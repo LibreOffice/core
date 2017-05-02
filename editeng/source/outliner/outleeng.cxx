@@ -197,7 +197,7 @@ void OutlinerEditEng::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
         pOwner->ImplCheckParagraphs( nPara, pOwner->pParaList->GetParagraphCount() );
 
         if ( !IsInUndo() && IsUndoEnabled() )
-            pOwner->UndoActionEnd( OLUNDO_ATTR );
+            pOwner->UndoActionEnd();
     }
 }
 

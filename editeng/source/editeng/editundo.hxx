@@ -223,7 +223,7 @@ private:
     bool                bRemoveParaAttribs;
     sal_uInt16          nRemoveWhich;
 
-    void                ImpSetSelection( EditView* pView );
+    void                ImpSetSelection();
 
 
 public:

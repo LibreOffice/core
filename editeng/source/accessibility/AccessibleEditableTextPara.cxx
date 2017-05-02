@@ -1250,7 +1250,7 @@ namespace accessibility
         }
         if( bSupplementalMode )
         {
-            _correctValues( nIndex, aRes );
+            _correctValues( aRes );
             // NumberingPrefix
             nRes = aRes.getLength();
             aRes.realloc( nRes + 1 );
@@ -1467,8 +1467,7 @@ namespace accessibility
         return OCommonAccessibleText::getTextRange(nStartIndex, nEndIndex);
     }
 
-    void AccessibleEditableTextPara::_correctValues( const sal_Int32 /* nIndex */,
-                                           uno::Sequence< PropertyValue >& rValues)
+    void AccessibleEditableTextPara::_correctValues( uno::Sequence< PropertyValue >& rValues)
     {
         SvxTextForwarder& rCacheTF = GetTextForwarder();
         sal_Int32 nRes = rValues.getLength();

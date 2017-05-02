@@ -276,7 +276,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
     if( bOutlinerUndoEnabled )
     {
-        pOwner->UndoActionEnd( OLUNDO_ATTR );
+        pOwner->UndoActionEnd();
     }
     else if ( bModelUndoEnabled )
     {

@@ -382,13 +382,13 @@ public:
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang );
     bool FnAddNonBrkSpace( SvxAutoCorrDoc&, const OUString&,
-                                sal_Int32 nSttPos, sal_Int32 nEndPos,
+                                sal_Int32 nEndPos,
                                 LanguageType eLang );
     bool FnSetINetAttr( SvxAutoCorrDoc&, const OUString&,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang );
     bool FnChgWeightUnderl( SvxAutoCorrDoc&, const OUString&,
-                                sal_Int32 nSttPos, sal_Int32 nEndPos );
+                                sal_Int32 nEndPos );
     bool FnCapitalStartSentence( SvxAutoCorrDoc&, const OUString&, bool bNormalPos,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang);

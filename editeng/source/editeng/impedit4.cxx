@@ -1295,7 +1295,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                 UpdateFields();
 
             // Otherwise, quick format => no attributes!
-            pPortion->MarkSelectionInvalid( nStartPos, pC->GetText().getLength() );
+            pPortion->MarkSelectionInvalid( nStartPos );
         }
 
 #if OSL_DEBUG_LEVEL > 0
@@ -1952,8 +1952,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
 }
 
 bool ImpEditEngine::SpellSentence(EditView& rEditView,
-    svx::SpellPortions& rToFill,
-    bool /*bIsGrammarChecking*/ )
+    svx::SpellPortions& rToFill )
 {
     bool bRet = false;
     EditSelection aCurSel( rEditView.pImpEditView->GetEditSelection() );
@@ -2210,7 +2209,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
                 ++aCurrentNewPortion;
             }
         }
-        UndoActionEnd( EDITUNDO_INSERT );
+        UndoActionEnd();
 
         EditPaM aNext;
         if (bRecheck)
@@ -2555,7 +2554,7 @@ sal_Int32 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxSe
                 aNewPaM.SetIndex( aNewPaM.GetNode()->Len() );
             pEditView->pImpEditView->SetEditSelection( aNewPaM );
             FormatAndUpdate( pEditView );
-            UndoActionEnd( EDITUNDO_REPLACEALL );
+            UndoActionEnd();
         }
         else
         {
@@ -2991,9 +2990,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
                 sal_Int32 nSelNode = aEditDoc.GetPos( rData.aSelection.Min().GetNode() );
                 ParaPortion* pParaPortion = GetParaPortions()[nSelNode];
-                pParaPortion->MarkSelectionInvalid( rData.nStart,
-                        std::max< sal_Int32 >( rData.nStart + rData.nLen,
-                                            rData.nStart + rData.aNewText.getLength() ) );
+                pParaPortion->MarkSelectionInvalid( rData.nStart );
             }
         }
     }

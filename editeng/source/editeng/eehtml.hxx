@@ -53,11 +53,11 @@ private:
     sal_uInt8               nDefListLevel;
 
     void                    StartPara( bool bReal );
-    void                    EndPara( bool bReal );
+    void                    EndPara();
     void                    AnchorStart();
     void                    AnchorEnd();
     void                    HeadingStart( int nToken );
-    void                    HeadingEnd( int nToken );
+    void                    HeadingEnd();
     void                    SkipGroup( int nEndToken );
     bool                    ThrowAwayBlank();
     bool                    HasTextInCurrentPara();

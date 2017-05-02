@@ -393,7 +393,7 @@ void EditView::InsertText( const OUString& rStr, bool bSelect )
 
     pEE->UndoActionStart( EDITUNDO_INSERT );
     EditPaM aPaM2( pEE->InsertText( pImpEditView->GetEditSelection(), rStr ) );
-    pEE->UndoActionEnd( EDITUNDO_INSERT );
+    pEE->UndoActionEnd();
 
     if ( bSelect )
     {
@@ -501,7 +501,7 @@ void EditView::RemoveAttribsKeepLanguages( bool bRemoveParaAttribs )
             pImpEditView->pEditEngine->RemoveCharAttribs( aSelection, bRemoveParaAttribs, nWID );
     }
 
-    pImpEditView->pEditEngine->UndoActionEnd( EDITUNDO_RESETATTRIBS );
+    pImpEditView->pEditEngine->UndoActionEnd();
     pImpEditView->pEditEngine->FormatAndUpdate( this );
 }
 
@@ -511,7 +511,7 @@ void EditView::RemoveAttribs( bool bRemoveParaAttribs, sal_uInt16 nWhich )
     pImpEditView->DrawSelection();
     pImpEditView->pEditEngine->UndoActionStart( EDITUNDO_RESETATTRIBS );
     pImpEditView->pEditEngine->RemoveCharAttribs( pImpEditView->GetEditSelection(), bRemoveParaAttribs, nWhich  );
-    pImpEditView->pEditEngine->UndoActionEnd( EDITUNDO_RESETATTRIBS );
+    pImpEditView->pEditEngine->UndoActionEnd();
     pImpEditView->pEditEngine->FormatAndUpdate( this );
 }
 
@@ -519,7 +519,7 @@ void EditView::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )
 {
     pImpEditView->pEditEngine->UndoActionStart( EDITUNDO_RESETATTRIBS );
     pImpEditView->pEditEngine->RemoveCharAttribs( nPara, nWhich );
-    pImpEditView->pEditEngine->UndoActionEnd( EDITUNDO_RESETATTRIBS );
+    pImpEditView->pEditEngine->UndoActionEnd();
     pImpEditView->pEditEngine->FormatAndUpdate( this );
 }
 
@@ -545,7 +545,7 @@ sal_uInt32 EditView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFor
     pImpEditView->DrawSelection();
     pImpEditView->pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_READ );
     EditPaM aEndPaM = pImpEditView->pEditEngine->pImpEditEngine->Read( rInput, rBaseURL, eFormat, aOldSel, pHTTPHeaderAttrs );
-    pImpEditView->pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_READ );
+    pImpEditView->pEditEngine->pImpEditEngine->UndoActionEnd();
     EditSelection aNewSel( aEndPaM, aEndPaM );
 
     pImpEditView->SetEditSelection( aNewSel );
@@ -606,7 +606,7 @@ void EditView::MoveParagraphs( Range aParagraphs, sal_Int32 nNewPos )
 {
     pImpEditView->pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_MOVEPARAS );
     pImpEditView->pEditEngine->pImpEditEngine->MoveParagraphs( aParagraphs, nNewPos, this );
-    pImpEditView->pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_MOVEPARAS );
+    pImpEditView->pEditEngine->pImpEditEngine->UndoActionEnd();
 }
 
 void EditView::MoveParagraphs( long nDiff )
@@ -662,7 +662,7 @@ void EditView::InsertText( const EditTextObject& rTextObject )
 
     pImpEditView->pEditEngine->UndoActionStart( EDITUNDO_INSERT );
     EditSelection aTextSel( pImpEditView->pEditEngine->InsertText( rTextObject, pImpEditView->GetEditSelection() ) );
-    pImpEditView->pEditEngine->UndoActionEnd( EDITUNDO_INSERT );
+    pImpEditView->pEditEngine->UndoActionEnd();
 
     aTextSel.Min() = aTextSel.Max();    // Selection not retained.
     pImpEditView->SetEditSelection( aTextSel );
@@ -675,7 +675,7 @@ void EditView::InsertText( css::uno::Reference< css::datatransfer::XTransferable
     pImpEditView->DeleteSelected();
     EditSelection aTextSel =
         pImpEditView->pEditEngine->InsertText(xDataObj, rBaseURL, pImpEditView->GetEditSelection().Max(), bUseSpecial);
-    pImpEditView->pEditEngine->UndoActionEnd( EDITUNDO_INSERT );
+    pImpEditView->pEditEngine->UndoActionEnd();
 
     aTextSel.Min() = aTextSel.Max();    // Selection not retained.
     pImpEditView->SetEditSelection( aTextSel );
@@ -1125,7 +1125,7 @@ void EditView::InsertField( const SvxFieldItem& rFld )
     pImpEditView->DrawSelection();
     pEE->UndoActionStart( EDITUNDO_INSERT );
     EditPaM aPaM( pEE->InsertField( pImpEditView->GetEditSelection(), rFld ) );
-    pEE->UndoActionEnd( EDITUNDO_INSERT );
+    pEE->UndoActionEnd();
     pImpEditView->SetEditSelection( EditSelection( aPaM, aPaM ) );
     pEE->UpdateFields();
     pEE->FormatAndUpdate( this );

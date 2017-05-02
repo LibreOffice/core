@@ -1955,8 +1955,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                         sal_Unicode cBlank = nSttPos ? (*pText)[nSttPos - 1] : 0;
                         m_aDelPam.GetPoint()->nContent = nPos;
 
-                        if( pATst->FnChgWeightUnderl( aACorrDoc, *pText,
-                                                            nSttPos, nPos ))
+                        if( pATst->FnChgWeightUnderl( aACorrDoc, *pText, nPos ))
                         {
                             if( m_aFlags.bWithRedlining )
                             {
@@ -1985,7 +1984,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                                            : LANGUAGE_SYSTEM;
 
                     SetRedlineText( STR_AUTOFMTREDL_NON_BREAK_SPACE );
-                    if ( pATst->FnAddNonBrkSpace( aACorrDoc, *pText, nSttPos, nPos, eLang ) )
+                    if ( pATst->FnAddNonBrkSpace( aACorrDoc, *pText, nPos, eLang ) )
                         --nPos;
                 }
                 break;
@@ -2042,7 +2041,7 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
             if ( m_aFlags.bAddNonBrkSpace )
             {
                 SetRedlineText( STR_AUTOFMTREDL_NON_BREAK_SPACE );
-                pATst->FnAddNonBrkSpace( aACorrDoc, *pText, nSttPos, nPos, eLang );
+                pATst->FnAddNonBrkSpace( aACorrDoc, *pText, nPos, eLang );
             }
 
             if( ( m_aFlags.bChgOrdinalNumber &&

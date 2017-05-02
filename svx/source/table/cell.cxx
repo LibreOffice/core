@@ -1146,7 +1146,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
             if( !bSpecial )
             {
 
-                if( !SvxUnoTextRangeBase::SetPropertyValueHelper( aSet, pMap, rValue, aSet ))
+                if( !SvxUnoTextRangeBase::SetPropertyValueHelper( pMap, rValue, aSet ))
                 {
                     if( aSet.GetItemState( pMap->nWID ) != SfxItemState::SET )
                     {

@@ -393,7 +393,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
             }
 
             ParaPortion* pPortion = FindParaPortion( mpIMEInfos->aPos.GetNode() );
-            pPortion->MarkSelectionInvalid( mpIMEInfos->aPos.GetIndex(), 0 );
+            pPortion->MarkSelectionInvalid( mpIMEInfos->aPos.GetIndex() );
 
             bool bWasCursorOverwrite = mpIMEInfos->bWasCursorOverwrite;
 
@@ -404,7 +404,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
 
             pView->SetInsertMode( !bWasCursorOverwrite );
         }
-        UndoActionEnd( EDITUNDO_INSERT );
+        UndoActionEnd();
     }
     else if ( rCEvt.GetCommand() == CommandEventId::ExtTextInput )
     {
@@ -461,7 +461,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
                 }
 
                 ParaPortion* pPortion = FindParaPortion( mpIMEInfos->aPos.GetNode() );
-                pPortion->MarkSelectionInvalid( mpIMEInfos->aPos.GetIndex(), 0 );
+                pPortion->MarkSelectionInvalid( mpIMEInfos->aPos.GetIndex() );
                 FormatAndUpdate( pView );
             }
 
@@ -737,7 +737,7 @@ void ImpEditEngine::ParaAttribsChanged( ContentNode* pNode )
 
     ParaPortion* pPortion = FindParaPortion( pNode );
     OSL_ENSURE( pPortion, "ParaAttribsChanged: Portion?" );
-    pPortion->MarkSelectionInvalid( 0, pNode->Len() );
+    pPortion->MarkSelectionInvalid( 0 );
 
     sal_Int32 nPara = aEditDoc.GetPos( pNode );
     pEditEngine->ParaAttribsChanged( nPara );
@@ -774,7 +774,7 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
     bool bCtrl = aTranslatedKeyEvent.GetKeyCode().IsMod1();
     sal_uInt16 nCode = aTranslatedKeyEvent.GetKeyCode().GetCode();
 
-    if ( DoVisualCursorTraveling( aPaM.GetNode() ) )
+    if ( DoVisualCursorTraveling() )
     {
         // Only for simple cursor movement...
         if ( !bCtrl && ( ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) ) )
@@ -2287,7 +2287,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
     EditPaM aPaM = aEditDoc.ConnectParagraphs( pLeft, pRight );
     GetParaPortions().Remove( nParagraphTobeDeleted );
 
-    pLeftPortion->MarkSelectionInvalid( aPaM.GetIndex(), pLeft->Len() );
+    pLeftPortion->MarkSelectionInvalid( aPaM.GetIndex() );
 
     // the right node is deleted by EditDoc:ConnectParagraphs().
     if ( GetTextRanger() )
@@ -2298,7 +2298,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
         for ( sal_Int32 n = nParagraphTobeDeleted; n < GetParaPortions().Count(); n++ )
         {
             ParaPortion* pPP = GetParaPortions()[n];
-            pPP->MarkSelectionInvalid( 0, pPP->GetNode()->Len() );
+            pPP->MarkSelectionInvalid( 0 );
             pPP->GetLines().Reset();
         }
     }
@@ -2443,7 +2443,7 @@ EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
         ImpRemoveChars( aStartPaM, aStartPaM.GetNode()->Len() - aStartPaM.GetIndex() );
         ParaPortion* pPortion = FindParaPortion( aStartPaM.GetNode() );
         OSL_ENSURE( pPortion, "Blind Portion in ImpDeleteSelection(3)" );
-        pPortion->MarkSelectionInvalid( aStartPaM.GetIndex(), aStartPaM.GetNode()->Len() );
+        pPortion->MarkSelectionInvalid( aStartPaM.GetIndex() );
 
         // The beginning of the EndNodes....
         const sal_Int32 nChars = aEndPaM.GetIndex();
@@ -2451,7 +2451,7 @@ EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
         ImpRemoveChars( aEndPaM, nChars );
         pPortion = FindParaPortion( aEndPaM.GetNode() );
         OSL_ENSURE( pPortion, "Blind Portion in ImpDeleteSelection(4)" );
-        pPortion->MarkSelectionInvalid( 0, aEndPaM.GetNode()->Len() );
+        pPortion->MarkSelectionInvalid( 0 );
         // Join together....
         aStartPaM = ImpConnectParagraphs( aStartPaM.GetNode(), aEndPaM.GetNode() );
     }
@@ -2674,7 +2674,7 @@ EditPaM ImpEditEngine::InsertTextUserInput( const EditSelection& rCurSel,
     TextModified();
 
     if ( bUndoAction )
-        UndoActionEnd( EDITUNDO_INSERT );
+        UndoActionEnd();
 
     return aPaM;
 }
@@ -2768,7 +2768,7 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
         nStart = nEnd+1;
     }
 
-    UndoActionEnd( EDITUNDO_INSERT );
+    UndoActionEnd();
 
     TextModified();
     return aPaM;
@@ -2997,7 +2997,7 @@ bool ImpEditEngine::UpdateFields()
             // If possible be more precise when invalidate.
             ParaPortion* pPortion = GetParaPortions()[nPara];
             OSL_ENSURE( pPortion, "NULL-Pointer in Doc" );
-            pPortion->MarkSelectionInvalid( 0, pNode->Len() );
+            pPortion->MarkSelectionInvalid( 0 );
         }
     }
     return bChanges;
@@ -4317,7 +4317,7 @@ void ImpEditEngine::IndentBlock( EditView* pEditView, bool bRight )
             }
         }
 
-        UndoActionEnd( bRight ? EDITUNDO_INDENTBLOCK : EDITUNDO_UNINDENTBLOCK );
+        UndoActionEnd();
         UpdateSelections();
         FormatAndUpdate( pEditView );
 
@@ -4367,7 +4367,7 @@ bool ImpEditEngine::IsVisualCursorTravelingEnabled()
 
 }
 
-bool ImpEditEngine::DoVisualCursorTraveling( const ContentNode* )
+bool ImpEditEngine::DoVisualCursorTraveling()
 {
     // Don't check if it's necessary, because we also need it when leaving the paragraph
     return IsVisualCursorTravelingEnabled();

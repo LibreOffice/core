@@ -347,7 +347,7 @@ bool ImpEditEngine::IsPageOverflow( ) const
 void ImpEditEngine::FormatFullDoc()
 {
     for ( sal_Int32 nPortion = 0; nPortion < GetParaPortions().Count(); nPortion++ )
-        GetParaPortions()[nPortion]->MarkSelectionInvalid( 0, GetParaPortions()[nPortion]->GetNode()->Len() );
+        GetParaPortions()[nPortion]->MarkSelectionInvalid( 0 );
     FormatDoc();
 }
 
@@ -388,7 +388,7 @@ void ImpEditEngine::FormatDoc()
                     for ( sal_Int32 n = nPara+1; n < GetParaPortions().Count(); n++ )
                     {
                         ParaPortion* pPP = GetParaPortions()[n];
-                        pPP->MarkSelectionInvalid( 0, pPP->GetNode()->Len() );
+                        pPP->MarkSelectionInvalid( 0 );
                         pPP->GetLines().Reset();
                     }
                 }
@@ -523,11 +523,10 @@ void ImpEditEngine::CheckAutoPageSize()
                 // Only paragraphs which are not aligned to the left need to be
                 // reformatted, the height can not be changed here anymore.
                 ParaPortion* pParaPortion = GetParaPortions()[nPara];
-                ContentNode* pNode = pParaPortion->GetNode();
                 SvxAdjust eJustification = GetJustification( nPara );
                 if ( eJustification != SvxAdjust::Left )
                 {
-                    pParaPortion->MarkSelectionInvalid( 0, pNode->Len() );
+                    pParaPortion->MarkSelectionInvalid( 0 );
                     CreateLines( nPara, 0 );  // 0: For AutoPageSize no TextRange!
                 }
             }
@@ -613,7 +612,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             pParaPortion->GetTextPortions().Reset();
         if ( pParaPortion->GetLines().Count() )
             pParaPortion->GetLines().Reset();
-        CreateAndInsertEmptyLine( pParaPortion, nStartPosY );
+        CreateAndInsertEmptyLine( pParaPortion );
         return FinishCreateLines( pParaPortion );
     }
 
@@ -1615,7 +1614,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     DBG_ASSERT( pParaPortion->GetLines().Count(), "No line after CreateLines!" );
 
     if ( bLineBreak )
-        CreateAndInsertEmptyLine( pParaPortion, nStartPosY );
+        CreateAndInsertEmptyLine( pParaPortion );
 
     pBuf.reset();
 
@@ -1629,7 +1628,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     return bHeightChanged;
 }
 
-void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uInt32 )
+void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion )
 {
     DBG_ASSERT( !GetTextRanger(), "Don't use CreateAndInsertEmptyLine with a polygon!" );
 
@@ -2569,7 +2568,7 @@ void ImpEditEngine::SetTextRanger( TextRanger* pRanger )
         for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
         {
             ParaPortion* pParaPortion = GetParaPortions()[nPara];
-            pParaPortion->MarkSelectionInvalid( 0, pParaPortion->GetNode()->Len() );
+            pParaPortion->MarkSelectionInvalid( 0 );
             pParaPortion->GetLines().Reset();
         }
 
@@ -4014,7 +4013,7 @@ void ImpEditEngine::InvalidateFromParagraph( sal_Int32 nFirstInvPara )
     else
     {
         pTmpPortion = GetParaPortions()[0];
-        pTmpPortion->MarkSelectionInvalid( 0, pTmpPortion->GetNode()->Len() );
+        pTmpPortion->MarkSelectionInvalid( 0 );
     }
     pTmpPortion->ResetHeight();
 }
