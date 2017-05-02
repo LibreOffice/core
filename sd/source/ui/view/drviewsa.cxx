@@ -95,14 +95,14 @@ public:
     void                    ParentDestroyed() { mpParent = nullptr; }
 };
 
-void SAL_CALL ScannerEventListener::disposing( const lang::EventObject& rEventObject )
+void SAL_CALL ScannerEventListener::disposing( const lang::EventObject& /*rEventObject*/ )
 {
     if( mpParent )
-        mpParent->ScannerEvent( rEventObject );
+        mpParent->ScannerEvent();
 }
 
-DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, vcl::Window* pParentWindow, PageKind ePageKind, FrameView* pFrameViewArgument )
-    : ViewShell (pFrame, pParentWindow, rViewShellBase)
+DrawViewShell::DrawViewShell( ViewShellBase& rViewShellBase, vcl::Window* pParentWindow, PageKind ePageKind, FrameView* pFrameViewArgument )
+    : ViewShell (pParentWindow, rViewShellBase)
     , maTabControl(VclPtr<sd::TabControl>::Create(this, pParentWindow))
     , mbIsLayerModeActive(false)
     , mbIsInSwitchPage(false)
@@ -156,7 +156,7 @@ DrawViewShell::~DrawViewShell()
     EndListening (*GetDocSh());
 
     if( SlideShow::IsRunning(*this) )
-        StopSlideShow(false);
+        StopSlideShow();
 
     DisposeFunctions();
 

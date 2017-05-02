@@ -224,7 +224,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
 
         void                ImplFlipBoundingBox( EscherPropertyContainer& rPropOpt );
         bool                ImplGetText();
-        bool                ImplCreatePresentationPlaceholder( const bool bMaster, const PageType PageType,
+        bool                ImplCreatePresentationPlaceholder( const bool bMaster,
                                 const sal_uInt32 StyleInstance, const sal_uInt8 PlaceHolderId );
         static bool         ImplGetEffect( const css::uno::Reference< css::beans::XPropertySet > &,
                                 css::presentation::AnimationEffect& eEffect,

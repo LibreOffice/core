@@ -89,7 +89,7 @@ void PPTExCharSheet::SetStyleSheet( const css::uno::Reference< css::beans::XProp
     rLev.mnFlags = aPortionObj.mnCharAttr;
 }
 
-void PPTExCharSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, bool bSimpleText,
+void PPTExCharSheet::Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
     const css::uno::Reference< css::beans::XPropertySet > & rPagePropSet )
 {
     const PPTExCharLevel& rLev = maCharLevel[ nLev ];
@@ -312,7 +312,7 @@ void PPTExParaSheet::SetStyleSheet( const css::uno::Reference< css::beans::XProp
     }
 }
 
-void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx*, sal_uInt16 nLev, bool, bool bSimpleText,
+void PPTExParaSheet::Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
     const css::uno::Reference< css::beans::XPropertySet > & rPagePropSet )
 {
     const PPTExParaLevel& rLev = maParaLevel[ nLev ];

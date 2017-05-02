@@ -926,7 +926,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 }
 
 // Object was inserted into model
-void SdDrawDocument::InsertObject(SdrObject* pObj, SdPage* /*pPage*/)
+void SdDrawDocument::InsertObject(SdrObject* pObj)
 {
     if(mpOnlineSpellingList && pObj)
     {
@@ -939,7 +939,7 @@ void SdDrawDocument::InsertObject(SdrObject* pObj, SdPage* /*pPage*/)
 }
 
 // Object removed from model
-void SdDrawDocument::RemoveObject(SdrObject* pObj, SdPage* /*pPage*/)
+void SdDrawDocument::RemoveObject(SdrObject* pObj)
 {
     if(mpOnlineSpellingList && pObj)
     {

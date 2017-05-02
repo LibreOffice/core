@@ -101,7 +101,7 @@ private:
 
     friend class TabControl::TabControlTransferable;
 
-    void                DragFinished( sal_Int8 nDropAction );
+    void                DragFinished();
 
 private:
     using TabBar::StartDrag;

@@ -99,8 +99,7 @@ RequestQueue::~RequestQueue()
 
 void RequestQueue::AddRequest (
     CacheKey aKey,
-    RequestPriorityClass eRequestClass,
-    bool /*bInsertWithHighestPriority*/)
+    RequestPriorityClass eRequestClass)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -184,7 +183,7 @@ void RequestQueue::ChangeClass (
             Request::DataComparator(aKey)));
     if (iRequest!=mpRequestQueue->end() && iRequest->meClass!=eNewRequestClass)
     {
-        AddRequest(aKey, eNewRequestClass, true);
+        AddRequest(aKey, eNewRequestClass);
     }
 }
 

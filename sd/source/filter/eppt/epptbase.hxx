@@ -245,7 +245,7 @@ struct PPTExCharSheet
 
                 void    SetStyleSheet( const css::uno::Reference< css::beans::XPropertySet > &,
                                         FontCollection& rFontCollection, int nLevel );
-                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, bool bFirst, bool bSimpleText,
+                void    Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
                             const css::uno::Reference< css::beans::XPropertySet > & rPagePropSet );
 
 };
@@ -286,7 +286,7 @@ struct PPTExParaSheet
 
                 void    SetStyleSheet( const css::uno::Reference< css::beans::XPropertySet > &,
                                         FontCollection& rFontCollection, int nLevel, const PPTExCharLevel& rCharLevel );
-                void    Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, bool bFirst, bool bSimpleText,
+                void    Write( SvStream& rSt, sal_uInt16 nLev, bool bSimpleText,
                     const css::uno::Reference< css::beans::XPropertySet > & rPagePropSet );
 };
 

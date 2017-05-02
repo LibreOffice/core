@@ -254,7 +254,7 @@ void ShowWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const ::tools::Re
     {
         if( mxController.is() )
         {
-            mxController->paint(rRect);
+            mxController->paint();
         }
         else if(mpViewShell )
         {

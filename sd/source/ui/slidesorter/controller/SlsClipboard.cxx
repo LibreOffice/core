@@ -636,7 +636,7 @@ sal_Int8 Clipboard::AcceptDrop (
 {
     sal_Int8 nAction (DND_ACTION_NONE);
 
-    const Clipboard::DropType eDropType (IsDropAccepted(rTargetHelper));
+    const Clipboard::DropType eDropType (IsDropAccepted());
 
     switch (eDropType)
     {
@@ -704,7 +704,7 @@ sal_Int8 Clipboard::ExecuteDrop (
 {
     sal_Int8 nResult = DND_ACTION_NONE;
     mxUndoContext.reset();
-    const Clipboard::DropType eDropType (IsDropAccepted(rTargetHelper));
+    const Clipboard::DropType eDropType (IsDropAccepted());
 
     switch (eDropType)
     {
@@ -857,7 +857,7 @@ sal_uInt16 Clipboard::InsertSlides (
     return nInsertedPageCount;
 }
 
-Clipboard::DropType Clipboard::IsDropAccepted (DropTargetHelper&) const
+Clipboard::DropType Clipboard::IsDropAccepted() const
 {
     const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
     if (pDragTransferable == nullptr)

@@ -379,7 +379,7 @@ bool SdOptionsContents::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsContentsItem::SdOptionsContentsItem( SdOptions*, ::sd::FrameView*)
+SdOptionsContentsItem::SdOptionsContentsItem()
 :   SfxPoolItem         ( ATTR_OPTIONS_CONTENTS )
 ,   maOptionsContents   ( 0, false )
 {

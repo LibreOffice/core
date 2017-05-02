@@ -816,7 +816,7 @@ SdOutliner* SdDrawDocument::GetOutliner(bool bCreateOutliner)
         mpOutliner = new SdOutliner( this, OutlinerMode::TextObject );
 
         if (mpDocSh)
-            mpOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
+            mpOutliner->SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
 
         mpOutliner->SetDefTab( nDefaultTabulator );
         mpOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
@@ -840,7 +840,7 @@ SdOutliner* SdDrawDocument::GetInternalOutliner(bool bCreateOutliner)
         mpInternalOutliner->EnableUndo( false );
 
         if (mpDocSh)
-            mpInternalOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
+            mpInternalOutliner->SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
 
         mpInternalOutliner->SetDefTab( nDefaultTabulator );
         mpInternalOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));

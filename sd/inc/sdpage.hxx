@@ -169,7 +169,7 @@ public:
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
 
     void EnsureMasterPageDefaultBackground();
-    SdrObject*      CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, bool bInsert=false);
+    SdrObject*      CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect);
     SdrObject*      CreateDefaultPresObj(PresObjKind eObjKind);
     void            DestroyDefaultPresObj(PresObjKind eObjKind);
     SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1, bool bFuzzySearch = false );

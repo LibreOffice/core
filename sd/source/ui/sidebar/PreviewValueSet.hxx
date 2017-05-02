@@ -43,7 +43,7 @@ public:
     /** Set the number of rows and columns according to the current number
         of items.  Call this method when new items have been inserted.
     */
-    void Rearrange (bool bForceRequestResize = false);
+    void Rearrange();
 
 protected:
     virtual void MouseButtonDown (const MouseEvent& rEvent) override;

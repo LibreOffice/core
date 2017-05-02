@@ -140,7 +140,7 @@ SfxViewFrame* ViewShell::GetViewFrame() const
 
 /// declare SFX-Slotmap and standard interface
 
-ViewShell::ViewShell( SfxViewFrame*, vcl::Window* pParentWindow, ViewShellBase& rViewShellBase)
+ViewShell::ViewShell( vcl::Window* pParentWindow, ViewShellBase& rViewShellBase)
 :   SfxShell(&rViewShellBase)
 ,   mpParentWindow(pParentWindow)
 {
@@ -381,7 +381,7 @@ void ViewShell::Deactivate(bool bIsMDIActivate)
     {
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
         if(xSlideShow.is() && xSlideShow->isRunning() )
-            xSlideShow->deactivate(GetViewShellBase());
+            xSlideShow->deactivate();
 
         if(HasCurrentFunction())
             GetCurrentFunction()->Deactivate();
@@ -970,7 +970,7 @@ void ViewShell::Resize()
         pView->VisAreaChanged(GetActiveWindow());
 }
 
-SvBorder ViewShell::GetBorder (bool )
+SvBorder ViewShell::GetBorder()
 {
     SvBorder aBorder;
 
@@ -1248,7 +1248,7 @@ public:
     }
 };
 
-void ViewShell::ImpSidUndo(bool, SfxRequest& rReq)
+void ViewShell::ImpSidUndo(SfxRequest& rReq)
 {
     //The xWatcher keeps the SlideSorter selection in sync
     //with the page insertions/deletions that Undo may introduce
@@ -1299,7 +1299,7 @@ void ViewShell::ImpSidUndo(bool, SfxRequest& rReq)
     rReq.Done();
 }
 
-void ViewShell::ImpSidRedo(bool, SfxRequest& rReq)
+void ViewShell::ImpSidRedo(SfxRequest& rReq)
 {
     //The xWatcher keeps the SlideSorter selection in sync
     //with the page insertions/deletions that Undo may introduce

@@ -186,7 +186,7 @@ private:
         implementation of proper handling master pages copy-and-paste.
     */
     enum DropType { DT_PAGE, DT_PAGE_FROM_NAVIGATOR, DT_SHAPE, DT_NONE };
-    DropType IsDropAccepted (DropTargetHelper& rTargetHelper) const;
+    DropType IsDropAccepted() const;
 
     /** This method contains the code for AcceptDrop() and ExecuteDrop() shapes.
         There are only minor differences for the two cases at this level.

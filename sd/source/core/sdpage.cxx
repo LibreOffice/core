@@ -281,7 +281,7 @@ void SdPage::EnsureMasterPageDefaultBackground()
 
 /** creates a presentation object with the given PresObjKind on this page. A user call will be set
 */
-SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect, bool /* bInsert */ )
+SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::tools::Rectangle& rRect )
 {
     ::svl::IUndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : nullptr;
     const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
@@ -846,7 +846,7 @@ void SdPage::CreateTitleAndLayout(bool bInit, bool bCreate )
 
             while( iter != aAreas.end() )
             {
-                SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pMasterPage->CreatePresObj(PRESOBJ_HANDOUT, false, (*iter++), true) );
+                SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pMasterPage->CreatePresObj(PRESOBJ_HANDOUT, false, (*iter++)) );
                 // #i105146# We want no content to be displayed for PageKind::Handout,
                 // so just never set a page as content
                 pPageObj->SetReferencedPage(nullptr);
@@ -974,21 +974,20 @@ void getPresObjProp( const SdPage& rPage, const char* sObjKind, const char* sPag
 
 SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind)
 {
-
     if( eObjKind == PRESOBJ_TITLE )
     {
         ::tools::Rectangle aTitleRect( GetTitleRect() );
-        return CreatePresObj(PRESOBJ_TITLE, false, aTitleRect, true/*bInsert*/);
+        return CreatePresObj(PRESOBJ_TITLE, false, aTitleRect);
     }
     else if( eObjKind == PRESOBJ_OUTLINE )
     {
         ::tools::Rectangle aLayoutRect( GetLayoutRect() );
-        return CreatePresObj( PRESOBJ_OUTLINE, false, aLayoutRect, true/*bInsert*/);
+        return CreatePresObj( PRESOBJ_OUTLINE, false, aLayoutRect);
     }
     else if( eObjKind == PRESOBJ_NOTES )
     {
         ::tools::Rectangle aLayoutRect( GetLayoutRect() );
-        return CreatePresObj( PRESOBJ_NOTES, false, aLayoutRect, true/*bInsert*/);
+        return CreatePresObj( PRESOBJ_NOTES, false, aLayoutRect);
     }
     else if( (eObjKind == PRESOBJ_FOOTER) || (eObjKind == PRESOBJ_DATETIME) || (eObjKind == PRESOBJ_SLIDENUMBER) || (eObjKind == PRESOBJ_HEADER ) )
     {
@@ -1021,7 +1020,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind)
             else
             {
                 ::tools::Rectangle aRect( aPos, aSize );
-                return CreatePresObj( eObjKind, false, aRect, true/*bInsert*/ );
+                return CreatePresObj( eObjKind, false, aRect );
             }
         }
         else
@@ -1048,7 +1047,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind)
                 aPos.Y() = aPosition.Y() + long( aPageSize.Height() - NOTES_HEADER_FOOTER_HEIGHT );
 
             ::tools::Rectangle aRect( aPos, aSize );
-            return CreatePresObj( eObjKind, false, aRect, true/*bInsert*/ );
+            return CreatePresObj( eObjKind, false, aRect );
         }
     }
     else
@@ -1687,7 +1686,7 @@ void SdPage::NbcInsertObject(SdrObject* pObj, size_t nPos)
 {
     FmFormPage::NbcInsertObject(pObj, nPos);
 
-    static_cast<SdDrawDocument*>(pModel)->InsertObject(pObj, this);
+    static_cast<SdDrawDocument*>(pModel)->InsertObject(pObj);
 
     SdrLayerID nId = pObj->GetLayer();
     if( mbMaster )
@@ -1751,7 +1750,7 @@ void SdPage::onRemoveObject( SdrObject* pObject )
         RemovePresObj(pObject);
 
         if( pModel )
-            static_cast<SdDrawDocument*>(pModel)->RemoveObject(pObject, this);
+            static_cast<SdDrawDocument*>(pModel)->RemoveObject(pObject);
 
         removeAnimations( pObject );
     }
@@ -2425,7 +2424,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         {
             SfxItemPool* pPool = static_cast<SdDrawDocument*>(GetModel())->GetDrawOutliner().GetEmptyItemSet().GetPool();
             pOutl = new ::Outliner( pPool, OutlinerMode::OutlineObject );
-            pOutl->SetRefDevice( SD_MOD()->GetRefDevice( *static_cast<SdDrawDocument*>( GetModel() )->GetDocSh() ) );
+            pOutl->SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
             pOutl->SetEditTextObjectPool(pPool);
             pOutl->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetModel()->GetStyleSheetPool()));
             pOutl->EnableUndo(false);
