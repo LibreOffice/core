@@ -92,8 +92,6 @@ template<typename T> constexpr bool isIncompleteOrDerivedFromVclReferenceBase(
  *
  * @param reference_type must be a subclass of vcl::Window
  */
-namespace detail {
-}
 template <class reference_type>
 class VclPtr
 {

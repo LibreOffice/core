@@ -46,14 +46,6 @@
 #define CFID_FIRST_ITEM_ID  CFID_FONT
 #define CFID_LAST_ITEM_ID   CFID_FONTLIST
 
-
-namespace pcr
-{
-
-
-}   // namespace pcr
-
-
 #endif // INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_FONTITEMIDS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

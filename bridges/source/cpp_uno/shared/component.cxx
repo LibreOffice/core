@@ -35,9 +35,6 @@
 #include "uno/mapping.h"
 #include "cppu/EnvDcp.hxx"
 
-namespace bridges { namespace cpp_uno { namespace shared {
-
-} } }
 
 namespace {
 
