@@ -16,6 +16,9 @@
 #include <oox/token/properties.hxx>
 #include "oox/token/tokenmap.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 
 using namespace ::com::sun::star;
 

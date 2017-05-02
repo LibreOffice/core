@@ -18,28 +18,23 @@
  */
 
 #include "drawingml/customshapeproperties.hxx"
-#include "oox/helper/helper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include <oox/token/properties.hxx>
 #include "oox/token/tokenmap.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/graphic/XGraphicTransformer.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
-#include <osl/diagnose.h>
+#include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <comphelper/sequence.hxx>
 
-using namespace ::oox::core;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::drawing;
 
 namespace oox { namespace drawingml {
