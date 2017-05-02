@@ -605,7 +605,7 @@ void BibGeneralPage::focusGained(const awt::FocusEvent& rEvent)
     }
 }
 
-void BibGeneralPage::focusLost(const awt::FocusEvent& )
+void BibGeneralPage::focusLost()
 {
     CommitActiveControl();
 }
@@ -700,9 +700,9 @@ void BibGeneralPageFocusListener::focusGained( const css::awt::FocusEvent& e )
     mpBibGeneralPage->focusGained(e);
 }
 
-void BibGeneralPageFocusListener::focusLost( const css::awt::FocusEvent& e )
+void BibGeneralPageFocusListener::focusLost( const css::awt::FocusEvent& )
 {
-    mpBibGeneralPage->focusLost(e);
+    mpBibGeneralPage->focusLost();
 }
 
 void BibGeneralPageFocusListener::disposing( const css::lang::EventObject& )

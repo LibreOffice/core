@@ -165,7 +165,7 @@ public:
     /// @throws css::uno::RuntimeException
     void focusGained(const css::awt::FocusEvent& rEvent);
     /// @throws css::uno::RuntimeException
-    void focusLost(const css::awt::FocusEvent& rEvent);
+    void focusLost();
 
 };
 
