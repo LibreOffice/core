@@ -104,7 +104,7 @@ bool ShapePropertyMap::setAnyProperty( ShapeProperty ePropId, const Any& rValue 
             return setFillBitmapUrl( nPropId, rValue );
 
         case ShapeProperty::FillBitmapNameFromUrl:
-            return setFillBitmapNameFromUrl( nPropId, rValue );
+            return setFillBitmapNameFromUrl( rValue );
 
         default:;   // suppress compiler warnings
     }
@@ -193,7 +193,7 @@ bool ShapePropertyMap::setFillBitmapUrl( sal_Int32 nPropId, const Any& rValue )
     return false;
 }
 
-bool ShapePropertyMap::setFillBitmapNameFromUrl( sal_Int32 /*nPropId*/, const Any& rValue )
+bool ShapePropertyMap::setFillBitmapNameFromUrl( const Any& rValue )
 {
     if( rValue.has< OUString >() )
     {

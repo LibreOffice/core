@@ -34,7 +34,6 @@ class SolidFillContext : public ColorContext
 public:
     explicit            SolidFillContext(
                             ::oox::core::ContextHandler2Helper& rParent,
-                            const ::oox::AttributeList& rAttribs,
                             FillProperties& rFillProps );
 };
 
@@ -123,7 +122,6 @@ class DuotoneContext : public ::oox::core::ContextHandler2
 public:
     explicit            DuotoneContext(
                             ::oox::core::ContextHandler2Helper& rParent,
-                            const ::oox::AttributeList& rAttribs,
                             BlipFillProperties& rBlipProps );
     virtual             ~DuotoneContext() override;
 

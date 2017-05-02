@@ -181,8 +181,7 @@ public:
                             ::oox::core::XmlFilterBase& rFilterBase,
                             const Theme* pTheme,
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
-                            basegfx::B2DHomMatrix& aTransformation,
-                            const css::awt::Rectangle* pShapeRect = nullptr );
+                            basegfx::B2DHomMatrix& aTransformation );
 
     void                setXShape( const css::uno::Reference< css::drawing::XShape >& rXShape )
                             { mxShape = rXShape; };
@@ -230,7 +229,6 @@ protected:
                             Shape& rMaster,
                             const Theme* pTheme,
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
-                            const css::awt::Rectangle& rClientRect,
                             ShapeIdMap* pShapeMap,
                             const basegfx::B2DHomMatrix& aTransformation );
 

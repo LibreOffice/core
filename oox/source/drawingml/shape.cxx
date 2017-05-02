@@ -263,7 +263,7 @@ void Shape::addShape(
             // if this is a group shape, we have to add also each child shape
             Reference< XShapes > xShapes( xShape, UNO_QUERY );
             if ( xShapes.is() )
-                addChildren( rFilterBase, *this, pTheme, xShapes, awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap, aMatrix );
+                addChildren( rFilterBase, *this, pTheme, xShapes, pShapeMap, aMatrix );
 
             if( meFrameType == FRAMETYPE_DIAGRAM )
             {
@@ -319,14 +319,9 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
 void Shape::addChildren( ::oox::core::XmlFilterBase& rFilterBase,
                          const Theme* pTheme,
                          const Reference< XShapes >& rxShapes,
-                         basegfx::B2DHomMatrix& aTransformation,
-                         const awt::Rectangle* pShapeRect )
+                         basegfx::B2DHomMatrix& aTransformation )
 {
-    addChildren(rFilterBase, *this, pTheme, rxShapes,
-                pShapeRect ?
-                 *pShapeRect :
-                 awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ),
-                nullptr, aTransformation);
+    addChildren(rFilterBase, *this, pTheme, rxShapes, nullptr, aTransformation);
 }
 
 struct ActionLockGuard
@@ -354,7 +349,6 @@ void Shape::addChildren(
         Shape& rMaster,
         const Theme* pTheme,
         const Reference< XShapes >& rxShapes,
-        const awt::Rectangle&,
         ShapeIdMap* pShapeMap,
         const basegfx::B2DHomMatrix& aTransformation )
 {
@@ -1090,7 +1084,7 @@ Reference< XShape > const & Shape::createAndInsert(
             // for these ==cscode== and ==csdata== markers, so don't "clean up" these SAL_INFOs
             SAL_INFO("oox.cscode", "==cscode== shape name: '" << msName << "'");
             SAL_INFO("oox.csdata", "==csdata== shape name: '" << msName << "'");
-            mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape, maSize );
+            mpCustomShapePropertiesPtr->pushToPropSet( xSet, mxShape, maSize );
         }
         else if( getTextBody() )
             getTextBody()->getTextProperties().pushVertSimulation();

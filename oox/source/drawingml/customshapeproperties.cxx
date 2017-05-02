@@ -111,7 +111,7 @@ static OUString GetConnectorShapeType( sal_Int32 nType )
     return sType;
 }
 
-void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFilterBase */,
+void CustomShapeProperties::pushToPropSet(
     const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape, const awt::Size &aSize )
 {
     if ( mnShapePresetType >= 0 )

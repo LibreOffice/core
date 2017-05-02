@@ -378,7 +378,7 @@ void PPTShape::addShape(
             // if this is a group shape, we have to add also each child shape
             Reference<XShapes> xShapes(xShape, UNO_QUERY);
             if (xShapes.is())
-                addChildren( rFilterBase, *this, pTheme, xShapes, awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap, aTransformation );
+                addChildren( rFilterBase, *this, pTheme, xShapes, pShapeMap, aTransformation );
         }
     }
     catch (const Exception&)

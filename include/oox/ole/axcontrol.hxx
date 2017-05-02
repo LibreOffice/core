@@ -307,9 +307,7 @@ public:
     void                convertAxPicture(
                             PropertyMap& rPropMap,
                             const StreamDataSequence& rPicData,
-                            sal_Int32 nPicSizeMode,
-                            sal_Int32 nPicAlign,
-                            bool bPicTiling ) const;
+                            sal_Int32 nPicSizeMode ) const;
 
     /** Converts the Forms 2.0 value for checked/unchecked/dontknow to UNO
         properties. */

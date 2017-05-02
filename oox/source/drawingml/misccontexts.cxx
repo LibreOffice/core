@@ -37,7 +37,7 @@ namespace oox {
 namespace drawingml {
 
 SolidFillContext::SolidFillContext( ContextHandler2Helper& rParent,
-        const AttributeList&, FillProperties& rFillProps ) :
+        FillProperties& rFillProps ) :
     ColorContext( rParent, rFillProps.maFillColor )
 {
 }
@@ -181,7 +181,7 @@ ContextHandlerRef BlipContext::onCreateContext(
             return new ColorChangeContext( *this, rAttribs, mrBlipProps );
 
         case A_TOKEN( duotone ):
-            return new DuotoneContext( *this, rAttribs, mrBlipProps );
+            return new DuotoneContext( *this, mrBlipProps );
 
         case A_TOKEN( extLst ):
             return new BlipExtensionContext( *this, mrBlipProps );
@@ -198,7 +198,7 @@ ContextHandlerRef BlipContext::onCreateContext(
 }
 
 DuotoneContext::DuotoneContext( ContextHandler2Helper& rParent,
-        const AttributeList& /*rAttribs*/, BlipFillProperties& rBlipProps ) :
+        BlipFillProperties& rBlipProps ) :
     ContextHandler2( rParent ),
     mrBlipProps( rBlipProps ),
     mnColorIndex( 0 )
@@ -279,7 +279,7 @@ ContextHandlerRef FillPropertiesContext::createFillContext(
     switch( nElement )
     {
         case A_TOKEN( noFill ):     { rFillProps.moFillType = getBaseToken( nElement ); return nullptr; };
-        case A_TOKEN( solidFill ):  { rFillProps.moFillType = getBaseToken( nElement ); return new SolidFillContext( rParent, rAttribs, rFillProps ); };
+        case A_TOKEN( solidFill ):  { rFillProps.moFillType = getBaseToken( nElement ); return new SolidFillContext( rParent, rFillProps ); };
         case A_TOKEN( gradFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new GradientFillContext( rParent, rAttribs, rFillProps.maGradientProps ); };
         case A_TOKEN( pattFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new PatternFillContext( rParent, rAttribs, rFillProps.maPatternProps ); };
         case A_TOKEN( blipFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new BlipFillContext( rParent, rAttribs, rFillProps.maBlipProps ); };

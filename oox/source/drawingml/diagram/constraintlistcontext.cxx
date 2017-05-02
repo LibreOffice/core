@@ -31,7 +31,6 @@ namespace oox { namespace drawingml {
 
 // CT_ConstraintLists
 ConstraintListContext::ConstraintListContext( ContextHandler2Helper& rParent,
-                                              const AttributeList&,
                                               const LayoutAtomPtr &pNode )
     : ContextHandler2( rParent )
     , mpNode( pNode )
