@@ -568,7 +568,7 @@ uno::Reference< uno::XInterface > SAL_CALL ConvDicList_CreateInstance(
 
 void * SAL_CALL ConvDicList_getFactory(
         const sal_Char * pImplName,
-        XMultiServiceFactory * pServiceManager, void *  )
+        XMultiServiceFactory * pServiceManager  )
 {
     void * pRet = nullptr;
     if ( ConvDicList::getImplementationName_Static().equalsAscii( pImplName ) )

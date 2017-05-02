@@ -3005,7 +3005,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                         if( !tstart ) {STARTT;}
                         makeChars(str);
                     }
-                    makeTab(static_cast<Tab*>(para->hhstr[n].get()));
+                    makeTab();
                     break;
                 case CH_TEXT_BOX:                 /* 10 - ordered by Table/text box/formula/button/hypertext */
                 {
@@ -3066,7 +3066,6 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                 }
                 case CH_LINE:                     // 14
                 {
-                    Line *hbox = static_cast<Line*>(para->hhstr[n].get());
                     if (str.size() > 0)
                     {
                         if( !pstart ) {STARTP;}
@@ -3075,7 +3074,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     }
                     if( tstart ) {ENDT;}
                     if( pstart ) {ENDP;}
-                    makeLine(hbox);
+                    makeLine();
                     pstart = true;
                     break;
                 }
@@ -3447,7 +3446,7 @@ void HwpReader::makeDateCode(DateCode * hbox)
 }
 
 
-void HwpReader::makeTab(Tab *  )                  /*hbox */
+void HwpReader::makeTab()
 {
     rstartEl("text:tab-stop", mxList.get());
     rendEl("text:tab-stop");
@@ -4582,10 +4581,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 }
 
 
-/**
- *
- */
-void HwpReader::makeLine(Line *   )
+void HwpReader::makeLine()
 {
     padd("text:style-name", sXML_CDATA, "Horizontal Line");
     rstartEl( "text:p", mxList.get());

@@ -120,14 +120,14 @@ private:
     void makeBookmark(Bookmark *hbox);      //6
     void makeDateFormat(DateCode *hbox);    //7
     void makeDateCode(DateCode *hbox);      //8
-    void makeTab(Tab *hbox);            //9
+    void makeTab();            //9
     void makeTable(TxtBox *hbox);
     void makeTextBox(TxtBox *hbox);
     void makeFormula(TxtBox *hbox);
     void makeHyperText(TxtBox *hbox);
     void makePicture(Picture *hbox);
     void makePictureDRAW(HWPDrawingObject *drawobj, Picture *hbox);
-    void makeLine(Line *hbox);
+    void makeLine();
     void makeHidden(Hidden *hbox);
     void makeFootnote(Footnote *hbox);
     void makeAutoNum(AutoNum *hbox);

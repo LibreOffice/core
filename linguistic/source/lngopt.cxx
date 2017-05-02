@@ -451,7 +451,7 @@ Locale LinguProps::getPropertyLocale(const OUString& aPropertyName)
 }
 
 void * SAL_CALL LinguProps_getFactory( const sal_Char * pImplName,
-            XMultiServiceFactory *pServiceManager, void * )
+            XMultiServiceFactory *pServiceManager )
 {
     void * pRet = nullptr;
     if ( LinguProps::getImplementationName_Static().equalsAscii( pImplName ) )

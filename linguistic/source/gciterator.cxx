@@ -1139,8 +1139,7 @@ static uno::Reference< uno::XInterface > SAL_CALL GrammarCheckingIterator_create
 
 void * SAL_CALL GrammarCheckingIterator_getFactory(
     const sal_Char *pImplName,
-    lang::XMultiServiceFactory *pServiceManager,
-    void * /*pRegistryKey*/ )
+    lang::XMultiServiceFactory *pServiceManager )
 {
     void * pRet = nullptr;
     if ( GrammarCheckingIterator_getImplementationName().equalsAscii( pImplName ) )
