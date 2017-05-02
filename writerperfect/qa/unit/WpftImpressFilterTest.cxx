@@ -43,7 +43,7 @@ void WpftImpressFilterTest::test()
         {"PowerPoint_Mac_1", REQUIRE_MWAW_VERSION(0, 3, 9)},
         {"PowerPoint_Mac_2", REQUIRE_MWAW_VERSION(0, 3, 9)},
         {"PowerPoint_Mac_3", REQUIRE_MWAW_VERSION(0, 3, 9)},
-        {"PowerPoint_Mac_4", REQUIRE_MWAW_VERSION(0, 3, 10)},
+        {"PowerPoint_Mac_4.ppt", REQUIRE_MWAW_VERSION(0, 3, 10)},
         {"PowerPoint_2.ppt", REQUIRE_MWAW_VERSION(0, 3, 10)},
         {"PowerPoint_3.ppt", REQUIRE_MWAW_VERSION(0, 3, 9)},
         {"PowerPoint_4.ppt", REQUIRE_MWAW_VERSION(0, 3, 10)},
