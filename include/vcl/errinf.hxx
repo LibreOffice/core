@@ -42,9 +42,7 @@ class DynamicErrorInfo;
 class ImplDynamicErrorInfo;
 enum class DialogMask;
 
-namespace {
-  typedef void (* DisplayFnPtr)();
-}
+typedef void (* DisplayFnPtr)();
 
 typedef DialogMask WindowDisplayErrorFunc(
     vcl::Window*, DialogMask eMask, const OUString &rErr, const OUString &rAction);
