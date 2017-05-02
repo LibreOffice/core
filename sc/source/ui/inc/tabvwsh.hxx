@@ -395,6 +395,8 @@ public:
     int getPart() const override;
     /// See SfxViewShell::NotifyCursor().
     void NotifyCursor(SfxViewShell* pViewShell) const override;
+    /// Emits a LOK_CALLBACK_INVALIDATE_HEADER for all views whose current tab is equal to nCurrentTabIndex
+    static void notifyAllViewsHeaderInvalidation(const OString& rPayload, SCTAB nCurrentTabIndex = -1);
 };
 
 #endif
