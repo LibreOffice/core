@@ -164,6 +164,11 @@ Reader* GetRtfReader()
     return aReaderWriter[READER_WRITER_RTF].GetReader();
 }
 
+Reader* GetDOCXReader()
+{
+    return aReaderWriter[READER_WRITER_DOCX].GetReader();
+}
+
 void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
 {
     for( int n = 0; n < MAXFILTER; ++n )
