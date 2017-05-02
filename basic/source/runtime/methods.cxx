@@ -1865,7 +1865,7 @@ css::util::Date SbxDateToUNODate( const SbxValue* const pVal )
 void SbxDateFromUNODate( SbxValue *pVal, const css::util::Date& aUnoDate)
 {
     double dDate;
-    if( implDateSerial( aUnoDate.Year, aUnoDate.Month, aUnoDate.Day, false, dDate ) )
+    if( implDateSerial( aUnoDate.Year, aUnoDate.Month, aUnoDate.Day, false, false, dDate ) )
     {
         pVal->PutDate( dDate );
     }
@@ -1980,7 +1980,7 @@ void SbxDateFromUNODateTime( SbxValue *pVal, const css::util::DateTime& aUnoDT)
     double dDate(0.0);
     if( implDateTimeSerial( aUnoDT.Year, aUnoDT.Month, aUnoDT.Day,
                             aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds,
-                            false, dDate ) )
+                            false, false, dDate ) )
     {
         pVal->PutDate( dDate );
     }
@@ -2111,7 +2111,7 @@ RTLFUNC(CDateFromIso)
 
             double dDate;
             if (!implDateSerial( (sal_Int16)(nSign * aYearStr.toInt32()),
-                        (sal_Int16)aMonthStr.toInt32(), (sal_Int16)aDayStr.toInt32(), false, dDate ))
+                        (sal_Int16)aMonthStr.toInt32(), (sal_Int16)aDayStr.toInt32(), false, false, dDate ))
                 break;
 
             rPar.Get(0)->PutDate( dDate );
@@ -2143,7 +2143,7 @@ RTLFUNC(DateSerial)
     sal_Int16 nDay = rPar.Get(3)->GetInteger();
 
     double dDate;
-    if( implDateSerial( nYear, nMonth, nDay, true, dDate ) )
+    if( implDateSerial( nYear, nMonth, nDay, true, true, dDate ) )
     {
         rPar.Get(0)->PutDate( dDate );
     }
@@ -4912,7 +4912,8 @@ sal_Int16 implGetDateYear( double aDate )
     return nRet;
 }
 
-bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, bool bUseTwoDigitYear, double& rdRet )
+bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
+        bool bUseTwoDigitYear, bool bRollOver, double& rdRet )
 {
     // XXX NOTE: For VBA years<0 are invalid and years in the range 0..29 and
     // 30..99 can not be input as they are 2-digit for 2000..2029 and
@@ -4945,58 +4946,59 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, bool bUs
         }
     }
 
+    sal_Int32 nAddMonths = 0;
+    sal_Int32 nAddDays = 0;
+    // Always sanitize values to set date and to use for validity detection.
+    if (nMonth < 1 || 12 < nMonth)
+    {
+        sal_Int16 nM = ((nMonth < 1) ? (12 + (nMonth % 12)) : (nMonth % 12));
+        nAddMonths = nMonth - nM;
+        nMonth = nM;
+    }
+    // Day 0 would already be normalized during Date::Normalize(), include
+    // it in negative days, also to detect non-validity. The actual day of
+    // month is 1+(nDay-1)
+    if (nDay < 1)
+    {
+        nAddDays = nDay - 1;
+        nDay = 1;
+    }
+    else if (nDay > 31)
+    {
+        nAddDays = nDay - 31;
+        nDay = 31;
+    }
+
     Date aCurDate( nDay, nMonth, nYear );
 
-    /* TODO: also StarBASIC should provide the rollover mechanism, probably we
-     * can use tools::Date::AddMonths() and operator+=() for both, VBA and
-     * StarBASIC. If called from CDateFromIso or CDateFromUnoDate it should not
-     * rollover. */
+    /* TODO: we could enable the same rollover mechanism for StarBASIC to be
+     * compatible with VBA (just with our wider supported date range), then
+     * documentation would need to be adapted. As is, the DateSerial() runtime
+     * function works as dumb as documented.. (except that the resulting date
+     * is checked for validity now and not just day<=31 and month<=12).
+     * If change wanted then simply remove overriding bRollOver here and adapt
+     * documentation.*/
 #if HAVE_FEATURE_SCRIPTING
-    if ( !SbiRuntime::isVBAEnabled() )
+    if (!SbiRuntime::isVBAEnabled())
+        bRollOver = false;
 #endif
-    {
-        if ( nMonth < 1 || nDay < 1 || !aCurDate.IsValidDate() )
-        {
-#if HAVE_FEATURE_SCRIPTING
-            StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-#endif
-            return false;
-        }
-    }
-#if HAVE_FEATURE_SCRIPTING
-    else
-    {
-        // grab the year & month
-        aCurDate = Date( 1, (( nMonth % 12 ) > 0 ) ? ( nMonth % 12 ) : 12 + ( nMonth % 12 ), nYear );
 
-        // adjust year based on month value
-        // e.g. 2000, 0, xx = 1999, 12, xx ( or December of the previous year )
-        //      2000, 13, xx = 2001, 1, xx ( or January of the following year )
-        if( ( nMonth < 1 ) || ( nMonth > 12 ) )
-        {
-            // inaccurate around leap year, don't use days to calculate,
-            // just modify the months directory
-            sal_Int16 nYearAdj = ( nMonth /12 ); // default to positive months inputed
-            if ( nMonth <=0 )
-            {
-                nYearAdj = ( ( nMonth -12 ) / 12 );
-            }
-            aCurDate.AddYears( nYearAdj );
-        }
-
-        // adjust day value,
-        // e.g. 2000, 2, 0 = 2000, 1, 31 or the last day of the previous month
-        //      2000, 1, 32 = 2000, 2, 1 or the first day of the following month
-        if( ( nDay < 1 ) || ( nDay > aCurDate.GetDaysInMonth() ) )
-        {
-            aCurDate += nDay - 1;
-        }
-        else
-        {
-            aCurDate.SetDay( nDay );
-        }
-    }
+    if (nYear == 0 || (!bRollOver && (nAddMonths || nAddDays || !aCurDate.IsValidDate())))
+    {
+#if HAVE_FEATURE_SCRIPTING
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 #endif
+        return false;
+    }
+
+    if (bRollOver)
+    {
+        aCurDate.Normalize();
+        if (nAddMonths)
+            aCurDate.AddMonths( nAddMonths);
+        if (nAddDays)
+            aCurDate += (long)nAddDays;
+    }
 
     long nDiffDays = GetDayDiff( aCurDate );
     rdRet = (double)nDiffDays;
@@ -5015,10 +5017,10 @@ double implTimeSerial( sal_Int16 nHours, sal_Int16 nMinutes, sal_Int16 nSeconds 
 
 bool implDateTimeSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
                          sal_Int16 nHour, sal_Int16 nMinute, sal_Int16 nSecond,
-                         bool bUseTwoDigitYear, double& rdRet )
+                         bool bUseTwoDigitYear, bool bRollOver, double& rdRet )
 {
     double dDate;
-    if(!implDateSerial(nYear, nMonth, nDay, bUseTwoDigitYear, dDate))
+    if(!implDateSerial(nYear, nMonth, nDay, bUseTwoDigitYear, bRollOver, dDate))
         return false;
     rdRet += dDate + implTimeSerial(nHour, nMinute, nSecond);
     return true;

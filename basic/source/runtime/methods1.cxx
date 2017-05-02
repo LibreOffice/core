@@ -2075,7 +2075,7 @@ RTLFUNC(DateAdd)
                 sal_Int32 nTargetYear = lNumber + nYear;
                 nTargetYear16 = limitToINT16( nTargetYear );
                 nTargetMonth = nMonth;
-                bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, false, dNewDate );
+                bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, false, true, dNewDate );
                 break;
             }
             case INTERVAL_Q:
@@ -2119,7 +2119,7 @@ RTLFUNC(DateAdd)
                     nTargetYear = (sal_Int32)nYear + nYearsAdd;
                 }
                 nTargetYear16 = limitToINT16( nTargetYear );
-                bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, false, dNewDate );
+                bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, false, true, dNewDate );
                 break;
             }
             default: break;
@@ -2134,7 +2134,7 @@ RTLFUNC(DateAdd)
             while( nNewMonth > nTargetMonth )
             {
                 nCorrectionDay--;
-                implDateSerial( nTargetYear16, nTargetMonth, nCorrectionDay, false, dNewDate );
+                implDateSerial( nTargetYear16, nTargetMonth, nCorrectionDay, false, true, dNewDate );
                 implGetDayMonthYear( nNewYear, nNewMonth, nNewDay, dNewDate );
             }
             dNewDate += dHoursMinutesSeconds;
@@ -2329,7 +2329,7 @@ double implGetDateOfFirstDayInFirstWeek
         nFirstWeekMinDays = 7;      // vbFirstFourDays
 
     double dBaseDate;
-    implDateSerial( nYear, 1, 1, false, dBaseDate );
+    implDateSerial( nYear, 1, 1, false, false, dBaseDate );
 
     sal_Int16 nWeekDay0101 = implGetWeekDay( dBaseDate );
     sal_Int16 nDayDiff = nWeekDay0101 - nFirstDay;
@@ -2392,7 +2392,7 @@ RTLFUNC(DatePart)
         {
             sal_Int16 nYear = implGetDateYear( dDate );
             double dBaseDate;
-            implDateSerial( nYear, 1, 1, false, dBaseDate );
+            implDateSerial( nYear, 1, 1, false, false, dBaseDate );
             nRet = 1 + sal_Int32( dDate - dBaseDate );
             break;
         }

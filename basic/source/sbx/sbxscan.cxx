@@ -761,7 +761,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
             {
                 sal_Int16 nYear = implGetDateYear( nNumber );
                 double dBaseDate;
-                implDateSerial( nYear, 1, 1, true, dBaseDate );
+                implDateSerial( nYear, 1, 1, true, false, dBaseDate );
                 sal_Int32 nYear32 = 1 + sal_Int32( nNumber - dBaseDate );
                 rRes = OUString::number(nYear32);
             }

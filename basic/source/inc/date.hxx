@@ -24,11 +24,11 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
-bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, bool bUseTwoDigitYear, double& rdRet );
+bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, bool bUseTwoDigitYear, bool bRollOver, double& rdRet );
 double implTimeSerial( sal_Int16 nHour, sal_Int16 nMinute, sal_Int16 nSecond);
 bool implDateTimeSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
                          sal_Int16 nHour, sal_Int16 nMinute, sal_Int16 nSecond,
-                         bool bUseTwoDigitYear, double& rdRet );
+                         bool bUseTwoDigitYear, bool bRollOver, double& rdRet );
 
 sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam = false, sal_Int16 nFirstDay = 0 );
 
