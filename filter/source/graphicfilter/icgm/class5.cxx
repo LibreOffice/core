@@ -197,7 +197,7 @@ void CGM::ImplDoClass5()
         case 0x12 : /*Text Alignment*/
         {
             pElement->eTextAlignmentH = (TextAlignmentH)ImplGetUI16();
-            pElement->eTextAlignmentV = (TextAlignmentV)ImplGetUI16( 8 );
+            pElement->eTextAlignmentV = (TextAlignmentV)ImplGetUI16();
             pElement->nTextAlignmentHCont = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
             pElement->nTextAlignmentVCont = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
         }
@@ -436,8 +436,8 @@ void CGM::ImplDoClass5()
         {
             long nHorzOffset = ImplGetI( pElement->nIndexPrecision );
             long nVertOffset = ImplGetI( pElement->nIndexPrecision );
-            sal_uInt32 nType = ImplGetUI16();
-            mpOutAct->SetGradientOffset( nHorzOffset, nVertOffset, nType );
+            (void)ImplGetUI16(); // nType
+            mpOutAct->SetGradientOffset( nHorzOffset, nVertOffset );
             mnAct4PostReset |= ACT4_GRADIENT_ACTION;
         }
         break;
@@ -486,7 +486,7 @@ void CGM::ImplDoClass5()
                 mnParaSize = nPara;
             }
             if ( nNumberOfStages > 1 )
-                mpOutAct->SetGradientStyle( 0xff, 1 );
+                mpOutAct->SetGradientStyle( 0xff );
 
             mpOutAct->SetGradientDescriptor( nColorFrom, nColorTo );
             mnAct4PostReset |= ACT4_GRADIENT_ACTION;
@@ -494,9 +494,9 @@ void CGM::ImplDoClass5()
         break;
         case 0x7e : /*set Gradient Style*/
         {
-            sal_uInt32 nStyle = ImplGetUI16( 8 );
-            double fRatio = ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize );
-            mpOutAct->SetGradientStyle( nStyle, fRatio );
+            sal_uInt32 nStyle = ImplGetUI16();
+            (void)ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize ); // fRatio
+            mpOutAct->SetGradientStyle( nStyle );
             mnAct4PostReset |= ACT4_GRADIENT_ACTION;
         }
         break;

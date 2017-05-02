@@ -605,7 +605,7 @@ public:
                                 const SdrPage& rPage,
                                 sal_uInt32& nBgFileOffset
                             );
-    bool                    IsNoteOrHandout( sal_uInt16 nPageNum, PptPageKind ePageKind ) const;
+    bool                    IsNoteOrHandout( sal_uInt16 nPageNum ) const;
     bool                    HasMasterPage(
                                 sal_uInt16 nPageNum,
                                 PptPageKind ePageKind = PPT_SLIDEPAGE
@@ -736,7 +736,7 @@ struct PPTCharSheet
                     explicit PPTCharSheet( TSS_Type nInstance );
                     PPTCharSheet( const PPTCharSheet& rCharSheet );
 
-    void            Read( SvStream& rIn, bool bMasterStyle, sal_uInt32 nLevel, bool bFirst );
+    void            Read( SvStream& rIn, sal_uInt32 nLevel );
 };
 
 struct PPTParaLevel
@@ -772,7 +772,6 @@ public:
     void            Read(
                         SdrPowerPointImport& rMan,
                         SvStream& rIn,
-                        bool bMasterStyle,
                         sal_uInt32 nLevel,
                         bool bFirst
                     );
@@ -792,8 +791,7 @@ class PPTNumberFormatCreator
 
     void        ImplGetNumberFormat(
                     SdrPowerPointImport& rMan,
-                    SvxNumberFormat& rNumberFormat,
-                    sal_uInt32 nLevel
+                    SvxNumberFormat& rNumberFormat
                 );
     bool       ImplGetExtNumberFormat(
                     SdrPowerPointImport& rMan,
@@ -994,7 +992,7 @@ struct PPTTextRulerInterpreter
                     { return mxImplRuler->pTab[ nIndex ].nStyle; };
 
         sal_uInt16  GetTabCount() const { return mxImplRuler->nTabCount; };
-        bool        GetDefaultTab( sal_uInt32 nLevel, sal_uInt16& nValue ) const;
+        bool        GetDefaultTab( sal_uInt16& nValue ) const;
         bool        GetTextOfs( sal_uInt32 nLevel, sal_uInt16& nValue ) const;
         bool        GetBulletOfs( sal_uInt32 nLevel, sal_uInt16& nValue ) const;
 
@@ -1170,8 +1168,7 @@ public:
                                 SfxItemSet& rSet,
                                 boost::optional< sal_Int16 >& rStartNumbering,
                                 SdrPowerPointImport& rManager,
-                                TSS_Type nInstanceInSheet,
-                                const PPTParagraphObj* pPrev
+                                TSS_Type nInstanceInSheet
                             );
 };
 

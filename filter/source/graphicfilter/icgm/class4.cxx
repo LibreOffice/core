@@ -183,7 +183,7 @@ void CGM::ImplDoClass4()
                     mpOutAct->CloseRegion();
 
                 ImplGetPoint ( aFloatPoint, true );
-                sal_uInt32 nType = ImplGetUI16( 4 );
+                sal_uInt32 nType = ImplGetUI16();
                 sal_uInt32 nSize = ImplGetUI( 1 );
 
                 if (static_cast<sal_uIntPtr>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
@@ -194,7 +194,7 @@ void CGM::ImplDoClass4()
                 awt::Size aSize;
                 awt::Point aPoint( (long)aFloatPoint.X, (long)aFloatPoint.Y );
                 mpOutAct->DrawText( aPoint, aSize,
-                                reinterpret_cast<char*>(mpSource) + mnParaSize, nSize, (FinalFlag)nType );
+                                reinterpret_cast<char*>(mpSource) + mnParaSize, (FinalFlag)nType );
                 mnParaSize = mnElementSize;
             }
             break;
@@ -221,7 +221,7 @@ void CGM::ImplDoClass4()
                 ImplMapDouble( dy );
 
                 ImplGetPoint ( aFloatPoint, true );
-                sal_uInt32 nType = ImplGetUI16(4);
+                sal_uInt32 nType = ImplGetUI16();
                 sal_uInt32 nSize = ImplGetUI(1);
 
                 if (static_cast<sal_uIntPtr>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
@@ -232,14 +232,14 @@ void CGM::ImplDoClass4()
                 awt::Point aPoint( (long)aFloatPoint.X, (long)aFloatPoint.Y );
                 awt::Size aSize((long)dx, (long)dy);
                 mpOutAct->DrawText( aPoint, aSize ,
-                                reinterpret_cast<char*>(mpSource) + mnParaSize, nSize, (FinalFlag)nType );
+                                reinterpret_cast<char*>(mpSource) + mnParaSize, (FinalFlag)nType );
                 mnParaSize = mnElementSize;
             }
             break;
 
             case 0x06 : /*Append Text*/
             {
-                sal_uInt32 nType = ImplGetUI16( 4 );
+                (void)ImplGetUI16(); // nType
                 sal_uInt32 nSize = ImplGetUI( 1 );
 
                 if (static_cast<sal_uIntPtr>(mpEndValidSource - (mpSource + mnParaSize)) < nSize)
@@ -247,7 +247,7 @@ void CGM::ImplDoClass4()
 
                 mpSource[ mnParaSize + nSize ] = 0;
 
-                mpOutAct->AppendText( reinterpret_cast<char*>(mpSource) + mnParaSize, nSize, (FinalFlag)nType );
+                mpOutAct->AppendText( reinterpret_cast<char*>(mpSource) + mnParaSize );
                 mnParaSize = mnElementSize;
             }
             break;

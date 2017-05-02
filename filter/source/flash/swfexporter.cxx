@@ -263,7 +263,7 @@ bool FlashExporter::exportAll( const Reference< XComponent >& xDoc, Reference< X
 }
 
 
-bool FlashExporter::exportSlides( const Reference< XDrawPage >& xDrawPage, Reference< XOutputStream > &xOutputStream, sal_uInt16 /* nPage */ )
+bool FlashExporter::exportSlides( const Reference< XDrawPage >& xDrawPage, Reference< XOutputStream > &xOutputStream )
 {
     Reference< XPropertySet > xPropSet( xDrawPage, UNO_QUERY );
     if( !xDrawPage.is() || !xPropSet.is() )

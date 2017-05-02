@@ -414,7 +414,7 @@ bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
             fullpath = swfdirpath + STR("/slide") + VAL(nPage+1) + STR("p.swf");
 
             Reference<XOutputStream> xOutputStreamWrap(*(new OslOutputStreamWrapper(fullpath)), UNO_QUERY);
-            bool ret = aFlashExporter.exportSlides( xDrawPage, xOutputStreamWrap, sal::static_int_cast<sal_uInt16>( nPage ) );
+            bool ret = aFlashExporter.exportSlides( xDrawPage, xOutputStreamWrap );
             aFlashExporter.Flush();
             xOutputStreamWrap.clear();
 

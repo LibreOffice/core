@@ -1292,8 +1292,7 @@ bool EscherPropertyContainer::CreateGraphicProperties( const css::uno::Reference
                 pVisArea.reset(new css::awt::Rectangle);
                 aAny >>= (*pVisArea);
             }
-            tools::Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
-            sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, pVisArea.get() );
+            sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, pVisArea.get() );
             if ( nBlibId )
             {
                 AddOpt( ESCHER_Prop_pib, nBlibId, true );
@@ -1327,8 +1326,7 @@ bool EscherPropertyContainer::ImplCreateEmbeddedBmp( const OString& rUniqueId )
     {
         EscherGraphicProvider aProvider;
         SvMemoryStream aMemStrm;
-        tools::Rectangle aRect;
-        if ( aProvider.GetBlibID( aMemStrm, rUniqueId, aRect ) )
+        if ( aProvider.GetBlibID( aMemStrm, rUniqueId ) )
         {
             // grab BLIP from stream and insert directly as complex property
             // ownership of stream memory goes to complex property
@@ -1696,8 +1694,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                 // write out embedded graphic
                 if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
                 {
-                    tools::Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
-                    const sal_uInt32 nBlibId(pGraphicProvider->GetBlibID(*pPicOutStrm, aUniqueId, aRect, nullptr, pGraphicAttr.get()));
+                    const sal_uInt32 nBlibId(pGraphicProvider->GetBlibID(*pPicOutStrm, aUniqueId, nullptr, pGraphicAttr.get()));
 
                     if(nBlibId)
                     {
@@ -1718,9 +1715,8 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                 {
                     EscherGraphicProvider aProvider;
                     SvMemoryStream aMemStrm;
-                    tools::Rectangle aRect;
 
-                    if ( aProvider.GetBlibID( aMemStrm, aUniqueId, aRect, nullptr, pGraphicAttr.get(), bOOxmlExport ) )
+                    if ( aProvider.GetBlibID( aMemStrm, aUniqueId, nullptr, pGraphicAttr.get(), bOOxmlExport ) )
                     {
                         // grab BLIP from stream and insert directly as complex property
                         // ownership of stream memory goes to complex property
@@ -3811,9 +3807,7 @@ bool   EscherPropertyContainer::CreateBlipPropertiesforOLEControl(const css::uno
         {
             if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
             {
-                tools::Rectangle aRect( Point( 0, 0 ), pShapeBoundRect->GetSize() );
-
-                sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect );
+                sal_uInt32 nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId );
                 if ( nBlibId )
                 {
                     AddOpt( ESCHER_Prop_pib, nBlibId, true );
@@ -4190,7 +4184,7 @@ bool EscherGraphicProvider::GetPrefSize( const sal_uInt32 nBlibId, Size& rPrefSi
 }
 
 sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OString& rId,
-                                            const tools::Rectangle& /* rBoundRect */, const css::awt::Rectangle* pVisArea,
+                                            const css::awt::Rectangle* pVisArea,
                                             const GraphicAttr* pGraphicAttr, const bool bOOxmlExport )
 {
     sal_uInt32          nBlibId = 0;

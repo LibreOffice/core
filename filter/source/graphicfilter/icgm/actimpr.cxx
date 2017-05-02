@@ -711,7 +711,7 @@ void CGMImpressOutAct::DrawPolyPolygon( tools::PolyPolygon& rPolyPolygon )
     }
 }
 
-void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, char* pString, sal_uInt32 /*nSize*/, FinalFlag eFlag )
+void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, char* pString, FinalFlag eFlag )
 {
     if ( ImplCreateShape( "com.sun.star.drawing.TextShape" ) )
     {
@@ -851,7 +851,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
     }
 }
 
-void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFlag /*eFlag*/ )
+void CGMImpressOutAct::AppendText( const char* pString )
 {
     if ( nFinalTextCount )
     {
@@ -953,7 +953,7 @@ void CGMImpressOutAct::RegPolyLine( tools::Polygon& rPolygon, bool bReverse )
     }
 }
 
-void CGMImpressOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 /*nType*/ )
+void CGMImpressOutAct::SetGradientOffset( long nHorzOfs, long nVertOfs )
 {
     if ( !mpGradient )
         mpGradient = new awt::Gradient;
@@ -976,7 +976,7 @@ void CGMImpressOutAct::SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 
     mpGradient->EndColor = nColorTo;
 }
 
-void CGMImpressOutAct::SetGradientStyle( sal_uInt32 nStyle, double /*fRatio*/ )
+void CGMImpressOutAct::SetGradientStyle( sal_uInt32 nStyle )
 {
     if ( !mpGradient )
         mpGradient = new awt::Gradient;
