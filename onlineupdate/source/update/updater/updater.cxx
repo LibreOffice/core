@@ -1610,7 +1610,7 @@ PatchFile::Prepare()
 
     NS_tremove(spath);
 
-    mPatchStream = NS_tfopen(spath, NS_T("wb"));
+    mPatchStream = NS_tfopen(spath, NS_T("wb+"));
     if (!mPatchStream)
         return WRITE_ERROR;
 
