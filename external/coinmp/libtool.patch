@@ -1,0 +1,162 @@
+--- Cbc/ltmain.sh
++++ Cbc/ltmain.sh
+@@ -1254,6 +1254,12 @@
+ 	  prev=
+ 	  continue
+ 	  ;;
++	mllvm)
++	  # Clang does not use LLVM to link, so we can simply discard any
++	  # '-mllvm $arg' options when doing the link step.
++	  prev=
++	  continue
++	  ;;
+ 	objectlist)
+ 	  if test -f "$arg"; then
+ 	    save_arg=$arg
+@@ -1607,6 +1613,11 @@
+ 	continue
+ 	;;
+ 
++      -mllvm)
++	prev=mllvm
++	continue
++	;;
++
+       -module)
+ 	module=yes
+ 	continue
+--- Cgl/ltmain.sh
++++ Cgl/ltmain.sh
+@@ -1254,6 +1254,12 @@
+ 	  prev=
+ 	  continue
+ 	  ;;
++	mllvm)
++	  # Clang does not use LLVM to link, so we can simply discard any
++	  # '-mllvm $arg' options when doing the link step.
++	  prev=
++	  continue
++	  ;;
+ 	objectlist)
+ 	  if test -f "$arg"; then
+ 	    save_arg=$arg
+@@ -1607,6 +1613,11 @@
+ 	continue
+ 	;;
+ 
++      -mllvm)
++	prev=mllvm
++	continue
++	;;
++
+       -module)
+ 	module=yes
+ 	continue
+--- Clp/ltmain.sh
++++ Clp/ltmain.sh
+@@ -1254,6 +1254,12 @@
+ 	  prev=
+ 	  continue
+ 	  ;;
++	mllvm)
++	  # Clang does not use LLVM to link, so we can simply discard any
++	  # '-mllvm $arg' options when doing the link step.
++	  prev=
++	  continue
++	  ;;
+ 	objectlist)
+ 	  if test -f "$arg"; then
+ 	    save_arg=$arg
+@@ -1607,6 +1613,11 @@
+ 	continue
+ 	;;
+ 
++      -mllvm)
++	prev=mllvm
++	continue
++	;;
++
+       -module)
+ 	module=yes
+ 	continue
+--- CoinMP/ltmain.sh
++++ CoinMP/ltmain.sh
+@@ -1254,6 +1254,12 @@
+ 	  prev=
+ 	  continue
+ 	  ;;
++	mllvm)
++	  # Clang does not use LLVM to link, so we can simply discard any
++	  # '-mllvm $arg' options when doing the link step.
++	  prev=
++	  continue
++	  ;;
+ 	objectlist)
+ 	  if test -f "$arg"; then
+ 	    save_arg=$arg
+@@ -1607,6 +1613,11 @@
+ 	continue
+ 	;;
+ 
++      -mllvm)
++	prev=mllvm
++	continue
++	;;
++
+       -module)
+ 	module=yes
+ 	continue
+--- CoinUtils/ltmain.sh
++++ CoinUtils/ltmain.sh
+@@ -1254,6 +1254,12 @@
+ 	  prev=
+ 	  continue
+ 	  ;;
++	mllvm)
++	  # Clang does not use LLVM to link, so we can simply discard any
++	  # '-mllvm $arg' options when doing the link step.
++	  prev=
++	  continue
++	  ;;
+ 	objectlist)
+ 	  if test -f "$arg"; then
+ 	    save_arg=$arg
+@@ -1607,6 +1613,11 @@
+ 	continue
+ 	;;
+ 
++      -mllvm)
++	prev=mllvm
++	continue
++	;;
++
+       -module)
+ 	module=yes
+ 	continue
+--- Osi/ltmain.sh
++++ Osi/ltmain.sh
+@@ -1254,6 +1254,12 @@
+ 	  prev=
+ 	  continue
+ 	  ;;
++	mllvm)
++	  # Clang does not use LLVM to link, so we can simply discard any
++	  # '-mllvm $arg' options when doing the link step.
++	  prev=
++	  continue
++	  ;;
+ 	objectlist)
+ 	  if test -f "$arg"; then
+ 	    save_arg=$arg
+@@ -1607,6 +1613,11 @@
+ 	continue
+ 	;;
+ 
++      -mllvm)
++	prev=mllvm
++	continue
++	;;
++
+       -module)
+ 	module=yes
+ 	continue
