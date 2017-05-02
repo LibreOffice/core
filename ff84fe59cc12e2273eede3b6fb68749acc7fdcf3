@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_64bb7973",
+        "filename": "oox/source/drawingml/fillproperties.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1001595
+      },
+      "writtenOn": "2017-05-02T09:32:12Z",
+      "side": 1,
+      "message": "This change works for me using a 64bit build with msvc under windows.",
+      "revId": "ff84fe59cc12e2273eede3b6fb68749acc7fdcf3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
