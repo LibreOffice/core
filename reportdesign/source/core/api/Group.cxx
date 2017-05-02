@@ -300,7 +300,13 @@ void OGroup::setSection(     const OUString& _sProperty
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         prepareSet(_sProperty, uno::makeAny(_member), uno::makeAny(_bOn), &l);
-        lcl_createSectionIfNeeded(_bOn ,this,_member);
+
+        // create section if needed
+        if ( _bOn && !_member.is() )
+            _member = OSection::createOSection(this, getContext());
+        else if ( !_bOn )
+            ::comphelper::disposeComponent(_member);
+
         if ( _member.is() )
             _member->setName(_sName);
     }

@@ -35,14 +35,6 @@
 
 namespace reportdesign
 {
-    template <class T> void lcl_createSectionIfNeeded(bool _bOn,const T& _xParent,css::uno::Reference< css::report::XSection>& _xSection/*in/out*/,bool _bPageSection = false)
-    {
-        if ( _bOn && !_xSection.is() )
-            _xSection = OSection::createOSection(_xParent,_xParent->getContext(),_bPageSection);
-        else if ( !_bOn )
-            ::comphelper::disposeComponent(_xSection);
-    }
-
     /** uses the XChild interface to get the section from any child of it.
      *
      * \param _xReportComponent A report component which is a child of the section.

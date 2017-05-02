@@ -209,7 +209,6 @@ public:
     void CreateReadonlyCopyBasedOnData(
                     const css::uno::Reference< css::io::XInputStream >& xDataToCopy,
                     const css::uno::Sequence< css::beans::PropertyValue >& aProps,
-                    bool bUseCommonEncryption,
                     css::uno::Reference< css::io::XStream >& xTargetStream );
 
     void GetCopyOfLastCommit( css::uno::Reference< css::io::XStream >& xTargetStream );

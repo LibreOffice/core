@@ -521,7 +521,7 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
                 bool bChanged = false;
 
                 OObjectBase& rBase = dynamic_cast<OObjectBase&>(*pObject);
-                rBase.EndListening(false);
+                rBase.EndListening();
                 if ( aPos.X < i_nLeftMargin )
                 {
                     aPos.X  = i_nLeftMargin;
@@ -537,7 +537,7 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
                         // add listener around
                         rBase.StartListening();
                         xReportComponent->setSize(aSize);
-                        rBase.EndListening(false);
+                        rBase.EndListening();
                     }
                     bChanged = true;
                 }

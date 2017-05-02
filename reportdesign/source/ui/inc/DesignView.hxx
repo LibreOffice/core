@@ -238,10 +238,9 @@ namespace rptui
 
         /** returns if the view handles the event by itself
         *
-        * \param _nId the command id
         * \return  <FALSE/> is the event is not handled by the view otherwise <TRUE/>
         */
-        bool        isHandleEvent(sal_uInt16 _nId) const;
+        bool        isHandleEvent() const;
 
         sal_uInt32      getMarkedObjectCount() const;
 
