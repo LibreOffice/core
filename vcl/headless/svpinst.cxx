@@ -417,7 +417,7 @@ SalSession* SvpSalInstance::CreateSalSession()
 
 OUString SvpSalInstance::GetConnectionIdentifier()
 {
-    return OUString("");
+    return OUString();
 }
 
 void SvpSalInstance::StopTimer()

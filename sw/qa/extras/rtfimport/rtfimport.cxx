@@ -1734,7 +1734,7 @@ DECLARE_RTFIMPORT_TEST(testContSectionPageBreak, "cont-section-pagebreak.rtf")
     // actually not sure how many paragraph there should be between
     // SECOND and THIRD - important is that the page break is on there
     uno::Reference<text::XTextRange> xParaNext = getParagraph(3);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), xParaNext->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(), xParaNext->getString());
     //If PageDescName is not empty, a page break / switch to page style is defined
     CPPUNIT_ASSERT(uno::Any() != getProperty<OUString>(xParaNext, "PageDescName"));
     uno::Reference<text::XTextRange> xParaThird = getParagraph(4);

@@ -1223,20 +1223,20 @@ DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
         {OUString("Text"), OUString("[B x "), 0},
         {OUString("Annotation"), OUString("Comment on [C..C]"), 2},
         {OUString("Text"), OUString("[C x B]"), 0},
-        {OUString("AnnotationEnd"), OUString(""), 1},
+        {OUString("AnnotationEnd"), OUString(), 1},
         {OUString("Text"), OUString(" x C]"), 0},
-        {OUString("AnnotationEnd"), OUString(""), 2},
+        {OUString("AnnotationEnd"), OUString(), 2},
         {OUString("Text"), OUString(" xx A]"), 0},
-        {OUString("AnnotationEnd"), OUString(""), 0},
+        {OUString("AnnotationEnd"), OUString(), 0},
         {OUString("Text"), OUString(" Comment on a point"), 0},
         {OUString("Annotation"), OUString("Comment on point"), 3},
         {OUString("Text"), OUString("x "), 0},
         {OUString("Annotation"), OUString("Comment on AA...BB"), 4},
         {OUString("Annotation"), OUString("Comment on AAAAAA"), 5},
         {OUString("Text"), OUString("AAAAAA"), 0},
-        {OUString("AnnotationEnd"), OUString(""), 5},
+        {OUString("AnnotationEnd"), OUString(), 5},
         {OUString("Text"), OUString(" BBBBBB"), 0},
-        {OUString("AnnotationEnd"), OUString(""), 4}
+        {OUString("AnnotationEnd"), OUString(), 4}
     };
 
     OUString sNames[6];

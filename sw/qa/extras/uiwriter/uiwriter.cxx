@@ -2054,7 +2054,7 @@ void SwUiWriterTest::testSearchWithTransliterate()
     //transliteration option set so that at least one of the search strings is not found
     sal_uLong case1 = pWrtShell->SearchPattern(SearchOpt,true,SwDocPositions::Start,SwDocPositions::End);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(true);
-    CPPUNIT_ASSERT_EQUAL(OUString(""),pShellCursor->GetText());
+    CPPUNIT_ASSERT_EQUAL(OUString(),pShellCursor->GetText());
     CPPUNIT_ASSERT_EQUAL(0,(int)case1);
     SearchOpt.searchString = "paragraph";
     SearchOpt.transliterateFlags = TransliterationFlags::IGNORE_KASHIDA_CTL;
@@ -3492,7 +3492,7 @@ void SwUiWriterTest::testTdf87922()
 struct PortionItem
 {
     PortionItem(OUString const & sItemType, sal_Int32 nLength = 0,
-                sal_uInt16 nTextType = 0, OUString const & sText = OUString(""))
+                sal_uInt16 nTextType = 0, OUString const & sText = OUString())
         : msItemType(sItemType)
         , mnLength(nLength)
         , mnTextType(nTextType)

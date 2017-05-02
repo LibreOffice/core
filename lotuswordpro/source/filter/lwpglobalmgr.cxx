@@ -136,7 +136,7 @@ OUString LwpGlobalMgr::GetEditorName(sal_uInt8 nID)
     auto iter = m_EditorAttrMap.find(nID);
     if (iter != m_EditorAttrMap.end())
         return iter->second->cName.str();
-    return OUString("");
+    return OUString();
 }
 
 XFColor LwpGlobalMgr::GetHighlightColor(sal_uInt8 nID)

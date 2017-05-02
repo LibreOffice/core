@@ -176,7 +176,7 @@ SalYieldResult X11SalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents,
 OUString X11SalInstance::GetConnectionIdentifier()
 {
     static const char* pDisplay = getenv( "DISPLAY" );
-    return pDisplay ? OUString::createFromAscii(pDisplay) : OUString("");
+    return pDisplay ? OUString::createFromAscii(pDisplay) : OUString();
 }
 
 SalFrame *X11SalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle )

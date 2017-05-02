@@ -1575,7 +1575,7 @@ void FileDialogHelper_Impl::getRealFilter( OUString& _rFilter ) const
     {
         std::shared_ptr<const SfxFilter> pFilter =
             mpMatcher->GetFilter4UIName( _rFilter, m_nMustFlags, m_nDontFlags );
-        _rFilter = pFilter ? pFilter->GetFilterName() : OUString("");
+        _rFilter = pFilter ? pFilter->GetFilterName() : OUString();
     }
 }
 
