@@ -3103,7 +3103,6 @@ void ToolbarLayoutManager::implts_setTrackingRect( ui::DockingArea eDockingArea,
 
 void ToolbarLayoutManager::implts_renumberRowColumnData(
     ui::DockingArea eDockingArea,
-    DockingOperation /*eDockingOperation*/,
     const UIElement& rUIElement )
 {
     SolarMutexClearableGuard aReadLock;
@@ -3515,7 +3514,7 @@ void SAL_CALL ToolbarLayoutManager::endDocking( const awt::EndDockingEvent& e )
             if ( m_eDockOperation != DOCKOP_ON_COLROW )
             {
                 // we have to renumber our row/column data to insert a new row/column
-                implts_renumberRowColumnData((ui::DockingArea)aUIDockingElement.m_aDockedData.m_nDockedArea, m_eDockOperation, aUIDockingElement );
+                implts_renumberRowColumnData((ui::DockingArea)aUIDockingElement.m_aDockedData.m_nDockedArea, aUIDockingElement );
             }
         }
 

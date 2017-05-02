@@ -205,7 +205,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
 
         void             implts_setDockingAreaWindowSizes( const css::awt::Rectangle& rBorderSpace );
         css::awt::Point  implts_findNextCascadeFloatingPos();
-        void             implts_renumberRowColumnData( css::ui::DockingArea eDockingArea, DockingOperation eDockingOperation, const UIElement& rUIElement );
+        void             implts_renumberRowColumnData( css::ui::DockingArea eDockingArea, const UIElement& rUIElement );
         void             implts_calcWindowPosSizeOnSingleRowColumn( sal_Int32 nDockingArea,
                                                                     sal_Int32 nOffset,
                                                                     SingleRowColumnWindowData& rRowColumnWindowData,

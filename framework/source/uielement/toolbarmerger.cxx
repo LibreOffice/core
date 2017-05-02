@@ -371,7 +371,6 @@ bool ToolBarMerger::ProcessMergeOperation(
 */
 bool ToolBarMerger::ProcessMergeFallback(
     ToolBox*                         pToolbar,
-    ToolBox::ImplToolItems::size_type /*nPos*/,
     sal_uInt16&                      rItemId,
     CommandToInfoMap&                rCommandMap,
     const OUString&           rModuleIdentifier,

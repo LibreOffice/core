@@ -2482,7 +2482,7 @@ awt::Rectangle LayoutManager::implts_calcDockingAreaSizes()
     return aBorderSpace;
 }
 
-void LayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangle& /*rBorderSpace*/ )
+void LayoutManager::implts_setDockingAreaWindowSizes()
 {
     SolarMutexClearableGuard aReadLock;
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
@@ -2714,7 +2714,7 @@ IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl, Timer *, void)
     aDockingArea.Height -= aStatusBarSize.Height();
     aReadLock.clear();
 
-    implts_setDockingAreaWindowSizes( aDockingArea );
+    implts_setDockingAreaWindowSizes();
     implts_doLayout( true, false );
 }
 
