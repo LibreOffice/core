@@ -126,4 +126,63 @@ void Test::testSetFormula()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testMultipleDataCellsInRange()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScRange aRange(1,2,0); // B3
+    sc::MultiDataCellState aState = m_pDoc->HasMultipleDataCells(aRange);
+    CPPUNIT_ASSERT_EQUAL(sc::MultiDataCellState::Empty, aState.meState);
+
+    // Set a numeric value to B3.
+    m_pDoc->SetValue(ScAddress(1,2,0), 1.0);
+    aState = m_pDoc->HasMultipleDataCells(aRange);
+    CPPUNIT_ASSERT(sc::MultiDataCellState::HasOneCell, aState.meState);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), aState.mnCol1);
+    CPPUNIT_ASSERT_EQUAL(SCROW(2), aState.mnRow1);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), aState.mnTab1);
+
+    // Set another numeric value to B4.
+    m_pDoc->SetValue(ScAddress(1,3,0), 2.0);
+    aRange.aEnd.SetRow(3); // B3:B4
+    aState = m_pDoc->HasMultipleDataCells(aRange);
+    CPPUNIT_ASSERT(sc::MultiDataCellState::HasMultipleCells, aState.meState);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), aState.mnCol1);
+    CPPUNIT_ASSERT_EQUAL(SCROW(2), aState.mnRow1);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), aState.mnTab1);
+
+    // Set the query range to B4:B5.  Now it should only report one cell, with
+    // B4 being the first non-empty cell.
+    aRange.aStart.SetRow(3);
+    aRange.aEnd.SetRow(4);
+    aState = m_pDoc->HasMultipleDataCells(aRange);
+    CPPUNIT_ASSERT(sc::MultiDataCellState::HasOneCell, aState.meState);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), aState.mnCol1);
+    CPPUNIT_ASSERT_EQUAL(SCROW(3), aState.mnRow1);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), aState.mnTab1);
+
+    // Set the query range to A1:C3.  The first non-empty cell should be B3.
+    aRange = ScRange(0,0,0,2,2,0);
+    aState = m_pDoc->HasMultipleDataCells(aRange);
+    CPPUNIT_ASSERT(sc::MultiDataCellState::HasOneCell, aState.meState);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(1), aState.mnCol1);
+    CPPUNIT_ASSERT_EQUAL(SCROW(2), aState.mnRow1);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), aState.mnTab1);
+
+    // Set string cells to D4 and F5, and query D3:F5.  D4 should be the first
+    // non-empty cell.
+    m_pDoc->SetString(ScAddress(3,3,0), "foo");
+    m_pDoc->SetString(ScAddress(5,4,0), "bar");
+    aRange = ScRange(3,2,0,5,4,0);
+    aState = m_pDoc->HasMultipleDataCells(aRange);
+    CPPUNIT_ASSERT(sc::MultiDataCellState::HasMultipleCells, aState.meState);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(3), aState.mnCol1);
+    CPPUNIT_ASSERT_EQUAL(SCROW(3), aState.mnRow1);
+    CPPUNIT_ASSERT_EQUAL(SCTAB(0), aState.mnTab1);
+
+    // TODO : add more test cases as needed.
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
