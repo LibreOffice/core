@@ -104,7 +104,7 @@ public:
     double getGlobalLineTypeScale() const { return mfGlobalLineTypeScale; }
     void setGlobalLineTypeScale(double fGlobalLineTypeScale) { mfGlobalLineTypeScale = fGlobalLineTypeScale; }
 
-    bool Read( SvStream & rIStream, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent);
+    bool Read( SvStream & rIStream );
         // Reads complete DXF file.
 
 private:

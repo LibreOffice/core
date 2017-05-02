@@ -58,7 +58,7 @@ void CGM::ImplDoClass1()
         break;
         case 0x05 : /*Real Precision*/
         {
-            nUInteger = ImplGetUI16( 4 );
+            nUInteger = ImplGetUI16();
             nI0 = ImplGetI( pElement->nIntegerPrecision );  // exponent
             nI1 = ImplGetI( pElement->nIntegerPrecision );  // mantisse
             switch( nUInteger )

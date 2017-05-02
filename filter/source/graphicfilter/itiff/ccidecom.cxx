@@ -646,7 +646,7 @@ DecompressStatus CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_u
             sal_uInt32 nCurPos = pIStream->Tell();
             sal_uInt16 nOldInputBitsBufSize = nInputBitsBufSize;
             sal_uInt32 nOldInputBitsBuf = nInputBitsBuf;
-            if ( !ReadEOL( 32 ) )
+            if ( !ReadEOL() )
             {
                 nInputBitsBufSize = nOldInputBitsBufSize;
                 nInputBitsBuf = nOldInputBitsBuf;
@@ -657,7 +657,7 @@ DecompressStatus CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_u
         }
         else
         {
-            if ( !ReadEOL( nTargetBits ) )
+            if ( !ReadEOL() )
             {
                 return DecompressStatus(bStatus, true);
             }
@@ -762,7 +762,7 @@ void CCIDecompressor::MakeLookUp(const CCIHuffmanTableEntry * pHufTab,
 }
 
 
-bool CCIDecompressor::ReadEOL( sal_uInt32 /*nMaxFillBits*/ )
+bool CCIDecompressor::ReadEOL()
 {
     sal_uInt16  nCode;
     sal_uInt8   nByte;

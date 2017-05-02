@@ -85,8 +85,8 @@ public:
     void                        DrawPolyLine( tools::Polygon& );
     void                        DrawPolybezier( tools::Polygon& );
     void                        DrawPolyPolygon( tools::PolyPolygon& );
-    void                        DrawText( css::awt::Point& TextRectPos, css::awt::Size& TextRectSize, char* String, sal_uInt32 StringSize, FinalFlag );
-    void                        AppendText( char* String, sal_uInt32 StringSize, FinalFlag );
+    void                        DrawText( css::awt::Point& TextRectPos, css::awt::Size& TextRectSize, char* String, FinalFlag );
+    void                        AppendText( const char* String );
 
     void                        FirstOutPut() { mpCGM->mbFirstOutPut = false; } ;
     void                        BeginFigure();
@@ -94,10 +94,10 @@ public:
     void                        NewRegion();
     void                        EndFigure();
     void                        RegPolyLine( tools::Polygon&, bool bReverse = false );
-    void                        SetGradientOffset( long nHorzOfs, long nVertOfs, sal_uInt32 nType );
+    void                        SetGradientOffset( long nHorzOfs, long nVertOfs );
     void                        SetGradientAngle( long nAngle );
     void                        SetGradientDescriptor( sal_uInt32 nColorFrom, sal_uInt32 nColorTo );
-    void                        SetGradientStyle( sal_uInt32 nStyle, double fRatio );
+    void                        SetGradientStyle( sal_uInt32 nStyle );
 };
 
 

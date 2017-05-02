@@ -144,7 +144,7 @@ DXFLineInfo DXF2GDIMetaFile::GetEntityDXFLineInfo(const DXFBasicEntity & rE)
 }
 
 
-bool DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE, sal_uLong /*nWidth*/)
+bool DXF2GDIMetaFile::SetLineAttribute(const DXFBasicEntity & rE)
 {
     long nColor;
     Color aColor;
@@ -184,7 +184,7 @@ bool DXF2GDIMetaFile::SetAreaAttribute(const DXFBasicEntity & rE)
 }
 
 
-bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAngle, sal_uInt16 nHeight, double /*fWidthScale*/)
+bool DXF2GDIMetaFile::SetFontAttribute(const DXFBasicEntity & rE, short nAngle, sal_uInt16 nHeight)
 {
     long nColor;
     Color aColor;
@@ -422,7 +422,7 @@ void DXF2GDIMetaFile::DrawTextEntity(const DXFTextEntity & rE, const DXFTransfor
     fA=aT.CalcRotAngle();
     nAng=(short)(fA*10.0+0.5);
     aT.TransDir(DXFVector(1,0,0),aV);
-    if ( SetFontAttribute( rE,nAng, nHeight, aV. Abs() ) )
+    if ( SetFontAttribute( rE,nAng, nHeight ) )
     {
         OUString const aUString(pDXF->ToOUString(rE.m_sText));
         aT.Transform( DXFVector( 0, 0, 0 ), aPt );
@@ -480,7 +480,7 @@ void DXF2GDIMetaFile::DrawAttribEntity(const DXFAttribEntity & rE, const DXFTran
         fA=aT.CalcRotAngle();
         nAng=(short)(fA*10.0+0.5);
         aT.TransDir(DXFVector(1,0,0),aV);
-        if (SetFontAttribute(rE,nAng,nHeight,aV.Abs()))
+        if (SetFontAttribute(rE,nAng,nHeight))
         {
             OUString const aUString(pDXF->ToOUString(rE.m_sText));
             aT.Transform( DXFVector( 0, 0, 0 ), aPt );
@@ -519,7 +519,7 @@ void DXF2GDIMetaFile::DrawPolyLineEntity(const DXFPolyLineEntity & rE, const DXF
     fW/=2.0;
     if ((rE.nFlags&1)!=0) fW/=(double)nPolySize;
     else fW/=(double)(nPolySize-1);
-    if (SetLineAttribute(rE,rTransform.TransLineWidth(fW))) {
+    if (SetLineAttribute(rE)) {
         if ((rE.nFlags&1)!=0) pVirDev->DrawPolygon(aPoly);
         else pVirDev->DrawPolyLine(aPoly);
         if (rE.fThickness!=0) {
@@ -549,8 +549,7 @@ void DXF2GDIMetaFile::DrawLWPolyLineEntity(const DXFLWPolyLineEntity & rE, const
         {
             rTransform.Transform( rE.pP[ (sal_uInt16)i ], aPoly[ (sal_uInt16)i ] );
         }
-        double fW = rE.fConstantWidth;
-        if ( SetLineAttribute( rE, rTransform.TransLineWidth( fW ) ) )
+        if ( SetLineAttribute( rE ) )
         {
             if ( ( rE.nFlags & 1 ) != 0 )
                 pVirDev->DrawPolygon( aPoly );

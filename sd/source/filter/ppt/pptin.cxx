@@ -604,7 +604,7 @@ bool ImplSdPPTImport::Import()
                             PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_Type::TextInShape, 0 );
                             PPTPortionObj aPortion( *pPPTStyleSheet, TSS_Type::TextInShape, 0 );
                             aParagraph.AppendPortion( aPortion );
-                            aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown, nullptr );
+                            aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
                             aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
                         }
                     }
@@ -617,7 +617,7 @@ bool ImplSdPPTImport::Import()
                         PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_Type::TextInShape, 0 );
                         PPTPortionObj aPortion( *pPPTStyleSheet, TSS_Type::TextInShape, 0 );
                         aParagraph.AppendPortion( aPortion );
-                        aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown, nullptr );
+                        aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
                         aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
                     }
 
@@ -662,7 +662,7 @@ bool ImplSdPPTImport::Import()
                             PPTParagraphObj aParagraph( *pPPTStyleSheet, nTitleInstance, 0 );
                             PPTPortionObj aPortion( *pPPTStyleSheet, nTitleInstance, 0 );
                             aParagraph.AppendPortion( aPortion );
-                            aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown, nullptr );
+                            aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
                             aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
                         }
 
@@ -684,7 +684,7 @@ bool ImplSdPPTImport::Import()
                                 SfxItemSet& rItemSet = pOutlineSheet->GetItemSet();
                                 PPTPortionObj aPortion( *pPPTStyleSheet, nOutlinerInstance, nLevel );
                                 pParagraphs[ nLevel ]->AppendPortion( aPortion );
-                                pParagraphs[ nLevel ]->ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown, pPreviousPara );
+                                pParagraphs[ nLevel ]->ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
                                 aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
                                 pPreviousPara = pParagraphs[ nLevel ];
                             }
@@ -701,7 +701,7 @@ bool ImplSdPPTImport::Import()
                             PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_Type::Subtitle, 0 );
                             PPTPortionObj aPortion( *pPPTStyleSheet, TSS_Type::Subtitle, 0 );
                             aParagraph.AppendPortion( aPortion );
-                            aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown, nullptr );
+                            aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
                             aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
                         }
                     }
@@ -714,7 +714,7 @@ bool ImplSdPPTImport::Import()
                             PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_Type::Notes, 0 );
                             PPTPortionObj aPortion( *pPPTStyleSheet, TSS_Type::Notes, 0 );
                             aParagraph.AppendPortion( aPortion );
-                            aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown, nullptr );
+                            aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
                             aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
                         }
                     }

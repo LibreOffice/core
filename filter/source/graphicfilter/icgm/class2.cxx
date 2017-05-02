@@ -103,7 +103,7 @@ void CGM::ImplDoClass2()
         break;
         case 0x09 : /*Device Viewport Specification Mode*/
         {
-            nUInteger = ImplGetUI16( 8 );
+            nUInteger = ImplGetUI16();
             switch( nUInteger )
             {
                 case 0 : pElement->eDeviceViewPortMode = DVPM_FRACTION; break;
