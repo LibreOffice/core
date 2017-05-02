@@ -61,6 +61,10 @@ void DateTest::testDate()
     aDate.Normalize();
     CPPUNIT_ASSERT_EQUAL( aMax.GetDate(), aDate.GetDate());
 
+    // Empty date is not a valid date.
+    aDate = Date( Date::EMPTY );
+    CPPUNIT_ASSERT( !aDate.IsValidDate());
+
     // 0001-00-x normalized to -0001-12-x
     aDate.SetYear(1);
     aDate.SetMonth(0);
