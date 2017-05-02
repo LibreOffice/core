@@ -99,7 +99,7 @@ public:
     OObjectBase(const OObjectBase&) = delete;
     OObjectBase& operator=(const OObjectBase&) = delete;
     void StartListening();
-    void EndListening(bool bRemoveListener = true);
+    void EndListening();
     // PropertyChangeListener
     /// @throws css::uno::RuntimeException
     virtual void _propertyChange( const  css::beans::PropertyChangeEvent& evt );

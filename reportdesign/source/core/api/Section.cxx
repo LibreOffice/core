@@ -95,8 +95,7 @@ uno::Reference<report::XSection> OSection::createOSection(
 
 uno::Reference<report::XSection> OSection::createOSection(
     const uno::Reference< report::XGroup >& xParentGroup,
-    const uno::Reference< uno::XComponentContext >& context,
-    bool const)
+    const uno::Reference< uno::XComponentContext >& context)
 {
     OSection *const pNew =
         new OSection(nullptr, xParentGroup, context, lcl_getGroupAbsent());

@@ -662,7 +662,7 @@ void ODesignView::setDragStripes(bool bOn)
     m_aScrollWindow->setDragStripes(bOn);
 }
 
-bool ODesignView::isHandleEvent(sal_uInt16 /*_nId*/) const
+bool ODesignView::isHandleEvent() const
 {
     return m_pPropWin && m_pPropWin->HasChildPathFocus();
 }
