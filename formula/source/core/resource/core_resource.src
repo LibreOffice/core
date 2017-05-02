@@ -2251,42 +2251,16 @@ StringArray RID_STRLIST_FUNCTION_NAMES
         < "IFERROR" ; SC_OPCODE_IF_ERROR ; >;
         < "IFNA" ; SC_OPCODE_IF_NA ; >;
         < "CHOOSE" ; SC_OPCODE_CHOOSE ; >;
-        < "(" ; SC_OPCODE_OPEN ; >;
-        < ")" ; SC_OPCODE_CLOSE ; >;
-        < "[" ; SC_OPCODE_TABLE_REF_OPEN ; >;
-        < "]" ; SC_OPCODE_TABLE_REF_CLOSE ; >;
         < "#All" ; SC_OPCODE_TABLE_REF_ITEM_ALL ; >;
         < "#Headers" ; SC_OPCODE_TABLE_REF_ITEM_HEADERS ; >;
         < "#Data" ; SC_OPCODE_TABLE_REF_ITEM_DATA ; >;
         < "#Totals" ; SC_OPCODE_TABLE_REF_ITEM_TOTALS ; >;
         < "#This Row" ; SC_OPCODE_TABLE_REF_ITEM_THIS_ROW ; >;
-        < "{" ; SC_OPCODE_ARRAY_OPEN ; >;
-        < "}" ; SC_OPCODE_ARRAY_CLOSE ; >;
-        < "|" ; SC_OPCODE_ARRAY_ROW_SEP ; >;
-        < ";" ; SC_OPCODE_ARRAY_COL_SEP ; >;
-        < ";" ; SC_OPCODE_SEP ; >;
-        < "%" ; SC_OPCODE_PERCENT_SIGN ; >;
-        < "+" ; SC_OPCODE_ADD ; >;
-        < "-" ; SC_OPCODE_SUB ; >;
-        < "*" ; SC_OPCODE_MUL ; >;
-        < "/" ; SC_OPCODE_DIV ; >;
-        < "&" ; SC_OPCODE_AMPERSAND ; >;
-        < "^" ; SC_OPCODE_POW ; >;
-        < "=" ; SC_OPCODE_EQUAL ; >;
-        < "<>" ; SC_OPCODE_NOT_EQUAL ; >;
-        < "<" ; SC_OPCODE_LESS ; >;
-        < ">" ; SC_OPCODE_GREATER ; >;
-        < "<=" ; SC_OPCODE_LESS_EQUAL ; >;
-        < ">=" ; SC_OPCODE_GREATER_EQUAL ; >;
         < "AND" ; SC_OPCODE_AND ; >;
         < "OR" ; SC_OPCODE_OR ; >;
         < "XOR" ; SC_OPCODE_XOR ; >;
-        < "!" ; SC_OPCODE_INTERSECT ; >;
-        < "~" ; SC_OPCODE_UNION ; >;
-        < ":" ; SC_OPCODE_RANGE ; >;
         < "NOT" ; SC_OPCODE_NOT ; >;
         < "NEG" ; SC_OPCODE_NEG ; >;
-        < "-" ; SC_OPCODE_NEG_SUB ; >;
         < "PI" ; SC_OPCODE_PI ; >; // ???
         < "RAND" ; SC_OPCODE_RANDOM ; >;
         < "TRUE" ; SC_OPCODE_TRUE ; >;
@@ -2689,6 +2663,39 @@ StringArray RID_STRLIST_FUNCTION_NAMES
         < "ENCODEURL" ; SC_OPCODE_ENCODEURL ; >;
         < "RAWSUBTRACT" ; SC_OPCODE_RAWSUBTRACT ; >;
         < "ROUNDSIG" ; SC_OPCODE_ROUNDSIG; >;
+    };
+};
+
+StringArray RID_STRLIST_FUNCTION_NAMES_SYMBOLS
+{
+    ItemList =
+    {
+        < "(" ; SC_OPCODE_OPEN ; >;
+        < ")" ; SC_OPCODE_CLOSE ; >;
+        < "[" ; SC_OPCODE_TABLE_REF_OPEN ; >;
+        < "]" ; SC_OPCODE_TABLE_REF_CLOSE ; >;
+        < "{" ; SC_OPCODE_ARRAY_OPEN ; >;
+        < "}" ; SC_OPCODE_ARRAY_CLOSE ; >;
+        < "|" ; SC_OPCODE_ARRAY_ROW_SEP ; >;
+        < ";" ; SC_OPCODE_ARRAY_COL_SEP ; >;
+        < ";" ; SC_OPCODE_SEP ; >;
+        < "%" ; SC_OPCODE_PERCENT_SIGN ; >;
+        < "+" ; SC_OPCODE_ADD ; >;
+        < "-" ; SC_OPCODE_SUB ; >;
+        < "*" ; SC_OPCODE_MUL ; >;
+        < "/" ; SC_OPCODE_DIV ; >;
+        < "&" ; SC_OPCODE_AMPERSAND ; >;
+        < "^" ; SC_OPCODE_POW ; >;
+        < "=" ; SC_OPCODE_EQUAL ; >;
+        < "<>" ; SC_OPCODE_NOT_EQUAL ; >;
+        < "<" ; SC_OPCODE_LESS ; >;
+        < ">" ; SC_OPCODE_GREATER ; >;
+        < "<=" ; SC_OPCODE_LESS_EQUAL ; >;
+        < ">=" ; SC_OPCODE_GREATER_EQUAL ; >;
+        < "!" ; SC_OPCODE_INTERSECT ; >;
+        < "~" ; SC_OPCODE_UNION ; >;
+        < ":" ; SC_OPCODE_RANGE ; >;
+        < "-" ; SC_OPCODE_NEG_SUB ; >;
     };
 };
 
