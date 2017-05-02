@@ -535,6 +535,7 @@ struct SwReaderWriterEntry
 namespace SwReaderWriter
 {
     SW_DLLPUBLIC Reader* GetRtfReader();
+    SW_DLLPUBLIC Reader* GetDOCXReader();
 
     /// Return reader based on the name.
     Reader* GetReader( const OUString& rFltName );
