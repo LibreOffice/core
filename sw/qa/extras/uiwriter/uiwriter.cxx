@@ -120,6 +120,8 @@ public:
     void testFdo70807();
     void testImportRTF();
     void testExportRTF();
+    void testDOCXAutoTextEmpty();
+    void testDOCXAutoTextMultiple();
     void testTdf67238();
     void testFdo75110();
     void testFdo75898();
@@ -248,6 +250,8 @@ public:
     CPPUNIT_TEST(testFdo70807);
     CPPUNIT_TEST(testImportRTF);
     CPPUNIT_TEST(testExportRTF);
+    CPPUNIT_TEST(testDOCXAutoTextEmpty);
+    CPPUNIT_TEST(testDOCXAutoTextMultiple);
     CPPUNIT_TEST(testTdf67238);
     CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST(testFdo75898);
@@ -370,6 +374,7 @@ public:
 
 private:
     SwDoc* createDoc(const char* pName = nullptr);
+    SwTextBlocks* readDOCXAutotext(const OUString& sFileName, bool bEmpty = false);
 };
 
 SwDoc* SwUiWriterTest::createDoc(const char* pName)
@@ -382,6 +387,23 @@ SwDoc* SwUiWriterTest::createDoc(const char* pName)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     return pTextDoc->GetDocShell()->GetDoc();
+}
+
+SwTextBlocks* SwUiWriterTest::readDOCXAutotext(const OUString& sFileName, bool bEmpty)
+{
+    OUString rURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + sFileName;
+
+    SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ);
+    SwDoc* pDoc = createDoc();
+
+    SwReader aReader(*pSrcMed, rURL, pDoc);
+    Reader* pDOCXReader = SwReaderWriter::GetDOCXReader();
+    SwTextBlocks* pGlossary = new SwTextBlocks(rURL);
+
+    CPPUNIT_ASSERT(pDOCXReader != nullptr);
+    CPPUNIT_ASSERT_EQUAL(!bEmpty, aReader.ReadGlossaries(*pDOCXReader, *pGlossary, false));
+
+    return pGlossary;
 }
 
 //Replacement tests
@@ -743,6 +765,40 @@ void SwUiWriterTest::testExportRTF()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aData.indexOf("ccc"));
     // Ensure there's no extra newline
     CPPUNIT_ASSERT(aData.endsWith("bbb}" SAL_NEWLINE_STRING "}"));
+}
+
+void SwUiWriterTest::testDOCXAutoTextEmpty()
+{
+    // file contains normal content but no AutoText
+    SwTextBlocks* pGlossary = readDOCXAutotext("autotext-empty.dotx", true);
+    CPPUNIT_ASSERT(pGlossary != nullptr);
+}
+
+void SwUiWriterTest::testDOCXAutoTextMultiple()
+{
+    // file contains three AutoText entries
+    SwTextBlocks* pGlossary = readDOCXAutotext("autotext-multiple.dotx");
+
+    // check entries count
+    CPPUNIT_ASSERT_EQUAL((sal_uInt16)3, pGlossary->GetCount());
+
+    // check names of entries, sorted order
+    CPPUNIT_ASSERT_EQUAL(OUString("Anothercomplex"), pGlossary->GetLongName(0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Multiple"), pGlossary->GetLongName(1));
+    CPPUNIT_ASSERT_EQUAL(OUString("Second  Autotext"), pGlossary->GetLongName(2));
+
+    // check if previously loaded content is correct (eg. doesn't contain title)
+    SwDoc* pDoc = pGlossary->GetDoc();
+    CPPUNIT_ASSERT(pDoc != nullptr);
+
+    SwNodeIndex aDocEnd(pDoc->GetNodes().GetEndOfContent());
+    SwNodeIndex aStart(*aDocEnd.GetNode().StartOfSectionNode(), 1);
+    if(aStart < aDocEnd)
+    {
+        // first line
+        SwNode& rNode = aStart.GetNode();
+        CPPUNIT_ASSERT_EQUAL(OUString("Another "), rNode.GetTextNode()->GetText());
+    }
 }
 
 void SwUiWriterTest::testFdo74981()
