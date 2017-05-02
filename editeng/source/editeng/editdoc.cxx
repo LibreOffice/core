@@ -605,17 +605,15 @@ void ParaPortion::MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff )
     aWritingDirectionInfos.clear();
 }
 
-void ParaPortion::MarkSelectionInvalid( sal_Int32 nStart, sal_Int32 /* nEnd */ )
+void ParaPortion::MarkSelectionInvalid( sal_Int32 nStart )
 {
     if ( !bInvalid )
     {
         nInvalidPosStart = nStart;
-//      nInvalidPosEnd = nEnd;
     }
     else
     {
         nInvalidPosStart = std::min( nInvalidPosStart, nStart );
-//      nInvalidPosEnd = pNode->Len();
     }
     nInvalidDiff = 0;
     bInvalid = true;

@@ -339,7 +339,7 @@ public:
     ::svl::IUndoManager* SetUndoManager(::svl::IUndoManager* pNew);
     void            UndoActionStart( sal_uInt16 nId );
     void            UndoActionStart(sal_uInt16 nId, const ESelection& rSel);
-    void            UndoActionEnd( sal_uInt16 nId );
+    void            UndoActionEnd();
     bool            IsInUndo();
 
     void            EnableUndo( bool bEnable );
@@ -451,7 +451,7 @@ public:
     bool            HasText( const SvxSearchItem& rSearchItem );
 
     //spell and return a sentence
-    bool            SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill, bool bIsGrammarChecking );
+    bool            SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill );
     // put spell position to start of current sentence
     void            PutSpellingToSentenceStart( EditView& rEditView );
     //applies a changed sentence

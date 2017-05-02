@@ -256,7 +256,7 @@ void ImpEditEngine::UndoActionStart( sal_uInt16 nId )
     }
 }
 
-void ImpEditEngine::UndoActionEnd( sal_uInt16 )
+void ImpEditEngine::UndoActionEnd()
 {
     if ( IsUndoEnabled() && !IsInUndo() )
     {
@@ -579,7 +579,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetA
             bFormatted = false;
             if ( !pNode->Len() || ( nStartPos != nEndPos  ) )
             {
-                pPortion->MarkSelectionInvalid( nStartPos, nEndPos-nStartPos );
+                pPortion->MarkSelectionInvalid( nStartPos );
                 if ( bCheckLanguage )
                     pNode->GetWrongList()->SetInvalidRange(nStartPos, nEndPos);
             }
@@ -644,7 +644,7 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, bool bRemoveParaAttri
         if ( bChanged && !bRemoveParaAttribs )
         {
             bFormatted = false;
-            pPortion->MarkSelectionInvalid( nStartPos, nEndPos-nStartPos );
+            pPortion->MarkSelectionInvalid( nStartPos );
         }
     }
 }
@@ -679,7 +679,7 @@ void ImpEditEngine::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich, bool 
     CharAttribList::DbgCheckAttribs(pNode->GetCharAttribs());
 #endif
 
-    pPortion->MarkSelectionInvalid( 0, pNode->Len() );
+    pPortion->MarkSelectionInvalid( 0 );
 }
 
 void ImpEditEngine::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )

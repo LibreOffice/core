@@ -775,7 +775,7 @@ bool Outliner::Expand( Paragraph* pPara )
         if( bUndo )
         {
             InsertUndo( pUndo );
-            UndoActionEnd( OLUNDO_EXPAND );
+            UndoActionEnd();
         }
         return true;
     }
@@ -803,7 +803,7 @@ bool Outliner::Collapse( Paragraph* pPara )
         if( bUndo )
         {
             InsertUndo( pUndo );
-            UndoActionEnd( OLUNDO_COLLAPSE );
+            UndoActionEnd();
         }
         return true;
     }
@@ -1771,7 +1771,7 @@ IMPL_LINK( Outliner, EndPasteOrDropHdl, PasteOrDropInfos&, rInfos, void )
     bPasting = false;
     ImpTextPasted( rInfos.nStartPara, rInfos.nEndPara - rInfos.nStartPara + 1 );
     maEndPasteOrDropHdl.Call( &rInfos );
-    UndoActionEnd( EDITUNDO_DRAGANDDROP );
+    UndoActionEnd();
 }
 
 IMPL_LINK( Outliner, EndMovingParagraphsHdl, MoveParagraphsInfo&, rInfos, void )

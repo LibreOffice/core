@@ -393,7 +393,7 @@ void TextConvWrapper::ReplaceUnit(
         }
     }
 
-    pImpEditEng->UndoActionEnd( EDITUNDO_INSERT );
+    pImpEditEng->UndoActionEnd();
 
     // adjust ConvContinue / ConvTo if necessary
     ImpEditEngine* pImpEE = m_pEditView->GetImpEditEngine();

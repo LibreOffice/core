@@ -558,7 +558,7 @@ void EditUndoSetAttribs::Undo()
     }
     if ( bFields )
         pEE->UpdateFieldsOnly();
-    ImpSetSelection(pEE->GetActiveView());
+    ImpSetSelection();
 }
 
 void EditUndoSetAttribs::Redo()
@@ -572,7 +572,7 @@ void EditUndoSetAttribs::Redo()
     else
         pEE->RemoveCharAttribs( aSel, bRemoveParaAttribs, nRemoveWhich );
 
-    ImpSetSelection( GetEditEngine()->GetActiveView() );
+    ImpSetSelection();
 }
 
 void EditUndoSetAttribs::AppendContentInfo(ContentAttribsInfo* pNew)
@@ -580,7 +580,7 @@ void EditUndoSetAttribs::AppendContentInfo(ContentAttribsInfo* pNew)
     aPrevAttribs.push_back(std::unique_ptr<ContentAttribsInfo>(pNew));
 }
 
-void EditUndoSetAttribs::ImpSetSelection( EditView* /*pView*/ )
+void EditUndoSetAttribs::ImpSetSelection()
 {
     EditEngine* pEE = GetEditEngine();
     EditSelection aSel = pEE->CreateSelection(aESel);

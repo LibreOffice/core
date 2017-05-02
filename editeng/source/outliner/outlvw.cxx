@@ -210,7 +210,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin )
                                     pEditView->SetSelection( aTmpSel );
                                 }
                                 pEditView->ShowCursor();
-                                pOwner->UndoActionEnd( OLUNDO_INSERT );
+                                pOwner->UndoActionEnd();
                                 bKeyProcessed = true;
                             }
                         }
@@ -228,7 +228,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin )
                         ESelection aTmpSel(nTemp,0,nTemp,0);
                         pEditView->SetSelection( aTmpSel );
                         pEditView->ShowCursor();
-                        pOwner->UndoActionEnd( OLUNDO_INSERT );
+                        pOwner->UndoActionEnd();
                         bKeyProcessed = true;
                     }
                 }
@@ -410,7 +410,7 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
     }
 
     if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
-        pOwner->UndoActionEnd( OLUNDO_ATTR );
+        pOwner->UndoActionEnd();
 
     pEditView->SetEditEngineUpdateMode( bUpdate );
 }
@@ -565,7 +565,7 @@ void OutlinerView::Indent( short nDiff )
     }
 
     if( bUndo )
-        pOwner->UndoActionEnd( OLUNDO_DEPTH );
+        pOwner->UndoActionEnd();
 }
 
 void OutlinerView::AdjustHeight( long nDY )
@@ -624,7 +624,7 @@ void OutlinerView::ImplExpandOrCollaps( sal_Int32 nStartPara, sal_Int32 nEndPara
     }
 
     if( bUndo )
-        pOwner->UndoActionEnd( bExpand ? OLUNDO_EXPAND : OLUNDO_COLLAPSE );
+        pOwner->UndoActionEnd();
 
     if ( bUpdate )
     {
@@ -657,7 +657,7 @@ void OutlinerView::InsertText( const OutlinerParaObject& rParaObj )
     ImpPasted( nStart, nParaCount, nSize);
     pEditView->SetEditEngineUpdateMode( true );
 
-    pOwner->UndoActionEnd( OLUNDO_INSERT );
+    pOwner->UndoActionEnd();
 
     pEditView->ShowCursor();
 }
@@ -696,7 +696,7 @@ void OutlinerView::PasteSpecial()
         }
 
         pEditView->SetEditEngineUpdateMode( true );
-        pOwner->UndoActionEnd( OLUNDO_INSERT );
+        pOwner->UndoActionEnd();
         pEditView->ShowCursor();
 
         // Chaining handling
@@ -894,7 +894,7 @@ void OutlinerView::ToggleBullets()
 
     pOwner->pEditEngine->SetUpdateMode( bUpdate );
 
-    pOwner->UndoActionEnd( OLUNDO_DEPTH );
+    pOwner->UndoActionEnd();
 }
 
 
@@ -966,7 +966,7 @@ void OutlinerView::EnableBullets()
 
     pOwner->pEditEngine->SetUpdateMode( bUpdate );
 
-    pOwner->UndoActionEnd( OLUNDO_DEPTH );
+    pOwner->UndoActionEnd();
 }
 
 
@@ -1098,7 +1098,7 @@ void OutlinerView::ApplyBulletsNumbering(
 
     pOwner->pEditEngine->SetUpdateMode( bUpdate );
 
-    pOwner->UndoActionEnd( OLUNDO_DEPTH );
+    pOwner->UndoActionEnd();
 
     return;
 }
@@ -1150,7 +1150,7 @@ void OutlinerView::SwitchOffBulletsNumbering(
     pOwner->pEditEngine->QuickMarkInvalid( ESelection( nStartPara, 0, nParaCount, 0 ) );
 
     pOwner->pEditEngine->SetUpdateMode( bUpdate );
-    pOwner->UndoActionEnd( OLUNDO_DEPTH );
+    pOwner->UndoActionEnd();
 }
 
 
@@ -1179,7 +1179,7 @@ void OutlinerView::RemoveAttribs( bool bRemoveParaAttribs, bool bKeepLanguages )
             pOwner->ImplInitDepth( nPara, pPara->GetDepth(), false );
         }
     }
-    pOwner->UndoActionEnd( OLUNDO_ATTR );
+    pOwner->UndoActionEnd();
     pOwner->SetUpdateMode( bUpdate );
 }
 

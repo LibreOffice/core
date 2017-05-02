@@ -419,9 +419,7 @@ svx::SpellPortions SdOutliner::GetNextSpellSentence()
                 EndOfSearch();
 
             // Advance to the next sentence.
-            bFoundNextSentence = SpellSentence (
-                pOutlinerView->GetEditView(),
-                aResult, false);
+            bFoundNextSentence = SpellSentence( pOutlinerView->GetEditView(), aResult);
         }
 
         // When no sentence with spelling errors has been found in the

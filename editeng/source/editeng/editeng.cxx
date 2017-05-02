@@ -139,11 +139,11 @@ void EditEngine::UndoActionStart(sal_uInt16 nId, const ESelection& rSel)
     pImpEditEngine->UndoActionStart(nId, rSel);
 }
 
-void EditEngine::UndoActionEnd( sal_uInt16 nId )
+void EditEngine::UndoActionEnd()
 {
     DBG_ASSERT( !pImpEditEngine->IsInUndo(), "Calling UndoActionEnd in Undomode!" );
     if ( !pImpEditEngine->IsInUndo() )
-        pImpEditEngine->UndoActionEnd( nId );
+        pImpEditEngine->UndoActionEnd();
 }
 
 bool EditEngine::HasTriedMergeOnLastAddUndo() const
@@ -1084,7 +1084,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
             {
                 if ( !rKeyEvent.GetKeyCode().IsMod2() || ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) )
                 {
-                    if ( pImpEditEngine->DoVisualCursorTraveling( aCurSel.Max().GetNode() ) && ( ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) /* || ( nCode == KEY_HOME ) || ( nCode == KEY_END ) */ ) )
+                    if ( pImpEditEngine->DoVisualCursorTraveling() && ( ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) /* || ( nCode == KEY_HOME ) || ( nCode == KEY_END ) */ ) )
                         bSetCursorFlags = false;    // Will be manipulated within visual cursor move
 
                     aCurSel = pImpEditEngine->MoveCursor( rKeyEvent, pEditView );
@@ -1176,7 +1176,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                     pEditView->pImpEditView->DrawSelection();
                     pImpEditEngine->UndoActionStart( EDITUNDO_DELETE );
                     aCurSel = pImpEditEngine->DeleteLeftOrRight( aCurSel, nDel, nMode );
-                    pImpEditEngine->UndoActionEnd( EDITUNDO_DELETE );
+                    pImpEditEngine->UndoActionEnd();
                     bModified = true;
                     bAllowIdle = false;
                 }
@@ -1201,7 +1201,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                             aCurSel = pImpEditEngine->AutoCorrect( aCurSel, 0, !pEditView->IsInsertMode(), pFrameWin );
                         aCurSel = pImpEditEngine->InsertTab( aCurSel );
                         if ( bSel )
-                            pImpEditEngine->UndoActionEnd( EDITUNDO_INSERT );
+                            pImpEditEngine->UndoActionEnd();
                         bModified = true;
                     }
                 }
@@ -1239,7 +1239,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                                 pImpEditEngine->SetAutoCompleteText( OUString(), true );
                             }
                         }
-                        pImpEditEngine->UndoActionEnd( EDITUNDO_INSERT );
+                        pImpEditEngine->UndoActionEnd();
                         bModified = true;
                     }
                 }
@@ -1682,7 +1682,7 @@ void EditEngine::InsertParagraph( sal_Int32 nPara, const EditTextObject& rTxtObj
     pImpEditEngine->RemoveCharAttribs( nPara );
     pImpEditEngine->InsertText( rTxtObj, EditSelection( aPaM, aPaM ) );
 
-    pImpEditEngine->UndoActionEnd( EDITUNDO_INSERT );
+    pImpEditEngine->UndoActionEnd();
 
     pImpEditEngine->FormatAndUpdate();
 }
@@ -1700,7 +1700,7 @@ void EditEngine::InsertParagraph(sal_Int32 nPara, const OUString& rTxt)
     // When InsertParagraph from the outside, no hard attributes
     // should be taken over!
     pImpEditEngine->RemoveCharAttribs( nPara );
-    pImpEditEngine->UndoActionEnd( EDITUNDO_INSERT );
+    pImpEditEngine->UndoActionEnd();
     pImpEditEngine->ImpInsertText( EditSelection( aPaM, aPaM ), rTxt );
     pImpEditEngine->FormatAndUpdate();
 }
@@ -1712,7 +1712,7 @@ void EditEngine::SetText(sal_Int32 nPara, const OUString& rTxt)
     {
         pImpEditEngine->UndoActionStart( EDITUNDO_INSERT );
         pImpEditEngine->ImpInsertText( *pSel, rTxt );
-        pImpEditEngine->UndoActionEnd( EDITUNDO_INSERT );
+        pImpEditEngine->UndoActionEnd();
         pImpEditEngine->FormatAndUpdate();
         delete pSel;
     }
@@ -1762,7 +1762,7 @@ void EditEngine::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAt
     pImpEditEngine->UndoActionStart( EDITUNDO_RESETATTRIBS );
     EditSelection aSel( pImpEditEngine->ConvertSelection( rSelection.nStartPara, rSelection.nStartPos, rSelection.nEndPara, rSelection.nEndPos ) );
     pImpEditEngine->RemoveCharAttribs( aSel, bRemoveParaAttribs, nWhich  );
-    pImpEditEngine->UndoActionEnd( EDITUNDO_RESETATTRIBS );
+    pImpEditEngine->UndoActionEnd();
     pImpEditEngine->FormatAndUpdate();
 }
 
@@ -2047,7 +2047,7 @@ void EditEngine::QuickMarkInvalid( const ESelection& rSel )
     {
         ParaPortion* pPortion = pImpEditEngine->GetParaPortions().SafeGetObject( nPara );
         if ( pPortion )
-            pPortion->MarkSelectionInvalid( 0, pPortion->GetNode()->Len() );
+            pPortion->MarkSelectionInvalid( 0 );
     }
 }
 
@@ -2210,9 +2210,9 @@ void EditEngine::ClearSpellErrors()
     pImpEditEngine->ClearSpellErrors();
 }
 
-bool EditEngine::SpellSentence(EditView& rView, svx::SpellPortions& rToFill, bool bIsGrammarChecking )
+bool EditEngine::SpellSentence(EditView& rView, svx::SpellPortions& rToFill )
 {
-    return pImpEditEngine->SpellSentence( rView, rToFill, bIsGrammarChecking );
+    return pImpEditEngine->SpellSentence( rView, rToFill );
 }
 
 void EditEngine::PutSpellingToSentenceStart( EditView& rEditView )

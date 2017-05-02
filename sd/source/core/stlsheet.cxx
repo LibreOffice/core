@@ -1039,7 +1039,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
 
             SvxShape::SetFillAttribute( pEntry->nWID, aTempName, aSet );
         }
-        else if(!SvxUnoTextRangeBase::SetPropertyValueHelper( aSet, pEntry, aValue, aSet ))
+        else if(!SvxUnoTextRangeBase::SetPropertyValueHelper( pEntry, aValue, aSet ))
         {
             SvxItemPropertySet_setPropertyValue( pEntry, aValue, aSet );
         }

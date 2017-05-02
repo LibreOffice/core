@@ -303,9 +303,9 @@ void Outliner::UndoActionStart( sal_uInt16 nId )
     pEditEngine->UndoActionStart( nId );
 }
 
-void Outliner::UndoActionEnd( sal_uInt16 nId )
+void Outliner::UndoActionEnd()
 {
-    pEditEngine->UndoActionEnd( nId );
+    pEditEngine->UndoActionEnd();
 }
 
 void Outliner::InsertUndo( EditUndo* pUndo )
@@ -581,9 +581,9 @@ bool Outliner::IsForceAutoColor() const
     return pEditEngine->IsForceAutoColor();
 }
 
-bool Outliner::SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill, bool bIsGrammarChecking )
+bool Outliner::SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill )
 {
-    return pEditEngine->SpellSentence(rEditView, rToFill, bIsGrammarChecking );
+    return pEditEngine->SpellSentence(rEditView, rToFill );
 }
 
 void Outliner::PutSpellingToSentenceStart( EditView& rEditView )

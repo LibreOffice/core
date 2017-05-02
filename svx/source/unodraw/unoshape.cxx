@@ -1657,7 +1657,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
     if( pSet->GetItemState( pMap->nWID ) != SfxItemState::SET )
         pSet->Put(mpObj->GetMergedItem(pMap->nWID));
 
-    if( !SvxUnoTextRangeBase::SetPropertyValueHelper( *pSet, pMap, rVal, *pSet ))
+    if( !SvxUnoTextRangeBase::SetPropertyValueHelper( pMap, rVal, *pSet ))
     {
         if( pSet->GetItemState( pMap->nWID ) != SfxItemState::SET )
         {

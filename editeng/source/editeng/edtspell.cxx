@@ -546,7 +546,7 @@ EdtAutoCorrDoc::EdtAutoCorrDoc(
 EdtAutoCorrDoc::~EdtAutoCorrDoc()
 {
     if ( bUndoAction )
-        mpEditEngine->UndoActionEnd( EDITUNDO_INSERT );
+        mpEditEngine->UndoActionEnd();
 }
 
 bool EdtAutoCorrDoc::Delete(sal_Int32 nStt, sal_Int32 nEnd)

@@ -229,13 +229,13 @@ void EditHTMLParser::NextToken( int nToken )
 
     case HTML_PARABREAK_ON:
         if( bInPara && HasTextInCurrentPara() )
-            EndPara( true );
+            EndPara();
         StartPara( true );
         break;
 
     case HTML_PARABREAK_OFF:
         if( bInPara )
-            EndPara( true );
+            EndPara();
         break;
 
     case HTML_HEAD1_ON:
@@ -256,7 +256,7 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_HEAD5_OFF:
     case HTML_HEAD6_OFF:
     {
-        HeadingEnd( nToken );
+        HeadingEnd();
     }
     break;
 
@@ -322,7 +322,7 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_DD_OFF:
     case HTML_DT_OFF:
     case HTML_ORDERLIST_OFF:
-    case HTML_UNORDERLIST_OFF:  EndPara( false );
+    case HTML_UNORDERLIST_OFF:  EndPara();
                                 break;
 
     case HTML_TABLEROW_ON:
@@ -721,7 +721,7 @@ void EditHTMLParser::StartPara( bool bReal )
     bInPara = true;
 }
 
-void EditHTMLParser::EndPara( bool )
+void EditHTMLParser::EndPara()
 {
     if ( bInPara )
     {
@@ -807,9 +807,9 @@ void EditHTMLParser::HeadingStart( int nToken )
     ImpSetStyleSheet( nId );
 }
 
-void EditHTMLParser::HeadingEnd( int )
+void EditHTMLParser::HeadingEnd()
 {
-    EndPara( false );
+    EndPara();
     ImpSetStyleSheet( 0 );
 
     if ( bWasInPara )

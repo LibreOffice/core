@@ -1806,7 +1806,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     aSel.nStartPos = aSel.nEndPos - aToggle.StringToReplace().getLength();
                     pWin->SetSelection( aSel );
                     pEditView->InsertText( sReplacement, true );
-                    pEditEngine->UndoActionEnd(EDITUNDO_REPLACEALL);
+                    pEditEngine->UndoActionEnd();
                     pWin->Flush();
                 }
             }

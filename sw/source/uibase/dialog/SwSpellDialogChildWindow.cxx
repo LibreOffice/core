@@ -812,7 +812,7 @@ bool SwSpellDialogChildWindow::SpellDrawText_Impl(SwWrtShell& rSh, svx::SpellPor
     OSL_ENSURE(pOutliner, "No Outliner in SwSpellDialogChildWindow::SpellDrawText_Impl");
     if(pOutliner)
     {
-        bRet = pOutliner->SpellSentence(pSdrView->GetTextEditOutlinerView()->GetEditView(), rPortions, m_bIsGrammarCheckingOn);
+        bRet = pOutliner->SpellSentence(pSdrView->GetTextEditOutlinerView()->GetEditView(), rPortions);
         // find out if the current selection is in the first spelled drawing object
         // and behind the initial selection
         if(bRet && m_pSpellState->m_bRestartDrawing)

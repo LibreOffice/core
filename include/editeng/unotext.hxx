@@ -324,7 +324,7 @@ public:
     const SvxItemPropertySet*   getPropertySet() const throw() { return mpPropSet; }
     SvxEditSource*              GetEditSource() const throw() { return mpEditSource; }
 
-    static bool SetPropertyValueHelper( const SfxItemSet& rOldSet, const SfxItemPropertySimpleEntry* pMap, const css::uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection = nullptr, SvxEditSource* pEditSource = nullptr );
+    static bool SetPropertyValueHelper( const SfxItemPropertySimpleEntry* pMap, const css::uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection = nullptr, SvxEditSource* pEditSource = nullptr );
     /// @throws css::uno::RuntimeException
     static bool GetPropertyValueHelper(  SfxItemSet& rSet, const SfxItemPropertySimpleEntry* pMap, css::uno::Any& aAny, const ESelection* pSelection = nullptr,  SvxEditSource* pEditSource = nullptr  );
 

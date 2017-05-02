@@ -751,7 +751,7 @@ public:
     void            EnableUndo( bool bEnable );
     bool            IsUndoEnabled() const;
     void            UndoActionStart( sal_uInt16 nId );
-    void            UndoActionEnd( sal_uInt16 nId );
+    void            UndoActionEnd();
     void            InsertUndo( EditUndo* pUndo );
     bool            IsInUndo();
 
@@ -961,7 +961,7 @@ public:
     OutlinerMode    GetOutlinerMode() const { return nOutlinerMode; }
 
     // spell and return a sentence
-    bool            SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill, bool bIsGrammarChecking );
+    bool            SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill );
     // put spell position to start of current sentence
     void            PutSpellingToSentenceStart( EditView& rEditView );
     // applies a changed sentence

@@ -1254,7 +1254,7 @@ bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window* pFrameWi
                     pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_PASTE );
                     Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetClipboard());
                     Paste( aClipBoard, pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
-                    pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_PASTE );
+                    pEditEngine->pImpEditEngine->UndoActionEnd();
                     bDone = true;
                 }
             }
@@ -1396,7 +1396,7 @@ void ImpEditView::DeleteSelected()
 
     EditPaM aPaM = pEditEngine->pImpEditEngine->DeleteSelected( GetEditSelection() );
 
-    pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_DELETE );
+    pEditEngine->pImpEditEngine->UndoActionEnd();
 
     SetEditSelection( EditSelection( aPaM, aPaM ) );
     pEditEngine->pImpEditEngine->FormatAndUpdate( GetEditViewPtr() );
@@ -1499,7 +1499,7 @@ void ImpEditView::CutCopy( css::uno::Reference< css::datatransfer::clipboard::XC
             pEditEngine->pImpEditEngine->EnterBlockNotifications();
             pEditEngine->pImpEditEngine->UndoActionStart(EDITUNDO_CUT);
             DeleteSelected();
-            pEditEngine->pImpEditEngine->UndoActionEnd(EDITUNDO_CUT);
+            pEditEngine->pImpEditEngine->UndoActionEnd();
             pEditEngine->pImpEditEngine->LeaveBlockNotifications();
         }
     }
@@ -1573,7 +1573,7 @@ void ImpEditView::Paste( css::uno::Reference< css::datatransfer::clipboard::XCli
     aPasteOrDropInfos.nEndPara = pEditEngine->GetEditDoc().GetPos( aSel.Max().GetNode() );
     pEditEngine->HandleEndPasteOrDrop(aPasteOrDropInfos);
 
-    pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_PASTE );
+    pEditEngine->pImpEditEngine->UndoActionEnd();
     SetEditSelection( aSel );
     pEditEngine->pImpEditEngine->UpdateSelections();
     pEditEngine->pImpEditEngine->FormatAndUpdate( GetEditViewPtr() );
@@ -1924,7 +1924,7 @@ void ImpEditView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent
         }
 
         if ( pDragAndDropInfo->bUndoAction )
-            pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_DRAGANDDROP );
+            pEditEngine->pImpEditEngine->UndoActionEnd();
 
         HideDDCursor();
         ShowCursor( DoAutoScroll(), true );

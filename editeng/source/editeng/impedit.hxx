@@ -556,7 +556,7 @@ private:
     void                Clear();
     EditPaM             RemoveText();
     bool                CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY );
-    void                CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uInt32 nStartPosY );
+    void                CreateAndInsertEmptyLine( ParaPortion* pParaPortion );
     bool                FinishCreateLines( ParaPortion* pParaPortion );
     void                CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rStartPos /*, sal_Bool bCreateBlockPortions */ );
     void                RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nStartPos, sal_Int32 nNewChars );
@@ -868,7 +868,7 @@ public:
 
     svtools::ColorConfig& GetColorConfig();
     bool            IsVisualCursorTravelingEnabled();
-    bool            DoVisualCursorTraveling( const ContentNode* pNode );
+    bool            DoVisualCursorTraveling();
 
     EditSelection         ConvertSelection( sal_Int32 nStartPara, sal_Int32 nStartPos, sal_Int32 nEndPara, sal_Int32 nEndPos );
     inline EPaM           CreateEPaM( const EditPaM& rPaM );
@@ -903,7 +903,7 @@ public:
 
     void                UndoActionStart( sal_uInt16 nId );
     void                UndoActionStart( sal_uInt16 nId, const ESelection& rSel );
-    void                UndoActionEnd( sal_uInt16 nId );
+    void                UndoActionEnd();
 
     EditView*           GetActiveView() const   { return pActiveView; }
     void                SetActiveView( EditView* pView );
@@ -953,7 +953,7 @@ public:
     css::uno::Reference< css::linguistic2::XSpellAlternatives >
                         ImpFindNextError(EditSelection& rSelection);
     //spell and return a sentence
-    bool                SpellSentence(EditView& rView, svx::SpellPortions& rToFill, bool bIsGrammarChecking );
+    bool                SpellSentence(EditView& rView, svx::SpellPortions& rToFill );
     //put spelling back to start of current sentence - needed after switch of grammar support
     void                PutSpellingToSentenceStart( EditView& rEditView );
     //applies a changed sentence

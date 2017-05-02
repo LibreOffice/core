@@ -334,7 +334,7 @@ namespace accessibility
         /// Check whether 0<=nStart<=n and 0<=nEnd<=n
         void CheckRange( sal_Int32 nStart, sal_Int32 nEnd );
 
-        void _correctValues( const sal_Int32 nIndex, css::uno::Sequence< css::beans::PropertyValue >& rValues );
+        void _correctValues( css::uno::Sequence< css::beans::PropertyValue >& rValues );
         sal_Int32 SkipField(sal_Int32 nIndex, bool bForward);
         // get overlapped field, extend return string. Only extend forward for now
         void ExtendByField( css::accessibility::TextSegment& Segment );

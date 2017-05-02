@@ -81,7 +81,7 @@ svx::SpellPortions ScSpellDialogChildWindow::GetNextWrongSentence( bool /*bReche
             {
                 if( mbNeedNextObj )
                     mxEngine->SpellNextDocument();
-                mbNeedNextObj = !mxEngine->IsFinished() && !mxEngine->SpellSentence( *pEditView, aPortions, false );
+                mbNeedNextObj = !mxEngine->IsFinished() && !mxEngine->SpellSentence( *pEditView, aPortions );
             }
             while( mbNeedNextObj );
         }

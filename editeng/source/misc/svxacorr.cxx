@@ -629,7 +629,7 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
 
 bool SvxAutoCorrect::FnAddNonBrkSpace(
                                 SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                                sal_Int32, sal_Int32 nEndPos,
+                                sal_Int32 nEndPos,
                                 LanguageType eLang )
 {
     bool bRet = false;
@@ -727,7 +727,7 @@ bool SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
 
 
 bool SvxAutoCorrect::FnChgWeightUnderl( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
-                                        sal_Int32 , sal_Int32 nEndPos )
+                                        sal_Int32 nEndPos )
 {
     // Condition:
     //  at the beginning:   _, *, / or ~ after Space with the following !Space
@@ -1276,7 +1276,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
             if ( IsAutoCorrFlag( AddNonBrkSpace ) )
             {
                 if ( NeedsHardspaceAutocorr( cChar ) &&
-                    FnAddNonBrkSpace( rDoc, rTxt, 0, nInsPos, rDoc.GetLanguage( nInsPos ) ) )
+                    FnAddNonBrkSpace( rDoc, rTxt, nInsPos, rDoc.GetLanguage( nInsPos ) ) )
                 {
                     ;
                 }
@@ -1319,7 +1319,7 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
         {
             if( IsAutoCorrFlag( ChgWeightUnderl ) )
             {
-                FnChgWeightUnderl( rDoc, rTxt, 0, nPos+1 );
+                FnChgWeightUnderl( rDoc, rTxt, nPos+1 );
             }
             break;
         }
