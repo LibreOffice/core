@@ -30,9 +30,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class OOO_DLLPUBLIC_CHARTTOOLS RelativePositionHelper
 {
 public:

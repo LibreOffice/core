@@ -28,9 +28,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class OOO_DLLPUBLIC_CHARTVIEW DataPointSymbolSupplier
 {
 public:

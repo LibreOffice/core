@@ -42,9 +42,6 @@
 namespace chart
 {
 
-/**
-*/
-
 //These properties describe how a couple of labels are arranged one to another.
 //The couple can contain all labels for all tickmark depth or just the labels for one single depth or
 //the labels from an coherent range of tick depths (e.g. the major and first minor tickmarks should be handled together).

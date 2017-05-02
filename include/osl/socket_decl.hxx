@@ -119,8 +119,6 @@ namespace osl
         */
         inline SocketAddr & SAL_CALL operator= (oslSocketAddr Addr);
 
-        /**
-         */
         inline SocketAddr & SAL_CALL operator= (const SocketAddr& Addr);
 
 #if defined LIBO_INTERNAL_ONLY

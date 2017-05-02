@@ -30,8 +30,6 @@
 
 module com { module sun { module star { module scanner {
 
-/**
-*/
 published interface XScannerManager: com::sun::star::uno::XInterface
 {
     // DOCUMENTATION CHANGED FOR XScannerManager::getAvailableScanners

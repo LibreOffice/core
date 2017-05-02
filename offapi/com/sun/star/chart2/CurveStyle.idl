@@ -47,6 +47,7 @@ enum CurveStyle
     B_SPLINES,
 
     /**
+     * Non-uniform rational b-splines
      */
     NURBS,
 

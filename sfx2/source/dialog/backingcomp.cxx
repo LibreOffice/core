@@ -696,16 +696,10 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 }
 
 
-/**
- */
-
 void SAL_CALL BackingComp::keyPressed( /*IN*/ const css::awt::KeyEvent&  )
 {
 }
 
-
-/**
- */
 
 void SAL_CALL BackingComp::keyReleased( /*IN*/ const css::awt::KeyEvent& )
 {

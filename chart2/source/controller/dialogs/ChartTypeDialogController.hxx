@@ -41,9 +41,6 @@ class ValueSet;
 namespace chart
 {
 
-/**
-*/
-
 enum GlobalStackMode
 {
     GlobalStackMode_NONE,

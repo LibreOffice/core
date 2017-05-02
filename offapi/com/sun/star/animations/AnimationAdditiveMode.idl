@@ -31,24 +31,10 @@
 */
 constants AnimationAdditiveMode
 {
-    /**
-    */
     const short BASE = 0;
-
-    /**
-    */
     const short SUM = 1;
-
-    /**
-    */
     const short REPLACE = 2;
-
-    /**
-    */
     const short MULTIPLY = 3;
-
-    /**
-    */
     const short NONE = 4;
 };
 

@@ -37,8 +37,6 @@
 namespace chart
 {
 
-/**
-*/
 enum ObjectType
 {
     OBJECTTYPE_PAGE,

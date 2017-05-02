@@ -27,9 +27,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class MinimumAndMaximumSupplier
 {
 public:

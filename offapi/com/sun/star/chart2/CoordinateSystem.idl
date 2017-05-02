@@ -32,12 +32,8 @@ module star
 module chart2
 {
 
-/**
- */
 service CoordinateSystem
 {
-    /**
-     */
     interface XCoordinateSystem;
 
     /** a coordinate system can contain several chart types, which then do contain the data series.

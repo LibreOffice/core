@@ -35,9 +35,6 @@
 
 namespace framework{
 
-/**
- */
-
 FrameListAnalyzer::FrameListAnalyzer( const css::uno::Reference< css::frame::XFramesSupplier >& xSupplier       ,
                                       const css::uno::Reference< css::frame::XFrame >&          xReferenceFrame ,
                                             FrameAnalyzerFlags                                  eDetectMode     )
@@ -47,9 +44,6 @@ FrameListAnalyzer::FrameListAnalyzer( const css::uno::Reference< css::frame::XFr
 {
     impl_analyze();
 }
-
-/**
- */
 
 FrameListAnalyzer::~FrameListAnalyzer()
 {

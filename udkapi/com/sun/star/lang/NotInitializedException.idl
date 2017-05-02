@@ -26,8 +26,6 @@
 module com { module sun { module star { module lang {
 
 
-/**
- */
 /** is thrown when a component is attempted to be used before it was
     completely constructed.
 */

@@ -37,9 +37,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class DrawModelWrapper;
 class OOO_DLLPUBLIC_CHARTVIEW ExplicitValueProvider
 {

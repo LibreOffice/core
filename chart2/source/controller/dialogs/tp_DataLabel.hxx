@@ -27,9 +27,6 @@ class SvNumberFormatter;
 namespace chart
 {
 
-/**
-*/
-
 class DataLabelsTabPage : public SfxTabPage
 {
 public:

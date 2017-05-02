@@ -29,9 +29,6 @@ namespace svx
 {
 
 
-/**
-*/
-
 class SAL_WARN_UNUSED SVX_DLLPUBLIC FormatPaintBrushToolBoxControl : public SfxToolBoxControl
 {
 public:

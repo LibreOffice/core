@@ -25,9 +25,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class VCartesianAxis;
 
 class VPolarRadiusAxis : public VPolarAxis

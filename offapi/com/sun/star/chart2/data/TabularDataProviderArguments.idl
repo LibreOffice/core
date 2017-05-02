@@ -32,8 +32,6 @@ module chart2
 module data
 {
 
-/**
-  */
 service TabularDataProviderArguments
 {
     /** the range address string spanning all data.

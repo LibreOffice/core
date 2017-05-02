@@ -33,24 +33,12 @@ module star
 module chart2
 {
 
-/**
- */
 service RegressionCurve
 {
-    /**
-     */
     service ::com::sun::star::beans::PropertySet;
-    /**
-     */
     service ::com::sun::star::drawing::LineProperties;
 
-    /**
-     */
     interface XRegressionCurve;
-
-//     /**
-//      */
-//     interface ::com::sun::star::lang::XServiceName;
 };
 
 } ; // chart2

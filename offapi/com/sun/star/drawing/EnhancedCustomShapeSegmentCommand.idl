@@ -24,80 +24,42 @@
 module com {  module sun {  module star {  module drawing {
 
 
-/**
- */
 constants EnhancedCustomShapeSegmentCommand
 {
-    /**
-     */
     const short UNKNOWN = 0;
 
-    /**
-     */
     const short MOVETO = 1;
 
-    /**
-     */
     const short LINETO = 2;
 
-    /**
-     */
     const short CURVETO = 3;
 
-    /**
-     */
     const short CLOSESUBPATH = 4;
 
-    /**
-     */
     const short ENDSUBPATH = 5;
 
-    /**
-     */
     const short NOFILL = 6;
 
-    /**
-     */
     const short NOSTROKE = 7;
 
-    /**
-     */
     const short ANGLEELLIPSETO = 8;
 
-    /**
-     */
     const short ANGLEELLIPSE = 9;
 
-    /**
-     */
     const short ARCTO = 10;
 
-    /**
-     */
     const short ARC = 11;
 
-    /**
-     */
     const short CLOCKWISEARCTO = 12;
 
-    /**
-     */
     const short CLOCKWISEARC = 13;
 
-    /**
-     */
     const short ELLIPTICALQUADRANTX = 14;
 
-    /**
-     */
     const short ELLIPTICALQUADRANTY = 15;
 
-    /**
-     */
     const short QUADRATICCURVETO = 16;
 
-    /**
-     */
     const short ARCANGLETO = 17;
 
     /**

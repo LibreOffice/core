@@ -23,14 +23,10 @@
  module com {  module sun {  module star {  module animations {
 
 
-/**
-*/
 struct TimeFilterPair
 {
-    /** */
     double Time;
 
-    /** */
     double Progress;
 };
 

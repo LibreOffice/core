@@ -33,12 +33,8 @@ module star
 module chart2
 {
 
-/**
- */
 service ErrorBar
 {
-    /**
-     */
     service ::com::sun::star::drawing::LineProperties;
 
     /** allows attaching data sequences to the error bars.
@@ -55,24 +51,16 @@ service ErrorBar
      */
     [property] long ErrorBarStyle;
 
-    /**
-     */
     [property] double PositiveError;
 
-    /**
-     */
     [property] double NegativeError;
 
     /** The weight for the standard deviation.
      */
     [property] double Weight;
 
-    /**
-     */
     [property] boolean ShowPositiveError;
 
-    /**
-     */
     [property] boolean ShowNegativeError;
 };
 

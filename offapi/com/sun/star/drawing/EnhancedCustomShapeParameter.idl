@@ -31,8 +31,6 @@ struct EnhancedCustomShapeParameter
     */
     any     Value;
 
-    /**
-    */
     short   Type;
 };
 

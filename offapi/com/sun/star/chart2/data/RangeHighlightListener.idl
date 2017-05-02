@@ -38,8 +38,6 @@ module data
  */
 service RangeHighlightListener
 {
-    /**
-     */
     interface ::com::sun::star::view::XSelectionChangeListener;
 };
 

@@ -35,16 +35,10 @@ module star
 module chart2
 {
 
-/**
- */
 service Diagram
 {
-    /**
-     */
     interface ::com::sun::star::chart2::XDiagram;
 
-    /**
-     */
     interface ::com::sun::star::chart2::XCoordinateSystemContainer;
 
     /** gives access to the sub title of a chart document

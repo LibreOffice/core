@@ -441,8 +441,6 @@ void JobData::disableJob()
     aConfig.close();
 }
 
-/**
- */
 bool isEnabled( const OUString& sAdminTime ,
                     const OUString& sUserTime  )
 {
@@ -465,8 +463,6 @@ bool isEnabled( const OUString& sAdminTime ,
            );
 }
 
-/**
- */
 void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >&              rxContext,
                                          const OUString&                                                 sEvent ,
                                                ::std::vector< JobData::TJob2DocEventBinding >& lJobs  )
@@ -482,8 +478,6 @@ void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XC
     }
 }
 
-/**
- */
 bool JobData::hasCorrectContext(const OUString& rModuleIdent) const
 {
     sal_Int32 nContextLen  = m_sContext.getLength();

@@ -26,9 +26,6 @@
 namespace chart
 {
 
-/**
-*/
-
 class Clipping
 {
     /** This class uses the Liang-Biarsky parametric line-clipping algorithm as described in:
