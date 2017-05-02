@@ -290,7 +290,7 @@ void Window::RequestHelp(const HelpEvent& rEvt)
 {
     if ( mpViewShell )
     {
-        if( !mpViewShell->RequestHelp( rEvt, this) )
+        if( !mpViewShell->RequestHelp( rEvt ) )
             vcl::Window::RequestHelp( rEvt );
     }
     else

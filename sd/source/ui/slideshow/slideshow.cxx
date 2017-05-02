@@ -977,7 +977,7 @@ void SlideShow::activate( ViewShellBase& rBase )
 
 }
 
-void SlideShow::deactivate( ViewShellBase& /*rBase*/ )
+void SlideShow::deactivate()
 {
     mxController->deactivate();
 }
@@ -987,10 +987,10 @@ bool SlideShow::keyInput(const KeyEvent& rKEvt)
     return mxController.is() && mxController->keyInput(rKEvt);
 }
 
-void SlideShow::paint( const ::tools::Rectangle& rRect )
+void SlideShow::paint()
 {
     if( mxController.is() )
-        mxController->paint( rRect );
+        mxController->paint();
 }
 
 void SlideShow::pause( bool bPause )

@@ -126,7 +126,7 @@ void OutlineViewShell::InitInterface_Impl()
 /**
  * common initialization part of both constructors
  */
-void OutlineViewShell::Construct(DrawDocShell* )
+void OutlineViewShell::Construct()
 {
     bool bModified = GetDoc()->IsChanged();
 
@@ -180,11 +180,11 @@ Reference<drawing::XDrawSubController> OutlineViewShell::CreateSubController()
  * Default constructor, windows must not center themselves automatically
  */
 OutlineViewShell::OutlineViewShell (
-    SfxViewFrame* pFrame,
+    SfxViewFrame* /*pFrame*/,
     ViewShellBase& rViewShellBase,
     vcl::Window* pParentWindow,
     FrameView* pFrameViewArgument)
-    : ViewShell(pFrame, pParentWindow, rViewShellBase),
+    : ViewShell(pParentWindow, rViewShellBase),
       pOlView(nullptr),
       pLastPage( nullptr ),
       bPastePossible(false),
@@ -198,7 +198,7 @@ OutlineViewShell::OutlineViewShell (
 
     mpFrameView->Connect();
 
-    Construct(GetDocSh());
+    Construct();
 
     SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::OutlineText));
 
@@ -635,13 +635,13 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         case SID_UNDO :
         {
             OutlineViewPageChangesGuard aGuard2(pOlView);
-            ImpSidUndo(false, rReq);
+            ImpSidUndo(rReq);
         }
         break;
         case SID_REDO :
         {
             OutlineViewPageChangesGuard aGuard2(pOlView);
-            ImpSidRedo(false, rReq);
+            ImpSidRedo(rReq);
         }
         break;
 
@@ -1114,7 +1114,7 @@ bool OutlineViewShell::PrepareClose( bool bUI )
     if( !ViewShell::PrepareClose(bUI) )
         return false;
 
-    return pOlView == nullptr || pOlView->PrepareClose(bUI);
+    return pOlView == nullptr || pOlView->PrepareClose();
 }
 
 /**

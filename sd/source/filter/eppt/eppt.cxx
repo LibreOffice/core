@@ -399,7 +399,6 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
 
         mpPptEscherEx->BeginAtom();
 
-        bool bFirst = true;
         bool bSimpleText = false;
 
         mpStrm->WriteUInt16( 5 );                           // paragraph count
@@ -408,13 +407,11 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
         {
             if ( nInstance >= EPP_TEXTTYPE_CenterBody )
             {
-                bFirst = false;
                 bSimpleText = true;
                 mpStrm->WriteUInt16( nLev );
             }
-            mpStyleSheet->mpParaSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
-            mpStyleSheet->mpCharSheet[ nInstance ]->Write( *mpStrm, mpPptEscherEx, nLev, bFirst, bSimpleText, mXPagePropSet );
-            bFirst = false;
+            mpStyleSheet->mpParaSheet[ nInstance ]->Write( *mpStrm, nLev, bSimpleText, mXPagePropSet );
+            mpStyleSheet->mpCharSheet[ nInstance ]->Write( *mpStrm, nLev, bSimpleText, mXPagePropSet );
         }
         mpPptEscherEx->EndAtom( EPP_TxMasterStyleAtom, 0, nInstance );
     }

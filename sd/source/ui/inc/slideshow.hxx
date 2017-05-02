@@ -162,8 +162,8 @@ public:
     // events
     void resize( const Size &rSize );
     void activate(ViewShellBase& rBase);
-    void deactivate(ViewShellBase& rBase);
-    void paint( const ::tools::Rectangle& rRect );
+    void deactivate();
+    void paint();
 
     bool keyInput(const KeyEvent& rKEvt);
 

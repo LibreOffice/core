@@ -223,7 +223,7 @@ public:
     void slideEnded(const bool bReverse);
     /// @throws css::uno::RuntimeException
     void hyperLinkClicked(const OUString & hyperLink);
-    void click(const css::uno::Reference< css::drawing::XShape > & xShape, const css::awt::MouseEvent & aOriginalEvent);
+    void click(const css::uno::Reference< css::drawing::XShape > & xShape);
     bool swipe(const CommandSwipeData &rSwipeData);
     bool longpress(const CommandLongPressData& rLongPressData);
 
@@ -232,7 +232,7 @@ public:
 
     ViewShell* getViewShell() const { return mpViewShell; }
 
-    void paint( const ::tools::Rectangle& rRect );
+    void paint();
     bool keyInput(const KeyEvent& rKEvt);
     void mouseButtonUp(const MouseEvent& rMEvt);
 

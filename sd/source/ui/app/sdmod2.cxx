@@ -479,7 +479,7 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
     pRet->Put( SfxUInt16Item( SID_ATTR_METRIC, (sal_uInt16)nMetric ) );
 
     // TP_OPTIONS_CONTENTS:
-    pRet->Put( SdOptionsContentsItem( pOptions, pFrameView ) );
+    pRet->Put( SdOptionsContentsItem() );
 
     // TP_OPTIONS_MISC:
     SdOptionsMiscItem aSdOptionsMiscItem( pOptions, pFrameView );

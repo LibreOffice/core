@@ -674,7 +674,7 @@ void HtmlExport::ExportSingleDocument()
         if(mbNotes)
         {
             SdPage* pNotesPage = maNotesPages[ nSdPage ];
-            OUString aNotesStr( CreateTextForNotesPage( pOutliner, pNotesPage, true, maBackColor) );
+            OUString aNotesStr( CreateTextForNotesPage( pOutliner, pNotesPage, maBackColor) );
 
             if (!aNotesStr.isEmpty())
             {
@@ -1127,7 +1127,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         if(mbNotes)
         {
             SdPage* pNotesPage = maNotesPages[ nSdPage ];
-            OUString aNotesStr( CreateTextForNotesPage( pOutliner, pNotesPage, true, maBackColor) );
+            OUString aNotesStr( CreateTextForNotesPage( pOutliner, pNotesPage, maBackColor) );
 
             if (!aNotesStr.isEmpty())
             {
@@ -1377,7 +1377,6 @@ void HtmlExport::WriteOutlinerParagraph(OUStringBuffer& aStr, SdrOutliner* pOutl
 // creates a outliner text for a note page
 OUString HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
                                            SdPage* pPage,
-                                           bool,
                                            const Color& rBackgroundColor )
 {
     OUStringBuffer aStr;
@@ -1662,7 +1661,7 @@ bool HtmlExport::CreateHtmlForPresPages()
         {
             SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
             SdPage* pNotesPage = maNotesPages[ nSdPage ];
-            OUString aNotesStr( CreateTextForNotesPage( pOutliner, pNotesPage, true, maBackColor) );
+            OUString aNotesStr( CreateTextForNotesPage( pOutliner, pNotesPage, maBackColor) );
             pOutliner->Clear();
 
             if (!aNotesStr.isEmpty())
@@ -2065,7 +2064,7 @@ bool HtmlExport::CreateNotesPages()
         aStr.append(CreateBodyTag());
 
         if(pPage)
-            aStr.append(CreateTextForNotesPage( pOutliner, pPage, true, maBackColor ));
+            aStr.append(CreateTextForNotesPage( pOutliner, pPage, maBackColor ));
 
         aStr.append("</body>\r\n</html>");
 

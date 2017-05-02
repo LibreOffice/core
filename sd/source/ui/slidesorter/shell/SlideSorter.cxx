@@ -183,7 +183,7 @@ void SlideSorter::Init()
         pContentWindow->Hide();
 
         // Set view pointer of base class.
-        SetupControls(pParentWindow);
+        SetupControls();
 
         mbIsValid = true;
     }
@@ -242,7 +242,7 @@ void SlideSorter::Paint (const ::tools::Rectangle& rRepaintArea)
         GetContentWindow());
 }
 
-void SlideSorter::SetupControls (vcl::Window* )
+void SlideSorter::SetupControls()
 {
     GetVerticalScrollBar()->Show();
 }
@@ -371,16 +371,12 @@ bool SlideSorter::RelocateToWindow (vcl::Window* pParentWindow)
 
     ReleaseListeners();
 
-    vcl::Window *pNewWindow = nullptr;
     if (mpViewShell)
     {
         mpViewShell->ViewShell::RelocateToParentWindow(pParentWindow);
-        pNewWindow = mpViewShell->GetParentWindow();
     }
-    else
-        pNewWindow = nullptr;
 
-    SetupControls(pNewWindow);
+    SetupControls();
     SetupListeners();
 
     // For accessibility we have to shortly hide the content window.  This

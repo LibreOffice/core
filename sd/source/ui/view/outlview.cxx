@@ -96,7 +96,7 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
         // initialize Outliner: set Reference Device
         bInitOutliner = true;
         mrOutliner.Init( OutlinerMode::OutlineView );
-        mrOutliner.SetRefDevice( SD_MOD()->GetRefDevice( rDocSh ) );
+        mrOutliner.SetRefDevice( SD_MOD()->GetVirtualRefDevice() );
         //viewsize without the width of the image and number in front
         mnPaperWidth = (mrOutlineViewShell.GetActiveWindow()->GetViewSize().Width() - 4000);
         mrOutliner.SetPaperSize(Size(mnPaperWidth, 400000000));
@@ -1002,7 +1002,7 @@ SdrTextObj* OutlineView::CreateOutlineTextObject(SdPage* pPage)
 }
 
 /** updates draw model with all changes from outliner model */
-bool OutlineView::PrepareClose(bool)
+bool OutlineView::PrepareClose()
 {
     ::sd::UndoManager* pDocUndoMgr = dynamic_cast<sd::UndoManager*>(mpDocSh->GetUndoManager());
     if (pDocUndoMgr != nullptr)

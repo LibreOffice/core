@@ -149,7 +149,7 @@ protected:
     virtual void            RequestingChildren( SvTreeListEntry* pParent ) override;
 
     void                    DoDrag();
-    void                    OnDragFinished( sal_uInt8 nDropAction );
+    void                    OnDragFinished();
 
     /** Return the name of the object.  When the object has no user supplied
         name and the bCreate flag is <TRUE/> then a name is created

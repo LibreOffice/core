@@ -57,9 +57,9 @@ bool TabControl::TabControlTransferable::GetData( const css::datatransfer::DataF
     return false;
 }
 
-void TabControl::TabControlTransferable::DragFinished( sal_Int8 nDropAction )
+void TabControl::TabControlTransferable::DragFinished( sal_Int8 /*nDropAction*/ )
 {
-    mrParent.DragFinished( nDropAction );
+    mrParent.DragFinished();
 }
 
 TabControl::TabControl(DrawViewShell* pViewSh, vcl::Window* pParent) :
@@ -163,7 +163,7 @@ void TabControl::StartDrag( sal_Int8, const Point& )
     ( new TabControl::TabControlTransferable( *this ) )->StartDrag( this, DND_ACTION_COPYMOVE );
 }
 
-void TabControl::DragFinished( sal_Int8 )
+void TabControl::DragFinished()
 {
     bInternalMove = false;
 }

@@ -84,7 +84,7 @@ struct SdNavigatorDropEvent : public ExecuteDropEvent
     {}
 };
 
-css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDataObject( View*, vcl::Window& )
+css::uno::Reference< css::datatransfer::XTransferable > View::CreateClipboardDataObject()
 {
     // since SdTransferable::CopyToClipboard is called, this
     // dynamically created object is destroyed automatically
@@ -234,7 +234,7 @@ void View::UpdateSelectionClipboard( bool bForceDeselect )
     }
 }
 
-void View::DoCut(vcl::Window* )
+void View::DoCut()
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
@@ -251,7 +251,7 @@ void View::DoCut(vcl::Window* )
     }
 }
 
-void View::DoCopy (vcl::Window* pWindow)
+void View::DoCopy()
 {
     const OutlinerView* pOLV = GetTextEditOutlinerView();
 
@@ -260,7 +260,7 @@ void View::DoCopy (vcl::Window* pWindow)
     else if( AreObjectsMarked() )
     {
         BrkAction();
-        CreateClipboardDataObject( this, *pWindow );
+        CreateClipboardDataObject();
     }
 }
 

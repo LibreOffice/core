@@ -165,8 +165,8 @@ public:
     void SetIsNavigatorShowingAllShapes (const bool bIsNavigatorShowingAllShapes);
     bool IsNavigatorShowingAllShapes() const { return mbIsNavigatorShowingAllShapes;}
 
-    void    WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse );
-    void    ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse );
+    void    WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >& );
+    void    ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >& );
 
 private:
     sal_uInt16          mnRefCount;

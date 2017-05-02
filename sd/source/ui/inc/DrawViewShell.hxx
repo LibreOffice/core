@@ -88,7 +88,6 @@ public:
             one view shell to the next.
     */
     DrawViewShell (
-        SfxViewFrame* pFrame,
         ViewShellBase& rViewShellBase,
         vcl::Window* pParentWindow,
         PageKind ePageKind,
@@ -279,7 +278,7 @@ public:
     */
     virtual void    ShowUIControls (bool bVisible) override;
 
-    void            ScannerEvent( const css::lang::EventObject& rEventObject );
+    void            ScannerEvent();
 
     bool            IsLayerModeActive() const { return mbIsLayerModeActive;}
 
@@ -449,21 +448,9 @@ private:
 
     virtual void Notify (SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
-    /** Stop a running slide show.  The frame the show is running in is
-        destroyed if
-        a) it is running in its own frame, i.e. is a full screen show and
-        b) the given flag bCloseFrame is true.
-        @param bCloseFrame
-            Be careful with this flag when stopping a full screen show.
-            When called from the destructor the flag has to be <FALSE/> or
-            otherwise we run into a loop of calls to destructors of the view
-            and the frame.
-            When called from other places the flag should be <TRUE/> so that
-            not an empty frame remains. When called with <TRUE/> it is the
-            responsibility of the caller to avoid an illegal reentrant
-            call.
+    /** Stop a running slide show.
     */
-    void StopSlideShow (bool bCloseFrame);
+    void StopSlideShow();
 
     /** Show the context menu for snap lines and points.  Because snap lines
         can not be selected the index of the snap line/point for which the

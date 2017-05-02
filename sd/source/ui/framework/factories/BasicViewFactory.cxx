@@ -333,7 +333,6 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
     {
         pViewShell.reset(
             new DrawViewShell(
-                &rFrame,
                 *mpBase,
                 &rWindow,
                 PageKind::Standard,
@@ -344,7 +343,6 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
     {
         pViewShell.reset(
             new GraphicViewShell (
-                &rFrame,
                 *mpBase,
                 &rWindow,
                 pFrameView));
@@ -364,7 +362,6 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
     {
         pViewShell.reset(
             new DrawViewShell(
-                &rFrame,
                 *mpBase,
                 &rWindow,
                 PageKind::Notes,
@@ -375,7 +372,6 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
     {
         pViewShell.reset(
             new DrawViewShell(
-                &rFrame,
                 *mpBase,
                 &rWindow,
                 PageKind::Handout,
@@ -386,7 +382,6 @@ std::shared_ptr<ViewShell> BasicViewFactory::CreateViewShell (
     {
         pViewShell.reset(
             new PresentationViewShell(
-                &rFrame,
                 *mpBase,
                 &rWindow,
                 pFrameView));

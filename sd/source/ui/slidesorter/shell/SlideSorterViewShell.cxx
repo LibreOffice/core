@@ -115,11 +115,11 @@ std::shared_ptr<SlideSorterViewShell> SlideSorterViewShell::Create (
 }
 
 SlideSorterViewShell::SlideSorterViewShell (
-    SfxViewFrame* pFrame,
+    SfxViewFrame* /*pFrame*/,
     ViewShellBase& rViewShellBase,
     vcl::Window* pParentWindow,
     FrameView* pFrameViewArgument)
-    : ViewShell (pFrame, pParentWindow, rViewShellBase),
+    : ViewShell (pParentWindow, rViewShellBase),
       mpSlideSorter(),
       mbIsArrangeGUIElementsPending(true)
 {
