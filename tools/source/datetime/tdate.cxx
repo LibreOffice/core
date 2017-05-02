@@ -464,6 +464,8 @@ bool Date::IsValidDate() const
 //static
 bool Date::IsValidDate( sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear )
 {
+    if (nYear == 0)
+        return false;
     if ( !nMonth || (nMonth > 12) )
         return false;
     if ( !nDay || (nDay > ImplDaysInMonth( nMonth, nYear )) )
