@@ -493,6 +493,18 @@ bool Date::Normalize( sal_uInt16 & rDay, sal_uInt16 & rMonth, sal_Int16 & rYear 
     if (IsValidDate( rDay, rMonth, rYear))
         return false;
 
+    if (rDay == 0 && rMonth == 0 && rYear == 0)
+        return false;   // empty date
+
+    if (rDay == 0)
+    {
+        if (rMonth == 0)
+            ;   // nothing, handled below
+        else
+            --rMonth;
+        // Last day of month is determined at the end.
+    }
+
     if (rMonth > 12)
     {
         rYear += rMonth / 12;
@@ -550,6 +562,10 @@ bool Date::Normalize( sal_uInt16 & rDay, sal_uInt16 & rMonth, sal_Int16 & rYear 
             }
         }
     }
+
+    if (rDay == 0)
+        rDay = ImplDaysInMonth( rMonth, rYear);
+
     return true;
 }
 
