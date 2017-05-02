@@ -11615,6 +11615,8 @@ if test "$ENABLE_JAVA" != ""; then
             # AC_PATH_PROGS needs unix path
             with_ant_home=`cygpath -u "$with_ant_home"`
         fi
+        AbsolutePath "$with_ant_home"
+        with_ant_home=$absolute_path
         AC_PATH_PROGS(ANT, [jakarta-ant ant ant.sh ant.bat ant.cmd],,$with_ant_home/bin:$PATH)
         WITH_ANT_HOME=$with_ant_home
         ANT_HOME=$with_ant_home
