@@ -164,7 +164,7 @@ rtl_TextEncoding DXFRepresentation::getTextEncoding() const
         osl_getTextEncodingFromLocale(nullptr); // Use default encoding if none specified
 }
 
-bool DXFRepresentation::Read( SvStream & rIStream, sal_uInt16 /*nMinPercent*/, sal_uInt16 /*nMaxPercent*/)
+bool DXFRepresentation::Read( SvStream & rIStream )
 {
     bool bRes;
 

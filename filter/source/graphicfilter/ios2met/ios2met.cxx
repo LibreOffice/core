@@ -380,7 +380,7 @@ private:
     void PushAttr(sal_uInt16 nPushOrder);
     void PopAttr();
 
-    void ChangeBrush( const Color& rPatColor, const Color& rBGColor, bool bFill );
+    void ChangeBrush( const Color& rPatColor, bool bFill );
     void SetPen( const Color& rColor, sal_uInt16 nStrLinWidth = 0, PenStyle ePenStyle = PEN_SOLID );
     void SetRasterOp(RasterOp eROP);
 
@@ -415,7 +415,7 @@ private:
     void        ReadFilletSharp(bool bGivenPos, sal_uInt16 nOrderLen);
     void        ReadMarker(bool bGivenPos, sal_uInt16 nOrderLen);
     void        ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen);
-    void        ReadDsc(sal_uInt16 nDscID, sal_uInt16 nDscLen);
+    void        ReadDsc(sal_uInt16 nDscID);
     void        ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen);
     void        ReadFont(sal_uInt16 nFieldSize);
     void        ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize);
@@ -715,7 +715,7 @@ void OS2METReader::PopAttr()
     delete p;
 }
 
-void OS2METReader::ChangeBrush(const Color& rPatColor, const Color& /*rBGColor*/, bool bFill )
+void OS2METReader::ChangeBrush(const Color& rPatColor, bool bFill )
 {
     Color aColor;
 
@@ -955,12 +955,12 @@ void OS2METReader::ReadBox(bool bGivenPos)
 
         if ( nFlags & 0x40 )
         {
-            ChangeBrush(aAttr.aPatCol,aAttr.aPatBgCol,aAttr.bFill);
+            ChangeBrush(aAttr.aPatCol, aAttr.bFill);
             SetRasterOp(aAttr.ePatMix);
         }
         else
         {
-            ChangeBrush( Color( COL_TRANSPARENT ), Color( COL_TRANSPARENT ), false );
+            ChangeBrush( Color( COL_TRANSPARENT ), false );
             SetRasterOp(aAttr.eLinMix);
         }
 
@@ -1150,7 +1150,7 @@ void OS2METReader::ReadFullArc(bool bGivenPos, sal_uInt16 nOrderSize)
     aCalcBndRect.Union(aRect);
 
     if (pAreaStack!=nullptr) {
-        ChangeBrush(aAttr.aPatCol,aAttr.aPatBgCol,aAttr.bFill);
+        ChangeBrush(aAttr.aPatCol, aAttr.bFill);
         SetRasterOp(aAttr.ePatMix);
         if ((pAreaStack->nFlags&0x40)!=0)
             SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
@@ -1160,7 +1160,7 @@ void OS2METReader::ReadFullArc(bool bGivenPos, sal_uInt16 nOrderSize)
     else
     {
         SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
-        ChangeBrush(Color( COL_TRANSPARENT ),Color( COL_TRANSPARENT ),false);
+        ChangeBrush(Color( COL_TRANSPARENT ), false);
         SetRasterOp(aAttr.eLinMix);
     }
     pVirDev->DrawEllipse(aRect);
@@ -1252,7 +1252,7 @@ void OS2METReader::ReadPolygons()
         aPolyPoly.Insert(aPoly);
     }
 
-    ChangeBrush(aAttr.aPatCol,aAttr.aPatBgCol,aAttr.bFill);
+    ChangeBrush(aAttr.aPatCol, aAttr.bFill);
     SetRasterOp(aAttr.ePatMix);
     if ((nFlags&0x01)!=0)
         SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
@@ -1375,11 +1375,11 @@ void OS2METReader::ReadMarker(bool bGivenPos, sal_uInt16 nOrderLen)
     SetRasterOp(aAttr.eMrkMix);
     if (aAttr.nMrkSymbol>=5 && aAttr.nMrkSymbol<=9)
     {
-        ChangeBrush(aAttr.aMrkCol,aAttr.aMrkCol,true);
+        ChangeBrush(aAttr.aMrkCol, true);
     }
     else
     {
-        ChangeBrush(Color(COL_TRANSPARENT),Color(COL_TRANSPARENT),false);
+        ChangeBrush(Color(COL_TRANSPARENT), false);
     }
     if (bCoord32) nNumPoints=nOrderLen/8; else nNumPoints=nOrderLen/4;
     if (!bGivenPos) nNumPoints++;
@@ -1550,7 +1550,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                     else
                         SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
 
-                    ChangeBrush(p->aCol,p->aBgCol,p->bFill);
+                    ChangeBrush(p->aCol, p->bFill);
                     SetRasterOp(p->eMix);
                     DrawPolyPolygon( p->aPPoly );
                 }
@@ -1610,7 +1610,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                     if( p->bStroke )
                     {
                         SetPen( aAttr.aPatCol, aAttr.nStrLinWidth );
-                        ChangeBrush(Color(COL_TRANSPARENT),Color(COL_TRANSPARENT),false);
+                        ChangeBrush(Color(COL_TRANSPARENT), false);
                         SetRasterOp( aAttr.ePatMix );
                         if ( IsLineInfo() )
                         {
@@ -1623,7 +1623,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
                     else
                     {
                         SetPen( COL_TRANSPARENT, 0, PEN_NULL );
-                        ChangeBrush( aAttr.aPatCol, aAttr.aPatBgCol, aAttr.bFill );
+                        ChangeBrush( aAttr.aPatCol, aAttr.bFill );
                         SetRasterOp( aAttr.ePatMix );
                         pVirDev->DrawPolyPolygon( p->aPPoly );
                     }
@@ -1658,7 +1658,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             {
                 SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
                 SetRasterOp(aAttr.eLinMix);
-                ChangeBrush(Color(COL_TRANSPARENT),Color(COL_TRANSPARENT),false);
+                ChangeBrush(Color(COL_TRANSPARENT), false);
                 nC=p->aPPoly.Count();
                 for (i=0; i<nC; i++)
                 {
@@ -2158,7 +2158,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
     }
 }
 
-void OS2METReader::ReadDsc(sal_uInt16 nDscID, sal_uInt16 /*nDscLen*/)
+void OS2METReader::ReadDsc(sal_uInt16 nDscID)
 {
     switch (nDscID) {
         case 0x00f7: { // 'Specify GVM Subset'
@@ -2618,7 +2618,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
                 pOS2MET->ReadUChar( nbyte ); nDscID =((sal_uInt16)nbyte) & 0x00ff;
                 pOS2MET->ReadUChar( nbyte ); nDscLen=((sal_uInt16)nbyte) & 0x00ff;
                 nPos=pOS2MET->Tell();
-                ReadDsc(nDscID, nDscLen);
+                ReadDsc(nDscID);
                 pOS2MET->Seek(nPos+nDscLen);
             }
             break;

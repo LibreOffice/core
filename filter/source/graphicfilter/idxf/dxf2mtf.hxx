@@ -62,12 +62,12 @@ private:
 
     DXFLineInfo GetEntityDXFLineInfo(const DXFBasicEntity & rE);
 
-    bool SetLineAttribute(const DXFBasicEntity & rE, sal_uLong nWidth=0);
+    bool SetLineAttribute(const DXFBasicEntity & rE);
 
     bool SetAreaAttribute(const DXFBasicEntity & rE);
 
     bool SetFontAttribute(const DXFBasicEntity & rE, short nAngle,
-                          sal_uInt16 nHeight, double fWidthScale);
+                          sal_uInt16 nHeight);
 
     void DrawLineEntity(const DXFLineEntity & rE, const DXFTransform & rTransform);
 

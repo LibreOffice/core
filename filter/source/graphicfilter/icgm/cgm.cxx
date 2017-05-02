@@ -97,7 +97,7 @@ sal_uInt32 CGM::GetBackGroundColor()
     return ( pElement ) ? pElement->aColorTable[ 0 ] : 0;
 }
 
-sal_uInt32 CGM::ImplGetUI16( sal_uInt32 /*nAlign*/ )
+sal_uInt32 CGM::ImplGetUI16()
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
     if (mpEndValidSource - pSource < 2)
