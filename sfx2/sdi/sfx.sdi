@@ -5024,24 +5024,6 @@ SfxVoidItem BibliographyComponent SID_COMP_BIBLIOGRAPHY
     GroupId = GID_APPLICATION;
 ]
 
-
-SfxVoidItem CheckPLZ SID_OFFICE_CHECK_PLZ
-(SfxStringItem PLZ SID_OFFICE_CHECK_PLZ)
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_SPECIAL;
-]
-
 SfxVoidItem AutoCorrectDlg SID_AUTO_CORRECT_DLG
 (SfxBoolItem ShowSwOptions SID_AUTO_CORRECT_DLG, SfxBoolItem OpenSmartTag SID_OPEN_SMARTTAGOPTIONS)
 [
