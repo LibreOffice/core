@@ -786,7 +786,7 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
 {
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
-    if ( pDoc->GetSpzFrameFormats()->Contains( &m_rFormat ) )    // Format does still exist
+    if (pDoc->GetSpzFrameFormats()->IsAlive(&m_rFormat)) // Format does still exist
     {
         SwFormatAnchor aTmp( m_rFormat.GetAnchor() );
 
@@ -824,12 +824,12 @@ SwHistoryChangeFlyChain::SwHistoryChangeFlyChain( SwFlyFrameFormat& rFormat,
 
 void SwHistoryChangeFlyChain::SetInDoc( SwDoc* pDoc, bool )
 {
-    if (pDoc->GetSpzFrameFormats()->Contains( m_pFlyFormat ) )
+    if (pDoc->GetSpzFrameFormats()->IsAlive(m_pFlyFormat))
     {
         SwFormatChain aChain;
 
-        if ( m_pPrevFormat &&
-             pDoc->GetSpzFrameFormats()->Contains( m_pPrevFormat ) )
+        if (m_pPrevFormat &&
+            pDoc->GetSpzFrameFormats()->IsAlive(m_pPrevFormat))
         {
             aChain.SetPrev( m_pPrevFormat );
             SwFormatChain aTmp( m_pPrevFormat->GetChain() );
@@ -837,8 +837,8 @@ void SwHistoryChangeFlyChain::SetInDoc( SwDoc* pDoc, bool )
             m_pPrevFormat->SetFormatAttr( aTmp );
         }
 
-        if ( m_pNextFormat &&
-             pDoc->GetSpzFrameFormats()->Contains( m_pNextFormat ) )
+        if (m_pNextFormat &&
+            pDoc->GetSpzFrameFormats()->IsAlive(m_pNextFormat))
         {
             aChain.SetNext( m_pNextFormat );
             SwFormatChain aTmp( m_pNextFormat->GetChain() );

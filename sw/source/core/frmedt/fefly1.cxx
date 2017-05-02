@@ -947,7 +947,7 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrameFormat*>& rFillArr )
     bool bTmpAssert = false;
     for( auto pFormat : rFillArr )
     {
-        if( mpDoc->GetSpzFrameFormats()->Contains( pFormat ))
+        if (mpDoc->GetSpzFrameFormats()->IsAlive(pFormat))
         {
             // FlyFormat is still valid, therefore process
 

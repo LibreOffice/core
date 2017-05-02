@@ -519,7 +519,7 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
 
     // Is the new Format still existent?
-    if( rDoc.GetFrameFormats()->Contains( pOldFormat ) )
+    if (rDoc.GetFrameFormats()->IsAlive(pOldFormat))
     {
         if( bAnchorChgd )
             pFrameFormat->DelFrames();
@@ -592,7 +592,7 @@ void SwUndoSetFlyFormat::RedoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
 
     // Is the new Format still existent?
-    if( rDoc.GetFrameFormats()->Contains( pNewFormat ) )
+    if (rDoc.GetFrameFormats()->IsAlive(pNewFormat))
     {
 
         if( bAnchorChgd )

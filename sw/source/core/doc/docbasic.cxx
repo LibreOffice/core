@@ -164,8 +164,12 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             const SwFrameFormat* pFormat = rCallEvent.PTR.pFormat;
             if( bCheckPtr )
             {
-                if ( GetSpzFrameFormats()->Contains( pFormat ) )
+                if (GetSpzFrameFormats()->IsAlive(pFormat))
                     bCheckPtr = false;      // misuse as a flag
+                else
+                    // this shouldn't be possible now that SwCallMouseEvent
+                    // listens for dying format?
+                    assert(false);
             }
             if( !bCheckPtr )
                 pTable = &pFormat->GetMacro().GetMacroTable();
@@ -179,7 +183,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             {
                 const SwFrameFormat* pFormat = rCallEvent.PTR.IMAP.pFormat;
                 const ImageMap* pIMap;
-                if( GetSpzFrameFormats()->Contains( pFormat ) &&
+                if (GetSpzFrameFormats()->IsAlive(pFormat) &&
                     nullptr != (pIMap = pFormat->GetURL().GetMap()) )
                 {
                     for( size_t nPos = pIMap->GetIMapObjectCount(); nPos; )

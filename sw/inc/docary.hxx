@@ -225,7 +225,7 @@ public:
 
     // Get the iterator of the exact object (includes pointer!),
     // e.g for position with std::distance.
-    // There is also Contains, if you don't need the position.
+    // There is also ContainsFormat, if you don't need the position.
     const_iterator find( const value_type& x ) const;
 
     // As this array is non-unique related to type and name,
@@ -253,8 +253,11 @@ public:
     virtual size_t GetFormatCount() const override { return m_Array.size(); }
     virtual SwFormat* GetFormat(size_t idx) const override { return operator[]( idx ); }
 
-    bool Contains( const value_type& x ) const;
-    inline bool Contains( const SwFormat* p ) const;
+    /// fast check if given format is contained here
+    /// @precond pFormat must not have been deleted
+    bool ContainsFormat(SwFrameFormat const* pFormat) const;
+    /// not so fast check that given format is still alive (i.e. contained here)
+    bool IsAlive(SwFrameFormat const*) const;
 
     void DeleteAndDestroyAll( bool keepDefault = false );
 
@@ -262,11 +265,6 @@ public:
     void newDefault( const_iterator const& position );
 };
 
-inline bool SwFrameFormats::Contains( const SwFormat* p ) const
-{
-    value_type p2 = dynamic_cast<value_type>(const_cast<SwFormat*>( p ));
-    return p2 != nullptr && this->Contains( p2 );
-}
 
 /// Unsorted, undeleting SwFrameFormat vector
 class SwFrameFormatsV : public SwFormatsModifyBase<SwFrameFormat*>
