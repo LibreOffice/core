@@ -519,19 +519,19 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = isEditable() && getDesignView()->HasSelection();
             break;
         case SID_CUT:
-            aReturn.bEnabled = isEditable() && getDesignView()->HasSelection() && !getDesignView()->isHandleEvent(_nId);
+            aReturn.bEnabled = isEditable() && getDesignView()->HasSelection() && !getDesignView()->isHandleEvent();
             break;
         case SID_COPY:
             aReturn.bEnabled = getDesignView()->HasSelection() && !getDesignView()->isHandleEvent(_nId);
             break;
         case SID_PASTE:
-            aReturn.bEnabled = isEditable()  && !getDesignView()->isHandleEvent(_nId) && getDesignView()->IsPasteAllowed();
+            aReturn.bEnabled = isEditable()  && !getDesignView()->isHandleEvent() && getDesignView()->IsPasteAllowed();
             break;
         case SID_SELECTALL:
-            aReturn.bEnabled = !getDesignView()->isHandleEvent(_nId);
+            aReturn.bEnabled = !getDesignView()->isHandleEvent();
             break;
         case SID_SELECTALL_IN_SECTION:
-            aReturn.bEnabled = !getDesignView()->isHandleEvent(_nId);
+            aReturn.bEnabled = !getDesignView()->isHandleEvent();
             if ( aReturn.bEnabled )
                 aReturn.bEnabled = getCurrentSectionView() != nullptr;
             break;
@@ -552,7 +552,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_EXPAND_SECTION:
         case SID_NEXT_MARK:
         case SID_PREV_MARK:
-            aReturn.bEnabled = isEditable() && !getDesignView()->isHandleEvent(_nId);
+            aReturn.bEnabled = isEditable() && !getDesignView()->isHandleEvent();
             break;
         case SID_SELECT:
         case SID_SELECT_REPORT:
@@ -562,7 +562,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = isConnected() && m_xReportDefinition.is();
             break;
         case SID_DELETE:
-            aReturn.bEnabled = isEditable() && getDesignView()->HasSelection() && !getDesignView()->isHandleEvent(_nId);
+            aReturn.bEnabled = isEditable() && getDesignView()->HasSelection() && !getDesignView()->isHandleEvent();
             if ( aReturn.bEnabled )
             {
                 OSectionWindow* pSectionWindow = getDesignView()->getMarkedSection();

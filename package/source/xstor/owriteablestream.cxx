@@ -1391,7 +1391,7 @@ void OWriteStream_Impl::InputStreamDisposed( OInputCompStream* pStream )
     m_aInputStreamsList.remove( pStream );
 }
 
-void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io::XInputStream >& xDataToCopy, const uno::Sequence< beans::PropertyValue >& aProps, bool, uno::Reference< io::XStream >& xTargetStream )
+void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io::XInputStream >& xDataToCopy, const uno::Sequence< beans::PropertyValue >& aProps, uno::Reference< io::XStream >& xTargetStream )
 {
     uno::Reference < io::XStream > xTempFile;
     if ( !xTargetStream.is() )
@@ -1455,7 +1455,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         // in case of new inserted package stream it is possible that input stream still was not set
         GetStreamProperties();
 
-        CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, m_bUseCommonEncryption, xTargetStream );
+        CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, xTargetStream );
     }
 }
 
@@ -1521,7 +1521,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
     // in case of new inserted package stream it is possible that input stream still was not set
     GetStreamProperties();
 
-    CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, m_bUseCommonEncryption, xTargetStream );
+    CreateReadonlyCopyBasedOnData( xDataToCopy, m_aProps, xTargetStream );
 }
 
 void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStorage >& xRelStorage, const OUString& aOrigStreamName, const OUString& aNewStreamName )

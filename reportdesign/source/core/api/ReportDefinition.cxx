@@ -1034,7 +1034,13 @@ void OReportDefinition::setSection(  const OUString& _sProperty
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         prepareSet(_sProperty, uno::makeAny(_member), uno::makeAny(_bOn), &l);
-        lcl_createSectionIfNeeded(_bOn ,this,_member,_sProperty == PROPERTY_PAGEHEADERON || _sProperty == PROPERTY_PAGEFOOTERON);
+
+        // create section if needed
+        if ( _bOn && !_member.is() )
+            _member = OSection::createOSection(this, getContext(), _sProperty == PROPERTY_PAGEHEADERON || _sProperty == PROPERTY_PAGEFOOTERON);
+        else if ( !_bOn )
+            ::comphelper::disposeComponent(_member);
+
         if ( _member.is() )
             _member->setName(_sName);
     }
