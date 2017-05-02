@@ -825,43 +825,43 @@ Tcg255::~Tcg255()
 
 bool Tcg255::processSubStruct( sal_uInt8 nId, SvStream &rS )
 {
-     Tcg255SubStruct* pSubStruct = nullptr;
-     switch ( nId )
-     {
-         case 0x1:
-         {
-             pSubStruct = new PlfMcd;
-             break;
-         }
-         case 0x2:
-         {
-             pSubStruct = new PlfAcd;
-             break;
-         }
-         case 0x3:
-         case 0x4:
-         {
-             pSubStruct = new PlfKme;
-             break;
-         }
-         case 0x10:
-         {
-             pSubStruct = new TcgSttbf;
-             break;
-         }
-         case 0x11:
-         {
-             pSubStruct = new MacroNames;
-             break;
-         }
-         case 0x12:
-         {
-             pSubStruct = new SwCTBWrapper;
-             break;
-         }
-         default:
-             SAL_INFO("sw.ww8","Unknown id 0x" << std::hex << nId);
-             return false;
+    Tcg255SubStruct* pSubStruct = nullptr;
+    switch ( nId )
+    {
+        case 0x1:
+        {
+            pSubStruct = new PlfMcd;
+            break;
+        }
+        case 0x2:
+        {
+            pSubStruct = new PlfAcd;
+            break;
+        }
+        case 0x3:
+        case 0x4:
+        {
+            pSubStruct = new PlfKme;
+            break;
+        }
+        case 0x10:
+        {
+            pSubStruct = new TcgSttbf;
+            break;
+        }
+        case 0x11:
+        {
+            pSubStruct = new MacroNames;
+            break;
+        }
+        case 0x12:
+        {
+            pSubStruct = new SwCTBWrapper;
+            break;
+        }
+        default:
+            SAL_INFO("sw.ww8","Unknown id 0x" << std::hex << nId);
+            return false;
     }
     pSubStruct->ch = nId;
     if ( !pSubStruct->Read( rS ) )
