@@ -228,6 +228,8 @@ void SwFieldPortion::CheckScript( const SwTextSizeInfo &rInf )
                              rSI.GetDefaultDir() :
                              rSI.DirType( IsFollow() ? rInf.GetIdx() - 1 : rInf.GetIdx() );
 
+        bool bPerformUBA = UBIDI_LTR != nFieldDir || i18n::ScriptType::COMPLEX == nScript;
+        if (bPerformUBA)
         {
             UErrorCode nError = U_ZERO_ERROR;
             UBiDi* pBidi = ubidi_openSized( aText.getLength(), 0, &nError );
