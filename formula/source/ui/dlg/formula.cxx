@@ -77,7 +77,7 @@ class FormulaDlg_Impl
 public:
     ::std::pair<RefButton*,RefEdit*>
         RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
-    void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton );
+    void            RefInputStartAfter();
     void            RefInputDoneAfter( bool bForced );
     bool            CalcValue( const OUString& rStrExp, OUString& rStrResult, bool bForceMatrixFormula = false );
     bool            CalcStruct( const OUString& rStrExp, bool bForceRecalcStruct = false );
@@ -1477,7 +1477,7 @@ void FormulaDlg_Impl::UpdateSelection()
     aPair.second = m_pEdRef;
     return aPair;
 }
-void FormulaDlg_Impl::RefInputStartAfter( RefEdit* /*pEdit*/, RefButton* /*pButton*/ )
+void FormulaDlg_Impl::RefInputStartAfter()
 {
     m_pRefBtn->SetEndImage();
 
@@ -1727,9 +1727,9 @@ void FormulaModalDialog::Update()
     return m_pImpl->RefInputStartBefore( pEdit, pButton );
 }
 
-void FormulaModalDialog::RefInputStartAfter( RefEdit* pEdit, RefButton* pButton )
+void FormulaModalDialog::RefInputStartAfter()
 {
-    m_pImpl->RefInputStartAfter( pEdit, pButton );
+    m_pImpl->RefInputStartAfter();
 }
 
 void FormulaModalDialog::RefInputDoneAfter()
@@ -1817,9 +1817,9 @@ void FormulaDlg::DoEnter()
     return m_pImpl->RefInputStartBefore( pEdit, pButton );
 }
 
-void FormulaDlg::RefInputStartAfter( RefEdit* pEdit, RefButton* pButton )
+void FormulaDlg::RefInputStartAfter()
 {
-    m_pImpl->RefInputStartAfter( pEdit, pButton );
+    m_pImpl->RefInputStartAfter();
 }
 
 void FormulaDlg::RefInputDoneAfter( bool bForced )

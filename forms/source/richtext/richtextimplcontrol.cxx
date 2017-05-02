@@ -566,7 +566,7 @@ namespace frm
     }
 
 
-    void RichTextControlImpl::Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, DrawFlags /*_nFlags*/ )
+    void RichTextControlImpl::Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize )
     {
         // need to normalize the map mode of the device - every paint operation on any device needs
         // to use the same map mode
