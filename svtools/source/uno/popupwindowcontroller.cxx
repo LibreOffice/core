@@ -178,8 +178,15 @@ void SAL_CALL PopupWindowController::dispose()
 // XStatusListener
 void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEvent& rEvent )
 {
-    svt::ToolboxController::statusChanged(rEvent);
-    enable( rEvent.IsEnabled );
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nItemId = 0;
+    if ( getToolboxId( nItemId, &pToolBox ) )
+    {
+        bool bValue = false;
+        rEvent.State >>= bValue;
+        pToolBox->CheckItem( nItemId, bValue );
+        pToolBox->EnableItem( nItemId, rEvent.IsEnabled );
+    }
 }
 
 Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow()
