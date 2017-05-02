@@ -457,7 +457,7 @@ void SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
 {
     maMSTOCExpression = rSource.maMSTOCExpression;
     SwTOXType* pType = const_cast<SwTOXType*>(rSource.GetTOXType());
-    if( pDoc && std::find(pDoc->GetTOXTypes().begin(), pDoc->GetTOXTypes().end(), pType) == pDoc->GetTOXTypes().end())
+    if( pDoc && !pDoc->GetTOXTypes().Contains( pType ))
     {
         // type not in pDoc, so create it now
         const SwTOXTypes& rTypes = pDoc->GetTOXTypes();
