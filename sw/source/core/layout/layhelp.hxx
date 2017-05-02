@@ -94,24 +94,24 @@ public:
     SwActualSection *GetUpper()                         { return pUpper; }
 };
 
-// Helps during the InsertCnt_-function to create new pages.
-// If there's a layoutcache available, this information is used.
+/// Helps during the InsertCnt_ function to create new pages.
+/// If there's a layout cache available, this information is used.
 class SwLayHelper
 {
-    SwFrame* &rpFrame;
-    SwFrame* &rpPrv;
-    SwPageFrame* &rpPage;
-    SwLayoutFrame* &rpLay;
-    SwActualSection* &rpActualSection;
+    SwFrame* &mrpFrame;
+    SwFrame* &mrpPrv;
+    SwPageFrame* &mrpPage;
+    SwLayoutFrame* &mrpLay;
+    SwActualSection* &mrpActualSection;
     bool mbBreakAfter;
-    SwDoc* pDoc;
-    SwLayCacheImpl* pImpl;
-    sal_uLong nMaxParaPerPage;
-    sal_uLong nParagraphCnt;
-    sal_uLong nStartOfContent;
-    size_t nIndex;                          // the index in the page break array
-    size_t nFlyIdx;                         // the index in the fly cache array
-    bool bFirst : 1;
+    SwDoc* mpDoc;
+    SwLayCacheImpl* mpImpl;
+    sal_uLong mnMaxParaPerPage;
+    sal_uLong mnParagraphCnt;
+    sal_uLong mnStartOfContent;
+    size_t mnIndex;                          ///< the index in the page break array
+    size_t mnFlyIdx;                         ///< the index in the fly cache array
+    bool mbFirst : 1;
     void CheckFlyCache_( SwPageFrame* pPage );
 public:
     SwLayHelper( SwDoc *pD, SwFrame* &rpF, SwFrame* &rpP, SwPageFrame* &rpPg,
@@ -126,7 +126,7 @@ public:
     /// Look for fresh text frames at this (new) page and set them to the right
     /// position, if they are in the fly cache.
     void CheckFlyCache( SwPageFrame* pPage )
-    { if( pImpl && nFlyIdx < pImpl->GetFlyCount() ) CheckFlyCache_( pPage ); }
+    { if( mpImpl && mnFlyIdx < mpImpl->GetFlyCount() ) CheckFlyCache_( pPage ); }
 };
 
 // Contains the data structures that are required to read and write a layout cache.
