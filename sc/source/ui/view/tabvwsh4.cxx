@@ -1684,6 +1684,32 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     pAccessibilityBroadcaster(nullptr),
     mbInSwitch(false)
 {
+    // FIXME this is just a workaround, the real fix is to move the
+    // CurMaxCol/Row to ScTable, so that we maintain them consistently
+    // for all the views:
+    // If another view had enlarged the dimensions, preserve it
+    // lest we reduce it to the original, and they get blank tiles
+    // (in the area outside the original dimensions).
+    long nMaxTiledRow = 0;
+    long nMaxTiledCol = 0;
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        if (pTabViewShell && getPart() == pTabViewShell->getPart())
+        {
+            ScViewData& rViewData = pTabViewShell->GetViewData();
+            const long nCurMaxTiledRow = rViewData.GetMaxTiledRow();
+            const long nCurMaxTiledCol = rViewData.GetMaxTiledCol();
+            SAL_INFO("sc.lok.docsize", "sfxlokhelper::createview: maxTiledRow: " <<
+                     nCurMaxTiledRow << ", maxTiledCol: " << nCurMaxTiledCol);
+            nMaxTiledRow = std::max(nCurMaxTiledRow, nMaxTiledRow);
+            nMaxTiledCol = std::max(nCurMaxTiledCol, nMaxTiledCol);
+        }
+
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
 
     //  if switching back from print preview,
@@ -1744,6 +1770,15 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     //put things back as we found them
     if (bInstalledScTabViewObjAsTempController)
         GetViewData().GetDocShell()->GetModel()->setCurrentController(nullptr);
+
+    // Set the maximum dimensions as explained above, but only if they have
+    // the default values.
+    SAL_INFO("sc.lok.docsize", "sfxlokhelper::createview: overwriting new view's maxTiledRow: " <<
+             nMaxTiledRow << ", maxTiledCol: " << nMaxTiledCol);
+    if (GetViewData().GetMaxTiledRow() == 50 && nMaxTiledRow > 0)
+        GetViewData().SetMaxTiledRow(nMaxTiledRow);
+    if (GetViewData().GetMaxTiledCol() == 20 && nMaxTiledCol > 0)
+        GetViewData().SetMaxTiledCol(nMaxTiledCol);
 }
 
 ScTabViewShell::~ScTabViewShell()
