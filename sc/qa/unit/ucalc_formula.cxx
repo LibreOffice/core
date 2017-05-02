@@ -7694,7 +7694,7 @@ void Test::testMatConcat()
     CPPUNIT_ASSERT_EQUAL(OUString("x"),aStr);
     aPos.IncRow();
     aStr = m_pDoc->GetString(aPos);
-    CPPUNIT_ASSERT_EQUAL(OUString(""),aStr);
+    CPPUNIT_ASSERT_EQUAL(OUString(),aStr);
     aPos.IncRow();
     aStr = m_pDoc->GetString(aPos);
     CPPUNIT_ASSERT_EQUAL(OUString("er"),aStr);

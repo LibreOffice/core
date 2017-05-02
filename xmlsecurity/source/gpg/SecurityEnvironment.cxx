@@ -54,7 +54,7 @@ const Sequence< sal_Int8>& SecurityEnvironmentGpg::getUnoTunnelId() {
 
 OUString SecurityEnvironmentGpg::getSecurityEnvironmentInformation()
 {
-    return OUString("");
+    return OUString();
 }
 
 Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertificates()

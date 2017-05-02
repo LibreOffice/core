@@ -1431,7 +1431,7 @@ void SdTiledRenderingTest::testTdf103083()
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     EditView& rEditView2 = pView->GetTextEditOutlinerView()->GetEditView();
     rEditView2.SetSelection(ESelection(2, 0, 2, 10)); // start para, start char, end para, end char.
-    CPPUNIT_ASSERT_EQUAL(OUString(""), rEditView2.GetSelected());
+    CPPUNIT_ASSERT_EQUAL(OUString(), rEditView2.GetSelected());
 
     // paste contents of bullet item
     comphelper::dispatchCommand(".uno:Paste", uno::Sequence<beans::PropertyValue>());

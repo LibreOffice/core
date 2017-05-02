@@ -97,7 +97,7 @@ OUString SAL_CALL CWinClipboard::getName(  )
     if ( nullptr != m_pImpl.get( ) )
         return m_pImpl->getName( );
 
-    return OUString("");
+    return OUString();
 }
 
 // XFlushableClipboard

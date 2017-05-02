@@ -1622,9 +1622,9 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
             aRet <<= uno::Sequence<sheet::TableFilterField>(0);
     }
     else if (aPropertyName == SC_UNO_DP_LAYOUTNAME)
-        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString("");
+        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString();
     else if (aPropertyName == SC_UNO_DP_FIELD_SUBTOTALNAME)
-        aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString("");
+        aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString();
     else if (aPropertyName == SC_UNO_DP_HAS_HIDDEN_MEMBER)
         aRet <<= mbHasHiddenMember;
     else if (aPropertyName == SC_UNO_DP_FLAGS)

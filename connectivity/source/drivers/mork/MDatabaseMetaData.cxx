@@ -77,9 +77,9 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     // ****************************************************
 
     // Catalog
-    aRow[1] = new ORowSetValueDecorator(OUString(""));
+    aRow[1] = new ORowSetValueDecorator(OUString());
     // Schema
-    aRow[2] = new ORowSetValueDecorator(OUString(""));
+    aRow[2] = new ORowSetValueDecorator(OUString());
     // DATA_TYPE
     aRow[5] = new ORowSetValueDecorator(static_cast<sal_Int16>(DataType::VARCHAR));
     // TYPE_NAME, not used

@@ -33,7 +33,7 @@ OUString getTextForType(ScCondFormatEntryType eType)
             break;
     }
 
-    return OUString("");
+    return OUString();
 }
 
 OUString getExpression(sal_Int32 nIndex)

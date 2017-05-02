@@ -94,7 +94,7 @@ OUString LwpMarker::GetNamedProperty(const OUString& name)
     if (pProp)
         return pProp->GetNamedProperty(name);
     else
-        return OUString("");
+        return OUString();
 }
 
 LwpStoryMarker::LwpStoryMarker(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
@@ -147,7 +147,7 @@ OUString LwpCHBlkMarker::GetPromptText()
         pStory = dynamic_cast<LwpStory*>(m_objPromptStory.obj().get());
     if (pStory)
         return pStory->GetContentText();
-    return OUString("");
+    return OUString();
 }
 
 void LwpCHBlkMarker::ConvertCHBlock(XFContentContainer* pXFPara, sal_uInt8 nType)
