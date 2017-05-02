@@ -2075,7 +2075,7 @@ RTLFUNC(DateAdd)
                 sal_Int32 nTargetYear = lNumber + nYear;
                 nTargetYear16 = limitToINT16( nTargetYear );
                 nTargetMonth = nMonth;
-                bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, dNewDate );
+                bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, false, dNewDate );
                 break;
             }
             case INTERVAL_Q:
@@ -2119,7 +2119,7 @@ RTLFUNC(DateAdd)
                     nTargetYear = (sal_Int32)nYear + nYearsAdd;
                 }
                 nTargetYear16 = limitToINT16( nTargetYear );
-                bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, dNewDate );
+                bOk = implDateSerial( nTargetYear16, nTargetMonth, nDay, false, dNewDate );
                 break;
             }
             default: break;
@@ -2130,16 +2130,11 @@ RTLFUNC(DateAdd)
             // Overflow?
             sal_Int16 nNewYear, nNewMonth, nNewDay;
             implGetDayMonthYear( nNewYear, nNewMonth, nNewDay, dNewDate );
-            if( nNewYear > 9999 || nNewYear < 100 )
-            {
-                StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-                return;
-            }
             sal_Int16 nCorrectionDay = nDay;
             while( nNewMonth > nTargetMonth )
             {
                 nCorrectionDay--;
-                implDateSerial( nTargetYear16, nTargetMonth, nCorrectionDay, dNewDate );
+                implDateSerial( nTargetYear16, nTargetMonth, nCorrectionDay, false, dNewDate );
                 implGetDayMonthYear( nNewYear, nNewMonth, nNewDay, dNewDate );
             }
             dNewDate += dHoursMinutesSeconds;
@@ -2334,7 +2329,7 @@ double implGetDateOfFirstDayInFirstWeek
         nFirstWeekMinDays = 7;      // vbFirstFourDays
 
     double dBaseDate;
-    implDateSerial( nYear, 1, 1, dBaseDate );
+    implDateSerial( nYear, 1, 1, false, dBaseDate );
 
     sal_Int16 nWeekDay0101 = implGetWeekDay( dBaseDate );
     sal_Int16 nDayDiff = nWeekDay0101 - nFirstDay;
@@ -2397,7 +2392,7 @@ RTLFUNC(DatePart)
         {
             sal_Int16 nYear = implGetDateYear( dDate );
             double dBaseDate;
-            implDateSerial( nYear, 1, 1, dBaseDate );
+            implDateSerial( nYear, 1, 1, false, dBaseDate );
             nRet = 1 + sal_Int32( dDate - dBaseDate );
             break;
         }

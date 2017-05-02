@@ -1865,7 +1865,7 @@ css::util::Date SbxDateToUNODate( const SbxValue* const pVal )
 void SbxDateFromUNODate( SbxValue *pVal, const css::util::Date& aUnoDate)
 {
     double dDate;
-    if( implDateSerial( aUnoDate.Year, aUnoDate.Month, aUnoDate.Day, dDate ) )
+    if( implDateSerial( aUnoDate.Year, aUnoDate.Month, aUnoDate.Day, false, dDate ) )
     {
         pVal->PutDate( dDate );
     }
@@ -1980,7 +1980,7 @@ void SbxDateFromUNODateTime( SbxValue *pVal, const css::util::DateTime& aUnoDT)
     double dDate(0.0);
     if( implDateTimeSerial( aUnoDT.Year, aUnoDT.Month, aUnoDT.Day,
                             aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds,
-                            dDate ) )
+                            false, dDate ) )
     {
         pVal->PutDate( dDate );
     }
@@ -2021,7 +2021,7 @@ RTLFUNC(CDateFromUnoDateTime)
         SbxBase::SetError( ERRCODE_SBX_CONVERSION );
 }
 
-// Function to convert date to ISO 8601 date format
+// Function to convert date to ISO 8601 date format YYYYMMDD
 RTLFUNC(CDateToIso)
 {
     (void)pBasic;
@@ -2031,11 +2031,13 @@ RTLFUNC(CDateToIso)
     {
         double aDate = rPar.Get(1)->GetDate();
 
+        // Date may actually even be -YYYYYMMDD
         char Buffer[11];
-        snprintf( Buffer, sizeof( Buffer ), "%04d%02d%02d",
-            implGetDateYear( aDate ),
-            implGetDateMonth( aDate ),
-            implGetDateDay( aDate ) );
+        sal_Int16 nYear = implGetDateYear( aDate );
+        snprintf( Buffer, sizeof( Buffer ), (nYear < 0 ? "%05d%02d%02d" : "%04d%02d%02d"),
+                static_cast<int>(nYear),
+                static_cast<int>(implGetDateMonth( aDate )),
+                static_cast<int>(implGetDateDay( aDate )) );
         OUString aRetStr = OUString::createFromAscii( Buffer );
         rPar.Get(0)->PutString( aRetStr );
     }
@@ -2056,34 +2058,51 @@ RTLFUNC(CDateFromIso)
         do
         {
             OUString aStr = rPar.Get(1)->GetOUString();
+            if (aStr.isEmpty())
+                break;
+
+            // Valid formats are
+            // YYYYMMDD    -YYYMMDD     YYYYYMMDD    -YYYYYMMDD
+            // YYYY-MM-DD  -YYYY-MM-DD  YYYYY-MM-DD  -YYYYY-MM-DD
+
+            sal_Int32 nSign = 1;
+            if (aStr[0] == '-')
+            {
+                nSign = -1;
+                aStr = aStr.copy(1);
+            }
             const sal_Int32 nLen = aStr.getLength();
-            if (nLen != 8 && nLen != 10)
+
+            // Now valid
+            // YYYYMMDD    YYYYYMMDD
+            // YYYY-MM-DD  YYYYY-MM-DD
+            if (nLen < 8 || 11 < nLen)
                 break;
 
             OUString aYearStr, aMonthStr, aDayStr;
-            if (nLen == 8)
+            if (nLen == 8 || nLen == 9)
             {
-                // YYYYMMDD
+                // (Y)YYYYMMDD
                 if (!comphelper::string::isdigitAsciiString(aStr))
                     break;
 
-                aYearStr  = aStr.copy( 0, 4 );
-                aMonthStr = aStr.copy( 4, 2 );
-                aDayStr   = aStr.copy( 6, 2 );
+                const sal_Int32 nMonthPos = (nLen == 9 ? 5 : 4);
+                aYearStr  = aStr.copy( 0, nMonthPos );
+                aMonthStr = aStr.copy( nMonthPos, 2 );
+                aDayStr   = aStr.copy( nMonthPos + 2, 2 );
             }
             else
             {
-                // YYYY-MM-DD
-                const sal_Int32 nSep1 = aStr.indexOf('-');
-                if (nSep1 != 4)
+                // (Y)YYYY-MM-DD
+                const sal_Int32 nMonthSep = (nLen == 11 ? 5 : 4);
+                if (aStr.indexOf('-') != nMonthSep)
                     break;
-                const sal_Int32 nSep2 = aStr.indexOf('-', nSep1+1);
-                if (nSep2 != 7)
+                if (aStr.indexOf('-', nMonthSep + 1) != nMonthSep + 3)
                     break;
 
-                aYearStr  = aStr.copy( 0, 4 );
-                aMonthStr = aStr.copy( 5, 2 );
-                aDayStr   = aStr.copy( 8, 2 );
+                aYearStr  = aStr.copy( 0, nMonthSep );
+                aMonthStr = aStr.copy( nMonthSep + 1, 2 );
+                aDayStr   = aStr.copy( nMonthSep + 4, 2 );
                 if (    !comphelper::string::isdigitAsciiString(aYearStr) ||
                         !comphelper::string::isdigitAsciiString(aMonthStr) ||
                         !comphelper::string::isdigitAsciiString(aDayStr))
@@ -2091,8 +2110,8 @@ RTLFUNC(CDateFromIso)
             }
 
             double dDate;
-            if (!implDateSerial( (sal_Int16)aYearStr.toInt32(),
-                        (sal_Int16)aMonthStr.toInt32(), (sal_Int16)aDayStr.toInt32(), dDate ))
+            if (!implDateSerial( (sal_Int16)(nSign * aYearStr.toInt32()),
+                        (sal_Int16)aMonthStr.toInt32(), (sal_Int16)aDayStr.toInt32(), false, dDate ))
                 break;
 
             rPar.Get(0)->PutDate( dDate );
@@ -2124,7 +2143,7 @@ RTLFUNC(DateSerial)
     sal_Int16 nDay = rPar.Get(3)->GetInteger();
 
     double dDate;
-    if( implDateSerial( nYear, nMonth, nDay, dDate ) )
+    if( implDateSerial( nYear, nMonth, nDay, true, dDate ) )
     {
         rPar.Get(0)->PutDate( dDate );
     }
@@ -4893,36 +4912,46 @@ sal_Int16 implGetDateYear( double aDate )
     return nRet;
 }
 
-bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet )
+bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, bool bUseTwoDigitYear, double& rdRet )
 {
+    // XXX NOTE: For VBA years<0 are invalid and years in the range 0..29 and
+    // 30..99 can not be input as they are 2-digit for 2000..2029 and
+    // 1930..1999, VBA mode overrides bUseTwoDigitYear (as if that was always
+    // true). For VBA years > 9999 are invalid.
+    // For StarBASIC, if bUseTwoDigitYear==true then years in the range 0..99
+    // can not be input as they are 2-digit for 1900..1999, years<0 are
+    // accepted. If bUseTwoDigitYear==false then all years are accepted, but
+    // year 0 is invalid (last day BCE -0001-12-31, first day CE 0001-01-01).
 #if HAVE_FEATURE_SCRIPTING
-    if ( nYear < 30 && SbiRuntime::isVBAEnabled() )
+    if ( (nYear < 0 || 9999 < nYear) && SbiRuntime::isVBAEnabled() )
+    {
+        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+        return false;
+    }
+    else if ( nYear < 30 && SbiRuntime::isVBAEnabled() )
     {
         nYear += 2000;
     }
     else
 #endif
     {
-        if ( nYear < 100 )
+        if ( 0 <= nYear && nYear < 100 && (bUseTwoDigitYear || SbiRuntime::isVBAEnabled()) )
         {
             nYear += 1900;
         }
     }
-    Date aCurDate( nDay, nMonth, nYear );
-    if ((nYear < 100 || nYear > 9999) )
-    {
-#if HAVE_FEATURE_SCRIPTING
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-#endif
-        return false;
-    }
 
+    Date aCurDate( nDay, nMonth, nYear );
+
+    /* TODO: also StarBASIC should provide the rollover mechanism, probably we
+     * can use tools::Date::AddMonths() and operator+=() for both, VBA and
+     * StarBASIC. If called from CDateFromIso or CDateFromUnoDate it should not
+     * rollover. */
 #if HAVE_FEATURE_SCRIPTING
     if ( !SbiRuntime::isVBAEnabled() )
 #endif
     {
-        if ( (nMonth < 1 || nMonth > 12 )||
-             (nDay < 1 || nDay > 31 ) )
+        if ( nMonth < 1 || nDay < 1 || !aCurDate.IsValidDate() )
         {
 #if HAVE_FEATURE_SCRIPTING
             StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
@@ -4982,10 +5011,10 @@ double implTimeSerial( sal_Int16 nHours, sal_Int16 nMinutes, sal_Int16 nSeconds 
 
 bool implDateTimeSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
                          sal_Int16 nHour, sal_Int16 nMinute, sal_Int16 nSecond,
-                         double& rdRet )
+                         bool bUseTwoDigitYear, double& rdRet )
 {
     double dDate;
-    if(!implDateSerial(nYear, nMonth, nDay, dDate))
+    if(!implDateSerial(nYear, nMonth, nDay, bUseTwoDigitYear, dDate))
         return false;
     rdRet += dDate + implTimeSerial(nHour, nMinute, nSecond);
     return true;
