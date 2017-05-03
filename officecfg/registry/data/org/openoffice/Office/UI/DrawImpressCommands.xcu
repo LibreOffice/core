@@ -922,7 +922,7 @@
       </node>
       <node oor:name=".uno:DisplayMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Display Mode</value>
+          <value xml:lang="en-US">Display Views</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -930,10 +930,10 @@
       </node>
       <node oor:name=".uno:ToggleTabBarVisibility" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Toggle Tab Bar Visibility</value>
+          <value xml:lang="en-US">Views Tab Bar</value>
         </prop>
-        <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Modes Tab Bar</value>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Toggle Views Tab Bar Visibility</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
