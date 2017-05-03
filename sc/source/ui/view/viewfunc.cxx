@@ -1451,6 +1451,128 @@ void ScViewFunc::UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet )
         pHdl->ForgetLastPattern();
 }
 
+
+void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, long nOffset)
+{
+    if (!comphelper::LibreOfficeKit::isActive() || nOffset == 0)
+        return;
+
+    SCTAB nCurrentTabIndex = GetViewData().GetTabNo();
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        if (pTabViewShell)
+        {
+            pTabViewShell->GetViewData().GetLOKWidthHelper(nCurrentTabIndex)->invalidateByIndex(nStartCol);
+
+            // if we remove a column the cursor position  and the current selection
+            // in other views could need to be moved on the left by one column.
+            if (pTabViewShell != this)
+            {
+                if (pTabViewShell->getPart() == nCurrentTabIndex)
+                {
+                    SCCOL nX = pTabViewShell->GetViewData().GetCurX();
+                    if (nX > nStartCol || (nX == nStartCol && nOffset > 0))
+                    {
+                        SCROW nY = pTabViewShell->GetViewData().GetCurY();
+                        pTabViewShell->SetCursor(nX + nOffset, nY);
+                    }
+
+                    ScMarkData aMultiMark( pTabViewShell->GetViewData().GetMarkData() );
+                    aMultiMark.SetMarking( false );
+                    aMultiMark.MarkToMulti();
+                    if (aMultiMark.IsMultiMarked())
+                    {
+                        aMultiMark.ShiftCols(nStartCol, nOffset);
+                        pTabViewShell->SetMarkData(aMultiMark);
+                    }
+                }
+                else
+                {
+                    SCROW nX = pTabViewShell->GetViewData().GetCurXForTab(nCurrentTabIndex);
+                    if (nX > nStartCol || (nX == nStartCol && nOffset > 0))
+                    {
+                        pTabViewShell->GetViewData().SetCurXForTab(nX + nOffset, nCurrentTabIndex);
+                    }
+                }
+            }
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
+void ScViewFunc::OnLOKInsertDeleteRow(SCROW nStartRow, long nOffset)
+{
+    if (!comphelper::LibreOfficeKit::isActive() || nOffset == 0)
+        return;
+
+    SCTAB nCurrentTabIndex = GetViewData().GetTabNo();
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        if (pTabViewShell)
+        {
+            pTabViewShell->GetViewData().GetLOKHeightHelper(nCurrentTabIndex)->invalidateByIndex(nStartRow);
+
+            // if we remove a row the cursor position and the current selection
+            // in other views could need to be moved up by one row.
+            if (pTabViewShell != this)
+            {
+                if (pTabViewShell->getPart() == nCurrentTabIndex)
+                {
+                    SCROW nY = pTabViewShell->GetViewData().GetCurY();
+                    if (nY > nStartRow || (nY == nStartRow && nOffset > 0))
+                    {
+                        SCCOL nX = pTabViewShell->GetViewData().GetCurX();
+                        pTabViewShell->SetCursor(nX, nY + nOffset);
+                    }
+
+                    ScMarkData aMultiMark( pTabViewShell->GetViewData().GetMarkData() );
+                    aMultiMark.SetMarking( false );
+                    aMultiMark.MarkToMulti();
+                    if (aMultiMark.IsMultiMarked())
+                    {
+                        aMultiMark.ShiftRows(nStartRow, nOffset);
+                        pTabViewShell->SetMarkData(aMultiMark);
+                    }
+                }
+                else
+                {
+                    SCROW nY = pTabViewShell->GetViewData().GetCurYForTab(nCurrentTabIndex);
+                    if (nY > nStartRow || (nY == nStartRow && nOffset > 0))
+                    {
+                        pTabViewShell->GetViewData().SetCurYForTab(nY + nOffset, nCurrentTabIndex);
+                    }
+                }
+            }
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
+void ScViewFunc::OnLOKSetWidthOrHeight(SCCOLROW nStart, bool bWidth)
+{
+    if (!comphelper::LibreOfficeKit::isActive())
+        return;
+
+    SCTAB nCurTab = GetViewData().GetTabNo();
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
+        if (pTabViewShell)
+        {
+            if (bWidth)
+                pTabViewShell->GetViewData().GetLOKWidthHelper(nCurTab)->invalidateByIndex(nStart);
+            else
+                pTabViewShell->GetViewData().GetLOKHeightHelper(nCurTab)->invalidateByIndex(nStart);
+        }
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 //  insert cells - undo OK
 
 bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
@@ -1458,7 +1580,6 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
     ScRange aRange;
     if (GetViewData().GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
-
         ScDocShell* pDocSh = GetViewData().GetDocShell();
         const ScMarkData& rMark = GetViewData().GetMarkData();
         bool bSuccess = pDocSh->GetDocFunc().InsertCells( aRange, &rMark, eCmd, bRecord, false, bPartOfPaste );
@@ -1466,69 +1587,17 @@ bool ScViewFunc::InsertCells( InsCellCmd eCmd, bool bRecord, bool bPartOfPaste )
         {
             bool bInsertCols = ( eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER);
             bool bInsertRows = ( eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER );
-            if (comphelper::LibreOfficeKit::isActive())
+
+            if (bInsertCols)
             {
-                SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-                while (pViewShell)
-                {
-                    ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-                    if (pTabViewShell)
-                    {
-                        if (bInsertCols)
-                        {
-                            pTabViewShell->GetViewData().GetLOKWidthHelper().invalidateByIndex(aRange.aStart.Col());
-
-                            // if we insert a column the cursor position and the current selection
-                            // in other views could need to be moved on the right by one column.
-                            if (pTabViewShell != this)
-                            {
-                                SCCOL nX = pTabViewShell->GetViewData().GetCurX();
-                                if (nX >= aRange.aStart.Col())
-                                {
-                                    SCROW nY = pTabViewShell->GetViewData().GetCurY();
-                                    pTabViewShell->SetCursor(nX+1, nY);
-                                }
-
-                                ScMarkData aMultiMark( pTabViewShell->GetViewData().GetMarkData() );
-                                aMultiMark.SetMarking( false );
-                                aMultiMark.MarkToMulti();
-                                if (aMultiMark.IsMultiMarked())
-                                {
-                                    aMultiMark.ShiftCols(aRange.aStart.Col(), 1);
-                                    pTabViewShell->SetMarkData(aMultiMark);
-                                }
-                            }
-                        }
-
-                        if (bInsertRows)
-                        {
-                            pTabViewShell->GetViewData().GetLOKHeightHelper().invalidateByIndex(aRange.aStart.Row());
-
-                            // if we insert a row the cursor position and the current selection
-                            // in other views could need to be moved down by one row.
-                            if (pTabViewShell != this)
-                            {
-                                SCROW nY = pTabViewShell->GetViewData().GetCurY();
-                                if (nY >= aRange.aStart.Row())
-                                {
-                                    SCCOL nX = pTabViewShell->GetViewData().GetCurX();
-                                    pTabViewShell->SetCursor(nX, nY+1);
-                                }
-
-                                ScMarkData aMultiMark( pTabViewShell->GetViewData().GetMarkData() );
-                                aMultiMark.SetMarking( false );
-                                aMultiMark.MarkToMulti();
-                                if (aMultiMark.IsMultiMarked())
-                                {
-                                    aMultiMark.ShiftRows(aRange.aStart.Row(), 1);
-                                    pTabViewShell->SetMarkData(aMultiMark);
-                                }
-                            }
-                        }
-                    }
-                    pViewShell = SfxViewShell::GetNext(*pViewShell);
-                }
+                OnLOKInsertDeleteColumn(aRange.aStart.Col(), 1);
             }
+
+            if (bInsertRows)
+            {
+                OnLOKInsertDeleteRow(aRange.aStart.Row(), 1);
+            }
+
             pDocSh->UpdateOle(&GetViewData());
             CellContentChanged();
             ResetAutoSpell();
@@ -1595,68 +1664,14 @@ void ScViewFunc::DeleteCells( DelCellCmd eCmd )
             pDocSh->GetDocFunc().DeleteCells( aRange, &rMark, eCmd, false );
         }
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (eCmd == DEL_DELCOLS)
         {
-            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-            while (pViewShell)
-            {
-                ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-                if (pTabViewShell)
-                {
-                    if (eCmd == DEL_DELCOLS)
-                    {
-                        pTabViewShell->GetViewData().GetLOKWidthHelper().invalidateByIndex(aRange.aStart.Col());
+            OnLOKInsertDeleteColumn(aRange.aStart.Col(), -1);
+        }
 
-                        // if we remove a column the cursor position  and the current selection
-                        // in other views could need to be moved on the left by one column.
-                        if (pTabViewShell != this)
-                        {
-                            SCCOL nX = pTabViewShell->GetViewData().GetCurX();
-                            if (nX >= aRange.aStart.Col())
-                            {
-                                SCROW nY = pTabViewShell->GetViewData().GetCurY();
-                                pTabViewShell->SetCursor(nX-1, nY);
-                            }
-
-                            ScMarkData aMultiMark( pTabViewShell->GetViewData().GetMarkData() );
-                            aMultiMark.SetMarking( false );
-                            aMultiMark.MarkToMulti();
-                            if (aMultiMark.IsMultiMarked())
-                            {
-                                aMultiMark.ShiftCols(aRange.aStart.Col(), -1);
-                                pTabViewShell->SetMarkData(aMultiMark);
-                            }
-                        }
-                    }
-
-                    if (eCmd == DEL_DELROWS)
-                    {
-                        pTabViewShell->GetViewData().GetLOKHeightHelper().invalidateByIndex(aRange.aStart.Row());
-
-                        // if we remove a row the cursor position and the current selection
-                        // in other views could need to be moved up by one row.
-                        if (pTabViewShell != this)
-                        {
-                            SCROW nY = pTabViewShell->GetViewData().GetCurY();
-                            if (nY >= aRange.aStart.Row())
-                            {
-                                SCCOL nX = pTabViewShell->GetViewData().GetCurX();
-                                pTabViewShell->SetCursor(nX, nY-1);
-                            }
-
-                            ScMarkData aMultiMark( pTabViewShell->GetViewData().GetMarkData() );
-                            aMultiMark.SetMarking( false );
-                            aMultiMark.MarkToMulti();
-                            if (aMultiMark.IsMultiMarked())
-                            {
-                                aMultiMark.ShiftRows(aRange.aStart.Row(), -1);
-                                pTabViewShell->SetMarkData(aMultiMark);
-                            }
-                        }
-                    }
-                }
-                pViewShell = SfxViewShell::GetNext(*pViewShell);
-            }
+        if (eCmd == DEL_DELROWS)
+        {
+            OnLOKInsertDeleteRow(aRange.aStart.Row(), -1);
         }
 
         pDocSh->UpdateOle(&GetViewData());
@@ -2028,22 +2043,7 @@ void ScViewFunc::SetWidthOrHeight(
     SCCOLROW nStart = rRanges.front().mnStart;
     SCCOLROW nEnd = rRanges.back().mnEnd;
 
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-        while (pViewShell)
-        {
-            ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(pViewShell);
-            if (pTabViewShell)
-            {
-                if (bWidth)
-                    pTabViewShell->GetViewData().GetLOKWidthHelper().invalidateByIndex(nStart);
-                else
-                    pTabViewShell->GetViewData().GetLOKHeightHelper().invalidateByIndex(nStart);
-            }
-            pViewShell = SfxViewShell::GetNext(*pViewShell);
-        }
-    }
+    OnLOKSetWidthOrHeight(nStart, bWidth);
 
     bool bFormula = false;
     if ( eMode == SC_SIZE_OPTIMAL )
