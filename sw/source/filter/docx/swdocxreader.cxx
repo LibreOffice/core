@@ -139,7 +139,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
             aPam.SetMark();
             {
                 SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
-                rIdx = aStart.GetNode().EndOfSectionIndex() - 1;
+                rIdx = aStart.GetNode().EndOfSectionIndex() - 2;
                 if( ( nullptr == ( pCNd = rIdx.GetNode().GetContentNode() ) ) )
                 {
                     ++rIdx;
