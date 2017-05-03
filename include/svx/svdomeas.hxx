@@ -139,7 +139,7 @@ public:
         tools::Rectangle* pAnchorRect, bool bLineWidth = true ) const override;
     virtual void TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const override;
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const override;
-    virtual sal_uInt16 GetOutlinerViewAnchorMode() const override;
+    virtual EVAnchorMode GetOutlinerViewAnchorMode() const override;
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject) override;
     virtual OutlinerParaObject* GetOutlinerParaObject() const override;
 

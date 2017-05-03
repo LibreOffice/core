@@ -1622,9 +1622,9 @@ void SdrTableObj::TakeTextEditArea( const CellPos& rPos, Size* pPaperMin, Size* 
 }
 
 
-sal_uInt16 SdrTableObj::GetOutlinerViewAnchorMode() const
+EVAnchorMode SdrTableObj::GetOutlinerViewAnchorMode() const
 {
-    EVAnchorMode eRet=ANCHOR_TOP_LEFT;
+    EVAnchorMode eRet=EVAnchorMode::TopLeft;
     CellRef xCell( getActiveCell() );
     if( xCell.is() )
     {
@@ -1633,19 +1633,19 @@ sal_uInt16 SdrTableObj::GetOutlinerViewAnchorMode() const
         {
             if (eV==SDRTEXTVERTADJUST_TOP)
             {
-                eRet=ANCHOR_TOP_LEFT;
+                eRet=EVAnchorMode::TopLeft;
             }
             else if (eV==SDRTEXTVERTADJUST_BOTTOM)
             {
-                eRet=ANCHOR_BOTTOM_LEFT;
+                eRet=EVAnchorMode::BottomLeft;
             }
             else
             {
-                eRet=ANCHOR_VCENTER_LEFT;
+                eRet=EVAnchorMode::VCenterLeft;
             }
         }
     }
-    return (sal_uInt16)eRet;
+    return eRet;
 }
 
 

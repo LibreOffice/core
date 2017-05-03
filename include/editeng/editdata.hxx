@@ -37,10 +37,10 @@ enum EESelectionMode    { EE_SELMODE_STD, EE_SELMODE_TXTONLY, EE_SELMODE_HIDDEN 
     // EE_SELMODE_HIDDEN can be used to completely hide the selection. This is useful e.g. when you want show the selection
     // only as long as your window (which the edit view works on) has the focus
 enum class EESpellState  { Ok, LanguageNotInstalled, NoSpeller, ErrorFound };
-enum EVAnchorMode       {
-            ANCHOR_TOP_LEFT,    ANCHOR_VCENTER_LEFT,    ANCHOR_BOTTOM_LEFT,
-            ANCHOR_TOP_HCENTER, ANCHOR_VCENTER_HCENTER, ANCHOR_BOTTOM_HCENTER,
-            ANCHOR_TOP_RIGHT,   ANCHOR_VCENTER_RIGHT,   ANCHOR_BOTTOM_RIGHT };
+enum class EVAnchorMode {
+            TopLeft,     TopHCenter,     TopRight,
+            VCenterLeft, VCenterHCenter, VCenterRight,
+            BottomLeft,  BottomHCenter,  BottomRight };
 
 #define EE_PARA_NOT_FOUND       SAL_MAX_INT32
 #define EE_PARA_APPEND          SAL_MAX_INT32

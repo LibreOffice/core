@@ -244,7 +244,7 @@ void SdrObjEditView::ModelHasChanged()
             bool bAnchorChg=false;
             bool bColorChg=false;
             bool bContourFrame=pTextObj->IsContourTextFrame();
-            EVAnchorMode eNewAnchor(ANCHOR_VCENTER_HCENTER);
+            EVAnchorMode eNewAnchor(EVAnchorMode::VCenterHCenter);
             tools::Rectangle aOldArea(aMinTextEditArea);
             aOldArea.Union(aTextEditArea);
             Color aNewColor;
@@ -302,7 +302,7 @@ void SdrObjEditView::ModelHasChanged()
             }
             if (pTextEditOutlinerView!=nullptr) { // check fill and anchor
                 EVAnchorMode eOldAnchor=pTextEditOutlinerView->GetAnchorMode();
-                eNewAnchor=(EVAnchorMode)pTextObj->GetOutlinerViewAnchorMode();
+                eNewAnchor=pTextObj->GetOutlinerViewAnchorMode();
                 bAnchorChg=eOldAnchor!=eNewAnchor;
                 Color aOldColor(pTextEditOutlinerView->GetBackgroundColor());
                 aNewColor = GetTextEditBackgroundColor(*this);
@@ -538,7 +538,7 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoP
 
     if (pText!=nullptr)
     {
-        pOutlView->SetAnchorMode((EVAnchorMode)(pText->GetOutlinerViewAnchorMode()));
+        pOutlView->SetAnchorMode(pText->GetOutlinerViewAnchorMode());
         pTextEditOutliner->SetFixedCellHeight(static_cast<const SdrTextFixedCellHeightItem&>(pText->GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
     }
     // do update before setting output area so that aTextEditArea can be recalculated
