@@ -76,7 +76,7 @@ SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
 }
 
 
-void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, bool /*bNew*/ ) const
+void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName ) const
 {
     OUString aName;
     OUString aFilter;
@@ -163,13 +163,13 @@ IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, SelectHdl, ComboBox&, void)
     OUString aName( pURLBox->GetURL() );
 
     if ( !pURLBox->IsTravelSelect() && !aName.isEmpty() )
-        OpenURL( aName, false );
+        OpenURL( aName );
 }
 
 IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl, SvtURLBox*, void)
 {
     SvtURLBox* pURLBox = GetURLBox();
-    OpenURL( pURLBox->GetURL(), pURLBox->IsCtrlOpen() );
+    OpenURL( pURLBox->GetURL() );
 
     Reference< XDesktop2 > xDesktop = Desktop::create( m_xContext );
     Reference< XFrame > xFrame( xDesktop->getActiveFrame(), UNO_QUERY );

@@ -719,7 +719,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
             // #i102619# Retrieve metric from shell before execution - the shell could be destroyed after execution
             if ( pDispatcher->GetBindings() )
             {
-                if ( !pDispatcher->IsLocked( GetId() ) )
+                if ( !pDispatcher->IsLocked() )
                 {
                     const SfxSlot *pSlot = nullptr;
                     if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, false,

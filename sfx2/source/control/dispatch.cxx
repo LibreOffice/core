@@ -297,7 +297,7 @@ bool SfxDispatcher::IsActive(const SfxShell& rShell)
     modal-mode and if the specified slot are handled as frame-specific
     (ie, not served by the application).
 */
-bool SfxDispatcher::IsLocked(sal_uInt16) const
+bool SfxDispatcher::IsLocked() const
 {
     return xImp->bLocked;
 }
@@ -890,7 +890,7 @@ void SfxDispatcher::Execute_(SfxShell& rShell, const SfxSlot& rSlot,
     DBG_ASSERT( !xImp->bFlushing, "recursive call to dispatcher" );
     DBG_ASSERT( xImp->aToDoStack.empty(), "unprepared InPlace _Execute" );
 
-    if ( IsLocked( rSlot.GetSlotId() ) )
+    if ( IsLocked() )
         return;
 
     if ( bool(eCallMode & SfxCallMode::ASYNCHRON) ||
@@ -963,7 +963,7 @@ const SfxSlot* SfxDispatcher::GetSlot( const OUString& rCommand )
 const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
         SfxItemSet* pArgs, SfxItemSet* pInternalArgs, sal_uInt16 nModi)
 {
-    if ( IsLocked(nSlot) )
+    if ( IsLocked() )
         return nullptr;
 
     SfxShell *pShell = nullptr;
@@ -1008,7 +1008,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
 const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
         const SfxPoolItem **pArgs, sal_uInt16 nModi, const SfxPoolItem **pInternalArgs)
 {
-    if ( IsLocked(nSlot) )
+    if ( IsLocked() )
         return nullptr;
 
     SfxShell *pShell = nullptr;
@@ -1057,7 +1057,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
 const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
         const SfxItemSet &rArgs)
 {
-    if ( IsLocked(nSlot) )
+    if ( IsLocked() )
         return nullptr;
 
     SfxShell *pShell = nullptr;
@@ -1108,7 +1108,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
 const SfxPoolItem* SfxDispatcher::ExecuteList(sal_uInt16 nSlot, SfxCallMode eCall,
         std::initializer_list<SfxPoolItem const*> args)
 {
-    if ( IsLocked(nSlot) )
+    if ( IsLocked() )
         return nullptr;
 
     SfxShell *pShell = nullptr;
@@ -1141,7 +1141,7 @@ IMPL_LINK(SfxDispatcher, PostMsgHandler, SfxRequest*, pReq, void)
     // Has also the Pool not yet died?
     if ( !pReq->IsCancelled() )
     {
-        if ( !IsLocked(pReq->GetSlot()) )
+        if ( !IsLocked() )
         {
             Flush();
             SfxSlotServer aSvr;
@@ -1468,8 +1468,7 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
         if ( bIsTaskActive && nStatBarId && xImp->pFrame )
         {
             // internal frames also may control statusbar
-            SfxBindings& rBindings = xImp->pFrame->GetBindings();
-            xImp->pFrame->GetFrame().GetWorkWindow_Impl()->SetStatusBar_Impl( nStatBarId, pStatusBarShell, rBindings );
+            xImp->pFrame->GetFrame().GetWorkWindow_Impl()->SetStatusBar_Impl( nStatBarId );
         }
     }
 }
@@ -1717,7 +1716,7 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer, bool b
     SFX_STACK(SfxDispatcher::FindServer_);
 
     // Dispatcher locked? (nevertheless let SID_HELP_PI through)
-    if ( IsLocked(nSlot) )
+    if ( IsLocked() )
     {
         xImp->bInvalidateOnUnlock = true;
         return false;
@@ -1852,7 +1851,7 @@ bool SfxDispatcher::FillState_(const SfxSlotServer& rSvr, SfxItemSet& rState,
     SFX_STACK(SfxDispatcher::FillState_);
 
     const SfxSlot *pSlot = rSvr.GetSlot();
-    if ( pSlot && IsLocked( pSlot->GetSlotId() ) )
+    if ( pSlot && IsLocked() )
     {
         xImp->bInvalidateOnUnlock = true;
         return false;

@@ -252,7 +252,7 @@ public:
                             { return pParent; }
 
     // Methods for all Child windows
-    void                    DataChanged_Impl( const DataChangedEvent& rDCEvt );
+    void                    DataChanged_Impl();
     void                    ReleaseChild_Impl( vcl::Window& rWindow );
     SfxChild_Impl*          RegisterChild_Impl( vcl::Window& rWindow, SfxChildAlignment eAlign, bool bCanGetFocus );
     void                    ShowChildren_Impl();
@@ -300,7 +300,7 @@ public:
 
     // Methods for StatusBar
     void                    ResetStatusBar_Impl();
-    void                    SetStatusBar_Impl(sal_uInt32 nResId, SfxShell *pShell, SfxBindings& );
+    void                    SetStatusBar_Impl(sal_uInt32 nResId);
     void                    UpdateStatusBar_Impl();
     css::uno::Reference< css::task::XStatusIndicator > GetStatusIndicator();
     css::uno::Reference< css::frame::XFrame > GetFrameInterface();

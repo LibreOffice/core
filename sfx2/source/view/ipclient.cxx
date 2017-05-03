@@ -304,7 +304,7 @@ void SAL_CALL SfxInPlaceClient_Impl::visibilityChanged( sal_Bool bVisible )
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
 
-    m_pClient->GetViewShell()->OutplaceActivated( bVisible, m_pClient );
+    m_pClient->GetViewShell()->OutplaceActivated( bVisible );
     m_pClient->Invalidate();
 }
 

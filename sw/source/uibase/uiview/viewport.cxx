@@ -285,7 +285,7 @@ void SwView::SetVisArea( const tools::Rectangle &rRect, bool bUpdateScrollbar )
             GetDocShell()->SvEmbeddedObject::SetVisArea( aVis );*/
     }
 
-    SfxViewShell::VisAreaChanged( m_aVisArea );
+    SfxViewShell::VisAreaChanged();
 
     InvalidateRulerPos();
 

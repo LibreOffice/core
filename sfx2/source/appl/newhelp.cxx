@@ -2927,7 +2927,7 @@ void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
 
 SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     const css::uno::Reference < css::frame::XFrame2 >& rFrame,
-    vcl::Window* pParent, WinBits ) :
+    vcl::Window* pParent ) :
 
     SplitWindow( pParent, WB_3DLOOK | WB_NOSPLITDRAW ),
 

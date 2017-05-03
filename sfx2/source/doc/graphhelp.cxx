@@ -243,7 +243,7 @@ bool GraphicHelper::getThumbnailReplacement_Impl(const OUString& rResID, const u
 }
 
 // static
-OUString GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const OUString& aFactoryShortName, bool /*bIsTemplate*/ )
+OUString GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const OUString& aFactoryShortName )
 {
     OUString sResult;
 

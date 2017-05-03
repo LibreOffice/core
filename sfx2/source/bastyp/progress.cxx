@@ -66,7 +66,7 @@ struct SfxProgress_Impl
     SfxWorkWindow*          pWorkWin;
     SfxViewFrame*           pView;
 
-    explicit                SfxProgress_Impl( const OUString& );
+    explicit                SfxProgress_Impl();
     void                    Enable_Impl();
 
 };
@@ -94,7 +94,7 @@ void SfxProgress_Impl::Enable_Impl()
 }
 
 
-SfxProgress_Impl::SfxProgress_Impl( const OUString &/*rTitle*/ )
+SfxProgress_Impl::SfxProgress_Impl()
     : nMax(0)
     , nCreate(0)
     , nNextReschedule(0)
@@ -133,7 +133,7 @@ SfxProgress::SfxProgress
     A progress-bar will be displayed in the status bar,
 */
 
-:   pImpl( new SfxProgress_Impl( rText ) ),
+:   pImpl( new SfxProgress_Impl ),
     nVal(0),
     bSuspended(true)
 {
