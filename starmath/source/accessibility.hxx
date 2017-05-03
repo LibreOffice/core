@@ -279,7 +279,7 @@ class SmEditSource :
     SmEditSource & operator = ( const SmEditSource & ) = delete;
 
 public:
-            SmEditSource( SmEditWindow *pWin, SmEditAccessible &rAcc );
+            SmEditSource( SmEditAccessible &rAcc );
     virtual ~SmEditSource() override;
 
     virtual SvxEditSource*      Clone() const override;

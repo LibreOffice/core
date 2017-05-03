@@ -1014,7 +1014,7 @@ void SmEditWindow::Flush()
     }
 }
 
-void SmEditWindow::DeleteEditView( SmViewShell & /*rView*/ )
+void SmEditWindow::DeleteEditView()
 {
     if (pEditView)
     {
