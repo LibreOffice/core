@@ -20,7 +20,6 @@
 #include "svddrgm1.hxx"
 #include <math.h>
 
-#include <tools/bigint.hxx>
 #include <o3tl/numeric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

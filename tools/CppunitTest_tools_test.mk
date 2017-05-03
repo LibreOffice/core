@@ -14,7 +14,6 @@ $(eval $(call gb_CppunitTest_CppunitTest,tools_test))
 $(eval $(call gb_CppunitTest_use_external,tools_test,boost_headers))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
-    tools/qa/cppunit/test_bigint \
     tools/qa/cppunit/test_date \
     tools/qa/cppunit/test_fract \
     tools/qa/cppunit/test_inetmime \

@@ -24,7 +24,6 @@
 
 // forward ---------------------------------------------------------------
 #include <rtl/ustring.hxx>
-#include <tools/bigint.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
 
@@ -42,7 +41,7 @@ EDITENG_DLLPUBLIC sal_uInt16 GetMetricId( MapUnit eUnit );
 
 inline long Scale( long nVal, long nMult, long nDiv )
 {
-    BigInt aVal( nVal );
+    sal_Int64 aVal( nVal );
     aVal *= nMult;
     aVal += nDiv/2;
     aVal /= nDiv;

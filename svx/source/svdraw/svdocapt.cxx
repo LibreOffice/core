@@ -28,7 +28,6 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/style.hxx>
-#include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
 
 #include "svdconv.hxx"
@@ -155,10 +154,10 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const tools::Rectangle& rRe
         }
         bool bTakeIt=eEscDir!=SdrCaptionEscDir::BestFit;
         if (!bTakeIt) {
-            BigInt aHorX(aBestPt.X()-aTl.X()); aHorX*=aHorX;
-            BigInt aHorY(aBestPt.Y()-aTl.Y()); aHorY*=aHorY;
-            BigInt aVerX(aBest2.X()-aTl.X());  aVerX*=aVerX;
-            BigInt aVerY(aBest2.Y()-aTl.Y());  aVerY*=aVerY;
+            sal_Int64 aHorX(aBestPt.X()-aTl.X()); aHorX*=aHorX;
+            sal_Int64 aHorY(aBestPt.Y()-aTl.Y()); aHorY*=aHorY;
+            sal_Int64 aVerX(aBest2.X()-aTl.X());  aVerX*=aVerX;
+            sal_Int64 aVerY(aBest2.Y()-aTl.Y());  aVerY*=aVerY;
             if (eType!=SdrCaptionType::Type1) {
                 bTakeIt=aVerX+aVerY<aHorX+aHorY;
             } else {

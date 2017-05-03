@@ -26,7 +26,6 @@
 #include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 #include <svx/svdoashp.hxx>
-#include <tools/bigint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -112,12 +111,12 @@ tools::Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
         if (bEcke) { // corner point handles
             bool bUseX=(aXFact<aYFact) != bBigOrtho;
             if (bUseX) {
-                long nNeed=long(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
+                long nNeed=long(sal_Int64(nHgt0)*sal_Int64(nXMul)/sal_Int64(nXDiv));
                 if (bYNeg) nNeed=-nNeed;
                 if (bTop) aTmpRect.Top()=aTmpRect.Bottom()-nNeed;
                 if (bBtm) aTmpRect.Bottom()=aTmpRect.Top()+nNeed;
             } else {
-                long nNeed=long(BigInt(nWdt0)*BigInt(nYMul)/BigInt(nYDiv));
+                long nNeed=long(sal_Int64(nWdt0)*sal_Int64(nYMul)/sal_Int64(nYDiv));
                 if (bXNeg) nNeed=-nNeed;
                 if (bLft) aTmpRect.Left()=aTmpRect.Right()-nNeed;
                 if (bRgt) aTmpRect.Right()=aTmpRect.Left()+nNeed;
@@ -125,13 +124,13 @@ tools::Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
         } else { // apex handles
             if ((bLft || bRgt) && nXDiv!=0) {
                 long nHgt0b=maRect.Bottom()-maRect.Top();
-                long nNeed=long(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
+                long nNeed=long(sal_Int64(nHgt0b)*sal_Int64(nXMul)/sal_Int64(nXDiv));
                 aTmpRect.Top()-=(nNeed-nHgt0b)/2;
                 aTmpRect.Bottom()=aTmpRect.Top()+nNeed;
             }
             if ((bTop || bBtm) && nYDiv!=0) {
                 long nWdt0b=maRect.Right()-maRect.Left();
-                long nNeed=long(BigInt(nWdt0b)*BigInt(nYMul)/BigInt(nYDiv));
+                long nNeed=long(sal_Int64(nWdt0b)*sal_Int64(nYMul)/sal_Int64(nYDiv));
                 aTmpRect.Left()-=(nNeed-nWdt0b)/2;
                 aTmpRect.Right()=aTmpRect.Left()+nNeed;
             }

@@ -19,11 +19,11 @@
 
 #include <comphelper/string.hxx>
 #include <tools/debug.hxx>
-#include <tools/bigint.hxx>
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/longcurr.hxx>
+#include <cstdlib>
 
 #include <svdata.hxx>
 
@@ -34,10 +34,10 @@ using namespace ::comphelper;
 namespace
 {
 
-BigInt ImplPower10( sal_uInt16 n )
+sal_Int64 ImplPower10( sal_uInt16 n )
 {
     sal_uInt16 i;
-    BigInt   nValue = 1;
+    sal_Int64   nValue = 1;
 
     for ( i=0; i < n; i++ )
         nValue *= 10;
@@ -45,35 +45,33 @@ BigInt ImplPower10( sal_uInt16 n )
     return nValue;
 }
 
-OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt &rNumber, sal_uInt16 nDigits, const OUString& rCurrSymbol, bool bShowThousandSep )
+OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const sal_Int64 &rNumber, sal_uInt16 nDigits, const OUString& rCurrSymbol, bool bShowThousandSep )
 {
     SAL_WARN_IF( nDigits >= 10, "vcl", "LongCurrency may only have 9 decimal places" );
 
-    if ( rNumber.IsZero() || (long)rNumber )
-        return rLocaleDataWrapper.getCurr( (long)rNumber, nDigits, rCurrSymbol, bShowThousandSep );
+    if ( rNumber == 0 )
+        return rLocaleDataWrapper.getCurr( rNumber, nDigits, rCurrSymbol, bShowThousandSep );
 
-    BigInt aTmp( ImplPower10( nDigits ) );
-    BigInt aInteger( rNumber );
-    aInteger.Abs();
+    sal_Int64 aTmp( ImplPower10( nDigits ) );
+    sal_Int64 aInteger = std::fabs(rNumber);
     aInteger  /= aTmp;
-    BigInt aFraction( rNumber );
-    aFraction.Abs();
+    sal_Int64 aFraction = std::fabs( rNumber );
     aFraction %= aTmp;
-    if ( !aInteger.IsZero() )
+    if ( aInteger != 0 )
     {
         aFraction += aTmp;
         aTmp       = 1000000000L;
     }
-    if ( rNumber.IsNeg() )
+    if ( rNumber <= 0 )
         aFraction *= -1;
 
     OUStringBuffer aTemplate = rLocaleDataWrapper.getCurr( (long)aFraction, nDigits, rCurrSymbol, bShowThousandSep );
-    while( !aInteger.IsZero() )
+    while( aInteger != 0 )
     {
         aFraction  = aInteger;
         aFraction %= aTmp;
         aInteger  /= aTmp;
-        if( !aInteger.IsZero() )
+        if( aInteger != 0 )
             aFraction += aTmp;
 
         OUString aFractionStr = rLocaleDataWrapper.getNum( (long)aFraction, 0 );
@@ -114,7 +112,7 @@ bool ImplNumericProcessKeyInput( const KeyEvent& rKEvt,
     }
 }
 
-bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
+bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
                                  sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
                                  bool bCurrency )
 {
@@ -224,7 +222,7 @@ bool ImplNumericGetValue( const OUString& rStr, BigInt& rValue,
     aStr += aStr2.makeStringAndClear();
 
     // check range
-    BigInt nValue( aStr );
+    sal_Int64 nValue( aStr.toInt64() );
     if ( bRound )
     {
         if ( !bNegative )
@@ -247,23 +245,23 @@ bool ImplLongCurrencyProcessKeyInput( const KeyEvent& rKEvt,
 
 } // namespace
 
-inline bool ImplLongCurrencyGetValue( const OUString& rStr, BigInt& rValue,
+inline bool ImplLongCurrencyGetValue( const OUString& rStr, sal_Int64& rValue,
                                       sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper )
 {
     return ImplNumericGetValue( rStr, rValue, nDecDigits, rLocaleDataWrapper, true );
 }
 
-bool ImplLongCurrencyReformat( const OUString& rStr, BigInt const & nMin, BigInt const & nMax,
+bool ImplLongCurrencyReformat( const OUString& rStr, sal_Int64 const & nMin, sal_Int64 const & nMax,
                                sal_uInt16 nDecDigits,
                                const LocaleDataWrapper& rLocaleDataWrapper, OUString& rOutStr,
                                LongCurrencyFormatter& rFormatter )
 {
-    BigInt nValue;
+    sal_Int64 nValue;
     if ( !ImplNumericGetValue( rStr, nValue, nDecDigits, rLocaleDataWrapper, true ) )
         return true;
     else
     {
-        BigInt nTempVal = nValue;
+        sal_Int64 nTempVal = nValue;
         if ( nTempVal > nMax )
             nTempVal = nMax;
         else if ( nTempVal < nMin )
@@ -307,14 +305,14 @@ OUString const & LongCurrencyFormatter::GetCurrencySymbol() const
     return !maCurrencySymbol.isEmpty() ? maCurrencySymbol : GetLocaleDataWrapper().getCurrSymbol();
 }
 
-void LongCurrencyFormatter::SetValue(const BigInt& rNewValue)
+void LongCurrencyFormatter::SetValue(const sal_Int64& rNewValue)
 {
     SetUserValue(rNewValue);
     mnFieldValue = mnLastValue;
     SetEmptyFieldValueData( false );
 }
 
-void LongCurrencyFormatter::SetUserValue( BigInt nNewValue )
+void LongCurrencyFormatter::SetUserValue( sal_Int64 nNewValue )
 {
     if ( nNewValue > mnMax )
         nNewValue = mnMax;
@@ -337,12 +335,12 @@ void LongCurrencyFormatter::SetUserValue( BigInt nNewValue )
     MarkToBeReformatted( false );
 }
 
-BigInt LongCurrencyFormatter::GetValue() const
+sal_Int64 LongCurrencyFormatter::GetValue() const
 {
     if ( !GetField() )
         return 0;
 
-    BigInt nTempValue;
+    sal_Int64 nTempValue;
     if ( ImplLongCurrencyGetValue( GetField()->GetText(), nTempValue, GetDecimalDigits(), GetLocaleDataWrapper() ) )
     {
         if ( nTempValue > mnMax )
@@ -384,13 +382,13 @@ void LongCurrencyFormatter::ReformatAll()
     Reformat();
 }
 
-void LongCurrencyFormatter::SetMin(const BigInt& rNewMin)
+void LongCurrencyFormatter::SetMin(const sal_Int64& rNewMin)
 {
     mnMin = rNewMin;
     ReformatAll();
 }
 
-void LongCurrencyFormatter::SetMax(const BigInt& rNewMax)
+void LongCurrencyFormatter::SetMax(const sal_Int64& rNewMax)
 {
     mnMax = rNewMax;
     ReformatAll();
@@ -412,14 +410,14 @@ void LongCurrencyFormatter::SetDecimalDigits( sal_uInt16 nDigits )
 }
 
 
-void ImplNewLongCurrencyFieldValue(LongCurrencyField* pField, const BigInt& rNewValue)
+void ImplNewLongCurrencyFieldValue(LongCurrencyField* pField, const sal_Int64& rNewValue)
 {
     Selection aSelect = pField->GetSelection();
     aSelect.Justify();
     OUString aText = pField->GetText();
     bool bLastSelected = aSelect.Max() == aText.getLength();
 
-    BigInt nOldLastValue  = pField->mnLastValue;
+    sal_Int64 nOldLastValue  = pField->mnLastValue;
     pField->SetUserValue(rNewValue);
     pField->mnLastValue  = nOldLastValue;
 
@@ -480,7 +478,7 @@ void LongCurrencyField::Modify()
 
 void LongCurrencyField::Up()
 {
-    BigInt nValue = GetValue();
+    sal_Int64 nValue = GetValue();
     nValue += mnSpinSize;
     if ( nValue > mnMax )
         nValue = mnMax;
@@ -491,7 +489,7 @@ void LongCurrencyField::Up()
 
 void LongCurrencyField::Down()
 {
-    BigInt nValue = GetValue();
+    sal_Int64 nValue = GetValue();
     nValue -= mnSpinSize;
     if ( nValue < mnMin )
         nValue = mnMin;
