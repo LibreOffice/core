@@ -193,6 +193,10 @@ ImpEditEngine::~ImpEditEngine()
 
     Dispose();
     delete pEmptyItemSet;
+    // it's only legal to delete the pUndoManager if it was created by
+    // ImpEditEngine; if it was set by SetUndoManager() it must be cleared
+    // before destroying the ImpEditEngine!
+    assert(!pUndoManager || typeid(*pUndoManager) == typeid(EditUndoManager));
     delete pUndoManager;
     delete pTextRanger;
     delete mpIMEInfos;
