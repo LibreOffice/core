@@ -789,7 +789,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
     delete pTable;
 }
 
-void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
+void SmXMLExport::ExportMath(const SmNode *pNode)
 {
     const SmTextNode *pTemp = static_cast<const SmTextNode *>(pNode);
     SvXMLElementExport *pMath = nullptr;
@@ -831,7 +831,7 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
     delete pMath;
 }
 
-void SmXMLExport::ExportText(const SmNode *pNode, int /*nLevel*/)
+void SmXMLExport::ExportText(const SmNode *pNode)
 {
     SvXMLElementExport *pText;
     const SmTextNode *pTemp = static_cast<const SmTextNode *>(pNode);
@@ -861,7 +861,7 @@ void SmXMLExport::ExportText(const SmNode *pNode, int /*nLevel*/)
     delete pText;
 }
 
-void SmXMLExport::ExportBlank(const SmNode *pNode, int /*nLevel*/)
+void SmXMLExport::ExportBlank(const SmNode *pNode)
 {
     const SmBlankNode *pTemp = static_cast<const SmBlankNode *>(pNode);
     //!! exports an <mspace> element. Note that for example "~_~" is allowed in
@@ -1469,7 +1469,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
             ExportLine(pNode, nLevel);
             break;
         case SmNodeType::Text:
-            ExportText(pNode, nLevel);
+            ExportText(pNode);
             break;
         case SmNodeType::GlyphSpecial:
         case SmNodeType::Math:
@@ -1482,7 +1482,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
                 {
                     // no conversion to MathML implemented -> export it as text
                     // thus at least it will not vanish into nothing
-                    ExportText(pNode, nLevel);
+                    ExportText(pNode);
                 }
                 else
                 {
@@ -1516,14 +1516,14 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
                     {
                         AddAttribute(XML_NAMESPACE_MATH, XML_STRETCHY, XML_FALSE);
                     }
-                    ExportMath(pNode, nLevel);
+                    ExportMath(pNode);
                 }
             }
             break;
         case SmNodeType::Special: //SmNodeType::Special requires some sort of Entity preservation in the XML engine.
         case SmNodeType::MathIdent:
         case SmNodeType::Place:
-            ExportMath(pNode, nLevel);
+            ExportMath(pNode);
             break;
         case SmNodeType::BinHor:
             ExportBinaryHorizontal(pNode, nLevel);
@@ -1562,7 +1562,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
             ExportMatrix(pNode, nLevel);
             break;
         case SmNodeType::Blank:
-            ExportBlank(pNode, nLevel);
+            ExportBlank(pNode);
             break;
        default:
             SAL_WARN("starmath", "Warning: failed to export a node?");

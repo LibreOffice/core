@@ -1928,7 +1928,7 @@ SmViewShell::~SmViewShell()
     // Thus we need to supply this view as argument
     SmEditWindow *pEditWin = GetEditWindow();
     if (pEditWin)
-        pEditWin->DeleteEditView( *this );
+        pEditWin->DeleteEditView();
     mpGraphic.disposeAndClear();
 }
 

@@ -77,8 +77,8 @@ protected:
     void ExportLine(const SmNode *pNode, int nLevel);
     void ExportExpression(const SmNode *pNode, int nLevel,
                           bool bNoMrowContainer = false);
-    void ExportText(const SmNode *pNode, int nLevel);
-    void ExportMath(const SmNode *pNode, int nLevel);
+    void ExportText(const SmNode *pNode);
+    void ExportMath(const SmNode *pNode);
     void ExportBinaryHorizontal(const SmNode *pNode, int nLevel);
     void ExportUnaryHorizontal(const SmNode *pNode, int nLevel);
     void ExportBrace(const SmNode *pNode, int nLevel);
@@ -91,7 +91,7 @@ protected:
     void ExportFont(const SmNode *pNode, int nLevel);
     void ExportVerticalBrace(const SmVerticalBraceNode *pNode, int nLevel);
     void ExportMatrix(const SmNode *pNode, int nLevel);
-    void ExportBlank(const SmNode *pNode, int nLevel);
+    void ExportBlank(const SmNode *pNode);
 
 public:
     SmXMLExport(

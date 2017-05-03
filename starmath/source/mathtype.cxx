@@ -1798,7 +1798,7 @@ void MathType::HandleMatrixSeparator(int nMatrixRows,int nMatrixCols,
 
 /* set the alignment of the following term, but starmath currently
  * cannot handle vertical alignment */
-void MathType::HandleAlign(sal_uInt8 nHorAlign, sal_uInt8 /*nVAlign*/, int &rSetAlign)
+void MathType::HandleAlign(sal_uInt8 nHorAlign, int &rSetAlign)
 {
     switch(nHorAlign)
     {
@@ -1956,7 +1956,7 @@ void MathType::HandleNodes(SmNode *pNode,int nLevel)
             HandleAttributes(pNode,nLevel);
             break;
         case SmNodeType::Text:
-            HandleText(pNode,nLevel);
+            HandleText(pNode);
             break;
         case SmNodeType::VerticalBrace:
             HandleVerticalBrace(pNode,nLevel);
@@ -1979,14 +1979,14 @@ void MathType::HandleNodes(SmNode *pNode,int nLevel)
             //if the token str and the result text are the same then this
             //is to be seen as text, else assume it's a mathchar
             if (pText->GetText() == pText->GetToken().aText)
-                HandleText(pText,nLevel);
+                HandleText(pText);
             else
-                HandleMath(pText,nLevel);
+                HandleMath(pText);
             }
             break;
         case SmNodeType::Math:
         case SmNodeType::MathIdent:
-            HandleMath(pNode,nLevel);
+            HandleMath(pNode);
             break;
         case SmNodeType::SubSup:
             HandleSubSupScript(pNode,nLevel);
@@ -2643,7 +2643,7 @@ bool MathType::HandlePile(int &rSetAlign, int nLevel, sal_uInt8 nSelector, sal_u
     pS->ReadUChar( nHAlign );
     pS->ReadUChar( nVAlign );
 
-    HandleAlign(nHAlign,nVAlign,rSetAlign);
+    HandleAlign(nHAlign, rSetAlign);
 
     rRet += " stack {\n";
     bool bRet = HandleRecords( nLevel+1, nSelector, nVariation, -1, -1 );
@@ -3045,7 +3045,7 @@ void MathType::HandleMAlign(SmNode *pNode,int nLevel)
     nHAlign=nPushedHAlign;
 }
 
-void MathType::HandleMath(SmNode *pNode, int /*nLevel*/)
+void MathType::HandleMath(SmNode *pNode)
 {
     if (pNode->GetToken().eType == TMLINE)
     {
@@ -3276,7 +3276,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
     }
 }
 
-void MathType::HandleText(SmNode *pNode, int /*nLevel*/)
+void MathType::HandleText(SmNode *pNode)
 {
     SmTextNode *pTemp = static_cast<SmTextNode *>(pNode);
     for(sal_Int32 i=0;i<pTemp->GetText().getLength();i++)
