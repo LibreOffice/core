@@ -1333,6 +1333,7 @@ void SdTiledRenderingTest::testTdf102223()
     uno::Sequence<beans::PropertyValue> aArgs;
     comphelper::dispatchCommand(".uno:Cut", aArgs);
 
+    pView->SdrEndTextEdit(false);
     pView->SdrBeginTextEdit(pTableObject);
     CPPUNIT_ASSERT(pView->GetTextEditObject());
     EditView& rEditView2 = pView->GetTextEditOutlinerView()->GetEditView();
@@ -1489,6 +1490,7 @@ void SdTiledRenderingTest::testTdf104405()
     // now click on the table
     pView->MarkObj(pTableObject, pView->GetSdrPageView());
     pTableObject->setActiveCell(sdr::table::CellPos(0,0));
+    pView->SdrEndTextEdit(false);
     pView->SdrBeginTextEdit(pTableObject);
     EditView& rEditView2 = pView->GetTextEditOutlinerView()->GetEditView();
     rEditView2.SetSelection(ESelection(0, 0, 0, 3)); // start para, start char, end para, end char.

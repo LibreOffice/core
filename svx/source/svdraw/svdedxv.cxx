@@ -97,6 +97,7 @@ SdrObjEditView::SdrObjEditView(SdrModel* pModel1, OutputDevice* pOut):
 SdrObjEditView::~SdrObjEditView()
 {
     pTextEditWin = nullptr;            // so there's no ShowCursor in SdrEndTextEdit
+    assert(!IsTextEdit());
     if (IsTextEdit())
         SdrEndTextEdit();
     delete pTextEditOutliner;
@@ -707,6 +708,8 @@ bool SdrObjEditView::SdrBeginTextEdit(
     bool bDontDeleteOutliner, bool bOnlyOneView,
     bool bGrabFocus)
 {
+    assert(!IsTextEdit());
+    // FIXME this encourages all sorts of bad habits and should be removed
     SdrEndTextEdit();
 
     if( dynamic_cast< SdrTextObj* >( pObj ) == nullptr )
