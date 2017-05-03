@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_7d130c5d",
+        "filename": "sc/source/ui/unoobj/PivotTableDataProvider.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-03T18:47:56Z",
+      "side": 1,
+      "message": "*m_aCategoriesColumnOrientation.back()",
+      "revId": "1116d7abf819a06d394fab36933fc48084bdfef5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
