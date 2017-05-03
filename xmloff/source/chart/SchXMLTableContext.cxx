@@ -1026,7 +1026,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                         Reference< chart2::data::XDataSource > xDataSource( xChartDoc, uno::UNO_QUERY );
                         if( xDataSource.is() )
                         {
-                            //first detect which collumns are really used
+                            //first detect which columns are really used
                             std::map< sal_Int32, bool > aUsageMap;
                             OUString aRange;
                             Sequence< Reference< chart2::data::XLabeledDataSequence > > aUsedSequences( xDataSource->getDataSequences() );
