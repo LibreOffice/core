@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_7a26b217",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-03T13:58:24Z",
+      "side": 1,
+      "message": "A line starting with a date literal does not make sense, does it?",
+      "revId": "3941b7d62f7916642bbdbf70b75ba7980e55460b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_fa11c2b0",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-03T13:58:24Z",
+      "side": 1,
+      "message": "Probably it\u0027s better to give this a separate else if block, to not interfere with string handling.",
+      "revId": "3941b7d62f7916642bbdbf70b75ba7980e55460b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_5aec96c7",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-03T13:58:24Z",
+      "side": 1,
+      "message": "Weeding out duplicated ## in an alleged date literal would be wrong. They should lead to an error instead.",
+      "range": {
+        "startLine": 526,
+        "startChar": 0,
+        "endLine": 534,
+        "endChar": 56
+      },
+      "revId": "3941b7d62f7916642bbdbf70b75ba7980e55460b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_9a3c3e31",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-03T13:58:24Z",
+      "side": 1,
+      "message": "LANGUAGE_NONE is wrong. Either use the application\u0027s locale, or LANGUAGE_ENGLISH_US. Probably en-US, or what is the goal to support?",
+      "range": {
+        "startLine": 541,
+        "startChar": 99,
+        "endLine": 541,
+        "endChar": 112
+      },
+      "revId": "3941b7d62f7916642bbdbf70b75ba7980e55460b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_5a11f6ab",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-03T13:58:24Z",
+      "side": 1,
+      "message": "This should yield SbxDATE instead.",
+      "range": {
+        "startLine": 555,
+        "startChar": 0,
+        "endLine": 555,
+        "endChar": 50
+      },
+      "revId": "3941b7d62f7916642bbdbf70b75ba7980e55460b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
