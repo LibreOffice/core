@@ -2063,19 +2063,20 @@ RTLFUNC(CDateFromIso)
         {
             OUString aStr = rPar.Get(1)->GetOUString();
             const sal_Int32 nLen = aStr.getLength();
-            if (nLen != 8 && nLen != 10)
+            if (nLen != 6 && nLen != 8 && nLen != 10)
                 break;
 
             OUString aYearStr, aMonthStr, aDayStr;
-            if (nLen == 8)
+            if (nLen == 6 || nLen == 8)
             {
-                // YYYYMMDD
+                // (YY)YYMMDD
                 if (!comphelper::string::isdigitAsciiString(aStr))
                     break;
 
-                aYearStr  = aStr.copy( 0, 4 );
-                aMonthStr = aStr.copy( 4, 2 );
-                aDayStr   = aStr.copy( 6, 2 );
+                const sal_Int32 nMonthPos = (nLen == 6 ? 2 : 4);
+                aYearStr  = aStr.copy( 0, nMonthPos );
+                aMonthStr = aStr.copy( nMonthPos, 2 );
+                aDayStr   = aStr.copy( nMonthPos + 2, 2 );
             }
             else
             {
