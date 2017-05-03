@@ -412,9 +412,11 @@ struct ImpContent
 
 struct ImpContentLessCompare : public ::std::binary_function< ImpContent, ImpContent, bool>
 {
-    bool operator() (const ImpContent& lhs, const ImpContent& rhs) const
+    bool operator() (const ImpContent& rLhs, const ImpContent& rRhs) const
     {
-        return std::tie(lhs.nType, lhs.nId) < std::tie(rhs.nType, rhs.nId);
+        sal_uInt64 const lhs((static_cast<sal_uInt64>(rLhs.nType.get()) << 32) | rLhs.nId);
+        sal_uInt64 const rhs((static_cast<sal_uInt64>(rRhs.nType.get()) << 32) | rRhs.nId);
+        return lhs < rhs;
     }
 };
 
