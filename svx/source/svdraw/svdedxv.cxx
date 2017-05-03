@@ -100,7 +100,7 @@ SdrObjEditView::~SdrObjEditView()
     if (IsTextEdit())
         SdrEndTextEdit();
     delete pTextEditOutliner;
-    delete mpOldTextEditUndoManager;
+    assert(nullptr == mpOldTextEditUndoManager); // should have been reset
 }
 
 
@@ -952,13 +952,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
                     // we have an outliner, undo manager and it's an EditUndoManager, exchange
                     // the document undo manager and the default one from the outliner and tell
                     // it that text edit starts by setting a callback if it needs to end text edit mode.
-                    if(mpOldTextEditUndoManager)
-                    {
-                        // should not happen, delete it since it was probably forgotten somewhere
-                        OSL_ENSURE(false, "Deleting forgotten old TextEditUndoManager, should be checked (!)");
-                        delete mpOldTextEditUndoManager;
-                        mpOldTextEditUndoManager = nullptr;
-                    }
+                    assert(nullptr == mpOldTextEditUndoManager);
 
                     mpOldTextEditUndoManager = pTextEditOutliner->SetUndoManager(pSdrUndoManager);
                     pSdrUndoManager->SetEndTextEditHdl(LINK(this, SdrObjEditView, EndTextEditHdl));
@@ -1064,6 +1058,10 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                 delete pOriginal;
             }
         }
+    }
+    else
+    {
+        assert(nullptr == mpOldTextEditUndoManager); // cannot be restored!
     }
 
     if( GetModel() && mxTextEditObj.is() )
