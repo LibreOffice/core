@@ -61,6 +61,11 @@ namespace
         return aRet;
     }
 
+    typedef struct {
+        DWORD pid;
+        HWND hwnd;
+    } WINPROCINFO;
+
     /* This is the error table that defines the mapping between OS error
     codes and errno values */
 
@@ -323,6 +328,31 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
             static_cast< XSystemShellExecute* >(this),
             psxErr);
     }
+    else
+    {
+        // Get Permission make changes to the Window of the created Process
+        WINPROCINFO wpi;
+        wpi.pid = GetProcessId(sei.hProcess);
+        wpi.hwnd = 0;
+        AllowSetForegroundWindow(wpi.pid);
+
+        // Get the handle of the created Window
+        HWND hwnd = 0;
+        DWORD check = 0;
+        GetWindowThreadProcessId(hwnd, &check);
+        if(check == wpi.pid)
+            wpi.hwnd = hwnd;
+
+        // Move created Window into the foreground
+        if(wpi.hwnd != 0)
+        {
+            SetForegroundWindow(wpi.hwnd);
+            SetActiveWindow(wpi.hwnd);
+        }
+    }
+
+    // Close the handle for the created childprocess when we are done
+    CloseHandle(sei.hProcess);
 }
 
 // XServiceInfo
