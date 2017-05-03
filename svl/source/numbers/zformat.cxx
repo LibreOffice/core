@@ -3375,7 +3375,7 @@ void SvNumberformat::ImpAppendEraG( OUStringBuffer& OutString,
     }
 }
 
-bool SvNumberformat::ImpIsIso8601( const ImpSvNumFor& rNumFor )
+bool SvNumberformat::ImpIsIso8601( const ImpSvNumFor& rNumFor ) const
 {
     bool bIsIso = false;
     if ((eType & css::util::NumberFormat::DATE) == css::util::NumberFormat::DATE)

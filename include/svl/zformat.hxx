@@ -491,7 +491,7 @@ private:
     SVL_DLLPRIVATE static sal_Int32 ImpUseMonthCase( int & io_nState, const ImpSvNumFor& rNumFor, NfKeywordIndex eCodeType );
 
     /// Whether it's a (YY)YY-M(M)-D(D) format.
-    SVL_DLLPRIVATE bool ImpIsIso8601( const ImpSvNumFor& rNumFor );
+    SVL_DLLPRIVATE bool ImpIsIso8601( const ImpSvNumFor& rNumFor ) const;
 
     const CharClass& rChrCls() const;
     const LocaleDataWrapper& rLoc() const;
