@@ -232,7 +232,7 @@ namespace svgio
                 }
 
                 // valid token-value pair, parse it
-                parseStyleAttribute(aOUTokenName, StrToSVGToken(aOUTokenName, true), aOUTokenValue, true);
+                parseStyleAttribute(StrToSVGToken(aOUTokenName, true), aOUTokenValue, true);
             }
         }
 
@@ -1272,7 +1272,6 @@ namespace svgio
         }
 
         void SvgStyleAttributes::parseStyleAttribute(
-            const OUString& /* rTokenName */,
             SVGToken aSVGToken,
             const OUString& aContent,
             bool bCaseIndependent)
