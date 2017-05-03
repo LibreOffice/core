@@ -236,6 +236,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_nTableDepth(0),
         m_nTableCellDepth(0),
         m_nLastTableCellParagraphDepth(0),
+        m_bHasFtn(false),
         m_bHasFtnSep(false),
         m_bIgnoreNextPara(false),
         m_bIgnoreNextTab(false),
@@ -5337,6 +5338,9 @@ void DomainMapper_Impl::substream(Id rName,
         propSize[i] = m_aPropertyStacks[i].size();
     }
 #endif
+    // Save "has footnote" state, which is specific to a section in the body
+    // text, so state from substreams is not relevant.
+    bool bHasFtn = m_bHasFtn;
 
     //finalize any waiting frames before starting alternate streams
     CheckUnregisteredFrameConversion();
@@ -5406,12 +5410,14 @@ void DomainMapper_Impl::substream(Id rName,
 
     getTableManager().endLevel();
     popTableManager();
+    m_bHasFtn = bHasFtn;
 
     switch(rName)
     {
     case NS_ooxml::LN_footnote:
     case NS_ooxml::LN_endnote:
         m_pTableHandler->setHadFootOrEndnote(true);
+        m_bHasFtn = true;
         break;
     }
 
