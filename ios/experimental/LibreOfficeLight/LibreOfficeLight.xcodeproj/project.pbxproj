@@ -28,8 +28,6 @@
 		39B08BD91E5F0BB600682A59 /* services.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 39B085241E5F0BB400682A59 /* services.rdb */; };
 		39B091CD1E5F0BB800682A59 /* udkapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 39B08B9B1E5F0BB600682A59 /* udkapi.rdb */; };
 		39B091CE1E5F0BB800682A59 /* unorc in Resources */ = {isa = PBXBuildFile; fileRef = 39B08B9C1E5F0BB600682A59 /* unorc */; };
-		39B091D01E5F102E00682A59 /* test1.odt in Resources */ = {isa = PBXBuildFile; fileRef = 39B091CF1E5F102E00682A59 /* test1.odt */; };
-		39B091D21E5F109A00682A59 /* icudt58l.dat in Resources */ = {isa = PBXBuildFile; fileRef = 39B091D11E5F109A00682A59 /* icudt58l.dat */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,8 +77,6 @@
 		39B085241E5F0BB400682A59 /* services.rdb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = services.rdb; path = "../../../../ios-work/workdir/ios/resources/services.rdb"; sourceTree = SOURCE_ROOT; };
 		39B08B9B1E5F0BB600682A59 /* udkapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = udkapi.rdb; path = "../../../../ios-work/workdir/ios/resources/udkapi.rdb"; sourceTree = SOURCE_ROOT; };
 		39B08B9C1E5F0BB600682A59 /* unorc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = unorc; path = "../../../../ios-work/workdir/ios/resources/unorc"; sourceTree = SOURCE_ROOT; };
-		39B091CF1E5F102E00682A59 /* test1.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = test1.odt; path = ../../../odk/examples/java/DocumentHandling/test/test1.odt; sourceTree = SOURCE_ROOT; };
-		39B091D11E5F109A00682A59 /* icudt58l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt58l.dat; path = "../../../../ios-work/workdir/UnpackedTarball/icu/source/data/in/icudt58l.dat"; sourceTree = "<group>"; };
 		39B092501E5F3DEA00682A59 /* LibreOfficeLight-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LibreOfficeLight-Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -198,8 +194,6 @@
 				39B085241E5F0BB400682A59 /* services.rdb */,
 				39B08B9B1E5F0BB600682A59 /* udkapi.rdb */,
 				39B08B9C1E5F0BB600682A59 /* unorc */,
-				39B091CF1E5F102E00682A59 /* test1.odt */,
-				39B091D11E5F109A00682A59 /* icudt58l.dat */,
 			);
 			name = Resources;
 			sourceTree = SOURCE_ROOT;
@@ -320,7 +314,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39B091D21E5F109A00682A59 /* icudt58l.dat in Resources */,
 				397E09081E597BD8001374E0 /* Assets.xcassets in Resources */,
 				39B08BD71E5F0BB600682A59 /* rc in Resources */,
 				39B08B9E1E5F0BB600682A59 /* offapi.rdb in Resources */,
@@ -331,7 +324,6 @@
 				39B08B9D1E5F0BB600682A59 /* fundamentalrc in Resources */,
 				39B091CD1E5F0BB800682A59 /* udkapi.rdb in Resources */,
 				39B08BD91E5F0BB600682A59 /* services.rdb in Resources */,
-				39B091D01E5F102E00682A59 /* test1.odt in Resources */,
 				39B091CE1E5F0BB800682A59 /* unorc in Resources */,
 				397E09031E597BD8001374E0 /* Main.storyboard in Resources */,
 			);

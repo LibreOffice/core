@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		399857461E56322300F2DA60 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 399857441E56322300F2DA60 /* InfoPlist.strings */; };
-		BE03BF9318F9A7CC00620DC7 /* icudt58l.dat in Resources */ = {isa = PBXBuildFile; fileRef = BE03BF9218F9A7CC00620DC7 /* icudt58l.dat */; };
 		BE82BD7618218E2E00A447B5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE82BD7518218E2E00A447B5 /* Foundation.framework */; };
 		BE82BD7818218E2E00A447B5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE82BD7718218E2E00A447B5 /* CoreGraphics.framework */; };
 		BE82BD7A18218E2E00A447B5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE82BD7918218E2E00A447B5 /* UIKit.framework */; };
@@ -23,7 +22,6 @@
 		BEEE02D11860ABDB00FBDE67 /* program in Resources */ = {isa = PBXBuildFile; fileRef = BEEE02CE1860ABB700FBDE67 /* program */; };
 		BEEE02D21860ABDB00FBDE67 /* share in Resources */ = {isa = PBXBuildFile; fileRef = BEEE02CF1860ABB700FBDE67 /* share */; };
 		BEEE02D31860ABDB00FBDE67 /* services in Resources */ = {isa = PBXBuildFile; fileRef = BEEE02D01860ABB700FBDE67 /* services */; };
-		BEEEF96A1860A25400FBDE67 /* test1.odt in Resources */ = {isa = PBXBuildFile; fileRef = BEEEF9691860A25400FBDE67 /* test1.odt */; };
 		BEEEFE011860A89100FBDE67 /* fundamentalrc in Resources */ = {isa = PBXBuildFile; fileRef = BEEEF96D1860A82900FBDE67 /* fundamentalrc */; };
 		BEEEFE021860A89100FBDE67 /* offapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = BEEEF96E1860A82900FBDE67 /* offapi.rdb */; };
 		BEEEFE031860A89100FBDE67 /* oovbaapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = BEEEF96F1860A82900FBDE67 /* oovbaapi.rdb */; };
@@ -37,7 +35,6 @@
 		399857421E5631FC00F2DA60 /* lo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lo.h; sourceTree = "<group>"; };
 		399857451E56322300F2DA60 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
 		BE03BF9118F9648F00620DC7 /* udata.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = udata.cpp; path = ../../ioswork/UnpackedTarball/icu/source/common/udata.cpp; sourceTree = SOURCE_ROOT; };
-		BE03BF9218F9A7CC00620DC7 /* icudt58l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt58l.dat; path = ../../ioswork/UnpackedTarball/icu/source/data/in/icudt58l.dat; sourceTree = SOURCE_ROOT; };
 		BE03BF9518FC1A1C00620DC7 /* xdictionary.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xdictionary.cxx; path = ../../../i18npool/source/breakiterator/xdictionary.cxx; sourceTree = SOURCE_ROOT; };
 		BE0898E81860D42B0021A679 /* brand.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = brand.cxx; path = ../../../vcl/source/app/brand.cxx; sourceTree = SOURCE_ROOT; };
 		BE0898E91860D42B0021A679 /* dbggui.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbggui.cxx; path = ../../../vcl/source/app/dbggui.cxx; sourceTree = SOURCE_ROOT; };
@@ -848,7 +845,6 @@
 		BEEE02CE1860ABB700FBDE67 /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = ../../ioswork/ios/resources/program; sourceTree = SOURCE_ROOT; };
 		BEEE02CF1860ABB700FBDE67 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../../ioswork/ios/resources/share; sourceTree = SOURCE_ROOT; };
 		BEEE02D01860ABB700FBDE67 /* services */ = {isa = PBXFileReference; lastKnownFileType = folder; name = services; path = ../../ioswork/ios/resources/services; sourceTree = SOURCE_ROOT; };
-		BEEEF9691860A25400FBDE67 /* test1.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = test1.odt; path = ../../../odk/examples/java/DocumentHandling/test/test1.odt; sourceTree = SOURCE_ROOT; };
 		BEEEF96D1860A82900FBDE67 /* fundamentalrc */ = {isa = PBXFileReference; lastKnownFileType = text; name = fundamentalrc; path = ../../ioswork/ios/resources/fundamentalrc; sourceTree = SOURCE_ROOT; };
 		BEEEF96E1860A82900FBDE67 /* offapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = offapi.rdb; path = ../../ioswork/ios/resources/offapi.rdb; sourceTree = SOURCE_ROOT; };
 		BEEEF96F1860A82900FBDE67 /* oovbaapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = oovbaapi.rdb; path = ../../ioswork/ios/resources/oovbaapi.rdb; sourceTree = SOURCE_ROOT; };
@@ -2145,8 +2141,6 @@
 				BEEEFDFD1860A82C00FBDE67 /* udkapi.rdb */,
 				BEEEFDFE1860A82C00FBDE67 /* unorc */,
 				BEEE02D01860ABB700FBDE67 /* services */,
-				BEEEF9691860A25400FBDE67 /* test1.odt */,
-				BE03BF9218F9A7CC00620DC7 /* icudt58l.dat */,
 			);
 			name = Resources;
 			path = Prototype;
@@ -2213,11 +2207,9 @@
 				BEEEFE041860A89100FBDE67 /* rc in Resources */,
 				BEEEFE051860A89100FBDE67 /* services.rdb in Resources */,
 				BEEE02D21860ABDB00FBDE67 /* share in Resources */,
-				BE03BF9318F9A7CC00620DC7 /* icudt58l.dat in Resources */,
 				BEEEFE061860A89100FBDE67 /* udkapi.rdb in Resources */,
 				BEEEFE071860A89100FBDE67 /* unorc in Resources */,
 				BEEE02D31860ABDB00FBDE67 /* services in Resources */,
-				BEEEF96A1860A25400FBDE67 /* test1.odt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
