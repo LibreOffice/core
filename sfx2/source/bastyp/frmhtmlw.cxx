@@ -48,7 +48,6 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
 #include <sax/tools/converter.hxx>
-#include "strings.hxx"
 
 using namespace ::com::sun::star;
 
