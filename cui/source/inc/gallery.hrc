@@ -18,9 +18,4 @@
  */
 #include <cuires.hrc>
 
-// Images
-#define RID_SVXBMP_THEME_NORMAL_BIG             (RID_CUI_GALLERY_START + 49)
-#define RID_SVXBMP_THEME_READONLY_BIG           (RID_CUI_GALLERY_START + 53)
-#define RID_SVXBMP_THEME_DEFAULT_BIG            (RID_CUI_GALLERY_START + 55)
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,6 +35,7 @@
 #include <svx/galtheme.hxx>
 #include "cuigaldlg.hxx"
 #include "helpid.hrc"
+#include "bitmaps.hlst"
 #include <unotools/syslocale.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -683,16 +684,16 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     m_pFtMSShowChangeDate->SetText( aAccess );
 
     // set image
-    sal_uInt16 nId;
+    OUString sId;
 
     if( pThm->IsReadOnly() )
-        nId = RID_SVXBMP_THEME_READONLY_BIG;
+        sId = RID_SVXBMP_THEME_READONLY_BIG;
     else if( pThm->IsDefault() )
-        nId = RID_SVXBMP_THEME_DEFAULT_BIG;
+        sId = RID_SVXBMP_THEME_DEFAULT_BIG;
     else
-        nId = RID_SVXBMP_THEME_NORMAL_BIG;
+        sId = RID_SVXBMP_THEME_NORMAL_BIG;
 
-    m_pFiMSImage->SetImage(Image(BitmapEx(CUI_RES(nId))));
+    m_pFiMSImage->SetImage(Image(BitmapEx(sId)));
 }
 
 bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet* /*rSet*/ )
