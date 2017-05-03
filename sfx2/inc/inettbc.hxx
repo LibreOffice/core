@@ -32,7 +32,7 @@ class SfxURLToolBoxControl_Impl : public SfxToolBoxControl
 private:
 
     SvtURLBox*              GetURLBox() const;
-    void                    OpenURL( const OUString& rName, bool bNew ) const;
+    void                    OpenURL( const OUString& rName ) const;
 
     DECL_LINK(        OpenHdl, SvtURLBox*, void );
     DECL_LINK(        SelectHdl, ComboBox&, void );

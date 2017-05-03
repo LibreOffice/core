@@ -195,12 +195,12 @@ public:
 
     virtual ErrCode             DoVerb(long nVerb);
 
-    void                        OutplaceActivated( bool bActive, SfxInPlaceClient* pClient );
+    void                        OutplaceActivated( bool bActive );
     virtual void                UIActivating( SfxInPlaceClient* pClient );
     virtual void                UIDeactivated( SfxInPlaceClient* pClient );
 
     void                        JumpToMark( const OUString& rMark );
-    void                        VisAreaChanged(const tools::Rectangle& rRect);
+    void                        VisAreaChanged();
 
     // Misc
 

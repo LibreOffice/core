@@ -427,7 +427,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
     // create all internal windows and sub frames ...
     Reference< css::awt::XWindow >      xParentWindow = xHelpTask->getContainerWindow();
     VclPtr<vcl::Window>                 pParentWindow = VCLUnoHelper::GetWindow( xParentWindow );
-    VclPtrInstance<SfxHelpWindow_Impl>  pHelpWindow( xHelpTask, pParentWindow, WB_DOCKBORDER );
+    VclPtrInstance<SfxHelpWindow_Impl>  pHelpWindow( xHelpTask, pParentWindow );
     Reference< css::awt::XWindow >      xHelpWindow   = VCLUnoHelper::GetInterface( pHelpWindow );
 
     Reference< XFrame > xHelpContent;

@@ -175,7 +175,7 @@ SfxApplication* SfxApplication::GetOrCreate()
 }
 
 SfxApplication::SfxApplication()
-    : pImpl( new SfxAppData_Impl( this ) )
+    : pImpl( new SfxAppData_Impl )
 {
     SetName( "StarOffice" );
     if (!utl::ConfigManager::IsAvoidConfig())

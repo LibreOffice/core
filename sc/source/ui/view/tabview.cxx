@@ -2153,8 +2153,7 @@ void ScTabView::SetNewVisArea()
 
     vcl::Window* pActive = pGridWin[aViewData.GetActivePart()];
     if (pActive)
-        aViewData.GetViewShell()->VisAreaChanged(
-            pActive->PixelToLogic(tools::Rectangle(Point(),pActive->GetOutputSizePixel())) );
+        aViewData.GetViewShell()->VisAreaChanged();
     if (pDrawView)
         pDrawView->VisAreaChanged();    // no window passed on -> for all windows
 

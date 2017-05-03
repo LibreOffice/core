@@ -1433,7 +1433,7 @@ void SfxWorkWindow::ResetStatusBar_Impl()
 }
 
 
-void SfxWorkWindow::SetStatusBar_Impl( sal_uInt32 nResId, SfxShell*, SfxBindings& )
+void SfxWorkWindow::SetStatusBar_Impl( sal_uInt32 nResId )
 {
     if ( nResId && bShowStatusBar && IsVisible_Impl() )
         aStatBar.nId = sal::static_int_cast<sal_uInt16>(nResId);
@@ -2517,7 +2517,7 @@ void SfxWorkWindow::SetActiveChild_Impl( vcl::Window *pChild )
     pActiveChild = pChild;
 }
 
-void SfxWorkWindow::DataChanged_Impl( const DataChangedEvent& )
+void SfxWorkWindow::DataChanged_Impl()
 {
     sal_uInt16 n;
     sal_uInt16 nCount = aChildWins.size();

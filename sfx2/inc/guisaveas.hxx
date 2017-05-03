@@ -77,9 +77,7 @@ public:
     static bool WarnUnacceptableFormat(
                                     const css::uno::Reference< css::frame::XModel >& xModel,
                                     const OUString& aOldUIName,
-                                    const OUString& aDefUIName,
                                     const OUString& aDefExtension,
-                                    bool bCanProceedFurther,
                                     bool rDefaultIsAlien );
 
     static vcl::Window* GetModelWindow( const css::uno::Reference< css::frame::XModel >& xModel );
