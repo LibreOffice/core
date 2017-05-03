@@ -161,6 +161,7 @@ private:
     OUString    maStrProperty;
 
     sal_Int32   mnPropertyType;
+    sal_Int32   mnMotionPathPos;
     sal_Int32   mnCurvePathPos;
     sal_Int32   mnPolygonPathPos;
     sal_Int32   mnFreeformPathPos;
