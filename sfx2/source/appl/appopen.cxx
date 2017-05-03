@@ -180,7 +180,6 @@ private:
 sal_uInt32 CheckPasswd_Impl
 (
     SfxObjectShell*  pDoc,
-    SfxItemPool&     /*rPool*/, // Pool, if a Set has to be created
     SfxMedium*       pFile      // the Medium and its Password shold be obtained
 )
 

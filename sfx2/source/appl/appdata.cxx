@@ -83,7 +83,7 @@ void SfxBasicManagerCreationListener::onBasicManagerCreated( const Reference< XM
         m_rAppData.OnApplicationBasicManagerCreated( _rBasicManager );
 }
 
-SfxAppData_Impl::SfxAppData_Impl( SfxApplication* )
+SfxAppData_Impl::SfxAppData_Impl()
     : pDdeService( nullptr )
     , pDocTopics( nullptr )
     , pTriggerTopic(nullptr)

@@ -1409,9 +1409,7 @@ bool SfxObjectShell::SaveTo_Impl
         {
             // store the thumbnail representation image
             // the thumbnail is not stored in case of encrypted document
-            if ( !GenerateAndStoreThumbnail( bPasswdProvided,
-                                            pFilter->IsOwnTemplateFormat(),
-                                            xMedStorage ) )
+            if ( !GenerateAndStoreThumbnail( bPasswdProvided, xMedStorage ) )
             {
                 // TODO: error handling
                 SAL_WARN( "sfx.doc", "Couldn't store thumbnail representation!" );
@@ -2963,7 +2961,7 @@ bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
     {
         // Password
         const SfxStringItem* pPasswdItem = SfxItemSet::GetItem<SfxStringItem>(rMedium.GetItemSet(), SID_PASSWORD, false);
-        if ( pPasswdItem || ERRCODE_IO_ABORT != CheckPasswd_Impl( this, SfxGetpApp()->GetPool(), pMedium ) )
+        if ( pPasswdItem || ERRCODE_IO_ABORT != CheckPasswd_Impl( this, pMedium ) )
         {
             uno::Sequence< beans::NamedValue > aEncryptionData;
             if ( GetEncryptionData_Impl(pMedium->GetItemSet(), aEncryptionData) )
@@ -3421,7 +3419,7 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed
     return bResult;
 }
 
-bool SfxObjectShell::GenerateAndStoreThumbnail(bool bEncrypted, bool bIsTemplate, const uno::Reference<embed::XStorage>& xStorage)
+bool SfxObjectShell::GenerateAndStoreThumbnail(bool bEncrypted, const uno::Reference<embed::XStorage>& xStorage)
 {
     //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
     bIsInGenerateThumbnail = true;
@@ -3436,7 +3434,7 @@ bool SfxObjectShell::GenerateAndStoreThumbnail(bool bEncrypted, bool bIsTemplate
         {
             uno::Reference<io::XStream> xStream = xThumbnailStorage->openStreamElement("thumbnail.png", embed::ElementModes::READWRITE);
 
-            if (xStream.is() && WriteThumbnail(bEncrypted, bIsTemplate, xStream))
+            if (xStream.is() && WriteThumbnail(bEncrypted, xStream))
             {
                 uno::Reference<embed::XTransactedObject> xTransactedObject(xThumbnailStorage, uno::UNO_QUERY_THROW);
                 xTransactedObject->commit();
@@ -3454,7 +3452,7 @@ bool SfxObjectShell::GenerateAndStoreThumbnail(bool bEncrypted, bool bIsTemplate
     return bResult;
 }
 
-bool SfxObjectShell::WriteThumbnail(bool bEncrypted, bool bIsTemplate, const uno::Reference<io::XStream>& xStream)
+bool SfxObjectShell::WriteThumbnail(bool bEncrypted, const uno::Reference<io::XStream>& xStream)
 {
     bool bResult = false;
 
@@ -3472,8 +3470,7 @@ bool SfxObjectShell::WriteThumbnail(bool bEncrypted, bool bIsTemplate, const uno
         if (bEncrypted)
         {
             const OUString sResID = GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl(
-                GetFactory().GetFactoryName(),
-                bIsTemplate);
+                GetFactory().GetFactoryName());
             if (!sResID.isEmpty())
                 bResult = GraphicHelper::getThumbnailReplacement_Impl(sResID, xStream);
         }

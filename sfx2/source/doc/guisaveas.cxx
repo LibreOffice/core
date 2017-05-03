@@ -744,8 +744,8 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
 
         if ( !aPreusedFilterName.equals( aFilterName ) && !aUIName.equals( aDefUIName ) )
         {
-            if ( !SfxStoringHelper::WarnUnacceptableFormat( GetModel(), aUIName, aDefUIName, aDefExtension,
-                                                            true, (bool)( nDefFiltFlags & SfxFilterFlags::ALIEN ) ) )
+            if ( !SfxStoringHelper::WarnUnacceptableFormat( GetModel(), aUIName, aDefExtension,
+                                                            (bool)( nDefFiltFlags & SfxFilterFlags::ALIEN ) ) )
                 return STATUS_SAVEAS_STANDARDNAME;
         }
     }
@@ -1747,9 +1747,7 @@ void SfxStoringHelper::SetDocInfoState(
 // static
 bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XModel >& xModel,
                                                     const OUString& aOldUIName,
-                                                    const OUString& /*aDefUIName*/,
                                                     const OUString& aDefExtension,
-                                                    bool /*bCanProceedFurther*/,
                                                     bool bDefIsAlien )
 {
     if ( !SvtSaveOptions().IsWarnAlienFormat() )

@@ -52,8 +52,7 @@ public:
             GDIMetaFile* pMetaFile,
             const css::uno::Reference< css::io::XStream >& xStream );
 
-    static OUString getThumbnailReplacementIDByFactoryName_Impl(const OUString& aFactoryShortName,
-                                                                bool bIsTemplate);
+    static OUString getThumbnailReplacementIDByFactoryName_Impl(const OUString& aFactoryShortName);
 
     static bool getThumbnailReplacement_Impl(
             const OUString& rResID,

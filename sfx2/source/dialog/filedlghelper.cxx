@@ -155,16 +155,16 @@ OUString DecodeSpaces_Impl( const OUString& rSource );
 // FileDialogHelper_Impl
 
 // XFilePickerListener Methods
-void SAL_CALL FileDialogHelper_Impl::fileSelectionChanged( const FilePickerEvent& aEvent )
+void SAL_CALL FileDialogHelper_Impl::fileSelectionChanged( const FilePickerEvent& )
 {
     SolarMutexGuard aGuard;
-    mpAntiImpl->FileSelectionChanged( aEvent );
+    mpAntiImpl->FileSelectionChanged();
 }
 
-void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& aEvent )
+void SAL_CALL FileDialogHelper_Impl::directoryChanged( const FilePickerEvent& )
 {
     SolarMutexGuard aGuard;
-    mpAntiImpl->DirectoryChanged( aEvent );
+    mpAntiImpl->DirectoryChanged();
 }
 
 OUString SAL_CALL FileDialogHelper_Impl::helpRequested( const FilePickerEvent& aEvent )
@@ -194,7 +194,7 @@ void SAL_CALL FileDialogHelper_Impl::dialogClosed( const DialogClosedEvent& _rEv
 }
 
 // handle XFilePickerListener events
-void FileDialogHelper_Impl::handleFileSelectionChanged( const FilePickerEvent& )
+void FileDialogHelper_Impl::handleFileSelectionChanged()
 {
     if ( mbHasVersions )
         updateVersions();
@@ -203,7 +203,7 @@ void FileDialogHelper_Impl::handleFileSelectionChanged( const FilePickerEvent& )
         maPreviewIdle.Start();
 }
 
-void FileDialogHelper_Impl::handleDirectoryChanged( const FilePickerEvent& )
+void FileDialogHelper_Impl::handleDirectoryChanged()
 {
     if ( mbShowPreview )
         TimeOutHdl_Impl( nullptr );
@@ -2562,14 +2562,14 @@ const uno::Reference < XFilePicker2 >& FileDialogHelper::GetFilePicker() const
 }
 
 // XFilePickerListener Methods
-void SAL_CALL FileDialogHelper::FileSelectionChanged( const FilePickerEvent& aEvent )
+void SAL_CALL FileDialogHelper::FileSelectionChanged()
 {
-    mpImpl->handleFileSelectionChanged( aEvent );
+    mpImpl->handleFileSelectionChanged();
 }
 
-void SAL_CALL FileDialogHelper::DirectoryChanged( const FilePickerEvent& aEvent )
+void SAL_CALL FileDialogHelper::DirectoryChanged()
 {
-    mpImpl->handleDirectoryChanged( aEvent );
+    mpImpl->handleDirectoryChanged();
 }
 
 OUString SAL_CALL FileDialogHelper::HelpRequested( const FilePickerEvent& aEvent )

@@ -160,8 +160,8 @@ namespace sfx2
         virtual void SAL_CALL       disposing( const css::lang::EventObject& Source ) override;
 
         // handle XFilePickerListener events
-        void                    handleFileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
-        void                    handleDirectoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
+        void                    handleFileSelectionChanged();
+        void                    handleDirectoryChanged();
         static OUString         handleHelpRequested( const css::ui::dialogs::FilePickerEvent& aEvent );
         void                    handleControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
         void                    handleDialogSizeChanged();

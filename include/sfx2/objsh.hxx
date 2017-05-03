@@ -440,12 +440,10 @@ public:
 
     bool                        GenerateAndStoreThumbnail(
                                     bool bEncrypted,
-                                    bool bIsTemplate,
                                     const css::uno::Reference< css::embed::XStorage >& xStor );
 
     bool                        WriteThumbnail(
                                     bool bEncrypted,
-                                    bool bIsTemplate,
                                     const css::uno::Reference< css::io::XStream >& xStream );
 
     bool                        IsInGenerateAndStoreThumbnail() const {return bIsInGenerateThumbnail;}//optimize thumbnail generate and store procedure to improve odt saving performance, i120030

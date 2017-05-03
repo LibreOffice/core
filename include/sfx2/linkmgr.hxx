@@ -126,10 +126,9 @@ public:
 
     static SvLinkSourceRef CreateObj( SvBaseLink* );
 
-    void        UpdateAllLinks( bool bAskUpdate = true,
-                                bool bCallErrHdl = true,
-                                bool bUpdateGrfLinks = false,
-                                vcl::Window* pParentWin = nullptr );
+    void        UpdateAllLinks( bool bAskUpdate,
+                                bool bUpdateGrfLinks,
+                                vcl::Window* pParentWin );
 
     // Call for list of links (eg for link-dialog)
     const       SvBaseLinks& GetLinks() const { return aLinkTbl; }

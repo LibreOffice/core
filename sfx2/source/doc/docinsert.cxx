@@ -131,7 +131,7 @@ SfxMedium* DocumentInserter::CreateMedium(char const*const pFallbackHack)
         else
             pMedium.reset();
 
-        if ( pMedium && CheckPasswd_Impl( nullptr, SfxGetpApp()->GetPool(), pMedium.get() ) == ERRCODE_ABORT )
+        if ( pMedium && CheckPasswd_Impl( nullptr, pMedium.get() ) == ERRCODE_ABORT )
             pMedium.reset();
     }
 
@@ -159,7 +159,7 @@ SfxMediumList* DocumentInserter::CreateMediumList()
             else
                 DELETEZ( pMedium );
 
-            if( pMedium && CheckPasswd_Impl( nullptr, SfxGetpApp()->GetPool(), pMedium ) != ERRCODE_ABORT )
+            if( pMedium && CheckPasswd_Impl( nullptr, pMedium ) != ERRCODE_ABORT )
                 pMediumList->push_back( pMedium );
             else
                 delete pMedium;

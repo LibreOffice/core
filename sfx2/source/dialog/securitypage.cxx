@@ -150,14 +150,14 @@ struct SfxSecurityPage_Impl
     DECL_LINK( RecordChangesCBToggleHdl, CheckBox&, void );
     DECL_LINK( ChangeProtectionPBHdl, Button*, void );
 
-    SfxSecurityPage_Impl( SfxSecurityPage &rDlg, const SfxItemSet &rItemSet );
+    SfxSecurityPage_Impl( SfxSecurityPage &rDlg );
 
-    bool    FillItemSet_Impl( SfxItemSet & );
-    void    Reset_Impl( const SfxItemSet & );
+    bool    FillItemSet_Impl();
+    void    Reset_Impl();
 };
 
 
-SfxSecurityPage_Impl::SfxSecurityPage_Impl( SfxSecurityPage &rTabPage, const SfxItemSet & ) :
+SfxSecurityPage_Impl::SfxSecurityPage_Impl( SfxSecurityPage &rTabPage ) :
     m_rMyTabPage                    (rTabPage),
     m_eRedlingMode                  ( RL_NONE ),
     m_bOrigPasswordIsConfirmed      ( false ),
@@ -180,7 +180,7 @@ SfxSecurityPage_Impl::SfxSecurityPage_Impl( SfxSecurityPage &rTabPage, const Sfx
 }
 
 
-bool SfxSecurityPage_Impl::FillItemSet_Impl( SfxItemSet & )
+bool SfxSecurityPage_Impl::FillItemSet_Impl()
 {
     bool bModified = false;
 
@@ -229,7 +229,7 @@ bool SfxSecurityPage_Impl::FillItemSet_Impl( SfxItemSet & )
 }
 
 
-void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
+void SfxSecurityPage_Impl::Reset_Impl()
 {
     SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
 
@@ -417,25 +417,25 @@ VclPtr<SfxTabPage> SfxSecurityPage::Create( vcl::Window * pParent, const SfxItem
 SfxSecurityPage::SfxSecurityPage( vcl::Window* pParent, const SfxItemSet& rItemSet )
     : SfxTabPage(pParent, "SecurityInfoPage", "sfx/ui/securityinfopage.ui", &rItemSet)
 {
-    m_pImpl.reset(new SfxSecurityPage_Impl( *this, rItemSet ));
+    m_pImpl.reset(new SfxSecurityPage_Impl( *this ));
 }
 
 
-bool SfxSecurityPage::FillItemSet( SfxItemSet * rItemSet )
+bool SfxSecurityPage::FillItemSet( SfxItemSet * /*rItemSet*/ )
 {
     bool bModified = false;
     DBG_ASSERT( m_pImpl.get(), "implementation pointer is 0. Still in c-tor?" );
     if (m_pImpl.get() != nullptr)
-        bModified =  m_pImpl->FillItemSet_Impl( *rItemSet );
+        bModified = m_pImpl->FillItemSet_Impl();
     return bModified;
 }
 
 
-void SfxSecurityPage::Reset( const SfxItemSet * rItemSet )
+void SfxSecurityPage::Reset( const SfxItemSet * /*rItemSet*/ )
 {
     DBG_ASSERT( m_pImpl.get(), "implementation pointer is 0. Still in c-tor?" );
     if (m_pImpl.get() != nullptr)
-        m_pImpl->Reset_Impl( *rItemSet );
+        m_pImpl->Reset_Impl();
 }
 
 

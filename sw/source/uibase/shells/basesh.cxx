@@ -673,7 +673,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 if( !rSh.GetLinkManager().GetLinks().empty() )
                 {
                     rSh.StartAllAction();
-                    rSh.GetLinkManager().UpdateAllLinks( false, true, true );
+                    rSh.GetLinkManager().UpdateAllLinks( false, true, nullptr );
                     rSh.EndAllAction();
                 }
                 SfxDispatcher &rDis = *rTempView.GetViewFrame()->GetDispatcher();
@@ -1158,7 +1158,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 {
                     rSh.EnterStdMode();
                     rSh.StartAllAction();
-                    rSh.GetLinkManager().UpdateAllLinks( false, false );
+                    rSh.GetLinkManager().UpdateAllLinks( false, false, nullptr );
                     rSh.EndAllAction();
                 }
             }

@@ -2959,7 +2959,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
     }
 }
 
-SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl( sal_uInt16 /*nId*/ )
+SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl()
 {
     SfxWorkWindow* pWork = GetFrame().GetWorkWindow_Impl();
     return pWork;
@@ -2967,33 +2967,33 @@ SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl( sal_uInt16 /*nId*/ )
 
 void SfxViewFrame::SetChildWindow(sal_uInt16 nId, bool bOn, bool bSetFocus )
 {
-    SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
+    SfxWorkWindow* pWork = GetWorkWindow_Impl();
     if ( pWork )
         pWork->SetChildWindow_Impl( nId, bOn, bSetFocus );
 }
 
 void SfxViewFrame::ToggleChildWindow(sal_uInt16 nId)
 {
-    SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
+    SfxWorkWindow* pWork = GetWorkWindow_Impl();
     if ( pWork )
         pWork->ToggleChildWindow_Impl( nId, true );
 }
 
 bool SfxViewFrame::HasChildWindow( sal_uInt16 nId )
 {
-    SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
+    SfxWorkWindow* pWork = GetWorkWindow_Impl();
     return pWork && pWork->HasChildWindow_Impl(nId);
 }
 
 bool SfxViewFrame::KnowsChildWindow( sal_uInt16 nId )
 {
-    SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
+    SfxWorkWindow* pWork = GetWorkWindow_Impl();
     return pWork && pWork->KnowsChildWindow_Impl(nId);
 }
 
 void SfxViewFrame::ShowChildWindow( sal_uInt16 nId, bool bVisible )
 {
-    SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
+    SfxWorkWindow* pWork = GetWorkWindow_Impl();
     if ( pWork )
     {
         GetDispatcher()->Update_Impl(true);
@@ -3003,7 +3003,7 @@ void SfxViewFrame::ShowChildWindow( sal_uInt16 nId, bool bVisible )
 
 SfxChildWindow* SfxViewFrame::GetChildWindow(sal_uInt16 nId)
 {
-    SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
+    SfxWorkWindow* pWork = GetWorkWindow_Impl();
     return pWork ? pWork->GetChildWindow_Impl(nId) : nullptr;
 }
 

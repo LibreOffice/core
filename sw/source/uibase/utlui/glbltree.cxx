@@ -809,7 +809,7 @@ void    SwGlobalTree::ExecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
         case CTX_UPDATE_LINK:
         case CTX_UPDATE_ALL:
         {
-            pActiveShell->GetLinkManager().UpdateAllLinks();
+            pActiveShell->GetLinkManager().UpdateAllLinks(true, false, nullptr);
             if(CTX_UPDATE_ALL == nSelectedPopupEntry)
                 nSlot = FN_UPDATE_TOX;
             pCont = nullptr;
