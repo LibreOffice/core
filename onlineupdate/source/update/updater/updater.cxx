@@ -112,8 +112,6 @@ struct UpdateServerThreadArgs
 #define USE_EXECV
 #endif
 
-# define MAYBE_USE_HARD_LINKS 0
-
 #if defined(VERIFY_MAR_SIGNATURE) && !defined(_WIN32) && !defined(MACOSX)
 #include <nss.h>
 #include <nspr.h>
@@ -639,26 +637,6 @@ static int ensure_copy_symlink(const NS_tchar *path, const NS_tchar *dest)
 }
 #endif
 
-#if MAYBE_USE_HARD_LINKS
-/*
- * Creates a hardlink (destFilename) which points to the existing file
- * (srcFilename).
- *
- * @return 0 if successful, an error otherwise
- */
-
-static int
-create_hard_link(const NS_tchar *srcFilename, const NS_tchar *destFilename)
-{
-    if (link(srcFilename, destFilename) < 0)
-    {
-        LOG(("link(%s, %s) failed errno = %d", srcFilename, destFilename, errno));
-        return WRITE_ERROR;
-    }
-    return OK;
-}
-#endif
-
 // Copy the file named path onto a new file named dest.
 static int ensure_copy(const NS_tchar *path, const NS_tchar *dest)
 {
@@ -686,18 +664,6 @@ static int ensure_copy(const NS_tchar *path, const NS_tchar *dest)
     if (S_ISLNK(ss.st_mode))
     {
         return ensure_copy_symlink(path, dest);
-    }
-#endif
-
-#if MAYBE_USE_HARD_LINKS
-    if (sUseHardLinks)
-    {
-        if (!create_hard_link(path, dest))
-        {
-            return OK;
-        }
-        // Since we failed to create the hard link, fall through and copy the file.
-        sUseHardLinks = false;
     }
 #endif
 
