@@ -284,7 +284,7 @@ namespace svgio
 
         public:
             /// local attribute scanner
-            void parseStyleAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& rContent,
+            void parseStyleAttribute(SVGToken aSVGToken, const OUString& rContent,
                                      bool bCaseIndependent);
 
             /// helper which does the necessary with a given path
