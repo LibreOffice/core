@@ -214,7 +214,7 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
                     report(
                         DiagnosticsEngine::Warning,
                         ("redundant const_cast from %0 to %1, result is"
-                         " implictly cast to %2"),
+                         " implicitly cast to %2"),
                         e->getExprLoc())
                         << e->getSubExprAsWritten()->getType() << e->getType()
                         << expr->getType() << expr->getSourceRange();
@@ -237,7 +237,7 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
                     report(
                         DiagnosticsEngine::Warning,
                         ("redundant const_cast from %0 to %1, result is"
-                         " ultimately implictly cast to %2"),
+                         " ultimately implicitly cast to %2"),
                         cc->getExprLoc())
                         << cc->getSubExprAsWritten()->getType() << cc->getType()
                         << expr->getType() << expr->getSourceRange();
@@ -281,7 +281,7 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
                     report(
                         DiagnosticsEngine::Warning,
                         ("redundant const_cast from %0 to %1, result is"
-                         " ultimately implictly cast to %2"),
+                         " ultimately implicitly cast to %2"),
                         cc->getExprLoc())
                         << cc->getSubExprAsWritten()->getType() << cc->getType()
                         << expr->getType() << expr->getSourceRange();
@@ -300,7 +300,7 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
                     report(
                         DiagnosticsEngine::Warning,
                         ("redundant const_cast from %0 to %1, result is"
-                         " ultimately implictly cast to %2"),
+                         " ultimately implicitly cast to %2"),
                         cc->getExprLoc())
                         << cc->getSubExprAsWritten()->getType() << cc->getType()
                         << expr->getType() << expr->getSourceRange();
