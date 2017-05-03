@@ -2048,6 +2048,7 @@ RTLFUNC(CDateToIso)
 }
 
 // Function to convert date from ISO 8601 date format YYYYMMDD or YYYY-MM-DD
+// And even YYMMDD for compatibility, sigh..
 RTLFUNC(CDateFromIso)
 {
     (void)pBasic;
@@ -2062,7 +2063,7 @@ RTLFUNC(CDateFromIso)
                 break;
 
             // Valid formats are
-            // YYYYMMDD    -YYYMMDD     YYYYYMMDD    -YYYYYMMDD
+            // YYYYMMDD    -YYYMMDD     YYYYYMMDD    -YYYYYMMDD    YYMMDD
             // YYYY-MM-DD  -YYYY-MM-DD  YYYYY-MM-DD  -YYYYY-MM-DD
 
             sal_Int32 nSign = 1;
@@ -2073,20 +2074,27 @@ RTLFUNC(CDateFromIso)
             }
             const sal_Int32 nLen = aStr.getLength();
 
-            // Now valid
-            // YYYYMMDD    YYYYYMMDD
-            // YYYY-MM-DD  YYYYY-MM-DD
-            if (nLen < 8 || 11 < nLen)
+            // Signed YYMMDD two digit year is invalid.
+            if (nLen == 6 && nSign == -1)
                 break;
 
+            // Now valid
+            // YYYYMMDD    YYYYYMMDD    YYMMDD
+            // YYYY-MM-DD  YYYYY-MM-DD
+            if (nLen != 6 && (nLen < 8 || 11 < nLen))
+                break;
+
+            bool bUseTwoDigitYear = false;
             OUString aYearStr, aMonthStr, aDayStr;
-            if (nLen == 8 || nLen == 9)
+            if (nLen == 6 || nLen == 8 || nLen == 9)
             {
-                // (Y)YYYYMMDD
+                // ((Y)YY)YYMMDD
                 if (!comphelper::string::isdigitAsciiString(aStr))
                     break;
 
-                const sal_Int32 nMonthPos = (nLen == 9 ? 5 : 4);
+                const sal_Int32 nMonthPos = (nLen == 6 ? 2 : (nLen == 9 ? 5 : 4));
+                if (nMonthPos == 2)
+                    bUseTwoDigitYear = true;
                 aYearStr  = aStr.copy( 0, nMonthPos );
                 aMonthStr = aStr.copy( nMonthPos, 2 );
                 aDayStr   = aStr.copy( nMonthPos + 2, 2 );
@@ -2111,7 +2119,7 @@ RTLFUNC(CDateFromIso)
 
             double dDate;
             if (!implDateSerial( (sal_Int16)(nSign * aYearStr.toInt32()),
-                        (sal_Int16)aMonthStr.toInt32(), (sal_Int16)aDayStr.toInt32(), false, false, dDate ))
+                        (sal_Int16)aMonthStr.toInt32(), (sal_Int16)aDayStr.toInt32(), bUseTwoDigitYear, false, dDate ))
                 break;
 
             rPar.Get(0)->PutDate( dDate );
