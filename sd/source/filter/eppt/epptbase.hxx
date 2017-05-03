@@ -30,13 +30,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
-#include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
-#include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <vcl/vclptr.hxx>
-#include <vcl/outdev.hxx>
+#include <vcl/virdev.hxx>
 
 #include "grouptable.hxx"
 
@@ -65,8 +63,6 @@ enum class EppLayout
 };
 
 #define EPP_LAYOUT_SIZE 25
-
-class PptEscherEx;
 
 struct PHLayout
 {
