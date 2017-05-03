@@ -78,10 +78,11 @@ uno::Sequence<uno::Any> SAL_CALL PivotTableDataSequence::getData()
     size_t i = 0;
     for (ValueAndFormat const & rItem : m_aData)
     {
-        if (rItem.m_bIsValue)
+        if (rItem.m_eType == ValueType::Numeric)
             aSeq[i] <<= double(rItem.m_fValue);
-        else
+        else if (rItem.m_eType == ValueType::String)
             aSeq[i] <<= OUString(rItem.m_aString);
+
         i++;
     }
     return aSeq;
@@ -119,7 +120,7 @@ uno::Sequence<OUString> SAL_CALL PivotTableDataSequence::getTextualData()
     size_t i = 0;
     for (ValueAndFormat const & rItem : m_aData)
     {
-        if (!rItem.m_bIsValue)
+        if (rItem.m_eType == ValueType::String)
             aSeq[i] = rItem.m_aString;
         i++;
     }
