@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_7ad152fb",
+        "filename": "sw/source/filter/html/svxcss1.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-05-03T12:50:17Z",
+      "side": 0,
+      "message": "urgh, yet another case of C++ programmers confusing \"ueberladen\" with \"ueberschreiben\".",
+      "revId": "862b6c0a32dfce924bfafa84acaed47c5380fc46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
