@@ -36,26 +36,24 @@
 namespace sc
 {
 
-typedef cppu::WeakImplHelper<css::chart2::data::XDataSequence,
-                             css::chart2::data::XTextualDataSequence,
-                             css::chart2::data::XNumericalDataSequence,
-                             css::util::XCloneable,
-                             css::util::XModifyBroadcaster,
-                             css::beans::XPropertySet,
-                             css::lang::XServiceInfo>
-        PivotTableDataSequence_Base;
+enum class ValueType
+{
+    Empty,
+    String,
+    Numeric
+};
 
 struct ValueAndFormat
 {
     double m_fValue;
     OUString m_aString;
-    bool m_bIsValue;
+    ValueType m_eType;
     sal_uInt32 m_nNumberFormat;
 
     explicit ValueAndFormat()
         : m_fValue(0.0)
         , m_aString()
-        , m_bIsValue(true)
+        , m_eType(ValueType::Empty)
         , m_nNumberFormat(0)
     {
         rtl::math::setNan(&m_fValue);
@@ -64,19 +62,28 @@ struct ValueAndFormat
     explicit ValueAndFormat(double fValue, sal_uInt32 nNumberFormat)
         : m_fValue(fValue)
         , m_aString()
-        , m_bIsValue(true)
+        , m_eType(ValueType::Numeric)
         , m_nNumberFormat(nNumberFormat)
     {}
 
     explicit ValueAndFormat(OUString const & rString)
         : m_fValue(0.0)
         , m_aString(rString)
-        , m_bIsValue(false)
+        , m_eType(ValueType::String)
         , m_nNumberFormat(0)
     {
         rtl::math::setNan(&m_fValue);
     }
 };
+
+typedef cppu::WeakImplHelper<css::chart2::data::XDataSequence,
+                             css::chart2::data::XTextualDataSequence,
+                             css::chart2::data::XNumericalDataSequence,
+                             css::util::XCloneable,
+                             css::util::XModifyBroadcaster,
+                             css::beans::XPropertySet,
+                             css::lang::XServiceInfo>
+        PivotTableDataSequence_Base;
 
 class PivotTableDataSequence : public PivotTableDataSequence_Base, public SfxListener
 {
