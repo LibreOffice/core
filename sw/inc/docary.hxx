@@ -23,6 +23,7 @@
 #include <vector>
 #include <set>
 #include <algorithm>
+#include <type_traits>
 #include <o3tl/sorted_vector.hxx>
 
 #include <boost/multi_index_container.hpp>
@@ -135,7 +136,8 @@ public:
         return it == end() ? SIZE_MAX : it - begin();
     }
 
-    bool Contains(Value const& p) const
+    /// check that given format is still alive (i.e. contained here)
+    bool IsAlive(typename std::remove_pointer<Value>::type const*const p) const
         { return std::find(begin(), end(), p) != end(); }
 
     static void dumpAsXml(struct _xmlTextWriter* /*pWriter*/) {};
@@ -158,9 +160,12 @@ public:
 
     size_t GetPos(const SwFormat *p) const
         { return SwVectorModifyBase<Value>::GetPos( static_cast<Value>( const_cast<SwFormat*>( p ) ) ); }
-    bool Contains(const SwFormat *p) const {
-        Value p2 = dynamic_cast<Value>(const_cast<SwFormat*>(p));
-        return p2 != nullptr && SwVectorModifyBase<Value>::Contains(p2);
+
+    /// check if given format is contained here
+    /// @precond pFormat must not have been deleted
+    bool ContainsFormat(SwFormat const*const pFormat) const {
+        Value p = dynamic_cast<Value>(const_cast<SwFormat*>(pFormat));
+        return p != nullptr && SwVectorModifyBase<Value>::IsAlive(p);
     }
 };
 

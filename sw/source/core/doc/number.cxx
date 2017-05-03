@@ -800,11 +800,13 @@ SwNumRule& SwNumRule::CopyNumRule( SwDoc* pDoc, const SwNumRule& rNumRule )
     {
         Set( n, rNumRule.maFormats[ n ] );
         if( maFormats[ n ] && maFormats[ n ]->GetCharFormat() &&
-            !pDoc->GetCharFormats()->Contains( maFormats[n]->GetCharFormat() ))
+            !pDoc->GetCharFormats()->IsAlive(maFormats[n]->GetCharFormat()))
+        {
             // If we copy across different Documents, then copy the
             // corresponding CharFormat into the new Document.
             maFormats[n]->SetCharFormat( pDoc->CopyCharFormat( *maFormats[n]->
                                         GetCharFormat() ) );
+        }
     }
     meRuleType = rNumRule.meRuleType;
     msName = rNumRule.msName;

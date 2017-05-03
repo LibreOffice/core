@@ -228,7 +228,7 @@ void SwHistorySetText::SetInDoc( SwDoc* pDoc, bool )
     if ( RES_TXTATR_CHARFMT == m_pAttr->Which() )
     {
         // ask the Doc if the CharFormat still exists
-        if ( !pDoc->GetCharFormats()->Contains( (static_cast<SwFormatCharFormat&>(*m_pAttr)).GetCharFormat() ) )
+        if (!pDoc->GetCharFormats()->IsAlive((static_cast<SwFormatCharFormat&>(*m_pAttr)).GetCharFormat()))
             return; // do not set, format does not exist
     }
 
@@ -522,12 +522,12 @@ void SwHistoryChangeFormatColl::SetInDoc( SwDoc* pDoc, bool )
     {
         if ( SwNodeType::Text == m_nNodeType )
         {
-            if (pDoc->GetTextFormatColls()->Contains( static_cast<SwTextFormatColl * const>(m_pColl) ))
+            if (pDoc->GetTextFormatColls()->IsAlive(static_cast<SwTextFormatColl * const>(m_pColl)))
             {
                 pContentNd->ChgFormatColl( m_pColl );
             }
         }
-        else if (pDoc->GetGrfFormatColls()->Contains( static_cast<SwGrfFormatColl * const>(m_pColl) ))
+        else if (pDoc->GetGrfFormatColls()->IsAlive(static_cast<SwGrfFormatColl * const>(m_pColl)))
         {
             pContentNd->ChgFormatColl( m_pColl );
         }

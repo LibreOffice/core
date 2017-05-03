@@ -230,7 +230,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
 
             pTextNode->ResetAllAttr();
 
-            if (rDoc.GetTextFormatColls()->Contains(pTextFormatColl))
+            if (rDoc.GetTextFormatColls()->IsAlive(pTextFormatColl))
                 pTextFormatColl = static_cast<SwTextFormatColl*>(pTextNode->ChgFormatColl( pTextFormatColl )) ;
 
             pHistory->SetTmpEnd( nSetPos );
@@ -269,7 +269,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
         rPam.Exchange();
     }
 
-    if( pDoc->GetTextFormatColls()->Contains( pTextFormatColl ))
+    if (pDoc->GetTextFormatColls()->IsAlive(pTextFormatColl))
     {
         SwTextNode* pTextNd = rPam.GetMark()->nNode.GetNode().GetTextNode();
         if( pTextNd )
@@ -277,8 +277,8 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     pTextFormatColl = pSavTextFormatColl;
 
-    if( pLastNdColl && pDoc->GetTextFormatColls()->Contains( pLastNdColl ) &&
-        rPam.GetPoint()->nNode != rPam.GetMark()->nNode )
+    if (pLastNdColl && pDoc->GetTextFormatColls()->IsAlive(pLastNdColl)
+        && rPam.GetPoint()->nNode != rPam.GetMark()->nNode)
     {
         SwTextNode* pTextNd = rPam.GetPoint()->nNode.GetNode().GetTextNode();
         if( pTextNd )

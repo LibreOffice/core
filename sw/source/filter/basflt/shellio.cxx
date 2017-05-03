@@ -226,7 +226,8 @@ sal_uLong SwReader::Read( const Reader& rOptions )
             {
                 SwFrameFormat* pFrameFormat = (*mxDoc->GetSpzFrameFormats())[ n ];
                 const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-                if( !aFlyFrameArr.Contains( pFrameFormat) )
+                // ok, here IsAlive is a misnomer...
+                if (!aFlyFrameArr.IsAlive(pFrameFormat))
                 {
                     SwPosition const*const pFrameAnchor(
                             rAnchor.GetContentAnchor());
