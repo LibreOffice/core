@@ -1324,7 +1324,7 @@ void ScTiledRenderingTest::testDocumentSizeWithTwoViews()
     ScModelObj* pModelObj = createDoc("cursor-away.ods");
 
     // Set the visible area, and press page down
-    pModelObj->setClientVisibleArea(Rectangle(750, 1861, 20583, 6997));
+    pModelObj->setClientVisibleArea(tools::Rectangle(750, 1861, 20583, 6997));
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::PAGEDOWN);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN);
     Scheduler::ProcessEventsToIdle();
