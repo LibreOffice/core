@@ -48,7 +48,6 @@ class SdDrawDocument;
 class KeyEvent;
 class OutputDevice;
 class Size;
-namespace tools { class Rectangle; }
 namespace vcl { class Window; }
 class SfxRequest;
 class WorkWindow;
@@ -65,7 +64,6 @@ namespace sd
 {
 
 class SlideshowImpl;
-class Window;
 class View;
 class ViewShell;
 class ViewShellBase;

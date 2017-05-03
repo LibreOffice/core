@@ -25,9 +25,8 @@
 
 #include <sot/storage.hxx>
 #include "sddllapi.h"
-#include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
-#include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <sfx2/module.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/virdev.hxx>
@@ -41,13 +40,8 @@ class EditFieldInfo;
 class SdTransferable;
 class SvNumberFormatter;
 class SfxErrorHandler;
-class SdDrawDocument;
 class SfxFrame;
 namespace svtools { class ColorConfig; }
-
-namespace sd {
-class DrawDocShell;
-}
 
 namespace com { namespace sun { namespace star { namespace frame {
     class XFrame;
