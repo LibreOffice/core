@@ -802,7 +802,7 @@ css::uno::Any SAL_CALL SdXShape::getPropertyValue( const OUString& PropertyName 
                     }
                     else
                     {
-                        xImageMap = SvUnoImageMap_createInstance(ImplGetSupportedMacroItems() );
+                        xImageMap = SvUnoImageMap_createInstance();
                     }
                 }
 

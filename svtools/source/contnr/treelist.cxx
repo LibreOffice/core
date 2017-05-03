@@ -48,8 +48,8 @@ struct SvListView::Impl
     void InitTable();
     void RemoveViewData( SvTreeListEntry* pParent );
 
-    void ActionMoving(SvTreeListEntry* pEntry, SvTreeListEntry* pTargetPrnt, sal_uLong nChildPos);
-    void ActionMoved(SvTreeListEntry* pEntry, SvTreeListEntry* pTargetPrnt, sal_uLong nChildPos);
+    void ActionMoving(SvTreeListEntry* pEntry);
+    void ActionMoved();
     void ActionInserted(SvTreeListEntry* pEntry);
     void ActionInsertedTree(SvTreeListEntry* pEntry);
     void ActionRemoving(SvTreeListEntry* pEntry);
@@ -1292,7 +1292,7 @@ void SvListView::ModelHasEntryInvalidated( SvTreeListEntry*)
 {
 }
 
-void SvListView::Impl::ActionMoving( SvTreeListEntry* pEntry,SvTreeListEntry*,sal_uLong)
+void SvListView::Impl::ActionMoving( SvTreeListEntry* pEntry )
 {
     SvTreeListEntry* pParent = pEntry->pParent;
     DBG_ASSERT(pParent,"Model not consistent");
@@ -1306,9 +1306,7 @@ void SvListView::Impl::ActionMoving( SvTreeListEntry* pEntry,SvTreeListEntry*,sa
     m_bVisPositionsValid = false;
 }
 
-void SvListView::Impl::ActionMoved( SvTreeListEntry* /* pEntry */ ,
-                            SvTreeListEntry* /* pTargetPrnt */ ,
-                            sal_uLong /* nChildPos */ )
+void SvListView::Impl::ActionMoved()
 {
     m_nVisibleCount = 0;
     m_bVisPositionsValid = false;
@@ -1426,10 +1424,10 @@ void SvListView::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEn
             break;
         case SvListAction::MOVING:
             ModelIsMoving( pEntry1, pEntry2, nPos );
-            m_pImpl->ActionMoving( pEntry1, pEntry2, nPos );
+            m_pImpl->ActionMoving( pEntry1 );
             break;
         case SvListAction::MOVED:
-            m_pImpl->ActionMoved( pEntry1, pEntry2, nPos );
+            m_pImpl->ActionMoved();
             ModelHasMoved( pEntry1 );
             break;
         case SvListAction::CLEARING:

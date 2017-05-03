@@ -172,7 +172,7 @@ public:
     bool                HasGraphicObjectReference( const GraphicObject& rObj );
 
     void                TryToSwapIn();
-    void                GraphicObjectWasSwappedOut( const GraphicObject& rObj );
+    void                GraphicObjectWasSwappedOut();
     void                GraphicObjectWasSwappedIn( const GraphicObject& rObj );
 };
 
@@ -364,7 +364,7 @@ void GraphicCacheEntry::TryToSwapIn()
         maGraphicObjectList.front()->FireSwapInRequest();
 }
 
-void GraphicCacheEntry::GraphicObjectWasSwappedOut( const GraphicObject& /*rObj*/ )
+void GraphicCacheEntry::GraphicObjectWasSwappedOut()
 {
     mbSwappedAll = true;
 
@@ -989,7 +989,7 @@ void GraphicCache::GraphicObjectWasSwappedOut( const GraphicObject& rObj )
     GraphicCacheEntry* pEntry = ImplGetCacheEntry( rObj );
 
     if( pEntry )
-        pEntry->GraphicObjectWasSwappedOut( rObj );
+        pEntry->GraphicObjectWasSwappedOut();
 }
 
 void GraphicCache::GraphicObjectWasSwappedIn( const GraphicObject& rObj )

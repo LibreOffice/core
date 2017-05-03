@@ -847,7 +847,7 @@ void ToolbarMenu::implSelectEntry( int nSelectedEntry )
 
 void ToolbarMenu::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    implHighlightAtPosition(rMEvt, true);
+    implHighlightAtPosition(rMEvt);
     implSelectEntry(mpImpl->mnHighlightedEntry);
 }
 
@@ -862,11 +862,11 @@ void ToolbarMenu::MouseMove( const MouseEvent& rMEvt )
     if (!IsVisible())
         return;
 
-    implHighlightAtPosition(rMEvt, false);
+    implHighlightAtPosition(rMEvt);
 }
 
 
-void ToolbarMenu::implHighlightAtPosition(const MouseEvent& rMEvt, bool /*bMBDown*/)
+void ToolbarMenu::implHighlightAtPosition(const MouseEvent& rMEvt)
 {
     long nMouseY = rMEvt.GetPosPixel().Y();
     Size aOutSz = GetOutputSizePixel();

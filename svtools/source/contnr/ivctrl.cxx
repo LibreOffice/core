@@ -107,7 +107,7 @@ void SvtIconChoiceCtrl::DrawEntryImage( SvxIconChoiceCtrlEntry* pEntry, const Po
     rDev.DrawImage( rPos, pEntry->GetImage() );
 }
 
-OUString SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry, bool )
+OUString SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry )
 {
     return pEntry->GetText();
 }

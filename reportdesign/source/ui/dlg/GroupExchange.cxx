@@ -54,7 +54,7 @@ namespace rptui
         SotClipboardFormatId nFormat = SotExchange::GetFormat(rFlavor);
         if(nFormat == OGroupExchange::getReportGroupId() )
         {
-            return SetAny(uno::makeAny(m_aGroupRow),rFlavor);
+            return SetAny(uno::makeAny(m_aGroupRow));
         }
         return false;
     }

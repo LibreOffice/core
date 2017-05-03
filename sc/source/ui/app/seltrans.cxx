@@ -396,7 +396,7 @@ bool ScSelectionTransferObj::GetData(
     {
         TransferableDataHelper aHelper( xSource );
         uno::Any aAny = aHelper.GetAny(rFlavor, rDestDoc);
-        bOK = SetAny( aAny, rFlavor );
+        bOK = SetAny( aAny );
     }
 
     return bOK;

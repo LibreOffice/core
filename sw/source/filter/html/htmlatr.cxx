@@ -2630,7 +2630,7 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
         OString sOut = "<" OOO_STRING_SVTOOLS_HTML_font " "
             OOO_STRING_SVTOOLS_HTML_O_color "=";
         rWrt.Strm().WriteOString( sOut );
-        HTMLOutFuncs::Out_Color( rWrt.Strm(), aColor, rHTMLWrt.m_eDestEnc ).WriteChar( '>' );
+        HTMLOutFuncs::Out_Color( rWrt.Strm(), aColor ).WriteChar( '>' );
     }
     else
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_font, false );

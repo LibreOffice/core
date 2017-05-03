@@ -274,7 +274,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
 
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).append("=");
         rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-        HTMLOutFuncs::Out_Color( rWrt.Strm(), rFillColor, rHTMLWrt.m_eDestEnc );
+        HTMLOutFuncs::Out_Color( rWrt.Strm(), rFillColor );
     }
 
     if (!sOut.isEmpty())

@@ -242,11 +242,11 @@ class SvxIconChoiceCtrl_Impl
                         }
     void                InitScrollBarBox();
     void                ToggleSelection( SvxIconChoiceCtrlEntry* );
-    void                DeselectAllBut( SvxIconChoiceCtrlEntry*, bool bPaintSync = false );
+    void                DeselectAllBut( SvxIconChoiceCtrlEntry* );
     void                Center( SvxIconChoiceCtrlEntry* pEntry ) const;
     void                StopEditTimer() { aEditIdle.Stop(); }
     void                StartEditTimer() { aEditIdle.Start(); }
-    void                CallSelectHandler( SvxIconChoiceCtrlEntry* );
+    void                CallSelectHandler();
     void                SelectRect(
                             SvxIconChoiceCtrlEntry* pEntry1,
                             SvxIconChoiceCtrlEntry* pEntry2,
@@ -281,8 +281,7 @@ class SvxIconChoiceCtrl_Impl
     void                CancelUserEvents();
     void                EntrySelected(
                             SvxIconChoiceCtrlEntry* pEntry,
-                            bool bSelect,
-                            bool bSyncPaint
+                            bool bSelect
                         );
     void                RepaintSelectedEntries();
     void                SetListPositions();
@@ -327,8 +326,7 @@ public:
     void                SelectEntry(
                             SvxIconChoiceCtrlEntry*,
                             bool bSelect,
-                            bool bAddToSelection = false,
-                            bool bSyncPaint = false
+                            bool bAddToSelection = false
                         );
     void                Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
     bool                MouseButtonDown( const MouseEvent& );
@@ -339,8 +337,7 @@ public:
                             SvxIconChoiceCtrlEntry* pOldCursor,
                             SvxIconChoiceCtrlEntry* pNewCursor,
                             bool bMod1,
-                            bool bShift,
-                            bool bPaintSync
+                            bool bShift
                         );
     bool                KeyInput( const KeyEvent& );
     void                Resize();
@@ -381,9 +378,9 @@ public:
                             const OUString* pStr = nullptr
                         );
 
-    long                CalcBoundingWidth( SvxIconChoiceCtrlEntry* ) const;
-    long                CalcBoundingHeight( SvxIconChoiceCtrlEntry* ) const;
-    Size                CalcBoundingSize( SvxIconChoiceCtrlEntry* ) const;
+    long                CalcBoundingWidth() const;
+    long                CalcBoundingHeight() const;
+    Size                CalcBoundingSize() const;
     void                FindBoundingRect( SvxIconChoiceCtrlEntry* pEntry );
     void                SetBoundingRect_Impl(
                             SvxIconChoiceCtrlEntry* pEntry,
@@ -415,7 +412,7 @@ public:
     void                SetGrid( const Size& );
     Size                GetMinGrid() const;
     void                Scroll( long nDeltaX, long nDeltaY );
-    const Size&         GetItemSize( SvxIconChoiceCtrlEntry*, IcnViewFieldType ) const;
+    const Size&         GetItemSize( IcnViewFieldType ) const;
 
     void                HideDDIcon();
 

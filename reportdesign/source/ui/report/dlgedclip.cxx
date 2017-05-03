@@ -57,7 +57,7 @@ void OReportExchange::AddSupportedFormats()
 bool OReportExchange::GetData( const datatransfer::DataFlavor& _rFlavor, const OUString& /*rDestDoc*/ )
 {
     const SotClipboardFormatId nFormatId = SotExchange::GetFormat(_rFlavor);
-    return (nFormatId == getDescriptorFormatId()) && SetAny( uno::Any(m_aCopyElements), _rFlavor );
+    return (nFormatId == getDescriptorFormatId()) && SetAny( uno::Any(m_aCopyElements) );
 }
 
 bool OReportExchange::canExtract(const DataFlavorExVector& _rFlavor)

@@ -1458,7 +1458,7 @@ long SvImpLBox::GetEntryLine( SvTreeListEntry* pEntry ) const
     return nFirstVisPos;
 }
 
-void SvImpLBox::SetEntryHeight( short /* nHeight */ )
+void SvImpLBox::SetEntryHeight()
 {
     SetNodeBmpYOffset( GetExpandedNodeBmp() );
     SetNodeBmpYOffset( GetCollapsedNodeBmp() );
@@ -1862,7 +1862,7 @@ void SvImpLBox::EntryInserted( SvTreeListEntry* pEntry )
 
 // ****** Control the control animation
 
-bool SvImpLBox::ButtonDownCheckCtrl(const MouseEvent& rMEvt, SvTreeListEntry* pEntry, long /*nY*/)
+bool SvImpLBox::ButtonDownCheckCtrl(const MouseEvent& rMEvt, SvTreeListEntry* pEntry)
 {
     SvLBoxItem* pItem = pView->GetItem(pEntry,rMEvt.GetPosPixel().X(),&pActiveTab);
     if (pItem && pItem->GetType() == SvLBoxItemType::Button)
@@ -1917,7 +1917,7 @@ bool SvImpLBox::ButtonUpCheckCtrl( const MouseEvent& rMEvt )
         pActiveButton->SetStateHilighted( false );
         long nMouseX = rMEvt.GetPosPixel().X();
         if (pEntry == pActiveEntry && pView->GetItem(pActiveEntry, nMouseX) == pActiveButton)
-            pActiveButton->ClickHdl(pView, pActiveEntry);
+            pActiveButton->ClickHdl(pActiveEntry);
         InvalidateEntry(pActiveEntry);
         if (pCursor == pActiveEntry)
             ShowCursor(true);
@@ -1955,7 +1955,7 @@ bool SvImpLBox::IsNodeButton( const Point& rPosPixel, SvTreeListEntry* pEntry ) 
 }
 
 // false == hit no node button
-bool SvImpLBox::ButtonDownCheckExpand( const MouseEvent& rMEvt, SvTreeListEntry* pEntry, long /* nY */ )
+bool SvImpLBox::ButtonDownCheckExpand( const MouseEvent& rMEvt, SvTreeListEntry* pEntry )
 {
     bool bRet = false;
 
@@ -2005,7 +2005,7 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
 
     long nY = GetEntryLine( pEntry );
     // Node-Button?
-    if( ButtonDownCheckExpand( rMEvt, pEntry, nY ) )
+    if( ButtonDownCheckExpand( rMEvt, pEntry ) )
         return;
 
     if( !EntryReallyHit(pEntry,aPos,nY))
@@ -2059,7 +2059,7 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
     else
     {
         // CheckButton? (TreeListBox: Check + Info)
-        if( ButtonDownCheckCtrl(rMEvt, pEntry, nY) )
+        if( ButtonDownCheckCtrl(rMEvt, pEntry) )
             return;
         // Inplace-Editing?
     }

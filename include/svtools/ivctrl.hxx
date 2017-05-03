@@ -211,9 +211,7 @@ protected:
                             const Point& rPos,
                             OutputDevice& rDev );
 
-    static OUString      GetEntryText(
-                            SvxIconChoiceCtrlEntry* pEntry,
-                            bool bInplaceEdit );
+    static OUString     GetEntryText( SvxIconChoiceCtrlEntry* pEntry );
 
     virtual void        FillLayoutData() const override;
 

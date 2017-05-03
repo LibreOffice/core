@@ -393,9 +393,9 @@ void OTableGrantControl::PaintCell( OutputDevice& rDev, const tools::Rectangle& 
     {
         TTablePrivilegeMap::const_iterator aFind = findPrivilege(m_nDataPos);
         if(aFind != m_aPrivMap.end())
-            PaintTristate(rDev, rRect, isAllowed(nColumnId,aFind->second.nRights) ? TRISTATE_TRUE : TRISTATE_FALSE,isAllowed(nColumnId,aFind->second.nWithGrant));
+            PaintTristate(rRect, isAllowed(nColumnId,aFind->second.nRights) ? TRISTATE_TRUE : TRISTATE_FALSE,isAllowed(nColumnId,aFind->second.nWithGrant));
         else
-            PaintTristate(rDev, rRect, TRISTATE_FALSE, false);
+            PaintTristate(rRect, TRISTATE_FALSE, false);
     }
     else
     {

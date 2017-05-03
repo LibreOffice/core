@@ -127,7 +127,7 @@ bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
         {
             // cached/direct drawing
             if( !mpCache->DrawDisplayCacheObj( pOut, aPt, aSz, rObj, rAttr ) )
-                bRet = ImplDraw( pOut, aPt, aSz, rObj, rAttr, nFlags, rCached );
+                bRet = ImplDraw( pOut, aPt, aSz, rObj, rAttr, rCached );
             else
                 bRet = rCached = true;
         }
@@ -232,7 +232,7 @@ void GraphicManager::ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj )
 bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
                                const Size& rSz, GraphicObject& rObj,
                                const GraphicAttr& rAttr,
-                               const GraphicManagerDrawFlags nFlags, bool& rCached )
+                               bool& rCached )
 {
     const Graphic&  rGraphic = rObj.GetGraphic();
     bool            bRet = false;
@@ -250,7 +250,7 @@ bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
             {
                 BitmapEx aDstBmpEx;
 
-                if( ImplCreateOutput( pOut, rPt, rSz, aSrcBmpEx, rAttr, nFlags, &aDstBmpEx ) )
+                if( ImplCreateOutput( pOut, rPt, rSz, aSrcBmpEx, rAttr, &aDstBmpEx ) )
                 {
                     rCached = mpCache->CreateDisplayCacheObj( pOut, rPt, rSz, rObj, rAttr, aDstBmpEx );
                     bRet = true;
@@ -258,7 +258,7 @@ bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
             }
 
             if( !bRet )
-                bRet = ImplCreateOutput( pOut, rPt, rSz, aSrcBmpEx, rAttr, nFlags );
+                bRet = ImplCreateOutput( pOut, rPt, rSz, aSrcBmpEx, rAttr );
         }
         else
         {
@@ -269,7 +269,7 @@ bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
                 GDIMetaFile aDstMtf;
                 BitmapEx    aContainedBmpEx;
 
-                if( ImplCreateOutput( pOut, rPt, rSz, rSrcMtf, rAttr, nFlags, aDstMtf, aContainedBmpEx ) )
+                if( ImplCreateOutput( pOut, rPt, rSz, rSrcMtf, rAttr, aDstMtf, aContainedBmpEx ) )
                 {
                     if( !!aContainedBmpEx )
                     {
@@ -277,7 +277,7 @@ bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
                         // bitmap (allows caching the resulting pixmap).
                         BitmapEx aDstBmpEx;
 
-                        if( ImplCreateOutput( pOut, rPt, rSz, aContainedBmpEx, rAttr, nFlags, &aDstBmpEx ) )
+                        if( ImplCreateOutput( pOut, rPt, rSz, aContainedBmpEx, rAttr, &aDstBmpEx ) )
                         {
                             rCached = mpCache->CreateDisplayCacheObj( pOut, rPt, rSz, rObj, rAttr, aDstBmpEx );
                             bRet = true;
@@ -872,7 +872,7 @@ bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAttrib
 bool GraphicManager::ImplCreateOutput( OutputDevice* pOutputDevice,
                                        const Point& rPoint, const Size& rSize,
                                        const BitmapEx& rBitmapEx, const GraphicAttr& rAttributes,
-                                       const GraphicManagerDrawFlags /*nFlags*/, BitmapEx* pBmpEx )
+                                       BitmapEx* pBmpEx )
 {
     sal_uInt16  nRot10 = rAttributes.GetRotation() % 3600;
 
@@ -1089,7 +1089,7 @@ static BitmapEx checkMetadataBitmap( const BitmapEx& rBmpEx,
 bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                                        const Point& rPt, const Size& rSz,
                                        const GDIMetaFile& rMtf, const GraphicAttr& rAttr,
-                                       const GraphicManagerDrawFlags /*nFlags*/, GDIMetaFile& rOutMtf, BitmapEx& rOutBmpEx )
+                                       GDIMetaFile& rOutMtf, BitmapEx& rOutBmpEx )
 {
     const Size aNewSize( rMtf.GetPrefSize() );
 

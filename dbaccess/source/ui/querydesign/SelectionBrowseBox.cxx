@@ -1220,7 +1220,7 @@ void OSelectionBrowseBox::PaintCell(OutputDevice& rDev, const tools::Rectangle& 
 
     long nRow = GetRealRow(m_nSeekRow);
     if (nRow == BROW_VIS_ROW)
-        PaintTristate(rDev, rRect, pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE);
+        PaintTristate(rRect, pEntry->IsVisible() ? TRISTATE_TRUE : TRISTATE_FALSE);
     else
         rDev.DrawText(rRect, GetCellText(nRow, nColumnId),DrawTextFlags::VCenter);
 

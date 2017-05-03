@@ -1250,7 +1250,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
             break;
 
         long    nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), false);
-        sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.maPosPixel.X(), false);
+        sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.maPosPixel.X());
 
         long nCorrectRowCount = GetRowCount();
         if (GetOptions() & DbGridControlOptions::Insert)
@@ -1344,7 +1344,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
     if ( IsDropFormatSupported( SotClipboardFormatId::STRING ) )
     {
         long    nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), false);
-        sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.maPosPixel.X(), false);
+        sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.maPosPixel.X());
 
         long nCorrectRowCount = GetRowCount();
         if (GetOptions() & DbGridControlOptions::Insert)

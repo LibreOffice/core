@@ -125,7 +125,7 @@ bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const css::datatransfer::Da
         case SotClipboardFormatId::TREELISTBOX:
         {
             css::uno::Any aTreeListBoxData; // empty for now
-            SetAny(aTreeListBoxData, rFlavor);
+            SetAny(aTreeListBoxData);
             return true;
         }
 

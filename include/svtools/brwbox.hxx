@@ -506,8 +506,7 @@ public:
                                     bool bComplete = false ) const;
     long            GetRowAtYPosPixel( long nY,
                                         bool bRelToBrowser = true  ) const;
-    sal_uInt16      GetColumnAtXPosPixel( long nX,
-                                          bool bRelToBrowser = true  ) const;
+    sal_uInt16      GetColumnAtXPosPixel( long nX ) const;
 
     // invalidations
     void            Clear();

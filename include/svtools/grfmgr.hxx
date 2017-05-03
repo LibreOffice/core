@@ -509,7 +509,6 @@ private:
                             const Size& rSz,
                             GraphicObject& rObj,
                             const GraphicAttr& rAttr,
-                            const GraphicManagerDrawFlags nFlags,
                             bool& rCached
                         );
 
@@ -519,7 +518,6 @@ private:
                             const Size& rSz,
                             const BitmapEx& rBmpEx,
                             const GraphicAttr& rAttr,
-                            const GraphicManagerDrawFlags nFlags,
                             BitmapEx* pBmpEx = nullptr
                         );
     static bool SVT_DLLPRIVATE ImplCreateOutput(
@@ -528,7 +526,6 @@ private:
                             const Size& rSz,
                             const GDIMetaFile& rMtf,
                             const GraphicAttr& rAttr,
-                            const GraphicManagerDrawFlags nFlags,
                             GDIMetaFile& rOutMtf,
                             BitmapEx& rOutBmpEx
                         );

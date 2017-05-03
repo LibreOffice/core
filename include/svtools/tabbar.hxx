@@ -349,7 +349,7 @@ private:
     SVT_DLLPRIVATE void            ImplSelect();
     SVT_DLLPRIVATE void            ImplActivatePage();
     SVT_DLLPRIVATE bool            ImplDeactivatePage();
-    SVT_DLLPRIVATE void            ImplPrePaint(vcl::RenderContext& rRenderContext);
+    SVT_DLLPRIVATE void            ImplPrePaint();
     SVT_DLLPRIVATE ImplTabBarItem* ImplGetLastTabBarItem( sal_uInt16 nItemCount );
 
     DECL_DLLPRIVATE_LINK(ImplClickHdl, Button*, void);

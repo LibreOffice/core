@@ -271,7 +271,7 @@ SvLBoxItemType SvLBoxButton::GetType() const
     return SvLBoxItemType::Button;
 }
 
-bool SvLBoxButton::ClickHdl( SvTreeListBox*, SvTreeListEntry* pEntry )
+bool SvLBoxButton::ClickHdl( SvTreeListEntry* pEntry )
 {
     if ( CheckModification() )
     {

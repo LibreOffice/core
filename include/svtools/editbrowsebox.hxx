@@ -579,7 +579,7 @@ namespace svt
 
         virtual bool IsCursorMoveAllowed(long nNewRow, sal_uInt16 nNewColId) const override;
 
-        void    PaintTristate(OutputDevice& rDev, const tools::Rectangle& rRect, const TriState& eState, bool _bEnabled=true) const;
+        void    PaintTristate(const tools::Rectangle& rRect, const TriState& eState, bool _bEnabled=true) const;
 
         void AsynchGetFocus();
             // secure starting of StartEditHdl

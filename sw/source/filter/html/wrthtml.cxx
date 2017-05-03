@@ -878,7 +878,7 @@ static void OutBodyColor( const sal_Char* pTag, const SwFormat *pFormat,
         Color aColor( pColorItem->GetValue() );
         if( COL_AUTO == aColor.GetColor() )
             aColor.SetColor( COL_BLACK );
-        HTMLOutFuncs::Out_Color( rHWrt.Strm(), aColor, rHWrt.m_eDestEnc );
+        HTMLOutFuncs::Out_Color( rHWrt.Strm(), aColor );
         if( RES_POOLCOLL_STANDARD==pFormat->GetPoolFormatId() )
             rHWrt.m_pDfltColor = new Color( aColor );
     }
@@ -1211,7 +1211,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
         OStringBuffer sOut;
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).append('=');
         Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-        HTMLOutFuncs::Out_Color( Strm(), rBackColor, m_eDestEnc);
+        HTMLOutFuncs::Out_Color( Strm(), rBackColor);
     }
 
     if( !bGraphic )
