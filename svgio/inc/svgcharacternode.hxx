@@ -43,7 +43,7 @@ namespace svgio
         public:
             SvgTextPositions();
 
-            void parseTextPositionAttributes(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent);
+            void parseTextPositionAttributes(SVGToken aSVGToken, const OUString& aContent);
 
             /// X content
             const SvgNumberVector& getX() const { return maX; }

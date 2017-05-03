@@ -41,7 +41,7 @@ namespace svgio
         {
         }
 
-        void SvgTextPositions::parseTextPositionAttributes(const OUString& /*rTokenName*/, SVGToken aSVGToken, const OUString& aContent)
+        void SvgTextPositions::parseTextPositionAttributes(SVGToken aSVGToken, const OUString& aContent)
         {
             // parse own
             switch(aSVGToken)
