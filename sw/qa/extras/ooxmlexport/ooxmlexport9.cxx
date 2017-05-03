@@ -460,8 +460,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106492, "tdf106492.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf107104, "tdf107104.docx")
 {
     CPPUNIT_ASSERT(getShape(1)->getSize().Width > 0);
-    // This failed: the second arrow was invisible because it had zero height.
+    // This failed: the second arrow was invisible because it had zero width.
     CPPUNIT_ASSERT(getShape(2)->getSize().Width > 0);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf107033, "tdf107033.docx")
+{
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    // This was 0: footnote separator was disabled even in case the document
+    // had no footnotes.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(25), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
