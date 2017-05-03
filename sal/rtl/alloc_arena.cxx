@@ -668,6 +668,10 @@ rtl_arena_destructor (void * obj)
 
 /** rtl_arena_activate()
  */
+#if defined __GNUC__ && __GNUC__ >= 7
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-truncation"
+#endif
 rtl_arena_type *
 rtl_arena_activate (
     rtl_arena_type *   arena,
@@ -715,6 +719,9 @@ rtl_arena_activate (
             {
                 size = i * arena->m_quantum;
                 (void) snprintf (namebuf, sizeof(namebuf), "%s_%" SAL_PRIuUINTPTR, arena->m_name, size);
+#if defined __GNUC__ && __GNUC__ >= 7
+#pragma GCC diagnostic pop
+#endif
                 arena->m_qcache_ptr[i - 1] = rtl_cache_create(namebuf, size, 0, nullptr, nullptr, nullptr, nullptr, arena, RTL_CACHE_FLAG_QUANTUMCACHE);
             }
         }
