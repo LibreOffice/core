@@ -323,6 +323,28 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
             static_cast< XSystemShellExecute* >(this),
             psxErr);
     }
+    else
+    {
+        // Get Permission make changes to the Window of the created Process
+        HWND procHandle = 0;
+        DWORD procId = GetProcessId(sei.hProcess);
+        AllowSetForegroundWindow(procId);
+
+        // Get the handle of the created Window
+        DWORD check = 0;
+        GetWindowThreadProcessId(procHandle, &check);
+        SAL_WARN_IF(check != procId, "shell", "Could not get handle of process called by shell.");
+
+        // Move created Window into the foreground
+        if(procHandle != 0)
+        {
+            SetForegroundWindow(procHandle);
+            SetActiveWindow(procHandle);
+        }
+    }
+
+    // Close the handle for the created childprocess when we are done
+    CloseHandle(sei.hProcess);
 }
 
 // XServiceInfo
