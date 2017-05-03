@@ -2055,7 +2055,7 @@ void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
 
     ImplApplyViewOptions( rOpt );
 
-    // With one layout per view it is not longer necessary
+    // With one layout per view it is no longer necessary
     // to sync these "layout related" view options
     // But as long as we have to disable "multiple layout"
 

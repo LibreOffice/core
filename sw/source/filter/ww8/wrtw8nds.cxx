@@ -1365,7 +1365,7 @@ bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) cons
             if (pStart->nContent.GetIndex() == 0)
             {
                 // This condition detects if the pseudo-char we will export
-                // should be implictly excluded by the redlining char
+                // should be implicitly excluded by the redlining char
                 // properties starting on the next node.
                 return true;
             }

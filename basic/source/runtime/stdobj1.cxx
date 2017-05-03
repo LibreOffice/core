@@ -261,7 +261,7 @@ void SbStdFont::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         const sal_uInt32 nWhich = pVar->GetUserData();
         bool         bWrite = pHint->GetId() == SfxHintId::BasicDataChanged;
 
-        // Propteries
+        // Properties
         switch( nWhich )
         {
             case ATTR_IMP_BOLD:         PropBold( pVar, bWrite ); return;

@@ -86,7 +86,7 @@ public class ODatabaseSource extends TestCase {
 
     @Override
     protected void cleanup(TestParameters tParam, PrintWriter log) {
-        log.println("    disposing not longer needed docs... ");
+        log.println("    disposing no longer needed docs... ");
         DesktopTools.closeDoc(xDBDoc);
     }
 

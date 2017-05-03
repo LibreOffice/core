@@ -923,7 +923,7 @@ void LayoutManager::implts_backupProgressBarWrapper()
 
     // safe a backup copy of the current progress!
     // This copy will be used automatically inside createProgressBar() which is called
-    // implictly from implts_doLayout() .-)
+    // implicitly from implts_doLayout() .-)
     m_xProgressBarBackup = m_aProgressBarElement.m_xUIElement;
 
     // remove the relation between this old progress bar and our old status bar.

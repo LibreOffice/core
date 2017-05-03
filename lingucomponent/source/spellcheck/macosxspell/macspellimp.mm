@@ -461,7 +461,7 @@ void SAL_CALL
             //! Pointer allows for access of the non-UNO functions.
             //! And the reference to the UNO-functions while increasing
             //! the ref-count and will implicitly free the memory
-            //! when the object is not longer used.
+            //! when the object is no longer used.
             pPropHelper = new PropertyHelper_Spell( static_cast<XSpellChecker *>(this), xPropSet );
             xPropHelper = pPropHelper;
             pPropHelper->AddAsPropListener();   //! after a reference is established

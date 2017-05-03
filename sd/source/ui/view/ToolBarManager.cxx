@@ -785,7 +785,7 @@ void ToolBarManager::Implementation::Update (
 
         if (mbIsValid && mxLayouter.is() && (mbPreUpdatePending || mbPostUpdatePending))
         {
-            // 1) Release UNO tool bars that are not longer used.  Do this
+            // 1) Release UNO tool bars that are no longer used.  Do this
             // now so that they are not updated when the SFX shell stack is
             // modified.
             if (mbPreUpdatePending)

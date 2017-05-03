@@ -1489,7 +1489,7 @@
     <!--
         **get-path- command**
 		This function will collect the next command from a string. If the input string should has a start of number character,
-		we here implictly think the command is the last-command
+		we here implicitly think the command is the last-command
         All of the command of vml is listed as following:
         __Basic commands:__
 		m		l		c		x		e		t		r		v		nf		ns		ae		al		at		ar		wa		wr		qx		qy		qb	

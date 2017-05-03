@@ -1590,7 +1590,7 @@ static Writer& OutCSS1_SwFormat( Writer& rWrt, const SwFormat& rFormat,
          RES_POOLCHR_INET_VISIT==nRefPoolId) )
         bCheckForPseudo = true;
 
-    // export now the Attributes (incl. Selektor)
+    // export now the Attributes (incl. selector)
     bool bHasScriptDependencies = false;
     if( OutCSS1Rule( rHTMLWrt, aSelector, aItemSet, CSS1_FMT_ISTAG != nDeep,
                       bCheckForPseudo ) )

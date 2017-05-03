@@ -740,7 +740,7 @@ void XMLTextFrameContext::removeGraphicFromImportContext(const SvXMLImportContex
             uno::Reference< lang::XComponent > xComp(pXMLTextFrameContext_Impl->GetPropSet(), UNO_QUERY);
 
             // Inform shape importer about the removal so it can adjust
-            // z-indxes.
+            // z-indexes.
             uno::Reference<drawing::XShape> xShape(xComp, uno::UNO_QUERY);
             GetImport().GetShapeImport()->shapeRemoved(xShape);
 

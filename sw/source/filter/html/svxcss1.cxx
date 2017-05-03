@@ -729,7 +729,7 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
     nScriptFlags( Css1ScriptFlags::AllMask ),
     bIgnoreFontFamily( false )
 {
-    // also initialiase item IDs
+    // also initialise item IDs
     aItemIds.nFont = rPool.GetTrueWhich( SID_ATTR_CHAR_FONT, false );
     aItemIds.nFontCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONT, false );
     aItemIds.nFontCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONT, false );

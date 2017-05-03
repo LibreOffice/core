@@ -419,7 +419,7 @@ bool parseParameters(ParameterList const & rInput,
                             aValue += OUStringLiteral1(
                                 sal_Unicode(
                                     static_cast<unsigned char>(itNext->m_aValue[i]))
-                                | 0xF800); // map to unicode corparate use sub area
+                                | 0xF800); // map to unicode corporate use sub area
                     }
                     else
                     {
