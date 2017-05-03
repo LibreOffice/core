@@ -5,7 +5,7 @@
   <object class="GtkDialog" id="OutlineNumberingDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Outline Numbering</property>
+    <property name="title" translatable="yes">Chapter and Outline Numbering</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>

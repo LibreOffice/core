@@ -2501,7 +2501,13 @@
       </node>
       <node oor:name=".uno:ChapterNumberingDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Outline ~Numbering...</value>
+          <value xml:lang="en-US">Chapter Numbering</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Chapter and Outline ~Numbering...</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Set Chapter and Outline Numbering</value>
         </prop>
       </node>
       <node oor:name=".uno:ControlCodes" oor:op="replace">
