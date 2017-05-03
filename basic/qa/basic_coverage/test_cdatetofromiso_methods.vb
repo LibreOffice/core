@@ -32,6 +32,8 @@ Function doUnitTest as Integer
         doUnitTest = 0
     ElseIf ( CDateToIso( CDateFromIso("-00011231") ) <> "-00011231" ) Then
         doUnitTest = 0
+    ElseIf ( CDateToIso( CDateFromIso("991231") ) <> "19991231" ) Then
+        doUnitTest = 0
     Else
         doUnitTest = 1
     End If
