@@ -201,21 +201,23 @@ bool SwUndoFormatAttr::IsFormatInDoc( SwDoc* pDoc )
 {
     // search for the Format in the Document; if it does not exist any more,
     // the attribute is not restored!
-    size_t nPos = SIZE_MAX;
+    bool isAlive(false);
     switch ( m_nFormatWhich )
     {
         case RES_TXTFMTCOLL:
         case RES_CONDTXTFMTCOLL:
-            nPos = pDoc->GetTextFormatColls()->GetPos( m_pFormat );
+            isAlive = pDoc->GetTextFormatColls()->IsAlive(
+                    static_cast<const SwTextFormatColl *>(m_pFormat));
             break;
 
         case RES_GRFFMTCOLL:
-            nPos = pDoc->GetGrfFormatColls()->GetPos(
-                    static_cast<const SwGrfFormatColl*>(m_pFormat) );
+            isAlive = pDoc->GetGrfFormatColls()->IsAlive(
+                    static_cast<const SwGrfFormatColl*>(m_pFormat));
             break;
 
         case RES_CHRFMT:
-            nPos = pDoc->GetCharFormats()->GetPos( m_pFormat );
+            isAlive = pDoc->GetCharFormats()->IsAlive(
+                    static_cast<const SwCharFormat *>(m_pFormat));
             break;
 
         case RES_FRMFMT:
@@ -226,14 +228,14 @@ bool SwUndoFormatAttr::IsFormatInDoc( SwDoc* pDoc )
                 {
                     m_pFormat =
                         static_cast<SwTableNode*>(pNd)->GetTable().GetFrameFormat();
-                    nPos = 0;
+                    isAlive = true;
                     break;
                 }
                 else if ( pNd->IsSectionNode() )
                 {
                     m_pFormat =
                         static_cast<SwSectionNode*>(pNd)->GetSection().GetFormat();
-                    nPos = 0;
+                    isAlive = true;
                     break;
                 }
                 else if ( pNd->IsStartNode() && (SwTableBoxStartNode ==
@@ -247,7 +249,7 @@ bool SwUndoFormatAttr::IsFormatInDoc( SwDoc* pDoc )
                         if ( pBox )
                         {
                             m_pFormat = pBox->GetFrameFormat();
-                            nPos = 0;
+                            isAlive = true;
                             break;
                         }
                     }
@@ -256,13 +258,15 @@ bool SwUndoFormatAttr::IsFormatInDoc( SwDoc* pDoc )
             SAL_FALLTHROUGH;
         case RES_DRAWFRMFMT:
         case RES_FLYFRMFMT:
-            if ( ( pDoc->GetSpzFrameFormats()->find( static_cast<SwFrameFormat*>(m_pFormat) ) != pDoc->GetSpzFrameFormats()->end() )
-                || ( pDoc->GetFrameFormats()->find( static_cast<SwFrameFormat*>( m_pFormat ) ) != pDoc->GetFrameFormats()->end() ) )
-                nPos = 0;
+            if (pDoc->GetSpzFrameFormats()->IsAlive(static_cast<const SwFrameFormat *>(m_pFormat))
+                || pDoc->GetFrameFormats()->IsAlive(static_cast<const SwFrameFormat *>(m_pFormat)))
+            {
+                isAlive = true;
+            }
             break;
     }
 
-    if ( nPos == SIZE_MAX )
+    if (!isAlive)
     {
         // Format does not exist; reset
         m_pFormat = nullptr;
