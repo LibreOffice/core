@@ -747,7 +747,7 @@ Sequence< OUString > SAL_CALL SmGraphicAccessible::getSupportedServiceNames()
 }
 
 
-SmEditSource::SmEditSource( SmEditWindow * /*pWin*/, SmEditAccessible &rAcc ) :
+SmEditSource::SmEditSource( SmEditAccessible &rAcc ) :
     aViewFwd    (rAcc),
     aTextFwd    (rAcc, *this),
     aEditViewFwd(rAcc),
@@ -1568,7 +1568,7 @@ void SmEditAccessible::Init()
         if (pEditEngine && pEditView)
         {
             assert(!pTextHelper);
-            pTextHelper.reset(new ::accessibility::AccessibleTextHelper( o3tl::make_unique<SmEditSource>( pWin, *this ) ));
+            pTextHelper.reset(new ::accessibility::AccessibleTextHelper( o3tl::make_unique<SmEditSource>( *this ) ));
             pTextHelper->SetEventSource( this );
         }
     }

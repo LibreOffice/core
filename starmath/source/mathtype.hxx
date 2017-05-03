@@ -123,7 +123,7 @@ private:
     bool HandleRecords(int nLevel, sal_uInt8 nSelector =0xFF,
         sal_uInt8 nVariation =0xFF, int nRows =0, int nCols =0);
     bool HandleSize(sal_Int16 nLSize, sal_Int16 nDSize, int &rSetSize);
-    void HandleAlign(sal_uInt8 nHAlign, sal_uInt8 nVAlign, int &rSetAlign);
+    void HandleAlign(sal_uInt8 nHAlign, int &rSetAlign);
     bool HandlePile(int &rSetAlign, int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariation);
     bool HandleMatrix(int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariarion);
     void HandleMatrixSeparator(int nMatrixRows, int nMatrixCols, int &rCurCol, int &rCurRow);
@@ -155,8 +155,8 @@ private:
     void HandleOperator(SmNode *pNode,int nLevel);
     bool HandleLim(SmNode *pNode,int nLevel);
     void HandleMAlign(SmNode *pNode,int nLevel);
-    void HandleMath(SmNode *pNode,int nLevel);
-    void HandleText(SmNode *pNode,int nLevel);
+    void HandleMath(SmNode *pNode);
+    void HandleText(SmNode *pNode);
     void HandleAttributes(SmNode *pNode,int nLevel);
     void TypeFaceToString(OUString &rRet,sal_uInt8 nFace);
 

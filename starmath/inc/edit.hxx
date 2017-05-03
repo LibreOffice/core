@@ -116,7 +116,7 @@ public:
     static bool HasMark(const OUString &rText);
 
     void Flush();
-    void DeleteEditView(SmViewShell& rView);
+    void DeleteEditView();
 
     void ApplyColorConfigValues(const svtools::ColorConfig& rColorCfg);
 
