@@ -41,7 +41,6 @@
 #include <editeng/charrotateitem.hxx>
 #include <i18nutil/unicode.hxx>
 #include <svl/solar.hrc>
-#include <tools/bigint.hxx>
 #include <tools/stream.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <vcl/svapp.hxx>
@@ -921,7 +920,7 @@ bool SdrMetricItem::HasMetrics() const
 void SdrMetricItem::ScaleMetrics(long nMul, long nDiv)
 {
     if (GetValue()!=0) {
-        BigInt aVal(GetValue());
+        sal_Int64 aVal(GetValue());
         aVal*=nMul;
         aVal+=nDiv/2; // to round accurately
         aVal/=nDiv;
@@ -1299,7 +1298,7 @@ bool SdrTextAniAmountItem::HasMetrics() const
 void SdrTextAniAmountItem::ScaleMetrics(long nMul, long nDiv)
 {
     if (GetValue()>0) {
-        BigInt aVal(GetValue());
+        sal_Int64 aVal(GetValue());
         aVal*=nMul;
         aVal+=nDiv/2; // to round accurately
         aVal/=nDiv;

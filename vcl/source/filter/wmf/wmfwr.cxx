@@ -27,7 +27,6 @@
 #include <rtl/crc.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
-#include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/fract.hxx>
@@ -1402,33 +1401,33 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                             Fraction aScaleY = aMM.GetScaleY();
 
                             Point aOrigin = aSrcMapMode.GetOrigin();
-                            BigInt aX( aOrigin.X() );
-                            aX *= BigInt( aScaleX.GetDenominator() );
+                            sal_Int64 aX( aOrigin.X() );
+                            aX *= sal_Int64( aScaleX.GetDenominator() );
                             if( aOrigin.X() >= 0 )
                                 if( aScaleX.GetNumerator() >= 0 )
-                                    aX += BigInt( aScaleX.GetNumerator()/2 );
+                                    aX += sal_Int64( aScaleX.GetNumerator()/2 );
                                 else
-                                    aX -= BigInt( (aScaleX.GetNumerator()+1)/2 );
+                                    aX -= sal_Int64( (aScaleX.GetNumerator()+1)/2 );
                             else
                                 if( aScaleX.GetNumerator() >= 0 )
-                                    aX -= BigInt( (aScaleX.GetNumerator()-1)/2 );
+                                    aX -= sal_Int64( (aScaleX.GetNumerator()-1)/2 );
                                 else
-                                    aX += BigInt( aScaleX.GetNumerator()/2 );
-                            aX /= BigInt( aScaleX.GetNumerator() );
+                                    aX += sal_Int64( aScaleX.GetNumerator()/2 );
+                            aX /= sal_Int64( aScaleX.GetNumerator() );
                             aOrigin.X() = (long)aX + aMM.GetOrigin().X();
-                            BigInt aY( aOrigin.Y() );
-                            aY *= BigInt( aScaleY.GetDenominator() );
+                            sal_Int64 aY( aOrigin.Y() );
+                            aY *= sal_Int64( aScaleY.GetDenominator() );
                             if( aOrigin.Y() >= 0 )
                                 if( aScaleY.GetNumerator() >= 0 )
-                                    aY += BigInt( aScaleY.GetNumerator()/2 );
+                                    aY += sal_Int64( aScaleY.GetNumerator()/2 );
                                 else
-                                    aY -= BigInt( (aScaleY.GetNumerator()+1)/2 );
+                                    aY -= sal_Int64( (aScaleY.GetNumerator()+1)/2 );
                             else
                                 if( aScaleY.GetNumerator() >= 0 )
-                                    aY -= BigInt( (aScaleY.GetNumerator()-1)/2 );
+                                    aY -= sal_Int64( (aScaleY.GetNumerator()-1)/2 );
                                 else
-                                    aY += BigInt( aScaleY.GetNumerator()/2 );
-                            aY /= BigInt( aScaleY.GetNumerator() );
+                                    aY += sal_Int64( aScaleY.GetNumerator()/2 );
+                            aY /= sal_Int64( aScaleY.GetNumerator() );
                             aOrigin.Y() = (long)aY + aMM.GetOrigin().Y();
                             aSrcMapMode.SetOrigin( aOrigin );
 

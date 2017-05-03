@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
 #include <svx/svdopath.hxx>
 #include <math.h>
@@ -730,10 +729,10 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
                 }
             }
             if (bPnt1 && bPnt2) { // both alternatives exist (and compete)
-                BigInt nX1(aNeuPos1.X()-aPos.X()); nX1*=nX1;
-                BigInt nY1(aNeuPos1.Y()-aPos.Y()); nY1*=nY1;
-                BigInt nX2(aNeuPos2.X()-aPos.X()); nX2*=nX2;
-                BigInt nY2(aNeuPos2.Y()-aPos.Y()); nY2*=nY2;
+                sal_Int64 nX1(aNeuPos1.X()-aPos.X()); nX1*=nX1;
+                sal_Int64 nY1(aNeuPos1.Y()-aPos.Y()); nY1*=nY1;
+                sal_Int64 nX2(aNeuPos2.X()-aPos.X()); nX2*=nX2;
+                sal_Int64 nY2(aNeuPos2.Y()-aPos.Y()); nY2*=nY2;
                 nX1+=nY1; // correction distance to square
                 nX2+=nY2; // correction distance to square
                 // let the alternative that allows fewer correction win

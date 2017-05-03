@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/bigint.hxx>
 #include "pagefrm.hxx"
 #include "txtfrm.hxx"
 #include <doc.hxx>

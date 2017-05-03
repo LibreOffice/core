@@ -20,7 +20,6 @@
 #include <osl/endian.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <tools/bigint.hxx>
 #include <tools/debug.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
@@ -411,9 +410,9 @@ Point ImplEdgePointFilter::EdgeSection( const Point& rPoint, int nEdge ) const
             nNewX = (dy * md) / mn + lx;
         else
         {
-            BigInt ady = dy;
+            sal_Int64 ady = dy;
             ady *= md;
-            if( ady.IsNeg() )
+            if( ady < 0 )
                 if( mn < 0 )
                     ady += mn/2;
                 else
@@ -437,9 +436,9 @@ Point ImplEdgePointFilter::EdgeSection( const Point& rPoint, int nEdge ) const
             nNewY = (dx * mn) / md + ly;
         else
         {
-            BigInt adx = dx;
+            sal_Int64 adx = dx;
             adx *= mn;
-            if( adx.IsNeg() )
+            if( adx < 0 )
                 if( md < 0 )
                     adx += md/2;
                 else

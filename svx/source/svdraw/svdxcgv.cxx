@@ -41,7 +41,6 @@
 #include <vcl/metaact.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itempool.hxx>
-#include <tools/bigint.hxx>
 #include <sot/formats.hxx>
 #include <clonelist.hxx>
 #include <vcl/virdev.hxx>
@@ -396,8 +395,8 @@ bool SdrExchangeView::Paste(
 
 void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Point& rCenter, const Size& rSiz, const MapMode& rMap, SdrInsertFlags nOptions)
 {
-    BigInt nSizX(rSiz.Width());
-    BigInt nSizY(rSiz.Height());
+    sal_Int64 nSizX(rSiz.Width());
+    sal_Int64 nSizY(rSiz.Height());
     MapUnit eSrcMU=rMap.GetMapUnit();
     MapUnit eDstMU=mpModel->GetScaleUnit();
     FrPair aMapFact(GetMapFactor(eSrcMU,eDstMU));

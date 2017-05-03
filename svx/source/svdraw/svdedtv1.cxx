@@ -25,7 +25,6 @@
 #include <svl/aeitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
-#include <tools/bigint.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "getallcharpropids.hxx"
@@ -107,10 +106,10 @@ void SdrEditView::SetMarkedObjRect(const tools::Rectangle& rRect)
             else
             { // transform aR1 to aR0 after rRect
                 aR1.Move(-x0,-y0);
-                BigInt l(aR1.Left());
-                BigInt r(aR1.Right());
-                BigInt t(aR1.Top());
-                BigInt b(aR1.Bottom());
+                sal_Int64 l(aR1.Left());
+                sal_Int64 r(aR1.Right());
+                sal_Int64 t(aR1.Top());
+                sal_Int64 b(aR1.Bottom());
                 if (w0!=0) {
                     l*=w1; l/=w0;
                     r*=w1; r/=w0;

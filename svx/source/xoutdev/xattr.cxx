@@ -37,7 +37,6 @@
 #include "svx/unoapi.hxx"
 #include <svl/style.hxx>
 
-#include <tools/bigint.hxx>
 #include <svl/itemset.hxx>
 #include <svx/dialogs.hrc>
 #include "svx/svdstr.hrc"
@@ -63,11 +62,11 @@ using namespace ::com::sun::star;
 
 long ScaleMetricValue( long nVal, long nMul, long nDiv )
 {
-    BigInt aVal( nVal );
+    long aVal = nVal;
 
     aVal *= nMul;
 
-    if ( aVal.IsNeg() != ( nDiv < 0 ) )
+    if ( ( aVal < 0 ) != ( nDiv < 0 ) )
         aVal-=nDiv/2; // for correct rounding
     else
         aVal+=nDiv/2; // for correct rounding

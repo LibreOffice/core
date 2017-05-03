@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_LONGCURR_HXX
 
 #include <vcl/dllapi.h>
-#include <tools/bigint.hxx>
 #include <vcl/field.hxx>
 
 class LocaleDataWrapper;
@@ -41,29 +40,29 @@ public:
     void                    SetCurrencySymbol( const OUString& rStr );
     OUString const &        GetCurrencySymbol() const;
 
-    void                    SetMin(const BigInt& rNewMin);
-    const BigInt&           GetMin() const { return mnMin; }
-    void                    SetMax(const BigInt& rNewMax);
-    const BigInt&           GetMax() const { return mnMax; }
+    void                    SetMin(const sal_Int64& rNewMin);
+    const sal_Int64&        GetMin() const { return mnMin; }
+    void                    SetMax(const sal_Int64& rNewMax);
+    const sal_Int64&        GetMax() const { return mnMax; }
 
     void                    SetDecimalDigits( sal_uInt16 nDigits );
     sal_uInt16              GetDecimalDigits() const { return mnDecimalDigits;}
-    void                    SetValue(const BigInt& rNewValue);
-    void                    SetUserValue( BigInt nNewValue );
-    BigInt                  GetValue() const;
+    void                    SetValue(const sal_Int64& rNewValue);
+    void                    SetUserValue( sal_Int64 nNewValue );
+    sal_Int64               GetValue() const;
 
 protected:
-    BigInt                  mnLastValue;
-    BigInt                  mnMin;
-    BigInt                  mnMax;
+    sal_Int64               mnLastValue;
+    sal_Int64               mnMin;
+    sal_Int64               mnMax;
 
                             LongCurrencyFormatter();
 private:
-    friend bool ImplLongCurrencyReformat( const OUString&, BigInt const &, BigInt const &, sal_uInt16, const LocaleDataWrapper&, OUString&, LongCurrencyFormatter& );
-    SAL_DLLPRIVATE void        ImpInit();
+    friend bool ImplLongCurrencyReformat( const OUString&, sal_Int64 const &, sal_Int64 const &, sal_uInt16, const LocaleDataWrapper&, OUString&, LongCurrencyFormatter& );
+    SAL_DLLPRIVATE void     ImpInit();
 
-    BigInt                  mnFieldValue;
-    BigInt                  mnCorrectedValue;
+    sal_Int64               mnFieldValue;
+    sal_Int64               mnCorrectedValue;
     OUString                maCurrencySymbol;
     sal_uInt16              mnDecimalDigits;
     bool                    mbThousandSep;
@@ -73,44 +72,44 @@ private:
 
 class VCL_DLLPUBLIC LongCurrencyField : public SpinField, public LongCurrencyFormatter
 {
-    friend void ImplNewLongCurrencyFieldValue(LongCurrencyField*, const BigInt&);
+    friend void ImplNewLongCurrencyFieldValue(LongCurrencyField*, const sal_Int64&);
 
 private:
-    BigInt          mnSpinSize;
-    BigInt          mnFirst;
-    BigInt          mnLast;
+    sal_Int64               mnSpinSize;
+    sal_Int64               mnFirst;
+    sal_Int64               mnLast;
 
 public:
-                    LongCurrencyField( vcl::Window* pParent, WinBits nWinStyle );
+                            LongCurrencyField( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
 
-    void            Modify() override;
-    void            Up() override;
-    void            Down() override;
-    void            First() override;
-    void            Last() override;
+    void                    Modify() override;
+    void                    Up() override;
+    void                    Down() override;
+    void                    First() override;
+    void                    Last() override;
 
-    void            SetFirst(const BigInt& rNewFirst ) { mnFirst = rNewFirst; }
-    const BigInt&   GetFirst() const { return mnFirst; }
-    void            SetLast(const BigInt& rNewLast ) { mnLast = rNewLast; }
-    const BigInt&   GetLast() const { return mnLast; }
-    void            SetSpinSize(const BigInt& rNewSize) { mnSpinSize = rNewSize; }
-    const BigInt&   GetSpinSize() const { return mnSpinSize; }
+    void                    SetFirst(const sal_Int64& rNewFirst ) { mnFirst = rNewFirst; }
+    const sal_Int64&        GetFirst() const { return mnFirst; }
+    void                    SetLast(const sal_Int64& rNewLast ) { mnLast = rNewLast; }
+    const sal_Int64&        GetLast() const { return mnLast; }
+    void                    SetSpinSize(const sal_Int64& rNewSize) { mnSpinSize = rNewSize; }
+    const sal_Int64&        GetSpinSize() const { return mnSpinSize; }
 };
 
 
 class VCL_DLLPUBLIC LongCurrencyBox : public ComboBox, public LongCurrencyFormatter
 {
 public:
-                    LongCurrencyBox( vcl::Window* pParent, WinBits nWinStyle );
+                            LongCurrencyBox( vcl::Window* pParent, WinBits nWinStyle );
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            PreNotify( NotifyEvent& rNEvt ) override;
+    virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
 
-    void            Modify() override;
-    void            ReformatAll() override;
+    void                    Modify() override;
+    void                    ReformatAll() override;
 };
 
 #endif // INCLUDED_VCL_LONGCURR_HXX

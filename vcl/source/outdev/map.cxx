@@ -18,7 +18,6 @@
  */
 
 #include <o3tl/numeric.hxx>
-#include <tools/bigint.hxx>
 
 #include <vcl/virdev.hxx>
 #include <vcl/wrkwin.hxx>
@@ -39,7 +38,7 @@ static const o3tl::enumarray<MapUnit,long> aImplDenominatorAry =
 
 /*
 Reduces accuracy until it is a fraction (should become
-ctor fraction once); we could also do this with BigInts
+ctor fraction once); we could also do this with sal_Int64s
 */
 
 static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
@@ -83,7 +82,7 @@ static Fraction ImplMakeFraction( long nN1, long nN2, long nD1, long nD2 )
 // rMapRes.nMapScNum?
 // rMapRes.nMapScDenom?         > 0
 
-static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
+static void ImplCalcsal_Int64Threshold( long nDPIX, long nDPIY,
                                      const ImplMapRes& rMapRes,
                                      ImplThresholdRes& rThresRes )
 {
@@ -94,7 +93,7 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
     }
     else
     {
-        // calculate thresholds for BigInt arithmetic
+        // calculate thresholds for sal_Int64 arithmetic
         long    nDenomHalfX = rMapRes.mnMapScDenomX / 2;
         sal_uLong   nDenomX     = rMapRes.mnMapScDenomX;
         long    nProductX   = nDPIX * rMapRes.mnMapScNumX;
@@ -119,7 +118,7 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
     }
     else
     {
-        // calculate thresholds for BigInt arithmetic
+        // calculate thresholds for sal_Int64 arithmetic
         long    nDenomHalfY = rMapRes.mnMapScDenomY / 2;
         sal_uLong   nDenomY     = rMapRes.mnMapScDenomY;
         long    nProductY   = nDPIY * rMapRes.mnMapScNumY;
@@ -267,41 +266,41 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
         rMapRes.mfOffsetY /= aScaleY.GetNumerator();
         rMapRes.mfOffsetY += aOrigin.Y();
 
-        BigInt aX( rMapRes.mnMapOfsX );
-        aX *= BigInt( aScaleX.GetDenominator() );
+        sal_Int64 aX( rMapRes.mnMapOfsX );
+        aX *= sal_Int64( aScaleX.GetDenominator() );
         if ( rMapRes.mnMapOfsX >= 0 )
         {
             if ( aScaleX.GetNumerator() >= 0 )
-                aX += BigInt( aScaleX.GetNumerator()/2 );
+                aX += sal_Int64( aScaleX.GetNumerator()/2 );
             else
-                aX -= BigInt( (aScaleX.GetNumerator()+1)/2 );
+                aX -= sal_Int64( (aScaleX.GetNumerator()+1)/2 );
         }
         else
         {
             if ( aScaleX.GetNumerator() >= 0 )
-                aX -= BigInt( (aScaleX.GetNumerator()-1)/2 );
+                aX -= sal_Int64( (aScaleX.GetNumerator()-1)/2 );
             else
-                aX += BigInt( aScaleX.GetNumerator()/2 );
+                aX += sal_Int64( aScaleX.GetNumerator()/2 );
         }
-        aX /= BigInt( aScaleX.GetNumerator() );
+        aX /= sal_Int64( aScaleX.GetNumerator() );
         rMapRes.mnMapOfsX = (long)aX + aOrigin.X();
-        BigInt aY( rMapRes.mnMapOfsY );
-        aY *= BigInt( aScaleY.GetDenominator() );
+        sal_Int64 aY( rMapRes.mnMapOfsY );
+        aY *= sal_Int64( aScaleY.GetDenominator() );
         if( rMapRes.mnMapOfsY >= 0 )
         {
             if ( aScaleY.GetNumerator() >= 0 )
-                aY += BigInt( aScaleY.GetNumerator()/2 );
+                aY += sal_Int64( aScaleY.GetNumerator()/2 );
             else
-                aY -= BigInt( (aScaleY.GetNumerator()+1)/2 );
+                aY -= sal_Int64( (aScaleY.GetNumerator()+1)/2 );
         }
         else
         {
             if ( aScaleY.GetNumerator() >= 0 )
-                aY -= BigInt( (aScaleY.GetNumerator()-1)/2 );
+                aY -= sal_Int64( (aScaleY.GetNumerator()-1)/2 );
             else
-                aY += BigInt( aScaleY.GetNumerator()/2 );
+                aY += sal_Int64( aScaleY.GetNumerator()/2 );
         }
-        aY /= BigInt( aScaleY.GetNumerator() );
+        aY /= sal_Int64( aScaleY.GetNumerator() );
         rMapRes.mnMapOfsY = (long)aY + aOrigin.Y();
     }
 
@@ -332,7 +331,7 @@ inline void ImplCalcMapResolution( const MapMode& rMapMode,
                                    ImplThresholdRes& rThresRes )
 {
     ImplCalcMapResolution( rMapMode, nDPIX, nDPIY, rMapRes );
-    ImplCalcBigIntThreshold( nDPIX, nDPIY, rMapRes, rThresRes );
+    ImplCalcsal_Int64Threshold( nDPIX, nDPIY, rMapRes, rThresRes );
 }
 
 // #i75163#
@@ -1564,18 +1563,18 @@ static long fn5( const long n1,
     if ( LONG_MAX / std::abs(n2) < std::abs(n3) )
     {
         // a6 is skipped
-        BigInt a7 = n2;
+        sal_Int64 a7 = n2;
         a7 *= n3;
         a7 *= n1;
 
         if ( LONG_MAX / std::abs(n4) < std::abs(n5) )
         {
-            BigInt a8 = n4;
+            sal_Int64 a8 = n4;
             a8 *= n5;
 
-            BigInt a9 = a8;
+            sal_Int64 a9 = a8;
             a9 /= 2;
-            if ( a7.IsNeg() )
+            if ( a7 < 0 )
                 a7 -= a9;
             else
                 a7 += a9;
@@ -1586,7 +1585,7 @@ static long fn5( const long n1,
         {
             long n8 = n4 * n5;
 
-            if ( a7.IsNeg() )
+            if ( a7 < 0 )
                 a7 -= n8 / 2;
             else
                 a7 += n8 / 2;
@@ -1601,17 +1600,17 @@ static long fn5( const long n1,
 
         if ( LONG_MAX / std::abs(n1) < std::abs(n6) )
         {
-            BigInt a7 = n1;
+            sal_Int64 a7 = n1;
             a7 *= n6;
 
             if ( LONG_MAX / std::abs(n4) < std::abs(n5) )
             {
-                BigInt a8 = n4;
+                sal_Int64 a8 = n4;
                 a8 *= n5;
 
-                BigInt a9 = a8;
+                sal_Int64 a9 = a8;
                 a9 /= 2;
-                if ( a7.IsNeg() )
+                if ( a7 < 0 )
                     a7 -= a9;
                 else
                     a7 += a9;
@@ -1622,7 +1621,7 @@ static long fn5( const long n1,
             {
                 long n8 = n4 * n5;
 
-                if ( a7.IsNeg() )
+                if ( a7 < 0 )
                     a7 -= n8 / 2;
                 else
                     a7 += n8 / 2;
@@ -1637,13 +1636,13 @@ static long fn5( const long n1,
 
             if ( LONG_MAX / std::abs(n4) < std::abs(n5) )
             {
-                BigInt a7 = n7;
-                BigInt a8 = n4;
+                sal_Int64 a7 = n7;
+                sal_Int64 a8 = n4;
                 a8 *= n5;
 
-                BigInt a9 = a8;
+                sal_Int64 a9 = a8;
                 a9 /= 2;
-                if ( a7.IsNeg() )
+                if ( a7 < 0 )
                     a7 -= a9;
                 else
                     a7 += a9;
@@ -1677,10 +1676,10 @@ static long fn3( const long n1, const long n2, const long n3 )
         return 0;
     if ( LONG_MAX / std::abs(n1) < std::abs(n2) )
     {
-        BigInt a4 = n1;
+        sal_Int64 a4 = n1;
         a4 *= n2;
 
-        if ( a4.IsNeg() )
+        if ( a4 < 0 )
             a4 -= n3 / 2;
         else
             a4 += n3 / 2;

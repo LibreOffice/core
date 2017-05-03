@@ -23,7 +23,6 @@
 #include <svx/xpoly.hxx>
 
 #include <vcl/virdev.hxx>
-#include <tools/bigint.hxx>
 #include <tools/debug.hxx>
 #include <unotools/syslocale.hxx>
 
@@ -554,9 +553,9 @@ void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho)
 
 long BigMulDiv(long nVal, long nMul, long nDiv)
 {
-    BigInt aVal(nVal);
+    sal_Int64 aVal(nVal);
     aVal*=nMul;
-    if (aVal.IsNeg()!=(nDiv<0)) {
+    if ((aVal<0)!=(nDiv<0)) {
         aVal-=nDiv/2; // to round correctly
     } else {
         aVal+=nDiv/2; // to round correctly
