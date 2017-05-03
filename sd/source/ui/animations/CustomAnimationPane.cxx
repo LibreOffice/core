@@ -130,6 +130,7 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     mrBase( rBase ),
     mpCustomAnimationPresets(nullptr),
     mnPropertyType( nPropertyTypeNone ),
+    mnMotionPathPos( 3 ),
     mnCurvePathPos( LISTBOX_ENTRY_NOTFOUND ),
     mnPolygonPathPos( LISTBOX_ENTRY_NOTFOUND ),
     mnFreeformPathPos( LISTBOX_ENTRY_NOTFOUND ),
@@ -146,6 +147,7 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     mrBase( rBase ),
     mpCustomAnimationPresets(nullptr),
     mnPropertyType( nPropertyTypeNone ),
+    mnMotionPathPos( 3 ),
     mnCurvePathPos( LISTBOX_ENTRY_NOTFOUND ),
     mnPolygonPathPos( LISTBOX_ENTRY_NOTFOUND ),
     mnFreeformPathPos( LISTBOX_ENTRY_NOTFOUND ),
@@ -1980,7 +1982,8 @@ PathKind CustomAnimationPane::getCreatePathKind() const
 {
     PathKind eKind = PathKind::NONE;
 
-    if( mpLBAnimation->GetSelectEntryCount() == 1 )
+    if( ( mpLBAnimation->GetSelectEntryCount() == 1 ) &&
+        ( mpLBCategory->GetSelectEntryPos() == mnMotionPathPos ) )
     {
         const sal_Int32 nPos = mpLBAnimation->GetSelectEntryPos();
         if( nPos == mnCurvePathPos )
@@ -2167,7 +2170,7 @@ sal_uInt32 CustomAnimationPane::fillAnimationLB( bool bHasText )
     const PresetCategoryList::const_iterator aCategoryEnd( rCategoryList.end() );
     mpLBAnimation->Clear();
 
-    if(nPosition == 3)
+    if(nPosition == mnMotionPathPos)
     {
         OUString sMotionPathLabel( SD_RESSTR( STR_CUSTOMANIMATION_USERPATH ) );
         mpLBAnimation->InsertCategory( sMotionPathLabel );
