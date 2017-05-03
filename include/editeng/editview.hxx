@@ -214,8 +214,8 @@ public:
     const SfxStyleSheet* GetStyleSheet() const;
     SfxStyleSheet* GetStyleSheet();
 
-    void            SetAnchorMode( EVAnchorMode eMode );
-    EVAnchorMode    GetAnchorMode() const;
+    void            SetAnchorMode( EEAnchorMode eMode );
+    EEAnchorMode    GetAnchorMode() const;
 
     void            CompleteAutoCorrect( vcl::Window* pFrameWin = nullptr );
 

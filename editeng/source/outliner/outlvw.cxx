@@ -1320,12 +1320,12 @@ EVControlBits OutlinerView::GetControlWord() const
     return pEditView->GetControlWord();
 }
 
-void OutlinerView::SetAnchorMode( EVAnchorMode eMode )
+void OutlinerView::SetAnchorMode( EEAnchorMode eMode )
 {
     pEditView->SetAnchorMode( eMode );
 }
 
-EVAnchorMode OutlinerView::GetAnchorMode() const
+EEAnchorMode OutlinerView::GetAnchorMode() const
 {
     return pEditView->GetAnchorMode();
 }

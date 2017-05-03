@@ -725,12 +725,12 @@ void EditView::SetInsertMode( bool bInsert )
     pImpEditView->SetInsertMode( bInsert );
 }
 
-void EditView::SetAnchorMode( EVAnchorMode eMode )
+void EditView::SetAnchorMode( EEAnchorMode eMode )
 {
     pImpEditView->SetAnchorMode( eMode );
 }
 
-EVAnchorMode EditView::GetAnchorMode() const
+EEAnchorMode EditView::GetAnchorMode() const
 {
     return pImpEditView->GetAnchorMode();
 }
