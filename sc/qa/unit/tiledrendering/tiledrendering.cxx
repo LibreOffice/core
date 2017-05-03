@@ -1322,8 +1322,6 @@ void ScTiledRenderingTest::testDocumentSizeWithTwoViews()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::PAGEDOWN);
     Scheduler::ProcessEventsToIdle();
 
-    Size aDocSize = pModelObj->getDocumentSize();
-
     int nCanvasWidth = 256;
     int nCanvasHeight = 256;
     std::vector<unsigned char> aBuffer1(nCanvasWidth * nCanvasHeight * 4);
@@ -1334,7 +1332,6 @@ void ScTiledRenderingTest::testDocumentSizeWithTwoViews()
 
     // Create a new view
     SfxLokHelper::createView();
-    Size aViewSize = pModelObj->getDocumentSize();
 
     std::vector<unsigned char> aBuffer2(nCanvasWidth * nCanvasHeight * 4);
     ScopedVclPtrInstance<VirtualDevice> pDevice2(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
@@ -1342,10 +1339,7 @@ void ScTiledRenderingTest::testDocumentSizeWithTwoViews()
     pModelObj->paintTile(*pDevice2.get(), nCanvasWidth, nCanvasHeight, /*nTilePosX=*/0, /*nTilePosY=*/291840, /*nTileWidth=*/3840, /*nTileHeight=*/3840);
     Scheduler::ProcessEventsToIdle();
 
-    // Make sure the newly created view has the same size as the original one
-    CPPUNIT_ASSERT_EQUAL(aDocSize, aViewSize);
-
-    // and that the tiles actually have the same content
+    // Check that the tiles actually have the same content
     for (size_t i = 0; i < aBuffer1.size(); ++i)
         CPPUNIT_ASSERT_EQUAL(aBuffer1[i], aBuffer2[i]);
 

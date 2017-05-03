@@ -1140,24 +1140,17 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
 
-    SCCOL nEndCol = 0;
-    SCROW nEndRow = 0;
-
-    // size of the document including drawings, charts, etc.
-    pDoc->GetTiledRenderingArea(nTab, nEndCol, nEndRow);
-
     const double fPPTX = pViewData->GetPPTX();
     const double fPPTY = pViewData->GetPPTY();
 
-    ScTableInfo aTabInfo(nEndRow + 3);
     sal_Int32 nTopLeftTileRowOffset = 0;
     sal_Int32 nTopLeftTileColOffset = 0;
     sal_Int32 nTopLeftTileRowOrigin = 0;
     sal_Int32 nTopLeftTileColOrigin = 0;
 
     // find approximate col/row offsets of nearby.
-    sal_Int32 nTopLeftTileRow =0;
-    sal_Int32 nTopLeftTileCol =0;
+    sal_Int32 nTopLeftTileRow = 0;
+    sal_Int32 nTopLeftTileCol = 0;
     sal_Int32 nBottomRightTileRow = 0;
     sal_Int32 nBottomRightTileCol = 0;
     sal_Int32 nDummy;
@@ -1175,12 +1168,25 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     nBottomRightTileCol++;
     nBottomRightTileRow++;
 
-    nTopLeftTileCol = std::min(nTopLeftTileCol, (sal_Int32)nEndCol);
-    nTopLeftTileRow = std::min(nTopLeftTileRow, (sal_Int32)nEndRow);
+    // size of the document including drawings, charts, etc.
+    SCCOL nEndCol = 0;
+    SCROW nEndRow = 0;
+    pDoc->GetTiledRenderingArea(nTab, nEndCol, nEndRow);
+
+    if (nEndCol < nBottomRightTileCol)
+    {
+        nEndCol = nBottomRightTileCol;
+        pViewData->SetMaxTiledCol(nEndCol);
+    }
+
+    if (nEndRow < nBottomRightTileRow)
+    {
+        nEndRow = nBottomRightTileRow;
+        pViewData->SetMaxTiledRow(nEndRow);
+    }
+
     nTopLeftTileCol = std::max<sal_Int32>(nTopLeftTileCol, 0);
     nTopLeftTileRow = std::max<sal_Int32>(nTopLeftTileRow, 0);
-    nBottomRightTileCol = std::min(nBottomRightTileCol, (sal_Int32)nEndCol);
-    nBottomRightTileRow = std::min(nBottomRightTileRow, (sal_Int32)nEndRow);
     nTopLeftTileColOrigin = nTopLeftTileColOrigin * TWIPS_PER_PIXEL;
     nTopLeftTileRowOrigin = nTopLeftTileRowOrigin * TWIPS_PER_PIXEL;
 
@@ -1194,6 +1200,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     aAbsMode.SetOrigin(aOrigin);
     rDevice.SetMapMode(aAbsMode);
 
+    ScTableInfo aTabInfo(nEndRow + 3);
     pDoc->FillInfo(aTabInfo, nTopLeftTileCol, nTopLeftTileRow,
                    nBottomRightTileCol, nBottomRightTileRow,
                    nTab, fPPTX, fPPTY, false, false);
