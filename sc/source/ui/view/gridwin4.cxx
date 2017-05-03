@@ -1174,16 +1174,10 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     pDoc->GetTiledRenderingArea(nTab, nEndCol, nEndRow);
 
     if (nEndCol < nBottomRightTileCol)
-    {
         nEndCol = nBottomRightTileCol;
-        pViewData->SetMaxTiledCol(nEndCol);
-    }
 
     if (nEndRow < nBottomRightTileRow)
-    {
         nEndRow = nBottomRightTileRow;
-        pViewData->SetMaxTiledRow(nEndRow);
-    }
 
     nTopLeftTileCol = std::max<sal_Int32>(nTopLeftTileCol, 0);
     nTopLeftTileRow = std::max<sal_Int32>(nTopLeftTileRow, 0);
