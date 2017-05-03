@@ -333,7 +333,7 @@ double SAL_CALL AnalysisAddIn::getYielddisc( const css::uno::Reference< css::bea
 double SAL_CALL AnalysisAddIn::getYieldmat( const css::uno::Reference< css::beans::XPropertySet >& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, double fRate, double fPrice, const css::uno::Any& rOB )
 {
-    if( fPrice <= 0.0 || fRate <= 0.0 || nSettle >= nMat )
+    if( fPrice <= 0.0 || fRate < 0.0 || nSettle >= nMat || nSettle < nIssue)
         throw css::lang::IllegalArgumentException();
 
     double fRet = GetYieldmat( GetNullDate( xOpt ),  nSettle, nMat, nIssue, fRate, fPrice, getDateMode( xOpt, rOB ) );
