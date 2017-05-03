@@ -2092,7 +2092,7 @@ RTLFUNC(CDateFromIso)
                 if (!comphelper::string::isdigitAsciiString(aStr))
                     break;
 
-                const sal_Int32 nMonthPos = (nLen == 6 ? 2 : (nLen == 9 ? 5 : 4));
+                const sal_Int32 nMonthPos = (nLen == 8 ? 4 : (nLen == 6 ? 2 : 5));
                 if (nMonthPos == 2)
                     bUseTwoDigitYear = true;
                 aYearStr  = aStr.copy( 0, nMonthPos );
