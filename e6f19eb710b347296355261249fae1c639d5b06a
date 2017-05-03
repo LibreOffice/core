@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_dd1a406e",
+        "filename": "include/editeng/editdata.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-03T18:55:53Z",
+      "side": 1,
+      "message": "are you sure it\u0027s safe to re-order them? sometimes these values can sneak into binary formas.\nand why EVAnchorMode and not EEAnchorMode, to match the other stuff defined here?",
+      "revId": "e6f19eb710b347296355261249fae1c639d5b06a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
