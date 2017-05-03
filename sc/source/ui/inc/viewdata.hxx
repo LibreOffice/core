@@ -333,6 +333,8 @@ public:
     SCROW           GetPosY( ScVSplitPos eWhich ) const     { return pThisTab->nPosY[eWhich]; }
     SCCOL           GetCurX() const                         { return pThisTab->nCurX; }
     SCROW           GetCurY() const                         { return pThisTab->nCurY; }
+    SCCOL           GetCurXForTab( SCTAB nTabIndex ) const;
+    SCROW           GetCurYForTab( SCTAB nTabIndex ) const;
     SCCOL           GetOldCurX() const;
     SCROW           GetOldCurY() const;
     SCCOL           GetLOKOldCurX() const                   { return pThisTab->nLOKOldCurX; }
@@ -342,6 +344,9 @@ public:
 
     ScPositionHelper& GetLOKWidthHelper()                   { return pThisTab->aWidthHelper; }
     ScPositionHelper& GetLOKHeightHelper()                  { return pThisTab->aHeightHelper; }
+
+    ScPositionHelper* GetLOKWidthHelper(SCTAB nTabIndex);
+    ScPositionHelper* GetLOKHeightHelper(SCTAB nTabIndex);
 
     ScSplitMode     GetHSplitMode() const                   { return pThisTab->eHSplitMode; }
     ScSplitMode     GetVSplitMode() const                   { return pThisTab->eVSplitMode; }
@@ -360,6 +365,8 @@ public:
     void            SetPosY( ScVSplitPos eWhich, SCROW nNewPosY );
     void            SetCurX( SCCOL nNewCurX )                       { pThisTab->nCurX = nNewCurX; }
     void            SetCurY( SCROW nNewCurY )                       { pThisTab->nCurY = nNewCurY; }
+    void            SetCurXForTab( SCCOL nNewCurX, SCTAB nTabIndex );
+    void            SetCurYForTab( SCCOL nNewCurY, SCTAB nTabIndex );
     void            SetOldCursor( SCCOL nNewX, SCROW nNewY );
     void            ResetOldCursor();
     void            SetLOKOldCurX( SCCOL nCurX )                    { pThisTab->nLOKOldCurX = nCurX; }

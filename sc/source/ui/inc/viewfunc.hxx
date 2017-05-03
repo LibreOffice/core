@@ -320,6 +320,11 @@ public:
                                      std::vector<VclPtr<Edit> >& aEdits,
                                      sal_uInt16 aColLength );
     void            UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAttr = nullptr );
+
+    void            OnLOKInsertDeleteColumn(SCCOL nStartCol, long nOffset);
+    void            OnLOKInsertDeleteRow(SCROW nStartRow, long nOffset);
+    void            OnLOKSetWidthOrHeight(SCCOLROW nStart, bool bWidth);
+
                                                 // Internal helper functions
 protected:
     static void     UpdateLineAttrs( ::editeng::SvxBorderLine&        rLine,

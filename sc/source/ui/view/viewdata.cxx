@@ -1122,6 +1122,38 @@ void ScViewData::ResetOldCursor()
     pThisTab->mbOldCursorValid = false;
 }
 
+SCCOL ScViewData::GetCurXForTab( SCTAB nTabIndex ) const
+{
+    if (!ValidTab(nTabIndex) || !(nTabIndex < static_cast<SCTAB>(maTabData.size())))
+        return -1;
+
+    return maTabData[nTabIndex]->nCurX;
+}
+
+SCROW ScViewData::GetCurYForTab( SCTAB nTabIndex ) const
+{
+    if (!ValidTab(nTabIndex) || !(nTabIndex < static_cast<SCTAB>(maTabData.size())))
+            return -1;
+
+    return maTabData[nTabIndex]->nCurY;
+}
+
+void ScViewData::SetCurXForTab( SCCOL nNewCurX, SCTAB nTabIndex )
+{
+    if (!ValidTab(nTabIndex) || !(nTabIndex < static_cast<SCTAB>(maTabData.size())))
+            return;
+
+    maTabData[nTabIndex]->nCurX = nNewCurX;
+}
+
+void ScViewData::SetCurYForTab( SCCOL nNewCurY, SCTAB nTabIndex )
+{
+    if (!ValidTab(nTabIndex) || !(nTabIndex < static_cast<SCTAB>(maTabData.size())))
+            return;
+
+    maTabData[nTabIndex]->nCurY = nNewCurY;
+}
+
 void ScViewData::SetMaxTiledCol( SCCOL nNewMaxCol )
 {
     if (nNewMaxCol < 0)
@@ -1824,6 +1856,24 @@ void ScViewData::SetTabNo( SCTAB nNewTab )
 
     CalcPPT();          //  for common column width correction
     RecalcPixPos();     //! not always needed!
+}
+
+ScPositionHelper* ScViewData::GetLOKWidthHelper(SCTAB nTabIndex)
+{
+    if (!ValidTab(nTabIndex) || !(nTabIndex < static_cast<SCTAB>(maTabData.size())))
+    {
+        return nullptr;
+    }
+    return &(maTabData[nTabIndex]->aWidthHelper);
+}
+
+ScPositionHelper* ScViewData::GetLOKHeightHelper(SCTAB nTabIndex)
+{
+    if (!ValidTab(nTabIndex) || !(nTabIndex < static_cast<SCTAB>(maTabData.size())))
+    {
+        return nullptr;
+    }
+    return &(maTabData[nTabIndex]->aHeightHelper);
 }
 
 void ScViewData::SetActivePart( ScSplitPos eNewActive )
