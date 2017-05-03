@@ -3524,6 +3524,8 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
         case 0x14:
             if( !m_bSpec )        // "Para End" char
                 cInsert = u'\x00b5';
+                    //TODO: should this be U+00B6 PILCROW SIGN rather than
+                    // U+00B5 MICRO SIGN?
             break;
         case 0x15:
             if( !m_bSpec )        // Juristenparagraph
