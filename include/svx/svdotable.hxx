@@ -229,7 +229,7 @@ public:
     virtual void EndTextEdit(SdrOutliner& rOutl) override;
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const override;
     void TakeTextEditArea(const sdr::table::CellPos& rPos, Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const;
-    virtual sal_uInt16 GetOutlinerViewAnchorMode() const override;
+    virtual EEAnchorMode GetOutlinerViewAnchorMode() const override;
 
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject) override;
 

@@ -1313,7 +1313,7 @@ void SdrMeasureObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Re
     SdrTextObj::TakeTextEditArea(pPaperMin,pPaperMax,pViewInit,pViewMin);
 }
 
-sal_uInt16 SdrMeasureObj::GetOutlinerViewAnchorMode() const
+EEAnchorMode SdrMeasureObj::GetOutlinerViewAnchorMode() const
 {
     if (bTextDirty) UndirtyText();
     ImpMeasureRec aRec;
@@ -1350,21 +1350,21 @@ sal_uInt16 SdrMeasureObj::GetOutlinerViewAnchorMode() const
         if (eMV==css::drawing::MeasureTextVertPos_CENTERED) eTH=SDRTEXTHORZADJUST_CENTER;
     }
 
-    EVAnchorMode eRet=ANCHOR_BOTTOM_HCENTER;
+    EEAnchorMode eRet=EEAnchorMode::BottomHCenter;
     if (eTH==SDRTEXTHORZADJUST_LEFT) {
-        if (eTV==SDRTEXTVERTADJUST_TOP) eRet=ANCHOR_TOP_LEFT;
-        else if (eTV==SDRTEXTVERTADJUST_BOTTOM) eRet=ANCHOR_BOTTOM_LEFT;
-        else eRet=ANCHOR_VCENTER_LEFT;
+        if (eTV==SDRTEXTVERTADJUST_TOP) eRet=EEAnchorMode::TopLeft;
+        else if (eTV==SDRTEXTVERTADJUST_BOTTOM) eRet=EEAnchorMode::BottomLeft;
+        else eRet=EEAnchorMode::VCenterLeft;
     } else if (eTH==SDRTEXTHORZADJUST_RIGHT) {
-        if (eTV==SDRTEXTVERTADJUST_TOP) eRet=ANCHOR_TOP_RIGHT;
-        else if (eTV==SDRTEXTVERTADJUST_BOTTOM) eRet=ANCHOR_BOTTOM_RIGHT;
-        else eRet=ANCHOR_VCENTER_RIGHT;
+        if (eTV==SDRTEXTVERTADJUST_TOP) eRet=EEAnchorMode::TopRight;
+        else if (eTV==SDRTEXTVERTADJUST_BOTTOM) eRet=EEAnchorMode::BottomRight;
+        else eRet=EEAnchorMode::VCenterRight;
     } else {
-        if (eTV==SDRTEXTVERTADJUST_TOP) eRet=ANCHOR_TOP_HCENTER;
-        else if (eTV==SDRTEXTVERTADJUST_BOTTOM) eRet=ANCHOR_BOTTOM_HCENTER;
-        else eRet=ANCHOR_VCENTER_HCENTER;
+        if (eTV==SDRTEXTVERTADJUST_TOP) eRet=EEAnchorMode::TopHCenter;
+        else if (eTV==SDRTEXTVERTADJUST_BOTTOM) eRet=EEAnchorMode::BottomHCenter;
+        else eRet=EEAnchorMode::VCenterHCenter;
     }
-    return (sal_uInt16)eRet;
+    return eRet;
 }
 
 

@@ -309,38 +309,38 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
     mbInEditMode = false;
 }
 
-sal_uInt16 SdrTextObj::GetOutlinerViewAnchorMode() const
+EEAnchorMode SdrTextObj::GetOutlinerViewAnchorMode() const
 {
     SdrTextHorzAdjust eH=GetTextHorizontalAdjust();
     SdrTextVertAdjust eV=GetTextVerticalAdjust();
-    EVAnchorMode eRet=ANCHOR_TOP_LEFT;
-    if (IsContourTextFrame()) return (sal_uInt16)eRet;
+    EEAnchorMode eRet=EEAnchorMode::TopLeft;
+    if (IsContourTextFrame()) return eRet;
     if (eH==SDRTEXTHORZADJUST_LEFT) {
         if (eV==SDRTEXTVERTADJUST_TOP) {
-            eRet=ANCHOR_TOP_LEFT;
+            eRet=EEAnchorMode::TopLeft;
         } else if (eV==SDRTEXTVERTADJUST_BOTTOM) {
-            eRet=ANCHOR_BOTTOM_LEFT;
+            eRet=EEAnchorMode::BottomLeft;
         } else {
-            eRet=ANCHOR_VCENTER_LEFT;
+            eRet=EEAnchorMode::VCenterLeft;
         }
     } else if (eH==SDRTEXTHORZADJUST_RIGHT) {
         if (eV==SDRTEXTVERTADJUST_TOP) {
-            eRet=ANCHOR_TOP_RIGHT;
+            eRet=EEAnchorMode::TopRight;
         } else if (eV==SDRTEXTVERTADJUST_BOTTOM) {
-            eRet=ANCHOR_BOTTOM_RIGHT;
+            eRet=EEAnchorMode::BottomRight;
         } else {
-            eRet=ANCHOR_VCENTER_RIGHT;
+            eRet=EEAnchorMode::VCenterRight;
         }
     } else {
         if (eV==SDRTEXTVERTADJUST_TOP) {
-            eRet=ANCHOR_TOP_HCENTER;
+            eRet=EEAnchorMode::TopHCenter;
         } else if (eV==SDRTEXTVERTADJUST_BOTTOM) {
-            eRet=ANCHOR_BOTTOM_HCENTER;
+            eRet=EEAnchorMode::BottomHCenter;
         } else {
-            eRet=ANCHOR_VCENTER_HCENTER;
+            eRet=EEAnchorMode::VCenterHCenter;
         }
     }
-    return (sal_uInt16)eRet;
+    return eRet;
 }
 
 void SdrTextObj::ImpSetTextEditParams() const

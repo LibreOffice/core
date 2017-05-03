@@ -89,7 +89,7 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     bReadOnly           = false;
     bClickedInSelection = false;
     eSelectionMode      = EE_SELMODE_TXTONLY;
-    eAnchorMode         = ANCHOR_TOP_LEFT;
+    eAnchorMode         = EEAnchorMode::TopLeft;
     nInvMore            = 1;
     nTravelXPos         = TRAVEL_X_DONTKNOW;
     nControl            = EVControlBits::AUTOSCROLL | EVControlBits::ENABLEPASTE;
@@ -691,23 +691,23 @@ void ImpEditView::RecalcOutputArea()
             aNewSz.Width() = pEditEngine->pImpEditEngine->GetPaperSize().Width();
         switch ( eAnchorMode )
         {
-            case ANCHOR_TOP_LEFT:
-            case ANCHOR_VCENTER_LEFT:
-            case ANCHOR_BOTTOM_LEFT:
+            case EEAnchorMode::TopLeft:
+            case EEAnchorMode::VCenterLeft:
+            case EEAnchorMode::BottomLeft:
             {
                 aNewTopLeft.X() = aAnchorPoint.X();
             }
             break;
-            case ANCHOR_TOP_HCENTER:
-            case ANCHOR_VCENTER_HCENTER:
-            case ANCHOR_BOTTOM_HCENTER:
+            case EEAnchorMode::TopHCenter:
+            case EEAnchorMode::VCenterHCenter:
+            case EEAnchorMode::BottomHCenter:
             {
                 aNewTopLeft.X() = aAnchorPoint.X() - aNewSz.Width() / 2;
             }
             break;
-            case ANCHOR_TOP_RIGHT:
-            case ANCHOR_VCENTER_RIGHT:
-            case ANCHOR_BOTTOM_RIGHT:
+            case EEAnchorMode::TopRight:
+            case EEAnchorMode::VCenterRight:
+            case EEAnchorMode::BottomRight:
             {
                 aNewTopLeft.X() = aAnchorPoint.X() - aNewSz.Width() - 1;
             }
@@ -722,23 +722,23 @@ void ImpEditView::RecalcOutputArea()
             aNewSz.Height() = pEditEngine->pImpEditEngine->GetPaperSize().Height();
         switch ( eAnchorMode )
         {
-            case ANCHOR_TOP_LEFT:
-            case ANCHOR_TOP_HCENTER:
-            case ANCHOR_TOP_RIGHT:
+            case EEAnchorMode::TopLeft:
+            case EEAnchorMode::TopHCenter:
+            case EEAnchorMode::TopRight:
             {
                 aNewTopLeft.Y() = aAnchorPoint.Y();
             }
             break;
-            case ANCHOR_VCENTER_LEFT:
-            case ANCHOR_VCENTER_HCENTER:
-            case ANCHOR_VCENTER_RIGHT:
+            case EEAnchorMode::VCenterLeft:
+            case EEAnchorMode::VCenterHCenter:
+            case EEAnchorMode::VCenterRight:
             {
                 aNewTopLeft.Y() = aAnchorPoint.Y() - aNewSz.Height() / 2;
             }
             break;
-            case ANCHOR_BOTTOM_LEFT:
-            case ANCHOR_BOTTOM_HCENTER:
-            case ANCHOR_BOTTOM_RIGHT:
+            case EEAnchorMode::BottomLeft:
+            case EEAnchorMode::BottomHCenter:
+            case EEAnchorMode::BottomRight:
             {
                 aNewTopLeft.Y() = aAnchorPoint.Y() - aNewSz.Height() - 1;
             }
@@ -748,7 +748,7 @@ void ImpEditView::RecalcOutputArea()
     ResetOutputArea( tools::Rectangle( aNewTopLeft, aNewSz ) );
 }
 
-void ImpEditView::SetAnchorMode( EVAnchorMode eMode )
+void ImpEditView::SetAnchorMode( EEAnchorMode eMode )
 {
     eAnchorMode = eMode;
     CalcAnchorPoint();
@@ -761,23 +761,23 @@ void ImpEditView::CalcAnchorPoint()
     // X:
     switch ( eAnchorMode )
     {
-        case ANCHOR_TOP_LEFT:
-        case ANCHOR_VCENTER_LEFT:
-        case ANCHOR_BOTTOM_LEFT:
+        case EEAnchorMode::TopLeft:
+        case EEAnchorMode::VCenterLeft:
+        case EEAnchorMode::BottomLeft:
         {
             aAnchorPoint.X() = aOutArea.Left();
         }
         break;
-        case ANCHOR_TOP_HCENTER:
-        case ANCHOR_VCENTER_HCENTER:
-        case ANCHOR_BOTTOM_HCENTER:
+        case EEAnchorMode::TopHCenter:
+        case EEAnchorMode::VCenterHCenter:
+        case EEAnchorMode::BottomHCenter:
         {
             aAnchorPoint.X() = aOutArea.Left() + (aOutArea.GetWidth()-1) / 2;
         }
         break;
-        case ANCHOR_TOP_RIGHT:
-        case ANCHOR_VCENTER_RIGHT:
-        case ANCHOR_BOTTOM_RIGHT:
+        case EEAnchorMode::TopRight:
+        case EEAnchorMode::VCenterRight:
+        case EEAnchorMode::BottomRight:
         {
             aAnchorPoint.X() = aOutArea.Right();
         }
@@ -787,23 +787,23 @@ void ImpEditView::CalcAnchorPoint()
     // Y:
     switch ( eAnchorMode )
     {
-        case ANCHOR_TOP_LEFT:
-        case ANCHOR_TOP_HCENTER:
-        case ANCHOR_TOP_RIGHT:
+        case EEAnchorMode::TopLeft:
+        case EEAnchorMode::TopHCenter:
+        case EEAnchorMode::TopRight:
         {
             aAnchorPoint.Y() = aOutArea.Top();
         }
         break;
-        case ANCHOR_VCENTER_LEFT:
-        case ANCHOR_VCENTER_HCENTER:
-        case ANCHOR_VCENTER_RIGHT:
+        case EEAnchorMode::VCenterLeft:
+        case EEAnchorMode::VCenterHCenter:
+        case EEAnchorMode::VCenterRight:
         {
             aAnchorPoint.Y() = aOutArea.Top() + (aOutArea.GetHeight()-1) / 2;
         }
         break;
-        case ANCHOR_BOTTOM_LEFT:
-        case ANCHOR_BOTTOM_HCENTER:
-        case ANCHOR_BOTTOM_RIGHT:
+        case EEAnchorMode::BottomLeft:
+        case EEAnchorMode::BottomHCenter:
+        case EEAnchorMode::BottomRight:
         {
             aAnchorPoint.Y() = aOutArea.Bottom() - 1;
         }

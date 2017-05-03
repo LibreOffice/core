@@ -287,8 +287,8 @@ public:
     void            SetControlWord( EVControlBits nWord );
     EVControlBits   GetControlWord() const;
 
-    void            SetAnchorMode( EVAnchorMode eMode );
-    EVAnchorMode    GetAnchorMode() const;
+    void            SetAnchorMode( EEAnchorMode eMode );
+    EEAnchorMode    GetAnchorMode() const;
 
     Pointer     GetPointer( const Point& rPosPixel );
     void        Command( const CommandEvent& rCEvt );

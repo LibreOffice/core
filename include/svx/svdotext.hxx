@@ -48,7 +48,7 @@ class ImpSdrObjTextLink;
 class EditStatus;
 class TextChain;
 class TextChainFlow;
-
+enum class EEAnchorMode;
 
 namespace sdr { namespace properties {
     class TextProperties;
@@ -487,7 +487,7 @@ public:
     virtual bool BegTextEdit(SdrOutliner& rOutl) override;
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, tools::Rectangle* pViewInit, tools::Rectangle* pViewMin) const;
     virtual void EndTextEdit(SdrOutliner& rOutl) override;
-    virtual sal_uInt16 GetOutlinerViewAnchorMode() const;
+    virtual EEAnchorMode GetOutlinerViewAnchorMode() const;
 
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject) override;
     void NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObject, SdrText* pText );

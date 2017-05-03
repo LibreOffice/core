@@ -257,7 +257,7 @@ private:
     Point               aVisDocStartPos;
     EESelectionMode     eSelectionMode;
     EditSelection       aEditSelection;
-    EVAnchorMode        eAnchorMode;
+    EEAnchorMode        eAnchorMode;
 
 protected:
 
@@ -345,8 +345,8 @@ public:
     bool            IsInSelection( const EditPaM& rPaM );
 
 
-    void            SetAnchorMode( EVAnchorMode eMode );
-    EVAnchorMode    GetAnchorMode() const           { return eAnchorMode; }
+    void            SetAnchorMode( EEAnchorMode eMode );
+    EEAnchorMode    GetAnchorMode() const           { return eAnchorMode; }
     void            CalcAnchorPoint();
     void            RecalcOutputArea();
 
