@@ -1520,7 +1520,7 @@ bool BrowseBox::GoToColumnId( sal_uInt16 nColId, bool bMakeVisible, bool bRowCol
         sal_uInt16 nFirstPos = nFirstCol;
         sal_uInt16 nWidth = (sal_uInt16)pColumn->Width();
         sal_uInt16 nLastPos = GetColumnAtXPosPixel(
-                            pDataWin->GetSizePixel().Width()-nWidth, false );
+                            pDataWin->GetSizePixel().Width()-nWidth );
         sal_uInt16 nFrozen = FrozenColCount();
         if ( bMakeVisible && nLastPos &&
              nNewPos >= nFrozen && ( nNewPos < nFirstPos || nNewPos > nLastPos ) )
@@ -2072,7 +2072,7 @@ tools::Rectangle BrowseBox::GetFieldRect( sal_uInt16 nColumnId ) const
 }
 
 
-sal_uInt16 BrowseBox::GetColumnAtXPosPixel( long nX, bool ) const
+sal_uInt16 BrowseBox::GetColumnAtXPosPixel( long nX ) const
 {
 
     // accumulate the widths of the visible columns

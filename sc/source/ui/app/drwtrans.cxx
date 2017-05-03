@@ -370,7 +370,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
                 pModel->SetSwapGraphicsMode( SdrSwapGraphicsMode::PURGE );
             }
 
-            bOK = SetAny( aOleData.GetAny(rFlavor, rDestDoc), rFlavor );
+            bOK = SetAny( aOleData.GetAny(rFlavor, rDestDoc) );
 
             if( pModel )
                 pModel->SetSwapGraphicsMode( nOldSwapMode );
@@ -383,7 +383,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
     {
         if ( nFormat == SotClipboardFormatId::LINKSRCDESCRIPTOR || nFormat == SotClipboardFormatId::OBJECTDESCRIPTOR )
         {
-            bOK = SetTransferableObjectDescriptor( aObjDesc, rFlavor );
+            bOK = SetTransferableObjectDescriptor( aObjDesc );
         }
         else if ( nFormat == SotClipboardFormatId::DRAWING )
         {
@@ -400,7 +400,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
             OSL_ENSURE( pPv, "pPv not there..." );
             aView.MarkAllObj( pPv );
             if ( nFormat == SotClipboardFormatId::GDIMETAFILE )
-                bOK = SetGDIMetaFile( aView.GetMarkedObjMetaFile(true), rFlavor );
+                bOK = SetGDIMetaFile( aView.GetMarkedObjMetaFile(true) );
             else
                 bOK = SetBitmapEx( aView.GetMarkedObjBitmapEx(true), rFlavor );
         }
@@ -416,7 +416,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
                 if (pObject && pObject->GetObjIdentifier() == OBJ_GRAF)
                 {
                     SdrGrafObj* pGraphObj = static_cast<SdrGrafObj*>(pObject);
-                    bOK = SetGraphic( pGraphObj->GetGraphic(), rFlavor );
+                    bOK = SetGraphic( pGraphObj->GetGraphic() );
                 }
             }
         }

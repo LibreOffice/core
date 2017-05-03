@@ -1149,7 +1149,7 @@ void TabBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& r
     if (!nItemCount)
         return;
 
-    ImplPrePaint(rRenderContext);
+    ImplPrePaint();
 
     Color aFaceColor, aSelectColor, aFaceTextColor, aSelectTextColor;
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
@@ -1528,7 +1528,7 @@ bool TabBar::ImplDeactivatePage()
     return bRet;
 }
 
-void TabBar::ImplPrePaint(vcl::RenderContext& /*rRenderContext*/)
+void TabBar::ImplPrePaint()
 {
     sal_uInt16 nItemCount = mpImpl->getItemSize();
     if (!nItemCount)

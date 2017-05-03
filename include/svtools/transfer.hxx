@@ -217,13 +217,13 @@ protected:
     bool                HasFormat( SotClipboardFormatId nFormat );
     void                ClearFormats();
 
-    bool                SetAny( const css::uno::Any& rAny, const css::datatransfer::DataFlavor& rFlavor );
+    bool                SetAny( const css::uno::Any& rAny );
     bool                SetString( const OUString& rString, const css::datatransfer::DataFlavor& rFlavor );
     bool                SetBitmapEx( const BitmapEx& rBitmap, const css::datatransfer::DataFlavor& rFlavor );
-    bool                SetGDIMetaFile( const GDIMetaFile& rMtf, const css::datatransfer::DataFlavor& rFlavor );
-    bool                SetGraphic( const Graphic& rGraphic, const css::datatransfer::DataFlavor& rFlavor );
-    bool                SetImageMap( const ImageMap& rIMap, const css::datatransfer::DataFlavor& rFlavor );
-    bool                SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc, const css::datatransfer::DataFlavor& rFlavor );
+    bool                SetGDIMetaFile( const GDIMetaFile& rMtf );
+    bool                SetGraphic( const Graphic& rGraphic );
+    bool                SetImageMap( const ImageMap& rIMap );
+    bool                SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc );
     bool                SetINetBookmark( const INetBookmark& rBmk, const css::datatransfer::DataFlavor& rFlavor );
     bool                SetINetImage( const INetImage& rINtImg, const css::datatransfer::DataFlavor& rFlavor );
     bool                SetObject( void* pUserObject, SotClipboardFormatId nUserObjectId, const css::datatransfer::DataFlavor& rFlavor );
@@ -333,7 +333,7 @@ public:
     bool                        GetImageMap( const css::datatransfer::DataFlavor& rFlavor, ImageMap& rImap );
 
     bool                        GetTransferableObjectDescriptor( SotClipboardFormatId nFormat, TransferableObjectDescriptor& rDesc );
-    bool                        GetTransferableObjectDescriptor( const css::datatransfer::DataFlavor& rFlavor, TransferableObjectDescriptor& rDesc );
+    bool                        GetTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc );
 
     bool                        GetINetBookmark( SotClipboardFormatId nFormat, INetBookmark& rBmk );
     bool                        GetINetBookmark( const css::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk );
@@ -342,7 +342,7 @@ public:
     bool                        GetINetImage( const css::datatransfer::DataFlavor& rFlavor, INetImage& rINtImg );
 
     bool                        GetFileList( SotClipboardFormatId nFormat, FileList& rFileList );
-    bool                        GetFileList( const css::datatransfer::DataFlavor& rFlavor, FileList& rFileList );
+    bool                        GetFileList( FileList& rFileList );
 
     css::uno::Sequence<sal_Int8> GetSequence( SotClipboardFormatId nFormat, const OUString& rDestDoc );
     css::uno::Sequence<sal_Int8> GetSequence( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );

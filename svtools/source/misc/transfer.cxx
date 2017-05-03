@@ -621,7 +621,7 @@ void TransferableHelper::ClearFormats()
 }
 
 
-bool TransferableHelper::SetAny( const Any& rAny, const DataFlavor& )
+bool TransferableHelper::SetAny( const Any& rAny )
 {
     maAny = rAny;
     return( maAny.hasValue() );
@@ -678,7 +678,7 @@ bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataFlavo
 }
 
 
-bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf, const DataFlavor& )
+bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf )
 {
     if( rMtf.GetActionSize() )
     {
@@ -692,7 +692,7 @@ bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf, const DataFlav
 }
 
 
-bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlavor& )
+bool TransferableHelper::SetGraphic( const Graphic& rGraphic )
 {
     if( rGraphic.GetType() != GraphicType::NONE )
     {
@@ -708,7 +708,7 @@ bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlavor& 
 }
 
 
-bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const css::datatransfer::DataFlavor& )
+bool TransferableHelper::SetImageMap( const ImageMap& rIMap )
 {
     SvMemoryStream aMemStm( 8192, 8192 );
 
@@ -720,8 +720,7 @@ bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const css::datatran
 }
 
 
-bool TransferableHelper::SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc,
-                                                          const css::datatransfer::DataFlavor& )
+bool TransferableHelper::SetTransferableObjectDescriptor( const TransferableObjectDescriptor& rDesc )
 {
     PrepareOLE( rDesc );
 
@@ -1779,11 +1778,11 @@ bool TransferableDataHelper::GetImageMap( const css::datatransfer::DataFlavor& r
 bool TransferableDataHelper::GetTransferableObjectDescriptor( SotClipboardFormatId nFormat, TransferableObjectDescriptor& rDesc )
 {
     DataFlavor aFlavor;
-    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetTransferableObjectDescriptor( aFlavor, rDesc ) );
+    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetTransferableObjectDescriptor( rDesc ) );
 }
 
 
-bool TransferableDataHelper::GetTransferableObjectDescriptor( const css::datatransfer::DataFlavor&, TransferableObjectDescriptor& rDesc )
+bool TransferableDataHelper::GetTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc )
 {
     rDesc = *mxObjDesc;
     return true;
@@ -1957,13 +1956,11 @@ bool TransferableDataHelper::GetFileList( SotClipboardFormatId nFormat,
                                                 FileList& rFileList )
 {
     DataFlavor aFlavor;
-    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetFileList( aFlavor, rFileList ) );
+    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetFileList( rFileList ) );
 }
 
 
-bool TransferableDataHelper::GetFileList(
-            const css::datatransfer::DataFlavor&,
-            FileList& rFileList )
+bool TransferableDataHelper::GetFileList( FileList& rFileList )
 {
     tools::SvRef<SotStorageStream> xStm;
     bool                bRet = false;

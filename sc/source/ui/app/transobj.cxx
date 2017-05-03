@@ -254,7 +254,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
     {
         if ( nFormat == SotClipboardFormatId::LINKSRCDESCRIPTOR || nFormat == SotClipboardFormatId::OBJECTDESCRIPTOR )
         {
-            bOK = SetTransferableObjectDescriptor( aObjDesc, rFlavor );
+            bOK = SetTransferableObjectDescriptor( aObjDesc );
         }
         else if ( ( nFormat == SotClipboardFormatId::RTF || nFormat == SotClipboardFormatId::RICHTEXT ||
             nFormat == SotClipboardFormatId::EDITENGINE ) &&
@@ -387,7 +387,7 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             aMtf.Stop();
             aMtf.WindStart();
 
-            bOK = SetGDIMetaFile( aMtf, rFlavor );
+            bOK = SetGDIMetaFile( aMtf );
         }
         else if ( nFormat == SotClipboardFormatId::EMBED_SOURCE )
         {

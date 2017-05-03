@@ -482,9 +482,9 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
 
         // TODO/LATER: support all the graphical formats, the embedded object scenario should not have separated handling
         if( nFormat == SotClipboardFormatId::GDIMETAFILE && mpGraphic )
-            bOK = SetGDIMetaFile( mpGraphic->GetGDIMetaFile(), rFlavor );
+            bOK = SetGDIMetaFile( mpGraphic->GetGDIMetaFile() );
         else
-            bOK = SetAny( mpOLEDataHelper->GetAny(rFlavor, rDestDoc), rFlavor );
+            bOK = SetAny( mpOLEDataHelper->GetAny(rFlavor, rDestDoc) );
 
         if( mpSdDrawDocumentIntern )
             mpSdDrawDocumentIntern->SetSwapGraphicsMode( nOldSwapMode );
@@ -493,7 +493,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
     {
         if( ( nFormat == SotClipboardFormatId::LINKSRCDESCRIPTOR || nFormat == SotClipboardFormatId::OBJECTDESCRIPTOR ) && mpObjDesc )
         {
-            bOK = SetTransferableObjectDescriptor( *mpObjDesc, rFlavor );
+            bOK = SetTransferableObjectDescriptor( *mpObjDesc );
         }
         else if( nFormat == SotClipboardFormatId::DRAWING )
         {
@@ -529,7 +529,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
                 const bool bToggleOnlineSpell = mpSdDrawDocumentIntern && mpSdDrawDocumentIntern->GetOnlineSpell();
                 if (bToggleOnlineSpell)
                     mpSdDrawDocumentIntern->SetOnlineSpell(false);
-                bOK = SetGDIMetaFile( mpSdViewIntern->GetMarkedObjMetaFile( true ), rFlavor );
+                bOK = SetGDIMetaFile( mpSdViewIntern->GetMarkedObjMetaFile( true ) );
                 if (bToggleOnlineSpell)
                     mpSdDrawDocumentIntern->SetOnlineSpell(true);
             }
@@ -552,11 +552,11 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         }
         else if( ( nFormat == SotClipboardFormatId::SVXB ) && mpGraphic )
         {
-            bOK = SetGraphic( *mpGraphic, rFlavor );
+            bOK = SetGraphic( *mpGraphic );
         }
         else if( ( nFormat == SotClipboardFormatId::SVIM ) && mpImageMap )
         {
-            bOK = SetImageMap( *mpImageMap, rFlavor );
+            bOK = SetImageMap( *mpImageMap );
         }
         else if( mpBookmark )
         {
@@ -832,7 +832,7 @@ void SdTransferable::SetView(const ::sd::View* pView)
         StartListening(*const_cast<sd::View*>(mpSdView));
 }
 
-bool SdTransferable::SetTableRTF( SdDrawDocument* pModel, const DataFlavor& rFlavor)
+bool SdTransferable::SetTableRTF( SdDrawDocument* pModel, const DataFlavor& /*rFlavor*/)
 {
     if ( pModel )
     {
@@ -844,7 +844,7 @@ bool SdTransferable::SetTableRTF( SdDrawDocument* pModel, const DataFlavor& rFla
             {
                 SvMemoryStream aMemStm( 65535, 65535 );
                 sdr::table::SdrTableObj::ExportAsRTF( aMemStm, *pTableObj );
-                return SetAny( Any( Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) ) ), rFlavor );
+                return SetAny( Any( Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) ) ) );
             }
         }
     }

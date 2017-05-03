@@ -94,7 +94,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                 {
                     TransferableObjectDescriptor aDesc;
                     FillTransferableObjectDescriptor( aDesc, m_xObj, m_pGraphic, m_nAspect );
-                    bRet = SetTransferableObjectDescriptor( aDesc, rFlavor );
+                    bRet = SetTransferableObjectDescriptor( aDesc );
                 }
                 else if( nFormat == SotClipboardFormatId::EMBED_SOURCE )
                 {
@@ -142,7 +142,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                             bRet = ( aSeq.getLength() > 0 );
                             if( bRet )
                             {
-                                SetAny( uno::Any(aSeq), rFlavor );
+                                SetAny( uno::Any(aSeq) );
                             }
                         }
                         else
@@ -164,7 +164,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                     uno::Any aAny;
                     aAny <<= uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
                                                     aMemStm.Seek( STREAM_SEEK_TO_END ) );
-                    SetAny( aAny, rFlavor );
+                    SetAny( aAny );
                     bRet = true;
                 }
                 else if ( ( nFormat == SotClipboardFormatId::BITMAP || nFormat == SotClipboardFormatId::PNG ) && m_pGraphic )
@@ -177,7 +177,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                     if ( xTransferable.is() )
                     {
                         uno::Any aAny = xTransferable->getTransferData( rFlavor );
-                        SetAny( aAny, rFlavor );
+                        SetAny( aAny );
                         bRet = true;
                     }
                 }

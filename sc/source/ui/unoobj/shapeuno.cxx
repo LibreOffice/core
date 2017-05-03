@@ -696,7 +696,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
                 xImageMap.set(SvUnoImageMap_createInstance( rIMap, GetSupportedMacroItems() ));
             }
             else
-                xImageMap = SvUnoImageMap_createInstance( GetSupportedMacroItems() );
+                xImageMap = SvUnoImageMap_createInstance();
         }
         aAny <<= uno::Reference< container::XIndexContainer >::query( xImageMap );
     }
@@ -967,7 +967,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyDefault( const OUString& aPropertyName 
     if ( aPropertyName == SC_UNONAME_IMAGEMAP )
     {
         //  default: empty ImageMap
-        uno::Reference< uno::XInterface > xImageMap(SvUnoImageMap_createInstance( GetSupportedMacroItems() ));
+        uno::Reference< uno::XInterface > xImageMap(SvUnoImageMap_createInstance());
         aAny <<= uno::Reference< container::XIndexContainer >::query( xImageMap );
     }
     else

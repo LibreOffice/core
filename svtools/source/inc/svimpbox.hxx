@@ -172,10 +172,10 @@ private:
     void                SetAnchorSelection( SvTreeListEntry* pOld,
                             SvTreeListEntry* pNewCursor );
     void                BeginDrag();
-    bool ButtonDownCheckCtrl( const MouseEvent& rMEvt, SvTreeListEntry* pEntry, long nY );
+    bool ButtonDownCheckCtrl( const MouseEvent& rMEvt, SvTreeListEntry* pEntry );
     bool MouseMoveCheckCtrl( const MouseEvent& rMEvt, SvTreeListEntry* pEntry );
     bool ButtonUpCheckCtrl( const MouseEvent& rMEvt );
-    bool ButtonDownCheckExpand( const MouseEvent&, SvTreeListEntry*,long nY );
+    bool ButtonDownCheckExpand( const MouseEvent&, SvTreeListEntry* );
 
     bool EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPos, long nLine);
     void                InitScrollBarBox();
@@ -271,7 +271,7 @@ public:
     void                GetFocus();
     void                LoseFocus();
     virtual void        UpdateAll( bool bInvalidateCompleteView );
-    void                SetEntryHeight( short nHeight );
+    void                SetEntryHeight();
     void                InvalidateEntry( SvTreeListEntry* );
     void                RecalcFocusRect();
 

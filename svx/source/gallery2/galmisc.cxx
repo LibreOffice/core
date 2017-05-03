@@ -520,7 +520,7 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
     else if( ( SotClipboardFormatId::SVIM == nFormat ) && mpImageMap )
     {
         // TODO/MBA: do we need a BaseURL here?!
-        bRet = SetImageMap( *mpImageMap, rFlavor );
+        bRet = SetImageMap( *mpImageMap );
     }
     else if( ( SotClipboardFormatId::SIMPLE_FILE == nFormat ) && mpURL )
     {
@@ -528,11 +528,11 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
     }
     else if( ( SotClipboardFormatId::SVXB == nFormat ) && mpGraphicObject )
     {
-        bRet = SetGraphic( mpGraphicObject->GetGraphic(), rFlavor );
+        bRet = SetGraphic( mpGraphicObject->GetGraphic() );
     }
     else if( ( SotClipboardFormatId::GDIMETAFILE == nFormat ) && mpGraphicObject )
     {
-        bRet = SetGDIMetaFile( mpGraphicObject->GetGraphic().GetGDIMetaFile(), rFlavor );
+        bRet = SetGDIMetaFile( mpGraphicObject->GetGraphic().GetGDIMetaFile() );
     }
     else if( ( SotClipboardFormatId::BITMAP == nFormat ) && mpGraphicObject )
     {

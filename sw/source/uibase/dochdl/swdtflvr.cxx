@@ -495,7 +495,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
             TransferableDataHelper aD( new SvEmbedTransferHelper( xObj, pOLEGraph, nAspect ) );
             uno::Any aAny = aD.GetAny(rFlavor, rDestDoc);
             if( aAny.hasValue() )
-                bOK = SetAny( aAny, rFlavor );
+                bOK = SetAny( aAny );
         }
 
         // the following solution will be used in the case when the object can not generate the image
@@ -505,7 +505,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         {
             pOLEGraph = FindOLEReplacementGraphic();
             if ( pOLEGraph )
-                bOK = SetGDIMetaFile( pOLEGraph->GetGDIMetaFile(), rFlavor );
+                bOK = SetGDIMetaFile( pOLEGraph->GetGDIMetaFile() );
         }
     }
     else
@@ -519,7 +519,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
 
         case SotClipboardFormatId::OBJECTDESCRIPTOR:
         case SotClipboardFormatId::LINKSRCDESCRIPTOR:
-            bOK = SetTransferableObjectDescriptor( m_aObjDesc, rFlavor );
+            bOK = SetTransferableObjectDescriptor( m_aObjDesc );
             break;
 
         case SotClipboardFormatId::DRAWING:
@@ -558,12 +558,12 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
 
         case SotClipboardFormatId::SVXB:
             if( m_eBufferType & TransferBufferType::Graphic && m_pOrigGraphic )
-                bOK = SetGraphic( *m_pOrigGraphic, rFlavor );
+                bOK = SetGraphic( *m_pOrigGraphic );
             break;
 
         case SotClipboardFormatId::GDIMETAFILE:
             if( m_eBufferType & TransferBufferType::Graphic )
-                bOK = SetGDIMetaFile( m_pClpGraphic->GetGDIMetaFile(), rFlavor );
+                bOK = SetGDIMetaFile( m_pClpGraphic->GetGDIMetaFile() );
             break;
         case SotClipboardFormatId::BITMAP:
         case SotClipboardFormatId::PNG:
@@ -574,7 +574,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
 
         case SotClipboardFormatId::SVIM:
             if( m_pImageMap )
-                bOK = SetImageMap( *m_pImageMap, rFlavor );
+                bOK = SetImageMap( *m_pImageMap );
             break;
 
         case SotClipboardFormatId::INET_IMAGE:

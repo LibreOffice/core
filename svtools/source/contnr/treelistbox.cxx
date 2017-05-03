@@ -2155,7 +2155,7 @@ void SvTreeListBox::SetEntryHeight( SvTreeListEntry* pEntry )
     {
         nEntryHeight = nHeightMax;
         Control::SetFont( GetFont() );
-        pImpl->SetEntryHeight( nHeightMax );
+        pImpl->SetEntryHeight();
     }
 }
 
@@ -2169,7 +2169,7 @@ void SvTreeListBox::SetEntryHeight( short nHeight, bool bForce )
         else
             nTreeFlags &= ~SvTreeFlags::FIXEDHEIGHT;
         Control::SetFont( GetFont() );
-        pImpl->SetEntryHeight( nHeight );
+        pImpl->SetEntryHeight();
     }
 }
 
@@ -2185,7 +2185,7 @@ void SvTreeListBox::AdjustEntryHeight( const Image& rBmp )
     if( aSize.Height() > nEntryHeight )
     {
         nEntryHeight = (short)aSize.Height() + nEntryHeightOffs;
-        pImpl->SetEntryHeight( nEntryHeight );
+        pImpl->SetEntryHeight();
     }
 }
 
@@ -2195,7 +2195,7 @@ void SvTreeListBox::AdjustEntryHeight()
     if( aSize.Height()  >  nEntryHeight )
     {
         nEntryHeight = (short)aSize.Height() + nEntryHeightOffs;
-        pImpl->SetEntryHeight( nEntryHeight );
+        pImpl->SetEntryHeight();
     }
 }
 
@@ -2449,7 +2449,7 @@ void SvTreeListBox::SetSpaceBetweenEntries( short nOffsLogic )
         nEntryHeightOffs = nOffsLogic;
         nEntryHeight = nEntryHeight + nOffsLogic;
         AdjustEntryHeightAndRecalc();
-        pImpl->SetEntryHeight( nEntryHeight );
+        pImpl->SetEntryHeight();
     }
 }
 

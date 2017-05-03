@@ -256,7 +256,7 @@ private:
     SVT_DLLPRIVATE sal_uInt16               ImplHitTest( const Point& rPos, long& nMouseOff, sal_uInt16& nPos ) const;
     SVT_DLLPRIVATE void             ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos );
     SVT_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
-                                                 const tools::Rectangle& rItemRect, const tools::Rectangle* pRect, DrawFlags nFlags);
+                                                 const tools::Rectangle& rItemRect, const tools::Rectangle* pRect);
     SVT_DLLPRIVATE void             ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
                                                  const tools::Rectangle* pRect);
     SVT_DLLPRIVATE void             ImplUpdate( sal_uInt16 nPos,

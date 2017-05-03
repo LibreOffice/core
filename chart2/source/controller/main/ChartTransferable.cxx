@@ -90,7 +90,7 @@ bool ChartTransferable::GetData( const css::datatransfer::DataFlavor& rFlavor, c
         else if ( nFormat == SotClipboardFormatId::GDIMETAFILE )
         {
             Graphic aGraphic( m_xMetaFileGraphic );
-            bResult = SetGDIMetaFile( aGraphic.GetGDIMetaFile(), rFlavor );
+            bResult = SetGDIMetaFile( aGraphic.GetGDIMetaFile() );
         }
         else if( nFormat == SotClipboardFormatId::BITMAP )
         {

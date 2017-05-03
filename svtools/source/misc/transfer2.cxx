@@ -376,7 +376,7 @@ bool TransferDataContainer::GetData(
         TDataCntnrEntry_Impl& rEntry = (TDataCntnrEntry_Impl&)*aIter;
         if( nFmtId == rEntry.nId )
         {
-            bFnd = SetAny( rEntry.aAny, rFlavor );
+            bFnd = SetAny( rEntry.aAny );
             break;
         }
     }
@@ -400,7 +400,7 @@ bool TransferDataContainer::GetData(
         case SotClipboardFormatId::BITMAP:
         case SotClipboardFormatId::GDIMETAFILE:
             if( pImpl->pGrf )
-                bFnd = SetGraphic( *pImpl->pGrf, rFlavor );
+                bFnd = SetGraphic( *pImpl->pGrf );
             break;
         default: break;
         }

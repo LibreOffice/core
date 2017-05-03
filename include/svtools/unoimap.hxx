@@ -30,7 +30,7 @@ SVT_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvUnoImageMapRectangle
 SVT_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvUnoImageMapCircleObject_createInstance( const SvEventDescription* pSupportedMacroItems );
 SVT_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvUnoImageMapPolygonObject_createInstance( const SvEventDescription* pSupportedMacroItems );
 
-SVT_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvUnoImageMap_createInstance( const SvEventDescription* pSupportedMacroItems );
+SVT_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvUnoImageMap_createInstance();
 SVT_DLLPUBLIC css::uno::Reference< css::uno::XInterface > SvUnoImageMap_createInstance( const ImageMap& rMap, const SvEventDescription* pSupportedMacroItems );
 SVT_DLLPUBLIC bool SvUnoImageMap_fillImageMap( const css::uno::Reference< css::uno::XInterface >& xImageMap, ImageMap& rMap );
 

@@ -1200,18 +1200,11 @@ namespace svt
     }
 
 
-    void EditBrowseBox::PaintTristate(OutputDevice&, const tools::Rectangle& rRect, const TriState& eState, bool _bEnabled) const
+    void EditBrowseBox::PaintTristate(const tools::Rectangle& rRect, const TriState& eState, bool _bEnabled) const
     {
         pCheckBoxPaint->GetBox().SetState(eState);
         pCheckBoxPaint->SetPosSizePixel(rRect.TopLeft(), rRect.GetSize());
 
-        // First update the parent, preventing that while painting this window
-        // an update for the parent is done (because it's in the queue already)
-        // which may lead to hiding this window immediately
-// #95598# comment out OJ
-/*      if (pCheckBoxPaint->GetParent())
-            pCheckBoxPaint->GetParent()->Update();
-*/
         pCheckBoxPaint->GetBox().Enable(_bEnabled);
         pCheckBoxPaint->Show();
         pCheckBoxPaint->SetParentUpdateMode( false );

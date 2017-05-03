@@ -275,7 +275,7 @@ void HeaderBar::ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos )
 }
 
 void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, bool bHigh,
-                             const tools::Rectangle& rItemRect, const tools::Rectangle* pRect, DrawFlags )
+                             const tools::Rectangle& rItemRect, const tools::Rectangle* pRect )
 {
     ImplControlValue aControlValue(0);
     tools::Rectangle aCtrlRegion;
@@ -609,7 +609,7 @@ void HeaderBar::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos
                              bool bHigh, const tools::Rectangle* pRect )
 {
     tools::Rectangle aRect = ImplGetItemRect(nPos);
-    ImplDrawItem(rRenderContext, nPos, bHigh, aRect, pRect, DrawFlags::NONE );
+    ImplDrawItem(rRenderContext, nPos, bHigh, aRect, pRect );
 }
 
 void HeaderBar::ImplUpdate(sal_uInt16 nPos, bool bEnd)
@@ -977,7 +977,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
             aItemRect.Right() = 16000;
         vcl::Region aRegion( aRect );
         pDev->SetClipRegion( aRegion );
-        ImplDrawItem(*pDev, i, false, aItemRect, &aRect, nFlags );
+        ImplDrawItem(*pDev, i, false, aItemRect, &aRect );
         pDev->SetClipRegion();
     }
 
