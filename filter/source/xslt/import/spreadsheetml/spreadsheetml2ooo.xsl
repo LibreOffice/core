@@ -6620,7 +6620,7 @@
 					<!-- the following block is not used, if the cell had been repeated earlier -->
 					<xsl:when test="$nextCell and not($cell-is-repeatable and $col-repeated = 1)">
 						<xsl:choose>
-							<!-- After cells can not longer be repeated write out the attribute -->
+							<!-- After cells can no longer be repeated write out the attribute -->
 							<xsl:when test="not($cell-is-repeatable) and $col-repeated > 1">
 								<xsl:attribute name="table:number-columns-repeated">
 									<xsl:value-of select="$col-repeated"/>

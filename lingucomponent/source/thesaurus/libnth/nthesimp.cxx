@@ -536,7 +536,7 @@ void SAL_CALL Thesaurus::initialize( const Sequence< Any >& rArguments )
             //! Pointer allows for access of the non-UNO functions.
             //! And the reference to the UNO-functions while increasing
             //! the ref-count and will implicitly free the memory
-            //! when the object is not longer used.
+            //! when the object is no longer used.
             pPropHelper = new PropertyHelper_Thesaurus( static_cast<XThesaurus *>(this), xPropSet );
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }

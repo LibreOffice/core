@@ -58,7 +58,7 @@ public:
 /** deprecated.
 
     An earlier version of UNO used an unique identifier for interfaces. In the
-    current version of UNO this uik was eliminated and this type is not longer used.
+    current version of UNO this uik was eliminated and this type is no longer used.
  */
 struct RTUik
 {

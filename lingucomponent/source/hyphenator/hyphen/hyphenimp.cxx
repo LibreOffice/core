@@ -804,7 +804,7 @@ void SAL_CALL Hyphenator::initialize( const Sequence< Any >& rArguments )
             //! Pointer allows for access of the non-UNO functions.
             //! And the reference to the UNO-functions while increasing
             //! the ref-count and will implicitly free the memory
-            //! when the object is not longer used.
+            //! when the object is no longer used.
             pPropHelper = new PropertyHelper_Hyphenation( static_cast<XHyphenator *>(this), xPropSet );
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }

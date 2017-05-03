@@ -605,7 +605,7 @@ void SAL_CALL SpellChecker::initialize( const Sequence< Any >& rArguments )
             //! Pointer allows for access of the non-UNO functions.
             //! And the reference to the UNO-functions while increasing
             //! the ref-count and will implicitly free the memory
-            //! when the object is not longer used.
+            //! when the object is no longer used.
             m_pPropHelper = new PropertyHelper_Spelling( static_cast<XSpellChecker *>(this), xPropSet );
             m_pPropHelper->AddAsPropListener();   //! after a reference is established
         }
