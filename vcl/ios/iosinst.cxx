@@ -87,11 +87,9 @@ class IosSalFrame : public SvpSalFrame
 public:
     IosSalFrame( IosSalInstance *pInstance,
                      SalFrame           *pParent,
-                     SalFrameStyleFlags  nSalFrameStyle,
-                     SystemParentData   *pSysParent )
+                     SalFrameStyleFlags  nSalFrameStyle)
         : SvpSalFrame( pInstance, pParent, nSalFrameStyle )
     {
-        pSysParent = NULL;
         if (pParent == NULL && viewWidth > 1 && viewHeight > 1)
             SetPosSize(0, 0, viewWidth, viewHeight, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
     }
@@ -131,12 +129,13 @@ public:
 
 SalFrame *IosSalInstance::CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle )
 {
-    return new IosSalFrame( this, NULL, nStyle, pParent );
+    pParent = NULL;
+    return new IosSalFrame( this, NULL, nStyle );
 }
 
 SalFrame *IosSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
 {
-    return new IosSalFrame( this, pParent, nStyle, NULL );
+    return new IosSalFrame( this, pParent, nStyle );
 }
 
 // All the interesting stuff is slaved from the IosSalInstance
