@@ -971,7 +971,7 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
                               OUString(),
                               this,
                               RID_SVXERRCTX,
-                              &CUI_MGR() );
+                              &DIALOG_MGR() );
 
     ErrorHandler::HandleError(
         *new StringErrorInfo( ERRCODE_SVX_GRAPHIC_NOTREADABLE,
