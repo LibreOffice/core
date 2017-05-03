@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_fd81bc4e",
+        "filename": "sw/source/filter/html/svxcss1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-05-03T20:42:06Z",
+      "side": 1,
+      "message": "\"initialize\" (with \"z\")",
+      "range": {
+        "startLine": 732,
+        "startChar": 12,
+        "endLine": 732,
+        "endChar": 22
+      },
+      "revId": "b24833655edefef0a6a019517e7d6790f50263cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_ddb6c03c",
+        "filename": "sw/source/uibase/app/docsh2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1393,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-05-03T20:42:06Z",
+      "side": 1,
+      "message": "Missing \"r\" here",
+      "range": {
+        "startLine": 1393,
+        "startChar": 24,
+        "endLine": 1393,
+        "endChar": 33
+      },
+      "revId": "b24833655edefef0a6a019517e7d6790f50263cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
