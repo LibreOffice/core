@@ -100,7 +100,7 @@ namespace
 #define EmfPlusRecordTypeRestore 0x4026
 //TODO EmfPlusRecordTypeBeginContainer 0x4027
 #define EmfPlusRecordTypeBeginContainerNoParams 0x4028
-#define EmfPlusRecordTypeEndContainer 0x4027
+#define EmfPlusRecordTypeEndContainer 0x4029
 #define EmfPlusRecordTypeSetWorldTransform 0x402A
 #define EmfPlusRecordTypeResetWorldTransform 0x402B
 #define EmfPlusRecordTypeMultiplyWorldTransform 0x402C
