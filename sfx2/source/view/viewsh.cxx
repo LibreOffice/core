@@ -762,7 +762,7 @@ ErrCode SfxViewShell::DoVerb(long /*nVerb*/)
 }
 
 
-void SfxViewShell::OutplaceActivated( bool bActive, SfxInPlaceClient* /*pClient*/ )
+void SfxViewShell::OutplaceActivated( bool bActive )
 {
     if ( !bActive )
         GetFrame()->GetFrame().Appear();
@@ -1585,7 +1585,7 @@ void SfxViewShell::QueryObjAreaPixel( tools::Rectangle& ) const
 }
 
 
-void SfxViewShell::VisAreaChanged(const tools::Rectangle& /*rVisArea*/)
+void SfxViewShell::VisAreaChanged()
 {
     SfxInPlaceClientList *pClients = pImpl->GetIPClientList_Impl(false);
     if ( !pClients )

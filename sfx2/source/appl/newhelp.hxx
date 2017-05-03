@@ -529,7 +529,7 @@ friend class SfxHelpIndexWindow_Impl;
 
 public:
     SfxHelpWindow_Impl( const css::uno::Reference < css::frame::XFrame2 >& rFrame,
-                        vcl::Window* pParent, WinBits nBits );
+                        vcl::Window* pParent );
     virtual ~SfxHelpWindow_Impl() override;
     virtual void dispose() override;
 

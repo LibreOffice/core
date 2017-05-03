@@ -269,7 +269,6 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
 
 void LinkManager::UpdateAllLinks(
     bool bAskUpdate,
-    bool /*bCallErrHdl*/,
     bool bUpdateGrfLinks,
     vcl::Window* pParentWin )
 {

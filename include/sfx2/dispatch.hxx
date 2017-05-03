@@ -156,7 +156,7 @@ public:
     bool                IsFlushed() const;
     void                Flush();
     void                Lock( bool bLock );
-    bool                IsLocked( sal_uInt16 nSID = 0 ) const;
+    bool                IsLocked() const;
     void                SetSlotFilter( SfxSlotFilterState nEnable = SfxSlotFilterState::DISABLED,
                                        sal_uInt16 nCount = 0, const sal_uInt16 *pSIDs = nullptr );
 

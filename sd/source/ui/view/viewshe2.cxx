@@ -984,10 +984,10 @@ void ViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
     mpFrameView->ReadUserDataSequence( rSequence );
 }
 
-void ViewShell::VisAreaChanged(const ::tools::Rectangle& rRect)
+void ViewShell::VisAreaChanged(const ::tools::Rectangle& /*rRect*/)
 {
     OSL_ASSERT (GetViewShell()!=nullptr);
-    GetViewShell()->VisAreaChanged(rRect);
+    GetViewShell()->VisAreaChanged();
 }
 
 void ViewShell::SetWinViewPos(const Point& rWinPos)

@@ -43,7 +43,7 @@ private:
     inline void Insert( SfxPoolItem* pItem );
 
 public:
-    explicit CntStaticPoolDefaults_Impl( CntItemPool* pPool );
+    explicit CntStaticPoolDefaults_Impl();
     ~CntStaticPoolDefaults_Impl();
     CntStaticPoolDefaults_Impl(const CntStaticPoolDefaults_Impl&) = delete;
     CntStaticPoolDefaults_Impl& operator=(const CntStaticPoolDefaults_Impl&) = delete;
@@ -102,7 +102,7 @@ CntItemPool::CntItemPool()
     FreezeIdRanges();
 
     // Create static defaults.
-    pPoolDefs_Impl = new CntStaticPoolDefaults_Impl( this );
+    pPoolDefs_Impl = new CntStaticPoolDefaults_Impl;
 
     // Set item infos.
     SetItemInfos( pPoolDefs_Impl->GetItemInfos() );
@@ -178,7 +178,7 @@ CntStaticPoolDefaults_Impl::~CntStaticPoolDefaults_Impl()
 }
 
 
-CntStaticPoolDefaults_Impl::CntStaticPoolDefaults_Impl( CntItemPool* /*pPool*/ )
+CntStaticPoolDefaults_Impl::CntStaticPoolDefaults_Impl()
 : m_pDefaults( new std::vector<SfxPoolItem*>( m_nItems, nullptr ) ),
   m_pItemInfos( new SfxItemInfo  [ m_nItems ] )
 {

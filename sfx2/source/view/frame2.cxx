@@ -87,7 +87,7 @@ void SfxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     Window::DataChanged( rDCEvt );
     SfxWorkWindow *pWorkWin = pFrame->GetWorkWindow_Impl();
     if ( pWorkWin )
-        pWorkWin->DataChanged_Impl( rDCEvt );
+        pWorkWin->DataChanged_Impl();
 }
 
 bool SfxFrameWindow_Impl::EventNotify( NotifyEvent& rNEvt )
