@@ -2568,7 +2568,7 @@ bool MenuBar::ImplHandleCmdEvent( const CommandEvent& rCEvent )
             const CommandModKeyData* pCData = rCEvent.GetModKeyData ();
             if (pWin->nHighlightedItem == ITEMPOS_INVALID)
             {
-                if (pCData && pCData->IsMod2())
+                if (pCData && pCData->IsMod2() && pCData->IsDown())
                     pWin->SetMBWHideAccel(false);
                 else
                     pWin->SetMBWHideAccel(true);

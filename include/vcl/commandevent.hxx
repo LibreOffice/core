@@ -187,11 +187,13 @@ public:
 class VCL_DLLPUBLIC CommandModKeyData
 {
 private:
+    bool                mbDown;
     sal_uInt16          mnCode;
 
 public:
-                    CommandModKeyData( sal_uInt16 nCode );
+                    CommandModKeyData( sal_uInt16 nCode, bool bDown );
 
+    bool            IsDown()    const { return mbDown; }
     bool            IsMod1()    const { return (mnCode & MODKEY_MOD1) != 0; }
     bool            IsMod2()    const { return (mnCode & MODKEY_MOD2) != 0; }
     bool            IsLeftShift() const { return (mnCode & MODKEY_LSHIFT) != 0; }

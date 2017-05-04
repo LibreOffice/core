@@ -2102,7 +2102,7 @@ static void ImplHandleSalKeyMod( vcl::Window* pWindow, SalKeyModEvent* pEvent )
     if ( !pChild )
         return;
 
-    CommandModKeyData data( pEvent->mnModKeyCode );
+    CommandModKeyData data( pEvent->mnModKeyCode, pEvent->mbDown );
     ImplCallCommand( pChild, CommandEventId::ModKeyChange, &data );
 }
 
