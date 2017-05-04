@@ -748,10 +748,10 @@ void E3dObject::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
     // take no part in the rotation of the scene. To ensure this, there is the
     // SetGlueReallyAbsolute(sal_True);
 
-    double fWinkelInRad = nAngle/100.0 * F_PI180;
+    double fAngleInRad = nAngle/100.0 * F_PI180;
 
     basegfx::B3DHomMatrix aRotateZ;
-    aRotateZ.rotate(0.0, 0.0, fWinkelInRad);
+    aRotateZ.rotate(0.0, 0.0, fAngleInRad);
     NbcSetTransform(aRotateZ * GetTransform());
 
     SetRectsDirty();        // This forces a recalculation of all BoundRects

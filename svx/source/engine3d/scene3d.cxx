@@ -177,21 +177,10 @@ E3dScene::E3dScene()
     bDrawOnlySelected(false)
 {
     // Set defaults
-    E3dDefaultAttributes aDefault;
-    SetDefaultAttributes(aDefault);
+    SetDefaultAttributes();
 }
 
-E3dScene::E3dScene(E3dDefaultAttributes& rDefault)
-:   E3dObject(),
-    aCamera(basegfx::B3DPoint(0.0, 0.0, 4.0), basegfx::B3DPoint()),
-    mp3DDepthRemapper(nullptr),
-    bDrawOnlySelected(false)
-{
-    // Set defaults
-    SetDefaultAttributes(rDefault);
-}
-
-void E3dScene::SetDefaultAttributes(E3dDefaultAttributes& /*rDefault*/)
+void E3dScene::SetDefaultAttributes()
 {
     // For WIN95/NT turn off the FP-Exceptions
 #if defined(_WIN32)
@@ -503,7 +492,7 @@ void E3dScene::Notify(SfxBroadcaster &rBC, const SfxHint  &rHint)
     E3dObject::Notify(rBC, rHint);
 }
 
-void E3dScene::RotateScene (const Point& rRef, long /*nAngle*/, double sn, double cs)
+void E3dScene::RotateScene (const Point& rRef, double sn, double cs)
 {
     Point UpperLeft, LowerRight, Center, NewCenter;
 
@@ -605,11 +594,11 @@ void E3dScene::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
     // objects. So going through the entire list and rotate around the Z axis
     // through the enter of aOutRect's (Steiner's theorem), so RotateZ
 
-    RotateScene (rRef, nAngle, sn, cs);  // Rotates the scene
-    double fWinkelInRad = nAngle/100.0 * F_PI180;
+    RotateScene (rRef, sn, cs);  // Rotates the scene
+    double fAngleInRad = nAngle/100.0 * F_PI180;
 
     basegfx::B3DHomMatrix aRotation;
-    aRotation.rotate(0.0, 0.0, fWinkelInRad);
+    aRotation.rotate(0.0, 0.0, fAngleInRad);
     NbcSetTransform(aRotation * GetTransform());
 
     SetRectsDirty();    // This forces a recalculation of all BoundRects

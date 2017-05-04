@@ -51,10 +51,8 @@ private:
 
     public:
 
-
             SdrCustomShapeGeometryItem();
             SdrCustomShapeGeometryItem( const css::uno::Sequence< css::beans::PropertyValue >& );
-            SdrCustomShapeGeometryItem( SvStream& rIn, sal_uInt16 nVersion );
             virtual ~SdrCustomShapeGeometryItem() override;
 
             virtual bool                operator==( const SfxPoolItem& ) const override;

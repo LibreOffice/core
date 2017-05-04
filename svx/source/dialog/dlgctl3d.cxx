@@ -97,7 +97,7 @@ void Svx3DPreviewControl::Construct()
     mp3DView->SetBufferedOverlayAllowed(true);
 
     // 3D Scene
-    mpScene = new E3dScene(mp3DView->Get3DDefaultAttributes());
+    mpScene = new E3dScene;
 
     // initially create object
     SetObjectType(SvxPreviewObjectType::SPHERE);

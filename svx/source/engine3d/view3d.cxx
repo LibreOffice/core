@@ -838,7 +838,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
             BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_LATHE));
 
         // Create a new scene for the created 3D object
-        E3dScene* pScene = new E3dScene(Get3DDefaultAttributes());
+        E3dScene* pScene = new E3dScene;
 
         // Determine rectangle and possibly correct it
         tools::Rectangle aRect = GetAllMarkedRect();
@@ -1292,7 +1292,6 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
 E3dScene* E3dView::SetCurrent3DObj(E3dObject* p3DObj)
 {
     DBG_ASSERT(p3DObj != nullptr, "Who puts in a NULL-pointer here");
-    E3dScene* pScene = nullptr;
 
     // get transformed BoundVolume of the object
     basegfx::B3DRange aVolume(p3DObj->GetBoundVolume());
@@ -1302,7 +1301,7 @@ E3dScene* E3dView::SetCurrent3DObj(E3dObject* p3DObj)
 
     tools::Rectangle aRect(0,0, (long) fW, (long) fH);
 
-    pScene = new E3dScene(Get3DDefaultAttributes());
+    E3dScene* pScene = new E3dScene;
 
     InitScene(pScene, fW, fH, aVolume.getMaxZ() + ((fW + fH) / 4.0));
 
