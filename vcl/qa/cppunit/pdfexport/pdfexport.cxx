@@ -21,6 +21,10 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/pdfdocument.hxx>
 #include <tools/zcodec.hxx>
+#if HAVE_FEATURE_PDFIUM
+#include <fpdf_edit.h>
+#include <fpdfview.h>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -193,34 +197,60 @@ void PdfExportTest::testTdf106693()
 
 void PdfExportTest::testTdf105461()
 {
-    vcl::filter::PDFDocument aDocument;
-    load("tdf105461.odp", aDocument);
+    // Setup.
+    FPDF_LIBRARY_CONFIG config;
+    config.version = 2;
+    config.m_pUserFontPaths = nullptr;
+    config.m_pIsolate = nullptr;
+    config.m_v8EmbedderSlot = 0;
+    FPDF_InitLibraryWithConfig(&config);
+
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf105461.odp";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result with pdfium.
+    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    FPDF_DOCUMENT pPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
+    CPPUNIT_ASSERT(pPdfDocument);
 
     // The document has one page.
-    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
-
-    // The page has a stream.
-    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents");
-    CPPUNIT_ASSERT(pContents);
-    vcl::filter::PDFStreamElement* pStream = pContents->GetStream();
-    CPPUNIT_ASSERT(pStream);
-    SvMemoryStream& rObjectStream = pStream->GetMemory();
-    // Uncompress it.
-    SvMemoryStream aUncompressed;
-    ZCodec aZCodec;
-    aZCodec.BeginCompression();
-    rObjectStream.Seek(0);
-    aZCodec.Decompress(rObjectStream, aUncompressed);
-    CPPUNIT_ASSERT(aZCodec.EndCompression());
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument));
+    FPDF_PAGE pPdfPage = FPDF_LoadPage(pPdfDocument, /*page_index=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
 
     // Make sure there is a filled rectangle inside.
-    OString aFilledRectangle("re f*");
-    auto pStart = static_cast<const char*>(aUncompressed.GetData());
-    const char* pEnd = pStart + aUncompressed.GetSize();
-    auto it = std::search(pStart, pEnd, aFilledRectangle.getStr(), aFilledRectangle.getStr() + aFilledRectangle.getLength());
-    // This failed, stream contained no filled rectangle.
-    CPPUNIT_ASSERT(it != pEnd);
+    int nPageObjectCount = FPDFPage_CountObject(pPdfPage);
+    int nYellowPathCount = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(pPdfPage, i);
+        if (FPDFPageObj_GetType(pPdfPageObject) != FPDF_PAGEOBJ_PATH)
+            continue;
+
+        unsigned int nRed = 0, nGreen = 0, nBlue = 0, nAlpha = 0;
+        FPDFPath_GetFillColor(pPdfPageObject, &nRed, &nGreen, &nBlue, &nAlpha);
+        if (RGB_COLORDATA(nRed, nGreen, nBlue) == COL_YELLOW)
+            ++nYellowPathCount;
+    }
+
+    // This was 0, the page contained no yellow paths.
+    CPPUNIT_ASSERT_EQUAL(1, nYellowPathCount);
+
+    // Cleanup.
+    FPDF_ClosePage(pPdfPage);
+    FPDF_CloseDocument(pPdfDocument);
+    FPDF_DestroyLibrary();
 }
 
 void PdfExportTest::testTdf105093()

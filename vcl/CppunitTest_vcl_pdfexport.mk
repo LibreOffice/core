@@ -28,7 +28,10 @@ $(eval $(call gb_CppunitTest_use_libraries,vcl_pdfexport, \
 	xmlsecurity \
 ))
 
-$(eval $(call gb_CppunitTest_use_external,vcl_pdfexport,boost_headers))
+$(eval $(call gb_CppunitTest_use_externals,vcl_pdfexport, \
+	boost_headers \
+	$(if $(filter PDFIUM,$(BUILD_TYPE)),pdfium) \
+))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,vcl_pdfexport))
 
