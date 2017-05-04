@@ -43,6 +43,16 @@ namespace cppcanvas
 {
     namespace internal
     {
+
+        enum EmfPlusBrushType
+        {
+            BrushTypeSolidColor = 0x00000000,
+            BrushTypeHatchFill = 0x00000001,
+            BrushTypeTextureFill = 0x00000002,
+            BrushTypePathGradient = 0x00000003,
+            BrushTypeLinearGradient = 0x00000004
+        };
+
         EMFPBrush::EMFPBrush()
             : type(0)
             , additionalFlags(0)
@@ -99,7 +109,7 @@ namespace cppcanvas
             SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " type: " << type << std::dec);
 
             switch (type) {
-            case 0:
+            case BrushTypeSolidColor:
             {
                 sal_uInt32 color;
 
@@ -108,7 +118,7 @@ namespace cppcanvas
                 SAL_INFO("cppcanvas.emf", "EMF+\tsolid color: 0x" << std::hex << color << std::dec);
                 break;
             }
-            case 1:
+            case BrushTypeHatchFill:
             {
                 sal_uInt32 style;
                 sal_uInt32 foregroundColor;
@@ -123,8 +133,12 @@ namespace cppcanvas
                 SAL_INFO("cppcanvas.emf", "EMF+\thatch style " << style << " foregroundcolor: 0x" << solidColor.AsRGBHexString() << " background 0x" << secondColor.AsRGBHexString());
                 break;
             }
-            // path gradient
-            case 3:
+            case BrushTypeTextureFill:
+            {
+                SAL_WARN("cppcanvas.emf", "EMF+\tTODO: implement BrushTypeTextureFill brush");
+                break;
+            }
+            case BrushTypePathGradient:
             {
                 s.ReadUInt32(additionalFlags).ReadInt32(wrapMode);
 
@@ -230,8 +244,7 @@ namespace cppcanvas
                 }
                 break;
             }
-            // linear gradient
-            case 4:
+            case BrushTypeLinearGradient:
             {
                 s.ReadUInt32(additionalFlags).ReadInt32(wrapMode);
 

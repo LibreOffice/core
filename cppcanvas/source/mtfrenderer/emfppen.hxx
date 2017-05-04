@@ -39,7 +39,7 @@ namespace cppcanvas
         struct EMFPPen : public EMFPBrush
         {
             XForm pen_transformation;   //TODO: This isn't used
-            float width;
+            float penWidth;
             sal_Int32 startCap;
             sal_Int32 endCap;
             sal_Int32 lineJoin;
