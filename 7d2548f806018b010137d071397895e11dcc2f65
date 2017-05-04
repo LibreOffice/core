@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_fd8e1c26",
+        "filename": "shell/source/win32/SysShExec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-04T07:52:03Z",
+      "side": 1,
+      "message": "Seeing the usage of the \"typedef struct\" C idiom and the all-caps name, it made me wonder whether this is a verbatim copy from some Windows API (instead of including the appropriate Windows include file).  Also made me wonder whether the struct as a whole is passed around somewhere (e.g., passed to a Windows API call).  In short, lots of distractions for something that turns out to be just two local variables.  (And what\u0027s wrong with giving those local variables short names like \"pid\" and \"hwnd\" in the one code block in CSysShExec::execute where they are actually used?)",
+      "parentUuid": "5a3905b3_3dab448b",
+      "revId": "7d2548f806018b010137d071397895e11dcc2f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_7a95d23e",
         "filename": "shell/source/win32/SysShExec.cxx",
         "patchSetId": 1
