@@ -91,8 +91,9 @@ CommandScrollData::CommandScrollData( long nDeltaX, long nDeltaY )
     mnDeltaY    = nDeltaY;
 }
 
-CommandModKeyData::CommandModKeyData( ModKeyFlags nCode )
+CommandModKeyData::CommandModKeyData( ModKeyFlags nCode, bool bDown )
 {
+    mbDown = bDown;
     mnCode = nCode;
 }
 

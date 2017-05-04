@@ -3101,6 +3101,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
                 ||      nKeySym == XK_Super_L   || nKeySym == XK_Super_R )
     {
         SalKeyModEvent aModEvt;
+        aModEvt.mbDown = false; // auto-accelerator feature not supported here.
         aModEvt.mnModKeyCode = ModKeyFlags::NONE;
         if( pEvent->type == KeyPress && mnExtKeyMod == ModKeyFlags::NONE )
             mbSendExtKeyModChange = true;
