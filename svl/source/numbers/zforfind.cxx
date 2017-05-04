@@ -2045,6 +2045,10 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
         }
     }
 
+    // Bail out early for just a sign.
+    if (nSign && nPos == rString.getLength())
+        return true;
+
     if ( GetDecSep(rString, nPos) )                 // decimal separator in start string
     {
         nDecPos = 1;
