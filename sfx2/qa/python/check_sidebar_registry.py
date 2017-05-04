@@ -27,7 +27,7 @@ class CheckSidebarRegistry(unittest.TestCase):
 
     def test_sidebar_registry(self):
 
-        # assert(result) after whole processing to list defected nodes at once
+        # assert(result) after whole processing to list defective nodes at once
         result = True
 
         #open registry node in Sidebar.xcu
