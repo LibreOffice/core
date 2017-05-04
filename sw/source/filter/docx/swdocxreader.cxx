@@ -33,6 +33,7 @@
 #include <ndtxt.hxx>
 #include <poolfmt.hxx>
 #include <svl/urihelper.hxx>
+#include <doc.hxx>
 #include <swerror.h>
 #include <tools/ref.hxx>
 #include <unotxdoc.hxx>
@@ -139,7 +140,11 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
             aPam.SetMark();
             {
                 SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
-                rIdx = aStart.GetNode().EndOfSectionIndex() - 2;
+                rIdx = aStart.GetNode().EndOfSectionIndex() - 1;
+                // don't add extra empty text node if exist (.dotx but not .dotm)
+                if( rIdx.GetNode().GetTextNode() &&
+                    rIdx.GetNode().GetTextNode()->GetText().isEmpty() )
+                    rIdx = aStart.GetNode().EndOfSectionIndex() - 2;
                 if( ( nullptr == ( pCNd = rIdx.GetNode().GetContentNode() ) ) )
                 {
                     ++rIdx;
