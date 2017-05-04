@@ -26,16 +26,16 @@ reference)
     mkdir -p $mydir-reference/source/ooxml
     for i in $writerfilter_ALL
     do
-        cp $mydir/$i $mydir-reference/$i
+        cp $mydir/"$i" $mydir-reference/"$i"
     done
     ;;
 compare)
     for i in $writerfilter_ALL
     do
-        if [ "$(basename $i)" == "model_preprocessed.xml" ]; then
+        if [ "$(basename "$i")" == "model_preprocessed.xml" ]; then
             continue
         fi
-        diff -u $mydir-reference/$i $mydir/$i
+        diff -u $mydir-reference/"$i" $mydir/"$i"
     done
     ;;
 *)
