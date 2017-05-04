@@ -119,7 +119,6 @@ PresenterCanvas::PresenterCanvas (
       mxSharedWindow(rxSharedWindow),
       mxWindow(rxWindow),
       maOffset(),
-      mpUpdateRequester(),
       maClipRectangle(),
       mbOffsetUpdatePending(true)
 {
@@ -127,7 +126,9 @@ PresenterCanvas::PresenterCanvas (
         mxWindow->addWindowListener(this);
 
     if (mxUpdateCanvas.is())
-        mpUpdateRequester = CanvasUpdateRequester::Instance(mxUpdateCanvas);
+    {
+        m_pUpdateRequester = CanvasUpdateRequester::Instance(mxUpdateCanvas);
+    }
 }
 
 PresenterCanvas::~PresenterCanvas()
@@ -465,9 +466,9 @@ sal_Bool SAL_CALL PresenterCanvas::updateScreen (sal_Bool bUpdateAll)
     ThrowIfDisposed();
 
     mbOffsetUpdatePending = true;
-    if (mpUpdateRequester.get() != nullptr)
+    if (m_pUpdateRequester.get() != nullptr)
     {
-        mpUpdateRequester->RequestUpdate(bUpdateAll);
+        m_pUpdateRequester->RequestUpdate(bUpdateAll);
         return true;
     }
     else
