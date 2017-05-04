@@ -968,7 +968,6 @@ void GtkSalFrame::InitCommon()
     m_bSpanMonitorsWhenFullscreen = false;
     m_nState            = GDK_WINDOW_STATE_WITHDRAWN;
     m_nVisibility       = GDK_VISIBILITY_FULLY_OBSCURED;
-    m_bSendModChangeOnRelease = false;
     m_pIMHandler        = nullptr;
     m_nExtStyle         = 0;
     m_pRegion           = nullptr;
@@ -2984,10 +2983,7 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
     pSalInstance->updatePrinterUpdate();
 
     if( !pEvent->in )
-    {
         pThis->m_nKeyModifiers = 0;
-        pThis->m_bSendModChangeOnRelease = false;
-    }
 
     if( pThis->m_pIMHandler )
         pThis->m_pIMHandler->focusChanged( pEvent->in );
@@ -3100,20 +3096,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
         pEvent->keyval == GDK_KEY_Meta_L || pEvent->keyval == GDK_KEY_Meta_R ||
         pEvent->keyval == GDK_KEY_Super_L || pEvent->keyval == GDK_KEY_Super_R )
     {
-        SalKeyModEvent aModEvt;
-
         sal_uInt16 nModCode = GetKeyModCode( pEvent->state );
-
-        aModEvt.mnModKeyCode = 0; // emit no MODKEYCHANGE events
-        if( pEvent->type == GDK_KEY_PRESS && !pThis->m_nKeyModifiers )
-            pThis->m_bSendModChangeOnRelease = true;
-
-        else if( pEvent->type == GDK_KEY_RELEASE &&
-                 pThis->m_bSendModChangeOnRelease )
-        {
-            aModEvt.mnModKeyCode = pThis->m_nKeyModifiers;
-        }
-
         sal_uInt16 nExtModMask = 0;
         sal_uInt16 nModMask = 0;
         // pressing just the ctrl key leads to a keysym of XK_Control but
@@ -3159,8 +3142,15 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
                 nModMask = KEY_MOD3;
                 break;
         }
+
+        SalKeyModEvent aModEvt;
+        aModEvt.mbDown = pEvent->type == GDK_KEY_PRESS;
+        aModEvt.mnTime = pEvent->time;
+        aModEvt.mnCode = nModCode;
+
         if( pEvent->type == GDK_KEY_RELEASE )
         {
+            aModEvt.mnModKeyCode = pThis->m_nKeyModifiers;
             nModCode &= ~nModMask;
             pThis->m_nKeyModifiers &= ~nExtModMask;
         }
@@ -3168,14 +3158,10 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
         {
             nModCode |= nModMask;
             pThis->m_nKeyModifiers |= nExtModMask;
+            aModEvt.mnModKeyCode = pThis->m_nKeyModifiers;
         }
 
-        aModEvt.mnCode = nModCode;
-        aModEvt.mnTime = pEvent->time;
-        aModEvt.mnModKeyCode = pThis->m_nKeyModifiers;
-
         pThis->CallCallback( SalEvent::KeyModChange, &aModEvt );
-
     }
     else
     {
@@ -3188,7 +3174,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
                               (pEvent->type == GDK_KEY_PRESS),
                               false );
         if( ! aDel.isDeleted() )
-            pThis->m_bSendModChangeOnRelease = false;
+            pThis->m_nKeyModifiers = 0;
     }
 
     if( !aDel.isDeleted() && pThis->m_pIMHandler )

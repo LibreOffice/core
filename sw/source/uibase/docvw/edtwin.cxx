@@ -5523,7 +5523,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         case CommandEventId::ModKeyChange :
         {
             const CommandModKeyData* pCommandData = rCEvt.GetModKeyData();
-            if (pCommandData->IsMod1() && !pCommandData->IsMod2())
+            if (!pCommandData->IsDown() && pCommandData->IsMod1() && !pCommandData->IsMod2())
             {
                 sal_uInt16 nSlot = 0;
                 if(pCommandData->IsLeftShift() && !pCommandData->IsRightShift())

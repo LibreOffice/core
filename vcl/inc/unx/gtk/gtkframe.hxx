@@ -196,7 +196,6 @@ class GtkSalFrame : public SalFrame
     bool                            m_bSpanMonitorsWhenFullscreen;
     bool                            m_bDefaultPos;
     bool                            m_bDefaultSize;
-    bool                            m_bSendModChangeOnRelease;
     bool                            m_bWindowIsGtkPlug;
     OUString                        m_aTitle;
     OUString                        m_sWMClass;
