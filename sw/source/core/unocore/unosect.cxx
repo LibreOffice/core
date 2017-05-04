@@ -294,7 +294,7 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
     }
 
     SwUnoInternalPaM aPam(*pDoc);
-    //das muss jetzt true liefern
+    // this has to return true now
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     UnoActionContext aCont(pDoc);
     pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::INSSECTION, nullptr );

@@ -1900,7 +1900,7 @@ void SAL_CALL SwXTextField::attach(
            static_cast<SwTableField*>(pField)->ChgExpStr(m_pImpl->m_pProps->sPar1);
         }
         break;
-        default: OSL_FAIL("was ist das fuer ein Typ?");
+        default: OSL_FAIL("What kind of type is that?");
     }
     if (!pField)
         throw uno::RuntimeException("no SwField created?");
@@ -2348,7 +2348,7 @@ uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
                 // e.g. fields in undo or redo array
                 if (rTextNode.GetNodes().IsDocNodes())
                 {
-                    bool bFrame = 0 != rTextNode.FindLayoutRect().Width(); // oder so
+                    bool bFrame = 0 != rTextNode.FindLayoutRect().Width(); // or so
                     bool bHidden = rTextNode.IsHidden();
                     if ( !bHidden )
                     {

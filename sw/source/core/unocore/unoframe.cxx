@@ -977,7 +977,7 @@ static inline void lcl_FillCol ( SfxItemSet &rToSet, const ::SfxItemSet &rFromSe
 
 bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItemSet&, bool& rSizeFound)
 {
-    //Properties fuer alle Frames
+    // Properties for all frames
     const ::uno::Any *pStyleName;
     SwDocStyleSheet* pStyle = nullptr;
     bool bRet;
@@ -1050,7 +1050,7 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
             SfxItemSet& rGrSet,
             bool& rSizeFound)
 {
-    //Properties fuer alle Frames
+    // Properties for all frames
     bool bRet;
     const ::uno::Any *pStyleName;
     SwDocStyleSheet* pStyle = nullptr;
@@ -2184,7 +2184,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             const SwFormatContent* pCnt = &pFormat->GetContent();
             OSL_ENSURE( pCnt->GetContentIdx() &&
                            pDoc->GetNodes()[ pCnt->GetContentIdx()->
-                                            GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
+                                            GetIndex() + 1 ]->GetOLENode(), "no OLE-Node?");
 
             SwOLENode* pOleNode =  pDoc->GetNodes()[ pCnt->GetContentIdx()
                                             ->GetIndex() + 1 ]->GetOLENode();
@@ -3464,7 +3464,7 @@ uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExte
         const SwFormatContent* pCnt = &pFormat->GetContent();
         OSL_ENSURE( pCnt->GetContentIdx() &&
                        pDoc->GetNodes()[ pCnt->GetContentIdx()->
-                                        GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
+                                        GetIndex() + 1 ]->GetOLENode(), "no OLE-Node?");
 
         SwOLENode* pOleNode =  pDoc->GetNodes()[ pCnt->GetContentIdx()
                                         ->GetIndex() + 1 ]->GetOLENode();
@@ -3497,7 +3497,7 @@ sal_Int64 SAL_CALL SwXTextEmbeddedObject::getAspect()
         const SwFormatContent* pCnt = &pFormat->GetContent();
         OSL_ENSURE( pCnt->GetContentIdx() &&
                        pDoc->GetNodes()[ pCnt->GetContentIdx()->
-                                        GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
+                                        GetIndex() + 1 ]->GetOLENode(), "no OLE-Node?");
 
         return pDoc->GetNodes()[ pCnt->GetContentIdx()->GetIndex() + 1 ]->GetOLENode()->GetAspect();
     }
@@ -3514,7 +3514,7 @@ void SAL_CALL SwXTextEmbeddedObject::setAspect( sal_Int64 nAspect )
         const SwFormatContent* pCnt = &pFormat->GetContent();
         OSL_ENSURE( pCnt->GetContentIdx() &&
                        pDoc->GetNodes()[ pCnt->GetContentIdx()->
-                                        GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
+                                        GetIndex() + 1 ]->GetOLENode(), "no OLE-Node?");
 
         pDoc->GetNodes()[ pCnt->GetContentIdx()->GetIndex() + 1 ]->GetOLENode()->SetAspect( nAspect );
     }
@@ -3529,7 +3529,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL SwXTextEmbeddedObject::getReplaceme
         const SwFormatContent* pCnt = &pFormat->GetContent();
         OSL_ENSURE( pCnt->GetContentIdx() &&
                        pDoc->GetNodes()[ pCnt->GetContentIdx()->
-                                        GetIndex() + 1 ]->GetOLENode(), "kein OLE-Node?");
+                                        GetIndex() + 1 ]->GetOLENode(), "no OLE-Node?");
 
         const Graphic* pGraphic = pDoc->GetNodes()[ pCnt->GetContentIdx()->GetIndex() + 1 ]->GetOLENode()->GetGraphic();
         if ( pGraphic )
