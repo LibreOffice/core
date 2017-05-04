@@ -68,7 +68,7 @@ class SbUnoStructRefObject: public SbxObject
     {
         bool operator() (const OUString& rProp, const OUString& rOtherProp ) const
         {
-            return rProp.toAsciiUpperCase().compareTo( rOtherProp.toAsciiUpperCase() ) < 0;
+            return rProp.compareToIgnoreAsciiCase( rOtherProp ) < 0;
         }
     };
     typedef std::map< OUString, StructRefInfo*, caseLessComp > StructFieldInfo;

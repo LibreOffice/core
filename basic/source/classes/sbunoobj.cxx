@@ -4730,7 +4730,7 @@ SbxVariable* SbUnoStructRefObject::Find( const OUString& rName, SbxClassType t )
     {
         if ( !mbMemberCacheInit )
             initMemberCache();
-        StructFieldInfo::iterator it = maFields.find( OUString( rName ).toAsciiUpperCase() );
+        StructFieldInfo::iterator it = maFields.find( rName );
         if ( it != maFields.end() )
         {
             SbxDataType eSbxType;
