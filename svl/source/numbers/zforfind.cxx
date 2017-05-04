@@ -65,6 +65,7 @@ const sal_uInt8 ImpSvNumberInputScan::nMatchedUsedAsReturn = 0x10;
 
 static const sal_Unicode cNoBreakSpace = 0xA0;
 static const sal_Unicode cNarrowNoBreakSpace = 0x202F;
+static const sal_Int16 kDefaultEra = 1;     // Gregorian CE, positive year
 
 ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         :
@@ -122,6 +123,7 @@ void ImpSvNumberInputScan::Reset()
     nAmPm        = 0;
     nPosThousandString = 0;
     nLogical     = 0;
+    mnEra        = kDefaultEra;
     nStringScanNumFor = 0;
     nStringScanSign = 0;
     nMatchedAllStrings = nMatchedVirgin;
@@ -999,12 +1001,15 @@ sal_uInt16 ImpSvNumberInputScan::ImplGetYear( sal_uInt16 nIndex )
     sal_uInt16 nYear = 0;
 
     sal_Int32 nLen = sStrArray[nNums[nIndex]].getLength();
-    if (nLen <= 4)
+    // 16-bit integer year width can have 5 digits, allow for one additional
+    // leading zero as convention.
+    if (nLen <= 6)
     {
         nYear = (sal_uInt16) sStrArray[nNums[nIndex]].toInt32();
+        // A year in another, not Gregorian CE era is never expanded.
         // A year < 100 entered with at least 3 digits with leading 0 is taken
         // as is without expansion.
-        if (nYear < 100 && nLen < 3)
+        if (mnEra == kDefaultEra && nYear < 100 && nLen < 3)
         {
             nYear = SvNumberFormatter::ExpandTwoDigitYear( nYear, nYear2000 );
         }
@@ -1123,6 +1128,26 @@ bool ImpSvNumberInputScan::MayBeMonthDate()
 }
 
 
+/** If a string is a separator plus '-' minus sign preceding a 'Y' year in
+    a date pattern at position nPat.
+ */
+static bool lcl_IsSignedYearSep( const OUString& rStr, const OUString& rPat, sal_Int32 nPat )
+{
+    bool bOk = false;
+    sal_Int32 nLen = rStr.getLength();
+    if (nLen > 1 && rStr[nLen-1] == '-')
+    {
+        --nLen;
+        if (nPat + nLen < rPat.getLength() && rPat[nPat+nLen] == 'Y')
+        {
+            // Signed year is possible.
+            bOk = (rPat.indexOf( rStr.copy( 0, nLen), nPat) == nPat);
+        }
+    }
+    return bOk;
+}
+
+
 bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
 {
     if (nAcceptedDatePattern >= -1)
@@ -1210,6 +1235,10 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                     {
                         nPat += nLen - 1;
                     }
+                    else if ((bOk = lcl_IsSignedYearSep( sStrArray[nNext], rPat, nPat)))
+                    {
+                        nPat += nLen - 2;
+                    }
                     else if (nPat + nLen > rPat.getLength() && sStrArray[nNext][ nLen - 1 ] == ' ')
                     {
                         using namespace comphelper::string;
@@ -1295,7 +1324,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
 }
 
 
-bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_Int32 & rPos )
+bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_Int32 & rPos, bool & rSignedYear )
 {
     // If not initialized yet start with first number, if any.
     if (!IsAcceptedDatePattern( (nAnzNums ? nNums[0] : 0)))
@@ -1321,6 +1350,12 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_I
             {
                 const sal_Int32 nLen = sStrArray[nNext].getLength();
                 bool bOk = (rPat.indexOf( sStrArray[nNext], nPat) == nPat);
+                if (!bOk)
+                {
+                    bOk = lcl_IsSignedYearSep( sStrArray[nNext], rPat, nPat);
+                    if (bOk)
+                        rSignedYear = true;
+                }
                 if (!bOk && (nPat + nLen > rPat.getLength() && sStrArray[nNext][ nLen - 1 ] == ' '))
                 {
                     // The same ugly trailing blanks check as in
@@ -1355,6 +1390,30 @@ sal_uInt16 ImpSvNumberInputScan::GetDatePatternNumbers()
         return 0;
     }
     return nDatePatternNumbers;
+}
+
+
+bool ImpSvNumberInputScan::IsDatePatternNumberOfType( sal_uInt16 nNumber, sal_Unicode cType )
+{
+    if (GetDatePatternNumbers() <= nNumber)
+        return false;
+
+    sal_uInt16 nNum = 0;
+    const OUString& rPat = sDateAcceptancePatterns[nAcceptedDatePattern];
+    for (sal_Int32 nPat = 0; nPat < rPat.getLength(); ++nPat)
+    {
+        switch (rPat[nPat])
+        {
+            case 'Y':
+            case 'M':
+            case 'D':
+                if (nNum == nNumber)
+                    return rPat[nPat] == cType;
+                ++nNum;
+            break;
+        }
+    }
+    return false;
 }
 
 
@@ -1910,6 +1969,9 @@ input for the following reasons:
             break;
         }   // switch (nAnzNums)
 
+        if (mnEra != kDefaultEra)
+            pCal->setValue( CalendarFieldIndex::ERA, mnEra );
+
         if ( res && pCal->isValid() )
         {
             double fDiff = DateTime(*pNullDate) - pCal->getEpochStart();
@@ -2231,8 +2293,9 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
         }
         else if (nDecPos == 2)                      // . dup: 12.4.
         {
+            bool bSignedYear = false;
             if (bDecSepInDateSeps ||                // . also date separator
-                SkipDatePatternSeparator( nStringPos, nPos))
+                SkipDatePatternSeparator( nStringPos, nPos, bSignedYear))
             {
                 if ( eScannedType != css::util::NumberFormat::UNDEFINED &&
                      eScannedType != css::util::NumberFormat::DATE &&
@@ -2311,7 +2374,8 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
     }
 
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
-    bool bDate = SkipDatePatternSeparator( nStringPos, nPos);   // 12/31  31.12.  12/31/1999  31.12.1999
+    bool bSignedYear = false;
+    bool bDate = SkipDatePatternSeparator( nStringPos, nPos, bSignedYear);   // 12/31  31.12.  12/31/1999  31.12.1999
     if (!bDate)
     {
         const OUString& rDate = pFormatter->GetDateSep();
@@ -2347,6 +2411,13 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
                 SkipString( pLoc->getLongDateMonthSep(), rString, nPos );
             }
             SkipBlanks(rString, nPos);
+        }
+        if (bSignedYear)
+        {
+            if (mnEra != kDefaultEra)               // signed year twice?
+                return MatchedReturn();
+
+            mnEra = 0;  // BCE
         }
     }
 
@@ -2568,8 +2639,9 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
         }
         else if (nDecPos == 2)                      // . dup: 12.4.
         {
+            bool bSignedYear = false;
             if (bDecSepInDateSeps ||                // . also date separator
-                SkipDatePatternSeparator( nAnzStrings-1, nPos))
+                SkipDatePatternSeparator( nAnzStrings-1, nPos, bSignedYear))
             {
                 if ( eScannedType != css::util::NumberFormat::UNDEFINED &&
                      eScannedType != css::util::NumberFormat::DATE &&
@@ -2685,7 +2757,8 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
         }
     }
 
-    bool bDate = SkipDatePatternSeparator( nAnzStrings-1, nPos);   // 12/31  31.12.  12/31/1999  31.12.1999
+    bool bSignedYear = false;
+    bool bDate = SkipDatePatternSeparator( nAnzStrings-1, nPos, bSignedYear);   // 12/31  31.12.  12/31/1999  31.12.1999
     if (!bDate)
     {
         const OUString& rDate = pFormatter->GetDateSep();
@@ -3444,6 +3517,26 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
 
     if (res)
     {
+        // Accept signed date only for ISO date with at least four digits in
+        // year to not have an input of -M-D-Y arbitrarily recognized. The
+        // final order is only determined in GetDateRef().
+        // Also accept for Y/M/D date pattern match, i.e. if the first number
+        // is year.
+        // Accept only if the year immediately follows the sign character with
+        // no space in between.
+        if (nSign && (eScannedType == css::util::NumberFormat::DATE ||
+                      eScannedType == css::util::NumberFormat::DATETIME) && mnEra == kDefaultEra &&
+                (IsDatePatternNumberOfType(0,'Y') || (MayBeIso8601() && sStrArray[nNums[0]].getLength() >= 4)))
+        {
+            const sal_Unicode c = sStrArray[0][sStrArray[0].getLength()-1];
+            if (c == '-' || c == '+')
+            {
+                // A '+' sign doesn't change the era.
+                if (nSign < 0)
+                    mnEra = 0;  // BCE
+                nSign = 0;
+            }
+        }
         if ( nNegCheck ||                             // ')' not found for '('
              (nSign && (eScannedType == css::util::NumberFormat::DATE ||
                         eScannedType == css::util::NumberFormat::DATETIME))) // signed date/datetime

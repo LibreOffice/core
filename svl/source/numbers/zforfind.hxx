@@ -115,6 +115,7 @@ private:
     short  nESign;                              // Sign of exponent
     short  nAmPm;                               // +1 AM, -1 PM, 0 if none
     short  nLogical;                            // -1 => False, 1 => True
+    sal_Int16 mnEra;                            // Era if date, 0 => BCE, 1 => CE (currently only Gregorian)
     sal_uInt16 nThousand;                       // Count of group (AKA thousand) separators
     sal_uInt16 nPosThousandString;              // Position of concatenated 000,000,000 string
     short  eScannedType;                        // Scanned type
@@ -386,13 +387,20 @@ private:
     /** Sets (not advances!) rPos to sStrArray[nParticle].getLength() if string
         matches separator in pattern at nParticle.
 
+        Also detects a signed year case like M/D/-Y
+
         @returns TRUE if separator matched.
      */
-    bool SkipDatePatternSeparator( sal_uInt16 nParticle, sal_Int32 & rPos );
+    bool SkipDatePatternSeparator( sal_uInt16 nParticle, sal_Int32 & rPos, bool & rSignedYear );
 
     /** Returns count of numbers in accepted date pattern.
      */
     sal_uInt16 GetDatePatternNumbers();
+
+    /** Whether numeric string nNumber is of type cType in accepted date
+        pattern, 'Y', 'M' or 'D'.
+     */
+    bool IsDatePatternNumberOfType( sal_uInt16 nNumber, sal_Unicode cType );
 
     /** Obtain order of accepted date pattern coded as, for example,
         ('D'<<16)|('M'<<8)|'Y'

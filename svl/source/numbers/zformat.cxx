@@ -3463,6 +3463,30 @@ bool SvNumberformat::ImpIsIso8601( const ImpSvNumFor& rNumFor ) const
     return bIsIso;
 }
 
+static bool lcl_hasEra( const ImpSvNumFor& rNumFor )
+{
+    const ImpSvNumberformatInfo& rInfo = rNumFor.Info();
+    const sal_uInt16 nAnz = rNumFor.GetCount();
+    for ( sal_uInt16 i = 0; i < nAnz; i++ )
+    {
+        switch ( rInfo.nTypeArray[i] )
+        {
+            case NF_KEY_RR :
+            case NF_KEY_G :
+            case NF_KEY_GG :
+            case NF_KEY_GGG :
+                return true;
+        }
+    }
+    return false;
+}
+
+static bool lcl_isSignedYear( const CalendarWrapper& rCal, const ImpSvNumFor& rNumFor )
+{
+    return rCal.getValue( css::i18n::CalendarFieldIndex::ERA ) == 0 &&
+        rCal.getUniqueID() == GREGORIAN && !lcl_hasEra( rNumFor );
+}
+
 bool SvNumberformat::ImpGetDateOutput(double fNumber,
                                       sal_uInt16 nIx,
                                       OUStringBuffer& sBuff)
@@ -3583,6 +3607,11 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             {
                 SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
             }
+            // Prepend a minus sign if Gregorian BCE and era is not displayed.
+            if (lcl_isSignedYear( rCal, NumFor[nIx] ))
+            {
+                sBuff.append('-');
+            }
             sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNatNum ));
             if ( bOtherCalendar )
             {
@@ -3593,6 +3622,11 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             if ( bOtherCalendar )
             {
                 SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+            }
+            // Prepend a minus sign if Gregorian BCE and era is not displayed.
+            if (lcl_isSignedYear( rCal, NumFor[nIx] ))
+            {
+                sBuff.append('-');
             }
             aYear = rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR, nNatNum );
             if (aYear.getLength() < 4)
@@ -3930,6 +3964,11 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             {
                 SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
             }
+            // Prepend a minus sign if Gregorian BCE and era is not displayed.
+            if (lcl_isSignedYear( rCal, NumFor[nIx] ))
+            {
+                sBuff.append('-');
+            }
             sBuff.append(rCal.getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNatNum ));
             if ( bOtherCalendar )
             {
@@ -3940,6 +3979,11 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             if ( bOtherCalendar )
             {
                 SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
+            }
+            // Prepend a minus sign if Gregorian BCE and era is not displayed.
+            if (lcl_isSignedYear( rCal, NumFor[nIx] ))
+            {
+                sBuff.append('-');
             }
             aYear = rCal.getDisplayString( CalendarDisplayCode::LONG_YEAR, nNatNum );
             if (aYear.getLength() < 4)
