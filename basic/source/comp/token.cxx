@@ -573,11 +573,8 @@ OUString SbiTokenizer::GetKeywordCase( const OUString& sKeyword )
     const TokenTable* tp = pTokTable;
     for( short i = 0; i < nToken; i++, tp++ )
     {
-        OUString sStr = OStringToOUString(tp->s, RTL_TEXTENCODING_ASCII_US);
-        if( sStr.equalsIgnoreAsciiCase(sKeyword) )
-        {
-            return sStr;
-        }
+        if( sKeyword.equalsIgnoreAsciiCaseAscii(tp->s) )
+            return OStringToOUString(tp->s, RTL_TEXTENCODING_ASCII_US);
     }
     return OUString();
 }
