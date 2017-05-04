@@ -16,6 +16,23 @@
       "revId": "8e1ed067b2d7ae8f7732a2c7f784ae37a2fc9472",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_3d99846f",
+        "filename": "include/editeng/itemtype.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-04T08:08:36Z",
+      "side": 1,
+      "message": "I agree with Stephan here, I think you\u0027d need to work backwards through the code, converting long to sal_Int32/sal_Int64 before you could even attempt to get rid of BigInt.\n\nI started having a look at this, and one of the places that needs conversion is Fraction, which is also in tools.",
+      "revId": "8e1ed067b2d7ae8f7732a2c7f784ae37a2fc9472",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
