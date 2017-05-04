@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include <boost/math/common_factor_rt.hpp>
 #include <boost/rational.hpp>
 
 template<typename T>
@@ -180,8 +181,8 @@ namespace
         T den = r.denominator();
 
         // Avoid overflow and preserve normalization
-        T gcd1 = boost::integer::gcd(i.numerator(), den);
-        T gcd2 = boost::integer::gcd(num, i.denominator());
+        T gcd1 = boost::math::gcd(i.numerator(), den);
+        T gcd2 = boost::math::gcd(num, i.denominator());
 
         bool fail = false;
         fail |= o3tl::checked_multiply(i.numerator() / gcd1, num / gcd2, num);
