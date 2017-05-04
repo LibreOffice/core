@@ -16,6 +16,24 @@
       "revId": "e6f19eb710b347296355261249fae1c639d5b06a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_bdf2d498",
+        "filename": "include/editeng/editdata.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-05-04T10:00:13Z",
+      "side": 1,
+      "message": "yes should be safe, there are no cast to other types. Seems it\u0027s only used to bring SdrTextVertAdjust and SdrTextHorzAdjust information to EditEngine.\nI will rename it.",
+      "parentUuid": "5a3905b3_dd1a406e",
+      "revId": "e6f19eb710b347296355261249fae1c639d5b06a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
