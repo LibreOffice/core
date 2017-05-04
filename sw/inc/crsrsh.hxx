@@ -476,7 +476,7 @@ public:
     void        SetFlyMacroLnk( const Link<const SwFlyFrameFormat*,void>& rLnk ) { m_aFlyMacroLnk = rLnk; }
     const Link<const SwFlyFrameFormat*,void>& GetFlyMacroLnk() const           { return m_aFlyMacroLnk; }
 
-    // Methods returning/altering link for changes of attributes/formates.
+    // Methods returning/altering link for changes of attributes/formats.
     void        SetChgLnk( const Link<SwCursorShell*,void> &rLnk ) { m_aChgLnk = rLnk; }
     const Link<SwCursorShell*,void>& GetChgLnk() const           { return m_aChgLnk; }
 

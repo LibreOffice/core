@@ -453,7 +453,7 @@ namespace xmloff
             Property aProperty = m_xPropertyInfo->getPropertyByName(sPropertyName);
             if ((aProperty.Attributes & PropertyAttribute::MAYBEVOID) == 0)
                 // the string is empty, and the property is not allowed to be void
-                // -> don't need to write the attibute, 'cause missing it is unambiguous
+                // -> don't need to write the attribute, 'cause missing it is unambiguous
                 return;
         }
 

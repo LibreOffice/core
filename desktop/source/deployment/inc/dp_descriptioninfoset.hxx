@@ -156,7 +156,7 @@ public:
         have at least one child element containing an URL.
 
         The <code>&lt;update-website&gt;</code> and <code>&lt;update-download&gt;</code>
-        elements are mutually exclusiv.
+        elements are mutually exclusive.
 
         @return
         the download website URL, or an empty <code>optional</code> if none is

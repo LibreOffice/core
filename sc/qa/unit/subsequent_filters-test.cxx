@@ -3155,7 +3155,7 @@ void ScFiltersTest::testCustomNumFormatHybridCellODS()
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.SetAutoCalc(true);
 
-    // All of B14, B16 and B18 should be displaying empty strings by virture
+    // All of B14, B16 and B18 should be displaying empty strings by virtue
     // of the custom number format being set on those cells.
 
     for (SCROW nRow : {13, 15, 17})

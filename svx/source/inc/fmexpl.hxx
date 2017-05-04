@@ -378,7 +378,7 @@ namespace svxform
         enum DROP_ACTION        { DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
         enum SELDATA_ITEMS      { SDI_DIRTY, SDI_ALL, SDI_NORMALIZED, SDI_NORMALIZED_FORMARK };
 
-        // when dropping I want to be able to scroll and to exand folders, for this:
+        // when dropping I want to be able to scroll and to expand folders, for this:
         AutoTimer           m_aDropActionTimer;
         Timer               m_aSynchronizeTimer;
         // the meta-data about my current selection

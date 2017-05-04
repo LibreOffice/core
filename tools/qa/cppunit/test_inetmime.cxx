@@ -163,7 +163,7 @@ namespace
             CPPUNIT_ASSERT(i != parameters.end());
             CPPUNIT_ASSERT_EQUAL(OString("unknown"), i->second.m_sCharset);
             CPPUNIT_ASSERT_EQUAL(OString("en"), i->second.m_sLanguage);
-            // Convertion fails for unknown charsets:
+            // Conversion fails for unknown charsets:
             CPPUNIT_ASSERT(!i->second.m_bConverted);
         }
     }

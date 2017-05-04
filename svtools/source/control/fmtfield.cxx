@@ -1087,7 +1087,7 @@ void DoubleCurrencyField::FormatChanged(FORMAT_CHANGE_TYPE nWhat)
         case FORMAT_CHANGE_TYPE::KEYONLY:
             OSL_FAIL("DoubleCurrencyField::FormatChanged : somebody modified my key !");
             // We always build our own format from the settings we get via special methods (setCurrencySymbol etc.).
-            // Nobody but ourself should modifiy the format key directly !
+            // Nobody but ourself should modify the format key directly!
             break;
         default: break;
     }

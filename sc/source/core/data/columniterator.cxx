@@ -41,7 +41,7 @@ void ScColumnTextWidthIterator::next()
 
     if (miDataCur != miDataEnd)
     {
-        // Stil in the same block. We're good.
+        // Still in the same block. We're good.
         checkEndRow();
         return;
     }

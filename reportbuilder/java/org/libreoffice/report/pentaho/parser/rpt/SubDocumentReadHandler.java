@@ -80,8 +80,8 @@ public class SubDocumentReadHandler extends NoCDATATextContentReadHandler
     {
         if (OfficeNamespaces.OOREPORT_NS.equals(uri))
         {
-            // expect a report control. The control will modifiy the current
-            // element (as we do not separate the elements that strictly ..)
+            // expect a report control. The control will modify the current
+            // element (as we do not separate the elements that strictly...)
             if ("report-control".equals(tagName))
             {
                 return new IgnoreAnyChildReadHandler();
