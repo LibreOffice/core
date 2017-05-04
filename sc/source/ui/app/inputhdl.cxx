@@ -2603,8 +2603,8 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
     bool bMatrix = ( nBlockMode == ScEnterMode::MATRIX );
 
     SfxApplication* pSfxApp     = SfxGetpApp();
-    EditTextObject* pObject     = nullptr;
-    ScPatternAttr*  pCellAttrs  = nullptr;
+    std::unique_ptr<EditTextObject> pObject;
+    std::unique_ptr<ScPatternAttr> pCellAttrs;
     bool            bForget     = false; // Remove due to validity?
 
     OUString aString = GetEditText(mpEditEngine.get());
@@ -2742,7 +2742,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
             if ( pCommonAttrs )
             {
                 ScDocument* pDoc = pActiveViewSh->GetViewData().GetDocument();
-                pCellAttrs = new ScPatternAttr( pDoc->GetPool() );
+                pCellAttrs = o3tl::make_unique<ScPatternAttr>(pDoc->GetPool());
                 pCellAttrs->GetFromEditItemSet( pCommonAttrs );
                 delete pCommonAttrs;
             }
@@ -2798,7 +2798,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
         if (bAttrib)
         {
             mpEditEngine->ClearSpellErrors();
-            pObject = mpEditEngine->CreateTextObject();
+            pObject.reset(mpEditEngine->CreateTextObject());
         }
         else if (bAutoComplete) // Adjust Upper/Lower case
         {
@@ -2893,7 +2893,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
 
             ScInputStatusItem aItem( FID_INPUTLINE_STATUS,
                                      aCursorPos, aCursorPos, aCursorPos,
-                                     aString, pObject );
+                                     aString, pObject.get() );
 
             if (!aMisspellRanges.empty())
                 aItem.SetMisspellRanges(&aMisspellRanges);
@@ -2916,9 +2916,6 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
         pExecuteSh->ApplySelectionPattern( *pCellAttrs, true );
         pExecuteSh->AdjustBlockHeight();
     }
-
-    delete pCellAttrs;
-    delete pObject;
 
     HideTip();
     HideTipBelow();
