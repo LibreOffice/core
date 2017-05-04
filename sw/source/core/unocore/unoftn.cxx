@@ -268,7 +268,7 @@ SwXFootnote::setLabel(const OUString& aLabel)
     if(pFormat)
     {
         const SwTextFootnote* pTextFootnote = pFormat->GetTextFootnote();
-        OSL_ENSURE(pTextFootnote, "kein TextNode?");
+        OSL_ENSURE(pTextFootnote, "No TextNode?");
         SwTextNode& rTextNode = (SwTextNode&)pTextFootnote->GetTextNode();
 
         SwPaM aPam(rTextNode, pTextFootnote->GetStart());

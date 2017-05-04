@@ -746,7 +746,7 @@ void SwXTextSearch::FillSearchOptions( i18nutil::SearchOptions2& rSearchOpt ) co
     if( m_bWord )
         rSearchOpt.searchFlag |= util::SearchFlags::NORM_WORD_ONLY;
 
-//  bInSel: 1;  // wie geht das?
+//  bInSel: 1;  // How is that possible?
 //  TODO: pSearch->bStyles!
 //      inSelection??
 //      aSrchParam.SetSrchInSelection(TypeConversion::toBOOL(aVal));
