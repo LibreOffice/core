@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_1863f6b2",
+        "filename": "officecfg/registry/data/org/openoffice/Inet.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1001622
+      },
+      "writtenOn": "2017-05-04T16:40:17Z",
+      "side": 1,
+      "message": "I assumed that:\n* it was the default anyway\n* it was a good idea to start with a default set to system when there was no user level configuration\n\nI Will remove it",
+      "parentUuid": "5a3905b3_98c1a683",
+      "revId": "1bfd2f7f2e0cee2b799adb0b7e83e0d8daad6698",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_b8be62fd",
         "filename": "officecfg/registry/data/org/openoffice/Inet.xcu",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2017-05-04T15:30:42Z",
       "side": 1,
       "message": "As, by desgin, the \"System\" group shall not be changeable, you can add oor:finalized\u003d\"true\" here.",
+      "revId": "1bfd2f7f2e0cee2b799adb0b7e83e0d8daad6698",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_3858b2fa",
+        "filename": "officecfg/registry/data/org/openoffice/Inet.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1001622
+      },
+      "writtenOn": "2017-05-04T16:40:17Z",
+      "side": 1,
+      "message": "Ok will add it",
+      "parentUuid": "5a3905b3_b8be62fd",
       "revId": "1bfd2f7f2e0cee2b799adb0b7e83e0d8daad6698",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
