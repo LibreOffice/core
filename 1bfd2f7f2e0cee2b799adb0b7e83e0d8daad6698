@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_98c1a683",
+        "filename": "officecfg/registry/data/org/openoffice/Inet.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-04T15:30:42Z",
+      "side": 1,
+      "message": "The value of ooInetProxyType (unless overridden in a higher layer, e.g., from cui/source/options/optinet2.cxx in registrymodifications.xcu) shall be obtained from the backends.  Why did you drop that?",
+      "revId": "1bfd2f7f2e0cee2b799adb0b7e83e0d8daad6698",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b8be62fd",
+        "filename": "officecfg/registry/data/org/openoffice/Inet.xcu",
+        "patchSetId": 4
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-04T15:30:42Z",
+      "side": 1,
+      "message": "As, by desgin, the \"System\" group shall not be changeable, you can add oor:finalized\u003d\"true\" here.",
+      "revId": "1bfd2f7f2e0cee2b799adb0b7e83e0d8daad6698",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
