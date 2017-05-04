@@ -22,10 +22,8 @@
 
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <sal/types.h>
-#include <tools/solar.h>
 #include <tools/link.hxx>
 #include <memory>
-#include <vector>
 
 struct ImplSVEvent;
 
@@ -37,6 +35,7 @@ namespace sd { namespace presenter {
     to a single call to updateScreen.
 */
 class CanvasUpdateRequester
+    : public std::enable_shared_from_this<CanvasUpdateRequester>
 {
 public:
     CanvasUpdateRequester(const CanvasUpdateRequester&) = delete;
@@ -55,15 +54,12 @@ private:
     ~CanvasUpdateRequester();
     class Deleter; friend class Deleter;
 
-    typedef ::std::vector<
-        ::std::pair<
-            css::uno::Reference<css::rendering::XSpriteCanvas>,
-           std::shared_ptr<CanvasUpdateRequester> > > RequesterMap;
-    static RequesterMap maRequesterMap;
-
+    /// keep instance alive waiting for event dispatch
+    std::shared_ptr<CanvasUpdateRequester> m_pThis;
     css::uno::Reference<css::rendering::XSpriteCanvas> mxCanvas;
-    ImplSVEvent * mnUserEventId;
+    ImplSVEvent * m_pUserEventId;
     bool mbUpdateFlag;
+
     DECL_LINK(Callback, void*, void);
 };
 

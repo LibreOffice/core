@@ -20,6 +20,7 @@
 #include "CanvasUpdateRequester.hxx"
 #include <vcl/svapp.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -36,30 +37,54 @@ public:
 
 //===== CanvasUpdateRequester =================================================
 
-CanvasUpdateRequester::RequesterMap CanvasUpdateRequester::maRequesterMap;
-
 std::shared_ptr<CanvasUpdateRequester> CanvasUpdateRequester::Instance (
     const Reference<rendering::XSpriteCanvas>& rxSharedCanvas)
 {
-    RequesterMap::const_iterator iRequester;
-    for (iRequester=maRequesterMap.begin(); iRequester!=maRequesterMap.end(); ++iRequester)
+    // this global must not own anything or we crash on shutdown
+    static std::vector<std::pair<
+        uno::WeakReference<rendering::XSpriteCanvas>,
+        std::weak_ptr<CanvasUpdateRequester>>> s_RequesterMap;
+    for (auto it = s_RequesterMap.begin(); it != s_RequesterMap.end(); )
     {
-        if (iRequester->first == rxSharedCanvas)
-            return iRequester->second;
+        uno::Reference<rendering::XSpriteCanvas> const xCanvas(it->first);
+        if (!xCanvas.is())
+        {
+            it = s_RequesterMap.erase(it); // remove stale entry
+        }
+        else if (xCanvas == rxSharedCanvas)
+        {
+            std::shared_ptr<CanvasUpdateRequester> pRequester(it->second);
+            if (pRequester)
+            {
+                return pRequester;
+            }
+            else
+            {
+                std::shared_ptr<CanvasUpdateRequester> const pNew(
+                        new CanvasUpdateRequester(rxSharedCanvas), Deleter());
+                it->second = pNew;
+                return pNew;
+            }
+        }
+        else
+        {
+            ++it;
+        }
     }
 
     // No requester for the given canvas found.  Create a new one.
     std::shared_ptr<CanvasUpdateRequester> pRequester (
         new CanvasUpdateRequester(rxSharedCanvas), Deleter());
-    maRequesterMap.push_back(RequesterMap::value_type(rxSharedCanvas,pRequester));
+    s_RequesterMap.push_back(std::make_pair(rxSharedCanvas, pRequester));
     return pRequester;
 }
 
+
 CanvasUpdateRequester::CanvasUpdateRequester (
-    const Reference<rendering::XSpriteCanvas>& rxCanvas)
-    : mxCanvas(rxCanvas),
-      mnUserEventId(nullptr),
-      mbUpdateFlag(false)
+        const Reference<rendering::XSpriteCanvas>& rxCanvas)
+    : mxCanvas(rxCanvas)
+    , m_pUserEventId(nullptr)
+    , mbUpdateFlag(false)
 {
     Reference<lang::XComponent> xComponent (mxCanvas, UNO_QUERY);
     if (xComponent.is())
@@ -70,16 +95,16 @@ CanvasUpdateRequester::CanvasUpdateRequester (
 
 CanvasUpdateRequester::~CanvasUpdateRequester()
 {
-    if (mnUserEventId != nullptr)
-        Application::RemoveUserEvent(mnUserEventId);
+    assert(m_pUserEventId == nullptr);
 }
 
 void CanvasUpdateRequester::RequestUpdate (const bool bUpdateAll)
 {
-    if (mnUserEventId == nullptr)
+    if (m_pUserEventId == nullptr)
     {
+        m_pThis = shared_from_this(); // keep instance alive until dispatch
         mbUpdateFlag = bUpdateAll;
-        mnUserEventId = Application::PostUserEvent(LINK(this, CanvasUpdateRequester, Callback));
+        m_pUserEventId = Application::PostUserEvent(LINK(this, CanvasUpdateRequester, Callback));
     }
     else
     {
@@ -89,12 +114,14 @@ void CanvasUpdateRequester::RequestUpdate (const bool bUpdateAll)
 
 IMPL_LINK_NOARG(CanvasUpdateRequester, Callback, void*, void)
 {
-    mnUserEventId = nullptr;
+    m_pUserEventId = nullptr;
     if (mxCanvas.is())
     {
         mxCanvas->updateScreen(mbUpdateFlag);
         mbUpdateFlag = false;
     }
+    assert(m_pThis);
+    m_pThis.reset(); // possibly delete "this"
 }
 
 } } // end of namespace ::sd::presenter

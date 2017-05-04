@@ -353,7 +353,7 @@ private:
     /** The UpdateRequester is used by updateScreen() to schedule
         updateScreen() calls at the shared canvas.
     */
-    std::shared_ptr<CanvasUpdateRequester> mpUpdateRequester;
+    std::shared_ptr<CanvasUpdateRequester> m_pUpdateRequester;
 
     /** The clip rectangle as given to SetClip().
     */
