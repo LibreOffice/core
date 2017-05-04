@@ -46,6 +46,24 @@ namespace cppcanvas
 {
     namespace internal
     {
+
+        enum EmfPlusPenData
+        {
+            PenDataTransform        = 0x00000001,
+            PenDataStartCap         = 0x00000002,
+            PenDataEndCap           = 0x00000004,
+            PenDataJoin             = 0x00000008,
+            PenDataMiterLimit       = 0x00000010,
+            PenDataLineStyle        = 0x00000020,
+            PenDataDashedLineCap    = 0x00000040,
+            PenDataDashedLineOffset = 0x00000080,
+            PenDataDashedLine       = 0x00000100,
+            PenDataNonCenter        = 0x00000200,
+            PenDataCompoundLine     = 0x00000400,
+            PenDataCustomStartCap   = 0x00000800,
+            PenDataCustomEndCap     = 0x00001000
+        };
+
         const sal_Int32 EmfPlusLineStyleSolid = 0x00000000;
         const sal_Int32 EmfPlusLineStyleDash = 0x00000001;
         const sal_Int32 EmfPlusLineStyleDot = 0x00000002;
@@ -55,7 +73,7 @@ namespace cppcanvas
 
         EMFPPen::EMFPPen()
             : EMFPBrush()
-            , width(0.0)
+            , penWidth(0.0)
             , startCap(0)
             , endCap(0)
             , lineJoin(0)
@@ -86,11 +104,11 @@ namespace cppcanvas
         void EMFPPen::SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer& rR, const OutDevState& rState)
         {
 #if OSL_DEBUG_LEVEL > 1
-            if (width == 0.0) {
+            if (penWidth == 0.0) {
                 SAL_INFO("cppcanvas.emf", "TODO: pen with zero width - using minimal which might not be correct");
             }
 #endif
-            rStrokeAttributes.StrokeWidth = fabs((rState.mapModeTransform * rR.MapSize(width == 0.0 ? 0.05 : width, 0)).getLength());
+            rStrokeAttributes.StrokeWidth = fabs((rState.mapModeTransform * rR.MapSize(penWidth == 0.0 ? 0.05 : penWidth, 0)).getLength());
         }
 
         /// Convert stroke caps between EMF+ and rendering API
@@ -155,19 +173,19 @@ namespace cppcanvas
 
         void EMFPPen::Read(SvStream& s, ImplRenderer& rR)
         {
-            sal_uInt32 header, unknown, penFlags, unknown2;
+            sal_uInt32 graphicsVersion, penType, penDataFlags, penUnit;
             int i;
 
-            s.ReadUInt32(header).ReadUInt32(unknown).ReadUInt32(penFlags).ReadUInt32(unknown2).ReadFloat(width);
+            s.ReadUInt32(graphicsVersion).ReadUInt32(penType).ReadUInt32(penDataFlags).ReadUInt32(penUnit).ReadFloat(penWidth);
 
             SAL_INFO("cppcanvas.emf", "EMF+\tpen");
-            SAL_INFO("cppcanvas.emf", "EMF+\theader: 0x" << std::hex << header << " unknown: 0x" << unknown <<
-                " additional flags: 0x" << penFlags << " unknown: 0x" << unknown2 << " width: " << std::dec << width);
+            SAL_INFO("cppcanvas.emf", "EMF+\t graphics version: 0x" << std::hex << graphicsVersion << " type (must be set to zero): " << penType <<
+                " pen data flags: 0x" << penDataFlags << " unit: " << penUnit << " width: " << std::dec << penWidth);
 
-            if (penFlags & 1)
+            if (penDataFlags & PenDataTransform)
                 ReadXForm(s, pen_transformation);
 
-            if (penFlags & 2)
+            if (penDataFlags & PenDataStartCap)
             {
                 s.ReadInt32(startCap);
                 SAL_INFO("cppcanvas.emf", "EMF+\t\tstartCap: 0x" << std::hex << startCap);
@@ -175,7 +193,7 @@ namespace cppcanvas
             else
                 startCap = 0;
 
-            if (penFlags & 4)
+            if (penDataFlags & PenDataEndCap)
             {
                 s.ReadInt32(endCap);
                 SAL_INFO("cppcanvas.emf", "EMF+\t\tendCap: 0x" << std::hex << endCap);
@@ -183,17 +201,17 @@ namespace cppcanvas
             else
                 endCap = 0;
 
-            if (penFlags & 8)
+            if (penDataFlags & PenDataJoin)
                 s.ReadInt32(lineJoin);
             else
                 lineJoin = 0;
 
-            if (penFlags & 16)
+            if (penDataFlags & PenDataMiterLimit)
                 s.ReadFloat(mitterLimit);
             else
                 mitterLimit = 0;
 
-            if (penFlags & 32)
+            if (penDataFlags & PenDataLineStyle)
             {
                 s.ReadInt32(dashStyle);
                 SAL_INFO("cppcanvas.emf", "EMF+\t\tdashStyle: 0x" << std::hex << dashStyle);
@@ -201,17 +219,17 @@ namespace cppcanvas
             else
                 dashStyle = 0;
 
-            if (penFlags & 64)
+            if (penDataFlags & PenDataDashedLineCap)
                 s.ReadInt32(dashCap);
             else
                 dashCap = 0;
 
-            if (penFlags & 128)
+            if (penDataFlags & PenDataDashedLineOffset)
                 s.ReadFloat(dashOffset);
             else
                 dashOffset = 0;
 
-            if (penFlags & 256)
+            if (penDataFlags & PenDataDashedLine)
             {
                 dashStyle = EmfPlusLineStyleCustom;
 
@@ -230,12 +248,12 @@ namespace cppcanvas
             else
                 dashPatternLen = 0;
 
-            if (penFlags & 512)
+            if (penDataFlags & PenDataNonCenter)
                 s.ReadInt32(alignment);
             else
                 alignment = 0;
 
-            if (penFlags & 1024) {
+            if (penDataFlags & PenDataCompoundLine) {
                 s.ReadInt32(compoundArrayLen);
                 if (compoundArrayLen<0 || sal_uInt32(compoundArrayLen)>SAL_MAX_INT32 / sizeof(float))
                     compoundArrayLen = SAL_MAX_INT32 / sizeof(float);
@@ -246,7 +264,7 @@ namespace cppcanvas
             else
                 compoundArrayLen = 0;
 
-            if (penFlags & 2048)
+            if (penDataFlags & PenDataCustomStartCap)
             {
                 s.ReadInt32(customStartCapLen);
                 SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomStartCapLen: " << customStartCapLen);
@@ -261,7 +279,7 @@ namespace cppcanvas
             else
                 customStartCapLen = 0;
 
-            if (penFlags & 4096)
+            if (penDataFlags & PenDataCustomEndCap)
             {
                 s.ReadInt32(customEndCapLen);
                 SAL_INFO("cppcanvas.emf", "EMF+\t\tcustomEndCapLen: " << customEndCapLen);
