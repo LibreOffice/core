@@ -332,7 +332,6 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
         // bRest = false;
 
-        // Wenn das Ende der Portion hinausragt, wird geclippt.
         // If the end of the portion juts out, it is clipped.
         // A safety distance of half the height is added, so that
         // TTF-"f" isn't overlapping into the page margin.

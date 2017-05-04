@@ -1181,11 +1181,9 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
         if( rInf.IsNewLine() && (!rInf.GetFly() || !m_pCurr->IsDummy()) )
             return nullptr;
 
-        // Wenn der Text an den Fly gestossen ist, oder wenn
-        // der Fly als erstes drankommt, weil er ueber dem linken
-        // Rand haengt, wird GetFly() returnt.
-        // Wenn IsFull() und kein GetFly() vorhanden ist, gibt's
-        // naturgemaesz eine 0.
+        // When the test bumped at the Fly, or when the Fly comes first because
+        // it's juts out over the left edge, GetFly() is returned.
+        // When IsFull() and no GetFly() is available, naturally zero is returned.
         if( rInf.GetFly() )
         {
             if( rInf.GetLast()->IsBreakPortion() )
@@ -1196,17 +1194,16 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
 
             return rInf.GetFly();
         }
-        // Ein fieser Sonderfall: ein Rahmen ohne Umlauf kreuzt den
-        // Footnote-Bereich. Wir muessen die Footnote-Portion als Zeilenrest
-        // bekanntgeben, damit SwTextFrame::Format nicht abbricht
-        // (die Textmasse wurde ja durchformatiert).
+
+        // A nasty special case: A frame circulation crosses the Footnote area.
+        // We must declare the Footnote portion as rest of line, so that
+        // SwTextFrame::Format doesn't abort (the text mass already was formatted).
         if( rInf.GetRest() )
             rInf.SetNewLine( true );
         else
         {
-            // Wenn die naechste Zeile mit einem Rest eines Feldes beginnt,
-            // jetzt aber kein Rest mehr anliegt,
-            // muss sie auf jeden Fall neu formatiert werden!
+            // When the next line begins a rest of a field, but now no more
+            // remains, the line must definitely formatted anew!
             if( lcl_OldFieldRest( GetCurr() ) )
                 rInf.SetNewLine( true );
             else
@@ -1290,13 +1287,11 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
 
         if( cChar )
         {
-            /* Wir holen uns nocheinmal cChar, um sicherzustellen, dass das
-             * Tab jetzt wirklich ansteht und nicht auf die naechste Zeile
-             * gewandert ist ( so geschehen hinter Rahmen ).
-             * Wenn allerdings eine FieldPortion im Rest wartet, muessen wir
-             * das cChar natuerlich aus dem Feldinhalt holen, z.B. bei
-             * DezimalTabs und Feldern (22615)
-            */
+            /* We fetch again a cChar to be sure, that the tab is pending now and
+             * didn't move to the next line ( so happens behind frames ).
+             * When indeed a FieldPortion is in the rest, we must naturally fetch
+             * the cChar from the field content, e.g. DecimalTabs and fields (22615)
+             */
             if( !rInf.GetRest() || !rInf.GetRest()->InFieldGrp() )
                 cChar = rInf.GetChar( rInf.GetIdx() );
             rInf.ClearHookChar();
@@ -1451,17 +1446,17 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
         }
     }
 
-    // Der Font wird im Outputdevice eingestellt,
-    // der Ascent und die Hoehe werden berechnet.
+    // The font is set in output device,
+    // the ascent and the height will be calculated.
     if( !pPor->GetAscent() && !pPor->Height() )
         CalcAscent( rInf, pPor );
     rInf.SetLen( pPor->GetLen() );
 
-    // In CalcFlyWidth wird Width() verkuerzt, wenn eine FlyPortion vorliegt.
+    // In CalcFlyWidth Width() will be shorten, when a FlyPortion is present.
     CalcFlyWidth( rInf );
 
-    // Man darf nicht vergessen, dass pCurr als GetLast() vernuenftige
-    // Werte bereithalten muss:
+    // One must not forgot, that pCurr as GetLast() must keep reasonable values
+    // ready:
     if( !m_pCurr->Height() )
     {
         OSL_ENSURE( m_pCurr->Height(), "SwTextFormatter::NewPortion: limbo dance" );
@@ -1494,8 +1489,8 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
     GetInfo().SetLineHeight( 0 );
     GetInfo().SetLineNetHeight( 0 );
 
-    // Recycling muss bei geaenderter Zeilenhoehe unterdrueckt werden
-    // und auch bei geaendertem Ascent (Absenken der Grundlinie).
+    // Recycling must be suppressed by changed line height and also
+    // by changed ascent (lowering of baseline).
     const sal_uInt16 nOldHeight = m_pCurr->Height();
     const sal_uInt16 nOldAscent = m_pCurr->GetAscent();
 
@@ -1532,7 +1527,7 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
         }
     }
 
-    // Hier folgt bald die Unterlaufpruefung.
+    // Here soon the underflow check follows.
     while( bBuild )
     {
         GetInfo().SetFootnoteInside( false );
@@ -1584,7 +1579,7 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
             CalcRealHeight();
         }
 
-        // bBuild entscheidet, ob noch eine Ehrenrunde gedreht wird
+        // bBuild decides if another lap of honor is done
         if ( m_pCurr->GetRealHeight() <= GetInfo().GetLineHeight() )
         {
             m_pCurr->SetRealHeight( GetInfo().GetLineHeight() );
@@ -1672,9 +1667,9 @@ sal_Int32 SwTextFormatter::FormatLine(const sal_Int32 nStartPos)
     if( nOldHeight != m_pCurr->Height() || nOldAscent != m_pCurr->GetAscent() )
     {
         SetFlyInCntBase();
-        GetInfo().SetPaintOfst( 0 ); //geaenderte Zeilenhoehe => kein Recycling
-        // alle weiteren Zeilen muessen gepaintet und, wenn Flys im Spiel sind
-        // auch formatiert werden.
+        GetInfo().SetPaintOfst( 0 ); // changed line height => no recycling
+        // all following line must be painted and when Flys are around,
+        // also formatted
         GetInfo().SetShift( true );
     }
 
@@ -1735,10 +1730,10 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
         return;
     }
 
-    // Das Dummyflag besitzen Zeilen, die nur Flyportions enthalten, diese
-    // sollten kein Register etc. beachten. Dummerweise hat kann es eine leere
-    // Zeile am Absatzende geben (bei leeren Abs?tzen oder nach einem
-    // Shift-Return), die das Register durchaus beachten soll.
+    // The dummy flag holds lines, which only contain flyportions, these shouldn't
+    // consider register and so on. Unfortunately an empty line can be at
+    // the end of a paragraph (empty paragraphs or behind a Shift-Return),
+    // which should consider the register.
     if( !m_pCurr->IsDummy() || ( !m_pCurr->GetNext() &&
         GetStart() >= GetTextFrame()->GetText().getLength() && !bNewLine ) )
     {
@@ -1808,8 +1803,8 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                     case SvxInterLineSpaceRule::Prop:
                     {
                         long nTmp = pSpace->GetPropLineSpace();
-                        // 50% ist das Minimum, bei 0% schalten wir auf
-                        // den Defaultwert 100% um ...
+                        // 50% is the minimum, if 0% we switch to the
+                        // default value 100% ...
                         if( nTmp < 50 )
                             nTmp = nTmp ? 50 : 100;
 
@@ -1850,7 +1845,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
 
 void SwTextFormatter::FeedInf( SwTextFormatInfo &rInf ) const
 {
-    // Fly auf jeden Fall loeschen!
+    // delete Fly in any case!
     ClearFly( rInf );
     rInf.Init();
 
@@ -1970,7 +1965,7 @@ bool SwTextFormatter::AllowRepaintOpt() const
                 bOptimizeRepaint = false;
             else
             {
-                // ????: Blank in der letzten Masterzeile (blocksat.sdw)
+                // ????: blank in the last master line (blocksat.sdw)
                 bOptimizeRepaint = nullptr == m_pCurr->GetNext() && !m_pFrame->GetFollow();
                 if ( bOptimizeRepaint )
                 {
@@ -1990,7 +1985,7 @@ bool SwTextFormatter::AllowRepaintOpt() const
         }
     }
 
-    // Schon wieder ein Sonderfall: unsichtbare SoftHyphs
+    // Again another special case: invisible SoftHyphs
     const sal_Int32 nReformat = GetInfo().GetReformatStart();
     if( bOptimizeRepaint && COMPLETE_STRING != nReformat )
     {
