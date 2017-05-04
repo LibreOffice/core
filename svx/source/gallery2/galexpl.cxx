@@ -153,7 +153,7 @@ bool GalleryExplorer::GetGraphicObj( const OUString& rThemeName, sal_uInt32 nPos
                 bRet = bRet || pTheme->GetGraphic( nPos, *pGraphic, bProgress );
 
             if( pThumb )
-                bRet = bRet || pTheme->GetThumb( nPos, *pThumb, bProgress );
+                bRet = bRet || pTheme->GetThumb( nPos, *pThumb );
 
             pGal->ReleaseTheme( pTheme, aListener );
         }

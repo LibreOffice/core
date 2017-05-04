@@ -530,7 +530,7 @@ void GalleryBrowser2::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-sal_Int8 GalleryBrowser2::AcceptDrop( DropTargetHelper& rTarget, const AcceptDropEvent& )
+sal_Int8 GalleryBrowser2::AcceptDrop( DropTargetHelper& rTarget )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
@@ -555,7 +555,7 @@ sal_Int8 GalleryBrowser2::AcceptDrop( DropTargetHelper& rTarget, const AcceptDro
     return nRet;
 }
 
-sal_Int8 GalleryBrowser2::ExecuteDrop( DropTargetHelper&, const ExecuteDropEvent& rEvt )
+sal_Int8 GalleryBrowser2::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
@@ -574,7 +574,7 @@ sal_Int8 GalleryBrowser2::ExecuteDrop( DropTargetHelper&, const ExecuteDropEvent
     return nRet;
 }
 
-void GalleryBrowser2::StartDrag( vcl::Window*, const Point* pDragPoint )
+void GalleryBrowser2::StartDrag( const Point* pDragPoint )
 {
     if( mpCurTheme )
     {
@@ -586,13 +586,13 @@ void GalleryBrowser2::StartDrag( vcl::Window*, const Point* pDragPoint )
     }
 }
 
-void GalleryBrowser2::TogglePreview( vcl::Window*, const Point* )
+void GalleryBrowser2::TogglePreview()
 {
     SetMode( ( GALLERYBROWSERMODE_PREVIEW != GetMode() ) ? GALLERYBROWSERMODE_PREVIEW : meLastMode );
     GetViewWindow()->GrabFocus();
 }
 
-void GalleryBrowser2::ShowContextMenu( vcl::Window*, const Point* pContextPoint )
+void GalleryBrowser2::ShowContextMenu( const Point* pContextPoint )
 {
     Point aSelPos;
     const sal_uIntPtr nItemId = ImplGetSelectedItemId( pContextPoint, aSelPos );
@@ -616,14 +616,14 @@ void GalleryBrowser2::ShowContextMenu( vcl::Window*, const Point* pContextPoint 
     }
 }
 
-bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
+bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, vcl::Window* /*pWindow*/ )
 {
     Point       aSelPos;
     const sal_uIntPtr   nItemId = ImplGetSelectedItemId( nullptr, aSelPos );
     bool bRet = false;
     svx::sidebar::GalleryControl* pParentControl = dynamic_cast<svx::sidebar::GalleryControl*>(GetParent());
     if (pParentControl != nullptr)
-        bRet = pParentControl->GalleryKeyInput(rKEvt, pWindow);
+        bRet = pParentControl->GalleryKeyInput(rKEvt);
 
     if( !bRet && !maViewBox->HasFocus() && nItemId && mpCurTheme )
     {
@@ -651,7 +651,7 @@ bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow )
             {
                 if( bPreview )
                 {
-                    TogglePreview( pWindow );
+                    TogglePreview();
                     bRet = true;
                 }
             }

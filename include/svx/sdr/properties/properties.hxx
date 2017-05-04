@@ -79,10 +79,6 @@ namespace sdr
             // basic constructor, used from SdrObject.
             explicit BaseProperties(SdrObject& rObj);
 
-            // constructor for copying, but using new object. Used from the Clone()
-            // method.
-            BaseProperties(const BaseProperties& rProps, SdrObject& rObj);
-
             // destructor
             virtual ~BaseProperties();
 

@@ -161,7 +161,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     }
     else if (rsResourceURL.endsWith("/GalleryPanel"))
     {
-        pControl.reset(VclPtr<GalleryControl>::Create(pBindings, pParentWindow));
+        pControl.reset(VclPtr<GalleryControl>::Create(pParentWindow));
         aLayoutSize = ui::LayoutSize(300,-1,400);
     }
     else if (rsResourceURL.endsWith("/StyleListPanel"))

@@ -52,9 +52,6 @@ namespace sdr
             // basic constructor
             explicit EmptyProperties(SdrObject& rObj);
 
-            // constructor for copying, but using new object
-            EmptyProperties(const EmptyProperties& rProps, SdrObject& rObj);
-
             // destructor
             virtual ~EmptyProperties() override;
 

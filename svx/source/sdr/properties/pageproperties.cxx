@@ -40,8 +40,8 @@ namespace sdr
         {
         }
 
-        PageProperties::PageProperties(const PageProperties& rProps, SdrObject& rObj)
-        :   EmptyProperties(rProps, rObj)
+        PageProperties::PageProperties(const PageProperties& /*rProps*/, SdrObject& rObj)
+        :   EmptyProperties(rObj)
         {
         }
 

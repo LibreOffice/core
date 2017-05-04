@@ -279,7 +279,7 @@ bool SdrCreateView::CheckEdgeMode()
     }
 }
 
-void SdrCreateView::SetConnectMarker(const SdrObjConnection& rCon, const SdrPageView& /*rPV*/)
+void SdrCreateView::SetConnectMarker(const SdrObjConnection& rCon)
 {
     SdrObject* pTargetObject = rCon.pObj;
 
@@ -320,7 +320,7 @@ bool SdrCreateView::MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin)
             bool bMarkHit=PickHandle(aPos)!=nullptr || IsMarkedObjHit(aPos);
             SdrObjConnection aCon;
             if (!bMarkHit) SdrEdgeObj::ImpFindConnector(aPos,*pPV,aCon,nullptr,pWin);
-            SetConnectMarker(aCon,*pPV);
+            SetConnectMarker(aCon);
         }
     }
     return SdrDragView::MouseMove(rMEvt,pWin);

@@ -34,7 +34,6 @@ namespace svx { namespace sidebar {
 static const sal_Int32 gnInitialVerticalSplitPosition (150);
 
 GalleryControl::GalleryControl (
-    SfxBindings* /*pBindings*/,
     vcl::Window* pParentWindow)
     : Window(pParentWindow, WB_SIZEABLE|WB_MOVEABLE|WB_CLOSEABLE|WB_HIDE),
       mpGallery (Gallery::GetGalleryInstance()),
@@ -45,8 +44,8 @@ GalleryControl::GalleryControl (
       mpBrowser1(VclPtr<GalleryBrowser1>::Create(
               this,
               mpGallery,
-              [this] (KeyEvent const& rEvent, vcl::Window *const pWindow)
-                  { return this->GalleryKeyInput(rEvent, pWindow); },
+              [this] (KeyEvent const& rEvent, vcl::Window *const /*pWindow*/)
+                  { return this->GalleryKeyInput(rEvent); },
               [this] ()
                   { return mpBrowser2->SelectTheme(mpBrowser1->GetSelectedTheme()); })),
       mpBrowser2(VclPtr<GalleryBrowser2>::Create(this, mpGallery)),
@@ -177,7 +176,7 @@ void GalleryControl::Resize()
     maLastSize = aNewSize;
 }
 
-bool GalleryControl::GalleryKeyInput( const KeyEvent& rKEvt, vcl::Window* )
+bool GalleryControl::GalleryKeyInput( const KeyEvent& rKEvt )
 {
     const sal_uInt16    nCode = rKEvt.GetKeyCode().GetCode();
     bool            bRet = ( !rKEvt.GetKeyCode().IsMod1() &&
