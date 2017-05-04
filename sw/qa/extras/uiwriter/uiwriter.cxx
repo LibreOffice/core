@@ -122,6 +122,7 @@ public:
     void testExportRTF();
     void testDOCXAutoTextEmpty();
     void testDOCXAutoTextMultiple();
+    void testDOTMAutoText();
     void testTdf67238();
     void testFdo75110();
     void testFdo75898();
@@ -252,6 +253,7 @@ public:
     CPPUNIT_TEST(testExportRTF);
     CPPUNIT_TEST(testDOCXAutoTextEmpty);
     CPPUNIT_TEST(testDOCXAutoTextMultiple);
+    CPPUNIT_TEST(testDOTMAutoText);
     CPPUNIT_TEST(testTdf67238);
     CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST(testFdo75898);
@@ -804,6 +806,22 @@ void SwUiWriterTest::testDOCXAutoTextMultiple()
     SwNodeIndex aLast(*aDocEnd.GetNode().EndOfSectionNode(), -1);
     SwNode& rLastNode = aLast.GetNode();
     CPPUNIT_ASSERT_EQUAL(OUString("complex"), rLastNode.GetTextNode()->GetText());
+}
+
+void SwUiWriterTest::testDOTMAutoText()
+{
+    // this is dotm file difference is that in the dotm
+    // there are no empty paragraphs at the end of each entry
+    SwTextBlocks* pGlossary = readDOCXAutotext("autotext-dotm.dotm");
+
+    SwDoc* pDoc = pGlossary->GetDoc();
+    CPPUNIT_ASSERT(pDoc != nullptr);
+
+    // check if content is correct
+    SwNodeIndex aDocEnd(pDoc->GetNodes().GetEndOfContent());
+    SwNodeIndex aStart(*aDocEnd.GetNode().StartOfSectionNode(), 1);
+    SwNode& rNode = aStart.GetNode();
+    CPPUNIT_ASSERT_EQUAL(OUString("paragraph"), rNode.GetTextNode()->GetText());
 }
 
 void SwUiWriterTest::testFdo74981()
