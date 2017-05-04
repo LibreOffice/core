@@ -124,7 +124,7 @@ public:
 
     // insert point
     sal_uInt32 NbcInsPointOld(const Point& rPos, bool bNewObj);
-    sal_uInt32 NbcInsPoint(sal_uInt32 i, const Point& rPos, bool bNewObj);
+    sal_uInt32 NbcInsPoint(const Point& rPos, bool bNewObj);
 
     // rip at given point
     SdrObject* RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index);

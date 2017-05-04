@@ -109,7 +109,7 @@ Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer() throw ()
 
         // From the model get the current SdrLayer object via the layer admin.
         SdrLayerAdmin& rLayerAdmin = pSdModel->GetLayerAdmin ();
-        SdrLayer* pLayer = rLayerAdmin.GetLayer (mrView.GetActiveLayer(), true);
+        SdrLayer* pLayer = rLayerAdmin.GetLayer (mrView.GetActiveLayer());
         if (pLayer == nullptr)
             break;
 

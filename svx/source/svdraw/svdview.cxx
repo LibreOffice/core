@@ -854,7 +854,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         case SdrEventKind::MarkPoint: { // + (if applicable) BegDrag
             if (!rVEvt.bAddMark) UnmarkAllPoints();
             if (rVEvt.bPrevNextMark) {
-                bRet=MarkNextPoint(aLogicPos,rVEvt.bMarkPrev);
+                bRet=MarkNextPoint();
             } else {
                 bRet=MarkPoint(*rVEvt.pHdl,rVEvt.bUnmark);
             }
@@ -866,9 +866,9 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         case SdrEventKind::MarkGluePoint: { // + (if applicable) BegDrag
             if (!rVEvt.bAddMark) UnmarkAllGluePoints();
             if (rVEvt.bPrevNextMark) {
-                bRet=MarkNextGluePoint(aLogicPos,rVEvt.bMarkPrev);
+                bRet=MarkNextGluePoint();
             } else {
-                bRet=MarkGluePoint(rVEvt.pObj,rVEvt.nGlueId,rVEvt.pPV,rVEvt.bUnmark);
+                bRet=MarkGluePoint(rVEvt.pObj,rVEvt.nGlueId,rVEvt.bUnmark);
             }
             if (!rVEvt.bUnmark && !rVEvt.bPrevNextMark) {
                 SdrHdl* pHdl=GetGluePointHdl(rVEvt.pObj,rVEvt.nGlueId);

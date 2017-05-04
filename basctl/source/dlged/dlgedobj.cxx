@@ -506,8 +506,8 @@ void DlgEdObj::UpdateStep()
     sal_Int32 nStep = GetStep();
 
     SdrLayerAdmin& rLayerAdmin = GetModel()->GetLayerAdmin();
-    SdrLayerID nHiddenLayerId   = rLayerAdmin.GetLayerID( "HiddenLayer", false );
-    SdrLayerID nControlLayerId   = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), false );
+    SdrLayerID nHiddenLayerId   = rLayerAdmin.GetLayerID( "HiddenLayer" );
+    SdrLayerID nControlLayerId   = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName() );
 
     if( nCurStep )
     {

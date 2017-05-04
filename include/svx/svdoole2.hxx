@@ -58,7 +58,7 @@ private:
     SVX_DLLPRIVATE void SetGraphic_Impl(const Graphic* pGrf);
 
     // #i118485# helper added
-    SVX_DLLPRIVATE SdrObject* createSdrGrafObjReplacement(bool bAddText, bool bUseHCGraphic) const;
+    SVX_DLLPRIVATE SdrObject* createSdrGrafObjReplacement(bool bAddText) const;
     SVX_DLLPRIVATE void ImpSetVisAreaSize();
 
 protected:

@@ -108,7 +108,7 @@ void DrawViewShell::DeleteActualLayer()
 
     if (ScopedVclPtrInstance<QueryBox>(GetActiveWindow(), WB_YES_NO, aString)->Execute() == RET_YES)
     {
-        const SdrLayer* pLayer = rAdmin.GetLayer(rName, false);
+        const SdrLayer* pLayer = rAdmin.GetLayer(rName);
         mpDrawView->DeleteLayer( pLayer->GetName() );
 
         /* in order to redraw TabBar and Window; should be initiated later on by

@@ -1196,7 +1196,7 @@ void SdrOle2Obj::Disconnect_Impl()
     mpImpl->mbConnected = false;
 }
 
-SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText, bool /* bUseHCGraphic */) const
+SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText) const
 {
     const Graphic* pOLEGraphic = GetGraphic();
 
@@ -1258,7 +1258,7 @@ SdrObject* SdrOle2Obj::DoConvertToPolyObj(bool bBezier, bool bAddText) const
     // #i118485# missing converter added
     if(GetModel())
     {
-        SdrObject* pRetval = createSdrGrafObjReplacement(true, false);
+        SdrObject* pRetval = createSdrGrafObjReplacement(true);
 
         if(pRetval)
         {
@@ -1428,7 +1428,7 @@ void SdrOle2Obj::SetClosedObj( bool bIsClosed )
 SdrObject* SdrOle2Obj::getFullDragClone() const
 {
     // #i118485# use central replacement generator
-    return createSdrGrafObjReplacement(false, true);
+    return createSdrGrafObjReplacement(false);
 }
 
 void SdrOle2Obj::SetPersistName( const OUString& rPersistName )

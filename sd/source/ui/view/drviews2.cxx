@@ -1409,7 +1409,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         pDlg->GetAttr( aNewAttr );
                         aLayerName   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
-                        if( rLayerAdmin.GetLayer( aLayerName, false )
+                        if( rLayerAdmin.GetLayer( aLayerName )
                             || aLayerName.isEmpty() )
                         {
                             // name already exists
@@ -1478,7 +1478,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             mpDrawView->InsertNewLayer(aLayerName, nPrevLayer + 1);
-            pLayer = rLayerAdmin.GetLayer(aLayerName, false);
+            pLayer = rLayerAdmin.GetLayer(aLayerName);
             if( pLayer )
             {
                 pLayer->SetTitle( aLayerTitle );
@@ -1521,7 +1521,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
             sal_uInt16 nCurPage = GetLayerTabControl()->GetCurPageId();
             OUString aLayerName = GetLayerTabControl()->GetPageText(nCurPage);
-            SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, false);
+            SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName);
 
             OUString aLayerTitle = pLayer->GetTitle();
             OUString aLayerDesc = pLayer->GetDescription();
@@ -1578,7 +1578,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         pDlg->GetAttr( aNewAttr );
                         aLayerName   = static_cast<const SfxStringItem &>( aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
 
-                        if( (rLayerAdmin.GetLayer( aLayerName, false ) &&
+                        if( (rLayerAdmin.GetLayer( aLayerName ) &&
                              aLayerName != aOldLayerName) || aLayerName.isEmpty() )
                         {
                             // name already exists
@@ -2868,9 +2868,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
                 sal_uInt8 aLayerId;
                 if (nSId == SID_DISPLAY_MASTER_BACKGROUND)
-                    aLayerId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false);
+                    aLayerId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
                 else
-                    aLayerId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false);
+                    aLayerId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
                 aVisibleLayers.Set(aLayerId, !aVisibleLayers.IsSet(aLayerId));
                 pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
             }

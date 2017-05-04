@@ -486,7 +486,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
         OUString aLayerName;
 
         // Test for existing names
-        while( aLayerName.isEmpty() || rLayerAdmin.GetLayer( aLayerName, false) )
+        while( aLayerName.isEmpty() || rLayerAdmin.GetLayer( aLayerName ) )
         {
             aLayerName = SD_RESSTR(STR_LAYER);
             aLayerName += OUString::number(nLayer);
@@ -613,7 +613,7 @@ uno::Any SAL_CALL SdLayerManager::getByName( const OUString& aName )
         throw lang::DisposedException();
 
     SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
-    SdrLayer* pLayer = rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), false );
+    SdrLayer* pLayer = rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ) );
     if( pLayer == nullptr )
         throw container::NoSuchElementException();
 
@@ -653,7 +653,7 @@ sal_Bool SAL_CALL SdLayerManager::hasByName( const OUString& aName )
 
     SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
 
-    return nullptr != rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), false );
+    return nullptr != rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ) );
 }
 
 // XElementAccess

@@ -319,7 +319,7 @@ bool ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* p
     return false;
 }
 
-void ScDocument::StartAnimations( SCTAB nTab, vcl::Window* pWin )
+void ScDocument::StartAnimations( SCTAB nTab, vcl::Window* /*pWin*/ )
 {
     if (!pDrawLayer)
         return;
@@ -336,8 +336,7 @@ void ScDocument::StartAnimations( SCTAB nTab, vcl::Window* pWin )
         {
             if ( pGrafObj->IsAnimated() )
             {
-                const tools::Rectangle& rRect = pGrafObj->GetCurrentBoundRect();
-                pGrafObj->StartAnimation( pWin, rRect.TopLeft(), rRect.GetSize() );
+                pGrafObj->StartAnimation();
             }
         }
         pObject = aIter.Next();

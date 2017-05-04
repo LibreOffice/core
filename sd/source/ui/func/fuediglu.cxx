@@ -107,7 +107,7 @@ bool FuEditGluePoints::MouseButtonDown(const MouseEvent& rMEvt)
 
             if (mpView->IsGluePointMarked(aVEvt.pObj, aVEvt.nGlueId) && rMEvt.IsShift())
             {
-                mpView->UnmarkGluePoint(aVEvt.pObj, aVEvt.nGlueId, aVEvt.pPV);
+                mpView->UnmarkGluePoint(aVEvt.pObj, aVEvt.nGlueId);
                 pHdl = nullptr;
             }
 

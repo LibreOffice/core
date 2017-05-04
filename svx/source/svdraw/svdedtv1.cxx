@@ -690,7 +690,7 @@ void SdrEditView::DistortMarkedObj(const tools::Rectangle& rRef, const XPolygon&
 }
 
 
-void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, bool /*bReplaceAll*/)
+void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr)
 {
     // bReplaceAll has no effect here
     tools::Rectangle aAllSnapRect(GetMarkedObjRect());
@@ -776,9 +776,8 @@ void SdrEditView::SetNotPersistAttrToMarked(const SfxItemSet& rAttr, bool /*bRep
     }
 }
 
-void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, bool /*bOnlyHardAttr*/) const
+void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr) const
 {
-    // bOnlyHardAttr has no effect here.
     // TODO: Take into account the origin and PvPos.
     tools::Rectangle aAllSnapRect(GetMarkedObjRect()); // TODO: change this for PolyPt's and GluePt's!!!
     long nAllSnapPosX=aAllSnapRect.Left();
@@ -1168,7 +1167,7 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
         // better check before what to do:
         // pObj->SetAttr() or SetNotPersistAttr()
         // TODO: missing implementation!
-        SetNotPersistAttrToMarked(rAttr,bReplaceAll);
+        SetNotPersistAttrToMarked(rAttr);
 
         if( bUndo )
             EndUndo();

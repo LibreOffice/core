@@ -2314,7 +2314,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
         OUString aLayerName;
         if( rValue >>= aLayerName )
         {
-            const SdrLayer* pLayer=mpModel->GetLayerAdmin().GetLayer(aLayerName, true);
+            const SdrLayer* pLayer=mpModel->GetLayerAdmin().GetLayer(aLayerName);
             if( pLayer != nullptr )
             {
                 mpObj->SetLayer( pLayer->GetID() );

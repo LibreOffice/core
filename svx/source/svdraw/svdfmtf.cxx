@@ -185,12 +185,12 @@ void ImpSdrGDIMetaFileImport::DoLoopActions(GDIMetaFile& rMtf, SvdProgressInfo* 
             case MetaActionType::MASKSCALE      : DoAction(static_cast<MetaMaskScaleAction&>(*pAct)); break;
             case MetaActionType::MASKSCALEPART  : DoAction(static_cast<MetaMaskScalePartAction&>(*pAct)); break;
             case MetaActionType::GRADIENT       : DoAction(static_cast<MetaGradientAction&>(*pAct)); break;
-            case MetaActionType::WALLPAPER      : DoAction(static_cast<MetaWallpaperAction&>(*pAct)); break;
+            case MetaActionType::WALLPAPER      : OSL_ENSURE(false, "Tried to construct SdrObject from MetaWallpaperAction: not supported (!)"); break;
             case MetaActionType::Transparent    : DoAction(static_cast<MetaTransparentAction&>(*pAct)); break;
-            case MetaActionType::EPS            : DoAction(static_cast<MetaEPSAction&>(*pAct)); break;
+            case MetaActionType::EPS            : OSL_ENSURE(false, "Tried to construct SdrObject from MetaEPSAction: not supported (!)"); break;
             case MetaActionType::REFPOINT       : DoAction(static_cast<MetaRefPointAction&>(*pAct)); break;
             case MetaActionType::TEXTLINECOLOR  : DoAction(static_cast<MetaTextLineColorAction&>(*pAct)); break;
-            case MetaActionType::TEXTLINE       : DoAction(static_cast<MetaTextLineAction&>(*pAct)); break;
+            case MetaActionType::TEXTLINE       : OSL_ENSURE(false, "Tried to construct SdrObject from MetaTextLineAction: not supported (!)"); break;
             case MetaActionType::FLOATTRANSPARENT : DoAction(static_cast<MetaFloatTransparentAction&>(*pAct)); break;
             case MetaActionType::GRADIENTEX     : DoAction(static_cast<MetaGradientExAction&>(*pAct)); break;
             case MetaActionType::LAYOUTMODE     : DoAction(static_cast<MetaLayoutModeAction&>(*pAct)); break;
@@ -1415,11 +1415,6 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientAction& rAct)
     }
 }
 
-void ImpSdrGDIMetaFileImport::DoAction(MetaWallpaperAction&)
-{
-    OSL_ENSURE(false, "Tried to construct SdrObject from MetaWallpaperAction: not supported (!)");
-}
-
 void ImpSdrGDIMetaFileImport::DoAction(MetaTransparentAction& rAct)
 {
     basegfx::B2DPolyPolygon aSource(rAct.GetPolyPolygon().getB2DPolyPolygon());
@@ -1435,16 +1430,6 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaTransparentAction& rAct)
         pPath->SetMergedItem(XFillTransparenceItem(rAct.GetTransparence()));
         InsertObj(pPath, false);
     }
-}
-
-void ImpSdrGDIMetaFileImport::DoAction(MetaEPSAction&)
-{
-    OSL_ENSURE(false, "Tried to construct SdrObject from MetaEPSAction: not supported (!)");
-}
-
-void ImpSdrGDIMetaFileImport::DoAction(MetaTextLineAction&)
-{
-    OSL_ENSURE(false, "Tried to construct SdrObject from MetaTextLineAction: not supported (!)");
 }
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaGradientExAction& rAct)

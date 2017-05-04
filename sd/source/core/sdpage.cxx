@@ -542,7 +542,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
             // background objects of the master page
             pSdrObj->SetLayer( rLayerAdmin.
-                GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false) );
+                GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ)) );
         }
 
         // Subscribe object at the style sheet

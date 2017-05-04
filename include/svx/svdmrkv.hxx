@@ -327,9 +327,8 @@ public:
     // Selects the first marked point (P1) which is hit by rPnt
     // and from there it searches the first non-marked point(P2).
     // In case of success the marking of
-    // P1 is deleted, a mark is set at P2 and sal_True is returned.
-    // With the parameter bPrev=sal_True the scan direction is turned to the other direction.
-    bool MarkNextPoint(const Point& rPnt, bool bPrev);
+    // P1 is deleted, a mark is set at P2 and true is returned.
+    bool MarkNextPoint();
 
     // Search for the number of the suitable handle. In case of empty search result,
     // SAL_MAX_SIZE is returned.
@@ -367,8 +366,8 @@ public:
     // Attention: With each change of the glue point status the handle list is re-calculated.
     // All previously saved SdrHdl* became invalid by this, the same with the point IDs!
     bool PickGluePoint(const Point& rPnt, SdrObject*& rpObj, sal_uInt16& rnId, SdrPageView*& rpPV) const;
-    bool MarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, const SdrPageView* pPV, bool bUnmark=false);
-    void UnmarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, const SdrPageView* pPV) { MarkGluePoint(pObj,nId,pPV,true); }
+    bool MarkGluePoint(const SdrObject* pObj, sal_uInt16 nId, bool bUnmark=false);
+    void UnmarkGluePoint(const SdrObject* pObj, sal_uInt16 nId) { MarkGluePoint(pObj,nId,true); }
     bool IsGluePointMarked(const SdrObject* pObj, sal_uInt16 nId) const;
 
     // Get the Hdl (handle) of a marked GluePoint. Non-marked
@@ -382,9 +381,8 @@ public:
     // Selects the first marked point (P1) which is hit by rPnt
     // and from there it searches the first non-marked point(P2).
     // In case of success the marking of
-    // P1 is deleted, a mark is set at P2 and sal_True is returned.
-    // With the parameter bPrev=sal_True the scan direction is turned to the other direction.
-    bool MarkNextGluePoint(const Point& rPnt, bool bPrev);
+    // P1 is deleted, a mark is set at P2 and true is returned.
+    bool MarkNextGluePoint();
 
     // Draw a selection frame for glue point marking.
     // This routine will just be started in case that HasMarkablePoints() returns sal_True.

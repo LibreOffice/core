@@ -2545,7 +2545,7 @@ sal_uInt32 SdrPathObj::NbcInsPointOld(const Point& rPos, bool bNewObj)
 
     if(bNewObj)
     {
-        nNewHdl = NbcInsPoint(0L, rPos, true);
+        nNewHdl = NbcInsPoint(rPos, true);
     }
     else
     {
@@ -2556,22 +2556,14 @@ sal_uInt32 SdrPathObj::NbcInsPointOld(const Point& rPos, bool bNewObj)
         double fSmallestCut;
         basegfx::tools::getSmallestDistancePointToPolyPolygon(GetPathPoly(), aTestPoint, nSmallestPolyIndex, nSmallestEdgeIndex, fSmallestCut);
 
-        // create old polygon index from it
-        sal_uInt32 nPolyIndex(nSmallestEdgeIndex);
-
-        for(sal_uInt32 a(0L); a < nSmallestPolyIndex; a++)
-        {
-            nPolyIndex += GetPathPoly().getB2DPolygon(a).count();
-        }
-
-        nNewHdl = NbcInsPoint(nPolyIndex, rPos, false);
+        nNewHdl = NbcInsPoint(rPos, false);
     }
 
     ImpForceKind();
     return nNewHdl;
 }
 
-sal_uInt32 SdrPathObj::NbcInsPoint(sal_uInt32 /*nHdlNum*/, const Point& rPos, bool bNewObj)
+sal_uInt32 SdrPathObj::NbcInsPoint(const Point& rPos, bool bNewObj)
 {
     sal_uInt32 nNewHdl;
 
