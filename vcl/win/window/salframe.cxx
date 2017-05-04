@@ -3475,6 +3475,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         if ( (wParam == VK_SHIFT) || (wParam == VK_CONTROL) || (wParam == VK_MENU) )
         {
             SalKeyModEvent aModEvt;
+            aModEvt.mbDown = false; // auto-accelerator feature not supported here.
             aModEvt.mnTime = GetMessageTime();
             aModEvt.mnCode = nModCode;
             aModEvt.mnModKeyCode = ModKeyFlags::NONE;   // no command events will be sent if this member is 0
