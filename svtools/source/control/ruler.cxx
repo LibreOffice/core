@@ -2515,6 +2515,7 @@ void Ruler::SetNullOffset( long nPos )
 {
     if ( mpData->nNullOff != nPos )
     {
+        mpData->nNullVirOff += nPos - mpData->nNullOff;
         mpData->nNullOff = nPos;
         ImplUpdate();
     }
