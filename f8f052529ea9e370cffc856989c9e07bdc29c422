@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_9d099834",
+        "filename": "cui/source/options/optinet2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-04T13:44:35Z",
+      "side": 1,
+      "message": "such random layout changes unnecessarily make reviewing harder",
+      "revId": "f8f052529ea9e370cffc856989c9e07bdc29c422",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
