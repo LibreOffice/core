@@ -44,7 +44,8 @@ public:
     // FG: This constructor is only called from MakeObject from the 3d-Objectfactory
     //     when a document with a sphere is loaded.  This constructor does not call
     //     CreateSphere, or create any spheres.
-    E3dSphereObj(int dummy);
+    enum Dummy { DUMMY };
+    E3dSphereObj(Dummy dummy);
 
     // horizontal segments:
     sal_uInt32 GetHorizontalSegments() const

@@ -63,7 +63,7 @@ IMPL_STATIC_LINK( E3dObjFactory, MakeObject, SdrObjCreatorParams, aParams, SdrOb
                 // determined only after loading the members. This will result
                 // in that the first sphere will be immediately destroyed,
                 // although it was never used.
-                return new E3dSphereObj(123);
+                return new E3dSphereObj(E3dSphereObj::DUMMY);
             case E3D_EXTRUDEOBJ_ID:
                 return new E3dExtrudeObj();
             case E3D_LATHEOBJ_ID:

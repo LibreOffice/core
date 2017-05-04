@@ -83,13 +83,12 @@ protected:
     virtual void Notify(SfxBroadcaster &rBC, const SfxHint  &rHint) override;
 
 protected:
-    void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
+    void SetDefaultAttributes();
 
     void ImpCleanup3DDepthMapper();
 
 public:
     E3dScene();
-    E3dScene(E3dDefaultAttributes& rDefault);
     virtual ~E3dScene() override;
 
     virtual void SetBoundRectDirty() override;
@@ -140,7 +139,7 @@ public:
     virtual void SetTransform(const basegfx::B3DHomMatrix& rMatrix) override;
 
     virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs) override;
-    void RotateScene(const Point& rRef, long nAngle, double sn, double cs);
+    void RotateScene(const Point& rRef, double sn, double cs);
 
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual OUString TakeObjNameSingul() const override;

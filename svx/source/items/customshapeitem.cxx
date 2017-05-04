@@ -243,14 +243,6 @@ void SdrCustomShapeGeometryItem::ClearPropertyValue( const OUString& rPropName )
 SdrCustomShapeGeometryItem::~SdrCustomShapeGeometryItem()
 {
 }
-SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( SvStream& /*rIn*/, sal_uInt16 nVersion ):
-    SfxPoolItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )
-{
-    if ( nVersion )
-    {
-
-    }
-}
 bool SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
 {
     bool bRet = SfxPoolItem::operator==( rCmp );
@@ -274,17 +266,13 @@ bool SdrCustomShapeGeometryItem::GetPresentation(
     return false;
 }
 
-SfxPoolItem* SdrCustomShapeGeometryItem::Create( SvStream& rIn, sal_uInt16 nItemVersion ) const
+SfxPoolItem* SdrCustomShapeGeometryItem::Create( SvStream& /*rIn*/, sal_uInt16 /*nItemVersion*/ ) const
 {
-    return new SdrCustomShapeGeometryItem( rIn, nItemVersion );
+    return new SdrCustomShapeGeometryItem;
 }
 
-SvStream& SdrCustomShapeGeometryItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& SdrCustomShapeGeometryItem::Store( SvStream& rOut, sal_uInt16 /*nItemVersion*/ ) const
 {
-    if ( nItemVersion )
-    {
-
-    }
     return rOut;
 }
 

@@ -67,7 +67,7 @@ E3dSphereObj::E3dSphereObj(E3dDefaultAttributes& rDefault, const basegfx::B3DPoi
 // of segments is not even known yet. This was until 10.02.1997 a (small)
 // memory leak.
 
-E3dSphereObj::E3dSphereObj(int /*dummy*/)
+E3dSphereObj::E3dSphereObj(Dummy /*dummy*/)
 // the parameters it needs to be able to distinguish which
 // constructors of the two is meant. The above is the default.
 {

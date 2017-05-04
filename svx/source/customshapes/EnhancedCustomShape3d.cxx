@@ -326,7 +326,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         a3DDefaultAttr.SetDefaultLatheCharacterMode( true );
         a3DDefaultAttr.SetDefaultExtrudeCharacterMode( true );
 
-        E3dScene* pScene = new E3dScene( a3DDefaultAttr );
+        E3dScene* pScene = new E3dScene;
 
         bool bSceneHasObjects ( false );
         bool bUseTwoFillStyles( false );
