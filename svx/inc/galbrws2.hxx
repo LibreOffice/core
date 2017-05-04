@@ -152,11 +152,11 @@ public:
     INetURLObject       GetURL() const;
     OUString            GetFilterName() const;
 
-    sal_Int8            AcceptDrop( DropTargetHelper& rTarget, const AcceptDropEvent& rEvt );
-    sal_Int8            ExecuteDrop( DropTargetHelper& rTarget, const ExecuteDropEvent& rEvt );
-    void                StartDrag( vcl::Window* pWindow, const Point* pDragPoint = nullptr );
-    void                TogglePreview( vcl::Window* pWindow, const Point* pPreviewPoint = nullptr );
-    void                ShowContextMenu( vcl::Window* pWindow, const Point* pContextPoint );
+    sal_Int8            AcceptDrop( DropTargetHelper& rTarget );
+    sal_Int8            ExecuteDrop( const ExecuteDropEvent& rEvt );
+    void                StartDrag( const Point* pDragPoint = nullptr );
+    void                TogglePreview();
+    void                ShowContextMenu( const Point* pContextPoint );
     bool                KeyInput( const KeyEvent& rEvt, vcl::Window* pWindow );
 
     static css::uno::Reference< css::frame::XFrame > GetFrame();

@@ -57,7 +57,7 @@ public:
     virtual void Invoke() final override;
 
     // get primitive visualization
-    drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceForPage(const DisplayInfo& rDisplayInfo);
+    drawinglayer::primitive2d::Primitive2DContainer createPrimitive2DSequenceForPage();
 
     // Own reaction on changes which will be forwarded to the OC of the owner-VOC
     virtual void InvalidatePartOfView(const basegfx::B2DRange& rRange) const override;
@@ -117,7 +117,7 @@ void PagePrimitiveExtractor::Invoke()
     }
 }
 
-drawinglayer::primitive2d::Primitive2DContainer PagePrimitiveExtractor::createPrimitive2DSequenceForPage(const DisplayInfo& /*rDisplayInfo*/)
+drawinglayer::primitive2d::Primitive2DContainer PagePrimitiveExtractor::createPrimitive2DSequenceForPage()
 {
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
     SdrPage* pStartPage = GetStartPage();
@@ -187,7 +187,7 @@ bool PagePrimitiveExtractor::isDrawModeHighContrast() const { return mrViewObjec
 SdrPageView* PagePrimitiveExtractor::TryToGetSdrPageView() const { return mrViewObjectContactOfPageObj.GetObjectContact().TryToGetSdrPageView(); }
 OutputDevice* PagePrimitiveExtractor::TryToGetOutputDevice() const { return mrViewObjectContactOfPageObj.GetObjectContact().TryToGetOutputDevice(); }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
+drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
 {
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
     const SdrPageObj& rPageObject((static_cast< ViewContactOfPageObj& >(GetViewContact())).GetPageObj());
@@ -255,7 +255,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfPageObj::crea
             mpExtractor->SetViewObjectContactRedirector(GetObjectContact().GetViewObjectContactRedirector());
 
             // create page content
-            xPageContent = mpExtractor->createPrimitive2DSequenceForPage(rDisplayInfo);
+            xPageContent = mpExtractor->createPrimitive2DSequenceForPage();
 
             // #i105548# reset VOCRedirector to not accidentally have a pointer to a
             // temporary class, so calls to it are avoided safely

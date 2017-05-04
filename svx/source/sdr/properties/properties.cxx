@@ -36,11 +36,6 @@ namespace sdr
         {
         }
 
-        BaseProperties::BaseProperties(const BaseProperties& /*rProps*/, SdrObject& rObj)
-        :   mrObject(rObj)
-        {
-        }
-
         BaseProperties::~BaseProperties()
         {
         }

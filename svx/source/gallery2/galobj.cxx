@@ -282,7 +282,7 @@ SgaObjectBmp::SgaObjectBmp( const INetURLObject& rURL )
         Init( aGraphic, rURL );
 }
 
-SgaObjectBmp::SgaObjectBmp( const Graphic& rGraphic, const INetURLObject& rURL, const OUString& )
+SgaObjectBmp::SgaObjectBmp( const Graphic& rGraphic, const INetURLObject& rURL )
 {
     if( FileExists( rURL ) )
         Init( rGraphic, rURL );
@@ -391,8 +391,7 @@ SgaObjectAnim::SgaObjectAnim()
 }
 
 SgaObjectAnim::SgaObjectAnim( const Graphic& rGraphic,
-                              const INetURLObject& rURL,
-                              const OUString& )
+                              const INetURLObject& rURL )
 {
     aURL = rURL;
     bIsValid = CreateThumb( rGraphic );
@@ -402,8 +401,8 @@ SgaObjectINet::SgaObjectINet()
 {
 }
 
-SgaObjectINet::SgaObjectINet( const Graphic& rGraphic, const INetURLObject& rURL, const OUString& rFormatName ) :
-            SgaObjectAnim   ( rGraphic, rURL, rFormatName )
+SgaObjectINet::SgaObjectINet( const Graphic& rGraphic, const INetURLObject& rURL ) :
+            SgaObjectAnim   ( rGraphic, rURL )
 {
 }
 

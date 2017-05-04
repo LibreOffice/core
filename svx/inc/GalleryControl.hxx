@@ -39,11 +39,9 @@ namespace svx { namespace sidebar {
 class SVX_DLLPUBLIC GalleryControl : public vcl::Window
 {
 public:
-    GalleryControl (
-        SfxBindings* pBindings,
-        vcl::Window* pParentWindow);
+    GalleryControl( vcl::Window* pParentWindow );
 
-    bool GalleryKeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow);
+    bool GalleryKeyInput( const KeyEvent& rKEvt );
 
 private:
     Gallery* mpGallery;
