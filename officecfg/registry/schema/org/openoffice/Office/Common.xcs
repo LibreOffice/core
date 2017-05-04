@@ -5136,6 +5136,13 @@
             </info>
             <value>true</value>
           </prop>
+          <prop oor:name="ExportHiddenSlides" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Specifies if hidden slides are exported to PDF. (Hidden slides
+              are available in Impress documents only).</desc>
+            </info>
+            <value>false</value>
+          </prop>
           <prop oor:name="ExportFormFields" oor:type="xs:boolean" oor:nillable="false">
             <info>
               <desc>Specifies whether form fields are exported as widgets or
