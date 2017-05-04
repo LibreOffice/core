@@ -338,7 +338,7 @@ public:
     void ReleaseTextLink();
     bool IsLinkedText() const { return pPlusData!=nullptr && GetLinkUserData()!=nullptr; }
     bool ReloadLinkedText(bool bForceLoad);
-    bool LoadText(const OUString& rFileName, const OUString& rFilterName, rtl_TextEncoding eCharSet);
+    bool LoadText(const OUString& rFileName, rtl_TextEncoding eCharSet);
 
     virtual bool AdjustTextFrameWidthAndHeight(tools::Rectangle& rR, bool bHgt = true, bool bWdt = true) const;
     virtual bool NbcAdjustTextFrameWidthAndHeight(bool bHgt = true, bool bWdt = true);

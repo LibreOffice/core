@@ -627,7 +627,7 @@ bool SdrDragView::IsInsObjPointPossible() const
     return mpMarkedObj!=nullptr && mpMarkedObj->IsPolyObj();
 }
 
-bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, sal_uInt32 /*nIdx*/, const Point& rPnt, bool bNewObj, OutputDevice* pOut)
+bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, const Point& rPnt, bool bNewObj, OutputDevice* pOut)
 {
     bool bRet(false);
 
@@ -694,13 +694,12 @@ bool SdrDragView::EndInsObjPoint(SdrCreateCmd eCmd)
 {
     if(IsInsObjPoint())
     {
-        sal_uInt32 nNextPnt(mnInsPointNum);
         Point aPnt(maDragStat.GetNow());
         bool bOk=EndDragObj();
         if (bOk && eCmd!=SdrCreateCmd::ForceEnd)
         {
             // Ret=True means: Action is over.
-            bOk=!(ImpBegInsObjPoint(true, nNextPnt, aPnt, eCmd == SdrCreateCmd::NextObject, mpDragWin));
+            bOk = ! ImpBegInsObjPoint(true, aPnt, eCmd == SdrCreateCmd::NextObject, mpDragWin);
         }
 
         return bOk;

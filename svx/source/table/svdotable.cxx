@@ -201,7 +201,7 @@ public:
     std::vector<std::unique_ptr<SdrUndoAction>> maUndos;
     bool mbSkipChangeLayout;
 
-    void SetModel(SdrModel* pOldModel, SdrModel* pNewModel);
+    void SetModel(SdrModel* pNewModel);
 
     CellRef getCell( const CellPos& rPos ) const;
     void LayoutTable( tools::Rectangle& rArea, bool bFitWidth, bool bFitHeight );
@@ -323,7 +323,7 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
 }
 
 
-void SdrTableObjImpl::SetModel(SdrModel* /*pOldModel*/, SdrModel* pNewModel)
+void SdrTableObjImpl::SetModel(SdrModel* pNewModel)
 {
     // try to find new table style
     disconnectTableStyle();
@@ -1369,7 +1369,7 @@ void SdrTableObj::SetModel(SdrModel* pNewModel)
 
         if( mpImpl.is() )
         {
-            mpImpl->SetModel( pOldModel, pNewModel );
+            mpImpl->SetModel( pNewModel );
 
             if( !maLogicRect.IsEmpty() )
             {
@@ -1381,14 +1381,14 @@ void SdrTableObj::SetModel(SdrModel* pNewModel)
 }
 
 
-void SdrTableObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText, tools::Rectangle* pAnchorRect, bool bLineWidth ) const
+void SdrTableObj::TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText, tools::Rectangle* pAnchorRect, bool /*bLineWidth*/ ) const
 {
     if( mpImpl.is() )
-        TakeTextRect( mpImpl->maEditPos, rOutliner, rTextRect, bNoEditText, pAnchorRect, bLineWidth );
+        TakeTextRect( mpImpl->maEditPos, rOutliner, rTextRect, bNoEditText, pAnchorRect );
 }
 
 
-void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText, tools::Rectangle* pAnchorRect, bool /*bLineWidth*/ ) const
+void SdrTableObj::TakeTextRect( const CellPos& rPos, SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText, tools::Rectangle* pAnchorRect ) const
 {
     if( !mpImpl.is())
         return;

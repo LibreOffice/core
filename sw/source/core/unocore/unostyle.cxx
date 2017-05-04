@@ -1609,7 +1609,7 @@ void SwXStyle::SetPropertyValue<XATTR_FILLGRADIENT>(const SfxItemPropertySimpleE
             // Bitmap also has the MID_GRAFURL mode where a Bitmap URL is used
             const Graphic aNullGraphic;
             SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
-            XFillBitmapItem aXFillBitmapItem(rStyleSet.GetPool(), aNullGraphic);
+            XFillBitmapItem aXFillBitmapItem(aNullGraphic);
             aXFillBitmapItem.PutValue(aValue, nMemberId);
             rStyleSet.Put(aXFillBitmapItem);
         }
@@ -3594,7 +3594,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
                         {
                             // Bitmap also has the MID_GRAFURL mode where a Bitmap URL is used
                             const Graphic aNullGraphic;
-                            XFillBitmapItem aXFillBitmapItem(aSet.GetPool(), aNullGraphic);
+                            XFillBitmapItem aXFillBitmapItem(aNullGraphic);
 
                             aXFillBitmapItem.PutValue(aValue, nMemberId);
                             aSet.Put(aXFillBitmapItem);

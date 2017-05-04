@@ -37,7 +37,7 @@ public:
                             static SfxPoolItem* CreateDefault();
                             XFillHatchItem() : NameOrIndex(XATTR_FILLHATCH, -1) {}
                             XFillHatchItem(const OUString& rName, const XHatch& rTheHatch);
-                            XFillHatchItem(SfxItemPool* pPool, const XHatch& rTheHatch);
+                            XFillHatchItem(const XHatch& rTheHatch);
                             XFillHatchItem(const XFillHatchItem& rItem);
                             XFillHatchItem(SvStream& rIn);
 

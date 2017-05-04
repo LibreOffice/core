@@ -1370,8 +1370,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ChangeTrgrTypeHdl_Impl, ListBox&, void)
             break;
     }
 
-    SfxItemPool* pPool = nullptr;
-    const XFillFloatTransparenceItem aGradientItem(pPool, aTmpGradient, bGradient);
+    const XFillFloatTransparenceItem aGradientItem(aTmpGradient, bGradient);
     setFillFloatTransparence(aGradientItem);
 }
 

@@ -137,7 +137,6 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetHelpId( aHelpFile, HID_STANDARD_STYLESHEET_NAME );
     SfxItemSet& rISet = pSheet->GetItemSet();
-    SfxItemPool* pPool = rISet.GetPool();
 
     ::basegfx::B2DPolyPolygon aNullPolyPolygon;
     Color    aNullCol(RGB_Color(COL_DEFAULT_SHAPE_STROKE));
@@ -152,9 +151,9 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(XLineStyleItem(drawing::LineStyle_SOLID));
     rISet.Put(XLineColorItem(OUString(), RGB_Color(COL_DEFAULT_SHAPE_STROKE)));
     rISet.Put(XLineWidthItem(0));
-    rISet.Put(XLineDashItem(pPool,aNullDash));
-    rISet.Put(XLineStartItem(pPool,aNullPolyPolygon));
-    rISet.Put(XLineEndItem(pPool,aNullPolyPolygon));
+    rISet.Put(XLineDashItem(aNullDash));
+    rISet.Put(XLineStartItem(aNullPolyPolygon));
+    rISet.Put(XLineEndItem(aNullPolyPolygon));
     rISet.Put(XLineStartWidthItem(200));
     rISet.Put(XLineEndWidthItem(200));
     rISet.Put(XLineStartCenterItem());
@@ -166,12 +165,12 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(XFillColorItem(OUString(), RGB_Color(COL_DEFAULT_SHAPE_FILLING)));
 
     rISet.Put( XFillGradientItem( aNullGrad) );
-    rISet.Put(XFillHatchItem(pPool,aNullHatch));
+    rISet.Put(XFillHatchItem(aNullHatch));
     Size    aNullSize( 32, 32 );
     Color   aNullColor( COL_WHITE );
     Bitmap  aNullBmp( aNullSize, 8 );
     aNullBmp.Erase( aNullColor );
-    rISet.Put(XFillBitmapItem(pPool, Graphic(aNullBmp)));
+    rISet.Put(XFillBitmapItem(Graphic(aNullBmp)));
 
                     // Shadow attributes (Drawing Engine)
     rISet.Put(makeSdrShadowItem(false));

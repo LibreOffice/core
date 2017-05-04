@@ -27,8 +27,7 @@ namespace svx {
 SpellDialogChildWindow::SpellDialogChildWindow (
     vcl::Window* _pParent,
     sal_uInt16 nId,
-    SfxBindings* pBindings,
-    SfxChildWinInfo* /*pInfo*/)
+    SfxBindings* pBindings)
     : SfxChildWindow (_pParent, nId)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

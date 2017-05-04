@@ -782,7 +782,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 // If we have a graphic as source object, use its graphic
                                 // content as fill style
                                 aSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
-                                aSet.Put(XFillBitmapItem(&mrDoc.GetPool(), pSdrGrafObj->GetGraphic()));
+                                aSet.Put(XFillBitmapItem(pSdrGrafObj->GetGraphic()));
                             }
 
                             pPickObj->SetMergedItemSetAndBroadcast( aSet );

@@ -178,7 +178,7 @@ drawing::Direction3D GetDirection3D( const SdrCustomShapeGeometryItem& rItem, co
 
 }
 
-EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCustomShape, const tools::Rectangle& /*rBoundRect*/, const double *pM )
+EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCustomShape, const double *pM )
     : aCenter( pCustomShape->GetSnapRect().Center() )
     , eProjectionMode( drawing::ProjectionMode_PARALLEL )
     , fSkewAngle(0.0)
@@ -781,7 +781,7 @@ tools::Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* p
     aMatrix.translate(aRotationCenter.DirectionX, aRotationCenter.DirectionY, aRotationCenter.DirectionZ);
     aBoundVolume.transform(aMatrix);
 
-    Transformation2D aTransformation2D( pCustomShape, rSnapRect, pMap );
+    Transformation2D aTransformation2D( pCustomShape, pMap );
     if ( aTransformation2D.IsParallel() )
         aBoundVolume = aTransformation2D.ApplySkewSettings( aBoundVolume );
 

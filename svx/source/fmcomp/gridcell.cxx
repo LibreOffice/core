@@ -2960,7 +2960,7 @@ void DbFilterField::SetText(const OUString& rText)
     }
 
     // now force a repaint on the window
-    m_rColumn.GetParent().RowModified(0,m_rColumn.GetId());
+    m_rColumn.GetParent().RowModified(0);
 }
 
 

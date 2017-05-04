@@ -424,7 +424,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
     {
         case SID_FONTWORK_GALLERY_FLOATER:
         {
-            ScopedVclPtrInstance< FontWorkGalleryDialog > aDlg( pSdrView, ImpGetViewWin(pSdrView), nSID );
+            ScopedVclPtrInstance< FontWorkGalleryDialog > aDlg( pSdrView, ImpGetViewWin(pSdrView) );
             aDlg->Execute();
         }
         break;

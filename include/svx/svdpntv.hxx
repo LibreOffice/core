@@ -432,8 +432,8 @@ public:
     const SfxItemSet& GetDefaultAttr() const { return maDefaultAttr; }
     void SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
 
-    void SetNotPersistDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll);
-    void MergeNotPersistDefaultAttr(SfxItemSet& rAttr, bool bOnlyHardAttr) const;
+    void SetNotPersistDefaultAttr(const SfxItemSet& rAttr);
+    void MergeNotPersistDefaultAttr(SfxItemSet& rAttr) const;
 
     /// Execute a swap-in of e.g. graphics asynchronously.
     /// This does not reload all graphics like Paint does, but kicks off
@@ -486,7 +486,7 @@ public:
     /// Must be called by the App when scrolling etc. in order for
     /// an active FormularControl to be moved too
     void VisAreaChanged(const OutputDevice* pOut);
-    void VisAreaChanged(const SdrPageWindow& rWindow);
+    void VisAreaChanged();
 
     bool IsPrintPreview() const { return mbPrintPreview; }
     void SetPrintPreview(bool bOn = true) { mbPrintPreview=bOn; }

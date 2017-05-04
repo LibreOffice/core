@@ -1150,7 +1150,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
 
             SetAttributes(pPath);
             aHatchAttr.Put(XFillStyleItem(drawing::FillStyle_HATCH));
-            aHatchAttr.Put(XFillHatchItem(&mpModel->GetItemPool(), XHatch(rHatch.GetColor(), eStyle, rHatch.GetDistance(), rHatch.GetAngle())));
+            aHatchAttr.Put(XFillHatchItem(XHatch(rHatch.GetColor(), eStyle, rHatch.GetDistance(), rHatch.GetAngle())));
             pPath->SetMergedItemSet(aHatchAttr);
 
             InsertObj(pPath, false);

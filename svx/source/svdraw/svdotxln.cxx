@@ -186,7 +186,7 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
 
             if( bLoad )
             {
-                bRet = LoadText( pData->aFileName, pData->aFilterName, pData->eCharSet );
+                bRet = LoadText( pData->aFileName, pData->eCharSet );
             }
 
             pData->aFileDate0 = aFileDT;
@@ -196,7 +196,7 @@ bool SdrTextObj::ReloadLinkedText( bool bForceLoad)
     return bRet;
 }
 
-bool SdrTextObj::LoadText(const OUString& rFileName, const OUString& /*rFilterName*/, rtl_TextEncoding eCharSet)
+bool SdrTextObj::LoadText(const OUString& rFileName, rtl_TextEncoding eCharSet)
 {
     INetURLObject   aFileURL( rFileName );
     bool            bRet = false;

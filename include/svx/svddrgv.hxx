@@ -64,7 +64,7 @@ protected:
     virtual void SetMarkHandles(SfxViewShell* pOtherShell) override;
     void ShowDragObj();
     void HideDragObj();
-    bool ImpBegInsObjPoint(bool bIdxZwang, sal_uInt32 nIdx, const Point& rPnt, bool bNewObj, OutputDevice* pOut);
+    bool ImpBegInsObjPoint(bool bIdxZwang, const Point& rPnt, bool bNewObj, OutputDevice* pOut);
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
@@ -115,7 +115,7 @@ public:
 
     // Interactive insertion of a new point. nIdx=0 => in front of the first point
     bool IsInsObjPointPossible() const;
-    bool BegInsObjPoint(const Point& rPnt, bool bNewObj) { return ImpBegInsObjPoint(false, 0L, rPnt, bNewObj, nullptr); }
+    bool BegInsObjPoint(const Point& rPnt, bool bNewObj) { return ImpBegInsObjPoint(false, rPnt, bNewObj, nullptr); }
     void MovInsObjPoint(const Point& rPnt) { MovDragObj(rPnt); }
     bool EndInsObjPoint(SdrCreateCmd eCmd);
     bool IsInsObjPoint() const { return mpCurrentSdrDragMethod && mbInsPolyPoint; }

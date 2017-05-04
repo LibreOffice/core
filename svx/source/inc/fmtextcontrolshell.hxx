@@ -133,7 +133,7 @@ namespace svx
 
         /** notifies the instance that the design mode has changed
         */
-        void    designModeChanged( bool _bNewDesignMode );
+        void    designModeChanged();
 
         void    Invalidate( SfxSlotId _nSlot );
 

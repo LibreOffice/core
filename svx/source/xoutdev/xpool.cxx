@@ -60,11 +60,11 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster, bool bLoadRefCounts)
     // prepare PoolDefaults
     std::vector<SfxPoolItem*>& rPoolDefaults = *mpLocalPoolDefaults;
     rPoolDefaults[XATTR_LINESTYLE          -XATTR_START] = new XLineStyleItem;
-    rPoolDefaults[XATTR_LINEDASH           -XATTR_START] = new XLineDashItem(this,aNullDash);
+    rPoolDefaults[XATTR_LINEDASH           -XATTR_START] = new XLineDashItem(aNullDash);
     rPoolDefaults[XATTR_LINEWIDTH          -XATTR_START] = new XLineWidthItem;
     rPoolDefaults[XATTR_LINECOLOR          -XATTR_START] = new XLineColorItem(aNullStr,aNullLineCol);
-    rPoolDefaults[XATTR_LINESTART          -XATTR_START] = new XLineStartItem(this,aNullPol);
-    rPoolDefaults[XATTR_LINEEND            -XATTR_START] = new XLineEndItem  (this,aNullPol);
+    rPoolDefaults[XATTR_LINESTART          -XATTR_START] = new XLineStartItem(aNullPol);
+    rPoolDefaults[XATTR_LINEEND            -XATTR_START] = new XLineEndItem  (aNullPol);
     rPoolDefaults[XATTR_LINESTARTWIDTH     -XATTR_START] = new XLineStartWidthItem;
     rPoolDefaults[XATTR_LINEENDWIDTH       -XATTR_START] = new XLineEndWidthItem;
     rPoolDefaults[XATTR_LINESTARTCENTER    -XATTR_START] = new XLineStartCenterItem;
@@ -75,8 +75,8 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster, bool bLoadRefCounts)
     rPoolDefaults[XATTR_FILLSTYLE                -XATTR_START] = new XFillStyleItem;
     rPoolDefaults[XATTR_FILLCOLOR                -XATTR_START] = new XFillColorItem   (aNullStr,aNullFillCol);
     rPoolDefaults[XATTR_FILLGRADIENT         -XATTR_START] = new XFillGradientItem(aNullGrad);
-    rPoolDefaults[XATTR_FILLHATCH                -XATTR_START] = new XFillHatchItem   (this,aNullHatch);
-    rPoolDefaults[XATTR_FILLBITMAP               -XATTR_START] = new XFillBitmapItem  (this, aNullGraphic);
+    rPoolDefaults[XATTR_FILLHATCH                -XATTR_START] = new XFillHatchItem   (aNullHatch);
+    rPoolDefaults[XATTR_FILLBITMAP               -XATTR_START] = new XFillBitmapItem  (aNullGraphic);
     rPoolDefaults[XATTR_FILLTRANSPARENCE     -XATTR_START] = new XFillTransparenceItem;
     rPoolDefaults[XATTR_GRADIENTSTEPCOUNT        -XATTR_START] = new XGradientStepCountItem;
     rPoolDefaults[XATTR_FILLBMP_TILE         -XATTR_START] = new XFillBmpTileItem;
@@ -89,7 +89,7 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster, bool bLoadRefCounts)
     rPoolDefaults[XATTR_FILLBMP_STRETCH      -XATTR_START] = new XFillBmpStretchItem;
     rPoolDefaults[XATTR_FILLBMP_POSOFFSETX       -XATTR_START] = new XFillBmpPosOffsetXItem;
     rPoolDefaults[XATTR_FILLBMP_POSOFFSETY       -XATTR_START] = new XFillBmpPosOffsetYItem;
-    rPoolDefaults[XATTR_FILLFLOATTRANSPARENCE    -XATTR_START] = new XFillFloatTransparenceItem( this, aNullGrad, false );
+    rPoolDefaults[XATTR_FILLFLOATTRANSPARENCE    -XATTR_START] = new XFillFloatTransparenceItem( aNullGrad, false );
     rPoolDefaults[XATTR_SECONDARYFILLCOLOR       -XATTR_START] = new XSecondaryFillColorItem(aNullStr, aNullFillCol);
     rPoolDefaults[XATTR_FILLBACKGROUND           -XATTR_START] = new XFillBackgroundItem;
     rPoolDefaults[XATTR_FORMTXTSTYLE       -XATTR_START] = new XFormTextStyleItem;
