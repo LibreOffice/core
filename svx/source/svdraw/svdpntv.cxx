@@ -854,7 +854,7 @@ void SdrPaintView::ImpFormLayerDrawing( SdrPaintWindow& rPaintWindow )
         {
             const SdrModel& rModel = *(GetModel());
             const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
-            const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), false);
+            const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName());
 
             // BUFFERED use GetTargetOutputDevice() now, it may be targeted to VDevs, too
             // need to set PreparedPageWindow to make DrawLayer use the correct ObjectContact
@@ -1003,7 +1003,7 @@ void SdrPaintView::MergeNotPersistDefaultAttr(SfxItemSet& rAttr, bool /*bOnlyHar
     bool bMeasure= dynamic_cast<const SdrView*>(this) != nullptr && static_cast<const SdrView*>(this)->IsMeasureTool();
     const OUString& aNam = bMeasure ? maMeasureLayer : maActualLayer;
     rAttr.Put(SdrLayerNameItem(aNam));
-    SdrLayerID nLayer=mpModel->GetLayerAdmin().GetLayerID(aNam,true);
+    SdrLayerID nLayer=mpModel->GetLayerAdmin().GetLayerID(aNam);
     if (nLayer!=SDRLAYER_NOTFOUND) {
         rAttr.Put(SdrLayerIdItem(nLayer));
     }

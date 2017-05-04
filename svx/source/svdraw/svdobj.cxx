@@ -1465,10 +1465,10 @@ void SdrObject::NbcMirror(const Point& rRef1, const Point& rRef2)
     SetGlueReallyAbsolute(false);
 }
 
-void SdrObject::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
+void SdrObject::NbcShear(const Point& rRef, long /*nAngle*/, double tn, bool bVShear)
 {
     SetGlueReallyAbsolute(true);
-    NbcShearGluePoints(rRef,nAngle,tn,bVShear);
+    NbcShearGluePoints(rRef,tn,bVShear);
     SetGlueReallyAbsolute(false);
 }
 
@@ -2106,7 +2106,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         OUString aLayerName=static_cast<const SdrLayerNameItem*>(pPoolItem)->GetValue();
         const SdrLayerAdmin* pLayAd=pPage!=nullptr ? &pPage->GetLayerAdmin() : pModel!=nullptr ? &pModel->GetLayerAdmin() : nullptr;
         if (pLayAd!=nullptr) {
-            const SdrLayer* pLayer=pLayAd->GetLayer(aLayerName, true);
+            const SdrLayer* pLayer=pLayAd->GetLayer(aLayerName);
             if (pLayer!=nullptr) {
                 nLayer=pLayer->GetID();
             }
@@ -2313,13 +2313,13 @@ void SdrObject::NbcMirrorGluePoints(const Point& rRef1, const Point& rRef2)
     }
 }
 
-void SdrObject::NbcShearGluePoints(const Point& rRef, long nAngle, double tn, bool bVShear)
+void SdrObject::NbcShearGluePoints(const Point& rRef, double tn, bool bVShear)
 {
     // First a const call to see whether there are any glue points.
     // Force const call!
     if (GetGluePointList()!=nullptr) {
         SdrGluePointList* pGPL=ForceGluePointList();
-        pGPL->Shear(rRef,nAngle,tn,bVShear,this);
+        pGPL->Shear(rRef,tn,bVShear,this);
     }
 }
 

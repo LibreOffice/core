@@ -1522,8 +1522,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
-            sal_uInt8 aBackgroundId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false);
-            sal_uInt8 aObjectId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false);
+            sal_uInt8 aBackgroundId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
+            sal_uInt8 aObjectId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
             rSet.Put(SfxBoolItem(SID_DISPLAY_MASTER_BACKGROUND,
                     aVisibleLayers.IsSet(aBackgroundId)));
             rSet.Put(SfxBoolItem(SID_DISPLAY_MASTER_OBJECTS,

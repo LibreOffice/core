@@ -131,7 +131,7 @@ sal_Int8 LayerTabBar::AcceptDrop( const AcceptDropEvent& rEvt )
         sal_uInt16          nPageId = SDRPAGE_NOTFOUND;
         Point           aPos( PixelToLogic( rEvt.maPosPixel ) );
         sal_uInt16 nLayerId = pDrViewSh->GetView()->GetDoc().GetLayerAdmin().GetLayerID(
-            GetPageText( GetPageId( aPos ) ), false );
+            GetPageText( GetPageId( aPos ) ) );
 
         nRet = pDrViewSh->AcceptDrop( rEvt, *this, nullptr, nPageId, nLayerId );
 
@@ -148,7 +148,7 @@ sal_Int8 LayerTabBar::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     sal_uInt16          nPageId = SDRPAGE_NOTFOUND;
     sal_uInt16 nLayerId = pDrViewSh->GetView()->GetDoc().GetLayerAdmin().GetLayerID(
-        GetPageText( GetPageId( PixelToLogic( rEvt.maPosPixel ) ) ), false );
+        GetPageText( GetPageId( PixelToLogic( rEvt.maPosPixel ) ) ) );
     sal_Int8        nRet = pDrViewSh->ExecuteDrop( rEvt, *this, nullptr, nPageId, nLayerId );
 
     EndSwitchPage();
@@ -208,7 +208,7 @@ TabBarAllowRenamingReturnCode LayerTabBar::AllowRenaming()
     OUString aNewName( GetEditText() );
 
     if (aNewName.isEmpty() ||
-        (rLayerAdmin.GetLayer( aNewName, false ) && aLayerName != aNewName) )
+        (rLayerAdmin.GetLayer( aNewName ) && aLayerName != aNewName) )
     {
         // Name already exists
         ScopedVclPtrInstance<WarningBox> aWarningBox( &pDrViewSh->GetViewFrame()->GetWindow(), WinBits( WB_OK ),
@@ -247,7 +247,7 @@ void LayerTabBar::EndRenaming()
         SdDrawDocument& rDoc = pView->GetDoc();
         OUString aLayerName = pView->GetActiveLayer();
         SdrLayerAdmin& rLayerAdmin = rDoc.GetLayerAdmin();
-        SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, false);
+        SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName);
 
         if (pLayer)
         {

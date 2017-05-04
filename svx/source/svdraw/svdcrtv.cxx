@@ -395,7 +395,7 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, cons
             aLay = maMeasureLayer;
         }
 
-        SdrLayerID nLayer=pCreatePV->GetPage()->GetLayerAdmin().GetLayerID(aLay,true);
+        SdrLayerID nLayer=pCreatePV->GetPage()->GetLayerAdmin().GetLayerID(aLay);
         if (nLayer==SDRLAYER_NOTFOUND) nLayer=0;
         if (!pCreatePV->GetLockedLayers().IsSet(nLayer) && pCreatePV->GetVisibleLayers().IsSet(nLayer))
         {
@@ -612,11 +612,11 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                 if(dynamic_cast<const FmFormObj*>( pObj) !=  nullptr)
                 {
                     // for FormControls, force to form layer
-                    nLayer = rAd.GetLayerID(rAd.GetControlLayerName(), true);
+                    nLayer = rAd.GetLayerID(rAd.GetControlLayerName());
                 }
                 else
                 {
-                    nLayer = rAd.GetLayerID(maActualLayer, true);
+                    nLayer = rAd.GetLayerID(maActualLayer);
                 }
 
                 if(SDRLAYER_NOTFOUND == nLayer)

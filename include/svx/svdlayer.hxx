@@ -142,9 +142,9 @@ public:
 
     sal_uInt16         GetLayerPos(SdrLayer* pLayer) const;
 
-    SdrLayer*          GetLayer(const OUString& rName, bool bInherited);
-    const SdrLayer*    GetLayer(const OUString& rName, bool bInherited) const;
-    SdrLayerID         GetLayerID(const OUString& rName, bool bInherited) const;
+    SdrLayer*          GetLayer(const OUString& rName);
+    const SdrLayer*    GetLayer(const OUString& rName) const;
+    SdrLayerID         GetLayerID(const OUString& rName) const;
     SdrLayer*          GetLayerPerID(sal_uInt16 nID) { return const_cast<SdrLayer*>(const_cast<const SdrLayerAdmin*>(this)->GetLayerPerID(nID)); }
     const SdrLayer*    GetLayerPerID(sal_uInt16 nID) const;
 

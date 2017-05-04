@@ -198,8 +198,8 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
 
                 pCurrentPage->SetAutoLayout(aNewAutoLayout, true);
 
-                sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false);
-                sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false);
+                sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
+                sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
                 aVisibleLayers.Set(aBckgrnd, bBVisible);
                 aVisibleLayers.Set(aBckgrndObj, bBObjsVisible);
                 pCurrentPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
@@ -259,8 +259,8 @@ void ViewShell::Implementation::AssignLayout ( SfxRequest& rRequest, PageKind eP
         // Transform the given request into the four argument form that is
         // understood by ProcessModifyPageSlot().
         SdrLayerAdmin& rLayerAdmin (mrViewShell.GetViewShellBase().GetDocument()->GetLayerAdmin());
-        sal_uInt8 aBackground (rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false));
-        sal_uInt8 aBackgroundObject (rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false));
+        sal_uInt8 aBackground (rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND)));
+        sal_uInt8 aBackgroundObject (rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ)));
 
         SetOfByte aVisibleLayers;
 

@@ -114,7 +114,7 @@ bool SdrExchangeView::ImpGetPasteLayer(const SdrObjList* pObjList, SdrLayerID& r
     if (pObjList!=nullptr) {
         const SdrPage* pPg=pObjList->GetPage();
         if (pPg!=nullptr) {
-            rLayer=pPg->GetLayerAdmin().GetLayerID(maActualLayer,true);
+            rLayer=pPg->GetLayerAdmin().GetLayerID(maActualLayer);
             if (rLayer==SDRLAYER_NOTFOUND) rLayer=0;
             SdrPageView* pPV = GetSdrPageView();
             if (pPV!=nullptr) {
@@ -327,11 +327,11 @@ bool SdrExchangeView::Paste(
                     if(dynamic_cast<const FmFormObj*>( pNeuObj) !=  nullptr)
                     {
                         // for FormControls, force to form layer
-                        nLayer = rAd.GetLayerID(rAd.GetControlLayerName(), true);
+                        nLayer = rAd.GetLayerID(rAd.GetControlLayerName());
                     }
                     else
                     {
-                        nLayer = rAd.GetLayerID(maActualLayer, true);
+                        nLayer = rAd.GetLayerID(maActualLayer);
                     }
 
                     if(SDRLAYER_NOTFOUND == nLayer)
@@ -672,7 +672,7 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
     ::std::vector< SdrMark* >&                  rObjVector1 = aObjVectors[ 0 ];
     ::std::vector< SdrMark* >&                  rObjVector2 = aObjVectors[ 1 ];
     const SdrLayerAdmin&                        rLayerAdmin = mpModel->GetLayerAdmin();
-    const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), false );
+    const sal_uInt32                            nControlLayerId = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName() );
 
     for( size_t n = 0, nCount = GetMarkedObjectCount(); n < nCount; ++n )
     {

@@ -129,12 +129,9 @@ protected:
     void DoAction(MetaMaskScaleAction& rAct);
     void DoAction(MetaMaskScalePartAction& rAct);
     void DoAction(MetaGradientAction& rAct);
-    static void DoAction(MetaWallpaperAction& rAct);
     void DoAction(MetaTransparentAction& rAct);
-    static void DoAction(MetaEPSAction& rAct);
     void DoAction(MetaRefPointAction& rAct)  { rAct.Execute(mpVD); }
     void DoAction(MetaTextLineColorAction& rAct)  { rAct.Execute(mpVD); mbFntDirty = true; }
-    static void DoAction(MetaTextLineAction& rAct);
     void DoAction(MetaFloatTransparentAction& rAct);
     void DoAction(MetaGradientExAction& rAct);
     void DoAction(MetaLayoutModeAction& rAct)  { rAct.Execute(mpVD); mbFntDirty = true; }

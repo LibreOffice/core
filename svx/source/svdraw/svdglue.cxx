@@ -243,7 +243,7 @@ void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, long nAngle, c
     if (pObj!=nullptr) SetAbsolutePos(aPt,*pObj); else SetPos(aPt);
 }
 
-void SdrGluePoint::Shear(const Point& rRef, long /*nAngle*/, double tn, bool bVShear, const SdrObject* pObj)
+void SdrGluePoint::Shear(const Point& rRef, double tn, bool bVShear, const SdrObject* pObj)
 {
     Point aPt(pObj!=nullptr ? GetAbsolutePos(*pObj) : GetPos());
     ShearPoint(aPt,rRef,tn,bVShear);
@@ -396,11 +396,11 @@ void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, long nAngl
     }
 }
 
-void SdrGluePointList::Shear(const Point& rRef, long nAngle, double tn, bool bVShear, const SdrObject* pObj)
+void SdrGluePointList::Shear(const Point& rRef, double tn, bool bVShear, const SdrObject* pObj)
 {
     sal_uInt16 nCount=GetCount();
     for (sal_uInt16 nNum=0; nNum<nCount; nNum++) {
-        GetObject(nNum)->Shear(rRef,nAngle,tn,bVShear,pObj);
+        GetObject(nNum)->Shear(rRef,tn,bVShear,pObj);
     }
 }
 

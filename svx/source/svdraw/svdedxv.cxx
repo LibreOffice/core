@@ -154,11 +154,10 @@ SdrPageView* SdrObjEditView::ShowSdrPage(SdrPage* pPage)
 
             // Found one, so create an outliner view, to get invalidations when
             // the text edit changes.
-            bool bEmpty = pView->GetTextEditObject()->GetOutlinerParaObject() == nullptr;
             // Call GetSfxViewShell() to make sure ImpMakeOutlinerView()
             // registers the view shell of this draw view, and not the view
             // shell of pView.
-            OutlinerView* pOutlinerView = pView->ImpMakeOutlinerView(static_cast<vcl::Window*>(pOutDev), !bEmpty, nullptr, GetSfxViewShell());
+            OutlinerView* pOutlinerView = pView->ImpMakeOutlinerView(static_cast<vcl::Window*>(pOutDev), nullptr, GetSfxViewShell());
             pOutlinerView->HideCursor();
             pView->GetTextEditOutliner()->InsertView(pOutlinerView);
         }
@@ -505,7 +504,7 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView& rOutlView) const
     }
 }
 
-OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, bool /*bNoPaint*/, OutlinerView* pGivenView, SfxViewShell* pViewShell) const
+OutlinerView* SdrObjEditView::ImpMakeOutlinerView(vcl::Window* pWin, OutlinerView* pGivenView, SfxViewShell* pViewShell) const
 {
     // background
     Color aBackground(GetTextEditBackgroundColor(*this));
@@ -794,8 +793,6 @@ bool SdrObjEditView::SdrBeginTextEdit(
             pTextEditOutliner->ForceAutoColor( aOptions.GetIsAutomaticFontColor() );
         }
 
-        bool bEmpty = mxTextEditObj->GetOutlinerParaObject()==nullptr;
-
         aOldCalcFieldValueLink=pTextEditOutliner->GetCalcFieldValueHdl();
         // FieldHdl has to be set by SdrBeginTextEdit, because this call an UpdateFields
         pTextEditOutliner->SetCalcFieldValueHdl(LINK(this,SdrObjEditView,ImpOutlinerCalcFieldValueHdl));
@@ -861,7 +858,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
             // to call AdjustMarkHdl() always.
             AdjustMarkHdl();
 
-            pTextEditOutlinerView=ImpMakeOutlinerView(pWin,!bEmpty,pGivenOutlinerView);
+            pTextEditOutlinerView=ImpMakeOutlinerView(pWin,pGivenOutlinerView);
 
             // check if this view is already inserted
             sal_uIntPtr i2,nCount = pTextEditOutliner->GetViewCount();
@@ -887,7 +884,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
                     if(&rOutDev != pWin && OUTDEV_WINDOW == rOutDev.GetOutDevType())
                     {
-                        OutlinerView* pOutlView = ImpMakeOutlinerView(static_cast<vcl::Window*>(&rOutDev), !bEmpty, nullptr);
+                        OutlinerView* pOutlView = ImpMakeOutlinerView(static_cast<vcl::Window*>(&rOutDev), nullptr);
                         pTextEditOutliner->InsertView(pOutlView, (sal_uInt16)i);
                     }
                 }
@@ -910,7 +907,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
                             if(&rOutDev != pWin && OUTDEV_WINDOW == rOutDev.GetOutDevType())
                             {
-                                OutlinerView* pOutlView = ImpMakeOutlinerView(static_cast<vcl::Window*>(&rOutDev), !bEmpty, nullptr);
+                                OutlinerView* pOutlView = ImpMakeOutlinerView(static_cast<vcl::Window*>(&rOutDev), nullptr);
                                 pOutlView->HideCursor();
                                 pTextEditOutliner->InsertView(pOutlView);
                             }
@@ -1372,7 +1369,6 @@ bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
 
 TextChainCursorManager *SdrObjEditView::ImpHandleMotionThroughBoxesKeyInput(
                                             const KeyEvent& rKEvt,
-                                            vcl::Window*,
                                             bool *bOutHandled)
 {
     *bOutHandled = false;
@@ -1405,7 +1401,7 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
         // We possibly move to another box before any handling
         bool bHandled = false;
         std::unique_ptr<TextChainCursorManager> xCursorManager(
-            ImpHandleMotionThroughBoxesKeyInput(rKEvt, pWin, &bHandled));
+            ImpHandleMotionThroughBoxesKeyInput(rKEvt, &bHandled));
         if (bHandled)
             return true;
         /* End special handling of keys within a chain */
@@ -1688,7 +1684,7 @@ bool SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) c
 
         if(GetMarkedObjectCount()==1 && GetMarkedObjectByIndex(0)==mxTextEditObj.get())
         {
-            MergeNotPersistAttrFromMarked(rTargetSet, bOnlyHardAttr);
+            MergeNotPersistAttrFromMarked(rTargetSet);
         }
 
         return true;
@@ -1818,7 +1814,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 
                 if (GetMarkedObjectCount()==1 && GetMarkedObjectByIndex(0)==mxTextEditObj.get())
                 {
-                    SetNotPersistAttrToMarked(aSet,bReplaceAll);
+                    SetNotPersistAttrToMarked(aSet);
                 }
             }
             FlushComeBackTimer();
@@ -1895,7 +1891,7 @@ void SdrObjEditView::AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window *pW
 
     if(mxTextEditObj.is() && !bTextEditOnlyOneView && pNewWin->GetOutDevType()==OUTDEV_WINDOW)
     {
-        OutlinerView* pOutlView=ImpMakeOutlinerView(static_cast<vcl::Window*>(pNewWin),false,nullptr);
+        OutlinerView* pOutlView=ImpMakeOutlinerView(static_cast<vcl::Window*>(pNewWin),nullptr);
         pTextEditOutliner->InsertView(pOutlView);
     }
 }

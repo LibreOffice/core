@@ -289,8 +289,8 @@ public:
     // EndUndo();
     void ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrObject* pNewObj, bool bMark=true);
 
-    void SetNotPersistAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll);
-    void MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) const;
+    void SetNotPersistAttrToMarked(const SfxItemSet& rAttr);
+    void MergeNotPersistAttrFromMarked(SfxItemSet& rAttr) const;
     void MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) const;
     SfxItemSet GetAttrFromMarked(bool bOnlyHardAttr) const;
     void SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll);

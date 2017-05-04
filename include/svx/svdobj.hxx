@@ -656,7 +656,7 @@ public:
     void SetGlueReallyAbsolute(bool bOn);
     void NbcRotateGluePoints(const Point& rRef, long nAngle, double sn, double cs);
     void NbcMirrorGluePoints(const Point& rRef1, const Point& rRef2);
-    void NbcShearGluePoints (const Point& rRef, long nAngle, double tn, bool bVShear);
+    void NbcShearGluePoints (const Point& rRef, double tn, bool bVShear);
 
     // if bTail1 is true, line start, otherwise line end
     // if pObj is null disconnect

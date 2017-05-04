@@ -484,7 +484,7 @@ void SdrObjGroup::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShe
         SdrObject* pObj=pOL->GetObj(i);
         pObj->NbcShear(rRef,nAngle,tn,bVShear);
     }
-    NbcShearGluePoints(rRef,nAngle,tn,bVShear);
+    NbcShearGluePoints(rRef,tn,bVShear);
     SetGlueReallyAbsolute(false);
 }
 
@@ -674,7 +674,7 @@ void SdrObjGroup::Shear(const Point& rRef, long nAngle, double tn, bool bVShear)
             SdrObject* pObj=pOL->GetObj(i);
             if (!pObj->IsEdgeObj()) pObj->Shear(rRef,nAngle,tn,bVShear);
         }
-        NbcShearGluePoints(rRef,nAngle,tn,bVShear);
+        NbcShearGluePoints(rRef,tn,bVShear);
         SetGlueReallyAbsolute(false);
         SetChanged();
         BroadcastObjectChange();

@@ -208,7 +208,7 @@ void SdrTextObj::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
     SetGlueReallyAbsolute(false);
 }
 
-void SdrTextObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShear)
+void SdrTextObj::NbcShear(const Point& rRef, long /*nAngle*/, double tn, bool bVShear)
 {
     SetGlueReallyAbsolute(true);
 
@@ -226,7 +226,7 @@ void SdrTextObj::NbcShear(const Point& rRef, long nAngle, double tn, bool bVShea
     }
     ImpCheckShear();
     SetRectsDirty();
-    NbcShearGluePoints(rRef,nAngle,tn,bVShear);
+    NbcShearGluePoints(rRef,tn,bVShear);
     SetGlueReallyAbsolute(false);
 }
 

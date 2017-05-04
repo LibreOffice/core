@@ -613,7 +613,7 @@ void SdrHdl::CreateB2dIAObject()
                         {
                             pNewOverlayObject = CreateOverlayObject(
                                                     aPosition, eColIndex, eKindOfMarker,
-                                                    rOutDev, aMoveOutsideOffset);
+                                                    aMoveOutsideOffset);
                         }
                         // OVERLAYMANAGER
                         if (pNewOverlayObject)
@@ -784,7 +784,7 @@ BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, BitmapColorIndex eIndex)
 
 sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
     const basegfx::B2DPoint& rPos,
-    BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker, OutputDevice& /*rOutDev*/, Point aMoveOutsideOffset)
+    BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker, Point aMoveOutsideOffset)
 {
     sdr::overlay::OverlayObject* pRetval = nullptr;
 
@@ -1602,12 +1602,10 @@ void ImpEdgeHdl::CreateB2dIAObject()
                             if (xManager.is())
                             {
                                 basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
-                                OutputDevice& rOutDev = rPageWindow.GetPaintWindow().GetOutputDevice();
                                 sdr::overlay::OverlayObject* pNewOverlayObject = CreateOverlayObject(
                                     aPosition,
                                     eColIndex,
-                                    eKindOfMarker,
-                                    rOutDev);
+                                    eKindOfMarker);
 
                                 // OVERLAYMANAGER
                                 if (pNewOverlayObject)
@@ -1720,12 +1718,10 @@ void ImpMeasureHdl::CreateB2dIAObject()
                         if (xManager.is())
                         {
                             basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
-                            OutputDevice& rOutDev = rPageWindow.GetPaintWindow().GetOutputDevice();
                             sdr::overlay::OverlayObject* pNewOverlayObject = CreateOverlayObject(
                                 aPosition,
                                 eColIndex,
-                                eKindOfMarker,
-                                rOutDev);
+                                eKindOfMarker);
 
                             // OVERLAYMANAGER
                             if (pNewOverlayObject)

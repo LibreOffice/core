@@ -246,8 +246,8 @@ bool ImplSdPPTImport::Import()
     ((EditEngine&)rOutl.GetEditEngine()).SetControlWord( nControlWord );
 
     SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
-    mnBackgroundLayerID = rAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRND ), false );
-    mnBackgroundObjectsLayerID = rAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRNDOBJ ), false );
+    mnBackgroundLayerID = rAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRND ) );
+    mnBackgroundObjectsLayerID = rAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRNDOBJ ) );
 
     ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
     if ( pDocShell )

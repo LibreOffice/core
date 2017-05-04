@@ -229,7 +229,7 @@ bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
                 OUString aStr(SD_RESSTR(STR_LAYER_MEASURELINES));
-                pObj->SetLayer(rAdmin.GetLayerID(aStr, false));
+                pObj->SetLayer(rAdmin.GetLayerID(aStr));
             }
 
             // init text position when vertical caption object is created
@@ -489,7 +489,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 
         SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
         OUString aStr(SD_RESSTR(STR_LAYER_MEASURELINES));
-        pObj->SetLayer(rAdmin.GetLayerID(aStr, false));
+        pObj->SetLayer(rAdmin.GetLayerID(aStr));
     }
     else if (nSlotId == OBJ_CUSTOMSHAPE )
     {

@@ -318,7 +318,7 @@ void SdrPageWindow::RedrawAll( sdr::contact::ViewObjectContactRedirector* pRedir
     // Draw all layers. do NOT draw form layer from CompleteRedraw, this is done separately
     // as a single layer paint
     const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
-    const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), false);
+    const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName());
     aProcessLayers.Clear(nControlLayerId);
 
     // still something to paint?
@@ -368,7 +368,7 @@ void SdrPageWindow::RedrawLayer(const SdrLayerID* pId,
     {
         // find out if we are painting the ControlLayer
         const SdrLayerAdmin& rLayerAdmin = rModel.GetLayerAdmin();
-        const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName(), false);
+        const SdrLayerID nControlLayerId = rLayerAdmin.GetLayerID(rLayerAdmin.GetControlLayerName());
         const bool bControlLayerProcessingActive(nControlLayerId == *pId);
 
         // create PaintInfoRec, use Rectangle only temporarily

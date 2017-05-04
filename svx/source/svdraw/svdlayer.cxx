@@ -241,12 +241,12 @@ sal_uInt16 SdrLayerAdmin::GetLayerPos(SdrLayer* pLayer) const
     return sal_uInt16(nRet);
 }
 
-SdrLayer* SdrLayerAdmin::GetLayer(const OUString& rName, bool bInherited)
+SdrLayer* SdrLayerAdmin::GetLayer(const OUString& rName)
 {
-    return const_cast<SdrLayer*>(const_cast<const SdrLayerAdmin*>(this)->GetLayer(rName, bInherited));
+    return const_cast<SdrLayer*>(const_cast<const SdrLayerAdmin*>(this)->GetLayer(rName));
 }
 
-const SdrLayer* SdrLayerAdmin::GetLayer(const OUString& rName, bool /*bInherited*/) const
+const SdrLayer* SdrLayerAdmin::GetLayer(const OUString& rName) const
 {
     sal_uInt16 i(0);
     const SdrLayer* pLay = nullptr;
@@ -261,16 +261,16 @@ const SdrLayer* SdrLayerAdmin::GetLayer(const OUString& rName, bool /*bInherited
 
     if(!pLay && pParent)
     {
-        pLay = pParent->GetLayer(rName, true);
+        pLay = pParent->GetLayer(rName);
     }
 
     return pLay;
 }
 
-SdrLayerID SdrLayerAdmin::GetLayerID(const OUString& rName, bool bInherited) const
+SdrLayerID SdrLayerAdmin::GetLayerID(const OUString& rName) const
 {
     SdrLayerID nRet=SDRLAYER_NOTFOUND;
-    const SdrLayer* pLay=GetLayer(rName,bInherited);
+    const SdrLayer* pLay=GetLayer(rName);
     if (pLay!=nullptr) nRet=pLay->GetID();
     return nRet;
 }

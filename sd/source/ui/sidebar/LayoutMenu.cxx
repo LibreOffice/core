@@ -468,9 +468,9 @@ SfxRequest LayoutMenu::CreateRequest (
     {
         SdrLayerAdmin& rLayerAdmin (mrBase.GetDocument()->GetLayerAdmin());
         sal_uInt8 aBackground (rLayerAdmin.GetLayerID(
-            SD_RESSTR(STR_LAYER_BCKGRND), false));
+            SD_RESSTR(STR_LAYER_BCKGRND)));
         sal_uInt8 aBackgroundObject (rLayerAdmin.GetLayerID(
-            SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false));
+            SD_RESSTR(STR_LAYER_BCKGRNDOBJ)));
         ViewShell* pViewShell = mrBase.GetMainViewShell().get();
         if (pViewShell == nullptr)
             break;

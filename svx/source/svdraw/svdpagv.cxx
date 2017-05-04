@@ -610,7 +610,7 @@ void SdrPageView::SetLayer(const OUString& rName, SetOfByte& rBS, bool bJa)
     if(!GetPage())
         return;
 
-    SdrLayerID nID = GetPage()->GetLayerAdmin().GetLayerID(rName, true);
+    SdrLayerID nID = GetPage()->GetLayerAdmin().GetLayerID(rName);
 
     if(SDRLAYER_NOTFOUND != nID)
         rBS.Set(nID, bJa);
@@ -625,7 +625,7 @@ bool SdrPageView::IsLayer(const OUString& rName, const SetOfByte& rBS) const
 
     if (!rName.isEmpty())
     {
-        SdrLayerID nId = GetPage()->GetLayerAdmin().GetLayerID(rName, true);
+        SdrLayerID nId = GetPage()->GetLayerAdmin().GetLayerID(rName);
 
         if(SDRLAYER_NOTFOUND != nId)
         {
