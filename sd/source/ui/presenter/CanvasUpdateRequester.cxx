@@ -44,10 +44,14 @@ std::shared_ptr<CanvasUpdateRequester> CanvasUpdateRequester::Instance (
     static std::vector<std::pair<
         uno::WeakReference<rendering::XSpriteCanvas>,
         std::weak_ptr<CanvasUpdateRequester>>> s_RequesterMap;
-    for (auto it = s_RequesterMap.begin(); it != s_RequesterMap.end(); ++it)
+    for (auto it = s_RequesterMap.begin(); it != s_RequesterMap.end(); )
     {
         uno::Reference<rendering::XSpriteCanvas> const xCanvas(it->first);
-        if (xCanvas == rxSharedCanvas)
+        if (!xCanvas.is())
+        {
+            it = s_RequesterMap.erase(it); // remove stale entry
+        }
+        else if (xCanvas == rxSharedCanvas)
         {
             std::shared_ptr<CanvasUpdateRequester> pRequester(it->second);
             if (pRequester)
@@ -64,10 +68,7 @@ std::shared_ptr<CanvasUpdateRequester> CanvasUpdateRequester::Instance (
         }
         else
         {
-            if (!xCanvas.is())
-            {
-                it = s_RequesterMap.erase(it); // remove stale entry
-            }
+            ++it;
         }
     }
 
