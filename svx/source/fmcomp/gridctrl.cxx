@@ -166,11 +166,11 @@ GridFieldValueListener::~GridFieldValueListener()
     dispose();
 }
 
-void GridFieldValueListener::_propertyChanged(const PropertyChangeEvent& _evt)
+void GridFieldValueListener::_propertyChanged(const PropertyChangeEvent& /*_evt*/)
 {
     DBG_ASSERT(m_nSuspended>=0, "GridFieldValueListener::_propertyChanged : resume > suspend !");
     if (m_nSuspended <= 0)
-        m_rParent.FieldValueChanged(m_nId, _evt);
+        m_rParent.FieldValueChanged(m_nId);
 }
 
 void GridFieldValueListener::dispose()
@@ -200,7 +200,7 @@ public:
     DisposeListenerGridBridge(  DbGridControl& _rParent, const Reference< XComponent >& _rxObject);
     virtual ~DisposeListenerGridBridge() override;
 
-    virtual void disposing(const EventObject& _rEvent, sal_Int16 _nId) override { m_rParent.disposing(_nId, _rEvent); }
+    virtual void disposing(const EventObject& /*_rEvent*/, sal_Int16 _nId) override { m_rParent.disposing(_nId); }
 };
 
 DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, const Reference< XComponent >& _rxObject)
@@ -3082,7 +3082,7 @@ void DbGridControl::resetCurrentRow()
     RowModified(GetCurRow()); // will update the current controller if affected
 }
 
-void DbGridControl::RowModified( long nRow, sal_uInt16 /*nColId*/ )
+void DbGridControl::RowModified( long nRow )
 {
     if (nRow == m_nCurrentPos && IsEditing())
     {
@@ -3573,7 +3573,7 @@ void DbGridControl::DisconnectFromFields()
     m_pFieldListeners = nullptr;
 }
 
-void DbGridControl::FieldValueChanged(sal_uInt16 _nId, const PropertyChangeEvent& /*_evt*/)
+void DbGridControl::FieldValueChanged(sal_uInt16 _nId)
 {
     osl::MutexGuard aPreventDestruction(m_aDestructionSafety);
     // needed as this may run in a thread other than the main one
@@ -3598,7 +3598,7 @@ void DbGridControl::FieldValueChanged(sal_uInt16 _nId, const PropertyChangeEvent
 
         // and finally do the update ...
         pColumn->UpdateFromField(m_xCurrentRow.get(), m_xFormatter);
-        RowModified(GetCurRow(), _nId);
+        RowModified(GetCurRow());
     }
 }
 
@@ -3623,7 +3623,7 @@ void DbGridControl::FieldListenerDisposing(sal_uInt16 _nId)
     pListeners->erase(aPos);
 }
 
-void DbGridControl::disposing(sal_uInt16 _nId, const EventObject& /*_rEvt*/)
+void DbGridControl::disposing(sal_uInt16 _nId)
 {
     if (_nId == 0)
     {   // the seek cursor is being disposed

@@ -45,7 +45,7 @@ public:
             static SfxPoolItem* CreateDefault();
             XFillBitmapItem() : NameOrIndex(XATTR_FILLBITMAP, -1 ) {}
             XFillBitmapItem(const OUString& rName, const GraphicObject& rGraphicObject);
-            XFillBitmapItem(SfxItemPool* pPool, const GraphicObject& rGraphicObject);
+            XFillBitmapItem( const GraphicObject& rGraphicObject );
             XFillBitmapItem( const XFillBitmapItem& rItem );
             XFillBitmapItem( SvStream& rIn, sal_uInt16 nVer );
 

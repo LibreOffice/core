@@ -81,7 +81,7 @@ void ParaPropertyPanel::HandleContextChange (
             mpTBxVertAlign->Show();
             mpTBxBackColor->Hide();
             mpTBxNumBullet->Hide();
-            ReSize(false);
+            ReSize();
             break;
 
         case CombinedEnumContext(Application::DrawImpress, Context::Draw):
@@ -92,7 +92,7 @@ void ParaPropertyPanel::HandleContextChange (
             mpTBxVertAlign->Show();
             mpTBxBackColor->Hide();
             mpTBxNumBullet->Show();
-            ReSize(true);
+            ReSize();
             break;
 
         case CombinedEnumContext(Application::WriterVariants, Context::Default):
@@ -100,21 +100,21 @@ void ParaPropertyPanel::HandleContextChange (
             mpTBxVertAlign->Hide();
             mpTBxBackColor->Show();
             mpTBxNumBullet->Show();
-            ReSize(true);
+            ReSize();
             break;
 
         case CombinedEnumContext(Application::WriterVariants, Context::Table):
             mpTBxVertAlign->Show();
             mpTBxBackColor->Show();
             mpTBxNumBullet->Show();
-            ReSize(true);
+            ReSize();
             break;
 
         case CombinedEnumContext(Application::WriterVariants, Context::Annotation):
             mpTBxVertAlign->Hide();
             mpTBxBackColor->Hide();
             mpTBxNumBullet->Hide();
-            ReSize(false);
+            ReSize();
             break;
 
         case CombinedEnumContext(Application::Calc, Context::EditCell):
@@ -136,7 +136,7 @@ void ParaPropertyPanel::DataChanged (const DataChangedEvent& rEvent)
     (void)rEvent;
 }
 
-void ParaPropertyPanel::ReSize(bool /* bSize */)
+void ParaPropertyPanel::ReSize()
 {
     if (mxSidebar.is())
         mxSidebar->requestLayout();
@@ -220,16 +220,16 @@ void ParaPropertyPanel::NotifyItemUpdate(
         break;
 
     case SID_ATTR_PARA_LRSPACE:
-        StateChangedIndentImpl( nSID, eState, pState );
+        StateChangedIndentImpl( eState, pState );
         break;
 
     case SID_ATTR_PARA_ULSPACE:
-        StateChangedULImpl( nSID, eState, pState );
+        StateChangedULImpl( eState, pState );
         break;
     }
 }
 
-void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
+void ParaPropertyPanel::StateChangedIndentImpl( SfxItemState eState, const SfxPoolItem* pState )
 {
     switch (maContext.GetCombinedContext_DI())
     {
@@ -333,7 +333,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
     }
 }
 
-void ParaPropertyPanel::StateChangedULImpl( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
+void ParaPropertyPanel::StateChangedULImpl( SfxItemState eState, const SfxPoolItem* pState )
 {
     mpTopDist->SetMax( mpTopDist->Normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
     mpBottomDist->SetMax( mpBottomDist->Normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );

@@ -2785,7 +2785,7 @@ void FmXFormShell::SetDesignMode(bool bDesign)
     m_pShell->m_bDesignMode = bDesign;
     UpdateForms( false );
 
-    m_pTextShell->designModeChanged( m_pShell->m_bDesignMode );
+    m_pTextShell->designModeChanged();
 
     if (bDesign)
     {

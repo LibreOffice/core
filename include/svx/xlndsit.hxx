@@ -38,7 +38,7 @@ public:
                             static SfxPoolItem* CreateDefault();
                             XLineDashItem() : NameOrIndex(XATTR_LINEDASH, -1) {}
                             XLineDashItem(const OUString& rName, const XDash& rTheDash);
-                            XLineDashItem(SfxItemPool* pPool, const XDash& rTheDash);
+                            XLineDashItem(const XDash& rTheDash);
                             XLineDashItem(const XLineDashItem& rItem);
                             XLineDashItem(SvStream& rIn);
 

@@ -1029,7 +1029,7 @@ namespace svx
     }
 
 
-    void FmTextControlShell::designModeChanged( bool /*_bNewDesignMode*/ )
+    void FmTextControlShell::designModeChanged()
     {
         m_rBindings.Invalidate( pTextControlSlots );
     }

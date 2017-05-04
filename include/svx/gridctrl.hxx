@@ -353,10 +353,10 @@ protected:
     /// @throws css::uno::RuntimeException
     void DataSourcePropertyChanged(const css::beans::PropertyChangeEvent& evt);
 
-    void FieldValueChanged(sal_uInt16 _nId, const css::beans::PropertyChangeEvent& _evt);
+    void FieldValueChanged(sal_uInt16 _nId);
     void FieldListenerDisposing(sal_uInt16 _nId);
 
-    void disposing(sal_uInt16 _nId, const css::lang::EventObject& _rEvt);
+    void disposing(sal_uInt16 _nId);
 
     // own overridables
     /// called when the current row changed
@@ -467,7 +467,7 @@ public:
 
     void RowRemoved( long nRow, long nNumRows = 1, bool bDoPaint = true );
     void RowInserted( long nRow, long nNumRows = 1, bool bDoPaint = true );
-    void RowModified( long nRow, sal_uInt16 nColId = USHRT_MAX );
+    void RowModified( long nRow );
 
     void resetCurrentRow();
 

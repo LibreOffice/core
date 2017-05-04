@@ -337,7 +337,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         {
             XHatch aHatch(static_cast<const XFillHatchItem&>(rOriginalSet.Get(XATTR_FILLHATCH)).GetHatchValue());
             aHatch.SetColor(aShadowColor);
-            aTempSet.Put(XFillHatchItem(aTempSet.GetPool(), aHatch));
+            aTempSet.Put(XFillHatchItem(aHatch));
             aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
         }
 
@@ -395,7 +395,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
                 }
             }
 
-            aTempSet.Put(XFillBitmapItem(aTempSet.GetPool(), aGraphicObject));
+            aTempSet.Put(XFillBitmapItem(aGraphicObject));
             aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
         }
 

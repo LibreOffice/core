@@ -1410,7 +1410,7 @@ void FmGridControl::DeleteSelectedRows()
 }
 
 // XCurrentRecordListener
-void FmGridControl::positioned(const css::lang::EventObject& /*rEvent*/)
+void FmGridControl::positioned()
 {
     SAL_INFO("svx.fmcomp", "FmGridControl::positioned");
     // position on the data source (force it to be done in the main thread)
@@ -1432,7 +1432,7 @@ bool FmGridControl::commit()
     return true;
 }
 
-void FmGridControl::inserted(const css::lang::EventObject& /*rEvent*/)
+void FmGridControl::inserted()
 {
     const DbGridRowRef& xRow = GetCurrentRow();
     if (!xRow.is())
@@ -1574,7 +1574,7 @@ void FmGridControl::ColumnMoved(sal_uInt16 nId)
         xColumns->insertByIndex(GetModelColumnPos(nId), aElement);
         pCol->setModel(xCol);
         // if the column which is shown here is selected ...
-        if ( isColumnSelected(nId,pCol) )
+        if ( isColumnSelected(pCol) )
             markColumn(nId); // ... -> mark it
     }
 
@@ -1745,7 +1745,7 @@ void FmGridControl::HideColumn(sal_uInt16 nId)
         m_nMarkedColumnId = (sal_uInt16)-1;
 }
 
-bool FmGridControl::isColumnSelected(sal_uInt16 /*nId*/,DbGridColumn* _pColumn)
+bool FmGridControl::isColumnSelected(DbGridColumn* _pColumn)
 {
     OSL_ENSURE(_pColumn,"Column can not be null!");
     bool bSelected = false;
@@ -1773,7 +1773,7 @@ void FmGridControl::ShowColumn(sal_uInt16 nId)
         GetPeer()->columnVisible(pColumn);
 
     // if the column which is shown here is selected ...
-    if ( isColumnSelected(nId,pColumn) )
+    if ( isColumnSelected(pColumn) )
         markColumn(nId); // ... -> mark it
 }
 

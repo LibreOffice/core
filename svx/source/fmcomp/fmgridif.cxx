@@ -1517,11 +1517,11 @@ void FmXGridPeer::cursorMoved(const EventObject& _rEvent)
     // we are not interested in move to insert row only in the resetted event
     // which is fired after positioning an the insert row
     if (pGrid && pGrid->IsOpen() && !::comphelper::getBOOL(Reference< XPropertySet > (_rEvent.Source, UNO_QUERY)->getPropertyValue(FM_PROP_ISNEW)))
-        pGrid->positioned(_rEvent);
+        pGrid->positioned();
 }
 
 
-void FmXGridPeer::rowChanged(const EventObject& _rEvent)
+void FmXGridPeer::rowChanged(const EventObject& /*_rEvent*/)
 {
     VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
     if (pGrid && pGrid->IsOpen())
@@ -1529,7 +1529,7 @@ void FmXGridPeer::rowChanged(const EventObject& _rEvent)
         if (m_xCursor->rowUpdated() && !pGrid->IsCurrentAppending())
             pGrid->RowModified(pGrid->GetCurrentPos());
         else if (m_xCursor->rowInserted())
-            pGrid->inserted(_rEvent);
+            pGrid->inserted();
     }
 }
 
@@ -2646,7 +2646,7 @@ void FmXGridPeer::resetted(const EventObject& rEvent)
         SolarMutexGuard aGuard;
         VclPtr< FmGridControl > pGrid = GetAs< FmGridControl >();
         if (pGrid && pGrid->IsOpen())
-            pGrid->positioned(rEvent);
+            pGrid->positioned();
     }
 }
 

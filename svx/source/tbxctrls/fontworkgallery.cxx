@@ -68,7 +68,7 @@ namespace svx
 const int nColCount = 4;
 const int nLineCount = 4;
 
-FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, vcl::Window* pParent, sal_uInt16 /*nSID*/ ) :
+FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, vcl::Window* pParent ) :
         ModalDialog(pParent, "FontworkGalleryDialog", "svx/ui/fontworkgallerydialog.ui" ),
         mnThemeId           ( 0xffff ),
         mpSdrView           ( pSdrView ),
@@ -422,7 +422,7 @@ private:
     DECL_LINK( SelectHdl, ToolbarMenu*, void );
 
     void    implSetCharacterSpacing( sal_Int32 nCharacterSpacing, bool bEnabled );
-    void    implSetKernCharacterPairs( bool bKernOnOff, bool bEnabled );
+    void    implSetKernCharacterPairs( bool bEnabled );
 
 };
 
@@ -474,7 +474,7 @@ void FontworkCharacterSpacingWindow::implSetCharacterSpacing( sal_Int32 nCharact
 }
 
 
-void FontworkCharacterSpacingWindow::implSetKernCharacterPairs( bool, bool bEnabled )
+void FontworkCharacterSpacingWindow::implSetKernCharacterPairs( bool bEnabled )
 {
     enableEntry( 6, bEnabled );
     checkEntry( 6, bEnabled );
@@ -500,13 +500,13 @@ void FontworkCharacterSpacingWindow::statusChanged( const css::frame::FeatureSta
     {
         if( !Event.IsEnabled )
         {
-            implSetKernCharacterPairs( false, false );
+            implSetKernCharacterPairs( false );
         }
         else
         {
             bool bValue = false;
             if( Event.State >>= bValue )
-                implSetKernCharacterPairs( bValue, true );
+                implSetKernCharacterPairs( true );
         }
     }
 }
@@ -544,7 +544,7 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl,ToolbarMenu*, void)
 
         mrController.dispatchCommand( msFontworkKernCharacterPairs, aArgs );
 
-        implSetKernCharacterPairs( true, true );
+        implSetKernCharacterPairs( true );
     }
     else if( nSelection >= 0 )
     {

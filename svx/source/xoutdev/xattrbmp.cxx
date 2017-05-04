@@ -271,7 +271,7 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
     }
 }
 
-XFillBitmapItem::XFillBitmapItem(SfxItemPool* /*pPool*/, const GraphicObject& rGraphicObject)
+XFillBitmapItem::XFillBitmapItem(const GraphicObject& rGraphicObject)
 :   NameOrIndex( XATTR_FILLBITMAP, -1),
     maGraphicObject(rGraphicObject)
 {

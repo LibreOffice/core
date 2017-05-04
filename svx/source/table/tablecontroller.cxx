@@ -237,7 +237,7 @@ bool SvxTableController::onKeyInput(const KeyEvent& rKEvt, vcl::Window* pWindow 
         }
     }
 
-    TblAction nAction = getKeyboardAction(rKEvt, pWindow);
+    TblAction nAction = getKeyboardAction(rKEvt);
 
     return executeAction( nAction, rKEvt.GetKeyCode().IsShift(), pWindow );
 }
@@ -1447,7 +1447,7 @@ bool SvxTableController::checkTableObject()
 }
 
 
-SvxTableController::TblAction SvxTableController::getKeyboardAction(const KeyEvent& rKEvt, vcl::Window* /*pWindow*/)
+SvxTableController::TblAction SvxTableController::getKeyboardAction(const KeyEvent& rKEvt)
 {
     const bool bMod1 = rKEvt.GetKeyCode().IsMod1(); // ctrl
     const bool bMod2 = rKEvt.GetKeyCode().IsMod2(); // Alt

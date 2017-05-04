@@ -417,7 +417,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             {
                 const Color aNullCol(COL_DEFAULT_SHAPE_STROKE);
                 const XHatch aNullHatch(aNullCol);
-                XFillHatchItem aXFillHatchItem(rToSet.GetPool(), aNullHatch);
+                XFillHatchItem aXFillHatchItem(aNullHatch);
 
                 aXFillHatchItem.PutValue(*pXFillHatchItem, MID_FILLHATCH);
                 rToSet.Put(aXFillHatchItem);
@@ -441,7 +441,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             if(pXFillBitmapItem)
             {
                 const Graphic aNullGraphic;
-                XFillBitmapItem aXFillBitmapItem(rToSet.GetPool(), aNullGraphic);
+                XFillBitmapItem aXFillBitmapItem(aNullGraphic);
 
                 aXFillBitmapItem.PutValue(*pXFillBitmapItem, MID_BITMAP);
                 rToSet.Put(aXFillBitmapItem);
@@ -462,7 +462,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             if(pXFillBitmapURLItem)
             {
                 const Graphic aNullGraphic;
-                XFillBitmapItem aXFillBitmapItem(rToSet.GetPool(), aNullGraphic);
+                XFillBitmapItem aXFillBitmapItem(aNullGraphic);
 
                 aXFillBitmapItem.PutValue(*pXFillBitmapURLItem, MID_GRAFURL);
                 rToSet.Put(aXFillBitmapItem);
@@ -533,7 +533,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             if(pXFillFloatTransparenceItem)
             {
                 const XGradient aNullGrad(RGB_Color(COL_BLACK), RGB_Color(COL_WHITE));
-                XFillFloatTransparenceItem aXFillFloatTransparenceItem(rToSet.GetPool(), aNullGrad, false);
+                XFillFloatTransparenceItem aXFillFloatTransparenceItem(aNullGrad, false);
 
                 aXFillFloatTransparenceItem.PutValue(*pXFillFloatTransparenceItem, MID_FILLGRADIENT);
                 rToSet.Put(aXFillFloatTransparenceItem);
@@ -1873,7 +1873,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                         case XATTR_FILLBITMAP:
                         {
                             const Graphic aNullGraphic;
-                            XFillBitmapItem aXFillBitmapItem(aSet.GetPool(), aNullGraphic);
+                            XFillBitmapItem aXFillBitmapItem(aNullGraphic);
 
                             aXFillBitmapItem.PutValue(aValue, nMemberId);
                             aSet.Put(aXFillBitmapItem);

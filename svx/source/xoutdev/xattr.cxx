@@ -680,7 +680,7 @@ XLineDashItem::XLineDashItem(SvStream& rIn) :
     }
 }
 
-XLineDashItem::XLineDashItem(SfxItemPool* /*pPool*/, const XDash& rTheDash)
+XLineDashItem::XLineDashItem(const XDash& rTheDash)
 :   NameOrIndex( XATTR_LINEDASH, -1 ),
     aDash(rTheDash)
 {
@@ -1249,7 +1249,7 @@ XLineStartItem::XLineStartItem(SvStream& rIn) :
     }
 }
 
-XLineStartItem::XLineStartItem(SfxItemPool* /*pPool*/, const basegfx::B2DPolyPolygon& rPolyPolygon)
+XLineStartItem::XLineStartItem(const basegfx::B2DPolyPolygon& rPolyPolygon)
 :   NameOrIndex( XATTR_LINESTART, -1 ),
     maPolyPolygon(rPolyPolygon)
 {
@@ -1592,7 +1592,7 @@ XLineEndItem::XLineEndItem(SvStream& rIn) :
     }
 }
 
-XLineEndItem::XLineEndItem(SfxItemPool* /*pPool*/, const basegfx::B2DPolyPolygon& rPolyPolygon)
+XLineEndItem::XLineEndItem(const basegfx::B2DPolyPolygon& rPolyPolygon)
 :   NameOrIndex( XATTR_LINEEND, -1 ),
     maPolyPolygon(rPolyPolygon)
 {
@@ -2768,7 +2768,7 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem( const XFillFloatTranspar
     SetWhich( XATTR_FILLFLOATTRANSPARENCE );
 }
 
-XFillFloatTransparenceItem::XFillFloatTransparenceItem(SfxItemPool* /*pPool*/, const XGradient& rTheGradient, bool bEnable )
+XFillFloatTransparenceItem::XFillFloatTransparenceItem(const XGradient& rTheGradient, bool bEnable )
 :   XFillGradientItem   ( -1, rTheGradient ),
     bEnabled            ( bEnable )
 {
@@ -2910,7 +2910,7 @@ XFillHatchItem::XFillHatchItem(SvStream& rIn) :
     }
 }
 
-XFillHatchItem::XFillHatchItem(SfxItemPool* /*pPool*/, const XHatch& rTheHatch)
+XFillHatchItem::XFillHatchItem(const XHatch& rTheHatch)
 :   NameOrIndex( XATTR_FILLHATCH, -1 ),
     aHatch(rTheHatch)
 {

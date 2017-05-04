@@ -978,7 +978,7 @@ bool SdrPaintView::IsGroupEntered() const
     return false;
 }
 
-void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, bool /*bReplaceAll*/)
+void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr)
 {
     // bReplaceAll has no effect here at all.
     bool bMeasure= dynamic_cast<const SdrView*>(this) != nullptr && static_cast<SdrView*>(this)->IsMeasureTool();
@@ -997,7 +997,7 @@ void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, bool /*bRep
     }
 }
 
-void SdrPaintView::MergeNotPersistDefaultAttr(SfxItemSet& rAttr, bool /*bOnlyHardAttr*/) const
+void SdrPaintView::MergeNotPersistDefaultAttr(SfxItemSet& rAttr) const
 {
     // bOnlyHardAttr has no effect here at all.
     bool bMeasure= dynamic_cast<const SdrView*>(this) != nullptr && static_cast<const SdrView*>(this)->IsMeasureTool();
@@ -1033,7 +1033,7 @@ void SdrPaintView::SetDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll)
 #endif
     if (bReplaceAll) maDefaultAttr.Set(rAttr);
     else maDefaultAttr.Put(rAttr,false); // if FALSE, regard InvalidItems as "holes," not as Default
-    SetNotPersistDefaultAttr(rAttr,bReplaceAll);
+    SetNotPersistDefaultAttr(rAttr);
 #ifdef DBG_UTIL
     if (mpItemBrowser!=nullptr) mpItemBrowser->SetDirty();
 #endif
@@ -1074,7 +1074,7 @@ bool SdrPaintView::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAttr) con
         rTargetSet.Put(mpDefaultStyleSheet->GetItemSet(), false);
         rTargetSet.Put(maDefaultAttr, false);
     }
-    MergeNotPersistDefaultAttr(rTargetSet, bOnlyHardAttr);
+    MergeNotPersistDefaultAttr(rTargetSet);
     return true;
 }
 
@@ -1217,20 +1217,17 @@ void SdrPaintView::VisAreaChanged(const OutputDevice* pOut)
 
             if(pWindow)
             {
-                VisAreaChanged(*pWindow);
+                VisAreaChanged();
             }
         }
         else
         {
-            for(sal_uInt32 a(0L); a < mpPageView->PageWindowCount(); a++)
-            {
-                VisAreaChanged(*mpPageView->GetPageWindow(a));
-            }
+            VisAreaChanged();
         }
     }
 }
 
-void SdrPaintView::VisAreaChanged(const SdrPageWindow& /*rWindow*/)
+void SdrPaintView::VisAreaChanged()
 {
     // notify SfxListener
     Broadcast(SvxViewChangedHint());

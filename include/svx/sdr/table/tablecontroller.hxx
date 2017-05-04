@@ -148,7 +148,7 @@ private:
     SVX_DLLPRIVATE void EditCell(const CellPos& rPos, vcl::Window* pWindow, TblAction nAction);
     SVX_DLLPRIVATE void StopTextEdit();
 
-    SVX_DLLPRIVATE TblAction getKeyboardAction(const KeyEvent& rKEvt, vcl::Window* pWindow);
+    SVX_DLLPRIVATE TblAction getKeyboardAction(const KeyEvent& rKEvt);
     SVX_DLLPRIVATE bool executeAction(TblAction nAction, bool bSelect, vcl::Window* pWindow);
     SVX_DLLPRIVATE void gotoCell(const CellPos& rCell, bool bSelect, vcl::Window* pWindow, TblAction nAction = TblAction::NONE);
 

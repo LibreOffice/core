@@ -112,13 +112,13 @@ public:
     void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt);
 
     // css::form::XPositioningListener
-    void positioned(const css::lang::EventObject& rEvent);
+    void positioned();
 
     // XBound
     bool commit();
 
     // css::form::XInsertListener
-    void inserted(const css::lang::EventObject& rEvent);
+    void inserted();
 
     void markColumn(sal_uInt16 nId);
     bool isColumnMarked(sal_uInt16 nId) const;
@@ -186,14 +186,12 @@ protected:
     bool selectBookmarks(const css::uno::Sequence< css::uno::Any>& _rBookmarks);
 
     /** returns if a column is selected
-        @param  nColumnId
-            The column id.
         @param  _pColumn
             The column to compare with.
         @return
             <TRUE/> if the column is selected, otherwise <FALSE/>
     */
-    bool isColumnSelected(sal_uInt16 nColumnId,DbGridColumn* _pColumn);
+    bool isColumnSelected(DbGridColumn* _pColumn);
 };
 
 #endif // INCLUDED_SVX_FMGRIDCL_HXX

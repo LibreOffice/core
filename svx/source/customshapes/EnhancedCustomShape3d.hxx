@@ -50,7 +50,7 @@ class EnhancedCustomShape3d
 
         public:
 
-                        Transformation2D( const SdrObject* pCustomShape, const tools::Rectangle& rBoundRect, const double* pMap );
+                        Transformation2D( const SdrObject* pCustomShape, const double* pMap );
 
             basegfx::B3DPolygon ApplySkewSettings( const basegfx::B3DPolygon& rPolygon3D ) const;
             Point       Transform2D( const basegfx::B3DPoint& rPoint ) const;

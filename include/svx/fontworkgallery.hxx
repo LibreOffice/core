@@ -81,7 +81,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
     std::vector< BitmapEx> maFavoritesHorizontal;
 
 public:
-    FontWorkGalleryDialog( SdrView* pView, vcl::Window* pParent, sal_uInt16 nSID );
+    FontWorkGalleryDialog( SdrView* pView, vcl::Window* pParent );
     virtual ~FontWorkGalleryDialog() override;
     virtual void dispose() override;
 

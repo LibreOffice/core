@@ -108,11 +108,11 @@ private:
     DECL_LINK(ModifyIndentHdl_Impl, Edit&, void);
     DECL_LINK(ULSpaceHdl_Impl, Edit&, void);
 
-    void StateChangedIndentImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    void StateChangedULImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+    void StateChangedIndentImpl( SfxItemState eState, const SfxPoolItem* pState );
+    void StateChangedULImpl( SfxItemState eState, const SfxPoolItem* pState );
 
     void initial();
-    void ReSize(bool bSize);
+    void ReSize();
     void InitToolBoxIndent();
     void InitToolBoxSpacing();
 };
