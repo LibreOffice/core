@@ -7838,22 +7838,7 @@ AC_SUBST(CLUCENE_LIBS)
 dnl ===================================================================
 dnl Check for system expat
 dnl ===================================================================
-dnl we should use libo_CHECK_SYSTEM_MODULE, but e.g. the mingw tinderbox had no
-dnl proper pkg-config for it. It should really be fixed on the tinderbox though.
-AC_MSG_CHECKING([which expat to use])
-if test "$with_system_expat" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_EXPAT=TRUE
-    AC_CHECK_HEADER(expat.h, [],
-        [AC_MSG_ERROR(expat.h not found. install expat)], [])
-    AC_CHECK_LIB([expat], [XML_ParserCreate], [:],
-        [AC_MSG_RESULT(expat library not found or functional.)], [])
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_EXPAT=
-    BUILD_TYPE="$BUILD_TYPE EXPAT"
-fi
-AC_SUBST(SYSTEM_EXPAT)
+libo_CHECK_SYSTEM_MODULE([expat], [EXPAT], [expat])
 
 AC_MSG_CHECKING([whether to enable Embedded OpenType support])
 if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_eot" = "yes"; then
