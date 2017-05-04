@@ -57,8 +57,7 @@ public:
     // since this would not be saved/loaded, thus the compatibility will be better when setting it at
     // newly created charts using this method
     static void AdaptDefaultsForChart(
-        const css::uno::Reference < css::embed::XEmbeddedObject > & xEmbObj,
-        bool bNoFillStyle = true);
+        const css::uno::Reference < css::embed::XEmbeddedObject > & xEmbObj);
 };
 
 #endif // INCLUDED_SVX_CHARTHELPER_HXX

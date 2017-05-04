@@ -143,7 +143,7 @@ public:
     // Default = sal_False;
     bool IsUseIncompatiblePathCreateInterface() const { return bUseIncompatiblePathCreateInterface; }
     void SetUseIncompatiblePathCreateInterface(bool bOn) { bUseIncompatiblePathCreateInterface = bOn; }
-    void SetConnectMarker(const SdrObjConnection& rCon, const SdrPageView& rPV);
+    void SetConnectMarker(const SdrObjConnection& rCon);
     void HideConnectMarker();
 
     // Attributes of the object that is in the process of being created

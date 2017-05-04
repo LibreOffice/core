@@ -44,14 +44,6 @@ namespace sdr
         {
         }
 
-        EmptyProperties::EmptyProperties(const EmptyProperties& rProps, SdrObject& rObj)
-        :   BaseProperties(rProps, rObj),
-            mpEmptyItemSet(nullptr)
-        {
-            // do not gererate an assert, else derivations like PageProperties will generate an assert
-            // using the Clone() operator path.
-        }
-
         EmptyProperties::~EmptyProperties()
         {
             if(mpEmptyItemSet)
@@ -63,7 +55,7 @@ namespace sdr
 
         BaseProperties& EmptyProperties::Clone(SdrObject& rObj) const
         {
-            return *(new EmptyProperties(*this, rObj));
+            return *(new EmptyProperties(rObj));
         }
 
         const SfxItemSet& EmptyProperties::GetObjectItemSet() const

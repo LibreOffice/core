@@ -143,7 +143,7 @@ public:
 
                         SgaObjectBmp();
                         SgaObjectBmp( const INetURLObject& rURL );
-                        SgaObjectBmp( const Graphic& rGraphic, const INetURLObject& rURL, const OUString& rFormat );
+                        SgaObjectBmp( const Graphic& rGraphic, const INetURLObject& rURL );
 
     virtual SgaObjKind  GetObjKind() const override { return SgaObjKind::Bitmap; }
 };
@@ -153,7 +153,7 @@ class SgaObjectAnim : public SgaObjectBmp
 public:
 
                         SgaObjectAnim();
-                        SgaObjectAnim( const Graphic& rGraphic, const INetURLObject& rURL, const OUString& rFormatName );
+                        SgaObjectAnim( const Graphic& rGraphic, const INetURLObject& rURL );
 
     virtual SgaObjKind  GetObjKind() const override { return SgaObjKind::Animation; }
 };
@@ -163,7 +163,7 @@ class SgaObjectINet : public SgaObjectAnim
 public:
 
                         SgaObjectINet();
-                        SgaObjectINet( const Graphic& rGraphic, const INetURLObject& rURL, const OUString& rFormatName );
+                        SgaObjectINet( const Graphic& rGraphic, const INetURLObject& rURL );
 
     virtual SgaObjKind  GetObjKind() const override { return SgaObjKind::Inet; }
 };

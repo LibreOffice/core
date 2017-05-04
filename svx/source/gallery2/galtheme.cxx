@@ -554,11 +554,11 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
                         std::unique_ptr<SgaObject> pNewObj;
 
                         if ( SgaObjKind::Inet == pEntry->eObjKind )
-                            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectINet( aGraphic, aURL, aFormat )));
+                            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectINet( aGraphic, aURL )));
                         else if ( aGraphic.IsAnimated() )
-                            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectAnim( aGraphic, aURL, aFormat )));
+                            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectAnim( aGraphic, aURL )));
                         else
-                            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectBmp( aGraphic, aURL, aFormat )));
+                            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectBmp( aGraphic, aURL )));
 
                         if( !InsertObject( *pNewObj ) )
                             pEntry->mbDelete = true;
@@ -751,7 +751,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
     return pRet;
 }
 
-bool GalleryTheme::GetThumb( sal_uIntPtr nPos, BitmapEx& rBmp, bool )
+bool GalleryTheme::GetThumb( sal_uIntPtr nPos, BitmapEx& rBmp )
 {
     SgaObject*  pObj = AcquireObject( nPos );
     bool        bRet = false;
@@ -792,7 +792,7 @@ bool GalleryTheme::GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, bool bProgre
 
                 if( aModel.GetModel() )
                 {
-                    if( GetModel( nPos, *aModel.GetModel(), bProgress ) )
+                    if( GetModel( nPos, *aModel.GetModel() ) )
                     {
                         ImageMap aIMap;
 
@@ -921,7 +921,7 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
     return bRet;
 }
 
-bool GalleryTheme::GetModel( sal_uIntPtr nPos, SdrModel& rModel, bool )
+bool GalleryTheme::GetModel( sal_uIntPtr nPos, SdrModel& rModel )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
     bool                    bRet = false;
@@ -1103,9 +1103,9 @@ bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos 
     if( nImportRet != GalleryGraphicImportRet::IMPORT_NONE )
     {
         if ( aGraphic.IsAnimated() )
-            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectAnim( aGraphic, rURL, aFormat )));
+            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectAnim( aGraphic, rURL )));
         else
-            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectBmp( aGraphic, rURL, aFormat )));
+            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectBmp( aGraphic, rURL )));
     }
 #if HAVE_FEATURE_AVMEDIA
     else if( ::avmedia::MediaWindow::isMediaURL( rURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ), ""/*TODO?*/ ) )

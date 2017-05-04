@@ -181,12 +181,12 @@ public:
                                     return ImplGetGalleryObject( nPos )->aURL;
                                 }
 
-    SAL_DLLPRIVATE bool         GetThumb( sal_uIntPtr nPos, BitmapEx& rBmp, bool bProgress = false );
+    SAL_DLLPRIVATE bool         GetThumb( sal_uIntPtr nPos, BitmapEx& rBmp );
 
     bool                        GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, bool bProgress = false );
     bool                        InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPos );
 
-    bool                        GetModel( sal_uIntPtr nPos, SdrModel& rModel, bool bProgress = false );
+    bool                        GetModel( sal_uIntPtr nPos, SdrModel& rModel );
     bool                        InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPos );
 
     SAL_DLLPRIVATE bool         GetModelStream( sal_uIntPtr nPos, tools::SvRef<SotStorageStream>& rModelStreamRef );

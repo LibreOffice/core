@@ -1880,7 +1880,7 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
             {
                 // show IA helper, but only do this during IA, so not when the original
                 // Edge gets modified in the last call
-                rDragStat.GetView()->SetConnectMarker(*pDraggedOne, *rDragStat.GetPageView());
+                rDragStat.GetView()->SetConnectMarker(*pDraggedOne);
             }
         }
 
@@ -2037,7 +2037,7 @@ bool SdrEdgeObj::MovCreate(SdrDragStat& rDragStat)
     (*pEdgeTrack)[nMax-1]=rDragStat.GetNow();
     if (rDragStat.GetPageView()!=nullptr) {
         ImpFindConnector(rDragStat.GetNow(),*rDragStat.GetPageView(),aCon2,this);
-        rDragStat.GetView()->SetConnectMarker(aCon2,*rDragStat.GetPageView());
+        rDragStat.GetView()->SetConnectMarker(aCon2);
     }
     SetBoundRectDirty();
     bSnapRectDirty=true;
