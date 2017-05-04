@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_3dab448b",
+        "filename": "shell/source/win32/SysShExec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1001595
+      },
+      "writtenOn": "2017-05-04T07:22:44Z",
+      "side": 1,
+      "message": "It is not crucial for the code to work, I can just define the variables in the actual condition. I think however that it helps to increase readability and understanding of the code by indicating that these two variables belong to the same processwindow instead of having to use long, messy names for variables to indicate the same thing properly.",
+      "parentUuid": "5a3905b3_3da50404",
+      "revId": "7d2548f806018b010137d071397895e11dcc2f65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_7a95d23e",
         "filename": "shell/source/win32/SysShExec.cxx",
         "patchSetId": 1
