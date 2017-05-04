@@ -133,6 +133,11 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) override;
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent,
                                        const SfxItemSet* rAttrSet);
+    void SetNumRule(SwNumRule *pRule)
+    {
+        pNumRule = pRule;
+        m_pPreviewWIN->SetNumRule(pNumRule);
+    }
 };
 
 #endif

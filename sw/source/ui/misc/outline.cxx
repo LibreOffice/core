@@ -307,6 +307,9 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu, bool )
         {
             xNumRule.reset(pRules->MakeNumRule(rWrtSh));
             xNumRule->SetRuleType( OUTLINE_RULE );
+            SfxTabPage* pOutlinePage = GetTabPage(m_nOutlineId);
+            assert(pOutlinePage);
+            static_cast<SwOutlineSettingsTabPage*>(pOutlinePage)->SetNumRule(xNumRule.get());
         }
         else
             *xNumRule = *rWrtSh.GetOutlineNumRule();
