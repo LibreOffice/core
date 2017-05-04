@@ -421,7 +421,7 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
                                 SwAttrSet* pAutoAttr,
                                 bool bDelayed )
 {
-    OSL_ENSURE( pGrfColl, "MakeGrfNode: Formatpointer ist 0." );
+    OSL_ENSURE( pGrfColl, "MakeGrfNode: Formatpointer is 0." );
     SwGrfNode *pNode;
     // create object delayed, only from a SW/G-reader
     if( bDelayed )
@@ -437,7 +437,7 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
                                 const GraphicObject& rGrfObj,
                                 SwGrfFormatColl* pGrfColl )
 {
-    OSL_ENSURE( pGrfColl, "MakeGrfNode: Formatpointer ist 0." );
+    OSL_ENSURE( pGrfColl, "MakeGrfNode: Formatpointer is 0." );
     return new SwGrfNode( rWhere, rGrfObj, pGrfColl, nullptr );
 }
 
@@ -862,7 +862,7 @@ uno::Reference< embed::XStorage > SwGrfNode::GetDocSubstorageOrRoot( const OUStr
 {
     uno::Reference < embed::XStorage > refStor =
         const_cast<SwGrfNode*>(this)->GetDoc()->GetDocStorage();
-    OSL_ENSURE( refStor.is(), "Kein Storage am Doc" );
+    OSL_ENSURE( refStor.is(), "No storage in Doc" );
 
     if ( !aStgName.isEmpty() )
     {
