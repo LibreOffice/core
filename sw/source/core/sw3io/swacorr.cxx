@@ -54,8 +54,6 @@ void SwAutoCorrect::refreshBlockList( const uno::Reference< embed::XStorage >& r
     }
 }
 
-    //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
-    //      rShort ist der Stream-Name - gecryptet!
 /**
  * Text with attributes
  *
