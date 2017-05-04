@@ -2155,7 +2155,7 @@ void ScTabView::SetNewVisArea()
     if (pActive)
         aViewData.GetViewShell()->VisAreaChanged();
     if (pDrawView)
-        pDrawView->VisAreaChanged();    // no window passed on -> for all windows
+        pDrawView->VisAreaChanged(nullptr);    // no window passed on -> for all windows
 
     UpdateAllOverlays();                // #i79909# with drawing MapMode set
 

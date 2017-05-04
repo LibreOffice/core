@@ -485,7 +485,7 @@ public:
 
     /// Must be called by the App when scrolling etc. in order for
     /// an active FormularControl to be moved too
-    void VisAreaChanged(const OutputDevice* pOut=nullptr);
+    void VisAreaChanged(const OutputDevice* pOut);
     void VisAreaChanged(const SdrPageWindow& rWindow);
 
     bool IsPrintPreview() const { return mbPrintPreview; }
