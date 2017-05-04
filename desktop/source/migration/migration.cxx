@@ -494,7 +494,7 @@ OUString MigrationImpl::preXDGConfigDir(const OUString& rConfigDir)
     else
         aPreXDGConfigPath = rConfigDir;
 
-    // the application-specific config dir is not longer prefixed by '.' because it is hidden under ".config"
+    // the application-specific config dir is no longer prefixed by '.' because it is hidden under ".config"
     // we have to add the '.' for the pre-XDG directory names
     aPreXDGConfigPath += ".";
 

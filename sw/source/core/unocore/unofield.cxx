@@ -3014,7 +3014,7 @@ uno::Any SAL_CALL SwXFieldEnumeration::nextElement()
         m_pImpl->m_Items[ m_pImpl->m_nNextIndex++ ];
     uno::Any aRet;
     aRet <<= rxField;
-    rxField = nullptr;  // free memory for item that is not longer used
+    rxField = nullptr;  // free memory for item that is no longer used
     return aRet;
 }
 

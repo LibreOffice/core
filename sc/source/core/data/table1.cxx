@@ -829,7 +829,7 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
     //
     //     bIncludeOld = true ensure that the returned area contains at least the initial area,
     //                   independently of the emptiness of rows / columns (i.e. does not allow shrinking)
-    //     bOnlyDown = true means extend / shrink the inputed area only down, i.e modifiy only rEndRow
+    //     bOnlyDown = true means extend / shrink the inputted area only down, i.e modify only rEndRow
 
     rStartCol = std::min<SCCOL>( rStartCol, aCol.size()-1 );
     rEndCol   = std::min<SCCOL>( rEndCol,   aCol.size()-1 );

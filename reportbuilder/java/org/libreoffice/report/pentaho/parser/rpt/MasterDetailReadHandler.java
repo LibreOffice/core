@@ -83,8 +83,8 @@ public class MasterDetailReadHandler extends ElementReadHandler
     {
         if (OfficeNamespaces.OOREPORT_NS.equals(uri) && "master-detail-field".equals(tagName))
         {
-            // expect a report control. The control will modifiy the current
-            // element (as we do not separate the elements that strictly ..)
+            // expect a report control. The control will modify the current
+            // element (as we do not separate the elements that strictly...)
             return new MasterDetailReadHandler(element, true);
         }
 

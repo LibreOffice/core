@@ -4947,7 +4947,7 @@ void ScXMLExport::CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uIn
                         const OUString& rPrefix = pUnknown->GetPrefix( nIdx );
                         // Add namespace declaration for unknown attributes if
                         // there aren't existing ones for the prefix used by the
-                        // attibutes
+                        // attributes
                         GetNamespaceMap_().Add( rPrefix,
                                                 pUnknown->GetNamespace( nIdx ) );
                     }

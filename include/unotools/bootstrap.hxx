@@ -28,7 +28,7 @@ namespace utl
     /** provides configuration information needed for application startup.
 
         This class handles the startup information for the office application.
-           It encapsulates knowledge of how to retriev such information and how
+           It encapsulates knowledge of how to retrieve such information and how
            to diagnose failures to retrieve required data.
 
     */
