@@ -30,6 +30,7 @@
 #include <com/sun/star/ucb/URLAuthenticationRequest.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
+#include "officecfg/Office/Common.hxx"
 
 #include "passwordcontainer.hxx"
 
@@ -142,11 +143,16 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
 
     if ( bCanUseSystemCredentials )
     {
-        // Runtime / Persistent info avail for current auth request?
-
-        OUString aResult = m_xPasswordContainer->findUrl(
-            rURL.isEmpty() ? rRequest.ServerName : rURL );
-        if ( !aResult.isEmpty() )
+        // Does the configuration mandate that we try system credentials first?
+        bool bUseSystemCredentials = ::officecfg::Office::Common::Passwords::TrySystemCredentialsFirst::get();
+        if (!bUseSystemCredentials)
+        {
+            // Runtime / Persistent info avail for current auth request?
+            OUString aResult = m_xPasswordContainer->findUrl(
+                rURL.isEmpty() ? rRequest.ServerName : rURL);
+            bUseSystemCredentials = !aResult.isEmpty();
+        }
+        if ( bUseSystemCredentials )
         {
             if ( fillContinuation( true,
                                    rRequest,
