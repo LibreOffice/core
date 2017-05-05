@@ -81,15 +81,12 @@ You can help us to fix this issue by sending an anonymous crash report to the %P
           </packing>
         </child>
         <child>
-          <object class="GtkTextView" id="ed_post">
+          <object class="GtkLabel" id="ft_post">
             <property name="can_focus">False</property>
             <property name="valign">center</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes" context="crashreportdlg|ed_post">The crash report was successfully uploaded.
-You can soon find the report at:
-http://crashreport.collaboraoffice.com/stats/crash_details/%CRASHID</property>
+            <property name="label" translatable="yes" context="crashreportdlg|ed_post">The crash report was successfully uploaded.</property>
             <property name="wrap">True</property>
-            <property name="selectable">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
