@@ -25,7 +25,9 @@
 #endif
 #endif
 
+#if defined(_WIN32)
 #define UPDATER_NO_STRING_GLUE_STL
+#endif
 #include "nsVersionComparator.h"
 #undef UPDATER_NO_STRING_GLUE_STL
 
