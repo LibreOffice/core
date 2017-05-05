@@ -153,7 +153,8 @@ SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport,
     bool isEncoded(false);
     OUString const defaultEncoded(
         rImport.GetMM100UnitConverter().encodeStyleName(sDefault, &isEncoded));
-    if (isEncoded && !xStyles->hasByName(defaultEncoded))
+    if (isEncoded && defaultEncoded != "Default_20_Style"
+        && !xStyles->hasByName(defaultEncoded))
     {   // new name may contain a space which is converted to _20_ on export
         rImport.AddStyleDisplayName(XML_STYLE_FAMILY_TEXT_TEXT, defaultEncoded, sDefault);
     }
