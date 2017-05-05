@@ -123,7 +123,7 @@ public:
 
     // in case an SwModify object is destroyed that itself is registered in another SwModify,
     // its SwClient objects can decide to get registered to the latter instead by calling this method
-    void CheckRegistration( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue );
+    void CheckRegistration( const SfxPoolItem *pOldValue );
 
     // controlled access to Modify method
     // mba: this is still considered a hack and it should be fixed; the name makes grep-ing easier
@@ -221,7 +221,7 @@ private:
     virtual void Modify( const SfxPoolItem* pOldValue, const SfxPoolItem *pNewValue ) override
     {
         if( pNewValue && pNewValue->Which() == RES_OBJECTDYING )
-            CheckRegistration(pOldValue,pNewValue);
+            CheckRegistration(pOldValue);
         else if( m_pToTell )
             m_pToTell->ModifyNotification(pOldValue, pNewValue);
     }

@@ -231,8 +231,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrame *pFrame,
                             xAccImpl->ViewForwarderChanged();
                             break;
                         case Action::SCROLLED_IN:
-                            ScrolledInShape( rLower.GetDrawObject(),
-                                             xAccImpl.get() );
+                            ScrolledInShape( xAccImpl.get() );
                             break;
                         case Action::SCROLLED_OUT:
                             {
@@ -1001,8 +1000,7 @@ void SwAccessibleContext::DisposeShape( const SdrObject *pObj,
     xAccImpl->dispose();
 }
 
-void SwAccessibleContext::ScrolledInShape( const SdrObject* ,
-                                ::accessibility::AccessibleShape *pAccImpl )
+void SwAccessibleContext::ScrolledInShape( ::accessibility::AccessibleShape *pAccImpl )
 {
     if(nullptr == pAccImpl)
     {
@@ -1206,8 +1204,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
                 // #i37790#
                 if ( xAccImpl.is() )
                 {
-                    ScrolledInShape( rChildFrameOrObj.GetDrawObject(),
-                                     xAccImpl.get() );
+                    ScrolledInShape( xAccImpl.get() );
                 }
                 else
                 {

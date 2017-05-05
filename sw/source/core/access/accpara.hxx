@@ -137,7 +137,7 @@ class SwAccessibleParagraph :
         }
     }
 
-    const SwRangeRedline* GetRedlineAtIndex( sal_Int32 nPos );
+    const SwRangeRedline* GetRedlineAtIndex();
     OUString GetFieldTypeNameAtIndex(sal_Int32 nIndex);
 
     // #i63870#
@@ -151,7 +151,6 @@ class SwAccessibleParagraph :
             tAccParaPropValMap& rRunAttrSeq );
 
     void _getSupplementalAttributesImpl(
-            const sal_Int32 nIndex,
             const css::uno::Sequence< OUString >& aRequestedAttributes,
             tAccParaPropValMap& rSupplementalAttrSeq );
 
@@ -199,7 +198,6 @@ protected:
     //helpers for word boundaries
 
     bool GetCharBoundary( css::i18n::Boundary& rBound,
-                              const OUString& rText,
                               sal_Int32 nPos );
     bool GetWordBoundary( css::i18n::Boundary& rBound,
                               const OUString& rText,
@@ -214,7 +212,6 @@ protected:
                                    const OUString& rText,
                                    sal_Int32 nPos );
     bool GetAttributeBoundary( css::i18n::Boundary& rBound,
-                                   const OUString& rText,
                                    sal_Int32 nPos );
     bool GetGlyphBoundary( css::i18n::Boundary& rBound,
                                const OUString& rText,

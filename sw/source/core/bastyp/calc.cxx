@@ -403,7 +403,7 @@ OUString SwCalc::GetStrResult( const SwSbxValue& rVal )
     return GetStrResult( rVal.GetDouble() );
 }
 
-OUString SwCalc::GetStrResult( double nValue, bool )
+OUString SwCalc::GetStrResult( double nValue )
 {
     if( nValue >= DBL_MAX )
         switch( m_eError )

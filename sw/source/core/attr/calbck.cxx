@@ -36,7 +36,7 @@ SwClient::~SwClient()
         m_pRegisteredIn->Remove( this );
 }
 
-void SwClient::CheckRegistration( const SfxPoolItem* pOld, const SfxPoolItem* )
+void SwClient::CheckRegistration( const SfxPoolItem* pOld )
 {
     DBG_TESTSOLARMUTEX();
     // this method only handles notification about dying SwModify objects
@@ -68,9 +68,9 @@ void SwClient::SwClientNotify(const SwModify&, const SfxHint& rHint)
     }
 };
 
-void SwClient::Modify(SfxPoolItem const*const pOldValue, SfxPoolItem const*const pNewValue)
+void SwClient::Modify(SfxPoolItem const*const pOldValue, SfxPoolItem const*const /*pNewValue*/)
 {
-    CheckRegistration( pOldValue, pNewValue );
+    CheckRegistration( pOldValue );
 }
 
 void SwModify::SetInDocDTOR()
@@ -102,7 +102,7 @@ SwModify::~SwModify()
     // remove all clients that have not done themselves
     // mba: possibly a hotfix for forgotten base class calls?!
     while( m_pWriterListeners )
-        static_cast<SwClient*>(m_pWriterListeners)->CheckRegistration( &aDyObject, &aDyObject );
+        static_cast<SwClient*>(m_pWriterListeners)->CheckRegistration( &aDyObject );
 }
 
 void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )

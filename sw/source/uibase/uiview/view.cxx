@@ -624,7 +624,7 @@ void SwView::CheckReadonlySelection()
     SfxDisableFlags nDisableFlags = SfxDisableFlags::NONE;
     SfxDispatcher &rDis = GetDispatcher();
 
-    if( m_pWrtShell->HasReadonlySel(m_bAnnotationMode) &&
+    if( m_pWrtShell->HasReadonlySel() &&
         ( !m_pWrtShell->GetDrawView() ||
             !m_pWrtShell->GetDrawView()->GetMarkedObjectList().GetMarkCount() ))
         nDisableFlags |= SfxDisableFlags::SwOnProtectedCursor;

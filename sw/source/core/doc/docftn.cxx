@@ -207,7 +207,7 @@ void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         }
     }
     else
-        CheckRegistration( pOld, pNew );
+        CheckRegistration( pOld );
 }
 
 SwFootnoteInfo& SwFootnoteInfo::operator=(const SwFootnoteInfo& rInfo)

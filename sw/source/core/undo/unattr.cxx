@@ -69,7 +69,7 @@ void SwUndoFormatAttrHelper::Modify( const SfxPoolItem* pOld, const SfxPoolItem*
 {
     if( pOld ) {
         if ( pOld->Which() == RES_OBJECTDYING ) {
-            CheckRegistration( pOld, pNew );
+            CheckRegistration( pOld );
         } else if ( pNew ) {
             if( POOLATTR_END >= pOld->Which() ) {
                 if ( GetUndo() ) {

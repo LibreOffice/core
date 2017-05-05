@@ -2604,7 +2604,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             if (nPostItMode != SwPostItMode::NONE)
             {
                 SwDoc::UpdatePagesForPrintingWithPostItData( *m_pRenderData,
-                        *m_pPrintUIOptions, bIsPDFExport, nPageCount );
+                        *m_pPrintUIOptions, nPageCount );
             }
 
             nRet = m_pRenderData->GetPagesToPrint().size();

@@ -768,7 +768,6 @@ void SwDoc::CalculatePagesForPrinting(
 void SwDoc::UpdatePagesForPrintingWithPostItData(
     /* out */ SwRenderData &rData,
     const SwPrintUIOptions &rOptions,
-    bool /*bIsPDFExport*/,
     sal_Int32 nDocPageCount )
 {
 

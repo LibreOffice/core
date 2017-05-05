@@ -298,7 +298,7 @@ void SwNumFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     if( pFormat && !pFormat->GetDoc()->IsInDtor() )
         UpdateNumNodes( const_cast<SwDoc*>(pFormat->GetDoc()) );
     else
-        CheckRegistration( pOld, pNew );
+        CheckRegistration( pOld );
 }
 
 OUString SwNumFormat::GetCharFormatName() const

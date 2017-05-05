@@ -161,8 +161,7 @@ protected:
 
     void DisposeShape( const SdrObject *pObj,
                                 ::accessibility::AccessibleShape *pAccImpl );
-    void ScrolledInShape( const SdrObject *pObj,
-                                ::accessibility::AccessibleShape *pAccImpl );
+    void ScrolledInShape( ::accessibility::AccessibleShape *pAccImpl );
 
     virtual void InvalidateContent_( bool bVisibleDataFired );
 
