@@ -20,8 +20,8 @@
 #ifdef TEST_UPDATER
 #include "../xpcshellCert.h"
 #else
-#include "primaryCert.h"
-#include "secondaryCert.h"
+#include "onlineupdate/primaryCert.h"
+#include "onlineupdate/secondaryCert.h"
 #endif
 #endif
 
