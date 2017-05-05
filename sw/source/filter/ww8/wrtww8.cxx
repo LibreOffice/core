@@ -130,7 +130,7 @@ class WW8_WrFkp
     sal_uInt8* pFkp;         // Fkp total ( first and only FCs and Sprms )
     sal_uInt8* pOfs;         // pointer to the offset area, later copied to pFkp
     ePLCFT ePlc;
-    short nStartGrp;    // ab hier grpprls
+    short nStartGrp;    // from here on grpprls
     short nOldStartGrp;
     sal_uInt8 nItemSize;
     sal_uInt8 nIMax;         // number of entry pairs
@@ -478,8 +478,8 @@ static void WriteDop( WW8Export& rWrt )
         }
     }
 
-    // Werte aus der DocStatistik (werden aufjedenfall fuer die
-    // DocStat-Felder benoetigt!)
+    // Values from the DocumentStatistics (are definitely needed
+    // for the DocStat fields)
     rDop.fWCFootnoteEdn = true; // because they are included in StarWriter
 
     const SwDocStat& rDStat = rWrt.m_pDoc->getIDocumentStatistics().GetDocStat();
@@ -797,7 +797,7 @@ const SfxPoolItem& MSWordExportBase::GetItem(sal_uInt16 nWhich) const
     if (m_pISet)
     {
         // if write a EditEngine text, then the WhichIds are greater as
-        // ourer own Ids. So the Id have to translate from our into the
+        // our own Ids. So the Id have to translate from our into the
         // EditEngine Range
         nWhich = sw::hack::GetSetWhichFromSwDocWhich(*m_pISet, *m_pDoc, nWhich);
         OSL_ENSURE(nWhich != 0, "All broken, Impossible");
@@ -931,7 +931,7 @@ void WW8_WrMagicTable::Append( WW8_CP nCp, sal_uLong nData)
 {
     /*
     Tell the undocumented table hack that everything between here and the last
-    table position is nontable text, don't do it if the previous position is
+    table position is none table text, don't do it if the previous position is
     the same as this one, as that would be a region of 0 length
     */
     if ((!Count()) || (Prev() != nCp))
@@ -967,7 +967,7 @@ sal_uLong SwWW8Writer::FillUntil( SvStream& rStrm, sal_uLong nEndPos )
         SwWW8Writer::FillCount( rStrm, nEndPos - nCurPos );
 #if OSL_DEBUG_LEVEL > 0
     else
-        OSL_ENSURE( nEndPos == nCurPos, "Falsches FillUntil()" );
+        OSL_ENSURE( nEndPos == nCurPos, "Wrong FillUntil()" );
 #endif
     return rStrm.Tell();
 }
@@ -1034,7 +1034,7 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pS
         m_Fkps.push_back(std::unique_ptr<WW8_WrFkp>(pF));
         if( !pF->Append( nEndFc, nVarLen, pNewSprms ) )
         {
-            OSL_ENSURE( false, "Sprm liess sich nicht einfuegen" );
+            OSL_ENSURE( false, "Unable to insert Sprm" );
         }
     }
     if( pNewSprms != pSprms )   //Merge to new has created a new block
@@ -1076,7 +1076,7 @@ void WW8_WrPlcPn::WritePlc()
     SwWW8Writer::WriteLong( *rWrt.pTableStrm,
                                 m_Fkps[ i - 1 ]->GetEndFc() );
 
-    // fuer jedes FKP die Page ausgeben
+    // for every FKP output the page
     for (i = 0; i < m_Fkps.size(); ++i)
     {
         SwWW8Writer::WriteLong( *rWrt.pTableStrm, i + nFkpStartPage );
@@ -1185,8 +1185,8 @@ bool WW8_WrFkp::Append( WW8_FC nEndFc, sal_uInt16 nVarLen, const sal_uInt8* pSpr
     {
         OSL_ENSURE( nEndFc >= n, "+Fkp: FC backwards" );
         OSL_ENSURE( !nVarLen || !pSprms || nEndFc != n,
-                                    "+Fkp: selber FC mehrfach benutzt" );
-                        // selber FC ohne Sprm wird ohne zu mosern ignoriert.
+                                    "+Fkp: used FC multiple time oneself" );
+                        // even FC without Sprm is ignored without grumbling
 
         return true;    // ignore (do not create a new Fkp)
     }
@@ -1220,7 +1220,7 @@ bool WW8_WrFkp::Append( WW8_FC nEndFc, sal_uInt16 nVarLen, const sal_uInt8* pSpr
 
         nStartGrp = nPos;
         pOfs[nIMax * nItemSize] = (sal_uInt8)( nStartGrp >> 1 );
-                                            // ( DatenAnfg >> 1 ) insert
+                                            // ( nStartGrp >> 1 ) insert
         sal_uInt8 nCnt = static_cast< sal_uInt8 >(CHP == ePlc
                         ? ( nVarLen < 256 ) ? (sal_uInt8) nVarLen : 255
                         : ( ( nVarLen + 1 ) >> 1 ));
@@ -1231,7 +1231,7 @@ bool WW8_WrFkp::Append( WW8_FC nEndFc, sal_uInt16 nVarLen, const sal_uInt8* pSpr
     else
     {
         // do not enter for real ( no Sprms or recurrence )
-        // DatenAnfg 0 ( no data ) or recurrence
+        // date start 0 ( no data ) or recurrence
         pOfs[nIMax * nItemSize] = nOldP;
     }
     nIMax++;
@@ -1262,7 +1262,7 @@ void WW8_WrFkp::Write( SvStream& rStrm, SwWW8WrGrf& rGrf )
 {
     Combine();                      // If not already combined
 
-    sal_uInt8* p;               //  Suche Magic fuer nPicLocFc
+    sal_uInt8* p;               //  search magic for nPicLocFc
     sal_uInt8* pEnd = pFkp + nStartGrp;
     for( p = pFkp + 511 - 4; p >= pEnd; p-- )
     {
@@ -1304,7 +1304,7 @@ void WW8_WrFkp::MergeToNew( short& rVarLen, sal_uInt8 *& rpNewSprms )
             rVarLen = rVarLen + nOldVarLen;
         }
         --nIMax;
-        // if this sprms don't used from others, remove it
+        // if this Sprms don't used from others, remove it
         bool bFnd = false;
         for (sal_uInt16 n = 0; n < nIMax; ++n)
         {
@@ -1324,9 +1324,9 @@ void WW8_WrFkp::MergeToNew( short& rVarLen, sal_uInt8 *& rpNewSprms )
 
 WW8_FC WW8_WrFkp::GetStartFc() const
 {
-// wenn bCombined, dann ist das Array ab pFkp schon Bytemaessig auf LittleEndian
-// umgedreht, d.h. zum Herausholen der Anfangs- und Endpositionen muss
-// zurueckgedreht werden.
+    // when bCombined, then is the array beginning with pFkp byte-wise changed
+    // to LittleEndian, this means for fetching the start and end positions must
+    // be turned back.
     if( bCombined )
         return SVBT32ToUInt32( pFkp );        // 0. Element
     return reinterpret_cast<sal_Int32*>(pFkp)[0];
@@ -1617,7 +1617,7 @@ void WW8Export::OutGrfBullets(const ww8::Frame & rFrame)
     m_pGrf->Insert(rFrame);
     m_pChpPlc->AppendFkpEntry( Strm().Tell(), pO->size(), pO->data() );
     pO->clear();
-    //if links...
+    // if left...
     WriteChar( (char)1 );
 
     sal_uInt8 aArr[ 22 ];
@@ -1699,8 +1699,8 @@ void WW8Export::WriteAsStringTable(const std::vector<OUString>& rStrings,
     }
 }
 
-// WriteShort() target an FilePos nPos den Wert nVal ein und seekt auf die
-// alte FilePos zurueck. Benutzt zum Nachtragen von Laengen.
+// WriteShort() sets at FilePos nPos the value nVal and seeks to the old
+// FilePos. Used to add lengths.
 void SwWW8Writer::WriteShort( SvStream& rStrm, sal_uLong nPos, sal_Int16 nVal )
 {
     sal_uLong nOldPos = rStrm.Tell();       // remember Pos
@@ -2176,7 +2176,7 @@ void WW8AttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTab
     const SwTableLine * pTabLine = pTabBox->GetUpper();
     const SwFrameFormat * pLineFormat = pTabLine->GetFrameFormat();
 
-    // Zeilenhoehe ausgeben   sprmTDyaRowHeight
+    // output line height   sprmTDyaRowHeight
     long nHeight = 0;
     const SwFormatFrameSize& rLSz = pLineFormat->GetFrameSize();
     if ( ATT_VAR_SIZE != rLSz.GetHeightSizeType() && rLSz.GetHeight() )
@@ -2424,7 +2424,7 @@ void AttributeOutputBase::GetTablePageSize( ww8::WW8TableNodeInfoInner * pTableT
         SwRect aRect( pFormat->FindLayoutRect( false, &aPt ) );
         if ( aRect.IsEmpty() )
         {
-            // dann besorge mal die Seitenbreite ohne Raender !!
+            // Then fetch the page width without borders !!
             const SwFrameFormat* pParentFormat =
                 GetExport().m_pParentFrame ?
                 &(GetExport().m_pParentFrame->GetFrameFormat()) :
@@ -2828,12 +2828,12 @@ void WW8Export::WriteFkpPlcUsw()
     // Graphics in the data stream
     m_pGrf->Write();                          // Graphics
 
-    // Ausgabe in WordDocument-Stream
+    // output into WordDocument stream
     m_pChpPlc->WriteFkps();                   // Fkp.Chpx
     m_pPapPlc->WriteFkps();                   // Fkp.Papx
     pSepx->WriteSepx( Strm() );             // Sepx
 
-    // Ausagbe in Table-Stream
+    // output into Table stream
     m_pStyles->OutputStylesTable();           // for WW8 StyleTab
     pFootnote->WritePlc( *this );                // Footnote-Ref & Text Plc
     pEdn->WritePlc( *this );                // Endnote-Ref & Text Plc
@@ -2936,7 +2936,7 @@ void WW8Export::WriteFkpPlcUsw()
 void WW8Export::StoreDoc1()
 {
     bool bNeedsFinalPara = false;
-    // Start of Text ( Mangel ueber )
+    // Start of Text ( overwrite )
     SwWW8Writer::FillUntil( Strm(), pFib->m_fcMin );
 
     WriteMainText();                    // main text
