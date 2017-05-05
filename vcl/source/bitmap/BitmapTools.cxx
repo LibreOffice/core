@@ -23,6 +23,7 @@
 
 #include <tools/rcid.h>
 #include <tools/resmgr.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace css;

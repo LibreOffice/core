@@ -47,7 +47,6 @@ class PopupMenu;
 class KeyEvent;
 class CommandEvent;
 class MenuFloatingWindow;
-namespace vcl { class Window; }
 class SalMenu;
 class MenuBarWindow;
 struct SystemMenuData;
@@ -57,7 +56,12 @@ namespace com { namespace sun { namespace star { namespace accessibility {
     class XAccessible;
 }}}}
 
-namespace vcl { struct MenuLayoutData; }
+namespace vcl
+{
+class Window;
+struct MenuLayoutData;
+typedef OutputDevice RenderContext; // same as in include/vcl/outdev.hxx
+}
 
 #define MENU_APPEND        (sal_uInt16(0xFFFF))
 #define MENU_ITEM_NOTFOUND (sal_uInt16(0xFFFF))

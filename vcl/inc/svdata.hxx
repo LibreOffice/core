@@ -25,6 +25,7 @@
 #include <tools/fldunit.hxx>
 #include <unotools/options.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 

@@ -33,6 +33,7 @@
 #include "RegressionCurveHelper.hxx"
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/chart2/XTitle.hpp>

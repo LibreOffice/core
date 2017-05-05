@@ -33,6 +33,7 @@
 #include <vcl/region.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/uitest/factory.hxx>
+#include <vcl/vclevent.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -1548,7 +1549,6 @@ public:
 
 // Only for compatibility - because many people outside haven't included event.hxx
 // These require Window to be defined for VclPtr<Window>
-#include <vcl/vclevent.hxx>
 #include <vcl/event.hxx>
 
 #endif // INCLUDED_VCL_WINDOW_HXX

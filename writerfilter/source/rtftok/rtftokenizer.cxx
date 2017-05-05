@@ -9,6 +9,7 @@
 
 #include <rtftokenizer.hxx>
 #include <tools/resmgr.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/dialogs.hrc>
 #include <rtl/strbuf.hxx>

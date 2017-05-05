@@ -20,14 +20,15 @@
 #include <memory>
 #include "db.hxx"
 #include <osl/diagnose.h>
+#include <osl/file.hxx>
 #include <osl/thread.h>
 #include <osl/process.h>
+#include <rtl/character.hxx>
 #include <rtl/uri.hxx>
-#include <osl/file.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/i18n/Collator.hpp>
-#include <rtl/ustrbuf.hxx>
 #include "inputstream.hxx"
 #include <algorithm>
 #include <cassert>

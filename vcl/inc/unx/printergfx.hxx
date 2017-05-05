@@ -29,6 +29,8 @@
 #include <list>
 #include <vector>
 
+enum class PolyFlags : sal_uInt8;
+
 namespace psp {
 
 struct JobData;
