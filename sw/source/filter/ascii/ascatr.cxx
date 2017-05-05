@@ -180,14 +180,33 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
 
     SwASC_AttrIter aAttrIter( static_cast<SwASCWriter&>(rWrt), rNd, nStrPos );
 
-    if( !nStrPos && rWrt.bExportPargraphNumbering )
+    const SwNumRule* pNumRule = rNd.GetNumRule();
+    if (pNumRule && !nStrPos && rWrt.bExportPargraphNumbering)
     {
-        OUString numString( rNd.GetNumString() );
-        if (!numString.isEmpty())
+        bool bIsOutlineNumRule = pNumRule == rNd.GetDoc()->GetOutlineNumRule();
+
+        // indent each numbering level by 4 spaces
+        OUString level;
+        if (!bIsOutlineNumRule)
         {
-            numString += " ";
-            rWrt.Strm().WriteUnicodeOrByteText(numString);
+            for (int i = 0; i <= rNd.GetActualListLevel(); ++i)
+                level += "    ";
         }
+
+        // set up bullets or numbering
+        OUString numString(rNd.GetNumString());
+        if (numString.isEmpty() && !bIsOutlineNumRule)
+        {
+            if (rNd.HasBullet() && !rNd.HasVisibleNumberingOrBullet())
+                numString = " ";
+            else if (rNd.HasBullet())
+                numString = OUString(numfunc::GetBulletChar(rNd.GetActualListLevel()));
+            else if (!rNd.HasBullet() && !rNd.HasVisibleNumberingOrBullet())
+                numString = "  ";
+        }
+
+        if (!level.isEmpty() || !numString.isEmpty())
+            rWrt.Strm().WriteUnicodeOrByteText(level + numString + " ");
     }
 
     OUString aStr( rNd.GetText() );
