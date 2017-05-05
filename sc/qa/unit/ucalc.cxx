@@ -3854,7 +3854,7 @@ void Test::testCutPasteGroupRefUndo()
     m_pDoc->InsertTab(0, "Test");
 
     // Formula data in A1:A9
-    const char* aData[][1] = {
+    std::vector<std::vector<const char*>> aData = {
         { "1" },
         { "=A1+A1" },
         { "=A2+A1" },
@@ -3866,7 +3866,7 @@ void Test::testCutPasteGroupRefUndo()
         { "=A8+A7" }
     };
     ScAddress aPos(0,0,0);
-    ScRange aDataRange = insertRangeData( m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData( m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to insert data", aPos, aDataRange.aStart);
 
     // Check initial data.
@@ -4955,7 +4955,7 @@ void Test::testCopyPasteReferencesExternalDoc()
 
 void Test::testFindAreaPosVertical()
 {
-    const char* aData[][3] = {
+    std::vector<std::vector<const char*>> aData = {
         {   nullptr, "1", "1" },
         { "1",   nullptr, "1" },
         { "1", "1", "1" },
@@ -4966,9 +4966,9 @@ void Test::testFindAreaPosVertical()
     };
 
     m_pDoc->InsertTab(0, "Test1");
-    clearRange( m_pDoc, ScRange(0, 0, 0, 1, SAL_N_ELEMENTS(aData), 0));
+    clearRange( m_pDoc, ScRange(0, 0, 0, 1, aData.size(), 0));
     ScAddress aPos(0,0,0);
-    ScRange aDataRange = insertRangeData( m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData( m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     m_pDoc->SetRowHidden(4,4,0,true);
@@ -5026,14 +5026,15 @@ void Test::testFindAreaPosVertical()
 
 void Test::testFindAreaPosColRight()
 {
-    const char* aData[][7] = {
+    std::vector<std::vector<const char*>> aData = {
         { "", "1", "1", "", "1", "1", "1" },
-        { "", "", "1", "1", "1", "", "1" }, };
+        { "", "", "1", "1", "1", "", "1" },
+    };
 
     m_pDoc->InsertTab(0, "test1");
-    clearRange( m_pDoc, ScRange(0, 0, 0, 7, SAL_N_ELEMENTS(aData), 0));
+    clearRange( m_pDoc, ScRange(0, 0, 0, 7, aData.size(), 0));
     ScAddress aPos(0,0,0);
-    ScRange aDataRange = insertRangeData( m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData( m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     m_pDoc->SetColHidden(4,4,0,true);
@@ -6179,7 +6180,7 @@ void Test::testFormulaToValue2()
 
     m_pDoc->InsertTab(0, "Test");
 
-    const char* aData[][2] = {
+    std::vector<std::vector<const char*>> aData = {
         { "=1", "=ISFORMULA(RC[-1])" },
         { "=2", "=ISFORMULA(RC[-1])" },
         {  "3", "=ISFORMULA(RC[-1])" },
@@ -6189,12 +6190,12 @@ void Test::testFormulaToValue2()
 
     // Insert data into B2:C6.
     ScAddress aPos(1,1,0); // B2
-    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "1", "TRUE" },
             { "2", "TRUE" },
             { "3", "FALSE" },
@@ -6202,7 +6203,7 @@ void Test::testFormulaToValue2()
             { "5", "TRUE" },
         };
 
-        bool bSuccess = checkOutput<2>(m_pDoc, aDataRange, aOutputCheck, "Initial value");
+        bool bSuccess = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Initial value");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -6213,7 +6214,7 @@ void Test::testFormulaToValue2()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "1", "TRUE" },
             { "2", "FALSE" },
             { "3", "FALSE" },
@@ -6221,7 +6222,7 @@ void Test::testFormulaToValue2()
             { "5", "TRUE" },
         };
 
-        bool bSuccess = checkOutput<2>(m_pDoc, aDataRange, aOutputCheck, "Initial value");
+        bool bSuccess = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Initial value");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
@@ -6232,7 +6233,7 @@ void Test::testFormulaToValue2()
 
     {
         // Expected output table content.  0 = empty cell
-        const char* aOutputCheck[][2] = {
+        std::vector<std::vector<const char*>> aOutputCheck = {
             { "1", "TRUE" },
             { "2", "TRUE" },
             { "3", "FALSE" },
@@ -6240,7 +6241,7 @@ void Test::testFormulaToValue2()
             { "5", "TRUE" },
         };
 
-        bool bSuccess = checkOutput<2>(m_pDoc, aDataRange, aOutputCheck, "Initial value");
+        bool bSuccess = checkOutput(m_pDoc, aDataRange, aOutputCheck, "Initial value");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 

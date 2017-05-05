@@ -62,7 +62,7 @@ public:
 
     void checkPrecisionAsShown( OUString& rCode, double fValue, double fExpectedRoundVal );
 
-    ScRange insertRangeData(
+    static ScRange insertRangeData(
         ScDocument* pDoc, const ScAddress& rPos, const std::vector<std::vector<const char*>>& rData );
 
     template<size_t Size>
