@@ -389,10 +389,10 @@ SwFrameFormat* SwWW8ImplReader::MakeGrafInContent(const WW8_PIC& rPic,
 
     SwFrameFormat* pFlyFormat = nullptr;
 
-    if (rFileName.isEmpty() && m_nObjLocFc)      // dann sollte ists ein OLE-Object
+    if (rFileName.isEmpty() && m_nObjLocFc)      // then it should be a OLE-Object
         pFlyFormat = ImportOle(pGraph, &aFlySet, &rGrfSet);
 
-    if( !pFlyFormat )                          // dann eben als Graphic
+    if( !pFlyFormat )                          // then just as graphic
     {
 
         pFlyFormat = m_rDoc.getIDocumentContentOperations().Insert( *m_pPaM, rFileName, OUString(), pGraph, &aFlySet,

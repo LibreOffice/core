@@ -2951,7 +2951,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const ww8::Frame& rFormat, const P
     {
         bool bDone = false;
 
-        // Hole vom Node und vom letzten Node die Position in der Section
+        // Fetch from node and last node the position in the section
         const SwNodeIndex* pNodeIndex = rFrameFormat.GetContent().GetContentIdx();
 
         sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
