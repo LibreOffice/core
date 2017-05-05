@@ -35,7 +35,7 @@ private:
     VclPtr<Button> mpBtnCancel;
     VclPtr<Button> mpBtnClose;
     VclPtr<FixedText> mpEditPreUpload;
-    VclPtr<VclMultiLineEdit> mpEditPostUpload;
+    VclPtr<FixedText> mpEditPostUpload;
     VclPtr<FixedHyperlink> mpBugReportMailto;
     VclPtr<CheckBox> mpCBSafeMode;
 
