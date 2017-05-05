@@ -70,6 +70,7 @@ static inline int mywcsprintf(WCHAR* dest, size_t count, const WCHAR* fmt, ...)
 # define NS_tstat_t _stat
 # define NS_tstrcat wcscat
 # define NS_tstrcmp wcscmp
+# define NS_tstrncmp wcsncmp
 # define NS_tstricmp wcsicmp
 # define NS_tstrcpy wcscpy
 # define NS_tstrncpy wcsncpy
@@ -115,6 +116,7 @@ static inline int mywcsprintf(WCHAR* dest, size_t count, const WCHAR* fmt, ...)
 # define NS_tlstat lstat
 # define NS_tstrcat strcat
 # define NS_tstrcmp strcmp
+# define NS_tstrncmp strncmp
 # define NS_tstricmp strcasecmp
 # define NS_tstrcpy strcpy
 # define NS_tstrncpy strncpy
