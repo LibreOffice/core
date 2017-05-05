@@ -336,7 +336,7 @@ bool SwTaggedPDFHelper::CheckReopenTag()
         if ( ( rFrame.IsPageFrame() && static_cast<const SwPageFrame&>(rFrame).GetPrev() ) ||
              ( rFrame.IsFlowFrame() && SwFlowFrame::CastFlowFrame(&rFrame)->IsFollow() ) ||
              ( rFrame.IsRowFrame() && rFrame.IsInFollowFlowRow() ) ||
-             ( rFrame.IsCellFrame() && const_cast<SwFrame&>(rFrame).GetPrevCellLeaf( MAKEPAGE_NONE ) ) )
+             ( rFrame.IsCellFrame() && const_cast<SwFrame&>(rFrame).GetPrevCellLeaf() ) )
         {
             pKeyFrame = &rFrame;
         }

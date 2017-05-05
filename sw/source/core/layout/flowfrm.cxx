@@ -789,12 +789,12 @@ SwLayoutFrame *SwFrame::GetLeaf( MakePageType eMakePage, bool bFwd )
     }
 
     if ( bInTab && ( !IsTabFrame() || GetUpper()->IsCellFrame() ) ) // TABLE IN TABLE
-        return bFwd ? GetNextCellLeaf() : GetPrevCellLeaf( eMakePage );
+        return bFwd ? GetNextCellLeaf() : GetPrevCellLeaf();
 
     if ( bInSct )
-        return bFwd ? GetNextSctLeaf( eMakePage ) : GetPrevSctLeaf( eMakePage );
+        return bFwd ? GetNextSctLeaf( eMakePage ) : GetPrevSctLeaf();
 
-    return bFwd ? GetNextLeaf( eMakePage ) : GetPrevLeaf( eMakePage );
+    return bFwd ? GetNextLeaf( eMakePage ) : GetPrevLeaf();
 }
 
 bool SwFrame::WrongPageDesc( SwPageFrame* pNew )
@@ -1004,7 +1004,7 @@ SwLayoutFrame *SwFrame::GetNextLeaf( MakePageType eMakePage )
 }
 
 /// Returns the previous layout leaf where we can move the frame.
-SwLayoutFrame *SwFrame::GetPrevLeaf( MakePageType )
+SwLayoutFrame *SwFrame::GetPrevLeaf()
 {
     OSL_ENSURE( !IsInFootnote(), "GetPrevLeaf(), don't call me for Footnote." );
 
@@ -1712,7 +1712,7 @@ SwTwips SwFlowFrame::CalcAddLowerSpaceAsLastInTableCell(
 }
 
 /// Moves the Frame forward if it seems necessary regarding the current conditions and attributes.
-bool SwFlowFrame::CheckMoveFwd( bool& rbMakePage, bool bKeep, bool, bool bIgnoreMyOwnKeepValue )
+bool SwFlowFrame::CheckMoveFwd( bool& rbMakePage, bool bKeep, bool bIgnoreMyOwnKeepValue )
 {
     const SwFrame* pNxt = m_rThis.GetIndNext();
 
