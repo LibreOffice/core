@@ -92,8 +92,8 @@ public:
 
     static void characters(OOXMLFastContextHandler * pHandler, const OUString & rString);
 
-    static void startAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
-    static void endAction(OOXMLFastContextHandler * pHandler, Token_t nToken);
+    static void startAction(OOXMLFastContextHandler * pHandler);
+    static void endAction(OOXMLFastContextHandler * pHandler);
 
 private:
     OOXMLFactory() = delete;

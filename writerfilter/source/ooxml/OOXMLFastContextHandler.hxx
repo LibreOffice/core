@@ -220,8 +220,8 @@ protected:
     /// @throws css::xml::sax::SAXException
     virtual void lcl_characters(const OUString & aChars);
 
-    void startAction(Token_t Element);
-    void endAction(Token_t Element);
+    void startAction();
+    void endAction();
 
     const css::uno::Reference< css::uno::XComponentContext >& getComponentContext() { return m_xContext;}
 

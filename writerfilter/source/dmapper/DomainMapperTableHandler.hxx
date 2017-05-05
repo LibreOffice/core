@@ -87,10 +87,9 @@ public:
     /**
        Handle start of table.
 
-       @param nDepth  depth of the table in surrounding table hierarchy
        @param pProps  properties of the table
      */
-    void startTable(unsigned int nDepth, const TablePropertyMapPtr& pProps);
+    void startTable(const TablePropertyMapPtr& pProps);
     /// Handle end of table.
     void endTable(unsigned int nestedTableLevel, bool bTableStartsAtCellStart);
     /**

@@ -64,8 +64,7 @@ DomainMapperTableHandler::~DomainMapperTableHandler()
 {
 }
 
-void DomainMapperTableHandler::startTable(unsigned int /*nDepth*/,
-                                          const TablePropertyMapPtr& pProps)
+void DomainMapperTableHandler::startTable(const TablePropertyMapPtr& pProps)
 {
     m_aTableProperties = pProps;
     m_aTableRanges.clear();

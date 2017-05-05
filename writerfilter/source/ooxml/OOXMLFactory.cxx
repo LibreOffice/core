@@ -153,7 +153,7 @@ void OOXMLFactory::characters(OOXMLFastContextHandler * pHandler,
     }
 }
 
-void OOXMLFactory::startAction(OOXMLFastContextHandler * pHandler, Token_t /*nToken*/)
+void OOXMLFactory::startAction(OOXMLFastContextHandler * pHandler)
 {
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
@@ -164,7 +164,7 @@ void OOXMLFactory::startAction(OOXMLFastContextHandler * pHandler, Token_t /*nTo
     }
 }
 
-void OOXMLFactory::endAction(OOXMLFastContextHandler * pHandler, Token_t /*nToken*/)
+void OOXMLFactory::endAction(OOXMLFastContextHandler * pHandler)
 {
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
