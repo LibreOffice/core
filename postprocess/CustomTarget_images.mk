@@ -16,6 +16,7 @@ helpimages_DIR := $(call gb_CustomTarget_get_workdir,helpcontent2/source/auxilia
 $(eval $(call gb_CustomTarget_register_targets,postprocess/images,\
 	$(foreach theme,$(WITH_THEMES),images_$(theme).zip) \
 	commandimagelist.ilst \
+	sourceimagelist.ilst \
 	sorted.lst \
 ))
 
