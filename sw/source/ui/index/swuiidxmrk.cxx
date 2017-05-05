@@ -176,7 +176,7 @@ void SwIndexMarkPane::InitControls()
     OSL_ENSURE(pSh && pTOXMgr, "no shell?");
     // contents index
     const SwTOXType* pType = pTOXMgr->GetTOXType(TOX_CONTENT);
-    OSL_ENSURE(pType, "Kein Verzeichnistyp !!");
+    OSL_ENSURE(pType, "No directory type !!");
     OUString sTmpTypeSelection;
     if(m_pTypeDCB->GetSelectEntryCount())
         sTmpTypeSelection = m_pTypeDCB->GetSelectEntry();
@@ -185,7 +185,7 @@ void SwIndexMarkPane::InitControls()
 
     // keyword index
     pType = pTOXMgr->GetTOXType(TOX_INDEX);
-    OSL_ENSURE(pType, "Kein Verzeichnistyp !!");
+    OSL_ENSURE(pType, "No directory type !!");
     m_pTypeDCB->InsertEntry(pType->GetTypeName());
 
     // user index

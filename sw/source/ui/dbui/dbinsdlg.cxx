@@ -702,7 +702,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void )
             const SwFormatCol& rCol = aPara.pFrameFormat->GetCol();
             const SwColumns& rCols = rCol.GetColumns();
 
-            // initialise nStart und nEnd for nNum == 0
+            // initialise nStart and nEnd for nNum == 0
             long nWidth1 = 0,
                 nStart1 = 0,
                 nEnd1 = nWidth;
