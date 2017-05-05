@@ -332,6 +332,32 @@ get_full_path(const NS_tchar *relpath)
     return s;
 }
 
+namespace {
+
+bool is_userprofile_in_instdir()
+{
+    // the algorithm is:
+    // 1.) if userprofile path length is smaller than installation dir,
+    //      the profile is surely not in instdir
+    // 2.) else comparing the two paths looking only at the installation dir
+    //      characters should yield an equal string
+    NS_tchar userprofile[MAXPATHLEN];
+    NS_tstrcpy(userprofile, gPatchDirPath);
+    NS_tchar *slash = (NS_tchar *) NS_tstrrchr(userprofile, NS_T('/'));
+    if (slash)
+        *slash = NS_T('\0');
+
+    size_t userprofile_len = NS_tstrlen(userprofile);
+    size_t installdir_len = NS_tstrlen(gInstallDirPath);
+
+    if (userprofile_len < installdir_len)
+        return false;
+
+    return NS_tstrncmp(userprofile, gInstallDirPath, installdir_len) == 0;
+}
+
+}
+
 /**
  * Converts a full update path into a relative path; reverses get_full_path.
  *
@@ -2404,6 +2430,31 @@ ProcessReplaceRequest()
         // The status file will be have 'pending' written to it so there is no value
         // in returning an error specific for this failure.
         return rv;
+    }
+
+    if (is_userprofile_in_instdir())
+    {
+        // 1.) calculate path of the user profile in the backup directory
+        // 2.) move the user profile from the backup to the install directory
+        NS_tchar backup_user_profile[MAXPATHLEN];
+        NS_tchar userprofile[MAXPATHLEN];
+
+        NS_tstrcpy(userprofile, gPatchDirPath);
+        NS_tchar *slash = (NS_tchar *) NS_tstrrchr(userprofile, NS_T('/'));
+        if (slash)
+            *slash = NS_T('\0');
+        NS_tstrcpy(backup_user_profile, tmpDir);
+        size_t installdir_len = NS_tstrlen(destDir);
+
+        NS_tstrcat(backup_user_profile, userprofile + installdir_len);
+        if (slash)
+            *slash = NS_T('/');
+        LOG(("copy user profile back from " LOG_S " to " LOG_S, backup_user_profile, userprofile));
+        int rv2 = rename_file(backup_user_profile, userprofile);
+        if (rv2)
+        {
+            LOG(("failed to copy user profile back"));
+        }
     }
 
 #if !defined(_WIN32) && !defined(MACOSX)
