@@ -904,6 +904,10 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
         }
     }
 
+    if (pDialogSet->HasItem(ATTR_FONT_LANGUAGE))
+        // font language has changed.  Redo the online spelling.
+        ResetAutoSpell();
+
     const SvxBoxItem*     pOldOuter = static_cast<const SvxBoxItem*>     (&pOldSet->Get( ATTR_BORDER ));
     const SvxBoxItem*     pNewOuter = static_cast<const SvxBoxItem*>     (&pDialogSet->Get( ATTR_BORDER ));
     const SvxBoxInfoItem* pOldInner = static_cast<const SvxBoxInfoItem*> (&pOldSet->Get( ATTR_BORDER_INNER ));
