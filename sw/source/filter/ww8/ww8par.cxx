@@ -4992,8 +4992,8 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     m_pLstManager = new WW8ListManager( *m_pTableStream, *this );
 
     /*
-        zuerst(!) alle Styles importieren   (siehe WW8PAR2.CXX)
-            VOR dem Import der Listen !!
+        first (1) import all styles (see WW8PAR2.CXX)
+            BEFORE the import of the lists !!
     */
     ::SetProgressState(m_nProgress, m_pDocShell);    // Update
     m_pStyles = new WW8RStyle( *m_pWwFib, this );     // Styles

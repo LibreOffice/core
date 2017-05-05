@@ -2559,7 +2559,7 @@ bool SwMSConvertControls::InsertControl(
     uno::Reference< drawing::XShape > xShape =
         uno::Reference< drawing::XShape >(xCreate, uno::UNO_QUERY);
 
-    OSL_ENSURE(xShape.is(), "XShape nicht erhalten");
+    OSL_ENSURE(xShape.is(), "Did not get XShape");
     xShape->setSize(rSize);
 
     uno::Reference< beans::XPropertySet > xShapePropSet(
