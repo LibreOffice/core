@@ -38,7 +38,7 @@
  *
  * -----------------------------------------------------------------------
  *
- * Methodes
+ * Methods
  *
  * Use SetValue() to set a percentage between 0 and 100. A value larger
  * than 100 will cause the last rectangle to start flashing

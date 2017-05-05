@@ -299,8 +299,8 @@ void SwWrtShell::PopMode()
     m_pModeStack = pTmp;
 }
 
-// Two methodes for setting cursors: the first maps at the
-// eponymous methodes in the CursorShell, the second removes
+// Two methods for setting cursors: the first maps at the
+// eponymous methods in the CursorShell, the second removes
 // all selections at first.
 
 long SwWrtShell::SetCursor(const Point *pPt, bool bTextOnly)

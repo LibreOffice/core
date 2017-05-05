@@ -1134,7 +1134,7 @@ void SwPagePreview::Init()
 
     // Update the fields
     // ATTENTION: Do cast the EditShell up, to use the SS.
-    //            At the methodes the current shell will be queried!
+    //            At the methods the current shell will be queried!
     SwEditShell* pESh = dynamic_cast<SwEditShell*>(GetViewShell());
     bool bIsModified = pESh != nullptr && pESh->IsModified();
 
@@ -1354,7 +1354,7 @@ void SwPagePreview::OuterResizePixel( const Point &rOfst, const Size &rSize )
     Point aBottomRight( m_pViewWin->PixelToLogic( Point( aTmpSize.Width(), aTmpSize.Height() ) ) );
     SetVisArea( tools::Rectangle( Point(), aBottomRight ) );
 
-    // Call of the DocSzChgd-Methode of the scrollbars is necessary,
+    // Call of the DocSzChgd-Method of the scrollbars is necessary,
     // because from the maximum scroll range half the height of the
     // VisArea is always deducted.
     if ( m_pVScrollbar && aTmpSize.Width() > 0 && aTmpSize.Height() > 0 )

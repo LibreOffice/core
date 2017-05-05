@@ -835,7 +835,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         nullptr,                                          // 93
         nullptr,                                          // 94
         &SwWW8ImplReader::Read_F_Shape,             // 95
-        nullptr                                           // eMax - Dummy leer Methode
+        nullptr                                           // eMax - Dummy leer method
     };
     OSL_ENSURE( ( sizeof( aWW8FieldTab ) / sizeof( *aWW8FieldTab ) == eMax+1 ),
             "FeldFunc-Tabelle stimmt nicht" );
