@@ -80,6 +80,8 @@ public:
                     }
                     Date( const css::util::DateTime& _rDateTime );
 
+    bool            IsEmpty() const { return mnDate == 0; }
+
     void            SetDate( sal_Int32 nNewDate );
     sal_Int32       GetDate() const { return mnDate; }
     /** Type safe access for values that are guaranteed to be unsigned, like Date::SYSTEM. */
