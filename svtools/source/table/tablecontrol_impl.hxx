@@ -238,7 +238,7 @@ namespace svt { namespace table
         */
         bool        markAllRowsAsSelected();
 
-        void commitAccessibleEvent( sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue );
+        void commitAccessibleEvent( sal_Int16 const i_eventID );
         void commitCellEvent( sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue );
         void commitTableEvent( sal_Int16 const i_eventID, const css::uno::Any& i_newValue, const css::uno::Any& i_oldValue );
 

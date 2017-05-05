@@ -31,7 +31,6 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
                                       const OUString & rRealm,
                                       const OUString & rUserName,
                                       const OUString & rPassword,
-                                      const OUString & rAccount,
                                       bool bAllowUseSystemCredentials,
                                       bool bAllowSessionStoring )
 {
@@ -50,9 +49,7 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
     aRequest.UserName       = rUserName;
     aRequest.HasPassword    = true;
     aRequest.Password       = rPassword;
-    aRequest.HasAccount     = !rAccount.isEmpty();
-    if ( aRequest.HasAccount )
-        aRequest.Account = rAccount;
+    aRequest.HasAccount     = false;
     aRequest.URL = rURL;
 
     initialize(aRequest,

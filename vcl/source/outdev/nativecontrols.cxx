@@ -316,7 +316,6 @@ bool OutputDevice::GetNativeControlRegion(  ControlType nType,
                                 const tools::Rectangle& rControlRegion,
                                 ControlState nState,
                                 const ImplControlValue& aValue,
-                                const OUString& aCaption,
                                 tools::Rectangle &rNativeBoundingRegion,
                                 tools::Rectangle &rNativeContentRegion ) const
 {
@@ -333,7 +332,7 @@ bool OutputDevice::GetNativeControlRegion(  ControlType nType,
     tools::Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
     bool bRet = mpGraphics->GetNativeControlRegion(nType, nPart, screenRegion, nState, *aScreenCtrlValue,
-                                aCaption, rNativeBoundingRegion,
+                                OUString(), rNativeBoundingRegion,
                                 rNativeContentRegion, this );
     if( bRet )
     {

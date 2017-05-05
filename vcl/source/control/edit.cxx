@@ -2727,7 +2727,7 @@ Size Edit::CalcMinimumSizeForText(const OUString &rString) const
     tools::Rectangle aRect( Point( 0, 0 ), aSize );
     tools::Rectangle aContent, aBound;
     if (GetNativeControlRegion(eCtrlType, ControlPart::Entire, aRect, ControlState::NONE,
-                               aControlValue, OUString(), aBound, aContent))
+                               aControlValue, aBound, aContent))
     {
         if (aBound.GetHeight() > aSize.Height())
             aSize.Height() = aBound.GetHeight();

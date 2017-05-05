@@ -492,7 +492,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
                 tools::Rectangle aCtrlRegion( Point(mnLeftBorder, mnTopBorder), aMinSize );
                 tools::Rectangle aBounds, aContent;
                 if( pWin->GetNativeControlRegion( aCtrlType, ControlPart::Entire, aCtrlRegion,
-                                                  ControlState::ENABLED, aControlValue, OUString(),
+                                                  ControlState::ENABLED, aControlValue,
                                                   aBounds, aContent ) )
                 {
                     mnLeftBorder    = aContent.Left() - aBounds.Left();
@@ -696,7 +696,7 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, c
         tools::Rectangle aContentRgn(aCtrlRegion);
         if (!ImplGetSVData()->maNWFData.mbCanDrawWidgetAnySize &&
             rRenderContext.GetNativeControlRegion(aCtrlType, aCtrlPart, aCtrlRegion,
-                                         nState, aControlValue, OUString(),
+                                         nState, aControlValue,
                                          aBoundingRgn, aContentRgn))
         {
             aCtrlRegion=aContentRgn;

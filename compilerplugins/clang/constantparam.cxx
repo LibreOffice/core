@@ -24,6 +24,9 @@
   $ ./compilerplugins/clang/constantparam.py
 
   TODO look for OUString and OString params and check for call-params that are always either "" or default constructed
+
+  FIXME this plugin manages to trigger crashes inside clang, when calling EvaluateAsInt, so I end up disabling it for a handful of files
+     here and there.
 */
 
 namespace {
@@ -172,7 +175,24 @@ std::string ConstantParam::getCallValue(const Expr* arg)
             return "defaultConstruct";
         }
     }
-    return "unknown2";
+
+    // Get the expression contents.
+    // This helps us find params which are always initialised with something like "OUString()".
+    SourceManager& SM = compiler.getSourceManager();
+    SourceLocation startLoc = arg->getLocStart();
+    SourceLocation endLoc = arg->getLocEnd();
+    const char *p1 = SM.getCharacterData( startLoc );
+    const char *p2 = SM.getCharacterData( endLoc );
+    if (!p1 || !p2 || (p2 - p1) < 0 || (p2 - p1) > 40) {
+        return "unknown";
+    }
+    unsigned n = Lexer::MeasureTokenLength( endLoc, SM, compiler.getLangOpts());
+    std::string s( p1, p2 - p1 + n);
+    // strip linefeed and tab characters so they don't interfere with the parsing of the log file
+    std::replace( s.begin(), s.end(), '\r', ' ');
+    std::replace( s.begin(), s.end(), '\n', ' ');
+    std::replace( s.begin(), s.end(), '\t', ' ');
+    return s;
 }
 
 bool ConstantParam::VisitCallExpr(const CallExpr * callExpr) {

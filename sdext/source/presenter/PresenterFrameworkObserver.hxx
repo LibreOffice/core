@@ -62,10 +62,6 @@ private:
     Action maAction;
 
     /** Create a new PresenterFrameworkObserver object.
-        @param rsEventName
-            An event name other than ConfigurationUpdateEnd.  When the
-            observer shall only listen for ConfigurationUpdateEnd then pass
-            an empty name.
         @param rPredicate
             This functor tests whether the action is to be executed or not.
         @param rAction
@@ -74,7 +70,6 @@ private:
     */
     PresenterFrameworkObserver (
         const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
-        const OUString& rsEventName,
         const Predicate& rPredicate,
         const Action& rAction);
     virtual ~PresenterFrameworkObserver() override;

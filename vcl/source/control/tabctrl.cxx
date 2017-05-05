@@ -237,7 +237,7 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
                                                aSize.Width() - TAB_TABOFFSET_X * 2,
                                                aSize.Height() - TAB_TABOFFSET_Y * 2));
     if(GetNativeControlRegion( ControlType::TabItem, ControlPart::Entire, aCtrlRegion,
-                                           ControlState::ENABLED, aControlValue, OUString(),
+                                           ControlState::ENABLED, aControlValue,
                                            aBoundingRgn, aContentRgn ) )
     {
         return aContentRgn.GetSize();

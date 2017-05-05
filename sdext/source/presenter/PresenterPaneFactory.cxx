@@ -174,7 +174,7 @@ Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
     }
 
     // No.  Create a new one.
-    Reference<XResource> xResource = CreatePane(rxPaneId, OUString());
+    Reference<XResource> xResource = CreatePane(rxPaneId);
     return xResource;
 }
 
@@ -214,8 +214,7 @@ void SAL_CALL PresenterPaneFactory::releaseResource (const Reference<XResource>&
 
 
 Reference<XResource> PresenterPaneFactory::CreatePane (
-    const Reference<XResourceId>& rxPaneId,
-    const OUString& rsTitle)
+    const Reference<XResourceId>& rxPaneId)
 {
     if ( ! rxPaneId.is())
         return nullptr;
@@ -236,7 +235,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     {
         return CreatePane(
             rxPaneId,
-            rsTitle,
+            OUString(),
             xParentPane,
             rxPaneId->getFullResourceURL().Arguments == "Sprite=1");
     }

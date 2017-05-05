@@ -80,7 +80,6 @@ namespace
 ::sw::mark::IMark* SwCursorShell::SetBookmark(
     const vcl::KeyCode& rCode,
     const OUString& rName,
-    const OUString& rShortName,
     IDocumentMarkAccess::MarkType eMark)
 {
     StartAction();
@@ -92,7 +91,7 @@ namespace
     if(pBookmark)
     {
         pBookmark->SetKeyCode(rCode);
-        pBookmark->SetShortName(rShortName);
+        pBookmark->SetShortName(OUString());
     }
     EndAction();
     return pMark;

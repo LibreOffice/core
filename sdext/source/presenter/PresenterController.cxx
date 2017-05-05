@@ -1136,7 +1136,7 @@ void PresenterController::LoadTheme (const Reference<XPane>& rxPane)
 {
     // Create (load) the current theme.
     if (rxPane.is())
-        mpTheme.reset(new PresenterTheme(mxComponentContext, OUString(), rxPane->getCanvas()));
+        mpTheme.reset(new PresenterTheme(mxComponentContext, rxPane->getCanvas()));
 }
 
 double PresenterController::GetSlideAspectRatio() const

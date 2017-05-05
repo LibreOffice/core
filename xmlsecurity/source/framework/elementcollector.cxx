@@ -27,16 +27,15 @@ namespace cssu = com::sun::star::uno;
 namespace cssxc = com::sun::star::xml::crypto;
 
 ElementCollector::ElementCollector(
-    sal_Int32 nSecurityId,
     sal_Int32 nBufferId,
     cssxc::sax::ElementMarkPriority nPriority,
     bool bToModify,
     const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& xReferenceResolvedListener)
-    :ElementMark(nSecurityId, nBufferId),
+    :ElementMark(cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID, nBufferId),
      m_nPriority(nPriority),
      m_bToModify(bToModify),
-      m_bAbleToNotify(false),
-      m_bNotified(false),
+     m_bAbleToNotify(false),
+     m_bNotified(false),
      m_xReferenceResolvedListener(xReferenceResolvedListener)
 /****** ElementCollector/ElementCollector *************************************
  *

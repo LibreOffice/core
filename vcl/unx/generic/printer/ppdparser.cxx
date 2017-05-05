@@ -103,19 +103,18 @@ namespace psp
 
         OUString translateValue(
             const OUString& i_rKey,
-            const OUString& i_rOption,
-            const OUString& i_rValue
+            const OUString& i_rOption
             ) const;
 
         OUString translateOption( const OUString& i_rKey,
                                        const OUString& i_rOption ) const
         {
-            return translateValue( i_rKey, i_rOption, OUString()  );
+            return translateValue( i_rKey, i_rOption  );
         }
 
         OUString translateKey( const OUString& i_rKey ) const
         {
-            return translateValue( i_rKey, OUString(), OUString() );
+            return translateValue( i_rKey, OUString() );
         }
     };
 
@@ -187,23 +186,17 @@ namespace psp
 
     OUString PPDTranslator::translateValue(
         const OUString& i_rKey,
-        const OUString& i_rOption,
-        const OUString& i_rValue
+        const OUString& i_rOption
         ) const
     {
         OUString aResult;
 
-        OUStringBuffer aKey( i_rKey.getLength() + i_rOption.getLength() + i_rValue.getLength() + 2 );
+        OUStringBuffer aKey( i_rKey.getLength() + i_rOption.getLength() + 2 );
         aKey.append( i_rKey );
-        if( !i_rOption.isEmpty() || !i_rValue.isEmpty() )
+        if( !i_rOption.isEmpty() )
         {
             aKey.append( ':' );
             aKey.append( i_rOption );
-        }
-        if( !i_rValue.isEmpty() )
-        {
-            aKey.append( ':' );
-            aKey.append( i_rValue );
         }
         if( !aKey.isEmpty() )
         {

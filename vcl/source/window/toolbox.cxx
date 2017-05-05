@@ -130,7 +130,7 @@ int ToolBox::ImplGetDragWidth( const vcl::RenderContext& rRenderContext, bool bH
 
         if ( rRenderContext.GetNativeControlRegion(ControlType::Toolbar,
                 bHorz ? ControlPart::ThumbVert : ControlPart::ThumbHorz,
-                aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
+                aArea, ControlState::NONE, aControlValue, aBound, aContent) )
         {
             nWidth = bHorz ? aContent.GetWidth() : aContent.GetHeight();
         }
@@ -1445,7 +1445,7 @@ bool ToolBox::ImplCalcItem()
             if( GetNativeControlRegion( ControlType::Toolbar, ControlPart::Button,
                                         aReg,
                                         ControlState::ENABLED | ControlState::ROLLOVER,
-                                        aVal, OUString(),
+                                        aVal,
                                         aNativeBounds, aNativeContent ) )
             {
                 aRect = aNativeBounds;
@@ -1470,7 +1470,7 @@ bool ToolBox::ImplCalcItem()
         if( GetNativeControlRegion( ControlType::Combobox, ControlPart::Entire,
                                     aReg,
                                     ControlState::ENABLED | ControlState::ROLLOVER,
-                                    aVal, OUString(),
+                                    aVal,
                                     aNativeBounds, aNativeContent ) )
         {
             aRect = aNativeBounds;
@@ -1482,7 +1482,7 @@ bool ToolBox::ImplCalcItem()
         if( GetNativeControlRegion( ControlType::Listbox, ControlPart::Entire,
                                     aReg,
                                     ControlState::ENABLED | ControlState::ROLLOVER,
-                                    aVal, OUString(),
+                                    aVal,
                                     aNativeBounds, aNativeContent ) )
         {
             aRect = aNativeBounds;
@@ -1494,7 +1494,7 @@ bool ToolBox::ImplCalcItem()
         if( GetNativeControlRegion( ControlType::Spinbox, ControlPart::Entire,
                                     aReg,
                                     ControlState::ENABLED | ControlState::ROLLOVER,
-                                    aVal, OUString(),
+                                    aVal,
                                     aNativeBounds, aNativeContent ) )
         {
             aRect = aNativeBounds;

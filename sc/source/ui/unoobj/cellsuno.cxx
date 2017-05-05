@@ -5014,7 +5014,7 @@ OUString SAL_CALL ScCellRangeObj::getArrayFormula()
 }
 
 void ScCellRangeObj::SetArrayFormula_Impl(const OUString& rFormula,
-    const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar)
+    const formula::FormulaGrammar::Grammar eGrammar)
 {
     ScDocShell* pDocSh = GetDocShell();
     if (pDocSh)
@@ -5027,7 +5027,7 @@ void ScCellRangeObj::SetArrayFormula_Impl(const OUString& rFormula,
                 throw uno::RuntimeException();
             }
 
-            pDocSh->GetDocFunc().EnterMatrix( aRange, nullptr, nullptr, rFormula, true, true, rFormulaNmsp, eGrammar );
+            pDocSh->GetDocFunc().EnterMatrix( aRange, nullptr, nullptr, rFormula, true, true, OUString()/*rFormulaNmsp*/, eGrammar );
         }
         else
         {
@@ -5044,7 +5044,7 @@ void SAL_CALL ScCellRangeObj::setArrayFormula( const OUString& aFormula )
 {
     SolarMutexGuard aGuard;
     // GRAM_API for API compatibility.
-    SetArrayFormula_Impl( aFormula, OUString(), formula::FormulaGrammar::GRAM_API);
+    SetArrayFormula_Impl( aFormula, formula::FormulaGrammar::GRAM_API);
 }
 
 // XArrayFormulaTokens

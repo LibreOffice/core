@@ -496,7 +496,6 @@ protected:
 
             /// @throws css::uno::RuntimeException
             void            SetArrayFormula_Impl( const OUString& rFormula,
-                                const OUString& rFormulaNmsp,
                                 const formula::FormulaGrammar::Grammar eGrammar );
 
 public:

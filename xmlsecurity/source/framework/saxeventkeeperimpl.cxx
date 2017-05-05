@@ -815,7 +815,6 @@ sal_Int32 SAXEventKeeperImpl::createElementCollector(
 
     ElementCollector* pElementCollector
         = new ElementCollector(
-            cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID,
             nId,
             nPriority,
             bModifyElement,

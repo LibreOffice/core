@@ -15,19 +15,34 @@ def normalizeTypeParams( line ):
 # reading as binary (since we known it is pure ascii) is much faster than reading as unicode
 with io.open("loplugin.constantparam.log", "rb", buffering=1024*1024) as txt:
     for line in txt:
-        tokens = line.strip().split("\t")
-        returnType = normalizeTypeParams(tokens[0])
-        nameAndParams = normalizeTypeParams(tokens[1])
-        sourceLocation = tokens[2]
-        paramName = tokens[3]
-        paramType = normalizeTypeParams(tokens[4])
-        callValue = tokens[5]
-        callInfo = (returnType, nameAndParams, paramName, paramType, sourceLocation)
-        if not callInfo in callDict:
-            callDict[callInfo] = set()
-        callDict[callInfo].add(callValue)
+        try:
+            tokens = line.strip().split("\t")
+            returnType = normalizeTypeParams(tokens[0])
+            nameAndParams = normalizeTypeParams(tokens[1])
+            sourceLocation = tokens[2]
+            paramName = tokens[3]
+            paramType = normalizeTypeParams(tokens[4])
+            callValue = tokens[5]
+            callInfo = (returnType, nameAndParams, paramName, paramType, sourceLocation)
+            if not callInfo in callDict:
+                callDict[callInfo] = set()
+            callDict[callInfo].add(callValue)
+        except IndexError:
+            print "problem with line " + line.strip()
+            raise
+
+def RepresentsInt(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+
+consRegex = re.compile("^\w+\(\)$")
 
 tmp1list = list()
+tmp2list = list()
+tmp3list = list()
 for callInfo, callValues in callDict.iteritems():
     nameAndParams = callInfo[1]
     if len(callValues) != 1:
@@ -51,21 +66,47 @@ for callInfo, callValues in callDict.iteritems():
     # part of our binary API
     if sourceLoc.startswith("include/LibreOfficeKit"): continue
 
-    v2 = callInfo[3] + " " + callInfo[2] + " " + callValue
-    tmp1list.append((sourceLoc, functionSig, v2))
+    if RepresentsInt(callValue):
+        if callValue == "0" or callValue == "1":
+            tmp1list.append((sourceLoc, functionSig, callInfo[3] + " " + callInfo[2], callValue))
+        else:
+            tmp2list.append((sourceLoc, functionSig, callInfo[3] + " " + callInfo[2], callValue))
+    # look for places where the callsite is always a constructor invocation
+    elif consRegex.match(callValue):
+        if callValue.startswith("Get"): continue
+        if callValue.startswith("get"): continue
+        if "operator=" in functionSig: continue
+        if "&&" in functionSig: continue
+        tmp3list.append((sourceLoc, functionSig, callInfo[3] + " " + callInfo[2], callValue))
+
 
 # sort results by filename:lineno
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
     return [int(text) if text.isdigit() else text.lower()
             for text in re.split(_nsre, s)]
 tmp1list.sort(key=lambda v: natural_sort_key(v[0]))
+tmp2list.sort(key=lambda v: natural_sort_key(v[0]))
+tmp3list.sort(key=lambda v: natural_sort_key(v[0]))
 
 # print out the results
-with open("loplugin.constantparam.report", "wt") as f:
+with open("loplugin.constantparam.report-booleans", "wt") as f:
     for v in tmp1list:
         f.write(v[0] + "\n")
         f.write("    " + v[1] + "\n")
         f.write("    " + v[2] + "\n")
+        f.write("    " + v[3] + "\n")
+with open("loplugin.constantparam.report-numbers", "wt") as f:
+    for v in tmp2list:
+        f.write(v[0] + "\n")
+        f.write("    " + v[1] + "\n")
+        f.write("    " + v[2] + "\n")
+        f.write("    " + v[3] + "\n")
+with open("loplugin.constantparam.report-constructors", "wt") as f:
+    for v in tmp3list:
+        f.write(v[0] + "\n")
+        f.write("    " + v[1] + "\n")
+        f.write("    " + v[2] + "\n")
+        f.write("    " + v[3] + "\n")
 
 # -------------------------------------------------------------
 # Now a fun set of heuristics to look for methods that

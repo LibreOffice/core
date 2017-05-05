@@ -62,7 +62,6 @@ namespace svx
         */
         OColumnTransferable(
              const OUString& _rDatasource
-            ,const OUString& _rConnectionResource
             ,const OUString& _rCommand
             ,const OUString& _rFieldName
             ,ColumnTransferFormatFlags  _nFormats
@@ -192,8 +191,7 @@ namespace svx
         */
         ODataAccessObjectTransferable(
             const OUString&  _rDatasourceOrLocation
-            ,const OUString& _rConnectionResource
-            ,const sal_Int32            _nCommandType
+            ,const sal_Int32 _nCommandType
             ,const OUString& _rCommand
             ,const css::uno::Reference< css::sdbc::XConnection >& _rxConnection
         );
@@ -208,8 +206,7 @@ namespace svx
         */
         ODataAccessObjectTransferable(
             const OUString&  _rDatasourceOrLocation
-            ,const OUString& _rConnectionResource
-            ,const sal_Int32        _nCommandType
+            ,const sal_Int32 _nCommandType
             ,const OUString& _rCommand
         );
 

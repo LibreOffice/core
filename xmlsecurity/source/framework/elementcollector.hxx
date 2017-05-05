@@ -63,7 +63,6 @@ private:
 
 public:
     ElementCollector(
-        sal_Int32 nSecurityId,
         sal_Int32 nBufferId,
         css::xml::crypto::sax::ElementMarkPriority nPriority,
         bool bToModify,

@@ -1955,7 +1955,7 @@ void ScXMLExport::ExportStyles_( bool bUsed )
         sal_Int32 nShapesCount(0);
         CollectSharedData(nTableCount, nShapesCount);
     }
-    rtl::Reference<ScXMLStyleExport> aStylesExp(new ScXMLStyleExport(*this, OUString(), GetAutoStylePool().get()));
+    rtl::Reference<ScXMLStyleExport> aStylesExp(new ScXMLStyleExport(*this, GetAutoStylePool().get()));
     if (GetModel().is())
     {
         uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);

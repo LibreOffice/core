@@ -57,8 +57,7 @@ Image PagePreviewProvider::operator () (
         // object.
         aPreview = rRenderer.RenderPage(
             pPage,
-            nWidth,
-            OUString());
+            nWidth);
     }
 
     return aPreview;

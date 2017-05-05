@@ -73,8 +73,7 @@ int DAVAuthListener_Impl::authenticate(
             rtl::Reference< ucbhelper::SimpleAuthenticationRequest > xRequest
                 = new ucbhelper::SimpleAuthenticationRequest(
                     m_aURL, inHostName, inRealm, inoutUserName,
-                    outPassWord, OUString(),
-                    bCanUseSystemCredentials );
+                    outPassWord, bCanUseSystemCredentials );
             xIH->handle( xRequest.get() );
 
             rtl::Reference< ucbhelper::InteractionContinuation > xSelection

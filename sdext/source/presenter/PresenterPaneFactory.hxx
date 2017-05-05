@@ -101,8 +101,7 @@ private:
     void Register (const css::uno::Reference<css::frame::XController>& rxController);
 
     css::uno::Reference<css::drawing::framework::XResource> CreatePane (
-        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
-        const OUString& rsTitle);
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId);
     css::uno::Reference<css::drawing::framework::XResource> CreatePane (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
         const OUString& rsTitle,

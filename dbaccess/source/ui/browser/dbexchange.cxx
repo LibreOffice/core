@@ -64,7 +64,7 @@ namespace dbaui
                     const Reference< XConnection >& _rxConnection,
                     const Reference< XNumberFormatter >& _rxFormatter,
                     const Reference< XComponentContext >& _rxORB)
-                    :ODataAccessObjectTransferable( _rDatasource,OUString(), _nCommandType, _rCommand, _rxConnection )
+                    :ODataAccessObjectTransferable( _rDatasource, _nCommandType, _rCommand, _rxConnection )
         ,m_pHtml(nullptr)
         ,m_pRtf(nullptr)
     {
@@ -83,7 +83,7 @@ namespace dbaui
                     const OUString&  _rCommand,
                     const Reference< XNumberFormatter >& _rxFormatter,
                     const Reference< XComponentContext >& _rxORB)
-        :ODataAccessObjectTransferable( _rDatasource, OUString(),_nCommandType, _rCommand)
+        :ODataAccessObjectTransferable( _rDatasource, _nCommandType, _rCommand)
         ,m_pHtml(nullptr)
         ,m_pRtf(nullptr)
     {

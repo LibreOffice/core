@@ -246,9 +246,9 @@ void ScrollBar::ImplCalc( bool bUpdate )
         if ( GetStyle() & WB_HORZ )
         {
             if ( GetNativeControlRegion( ControlType::Scrollbar, IsRTLEnabled()? ControlPart::ButtonRight: ControlPart::ButtonLeft,
-                        aControlRegion, ControlState::NONE, ImplControlValue(), OUString(), aBoundingRegion, aBtn1Region ) &&
+                        aControlRegion, ControlState::NONE, ImplControlValue(), aBoundingRegion, aBtn1Region ) &&
                  GetNativeControlRegion( ControlType::Scrollbar, IsRTLEnabled()? ControlPart::ButtonLeft: ControlPart::ButtonRight,
-                        aControlRegion, ControlState::NONE, ImplControlValue(), OUString(), aBoundingRegion, aBtn2Region ) )
+                        aControlRegion, ControlState::NONE, ImplControlValue(), aBoundingRegion, aBtn2Region ) )
             {
                 maBtn1Rect = aBtn1Region;
                 maBtn2Rect = aBtn2Region;
@@ -263,7 +263,7 @@ void ScrollBar::ImplCalc( bool bUpdate )
             }
 
             if ( GetNativeControlRegion( ControlType::Scrollbar, ControlPart::TrackHorzArea,
-                     aControlRegion, ControlState::NONE, ImplControlValue(), OUString(), aBoundingRegion, aTrackRegion ) )
+                     aControlRegion, ControlState::NONE, ImplControlValue(), aBoundingRegion, aTrackRegion ) )
                 maTrackRect = aTrackRegion;
             else
                 maTrackRect = tools::Rectangle( maBtn1Rect.TopRight(), maBtn2Rect.BottomLeft() );
@@ -287,9 +287,9 @@ void ScrollBar::ImplCalc( bool bUpdate )
         else
         {
             if ( GetNativeControlRegion( ControlType::Scrollbar, ControlPart::ButtonUp,
-                        aControlRegion, ControlState::NONE, ImplControlValue(), OUString(), aBoundingRegion, aBtn1Region ) &&
+                        aControlRegion, ControlState::NONE, ImplControlValue(), aBoundingRegion, aBtn1Region ) &&
                  GetNativeControlRegion( ControlType::Scrollbar, ControlPart::ButtonDown,
-                        aControlRegion, ControlState::NONE, ImplControlValue(), OUString(), aBoundingRegion, aBtn2Region ) )
+                        aControlRegion, ControlState::NONE, ImplControlValue(), aBoundingRegion, aBtn2Region ) )
             {
                 maBtn1Rect = aBtn1Region;
                 maBtn2Rect = aBtn2Region;
@@ -304,7 +304,7 @@ void ScrollBar::ImplCalc( bool bUpdate )
             }
 
             if ( GetNativeControlRegion( ControlType::Scrollbar, ControlPart::TrackVertArea,
-                     aControlRegion, ControlState::NONE, ImplControlValue(), OUString(), aBoundingRegion, aTrackRegion ) )
+                     aControlRegion, ControlState::NONE, ImplControlValue(), aBoundingRegion, aTrackRegion ) )
                 maTrackRect = aTrackRegion;
             else
                 maTrackRect = tools::Rectangle( maBtn1Rect.BottomLeft()+Point(0,1), maBtn2Rect.TopRight() );
