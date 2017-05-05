@@ -955,19 +955,19 @@ bool GtkSalGraphics::DoDrawNativeControl(
 {
     if ( (nType==ControlType::Pushbutton) && (nPart==ControlPart::Entire) )
     {
-        return NWPaintGTKButton( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKButton( pDrawable, aCtrlRect, aClip, nState );
     }
     else if ( (nType==ControlType::Radiobutton) && (nPart==ControlPart::Entire) )
     {
-        return NWPaintGTKRadio( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKRadio( pDrawable, aCtrlRect, aClip, nState, aValue );
     }
     else if ( (nType==ControlType::Checkbox) && (nPart==ControlPart::Entire) )
     {
-        return NWPaintGTKCheck( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKCheck( pDrawable, aCtrlRect, aClip, nState, aValue );
     }
     else if ( (nType==ControlType::Scrollbar) && ((nPart==ControlPart::DrawBackgroundHorz) || (nPart==ControlPart::DrawBackgroundVert)) )
     {
-        return NWPaintGTKScrollbar( nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKScrollbar( nPart, aCtrlRect, aClip, nState, aValue );
     }
     else if ( ((nType==ControlType::Editbox) && ((nPart==ControlPart::Entire) || (nPart==ControlPart::HasBackgroundTexture)) )
         || ((nType==ControlType::Spinbox) && (nPart==ControlPart::HasBackgroundTexture))
@@ -997,19 +997,19 @@ bool GtkSalGraphics::DoDrawNativeControl(
         if ( nType == ControlType::TabBody )
             return true;
         else
-            return NWPaintGTKTabItem( nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption);
+            return NWPaintGTKTabItem( nType, aCtrlRect, aClip, nState, aValue);
     }
     else if ( (nType==ControlType::Listbox) && ((nPart==ControlPart::Entire) || (nPart==ControlPart::ListboxWindow)) )
     {
-        return NWPaintGTKListBox( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKListBox( pDrawable, nPart, aCtrlRect, aClip, nState );
     }
     else if ( nType== ControlType::Toolbar )
     {
-        return NWPaintGTKToolbar( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKToolbar( pDrawable, nPart, aCtrlRect, aClip, nState, aValue );
     }
     else if ( nType== ControlType::Menubar )
     {
-        return NWPaintGTKMenubar( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKMenubar( pDrawable, nPart, aCtrlRect, aClip, nState );
     }
     else if(    (nType == ControlType::MenuPopup)
         && (  (nPart == ControlPart::Entire)
@@ -1021,19 +1021,19 @@ bool GtkSalGraphics::DoDrawNativeControl(
     )
     )
     {
-        return NWPaintGTKPopupMenu( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKPopupMenu( pDrawable, nPart, aCtrlRect, aClip, nState );
     }
     else if( (nType == ControlType::Tooltip) && (nPart == ControlPart::Entire) )
     {
-        return NWPaintGTKTooltip( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKTooltip( pDrawable, aCtrlRect, aClip );
     }
     else if( (nType == ControlType::Progress) && (nPart == ControlPart::Entire) )
     {
-        return NWPaintGTKProgress( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKProgress( aCtrlRect, aValue );
     }
     else if( (nType == ControlType::ListNode) && (nPart == ControlPart::Entire) )
     {
-        return NWPaintGTKListNode( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKListNode( aCtrlRect, aClip, nState, aValue );
     }
     else if( (nType == ControlType::ListNet) && (nPart == ControlPart::Entire) )
     {
@@ -1042,26 +1042,26 @@ bool GtkSalGraphics::DoDrawNativeControl(
     }
     else if( nType == ControlType::Slider )
     {
-        return NWPaintGTKSlider( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKSlider( nPart, aCtrlRect, aClip, nState, aValue );
     }
     else if( nType == ControlType::WindowBackground )
     {
-        return NWPaintGTKWindowBackground( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKWindowBackground( pDrawable, aCtrlRect, aClip );
     }
     else if( nType == ControlType::Fixedline )
     {
-        return NWPaintGTKFixedLine( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKFixedLine( pDrawable, nPart, aCtrlRect );
     }
     else if(nType==ControlType::Frame)
     {
-        return NWPaintGTKFrame( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption);
+        return NWPaintGTKFrame( pDrawable, aCtrlRect, aClip, aValue);
     }
     else if(nType==ControlType::ListHeader)
     {
         if(nPart == ControlPart::Button)
-            return NWPaintGTKListHeader( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+            return NWPaintGTKListHeader( pDrawable, aCtrlRect, aClip, nState );
         else if(nPart == ControlPart::Arrow)
-            return NWPaintGTKArrow( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+            return NWPaintGTKArrow( pDrawable, aCtrlRect, aClip, nState, aValue );
     }
 
     return false;
@@ -1366,11 +1366,9 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
 
 bool GtkSalGraphics::NWPaintGTKArrow(
             GdkDrawable* gdkDrawable,
-            ControlType, ControlPart,
             const tools::Rectangle& rControlRectangle,
             const std::list< tools::Rectangle >& rClipList,
-            ControlState nState, const ImplControlValue& aValue,
-            const OUString& )
+            ControlState nState, const ImplControlValue& aValue)
 {
     GtkArrowType arrowType(aValue.getNumericVal()&1?GTK_ARROW_DOWN:GTK_ARROW_UP);
     GtkStateType stateType(nState&ControlState::PRESSED?GTK_STATE_ACTIVE:GTK_STATE_NORMAL);
@@ -1395,11 +1393,9 @@ bool GtkSalGraphics::NWPaintGTKArrow(
 
 bool GtkSalGraphics::NWPaintGTKListHeader(
             GdkDrawable* gdkDrawable,
-            ControlType, ControlPart,
             const tools::Rectangle& rControlRectangle,
             const std::list< tools::Rectangle >& rClipList,
-            ControlState nState, const ImplControlValue&,
-            const OUString& )
+            ControlState nState )
 {
     GtkStateType    stateType;
     GtkShadowType    shadowType;
@@ -1436,11 +1432,8 @@ bool GtkSalGraphics::NWPaintGTKListHeader(
 
 bool GtkSalGraphics::NWPaintGTKFixedLine(
             GdkDrawable* gdkDrawable,
-            ControlType, ControlPart nPart,
-            const tools::Rectangle& rControlRectangle,
-            const std::list< tools::Rectangle >&,
-            ControlState, const ImplControlValue&,
-            const OUString& )
+            ControlPart nPart,
+            const tools::Rectangle& rControlRectangle )
 {
     if(nPart == ControlPart::SeparatorHorz)
         gtk_paint_hline(m_pWindow->style,gdkDrawable,GTK_STATE_NORMAL,nullptr,m_pWindow,"hseparator",rControlRectangle.Left(),rControlRectangle.Right(),rControlRectangle.Top());
@@ -1452,11 +1445,9 @@ bool GtkSalGraphics::NWPaintGTKFixedLine(
 
 bool GtkSalGraphics::NWPaintGTKFrame(
             GdkDrawable* gdkDrawable,
-            ControlType, ControlPart,
             const tools::Rectangle& rControlRectangle,
             const std::list< tools::Rectangle >& rClipList,
-            ControlState /* nState */, const ImplControlValue& aValue,
-            const OUString& )
+            const ImplControlValue& aValue )
 {
     GdkRectangle clipRect;
     int frameWidth=getFrameWidth(gWidgetData[m_nXScreen].gFrame);
@@ -1519,11 +1510,8 @@ bool GtkSalGraphics::NWPaintGTKFrame(
 
 bool GtkSalGraphics::NWPaintGTKWindowBackground(
             GdkDrawable* gdkDrawable,
-            ControlType, ControlPart,
             const tools::Rectangle& rControlRectangle,
-            const std::list< tools::Rectangle >& rClipList,
-            ControlState /* nState */, const ImplControlValue&,
-            const OUString& )
+            const std::list< tools::Rectangle >& rClipList )
 {
     GdkRectangle clipRect;
     for( std::list< tools::Rectangle >::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
@@ -1547,11 +1535,9 @@ bool GtkSalGraphics::NWPaintGTKWindowBackground(
 bool GtkSalGraphics::NWPaintGTKButtonReal(
             GtkWidget* button,
             GdkDrawable* gdkDrawable,
-            ControlType, ControlPart,
             const tools::Rectangle& rControlRectangle,
             const std::list< tools::Rectangle >& rClipList,
-            ControlState nState, const ImplControlValue&,
-            const OUString& )
+            ControlState nState )
 {
     GtkStateType    stateType;
     GtkShadowType    shadowType;
@@ -1683,20 +1669,16 @@ bool GtkSalGraphics::NWPaintGTKButtonReal(
 
 bool GtkSalGraphics::NWPaintGTKButton(
             GdkDrawable* gdkDrawable,
-            ControlType type, ControlPart part,
             const tools::Rectangle& rControlRectangle,
             const std::list< tools::Rectangle >& rClipList,
-            ControlState nState, const ImplControlValue& value,
-            const OUString& string)
+            ControlState nState)
 {
         return NWPaintGTKButtonReal(
             gWidgetData[m_nXScreen].gBtnWidget,
             gdkDrawable,
-            type, part,
             rControlRectangle,
             rClipList,
-            nState, value,
-            string );
+            nState );
 }
 
 static tools::Rectangle NWGetButtonArea( SalX11Screen nScreen,
@@ -1772,12 +1754,10 @@ static tools::Rectangle NWGetTabItemRect( SalX11Screen nScreen, tools::Rectangle
 }
 
 bool GtkSalGraphics::NWPaintGTKRadio( GdkDrawable* gdkDrawable,
-                                      ControlType, ControlPart,
                                       const tools::Rectangle& rControlRectangle,
                                       const std::list< tools::Rectangle >& rClipList,
                                       ControlState nState,
-                                      const ImplControlValue& aValue,
-                                      const OUString& )
+                                      const ImplControlValue& aValue )
 {
     GtkStateType    stateType;
     GtkShadowType    shadowType;
@@ -1828,12 +1808,10 @@ bool GtkSalGraphics::NWPaintGTKRadio( GdkDrawable* gdkDrawable,
 }
 
 bool GtkSalGraphics::NWPaintGTKCheck( GdkDrawable* gdkDrawable,
-                                      ControlType, ControlPart,
                                       const tools::Rectangle& rControlRectangle,
                                       const std::list< tools::Rectangle >& rClipList,
                                       ControlState nState,
-                                      const ImplControlValue& aValue,
-                                      const OUString& )
+                                      const ImplControlValue& aValue )
 {
     GtkStateType    stateType;
     GtkShadowType    shadowType;
@@ -1884,12 +1862,11 @@ static void NWCalcArrowRect( const tools::Rectangle& rButton, tools::Rectangle& 
         ) );
 }
 
-bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
+bool GtkSalGraphics::NWPaintGTKScrollbar( ControlPart nPart,
                                           const tools::Rectangle& rControlRectangle,
                                           const std::list< tools::Rectangle >&,
                                           ControlState nState,
-                                          const ImplControlValue& aValue,
-                                          const OUString& )
+                                          const ImplControlValue& aValue )
 {
     assert(aValue.getType() == ControlType::Scrollbar);
     const ScrollbarValue& rScrollbarVal = static_cast<const ScrollbarValue&>(aValue);
@@ -2715,12 +2692,11 @@ static tools::Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen,
     return aButtonRect;
 }
 
-bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
+bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType,
                                         const tools::Rectangle& rControlRectangle,
                                         const std::list< tools::Rectangle >&,
                                         ControlState nState,
-                                        const ImplControlValue& aValue,
-                                        const OUString& )
+                                        const ImplControlValue& aValue )
 {
     OSL_ASSERT( nType != ControlType::TabItem || aValue.getType() == ControlType::TabItem );
     GdkX11Pixmap *   pixmap;
@@ -2868,12 +2844,10 @@ bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
 }
 
 bool GtkSalGraphics::NWPaintGTKListBox( GdkDrawable* gdkDrawable,
-                                        ControlType , ControlPart nPart,
+                                        ControlPart nPart,
                                         const tools::Rectangle& rControlRectangle,
                                         const std::list< tools::Rectangle >& rClipList,
-                                        ControlState nState,
-                                        const ImplControlValue& ,
-                                        const OUString&  )
+                                        ControlState nState  )
 {
     tools::Rectangle        aIndicatorRect;
     GtkStateType    stateType;
@@ -2944,11 +2918,10 @@ bool GtkSalGraphics::NWPaintGTKListBox( GdkDrawable* gdkDrawable,
 
 bool GtkSalGraphics::NWPaintGTKToolbar(
             GdkDrawable* gdkDrawable,
-            ControlType, ControlPart nPart,
+            ControlPart nPart,
             const tools::Rectangle& rControlRectangle,
             const std::list< tools::Rectangle >& rClipList,
-            ControlState nState, const ImplControlValue& aValue,
-            const OUString& string)
+            ControlState nState, const ImplControlValue& aValue)
 {
     GtkStateType    stateType;
     GtkShadowType    shadowType;
@@ -3018,7 +2991,7 @@ bool GtkSalGraphics::NWPaintGTKToolbar(
         NWSetWidgetState( pButtonWidget, nState, stateType );
         gtk_widget_ensure_style( pButtonWidget );
         if(bPaintButton)
-            NWPaintGTKButtonReal(pButtonWidget, gdkDrawable, ControlType::Generic, ControlPart::NONE, rControlRectangle, rClipList, nState, aValue, string);
+            NWPaintGTKButtonReal(pButtonWidget, gdkDrawable, rControlRectangle, rClipList, nState);
     }
 
     if( nPart != ControlPart::Button )
@@ -3124,11 +3097,10 @@ static void lcl_rectangleToGdkRectangle(const tools::Rectangle& rRectangle, GdkR
 
 bool GtkSalGraphics::NWPaintGTKMenubar(
             GdkDrawable* gdkDrawable,
-            ControlType, ControlPart nPart,
+            ControlPart nPart,
             const tools::Rectangle& rControlRectangle,
             const std::list< tools::Rectangle >& rClipList,
-            ControlState nState, const ImplControlValue&,
-            const OUString& )
+            ControlState nState )
 {
     GtkStateType    stateType;
     GtkShadowType    shadowType;
@@ -3211,11 +3183,10 @@ bool GtkSalGraphics::NWPaintGTKMenubar(
 
 bool GtkSalGraphics::NWPaintGTKPopupMenu(
             GdkDrawable* gdkDrawable,
-            ControlType, ControlPart nPart,
+            ControlPart nPart,
             const tools::Rectangle& rControlRectangle,
             const std::list< tools::Rectangle >& rClipList,
-            ControlState nState, const ImplControlValue&,
-            const OUString& )
+            ControlState nState )
 {
     // #i50745# gtk does not draw disabled menu entries (and crux theme
     // even crashes) in very old (Fedora Core 4 vintage) gtk's
@@ -3376,11 +3347,8 @@ bool GtkSalGraphics::NWPaintGTKPopupMenu(
 
 bool GtkSalGraphics::NWPaintGTKTooltip(
             GdkDrawable* gdkDrawable,
-            ControlType, ControlPart,
             const tools::Rectangle& rControlRectangle,
-            const std::list< tools::Rectangle >& rClipList,
-            ControlState, const ImplControlValue&,
-            const OUString& )
+            const std::list< tools::Rectangle >& rClipList )
 {
     NWEnsureGTKTooltip( m_nXScreen );
 
@@ -3413,12 +3381,9 @@ bool GtkSalGraphics::NWPaintGTKTooltip(
 }
 
 bool GtkSalGraphics::NWPaintGTKListNode(
-            GdkDrawable*,
-            ControlType, ControlPart,
             const tools::Rectangle& rControlRectangle,
             const std::list< tools::Rectangle >&,
-            ControlState nState, const ImplControlValue& rValue,
-            const OUString& )
+            ControlState nState, const ImplControlValue& rValue )
 {
     NWEnsureGTKTreeView( m_nXScreen );
 
@@ -3463,12 +3428,8 @@ bool GtkSalGraphics::NWPaintGTKListNode(
 }
 
 bool GtkSalGraphics::NWPaintGTKProgress(
-            GdkDrawable*,
-            ControlType, ControlPart,
             const tools::Rectangle& rControlRectangle,
-            const std::list< tools::Rectangle >&,
-            ControlState, const ImplControlValue& rValue,
-            const OUString& )
+            const ImplControlValue& rValue )
 {
     NWEnsureGTKProgressBar( m_nXScreen );
 
@@ -3528,12 +3489,10 @@ bool GtkSalGraphics::NWPaintGTKProgress(
 }
 
 bool GtkSalGraphics::NWPaintGTKSlider(
-            GdkDrawable*,
-            ControlType, ControlPart nPart,
+            ControlPart nPart,
             const tools::Rectangle& rControlRectangle,
             const std::list< tools::Rectangle >&,
-            ControlState nState, const ImplControlValue& rValue,
-            const OUString& )
+            ControlState nState, const ImplControlValue& rValue )
 {
     OSL_ASSERT( rValue.getType() == ControlType::Slider );
     NWEnsureGTKSlider( m_nXScreen );
