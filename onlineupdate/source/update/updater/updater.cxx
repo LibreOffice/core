@@ -735,6 +735,11 @@ struct copy_recursive_skiplist
         NS_tsnprintf(paths[index], MAXPATHLEN, NS_T("%s/%s"), path, suffix);
     }
 
+    void append(unsigned index, const NS_tchar* path)
+    {
+        NS_tstrcpy(paths[index], path);
+    }
+
     bool find(const NS_tchar *path)
     {
         for (int i = 0; i < static_cast<int>(N); ++i)
@@ -2262,18 +2267,28 @@ CopyInstallDirToDestDir()
 {
     // These files should not be copied over to the updated app
 #ifdef _WIN32
-#define SKIPLIST_COUNT 3
+#define SKIPLIST_COUNT 4
 #elif defined(MACOSX)
-#define SKIPLIST_COUNT 0
+#define SKIPLIST_COUNT 1
 #else
-#define SKIPLIST_COUNT 2
+#define SKIPLIST_COUNT 3
 #endif
     copy_recursive_skiplist<SKIPLIST_COUNT> skiplist;
+
+    std::unique_ptr<NS_tchar> pUserProfile(new NS_tchar[MAXPATHLEN]);
+    NS_tstrcpy(pUserProfile.get(), gPatchDirPath);
+    NS_tchar *slash = (NS_tchar *) NS_tstrrchr(pUserProfile.get(), NS_T('/'));
+    if (slash)
+        *slash = NS_T('\0');
+
+    LOG(("ignore user profile directory during copy: " LOG_S, pUserProfile.get()));
+
+    skiplist.append(0, pUserProfile.get());
 #ifndef MACOSX
-    skiplist.append(0, gInstallDirPath, NS_T("updated"));
-    skiplist.append(1, gInstallDirPath, NS_T("updates/0"));
+    skiplist.append(1, gInstallDirPath, NS_T("updated"));
+    skiplist.append(2, gInstallDirPath, NS_T("updates/0"));
 #ifdef _WIN32
-    skiplist.append(2, gInstallDirPath, NS_T("updated.update_in_progress.lock"));
+    skiplist.append(4, gInstallDirPath, NS_T("updated.update_in_progress.lock"));
 #endif
 #endif
 
@@ -2289,6 +2304,8 @@ CopyInstallDirToDestDir()
 static int
 ProcessReplaceRequest()
 {
+    // TODO: moggi: handle the user profile in the installation dir also
+    // during the replacement request
     // The replacement algorithm is like this:
     // 1. Move destDir to tmpDir.  In case of failure, abort.
     // 2. Move newDir to destDir.  In case of failure, revert step 1 and abort.
