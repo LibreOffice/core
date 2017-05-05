@@ -2660,15 +2660,11 @@ void ScXMLExport::ExportAutoStyles_()
 
         pChangeTrackingExportHelper->CollectAutoStyles();
 
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN,
-            GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_ROW,
-            GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_TABLE,
-            GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
+        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN);
+        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_ROW);
+        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_TABLE);
         exportAutoDataStyles();
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_CELL,
-            GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
+        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_CELL);
 
         GetShapeExport()->exportAutoStyles();
         GetFormExport()->exportAutoStyles( );

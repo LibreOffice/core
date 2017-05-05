@@ -163,7 +163,6 @@ SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
 }
 
 SvXMLMetaDocumentContext::SvXMLMetaDocumentContext(SvXMLImport& rImport,
-            sal_Int32 /*nElement*/,
             const uno::Reference<document::XDocumentProperties>& xDocProps) :
     SvXMLImportContext( rImport ),
     mxDocProps(xDocProps),

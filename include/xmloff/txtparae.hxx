@@ -273,7 +273,7 @@ protected:
     void exportText(
         const css::uno::Reference< css::text::XText > & rText,
         const css::uno::Reference< css::text::XTextSection > & rBaseSection,
-        bool bAutoStyles, bool bProgress, bool bExportParagraph, TextPNS eExtensionNS = TextPNS::ODF );
+        bool bAutoStyles, bool bProgress, bool bExportParagraph );
 
     void exportTextContentEnumeration(
         const css::uno::Reference< css::container::XEnumeration > & rContentEnum,
@@ -370,9 +370,7 @@ protected:
         const enum ::xmloff::token::XMLTokenEnum pElements[],
         bool bAutoStyles);
 
-    void exportSoftPageBreak(
-        const css::uno::Reference< css::beans::XPropertySet> & rPropSet,
-        bool bAutoStyles);
+    void exportSoftPageBreak();
 
     void exportTextRange(
         const css::uno::Reference< css::text::XTextRange > & rTextRange,
@@ -537,10 +535,9 @@ public:
     void exportText(
         const css::uno::Reference< css::text::XText > & rText,
         const css::uno::Reference< css::text::XTextSection > & rBaseSection,
-        bool bIsProgress,
-        TextPNS eExtensionNS = TextPNS::ODF)
+        bool bIsProgress)
     {
-        exportText( rText, rBaseSection, false, bIsProgress, true/*bExportParagraph*/, eExtensionNS );
+        exportText( rText, rBaseSection, false, bIsProgress, true/*bExportParagraph*/ );
     }
 
     void exportFramesBoundToPage( bool bIsProgress )

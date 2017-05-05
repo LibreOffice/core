@@ -313,7 +313,7 @@ ScXMLFlatDocContext_Impl::ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport, sal_
                                                    const uno::Reference<document::XDocumentProperties>& i_xDocProps) :
 SvXMLImportContext(i_rImport),
 ScXMLDocContext_Impl(i_rImport, nElement, i_xAttrList),
-SvXMLMetaDocumentContext(i_rImport, nElement, i_xDocProps)
+SvXMLMetaDocumentContext(i_rImport, i_xDocProps)
 {
 }
 

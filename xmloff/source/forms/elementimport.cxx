@@ -1175,8 +1175,7 @@ namespace xmloff
     //= OReferredControlImport
     OReferredControlImport::OReferredControlImport(
             OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
-            const Reference< XNameContainer >& _rxParentContainer,
-            OControlElement::ElementType )
+            const Reference< XNameContainer >& _rxParentContainer )
         :OControlImport(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer)
     {
     }
@@ -2094,7 +2093,7 @@ namespace xmloff
 
             case OControlElement::FRAME:
             case OControlElement::FIXED_TEXT:
-                return new OReferredControlImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
+                return new OReferredControlImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer);
 
             case OControlElement::GRID:
                 return new OGridImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);

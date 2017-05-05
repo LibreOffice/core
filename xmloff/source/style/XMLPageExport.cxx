@@ -212,10 +212,7 @@ void XMLPageExport::exportStyles( bool bUsed, bool bAutoStyles )
 
 void XMLPageExport::exportAutoStyles()
 {
-    rExport.GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_PAGE_MASTER
-        , rExport.GetDocHandler(), rExport.GetMM100UnitConverter(),
-        rExport.GetNamespaceMap()
-        );
+    rExport.GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_PAGE_MASTER);
 }
 
 void XMLPageExport::exportDefaultStyle()

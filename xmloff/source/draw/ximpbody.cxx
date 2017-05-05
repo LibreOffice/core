@@ -277,7 +277,7 @@ void SdXMLDrawPageContext::EndElement()
         uno::Reference< animations::XAnimationNodeSupplier > xNodeSupplier(GetLocalShapesContext(), uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet > xPageProps( GetLocalShapesContext(), uno::UNO_QUERY );
         if(xNodeSupplier.is())
-            xmloff::AnimationNodeContext::postProcessRootNode( GetSdImport(), xNodeSupplier->getAnimationNode(), xPageProps );
+            xmloff::AnimationNodeContext::postProcessRootNode( xNodeSupplier->getAnimationNode(), xPageProps );
     }
 }
 

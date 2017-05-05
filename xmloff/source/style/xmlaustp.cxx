@@ -372,17 +372,9 @@ OUString SvXMLAutoStylePoolP::Find( sal_Int32 nFamily,
     return pImpl->Find( nFamily, rParent, rProperties );
 }
 
-void SvXMLAutoStylePoolP::exportXML( sal_Int32 nFamily,
-    const uno::Reference< css::xml::sax::XDocumentHandler > &,
-    const SvXMLUnitConverter&,
-    const SvXMLNamespaceMap&
-    ) const
+void SvXMLAutoStylePoolP::exportXML( sal_Int32 nFamily ) const
 {
-    pImpl->exportXML( nFamily,
-                      GetExport().GetDocHandler(),
-                      GetExport().GetMM100UnitConverter(),
-                      GetExport().GetNamespaceMap(),
-                      this);
+    pImpl->exportXML( nFamily, this );
 }
 
 void SvXMLAutoStylePoolP::ClearEntries()

@@ -1699,8 +1699,7 @@ void XMLTextParagraphExport::exportText(
         const Reference < XTextSection > & rBaseSection,
         bool bAutoStyles,
         bool bIsProgress,
-        bool bExportParagraph,
-        TextPNS /*eExtensionNS*/)
+        bool bExportParagraph)
 {
     if( bAutoStyles )
         GetExport().GetShapeExport(); // make sure the graphics styles family
@@ -2399,7 +2398,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sSoftPageBreak))
             {
-                exportSoftPageBreak(xPropSet,   bAutoStyles);
+                exportSoftPageBreak();
             }
             else {
                 OSL_FAIL("unknown text portion type");
@@ -2469,9 +2468,7 @@ void XMLTextParagraphExport::exportTextField(
     }
 }
 
-void XMLTextParagraphExport::exportSoftPageBreak(
-    const Reference<XPropertySet> & ,
-    bool )
+void XMLTextParagraphExport::exportSoftPageBreak()
 {
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
                               XML_SOFT_PAGE_BREAK, false,
@@ -3586,30 +3583,15 @@ void XMLTextParagraphExport::recordTrackedChangesNoXText()
 
 void XMLTextParagraphExport::exportTextAutoStyles()
 {
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_PARAGRAPH,
-                                   GetExport().GetDocHandler(),
-                                   GetExport().GetMM100UnitConverter(),
-                                   GetExport().GetNamespaceMap() );
+    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_PARAGRAPH );
 
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_TEXT,
-                                   GetExport().GetDocHandler(),
-                                   GetExport().GetMM100UnitConverter(),
-                                   GetExport().GetNamespaceMap() );
+    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_TEXT );
 
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_FRAME,
-                                   GetExport().GetDocHandler(),
-                                   GetExport().GetMM100UnitConverter(),
-                                   GetExport().GetNamespaceMap() );
+    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_FRAME );
 
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_SECTION,
-                                  GetExport().GetDocHandler(),
-                                  GetExport().GetMM100UnitConverter(),
-                                  GetExport().GetNamespaceMap() );
+    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_SECTION );
 
-    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_RUBY,
-                                  GetExport().GetDocHandler(),
-                                  GetExport().GetMM100UnitConverter(),
-                                  GetExport().GetNamespaceMap() );
+    GetAutoStylePool().exportXML( XML_STYLE_FAMILY_TEXT_RUBY );
 
     maListAutoPool.exportXML();
 }

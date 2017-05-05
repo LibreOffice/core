@@ -69,7 +69,7 @@ namespace xmloff
     {
         // the complete attribute name to look for
         OUString sCompleteAttributeName = GetImport().GetNamespaceMap().GetQNameByIndex(
-            OAttributeMetaData::getOfficeFormsAttributeNamespace(_eAttribute),
+            OAttributeMetaData::getOfficeFormsAttributeNamespace(),
             OUString::createFromAscii(OAttributeMetaData::getOfficeFormsAttributeName(_eAttribute)));
 
         // get and convert the value
@@ -143,7 +143,7 @@ namespace xmloff
 
         // add the attribute
         _rExp.AddAttribute(
-            OAttributeMetaData::getOfficeFormsAttributeNamespace(_eAttribute),
+            OAttributeMetaData::getOfficeFormsAttributeNamespace(),
             OAttributeMetaData::getOfficeFormsAttributeName(_eAttribute),
             aValue.makeStringAndClear());
     }

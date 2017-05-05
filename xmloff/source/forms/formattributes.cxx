@@ -216,54 +216,44 @@ namespace xmloff
     }
 
     void OAttribute2Property::addStringProperty(
-        const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-        const sal_Char* _pAttributeDefault)
+        const sal_Char* _pAttributeName, const OUString& _rPropertyName)
     {
-        implAdd(_pAttributeName, _rPropertyName, ::cppu::UnoType<OUString>::get(),
-            _pAttributeDefault ? OUString::createFromAscii(_pAttributeDefault) : OUString());
+        implAdd(_pAttributeName, _rPropertyName, ::cppu::UnoType<OUString>::get());
     }
 
     void OAttribute2Property::addBooleanProperty(
         const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-        const bool _bAttributeDefault, const bool _bInverseSemantics)
+        const bool /*_bAttributeDefault*/, const bool _bInverseSemantics)
     {
-        OUStringBuffer aDefault;
-        ::sax::Converter::convertBool(aDefault, _bAttributeDefault);
-        AttributeAssignment& aAssignment = implAdd(_pAttributeName, _rPropertyName, cppu::UnoType<bool>::get(), aDefault.makeStringAndClear());
+        AttributeAssignment& aAssignment = implAdd(_pAttributeName, _rPropertyName, cppu::UnoType<bool>::get());
         aAssignment.bInverseSemantics = _bInverseSemantics;
     }
 
     void OAttribute2Property::addInt16Property(
-        const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-        const sal_Int16 _nAttributeDefault)
+        const sal_Char* _pAttributeName, const OUString& _rPropertyName)
     {
-        implAdd(_pAttributeName, _rPropertyName, ::cppu::UnoType<sal_Int16>::get(), OUString::number(_nAttributeDefault));
+        implAdd(_pAttributeName, _rPropertyName, ::cppu::UnoType<sal_Int16>::get());
     }
 
     void OAttribute2Property::addInt32Property(
-        const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-        const sal_Int32 _nAttributeDefault)
+        const sal_Char* _pAttributeName, const OUString& _rPropertyName)
     {
-        implAdd( _pAttributeName, _rPropertyName, ::cppu::UnoType<sal_Int32>::get(), OUString::number( _nAttributeDefault ) );
+        implAdd( _pAttributeName, _rPropertyName, ::cppu::UnoType<sal_Int32>::get() );
     }
 
     void OAttribute2Property::addEnumPropertyImpl(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-            const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry<sal_uInt16>* _pValueMap,
+            const SvXMLEnumMapEntry<sal_uInt16>* _pValueMap,
             const css::uno::Type* _pType)
     {
-        OUStringBuffer aDefault;
-        SvXMLUnitConverter::convertEnum(aDefault, _nAttributeDefault, _pValueMap);
         AttributeAssignment& aAssignment = implAdd(_pAttributeName, _rPropertyName,
-            _pType ? *_pType : ::cppu::UnoType<sal_Int32>::get(),
-                // this assumes that the setPropertyValue for enums can handle int32's ....
-            aDefault.makeStringAndClear());
+            _pType ? *_pType : ::cppu::UnoType<sal_Int32>::get());
         aAssignment.pEnumMap = _pValueMap;
     }
 
     OAttribute2Property::AttributeAssignment& OAttribute2Property::implAdd(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-            const css::uno::Type& _rType, const OUString& /*_rDefaultString*/)
+            const css::uno::Type& _rType)
     {
         OSL_ENSURE(m_aKnownProperties.end() == m_aKnownProperties.find(OUString::createFromAscii(_pAttributeName)),
             "OAttribute2Property::implAdd: already have this attribute!");

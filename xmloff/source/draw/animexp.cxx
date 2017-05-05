@@ -266,7 +266,7 @@ XMLAnimationsExporter::~XMLAnimationsExporter()
 {
 }
 
-void XMLAnimationsExporter::prepare( const Reference< XShape >& xShape, SvXMLExport& )
+void XMLAnimationsExporter::prepare( const Reference< XShape >& xShape )
 {
     try
     {

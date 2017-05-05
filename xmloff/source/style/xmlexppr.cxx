@@ -775,7 +775,7 @@ void SvXMLExportPropertyMapper::exportXML(
                         rExport.GetAttrList(), rProperties,
                         rExport.GetMM100UnitConverter(),
                         rExport.GetNamespaceMap(),
-                        nFlags, &aIndexArray,
+                        &aIndexArray,
                         nPropMapStartIdx, nPropMapEndIdx );
 
             if( rExport.GetAttrList().getLength() > 0 ||
@@ -832,7 +832,6 @@ void SvXMLExportPropertyMapper::_exportXML(
         const ::std::vector< XMLPropertyState >& rProperties,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
-        SvXmlExportFlags nFlags,
         std::vector<sal_uInt16>* pIndexArray,
         sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx ) const
 {
@@ -870,7 +869,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                 else
                 {
                     _exportXML( rAttrList, rProperties[nIndex], rUnitConverter,
-                                rNamespaceMap, nFlags, &rProperties, nIndex );
+                                rNamespaceMap, &rProperties, nIndex );
                 }
             }
         }
@@ -884,7 +883,6 @@ void SvXMLExportPropertyMapper::_exportXML(
         const XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
-        SvXmlExportFlags /*nFlags*/,
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {

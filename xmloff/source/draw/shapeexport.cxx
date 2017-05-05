@@ -515,7 +515,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
     // prepare animation information if needed
     if( mxAnimationsExporter.is() )
-        mxAnimationsExporter->prepare( xShape, mrExport );
+        mxAnimationsExporter->prepare( xShape );
 
     // check for special shapes
 
@@ -789,17 +789,17 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     {
         case XmlShapeTypeDrawRectangleShape:
         {
-            ImpExportRectangleShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            ImpExportRectangleShape(xShape, nFeatures, pRefPoint );
             break;
         }
         case XmlShapeTypeDrawEllipseShape:
         {
-            ImpExportEllipseShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            ImpExportEllipseShape(xShape, nFeatures, pRefPoint );
             break;
         }
         case XmlShapeTypeDrawLineShape:
         {
-            ImpExportLineShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            ImpExportLineShape(xShape, nFeatures, pRefPoint );
             break;
         }
         case XmlShapeTypeDrawPolyPolygonShape:  // closed PolyPolygon
@@ -841,19 +841,19 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
         case XmlShapeTypeDrawControlShape:
         {
-            ImpExportControlShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            ImpExportControlShape(xShape, nFeatures, pRefPoint );
             break;
         }
 
         case XmlShapeTypeDrawConnectorShape:
         {
-            ImpExportConnectorShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            ImpExportConnectorShape(xShape, nFeatures, pRefPoint );
             break;
         }
 
         case XmlShapeTypeDrawMeasureShape:
         {
-            ImpExportMeasureShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            ImpExportMeasureShape(xShape, nFeatures, pRefPoint );
             break;
         }
 
@@ -883,7 +883,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
         case XmlShapeTypeDrawCaptionShape:
         {
-            ImpExportCaptionShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            ImpExportCaptionShape(xShape, nFeatures, pRefPoint );
             break;
         }
 
@@ -898,41 +898,41 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
         case XmlShapeTypeDraw3DSceneObject:
         {
-            ImpExport3DSceneShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            ImpExport3DSceneShape( xShape, nFeatures, pRefPoint );
             break;
         }
 
         case XmlShapeTypeDrawGroupShape:
         {
             // empty group
-            ImpExportGroupShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            ImpExportGroupShape( xShape, nFeatures, pRefPoint );
             break;
         }
 
         case XmlShapeTypeDrawFrameShape:
         {
-            ImpExportFrameShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            ImpExportFrameShape(xShape, nFeatures, pRefPoint );
             break;
         }
 
         case XmlShapeTypeDrawAppletShape:
         {
-            ImpExportAppletShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            ImpExportAppletShape(xShape, nFeatures, pRefPoint );
             break;
         }
 
         case XmlShapeTypeDrawPluginShape:
         {
-            ImpExportPluginShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+            ImpExportPluginShape(xShape, nFeatures, pRefPoint );
             break;
         }
 
         case XmlShapeTypeDrawCustomShape:
         {
             if ( aShapeInfo.xCustomShapeReplacement.is() )
-                ImpExportGroupShape( aShapeInfo.xCustomShapeReplacement, XmlShapeTypeDrawGroupShape, nFeatures, pRefPoint );
+                ImpExportGroupShape( aShapeInfo.xCustomShapeReplacement, nFeatures, pRefPoint );
             else
-                ImpExportCustomShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
+                ImpExportCustomShape( xShape, nFeatures, pRefPoint );
             break;
         }
 
@@ -1039,22 +1039,12 @@ void XMLShapeExport::exportAutoStyles()
 
     // ...for graphic
     {
-        GetExport().GetAutoStylePool()->exportXML(
-            XML_STYLE_FAMILY_SD_GRAPHICS_ID
-            , GetExport().GetDocHandler(),
-            GetExport().GetMM100UnitConverter(),
-            GetExport().GetNamespaceMap()
-            );
+        GetExport().GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_SD_GRAPHICS_ID );
     }
 
     // ...for presentation
     {
-        GetExport().GetAutoStylePool()->exportXML(
-            XML_STYLE_FAMILY_SD_PRESENTATION_ID
-            , GetExport().GetDocHandler(),
-            GetExport().GetMM100UnitConverter(),
-            GetExport().GetNamespaceMap()
-            );
+        GetExport().GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_SD_PRESENTATION_ID );
     }
 
     if( mxShapeTableExport.is() )
@@ -1818,7 +1808,7 @@ void XMLShapeExport::ImpExportDescription( const uno::Reference< drawing::XShape
     }
 }
 
-void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape >& xShape, XmlShapeType, XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
+void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape >& xShape, XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
 {
     uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY);
     if(xShapes.is() && xShapes->getCount())
@@ -1952,7 +1942,7 @@ void XMLShapeExport::ImpExportTextBoxShape(
 
 void XMLShapeExport::ImpExportRectangleShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
+    XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -1984,7 +1974,7 @@ void XMLShapeExport::ImpExportRectangleShape(
 
 void XMLShapeExport::ImpExportLineShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
+    XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -2095,7 +2085,7 @@ void XMLShapeExport::ImpExportLineShape(
 
 void XMLShapeExport::ImpExportEllipseShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
+    XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -2407,7 +2397,7 @@ void XMLShapeExport::ImpExportChartShape(
 
 void XMLShapeExport::ImpExportControlShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
+    XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -2436,7 +2426,7 @@ void XMLShapeExport::ImpExportControlShape(
 
 void XMLShapeExport::ImpExportConnectorShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
+    XMLShapeExportFlags nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
     uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
 
@@ -2647,7 +2637,7 @@ void XMLShapeExport::ImpExportConnectorShape(
 
 void XMLShapeExport::ImpExportMeasureShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
+    XMLShapeExportFlags nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
     uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
 
@@ -2932,7 +2922,7 @@ void XMLShapeExport::ImpExportPageShape(
 
 void XMLShapeExport::ImpExportCaptionShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
+    XMLShapeExportFlags nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -2982,7 +2972,7 @@ void XMLShapeExport::ImpExportCaptionShape(
 
 void XMLShapeExport::ImpExportFrameShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
+    XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -3016,7 +3006,7 @@ void XMLShapeExport::ImpExportFrameShape(
 
 void XMLShapeExport::ImpExportAppletShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
+    XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -3071,7 +3061,7 @@ void XMLShapeExport::ImpExportAppletShape(
 
 void XMLShapeExport::ImpExportPluginShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
+    XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
@@ -3416,7 +3406,7 @@ void XMLShapeExport::ImpExportMediaShape(
     }
 }
 
-void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShape >& xShape, XmlShapeType, XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
+void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShape >& xShape, XMLShapeExportFlags nFeatures, awt::Point* pRefPoint)
 {
     uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY);
     if(xShapes.is() && xShapes->getCount())
@@ -4844,7 +4834,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
 
 void XMLShapeExport::ImpExportCustomShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint )
+    XMLShapeExportFlags nFeatures, css::awt::Point* pRefPoint )
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if ( xPropSet.is() )
