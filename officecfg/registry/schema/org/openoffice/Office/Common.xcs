@@ -5572,13 +5572,6 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="UseDocumentSystemFileLocking" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Allows to specify whether the OOo document file locking
-          mechanics should use the system file locking.</desc>
-        </info>
-        <value>true</value>
-      </prop>
       <prop oor:name="UseDocumentOOoLockFile" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Allows to specify whether the OOo document file locking
