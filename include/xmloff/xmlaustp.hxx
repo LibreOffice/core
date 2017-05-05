@@ -113,11 +113,7 @@ public:
     OUString Find( sal_Int32 nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties ) const;
 
     /** Export all item sets ofs a certain class in the order in that they have been added. */
-    void exportXML( sal_Int32 nFamily,
-        const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap
-        ) const;
+    void exportXML( sal_Int32 nFamily ) const;
 
     void ClearEntries();
 };

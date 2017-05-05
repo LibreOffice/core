@@ -1006,12 +1006,7 @@ void SchXMLExportHelper_Impl::exportAutoStyles()
         mrExport.exportAutoDataStyles();
 
         // export chart auto styles
-        mrAutoStylePool.exportXML(
-            XML_STYLE_FAMILY_SCH_CHART_ID
-            , mrExport.GetDocHandler(),
-            mrExport.GetMM100UnitConverter(),
-            mrExport.GetNamespaceMap()
-            );
+        mrAutoStylePool.exportXML( XML_STYLE_FAMILY_SCH_CHART_ID );
 
         // export auto styles for additional shapes
         mrExport.GetShapeExport()->exportAutoStyles();

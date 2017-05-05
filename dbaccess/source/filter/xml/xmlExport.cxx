@@ -1234,26 +1234,10 @@ void ODBExport::ExportAutoStyles_()
     if ( getExportFlags() & SvXMLExportFlags::CONTENT )
     {
         collectComponentStyles();
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_TABLE
-                                        ,GetDocHandler()
-                                        ,GetMM100UnitConverter()
-                                        ,GetNamespaceMap()
-        );
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN
-                                        ,GetDocHandler()
-                                        ,GetMM100UnitConverter()
-                                        ,GetNamespaceMap()
-        );
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_CELL
-                                        ,GetDocHandler()
-                                        ,GetMM100UnitConverter()
-                                        ,GetNamespaceMap()
-        );
-        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_ROW
-                                        ,GetDocHandler()
-                                        ,GetMM100UnitConverter()
-                                        ,GetNamespaceMap()
-        );
+        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_TABLE);
+        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN);
+        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_CELL);
+        GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_ROW);
         exportDataStyles();
     }
 }

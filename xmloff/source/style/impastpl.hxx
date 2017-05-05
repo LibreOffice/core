@@ -171,9 +171,6 @@ public:
                           const ::std::vector< XMLPropertyState >& rProperties ) const;
 
     void exportXML( sal_Int32 nFamily,
-        const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap,
         const SvXMLAutoStylePoolP *pAntiImpl) const;
 
     void ClearEntries();

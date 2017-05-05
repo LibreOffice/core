@@ -79,7 +79,6 @@ protected:
                      const ::std::vector< XMLPropertyState >& rProperties,
                      const SvXMLUnitConverter& rUnitConverter,
                      const SvXMLNamespaceMap& rNamespaceMap,
-                     SvXmlExportFlags nFlags,
                      std::vector<sal_uInt16>* pIndexArray,
                        sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx ) const;
 
@@ -87,7 +86,6 @@ protected:
                      const XMLPropertyState& rProperty,
                      const SvXMLUnitConverter& rUnitConverter,
                      const SvXMLNamespaceMap& rNamespaceMap,
-                     SvXmlExportFlags nFlags,
                      const ::std::vector< XMLPropertyState > *pProperties,
                      sal_uInt32 nIdx ) const;
 

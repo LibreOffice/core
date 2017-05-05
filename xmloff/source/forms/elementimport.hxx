@@ -308,8 +308,7 @@ namespace xmloff
     public:
         OReferredControlImport(
             OFormLayerXMLImport_Impl& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const OUString& _rName,
-            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer,
-            OControlElement::ElementType _eType
+            const css::uno::Reference< css::container::XNameContainer >& _rxParentContainer
         );
 
         // SvXMLImportContext overridables

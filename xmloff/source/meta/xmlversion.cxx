@@ -48,9 +48,9 @@ XMLVersionListExport::XMLVersionListExport(
 :   SvXMLExport( rContext, "", rFileName, util::MeasureUnit::CM, rHandler ),
     maVersions( rVersions )
 {
-    GetNamespaceMap_().AddAtIndex( XML_NAMESPACE_DC_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_DC),
+    GetNamespaceMap_().AddAtIndex( xmloff::token::GetXMLToken(xmloff::token::XML_NP_DC),
                                    xmloff::token::GetXMLToken(xmloff::token::XML_N_DC), XML_NAMESPACE_DC );
-    GetNamespaceMap_().AddAtIndex( XML_NAMESPACE_FRAMEWORK_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_VERSIONS_LIST),
+    GetNamespaceMap_().AddAtIndex( xmloff::token::GetXMLToken(xmloff::token::XML_NP_VERSIONS_LIST),
                                    xmloff::token::GetXMLToken(xmloff::token::XML_N_VERSIONS_LIST), XML_NAMESPACE_FRAMEWORK );
 }
 
@@ -105,7 +105,7 @@ XMLVersionListImport::XMLVersionListImport(
 :   SvXMLImport(rContext, ""),
     maVersions( rVersions )
 {
-    GetNamespaceMap().AddAtIndex( XML_NAMESPACE_FRAMEWORK_IDX, xmloff::token::GetXMLToken(xmloff::token::XML_NP_VERSIONS_LIST),
+    GetNamespaceMap().AddAtIndex( xmloff::token::GetXMLToken(xmloff::token::XML_NP_VERSIONS_LIST),
                                   xmloff::token::GetXMLToken(xmloff::token::XML_N_VERSIONS_LIST), XML_NAMESPACE_FRAMEWORK );
 }
 

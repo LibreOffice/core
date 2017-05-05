@@ -126,7 +126,7 @@ public:
     static bool NormalizeW3URI( OUString& rName );
     static bool NormalizeURI( OUString& rName );
 
-/* deprecated */ void AddAtIndex( sal_uInt16 nIdx, const OUString& rPrefix,
+/* deprecated */ void AddAtIndex( const OUString& rPrefix,
                      const OUString& rName, sal_uInt16 nKey );
 /* deprecated */ static sal_uInt16 GetIndexByKey( sal_uInt16 nKey );
 /* deprecated */ sal_uInt16 GetIndexByPrefix( const OUString& rPrefix ) const;

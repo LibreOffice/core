@@ -827,7 +827,7 @@ namespace xmloff
         if (DAFlags::DataField & m_nIncludeDatabase)
         {
             exportStringPropertyAttribute(
-                OAttributeMetaData::getDatabaseAttributeNamespace(DAFlags::DataField),
+                OAttributeMetaData::getDatabaseAttributeNamespace(),
                 OAttributeMetaData::getDatabaseAttributeName(DAFlags::DataField),
                 PROPERTY_DATAFIELD);
             RESET_BIT( nIncludeDatabase, DAFlags::DataField );
@@ -837,7 +837,7 @@ namespace xmloff
         if ( DAFlags::InputRequired & m_nIncludeDatabase )
         {
             exportBooleanPropertyAttribute(
-                OAttributeMetaData::getDatabaseAttributeNamespace( DAFlags::InputRequired ),
+                OAttributeMetaData::getDatabaseAttributeNamespace(),
                 OAttributeMetaData::getDatabaseAttributeName( DAFlags::InputRequired ),
                 PROPERTY_INPUT_REQUIRED,
                 BoolAttrFlags::DefaultTrue
@@ -849,7 +849,7 @@ namespace xmloff
         if (DAFlags::BoundColumn & m_nIncludeDatabase)
         {
             exportInt16PropertyAttribute(
-                OAttributeMetaData::getDatabaseAttributeNamespace(DAFlags::BoundColumn),
+                OAttributeMetaData::getDatabaseAttributeNamespace(),
                 OAttributeMetaData::getDatabaseAttributeName(DAFlags::BoundColumn),
                 PROPERTY_BOUNDCOLUMN,
                 0,
@@ -861,7 +861,7 @@ namespace xmloff
         if (DAFlags::ConvertEmpty & m_nIncludeDatabase)
         {
             exportBooleanPropertyAttribute(
-                OAttributeMetaData::getDatabaseAttributeNamespace(DAFlags::ConvertEmpty),
+                OAttributeMetaData::getDatabaseAttributeNamespace(),
                 OAttributeMetaData::getDatabaseAttributeName(DAFlags::ConvertEmpty),
                 PROPERTY_EMPTY_IS_NULL,
                 BoolAttrFlags::DefaultFalse
@@ -873,7 +873,7 @@ namespace xmloff
         if (DAFlags::ListSource_TYPE & m_nIncludeDatabase)
         {
             exportEnumPropertyAttribute(
-                OAttributeMetaData::getDatabaseAttributeNamespace(DAFlags::ListSource_TYPE),
+                OAttributeMetaData::getDatabaseAttributeNamespace(),
                 OAttributeMetaData::getDatabaseAttributeName(DAFlags::ListSource_TYPE),
                 PROPERTY_LISTSOURCETYPE,
                 aListSourceTypeMap,
@@ -1254,7 +1254,7 @@ namespace xmloff
         if ( !sListSource.isEmpty() )
         {   // the ListSource property needs to be exported as attribute, and it is not empty
             AddAttribute(
-                OAttributeMetaData::getDatabaseAttributeNamespace(DAFlags::ListSource),
+                OAttributeMetaData::getDatabaseAttributeNamespace(),
                 OAttributeMetaData::getDatabaseAttributeName(DAFlags::ListSource),
                 sListSource);
         }
@@ -1772,7 +1772,7 @@ namespace xmloff
             if ( xBinding.is() )
             {
                 AddAttribute(
-                    OAttributeMetaData::getBindingAttributeNamespace( BAFlags::LinkedCell ),
+                    OAttributeMetaData::getBindingAttributeNamespace(),
                     OAttributeMetaData::getBindingAttributeName( BAFlags::LinkedCell ),
                     aHelper.getStringAddressFromCellBinding( xBinding )
                 );
@@ -1789,7 +1789,7 @@ namespace xmloff
                     );
 
                     AddAttribute(
-                        OAttributeMetaData::getBindingAttributeNamespace( BAFlags::ListLinkingType ),
+                        OAttributeMetaData::getBindingAttributeNamespace(),
                         OAttributeMetaData::getBindingAttributeName( BAFlags::ListLinkingType ),
                         sBuffer.makeStringAndClear()
                     );
@@ -1833,7 +1833,7 @@ namespace xmloff
                 FormCellBindingHelper aHelper( m_xProps, nullptr );
 
                 AddAttribute(
-                    OAttributeMetaData::getBindingAttributeNamespace( BAFlags::ListCellRange ),
+                    OAttributeMetaData::getBindingAttributeNamespace(),
                     OAttributeMetaData::getBindingAttributeName( BAFlags::ListCellRange ),
                     aHelper.getStringAddressFromCellListSource( xSource )
                 );
