@@ -2137,14 +2137,14 @@ void WpADOColumn::put_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject)
 {
     assert(pInterface);
     bool bRet = SUCCEEDED(pInterface->put_ParentCatalog(ppvObject));
-    OSL_ENSURE(bRet,"Could not set ParentCatalog!");
+    SAL_WARN_IF(!bRet, "connectivity.ado", "Could not set ParentCatalog!");
 }
 
 void WpADOTable::putref_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject)
 {
     assert(pInterface);
     bool bRet = SUCCEEDED(pInterface->putref_ParentCatalog(ppvObject));
-    OSL_ENSURE(bRet,"Could not set ParentCatalog!");
+    SAL_WARN_IF(!bRet, "connectivity.ado", "Could not set ParentCatalog!");
 }
 
 void WpBase::setIDispatch(IDispatch* _pIUnknown)
@@ -2154,12 +2154,12 @@ void WpBase::setIDispatch(IDispatch* _pIUnknown)
 
 void OTools::putValue(const WpADOProperties& _rProps,const OLEVariant &_aPosition,const OLEVariant &_aValVar)
 {
-    OSL_ENSURE(_rProps.IsValid(),"Properties are not valid!");
+    SAL_WARN_IF(!_rProps.IsValid(), "connectivity.ado", "Properties are not valid!");
     WpADOProperty aProp(_rProps.GetItem(_aPosition));
     if ( aProp.IsValid() )
     {
         bool bRet = aProp.PutValue(_aValVar);
-        OSL_ENSURE(bRet,"Could not put value!");
+        SAL_WARN_IF(!bRet, "connectivity.ado", "Could not put value!");
     }
 }
 
