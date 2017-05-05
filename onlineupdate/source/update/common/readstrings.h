@@ -11,14 +11,9 @@
 
 #ifdef _WIN32
 # include <windows.h>
-typedef WCHAR NS_tchar;
-#else
-typedef char NS_tchar;
 #endif
 
-#ifndef NULL
-#define NULL 0
-#endif
+#include "types.hxx"
 
 struct StringTable
 {
