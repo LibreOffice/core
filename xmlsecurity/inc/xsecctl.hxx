@@ -352,7 +352,7 @@ public:
     /*
      * For signature generation
      */
-    void signAStream( sal_Int32 securityId, const OUString& uri, const OUString& objectURL, bool isBinary, bool bXAdESCompliantIfODF);
+    void signAStream( sal_Int32 securityId, const OUString& uri, bool isBinary, bool bXAdESCompliantIfODF);
 
 
     /** sets data that describes the certificate.

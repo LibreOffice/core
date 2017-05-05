@@ -309,7 +309,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
     for (sal_Int32 n = 0; n < nElements; n++)
     {
         bool bBinaryMode = !isXML(aElements[n]);
-        maSignatureHelper.AddForSigning(nSecurityId, aElements[n], aElements[n], bBinaryMode, bAdESCompliant);
+        maSignatureHelper.AddForSigning(nSecurityId, aElements[n], bBinaryMode, bAdESCompliant);
     }
 
     maSignatureHelper.SetDateTime(nSecurityId, Date(Date::SYSTEM), tools::Time(tools::Time::SYSTEM));
