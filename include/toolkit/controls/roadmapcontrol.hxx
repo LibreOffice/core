@@ -81,7 +81,7 @@ namespace toolkit
 
         void                                MakeRMItemValidation( sal_Int32 Index, const css::uno::Reference< XInterface >& xRoadmapItem );
         css::container::ContainerEvent      GetContainerEvent(sal_Int32 Index, const css::uno::Reference< XInterface >& );
-        void                                SetRMItemDefaultProperties( const sal_Int32 Index, const css::uno::Reference< XInterface >& );
+        void                                SetRMItemDefaultProperties( const css::uno::Reference< XInterface >& );
         static sal_Int16                    GetCurrentItemID( const css::uno::Reference< css::beans::XPropertySet >& xPropertySet );
         sal_Int32                           GetUniqueID();
 

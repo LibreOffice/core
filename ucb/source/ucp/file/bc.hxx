@@ -245,8 +245,7 @@ namespace fileaccess {
 
         /// @throws css::uno::RuntimeException
         css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo(
-            sal_Int32 nMyCommandIdentifier );
+        getPropertySetInfo();
 
         /// @throws css::uno::RuntimeException
         css::uno::Reference< css::sdbc::XRow > SAL_CALL

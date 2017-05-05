@@ -602,7 +602,7 @@ ScVbaShape::setRelativeHorizontalPosition(::sal_Int32 _relativehorizontalpositio
         }
         default:
         {
-            DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_ARGUMENT, OUString());
+            DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_ARGUMENT);
         }
     }
     m_xPropertySet->setPropertyValue( "HoriOrientRelation" , uno::makeAny( nType ) );
@@ -673,7 +673,7 @@ ScVbaShape::setRelativeVerticalPosition(::sal_Int32 _relativeverticalposition)
         }
         default:
         {
-            DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_ARGUMENT, OUString());
+            DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_ARGUMENT);
         }
     }
     m_xPropertySet->setPropertyValue( "VertOrientRelation" , uno::makeAny( nType ) );

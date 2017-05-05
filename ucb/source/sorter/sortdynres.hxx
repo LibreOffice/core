@@ -109,7 +109,7 @@ public:
     // own methods:
 
     /// @throws css::uno::RuntimeException
-    void impl_disposing( const css::lang::EventObject& Source );
+    void impl_disposing();
 
     /// @throws css::uno::RuntimeException
     void impl_notify( const css::ucb::ListEvent& Changes );

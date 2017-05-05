@@ -203,7 +203,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     }
 
 
-    void UnoControlRoadmapModel::SetRMItemDefaultProperties( const sal_Int32 , const Reference< XInterface >& xRoadmapItem)
+    void UnoControlRoadmapModel::SetRMItemDefaultProperties( const Reference< XInterface >& xRoadmapItem)
     {
         Reference< XPropertySet > xPropertySet( xRoadmapItem, UNO_QUERY );
         Reference< XPropertySet > xProps( xRoadmapItem, UNO_QUERY );
@@ -277,7 +277,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         Reference< XInterface > xRoadmapItem;
         Element >>= xRoadmapItem;
         MakeRMItemValidation( Index, xRoadmapItem);
-        SetRMItemDefaultProperties( Index, xRoadmapItem );
+        SetRMItemDefaultProperties( xRoadmapItem );
         maRoadmapItems.insert( maRoadmapItems.begin() + Index, xRoadmapItem);
         ContainerEvent aEvent = GetContainerEvent(Index, xRoadmapItem);
         maContainerListeners.elementInserted( aEvent );
@@ -326,7 +326,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         Reference< XInterface > xRoadmapItem;
         Element >>= xRoadmapItem;
         MakeRMItemValidation( Index, xRoadmapItem);
-        SetRMItemDefaultProperties( Index, xRoadmapItem );
+        SetRMItemDefaultProperties( xRoadmapItem );
         maRoadmapItems.erase( maRoadmapItems.begin() + Index );
         maRoadmapItems.insert( maRoadmapItems.begin() + Index, xRoadmapItem);        //push_back( xRoadmapItem );
         ContainerEvent aEvent = GetContainerEvent(Index, xRoadmapItem);

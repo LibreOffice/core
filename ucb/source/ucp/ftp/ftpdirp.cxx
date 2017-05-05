@@ -1169,7 +1169,7 @@ bool FTPDirectoryParser::parseUNIX_isYearTimeField (
         return false;
 
     rDateTime.SetYear(nNumber);
-    rDateTime.SetTime(0);
+    rDateTime.SetTime();
     return true;
 }
 

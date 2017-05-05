@@ -72,7 +72,7 @@ protected:
     /// @throws css::uno::RuntimeException
     css::uno::Any AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, const css::uno::Any& rRange );
     /// @throws css::uno::RuntimeException
-    css::uno::Any AddTextboxInWriter( sal_Int32 _nOrientation, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight );
+    css::uno::Any AddTextboxInWriter( sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight );
     OUString createName( const OUString& sName );
     //TODO helperapi using a writer document
     //css::awt::Point calculateTopLeftMargin( css::uno::Reference< ov::XHelperInterface > xDocument );
