@@ -172,7 +172,7 @@ public:
 
     // The default value for all dispatchers is activated. If the app for example
     // wants to intervene in MouseDispatcher for special treatment, you have to
-    // deactivate the MouseDispatcher with the help of the methode below and you have
+    // deactivate the MouseDispatcher with the help of the method below and you have
     // to implement it yourself. Example for MouseButtonDown:
     //      SdrViewEvent aVEvt;
     //      SdrHitKind eHit=pSdrView->PickAnything(rMEvt,SdrMouseEventKind::BUTTONDOWN,aVEvt);

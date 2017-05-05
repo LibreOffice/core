@@ -43,7 +43,7 @@ class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
 
     OReportPage(const OReportPage&);
 
-    // methode to remove temporary objects, created by 'special mode'
+    // method to remove temporary objects, created by 'special mode'
     // (BegDragObj)
     void removeTempObject(SdrObject *_pToRemoveObj);
 

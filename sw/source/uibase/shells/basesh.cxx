@@ -1786,7 +1786,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
     pGetStateSet = nullptr;
 }
 
-// Disable the slots with this status methode
+// Disable the slots with this status method
 
 void SwBaseShell::StateDisableItems( SfxItemSet &rSet )
 {
@@ -1800,7 +1800,7 @@ void SwBaseShell::StateDisableItems( SfxItemSet &rSet )
     }
 }
 
-// Disable the slots with this status methode
+// Disable the slots with this status method
 
 void SwBaseShell::StateStyle( SfxItemSet &rSet )
 {

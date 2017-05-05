@@ -2154,7 +2154,7 @@ bool impl_maxOpenDocCountReached()
 
 /*  [Description]
 
-    This internal methode returns in 'rSet' the Status for the  <SfxShell>
+    This internal method returns in 'rSet' the Status for the  <SfxShell>
     Subclass SfxViewFrame in the <SVIDL> described <Slots>.
 
     Thus exactly those Slots-IDs that are recognized as being invalid by Sfx

@@ -54,7 +54,7 @@ protected:
             const SvXMLNamespaceMap& rNamespaceMap
             ) const;
 
-// this methode is executed after Properties Export, so you can e.g. export a map or so on
+// this method is executed after Properties Export, so you can e.g. export a map or so on
     virtual void exportStyleContent(
             const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
             sal_Int32 nFamily,

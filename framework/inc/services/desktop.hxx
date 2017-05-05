@@ -379,7 +379,7 @@ class Desktop : private cppu::BaseMutex,
         bool m_bIsTerminated;
 
         /** when true, the call came form session manager
-          *   the methode is Desktop::terminateQuickstarterToo()
+          *   the method is Desktop::terminateQuickstarterToo()
           *   this the only one place where set this to true
           *   In this case,  when one frame break, not make
           *   question for other, the break of shutdown or logout
