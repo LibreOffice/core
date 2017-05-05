@@ -55,6 +55,7 @@ SfxUndoAction::~SfxUndoAction()
 SfxUndoAction::SfxUndoAction()
     : m_aDateTime(DateTime::SYSTEM)
 {
+    m_aDateTime.ConvertToUTC();
 }
 
 
