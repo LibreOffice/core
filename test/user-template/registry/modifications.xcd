@@ -10,9 +10,6 @@
 <oor:data xmlns:oor="http://openoffice.org/2001/registry">
  <oor:component-data oor:name="Common" oor:package="org.openoffice.Office">
   <node oor:name="Misc">
-    <prop oor:name="UseDocumentSystemFileLocking">
-      <value>false</value>
-    </prop>
     <prop oor:name="UseDocumentOOoLockFile">
       <value>false</value>
     </prop>
