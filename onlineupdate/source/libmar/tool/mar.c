@@ -272,10 +272,11 @@ int main(int argc, char **argv) {
       while(fgets(buf, 1000, file) != NULL)
       {
         int j;
+        size_t str_len;
         for (j=strlen(buf)-1;j>=0 && (buf[j]=='\n' || buf[j]=='\r');j--)
           ;
         buf[j+1]='\0';
-        size_t str_len = strlen(buf) + 1;
+        str_len = strlen(buf) + 1;
         files[num_files] = (char*)malloc(sizeof(char)*str_len);
         strcpy(files[num_files], buf);
         ++num_files;
