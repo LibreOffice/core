@@ -95,9 +95,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
                         SvNumberFormatter* pFormTable = pDoc->GetFormatTable();
                         nFormatIndex = pFormTable->GetStandardFormat(
                                 css::util::NumberFormat::DATE, ScGlobal::eLnge );
-
-                        nVal = Date( aDate.Day, aDate.Month, aDate.Year ) -
-                            *pFormTable->GetNullDate();
+                        nVal = Date( aDate ) - *pFormTable->GetNullDate();
                     }
                     bValue = true;
                 }
