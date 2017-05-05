@@ -244,42 +244,33 @@ void DateTime::GetWin32FileDateTime( sal_uInt32 & rLower, sal_uInt32 & rUpper )
 
 DateTime DateTime::CreateFromWin32FileDateTime( sal_uInt32 rLower, sal_uInt32 rUpper )
 {
-    const sal_Int64 a100nPerSecond = SAL_CONST_INT64( 10000000 );
-    const sal_Int64 a100nPerDay = a100nPerSecond * sal_Int64( 60 * 60 * 24 );
+    // (rUpper|rLower) = 100-nanosecond intervals since 1601-01-01 00:00
+    const sal_uInt64 a100nPerSecond = SAL_CONST_UINT64( 10000000 );
+    const sal_uInt64 a100nPerDay = a100nPerSecond * sal_uInt64( 60 * 60 * 24 );
 
-    sal_Int64 aTime = sal_Int64(
+    sal_uInt64 aTime =
             sal_uInt64( rUpper ) * SAL_CONST_UINT64( 0x100000000 ) +
-            sal_uInt64( rLower ) );
+            sal_uInt64( rLower );
 
-    sal_Int64 nDays = aTime / a100nPerDay;
-    sal_Int64 nYears =
-        ( nDays -
-          ( nDays / ( 4 * 365 ) ) +
-          ( nDays / ( 100 * 365 ) ) -
-          ( nDays / ( 400 * 365 ) ) ) / 365;
-    nDays -= nYears * 365 + nYears / 4 - nYears / 100 + nYears / 400;
+    SAL_WARN_IF( static_cast<sal_Int64>(aTime) < 0, "tools.datetime",
+            "DateTime::CreateFromWin32FileDateTime - absurdly high value expected?");
 
-    sal_uInt16 nMonths = 0;
-    for( sal_Int64 nDaysCount = nDays; nDaysCount >= 0; )
-    {
-        nDays = nDaysCount;
-        nMonths ++;
-        nDaysCount -= Date(
-            1, nMonths, sal::static_int_cast< sal_uInt16 >(1601 + nYears) ).
-            GetDaysInMonth();
-    }
+    sal_uInt64 nDays = aTime / a100nPerDay;
 
-    Date _aDate(
-        (sal_uInt16)( nDays + 1 ), nMonths,
-        sal::static_int_cast< sal_uInt16 >(nYears + 1601) );
-    tools::Time _aTime(
-        static_cast<sal_uInt32>( ( aTime / ( a100nPerSecond * 60 * 60 ) ) % sal_Int64( 24 ) ),
-        static_cast<sal_uInt32>( ( aTime / ( a100nPerSecond * 60 ) )      % sal_Int64( 60 ) ),
-        static_cast<sal_uInt32>( ( aTime / ( a100nPerSecond ) )           % sal_Int64( 60 ) ),
-        static_cast<sal_uInt64>(aTime % a100nPerSecond) * 100
-    );
+    Date aDate(1,1,1601);
+    // (0xffffffffffffffff / a100nPerDay = 21350398) fits into long
+    // (0x7fffffff = 2147483647)
+    aDate += static_cast<long>(nDays);
 
-    return DateTime( _aDate, _aTime );
+    SAL_WARN_IF( aDate - Date(1,1,1601) != static_cast<long>(nDays), "tools.datetime",
+            "DateTime::CreateFromWin32FileDateTime - date truncated to max");
+
+    sal_uInt64 nNanos = (aTime - (nDays * a100nPerDay)) * 100;
+    return DateTime( aDate, tools::Time(
+                static_cast<sal_uInt32>((nNanos / tools::Time::nanoSecPerHour)   % sal_uInt64( 24 )),
+                static_cast<sal_uInt32>((nNanos / tools::Time::nanoSecPerMinute) % sal_uInt64( 60 )),
+                static_cast<sal_uInt32>((nNanos / tools::Time::nanoSecPerSec)    % sal_uInt64( 60 )),
+                static_cast<sal_uInt64>( nNanos % tools::Time::nanoSecPerSec)));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
