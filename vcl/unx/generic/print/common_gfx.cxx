@@ -30,9 +30,9 @@
 #include <vcl/strhelper.hxx>
 #include "printerinfomanager.hxx"
 
-#include "tools/debug.hxx"
 #include "tools/color.hxx"
 #include "tools/poly.hxx"
+#include "tools/stream.hxx"
 
 using namespace psp ;
 

@@ -20,10 +20,8 @@
 #ifndef INCLUDED_VCL_VCLEVENT_HXX
 #define INCLUDED_VCL_VCLEVENT_HXX
 
-#include <tools/link.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/vclptr.hxx>
-#include <vcl/window.hxx>
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -34,6 +32,11 @@ namespace com { namespace sun { namespace star {
         class XAccessible;
     }
 }}}
+
+namespace vcl
+{
+    class Window;
+}
 
 enum class VclEventId
 {

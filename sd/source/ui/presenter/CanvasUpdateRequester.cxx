@@ -20,6 +20,7 @@
 #include "CanvasUpdateRequester.hxx"
 #include <vcl/svapp.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <cppuhelper/weakref.hxx>
 #include <vector>
 
 using namespace ::com::sun::star;

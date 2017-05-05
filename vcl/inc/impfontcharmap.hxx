@@ -20,6 +20,9 @@
 #ifndef INCLUDED_VCL_INC_IMPFONTCHARMAP_HXX
 #define INCLUDED_VCL_INC_IMPFONTCHARMAP_HXX
 
+#include <tools/ref.hxx>
+#include <vcl/dllapi.h>
+
 class ImplFontCharMap;
 typedef tools::SvRef<ImplFontCharMap> ImplFontCharMapRef;
 

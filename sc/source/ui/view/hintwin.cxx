@@ -34,6 +34,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svtools/colorcfg.hxx>
+#include <vcl/settings.hxx>
 
 #define HINT_LINESPACE  2
 #define HINT_INDENT     3

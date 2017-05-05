@@ -23,6 +23,7 @@
 #include <osl/thread.h>
 #include <osl/process.h>
 #include <rtl/uri.hxx>
+#include <rtl/character.hxx>
 #include <osl/file.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>

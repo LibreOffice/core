@@ -10,6 +10,7 @@
 #include <rtftokenizer.hxx>
 #include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svx/dialogs.hrc>
 #include <rtl/strbuf.hxx>
 #include <rtfskipdestination.hxx>

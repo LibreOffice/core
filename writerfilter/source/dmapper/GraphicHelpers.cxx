@@ -30,6 +30,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <svx/svdstr.hrc>
 
 #include <iostream>
