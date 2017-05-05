@@ -3571,7 +3571,7 @@ sal_uInt32 ScDocument::GetNumberFormat( const ScRange& rRange ) const
     SCCOL nCol1 = rRange.aStart.Col(), nCol2 = rRange.aEnd.Col();
     SCROW nRow1 = rRange.aStart.Row(), nRow2 = rRange.aEnd.Row();
 
-    if (!ValidTab(nTab1) || !ValidTab(nTab2) || !maTabs[nTab1] || !maTabs[nTab2])
+    if (!TableExists(nTab1) || !TableExists(nTab2))
         return 0;
 
     sal_uInt32 nFormat = 0;
