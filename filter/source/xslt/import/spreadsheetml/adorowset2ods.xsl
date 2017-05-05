@@ -88,7 +88,8 @@
                 <xsl:attribute name="office:value"><xsl:value-of select="$thisCellValue"/></xsl:attribute>
               </xsl:when>
               <xsl:when test="$thisColType='date'">
-                <xsl:attribute name="office:date-value"><xsl:value-of select="$thisCellValue"/></xsl:attribute>
+                <!-- We need to convert '2017-04-06 00:40:40' to '2017-04-06T00:40:40', so replace space with 'T' -->
+                <xsl:attribute name="office:date-value"><xsl:value-of select="translate($thisCellValue,' ','T')"/></xsl:attribute>
               </xsl:when>
               <xsl:when test="$thisColType='time'">
                 <xsl:attribute name="office:time-value"><xsl:value-of select="$thisCellValue"/></xsl:attribute>
