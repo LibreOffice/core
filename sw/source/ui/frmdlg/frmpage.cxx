@@ -2965,7 +2965,7 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
             aTmpName1 = static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
 
-        OSL_ENSURE(m_pWrtSh, "keine Shell?");
+        OSL_ENSURE(m_pWrtSh, "no Shell?");
         if( m_bNew || aTmpName1.isEmpty() )
         {
             if (m_sDlgType == "PictureDialog")
