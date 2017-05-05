@@ -340,7 +340,7 @@ public:
 
     long BeginDrag( const Point *pPt, bool bProp );
     long Drag     ( const Point *pPt, bool bProp );
-    void EndDrag  ( const Point *pPt );
+    void EndDrag  ();
     void BreakDrag();
 
     /// Methods for status line.

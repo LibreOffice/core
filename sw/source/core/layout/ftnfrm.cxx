@@ -335,7 +335,7 @@ SwTwips SwFootnoteContFrame::GrowFrame( SwTwips nDist, bool bTst, bool )
          nReal = 0;
     if ( nGrow > 0 )
     {
-        SwNeighbourAdjust nAdjust = pBoss->NeighbourhoodAdjustment( this );
+        SwNeighbourAdjust nAdjust = pBoss->NeighbourhoodAdjustment();
         if( SwNeighbourAdjust::OnlyAdjust == nAdjust )
             nReal = AdjustNeighbourhood( nGrow, bTst );
         else
@@ -2492,7 +2492,7 @@ SwTwips SwFootnoteBossFrame::GetVarSpace() const
  * @see Grow()
  * @see Shrink()
  */
-SwNeighbourAdjust SwFootnoteBossFrame::NeighbourhoodAdjustment_( const SwFrame* ) const
+SwNeighbourAdjust SwFootnoteBossFrame::NeighbourhoodAdjustment_() const
 {
     SwNeighbourAdjust nRet = SwNeighbourAdjust::OnlyAdjust;
     if( GetUpper() && !GetUpper()->IsPageBodyFrame() )

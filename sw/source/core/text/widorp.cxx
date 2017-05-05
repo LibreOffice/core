@@ -262,7 +262,7 @@ WidowsAndOrphans::WidowsAndOrphans( SwTextFrame *pNewFrame, const SwTwips nRst,
         {
             // For compatibility reasons, we disable Keep/Widows/Orphans
             // inside splittable row frames:
-            if ( m_pFrame->GetNextCellLeaf( MAKEPAGE_NONE ) || m_pFrame->IsInFollowFlowRow() )
+            if ( m_pFrame->GetNextCellLeaf() || m_pFrame->IsInFollowFlowRow() )
             {
                 const SwFrame* pTmpFrame = m_pFrame->GetUpper();
                 while ( !pTmpFrame->IsRowFrame() )

@@ -1298,7 +1298,7 @@ bool SwFrame::IsMoveable( const SwLayoutFrame* _pLayoutFrame ) const
                   _pLayoutFrame->IsInFootnote() )
         {
             if ( _pLayoutFrame->IsInTab() && !IsTabFrame() &&
-                 ( !IsContentFrame() || !const_cast<SwFrame*>(this)->GetNextCellLeaf( MAKEPAGE_NONE ) ) )
+                 ( !IsContentFrame() || !const_cast<SwFrame*>(this)->GetNextCellLeaf() ) )
             {
                 bRetVal = false;
             }
@@ -1425,7 +1425,7 @@ void SwFrame::SetDirFlags( bool bVert )
     }
 }
 
-SwLayoutFrame* SwFrame::GetNextCellLeaf( MakePageType )
+SwLayoutFrame* SwFrame::GetNextCellLeaf()
 {
     SwFrame* pTmpFrame = this;
     while (pTmpFrame && !pTmpFrame->IsCellFrame())

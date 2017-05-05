@@ -823,7 +823,7 @@ void SwShellTableCursor::FillRects()
             }
 
             pEndFrame = pFrame;
-            pFrame = pFrame->GetNextCellLeaf( MAKEPAGE_NONE );
+            pFrame = pFrame->GetNextCellLeaf();
         }
     }
     if (pEndFrame)

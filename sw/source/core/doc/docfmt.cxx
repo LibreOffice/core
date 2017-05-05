@@ -854,11 +854,9 @@ SwFormat *SwDoc::MakeFrameFormat_(const OUString &rFormatName,
     return dynamic_cast<SwFormat*>(pFrameFormat);
 }
 
-// #i40550# - add parameter <bAuto> - not relevant
 SwCharFormat *SwDoc::MakeCharFormat( const OUString &rFormatName,
                                SwCharFormat *pDerivedFrom,
-                               bool bBroadcast,
-                               bool )
+                               bool bBroadcast )
 {
     SwCharFormat *pFormat = new SwCharFormat( GetAttrPool(), rFormatName, pDerivedFrom );
     mpCharFormatTable->push_back( pFormat );
@@ -883,18 +881,17 @@ SwCharFormat *SwDoc::MakeCharFormat( const OUString &rFormatName,
 
 SwFormat *SwDoc::MakeCharFormat_(const OUString &rFormatName,
                             SwFormat *pDerivedFrom,
-                            bool bBroadcast, bool bAuto)
+                            bool bBroadcast, bool /*bAuto*/)
 {
     SwCharFormat *pCharFormat = dynamic_cast<SwCharFormat*>(pDerivedFrom);
-    pCharFormat = MakeCharFormat( rFormatName, pCharFormat, bBroadcast, bAuto );
+    pCharFormat = MakeCharFormat( rFormatName, pCharFormat, bBroadcast );
     return dynamic_cast<SwFormat*>(pCharFormat);
 }
 
 /// Create the FormatCollections
 SwTextFormatColl* SwDoc::MakeTextFormatColl( const OUString &rFormatName,
                                      SwTextFormatColl *pDerivedFrom,
-                                     bool bBroadcast,
-                                     bool )
+                                     bool bBroadcast)
 {
     SwTextFormatColl *pFormatColl = new SwTextFormatColl( GetAttrPool(), rFormatName,
                                                 pDerivedFrom );
@@ -918,10 +915,10 @@ SwTextFormatColl* SwDoc::MakeTextFormatColl( const OUString &rFormatName,
 
 SwFormat *SwDoc::MakeTextFormatColl_(const OUString &rFormatName,
                             SwFormat *pDerivedFrom,
-                            bool bBroadcast, bool bAuto)
+                            bool bBroadcast, bool /*bAuto*/)
 {
     SwTextFormatColl *pTextFormatColl = dynamic_cast<SwTextFormatColl*>(pDerivedFrom);
-    pTextFormatColl = MakeTextFormatColl( rFormatName, pTextFormatColl, bBroadcast, bAuto );
+    pTextFormatColl = MakeTextFormatColl( rFormatName, pTextFormatColl, bBroadcast );
     return dynamic_cast<SwFormat*>(pTextFormatColl);
 }
 

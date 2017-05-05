@@ -460,7 +460,7 @@ void SwContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 }
 
 
-SwFlyDrawContact::SwFlyDrawContact( SwFlyFrameFormat *pToRegisterIn, SdrModel * )
+SwFlyDrawContact::SwFlyDrawContact( SwFlyFrameFormat *pToRegisterIn )
     : SwContact( pToRegisterIn )
     , mpMasterObj(new SwFlyDrawObj)
 {

@@ -46,8 +46,7 @@ using namespace ::com::sun::star::i18n;
  *   - String - the orig text
  *   - SwFormatRuby - the ruby attribute
  */
-sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
-                            sal_uInt16 nMode )
+sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList )
 {
     const SwPaM *_pStartCursor = rPam.GetNext(),
                 *_pStartCursor2 = _pStartCursor;
@@ -67,7 +66,7 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
                     aPam.SetMark();
                     *aPam.GetMark() = *pEnd;
                 }
-                if( SelectNextRubyChars( aPam, *pNew, nMode ))
+                if( SelectNextRubyChars( aPam, *pNew ))
                 {
                     rList.push_back(std::move(pNew));
                     aPam.DeleteMark();
@@ -91,8 +90,7 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
     return rList.size();
 }
 
-void SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
-                            sal_uInt16 nMode )
+void SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList )
 {
     GetIDocumentUndoRedo().StartUndo( SwUndoId::SETRUBYATTR, nullptr );
     std::set<sal_uInt16> aDelArr;
@@ -119,7 +117,7 @@ void SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                     aPam.SetMark();
                     *aPam.GetMark() = *pEnd;
                 }
-                if( SelectNextRubyChars( aPam, aCheckEntry, nMode ))
+                if( SelectNextRubyChars( aPam, aCheckEntry ))
                 {
                     const SwRubyListEntry* pEntry = rList[ nListEntry++ ].get();
                     if( aCheckEntry.GetRubyAttr() != pEntry->GetRubyAttr() )
@@ -178,7 +176,7 @@ void SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
     GetIDocumentUndoRedo().EndUndo( SwUndoId::SETRUBYATTR, nullptr );
 }
 
-bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt16 )
+bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry )
 {
     // Point must be the startposition, Mark is optional the end position
     SwPosition* pPos = rPam.GetPoint();

@@ -2856,9 +2856,8 @@ SwFlyFrameFormat::~SwFlyFrameFormat()
 
 SwFlyDrawContact* SwFlyFrameFormat::GetOrCreateContact()
 {
-    IDocumentDrawModelAccess& rIDDMA = getIDocumentDrawModelAccess();
     if(!m_pContact)
-        m_pContact.reset(new SwFlyDrawContact(this, rIDDMA.GetOrCreateDrawModel()));
+        m_pContact.reset(new SwFlyDrawContact(this));
     return m_pContact.get();
 }
 
