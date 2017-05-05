@@ -335,7 +335,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText
     return n;
 }
 
-sal_uLong SwXMLTextBlocks::PutBlockText( const OUString& rShort, const OUString& ,
+sal_uLong SwXMLTextBlocks::PutBlockText( const OUString& rShort,
                                          const OUString& rText,  const OUString& rPackageName )
 {
     GetIndex ( rShort );

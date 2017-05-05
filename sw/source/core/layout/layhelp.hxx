@@ -167,9 +167,9 @@ public:
     /// Open a record of type "nType"
     bool OpenRec( sal_uInt8 nType );
 
-    /// Close a record of type "nType". This skips any unread data that
+    /// Close a record. This skips any unread data that
     /// remains in the record.
-    bool CloseRec( sal_uInt8 nType );
+    bool CloseRec();
 
     /// Return the number of bytes contained in the current record that
     /// haven't been read by now.
