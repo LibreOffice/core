@@ -1647,7 +1647,7 @@ SwLayoutFrame *SwFrame::GetNextSctLeaf( MakePageType eMakePage )
 }
 
 /// Returns the preceding layout sheet where the frame can be moved into
-SwLayoutFrame *SwFrame::GetPrevSctLeaf( MakePageType )
+SwLayoutFrame *SwFrame::GetPrevSctLeaf()
 {
     PROTOCOL_ENTER( this, PROT::Leaf, DbgAction::PrevSect, GetUpper()->FindSctFrame() )
 

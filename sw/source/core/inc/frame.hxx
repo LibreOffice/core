@@ -361,10 +361,10 @@ public:
     SwLayoutFrame *GetNextFootnoteLeaf( MakePageType eMakePage );
     SwLayoutFrame *GetNextSctLeaf( MakePageType eMakePage );
     SwLayoutFrame *GetNextCellLeaf();
-    SwLayoutFrame *GetPrevLeaf   ( MakePageType eMakeFootnote );
+    SwLayoutFrame *GetPrevLeaf   ();
     SwLayoutFrame *GetPrevFootnoteLeaf( MakePageType eMakeFootnote );
-    SwLayoutFrame *GetPrevSctLeaf( MakePageType eMakeFootnote );
-    SwLayoutFrame *GetPrevCellLeaf( MakePageType eMakeFootnote );
+    SwLayoutFrame *GetPrevSctLeaf();
+    SwLayoutFrame *GetPrevCellLeaf();
     const SwLayoutFrame *GetLeaf ( MakePageType eMakePage, bool bFwd,
                                  const SwFrame *pAnch ) const;
 

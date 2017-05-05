@@ -246,7 +246,7 @@ void SwLayouter::InsertEndnotes( SwSectionFrame* pSect )
     mpEndnoter->InsertEndnotes();
 }
 
-void SwLayouter::LoopControl( SwPageFrame* pPage, sal_uInt8 )
+void SwLayouter::LoopControl( SwPageFrame* pPage )
 {
     OSL_ENSURE( mpLooping, "Looping: Lost control" );
     mpLooping->Control( pPage );
