@@ -149,7 +149,7 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview )
             }
             else
             {
-                DebugHelper::runtimeexception( ERRCODE_BASIC_NO_ACTIVE_OBJECT, OUString() );
+                DebugHelper::runtimeexception( ERRCODE_BASIC_NO_ACTIVE_OBJECT );
             }
             break;
         }
@@ -164,7 +164,7 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview )
             }
             else
             {
-                DebugHelper::runtimeexception( ERRCODE_BASIC_NO_ACTIVE_OBJECT, OUString() );
+                DebugHelper::runtimeexception( ERRCODE_BASIC_NO_ACTIVE_OBJECT );
             }
             break;
         }
@@ -236,7 +236,7 @@ SwVbaView::setType( ::sal_Int32 _type )
             break;
         }
         default:
-            DebugHelper::runtimeexception( ERRCODE_BASIC_NOT_IMPLEMENTED, OUString() );
+            DebugHelper::runtimeexception( ERRCODE_BASIC_NOT_IMPLEMENTED );
 
     }
 }

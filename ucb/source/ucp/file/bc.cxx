@@ -311,7 +311,7 @@ BaseContent::execute( const Command& aCommand,
 
     if (aCommand.Name == "getPropertySetInfo")  // No exceptions
     {
-        aAny <<= getPropertySetInfo( CommandId );
+        aAny <<= getPropertySetInfo();
     }
     else if (aCommand.Name == "getCommandInfo")  // no exceptions
     {
@@ -713,8 +713,7 @@ BaseContent::getCommandInfo()
 
 
 Reference< beans::XPropertySetInfo > SAL_CALL
-BaseContent::getPropertySetInfo(
-    sal_Int32 )
+BaseContent::getPropertySetInfo()
 {
     if( m_nState & Deleted )
         return Reference< beans::XPropertySetInfo >();

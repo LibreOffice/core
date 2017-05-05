@@ -379,7 +379,7 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
 
 // XEventListener
 
-void SortedDynamicResultSet::impl_disposing( const EventObject& )
+void SortedDynamicResultSet::impl_disposing()
 {
     mxListener.clear();
     mxOriginal.clear();
@@ -527,12 +527,12 @@ SortedDynamicResultSetListener::~SortedDynamicResultSetListener()
 // XEventListener ( base of XDynamicResultSetListener )
 
 void SAL_CALL
-SortedDynamicResultSetListener::disposing( const EventObject& Source )
+SortedDynamicResultSetListener::disposing( const EventObject& /*Source*/ )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
     if ( mpOwner )
-        mpOwner->impl_disposing( Source );
+        mpOwner->impl_disposing();
 }
 
 

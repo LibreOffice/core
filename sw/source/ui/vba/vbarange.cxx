@@ -270,7 +270,7 @@ void SwVbaRange::GetStyleInfo(OUString& aStyleName, OUString& aStyleType )
     }
     if( aStyleType.isEmpty() )
     {
-        DebugHelper::runtimeexception( ERRCODE_BASIC_INTERNAL_ERROR, OUString() );
+        DebugHelper::runtimeexception( ERRCODE_BASIC_INTERNAL_ERROR );
     }
 }
 

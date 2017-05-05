@@ -878,7 +878,7 @@ OUString ScVbaApplication::getOfficePath( const OUString& _sPathType )
     }
     catch (const uno::Exception&)
     {
-        DebugHelper::runtimeexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
+        DebugHelper::runtimeexception(ERRCODE_BASIC_METHOD_FAILED);
     }
     return sRetPath;
 }

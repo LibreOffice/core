@@ -157,7 +157,7 @@ sheet::TablePageBreakData RangePageBreaks::getTablePageBreakData( sal_Int32 nAPI
         aTablePageBreakData = aTablePageBreakDataList[i];
         sal_Int32 nPos = aTablePageBreakData.Position;
         if( nPos > nUsedEnd + 1 )
-            DebugHelper::runtimeexception(ERRCODE_BASIC_METHOD_FAILED, OUString());
+            DebugHelper::runtimeexception(ERRCODE_BASIC_METHOD_FAILED);
         index++;
         if( index == nAPIItemIndex )
             return aTablePageBreakData;

@@ -808,7 +808,7 @@ ScVbaWindow::setView( const uno::Any& _view)
             nSlot = FID_PAGEBREAKMODE;
             break;
         default:
-            DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_PARAMETER, OUString() );
+            DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_PARAMETER);
     }
     // !! TODO !! get view shell from controller
     ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );

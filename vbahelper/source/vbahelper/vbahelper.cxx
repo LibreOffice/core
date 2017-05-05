@@ -1061,7 +1061,7 @@ void DebugHelper::basicexception( const css::uno::Exception& ex )
     basicexception( OUString(), ex, ERRCODE_BASIC_INTERNAL_ERROR, OUString() );
 }
 
-void DebugHelper::runtimeexception( int err,  const OUString& /*additionalArgument*/ )
+void DebugHelper::runtimeexception( int err )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
     throw css::uno::RuntimeException( css::uno::Exception().Message + " " + OUString::number(err),

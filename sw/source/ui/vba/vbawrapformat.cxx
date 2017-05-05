@@ -79,7 +79,7 @@ void SwVbaWrapFormat::makeWrap()
             }
             default:
             {
-                DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_ARGUMENT, OUString());
+                DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_ARGUMENT);
             }
         }
     }

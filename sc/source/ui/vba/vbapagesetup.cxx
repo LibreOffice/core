@@ -198,7 +198,7 @@ void SAL_CALL ScVbaPageSetup::setZoom( const uno::Any& zoom)
             zoom >>= aValue;
             if( aValue )
             {
-                DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_PARAMETER, OUString() );
+                DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_PARAMETER);
             }
         }
         else
@@ -206,7 +206,7 @@ void SAL_CALL ScVbaPageSetup::setZoom( const uno::Any& zoom)
             zoom >>= pageScale;
             if(( pageScale < ZOOM_IN )||( pageScale > ZOOM_MAX ))
             {
-                DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_PARAMETER, OUString() );
+                DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_PARAMETER);
             }
         }
 
@@ -220,7 +220,7 @@ void SAL_CALL ScVbaPageSetup::setZoom( const uno::Any& zoom)
     {
         if( pageScale == 0 )
         {
-            DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_PARAMETER, OUString() );
+            DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_PARAMETER);
         }
     }
     catch (const uno::Exception&)
@@ -476,7 +476,7 @@ void SAL_CALL ScVbaPageSetup::setOrder(sal_Int32 order)
             bOrder = false;
             break;
         default:
-            DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_PARAMETER, OUString() );
+            DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_PARAMETER);
     }
 
     try

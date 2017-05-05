@@ -47,7 +47,7 @@ namespace ftp {
         void SetMonth(sal_uInt16 month) { Month = month; }
         void SetDay(sal_uInt16 day) { Day = day; }
         // Only zero allowed and used for time-argument
-        void SetTime(sal_uInt16) { Hours = 0; Minutes = 0; Seconds = 0; NanoSeconds = 0; }
+        void SetTime() { Hours = 0; Minutes = 0; Seconds = 0; NanoSeconds = 0; }
         void SetHour(sal_uInt16 hours) { Hours = hours; }
         void SetMin(sal_uInt16 minutes) { Minutes = minutes; }
         void SetSec(sal_uInt16 seconds) { Seconds = seconds; }

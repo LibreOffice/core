@@ -343,18 +343,18 @@ ScVbaShapes::AddShape( sal_Int32 _nType, sal_Int32 _nLeft, sal_Int32 _nTop, sal_
 }
 
 uno::Any SAL_CALL
-ScVbaShapes::AddTextbox( sal_Int32 _nOrientation, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight )
+ScVbaShapes::AddTextbox( sal_Int32 /*_nOrientation*/, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight )
 {
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xModel, uno::UNO_QUERY_THROW );
     if( xServiceInfo->supportsService( "com.sun.star.text.TextDocument" ) )
     {
-        return AddTextboxInWriter( _nOrientation, _nLeft, _nTop, _nWidth, _nHeight );
+        return AddTextboxInWriter( _nLeft, _nTop, _nWidth, _nHeight );
     }
     throw uno::RuntimeException( "Not implemented" );
 }
 
 uno::Any
-ScVbaShapes::AddTextboxInWriter( sal_Int32 /*_nOrientation*/, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight )
+ScVbaShapes::AddTextboxInWriter( sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight )
 {
     OUString sCreateShapeName( "com.sun.star.drawing.TextShape" );
     sal_Int32 nXPos = Millimeter::getInHundredthsOfOneMillimeter( _nLeft );

@@ -271,7 +271,7 @@ public:
     static void basicexception( const css::uno::Exception& ex );
 
     /// @throws css::script::BasicErrorException
-    static void runtimeexception( int err,  const OUString& additionalArgument );
+    static void runtimeexception( int err );
 };
 
     } // vba
