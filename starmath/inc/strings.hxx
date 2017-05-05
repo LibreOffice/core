@@ -265,8 +265,6 @@
 #define RID_XNOTPRECEDESY   "<?> nprec <?> "
 #define RID_XNOTSUCCEEDSY   "<?> nsucc <?> "
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
