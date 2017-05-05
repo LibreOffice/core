@@ -661,7 +661,15 @@ bool UndoManager::Repeat(::sw::RepeatContext & rContext,
 
     OUString const comment(pRepeatAction->GetComment());
     OUString const rcomment(pRepeatAction->GetRepeatComment(rContext));
-    SwUndoId const nId(static_cast<const SwUndo*>(pRepeatAction)->GetId());
+    auto const*const pListAction(dynamic_cast<SfxListUndoAction *>(pRepeatAction));
+    auto const*const pSwAction(dynamic_cast<SwUndo *>(pRepeatAction));
+    if (!pListAction && !pSwAction)
+    {
+        return false;
+    }
+    SwUndoId const nId((pSwAction)
+            ? pSwAction->GetId()
+            : static_cast<SwUndoId>(pListAction->GetId()));
     if (DoesUndo())
     {
         ViewShellId nViewShellId(-1);
