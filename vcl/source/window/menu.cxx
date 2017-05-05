@@ -1289,7 +1289,7 @@ Size Menu::ImplGetNativeCheckAndRadioSize(vcl::RenderContext& rRenderContext, lo
         if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::MenuItemCheckMark))
         {
             if (rRenderContext.GetNativeControlRegion(ControlType::MenuPopup, ControlPart::MenuItemCheckMark,
-                                              aCtrlRegion, ControlState::ENABLED, aVal, OUString(),
+                                              aCtrlRegion, ControlState::ENABLED, aVal,
                                               aNativeBounds, aNativeContent))
             {
                 rCheckHeight = aNativeBounds.GetHeight();
@@ -1299,7 +1299,7 @@ Size Menu::ImplGetNativeCheckAndRadioSize(vcl::RenderContext& rRenderContext, lo
         if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::MenuItemRadioMark))
         {
             if (rRenderContext.GetNativeControlRegion(ControlType::MenuPopup, ControlPart::MenuItemRadioMark,
-                                                      aCtrlRegion, ControlState::ENABLED, aVal, OUString(),
+                                                      aCtrlRegion, ControlState::ENABLED, aVal,
                                                       aNativeBounds, aNativeContent))
             {
                 rRadioHeight = aNativeBounds.GetHeight();
@@ -1320,7 +1320,7 @@ bool Menu::ImplGetNativeSubmenuArrowSize(vcl::RenderContext& rRenderContext, Siz
     {
         if (rRenderContext.GetNativeControlRegion(ControlType::MenuPopup, ControlPart::SubmenuArrow,
                                                   aCtrlRegion, ControlState::ENABLED,
-                                                  aVal, OUString(), aNativeBounds, aNativeContent))
+                                                  aVal, aNativeBounds, aNativeContent))
         {
             Size aSize(aNativeContent.GetWidth(), aNativeContent.GetHeight());
             rArrowSize = aSize;
@@ -1566,7 +1566,6 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
                                                  aCtrlRegion,
                                                  ControlState::ENABLED,
                                                  aVal,
-                                                 OUString(),
                                                  aNativeBounds,
                                                  aNativeContent )
             )

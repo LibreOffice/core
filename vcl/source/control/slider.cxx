@@ -140,7 +140,7 @@ void Slider::ImplUpdateRects( bool bUpdate )
             const tools::Rectangle aControlRegion( tools::Rectangle( Point(0,0), Size( SLIDER_THUMB_SIZE, 10 ) ) );
             tools::Rectangle aThumbBounds, aThumbContent;
             if ( GetNativeControlRegion( ControlType::Slider, ControlPart::ThumbHorz,
-                                         aControlRegion, ControlState::NONE, ImplControlValue(), OUString(),
+                                         aControlRegion, ControlState::NONE, ImplControlValue(),
                                          aThumbBounds, aThumbContent ) )
             {
                 maThumbRect.Left() = mnThumbPixPos - aThumbBounds.GetWidth()/2;
@@ -174,7 +174,7 @@ void Slider::ImplUpdateRects( bool bUpdate )
             const tools::Rectangle aControlRegion( tools::Rectangle( Point(0,0), Size( 10, SLIDER_THUMB_SIZE ) ) );
             tools::Rectangle aThumbBounds, aThumbContent;
             if ( GetNativeControlRegion( ControlType::Slider, ControlPart::ThumbVert,
-                                         aControlRegion, ControlState::NONE, ImplControlValue(), OUString(),
+                                         aControlRegion, ControlState::NONE, ImplControlValue(),
                                          aThumbBounds, aThumbContent ) )
             {
                 maThumbRect.Top() = mnThumbPixPos - aThumbBounds.GetHeight()/2;

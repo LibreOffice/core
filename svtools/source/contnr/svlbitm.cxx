@@ -351,7 +351,6 @@ void SvLBoxButton::ImplAdjustBoxSize(Size& io_rSize, ControlType i_eType, vcl::R
                                                             aCtrlRegion,
                                                             nState,
                                                             aControlValue,
-                                                            OUString(),
                                                             aNativeBounds,
                                                             aNativeContent );
         if( bNativeOK )

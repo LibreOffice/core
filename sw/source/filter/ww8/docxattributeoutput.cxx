@@ -181,7 +181,7 @@ class FFDataWriterHelper
     }
 public:
     explicit FFDataWriterHelper( const ::sax_fastparser::FSHelperPtr& rSerializer ) : m_pSerializer( rSerializer ){}
-    void WriteFormCheckbox( const OUString& rName, const OUString& rDefault, bool bChecked )
+    void WriteFormCheckbox( const OUString& rName, bool bChecked )
     {
        writeCommonStart( rName );
        // Checkbox specific bits
@@ -190,28 +190,14 @@ public:
        // #TODO check if this defaulted
        m_pSerializer->startElementNS( XML_w, XML_sizeAuto, FSEND );
        m_pSerializer->endElementNS( XML_w, XML_sizeAuto );
-       if ( !rDefault.isEmpty() )
-       {
-           m_pSerializer->singleElementNS( XML_w, XML_default,
-               FSNS( XML_w, XML_val ),
-                   OUStringToOString( rDefault, RTL_TEXTENCODING_UTF8 ).getStr(), FSEND );
-       }
        if ( bChecked )
             m_pSerializer->singleElementNS( XML_w, XML_checked, FSEND );
         m_pSerializer->endElementNS( XML_w, XML_checkBox );
        writeFinish();
     }
-    void WriteFormText(  const OUString& rName, const OUString& rDefault )
+    void WriteFormText(  const OUString& rName )
     {
        writeCommonStart( rName );
-       if ( !rDefault.isEmpty() )
-       {
-           m_pSerializer->startElementNS( XML_w, XML_textInput, FSEND );
-           m_pSerializer->singleElementNS( XML_w, XML_default,
-               FSNS( XML_w, XML_val ),
-               OUStringToOString( rDefault, RTL_TEXTENCODING_UTF8 ).getStr(), FSEND );
-           m_pSerializer->endElementNS( XML_w, XML_textInput );
-       }
        writeFinish();
     }
 };
@@ -1507,13 +1493,13 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
             bChecked = true;
 
         FFDataWriterHelper ffdataOut( m_pSerializer );
-        ffdataOut.WriteFormCheckbox( sName, OUString(), bChecked );
+        ffdataOut.WriteFormCheckbox( sName, bChecked );
     }
     else if ( rInfos.eType == ww::eFORMTEXT )
     {
         FieldMarkParamsHelper params( rFieldmark );
         FFDataWriterHelper ffdataOut( m_pSerializer );
-        ffdataOut.WriteFormText( params.getName(), OUString() );
+        ffdataOut.WriteFormText( params.getName() );
     }
 }
 

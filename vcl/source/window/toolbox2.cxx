@@ -794,7 +794,7 @@ sal_uInt16 ToolBox::GetItemId(const OUString &rCommand) const
     return 0;
 }
 
-Point ToolBox::ImplGetPopupPosition( const tools::Rectangle& rRect, const Size& rSize ) const
+Point ToolBox::ImplGetPopupPosition( const tools::Rectangle& rRect ) const
 {
     Point aPos;
     if( !rRect.IsEmpty() )
@@ -813,32 +813,28 @@ Point ToolBox::ImplGetPopupPosition( const tools::Rectangle& rRect, const Size& 
                 aPos = rRect.BottomLeft();
                 aPos.Y()++;
                 devPos = OutputToAbsoluteScreenPixel( aPos );
-                if( devPos.Y() + rSize.Height() >= aScreen.Bottom() )
-                    aPos.Y() = rRect.Top() - rSize.Height();
+                if( devPos.Y() >= aScreen.Bottom() )
+                    aPos.Y() = rRect.Top();
                 break;
             case WindowAlign::Bottom:
                 aPos = rRect.TopLeft();
                 aPos.Y()--;
                 devPos = OutputToAbsoluteScreenPixel( aPos );
-                if( devPos.Y() - rSize.Height() > aScreen.Top() )
-                    aPos.Y() -= rSize.Height();
-                else
+                if( devPos.Y() <= aScreen.Top() )
                     aPos.Y() = rRect.Bottom();
                 break;
             case WindowAlign::Left:
                 aPos = rRect.TopRight();
                 aPos.X()++;
                 devPos = OutputToAbsoluteScreenPixel( aPos );
-                if( devPos.X() + rSize.Width() >= aScreen.Right() )
-                    aPos.X() = rRect.Left() - rSize.Width();
+                if( devPos.X() >= aScreen.Right() )
+                    aPos.X() = rRect.Left();
                 break;
             case WindowAlign::Right:
                 aPos = rRect.TopLeft();
                 aPos.X()--;
                 devPos = OutputToAbsoluteScreenPixel( aPos );
-                if( devPos.X() - rSize.Width() > aScreen.Left() )
-                    aPos.X() -= rSize.Width();
-                else
+                if( devPos.X() <= aScreen.Left() )
                     aPos.X() = rRect.Right();
                 break;
             default:
@@ -1701,7 +1697,7 @@ IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu, void*, void)
             }
         }
 
-        sal_uInt16 uId = GetMenu()->Execute( pWin, tools::Rectangle( ImplGetPopupPosition( aMenuRect, Size() ), Size() ),
+        sal_uInt16 uId = GetMenu()->Execute( pWin, tools::Rectangle( ImplGetPopupPosition( aMenuRect ), Size() ),
                                 PopupMenuFlags::ExecuteDown | PopupMenuFlags::NoMouseUpClose );
 
         if ( pWin->IsDisposed() )

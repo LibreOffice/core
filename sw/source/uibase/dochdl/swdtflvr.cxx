@@ -3656,7 +3656,6 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
         ::sw::mark::IMark* pMark = rSh.SetBookmark(
             vcl::KeyCode(),
             OUString(),
-            OUString(),
             IDocumentMarkAccess::MarkType::DDE_BOOKMARK);
         if(pMark)
         {

@@ -1093,7 +1093,7 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
     while ( nPos >= 0 );
 }
 
-void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPrintUIOptions, tools::Rectangle aOutRect, Point aZeroPoint )
+void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPrintUIOptions, tools::Rectangle aOutRect )
 {
     const bool bIsPrintTitle = rPrintUIOptions.getBoolValue( PRTUIOPT_TITLE_ROW, true );
     const bool bIsPrintFrame = rPrintUIOptions.getBoolValue( PRTUIOPT_BORDER, true );
@@ -1207,7 +1207,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
                 nZ -= 10;
                 Fraction aFraction (std::max(MINZOOM, std::min(MAXZOOM, nZ)), 100);
 
-                OutputMapMode = MapMode(MapUnit::Map100thMM, aZeroPoint, aFraction, aFraction);
+                OutputMapMode = MapMode(MapUnit::Map100thMM, Point(), aFraction, aFraction);
             }
             else
                 OutputMapMode = MapMode(MapUnit::Map100thMM);
@@ -1217,7 +1217,7 @@ void SmViewShell::Impl_Print(OutputDevice &rOutDev, const SmPrintUIOptions &rPri
         {
             Fraction aFraction( nZoomFactor, 100 );
 
-            OutputMapMode = MapMode(MapUnit::Map100thMM, aZeroPoint, aFraction, aFraction);
+            OutputMapMode = MapMode(MapUnit::Map100thMM, Point(), aFraction, aFraction);
             break;
         }
     }

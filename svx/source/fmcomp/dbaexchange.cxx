@@ -44,13 +44,12 @@ namespace svx
     using namespace ::comphelper;
 
     OColumnTransferable::OColumnTransferable(const OUString& _rDatasource
-                                            ,const OUString& _rConnectionResource
                                             ,const OUString& _rCommand
                                             ,const OUString& _rFieldName
                                             ,ColumnTransferFormatFlags _nFormats)
         :m_nFormatFlags(_nFormats)
     {
-        implConstruct(_rDatasource,_rConnectionResource, css::sdb::CommandType::TABLE, _rCommand, _rFieldName);
+        implConstruct(_rDatasource,OUString(), css::sdb::CommandType::TABLE, _rCommand, _rFieldName);
     }
 
 
@@ -371,23 +370,21 @@ namespace svx
 
     ODataAccessObjectTransferable::ODataAccessObjectTransferable(
             const OUString&  _rDatasource
-            ,const OUString& _rConnectionResource
-            ,const sal_Int32        _nCommandType
+            ,const sal_Int32  _nCommandType
             ,const OUString& _rCommand
         )
     {
-        construct(_rDatasource,_rConnectionResource,_nCommandType,_rCommand,nullptr,(CommandType::COMMAND == _nCommandType),_rCommand);
+        construct(_rDatasource,OUString(),_nCommandType,_rCommand,nullptr,(CommandType::COMMAND == _nCommandType),_rCommand);
     }
 
     ODataAccessObjectTransferable::ODataAccessObjectTransferable(
                     const OUString&  _rDatasource
-                    ,const OUString& _rConnectionResource
-                    ,const sal_Int32        _nCommandType
+                    ,const sal_Int32 _nCommandType
                     ,const OUString& _rCommand
                     ,const Reference< XConnection >& _rxConnection)
     {
         OSL_ENSURE(_rxConnection.is(),"Wrong ctor used.!");
-        construct(_rDatasource,_rConnectionResource,_nCommandType,_rCommand,_rxConnection,(CommandType::COMMAND == _nCommandType),_rCommand);
+        construct(_rDatasource,OUString(),_nCommandType,_rCommand,_rxConnection,(CommandType::COMMAND == _nCommandType),_rCommand);
     }
 
 

@@ -70,9 +70,8 @@ namespace sw { namespace mark
 
     CrossRefHeadingBookmark::CrossRefHeadingBookmark(const SwPaM& rPaM,
         const vcl::KeyCode& rCode,
-        const OUString& rName,
-        const OUString& rShortName)
-        : CrossRefBookmark(rPaM, rCode, rName, rShortName, IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc")
+        const OUString& rName)
+        : CrossRefBookmark(rPaM, rCode, rName, OUString(), IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc")
     { }
 
     bool CrossRefHeadingBookmark::IsLegalName(const OUString& rName)
@@ -82,9 +81,8 @@ namespace sw { namespace mark
 
     CrossRefNumItemBookmark::CrossRefNumItemBookmark(const SwPaM& rPaM,
         const vcl::KeyCode& rCode,
-        const OUString& rName,
-        const OUString& rShortName)
-        : CrossRefBookmark(rPaM, rCode, rName, rShortName, CrossRefNumItemBookmark_NamePrefix)
+        const OUString& rName)
+        : CrossRefBookmark(rPaM, rCode, rName, OUString(), CrossRefNumItemBookmark_NamePrefix)
     { }
 
     bool CrossRefNumItemBookmark::IsLegalName(const OUString& rName)

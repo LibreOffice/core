@@ -204,7 +204,7 @@ private:
     SAL_DLLPRIVATE void            ImplUpdateInputEnable();
     SAL_DLLPRIVATE void            ImplFillLayoutData();
     SAL_DLLPRIVATE bool            ImplHasClippedItems();
-    SAL_DLLPRIVATE Point           ImplGetPopupPosition( const tools::Rectangle& rRect, const Size& rSize ) const;
+    SAL_DLLPRIVATE Point           ImplGetPopupPosition( const tools::Rectangle& rRect ) const;
     SAL_DLLPRIVATE bool            ImplIsFloatingMode() const;
     SAL_DLLPRIVATE bool            ImplIsInPopupMode() const;
     SAL_DLLPRIVATE const OUString& ImplGetHelpText( sal_uInt16 nItemId ) const;

@@ -306,7 +306,7 @@ public:
     void GetState(SfxItemSet &);
 
     void Impl_Print( OutputDevice &rOutDev, const SmPrintUIOptions &rPrintUIOptions,
-            tools::Rectangle aOutRect, Point aZeroPoint );
+            tools::Rectangle aOutRect );
 
     /** Set bInsertIntoEditWindow so we know where to insert
      *

@@ -2318,9 +2318,9 @@ namespace svt { namespace table
     }
 
 
-    void TableControl_Impl::commitAccessibleEvent( sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue )
+    void TableControl_Impl::commitAccessibleEvent( sal_Int16 const i_eventID )
     {
-        impl_commitAccessibleEvent( i_eventID, i_newValue, i_oldValue );
+        impl_commitAccessibleEvent( i_eventID, Any(), Any() );
     }
 
 

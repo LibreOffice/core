@@ -60,7 +60,6 @@ class PresenterTheme
 public:
     PresenterTheme (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,
-        const OUString& rsThemeName,
         const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
     ~PresenterTheme();
 

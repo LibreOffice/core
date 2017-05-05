@@ -1388,7 +1388,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         {
             xStm->Seek( 0 );
             // mba: clipboard always must contain absolute URLs (could be from alien source)
-            bReturn = SdrView::Paste( *xStm, OUString(), EE_FORMAT_HTML, maDropPos, pPage, nPasteOptions );
+            bReturn = SdrView::Paste( *xStm, EE_FORMAT_HTML, maDropPos, pPage, nPasteOptions );
         }
     }
 
@@ -1417,7 +1417,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             if( !bReturn )
                 // mba: clipboard always must contain absolute URLs (could be from alien source)
-                bReturn = SdrView::Paste( *xStm, OUString(), EE_FORMAT_BIN, maDropPos, pPage, nPasteOptions );
+                bReturn = SdrView::Paste( *xStm, EE_FORMAT_BIN, maDropPos, pPage, nPasteOptions );
         }
     }
 
@@ -1453,7 +1453,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 if( !bReturn )
                     // mba: clipboard always must contain absolute URLs (could be from alien source)
-                    bReturn = SdrView::Paste( *xStm, OUString(), EE_FORMAT_RTF, maDropPos, pPage, nPasteOptions );
+                    bReturn = SdrView::Paste( *xStm, EE_FORMAT_RTF, maDropPos, pPage, nPasteOptions );
             }
         }
     }

@@ -511,7 +511,7 @@ void SwNavigationPI::MakeMark()
     if(vNavMarkNames.size() == MAX_MARKS)
         pMarkAccess->deleteMark(pMarkAccess->findMark(vNavMarkNames[m_nAutoMarkIdx]));
 
-    rSh.SetBookmark(vcl::KeyCode(), OUString(), OUString(), IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER);
+    rSh.SetBookmark(vcl::KeyCode(), OUString(), IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER);
     SwView::SetActMark( m_nAutoMarkIdx );
 
     if(++m_nAutoMarkIdx == MAX_MARKS)

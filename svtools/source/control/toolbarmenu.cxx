@@ -525,7 +525,7 @@ static long ImplGetNativeCheckAndRadioSize(vcl::RenderContext& rRenderContext, l
     if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::MenuItemCheckMark))
     {
         if (rRenderContext.GetNativeControlRegion(ControlType::MenuPopup, ControlPart::MenuItemCheckMark,
-                                                  aCtrlRegion, ControlState::ENABLED, aVal, OUString(),
+                                                  aCtrlRegion, ControlState::ENABLED, aVal,
                                                   aNativeBounds, aNativeContent)
         )
         {
@@ -536,7 +536,7 @@ static long ImplGetNativeCheckAndRadioSize(vcl::RenderContext& rRenderContext, l
     if (rRenderContext.IsNativeControlSupported(ControlType::MenuPopup, ControlPart::MenuItemRadioMark))
     {
         if (rRenderContext.GetNativeControlRegion(ControlType::MenuPopup, ControlPart::MenuItemRadioMark,
-                                          aCtrlRegion, ControlState::ENABLED, aVal, OUString(),
+                                          aCtrlRegion, ControlState::ENABLED, aVal,
                                           aNativeBounds, aNativeContent)
         )
         {

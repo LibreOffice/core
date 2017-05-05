@@ -114,7 +114,7 @@ bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window* pW
             if (!ImplGetSVData()->maNWFData.mbCanDrawWidgetAnySize &&
                 pContext->GetNativeControlRegion(ControlType::Spinbox, ControlPart::Entire,
                                                 aNatRgn, ControlState::NONE, rSpinbuttonValue,
-                                                OUString(), aBound, aContent))
+                                                aBound, aContent))
             {
                 aSize = aContent.GetSize();
             }
@@ -658,9 +658,9 @@ void SpinField::ImplCalcButtonAreas(OutputDevice* pDev, const Size& rOutSz, tool
 
             bNativeRegionOK =
                 pWin->GetNativeControlRegion(ControlType::Spinbox, ControlPart::ButtonUp,
-                    aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContentUp) &&
+                    aArea, ControlState::NONE, aControlValue, aBound, aContentUp) &&
                 pWin->GetNativeControlRegion(ControlType::Spinbox, ControlPart::ButtonDown,
-                    aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContentDown);
+                    aArea, ControlState::NONE, aControlValue, aBound, aContentDown);
 
             if (bNativeRegionOK)
             {
@@ -713,7 +713,7 @@ void SpinField::Resize()
 
             // adjust position and size of the edit field
             if (GetNativeControlRegion(ControlType::Spinbox, ControlPart::SubEdit, aArea, ControlState::NONE,
-                                       aControlValue, OUString(), aBound, aContent) &&
+                                       aControlValue, aBound, aContent) &&
                 // there is just no useful native support for spinfields with dropdown
                 !(GetStyle() & WB_DROPDOWN))
             {
@@ -905,9 +905,9 @@ Size SpinField::CalcMinimumSizeForText(const OUString &rString) const
         tools::Rectangle aEntireBound, aEntireContent, aEditBound, aEditContent;
         if (
                GetNativeControlRegion(ControlType::Spinbox, ControlPart::Entire,
-                   aArea, ControlState::NONE, aControlValue, OUString(), aEntireBound, aEntireContent) &&
+                   aArea, ControlState::NONE, aControlValue, aEntireBound, aEntireContent) &&
                GetNativeControlRegion(ControlType::Spinbox, ControlPart::SubEdit,
-                   aArea, ControlState::NONE, aControlValue, OUString(), aEditBound, aEditContent)
+                   aArea, ControlState::NONE, aControlValue, aEditBound, aEditContent)
            )
         {
             aSz.Width() += (aEntireContent.GetWidth() - aEditContent.GetWidth());

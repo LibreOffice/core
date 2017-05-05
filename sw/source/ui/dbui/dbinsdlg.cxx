@@ -1397,7 +1397,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                             pMark = rSh.SetBookmark(
                                     vcl::KeyCode(),
                                     OUString(),
-                                    OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
+                                    IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
                             rSh.SwCursorShell::MovePara(
                                     GoCurrPara, fnParaEnd );
                             bSetCursor = false;

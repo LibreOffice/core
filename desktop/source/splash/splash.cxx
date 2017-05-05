@@ -590,7 +590,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
         tools::Rectangle aNativeControlRegion, aNativeContentRegion;
 
         if (rRenderContext.GetNativeControlRegion(ControlType::IntroProgress, ControlPart::Entire, aDrawRect,
-                                                  ControlState::ENABLED, aValue, OUString(),
+                                                  ControlState::ENABLED, aValue,
                                                   aNativeControlRegion, aNativeContentRegion))
         {
               long nProgressHeight = aNativeControlRegion.GetHeight();

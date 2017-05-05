@@ -303,7 +303,7 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
     }
     else
     {
-        mpTheme.reset(new PresenterTheme(mxContext, OUString(), rxCanvas));
+        mpTheme.reset(new PresenterTheme(mxContext, rxCanvas));
         bModified = true;
     }
 
