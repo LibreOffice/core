@@ -226,9 +226,9 @@ void SmNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
     mnAttributes = FontAttribute::None;
 
     switch (rFormat.GetHorAlign())
-    {   case AlignLeft:     meRectHorAlign = RectHorAlign::Left;   break;
-        case AlignCenter:   meRectHorAlign = RectHorAlign::Center; break;
-        case AlignRight:    meRectHorAlign = RectHorAlign::Right;  break;
+    {   case SmHorAlign::Left:     meRectHorAlign = RectHorAlign::Left;   break;
+        case SmHorAlign::Center:   meRectHorAlign = RectHorAlign::Center; break;
+        case SmHorAlign::Right:    meRectHorAlign = RectHorAlign::Right;  break;
     }
 
     GetFont() = rFormat.GetFont(FNT_MATH);
