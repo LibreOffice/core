@@ -1435,7 +1435,7 @@ SwLayoutFrame* SwFrame::GetNextCellLeaf()
     return pTmpFrame ? static_cast<SwCellFrame*>(pTmpFrame)->GetFollowCell() : nullptr;
 }
 
-SwLayoutFrame* SwFrame::GetPrevCellLeaf( MakePageType )
+SwLayoutFrame* SwFrame::GetPrevCellLeaf()
 {
     SwFrame* pTmpFrame = this;
     while ( !pTmpFrame->IsCellFrame() )

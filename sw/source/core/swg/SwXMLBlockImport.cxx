@@ -49,7 +49,7 @@ private:
     SwXMLBlockListImport & rLocalRef;
 
 public:
-    SwXMLBlockListContext( SwXMLBlockListImport& rImport, sal_Int32 Element,
+    SwXMLBlockListContext( SwXMLBlockListImport& rImport,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
@@ -59,7 +59,7 @@ public:
 class SwXMLBlockContext : public SvXMLImportContext
 {
 public:
-    SwXMLBlockContext( SwXMLBlockListImport& rImport, sal_Int32 Element,
+    SwXMLBlockContext( SwXMLBlockListImport& rImport,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 };
 
@@ -69,7 +69,7 @@ private:
     SwXMLTextBlockImport & rLocalRef;
 
 public:
-    SwXMLTextBlockDocumentContext( SwXMLTextBlockImport& rImport, sal_Int32 Element,
+    SwXMLTextBlockDocumentContext( SwXMLTextBlockImport& rImport,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
@@ -82,7 +82,7 @@ private:
     SwXMLTextBlockImport & rLocalRef;
 
 public:
-    SwXMLTextBlockBodyContext( SwXMLTextBlockImport& rImport, sal_Int32 Element,
+    SwXMLTextBlockBodyContext( SwXMLTextBlockImport& rImport,
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
@@ -95,7 +95,7 @@ private:
     SwXMLTextBlockImport & rLocalRef;
 
 public:
-    SwXMLTextBlockTextContext( SwXMLTextBlockImport& rImport, sal_Int32 Element,
+    SwXMLTextBlockTextContext( SwXMLTextBlockImport& rImport,
                 const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
@@ -109,7 +109,7 @@ private:
     SwXMLTextBlockImport & rLocalRef;
 
 public:
-    SwXMLTextBlockParContext( SwXMLTextBlockImport & rImport, sal_Int32 Element,
+    SwXMLTextBlockParContext( SwXMLTextBlockImport & rImport,
             const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList );
 
     virtual void SAL_CALL characters( const OUString & aChars ) override;
@@ -171,7 +171,6 @@ sal_Int32 SwXMLBlockListTokenHandler::getTokenDirect( const char *pTag, sal_Int3
 
 SwXMLBlockListContext::SwXMLBlockListContext(
     SwXMLBlockListImport& rImport,
-    sal_Int32 /*Element*/,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList ) :
     SvXMLImportContext( rImport ),
     rLocalRef( rImport )
@@ -185,14 +184,13 @@ SwXMLBlockListContext::createFastChildContext( sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     if ( Element == SwXMLBlockListToken::BLOCK )
-        return new SwXMLBlockContext( rLocalRef, Element, xAttrList );
+        return new SwXMLBlockContext( rLocalRef, xAttrList );
     else
         return new SvXMLImportContext( rLocalRef );
 }
 
 SwXMLBlockContext::SwXMLBlockContext(
     SwXMLBlockListImport& rImport,
-    sal_Int32 /*Element*/,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList ) :
     SvXMLImportContext( rImport )
 {
@@ -221,7 +219,6 @@ SwXMLBlockContext::SwXMLBlockContext(
 
 SwXMLTextBlockDocumentContext::SwXMLTextBlockDocumentContext(
     SwXMLTextBlockImport& rImport,
-    sal_Int32 /*Element*/,
     const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/ ) :
     SvXMLImportContext( rImport ),
     rLocalRef(rImport)
@@ -233,14 +230,13 @@ SwXMLTextBlockDocumentContext::createFastChildContext( sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     if ( Element == SwXMLTextBlockToken::OFFICE_BODY )
-        return new SwXMLTextBlockBodyContext( rLocalRef, Element, xAttrList );
+        return new SwXMLTextBlockBodyContext( rLocalRef, xAttrList );
     else
         return new SvXMLImportContext( rLocalRef );
 }
 
 SwXMLTextBlockTextContext::SwXMLTextBlockTextContext(
     SwXMLTextBlockImport& rImport,
-    sal_Int32 /*Element*/,
     const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList */) :
     SvXMLImportContext ( rImport ),
     rLocalRef( rImport )
@@ -252,14 +248,13 @@ SwXMLTextBlockTextContext::createFastChildContext( sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     if ( Element == SwXMLTextBlockToken::TEXT_P )
-        return new SwXMLTextBlockParContext( rLocalRef, Element, xAttrList );
+        return new SwXMLTextBlockParContext( rLocalRef, xAttrList );
     else
         return new SvXMLImportContext( rLocalRef );
 }
 
 SwXMLTextBlockBodyContext::SwXMLTextBlockBodyContext(
     SwXMLTextBlockImport& rImport,
-    sal_Int32 /*Element*/,
     const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/ ) :
     SvXMLImportContext( rImport ),
     rLocalRef(rImport)
@@ -271,16 +266,15 @@ SwXMLTextBlockBodyContext::createFastChildContext( sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     if( Element == SwXMLTextBlockToken::OFFICE_TEXT )
-        return new SwXMLTextBlockTextContext( rLocalRef, Element, xAttrList );
+        return new SwXMLTextBlockTextContext( rLocalRef, xAttrList );
     else if( Element == SwXMLTextBlockToken::TEXT_P )
-        return new SwXMLTextBlockParContext( rLocalRef, Element, xAttrList );
+        return new SwXMLTextBlockParContext( rLocalRef, xAttrList );
     else
         return new SvXMLImportContext( rLocalRef );
 }
 
 SwXMLTextBlockParContext::SwXMLTextBlockParContext(
     SwXMLTextBlockImport& rImport,
-    sal_Int32 /*Element*/,
     const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/ ) :
     SvXMLImportContext( rImport ),
     rLocalRef( rImport )
@@ -321,7 +315,7 @@ SvXMLImportContext* SwXMLBlockListImport::CreateFastContext( sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
 {
     if( Element == SwXMLBlockListToken::BLOCK_LIST )
-        return new SwXMLBlockListContext( *this, Element, xAttrList );
+        return new SwXMLBlockListContext( *this, xAttrList );
     else
         return SvXMLImport::CreateFastContext( Element, xAttrList );
 }
@@ -346,7 +340,7 @@ SvXMLImportContext* SwXMLTextBlockImport::CreateFastContext( sal_Int32 Element,
 {
     if( Element == SwXMLTextBlockToken::OFFICE_DOCUMENT ||
         Element == SwXMLTextBlockToken::OFFICE_DOCUMENT_CONTENT )
-        return new SwXMLTextBlockDocumentContext( *this, Element, xAttrList );
+        return new SwXMLTextBlockDocumentContext( *this, xAttrList );
     else
         return SvXMLImport::CreateFastContext( Element, xAttrList );
 }

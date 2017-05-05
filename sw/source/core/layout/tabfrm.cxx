@@ -1876,7 +1876,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         const bool bMoveable = IsMoveable();
         if (bMoveable &&
             !(bMovedFwd && bEmulateTableKeep) )
-            if ( CheckMoveFwd( bMakePage, bKeep && KEEPTAB, bMovedBwd, bEmulateTableKeep ) )
+            if ( CheckMoveFwd( bMakePage, bKeep && KEEPTAB, bEmulateTableKeep ) )
             {
                 bMovedFwd = true;
                 m_bCalcLowers = true;

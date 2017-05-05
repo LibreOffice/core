@@ -91,9 +91,9 @@ public:
     SwDoc* GetDoc() const { return pDoc; }
     //void  SetDoc( SwDoc * pNewDoc);
     sal_uLong StartPutBlock( const OUString& rShort, const OUString& rPackageName );
-    sal_uLong PutBlock( SwPaM& rPaM, const OUString& rLong );
+    sal_uLong PutBlock();
     sal_uLong GetBlockText( const OUString& rShort, OUString& rText );
-    sal_uLong PutBlockText( const OUString& rShort, const OUString& rName, const OUString& rText, const OUString& rPackageName );
+    sal_uLong PutBlockText( const OUString& rShort, const OUString& rText, const OUString& rPackageName );
     void MakeBlockText( const OUString& rText );
 
 };
