@@ -28,7 +28,6 @@
 #include <sfx2/msg.hxx>
 #include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
-#include <sfx2/objitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svl/srchitem.hxx>
@@ -106,7 +105,6 @@
 /* Avoid clash with the ones from svx/source/form/typemap.cxx */
 #define aSfxBoolItem_Impl sc_source_ui_appl_typemap_aSfxBoolItem_Impl
 #define aSfxInt32Item_Impl sc_source_ui_appl_typemap_aSfxInt32Item_Impl
-#define aSfxObjectItem_Impl sc_source_ui_appl_typemap_aSfxObjectItem_Impl
 #define aSfxStringItem_Impl sc_source_ui_appl_typemap_aSfxStringItem_Impl
 #define aSfxUInt16Item_Impl sc_source_ui_appl_typemap_aSfxUInt16Item_Impl
 #define aSfxUInt32Item_Impl sc_source_ui_appl_typemap_aSfxUInt32Item_Impl
@@ -131,7 +129,6 @@
 #ifdef DISABLE_DYNLOADING
 #undef aSfxBoolItem_Impl
 #undef aSfxInt32Item_Impl
-#undef aSfxObjectItem_Impl
 #undef aSfxStringItem_Impl
 #undef aSfxUInt16Item_Impl
 #undef aSfxUInt32Item_Impl
