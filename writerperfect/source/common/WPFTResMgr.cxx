@@ -3,7 +3,7 @@
 #include "WPFTResMgr.hxx"
 
 #include <tools/resmgr.hxx>
-
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 
 ResMgr &WPFTResMgr::GetResMgr()

@@ -24,6 +24,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/vclevent.hxx>
+#include <vcl/window.hxx>
 #include <memory>
 
 class WorkWindow;
