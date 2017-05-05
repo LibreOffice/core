@@ -30,7 +30,7 @@ CrashReportDialog::CrashReportDialog(vcl::Window* pParent):
     get(mpBtnCancel, "btn_cancel");
     get(mpBtnClose, "btn_close");
     get(mpEditPreUpload, "ed_pre");
-    get(mpEditPostUpload, "ed_post");
+    get(mpEditPostUpload, "ft_post");
     get(mpBugReportMailto, "bugreport_mailto");
     get(mpCBSafeMode, "check_safemode");
 
@@ -39,7 +39,6 @@ CrashReportDialog::CrashReportDialog(vcl::Window* pParent):
     mpBtnSend->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
     mpBtnCancel->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
     mpBtnClose->SetClickHdl(LINK(this, CrashReportDialog, BtnHdl));
-    mpEditPostUpload->SetReadOnly();
 }
 
 CrashReportDialog::~CrashReportDialog()
