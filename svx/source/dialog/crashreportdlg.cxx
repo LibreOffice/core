@@ -28,15 +28,16 @@ CrashReportDialog::CrashReportDialog(weld::Window* pParent)
     , mxBtnCancel(m_xBuilder->weld_button("btn_cancel"))
     , mxBtnClose(m_xBuilder->weld_button("btn_close"))
     , mxEditPreUpload(m_xBuilder->weld_label("ed_pre"))
-    , mxEditPostUpload(m_xBuilder->weld_text_view("ed_post"))
+    , mxEditPostUpload(m_xBuilder->weld_label("ft_post"))
     , mxBugReportMailto(m_xBuilder->weld_link_button("bugreport_mailto"))
     , mxCBSafeMode(m_xBuilder->weld_check_button("check_safemode"))
 {
-    maSuccessMsg = mxEditPostUpload->get_text();
+    maSuccessMsg = mxEditPostUpload->get_label();
 
     auto nWidth = mxEditPreUpload->get_preferred_size().Width();
     nWidth = std::max(nWidth, mxCBSafeMode->get_size_request().Width());
     mxEditPreUpload->set_size_request(nWidth, -1);
+    mxEditPostUpload->set_size_request(nWidth, -1);
     mxCBSafeMode->set_size_request(nWidth, -1);
 
     mxBtnSend->connect_clicked(LINK(this, CrashReportDialog, BtnHdl));
@@ -76,11 +77,11 @@ IMPL_LINK(CrashReportDialog, BtnHdl, weld::Button&, rBtn, void)
             OUString aProcessedMessage = maSuccessMsg.replaceAll("%CRASHID", aCrashID.replaceAll("Crash-ID=",""));
 
             // vclbuilder seems to replace _ with ~ even in text
-            mxEditPostUpload->set_text(aProcessedMessage.replaceAll("~", "_"));
+            mxEditPostUpload->set_label(aProcessedMessage.replaceAll("~", "_"));
         }
         else
         {
-            mxEditPostUpload->set_text(aCrashID);
+            mxEditPostUpload->set_label(aCrashID);
         }
 
         mxBtnClose->show();
