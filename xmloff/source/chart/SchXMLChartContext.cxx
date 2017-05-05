@@ -419,7 +419,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
     if( xVisualObject.is() )
         xVisualObject->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, maChartSize );
 
-    InitChart( aOldChartTypeName, bSetSwitchData);
+    InitChart( aOldChartTypeName);
 
     if( bHasAddin )
     {
@@ -1164,8 +1164,8 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
         4.  Set the chart type.
 */
 void SchXMLChartContext::InitChart(
-    const OUString & rChartTypeServiceName, // currently the old service name
-    bool /* bSetSwitchData */ )
+    const OUString & rChartTypeServiceName // currently the old service name
+    )
 {
     uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
     SAL_WARN_IF( !xDoc.is(), "xmloff.chart", "No valid document!" );

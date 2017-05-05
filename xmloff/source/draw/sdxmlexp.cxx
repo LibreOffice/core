@@ -2156,12 +2156,7 @@ void SdXMLExport::ExportAutoStyles_()
     }
 
     // export draw-page styles
-    GetAutoStylePool()->exportXML(
-        XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID
-        , GetDocHandler(),
-        GetMM100UnitConverter(),
-        GetNamespaceMap()
-        );
+    GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID );
 
     if( getExportFlags() & SvXMLExportFlags::STYLES )
     {

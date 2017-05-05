@@ -614,10 +614,7 @@ struct StyleComparator
 }
 
 void SvXMLAutoStylePoolP_Impl::exportXML(
-           sal_Int32 nFamily,
-        const uno::Reference< css::xml::sax::XDocumentHandler > &,
-        const SvXMLUnitConverter&,
-        const SvXMLNamespaceMap&,
+        sal_Int32 nFamily,
         const SvXMLAutoStylePoolP *pAntiImpl) const
 {
     // Get list of parents for current family (nFamily)

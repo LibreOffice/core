@@ -212,7 +212,7 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the DA_* constants.
         */
-        static sal_uInt16 getDatabaseAttributeNamespace(DAFlags )
+        static sal_uInt16 getDatabaseAttributeNamespace()
         {
             // nothing special here
             return XML_NAMESPACE_FORM;
@@ -234,7 +234,7 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the BA_* constants.
         */
-        static sal_uInt16 getBindingAttributeNamespace(BAFlags )
+        static sal_uInt16 getBindingAttributeNamespace()
         {
             // nothing special here
             return XML_NAMESPACE_FORM;
@@ -256,7 +256,7 @@ namespace xmloff
             @param _nId
                 the id of the attribute
         */
-        static sal_uInt16 getOfficeFormsAttributeNamespace(OfficeFormsAttributes )
+        static sal_uInt16 getOfficeFormsAttributeNamespace()
         { // nothing special here
           return XML_NAMESPACE_FORM;
         }
@@ -312,13 +312,9 @@ namespace xmloff
                 the name of the attrribute
             @param _rPropertyName
                 the name of the property assigned to the attribute
-            @param _pAttributeDefault
-                the default value for the attribute, if any. May be NULL, in this case the default is assumed to be
-                an empty string.
         */
         void    addStringProperty(
-            const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-            const sal_Char* _pAttributeDefault = nullptr);
+            const sal_Char* _pAttributeName, const OUString& _rPropertyName);
 
         /** add a attribute assignment referring to a boolean property to the map
 
@@ -342,12 +338,9 @@ namespace xmloff
                 the name of the attrribute
             @param _rPropertyName
                 the name of the property assigned to the attribute
-            @param _nAttributeDefault
-                the default value for the attribute.
         */
         void    addInt16Property(
-            const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-            const sal_Int16 _nAttributeDefault);
+            const sal_Char* _pAttributeName, const OUString& _rPropertyName);
 
         /** add a attribute assignment referring to an int32 property to the map
 
@@ -355,12 +348,9 @@ namespace xmloff
                 the name of the attrribute
             @param _rPropertyName
                 the name of the property assigned to the attribute
-            @param _nAttributeDefault
-                the default value for the attribute.
         */
         void    addInt32Property(
-            const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-            const sal_Int32 _nAttributeDefault );
+            const sal_Char* _pAttributeName, const OUString& _rPropertyName );
 
         /** add a attribute assignment referring to an enum property to the map
 
@@ -368,8 +358,6 @@ namespace xmloff
                 the name of the attrribute
             @param _rPropertyName
                 the name of the property assigned to the attribute
-            @param _nAttributeDefault
-                the default value for the attribute, as (32bit) integer
             @param _pValueMap
                 the map to translate strings into enum values
             @param _pType
@@ -378,22 +366,22 @@ namespace xmloff
         template<typename EnumT>
         void    addEnumProperty(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-            const EnumT _nAttributeDefault, const SvXMLEnumMapEntry<EnumT>* _pValueMap,
+            const SvXMLEnumMapEntry<EnumT>* _pValueMap,
             const css::uno::Type* _pType = nullptr)
         {
-            addEnumPropertyImpl(_pAttributeName, _rPropertyName, static_cast<sal_uInt16>(_nAttributeDefault),
+            addEnumPropertyImpl(_pAttributeName, _rPropertyName,
                                 reinterpret_cast<const SvXMLEnumMapEntry<sal_uInt16>*>(_pValueMap), _pType);
         }
 
     private:
         void addEnumPropertyImpl(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-            const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry<sal_uInt16>* _pValueMap,
+            const SvXMLEnumMapEntry<sal_uInt16>* _pValueMap,
             const css::uno::Type* _pType = nullptr);
         /// some common code for the various add*Property methods
         AttributeAssignment& implAdd(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-            const css::uno::Type& _rType, const OUString& _rDefaultString);
+            const css::uno::Type& _rType);
     };
 }   // namespace xmloff
 

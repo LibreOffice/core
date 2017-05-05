@@ -150,7 +150,6 @@ public:
     XMLTextFrameParam_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-            sal_uInt16 nType,
             ParamMap &rParamMap);
 };
 
@@ -158,7 +157,6 @@ XMLTextFrameParam_Impl::XMLTextFrameParam_Impl(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-        sal_uInt16 /*nType*/,
         ParamMap &rParamMap):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
@@ -372,7 +370,7 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     bool    bCreateFailed : 1;
     bool    bOwnBase64Stream : 1;
 
-    void Create( bool bHRefOrBase64 );
+    void Create();
 
 public:
 
@@ -414,7 +412,7 @@ public:
 };
 
 
-void XMLTextFrameContext_Impl::Create( bool /*bHRefOrBase64*/ )
+void XMLTextFrameContext_Impl::Create()
 {
     rtl::Reference < XMLTextImportHelper > xTextImportHelper =
         GetImport().GetTextImport();
@@ -778,7 +776,7 @@ bool XMLTextFrameContext_Impl::CreateIfNotThere()
     {
         if( bOwnBase64Stream )
             xBase64Stream->closeOutput();
-        Create( true );
+        Create();
     }
 
     return xPropSet.is();
@@ -1024,7 +1022,7 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
           sHRef.isEmpty() && sMimeType.isEmpty() ) )
         return; // no URL: no image or OLE object
 
-    Create( true );
+    Create();
 }
 
 void XMLTextFrameContext_Impl::EndElement()
@@ -1060,7 +1058,7 @@ SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
         {
             pContext = new XMLTextFrameParam_Impl( GetImport(),
                                               nPrefix, rLocalName,
-                                               xAttrList, nType, aParamMap );
+                                               xAttrList, aParamMap );
         }
     }
     else if( (XML_NAMESPACE_OFFICE == nPrefix) )
@@ -1103,7 +1101,7 @@ SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
             sFilterService = pEContext->GetFilterServiceName();
             if( !sFilterService.isEmpty() )
             {
-                Create( false );
+                Create();
                 if( xPropSet.is() )
                 {
                     Reference < XEmbeddedObjectSupplier > xEOS( xPropSet,

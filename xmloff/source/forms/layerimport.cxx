@@ -87,7 +87,7 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Title), PROPERTY_TITLE);
     m_aAttributeMetaData.addStringProperty(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TargetFrame), PROPERTY_TARGETFRAME, "_blank");
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TargetFrame), PROPERTY_TARGETFRAME);
     m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getDatabaseAttributeName(DAFlags::DataField), PROPERTY_DATAFIELD);
     m_aAttributeMetaData.addStringProperty(
@@ -164,61 +164,61 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
 
     // the int16 attributes
     m_aAttributeMetaData.addInt16Property(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::MaxLength), PROPERTY_MAXTEXTLENGTH, 0);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::MaxLength), PROPERTY_MAXTEXTLENGTH);
     m_aAttributeMetaData.addInt16Property(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Size), PROPERTY_LINECOUNT, 5);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::Size), PROPERTY_LINECOUNT);
     m_aAttributeMetaData.addInt16Property(
-        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TabIndex), PROPERTY_TABINDEX, 0);
+        OAttributeMetaData::getCommonControlAttributeName(CCAFlags::TabIndex), PROPERTY_TABINDEX);
     m_aAttributeMetaData.addInt16Property(
-        OAttributeMetaData::getDatabaseAttributeName(DAFlags::BoundColumn), PROPERTY_BOUNDCOLUMN, 0);
+        OAttributeMetaData::getDatabaseAttributeName(DAFlags::BoundColumn), PROPERTY_BOUNDCOLUMN);
 
     // the int32 attributes
     m_aAttributeMetaData.addInt32Property(
-        OAttributeMetaData::getSpecialAttributeName( SCAFlags::PageStepSize ), PROPERTY_BLOCK_INCREMENT, 10 );
+        OAttributeMetaData::getSpecialAttributeName( SCAFlags::PageStepSize ), PROPERTY_BLOCK_INCREMENT );
 
     // the enum attributes
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getCommonControlAttributeName( CCAFlags::VisualEffect ), PROPERTY_VISUAL_EFFECT,
-        VisualEffect::LOOK3D, aVisualEffectMap,
+        aVisualEffectMap,
         &::cppu::UnoType<sal_Int16>::get() );
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getCommonControlAttributeName( CCAFlags::Orientation ), PROPERTY_ORIENTATION,
-        ScrollBarOrientation::HORIZONTAL, aOrientationMap,
+        aOrientationMap,
         &::cppu::UnoType<sal_Int32>::get() );
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCAFlags::ButtonType), PROPERTY_BUTTONTYPE,
-        FormButtonType_PUSH, aFormButtonTypeMap,
+        aFormButtonTypeMap,
         &::cppu::UnoType<FormButtonType>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getDatabaseAttributeName(DAFlags::ListSource_TYPE), PROPERTY_LISTSOURCETYPE,
-        ListSourceType_VALUELIST, aListSourceTypeMap,
+        aListSourceTypeMap,
         &::cppu::UnoType<ListSourceType>::get());
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCAFlags::State), PROPERTY_DEFAULT_STATE, TRISTATE_FALSE,
+        OAttributeMetaData::getSpecialAttributeName(SCAFlags::State), PROPERTY_DEFAULT_STATE,
         aCheckStateMap,
         &::cppu::UnoType<sal_Int16>::get());
     m_aAttributeMetaData.addEnumProperty(
-        OAttributeMetaData::getSpecialAttributeName(SCAFlags::CurrentState), PROPERTY_STATE, TRISTATE_FALSE,
+        OAttributeMetaData::getSpecialAttributeName(SCAFlags::CurrentState), PROPERTY_STATE,
         aCheckStateMap,
         &::cppu::UnoType<sal_Int16>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getFormAttributeName(faEnctype), PROPERTY_SUBMIT_ENCODING,
-        FormSubmitEncoding_URL, aSubmitEncodingMap,
+        aSubmitEncodingMap,
         &::cppu::UnoType<FormSubmitEncoding>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getFormAttributeName(faMethod), PROPERTY_SUBMIT_METHOD,
-        FormSubmitMethod_GET, aSubmitMethodMap,
+        aSubmitMethodMap,
         &::cppu::UnoType<FormSubmitMethod>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getFormAttributeName(faCommandType), PROPERTY_COMMAND_TYPE,
-        CommandType::COMMAND, aCommandTypeMap);
+        aCommandTypeMap);
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getFormAttributeName(faNavigationMode), PROPERTY_NAVIGATION,
-        NavigationBarMode_NONE, aNavigationTypeMap,
+        aNavigationTypeMap,
         &::cppu::UnoType<NavigationBarMode>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getFormAttributeName(faTabbingCycle), PROPERTY_CYCLE,
-        TabulatorCycle_RECORDS, aTabulatorCycleMap,
+        aTabulatorCycleMap,
         &::cppu::UnoType<TabulatorCycle>::get());
 
     // 'initialize'

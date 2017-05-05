@@ -383,7 +383,7 @@ sal_uInt16 SvXMLNamespaceMap::GetNextIndex( sal_uInt16 nOldIdx ) const
     return (++aIter == aNameMap.end()) ? USHRT_MAX : (*aIter).second->nKey;
 }
 
-void SvXMLNamespaceMap::AddAtIndex( sal_uInt16 /*nIdx*/, const OUString& rPrefix,
+void SvXMLNamespaceMap::AddAtIndex( const OUString& rPrefix,
                                     const OUString& rName, sal_uInt16 nKey )
 {
     if( XML_NAMESPACE_UNKNOWN == nKey )

@@ -257,12 +257,7 @@ namespace xmloff
 
     void OFormLayerXMLExport_Impl::exportAutoStyles()
     {
-        m_rContext.GetAutoStylePool()->exportXML(
-            XML_STYLE_FAMILY_CONTROL_ID,
-            m_rContext.GetDocHandler(),
-            m_rContext.GetMM100UnitConverter(),
-            m_rContext.GetNamespaceMap()
-        );
+        m_rContext.GetAutoStylePool()->exportXML( XML_STYLE_FAMILY_CONTROL_ID );
     }
 
     void OFormLayerXMLExport_Impl::exportForms(const Reference< XDrawPage >& _rxDrawPage)
