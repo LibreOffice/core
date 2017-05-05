@@ -607,7 +607,7 @@ void update_checker()
     OUString aChannel = officecfg::Office::Update::Update::UpdateChannel::get();
 
     OUString aDownloadCheckURL = aDownloadCheckBaseURL + "update/check/1/" + aProductName +
-        "/" + aBuildID + "/" + aBuildTarget + "/" + "/" + aChannel;
+        "/" + aBuildID + "/" + aBuildTarget + "/" + aChannel;
     OString aURL = OUStringToOString(aDownloadCheckURL, RTL_TEXTENCODING_UTF8);
     Updater::log("Update check: " + aURL);
 
