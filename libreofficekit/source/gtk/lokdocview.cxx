@@ -2595,9 +2595,12 @@ static gboolean lok_doc_view_draw (GtkWidget* pWidget, cairo_t* pCairo)
     return FALSE;
 }
 
-static void lok_doc_view_finalize (GObject* object)
+//rhbz#1444437 finalize may not occur immediately when this widget is destroyed
+//it may happen during GC of javascript, e.g. in gnome-documents but "destroy"
+//will be called promptly, so close documents in destroy, not finalize
+static void lok_doc_view_destroy (GtkWidget* widget)
 {
-    LOKDocView* pDocView = LOK_DOC_VIEW (object);
+    LOKDocView* pDocView = LOK_DOC_VIEW (widget);
     LOKDocViewPrivate& priv = getPrivate(pDocView);
 
     // Ignore notifications sent to this view on shutdown.
@@ -2620,6 +2623,15 @@ static void lok_doc_view_finalize (GObject* object)
         if (priv->m_pOffice)
             priv->m_pOffice->pClass->destroy (priv->m_pOffice);
     }
+
+    GTK_WIDGET_CLASS (lok_doc_view_parent_class)->destroy (widget);
+}
+
+static void lok_doc_view_finalize (GObject* object)
+{
+    LOKDocView* pDocView = LOK_DOC_VIEW (object);
+    LOKDocViewPrivate& priv = getPrivate(pDocView);
+
     delete priv.m_pImpl;
     priv.m_pImpl = nullptr;
 
@@ -2670,6 +2682,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
     pWidgetClass->key_press_event = signalKey;
     pWidgetClass->key_release_event = signalKey;
     pWidgetClass->motion_notify_event = lok_doc_view_signal_motion;
+    pWidgetClass->destroy = lok_doc_view_destroy;
 
     /**
      * LOKDocView:lopath:
