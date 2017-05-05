@@ -3640,7 +3640,7 @@ void SwWW8ImplReader::Read_FieldVanish( sal_uInt16, const sal_uInt8*, short nLen
         return;
     }
 
-    // our methode was called from
+    // our method was called from
     // ''Skip attributes of field contents'' loop within ReadTextAttr()
     if( m_bIgnoreText )
         return;
