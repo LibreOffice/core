@@ -824,15 +824,11 @@ sal_Int32 ParaPortionList::FindParagraph(long nYOffset) const
 
 const ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos) const
 {
-    SAL_WARN_IF( nPos < 0 || nPos >= (sal_Int32)maPortions.size(), "editeng",
-            "ParaPortionList::SafeGetObject - nPos out of bounds: " << nPos << " size: " << maPortions.size());
     return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? maPortions[nPos].get() : nullptr;
 }
 
 ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos)
 {
-    SAL_WARN_IF( nPos < 0 || nPos >= (sal_Int32)maPortions.size(), "editeng",
-            "ParaPortionList::SafeGetObject - nPos out of bounds: " << nPos << " size: " << maPortions.size());
     return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? maPortions[nPos].get() : nullptr;
 }
 
