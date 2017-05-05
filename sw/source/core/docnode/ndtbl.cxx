@@ -1249,8 +1249,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     getIDocumentState().SetEnableSetModified(false);
 
     SwTableNode* pTableNd = GetNodes().TextToTable(
-            rTableNodes, pTableFormat, pLineFormat, pBoxFormat,
-            getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD )/*, pUndo*/ );
+            rTableNodes, pTableFormat, pLineFormat, pBoxFormat );
 
     SwTable& rNdTable = pTableNd->GetTable();
     rNdTable.RegisterToFormat(*pTableFormat);
@@ -1363,8 +1362,7 @@ lcl_SetTableBoxWidths2(SwTable & rTable, size_t const nMaxBoxes,
 SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
                                     SwTableFormat* pTableFormat,
                                     SwTableLineFormat* pLineFormat,
-                                    SwTableBoxFormat* pBoxFormat,
-                                    SwTextFormatColl* /*pTextColl*/  /*, SwUndo... pUndo*/  )
+                                    SwTableBoxFormat* pBoxFormat  )
 {
     if( rTableNodes.empty() )
         return nullptr;
@@ -3533,7 +3531,7 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
 
     // The actual merge
     SwNodeIndex aIdx( bWithPrev ? *pTableNd : *pDelTableNd );
-    bool bRet = rNds.MergeTable( aIdx, !bWithPrev, nMode, pHistory );
+    bool bRet = rNds.MergeTable( aIdx, !bWithPrev, nMode );
 
     if( pHistory )
     {
@@ -3552,7 +3550,7 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
 }
 
 bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
-                            sal_uInt16 nMode, SwHistory* )
+                            sal_uInt16 nMode )
 {
     SwTableNode* pDelTableNd = rPos.GetNode().GetTableNode();
     OSL_ENSURE( pDelTableNd, "Where did the TableNode go?" );

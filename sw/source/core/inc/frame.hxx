@@ -360,7 +360,7 @@ public:
     SwLayoutFrame *GetNextLeaf   ( MakePageType eMakePage );
     SwLayoutFrame *GetNextFootnoteLeaf( MakePageType eMakePage );
     SwLayoutFrame *GetNextSctLeaf( MakePageType eMakePage );
-    SwLayoutFrame *GetNextCellLeaf( MakePageType eMakePage );
+    SwLayoutFrame *GetNextCellLeaf();
     SwLayoutFrame *GetPrevLeaf   ( MakePageType eMakeFootnote );
     SwLayoutFrame *GetPrevFootnoteLeaf( MakePageType eMakeFootnote );
     SwLayoutFrame *GetPrevSctLeaf( MakePageType eMakeFootnote );

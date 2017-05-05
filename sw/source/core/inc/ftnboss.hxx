@@ -57,7 +57,7 @@ class SwFootnoteBossFrame: public SwLayoutFrame
 
     SwFootnoteContFrame *MakeFootnoteCont();
     SwFootnoteFrame     *FindFirstFootnote();
-    SwNeighbourAdjust NeighbourhoodAdjustment_( const SwFrame* pFrame ) const;
+    SwNeighbourAdjust NeighbourhoodAdjustment_() const;
 
 protected:
     void          InsertFootnote( SwFootnoteFrame * );
@@ -118,8 +118,8 @@ public:
                       SwTextFootnote *pAttr );
 
     // should AdjustNeighbourhood be called (or Grow/Shrink)?
-    SwNeighbourAdjust NeighbourhoodAdjustment( const SwFrame* pFrame ) const
-        { return IsPageFrame() ? SwNeighbourAdjust::OnlyAdjust : NeighbourhoodAdjustment_( pFrame ); }
+    SwNeighbourAdjust NeighbourhoodAdjustment() const
+        { return IsPageFrame() ? SwNeighbourAdjust::OnlyAdjust : NeighbourhoodAdjustment_(); }
 };
 
 inline const SwLayoutFrame *SwFootnoteBossFrame::FindBodyCont() const

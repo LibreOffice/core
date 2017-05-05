@@ -270,9 +270,7 @@ public:
     SwTableNode* TextToTable( const TableRanges_t& rTableNodes,
                                 SwTableFormat* pTableFormat,
                                 SwTableLineFormat* pLineFormat,
-                                SwTableBoxFormat* pBoxFormat,
-                                SwTextFormatColl* pTextColl
-                                /*, SwUndo... pUndo*/ );
+                                SwTableBoxFormat* pBoxFormat );
 
     /// Create regular text from what was table.
     bool TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
@@ -298,7 +296,7 @@ public:
                                 bool bCalcNewSize = false );
     /// Two Tables that are following one another are merged.
     bool MergeTable( const SwNodeIndex& rPos, bool bWithPrev = true,
-                    sal_uInt16 nMode = 0, SwHistory* pHistory = nullptr );
+                    sal_uInt16 nMode = 0 );
 
     /// Insert a new SwSection.
     SwSectionNode* InsertTextSection(SwNodeIndex const& rNdIdx,
