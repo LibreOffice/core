@@ -515,11 +515,8 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( const OUString& Database,
 }
 
 Reference< XCollator >
-Databases::getCollator( const OUString& Language,
-                        const OUString& System )
+Databases::getCollator( const OUString& Language )
 {
-    (void)System;
-
     OUString key = Language;
 
     osl::MutexGuard aGuard( m_aMutex );
@@ -799,7 +796,7 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
         }
 
         // sorting
-        Reference< XCollator > xCollator = getCollator( Language,OUString());
+        Reference< XCollator > xCollator = getCollator( Language );
         KeywordElementComparator aComparator( xCollator );
         std::sort(aVector.begin(),aVector.end(),aComparator);
 

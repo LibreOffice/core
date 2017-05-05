@@ -622,12 +622,10 @@ public:
                          maAddProps;
 
                          UIControlOptions( const OUString& i_rDependsOnName = OUString(),
-                             sal_Int32 i_nDependsOnEntry = -1, bool i_bAttachToDependency = false,
-                             const OUString& i_rGroupHint = OUString())
+                             sal_Int32 i_nDependsOnEntry = -1, bool i_bAttachToDependency = false)
                              : maDependsOnName( i_rDependsOnName )
                              , mnDependsOnEntry( i_nDependsOnEntry )
                              , mbAttachToDependency( i_bAttachToDependency )
-                             , maGroupHint( i_rGroupHint )
                              , mbInternalOnly( false )
                              , mbEnabled( true ) {}
     };

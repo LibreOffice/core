@@ -606,7 +606,7 @@ void OutlineToImpressFinalizer::operator() (bool)
         sd::OutlineView* pView = static_cast<sd::OutlineView*>(pOutlineShell->GetView());
         // mba: the stream can't contain any relative URLs, because we don't
         // have any information about a BaseURL!
-        if ( pOutlineShell->ReadRtf(*mpStream, OUString()) == 0 )
+        if ( pOutlineShell->ReadRtf(*mpStream) == 0 )
         {
         }
 

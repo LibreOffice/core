@@ -82,8 +82,7 @@ PreviewRenderer::~PreviewRenderer()
 
 Image PreviewRenderer::RenderPage (
     const SdPage* pPage,
-    const sal_Int32 nWidth,
-    const OUString& rSubstitutionText)
+    const sal_Int32 nWidth)
 {
     if (pPage != nullptr)
     {
@@ -96,7 +95,7 @@ Image PreviewRenderer::RenderPage (
         return RenderPage (
             pPage,
             Size(nWidth,nHeight),
-            rSubstitutionText,
+            OUString(),
             false/*bObeyHighContrastMode*/);
     }
     else

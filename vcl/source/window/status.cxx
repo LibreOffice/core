@@ -612,7 +612,7 @@ void StatusBar::ImplCalcProgressRect()
         tools::Rectangle aControlRegion( tools::Rectangle( (const Point&)Point(), maPrgsFrameRect.GetSize() ) );
         tools::Rectangle aNativeControlRegion, aNativeContentRegion;
         if( (bNativeOK = GetNativeControlRegion( ControlType::Progress, ControlPart::Entire, aControlRegion,
-                                                 ControlState::ENABLED, aValue, OUString(),
+                                                 ControlState::ENABLED, aValue,
                                                  aNativeControlRegion, aNativeContentRegion ) ) )
         {
             long nProgressHeight = aNativeControlRegion.GetHeight();
@@ -1418,7 +1418,7 @@ Size StatusBar::CalcWindowSizePixel() const
         tools::Rectangle aControlRegion( (const Point&)Point(), Size( nCalcWidth, nMinHeight ) );
         tools::Rectangle aNativeControlRegion, aNativeContentRegion;
         if( GetNativeControlRegion( ControlType::Progress, ControlPart::Entire,
-                    aControlRegion, ControlState::ENABLED, aValue, OUString(),
+                    aControlRegion, ControlState::ENABLED, aValue,
                     aNativeControlRegion, aNativeContentRegion ) )
         {
             nProgressHeight = aNativeControlRegion.GetHeight();
@@ -1432,7 +1432,7 @@ Size StatusBar::CalcWindowSizePixel() const
         tools::Rectangle aBound, aContent;
         tools::Rectangle aNatRgn( Point( 0, 0 ), Size( 150, 50 ) );
         if( GetNativeControlRegion(ControlType::Frame, ControlPart::Border,
-                    aNatRgn, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
+                    aNatRgn, ControlState::NONE, aControlValue, aBound, aContent) )
         {
             mpImplData->mnItemBorderWidth =
                 ( aBound.GetHeight() - aContent.GetHeight() ) / 2;

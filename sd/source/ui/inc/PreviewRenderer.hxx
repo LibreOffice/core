@@ -57,17 +57,12 @@ public:
             The page to render.
         @param nWidth
             The width of the preview in device coordinates.
-        @param sSubstitutionText
-            When the actual preview can not be created for some reason, then
-            this text is painted in an empty rectangle of the requested size
-            instead.
          The high contrast mode of the application is
          ignored and the preview is rendered in normal mode.
     */
     Image RenderPage (
         const SdPage* pPage,
-        const sal_Int32 nWidth,
-        const OUString& sSubstitutionText);
+        const sal_Int32 nWidth);
 
     /** Render a page with the given pixel size.
         @param pPage

@@ -652,7 +652,7 @@ namespace svt { namespace table
 
         if ( m_pImpl->isAccessibleAlive() )
         {
-            m_pImpl->commitAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
+            m_pImpl->commitAccessibleEvent( AccessibleEventId::SELECTION_CHANGED );
 
             m_pImpl->commitTableEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), Any() );
                 // TODO: why do we notify this when the *selection* changed? Shouldn't we find a better place for this,

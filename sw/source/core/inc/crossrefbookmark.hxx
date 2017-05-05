@@ -67,8 +67,7 @@ namespace sw {
         public:
             CrossRefHeadingBookmark(const SwPaM& rPaM,
                 const vcl::KeyCode& rCode,
-                const OUString& rName,
-                const OUString& rShortName);
+                const OUString& rName);
             static bool IsLegalName(const OUString& rName);
         };
 
@@ -78,8 +77,7 @@ namespace sw {
         public:
             CrossRefNumItemBookmark(const SwPaM& rPaM,
                 const vcl::KeyCode& rCode,
-                const OUString& rName,
-                const OUString& rShortName);
+                const OUString& rName);
             static bool IsLegalName(const OUString& rName);
         };
     }

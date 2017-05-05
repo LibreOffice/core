@@ -674,7 +674,7 @@ void Window::ImplCalcOverlapRegion( const tools::Rectangle& rSourceRect, vcl::Re
 }
 
 void Window::SaveBackground( const Point& rPos, const Size& rSize,
-                             const Point& rDestOff, VirtualDevice& rSaveDevice )
+                             VirtualDevice& rSaveDevice )
 {
     if ( mpWindowImpl->mpPaintRegion )
     {
@@ -687,7 +687,7 @@ void Window::SaveBackground( const Point& rPos, const Size& rSize,
         if ( !aClip.IsEmpty() )
         {
             const vcl::Region    aOldClip( rSaveDevice.GetClipRegion() );
-            const Point     aPixOffset( rSaveDevice.LogicToPixel( rDestOff ) );
+            const Point     aPixOffset( rSaveDevice.LogicToPixel( Point() ) );
             const bool      bMap = rSaveDevice.IsMapModeEnabled();
 
             // move clip region to have the same distance to DestOffset
@@ -697,12 +697,12 @@ void Window::SaveBackground( const Point& rPos, const Size& rSize,
             rSaveDevice.EnableMapMode( false );
             rSaveDevice.SetClipRegion( aClip );
             rSaveDevice.EnableMapMode( bMap );
-            rSaveDevice.DrawOutDev( rDestOff, rSize, rPos, rSize, *this );
+            rSaveDevice.DrawOutDev( Point(), rSize, rPos, rSize, *this );
             rSaveDevice.SetClipRegion( aOldClip );
         }
     }
     else
-        rSaveDevice.DrawOutDev( rDestOff, rSize, rPos, rSize, *this );
+        rSaveDevice.DrawOutDev( Point(), rSize, rPos, rSize, *this );
 }
 
 } /* namespace vcl */

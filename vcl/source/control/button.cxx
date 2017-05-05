@@ -1148,7 +1148,7 @@ void PushButton::ImplSetDefButton( bool bSet )
         // get native size of a 'default' button
         // and adjust the VCL button if more space for adornment is required
         if( GetNativeControlRegion( ControlType::Pushbutton, ControlPart::Entire, aCtrlRegion,
-                                nState, aControlValue, OUString(),
+                                nState, aControlValue,
                                 aBound, aCont ) )
         {
             dLeft = aCont.Left() - aBound.Left();
@@ -2726,7 +2726,7 @@ Size RadioButton::ImplGetRadioImageSize() const
 
         // get native size of a radio button
         if( GetNativeControlRegion( ControlType::Radiobutton, ControlPart::Entire, aCtrlRegion,
-                                           nState, aControlValue, OUString(),
+                                           nState, aControlValue,
                                            aBoundingRgn, aContentRgn ) )
         {
             aSize = aContentRgn.GetSize();
@@ -2847,7 +2847,7 @@ void RadioButton::ImplSetMinimumNWFSize()
 
     // get native size of a radiobutton
     if( GetNativeControlRegion( ControlType::Radiobutton, ControlPart::Entire, aCtrlRegion,
-                                ControlState::DEFAULT|ControlState::ENABLED, aControlValue, OUString(),
+                                ControlState::DEFAULT|ControlState::ENABLED, aControlValue,
                                 aBoundingRgn, aContentRgn ) )
     {
         Size aSize = aContentRgn.GetSize();
@@ -3598,7 +3598,7 @@ Size CheckBox::ImplGetCheckImageSize() const
 
         // get native size of a check box
         if( GetNativeControlRegion( ControlType::Checkbox, ControlPart::Entire, aCtrlRegion,
-                                           nState, aControlValue, OUString(),
+                                           nState, aControlValue,
                                            aBoundingRgn, aContentRgn ) )
         {
             aSize = aContentRgn.GetSize();
@@ -3703,7 +3703,7 @@ void CheckBox::ImplSetMinimumNWFSize()
 
     // get native size of a radiobutton
     if( GetNativeControlRegion( ControlType::Checkbox, ControlPart::Entire, aCtrlRegion,
-                                ControlState::DEFAULT|ControlState::ENABLED, aControlValue, OUString(),
+                                ControlState::DEFAULT|ControlState::ENABLED, aControlValue,
                                 aBoundingRgn, aContentRgn ) )
     {
         Size aSize = aContentRgn.GetSize();

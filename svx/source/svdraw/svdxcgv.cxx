@@ -165,7 +165,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     return true;
 }
 
-bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions)
+bool SdrExchangeView::Paste(SvStream& rInput, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst, SdrInsertFlags nOptions)
 {
     Point aPos(rPos);
     ImpGetPasteObjList(aPos,pLst);
@@ -193,7 +193,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt
 
     pObj->SetMergedItemSet(aTempAttr);
 
-    pObj->NbcSetText(rInput,rBaseURL,eFormat);
+    pObj->NbcSetText(rInput,OUString(),eFormat);
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());
     MapUnit eMap=mpModel->GetScaleUnit();

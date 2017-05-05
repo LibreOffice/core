@@ -2728,7 +2728,7 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
     }
     else
     {
-        DrawEntry(rRenderContext, true, false, bLayout);
+        DrawEntry(rRenderContext, bLayout);
     }
 }
 
@@ -2757,13 +2757,13 @@ void ImplWin::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle&
     ImplDraw(rRenderContext);
 }
 
-void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bDrawImage, bool bDrawTextAtImagePos, bool bLayout)
+void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bLayout)
 {
     long nBorder = 1;
     Size aOutSz(GetOutputSizePixel());
 
     bool bImage = !!maImage;
-    if (bDrawImage && bImage && !bLayout)
+    if (bImage && !bLayout)
     {
         DrawImageFlags nStyle = DrawImageFlags::NONE;
         Size aImgSz = maImage.GetSizePixel();
@@ -2804,7 +2804,7 @@ void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bDrawImage, boo
     {
         DrawTextFlags nTextStyle = DrawTextFlags::VCenter;
 
-        if ( bDrawImage && bImage && !bLayout )
+        if ( bImage && !bLayout )
             nTextStyle |= DrawTextFlags::Left;
         else if ( GetStyle() & WB_CENTER )
             nTextStyle |= DrawTextFlags::Center;
@@ -2815,7 +2815,7 @@ void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bDrawImage, boo
 
         tools::Rectangle aTextRect( Point( nBorder, 0 ), Size( aOutSz.Width()-2*nBorder, aOutSz.Height() ) );
 
-        if ( !bDrawTextAtImagePos && ( bImage || IsUserDrawEnabled() ) )
+        if ( bImage || IsUserDrawEnabled() )
         {
             aTextRect.Left() += maImage.GetSizePixel().Width() + IMG_TXT_DISTANCE;
         }

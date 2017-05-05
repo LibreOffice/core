@@ -164,11 +164,8 @@ namespace chelp {
         /**
          *  The following method returns the Collator for the given language-country combination
          */
-
         css::uno::Reference< css::i18n::XCollator >
-        getCollator( const OUString& Language,
-                     const OUString& System );   // System not used by current implementation
-        //                                            // of XCollator
+        getCollator( const OUString& Language );
 
         /**
          *  Returns the cascading style sheet used to format the HTML-output.

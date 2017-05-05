@@ -548,8 +548,7 @@ public:
     void            EnableUserDraw( bool bUserDraw )    { mbUserDrawEnabled = bUserDraw; }
     bool            IsUserDrawEnabled() const           { return mbUserDrawEnabled; }
 
-    void DrawEntry(vcl::RenderContext& rRenderContext, bool bDrawImage,
-                   bool bDrawTextAtImagePos, bool bLayout = false);
+    void DrawEntry(vcl::RenderContext& rRenderContext, bool bLayout);
 
     bool GetEdgeBlending() const { return mbEdgeBlending; }
     void SetEdgeBlending(bool bNew) { mbEdgeBlending = bNew; }

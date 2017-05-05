@@ -135,8 +135,7 @@ SimpleNameClashResolveRequest::~SimpleNameClashResolveRequest() {}
 
 SimpleNameClashResolveRequest::SimpleNameClashResolveRequest(
                                     const OUString & rTargetFolderURL,
-                                    const OUString & rClashingName,
-                                    const OUString & rProposedNewName )
+                                    const OUString & rClashingName )
 {
     // Fill request...
     ucb::NameClashResolveRequest aRequest;
@@ -145,7 +144,7 @@ SimpleNameClashResolveRequest::SimpleNameClashResolveRequest(
     aRequest.Classification  = task::InteractionClassification_QUERY;
     aRequest.TargetFolderURL = rTargetFolderURL;
     aRequest.ClashingName    = rClashingName;
-    aRequest.ProposedNewName = rProposedNewName;
+    aRequest.ProposedNewName = OUString();
 
     setRequest( uno::makeAny( aRequest ) );
 

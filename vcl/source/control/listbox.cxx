@@ -109,7 +109,7 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
                 tools::Rectangle aBoundingRgn( aCtrlRegion );
                 tools::Rectangle aContentRgn( aCtrlRegion );
                 if( GetNativeControlRegion( ControlType::Listbox, ControlPart::Entire, aCtrlRegion,
-                                            ControlState::ENABLED, aControlValue, OUString(),
+                                            ControlState::ENABLED, aControlValue,
                                             aBoundingRgn, aContentRgn ) )
                 {
                     sal_Int32 nHeight = aBoundingRgn.GetHeight();
@@ -585,7 +585,7 @@ void ListBox::Resize()
         tools::Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
         if ( GetNativeControlRegion( ControlType::Listbox, ControlPart::ButtonDown,
-                    aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
+                    aArea, ControlState::NONE, aControlValue, aBound, aContent) )
         {
             long nTop = 0;
             // Convert back from border space to local coordinates
@@ -598,7 +598,7 @@ void ListBox::Resize()
 
             // Adjust the size of the edit field
             if ( GetNativeControlRegion( ControlType::Listbox, ControlPart::SubEdit,
-                        aArea, ControlState::NONE, aControlValue, OUString(), aBound, aContent) )
+                        aArea, ControlState::NONE, aControlValue, aBound, aContent) )
             {
                 // Convert back from border space to local coordinates
                 aContent.Move( -aPoint.X(), -aPoint.Y() );
@@ -1187,7 +1187,7 @@ Size ListBox::CalcMinimumSize() const
         Size aTestSize( 100, 20 );
         tools::Rectangle aArea( aPoint, aTestSize );
         if( GetNativeControlRegion( ControlType::Listbox, ControlPart::SubEdit, aArea, ControlState::NONE,
-                    aControlValue, OUString(), aBound, aContent) )
+                    aControlValue, aBound, aContent) )
         {
             // use the themes drop down size
             aSz.Width() += aTestSize.Width() - aContent.GetWidth();
@@ -1204,7 +1204,7 @@ Size ListBox::CalcMinimumSize() const
         tools::Rectangle aRect( Point( 0, 0 ), aSz );
         tools::Rectangle aContent, aBound;
         if( GetNativeControlRegion( ControlType::Listbox, ControlPart::Entire, aRect, ControlState::NONE,
-                    aControlValue, OUString(), aBound, aContent) )
+                    aControlValue, aBound, aContent) )
         {
             if( aBound.GetHeight() > aSz.Height() )
                 aSz.Height() = aBound.GetHeight();
@@ -1343,7 +1343,7 @@ void ListBox::DrawEntry(const UserDrawEvent& rEvt)
     if (rEvt.GetWindow() == mpImplLB->GetMainWindow())
         mpImplLB->GetMainWindow()->DrawEntry(*rEvt.GetRenderContext(), rEvt.GetItemId(), true/*bDrawImage*/, true/*bDrawText*/, false/*bDrawTextAtImagePos*/ );
     else if (rEvt.GetWindow() == mpImplWin)
-        mpImplWin->DrawEntry(*rEvt.GetRenderContext(), true/*bDrawImage*/, false/*bDrawTextAtImagePos*/);
+        mpImplWin->DrawEntry(*rEvt.GetRenderContext(), false/*layout*/);
 }
 
 void ListBox::EnableUserDraw( bool bUserDraw )

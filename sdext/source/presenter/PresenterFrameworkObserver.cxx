@@ -29,7 +29,6 @@ namespace sdext { namespace presenter {
 
 PresenterFrameworkObserver::PresenterFrameworkObserver (
     const css::uno::Reference<css::drawing::framework::XConfigurationController>&rxController,
-    const OUString& rsEventName,
     const Predicate& rPredicate,
     const Action& rAction)
     : PresenterFrameworkObserverInterfaceBase(m_aMutex),
@@ -42,13 +41,6 @@ PresenterFrameworkObserver::PresenterFrameworkObserver (
 
     if (mxConfigurationController->hasPendingRequests())
     {
-        if (!rsEventName.isEmpty())
-        {
-            mxConfigurationController->addConfigurationChangeListener(
-                this,
-                rsEventName,
-                Any());
-        }
         mxConfigurationController->addConfigurationChangeListener(
             this,
             "ConfigurationUpdateEnd",
@@ -70,7 +62,6 @@ void PresenterFrameworkObserver::RunOnUpdateEnd (
 {
     new PresenterFrameworkObserver(
         rxController,
-        OUString(),
         &PresenterFrameworkObserver::True,
         rAction);
 }

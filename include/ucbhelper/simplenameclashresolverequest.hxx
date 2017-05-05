@@ -52,12 +52,9 @@ public:
       * @param rTargetFolderURL contains the URL of the folder that contains
       *        the clashing resource.
       * @param rClashingName contains the clashing name.
-      * @param rProposedNewName contains a proposal for the new name or is
-      *        empty.
       */
     SimpleNameClashResolveRequest( const OUString & rTargetFolderURL,
-                                   const OUString & rClashingName,
-                                   const OUString & rProposedNewName );
+                                   const OUString & rClashingName );
     /**
       * This method returns the new name that was supplied by the interaction
       * handler.

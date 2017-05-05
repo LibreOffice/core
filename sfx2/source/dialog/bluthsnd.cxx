@@ -17,14 +17,13 @@
 
 #include "bluthsndapi.hxx"
 
-SfxBluetoothModel::SendMailResult SfxBluetoothModel::SaveAndSend( const css::uno::Reference< css::frame::XFrame >& xFrame,
-                            const OUString& rType )
+SfxBluetoothModel::SendMailResult SfxBluetoothModel::SaveAndSend( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
     SaveResult      eSaveResult;
     SendMailResult  eResult = SEND_MAIL_ERROR;
     OUString   aFileName;
 
-    eSaveResult  = SaveDocumentAsFormat( OUString(), xFrame, rType, aFileName );
+    eSaveResult  = SaveDocumentAsFormat( OUString(), xFrame, OUString(), aFileName );
     if( eSaveResult == SAVE_SUCCESSFULL )
     {
         maAttachedDocuments.push_back( aFileName );

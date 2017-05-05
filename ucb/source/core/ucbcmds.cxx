@@ -373,8 +373,8 @@ NameClashContinuation interactiveNameClashResolve(
     rtl::Reference< ucbhelper::SimpleNameClashResolveRequest > xRequest(
         new ucbhelper::SimpleNameClashResolveRequest(
             rTargetURL,  // target folder URL
-            rClashingName,   // clashing name
-            OUString() ) ); // no proposal for new name
+            rClashingName
+            ) );
 
     rException = xRequest->getRequest();
     if ( xEnv.is() )

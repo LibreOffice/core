@@ -84,7 +84,6 @@ public:
       *        a previous try).
       * @param rPassword contains a password, if available (for instance from
       *        a previous try).
-      * @param rAccount contains an account, if applicable.
       * @param bAllowUseSystemCredentials specifies if requesting client is
       *        able to obtain and use system credentials for authentication
       */
@@ -93,7 +92,6 @@ public:
                                  const OUString & rRealm,
                                  const OUString & rUserName,
                                  const OUString & rPassword,
-                                 const OUString & rAccount,
                                  bool bAllowUseSystemCredentials,
                                  bool bAllowSessionStoring = true );
 

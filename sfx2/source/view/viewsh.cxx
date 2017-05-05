@@ -538,7 +538,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                             HiddenWarningFact::WhenSaving, &GetViewFrame()->GetWindow() ) != RET_YES )
                 break;
             uno::Reference < frame::XFrame > xFrame( pFrame->GetFrame().GetFrameInterface() );
-            SfxMailModel::SendMailResult eResult = aModel.SaveAndSend( xFrame, OUString() );
+            SfxMailModel::SendMailResult eResult = aModel.SaveAndSend( xFrame );
             if( eResult == SfxMailModel::SEND_MAIL_ERROR )
             {
                     ScopedVclPtrInstance< MessageDialog > aBox(SfxGetpApp()->GetTopWindow(), SfxResId( STR_ERROR_SEND_MAIL ), VclMessageType::Info);
