@@ -1357,16 +1357,18 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                 }
 
                 if (xRangeProperties.is() && rDM_Impl.IsNewDoc())
+                {
                     xRangeProperties->setPropertyValue(
                         getPropertyName( PROP_PAGE_DESC_NAME ),
                         uno::makeAny( m_bTitlePage ?  m_sFirstPageStyleName
                                       : m_sFollowPageStyleName ));
 
-                if(m_bPageNoRestart || m_nPageNumber >= 0)
-                {
-                    sal_Int16 nPageNumber = m_nPageNumber >= 0 ? static_cast< sal_Int16 >(m_nPageNumber) : 1;
-                    xRangeProperties->setPropertyValue(getPropertyName( PROP_PAGE_NUMBER_OFFSET ),
-                        uno::makeAny( nPageNumber ));
+                    if (m_bPageNoRestart || 0 <= m_nPageNumber)
+                    {
+                        sal_Int16 nPageNumber = m_nPageNumber >= 0 ? static_cast< sal_Int16 >(m_nPageNumber) : 1;
+                        xRangeProperties->setPropertyValue(getPropertyName(PROP_PAGE_NUMBER_OFFSET),
+                            uno::makeAny(nPageNumber));
+                    }
                 }
             }
         }
