@@ -132,7 +132,7 @@ class SwImplProtocol
     void Record_( const SwFrame* pFrame, PROT nFunction, DbgAction nAct, void* pParam );
     bool NewStream();
     void CheckLine( OString& rLine );
-    static void SectFunc( OStringBuffer& rOut, const SwFrame* pFrame, DbgAction nAct, void* pParam );
+    static void SectFunc( OStringBuffer& rOut, DbgAction nAct, void* pParam );
 public:
     SwImplProtocol();
     ~SwImplProtocol();
@@ -602,7 +602,7 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
         case PROT::FileInit: FileInit();
                             aOut.append("Initialize");
                             break;
-        case PROT::Section:  SectFunc(aOut, pFrame, nAct, pParam);
+        case PROT::Section:  SectFunc(aOut, nAct, pParam);
                             break;
         case PROT::Cut:      bTmp = true;
                             SAL_FALLTHROUGH;
@@ -664,7 +664,7 @@ void SwImplProtocol::Record_( const SwFrame* pFrame, PROT nFunction, DbgAction n
 }
 
 /// Handle the output of the SectionFrames.
-void SwImplProtocol::SectFunc(OStringBuffer &rOut, const SwFrame* , DbgAction nAct, void* pParam)
+void SwImplProtocol::SectFunc(OStringBuffer &rOut, DbgAction nAct, void* pParam)
 {
     bool bTmp = false;
     switch( nAct )

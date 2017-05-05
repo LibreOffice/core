@@ -1617,7 +1617,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
         // Finally, we are able to split table rows. Therefore, bDontMoveMe
         // can be set to false:
         if( bDontMoveMe && IsInTab() &&
-            nullptr != GetNextCellLeaf( MAKEPAGE_NONE ) )
+            nullptr != GetNextCellLeaf() )
             bDontMoveMe = false;
 
         if ( bDontMoveMe && aRectFnSet.GetHeight(Frame()) >

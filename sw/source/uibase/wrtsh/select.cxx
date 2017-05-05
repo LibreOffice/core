@@ -718,10 +718,10 @@ IMPL_LINK( SwWrtShell, ExecFlyMac, const SwFlyFrameFormat*, pFlyFormat, void )
     }
 }
 
-long SwWrtShell::UpdateLayoutFrame(const Point *pPt, bool )
+long SwWrtShell::UpdateLayoutFrame(const Point *, bool )
 {
         // still a dummy
-    SwFEShell::EndDrag( pPt );
+    SwFEShell::EndDrag();
     m_fnDrag = &SwWrtShell::BeginFrameDrag;
     return 1;
 }

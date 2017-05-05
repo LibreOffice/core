@@ -1106,7 +1106,7 @@ bool SwFieldMgr::InsertField(
                 {
                     SwDBNextSetFieldType* pTyp = static_cast<SwDBNextSetFieldType*>(pCurShell->GetFieldType(
                         0, SwFieldIds::DbNextSet) );
-                    pField = new SwDBNextSetField(pTyp, sPar1, rData.m_sPar2, aDBData);
+                    pField = new SwDBNextSetField(pTyp, sPar1, aDBData);
                     bExp = true;
                     break;
                 }
