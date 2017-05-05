@@ -212,9 +212,9 @@ search(int32_t *I,unsigned char *old,int32_t oldsize,
 int main(int argc,char *argv[])
 {
     int fd;
-    unsigned char *old,*newbuf;
-    int32_t oldsize,newsize;
-    int32_t *I,*V;
+    unsigned char *old = nullptr,*newbuf = nullptr;
+    int32_t oldsize = 0,newsize = 0;
+    int32_t *I = nullptr,*V = nullptr;
 
     int32_t scan,pos,len;
     int32_t lastscan,lastpos,lastoffset;
