@@ -380,7 +380,6 @@ struct WW8LSTInfo   // sorted by nIdLst (in WW8 used list-Id)
 {
     std::vector<ww::bytes> maParaSprms;
     WW8aIdSty   aIdSty;          // Style Id's for each level
-    WW8aISet    aItemSet;        // Character attributes from GrpprlChpx
     WW8aCFormat    aCharFormat;        // Character Style Pointer
 
     SwNumRule*  pNumRule;        // Pointer to list-template in im Writer
@@ -394,7 +393,6 @@ struct WW8LSTInfo   // sorted by nIdLst (in WW8 used list-Id)
         bSimpleList(aLST.bSimpleList), bUsedInDoc(false)
     {
         memcpy( aIdSty, aLST.aIdSty, sizeof( aIdSty   ));
-        memset(&aItemSet, 0,  sizeof( aItemSet ));
         memset(&aCharFormat, 0,  sizeof( aCharFormat ));
     }
 
@@ -1231,6 +1229,9 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     sal_uInt16 nLSTInfos = static_cast< sal_uInt16 >(maLSTInfos.size());
     for (sal_uInt16 nList = 0; nList < nLSTInfos; ++nList)
     {
+        WW8aISet aItemSet;        // Character attributes from GrpprlChpx
+        memset(&aItemSet, 0, sizeof(aItemSet));
+
         WW8LSTInfo* pListInfo = maLSTInfos[nList];
         if( !pListInfo || !pListInfo->pNumRule ) break;
         SwNumRule& rMyNumRule = *pListInfo->pNumRule;
@@ -1245,7 +1246,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         {
             SwNumFormat aNumFormat( rMyNumRule.Get( nLevel ) );
             // read LVLF
-            bLVLOk = ReadLVL( aNumFormat, pListInfo->aItemSet[nLevel],
+            bLVLOk = ReadLVL( aNumFormat, aItemSet[nLevel],
                 pListInfo->aIdSty[nLevel], true, aNotReallyThere, nLevel,
                 pListInfo->maParaSprms[nLevel]);
             if( !bLVLOk )
@@ -1262,14 +1263,14 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         for (sal_uInt16 nLevel = 0; nLevel < nLvlCount; ++nLevel)
         {
             bool bDummy;
-            AdjustLVL( nLevel, rMyNumRule, pListInfo->aItemSet,
+            AdjustLVL( nLevel, rMyNumRule, aItemSet,
                                            pListInfo->aCharFormat, bDummy );
         }
 
         // 1.2.3 clear and delete ItemPools
 
         for (sal_uInt16 nLevel = 0; nLevel < nLvlCount; ++nLevel)
-            delete pListInfo->aItemSet[ nLevel ];
+            delete aItemSet[ nLevel ];
     }
 
     // 2. read and save PLF LFO
