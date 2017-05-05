@@ -30,6 +30,7 @@
 #include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/misspellrange.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/svdetc.hxx>
 #include <editeng/editobj.hxx>
 #include <sfx2/dispatch.hxx>
@@ -52,6 +53,8 @@
 #include <svx/svditer.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
+
+#include <o3tl/make_unique.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -5568,6 +5571,22 @@ bool ScGridWindow::ContinueOnlineSpelling()
         {
             ++nTextCellCount;
 
+            // NB: For spell-checking, we currently only use the primary
+            // language; not CJK nor CTL.
+            const ScPatternAttr* pPattern = pDoc->GetPattern(nCol, nRow, nTab);
+            LanguageType nCellLang =
+                static_cast<const SvxLanguageItem&>(pPattern->GetItem(ATTR_FONT_LANGUAGE)).GetValue();
+
+            if (nCellLang == LANGUAGE_SYSTEM)
+                nCellLang = Application::GetSettings().GetLanguageTag().getLanguageType();   // never use SYSTEM for spelling
+
+            if (nCellLang == LANGUAGE_NONE)
+            {
+                // No need to spell check this cell.
+                pCell = aIter.GetNext(nCol, nRow);
+                continue;
+            }
+
             if (!pEngine)
             {
                 //  ScTabEditEngine is needed
@@ -5582,14 +5601,10 @@ bool ScGridWindow::ContinueOnlineSpelling()
 
                 uno::Reference<linguistic2::XSpellChecker1> xXSpellChecker1(LinguMgr::GetSpellChecker());
                 pEngine->SetSpeller(xXSpellChecker1);
+                pEngine->SetDefaultLanguage(ScGlobal::GetEditDefaultLanguage());
             }
 
-            const ScPatternAttr* pPattern = pDoc->GetPattern(nCol, nRow, nTab);
-            sal_uInt16 nCellLang =
-                static_cast<const SvxLanguageItem&>(pPattern->GetItem(ATTR_FONT_LANGUAGE)).GetValue();
-            if (nCellLang == LANGUAGE_SYSTEM)
-                nCellLang = Application::GetSettings().GetLanguageTag().getLanguageType();   // never use SYSTEM for spelling
-            pEngine->SetDefaultLanguage(nCellLang);
+            pEngine->SetDefaultItem(SvxLanguageItem(nCellLang, EE_CHAR_LANGUAGE));
 
             if (eType == CELLTYPE_STRING)
                 pEngine->SetText(pCell->mpString->getString());
