@@ -69,8 +69,11 @@ public:
                     explicit Date( DateInitSystem );
                     explicit Date( sal_Int32 nDate ) : mnDate(nDate) {}
                     Date( const Date& rDate ) : mnDate(rDate.mnDate) {}
+
+                    /** nDay and nMonth both must be <100, nYear must be != 0 */
                     Date( sal_uInt16 nDay, sal_uInt16 nMonth, sal_Int16 nYear )
                         { setDateFromDMY(nDay, nMonth, nYear); }
+
                     Date( const css::util::Date& rUDate )
                     {
                         setDateFromDMY(rUDate.Day, rUDate.Month, rUDate.Year);
@@ -83,9 +86,13 @@ public:
     sal_uInt32      GetDateUnsigned() const { return static_cast<sal_uInt32>(mnDate < 0 ? -mnDate : mnDate); }
     css::util::Date GetUNODate() const { return css::util::Date(GetDay(), GetMonth(), GetYear()); }
 
+                    /** nNewDay must be <100 */
     void            SetDay( sal_uInt16 nNewDay );
+                    /** nNewMonth must be <100 */
     void            SetMonth( sal_uInt16 nNewMonth );
+                    /** nNewYear must be != 0 */
     void            SetYear( sal_Int16 nNewYear );
+
     sal_uInt16      GetDay() const
                     {
                         return mnDate < 0 ?
