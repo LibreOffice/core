@@ -117,9 +117,9 @@ void SwLineNumberInfo::SetCharFormat( SwCharFormat *pChFormat )
     pChFormat->Add( this );
 }
 
-void SwLineNumberInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwLineNumberInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* /*pNew*/ )
 {
-    CheckRegistration( pOld, pNew );
+    CheckRegistration( pOld );
     SwDoc *pDoc = static_cast<SwCharFormat*>(GetRegisteredIn())->GetDoc();
     SwRootFrame* pRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if( pRoot )

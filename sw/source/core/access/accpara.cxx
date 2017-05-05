@@ -702,7 +702,7 @@ SwTOXSortTabBase* SwAccessibleParagraph::GetTOXSortTabBase()
 }
 
 //the function is to check whether the position is in a redline range.
-const SwRangeRedline* SwAccessibleParagraph::GetRedlineAtIndex( sal_Int32 )
+const SwRangeRedline* SwAccessibleParagraph::GetRedlineAtIndex()
 {
     const SwRangeRedline* pRedline = nullptr;
     SwPaM* pCrSr = GetCursor( true );
@@ -727,7 +727,6 @@ const SwRangeRedline* SwAccessibleParagraph::GetRedlineAtIndex( sal_Int32 )
 
 bool SwAccessibleParagraph::GetCharBoundary(
     i18n::Boundary& rBound,
-    const OUString&,
     sal_Int32 nPos )
 {
     if( GetPortionData().FillBoundaryIFDateField( rBound,  nPos) )
@@ -802,7 +801,6 @@ bool SwAccessibleParagraph::GetParagraphBoundary(
 
 bool SwAccessibleParagraph::GetAttributeBoundary(
     i18n::Boundary& rBound,
-    const OUString&,
     sal_Int32 nPos )
 {
     GetPortionData().GetAttributeBoundary( rBound, nPos );
@@ -866,7 +864,7 @@ bool SwAccessibleParagraph::GetTextBoundary(
             break;
 
         case AccessibleTextType::CHARACTER:
-            bRet = GetCharBoundary( rBound, rText, nPos );
+            bRet = GetCharBoundary( rBound, nPos );
             break;
 
         case AccessibleTextType::LINE:
@@ -878,7 +876,7 @@ bool SwAccessibleParagraph::GetTextBoundary(
             break;
 
         case AccessibleTextType::ATTRIBUTE_RUN:
-            bRet = GetAttributeBoundary( rBound, rText, nPos );
+            bRet = GetAttributeBoundary( rBound, nPos );
             break;
 
         case AccessibleTextType::GLYPH:
@@ -1616,7 +1614,7 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
             aSupplementalNames = getSupplementalAttributeNames();
 
         tAccParaPropValMap aSupplementalAttrSeq;
-        _getSupplementalAttributesImpl( nIndex, aSupplementalNames, aSupplementalAttrSeq );
+        _getSupplementalAttributesImpl( aSupplementalNames, aSupplementalAttrSeq );
 
         aValues.resize( aValues.size() + aSupplementalAttrSeq.size() );
 
@@ -2020,7 +2018,6 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
 }
 
 void SwAccessibleParagraph::_getSupplementalAttributesImpl(
-        const sal_Int32,
         const uno::Sequence< OUString >& aRequestedAttributes,
         tAccParaPropValMap& rSupplementalAttrSeq )
 {
@@ -2087,7 +2084,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
 {
     PropertyValue ChangeAttr, ChangeAttrColor;
 
-    const SwRangeRedline* pRedline = GetRedlineAtIndex( nIndex );
+    const SwRangeRedline* pRedline = GetRedlineAtIndex();
     if ( pRedline )
     {
 
@@ -3547,11 +3544,11 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
 }
 
 // #i108125#
-void SwAccessibleParagraph::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
+void SwAccessibleParagraph::Modify( const SfxPoolItem* pOld, const SfxPoolItem* /*pNew*/ )
 {
     mpParaChangeTrackInfo->reset();
 
-    CheckRegistration( pOld, pNew );
+    CheckRegistration( pOld );
 }
 
 bool SwAccessibleParagraph::GetSelectionAtIndex(

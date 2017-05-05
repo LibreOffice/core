@@ -354,7 +354,7 @@ void SwTableFormula::MakeFormula_( const SwTable& rTable, OUString& rNewStr,
                     rNewStr += OUStringLiteral1(cListDelim);
                 bDelim = true;
                 rNewStr += pCalcPara->rCalc.GetStrResult(
-                            pTableBox->GetValue( *pCalcPara ), false );
+                            pTableBox->GetValue( *pCalcPara ) );
             }
         }
         rNewStr += ")";
@@ -367,7 +367,7 @@ void SwTableFormula::MakeFormula_( const SwTable& rTable, OUString& rNewStr,
         {
             rNewStr += "(";
             rNewStr += pCalcPara->rCalc.GetStrResult(
-                            pSttBox->GetValue( *pCalcPara ), false );
+                            pSttBox->GetValue( *pCalcPara ) );
             rNewStr += ")";
         }
     }

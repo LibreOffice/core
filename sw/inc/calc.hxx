@@ -183,7 +183,7 @@ public:
 
     SwSbxValue  Calculate( const OUString &rStr );
     OUString    GetStrResult( const SwSbxValue& rValue );
-    OUString    GetStrResult( double, bool bRound = true );
+    OUString    GetStrResult( double );
 
     SwCalcExp*  VarInsert( const OUString& r );
     SwCalcExp*  VarLook( const OUString &rStr, bool bIns = false );

@@ -288,7 +288,7 @@ public:
 
     /** Is in something protected (readonly) or selection contains
        something protected. */
-    bool HasReadonlySel( bool bFormView, bool bAnnotationMode = false ) const;
+    bool HasReadonlySel( bool bFormView ) const;
 
     bool ContainsPosition(const SwPosition & rPos) const
     {

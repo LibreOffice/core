@@ -515,7 +515,7 @@ void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         break;
 
     default:
-        CheckRegistration( pOld, pNew );
+        CheckRegistration( pOld );
         break;
     }
 

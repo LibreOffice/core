@@ -889,7 +889,7 @@ public:
      evaluating the respective settings (see implementation) */
     static void CalculatePagesForPrinting( const SwRootFrame& rLayout, SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
             sal_Int32 nDocPageCount );
-    static void UpdatePagesForPrintingWithPostItData( SwRenderData &rData, const SwPrintUIOptions &rOptions, bool bIsPDFExport,
+    static void UpdatePagesForPrintingWithPostItData( SwRenderData &rData, const SwPrintUIOptions &rOptions,
             sal_Int32 nDocPageCount );
     static void CalculatePagePairsForProspectPrinting( const SwRootFrame& rLayout, SwRenderData &rData, const SwPrintUIOptions &rOptions,
             sal_Int32 nDocPageCount );

@@ -3044,7 +3044,7 @@ void SwCursorShell::SetReadOnlyAvailable( bool bFlag )
     }
 }
 
-bool SwCursorShell::HasReadonlySel(bool bAnnotationMode) const
+bool SwCursorShell::HasReadonlySel() const
 {
     bool bRet = false;
     // If protected area is to be ignored, then selections are never read-only.
@@ -3061,7 +3061,7 @@ bool SwCursorShell::HasReadonlySel(bool bAnnotationMode) const
         {
             for(const SwPaM& rCursor : m_pCurrentCursor->GetRingContainer())
             {
-                if( rCursor.HasReadonlySel( GetViewOptions()->IsFormView(), bAnnotationMode ) )
+                if( rCursor.HasReadonlySel( GetViewOptions()->IsFormView() ) )
                 {
                     bRet = true;
                     break;

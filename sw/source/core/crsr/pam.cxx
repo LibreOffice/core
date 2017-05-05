@@ -564,7 +564,7 @@ static const SwFrame* lcl_FindEditInReadonlyFrame( const SwFrame& rFrame )
 }
 
 /// is in protected section or selection surrounds something protected
-bool SwPaM::HasReadonlySel( bool bFormView, bool /*bAnnotationMode*/ ) const
+bool SwPaM::HasReadonlySel( bool bFormView ) const
 {
     bool bRet = false;
 
