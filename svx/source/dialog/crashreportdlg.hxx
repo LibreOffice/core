@@ -24,7 +24,7 @@ private:
     std::unique_ptr<weld::Button> mxBtnCancel;
     std::unique_ptr<weld::Button> mxBtnClose;
     std::unique_ptr<weld::Label> mxEditPreUpload;
-    std::unique_ptr<weld::TextView> mxEditPostUpload;
+    std::unique_ptr<weld::Label> mxEditPostUpload;
     std::unique_ptr<weld::LinkButton> mxBugReportMailto;
     std::unique_ptr<weld::CheckButton> mxCBSafeMode;
 
