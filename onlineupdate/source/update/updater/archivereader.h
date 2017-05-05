@@ -9,12 +9,7 @@
 
 #include <stdio.h>
 #include <onlineupdate/mar.h>
-
-#ifdef _WIN32
-typedef WCHAR NS_tchar;
-#else
-typedef char NS_tchar;
-#endif
+#include "types.hxx"
 
 // This class provides an API to extract files from an update archive.
 class ArchiveReader

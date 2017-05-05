@@ -8,12 +8,11 @@
 #define PROGRESSUI_H__
 
 #include "updatedefines.h"
+#include "types.hxx"
 
 #if defined(_WIN32)
-typedef WCHAR NS_tchar;
 #define NS_main wmain
 #else
-typedef char NS_tchar;
 #define NS_main main
 #endif
 
