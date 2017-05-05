@@ -16,6 +16,8 @@ $(eval $(call gb_Executable_set_include,updater,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_Executable_use_custom_headers,updater,onlineupdate/generated))
+
 $(eval $(call gb_Executable_use_static_libraries,updater,\
     libmar \
     updatehelper \
