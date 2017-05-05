@@ -86,14 +86,19 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
 
             case sdbc::DataType::DATE:
                 {
-                    SvNumberFormatter* pFormTable = pDoc->GetFormatTable();
-                    nFormatIndex = pFormTable->GetStandardFormat(
-                                        css::util::NumberFormat::DATE, ScGlobal::eLnge );
-
                     util::Date aDate = xRow->getDate(nRowPos);
-                    nVal = Date( aDate.Day, aDate.Month, aDate.Year ) -
-                                                *pFormTable->GetNullDate();
                     bEmptyFlag = xRow->wasNull();
+                    if (bEmptyFlag)
+                        nVal = 0.0;
+                    else
+                    {
+                        SvNumberFormatter* pFormTable = pDoc->GetFormatTable();
+                        nFormatIndex = pFormTable->GetStandardFormat(
+                                css::util::NumberFormat::DATE, ScGlobal::eLnge );
+
+                        nVal = Date( aDate.Day, aDate.Month, aDate.Year ) -
+                            *pFormTable->GetNullDate();
+                    }
                     bValue = true;
                 }
                 break;
