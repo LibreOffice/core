@@ -89,7 +89,7 @@ OUString GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
 SmFormat::SmFormat()
 :   aBaseSize(0, SmPtsTo100th_mm(12))
 {
-    eHorAlign       = AlignCenter;
+    eHorAlign       = SmHorAlign::Center;
     nGreekCharStyle = 0;
     bIsTextmode     = bScaleNormalBrackets = false;
 

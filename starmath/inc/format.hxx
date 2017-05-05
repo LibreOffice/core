@@ -82,7 +82,11 @@
 #define DIS_END                 23
 
 
-enum SmHorAlign { AlignLeft, AlignCenter, AlignRight };
+enum class SmHorAlign {
+    Left,
+    Center,
+    Right
+};
 
 OUString GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent );
 

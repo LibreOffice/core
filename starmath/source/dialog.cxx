@@ -1044,19 +1044,19 @@ void SmAlignDialog::ReadFrom(const SmFormat &rFormat)
 {
     switch (rFormat.GetHorAlign())
     {
-        case AlignLeft:
+        case SmHorAlign::Left:
             m_pLeft->Check();
             m_pCenter->Check(false);
             m_pRight->Check(false);
             break;
 
-        case AlignCenter:
+        case SmHorAlign::Center:
             m_pLeft->Check(false);
             m_pCenter->Check();
             m_pRight->Check(false);
             break;
 
-        case AlignRight:
+        case SmHorAlign::Right:
             m_pLeft->Check(false);
             m_pCenter->Check(false);
             m_pRight->Check();
@@ -1068,11 +1068,11 @@ void SmAlignDialog::ReadFrom(const SmFormat &rFormat)
 void SmAlignDialog::WriteTo(SmFormat &rFormat) const
 {
     if (m_pLeft->IsChecked())
-        rFormat.SetHorAlign(AlignLeft);
+        rFormat.SetHorAlign(SmHorAlign::Left);
     else if (m_pRight->IsChecked())
-        rFormat.SetHorAlign(AlignRight);
+        rFormat.SetHorAlign(SmHorAlign::Right);
     else
-        rFormat.SetHorAlign(AlignCenter);
+        rFormat.SetHorAlign(SmHorAlign::Center);
 
     rFormat.RequestApplyChanges();
 }
