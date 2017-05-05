@@ -935,6 +935,14 @@
           credentials of the user.</desc>
         </info>
       </prop>
+      <prop oor:name="TrySystemCredentialsFirst" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if authentication using system credentials should be tried
+          automatically for all resources that support it (regardless of whether they are
+          in "AuthenticateUsingSystemCredentials" list or not).</desc>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
     <group oor:name="Dictionaries">
       <info>
