@@ -347,7 +347,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
         OUString sDisplayDropCapTextStyleName(
             GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_TEXT,
                                           sDropCapTextStyleName ) );
-        // The families cointaner must exist
+        // The families container must exist
         const Reference < XNameContainer >& rTextStyles =
             GetImport().GetTextImport()->GetTextStyles();
         if( rTextStyles.is() &&
@@ -363,7 +363,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
         OUString sDisplayName(
             GetImport().GetStyleDisplayName(
                             XML_STYLE_FAMILY_MASTER_PAGE, sMasterPageName ) );
-        // The families cointaner must exist
+        // The families container must exist
         const Reference < XNameContainer >& rPageStyles =
             GetImport().GetTextImport()->GetPageStyles();
         if( ( sDisplayName.isEmpty() ||
