@@ -228,15 +228,22 @@ void DateTime::GetWin32FileDateTime( sal_uInt32 & rLower, sal_uInt32 & rUpper )
     const sal_Int64 a100nPerSecond = SAL_CONST_INT64( 10000000 );
     const sal_Int64 a100nPerDay = a100nPerSecond * sal_Int64( 60 * 60 * 24 );
 
-    sal_Int64 nYears = GetYear() - 1601;
-    sal_Int64 nDays =
-        nYears * 365 +
-        nYears / 4 - nYears / 100 + nYears / 400 +
-        GetDayOfYear() - 1;
+    // FILETIME is indirectly documented as uint64, see
+    // https://msdn.microsoft.com/en-us/library/windows/desktop/ms724284.aspx
+    // mentioning the ULARGE_INTEGER structure.
+    // https://msdn.microsoft.com/en-us/library/windows/desktop/ms724280.aspx
+    // mentions that if FILETIME is not less than 0x8000000000000000 then the
+    // FileTimeToSystemTime function fails, which is another indicator.
+    // Unless there's evidence that FILETIME can represent a signed offset from
+    // 1601-01-01 truncate at 0. (reading part below in
+    // CreateFromWin32FileDateTime() would had to be adapted to signed as
+    // well).
+    sal_Int16 nYear = GetYear();
+    SAL_WARN_IF( nYear < 1601, "tools.datetime", "DateTime::GetWin32FileDateTime - year < 1601: " << nYear);
 
-    sal_Int64 aTime =
-        a100nPerDay * nDays +
-        GetNSFromTime()/100;
+    sal_Int64 aTime = (nYear < 1601 ? 0 : (
+        a100nPerDay * static_cast<sal_Int64>(*this - Date(1,1,1601)) +
+        GetNSFromTime()/100));
 
     rLower = sal_uInt32( aTime % SAL_CONST_UINT64( 0x100000000 ) );
     rUpper = sal_uInt32( aTime / SAL_CONST_UINT64( 0x100000000 ) );
