@@ -110,7 +110,7 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
                 nOffset = COMPLETE_STRING;
             aIo.CloseFlagRec();
             Insert( SW_LAYCACHE_IO_REC_PARA, nIndex, (sal_Int32)nOffset );
-            aIo.CloseRec( SW_LAYCACHE_IO_REC_PARA );
+            aIo.CloseRec();
             break;
         }
         case SW_LAYCACHE_IO_REC_TABLE:
@@ -120,7 +120,7 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
                            .ReadUInt32( nOffset );
             Insert( SW_LAYCACHE_IO_REC_TABLE, nIndex, (sal_Int32)nOffset );
             aIo.CloseFlagRec();
-            aIo.CloseRec( SW_LAYCACHE_IO_REC_TABLE );
+            aIo.CloseRec();
             break;
         case SW_LAYCACHE_IO_REC_FLY:
         {
@@ -132,7 +132,7 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
             aIo.GetStream().ReadUInt16( nPgNum ).ReadUInt32( nIndex )
                    .ReadInt32( nX ).ReadInt32( nY ).ReadInt32( nW ).ReadInt32( nH );
             m_FlyCache.push_back(SwFlyCache( nPgNum, nIndex, nX, nY, nW, nH ));
-            aIo.CloseRec( SW_LAYCACHE_IO_REC_FLY );
+            aIo.CloseRec();
             break;
         }
         default:
@@ -140,7 +140,7 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
             break;
         }
     }
-    aIo.CloseRec( SW_LAYCACHE_IO_REC_PAGES );
+    aIo.CloseRec();
 
     return !aIo.HasError();
 }
@@ -198,7 +198,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                 aIo.GetStream().WriteUInt32( static_cast<SwTextFrame*>(pTmp)->GetOfst() );
                             aIo.CloseFlagRec();
                             /*  Close Paragraph Record */
-                            aIo.CloseRec( SW_LAYCACHE_IO_REC_PARA );
+                            aIo.CloseRec();
                         }
                     }
                     else if( pTmp->IsTabFrame() )
@@ -238,7 +238,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                                .WriteUInt32( nOfst );
                                 aIo.CloseFlagRec();
                                 /* Close Table Record  */
-                                aIo.CloseRec( SW_LAYCACHE_IO_REC_TABLE );
+                                aIo.CloseRec();
                             }
                             // If the table has a follow on the next page,
                             // we know already the row number and store this
@@ -301,7 +301,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                                .WriteInt32( rRct.Width() )
                                                .WriteInt32( rRct.Height() );
                                 /* Close Fly Record  */
-                                aIo.CloseRec( SW_LAYCACHE_IO_REC_FLY );
+                                aIo.CloseRec();
                             }
                         }
                     }
@@ -309,7 +309,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
             }
             pPage = static_cast<SwPageFrame*>(pPage->GetNext());
         }
-        aIo.CloseRec( SW_LAYCACHE_IO_REC_PAGES );
+        aIo.CloseRec();
     }
 }
 
@@ -1083,7 +1083,7 @@ bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
 }
 
 // Close record
-bool SwLayCacheIoImpl::CloseRec( sal_uInt8 )
+bool SwLayCacheIoImpl::CloseRec()
 {
     bool bRes = true;
     OSL_ENSURE( !aRecords.empty(), "CloseRec: no levels" );
@@ -1158,7 +1158,7 @@ void SwLayCacheIoImpl::SkipRec()
     sal_uInt8 c = Peek();
     OpenRec( c );
     pStream->Seek( aRecords.back().size );
-    CloseRec( c );
+    CloseRec();
 }
 
 sal_uInt8 SwLayCacheIoImpl::OpenFlagRec()

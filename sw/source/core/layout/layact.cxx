@@ -581,7 +581,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                         }
                     }
                     if( bNoLoop )
-                        rLayoutAccess.GetLayouter()->LoopControl( pPage, LOOP_PAGE );
+                        rLayoutAccess.GetLayouter()->LoopControl( pPage );
                 }
 
                 unlockPositionOfObjects( pPage );
@@ -634,7 +634,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                     pPage = static_cast<SwPageFrame*>(pPage->GetNext());
                 }
                 if( bNoLoop )
-                    rLayoutAccess.GetLayouter()->LoopControl( pPage, LOOP_PAGE );
+                    rLayoutAccess.GetLayouter()->LoopControl( pPage );
             }
             CheckIdleEnd();
         }

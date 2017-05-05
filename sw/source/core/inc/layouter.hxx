@@ -99,7 +99,7 @@ public:
     void CollectEndnote( SwFootnoteFrame* pFootnote );
     bool HasEndnotes() const;
 
-    void LoopControl( SwPageFrame* pPage, sal_uInt8 nLoop );
+    void LoopControl( SwPageFrame* pPage );
     void EndLoopControl();
     void LoopingLouieLight( const SwDoc& rDoc, const SwTextFrame& rFrame );
 

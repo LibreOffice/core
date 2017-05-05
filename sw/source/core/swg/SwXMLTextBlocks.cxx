@@ -316,7 +316,7 @@ sal_uLong SwXMLTextBlocks::BeginPutDoc( const OUString& rShort, const OUString& 
     return StartPutBlock (rShort, aPackageName);
 }
 
-sal_uLong SwXMLTextBlocks::PutBlock( SwPaM& , const OUString& )
+sal_uLong SwXMLTextBlocks::PutBlock()
 {
     sal_uLong nRes = 0; // dead variable, this always returns 0
     SwXmlFlags nCommitFlags = nFlags;
@@ -395,7 +395,7 @@ sal_uLong SwXMLTextBlocks::PutBlock( SwPaM& , const OUString& )
 sal_uLong SwXMLTextBlocks::PutDoc()
 {
     SwPaM* pPaM = MakePaM();
-    sal_uLong nErr = PutBlock(*pPaM, m_aLong);
+    sal_uLong nErr = PutBlock();
     delete pPaM;
     return nErr;
 }
@@ -557,7 +557,7 @@ sal_uLong SwXMLTextBlocks::PutText( const OUString& rShort, const OUString& rNam
     SetIsTextOnly( m_aShort, true );
     aPackageName = GeneratePackageName( rShort );
     ClearDoc();
-    nRes = PutBlockText( rShort, rName, rText, aPackageName );
+    nRes = PutBlockText( rShort, rText, aPackageName );
     return nRes;
 }
 
