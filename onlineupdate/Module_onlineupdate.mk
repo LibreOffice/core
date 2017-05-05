@@ -21,6 +21,7 @@ $(eval $(call gb_Module_add_targets,onlineupdate,\
 	Executable_mar \
 	Executable_updater \
 	Executable_mbsdiff \
+	CustomTarget_generated \
 ))
 endif
 
