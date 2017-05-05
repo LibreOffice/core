@@ -168,12 +168,12 @@ private:
     WW8LSTInfo* GetLSTByListId(    sal_uInt32  nIdLst     ) const;
     //the rParaSprms returns back the original word paragraph indent
     //sprms which are attached to this numbering level
-    bool ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet, sal_uInt16 nLevelStyle,
+    bool ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet>& rpItemSet, sal_uInt16 nLevelStyle,
         bool bSetStartNo, std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel,
         ww::bytes &rParaSprms);
 
     // character attributes from GrpprlChpx
-    typedef SfxItemSet* WW8aISet[nMaxLevel];
+    typedef std::unique_ptr<SfxItemSet> WW8aISet[nMaxLevel];
     // character style pointer
     typedef SwCharFormat* WW8aCFormat[nMaxLevel];
 

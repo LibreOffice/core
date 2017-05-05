@@ -308,8 +308,6 @@ void SwWW8ImplReader::DeleteFormImpl()
 
 // Style Id's for each level
 typedef sal_uInt16 WW8aIdSty[WW8ListManager::nMaxLevel];
-// Character attributes from GrpprlChpx
-typedef SfxItemSet* WW8aISet[WW8ListManager::nMaxLevel];
 // Character Style Pointer
 typedef SwCharFormat* WW8aCFormat[WW8ListManager::nMaxLevel];
 
@@ -502,7 +500,7 @@ OUString sanitizeString(const OUString& rString)
     return rString;
 }
 
-bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
+bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet>& rpItemSet,
     sal_uInt16 nLevelStyle, bool bSetStartNo,
     std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel,
     ww::bytes &rParaSprms)
@@ -680,11 +678,10 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
         }
 
         // create new Itemset for character attributes
-        rpItemSet = new SfxItemSet( rDoc.GetAttrPool(), RES_CHRATR_BEGIN,
-            RES_CHRATR_END - 1 );
+        rpItemSet.reset(new SfxItemSet( rDoc.GetAttrPool(), RES_CHRATR_BEGIN, RES_CHRATR_END - 1));
 
         // Set Reader-ItemSet-Pointer to the newly created set
-        rReader.SetAktItemSet( rpItemSet );
+        rReader.SetAktItemSet(rpItemSet.get());
         // Set Reader-Style to Style of this Level
         sal_uInt16 nOldColl = rReader.GetNAktColl();
         sal_uInt16 nNewColl = nLevelStyle;
@@ -993,13 +990,12 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
     const OUString& sPrefix )
 {
     bNewCharFormatCreated = false;
-    SfxItemSet* pThisLevelItemSet;
     sal_uInt8 nIdenticalItemSetLevel;
     const SfxPoolItem* pItem;
 
     SwNumFormat aNumFormat  = rNumRule.Get( nLevel );
 
-    pThisLevelItemSet = rListItemSet[ nLevel ];
+    SfxItemSet* pThisLevelItemSet = rListItemSet[nLevel].get();
 
     if( pThisLevelItemSet && pThisLevelItemSet->Count())
     {
@@ -1007,7 +1003,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
         SfxItemIter aIter( *pThisLevelItemSet );
         for (sal_uInt8 nLowerLevel = 0; nLowerLevel < nLevel; ++nLowerLevel)
         {
-            SfxItemSet* pLowerLevelItemSet = rListItemSet[ nLowerLevel ];
+            SfxItemSet* pLowerLevelItemSet = rListItemSet[nLowerLevel].get();
             if(     pLowerLevelItemSet
                 && (pLowerLevelItemSet->Count() == pThisLevelItemSet->Count()) )
             {
@@ -1230,7 +1226,6 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     for (sal_uInt16 nList = 0; nList < nLSTInfos; ++nList)
     {
         WW8aISet aItemSet;        // Character attributes from GrpprlChpx
-        memset(&aItemSet, 0, sizeof(aItemSet));
 
         WW8LSTInfo* pListInfo = maLSTInfos[nList];
         if( !pListInfo || !pListInfo->pNumRule ) break;
@@ -1266,11 +1261,6 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             AdjustLVL( nLevel, rMyNumRule, aItemSet,
                                            pListInfo->aCharFormat, bDummy );
         }
-
-        // 1.2.3 clear and delete ItemPools
-
-        for (sal_uInt16 nLevel = 0; nLevel < nLvlCount; ++nLevel)
-            delete aItemSet[ nLevel ];
     }
 
     // 2. read and save PLF LFO
@@ -1379,7 +1369,6 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
 
                 WW8aISet aItemSet;       // Character attribues from GrpprlChpx
                 WW8aCFormat aCharFormat;       // Character Style Pointer
-                memset(&aItemSet, 0,  sizeof( aItemSet ));
                 memset(&aCharFormat, 0,  sizeof( aCharFormat ));
 
                 //2.2.2.0 skip inter-group of override header ?
@@ -1470,11 +1459,6 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                     if( bNewCharFormatCreated )
                         aFlagsNewCharFormat += (1 << nLevel);
                 }
-
-                // 2.2.4 clear and delete ItemPools
-
-                for (sal_uInt8 nLevel = 0; nLevel < rLFOInfo.nLfoLvl; ++nLevel)
-                    delete aItemSet[ nLevel ];
             }
         }
     }
