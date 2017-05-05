@@ -789,7 +789,7 @@ SwLayoutFrame *SwFrame::GetLeaf( MakePageType eMakePage, bool bFwd )
     }
 
     if ( bInTab && ( !IsTabFrame() || GetUpper()->IsCellFrame() ) ) // TABLE IN TABLE
-        return bFwd ? GetNextCellLeaf( eMakePage ) : GetPrevCellLeaf( eMakePage );
+        return bFwd ? GetNextCellLeaf() : GetPrevCellLeaf( eMakePage );
 
     if ( bInSct )
         return bFwd ? GetNextSctLeaf( eMakePage ) : GetPrevSctLeaf( eMakePage );
@@ -1826,7 +1826,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
             ( !m_rThis.IsTabFrame() ||
                 ( m_rThis.GetUpper()->IsInTab() &&
                   m_rThis.GetUpper()->FindTabFrame()->IsFwdMoveAllowed() ) ) &&
-             nullptr != const_cast<SwFrame&>(m_rThis).GetNextCellLeaf( MAKEPAGE_NONE ) )
+             nullptr != const_cast<SwFrame&>(m_rThis).GetNextCellLeaf() )
         {
             bNoFwd = false;
         }

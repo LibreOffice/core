@@ -528,7 +528,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
 
     SwRubyList aList;
 
-    const sal_uInt16 nCount = SwDoc::FillRubyList( *rSh.GetCursor(), aList, 0 );
+    const sal_uInt16 nCount = SwDoc::FillRubyList( *rSh.GetCursor(), aList );
     Sequence< Sequence< PropertyValue > > aRet(nCount);
     Sequence< PropertyValue >* pRet = aRet.getArray();
     OUString aString;
@@ -621,7 +621,7 @@ void SAL_CALL SwXTextView::setRubyList(
         aList.insert(aList.begin() + nPos, std::move(pEntry));
     }
     SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
-    pDoc->SetRubyList( *rSh.GetCursor(), aList, 0 );
+    pDoc->SetRubyList( *rSh.GetCursor(), aList );
 }
 
 SfxObjectShellLock SwXTextView::BuildTmpSelectionDoc()

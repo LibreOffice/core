@@ -415,8 +415,7 @@ private:
     // Update charts of given table.
     void UpdateCharts_( const SwTable& rTable, SwViewShell const & rVSh ) const;
 
-    static bool SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry,
-                                sal_uInt16 nMode );
+    static bool SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry );
 
     // CharTimer calls this method.
     void DoUpdateAllCharts();
@@ -783,8 +782,7 @@ public:
         {   return static_cast<SwFrameFormat*>(FindFormatByName( static_cast<SwFormatsBase&>(*mpFrameFormatTable), rName )); }
 
     SwCharFormat *MakeCharFormat(const OUString &rFormatName, SwCharFormat *pDerivedFrom,
-                           bool bBroadcast = false,
-                           bool bAuto = true );
+                           bool bBroadcast = false );
     void       DelCharFormat(size_t nFormat, bool bBroadcast = false);
     void       DelCharFormat(SwCharFormat* pFormat, bool bBroadcast = false);
     SwCharFormat* FindCharFormatByName( const OUString& rName ) const
@@ -798,8 +796,7 @@ public:
     SwTextFormatColls *GetTextFormatColls() { return mpTextFormatCollTable; }
     SwTextFormatColl *MakeTextFormatColl( const OUString &rFormatName,
                                   SwTextFormatColl *pDerivedFrom,
-                                  bool bBroadcast = false,
-                                  bool bAuto = true );
+                                  bool bBroadcast = false);
     SwConditionTextFormatColl* MakeCondTextFormatColl( const OUString &rFormatName,
                                                SwTextFormatColl *pDerivedFrom,
                                                bool bBroadcast = false);
@@ -1513,10 +1510,8 @@ public:
     void SetContainsMSVBasic( bool bFlag )  { mbContains_MSVBasic = bFlag; }
 
     // Interface for the list of Ruby - texts/attributes
-    static sal_uInt16 FillRubyList( const SwPaM& rPam, SwRubyList& rList,
-                        sal_uInt16 nMode );
-    void SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
-                        sal_uInt16 nMode );
+    static sal_uInt16 FillRubyList( const SwPaM& rPam, SwRubyList& rList );
+    void SetRubyList( const SwPaM& rPam, const SwRubyList& rList );
 
     void ReadLayoutCache( SvStream& rStream );
     void WriteLayoutCache( SvStream& rStream );

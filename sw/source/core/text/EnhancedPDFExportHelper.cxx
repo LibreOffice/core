@@ -445,7 +445,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
              ( rFrame.IsFlowFrame() && !SwFlowFrame::CastFlowFrame(&rFrame)->IsFollow() && SwFlowFrame::CastFlowFrame(&rFrame)->HasFollow() ) ||
              ( rFrame.IsTextFrame() && rFrame.GetDrawObjs() ) ||
              ( rFrame.IsRowFrame() && rFrame.IsInSplitTableRow() ) ||
-             ( rFrame.IsCellFrame() && const_cast<SwFrame&>(rFrame).GetNextCellLeaf( MAKEPAGE_NONE ) ) )
+             ( rFrame.IsCellFrame() && const_cast<SwFrame&>(rFrame).GetNextCellLeaf() ) )
         {
             const void* pKey = lcl_GetKeyFromFrame( rFrame );
 

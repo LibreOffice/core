@@ -164,7 +164,7 @@ class SW_DLLPUBLIC SwDBNextSetField : public SwDBNameInfField
 
 public:
     SwDBNextSetField( SwDBNextSetFieldType*,
-                      const OUString& rCond, const OUString& rDummy, const SwDBData& rDBData);
+                      const OUString& rCond, const SwDBData& rDBData);
 
     virtual OUString        Expand() const override;
     virtual SwField*        Copy() const override;
@@ -239,7 +239,7 @@ class SwDBNameFieldType : public SwFieldType
 public:
     SwDBNameFieldType(SwDoc*);
 
-    OUString                Expand(sal_uLong) const;
+    OUString                Expand() const;
     virtual SwFieldType*    Copy() const override;
 };
 

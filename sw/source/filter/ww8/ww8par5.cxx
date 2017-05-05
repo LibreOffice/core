@@ -2539,7 +2539,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBNext( WW8FieldDesc*, OUString& )
 #if HAVE_FEATURE_DBCONNECTIVITY
     SwDBNextSetFieldType aN;
     SwFieldType* pFT = m_rDoc.getIDocumentFieldsAccess().InsertFieldType( aN );
-    SwDBNextSetField aField( static_cast<SwDBNextSetFieldType*>(pFT), OUString(), OUString(),
+    SwDBNextSetField aField( static_cast<SwDBNextSetFieldType*>(pFT), OUString(),
                             SwDBData() );       // Datenbank: Nichts
     m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
 #endif

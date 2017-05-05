@@ -564,7 +564,6 @@ SwFieldType* SwDBNextSetFieldType::Copy() const
 
 SwDBNextSetField::SwDBNextSetField(SwDBNextSetFieldType* pTyp,
                                    const OUString& rCond,
-                                   const OUString& ,
                                    const SwDBData& rDBData) :
     SwDBNameInfField(pTyp, rDBData), aCond(rCond), bCondValid(true)
 {}
@@ -577,7 +576,7 @@ OUString SwDBNextSetField::Expand() const
 SwField* SwDBNextSetField::Copy() const
 {
     SwDBNextSetField *pTmp = new SwDBNextSetField(static_cast<SwDBNextSetFieldType*>(GetTyp()),
-                                         aCond, OUString(), GetDBData());
+                                         aCond, GetDBData());
     pTmp->SetSubType(GetSubType());
     pTmp->bCondValid = bCondValid;
     return pTmp;
@@ -750,7 +749,7 @@ SwDBNameFieldType::SwDBNameFieldType(SwDoc* pDocument)
     pDoc = pDocument;
 }
 
-OUString SwDBNameFieldType::Expand(sal_uLong ) const
+OUString SwDBNameFieldType::Expand() const
 {
     const SwDBData aData = pDoc->GetDBData();
     return aData.sDataSource + "." + aData.sCommand;
@@ -771,7 +770,7 @@ SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData)
 OUString SwDBNameField::Expand() const
 {
     if(0 ==(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE))
-        return static_cast<SwDBNameFieldType*>(GetTyp())->Expand(GetFormat());
+        return static_cast<SwDBNameFieldType*>(GetTyp())->Expand();
     return OUString();
 }
 

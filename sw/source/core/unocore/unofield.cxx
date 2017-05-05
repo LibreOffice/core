@@ -1640,7 +1640,7 @@ void SAL_CALL SwXTextField::attach(
             aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
             SwFieldType* pFieldType = pDoc->getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DbNextSet);
             pField = new SwDBNextSetField(static_cast<SwDBNextSetFieldType*>(pFieldType),
-                    m_pImpl->m_pProps->sPar3, OUString(), aData);
+                    m_pImpl->m_pProps->sPar3, aData);
         }
 #endif
         break;
