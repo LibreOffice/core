@@ -62,7 +62,7 @@ LogBridge::LogBridge()
 
 LogBridge::~LogBridge()
 {
-    OSL_ASSERT(m_count >= 0);
+    assert(m_count >= 0);
 }
 
 void LogBridge::v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam)
@@ -74,7 +74,7 @@ void LogBridge::v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam)
 
 void LogBridge::v_callOut_v(uno_EnvCallee * pCallee, va_list * pParam)
 {
-    OSL_ASSERT(m_count > 0);
+    assert(m_count > 0);
 
     -- m_count;
     pCallee(pParam);
@@ -88,7 +88,7 @@ void LogBridge::v_enter()
 {
     m_mutex.acquire();
 
-    OSL_ASSERT(m_count >= 0);
+    assert(m_count >= 0);
 
     if (m_count == 0)
         m_threadId = osl::Thread::getCurrentIdentifier();
@@ -98,7 +98,7 @@ void LogBridge::v_enter()
 
 void LogBridge::v_leave()
 {
-    OSL_ASSERT(m_count > 0);
+    assert(m_count > 0);
 
     -- m_count;
     if (!m_count)
