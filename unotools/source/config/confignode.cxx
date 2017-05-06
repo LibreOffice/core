@@ -395,7 +395,7 @@ namespace utl
                 // check if the name refers to a indirect descendant
                 else if (m_xHierarchyAccess.is() && m_xHierarchyAccess->hasByHierarchicalName(_rPath))
                 {
-                    OSL_ASSERT(!_rPath.isEmpty());
+                    assert(!_rPath.isEmpty());
 
                     OUString sParentPath, sLocalName;
 
