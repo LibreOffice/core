@@ -166,7 +166,7 @@ void PresenterWindowManager::NotifyViewCreation (const Reference<XView>& rxView)
 {
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor (
         mpPaneContainer->FindPaneId(rxView->getResourceId()->getAnchor()));
-    OSL_ASSERT(pDescriptor.get() != nullptr);
+    assert(pDescriptor.get() != nullptr);
     if (pDescriptor.get() != nullptr)
     {
         Layout();
@@ -403,7 +403,7 @@ bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
 
 void PresenterWindowManager::SetLayoutMode (const LayoutMode eMode)
 {
-    OSL_ASSERT(mpPresenterController.get() != nullptr);
+    assert(mpPresenterController.get() != nullptr);
 
     if (meLayoutMode != eMode
         || mbIsSlideSorterActive
@@ -611,7 +611,7 @@ void PresenterWindowManager::Layout()
         }
         catch (Exception&)
         {
-            OSL_ASSERT(false);
+            assert(false);
             throw;
         }
 

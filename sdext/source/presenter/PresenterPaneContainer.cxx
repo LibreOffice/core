@@ -199,7 +199,7 @@ PresenterPaneContainer::SharedPaneDescriptor
             }
             catch (RuntimeException&)
             {
-                OSL_ASSERT(false);
+                assert(false);
             }
         }
     }
@@ -339,7 +339,7 @@ void PresenterPaneContainer::ToTop (const SharedPaneDescriptor& rpDescriptor)
         for (iPane=maPanes.begin(); iPane!=iEnd; ++iPane)
             if (iPane->get() == rpDescriptor.get())
                 break;
-        OSL_ASSERT(iPane!=iEnd);
+        assert(iPane!=iEnd);
         if (iPane == iEnd)
             return;
 

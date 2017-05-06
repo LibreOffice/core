@@ -565,7 +565,7 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
 std::shared_ptr<RendererPaneStyle>
     PresenterPaneBorderPainter::Renderer::GetRendererPaneStyle (const OUString& rsResourceURL)
 {
-    OSL_ASSERT(mpTheme.get()!=nullptr);
+    assert(mpTheme.get()!=nullptr);
 
     RendererPaneStyleContainer::const_iterator iStyle (maRendererPaneStyles.find(rsResourceURL));
     if (iStyle == maRendererPaneStyles.end())
@@ -810,14 +810,14 @@ RendererPaneStyle::RendererPaneStyle (
         try
         {
             ::std::vector<sal_Int32> aInnerBorder (rpTheme->GetBorderSize(rsStyleName, false));
-            OSL_ASSERT(aInnerBorder.size()==4);
+            assert(aInnerBorder.size()==4);
             maInnerBorderSize.mnLeft = aInnerBorder[0];
             maInnerBorderSize.mnTop = aInnerBorder[1];
             maInnerBorderSize.mnRight = aInnerBorder[2];
             maInnerBorderSize.mnBottom = aInnerBorder[3];
 
             ::std::vector<sal_Int32> aOuterBorder (rpTheme->GetBorderSize(rsStyleName, true));
-            OSL_ASSERT(aOuterBorder.size()==4);
+            assert(aOuterBorder.size()==4);
             maOuterBorderSize.mnLeft = aOuterBorder[0];
             maOuterBorderSize.mnTop = aOuterBorder[1];
             maOuterBorderSize.mnRight = aOuterBorder[2];
@@ -825,7 +825,7 @@ RendererPaneStyle::RendererPaneStyle (
         }
         catch(beans::UnknownPropertyException&)
         {
-            OSL_ASSERT(false);
+            assert(false);
         }
 
         UpdateBorderSizes();

@@ -194,7 +194,7 @@ void PresenterConfigurationAccess::ForAll (
             const OUString& rsKey (aKeys[nItemIndex]);
             Reference<container::XNameAccess> xSetItem (rxContainer->getByName(rsKey), UNO_QUERY);
             Reference<beans::XPropertySet> xSet (xSetItem, UNO_QUERY);
-            OSL_ASSERT(xSet.is());
+            assert(xSet.is());
             if (xSetItem.is())
             {
                 // Get from the current item of the container the children
@@ -268,7 +268,7 @@ Any PresenterConfigurationAccess::GetProperty (
     const Reference<beans::XPropertySet>& rxProperties,
     const OUString& rsKey)
 {
-    OSL_ASSERT(rxProperties.is());
+    assert(rxProperties.is());
     if ( ! rxProperties.is())
         return Any();
     try

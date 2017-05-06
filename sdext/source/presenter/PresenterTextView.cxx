@@ -627,7 +627,7 @@ sal_Int32 PresenterTextParagraph::GetWordBoundary(
     const sal_Int32 nLocalCharacterIndex,
     const sal_Int32 nDistance)
 {
-    OSL_ASSERT(nDistance==-1 || nDistance==+1);
+    assert(nDistance==-1 || nDistance==+1);
 
     if (nLocalCharacterIndex < 0)
     {
@@ -1207,7 +1207,7 @@ void PresenterTextParagraph::Line::ProvideCellBoxes()
             maCellBoxes = mxLayoutedLine->queryInkMeasures();
         else
         {
-            OSL_ASSERT(mxLayoutedLine.is());
+            assert(mxLayoutedLine.is());
         }
     }
 }

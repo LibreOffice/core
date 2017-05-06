@@ -424,7 +424,7 @@ void SAL_CALL PresenterToolBar::disposing()
     ElementContainer::const_iterator iEnd (maElementContainer.end());
     for ( ; iPart!=iEnd; ++iPart)
     {
-        OSL_ASSERT(iPart->get()!=nullptr);
+        assert(iPart->get()!=nullptr);
         ElementContainerPart::iterator iElement ((*iPart)->begin());
         ElementContainerPart::const_iterator iPartEnd ((*iPart)->end());
         for ( ; iElement!=iPartEnd; ++iElement)
@@ -959,7 +959,7 @@ void PresenterToolBar::Paint (
     const awt::Rectangle& rUpdateBox,
     const rendering::ViewState& rViewState)
 {
-    OSL_ASSERT(mxCanvas.is());
+    assert(mxCanvas.is());
 
     ElementContainer::iterator iPart;
     ElementContainer::const_iterator iEnd (maElementContainer.end());
@@ -1190,8 +1190,8 @@ Element::Element (
 {
     if (mpToolBar.get() != nullptr)
     {
-        OSL_ASSERT(mpToolBar->GetPresenterController().is());
-        OSL_ASSERT(mpToolBar->GetPresenterController()->GetWindowManager().is());
+        assert(mpToolBar->GetPresenterController().is());
+        assert(mpToolBar->GetPresenterController()->GetWindowManager().is());
     }
 }
 
@@ -1292,7 +1292,7 @@ bool Element::SetState (
 
 void Element::Invalidate (const bool bSynchronous)
 {
-    OSL_ASSERT(mpToolBar.is());
+    assert(mpToolBar.is());
     mpToolBar->InvalidateArea(GetBoundingBox(), bSynchronous);
 }
 
@@ -1318,8 +1318,8 @@ bool Element::IsFilling() const
 
 void Element::UpdateState()
 {
-    OSL_ASSERT(mpToolBar.get() != nullptr);
-    OSL_ASSERT(mpToolBar->GetPresenterController().get() != nullptr);
+    assert(mpToolBar.get() != nullptr);
+    assert(mpToolBar->GetPresenterController().get() != nullptr);
 
     if (mpMode.get() == nullptr)
         return;
@@ -1430,7 +1430,7 @@ void ElementMode::ReadElementMode (
     }
     catch(Exception&)
     {
-        OSL_ASSERT(false);
+        assert(false);
     }
 }
 
@@ -1453,9 +1453,9 @@ Button::Button (
     : Element(rpToolBar),
       mbIsListenerRegistered(false)
 {
-    OSL_ASSERT(mpToolBar.get() != nullptr);
-    OSL_ASSERT(mpToolBar->GetPresenterController().is());
-    OSL_ASSERT(mpToolBar->GetPresenterController()->GetWindowManager().is());
+    assert(mpToolBar.get() != nullptr);
+    assert(mpToolBar->GetPresenterController().is());
+    assert(mpToolBar->GetPresenterController()->GetWindowManager().is());
 }
 
 void Button::Initialize()
@@ -1466,12 +1466,12 @@ void Button::Initialize()
 
 void Button::disposing()
 {
-    OSL_ASSERT(mpToolBar.get() != nullptr);
+    assert(mpToolBar.get() != nullptr);
     if (mpToolBar.get() != nullptr
         && mbIsListenerRegistered)
     {
-        OSL_ASSERT(mpToolBar->GetPresenterController().is());
-        OSL_ASSERT(mpToolBar->GetPresenterController()->GetWindowManager().is());
+        assert(mpToolBar->GetPresenterController().is());
+        assert(mpToolBar->GetPresenterController()->GetWindowManager().is());
 
         mbIsListenerRegistered = false;
         mpToolBar->GetPresenterController()->GetWindowManager()->RemoveLayoutListener(this);
@@ -1483,7 +1483,7 @@ void Button::Paint (
     const Reference<rendering::XCanvas>& rxCanvas,
     const rendering::ViewState& rViewState)
 {
-    OSL_ASSERT(rxCanvas.is());
+    assert(rxCanvas.is());
 
     if (mpMode.get() == nullptr)
         return;
@@ -1615,7 +1615,7 @@ awt::Size Label::CreateBoundingSize (
 
 void Label::SetText (const OUString& rsText)
 {
-    OSL_ASSERT(mpToolBar.get() != nullptr);
+    assert(mpToolBar.get() != nullptr);
     if (mpMode.get() == nullptr)
         return;
 
@@ -1635,7 +1635,7 @@ void Label::Paint (
     const Reference<rendering::XCanvas>& rxCanvas,
     const rendering::ViewState& rViewState)
 {
-    OSL_ASSERT(rxCanvas.is());
+    assert(rxCanvas.is());
     if (mpMode.get() == nullptr)
         return;
 
@@ -1692,7 +1692,7 @@ void Text::Paint (
     const awt::Point& rOffset)
 {
     (void)rOffset;
-    OSL_ASSERT(rxCanvas.is());
+    assert(rxCanvas.is());
 
     if (msText.isEmpty())
         return;
@@ -1919,7 +1919,7 @@ void VerticalSeparator::Paint (
     const Reference<rendering::XCanvas>& rxCanvas,
     const rendering::ViewState& rViewState)
 {
-    OSL_ASSERT(rxCanvas.is());
+    assert(rxCanvas.is());
 
     awt::Rectangle aBBox (GetBoundingBox());
 
@@ -1970,7 +1970,7 @@ void HorizontalSeparator::Paint (
     const Reference<rendering::XCanvas>& rxCanvas,
     const rendering::ViewState& rViewState)
 {
-    OSL_ASSERT(rxCanvas.is());
+    assert(rxCanvas.is());
 
     awt::Rectangle aBBox (GetBoundingBox());
 

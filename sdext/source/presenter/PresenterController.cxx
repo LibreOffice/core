@@ -116,7 +116,7 @@ PresenterController::PresenterController (
       mpAccessibleObject(),
       mbIsAccessibilityActive(false)
 {
-    OSL_ASSERT(mxController.is());
+    assert(mxController.is());
 
     if ( ! mxSlideShowController.is())
         throw lang::IllegalArgumentException(
@@ -368,7 +368,7 @@ void PresenterController::UpdatePaneTitles()
     PresenterPaneContainer::PaneList::const_iterator iPane;
     for (iPane=mpPaneContainer->maPanes.begin(); iPane!=mpPaneContainer->maPanes.end(); ++iPane)
     {
-        OSL_ASSERT((*iPane).get() != nullptr);
+        assert((*iPane).get() != nullptr);
 
         OUString sTemplate (IsAccessibilityActive()
             ? (*iPane)->msAccessibleTitleTemplate
@@ -1166,7 +1166,7 @@ double PresenterController::GetSlideAspectRatio() const
     }
     catch (RuntimeException&)
     {
-        OSL_ASSERT(false);
+        assert(false);
     }
 
     return nSlideAspectRatio;

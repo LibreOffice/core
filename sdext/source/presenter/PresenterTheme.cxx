@@ -317,7 +317,7 @@ OUString PresenterTheme::GetStyleName (const OUString& rsResourceURL) const
     const OUString& rsStyleName,
     const bool bOuter) const
 {
-    OSL_ASSERT(mpTheme.get() != nullptr);
+    assert(mpTheme.get() != nullptr);
 
     SharedPaneStyle pPaneStyle (mpTheme->GetPaneStyle(rsStyleName));
     if (pPaneStyle.get() != nullptr)
@@ -725,7 +725,7 @@ PresenterTheme::SharedFontDescriptor ReadContext::ReadFont (
     }
     catch (Exception&)
     {
-        OSL_ASSERT(false);
+        assert(false);
     }
 
     return PresenterTheme::SharedFontDescriptor();
@@ -755,7 +755,7 @@ Any ReadContext::GetByName (
     const Reference<container::XNameAccess>& rxNode,
     const OUString& rsName)
 {
-    OSL_ASSERT(rxNode.is());
+    assert(rxNode.is());
     if (rxNode->hasByName(rsName))
         return rxNode->getByName(rsName);
     else

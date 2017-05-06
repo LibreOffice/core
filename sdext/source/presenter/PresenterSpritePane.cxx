@@ -174,8 +174,8 @@ void PresenterSpritePane::CreateCanvases (
     const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
     const css::uno::Reference<css::rendering::XSpriteCanvas>& rxParentCanvas)
 {
-    OSL_ASSERT(!mxParentWindow.is() || mxParentWindow==rxParentWindow);
-    OSL_ASSERT(!mxParentCanvas.is() || mxParentCanvas==rxParentCanvas);
+    assert(!mxParentWindow.is() || mxParentWindow==rxParentWindow);
+    assert(!mxParentCanvas.is() || mxParentCanvas==rxParentCanvas);
     mxParentWindow = rxParentWindow;
     mxParentCanvas = rxParentCanvas;
 

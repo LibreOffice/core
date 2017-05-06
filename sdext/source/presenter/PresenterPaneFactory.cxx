@@ -101,7 +101,7 @@ void PresenterPaneFactory::Register (const Reference<frame::XController>& rxCont
     }
     catch (RuntimeException&)
     {
-        OSL_ASSERT(false);
+        assert(false);
         if (xCC.is())
             xCC->removeResourceFactoryForReference(this);
         mxConfigurationControllerWeak = WeakReference<XConfigurationController>();
@@ -242,7 +242,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     }
     catch (Exception&)
     {
-        OSL_ASSERT(false);
+        assert(false);
     }
 
     return nullptr;

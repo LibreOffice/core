@@ -496,7 +496,7 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
     }
     catch (const beans::UnknownPropertyException&)
     {
-        OSL_ASSERT(false);
+        assert(false);
         // For some reason we can not access the screen number.  Use
         // the default instead.
     }
@@ -605,7 +605,7 @@ void PresenterScreen::SetupPaneFactory (const Reference<XComponentContext>& rxCo
     }
     catch (const RuntimeException&)
     {
-        OSL_ASSERT(false);
+        assert(false);
     }
 }
 
@@ -621,7 +621,7 @@ void PresenterScreen::SetupViewFactory (const Reference<XComponentContext>& rxCo
     }
     catch (const RuntimeException&)
     {
-        OSL_ASSERT(false);
+        assert(false);
     }
 }
 
@@ -725,7 +725,7 @@ void PresenterScreen::ProcessViewDescriptions (
     }
     catch (const RuntimeException&)
     {
-        OSL_ASSERT(false);
+        assert(false);
     }
 }
 
@@ -771,7 +771,7 @@ void PresenterScreen::ProcessComponent (
        }
     catch (const Exception&)
     {
-        OSL_ASSERT(false);
+        assert(false);
     }
 }
 
@@ -798,7 +798,7 @@ void PresenterScreen::ProcessViewDescription (
     }
     catch (const Exception&)
     {
-        OSL_ASSERT(false);
+        assert(false);
     }
 }
 
@@ -824,7 +824,7 @@ void PresenterScreen::SetupView(
             aViewDescriptor = iDescriptor->second;
 
         // Prepare the pane.
-        OSL_ASSERT(mpPaneContainer.get() != nullptr);
+        assert(mpPaneContainer.get() != nullptr);
         mpPaneContainer->PreparePane(
             xPaneId,
             rsViewURL,

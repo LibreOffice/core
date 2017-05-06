@@ -164,7 +164,7 @@ void PresenterViewFactory::Register (const Reference<frame::XController>& rxCont
     }
     catch (RuntimeException&)
     {
-        OSL_ASSERT(false);
+        assert(false);
         if (mxConfigurationController.is())
             mxConfigurationController->removeResourceFactoryForReference(this);
         mxConfigurationController = nullptr;

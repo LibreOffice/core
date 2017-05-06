@@ -826,7 +826,7 @@ void Parser::parseLine( const OString& rLine )
     const OString& rCmd = readNextToken();
     const hash_entry* pEntry = PdfKeywordHash::in_word_set( rCmd.getStr(),
                                                             rCmd.getLength() );
-    OSL_ASSERT(pEntry);
+    assert(pEntry);
     switch( pEntry->eKey )
     {
         case CLIPPATH:
@@ -1017,7 +1017,7 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
                           const uno::Reference< uno::XComponentContext >&    xContext,
                           const OUString&                                    rFilterOptions )
 {
-    OSL_ASSERT(rSink);
+    assert(rSink);
 
     OUString aSysUPath;
     if( osl_getSystemPathFromFileURL( rURL.pData, &aSysUPath.pData ) != osl_File_E_None )
@@ -1196,8 +1196,8 @@ bool xpdf_ImportFromStream( const uno::Reference< io::XInputStream >&         xI
                             const uno::Reference< uno::XComponentContext >&   xContext,
                             const OUString&                                   rFilterOptions )
 {
-    OSL_ASSERT(xInput.is());
-    OSL_ASSERT(rSink);
+    assert(xInput.is());
+    assert(rSink);
 
     // convert XInputStream to local temp file
     oslFileHandle aFile = nullptr;

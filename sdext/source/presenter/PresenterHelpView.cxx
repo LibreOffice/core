@@ -531,7 +531,7 @@ bool LineDescriptor::IsEmpty() const
 void LineDescriptor::CalculateSize (
     const css::uno::Reference<css::rendering::XCanvasFont>& rxFont)
 {
-    OSL_ASSERT(rxFont.is());
+    assert(rxFont.is());
 
     rendering::StringContext aContext (msLine, 0, msLine.getLength());
     Reference<rendering::XTextLayout> xLayout (
