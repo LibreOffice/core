@@ -108,12 +108,6 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 oslFileHandle *pOutputRead,
                                                 oslFileHandle *pErrorRead );
 
-/******************************************************************************
- *
- *                  Functions for starting a process
- *
- *****************************************************************************/
-
 extern "C" {
 
 static void ChildStatusProc(void *pData)
@@ -364,9 +358,9 @@ static void ChildStatusProc(void *pData)
             if (stdOutput[0] != -1) close( stdOutput[0] );
             if (stdError[0] != -1) close( stdError[0] );
 
-            //if pid > 0 then a process was created, even if it later failed
-            //e.g. bash searching for a command to execute, and we still
-            //need to clean it up to avoid "defunct" processes
+            /* if pid > 0 then a process was created, even if it later failed
+               e.g. bash searching for a command to execute, and we still
+               need to clean it up to avoid "defunct" processes */
             if (pid > 0)
             {
                 pid_t child_pid;
@@ -584,7 +578,7 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 oslFileHandle   *pErrorRead
                                                 )
 {
-    int     i;
+    int i;
     ProcessData Data;
     oslThread hThread;
 
@@ -679,12 +673,6 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
 
     return osl_Process_E_Unknown;
 }
-
-/******************************************************************************
- *
- *                  Functions for processes
- *
- *****************************************************************************/
 
 oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
 {
@@ -1114,9 +1102,8 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
     return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
 }
 
-/***********************************************
- helper function for osl_joinProcessWithTimeout
- **********************************************/
+/** Helper function for osl_joinProcessWithTimeout
+ */
 
 static bool is_timeout(const struct timeval* tend)
 {
@@ -1125,21 +1112,15 @@ static bool is_timeout(const struct timeval* tend)
     return (tcurrent.tv_sec >= tend->tv_sec);
 }
 
-/**********************************************
- kill(pid, 0) is useful for checking if a
+/* kill(pid, 0) is useful for checking if a
  process is still alive, but remember that
  kill even returns 0 if the process is already
- a zombie.
- *********************************************/
+ a zombie. */
 
 static bool is_process_dead(pid_t pid)
 {
     return ((kill(pid, 0) == -1) && (ESRCH == errno));
 }
-
-/**********************************************
- osl_joinProcessWithTimeout
- *********************************************/
 
 oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const TimeValue* pTimeout)
 {
