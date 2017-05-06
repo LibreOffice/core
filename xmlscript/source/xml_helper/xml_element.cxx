@@ -69,13 +69,13 @@ sal_Int16 XMLElement::getLength()
 
 OUString XMLElement::getNameByIndex( sal_Int16 nPos )
 {
-    OSL_ASSERT( (size_t)nPos < _attrNames.size() );
+    assert( (size_t)nPos < _attrNames.size() );
     return _attrNames[ nPos ];
 }
 
 OUString XMLElement::getTypeByIndex( sal_Int16 nPos )
 {
-    OSL_ASSERT( (size_t)nPos < _attrNames.size() );
+    assert( (size_t)nPos < _attrNames.size() );
     static_cast<void>(nPos);
     // xxx todo
     return OUString();
@@ -89,7 +89,7 @@ OUString XMLElement::getTypeByName( OUString const & /*rName*/ )
 
 OUString XMLElement::getValueByIndex( sal_Int16 nPos )
 {
-    OSL_ASSERT( (size_t)nPos < _attrNames.size() );
+    assert( (size_t)nPos < _attrNames.size() );
     return _attrValues[ nPos ];
 }
 
