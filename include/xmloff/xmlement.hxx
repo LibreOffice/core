@@ -39,8 +39,10 @@ public:
     SvXMLEnumMapEntry(::xmloff::token::XMLTokenEnum eToken_, EnumT nValue_)
         : eToken(eToken_), nValue(static_cast<sal_uInt16>(nValue_)) {}
     ::xmloff::token::XMLTokenEnum   GetToken() const { return eToken; }
+    sal_uInt16                      GetValue() const { return nValue; }
 };
 
+#if defined(_MSC_VER)
 // specialisation to avoid lots of "C2398: conversion from 'const sal_Int16' to 'sal_uInt16' requires a narrowing conversion"
 // errors when compiling on MSVC
 template<>
@@ -55,6 +57,7 @@ public:
     ::xmloff::token::XMLTokenEnum   GetToken() const { return eToken; }
     sal_uInt16                      GetValue() const { return nValue; }
 };
+#endif
 
 #define ENUM_STRING_MAP_ENTRY(name,tok) { name, sizeof(name)-1, tok }
 
