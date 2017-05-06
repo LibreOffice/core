@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <iostream>
+#include <mutex>
 #if defined UNX
 #include <signal.h>
 #endif
@@ -473,16 +474,17 @@ namespace
 
 OUString ReplaceStringHookProc( const OUString& rStr )
 {
-    OUString sRet(rStr);
+    const static OUString sBuildId(utl::Bootstrap::getBuildIdData("development"));
+    static OUString sBrandName, sVersion, sAboutBoxVersion, sAboutBoxVersionSuffix, sExtension;
 
-    if (sRet.indexOf("%PRODUCT") != -1 || sRet.indexOf("%ABOUTBOX") != -1)
+    static std::once_flag aInitOnce;
+    std::call_once(aInitOnce, []
     {
-        OUString sBrandName = BrandName::get();
-        OUString sVersion = Version::get();
-        OUString sBuildId = utl::Bootstrap::getBuildIdData("development");
-        OUString sAboutBoxVersion = AboutBoxVersion::get();
-        OUString sAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
-        OUString sExtension = Extension::get();
+        sBrandName = BrandName::get();
+        sVersion = Version::get();
+        sAboutBoxVersion = AboutBoxVersion::get();
+        sAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
+        sExtension = Extension::get();
 
         if ( sBrandName.isEmpty() )
         {
@@ -490,12 +492,16 @@ OUString ReplaceStringHookProc( const OUString& rStr )
             sVersion = utl::ConfigManager::getProductVersion();
             sAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
             sAboutBoxVersionSuffix = utl::ConfigManager::getAboutBoxProductVersionSuffix();
-            if ( sExtension.isEmpty() )
+            if (sExtension.isEmpty())
             {
                 sExtension = utl::ConfigManager::getProductExtension();
             }
         }
+    } );
 
+    OUString sRet(rStr);
+    if (sRet.indexOf("%PRODUCT") != -1 || sRet.indexOf("%ABOUTBOX") != -1)
+    {
         sRet = sRet.replaceAll( "%PRODUCTNAME", sBrandName );
         sRet = sRet.replaceAll( "%PRODUCTVERSION", sVersion );
         sRet = sRet.replaceAll( "%BUILDID", sBuildId );
