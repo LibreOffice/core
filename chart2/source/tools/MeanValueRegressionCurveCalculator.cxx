@@ -80,7 +80,7 @@ void SAL_CALL MeanValueRegressionCurveCalculator::recalculateRegression(
                     fErrorSum += (v*v);
                 }
             }
-            OSL_ASSERT( fErrorSum >= 0.0 );
+            assert( fErrorSum >= 0.0 );
             m_fCorrelationCoeffitient = sqrt( fErrorSum / (nMax - 1 ));
         }
     }

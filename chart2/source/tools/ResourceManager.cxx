@@ -30,7 +30,7 @@ ResMgr & ResourceManager::getResourceManager()
     static ResMgr * pResourceManager = nullptr;
     if( ! pResourceManager )
         pResourceManager = ResMgr::CreateResMgr("chartcontroller");
-    OSL_ASSERT( pResourceManager );
+    assert( pResourceManager );
     return *pResourceManager;
 }
 

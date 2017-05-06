@@ -125,7 +125,7 @@ void ConfigColorScheme::retrieveConfigColors()
             new impl::ChartConfigItem( *this ));
         m_apChartConfigItem->addPropertyNotification( aSeriesPropName );
     }
-    OSL_ASSERT( m_apChartConfigItem.get());
+    assert( m_apChartConfigItem.get());
     if( ! m_apChartConfigItem.get())
         return;
 

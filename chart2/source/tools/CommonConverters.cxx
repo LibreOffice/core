@@ -421,7 +421,7 @@ uno::Sequence< double > DataSequenceToDoubleSequence(
     const uno::Reference< data::XDataSequence >& xDataSequence )
 {
     uno::Sequence< double > aResult;
-    OSL_ASSERT( xDataSequence.is());
+    assert( xDataSequence.is());
     if(!xDataSequence.is())
         return aResult;
 
