@@ -671,7 +671,7 @@ void OServiceManager::disposing()
     m_xContext.clear();
 
     // not only the Event should hold the object
-    OSL_ASSERT( m_refCount != 1 );
+    assert( m_refCount != 1 );
 }
 
 // XPropertySet
@@ -806,7 +806,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
     check_undisposed();
 #if OSL_DEBUG_LEVEL > 0
     Reference< beans::XPropertySet > xProps( xContext->getServiceManager(), UNO_QUERY );
-    OSL_ASSERT( xProps.is() );
+    assert( xProps.is() );
     if (xProps.is())
     {
         Reference< XComponentContext > xDefContext;
@@ -860,7 +860,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
     check_undisposed();
 #if OSL_DEBUG_LEVEL > 0
     Reference< beans::XPropertySet > xProps( xContext->getServiceManager(), UNO_QUERY );
-    OSL_ASSERT( xProps.is() );
+    assert( xProps.is() );
     if (xProps.is())
     {
         Reference< XComponentContext > xDefContext;

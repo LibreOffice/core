@@ -91,7 +91,7 @@ css::uno::Reference< css::uri::XUriReference >
 Factory::createVndSunStarPkgUrlReference(
     css::uno::Reference< css::uri::XUriReference > const & authority)
 {
-    OSL_ASSERT(authority.is());
+    assert(authority.is());
     if (authority->isAbsolute() && !authority->hasFragment()) {
         OUStringBuffer buf;
         buf.append("vnd.sun.star.pkg://");
@@ -102,7 +102,7 @@ Factory::createVndSunStarPkgUrlReference(
         css::uno::Reference< css::uri::XUriReference > uriRef(
             css::uri::UriReferenceFactory::create(m_context)->parse(
                 buf.makeStringAndClear()));
-        OSL_ASSERT(uriRef.is());
+        assert(uriRef.is());
         return uriRef;
     } else {
         return css::uno::Reference< css::uri::XUriReference >();

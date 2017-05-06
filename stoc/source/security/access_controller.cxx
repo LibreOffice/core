@@ -494,7 +494,7 @@ void AccessController::checkAndClearPostPoned()
     // check postponed permissions
     std::unique_ptr< t_rec_vec > rec( static_cast< t_rec_vec * >( m_rec.getData() ) );
     m_rec.setData( nullptr ); // takeover ownership
-    OSL_ASSERT( rec.get() );
+    assert( rec.get() );
     if (rec.get())
     {
         t_rec_vec const & vec = *rec.get();
@@ -502,20 +502,20 @@ void AccessController::checkAndClearPostPoned()
         {
         case SINGLE_USER:
         {
-            OSL_ASSERT( m_singleUser_init );
+            assert( m_singleUser_init );
             for (const auto & p : vec)
             {
-                OSL_ASSERT( m_singleUserId.equals( p.first ) );
+                assert( m_singleUserId.equals( p.first ) );
                 m_singleUserPermissions.checkPermission( p.second );
             }
             break;
         }
         case SINGLE_DEFAULT_USER:
         {
-            OSL_ASSERT( m_defaultPerm_init );
+            assert( m_defaultPerm_init );
             for (const auto & p : vec)
             {
-                OSL_ASSERT( p.first.isEmpty() ); // default-user
+                assert( p.first.isEmpty() ); // default-user
                 m_defaultPermissions.checkPermission( p.second );
             }
             break;
@@ -530,7 +530,7 @@ void AccessController::checkAndClearPostPoned()
                     MutexGuard guard( m_mutex );
                     pPermissions = m_user2permissions.lookup( p.first );
                 }
-                OSL_ASSERT( pPermissions );
+                assert( pPermissions );
                 if (pPermissions)
                 {
                     pPermissions->checkPermission( p.second );

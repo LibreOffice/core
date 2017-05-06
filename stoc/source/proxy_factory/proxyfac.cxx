@@ -152,7 +152,7 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
             m_uno2cpp.get() );
         uno_any_destruct( exc, nullptr );
         ::cppu::throwException( cpp_exc );
-        OSL_ASSERT( false ); // way of no return
+        assert( false ); // way of no return
         return UnoInterfaceReference(); // for dummy
     }
 }
@@ -197,7 +197,7 @@ static void SAL_CALL binuno_proxy_free(
     (void) pEnv; // avoid warning about unused parameter
     binuno_Proxy * proxy = static_cast< binuno_Proxy * >(
         static_cast< uno_Interface * >( pProxy ) );
-    OSL_ASSERT( proxy->m_root->m_factory->m_uno_env.get()->pExtEnv == pEnv );
+    assert( proxy->m_root->m_factory->m_uno_env.get()->pExtEnv == pEnv );
     delete proxy;
 }
 
@@ -210,13 +210,13 @@ static void SAL_CALL binuno_proxy_acquire( uno_Interface * pUnoI )
         // rebirth of zombie
         uno_ExtEnvironment * uno_env =
             that->m_root->m_factory->m_uno_env.get()->pExtEnv;
-        OSL_ASSERT( uno_env != nullptr );
+        assert( uno_env != nullptr );
         (*uno_env->registerProxyInterface)(
             uno_env, reinterpret_cast< void ** >( &pUnoI ), binuno_proxy_free,
             that->m_oid.pData,
             reinterpret_cast< typelib_InterfaceTypeDescription * >(
                 that->m_typeDescr.get() ) );
-        OSL_ASSERT( that == static_cast< binuno_Proxy * >( pUnoI ) );
+        assert( that == static_cast< binuno_Proxy * >( pUnoI ) );
     }
 }
 
@@ -228,7 +228,7 @@ static void SAL_CALL binuno_proxy_release( uno_Interface * pUnoI )
     {
         uno_ExtEnvironment * uno_env =
             that->m_root->m_factory->m_uno_env.get()->pExtEnv;
-        OSL_ASSERT( uno_env != nullptr );
+        assert( uno_env != nullptr );
         (*uno_env->revokeInterface)( uno_env, pUnoI );
     }
 }
@@ -319,14 +319,14 @@ Any ProxyRoot::queryAggregation( Type const & rType )
         {
             Reference< XInterface > xProxy;
             uno_ExtEnvironment * cpp_env = m_factory->m_cpp_env.get()->pExtEnv;
-            OSL_ASSERT( cpp_env != nullptr );
+            assert( cpp_env != nullptr );
 
             // mind a new delegator, calculate current root:
             Reference< XInterface > xRoot(
                 static_cast< OWeakObject * >(this), UNO_QUERY_THROW );
             OUString oid;
             (*cpp_env->getObjectIdentifier)( cpp_env, &oid.pData, xRoot.get() );
-            OSL_ASSERT( !oid.isEmpty() );
+            assert( !oid.isEmpty() );
 
             (*cpp_env->getRegisteredInterface)(
                 cpp_env, reinterpret_cast< void ** >( &xProxy ),
@@ -353,7 +353,7 @@ Any ProxyRoot::queryAggregation( Type const & rType )
                         SAL_NO_ACQUIRE );
                     uno_ExtEnvironment * uno_env =
                         m_factory->m_uno_env.get()->pExtEnv;
-                    OSL_ASSERT( uno_env != nullptr );
+                    assert( uno_env != nullptr );
                     (*uno_env->registerProxyInterface)(
                         uno_env, reinterpret_cast< void ** >( &proxy.m_pUnoI ),
                         binuno_proxy_free, oid.pData,

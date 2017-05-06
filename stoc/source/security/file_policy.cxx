@@ -351,7 +351,7 @@ PolicyReader::PolicyReader( OUString const & fileName, AccessControl & ac )
 PolicyReader::~PolicyReader()
 {
     if ( ::osl_closeFile( m_file ) != osl_File_E_None ) {
-        OSL_ASSERT( false );
+        assert(false);
     }
 }
 

@@ -139,7 +139,7 @@ Reference< XIdlClass > IdlAttributeFieldImpl::getDeclaringClass()
         {
             OUString aName(getAttributeTypeDescr()->aBase.aBase.pTypeName);
             sal_Int32 i = aName.indexOf(':');
-            OSL_ASSERT(i >= 0);
+            assert(i >= 0);
             _xDeclClass = getReflection()->forName(aName.copy(0, i));
         }
     }
@@ -412,7 +412,7 @@ Reference< XIdlClass > IdlInterfaceMethodImpl::getDeclaringClass()
         {
             OUString aName(getMethodTypeDescr()->aBase.aBase.pTypeName);
             sal_Int32 i = aName.indexOf(':');
-            OSL_ASSERT(i >= 0);
+            assert(i >= 0);
             _xDeclClass = getReflection()->forName(aName.copy(0, i));
         }
     }
@@ -755,7 +755,7 @@ Sequence< Reference< XIdlClass > > InterfaceIdlClassImpl::getSuperclasses()
         for (sal_Int32 i = 0; i < pType->nBaseTypes; ++i) {
             _xSuperClasses[i] = getReflection()->forType(
                 &pType->ppBaseTypes[i]->aBase);
-            OSL_ASSERT(_xSuperClasses[i].is());
+            assert(_xSuperClasses[i].is());
         }
     }
     return Sequence< Reference< XIdlClass > >(_xSuperClasses);
