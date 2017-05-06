@@ -642,13 +642,13 @@ static void test_Conversion( const Reference< XMultiServiceFactory > & xMgr )
     aRet = xConverter->convertTo( aRet, cppu::UnoType<XServiceInfo>::get());
     aRet <<= SAL_CONST_INT64(0x7fffffffffffffff);
     aRet = xConverter->convertTo( aRet, cppu::UnoType<sal_uInt64>::get());
-    OSL_ASSERT( *(const sal_uInt64 *)aRet.getValue() == SAL_CONST_UINT64(0x7fffffffffffffff) );
+    assert( *(const sal_uInt64 *)aRet.getValue() == SAL_CONST_UINT64(0x7fffffffffffffff) );
     aRet <<= SAL_CONST_UINT64(0xffffffffffffffff);
     aRet = xConverter->convertTo( aRet, cppu::UnoType<sal_uInt64>::get());
-    OSL_ASSERT( *(const sal_uInt64 *)aRet.getValue() == SAL_CONST_UINT64(0xffffffffffffffff) );
+    assert( *(const sal_uInt64 *)aRet.getValue() == SAL_CONST_UINT64(0xffffffffffffffff) );
     aRet <<= SAL_CONST_INT64(-1);
     aRet = xConverter->convertTo( aRet, cppu::UnoType<sal_Int8>::get());
-    OSL_ASSERT( *(const sal_Int8 *)aRet.getValue() == (-1) );
+    assert( *(const sal_Int8 *)aRet.getValue() == (-1) );
     printf( "test_Conversion(): end.\n" );
 }
 

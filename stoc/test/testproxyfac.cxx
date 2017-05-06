@@ -172,7 +172,7 @@ static void test_proxyfac_(
     (void)test;
     Reference< lang::XServiceInfo > xMaster_XServiceInfo(
         xMaster, UNO_QUERY_THROW );
-    OSL_ASSERT( xMaster_XServiceInfo->getImplementationName().equals( test ) );
+    assert( xMaster_XServiceInfo->getImplementationName().equals( test ) );
 
     Reference< reflection::XProxyFactory > xTarget( xMaster, UNO_QUERY_THROW );
     Reference< XCurrentContext > xTarget_XCurrentContext(
@@ -180,34 +180,34 @@ static void test_proxyfac_(
     Reference< XCurrentContext > xMaster_XCurrentContext(
         xMaster, UNO_QUERY_THROW );
 
-    OSL_ASSERT(
+    assert(
         xTarget_XCurrentContext->getValueByName( test ) == makeAny( test ) );
-    OSL_ASSERT(
+    assert(
         xMaster_XCurrentContext->getValueByName( test ) == makeAny( test ) );
 
     Reference< XAggregation > xFakeAgg( xTarget->createProxy( xTarget ) );
     if (xFakeAgg.is())
     {
-        OSL_ASSERT( xTarget == xFakeAgg );
-        OSL_ASSERT( xMaster == xFakeAgg );
+        assert( xTarget == xFakeAgg );
+        assert( xMaster == xFakeAgg );
     }
 
     Reference< lang::XServiceInfo > xTarget_XServiceInfo(
         xTarget, UNO_QUERY_THROW );
-    OSL_ASSERT( xTarget_XServiceInfo->getImplementationName().equals( test ) );
+    assert( xTarget_XServiceInfo->getImplementationName().equals( test ) );
     Reference< lang::XServiceInfo > xTarget_XServiceInfo2(
         xTarget, UNO_QUERY_THROW );
-    OSL_ASSERT( xTarget_XServiceInfo2.get() == xTarget_XServiceInfo.get() );
+    assert( xTarget_XServiceInfo2.get() == xTarget_XServiceInfo.get() );
 
-    OSL_ASSERT( xTarget == xTarget_XCurrentContext );
-    OSL_ASSERT( xTarget_XCurrentContext == xMaster );
-    OSL_ASSERT(
+    assert( xTarget == xTarget_XCurrentContext );
+    assert( xTarget_XCurrentContext == xMaster );
+    assert(
         xTarget_XCurrentContext.get() == xMaster_XCurrentContext.get() );
-    OSL_ASSERT( xTarget_XCurrentContext == xMaster );
-    OSL_ASSERT( xTarget == xMaster );
-    OSL_ASSERT( xTarget_XServiceInfo.get() == xMaster_XServiceInfo.get() );
-    OSL_ASSERT( xTarget_XServiceInfo == xMaster );
-    OSL_ASSERT( xMaster_XServiceInfo == xMaster );
+    assert( xTarget_XCurrentContext == xMaster );
+    assert( xTarget == xMaster );
+    assert( xTarget_XServiceInfo.get() == xMaster_XServiceInfo.get() );
+    assert( xTarget_XServiceInfo == xMaster );
+    assert( xMaster_XServiceInfo == xMaster );
 
     try
     {
