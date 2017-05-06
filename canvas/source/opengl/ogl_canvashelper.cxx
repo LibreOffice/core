@@ -193,7 +193,7 @@ namespace oglcanvas
             for( sal_Int32 i=0; i<nNumCols; ++i )
                 *pCurrCol++ = rHelper.getDevice()->getDeviceColorSpace()->convertToARGB(rValues.maColors[i])[0];
 
-            OSL_ASSERT(nNumCols == rValues.maStops.getLength());
+            assert(nNumCols == rValues.maStops.getLength());
 
             switch( rValues.meType )
             {

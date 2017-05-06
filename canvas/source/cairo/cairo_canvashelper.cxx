@@ -663,7 +663,7 @@ namespace cairocanvas
     {
         int i;
 
-        OSL_ASSERT( rColors.getLength() == rStops.getLength() );
+        assert( rColors.getLength() == rStops.getLength() );
 
         for( i = 0; i < rColors.getLength(); i++ )
         {
