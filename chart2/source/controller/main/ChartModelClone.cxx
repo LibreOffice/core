@@ -160,7 +160,7 @@ namespace chart
         void ImplApplyDataToModel( const Reference< XModel >& i_model, const Reference< XInternalDataProvider > & i_data )
         {
             Reference< XChartDocument > xDoc( i_model, UNO_QUERY );
-            OSL_ASSERT( xDoc.is() && xDoc->hasInternalDataProvider() );
+            assert(xDoc.is() && xDoc->hasInternalDataProvider());
 
             // copy data from stored internal data provider
             if( xDoc.is() && xDoc->hasInternalDataProvider())

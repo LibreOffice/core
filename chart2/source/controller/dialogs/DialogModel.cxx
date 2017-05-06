@@ -829,7 +829,7 @@ void DialogModel::applyInterpretedData(
         std::vector< Sequence< Reference< XDataSeries > > > aNewSeries(
             ContainerHelper::SequenceToVector( rNewData.Series ));
 
-        OSL_ASSERT( aSeriesCnt.size() == aNewSeries.size());
+        assert(aSeriesCnt.size() == aNewSeries.size());
 
         std::vector< Sequence< Reference< XDataSeries > > >::const_iterator aSrcIt( aNewSeries.begin());
         std::vector< Reference< XDataSeriesContainer > >::iterator aDestIt( aSeriesCnt.begin());
@@ -838,7 +838,7 @@ void DialogModel::applyInterpretedData(
         {
             try
             {
-                OSL_ASSERT( (*aDestIt).is());
+                assert((*aDestIt).is());
                 (*aDestIt)->setDataSeries( *aSrcIt );
             }
             catch( const uno::Exception & ex )

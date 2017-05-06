@@ -778,7 +778,7 @@ bool ObjectKeyNavigation::next()
     {
         ObjectHierarchy::tChildContainer::const_iterator aIt(
             std::find( aSiblings.begin(), aSiblings.end(), getCurrentSelection()));
-        OSL_ASSERT( aIt != aSiblings.end());
+        assert(aIt != aSiblings.end());
         if( ++aIt == aSiblings.end())
             aIt = aSiblings.begin();
         setCurrentSelection( *aIt );
@@ -798,7 +798,7 @@ bool ObjectKeyNavigation::previous()
     {
         ObjectHierarchy::tChildContainer::const_iterator aIt(
             std::find( aSiblings.begin(), aSiblings.end(), getCurrentSelection()));
-        OSL_ASSERT( aIt != aSiblings.end());
+        assert(aIt != aSiblings.end());
         if( aIt == aSiblings.begin())
             aIt = aSiblings.end();
         --aIt;
@@ -825,7 +825,7 @@ bool ObjectKeyNavigation::down()
     if( bResult )
     {
         ObjectHierarchy::tChildContainer aChildren = aHierarchy.getChildren( getCurrentSelection());
-        OSL_ASSERT( !aChildren.empty());
+        assert(!aChildren.empty());
         setCurrentSelection( aChildren.front());
     }
     return bResult;

@@ -193,7 +193,7 @@ void ErrorBarResources::SetChartDocumentForRangeChoosing(
     m_apRangeSelectionHelper.reset( new RangeSelectionHelper( xChartDocument ));
 
     // has internal data provider => rename "cell range" to "from data"
-    OSL_ASSERT( m_apRangeSelectionHelper.get());
+    assert(m_apRangeSelectionHelper.get());
     if( m_bHasInternalDataProvider )
     {
         m_pRbRange->SetText(m_pUIStringRbRange->GetText());
@@ -440,10 +440,10 @@ IMPL_LINK_NOARG(ErrorBarResources, IndicatorChanged, Button*, void)
 
 IMPL_LINK( ErrorBarResources, ChooseRange, Button*, pButton, void )
 {
-    OSL_ASSERT( m_apRangeSelectionHelper.get());
+    assert(m_apRangeSelectionHelper.get());
     if( ! m_apRangeSelectionHelper.get())
         return;
-    OSL_ASSERT( m_pCurrentRangeChoosingField == nullptr );
+    assert(m_pCurrentRangeChoosingField == nullptr );
 
     OUString aUIString;
 
@@ -680,7 +680,7 @@ void ErrorBarResources::FillValueSets()
 void ErrorBarResources::listeningFinished(
     const OUString & rNewRange )
 {
-    OSL_ASSERT( m_apRangeSelectionHelper.get());
+    assert(m_apRangeSelectionHelper.get());
     if( ! m_apRangeSelectionHelper.get())
         return;
 
@@ -707,14 +707,14 @@ void ErrorBarResources::listeningFinished(
     m_pCurrentRangeChoosingField = nullptr;
 
     UpdateControlStates();
-    OSL_ASSERT( m_pParentDialog );
+    assert(m_pParentDialog);
     if( m_pParentDialog )
         lcl_enableRangeChoosing( false, m_pParentDialog );
 }
 
 void ErrorBarResources::disposingRangeSelection()
 {
-    OSL_ASSERT( m_apRangeSelectionHelper.get());
+    assert(m_apRangeSelectionHelper.get());
     if( m_apRangeSelectionHelper.get())
         m_apRangeSelectionHelper->stopRangeListening( false );
 }

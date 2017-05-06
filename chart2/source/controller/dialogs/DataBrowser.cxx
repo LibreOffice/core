@@ -636,7 +636,7 @@ void DataBrowser::RenewTable()
 
 OUString DataBrowser::GetColString( sal_Int32 nColumnId ) const
 {
-    OSL_ASSERT( m_apDataBrowserModel.get());
+    assert(m_apDataBrowserModel.get());
     if( nColumnId > 0 )
         return OUString( m_apDataBrowserModel->getRoleOfColumn( nColumnId - 1 ));
     return OUString();
@@ -694,7 +694,7 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
         }
         else
         {
-            OSL_ASSERT( m_apDataBrowserModel->getCellType( nColIndex ) == DataBrowserModel::TEXT );
+            assert(m_apDataBrowserModel->getCellType( nColIndex ) == DataBrowserModel::TEXT);
             aResult = m_apDataBrowserModel->getCellText( nColIndex, nRow );
         }
     }

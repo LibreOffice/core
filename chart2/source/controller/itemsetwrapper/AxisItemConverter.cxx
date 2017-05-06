@@ -100,7 +100,7 @@ AxisItemConverter::AxisItemConverter(
         new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
 
     m_xAxis.set( Reference< chart2::XAxis >( rPropertySet, uno::UNO_QUERY ) );
-    OSL_ASSERT( m_xAxis.is());
+    assert(m_xAxis.is());
 }
 
 AxisItemConverter::~AxisItemConverter()
@@ -664,7 +664,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     if( ! aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() ||
                         aScale.IncrementData.SubIncrements[0].IntervalCount != aValue )
                     {
-                        OSL_ASSERT( aValue.getValueTypeClass() == uno::TypeClass_LONG );
+                        assert(aValue.getValueTypeClass() == uno::TypeClass_LONG);
                         aScale.IncrementData.SubIncrements[0].IntervalCount = aValue;
                         bSetScale = true;
                     }

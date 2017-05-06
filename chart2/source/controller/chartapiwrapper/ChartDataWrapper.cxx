@@ -582,7 +582,7 @@ void ChartDataWrapper::fireChartDataChangeEvent( css::chart::ChartDataChangeEven
         return;
 
     uno::Reference< uno::XInterface > xSrc( static_cast< cppu::OWeakObject* >( this ));
-    OSL_ASSERT( xSrc.is());
+    assert(xSrc.is());
     if( xSrc.is() )
         aEvent.Source = xSrc;
 
@@ -625,7 +625,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     bool bPercent = false;
     bool bDeep = false;
     uno::Reference< css::chart::XChartDocument > xOldDoc( xChartDoc, uno::UNO_QUERY );
-    OSL_ASSERT( xOldDoc.is());
+    assert(xOldDoc.is());
     uno::Reference< beans::XPropertySet > xDiaProp( xOldDoc->getDiagram(), uno::UNO_QUERY );
     if( xDiaProp.is())
     {
@@ -659,7 +659,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     switchToInternalDataProvider();
     rDataOperator.apply(m_xDataAccess);
     uno::Reference< chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider() );
-    OSL_ASSERT( xDataProvider.is() );
+    assert(xDataProvider.is());
     if( !xDataProvider.is() )
         return;
     uno::Reference< chart2::data::XDataSource > xSource( xDataProvider->createDataSource( aArguments ) );

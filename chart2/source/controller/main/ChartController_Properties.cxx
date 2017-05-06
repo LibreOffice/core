@@ -231,7 +231,7 @@ wrapper::ItemConverter* createItemConverter(
                         if( !ColorPerPointHelper::hasPointOwnColor( xSeriesProp, nPointIndex, xObjectProperties ) )
                         {
                             bUseSpecialFillColor = true;
-                            OSL_ASSERT( xDiagram.is());
+                            assert(xDiagram.is());
                             uno::Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme() );
                             if( xColorScheme.is())
                                 nSpecialFillColor = xColorScheme->getColorByIndex( nPointIndex );

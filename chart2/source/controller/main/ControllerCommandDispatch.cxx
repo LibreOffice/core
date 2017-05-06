@@ -488,7 +488,7 @@ void ControllerCommandDispatch::initialize()
     {
         Reference< frame::XModel > xModel( m_xChartController->getModel());
         Reference< util::XModifyBroadcaster > xModifyBroadcaster( xModel, uno::UNO_QUERY );
-        OSL_ASSERT( xModifyBroadcaster.is());
+        assert(xModifyBroadcaster.is());
         if( xModifyBroadcaster.is())
             xModifyBroadcaster->addModifyListener( this );
 
@@ -522,8 +522,8 @@ void ControllerCommandDispatch::updateCommandAvailability()
     bool bModelStateIsValid = ( m_apModelState.get() != nullptr );
     bool bControllerStateIsValid = ( m_apControllerState.get() != nullptr );
     // Model and controller states exist.
-    OSL_ASSERT( bModelStateIsValid );
-    OSL_ASSERT( bControllerStateIsValid );
+    assert(bModelStateIsValid);
+    assert(bControllerStateIsValid);
 
     // read-only
     bool bIsWritable = bModelStateIsValid && (! m_apModelState->bIsReadOnly);

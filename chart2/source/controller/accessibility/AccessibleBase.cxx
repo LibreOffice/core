@@ -87,7 +87,7 @@ AccessibleBase::AccessibleBase(
         m_bStateSetInitialized( false )
 {
     // initialize some states
-    OSL_ASSERT( m_xStateSetHelper.is() );
+    assert(m_xStateSetHelper.is());
     m_xStateSetHelper->AddState( AccessibleStateType::ENABLED );
     m_xStateSetHelper->AddState( AccessibleStateType::SHOWING );
     m_xStateSetHelper->AddState( AccessibleStateType::VISIBLE );
@@ -97,7 +97,7 @@ AccessibleBase::AccessibleBase(
 
 AccessibleBase::~AccessibleBase()
 {
-    OSL_ASSERT( m_bIsDisposed );
+    assert(m_bIsDisposed);
 }
 
 bool AccessibleBase::CheckDisposeState( bool bThrowException /* default: true */ ) const
@@ -177,14 +177,14 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
 void AccessibleBase::AddState( sal_Int16 aState )
 {
     CheckDisposeState();
-    OSL_ASSERT( m_xStateSetHelper.is() );
+    assert(m_xStateSetHelper.is());
     m_xStateSetHelper->AddState( aState );
 }
 
 void AccessibleBase::RemoveState( sal_Int16 aState )
 {
     CheckDisposeState();
-    OSL_ASSERT( m_xStateSetHelper.is() );
+    assert(m_xStateSetHelper.is());
     m_xStateSetHelper->RemoveState( aState );
 }
 

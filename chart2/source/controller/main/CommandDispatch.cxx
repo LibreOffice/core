@@ -86,7 +86,7 @@ void SAL_CALL CommandDispatch::addStatusListener( const Reference< frame::XStatu
             m_aListeners.begin(),
             tListenerMap::value_type( URL.Complete, new ::comphelper::OInterfaceContainerHelper2( m_aMutex )));
     }
-    OSL_ASSERT( aIt != m_aListeners.end());
+    assert(aIt != m_aListeners.end());
 
     aIt->second->addInterface( Control );
     fireStatusEvent( URL.Complete, Control );

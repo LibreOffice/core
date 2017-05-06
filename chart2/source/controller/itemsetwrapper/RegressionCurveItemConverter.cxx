@@ -41,7 +41,7 @@ namespace
 template <class T, class D>
 bool lclConvertToPropertySet(const SfxItemSet& rItemSet, sal_uInt16 nWhichId, const uno::Reference<beans::XPropertySet>& xProperties, const OUString& aPropertyID)
 {
-    OSL_ASSERT(xProperties.is());
+    assert(xProperties.is());
     if( xProperties.is() )
     {
         T aValue = static_cast<T>(static_cast<const D&>(rItemSet.Get( nWhichId )).GetValue());
@@ -59,7 +59,7 @@ bool lclConvertToPropertySet(const SfxItemSet& rItemSet, sal_uInt16 nWhichId, co
 template <class T, class D>
 void lclConvertToItemSet(SfxItemSet& rItemSet, sal_uInt16 nWhichId, const uno::Reference<beans::XPropertySet>& xProperties, const OUString& aPropertyID)
 {
-    OSL_ASSERT(xProperties.is());
+    assert(xProperties.is());
     if( xProperties.is() )
     {
         T aValue = static_cast<T>(static_cast<const D&>(rItemSet.Get( nWhichId )).GetValue());
@@ -72,7 +72,7 @@ void lclConvertToItemSet(SfxItemSet& rItemSet, sal_uInt16 nWhichId, const uno::R
 
 void lclConvertToItemSetDouble(SfxItemSet& rItemSet, sal_uInt16 nWhichId, const uno::Reference<beans::XPropertySet>& xProperties, const OUString& aPropertyID)
 {
-    OSL_ASSERT(xProperties.is());
+    assert(xProperties.is());
     if( xProperties.is() )
     {
         double aValue = static_cast<const SvxDoubleItem&>(rItemSet.Get( nWhichId )).GetValue();
@@ -142,7 +142,7 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
     uno::Reference< chart2::XRegressionCurve > xCurve( GetPropertySet(), uno::UNO_QUERY );
     bool bChanged = false;
 
-    OSL_ASSERT(xCurve.is());
+    assert(xCurve.is());
     if(!xCurve.is())
         return false;
 
@@ -255,7 +255,7 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
 void RegressionCurveItemConverter::FillSpecialItem(sal_uInt16 nWhichId, SfxItemSet& rOutItemSet ) const
 {
     uno::Reference<chart2::XRegressionCurve> xCurve(GetPropertySet(), uno::UNO_QUERY);
-    OSL_ASSERT(xCurve.is());
+    assert(xCurve.is());
     if(!xCurve.is())
         return;
 
