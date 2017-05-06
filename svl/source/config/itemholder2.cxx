@@ -127,7 +127,7 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
             break;
 
         default:
-            OSL_ASSERT(false);
+            assert(false);
             break;
     }
 }

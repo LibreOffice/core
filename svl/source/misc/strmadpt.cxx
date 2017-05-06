@@ -257,7 +257,7 @@ sal_uInt64 SvInputStream::SeekPos(sal_uInt64 const nPos)
                     try
                     {
                         sal_Int64 nLength = m_xSeekable->getLength();
-                        OSL_ASSERT(nLength >= 0);
+                        assert(nLength >= 0);
                         if (static_cast<sal_uInt64>(nLength)
                             < STREAM_SEEK_TO_END)
                         {

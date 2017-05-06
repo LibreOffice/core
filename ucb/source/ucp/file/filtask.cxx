@@ -1377,7 +1377,7 @@ bool getType(
     TaskManager & task, sal_Int32 id, OUString const & fileUrl,
     osl::DirectoryItem * item, osl::FileStatus::Type * type)
 {
-    OSL_ASSERT(item != nullptr && type != nullptr);
+    assert(item != nullptr && type != nullptr);
     osl::FileBase::RC err = osl::DirectoryItem::get(fileUrl, *item);
     if (err != osl::FileBase::E_None) {
         task.installError(id, TASKHANDLING_TRANSFER_BY_COPY_SOURCE, err);
@@ -2935,7 +2935,7 @@ TaskManager::erasePersistentSet( const OUString& aUnqPath,
 {
     if( ! m_xFileRegistry.is() )
     {
-        OSL_ASSERT( m_xFileRegistry.is() );
+        assert( m_xFileRegistry.is() );
         return;
     }
 
@@ -2996,7 +2996,7 @@ TaskManager::copyPersistentSet( const OUString& srcUnqPath,
 {
     if( ! m_xFileRegistry.is() )
     {
-        OSL_ASSERT( m_xFileRegistry.is() );
+        assert( m_xFileRegistry.is() );
         return;
     }
 

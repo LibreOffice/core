@@ -136,7 +136,7 @@ enum Result { Success, GeneralFailure, SpecificFailure };
 Result normalizePrefix( css::uno::Reference< css::ucb::XUniversalContentBroker > const & broker,
                         OUString const & uri, OUString * normalized)
 {
-    OSL_ASSERT(broker.is() && normalized != nullptr);
+    assert(broker.is() && normalized != nullptr);
     css::uno::Reference< css::ucb::XContent > content;
     try {
         content = broker->queryContent(broker->createContentIdentifier(uri));
@@ -153,7 +153,7 @@ Result normalizePrefix( css::uno::Reference< css::ucb::XUniversalContentBroker >
                        0,
                        css::uno::Reference< css::ucb::XCommandEnvironment >())
                >>= *normalized);
-        OSL_ASSERT(ok);
+        assert(ok);
     } catch (css::uno::RuntimeException &) {
         throw;
     } catch (css::ucb::UnsupportedCommandException &) {
@@ -255,7 +255,7 @@ URIHelper::normalizedMakeRelative(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     OUString const & baseUriReference, OUString const & uriReference)
 {
-    OSL_ASSERT(context.is());
+    assert(context.is());
     css::uno::Reference< css::ucb::XUniversalContentBroker > broker(
         css::ucb::UniversalContentBroker::create(context));
     css::uno::Reference< css::uri::XUriReferenceFactory > uriFactory(
