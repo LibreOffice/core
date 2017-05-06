@@ -41,6 +41,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/indexdesigndialog \
     dbaccess/uiconfig/ui/jdbcconnectionpage \
     dbaccess/uiconfig/ui/joindialog \
+    dbaccess/uiconfig/ui/jointablemenu \
     dbaccess/uiconfig/ui/joinviewmenu \
     dbaccess/uiconfig/ui/keymenu \
     dbaccess/uiconfig/ui/ldapconnectionpage \
