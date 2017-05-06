@@ -133,7 +133,7 @@ void SwUndoFormatAttr::Init()
         SaveFlyAnchor( m_bSaveDrawPt );
     } else if ( RES_FRMFMT == m_nFormatWhich ) {
         SwDoc* pDoc = m_pFormat->GetDoc();
-        if (pDoc->GetTableFrameFormats()->ContainsFormat(dynamic_cast<SwFrameFormat*>(m_pFormat)))
+        if (pDoc->GetTableFrameFormats()->ContainsFormat(dynamic_cast<const SwFrameFormat&>(*m_pFormat)))
         {
             // Table Format: save table position, table formats are volatile!
             SwTable * pTable = SwIterator<SwTable,SwFormat>( *m_pFormat ).First();

@@ -711,7 +711,7 @@ void SwDoc::DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast )
     else
     {
         // The format has to be in the one or the other, we'll see in which one.
-        if (mpFrameFormatTable->ContainsFormat(pFormat))
+        if (mpFrameFormatTable->ContainsFormat(*pFormat))
         {
             if (bBroadcast)
                 BroadcastStyleOperation(pFormat->GetName(),
@@ -730,7 +730,7 @@ void SwDoc::DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast )
         }
         else
         {
-            bool contains = GetSpzFrameFormats()->ContainsFormat(pFormat);
+            bool contains = GetSpzFrameFormats()->ContainsFormat(*pFormat);
             OSL_ENSURE( contains, "FrameFormat not found." );
             if( contains )
             {
@@ -2116,9 +2116,9 @@ void SwFrameFormats::erase( const_iterator const& position )
     m_PosIndex.erase( begin() + (position - begin()) );
 }
 
-bool SwFrameFormats::ContainsFormat(const SwFrameFormat *const x) const
+bool SwFrameFormats::ContainsFormat(const SwFrameFormat& x) const
 {
-    return (x->m_ffList == this);
+    return (x.m_ffList == this);
 }
 
 bool SwFrameFormats::IsAlive(SwFrameFormat const*const p) const

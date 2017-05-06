@@ -260,7 +260,7 @@ public:
 
     /// fast check if given format is contained here
     /// @precond pFormat must not have been deleted
-    bool ContainsFormat(SwFrameFormat const* pFormat) const;
+    bool ContainsFormat(SwFrameFormat const& rFormat) const;
     /// not so fast check that given format is still alive (i.e. contained here)
     bool IsAlive(SwFrameFormat const*) const;
 
