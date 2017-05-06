@@ -6368,6 +6368,14 @@ void MSOPropertyBagStore::Read(SvStream& rStream)
     sal_uInt32 nCste(0);
     rStream.ReadUInt32(nCste);
 
+    //each string has a 2 byte len record at the start
+    const size_t nMaxPossibleRecords = rStream.remainingSize() / sizeof(sal_uInt16);
+    if (nCste > nMaxPossibleRecords)
+    {
+        SAL_WARN("sw.ww8", nCste << " records claimed, but max possible is " << nMaxPossibleRecords);
+        nCste = nMaxPossibleRecords;
+    }
+
     for (sal_uInt32 i = 0; i < nCste; ++i)
     {
         OUString aString = MSOPBString::Read(rStream);
@@ -6419,7 +6427,7 @@ void MSOPropertyBag::Read(SvStream& rStream)
     rStream.ReadUInt16(cProp);
     rStream.SeekRel(2); // cbUnknown
     //each MSOProperty is 8 bytes in size
-    size_t nMaxPossibleRecords = rStream.remainingSize() / 8;
+    const size_t nMaxPossibleRecords = rStream.remainingSize() / 8;
     if (cProp > nMaxPossibleRecords)
     {
         SAL_WARN("sw.ww8", cProp << " records claimed, but max possible is " << nMaxPossibleRecords);
