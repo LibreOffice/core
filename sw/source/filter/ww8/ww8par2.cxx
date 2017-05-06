@@ -151,7 +151,7 @@ class WW8TabDesc
 
     SwPosition* m_pTmpPos;
 
-    SwTableNode* m_pTableNd;            // table node
+    SwTableNode* m_pTableNd;          // table node
     const SwTableLines* m_pTabLines;  // row array of node
     SwTableLine* m_pTabLine;          // current row
     SwTableBoxes* m_pTabBoxes;        // boxes array in current row
@@ -350,7 +350,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
         SwFormatFootnote aFootnote(rDesc.meType == MAN_EDN);
         pFN = pText->InsertItem(aFootnote, nPos, nPos);
     }
-    OSL_ENSURE(pFN, "Probleme beim Anlegen des Fussnoten-Textes");
+    OSL_ENSURE(pFN, "Problems creating the footnote text");
     if (pFN)
     {
 
@@ -360,7 +360,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
         WW8PLCFMan* pOldPlcxMan = m_pPlcxMan;
 
         const SwNodeIndex* pSttIdx = static_cast<SwTextFootnote*>(pFN)->GetStartNode();
-        OSL_ENSURE(pSttIdx, "Probleme beim Anlegen des Fussnoten-Textes");
+        OSL_ENSURE(pSttIdx, "Problems creating footnote text");
 
         static_cast<SwTextFootnote*>(pFN)->SetSeqNo( m_rDoc.GetFootnoteIdxs().size() );
 
@@ -1075,8 +1075,8 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
 
     SwNumRule *pNumRule = m_aANLDRules.GetNumRule(m_nWwNumType);
 
-    // pNd->UpdateNum ohne Regelwerk gibt GPF spaetestens beim Speichern als
-    // sdw3
+    // pNd->UpdateNum without a set of rules at the latest whilst saving
+    // returns GPF as sdw3
 
     // WW:10 = numberierung -> SW:0 & WW:11 = bullets -> SW:0
     if (*pSprm13 == 10 || *pSprm13 == 11)
@@ -2125,11 +2125,11 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
             // last band has more than 1 cell
             delete pNewBand;
             pNewBand = new WW8TabBandDesc( *m_pActBand ); // create new
-            m_pActBand->nRows--;      // wegen Sonderbehandlung Raender-Defaults
+            m_pActBand->nRows--;      // because of special treatment of border defaults
             pNewBand->nRows = 1;
-            m_pActBand->pNextBand = pNewBand; // am Ende einschleifen
+            m_pActBand->pNextBand = pNewBand; // loop in at the end
             m_nBands++;
-            pNewBand = nullptr;                   // do not delete
+            pNewBand = nullptr;               // do not delete
         }
         CalcDefaults();
     }
@@ -2176,7 +2176,7 @@ void WW8TabDesc::CalcDefaults()
                 pR->nCenter[i] = pR->nCenter[i] -  pR->nCenter[0];
     }
 
-    // 1. Durchlauf: aeusserste L- und R-Grenzen finden
+    // First loop: find outermust L and R borders
     for( pR = m_pFirstBand; pR; pR = pR->pNextBand )
     {
         if( pR->nCenter[0] < m_nMinLeft )
@@ -2285,7 +2285,7 @@ void WW8TabDesc::CalcDefaults()
                         j = (k == pR->nWwCols - 1) ? 3 : 5;
                         break;
                     }
-                    // mangel mit Defaults ueber
+                    // merge with above defaults
                     pT->rgbrc[i] = pR->aDefBrcs[j];
                 }
             }
@@ -2394,7 +2394,7 @@ void WW8TabDesc::CalcDefaults()
         m_bOk = false;
     m_pActBand = m_pFirstBand;
     m_nAktBandRow = 0;
-    OSL_ENSURE( m_pActBand, "pActBand ist 0" );
+    OSL_ENSURE( m_pActBand, "pActBand is 0" );
 }
 
 void WW8TabDesc::SetSizePosition(SwFrameFormat* pFrameFormat)
@@ -2585,7 +2585,7 @@ void WW8TabDesc::UseSwTable()
 
     m_pTableNd  = const_cast<SwTableNode*>((*m_pTabLines)[0]->GetTabBoxes()[0]->
         GetSttNd()->FindTableNode());
-    OSL_ENSURE( m_pTableNd, "wo ist mein TabellenNode" );
+    OSL_ENSURE( m_pTableNd, "Where is my table node" );
 
     // #i69519# - Restrict rows to repeat to a decent value
     if ( m_nRowsToRepeat == static_cast<sal_uInt16>(m_nRows) )
@@ -2946,7 +2946,7 @@ void WW8TabDesc::EndMiserableHackForUnsupportedDirection(short nWwCol)
 
 void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
 {
-    OSL_ENSURE( m_pActBand, "pActBand ist 0" );
+    OSL_ENSURE( m_pActBand, "pActBand is 0" );
     if (!m_pActBand)
         return;
 
@@ -2989,7 +2989,7 @@ void WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     m_pTabBox = (*m_pTabBoxes)[nCol];
     if( !m_pTabBox->GetSttNd() )
     {
-        OSL_ENSURE(m_pTabBox->GetSttNd(), "Probleme beim Aufbau der Tabelle");
+        OSL_ENSURE(m_pTabBox->GetSttNd(), "Problems building the table");
         if (bPam)
             MoveOutsideTable();
         return;
@@ -3215,7 +3215,7 @@ void WW8TabDesc::AdjustNewBand()
 
     SetPamInCell( 0, false);
     OSL_ENSURE( m_pTabBoxes && m_pTabBoxes->size() == (sal_uInt16)m_pActBand->nSwCols,
-        "Falsche Spaltenzahl in Tabelle" );
+        "Wrong column count in table" );
 
     if( m_bClaimLineFormat )
     {
@@ -3335,7 +3335,7 @@ void WW8TabDesc::TableCellEnd()
         m_nAktCol = 0;
         m_nAktRow++;
         m_nAktBandRow++;
-        OSL_ENSURE( m_pActBand , "pActBand ist 0" );
+        OSL_ENSURE( m_pActBand , "pActBand is 0" );
         if( m_pActBand )
         {
             if( m_nAktRow >= m_nRows )  // nothing to at end of table
@@ -3346,7 +3346,7 @@ void WW8TabDesc::TableCellEnd()
             {                       // new band needed ?
                 m_pActBand = m_pActBand->pNextBand;
                 m_nAktBandRow = 0;
-                OSL_ENSURE( m_pActBand, "pActBand ist 0" );
+                OSL_ENSURE( m_pActBand, "pActBand is 0" );
                 AdjustNewBand();
             }
             else
@@ -3439,8 +3439,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
 {
     // Entering a table so make sure the FirstPara flag gets set
     m_bFirstPara = true;
-    // keine rekursiven Tabellen Nicht bei EinfuegenDatei in Tabelle oder
-    // Fussnote
+    // no recursive table, not with InsertFile in table or foot note
     if (m_bReadNoTable)
         return false;
 
@@ -3944,7 +3943,7 @@ void WW8RStyle::PostStyle(SwWW8StyInf &rSI, bool bOldNoImp)
     pIo->m_bHasBorder = pIo->m_bSpec = pIo->m_bObj = pIo->m_bSymbol = false;
     pIo->m_nCharFormat = -1;
 
-    // If Style basiert auf Nichts oder Basis ignoriert
+    // if style is based on nothing or base ignored
     if ((rSI.m_nBase >= cstd || pIo->m_vColl[rSI.m_nBase].m_bImportSkipped) && rSI.m_bColl)
     {
         // If Char-Styles does not work
