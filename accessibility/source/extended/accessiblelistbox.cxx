@@ -156,7 +156,7 @@ namespace accessibility
                             MAP_ENTRY::iterator mi = m_mapEntry.find(pEntry);
                             if(mi != m_mapEntry.end())
                             {
-                                OSL_ASSERT(mi->second.get() != nullptr);
+                                assert(mi->second.get() != nullptr);
                                 m_xFocusedChild = mi->second;
                             }
                             else
