@@ -249,6 +249,7 @@ public:
     bool    TestInsertCol( SCROW nStartRow, SCROW nEndRow) const;
     bool TestInsertRow( SCROW nStartRow, SCSIZE nSize ) const;
     void        InsertRow( SCROW nStartRow, SCSIZE nSize );
+    void GetUnprotectedCellsInRange(SCROW nStartRow, SCROW nEndRow, ScRangeList& rRangeList ) const;
 
     /**
      * @param nStartRow top row position

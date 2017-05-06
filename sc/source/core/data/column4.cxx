@@ -767,6 +767,16 @@ void ScColumn::GetNotesInRange(SCROW nStartRow, SCROW nEndRow,
     std::for_each(it, ++itEnd, NoteEntryCollector(rNotes, nTab, nCol, nStartRow, nEndRow));
 }
 
+void ScColumn::GetUnprotectedCellsInRange(SCROW nStartRow, SCROW nEndRow,
+        ScRangeList& rRangeList ) const
+{
+    for ( SCROW nRow = nStartRow; nRow<=nEndRow; ++nRow )
+    {
+        if (static_cast<const ScProtectionAttr&>(pAttrArray->GetPattern(nRow)->GetItem(ATTR_PROTECTION)).GetProtection())
+            rRangeList.Append(ScRange( nCol, nRow, nTab));
+    }
+}
+
 namespace {
 
 class RecompileByOpcodeHandler

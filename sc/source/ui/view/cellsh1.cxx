@@ -2685,6 +2685,24 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
+            case SID_SELECT_UNPROTECTED_CELLS:
+            {
+                ScMarkData aNewMark;
+                ScViewData* pData = GetViewData();
+                ScMarkData& rMark = pData->GetMarkData();
+                ScDocument* pDoc   = pData->GetDocument();
+                ScRangeList rSelectedTabList;
+                ScRangeList rRangeList;
+
+                for (auto const& rTab : rMark.GetSelectedTabs())
+                    rSelectedTabList.Append( ScRange(0,0,rTab,MAXCOL,MAXROW,rTab) );
+
+                rMark.ResetMark();
+                pDoc->GetUnprotectedCellsInRange(rSelectedTabList, rRangeList);
+                aNewMark.MarkFromRangeList( rRangeList, true );
+            }
+            break;
+
         default:
             OSL_FAIL("incorrect slot in ExecuteEdit");
             break;

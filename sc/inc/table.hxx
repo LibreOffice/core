@@ -348,6 +348,7 @@ public:
     bool            IsProtected() const;
     void            SetProtection(const ScTableProtection* pProtect);
     ScTableProtection* GetProtection();
+    void            GetUnprotectedCellsInRange( const ScRange& rRange, ScRangeList& rRangeList ) const;
 
     Size            GetPageSize() const;
     void            SetPageSize( const Size& rSize );

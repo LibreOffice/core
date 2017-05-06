@@ -6598,6 +6598,18 @@ void ScDocument::GetNotesInRange( const ScRangeList& rRange, std::vector<sc::Not
     }
 }
 
+void ScDocument::GetUnprotectedCellsInRange( const ScRangeList& rRange, ScRangeList& rRangeList ) const
+{
+    for( size_t i = 0; i < rRange.size(); ++i)
+    {
+        const ScRange* pRange = rRange[i];
+        for( SCTAB nTab = pRange->aStart.Tab(); nTab <= pRange->aEnd.Tab(); ++nTab )
+        {
+            maTabs[nTab]->GetUnprotectedCellsInRange( *pRange, rRangeList );
+        }
+    }
+}
+
 bool ScDocument::ContainsNotesInRange( const ScRangeList& rRange ) const
 {
     for( size_t i = 0; i < rRange.size(); ++i)

@@ -1614,6 +1614,16 @@ void ScTable::GetNotesInRange( const ScRange& rRange, std::vector<sc::NoteEntry>
     }
 }
 
+void ScTable::GetUnprotectedCellsInRange( const ScRange& rRange, ScRangeList& rRangeList ) const
+{
+    SCROW nStartRow = rRange.aStart.Row();
+    SCROW nEndRow = rRange.aEnd.Row();
+    for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+    {
+        aCol[nCol].GetUnprotectedCellsInRange(nStartRow, nEndRow, rRangeList);
+    }
+}
+
 bool ScTable::ContainsNotesInRange( const ScRange& rRange ) const
 {
     SCROW nStartRow = rRange.aStart.Row();
