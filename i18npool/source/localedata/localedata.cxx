@@ -503,7 +503,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
                 {
                     if (pCurrent->dllName == i.pLib)
                     {
-                        OSL_ASSERT( pOutCachedItem );
+                        assert( pOutCachedItem );
                         if( pOutCachedItem )
                         {
                             (*pOutCachedItem) = new LocaleDataLookupTableItem( *pCurrent );
@@ -531,7 +531,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
                 ::osl::MutexGuard aGuard( maMutex );
                 LocaleDataLookupTableItem* pNewItem = new LocaleDataLookupTableItem(i.pLib, module, i.pLocale);
                 maLookupTable.push_back(pNewItem);
-                OSL_ASSERT( pOutCachedItem );
+                assert( pOutCachedItem );
                 if( pOutCachedItem )
                 {
                     (*pOutCachedItem) = new LocaleDataLookupTableItem( *pNewItem );
@@ -1286,7 +1286,7 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale )
                         rVal.Value <<= (sal_Int16) sVal.toInt32();
                         break;
                     default:
-                        OSL_ASSERT(false);
+                        assert(false);
                 }
             }
         }
@@ -1381,7 +1381,7 @@ LocaleDataImpl::getOutlineNumberingLevels( const lang::Locale& rLocale )
                         case 10: level[j].sTransliteration = tmp; break;
                         case 11: level[j].nNatNum    = tmp.toInt32();   break;
                         default:
-                                 OSL_ASSERT(false);
+                                 assert(false);
                     }
                 }
             }
