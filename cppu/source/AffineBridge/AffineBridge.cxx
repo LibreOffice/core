@@ -174,8 +174,8 @@ AffineBridge::~AffineBridge()
 
 void AffineBridge::outerDispatch(bool loop)
 {
-    OSL_ASSERT(m_outerThreadId == osl::Thread::getCurrentIdentifier());
-    OSL_ASSERT(m_innerThreadId != m_outerThreadId);
+    assert(m_outerThreadId == osl::Thread::getCurrentIdentifier());
+    assert(m_innerThreadId != m_outerThreadId);
 
     Msg mm;
 
@@ -213,8 +213,8 @@ void AffineBridge::outerDispatch(bool loop)
 
 void AffineBridge::innerDispatch()
 {
-    OSL_ASSERT(m_innerThreadId == osl::Thread::getCurrentIdentifier());
-    OSL_ASSERT(m_innerThreadId != m_outerThreadId);
+    assert(m_innerThreadId == osl::Thread::getCurrentIdentifier());
+    assert(m_innerThreadId != m_outerThreadId);
 
     Msg mm;
 
@@ -275,7 +275,7 @@ void AffineBridge::v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam)
 
 void AffineBridge::v_callOut_v(uno_EnvCallee * pCallee, va_list * pParam)
 {
-    OSL_ASSERT(m_innerThreadId);
+    assert(m_innerThreadId);
 
     osl::MutexGuard guard(m_innerMutex);
 
@@ -310,14 +310,14 @@ void AffineBridge::v_enter()
     if (!m_enterCount)
         m_innerThreadId = osl::Thread::getCurrentIdentifier();
 
-    OSL_ASSERT(m_innerThreadId == osl::Thread::getCurrentIdentifier());
+    assert(m_innerThreadId == osl::Thread::getCurrentIdentifier());
 
     ++ m_enterCount;
 }
 
 void AffineBridge::v_leave()
 {
-    OSL_ASSERT(m_innerThreadId == osl::Thread::getCurrentIdentifier());
+    assert(m_innerThreadId == osl::Thread::getCurrentIdentifier());
 
     -- m_enterCount;
     if (!m_enterCount)
