@@ -216,6 +216,7 @@ interface CellSelection
     SID_DELETE_NOTE         [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_DEC_INDENT          [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_INC_INDENT          [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+    SID_SELECT_UNPROTECTED_CELLS [ ExecMethod = ExecuteEdit;]
 
     SID_THESAURUS   [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
     SID_SPELL_DIALOG [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
