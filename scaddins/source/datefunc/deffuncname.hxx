@@ -22,49 +22,49 @@
 
 static const char* DATE_DEFFUNCNAME_DiffWeeks[2] =
 {
-    "WOCHEN"
+    "WOCHEN",
     "WEEKS"
 };
 
 static const char* DATE_DEFFUNCNAME_DiffMonths[2] =
 {
-    "MONATE"
+    "MONATE",
     "MONTHS"
 };
 
 static const char* DATE_DEFFUNCNAME_DiffYears[2] =
 {
-    "JAHRE"
+    "JAHRE",
     "YEARS"
 };
 
 static const char* DATE_DEFFUNCNAME_IsLeapYear[2] =
 {
-    "ISTSCHALTJAHR"
+    "ISTSCHALTJAHR",
     "ISLEAPYEAR"
 };
 
 static const char* DATE_DEFFUNCNAME_DaysInMonth[2] =
 {
-    "TAGEIMMONAT"
+    "TAGEIMMONAT",
     "DAYSINMONTH"
 };
 
 static const char* DATE_DEFFUNCNAME_DaysInYear[2] =
 {
-    "TAGEIMJAHR"
+    "TAGEIMJAHR",
     "DAYSINYEAR"
 };
 
 static const char* DATE_DEFFUNCNAME_WeeksInYear[2] =
 {
-    "WOCHENIMJAHR"
+    "WOCHENIMJAHR",
     "WEEKSINYEAR"
 };
 
 static const char* DATE_DEFFUNCNAME_Rot13[2] =
 {
-    "ROT13"
+    "ROT13",
     "ROT13"
 };
 
