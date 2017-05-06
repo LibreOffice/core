@@ -78,7 +78,7 @@ Sequence< Any > make_seq_out_of_struct(
     }
     typelib_TypeDescription * pTD = nullptr;
     TYPELIB_DANGER_GET( &pTD, type.getTypeLibType() );
-    OSL_ASSERT( pTD );
+    assert( pTD );
     if (! pTD)
     {
         throw RuntimeException(

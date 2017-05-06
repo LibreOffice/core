@@ -148,7 +148,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_xContext( rxContext ),
     m_sIconTheme( SvtMiscOptions().GetIconTheme() )
 {
-    OSL_ASSERT( m_xContext.is() );
+    assert( m_xContext.is() );
 
     vcl::Window* pWindow = m_pToolBar;
     while ( pWindow && !pWindow->IsSystemWindow() )
@@ -204,12 +204,12 @@ ToolBarManager::~ToolBarManager()
 {
     assert(!m_aAsyncUpdateControllersTimer.IsActive());
     assert(!m_pToolBar); // must be disposed by ToolbarLayoutManager
-    OSL_ASSERT( !m_bAddedToTaskPaneList );
+    assert( !m_bAddedToTaskPaneList );
 }
 
 void ToolBarManager::Destroy()
 {
-    OSL_ASSERT( m_pToolBar != nullptr );
+    assert( m_pToolBar != nullptr );
     SolarMutexGuard g;
     if ( m_bAddedToTaskPaneList )
     {
