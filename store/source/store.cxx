@@ -113,7 +113,7 @@ storeError SAL_CALL store_createMemoryFile (
     storeError eErrCode = MemoryLockBytes_createInstance(xLockBytes);
     if (eErrCode != store_E_None)
         return eErrCode;
-    OSL_ASSERT(xLockBytes.is());
+    assert(xLockBytes.is());
 
     Reference<OStorePageManager> xManager (new OStorePageManager());
     if (!xManager.is())
@@ -151,7 +151,7 @@ storeError SAL_CALL store_openFile (
     storeError eErrCode = FileLockBytes_createInstance (xLockBytes, pFilename, eAccessMode);
     if (eErrCode != store_E_None)
         return eErrCode;
-    OSL_ASSERT(xLockBytes.is());
+    assert(xLockBytes.is());
 
     Reference<OStorePageManager> xManager (new OStorePageManager());
     if (!xManager.is())
