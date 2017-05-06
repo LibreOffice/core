@@ -105,7 +105,7 @@ bool EnumContext::operator!= (const EnumContext& rOther)
 void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Application eApplication)
 {
     maApplicationMap[rsName] = eApplication;
-    OSL_ASSERT(eApplication<=Application::LAST);
+    assert(eApplication <= Application::LAST);
     maApplicationVector[eApplication]=rsName;
 }
 

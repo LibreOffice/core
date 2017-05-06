@@ -863,8 +863,8 @@ bool ImplRegionBand::operator==( const ImplRegionBand& rRegionBand ) const
 
 ImplRegionBand* ImplRegionBand::SplitBand (const sal_Int32 nY)
 {
-    OSL_ASSERT(nY>mnYTop);
-    OSL_ASSERT(nY<=mnYBottom);
+    assert(nY > mnYTop);
+    assert(nY <= mnYBottom);
 
     // Create a copy of the given band (we tell the constructor to copy the points together
     // with the seps.)

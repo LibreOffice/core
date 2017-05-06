@@ -235,7 +235,7 @@ UnxFilePicker::~UnxFilePicker()
 
 void SAL_CALL UnxFilePicker::addFilePickerListener( const uno::Reference<XFilePickerListener>& xListener )
 {
-    OSL_ASSERT( m_pNotifyThread );
+    assert( m_pNotifyThread );
     osl::MutexGuard aGuard( m_aMutex );
 
     m_pNotifyThread->addFilePickerListener( xListener );
@@ -243,7 +243,7 @@ void SAL_CALL UnxFilePicker::addFilePickerListener( const uno::Reference<XFilePi
 
 void SAL_CALL UnxFilePicker::removeFilePickerListener( const uno::Reference<XFilePickerListener>& xListener )
 {
-    OSL_ASSERT( m_pNotifyThread );
+    assert( m_pNotifyThread );
     osl::MutexGuard aGuard( m_aMutex );
 
     m_pNotifyThread->removeFilePickerListener( xListener );

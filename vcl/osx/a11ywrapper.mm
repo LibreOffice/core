@@ -302,7 +302,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     } catch (const Exception&) {
     }
 
-    OSL_ASSERT( false );
+    assert( false );
     return nil;
 }
 

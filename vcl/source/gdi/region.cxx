@@ -88,7 +88,7 @@ namespace
     */
     std::unique_ptr<RegionBand> ImplRectilinearPolygonToBands(const tools::PolyPolygon& rPolyPoly)
     {
-        OSL_ASSERT(ImplIsPolygonRectilinear (rPolyPoly));
+        assert(ImplIsPolygonRectilinear (rPolyPoly));
 
         // Create a new RegionBand object as container of the bands.
         std::unique_ptr<RegionBand> pRegionBand( o3tl::make_unique<RegionBand>() );
@@ -120,7 +120,7 @@ namespace
                 }
 
                 // At this point the line has to be vertical.
-                OSL_ASSERT(aStart.X() == aEnd.X());
+                assert(aStart.X() == aEnd.X());
 
                 // Sort y-coordinates to simplify the algorithm and store the
                 // direction separately.  The direction is calculated as it is
