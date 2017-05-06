@@ -1560,7 +1560,10 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName
         ScGeneralFunction nVal = getFunction();
         if (nVal == ScGeneralFunction::MEDIAN)
             nVal = ScGeneralFunction::NONE;
-        aRet <<= (sheet::GeneralFunction)nVal;
+        const int nValAsInt = static_cast<int>(nVal);
+        assert(nValAsInt >= (int)css::sheet::GeneralFunction_NONE &&
+               nValAsInt <= (int)css::sheet::GeneralFunction_VARP);
+        aRet <<= (sheet::GeneralFunction)nValAsInt;
     }
     else if ( aPropertyName == SC_UNO_DP_FUNCTION2 )
     {

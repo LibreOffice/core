@@ -1832,7 +1832,8 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
             std::vector< ScGeneralFunction > aSubTotals(aSeq.getLength());
             for (sal_Int32 nIndex = 0; nIndex < aSeq.getLength(); nIndex++)
             {
-                aSubTotals[nIndex] = static_cast<ScGeneralFunction>(aSeq[nIndex]);
+                const int nValAsInt = static_cast<int>(aSeq[nIndex]);
+                aSubTotals[nIndex] = static_cast<ScGeneralFunction>(nValAsInt);
             }
             setSubtotals( aSubTotals );
         }
