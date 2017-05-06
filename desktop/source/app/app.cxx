@@ -475,9 +475,10 @@ OUString ReplaceStringHookProc( const OUString& rStr )
 
     if (sRet.indexOf("%PRODUCT") != -1 || sRet.indexOf("%ABOUTBOX") != -1)
     {
+        static OUString sBuildId( utl::Bootstrap::getBuildIdData("development") );
+
         OUString sBrandName = BrandName::get();
         OUString sVersion = Version::get();
-        OUString sBuildId = utl::Bootstrap::getBuildIdData("development");
         OUString sAboutBoxVersion = AboutBoxVersion::get();
         OUString sAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
         OUString sExtension = Extension::get();
