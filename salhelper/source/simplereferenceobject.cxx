@@ -21,12 +21,13 @@
 #include "osl/diagnose.h"
 
 #include <new>
+#include <cassert>
 
 using salhelper::SimpleReferenceObject;
 
 SimpleReferenceObject::~SimpleReferenceObject()
 {
-    OSL_ASSERT(m_nCount == 0);
+    assert(m_nCount == 0);
 }
 
 void * SimpleReferenceObject::operator new(std::size_t nSize)
