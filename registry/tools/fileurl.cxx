@@ -58,11 +58,11 @@ OUString convertToFileUrl(char const * filename, sal_Int32 length)
             OUString uWorkingDir;
             if (osl_getProcessWorkingDir(&uWorkingDir.pData) != osl_Process_E_None)
             {
-                OSL_ASSERT(false);
+                assert(false);
             }
             if (FileBase::getAbsoluteFileURL(uWorkingDir, uFileName, uFileUrl) != FileBase::E_None)
             {
-                OSL_ASSERT(false);
+                assert(false);
             }
         }
         else
@@ -70,7 +70,7 @@ OUString convertToFileUrl(char const * filename, sal_Int32 length)
             // absolute path name.
             if (FileBase::getFileURLFromSystemPath(uFileName, uFileUrl) != FileBase::E_None)
             {
-                OSL_ASSERT(false);
+                assert(false);
             }
         }
     }
