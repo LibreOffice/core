@@ -103,7 +103,7 @@ OString getPluginJarPath(
         SunVersion ver142("1.4.2-ea");
         SunVersion ver150("1.5.0-ea");
         SunVersion ver(sVersion);
-        OSL_ASSERT(ver142 && ver150 && ver);
+        assert(ver142 && ver150 && ver);
 
         OUString sName;
         if (ver < ver142)
@@ -139,7 +139,7 @@ OString getPluginJarPath(
                 sPath = sPath1 + OUString::createFromAscii(sep) + sPath2;
             }
         }
-        OSL_ASSERT(!sPath.isEmpty());
+        assert(!sPath.isEmpty());
     }
     ret = OUStringToOString(sPath, osl_getThreadTextEncoding());
 
@@ -301,7 +301,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
 {
     assert(parJavaInfo);
 
-    OSL_ASSERT(!sVendor.isEmpty());
+    assert(!sVendor.isEmpty());
     if (sVendor.isEmpty())
         return javaPluginError::InvalidArg;
 
@@ -349,11 +349,11 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     std::unique_ptr<JavaInfo> * ppInfo)
 {
     assert(ppInfo != nullptr);
-    OSL_ASSERT(!sPath.isEmpty());
+    assert(!sPath.isEmpty());
     if (sPath.isEmpty())
         return javaPluginError::InvalidArg;
 
-    OSL_ASSERT(!sVendor.isEmpty());
+    assert(!sVendor.isEmpty());
     if (sVendor.isEmpty())
         return javaPluginError::InvalidArg;
 
@@ -688,7 +688,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         reinterpret_cast<JNI_CreateVM_Type *>(moduleRt.getFunctionSymbol(sSymbolCreateJava));
     if (!pCreateJavaVM)
     {
-        OSL_ASSERT(false);
+        assert(false);
         OString sLib = OUStringToOString(
             sRuntimeLib, osl_getThreadTextEncoding());
         OString sSymbol = OUStringToOString(

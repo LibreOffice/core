@@ -122,7 +122,7 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
         return false;
 
     // init m_sRuntimeLibrary
-    OSL_ASSERT(!m_sHome.isEmpty());
+    assert(!m_sHome.isEmpty());
     //call virtual function to get the possible paths to the runtime library.
 
     int size = 0;
@@ -148,7 +148,7 @@ bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
         return false;
 
     // init m_sLD_LIBRARY_PATH
-    OSL_ASSERT(!m_sHome.isEmpty());
+    assert(!m_sHome.isEmpty());
     size = 0;
     char const * const * arLDPaths = getLibraryPaths( & size);
     vector<OUString> ld_paths = getVectorFromCharArray(arLDPaths, size);

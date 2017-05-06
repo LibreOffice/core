@@ -239,7 +239,7 @@ javaFrameworkError jfw_startVM(
                     "-Djava.class.path=" + jfw::BootParams::getClasspath();
             }
             else
-                OSL_ASSERT(false);
+                assert(false);
             pInfo = aInfo.get();
         }
         assert(pInfo != nullptr);
@@ -299,7 +299,7 @@ javaFrameworkError jfw_startVM(
             g_pJavaVM = pVm;
             *ppVM = pVm;
         }
-        OSL_ASSERT(plerr != javaPluginError::WrongVendor);
+        assert(plerr != javaPluginError::WrongVendor);
     }
     catch (const jfw::FrameworkException& e)
     {
@@ -667,7 +667,7 @@ javaFrameworkError jfw_getJavaInfoByPath(OUString const & pPath, std::unique_ptr
             {// plugin does not recognize this path as belonging to JRE
                 continue;
             }
-            OSL_ASSERT(false);
+            assert(false);
         }
         if (!*ppInfo && errcode != JFW_E_FAILED_VERSION)
             errcode = JFW_E_NOT_RECOGNIZED;
