@@ -70,10 +70,6 @@
  *
  ****************************************************************************/
 
-/*****************************************************************************/
-/*  Internal data structures and functions */
-/*****************************************************************************/
-
 #define THREADIMPL_FLAGS_TERMINATE  0x00001
 #define THREADIMPL_FLAGS_STARTUP    0x00002
 #define THREADIMPL_FLAGS_SUSPENDED  0x00004
@@ -439,12 +435,12 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
     pthread_t const thread = pImpl->m_hThread;
     bool const attached = ((pImpl->m_Flags & THREADIMPL_FLAGS_ATTACHED) > 0);
 
-    // check this only if *this* thread is still attached - if it's not,
-    // then it could have terminated and another newly created thread could
-    // have recycled the same id as m_hThread!
+    /* check this only if *this* thread is still attached - if it's not,
+       then it could have terminated and another newly created thread could
+       have recycled the same id as m_hThread! */
     if (attached && pthread_equal(pthread_self(), pImpl->m_hThread))
     {
-        assert(false); // Win32 implementation would deadlock here!
+        assert(false); /* Win32 implementation would deadlock here! */
         /* self join */
         pthread_mutex_unlock (&(pImpl->m_Lock));
         return; /* EDEADLK */
@@ -528,14 +524,12 @@ void SAL_CALL osl_waitThread(const TimeValue* pDelay)
     }
 }
 
-/*****************************************************************************/
-/* osl_yieldThread */
-/*
-    Note that POSIX scheduling _really_ requires threads to call this
+/** Yields thread
+
+    @attention Note that POSIX scheduling @em really requires threads to call this
     function, since a thread only reschedules to other thread, when
     it blocks (sleep, blocking I/O) OR calls sched_yield().
 */
-/*****************************************************************************/
 void SAL_CALL osl_yieldThread()
 {
     sched_yield();
@@ -552,9 +546,7 @@ void SAL_CALL osl_setThreadName(char const * name) {
 #endif
 }
 
-/*****************************************************************************/
 /* osl_getThreadIdentifier @@@ see TODO @@@ */
-/*****************************************************************************/
 
 struct HashEntry
 {
@@ -786,14 +778,11 @@ static void osl_thread_priority_init_Impl()
 #endif /* NO_PTHREAD_PRIORITY */
 }
 
-/*****************************************************************************/
-/* osl_setThreadPriority */
-/*
+/**
     Impl-Notes: contrary to solaris-docu, which claims
     valid priority-levels from 0 .. INT_MAX, only the
     range 0..127 is accepted. (0 lowest, 127 highest)
 */
-/*****************************************************************************/
 void SAL_CALL osl_setThreadPriority (
     oslThread         Thread,
     oslThreadPriority Priority)
@@ -1001,9 +990,6 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
     return bRet;
 }
 
-/*****************************************************************************/
-/* Thread Local Text Encoding */
-/*****************************************************************************/
 static void osl_thread_textencoding_init_Impl()
 {
     rtl_TextEncoding defaultEncoding;
