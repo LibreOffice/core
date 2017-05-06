@@ -46,7 +46,7 @@ namespace svtools {
 
 static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
 {
-    OSL_ASSERT( pWindow );
+    assert( pWindow );
     if ( pWindow )
     {
         // ->manually search topmost system window
@@ -60,7 +60,7 @@ static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
             pWindow = pWindow->GetParent();
         }
         pWindow = pTopMostSysWin;
-        OSL_ASSERT( pWindow );
+        assert( pWindow );
         return pWindow;
     }
 
