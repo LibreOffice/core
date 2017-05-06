@@ -483,6 +483,11 @@
           <value xml:lang="en-US">Select Row</value>
         </prop>
       </node>
+      <node oor:name=".uno:SelectUnprotectedCells" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Select Unprotected Cells</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ConditionalFormatMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">C~onditional Formatting</value>

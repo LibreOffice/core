@@ -1647,6 +1647,14 @@ CommentCaptionState ScTable::GetAllNoteCaptionsState(const ScRange& rRange, std:
     return (bIsFirstNoteShownState) ? CommentCaptionState::ALLSHOWN : CommentCaptionState::ALLHIDDEN;
 }
 
+void ScTable::GetUnprotectedCells( ScRangeList& rRangeList ) const
+{
+    for (SCCOL nCol = 0; nCol < MAXCOL; ++nCol)
+    {
+        aCol[nCol].GetUnprotectedCells(0, MAXROW, rRangeList);
+    }
+}
+
 bool ScTable::ContainsNotesInRange( const ScRange& rRange ) const
 {
     SCROW nStartRow = rRange.aStart.Row();

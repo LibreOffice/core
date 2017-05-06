@@ -548,6 +548,7 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( SID_TEXT_TO_COLUMNS );
     rBindings.Invalidate( SID_SORT_ASCENDING );
     rBindings.Invalidate( SID_SORT_DESCENDING );
+    rBindings.Invalidate( SID_SELECT_UNPROTECTED_CELLS );
 
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
         aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SfxHintId::ScAccCursorChanged));

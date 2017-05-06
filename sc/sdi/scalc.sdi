@@ -4330,6 +4330,22 @@ SfxVoidItem SelectArea SID_MARKAREA
     GroupId = GID_INTERN;
 ]
 
+SfxVoidItem SelectUnprotectedCells SID_SELECT_UNPROTECTED_CELLS
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_EDIT;
+]
 
 SfxVoidItem SelectOLE SID_OLE_SELECT
 ()
