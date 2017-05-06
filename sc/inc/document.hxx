@@ -1813,6 +1813,7 @@ public:
     SC_DLLPUBLIC ScPatternAttr*     GetDefPattern() const;
     SC_DLLPUBLIC ScDocumentPool*    GetPool();
     SC_DLLPUBLIC ScStyleSheetPool*  GetStyleSheetPool() const;
+    void GetUnprotectedCells( ScRangeList& rRange, SCTAB nTab ) const;
 
     // PageStyle:
     SC_DLLPUBLIC const OUString  GetPageStyle( SCTAB nTab ) const;

@@ -2734,6 +2734,20 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
+            case SID_SELECT_UNPROTECTED_CELLS:
+            {
+                ScViewData* pData = GetViewData();
+                SCTAB aTab = pData->GetTabNo();
+                ScMarkData& rMark = pData->GetMarkData();
+                ScDocument* pDoc   = pData->GetDocument();
+                ScRangeList rRangeList;
+
+                pDoc->GetUnprotectedCells(rRangeList, aTab);
+                rMark.MarkFromRangeList(rRangeList, true);
+                pTabViewShell->SetMarkData(rMark);
+            }
+            break;
+
         default:
             OSL_FAIL("incorrect slot in ExecuteEdit");
             break;
