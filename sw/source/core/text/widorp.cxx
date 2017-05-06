@@ -296,7 +296,7 @@ WidowsAndOrphans::WidowsAndOrphans( SwTextFrame *pNewFrame, const SwTwips nRst,
 }
 
 /**
- * The Find*-Methodes do not only search, but adjust the SwTextMargin to the
+ * The Find*-Methods do not only search, but adjust the SwTextMargin to the
  * line where the paragraph should have a break and truncate the paragraph there.
  * FindBreak()
  */
