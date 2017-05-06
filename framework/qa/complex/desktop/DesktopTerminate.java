@@ -49,7 +49,7 @@ public class DesktopTerminate
      * - Look for all document types in the configuration
      * - Do for every doc type
      *   - start office
-     *   - read configuration attibute settings
+     *   - read configuration attribute settings
      *   - create a new document
      *   - resize the document and close it
      *   - close office

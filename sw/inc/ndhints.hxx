@@ -94,7 +94,7 @@ private:
     bool          m_bFootnote            : 1;   ///< footnotes
     bool          m_bDDEFields           : 1;   ///< the TextNode has DDE fields
 
-    /// records a new attibute in m_pHistory.
+    /// records a new attribute in m_pHistory.
     void NoteInHistory( SwTextAttr *pAttr, const bool bNew = false );
 
     void CalcFlags( );

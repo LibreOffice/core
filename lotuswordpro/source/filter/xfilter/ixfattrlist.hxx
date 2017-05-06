@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * @file
- * Interface for the attibute list of a xml element.
+ * Interface for the attribute list of a xml element.
  ************************************************************************/
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFATTRLIST_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFATTRLIST_HXX

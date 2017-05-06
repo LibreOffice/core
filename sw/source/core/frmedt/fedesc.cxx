@@ -41,7 +41,7 @@ size_t SwFEShell::GetPageDescCnt() const
 void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 {
 #if OSL_DEBUG_LEVEL > 0
-    // SS does not change PageDesc, but only sets the attibute.
+    // SS does not change PageDesc, but only sets the attribute.
     // The Pagedesc should be available in the document
     bool bFound = false;
     for ( size_t nTst = 0; nTst < GetPageDescCnt(); ++nTst )

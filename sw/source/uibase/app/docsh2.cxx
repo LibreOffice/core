@@ -1390,7 +1390,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
             rWrtSh.InvalidateLayout( true );
     }
 
-    // Take HTTP-Header-Attibutes over into the DokInfo again.
+    // Take HTTP-Header-Attributes over into the DokInfo again.
     // The Base-URL doesn't matter here because TLX uses the one from the document
     // for absolutization.
     SetHeaderAttributesForSourceViewHack();
