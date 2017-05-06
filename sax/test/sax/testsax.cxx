@@ -196,12 +196,12 @@ Reference < XInputStream > createStreamFromSequence(
 {
     Reference < XInterface > xOutStreamService =
         xSMgr->createInstance("com.sun.star.io.Pipe");
-    OSL_ASSERT( xOutStreamService.is() );
+    assert( xOutStreamService.is() );
     Reference< XOutputStream >  rOutStream( xOutStreamService , UNO_QUERY );
-    OSL_ASSERT( rOutStream.is() );
+    assert( rOutStream.is() );
 
     Reference< XInputStream > rInStream( xOutStreamService , UNO_QUERY );
-    OSL_ASSERT( rInStream.is() );
+    assert( rInStream.is() );
 
     rOutStream->writeBytes( seqBytes );
     rOutStream->flush();
@@ -314,7 +314,7 @@ public:
 
     virtual void SAL_CALL endElement(const OUString& aName) throw (SAXException,RuntimeException)
     {
-        OSL_ASSERT( m_iLevel );
+        assert( m_iLevel );
         m_iLevel --;
         if( m_bPrint ) {
             int i;
