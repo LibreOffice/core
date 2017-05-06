@@ -26,7 +26,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <vcl/layout.hxx>
 
-// PRIVATE METHODES ------------------------------------------------------
+// Private methods ------------------------------------------------------
 
 IMPL_LINK_NOARG( SfxNewStyleDlg, OKClickHdl, Button*, void )
 {

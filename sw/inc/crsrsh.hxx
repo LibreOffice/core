@@ -274,7 +274,7 @@ protected:
     inline SwMoveFnCollection const & MakeFindRange( SwDocPositions, SwDocPositions, SwPaM* ) const;
 
     /*
-     * Compare-Methode for the StackCursor and the current Cursor.
+     * Compare-Method for the StackCursor and the current Cursor.
      * The Methods return -1, 0, 1 for lower, equal, greater.
      */
     int CompareCursorStackMkCurrPt() const;

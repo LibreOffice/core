@@ -196,7 +196,7 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile* pMergeDataFile 
     return true;
 }
 
-/* ProcessHelp Methode: search for en-US entry and replace it with the current language*/
+/* ProcessHelp method: search for en-US entry and replace it with the current language*/
 void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile* pMergeDataFile ){
 
     XMLElement*   pXMLElement = nullptr;

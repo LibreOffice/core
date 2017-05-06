@@ -34,7 +34,7 @@ import "ocidl.idl";
     ]
     interface IEvtListener : IDispatch
     {
-        [id(1), helpstring("Methode disposing")] HRESULT disposing([in] IDispatch* source);
+        [id(1), helpstring("Method disposing")] HRESULT disposing([in] IDispatch* source);
     };
 
 [

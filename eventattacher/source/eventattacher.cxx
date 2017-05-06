@@ -786,7 +786,7 @@ void EventAttacherImpl::removeListener
     const Reference< XIdlMethod >* pMethods = aMethodSeq.getConstArray();
     for( i = 0 ; i < nLen ; i++ )
     {
-        // Call Methode
+        // Call Method
         const Reference< XIdlMethod >& rxMethod = pMethods[i];
 
         // Is it the right method?

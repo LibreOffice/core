@@ -513,7 +513,7 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox, void )
             SbMethod* pMethod = static_cast<SbMethod*>(pModule->GetMethods()->Get( iMeth ));
             if( pMethod->IsHidden() )
                 continue;
-            DBG_ASSERT( pMethod, "Methode not found! (NULL)" );
+            DBG_ASSERT( pMethod, "Method not found! (NULL)" );
             sal_uInt16 nStart, nEnd;
             pMethod->GetLineRange( nStart, nEnd );
             aMacros.insert( map< sal_uInt16, SbMethod*>::value_type( nStart, pMethod ) );
