@@ -207,7 +207,7 @@ sal_Int32 StockChartTypeTemplate::getAxisCountByDimension( sal_Int32 nDimension 
         return 0;
 
     // one or two y-axes depending on volume
-    OSL_ASSERT( nDimension == 1 );
+    assert( nDimension == 1 );
     bool bHasVolume = false;
     getFastPropertyValue( PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME ) >>= bHasVolume;
     return bHasVolume ? 2 : 1;

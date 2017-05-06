@@ -313,7 +313,7 @@ sal_Bool SAL_CALL ColumnLineChartTypeTemplate::matchesTemplate(
             xColumnChartType.is() &&
             xLineChartType.is())
         {
-            OSL_ASSERT( xColumnChartCooSys.is());
+            assert(xColumnChartCooSys.is());
 
             // check stackmode of bars
             bResult = (xColumnChartCooSys->getDimension() == getDimension());

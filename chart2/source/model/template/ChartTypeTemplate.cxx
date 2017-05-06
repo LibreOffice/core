@@ -234,7 +234,7 @@ void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >
             DiagramHelper::getChartTypesFromDiagram(xDiagram) );
 
         Reference< XCoordinateSystemContainer > xCoordSysCnt( xDiagram, uno::UNO_QUERY );
-        OSL_ASSERT( xCoordSysCnt.is());
+        assert(xCoordSysCnt.is());
         if( xCoordSysCnt.is())
         {
             Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
@@ -466,7 +466,7 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
 
                 //iterate through all chart types in the current coordinate system
                 uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
-                OSL_ASSERT( xChartTypeContainer.is());
+                assert(xChartTypeContainer.is());
                 if( !xChartTypeContainer.is() )
                     continue;
                 uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
@@ -476,7 +476,7 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
 
                     //iterate through all series in this chart type
                     uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
-                    OSL_ASSERT( xDataSeriesContainer.is());
+                    assert(xDataSeriesContainer.is());
                     if( !xDataSeriesContainer.is() )
                         continue;
 
@@ -836,7 +836,7 @@ void ChartTypeTemplate::createChartTypes(
                 else
                 {
                     // reuse existing chart type
-                    OSL_ASSERT( xCT.is());
+                    assert(xCT.is());
                     Reference< chart2::XDataSeriesContainer > xDSCnt( xCT, uno::UNO_QUERY_THROW );
                     Sequence< Reference< XDataSeries > > aNewSeriesSeq( xDSCnt->getDataSeries());
                     sal_Int32 nNewStartIndex = aNewSeriesSeq.getLength();

@@ -58,7 +58,7 @@ InterpretedData SAL_CALL ColumnLineDataInterpreter::interpretDataSource(
     InterpretedData aResult(  DataInterpreter::interpretDataSource( xSource, aArguments, aSeriesToReUse ));
 
     // the base class should return one group
-    OSL_ASSERT( aResult.Series.getLength() == 1 );
+    assert( aResult.Series.getLength() == 1 );
     if( aResult.Series.getLength() == 1 )
     {
         sal_Int32 nNumberOfSeries = aResult.Series[0].getLength();

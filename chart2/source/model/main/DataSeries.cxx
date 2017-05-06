@@ -284,7 +284,7 @@ void SAL_CALL DataSeries::setFastPropertyValue_NoBroadcast(
             ModifyListenerHelper::removeListener( xBroadcaster, m_xModifyEventForwarder );
         }
 
-        OSL_ASSERT( rValue.getValueType().getTypeClass() == uno::TypeClass_INTERFACE );
+        assert( rValue.getValueType().getTypeClass() == uno::TypeClass_INTERFACE );
         if( rValue.hasValue() &&
             (rValue >>= xBroadcaster) &&
             xBroadcaster.is())

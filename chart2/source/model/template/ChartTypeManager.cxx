@@ -544,7 +544,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
 //               break;
 
             case TEMPLATE_NOT_FOUND:
-                OSL_ASSERT( false );
+                assert(false);
                 break;
         }
         xResult.set( xTemplate, uno::UNO_QUERY );

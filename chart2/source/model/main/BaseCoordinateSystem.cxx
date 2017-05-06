@@ -228,7 +228,7 @@ Reference< chart2::XAxis > SAL_CALL BaseCoordinateSystem::getAxisByDimension(
     if( nDimensionIndex < 0 || nDimensionIndex >= getDimension() )
         throw lang::IndexOutOfBoundsException();
 
-    OSL_ASSERT( m_aAllAxis.size() == static_cast< size_t >( getDimension()));
+    assert(m_aAllAxis.size() == static_cast< size_t >( getDimension()));
 
     if( nAxisIndex < 0 || nAxisIndex > this->getMaximumAxisIndexByDimension(nDimensionIndex) )
         throw lang::IndexOutOfBoundsException();
@@ -241,7 +241,7 @@ sal_Int32 SAL_CALL BaseCoordinateSystem::getMaximumAxisIndexByDimension( sal_Int
     if( nDimensionIndex < 0 || nDimensionIndex >= getDimension() )
         throw lang::IndexOutOfBoundsException();
 
-    OSL_ASSERT( m_aAllAxis.size() == static_cast< size_t >( getDimension()));
+    assert(m_aAllAxis.size() == static_cast< size_t >( getDimension()));
 
     sal_Int32 nRet = m_aAllAxis[ nDimensionIndex ].size();
     if(nRet)
