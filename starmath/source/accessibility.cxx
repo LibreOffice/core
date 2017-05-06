@@ -417,7 +417,7 @@ void SAL_CALL SmGraphicAccessible::removeAccessibleEventListener(
         const Reference< XAccessibleEventListener >& xListener )
     throw (RuntimeException, std::exception)
 {
-    if (xListener.is())
+    if (xListener.is() && nClientId)
     {
         SolarMutexGuard aGuard;
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( nClientId, xListener );
