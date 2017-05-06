@@ -157,7 +157,7 @@ namespace cppu_threadpool {
                 {
                     if ( !uno_bindIdToCurrentThread( m_aThreadId.getHandle() ) )
                     {
-                        OSL_ASSERT( false );
+                        assert(false);
                     }
                 }
 

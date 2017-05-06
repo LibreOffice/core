@@ -89,7 +89,7 @@ namespace cppu_threadpool {
                     break;
                 }
 
-                OSL_ASSERT( ! m_lstJob.empty() );
+                assert(!m_lstJob.empty());
                 if( ! m_lstJob.empty() )
                 {
                     job = m_lstJob.front();

@@ -84,9 +84,9 @@ extern "C" void SAL_CALL uno_releaseIdFromCurrentThread()
     SAL_THROW_EXTERN_C()
 {
     IdContainer *p = getIdContainer();
-    OSL_ASSERT( p );
-    OSL_ASSERT( p->bInit );
-    OSL_ASSERT( p->nRefCountOfCurrentId );
+    assert( p );
+    assert( p->bInit );
+    assert( p->nRefCountOfCurrentId );
 
     p->nRefCountOfCurrentId --;
     if( ! p->nRefCountOfCurrentId && (p->pLocalThreadId != p->pCurrentId) )
@@ -110,7 +110,7 @@ extern "C" sal_Bool SAL_CALL uno_bindIdToCurrentThread( sal_Sequence *pThreadId 
     }
     else
     {
-        OSL_ASSERT( 0 == p->nRefCountOfCurrentId );
+        assert( 0 == p->nRefCountOfCurrentId );
         if( 0 == p->nRefCountOfCurrentId )
         {
             rtl_byte_sequence_assign(&( p->pCurrentId ), pThreadId );
