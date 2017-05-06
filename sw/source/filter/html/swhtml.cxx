@@ -177,7 +177,7 @@ OUString HTMLReader::GetTemplateName() const
 
 bool HTMLReader::SetStrmStgPtr()
 {
-    OSL_ENSURE( pMedium, "Wo ist das Medium??" );
+    OSL_ENSURE( pMedium, "Where is the medium??" );
 
     if( pMedium->IsRemote() || !pMedium->IsStorage() )
     {
@@ -193,7 +193,7 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
 {
     if( !pStrm )
     {
-        OSL_ENSURE( pStrm, "HTML-Read ohne Stream" );
+        OSL_ENSURE( pStrm, "HTML-Read without stream" );
         return ERR_SWG_READ_ERROR;
     }
 
@@ -201,8 +201,8 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
     {
         Reader::ResetFrameFormats( rDoc );
 
-        // Die HTML-Seitenvorlage setzen, wenn des kein HTML-Dokument ist,
-        // sonst ist sie schon gesetzt.
+        // Set the HTML page style, when it isn't a HTML document,
+        // otherwise it's already set.
         if( !rDoc.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) )
         {
             rDoc.getIDocumentContentOperations().InsertPoolItem( rPam, SwFormatPageDesc(
@@ -210,7 +210,7 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
         }
     }
 
-    // damit keiner das Doc klaut!
+    // so nobody steals the document!
     rDoc.acquire();
     sal_uLong nRet = 0;
     tools::SvRef<SwHTMLParser> xParser = new SwHTMLParser( &rDoc, rPam, *pStrm,
@@ -227,7 +227,7 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
         const OUString sErr(OUString::number((sal_Int32)xParser->GetLineNr())
             + "," + OUString::number((sal_Int32)xParser->GetLinePos()));
 
-        // den Stream als Fehlernummer Transporter benutzen
+        // use the stream as transport for error number
         nRet = *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
                                     DialogMask::ButtonsOk | DialogMask::MessageError );
     }
@@ -309,7 +309,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_pPam = &rCursor; // re-use existing cursor: avoids spurious ~SwIndexReg assert
     memset( &m_aAttrTab, 0, sizeof( HTMLAttrTable ));
 
-    // Die Font-Groessen 1-7 aus der INI-Datei lesen
+    // Read the font sizes 1-7 from the INI file
     SvxHtmlOptions& rHtmlOptions = SvxHtmlOptions::Get();
     m_aFontHeights[0] = rHtmlOptions.GetFontSize( 0 ) * 20;
     m_aFontHeights[1] = rHtmlOptions.GetFontSize( 1 ) * 20;
@@ -337,8 +337,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
         m_xDoc->SetDefault( SwFormatFollowTextFlow(true) );
     }
 
-    // Waehrend des Imports in den HTML-Modus schalten, damit die
-    // richrigen Vorlagen angelegt werden
+    // Change to HTML mode during the import, so that the right styles are created
     m_bOldIsHTMLMode = m_xDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE);
     m_xDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, true);
 
@@ -359,13 +358,12 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     }
     m_pCSS1Parser->SetDfltEncoding( osl_getThreadTextEncoding() );
 
-    // Timer nur bei ganz normalen Dokumenten aufsetzen!
     SwDocShell* pDocSh = m_xDoc->GetDocShell();
     if( pDocSh )
     {
-        m_bViewCreated = true;            // nicht, synchron laden
+        m_bViewCreated = true;  // not, load synchronous
 
-        // es ist ein Sprungziel vorgegeben.
+        // a jump mark is present
 
         if( pMed )
         {
@@ -394,9 +392,9 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
                     else if( sCmp == "outline" ||
                             sCmp == "text" ||
                             sCmp == "frame" )
-                        m_eJumpTo = JUMPTO_NONE;  // das ist nichts gueltiges!
+                        m_eJumpTo = JUMPTO_NONE;  // this is nothing valid!
                     else
-                        // ansonsten ist das ein normaler (Book)Mark
+                        // otherwise this is a normal (book)mark
                         nPos = -1;
                 }
                 else
@@ -414,7 +412,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
 SwHTMLParser::~SwHTMLParser()
 {
 #ifdef DBG_UTIL
-    OSL_ENSURE( !m_nContinue, "DTOR im Continue!" );
+    OSL_ENSURE( !m_nContinue, "DTOR in continue!" );
 #endif
     bool bAsync = m_xDoc->IsInLoadAsynchron();
     m_xDoc->SetInLoadAsynchron( false );
@@ -423,11 +421,10 @@ SwHTMLParser::~SwHTMLParser()
     if( m_xDoc->GetDocShell() && m_nEventId )
         Application::RemoveUserEvent( m_nEventId );
 
-    // das DocumentDetected kann ggfs. die DocShells loeschen, darum nochmals
-    // abfragen
+    // the DocumentDetected maybe can delete the DocShells, therefore fetch again
     if( m_xDoc->GetDocShell() )
     {
-        // Gelinkte Bereiche updaten
+        // update linked sections
         sal_uInt16 nLinkMode = m_xDoc->getIDocumentSettingAccess().getLinkUpdateMode( true );
         if( nLinkMode != NEVER && bAsync &&
             SfxObjectCreateMode::INTERNAL!=m_xDoc->GetDocShell()->GetCreateMode() )
@@ -444,7 +441,7 @@ SwHTMLParser::~SwHTMLParser()
 
     if( !m_aSetAttrTab.empty() )
     {
-        OSL_ENSURE( m_aSetAttrTab.empty(),"Es stehen noch Attribute auf dem Stack" );
+        OSL_ENSURE( m_aSetAttrTab.empty(),"There are still attributes on the stack" );
         for ( HTMLAttrs::const_iterator it = m_aSetAttrTab.begin();
               it != m_aSetAttrTab.end(); ++it )
             delete *it;
@@ -456,11 +453,11 @@ SwHTMLParser::~SwHTMLParser()
     DeleteFormImpl();
     DeleteFootEndNoteImpl();
 
-    OSL_ENSURE( !m_pTable, "Es existiert noch eine offene Tabelle" );
+    OSL_ENSURE( !m_pTable, "It exists still a open table" );
     delete m_pImageMaps;
 
     OSL_ENSURE( !m_pPendStack,
-            "SwHTMLParser::~SwHTMLParser: Hier sollte es keinen Pending-Stack mehr geben" );
+            "SwHTMLParser::~SwHTMLParser: Here should not be Pending-Stack anymore" );
     while( m_pPendStack )
     {
         SwPendingStack* pTmp = m_pPendStack;
@@ -490,7 +487,7 @@ IMPL_LINK_NOARG( SwHTMLParser, AsyncCallback, void*, void )
     if( ( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
         || 1 == m_xDoc->getReferenceCount() )
     {
-        // wurde der Import vom SFX abgebrochen?
+        // was the import aborted by SFX?
         eState = SvParserState::Error;
     }
 
@@ -499,9 +496,9 @@ IMPL_LINK_NOARG( SwHTMLParser, AsyncCallback, void*, void )
 
 SvParserState SwHTMLParser::CallParser()
 {
-    // einen temporaeren Index anlegen, auf Pos 0 so wird er nicht bewegt!
+    // create temporary index on position 0, so it won't be moved!
     m_pSttNdIdx = new SwNodeIndex( m_xDoc->GetNodes() );
-    if( !IsNewDoc() )       // in ein Dokument einfuegen ?
+    if( !IsNewDoc() )       // insert into existing document ?
     {
         const SwPosition* pPos = m_pPam->GetPoint();
 
@@ -537,7 +534,7 @@ SvParserState SwHTMLParser::CallParser()
         }
     }
 
-    // Laufbalken anzeigen
+    // show progress bar
     else if( !GetMedium() || !GetMedium()->IsRemote() )
     {
         rInput.Seek(STREAM_SEEK_TO_END);
