@@ -277,10 +277,10 @@ sal_uInt16 MSWordStyles::GetWWId( const SwFormat& rFormat )
 
 void MSWordStyles::BuildStylesTable()
 {
-    m_nUsedSlots = WW8_RESERVED_SLOTS;    // soviele sind reserviert fuer
-                                        // Standard und HeadingX u.a.
+    m_nUsedSlots = WW8_RESERVED_SLOTS;  // reserved slots for standard, headingX, and others
+
     const SwCharFormats& rArr = *m_rExport.m_pDoc->GetCharFormats();       // first CharFormat
-    // das Default-ZeichenStyle ( 0 ) wird nicht mit ausgegeben !
+    // the default character style ( 0 ) will not be outputted !
     for( size_t n = 1; n < rArr.size(); n++ )
     {
         SwCharFormat* pFormat = rArr[n];
@@ -288,7 +288,7 @@ void MSWordStyles::BuildStylesTable()
     }
 
     const SwTextFormatColls& rArr2 = *m_rExport.m_pDoc->GetTextFormatColls();   // then TextFormatColls
-    // das Default-TextStyle ( 0 ) wird nicht mit ausgegeben !
+    // the default character style ( 0 ) will not be outputted !
     for( size_t n = 1; n < rArr2.size(); n++ )
     {
         SwTextFormatColl* pFormat = rArr2[n];
@@ -378,7 +378,7 @@ OString MSWordStyles::GetStyleId(sal_uInt16 nId) const
 /// For WW8 only - extend pO so that the size of pTableStrm is even.
 static void impl_SkipOdd( ww::bytes* pO, std::size_t nTableStrmTell )
 {
-    if ( ( nTableStrmTell + pO->size() ) & 1 )     // Start auf gerader
+    if ( ( nTableStrmTell + pO->size() ) & 1 )     // start on even
         pO->push_back( (sal_uInt8)0 );         // Address
 }
 
@@ -388,9 +388,9 @@ void WW8AttributeOutput::EndStyle()
 
     short nLen = m_rWW8Export.pO->size() - 2;            // length of the style
     sal_uInt8* p = m_rWW8Export.pO->data() + nPOPosStdLen1;
-    ShortToSVBT16( nLen, p );               // nachtragen
+    ShortToSVBT16( nLen, p );               // add
     p = m_rWW8Export.pO->data() + nPOPosStdLen2;
-    ShortToSVBT16( nLen, p );               // dito
+    ShortToSVBT16( nLen, p );               // also
 
     m_rWW8Export.pTableStrm->WriteBytes(m_rWW8Export.pO->data(), m_rWW8Export.pO->size());
     m_rWW8Export.pO->clear();
@@ -419,25 +419,25 @@ void WW8AttributeOutput::StartStyle( const OUString& rName, StyleType eType, sal
 
     nBit16 = bAutoUpdate ? 1 : 0;  // fAutoRedef : 1
     Set_UInt16( pData, nBit16 );
-    // jetzt neu:
-    // ab Ver8 gibts zwei Felder mehr:
+    // now new:
+    // from Ver8 there are two fields more:
     // sal_uInt16    fHidden : 1;       /* hidden from UI?
     // sal_uInt16    : 14;              /* unused bits
 
     sal_uInt16 nLen = static_cast< sal_uInt16 >( ( pData - aWW8_STD ) + 1 +
                 (2 * (rName.getLength() + 1)) );  // temporary
 
-    nPOPosStdLen1 = m_rWW8Export.pO->size();        // Adr1 zum nachtragen der Laenge
+    nPOPosStdLen1 = m_rWW8Export.pO->size();        // Adr1 for adding the length
 
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, nLen );
     m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), aWW8_STD, pData );
 
-    nPOPosStdLen2 = nPOPosStdLen1 + 8;  // Adr2 zum nachtragen von "end of upx"
+    nPOPosStdLen2 = nPOPosStdLen1 + 8;  // Adr2 for adding of "end of upx"
 
     // write names
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, rName.getLength() ); // length
     SwWW8Writer::InsAsString16( *m_rWW8Export.pO, rName );
-    m_rWW8Export.pO->push_back( (sal_uInt8)0 );             // Trotz P-String 0 am Ende!
+    m_rWW8Export.pO->push_back( (sal_uInt8)0 );             // Despite P-String 0 at the end!
 }
 
 void MSWordStyles::SetStyleDefaults( const SwFormat& rFormat, bool bPap )
@@ -502,17 +502,17 @@ void WW8AttributeOutput::StartStyleProperties( bool bParProp, sal_uInt16 nStyle 
 {
     impl_SkipOdd( m_rWW8Export.pO, m_rWW8Export.pTableStrm->Tell() );
 
-    sal_uInt16 nLen = ( bParProp ) ? 2 : 0;             // default length
-    m_nStyleLenPos = m_rWW8Export.pO->size();               // Laenge zum Nachtragen
-                                    // Keinen Pointer merken, da sich bei
-                                    // _grow der Pointer aendert !
+    sal_uInt16 nLen = ( bParProp ) ? 2 : 0;     // default length
+    m_nStyleLenPos = m_rWW8Export.pO->size();   // adding length
+                                                // Don't save pointer, because it
+                                                // changes by _grow!
 
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, nLen );        // Style-Len
 
     m_nStyleStartSize = m_rWW8Export.pO->size();
 
     if ( bParProp )
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, nStyle );     // Style-Nummer
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, nStyle );     // Style-Number
 }
 
 void MSWordStyles::WriteProperties( const SwFormat* pFormat, bool bParProp, sal_uInt16 nPos,
@@ -538,7 +538,7 @@ void MSWordStyles::WriteProperties( const SwFormat* pFormat, bool bParProp, sal_
 void WW8AttributeOutput::EndStyleProperties( bool /*bParProp*/ )
 {
     sal_uInt16 nLen = m_rWW8Export.pO->size() - m_nStyleStartSize;
-    sal_uInt8* pUpxLen = m_rWW8Export.pO->data() + m_nStyleLenPos; // Laenge zum Nachtragen
+    sal_uInt8* pUpxLen = m_rWW8Export.pO->data() + m_nStyleLenPos; // adding length
     ShortToSVBT16( nLen, pUpxLen );                 // add default length
 }
 
@@ -637,13 +637,13 @@ void WW8AttributeOutput::StartStyles()
     WW8Fib& rFib = *m_rWW8Export.pFib;
 
     sal_uLong nCurPos = m_rWW8Export.pTableStrm->Tell();
-    if ( nCurPos & 1 )                   // Start auf gerader
+    if ( nCurPos & 1 )                   // start on even
     {
         m_rWW8Export.pTableStrm->WriteChar( (char)0 );        // Address
         ++nCurPos;
     }
     rFib.m_fcStshfOrig = rFib.m_fcStshf = nCurPos;
-    m_nStyleCountPos = nCurPos + 2;     // Anzahl wird nachgetragen
+    m_nStyleCountPos = nCurPos + 2;     // count is added later
 
     static sal_uInt8 aStShi[] = {
         0x12, 0x00,
@@ -771,8 +771,8 @@ wwFont::wwFont(const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily
 void wwFont::Write(SvStream *pTableStrm) const
 {
     pTableStrm->WriteBytes(maWW8_FFN, sizeof(maWW8_FFN));    // fixed part
-    // ab Ver8 sind folgende beiden Felder eingeschoben,
-    // werden von uns ignoriert.
+    // from Ver8 following two fields interjected,
+    // we ignore them.
     //char  panose[ 10 ];       //  0x6   PANOSE
     //char  fs[ 24     ];       //  0x10  FONTSIGNATURE
     SwWW8Writer::FillCount(*pTableStrm, 0x22);
@@ -1212,7 +1212,7 @@ void WW8_WrPlcSepx::OutHeaderFooter( WW8Export& rWrt, bool bHeader,
     {
         pTextPos->Append( rCpPos );
         rWrt.WriteHeaderFooterText( rFormat, bHeader);
-        rWrt.WriteStringAsPara( OUString() ); // CR ans Ende ( sonst mault WW )
+        rWrt.WriteStringAsPara( OUString() ); // CR to the end ( otherwise WW complains )
         rCpPos = rWrt.Fc2Cp( rWrt.Strm().Tell() );
     }
     else
@@ -1266,8 +1266,7 @@ void MSWordSections::CheckForFacinPg( WW8Export& rWrt ) const
                 pPd->GetFollow()->GetFollow() == pPd->GetFollow() &&
                 rSepInfo.pPDNd &&
                 pPd->IsFollowNextPageOfNode( *rSepInfo.pPDNd ) )
-                // das ist also 1.Seite und nachfolgende, also nur den
-                // follow beachten
+                // so this is first page and subsequent, so only respect follow
                 pPd = pPd->GetFollow();
 
             // left-/right chain of pagedescs ?
@@ -1535,7 +1534,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         // if pSectionFormat is set, then there is a SectionNode
         //  valid pointer -> start Section ,
         //  0xfff -> Section terminated
-        nBreakCode = 0;         // fortlaufender Abschnitt
+        nBreakCode = 0;         // consecutive section
 
         if ( rSepInfo.pPDNd && rSepInfo.pPDNd->IsContentNode() )
         {
@@ -1551,14 +1550,12 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
                 bOutPgDscSet = false;
 
             // produce Itemset, which inherits PgDesk-Attr-Set:
-            // als Nachkomme wird bei 'deep'-OutputItemSet
-            // auch der Vorfahr abgeklappert
+            // as child also the parent is searched if 'deep'-OutputItemSet
             const SfxItemSet* pPdSet = &pPdFormat->GetAttrSet();
             SfxItemSet aSet( *pPdSet->GetPool(), pPdSet->GetRanges() );
             aSet.SetParent( pPdSet );
 
-            // am Nachkommen NUR  die Spaltigkeit gemaess Sect-Attr.
-            // umsetzen
+            // at the child ONLY change column structure according to Sect-Attr.
 
             const SvxLRSpaceItem &rSectionLR =
                 ItemGet<SvxLRSpaceItem>( *(rSepInfo.pSectionFormat), RES_LR_SPACE );
@@ -1581,7 +1578,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
             aSet.Put( aResultLR );
 
-            // und raus damit ins WW-File
+            // and write into the WW-File
             const SfxItemSet* pOldI = m_pISet;
             m_pISet = &aSet;
 
@@ -1685,7 +1682,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         // then the rest of the settings from PageDesc
         AttrOutput().SectionPageNumbering( pPd->GetNumType().GetNumberingType(), rSepInfo.oPgRestartNo );
 
-        // werden es nur linke oder nur rechte Seiten?
+        // will it be only left or only right pages?
         if ( 2 == nBreakCode )
         {
             if ( UseOnPage::Left == ( UseOnPage::All & pPd->ReadUseOn() ) )
@@ -1732,9 +1729,9 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
 
     /*
        !!!!!!!!!!!
-    // Umrandungen an Kopf- und Fusstexten muessten etwa so gehen:
-    // Dabei muss etwas wie pOut eingebaut werden,
-    // das bei jeder Spezialtext-Zeile wiederholt wird.
+    // borders at header and footer texts would be done like this:
+    // This should use something like pOut,
+    // which is repeated with every special text line.
     const SwFrameFormat* pFFormat = rFt.GetFooterFormat();
     const SvxBoxItem& rBox = pFFormat->GetBox(false);
     OutWW8_SwFormatBox1( m_rWW8Export.pOut, rBox, false);
@@ -1795,7 +1792,7 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
             ++nCpEnd;
             pTextPos->Append( nCpEnd + 1 );  // End of last Header/Footer for PlcfHdd
 
-            rWrt.WriteStringAsPara( OUString() ); // CR ans Ende ( sonst mault WW )
+            rWrt.WriteStringAsPara( OUString() ); // CR to the end ( otherwise WW complains )
         }
         rWrt.m_pFieldHdFt->Finish( nCpEnd, rWrt.pFib->m_ccpText + rWrt.pFib->m_ccpFootnote );
         rWrt.pFib->m_ccpHdr = nCpEnd - nCpStart;
@@ -2106,7 +2103,7 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
                 const SwFormatFootnote* pFootnote = static_cast<SwFormatFootnote const *>(aContent[ i ]);
                 rWrt.WriteFootnoteBegin( *pFootnote );
                 const SwNodeIndex* pIdx = pFootnote->GetTextFootnote()->GetStartNode();
-                OSL_ENSURE( pIdx, "wo ist der StartNode der Fuss-/EndNote?" );
+                OSL_ENSURE( pIdx, "Where is the start node of Foot-/Endnote?" );
                 rWrt.WriteSpecialText( pIdx->GetIndex() + 1,
                                        pIdx->GetNode().EndOfSectionIndex(),
                                        nTTyp );
@@ -2114,11 +2111,11 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
             break;
 
         default:
-            OSL_ENSURE( false, "was ist das fuer ein SubDocType?" );
+            OSL_ENSURE( false, "What kind of SubDocType is that?" );
     }
 
     pTextPos->Append( rWrt.Fc2Cp( rWrt.Strm().Tell() ));
-    // CR ans Ende ( sonst mault WW )
+    // CR to the end ( otherwise WW complains )
     rWrt.WriteStringAsPara( OUString() );
 
     WW8_CP nCpEnd = rWrt.Fc2Cp( rWrt.Strm().Tell() );
