@@ -135,8 +135,8 @@ sal_Int32 OMarkableOutputStreamTest::test(
 
                 Reference< XOutputStream > rOutput( TestObject , UNO_QUERY );
 
-                OSL_ASSERT( rPipeInput.is() );
-                OSL_ASSERT( rOutput.is() );
+                assert( rPipeInput.is() );
+                assert( rOutput.is() );
                 if( 1 == hTestHandle ) {
                     // checks usual streaming
                     testSimple( rOutput , rPipeInput );
@@ -489,8 +489,8 @@ sal_Int32 OMarkableInputStreamTest::test(
 
                 Reference < XInputStream > rInput( TestObject , UNO_QUERY );
 
-                OSL_ASSERT( rPipeOutput.is() );
-                OSL_ASSERT( rInput.is() );
+                assert( rPipeOutput.is() );
+                assert( rInput.is() );
                 if( 1 == hTestHandle ) {
                     // checks usual streaming
                     testSimple( rPipeOutput , rInput );

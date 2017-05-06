@@ -497,7 +497,7 @@ sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32
                 sal_Int32 nToRead = nBytesToRead - ( m_pBuffer->getSize() - m_nCurrentPos );
                 nRead = m_input->readBytes( aData , nToRead );
 
-                OSL_ASSERT( aData.getLength() == nRead );
+                assert( aData.getLength() == nRead );
 
                 m_pBuffer->writeAt( m_pBuffer->getSize() , aData );
 
@@ -506,7 +506,7 @@ sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32
                 }
             }
 
-            OSL_ASSERT( m_pBuffer->getSize() - m_nCurrentPos >= nBytesToRead  );
+            assert( m_pBuffer->getSize() - m_nCurrentPos >= nBytesToRead  );
 
             m_pBuffer->readAt( m_nCurrentPos , aData , nBytesToRead );
 

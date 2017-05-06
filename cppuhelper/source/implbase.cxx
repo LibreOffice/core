@@ -82,7 +82,7 @@ void WeakComponentImplHelperBase::release()
                         exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 static_cast<void>(exc);
             }
-            OSL_ASSERT( rBHelper.bDisposed );
+            assert( rBHelper.bDisposed );
         }
         OWeakObject::release();
     }
@@ -209,7 +209,7 @@ void WeakAggComponentImplHelperBase::release()
                         exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 static_cast<void>(exc);
             }
-            OSL_ASSERT( rBHelper.bDisposed );
+            assert( rBHelper.bDisposed );
         }
         OWeakAggObject::release();
     }

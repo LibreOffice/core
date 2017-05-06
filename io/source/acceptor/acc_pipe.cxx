@@ -77,7 +77,7 @@ namespace io_acceptor
                 aReadBytes.realloc( nBytesToRead );
             }
             sal_Int32 n = m_pipe.read( aReadBytes.getArray(), nBytesToRead );
-            OSL_ASSERT( n >= 0 && n <= aReadBytes.getLength() );
+            assert( n >= 0 && n <= aReadBytes.getLength() );
             if( n < aReadBytes.getLength() )
             {
                 aReadBytes.realloc( n );

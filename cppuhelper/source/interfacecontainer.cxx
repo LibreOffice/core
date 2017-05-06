@@ -126,14 +126,14 @@ void OInterfaceIteratorHelper::remove()
 {
     if( bIsList )
     {
-        OSL_ASSERT( nRemain >= 0 &&
+        assert( nRemain >= 0 &&
                     nRemain < aData.pAsSequence->getLength() );
         XInterface * p = aData.pAsSequence->getConstArray()[nRemain].get();
         rCont.removeInterface( * reinterpret_cast< const Reference< XInterface > * >( &p ) );
     }
     else
     {
-        OSL_ASSERT( 0 == nRemain );
+        assert( 0 == nRemain );
         rCont.removeInterface( * reinterpret_cast< const Reference< XInterface > * >(&aData.pAsInterface));
     }
 }
@@ -195,7 +195,7 @@ void OInterfaceContainerHelper::copyAndResetInUse()
 
 sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> & rListener )
 {
-    OSL_ASSERT( rListener.is() );
+    assert( rListener.is() );
     MutexGuard aGuard( rMutex );
     if( bInUse )
         copyAndResetInUse();
@@ -226,7 +226,7 @@ sal_Int32 OInterfaceContainerHelper::addInterface( const Reference<XInterface> &
 
 sal_Int32 OInterfaceContainerHelper::removeInterface( const Reference<XInterface> & rListener )
 {
-    OSL_ASSERT( rListener.is() );
+    assert( rListener.is() );
     MutexGuard aGuard( rMutex );
     if( bInUse )
         copyAndResetInUse();

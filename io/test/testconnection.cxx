@@ -72,11 +72,11 @@ void doRead( const Reference < XConnection > &r )
 {
     Sequence < sal_Int8 > seq(10);
 
-    OSL_ASSERT( 10 == r->read( seq , 10 ) );
+    assert( 10 == r->read( seq , 10 ) );
 
     for( sal_Int32 i = 0 ; i < 10 ; i ++ )
     {
-        OSL_ASSERT( seq.getConstArray()[i] == i );
+        assert( seq.getConstArray()[i] == i );
     }
 }
 
@@ -130,7 +130,7 @@ void testConnection( const OUString &sConnectionDescription  ,
                 TimeValue value = {1,0};
                 osl_waitThread( &value );
                 r = rConnector->connect( sConnectionDescription );
-                OSL_ASSERT( r.is() );
+                assert( r.is() );
                 doWrite( r );
                 doRead( r );
                 bGotit = sal_True;

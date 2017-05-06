@@ -181,13 +181,13 @@ sal_Int32 ODataStreamTest::test(
                     rSource.set( x, UNO_QUERY );
                 }
 
-                OSL_ASSERT( rPipeInput.is() );
-                OSL_ASSERT( rPipeOutput.is() );
+                assert( rPipeInput.is() );
+                assert( rPipeOutput.is() );
                 rSink->setInputStream( rPipeInput );
                 rSource->setOutputStream( rPipeOutput );
 
-                OSL_ASSERT( rSink->getInputStream().is() );
-                OSL_ASSERT( rSource->getOutputStream().is() );
+                assert( rSink->getInputStream().is() );
+                assert( rSource->getOutputStream().is() );
 
                 if( 1 == hTestHandle ) {
                     testSimple( rInput , rOutput );
@@ -727,10 +727,10 @@ sal_Int32 OObjectStreamTest::test(  const OUString& TestName,
                 Reference <XOutputStream >  markableOutput( x , UNO_QUERY );
                 Reference <XActiveDataSource >  markableSource( x , UNO_QUERY );
 
-                OSL_ASSERT( markableInput.is()  );
-                OSL_ASSERT( markableOutput.is() );
-                OSL_ASSERT( markableSink.is()   );
-                OSL_ASSERT( markableSource.is() );
+                assert( markableInput.is()  );
+                assert( markableOutput.is() );
+                assert( markableSink.is()   );
+                assert( markableSource.is() );
 
                 markableSink->setInputStream( rPipeInput );
                 markableSource->setOutputStream( rPipeOutput );
@@ -748,14 +748,14 @@ sal_Int32 OObjectStreamTest::test(  const OUString& TestName,
                     rSource.set( x, UNO_QUERY );
                 }
 
-                OSL_ASSERT( rPipeInput.is() );
-                OSL_ASSERT( rPipeOutput.is() );
+                assert( rPipeInput.is() );
+                assert( rPipeOutput.is() );
 
                 rSink->setInputStream( markableInput );
                 rSource->setOutputStream( markableOutput );
 
-                OSL_ASSERT( rSink->getInputStream().is() );
-                OSL_ASSERT( rSource->getOutputStream().is() );
+                assert( rSink->getInputStream().is() );
+                assert( rSource->getOutputStream().is() );
 
                 if( 1 + DATASTREAM_TEST_MAX_HANDLE == hTestHandle ) {
                     testObject( rOutput , rInput);

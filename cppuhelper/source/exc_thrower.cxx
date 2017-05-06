@@ -75,7 +75,7 @@ void SAL_CALL ExceptionThrower_dispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * pMemberType,
     void * pReturn, void * pArgs [], uno_Any ** ppException )
 {
-    OSL_ASSERT( pMemberType->eTypeClass == typelib_TypeClass_INTERFACE_METHOD );
+    assert( pMemberType->eTypeClass == typelib_TypeClass_INTERFACE_METHOD );
 
     switch (reinterpret_cast< typelib_InterfaceMemberTypeDescription * >(
                 const_cast< typelib_TypeDescription * >( pMemberType ) )->
@@ -109,13 +109,13 @@ void SAL_CALL ExceptionThrower_dispatch(
     case 3: // throwException()
     {
         uno_Any * pAny = static_cast< uno_Any * >( pArgs[ 0 ] );
-        OSL_ASSERT( pAny->pType->eTypeClass == typelib_TypeClass_EXCEPTION );
+        assert( pAny->pType->eTypeClass == typelib_TypeClass_EXCEPTION );
         uno_type_any_construct( *ppException, pAny->pData, pAny->pType, nullptr );
         break;
     }
     default:
     {
-        OSL_ASSERT( false );
+        assert( false );
         RuntimeException exc( "not implemented!" );
         uno_type_any_construct(
             *ppException, &exc, cppu::UnoType<decltype(exc)>::get().getTypeLibType(), nullptr );
@@ -198,7 +198,7 @@ void SAL_CALL throwException( Any const & exc )
         reinterpret_cast< void ** >( &xThrower ),
         static_cast< uno_Interface * >( &theExceptionThrower::get() ),
         ExceptionThrower::getCppuType() );
-    OSL_ASSERT( xThrower.is() );
+    assert( xThrower.is() );
     xThrower->throwException( exc );
 }
 
@@ -226,7 +226,7 @@ Any SAL_CALL getCaughtException()
     cpp2uno.mapInterface(
         reinterpret_cast< void ** >( &unoI.m_pUnoI ),
         static_cast< XExceptionThrower * >( &theExceptionThrower::get() ), pTD );
-    OSL_ASSERT( unoI.is() );
+    assert( unoI.is() );
 
     typelib_TypeDescription * pMemberTD = nullptr;
     TYPELIB_DANGER_GET(
