@@ -49,12 +49,12 @@ namespace javaunohelper
 
 inline OUString jstring_to_oustring( jstring jstr, JNIEnv * jni_env )
 {
-    OSL_ASSERT( sizeof (sal_Unicode) == sizeof (jchar) );
+    assert( sizeof (sal_Unicode) == sizeof (jchar) );
     jsize len = jni_env->GetStringLength( jstr );
     rtl_uString * ustr =
         static_cast<rtl_uString *>(rtl_allocateMemory( sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) ));
     jni_env->GetStringRegion( jstr, 0, len, reinterpret_cast<jchar *>(ustr->buffer) );
-    OSL_ASSERT( !jni_env->ExceptionCheck() );
+    assert( !jni_env->ExceptionCheck() );
     ustr->refCount = 1;
     ustr->length = len;
     ustr->buffer[ len ] = '\0';
