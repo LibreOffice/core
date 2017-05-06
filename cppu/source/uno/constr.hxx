@@ -129,7 +129,7 @@ inline void _defaultConstructData(
         *static_cast<void **>(pMem) = nullptr; // either cpp or c-uno interface
         break;
     default:
-        OSL_ASSERT(false);
+        assert(false);
         break;
     }
 }

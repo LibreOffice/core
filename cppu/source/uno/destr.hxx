@@ -253,7 +253,7 @@ inline sal_Int32 idestructElements(
         return (sal_Int32)(sizeof(void *));
     }
     default:
-        OSL_ASSERT(false);
+        assert(false);
         return 0;
     }
 }

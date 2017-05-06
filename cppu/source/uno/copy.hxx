@@ -33,7 +33,7 @@ namespace cppu
 inline uno_Sequence * allocSeq(
     sal_Int32 nElementSize, sal_Int32 nElements )
 {
-    OSL_ASSERT( nElements >= 0 && nElementSize >= 0 );
+    assert( nElements >= 0 && nElementSize >= 0 );
     uno_Sequence * pSeq = nullptr;
     sal_uInt32 nSize = calcSeqMemSize( nElementSize, nElements );
     if (nSize > 0)
@@ -224,7 +224,7 @@ inline void _copyConstructAnyFromData(
         }
         break;
     default:
-        OSL_ASSERT(false);
+        assert(false);
         break;
     }
 }
@@ -361,7 +361,7 @@ inline void _copyConstructAny(
                 pDestAny->pReserved = nullptr; // either cpp or c-uno interface
                 break;
             default:
-                OSL_ASSERT(false);
+                assert(false);
                 break;
             }
         }
@@ -462,7 +462,7 @@ inline uno_Sequence * icopyConstructSequence(
                             pSourceElements[nPos],
                             pSeqElementType,
                             acquire, mapping );
-                        OSL_ASSERT( pNew != nullptr );
+                        assert( pNew != nullptr );
                         // ought never be a memory allocation problem,
                         // because of reference counted sequence handles
                         pDestElements[ nPos ] = pNew;

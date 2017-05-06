@@ -146,7 +146,7 @@ void Mapping::mapInterface(
     uno_Interface                     * pUnoI,
     typelib_InterfaceTypeDescription  * pTypeDescr)
 {
-    OSL_ASSERT(ppOut && pTypeDescr);
+    assert(ppOut && pTypeDescr);
     if (*ppOut)
     {
         (*ppOut)->release(*ppOut);
@@ -160,7 +160,7 @@ void Mapping::mapInterface(
     // need to enter environment because of potential "queryInterface" call
     rtl_uString * pOId = nullptr;
     uno_Environment_invoke(m_from.get(), s_getIdentifier_v, m_from.get(), &pOId, pUnoI);
-    OSL_ASSERT(pOId);
+    assert(pOId);
 
      // try to get any known interface from target environment
     m_to.get()->pExtEnv->getRegisteredInterface(m_to.get()->pExtEnv, reinterpret_cast<void **>(ppOut), pOId, pTypeDescr);

@@ -185,7 +185,7 @@ inline void ObjectEntry::append(
 inline InterfaceEntry * ObjectEntry::find(
     typelib_InterfaceTypeDescription * pTypeDescr_ )
 {
-    OSL_ASSERT( ! aInterfaces.empty() );
+    assert( ! aInterfaces.empty() );
     if (aInterfaces.empty())
         return nullptr;
 
@@ -346,7 +346,7 @@ static void SAL_CALL s_stub_defenv_revokeInterface(va_list * pParam)
 
     Ptr2ObjectMap::const_iterator const iFind(
         that->aPtr2ObjectMap.find( pInterface ) );
-    OSL_ASSERT( iFind != that->aPtr2ObjectMap.end() );
+    assert( iFind != that->aPtr2ObjectMap.end() );
     ObjectEntry * pOEntry = iFind->second;
     if (! --pOEntry->nRef)
     {
@@ -381,15 +381,15 @@ static void SAL_CALL s_stub_defenv_revokeInterface(va_list * pParam)
     }
     else if (pOEntry->mixedObject)
     {
-        OSL_ASSERT( !pOEntry->aInterfaces.empty() &&
+        assert( !pOEntry->aInterfaces.empty() &&
                     pOEntry->aInterfaces[ 0 ].fpFreeProxy == nullptr );
 
         sal_Int32 index = pOEntry->find( pInterface, 1 );
-        OSL_ASSERT( index > 0 );
+        assert( index > 0 );
         if (index > 0)
         {
             InterfaceEntry & entry = pOEntry->aInterfaces[ index ];
-            OSL_ASSERT( entry.pInterface == pInterface );
+            assert( entry.pInterface == pInterface );
             if (entry.fpFreeProxy != nullptr)
             {
                 --entry.refCount;
@@ -408,7 +408,7 @@ static void SAL_CALL s_stub_defenv_revokeInterface(va_list * pParam)
                         // remove from ptr map
                         std::size_t erased =
                               that->aPtr2ObjectMap.erase( pInterface );
-                        OSL_ASSERT( erased == 1 );
+                        assert( erased == 1 );
                     }
 
                     guard.clear();
@@ -1007,7 +1007,7 @@ inline void EnvironmentsData::getRegisteredEnvironments(
     {
         *pppEnvs = static_cast<uno_Environment **>((*memAlloc)(
             sizeof (uno_Environment *) * nSize ));
-        OSL_ASSERT( *pppEnvs );
+        assert( *pppEnvs );
         while (nSize--)
         {
             (*pppEnvs)[nSize] = aFounds[nSize];
