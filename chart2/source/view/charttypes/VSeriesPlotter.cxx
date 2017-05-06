@@ -1218,7 +1218,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
     const uno::Reference< chart2::XRegressionCurveCalculator > & xRegressionCurveCalculator,
     awt::Point aDefaultPos )
 {
-    OSL_ASSERT( xEquationProperties.is());
+    assert(xEquationProperties.is());
     if( !xEquationProperties.is())
         return;
 
@@ -1317,7 +1317,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
                     xEquationTarget, aFormula.makeStringAndClear(),
                     aNames, aValues, AbstractShapeFactory::makeTransformation( aScreenPosition2D ));
 
-                OSL_ASSERT( xTextShape.is());
+                assert(xTextShape.is());
                 if( xTextShape.is())
                 {
                     AbstractShapeFactory::setShapeName( xTextShape, rEquationCID );
@@ -2350,7 +2350,7 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
             if( xChild.is())
                 xChild->setParent( xSeriesProps );
 
-            OSL_ASSERT( xPointSet.is());
+            assert(xPointSet.is());
             xPointSet->setPropertyValue(
                 "Color", uno::Any( m_xColorScheme->getColorByIndex( nPointIndex )));
         }

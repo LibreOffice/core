@@ -668,8 +668,8 @@ void SplineCalculater::CalculateBSplines(
     // ODF1.2 spec variable k. Causion, k is used as index in the spec in addition.
     // nDegree is ODF1.2 file format attribute chart:spline-order and
     // ODF1.2 spec variable p
-    OSL_ASSERT( nResolution > 1 );
-    OSL_ASSERT( nDegree >= 1 );
+    assert( nResolution > 1 );
+    assert( nDegree >= 1 );
 
     // limit the b-spline degree at 15 to prevent insanely large sets of points
     sal_uInt32 p = std::min<sal_uInt32>(nDegree, 15);
