@@ -71,7 +71,7 @@ class Listener:
     public cppu::WeakImplHelper< css::frame::XDispatchResultListener >
 {
 public:
-    explicit Listener(Result * result): result_(result) { OSL_ASSERT(result != nullptr); }
+    explicit Listener(Result * result): result_(result) { assert(result != nullptr); }
 
 private:
     virtual void SAL_CALL disposing(css::lang::EventObject const &) override {}
@@ -100,7 +100,7 @@ public:
             listener):
         dispatch_(dispatch), url_(url), arguments_(arguments),
         listener_(listener)
-    { OSL_ASSERT(dispatch.is()); }
+    { assert(dispatch.is()); }
 
 private:
     virtual void SAL_CALL notify(css::uno::Any const &) override
