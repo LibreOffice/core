@@ -206,7 +206,7 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
         {
             // if we cannot get the version then the
             // Oasis2OOoTransformer will not be used
-            OSL_ASSERT(false);
+            assert(false);
         }
     }
 
