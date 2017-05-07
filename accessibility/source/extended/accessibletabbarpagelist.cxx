@@ -452,24 +452,18 @@ namespace accessibility
 
     sal_Int16 AccessibleTabBarPageList::getAccessibleRole(  )
     {
-        OExternalLockGuard aGuard( this );
-
         return AccessibleRole::PAGE_TAB_LIST;
     }
 
 
     OUString AccessibleTabBarPageList::getAccessibleDescription( )
     {
-        OExternalLockGuard aGuard( this );
-
         return OUString();
     }
 
 
     OUString AccessibleTabBarPageList::getAccessibleName(  )
     {
-        OExternalLockGuard aGuard( this );
-
         return OUString();
     }
 
@@ -605,16 +599,12 @@ namespace accessibility
 
     OUString AccessibleTabBarPageList::getTitledBorderText(  )
     {
-        OExternalLockGuard aGuard( this );
-
         return OUString();
     }
 
 
     OUString AccessibleTabBarPageList::getToolTipText(  )
     {
-        OExternalLockGuard aGuard( this );
-
         return OUString();
     }
 
@@ -662,16 +652,12 @@ namespace accessibility
 
     void AccessibleTabBarPageList::selectAllAccessibleChildren(  )
     {
-        OExternalLockGuard aGuard( this );
-
         selectAccessibleChild( 0 );
     }
 
 
     sal_Int32 AccessibleTabBarPageList::getSelectedAccessibleChildCount(  )
     {
-        OExternalLockGuard aGuard( this );
-
         return 1;
     }
 
