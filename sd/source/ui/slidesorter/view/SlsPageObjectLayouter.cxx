@@ -165,7 +165,7 @@ PageObjectLayouter::~PageObjectLayouter()
     const CoordinateSystem eCoordinateSystem,
     bool bIgnoreLocation)
 {
-    OSL_ASSERT(rpPageDescriptor);
+    assert(rpPageDescriptor);
     Point aLocation(0,0);
     if (rpPageDescriptor)
         aLocation = rpPageDescriptor->GetLocation( bIgnoreLocation );
@@ -228,7 +228,7 @@ Size PageObjectLayouter::GetGridMaxSize()
 
 Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
 {
-    OSL_ASSERT(mpWindow);
+    assert(mpWindow);
 
     // Set the correct font.
     vcl::Font aOriginalFont (mpWindow->GetFont());

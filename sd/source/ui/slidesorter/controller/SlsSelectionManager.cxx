@@ -150,7 +150,7 @@ void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
 void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& rSelectedPages)
 {
     // Prepare the deletion via the UNO API.
-    OSL_ASSERT(mrSlideSorter.GetModel().GetEditMode() == EditMode::Page);
+    assert(mrSlideSorter.GetModel().GetEditMode() == EditMode::Page);
 
     try
     {
@@ -183,7 +183,7 @@ void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& 
 void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& rSelectedPages)
 {
     // Prepare the deletion via the UNO API.
-    OSL_ASSERT(mrSlideSorter.GetModel().GetEditMode() == EditMode::MasterPage);
+    assert(mrSlideSorter.GetModel().GetEditMode() == EditMode::MasterPage);
 
     try
     {
@@ -230,7 +230,7 @@ void SelectionManager::SelectionHasChanged ()
         pViewShell->Invalidate (SID_STATUS_PAGE);
         pViewShell->Invalidate (SID_STATUS_LAYOUT);
 
-        OSL_ASSERT(mrController.GetCurrentSlideManager());
+        assert(mrController.GetCurrentSlideManager());
         SharedPageDescriptor pDescriptor(mrController.GetCurrentSlideManager()->GetCurrentSlide());
         if (pDescriptor.get() != nullptr)
             pViewShell->UpdatePreview(pDescriptor->GetPage());
@@ -297,7 +297,7 @@ void SelectionManager::SetInsertionPosition (const sal_Int32 nInsertionPosition)
     else if (nInsertionPosition > mrSlideSorter.GetModel().GetPageCount())
     {
         // Assert but then ignore invalid values.
-        OSL_ASSERT(nInsertionPosition<=mrSlideSorter.GetModel().GetPageCount());
+        assert(nInsertionPosition<=mrSlideSorter.GetModel().GetPageCount());
         return;
     }
     else

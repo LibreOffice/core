@@ -171,7 +171,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, vcl::W
     catch( Exception& e )
     {
         (void)e;
-        OSL_ASSERT(false);
+        assert(false);
     }
 
     const sal_Int32 LAYOUT_BORDER_PIX = 7;

@@ -353,7 +353,7 @@ void PageSelector::UpdateLock::Release()
     if (mpSelector != nullptr)
     {
         --mpSelector->mnUpdateLockCount;
-        OSL_ASSERT(mpSelector->mnUpdateLockCount >= 0);
+        assert(mpSelector->mnUpdateLockCount >= 0);
         if (mpSelector->mnUpdateLockCount == 0)
             mpSelector->UpdateCurrentPage(true);
 

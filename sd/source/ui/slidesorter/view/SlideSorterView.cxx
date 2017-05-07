@@ -174,7 +174,7 @@ SlideSorterView::~SlideSorterView()
 {
     if ( ! mbIsDisposed)
     {
-        OSL_ASSERT(mbIsDisposed);
+        assert(mbIsDisposed);
         Dispose();
     }
 }
@@ -198,7 +198,7 @@ void SlideSorterView::Dispose()
     // Deletion of the objects and the page will be done in SdrModel
     // destructor (as long as objects and pages are added)
 
-    OSL_ASSERT(mpLayeredDevice.unique());
+    assert(mpLayeredDevice.unique());
     mpLayeredDevice.reset();
 
     mbIsDisposed = true;
@@ -732,7 +732,7 @@ void SlideSorterView::RemoveVisibilityChangeListener(const Link<LinkParamNone*,v
 
 ToolTip& SlideSorterView::GetToolTip() const
 {
-    OSL_ASSERT(mpToolTip);
+    assert(mpToolTip);
     return *mpToolTip;
 }
 
@@ -841,7 +841,7 @@ SlideSorterView::DrawLock::DrawLock (SlideSorter& rSlideSorter)
 
 SlideSorterView::DrawLock::~DrawLock()
 {
-    OSL_ASSERT(mrView.mnLockRedrawSmph>0);
+    assert(mrView.mnLockRedrawSmph>0);
     --mrView.mnLockRedrawSmph;
     if (mrView.mnLockRedrawSmph == 0)
         if (mpWindow)

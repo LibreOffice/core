@@ -223,7 +223,7 @@ const BitmapEx& Theme::GetIcon (const IconType eType)
         return maIcons[eType];
     else
     {
-        OSL_ASSERT(eType>=0 && size_t(eType)<maIcons.size());
+        assert(eType>=0 && size_t(eType)<maIcons.size());
         return maIcons[0];
     }
 }
@@ -234,7 +234,7 @@ Theme::GradientDescriptor& Theme::GetGradient (const GradientColorType eType)
         return maGradients[eType];
     else
     {
-        OSL_ASSERT(eType>=0 && size_t(eType)<maGradients.size());
+        assert(eType>=0 && size_t(eType)<maGradients.size());
         return maGradients[0];
     }
 }
@@ -248,7 +248,7 @@ void Theme::InitializeIcon(const IconType eType, const OUString& rResourceId)
     }
     else
     {
-        OSL_ASSERT(eType>=0 && size_t(eType)<maIcons.size());
+        assert(eType>=0 && size_t(eType)<maIcons.size());
     }
 }
 

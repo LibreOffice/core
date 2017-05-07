@@ -112,7 +112,7 @@ void SAL_CALL ResourceManager::disposing()
 void SAL_CALL ResourceManager::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
 {
-    OSL_ASSERT(rEvent.ResourceId.is());
+    assert(rEvent.ResourceId.is());
 
     sal_Int32 nEventType = 0;
     rEvent.UserData >>= nEventType;

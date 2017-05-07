@@ -104,7 +104,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
 {
    if ( ! rxResourceId.is())
    {
-       OSL_ASSERT(rxResourceId.is());
+       assert(rxResourceId.is());
        return;
    }
 
@@ -249,7 +249,7 @@ void ConfigurationControllerResourceManager::AddResource (
 {
     if ( ! rxResource.is())
     {
-        OSL_ASSERT(rxResource.is());
+        assert(rxResource.is());
         return;
     }
 

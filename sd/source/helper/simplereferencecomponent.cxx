@@ -35,8 +35,8 @@ SimpleReferenceComponent::SimpleReferenceComponent()
 
 SimpleReferenceComponent::~SimpleReferenceComponent()
 {
-    OSL_ASSERT(m_nCount == 0);
-    OSL_ASSERT(mbDisposed);
+    assert(m_nCount == 0);
+    assert(mbDisposed);
 }
 
 void SimpleReferenceComponent::acquire()

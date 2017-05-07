@@ -74,7 +74,7 @@ Animator::~Animator()
 {
     if ( ! mbIsDisposed)
     {
-        OSL_ASSERT(mbIsDisposed);
+        assert(mbIsDisposed);
         Dispose();
     }
 }
@@ -102,7 +102,7 @@ Animator::AnimationId Animator::AddAnimation (
 {
     // When the animator is already disposed then ignore this call
     // silently (well, we show an assertion, but do not throw an exception.)
-    OSL_ASSERT( ! mbIsDisposed);
+    assert( ! mbIsDisposed);
     if (mbIsDisposed)
         return -1;
 
@@ -123,7 +123,7 @@ Animator::AnimationId Animator::AddAnimation (
 
 void Animator::RemoveAnimation (const Animator::AnimationId nId)
 {
-    OSL_ASSERT( ! mbIsDisposed);
+    assert( ! mbIsDisposed);
 
     const AnimationList::iterator iAnimation (::std::find_if(
         maAnimations.begin(),
@@ -132,7 +132,7 @@ void Animator::RemoveAnimation (const Animator::AnimationId nId)
             { return nId == pAnim->mnAnimationId; }));
     if (iAnimation != maAnimations.end())
     {
-        OSL_ASSERT((*iAnimation)->mnAnimationId == nId);
+        assert((*iAnimation)->mnAnimationId == nId);
         (*iAnimation)->Expire();
         maAnimations.erase(iAnimation);
     }
@@ -166,7 +166,7 @@ bool Animator::ProcessAnimations (const double nTime)
 {
     bool bExpired (false);
 
-    OSL_ASSERT( ! mbIsDisposed);
+    assert( ! mbIsDisposed);
     if (mbIsDisposed)
         return bExpired;
 
@@ -182,7 +182,7 @@ bool Animator::ProcessAnimations (const double nTime)
 
 void Animator::CleanUpAnimationList()
 {
-    OSL_ASSERT( ! mbIsDisposed);
+    assert( ! mbIsDisposed);
     if (mbIsDisposed)
         return;
 

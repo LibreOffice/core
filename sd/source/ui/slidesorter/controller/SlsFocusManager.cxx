@@ -93,12 +93,12 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
 
         if (mnPageIndex < 0)
         {
-            OSL_ASSERT(mnPageIndex>=0);
+            assert(mnPageIndex>=0);
             mnPageIndex = 0;
         }
         else if (mnPageIndex >= nPageCount)
         {
-            OSL_ASSERT(mnPageIndex<nPageCount);
+            assert(mnPageIndex<nPageCount);
             mnPageIndex = nPageCount - 1;
         }
 

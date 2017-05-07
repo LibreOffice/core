@@ -360,7 +360,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                     if ( !rMEvt.IsShift() && !rMEvt.IsMod2() )
                     {
-                        OSL_ASSERT (mpViewShell->GetViewShell()!=nullptr);
+                        assert (mpViewShell->GetViewShell()!=nullptr);
                         Client* pIPClient = static_cast<Client*>(
                             mpViewShell->GetViewShell()->GetIPClient());
 

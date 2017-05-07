@@ -1439,7 +1439,7 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
         aNotesPageName = sStandardPageName;
     }
 
-    OSL_ASSERT(nNotesPageNum==nStandardPageNum+1);
+    assert(nNotesPageNum==nStandardPageNum+1);
     if (nInsertPosition < 0)
         nInsertPosition = nStandardPageNum;
 

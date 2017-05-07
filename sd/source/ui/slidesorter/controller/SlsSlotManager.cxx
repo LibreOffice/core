@@ -1177,7 +1177,7 @@ sal_Int32 SlotManager::GetInsertionPosition()
                 return nIndex;
 
         // We should never get here.
-        OSL_ASSERT(false);
+        assert(false);
         return rSelector.GetPageCount() - 1;
     }
 
@@ -1192,7 +1192,7 @@ sal_Int32 SlotManager::GetInsertionPosition()
     else
     {
         // We should never get here because there has to be at least one page.
-        OSL_ASSERT(false);
+        assert(false);
         return -1;
     }
 }

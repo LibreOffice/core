@@ -114,7 +114,7 @@ void SAL_CALL ModuleController::disposing()
 
 void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
 {
-    OSL_ASSERT(rValues.size() == snFactoryPropertyCount);
+    assert(rValues.size() == snFactoryPropertyCount);
 
     // Get the service name of the factory.
     OUString sServiceName;
@@ -166,7 +166,7 @@ void ModuleController::InstantiateStartupServices()
 
 void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
 {
-    OSL_ASSERT(rValues.size() == snStartupPropertyCount);
+    assert(rValues.size() == snStartupPropertyCount);
 
     try
     {
