@@ -493,7 +493,6 @@ void DXF2GDIMetaFile::DrawAttribEntity(const DXFAttribEntity & rE, const DXFTran
 void DXF2GDIMetaFile::DrawPolyLineEntity(const DXFPolyLineEntity & rE, const DXFTransform & rTransform)
 {
     sal_uInt16 i,nPolySize;
-    double fW;
     const DXFBasicEntity * pBE;
 
     nPolySize=0;
@@ -504,21 +503,12 @@ void DXF2GDIMetaFile::DrawPolyLineEntity(const DXFPolyLineEntity & rE, const DXF
     }
     if (nPolySize<2) return;
     tools::Polygon aPoly(nPolySize);
-    fW=0.0;
     pBE=rE.pSucc;
     for (i=0; i<nPolySize; i++) {
         rTransform.Transform(static_cast<const DXFVertexEntity*>(pBE)->aP0,aPoly[i]);
-        if (i+1<nPolySize || (rE.nFlags&1)!=0) {
-            if (static_cast<const DXFVertexEntity*>(pBE)->fSWidth>=0.0) fW+=static_cast<const DXFVertexEntity*>(pBE)->fSWidth;
-            else fW+=rE.fSWidth;
-            if (static_cast<const DXFVertexEntity*>(pBE)->fEWidth>=0.0) fW+=static_cast<const DXFVertexEntity*>(pBE)->fEWidth;
-            else fW+=rE.fEWidth;
-        }
         pBE=pBE->pSucc;
     }
-    fW/=2.0;
-    if ((rE.nFlags&1)!=0) fW/=(double)nPolySize;
-    else fW/=(double)(nPolySize-1);
+
     if (SetLineAttribute(rE)) {
         if ((rE.nFlags&1)!=0) pVirDev->DrawPolygon(aPoly);
         else pVirDev->DrawPolyLine(aPoly);
