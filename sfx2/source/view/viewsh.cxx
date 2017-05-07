@@ -1436,6 +1436,8 @@ void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCa
     pImpl->m_pLibreOfficeKitViewCallback = pCallback;
     pImpl->m_pLibreOfficeKitViewData = pData;
 
+    afterCallbackRegistered();
+
     // Ask other views to tell us about their cursors.
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
@@ -1466,6 +1468,10 @@ void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) c
 
     if (pImpl->m_pLibreOfficeKitViewCallback)
         pImpl->m_pLibreOfficeKitViewCallback(nType, pPayload, pImpl->m_pLibreOfficeKitViewData);
+}
+
+void SfxViewShell::afterCallbackRegistered()
+{
 }
 
 void SfxViewShell::NotifyCursor(SfxViewShell* /*pViewShell*/) const
