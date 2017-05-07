@@ -288,7 +288,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_bIsNewDoc(!rMediaDescriptor.getUnpackedValueOrDefault("InsertMode", false)),
       m_rMediaDescriptor(rMediaDescriptor)
 {
-    OSL_ASSERT(xInputStream.is());
+    assert(xInputStream.is());
     m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, true));
 
     m_xModelFactory.set(m_xDstDoc, uno::UNO_QUERY);
@@ -2343,7 +2343,7 @@ RTFError RTFDocumentImpl::popState()
         writerfilter::Reference<Properties>::Pointer_t pProperties = std::make_shared<RTFReferenceProperties>(aObjAttributes, aObjSprms);
         uno::Reference<drawing::XShape> xShape;
         RTFValue::Pointer_t pShape = m_aObjectAttributes.find(NS_ooxml::LN_shape);
-        OSL_ASSERT(pShape.get());
+        assert(pShape.get());
         if (pShape)
             pShape->getAny() >>= xShape;
         if (xShape.is())
@@ -3073,7 +3073,7 @@ RTFError RTFDocumentImpl::popState()
 
     if (aState.pCurrentBuffer == &m_aSuperBuffer)
     {
-        OSL_ASSERT(!m_aStates.empty() && m_aStates.top().pCurrentBuffer == nullptr);
+        assert(!m_aStates.empty() && m_aStates.top().pCurrentBuffer == nullptr);
 
         if (!m_aSuperBuffer.empty())
             replayBuffer(m_aSuperBuffer, nullptr, nullptr);
