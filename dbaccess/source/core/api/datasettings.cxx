@@ -20,7 +20,6 @@
 #include "datasettings.hxx"
 #include "apitools.hxx"
 #include "dbastrings.hrc"
-#include <osl/diagnose.h>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

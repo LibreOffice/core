@@ -28,7 +28,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/diagnose.h>
 
 #include "com/sun/star/frame/Desktop.hpp"
 #include "com/sun/star/frame/XTerminateListener.hpp"

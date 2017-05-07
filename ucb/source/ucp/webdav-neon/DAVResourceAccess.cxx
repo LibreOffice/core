@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include "osl/diagnose.h"
 #include "com/sun/star/io/IOException.hpp"
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"

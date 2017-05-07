@@ -22,7 +22,6 @@
 #include <memory>
 #include <vector>
 
-#include <osl/diagnose.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

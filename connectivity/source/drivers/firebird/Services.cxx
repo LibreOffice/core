@@ -20,7 +20,6 @@
 #include "Driver.hxx"
 
 #include <cppuhelper/factory.hxx>
-#include <osl/diagnose.h>
 #include <sal/types.h>
 
 using namespace connectivity::firebird;

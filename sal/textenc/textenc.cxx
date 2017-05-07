@@ -26,7 +26,6 @@
 #include <cstddef>
 #include <cstdlib>
 
-#include "osl/diagnose.h"
 #include "osl/module.hxx"
 #include "rtl/instance.hxx"
 #include "rtl/textenc.h"

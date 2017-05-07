@@ -26,7 +26,6 @@
 #include <com/sun/star//ucb/UnsupportedCommandException.hpp>
 #include <com/sun/star/ucb/XPropertySetRegistry.hpp>
 
-#include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include <ucbhelper/contenthelper.hxx>
 #include <ucbhelper/contentinfo.hxx>

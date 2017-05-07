@@ -41,7 +41,6 @@
 #include <cppuhelper/implbase.hxx>
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/weak.hxx"
-#include "osl/diagnose.h"
 #include "osl/file.hxx"
 #include "osl/security.hxx"
 #include "rtl/string.h"

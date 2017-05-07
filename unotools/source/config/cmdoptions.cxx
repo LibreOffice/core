@@ -29,7 +29,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
-#include <osl/diagnose.h>
 
 #include "itemholder1.hxx"
 

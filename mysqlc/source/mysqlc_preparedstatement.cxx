@@ -31,7 +31,6 @@
 #include <cppconn/prepared_statement.h>
 #include <cppconn/statement.h>
 #include <cppuhelper/typeprovider.hxx>
-#include <osl/diagnose.h>
 
 #include <stdio.h>
 

@@ -31,7 +31,6 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "cppuhelper/unourl.hxx"
-#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
 using namespace cppu;

@@ -22,7 +22,6 @@
 #include "alloc_impl.hxx"
 #include "rtllifecycle.h"
 #include "sal/macros.h"
-#include "osl/diagnose.h"
 
 #include <cassert>
 #include <string.h>

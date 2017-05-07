@@ -22,7 +22,6 @@
 #include <com/sun/star/util/Date.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/rcid.h>
 #include <tools/resmgr.hxx>

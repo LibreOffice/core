@@ -25,7 +25,6 @@
 #include <comphelper/random.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/any.hxx>
-#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <sal/macros.h>

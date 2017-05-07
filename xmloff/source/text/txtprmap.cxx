@@ -18,7 +18,6 @@
  */
 
 #include <xmloff/txtprmap.hxx>
-#include <osl/diagnose.h>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/maptype.hxx>

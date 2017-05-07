@@ -21,7 +21,6 @@
 
 #include <algorithm>
 
-#include <osl/diagnose.h>
 #include <svl/poolitem.hxx>
 #include <comphelper/sequence.hxx>
 

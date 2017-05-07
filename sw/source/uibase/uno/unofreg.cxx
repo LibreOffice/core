@@ -24,7 +24,6 @@
 #include "unofreg.hxx"
 #include "unomailmerge.hxx"
 #include <sal/types.h>
-#include <osl/diagnose.h>
 #include <cppuhelper/factory.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <vcl/svapp.hxx>

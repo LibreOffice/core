@@ -20,7 +20,6 @@
 #include <cppuhelper/factory.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XSet.hpp>
-#include <osl/diagnose.h>
 #include "WinClipboard.hxx"
 
 #define WINCLIPBOARD_SERVICE_NAME  "com.sun.star.datatransfer.clipboard.SystemClipboard"

@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/accessibleeventnotifier.hxx>
-#include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/guarding.hxx>

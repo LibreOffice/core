@@ -43,7 +43,6 @@
 #include <com/sun/star/awt/XMessageBox.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 
 using rtl::OUString;

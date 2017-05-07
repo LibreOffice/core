@@ -19,7 +19,6 @@
 
 
 #include <comphelper/SelectionMultiplex.hxx>
-#include <osl/diagnose.h>
 
 
 namespace comphelper

@@ -20,7 +20,6 @@
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/msg.hxx>
-#include <osl/diagnose.h>
 
 
 SfxSlotKind SfxSlot::GetKind() const

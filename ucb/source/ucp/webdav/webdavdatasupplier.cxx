@@ -23,7 +23,6 @@
 #include <utility>
 
 #include <o3tl/make_unique.hxx>
-#include <osl/diagnose.h>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/providerhelper.hxx>

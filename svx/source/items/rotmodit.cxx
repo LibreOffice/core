@@ -18,7 +18,6 @@
  */
 
 #include <tools/stream.hxx>
-#include <osl/diagnose.h>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/ShadowLocation.hpp>

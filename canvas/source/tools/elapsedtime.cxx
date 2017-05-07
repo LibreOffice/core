@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <osl/time.h>
-#include <osl/diagnose.h>
 
 #include <canvas/elapsedtime.hxx>
 

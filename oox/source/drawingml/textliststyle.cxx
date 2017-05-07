@@ -18,7 +18,6 @@
  */
 
 #include "drawingml/textliststyle.hxx"
-#include <osl/diagnose.h>
 
 namespace oox { namespace drawingml {
 

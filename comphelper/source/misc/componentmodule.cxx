@@ -20,7 +20,6 @@
 #include <comphelper/componentmodule.hxx>
 
 #include <comphelper/sequence.hxx>
-#include <osl/diagnose.h>
 
 #include <vector>
 

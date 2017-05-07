@@ -24,7 +24,6 @@
 
  *************************************************************************/
 
-#include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/contentidentifier.hxx>

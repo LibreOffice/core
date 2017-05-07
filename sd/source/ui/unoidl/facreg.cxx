@@ -24,7 +24,6 @@
 
 #include <cppuhelper/factory.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
-#include "osl/diagnose.h"
 #include "sal/types.h"
 
 #include <string.h>

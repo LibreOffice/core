@@ -39,7 +39,6 @@
 #include <typeinfo>
 #include <vector>
 
-#include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
 #ifdef DBG_UTIL

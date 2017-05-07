@@ -28,7 +28,6 @@
 #include <o3tl/enumrange.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <osl/diagnose.h>
 
 #include "itemholder1.hxx"
 

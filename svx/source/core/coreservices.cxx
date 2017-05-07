@@ -21,7 +21,6 @@
 
 
 #include "sal/types.h"
-#include "osl/diagnose.h"
 #include "cppuhelper/factory.hxx"
 
 #include <coreservices.hxx>

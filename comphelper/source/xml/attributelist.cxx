@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/attributelist.hxx>
-#include <osl/diagnose.h>
 
 #include <vector>
 

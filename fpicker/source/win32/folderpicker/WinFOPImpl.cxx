@@ -18,7 +18,6 @@
  */
 
 #include "WinFOPImpl.hxx"
-#include <osl/diagnose.h>
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include "FopEvtDisp.hxx"

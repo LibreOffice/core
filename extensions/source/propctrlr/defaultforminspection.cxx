@@ -28,7 +28,6 @@
 
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <osl/diagnose.h>
 #include <sal/macros.h>
 
 

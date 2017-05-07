@@ -26,7 +26,6 @@
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <osl/diagnose.h>
 #include <propertyids.hxx>
 #include <time.h>
 #include <connectivity/dbtools.hxx>

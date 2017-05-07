@@ -18,7 +18,6 @@
  */
 
 #include <string.h>
-#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include "UCBDeadPropertyValue.hxx"
 

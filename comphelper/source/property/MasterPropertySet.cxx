@@ -24,7 +24,6 @@
 #include <comphelper/ChainablePropertySetInfo.hxx>
 #include <comphelper/solarmutex.hxx>
 
-#include <osl/diagnose.h>
 
 #include <memory>
 #include <vector>

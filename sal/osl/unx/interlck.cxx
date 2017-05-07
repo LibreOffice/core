@@ -20,7 +20,6 @@
 #include "system.hxx"
 
 #include <osl/interlck.h>
-#include <osl/diagnose.h>
 
 #if  ( defined (__sun) || defined ( NETBSD ) ) && defined ( SPARC )
 #error please use asm/interlck_sparc.s

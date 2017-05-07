@@ -33,7 +33,6 @@
  *
  *************************************************************************/
 
-#include <osl/diagnose.h>
 #include "propertyids.hxx"
 namespace connectivity
 {

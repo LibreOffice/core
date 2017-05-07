@@ -28,7 +28,6 @@
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
-#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
 #include <osl/thread.hxx>

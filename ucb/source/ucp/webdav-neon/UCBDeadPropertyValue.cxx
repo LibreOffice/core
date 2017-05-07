@@ -29,7 +29,6 @@
 #include <config_lgpl.h>
 #include <string.h>
 #include <ne_xml.h>
-#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include "UCBDeadPropertyValue.hxx"
 

@@ -34,7 +34,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/conditn.hxx>
-#include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>

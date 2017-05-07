@@ -23,7 +23,6 @@
 #include "options.hxx"
 
 #include "rtl/ustring.hxx"
-#include "osl/diagnose.h"
 
 #include <stdio.h>
 #include <string.h>

@@ -23,7 +23,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-#include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <rtl/math.hxx>
 #include <stringconversiontools.hxx>

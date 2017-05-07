@@ -23,7 +23,6 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <osl/diagnose.h>
 
 #include "helper/unopropertyarrayhelper.hxx"
 

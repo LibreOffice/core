@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/asyncnotification.hxx>
-#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <rtl/instance.hxx>

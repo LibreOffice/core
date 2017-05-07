@@ -19,7 +19,6 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <osl/diagnose.h>
 
 #include <stdio.h>
 #if defined _MSC_VER

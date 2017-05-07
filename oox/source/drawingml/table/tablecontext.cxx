@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/diagnose.h>
 #include "oox/helper/attributelist.hxx"
 #include "drawingml/guidcontext.hxx"
 #include "drawingml/table/tablecontext.hxx"

@@ -21,7 +21,6 @@
 
 #include <list>
 
-#include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

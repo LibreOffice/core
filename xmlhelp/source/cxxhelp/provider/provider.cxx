@@ -23,7 +23,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <osl/file.hxx>
-#include <osl/diagnose.h>
 #include <ucbhelper/contentidentifier.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

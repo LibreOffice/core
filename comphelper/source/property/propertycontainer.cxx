@@ -20,7 +20,6 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/property.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <osl/diagnose.h>
 #include <uno/data.h>
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

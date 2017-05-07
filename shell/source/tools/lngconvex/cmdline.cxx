@@ -19,7 +19,6 @@
 
 
 #include <stdexcept>
-#include <osl/diagnose.h>
 #include "cmdline.hxx"
 
 

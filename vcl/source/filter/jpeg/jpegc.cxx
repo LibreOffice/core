@@ -25,7 +25,6 @@
 #include <jerror.h>
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <osl/diagnose.h>
 
 extern "C" {
 #include "transupp.h"

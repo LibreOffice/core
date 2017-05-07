@@ -18,7 +18,6 @@
  */
 #include "vbaaddins.hxx"
 #include "vbaaddin.hxx"
-#include <osl/diagnose.h>
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>

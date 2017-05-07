@@ -24,7 +24,6 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <osl/diagnose.h>
 
 #include <osl/time.h>
 #include <osl/thread.hxx>

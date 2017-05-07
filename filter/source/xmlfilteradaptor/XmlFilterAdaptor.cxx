@@ -22,7 +22,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/urlobj.hxx>
 #include "XmlFilterAdaptor.hxx"
-#include <osl/diagnose.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>

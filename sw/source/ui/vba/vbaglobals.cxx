@@ -19,7 +19,6 @@
 #include <vbahelper/helperdecl.hxx>
 #include "service.hxx"
 #include "vbaglobals.hxx"
-#include <osl/diagnose.h>
 #include <sal/macros.h>
 #include <comphelper/unwrapargs.hxx>
 

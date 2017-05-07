@@ -22,7 +22,6 @@
 #include "datamodelcontext.hxx"
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
-#include <osl/diagnose.h>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

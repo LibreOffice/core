@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#include "osl/diagnose.h"
 #include <osl/mutex.hxx>
 #include "rtl/strbuf.hxx"
 #include "NeonSession.hxx"

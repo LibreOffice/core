@@ -19,7 +19,6 @@
 
 #include "sal/config.h"
 
-#include <osl/diagnose.h>
 #include <osl/module.hxx>
 #include <osl/thread.h>
 

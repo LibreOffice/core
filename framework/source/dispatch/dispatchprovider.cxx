@@ -39,7 +39,6 @@
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-#include <osl/diagnose.h>
 #include <rtl/string.h>
 #include <rtl/ustring.hxx>
 #include <vcl/svapp.hxx>

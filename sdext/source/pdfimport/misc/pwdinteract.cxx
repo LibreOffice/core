@@ -32,7 +32,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
-#include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <vcl/errcode.hxx>
 

@@ -31,7 +31,6 @@
 #include "system.hxx"
 
 #include <osl/security.h>
-#include <osl/diagnose.h>
 #include <rtl/bootstrap.h>
 #include <sal/log.hxx>
 

@@ -31,7 +31,6 @@
 #include <cassert>
 #include <memory>
 
-#include <osl/diagnose.h>
 #include <osl/security.h>
 #include <osl/nlsupport.h>
 #include <osl/mutex.h>

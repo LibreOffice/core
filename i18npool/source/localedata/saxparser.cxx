@@ -39,7 +39,6 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <osl/diagnose.h>
 
 #include "LocaleNode.hxx"
 
