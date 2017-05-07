@@ -972,7 +972,7 @@ void SchXMLChartContext::EndElement()
 
 void SchXMLChartContext::MergeSeriesForStockChart()
 {
-    OSL_ASSERT( mbIsStockChart );
+    assert( mbIsStockChart );
     try
     {
         uno::Reference< chart::XChartDocument > xOldDoc( mrImportHelper.GetChartDocument());
@@ -1009,7 +1009,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
             const sal_Int32 nSeriesCount( aSeriesSeq.getLength());
             const sal_Int32 nSeriesPerCandleStick = bHasJapaneseCandlestick ? 4: 3;
             sal_Int32 nCandleStickCount = nSeriesCount / nSeriesPerCandleStick;
-            OSL_ASSERT( nSeriesPerCandleStick * nCandleStickCount == nSeriesCount );
+            assert( nSeriesPerCandleStick * nCandleStickCount == nSeriesCount );
             uno::Sequence< uno::Reference< chart2::XDataSeries > > aNewSeries( nCandleStickCount );
             for( sal_Int32 i=0; i<nCandleStickCount; ++i )
             {
@@ -1120,7 +1120,7 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
                 {
                     if( !msColTrans.isEmpty() )
                     {
-                        OSL_ASSERT( msRowTrans.isEmpty() );
+                        assert( msRowTrans.isEmpty() );
                         pTableContext->setColumnPermutation( lcl_getNumberSequenceFromString( msColTrans, true ));
                         msColTrans.clear();
                     }

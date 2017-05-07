@@ -141,7 +141,7 @@ namespace DOM
                 ? &const_cast<CDocument&>(rDocument) : nullptr )
         ,   m_rMutex(const_cast< ::osl::Mutex & >(rMutex))
     {
-        OSL_ASSERT(m_aNodePtr);
+        assert(m_aNodePtr);
     }
 
     void CNode::invalidate()
@@ -181,7 +181,7 @@ namespace DOM
 
     CDocument & CNode::GetOwnerDocument()
     {
-        OSL_ASSERT(m_xDocument.is());
+        assert(m_xDocument.is());
         return *m_xDocument; // needs overriding in CDocument!
     }
 

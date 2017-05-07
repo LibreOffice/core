@@ -173,7 +173,7 @@ namespace DOM
             if (xNode.is())
             {
                 ::rtl::Reference<CNode> ret(i->second.second);
-                OSL_ASSERT(ret.is());
+                assert(ret.is());
                 return ret;
             }
         }
@@ -265,7 +265,7 @@ namespace DOM
                         ::std::make_pair(WeakReference<XNode>(pCNode.get()),
                         pCNode.get()))
                 ).second;
-            OSL_ASSERT(bInserted);
+            assert(bInserted);
             if (!bInserted) {
                 // if insertion failed, delete new instance and return null
                 return nullptr;
@@ -939,7 +939,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        OSL_ASSERT(nullptr != m_aNodePtr);
+        assert(nullptr != m_aNodePtr);
         if (nullptr == m_aNodePtr) {
             return nullptr;
         }
