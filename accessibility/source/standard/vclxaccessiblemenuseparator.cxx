@@ -62,8 +62,6 @@ Sequence< OUString > VCLXAccessibleMenuSeparator::getSupportedServiceNames()
 
 sal_Int16 VCLXAccessibleMenuSeparator::getAccessibleRole(  )
 {
-    OExternalLockGuard aGuard( this );
-
     return AccessibleRole::SEPARATOR;
 }
 

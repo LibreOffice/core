@@ -251,8 +251,6 @@ namespace accessibility
 
     sal_Int32 AccessibleTabBarPage::getAccessibleChildCount()
     {
-        OExternalLockGuard aGuard( this );
-
         return 0;
     }
 
@@ -290,8 +288,6 @@ namespace accessibility
 
     sal_Int16 AccessibleTabBarPage::getAccessibleRole(  )
     {
-        OExternalLockGuard aGuard( this );
-
         return AccessibleRole::PAGE_TAB;
     }
 
@@ -359,8 +355,6 @@ namespace accessibility
 
     Reference< XAccessible > AccessibleTabBarPage::getAccessibleAtPoint( const awt::Point& )
     {
-        OExternalLockGuard aGuard( this );
-
         return Reference< XAccessible >();
     }
 
@@ -435,8 +429,6 @@ namespace accessibility
 
     OUString AccessibleTabBarPage::getToolTipText(  )
     {
-        OExternalLockGuard aGuard( this );
-
         return OUString();
     }
 
