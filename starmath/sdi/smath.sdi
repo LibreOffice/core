@@ -217,7 +217,7 @@ SfxInt16Item Graphic SID_GAPHIC_SM
 
 
 SfxVoidItem InsertCommandText SID_INSERTCOMMANDTEXT
-()
+(SfxStringItem Text SID_INSERTCOMMANDTEXT)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
