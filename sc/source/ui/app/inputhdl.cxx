@@ -3660,7 +3660,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         }
                     }
 
-                    if ( pInputWin )                        // Named range input
+                    if ( pInputWin || comphelper::LibreOfficeKit::isActive())                        // Named range input
                     {
                         OUString aPosStr;
                         const ScAddress::Details aAddrDetails( &rDoc, aCursorPos );
@@ -3686,12 +3686,19 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                                 aPosStr = aCursorPos.Format(ScRefFlags::VALID | nFlags, &rDoc, aAddrDetails);
                         }
 
-                        // Disable the accessible VALUE_CHANGE event
-                        bool bIsSuppressed = pInputWin->IsAccessibilityEventsSuppressed(false);
-                        pInputWin->SetAccessibilityEventsSuppressed(true);
-                        pInputWin->SetPosString(aPosStr);
-                        pInputWin->SetAccessibilityEventsSuppressed(bIsSuppressed);
-                        pInputWin->SetSumAssignMode();
+                        if (pInputWin)
+                        {
+                            // Disable the accessible VALUE_CHANGE event
+                            bool bIsSuppressed = pInputWin->IsAccessibilityEventsSuppressed(false);
+                            pInputWin->SetAccessibilityEventsSuppressed(true);
+                            pInputWin->SetPosString(aPosStr);
+                            pInputWin->SetAccessibilityEventsSuppressed(bIsSuppressed);
+                            pInputWin->SetSumAssignMode();
+                        }
+                        else if (pActiveViewSh)
+                        {
+                            pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_ADDRESS, aPosStr.toUtf8().getStr());
+                        }
                     }
 
                     if (bStopEditing)
