@@ -961,35 +961,6 @@ const SvxItemPropertySet* SvxUnoPropertyMapProvider::GetPropertySet(sal_uInt16 n
     return aSetArr[nPropertyId];
 }
 
-
-/** maps the API constant MeasureUnit to a vcl MapUnit enum.
-    Returns false if conversion is not supported.
-
-    @cl: for warnings01 I found out that this method never worked so I thin
-         it is not used at all
-sal_Bool SvxMeasureUnitToMapUnit( const short eApi, int& eVcl ) throw()
-{
-    switch( eVcl )
-    {
-    case util::MeasureUnit::MM_100TH:       eVcl = MapUnit::Map100thMM;    break;
-    case util::MeasureUnit::MM_10TH:        eVcl = MapUnit::Map10thMM;     break;
-    case util::MeasureUnit::MM:             eVcl = MapUnit::MapMM;          break;
-    case util::MeasureUnit::CM:             eVcl = MapUnit::MapCM;          break;
-    case util::MeasureUnit::INCH_1000TH:    eVcl = MapUnit::Map1000thInch; break;
-    case util::MeasureUnit::INCH_100TH:     eVcl = MapUnit::Map100thInch;  break;
-    case util::MeasureUnit::INCH_10TH:      eVcl = MapUnit::Map10thInch;   break;
-    case util::MeasureUnit::INCH:           eVcl = MapUnit::MapInch;        break;
-    case util::MeasureUnit::POINT:          eVcl = MapUnit::MapPoint;       break;
-    case util::MeasureUnit::TWIP:           eVcl = MapUnit::MapTwip;        break;
-    case util::MeasureUnit::PERCENT:        eVcl = MapUnit::MapRelative;    break;
-    default:
-        return false;
-    }
-
-    return true;
-}
-*/
-
 /** maps the vcl MapUnit enum to a API constant MeasureUnit.
     Returns false if conversion is not supported.
 */
