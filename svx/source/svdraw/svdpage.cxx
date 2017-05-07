@@ -395,7 +395,7 @@ SdrObject* SdrObjList::NbcRemoveObject(size_t nObjNum)
 {
     if (nObjNum >= maList.size())
     {
-        OSL_ASSERT(nObjNum<maList.size());
+        assert(nObjNum<maList.size());
         return nullptr;
     }
 
@@ -426,7 +426,7 @@ SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
 {
     if (nObjNum >= maList.size())
     {
-        OSL_ASSERT(nObjNum<maList.size());
+        assert(nObjNum<maList.size());
         return nullptr;
     }
 
@@ -473,8 +473,8 @@ SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum)
 {
     if (nObjNum >= maList.size() || pNewObj == nullptr)
     {
-        OSL_ASSERT(nObjNum<maList.size());
-        OSL_ASSERT(pNewObj!=nullptr);
+        assert(nObjNum<maList.size());
+        assert(pNewObj!=nullptr);
         return nullptr;
     }
 
@@ -508,12 +508,12 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
 {
     if (nObjNum >= maList.size())
     {
-        OSL_ASSERT(nObjNum<maList.size());
+        assert(nObjNum<maList.size());
         return nullptr;
     }
     if (pNewObj == nullptr)
     {
-        OSL_ASSERT(pNewObj!=nullptr);
+        assert(pNewObj!=nullptr);
         return nullptr;
     }
 
@@ -562,8 +562,8 @@ SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
 {
     if (nOldObjNum >= maList.size() || nNewObjNum >= maList.size())
     {
-        OSL_ASSERT(nOldObjNum<maList.size());
-        OSL_ASSERT(nNewObjNum<maList.size());
+        assert(nOldObjNum<maList.size());
+        assert(nNewObjNum<maList.size());
         return nullptr;
     }
 
@@ -675,7 +675,7 @@ SdrObject* SdrObjList::GetObj(size_t nNum) const
 {
     if (nNum >= maList.size())
     {
-        OSL_ASSERT(nNum<maList.size());
+        assert(nNum<maList.size());
         return nullptr;
     }
     else
@@ -768,8 +768,8 @@ void SdrObjList::SetObjectNavigationPosition (
             maList.end(),
             mxNavigationOrder->begin());
     }
-    OSL_ASSERT(mxNavigationOrder.get()!=nullptr);
-    OSL_ASSERT( mxNavigationOrder->size() == maList.size());
+    assert(mxNavigationOrder.get()!=nullptr);
+    assert( mxNavigationOrder->size() == maList.size());
 
     SdrObjectWeakRef aReference (&rObject);
 
@@ -815,7 +815,7 @@ SdrObject* SdrObjList::GetObjectForNavigationPosition (const sal_uInt32 nNavigat
         // index is correct and look up the object in mxNavigationOrder.
         if (nNavigationPosition >= mxNavigationOrder->size())
         {
-            OSL_ASSERT(nNavigationPosition < mxNavigationOrder->size());
+            assert(nNavigationPosition < mxNavigationOrder->size());
         }
         else
             return (*mxNavigationOrder)[nNavigationPosition].get();
@@ -826,7 +826,7 @@ SdrObject* SdrObjList::GetObjectForNavigationPosition (const sal_uInt32 nNavigat
         // instead.
         if (nNavigationPosition >= maList.size())
         {
-            OSL_ASSERT(nNavigationPosition < maList.size());
+            assert(nNavigationPosition < maList.size());
         }
         else
             return maList[nNavigationPosition];
@@ -893,7 +893,7 @@ void SdrObjList::InsertObjectIntoContainer (
     SdrObject& rObject,
     const sal_uInt32 nInsertPosition)
 {
-    OSL_ASSERT(nInsertPosition<=maList.size());
+    assert(nInsertPosition<=maList.size());
 
     // Update the navigation positions.
     if (HasObjectNavigationOrder())
@@ -921,7 +921,7 @@ void SdrObjList::ReplaceObjectInContainer (
 {
     if (nObjectPosition >= maList.size())
     {
-        OSL_ASSERT(nObjectPosition<maList.size());
+        assert(nObjectPosition<maList.size());
         return;
     }
 
@@ -931,7 +931,7 @@ void SdrObjList::ReplaceObjectInContainer (
         // A user defined position of the object that is to be replaced is
         // not transferred to the new object so erase the former and append
         // the later object from/to the navigation order.
-        OSL_ASSERT(nObjectPosition < maList.size());
+        assert(nObjectPosition < maList.size());
         SdrObjectWeakRef aReference (maList[nObjectPosition]);
         WeakSdrObjectContainerType::iterator iObject (::std::find(
             mxNavigationOrder->begin(),
@@ -955,7 +955,7 @@ void SdrObjList::RemoveObjectFromContainer (
 {
     if (nObjectPosition >= maList.size())
     {
-        OSL_ASSERT(nObjectPosition<maList.size());
+        assert(nObjectPosition<maList.size());
         return;
     }
 

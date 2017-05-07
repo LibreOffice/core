@@ -52,7 +52,7 @@ namespace
             }
             catch(const uno::Exception&)
             {
-                OSL_ASSERT(false);
+                assert(false);
             }
         }
 

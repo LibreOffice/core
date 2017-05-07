@@ -279,7 +279,7 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
 {
     SolarMutexGuard g;
 
-    OSL_ASSERT (maShapeTreeInfo.GetViewForwarder() != nullptr);
+    assert (maShapeTreeInfo.GetViewForwarder() != nullptr);
 
     tools::Rectangle aVisibleArea = maShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
 

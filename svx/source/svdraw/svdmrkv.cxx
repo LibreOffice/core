@@ -1394,7 +1394,7 @@ bool SdrMarkView::MarkNextObj(bool bPrev)
     if (nMarkCount!=0) {
         nChgMarkNum=bPrev ? 0 : nMarkCount-1;
         SdrMark* pM=GetSdrMarkByIndex(nChgMarkNum);
-        OSL_ASSERT(pM!=nullptr);
+        assert(pM!=nullptr);
         if (pM->GetMarkedSdrObj() != nullptr)
             nSearchObjNum = pM->GetMarkedSdrObj()->GetNavigationPosition();
     }

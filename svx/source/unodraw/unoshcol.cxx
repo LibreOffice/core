@@ -109,7 +109,7 @@ void SvxShapeCollection::release() throw()
                 }
 
                 // only the alive ref holds the object
-                OSL_ASSERT( m_refCount == 1 );
+                assert( m_refCount == 1 );
                 // destroy the object if xHoldAlive decrement the refcount to 0
                 return;
             }
