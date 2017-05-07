@@ -491,12 +491,11 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
     bool bTakeBackInteractiveSequenceTimingForChild = false;
     sal_Int16 nFillDefault = GetFillMode( xNode, nFDef );
 
-    bool bSkipChildren = false;
-
     Reference< XAnimationNode > xAudioNode;
     static sal_uInt32 nAudioGroup;
 
     {
+        bool bSkipChildren = false;
         EscherExContainer aContainer( rStrm, nContainerRecType, nInstance );
         switch( xNode->getType() )
         {
