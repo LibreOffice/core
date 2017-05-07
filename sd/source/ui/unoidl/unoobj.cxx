@@ -951,7 +951,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
                 SdrOle2Obj* pOleObj = dynamic_cast< SdrOle2Obj* >( pObj );
                 if( pOleObj )
                 {
-                    pOleObj->SetGraphic( nullptr );
+                    pOleObj->ClearGraphic();
                 }
             }
         }

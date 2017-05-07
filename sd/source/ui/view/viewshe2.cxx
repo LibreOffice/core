@@ -779,7 +779,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             // OLE object is no longer empty
             pObj->SetEmptyPresObj(false);
             pObj->SetOutlinerParaObject(nullptr);
-            pObj->SetGraphic(nullptr);
+            pObj->ClearGraphic();
 
             // the empty OLE object gets a new IPObj
             if (!aName.isEmpty())

@@ -758,7 +758,25 @@ bool SdrOle2Obj::isUiActive() const
     return mpImpl->mxObjRef.is() && embed::EmbedStates::UI_ACTIVE == mpImpl->mxObjRef->getCurrentState();
 }
 
-void SdrOle2Obj::SetGraphic_Impl(const Graphic* pGrf)
+void SdrOle2Obj::SetGraphic(const Graphic& rGrf)
+{
+    // only for setting a preview graphic
+    if (mpImpl->mpGraphic)
+    {
+        delete mpImpl->mpGraphic;
+        mpImpl->mpGraphic = nullptr;
+        delete mpImpl->mpGraphicObject;
+        mpImpl->mpGraphicObject = nullptr;
+    }
+
+    mpImpl->mpGraphic = new Graphic(rGrf);
+    mpImpl->mpGraphicObject = new GraphicObject(*mpImpl->mpGraphic);
+
+    SetChanged();
+    BroadcastObjectChange();
+}
+
+void SdrOle2Obj::ClearGraphic()
 {
     if (mpImpl->mpGraphic)
     {
@@ -768,20 +786,8 @@ void SdrOle2Obj::SetGraphic_Impl(const Graphic* pGrf)
         mpImpl->mpGraphicObject = nullptr;
     }
 
-    if (pGrf)
-    {
-        mpImpl->mpGraphic = new Graphic(*pGrf);
-        mpImpl->mpGraphicObject = new GraphicObject(*mpImpl->mpGraphic);
-    }
-
     SetChanged();
     BroadcastObjectChange();
-}
-
-void SdrOle2Obj::SetGraphic(const Graphic* pGrf)
-{
-    // only for setting a preview graphic
-    SetGraphic_Impl( pGrf );
 }
 
 void SdrOle2Obj::SetProgName( const OUString& rName )
@@ -1896,7 +1902,7 @@ void SdrOle2Obj::GetObjRef_Impl()
 
                 // perhaps preview not valid anymore
                 // This line changes the modified state of the model
-                SetGraphic_Impl( nullptr );
+                ClearGraphic();
 
                 // if status was not set before, force it back
                 // to not set, so that SetGraphic(0L) above does not

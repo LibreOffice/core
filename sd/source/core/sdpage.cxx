@@ -357,7 +357,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             pSdrObj = new SdrOle2Obj();
             BitmapEx aBmpEx(BMP_PRESOBJ_OBJECT);
             Graphic aGraphic( aBmpEx );
-            static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(&aGraphic);
+            static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(aGraphic);
         }
         break;
 
@@ -367,7 +367,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( "StarChart" );
             BitmapEx aBmpEx(BMP_PRESOBJ_CHART);
             Graphic aGraphic( aBmpEx );
-            static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(&aGraphic);
+            static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(aGraphic);
         }
         break;
 
@@ -377,7 +377,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( "StarOrg" );
             BitmapEx aBmpEx(BMP_PRESOBJ_ORGCHART);
             Graphic aGraphic( aBmpEx );
-            static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(&aGraphic);
+            static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(aGraphic);
         }
         break;
 
@@ -388,7 +388,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
             static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( "StarCalc" );
             BitmapEx aBmpEx(BMP_PRESOBJ_TABLE);
             Graphic aGraphic( aBmpEx );
-            static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(&aGraphic);
+            static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(aGraphic);
         }
         break;
 

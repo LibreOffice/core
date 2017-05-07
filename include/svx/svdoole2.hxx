@@ -55,7 +55,6 @@ private:
     SVX_DLLPRIVATE void AddListeners_Impl();
     SVX_DLLPRIVATE void RemoveListeners_Impl();
     SVX_DLLPRIVATE void GetObjRef_Impl();
-    SVX_DLLPRIVATE void SetGraphic_Impl(const Graphic* pGrf);
 
     // #i118485# helper added
     SVX_DLLPRIVATE SdrObject* createSdrGrafObjReplacement(bool bAddText) const;
@@ -81,7 +80,8 @@ public:
 
     // An OLE graphic object can contain a StarView graphic,
     // which will be displayed if the OLE object is empty.
-    void        SetGraphic(const Graphic* pGrf);
+    void        SetGraphic(const Graphic& rGrf);
+    void        ClearGraphic();
     const       Graphic* GetGraphic() const;
     void        GetNewReplacement();
 
