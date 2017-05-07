@@ -694,23 +694,42 @@ namespace basegfx
         // look right and left for even smaller distances
         double fStepValue(1.0 / (double)((nPointCount - 1) * 2)); // half the edge step width
         double fPosition((double)nSmallestIndex / (double)(nPointCount - 1));
-        bool bDone(false);
 
-        while(!bDone)
+        while(true)
         {
-            if(!bDone)
-            {
-                // test left
-                double fPosLeft(fPosition - fStepValue);
+            // test left
+            double fPosLeft(fPosition - fStepValue);
 
-                if(fPosLeft < 0.0)
+            if(fPosLeft < 0.0)
+            {
+                fPosLeft = 0.0;
+                aVector = B2DVector(rTestPoint - maStartPoint);
+            }
+            else
+            {
+                aVector = B2DVector(rTestPoint - interpolatePoint(fPosLeft));
+            }
+
+            fNewQuadDist = aVector.getX() * aVector.getX() + aVector.getY() * aVector.getY();
+
+            if(fTools::less(fNewQuadDist, fQuadDist))
+            {
+                fQuadDist = fNewQuadDist;
+                fPosition = fPosLeft;
+            }
+            else
+            {
+                // test right
+                double fPosRight(fPosition + fStepValue);
+
+                if(fPosRight > 1.0)
                 {
-                    fPosLeft = 0.0;
-                    aVector = B2DVector(rTestPoint - maStartPoint);
+                    fPosRight = 1.0;
+                    aVector = B2DVector(rTestPoint - maEndPoint);
                 }
                 else
                 {
-                    aVector = B2DVector(rTestPoint - interpolatePoint(fPosLeft));
+                    aVector = B2DVector(rTestPoint - interpolatePoint(fPosRight));
                 }
 
                 fNewQuadDist = aVector.getX() * aVector.getX() + aVector.getY() * aVector.getY();
@@ -718,49 +737,23 @@ namespace basegfx
                 if(fTools::less(fNewQuadDist, fQuadDist))
                 {
                     fQuadDist = fNewQuadDist;
-                    fPosition = fPosLeft;
+                    fPosition = fPosRight;
                 }
                 else
                 {
-                    // test right
-                    double fPosRight(fPosition + fStepValue);
-
-                    if(fPosRight > 1.0)
-                    {
-                        fPosRight = 1.0;
-                        aVector = B2DVector(rTestPoint - maEndPoint);
-                    }
-                    else
-                    {
-                        aVector = B2DVector(rTestPoint - interpolatePoint(fPosRight));
-                    }
-
-                    fNewQuadDist = aVector.getX() * aVector.getX() + aVector.getY() * aVector.getY();
-
-                    if(fTools::less(fNewQuadDist, fQuadDist))
-                    {
-                        fQuadDist = fNewQuadDist;
-                        fPosition = fPosRight;
-                    }
-                    else
-                    {
-                        // not less left or right, done
-                        bDone = true;
-                    }
+                    // not less left or right, done
+                    break;
                 }
             }
 
             if(0.0 == fPosition || 1.0 == fPosition)
             {
                 // if we are completely left or right, we are done
-                bDone = true;
+                break;
             }
 
-            if(!bDone)
-            {
-                // prepare next step value
-                fStepValue /= 2.0;
-            }
+            // prepare next step value
+            fStepValue /= 2.0;
         }
 
         rCut = fPosition;
