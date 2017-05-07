@@ -277,7 +277,7 @@ sal_Bool MSWorksCalcImportFilter::filter(const css::uno::Sequence< css::beans::P
 
     if (!getXContext().is() || !xInputStream.is())
     {
-        OSL_ASSERT(false);
+        assert(false);
         return false;
     }
 

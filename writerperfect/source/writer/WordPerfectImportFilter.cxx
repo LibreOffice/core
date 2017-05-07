@@ -97,7 +97,7 @@ bool SAL_CALL WordPerfectImportFilter::importImpl(const Sequence< css::beans::Pr
     }
     if (!xInputStream.is())
     {
-        OSL_ASSERT(false);
+        assert(false);
         return false;
     }
 
