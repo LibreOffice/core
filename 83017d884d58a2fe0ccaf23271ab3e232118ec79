@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_b32f65a0",
+        "filename": "sc/source/core/data/dpcache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-07T05:32:14Z",
+      "side": 1,
+      "message": "This one requires reading the code.",
+      "revId": "83017d884d58a2fe0ccaf23271ab3e232118ec79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_d32cf1ad",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2694,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-07T05:32:14Z",
+      "side": 1,
+      "message": "This one requires reading the code.",
+      "revId": "83017d884d58a2fe0ccaf23271ab3e232118ec79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_f3172d52",
+        "filename": "sc/source/filter/dif/difexp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-07T05:32:14Z",
+      "side": 1,
+      "message": "All changes in this method require reading the code.",
+      "revId": "83017d884d58a2fe0ccaf23271ab3e232118ec79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_131d9973",
+        "filename": "sc/source/filter/excel/excimp8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-07T05:32:14Z",
+      "side": 1,
+      "message": "This requires reading the code.",
+      "revId": "83017d884d58a2fe0ccaf23271ab3e232118ec79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_33129563",
+        "filename": "sc/source/filter/xml/XMLChangeTrackingExportHelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-07T05:32:14Z",
+      "side": 1,
+      "message": "I think the assert should work in all cases here but it still needs reading the code and checking that there are no special cases that are now broken.",
+      "revId": "83017d884d58a2fe0ccaf23271ab3e232118ec79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_53172151",
+        "filename": "sc/source/ui/Accessibility/AccessibleSpreadsheet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-07T05:32:14Z",
+      "side": 1,
+      "message": "This requires reading the code.",
+      "revId": "83017d884d58a2fe0ccaf23271ab3e232118ec79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_730c1d43",
+        "filename": "sc/source/ui/dbgui/pfiltdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-07T05:32:14Z",
+      "side": 1,
+      "message": "This requires reading the code.",
+      "revId": "83017d884d58a2fe0ccaf23271ab3e232118ec79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_932269b8",
+        "filename": "sc/source/ui/drawfunc/fuins2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-07T05:32:14Z",
+      "side": 1,
+      "message": "Obviously this should not be an assert.",
+      "revId": "83017d884d58a2fe0ccaf23271ab3e232118ec79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_93098934",
+        "filename": "sc/source/ui/pagedlg/areasdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-07T05:32:14Z",
+      "side": 1,
+      "message": "This looks wrong with the if (pED) line.",
+      "revId": "83017d884d58a2fe0ccaf23271ab3e232118ec79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b306851e",
+        "filename": "sc/source/ui/unoobj/docuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2516,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-07T05:32:14Z",
+      "side": 1,
+      "message": "This looks wrong with the \u0026\u0026 bCreate condition in the next line.",
+      "revId": "83017d884d58a2fe0ccaf23271ab3e232118ec79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_d303110e",
+        "filename": "sc/source/ui/view/output2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2749,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-07T05:32:14Z",
+      "side": 1,
+      "message": "All changes in this file require careful code reading.",
+      "revId": "83017d884d58a2fe0ccaf23271ab3e232118ec79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
