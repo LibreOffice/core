@@ -145,7 +145,7 @@ void ParagraphList::Remove( sal_Int32 nPara )
 
 void ParagraphList::MoveParagraphs( sal_Int32 nStart, sal_Int32 nDest, sal_Int32 _nCount )
 {
-    OSL_ASSERT(static_cast<size_t>(nStart) < maEntries.size() && static_cast<size_t>(nDest) < maEntries.size());
+    assert(static_cast<size_t>(nStart) < maEntries.size() && static_cast<size_t>(nDest) < maEntries.size());
 
     if ( (( nDest < nStart ) || ( nDest >= ( nStart + _nCount ) )) && nStart >= 0 && nDest >= 0 && _nCount >= 0 )
     {
