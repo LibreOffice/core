@@ -44,7 +44,7 @@ namespace {
 template< typename Type >
 inline void lclRotateLeft( Type& rnValue, int nBits )
 {
-    OSL_ASSERT(
+    assert(
         nBits >= 0 &&
         sal::static_int_cast< unsigned int >(nBits) < sizeof( Type ) * 8 );
     rnValue = static_cast< Type >( (rnValue << nBits) | (rnValue >> (sizeof( Type ) * 8 - nBits)) );
@@ -54,7 +54,7 @@ inline void lclRotateLeft( Type& rnValue, int nBits )
 template< typename Type >
 inline void lclRotateLeft( Type& rnValue, sal_uInt8 nBits, sal_uInt8 nWidth )
 {
-    OSL_ASSERT( (nBits < nWidth) && (nWidth < sizeof( Type ) * 8) );
+    assert( (nBits < nWidth) && (nWidth < sizeof( Type ) * 8) );
     Type nMask = static_cast< Type >( (1UL << nWidth) - 1 );
     rnValue = static_cast< Type >(
         ((rnValue << nBits) | ((rnValue & nMask) >> (nWidth - nBits))) & nMask );

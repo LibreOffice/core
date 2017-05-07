@@ -296,7 +296,7 @@ namespace XSLT
                 else if ( aName == "InteractionHandler" )
                     value >>= xInterActionHandler;
             }
-        OSL_ASSERT(xInputStream.is());
+        assert(xInputStream.is());
         if (!xInputStream.is())
             return false;
 
@@ -320,9 +320,9 @@ namespace XSLT
 
         m_tcontrol = impl_createTransformer(msUserData[1], args);
 
-        OSL_ASSERT(xHandler.is());
-        OSL_ASSERT(xInputStream.is());
-        OSL_ASSERT(m_tcontrol.is());
+        assert(xHandler.is());
+        assert(xInputStream.is());
+        assert(m_tcontrol.is());
         if (xHandler.is() && xInputStream.is() && m_tcontrol.is())
             {
                 try
@@ -473,8 +473,8 @@ namespace XSLT
 
         m_tcontrol = impl_createTransformer(msUserData[1], args);
 
-        OSL_ASSERT(m_rOutputStream.is());
-        OSL_ASSERT(m_tcontrol.is());
+        assert(m_rOutputStream.is());
+        assert(m_tcontrol.is());
         if (m_tcontrol.is() && m_rOutputStream.is())
             {
                 // we want to be notfied when the processing is done...

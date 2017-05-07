@@ -450,7 +450,7 @@ bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& aDes
 
     if (!xOutputStream.is() )
     {
-        OSL_ASSERT ( false );
+        assert ( false );
         return false;
     }
 

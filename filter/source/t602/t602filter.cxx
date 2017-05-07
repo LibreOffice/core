@@ -258,7 +258,7 @@ bool SAL_CALL T602ImportFilter::importImpl( const Sequence< css::beans::Property
 
     if ( !mxInputStream.is() )
     {
-        OSL_ASSERT( false );
+        assert( false );
         return false;
     }
 

@@ -1731,7 +1731,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
             // write out link to graphic
             else
             {
-                OSL_ASSERT(aGraphicUrl.getLength());
+                assert(aGraphicUrl.getLength());
 
                 AddOpt( ESCHER_Prop_pibName, aGraphicUrl );
                 sal_uInt32  nPibFlags=0;
@@ -2075,7 +2075,7 @@ sal_Int32 lcl_GetAdjustValueCount( const XPolygon& rPoly )
 sal_Int32 lcl_GetConnectorAdjustValue ( const XPolygon& rPoly, sal_uInt16 nIndex )
 {
     sal_uInt16 k =  rPoly.GetSize();
-    OSL_ASSERT ( k >= ( 3 + nIndex ) );
+    assert ( k >= ( 3 + nIndex ) );
 
     Point aPt;
     Point aStart = rPoly[0];
@@ -2355,7 +2355,7 @@ sal_Int32 EscherPropertyContainer::GetValueForEnhancedCustomShapeParameter( cons
         case css::drawing::EnhancedCustomShapeParameterType::EQUATION :
         {
             size_t nIndex = (size_t) nValue;
-            OSL_ASSERT(nIndex < rEquationOrder.size());
+            assert(nIndex < rEquationOrder.size());
             if ( nIndex < rEquationOrder.size() )
             {
                 nValue = (sal_uInt16)rEquationOrder[ nIndex ];

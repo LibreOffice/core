@@ -160,7 +160,7 @@ bool FlashExporter::exportAll( const Reference< XComponent >& xDoc, Reference< X
     }
     catch( const Exception& )
     {
-        OSL_ASSERT( false );
+        assert( false );
         return false; // no writer, no cookies
     }
 
@@ -289,7 +289,7 @@ bool FlashExporter::exportSlides( const Reference< XDrawPage >& xDrawPage, Refer
     }
     catch( const Exception& )
     {
-        OSL_ASSERT( false );
+        assert( false );
     }
 
     exportDrawPageContents(xDrawPage, true, false);
@@ -631,7 +631,7 @@ void FlashExporter::exportShape( const Reference< XShape >& xShape, bool bMaster
     }
     catch( const Exception& )
     {
-        OSL_ASSERT(false);
+        assert(false);
     }
 }
 

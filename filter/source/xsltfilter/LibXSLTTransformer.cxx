@@ -268,10 +268,10 @@ namespace XSLT
     void
     Reader::execute()
     {
-        OSL_ASSERT(m_transformer != nullptr);
-        OSL_ASSERT(m_transformer->getInputStream().is());
-        OSL_ASSERT(m_transformer->getOutputStream().is());
-        OSL_ASSERT(!m_transformer->getStyleSheetURL().isEmpty());
+        assert(m_transformer != nullptr);
+        assert(m_transformer->getInputStream().is());
+        assert(m_transformer->getOutputStream().is());
+        assert(!m_transformer->getStyleSheetURL().isEmpty());
         ::std::map<const char*, OString>::iterator pit;
         ::std::map<const char*, OString> pmap = m_transformer->getParameters();
         ::std::vector< const char* > params( pmap.size() * 2 + 1 ); // build parameters
