@@ -33,6 +33,7 @@
 #include "sft.hxx"
 #include "sallayout.hxx"
 #include "CommonSalLayout.hxx"
+#include "win/ScopedHDC.hxx"
 
 #include <cstdio>
 #include <cstdlib>
@@ -77,17 +78,17 @@ bool WinFontInstance::CacheGlyphToAtlas(bool bRealGlyphIndices, HDC hDC, HFONT h
     std::vector<uint32_t> aCodePointsOrGlyphIndices(1);
     aCodePointsOrGlyphIndices[0] = nGlyphIndex;
 
-    HDC hNewDC = CreateCompatibleDC(hDC);
-    if (hNewDC == nullptr)
+    ScopedHDC aHDC(CreateCompatibleDC(hDC));
+
+    if (!aHDC)
     {
         SAL_WARN("vcl.gdi", "CreateCompatibleDC failed: " << WindowsErrorString(GetLastError()));
         return false;
     }
-    HFONT hOrigFont = static_cast<HFONT>(SelectObject(hNewDC, hFont));
+    HFONT hOrigFont = static_cast<HFONT>(SelectObject(aHDC.get(), hFont));
     if (hOrigFont == nullptr)
     {
         SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
-        DeleteDC(hNewDC);
         return false;
     }
 
@@ -96,10 +97,9 @@ bool WinFontInstance::CacheGlyphToAtlas(bool bRealGlyphIndices, HDC hDC, HFONT h
     if (!pTxt)
         return false;
 
-    if (!pTxt->BindFont(hNewDC))
+    if (!pTxt->BindFont(aHDC.get()))
     {
         SAL_WARN("vcl.gdi", "Binding of font failed. The font might not be supported by Direct Write.");
-        DeleteDC(hNewDC);
         return false;
     }
 
