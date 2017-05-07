@@ -168,14 +168,14 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
         for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
         {
             Reference< chart2::XCoordinateSystem > xCooSys( aCooSysSeq[i] );
-            OSL_ASSERT( xCooSys.is());
+            assert( xCooSys.is());
             for( sal_Int32 nN = xCooSys->getDimension(); nN--; )
             {
                 const sal_Int32 nMaxAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nN);
                 for(sal_Int32 nI=0; nI<=nMaxAxisIndex; ++nI)
                 {
                     Reference< chart2::XAxis > xAxis = xCooSys->getAxisByDimension( nN, nI );
-                    OSL_ASSERT( xAxis.is());
+                    assert( xAxis.is());
                     if( xAxis.is())
                     {
                         chart2::ScaleData aScaleData = xAxis->getScaleData();
@@ -353,7 +353,7 @@ void lcl_fillCategoriesIntoStringVector(
     const Reference< chart2::data::XDataSequence > & xCategories,
     ::std::vector< OUString > & rOutCategories )
 {
-    OSL_ASSERT( xCategories.is());
+    assert( xCategories.is());
     if( !xCategories.is())
         return;
     Reference< chart2::data::XTextualDataSequence > xTextualDataSequence( xCategories, uno::UNO_QUERY );
@@ -661,7 +661,7 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
 void ChartExport::ExportContent()
 {
     Reference< chart2::XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
-    OSL_ASSERT( xChartDoc.is() );
+    assert( xChartDoc.is() );
     if( !xChartDoc.is() )
         return;
     InitRangeSegmentationProperties( xChartDoc );
