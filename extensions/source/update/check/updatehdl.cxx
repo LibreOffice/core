@@ -1040,7 +1040,7 @@ void UpdateHandler::createDialog()
 {
     if ( !mxContext.is() )
     {
-        OSL_ASSERT( false );
+        assert( false );
         return;
     }
 

@@ -163,7 +163,7 @@ bool equalSequences(const Any& orig, const Any& returned)
 {
     if (orig.getValueTypeClass() != TypeClass_SEQUENCE)
     {
-        OSL_ASSERT(0);
+        assert(0);
         return false;
     }
     TypeDescription td(orig.getValueTypeRef());

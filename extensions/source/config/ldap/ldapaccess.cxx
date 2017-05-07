@@ -170,7 +170,7 @@ void LdapConnection::initConnection()
  void LdapConnection::getUserProfile(
      const OUString& aUser, LdapData * data)
 {
-    OSL_ASSERT(data != nullptr);
+    assert(data != nullptr);
     if (!isValid()) { connectSimple(); }
 
     OUString aUserDn =findUserDn( aUser );

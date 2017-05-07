@@ -25,7 +25,7 @@
 bool createUnoTypeWrapper(BSTR sTypeName, VARIANT * pVar)
 {
     bool ret = false;
-    OSL_ASSERT(sTypeName && pVar);
+    assert(sTypeName && pVar);
     CComObject< UnoTypeWrapper>* pObj;
     VariantClear(pVar);
     if( SUCCEEDED( CComObject<UnoTypeWrapper>::CreateInstance( &pObj)))
@@ -35,7 +35,7 @@ bool createUnoTypeWrapper(BSTR sTypeName, VARIANT * pVar)
         pVar->pdispVal= CComQIPtr<IDispatch>(pObj->GetUnknown());
         //now set the value, e.i. the name of the type
         CComQIPtr<IUnoTypeWrapper> spType(pVar->pdispVal);
-        OSL_ASSERT(spType);
+        assert(spType);
         if (SUCCEEDED(spType->put_Name(sTypeName)))
         {
             ret = true;
