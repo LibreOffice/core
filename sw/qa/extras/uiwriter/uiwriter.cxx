@@ -84,6 +84,7 @@
 #include "com/sun/star/text/TextMarkupType.hpp"
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
+#include <o3tl/make_unique.hxx>
 #include <osl/file.hxx>
 #include <paratr.hxx>
 #include <drawfont.hxx>
@@ -352,7 +353,7 @@ public:
 
 private:
     SwDoc* createDoc(const char* pName = nullptr);
-    SwTextBlocks* readDOCXAutotext(const OUString& sFileName, bool bEmpty = false);
+    std::unique_ptr<SwTextBlocks> readDOCXAutotext(const OUString& sFileName, bool bEmpty = false);
 };
 
 SwDoc* SwUiWriterTest::createDoc(const char* pName)
@@ -367,16 +368,16 @@ SwDoc* SwUiWriterTest::createDoc(const char* pName)
     return pTextDoc->GetDocShell()->GetDoc();
 }
 
-SwTextBlocks* SwUiWriterTest::readDOCXAutotext(const OUString& sFileName, bool bEmpty)
+std::unique_ptr<SwTextBlocks> SwUiWriterTest::readDOCXAutotext(const OUString& sFileName, bool bEmpty)
 {
     OUString rURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + sFileName;
 
-    SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ);
+    SfxMedium aSrcMed(rURL, StreamMode::STD_READ);
     SwDoc* pDoc = createDoc();
 
-    SwReader aReader(*pSrcMed, rURL, pDoc);
+    SwReader aReader(aSrcMed, rURL, pDoc);
     Reader* pDOCXReader = SwReaderWriter::GetDOCXReader();
-    SwTextBlocks* pGlossary = new SwTextBlocks(rURL);
+    auto pGlossary = o3tl::make_unique<SwTextBlocks>(rURL);
 
     CPPUNIT_ASSERT(pDOCXReader != nullptr);
     CPPUNIT_ASSERT_EQUAL(!bEmpty, aReader.ReadGlossaries(*pDOCXReader, *pGlossary, false));
@@ -748,14 +749,14 @@ void SwUiWriterTest::testExportRTF()
 void SwUiWriterTest::testDOCXAutoTextEmpty()
 {
     // file contains normal content but no AutoText
-    SwTextBlocks* pGlossary = readDOCXAutotext("autotext-empty.dotx", true);
+    std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext("autotext-empty.dotx", true);
     CPPUNIT_ASSERT(pGlossary != nullptr);
 }
 
 void SwUiWriterTest::testDOCXAutoTextMultiple()
 {
     // file contains three AutoText entries
-    SwTextBlocks* pGlossary = readDOCXAutotext("autotext-multiple.dotx");
+    std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext("autotext-multiple.dotx");
 
     // check entries count
     CPPUNIT_ASSERT_EQUAL((sal_uInt16)3, pGlossary->GetCount());
@@ -788,7 +789,7 @@ void SwUiWriterTest::testDOTMAutoText()
 {
     // this is dotm file difference is that in the dotm
     // there are no empty paragraphs at the end of each entry
-    SwTextBlocks* pGlossary = readDOCXAutotext("autotext-dotm.dotm");
+    std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext("autotext-dotm.dotm");
 
     SwDoc* pDoc = pGlossary->GetDoc();
     CPPUNIT_ASSERT(pDoc != nullptr);
