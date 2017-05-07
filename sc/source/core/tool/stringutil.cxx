@@ -366,13 +366,13 @@ sal_Int32 ScStringUtil::GetQuotedTokenCount(const OUString &rIn, const OUString&
         sal_Unicode c = *pStr;
         if ( cQuotedEndChar )
         {
-            // reached end of the quote ?
+            // reached end of the quote?
             if ( c == cQuotedEndChar )
                 cQuotedEndChar = 0;
         }
         else
         {
-            // Is the char a quote-beginn char ?
+            // Is the char a quote-begin char?
             sal_Int32 nQuoteIndex = 0;
             while ( nQuoteIndex < nQuotedLen )
             {

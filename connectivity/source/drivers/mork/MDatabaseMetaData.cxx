@@ -116,7 +116,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
             const OColumnAlias& colNames = m_pConnection->getColumnAlias();
 
             SAL_INFO("connectivity.mork", "\tTableName = : " << table);
-            // Iterate over all collumns in the table.
+            // Iterate over all columns in the table.
             for (   OColumnAlias::AliasMap::const_iterator compare = colNames.begin();
                     compare != colNames.end();
                     ++compare
