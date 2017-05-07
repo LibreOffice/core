@@ -196,7 +196,7 @@ SnakeWipe::SnakeWipe( sal_Int32 nElements, bool diagonal, bool flipOnYAxis )
     ::basegfx::B2DPolyPolygon res;
     if (m_diagonal)
     {
-        OSL_ASSERT( m_opposite );
+        assert( m_opposite );
         ::basegfx::B2DPolyPolygon half(
             calcHalfDiagonalSnake( t, false /* out */ ) );
         // flip on x axis and rotate 90 degrees:

@@ -119,10 +119,10 @@ bool BaseContainerNode::isChildNode( AnimationNodeSharedPtr const& pNode ) const
 bool BaseContainerNode::notifyDeactivatedChild(
     AnimationNodeSharedPtr const& pChildNode )
 {
-    OSL_ASSERT( pChildNode->getState() == FROZEN ||
+    assert( pChildNode->getState() == FROZEN ||
                 pChildNode->getState() == ENDED );
     // early exit on invalid nodes
-    OSL_ASSERT( getState() != INVALID );
+    assert( getState() != INVALID );
     if( getState() == INVALID )
         return false;
 
@@ -132,7 +132,7 @@ bool BaseContainerNode::notifyDeactivatedChild(
     }
 
     std::size_t const nSize = maChildren.size();
-    OSL_ASSERT( mnFinishedChildren < nSize );
+    assert( mnFinishedChildren < nSize );
     ++mnFinishedChildren;
     bool bFinished = (mnFinishedChildren >= nSize);
 

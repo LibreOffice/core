@@ -525,7 +525,7 @@ namespace slideshow
 
             if( pShape->hasIntrinsicAnimation() )
             {
-                OSL_ASSERT( pShape->maAnimationFrames.empty() );
+                assert( pShape->maAnimationFrames.empty() );
                 if( pShape->getNumberOfTreeNodes(
                         DocTreeNode::NodeType::LogicalParagraph) > 0 )
                 {
@@ -557,7 +557,7 @@ namespace slideshow
 
             if( pShape->hasIntrinsicAnimation() )
             {
-                OSL_ASSERT( !pShape->maAnimationFrames.empty() );
+                assert( !pShape->maAnimationFrames.empty() );
 
                 std::vector<double> aTimeout;
                 std::transform(
@@ -900,7 +900,7 @@ namespace slideshow
                 maHyperlinkIndices.pop_back();
                 maHyperlinkRegions.pop_back();
             }
-            OSL_ASSERT( maHyperlinkIndices.size() == maHyperlinkRegions.size());
+            assert( maHyperlinkIndices.size() == maHyperlinkRegions.size());
         }
 
         bool DrawShape::hasHyperlinks() const
@@ -910,7 +910,7 @@ namespace slideshow
 
         HyperlinkArea::HyperlinkRegions DrawShape::getHyperlinkRegions() const
         {
-            OSL_ASSERT( !maViewShapes.empty() );
+            assert( !maViewShapes.empty() );
 
             if( !isVisible() )
                 return HyperlinkArea::HyperlinkRegions();
@@ -934,7 +934,7 @@ namespace slideshow
                     pViewShape->getRenderer(
                         pCanvas, mpCurrMtf, mpAttributeLayer ) );
 
-                OSL_ASSERT( pRenderer );
+                assert( pRenderer );
 
                 if (pRenderer)
                 {

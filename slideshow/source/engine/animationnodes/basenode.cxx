@@ -301,7 +301,7 @@ public:
 
     void clear() {
         if (meToState != INVALID) {
-            OSL_ASSERT( (mpNode->meCurrentStateTransition & meToState) != 0 );
+            assert( (mpNode->meCurrentStateTransition & meToState) != 0 );
             mpNode->meCurrentStateTransition &= ~meToState;
             meToState = INVALID;
         }
@@ -432,7 +432,7 @@ bool BaseNode::resolve()
     if (! checkValidNode())
         return false;
 
-    OSL_ASSERT( meCurrState != RESOLVED );
+    assert( meCurrState != RESOLVED );
     if (inStateOrTransition( RESOLVED ))
         return true;
 
@@ -495,7 +495,7 @@ void BaseNode::activate()
     if (! checkValidNode())
         return;
 
-    OSL_ASSERT( meCurrState != ACTIVE );
+    assert( meCurrState != ACTIVE );
     if (inStateOrTransition( ACTIVE ))
         return;
 
@@ -551,7 +551,7 @@ void BaseNode::deactivate()
     if (inStateOrTransition( ENDED | FROZEN ) || !checkValidNode())
         return;
 
-    if (isTransition( meCurrState, FROZEN, false /* no OSL_ASSERT */ )) {
+    if (isTransition( meCurrState, FROZEN, false /* no assert */ )) {
         // do transition to FROZEN:
         StateTransition st(this);
         if (st.enter( FROZEN, StateTransition::FORCE )) {
@@ -612,7 +612,7 @@ void BaseNode::end()
 void BaseNode::notifyDeactivating( const AnimationNodeSharedPtr& rNotifier )
 {
     (void) rNotifier; // avoid warning
-    OSL_ASSERT( rNotifier->getState() == FROZEN ||
+    assert( rNotifier->getState() == FROZEN ||
                 rNotifier->getState() == ENDED );
     // TODO(F1): for end sync functionality, this might indeed be used some day
 }

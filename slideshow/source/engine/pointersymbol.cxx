@@ -155,7 +155,7 @@ void PointerSymbol::viewChanged( const UnoViewSharedPtr& rView )
             ( const ViewsVecT::value_type& cp )
             { return rView == cp.first; } ) );
 
-    OSL_ASSERT( aModifiedEntry != maViews.end() );
+    assert( aModifiedEntry != maViews.end() );
     if( aModifiedEntry == maViews.end() )
         return;
 

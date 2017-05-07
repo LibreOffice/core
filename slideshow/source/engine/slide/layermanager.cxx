@@ -134,13 +134,13 @@ namespace slideshow
             mbActive = false;
 
             // only background layer left
-            OSL_ASSERT( maLayers.size() == 1 && maLayers.front()->isBackgroundLayer() );
+            assert( maLayers.size() == 1 && maLayers.front()->isBackgroundLayer() );
         }
 
         void LayerManager::viewAdded( const UnoViewSharedPtr& rView )
         {
             // view must be member of mrViews container
-            OSL_ASSERT( std::find(mrViews.begin(),
+            assert( std::find(mrViews.begin(),
                                   mrViews.end(),
                                   rView) != mrViews.end() );
 
@@ -164,7 +164,7 @@ namespace slideshow
         void LayerManager::viewRemoved( const UnoViewSharedPtr& rView )
         {
             // view must not be member of mrViews container anymore
-            OSL_ASSERT( std::find(mrViews.begin(),
+            assert( std::find(mrViews.begin(),
                                   mrViews.end(),
                                   rView) == mrViews.end() );
 
@@ -186,7 +186,7 @@ namespace slideshow
             (void)rView;
 
             // view must be member of mrViews container
-            OSL_ASSERT( std::find(mrViews.begin(),
+            assert( std::find(mrViews.begin(),
                                   mrViews.end(),
                                   rView) != mrViews.end() );
 
@@ -212,7 +212,7 @@ namespace slideshow
 
         void LayerManager::addShape( const ShapeSharedPtr& rShape )
         {
-            OSL_ASSERT( !maLayers.empty() ); // always at least background layer
+            assert( !maLayers.empty() ); // always at least background layer
             ENSURE_OR_THROW( rShape, "LayerManager::addShape(): invalid Shape" );
 
             // add shape to XShape hash map
@@ -237,12 +237,12 @@ namespace slideshow
 
         void LayerManager::implAddShape( const ShapeSharedPtr& rShape )
         {
-            OSL_ASSERT( !maLayers.empty() ); // always at least background layer
+            assert( !maLayers.empty() ); // always at least background layer
             ENSURE_OR_THROW( rShape, "LayerManager::implAddShape(): invalid Shape" );
 
             LayerShapeMap::value_type aValue (rShape, LayerWeakPtr());
 
-            OSL_ASSERT( maAllShapes.find(rShape) == maAllShapes.end() ); // shape must not be added already
+            assert( maAllShapes.find(rShape) == maAllShapes.end() ); // shape must not be added already
             mbLayerAssociationDirty = true;
 
             if( mbDisableAnimationZOrder )
@@ -258,7 +258,7 @@ namespace slideshow
 
         void LayerManager::implRemoveShape( const ShapeSharedPtr& rShape )
         {
-            OSL_ASSERT( !maLayers.empty() ); // always at least background layer
+            assert( !maLayers.empty() ); // always at least background layer
             ENSURE_OR_THROW( rShape, "LayerManager::implRemoveShape(): invalid Shape" );
 
             const LayerShapeMap::iterator aShapeEntry( maAllShapes.find(rShape) );
@@ -307,7 +307,7 @@ namespace slideshow
         AttributableShapeSharedPtr LayerManager::getSubsetShape( const AttributableShapeSharedPtr&  rOrigShape,
                                                                  const DocTreeNode&                 rTreeNode )
         {
-            OSL_ASSERT( !maLayers.empty() ); // always at least background layer
+            assert( !maLayers.empty() ); // always at least background layer
 
             AttributableShapeSharedPtr pSubset;
 
@@ -338,11 +338,11 @@ namespace slideshow
         void LayerManager::revokeSubset( const AttributableShapeSharedPtr& rOrigShape,
                                          const AttributableShapeSharedPtr& rSubsetShape )
         {
-            OSL_ASSERT( !maLayers.empty() ); // always at least background layer
+            assert( !maLayers.empty() ); // always at least background layer
 
             if( rOrigShape->revokeSubset( rSubsetShape ) )
             {
-                OSL_ASSERT( maAllShapes.find(rSubsetShape) != maAllShapes.end() );
+                assert( maAllShapes.find(rSubsetShape) != maAllShapes.end() );
 
                 implRemoveShape( rSubsetShape );
 
@@ -355,7 +355,7 @@ namespace slideshow
 
         void LayerManager::enterAnimationMode( const AnimatableShapeSharedPtr& rShape )
         {
-            OSL_ASSERT( !maLayers.empty() ); // always at least background layer
+            assert( !maLayers.empty() ); // always at least background layer
             ENSURE_OR_THROW( rShape, "LayerManager::enterAnimationMode(): invalid Shape" );
 
             const bool bPrevAnimState( rShape->isBackgroundDetached() );
@@ -638,7 +638,7 @@ namespace slideshow
 
         void LayerManager::addUpdateArea( ShapeSharedPtr const& rShape )
         {
-            OSL_ASSERT( !maLayers.empty() ); // always at least background layer
+            assert( !maLayers.empty() ); // always at least background layer
             ENSURE_OR_THROW( rShape, "LayerManager::addUpdateArea(): invalid Shape" );
 
             const LayerShapeMap::const_iterator aShapeEntry( maAllShapes.find(rShape) );
@@ -682,7 +682,7 @@ namespace slideshow
 
         LayerSharedPtr LayerManager::createForegroundLayer() const
         {
-            OSL_ASSERT( mbActive );
+            assert( mbActive );
 
             LayerSharedPtr pLayer( Layer::createLayer() );
 
@@ -696,8 +696,8 @@ namespace slideshow
 
         void LayerManager::updateShapeLayers( bool bBackgroundLayerPainted )
         {
-            OSL_ASSERT( !maLayers.empty() ); // always at least background layer
-            OSL_ASSERT( mbActive );
+            assert( !maLayers.empty() ); // always at least background layer
+            assert( mbActive );
 
             // do we need to process shapes?
             if( !mbLayerAssociationDirty )
@@ -762,7 +762,7 @@ namespace slideshow
                     }
                 }
 
-                OSL_ASSERT( maLayers.size() == aWeakLayers.size() );
+                assert( maLayers.size() == aWeakLayers.size() );
 
                 // note: using indices here, since vector::insert
                 // above invalidates iterators

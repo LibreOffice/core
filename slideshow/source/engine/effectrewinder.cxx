@@ -164,7 +164,7 @@ bool EffectRewinder::rewind (
     // Do not allow nested rewinds.
     if (mpAsynchronousRewindEvent)
     {
-        OSL_ASSERT( ! mpAsynchronousRewindEvent);
+        assert( ! mpAsynchronousRewindEvent);
         return false;
     }
 
@@ -177,7 +177,7 @@ bool EffectRewinder::rewind (
     {
         if ( ! rPreviousSlideFunctor)
         {
-            OSL_ASSERT(rPreviousSlideFunctor);
+            assert(rPreviousSlideFunctor);
             return false;
         }
 
@@ -216,7 +216,7 @@ void EffectRewinder::skipAllMainSequenceEffects()
     // Do not allow nested rewinds.
     if (mpAsynchronousRewindEvent)
     {
-        OSL_ASSERT(!mpAsynchronousRewindEvent);
+        assert(!mpAsynchronousRewindEvent);
         return;
     }
 
@@ -330,7 +330,7 @@ void EffectRewinder::asynchronousRewind (
     const bool bRedisplayCurrentSlide,
     const std::function<void ()>& rSlideRewindFunctor)
 {
-    OSL_ASSERT(mpAsynchronousRewindEvent);
+    assert(mpAsynchronousRewindEvent);
 
     if (bRedisplayCurrentSlide)
     {
@@ -372,7 +372,7 @@ void EffectRewinder::asynchronousRewind (
 void EffectRewinder::asynchronousRewindToPreviousSlide (
     const ::std::function<void ()>& rSlideRewindFunctor)
 {
-    OSL_ASSERT(mpAsynchronousRewindEvent);
+    assert(mpAsynchronousRewindEvent);
 
     mpAsynchronousRewindEvent.reset();
     rSlideRewindFunctor();

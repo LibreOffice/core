@@ -411,7 +411,7 @@ void EventMultiplexerImpl::forEachView( XSlideShowViewFunc pViewMethod )
             }
             else
             {
-                OSL_ASSERT(xView.is());
+                assert(xView.is());
             }
         }
     }
