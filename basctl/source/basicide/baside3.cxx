@@ -891,7 +891,7 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
                 {}
             }
             bool bValidName = !aXmlDlgName.isEmpty();
-            OSL_ASSERT( bValidName );
+            assert( bValidName );
             if( !bValidName )
                 return bDone;
 
@@ -934,7 +934,7 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
             Shell* pShell = GetShell();
             if (!pShell)
             {
-                OSL_ASSERT(pShell);
+                assert(pShell);
                 return bDone;
             }
 
