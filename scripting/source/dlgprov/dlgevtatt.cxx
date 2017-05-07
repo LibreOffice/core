@@ -470,7 +470,7 @@ namespace dlgprov
             }
             else
             {
-                OSL_ASSERT( m_xContext.is() );
+                assert( m_xContext.is() );
                 if ( m_xContext.is() )
                 {
                     Reference< provider::XScriptProviderFactory > xFactory =
