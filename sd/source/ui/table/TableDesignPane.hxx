@@ -43,13 +43,16 @@ class EventMultiplexerEvent;
 
 class ViewShellBase;
 
-#define CB_HEADER_ROW       0
-#define CB_TOTAL_ROW        1
-#define CB_BANDED_ROWS      2
-#define CB_FIRST_COLUMN     3
-#define CB_LAST_COLUMN      4
-#define CB_BANDED_COLUMNS   5
-#define CB_COUNT CB_BANDED_COLUMNS-CB_HEADER_ROW+1
+enum TableCheckBox : sal_uInt16
+{
+    CB_HEADER_ROW       = 0,
+    CB_TOTAL_ROW        = 1,
+    CB_BANDED_ROWS      = 2,
+    CB_FIRST_COLUMN     = 3,
+    CB_LAST_COLUMN      = 4,
+    CB_BANDED_COLUMNS   = 5,
+    CB_COUNT            = CB_BANDED_COLUMNS + 1
+};
 
 class TableValueSet : public ValueSet
 {

@@ -77,7 +77,7 @@ static const sal_Int32 nCellHeight = 7; // one pixel is shared with the next cel
 static const sal_Int32 nBitmapWidth = (nCellWidth * nPreviewColumns) - (nPreviewColumns - 1);
 static const sal_Int32 nBitmapHeight = (nCellHeight * nPreviewRows) - (nPreviewRows - 1);
 
-static const OUStringLiteral gPropNames[ CB_COUNT ] =
+static const OUStringLiteral gPropNames[CB_COUNT] =
 {
     "UseFirstRowStyle",
     "UseLastRowStyle",
