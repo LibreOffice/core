@@ -30,7 +30,6 @@
 #include <editeng/unolingu.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/misspellrange.hxx>
-#include <editeng/langitem.hxx>
 #include <svx/svdetc.hxx>
 #include <editeng/editobj.hxx>
 #include <sfx2/dispatch.hxx>
