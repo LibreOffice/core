@@ -128,17 +128,11 @@ OUString SAL_CALL AccessibleGridControlHeader::getAccessibleColumnDescription( s
 
 Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibleRowHeaders()
 {
-    SolarMutexGuard g;
-
-    ensureIsAlive();
     return nullptr;        // no headers in headers
 }
 
 Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibleColumnHeaders()
 {
-    SolarMutexGuard g;
-
-    ensureIsAlive();
     return nullptr;        // no headers in headers
 }
 //not selectable

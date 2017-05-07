@@ -632,8 +632,6 @@ namespace accessibility
 
     sal_Int32 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleActionCount(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         // three actions supported
         return ACCESSIBLE_ACTION_COUNT;
     }

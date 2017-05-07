@@ -101,13 +101,11 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleColumnExtentAt(
 
 Reference< XAccessible > SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleCaption()
 {
-    ensureIsAlive();
     return nullptr;    // not supported
 }
 
 Reference< XAccessible > SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleSummary()
 {
-    ensureIsAlive();
     return nullptr;    // not supported
 }
 

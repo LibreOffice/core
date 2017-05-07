@@ -284,9 +284,6 @@ AccessibleGridControlTable::getSelectedAccessibleChild( sal_Int32 nSelectedChild
 void SAL_CALL AccessibleGridControlTable::deselectAccessibleChild(
         sal_Int32 nSelectedChildIndex )
 {
-    SolarMutexGuard aSolarGuard;
-
-    ensureIsAlive();
     (void)nSelectedChildIndex;
 }
 // XInterface -----------------------------------------------------------------

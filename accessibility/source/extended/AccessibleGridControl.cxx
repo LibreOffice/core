@@ -157,9 +157,6 @@ AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
 
 sal_Int16 SAL_CALL AccessibleGridControl::getAccessibleRole()
 {
-    SolarMutexGuard g;
-
-    ensureIsAlive();
     return AccessibleRole::PANEL;
 }
 

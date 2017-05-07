@@ -114,17 +114,11 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleColumnExtentAt(
 
 Reference< XAccessible > SAL_CALL AccessibleGridControlTableBase::getAccessibleCaption()
 {
-    SolarMutexGuard g;
-
-    ensureIsAlive();
     return nullptr;    // not supported
 }
 
 Reference< XAccessible > SAL_CALL AccessibleGridControlTableBase::getAccessibleSummary()
 {
-    SolarMutexGuard g;
-
-    ensureIsAlive();
     return nullptr;    // not supported
 }
 

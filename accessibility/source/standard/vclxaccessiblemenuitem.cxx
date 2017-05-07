@@ -194,8 +194,6 @@ sal_Int16 VCLXAccessibleMenuItem::getAccessibleRole(  )
 
 sal_Int32 VCLXAccessibleMenuItem::getCaretPosition()
 {
-    OExternalLockGuard aGuard( this );
-
     return -1;
 }
 
@@ -399,8 +397,6 @@ sal_Bool VCLXAccessibleMenuItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEnd
 
 sal_Int32 VCLXAccessibleMenuItem::getAccessibleActionCount( )
 {
-    OExternalLockGuard aGuard( this );
-
     return 1;
 }
 
@@ -547,8 +543,6 @@ sal_Bool VCLXAccessibleMenuItem::setCurrentValue( const Any& aNumber )
 
 Any VCLXAccessibleMenuItem::getMaximumValue(  )
 {
-    OExternalLockGuard aGuard( this );
-
     Any aValue;
     aValue <<= (sal_Int32) 1;
 
@@ -558,8 +552,6 @@ Any VCLXAccessibleMenuItem::getMaximumValue(  )
 
 Any VCLXAccessibleMenuItem::getMinimumValue(  )
 {
-    OExternalLockGuard aGuard( this );
-
     Any aValue;
     aValue <<= (sal_Int32) 0;
 
