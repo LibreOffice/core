@@ -268,7 +268,7 @@ SvTreeListEntry* getReferenceEntry(SvTreeListBox& rTree, SvTreeListEntry* pCurEn
     while (pParent)
     {
         ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);
-        OSL_ASSERT(pUserData);
+        assert(pUserData);
         if (pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat)
         {
             // This is a repeat element.
@@ -304,7 +304,7 @@ void ScXMLSourceDlg::TreeItemSelected()
     mpCurRefEntry = getReferenceEntry(*mpLbTree, pEntry);
 
     ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*mpCurRefEntry);
-    OSL_ASSERT(pUserData);
+    assert(pUserData);
 
     const ScAddress& rPos = pUserData->maLinkedPos;
     if (rPos.IsValid())
@@ -341,7 +341,7 @@ void ScXMLSourceDlg::DefaultElementSelected(SvTreeListEntry& rEntry)
         for (SvTreeListEntry* pChild = mpLbTree->FirstChild(&rEntry); pChild; pChild = SvTreeListBox::NextSibling(pChild))
         {
             ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
-            OSL_ASSERT(pUserData);
+            assert(pUserData);
             if (pUserData->meType != ScOrcusXMLTreeParam::Attribute)
             {
                 // This child is not an attribute. Bail out.
@@ -410,10 +410,10 @@ void ScXMLSourceDlg::AttributeSelected(SvTreeListEntry& rEntry)
     // parent element linked (but not range-linked).
 
     SvTreeListEntry* pParent = mpLbTree->GetParent(&rEntry);
-    OSL_ASSERT(pParent); // attribute should have a parent element.
+    assert(pParent); // attribute should have a parent element.
 
     ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);
-    OSL_ASSERT(pUserData);
+    assert(pUserData);
     if (pUserData->maLinkedPos.IsValid() && pUserData->mbRangeParent)
     {
         // Parent element is range-linked.  Bail out.
@@ -486,7 +486,7 @@ bool ScXMLSourceDlg::IsChildrenDirty(SvTreeListEntry* pEntry) const
     for (SvTreeListEntry* pChild = mpLbTree->FirstChild(pEntry); pChild; pChild = SvTreeListBox::NextSibling(pChild))
     {
         ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
-        OSL_ASSERT(pUserData);
+        assert(pUserData);
         if (pUserData->maLinkedPos.IsValid())
             // Already linked.
             return true;

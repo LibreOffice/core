@@ -3314,7 +3314,7 @@ void ScCellRangesBase::ForceChartListener_Impl()
     for (auto const& it : rListeners)
     {
         ScChartListener *const p = it.second.get();
-        OSL_ASSERT(p);
+        assert(p);
         if (p->GetUnoSource() == static_cast<chart::XChartData*>(this) && p->IsDirty())
             p->Update();
     }

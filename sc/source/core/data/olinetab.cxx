@@ -912,7 +912,7 @@ void ScSubOutlineIterator::DeleteLast()
 
     --nSubEntry;
     ScOutlineCollection& rColl = pArray->aCollections[nSubLevel];
-    OSL_ASSERT(nSubEntry < rColl.size());
+    assert(nSubEntry < rColl.size());
     ScOutlineCollection::iterator it = rColl.begin();
     std::advance(it, nSubEntry);
     rColl.erase(it);

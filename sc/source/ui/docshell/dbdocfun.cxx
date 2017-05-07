@@ -1230,7 +1230,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
             return UpdatePivotTable(*pOldObj, bRecord, bApi);
     }
 
-    OSL_ASSERT(pOldObj && pNewObj && pOldObj != pNewObj);
+    assert(pOldObj && pNewObj && pOldObj != pNewObj);
 
     ScDocShellModificator aModificator( rDocShell );
     WaitObject aWait( ScDocShell::GetActiveDialogParent() );

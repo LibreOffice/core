@@ -315,7 +315,7 @@ public:
      */
     ScSortInfo** GetFirstArray() const
     {
-        OSL_ASSERT(pppInfo);
+        assert(pppInfo);
         return pppInfo[0];
     }
 
@@ -324,7 +324,7 @@ public:
      */
     ScSortInfo* Get( sal_uInt16 nSort, SCCOLROW nInd )
     {
-        OSL_ASSERT(pppInfo);
+        assert(pppInfo);
         return (pppInfo[nSort])[ nInd - nStart ];
     }
 
@@ -333,7 +333,7 @@ public:
      */
     void Swap( SCCOLROW nInd1, SCCOLROW nInd2 )
     {
-        OSL_ASSERT(pppInfo);
+        assert(pppInfo);
         SCSIZE n1 = static_cast<SCSIZE>(nInd1 - nStart);
         SCSIZE n2 = static_cast<SCSIZE>(nInd2 - nStart);
         for ( sal_uInt16 nSort = 0; nSort < nUsedSorts; nSort++ )
@@ -2692,7 +2692,7 @@ bool ScTable::ValidQuery(
                 aRes.first = !aCol[rEntry.nField].HasDataAt(nRow);
             else
             {
-                OSL_ASSERT(rEntry.IsQueryByNonEmpty());
+                assert(rEntry.IsQueryByNonEmpty());
                 aRes.first = aCol[rEntry.nField].HasDataAt(nRow);
             }
         }

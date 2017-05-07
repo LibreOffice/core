@@ -383,7 +383,7 @@ bool ScPrintAreasDlg::Impl_CheckRefStrings()
 
         ERRORBOX( STR_INVALID_TABREF );
 
-        OSL_ASSERT(pEd);
+        assert(pEd);
 
         if (pEd)
             pEd->GrabFocus();

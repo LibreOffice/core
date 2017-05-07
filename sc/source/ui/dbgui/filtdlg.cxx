@@ -535,7 +535,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
             else
                 pList = m_EntryLists[nColumn].get();
 
-            OSL_ASSERT(pList);
+            assert(pList);
 
             std::vector<ScTypedStrData>::const_iterator it = pList->maList.begin(), itEnd = pList->maList.end();
             for (; it != itEnd; ++it)

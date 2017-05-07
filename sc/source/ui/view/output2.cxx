@@ -2747,8 +2747,8 @@ void ScOutputData::DrawEditParam::adjustForHyperlinkInPDF(Point aURLStart, Outpu
 
 void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 {
-    OSL_ASSERT(rParam.meOrient == SVX_ORIENTATION_STANDARD);
-    OSL_ASSERT(!rParam.mbAsianVertical);
+    assert(rParam.meOrient == SVX_ORIENTATION_STANDARD);
+    assert(!rParam.mbAsianVertical);
 
     Size aRefOne = mpRefDevice->PixelToLogic(Size(1,1));
 
@@ -3271,7 +3271,7 @@ bool ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
 
 void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 {
-    OSL_ASSERT(rParam.meHorJustAttr != SvxCellHorJustify::Repeat);
+    assert(rParam.meHorJustAttr != SvxCellHorJustify::Repeat);
 
     const bool bRepeat = (rParam.meHorJustAttr == SvxCellHorJustify::Repeat && !rParam.mbBreak);
     const bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
@@ -3532,7 +3532,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
 
 void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
 {
-    OSL_ASSERT(rParam.meHorJustAttr != SvxCellHorJustify::Repeat);
+    assert(rParam.meHorJustAttr != SvxCellHorJustify::Repeat);
 
     const bool bRepeat = (rParam.meHorJustAttr == SvxCellHorJustify::Repeat && !rParam.mbBreak);
     const bool bShrink = !rParam.mbBreak && !bRepeat && lcl_GetBoolValue(*rParam.mpPattern, ATTR_SHRINKTOFIT, rParam.mpCondSet);
@@ -3787,7 +3787,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
 
 void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
 {
-    OSL_ASSERT(rParam.meHorJustAttr != SvxCellHorJustify::Repeat);
+    assert(rParam.meHorJustAttr != SvxCellHorJustify::Repeat);
     Size aRefOne = mpRefDevice->PixelToLogic(Size(1,1));
 
     bool bRepeat = (rParam.meHorJustAttr == SvxCellHorJustify::Repeat && !rParam.mbBreak);
@@ -4131,9 +4131,9 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 {
     // When in asian vertical orientation, the orientation value is STANDARD,
     // and the asian vertical boolean is true.
-    OSL_ASSERT(rParam.meOrient == SVX_ORIENTATION_STANDARD);
-    OSL_ASSERT(rParam.mbAsianVertical);
-    OSL_ASSERT(rParam.meHorJustAttr != SvxCellHorJustify::Repeat);
+    assert(rParam.meOrient == SVX_ORIENTATION_STANDARD);
+    assert(rParam.mbAsianVertical);
+    assert(rParam.meHorJustAttr != SvxCellHorJustify::Repeat);
 
     Size aRefOne = mpRefDevice->PixelToLogic(Size(1,1));
 
