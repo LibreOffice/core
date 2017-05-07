@@ -138,6 +138,7 @@ public:
     GtkToolItem* m_pInsertAnnotation;
     GtkToolItem* m_pDeleteComment;
     GtkToolItem* m_pTrackChanges;
+    GtkWidget* m_pAddressbarEntry;
     GtkWidget* m_pFormulabarEntry;
     GtkWidget* m_pScrolledWindow;
     std::map<GtkToolItem*, std::string> m_aToolItemCommandNames;
@@ -590,6 +591,7 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
         }
         gtk_widget_show(rWindow.m_pColumnBar->m_pDrawingArea);
         gtk_widget_queue_draw(rWindow.m_pColumnBar->m_pDrawingArea);
+        gtk_widget_show(rWindow.m_pAddressbarEntry);
         gtk_widget_show(rWindow.m_pFormulabarEntry);
 
     }
@@ -1402,6 +1404,39 @@ static gboolean signalFindbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer 
     return FALSE;
 }
 
+/// Handles the key-press-event of the address entry widget.
+static gboolean signalAddressbar(GtkWidget* pWidget, GdkEventKey* pEvent, gpointer /*pData*/)
+{
+    TiledWindow& rWindow = lcl_getTiledWindow(pWidget);
+    switch(pEvent->keyval)
+    {
+        case GDK_KEY_Return:
+        {
+            GtkEntry* pEntry = GTK_ENTRY(rWindow.m_pAddressbarEntry);
+            const char* pText = gtk_entry_get_text(pEntry);
+
+            boost::property_tree::ptree aTree;
+            aTree.put(boost::property_tree::ptree::path_type("ToPoint/type", '/'), "string");
+            aTree.put(boost::property_tree::ptree::path_type("ToPoint/value", '/'), pText);
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTree);
+            std::string aArguments = aStream.str();
+
+            lok_doc_view_post_command(LOK_DOC_VIEW(rWindow.m_pDocView), ".uno:GoToCell", aArguments.c_str(), false);
+            gtk_widget_grab_focus(rWindow.m_pDocView);
+            return TRUE;
+        }
+        case GDK_KEY_Escape:
+        {
+            std::string aArguments;
+            lok_doc_view_post_command(LOK_DOC_VIEW(rWindow.m_pDocView), ".uno:Cancel", aArguments.c_str(), false);
+            gtk_widget_grab_focus(rWindow.m_pDocView);
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 /// Handles the key-press-event of the formula entry widget.
 static gboolean signalFormulabar(GtkWidget* /*pWidget*/, GdkEventKey* /*pEvent*/, gpointer /*pData*/)
 {
@@ -1591,6 +1626,13 @@ static void cursorChanged(LOKDocView* pDocView, gint nX, gint nY,
         gtk_adjustment_set_value(vadj, lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(pDocView), y));
     if (x!=-1)
         gtk_adjustment_set_value(hadj, lok_doc_view_twip_to_pixel(LOK_DOC_VIEW(pDocView), x));
+}
+
+/// LOKDocView the address has changed
+static void addressChanged(LOKDocView* pLOKDocView, char* pPayload, gpointer /*pData*/)
+{
+    TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
+    gtk_entry_set_text(GTK_ENTRY(rWindow.m_pAddressbarEntry), pPayload);
 }
 
 /// LOKDocView the formula has changed
@@ -2088,6 +2130,14 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     lcl_registerToolItem(rWindow, rWindow.m_pTrackChanges, ".uno:TrackChanges");
     gtk_widget_set_sensitive(GTK_WIDGET(rWindow.m_pTrackChanges), false);
 
+    // Address bar
+    GtkToolItem* pAddressEntryContainer = gtk_tool_item_new();
+    rWindow.m_pAddressbarEntry = gtk_entry_new();
+    gtk_container_add(GTK_CONTAINER(pAddressEntryContainer), rWindow.m_pAddressbarEntry);
+    g_signal_connect(rWindow.m_pAddressbarEntry, "key-press-event", G_CALLBACK(signalAddressbar), 0);
+    gtk_toolbar_insert(GTK_TOOLBAR(pLowerToolbar), pAddressEntryContainer, -1);
+    gtk_box_pack_start(GTK_BOX(rWindow.m_pVBox), pLowerToolbar, FALSE, FALSE, 0 ); // Adds to top.
+
     // Formula bar
     GtkToolItem* pFormulaEntryContainer = gtk_tool_item_new();
     rWindow.m_pFormulabarEntry = gtk_entry_new();
@@ -2188,6 +2238,7 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_widget_hide(rWindow.m_pCornerButton->m_pDrawingArea);
     gtk_widget_hide(rWindow.m_pRowBar->m_pDrawingArea);
     gtk_widget_hide(rWindow.m_pColumnBar->m_pDrawingArea);
+    gtk_widget_hide(rWindow.m_pAddressbarEntry);
     gtk_widget_hide(rWindow.m_pFormulabarEntry);
     // Hide the non-progressbar children of the status bar by default.
     gtk_widget_hide(rWindow.m_pStatusbarLabel);
@@ -2214,6 +2265,7 @@ static void setupDocView(GtkWidget* pDocView)
     g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), nullptr);
     g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(signalHyperlink), nullptr);
     g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(cursorChanged), nullptr);
+    g_signal_connect(pDocView, "address-changed", G_CALLBACK(addressChanged), nullptr);
     g_signal_connect(pDocView, "formula-changed", G_CALLBACK(formulaChanged), nullptr);
     g_signal_connect(pDocView, "password-required", G_CALLBACK(passwordRequired), nullptr);
     g_signal_connect(pDocView, "comment", G_CALLBACK(commentCallback), nullptr);
