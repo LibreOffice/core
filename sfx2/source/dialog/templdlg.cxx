@@ -341,7 +341,7 @@ SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, vcl::Wi
     , pImpl(new SfxTemplateDialog_Impl(pBindings, this))
     , mpBindings(pBindings)
 {
-    OSL_ASSERT(mpBindings!=nullptr);
+    assert(mpBindings!=nullptr);
 
     SetStyle(GetStyle() & ~WB_DOCKABLE);
 }

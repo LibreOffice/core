@@ -61,7 +61,7 @@ Theme::~Theme()
 Image Theme::GetImage (const ThemeItem eItem)
 {
     const PropertyType eType (GetPropertyType(eItem));
-    OSL_ASSERT(eType==PT_Image);
+    assert(eType==PT_Image);
     const sal_Int32 nIndex (GetIndex(eItem, eType));
     const Theme& rTheme (GetCurrentTheme());
     return rTheme.maImages[nIndex];
@@ -70,7 +70,7 @@ Image Theme::GetImage (const ThemeItem eItem)
 Color Theme::GetColor (const ThemeItem eItem)
 {
     const PropertyType eType (GetPropertyType(eItem));
-    OSL_ASSERT(eType==PT_Color || eType==PT_Paint);
+    assert(eType==PT_Color || eType==PT_Paint);
     const sal_Int32 nIndex (GetIndex(eItem, eType));
     const Theme& rTheme (GetCurrentTheme());
     if (eType == PT_Color)
@@ -84,7 +84,7 @@ Color Theme::GetColor (const ThemeItem eItem)
 const Paint& Theme::GetPaint (const ThemeItem eItem)
 {
     const PropertyType eType (GetPropertyType(eItem));
-    OSL_ASSERT(eType==PT_Paint);
+    assert(eType==PT_Paint);
     const sal_Int32 nIndex (GetIndex(eItem, eType));
     const Theme& rTheme (GetCurrentTheme());
     return rTheme.maPaints[nIndex];
@@ -98,7 +98,7 @@ const Wallpaper Theme::GetWallpaper (const ThemeItem eItem)
 sal_Int32 Theme::GetInteger (const ThemeItem eItem)
 {
     const PropertyType eType (GetPropertyType(eItem));
-    OSL_ASSERT(eType==PT_Integer);
+    assert(eType==PT_Integer);
     const sal_Int32 nIndex (GetIndex(eItem, eType));
     const Theme& rTheme (GetCurrentTheme());
     return rTheme.maIntegers[nIndex];
@@ -107,7 +107,7 @@ sal_Int32 Theme::GetInteger (const ThemeItem eItem)
 bool Theme::GetBoolean (const ThemeItem eItem)
 {
     const PropertyType eType (GetPropertyType(eItem));
-    OSL_ASSERT(eType==PT_Boolean);
+    assert(eType==PT_Boolean);
     const sal_Int32 nIndex (GetIndex(eItem, eType));
     const Theme& rTheme (GetCurrentTheme());
     return rTheme.maBooleans[nIndex];
@@ -337,7 +337,7 @@ void Theme::UpdateTheme()
     catch(beans::UnknownPropertyException& rException)
     {
         SAL_WARN("sfx", "unknown property: " << rException.Message);
-        OSL_ASSERT(false);
+        assert(false);
     }
 }
 
@@ -884,7 +884,7 @@ sal_Int32 Theme::GetIndex (const ThemeItem eItem, const PropertyType eType)
             return eItem - Bool_Rect_-1;
 
         default:
-            OSL_ASSERT(false);
+            assert(false);
             return 0;
     }
 }
@@ -1049,7 +1049,7 @@ void Theme::ProcessNewValue (
             break;
         }
         case PT_Invalid:
-            OSL_ASSERT(eType != PT_Invalid);
+            assert(eType != PT_Invalid);
             throw RuntimeException();
     }
 }

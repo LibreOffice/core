@@ -336,7 +336,7 @@ void SidebarController::NotifyResize()
 {
     if (!mpTabBar)
     {
-        OSL_ASSERT(mpTabBar!=nullptr);
+        assert(mpTabBar!=nullptr);
         return;
     }
 

@@ -37,8 +37,8 @@ SidebarDockingWindow::SidebarDockingWindow(SfxBindings* pSfxBindings, SidebarChi
     // Get the XFrame from the bindings.
     if (pSfxBindings==nullptr || pSfxBindings->GetDispatcher()==nullptr)
     {
-        OSL_ASSERT(pSfxBindings!=nullptr);
-        OSL_ASSERT(pSfxBindings->GetDispatcher()!=nullptr);
+        assert(pSfxBindings!=nullptr);
+        assert(pSfxBindings->GetDispatcher()!=nullptr);
     }
     else
     {

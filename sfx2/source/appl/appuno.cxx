@@ -296,7 +296,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         return;
     }
 
-    OSL_ASSERT(nCount > 0);
+    assert(nCount > 0);
 
 #ifdef DBG_UTIL
     // detect parameters that don't match to any formal argument or one of its members

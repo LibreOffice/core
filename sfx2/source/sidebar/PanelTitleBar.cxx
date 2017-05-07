@@ -49,7 +49,7 @@ PanelTitleBar::PanelTitleBar(const OUString& rsTitle,
       mxFrame(),
       msMoreOptionsCommand()
 {
-    OSL_ASSERT(mpPanel != nullptr);
+    assert(mpPanel != nullptr);
 
 #ifdef DEBUG
     SetText(OUString("PanelTitleBar"));
