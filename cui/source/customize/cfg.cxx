@@ -996,7 +996,6 @@ bool SaveInData::LoadSubMenus(
         if ( bItem )
         {
             bool bIsUserDefined = true;
-            bool bUseDefaultLabel = false;
 
             if ( nType == css::ui::ItemType::DEFAULT )
             {
@@ -1011,6 +1010,7 @@ bool SaveInData::LoadSubMenus(
                     bIsUserDefined = true;
                 }
 
+                bool bUseDefaultLabel = false;
                 // If custom label not set retrieve it from the command
                 // to info service
                 if ( aLabel.isEmpty() )
@@ -4290,7 +4290,6 @@ void ToolbarSaveInData::LoadToolbar(
         if ( bItem )
         {
             bool bIsUserDefined = true;
-            bool bUseDefaultLabel = false;
 
             if ( nType == css::ui::ItemType::DEFAULT )
             {
@@ -4305,6 +4304,7 @@ void ToolbarSaveInData::LoadToolbar(
                     bIsUserDefined = true;
                 }
 
+                bool bUseDefaultLabel = false;
                 // If custom label not set retrieve it from the command
                 // to info service
                 if ( aLabel.isEmpty() )

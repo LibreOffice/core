@@ -359,11 +359,10 @@ static bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const OUString &
     while( nIdx < nEnd )
     {
         sal_Int32 nStop = nIdx;
-        bool bClear = false;
         LanguageType eLang = pFnt->GetLanguage();
         assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
-        bClear = CH_BLANK == rText[ nStop ];
+        bool bClear = CH_BLANK == rText[ nStop ];
         Boundary aBndry( g_pBreakIt->GetBreakIter()->getWordBoundary( rText, nIdx,
                          g_pBreakIt->GetLocale( eLang ),
                          WordType::DICTIONARY_WORD, true ) );
