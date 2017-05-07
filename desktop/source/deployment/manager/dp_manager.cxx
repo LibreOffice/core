@@ -114,7 +114,7 @@ void PackageManagerImpl::initActivationLayer(
 {
     if (m_activePackages.isEmpty())
     {
-        assert( m_registryCache.isEmpty() );
+        OSL_ASSERT( m_registryCache.isEmpty() );
         // documents temp activation:
         m_activePackagesDB.reset( new ActivePackages );
         ::ucbhelper::Content ucbContent;
@@ -161,7 +161,7 @@ void PackageManagerImpl::initActivationLayer(
     else
     {
         // user|share:
-        assert( !m_activePackages.isEmpty() );
+        OSL_ASSERT( !m_activePackages.isEmpty() );
         m_activePackages_expanded = expandUnoRcUrl( m_activePackages );
         m_registrationData_expanded = expandUnoRcUrl(m_registrationData);
         if (!m_readOnly)
@@ -523,7 +523,7 @@ OUString PackageManagerImpl::getContext()
 Sequence< Reference<deployment::XPackageTypeInfo> >
 PackageManagerImpl::getSupportedPackageTypes()
 {
-    assert( m_xRegistry.is() );
+    OSL_ASSERT( m_xRegistry.is() );
     return m_xRegistry->getSupportedPackageTypes();
 }
 
@@ -575,7 +575,7 @@ OUString PackageManagerImpl::detectMediaType(
                     url, OUString(), false, OUString(), ucbContent.getCommandEnvironment() ) );
             const Reference<deployment::XPackageTypeInfo> xPackageType(
                 xPackage->getPackageType() );
-            assert( xPackageType.is() );
+            OSL_ASSERT( xPackageType.is() );
             if (xPackageType.is())
                 mediaType = xPackageType->getMediaType();
         }
@@ -644,7 +644,7 @@ OUString PackageManagerImpl::insertToActivationLayer(
     // write to DB:
     //bundled extensions should only be added by the synchronizeAddedExtensions
     //functions. Moreover, there is no "temporary folder" for bundled extensions.
-    assert(!(m_context == "bundled"));
+    OSL_ASSERT(!(m_context == "bundled"));
     OUString sFolderUrl = makeURLAppendSysPathSegment(destFolderContent.getURL(), title);
     DescriptionInfoset info =
         dp_misc::getDescriptionInfoset(sFolderUrl);
@@ -780,7 +780,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
         xPackage = m_xRegistry->bindPackage(
             makeURL( destFolder, title_enc ), mediaType, false, OUString(), xCmdEnv );
 
-        assert( xPackage.is() );
+        OSL_ASSERT( xPackage.is() );
         if (xPackage.is())
         {
             bool install = false;
@@ -888,7 +888,7 @@ void PackageManagerImpl::removePackage(
             {
                 ActivePackages::Data val;
                 m_activePackagesDB->get( & val, id, fileName);
-                assert(!val.temporaryName.isEmpty());
+                OSL_ASSERT(!val.temporaryName.isEmpty());
                 OUString url(makeURL(m_activePackages_expanded,
                                      val.temporaryName + "removed"));
                 ::ucbhelper::Content contentRemoved(url, xCmdEnv, m_xComponentContext);
@@ -1194,7 +1194,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
 
     //find all which are in the extension data base but which
     //are removed already.
-    assert(!(m_context == "user"));
+    OSL_ASSERT(!(m_context == "user"));
     bool bModified = false;
     ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
 
@@ -1261,7 +1261,7 @@ bool PackageManagerImpl::synchronizeRemovedExtensions(
             {
                 Reference<deployment::XPackage> xPackage = m_xRegistry->bindPackage(
                     url, i->second.mediaType, true, i->first, xCmdEnv );
-                assert(xPackage.is()); //Even if the files are removed, we must get the object.
+                OSL_ASSERT(xPackage.is()); //Even if the files are removed, we must get the object.
                 xPackage->revokePackage(true, xAbortChannel, xCmdEnv);
                 removePackage(xPackage->getIdentifier().Value, xPackage->getName(),
                               xAbortChannel, xCmdEnv);
@@ -1282,7 +1282,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
     Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
 {
     bool bModified = false;
-    assert(!(m_context == "user"));
+    OSL_ASSERT(!(m_context == "user"));
 
     ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
     //check if the folder exist at all. The shared extension folder
@@ -1320,7 +1320,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
             bool bShared = (m_context == "shared");
             if (bShared)
             {
-                assert(title2.endsWith("_"));
+                OSL_ASSERT(title2.endsWith("_"));
                 title2 = title2.copy(0, title2.getLength() -1);
             }
             OUString titleEncoded =  ::rtl::Uri::encode(
@@ -1378,7 +1378,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                     //showing a license if simple-license/@accept-by = "admin"
                     //It will also prevent showing the license for bundled extensions
                     //which is not supported.
-                    assert(!(m_context == "user"));
+                    OSL_ASSERT(!(m_context == "user"));
 
                     // shall the license be suppressed?
                     DescriptionInfoset info =

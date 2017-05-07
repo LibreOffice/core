@@ -191,10 +191,10 @@ inline void AdapterImpl::release()
     {
         t_ptr_map::iterator iFind(
             m_pFactory->m_receiver2adapters.find( m_key ) );
-        assert( m_pFactory->m_receiver2adapters.end() != iFind );
+        OSL_ASSERT( m_pFactory->m_receiver2adapters.end() != iFind );
         t_ptr_set & adapter_set = iFind->second;
         if (adapter_set.erase( this ) != 1) {
-            assert( false );
+            OSL_ASSERT( false );
         }
         if (adapter_set.empty())
         {
@@ -260,7 +260,7 @@ bool AdapterImpl::coerce_assign(
 
         if (p_exc) // exception occurred
         {
-            assert(
+            OSL_ASSERT(
                 p_exc->pType->eTypeClass == typelib_TypeClass_EXCEPTION );
             if (typelib_typedescriptionreference_isAssignableFrom( cppu::UnoType<RuntimeException>::get().getTypeLibType(),
                     p_exc->pType ))
@@ -648,7 +648,7 @@ AdapterImpl::AdapterImpl(
         pInterface->m_pTypeDescr = nullptr;
         pTypes[nPos].getDescription(
             reinterpret_cast<typelib_TypeDescription **>(&pInterface->m_pTypeDescr) );
-        assert( pInterface->m_pTypeDescr );
+        OSL_ASSERT( pInterface->m_pTypeDescr );
         if (! pInterface->m_pTypeDescr)
         {
             for ( sal_Int32 n = 0; n < nPos; ++n )
@@ -665,7 +665,7 @@ AdapterImpl::AdapterImpl(
     // map receiver
     m_pReceiver = static_cast<uno_Interface *>(m_pFactory->m_aCpp2Uno.mapInterface(
         xReceiver.get(), cppu::UnoType<decltype(xReceiver)>::get() ));
-    assert( nullptr != m_pReceiver );
+    OSL_ASSERT( nullptr != m_pReceiver );
     if (! m_pReceiver)
     {
         throw RuntimeException( "cannot map receiver!" );
@@ -699,7 +699,7 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
         UNO_QUERY_THROW );
     m_pConverter = static_cast<uno_Interface *>(m_aCpp2Uno.mapInterface(
         xConverter.get(), cppu::UnoType<decltype(xConverter)>::get() ));
-    assert( nullptr != m_pConverter );
+    OSL_ASSERT( nullptr != m_pConverter );
 
     // some type info:
     // sequence< any >
@@ -851,7 +851,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
         m_aUno2Cpp.mapInterface(
             reinterpret_cast<void **>(&xRet), pUnoI, cppu::UnoType<decltype(xRet)>::get() );
         that->release();
-        assert( xRet.is() );
+        OSL_ASSERT( xRet.is() );
         if (! xRet.is())
         {
             throw RuntimeException( "mapping UNO to C++ failed!" );

@@ -150,7 +150,7 @@ Sequence< double > CachedDataSequence::Impl_getNumericalData() const
     }
     else
     {
-        assert( m_eCurrentDataType == MIXED );
+        OSL_ASSERT( m_eCurrentDataType == MIXED );
         const Any * pMixedArray = m_aMixedSequence.getConstArray();
         std::transform( pMixedArray, pMixedArray + nSize,
                           pResultArray,
@@ -180,7 +180,7 @@ Sequence< OUString > CachedDataSequence::Impl_getTextualData() const
     }
     else
     {
-        assert( m_eCurrentDataType == MIXED );
+        OSL_ASSERT( m_eCurrentDataType == MIXED );
         const Any * pMixedArray = m_aMixedSequence.getConstArray();
         std::transform( pMixedArray, pMixedArray + nSize,
                           pResultArray,
@@ -211,7 +211,7 @@ Sequence< Any > CachedDataSequence::Impl_getMixedData() const
     }
     else
     {
-        assert( m_eCurrentDataType == TEXTUAL );
+        OSL_ASSERT( m_eCurrentDataType == TEXTUAL );
         const OUString * pMixedArray = m_aTextualSequence.getConstArray();
         std::transform( pMixedArray, pMixedArray + nSize,
                           pResultArray,

@@ -325,7 +325,7 @@ bool Layouter::Rearrange (
     const Size& rPageSize,
     const sal_uInt32 nPageCount)
 {
-    assert(mpWindow);
+    OSL_ASSERT(mpWindow);
 
     if (eOrientation != mpImplementation->GetOrientation())
         mpImplementation.reset(Implementation::Create(*mpImplementation, eOrientation));
@@ -842,7 +842,7 @@ Size Layouter::Implementation::GetTargetSize (
         return maPreferredSize;
     if ( ! (bCalculateWidth || bCalculateHeight))
     {
-        assert(bCalculateWidth || bCalculateHeight);
+        OSL_ASSERT(bCalculateWidth || bCalculateHeight);
         return maPreferredSize;
     }
 

@@ -85,7 +85,7 @@ class DisposingForwarder
     explicit DisposingForwarder( Reference< lang::XComponent > const & xTarget )
         : m_xTarget( xTarget )
     {
-        assert( m_xTarget.is() );
+        OSL_ASSERT( m_xTarget.is() );
     }
 public:
     // listens at source for disposing, then disposes target
@@ -532,7 +532,7 @@ ComponentContext::ComponentContext(
                     UNO_QUERY );
                 // patch DefaultContext property of new one
                 Reference< beans::XPropertySet > xProps( m_xSMgr, UNO_QUERY );
-                assert( xProps.is() );
+                OSL_ASSERT( xProps.is() );
                 if (xProps.is())
                 {
                     Reference< XComponentContext > xThis( this );
@@ -545,7 +545,7 @@ ComponentContext::ComponentContext(
                 throw;
             }
             osl_atomic_decrement( &m_refCount );
-            assert( m_xSMgr.is() );
+            OSL_ASSERT( m_xSMgr.is() );
         }
     }
 }

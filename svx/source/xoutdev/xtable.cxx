@@ -360,7 +360,7 @@ XPropertyListRef XPropertyList::CreatePropertyList( XPropertyListType aType,
         OSL_FAIL("unknown xproperty type");
         break;
     }
-    assert( !pRet.is() || pRet->meType == aType );
+    OSL_ASSERT( !pRet.is() || pRet->meType == aType );
 
     return pRet;
 }

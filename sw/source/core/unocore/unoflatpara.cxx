@@ -472,7 +472,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
         return xRet;
 
     const uno::Reference<lang::XUnoTunnel> xFPTunnel(xPara, uno::UNO_QUERY);
-    assert(xFPTunnel.is());
+    OSL_ASSERT(xFPTunnel.is());
     SwXFlatParagraph* const pFlatParagraph(sw::UnoTunnelGetImplementation<SwXFlatParagraph>(xFPTunnel));
 
     if ( !pFlatParagraph )
@@ -517,7 +517,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
         return xRet;
 
     const uno::Reference<lang::XUnoTunnel> xFPTunnel(xPara, uno::UNO_QUERY);
-    assert(xFPTunnel.is());
+    OSL_ASSERT(xFPTunnel.is());
     SwXFlatParagraph* const pFlatParagraph(sw::UnoTunnelGetImplementation<SwXFlatParagraph>(xFPTunnel));
 
     if ( !pFlatParagraph )

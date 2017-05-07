@@ -122,7 +122,7 @@ void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDe
         std::shared_ptr<DeckDescriptor> xDescriptor = pParentSidebarController->GetResourceManager()->GetDeckDescriptor(iDeck->msId);
         if (xDescriptor == nullptr)
         {
-            assert(xDescriptor!=nullptr);
+            OSL_ASSERT(xDescriptor!=nullptr);
             continue;
         }
 

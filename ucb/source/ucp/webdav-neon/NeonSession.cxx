@@ -351,7 +351,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
                                                 int,
                                                 const ne_ssl_certificate *cert )
 {
-    assert( cert );
+    OSL_ASSERT( cert );
 
     NeonSession * pSession = static_cast< NeonSession * >( userdata );
     uno::Reference< security::XCertificateContainer > xCertificateContainer;

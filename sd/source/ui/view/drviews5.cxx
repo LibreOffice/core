@@ -116,7 +116,7 @@ void DrawViewShell::ArrangeGUIElements()
 
     maTabControl->Hide();
 
-    assert (GetViewShell()!=nullptr);
+    OSL_ASSERT (GetViewShell()!=nullptr);
     Client* pIPClient = static_cast<Client*>(GetViewShell()->GetIPClient());
     bool bClientActive = false;
     if ( pIPClient && pIPClient->IsObjectInPlaceActive() )

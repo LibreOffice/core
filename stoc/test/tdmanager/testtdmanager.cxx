@@ -130,7 +130,7 @@ sal_Int32 Service::run(css::uno::Sequence< OUString > const & arguments)
     // test: add cmd line rdbs to manager
 
 
-    assert( arguments.getLength() > 0 );
+    OSL_ASSERT( arguments.getLength() > 0 );
     css::uno::Reference<css::container::XSet> xSet(
         manager, css::uno::UNO_QUERY_THROW );
     for ( sal_Int32 argPos = 0; argPos < arguments.getLength(); ++argPos ) {

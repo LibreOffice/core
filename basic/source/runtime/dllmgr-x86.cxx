@@ -51,7 +51,7 @@ using namespace css::uno;
    Missing support for functions returning structs (see TODO in call()).
 
    Missing support for additional data types (64 bit integers, Any, ...; would
-   trigger assert(false) in various switches).
+   trigger OSL_ASSERT(false) in various switches).
 
    It is assumed that the variables passed into SbiDllMgr::Call to represent
    the arguments and return value have types that exactly match the Declare
@@ -151,7 +151,7 @@ template< typename T > void add(
 }
 
 std::size_t alignment(SbxVariable * variable) {
-    assert(variable != 0);
+    OSL_ASSERT(variable != 0);
     if ((variable->GetType() & SbxARRAY) == 0) {
         switch (variable->GetType()) {
         case SbxINTEGER:
@@ -176,7 +176,7 @@ std::size_t alignment(SbxVariable * variable) {
         case SbxBYTE:
             return 1;
         default:
-            assert(false);
+            OSL_ASSERT(false);
             return 1;
         }
     } else {
@@ -198,7 +198,7 @@ SbError marshal(
 SbError marshalString(
     SbxVariable * variable, bool special, MarshalData & data, void ** buffer)
 {
-    assert(variable != 0 && buffer != 0);
+    OSL_ASSERT(variable != 0 && buffer != 0);
     OString str;
     SbError e = convert(variable->GetOUString(), &str);
     if (e != ERRCODE_NONE) {
@@ -216,7 +216,7 @@ SbError marshalStruct(
     SbxVariable * variable, std::vector< char > & blob, std::size_t offset,
     MarshalData & data)
 {
-    assert(variable != 0);
+    OSL_ASSERT(variable != 0);
     SbxArray * props = dynamic_cast<SbxObject*>( variable->GetObject() )->
         GetProperties();
     for (sal_uInt16 i = 0; i < props->Count(); ++i) {
@@ -232,7 +232,7 @@ SbError marshalArray(
     SbxVariable * variable, std::vector< char > & blob, std::size_t offset,
     MarshalData & data)
 {
-    assert(variable != 0);
+    OSL_ASSERT(variable != 0);
     SbxDimArray * arr = dynamic_cast<SbxDimArray*>( variable->GetObject() );
     int dims = arr->GetDims();
     std::vector< sal_Int32 > low(dims);
@@ -264,7 +264,7 @@ SbError marshal(
     bool outer, SbxVariable * variable, bool special,
     std::vector< char > & blob, std::size_t offset, MarshalData & data)
 {
-    assert(variable != 0);
+    OSL_ASSERT(variable != 0);
 
     SbxDataType eVarType = variable->GetType();
     bool bByVal = !(variable->GetFlags() & SbxFlagBits::Reference);
@@ -312,7 +312,7 @@ SbError marshal(
                 add(blob, variable->GetByte(), outer ? 4 : 1, offset);
                 break;
             default:
-                assert(false);
+                OSL_ASSERT(false);
                 break;
             }
         } else {
@@ -359,7 +359,7 @@ SbError marshal(
                     break;
                 }
             default:
-                assert(false);
+                OSL_ASSERT(false);
                 break;
             }
         } else {
@@ -385,7 +385,7 @@ template< typename T > T read(void const ** pointer) {
 }
 
 void const * unmarshal(SbxVariable * variable, void const * data) {
-    assert(variable != 0);
+    OSL_ASSERT(variable != 0);
     if ((variable->GetType() & SbxARRAY) == 0) {
         switch (variable->GetType()) {
         case SbxINTEGER:
@@ -423,7 +423,7 @@ void const * unmarshal(SbxVariable * variable, void const * data) {
             variable->PutByte(read< sal_uInt8 >(&data));
             break;
         default:
-            assert(false);
+            OSL_ASSERT(false);
             break;
         }
     } else {
@@ -550,7 +550,7 @@ SbError call(
                 DllMgr_call32(proc.proc, address(stack), stack.size())));
         break;
     default:
-        assert(false);
+        OSL_ASSERT(false);
         break;
     }
     for (sal_uInt16 i = 1; i < (arguments == 0 ? 0 : arguments->Count()); ++i) {
@@ -575,7 +575,7 @@ SbError call(
 
 SbError getProcData(HMODULE handle, OUString const & name, ProcData * proc)
 {
-    assert(proc != 0);
+    OSL_ASSERT(proc != 0);
     if ( !name.isEmpty() && name[0] == '@' ) { //TODO: "@" vs. "#"???
         sal_Int32 n = name.copy(1).toInt32(); //TODO: handle bad input
         if (n <= 0 || n > 0xFFFF) {

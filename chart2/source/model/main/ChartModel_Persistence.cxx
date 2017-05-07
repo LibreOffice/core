@@ -521,7 +521,7 @@ void SAL_CALL ChartModel::load(
             }
             else
             {
-                assert( aMDHelper.ISSET_InputStream );
+                OSL_ASSERT( aMDHelper.ISSET_InputStream );
                 // convert XInputStream to XStorage via the storage factory
                 Sequence< uno::Any > aStorageArgs( 2 );
                 aStorageArgs[0] <<= aMDHelper.InputStream;

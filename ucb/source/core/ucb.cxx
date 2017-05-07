@@ -719,7 +719,7 @@ void SAL_CALL UniversalContentBroker::changesOccurred( const util::ChangesEvent&
         uno::Reference< container::XHierarchicalNameAccess > xHierNameAccess;
         Event.Base >>= xHierNameAccess;
 
-        assert( xHierNameAccess.is() );
+        OSL_ASSERT( xHierNameAccess.is() );
 
         const util::ElementChange* pElementChanges
             = Event.Changes.getConstArray();

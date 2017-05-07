@@ -113,7 +113,7 @@ Reference< XGraphic > applyBrightnessContrast( Reference< XGraphic > const & xGr
 
 BitmapMode lclGetBitmapMode( sal_Int32 nToken )
 {
-    assert((nToken & sal_Int32(0xFFFF0000))==0);
+    OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
     switch( nToken )
     {
         case XML_tile:      return BitmapMode_REPEAT;
@@ -124,7 +124,7 @@ BitmapMode lclGetBitmapMode( sal_Int32 nToken )
 
 RectanglePoint lclGetRectanglePoint( sal_Int32 nToken )
 {
-    assert((nToken & sal_Int32(0xFFFF0000))==0);
+    OSL_ASSERT((nToken & sal_Int32(0xFFFF0000))==0);
     switch( nToken )
     {
         case XML_tl:    return RectanglePoint_LEFT_TOP;
@@ -317,7 +317,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
     if( moFillType.has() )
     {
         FillStyle eFillStyle = FillStyle_NONE;
-        assert((moFillType.get() & sal_Int32(0xFFFF0000))==0);
+        OSL_ASSERT((moFillType.get() & sal_Int32(0xFFFF0000))==0);
         switch( moFillType.get() )
         {
             case XML_noFill:

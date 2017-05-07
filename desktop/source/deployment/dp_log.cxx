@@ -149,7 +149,7 @@ void ProgressLogImpl::log_write( OString const & text )
 void ProgressLogImpl::push( Any const & Status )
 {
     update( Status );
-    assert( m_log_level >= 0 );
+    OSL_ASSERT( m_log_level >= 0 );
     ++m_log_level;
 }
 
@@ -160,7 +160,7 @@ void ProgressLogImpl::update( Any const & Status )
         return;
 
     OUStringBuffer buf;
-    assert( m_log_level >= 0 );
+    OSL_ASSERT( m_log_level >= 0 );
     for ( sal_Int32 n = 0; n < m_log_level; ++n )
         buf.append( ' ' );
 
@@ -180,7 +180,7 @@ void ProgressLogImpl::update( Any const & Status )
 
 void ProgressLogImpl::pop()
 {
-    assert( m_log_level > 0 );
+    OSL_ASSERT( m_log_level > 0 );
     --m_log_level;
 }
 

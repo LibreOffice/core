@@ -120,7 +120,7 @@ VendorSettings::VendorSettings():
 
 VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
 {
-    assert(!sVendor.isEmpty());
+    OSL_ASSERT(!sVendor.isEmpty());
     VersionInfo aVersionInfo;
     OString osVendor = OUStringToOString(sVendor, RTL_TEXTENCODING_UTF8);
     //Get minVersion
@@ -436,7 +436,7 @@ JFW_MODE getMode()
 
 OUString getApplicationClassPath()
 {
-    assert(getMode() == JFW_MODE_APPLICATION);
+    OSL_ASSERT(getMode() == JFW_MODE_APPLICATION);
     OUString retVal;
     OUString sParams = BootParams::getClasspathUrls();
     if (sParams.isEmpty())
@@ -453,7 +453,7 @@ OUString getApplicationClassPath()
             OUString systemPathElement;
             oslFileError rc = osl_getSystemPathFromFileURL(
                 token.pData, &systemPathElement.pData );
-            assert( rc == osl_File_E_None );
+            OSL_ASSERT( rc == osl_File_E_None );
             if (rc == osl_File_E_None && !systemPathElement.isEmpty())
             {
                 if (buf.getLength() > 0)

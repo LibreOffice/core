@@ -1365,9 +1365,9 @@ void SAL_CALL exportDialogModel(
     StyleBag all_styles;
     // window
     Reference< beans::XPropertySet > xProps( xDialogModel, UNO_QUERY );
-    assert( xProps.is() );
+    OSL_ASSERT( xProps.is() );
     Reference< beans::XPropertyState > xPropState( xProps, UNO_QUERY );
-    assert( xPropState.is() );
+    OSL_ASSERT( xPropState.is() );
 
     ElementDescriptor * pElem = new ElementDescriptor( xProps, xPropState, XMLNS_DIALOGS_PREFIX ":bulletinboard", xDocument );
     Reference< xml::sax::XAttributeList > xElem( pElem );

@@ -923,7 +923,7 @@ SlideSharedPtr SlideShowImpl::makeSlide(
 void SlideShowImpl::requestWaitSymbol()
 {
     ++mnWaitSymbolRequestCount;
-    assert(mnWaitSymbolRequestCount>0);
+    OSL_ASSERT(mnWaitSymbolRequestCount>0);
 
     if (mnWaitSymbolRequestCount == 1)
     {
@@ -940,7 +940,7 @@ void SlideShowImpl::requestWaitSymbol()
 void SlideShowImpl::releaseWaitSymbol()
 {
     --mnWaitSymbolRequestCount;
-    assert(mnWaitSymbolRequestCount>=0);
+    OSL_ASSERT(mnWaitSymbolRequestCount>=0);
 
     if (mnWaitSymbolRequestCount == 0)
     {
@@ -1099,7 +1099,7 @@ void SlideShowImpl::displaySlide(
         else
             mpCurrentSlide = makeSlide( xSlide, xDrawPages, xRootNode );
 
-        assert( mpCurrentSlide );
+        OSL_ASSERT( mpCurrentSlide );
         if (mpCurrentSlide)
         {
             basegfx::B2DSize oldSlideSize;
@@ -2279,7 +2279,7 @@ void SlideShowImpl::notifySlideEnded (const bool bReverse)
             // save time at current drawpage:
             uno::Reference<beans::XPropertySet> xPropSet(
                 mpCurrentSlide->getXDrawPage(), uno::UNO_QUERY );
-            assert( xPropSet.is() );
+            OSL_ASSERT( xPropSet.is() );
             if (xPropSet.is())
             {
                 xPropSet->setPropertyValue(

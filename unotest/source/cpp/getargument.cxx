@@ -31,7 +31,7 @@ namespace test {
 namespace detail {
 
 bool getArgument(OUString const & name, OUString * value) {
-    assert(value != nullptr);
+    OSL_ASSERT(value != nullptr);
     return rtl::Bootstrap::get("arg-" + name, *value);
 }
 

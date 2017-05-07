@@ -204,7 +204,7 @@ void CommandEnvironmentImpl::handle(
     Reference<task::XInteractionRequest> const & xRequest )
 {
     Any request( xRequest->getRequest() );
-    assert( request.getValueTypeClass() == TypeClass_EXCEPTION );
+    OSL_ASSERT( request.getValueTypeClass() == TypeClass_EXCEPTION );
     dp_misc::TRACE("[unopkg_cmdenv.cxx] incoming request:\n"
         + ::comphelper::anyToString(request) + "\n\n");
 
@@ -224,11 +224,11 @@ void CommandEnvironmentImpl::handle(
         // former pkgchk behaviour:
         const Reference<deployment::XPackage> xPackage(
             wtExc.Context, UNO_QUERY );
-        assert( xPackage.is() );
+        OSL_ASSERT( xPackage.is() );
         if (xPackage.is()) {
             const Reference<deployment::XPackageTypeInfo> xPackageType(
                 xPackage->getPackageType() );
-            assert( xPackageType.is() );
+            OSL_ASSERT( xPackageType.is() );
             if (xPackageType.is()) {
                 approve = (xPackage->isBundle() &&
                            xPackageType->getMediaType().match(
@@ -319,7 +319,7 @@ void CommandEnvironmentImpl::handle(
 void CommandEnvironmentImpl::push( Any const & Status )
 {
     update_( Status );
-    assert( m_logLevel >= 0 );
+    OSL_ASSERT( m_logLevel >= 0 );
     ++m_logLevel;
     if (m_xLogFile.is())
         m_xLogFile->push( Status );
@@ -351,7 +351,7 @@ void CommandEnvironmentImpl::update_( Any const & Status )
         msg = buf.makeStringAndClear();
         bUseErr = true;
     }
-    assert( m_logLevel >= 0 );
+    OSL_ASSERT( m_logLevel >= 0 );
     for ( sal_Int32 n = 0; n < m_logLevel; ++n )
     {
         if (bUseErr)
@@ -377,7 +377,7 @@ void CommandEnvironmentImpl::update( Any const & Status )
 
 void CommandEnvironmentImpl::pop()
 {
-    assert( m_logLevel > 0 );
+    OSL_ASSERT( m_logLevel > 0 );
     --m_logLevel;
     if (m_xLogFile.is())
         m_xLogFile->pop();

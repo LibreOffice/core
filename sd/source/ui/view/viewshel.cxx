@@ -133,7 +133,7 @@ SfxViewFrame* ViewShell::GetViewFrame() const
     }
     else
     {
-        assert (GetViewShell()!=nullptr);
+        OSL_ASSERT (GetViewShell()!=nullptr);
         return nullptr;
     }
 }
@@ -195,7 +195,7 @@ void ViewShell::construct()
     mpImpl.reset(new Implementation(*this));
     meShellType = ST_NONE;
 
-    assert (GetViewShell()!=nullptr);
+    OSL_ASSERT (GetViewShell()!=nullptr);
 
     if (IsMainViewShell())
         GetDocSh()->Connect (this);
@@ -326,7 +326,7 @@ void ViewShell::Activate(bool bIsMDIActivate)
                 { &aItem });
 
         SfxViewShell* pViewShell = GetViewShell();
-        assert (pViewShell!=nullptr);
+        OSL_ASSERT (pViewShell!=nullptr);
         SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_3D_STATE, true );
 
@@ -349,13 +349,13 @@ void ViewShell::Activate(bool bIsMDIActivate)
 
 void ViewShell::UIActivating( SfxInPlaceClient*  )
 {
-    assert (GetViewShell()!=nullptr);
+    OSL_ASSERT (GetViewShell()!=nullptr);
     GetViewShellBase().GetToolBarManager()->ToolBarsDestroyed();
 }
 
 void ViewShell::UIDeactivated( SfxInPlaceClient*  )
 {
-    assert (GetViewShell()!=nullptr);
+    OSL_ASSERT (GetViewShell()!=nullptr);
     GetViewShellBase().GetToolBarManager()->ToolBarsDestroyed();
     if ( GetDrawView() )
         GetViewShellBase().GetToolBarManager()->SelectionHasChanged(*this, *GetDrawView());
@@ -372,7 +372,7 @@ void ViewShell::Deactivate(bool bIsMDIActivate)
     if( pDragTransferable )
         pDragTransferable->SetView( nullptr );
 
-    assert (GetViewShell()!=nullptr);
+    OSL_ASSERT (GetViewShell()!=nullptr);
 
     // remember view attributes of FrameView
     WriteFrameViewData();
@@ -411,7 +411,7 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     {
         // give key input first to SfxViewShell to give CTRL+Key
         // (e.g. CTRL+SHIFT+'+', to front) priority.
-        assert (GetViewShell()!=nullptr);
+        OSL_ASSERT (GetViewShell()!=nullptr);
         bReturn = GetViewShell()->KeyInput(rKEvt);
     }
 
@@ -472,7 +472,7 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
     // selection;  this changes the window size and thus the mouse position
     // in model coordinates: with respect to model coordinates the mouse
     // moves.)
-    assert(mpImpl->mpUpdateLockForMouse.expired());
+    OSL_ASSERT(mpImpl->mpUpdateLockForMouse.expired());
     mpImpl->mpUpdateLockForMouse = ViewShell::Implementation::ToolBarManagerLock::Create(
         GetViewShellBase().GetToolBarManager());
 
@@ -1081,7 +1081,7 @@ void ViewShell::ArrangeGUIElements()
     bool bSlideShowActive = (xSlideShow.is() && xSlideShow->isRunning()) && !xSlideShow->isFullScreen() && xSlideShow->getAnimationMode() == ANIMATIONMODE_SHOW;
     if ( !bSlideShowActive)
     {
-        assert (GetViewShell()!=nullptr);
+        OSL_ASSERT (GetViewShell()!=nullptr);
 
         if (mpContentWindow)
             mpContentWindow->SetPosSizePixel(

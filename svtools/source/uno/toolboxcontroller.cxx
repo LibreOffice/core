@@ -63,7 +63,7 @@ ToolboxController::ToolboxController(
     ,   m_aCommandURL( aCommandURL )
     ,   m_aListenerContainer( m_aMutex )
 {
-    assert( m_xContext.is() );
+    OSL_ASSERT( m_xContext.is() );
     registerProperty( TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE,
         TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE,
         css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY,

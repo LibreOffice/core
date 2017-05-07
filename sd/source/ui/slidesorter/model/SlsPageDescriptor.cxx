@@ -50,8 +50,8 @@ PageDescriptor::PageDescriptor (
       mbIsMouseOver(false),
       mbHasTransition(false)
 {
-    assert(mpPage);
-    assert(mpPage == SdPage::getImplementation(rxPage));
+    OSL_ASSERT(mpPage);
+    OSL_ASSERT(mpPage == SdPage::getImplementation(rxPage));
     if (mpPage != nullptr)
     {
         if (mpPage->TRG_HasMasterPage())
@@ -125,7 +125,7 @@ bool PageDescriptor::HasState (const State eState) const
             return mpPage!=nullptr && mpPage->IsExcluded();
 
         default:
-            assert(false);
+            OSL_ASSERT(false);
             return false;
     }
 }
@@ -205,7 +205,7 @@ void PageDescriptor::SetCoreSelection()
             mpPage->SetSelected(false);
     else
     {
-        assert(mpPage!=nullptr);
+        OSL_ASSERT(mpPage!=nullptr);
     }
 }
 

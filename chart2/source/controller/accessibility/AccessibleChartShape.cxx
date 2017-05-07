@@ -65,7 +65,7 @@ AccessibleChartShape::AccessibleChartShape(
 
 AccessibleChartShape::~AccessibleChartShape()
 {
-    assert(CheckDisposeState(false /* don't throw exceptions */));
+    OSL_ASSERT( CheckDisposeState( false /* don't throw exceptions */ ) );
 
     if ( m_pAccShape.is() )
     {

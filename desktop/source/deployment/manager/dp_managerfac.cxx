@@ -132,7 +132,7 @@ PackageManagerFactoryImpl::getPackageManager( OUString const & context )
         m_managers.insert( t_string2weakref::value_type( context, xRet ) ) );
     if (insertion.second)
     {
-        assert( insertion.first->second.get() == xRet );
+        OSL_ASSERT( insertion.first->second.get() == xRet );
         // hold user, shared mgrs for whole process: live deployment
         if ( context == "user" )
             m_xUserMgr = xRet;

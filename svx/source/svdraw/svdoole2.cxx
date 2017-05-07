@@ -1585,7 +1585,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
     GetObjRef();
     if (mpImpl->mxObjRef.is())
     {
-        assert( pModel );
+        OSL_ASSERT( pModel );
         sal_Int64 nMiscStatus = mpImpl->mxObjRef->getStatus( GetAspect() );
 
         // the client is required to get access to scaling
@@ -1650,7 +1650,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
 
                 // make the new object area known to the client
                 // compared to the "else" branch aRect might have been changed by the object and no additional scaling was applied
-                // WHY this -> assert( pClient );
+                // WHY this -> OSL_ASSERT( pClient );
                 if( pClient )
                     pClient->SetObjArea(maRect);
 

@@ -89,7 +89,7 @@ static void mergeKeys(
         xDest->setStringListValue( xSource->getStringListValue() );
         break;
     default:
-        assert(false);
+        OSL_ASSERT(false);
         break;
     }
 

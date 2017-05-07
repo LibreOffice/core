@@ -114,7 +114,7 @@ ImageId ImageContainer::addImage( const uno::Sequence<beans::PropertyValue>& xBi
 
 void ImageContainer::writeBase64EncodedStream( ImageId nId, EmitContext& rContext )
 {
-    assert( nId >= 0 && nId < ImageId( m_aImages.size()) );
+    OSL_ASSERT( nId >= 0 && nId < ImageId( m_aImages.size()) );
 
     const uno::Sequence<beans::PropertyValue>& rEntry( m_aImages[nId] );
 

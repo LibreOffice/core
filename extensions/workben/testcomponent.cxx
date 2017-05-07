@@ -62,7 +62,7 @@ int SAL_CALL main (int argc, char **argv)
     // create service manager
 //  XMultiServiceFactoryRef xSMgr = getProcessServiceManager();
     XMultiServiceFactoryRef xSMgr = createRegistryServiceManager();
-    assert( xSMgr.is() );
+    OSL_ASSERT( xSMgr.is() );
     registerUsrServices( xSMgr );
     setProcessServiceManager( xSMgr );
 

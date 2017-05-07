@@ -181,7 +181,7 @@ extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
     SAL_THROW_EXTERN_C()
 {
     IdContainer * pId = getIdContainer();
-    assert( pId );
+    OSL_ASSERT( pId );
 
     // free old one
     if (pId->pCurrentContext)
@@ -199,7 +199,7 @@ extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
     {
         uno_Environment * pEnv = nullptr;
         ::uno_getEnvironment( &pEnv, pEnvTypeName, pEnvContext );
-        assert( pEnv && pEnv->pExtEnv );
+        OSL_ASSERT( pEnv && pEnv->pExtEnv );
         if (pEnv)
         {
             if (pEnv->pExtEnv)
@@ -228,7 +228,7 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
     SAL_THROW_EXTERN_C()
 {
     IdContainer * pId = getIdContainer();
-    assert( pId );
+    OSL_ASSERT( pId );
 
     Environment target_env;
 
@@ -236,11 +236,11 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
     if (*ppCurrentContext)
     {
         target_env = Environment(rtl::OUString(pEnvTypeName), pEnvContext);
-        assert( target_env.is() );
+        OSL_ASSERT( target_env.is() );
         if (! target_env.is())
             return false;
         uno_ExtEnvironment * pEnv = target_env.get()->pExtEnv;
-        assert( nullptr != pEnv );
+        OSL_ASSERT( nullptr != pEnv );
         if (nullptr == pEnv)
             return false;
         (*pEnv->releaseInterface)( pEnv, *ppCurrentContext );
@@ -255,13 +255,13 @@ extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
     if (! target_env.is())
     {
         target_env = Environment(rtl::OUString(pEnvTypeName), pEnvContext);
-        assert( target_env.is() );
+        OSL_ASSERT( target_env.is() );
         if (! target_env.is())
             return false;
     }
 
     Mapping mapping(&pId->pCurrentContextEnv->aBase, target_env.get());
-    assert( mapping.is() );
+    OSL_ASSERT( mapping.is() );
     if (! mapping.is())
         return false;
 

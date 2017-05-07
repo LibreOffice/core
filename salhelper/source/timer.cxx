@@ -116,7 +116,7 @@ void Timer::start()
 
         TimerManager *pManager = TimerManager::getTimerManager();
 
-        assert(pManager);
+        OSL_ASSERT(pManager);
 
         if ( pManager != nullptr )
         {
@@ -129,7 +129,7 @@ void Timer::stop()
 {
     TimerManager *pManager = TimerManager::getTimerManager();
 
-    assert(pManager);
+    OSL_ASSERT(pManager);
 
     if ( pManager != nullptr )
     {
@@ -141,7 +141,7 @@ sal_Bool Timer::isTicking() const
 {
     TimerManager *pManager = TimerManager::getTimerManager();
 
-    assert(pManager);
+    OSL_ASSERT(pManager);
 
     if (pManager)
         return pManager->lookupTimer(this);
@@ -161,7 +161,7 @@ sal_Bool Timer::isExpired() const
 
 sal_Bool Timer::expiresBefore(const Timer* pTimer) const
 {
-    assert(pTimer);
+    OSL_ASSERT(pTimer);
 
     if ( pTimer != nullptr )
     {
@@ -245,7 +245,7 @@ TimerManager::TimerManager()
 {
     osl::MutexGuard Guard(theTimerManagerMutex::get());
 
-    assert(m_pManager == nullptr);
+    OSL_ASSERT(m_pManager == nullptr);
 
     m_pManager = this;
 
@@ -282,7 +282,7 @@ TimerManager* TimerManager::getTimerManager()
 
 void TimerManager::registerTimer(Timer* pTimer)
 {
-    assert(pTimer);
+    OSL_ASSERT(pTimer);
 
     if ( pTimer == nullptr )
     {
@@ -321,7 +321,7 @@ void TimerManager::registerTimer(Timer* pTimer)
 
 void TimerManager::unregisterTimer(Timer* pTimer)
 {
-    assert(pTimer);
+    OSL_ASSERT(pTimer);
 
     if ( pTimer == nullptr )
     {
@@ -347,7 +347,7 @@ void TimerManager::unregisterTimer(Timer* pTimer)
 
 bool TimerManager::lookupTimer(const Timer* pTimer)
 {
-    assert(pTimer);
+    OSL_ASSERT(pTimer);
 
     if ( pTimer == nullptr )
     {

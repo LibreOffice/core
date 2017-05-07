@@ -595,7 +595,7 @@ struct AnnotatingVisitor
         aBuf.append( sal_Int32(nBlue), 16 );
 
         // TODO(F3): respect alpha transparency (polygons etc.)
-        assert(rColor.a == 1.0);
+        OSL_ASSERT(rColor.a == 1.0);
 
         return aBuf.makeStringAndClear();
     }
@@ -1253,11 +1253,11 @@ struct AnnotatingVisitor
                 nDummyIndex=0;
                 OUString aCurrAttrib(
                     aCurrToken.getToken(0,':',nDummyIndex).trim());
-                assert(nDummyIndex!=-1);
+                OSL_ASSERT(nDummyIndex!=-1);
                 nDummyIndex=0;
                 OUString aCurrValue(
                     aCurrToken.getToken(1,':',nDummyIndex).trim());
-                assert(nDummyIndex==-1);
+                OSL_ASSERT(nDummyIndex==-1);
 
                 // recurse into normal attribute parsing
                 parseAttribute( getTokenId(aCurrAttrib),

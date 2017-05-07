@@ -321,7 +321,7 @@ uno::Reference< ucb::XProgressHandler > ProgressCmdEnv::getProgressHandler()
 void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const & xRequest )
 {
     uno::Any request( xRequest->getRequest() );
-    assert( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
+    OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
     dp_misc::TRACE( "[dp_gui_cmdenv.cxx] incoming request:\n"
         + ::comphelper::anyToString(request) + "\n");
 
@@ -355,11 +355,11 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         // ignore intermediate errors of legacy packages, i.e.
         // former pkgchk behaviour:
         const uno::Reference< deployment::XPackage > xPackage( wtExc.Context, uno::UNO_QUERY );
-        assert( xPackage.is() );
+        OSL_ASSERT( xPackage.is() );
         if ( xPackage.is() )
         {
             const uno::Reference< deployment::XPackageTypeInfo > xPackageType( xPackage->getPackageType() );
-            assert( xPackageType.is() );
+            OSL_ASSERT( xPackageType.is() );
             if (xPackageType.is())
             {
                 approve = ( xPackage->isBundle() &&
@@ -400,7 +400,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             approve = true;
         else
         {
-            assert(false);
+            OSL_ASSERT(false);
         }
     }
     else if (request >>= verExc)
@@ -419,7 +419,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             id = RID_STR_WARNING_VERSION_GREATER;
             break;
         }
-        assert( verExc.Deployed.is() );
+        OSL_ASSERT( verExc.Deployed.is() );
         bool bEqualNames = verExc.NewDisplayName.equals(
             verExc.Deployed->getDisplayName());
         {
@@ -579,7 +579,7 @@ ExtensionCmdQueue::Thread::Thread( DialogHelper *pDialogHelper,
     m_bStopped( false ),
     m_bWorking( false )
 {
-    assert( pDialogHelper );
+    OSL_ASSERT( pDialogHelper );
 }
 
 

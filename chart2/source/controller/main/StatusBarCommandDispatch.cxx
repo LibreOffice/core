@@ -50,7 +50,7 @@ void StatusBarCommandDispatch::initialize()
     if( m_xModifiable.is())
     {
         Reference< util::XModifyBroadcaster > xModifyBroadcaster( m_xModifiable, uno::UNO_QUERY );
-        assert(xModifyBroadcaster.is());
+        OSL_ASSERT( xModifyBroadcaster.is());
         if( xModifyBroadcaster.is())
             xModifyBroadcaster->addModifyListener( this );
     }

@@ -302,7 +302,7 @@ void SAL_CALL PresenterButton::mouseReleased (const css::awt::MouseEvent& rEvent
 
     if (meState == PresenterBitmapDescriptor::ButtonDown)
     {
-        assert(mpPresenterController.get()!=nullptr);
+        OSL_ASSERT(mpPresenterController.get()!=nullptr);
         mpPresenterController->DispatchUnoCommand(msAction);
 
         meState = PresenterBitmapDescriptor::Normal;
@@ -420,7 +420,7 @@ Reference<rendering::XBitmap> PresenterButton::GetBitmap (
         return mpIcon->GetBitmap(eMode);
     else
     {
-        assert(mpIcon.get()!=nullptr);
+        OSL_ASSERT(mpIcon.get()!=nullptr);
         return nullptr;
     }
 }

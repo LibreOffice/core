@@ -131,7 +131,7 @@ public:
 
         try
         {
-            assert( m_ResMgr && m_OtherResMgr );
+            OSL_ASSERT( m_ResMgr && m_OtherResMgr );
 
             // translate the control id to a resource id
             sal_Int16 aResId = CtrlIdToResId( aId );

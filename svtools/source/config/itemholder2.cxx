@@ -162,7 +162,7 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
             break;
 
         default:
-            assert(false);
+            OSL_ASSERT(false);
             break;
     }
 }

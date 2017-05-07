@@ -50,7 +50,7 @@ bool ChartHelper::isGL3DDiagram( const css::uno::Reference<css::chart2::XDiagram
 
         //iterate through all chart types in the current coordinate system
         uno::Reference<chart2::XChartTypeContainer> xChartTypeContainer(xCooSys, uno::UNO_QUERY);
-        assert( xChartTypeContainer.is());
+        OSL_ASSERT( xChartTypeContainer.is());
         if( !xChartTypeContainer.is() )
             continue;
 

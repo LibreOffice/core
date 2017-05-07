@@ -308,7 +308,7 @@ bool SlideChangeBase::operator()( double nValue )
                     // between different canvases!
 
                     // render the content
-                    assert( getLeavingBitmap( rViewEntry ) );
+                    OSL_ASSERT( getLeavingBitmap( rViewEntry ) );
                     if( getLeavingBitmap( rViewEntry ) )
                         getLeavingBitmap( rViewEntry )->draw( pOutContentCanvas );
                 }
@@ -430,7 +430,7 @@ void SlideChangeBase::viewChanged( const UnoViewSharedPtr& rView )
             [rView]( const ViewEntry& rViewEntry )
             { return rView == rViewEntry.getView(); } ) );
 
-    assert( aModifiedEntry != maViewData.end() );
+    OSL_ASSERT( aModifiedEntry != maViewData.end() );
     if( aModifiedEntry == maViewData.end() )
         return;
 

@@ -497,7 +497,7 @@ OStorePageBIOS::AceCache::create (sal_uInt32 addr)
   if (ace != nullptr)
   {
     // verify invariant state.
-    assert((ace->m_next == ace) && (ace->m_prev == ace));
+    OSL_ASSERT((ace->m_next == ace) && (ace->m_prev == ace));
 
     // initialize.
     ace->m_addr = addr;

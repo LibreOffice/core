@@ -768,7 +768,7 @@ void SvxColorTabPage::FillUserData()
 void SvxColorTabPage::SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef )
 {
     (void) t;
-    assert( t == XPropertyListType::Color );
+    OSL_ASSERT( t == XPropertyListType::Color );
     pColorList = XColorListRef( static_cast<XColorList *>(xRef.get() ) );
 }
 

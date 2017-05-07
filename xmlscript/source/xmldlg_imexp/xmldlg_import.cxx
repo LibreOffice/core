@@ -256,13 +256,19 @@ void StyleElement::importVisualEffectStyle(
     if (getStringAttr( &aValue, "look", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "none" )
+        {
             _visualEffect = awt::VisualEffect::NONE;
+        }
         else if ( aValue == "3d" )
+        {
             _visualEffect = awt::VisualEffect::LOOK3D;
+        }
         else if ( aValue == "simple" )
+        {
             _visualEffect = awt::VisualEffect::FLAT;
+        }
         else
-            assert( false );
+            OSL_ASSERT( false );
 
         _hasValue |= 0x40;
         xProps->setPropertyValue( "VisualEffect", makeAny(_visualEffect) );

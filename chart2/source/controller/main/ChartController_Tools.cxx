@@ -239,7 +239,7 @@ void ChartController::executeDispatch_ScaleText()
     ControllerLockGuardUNO aCtlLockGuard( getModel() );
 
     std::unique_ptr<ReferenceSizeProvider> pRefSizeProv(impl_createReferenceSizeProvider());
-    assert(pRefSizeProv.get());
+    OSL_ASSERT( pRefSizeProv.get());
     if (pRefSizeProv)
         pRefSizeProv->toggleAutoResizeState();
 
@@ -438,7 +438,7 @@ void ChartController::impl_PasteStringAsTextShape( const OUString& rString, cons
     {
         const Reference< lang::XMultiServiceFactory >& xShapeFactory( pDrawModelWrapper->getShapeFactory() );
         const Reference< drawing::XDrawPage >& xDrawPage( pDrawModelWrapper->getMainDrawPage() );
-        assert(xShapeFactory.is() && xDrawPage.is());
+        OSL_ASSERT( xShapeFactory.is() && xDrawPage.is() );
 
         if ( xShapeFactory.is() && xDrawPage.is() )
         {

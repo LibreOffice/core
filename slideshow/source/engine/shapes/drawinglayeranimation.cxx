@@ -581,7 +581,7 @@ sal_uInt32 ActivityImpl::ImpRegisterAgainScrollTextMixerState(sal_uInt32 nTime)
 void ActivityImpl::updateShapeAttributes(
     double fTime, basegfx::B2DRectangle const& parentBounds )
 {
-    assert( meAnimKind != drawing::TextAnimationKind_NONE );
+    OSL_ASSERT( meAnimKind != drawing::TextAnimationKind_NONE );
     if( meAnimKind == drawing::TextAnimationKind_NONE )
         return;
 
@@ -780,7 +780,7 @@ ActivityImpl::ActivityImpl(
     uno::Reference<beans::XPropertySet> const xProps( xShape, uno::UNO_QUERY_THROW );
 
     getPropertyValue( meAnimKind, xProps, "TextAnimationKind" );
-    assert( meAnimKind != drawing::TextAnimationKind_NONE );
+    OSL_ASSERT( meAnimKind != drawing::TextAnimationKind_NONE );
     mbAlternate = (meAnimKind == drawing::TextAnimationKind_ALTERNATE);
     mbScrollIn = (meAnimKind == drawing::TextAnimationKind_SLIDE);
 

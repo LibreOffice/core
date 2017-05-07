@@ -242,7 +242,7 @@ Any IdlReflectionServiceImpl::getByHierarchicalName( const OUString & rName )
         if (aRet.getValueTypeClass() == TypeClass_INTERFACE)
         {
             // type retrieved from tdmgr
-            assert( (*o3tl::forceAccess<Reference<XInterface>>(aRet))->queryInterface(
+            OSL_ASSERT( (*o3tl::forceAccess<Reference<XInterface>>(aRet))->queryInterface(
                 cppu::UnoType<XTypeDescription>::get()).hasValue() );
 
             css::uno::Reference< css::reflection::XConstantTypeDescription >

@@ -127,9 +127,9 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
             xSeries.set( aSeriesToReUse[nSeriesIndex] );
         else
             xSeries.set( new DataSeries );
-        assert( xSeries.is() );
+        OSL_ASSERT( xSeries.is() );
         Reference< data::XDataSink > xSink( xSeries, uno::UNO_QUERY );
-        assert( xSink.is() );
+        OSL_ASSERT( xSink.is() );
         xSink->setData( comphelper::containerToSequence( aNewData ) );
 
         aSeriesVec.push_back( xSeries );

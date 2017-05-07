@@ -441,7 +441,7 @@ void BitmapCache::UpdateCacheSize (const CacheEntry& rEntry, CacheOperation eOpe
             break;
 
         default:
-            assert(false);
+            OSL_ASSERT(false);
             break;
     }
 }

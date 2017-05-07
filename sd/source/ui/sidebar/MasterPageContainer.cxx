@@ -265,7 +265,7 @@ void MasterPageContainer::ReleaseToken (Token aToken)
     SharedMasterPageDescriptor pDescriptor = mpImpl->GetDescriptor(aToken);
     if (pDescriptor.get() != nullptr)
     {
-        assert(pDescriptor->mnUseCount>0);
+        OSL_ASSERT(pDescriptor->mnUseCount>0);
         --pDescriptor->mnUseCount;
         if (pDescriptor->mnUseCount <= 0)
         {
@@ -527,7 +527,7 @@ void MasterPageContainer::Implementation::LateInit()
     {
         meInitializationState = INITIALIZING;
 
-        assert(Instance().get()==this);
+        OSL_ASSERT(Instance().get()==this);
         mpRequestQueue.reset(MasterPageContainerQueue::Create(
             std::shared_ptr<MasterPageContainerQueue::ContainerAdapter>(Instance())));
 
@@ -576,7 +576,7 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel()
         if (*iDescriptor!=nullptr && (*iDescriptor)->mpMasterPage != nullptr)
         {
             Size aPageSize ((*iDescriptor)->mpMasterPage->GetSize());
-            assert(aPageSize.Width() > 0 && aPageSize.Height() > 0);
+            OSL_ASSERT(aPageSize.Width() > 0 && aPageSize.Height() > 0);
             if (aPageSize.Width() > 0)
                 nWidth = aPageSize.Width();
             if (aPageSize.Height() > 0)

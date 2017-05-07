@@ -633,8 +633,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     aFileName = aFObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::NONE );
                 }
 
-                assert( !aFilterName.isEmpty() );
-                assert( !aFileName.isEmpty() );
+                OSL_ASSERT( !aFilterName.isEmpty() );
+                OSL_ASSERT( !aFileName.isEmpty() );
 
                 // Creates a temporary directory to store our predefined file into it.
                 ::utl::TempFile aTempDir( nullptr, true );

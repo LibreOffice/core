@@ -228,7 +228,7 @@ Reference<XAccessible > SAL_CALL AccessibleSlideSorterView::getAccessibleParent(
 
 sal_Int32 SAL_CALL AccessibleSlideSorterView::getAccessibleIndexInParent()
 {
-    assert(getAccessibleParent().is());
+    OSL_ASSERT(getAccessibleParent().is());
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     sal_Int32 nIndexInParent(-1);
@@ -756,7 +756,7 @@ AccessibleSlideSorterObject* AccessibleSlideSorterView::Implementation::GetAcces
     }
     else
     {
-        assert(nIndex>=0 && (sal_uInt32)nIndex<maPageObjects.size());
+        OSL_ASSERT(nIndex>=0 && (sal_uInt32)nIndex<maPageObjects.size());
     }
 
     return pChild;

@@ -376,7 +376,7 @@ void PreviewRenderer::SetupOutputSize (
     else
     {
         // We should never get here.
-        assert(false);
+        OSL_ASSERT(false);
         aMapMode.SetScaleX(1.0);
         aMapMode.SetScaleY(1.0);
     }

@@ -273,15 +273,15 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
     }
     catch(const BridgeRuntimeError&)
     {
-        assert(false);
+        OSL_ASSERT(false);
     }
     catch(const Exception&)
     {
-        assert(false);
+        OSL_ASSERT(false);
     }
     catch(...)
     {
-        assert(false);
+        OSL_ASSERT(false);
     }
 
     return ret;
@@ -400,7 +400,7 @@ void InterfaceOleWrapper_Impl::convertDispparamsArgs(DISPID id,
         else if(info.eMemberType == MemberType_PROPERTY)
             variantToAny( & varParam, anyParam, info.aType);
         else
-            assert(false);
+            OSL_ASSERT(false);
 
         pParams[countArgs - (i + 1)]= anyParam;
     }// end for / iterating over all parameters

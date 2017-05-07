@@ -291,7 +291,7 @@ bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
             else
             {
                 //Error
-                assert(false);
+                OSL_ASSERT(false);
                 bCompiled = false;
                 break;
             }
@@ -300,7 +300,7 @@ bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
             && errorNext != ::osl::File::E_None)
         {
             //Error
-            assert(false);
+            OSL_ASSERT(false);
             bCompiled = false;
         }
     }
@@ -358,7 +358,7 @@ void BackendImpl::implProcessHelp(
     Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {
     Reference< deployment::XPackage > xPackage(package);
-    assert(xPackage.is());
+    OSL_ASSERT(xPackage.is());
     if (doRegisterPackage)
     {
         //revive already processed help if possible

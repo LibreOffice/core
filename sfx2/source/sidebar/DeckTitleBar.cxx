@@ -44,7 +44,7 @@ DeckTitleBar::DeckTitleBar (const OUString& rsTitle,
     , maCloserAction(rCloserAction)
     , mbIsCloserVisible(false)
 {
-    assert(pParentWindow != nullptr);
+    OSL_ASSERT(pParentWindow != nullptr);
 
     if (maCloserAction)
         SetCloserVisible(true);

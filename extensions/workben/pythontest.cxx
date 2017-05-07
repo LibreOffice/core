@@ -433,7 +433,7 @@ void CmdDebugger::dumpVarToStream( const char *pc , const UsrAny &aValue, FILE *
 
 void CmdDebugger::detach()
 {
-    assert( m_pDebuggingRef );
+    OSL_ASSERT( m_pDebuggingRef );
 
        m_bIsRunning = FALSE;
        m_pDebuggingRef = 0;

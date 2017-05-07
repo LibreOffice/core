@@ -440,7 +440,7 @@ namespace cppcanvas
                         int length = aStartColor.getLength ();
                         uno::Sequence< double > aColor (length);
 
-                        assert (length == aEndColor.getLength());
+                        OSL_ASSERT (length == aEndColor.getLength());
 
                         for (int i = 0; i < brush->blendPoints; i++) {
                             aStops[i] = brush->blendPositions [i];

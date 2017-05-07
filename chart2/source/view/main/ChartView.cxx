@@ -494,7 +494,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
 
     //iterate through all coordinate systems
     uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
-    assert(xCooSysContainer.is());
+    OSL_ASSERT( xCooSysContainer.is());
     if( !xCooSysContainer.is())
         return;
     uno::Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
@@ -507,7 +507,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
 
         //iterate through all chart types in the current coordinate system
         uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
-        assert(xChartTypeContainer.is());
+        OSL_ASSERT( xChartTypeContainer.is());
         if( !xChartTypeContainer.is() )
             continue;
         uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
@@ -550,7 +550,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                 pVCooSys->addMinimumAndMaximumSupplier(pPlotter);
 
             uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
-            assert(xDataSeriesContainer.is());
+            OSL_ASSERT( xDataSeriesContainer.is());
             if( !xDataSeriesContainer.is() )
                 continue;
 
@@ -3414,7 +3414,7 @@ void ChartView::createShapes3D()
 
     //iterate through all chart types in the current coordinate system
     uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
-    assert(xChartTypeContainer.is());
+    OSL_ASSERT( xChartTypeContainer.is());
     if( !xChartTypeContainer.is() )
         return;
 
@@ -3437,7 +3437,7 @@ void ChartView::createShapes3D()
     }
 
     uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
-    assert(xDataSeriesContainer.is());
+    OSL_ASSERT( xDataSeriesContainer.is());
     if( !xDataSeriesContainer.is() )
         return;
 

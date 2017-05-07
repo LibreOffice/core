@@ -980,7 +980,7 @@ SvXMLGraphicImportExportHelper::SvXMLGraphicImportExportHelper( SvXMLGraphicHelp
 void SAL_CALL SvXMLGraphicImportExportHelper::disposing()
 {
     Reference< XComponent > xComp( m_xGraphicObjectResolver, UNO_QUERY );
-    assert( xComp.is());
+    OSL_ASSERT( xComp.is());
     if( xComp.is())
         xComp->dispose();
     // m_xBinaryStreamResolver is a reference to the same object => don't call

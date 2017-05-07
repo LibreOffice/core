@@ -371,7 +371,7 @@ void RehearseTimingsActivity::viewChanged( const UnoViewSharedPtr& rView )
             { return rView == cp.first; } )
         );
 
-    assert( aModifiedEntry != maViews.end() );
+    OSL_ASSERT( aModifiedEntry != maViews.end() );
     if( aModifiedEntry == maViews.end() )
         return;
 
@@ -467,7 +467,7 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
         cppcanvas::VCLFactory::createRenderer(
             canvas, metaFile, cppcanvas::Renderer::Parameters() ) );
     const bool succ = renderer->draw();
-    assert( succ );
+    OSL_ASSERT( succ );
     (void)succ;
 }
 

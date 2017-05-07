@@ -604,7 +604,7 @@ void SdPageObjsTLB::AddShapeList (
     while( aIter.IsMore() )
     {
         SdrObject* pObj = aIter.Next();
-        assert(pObj!=nullptr);
+        OSL_ASSERT(pObj!=nullptr);
 
         // Get the shape name.
         OUString aStr (GetObjectName( pObj ) );
@@ -1189,13 +1189,13 @@ void SdPageObjsTLB::DoDrag()
         ::sd::ViewShell* pViewShell = GetViewShellForDocShell(*pDocShell);
         if (pViewShell == nullptr)
         {
-            assert(pViewShell!=nullptr);
+            OSL_ASSERT(pViewShell!=nullptr);
             return;
         }
         sd::View* pView = pViewShell->GetView();
         if (pView == nullptr)
         {
-            assert(pView!=nullptr);
+            OSL_ASSERT(pView!=nullptr);
             return;
         }
 

@@ -44,7 +44,7 @@ namespace cppu
 static inline uno_Sequence * reallocSeq(
     uno_Sequence * pReallocate, std::size_t nElementSize, sal_Int32 nElements )
 {
-    assert( nElements >= 0 );
+    OSL_ASSERT( nElements >= 0 );
     uno_Sequence * pNew = nullptr;
     sal_uInt32 nSize = calcSeqMemSize( nElementSize, nElements );
     if (nSize > 0)
@@ -302,7 +302,7 @@ static inline bool idefaultConstructElements(
 
     if (pSeq == nullptr)
     {
-        assert( nAlloc >= 0 ); // must have been an allocation failure
+        OSL_ASSERT( nAlloc >= 0 ); // must have been an allocation failure
         return false;
     }
     *ppSeq = pSeq;
@@ -532,7 +532,7 @@ static inline bool icopyConstructFromElements(
                 uno_Sequence * pNew = icopyConstructSequence(
                     static_cast<uno_Sequence **>(pSourceElements)[nPos],
                     pSeqElementType, acquire, nullptr );
-                assert( pNew != nullptr );
+                OSL_ASSERT( pNew != nullptr );
                 // ought never be a memory allocation problem,
                 // because of reference counted sequence handles
                 pDestElements[ nPos ] = pNew;
@@ -625,7 +625,7 @@ static inline bool ireallocSequence(
     }
     else
     {
-        assert( pSeq->nRefCount == 1 );
+        OSL_ASSERT( pSeq->nRefCount == 1 );
         if (nSize > nElements) // default construct the rest
         {
             ret = idefaultConstructElements(
@@ -641,7 +641,7 @@ static inline bool ireallocSequence(
             // warning: it is assumed that the following will never fail,
             //          else this leads to a sequence null handle
             *ppSequence = reallocSeq( pSeq, nElementSize, nSize );
-            assert( *ppSequence != nullptr );
+            OSL_ASSERT( *ppSequence != nullptr );
             ret = (*ppSequence != nullptr);
         }
     }
@@ -695,7 +695,7 @@ sal_Bool SAL_CALL uno_type_sequence_construct(
         ret = true;
     }
 
-    assert( (*ppSequence != nullptr) == ret );
+    OSL_ASSERT( (*ppSequence != nullptr) == ret );
     return ret;
 }
 
@@ -734,7 +734,7 @@ sal_Bool SAL_CALL uno_sequence_construct(
         ret = true;
     }
 
-    assert( (*ppSequence != nullptr) == ret );
+    OSL_ASSERT( (*ppSequence != nullptr) == ret );
     return ret;
 }
 

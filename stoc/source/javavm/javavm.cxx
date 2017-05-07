@@ -573,7 +573,7 @@ public:
 
     ~DetachCurrentThread() {
         if (m_jvm->DetachCurrentThread() != 0) {
-            assert(false);
+            OSL_ASSERT(false);
         }
     }
 
@@ -823,7 +823,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         case JFW_E_RUNNING_JVM:
         {
             //This service should make sure that we do not start java twice.
-            assert(false);
+            OSL_ASSERT(false);
             break;
         }
         case JFW_E_NEED_RESTART:
@@ -884,12 +884,12 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         }
         return css::uno::makeAny(reinterpret_cast< sal_IntPtr >(m_pJavaVm));
     case RETURN_VIRTUALMACHINE:
-        assert(sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *));
+        OSL_ASSERT(sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *));
         return css::uno::makeAny(
             reinterpret_cast< sal_Int64 >(
                 m_xUnoVirtualMachine->getVirtualMachine().get()));
     case RETURN_UNOVIRTUALMACHINE:
-        assert(sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *));
+        OSL_ASSERT(sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *));
         return css::uno::makeAny(
             reinterpret_cast< sal_Int64 >(m_xUnoVirtualMachine.get()));
     }

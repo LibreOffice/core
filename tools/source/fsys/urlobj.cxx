@@ -3124,7 +3124,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 return false;
             break;
         default:
-            assert(false);
+            OSL_ASSERT(false);
             break;
     }
 
@@ -3563,7 +3563,7 @@ INetURLObject::getAbbreviated(
                     = pPrefixBegin
                           + (bAuthority && pPrefixBegin == pCoreBegin ? 2 :
                                                                         1);
-                assert(p <= pEnd);
+                OSL_ASSERT(p <= pEnd);
                 while (p < pEnd && *p != '/')
                     ++p;
                 if (p == pCoreEnd - 1 && *p == '/')
@@ -4426,7 +4426,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
         }
 
         default:
-            assert(false);
+            OSL_ASSERT(false);
             break;
     }
 

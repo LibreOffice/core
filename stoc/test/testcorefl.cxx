@@ -348,11 +348,11 @@ SAL_IMPLEMENT_MAIN()
                 OUString( "stoctest.rdb" ) ) );
         Reference< XComponentContext > xContext;
         Reference< beans::XPropertySet > xProps( xMgr, UNO_QUERY );
-        assert( xProps.is() );
+        OSL_ASSERT( xProps.is() );
         xProps->getPropertyValue(
             OUString( "DefaultContext" ) ) >>=
             xContext;
-        assert( xContext.is() );
+        OSL_ASSERT( xContext.is() );
 
         Reference< XIdlReflection > xRefl;
         xContext->getValueByName(

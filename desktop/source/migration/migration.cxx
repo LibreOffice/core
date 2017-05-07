@@ -693,7 +693,7 @@ typedef std::map< OUString, componentParts > Components;
 
 bool getComponent(OUString const & path, OUString * component)
 {
-    assert(component != nullptr);
+    OSL_ASSERT(component != nullptr);
     if (path.isEmpty() || path[0] != '/') {
         SAL_INFO( "desktop.migration", "configuration migration in/exclude path " << path << " ignored (does not start with slash)" );
         return false;

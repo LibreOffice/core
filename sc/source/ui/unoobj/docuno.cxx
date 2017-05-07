@@ -2514,7 +2514,7 @@ css::uno::Reference<css::uno::XInterface> ScModelObj::create(
                 ( pDocShell->GetCreateMode() == SfxObjectCreateMode::INTERNAL ));
         // this should never happen, i.e. the temporary document should never be
         // loaded, because this unlinks the data
-        assert( bCreate );
+        OSL_ASSERT( bCreate );
 
         if ( !xRet.is() && bCreate )
         {

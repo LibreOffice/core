@@ -1109,7 +1109,7 @@ void OOle2Obj::impl_createDataProvider_nothrow(const uno::Reference< frame::XMod
         uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
         if( xCompSupp.is())
             xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
-        assert( xReceiver.is());
+        OSL_ASSERT( xReceiver.is());
         if( xReceiver.is() )
         {
             uno::Reference< lang::XMultiServiceFactory> xFac(_xModel,uno::UNO_QUERY);
@@ -1149,7 +1149,7 @@ void OOle2Obj::initializeChart( const uno::Reference< frame::XModel>& _xModel)
     uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
     if( xCompSupp.is())
         xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
-    assert( xReceiver.is());
+    OSL_ASSERT( xReceiver.is());
     if( xReceiver.is() )
     {
         // lock the model to suppress any internal updates

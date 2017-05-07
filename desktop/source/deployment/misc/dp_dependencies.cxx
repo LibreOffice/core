@@ -152,7 +152,7 @@ check(dp_misc::DescriptionInfoset const & infoset) {
 OUString getErrorText(
     css::uno::Reference< css::xml::dom::XElement > const & dependency)
 {
-    assert(dependency.is());
+    OSL_ASSERT(dependency.is());
     if ( dependency->getNamespaceURI() == namespaceOpenOfficeOrg && dependency->getTagName() == minimalVersionOpenOfficeOrg )
     {
         return produceErrorText(

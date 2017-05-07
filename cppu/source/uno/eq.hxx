@@ -252,7 +252,7 @@ inline bool _equalSequence(
         return true;
     }
     default:
-        assert(false);
+        OSL_ASSERT(false);
         return false;
     }
 }
@@ -580,7 +580,7 @@ inline bool _equalData(
             return _equalObject( *static_cast<void **>(pDest), *static_cast<void **>(pSource), queryInterface, release );
         break;
     default:
-        assert(false);
+        OSL_ASSERT(false);
         break;
     }
     return false;

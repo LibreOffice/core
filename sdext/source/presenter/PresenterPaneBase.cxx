@@ -109,8 +109,8 @@ void PresenterPaneBase::SetTitle (const OUString& rsTitle)
 {
     msTitle = rsTitle;
 
-    assert(mpPresenterController.get()!=nullptr);
-    assert(mpPresenterController->GetPaintManager().get()!=nullptr);
+    OSL_ASSERT(mpPresenterController.get()!=nullptr);
+    OSL_ASSERT(mpPresenterController->GetPaintManager().get()!=nullptr);
 
     mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);
 }
@@ -345,7 +345,7 @@ void PresenterPaneBase::PaintBorderBackground (
 
 void PresenterPaneBase::PaintBorder (const awt::Rectangle& rUpdateBox)
 {
-    assert(mxPaneId.is());
+    OSL_ASSERT(mxPaneId.is());
 
     if (mxBorderPainter.is() && mxBorderWindow.is() && mxBorderCanvas.is())
     {
@@ -365,9 +365,9 @@ void PresenterPaneBase::PaintBorder (const awt::Rectangle& rUpdateBox)
 
 void PresenterPaneBase::LayoutContextWindow()
 {
-    assert(mxPaneId.is());
-    assert(mxBorderWindow.is());
-    assert(mxContentWindow.is());
+    OSL_ASSERT(mxPaneId.is());
+    OSL_ASSERT(mxBorderWindow.is());
+    OSL_ASSERT(mxContentWindow.is());
     if (mxBorderPainter.is() && mxPaneId.is() && mxBorderWindow.is() && mxContentWindow.is())
     {
         const awt::Rectangle aBorderBox (mxBorderWindow->getPosSize());

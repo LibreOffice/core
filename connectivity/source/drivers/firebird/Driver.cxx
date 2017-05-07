@@ -274,7 +274,7 @@ namespace connectivity
                     _pObject->dispose();
 
                     // only the alive ref holds the object
-                    assert( _refCount == 1 );
+                    OSL_ASSERT( _refCount == 1 );
 
                     // release the parent in the ~
                     if (xParent.is())

@@ -1661,7 +1661,7 @@ SwXText::convertToTextFrame(
         }
 
         SwTextNode *const pTextNode(aStartPam.GetNode().GetTextNode());
-        assert(pTextNode);
+        OSL_ASSERT(pTextNode);
         if (!pTextNode || !pTextNode->Len()) // don't remove if it contains text!
         {
             {   // has to be in a block to remove the SwIndexes before

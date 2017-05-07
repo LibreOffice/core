@@ -309,8 +309,8 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
 
     Any aRet;
 
-    assert( rOutParam.getLength() == 0 );
-    assert( rOutParamIndex.getLength() == 0 );
+    OSL_ASSERT( rOutParam.getLength() == 0 );
+    OSL_ASSERT( rOutParamIndex.getLength() == 0 );
 
     try
     {
@@ -334,7 +334,7 @@ Any XLB_Invocation::invoke( const OUString & rFunctionName,
 
         if ( rFunctionName == "setValues" )
         {
-            assert( rParams.getLength() == 17 );
+            OSL_ASSERT( rParams.getLength() == 17 );
             aBool = *(sal_Bool *)rParams[0].getValue();
             aChar = *(sal_Unicode *)rParams[1].getValue();
             rParams[2] >>= nByte;
@@ -781,7 +781,7 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
             aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float, aRet.Double,
             aRet.Enum, aRet.String, aRet.Interface, aRet.Any, aRet.Sequence, aRet2 );
 
-        assert( equals( aData, aRet ) && equals( aData, aRet2 ) );
+        OSL_ASSERT( equals( aData, aRet ) && equals( aData, aRet2 ) );
 
         // set last retrieved values
         test::TestData aSV2ret = xLBT->setValues2(
@@ -789,7 +789,7 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
             aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float, aRet.Double,
             aRet.Enum, aRet.String, aRet.Interface, aRet.Any, aRet.Sequence, aRet2 );
 
-        assert( equals( aData, aSV2ret ) && equals( aData, aRet2 ) );
+        OSL_ASSERT( equals( aData, aSV2ret ) && equals( aData, aRet2 ) );
         }
         {
         test::TestData aRet, aRet2;
@@ -798,7 +798,7 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
             aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float, aRet.Double,
             aRet.Enum, aRet.String, aRet.Interface, aRet.Any, aRet.Sequence, aRet2 );
 
-        assert( equals( aData, aRet ) && equals( aData, aRet2 ) && equals( aData, aGVret ) );
+        OSL_ASSERT( equals( aData, aRet ) && equals( aData, aRet2 ) && equals( aData, aGVret ) );
 
         // set last retrieved values
         xLBT->setBool( aRet.Bool );

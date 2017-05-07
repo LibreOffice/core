@@ -51,7 +51,7 @@ OString getElement(OString const & docPath,
                         xmlChar const * pathExpression, bool bThrowIfEmpty)
 {
     //Prepare the xml document and context
-    assert(!docPath.isEmpty());
+    OSL_ASSERT(!docPath.isEmpty());
      jfw::CXmlDocPtr doc(xmlParseFile(docPath.getStr()));
     if (doc == nullptr)
         throw FrameworkException(
@@ -712,7 +712,7 @@ void CNodeJavaInfo::loadFromNode(xmlDoc * pDoc, xmlNode * pJavaInfo)
     OString sExcMsg("[Java framework] Error in function NodeJavaInfo::loadFromNode "
                          "(elements.cxx).");
 
-    assert(pJavaInfo && pDoc);
+    OSL_ASSERT(pJavaInfo && pDoc);
     if (pJavaInfo->children == nullptr)
         return;
     //Get the xsi:nil attribute;
@@ -829,7 +829,7 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
                                 xmlNode* pJavaInfoNode) const
 
 {
-    assert(pJavaInfoNode && pDoc);
+    OSL_ASSERT(pJavaInfoNode && pDoc);
     //write the attribute vendorSettings
 
     //javaInfo@vendorUpdate

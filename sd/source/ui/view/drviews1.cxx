@@ -747,7 +747,7 @@ bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         bActivated = ViewShell::ActivateObject(pObj, nVerb);
 
-        assert(GetViewShell()!=nullptr);
+        OSL_ASSERT(GetViewShell()!=nullptr);
         Client* pClient = static_cast<Client*>(GetViewShell()->GetIPClient());
         if (pClient)
             pClient->SetSdrGrafObj(nullptr);
@@ -842,7 +842,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
             }
             else
             {
-                assert(mpFrameView!=nullptr);
+                OSL_ASSERT(mpFrameView!=nullptr);
                 mpFrameView->SetSelectedPage(nSelectedPage);
 
                 if (GetDoc()->GetSdPageCount(mePageKind) > nSelectedPage)
@@ -932,7 +932,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
         {
             // tighten VisArea, to possibly deactivate objects
             // !!! only if we are not in presentation mode (#96279) !!!
-            assert (GetViewShell()!=nullptr);
+            OSL_ASSERT (GetViewShell()!=nullptr);
             GetViewShell()->DisconnectAllClients();
             VisAreaChanged(::tools::Rectangle(Point(), Size(1, 1)));
         }

@@ -86,7 +86,7 @@ struct CompIdentifiers
 
 OUString CompIdentifiers::getName(std::vector<Reference<css::deployment::XPackage> > const & a)
 {
-    assert(a.size() == 3);
+    OSL_ASSERT(a.size() == 3);
     //get the first non-null reference
     Reference<css::deployment::XPackage>  extension;
     std::vector<Reference<css::deployment::XPackage> >::const_iterator it = a.begin();
@@ -98,7 +98,7 @@ OUString CompIdentifiers::getName(std::vector<Reference<css::deployment::XPackag
             break;
         }
     }
-    assert(extension.is());
+    OSL_ASSERT(extension.is());
     return extension->getDisplayName();
 }
 
@@ -146,14 +146,14 @@ public:
 ExtensionRemoveGuard::~ExtensionRemoveGuard()
 {
     try {
-        assert(!(m_extension.is() && !m_xPackageManager.is()));
+        OSL_ASSERT(!(m_extension.is() && !m_xPackageManager.is()));
         if (m_xPackageManager.is() && m_extension.is())
             m_xPackageManager->removePackage(
                 dp_misc::getIdentifier(m_extension), OUString(),
                 css::uno::Reference<css::task::XAbortChannel>(),
                 css::uno::Reference<css::ucb::XCommandEnvironment>());
     } catch (...) {
-        assert(false);
+        OSL_ASSERT(false);
     }
 }
 
@@ -167,7 +167,7 @@ ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& x
     , m_xContext(xContext)
 {
     m_xPackageManagerFactory = css::deployment::thePackageManagerFactory::get(m_xContext);
-    assert(m_xPackageManagerFactory.is());
+    OSL_ASSERT(m_xPackageManagerFactory.is());
 
     m_repositoryNames.push_back("user");
     m_repositoryNames.push_back("shared");
@@ -301,7 +301,7 @@ std::list<Reference<css::deployment::XPackage> >
         }
         extensionList.push_back(xPackage);
     }
-    assert(extensionList.size() == 3);
+    OSL_ASSERT(extensionList.size() == 3);
     return extensionList;
 }
 
@@ -359,7 +359,7 @@ bool ExtensionManager::isUserDisabled(
         listExtensions = getExtensionsWithSameId(identifier, fileName);
     } catch ( const lang::IllegalArgumentException & ) {
     }
-    assert(listExtensions.size() == 3);
+    OSL_ASSERT(listExtensions.size() == 3);
 
     return isUserDisabled( ::comphelper::containerToSequence(listExtensions) );
 }
@@ -367,7 +367,7 @@ bool ExtensionManager::isUserDisabled(
 bool ExtensionManager::isUserDisabled(
     uno::Sequence<Reference<css::deployment::XPackage> > const & seqExtSameId)
 {
-    assert(seqExtSameId.getLength() == 3);
+    OSL_ASSERT(seqExtSameId.getLength() == 3);
     Reference<css::deployment::XPackage> const & userExtension = seqExtSameId[0];
     if (userExtension.is())
     {
@@ -411,7 +411,7 @@ void ExtensionManager::activateExtension(
         listExtensions = getExtensionsWithSameId(identifier, fileName);
     } catch (const lang::IllegalArgumentException &) {
     }
-    assert(listExtensions.size() == 3);
+    OSL_ASSERT(listExtensions.size() == 3);
 
     activateExtension(
         ::comphelper::containerToSequence(listExtensions),
@@ -1171,7 +1171,7 @@ void ExtensionManager::reinstallDeployedExtensions(
                           registered.Value.Value))
                     {
                         const OUString id = dp_misc::getIdentifier(extensions[ pos ]);
-                        assert(!id.isEmpty());
+                        OSL_ASSERT(!id.isEmpty());
                         disabledExts.insert(id);
                     }
                 }
@@ -1196,7 +1196,7 @@ void ExtensionManager::reinstallDeployedExtensions(
             {
                 const OUString id =  dp_misc::getIdentifier(extensions[ pos ]);
                 const OUString fileName = extensions[ pos ]->getName();
-                assert(!id.isEmpty());
+                OSL_ASSERT(!id.isEmpty());
                 activateExtension(
                     id, fileName, disabledExts.find(id) != disabledExts.end(),
                     true, xAbortChannel, xCmdEnv );
@@ -1313,7 +1313,7 @@ void ExtensionManager::checkInstall(
                 request, cppu::UnoType<task::XInteractionApprove>::get(),
                 cmdEnv, &approve, &abort ))
         {
-            assert( !approve && !abort );
+            OSL_ASSERT( !approve && !abort );
             throw css::deployment::DeploymentException(
                 dp_misc::getResourceString(RID_STR_ERROR_WHILE_ADDING) + displayName,
                 static_cast<OWeakObject *>(this), request );
@@ -1345,7 +1345,7 @@ void ExtensionManager::checkUpdate(
     if (! dp_misc::interactContinuation(
             request, cppu::UnoType<task::XInteractionApprove>::get(),
             xCmdEnv, &replace, &abort )) {
-        assert( !replace && !abort );
+        OSL_ASSERT( !replace && !abort );
         throw css::deployment::DeploymentException(
             dp_misc::getResourceString(
                 RID_STR_ERROR_WHILE_ADDING) + newDisplayName,

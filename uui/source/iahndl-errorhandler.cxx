@@ -92,7 +92,7 @@ executeErrorDialog(
             break;
 
         default:
-            assert(false);
+            OSL_ASSERT(false);
             break;
         }
     }

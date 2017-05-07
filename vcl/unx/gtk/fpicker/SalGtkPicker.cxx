@@ -199,7 +199,7 @@ SalGtkPicker::~SalGtkPicker()
 
 void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const OUString& aDirectory )
 {
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     OString aTxt = unicodetouri(aDirectory);
     if( aTxt.isEmpty() ){
@@ -217,7 +217,7 @@ void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const OUString& aDirectory 
 
 OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory()
 {
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     gchar* pCurrentFolder =
         gtk_file_chooser_get_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ) );
@@ -229,7 +229,7 @@ OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory()
 
 void SAL_CALL SalGtkPicker::implsetTitle( const OUString& aTitle )
 {
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
 

@@ -222,7 +222,7 @@ void PresenterSlidePreview::SetSlide (const Reference<drawing::XDrawPage>& rxPag
         }
         catch (beans::UnknownPropertyException&)
         {
-            assert(false);
+            OSL_ASSERT(false);
         }
     }
 

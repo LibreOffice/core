@@ -517,7 +517,7 @@ Any SAL_CALL TreeControlPeer::getSelection()
             --nSelectionCount;
         }
 
-        assert( (pEntry == nullptr) && (nSelectionCount == 0) );
+        OSL_ASSERT( (pEntry == nullptr) && (nSelectionCount == 0) );
         aRet <<= aSelection;
     }
 
@@ -618,7 +618,7 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createSelectionEnumeration()
         --nSelectionCount;
     }
 
-    assert( (pEntry == nullptr) && (nSelectionCount == 0) );
+    OSL_ASSERT( (pEntry == nullptr) && (nSelectionCount == 0) );
 
     return Reference< XEnumeration >( new TreeSelectionEnumeration( aSelection ) );
 }
@@ -641,7 +641,7 @@ Reference< XEnumeration > SAL_CALL TreeControlPeer::createReverseSelectionEnumer
         --nSelectionCount;
     }
 
-    assert( (pEntry == nullptr) && (nSelectionCount == 0) );
+    OSL_ASSERT( (pEntry == nullptr) && (nSelectionCount == 0) );
 
     return Reference< XEnumeration >( new TreeSelectionEnumeration( aSelection ) );
 }

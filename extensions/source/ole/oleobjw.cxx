@@ -111,7 +111,7 @@ IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
     XInterface * xIntRoot = static_cast<OWeakObject *>(this);
 #if OSL_DEBUG_LEVEL > 0
     acquire(); // make sure we don't delete us twice because of Reference
-    assert( Reference<XInterface>( static_cast<XWeak*>(this), UNO_QUERY).get() == xIntRoot );
+    OSL_ASSERT( Reference<XInterface>( static_cast<XWeak*>(this), UNO_QUERY).get() == xIntRoot );
 #endif
 
     // remove entries in global maps
@@ -324,7 +324,7 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
         dispparams.cNamedArgs = 1;
         dispparams.rgvarg = & varArg;
 
-        assert(aDescPut || aVarDesc);
+        OSL_ASSERT(aDescPut || aVarDesc);
 
         VARTYPE vt = 0;
         DISPID dispid = 0;
@@ -506,7 +506,7 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
             throw UnknownPropertyException(msg);
         }
         // write-only should not be possible
-        assert(  aDescGet  || ! aDescPut);
+        OSL_ASSERT(  aDescGet  || ! aDescPut);
 
         HRESULT hr;
         DISPPARAMS dispparams = {nullptr, nullptr, 0, 0};
@@ -999,7 +999,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
     {
         //We should not run into this block, because invokeWithDispIdComTlb should
         //have been called instead.
-        assert(false);
+        OSL_ASSERT(false);
     }
 
 
@@ -1171,7 +1171,7 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
     // 2.parameter is a boolean which indicates if the COM pointer was a IUnknown or IDispatch
     // 3.parameter is a Sequence<Type>
     o2u_attachCurrentThread();
-    assert(aArguments.getLength() == 3);
+    OSL_ASSERT(aArguments.getLength() == 3);
 
     m_spUnknown= *static_cast<IUnknown* const *>(aArguments[0].getValue());
     m_spUnknown.QueryInterface( & m_spDispatch.p);
@@ -1898,7 +1898,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
                 {
                     //optional arg
                     //e.g: call func(x) in basic : func() ' no arg supplied
-                    assert(paramFlags & PARAMFLAG_FOPT);
+                    OSL_ASSERT(paramFlags & PARAMFLAG_FOPT);
                     arRefArgs[revIndex].vt = VT_ERROR;
                     arRefArgs[revIndex].scode = DISP_E_PARAMNOTFOUND;
                 }
@@ -2171,7 +2171,7 @@ void IUnknownWrapper_Impl::getFuncDescForInvoke(const OUString & sFuncName,
 }
 bool IUnknownWrapper_Impl::getDispid(const OUString& sFuncName, DISPID * id)
 {
-    assert(m_spDispatch);
+    OSL_ASSERT(m_spDispatch);
     LPOLESTR lpsz = const_cast<LPOLESTR> (reinterpret_cast<LPCOLESTR>(sFuncName.getStr()));
     HRESULT hr = m_spDispatch->GetIDsOfNames(IID_NULL, &lpsz, 1, LOCALE_USER_DEFAULT, id);
     return hr == S_OK;
@@ -2179,7 +2179,7 @@ bool IUnknownWrapper_Impl::getDispid(const OUString& sFuncName, DISPID * id)
 void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** pFuncDesc)
 
 {
-    assert( * pFuncDesc == nullptr);
+    OSL_ASSERT( * pFuncDesc == nullptr);
     buildComTlbIndex();
     typedef TLBFuncIndexMap::const_iterator cit;
     //We assume there is only one entry with the function name. A property
@@ -2201,7 +2201,7 @@ void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** p
                 //the actual name as obtained from ITypeInfo
                 OUString sRealName(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(memberName)));
                 cit itOrg  = m_mapComFunc.find(sRealName);
-                assert(itOrg != m_mapComFunc.end());
+                OSL_ASSERT(itOrg != m_mapComFunc.end());
                 // maybe this is a property, if so we need
                 // to store either both id's ( put/get ) or
                 // just the get. Storing both is more consistent
@@ -2220,7 +2220,7 @@ void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** p
     pair<cit, cit> p = m_mapComFunc.equal_range(sFuncName.toAsciiLowerCase());
     int numEntries = 0;
     for ( ;p.first != p.second; p.first ++, numEntries ++);
-    assert( ! (numEntries > 3) );
+    OSL_ASSERT( ! (numEntries > 3) );
 #endif
     if( itIndex != m_mapComFunc.end())
     {
@@ -2249,7 +2249,7 @@ void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** p
 void IUnknownWrapper_Impl::getPropDesc(const OUString & sFuncName, FUNCDESC ** pFuncDescGet,
                                        FUNCDESC** pFuncDescPut, VARDESC** pVarDesc)
 {
-    assert( * pFuncDescGet == nullptr && * pFuncDescPut == nullptr);
+    OSL_ASSERT( * pFuncDescGet == nullptr && * pFuncDescPut == nullptr);
     buildComTlbIndex();
     typedef TLBFuncIndexMap::const_iterator cit;
     pair<cit, cit> p = m_mapComFunc.equal_range(sFuncName);
@@ -2275,7 +2275,7 @@ void IUnknownWrapper_Impl::getPropDesc(const OUString & sFuncName, FUNCDESC ** p
     for ( int i = 0 ;p.first != p.second; p.first ++, i ++)
     {
         // There are a maximum of two entries, property put and property get
-        assert( ! (i > 2) );
+        OSL_ASSERT( ! (i > 2) );
         ITypeInfo* pType= getTypeInfo();
         FUNCDESC * pFuncDesc = nullptr;
         if (SUCCEEDED( pType->GetFuncDesc(p.first->second, & pFuncDesc)))

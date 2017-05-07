@@ -124,7 +124,7 @@ bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex )
 
 bool isBootstrapVariable(sal_uInt32 * pIndex)
 {
-    assert(osl_getCommandArgCount() >=  *pIndex);
+    OSL_ASSERT(osl_getCommandArgCount() >=  *pIndex);
 
     OUString arg;
     osl_getCommandArg(*pIndex, &arg.pData);
@@ -144,7 +144,7 @@ bool readArgument(
     {
         if (*pIndex < osl_getCommandArgCount())
         {
-            assert( pValue != nullptr );
+            OSL_ASSERT( pValue != nullptr );
             osl_getCommandArg( *pIndex, &pValue->pData );
             dp_misc::TRACE(__FILE__ ": argument value: "
                 + *pValue + "\n");
@@ -273,7 +273,7 @@ void printf_package(
 
     const Reference<deployment::XPackageTypeInfo> xPackageType(
         xPackage->getPackageType() );
-    assert( xPackageType.is() );
+    OSL_ASSERT( xPackageType.is() );
     if (xPackageType.is()) {
         printf_line( "Media-Type", xPackageType->getMediaType(), level + 1 );
     }
@@ -310,7 +310,7 @@ void printf_packages(
     std::vector<bool> const & vecUnaccepted,
     Reference<XCommandEnvironment> const & xCmdEnv, sal_Int32 level )
 {
-    assert(allExtensions.size() == vecUnaccepted.size());
+    OSL_ASSERT(allExtensions.size() == vecUnaccepted.size());
 
     if (allExtensions.empty())
     {
@@ -383,7 +383,7 @@ Reference<XComponentContext> connectToOffice(
     if (verbose)
         dp_misc::writeConsole("OK.  Connecting...");
 
-    assert( buf.isEmpty() );
+    OSL_ASSERT( buf.isEmpty() );
     buf.append( "uno:pipe,name=" );
     buf.append( pipeId );
     buf.append( ";urp;StarOffice.ComponentContext" );

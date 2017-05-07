@@ -466,7 +466,7 @@ private:
         else
         {
             // Multi-item condition.
-            assert(rItems.size() > 1);
+            OSL_ASSERT(rItems.size() > 1);
 
             // Store the 1st value for backward compatibility.
             const ScQueryEntry::Item& rItem = rItems.front();

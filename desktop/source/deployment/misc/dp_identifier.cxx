@@ -43,7 +43,7 @@ OUString generateIdentifier(
 OUString getIdentifier(
     css::uno::Reference< css::deployment::XPackage > const & package)
 {
-    assert(package.is());
+    OSL_ASSERT(package.is());
     css::beans::Optional< OUString > id(package->getIdentifier());
     return id.IsPresent
         ? id.Value : generateLegacyIdentifier(package->getName());

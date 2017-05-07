@@ -549,7 +549,7 @@ SwHistoryTextFlyCnt::~SwHistoryTextFlyCnt()
 void SwHistoryTextFlyCnt::SetInDoc( SwDoc* pDoc, bool )
 {
     ::sw::IShellCursorSupplier *const pISCS(pDoc->GetIShellCursorSupplier());
-    assert(pISCS);
+    OSL_ASSERT(pISCS);
     ::sw::UndoRedoContext context(*pDoc, *pISCS);
     m_pUndo->UndoImpl(context);
 }

@@ -155,11 +155,11 @@ inline static typelib_TypeDescription * createCTD(
             Reference< XStructTypeDescription > templateDesc(
                 access->getByHierarchicalName(aTypeName.copy(0, i)),
                 UNO_QUERY_THROW);
-            assert(
+            OSL_ASSERT(
                 templateDesc->getTypeParameters().getLength()
                 == xType->getTypeArguments().getLength());
             templateMemberTypes = templateDesc->getMemberTypes();
-            assert(templateMemberTypes.getLength() == nMembers);
+            OSL_ASSERT(templateMemberTypes.getLength() == nMembers);
         }
 
         sal_Int32 nPos;
@@ -212,7 +212,7 @@ inline static typelib_TypeDescription * createCTD(
             xAttribute->getGetExceptions() );
         for (sal_Int32 i = 0; i != getExcs.getLength(); ++i)
         {
-            assert( getExcs[i].is() );
+            OSL_ASSERT( getExcs[i].is() );
             getExc.push_back( getExcs[i]->getName().pData );
         }
         std::vector< rtl_uString * > setExc;
@@ -220,7 +220,7 @@ inline static typelib_TypeDescription * createCTD(
             xAttribute->getSetExceptions() );
         for (sal_Int32 i = 0; i != setExcs.getLength(); ++i)
         {
-            assert( setExcs[i].is() );
+            OSL_ASSERT( setExcs[i].is() );
             setExc.push_back( setExcs[i]->getName().pData );
         }
         typelib_typedescription_newExtendedInterfaceAttribute(
@@ -322,7 +322,7 @@ inline static typelib_TypeDescription * createCTD(
             new typelib_TypeDescription *[nBases]);
         for (sal_Int32 i = 0; i < nBases; ++i) {
             typelib_TypeDescription * p = createCTD(access, aBases[i]);
-            assert(
+            OSL_ASSERT(
                 !TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(p->eTypeClass));
             typelib_typedescription_register(&p);
             aBaseTypes[i] = p;
@@ -380,7 +380,7 @@ inline static typelib_TypeDescription * createCTD( const Reference< XEnumTypeDes
     {
         OUString aTypeName( xType->getName() );
         Sequence< OUString > aNames( xType->getEnumNames() );
-        assert( sizeof(OUString) == sizeof(rtl_uString *) ); // !!!
+        OSL_ASSERT( sizeof(OUString) == sizeof(rtl_uString *) ); // !!!
         Sequence< sal_Int32 > aValues( xType->getEnumValues() );
 
         typelib_typedescription_newEnum(
@@ -621,7 +621,7 @@ public:
 void EventListenerImpl::disposing( lang::EventObject const & rEvt )
 {
     if (rEvt.Source != m_xTDMgr) {
-        assert(false);
+        OSL_ASSERT(false);
     }
     // deregister of c typelib callback
     ::typelib_typedescription_revokeCallback( m_xTDMgr.get(), typelib_callback );

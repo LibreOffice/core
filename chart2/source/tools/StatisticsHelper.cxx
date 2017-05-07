@@ -313,7 +313,7 @@ Reference< beans::XPropertySet > StatisticsHelper::addErrorBars(
         xErrorBar.set( new ErrorBar );
     }
 
-    assert( xErrorBar.is());
+    OSL_ASSERT( xErrorBar.is());
     if( xErrorBar.is())
     {
         xErrorBar->setPropertyValue( "ErrorBarStyle", uno::Any( nStyle ));

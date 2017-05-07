@@ -1972,7 +1972,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
         std::vector<SwTextAttr *>::const_iterator const iter(
             std::find_if(newMarks.begin(), newMarks.end(),
                 NotContainedIn<SwTextAttr *>(oldMarks)));
-        assert(newMarks.end() != iter);
+        OSL_ASSERT(newMarks.end() != iter);
         if (newMarks.end() != iter)
         {
             pTextAttr = *iter;

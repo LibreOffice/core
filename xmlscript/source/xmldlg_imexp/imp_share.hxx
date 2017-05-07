@@ -164,7 +164,7 @@ public:
         , _xDialogModelFactory( xDialogModel, css::uno::UNO_QUERY_THROW )
         , XMLNS_DIALOGS_UID( 0 )
         , XMLNS_SCRIPT_UID( 0 )
-        { assert( _xDialogModel.is() && _xDialogModelFactory.is() &&
+        { OSL_ASSERT( _xDialogModel.is() && _xDialogModelFactory.is() &&
                       _xContext.is() ); }
     DialogImport( const DialogImport& rOther ) :
         ::cppu::WeakImplHelper< css::xml::input::XRoot >()
@@ -380,7 +380,7 @@ public:
         : _pImport( pImport ),
           _xControlModel( xControlModel_ ),
           _aId( id )
-        { assert( _xControlModel.is() ); }
+        { OSL_ASSERT( _xControlModel.is() ); }
 
     const css::uno::Reference< css::beans::XPropertySet >& getControlModel() const
         { return _xControlModel; }

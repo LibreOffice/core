@@ -217,7 +217,7 @@ namespace DOM
         if (!m_aNodePtr) { return; }
 
         if (m_pNamespace.get()) {
-            assert(!m_aNodePtr->parent);
+            OSL_ASSERT(!m_aNodePtr->parent);
             m_pNamespace->second =
                 OUStringToOString(prefix, RTL_TEXTENCODING_UTF8);
         } else {
@@ -232,7 +232,7 @@ namespace DOM
         if (!m_aNodePtr) { return OUString(); }
 
         if (m_pNamespace.get()) {
-            assert(!m_aNodePtr->parent);
+            OSL_ASSERT(!m_aNodePtr->parent);
             OUString const ret(OStringToOUString(
                         m_pNamespace->second, RTL_TEXTENCODING_UTF8));
             return ret;
@@ -248,7 +248,7 @@ namespace DOM
         if (!m_aNodePtr) { return OUString(); }
 
         if (m_pNamespace.get()) {
-            assert(!m_aNodePtr->parent);
+            OSL_ASSERT(!m_aNodePtr->parent);
             OUString const ret(OStringToOUString(
                         m_pNamespace->first, RTL_TEXTENCODING_UTF8));
             return ret;

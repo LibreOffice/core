@@ -328,10 +328,10 @@ void lcl_CloneSubGrids(
         }
 
         (*pDestIt) = xSubGrid;
-        assert( pDestIt != pDestEnd );
+        OSL_ASSERT( pDestIt != pDestEnd );
         ++pDestIt;
     }
-    assert( pDestIt == pDestEnd );
+    OSL_ASSERT( pDestIt == pDestEnd );
     (void)(pDestEnd); // avoid warning
 }
 

@@ -158,7 +158,7 @@ namespace cppu_threadpool
                 // thread wasn't reused, remove it from the list
                 WaitingThreadList::iterator ii = find(
                     m_lstThreads.begin(), m_lstThreads.end(), &waitingThread );
-                assert( ii != m_lstThreads.end() );
+                OSL_ASSERT( ii != m_lstThreads.end() );
                 m_lstThreads.erase( ii );
             }
         }
@@ -212,7 +212,7 @@ namespace cppu_threadpool
         MutexGuard guard( m_mutex );
 
         ThreadIdHashMap::iterator ii = m_mapQueue.find( aThreadId );
-        assert( ii != m_mapQueue.end() );
+        OSL_ASSERT( ii != m_mapQueue.end() );
 
         if( bAsynchron )
         {
@@ -266,7 +266,7 @@ namespace cppu_threadpool
             {
                 m_mapQueue[ aThreadId ] = pair < JobQueue * , JobQueue * > ( nullptr , nullptr );
                 ii = m_mapQueue.find( aThreadId );
-                assert( ii != m_mapQueue.end() );
+                OSL_ASSERT( ii != m_mapQueue.end() );
             }
 
             if( bAsynchron )
@@ -323,11 +323,11 @@ namespace cppu_threadpool
 
             ThreadIdHashMap::iterator ii = m_mapQueue.find( aThreadId );
 
-            assert( ii != m_mapQueue.end() );
+            OSL_ASSERT( ii != m_mapQueue.end() );
             pQueue = (*ii).second.first;
         }
 
-        assert( pQueue );
+        OSL_ASSERT( pQueue );
         void *pReturn = pQueue->enter( nDisposeId );
 
         if( pQueue->isCallstackEmpty() )
@@ -477,12 +477,12 @@ uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C()
 
     bool empty;
     {
-        assert( g_pThreadpoolHashSet );
+        OSL_ASSERT( g_pThreadpoolHashSet );
 
         MutexGuard guard( Mutex::getGlobalMutex() );
 
         ThreadpoolHashSet::iterator ii = g_pThreadpoolHashSet->find( hPool );
-        assert( ii != g_pThreadpoolHashSet->end() );
+        OSL_ASSERT( ii != g_pThreadpoolHashSet->end() );
         g_pThreadpoolHashSet->erase( ii );
         delete hPool;
 

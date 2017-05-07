@@ -910,7 +910,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
             rArguments[ 2 ] >>= pIntPtr;
             SystemChildWindow *pParentWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
             const SystemEnvData* pEnvData = pParentWindow ? pParentWindow->GetSystemData() : nullptr;
-            assert(pEnvData);
+            OSL_ASSERT(pEnvData);
             if (pEnvData)
             {
 #if defined(ENABLE_GTKSINK)

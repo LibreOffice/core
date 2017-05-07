@@ -119,7 +119,7 @@ void SAL_CALL ShellStackGuard::disposing (
 IMPL_LINK(ShellStackGuard, TimeoutHandler, Timer*, pIdle, void)
 {
 #ifdef DEBUG
-    assert(pIdle==&maPrinterPollingIdle);
+    OSL_ASSERT(pIdle==&maPrinterPollingIdle);
 #else
     (void)pIdle;
 #endif

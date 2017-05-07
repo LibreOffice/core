@@ -317,7 +317,7 @@ void SAL_CALL ContextChangeEventMultiplexer::disposing ( const css::lang::EventO
 
     if (iDescriptor == maListeners.end())
     {
-        assert(iDescriptor != maListeners.end());
+        OSL_ASSERT(iDescriptor != maListeners.end());
         return;
     }
 

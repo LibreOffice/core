@@ -712,7 +712,7 @@ SfxShell* ViewShellManager::Implementation::GetShell (ShellId nId) const
 
 SfxShell* ViewShellManager::Implementation::GetTopShell() const
 {
-    assert(mpTopShell == mrBase.GetSubShell(0));
+    OSL_ASSERT(mpTopShell == mrBase.GetSubShell(0));
     return mpTopShell;
 }
 
@@ -734,7 +734,7 @@ void ViewShellManager::Implementation::UnlockUpdate()
     if (mnUpdateLockCount < 0)
     {
         // This should not happen.
-        assert (mnUpdateLockCount>=0);
+        OSL_ASSERT (mnUpdateLockCount>=0);
         mnUpdateLockCount = 0;
     }
     if (mnUpdateLockCount == 0)
@@ -1060,7 +1060,7 @@ ShellDescriptor ViewShellManager::Implementation::CreateSubShell (
 void ViewShellManager::Implementation::DestroyViewShell (
     ShellDescriptor& rDescriptor)
 {
-    assert(rDescriptor.mpShell != nullptr);
+    OSL_ASSERT(rDescriptor.mpShell != nullptr);
 
     if (rDescriptor.mbIsListenerAddedToWindow)
     {
@@ -1089,7 +1089,7 @@ void ViewShellManager::Implementation::DestroySubShell (
     const ShellDescriptor& rDescriptor)
 {
     (void)rParentShell;
-    assert(rDescriptor.mpFactory.get() != nullptr);
+    OSL_ASSERT(rDescriptor.mpFactory.get() != nullptr);
     rDescriptor.mpFactory->ReleaseShell(rDescriptor.mpShell);
 }
 
@@ -1169,7 +1169,7 @@ void ViewShellManager::Implementation::DumpSfxShellStack()
 
 void ViewShellManager::Implementation::Deactivate (SfxShell* pShell)
 {
-    assert(pShell!=nullptr);
+    OSL_ASSERT(pShell!=nullptr);
 
     // We have to end a text edit for view shells that are to be taken from
     // the shell stack.

@@ -198,12 +198,12 @@ namespace internal
     void ScreenUpdater::lockUpdates()
     {
         ++mpImpl->mnLockCount;
-        assert(mpImpl->mnLockCount>0);
+        OSL_ASSERT(mpImpl->mnLockCount>0);
     }
 
     void ScreenUpdater::unlockUpdates()
     {
-        assert(mpImpl->mnLockCount>0);
+        OSL_ASSERT(mpImpl->mnLockCount>0);
         if (mpImpl->mnLockCount > 0)
         {
             --mpImpl->mnLockCount;

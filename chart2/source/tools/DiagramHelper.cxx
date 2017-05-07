@@ -291,7 +291,7 @@ void DiagramHelper::setStackMode(
 
                 //iterate through all series in this chart type
                 uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
-                assert( xDataSeriesContainer.is());
+                OSL_ASSERT( xDataSeriesContainer.is());
                 if( !xDataSeriesContainer.is() )
                     continue;
 
@@ -380,7 +380,7 @@ StackMode DiagramHelper::getStackModeFromChartType(
             chart2::StackingDirection eCurrentDirection = eCommonDirection;
             // property is not MAYBEVOID
             bool bSuccess = ( xProp->getPropertyValue( "StackingDirection" ) >>= eCurrentDirection );
-            assert( bSuccess );
+            OSL_ASSERT( bSuccess );
             (void)(bSuccess);  // avoid warning in non-debug builds
             if( ! bDirectionInitialized )
             {
@@ -532,7 +532,7 @@ void DiagramHelper::replaceCoordinateSystem(
     const Reference< XCoordinateSystem > & xCooSysToReplace,
     const Reference< XCoordinateSystem > & xReplacement )
 {
-    assert( xDiagram.is());
+    OSL_ASSERT( xDiagram.is());
     if( ! xDiagram.is())
         return;
 
@@ -645,7 +645,7 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
 
         //iterate through all chart types in the current coordinate system
         uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
-        assert( xChartTypeContainer.is());
+        OSL_ASSERT( xChartTypeContainer.is());
         if( !xChartTypeContainer.is() )
             continue;
         uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
@@ -655,7 +655,7 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
 
             //iterate through all series in this chart type
             uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
-            assert( xDataSeriesContainer.is());
+            OSL_ASSERT( xDataSeriesContainer.is());
             if( !xDataSeriesContainer.is() )
                 continue;
 
@@ -781,14 +781,14 @@ std::vector< Reference< XAxis > > lcl_getAxisHoldingCategoriesFromDiagram(
         for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
         {
             Reference< XCoordinateSystem > xCooSys( aCooSysSeq[i] );
-            assert( xCooSys.is());
+            OSL_ASSERT( xCooSys.is());
             for( sal_Int32 nN = xCooSys->getDimension(); nN--; )
             {
                 const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(nN);
                 for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
                 {
                     Reference< XAxis > xAxis = xCooSys->getAxisByDimension( nN,nI );
-                    assert( xAxis.is());
+                    OSL_ASSERT( xAxis.is());
                     if( xAxis.is())
                     {
                         ScaleData aScaleData = xAxis->getScaleData();
@@ -828,14 +828,14 @@ bool DiagramHelper::isCategoryDiagram(
         for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
         {
             Reference< XCoordinateSystem > xCooSys( aCooSysSeq[i] );
-            assert( xCooSys.is());
+            OSL_ASSERT( xCooSys.is());
             for( sal_Int32 nN = xCooSys->getDimension(); nN--; )
             {
                 const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(nN);
                 for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
                 {
                     Reference< XAxis > xAxis = xCooSys->getAxisByDimension( nN,nI );
-                    assert( xAxis.is());
+                    OSL_ASSERT( xAxis.is());
                     if( xAxis.is())
                     {
                         ScaleData aScaleData = xAxis->getScaleData();
@@ -1314,7 +1314,7 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
 
                 //iterate through all chart types in the current coordinate system
                 uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
-                assert( xChartTypeContainer.is());
+                OSL_ASSERT( xChartTypeContainer.is());
                 if( !xChartTypeContainer.is() )
                     continue;
                 uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
@@ -1326,7 +1326,7 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
 
                     //iterate through all series in this chart type
                     uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xCurrentChartType, uno::UNO_QUERY );
-                    assert( xDataSeriesContainer.is());
+                    OSL_ASSERT( xDataSeriesContainer.is());
                     if( !xDataSeriesContainer.is() )
                         continue;
 

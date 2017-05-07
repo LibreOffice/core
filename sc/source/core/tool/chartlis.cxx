@@ -646,7 +646,7 @@ void ScChartListenerCollection::SetDiffDirty(
     for (auto const& it : m_Listeners)
     {
         ScChartListener *const pCL = it.second.get();
-        assert(pCL);
+        OSL_ASSERT(pCL);
         const ScChartListener* pCLCmp = rCmp.findByName(pCL->GetName());
         if (!pCLCmp || *pCL != *pCLCmp)
         {

@@ -213,19 +213,19 @@ SlideSorter::~SlideSorter()
 
 model::SlideSorterModel& SlideSorter::GetModel() const
 {
-    assert(mpSlideSorterModel.get()!=nullptr);
+    OSL_ASSERT(mpSlideSorterModel.get()!=nullptr);
     return *mpSlideSorterModel;
 }
 
 view::SlideSorterView& SlideSorter::GetView() const
 {
-    assert(mpSlideSorterView.get()!=nullptr);
+    OSL_ASSERT(mpSlideSorterView.get()!=nullptr);
     return *mpSlideSorterView;
 }
 
 controller::SlideSorterController& SlideSorter::GetController() const
 {
-    assert(mpSlideSorterController.get()!=nullptr);
+    OSL_ASSERT(mpSlideSorterController.get()!=nullptr);
     return *mpSlideSorterController;
 }
 
@@ -325,7 +325,7 @@ model::SlideSorterModel* SlideSorter::CreateModel()
     ViewShellBase* pViewShellBase = GetViewShellBase();
     if (pViewShellBase != nullptr)
     {
-        assert (pViewShellBase->GetDocument() != nullptr);
+        OSL_ASSERT (pViewShellBase->GetDocument() != nullptr);
 
         return new model::SlideSorterModel(*this);
     }
@@ -410,13 +410,13 @@ void SlideSorter::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction)
 
 std::shared_ptr<controller::Properties> const & SlideSorter::GetProperties() const
 {
-    assert(mpProperties);
+    OSL_ASSERT(mpProperties);
     return mpProperties;
 }
 
 std::shared_ptr<view::Theme> const & SlideSorter::GetTheme() const
 {
-    assert(mpTheme);
+    OSL_ASSERT(mpTheme);
     return mpTheme;
 }
 

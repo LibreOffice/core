@@ -305,7 +305,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             bool bPrivateProtocol = ( aFileObj.GetProtocol() == INetProtocol::PrivSoffice );
 
             bHasLocation =  !aLocation.isEmpty() && !bPrivateProtocol;
-            assert( !bPrivateProtocol );
+            OSL_ASSERT( !bPrivateProtocol );
         }
         if ( !rType.isEmpty() )
             bStoreTo = true;
@@ -464,8 +464,8 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             if ( aFileName.isEmpty() )
                 return eRet;
 
-            assert( !aFilterName.isEmpty() );
-            assert( !aFileName.isEmpty() );
+            OSL_ASSERT( !aFilterName.isEmpty() );
+            OSL_ASSERT( !aFileName.isEmpty() );
 
             // Creates a temporary directory to store a predefined file into it.
             // This makes it possible to store the file for "send document as e-mail"

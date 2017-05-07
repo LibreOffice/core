@@ -80,7 +80,7 @@ const std::string TAG_END_BODY = std::string("</body");
 
 Sequence<sal_Int8> SAL_CALL TextHtmlToHTMLFormat(Sequence<sal_Int8>& aTextHtml)
 {
-    assert(aTextHtml.getLength() > 0);
+    OSL_ASSERT(aTextHtml.getLength() > 0);
 
     if (!(aTextHtml.getLength() > 0))
         return Sequence<sal_Int8>();

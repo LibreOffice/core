@@ -1721,7 +1721,7 @@ Reference< XSimpleRegistry > ImplementationRegistration::createTemporarySimpleRe
         rSMgr->createInstanceWithContext(
             spool().com_sun_star_registry_SimpleRegistry,   xCtx ),
         UNO_QUERY);
-    assert( xReg.is() );
+    OSL_ASSERT( xReg.is() );
     return xReg;
 }
 

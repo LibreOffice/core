@@ -383,7 +383,7 @@ OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt)
         }
     }
     }
-    catch (RuntimeException &) { assert( false ); } // assert here, but no unexpected()
+    catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
     osl_atomic_decrement( &m_aRefCount );
 }
 
@@ -397,7 +397,7 @@ OWeakRefListener::~OWeakRefListener()
         m_XWeakConnectionPoint->removeReference(static_cast<XReference*>(this));
     }
     }
-    catch (RuntimeException &) { assert( false ); } // assert here, but no unexpected()
+    catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
 }
 
 // XInterface
@@ -471,7 +471,7 @@ void WeakReferenceHelper::clear()
             m_pImpl = nullptr;
         }
     }
-    catch (RuntimeException &) { assert( false ); } // assert here, but no unexpected()
+    catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
 }
 
 WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& rWeakRef)
@@ -504,7 +504,7 @@ WeakReferenceHelper::operator= (const Reference< XInterface > & xInt)
             m_pImpl->acquire();
         }
     }
-    catch (RuntimeException &) { assert( false ); } // assert here, but no unexpected()
+    catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
     return *this;
 }
 
@@ -530,7 +530,7 @@ Reference< XInterface > WeakReferenceHelper::get() const
     }
     catch (RuntimeException &)
     {
-        assert( false );
+        OSL_ASSERT( false );
     } // assert here, but no unexpected()
 
     return Reference< XInterface >();

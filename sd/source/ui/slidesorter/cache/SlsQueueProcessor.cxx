@@ -113,7 +113,7 @@ IMPL_LINK_NOARG(QueueProcessor, ProcessRequestHdl, Timer *, void)
 
 void QueueProcessor::ProcessRequests()
 {
-    assert(mpCacheContext.get()!=nullptr);
+    OSL_ASSERT(mpCacheContext.get()!=nullptr);
 
     // Never process more than one request at a time in order to prevent the
     // lock up of the edit view.

@@ -85,7 +85,7 @@ bool SVGFilter::implImport(const Sequence< PropertyValue >& rDescriptor)
             xSeek->seek(0);
     }
 
-    assert(xInputStream.is());
+    OSL_ASSERT(xInputStream.is());
     if(!xInputStream.is())
         return false;
 

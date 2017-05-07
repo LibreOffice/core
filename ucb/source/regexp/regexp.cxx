@@ -45,9 +45,9 @@ inline Regexp::Regexp(Kind eTheKind, OUString const & rThePrefix,
     m_bEmptyDomain(bTheEmptyDomain),
     m_bTranslation(bTheTranslation)
 {
-    assert(m_eKind == KIND_DOMAIN
+    OSL_ASSERT(m_eKind == KIND_DOMAIN
                || (!m_bEmptyDomain && m_aInfix.isEmpty()));
-    assert(m_bTranslation || m_aReversePrefix.isEmpty());
+    OSL_ASSERT(m_bTranslation || m_aReversePrefix.isEmpty());
 }
 
 
@@ -153,7 +153,7 @@ bool isScheme(OUString const & rString, bool bColon)
 void appendStringLiteral(OUStringBuffer * pBuffer,
                          OUString const & rString)
 {
-    assert(pBuffer);
+    OSL_ASSERT(pBuffer);
 
     pBuffer->append('"');
     sal_Unicode const * p = rString.getStr();

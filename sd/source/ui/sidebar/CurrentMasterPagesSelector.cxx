@@ -90,7 +90,7 @@ void CurrentMasterPagesSelector::dispose()
     }
     else
     {
-        assert(mrDocument.GetDocSh() != nullptr);
+        OSL_ASSERT(mrDocument.GetDocSh() != nullptr);
     }
 
     Link<sd::tools::EventMultiplexerEvent&,void> aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
@@ -109,7 +109,7 @@ void CurrentMasterPagesSelector::LateInit()
     }
     else
     {
-        assert(mrDocument.GetDocSh() != nullptr);
+        OSL_ASSERT(mrDocument.GetDocSh() != nullptr);
     }
 }
 

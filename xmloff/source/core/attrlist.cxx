@@ -160,7 +160,7 @@ void SvXMLAttributeList::Clear()
 {
     m_pImpl->vecAttribute.clear();
 
-    assert( ! getLength() );
+    OSL_ASSERT( ! getLength() );
 }
 
 void SvXMLAttributeList::RemoveAttribute( const OUString& sName )
@@ -177,7 +177,7 @@ void SvXMLAttributeList::RemoveAttribute( const OUString& sName )
 
 void SvXMLAttributeList::AppendAttributeList( const uno::Reference< css::xml::sax::XAttributeList >  &r )
 {
-    assert( r.is() );
+    OSL_ASSERT( r.is() );
 
     sal_Int16 nMax = r->getLength();
     SvXMLAttributeList_Impl::size_type nTotalSize =
@@ -190,7 +190,7 @@ void SvXMLAttributeList::AppendAttributeList( const uno::Reference< css::xml::sa
             r->getValueByIndex( i )));
     }
 
-    assert( nTotalSize == (SvXMLAttributeList_Impl::size_type)getLength());
+    OSL_ASSERT( nTotalSize == (SvXMLAttributeList_Impl::size_type)getLength());
 }
 
 void SvXMLAttributeList::SetValueByIndex( sal_Int16 i,

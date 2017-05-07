@@ -121,12 +121,12 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
       mbIsContextMenuOpen(false)
 {
     sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
-    assert(pWindow);
+    OSL_ASSERT(pWindow);
     if (pWindow)
     {
         // The whole background is painted by the view and controls.
         vcl::Window* pParentWindow = pWindow->GetParent();
-        assert(pParentWindow!=nullptr);
+        OSL_ASSERT(pParentWindow!=nullptr);
         pParentWindow->SetBackground (Wallpaper());
 
         // Connect the view with the window that has been created by our base
@@ -217,50 +217,50 @@ model::SharedPageDescriptor SlideSorterController::GetPageAt (
 
 PageSelector& SlideSorterController::GetPageSelector()
 {
-    assert(mpPageSelector.get()!=nullptr);
+    OSL_ASSERT(mpPageSelector.get()!=nullptr);
     return *mpPageSelector.get();
 }
 
 FocusManager& SlideSorterController::GetFocusManager()
 {
-    assert(mpFocusManager.get()!=nullptr);
+    OSL_ASSERT(mpFocusManager.get()!=nullptr);
     return *mpFocusManager.get();
 }
 
 Clipboard& SlideSorterController::GetClipboard()
 {
-    assert(mpClipboard.get()!=nullptr);
+    OSL_ASSERT(mpClipboard.get()!=nullptr);
     return *mpClipboard.get();
 }
 
 ScrollBarManager& SlideSorterController::GetScrollBarManager()
 {
-    assert(mpScrollBarManager.get()!=nullptr);
+    OSL_ASSERT(mpScrollBarManager.get()!=nullptr);
     return *mpScrollBarManager.get();
 }
 
 std::shared_ptr<CurrentSlideManager> const & SlideSorterController::GetCurrentSlideManager() const
 {
-    assert(mpCurrentSlideManager.get()!=nullptr);
+    OSL_ASSERT(mpCurrentSlideManager.get()!=nullptr);
     return mpCurrentSlideManager;
 }
 
 std::shared_ptr<SlotManager> const & SlideSorterController::GetSlotManager() const
 {
-    assert(mpSlotManager.get()!=nullptr);
+    OSL_ASSERT(mpSlotManager.get()!=nullptr);
     return mpSlotManager;
 }
 
 std::shared_ptr<SelectionManager> const & SlideSorterController::GetSelectionManager() const
 {
-    assert(mpSelectionManager.get()!=nullptr);
+    OSL_ASSERT(mpSelectionManager.get()!=nullptr);
     return mpSelectionManager;
 }
 
 std::shared_ptr<InsertionIndicatorHandler> const &
     SlideSorterController::GetInsertionIndicatorHandler() const
 {
-    assert(mpInsertionIndicatorHandler.get()!=nullptr);
+    OSL_ASSERT(mpInsertionIndicatorHandler.get()!=nullptr);
     return mpInsertionIndicatorHandler;
 }
 
@@ -881,7 +881,7 @@ void SlideSorterController::SetDocumentSlides (const Reference<container::XIndex
 
 VisibleAreaManager& SlideSorterController::GetVisibleAreaManager() const
 {
-    assert(mpVisibleAreaManager);
+    OSL_ASSERT(mpVisibleAreaManager);
     return *mpVisibleAreaManager;
 }
 

@@ -298,7 +298,7 @@ bool ErrorBarItemConverter::ApplySpecialItem(
                         {
                             // no data range for error bars yet => create
                             uno::Reference< chart2::XInternalDataProvider > xIntDataProvider( xDataProvider, uno::UNO_QUERY );
-                            assert(xIntDataProvider.is());
+                            OSL_ASSERT( xIntDataProvider.is());
                             if( xIntDataProvider.is())
                             {
                                 xIntDataProvider->appendSequence();

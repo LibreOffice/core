@@ -220,7 +220,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
 
         rReq.Ignore();
         SfxViewShell* pViewShell = GetViewShell();
-        assert (pViewShell!=nullptr);
+        OSL_ASSERT (pViewShell!=nullptr);
         SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_INSERT_TABLE, true );
         break;

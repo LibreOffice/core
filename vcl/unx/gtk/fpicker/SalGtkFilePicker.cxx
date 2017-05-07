@@ -527,7 +527,7 @@ void SAL_CALL SalGtkFilePicker::appendFilter( const OUString& aTitle, const OUSt
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     if( FilterNameExists( aTitle ) )
             throw IllegalArgumentException();
@@ -543,7 +543,7 @@ void SAL_CALL SalGtkFilePicker::setCurrentFilter( const OUString& aTitle )
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     if( aTitle != m_aCurrentFilter )
     {
@@ -602,7 +602,7 @@ OUString SAL_CALL SalGtkFilePicker::getCurrentFilter()
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     UpdateFilterfromUI();
 
@@ -615,7 +615,7 @@ void SAL_CALL SalGtkFilePicker::appendFilterGroup( const OUString& /*sGroupTitle
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     // TODO m_pImpl->appendFilterGroup( sGroupTitle, aFilters );
     // check the names
@@ -644,7 +644,7 @@ void SAL_CALL SalGtkFilePicker::setMultiSelectionMode( sal_Bool bMode )
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER(m_pDialog), bMode );
 }
@@ -653,7 +653,7 @@ void SAL_CALL SalGtkFilePicker::setDefaultName( const OUString& aName )
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     OString aStr = OUStringToOString( aName, RTL_TEXTENCODING_UTF8 );
     GtkFileChooserAction eAction = gtk_file_chooser_get_action( GTK_FILE_CHOOSER( m_pDialog ) );
@@ -714,7 +714,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     GSList* pPathList = gtk_file_chooser_get_uris( GTK_FILE_CHOOSER(m_pDialog) );
 
@@ -868,7 +868,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     sal_Int16 retVal = 0;
 
@@ -1232,7 +1232,7 @@ void SAL_CALL SalGtkFilePicker::setValue( sal_Int16 nControlId, sal_Int16 nContr
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     GType tType;
     GtkWidget *pWidget;
@@ -1257,7 +1257,7 @@ uno::Any SAL_CALL SalGtkFilePicker::getValue( sal_Int16 nControlId, sal_Int16 nC
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     uno::Any aRetval;
 
@@ -1280,7 +1280,7 @@ void SAL_CALL SalGtkFilePicker::enableControl( sal_Int16 nControlId, sal_Bool bE
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     GtkWidget *pWidget;
 
@@ -1303,7 +1303,7 @@ void SAL_CALL SalGtkFilePicker::setLabel( sal_Int16 nControlId, const OUString& 
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     GType tType;
     GtkWidget *pWidget;
@@ -1339,7 +1339,7 @@ OUString SAL_CALL SalGtkFilePicker::getLabel( sal_Int16 nControlId )
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     GType tType;
     OString aTxt;
@@ -1361,7 +1361,7 @@ uno::Sequence<sal_Int16> SAL_CALL SalGtkFilePicker::getSupportedImageFormats()
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     // TODO return m_pImpl->getSupportedImageFormats();
     return uno::Sequence<sal_Int16>();
@@ -1371,7 +1371,7 @@ sal_Int32 SAL_CALL SalGtkFilePicker::getTargetColorDepth()
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     // TODO return m_pImpl->getTargetColorDepth();
     return 0;
@@ -1381,7 +1381,7 @@ sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableWidth()
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     return m_PreviewImageWidth;
 }
@@ -1390,7 +1390,7 @@ sal_Int32 SAL_CALL SalGtkFilePicker::getAvailableHeight()
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     return m_PreviewImageHeight;
 }
@@ -1399,7 +1399,7 @@ void SAL_CALL SalGtkFilePicker::setImage( sal_Int16 /*aImageFormat*/, const uno:
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     // TODO m_pImpl->setImage( aImageFormat, aImage );
 }
@@ -1499,7 +1499,7 @@ sal_Bool SAL_CALL SalGtkFilePicker::setShowState( sal_Bool bShowState )
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     // TODO return m_pImpl->setShowState( bShowState );
     if( bool(bShowState) != mbPreviewState )
@@ -1533,7 +1533,7 @@ sal_Bool SAL_CALL SalGtkFilePicker::getShowState()
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     return mbPreviewState;
 }
@@ -1712,7 +1712,7 @@ void SAL_CALL SalGtkFilePicker::cancel()
 {
     SolarMutexGuard g;
 
-    assert( m_pDialog != nullptr );
+    OSL_ASSERT( m_pDialog != nullptr );
 
     // TODO m_pImpl->cancel();
 }

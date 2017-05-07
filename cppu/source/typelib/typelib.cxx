@@ -100,7 +100,7 @@ static inline bool reallyWeak( typelib_TypeClass eTypeClass )
 
 static inline sal_Int32 getDescriptionSize( typelib_TypeClass eTypeClass )
 {
-    assert( typelib_TypeClass_TYPEDEF != eTypeClass );
+    OSL_ASSERT( typelib_TypeClass_TYPEDEF != eTypeClass );
 
     sal_Int32 nSize;
     // The reference is the description
@@ -275,7 +275,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl()
              i != ppTDR.end(); ++i )
         {
             typelib_TypeDescriptionReference * pTDR = *i;
-            assert( pTDR->nRefCount > pTDR->nStaticRefCount );
+            OSL_ASSERT( pTDR->nRefCount > pTDR->nStaticRefCount );
             pTDR->nRefCount -= pTDR->nStaticRefCount;
 
             if( pTDR->pType && !pTDR->pType->bOnDemand )
@@ -381,7 +381,7 @@ static inline void typelib_typedescription_initTables(
         {
             typelib_TypeDescription * pM = nullptr;
             TYPELIB_DANGER_GET( &pM, pITD->ppAllMembers[i] );
-            assert( pM );
+            OSL_ASSERT( pM );
             if (pM)
             {
                 aReadWriteAttributes[i] = !reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>(pM)->bReadOnly;
@@ -457,7 +457,7 @@ void freeTypeDescription(typelib_TypeDescription const * desc) {
 bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
     if (! (*ppTypeDescr)->bComplete)
     {
-        assert( (typelib_TypeClass_STRUCT == (*ppTypeDescr)->eTypeClass ||
+        OSL_ASSERT( (typelib_TypeClass_STRUCT == (*ppTypeDescr)->eTypeClass ||
                      typelib_TypeClass_EXCEPTION == (*ppTypeDescr)->eTypeClass ||
                      typelib_TypeClass_ENUM == (*ppTypeDescr)->eTypeClass ||
                      typelib_TypeClass_INTERFACE == (*ppTypeDescr)->eTypeClass) &&
@@ -482,12 +482,12 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
             {
                 typelib_typedescriptionreference_getDescription(
                     &pTD, reinterpret_cast<typelib_IndirectTypeDescription *>(pTD)->pType );
-                assert( pTD );
+                OSL_ASSERT( pTD );
                 if (! pTD)
                     return false;
             }
 
-            assert( typelib_TypeClass_TYPEDEF != pTD->eTypeClass );
+            OSL_ASSERT( typelib_TypeClass_TYPEDEF != pTD->eTypeClass );
             // typedescription found
             // set to on demand
             pTD->bOnDemand = true;
@@ -496,7 +496,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
                 && !pTD->bComplete && initTables)
             {
                 // mandatory info from callback chain
-                assert( reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD)->ppAllMembers );
+                OSL_ASSERT( reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD)->ppAllMembers );
                 // complete except of tables init
                 typelib_typedescription_initTables( pTD );
                 pTD->bComplete = true;
@@ -505,7 +505,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
             // The type description is hold by the reference until
             // on demand is activated.
             ::typelib_typedescription_register( &pTD ); // replaces incomplete one
-            assert( pTD == *ppTypeDescr ); // has to merge into existing one
+            OSL_ASSERT( pTD == *ppTypeDescr ); // has to merge into existing one
 
             // insert into the chache
             MutexGuard aGuard( rInit.getMutex() );
@@ -520,7 +520,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
             typelib_typedescription_acquire( pTD );
             rInit.pCache->push_back( pTD );
 
-            assert(
+            OSL_ASSERT(
                 pTD->bComplete
                 || (pTD->eTypeClass == typelib_TypeClass_INTERFACE
                     && !initTables));
@@ -553,7 +553,7 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
         *ppRet = nullptr;
     }
 
-    assert( typelib_TypeClass_TYPEDEF != eTypeClass );
+    OSL_ASSERT( typelib_TypeClass_TYPEDEF != eTypeClass );
 
     typelib_TypeDescription * pRet;
     switch( eTypeClass )
@@ -711,7 +711,7 @@ void newTypeDescription(
     sal_Int32 nMembers, typelib_CompoundMember_Init * pCompoundMembers,
     typelib_StructMember_Init * pStructMembers)
 {
-    assert(
+    OSL_ASSERT(
         (pCompoundMembers == nullptr || pStructMembers == nullptr)
         && (pStructMembers == nullptr || eTypeClass == typelib_TypeClass_STRUCT));
     if (typelib_TypeClass_TYPEDEF == eTypeClass)
@@ -727,7 +727,7 @@ void newTypeDescription(
     {
         case typelib_TypeClass_SEQUENCE:
         {
-            assert( nMembers == 0 );
+            OSL_ASSERT( nMembers == 0 );
             typelib_typedescriptionreference_acquire( pType );
             reinterpret_cast<typelib_IndirectTypeDescription *>(*ppRet)->pType = pType;
         }
@@ -755,7 +755,7 @@ void newTypeDescription(
                 pTmp->ppMemberNames = new rtl_uString *[ nMembers ];
                 bool polymorphic = eTypeClass == typelib_TypeClass_STRUCT
                     && rtl::OUString::unacquired(&pTypeName).indexOf('<') >= 0;
-                assert(!polymorphic || pStructMembers != nullptr);
+                OSL_ASSERT(!polymorphic || pStructMembers != nullptr);
                 if (polymorphic) {
                     reinterpret_cast< typelib_StructTypeDescription * >(pTmp)->
                         pParameterizedTypes = new sal_Bool[nMembers];
@@ -958,11 +958,11 @@ void BaseList::calculate(
         e.directBaseMemberOffset = *directBaseMembers;
         e.base = desc;
         list.push_back(e);
-        assert(desc->ppAllMembers != nullptr);
+        OSL_ASSERT(desc->ppAllMembers != nullptr);
         members += desc->nMembers;
     }
     if (directBaseSet.insert(desc->aBase.pTypeName).second) {
-        assert(desc->ppAllMembers != nullptr);
+        OSL_ASSERT(desc->ppAllMembers != nullptr);
         *directBaseMembers += desc->nMembers;
     }
 }
@@ -1004,10 +1004,10 @@ extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
                     &pITD->ppBaseTypes[i]),
                 false))
         {
-            assert(false);
+            OSL_ASSERT(false);
             return;
         }
-        assert(pITD->ppBaseTypes[i] != nullptr);
+        OSL_ASSERT(pITD->ppBaseTypes[i] != nullptr);
     }
     if (nBaseInterfaces > 0) {
         pITD->pBaseTypeDescription = pITD->ppBaseTypes[0];
@@ -1036,7 +1036,7 @@ extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
             typelib_InterfaceTypeDescription const * pBase = i->base;
             typelib_InterfaceTypeDescription const * pDirectBase
                 = pITD->ppBaseTypes[i->directBaseIndex];
-            assert(pBase->ppAllMembers != nullptr);
+            OSL_ASSERT(pBase->ppAllMembers != nullptr);
             for (sal_Int32 j = 0; j < pBase->nMembers; ++j) {
                 typelib_TypeDescriptionReference const * pDirectBaseMember
                     = pDirectBase->ppAllMembers[i->directBaseMemberOffset + j];
@@ -1085,7 +1085,7 @@ namespace {
 typelib_TypeDescriptionReference ** copyExceptions(
     sal_Int32 count, rtl_uString ** typeNames)
 {
-    assert(count >= 0);
+    OSL_ASSERT(count >= 0);
     if (count == 0) {
         return nullptr;
     }
@@ -1170,7 +1170,7 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
     (*ppRet)->ppExceptions = copyExceptions(nExceptions, ppExceptionNames);
     (*ppRet)->pInterface = pInterface;
     (*ppRet)->pBaseRef = nullptr;
-    assert(
+    OSL_ASSERT(
         (nAbsolutePosition >= pInterface->nAllMembers - pInterface->nMembers)
         && nAbsolutePosition < pInterface->nAllMembers);
     (*ppRet)->nIndex = nAbsolutePosition
@@ -1242,7 +1242,7 @@ extern "C" void SAL_CALL typelib_typedescription_newExtendedInterfaceAttribute(
     (*ppRet)->bReadOnly = bReadOnly;
     (*ppRet)->pInterface = pInterface;
     (*ppRet)->pBaseRef = nullptr;
-    assert(
+    OSL_ASSERT(
         (nAbsolutePosition >= pInterface->nAllMembers - pInterface->nMembers)
         && nAbsolutePosition < pInterface->nAllMembers);
     (*ppRet)->nIndex = nAbsolutePosition
@@ -1283,7 +1283,7 @@ void deleteExceptions(
 static inline void typelib_typedescription_destructExtendedMembers(
     typelib_TypeDescription * pTD )
 {
-    assert( typelib_TypeClass_TYPEDEF != pTD->eTypeClass );
+    OSL_ASSERT( typelib_TypeClass_TYPEDEF != pTD->eTypeClass );
 
     switch( pTD->eTypeClass )
     {
@@ -1391,7 +1391,7 @@ extern "C" void SAL_CALL typelib_typedescription_release(
     SAL_THROW_EXTERN_C()
 {
     sal_Int32 ref = osl_atomic_decrement( &pTD->nRefCount );
-    assert(ref >= 0);
+    OSL_ASSERT(ref >= 0);
     if (0 == ref)
     {
         TypeDescriptor_Init_Impl &rInit = Init::get();
@@ -1468,10 +1468,10 @@ extern "C" void SAL_CALL typelib_typedescription_register(
     typelib_TypeDescriptionReference * pTDR = nullptr;
     typelib_typedescriptionreference_getByName( &pTDR, (*ppNewDescription)->pTypeName );
 
-    assert( (*ppNewDescription)->pWeakRef || reallyWeak( (*ppNewDescription)->eTypeClass ) );
+    OSL_ASSERT( (*ppNewDescription)->pWeakRef || reallyWeak( (*ppNewDescription)->eTypeClass ) );
     if( pTDR )
     {
-        assert( (*ppNewDescription)->eTypeClass == pTDR->eTypeClass );
+        OSL_ASSERT( (*ppNewDescription)->eTypeClass == pTDR->eTypeClass );
         if( pTDR->pType )
         {
             if (reallyWeak( pTDR->eTypeClass ))
@@ -1494,7 +1494,7 @@ extern "C" void SAL_CALL typelib_typedescription_register(
                 }
                 // take new descr
                 pTDR->pType = *ppNewDescription;
-                assert( ! (*ppNewDescription)->pWeakRef );
+                OSL_ASSERT( ! (*ppNewDescription)->pWeakRef );
                 (*ppNewDescription)->pWeakRef = pTDR;
                 return;
             }
@@ -1572,7 +1572,7 @@ extern "C" void SAL_CALL typelib_typedescription_register(
 
         // description is the weak itself, so register it
         (*rInit.pWeakMap)[pTDR->pTypeName->buffer] = pTDR;
-        assert( static_cast<void *>(*ppNewDescription) == static_cast<void *>(pTDR) );
+        OSL_ASSERT( static_cast<void *>(*ppNewDescription) == static_cast<void *>(pTDR) );
     }
 
     // By default this reference is not really weak. The reference hold the description
@@ -1585,8 +1585,8 @@ extern "C" void SAL_CALL typelib_typedescription_register(
 
     pTDR->pType = *ppNewDescription;
     (*ppNewDescription)->pWeakRef = pTDR;
-    assert( rtl_ustr_compare( pTDR->pTypeName->buffer, (*ppNewDescription)->pTypeName->buffer ) == 0 );
-    assert( pTDR->eTypeClass == (*ppNewDescription)->eTypeClass );
+    OSL_ASSERT( rtl_ustr_compare( pTDR->pTypeName->buffer, (*ppNewDescription)->pTypeName->buffer ) == 0 );
+    OSL_ASSERT( pTDR->eTypeClass == (*ppNewDescription)->eTypeClass );
 }
 
 
@@ -1624,7 +1624,7 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
         nSize = 0;
         rMaxIntegralTypeSize = 1;
 
-        assert( typelib_TypeClass_TYPEDEF != pTypeDescription->eTypeClass );
+        OSL_ASSERT( typelib_TypeClass_TYPEDEF != pTypeDescription->eTypeClass );
 
         switch( pTypeDescription->eTypeClass )
         {
@@ -2157,7 +2157,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_release(
             }
 
             rtl_uString_release( pRef->pTypeName );
-            assert( pRef->pType == nullptr );
+            OSL_ASSERT( pRef->pType == nullptr );
 #if OSL_DEBUG_LEVEL > 0
             osl_atomic_decrement( &rInit.nTypeDescriptionReferenceCount );
 #endif
@@ -2210,9 +2210,9 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getDescription(
     }
 
     typelib_typedescription_getByName( ppRet, pRef->pTypeName );
-    assert( !*ppRet || rtl_ustr_compare( pRef->pTypeName->buffer, (*ppRet)->pTypeName->buffer ) == 0 );
-    assert( !*ppRet || pRef->eTypeClass == (*ppRet)->eTypeClass );
-    assert( !*ppRet || pRef == (*ppRet)->pWeakRef );
+    OSL_ASSERT( !*ppRet || rtl_ustr_compare( pRef->pTypeName->buffer, (*ppRet)->pTypeName->buffer ) == 0 );
+    OSL_ASSERT( !*ppRet || pRef->eTypeClass == (*ppRet)->eTypeClass );
+    OSL_ASSERT( !*ppRet || pRef == (*ppRet)->pWeakRef );
     pRef->pType = *ppRet;
 }
 

@@ -633,7 +633,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                return OUString(); // ignore prefix and suffix
           case PAGE_DESCRIPTOR:
           case BITMAP:
-               assert(false);
+               OSL_ASSERT(false);
                throw IllegalArgumentException();
           case CHARS_UPPER_LETTER_N:
                lcl_formatChars1( upperLetter, 26, number-1, result ); // 1=>A, 2=>B, ..., 26=>Z, 27=>AA, 28=>BB, ...
@@ -653,6 +653,8 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                } catch (Exception& ) {
                     // When transliteration property is missing, return default number (bug #101141#)
                     result += OUString::number( number );
+                    // OSL_ASSERT(0);
+                    // throw IllegalArgumentException();
                }
                break;
           case NATIVE_NUMBERING:
@@ -856,7 +858,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
               break;
 
           default:
-               assert(false);
+               OSL_ASSERT(false);
                throw IllegalArgumentException();
       }
 

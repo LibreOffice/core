@@ -1312,7 +1312,7 @@ namespace
                                 double& rVal,
                                 const LocaleDataWrapper* const pLclData )
     {
-        assert(pLclData);
+        OSL_ASSERT(pLclData);
         const sal_Unicode nCurrCmdPos = rCommandPos;
         rtl_math_ConversionStatus eStatus;
         const sal_Unicode* pEnd;

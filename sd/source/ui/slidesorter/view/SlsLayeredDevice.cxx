@@ -72,7 +72,7 @@ void DeviceCopy (
 
 void ForAllRectangles (const vcl::Region& rRegion, const std::function<void (const ::tools::Rectangle&)>& aFunction)
 {
-    assert(aFunction);
+    OSL_ASSERT(aFunction);
     RectangleVector aRectangles;
     rRegion.GetRegionRectangles(aRectangles);
 
@@ -174,7 +174,7 @@ void LayeredDevice::Invalidate (
 {
     if (nLayer<0 || size_t(nLayer)>=mpLayers->size())
     {
-        assert(nLayer>=0 && size_t(nLayer)<mpLayers->size());
+        OSL_ASSERT(nLayer>=0 && size_t(nLayer)<mpLayers->size());
         return;
     }
 
@@ -197,15 +197,15 @@ void LayeredDevice::RegisterPainter (
     const SharedILayerPainter& rpPainter,
     const sal_Int32 nLayer)
 {
-    assert(mpLayers);
+    OSL_ASSERT(mpLayers);
     if ( ! rpPainter)
     {
-        assert(rpPainter);
+        OSL_ASSERT(rpPainter);
         return;
     }
     if (nLayer<0 || nLayer>=gnMaximumLayerCount)
     {
-        assert(nLayer>=0 && nLayer<gnMaximumLayerCount);
+        OSL_ASSERT(nLayer>=0 && nLayer<gnMaximumLayerCount);
         return;
     }
 
@@ -233,12 +233,12 @@ void LayeredDevice::RemovePainter (
 {
     if ( ! rpPainter)
     {
-        assert(rpPainter);
+        OSL_ASSERT(rpPainter);
         return;
     }
     if (nLayer<0 || size_t(nLayer)>=mpLayers->size())
     {
-        assert(nLayer>=0 && size_t(nLayer)<mpLayers->size());
+        OSL_ASSERT(nLayer>=0 && size_t(nLayer)<mpLayers->size());
         return;
     }
 
@@ -360,7 +360,7 @@ bool LayeredDevice::HandleMapModeChange()
     else
     {
         // Can this happen?  Lets trigger a warning when it does.
-        assert(false);
+        OSL_ASSERT(false);
     }
 
     maSavedMapMode = rMapMode;
@@ -461,7 +461,7 @@ void Layer::Resize (const Size& rSize)
 
 void Layer::AddPainter (const SharedILayerPainter& rpPainter)
 {
-    assert(::std::find(maPainters.begin(), maPainters.end(), rpPainter) == maPainters.end());
+    OSL_ASSERT(::std::find(maPainters.begin(), maPainters.end(), rpPainter) == maPainters.end());
 
     maPainters.push_back(rpPainter);
 }

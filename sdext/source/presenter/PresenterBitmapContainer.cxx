@@ -136,7 +136,7 @@ void PresenterBitmapContainer::LoadBitmaps (
     }
     catch (Exception&)
     {
-        assert(false);
+        OSL_ASSERT(false);
     }
 }
 
@@ -165,7 +165,7 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
         }
         catch (Exception&)
         {
-            assert(false);
+            OSL_ASSERT(false);
         }
     }
 
@@ -193,8 +193,8 @@ SharedBitmapDescriptor PresenterBitmapContainer::LoadBitmap (
     const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
     const SharedBitmapDescriptor& rpDefault)
 {
-    assert(rxCanvas.is());
-    assert(rxPresenterHelper.is());
+    OSL_ASSERT(rxCanvas.is());
+    OSL_ASSERT(rxPresenterHelper.is());
 
     SharedBitmapDescriptor pBitmap (new BitmapDescriptor(rpDefault));
 

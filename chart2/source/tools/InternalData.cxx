@@ -307,7 +307,7 @@ bool InternalData::enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount )
 void InternalData::insertColumn( sal_Int32 nAfterIndex )
 {
     // note: -1 is allowed, as we insert after the given index
-    assert( nAfterIndex < m_nColumnCount && nAfterIndex >= -1 );
+    OSL_ASSERT( nAfterIndex < m_nColumnCount && nAfterIndex >= -1 );
     if( nAfterIndex >= m_nColumnCount || nAfterIndex < -1 )
         return;
     sal_Int32 nNewColumnCount = m_nColumnCount + 1;
@@ -364,7 +364,7 @@ sal_Int32 InternalData::getColumnCount() const
 void InternalData::insertRow( sal_Int32 nAfterIndex )
 {
     // note: -1 is allowed, as we insert after the given index
-    assert( nAfterIndex < m_nRowCount && nAfterIndex >= -1 );
+    OSL_ASSERT( nAfterIndex < m_nRowCount && nAfterIndex >= -1 );
     if( nAfterIndex >= m_nRowCount || nAfterIndex < -1 )
         return;
     sal_Int32 nNewRowCount = m_nRowCount + 1;
@@ -401,7 +401,7 @@ void InternalData::insertRow( sal_Int32 nAfterIndex )
 
 void InternalData::deleteColumn( sal_Int32 nAtIndex )
 {
-    assert( nAtIndex < m_nColumnCount && nAtIndex >= 0 );
+    OSL_ASSERT( nAtIndex < m_nColumnCount && nAtIndex >= 0 );
     if( nAtIndex >= m_nColumnCount || m_nColumnCount < 1 || nAtIndex < 0 )
         return;
     sal_Int32 nNewColumnCount = m_nColumnCount - 1;
@@ -435,7 +435,7 @@ void InternalData::deleteColumn( sal_Int32 nAtIndex )
 
 void InternalData::deleteRow( sal_Int32 nAtIndex )
 {
-    assert( nAtIndex < m_nRowCount && nAtIndex >= 0 );
+    OSL_ASSERT( nAtIndex < m_nRowCount && nAtIndex >= 0 );
     if( nAtIndex >= m_nRowCount || m_nRowCount < 1 || nAtIndex < 0 )
         return;
     sal_Int32 nNewRowCount = m_nRowCount - 1;

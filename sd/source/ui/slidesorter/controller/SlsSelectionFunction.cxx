@@ -619,7 +619,7 @@ void SelectionFunction::GotoNextPage (int nOffset)
     if (pDescriptor.get() != nullptr)
     {
         SdPage* pPage = pDescriptor->GetPage();
-        assert(pPage!=nullptr);
+        OSL_ASSERT(pPage!=nullptr);
         sal_Int32 nIndex = (pPage->GetPageNum()-1) / 2;
         GotoPage(nIndex + nOffset);
     }
@@ -642,7 +642,7 @@ void SelectionFunction::GotoPage (int nIndex)
         mpModeHandler->SetCurrentPage(pNextPageDescriptor);
     else
     {
-        assert(pNextPageDescriptor.get() != nullptr);
+        OSL_ASSERT(pNextPageDescriptor.get() != nullptr);
     }
     ResetShiftKeySelectionAnchor();
 }
@@ -1549,7 +1549,7 @@ bool DragAndDropModeHandler::ProcessButtonUpEvent (
 
 bool DragAndDropModeHandler::ProcessDragEvent (SelectionFunction::EventDescriptor& rDescriptor)
 {
-    assert(mpDragAndDropContext);
+    OSL_ASSERT(mpDragAndDropContext);
 
     if (rDescriptor.mbIsLeaving)
     {

@@ -130,7 +130,7 @@ private:
 OUString UrlReference::expand(
     css::uno::Reference< css::util::XMacroExpander > const & expander)
 {
-    assert(expander.is());
+    OSL_ASSERT(expander.is());
     return expander->expandMacros(
         ::rtl::Uri::decode(
             getPath(), ::rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8));

@@ -381,7 +381,7 @@ static inline bool loadModule(osl::Module & rModule, const OUString & rBridgeNam
 static Mapping loadExternalMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
 {
-    assert( rFrom.is() && rTo.is() );
+    OSL_ASSERT( rFrom.is() && rTo.is() );
     if (rFrom.is() && rTo.is())
     {
 #ifdef DISABLE_DYNLOADING
@@ -414,7 +414,7 @@ static Mapping loadExternalMapping(
         {
             Mapping aExt;
             (*fpGetMapFunc)( (uno_Mapping **)&aExt, rFrom.get(), rTo.get() );
-            assert( aExt.is() );
+            OSL_ASSERT( aExt.is() );
             if (aExt.is())
                 return aExt;
         }
@@ -440,7 +440,7 @@ static Mapping loadExternalMapping(
             {
                 Mapping aExt;
                 (*fpGetMapFunc)( reinterpret_cast<uno_Mapping **>(&aExt), rFrom.get(), rTo.get() );
-                assert( aExt.is() );
+                OSL_ASSERT( aExt.is() );
                 if (aExt.is())
                 {
                     aModule.release();
@@ -460,7 +460,7 @@ static Mapping getDirectMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose = OUString() )
 
 {
-    assert( rFrom.is() && rTo.is() );
+    OSL_ASSERT( rFrom.is() && rTo.is() );
     if (rFrom.is() && rTo.is())
     {
         MappingsData & rData = getMappingsData();
@@ -705,7 +705,7 @@ void SAL_CALL uno_revokeMapping(
     ClearableMutexGuard aGuard( rData.aMappingsMutex );
 
     const t_Mapping2Entry::const_iterator iFind( rData.aMapping2Entry.find( pMapping ) );
-    assert( iFind != rData.aMapping2Entry.end() );
+    OSL_ASSERT( iFind != rData.aMapping2Entry.end() );
     MappingEntry * pEntry = (*iFind).second;
     if (! --pEntry->nRef)
     {

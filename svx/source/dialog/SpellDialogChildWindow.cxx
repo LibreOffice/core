@@ -52,7 +52,7 @@ SfxBindings& SpellDialogChildWindow::GetBindings() const
 
 void SpellDialogChildWindow::InvalidateSpellDialog()
 {
-    assert (m_xAbstractSpellDialog);
+    OSL_ASSERT (m_xAbstractSpellDialog);
     if (m_xAbstractSpellDialog)
         m_xAbstractSpellDialog->Invalidate();
 }

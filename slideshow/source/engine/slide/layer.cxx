@@ -56,7 +56,7 @@ namespace slideshow
 
         ViewLayerSharedPtr Layer::addView( const ViewSharedPtr& rNewView )
         {
-            assert( rNewView );
+            OSL_ASSERT( rNewView );
 
             ViewEntryVector::iterator aIter;
             const ViewEntryVector::iterator aEnd( maViewEntries.end() );
@@ -87,7 +87,7 @@ namespace slideshow
 
         ViewLayerSharedPtr Layer::removeView( const ViewSharedPtr& rView )
         {
-            assert( rView );
+            OSL_ASSERT( rView );
 
             ViewEntryVector::iterator       aIter;
             const ViewEntryVector::iterator aEnd( maViewEntries.end() );

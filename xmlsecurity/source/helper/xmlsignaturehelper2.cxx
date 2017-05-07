@@ -68,7 +68,7 @@ uno::Reference< io::XInputStream > SAL_CALL UriBindingHelper::getUriBinding( con
 
 uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno::Reference < embed::XStorage >& rxStore, const OUString& rURI )
 {
-    assert(!rURI.isEmpty());
+    OSL_ASSERT(!rURI.isEmpty());
     uno::Reference < io::XInputStream > xInStream;
 
     OUString aURI(rURI);

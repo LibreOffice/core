@@ -304,7 +304,7 @@ bool RelativePositionHelper::centerGrow(
     }
 
     // anchor must not be changed
-    assert( rInOutPosition.Anchor == aPos.Anchor );
+    OSL_ASSERT( rInOutPosition.Anchor == aPos.Anchor );
 
     if( rInOutPosition.Primary == aPos.Primary &&
         rInOutPosition.Secondary == aPos.Secondary &&

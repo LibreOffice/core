@@ -126,7 +126,7 @@ SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
 #if OSL_DEBUG_LEVEL > 0
 const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
 {
-    assert( nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN );
+    OSL_ASSERT( nWhich < POOLATTR_END && nWhich >= POOLATTR_BEGIN );
 
     SfxPoolItem *pHt = aAttrTab[ nWhich - POOLATTR_BEGIN ];
     OSL_ENSURE( pHt, "GetDfltFormatAttr(): Dflt == 0" );

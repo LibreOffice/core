@@ -501,7 +501,7 @@ awt::FontDescriptor CharacterProperties::createFontDescriptorFromPropertySet(
     aValues[ i++ ]  >>= aResult.Underline;
     aValues[ i++ ]  >>= aResult.Weight;
     aValues[ i++ ]  >>= aResult.WordLineMode;
-    assert( i == aValues.getLength());
+    OSL_ASSERT( i == aValues.getLength());
 
     return aResult;
 }

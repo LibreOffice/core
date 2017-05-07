@@ -126,7 +126,7 @@ OdfFlatXml::importer(
                 sourceData[paramIdx].Value >>= url;
         }
 
-    assert(inputStream.is());
+    OSL_ASSERT(inputStream.is());
     if (!inputStream.is())
         return false;
 
@@ -186,10 +186,10 @@ OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
         }
     // get data source interface ...
     Reference<XActiveDataSource> dataSource(getDelegate(), UNO_QUERY);
-    assert(dataSource.is());
+    OSL_ASSERT(dataSource.is());
     if (!dataSource.is())
         return false;
-    assert(outputStream.is());
+    OSL_ASSERT(outputStream.is());
     if (!outputStream.is())
         return false;
     dataSource->setOutputStream(outputStream);

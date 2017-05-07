@@ -3111,7 +3111,7 @@ void ScColumn::EndListening( sc::EndListeningContext& rCxt, const ScAddress& rAd
         return;
 
     SvtBroadcaster* pBC = sc::broadcaster_block::at(*it->data, aPos.second);
-    assert(pBC);
+    OSL_ASSERT(pBC);
 
     rListener.EndListening(*pBC);
     if (!pBC->HasListeners())

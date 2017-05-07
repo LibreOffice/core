@@ -659,7 +659,7 @@ uno::Reference< embed::XEmbeddedObject >
 
 void ScDocument::UpdateChartListenerCollection()
 {
-    assert(pChartListenerCollection);
+    OSL_ASSERT(pChartListenerCollection);
 
     bChartListenerCollectionNeedsUpdate = false;
     if (!pDrawLayer)
@@ -735,7 +735,7 @@ void ScDocument::UpdateChartListenerCollection()
 
 void ScDocument::AddOLEObjectToCollection(const OUString& rName)
 {
-    assert(pChartListenerCollection);
+    OSL_ASSERT(pChartListenerCollection);
     ScChartListenerCollection::StringSetType& rNonOleObjects =
         pChartListenerCollection->getNonOleObjectNames();
 

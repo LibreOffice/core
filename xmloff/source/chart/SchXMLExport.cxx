@@ -2896,7 +2896,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
     const awt::Size& rPageSize,
     bool bExportContent )
 {
-    assert( mxExpPropMapper.is());
+    OSL_ASSERT( mxExpPropMapper.is());
 
     std::vector< XMLPropertyState > aPropertyStates;
     std::vector< XMLPropertyState > aEquationPropertyStates;

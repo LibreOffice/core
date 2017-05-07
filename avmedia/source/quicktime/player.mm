@@ -56,7 +56,7 @@ Player::~Player()
 
 QTMovie* Player::getMovie()
 {
-    assert( mpMovie );
+    OSL_ASSERT( mpMovie );
     return mpMovie;
 }
 

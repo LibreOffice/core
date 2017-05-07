@@ -136,7 +136,7 @@ DrawViewShell::~DrawViewShell()
     mpAnnotationManager.reset();
     mpViewOverlayManager.reset();
 
-    assert (GetViewShell()!=nullptr);
+    OSL_ASSERT (GetViewShell()!=nullptr);
 
     if( mxScannerListener.is() )
         static_cast< ScannerEventListener* >( mxScannerListener.get() )->ParentDestroyed();
@@ -206,7 +206,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     mpFrameView->Connect();
 
-    assert (GetViewShell()!=nullptr);
+    OSL_ASSERT (GetViewShell()!=nullptr);
 
     SetPool( &GetDoc()->GetPool() );
 

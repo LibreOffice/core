@@ -517,7 +517,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
                 {
                     PyRef element;
                     element = any2PyObject (tc->convertTo (s[i], s[i].getValueType() ));
-                    assert( element.is() );
+                    OSL_ASSERT( element.is() );
                     PyTuple_SetItem( tuple.get(), i, element.getAcquired() );
                 }
             }

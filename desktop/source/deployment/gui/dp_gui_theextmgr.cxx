@@ -214,7 +214,7 @@ void TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bPare
     for ( sal_Int32 i = 0; i < xAllPackages.getLength(); ++i )
     {
         uno::Reference< deployment::XPackage > xPackage = dp_misc::getExtensionWithHighestVersion(xAllPackages[i]);
-        assert(xPackage.is());
+        OSL_ASSERT(xPackage.is());
         if ( xPackage.is() )
         {
             vEntries.push_back( xPackage );
@@ -373,7 +373,7 @@ bool TheExtensionManager::supportsOptions( const uno::Reference< deployment::XPa
     beans::Optional< OUString > aId = xPackage->getIdentifier();
 
     //a bundle must always have an id
-    assert( aId.IsPresent );
+    OSL_ASSERT( aId.IsPresent );
 
     //iterate over all available nodes
     uno::Sequence< OUString > seqNames = m_xNameAccessNodes->getElementNames();

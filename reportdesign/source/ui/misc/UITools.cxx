@@ -696,7 +696,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
 
     };
 
-    assert( pDefaults.size() == SAL_N_ELEMENTS(aItemInfos) );
+    OSL_ASSERT( pDefaults.size() == SAL_N_ELEMENTS(aItemInfos) );
 
     static const sal_uInt16 pRanges[] =
     {

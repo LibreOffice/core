@@ -55,7 +55,7 @@ void InsertionIndicatorHandler::Start (const bool bIsOverSourceView)
 {
     if (mbIsActive)
     {
-        assert(!mbIsActive);
+        OSL_ASSERT(!mbIsActive);
     }
 
     mbIsReadOnly = mrSlideSorter.GetModel().IsReadOnly();

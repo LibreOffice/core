@@ -407,7 +407,7 @@ static PyObject *createUnoStructHelper(
                         PyRef returnCandidate( PyUNOStruct_new( IdlStruct, c->xInvocation ) );
                         PyUNO *me = reinterpret_cast<PyUNO*>( returnCandidate.get() );
                         TypeDescription desc( typeName );
-                        assert( desc.is() ); // could already instantiate an XInvocation2 !
+                        OSL_ASSERT( desc.is() ); // could already instantiate an XInvocation2 !
 
                         typelib_CompoundTypeDescription *pCompType =
                             reinterpret_cast<typelib_CompoundTypeDescription *>(desc.get());

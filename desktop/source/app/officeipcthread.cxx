@@ -146,7 +146,7 @@ public:
 
 private:
     bool next(OUString * argument, bool prefix) {
-        assert(argument != nullptr);
+        OSL_ASSERT(argument != nullptr);
         if (m_index < m_input.getLength()) {
             if (prefix) {
                 if (m_input[m_index] != ',') {

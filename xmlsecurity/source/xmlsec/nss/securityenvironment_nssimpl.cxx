@@ -583,7 +583,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
     //CERT_PKIXVerifyCert does not take a db as argument. It will therefore
     //internally use CERT_GetDefaultCertDB
     //Make sure m_pHandler is the default DB
-    assert(m_pHandler == CERT_GetDefaultCertDB());
+    OSL_ASSERT(m_pHandler == CERT_GetDefaultCertDB());
     CERTCertDBHandle * certDb = m_pHandler != nullptr ? m_pHandler : CERT_GetDefaultCertDB();
     cert = xcert->getNssCert() ;
     if( cert != nullptr )

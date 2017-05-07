@@ -342,7 +342,7 @@ void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         if( eKind == SdrHintKind::BeginEdit )
         {
             // #i79965# remember map mode
-            assert(!m_bRestoreMapMode);
+            OSL_ASSERT( ! m_bRestoreMapMode );
             OutputDevice* pOutDev = this->GetFirstOutputDevice();
             if( pOutDev )
             {
@@ -353,7 +353,7 @@ void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         else if( eKind == SdrHintKind::EndEdit )
         {
             // #i79965# scroll back view when ending text edit
-            assert(m_bRestoreMapMode);
+            OSL_ASSERT( m_bRestoreMapMode );
             if( m_bRestoreMapMode )
             {
                 OutputDevice* pOutDev = this->GetFirstOutputDevice();

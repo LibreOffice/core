@@ -42,11 +42,11 @@ UriReference::UriReference(
     m_hasQuery(bHasQuery),
     m_hasFragment(false)
 {
-    assert(!scheme.isEmpty() || bIsHierarchical);
-    assert(!bHasAuthority || bIsHierarchical);
-    assert(authority.isEmpty() || bHasAuthority);
-    assert(!bHasQuery || bIsHierarchical);
-    assert(query.isEmpty() || bHasQuery);
+    OSL_ASSERT(!scheme.isEmpty() || bIsHierarchical);
+    OSL_ASSERT(!bHasAuthority || bIsHierarchical);
+    OSL_ASSERT(authority.isEmpty() || bHasAuthority);
+    OSL_ASSERT(!bHasQuery || bIsHierarchical);
+    OSL_ASSERT(query.isEmpty() || bHasQuery);
 }
 
 UriReference::~UriReference() {}

@@ -76,7 +76,7 @@ SAL_IMPLEMENT_MAIN()
             n ++;
         }
         // there are two services in two registries !
-        assert( 2 == n );
+        OSL_ASSERT( 2 == n );
         if( 2 == n )
         {
             printf( "test passed\n" );
@@ -101,7 +101,7 @@ SAL_IMPLEMENT_MAIN()
     {
         OString o =  OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
         printf( "%s\n" , o.getStr() );
-        assert(0);
+        OSL_ASSERT( 0 );
         return 1;
     }
 }

@@ -274,7 +274,7 @@ sal_Int32 ExtensionBox_Impl::getSelIndex() const
 {
     if ( m_bHasActive )
     {
-        assert( m_nActive >= -1);
+        OSL_ASSERT( m_nActive >= -1);
         return static_cast< sal_Int32 >( m_nActive );
     }
     else

@@ -302,7 +302,7 @@ sal_Int32 PlacePanels (
                     nPanelHeight = iItem->maLayoutSize.Preferred;
                     break;
                 default:
-                    assert(false);
+                    OSL_ASSERT(false);
                     break;
             }
 
@@ -453,7 +453,7 @@ void DistributeHeights (
 
     if (nRemainingHeightToDistribute == 0)
         return;
-    assert(nRemainingHeightToDistribute > 0);
+    OSL_ASSERT(nRemainingHeightToDistribute > 0);
 
     // It is possible that not all of the height could be distributed
     // because of Maximum heights being smaller than expected.
@@ -480,7 +480,7 @@ void DistributeHeights (
         }
     }
 
-    assert(nRemainingHeightToDistribute==0);
+    OSL_ASSERT(nRemainingHeightToDistribute==0);
 }
 
 tools::Rectangle PlaceDeckTitle (
@@ -542,7 +542,7 @@ void SetupVerticalScrollBar(
     const sal_Int32 nContentHeight,
     const sal_Int32 nVisibleHeight)
 {
-    assert(nContentHeight > nVisibleHeight);
+    OSL_ASSERT(nContentHeight > nVisibleHeight);
 
     rVerticalScrollBar.SetRangeMin(0);
     rVerticalScrollBar.SetRangeMax(nContentHeight-1);

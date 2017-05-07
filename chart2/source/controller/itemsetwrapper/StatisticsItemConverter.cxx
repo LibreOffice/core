@@ -174,7 +174,7 @@ uno::Reference< beans::XPropertySet > lcl_getCurveProperties(
 template <class T, class D>
 bool lclConvertToPropertySet(const SfxItemSet& rItemSet, sal_uInt16 nWhichId, const uno::Reference<beans::XPropertySet>& xProperties, const OUString& aPropertyID)
 {
-    assert(xProperties.is());
+    OSL_ASSERT(xProperties.is());
     if( xProperties.is() )
     {
         T aValue = static_cast<T>(static_cast<const D&>(rItemSet.Get( nWhichId )).GetValue());
@@ -192,7 +192,7 @@ bool lclConvertToPropertySet(const SfxItemSet& rItemSet, sal_uInt16 nWhichId, co
 template <class T, class D>
 void lclConvertToItemSet(SfxItemSet& rItemSet, sal_uInt16 nWhichId, const uno::Reference<beans::XPropertySet>& xProperties, const OUString& aPropertyID)
 {
-    assert(xProperties.is());
+    OSL_ASSERT(xProperties.is());
     if( xProperties.is() )
     {
         T aValue = static_cast<T>(static_cast<const D&>(rItemSet.Get( nWhichId )).GetValue());
@@ -205,7 +205,7 @@ void lclConvertToItemSet(SfxItemSet& rItemSet, sal_uInt16 nWhichId, const uno::R
 
 void lclConvertToItemSetDouble(SfxItemSet& rItemSet, sal_uInt16 nWhichId, const uno::Reference<beans::XPropertySet>& xProperties, const OUString& aPropertyID)
 {
-    assert(xProperties.is());
+    OSL_ASSERT(xProperties.is());
     if( xProperties.is() )
     {
         double aValue = static_cast<const SvxDoubleItem&>(rItemSet.Get( nWhichId )).GetValue();
@@ -582,7 +582,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
                         {
                             // no data range for error bars yet => create
                             uno::Reference< chart2::XInternalDataProvider > xIntDataProvider( xDataProvider, uno::UNO_QUERY );
-                            assert(xIntDataProvider.is());
+                            OSL_ASSERT( xIntDataProvider.is());
                             if( xIntDataProvider.is())
                             {
                                 xIntDataProvider->appendSequence();

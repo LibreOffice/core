@@ -163,7 +163,7 @@ DocumentSignatureAlgorithm
 DocumentSignatureHelper::getDocumentAlgorithm(
     const OUString & sODFVersion, const SignatureInformation & sigInfo)
 {
-    assert(!sODFVersion.isEmpty());
+    OSL_ASSERT(!sODFVersion.isEmpty());
     DocumentSignatureAlgorithm mode = DocumentSignatureAlgorithm::OOo3_2;
     if (!isOOo3_2_Signature(sigInfo))
     {

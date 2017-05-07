@@ -349,7 +349,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                        avoid the restoration of an no more existing object in
                        ::SelectionHasChanged after deletion. All other OLE
                        objects are not affected. */
-                    assert (mpViewShell->GetViewShell()!=nullptr);
+                    OSL_ASSERT (mpViewShell->GetViewShell()!=nullptr);
                     Client* pIPClient = static_cast<Client*>(
                         mpViewShell->GetViewShell()->GetIPClient());
                     if (pIPClient && pIPClient->IsObjectInPlaceActive())

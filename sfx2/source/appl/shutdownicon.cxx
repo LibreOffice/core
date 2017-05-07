@@ -535,7 +535,7 @@ void ShutdownIcon::terminateDesktop()
 
 ShutdownIcon* ShutdownIcon::getInstance()
 {
-    assert( pShutdownIcon );
+    OSL_ASSERT( pShutdownIcon );
     return pShutdownIcon;
 }
 

@@ -456,7 +456,7 @@ void PresenterNotesView::Layout()
                 }
             catch(beans::UnknownPropertyException&)
                 {
-                    assert(false);
+                    OSL_ASSERT(false);
                 }
             if(AllSettings::GetLayoutRTL())
                 {
@@ -552,7 +552,7 @@ void PresenterNotesView::PaintToolBar (const awt::Rectangle& rUpdateBox)
     }
 
     // Paint the horizontal separator.
-    assert(mxViewId.is());
+    OSL_ASSERT(mxViewId.is());
     PresenterCanvasHelper::SetDeviceColor(aRenderState, maSeparatorColor);
 
     mxCanvas->drawLine(
@@ -660,7 +660,7 @@ void PresenterNotesView::ChangeFontSize (const sal_Int32 nSizeChange)
         }
         catch (Exception&)
         {
-            assert(false);
+            OSL_ASSERT(false);
         }
     }
 }
@@ -680,7 +680,7 @@ void PresenterNotesView::UpdateScrollBar()
         }
         catch(beans::UnknownPropertyException&)
         {
-            assert(false);
+            OSL_ASSERT(false);
         }
 
         mpScrollBar->SetLineHeight(mpFont->mnSize*1.2);

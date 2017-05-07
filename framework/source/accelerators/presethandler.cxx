@@ -170,7 +170,7 @@ void lcl_throwCorruptedUIConfigurationException(
 {
     css::uno::Exception e;
     bool ok = (exception >>= e);
-    assert(ok); (void) ok; // avoid warnings
+    OSL_ASSERT(ok); (void) ok; // avoid warnings
     throw css::configuration::CorruptedUIConfigurationException(
         lcl_getLocalizedMessage(id),
         css::uno::Reference< css::uno::XInterface >(),

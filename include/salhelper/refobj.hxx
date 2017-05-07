@@ -85,7 +85,7 @@ protected:
      */
     virtual ~ReferenceObject()
     {
-        assert(m_nReferenceCount == 0);
+        OSL_ASSERT(m_nReferenceCount == 0);
     }
 };
 

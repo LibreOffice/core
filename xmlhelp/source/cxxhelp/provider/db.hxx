@@ -79,7 +79,7 @@ namespace helpdatafileproxy {
                 , m_nItRead( -1 )
                 , m_iItPos( -1 )
         {
-            assert(comphelper::isFileUrl(rFileURL));
+            OSL_ASSERT(comphelper::isFileUrl(rFileURL));
         }
         ~Hdf()
             { releaseHashMap(); }

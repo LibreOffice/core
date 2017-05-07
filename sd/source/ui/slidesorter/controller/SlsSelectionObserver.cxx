@@ -89,21 +89,21 @@ void SelectionObserver::NotifyPageEvent (const SdrPage* pSdrPage)
 
 void SelectionObserver::StartObservation()
 {
-    assert(!mbIsOvservationActive);
+    OSL_ASSERT(!mbIsOvservationActive);
     maInsertedPages.clear();
     mbIsOvservationActive = true;
 }
 
 void SelectionObserver::AbortObservation()
 {
-    assert(mbIsOvservationActive);
+    OSL_ASSERT(mbIsOvservationActive);
     mbIsOvservationActive = false;
     maInsertedPages.clear();
 }
 
 void SelectionObserver::EndObservation()
 {
-    assert(mbIsOvservationActive);
+    OSL_ASSERT(mbIsOvservationActive);
     mbIsOvservationActive = false;
 
     PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());

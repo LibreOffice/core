@@ -1186,7 +1186,7 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
         }
         catch ( Exception& )
         {
-            assert(false);
+            OSL_ASSERT(false);
         }
 
         if (m_nFormatKey && m_xFormatter.is())

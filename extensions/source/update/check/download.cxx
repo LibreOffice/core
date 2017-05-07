@@ -104,7 +104,7 @@ static void openFile( OutData& out )
 static inline OString
 getStringValue(const uno::Reference< container::XNameAccess >& xNameAccess, const OUString& aName)
 {
-    assert(xNameAccess->hasByName(aName));
+    OSL_ASSERT(xNameAccess->hasByName(aName));
     uno::Any aValue = xNameAccess->getByName(aName);
 
     return OUStringToOString(aValue.get<OUString>(), RTL_TEXTENCODING_UTF8);
@@ -115,7 +115,7 @@ static inline sal_Int32
 getInt32Value(const uno::Reference< container::XNameAccess >& xNameAccess,
                     const OUString& aName)
 {
-    assert(xNameAccess->hasByName(aName));
+    OSL_ASSERT(xNameAccess->hasByName(aName));
     uno::Any aValue = xNameAccess->getByName(aName);
 
     sal_Int32 n = -1;
@@ -191,7 +191,7 @@ Download::getProxyForURL(const OUString& rURL, OString& rHost, sal_Int32& rPort)
             "com.sun.star.configuration.ConfigurationAccess", aArgumentList ),
         uno::UNO_QUERY_THROW );
 
-    assert(xNameAccess->hasByName("ooInetProxyType"));
+    OSL_ASSERT(xNameAccess->hasByName("ooInetProxyType"));
     uno::Any aValue = xNameAccess->getByName("ooInetProxyType");
 
     sal_Int32 nProxyType = aValue.get< sal_Int32 >();
@@ -336,7 +336,7 @@ bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal
 bool
 Download::start(const OUString& rURL, const OUString& rFile, const OUString& rDestinationDir)
 {
-    assert( m_aHandler.is() );
+    OSL_ASSERT( m_aHandler.is() );
 
     OutData out(m_aCondition);
     OUString aFile( rFile );

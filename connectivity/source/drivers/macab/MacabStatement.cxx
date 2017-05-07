@@ -222,7 +222,7 @@ MacabCondition *MacabCommonStatement::analyseWhereClause(const OSQLParseNode *pP
     }
     impl_throwError(STR_QUERY_TOO_COMPLEX);
     // Unreachable:
-    assert(false);
+    OSL_ASSERT(false);
     return nullptr;
 }
 
@@ -268,7 +268,7 @@ MacabOrder *MacabCommonStatement::analyseOrderByClause(const OSQLParseNode *pPar
     }
     impl_throwError(STR_QUERY_TOO_COMPLEX);
     // Unreachable:
-    assert(false);
+    OSL_ASSERT(false);
     return nullptr;
 }
 

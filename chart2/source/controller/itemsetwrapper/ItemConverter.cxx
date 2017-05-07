@@ -85,8 +85,8 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
     SfxItemPool & rPool = GetItemPool();
 
     assert(pRanges != nullptr);
-    assert(m_xPropertySetInfo.is());
-    assert(m_xPropertySet.is());
+    OSL_ASSERT( m_xPropertySetInfo.is());
+    OSL_ASSERT( m_xPropertySet.is());
 
     while( (*pRanges) != 0)
     {
@@ -95,7 +95,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
         sal_uInt16 nEnd = (*pRanges);
         ++pRanges;
 
-        assert(nBeg <= nEnd);
+        OSL_ASSERT( nBeg <= nEnd );
         for( sal_uInt16 nWhich = nBeg; nWhich <= nEnd; ++nWhich )
         {
             if( GetItemProperty( nWhich, aProperty ))
@@ -166,7 +166,7 @@ bool ItemConverter::ApplySpecialItem(
 
 bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
 {
-    assert(m_xPropertySet.is());
+    OSL_ASSERT( m_xPropertySet.is());
 
     bool bItemsChanged = false;
     SfxItemIter aIter( rItemSet );

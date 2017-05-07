@@ -297,7 +297,7 @@ awt::Size lcl_placeLegendEntries(
 
     std::vector< Reference< drawing::XShape > > aTextShapes;
     awt::Size aMaxEntryExtent = lcl_createTextShapes( rEntries, xShapeFactory, xTarget, aTextShapes, rTextProperties );
-    assert(aTextShapes.size() == rEntries.size());
+    OSL_ASSERT( aTextShapes.size() == rEntries.size());
 
     sal_Int32 nMaxEntryWidth = nXOffset + nSymbolPlusDistanceWidth + aMaxEntryExtent.Width;
     sal_Int32 nMaxEntryHeight = nYOffset + aMaxEntryExtent.Height;

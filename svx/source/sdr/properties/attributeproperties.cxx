@@ -243,7 +243,7 @@ namespace sdr
 
         void AttributeProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
         {
-            assert(pNewModel!=nullptr);
+            OSL_ASSERT(pNewModel!=nullptr);
 
             if(pSrcPool && pDestPool && (pSrcPool != pDestPool))
             {
@@ -282,7 +282,7 @@ namespace sdr
                             // name or use the default.
 
                             // Look up the style in the new document.
-                            assert(pNewModel->GetStyleSheetPool() != nullptr);
+                            OSL_ASSERT(pNewModel->GetStyleSheetPool() != nullptr);
                             SfxStyleSheet* pNewStyleSheet = dynamic_cast<SfxStyleSheet*>(
                                 pNewModel->GetStyleSheetPool()->Find(
                                     pStySheet->GetName(),

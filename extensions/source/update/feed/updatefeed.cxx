@@ -224,8 +224,8 @@ public:
     sal_Bool SAL_CALL hasMoreElements() override { return m_nCount < m_nNodes; };
     uno::Any SAL_CALL nextElement() override
     {
-        assert( m_xNodeList.is() );
-        assert( m_xUpdateInformationProvider.is() );
+        OSL_ASSERT( m_xNodeList.is() );
+        OSL_ASSERT( m_xUpdateInformationProvider.is() );
 
         if( !(m_nCount < m_nNodes ) )
             throw container::NoSuchElementException(OUString::number(m_nCount), *this);
@@ -516,7 +516,7 @@ UpdateInformationProvider::load(const OUString& rURL)
 uno::Reference< xml::dom::XElement >
 UpdateInformationProvider::getDocumentRoot(const uno::Reference< xml::dom::XNode >& rxNode)
 {
-    assert(m_xDocumentBuilder.is());
+    OSL_ASSERT(m_xDocumentBuilder.is());
 
     uno::Reference< xml::dom::XElement > xElement(rxNode, uno::UNO_QUERY_THROW);
 
@@ -526,7 +526,7 @@ UpdateInformationProvider::getDocumentRoot(const uno::Reference< xml::dom::XNode
         uno::Reference< xml::dom::XDocument > xUpdateXML =
             m_xDocumentBuilder->parse(load(xElement->getAttribute( "src" )));
 
-        assert( xUpdateXML.is() );
+        OSL_ASSERT( xUpdateXML.is() );
 
         if( xUpdateXML.is() )
             return xUpdateXML->getDocumentElement();
@@ -561,7 +561,7 @@ uno::Reference< xml::dom::XNode >
 UpdateInformationProvider::getChildNode(const uno::Reference< xml::dom::XNode >& rxNode,
                                         const OUString& rName)
 {
-    assert(m_xXPathAPI.is());
+    OSL_ASSERT(m_xXPathAPI.is());
     try {
         return m_xXPathAPI->selectSingleNode(rxNode, "./atom:" + rName);
     } catch (const xml::xpath::XPathException &) {
@@ -577,7 +577,7 @@ UpdateInformationProvider::getUpdateInformationEnumeration(
     OUString const & extensionId
 )
 {
-    assert(m_xDocumentBuilder.is());
+    OSL_ASSERT(m_xDocumentBuilder.is());
 
     // reset cancelled flag
     m_bCancelled.reset();

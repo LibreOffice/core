@@ -63,7 +63,7 @@ Reference< XComponentContext > createInitialComponentContext(
         OUString file_url;
         oslFileError rc = osl_getFileURLFromSystemPath(
             inst_dir.pData, &file_url.pData );
-        assert( osl_File_E_None == rc );
+        OSL_ASSERT( osl_File_E_None == rc );
 
         OUString unorc = file_url + ("/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("louno") );
 
@@ -123,7 +123,7 @@ void exportToFile(
         nRead = xStream->readBytes( readBytes, 1024 );
         if (! nRead)
             break;
-        assert( readBytes.getLength() >= nRead );
+        OSL_ASSERT( readBytes.getLength() >= nRead );
 
         sal_Int32 nPos = bytes.getLength();
         bytes.realloc( nPos + nRead );
@@ -169,7 +169,7 @@ void MyApp::Main()
                              RTL_TEXTENCODING_ASCII_US ) );
         Reference< container::XNameContainer > xModel(
             importFile( aParam1.getStr(), xContext ) );
-        assert( xModel.is() );
+        OSL_ASSERT( xModel.is() );
 
         Reference< awt::XUnoControlDialog > xDlg = UnoControlDialog::create( xContext );
         xDlg->setModel( xModel );

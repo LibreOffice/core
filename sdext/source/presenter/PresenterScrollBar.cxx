@@ -220,7 +220,7 @@ void PresenterScrollBar::SetTotalSize (const double nTotalSize)
 
 void PresenterScrollBar::SetThumbSize (const double nThumbSize)
 {
-    assert(nThumbSize>=0);
+    OSL_ASSERT(nThumbSize>=0);
     if (mnThumbSize != nThumbSize)
     {
         mnThumbSize = nThumbSize;
@@ -258,7 +258,7 @@ void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rx
                     }
                     catch(Exception&)
                     {
-                        assert(false);
+                        OSL_ASSERT(false);
                     }
                 }
                 else
@@ -296,8 +296,8 @@ void PresenterScrollBar::Paint (
 {
     if ( ! mxCanvas.is() || ! mxWindow.is())
     {
-        assert(mxCanvas.is());
-        assert(mxWindow.is());
+        OSL_ASSERT(mxCanvas.is());
+        OSL_ASSERT(mxWindow.is());
         return;
     }
 
@@ -446,7 +446,7 @@ void SAL_CALL PresenterScrollBar::disposing (const css::lang::EventObject& rEven
 
 geometry::RealRectangle2D const & PresenterScrollBar::GetRectangle (const Area eArea) const
 {
-    assert(eArea>=0 && eArea<AreaCount);
+    OSL_ASSERT(eArea>=0 && eArea<AreaCount);
 
     return maBox[eArea];
 }
@@ -581,7 +581,7 @@ PresenterBitmapContainer::BitmapDescriptor::Mode PresenterScrollBar::GetBitmapMo
 
 bool PresenterScrollBar::IsDisabled (const Area eArea) const
 {
-    assert(eArea>=0 && eArea<AreaCount);
+    OSL_ASSERT(eArea>=0 && eArea<AreaCount);
 
     return ! maEnabledState[eArea];
 }

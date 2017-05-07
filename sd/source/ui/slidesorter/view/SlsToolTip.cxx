@@ -73,7 +73,7 @@ void ToolTip::SetPage (const model::SharedPageDescriptor& rpDescriptor)
                 sHelpText = pPage->GetName();
             else
             {
-                assert(mpDescriptor->GetPage() != nullptr);
+                OSL_ASSERT(mpDescriptor->GetPage() != nullptr);
             }
             if (sHelpText.isEmpty())
             {

@@ -199,7 +199,7 @@ bool ODbaseIndex::ConvertToKey(ONDXKey* rKey, sal_uInt32 nRec, const ORowSetValu
     }
     catch (Exception&)
     {
-        assert(false);
+        OSL_ASSERT(false);
         return false;
     }
     return true;

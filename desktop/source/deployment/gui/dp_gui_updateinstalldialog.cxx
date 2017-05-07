@@ -290,7 +290,7 @@ void UpdateInstallDialog::setError(INSTALL_ERROR err, OUString const & sExtensio
         break;
 
     default:
-        assert(false);
+        OSL_ASSERT(false);
     }
 
     OUString sMsg(m_pMle_info->GetText());
@@ -362,7 +362,7 @@ void UpdateInstallDialog::Thread::downloadExtensions()
                 continue;
             //We assume that m_aVecUpdateData contains only information about extensions which
             //can be downloaded directly.
-            assert(curData.sWebsiteURL.isEmpty());
+            OSL_ASSERT(curData.sWebsiteURL.isEmpty());
 
             //update the name of the extension which is to be downloaded
             {
@@ -495,7 +495,7 @@ void UpdateInstallDialog::Thread::installExtensions()
             }
             else if (curData.aUpdateSource.is())
             {
-                assert(curData.aUpdateSource.is());
+                OSL_ASSERT(curData.aUpdateSource.is());
                 //I am not sure if we should obtain the install properties and pass them into
                 //add extension. Currently it contains only "SUPPRESS_LICENSE". So it could happen
                 //that a license is displayed when updating from the shared repository, although the
@@ -581,7 +581,7 @@ bool UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
         }
     }
 
-    assert(m_sDownloadFolder.getLength());
+    OSL_ASSERT(m_sDownloadFolder.getLength());
     OUString destFolder, tempEntry;
     if (::osl::File::createTempFile(
         &m_sDownloadFolder,
@@ -644,7 +644,7 @@ void UpdateCommandEnv::handle(
     cssu::Reference< css::task::XInteractionRequest> const & xRequest )
 {
     cssu::Any request( xRequest->getRequest() );
-    assert( request.getValueTypeClass() == cssu::TypeClass_EXCEPTION );
+    OSL_ASSERT( request.getValueTypeClass() == cssu::TypeClass_EXCEPTION );
     dp_misc::TRACE("[dp_gui_cmdenv.cxx] incoming request:\n"
         + ::comphelper::anyToString(request) + "\n\n");
 

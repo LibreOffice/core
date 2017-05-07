@@ -422,7 +422,7 @@ UpdateCheckConfig::clearUpdateFound()
                 m_xContainer->removeByName(aName);
         } catch(const lang::WrappedTargetException& ) {
             // Can not remove value, probably in share layer
-            assert(false);
+            OSL_ASSERT(false);
             m_xContainer->replaceByName(aName, uno::makeAny(OUString()));
         }
     }

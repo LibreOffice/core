@@ -171,7 +171,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
         m_sJavaHome = "file:///usr/lib";
 
     // init m_sRuntimeLibrary
-    assert(!m_sHome.isEmpty());
+    OSL_ASSERT(!m_sHome.isEmpty());
     //call virtual function to get the possible paths to the runtime library.
 
     int size = 0;
@@ -256,7 +256,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
         return false;
 
     // init m_sLD_LIBRARY_PATH
-    assert(!m_sHome.isEmpty());
+    OSL_ASSERT(!m_sHome.isEmpty());
     size = 0;
     char const * const * arLDPaths = getLibraryPaths( & size);
     vector<OUString> ld_paths = getVectorFromCharArray(arLDPaths, size);

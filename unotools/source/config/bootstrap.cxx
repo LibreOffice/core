@@ -334,7 +334,7 @@ static PathStatus getDerivedPath(
             aStatus = checkStatusAndNormalizeURL(sDerivedURL);
 
         else // the relative appendix must be valid
-            assert(aStatus != Bootstrap::PATH_VALID || dbgCheckStatusOfURL(sDerivedURL) == Bootstrap::PATH_VALID);
+            OSL_ASSERT(aStatus != Bootstrap::PATH_VALID || dbgCheckStatusOfURL(sDerivedURL) == Bootstrap::PATH_VALID);
 
         _rData.getFrom(_sBootstrapParameter, _rURL, sDerivedURL);
 
@@ -349,7 +349,7 @@ static PathStatus getDerivedPath(
         _rURL = _aBaseURL;
 
         // if we have no data it can't be a valid path
-        assert( aStatus > Bootstrap::PATH_VALID );
+        OSL_ASSERT( aStatus > Bootstrap::PATH_VALID );
     }
 
     return aStatus;
@@ -467,7 +467,7 @@ static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Im
             addUnexpectedError(_rBuf,"");
             break;
 
-        default: assert(false);
+        default: OSL_ASSERT(false);
             addUnexpectedError(_rBuf);
             break;
         }
@@ -513,10 +513,7 @@ static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Im
                     eErrCode = Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY;
                 break;
 
-            case Bootstrap::DATA_INVALID:
-                assert(false);
-                SAL_FALLTHROUGH;
-
+            case Bootstrap::DATA_INVALID: OSL_ASSERT(false); SAL_FALLTHROUGH;
             case Bootstrap::PATH_VALID:
                 addFileError(_rBuf, _rData.aBootstrapINI_.path, IS_MISSING);
                 eErrCode = Bootstrap::MISSING_BOOTSTRAP_FILE;
@@ -530,8 +527,7 @@ static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Im
         }
         break;
 
-    default:
-        assert(false);
+    default: OSL_ASSERT(false);
         addUnexpectedError(_rBuf);
         break;
     }

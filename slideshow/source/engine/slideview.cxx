@@ -1021,7 +1021,7 @@ void SlideView::disposing( lang::EventObject const& evt )
 
     if (mxView.is())
     {
-        assert( evt.Source == mxView );
+        OSL_ASSERT( evt.Source == mxView );
         mxView.clear();
     }
 

@@ -143,7 +143,7 @@ void TmpRepositoryCommandEnv::handle(
     Reference< task::XInteractionRequest> const & xRequest )
 {
     uno::Any request( xRequest->getRequest() );
-    assert( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
+    OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
     deployment::VersionException verExc;
     deployment::LicenseException licExc;
@@ -176,7 +176,7 @@ void LicenseCommandEnv::handle(
     Reference< task::XInteractionRequest> const & xRequest )
 {
     uno::Any request( xRequest->getRequest() );
-    assert( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
+    OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
     deployment::LicenseException licExc;
 
@@ -211,7 +211,7 @@ void NoLicenseCommandEnv::handle(
     Reference< task::XInteractionRequest> const & xRequest )
 {
     uno::Any request( xRequest->getRequest() );
-    assert( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
+    OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
     deployment::LicenseException licExc;
 
@@ -233,7 +233,7 @@ void SilentCheckPrerequisitesCommandEnv::handle(
        Reference< task::XInteractionRequest> const & xRequest )
 {
     uno::Any request( xRequest->getRequest() );
-    assert( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
+    OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
     deployment::LicenseException licExc;
     deployment::PlatformException platformExc;

@@ -1846,8 +1846,8 @@ AccessibleFocusManager::AccessibleFocusManager()
 void AccessibleFocusManager::AddFocusableObject (
     const ::rtl::Reference<PresenterAccessible::AccessibleObject>& rpObject)
 {
-    assert(rpObject.is());
-    assert(::std::find(maFocusableObjects.begin(),maFocusableObjects.end(), rpObject)==maFocusableObjects.end());
+    OSL_ASSERT(rpObject.is());
+    OSL_ASSERT(::std::find(maFocusableObjects.begin(),maFocusableObjects.end(), rpObject)==maFocusableObjects.end());
 
     maFocusableObjects.push_back(rpObject);
 }
@@ -1862,7 +1862,7 @@ void AccessibleFocusManager::RemoveFocusableObject (
         maFocusableObjects.erase(iObject);
     else
     {
-        assert(iObject!=maFocusableObjects.end());
+        OSL_ASSERT(iObject!=maFocusableObjects.end());
     }
 }
 

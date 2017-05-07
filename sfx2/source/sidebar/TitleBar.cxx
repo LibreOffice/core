@@ -167,7 +167,7 @@ void TitleBar::PaintFocus(vcl::RenderContext& rRenderContext, const tools::Recta
 IMPL_LINK(TitleBar, SelectionHandler, ToolBox*, pToolBox, void)
 {
     (void)pToolBox;
-    assert(maToolBox.get()==pToolBox);
+    OSL_ASSERT(maToolBox.get()==pToolBox);
     const sal_uInt16 nItemId (maToolBox->GetHighlightItemId());
 
     HandleToolBoxItemClick(nItemId);

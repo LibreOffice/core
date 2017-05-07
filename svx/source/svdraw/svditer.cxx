@@ -65,7 +65,7 @@ void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMod
     {
         SdrObject* pObj = bUseZOrder ?
             rObjList.GetObj( nIdx ) : rObjList.GetObjectForNavigationPosition( nIdx );
-        assert( pObj != nullptr );
+        OSL_ASSERT( pObj != nullptr );
         if( pObj )
             ImpProcessObj( pObj, eMode, bUseZOrder );
     }

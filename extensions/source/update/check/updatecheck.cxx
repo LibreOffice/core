@@ -991,7 +991,7 @@ UpdateCheck::enableAutoCheck(bool enable)
 void
 UpdateCheck::enableDownload(bool enable, bool paused)
 {
-    assert(nullptr == m_pThread);
+    OSL_ASSERT(nullptr == m_pThread);
 
     State eState = DISABLED;
     if( enable )
@@ -1198,7 +1198,7 @@ UpdateCheck::showDialog(bool forceCheck)
         break;
 
     case NOT_INITIALIZED:
-        assert( false );
+        OSL_ASSERT( false );
         break;
     }
 
@@ -1233,7 +1233,7 @@ UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
     bool bSuppressBubble = aInfo.BuildId.equals(m_aUpdateInfo.BuildId);
     m_aUpdateInfo = aInfo;
 
-    assert(DISABLED == m_eState || CHECK_SCHEDULED == m_eState);
+    OSL_ASSERT(DISABLED == m_eState || CHECK_SCHEDULED == m_eState);
 
     // Ignore leading non direct download if we get direct ones
     std::vector< DownloadSource >::iterator iter = m_aUpdateInfo.Sources.begin();
@@ -1253,7 +1253,7 @@ UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
     }
 
     rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext, *this);
-    assert( rModel.is() );
+    OSL_ASSERT( rModel.is() );
 
     // Decide whether to use alternate release note pos ..
     bool autoDownloadEnabled = rModel->isAutoDownloadEnabled();
@@ -1368,7 +1368,7 @@ void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
         m_eUpdateState = eState;
 
     rtl::Reference<UpdateHandler> aUpdateHandler(getUpdateHandler());
-    assert( aUpdateHandler.is() );
+    OSL_ASSERT( aUpdateHandler.is() );
 
     UpdateInfo aUpdateInfo(m_aUpdateInfo);
     OUString aImageName(m_aImageName);

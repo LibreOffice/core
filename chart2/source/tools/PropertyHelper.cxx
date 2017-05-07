@@ -41,7 +41,7 @@ struct lcl_EqualsElement : public std::unary_function< OUString, bool >
     explicit lcl_EqualsElement( const Any & rValue, const Reference< container::XNameAccess > & xAccess )
             : m_aValue( rValue ), m_xAccess( xAccess )
     {
-        assert( m_xAccess.is());
+        OSL_ASSERT( m_xAccess.is());
     }
 
     bool operator() ( const OUString & rName )
@@ -155,7 +155,7 @@ OUString lcl_addNamedPropertyUniqueNameToTable(
                 aUniqueName = rPrefix + OUString::number( nIndex );
             }
 
-            assert( !aUniqueName.isEmpty());
+            OSL_ASSERT( !aUniqueName.isEmpty());
             xNameContainer->insertByName( aUniqueName, rValue );
             return aUniqueName;
         }

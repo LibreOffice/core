@@ -135,7 +135,7 @@ std::shared_ptr<SvStream> wrapStream(css::uno::Reference< css::io::XInputStream 
     // SeekPos implementation for an XInputStream that is not also XSeekable
     // (cf. "@@@" at tags/DEV300_m37/svtools/source/misc1/strmadpt.cxx@264807
     // l. 593):
-    assert(stream.is());
+    OSL_ASSERT(stream.is());
     std::shared_ptr<SvStream> s(std::make_shared<SvMemoryStream>());
     for (;;)
     {
@@ -398,10 +398,10 @@ void ImplImageTree::createStyle()
     if (maCurrentStyle != "default")
     {
         INetURLObject aUrl(getIconThemeFolderUrl());
-        assert(!aUrl.HasError());
+        OSL_ASSERT(!aUrl.HasError());
 
         bool ok = aUrl.Append("images_" + maCurrentStyle, INetURLObject::EncodeMechanism::All);
-        assert(ok); (void) ok;
+        OSL_ASSERT(ok); (void) ok;
         sThemeUrl = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE) + ".zip";
 
     }

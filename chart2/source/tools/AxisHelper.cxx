@@ -351,7 +351,7 @@ Reference< XAxis > AxisHelper::createAxis(
     Reference< XAxis > xAxis( xContext->getServiceManager()->createInstanceWithContext(
                     "com.sun.star.chart2.Axis", xContext ), uno::UNO_QUERY );
 
-    assert( xAxis.is());
+    OSL_ASSERT( xAxis.is());
     if( xAxis.is())
     {
         xCooSys->setAxisByDimension( nDimensionIndex, xAxis, nAxisIndex );
@@ -439,7 +439,7 @@ void AxisHelper::showAxis( sal_Int32 nDimensionIndex, bool bMainAxis
         xAxis.set( AxisHelper::createAxis( nDimensionIndex, bMainAxis, xDiagram, xContext, pRefSizeProvider ) );
     }
 
-    assert( xAxis.is());
+    OSL_ASSERT( xAxis.is());
     if( !bNewAxisCreated ) //default is true already if created
         AxisHelper::makeAxisVisible( xAxis );
 }

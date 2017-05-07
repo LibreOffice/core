@@ -317,7 +317,7 @@ bool RegionBand::isSingleRectangle() const
 
 void RegionBand::InsertBand(ImplRegionBand* pPreviousBand, ImplRegionBand* pBandToInsert)
 {
-    assert(pBandToInsert != nullptr);
+    OSL_ASSERT(pBandToInsert!=nullptr);
 
     if(!pPreviousBand)
     {

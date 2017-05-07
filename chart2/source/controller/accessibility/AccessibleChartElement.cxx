@@ -55,7 +55,7 @@ AccessibleChartElement::AccessibleChartElement(
 
 AccessibleChartElement::~AccessibleChartElement()
 {
-    assert(CheckDisposeState(false /* don't throw exceptions */));
+    OSL_ASSERT( CheckDisposeState( false /* don't throw exceptions */ ) );
 }
 
 // ________ protected ________

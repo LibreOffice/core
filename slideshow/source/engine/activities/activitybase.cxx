@@ -78,7 +78,7 @@ namespace slideshow
             if( !isActive() )
                 return false; // no, early exit.
 
-            assert( ! mbFirstPerformCall );
+            OSL_ASSERT( ! mbFirstPerformCall );
 
             return true;
         }

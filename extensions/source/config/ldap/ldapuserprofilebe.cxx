@@ -90,7 +90,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     LdapDefinition * definition, OUString * loggedOnUser)
 {
-    assert(context.is() && definition != nullptr && loggedOnUser != nullptr);
+    OSL_ASSERT(context.is() && definition != nullptr && loggedOnUser != nullptr);
     const OUString kReadOnlyViewService("com.sun.star.configuration.ConfigurationAccess") ;
     const OUString kComponent("org.openoffice.LDAP/UserDirectory");
     const OUString kServerDefiniton("ServerDefinition");

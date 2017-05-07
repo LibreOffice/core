@@ -78,19 +78,19 @@ namespace {
             if ( ! pDescriptor)
             {
                 PrintModel(rModel);
-                assert(pDescriptor);
+                OSL_ASSERT(pDescriptor);
                 return false;
             }
             if (nIndex != pDescriptor->GetPageIndex())
             {
                 PrintModel(rModel);
-                assert(nIndex == pDescriptor->GetPageIndex());
+                OSL_ASSERT(nIndex == pDescriptor->GetPageIndex());
                 return false;
             }
             if (nIndex != pDescriptor->GetVisualState().mnPageId)
             {
                 PrintModel(rModel);
-                assert(nIndex == pDescriptor->GetVisualState().mnPageId);
+                OSL_ASSERT(nIndex == pDescriptor->GetVisualState().mnPageId);
                 return false;
             }
         }
@@ -462,7 +462,7 @@ void SlideSorterModel::UpdatePageList()
 
             default:
                 // We should never get here.
-                assert(false);
+                OSL_ASSERT(false);
                 break;
         }
     }
@@ -618,7 +618,7 @@ void SlideSorterModel::UpdateIndices (const sal_Int32 nFirstIndex)
             {
                 if (rpDescriptor->GetPageIndex()!=nDescriptorIndex)
                 {
-                    assert(rpDescriptor->GetPageIndex()==nDescriptorIndex);
+                    OSL_ASSERT(rpDescriptor->GetPageIndex()==nDescriptorIndex);
                 }
             }
             else

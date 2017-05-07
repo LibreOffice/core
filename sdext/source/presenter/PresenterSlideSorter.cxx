@@ -529,8 +529,8 @@ void SAL_CALL PresenterSlideSorter::mouseReleased (const css::awt::MouseEvent& r
                 break;
 
             case 2:
-                assert(mpPresenterController.get()!=nullptr);
-                assert(mpPresenterController->GetWindowManager().get()!=nullptr);
+                OSL_ASSERT(mpPresenterController.get()!=nullptr);
+                OSL_ASSERT(mpPresenterController->GetWindowManager().get()!=nullptr);
                 mpPresenterController->GetWindowManager()->SetSlideSorterState(false);
                 GotoSlide(nSlideIndex);
                 break;
@@ -613,7 +613,7 @@ void SAL_CALL PresenterSlideSorter::propertyChange (
 void SAL_CALL PresenterSlideSorter::notifyPreviewCreation (
     sal_Int32 nSlideIndex)
 {
-    assert(mpLayout.get()!=nullptr);
+    OSL_ASSERT(mpLayout.get()!=nullptr);
 
     awt::Rectangle aBBox (mpLayout->GetBoundingBox(nSlideIndex));
     mpPresenterController->GetPaintManager()->Invalidate(mxWindow, aBBox, true);
@@ -807,7 +807,7 @@ void PresenterSlideSorter::ClearBackground (
     const Reference<rendering::XCanvas>& rxCanvas,
     const awt::Rectangle& rUpdateBox)
 {
-    assert(rxCanvas.is());
+    OSL_ASSERT(rxCanvas.is());
 
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
     mpPresenterController->GetCanvasHelper()->Paint(
@@ -840,7 +840,7 @@ double PresenterSlideSorter::GetSlideAspectRatio() const
     }
     catch (RuntimeException&)
     {
-        assert(false);
+        OSL_ASSERT(false);
     }
 
     return nSlideAspectRatio;
@@ -861,7 +861,7 @@ void PresenterSlideSorter::PaintPreview (
     const css::awt::Rectangle& rUpdateBox,
     const sal_Int32 nSlideIndex)
 {
-    assert(rxCanvas.is());
+    OSL_ASSERT(rxCanvas.is());
 
     geometry::IntegerSize2D aSize (mpLayout->maPreviewSize);
 
@@ -994,7 +994,7 @@ void PresenterSlideSorter::Paint (const awt::Rectangle& rUpdateBox)
 
     if (mpLayout->mnRowCount<=0 || mpLayout->mnColumnCount<=0)
     {
-        assert(mpLayout->mnRowCount>0 || mpLayout->mnColumnCount>0);
+        OSL_ASSERT(mpLayout->mnRowCount>0 || mpLayout->mnColumnCount>0);
         return;
     }
 
@@ -1928,7 +1928,7 @@ void PresenterSlideSorter::CurrentSlideFrameRenderer::PaintBitmapOnce(
     const double nX,
     const double nY)
 {
-    assert(rxCanvas.is());
+    OSL_ASSERT(rxCanvas.is());
     if ( ! rxBitmap.is())
         return;
 
@@ -1959,7 +1959,7 @@ void PresenterSlideSorter::CurrentSlideFrameRenderer::PaintBitmapTiled(
     const double nWidth,
     const double nHeight)
 {
-    assert(rxCanvas.is());
+    OSL_ASSERT(rxCanvas.is());
     if ( ! rxBitmap.is())
         return;
 

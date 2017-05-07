@@ -312,7 +312,7 @@ void Proxy::acquire()
                                                       Proxy_free,
                                                       m_aOId.pData,
                                                       m_pTypeDescr);
-        assert(pThis == this);
+        OSL_ASSERT(pThis == this);
     }
 
     if (m_probeFun)

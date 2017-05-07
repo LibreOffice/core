@@ -273,8 +273,8 @@ Reference< beans::XPropertySet > TitleWrapper::getFirstCharacterPropertySet()
 
 void TitleWrapper::getFastCharacterPropertyValue( sal_Int32 nHandle, Any& rValue )
 {
-    assert( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
-            nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
+    OSL_ASSERT( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
+                nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
 
     Reference< beans::XPropertySet > xProp( getFirstCharacterPropertySet(), uno::UNO_QUERY );
     Reference< beans::XFastPropertySet > xFastProp( xProp, uno::UNO_QUERY );
@@ -296,8 +296,8 @@ void TitleWrapper::getFastCharacterPropertyValue( sal_Int32 nHandle, Any& rValue
 void TitleWrapper::setFastCharacterPropertyValue(
     sal_Int32 nHandle, const Any& rValue )
 {
-    assert( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
-            nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
+    OSL_ASSERT( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
+                nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
 
     Reference< chart2::XTitle > xTitle( this->getTitleObject() );
     if( xTitle.is())

@@ -101,7 +101,7 @@ short SvColorDialog::Execute()
     }
     catch(Exception&)
     {
-        assert(false);
+        OSL_ASSERT(false);
     }
 
     return ret;

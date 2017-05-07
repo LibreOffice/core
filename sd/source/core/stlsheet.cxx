@@ -717,7 +717,7 @@ void SAL_CALL SdStyleSheet::release(  ) throw ()
                     exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
             static_cast<void>(exc);
         }
-        assert( mrBHelper.bDisposed );
+        OSL_ASSERT( mrBHelper.bDisposed );
         SdStyleSheetBase::release();
     }
 }

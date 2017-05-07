@@ -280,7 +280,7 @@ void SAL_CALL PresenterProtocolHandler::initialize (const Sequence<Any>& aArgume
         }
         catch (RuntimeException&)
         {
-            assert(false);
+            OSL_ASSERT(false);
         }
     }
 }

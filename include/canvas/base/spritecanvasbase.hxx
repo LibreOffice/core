@@ -139,7 +139,7 @@ namespace canvas
         // SpriteSurface
         virtual void showSprite( const Sprite::Reference& rSprite ) override
         {
-            assert( rSprite.is() );
+            OSL_ASSERT( rSprite.is() );
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -148,7 +148,7 @@ namespace canvas
 
         virtual void hideSprite( const Sprite::Reference& rSprite ) override
         {
-            assert( rSprite.is() );
+            OSL_ASSERT( rSprite.is() );
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -160,7 +160,7 @@ namespace canvas
                                  const ::basegfx::B2DPoint&     rNewPos,
                                  const ::basegfx::B2DVector&    rSpriteSize ) override
         {
-            assert( rSprite.is() );
+            OSL_ASSERT( rSprite.is() );
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -171,7 +171,7 @@ namespace canvas
                                    const ::basegfx::B2DPoint&   rPos,
                                    const ::basegfx::B2DRange&   rUpdateArea ) override
         {
-            assert( rSprite.is() );
+            OSL_ASSERT( rSprite.is() );
 
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 

@@ -1015,7 +1015,7 @@ bool PNGReaderImpl::ImplPreparePass()
 
 void PNGReaderImpl::ImplApplyFilter()
 {
-    assert( mnScansize >= mnBPP + 1 );
+    OSL_ASSERT( mnScansize >= mnBPP + 1 );
     const sal_uInt8* const pScanEnd = mpInflateInBuf + mnScansize;
 
     sal_uInt8 nFilterType = *mpInflateInBuf; // the filter type may change each scanline

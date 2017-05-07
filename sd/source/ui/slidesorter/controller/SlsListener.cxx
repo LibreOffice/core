@@ -575,7 +575,7 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
     SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
     if (pDocument == nullptr)
     {
-        assert(pDocument!=nullptr);
+        OSL_ASSERT(pDocument!=nullptr);
         return;
     }
     pCacheManager->InvalidatePreviewBitmap(pDocument->getUnoModel(), pPage);
@@ -597,7 +597,7 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
             }
             else
             {
-                assert(pCandidate!=nullptr && pCandidate->TRG_HasMasterPage());
+                OSL_ASSERT(pCandidate!=nullptr && pCandidate->TRG_HasMasterPage());
             }
         }
     }

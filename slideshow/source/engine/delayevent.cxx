@@ -26,7 +26,7 @@ namespace internal {
 
 bool Delay::fire()
 {
-    assert( isCharged() );
+    OSL_ASSERT( isCharged() );
     if (isCharged()) {
         mbWasFired = true;
         maFunc();

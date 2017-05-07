@@ -18,7 +18,6 @@
  */
 
 #include <algorithm>
-#include <cassert>
 
 #include <osl/diagnose.h>
 #include "oox/drawingml/clrscheme.hxx"
@@ -64,7 +63,7 @@ private:
 
 bool ClrScheme::getColor( sal_Int32 nSchemeClrToken, sal_Int32& rColor ) const
 {
-    assert((nSchemeClrToken & sal_Int32(0xFFFF0000))==0);
+    OSL_ASSERT((nSchemeClrToken & sal_Int32(0xFFFF0000))==0);
     switch( nSchemeClrToken )
     {
         case XML_bg1 : nSchemeClrToken = XML_lt1; break;

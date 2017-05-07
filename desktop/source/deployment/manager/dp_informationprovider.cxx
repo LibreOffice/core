@@ -163,7 +163,7 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
 
     if (!extMgr.is())
     {
-        assert(false);
+        OSL_ASSERT(false);
         return aList;
     }
     std::vector<std::pair<uno::Reference<deployment::XPackage>, uno::Any > > errors;
@@ -181,7 +181,7 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
         }
         catch (lang::IllegalArgumentException &)
         {
-            assert(false);
+            OSL_ASSERT(false);
         }
         updateInfoMap = dp_misc::getOnlineUpdateInfos(
             mxContext, extMgr, mxUpdateInformation, &vecExtensions, errors);
@@ -222,7 +222,7 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
                 "ignoring IllegalArgumentException \"" << e.Message << "\"");
             continue;
         }
-        assert(extensions.getLength() == 3);
+        OSL_ASSERT(extensions.getLength() == 3);
         if (extensions[0].is() )
             sVersionUser = extensions[0]->getVersion();
         if (extensions[1].is() )
@@ -289,7 +289,7 @@ uno::Sequence< uno::Sequence< OUString > > SAL_CALL PackageInformationProvider::
         const uno::Sequence< uno::Reference< deployment::XPackage > > &
             seqExtension = allExt[i];
         sal_Int32 cExt = seqExtension.getLength();
-        assert(cExt == 3);
+        OSL_ASSERT(cExt == 3);
         for (sal_Int32 j = 0; j < cExt; j++)
         {
             //ToDo according to the old code the first found extension is used

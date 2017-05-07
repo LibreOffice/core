@@ -79,7 +79,7 @@ sal_uInt32 findKabField(const OUString& columnName)
          ) );
     ::dbtools::throwGenericSQLException(sError,nullptr);
     // Unreachable:
-    assert(false);
+    OSL_ASSERT(false);
     return 0;
 }
 

@@ -170,9 +170,9 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
     // 3. create series with remaining sequences
     if( bHasVolume && nRemaining > 1 )
     {
-        assert( nVolumeSeries > nNumOfFullSeries );
+        OSL_ASSERT( nVolumeSeries > nNumOfFullSeries );
         aSequences[nBarGroupIndex][nVolumeSeries - 1].realloc( 1 );
-        assert( nDataCount > nSourceIndex );
+        OSL_ASSERT( nDataCount > nSourceIndex );
         if( aData[nSourceIndex].is())
             SetRole( aData[nSourceIndex]->getValues(), "values-y");
         aSequences[nBarGroupIndex][nVolumeSeries - 1][0].set( aData[nSourceIndex] );
@@ -184,10 +184,10 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
     // candle-stick
     if( nRemaining > 0 )
     {
-        assert( nCandleStickSeries > nNumOfFullSeries );
+        OSL_ASSERT( nCandleStickSeries > nNumOfFullSeries );
         const sal_Int32 nSeriesIndex = nCandleStickSeries - 1;
         aSequences[nCandleStickGroupIndex][nSeriesIndex].realloc( nRemaining );
-        assert( nDataCount > nSourceIndex );
+        OSL_ASSERT( nDataCount > nSourceIndex );
 
         // 1. low
         sal_Int32 nSeqIdx( 0 );
@@ -238,9 +238,9 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
                     xSeries.set( rSeriesToReUse[nReUsedSeriesIdx] );
                 else
                     xSeries.set( new DataSeries );
-                assert( xSeries.is() );
+                OSL_ASSERT( xSeries.is() );
                 Reference< data::XDataSink > xSink( xSeries, uno::UNO_QUERY_THROW );
-                assert( xSink.is() );
+                OSL_ASSERT( xSink.is() );
                 xSink->setData( aSequences[nGroupIndex][nSeriesIdx] );
                 aResultSeries[nGroupIndex][nSeriesIdx].set( xSeries );
             }
@@ -289,7 +289,7 @@ sal_Bool SAL_CALL StockDataInterpreter::isDataCompatible(
 
     // 2. b. candlestick
     {
-        assert(aInterpretedData.Series.getLength() > (bHasVolume ? 1 : 0));
+        OSL_ASSERT( aInterpretedData.Series.getLength() > (bHasVolume ? 1 : 0));
         Sequence< Reference< XDataSeries > > aSeries( aInterpretedData.Series[(bHasVolume ? 1 : 0)] );
         if(!aSeries.getLength())
             return false;

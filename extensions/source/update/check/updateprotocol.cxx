@@ -114,7 +114,7 @@ checkForUpdates(
     if( !rxContext.is() )
         throw uno::RuntimeException( "checkForUpdates: empty component context" );
 
-    assert( rxContext->getServiceManager().is() );
+    OSL_ASSERT( rxContext->getServiceManager().is() );
 
     // XPath implementation
     uno::Reference< xml::xpath::XXPathAPI > xXPath = xml::xpath::XPathAPI::create(rxContext);

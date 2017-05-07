@@ -122,7 +122,7 @@ sal_uInt16 SwEditShell::GetCntType() const
         default: break;
         }
 
-    assert( nRet );
+    OSL_ASSERT( nRet );
     return nRet;
 }
 

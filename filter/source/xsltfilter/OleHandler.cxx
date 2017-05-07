@@ -53,7 +53,7 @@ namespace XSLT
 {
     Reference<XStream> SAL_CALL OleHandler::createTempFile() {
         Reference<XStream> tempFile( TempFile::create(m_xContext), UNO_QUERY);
-        assert(tempFile.is());
+        OSL_ASSERT(tempFile.is());
         return tempFile;
     }
 

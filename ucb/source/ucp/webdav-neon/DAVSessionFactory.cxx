@@ -99,7 +99,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
 
 void DAVSessionFactory::releaseElement( DAVSession * pElement )
 {
-    assert( pElement );
+    OSL_ASSERT( pElement );
     osl::MutexGuard aGuard( m_aMutex );
     if ( pElement->m_aContainerIt != m_aMap.end() )
         m_aMap.erase( pElement->m_aContainerIt );

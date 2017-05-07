@@ -249,7 +249,7 @@ void PresenterCanvasHelper::SetDeviceColor(
 {
     // Other component counts then 4 (RGBA) are not accepted (anymore).
 
-    assert(rRenderState.DeviceColor.getLength() == 4);
+    OSL_ASSERT(rRenderState.DeviceColor.getLength() == 4);
     if (rRenderState.DeviceColor.getLength() == 4)
     {
         rRenderState.DeviceColor[0] = ((aColor >> 16) & 0x0ff) / 255.0;

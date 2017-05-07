@@ -146,7 +146,7 @@ void FormShellManager::RegisterAtCenterPane()
             WindowEventHandler));
 
     // Create a shell factory and with it activate the form shell.
-    assert(mpSubShellFactory.get()==nullptr);
+    OSL_ASSERT(mpSubShellFactory.get()==nullptr);
     mpSubShellFactory.reset(new FormShellManagerFactory(*pShell, *this));
     mrBase.GetViewShellManager()->AddSubShellFactory(pShell,mpSubShellFactory);
     mrBase.GetViewShellManager()->ActivateSubShell(*pShell, RID_FORMLAYER_TOOLBOX);
@@ -264,7 +264,7 @@ void FormShellManager::Notify(SfxBroadcaster&, const SfxHint& rHint)
         // If all goes well this listener is called after the
         // FormShellManager was notified about the dying form shell by the
         // FormShellManagerFactory.
-        assert(mpFormShell==nullptr);
+        OSL_ASSERT(mpFormShell==nullptr);
         if (mpFormShell != nullptr)
         {
             mpFormShell = nullptr;

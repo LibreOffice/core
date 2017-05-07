@@ -1740,13 +1740,13 @@ void DocxAttributeOutput::StartRunProperties()
     }
     InitCollectedRunProperties();
 
-    assert( !m_pPostponedGraphic );
+    OSL_ASSERT( !m_pPostponedGraphic );
     m_pPostponedGraphic.reset(new std::list<PostponedGraphic>);
 
-    assert( !m_pPostponedDiagrams );
+    OSL_ASSERT( !m_pPostponedDiagrams );
     m_pPostponedDiagrams.reset(new std::list<PostponedDiagram>);
 
-    assert( !m_pPostponedVMLDrawings );
+    OSL_ASSERT( !m_pPostponedVMLDrawings );
     m_pPostponedVMLDrawings.reset(new std::list<PostponedDrawing>);
 
     assert(!m_pPostponedDMLDrawings);

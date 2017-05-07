@@ -598,7 +598,7 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
         case TP_XERRORBAR:
         {
             ErrorBarsTabPage * pTabPage = dynamic_cast< ErrorBarsTabPage * >( &rPage );
-            assert(pTabPage);
+            OSL_ASSERT( pTabPage );
             if( pTabPage )
             {
                 pTabPage->SetAxisMinorStepWidthForErrorBarDecimals( m_fAxisMinorStepWidthForErrorBarDecimals );
@@ -610,7 +610,7 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
         case TP_YERRORBAR:
         {
             ErrorBarsTabPage * pTabPage = dynamic_cast< ErrorBarsTabPage * >( &rPage );
-            assert(pTabPage);
+            OSL_ASSERT( pTabPage );
             if( pTabPage )
             {
                 pTabPage->SetAxisMinorStepWidthForErrorBarDecimals( m_fAxisMinorStepWidthForErrorBarDecimals );

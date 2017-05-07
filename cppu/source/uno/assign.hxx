@@ -445,7 +445,7 @@ inline bool _assignData(
             return (pQueried != nullptr);
         }
     default:
-        assert(false);
+        OSL_ASSERT(false);
         return false;
     }
 }

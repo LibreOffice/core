@@ -120,7 +120,7 @@ void SAL_CALL SignatureVerifierImpl::removeSignatureVerifyResultListener(
 void SAL_CALL SignatureVerifierImpl::initialize(
     const cssu::Sequence< cssu::Any >& aArguments )
 {
-    assert(aArguments.getLength() == 5);
+    OSL_ASSERT(aArguments.getLength() == 5);
 
     OUString ouTempString;
 

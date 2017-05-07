@@ -404,7 +404,7 @@ bool getJavaProps(const OUString & exePath,
 {
     bool ret = false;
 
-    assert(!exePath.isEmpty());
+    OSL_ASSERT(!exePath.isEmpty());
     OUString usStartDir;
     //We need to set the CLASSPATH in case the office is started from
     //a different directory. The JREProperties.class is expected to reside
@@ -515,7 +515,7 @@ bool getJavaProps(const OUString & exePath,
             continue;
         //The JREProperties class writes key value pairs, separated by '='
         sal_Int32 index = sLine.indexOf('=');
-        assert(index != -1);
+        OSL_ASSERT(index != -1);
         OUString sKey = sLine.copy(0, index);
         OUString sVal = sLine.copy(index + 1);
 
@@ -541,7 +541,7 @@ bool getJavaProps(const OUString & exePath,
 
     TimeValue waitMax= {5 ,0};
     procErr = osl_joinProcessWithTimeout(javaProcess, &waitMax);
-    assert(procErr == osl_Process_E_None);
+    OSL_ASSERT(procErr == osl_Process_E_None);
     osl_freeProcessHandle(javaProcess);
     return ret;
 }
@@ -552,7 +552,7 @@ bool getJavaProps(const OUString & exePath,
  */
 bool decodeOutput(const OString& s, OUString* out)
 {
-    assert(out != nullptr);
+    OSL_ASSERT(out != nullptr);
     OUStringBuffer buff(512);
     sal_Int32 nIndex = 0;
     do

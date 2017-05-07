@@ -162,7 +162,7 @@ void CurrentSlideManager::SwitchCurrentSlide (
 
 void CurrentSlideManager::SetCurrentSlideAtViewShellBase (const SharedPageDescriptor& rpDescriptor)
 {
-    assert(rpDescriptor.get() != nullptr);
+    OSL_ASSERT(rpDescriptor.get() != nullptr);
 
     ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
     if (pBase != nullptr)
@@ -181,7 +181,7 @@ void CurrentSlideManager::SetCurrentSlideAtViewShellBase (const SharedPageDescri
 
 void CurrentSlideManager::SetCurrentSlideAtTabControl (const SharedPageDescriptor& rpDescriptor)
 {
-    assert(rpDescriptor.get() != nullptr);
+    OSL_ASSERT(rpDescriptor.get() != nullptr);
 
     ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
     if (pBase != nullptr)
@@ -199,7 +199,7 @@ void CurrentSlideManager::SetCurrentSlideAtTabControl (const SharedPageDescripto
 
 void CurrentSlideManager::SetCurrentSlideAtXController (const SharedPageDescriptor& rpDescriptor)
 {
-    assert(rpDescriptor.get() != nullptr);
+    OSL_ASSERT(rpDescriptor.get() != nullptr);
 
     try
     {

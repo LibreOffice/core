@@ -73,7 +73,7 @@ public:
         aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
         if (!xInputStream.is())
         {
-            assert(false);
+            OSL_ASSERT(false);
             return false;
         }
 

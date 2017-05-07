@@ -543,7 +543,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
 
                             if (mpViewSh != nullptr)
                             {
-                                assert (mpViewSh->GetViewShell()!=nullptr);
+                                OSL_ASSERT (mpViewSh->GetViewShell()!=nullptr);
                                 SfxInPlaceClient* pIpClient =
                                     mpViewSh->GetViewShell()->GetIPClient();
                                 if (pIpClient!=nullptr && pIpClient->IsObjectInPlaceActive())

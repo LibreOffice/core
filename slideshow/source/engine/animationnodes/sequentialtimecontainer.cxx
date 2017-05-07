@@ -113,9 +113,9 @@ void SequentialTimeContainer::notifyDeactivating(
     if (notifyDeactivatedChild( rNotifier ))
         return;
 
-    assert( mnFinishedChildren < maChildren.size() );
+    OSL_ASSERT( mnFinishedChildren < maChildren.size() );
     AnimationNodeSharedPtr const& pNextChild = maChildren[mnFinishedChildren];
-    assert( pNextChild->getState() == UNRESOLVED );
+    OSL_ASSERT( pNextChild->getState() == UNRESOLVED );
 
     if (! resolveChild( pNextChild )) {
         // could not resolve child - since we risk to
