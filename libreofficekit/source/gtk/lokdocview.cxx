@@ -273,6 +273,7 @@ enum
     CURSOR_CHANGED,
     SEARCH_RESULT_COUNT,
     COMMAND_RESULT,
+    ADDRESS_CHANGED,
     FORMULA_CHANGED,
     TEXT_SELECTION,
     PASSWORD_REQUIRED,
@@ -416,6 +417,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_TEXT_VIEW_SELECTION";
     case LOK_CALLBACK_CELL_VIEW_CURSOR:
         return "LOK_CALLBACK_CELL_VIEW_CURSOR";
+    case LOK_CALLBACK_CELL_ADDRESS:
+        return "LOK_CALLBACK_CELL_ADDRESS";
     case LOK_CALLBACK_CELL_FORMULA:
         return "LOK_CALLBACK_CELL_FORMULA";
     case LOK_CALLBACK_UNO_COMMAND_RESULT:
@@ -882,6 +885,11 @@ static void commandResult(LOKDocView* pDocView, const std::string& rString)
     g_signal_emit(pDocView, doc_view_signals[COMMAND_RESULT], 0, rString.c_str());
 }
 
+static void addressChanged(LOKDocView* pDocView, const std::string& rString)
+{
+    g_signal_emit(pDocView, doc_view_signals[ADDRESS_CHANGED], 0, rString.c_str());
+}
+
 static void formulaChanged(LOKDocView* pDocView, const std::string& rString)
 {
     g_signal_emit(pDocView, doc_view_signals[FORMULA_CHANGED], 0, rString.c_str());
@@ -1299,6 +1307,11 @@ callback (gpointer pData)
     case LOK_CALLBACK_UNO_COMMAND_RESULT:
     {
         commandResult(pDocView, pCallback->m_aPayload);
+    }
+    break;
+    case LOK_CALLBACK_CELL_ADDRESS:
+    {
+        addressChanged(pDocView, pCallback->m_aPayload);
     }
     break;
     case LOK_CALLBACK_CELL_FORMULA:
@@ -3063,6 +3076,21 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      */
     doc_view_signals[COMMAND_RESULT] =
         g_signal_new("command-result",
+                     G_TYPE_FROM_CLASS(pGObjectClass),
+                     G_SIGNAL_RUN_FIRST,
+                     0,
+                     nullptr, nullptr,
+                     g_cclosure_marshal_VOID__STRING,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_STRING);
+
+    /**
+     * LOKDocView::address-changed:
+     * @pDocView: the #LOKDocView on which the signal is emitted
+     * @aCommand: formula text content
+     */
+    doc_view_signals[ADDRESS_CHANGED] =
+        g_signal_new("address-changed",
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
