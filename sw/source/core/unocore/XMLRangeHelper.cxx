@@ -72,7 +72,7 @@ private:
 
 void lcl_getXMLStringForCell( const /*::chart::*/XMLRangeHelper::Cell & rCell, OUStringBuffer * output )
 {
-    OSL_ASSERT(output != nullptr);
+    assert(output != nullptr);
 
     if( rCell.empty())
         return;

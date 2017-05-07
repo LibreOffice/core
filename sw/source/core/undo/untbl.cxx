@@ -2460,7 +2460,7 @@ void SwUndoTableCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
                     dynamic_cast<SwUndoDelete*>(pEntry->pUndo);
                 SwUndoRedlineDelete *const pUndoRedlineDelete =
                     dynamic_cast<SwUndoRedlineDelete*>(pEntry->pUndo);
-                OSL_ASSERT(pUndoDelete || pUndoRedlineDelete);
+                assert(pUndoDelete || pUndoRedlineDelete);
                 if (pUndoRedlineDelete)
                 {
                     // The old content was not empty or he has been merged with the new content
