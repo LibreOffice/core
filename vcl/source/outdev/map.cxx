@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <o3tl/numeric.hxx>
 #include <tools/bigint.hxx>
 
 #include <vcl/virdev.hxx>
@@ -257,9 +256,6 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
     }
     else
     {
-        if (!aScaleX.GetNumerator() || !aScaleY.GetNumerator())
-            throw o3tl::divide_by_zero();
-
         rMapRes.mfOffsetX *= aScaleX.GetDenominator();
         rMapRes.mfOffsetX /= aScaleX.GetNumerator();
         rMapRes.mfOffsetX += aOrigin.X();
