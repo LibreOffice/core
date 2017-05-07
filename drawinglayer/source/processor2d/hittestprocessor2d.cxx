@@ -64,7 +64,7 @@ namespace drawinglayer
                     * basegfx::B2DVector(mfDiscreteHitTolerance, 0.0)).getLength();
             }
 
-            // gererate discrete hit position
+            // generate discrete hit position
             maDiscreteHitPosition = getViewInformation2D().getObjectToViewTransformation() * rLogicHitPosition;
 
             // check if HitTolerance is used

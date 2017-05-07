@@ -67,7 +67,7 @@ private:
     bool                bDefaultExtrudeCloseBack;
 
 public:
-    // Construktor
+    // Constructor
     E3dDefaultAttributes();
 
     // Reset to defaults

@@ -775,7 +775,7 @@ const SfxPoolItem* MSWordExportBase::HasItem( sal_uInt16 nWhich ) const
     if (m_pISet)
     {
         // if write a EditEngine text, then the WhichIds are greater as
-        // ourer own Ids. So the Id have to translate from our into the
+        // our own Ids. So the Id have to translate from our into the
         // EditEngine Range
         nWhich = sw::hack::GetSetWhichFromSwDocWhich(*m_pISet, *m_pDoc, nWhich);
         if (nWhich && SfxItemState::SET != m_pISet->GetItemState(nWhich, true, &pItem))
