@@ -1403,7 +1403,7 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OU
     }
 
     // check the index
-    OSL_ASSERT(nIndex >= 0);
+    assert(nIndex >= 0);
     if (sal::static_int_cast< sal_uInt32 >(nIndex) > m_aChildren.size())
         nIndex = m_aChildren.size();
 
