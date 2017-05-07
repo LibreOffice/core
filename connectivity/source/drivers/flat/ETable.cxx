@@ -486,7 +486,7 @@ OUString OFlatTable::getEntry()
     }
     catch(const Exception&)
     {
-        OSL_ASSERT(false);
+        assert(false);
     }
     return sURL;
 }

@@ -658,7 +658,7 @@ OUString ODbaseTable::getEntry(OConnection* _pConnection,const OUString& _sName 
     }
     catch(const Exception&)
     {
-        OSL_ASSERT(false);
+        assert(false);
     }
     return sURL;
 }
@@ -2564,7 +2564,7 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
         }
         else
         {
-            OSL_ASSERT(false);
+            assert(false);
         }
     } // for(sal_uInt32 nRowPos = 0; nRowPos < m_aHeader.db_anz;++nRowPos)
 }

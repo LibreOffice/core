@@ -1987,7 +1987,7 @@ void release(oslInterlockedCount& _refCount,
             }
 
             // only the alive ref holds the object
-            OSL_ASSERT( _refCount == 1 );
+            assert( _refCount == 1 );
 
             // release the parent in the ~
             if (xParent.is())

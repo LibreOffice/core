@@ -155,7 +155,7 @@ Any Container::getByName( const OUString& aName )
             "Element " + aName + " unknown in " + m_type + "-Container",
             *this );
     }
-    OSL_ASSERT( ii->second >= 0 && ii->second < (int)m_values.size() );
+    assert( ii->second >= 0 && ii->second < (int)m_values.size() );
     return m_values[ ii->second ];
 }
 

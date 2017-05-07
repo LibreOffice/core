@@ -130,7 +130,7 @@ bool loadClass(
     OUString const & classPath, OUString const & name,
     LocalRef< jobject > * classLoaderPtr, LocalRef< jclass > * classPtr)
 {
-    OSL_ASSERT(classLoaderPtr != nullptr);
+    assert(classLoaderPtr != nullptr);
     // For any jweak entries still present in the map upon destruction,
     // DeleteWeakGlobalRef is not called (which is a leak):
     ClassMapData * d =

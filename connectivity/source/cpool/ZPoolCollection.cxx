@@ -317,7 +317,7 @@ OConnectionPool* OPoolCollection::getConnectionPool(const OUString& _sImplName,
 Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider,
                             const OUString& _rPath)
 {
-    OSL_ASSERT(_rxConfProvider.is());
+    assert(_rxConfProvider.is());
     Sequence< Any > args(1);
     args[0] <<= NamedValue( "nodepath", makeAny(_rPath));
     Reference< XInterface > xInterface(

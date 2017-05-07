@@ -222,7 +222,7 @@ KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParse
     lcl_throwError(STR_QUERY_TOO_COMPLEX);
 
     // Unreachable:
-    OSL_ASSERT(false);
+    assert(false);
     return nullptr;
 }
 
@@ -268,7 +268,7 @@ KabOrder *KabCommonStatement::analyseOrderByClause(const OSQLParseNode *pParseNo
     }
     lcl_throwError(STR_QUERY_TOO_COMPLEX);
     // Unreachable:
-    OSL_ASSERT(false);
+    assert(false);
     return nullptr;
 }
 
