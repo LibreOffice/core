@@ -45,7 +45,7 @@ namespace frm
         Control::GetFocus();
         if (m_pView)
         {
-            m_pView->SetSelectionMode( EE_SELMODE_STD );
+            m_pView->SetSelectionMode( EESelectionMode::Std );
             m_pView->ShowCursor();
         }
     }
@@ -55,7 +55,7 @@ namespace frm
         if (m_pView)
         {
             m_pView->HideCursor();
-            m_pView->SetSelectionMode( m_bHideInactiveSelection ? EE_SELMODE_HIDDEN : EE_SELMODE_STD );
+            m_pView->SetSelectionMode( m_bHideInactiveSelection ? EESelectionMode::Hidden : EESelectionMode::Std );
         }
         Control::LoseFocus();
     }
@@ -94,7 +94,7 @@ namespace frm
             return;
         m_bHideInactiveSelection = _bHide;
         if ( !HasFocus() )
-            m_pView->SetSelectionMode( m_bHideInactiveSelection ? EE_SELMODE_HIDDEN : EE_SELMODE_STD );
+            m_pView->SetSelectionMode( m_bHideInactiveSelection ? EESelectionMode::Hidden : EESelectionMode::Std );
     }
 
 }   // namespace frm
