@@ -5023,10 +5023,14 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 
     for (size_t i=0; i < aLinkStrings.size() && i < aStringIds.size(); ++i)
     {
-        ww::bytes stringId = aStringIds[i];
-        WW8_STRINGID *stringIdStruct = reinterpret_cast<WW8_STRINGID*>(&stringId[0]);
-        m_aLinkStringMap[SVBT16ToShort(stringIdStruct->nStringId)] =
-            aLinkStrings[i];
+        const ww::bytes& stringId = aStringIds[i];
+        if (stringId.size() < sizeof(WW8_STRINGID))
+        {
+            SAL_WARN("sw.ww8", "SwWW8ImplReader::CoreLoad: WW8_STRINGID is too short");
+            continue;
+        }
+        const WW8_STRINGID *stringIdStruct = reinterpret_cast<const WW8_STRINGID*>(stringId.data());
+        m_aLinkStringMap[SVBT16ToShort(stringIdStruct->nStringId)] = aLinkStrings[i];
     }
 
     ReadDocVars(); // import document variables as meta information.
