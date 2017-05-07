@@ -31,6 +31,7 @@
 #include <editeng/eedata.hxx>
 #include "editeng/editeng.hxx"
 #include <editeng/editview.hxx>
+#include <svtools/colorcfg.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/cursor.hxx>
@@ -83,10 +84,6 @@ namespace datatransfer {
 namespace clipboard {
     class XClipboard;
 }}}}}
-
-namespace svtools {
-    class ColorConfig;
-}
 
 namespace editeng {
     struct MisspellRanges;
@@ -425,7 +422,7 @@ private:
     VclPtr< OutputDevice > pRefDev;
     VclPtr<VirtualDevice> mpOwnDev;
 
-    svtools::ColorConfig*   pColorConfig;
+    svtools::ColorConfig maColorConfig;
     mutable SvtCTLOptions*  pCTLOptions;
 
     SfxItemSet*         pEmptyItemSet;
@@ -866,7 +863,7 @@ public:
     void            FormatAndUpdate( EditView* pCurView = nullptr, bool bCalledFromUndo = false );
     inline void     IdleFormatAndUpdate( EditView* pCurView );
 
-    svtools::ColorConfig& GetColorConfig();
+    const svtools::ColorConfig& GetColorConfig() const { return maColorConfig; }
     bool            IsVisualCursorTravelingEnabled();
     bool            DoVisualCursorTraveling();
 

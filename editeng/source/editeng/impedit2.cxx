@@ -120,7 +120,6 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     pUndoManager        = nullptr;
     pUndoMarkSelection  = nullptr;
     pTextRanger         = nullptr;
-    pColorConfig        = nullptr;
     pCTLOptions         = nullptr;
 
     nCurTextHeight      = 0;
@@ -200,7 +199,6 @@ ImpEditEngine::~ImpEditEngine()
     delete pUndoManager;
     delete pTextRanger;
     delete mpIMEInfos;
-    delete pColorConfig;
     delete pCTLOptions;
     delete pSpellInfo;
 }
@@ -4345,14 +4343,6 @@ rtl::Reference<SvxForbiddenCharactersTable> ImpEditEngine::GetForbiddenCharsTabl
 void ImpEditEngine::SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars )
 {
     EditDLL::Get().GetGlobalData()->SetForbiddenCharsTable( xForbiddenChars );
-}
-
-svtools::ColorConfig& ImpEditEngine::GetColorConfig()
-{
-    if ( !pColorConfig )
-        pColorConfig = new svtools::ColorConfig;
-
-    return *pColorConfig;
 }
 
 bool ImpEditEngine::IsVisualCursorTravelingEnabled()
