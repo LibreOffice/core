@@ -141,8 +141,6 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
 
     OpenGLCompatibleDC aDC(rGraphics, 0, 0, nBitmapWidth, nBitmapHeight);
 
-    HFONT hNonAntialiasedFont = nullptr;
-
     SetTextColor(aDC.getCompatibleHDC(), RGB(0, 0, 0));
     SetBkColor(aDC.getCompatibleHDC(), RGB(255, 255, 255));
 
@@ -190,8 +188,6 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
     default:
         SAL_WARN("vcl.gdi", "DrawGlyphRun-EndDraw failed: " << WindowsErrorString(GetLastError()));
         SelectFont(aDC.getCompatibleHDC(), hOrigFont);
-        if (hNonAntialiasedFont != nullptr)
-            DeleteObject(hNonAntialiasedFont);
         return false;
     }
 
@@ -205,8 +201,6 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
     maGlyphCache.PutDrawElementInCache(aElement, nGlyphIndex);
 
     SelectFont(aDC.getCompatibleHDC(), hOrigFont);
-    if (hNonAntialiasedFont != nullptr)
-        DeleteObject(hNonAntialiasedFont);
 
     return true;
 }
