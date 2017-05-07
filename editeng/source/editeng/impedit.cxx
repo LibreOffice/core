@@ -88,7 +88,7 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     pDragAndDropInfo    = nullptr;
     bReadOnly           = false;
     bClickedInSelection = false;
-    eSelectionMode      = EE_SELMODE_TXTONLY;
+    eSelectionMode      = EESelectionMode::TxtOnly;
     eAnchorMode         = EEAnchorMode::TopLeft;
     nInvMore            = 1;
     nTravelXPos         = TRAVEL_X_DONTKNOW;
@@ -196,7 +196,7 @@ void lcl_translateTwips(vcl::Window& rParent, vcl::Window& rChild)
 
 void ImpEditView::DrawSelection( EditSelection aTmpSel, vcl::Region* pRegion, OutputDevice* pTargetDevice )
 {
-    if ( eSelectionMode == EE_SELMODE_HIDDEN )
+    if ( eSelectionMode == EESelectionMode::Hidden )
         return;
 
     // It must be ensured before rendering the selection, that the contents of

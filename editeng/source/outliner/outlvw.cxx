@@ -54,7 +54,7 @@ OutlinerView::OutlinerView( Outliner* pOut, vcl::Window* pWin )
     pOwner                      = pOut;
 
     pEditView.reset( new EditView( pOut->pEditEngine, pWin ) );
-    pEditView->SetSelectionMode( EE_SELMODE_TXTONLY );
+    pEditView->SetSelectionMode( EESelectionMode::TxtOnly );
 }
 
 OutlinerView::~OutlinerView()
