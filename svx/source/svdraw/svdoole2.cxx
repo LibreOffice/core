@@ -595,9 +595,9 @@ class SdrOle2ObjImpl
 public:
     svt::EmbeddedObjectRef mxObjRef;
 
-    Graphic* mpGraphic;
+    std::unique_ptr<Graphic> mxGraphic;
     // TODO/LATER: do we really need this pointer?
-    GraphicObject* mpGraphicObject;
+    std::unique_ptr<GraphicObject> mxGraphicObject;
     OUString maProgName;
     OUString        aPersistName;       // name of object in persist
     SdrLightEmbeddedClient_Impl* pLightClient; // must be registered as client only using AddOwnLightClient() call
@@ -616,8 +616,6 @@ public:
     rtl::Reference<SvxUnoShapeModifyListener> mxModifyListener;
 
     explicit SdrOle2ObjImpl( bool bFrame ) :
-        mpGraphic(nullptr),
-        mpGraphicObject(nullptr),
         pLightClient (nullptr),
         mbFrame(bFrame),
         mbInDestruction(false),
@@ -633,8 +631,6 @@ public:
 
     SdrOle2ObjImpl( bool bFrame, const svt::EmbeddedObjectRef& rObjRef ) :
         mxObjRef(rObjRef),
-        mpGraphic(nullptr),
-        mpGraphicObject(nullptr),
         pLightClient (nullptr),
         mbFrame(bFrame),
         mbInDestruction(false),
@@ -650,8 +646,8 @@ public:
 
     ~SdrOle2ObjImpl()
     {
-        delete mpGraphic;
-        delete mpGraphicObject;
+        mxGraphic.reset();
+        mxGraphicObject.reset();
 
         if (mxModifyListener.is())
         {
@@ -761,16 +757,8 @@ bool SdrOle2Obj::isUiActive() const
 void SdrOle2Obj::SetGraphic(const Graphic& rGrf)
 {
     // only for setting a preview graphic
-    if (mpImpl->mpGraphic)
-    {
-        delete mpImpl->mpGraphic;
-        mpImpl->mpGraphic = nullptr;
-        delete mpImpl->mpGraphicObject;
-        mpImpl->mpGraphicObject = nullptr;
-    }
-
-    mpImpl->mpGraphic = new Graphic(rGrf);
-    mpImpl->mpGraphicObject = new GraphicObject(*mpImpl->mpGraphic);
+    mpImpl->mxGraphic.reset(new Graphic(rGrf));
+    mpImpl->mxGraphicObject.reset(new GraphicObject(*mpImpl->mxGraphic));
 
     SetChanged();
     BroadcastObjectChange();
@@ -778,13 +766,8 @@ void SdrOle2Obj::SetGraphic(const Graphic& rGrf)
 
 void SdrOle2Obj::ClearGraphic()
 {
-    if (mpImpl->mpGraphic)
-    {
-        delete mpImpl->mpGraphic;
-        mpImpl->mpGraphic = nullptr;
-        delete mpImpl->mpGraphicObject;
-        mpImpl->mpGraphicObject = nullptr;
-    }
+    mpImpl->mxGraphic.reset();
+    mpImpl->mxGraphicObject.reset();
 
     SetChanged();
     BroadcastObjectChange();
@@ -1409,7 +1392,7 @@ void SdrOle2Obj::SetObjRef( const css::uno::Reference < css::embed::XEmbeddedObj
 
     if ( mpImpl->mxObjRef.is() )
     {
-        DELETEZ(mpImpl->mpGraphic);
+        mpImpl->mxGraphic.reset();
 
         if ( (mpImpl->mxObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
             SetResizeProtect(true);
@@ -1533,16 +1516,10 @@ SdrOle2Obj& SdrOle2Obj::assignFrom(const SdrOle2Obj& rObj)
         mpImpl->maProgName = rOle2Obj.mpImpl->maProgName;
         mpImpl->mbFrame = rOle2Obj.mpImpl->mbFrame;
 
-        if (rOle2Obj.mpImpl->mpGraphic)
+        if (rOle2Obj.mpImpl->mxGraphic)
         {
-            if (mpImpl->mpGraphic)
-            {
-                delete mpImpl->mpGraphic;
-                delete mpImpl->mpGraphicObject;
-            }
-
-            mpImpl->mpGraphic = new Graphic(*rOle2Obj.mpImpl->mpGraphic);
-            mpImpl->mpGraphicObject = new GraphicObject(*mpImpl->mpGraphic);
+            mpImpl->mxGraphic.reset(new Graphic(*rOle2Obj.mpImpl->mxGraphic));
+            mpImpl->mxGraphicObject.reset(new GraphicObject(*mpImpl->mxGraphic));
         }
 
         if( pModel && rObj.GetModel() && !IsEmptyPresObj() )
@@ -1764,7 +1741,7 @@ const Graphic* SdrOle2Obj::GetGraphic() const
 {
     if ( mpImpl->mxObjRef.is() )
         return mpImpl->mxObjRef.GetGraphic();
-    return mpImpl->mpGraphic;
+    return mpImpl->mxGraphic.get();
 }
 
 void SdrOle2Obj::GetNewReplacement()
