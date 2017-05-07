@@ -55,8 +55,6 @@
             <menu:menuitem menu:id=".uno:SendFeedback"/>
             <menu:menuitem menu:id=".uno:Documentation"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SafeMode"/>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ShowLicense"/>
             <menu:menuitem menu:id=".uno:About"/>
         </menu:menupopup>
