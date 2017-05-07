@@ -4393,7 +4393,7 @@ Reference < i18n::XExtendedInputSequenceChecker > const & ImpEditEngine::ImplGet
 
 Color ImpEditEngine::GetAutoColor() const
 {
-    Color aColor = const_cast<ImpEditEngine*>(this)->GetColorConfig().GetColorValue( svtools::FONTCOLOR ).nColor;
+    Color aColor = GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
 
     if ( GetBackgroundColor() != COL_AUTO )
     {
@@ -4405,7 +4405,6 @@ Color ImpEditEngine::GetAutoColor() const
 
     return aColor;
 }
-
 
 bool ImpEditEngine::ImplCalcAsianCompression(ContentNode* pNode,
                                              TextPortion* pTextPortion, sal_Int32 nStartPos,
