@@ -103,12 +103,16 @@ namespace cppcanvas
 
         void EMFPPen::SetStrokeWidth(rendering::StrokeAttributes& rStrokeAttributes, ImplRenderer& rR, const OutDevState& rState)
         {
-#if OSL_DEBUG_LEVEL > 1
-            if (penWidth == 0.0) {
-                SAL_INFO("cppcanvas.emf", "TODO: pen with zero width - using minimal which might not be correct");
-            }
-#endif
+            // If a zero width is specified, a minimum value is used, which is determined by the units.
+            //TODO Add support for other units than Pixel
             rStrokeAttributes.StrokeWidth = fabs((rState.mapModeTransform * rR.MapSize(penWidth == 0.0 ? 0.05 : penWidth, 0)).getLength());
+
+            // tdf#31814 Based on observation of different EMF+ files (eg. exported by ChemDraw),
+            // there is minimal value of line width
+            if (rStrokeAttributes.StrokeWidth < 1.0)
+            {
+                rStrokeAttributes.StrokeWidth = 1.0;
+            }
         }
 
         /// Convert stroke caps between EMF+ and rendering API
