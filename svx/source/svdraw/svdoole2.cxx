@@ -596,8 +596,6 @@ public:
     svt::EmbeddedObjectRef mxObjRef;
 
     std::unique_ptr<Graphic> mxGraphic;
-    // TODO/LATER: do we really need this pointer?
-    std::unique_ptr<GraphicObject> mxGraphicObject;
     OUString maProgName;
     OUString        aPersistName;       // name of object in persist
     SdrLightEmbeddedClient_Impl* pLightClient; // must be registered as client only using AddOwnLightClient() call
@@ -647,7 +645,6 @@ public:
     ~SdrOle2ObjImpl()
     {
         mxGraphic.reset();
-        mxGraphicObject.reset();
 
         if (mxModifyListener.is())
         {
@@ -758,7 +755,6 @@ void SdrOle2Obj::SetGraphic(const Graphic& rGrf)
 {
     // only for setting a preview graphic
     mpImpl->mxGraphic.reset(new Graphic(rGrf));
-    mpImpl->mxGraphicObject.reset(new GraphicObject(*mpImpl->mxGraphic));
 
     SetChanged();
     BroadcastObjectChange();
@@ -767,7 +763,6 @@ void SdrOle2Obj::SetGraphic(const Graphic& rGrf)
 void SdrOle2Obj::ClearGraphic()
 {
     mpImpl->mxGraphic.reset();
-    mpImpl->mxGraphicObject.reset();
 
     SetChanged();
     BroadcastObjectChange();
@@ -1519,7 +1514,6 @@ SdrOle2Obj& SdrOle2Obj::assignFrom(const SdrOle2Obj& rObj)
         if (rOle2Obj.mpImpl->mxGraphic)
         {
             mpImpl->mxGraphic.reset(new Graphic(*rOle2Obj.mpImpl->mxGraphic));
-            mpImpl->mxGraphicObject.reset(new GraphicObject(*mpImpl->mxGraphic));
         }
 
         if( pModel && rObj.GetModel() && !IsEmptyPresObj() )
