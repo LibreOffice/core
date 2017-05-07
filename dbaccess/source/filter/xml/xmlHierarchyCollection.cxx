@@ -29,7 +29,6 @@
 #include "xmlstrings.hrc"
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <tools/debug.hxx>
 
 namespace dbaxml
 {

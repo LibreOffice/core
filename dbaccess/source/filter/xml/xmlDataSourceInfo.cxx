@@ -26,7 +26,6 @@
 #include "xmlEnums.hxx"
 #include "xmlstrings.hrc"
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <tools/debug.hxx>
 #include <vector>
 
 namespace dbaxml

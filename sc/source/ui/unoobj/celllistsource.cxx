@@ -18,7 +18,6 @@
  */
 
 #include "celllistsource.hxx"
-#include <tools/debug.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>

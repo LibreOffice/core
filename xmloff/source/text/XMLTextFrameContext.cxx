@@ -18,7 +18,6 @@
  */
 
 #include <o3tl/make_unique.hxx>
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>

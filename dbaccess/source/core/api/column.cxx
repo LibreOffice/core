@@ -41,7 +41,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
-#include <tools/debug.hxx>
 
 #include <algorithm>
 

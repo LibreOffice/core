@@ -23,7 +23,6 @@
 #include <comphelper/string.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/process.h>
-#include <tools/debug.hxx>
 #include <tools/resary.hxx>
 #include <tools/gen.hxx>
 #include <uno/current_context.hxx>

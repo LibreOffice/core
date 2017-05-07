@@ -24,7 +24,6 @@
 #include "xmlEnums.hxx"
 #include "xmlComponent.hxx"
 #include "xmlCondPrtExpr.hxx"
-#include <tools/debug.hxx>
 #include "xmlFormatCondition.hxx"
 
 

@@ -26,7 +26,6 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/text/HorizontalAdjust.hpp>
 
-#include <tools/debug.hxx>
 
 #include <sax/tools/converter.hxx>
 

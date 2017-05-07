@@ -33,7 +33,6 @@
 #include <com/sun/star/sdbcx/XUser.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include "dbustrings.hrc"
-#include <tools/debug.hxx>
 #include "dbadmin.hxx"
 #include "moduledbu.hxx"
 #include <vcl/layout.hxx>

@@ -28,7 +28,6 @@
 
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
-#include <tools/debug.hxx>
 
 static GlyphCache* pInstance = nullptr;
 

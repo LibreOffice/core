@@ -19,7 +19,6 @@
 
 
 #include <osl/diagnose.h>
-#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 

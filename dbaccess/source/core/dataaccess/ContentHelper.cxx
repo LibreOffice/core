@@ -35,7 +35,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include "sdbcoretools.hxx"
 #include "dbastrings.hrc"
-#include <tools/debug.hxx>
 
 namespace dbaccess
 {

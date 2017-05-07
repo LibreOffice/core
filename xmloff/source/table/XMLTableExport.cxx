@@ -48,7 +48,6 @@
 #include <xmloff/maptype.hxx>
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/txtprmap.hxx>
-#include <tools/debug.hxx>
 #include "table.hxx"
 
 using namespace ::xmloff::token;

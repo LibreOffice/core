@@ -18,7 +18,6 @@
  */
 
 #include <comphelper/string.hxx>
-#include <tools/debug.hxx>
 #include <tools/bigint.hxx>
 
 #include <vcl/event.hxx>

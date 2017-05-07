@@ -23,7 +23,6 @@
 #include "core_resource.hxx"
 #include "core_resource.hrc"
 
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>

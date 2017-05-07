@@ -19,7 +19,6 @@
 
 #include <limits.h>
 #include <tools/time.hxx>
-#include <tools/debug.hxx>
 
 #include <svids.hrc>
 #include <bitmaps.hlst>

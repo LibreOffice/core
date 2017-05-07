@@ -18,7 +18,6 @@
  */
 
 #include <limits.h>
-#include <tools/debug.hxx>
 #include <tools/poly.hxx>
 
 #include <vcl/bitmap.hxx>

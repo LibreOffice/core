@@ -20,7 +20,6 @@
 #include "dsntypes.hxx"
 #include "dbamiscres.hrc"
 #include <unotools/confignode.hxx>
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <tools/wldcrd.hxx>
 #include <osl/file.hxx>

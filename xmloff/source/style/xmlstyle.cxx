@@ -30,7 +30,6 @@
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
 #include "PageMasterPropMapper.hxx"
 #include <o3tl/make_unique.hxx>
-#include <tools/debug.hxx>
 #include <svl/itemset.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>

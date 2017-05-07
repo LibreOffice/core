@@ -24,7 +24,6 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <tools/debug.hxx>
 #include "dbastrings.hrc"
 #include "apitools.hxx"
 

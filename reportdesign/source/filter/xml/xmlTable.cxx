@@ -31,7 +31,6 @@
 #include "xmlStyleImport.hxx"
 #include "xmlstrings.hrc"
 #include <connectivity/dbtools.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 

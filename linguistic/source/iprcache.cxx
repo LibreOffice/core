@@ -24,7 +24,6 @@
 #include "linguistic/misc.hxx"
 
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
-#include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 #include <linguistic/lngprops.hxx>
 

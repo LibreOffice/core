@@ -21,7 +21,6 @@
 #include "moduledbu.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <tools/debug.hxx>
 
 namespace dbaui
 {

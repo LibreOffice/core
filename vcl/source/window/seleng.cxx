@@ -19,7 +19,6 @@
 
 #include <vcl/window.hxx>
 #include <vcl/seleng.hxx>
-#include <tools/debug.hxx>
 #include <comphelper/lok.hxx>
 
 FunctionSet::~FunctionSet()

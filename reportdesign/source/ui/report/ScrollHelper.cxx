@@ -21,7 +21,6 @@
 #include "ReportController.hxx"
 #include "ReportWindow.hxx"
 #include "UITools.hxx"
-#include <tools/debug.hxx>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <toolkit/helper/convert.hxx>
 

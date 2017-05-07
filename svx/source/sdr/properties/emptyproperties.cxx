@@ -18,7 +18,6 @@
  */
 
 #include <sdr/properties/emptyproperties.hxx>
-#include <tools/debug.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdobj.hxx>

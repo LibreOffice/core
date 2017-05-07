@@ -18,7 +18,6 @@
  */
 
 #include "SharedConnection.hxx"
-#include <tools/debug.hxx>
 #include <comphelper/uno3.hxx>
 
 namespace dbaccess

@@ -20,7 +20,6 @@
 #include <string.h>
 
 #include <svsys.h>
-#include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>
 

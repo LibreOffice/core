@@ -54,7 +54,6 @@
 #include <o3tl/any.hxx>
 #include <sax/tools/converter.hxx>
 
-#include <tools/debug.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include "sdxmlexp_impl.hxx"
 #include "sdpropls.hxx"

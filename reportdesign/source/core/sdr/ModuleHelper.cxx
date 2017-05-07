@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/instance.hxx>
 #include <rtl/uri.hxx>
-#include <tools/debug.hxx>
 #include <svl/solar.hrc>
 
 #define ENTER_MOD_METHOD()  \

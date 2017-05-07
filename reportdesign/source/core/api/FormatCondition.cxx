@@ -20,7 +20,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include "corestrings.hrc"
 #include <tools/color.hxx>
-#include <tools/debug.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/property.hxx>
 #include <cppuhelper/supportsservice.hxx>

@@ -20,7 +20,6 @@
 #include <vcl/unohelp2.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>

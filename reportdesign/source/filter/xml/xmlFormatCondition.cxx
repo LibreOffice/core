@@ -30,7 +30,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include "xmlstrings.hrc"
 #include "xmlStyleImport.hxx"
-#include <tools/debug.hxx>
 
 namespace rptxml
 {

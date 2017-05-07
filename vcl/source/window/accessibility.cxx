@@ -22,7 +22,6 @@
 #include <i18nlangtag/mslangid.hxx>
 
 #include "tools/time.hxx"
-#include "tools/debug.hxx"
 
 #include "unotools/fontcfg.hxx"
 #include "unotools/confignode.hxx"

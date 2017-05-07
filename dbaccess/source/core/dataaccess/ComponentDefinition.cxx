@@ -21,7 +21,6 @@
 #include "apitools.hxx"
 #include "dbastrings.hrc"
 
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

@@ -23,7 +23,6 @@
 
 // program-sensitive includes
 #include <hash.hxx>
-#include <tools/debug.hxx>
 
 #include <rtl/character.hxx>
 #include <o3tl/make_unique.hxx>

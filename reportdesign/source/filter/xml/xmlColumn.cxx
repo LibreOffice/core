@@ -25,7 +25,6 @@
 #include <xmloff/nmspmap.hxx>
 #include "xmlEnums.hxx"
 #include "xmlCell.hxx"
-#include <tools/debug.hxx>
 #include "xmlStyleImport.hxx"
 #include "xmlTable.hxx"
 #include <comphelper/namecontainer.hxx>

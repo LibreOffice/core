@@ -22,7 +22,6 @@
 
 #include <tools/resmgr.hxx>
 #include <svl/solar.hrc>
-#include <tools/debug.hxx>
 
 #define ENTER_MOD_METHOD()  \
     ::osl::MutexGuard aGuard(s_aMutex); \

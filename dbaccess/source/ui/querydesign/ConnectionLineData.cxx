@@ -18,7 +18,6 @@
  */
 
 #include "ConnectionLineData.hxx"
-#include <tools/debug.hxx>
 
 using namespace dbaui;
 //class OConnectionLineData

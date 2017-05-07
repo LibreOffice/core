@@ -33,7 +33,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/types.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #include <unotools/syslocale.hxx>

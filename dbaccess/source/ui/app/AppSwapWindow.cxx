@@ -18,7 +18,6 @@
  */
 
 #include "AppSwapWindow.hxx"
-#include <tools/debug.hxx>
 #include "dbaccess_helpid.hrc"
 #include "dbu_app.hrc"
 #include "AppView.hxx"

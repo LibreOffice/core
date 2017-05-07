@@ -18,7 +18,6 @@
  */
 
 #include "RTableConnectionData.hxx"
-#include <tools/debug.hxx>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>

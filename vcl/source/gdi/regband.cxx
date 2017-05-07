@@ -19,7 +19,6 @@
 
 #include <algorithm>
 
-#include <tools/debug.hxx>
 #include <tools/helpers.hxx>
 #include <osl/diagnose.hxx>
 

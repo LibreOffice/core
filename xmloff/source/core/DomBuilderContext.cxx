@@ -33,7 +33,6 @@
 #include <com/sun/star/xml/dom/NodeType.hpp>
 
 #include <rtl/ustring.hxx>
-#include <tools/debug.hxx>
 
 #include <comphelper/processfactory.hxx>
 

@@ -23,7 +23,6 @@
 #include "core_resource.hrc"
 #include "View.hxx"
 
-#include <tools/debug.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>

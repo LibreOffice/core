@@ -40,7 +40,6 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XJob.hpp>
 
-#include <tools/debug.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/sharedunocomponent.hxx>

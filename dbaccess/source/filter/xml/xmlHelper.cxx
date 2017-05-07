@@ -29,7 +29,6 @@
 #include <com/sun/star/awt/TextAlign.hpp>
 #include "xmlstrings.hrc"
 #include "xmlEnums.hxx"
-#include <tools/debug.hxx>
 
 namespace dbaxml
 {

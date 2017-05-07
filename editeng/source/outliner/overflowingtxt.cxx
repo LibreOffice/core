@@ -18,7 +18,6 @@
  */
 
 #include "rtl/ustring.hxx"
-#include "tools/debug.hxx"
 
 #include "editeng/overflowingtxt.hxx"
 #include "editeng/outliner.hxx"

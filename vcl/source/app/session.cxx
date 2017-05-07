@@ -23,7 +23,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 
-#include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>
 

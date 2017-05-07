@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <rtl/character.hxx>
-#include <tools/debug.hxx>
 
 #include <basobj.hxx>
 #include <module.hxx>

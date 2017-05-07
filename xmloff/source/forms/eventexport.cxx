@@ -20,7 +20,6 @@
 #include "eventexport.hxx"
 #include <osl/diagnose.h>
 #include "strings.hxx"
-#include <tools/debug.hxx>
 #include <comphelper/sequence.hxx>
 
 namespace xmloff

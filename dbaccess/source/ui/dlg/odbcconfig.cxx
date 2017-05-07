@@ -26,7 +26,6 @@
 #include <osl/diagnose.h>
 #include <osl/process.h>
 #include <osl/thread.hxx>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
 #ifdef HAVE_ODBC_SUPPORT

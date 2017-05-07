@@ -30,7 +30,6 @@
 #include <xmloff/xmlprcon.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
-#include <tools/debug.hxx>
 #include "xmlfilter.hxx"
 #include "xmlHelper.hxx"
 #include <osl/diagnose.h>

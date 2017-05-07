@@ -25,7 +25,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlerror.hxx>
 
-#include <tools/debug.hxx>
 #include <algorithm>
 
 using com::sun::star::uno::Reference;

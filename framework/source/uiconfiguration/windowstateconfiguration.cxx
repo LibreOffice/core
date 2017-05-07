@@ -41,7 +41,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
-#include <tools/debug.hxx>
 
 #include <unordered_map>
 #include <vector>

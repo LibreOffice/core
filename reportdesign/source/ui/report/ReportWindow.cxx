@@ -23,7 +23,6 @@
 #include "DesignView.hxx"
 #include "UITools.hxx"
 
-#include <tools/debug.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/itempool.hxx>
 #include <unotools/syslocale.hxx>

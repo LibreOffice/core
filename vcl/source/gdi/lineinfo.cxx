@@ -19,7 +19,6 @@
 
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
-#include <tools/debug.hxx>
 #include <vcl/lineinfo.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

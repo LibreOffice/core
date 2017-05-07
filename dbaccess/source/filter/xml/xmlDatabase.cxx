@@ -29,7 +29,6 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
 #include "xmlstrings.hrc"
-#include <tools/debug.hxx>
 #include <connectivity/dbtools.hxx>
 
 namespace dbaxml

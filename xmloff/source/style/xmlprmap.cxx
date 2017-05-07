@@ -23,7 +23,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/maptype.hxx>
 #include <xmloff/prhdlfac.hxx>
-#include <tools/debug.hxx>
 
 #include "xmlbahdl.hxx"
 

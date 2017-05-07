@@ -31,7 +31,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/debug.hxx>
 
 using namespace ::xmloff::token;
 

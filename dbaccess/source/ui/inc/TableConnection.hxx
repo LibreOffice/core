@@ -20,7 +20,6 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLECONNECTION_HXX
 
 #include <vector>
-#include <tools/debug.hxx>
 #include <vcl/window.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include "TableConnectionData.hxx"

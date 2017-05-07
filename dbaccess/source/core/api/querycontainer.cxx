@@ -33,7 +33,6 @@
 
 #include <connectivity/dbexception.hxx>
 
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/uno3.hxx>

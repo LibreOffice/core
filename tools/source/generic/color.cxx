@@ -24,7 +24,6 @@
 #include <stdlib.h>
 
 #include <tools/color.hxx>
-#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/helpers.hxx>
 #include <basegfx/color/bcolortools.hxx>

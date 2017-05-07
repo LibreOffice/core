@@ -18,7 +18,6 @@
  */
 
 #include "TableFieldInfo.hxx"
-#include <tools/debug.hxx>
 
 using namespace dbaui;
 // class OTableFieldInfo

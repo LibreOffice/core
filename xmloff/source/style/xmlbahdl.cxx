@@ -20,7 +20,6 @@
 #include <xmlbahdl.hxx>
 
 #include <o3tl/any.hxx>
-#include <tools/debug.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <com/sun/star/uno/Any.hxx>

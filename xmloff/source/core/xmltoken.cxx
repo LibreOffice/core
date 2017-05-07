@@ -19,7 +19,6 @@
 
 #include <sal/macros.h>
 #include <xmloff/xmltoken.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 
 

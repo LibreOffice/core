@@ -28,7 +28,6 @@
 #include "xmlCondPrtExpr.hxx"
 #include "xmlStyleImport.hxx"
 #include <connectivity/dbtools.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/report/ReportPrintOption.hpp>
 #include "xmlstrings.hrc"
 #include "xmlTable.hxx"

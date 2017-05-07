@@ -20,7 +20,6 @@
 #include <sal/macros.h>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
-#include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <unotools/fontcfg.hxx>
 #include <unotools/fontdefs.hxx>

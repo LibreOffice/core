@@ -27,7 +27,6 @@
 #include "xmlstrings.hrc"
 #include "xmlStyleImport.hxx"
 #include <ucbhelper/content.hxx>
-#include <tools/debug.hxx>
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>

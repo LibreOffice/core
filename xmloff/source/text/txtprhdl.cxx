@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <o3tl/any.hxx>
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/fontenum.hxx>

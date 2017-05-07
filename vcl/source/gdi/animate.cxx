@@ -18,7 +18,6 @@
  */
 
 #include <vcl/animate.hxx>
-#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <rtl/crc.h>
 #include <vcl/virdev.hxx>
