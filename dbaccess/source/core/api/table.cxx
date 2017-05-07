@@ -26,7 +26,6 @@
 #include "core_resource.hrc"
 #include "CIndexes.hxx"
 
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/enumhelper.hxx>

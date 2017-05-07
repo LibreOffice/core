@@ -20,7 +20,6 @@
 #include "commandcontainer.hxx"
 #include "commanddefinition.hxx"
 
-#include <tools/debug.hxx>
 #include "dbastrings.hrc"
 #include <com/sun/star/sdb/TableDefinition.hpp>
 #include <com/sun/star/sdb/CommandDefinition.hpp>

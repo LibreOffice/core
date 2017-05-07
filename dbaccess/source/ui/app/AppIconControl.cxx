@@ -18,7 +18,6 @@
  */
 
 #include "AppIconControl.hxx"
-#include <tools/debug.hxx>
 #include "dbaccess_helpid.hrc"
 #include "moduledbu.hxx"
 #include "dbu_app.hrc"

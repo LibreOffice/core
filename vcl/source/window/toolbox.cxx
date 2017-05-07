@@ -32,7 +32,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/vclstatuslistener.hxx>
 
-#include <tools/debug.hxx>
 #include <tools/poly.hxx>
 #include <svl/imageitm.hxx>
 

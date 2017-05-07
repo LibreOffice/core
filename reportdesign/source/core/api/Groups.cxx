@@ -20,7 +20,6 @@
 #include "Group.hxx"
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <tools/debug.hxx>
 #include "core_resource.hxx"
 #include "core_resource.hrc"
 #include <algorithm>

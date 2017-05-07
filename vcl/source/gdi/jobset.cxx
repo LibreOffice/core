@@ -19,7 +19,6 @@
 
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
-#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <vcl/jobset.hxx>
 #include <jobset.h>

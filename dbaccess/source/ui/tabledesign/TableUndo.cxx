@@ -25,7 +25,6 @@
 #include "TableController.hxx"
 #include "TableDesignView.hxx"
 #include "FieldDescriptions.hxx"
-#include <tools/debug.hxx>
 
 using namespace dbaui;
 using namespace ::svt;

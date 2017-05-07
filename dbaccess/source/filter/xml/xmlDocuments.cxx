@@ -27,7 +27,6 @@
 #include "xmlHierarchyCollection.hxx"
 #include "xmlEnums.hxx"
 #include "xmlstrings.hrc"
-#include <tools/debug.hxx>
 
 namespace dbaxml
 {

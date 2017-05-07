@@ -18,7 +18,6 @@
  */
 
 #include "ScrollHelper.hxx"
-#include <tools/debug.hxx>
 
 #define LISTBOX_SCROLLING_AREA  12
 namespace dbaui

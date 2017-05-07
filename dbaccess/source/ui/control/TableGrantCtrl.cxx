@@ -18,7 +18,6 @@
  */
 
 #include "TableGrantCtrl.hxx"
-#include <tools/debug.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>

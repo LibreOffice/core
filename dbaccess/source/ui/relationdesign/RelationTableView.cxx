@@ -32,7 +32,6 @@
 #include "dbustrings.hrc"
 #include <connectivity/dbtools.hxx>
 #include <comphelper/sequence.hxx>
-#include <tools/debug.hxx>
 #include "dbaccess_helpid.hrc"
 #include "RelationDesignView.hxx"
 #include "JoinController.hxx"

@@ -21,7 +21,6 @@
 
 #include <sstream>
 
-#include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
 

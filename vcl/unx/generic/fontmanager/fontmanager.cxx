@@ -36,7 +36,6 @@
 
 #include "tools/urlobj.hxx"
 #include "tools/stream.hxx"
-#include "tools/debug.hxx"
 
 #include "osl/file.hxx"
 #include "osl/process.h"

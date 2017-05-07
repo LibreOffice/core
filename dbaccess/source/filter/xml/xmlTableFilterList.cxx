@@ -27,7 +27,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <xmloff/xmlimp.hxx>
 #include "xmlfilter.hxx"
-#include <tools/debug.hxx>
 
 namespace dbaxml
 {

@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/container/XIndexReplace.hpp>
-#include <tools/debug.hxx>
 #include "impastpl.hxx"
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/families.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include "TableConnectionData.hxx"
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
 using namespace dbaui;

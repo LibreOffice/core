@@ -27,7 +27,6 @@
 #include "xmlFileBasedDatabase.hxx"
 #include "xmlServerDatabase.hxx"
 #include "xmlstrings.hrc"
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace dbaxml

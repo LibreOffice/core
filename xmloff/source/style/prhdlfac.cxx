@@ -24,7 +24,6 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 
-#include <tools/debug.hxx>
 
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmltoken.hxx>

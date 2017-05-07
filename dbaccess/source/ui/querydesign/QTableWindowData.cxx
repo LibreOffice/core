@@ -18,7 +18,6 @@
  */
 
 #include "QTableWindowData.hxx"
-#include <tools/debug.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::io;

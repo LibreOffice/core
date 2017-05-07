@@ -37,7 +37,6 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <tools/debug.hxx>
 
 #include <sax/tools/converter.hxx>
 

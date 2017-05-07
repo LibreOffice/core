@@ -31,7 +31,6 @@
 #include "xmlEnums.hxx"
 #include "xmlstrings.hrc"
 #include <rtl/strbuf.hxx>
-#include <tools/debug.hxx>
 
 namespace dbaxml
 {

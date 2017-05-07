@@ -27,7 +27,6 @@
 
 #include "comphelper/processfactory.hxx"
 #include <rtl/bootstrap.hxx>
-#include "tools/debug.hxx"
 
 #include "i18nlangtag/mslangid.hxx"
 #include "i18nlangtag/languagetag.hxx"

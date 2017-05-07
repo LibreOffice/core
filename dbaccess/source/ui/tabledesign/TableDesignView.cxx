@@ -18,7 +18,6 @@
  */
 
 #include "TableDesignView.hxx"
-#include <tools/debug.hxx>
 #include "TableController.hxx"
 #include "dbaccess_helpid.hrc"
 #include "FieldDescriptions.hxx"

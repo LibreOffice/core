@@ -23,7 +23,6 @@
 
 #include <string.h>
 #include <rtl/strbuf.hxx>
-#include <tools/debug.hxx>
 #include <tools/poly.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

@@ -22,7 +22,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 
-#include <tools/debug.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>

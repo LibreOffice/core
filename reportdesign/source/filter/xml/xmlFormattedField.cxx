@@ -27,7 +27,6 @@
 #include <xmloff/xmluconv.hxx>
 #include "xmlReportElement.hxx"
 #include "xmlComponent.hxx"
-#include <tools/debug.hxx>
 
 
 namespace rptxml

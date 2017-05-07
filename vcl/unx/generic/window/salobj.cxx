@@ -25,7 +25,6 @@
 #include <X11/Xutil.h>
 #include <X11/extensions/shape.h>
 
-#include <tools/debug.hxx>
 
 #include <vcl/keycodes.hxx>
 #include <vcl/event.hxx>

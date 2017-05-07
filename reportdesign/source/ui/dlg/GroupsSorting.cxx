@@ -26,7 +26,6 @@
 #include <com/sun/star/report/GroupOn.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 
-#include <tools/debug.hxx>
 #include "RptResId.hrc"
 #include "rptui_slotid.hrc"
 #include "ModuleHelper.hxx"

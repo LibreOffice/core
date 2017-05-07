@@ -18,7 +18,6 @@
  */
 
 #include <memory>
-#include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

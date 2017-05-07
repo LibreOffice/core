@@ -24,7 +24,6 @@
 
 #include <string.h>
 #include <limits.h>
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/sheet/FormulaToken.hpp>

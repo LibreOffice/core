@@ -32,7 +32,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>
 
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
 using com::sun::star::uno::Reference;

@@ -26,7 +26,6 @@
 #include <X11/extensions/Xrender.h>
 #include <X11/Xproto.h>
 
-#include "tools/debug.hxx"
 
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolypolygon.hxx"

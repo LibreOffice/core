@@ -18,7 +18,6 @@
  */
 
 #include "QTableConnectionData.hxx"
-#include <tools/debug.hxx>
 #include "QTableWindow.hxx"
 
 using namespace dbaui;

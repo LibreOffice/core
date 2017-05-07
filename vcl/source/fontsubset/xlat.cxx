@@ -19,7 +19,6 @@
 
 #include "rtl/textcvt.h"
 #include "xlat.hxx"
-#include <tools/debug.hxx>
 
 namespace {
 

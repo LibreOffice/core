@@ -37,7 +37,6 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/debug.hxx>
 
 
 #include <vector>

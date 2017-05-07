@@ -31,7 +31,6 @@
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
 #include <xmloff/xmltoken.hxx>

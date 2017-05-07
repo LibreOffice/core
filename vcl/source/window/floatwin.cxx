@@ -30,7 +30,6 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/settings.hxx>
 
-#include <tools/debug.hxx>
 
 class FloatingWindow::ImplData
 {

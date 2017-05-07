@@ -19,7 +19,6 @@
 
 #include <vector>
 
-#include <tools/debug.hxx>
 #include <tools/solar.h>
 #include <o3tl/sorted_vector.hxx>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>

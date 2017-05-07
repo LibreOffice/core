@@ -23,7 +23,6 @@
 #include <tools/fract.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/helpers.hxx>
 #include <ucbhelper/content.hxx>

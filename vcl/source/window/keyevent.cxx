@@ -19,7 +19,6 @@
 
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
-#include <tools/debug.hxx>
 #include <vcl/event.hxx>
 
 KeyEvent::KeyEvent (const KeyEvent& rKeyEvent) :

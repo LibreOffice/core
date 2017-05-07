@@ -22,7 +22,6 @@
 
 #include <cstdlib>
 
-#include <tools/debug.hxx>
 
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>

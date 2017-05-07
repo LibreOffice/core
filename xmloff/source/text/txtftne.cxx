@@ -30,7 +30,6 @@
 #include <sal/config.h>
 
 #include <o3tl/any.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

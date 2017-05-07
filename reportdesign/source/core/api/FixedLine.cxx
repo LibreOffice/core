@@ -21,7 +21,6 @@
 #include "corestrings.hrc"
 #include "core_resource.hrc"
 #include "core_resource.hxx"
-#include <tools/debug.hxx>
 #include <comphelper/property.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "Tools.hxx"

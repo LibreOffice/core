@@ -28,7 +28,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include "definitioncolumn.hxx"
-#include <tools/debug.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;

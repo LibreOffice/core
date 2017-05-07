@@ -25,7 +25,6 @@
 #include "xmlControlProperty.hxx"
 #include "xmlComponent.hxx"
 #include "xmlstrings.hrc"
-#include <tools/debug.hxx>
 
 namespace rptxml
 {

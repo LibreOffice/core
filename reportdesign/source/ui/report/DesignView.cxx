@@ -18,7 +18,6 @@
  */
 
 #include "DesignView.hxx"
-#include <tools/debug.hxx>
 #include "ReportController.hxx"
 #include <comphelper/types.hxx>
 #include <svtools/acceleratorexecute.hxx>

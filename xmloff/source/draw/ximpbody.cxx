@@ -37,7 +37,6 @@
 #include "ximpshow.hxx"
 #include "PropertySetMerger.hxx"
 #include "animationimport.hxx"
-#include <tools/debug.hxx>
 #include <osl/diagnose.hxx>
 
 using namespace ::com::sun::star;

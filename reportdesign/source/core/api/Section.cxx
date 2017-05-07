@@ -28,7 +28,6 @@
 #include "corestrings.hrc"
 #include "core_resource.hxx"
 #include "core_resource.hrc"
-#include <tools/debug.hxx>
 #include "Tools.hxx"
 #include "RptModel.hxx"
 #include "RptPage.hxx"

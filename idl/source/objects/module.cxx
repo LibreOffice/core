@@ -20,7 +20,6 @@
 #include <module.hxx>
 #include <globals.hxx>
 #include <database.hxx>
-#include <tools/debug.hxx>
 #include <osl/file.hxx>
 
 

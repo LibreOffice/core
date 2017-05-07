@@ -18,7 +18,6 @@
  */
 
 #include <sdr/properties/itemsettools.hxx>
-#include <tools/debug.hxx>
 #include <tools/fract.hxx>
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>

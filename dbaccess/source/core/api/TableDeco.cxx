@@ -24,7 +24,6 @@
 #include "dbastrings.hrc"
 #include "core_resource.hxx"
 #include "core_resource.hrc"
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
 #include <cppuhelper/typeprovider.hxx>

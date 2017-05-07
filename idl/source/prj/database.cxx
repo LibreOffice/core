@@ -22,7 +22,6 @@
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
-#include <tools/debug.hxx>
 #include <database.hxx>
 #include <globals.hxx>
 #include <rtl/strbuf.hxx>

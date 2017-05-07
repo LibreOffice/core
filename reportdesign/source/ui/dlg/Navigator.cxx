@@ -35,7 +35,6 @@
 #include "helpids.hrc"
 #include "RptResId.hrc"
 #include "rptui_slotid.hrc"
-#include <tools/debug.hxx>
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/containermultiplexer.hxx>
 #include <comphelper/types.hxx>

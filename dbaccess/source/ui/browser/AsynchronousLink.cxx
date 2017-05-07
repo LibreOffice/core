@@ -19,7 +19,6 @@
 
 #include <dbaccess/AsynchronousLink.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/debug.hxx>
 
 // OAsynchronousLink
 using namespace dbaui;

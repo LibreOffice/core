@@ -22,7 +22,6 @@
 #include <set>
 
 #include <comphelper/string.hxx>
-#include <tools/debug.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>

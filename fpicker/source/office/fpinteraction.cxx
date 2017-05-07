@@ -18,7 +18,6 @@
  */
 
 #include "fpinteraction.hxx"
-#include <tools/debug.hxx>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>

@@ -20,7 +20,6 @@
 #include <osl/diagnose.h>
 #include <sfx2/styfitem.hxx>
 #include <tools/rcid.h>
-#include <tools/debug.hxx>
 
 SfxStyleFamilyItem::SfxStyleFamilyItem(SfxStyleFamily nFamily_, const OUString &rName, const Image& rImage, const ResId &rStringArrayId)
     : nFamily(nFamily_)

@@ -28,7 +28,6 @@
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <tools/solar.h>
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
 

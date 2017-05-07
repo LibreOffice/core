@@ -19,7 +19,6 @@
 
 #include "VertSplitView.hxx"
 
-#include <tools/debug.hxx>
 #include <vcl/split.hxx>
 #include <vcl/settings.hxx>
 

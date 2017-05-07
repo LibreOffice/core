@@ -22,7 +22,6 @@
 #include "documentdefinition.hxx"
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
-#include <tools/debug.hxx>
 #include <connectivity/dbtools.hxx>
 #include "myucp_resultset.hxx"
 #include <ucbhelper/cancelcommandexecution.hxx>

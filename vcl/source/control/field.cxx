@@ -22,7 +22,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
-#include "tools/debug.hxx"
 
 #include <vcl/dialog.hxx>
 #include <vcl/field.hxx>

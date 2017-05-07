@@ -19,7 +19,6 @@
 
 #include <xmloff/XMLPageExport.hxx>
 #include <o3tl/any.hxx>
-#include <tools/debug.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>

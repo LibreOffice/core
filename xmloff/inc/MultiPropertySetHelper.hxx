@@ -21,7 +21,6 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <tools/debug.hxx>
 
 
 namespace com { namespace sun { namespace star {

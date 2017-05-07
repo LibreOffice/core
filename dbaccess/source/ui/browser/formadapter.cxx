@@ -18,7 +18,6 @@
  */
 
 #include "formadapter.hxx"
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/types.hxx>
 #include <comphelper/enumhelper.hxx>

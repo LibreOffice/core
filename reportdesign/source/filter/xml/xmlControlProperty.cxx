@@ -30,7 +30,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmlEnums.hxx"
-#include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>
 #include <com/sun/star/util/DateTime.hpp>

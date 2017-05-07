@@ -38,7 +38,6 @@
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
 

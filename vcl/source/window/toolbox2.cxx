@@ -20,7 +20,6 @@
 #include "sal/config.h"
 
 #include <comphelper/processfactory.hxx>
-#include <tools/debug.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>

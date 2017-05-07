@@ -19,7 +19,6 @@
 
 #include "xmlTableFilterPattern.hxx"
 #include "xmlTableFilterList.hxx"
-#include <tools/debug.hxx>
 
 namespace dbaxml
 {

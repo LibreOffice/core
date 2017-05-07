@@ -25,7 +25,6 @@
 #include "xmlEnums.hxx"
 #include "xmlMasterFields.hxx"
 #include "xmlTable.hxx"
-#include <tools/debug.hxx>
 #include <comphelper/property.hxx>
 #include <com/sun/star/report/XReportControlModel.hpp>
 
