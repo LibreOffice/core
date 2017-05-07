@@ -31,24 +31,6 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace gstreamer {
 
-static ::osl::Mutex& ImplGetOwnStaticMutex()
-{
-    static ::osl::Mutex* pMutex = nullptr;
-
-    if( pMutex == nullptr )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-
-        if( pMutex == nullptr )
-        {
-            static ::osl::Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-
-    return *pMutex;
-}
-
 // Window
 
 
@@ -56,7 +38,6 @@ Window::Window() :
     meZoomLevel( media::ZoomLevel_NOT_AVAILABLE ),
     mnPointerType( awt::SystemPointer::ARROW )
 {
-    ::osl::MutexGuard aGuard( ImplGetOwnStaticMutex() );
 }
 
 Window::~Window()
