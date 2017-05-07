@@ -2653,6 +2653,7 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
             m_pContentsListBox->SetEntryText( pActEntry, aNewName );
 
             GetSaveInData()->SetModified();
+            GetTopLevelSelection()->SetModified();
         }
     }
     else
