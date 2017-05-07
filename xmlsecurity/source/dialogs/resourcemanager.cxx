@@ -157,7 +157,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
                 //then we have reached the end of the value
                 if (!bInValue)
                 {
-                    OSL_ASSERT(!sType.isEmpty());
+                    assert(!sType.isEmpty());
                     retVal.push_back(make_pair(sType, sbufValue.makeStringAndClear()));
                     sType.clear();
                     //The next char is the start of the new type
@@ -180,7 +180,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         }
         if (sbufValue.getLength())
         {
-            OSL_ASSERT(!sType.isEmpty());
+            assert(!sType.isEmpty());
             retVal.push_back(make_pair(sType, sbufValue.makeStringAndClear()));
         }
         return retVal;
@@ -252,7 +252,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
                 //then we have reached the end of the value
                 if (!bInValue)
                 {
-                    OSL_ASSERT(!sType.isEmpty());
+                    assert(!sType.isEmpty());
                     retVal.push_back(make_pair(sType, sbufValue.makeStringAndClear()));
                     sType.clear();
                     //The next char is the start of the new type
@@ -278,7 +278,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
         }
         if (!sbufValue.isEmpty())
         {
-            OSL_ASSERT(!sType.isEmpty());
+            assert(!sType.isEmpty());
             retVal.push_back(make_pair(sType, sbufValue.makeStringAndClear()));
         }
         return retVal;

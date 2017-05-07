@@ -848,7 +848,7 @@ sal_Int32 SAXEventKeeperImpl::createBlocker()
     sal_Int32 nId = m_nNextElementMarkId;
     m_nNextElementMarkId ++;
 
-    OSL_ASSERT(m_pNewBlocker == nullptr);
+    assert(m_pNewBlocker == nullptr);
 
     m_pNewBlocker = new ElementMark(cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID, nId);
     m_vElementMarkBuffers.push_back( m_pNewBlocker );
@@ -1170,7 +1170,7 @@ void SAL_CALL SAXEventKeeperImpl::setDocumentLocator( const cssu::Reference< css
 /* XInitialization */
 void SAL_CALL SAXEventKeeperImpl::initialize( const cssu::Sequence< cssu::Any >& aArguments )
 {
-    OSL_ASSERT(aArguments.getLength() == 1);
+    assert(aArguments.getLength() == 1);
 
     aArguments[0] >>= m_xXMLDocument;
     m_xDocumentHandler.set( m_xXMLDocument, cssu::UNO_QUERY );

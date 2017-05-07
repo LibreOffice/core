@@ -103,7 +103,7 @@ void XMLDocumentWrapper_XmlSecImpl::getNextSAXEvent()
  *  NODEPOSITION_NORMAL for other SAX events;
  ******************************************************************************/
 {
-    OSL_ASSERT( m_pCurrentElement != nullptr );
+    assert( m_pCurrentElement != nullptr );
 
         /*
          * Get the next event through tree order.
@@ -525,7 +525,7 @@ void XMLDocumentWrapper_XmlSecImpl::removeNode(const xmlNodePtr pNode) const
  ******************************************************************************/
 {
     /* you can't remove the current node */
-    OSL_ASSERT( m_pCurrentElement != pNode );
+    assert( m_pCurrentElement != pNode );
 
     xmlAttrPtr pAttr = pNode->properties;
 
@@ -604,7 +604,7 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::setCurrentElement( const cssu::Refe
 
 void SAL_CALL XMLDocumentWrapper_XmlSecImpl::removeCurrentElement(  )
 {
-    OSL_ASSERT( m_pCurrentElement != nullptr );
+    assert( m_pCurrentElement != nullptr );
 
     xmlNodePtr pOldCurrentElement = m_pCurrentElement;
 

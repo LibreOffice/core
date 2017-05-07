@@ -187,7 +187,7 @@ void BufferNode::setBlocker(const ElementMark* pBlocker)
  *  old blocker on this BufferNode, if there is one, will be overcasted.
  ******************************************************************************/
 {
-    OSL_ASSERT(!(m_pBlocker != nullptr && pBlocker != nullptr));
+    assert(!(m_pBlocker != nullptr && pBlocker != nullptr));
 
     m_pBlocker = const_cast<ElementMark*>(pBlocker);
     if (m_pBlocker != nullptr)

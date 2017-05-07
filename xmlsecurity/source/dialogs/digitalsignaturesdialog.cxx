@@ -261,7 +261,7 @@ bool DigitalSignaturesDialog::canAddRemove()
         // It's always possible to append a PDF signature.
         return ret;
 
-    OSL_ASSERT(maSignatureManager.mxStore.is());
+    assert(maSignatureManager.mxStore.is());
     bool bDoc1_1 = DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion);
     SaveODFItem item;
     bool bSave1_1 = item.isLessODF1_2();
