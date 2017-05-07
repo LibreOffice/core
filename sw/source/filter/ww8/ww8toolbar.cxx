@@ -946,7 +946,15 @@ bool PlfMcd::Read(SvStream &rS)
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
     rS.ReadInt32( iMac );
-    if ( iMac )
+    if (iMac < 0)
+        return false;
+    auto nMaxPossibleRecords = rS.remainingSize() / 24 /*sizeof MCD*/;
+    if (static_cast<sal_uInt32>(iMac) > nMaxPossibleRecords)
+    {
+        SAL_WARN("sw.ww8", iMac << " records claimed, but max possible is " << nMaxPossibleRecords);
+        iMac = nMaxPossibleRecords;
+    }
+    if (iMac)
     {
         rgmcd.resize(iMac);
         for ( sal_Int32 index = 0; index < iMac; ++index )
