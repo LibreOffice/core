@@ -1841,11 +1841,6 @@ void ChartExport::exportStockChart( const Reference< chart2::XChartType >& xChar
             FSEND );
 
     bool bPrimaryAxes = true;
-    bool bJapaneseCandleSticks = false;
-    Reference< beans::XPropertySet > xCTProp( xChartType, uno::UNO_QUERY );
-    if( xCTProp.is())
-        xCTProp->getPropertyValue("Japanese") >>= bJapaneseCandleSticks;
-
     Reference< chart2::XDataSeriesContainer > xDSCnt( xChartType, uno::UNO_QUERY );
     if(xDSCnt.is())
         exportCandleStickSeries( xDSCnt->getDataSeries(), bPrimaryAxes );
