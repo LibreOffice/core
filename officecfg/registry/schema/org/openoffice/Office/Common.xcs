@@ -754,7 +754,7 @@
           automatically for all resources that support it (regardless of whether they are
           in "AuthenticateUsingSystemCredentials" list or not).</desc>
         </info>
-        <value>false</value>
+        <value>true</value>
       </prop>
     </group>
     <group oor:name="Drawinglayer">
