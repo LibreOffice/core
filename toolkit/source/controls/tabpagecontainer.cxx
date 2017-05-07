@@ -29,7 +29,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 

@@ -29,7 +29,6 @@
 #include "file_url.hxx"
 #include "path_helper.hxx"
 
-#include <osl/diagnose.h>
 #include <osl/signal.h>
 #include <DbgHelp.h>
 #include <errorrep.h>

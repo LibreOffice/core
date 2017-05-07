@@ -24,7 +24,6 @@
 
 #include <rtl/instance.hxx>
 #include <rtl/crc.h>
-#include <osl/diagnose.h>
 #include <osl/getglobalmutex.hxx>
 #include <tools/solar.h>
 #include <tools/debug.hxx>

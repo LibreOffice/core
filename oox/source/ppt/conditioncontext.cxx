@@ -21,7 +21,6 @@
 
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
-#include <osl/diagnose.h>
 
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>

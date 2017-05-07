@@ -19,7 +19,6 @@
 
 #include "mysql/YDriver.hxx"
 #include "mysql/YCatalog.hxx"
-#include <osl/diagnose.h>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>

@@ -23,7 +23,6 @@
 #include <sal/macros.h>
 #include <osl/time.h>
 
-#include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

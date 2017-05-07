@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 
-#include <osl/diagnose.h>
 
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"

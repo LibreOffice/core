@@ -21,7 +21,6 @@
 
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 
-#include <osl/diagnose.h>
 #include "oox/helper/propertymap.hxx"
 #include "oox/core/relations.hxx"
 #include "oox/core/xmlfilterbase.hxx"

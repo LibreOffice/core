@@ -34,7 +34,6 @@
  *************************************************************************/
 
 #include <stdio.h>
-#include <osl/diagnose.h>
 #include "SPreparedStatement.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include "SResultSetMetaData.hxx"

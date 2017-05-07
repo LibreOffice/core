@@ -33,7 +33,6 @@
 
 #include <cppuhelper/servicefactory.hxx>
 
-#include <osl/diagnose.h>
 
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;

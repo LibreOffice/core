@@ -18,7 +18,6 @@
  */
 
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
-#include <osl/diagnose.h>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/vector/b2dvector.hxx>

@@ -22,7 +22,6 @@
 #include "inc/pdfihelper.hxx"
 #include "inc/pdfparse.hxx"
 
-#include <osl/diagnose.h>
 #include <osl/file.h>
 #include <osl/thread.h>
 #include <rtl/digest.h>

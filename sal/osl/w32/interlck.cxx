@@ -20,7 +20,6 @@
 #include "system.h"
 
 #include <osl/interlck.h>
-#include <osl/diagnose.h>
 
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {

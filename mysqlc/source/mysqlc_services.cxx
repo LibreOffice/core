@@ -20,7 +20,6 @@
 #include "mysqlc_driver.hxx"
 
 #include <cppuhelper/factory.hxx>
-#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <uno/lbnames.h>
 

@@ -20,7 +20,6 @@
 #include <memory>
 #include "precompile.h"
 
-#include <osl/diagnose.h>
 
 #include <comphelper/newarray.hxx>
 

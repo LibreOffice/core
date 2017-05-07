@@ -23,7 +23,6 @@
 
 #include <impbmp.hxx>
 
-#include <osl/diagnose.h>
 
 #include <string.h>
 

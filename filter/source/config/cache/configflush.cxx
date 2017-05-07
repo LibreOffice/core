@@ -21,7 +21,6 @@
 #include "constant.hxx"
 #include <cppuhelper/supportsservice.hxx>
 
-#include <osl/diagnose.h>
 
 namespace filter{
     namespace config{

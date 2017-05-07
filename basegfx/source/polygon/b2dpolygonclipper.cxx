@@ -18,7 +18,6 @@
  */
 
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
-#include <osl/diagnose.h>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

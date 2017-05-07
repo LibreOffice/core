@@ -59,7 +59,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
-#include <osl/diagnose.h>
 
 using namespace ::svxform;
 using namespace ::com::sun::star::uno;

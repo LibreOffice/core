@@ -20,7 +20,6 @@
 #include <cppuhelper/factory.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XSet.hpp>
-#include <osl/diagnose.h>
 
 #include <com/sun/star/datatransfer/XDataFormatTranslator.hpp>
 #include "ftransl.hxx"

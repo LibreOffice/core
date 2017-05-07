@@ -18,7 +18,6 @@
  */
 
 #include "DrawModelBroadcaster.hxx"
-#include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/unomod.hxx>

@@ -11,7 +11,6 @@
 #include <basegfx/range/b2drange.hxx>
 #include "gfxtypes.hxx"
 #include <rtl/ustring.hxx>
-#include <osl/diagnose.h>
 #include <boost/spirit/include/classic.hpp>
 
 namespace svgi

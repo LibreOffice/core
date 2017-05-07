@@ -18,7 +18,6 @@
  */
 
 #include <memory>
-#include <osl/diagnose.h>
 #include <com/sun/star/util/DateTime.hpp>
 #include "SerfUri.hxx"
 #include "DAVResource.hxx"

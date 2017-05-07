@@ -21,7 +21,6 @@
 #include <mmconfigitem.hxx>
 #include <vector>
 #include <swtypes.hxx>
-#include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>

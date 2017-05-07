@@ -18,7 +18,6 @@
  */
 
 #include "eventexport.hxx"
-#include <osl/diagnose.h>
 #include "strings.hxx"
 #include <comphelper/sequence.hxx>
 

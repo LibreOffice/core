@@ -18,7 +18,6 @@
  */
 
 #include <osl/mutex.hxx>
-#include <osl/diagnose.h>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>

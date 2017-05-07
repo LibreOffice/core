@@ -21,7 +21,6 @@
 #include <tools/stream.hxx>
 #include <sot/exchange.hxx>
 #include <sot/filelist.hxx>
-#include <osl/diagnose.h>
 #include <osl/thread.h>
 
 /******************************************************************************

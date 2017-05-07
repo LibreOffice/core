@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/diagnose.h>
 #include <sfx2/styfitem.hxx>
 #include <tools/rcid.h>
 

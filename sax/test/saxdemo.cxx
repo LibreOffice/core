@@ -42,7 +42,6 @@
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <osl/diagnose.h>
 
 using namespace ::std;
 using namespace ::cppu;

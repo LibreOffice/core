@@ -27,7 +27,6 @@
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
-#include <osl/diagnose.h>
 
 #include <stdlib.h>
 #include <stdio.h>

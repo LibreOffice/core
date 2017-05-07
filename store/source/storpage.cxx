@@ -23,7 +23,6 @@
 #include "sal/log.hxx"
 #include "rtl/string.h"
 #include "rtl/ref.hxx"
-#include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 
 #include "store/types.h"

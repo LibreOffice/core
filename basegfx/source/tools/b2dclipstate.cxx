@@ -28,7 +28,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
-#include <osl/diagnose.h>
 
 namespace basegfx
 {

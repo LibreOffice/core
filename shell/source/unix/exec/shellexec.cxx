@@ -19,7 +19,6 @@
 
 #include <config_folders.h>
 
-#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/process.h>
 #include <osl/file.hxx>

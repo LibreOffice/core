@@ -30,7 +30,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <iostream>
 #include <algorithm>
-#include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/rcid.h>

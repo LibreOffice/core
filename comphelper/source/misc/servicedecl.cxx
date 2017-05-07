@@ -19,7 +19,6 @@
 
 
 #include <comphelper/servicedecl.hxx>
-#include <osl/diagnose.h>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/implbase.hxx>

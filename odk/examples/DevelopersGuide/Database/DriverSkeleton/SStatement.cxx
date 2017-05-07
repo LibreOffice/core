@@ -34,7 +34,6 @@
  *************************************************************************/
 
 #include <stdio.h>
-#include <osl/diagnose.h>
 #include "SStatement.hxx"
 #include "SConnection.hxx"
 #include "SResultSet.hxx"

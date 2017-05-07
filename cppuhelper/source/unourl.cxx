@@ -20,7 +20,6 @@
 
 #include <cppuhelper/unourl.hxx>
 
-#include <osl/diagnose.h>
 #include <rtl/malformeduriexception.hxx>
 #include <rtl/string.h>
 #include <rtl/textenc.h>

@@ -24,7 +24,6 @@
 #include <globals.hxx>
 #include <hash.hxx>
 #include <database.hxx>
-#include <osl/diagnose.h>
 #include <tools/stream.hxx>
 
 bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )

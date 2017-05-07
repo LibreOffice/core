@@ -25,7 +25,6 @@
 
 #include <rtl/ustring>
 #include <sal/types.h>
-#include <osl/diagnose.h>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 

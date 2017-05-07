@@ -22,7 +22,6 @@
 
 #include "file_error.hxx"
 
-#include "osl/diagnose.h"
 #include "osl/thread.hxx"
 #include <sal/macros.h>
 

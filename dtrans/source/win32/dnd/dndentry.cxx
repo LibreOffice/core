@@ -20,7 +20,6 @@
 #include <cppuhelper/factory.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XSet.hpp>
-#include <osl/diagnose.h>
 
 #include "source.hxx"
 #include "target.hxx"

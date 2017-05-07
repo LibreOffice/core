@@ -18,7 +18,6 @@
  */
 
 
-#include <osl/diagnose.h>
 
 #include <uno/mapping.hxx>
 

@@ -24,7 +24,6 @@
 #include <com/sun/star/i18n/MultipleCharsOutputException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <osl/diagnose.h>
 
 #include <string.h>
 

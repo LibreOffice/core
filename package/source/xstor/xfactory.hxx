@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <osl/diagnose.h>
 
 class OStorageFactory : public ::cppu::WeakImplHelper< css::lang::XSingleServiceFactory,
                                                 css::lang::XServiceInfo >

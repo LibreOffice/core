@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include <osl/time.h>
 
-#include <osl/diagnose.h>
 #include <com/sun/star/test/XSimpleTest.hpp>
 
 #include <com/sun/star/io/XActiveDataSource.hpp>

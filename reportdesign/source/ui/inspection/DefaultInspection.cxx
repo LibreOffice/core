@@ -23,7 +23,6 @@
 #include "ModuleHelper.hxx"
 #include "helpids.hrc"
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include "metadata.hxx"

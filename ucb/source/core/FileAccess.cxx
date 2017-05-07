@@ -18,7 +18,6 @@
  */
 
 #include <osl/mutex.hxx>
-#include <osl/diagnose.h>
 
 #include <uno/mapping.hxx>
 #include <comphelper/processfactory.hxx>

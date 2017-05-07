@@ -19,7 +19,6 @@
 
 
 #include <osl/mutex.hxx>
-#include <osl/diagnose.h>
 #include <uno/dispatcher.h>
 #include <uno/mapping.hxx>
 #include <cppuhelper/queryinterface.hxx>

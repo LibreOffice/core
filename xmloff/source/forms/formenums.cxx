@@ -18,7 +18,6 @@
  */
 
 #include "formenums.hxx"
-#include <osl/diagnose.h>
 #include <com/sun/star/form/FormSubmitEncoding.hpp>
 #include <com/sun/star/form/FormSubmitMethod.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>

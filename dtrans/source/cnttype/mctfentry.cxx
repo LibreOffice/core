@@ -19,7 +19,6 @@
 
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/container/XSet.hpp>
-#include <osl/diagnose.h>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 #include "mcnttfactory.hxx"
 

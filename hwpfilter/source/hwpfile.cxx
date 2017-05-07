@@ -36,7 +36,6 @@
 #include "hcode.h"
 #include "hstream.hxx"
 
-#include <osl/diagnose.h>
 
 HWPFile *HWPFile::cur_doc = nullptr;
 static int ccount = 0;

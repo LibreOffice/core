@@ -18,7 +18,6 @@
  */
 
 #include <cppuhelper/factory.hxx>
-#include <osl/diagnose.h>
 #include "shellexec.hxx"
 
 using namespace ::com::sun::star::uno;

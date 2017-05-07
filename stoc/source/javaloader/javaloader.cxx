@@ -19,7 +19,6 @@
 
 #include <cstdarg>
 
-#include <osl/diagnose.h>
 #include <osl/process.h>
 
 #include <rtl/process.h>

@@ -21,7 +21,6 @@
 #include "codemaker/exceptiontree.hxx"
 #include "codemaker/typemanager.hxx"
 
-#include "osl/diagnose.h"
 #include "rtl/ref.hxx"
 #include "rtl/string.hxx"
 #include "rtl/textenc.h"

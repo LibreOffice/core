@@ -18,7 +18,6 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/diagnose.h>
 #include "smplmailsuppl.hxx"
 #include "smplmailclient.hxx"
 

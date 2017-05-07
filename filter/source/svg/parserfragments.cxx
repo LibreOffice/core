@@ -13,7 +13,6 @@
 
 #include <basegfx/tools/canvastools.hxx>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
-#include <osl/diagnose.h>
 
 #include <limits.h>
 #include <boost/bind.hpp>

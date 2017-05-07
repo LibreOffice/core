@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/diagnose.h>
 
 #include "drawingml/table/tablecellcontext.hxx"
 #include "drawingml/textbodycontext.hxx"

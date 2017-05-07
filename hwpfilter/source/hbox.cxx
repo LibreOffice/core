@@ -19,7 +19,6 @@
 
 #include "precompile.h"
 
-#include <osl/diagnose.h>
 
 #include "hwpfile.h"
 #include "hbox.h"

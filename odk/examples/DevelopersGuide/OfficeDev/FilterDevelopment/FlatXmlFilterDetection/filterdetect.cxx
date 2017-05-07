@@ -34,7 +34,6 @@
  *************************************************************************/
 
 #include "filterdetect.hxx"
-#include <osl/diagnose.h>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

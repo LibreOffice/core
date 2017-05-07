@@ -20,7 +20,6 @@
 #include <iostream>
 #include <libetonyek/libetonyek.h>
 #include <libodfgen/libodfgen.hxx>
-#include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbhelper.hxx>

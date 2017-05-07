@@ -25,7 +25,6 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
-#include <osl/diagnose.h>
 
 #include <list>
 

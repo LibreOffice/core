@@ -18,7 +18,6 @@
  */
 #include <sal/types.h>
 #include <cppuhelper/factory.hxx>
-#include <osl/diagnose.h>
 #include <cppuhelper/implementationentry.hxx>
 #include "ReportDefinition.hxx"
 #include "FormattedField.hxx"

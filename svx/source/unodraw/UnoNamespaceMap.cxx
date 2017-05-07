@@ -27,7 +27,6 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <svl/itempool.hxx>
 #include "svx/unoapi.hxx"

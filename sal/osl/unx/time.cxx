@@ -22,7 +22,6 @@
 #include "saltime.hxx"
 #include "system.hxx"
 
-#include <osl/diagnose.h>
 #include <osl/time.h>
 #include <time.h>
 #include <unistd.h>

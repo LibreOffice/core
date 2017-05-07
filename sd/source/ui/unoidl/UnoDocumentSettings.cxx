@@ -31,7 +31,6 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/xtable.hxx>
-#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 

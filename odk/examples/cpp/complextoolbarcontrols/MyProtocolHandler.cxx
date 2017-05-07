@@ -31,7 +31,6 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/diagnose.h>
 
 using namespace com::sun::star::awt;
 using namespace com::sun::star::frame;

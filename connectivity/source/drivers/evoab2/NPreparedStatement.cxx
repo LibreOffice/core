@@ -18,7 +18,6 @@
  */
 
 
-#include <osl/diagnose.h>
 #include "NPreparedStatement.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <cppuhelper/typeprovider.hxx>

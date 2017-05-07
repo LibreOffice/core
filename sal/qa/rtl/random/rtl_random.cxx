@@ -26,7 +26,6 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <osl/diagnose.h>
 #include <rtl/random.h>
 
 #include <string.h>

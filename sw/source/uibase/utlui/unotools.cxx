@@ -26,7 +26,6 @@
 #include <unotools.hxx>
 #include <unoprnms.hxx>
 #include <i18nutil/unicode.hxx>
-#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

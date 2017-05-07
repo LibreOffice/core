@@ -24,7 +24,6 @@
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
-#include <osl/diagnose.h>
 #include <i18nlangtag/mslangid.hxx>
 #include <rtl/math.hxx>
 #include <unotools/charclass.hxx>
