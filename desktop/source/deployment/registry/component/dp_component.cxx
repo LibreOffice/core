@@ -1051,7 +1051,7 @@ Reference<XComponentContext> raise_uno_process(
     Reference<XComponentContext> const & xContext,
     ::rtl::Reference<AbortChannel> const & abortChannel )
 {
-    OSL_ASSERT( xContext.is() );
+    assert( xContext.is() );
 
     OUString url( util::theMacroExpander::get(xContext)->expandMacros( "$URE_BIN_DIR/uno" ) );
 
@@ -1095,7 +1095,7 @@ Reference<XComponentContext> raise_uno_process(
         // try to terminate process:
         if ( osl_terminateProcess( hProcess ) != osl_Process_E_None )
         {
-            OSL_ASSERT( false );
+            assert( false );
         }
         throw;
     }
@@ -1113,7 +1113,7 @@ void extractComponentData(
         componentLoader,
     OUString const & componentUrl)
 {
-    OSL_ASSERT(
+    assert(
         context.is() && registry.is() && data != nullptr && componentLoader.is());
     OUString registryName(registry->getKeyName());
     sal_Int32 prefix = registryName.getLength();
@@ -1588,7 +1588,7 @@ BackendImpl::OtherPlatformPackageImpl::impl_createInstance(OUString const& rServ
 const
 {
     Reference<XComponentContext> const xContext(getMyBackend()->getComponentContext());
-    OSL_ASSERT(xContext.is());
+    assert(xContext.is());
     Reference<XInterface> xService;
     if (xContext.is())
         xService.set(xContext->getServiceManager()->createInstanceWithContext(rService, xContext));

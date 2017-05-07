@@ -321,7 +321,7 @@ uno::Reference< ucb::XProgressHandler > ProgressCmdEnv::getProgressHandler()
 void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const & xRequest )
 {
     uno::Any request( xRequest->getRequest() );
-    OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
+    assert( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
     dp_misc::TRACE( "[dp_gui_cmdenv.cxx] incoming request:\n"
         + ::comphelper::anyToString(request) + "\n");
 
@@ -355,11 +355,11 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         // ignore intermediate errors of legacy packages, i.e.
         // former pkgchk behaviour:
         const uno::Reference< deployment::XPackage > xPackage( wtExc.Context, uno::UNO_QUERY );
-        OSL_ASSERT( xPackage.is() );
+        assert( xPackage.is() );
         if ( xPackage.is() )
         {
             const uno::Reference< deployment::XPackageTypeInfo > xPackageType( xPackage->getPackageType() );
-            OSL_ASSERT( xPackageType.is() );
+            assert( xPackageType.is() );
             if (xPackageType.is())
             {
                 approve = ( xPackage->isBundle() &&
@@ -400,7 +400,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             approve = true;
         else
         {
-            OSL_ASSERT(false);
+            assert(false);
         }
     }
     else if (request >>= verExc)
@@ -419,7 +419,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             id = RID_STR_WARNING_VERSION_GREATER;
             break;
         }
-        OSL_ASSERT( verExc.Deployed.is() );
+        assert( verExc.Deployed.is() );
         bool bEqualNames = verExc.NewDisplayName.equals(
             verExc.Deployed->getDisplayName());
         {
@@ -579,7 +579,7 @@ ExtensionCmdQueue::Thread::Thread( DialogHelper *pDialogHelper,
     m_bStopped( false ),
     m_bWorking( false )
 {
-    OSL_ASSERT( pDialogHelper );
+    assert( pDialogHelper );
 }
 
 

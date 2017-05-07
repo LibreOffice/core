@@ -120,13 +120,13 @@ static OString decodeString( const sal_Char* pEncChars, int nLen)
         if( c == '%')
         {
             --i;
-            OSL_ASSERT( i >= 0);
+            assert( i >= 0);
             c = *(pChar++);
             if( ('0' <= c) && (c <= '9'))
                 c -= '0';
             else
             {
-                OSL_ASSERT( ('A' <= c) && (c <= 'F'));
+                assert( ('A' <= c) && (c <= 'F'));
                 c -= ('A'-10);
             }
         }
@@ -165,7 +165,7 @@ void PersistentMap::readAll()
     char aHeaderBytes[ sizeof(PmapMagic)];
     sal_uInt64 nBytesRead = 0;
     m_MapFile.read( aHeaderBytes, sizeof(aHeaderBytes), nBytesRead);
-    OSL_ASSERT( nBytesRead == sizeof(aHeaderBytes));
+    assert( nBytesRead == sizeof(aHeaderBytes));
     if( nBytesRead != sizeof(aHeaderBytes))
         return;
     // check header magic
@@ -229,13 +229,13 @@ void PersistentMap::flush()
         const OString aKeyString = encodeString( (*it).first);
         const sal_Int32 nKeyLen = aKeyString.getLength();
         m_MapFile.write( aKeyString.getStr(), nKeyLen, nBytesWritten);
-        OSL_ASSERT( nKeyLen == (sal_Int32)nBytesWritten);
+        assert( nKeyLen == (sal_Int32)nBytesWritten);
         m_MapFile.write( "\n", 1, nBytesWritten);
         // write line for value
         const OString& rValString = encodeString( (*it).second);
         const sal_Int32 nValLen = rValString.getLength();
         m_MapFile.write( rValString.getStr(), nValLen, nBytesWritten);
-        OSL_ASSERT( nValLen == (sal_Int32)nBytesWritten);
+        assert( nValLen == (sal_Int32)nBytesWritten);
         m_MapFile.write( "\n", 1, nBytesWritten);
     }
 

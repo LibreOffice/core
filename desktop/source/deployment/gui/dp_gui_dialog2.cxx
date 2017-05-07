@@ -91,7 +91,7 @@ struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
     const OUString operator () () {
         const SolarMutexGuard guard;
         std::unique_ptr< ResMgr > const resmgr( ResMgr::CreateResMgr( "fps_office" ) );
-        OSL_ASSERT( resmgr.get() != nullptr );
+        assert( resmgr.get() != nullptr );
         return ResId(STR_FILTERNAME_ALL, *resmgr.get()).toString();
     }
 };
@@ -649,7 +649,7 @@ bool ExtMgrDialog::updatePackage( const uno::Reference< deployment::XPackage > &
         dp_misc::getIdentifier(xPackage), xPackage->getName(), uno::Reference<ucb::XCommandEnvironment>());
     uno::Reference<deployment::XPackage> extension =
         dp_misc::getExtensionWithHighestVersion(seqExtensions);
-    OSL_ASSERT(extension.is());
+    assert(extension.is());
     std::vector< css::uno::Reference< css::deployment::XPackage > > vEntries;
     vEntries.push_back(extension);
 
@@ -732,7 +732,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
 
     m_sLastFolderURL = xFilePicker->getDisplayDirectory();
     uno::Sequence< OUString > files( xFilePicker->getSelectedFiles() );
-    OSL_ASSERT( files.getLength() > 0 );
+    assert( files.getLength() > 0 );
     return files;
 }
 

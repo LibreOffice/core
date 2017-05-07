@@ -239,7 +239,7 @@ void PackageRegistryImpl::insertBackend(
                                 m_mediaType2backend.find(
                                     /* media-type of pr. added backend */
                                     ins.first->second ) );
-                            OSL_ASSERT(
+                            assert(
                                 iFind != m_mediaType2backend.end() );
                             if (iFind != m_mediaType2backend.end())
                                 m_ambiguousBackends.insert( iFind->second );
@@ -358,7 +358,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
     Reference<lang::XServiceInfo> xServiceInfo(
         extensionBackend, UNO_QUERY_THROW );
 
-    OSL_ASSERT(xServiceInfo.is());
+    assert(xServiceInfo.is());
     OUString registryCachePath(
         makeURL( cachePath,
                  ::rtl::Uri::encode(
@@ -421,7 +421,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
         }
         allBackends.insert( that->m_ambiguousBackends.begin(),
                             that->m_ambiguousBackends.end() );
-        OSL_ASSERT( allBackends == that->m_allBackends );
+        assert( allBackends == that->m_allBackends );
     }
 #endif
 

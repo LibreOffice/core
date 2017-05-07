@@ -152,7 +152,7 @@ void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRe
             bApprove = true;
         else
         {
-            OSL_ASSERT(false);
+            assert(false);
         }
     }
 

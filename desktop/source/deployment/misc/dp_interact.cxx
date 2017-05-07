@@ -46,7 +46,7 @@ public:
     InteractionContinuationImpl( Type const & type, bool * pselect )
         : m_type( type ),
           m_pselect( pselect )
-        { OSL_ASSERT(
+        { assert(
             cppu::UnoType<task::XInteractionContinuation>::get().isAssignableFrom(m_type) ); }
 
     // XInterface
@@ -97,7 +97,7 @@ bool interactContinuation( Any const & request,
                            Reference<XCommandEnvironment> const & xCmdEnv,
                            bool * pcont, bool * pabort )
 {
-    OSL_ASSERT(
+    assert(
         cppu::UnoType<task::XInteractionContinuation>::get().isAssignableFrom(
             continuation ) );
     if (xCmdEnv.is()) {

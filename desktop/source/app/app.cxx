@@ -812,7 +812,7 @@ OUString    Desktop::CreateErrorMsgString(
 
         case ::utl::Bootstrap::NO_FAILURE:
         {
-            OSL_ASSERT(false);
+            assert(false);
         }
         break;
     }
@@ -892,7 +892,7 @@ void Desktop::HandleBootstrapErrors(
 
                 case ::utl::Bootstrap::NO_FAILURE:
                 {
-                    OSL_ASSERT(false);
+                    assert(false);
                 }
                 break;
             }
@@ -1320,7 +1320,7 @@ void Desktop::Exception(ExceptionCategory nCategory)
         }
     }
 
-    OSL_ASSERT(false); // unreachable
+    assert(false); // unreachable
 }
 
 void Desktop::AppEvent( const ApplicationEvent& rAppEvent )

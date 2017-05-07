@@ -140,7 +140,7 @@ void BackendDb::removeElement(OUString const & sXPathExpression)
         //There must not be any other entry with the same url
         const Reference<css::xml::dom::XNode> nextNode =
             xpathApi->selectSingleNode(root, sXPathExpression);
-        OSL_ASSERT(! nextNode.is());
+        assert(! nextNode.is());
 #endif
     }
     catch(const css::uno::Exception &)
@@ -277,7 +277,7 @@ void BackendDb::writeVectorOfPair(
         if (vecPairs.empty())
             return;
         const OUString sNameSpace = getDbNSName();
-        OSL_ASSERT(!sNameSpace.isEmpty());
+        assert(!sNameSpace.isEmpty());
         const OUString sPrefix(getNSPrefix() + ":");
         const Reference<css::xml::dom::XDocument> doc = getDocument();
         const Reference<css::xml::dom::XNode> root = doc->getFirstChild();
@@ -346,7 +346,7 @@ BackendDb::readVectorOfPair(
 {
     try
     {
-        OSL_ASSERT(parent.is());
+        assert(parent.is());
         const OUString sPrefix(getNSPrefix() + ":");
         const Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
         const OUString sExprPairs(
@@ -366,7 +366,7 @@ BackendDb::readVectorOfPair(
             const OUString sExprSecond(sPrefix + sSecondTagName + "/text()");
             const Reference<css::xml::dom::XNode> second =
                 xpathApi->selectSingleNode(aPair, sExprSecond);
-            OSL_ASSERT(first.is() && second.is());
+            assert(first.is() && second.is());
 
             retVector.push_back(std::make_pair(
                                     first->getNodeValue(), second->getNodeValue()));
@@ -484,7 +484,7 @@ Reference<css::xml::dom::XNode> BackendDb::writeKeyElement(
             getXPathAPI()->selectSingleNode(root, sExpression);
         if (existingNode.is())
         {
-            OSL_ASSERT(false);
+            assert(false);
             //replace the existing entry.
             removeEntry(url);
         }
@@ -539,7 +539,7 @@ std::list< OUString> BackendDb::readList(
 {
     try
     {
-        OSL_ASSERT(parent.is());
+        assert(parent.is());
         const OUString sPrefix(getNSPrefix() + ":");
         const Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
         const OUString sExprList(
@@ -635,7 +635,7 @@ void RegisteredDb::addEntry(OUString const & url)
                 sPrefix + ":" + sEntry + "[@url = \"" + url + "\"]");
             Reference<css::xml::dom::XNode> _extensionNode =
                 getXPathAPI()->selectSingleNode(root, sExpression);
-            OSL_ASSERT(! _extensionNode.is());
+            assert(! _extensionNode.is());
 #endif
             Reference<css::xml::dom::XElement> helpElement(
                 doc->createElementNS(sNameSpace, sPrefix +  ":" + sEntry));

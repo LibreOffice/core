@@ -691,7 +691,7 @@ void BackendImpl::PackageImpl::processPackage_(
         if (getMyBackend()->activateEntry(getURL()))
         {
             ::boost::optional<ConfigurationBackendDb::Data> data = that->readDataFromDb(url);
-            OSL_ASSERT(data);
+            assert(data);
             that->addToConfigmgrIni( m_isSchema, false, data->iniEntry, xCmdEnv );
         }
         else
@@ -779,7 +779,7 @@ void BackendImpl::PackageImpl::processPackage_(
             }
             catch(const Exception&)
             {
-                OSL_ASSERT(false);
+                assert(false);
             }
         }
 #endif

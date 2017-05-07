@@ -223,7 +223,7 @@ void ServiceImpl::startExecuteModal(
         }
 
         if (! bOfficePipePresent) {
-            OSL_ASSERT( ! bAppUp );
+            assert( ! bAppUp );
             app.reset( new MyApp );
             if (! InitVCL() )
                 throw RuntimeException( "Cannot initialize VCL!",

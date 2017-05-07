@@ -81,7 +81,7 @@ struct UnoRc : public rtl::StaticWithInit<
         ::rtl::Bootstrap::expandMacros( unorc );
         std::shared_ptr< ::rtl::Bootstrap > ret(
             new ::rtl::Bootstrap( unorc ) );
-        OSL_ASSERT( ret->getHandle() != nullptr );
+        assert( ret->getHandle() != nullptr );
         return ret;
     }
 };
@@ -198,13 +198,13 @@ bool compareExtensionFolderWithLastSynchronizedFile(
         }
         else
         {
-            OSL_ASSERT(false);
+            assert(false);
             bNeedsSync = true;
         }
     }
     else
     {
-        OSL_ASSERT(false);
+        assert(false);
         bNeedsSync = true;
     }
 
@@ -227,7 +227,7 @@ bool needToSyncRepository(OUString const & name)
     }
     else
     {
-        OSL_ASSERT(false);
+        assert(false);
         return true;
     }
     ::rtl::Bootstrap::expandMacros(folder);
@@ -296,7 +296,7 @@ OUString makeURL( OUString const & baseURL, OUString const & relPath_ )
 
 OUString makeURLAppendSysPathSegment( OUString const & baseURL, OUString const & segment )
 {
-    OSL_ASSERT(segment.indexOf(u'/') == -1);
+    assert(segment.indexOf(u'/') == -1);
 
     ::rtl::Uri::encode(
         segment, rtl_UriCharClassPchar, rtl_UriEncodeIgnoreEscapes,
@@ -314,7 +314,7 @@ OUString expandUnoRcTerm( OUString const & term_ )
 
 OUString makeRcTerm( OUString const & url )
 {
-    OSL_ASSERT( url.match( "vnd.sun.star.expand:" ));
+    assert( url.match( "vnd.sun.star.expand:" ));
     if (url.match( "vnd.sun.star.expand:" )) {
         // cut protocol:
         OUString rcterm( url.copy( sizeof ("vnd.sun.star.expand:") - 1 ) );
@@ -508,7 +508,7 @@ OUString readConsole()
     //unopkg.com feeds unopkg.exe with wchar_t|s
     if (ReadFile( GetStdHandle(STD_INPUT_HANDLE), &aBuffer, sizeof(aBuffer), &dwRead, nullptr ) )
     {
-        OSL_ASSERT((dwRead % 2) == 0);
+        assert((dwRead % 2) == 0);
         OUString value( aBuffer, dwRead / 2);
         return value.trim();
     }

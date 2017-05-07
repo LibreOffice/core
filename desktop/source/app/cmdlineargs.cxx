@@ -87,7 +87,7 @@ public:
     virtual boost::optional< OUString > getCwdUrl() override { return m_cwdUrl; }
 
     virtual bool next(OUString * argument) override {
-        OSL_ASSERT(argument != nullptr);
+        assert(argument != nullptr);
         if (m_index < m_count) {
             rtl_getAppCommandArg(m_index++, &argument->pData);
             return true;

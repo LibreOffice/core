@@ -66,7 +66,7 @@ OString newKey(OUString const & id) {
 {
     ::dp_manager::ActivePackages::Data d;
     sal_Int32 i = value.indexOf(';');
-    OSL_ASSERT(i >= 0);
+    assert(i >= 0);
     d.temporaryName = OUString(value.getStr(), i, RTL_TEXTENCODING_UTF8);
     d.fileName = fileName;
     d.mediaType = OUString(
@@ -78,11 +78,11 @@ OString newKey(OUString const & id) {
 ::dp_manager::ActivePackages::Data decodeNewData(OString const & value) {
     ::dp_manager::ActivePackages::Data d;
     sal_Int32 i1 = value.indexOf(separator);
-    OSL_ASSERT(i1 >= 0);
+    assert(i1 >= 0);
     d.temporaryName = OUString(
         value.getStr(), i1, RTL_TEXTENCODING_UTF8);
     sal_Int32 i2 = value.indexOf(separator, i1 + 1);
-    OSL_ASSERT(i2 >= 0);
+    assert(i2 >= 0);
     d.fileName = OUString(
         value.getStr() + i1 + 1, i2 - i1 - 1, RTL_TEXTENCODING_UTF8);
     sal_Int32 i3 = value.indexOf(separator, i2 + 1);

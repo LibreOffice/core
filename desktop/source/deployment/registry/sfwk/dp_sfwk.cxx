@@ -294,7 +294,7 @@ void BackendImpl::PackageImpl:: initPackageHandler()
     }
     else
     {
-        OSL_ASSERT( false );
+        assert( false );
         // NOT supported at the moment // TODO
     }
 

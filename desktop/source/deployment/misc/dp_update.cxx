@@ -90,7 +90,7 @@ void getOwnUpdateInfos(
     bool bAllHaveOwnUpdateInformation = true;
     for (UpdateInfoMap::iterator i = inout_map.begin(); i != inout_map.end(); ++i)
     {
-        OSL_ASSERT(i->second.extension.is());
+        assert(i->second.extension.is());
         Sequence<OUString> urls(i->second.extension->getUpdateInformationURLs());
         if (urls.getLength())
         {
@@ -113,7 +113,7 @@ void getOwnUpdateInfos(
                 boost::optional< OUString > id2(infoset.getIdentifier());
                 if (!id2)
                     continue;
-                OSL_ASSERT(*id2 == id);
+                assert(*id2 == id);
                 if (*id2 == id)
                 {
                     i->second.version = infoset.getVersion();
@@ -137,7 +137,7 @@ void getDefaultUpdateInfos(
      std::vector<std::pair<Reference<deployment::XPackage>, uno::Any> > & out_errors)
 {
     const OUString sDefaultURL(dp_misc::getExtensionDefaultUpdateURL());
-    OSL_ASSERT(!sDefaultURL.isEmpty());
+    assert(!sDefaultURL.isEmpty());
 
     Any anyError;
     Sequence< Reference< xml::dom::XElement > >
@@ -175,7 +175,7 @@ void getDefaultUpdateInfos(
 
 bool containsBundledOnly(Sequence<Reference<deployment::XPackage> > const & sameIdExtensions)
 {
-    OSL_ASSERT(sameIdExtensions.getLength() == 3);
+    assert(sameIdExtensions.getLength() == 3);
     return !sameIdExtensions[0].is() && !sameIdExtensions[1].is() && sameIdExtensions[2].is();
 }
 
@@ -187,7 +187,7 @@ bool onlyBundledExtensions(
     Reference<deployment::XExtensionManager> const & xExtMgr,
     std::vector< Reference<deployment::XPackage > > const * extensionList)
 {
-    OSL_ASSERT(xExtMgr.is());
+    assert(xExtMgr.is());
     bool bOnlyBundled = true;
     if (extensionList)
     {
@@ -341,7 +341,7 @@ UpdateInfoMap getOnlineUpdateInfos(
     std::vector<Reference<deployment::XPackage > > const * extensionList,
     std::vector<std::pair< Reference<deployment::XPackage>, uno::Any> > & out_errors)
 {
-    OSL_ASSERT(xExtMgr.is());
+    assert(xExtMgr.is());
     UpdateInfoMap infoMap;
     if (!xExtMgr.is() || onlyBundledExtensions(xExtMgr, extensionList))
         return infoMap;
@@ -357,12 +357,12 @@ UpdateInfoMap getOnlineUpdateInfos(
             uno::Sequence<Reference<deployment::XPackage> > const &   seqExt = seqAllExt[pos];
 
             Reference<deployment::XPackage> extension = getExtensionWithHighestVersion(seqExt);
-            OSL_ASSERT(extension.is());
+            assert(extension.is());
 
             std::pair<UpdateInfoMap::iterator, bool> insertRet = infoMap.insert(
                 UpdateInfoMap::value_type(
                     dp_misc::getIdentifier(extension), UpdateInfo(extension)));
-            OSL_ASSERT(insertRet.second);
+            assert(insertRet.second);
             (void)insertRet;
         }
     }
@@ -371,11 +371,11 @@ UpdateInfoMap getOnlineUpdateInfos(
         typedef std::vector<Reference<deployment::XPackage > >::const_iterator CIT;
         for (CIT i = extensionList->begin(); i != extensionList->end(); ++i)
         {
-            OSL_ASSERT(i->is());
+            assert(i->is());
             std::pair<UpdateInfoMap::iterator, bool> insertRet = infoMap.insert(
                 UpdateInfoMap::value_type(
                     dp_misc::getIdentifier(*i), UpdateInfo(*i)));
-            OSL_ASSERT(insertRet.second);
+            assert(insertRet.second);
             (void)insertRet;
         }
     }
@@ -402,7 +402,7 @@ OUString getHighestVersion(
     case 1: return sharedVersion;
     case 2: return bundledVersion;
     case 3: return onlineVersion;
-    default: OSL_ASSERT(false);
+    default: assert(false);
     }
 
     return OUString();

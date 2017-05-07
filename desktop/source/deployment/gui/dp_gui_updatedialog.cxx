@@ -314,13 +314,13 @@ void UpdateDialog::Thread::execute()
                 dp_misc::getIdentifier(info.extension), info.extension->getName(),
                 uno::Reference<ucb::XCommandEnvironment>());
         } catch ( const lang::IllegalArgumentException& ) {
-            OSL_ASSERT(false);
+            assert(false);
             continue;
         } catch ( const css::ucb::CommandFailedException& ) {
-            OSL_ASSERT(false);
+            assert(false);
             continue;
         }
-        OSL_ASSERT(extensions.getLength() == 3);
+        assert(extensions.getLength() == 3);
         if (extensions[0].is() )
             sVersionUser = extensions[0]->getVersion();
         if (extensions[1].is() )
@@ -393,7 +393,7 @@ void UpdateDialog::Thread::handleSpecificError(
 OUString UpdateDialog::Thread::getUpdateDisplayString(
     dp_gui::UpdateData const & data, OUString const & version) const
 {
-    OSL_ASSERT(data.aInstalledPackage.is());
+    assert(data.aInstalledPackage.is());
     OUStringBuffer b(data.aInstalledPackage->getDisplayName());
     b.append(' ');
     {
@@ -429,7 +429,7 @@ void UpdateDialog::Thread::prepareUpdateData(
     if (!updateInfo.is())
         return;
     dp_misc::DescriptionInfoset infoset(m_context, updateInfo);
-    OSL_ASSERT(!infoset.getVersion().isEmpty());
+    assert(!infoset.getVersion().isEmpty());
     uno::Sequence< uno::Reference< xml::dom::XElement > > ds(
         dp_misc::Dependencies::check(infoset));
 
@@ -526,7 +526,7 @@ UpdateDialog::UpdateDialog(
     get(m_pOk, "INSTALL");
     get(m_pClose, "gtk-close");
     get(m_pHelp, "gtk-help");
-    OSL_ASSERT(updateData != nullptr);
+    assert(updateData != nullptr);
 
     m_xExtensionManager = deployment::ExtensionManager::get( context );
 
@@ -609,7 +609,7 @@ UpdateDialog::CheckListBox::CheckListBox( vcl::Window* pParent, UpdateDialog & d
 
 sal_uInt16 UpdateDialog::CheckListBox::getItemCount() const {
     sal_uLong i = GetEntryCount();
-    OSL_ASSERT(i <= std::numeric_limits< sal_uInt16 >::max());
+    assert(i <= std::numeric_limits< sal_uInt16 >::max());
     return sal::static_int_cast< sal_uInt16 >(i);
 }
 
@@ -704,7 +704,7 @@ sal_uInt16 UpdateDialog::insertItem( UpdateDialog::Index *pEntry, SvLBoxButtonKi
         if ( p == pEntry )
             return i;
     }
-    OSL_ASSERT(false);
+    assert(false);
     return 0;
 }
 
@@ -933,7 +933,7 @@ bool UpdateDialog::showDescription(uno::Reference< xml::dom::XNode > const & aUp
 
 bool UpdateDialog::showDescription(uno::Reference< deployment::XPackage > const & aExtension)
 {
-    OSL_ASSERT(aExtension.is());
+    assert(aExtension.is());
     beans::StringPair pubInfo = aExtension->getPublisherInfo();
     return showDescription(std::make_pair(pubInfo.First, pubInfo.Second),
                            "");
@@ -1219,7 +1219,7 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler, SvTreeListBox*, void)
                 break;
             }
             default:
-                OSL_ASSERT(false);
+                assert(false);
                 break;
         }
     }
@@ -1279,7 +1279,7 @@ IMPL_LINK_NOARG(UpdateDialog, okHandler, Button*, void)
     typedef std::vector<UpdateData>::const_iterator CIT;
     for (CIT i = m_enabledUpdates.begin(); i < m_enabledUpdates.end(); ++i)
     {
-        OSL_ASSERT(i->aInstalledPackage.is());
+        assert(i->aInstalledPackage.is());
         //If the user has no write access to the shared folder then the update
         //for a shared extension is disable, that is it cannot be in m_enabledUpdates
     }

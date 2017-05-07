@@ -88,7 +88,7 @@ css::uno::Reference< css::xml::dom::XNode > EmptyNodeList::item(::sal_Int32)
 OUString getNodeValue(
     css::uno::Reference< css::xml::dom::XNode > const & node)
 {
-    OSL_ASSERT(node.is());
+    assert(node.is());
     try {
         return node->getNodeValue();
     } catch (const css::xml::dom::DOMException & e) {
@@ -583,7 +583,7 @@ std::pair< OUString, OUString > DescriptionInfoset::getLocalizedPublisherNameAnd
         } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
-        OSL_ASSERT(xPathName.is());
+        assert(xPathName.is());
         if (xPathName.is())
             sPublisherName = xPathName->getNodeValue();
 
@@ -594,7 +594,7 @@ std::pair< OUString, OUString > DescriptionInfoset::getLocalizedPublisherNameAnd
         } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
-        OSL_ASSERT(xURL.is());
+        assert(xURL.is());
         if (xURL.is())
            sURL = xURL->getNodeValue();
     }
@@ -711,7 +711,7 @@ css::uno::Reference<css::xml::dom::XNode>
 DescriptionInfoset::matchLanguageTag(
     css::uno::Reference< css::xml::dom::XNode > const & xParent, OUString const & rTag) const
 {
-    OSL_ASSERT(xParent.is());
+    assert(xParent.is());
     css::uno::Reference<css::xml::dom::XNode> nodeMatch;
 
     //first try exact match for lang
@@ -741,7 +741,7 @@ css::uno::Reference<css::xml::dom::XNode>
 DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom::XNode >
                                     const & xParent) const
 {
-    OSL_ASSERT(xParent.is());
+    assert(xParent.is());
     if ( xParent->getNodeName() == "simple-license" )
     {
         css::uno::Reference<css::xml::dom::XNode> nodeDefault;
@@ -792,7 +792,7 @@ OUString DescriptionInfoset::getLocalizedHREFAttrFromChild(
         } catch (const css::xml::xpath::XPathException &) {
             // ignore
         }
-        OSL_ASSERT(xURL.is());
+        assert(xURL.is());
         if (xURL.is())
             sURL = xURL->getNodeValue();
     }

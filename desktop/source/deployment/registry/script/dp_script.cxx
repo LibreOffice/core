@@ -157,7 +157,7 @@ BackendImpl::BackendImpl(
     m_typeInfos[ 0 ] = m_xBasicLibTypeInfo;
     m_typeInfos[ 1 ] = m_xDialogLibTypeInfo;
 
-    OSL_ASSERT( ! transientMode() );
+    assert( ! transientMode() );
 
     if (!transientMode())
     {

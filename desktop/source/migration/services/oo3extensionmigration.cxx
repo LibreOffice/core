@@ -399,7 +399,7 @@ uno::Reference< ucb::XProgressHandler > TmpRepositoryCommandEnv::getProgressHand
 void TmpRepositoryCommandEnv::handle(
     uno::Reference< task::XInteractionRequest> const & xRequest )
 {
-    OSL_ASSERT( xRequest->getRequest().getValueTypeClass() == uno::TypeClass_EXCEPTION );
+    assert( xRequest->getRequest().getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
     bool approve = true;
 

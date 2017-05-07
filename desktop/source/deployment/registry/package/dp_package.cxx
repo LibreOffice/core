@@ -821,7 +821,7 @@ void BackendImpl::PackageImpl::processPackage_(
                                  static_cast<OWeakObject *>(this), exc ) ),
                         cppu::UnoType<task::XInteractionApprove>::get(), xCmdEnv,
                         &approve, &abort )) {
-                    OSL_ASSERT( !approve && !abort );
+                    assert( !approve && !abort );
                     if (m_legacyBundle) // default for legacy packages: ignore
                         continue;
                     // no selection at all, so rethrow;
@@ -900,7 +900,7 @@ void BackendImpl::PackageImpl::processPackage_(
                                  static_cast<OWeakObject *>(this), exc ) ),
                         cppu::UnoType<task::XInteractionApprove>::get(), xCmdEnv,
                         &approve, &abort )) {
-                    OSL_ASSERT( !approve && !abort );
+                    assert( !approve && !abort );
                     if (m_legacyBundle) // default for legacy packages: ignore
                         continue;
                     // no selection at all, so rethrow
@@ -1080,7 +1080,7 @@ void BackendImpl::PackageImpl::exportTo(
         {
             Reference<deployment::XPackage> const & xPackage = pbundle[ pos ];
             OUString url_( expandUnoRcUrl( xPackage->getURL() ) );
-            OSL_ASSERT( url_.getLength() >= baseURLlen );
+            assert( url_.getLength() >= baseURLlen );
             OUString fullPath;
             if (url_.getLength() > baseURLlen)
                 fullPath = url_.copy( baseURLlen + 1 );
@@ -1096,7 +1096,7 @@ void BackendImpl::PackageImpl::exportTo(
             const Reference<deployment::XPackageTypeInfo> xPackageType(
                 xPackage->getPackageType() );
             OUString mediaType;
-            OSL_ASSERT( xPackageType.is() );
+            assert( xPackageType.is() );
             if (xPackageType.is())
                 mediaType = xPackageType->getMediaType();
             else
@@ -1252,7 +1252,7 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
         {
             const Reference<deployment::XPackageTypeInfo> xPackageType(
                 (*iPos)->getPackageType() );
-            OSL_ASSERT( xPackageType.is() );
+            assert( xPackageType.is() );
             if (xPackageType.is())
             {
                 const OUString mediaType( xPackageType->getMediaType() );
@@ -1271,7 +1271,7 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
             pret[ lower_end ] = *iPos;
             ++lower_end;
         }
-        OSL_ASSERT( lower_end == upper_end );
+        assert( lower_end == upper_end );
 
         const ::osl::MutexGuard guard( getMutex() );
         pBundle = m_pBundle;
@@ -1312,7 +1312,7 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
         try {
             xPackage.set( getMyBackend()->m_xRootRegistry->bindPackage(
                               url, mediaType, bRemoved, identifier, xCmdEnv ) );
-            OSL_ASSERT( xPackage.is() );
+            assert( xPackage.is() );
         } catch (css::lang::IllegalArgumentException & e) {
             css::uno::Any exc(cppu::getCaughtException());
             throw css::lang::WrappedTargetException(
@@ -1340,7 +1340,7 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
     if (xPackage.is()) {
         const Reference<deployment::XPackageTypeInfo> xPackageType(
             xPackage->getPackageType() );
-        OSL_ASSERT( xPackageType.is() );
+        assert( xPackageType.is() );
         // ignore any nested bundles:
         if (xPackageType.is() && isBundle_( xPackageType->getMediaType() ))
             xPackage.clear();
@@ -1354,7 +1354,7 @@ void BackendImpl::PackageImpl::scanBundle(
     ::rtl::Reference<AbortChannel> const & abortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
-    OSL_ASSERT( !m_legacyBundle );
+    assert( !m_legacyBundle );
 
     OUString mfUrl( makeURL( m_url_expanded, "META-INF/manifest.xml" ) );
     ::ucbhelper::Content manifestContent;
@@ -1540,7 +1540,7 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
         if (xPackage.is()) {
             const Reference<deployment::XPackageTypeInfo> xPackageType(
                 xPackage->getPackageType() );
-            OSL_ASSERT( xPackageType.is() );
+            assert( xPackageType.is() );
             if (xPackageType.is())
                 mediaType = xPackageType->getMediaType();
 
@@ -1588,7 +1588,7 @@ BackendImpl::PackageImpl::getPackagesFromDb(
     {
         Reference<deployment::XPackage> xExtension =
             bindBundleItem(i->first, i->second, true, m_identifier, xCmdEnv);
-        OSL_ASSERT(xExtension.is());
+        assert(xExtension.is());
         if (xExtension.is())
             retVector.push_back(xExtension);
     }

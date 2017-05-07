@@ -142,7 +142,7 @@ private:
 
 JavaMigration::~JavaMigration()
 {
-    OSL_ASSERT(m_aStack.empty());
+    assert(m_aStack.empty());
 }
 
 OUString jvmfwk_getImplementationName()
@@ -346,7 +346,7 @@ void SAL_CALL  JavaMigration::setPropertyValue(
              break;
          }
         default:
-            OSL_ASSERT(false);
+            assert(false);
         }
     }
 }

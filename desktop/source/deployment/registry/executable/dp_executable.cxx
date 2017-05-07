@@ -228,7 +228,7 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
     {
         if (!isUrlTargetInExtension())
         {
-            OSL_ASSERT(false);
+            assert(false);
             return;
         }
         sal_uInt64 attributes = 0;
@@ -243,7 +243,7 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
             else if (!(getMyBackend()->m_context == "bundled"))
                 //Bundled extension are required to be in the properly
                 //installed. That is an executable must have the right flags
-                OSL_ASSERT(false);
+                assert(false);
 
             //This won't have affect on Windows
             osl::File::setAttributes(
@@ -272,7 +272,7 @@ bool BackendImpl::ExecutablePackageImpl::isUrlTargetInExtension()
     else if (getMyBackend()->m_context == "bundled")
         sExtensionDir = dp_misc::expandUnoRcTerm("$BUNDLED_EXTENSIONS");
     else
-        OSL_ASSERT(false);
+        assert(false);
     //remove file ellipses
     if (osl::File::E_None == osl::File::getAbsoluteFileURL(OUString(), sExtensionDir, sExtensionDir))
     {
