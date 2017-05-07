@@ -17,6 +17,9 @@
  */
 package com.sun.star.wizards.form;
 
+import java.util.Map;
+import java.util.HashMap;
+
 import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.XControl;
@@ -44,11 +47,15 @@ public class UIControlArranger
     private final XRadioButton optAlignLeft;
     private final XRadioButton optAlignRight;
     private final XControl flnLabelPlacement;
-    private final String[] HelpTexts = new String[4];
+    private final Map helpTexts = new HashMap(4);
     private final ArrangeButtonList[] m_aArrangeList = new ArrangeButtonList[2];
     private final Integer IControlStep;
     private static final int SOBASEIMAGEYPOSITION = 66;
     private static final int SOIMAGELISTHEIGHT = 60;
+    private static final String ARRANGELISTSIDE = "private:graphicrepository/wizards/res/formarrangelistside_42.png";
+    private static final String ARRANGELISTTOP = "private:graphicrepository/wizards/res/formarrangelisttop_42.png";
+    private static final String ARRANGETABLE = "private:graphicrepository/wizards/res/formarrangetable_42.png";
+    private static final String ARRANGEFREE = "private:graphicrepository/wizards/res/formarrangefree_42.png";
 
     public UIControlArranger(FormWizard _CurUnoDialog, FormDocument _curFormDocument)
     {
@@ -102,16 +109,23 @@ public class UIControlArranger
                 });
 
 
-        HelpTexts[0] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 36); // "Columnar - Labels Left"
-        HelpTexts[1] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 37); // "Columnar - Labels of Top"
-        HelpTexts[2] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40); // "As Data Sheet"
-        HelpTexts[3] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 39); // In Blocks - Labels Above"
-
         DefaultListModel imageModel = new DefaultListModel();
-        imageModel.addElement("private:graphicrepository/wizards/res/formarrangelistside_42.png");
-        imageModel.addElement("private:graphicrepository/wizards/res/formarrangelisttop_42.png");
-        imageModel.addElement("private:graphicrepository/wizards/res/formarrangetable_42.png");
-        imageModel.addElement("private:graphicrepository/wizards/res/formarrangefree_42.png");
+        imageModel.addElement(ARRANGELISTSIDE);
+        imageModel.addElement(ARRANGELISTTOP);
+        imageModel.addElement(ARRANGETABLE);
+        imageModel.addElement(ARRANGEFREE);
+
+        // "Columnar - Labels Left"
+        helpTexts.put(ARRANGELISTSIDE, CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 36));
+
+        // "Columnar - Labels of Top"
+        helpTexts.put(ARRANGELISTTOP, CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 37));
+
+        // "As Data Sheet"
+        helpTexts.put(ARRANGETABLE, CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40));
+
+        // "In Blocks - Labels Above"
+        helpTexts.put(ARRANGEFREE, CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 39));
 
         String sMainArrangementHeader = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 41); // "Arrangement of the main form"
         m_aArrangeList[0] = new ArrangeButtonList(0, imageModel, sMainArrangementHeader);
@@ -134,7 +148,7 @@ public class UIControlArranger
             {
                 return PropertyNames.EMPTY_STRING;
             }
-            return HelpTexts[((Integer) listItem).intValue()];
+            return (String) helpTexts.get(listItem);
 
         }
     }
