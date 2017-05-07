@@ -113,16 +113,9 @@ void SAL_CALL VCLXAccessibleList::disposing()
     VCLXAccessibleComponent::disposing();
 
     // Dispose all items in the list.
-    clearItems();
+    m_aAccessibleChildren.clear();
 
     m_pListBoxHelper.reset();
-}
-
-
-void VCLXAccessibleList::clearItems()
-{
-    // Clear the list itself and delete all the rest.
-    ListItems().swap(m_aAccessibleChildren); // clear and minimize
 }
 
 
@@ -512,7 +505,7 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 nPos)
 
 void VCLXAccessibleList::HandleChangedItemList()
 {
-    clearItems();
+    m_aAccessibleChildren.clear();
     NotifyAccessibleEvent (
         AccessibleEventId::INVALIDATE_ALL_CHILDREN,
         Any(), Any());
