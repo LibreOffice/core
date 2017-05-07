@@ -58,7 +58,6 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
     virtual void KeyInput(const KeyEvent& rKEvt) override;
     virtual void Command(const CommandEvent& rCEvt) override;
 
-    DECL_LINK(MenuSelectHdl, Menu *, bool);
     DECL_LINK(ModifyTimerHdl, Timer *, void);
     DECL_LINK(CursorMoveTimerHdl, Timer *, void);
 

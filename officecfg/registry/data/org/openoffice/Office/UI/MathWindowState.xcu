@@ -20,9 +20,14 @@
 <oor:component-data xmlns:install="http://openoffice.org/2004/installation" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="MathWindowState" oor:package="org.openoffice.Office.UI">
   <node oor:name="UIElements">
     <node oor:name="States">
+      <node oor:name="private:resource/popupmenu/edit" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Edit Panel</value>
+        </prop>
+      </node>
       <node oor:name="private:resource/popupmenu/view" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Work Area</value>
+          <value xml:lang="en-US">View Panel</value>
         </prop>
       </node>
       <node oor:name="private:resource/toolbar/standardbar" oor:op="replace">

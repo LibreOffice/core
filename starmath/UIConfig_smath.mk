@@ -14,6 +14,7 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/smath,\
 ))
 
 $(eval $(call gb_UIConfig_add_popupmenufiles,modules/smath,\
+	starmath/uiconfig/smath/popupmenu/edit \
 	starmath/uiconfig/smath/popupmenu/view \
 ))
 
@@ -30,7 +31,6 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/smath,\
 $(eval $(call gb_UIConfig_add_uifiles,modules/smath,\
 	starmath/uiconfig/smath/ui/alignmentdialog \
 	starmath/uiconfig/smath/ui/catalogdialog \
-	starmath/uiconfig/smath/ui/commandmenu \
 	starmath/uiconfig/smath/ui/dockingelements \
 	starmath/uiconfig/smath/ui/fontdialog \
 	starmath/uiconfig/smath/ui/fontsizedialog \

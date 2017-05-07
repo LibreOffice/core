@@ -341,29 +341,9 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         GetParent()->ToTop();
 
         Point aPoint = rCEvt.GetMousePosPixel();
-
-        VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/smath/ui/commandmenu.ui", "");
-        VclPtr<PopupMenu> xPopupMenu(aBuilder.get_menu("menu"));
-
-        // added for replaceability of context menus
-        VclPtr<Menu> pMenu;
-        css::ui::ContextMenuExecuteEvent aEvent;
-        aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
-        aEvent.ExecutePosition.X = aPoint.X();
-        aEvent.ExecutePosition.Y = aPoint.Y();
-        OUString sDummy;
-        if ( GetView()->TryContextMenuInterception( *xPopupMenu, sDummy, pMenu, aEvent ) )
-        {
-            if ( pMenu )
-            {
-                xPopupMenu.disposeAndClear();
-                xPopupMenu = static_cast<PopupMenu*>(pMenu.get());
-            }
-        }
-
-        xPopupMenu->SetSelectHdl(LINK(this, SmEditWindow, MenuSelectHdl));
-
-        xPopupMenu->Execute( this, aPoint );
+        SmViewShell* pViewSh = rCmdBox.GetView();
+        if (pViewSh)
+            pViewSh->GetViewFrame()->GetDispatcher()->ExecutePopup("edit", this, &aPoint);
         bForwardEvt = false;
     }
     else if (rCEvt.GetCommand() == CommandEventId::Wheel)
@@ -395,16 +375,6 @@ bool SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
     }
 
     return bCommandHandled;
-}
-
-IMPL_LINK( SmEditWindow, MenuSelectHdl, Menu *, pMenu, bool )
-{
-    SmViewShell *pViewSh = rCmdBox.GetView();
-    if (pViewSh)
-        pViewSh->GetViewFrame()->GetDispatcher()->ExecuteList(
-                SID_INSERTCOMMANDTEXT, SfxCallMode::RECORD,
-                { new SfxStringItem(SID_INSERTCOMMANDTEXT, OUString::fromUtf8(pMenu->GetCurItemIdent())) });
-    return false;
 }
 
 void SmEditWindow::KeyInput(const KeyEvent& rKEvt)

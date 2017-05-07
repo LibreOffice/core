@@ -141,7 +141,68 @@
           <value>9</value>
         </prop>
       </node>
+      <node oor:name=".uno:InsertCommandText?Text:string=newline " oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">New Line</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertCommandText?Text:string=`" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Small Gap</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertCommandText?Text:string=~" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Gap</value>
+        </prop>
+      </node>
     </node>
-    <node oor:name="Popups"/>
+    <node oor:name="Popups">
+      <node oor:name=".uno:UnaryBinaryMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Unary/Binary Operators</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:RelationsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Relations</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SetOperationsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Set Operations</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FunctionsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Functions</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:OperatorsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">O~perators</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:AttributesMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Attributes</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:BracketsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Brackets</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:FormatsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">For~mats</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:OthersMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Others</value>
+        </prop>
+      </node>
+    </node>
   </node>
 </oor:component-data>
