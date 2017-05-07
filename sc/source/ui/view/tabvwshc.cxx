@@ -516,6 +516,12 @@ int ScTabViewShell::getPart() const
     return GetViewData().GetTabNo();
 }
 
+void ScTabViewShell::afterCallbackRegistered() const
+{
+    ScTabViewShell* pThisView = const_cast<ScTabViewShell*>(this);
+    pThisView->UpdateInputHandler(true, false);
+}
+
 void ScTabViewShell::NotifyCursor(SfxViewShell* pOtherShell) const
 {
     ScDrawView* pDrView = const_cast<ScTabViewShell*>(this)->GetScDrawView();
