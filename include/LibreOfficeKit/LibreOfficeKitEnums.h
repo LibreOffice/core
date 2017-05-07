@@ -500,7 +500,12 @@ typedef enum
      *
      * The payload says if we are invalidating a row or column header.
      */
-    LOK_CALLBACK_INVALIDATE_HEADER = 33
+    LOK_CALLBACK_INVALIDATE_HEADER = 33,
+    /**
+     * The text content of the address field in Calc.
+     */
+    LOK_CALLBACK_CELL_ADDRESS = 34
+
 }
 LibreOfficeKitCallbackType;
 
