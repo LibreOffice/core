@@ -176,11 +176,6 @@ private:
     */
     css::uno::Reference< css::accessibility::XAccessible >  m_xParent;
 
-
-    /** dispose all items aand clears the container
-    */
-    void clearItems();
-
     void UpdateEntryRange_Impl();
 protected:
     void UpdateSelection_Impl(sal_Int32 nPos = 0);
