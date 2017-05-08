@@ -831,10 +831,10 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(vc
     return VclPtr<VclAbstractDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwTableTabDlg(vcl::Window* pParent, SfxItemPool& Pool,
+VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSwTableTabDlg(vcl::Window* pParent,
     const SfxItemSet* pItemSet, SwWrtShell* pSh)
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwTableTabDlg>::Create(pParent, Pool, pItemSet, pSh);
+    VclPtr<SfxTabDialog> pDlg = VclPtr<SwTableTabDlg>::Create(pParent, pItemSet, pSh);
     return VclPtr<AbstractTabDialog_Impl>::Create(pDlg);
 }
 

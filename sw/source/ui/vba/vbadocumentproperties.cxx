@@ -865,7 +865,7 @@ public:
         return  new DocPropEnumeration( simpleDocPropSnapShot );
     }
 
-    void addProp( const OUString& Name, ::sal_Int8 /*Type*/, const uno::Any& Value )
+    void addProp( const OUString& Name, const uno::Any& Value )
     {
         sal_Int16 attributes = 128;
         uno::Reference< beans::XPropertyContainer > xContainer( mxUserDefinedProp, uno::UNO_QUERY_THROW );
@@ -883,14 +883,14 @@ SwVbaCustomDocumentProperties::SwVbaCustomDocumentProperties( const uno::Referen
 }
 
 uno::Reference< XDocumentProperty > SAL_CALL
-SwVbaCustomDocumentProperties::Add( const OUString& Name, sal_Bool LinkToContent, ::sal_Int8 Type, const uno::Any& Value, const uno::Any& LinkSource )
+SwVbaCustomDocumentProperties::Add( const OUString& Name, sal_Bool LinkToContent, ::sal_Int8 /*Type*/, const uno::Any& Value, const uno::Any& LinkSource )
 {
     CustomPropertiesImpl* pCustomProps = dynamic_cast< CustomPropertiesImpl* > ( m_xIndexAccess.get() );
     uno::Reference< XDocumentProperty > xDocProp;
     if ( pCustomProps )
     {
         OUString sLinkSource;
-        pCustomProps->addProp( Name, Type, Value );
+        pCustomProps->addProp( Name, Value );
 
         xDocProp.set( m_xNameAccess->getByName( Name ), uno::UNO_QUERY_THROW );
         xDocProp->setLinkToContent( LinkToContent );

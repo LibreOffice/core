@@ -3726,7 +3726,7 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStar
     {
         OSL_ENSURE(m_pPaM->GetNode().GetTextNode(), "Missing txtnode");
         // Create PageDesc and fill it
-        m_aSectionManager.CreateSep(rTextPos, m_bPgSecBreak);
+        m_aSectionManager.CreateSep(rTextPos);
         // -> 0xc was a Sectionbreak, but not a Pagebreak;
         // Create PageDesc and fill it
         m_bPgSecBreak = false;

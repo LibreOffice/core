@@ -200,7 +200,7 @@ public:
     WW8_WrtBookmarks();
     ~WW8_WrtBookmarks();
     //! Add a new bookmark to the list OR add an end position to an existing bookmark.
-    void Append( WW8_CP nStartCp, const OUString& rNm, const ::sw::mark::IMark* pBkmk=nullptr );
+    void Append( WW8_CP nStartCp, const OUString& rNm );
     //! Write out bookmarks to file.
     void Write( WW8Export& rWrt );
     //! Move existing field marks from one position to another.
@@ -223,7 +223,7 @@ WW8_WrtBookmarks::~WW8_WrtBookmarks()
     }
 }
 
-void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const OUString& rNm, const ::sw::mark::IMark*)
+void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const OUString& rNm)
 {
     std::pair<BKMKNames::iterator, bool> aResult = maSwBkmkNms.insert(std::pair<OUString,long>(rNm,0L));
     if (aResult.second)
@@ -1461,14 +1461,14 @@ void WW8Export::AppendBookmarks( const SwTextNode& rNd, sal_Int32 nAktPos, sal_I
                 nContent < nAktEnd ) )
             {
                 sal_uLong nCp = nSttCP + pPos->nContent.GetIndex() - nAktPos;
-                m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()), &rBkmk);
+                m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
             }
             if( pOPos && nNd == pOPos->nNode.GetIndex() &&
                 ( nContent = pOPos->nContent.GetIndex() ) >= nAktPos &&
                 nContent < nAktEnd )
             {
                 sal_uLong nCp = nSttCP + pOPos->nContent.GetIndex() - nAktPos;
-                m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()), &rBkmk);
+                m_pBkmks->Append(nCp, BookmarkToWord(rBkmk.GetName()));
             }
         }
     }

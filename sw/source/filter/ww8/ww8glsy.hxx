@@ -35,14 +35,14 @@ class SwNodeIndex;
 class WW8GlossaryFib : public WW8Fib
 {
 public:
-    WW8GlossaryFib( SvStream& rStrm, sal_uInt8 nWantedVersion ,
-        SvStream& rTableStrm, const WW8Fib &rFib) : WW8Fib(rStrm,
-        nWantedVersion,FindGlossaryFibOffset(rTableStrm,rStrm,rFib)) {}
+    WW8GlossaryFib( SvStream& rStrm, sal_uInt8 nWantedVersion, const WW8Fib &rFib)
+        : WW8Fib(rStrm, nWantedVersion, FindGlossaryFibOffset(rFib)) {}
     // fGlsy will indicate whether this has AutoText or not
-    bool IsGlossaryFib() { return m_fGlsy; }
+    bool IsGlossaryFib() {
+        return m_fGlsy;
+    }
 private:
-    static sal_uInt32 FindGlossaryFibOffset(SvStream &rTableStrm,SvStream &rStrm,
-        const WW8Fib &rFib);
+    static sal_uInt32 FindGlossaryFibOffset(const WW8Fib &rFib);
 };
 
 /*
@@ -60,8 +60,12 @@ class WW8Glossary
 public:
     WW8Glossary( tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVersion, SotStorage *pStg);
     bool Load( SwTextBlocks &rBlocks, bool bSaveRelFile );
-    WW8GlossaryFib *GetFib()        { return pGlossary.get(); }
-    sal_uInt16 GetNoStrings() const     { return nStrings; }
+    WW8GlossaryFib *GetFib()        {
+        return pGlossary.get();
+    }
+    sal_uInt16 GetNoStrings() const     {
+        return nStrings;
+    }
 
 private:
     std::unique_ptr<WW8GlossaryFib> pGlossary;
@@ -71,8 +75,8 @@ private:
     sal_uInt16 nStrings;
 
     static bool MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks, bool bSaveRelFile,
-        const std::vector<OUString>& rStrings,
-        const std::vector<ww::bytes>& rExtra);
+                            const std::vector<OUString>& rStrings,
+                            const std::vector<ww::bytes>& rExtra);
     static bool HasBareGraphicEnd(SwDoc *pD,SwNodeIndex &rIdx);
 
     WW8Glossary(const WW8Glossary&) = delete;
