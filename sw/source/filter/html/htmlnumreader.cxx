@@ -549,8 +549,7 @@ void SwHTMLParser::NewNumBulListItem( HtmlTokenId nToken )
     ShowStatline();
 }
 
-void SwHTMLParser::EndNumBulListItem( HtmlTokenId nToken, bool bSetColl,
-                                      bool /*bLastPara*/ )
+void SwHTMLParser::EndNumBulListItem( HtmlTokenId nToken, bool bSetColl )
 {
     // Create a new paragraph
     if( nToken == HtmlTokenId::NONE && m_pPam->GetPoint()->nContent.GetIndex() )

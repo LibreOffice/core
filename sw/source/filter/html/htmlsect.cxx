@@ -617,19 +617,19 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         if( !IsNewDoc() )
             Reader::ResetFrameFormatAttrs(aFrameItemSet );
 
-        SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE, aItemSet, aPropInfo,
+        SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE, aPropInfo,
                                 aFrameItemSet );
 
         // The width is either the WIDTH attribute's value or contained
         // in some style option.
-        SetVarSize( aItemSet, aPropInfo, aFrameItemSet, nTwipWidth, nPrcWidth );
+        SetVarSize( aPropInfo, aFrameItemSet, nTwipWidth, nPrcWidth );
 
         SetSpace( Size(0,0), aItemSet, aPropInfo, aFrameItemSet );
 
         // Set some other frame attributes. If the background is set, its
         // it will be cleared here. That for, it won't be set at the section,
         // too.
-        SetFrameFormatAttrs( aItemSet, aPropInfo,
+        SetFrameFormatAttrs( aItemSet,
                         HtmlFrameFormatFlags::Box|HtmlFrameFormatFlags::Background|HtmlFrameFormatFlags::Padding|HtmlFrameFormatFlags::Direction,
                         aFrameItemSet );
 

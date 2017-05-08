@@ -1952,8 +1952,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
 
 SwTableBox *SwXMLTableContext::MakeTableBox(
         SwTableLine *pUpper, const SwXMLTableCell_Impl *pCell,
-        sal_uInt32 /*nTopRow*/, sal_uInt32 nLeftCol, sal_uInt32 /*nBottomRow*/,
-        sal_uInt32 nRightCol )
+        sal_uInt32 nLeftCol, sal_uInt32 nRightCol )
 {
     //FIXME: here would be a great place to handle XmlId for cell
     SwTableBox *pBox;
@@ -2267,9 +2266,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                     // is a content box
                     nSplitCol = nCol + 1UL;
 
-                    pBox = MakeTableBox( pLine, pCell,
-                                         nTopRow, nStartCol,
-                                         nBottomRow, nSplitCol );
+                    pBox = MakeTableBox( pLine, pCell, nStartCol, nSplitCol );
 
                     if ( 1 != nBoxRowSpan )
                         pBox->setRowSpan( nBoxRowSpan );

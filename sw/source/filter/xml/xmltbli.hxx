@@ -95,8 +95,7 @@ class SwXMLTableContext : public XMLTextTableContext
                              SwTableLine *pUpper );
     SwTableBox *MakeTableBox( SwTableLine *pUpper,
                               const SwXMLTableCell_Impl *pStartNode,
-                              sal_uInt32 nTopRow, sal_uInt32 nLeftCol,
-                              sal_uInt32 nBottomRow, sal_uInt32 nRightCol );
+                              sal_uInt32 nLeftCol, sal_uInt32 nRightCol );
     SwTableBox *MakeTableBox( SwTableLine *pUpper,
                               sal_uInt32 nTopRow, sal_uInt32 nLeftCol,
                               sal_uInt32 nBottomRow, sal_uInt32 nRightCol );

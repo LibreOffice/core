@@ -461,7 +461,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                         pObj->SetUserCall( nullptr );
 
                         if( pUndo )
-                            pUndo->AddObj( i, pFormat, rMark );
+                            pUndo->AddObj( pFormat, rMark );
                         else
                             DelFrameFormat( pFormat );
                     }

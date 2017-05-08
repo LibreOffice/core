@@ -478,8 +478,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
 
         if( SVX_NUM_BITMAP == rNumFormat.GetNumberingType() )
         {
-            pRet = new SwGrfNumPortion( const_cast<SwTextFrame*>(GetTextFrame()),
-                                        pTextNd->GetLabelFollowedBy(),
+            pRet = new SwGrfNumPortion( pTextNd->GetLabelFollowedBy(),
                                         rNumFormat.GetBrush(),
                                         rNumFormat.GetGraphicOrientation(),
                                         rNumFormat.GetGraphicSize(),

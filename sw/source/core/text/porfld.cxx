@@ -753,7 +753,6 @@ SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
 #define GRFNUM_SECURE 10
 
 SwGrfNumPortion::SwGrfNumPortion(
-        SwFrame*,
         const OUString& rGraphicFollowedBy,
         const SvxBrushItem* pGrfBrush,
         const SwFormatVertOrient* pGrfOrient, const Size& rGrfSize,

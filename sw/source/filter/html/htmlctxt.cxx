@@ -412,14 +412,14 @@ bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
         if( !IsNewDoc() )
             Reader::ResetFrameFormatAttrs(aFrameItemSet );
 
-        SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE, rItemSet, rPropInfo,
+        SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE, rPropInfo,
                                 aFrameItemSet );
 
-        SetVarSize( rItemSet, rPropInfo, aFrameItemSet );
+        SetVarSize( rPropInfo, aFrameItemSet );
 
         SetSpace( Size(0,0), rItemSet, rPropInfo, aFrameItemSet );
 
-        SetFrameFormatAttrs( rItemSet, rPropInfo,
+        SetFrameFormatAttrs( rItemSet,
                         HtmlFrameFormatFlags::Box|HtmlFrameFormatFlags::Padding|HtmlFrameFormatFlags::Background|HtmlFrameFormatFlags::Direction,
                         aFrameItemSet );
 
@@ -447,12 +447,12 @@ bool SwHTMLParser::CreateContainer( const OUString& rClass,
             Reader::ResetFrameFormatAttrs( *pFrameItemSet );
 
         SetAnchorAndAdjustment( text::VertOrientation::NONE, text::HoriOrientation::NONE,
-                                rItemSet, rPropInfo, *pFrameItemSet );
+                                rPropInfo, *pFrameItemSet );
         Size aDummy(0,0);
         SetFixSize( aDummy, aDummy, false, false, rItemSet, rPropInfo,
                     *pFrameItemSet );
         SetSpace( aDummy, rItemSet, rPropInfo, *pFrameItemSet );
-        SetFrameFormatAttrs( rItemSet, rPropInfo, HtmlFrameFormatFlags::Box|HtmlFrameFormatFlags::Background|HtmlFrameFormatFlags::Direction,
+        SetFrameFormatAttrs( rItemSet, HtmlFrameFormatFlags::Box|HtmlFrameFormatFlags::Background|HtmlFrameFormatFlags::Direction,
                         *pFrameItemSet );
 
         bRet = true;

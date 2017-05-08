@@ -166,7 +166,7 @@ private:
     bool OldMerge( SwDoc*, const SwSelBoxes&, SwTableBox*, SwUndoTableMerge* );
     bool OldSplitRow( SwDoc*, const SwSelBoxes&, sal_uInt16, bool );
     bool NewMerge( SwDoc*, const SwSelBoxes&, const SwSelBoxes& rMerged,
-                   SwTableBox*, SwUndoTableMerge* );
+                   SwUndoTableMerge* );
     bool NewSplitRow( SwDoc*, const SwSelBoxes&, sal_uInt16, bool );
     SwBoxSelection* CollectBoxSelection( const SwPaM& rPam ) const;
     void InsertSpannedRow( SwDoc* pDoc, sal_uInt16 nIdx, sal_uInt16 nCnt );
@@ -241,8 +241,8 @@ public:
 #ifdef DBG_UTIL
         m_bDontChangeModel = true;
 #endif
-        return m_bNewModel ? NewMerge( pDoc, rBoxes, rMerged, pMergeBox, pUndo ) :
-                           OldMerge( pDoc, rBoxes, pMergeBox, pUndo );
+        return m_bNewModel ? NewMerge( pDoc, rBoxes, rMerged, pUndo ) :
+                             OldMerge( pDoc, rBoxes, pMergeBox, pUndo );
     }
     bool SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
                    bool bSameHeight )

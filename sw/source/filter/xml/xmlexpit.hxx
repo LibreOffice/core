@@ -52,7 +52,6 @@ protected:
                     const SvXMLItemMapEntry &rEntry,
                     const SvXMLUnitConverter& rUnitConverter,
                     const SvXMLNamespaceMap& rNamespaceMap,
-                    SvXmlExportFlags nFlags,
                     const SfxItemSet *pSet ) const;
 
     void exportElementItems(  SvXMLExport& rExport,
@@ -82,14 +81,6 @@ public:
                                     const SvXMLUnitConverter& rUnitConverter,
                                     const SvXMLNamespaceMap& rNamespaceMap,
                                     const SfxItemSet *pSet ) const;
-
-    /** this method is called for every item that has the
-        MID_SW_FLAG_NO_ITEM_EXPORT flag set */
-    static void handleNoItem( SvXMLAttributeList& rAttrList,
-                               const SvXMLItemMapEntry& rEntry,
-                               const SvXMLUnitConverter& rUnitConverter,
-                               const SvXMLNamespaceMap& rNamespaceMap,
-                               const SfxItemSet& rSet );
 
     /** this method is called for every item that has the
         MID_SW_FLAG_ELEMENT_EXPORT flag set */

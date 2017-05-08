@@ -84,7 +84,7 @@ the undo object to notify, maybe empty
 */
 
 bool SwTable::NewMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
-     const SwSelBoxes& rMerged, SwTableBox*, SwUndoTableMerge* pUndo )
+     const SwSelBoxes& rMerged, SwUndoTableMerge* pUndo )
 {
     if( pUndo )
         pUndo->SetSelBoxes( rBoxes );
