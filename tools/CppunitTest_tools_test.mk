@@ -31,6 +31,10 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
     tools/qa/cppunit/test_xmlwalker \
 ))
 
+$(eval $(call gb_CppunitTest_add_cxxobjects,tools_test,\
+    tools/qa/cppunit/test_cpuid, $(gb_LinkTarget_EXCEPTIONFLAGS) $(INTRINSICS_CXXFLAGS) \
+))
+
 $(eval $(call gb_CppunitTest_use_sdk_api,tools_test))
 
 $(eval $(call gb_CppunitTest_use_libraries,tools_test, \
