@@ -28,7 +28,8 @@
 using namespace com::sun::star;
 
 
-static const LanguageType kSAME(0xffff);
+constexpr LanguageType k0(0);
+constexpr LanguageType kSAME(0xffff);
 
 namespace {
 inline LanguageType getOverrideLang( LanguageType nLang, LanguageType nOverride )
@@ -165,7 +166,6 @@ struct IsoLangOtherEntry
  * code:
  * LANGUAGE_ENGLISH  LANGUAGE_ARABIC_PRIMARY_ONLY
  */
-constexpr LanguageType k0(0);
 
 static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
 {
