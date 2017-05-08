@@ -52,19 +52,19 @@ class SwImpBlocks
 {
     friend class SwTextBlocks;
 protected:
-    OUString aFile;                     // Physical file name
-    OUString aName;                     // Logical file name
-    OUString aCur;                      // Current text
-    OUString aShort, aLong;             // Short- and longname (PutDoc)
-    OUString sBaseURL;                  // Base URL - has to be set at the Readers and Writers
-    SwBlockNames aNames;                // List of all Blocks
-    Date aDateModified;                 // For aligning the Actions
-    tools::Time aTimeModified;
-    SwDoc* pDoc;                        // Document to be switched
-    sal_uInt16 nCur;                    // Current Index
-    bool bReadOnly : 1;
-    bool bInPutMuchBlocks : 1;          // Put several block entries
-    bool bInfoChanged : 1;              // Whether any info of TextBlock changed
+    OUString m_aFile;                     // Physical file name
+    OUString m_aName;                     // Logical file name
+    OUString m_aCurrentText;                      // Current text
+    OUString m_aShort, m_aLong;             // Short- and longname (PutDoc)
+    OUString m_sBaseURL;                  // Base URL - has to be set at the Readers and Writers
+    SwBlockNames m_aNames;                // List of all Blocks
+    Date m_aDateModified;                 // For aligning the Actions
+    tools::Time m_aTimeModified;
+    SwDoc* m_pDoc;                        // Document to be switched
+    sal_uInt16 m_nCurrentIndex;                    // Current Index
+    bool m_bReadOnly : 1;
+    bool m_bInPutMuchBlocks : 1;          // Put several block entries
+    bool m_bInfoChanged : 1;              // Whether any info of TextBlock changed
 
     explicit SwImpBlocks( const OUString& );
 
@@ -94,14 +94,14 @@ public:
     OUString GetLongName( sal_uInt16 ) const;         /// Return longname for index
     OUString GetPackageName( sal_uInt16 ) const;      /// Return packagename for index
 
-    const OUString& GetFileName() const {return aFile;}      /// Return physical file name
+    const OUString& GetFileName() const {return m_aFile;}      /// Return physical file name
     void SetName( const OUString& rName )             /// Logic name
-        { aName = rName; bInfoChanged = true; }
+        { m_aName = rName; m_bInfoChanged = true; }
     const OUString& GetName()
-        { return aName; }
+        { return m_aName; }
 
-    const OUString&     GetBaseURL() const { return sBaseURL;}
-    void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }
+    const OUString&     GetBaseURL() const { return m_sBaseURL;}
+    void                SetBaseURL( const OUString& rURL ) { m_sBaseURL = rURL; }
 
     virtual sal_uLong Delete( sal_uInt16 ) = 0;
     virtual sal_uLong Rename( sal_uInt16, const OUString&, const OUString& ) = 0;
