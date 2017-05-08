@@ -298,7 +298,7 @@ Reference< XVeto > SAL_CALL OQueryContainer::approveInsertElement( const Contain
     }
     catch( const Exception& )
     {
-        xReturn = new Veto( OUString(), ::cppu::getCaughtException() );
+        xReturn = new Veto( ::cppu::getCaughtException() );
     }
     return xReturn;
 }

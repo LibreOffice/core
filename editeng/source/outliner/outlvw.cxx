@@ -1378,13 +1378,13 @@ void OutlinerView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallback
     pEditView->ExecuteSpellPopup( rPosPixel, pStartDlg );
 }
 
-sal_uLong OutlinerView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
+sal_uLong OutlinerView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     sal_Int32 nOldParaCount = pEditView->GetEditEngine()->GetParagraphCount();
     ESelection aOldSel = pEditView->GetSelection();
     aOldSel.Adjust();
 
-    sal_uLong nRet = pEditView->Read( rInput, rBaseURL, eFormat, pHTTPHeaderAttrs );
+    sal_uLong nRet = pEditView->Read( rInput, OUString(), eFormat, pHTTPHeaderAttrs );
 
     long nParaDiff = pEditView->GetEditEngine()->GetParagraphCount() - nOldParaCount;
     sal_Int32 nChangesStart = aOldSel.nStartPara;

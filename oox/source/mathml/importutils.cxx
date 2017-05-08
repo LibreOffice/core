@@ -141,10 +141,9 @@ sal_Unicode XmlStream::AttributeList::attribute( int token, sal_Unicode def ) co
     return def;
 }
 
-XmlStream::Tag::Tag( int t, const uno::Reference< xml::sax::XFastAttributeList >& a, const OUString& txt )
+XmlStream::Tag::Tag( int t, const uno::Reference< xml::sax::XFastAttributeList >& a )
 : token( t )
 , attributes( AttributeListBuilder( a ))
-, text( txt )
 {
 }
 

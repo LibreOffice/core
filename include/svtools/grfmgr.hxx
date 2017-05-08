@@ -339,7 +339,6 @@ public:
 
     bool                    IsCached(
                                 OutputDevice* pOut,
-                                const Point& rPt,
                                 const Size& rSz,
                                 const GraphicAttr* pAttr,
                                 GraphicManagerDrawFlags nFlags = GraphicManagerDrawFlags::STANDARD

@@ -92,8 +92,7 @@ protected:
         const OUString & rURL,
         const css::uno::Any & rState,
         bool bEnabled,
-        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener,
-        const OUString & rFeatureDescriptor = OUString() );
+        const css::uno::Reference< css::frame::XStatusListener > & xSingleListener );
 
     // ____ XDispatch ____
     virtual void SAL_CALL dispatch(

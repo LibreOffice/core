@@ -622,7 +622,7 @@ public:
     virtual VclPtr<SvxAbstractNewTableDialog> CreateSvxNewTableDialog() override ;
 
     virtual VclPtr<VclAbstractDialog>          CreateOptionsDialog(
-        vcl::Window* pParent, const OUString& rExtensionId, const OUString& rApplicationContext ) override;
+        vcl::Window* pParent, const OUString& rExtensionId ) override;
 
     virtual VclPtr<SvxAbstractInsRowColDlg> CreateSvxInsRowColDlg( vcl::Window* pParent, bool bCol, const OString& sHelpId ) override;
 

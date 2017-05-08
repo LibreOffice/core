@@ -1522,7 +1522,7 @@ VclPtr<SvxAbstractNewTableDialog> AbstractDialogFactory_Impl::CreateSvxNewTableD
 }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateOptionsDialog(
-    vcl::Window* pParent, const OUString& rExtensionId, const OUString& /*rApplicationContext*/ )
+    vcl::Window* pParent, const OUString& rExtensionId )
 {
     return VclPtr<CuiVclAbstractDialog_Impl>::Create( VclPtr<OfaTreeOptionsDialog>::Create( pParent, rExtensionId ) );
 }

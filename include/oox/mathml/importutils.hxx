@@ -133,8 +133,7 @@ public:
     struct OOX_DLLPUBLIC Tag
     {
         Tag( int token = XML_TOKEN_INVALID,
-            const css::uno::Reference< css::xml::sax::XFastAttributeList >& attributes = css::uno::Reference< css::xml::sax::XFastAttributeList >(),
-            const OUString& text = OUString());
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& attributes = css::uno::Reference< css::xml::sax::XFastAttributeList >());
         Tag( int token,
             const AttributeList& attribs);
         int token; ///< tag type, or XML_TOKEN_INVALID

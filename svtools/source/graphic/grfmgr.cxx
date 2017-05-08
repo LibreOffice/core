@@ -423,14 +423,14 @@ void GraphicObject::FireSwapOutRequest()
     ImplAutoSwapOutHdl( nullptr );
 }
 
-bool GraphicObject::IsCached( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+bool GraphicObject::IsCached( OutputDevice* pOut, const Size& rSz,
                               const GraphicAttr* pAttr, GraphicManagerDrawFlags nFlags ) const
 {
     bool bRet;
 
     if( nFlags & GraphicManagerDrawFlags::CACHED )
     {
-        Point aPt( rPt );
+        Point aPt;
         Size aSz( rSz );
         if ( pAttr && pAttr->IsCropped() )
         {

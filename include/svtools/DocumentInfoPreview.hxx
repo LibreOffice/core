@@ -50,9 +50,7 @@ public:
 
     void clear();
 
-    void fill(
-        css::uno::Reference< css::document::XDocumentProperties > const & xDocProps,
-        OUString const & rURL);
+    void fill(css::uno::Reference< css::document::XDocumentProperties > const & xDocProps);
 
 private:
     VclPtr<ExtMultiLineEdit> m_pEditWin;

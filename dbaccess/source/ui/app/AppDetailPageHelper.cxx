@@ -1055,7 +1055,7 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
                     Reference<document::XDocumentProperties> xProp(
                         aPreview, UNO_QUERY);
                     if ( xProp.is() )
-                        m_aDocumentInfo->fill(xProp,OUString());
+                        m_aDocumentInfo->fill(xProp);
                 }
             }
             else

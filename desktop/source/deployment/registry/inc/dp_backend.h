@@ -247,7 +247,6 @@ protected:
        at a location relative to that folder specified by url.
     */
     OUString createFolder(
-        OUString const & relUrl,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
     /* deletes folders and files.
 
@@ -255,7 +254,6 @@ protected:
        not used are deleted.
      */
     void deleteUnusedFolders(
-        OUString const & relUrl,
         std::list< OUString> const & usedFolders);
     /* deletes one folder with a "temporary" name and the corresponding
        tmp file, which was used to derive the folder name.

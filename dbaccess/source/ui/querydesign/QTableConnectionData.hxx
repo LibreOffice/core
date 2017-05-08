@@ -43,8 +43,7 @@ namespace dbaui
     public:
         OQueryTableConnectionData();
         OQueryTableConnectionData( const OQueryTableConnectionData& rConnData );
-        OQueryTableConnectionData( const TTableWindowData::value_type& _pReferencingTable,const TTableWindowData::value_type& _pReferencedTable,
-            const OUString& rConnName=OUString());
+        OQueryTableConnectionData( const TTableWindowData::value_type& _pReferencingTable,const TTableWindowData::value_type& _pReferencedTable );
         virtual ~OQueryTableConnectionData() override;
 
         virtual void CopyFrom(const OTableConnectionData& rSource) override;

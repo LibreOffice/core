@@ -121,8 +121,7 @@ public:
 
     /** initializes the view with the content of a folder given by an UCB content
     */
-    bool                    Initialize( const css::uno::Reference< css::ucb::XContent>& _xContent,
-                                        const OUString& rFilter );
+    bool                    Initialize( const css::uno::Reference< css::ucb::XContent>& _xContent );
 
     /** reads the current content of the current folder again, and applies the given filter to it
 

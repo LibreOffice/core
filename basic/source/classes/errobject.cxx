@@ -76,7 +76,7 @@ ErrObject::getNumber()
 void SAL_CALL
 ErrObject::setNumber( ::sal_Int32 _number )
 {
-    GetSbData()->pInst->setErrorVB( _number, OUString() );
+    GetSbData()->pInst->setErrorVB( _number  );
     OUString _description = GetSbData()->pInst->GetErrorMsg();
     setData( uno::Any( _number ), uno::Any(), uno::Any( _description ), uno::Any(), uno::Any() );
 }
