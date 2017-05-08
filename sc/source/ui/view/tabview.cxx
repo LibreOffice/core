@@ -2652,6 +2652,7 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
             // Only invalidate if spreadsheet extended to the bottom
             if (aNewRowArea.getHeight())
             {
+                UpdateSelectionOverlay();
                 SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), aNewRowArea.toString());
             }
         }
@@ -2759,6 +2760,7 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
             // Only invalidate if spreadsheet extended to the bottom
             if (aNewColArea.getWidth())
             {
+                UpdateSelectionOverlay();
                 SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), aNewColArea.toString());
             }
         }
