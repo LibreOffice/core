@@ -151,7 +151,7 @@ SwTableBox* SwVbaTableHelper::GetTabBox( sal_Int32 nCol, sal_Int32 nRow )
     return pStart;
 }
 
-void SwVbaTableHelper::InitTabCols( SwTabCols& rCols, const SwTableBox *pStart, bool /*bCurRowOnly*/ )
+void SwVbaTableHelper::InitTabCols( SwTabCols& rCols, const SwTableBox *pStart )
 {
     rCols.SetLeftMin ( 0 );
     rCols.SetLeft    ( 0 );
@@ -182,11 +182,11 @@ sal_Int32 SwVbaTableHelper::GetRightSeparator( SwTabCols& rCols, sal_Int32 nNum)
     return i - 1;
 }
 
-sal_Int32 SwVbaTableHelper::GetColWidth( sal_Int32 nCol, sal_Int32 nRow, bool bCurRowOnly )
+sal_Int32 SwVbaTableHelper::GetColWidth( sal_Int32 nCol, sal_Int32 nRow )
 {
     SwTableBox* pStart = GetTabBox( nCol, nRow );
     SwTabCols aCols;
-    InitTabCols( aCols, pStart, bCurRowOnly );
+    InitTabCols( aCols, pStart );
     sal_Int32 nWidth = GetColWidth( aCols, nCol );
 
     sal_Int32 nTableWidth = getTableWidth( );
@@ -238,7 +238,7 @@ void SwVbaTableHelper::SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 
 
     SwTableBox* pStart = GetTabBox( nCol, nRow );
     SwTabCols aOldCols;
-    InitTabCols( aOldCols, pStart, bCurRowOnly );
+    InitTabCols( aOldCols, pStart );
 
     SwTabCols aCols( aOldCols );
     if ( aCols.Count() > 0 )

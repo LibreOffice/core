@@ -44,14 +44,7 @@ WW8Glossary::WW8Glossary(tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVer
 
     if (aWwFib.m_nFibBack >= 0x6A)   //Word97
     {
-        xTableStream = pStg->OpenSotStream(
-            aWwFib.m_fWhichTableStm ? SL::a1Table : SL::a0Table, StreamMode::STD_READ);
-
-        if (xTableStream.is() && SVSTREAM_OK == xTableStream->GetError())
-        {
-            xTableStream->SetEndian(SvStreamEndian::LITTLE);
-            pGlossary.reset( new WW8GlossaryFib(*refStrm, nVersion, *xTableStream, aWwFib) );
-        }
+        pGlossary.reset( new WW8GlossaryFib(*refStrm, nVersion, aWwFib) );
     }
 }
 
@@ -235,9 +228,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
     return bRet;
 }
 
-sal_uInt32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream & /* rTableStrm */,
-                                             SvStream & /* rStrm */,
-                                             const WW8Fib &rFib)
+sal_uInt32 WW8GlossaryFib::FindGlossaryFibOffset(const WW8Fib &rFib)
 {
     sal_uInt32 nGlossaryFibOffset = 0;
     if ( rFib.m_fDot ) // it's a template

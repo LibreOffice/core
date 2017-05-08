@@ -83,7 +83,7 @@ private:
     uno::Reference<i18n::XBreakIterator> m_xBreak;
 
     void    Init();
-    void    DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
+    void    DoPaint(vcl::RenderContext& rRenderContext);
     void    CalcCellArray(bool bFitWidth);
     void    CalcLineMap();
     void    PaintCells(vcl::RenderContext& rRenderContext);
@@ -889,7 +889,7 @@ void AutoFormatPreview::NotifyChange( const SwTableAutoFormat& rNewData )
     Invalidate(tools::Rectangle(Point(0,0), GetSizePixel()));
 }
 
-void AutoFormatPreview::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void AutoFormatPreview::DoPaint(vcl::RenderContext& rRenderContext)
 {
     DrawModeFlags nOldDrawMode = aVD->GetDrawMode();
     if (rRenderContext.GetSettings().GetStyleSettings().GetHighContrastMode())
@@ -935,9 +935,9 @@ void AutoFormatPreview::DoPaint(vcl::RenderContext& rRenderContext, const tools:
     aVD->SetDrawMode(nOldDrawMode);
 }
 
-void AutoFormatPreview::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
+void AutoFormatPreview::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/ )
 {
-    DoPaint(rRenderContext, rRect);
+    DoPaint(rRenderContext);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

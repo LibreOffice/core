@@ -2170,7 +2170,7 @@ bool SwWW8ImplReader::MiserableRTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
 }
 
 RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
-    WW8_FSPA *pFSPA, SfxItemSet &rFlySet, bool /*bOrgObjectWasReplace*/)
+    WW8_FSPA *pFSPA, SfxItemSet &rFlySet)
 {
     OSL_ENSURE(pRecord || pFSPA, "give me something! to work with for anchoring");
     if (!pRecord && !pFSPA)
@@ -2686,8 +2686,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             pF->nby = WW8_FSPA::RelPageBorder;
         }
 
-        RndStdIds eAnchor = ProcessEscherAlign(pRecord, pF, aFlySet,
-            bReplaceable);
+        RndStdIds eAnchor = ProcessEscherAlign(pRecord, pF, aFlySet);
 
         // Should we, and is it possible to make this into a writer textbox
         if ((!(m_nIniFlags1 & WW8FL_NO_FLY_FOR_TXBX)) && pRecord->bReplaceByFly)
@@ -2995,7 +2994,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
     if (0 > nHeightTw)
         nHeightTw = 0;
 
-    ProcessEscherAlign(pRecord, pF, rFlySet, true);
+    ProcessEscherAlign(pRecord, pF, rFlySet);
 
     rFlySet.Put(SwFormatFrameSize(ATT_FIX_SIZE, nWidthTw, nHeightTw));
 

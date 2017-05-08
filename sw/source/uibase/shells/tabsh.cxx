@@ -598,7 +598,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg.disposeAndReset(pFact->CreateSwTableTabDlg(GetView().GetWindow(), GetPool(), &aCoreSet, &rSh));
+                pDlg.disposeAndReset(pFact->CreateSwTableTabDlg(GetView().GetWindow(), &aCoreSet, &rSh));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 if (pItem)
