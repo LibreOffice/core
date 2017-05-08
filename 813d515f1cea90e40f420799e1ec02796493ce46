@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_a90372b7",
+        "filename": "writerfilter/source/dmapper/GraphicHelpers.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-08T13:59:35Z",
+      "side": 1,
+      "message": "surely there is a more specific exception you can catch?\n\ncatching everything seems rather dodgy to me ?",
+      "revId": "813d515f1cea90e40f420799e1ec02796493ce46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
