@@ -34,6 +34,24 @@
       "revId": "813d515f1cea90e40f420799e1ec02796493ce46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_891dd611",
+        "filename": "writerfilter/source/dmapper/GraphicHelpers.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-08T14:16:47Z",
+      "side": 1,
+      "message": "because otherwise you end up catching all sorts of other kinds of failure modes, like OOM, and asserts, and logic erros inside stdlib, etc, that should rather be propogating upwards and generating more general error messages, instead of being ignored.\n\nIn this specific case, I\u0027m fairly sure there is a well-defined and documented exception that should be thrown.",
+      "parentUuid": "5a3905b3_492bee30",
+      "revId": "813d515f1cea90e40f420799e1ec02796493ce46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
