@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_29e782e5",
+        "filename": "svx/source/form/fmview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-05-08T19:18:19Z",
+      "side": 1,
+      "message": "one more left",
+      "range": {
+        "startLine": 94,
+        "startChar": 7,
+        "endLine": 94,
+        "endChar": 19
+      },
+      "revId": "99d449fa67100df2e982fc472527893343c991d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_49eccec7",
+        "filename": "svx/source/form/fmview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-05-08T19:18:19Z",
+      "side": 1,
+      "message": "not a comment - so, if you like",
+      "range": {
+        "startLine": 97,
+        "startChar": 72,
+        "endLine": 97,
+        "endChar": 86
+      },
+      "revId": "99d449fa67100df2e982fc472527893343c991d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_69d18afb",
+        "filename": "svx/source/form/fmview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-05-08T19:18:19Z",
+      "side": 1,
+      "message": "one more left",
+      "range": {
+        "startLine": 102,
+        "startChar": 7,
+        "endLine": 102,
+        "endChar": 33
+      },
+      "revId": "99d449fa67100df2e982fc472527893343c991d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_0909e695",
+        "filename": "svx/source/form/fmview.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-05-08T19:18:19Z",
+      "side": 1,
+      "message": "Is \"Form-Navigator\" a proper name? (Otherwise, maybe just \"form navigator\"?)",
+      "range": {
+        "startLine": 331,
+        "startChar": 27,
+        "endLine": 331,
+        "endChar": 41
+      },
+      "revId": "99d449fa67100df2e982fc472527893343c991d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
