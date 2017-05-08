@@ -5,13 +5,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <memory>
 #include <formulalogger.hxx>
 #include <formulacell.hxx>
 #include <tokenarray.hxx>
 #include <document.hxx>
 #include <tokenstringcontext.hxx>
 #include <address.hxx>
+#include <interpre.hxx>
 
 #include <osl/file.hxx>
 #include <o3tl/make_unique.hxx>
@@ -211,6 +211,17 @@ void FormulaLogger::GroupScope::addRefMessage(
             aBuf.append("unknown value");
     }
 
+    mpImpl->maMessages.push_back(aBuf.makeStringAndClear());
+}
+
+void FormulaLogger::GroupScope::addGroupSizeThreasholdMessage( const ScFormulaCell& rCell )
+{
+    OUStringBuffer aBuf;
+    aBuf.append("group length below minimum threshold (");
+    aBuf.append(rCell.GetWeight());
+    aBuf.append(" < ");
+    aBuf.append(ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize);
+    aBuf.append(")");
     mpImpl->maMessages.push_back(aBuf.makeStringAndClear());
 }
 
