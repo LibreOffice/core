@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_c9eefeeb",
+        "filename": "shell/source/win32/SysShExec.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-08T14:44:26Z",
+      "side": 1,
+      "message": "But does this actually work?  \u003chttps://msdn.microsoft.com/en-us/library/windows/desktop/ms633522(v\u003dvs.85).aspx\u003e \"GetWindowThreadProcessId function\" documents the first parameter to be \"[in]\" only (and I guess it\u0027s not of reference type anyway; can\u0027t remember ever having seen the use of reference types for out paramters in the Windows API), so procHandle will always be null.",
+      "revId": "ad711bc6e2cc35c2ed114fff15008d5bbcfcf21c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
