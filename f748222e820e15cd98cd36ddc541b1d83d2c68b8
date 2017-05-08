@@ -16,6 +16,24 @@
       "revId": "f748222e820e15cd98cd36ddc541b1d83d2c68b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_49e20e05",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-05-08T14:31:59Z",
+      "side": 1,
+      "message": "copy elision should apply here and result in a move.\n\nbesides testDOCXAutoTextEmpty, testDOCXAutoTextMultiple and testDOTMAutoText run before testTdf77014 and pass.",
+      "parentUuid": "5a3905b3_899316a3",
+      "revId": "f748222e820e15cd98cd36ddc541b1d83d2c68b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
