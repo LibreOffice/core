@@ -171,6 +171,12 @@ public:
         SolarMutexGuard aGuard;
         unique_disposing_ptr<T>::reset(p);
     }
+
+    virtual ~unique_disposing_solar_mutex_reset_ptr() override
+    {
+        if (unique_disposing_ptr<T>::get() && comphelper::SolarMutex::get())
+            reset();
+    }
 };
 
 }
