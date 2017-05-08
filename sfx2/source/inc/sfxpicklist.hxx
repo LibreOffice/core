@@ -29,25 +29,16 @@
 
 #define PICKLIST_MAXSIZE  100
 
-class SfxPickList : public SfxListener
+class SfxPickListImpl;
+
+class SfxPickList
 {
-    sal_uInt32                      m_nAllowedMenuSize;
-    css::uno::Reference< css::util::XStringWidth > m_xStringLength;
-
-                            SfxPickList( sal_uInt32 nMenuSize );
-                            virtual ~SfxPickList() override;
-
-    /**
-     * Adds the given document to the pick list (recent documents) if it satisfies
-       certain requirements, e.g. being writable. Check implementation for requirement
-       details.
-     */
-    static void             AddDocumentToPickList( SfxObjectShell* pDocShell );
-
-    public:
-        static void ensure();
-
-        virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+private:
+    std::unique_ptr<SfxPickListImpl> mxImpl;
+public:
+    SfxPickList(sal_uInt32 nAllowedMenuSize);
+    static void ensure();
+    ~SfxPickList();
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_SFXPICKLIST_HXX

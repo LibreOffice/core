@@ -81,7 +81,26 @@ namespace
         : public rtl::Static<osl::Mutex, thePickListMutex> {};
 }
 
-void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
+class SfxPickListImpl : public SfxListener
+{
+private:
+    sal_uInt32 m_nAllowedMenuSize;
+    css::uno::Reference< css::util::XStringWidth > m_xStringLength;
+
+    /**
+     * Adds the given document to the pick list (recent documents) if it satisfies
+       certain requirements, e.g. being writable. Check implementation for requirement
+       details.
+     */
+    static void         AddDocumentToPickList( SfxObjectShell* pDocShell );
+
+public:
+    SfxPickListImpl(sal_uInt32 nMenuSize);
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+    virtual ~SfxPickListImpl() override;
+};
+
+void SfxPickListImpl::AddDocumentToPickList( SfxObjectShell* pDocSh )
 {
     if (pDocSh->IsAvoidRecentDocs() || comphelper::LibreOfficeKit::isActive())
         return;
@@ -165,12 +184,23 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
                                                                  (pFilter) ? pFilter->GetServiceName() : OUString() );
 }
 
+SfxPickList::SfxPickList(sal_uInt32 nAllowedMenuSize)
+    : mxImpl(new SfxPickListImpl(nAllowedMenuSize))
+{
+}
+
+SfxPickList::~SfxPickList()
+{
+    SolarMutexGuard aGuard;
+    mxImpl.reset();
+}
+
 void SfxPickList::ensure()
 {
     static SfxPickList aUniqueInstance(SvtHistoryOptions().GetSize(ePICKLIST));
 }
 
-SfxPickList::SfxPickList( sal_uInt32 nAllowedMenuSize ) :
+SfxPickListImpl::SfxPickListImpl( sal_uInt32 nAllowedMenuSize ) :
     m_nAllowedMenuSize( nAllowedMenuSize )
 {
     m_xStringLength = new StringLength;
@@ -178,12 +208,11 @@ SfxPickList::SfxPickList( sal_uInt32 nAllowedMenuSize ) :
     StartListening( *SfxGetpApp() );
 }
 
-SfxPickList::~SfxPickList()
+SfxPickListImpl::~SfxPickListImpl()
 {
 }
 
-
-void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
+void SfxPickListImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SfxOpenUrlHint* pOpenUrlHint = dynamic_cast<const SfxOpenUrlHint*>(&rHint);
     if ( pOpenUrlHint )
