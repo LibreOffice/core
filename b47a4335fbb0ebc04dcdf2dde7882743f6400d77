@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_49edae8a",
+        "filename": "sw/source/filter/ww8/ww8glsy.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-05-08T23:29:44Z",
+      "side": 1,
+      "message": "SetEndian can go now, we don\u0027t read from the stream.\n\nnot sure if we still need to try opening a readonly stream when we don\u0027t use it here.",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 60
+      },
+      "revId": "b47a4335fbb0ebc04dcdf2dde7882743f6400d77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
