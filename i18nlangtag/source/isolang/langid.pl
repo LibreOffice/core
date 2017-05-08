@@ -211,7 +211,7 @@ sub main()
     # LangID value to obtain the define identifier.
     if ($grepdef)
     {
-        # #define LANGUAGE_AFRIKAANS                  0x0436
+        # #define LANGUAGE_AFRIKAANS                  LanguageType(0x0436)
         @resultlist = grepFile(
             $modifier . '^\s*#\s*define\s+[A-Z_]*' . $grepdef,
             "$SRC_ROOT", "include", "i18nlangtag/lang.h", 1, ());
@@ -221,15 +221,15 @@ sub main()
         printf( "LangID: 0x%04X (dec %d), primary: 0x%03x, sub 0x%02x\n", $lcid,
                 $lcid, $parts[0], $parts[1]);
         my $buf = sprintf( "0x%04X", $lcid);
-        # #define LANGUAGE_AFRIKAANS                  0x0436
+        # #define LANGUAGE_AFRIKAANS                  LanguageType(0x0436)
         @resultlist = grepFile(
-            '^\s*#\s*define\s+\w+\s+' . $buf,
+            '^\s*#\s*define\s+\w+\s+LanguageType\(' . $buf . '\)',
             "$SRC_ROOT", "include", "i18nlangtag/lang.h", 1, ());
     }
     for $result (@resultlist)
     {
-        # #define LANGUAGE_AFRIKAANS                  0x0436
-        if ($result =~ /^\s*#\s*define\s+(\w+)\s+(0x[0-9a-fA-F]+)/)
+        # #define LANGUAGE_AFRIKAANS                  LanguageType(0x0436)
+        if ($result =~ /^\s*#\s*define\s+(\w+)\s+LanguageType\((0x[0-9a-fA-F]+)\)/)
         {
             push( @greplist, '\b' . $1 . '\b');
             $modifier = "";     # complete identifier now case sensitive
@@ -328,8 +328,8 @@ sub main()
         my @lcidlist;
         for $result (@resultlist)
         {
-            # #define LANGUAGE_AFRIKAANS                  0x0436
-            if ($result =~ /^\s*#\s*define\s+(\w+)\s+(0x[0-9a-fA-F]+)/)
+            # #define LANGUAGE_AFRIKAANS                  LanguageType(0x0436)
+            if ($result =~ /^\s*#\s*define\s+(\w+)\s+LanguageType\((0x[0-9a-fA-F]+)\)/)
             {
                 push( @lcidlist, oct( $2));
             }
