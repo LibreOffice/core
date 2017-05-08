@@ -4673,7 +4673,7 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
 
         bDependencyComputed = true;
 
-        const static bool bHyperThreadingActive = tools::cpuid::hasHyperThreading();
+        const static bool bHyperThreadingActive = cpuid::hasHyperThreading();
 
         // Then do the threaded calculation
 

@@ -6748,6 +6748,108 @@ fi
 AC_SUBST([HAVE_BROKEN_GCC_WMAYBE_UNINITIALIZED])
 
 dnl ===================================================================
+dnl CPU Intrinsincs support - SSE, AVX
+dnl ===================================================================
+
+INTRINSICS_CXXFLAGS=""
+
+if test "$GCC" = "yes"; then
+    AC_MSG_CHECKING([whether $CXX can compile SSE2 intrinsics])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS -msse2"
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+        #include <x86intrin.h>
+        int main () {
+            volatile __m128i a = _mm_set1_epi32 (0), b = _mm_set1_epi32 (0), c;
+            c = _mm_xor_si128 (a, b);
+            return 0;
+        }
+        ])],
+        [can_compile_sse2=yes],
+        [can_compile_sse2=no])
+    AC_LANG_POP([C++])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_MSG_RESULT([${can_compile_sse2}])
+    if test "${can_compile_sse2}" = "yes" ; then
+        INTRINSICS_CXXFLAGS="-msse2"
+    else
+        AC_MSG_WARN([cannot compile SSE2 intrinsics])
+    fi
+
+    AC_MSG_CHECKING([whether $CXX can compile SSSE3 intrinsics])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS -mssse3"
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+        #include <x86intrin.h>
+        int main () {
+            volatile __m128i a = _mm_set1_epi32 (0), b = _mm_set1_epi32 (0), c;
+            c = _mm_maddubs_epi16 (a, b);
+            return 0;
+        }
+        ])],
+        [can_compile_ssse3=yes],
+        [can_compile_ssse3=no])
+    AC_LANG_POP([C++])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_MSG_RESULT([${can_compile_ssse3}])
+    if test "${can_compile_ssse3}" = "yes" ; then
+        INTRINSICS_CXXFLAGS="-mssse3"
+    else
+        AC_MSG_WARN([cannot compile SSSE3 intrinsics])
+    fi
+
+    AC_MSG_CHECKING([whether $CXX can compile AVX intrinsics])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS -mavx"
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+        #include <x86intrin.h>
+        int main () {
+            volatile __m256 a = _mm256_set1_ps (0.0f), b = _mm256_set1_ps (0.0f), c;
+            c = _mm256_xor_ps(a, b);
+            return 0;
+        }
+        ])],
+        [can_compile_avx=yes],
+        [can_compile_avx=no])
+    AC_LANG_POP([C++])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_MSG_RESULT([${can_compile_avx}])
+    if test "${can_compile_avx}" = "yes" ; then
+        INTRINSICS_CXXFLAGS="-mavx"
+    else
+        AC_MSG_WARN([cannot compile AVX intrinsics])
+    fi
+
+    AC_MSG_CHECKING([whether $CXX can compile AVX2 intrinsics])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS -mavx2"
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+        #include <x86intrin.h>
+        int main () {
+            volatile __m256i a = _mm256_set1_epi32 (0), b = _mm256_set1_epi32 (0), c;
+            c = _mm256_maddubs_epi16(a, b);
+            return 0;
+        }
+        ])],
+        [can_compile_avx2=yes],
+        [can_compile_avx2=no])
+    AC_LANG_POP([C++])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_MSG_RESULT([${can_compile_avx2}])
+    if test "${can_compile_avx2}" = "yes" ; then
+        INTRINSICS_CXXFLAGS="-mavx2"
+    else
+        AC_MSG_WARN([cannot compile AVX2 intrinsics])
+    fi
+fi
+
+AC_SUBST([INTRINSICS_CXXFLAGS])
+
+dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================
 if test "$_os" != "WINNT"; then
