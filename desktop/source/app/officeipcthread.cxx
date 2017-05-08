@@ -932,6 +932,8 @@ void RequestHandler::Disable()
             handler->mIpcThread->join();
             handler->mIpcThread.clear();
         }
+
+        handler->cReady.reset();
     }
 }
 
@@ -946,12 +948,15 @@ RequestHandler::~RequestHandler()
     assert(!mIpcThread.is());
 }
 
-void RequestHandler::SetReady()
+void RequestHandler::SetReady(bool bIsReady)
 {
     osl::MutexGuard g(GetMutex());
     if (pGlobal.is())
     {
-        pGlobal->cReady.set();
+        if (bIsReady)
+            pGlobal->cReady.set();
+        else
+            pGlobal->cReady.reset();
     }
 }
 

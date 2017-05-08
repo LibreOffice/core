@@ -3063,10 +3063,12 @@ static void lo_startmain(void*)
 {
     osl_setThreadName("lo_startmain");
 
-    if (GetpApp())
+    if (comphelper::SolarMutex::get())
         Application::GetSolarMutex().tryToAcquire();
 
     soffice_main();
+
+    Application::ReleaseSolarMutex();
 }
 
 static bool bInitialized = false;
@@ -3233,6 +3235,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             SAL_INFO("lok", "Enabling RequestHandler");
             RequestHandler::Enable(false);
             SAL_INFO("lok", "Starting soffice_main");
+            RequestHandler::SetReady(false);
             pLib->maThread = osl_createThread(lo_startmain, nullptr);
             SAL_INFO("lok", "Waiting for RequestHandler");
             RequestHandler::WaitForReady();
