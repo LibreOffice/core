@@ -47,7 +47,7 @@ void splitPath( OString& rOrgPath, OString& rDir, OString& rBase );
 
 enum class whichOfficePath { InstallationRootPath, UserPath, ConfigPath };
 
-OUString const & getOfficePath( whichOfficePath ePath );
+OUString getOfficePath( whichOfficePath ePath );
 
 } // namespace
 

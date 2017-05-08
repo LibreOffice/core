@@ -605,8 +605,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
 
 void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets)
 {
-    OUString emptyName;
-    CopySheets(rSourcePool, eFamily, rCreatedSheets, emptyName);
+    CopySheets(rSourcePool, eFamily, rCreatedSheets, "");
 }
 
 namespace
@@ -626,7 +625,7 @@ struct HasFamilyPredicate : svl::StyleSheetPredicate
 
 }
 
-void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, OUString& rRenameSuffix)
+void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, const OUString& rRenameSuffix)
 {
     std::vector< std::pair< rtl::Reference< SfxStyleSheetBase >, OUString > > aNewStyles;
     std::vector< std::pair< OUString, OUString > > aRenamedList;

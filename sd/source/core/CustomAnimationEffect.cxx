@@ -1643,8 +1643,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
 
     if( pPreset.get() )
     {
-        OUString strEmpty;
-        Reference< XAnimationNode > xNode( pPreset->create( strEmpty ) );
+        Reference< XAnimationNode > xNode( pPreset->create( "" ) );
         if( xNode.is() )
         {
             // first, filter all only ui relevant user data
@@ -1776,8 +1775,7 @@ void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, con
 
 void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pPreset, double fDuration /* = -1.0 */ )
 {
-    OUString strEmpty;
-    replace( pEffect, pPreset, strEmpty, fDuration );
+    replace( pEffect, pPreset, "", fDuration );
 }
 
 void EffectSequenceHelper::remove( const CustomAnimationEffectPtr& pEffect )

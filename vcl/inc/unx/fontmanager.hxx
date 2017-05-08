@@ -240,7 +240,7 @@ public:
     // routines to get font info in small pieces
 
     // get a specific fonts PSName name
-    const OUString& getPSName( fontID nFontID ) const;
+    OUString getPSName( fontID nFontID ) const;
 
     // get a specific fonts italic type
     FontItalic getFontItalic( fontID nFontID ) const

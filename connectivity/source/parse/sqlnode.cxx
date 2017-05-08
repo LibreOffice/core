@@ -1031,10 +1031,9 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode* pAppend, OSQLParseNode*& pLit
 
 OSQLParseNode* OSQLParser::buildNode_Date(const double& fValue, sal_Int32 nType)
 {
-    OUString aEmptyString;
-    OSQLParseNode* pNewNode = new OSQLInternalNode(aEmptyString, SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::set_fct_spec));
+    OSQLParseNode* pNewNode = new OSQLInternalNode("", SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::set_fct_spec));
     pNewNode->append(new OSQLInternalNode("{", SQLNodeType::Punctuation));
-    OSQLParseNode* pDateNode = new OSQLInternalNode(aEmptyString, SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::odbc_fct_spec));
+    OSQLParseNode* pDateNode = new OSQLInternalNode("", SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::odbc_fct_spec));
     pNewNode->append(pDateNode);
     pNewNode->append(new OSQLInternalNode("}", SQLNodeType::Punctuation));
 
@@ -1044,7 +1043,7 @@ OSQLParseNode* OSQLParser::buildNode_Date(const double& fValue, sal_Int32 nType)
         {
             Date aDate = DBTypeConversion::toDate(fValue,DBTypeConversion::getNULLDate(m_xFormatter->getNumberFormatsSupplier()));
             OUString aString = DBTypeConversion::toDateString(aDate);
-            pDateNode->append(new OSQLInternalNode(aEmptyString, SQLNodeType::Keyword, SQL_TOKEN_D));
+            pDateNode->append(new OSQLInternalNode("", SQLNodeType::Keyword, SQL_TOKEN_D));
             pDateNode->append(new OSQLInternalNode(aString, SQLNodeType::String));
             break;
         }
@@ -1052,7 +1051,7 @@ OSQLParseNode* OSQLParser::buildNode_Date(const double& fValue, sal_Int32 nType)
         {
             css::util::Time aTime = DBTypeConversion::toTime(fValue);
             OUString aString = DBTypeConversion::toTimeString(aTime);
-            pDateNode->append(new OSQLInternalNode(aEmptyString, SQLNodeType::Keyword, SQL_TOKEN_T));
+            pDateNode->append(new OSQLInternalNode("", SQLNodeType::Keyword, SQL_TOKEN_T));
             pDateNode->append(new OSQLInternalNode(aString, SQLNodeType::String));
             break;
         }
@@ -1062,13 +1061,13 @@ OSQLParseNode* OSQLParser::buildNode_Date(const double& fValue, sal_Int32 nType)
             if (aDateTime.Seconds || aDateTime.Minutes || aDateTime.Hours)
             {
                 OUString aString = DBTypeConversion::toDateTimeString(aDateTime);
-                pDateNode->append(new OSQLInternalNode(aEmptyString, SQLNodeType::Keyword, SQL_TOKEN_TS));
+                pDateNode->append(new OSQLInternalNode("", SQLNodeType::Keyword, SQL_TOKEN_TS));
                 pDateNode->append(new OSQLInternalNode(aString, SQLNodeType::String));
             }
             else
             {
                 Date aDate(aDateTime.Day,aDateTime.Month,aDateTime.Year);
-                pDateNode->append(new OSQLInternalNode(aEmptyString, SQLNodeType::Keyword, SQL_TOKEN_D));
+                pDateNode->append(new OSQLInternalNode("", SQLNodeType::Keyword, SQL_TOKEN_D));
                 pDateNode->append(new OSQLInternalNode(DBTypeConversion::toDateString(aDate), SQLNodeType::String));
             }
             break;

@@ -83,8 +83,7 @@ namespace dbmm
             <member>movedLibrary</member>. If not, an assertion will be raised in
             the non-product builds, and an empty string will be returned.
         */
-        const OUString&
-                    getNewLibraryName(
+        OUString    getNewLibraryName(
                         DocumentID _nDocID,
                         ScriptType _eScriptType,
                         const OUString& _rOriginalLibName

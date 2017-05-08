@@ -66,7 +66,6 @@ class ScMyValidationsContainer
 {
 private:
     ScMyValidationVec      aValidationVec;
-    const OUString         sEmptyString;
     const OUString         sERRALSTY;
     const OUString         sIGNOREBL;
     const OUString         sSHOWLIST;

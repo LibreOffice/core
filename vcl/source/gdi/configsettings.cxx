@@ -120,13 +120,12 @@ void SettingsConfigItem::getValues()
     }
 }
 
-const OUString& SettingsConfigItem::getValue( const OUString& rGroup, const OUString& rKey ) const
+OUString SettingsConfigItem::getValue( const OUString& rGroup, const OUString& rKey ) const
 {
     std::unordered_map< OUString, SmallOUStrMap, OUStringHash >::const_iterator group = m_aSettings.find( rGroup );
     if( group == m_aSettings.end() || group->second.find( rKey ) == group->second.end() )
     {
-        static OUString aEmpty;
-        return aEmpty;
+        return OUString();
     }
     return group->second.find(rKey)->second;
 }

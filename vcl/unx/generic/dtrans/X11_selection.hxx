@@ -433,7 +433,7 @@ namespace x11 {
         osl::Mutex& getMutex() { return m_aMutex; }
 
         Atom getAtom( const OUString& rString );
-        const OUString& getString( Atom nAtom );
+        OUString getString( Atom nAtom );
 
         // type conversion
         // note: convertTypeToNative does NOT clear the list, so you can append

@@ -947,16 +947,15 @@ OString PrintFontManager::getFontFile(const PrintFont* pFont) const
     return aPath;
 }
 
-const OUString& PrintFontManager::getPSName( fontID nFontID ) const
+OUString PrintFontManager::getPSName( fontID nFontID ) const
 {
-    static OUString aEmpty;
     PrintFont* pFont = getFont( nFontID );
     if (pFont && pFont->m_aPSName.isEmpty())
     {
         analyzeSfntFile(pFont);
     }
 
-    return pFont ? pFont->m_aPSName : aEmpty;
+    return pFont ? pFont->m_aPSName : OUString();
 }
 
 int PrintFontManager::getFontAscend( fontID nFontID ) const

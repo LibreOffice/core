@@ -1615,8 +1615,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         if( bClearText )
         {
             uno::Reference< text::XText > xText( mxShape, uno::UNO_QUERY );
-            OUString aEmpty;
-            xText->setString( aEmpty );
+            xText->setString( "" );
         }
 
         // set parameters on shape
@@ -3795,8 +3794,7 @@ void SdXMLCustomShapeContext::EndElement()
                 Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( mxShape, UNO_QUERY );
                 if( xDefaulter.is() )
                 {
-                    OUString aEmptyType;
-                    xDefaulter->createCustomShapeDefaults( aEmptyType );
+                    xDefaulter->createCustomShapeDefaults( "" );
                 }
             }
         }

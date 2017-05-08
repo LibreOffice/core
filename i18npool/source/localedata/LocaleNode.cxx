@@ -2390,13 +2390,12 @@ Attr::Attr (const Reference< XAttributeList > & attr) {
     }
 }
 
-const OUString& Attr::getValueByName (const sal_Char *str) const {
-    static OUString empty;
+OUString Attr::getValueByName (const sal_Char *str) const {
     sal_Int32 len = name.getLength();
     for (sal_Int32 i = 0;i<len;i++)
         if (name[i].equalsAscii(str))
             return value[i];
-    return empty;
+    return OUString();
 }
 
 sal_Int32 Attr::getLength() const{

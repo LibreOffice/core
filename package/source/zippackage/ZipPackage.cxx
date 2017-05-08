@@ -1228,8 +1228,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             RandomPool aRandomPool;
 
             // call saveContents ( it will recursively save sub-directories
-            OUString aEmptyString;
-            m_xRootFolder->saveContents(aEmptyString, aManList, aZipOut, GetEncryptionKey(), aRandomPool.get());
+            m_xRootFolder->saveContents("", aManList, aZipOut, GetEncryptionKey(), aRandomPool.get());
         }
 
         if( m_nFormat == embed::StorageFormats::PACKAGE )

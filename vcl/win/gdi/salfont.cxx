@@ -1285,14 +1285,13 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
         if( rcOSL == osl::FileBase::E_None )
         {
             osl::DirectoryItem aDirItem;
-            OUString aEmptyString;
 
             while( aFontDir.getNextItem( aDirItem, 10 ) == osl::FileBase::E_None )
             {
                 osl::FileStatus aFileStatus( osl_FileStatus_Mask_FileURL );
                 rcOSL = aDirItem.getFileStatus( aFileStatus );
                 if ( rcOSL == osl::FileBase::E_None )
-                    AddTempDevFont( pFontCollection, aFileStatus.getFileURL(), aEmptyString );
+                    AddTempDevFont( pFontCollection, aFileStatus.getFileURL(), "" );
             }
         }
     }

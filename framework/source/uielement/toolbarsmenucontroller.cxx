@@ -286,7 +286,6 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
     m_aCommandVector.clear();
 
     // Retrieve layout manager for additional information
-    OUString aEmptyString;
     Reference< XLayoutManager > xLayoutManager( getLayoutManagerFromFrame( m_xFrame ));
 
     m_bResetActive = false;
@@ -414,11 +413,11 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         {
             if ( m_aModuleIdentifier == "com.sun.star.drawing.DrawingDocument" ||
                  m_aModuleIdentifier == "com.sun.star.presentation.PresentationDocument" )
-                addCommand( m_xPopupMenu, ".uno:ColorControl", aEmptyString );
+                addCommand( m_xPopupMenu, ".uno:ColorControl", "" );
             else if ( m_aModuleIdentifier == "com.sun.star.sheet.SpreadsheetDocument" )
-                addCommand( m_xPopupMenu, ".uno:InputLineVisible", aEmptyString );
+                addCommand( m_xPopupMenu, ".uno:InputLineVisible", "" );
             else
-                addCommand( m_xPopupMenu, ".uno:InsertFormula", aEmptyString );
+                addCommand( m_xPopupMenu, ".uno:InsertFormula", "" );
         }
 
         bool          bAddCommand( true );
@@ -441,7 +440,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
                 m_xPopupMenu->insertSeparator( nItemCount+1 );
             }
 
-            addCommand( m_xPopupMenu, aConfigureToolbar, aEmptyString );
+            addCommand( m_xPopupMenu, aConfigureToolbar, "" );
         }
 
         // Add separator if no configure has been added

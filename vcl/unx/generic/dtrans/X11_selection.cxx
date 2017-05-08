@@ -689,16 +689,15 @@ SelectionManager& SelectionManager::get( const OUString& rDisplayName )
     return *pInstance;
 }
 
-const OUString& SelectionManager::getString( Atom aAtom )
+OUString SelectionManager::getString( Atom aAtom )
 {
     osl::MutexGuard aGuard(m_aMutex);
 
     if( m_aAtomToString.find( aAtom ) == m_aAtomToString.end() )
     {
-        static OUString aEmpty;
         char* pAtom = m_pDisplay ? XGetAtomName( m_pDisplay, aAtom ) : nullptr;
         if( ! pAtom )
-            return aEmpty;
+            return OUString();
         OUString aString( OStringToOUString( pAtom, RTL_TEXTENCODING_ISO_8859_1 ) );
         XFree( pAtom );
         m_aStringToAtom[ aString ] = aAtom;

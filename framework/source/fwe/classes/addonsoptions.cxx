@@ -288,7 +288,6 @@ class AddonsOptions_Impl : public ConfigItem
         OUString                                   m_aPropMergeMenuNames[PROPERTYCOUNT_MERGE_MENUBAR];
         OUString                                   m_aPropMergeToolbarNames[PROPERTYCOUNT_MERGE_TOOLBAR];
         OUString                                   m_aPropMergeStatusbarNames[PROPERTYCOUNT_MERGE_STATUSBAR];
-        OUString                                   m_aEmpty;
         OUString                                   m_aPathDelimiter;
         OUString                                   m_aRootAddonPopupMenuURLPrexfix;
         Sequence< Sequence< PropertyValue > >             m_aCachedMenuProperties;
@@ -1078,7 +1077,7 @@ bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< 
             // A popup menu must have a title and can have a URL and ImageIdentifier
             // Set the other property values to empty
             aMenuItem[ OFFSET_MENUITEM_URL              ].Value <<= aPopupMenuURL;
-            aMenuItem[ OFFSET_MENUITEM_TARGET           ].Value <<= m_aEmpty;
+            aMenuItem[ OFFSET_MENUITEM_TARGET           ].Value <<= OUString();
             aMenuItem[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ].Value <<= aPopupMenuImageId;
             aMenuItem[ OFFSET_MENUITEM_CONTEXT          ].Value = aMenuItemNodePropValues[ OFFSET_MENUITEM_CONTEXT ];
 
@@ -1113,9 +1112,9 @@ bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< 
     {
         // Separator
         aMenuItem[ OFFSET_MENUITEM_URL              ].Value <<= aStrValue;
-        aMenuItem[ OFFSET_MENUITEM_TARGET           ].Value <<= m_aEmpty;
-        aMenuItem[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ].Value <<= m_aEmpty;
-        aMenuItem[ OFFSET_MENUITEM_CONTEXT          ].Value <<= m_aEmpty;
+        aMenuItem[ OFFSET_MENUITEM_TARGET           ].Value <<= OUString();
+        aMenuItem[ OFFSET_MENUITEM_IMAGEIDENTIFIER  ].Value <<= OUString();
+        aMenuItem[ OFFSET_MENUITEM_CONTEXT          ].Value <<= OUString();
         aMenuItem[ OFFSET_MENUITEM_SUBMENU          ].Value <<= Sequence< Sequence< PropertyValue > >(); // Submenu set!
         bResult = true;
     }
@@ -1194,11 +1193,11 @@ bool AddonsOptions_Impl::ReadToolBarItem( const OUString& aToolBarItemNodeName, 
         {
             // A separator toolbar item only needs a URL
             aToolBarItem[ OFFSET_TOOLBARITEM_URL                ].Value <<= aURL;
-            aToolBarItem[ OFFSET_TOOLBARITEM_TITLE              ].Value <<= m_aEmpty;
-            aToolBarItem[ OFFSET_TOOLBARITEM_TARGET             ].Value <<= m_aEmpty;
-            aToolBarItem[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER    ].Value <<= m_aEmpty;
-            aToolBarItem[ OFFSET_TOOLBARITEM_CONTEXT            ].Value <<= m_aEmpty;
-            aToolBarItem[ OFFSET_TOOLBARITEM_CONTROLTYPE        ].Value <<= m_aEmpty;
+            aToolBarItem[ OFFSET_TOOLBARITEM_TITLE              ].Value <<= OUString();
+            aToolBarItem[ OFFSET_TOOLBARITEM_TARGET             ].Value <<= OUString();
+            aToolBarItem[ OFFSET_TOOLBARITEM_IMAGEIDENTIFIER    ].Value <<= OUString();
+            aToolBarItem[ OFFSET_TOOLBARITEM_CONTEXT            ].Value <<= OUString();
+            aToolBarItem[ OFFSET_TOOLBARITEM_CONTROLTYPE        ].Value <<= OUString();
             aToolBarItem[ OFFSET_TOOLBARITEM_WIDTH              ].Value <<= sal_Int32( 0 );
 
             bResult = true;
