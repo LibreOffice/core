@@ -273,20 +273,23 @@ sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight, bool bOldSt
         else
             ++it;
     }
+    sal_Int32 itemZOrderOffset(0); // before the item
     if( it == items.end()) // we're topmost
     {
         if( items.empty())
             return 0;
-        sal_Int32 itemZOrder(0);
         --it;
-        if( it->second->getPropertyValue(getPropertyName( PROP_Z_ORDER )) >>= itemZOrder )
-            return itemZOrder + 1; // after the topmost
+        itemZOrderOffset = 1; // after the topmost
     }
-    else
-    {
+    // SwXFrame::getPropertyValue throws uno::RuntimeException
+    // when its GetFrameFormat() returns nullptr
+    try {
         sal_Int32 itemZOrder(0);
         if( it->second->getPropertyValue(getPropertyName( PROP_Z_ORDER )) >>= itemZOrder )
-            return itemZOrder; // before the item
+            return itemZOrder + itemZOrderOffset;
+    }
+    catch (const uno::RuntimeException&) {
+        SAL_WARN("writerfilter", "Exception when getting item z-order");
     }
     SAL_WARN( "writerfilter", "findZOrder() didn't find item z-order" );
     return 0; // this should not(?) happen
