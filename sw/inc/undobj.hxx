@@ -53,7 +53,7 @@ class SwUndo
     SwUndoId const m_nId;
     RedlineFlags   nOrigRedlineFlags;
     ViewShellId    m_nViewShellId;
-    bool m_isRepeatIgnored; /// for multi-selection, only repeat 1st selection
+    bool m_isRepeatIgnored; ///< for multi-selection, only repeat 1st selection
 
 protected:
     bool bCacheComment;
