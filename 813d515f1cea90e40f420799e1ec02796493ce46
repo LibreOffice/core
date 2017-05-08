@@ -52,6 +52,24 @@
       "revId": "813d515f1cea90e40f420799e1ec02796493ce46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e9d2da33",
+        "filename": "writerfilter/source/dmapper/GraphicHelpers.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-05-08T14:20:32Z",
+      "side": 1,
+      "message": "Ok, will fix.",
+      "parentUuid": "5a3905b3_891dd611",
+      "revId": "813d515f1cea90e40f420799e1ec02796493ce46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
