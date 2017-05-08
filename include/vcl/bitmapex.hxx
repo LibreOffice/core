@@ -71,6 +71,8 @@ public:
     TransparentType     GetTransparentType() const { return eTransparent; }
 
     Bitmap              GetBitmap( const Color* pTransReplaceColor = nullptr ) const;
+    /// Gives direct access to the contained bitmap.
+    const Bitmap&       GetBitmapRef() const;
     Bitmap              GetMask() const;
 
     bool                IsAlpha() const;

@@ -147,6 +147,8 @@ public:
     // before.
     Bitmap          GetBitmap(const GraphicConversionParameters& rParameters = GraphicConversionParameters()) const;
     BitmapEx        GetBitmapEx(const GraphicConversionParameters& rParameters = GraphicConversionParameters()) const;
+    /// Gives direct access to the contained BitmapEx.
+    const BitmapEx& GetBitmapExRef() const;
 
     Animation       GetAnimation() const;
     const GDIMetaFile& GetGDIMetaFile() const;

@@ -85,6 +85,8 @@ private:
 
     Bitmap              ImplGetBitmap(const GraphicConversionParameters& rParameters) const;
     BitmapEx            ImplGetBitmapEx(const GraphicConversionParameters& rParameters) const;
+    /// Gives direct access to the contained BitmapEx.
+    const BitmapEx&     ImplGetBitmapExRef() const;
     Animation           ImplGetAnimation() const;
     const GDIMetaFile&  ImplGetGDIMetaFile() const;
 

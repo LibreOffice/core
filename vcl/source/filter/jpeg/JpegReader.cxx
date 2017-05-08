@@ -161,13 +161,19 @@ void jpeg_svstream_src (j_decompress_ptr cinfo, void* input)
     source->pub.next_input_byte = nullptr; /* until buffer loaded */
 }
 
-JPEGReader::JPEGReader( SvStream& rStream, bool bSetLogSize ) :
+JPEGReader::JPEGReader( SvStream& rStream, GraphicFilterImportFlags nImportFlags ) :
     mrStream         ( rStream ),
     mnLastPos        ( rStream.Tell() ),
     mnLastLines      ( 0 ),
-    mbSetLogSize     ( bSetLogSize )
+    mbSetLogSize     ( nImportFlags & GraphicFilterImportFlags::SetLogsizeForJpeg )
 {
     maUpperName = "SVIJPEG";
+
+    if (!(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap))
+    {
+        mpBitmap.reset(new Bitmap());
+        mpIncompleteAlpha.reset(new Bitmap());
+    }
 }
 
 JPEGReader::~JPEGReader()
@@ -185,7 +191,7 @@ bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam& rParam)
     Size aSize(rParam.nWidth, rParam.nHeight);
     bool bGray = rParam.bGray;
 
-    maBitmap = Bitmap();
+    mpBitmap.reset(new Bitmap());
 
     sal_uInt64 nSize = aSize.Width() * aSize.Height();
 
@@ -202,11 +208,11 @@ bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam& rParam)
             aGrayPal[ n ] = BitmapColor( cGray, cGray, cGray );
         }
 
-        maBitmap = Bitmap(aSize, 8, &aGrayPal);
+        mpBitmap.reset(new Bitmap(aSize, 8, &aGrayPal));
     }
     else
     {
-        maBitmap = Bitmap(aSize, 24);
+        mpBitmap.reset(new Bitmap(aSize, 24));
     }
 
     if (mbSetLogSize)
@@ -221,8 +227,8 @@ bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam& rParam)
             MapMode     aMapMode( nUnit == 1 ? MapUnit::MapInch : MapUnit::MapCM, aEmptyPoint, aFractX, aFractY );
             Size        aPrefSize = OutputDevice::LogicToLogic( aSize, aMapMode, MapUnit::Map100thMM );
 
-            maBitmap.SetPrefSize(aPrefSize);
-            maBitmap.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+            mpBitmap->SetPrefSize(aPrefSize);
+            mpBitmap->SetPrefMapMode(MapMode(MapUnit::Map100thMM));
         }
     }
 
@@ -232,12 +238,12 @@ bool JPEGReader::CreateBitmap(JPEGCreateBitmapParam& rParam)
 Graphic JPEGReader::CreateIntermediateGraphic(long nLines)
 {
     Graphic aGraphic;
-    const Size aSizePixel(maBitmap.GetSizePixel());
+    const Size aSizePixel(mpBitmap->GetSizePixel());
 
     if (!mnLastLines)
     {
-        maIncompleteAlpha = Bitmap(aSizePixel, 1);
-        maIncompleteAlpha.Erase(Color(COL_WHITE));
+        mpIncompleteAlpha.reset(new Bitmap(aSizePixel, 1));
+        mpIncompleteAlpha->Erase(Color(COL_WHITE));
     }
 
     if (nLines && (nLines < aSizePixel.Height()))
@@ -247,21 +253,21 @@ Graphic JPEGReader::CreateIntermediateGraphic(long nLines)
         if (nNewLines > 0)
         {
             {
-                Bitmap::ScopedWriteAccess pAccess(maIncompleteAlpha);
+                Bitmap::ScopedWriteAccess pAccess(*mpIncompleteAlpha);
                 pAccess->SetFillColor(Color(COL_BLACK));
                 pAccess->FillRect(tools::Rectangle(Point(0, mnLastLines), Size(pAccess->Width(), nNewLines)));
             }
 
-            aGraphic = BitmapEx(maBitmap, maIncompleteAlpha);
+            aGraphic = BitmapEx(*mpBitmap, *mpIncompleteAlpha);
         }
         else
         {
-            aGraphic = maBitmap;
+            aGraphic = *mpBitmap;
         }
     }
     else
     {
-        aGraphic = maBitmap;
+        aGraphic = *mpBitmap;
     }
 
     mnLastLines = nLines;
@@ -269,7 +275,7 @@ Graphic JPEGReader::CreateIntermediateGraphic(long nLines)
     return aGraphic;
 }
 
-ReadState JPEGReader::Read( Graphic& rGraphic )
+ReadState JPEGReader::Read( Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, Bitmap::ScopedWriteAccess* ppAccess )
 {
     ReadState   eReadState;
     bool        bRet = false;
@@ -279,9 +285,10 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
 
     // read the (partial) image
     long nLines;
-    ReadJPEG( this, &mrStream, &nLines, GetPreviewSize() );
+    ReadJPEG( this, &mrStream, &nLines, GetPreviewSize(), nImportFlags, ppAccess );
 
-    if (!maBitmap.IsEmpty())
+    auto bUseExistingBitmap = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap);
+    if (bUseExistingBitmap || !mpBitmap->IsEmpty())
     {
         if( mrStream.GetError() == ERRCODE_IO_PENDING )
         {
@@ -289,7 +296,8 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
         }
         else
         {
-            rGraphic = maBitmap;
+            if (!bUseExistingBitmap)
+                rGraphic = *mpBitmap;
         }
 
         bRet = true;

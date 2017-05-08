@@ -235,6 +235,11 @@ bool BitmapEx::IsAlpha() const
     return( IsTransparent() && bAlpha );
 }
 
+const Bitmap& BitmapEx::GetBitmapRef() const
+{
+    return aBitmap;
+}
+
 Bitmap BitmapEx::GetBitmap( const Color* pTransReplaceColor ) const
 {
     Bitmap aRetBmp( aBitmap );

@@ -36,6 +36,7 @@ extern "C" {
 #include <JpegWriter.hxx>
 #include <memory>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/graphicfilter.hxx>
 
 extern "C" void errorExit (j_common_ptr cinfo)
 {
@@ -81,7 +82,8 @@ private:
 };
 
 void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
-               Size const & previewSize )
+               Size const & previewSize, GraphicFilterImportFlags nImportFlags,
+               Bitmap::ScopedWriteAccess* ppAccess )
 {
     try
     {
@@ -159,11 +161,23 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
         aCreateBitmapParam.Y_density = cinfo.Y_density;
         aCreateBitmapParam.bGray = bGray;
 
-        bool bBitmapCreated = pJPEGReader->CreateBitmap(aCreateBitmapParam);
+        const auto bOnlyCreateBitmap = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::OnlyCreateBitmap);
+        const auto bUseExistingBitmap = static_cast<bool>(nImportFlags & GraphicFilterImportFlags::UseExistingBitmap);
+        bool bBitmapCreated = bUseExistingBitmap;
+        if (!bBitmapCreated)
+            bBitmapCreated = pJPEGReader->CreateBitmap(aCreateBitmapParam);
 
-        if (bBitmapCreated)
+        if (bBitmapCreated && !bOnlyCreateBitmap)
         {
-            Bitmap::ScopedWriteAccess pAccess(pJPEGReader->GetBitmap());
+            std::unique_ptr<Bitmap::ScopedWriteAccess> pScopedAccess;
+
+            if (nImportFlags & GraphicFilterImportFlags::UseExistingBitmap)
+                // ppAccess must be set if this flag is used.
+                assert(ppAccess);
+            else
+                pScopedAccess.reset(new Bitmap::ScopedWriteAccess(pJPEGReader->GetBitmap()));
+
+            Bitmap::ScopedWriteAccess& pAccess = bUseExistingBitmap ? *ppAccess : *pScopedAccess.get();
 
             if (pAccess)
             {
@@ -251,7 +265,7 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
             }
         }
 
-        if (bBitmapCreated)
+        if (bBitmapCreated && !bOnlyCreateBitmap)
         {
             jpeg_finish_decompress( &cinfo );
         }
