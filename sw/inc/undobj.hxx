@@ -53,6 +53,7 @@ class SwUndo
     SwUndoId const m_nId;
     RedlineFlags   nOrigRedlineFlags;
     ViewShellId    m_nViewShellId;
+    bool m_isRepeatIgnored; /// for multi-selection, only repeat 1st selection
 
 protected:
     bool bCacheComment;
@@ -124,6 +125,7 @@ public:
     static bool FillSaveDataForFormat( const SwPaM& , SwRedlineSaveDatas& );
     static void SetSaveData( SwDoc& rDoc, SwRedlineSaveDatas& rSData );
     static bool HasHiddenRedlines( const SwRedlineSaveDatas& rSData );
+    void IgnoreRepeat() { m_isRepeatIgnored = true; }
 };
 
 enum class DelContentType : sal_uInt16

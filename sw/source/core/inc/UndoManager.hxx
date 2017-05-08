@@ -107,6 +107,8 @@ private:
     /// If true, then repair mode is enabled.
     bool m_bRepair;
     bool m_bLockUndoNoModifiedPosition : 1;
+    /// set the IgnoreRepeat flag on every added action
+    bool m_isAddWithIgnoreRepeat;
     /// position in Undo-Array at which Doc was saved (and is not modified)
     UndoStackMark m_UndoSaveMark;
     SwDocShell* m_pDocShell;

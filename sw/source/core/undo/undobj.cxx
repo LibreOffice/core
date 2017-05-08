@@ -158,9 +158,10 @@ void SwUndo::RemoveIdxRel( sal_uLong nIdx, const SwPosition& rPos )
 }
 
 SwUndo::SwUndo(SwUndoId const nId, const SwDoc* pDoc)
-    : m_nId(nId), nOrigRedlineFlags(RedlineFlags::NONE),
-      m_nViewShellId(CreateViewShellId(pDoc)),
-      bCacheComment(true), pComment(nullptr)
+    : m_nId(nId), nOrigRedlineFlags(RedlineFlags::NONE)
+    , m_nViewShellId(CreateViewShellId(pDoc))
+    , m_isRepeatIgnored(false)
+    , bCacheComment(true), pComment(nullptr)
 {
 }
 
@@ -240,6 +241,10 @@ void SwUndo::RedoWithContext(SfxUndoContext & rContext)
 
 void SwUndo::Repeat(SfxRepeatTarget & rContext)
 {
+    if (m_isRepeatIgnored)
+    {
+        return; // ignore Repeat for multi-selections
+    }
     ::sw::RepeatContext *const pRepeatContext(
             dynamic_cast< ::sw::RepeatContext * >(& rContext));
     assert(pRepeatContext);
@@ -250,6 +255,7 @@ bool SwUndo::CanRepeat(SfxRepeatTarget & rContext) const
 {
     assert(dynamic_cast< ::sw::RepeatContext * >(& rContext));
     (void)rContext;
+    // a MultiSelection action that doesn't do anything must still return true
     return (SwUndoId::REPEAT_START <= GetId()) && (GetId() < SwUndoId::REPEAT_END);
 }
 

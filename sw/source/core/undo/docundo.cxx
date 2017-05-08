@@ -61,6 +61,7 @@ UndoManager::UndoManager(std::shared_ptr<SwNodes> const & xUndoNodes,
     ,   m_bDrawUndo(true)
     ,   m_bRepair(false)
     ,   m_bLockUndoNoModifiedPosition(false)
+    ,   m_isAddWithIgnoreRepeat(false)
     ,   m_UndoSaveMark(MARK_INVALID)
     ,   m_pDocShell(nullptr)
     ,   m_pView(nullptr)
@@ -520,6 +521,10 @@ void UndoManager::AddUndoAction(SfxUndoAction *pAction, bool bTryMerge)
         {
             pUndo->SetRedlineFlags( m_rRedlineAccess.GetRedlineFlags() );
         }
+        if (m_isAddWithIgnoreRepeat)
+        {
+            pUndo->IgnoreRepeat();
+        }
     }
     SdrUndoManager::AddUndoAction(pAction, bTryMerge);
     // if the undo nodes array is too large, delete some actions
@@ -685,9 +690,17 @@ bool UndoManager::Repeat(::sw::RepeatContext & rContext,
     for(SwPaM& rPaM : rContext.GetRepeatPaM().GetRingContainer())
     {    // iterate over ring
         rContext.m_pCurrentPaM = &rPaM;
+        if (DoesUndo() && & rPaM != pTmp)
+        {
+            m_isAddWithIgnoreRepeat = true;
+        }
         for (sal_uInt16 nRptCnt = nRepeatCount; nRptCnt > 0; --nRptCnt)
         {
             pRepeatAction->Repeat(rContext);
+        }
+        if (DoesUndo() && & rPaM != pTmp)
+        {
+            m_isAddWithIgnoreRepeat = false;
         }
         rContext.m_bDeleteRepeated = false; // reset for next PaM
     }
