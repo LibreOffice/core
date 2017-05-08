@@ -648,6 +648,11 @@ Animation ImpGraphic::ImplGetAnimation() const
     return aAnimation;
 }
 
+const BitmapEx& ImpGraphic::ImplGetBitmapExRef() const
+{
+    return maEx;
+}
+
 const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
 {
     ensureAvailable();
