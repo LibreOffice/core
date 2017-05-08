@@ -233,6 +233,12 @@ namespace cppcanvas
 
         void ImplRenderer::ReadPoint (SvStream& s, float& x, float& y, sal_uInt32 flags)
         {
+            if (flags & 0x800) {
+                // specifies a location in the coordinate space that is relative to
+                // the location specified by the previous element in the array. In the case of the first element in
+                // PointData, a previous location at coordinates (0,0) is assumed.
+                SAL_WARN("cppcanvas.emf", "EMF+\t\t TODO Relative coordinates bit detected. Implement parse EMFPlusPointR");
+            }
             if (flags & 0x4000) {
                 sal_Int16 ix, iy;
 
