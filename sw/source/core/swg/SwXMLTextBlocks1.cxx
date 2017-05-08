@@ -64,7 +64,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
         {
             xRoot = xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
             xMedium = new SfxMedium( xRoot, GetBaseURL(), OUString( "writer8" ) );
-            SwReader aReader( *xMedium, aFolderName, pDoc );
+            SwReader aReader( *xMedium, aFolderName, m_pDoc );
             ReadXML->SetBlockMode( true );
             aReader.Read( *ReadXML );
             ReadXML->SetBlockMode( false );
@@ -73,7 +73,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             OUString sObjReplacements( "ObjectReplacements" );
             if ( xRoot->hasByName( sObjReplacements ) )
             {
-                uno::Reference< document::XStorageBasedDocument > xDocStor( pDoc->GetDocShell()->GetModel(), uno::UNO_QUERY_THROW );
+                uno::Reference< document::XStorageBasedDocument > xDocStor( m_pDoc->GetDocShell()->GetModel(), uno::UNO_QUERY_THROW );
                 uno::Reference< embed::XStorage > xStr( xDocStor->getDocumentStorage() );
                 if ( xStr.is() )
                 {
@@ -102,12 +102,12 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
                 comphelper::getProcessComponentContext();
 
             xml::sax::InputSource aParserInput;
-            aParserInput.sSystemId = aNames[nIdx]->aPackageName;
+            aParserInput.sSystemId = m_aNames[nIdx]->aPackageName;
 
             aParserInput.aInputStream = xStream->getInputStream();
 
             // get filter
-            uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, aCur, true );
+            uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, m_aCurrentText, true );
             uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new SwXMLTextBlockTokenHandler();
 
             // connect parser and filter
@@ -136,8 +136,8 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
                 // re throw ?
             }
 
-            bInfoChanged = false;
-            MakeBlockText(aCur);
+            m_bInfoChanged = false;
+            MakeBlockText(m_aCurrentText);
         }
         catch( uno::Exception& )
         {
@@ -161,9 +161,9 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
                                       SvxMacroTableDtor& rMacroTable )
 {
     // set current auto text
-    aShort = aNames[nIdx]->aShort;
-    aLong = aNames[nIdx]->aLong;
-    aPackageName = aNames[nIdx]->aPackageName;
+    m_aShort = m_aNames[nIdx]->aShort;
+    m_aLong = m_aNames[nIdx]->aLong;
+    aPackageName = m_aNames[nIdx]->aPackageName;
 
     sal_uLong nRet = 0;
 
@@ -187,7 +187,7 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
 
                 // prepare ParserInputSrouce
                 xml::sax::InputSource aParserInput;
-                aParserInput.sSystemId = aName;
+                aParserInput.sSystemId = m_aName;
                 aParserInput.aInputStream = xInputStream;
 
                 // get service factory
@@ -292,7 +292,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText
             comphelper::getProcessComponentContext();
 
         xml::sax::InputSource aParserInput;
-        aParserInput.sSystemId = aName;
+        aParserInput.sSystemId = m_aName;
         aParserInput.aInputStream = xContents->getInputStream();
 
         // get filter
@@ -501,7 +501,7 @@ void SwXMLTextBlocks::WriteInfo()
         {
         }
 
-        bInfoChanged = false;
+        m_bInfoChanged = false;
         return;
     }
 }
@@ -511,9 +511,9 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
     const SvxMacroTableDtor& rMacroTable )
 {
     // set current autotext
-    aShort = aNames[nIdx]->aShort;
-    aLong = aNames[nIdx]->aLong;
-    aPackageName = aNames[nIdx]->aPackageName;
+    m_aShort = m_aNames[nIdx]->aShort;
+    m_aLong = m_aNames[nIdx]->aLong;
+    aPackageName = m_aNames[nIdx]->aPackageName;
 
     // start XML autotext event export
     sal_uLong nRes = 0;
@@ -523,7 +523,7 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
 
     // Get model
     uno::Reference< lang::XComponent > xModelComp(
-        pDoc->GetDocShell()->GetModel(), UNO_QUERY );
+        m_pDoc->GetDocShell()->GetModel(), UNO_QUERY );
     OSL_ENSURE( xModelComp.is(), "XMLWriter::Write: got no model" );
     if( !xModelComp.is() )
         return ERR_SWG_WRITE_ERROR;
