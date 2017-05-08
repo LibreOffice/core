@@ -90,6 +90,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 
+#include <comphelper/lok.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <uno/current_context.hxx>
 
@@ -376,6 +377,13 @@ VCLUnoWrapperDeleter::disposing(lang::EventObject const& /* rSource */)
 
 void DeInitVCL()
 {
+    //rhbz#1444437, when using LibreOffice like a library you can't realistically
+    //tear everything down and recreate them on the next call, there's too many
+    //(c++) singletons that point to stuff that gets deleted during shutdown
+    //which won't be recreated on restart.
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     {
         SolarMutexReleaser r; // unblock threads blocked on that so we can join
         ::comphelper::JoinAsyncEventNotifiers();
