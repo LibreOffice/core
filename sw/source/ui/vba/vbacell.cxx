@@ -42,7 +42,7 @@ SwVbaCell::~SwVbaCell()
 ::sal_Int32 SAL_CALL SwVbaCell::getWidth()
 {
     SwVbaTableHelper aTableHelper( mxTextTable );
-    return aTableHelper.GetColWidth( mnColumn, mnRow, true );
+    return aTableHelper.GetColWidth( mnColumn, mnRow );
 }
 
 void SAL_CALL SwVbaCell::setWidth( ::sal_Int32 _width )

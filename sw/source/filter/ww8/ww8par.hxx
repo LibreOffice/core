@@ -872,7 +872,7 @@ public:
     void PrependedInlineNode(const SwPosition &rPos, const SwNode &rNode);
     sal_uInt16 CurrentSectionColCount() const;
     bool WillHavePageDescHere(const SwNodeIndex& rIdx) const;
-    void CreateSep(const long nTextPos, bool bMustHaveBreak);
+    void CreateSep(const long nTextPos);
     void InsertSegments();
     void JoinNode(const SwPosition &rPos, const SwNode &rNode);
     sal_uInt32 GetPageLeft() const;
@@ -1579,7 +1579,7 @@ private:
     void ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp );
     SdrObject* CreateContactObject(SwFrameFormat* pFlyFormat);
     RndStdIds ProcessEscherAlign(SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
-        SfxItemSet &rFlySet, bool bOrgObjectWasReplace);
+        SfxItemSet &rFlySet);
     bool MiserableRTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
         sal_Int16 eHoriOri, sal_Int16 eHoriRel);
     SwFrameFormat* Read_GrafLayer( long nGrafAnchorCp );

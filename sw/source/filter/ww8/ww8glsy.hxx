@@ -35,14 +35,12 @@ class SwNodeIndex;
 class WW8GlossaryFib : public WW8Fib
 {
 public:
-    WW8GlossaryFib( SvStream& rStrm, sal_uInt8 nWantedVersion ,
-        SvStream& rTableStrm, const WW8Fib &rFib) : WW8Fib(rStrm,
-        nWantedVersion,FindGlossaryFibOffset(rTableStrm,rStrm,rFib)) {}
+    WW8GlossaryFib( SvStream& rStrm, sal_uInt8 nWantedVersion, const WW8Fib &rFib)
+        : WW8Fib(rStrm, nWantedVersion, FindGlossaryFibOffset(rFib)) {}
     // fGlsy will indicate whether this has AutoText or not
     bool IsGlossaryFib() { return m_fGlsy; }
 private:
-    static sal_uInt32 FindGlossaryFibOffset(SvStream &rTableStrm,SvStream &rStrm,
-        const WW8Fib &rFib);
+    static sal_uInt32 FindGlossaryFibOffset(const WW8Fib &rFib);
 };
 
 /*
