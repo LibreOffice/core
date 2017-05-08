@@ -244,6 +244,9 @@ void Menu::Activate()
         }
         bInCallback = false;
     }
+
+    if (!aDelData.isDeleted() && !(nMenuFlags & MenuFlags::NoAutoMnemonics))
+        CreateAutoMnemonics();
 }
 
 void Menu::Deactivate()
@@ -2843,10 +2846,6 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
             }
             ImplCallEventListeners(VclEventId::MenuSubmenuChanged, nPos);
         }
-    }
-    else if (!(nMenuFlags & MenuFlags::NoAutoMnemonics))
-    {
-        CreateAutoMnemonics();
     }
 
     VclPtrInstance<MenuFloatingWindow> pWin( this, pW, nStyle | WB_SYSTEMWINDOW );
