@@ -124,8 +124,8 @@ void FmFormView::Init()
         }
     }
 
-    // dieses wird in der Shell vorgenommen
-    // bDesignMode = !bInitDesignMode;  // erzwingt, dass SetDesignMode ausgefuehrt wird
+    // this will be done in the shell
+    // bDesignMode = !bInitDesignMode;  // forces execution of SetDesignMode
     SetDesignMode( bInitDesignMode );
 }
 
@@ -223,10 +223,9 @@ void FmFormView::ChangeDesignMode(bool bDesign)
 
     FmFormModel* pModel = dynamic_cast<FmFormModel*>( GetModel() );
     if (pModel)
-    {   // fuer die Zeit des Uebergangs das Undo-Environment ausschalten, das sichert, dass man dort auch nicht-transiente
-        // Properties mal eben aendern kann (sollte allerdings mit Vorsicht genossen und beim Rueckschalten des Modes
-        // auch immer wieder rueckgaegig gemacht werden. Ein Beispiel ist das Setzen der maximalen Text-Laenge durch das
-        // FmXEditModel an seinem Control.)
+    {   // For the duration of the transition the Undo-Environment is disabled. This ensures that non-transient Properties can
+        // also be changed (this should be done with care and also reversed before switching the mode back. An example is the
+        // setting of the maximal length of the text by FmXEditModel on its control.)
         pModel->GetUndoEnv().Lock();
     }
 
@@ -297,7 +296,7 @@ void FmFormView::ChangeDesignMode(bool bDesign)
         }
     }
 
-    // und mein Undo-Environment wieder an
+    // Unlock Undo-Environment
     if (pModel)
         pModel->GetUndoEnv().UnLock();
 }
@@ -321,7 +320,7 @@ SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
             // creating the controllers
             ActivateControls(pPV);
 
-            // Alles deselektieren
+            // Deselect all
             UnmarkAll();
         }
         else if ( pFormShell && pFormShell->IsDesignMode() )
@@ -329,7 +328,7 @@ SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
             FmXFormShell* pFormShellImpl = pFormShell->GetImpl();
             pFormShellImpl->UpdateForms( true );
 
-            // damit der Formular-Navigator auf den Seitenwechsel reagieren kann
+            // so that the Form-Navigator can react to the pagechange
             pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_FMEXPLORER_CONTROL, true);
 
             pFormShellImpl->SetSelection(GetMarkedObjectList());
