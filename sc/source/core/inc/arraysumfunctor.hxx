@@ -13,20 +13,17 @@
 
 #include <cstdint>
 #include <rtl/math.hxx>
+
+#include <tools/simdsupport.hxx>
+#include <tools/simd.hxx>
 #include <tools/cpuid.hxx>
 
 #if defined(LO_SSE2_AVAILABLE)
-#include <emmintrin.h>
+#include <x86intrin.h>
 #endif
 
 namespace sc
 {
-
-template<typename T, unsigned int N>
-inline bool isAligned(const T* pointer)
-{
-    return 0 == (uintptr_t(pointer) % N);
-}
 
 struct ArraySumFunctor
 {
@@ -43,7 +40,7 @@ public:
 
     double operator() ()
     {
-        const static bool hasSSE2 = tools::cpuid::hasSSE2();
+        const static bool hasSSE2 = cpuid::hasSSE2();
 
         double fSum = 0.0;
         size_t i = 0;
@@ -51,7 +48,7 @@ public:
 
         if (hasSSE2)
         {
-            while ( i < mnSize && !isAligned<double, 16>(pCurrent))
+            while ( i < mnSize && !simd::isAligned<double, 16>(pCurrent))
             {
                 fSum += *pCurrent++;
                 i++;
