@@ -4088,12 +4088,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
     if (GetWeight() < ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize)
     {
         mxGroup->meCalcState = sc::GroupCalcDisabled;
-        std::ostringstream os;
-        os << "group length below minimum threshold ("
-            << GetWeight()
-            << " < " << ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize
-            << ")";
-        aScope.addMessage(OUString::createFromAscii(os.str().data()));
+        aScope.addGroupSizeThreasholdMessage(*this);
         return false;
     }
 
