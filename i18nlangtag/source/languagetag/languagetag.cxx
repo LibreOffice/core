@@ -643,7 +643,7 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID
 
     if (!bOtherImpl || !pImpl->mbInitializedLangID)
     {
-        if (nRegisterID == LANGUAGE_SYSTEM || nRegisterID == LANGUAGE_DONTKNOW)
+        if (nRegisterID == LanguageType(0) || nRegisterID == LANGUAGE_DONTKNOW)
             nRegisterID = getNextOnTheFlyLanguage();
         else
         {
