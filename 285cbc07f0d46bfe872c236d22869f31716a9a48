@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_ee490090",
+        "filename": "sw/source/filter/ww8/wrtww8.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 778,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-05-08T07:09:24Z",
+      "side": 1,
+      "message": "Not clear.\nAnyway, I wonder if this whole comment (which appears several times) shouldn\u0027t be removed.\nIndeed, since https://cgit.freedesktop.org/libreoffice/core/diff/sw/source/filter/ww8/wrtww8.cxx?id\u003dd8528a5cab06d300cb5be6445094de13b11ad8bb (2001!), there\u0027s no more mapping/translation",
+      "range": {
+        "startLine": 778,
+        "startChar": 24,
+        "endLine": 778,
+        "endChar": 68
+      },
+      "revId": "285cbc07f0d46bfe872c236d22869f31716a9a48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
