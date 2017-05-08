@@ -165,10 +165,9 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
                                                                  (pFilter) ? pFilter->GetServiceName() : OUString() );
 }
 
-SfxPickList& SfxPickList::Get()
+void SfxPickList::ensure()
 {
     static SfxPickList aUniqueInstance(SvtHistoryOptions().GetSize(ePICKLIST));
-    return aUniqueInstance;
 }
 
 SfxPickList::SfxPickList( sal_uInt32 nAllowedMenuSize ) :

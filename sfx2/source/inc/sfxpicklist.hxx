@@ -45,8 +45,7 @@ class SfxPickList : public SfxListener
     static void             AddDocumentToPickList( SfxObjectShell* pDocShell );
 
     public:
-        static SfxPickList& Get();
-        static void ensure() { Get(); }
+        static void ensure();
 
         virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 };
