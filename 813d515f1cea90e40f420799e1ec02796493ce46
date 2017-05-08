@@ -16,6 +16,24 @@
       "revId": "813d515f1cea90e40f420799e1ec02796493ce46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_492bee30",
+        "filename": "writerfilter/source/dmapper/GraphicHelpers.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-05-08T14:14:09Z",
+      "side": 1,
+      "message": "Well, yes, but what is the reason of more grained catch of a block around one logical operation? The logic of the method is to return zero on failure, so why make catch more specific?",
+      "parentUuid": "5a3905b3_a90372b7",
+      "revId": "813d515f1cea90e40f420799e1ec02796493ce46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
