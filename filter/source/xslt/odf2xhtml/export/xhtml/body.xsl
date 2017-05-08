@@ -1421,7 +1421,7 @@
 				<xsl:call-template name="calc-heading-digit">
 					<xsl:with-param name="value" select="$value + 1"/>
 					<xsl:with-param name="currentoutlineLevel" select="$currentoutlineLevel"/>
-					<xsl:with-param name="i" select="$i + 1"/>
+					<xsl:with-param name="i" select="$i + 2"/>
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:when test="$currentoutlineLevel &lt; $precedingoutlineLevel">
