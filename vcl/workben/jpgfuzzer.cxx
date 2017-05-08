@@ -21,7 +21,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
     Graphic aGraphic;
-    (void)ImportJPEG(aStream, aGraphic, GraphicFilterImportFlags::NONE);
+    (void)ImportJPEG(aStream, aGraphic, GraphicFilterImportFlags::NONE, nullptr);
     return 0;
 }
 

@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <sal/types.h>
 #include <basegfx/vector/b2dsize.hxx>
+#include <vcl/bitmap.hxx>
 
 #include <jpeglib.h>
 
@@ -35,6 +36,7 @@ class JPEGReader;
 class JPEGWriter;
 class Size;
 class SvStream;
+enum class GraphicFilterImportFlags;
 
 void jpeg_svstream_src (j_decompress_ptr cinfo, void* infile);
 
@@ -46,7 +48,8 @@ bool    WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
                    css::uno::Reference<css::task::XStatusIndicator> const & status);
 
 void    ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
-                  Size const & previewSize );
+                  Size const & previewSize, GraphicFilterImportFlags nImportFlags,
+                  Bitmap::ScopedWriteAccess* ppAccess );
 
 void    Transform(void* pInputStream, void* pOutputStream, long nAngle);
 

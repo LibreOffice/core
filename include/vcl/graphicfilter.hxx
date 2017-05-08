@@ -56,10 +56,14 @@ enum class GraphicFilterImportFlags
     DontSetLogsizeForJpeg  = 0x002,
     ForPreview             = 0x004,
     AllowPartialStreamRead = 0x010,
+    /// Only create a bitmap, do not read pixel data.
+    OnlyCreateBitmap       = 0x020,
+    /// Read pixel data into an existing bitmap.
+    UseExistingBitmap      = 0x040,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<GraphicFilterImportFlags> : is_typed_flags<GraphicFilterImportFlags, 0x0017> {};
+    template<> struct typed_flags<GraphicFilterImportFlags> : is_typed_flags<GraphicFilterImportFlags, 0x0077> {};
 }
 
 #define IMP_BMP                 "SVBMP"

@@ -120,7 +120,7 @@ try_again:
             {
                 Graphic aGraphic;
                 SvFileStream aFileStream(out, StreamMode::READ);
-                ret = (int) ImportJPEG(aFileStream, aGraphic, GraphicFilterImportFlags::NONE);
+                ret = (int) ImportJPEG(aFileStream, aGraphic, GraphicFilterImportFlags::NONE, nullptr);
             }
             else if (strcmp(argv[2], "gif") == 0)
             {

@@ -1493,10 +1493,19 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
             if( !( nImportFlags & GraphicFilterImportFlags::DontSetLogsizeForJpeg ) )
                 nImportFlags |= GraphicFilterImportFlags::SetLogsizeForJpeg;
 
-            if( !ImportJPEG( rIStream, rGraphic, nImportFlags ) )
+            sal_uInt64 nPosition = rIStream.Tell();
+            if( !ImportJPEG( rIStream, rGraphic, nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr ) )
                 nStatus = GRFILTER_FILTERERROR;
             else
-                eLinkType = GfxLinkType::NativeJpg;
+            {
+                Bitmap& rBitmap = const_cast<Bitmap&>(rGraphic.GetBitmapExRef().GetBitmapRef());
+                Bitmap::ScopedWriteAccess pWriteAccess(rBitmap);
+                rIStream.Seek(nPosition);
+                if( !ImportJPEG( rIStream, rGraphic, nImportFlags | GraphicFilterImportFlags::UseExistingBitmap, &pWriteAccess ) )
+                    nStatus = GRFILTER_FILTERERROR;
+                else
+                    eLinkType = GfxLinkType::NativeJpg;
+            }
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_SVG ) )
         {

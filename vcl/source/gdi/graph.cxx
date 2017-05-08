@@ -352,6 +352,11 @@ const GDIMetaFile& Graphic::GetGDIMetaFile() const
     return mxImpGraphic->ImplGetGDIMetaFile();
 }
 
+const BitmapEx& Graphic::GetBitmapExRef() const
+{
+    return mxImpGraphic->ImplGetBitmapExRef();
+}
+
 uno::Reference< graphic::XGraphic > Graphic::GetXGraphic() const
 {
     uno::Reference< graphic::XGraphic > xRet;

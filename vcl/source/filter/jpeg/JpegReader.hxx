@@ -21,9 +21,12 @@
 #define INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGREADER_HXX
 
 #include <vcl/graph.hxx>
+#include <vcl/bitmap.hxx>
 #include <vcl/fltcall.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+
+enum class GraphicFilterImportFlags;
 
 enum ReadState
 {
@@ -46,8 +49,8 @@ struct JPEGCreateBitmapParam
 class JPEGReader : public GraphicReader
 {
     SvStream&           mrStream;
-    Bitmap              maBitmap;
-    Bitmap              maIncompleteAlpha;
+    std::unique_ptr<Bitmap> mpBitmap;
+    std::unique_ptr<Bitmap> mpIncompleteAlpha;
 
     long                mnLastPos;
     long                mnLastLines;
@@ -56,14 +59,14 @@ class JPEGReader : public GraphicReader
     Graphic CreateIntermediateGraphic(long nLines);
 
 public:
-            JPEGReader( SvStream& rStream, bool bSetLogSize );
+            JPEGReader( SvStream& rStream, GraphicFilterImportFlags nImportFlags );
     virtual ~JPEGReader() override;
 
-    ReadState Read(Graphic& rGraphic);
+    ReadState Read(Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, Bitmap::ScopedWriteAccess* ppAccess);
 
     bool CreateBitmap(JPEGCreateBitmapParam& param);
 
-    Bitmap& GetBitmap() { return maBitmap; }
+    Bitmap& GetBitmap() { return *mpBitmap; }
 };
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_JPEG_JPEGREADER_HXX
