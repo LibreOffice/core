@@ -256,48 +256,51 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
     }
     else
     {
+        auto nXNumerator = aScaleX.GetNumerator();
+        auto nYNumerator = aScaleY.GetNumerator();
+        assert(nXNumerator != 0 && nYNumerator != 0);
         rMapRes.mfOffsetX *= aScaleX.GetDenominator();
-        rMapRes.mfOffsetX /= aScaleX.GetNumerator();
+        rMapRes.mfOffsetX /= nXNumerator;
         rMapRes.mfOffsetX += aOrigin.X();
         rMapRes.mfOffsetY *= aScaleY.GetDenominator();
-        rMapRes.mfOffsetY /= aScaleY.GetNumerator();
+        rMapRes.mfOffsetY /= nYNumerator;
         rMapRes.mfOffsetY += aOrigin.Y();
 
         BigInt aX( rMapRes.mnMapOfsX );
         aX *= BigInt( aScaleX.GetDenominator() );
         if ( rMapRes.mnMapOfsX >= 0 )
         {
-            if ( aScaleX.GetNumerator() >= 0 )
-                aX += BigInt( aScaleX.GetNumerator()/2 );
+            if (nXNumerator >= 0)
+                aX += BigInt(nXNumerator / 2);
             else
-                aX -= BigInt( (aScaleX.GetNumerator()+1)/2 );
+                aX -= BigInt((nXNumerator + 1) / 2);
         }
         else
         {
-            if ( aScaleX.GetNumerator() >= 0 )
-                aX -= BigInt( (aScaleX.GetNumerator()-1)/2 );
+            if (nXNumerator >= 0 )
+                aX -= BigInt((nXNumerator - 1) / 2);
             else
-                aX += BigInt( aScaleX.GetNumerator()/2 );
+                aX += BigInt(nXNumerator / 2);
         }
-        aX /= BigInt( aScaleX.GetNumerator() );
+        aX /= BigInt(nXNumerator);
         rMapRes.mnMapOfsX = (long)aX + aOrigin.X();
         BigInt aY( rMapRes.mnMapOfsY );
         aY *= BigInt( aScaleY.GetDenominator() );
         if( rMapRes.mnMapOfsY >= 0 )
         {
-            if ( aScaleY.GetNumerator() >= 0 )
-                aY += BigInt( aScaleY.GetNumerator()/2 );
+            if (nYNumerator >= 0)
+                aY += BigInt(nYNumerator / 2);
             else
-                aY -= BigInt( (aScaleY.GetNumerator()+1)/2 );
+                aY -= BigInt((nYNumerator + 1) / 2);
         }
         else
         {
-            if ( aScaleY.GetNumerator() >= 0 )
-                aY -= BigInt( (aScaleY.GetNumerator()-1)/2 );
+            if (nYNumerator >= 0)
+                aY -= BigInt((nYNumerator - 1) / 2);
             else
-                aY += BigInt( aScaleY.GetNumerator()/2 );
+                aY += BigInt(nYNumerator / 2);
         }
-        aY /= BigInt( aScaleY.GetNumerator() );
+        aY /= BigInt(nYNumerator);
         rMapRes.mnMapOfsY = (long)aY + aOrigin.Y();
     }
 
