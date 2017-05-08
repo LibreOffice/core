@@ -495,7 +495,7 @@ class HTMLTable
     // Setting the border with the help of guidelines of the Parent-Table
     void InheritBorders( const HTMLTable *pParent,
                          sal_uInt16 nRow, sal_uInt16 nCol,
-                         sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
+                         sal_uInt16 nRowSpan,
                          bool bFirstPara, bool bLastPara );
 
     // Inherit the left and the right border of the surrounding table
@@ -1789,7 +1789,7 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
 
 void HTMLTable::InheritBorders( const HTMLTable *pParent,
                                 sal_uInt16 nRow, sal_uInt16 nCol,
-                                sal_uInt16 nRowSpan, sal_uInt16 /*nColSpan*/,
+                                sal_uInt16 nRowSpan,
                                 bool bFirstPara, bool bLastPara )
 {
     OSL_ENSURE( m_nRows>0 && m_nCols>0 && m_nCurrentRow==m_nRows,
@@ -1924,7 +1924,6 @@ void HTMLTable::SetBorders()
                     {
                         pTable->InheritBorders( this, i, j,
                                                 pCell->GetRowSpan(),
-                                                pCell->GetColSpan(),
                                                 bFirstPara,
                                                 nullptr==pCnts->Next() );
                         pTable->SetBorders();

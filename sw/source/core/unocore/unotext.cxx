@@ -2554,8 +2554,7 @@ public:
 
     bool                        m_bIsHeader;
 
-    Impl(   SwXHeadFootText & /*rThis*/,
-            SwFrameFormat & rHeadFootFormat, const bool bIsHeader)
+    Impl( SwFrameFormat & rHeadFootFormat, const bool bIsHeader)
         : SwClient(& rHeadFootFormat)
         , m_bIsHeader(bIsHeader)
     {
@@ -2610,7 +2609,7 @@ SwXHeadFootText::CreateXHeadFootText(
 SwXHeadFootText::SwXHeadFootText(SwFrameFormat & rHeadFootFormat, const bool bIsHeader)
     : SwXText(rHeadFootFormat.GetDoc(),
             (bIsHeader) ? CursorType::Header : CursorType::Footer)
-    , m_pImpl( new SwXHeadFootText::Impl(*this, rHeadFootFormat, bIsHeader) )
+    , m_pImpl( new SwXHeadFootText::Impl(rHeadFootFormat, bIsHeader) )
 {
 }
 

@@ -1001,13 +1001,13 @@ void SwXMLTextImportHelper::RedlineSetCursor(
 }
 
 void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor(
-    bool bStart)
+    bool /*bStart*/)
 {
     OUString rId = GetOpenRedlineId();
     if ((nullptr != pRedlineHelper) && !rId.isEmpty())
     {
         uno::Reference<XTextRange> xTextRange( GetCursor()->getStart() );
-        pRedlineHelper->AdjustStartNodeCursor(rId, bStart, xTextRange );
+        pRedlineHelper->AdjustStartNodeCursor(rId);
         ResetOpenRedlineId();
     }
     // else: ignore redline (wasn't added before, or no open redline ID

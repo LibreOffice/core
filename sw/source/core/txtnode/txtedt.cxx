@@ -1440,11 +1440,9 @@ SwRect SwTextFrame::AutoSpell_( const SwContentNode* pActNode, sal_Int32 nActPos
     recognized words are stored into a list that is used later for drawing
     the underline.
 
-    @param pActNode ???
-    @param nActPos ???
     @return SwRect Repaint area
 */
-SwRect SwTextFrame::SmartTagScan( SwContentNode* /*pActNode*/, sal_Int32 /*nActPos*/ )
+SwRect SwTextFrame::SmartTagScan()
 {
     SwRect aRet;
     SwTextNode *pNode = GetTextNode();

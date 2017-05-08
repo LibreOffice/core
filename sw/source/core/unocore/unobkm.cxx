@@ -52,9 +52,9 @@ public:
     ::comphelper::OInterfaceContainerHelper2  m_EventListeners;
     SwDoc *                     m_pDoc;
     ::sw::mark::IMark *         m_pRegisteredBookmark;
-    OUString             m_sMarkName;
+    OUString                    m_sMarkName;
 
-    Impl(   SwDoc *const pDoc, ::sw::mark::IMark *const /*pBookmark*/)
+    Impl( SwDoc *const pDoc )
         : SwClient()
         , m_EventListeners(m_Mutex)
         , m_pDoc(pDoc)
@@ -124,15 +124,13 @@ const ::sw::mark::IMark* SwXBookmark::GetBookmark() const
     return m_pImpl->m_pRegisteredBookmark;
 }
 
-SwXBookmark::SwXBookmark(
-    ::sw::mark::IMark *const pBkmk,
-    SwDoc *const pDoc)
-    : m_pImpl( new SwXBookmark::Impl(pDoc, pBkmk) )
+SwXBookmark::SwXBookmark(SwDoc *const pDoc)
+    : m_pImpl( new SwXBookmark::Impl(pDoc) )
 {
 }
 
 SwXBookmark::SwXBookmark()
-    : m_pImpl( new SwXBookmark::Impl(nullptr, nullptr) )
+    : m_pImpl( new SwXBookmark::Impl(nullptr) )
 {
 }
 
@@ -160,7 +158,7 @@ uno::Reference<text::XTextContent> SwXBookmark::CreateXBookmark(
             "<SwXBookmark::GetObject(..)>"
             "SwXBookmark requested for non-bookmark mark and non-annotation mark.");
         SwXBookmark *const pXBookmark =
-            (pBookmark) ? new SwXBookmark(pBookmark, &rDoc) : new SwXBookmark;
+            pBookmark ? new SwXBookmark(&rDoc) : new SwXBookmark;
         xBookmark.set(pXBookmark);
         pXBookmark->m_pImpl->registerInMark(*pXBookmark, pMarkBase);
     }
@@ -451,8 +449,8 @@ SwXBookmark::removeVetoableChangeListener(
     OSL_FAIL("SwXBookmark::removeVetoableChangeListener(): not implemented");
 }
 
-SwXFieldmark::SwXFieldmark(bool _isReplacementObject, ::sw::mark::IMark* pBkm, SwDoc* pDc)
-    : SwXFieldmark_Base(pBkm, pDc)
+SwXFieldmark::SwXFieldmark(bool _isReplacementObject, SwDoc* pDc)
+    : SwXFieldmark_Base(pDc)
     , isReplacementObject(_isReplacementObject)
 { }
 
@@ -584,11 +582,11 @@ SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark *const pMark,
         // FIXME: These belong in XTextFieldsSupplier
         SwXFieldmark* pXBkmk = nullptr;
         if (dynamic_cast< ::sw::mark::TextFieldmark* >(pMark))
-            pXBkmk = new SwXFieldmark(false, pMark, &rDoc);
+            pXBkmk = new SwXFieldmark(false, &rDoc);
         else if (dynamic_cast< ::sw::mark::CheckboxFieldmark* >(pMark))
-            pXBkmk = new SwXFieldmark(true, pMark, &rDoc);
+            pXBkmk = new SwXFieldmark(true, &rDoc);
         else
-            pXBkmk = new SwXFieldmark(isReplacementObject, nullptr, &rDoc);
+            pXBkmk = new SwXFieldmark(isReplacementObject, &rDoc);
 
         xMark.set(pXBkmk);
         pXBkmk->registerInMark(*pXBkmk, pMarkBase);

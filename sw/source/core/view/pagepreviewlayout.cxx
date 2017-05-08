@@ -1053,7 +1053,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const tools:
             }
         }
         // paint preview background rectangles
-        mrParentViewShell.PaintDesktop_(rRenderContext, aPreviewBackgrdRegion);
+        mrParentViewShell.PaintDesktop_(aPreviewBackgrdRegion);
     }
 
     // prepare data for paint of pages

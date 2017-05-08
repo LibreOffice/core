@@ -439,7 +439,7 @@ void SwHTMLParser::InsertEmbed()
     // den Anker setzen
     if( !bHidden )
     {
-        SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, aFrameSet );
+        SetAnchorAndAdjustment( eVertOri, eHoriOri, aPropInfo, aFrameSet );
     }
     else
     {
@@ -610,7 +610,7 @@ void SwHTMLParser::NewObject()
         Reader::ResetFrameFormatAttrs( rFrameSet );
 
     // den Anker und die Ausrichtung setzen
-    SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, rFrameSet );
+    SetAnchorAndAdjustment( eVertOri, eHoriOri, aPropInfo, rFrameSet );
 
     // und noch die Groesse des Rahmens
     Size aDfltSz( HTML_DFLT_APPLET_WIDTH, HTML_DFLT_APPLET_HEIGHT );
@@ -744,7 +744,7 @@ void SwHTMLParser::InsertApplet()
         Reader::ResetFrameFormatAttrs( rFrameSet );
 
     // den Anker und die Ausrichtung setzen
-    SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, rFrameSet );
+    SetAnchorAndAdjustment( eVertOri, eHoriOri, aPropInfo, rFrameSet );
 
     // und noch die Groesse des Rahmens
     Size aDfltSz( HTML_DFLT_APPLET_WIDTH, HTML_DFLT_APPLET_HEIGHT );
@@ -927,7 +927,7 @@ void SwHTMLParser::InsertFloatingFrame()
         Reader::ResetFrameFormatAttrs( aFrameSet );
 
     // den Anker und die Ausrichtung setzen
-    SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, aFrameSet );
+    SetAnchorAndAdjustment( eVertOri, eHoriOri, aPropInfo, aFrameSet );
 
     // und noch die Groesse des Rahmens
     Size aDfltSz( HTML_DFLT_APPLET_WIDTH, HTML_DFLT_APPLET_HEIGHT );

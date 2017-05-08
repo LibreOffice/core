@@ -216,7 +216,7 @@ public:
     SwRect AutoSpell_( const SwContentNode*, sal_Int32 );
 
     /// Is called by FormatSpelling()
-    SwRect SmartTagScan( SwContentNode* , sal_Int32 );
+    SwRect SmartTagScan();
 
     /// Is called by CollectAutoCmplWords()
     void CollectAutoCmplWrds( SwContentNode* , sal_Int32 );

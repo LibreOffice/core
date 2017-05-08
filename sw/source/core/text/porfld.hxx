@@ -167,8 +167,7 @@ class SwGrfNumPortion : public SwNumberPortion
     SwTwips         nGrfHeight;
     sal_Int16       eOrient;
 public:
-    SwGrfNumPortion( SwFrame *pFrame,
-                     const OUString& rGraphicFollowedBy,
+    SwGrfNumPortion( const OUString& rGraphicFollowedBy,
                      const SvxBrushItem* pGrfBrush,
                      const SwFormatVertOrient* pGrfOrient,
                      const Size& rGrfSize,

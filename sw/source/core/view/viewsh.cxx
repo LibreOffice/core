@@ -1523,11 +1523,11 @@ void SwViewShell::PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect 
         }
     }
     if ( !aRegion.empty() )
-        PaintDesktop_(rRenderContext, aRegion);
+        PaintDesktop_(aRegion);
 }
 
 // PaintDesktop is split in two, this part is also used by PreviewPage
-void SwViewShell::PaintDesktop_(vcl::RenderContext& /*rRenderContext*/, const SwRegionRects &rRegion)
+void SwViewShell::PaintDesktop_(const SwRegionRects &rRegion)
 {
     // OD 2004-04-23 #116347#
     GetOut()->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );

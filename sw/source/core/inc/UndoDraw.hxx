@@ -127,7 +127,7 @@ public:
     virtual void UndoImpl( ::sw::UndoRedoContext & ) override;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
-    void AddObj( sal_uInt16 nPos, SwDrawFrameFormat*, const SdrMark& );
+    void AddObj( SwDrawFrameFormat*, const SdrMark& );
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDODRAW_HXX

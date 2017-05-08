@@ -98,15 +98,9 @@ public:
      * Adjust the start (end) position for a redline that begins in a
      * start node. It takes the cursor positions _inside_ the redlined
      * element (e.g. section or table).
-     *
-     * We will do sanity checking of the given text range: It will
-     * only be considered valid if it points to the next text node
-     * after the position given in a previous SetCursor */
+     */
     void AdjustStartNodeCursor(
-         const OUString& rId,        // ID used in RedlineAdd() call
-        bool bStart,
-        // XTextRange _inside_ a table/section
-        css::uno::Reference<css::text::XTextRange> & rRange);
+         const OUString& rId);        // ID used in RedlineAdd() call
 
     // set redline mode: show changes
     void SetShowChanges( bool bShowChanges );
