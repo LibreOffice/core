@@ -37,6 +37,7 @@ extern "C" {
 #include <JpegWriter.hxx>
 #include <memory>
 #include <vcl/bitmapaccess.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable to __declspec(align()) aligned warning */
@@ -67,7 +68,8 @@ extern "C" void outputMessage (j_common_ptr cinfo)
 }
 
 void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
-               Size const & previewSize )
+               Size const & previewSize, GraphicFilterImportFlags nImportFlags,
+               Bitmap::ScopedWriteAccess* ppAccess )
 {
     jpeg_decompress_struct cinfo;
     ErrorManagerStruct jerr;

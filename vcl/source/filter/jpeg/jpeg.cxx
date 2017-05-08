@@ -25,7 +25,7 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
 
-VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, GraphicFilterImportFlags nImportFlags )
+VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, GraphicFilterImportFlags nImportFlags, Bitmap::ScopedWriteAccess* ppAccess )
 {
     bool        bReturn = true;
 
@@ -34,7 +34,7 @@ VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, Graphi
     JPEGReader* pJPEGReader = dynamic_cast<JPEGReader*>( pContext.get() );
     if (!pJPEGReader)
     {
-        pContext = std::make_shared<JPEGReader>( rInputStream, bool( nImportFlags & GraphicFilterImportFlags::SetLogsizeForJpeg ) );
+        pContext = std::make_shared<JPEGReader>( rInputStream, nImportFlags );
         pJPEGReader = static_cast<JPEGReader*>( pContext.get() );
     }
 
@@ -47,7 +47,7 @@ VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, Graphi
         pJPEGReader->DisablePreviewMode();
     }
 
-    ReadState eReadState = pJPEGReader->Read( rGraphic );
+    ReadState eReadState = pJPEGReader->Read( rGraphic, nImportFlags, ppAccess );
 
     if( eReadState == JPEGREAD_ERROR )
     {
