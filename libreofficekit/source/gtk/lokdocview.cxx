@@ -2608,20 +2608,32 @@ static void lok_doc_view_destroy (GtkWidget* widget)
     std::stringstream ss;
     ss << "lok::Document::setView(" << priv->m_nViewId << ")";
     g_info("%s", ss.str().c_str());
-    priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
-    priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, nullptr, nullptr);
+    if (priv->m_pDocument)
+    {
+        priv->m_pDocument->pClass->setView(priv->m_pDocument, priv->m_nViewId);
+        priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, nullptr, nullptr);
+    }
     aGuard.unlock();
 
-    if (priv->m_pDocument && priv->m_pDocument->pClass->getViewsCount(priv->m_pDocument) > 1)
+    if (priv->m_pDocument)
     {
-        priv->m_pDocument->pClass->destroyView(priv->m_pDocument, priv->m_nViewId);
-    }
-    else
-    {
-        if (priv->m_pDocument)
-            priv->m_pDocument->pClass->destroy (priv->m_pDocument);
-        if (priv->m_pOffice)
-            priv->m_pOffice->pClass->destroy (priv->m_pOffice);
+        if (priv->m_pDocument->pClass->getViewsCount(priv->m_pDocument) > 1)
+        {
+            priv->m_pDocument->pClass->destroyView(priv->m_pDocument, priv->m_nViewId);
+        }
+        else
+        {
+            if (priv->m_pDocument)
+            {
+                priv->m_pDocument->pClass->destroy (priv->m_pDocument);
+                priv->m_pDocument = nullptr;
+            }
+            if (priv->m_pOffice)
+            {
+                priv->m_pOffice->pClass->destroy (priv->m_pOffice);
+                priv->m_pOffice = nullptr;
+            }
+        }
     }
 
     GTK_WIDGET_CLASS (lok_doc_view_parent_class)->destroy (widget);
