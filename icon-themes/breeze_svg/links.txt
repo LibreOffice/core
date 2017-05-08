@@ -563,6 +563,7 @@ cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
 cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
 cmd/sc_insertcolumnsmenu.png cmd/sc_insertcolumns.png
 cmd/sc_functiondialog.png cmd/sc_dbviewfunctions.png
+cmd/sc_sheetcommentmenu.png cmd/sc_showannotations.png
 
 # Shapes
 cmd/lc_basicshapes.png cmd/lc_basicshapes.diamond.png
@@ -1360,3 +1361,6 @@ cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png 
 cmd/lc_rowoperations.png cmd/lc_entirerow.png 
 cmd/sc_rowoperations.png cmd/sc_entirerow.png
+
+cmd/sc_cellprotection.png cmd/sc_protect.png
+cmd/lc_cellprotection.png cmd/lc_protect.png
