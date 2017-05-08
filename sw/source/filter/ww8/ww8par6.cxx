@@ -788,7 +788,7 @@ void wwSectionManager::SetNumberingType(const wwSection &rNewSection,
 // fills it/them with attributes and KF texts.
 // This has become necessary because the translation of the various
 // page attributes is interconnected too much.
-void wwSectionManager::CreateSep(const long nTextPos, bool /*bMustHaveBreak*/)
+void wwSectionManager::CreateSep(const long nTextPos)
 {
     /*
     #i1909# section/page breaks should not occur in tables or subpage
