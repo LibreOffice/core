@@ -149,7 +149,7 @@ public:
     RegionMode      GetRegionDropMode() const {return m_nRegionMode;}
     void            SetRegionDropMode(RegionMode nNewMode);
 
-    sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
+    sal_Int8        AcceptDrop();
     sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     bool            IsGlobalDoc() const;
@@ -164,8 +164,7 @@ class SwNavigationChild : public SfxChildWindowContext
 public:
     SwNavigationChild( vcl::Window* ,
                         sal_uInt16 nId,
-                        SfxBindings*,
-                        SfxChildWinInfo*  );
+                        SfxBindings*  );
 
     //! soon obsolete !
     static  SfxChildWindowContext* CreateImpl(vcl::Window *pParent,

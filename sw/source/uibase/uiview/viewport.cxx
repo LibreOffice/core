@@ -813,7 +813,7 @@ void SwView::CalcVisArea( const Size &rOutPixel )
 
 // Rearrange control elements
 
-void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, bool /*bInner*/ )
+void SwView::CalcAndSetBorderPixel( SvBorder &rToFill )
 {
     bool bRightVRuler = m_pWrtShell->GetViewOptions()->IsVRulerRight();
     if ( m_pVRuler->IsVisible() )
@@ -971,7 +971,7 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize, bool )
     {
         Size aSz( rSize );
         SvBorder aBorder;
-        CalcAndSetBorderPixel( aBorder, true );
+        CalcAndSetBorderPixel( aBorder );
         if ( GetViewFrame()->GetFrame().IsInPlace() )
         {
             Size aViewSize( aSz );
@@ -1083,7 +1083,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         const bool bScroll1 = m_pVScrollbar->IsVisible(true);
         const bool bScroll2 = m_pHScrollbar->IsVisible(true);
         SvBorder aBorder;
-        CalcAndSetBorderPixel( aBorder, false );
+        CalcAndSetBorderPixel( aBorder );
         const Size aEditSz( GetEditWin().GetOutputSizePixel() );
         ViewResizePixel( GetEditWin(), rOfst, rSize, aEditSz, *m_pVScrollbar,
                                 *m_pHScrollbar, *m_pScrollFill, m_pVRuler, m_pHRuler,

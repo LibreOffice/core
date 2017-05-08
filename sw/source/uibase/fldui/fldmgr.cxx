@@ -1611,7 +1611,7 @@ void SwFieldType::GetFieldName_()
     }
 }
 
-bool SwFieldMgr::ChooseMacro(const OUString&)
+bool SwFieldMgr::ChooseMacro()
 {
     bool bRet = false;
 

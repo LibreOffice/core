@@ -1318,7 +1318,7 @@ bool SwPagePreview::ChgPage( int eMvMode, bool bUpdateScrollbar )
 }
 
 // From here, everything was taken from the SwView.
-void SwPagePreview::CalcAndSetBorderPixel( SvBorder &rToFill, bool /*bInner*/ )
+void SwPagePreview::CalcAndSetBorderPixel( SvBorder &rToFill )
 {
     const StyleSettings &rSet = m_pViewWin->GetSettings().GetStyleSettings();
     const long nTmp = rSet.GetScrollBarSize();
@@ -1332,7 +1332,7 @@ void SwPagePreview::CalcAndSetBorderPixel( SvBorder &rToFill, bool /*bInner*/ )
 void  SwPagePreview::InnerResizePixel( const Point &rOfst, const Size &rSize, bool )
 {
     SvBorder aBorder;
-    CalcAndSetBorderPixel( aBorder, true );
+    CalcAndSetBorderPixel( aBorder );
     tools::Rectangle aRect( rOfst, rSize );
     aRect += aBorder;
     ViewResizePixel( *m_pViewWin, aRect.TopLeft(), aRect.GetSize(),
@@ -1346,7 +1346,7 @@ void  SwPagePreview::InnerResizePixel( const Point &rOfst, const Size &rSize, bo
 void SwPagePreview::OuterResizePixel( const Point &rOfst, const Size &rSize )
 {
     SvBorder aBorder;
-    CalcAndSetBorderPixel( aBorder, false );
+    CalcAndSetBorderPixel( aBorder );
 
     // Never set EditWin !
 
@@ -1363,7 +1363,7 @@ void SwPagePreview::OuterResizePixel( const Point &rOfst, const Size &rSize )
     }
 
     SvBorder aBorderNew;
-    CalcAndSetBorderPixel( aBorderNew, false );
+    CalcAndSetBorderPixel( aBorderNew );
     ViewResizePixel( *m_pViewWin, rOfst, rSize, m_pViewWin->GetOutputSizePixel(),
                     *m_pVScrollbar, *m_pHScrollbar, *m_pScrollFill );
 }

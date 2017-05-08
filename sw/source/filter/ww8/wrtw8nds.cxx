@@ -1133,7 +1133,7 @@ OUString BookmarkToWriter(const OUString &rBookmark)
         INetURLObject::DecodeMechanism::Unambiguous, RTL_TEXTENCODING_ASCII_US);
 }
 
-void SwWW8AttrIter::OutSwFormatRefMark(const SwFormatRefMark& rAttr, bool)
+void SwWW8AttrIter::OutSwFormatRefMark(const SwFormatRefMark& rAttr)
 {
     if ( m_rExport.HasRefToObject( REF_SETREFATTR, &rAttr.GetRefName(), 0 ) )
         m_rExport.AppendBookmark( MSWordExportBase::GetBookmarkName( REF_SETREFATTR,
@@ -1247,7 +1247,7 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
                     pEnd = pHt->End();
                     if (nullptr != pEnd && nPos == *pEnd && nPos != pHt->GetStart())
                     {
-                        OutSwFormatRefMark(*static_cast<const SwFormatRefMark*>(pItem), false);
+                        OutSwFormatRefMark(*static_cast<const SwFormatRefMark*>(pItem));
                         --nRet;
                     }
                     break;
@@ -1286,13 +1286,13 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
                 case RES_TXTATR_REFMARK:
                     if ( nPos == pHt->GetStart() )
                     {
-                        OutSwFormatRefMark( *static_cast< const SwFormatRefMark* >( pItem ), true );
+                        OutSwFormatRefMark( *static_cast< const SwFormatRefMark* >( pItem ) );
                         ++nRet;
                     }
                     pEnd = pHt->End();
                     if (nullptr != pEnd && nPos == *pEnd && nPos == pHt->GetStart())
                     {   // special case: empty TODO: is this possible or would empty one have pEnd null?
-                        OutSwFormatRefMark( *static_cast< const SwFormatRefMark* >( pItem ), false );
+                        OutSwFormatRefMark( *static_cast< const SwFormatRefMark* >( pItem ) );
                         --nRet;
                     }
                     break;
@@ -1796,7 +1796,7 @@ sal_Int32 MSWordExportBase::GetNextPos( SwWW8AttrIter* aAttrIter, const SwTextNo
     return std::min( nNextPos, std::min( nNextBookmark, nNextAnnotationMark ) );
 }
 
-void MSWordExportBase::UpdatePosition( SwWW8AttrIter* aAttrIter, sal_Int32 nAktPos, sal_Int32 /*nEnd*/ )
+void MSWordExportBase::UpdatePosition( SwWW8AttrIter* aAttrIter, sal_Int32 nAktPos )
 {
     sal_Int32 nNextPos;
 
@@ -2451,7 +2451,7 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
             AttrOutput().EndRun();
 
         nAktPos = nNextAttr;
-        UpdatePosition( &aAttrIter, nAktPos, nEnd );
+        UpdatePosition( &aAttrIter, nAktPos );
         eChrSet = aAttrIter.GetCharSet();
     }
     while ( nAktPos < nEnd );

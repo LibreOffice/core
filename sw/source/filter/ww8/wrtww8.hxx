@@ -791,7 +791,7 @@ protected:
     sal_Int32 GetNextPos( SwWW8AttrIter* pAttrIter, const SwTextNode& rNode, sal_Int32 nAktPos );
 
     /// Update the information for GetNextPos().
-    void UpdatePosition( SwWW8AttrIter* pAttrIter, sal_Int32 nAktPos, sal_Int32 nEnd );
+    void UpdatePosition( SwWW8AttrIter* pAttrIter, sal_Int32 nAktPos );
 
     /// Output SwTextNode
     virtual void OutputTextNode( const SwTextNode& );
@@ -1474,7 +1474,7 @@ private:
 
     sal_Int32 SearchNext( sal_Int32 nStartPos );
 
-    void OutSwFormatRefMark(const SwFormatRefMark& rAttr, bool bStart);
+    void OutSwFormatRefMark(const SwFormatRefMark& rAttr);
 
     void IterToCurrent();
 

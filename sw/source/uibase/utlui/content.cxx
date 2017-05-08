@@ -1043,7 +1043,7 @@ sal_Int8 SwContentTree::AcceptDrop( const AcceptDropEvent& rEvt )
             nRet = SvTreeListBox::AcceptDrop( rEvt );
     }
     else if( !bIsInDrag )
-        nRet = GetParentWindow()->AcceptDrop( rEvt );
+        nRet = GetParentWindow()->AcceptDrop();
     return nRet;
 }
 

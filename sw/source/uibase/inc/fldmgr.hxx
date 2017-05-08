@@ -137,7 +137,7 @@ public:
 
     void            InsertFieldType(SwFieldType& rType);
 
-    bool            ChooseMacro(const OUString &rSelMacro);
+    bool            ChooseMacro();
     void            SetMacroPath(const OUString& rPath);
     const OUString& GetMacroPath() const         { return sMacroPath; }
     const OUString& GetMacroName() const         { return sMacroName; }

@@ -293,7 +293,7 @@ class SwPostItMgr: public SfxListener
                                      std::vector< vcl::Window* >* pChildren );
 
         void DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage);
-        void PaintTile(OutputDevice& rRenderContext, const tools::Rectangle& rRect);
+        void PaintTile(OutputDevice& rRenderContext);
 };
 
 #endif

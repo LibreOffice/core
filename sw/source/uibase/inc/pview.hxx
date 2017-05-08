@@ -203,7 +203,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     SAL_DLLPRIVATE virtual bool            HasPrintOptionsPage() const override;
     SAL_DLLPRIVATE virtual VclPtr<SfxTabPage> CreatePrintOptionsPage(vcl::Window *pParent, const SfxItemSet &rOptions ) override;
 
-    SAL_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill, bool bInner );
+    SAL_DLLPRIVATE void CalcAndSetBorderPixel( SvBorder &rToFill );
 
     /** Helper method to execute SfxRequest FN_PAGE_UP and FN_PAGE_DOWN
 

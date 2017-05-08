@@ -904,8 +904,7 @@ void RtfAttributeOutput::TableNodeInfoInner(ww8::WW8TableNodeInfoInner::Pointer_
     // This is called when the nested table ends in a cell, and there's no
     // paragraph benhind that; so we must check for the ends of cell, rows,
     // and tables
-    // ['true' to write an empty paragraph, MS Word insists on that]
-    FinishTableRowCell(pNodeInfoInner, true);
+    FinishTableRowCell(pNodeInfoInner);
 }
 
 void RtfAttributeOutput::TableOrientation(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
@@ -1080,7 +1079,7 @@ void RtfAttributeOutput::EndTable()
     m_pTableWrt.reset(nullptr);
 }
 
-void RtfAttributeOutput::FinishTableRowCell(const ww8::WW8TableNodeInfoInner::Pointer_t& pInner, bool /*bForceEmptyParagraph*/)
+void RtfAttributeOutput::FinishTableRowCell(const ww8::WW8TableNodeInfoInner::Pointer_t& pInner)
 {
     if (pInner)
     {

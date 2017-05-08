@@ -45,7 +45,7 @@ class SwXDispatchProviderInterceptor : public cppu::WeakImplHelper
         //::osl::MutexGuard   aGuard; #102295# solar mutex has to be used currently
         SolarMutexGuard aGuard;
     public:
-        DispatchMutexLock_Impl(SwXDispatchProviderInterceptor&);
+        DispatchMutexLock_Impl();
         ~DispatchMutexLock_Impl();
     };
     friend class DispatchMutexLock_Impl;

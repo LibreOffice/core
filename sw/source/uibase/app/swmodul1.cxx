@@ -609,14 +609,14 @@ FieldUnit SwModule::GetMetric( bool bWeb ) const
 }
 
 // Pass-through Update-Status
-sal_uInt16 SwModule::GetLinkUpdMode( bool ) const
+sal_uInt16 SwModule::GetLinkUpdMode() const
 {
     if(!m_pUsrPref)
         GetUsrPref(false);
     return (sal_uInt16)m_pUsrPref->GetUpdateLinkMode();
 }
 
-SwFieldUpdateFlags SwModule::GetFieldUpdateFlags( bool ) const
+SwFieldUpdateFlags SwModule::GetFieldUpdateFlags() const
 {
     if(!m_pUsrPref)
         GetUsrPref(false);
