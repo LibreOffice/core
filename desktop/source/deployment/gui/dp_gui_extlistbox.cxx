@@ -194,8 +194,6 @@ ExtensionBox_Impl::ExtensionBox_Impl(vcl::Window* pParent) :
 
 void ExtensionBox_Impl::Init()
 {
-    SetHelpId( HID_EXTENSION_MANAGER_LISTBOX );
-
     m_pScrollBar = VclPtr<ScrollBar>::Create( this, WB_VERT );
     m_pScrollBar->SetScrollHdl( LINK( this, ExtensionBox_Impl, ScrollHdl ) );
     m_pScrollBar->EnableDrag();
