@@ -146,8 +146,6 @@ void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
     setExtensionManager(pParentDialog->getExtensionManager());
 
     m_pParent = pParentDialog;
-
-    SetHelpId( HID_EXTENSION_MANAGER_LISTBOX );
 }
 
 VCL_BUILDER_DECL_FACTORY(ExtBoxWithBtns)
@@ -486,8 +484,6 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
 
     m_pExtensionBox->InitFromDialog(this);
 
-    m_pOptionsBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_OPTIONS );
-    m_pRemoveBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_REMOVE );
     m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_ENABLE );
 
     m_pOptionsBtn->SetClickHdl( LINK( this, ExtMgrDialog, HandleOptionsBtn ) );
