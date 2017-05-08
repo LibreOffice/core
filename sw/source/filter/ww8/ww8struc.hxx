@@ -1122,7 +1122,7 @@ class MSOPropertyBag
 {
 public:
     MSOPropertyBag();
-    void Read(SvStream& rStream);
+    bool Read(SvStream& rStream);
     void Write(WW8Export& rExport);
 
     /// Matches MSOFactoidType::m_nId in MSOPropertyBagStore::m_aFactoidTypes.

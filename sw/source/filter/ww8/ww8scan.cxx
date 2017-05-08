@@ -6420,11 +6420,13 @@ MSOPropertyBag::MSOPropertyBag()
 {
 }
 
-void MSOPropertyBag::Read(SvStream& rStream)
+bool MSOPropertyBag::Read(SvStream& rStream)
 {
     rStream.ReadUInt16(m_nId);
     sal_uInt16 cProp(0);
     rStream.ReadUInt16(cProp);
+    if (!rStream.good())
+        return false;
     rStream.SeekRel(2); // cbUnknown
     //each MSOProperty is 8 bytes in size
     const size_t nMaxPossibleRecords = rStream.remainingSize() / 8;
@@ -6433,12 +6435,13 @@ void MSOPropertyBag::Read(SvStream& rStream)
         SAL_WARN("sw.ww8", cProp << " records claimed, but max possible is " << nMaxPossibleRecords);
         cProp = nMaxPossibleRecords;
     }
-    for (sal_uInt16 i = 0; i < cProp; ++i)
+    for (sal_uInt16 i = 0; i < cProp && rStream.good(); ++i)
     {
         MSOProperty aProperty;
         aProperty.Read(rStream);
         m_aProperties.push_back(aProperty);
     }
+    return rStream.good();
 }
 
 void MSOPropertyBag::Write(WW8Export& rExport)
@@ -6458,10 +6461,11 @@ void WW8SmartTagData::Read(SvStream& rStream, WW8_FC fcFactoidData, sal_uInt32 l
         return;
 
     m_aPropBagStore.Read(rStream);
-    while (rStream.Tell() < fcFactoidData + lcbFactoidData)
+    while (rStream.good() && rStream.Tell() < fcFactoidData + lcbFactoidData)
     {
         MSOPropertyBag aPropertyBag;
-        aPropertyBag.Read(rStream);
+        if (!aPropertyBag.Read(rStream))
+            break;
         m_aPropBags.push_back(aPropertyBag);
     }
 
