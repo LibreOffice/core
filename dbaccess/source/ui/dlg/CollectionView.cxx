@@ -73,7 +73,7 @@ OCollectionView::OCollectionView( vcl::Window * pParent
     get(m_pPB_OK, "ok");
 
     OSL_ENSURE(m_xContent.is(),"No valid content!");
-    m_pView->Initialize(m_xContent,OUString());
+    m_pView->Initialize(m_xContent);
     m_pFTCurrentPath->SetStyle( m_pFTCurrentPath->GetStyle() | WB_PATHELLIPSIS );
     initCurrentPath();
 
@@ -132,7 +132,7 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click, Button*, void)
                         xChild.set(m_xContent,UNO_QUERY);
                     }
                 }
-                m_pView->Initialize(m_xContent,OUString());
+                m_pView->Initialize(m_xContent);
                 initCurrentPath();
             }
             sSubFolder = sName.copy(0,nIndex-1);
@@ -201,7 +201,7 @@ IMPL_LINK_NOARG(OCollectionView, NewFolder_Click, Button*, void)
     {
         Reference<XHierarchicalNameContainer> xNameContainer(m_xContent,UNO_QUERY);
         if ( dbaui::insertHierachyElement(this,m_xContext,xNameContainer,OUString(),m_bCreateForm) )
-            m_pView->Initialize(m_xContent,OUString());
+            m_pView->Initialize(m_xContent);
     }
     catch( const SQLException& )
     {
@@ -224,7 +224,7 @@ IMPL_LINK_NOARG(OCollectionView, Up_Click, Button*, void)
             if ( xNameAccess.is() )
             {
                 m_xContent.set(xNameAccess,UNO_QUERY);
-                m_pView->Initialize(m_xContent,OUString());
+                m_pView->Initialize(m_xContent);
                 initCurrentPath();
             }
             else
@@ -255,7 +255,7 @@ IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView, SvTreeListBox*, bool)
                 if ( xContent.is() )
                 {
                     m_xContent = xContent;
-                    m_pView->Initialize(m_xContent,OUString());
+                    m_pView->Initialize(m_xContent);
                     initCurrentPath();
                 }
             }

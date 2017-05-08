@@ -1112,7 +1112,7 @@ void SvtFileView::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 }
 
 
-bool SvtFileView::Initialize( const css::uno::Reference< css::ucb::XContent>& _xContent, const OUString& rFilter  )
+bool SvtFileView::Initialize( const css::uno::Reference< css::ucb::XContent>& _xContent  )
 {
     WaitObject aWaitCursor( this );
 
@@ -1123,7 +1123,7 @@ bool SvtFileView::Initialize( const css::uno::Reference< css::ucb::XContent>& _x
     if ( eResult != eSuccess )
         return false;
 
-    mpImpl->FilterFolderContent_Impl( rFilter );
+    mpImpl->FilterFolderContent_Impl( OUString() );
 
     mpImpl->SortFolderContent_Impl(); // possibly not necessary!!!!!!!!!!
     mpImpl->CreateDisplayText_Impl();

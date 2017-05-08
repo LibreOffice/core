@@ -68,11 +68,6 @@ namespace frm
         // XComponent
         void SAL_CALL dispose();
 
-        /** queries the interceptor chain for the given dispatch
-        */
-        css::uno::Reference< css::frame::XDispatch >
-            queryDispatch( const css::util::URL& _rURL, const OUString& _rTargetFrameName );
-
         /** queries the interceptor chain for the given dispatch, with a blank target frame and no frame search flags
         */
         css::uno::Reference< css::frame::XDispatch >

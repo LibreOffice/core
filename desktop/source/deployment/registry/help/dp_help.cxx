@@ -148,7 +148,7 @@ BackendImpl::BackendImpl(
         //can be removed. This works now, because the extension manager is a singleton
         //and the backends are only create once per process.
         std::list<OUString> folders = m_backendDb->getAllDataUrls();
-        deleteUnusedFolders(OUString(), folders);
+        deleteUnusedFolders(folders);
    }
 }
 
@@ -369,7 +369,7 @@ void BackendImpl::implProcessHelp(
             if (!package->extensionContainsCompiledHelp())
             {
 #if HAVE_FEATURE_DESKTOP
-                const OUString sHelpFolder = createFolder(OUString(), xCmdEnv);
+                const OUString sHelpFolder = createFolder(xCmdEnv);
                 data.dataUrl = sHelpFolder;
 
                 Reference< ucb::XSimpleFileAccess3 > xSFA = getFileAccess();

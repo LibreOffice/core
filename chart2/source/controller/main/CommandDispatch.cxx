@@ -119,8 +119,7 @@ void CommandDispatch::fireStatusEventForURL(
     const OUString & rURL,
     const uno::Any & rState,
     bool bEnabled,
-    const Reference< frame::XStatusListener > & xSingleListener, /* = 0 */
-    const OUString & rFeatureDescriptor /* = OUString() */ )
+    const Reference< frame::XStatusListener > & xSingleListener /* = 0 */)
 {
     // prepare event to send
     util::URL aURL;
@@ -134,7 +133,7 @@ void CommandDispatch::fireStatusEventForURL(
     frame::FeatureStateEvent aEventToSend(
         static_cast< cppu::OWeakObject* >( this ), // Source
         aURL,                                      // FeatureURL
-        rFeatureDescriptor,                        // FeatureDescriptor
+        OUString(),                                // FeatureDescriptor
         bEnabled,                                  // IsEnabled
         false,                                     // Requery
         rState                                     // State

@@ -215,7 +215,7 @@ BackendImpl::BackendImpl(
         //can be removed. This works now, because the extension manager is a singleton
         //and the backends are only create once per process.
         std::list<OUString> folders = m_backendDb->getAllDataUrls();
-        deleteUnusedFolders(OUString(), folders);
+        deleteUnusedFolders(folders);
 
         configmgrini_verify_init( xCmdEnv );
 
@@ -699,7 +699,7 @@ void BackendImpl::PackageImpl::processPackage_(
             ConfigurationBackendDb::Data data;
             if (!m_isSchema)
             {
-                const OUString sModFolder = that->createFolder(OUString(), xCmdEnv);
+                const OUString sModFolder = that->createFolder(xCmdEnv);
                 bool out_replaced = false;
                 url = replaceOrigin(url, sModFolder, xCmdEnv, that->getComponentContext(), out_replaced);
                 if (out_replaced)
@@ -755,7 +755,7 @@ void BackendImpl::PackageImpl::processPackage_(
                    ConfigurationBackendDb::Data data;
                    if (!schema)
                    {
-                       const OUString sModFolder = that->createFolder(OUString(), xCmdEnv);
+                       const OUString sModFolder = that->createFolder(xCmdEnv);
                        bool out_replaced = false;
                        url_replaced = replaceOrigin(
                            url2, sModFolder, xCmdEnv, that->getComponentContext(), out_replaced);

@@ -39,13 +39,11 @@ public:
                         const OUString& rImageURL,
                         const OUString& rTargetURL,
                         const OUString& rTargetFrame,
-                        const OUString& rAlternateText,
-                        const Size& rSizePixel )
+                        const OUString& rAlternateText )
                     :   aImageURL( rImageURL ),
                         aTargetURL( rTargetURL ),
                         aTargetFrame( rTargetFrame ),
-                        aAlternateText( rAlternateText ),
-                        aSizePixel( rSizePixel )
+                        aAlternateText( rAlternateText )
                     {}
                     INetImage()
                     {}

@@ -478,7 +478,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
             else if( !rURL.GetURL().isEmpty() )
                 m_pTargetURL = new INetImage( aEmptyOUStr, rURL.GetURL(),
                                             rURL.GetTargetFrameName(),
-                                            aEmptyOUStr, Size() );
+                                            aEmptyOUStr );
         }
     }
 
@@ -1004,7 +1004,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         {
             m_pTargetURL = new INetImage( sGrfNm, rURL.GetURL(),
                                         rURL.GetTargetFrameName(),
-                                        aEmptyOUStr, Size() );
+                                        aEmptyOUStr );
             AddFormat( SotClipboardFormatId::INET_IMAGE );
         }
     }
@@ -3142,7 +3142,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         {
             m_pTargetURL = new INetImage( sGrfNm, rURL.GetURL(),
                                         rURL.GetTargetFrameName(),
-                                        aEmptyOUStr, Size() );
+                                        aEmptyOUStr );
             AddFormat( SotClipboardFormatId::INET_IMAGE );
         }
     }

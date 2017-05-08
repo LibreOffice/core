@@ -167,7 +167,7 @@ public:
     void Error( SbError );                      // trappable Error
     void Error( SbError, const OUString& rMsg );  // trappable Error with message
     void ErrorVB( sal_Int32 nVBNumber, const OUString& rMsg );
-    void setErrorVB( sal_Int32 nVBNumber, const OUString& rMsg );
+    void setErrorVB( sal_Int32 nVBNumber );
     void FatalError( SbError );                 // non-trappable Error
     void FatalError( SbError, const OUString& );  // non-trappable Error
     void Abort();                               // with current error code

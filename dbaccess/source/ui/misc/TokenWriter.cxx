@@ -625,9 +625,8 @@ const char OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\
 
 OHTMLImportExport::OHTMLImportExport(const svx::ODataAccessDescriptor& _aDataDescriptor,
                                      const Reference< XComponentContext >& _rM,
-                                     const Reference< css::util::XNumberFormatter >& _rxNumberF,
-                                     const OUString& rExchange)
-        : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange)
+                                     const Reference< css::util::XNumberFormatter >& _rxNumberF)
+        : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,OUString())
     ,m_nIndent(0)
 #if OSL_DEBUG_LEVEL > 0
     ,m_bCheckFont(false)

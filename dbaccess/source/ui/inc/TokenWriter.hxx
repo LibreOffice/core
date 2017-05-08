@@ -126,9 +126,8 @@ namespace dbaui
         // export data
         ORTFImportExport(   const svx::ODataAccessDescriptor& _aDataDescriptor,
                             const css::uno::Reference< css::uno::XComponentContext >& _rM,
-                            const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
-                            const OUString& rExchange = OUString())
-                            : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange) {};
+                            const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF)
+                            : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,OUString()) {};
 
         // import data
         ORTFImportExport(   const SharedConnection& _rxConnection,
@@ -170,8 +169,7 @@ namespace dbaui
         // export data
         OHTMLImportExport(  const svx::ODataAccessDescriptor& _aDataDescriptor,
                             const css::uno::Reference< css::uno::XComponentContext >& _rM,
-                            const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
-                            const OUString& rExchange = OUString());
+                            const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF);
         // import data
         OHTMLImportExport(  const SharedConnection& _rxConnection,
                             const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
@@ -206,8 +204,7 @@ namespace dbaui
         ORowSetImportExport(vcl::Window* _pParent,
                             const css::uno::Reference< css::sdbc::XResultSetUpdate >& _xResultSetUpdate,
                             const svx::ODataAccessDescriptor& _aDataDescriptor,
-                            const css::uno::Reference< css::uno::XComponentContext >& _rM,
-                            const OUString& rExchange = OUString());
+                            const css::uno::Reference< css::uno::XComponentContext >& _rM);
 
         virtual bool Write() override;
         virtual bool Read() override;

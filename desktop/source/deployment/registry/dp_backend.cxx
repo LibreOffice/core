@@ -212,10 +212,9 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
 }
 
 OUString PackageRegistryBackend::createFolder(
-    OUString const & relUrl,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {
-    const OUString sDataFolder = makeURL(getCachePath(), relUrl);
+    const OUString sDataFolder = makeURL(getCachePath(), OUString());
     //make sure the folder exist
     ucbhelper::Content dataContent;
     ::dp_misc::create_folder(&dataContent, sDataFolder, xCmdEnv);
@@ -252,12 +251,11 @@ void PackageRegistryBackend::deleteTempFolder(
 //then created a Folder with a same name and a trailing '_'
 //If the folderURL has no '_' then there is no corresponding tmp file.
 void PackageRegistryBackend::deleteUnusedFolders(
-    OUString const & relUrl,
     std::list< OUString> const & usedFolders)
 {
     try
     {
-        const OUString sDataFolder = makeURL(getCachePath(), relUrl);
+        const OUString sDataFolder = makeURL(getCachePath(), OUString());
         ::ucbhelper::Content tempFolder(
             sDataFolder, Reference<ucb::XCommandEnvironment>(), m_xComponentContext);
 

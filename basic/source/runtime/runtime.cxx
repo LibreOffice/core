@@ -491,14 +491,14 @@ void SbiInstance::ErrorVB( sal_Int32 nVBNumber, const OUString& rMsg )
     }
 }
 
-void SbiInstance::setErrorVB( sal_Int32 nVBNumber, const OUString& rMsg )
+void SbiInstance::setErrorVB( sal_Int32 nVBNumber )
 {
     SbError n = StarBASIC::GetSfxFromVBError( static_cast< sal_uInt16 >( nVBNumber ) );
     if( !n )
     {
         n = nVBNumber; // force orig number, probably should have a specific table of vb ( localized ) errors
     }
-    aErrorMsg = rMsg;
+    aErrorMsg = OUString();
     SbiRuntime::translateErrorToVba( n, aErrorMsg );
 
     nErr = n;

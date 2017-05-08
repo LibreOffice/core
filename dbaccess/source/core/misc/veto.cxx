@@ -26,9 +26,8 @@ namespace dbaccess
     using ::com::sun::star::uno::RuntimeException;
 
     // Veto
-    Veto::Veto( const OUString& _rReason, const Any& _rDetails )
-        :m_sReason( _rReason )
-        ,m_aDetails( _rDetails )
+    Veto::Veto( const Any& _rDetails )
+        :m_aDetails( _rDetails )
     {
     }
 
@@ -38,7 +37,7 @@ namespace dbaccess
 
     OUString SAL_CALL Veto::getReason()
     {
-        return m_sReason;
+        return OUString();
     }
 
     Any SAL_CALL Veto::getDetails()

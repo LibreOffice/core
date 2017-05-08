@@ -152,7 +152,7 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
                 pTargetURL = new INetImage( bLink ? sGrfName : OUString(),
                                             rURL.GetURL(),
                                             rURL.GetTargetFrameName(),
-                                            OUString(), Size() );
+                                            OUString() );
         }
     }
 

@@ -153,7 +153,7 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateScriptErrorDialog( const css::uno::Any& rException ) = 0;
 
     virtual VclPtr<VclAbstractDialog>  CreateOptionsDialog(
-        vcl::Window* pParent, const OUString& rExtensionId, const OUString& rApplicationContext ) = 0;
+        vcl::Window* pParent, const OUString& rExtensionId ) = 0;
 };
 
 #endif

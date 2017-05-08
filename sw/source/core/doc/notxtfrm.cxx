@@ -589,7 +589,7 @@ void SwNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             if( pVSh )
             {
                 GraphicAttr aAttr;
-                if( pNd->GetGrfObj().IsCached( pVSh->GetOut(), Point(),
+                if( pNd->GetGrfObj().IsCached( pVSh->GetOut(),
                             Prt().SSize(), &pNd->GetGraphicAttr( aAttr, this ) ))
                 {
                     for(SwViewShell& rShell : pVSh->GetRingContainer())

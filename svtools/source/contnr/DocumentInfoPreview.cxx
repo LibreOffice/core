@@ -79,8 +79,7 @@ void ODocumentInfoPreview::clear() {
 }
 
 void ODocumentInfoPreview::fill(
-    css::uno::Reference< css::document::XDocumentProperties > const & xDocProps,
-    OUString const & rURL)
+    css::uno::Reference< css::document::XDocumentProperties > const & xDocProps)
 {
     assert(xDocProps.is());
 
@@ -98,19 +97,6 @@ void ODocumentInfoPreview::fill(
         DI_KEYWORDS,
         comphelper::string::convertCommaSeparated(xDocProps->getKeywords()));
     insertNonempty(DI_DESCRIPTION, xDocProps->getDescription());
-    if (!rURL.isEmpty()) {
-        insertNonempty(
-            DI_SIZE, CreateExactSizeText(utl::UCBContentHelper::GetSize(rURL)));
-        INetContentType eTypeID = INetContentTypes::GetContentTypeFromURL(rURL);
-        if(eTypeID == CONTENT_TYPE_APP_OCTSTREAM)
-        {
-            insertNonempty( DI_MIMETYPE, SvFileInformationManager::GetDescription(INetURLObject(rURL)));
-        }
-        else
-        {
-            insertNonempty( DI_MIMETYPE, INetContentTypes::GetPresentation(eTypeID, m_aLanguageTag));
-        }
-    }
 
     // User-defined (custom) properties:
     css::uno::Reference< css::beans::XPropertySet > user(
