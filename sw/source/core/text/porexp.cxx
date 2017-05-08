@@ -214,7 +214,7 @@ SwPostItsPortion::SwPostItsPortion( bool bScrpt )
 void SwPostItsPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( rInf.OnWin() && Width() )
-        rInf.DrawPostIts( *this, IsScript() );
+        rInf.DrawPostIts( IsScript() );
 }
 
 sal_uInt16 SwPostItsPortion::GetViewWidth( const SwTextSizeInfo &rInf ) const

@@ -134,8 +134,7 @@ static Writer& OutHTML_FrameFormatAsMulticol( Writer& rWrt, const SwFrameFormat&
 static Writer& OutHTML_FrameFormatAsSpacer( Writer& rWrt, const SwFrameFormat& rFormat );
 static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
                                           const SwFrameFormat& rFrameFormat, bool bSpan );
-static Writer& OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& rFormat,
-                                      bool bInCntnr );
+static Writer& OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& rFormat );
 
 static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rFormat,
                                       bool bInCntnr );
@@ -501,7 +500,7 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
                     static_cast<const SwDrawFrameFormat &>(rFrameFormat), *pSdrObject );
         break;
     case HtmlOut::GraphicFrame:
-        OutHTML_FrameFormatAsImage( *this, rFrameFormat, pCntnrStr != nullptr );
+        OutHTML_FrameFormatAsImage( *this, rFrameFormat );
         break;
     }
 
@@ -1710,8 +1709,7 @@ static Writer& OutHTML_FrameFormatAsDivOrSpan( Writer& rWrt,
     return rWrt;
 }
 
-static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& rFrameFormat,
-                                       bool /*bInCntnr*/ )
+static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& rFrameFormat )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 

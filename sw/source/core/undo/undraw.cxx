@@ -554,7 +554,7 @@ void SwUndoDrawDelete::RedoImpl(::sw::UndoRedoContext & rContext)
     }
 }
 
-void SwUndoDrawDelete::AddObj( sal_uInt16 , SwDrawFrameFormat* pFormat,
+void SwUndoDrawDelete::AddObj( SwDrawFrameFormat* pFormat,
                                 const SdrMark& rMark )
 {
     SwUndoGroupObjImpl& rSave = *( pObjArr + pMarkLst->GetMarkCount() );

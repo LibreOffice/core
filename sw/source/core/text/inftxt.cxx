@@ -1004,7 +1004,7 @@ void SwTextPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
     }
 }
 
-void SwTextPaintInfo::DrawPostIts( const SwLinePortion&, bool bScript ) const
+void SwTextPaintInfo::DrawPostIts( bool bScript ) const
 {
     if( OnWin() && m_pOpt->IsPostIts() )
     {

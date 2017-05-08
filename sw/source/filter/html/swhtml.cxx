@@ -1709,7 +1709,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::UNORDERLIST_OFF:
         if( m_nOpenParaToken != HtmlTokenId::NONE )
             EndPara();
-        EndNumBulListItem( HtmlTokenId::NONE, true, GetNumInfo().GetDepth()==1 );
+        EndNumBulListItem( HtmlTokenId::NONE, true );
         EndNumBulList( nToken );
         break;
 

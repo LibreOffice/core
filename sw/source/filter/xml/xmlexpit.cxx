@@ -93,14 +93,13 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                 else
                 {
                     exportXML( rExport, rAttrList, *pItem, rEntry, rUnitConverter,
-                                  rNamespaceMap, nFlags, &rSet );
+                                  rNamespaceMap, &rSet );
                 }
             }
         }
         else
         {
-            handleNoItem( rAttrList, rEntry, rUnitConverter, rNamespaceMap,
-                          rSet );
+            OSL_FAIL( "no item not handled in xml export" );
         }
         nIndex++;
     }
@@ -112,7 +111,6 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                                  const SvXMLItemMapEntry& rEntry,
                                  const SvXMLUnitConverter& rUnitConverter,
                                  const SvXMLNamespaceMap& rNamespaceMap,
-                                 SvXmlExportFlags /*nFlags*/,
                                  const SfxItemSet *pSet ) const
 {
     if( 0 != (rEntry.nMemberId & MID_SW_FLAG_SPECIAL_ITEM_EXPORT) )
@@ -324,17 +322,6 @@ void SvXMLExportItemMapper::handleSpecialItem( SvXMLAttributeList& /*rAttrList*/
                                     const SfxItemSet* /*pSet*/ /* = NULL */ ) const
 {
     OSL_FAIL( "special item not handled in xml export" );
-}
-
-/** this method is called for every item that has the
-    MID_SW_FLAG_NO_ITEM_EXPORT flag set */
-void SvXMLExportItemMapper::handleNoItem( SvXMLAttributeList& /*rAttrList*/,
-                               const SvXMLItemMapEntry& /*rEntry*/,
-                               const SvXMLUnitConverter& /*rUnitConverter*/,
-                               const SvXMLNamespaceMap& /*rNamespaceMap*/,
-                               const SfxItemSet& /*rSet*/ )
-{
-    OSL_FAIL( "no item not handled in xml export" );
 }
 
 /** this method is called for every item that has the

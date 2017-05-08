@@ -613,8 +613,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void NewNumBulList( HtmlTokenId nToken );
     void EndNumBulList( HtmlTokenId nToken = HtmlTokenId::NONE );
     void NewNumBulListItem( HtmlTokenId nToken );
-    void EndNumBulListItem( HtmlTokenId nToken, bool bSetColl,
-                            bool bLastPara=false );
+    void EndNumBulListItem( HtmlTokenId nToken, bool bSetColl);
 
     // definitions lists <DL> with <DD>, <DT>
     void NewDefList();
@@ -663,18 +662,16 @@ private:
     // in Attrset (htmlgrin.cxx)
     void SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                  sal_Int16 eHoriOri,
-                                 const SfxItemSet &rItemSet,
                                  const SvxCSS1PropertyInfo &rPropInfo,
                                  SfxItemSet& rFrameSet );
     void SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                  sal_Int16 eHoriOri,
                                  SfxItemSet& rFrameSet,
                                  bool bDontAppend=false );
-    void SetAnchorAndAdjustment( const SfxItemSet &rItemSet,
-                                 const SvxCSS1PropertyInfo &rPropInfo,
+    void SetAnchorAndAdjustment( const SvxCSS1PropertyInfo &rPropInfo,
                                  SfxItemSet &rFrameItemSet );
 
-    static void SetFrameFormatAttrs( SfxItemSet &rItemSet, SvxCSS1PropertyInfo &rPropInfo,
+    static void SetFrameFormatAttrs( SfxItemSet &rItemSet,
                          HtmlFrameFormatFlags nFlags, SfxItemSet &rFrameItemSet );
 
     // create frames and register auto bound frames
@@ -686,7 +683,7 @@ private:
                      bool bPrcWidth, bool bPrcHeight,
                      SfxItemSet &rItemSet, SvxCSS1PropertyInfo &rPropInfo,
                      SfxItemSet& rFlyItemSet );
-    static void SetVarSize( SfxItemSet &rItemSet, SvxCSS1PropertyInfo &rPropInfo,
+    static void SetVarSize( SvxCSS1PropertyInfo &rPropInfo,
                      SfxItemSet& rFlyItemSet, SwTwips nDfltWidth=MINLAY,
                      sal_uInt8 nDltPrcWidth=0 );
     static void SetSpace( const Size& rPixSpace, SfxItemSet &rItemSet,

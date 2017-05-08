@@ -1925,7 +1925,7 @@ bool SwLayIdle::DoIdleJob_( const SwContentFrame *pCnt, IdleJobType eJob )
             case SMART_TAGS :
             {
                 try {
-                    const SwRect aRepaint( const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pCnt))->SmartTagScan( pContentNode, nTextPos ) );
+                    const SwRect aRepaint( const_cast<SwTextFrame*>(static_cast<const SwTextFrame*>(pCnt))->SmartTagScan() );
                     bPageValid = bPageValid && !pTextNode->IsSmartTagDirty();
                     if ( aRepaint.HasArea() )
                         pImp->GetShell()->InvalidateWindows( aRepaint );

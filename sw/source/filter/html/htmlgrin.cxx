@@ -146,11 +146,8 @@ void SwHTMLParser::ConnectImageMaps()
     }
 }
 
-/*  */
-
 void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                            sal_Int16 eHoriOri,
-                                           const SfxItemSet &rCSS1ItemSet,
                                            const SvxCSS1PropertyInfo &rCSS1PropInfo,
                                            SfxItemSet& rFrameItemSet )
 {
@@ -167,7 +164,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
     else if( SwCSS1Parser::MayBePositioned( rCSS1PropInfo, true ) )
     {
         // If the alignment can be set via CSS1 options we use them.
-        SetAnchorAndAdjustment( rCSS1ItemSet, rCSS1PropInfo, rFrameItemSet );
+        SetAnchorAndAdjustment( rCSS1PropInfo, rFrameItemSet );
     }
     else
     {
@@ -535,12 +532,12 @@ IMAGE_SETEVENT:
         aFrameSet.Put( aBoxItem );
     }
 
-    SetAnchorAndAdjustment( eVertOri, eHoriOri, aItemSet, aPropInfo, aFrameSet );
+    SetAnchorAndAdjustment( eVertOri, eHoriOri, aPropInfo, aFrameSet );
 
     SetSpace( Size( nHSpace, nVSpace), aItemSet, aPropInfo, aFrameSet );
 
     // set other CSS1 attributes
-    SetFrameFormatAttrs( aItemSet, aPropInfo, HtmlFrameFormatFlags::Box, aFrameSet );
+    SetFrameFormatAttrs( aItemSet, HtmlFrameFormatFlags::Box, aFrameSet );
 
     Size aTwipSz( bPrcWidth ? 0 : nWidth, bPrcHeight ? 0 : nHeight );
     if( (aTwipSz.Width() || aTwipSz.Height()) && Application::GetDefaultDevice() )

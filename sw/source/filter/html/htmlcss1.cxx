@@ -1932,8 +1932,7 @@ bool SwHTMLParser::ParseStyleOptions( const OUString &rStyle,
     return bRet;
 }
 
-void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
-                                           const SvxCSS1PropertyInfo &rPropInfo,
+void SwHTMLParser::SetAnchorAndAdjustment( const SvxCSS1PropertyInfo &rPropInfo,
                                            SfxItemSet &rFrameItemSet )
 {
     SwFormatAnchor aAnchor;
@@ -2037,8 +2036,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
     rFrameItemSet.Put( SwFormatSurround( eSurround ) );
 }
 
-void SwHTMLParser::SetVarSize( SfxItemSet & /*rItemSet*/,
-                               SvxCSS1PropertyInfo &rPropInfo,
+void SwHTMLParser::SetVarSize( SvxCSS1PropertyInfo &rPropInfo,
                                SfxItemSet &rFrameItemSet,
                                SwTwips nDfltWidth, sal_uInt8 nDfltPrcWidth )
 {
@@ -2079,7 +2077,6 @@ void SwHTMLParser::SetVarSize( SfxItemSet & /*rItemSet*/,
 }
 
 void SwHTMLParser::SetFrameFormatAttrs( SfxItemSet &rItemSet,
-                                   SvxCSS1PropertyInfo & /*rPropInfo*/,
                                    HtmlFrameFormatFlags nFlags,
                                    SfxItemSet &rFrameItemSet )
 {
