@@ -19,9 +19,6 @@
 
 #include <vcl/builderfactory.hxx>
 
-#include <map>
-#include <set>
-
 #include "strings.hrc"
 #include "dlgctrls.hxx"
 #include "sdresid.hxx"
@@ -30,25 +27,9 @@
 
 using namespace ::sd;
 
-struct FadeEffectLBImpl
-{
-};
-
 FadeEffectLB::FadeEffectLB(vcl::Window* pParent, WinBits nStyle)
     : ListBox(pParent, nStyle)
-    , mpImpl(new FadeEffectLBImpl)
 {
-}
-
-FadeEffectLB::~FadeEffectLB()
-{
-    disposeOnce();
-}
-
-void FadeEffectLB::dispose()
-{
-    mpImpl.reset();
-    ListBox::dispose();
 }
 
 VCL_BUILDER_DECL_FACTORY(FadeEffectLB)
