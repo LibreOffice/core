@@ -61,6 +61,7 @@
 #include <com/sun/star/frame/XTerminateListener2.hpp>
 
 #include <comphelper/sequence.hxx>
+#include <comphelper/lok.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/instance.hxx>
 #include <vcl/svapp.hxx>
@@ -227,8 +228,9 @@ sal_Bool SAL_CALL Desktop::terminate()
 
     // try to close all open frames.
     // Allow using of any UI ... because Desktop.terminate() was designed as UI functionality in the past.
-    bool bIsEventTestingMode = Application::IsEventTestingModeEnabled();
-    bool bFramesClosed = impl_closeFrames(!bIsEventTestingMode);
+    bool bRestartableMainLoop = Application::IsEventTestingModeEnabled() ||
+                                comphelper::LibreOfficeKit::isActive();
+    bool bFramesClosed = impl_closeFrames(!bRestartableMainLoop);
 
     // Ask normal terminate listener. They could stop terminating the process.
     Desktop::TTerminateListenerList lCalledTerminationListener;
@@ -240,7 +242,7 @@ sal_Bool SAL_CALL Desktop::terminate()
         return false;
     }
 
-    if (bIsEventTestingMode)
+    if (bRestartableMainLoop)
     {
         Application::Quit();
         return true;

@@ -1996,7 +1996,7 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl, void*, void)
         // When this server closes down it attempts to recreate the pipe (in RequestHandler::Disable()).
         // It's possible that the client has a pending connection request.
         // When the IPC thread is not running, this connection locks (because maPipe.accept()) is never called
-        RequestHandler::SetReady();
+        RequestHandler::SetReady(true);
         OpenClients();
 
         CloseSplashScreen();

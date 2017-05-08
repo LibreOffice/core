@@ -122,7 +122,7 @@ class RequestHandler: public salhelper::SimpleReferenceObject
     static Status               Enable(bool ipc);
     static void                 Disable();
     // start dispatching events...
-    static void                 SetReady();
+    static void                 SetReady(bool bIsReady);
     static void                 WaitForReady();
 
     bool                        AreRequestsEnabled() const { return mState == State::RequestsEnabled; }
