@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_49d68ec6",
+        "filename": "sw/source/filter/xml/xmlimp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-05-08T23:40:00Z",
+      "side": 0,
+      "message": "m_bPreserveRedlineFlags looks unused, but I don\u0027t know if it\u0027s safe to ignore the argument in SwXMLImport::initialize.\nAnd I couldn\u0027t find the place where we write the \"PreserveRedlineFlags\" argument",
+      "range": {
+        "startLine": 961,
+        "startChar": 38,
+        "endLine": 961,
+        "endChar": 61
+      },
+      "revId": "31b06e2f7989d8e16beecdd9df3f3fea79c60e0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
