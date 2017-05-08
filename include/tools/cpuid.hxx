@@ -13,21 +13,65 @@
 
 #include <sal/config.h>
 #include <tools/toolsdllapi.h>
+#include <o3tl/typed_flags_set.hxx>
+#include <rtl/ustring.hxx>
 
-#if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)) && defined(__SSE2__)
-#define LO_SSE2_AVAILABLE 1
-#elif defined(_MSC_VER)
-#define LO_SSE2_AVAILABLE 1
-#endif
+namespace cpuid {
 
-namespace tools
+enum class InstructionSetFlags
 {
-namespace cpuid
-{
-    TOOLS_DLLPUBLIC bool hasSSE2();
-}
+    NONE  = 0x00,
+    SSE2  = 0x01,
+    SSSE3 = 0x02,
+    SSE41 = 0x04,
+    SSE42 = 0x08,
+    AVX   = 0x10,
+    AVX2  = 0x20,
+};
+
+} // end cpuid
+
+namespace o3tl {
+    template<> struct typed_flags<cpuid::InstructionSetFlags> : is_typed_flags<cpuid::InstructionSetFlags, 0x03f> {};
 }
 
-#endif
+namespace cpuid {
+
+/** Get supported instruction set flags determined at runtime by probing the CPU.
+ */
+TOOLS_DLLPUBLIC InstructionSetFlags getCpuInstructionSetFlags();
+
+/** Check if a certain instruction set is supported by the CPU at runtime.
+ */
+TOOLS_DLLPUBLIC bool isCpuInstructionSetSupported(InstructionSetFlags eInstructions);
+
+/** Returns a string of supported instructions.
+ */
+TOOLS_DLLPUBLIC OUString instructionSetSupportedString();
+
+/** Check if SSE2 can be used in code
+ */
+inline bool hasSSE2()
+{
+    return isCpuInstructionSetSupported(InstructionSetFlags::SSE2);
+}
+
+/** Check if SSSE3 can be used in code
+ */
+inline bool hasSSSE3()
+{
+    return isCpuInstructionSetSupported(InstructionSetFlags::SSSE3);
+}
+
+/** Check if AVX2 can be used in code
+ */
+inline bool hasAVX2()
+{
+    return isCpuInstructionSetSupported(InstructionSetFlags::AVX2);
+}
+
+} // end cpuid
+
+#endif // INCLUDED_TOOLS_CPUID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
