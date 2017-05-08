@@ -413,8 +413,8 @@ private:
     void WriteSrcRect( const SdrObject* pSdrObj, const SwFrameFormat* pFrameFormat );
     void WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat);
     bool WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize );
-    bool WriteOLEMath( const SdrObject* pSdrObj, const SwOLENode& rNode, const Size& rSize );
-    bool PostponeOLE( const SdrObject* pSdrObj, SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat );
+    bool WriteOLEMath( const SwOLENode& rNode );
+    bool PostponeOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat );
     void WriteOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* rFlyFrameFormat );
 
     /// checks whether the current component is a diagram
@@ -425,7 +425,7 @@ private:
     void StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner );
     void StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner, sal_uInt32 nCell, sal_uInt32 nRow );
     void TableCellProperties( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner, sal_uInt32 nCell, sal_uInt32 nRow );
-    void EndTableCell( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner, sal_uInt32 nCell, sal_uInt32 nRow );
+    void EndTableCell( sal_uInt32 nCell );
     void EndTableRow( );
     void EndTable();
     void SyncNodelessCells(ww8::WW8TableNodeInfoInner::Pointer_t const & pInner, sal_Int32 nCell, sal_uInt32 nRow);

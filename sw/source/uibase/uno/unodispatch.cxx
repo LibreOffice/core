@@ -64,7 +64,7 @@ SwXDispatchProviderInterceptor::~SwXDispatchProviderInterceptor()
 uno::Reference< frame::XDispatch > SwXDispatchProviderInterceptor::queryDispatch(
     const util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
 {
-    DispatchMutexLock_Impl aLock(*this);
+    DispatchMutexLock_Impl aLock;
     uno::Reference< frame::XDispatch> xResult;
     // create some dispatch ...
     if(m_pView && aURL.Complete.startsWith(".uno:DataSourceBrowser/"))
@@ -100,7 +100,7 @@ uno::Sequence<OUString> SAL_CALL SwXDispatchProviderInterceptor::getInterceptedU
 uno::Sequence< uno::Reference< frame::XDispatch > > SwXDispatchProviderInterceptor::queryDispatches(
     const uno::Sequence< frame::DispatchDescriptor >& aDescripts )
 {
-    DispatchMutexLock_Impl aLock(*this);
+    DispatchMutexLock_Impl aLock;
     uno::Sequence< uno::Reference< frame::XDispatch> > aReturn(aDescripts.getLength());
     uno::Reference< frame::XDispatch>* pReturn = aReturn.getArray();
     const frame::DispatchDescriptor* pDescripts = aDescripts.getConstArray();
@@ -114,33 +114,33 @@ uno::Sequence< uno::Reference< frame::XDispatch > > SwXDispatchProviderIntercept
 
 uno::Reference< frame::XDispatchProvider > SwXDispatchProviderInterceptor::getSlaveDispatchProvider(  )
 {
-    DispatchMutexLock_Impl aLock(*this);
+    DispatchMutexLock_Impl aLock;
     return m_xSlaveDispatcher;
 }
 
 void SwXDispatchProviderInterceptor::setSlaveDispatchProvider(
     const uno::Reference< frame::XDispatchProvider >& xNewDispatchProvider )
 {
-    DispatchMutexLock_Impl aLock(*this);
+    DispatchMutexLock_Impl aLock;
     m_xSlaveDispatcher = xNewDispatchProvider;
 }
 
 uno::Reference< frame::XDispatchProvider > SwXDispatchProviderInterceptor::getMasterDispatchProvider(  )
 {
-    DispatchMutexLock_Impl aLock(*this);
+    DispatchMutexLock_Impl aLock;
     return m_xMasterDispatcher;
 }
 
 void SwXDispatchProviderInterceptor::setMasterDispatchProvider(
     const uno::Reference< frame::XDispatchProvider >& xNewSupplier )
 {
-    DispatchMutexLock_Impl aLock(*this);
+    DispatchMutexLock_Impl aLock;
     m_xMasterDispatcher = xNewSupplier;
 }
 
 void SwXDispatchProviderInterceptor::disposing( const lang::EventObject& )
 {
-    DispatchMutexLock_Impl aLock(*this);
+    DispatchMutexLock_Impl aLock;
     if (m_xIntercepted.is())
     {
         m_xIntercepted->releaseDispatchProviderInterceptor(static_cast<frame::XDispatchProviderInterceptor*>(this));
@@ -176,7 +176,7 @@ sal_Int64 SwXDispatchProviderInterceptor::getSomething(
 
 void    SwXDispatchProviderInterceptor::Invalidate()
 {
-    DispatchMutexLock_Impl aLock(*this);
+    DispatchMutexLock_Impl aLock;
     if (m_xIntercepted.is())
     {
         m_xIntercepted->releaseDispatchProviderInterceptor(static_cast<frame::XDispatchProviderInterceptor*>(this));
@@ -392,8 +392,7 @@ const sal_Char* SwXDispatch::GetDBChangeURL()
     return cInternalDBChangeNotification;
 }
 
-SwXDispatchProviderInterceptor::DispatchMutexLock_Impl::DispatchMutexLock_Impl(
-                                                 SwXDispatchProviderInterceptor& )
+SwXDispatchProviderInterceptor::DispatchMutexLock_Impl::DispatchMutexLock_Impl()
 {
 }
 

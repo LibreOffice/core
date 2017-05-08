@@ -1656,7 +1656,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 #if defined(_WIN32) || defined UNX
 
-void SwView::ScannerEventHdl( const EventObject& /*rEventObject*/ )
+void SwView::ScannerEventHdl()
 {
     uno::Reference< XScannerManager2 > xScanMgr = SW_MOD()->GetScannerManager();
     if( xScanMgr.is() )

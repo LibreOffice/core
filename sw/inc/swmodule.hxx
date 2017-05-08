@@ -217,8 +217,8 @@ public:
     FieldUnit GetMetric( bool bWeb ) const;
 
     // Pass update-statuses.
-    sal_uInt16 GetLinkUpdMode( bool bWeb ) const;
-    SwFieldUpdateFlags GetFieldUpdateFlags( bool bWeb ) const;
+    sal_uInt16 GetLinkUpdMode() const;
+    SwFieldUpdateFlags GetFieldUpdateFlags() const;
 
     // Virtual methods for options dialog.
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId ) override;

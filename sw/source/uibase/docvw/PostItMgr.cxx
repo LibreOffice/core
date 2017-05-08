@@ -971,7 +971,7 @@ void SwPostItMgr::DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage)
     }
 }
 
-void SwPostItMgr::PaintTile(OutputDevice& rRenderContext, const tools::Rectangle& /*rRect*/)
+void SwPostItMgr::PaintTile(OutputDevice& rRenderContext)
 {
     for (SwSidebarItem* pItem : mvPostItFields)
     {

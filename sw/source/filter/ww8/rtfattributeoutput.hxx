@@ -471,7 +471,7 @@ private:
     void EndTable();
 
     /// End cell, row, and even the entire table if necessary.
-    void FinishTableRowCell(const ww8::WW8TableNodeInfoInner::Pointer_t& pInner, bool bForceEmptyParagraph = false);
+    void FinishTableRowCell(const ww8::WW8TableNodeInfoInner::Pointer_t& pInner);
 
     void WriteTextFootnoteNumStr(const SwFormatFootnote& rFootnote);
 

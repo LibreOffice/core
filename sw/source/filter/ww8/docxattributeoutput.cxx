@@ -700,7 +700,7 @@ void DocxAttributeOutput::SyncNodelessCells(ww8::WW8TableNodeInfoInner::Pointer_
 {
     sal_Int32 nOpenCell = lastOpenCell.back();
     if (nOpenCell != -1 && nOpenCell != nCell && nOpenCell < MAX_CELL_IN_WORD)
-        EndTableCell(pInner, nOpenCell, nRow);
+        EndTableCell(nOpenCell);
 
     sal_Int32 nClosedCell = lastClosedCell.back();
     for (sal_Int32 i = nClosedCell+1; i < nCell; ++i)
@@ -713,7 +713,7 @@ void DocxAttributeOutput::SyncNodelessCells(ww8::WW8TableNodeInfoInner::Pointer_
 
         StartTableCell(pInner, i, nRow);
         m_pSerializer->singleElementNS( XML_w, XML_p, FSEND );
-        EndTableCell(pInner, i, nRow);
+        EndTableCell(i);
     }
 }
 
@@ -762,7 +762,7 @@ void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointe
                 m_pSerializer->singleElementNS( XML_w, XML_p, FSEND );
             }
 
-            EndTableCell(pInner, nCell, nRow);
+            EndTableCell(nCell);
         }
 
         // This is a line end
@@ -3152,7 +3152,7 @@ void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t 
     m_tableReference->m_bTableCellOpen = true;
 }
 
-void DocxAttributeOutput::EndTableCell(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ const &, sal_uInt32 nCell, sal_uInt32 /*nRow*/)
+void DocxAttributeOutput::EndTableCell(sal_uInt32 nCell)
 {
     lastClosedCell.back() = nCell;
     lastOpenCell.back() = -1;
@@ -4477,9 +4477,9 @@ void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rOL
 {
     if( WriteOLEChart( pSdrObj, rSize ))
         return;
-    if( WriteOLEMath( pSdrObj, rOLENode, rSize ))
+    if( WriteOLEMath( rOLENode ))
         return;
-    if( PostponeOLE( pSdrObj, rOLENode, rSize, pFlyFrameFormat ))
+    if( PostponeOLE( rOLENode, rSize, pFlyFrameFormat ))
         return;
     // Then we fall back to just export the object as a graphic.
     if( !m_pPostponedGraphic )
@@ -4596,7 +4596,7 @@ void DocxAttributeOutput::WritePostponedChart()
     m_postponedChart = nullptr;
 }
 
-bool DocxAttributeOutput::WriteOLEMath( const SdrObject*, const SwOLENode& rOLENode, const Size& )
+bool DocxAttributeOutput::WriteOLEMath( const SwOLENode& rOLENode )
 {
     uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode&>(rOLENode).GetOLEObj().GetOleRef());
     SvGlobalName aObjName(xObj->getClassID());
@@ -4797,7 +4797,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
     }
 }
 
-bool DocxAttributeOutput::PostponeOLE( const SdrObject*, SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat )
+bool DocxAttributeOutput::PostponeOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat )
 {
     if( !m_pPostponedOLEs )
         //cannot be postponed, try to write now

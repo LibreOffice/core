@@ -64,11 +64,11 @@ using namespace ::com::sun::star::frame;
 
 //! soon obsolete !
 SfxChildWindowContext* SwNavigationChild::CreateImpl( vcl::Window *pParent,
-        SfxBindings *pBindings, SfxChildWinInfo* pInfo )
+        SfxBindings *pBindings, SfxChildWinInfo* /*pInfo*/ )
 {
     SfxChildWindowContext *pContext = new SwNavigationChild(pParent,
             /* cast is safe here! */static_cast< sal_uInt16 >(SwView::GetInterfaceId()),
-            pBindings,pInfo);
+            pBindings);
     return pContext;
 }
 void    SwNavigationChild::RegisterChildWindowContext(SfxModule* pMod)
@@ -1032,7 +1032,7 @@ OUString SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
     return sFileName;
 }
 
-sal_Int8 SwNavigationPI::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
+sal_Int8 SwNavigationPI::AcceptDrop()
 {
     return ( !SwContentTree::IsInDrag() &&
         ( m_aContentTree->IsDropFormatSupported( SotClipboardFormatId::SIMPLE_FILE ) ||
@@ -1192,8 +1192,7 @@ SwView*  SwNavigationPI::GetCreateView() const
 
 SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
                         sal_uInt16 nId,
-                        SfxBindings* _pBindings,
-                        SfxChildWinInfo* )
+                        SfxBindings* _pBindings )
     : SfxChildWindowContext( nId )
 {
     VclPtr<SwNavigationPI> pNavi = VclPtr<SwNavigationPI>::Create(_pBindings, pParent);

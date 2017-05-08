@@ -2994,7 +2994,7 @@ public:
 
     void StartNoBreak( const SwPosition& rPos );
     void EndNoBreak( const SwPosition& rPos );
-    void CheckNoBreak( const SwPosition& rPos, SwDoc *pDoc );
+    void CheckNoBreak( const SwPosition& rPos );
 };
 
 CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
@@ -3222,7 +3222,7 @@ void CellSaveStruct::EndNoBreak( const SwPosition& rPos )
     }
 }
 
-void CellSaveStruct::CheckNoBreak( const SwPosition& rPos, SwDoc * /*pDoc*/ )
+void CellSaveStruct::CheckNoBreak( const SwPosition& rPos )
 {
     if( m_pCnts && m_pCurrCnts==m_pCnts )
     {
@@ -3945,7 +3945,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
     if( pSaveStruct->IsInSection() )
     {
-        pSaveStruct->CheckNoBreak( *m_pPam->GetPoint(), m_xDoc.get() );
+        pSaveStruct->CheckNoBreak( *m_pPam->GetPoint() );
 
         // End all open contexts. We'll take AttrMin because nContextStMin might
         // have been modified. Since it's gonna be restored by EndContext, it's okay

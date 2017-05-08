@@ -40,8 +40,7 @@ public:
             SvXMLImport& rImport,
             const css::uno::Reference<css::beans::XPropertySet>& rInfoSet,
             bool bInsertM, bool bStylesOnlyM,
-            bool bBlockM, bool bOrganizerM,
-            bool bPreserveRedlineFlags );
+            bool bBlockM, bool bOrganizerM );
     virtual ~SwXMLTextImportHelper() override;
 
     virtual css::uno::Reference<css::beans::XPropertySet>

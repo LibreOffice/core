@@ -1911,7 +1911,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
 
     SwPostItMgr* pPostItMgr = GetPostItMgr();
     if (GetViewOptions()->IsPostIts() && pPostItMgr)
-        pPostItMgr->PaintTile(rDevice, aOutRect);
+        pPostItMgr->PaintTile(rDevice);
 
     // SwViewShell's output device tear down
     mpOut = pSaveOut;

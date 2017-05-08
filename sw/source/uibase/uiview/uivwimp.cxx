@@ -269,12 +269,12 @@ SwScannerEventListener::~SwScannerEventListener()
 {
 }
 
-void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject)
+void SAL_CALL SwScannerEventListener::disposing( const EventObject& /*rEventObject*/)
 {
 #if defined(_WIN32) || defined UNX
     SolarMutexGuard aGuard;
     if( pView )
-        pView->ScannerEventHdl( rEventObject );
+        pView->ScannerEventHdl();
 #endif
 }
 

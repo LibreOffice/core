@@ -533,8 +533,7 @@ void SwFieldFuncPage::UpdateSubType()
 // call MacroBrowser, fill Listbox with Macros
 IMPL_LINK_NOARG( SwFieldFuncPage, MacroHdl, Button *, void)
 {
-    const OUString sMacro(TurnMacroString(m_pNameED->GetText()).replaceAll(".", ";"));
-    if (GetFieldMgr().ChooseMacro(sMacro))
+    if (GetFieldMgr().ChooseMacro())
         UpdateSubType();
 }
 

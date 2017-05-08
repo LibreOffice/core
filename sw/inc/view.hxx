@@ -325,7 +325,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                                       SvxZoomType eZoomType,
                                       short nFactor,
                                       bool bViewOnly);
-    SAL_DLLPRIVATE void          CalcAndSetBorderPixel( SvBorder &rToFill, bool bInner );
+    SAL_DLLPRIVATE void          CalcAndSetBorderPixel( SvBorder &rToFill );
 
     SAL_DLLPRIVATE void          ShowAtResize();
 
@@ -408,7 +408,7 @@ public:
     const SwEditWin &GetEditWin () const { return *m_pEditWin; }
 
 #if defined(_WIN32) || defined UNX
-    void ScannerEventHdl( const css::lang::EventObject& rEventObject );
+    void ScannerEventHdl();
 #endif
 
     // hand the handler for text blocks to the shell; create if applicable
@@ -421,10 +421,10 @@ public:
                             sal_uInt16 nRangeX = USHRT_MAX,
                             sal_uInt16 nRangeY = USHRT_MAX);
 
-    long        SetVScrollMax(long lMax);
-    long        SetHScrollMax(long lMax);
+    long            SetVScrollMax(long lMax);
+    long            SetHScrollMax(long lMax);
 
-    void SpellError(LanguageType eLang);
+    void            SpellError(LanguageType eLang);
     bool            ExecSpellPopup( const Point& rPt );
     void                ExecFieldPopup( const Point& rPt, sw::mark::IFieldmark *fieldBM );
     void            ExecSmartTagPopup( const Point& rPt );
