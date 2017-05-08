@@ -67,22 +67,23 @@ namespace cppcanvas
         void EMFPPath::Read (SvStream& s, sal_uInt32 pathFlags, ImplRenderer& rR)
         {
             for (int i = 0; i < nPoints; i ++) {
-                if (pathFlags & 0x4000) {
+                if (pathFlags & 0x800) {
+                    // EMFPlusPointR: points are stored in EMFPlusInteger7 or
+                    // EMFPlusInteger15 objects, see section 2.2.2.21/22
+                    // If 0x800 bit is set, the 0x4000 bit is undefined and must be ignored
+                    SAL_WARN("cppcanvas.emf", "EMF+\t\t TODO - parse EMFPlusPointR object (section 2.2.1.6)");
+                } else if (pathFlags & 0x4000) {
                     // EMFPlusPoint: stored in signed short 16bit integer format
                     sal_Int16 x, y;
 
                     s.ReadInt16( x ).ReadInt16( y );
-                    SAL_INFO ("cppcanvas.emf", "EMF+\tEMFPlusPoint [x,y]: " << x << "," << y);
+                    SAL_INFO ("cppcanvas.emf", "EMF+\t EMFPlusPoint [x,y]: " << x << "," << y);
                     pPoints [i*2] = x;
                     pPoints [i*2 + 1] = y;
-                } else if (!(pathFlags & 0xC000)) {
+                } else {
                     // EMFPlusPointF: stored in Single (float) format
                     s.ReadFloat( pPoints [i*2] ).ReadFloat( pPoints [i*2 + 1] );
-                    SAL_INFO ("cppcanvas.emf", "EMF+\tEMFPlusPointF [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
-                } else { //if (pathFlags & 0x8000)
-                    // EMFPlusPointR: points are stored in EMFPlusInteger7 or
-                    // EMFPlusInteger15 objects, see section 2.2.2.21/22
-                    SAL_INFO("cppcanvas.emf", "EMF+\t\tTODO - parse EMFPlusPointR object (section 2.2.1.6)");
+                    SAL_INFO ("cppcanvas.emf", "EMF+\t EMFPlusPointF [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
                 }
 
             }
