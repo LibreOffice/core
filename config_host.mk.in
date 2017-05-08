@@ -648,6 +648,7 @@ export ZLIB_LIBS=$(gb_SPACE)@ZLIB_LIBS@
 export ZMF_CFLAGS=$(gb_SPACE)@ZMF_CFLAGS@
 export ZMF_LIBS=$(gb_SPACE)@ZMF_LIBS@
 export USE_AVMEDIA_DUMMY=@USE_AVMEDIA_DUMMY@
+export INTRINSICS_CXXFLAGS=@INTRINSICS_CXXFLAGS@
 
 # lang-related stuff
 include $(BUILDDIR)/config_$(gb_Side)_lang.mk
