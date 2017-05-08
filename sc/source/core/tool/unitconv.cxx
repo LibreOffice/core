@@ -63,8 +63,7 @@ ScUnitConverter::ScUnitConverter()
     ScLinkConfigItem aConfigItem( CFGPATH_UNIT );
 
     // empty node name -> use the config item's path itself
-    OUString aEmptyString;
-    Sequence<OUString> aNodeNames = aConfigItem.GetNodeNames( aEmptyString );
+    Sequence<OUString> aNodeNames = aConfigItem.GetNodeNames( "" );
 
     long nNodeCount = aNodeNames.getLength();
     if ( nNodeCount )

@@ -156,16 +156,14 @@ namespace dbmm
         // nothing to do here
     }
 
-    const OUString& MigrationLog::getNewLibraryName( DocumentID _nDocID, ScriptType _eScriptType,
+    OUString MigrationLog::getNewLibraryName( DocumentID _nDocID, ScriptType _eScriptType,
         const OUString& _rOriginalLibName ) const
     {
-        static OUString s_sEmptyString;
-
         DocumentLogs::const_iterator docPos = m_pData->aDocumentLogs.find( _nDocID );
         if ( docPos == m_pData->aDocumentLogs.end() )
         {
             OSL_FAIL( "MigrationLog::getNewLibraryName: document is not known!" );
-            return s_sEmptyString;
+            return OUString();
         }
 
         const DocumentEntry& rDocEntry( docPos->second );
@@ -181,7 +179,7 @@ namespace dbmm
         }
 
         OSL_FAIL( "MigrationLog::getNewLibraryName: doc is known, but library isn't!" );
-        return s_sEmptyString;
+        return OUString();
     }
 
     namespace

@@ -37,12 +37,11 @@ using ::rtl::Bootstrap;
 
 namespace psp {
 
-OUString const & getOfficePath( whichOfficePath ePath )
+OUString getOfficePath( whichOfficePath ePath )
 {
     static OUString aInstallationRootPath;
     static OUString aUserPath;
     static OUString aConfigPath;
-    static OUString aEmpty;
     static bool bOnce = false;
 
     if( ! bOnce )
@@ -86,7 +85,7 @@ OUString const & getOfficePath( whichOfficePath ePath )
         case whichOfficePath::InstallationRootPath: return aInstallationRootPath;
         case whichOfficePath::UserPath: return aUserPath;
     }
-    return aEmpty;
+    return OUString();
 }
 
 static OString getEnvironmentPath( const char* pKey )

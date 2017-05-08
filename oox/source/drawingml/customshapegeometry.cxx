@@ -653,30 +653,29 @@ XYAdjustHandleContext::XYAdjustHandleContext( ContextHandler2Helper& rParent, co
 , mrAdjustHandle( rAdjustHandle )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
-    const OUString aEmptyDefault;
     if ( rAttribs.hasAttribute( XML_gdRefX ) )
     {
-        mrAdjustHandle.gdRef1 = GetGeomGuideName( rAttribs.getString( XML_gdRefX, aEmptyDefault ) );
+        mrAdjustHandle.gdRef1 = GetGeomGuideName( rAttribs.getString( XML_gdRefX, "" ) );
     }
     if ( rAttribs.hasAttribute( XML_minX ) )
     {
-        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minX, aEmptyDefault ) );
+        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minX, "" ) );
     }
     if ( rAttribs.hasAttribute( XML_maxX ) )
     {
-        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxX, aEmptyDefault ) );
+        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxX, "" ) );
     }
     if ( rAttribs.hasAttribute( XML_gdRefY ) )
     {
-        mrAdjustHandle.gdRef2 = GetGeomGuideName( rAttribs.getString( XML_gdRefY, aEmptyDefault ) );
+        mrAdjustHandle.gdRef2 = GetGeomGuideName( rAttribs.getString( XML_gdRefY, "" ) );
     }
     if ( rAttribs.hasAttribute( XML_minY ) )
     {
-        mrAdjustHandle.min2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minY, aEmptyDefault ) );
+        mrAdjustHandle.min2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minY, "" ) );
     }
     if ( rAttribs.hasAttribute( XML_maxY ) )
     {
-        mrAdjustHandle.max2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxY, aEmptyDefault ) );
+        mrAdjustHandle.max2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxY, "" ) );
     }
 }
 
@@ -704,32 +703,31 @@ PolarAdjustHandleContext::PolarAdjustHandleContext( ContextHandler2Helper& rPare
 , mrAdjustHandle( rAdjustHandle )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
-    const OUString aEmptyDefault;
     if ( rAttribs.hasAttribute( XML_gdRefR ) )
     {
         mrAdjustHandle.polar = true ;
-        mrAdjustHandle.gdRef1 = GetGeomGuideName( rAttribs.getString( XML_gdRefR, aEmptyDefault ) );
+        mrAdjustHandle.gdRef1 = GetGeomGuideName( rAttribs.getString( XML_gdRefR, "" ) );
     }
     if ( rAttribs.hasAttribute( XML_minR ) )
     {
-        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minR, aEmptyDefault ) );
+        mrAdjustHandle.min1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minR, "" ) );
     }
     if ( rAttribs.hasAttribute( XML_maxR ) )
     {
-        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxR, aEmptyDefault ) );
+        mrAdjustHandle.max1 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxR, "" ) );
     }
     if ( rAttribs.hasAttribute( XML_gdRefAng ) )
     {
         mrAdjustHandle.polar = true ;
-        mrAdjustHandle.gdRef2 = GetGeomGuideName( rAttribs.getString( XML_gdRefAng, aEmptyDefault ) );
+        mrAdjustHandle.gdRef2 = GetGeomGuideName( rAttribs.getString( XML_gdRefAng, "" ) );
     }
     if ( rAttribs.hasAttribute( XML_minAng ) )
     {
-        mrAdjustHandle.min2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minAng, aEmptyDefault ) );
+        mrAdjustHandle.min2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_minAng, "" ) );
     }
     if ( rAttribs.hasAttribute( XML_maxAng ) )
     {
-        mrAdjustHandle.max2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxAng, aEmptyDefault ) );
+        mrAdjustHandle.max2 = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_maxAng, "" ) );
     }
 }
 
@@ -947,10 +945,8 @@ Path2DContext::Path2DContext( ContextHandler2Helper& rParent, const AttributeLis
 , mrSegments( rSegments )
 , mrCustomShapeProperties( rCustomShapeProperties )
 {
-    const OUString aEmptyString;
-
-    rPath2D.w = rAttribs.getString( XML_w, aEmptyString ).toInt64();
-    rPath2D.h = rAttribs.getString( XML_h, aEmptyString ).toInt64();
+    rPath2D.w = rAttribs.getString( XML_w, "" ).toInt64();
+    rPath2D.h = rAttribs.getString( XML_h, "" ).toInt64();
     rPath2D.fill = rAttribs.getToken( XML_fill, XML_norm );
     rPath2D.stroke = rAttribs.getBool( XML_stroke, true );
     rPath2D.extrusionOk = rAttribs.getBool( XML_extrusionOk, true );

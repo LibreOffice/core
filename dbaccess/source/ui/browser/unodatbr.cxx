@@ -468,9 +468,8 @@ void SbaTableQueryBrowser::impl_sanitizeRowSetClauses_nothrow()
         if ( invalidColumn )
         {
             // reset the complete order statement at both the row set and the parser
-            const OUString sEmptyOrder;
-            xRowSetProps->setPropertyValue( PROPERTY_ORDER, makeAny( sEmptyOrder ) );
-            xComposer->setOrder( sEmptyOrder );
+            xRowSetProps->setPropertyValue( PROPERTY_ORDER, makeAny( OUString() ) );
+            xComposer->setOrder( "" );
         }
 
         // check if the columns participating in the filter refer to existing tables

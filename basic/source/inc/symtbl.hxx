@@ -35,7 +35,6 @@ enum SbiSymScope { SbLOCAL, SbPARAM, SbPUBLIC, SbGLOBAL, SbRTL };
 // makes sure that they don't exist twice.
 
 class SbiStringPool {
-    const OUString aEmpty;
     std::vector<OUString> aData;
 public:
     SbiStringPool();
@@ -43,7 +42,7 @@ public:
     sal_uInt32 GetSize() const { return aData.size(); }
     short Add( const OUString& );
     short Add( double, SbxDataType );
-    const OUString& Find( sal_uInt32 ) const;
+    OUString Find( sal_uInt32 ) const;
 };
 
 

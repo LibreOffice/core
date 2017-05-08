@@ -365,8 +365,7 @@ void ScUnoAddInCollection::ReadConfiguration()
     const OUString sSlash('/');
 
     // get the list of add-ins (services)
-    OUString aEmptyString;
-    uno::Sequence<OUString> aServiceNames = rAddInConfig.GetNodeNames( aEmptyString );
+    uno::Sequence<OUString> aServiceNames = rAddInConfig.GetNodeNames( "" );
 
     sal_Int32 nServiceCount = aServiceNames.getLength();
     for ( sal_Int32 nService = 0; nService < nServiceCount; nService++ )

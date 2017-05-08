@@ -131,8 +131,7 @@ void lcl_insertMenuCommand(
     const uno::Reference< awt::XPopupMenu > & xMenu,
     sal_Int16 nId, const OUString & rCommand )
 {
-    static OUString aEmptyString;
-    xMenu->insertItem( nId, aEmptyString, 0, -1 );
+    xMenu->insertItem( nId, "", 0, -1 );
     xMenu->setCommand( nId, rCommand );
 }
 

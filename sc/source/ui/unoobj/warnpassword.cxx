@@ -42,12 +42,10 @@ bool ScWarnPassword::WarningOnPassword( SfxMedium& rMedium )
     Reference< XInteractionHandler > xHandler( rMedium.GetInteractionHandler());
     if( xHandler.is() )
     {
-
-        OUString empty;
-        Any aException( makeAny(InteractiveAppException(empty,
+        Any aException( makeAny(InteractiveAppException("",
                 Reference <XInterface> (),
                 InteractionClassification_QUERY,
-                 ERRCODE_SVX_EXPORT_FILTER_CRYPT)));
+                ERRCODE_SVX_EXPORT_FILTER_CRYPT)));
 
         rtl::Reference< ucbhelper::SimpleInteractionRequest > xRequest
                     = new ucbhelper::SimpleInteractionRequest(

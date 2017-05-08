@@ -66,13 +66,12 @@ bool AstEnum::dump(RegistryKey& rKey)
         return false;
     }
 
-    OUString emptyStr;
     sal_uInt16 nConst = getNodeCount(NT_enum_val);
     if ( nConst > 0 )
     {
         typereg::Writer aBlob(
             m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
-            getDocumentation(), emptyStr, RT_TYPE_ENUM, m_bPublished,
+            getDocumentation(), "", RT_TYPE_ENUM, m_bPublished,
             OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0,
             nConst, 0, 0);
 
@@ -91,7 +90,7 @@ bool AstEnum::dump(RegistryKey& rKey)
         sal_uInt32 aBlobSize;
         void const * pBlob = aBlob.getBlob(&aBlobSize);
 
-        if (localKey.setValue(emptyStr, RegValueType::BINARY,
+        if (localKey.setValue("", RegValueType::BINARY,
                                 const_cast<RegValue>(pBlob), aBlobSize) != RegError::NO_ERROR)
         {
             fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",

@@ -736,10 +736,8 @@ IMPL_LINK( SmDistanceDialog, CheckBoxClickHdl, Button *, pCheckBox, void )
 
 void SmDistanceDialog::SetHelpId(MetricField &rField, const OString& sHelpId)
 {
-    const OUString aEmptyText;
-
     rField.SetHelpId(sHelpId);
-    rField.SetHelpText(aEmptyText);
+    rField.SetHelpText("");
 
     // since MetricField inherits from SpinField which has a sub Edit field
     // (which is actually the one we modify) we have to set the help-id
@@ -748,7 +746,7 @@ void SmDistanceDialog::SetHelpId(MetricField &rField, const OString& sHelpId)
     if (pSubEdit)
     {
         pSubEdit->SetHelpId(sHelpId);
-        pSubEdit->SetHelpText(aEmptyText);
+        pSubEdit->SetHelpText("");
     }
 }
 

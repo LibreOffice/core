@@ -1830,11 +1830,10 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                      !bOutlineStyleCandidate &&
                      m_xImpl->m_xChapterNumbering.is())
                 {
-                    OUString sEmptyStr;
                     if ( !lcl_HasListStyle( sStyleName,
                                     m_xImpl->m_xParaStyles, GetXMLImport(),
                                     "NumberingStyleName",
-                                    sEmptyStr ) )
+                                    "" ) )
                     {
                         // heading not in a list --> apply outline style
                         xPropSet->setPropertyValue( s_NumberingRules,

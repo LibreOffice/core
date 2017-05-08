@@ -56,8 +56,7 @@ namespace frm
     {
         static const Locale s_aEnglishUS( "en", "us", OUString() );
         static const Locale s_aGerman( "de", "DE", OUString() );
-        static const OUString s_sEmptyString;
-        static const Locale s_aSystem( s_sEmptyString, s_sEmptyString, s_sEmptyString );
+        static const Locale s_aSystem( "", "", "" );
 
         switch (_eType)
         {

@@ -555,9 +555,8 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
     if( xScriptCont.is() )
     {
         // Register listener for lib container
-        OUString aEmptyLibName;
         uno::Reference< container::XContainerListener > xLibContainerListener
-            = new BasMgrContainerListenerImpl( this, aEmptyLibName );
+            = new BasMgrContainerListenerImpl( this, "" );
 
         uno::Reference< container::XContainer> xLibContainer( xScriptCont, uno::UNO_QUERY );
         xLibContainer->addContainerListener( xLibContainerListener );

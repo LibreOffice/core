@@ -191,9 +191,8 @@ bool AstInterface::dump(RegistryKey& rKey)
         }
     }
 
-    OUString emptyStr;
     typereg::Writer aBlob(
-        version, getDocumentation(), emptyStr, RT_TYPE_INTERFACE, m_bPublished,
+        version, getDocumentation(), "", RT_TYPE_INTERFACE, m_bPublished,
         OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), nBaseTypes,
         nAttributes, nMethods, nReferences);
 
@@ -242,7 +241,7 @@ bool AstInterface::dump(RegistryKey& rKey)
     sal_uInt32 aBlobSize;
     void const * pBlob = aBlob.getBlob(&aBlobSize);
 
-    if (localKey.setValue(emptyStr, RegValueType::BINARY, const_cast<RegValue>(pBlob), aBlobSize) != RegError::NO_ERROR)
+    if (localKey.setValue("", RegValueType::BINARY, const_cast<RegValue>(pBlob), aBlobSize) != RegError::NO_ERROR)
     {
         fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                 idlc()->getOptions()->getProgramName().getStr(),

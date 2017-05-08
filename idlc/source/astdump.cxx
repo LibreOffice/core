@@ -36,7 +36,6 @@
 
 bool AstModule::dump(RegistryKey& rKey)
 {
-    OUString emptyStr;
     RegistryKey localKey;
     if ( getNodeType() == NT_root )
     {
@@ -62,7 +61,7 @@ bool AstModule::dump(RegistryKey& rKey)
 
         typereg::Writer aBlob(
             m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
-            getDocumentation(), emptyStr, typeClass,
+            getDocumentation(), "", typeClass,
             m_bPublished,
             OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0,
             nConst, 0, 0);
@@ -86,7 +85,7 @@ bool AstModule::dump(RegistryKey& rKey)
         sal_uInt32 aBlobSize;
         void const * pBlob = aBlob.getBlob(&aBlobSize);
 
-        if (localKey.setValue(emptyStr, RegValueType::BINARY,
+        if (localKey.setValue("", RegValueType::BINARY,
                                 const_cast<RegValue>(pBlob), aBlobSize) != RegError::NO_ERROR)
         {
             fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
@@ -102,7 +101,7 @@ bool AstModule::dump(RegistryKey& rKey)
 
         typereg::Writer aBlob(
             m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
-            getDocumentation(), emptyStr, typeClass, m_bPublished,
+            getDocumentation(), "", typeClass, m_bPublished,
             OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0, 0, 0,
             0);
 
@@ -111,7 +110,7 @@ bool AstModule::dump(RegistryKey& rKey)
 
         if ( getNodeType() != NT_root )
         {
-            if (localKey.setValue(emptyStr, RegValueType::BINARY,
+            if (localKey.setValue("", RegValueType::BINARY,
                                     const_cast<RegValue>(pBlob), aBlobSize) != RegError::NO_ERROR)
             {
                 fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
@@ -130,7 +129,6 @@ bool AstModule::dump(RegistryKey& rKey)
 
 bool AstTypeDef::dump(RegistryKey& rKey)
 {
-    OUString emptyStr;
     RegistryKey localKey;
     if (rKey.createKey( OStringToOUString(getFullName(), RTL_TEXTENCODING_UTF8 ), localKey) != RegError::NO_ERROR)
     {
@@ -142,7 +140,7 @@ bool AstTypeDef::dump(RegistryKey& rKey)
 
     typereg::Writer aBlob(
         m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
-        getDocumentation(), emptyStr, RT_TYPE_TYPEDEF, m_bPublished,
+        getDocumentation(), "", RT_TYPE_TYPEDEF, m_bPublished,
         OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 1, 0, 0, 0);
     aBlob.setSuperTypeName(
         0,
@@ -152,7 +150,7 @@ bool AstTypeDef::dump(RegistryKey& rKey)
     sal_uInt32 aBlobSize;
     void const * pBlob = aBlob.getBlob(&aBlobSize);
 
-    if (localKey.setValue(emptyStr, RegValueType::BINARY, const_cast<RegValue>(pBlob), aBlobSize) != RegError::NO_ERROR)
+    if (localKey.setValue("", RegValueType::BINARY, const_cast<RegValue>(pBlob), aBlobSize) != RegError::NO_ERROR)
     {
         fprintf(stderr, "%s: warning, could not set value of key \"%s\" in %s\n",
                 idlc()->getOptions()->getProgramName().getStr(),
@@ -165,7 +163,6 @@ bool AstTypeDef::dump(RegistryKey& rKey)
 
 bool AstService::dump(RegistryKey& rKey)
 {
-    OUString emptyStr;
     typereg_Version version = m_bPublished
         ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0;
     OString superName;
@@ -230,7 +227,7 @@ bool AstService::dump(RegistryKey& rKey)
         return false;
     }
     typereg::Writer writer(
-        version, getDocumentation(), emptyStr,
+        version, getDocumentation(), "",
         getNodeType() == NT_singleton ? RT_TYPE_SINGLETON : RT_TYPE_SERVICE,
         m_bPublished,
         OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
@@ -303,14 +300,14 @@ bool AstService::dump(RegistryKey& rKey)
     }
     if (m_defaultConstructor) {
         writer.setMethodData(
-            constructorIndex++, emptyStr, RTMethodMode::TWOWAY,
-            emptyStr, "void",
+            constructorIndex++, "", RTMethodMode::TWOWAY,
+            "", "void",
             0, 0);
     }
     sal_uInt32 size;
     void const * blob = writer.getBlob(&size);
     if (localKey.setValue(
-            emptyStr, RegValueType::BINARY, const_cast< void * >(blob),
+            "", RegValueType::BINARY, const_cast< void * >(blob),
             size) != RegError::NO_ERROR)
     {
         fprintf(

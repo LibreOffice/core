@@ -51,7 +51,7 @@ namespace vcl
 
         static SettingsConfigItem* get();
 
-        const OUString& getValue( const OUString& rGroup, const OUString& rKey ) const;
+        OUString getValue( const OUString& rGroup, const OUString& rKey ) const;
         void setValue( const OUString& rGroup, const OUString& rKey, const OUString& rValue );
 
     };

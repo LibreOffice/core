@@ -82,7 +82,6 @@ bool ScMyValidation::IsEqual(const ScMyValidation& aVal) const
 
 ScMyValidationsContainer::ScMyValidationsContainer()
     : aValidationVec(),
-    sEmptyString(),
     sERRALSTY(SC_UNONAME_ERRALSTY),
     sIGNOREBL(SC_UNONAME_IGNOREBL),
     sSHOWLIST(SC_UNONAME_SHOWLIST),
@@ -417,7 +416,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                             pArr[0].Name = "EventType";
                             pArr[0].Value <<= bScriptURL ? sScript : OUString("StarBasic");
                             pArr[1].Name = "Library";
-                            pArr[1].Value <<= sEmptyString;
+                            pArr[1].Value <<= OUString();
                             pArr[2].Name = bScriptURL ? sScript : OUString("MacroName");
                             pArr[2].Value <<= aItr->sErrorTitle;
 
