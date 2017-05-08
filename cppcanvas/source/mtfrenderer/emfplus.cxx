@@ -1257,10 +1257,10 @@ namespace cppcanvas
                                         SAL_INFO("cppcanvas.emf", "EMF+ warning: empty bitmap");
                                     }
                                 } else {
-                                    SAL_INFO("cppcanvas.emf", "EMF+ DrawImage(Points) TODO (fixme)");
+                                    SAL_WARN("cppcanvas.emf", "EMF+ DrawImage(Points) TODO (fixme)");
                                 }
                             } else {
-                                SAL_INFO("cppcanvas.emf", "EMF+ DrawImage(Points) TODO (fixme) - possibly unsupported source units for crop rectangle");
+                                SAL_WARN("cppcanvas.emf", "EMF+ DrawImage(Points) TODO (fixme) - possibly unsupported source units for crop rectangle");
                             }
                             break;
                         }
@@ -1329,7 +1329,7 @@ namespace cppcanvas
                                     rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
                                 }
                             } else {
-                                SAL_INFO("cppcanvas.emf", "EMF+ DrawString TODO - drawing with brush not yet supported");
+                                SAL_WARN("cppcanvas.emf", "EMF+ DrawString TODO - drawing with brush not yet supported");
                             }
                         }
                         break;
@@ -1645,14 +1645,13 @@ namespace cppcanvas
                                 rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
                             }
                         } else {
-                            SAL_INFO("cppcanvas.emf", "EMF+\tTODO: fonts (non-unicode glyphs chars)");
+                            SAL_WARN("cppcanvas.emf", "EMF+\tTODO: fonts (non-unicode glyphs chars)");
                         }
 
                         break;
                     }
                     default:
-                        SAL_INFO("cppcanvas.emf", "EMF+ unhandled record type: 0x" << std::hex << type << std::dec);
-                        SAL_INFO("cppcanvas.emf", "EMF+\tTODO");
+                        SAL_WARN("cppcanvas.emf", "EMF+ TODO unhandled record type: 0x" << std::hex << type << std::dec);
                     }
                 }
 
