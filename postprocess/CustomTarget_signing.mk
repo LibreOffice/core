@@ -32,6 +32,7 @@ ifneq ($(ENABLE_DBGUTIL),TRUE)
 	EXCLUDELIST=$(shell $(gb_MKTEMP)) && \
 	cat $(SRCDIR)/postprocess/signing/no_signing.txt > $$EXCLUDELIST && \
 	echo "$(foreach lib,$(gb_MERGEDLIBS),$(call gb_Library_get_filename,$(lib)))" | tr ' ' '\n' >> $$EXCLUDELIST && \
+	chmod u+w $(foreach lib,$(MSVC_DLLS),$(INSTDIR)/program/shlxthdl/$(lib)) && \
 	$(PERL) $(SRCDIR)/postprocess/signing/signing.pl \
 			-e $$EXCLUDELIST \
 			-l $(subst .done,_log.txt,$@) \
