@@ -1082,9 +1082,18 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_DocPartName_val:
         {
-            // Add glossary entry name as a first paragraph in section
-            PropertyMapPtr pContext = m_pImpl->GetTopContext();
-            m_pImpl->appendTextPortion(sStringValue, pContext);
+            m_sGlossaryEntryName = sStringValue;
+            break;
+        }
+        case NS_ooxml::LN_CT_DocPartGallery_val:
+        {
+            OUString sGlossaryEntryGallery = sStringValue;
+            if(m_pImpl->GetTopContext().get())
+            {
+                OUString sName = sGlossaryEntryGallery + ":" + m_sGlossaryEntryName;
+                // Add glossary entry name as a first paragraph in section
+                m_pImpl->appendTextPortion(sName, m_pImpl->GetTopContext());
+            }
             break;
         }
         default:
@@ -2761,6 +2770,20 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     }
     break;
     case NS_ooxml::LN_CT_DocPartPr_name:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties.get() != nullptr)
+            pProperties->resolve(*this);
+    }
+    break;
+    case NS_ooxml::LN_CT_DocPartPr_category:
+    {
+        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+        if (pProperties.get() != nullptr)
+            pProperties->resolve(*this);
+    }
+    break;
+    case NS_ooxml::LN_CT_DocPartCategory_gallery:
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if (pProperties.get() != nullptr)
