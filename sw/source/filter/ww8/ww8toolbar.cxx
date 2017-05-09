@@ -1048,8 +1048,13 @@ bool PlfKme::Read(SvStream &rS)
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
     rS.ReadInt32( iMac );
-    if ( iMac )
+    if (iMac > 0)
     {
+        //each Kme is 14 bytes in size
+        size_t nMaxAvailableRecords = rS.remainingSize() / 14;
+        if (static_cast<sal_uInt32>(iMac) > nMaxAvailableRecords)
+            return false;
+
         rgkme.reset( new Kme[ iMac ] );
         for( sal_Int32 index=0; index<iMac; ++index )
         {
