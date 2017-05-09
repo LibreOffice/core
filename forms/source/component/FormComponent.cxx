@@ -1980,7 +1980,17 @@ void OBoundControlModel::initFromField( const Reference< XRowSet >& _rxRowSet )
     // but only if the rowset is positioned on a valid record
     if ( hasField() && _rxRowSet.is() )
     {
-        if ( !_rxRowSet->isBeforeFirst() && !_rxRowSet->isAfterLast() )
+        bool shouldTransfer(!_rxRowSet->isBeforeFirst() && !_rxRowSet->isAfterLast());
+        if (!shouldTransfer)
+        {
+            const Reference< XPropertySet > xPS(_rxRowSet, UNO_QUERY);
+            if (xPS.is())
+            {
+                assert(shouldTransfer == false);
+                xPS->getPropertyValue("IsNew") >>= shouldTransfer;
+            }
+        }
+        if ( shouldTransfer )
             transferDbValueToControl();
         else
             // reset the field if the row set is empty
