@@ -64,6 +64,7 @@ class SvInsertOleDlg : public InsertObjectDialog_Impl
     VclPtr<Edit> m_pEdFilepath;
     VclPtr<PushButton> m_pBtnFilepath;
     VclPtr<CheckBox> m_pCbFilelink;
+    VclPtr<CheckBox> m_pCbAsIcon;
     const SvObjectServerList* m_pServers;
 
     css::uno::Sequence< sal_Int8 > m_aIconMetaFile;
