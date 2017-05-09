@@ -711,17 +711,32 @@ namespace
                 "com.sun.star.embed.OLESimpleStorage",
                 aArgs ), uno::UNO_QUERY_THROW );
 
-        uno::Reference< io::XStream > xCONTENTS;
-        try
+        //various stream names that can contain the real document contents for
+        //this object in a straightforward direct way
+        static const OUStringLiteral aStreamNames[] =
         {
-            xNameContainer->getByName("CONTENTS") >>= xCONTENTS;
-        }
-        catch (container::NoSuchElementException const&)
-        {
-            // ignore
-        }
+            OUStringLiteral("CONTENTS"),
+            OUStringLiteral("Package"),
+            OUStringLiteral("EmbeddedOdf"),
+            OUStringLiteral("WordDocument"),
+            OUStringLiteral("Workbook"),
+            OUStringLiteral("PowerPoint Document")
+        };
 
-        bool bCopied = xCONTENTS.is() && lcl_CopyStream(xCONTENTS->getInputStream(), xStream->getOutputStream());
+        bool bCopied = false;
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aStreamNames) && !bCopied; ++i)
+        {
+            uno::Reference<io::XStream> xEmbeddedFile;
+            try
+            {
+                xNameContainer->getByName(aStreamNames[i]) >>= xEmbeddedFile;
+            }
+            catch (const container::NoSuchElementException&)
+            {
+                // ignore
+            }
+            bCopied = xEmbeddedFile.is() && lcl_CopyStream(xEmbeddedFile->getInputStream(), xStream->getOutputStream());
+        }
 
         if (!bCopied)
         {
