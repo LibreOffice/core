@@ -105,7 +105,7 @@ protected:
 
     bool LoadSubMenus(
         const css::uno::Reference< css::container::XIndexAccess >& xMenuSettings,
-        const OUString& rBaseTitle, SvxConfigEntry* pParentData );
+        const OUString& rBaseTitle, SvxConfigEntry* pParentData, bool bContextMenu );
 
 public:
 
