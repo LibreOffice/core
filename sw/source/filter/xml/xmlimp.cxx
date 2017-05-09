@@ -405,7 +405,6 @@ SwXMLImport::SwXMLImport(
     m_bBlock( false ),
     m_bOrganizerMode( false ),
     m_bInititedXForms( false ),
-    m_bPreserveRedlineFlags( true ),
     m_pDoc( nullptr )
 {
     InitItemImport();
@@ -1440,20 +1439,10 @@ void SwXMLImport::initialize(
     // delegate to super class
     SvXMLImport::initialize(aArguments);
 
-    // we are only looking for a PropertyValue "PreserveRedlineFlags"
+    // we are only looking for a NamedValue "LateInitSettings"
     sal_Int32 nLength = aArguments.getLength();
     for(sal_Int32 i = 0; i < nLength; i++)
     {
-        beans::PropertyValue aValue;
-        if ( aArguments[i] >>= aValue )
-        {
-            if (aValue.Name == "PreserveRedlineFlags")
-            {
-                OSL_VERIFY( aValue.Value >>= m_bPreserveRedlineFlags );
-            }
-            continue;
-        }
-
         beans::NamedValue aNamedValue;
         if ( aArguments[i] >>= aNamedValue )
         {
