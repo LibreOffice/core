@@ -116,7 +116,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stora
         }
         catch(const Exception& e)
         {
-            OSL_FAIL("Exception caught! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_removeElement");
+            SAL_WARN("connectivity.hsqldb", "Exception caught! : Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_removeElement " << e.Message);
             StorageContainer::throwJavaException(e,env);
         }
     }
