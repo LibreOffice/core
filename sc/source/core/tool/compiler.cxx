@@ -5765,10 +5765,10 @@ bool ScCompiler::HandleTableRef()
 
 bool ScCompiler::IsForceArrayParameter( const formula::FormulaToken* pToken, sal_uInt16 nParam ) const
 {
-    ScParameterClassification::Type eType = ScParameterClassification::GetParameterType( pToken, nParam);
+    formula::ParamClass eType = ScParameterClassification::GetParameterType( pToken, nParam);
     return
-        eType == ScParameterClassification::ForceArray ||
-        eType == ScParameterClassification::ReferenceOrForceArray;
+        eType == formula::ParamClass::ForceArray ||
+        eType == formula::ParamClass::ReferenceOrForceArray;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
