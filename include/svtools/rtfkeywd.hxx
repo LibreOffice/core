@@ -1208,6 +1208,9 @@
 #define LO_STRING_SVTOOLS_RTF_BRDRSH "\\brdrsh"
 #define LO_STRING_SVTOOLS_RTF_GENERATOR "\\generator"
 #define LO_STRING_SVTOOLS_RTF_VIEWBKSP "\\viewbksp"
+#define LO_STRING_SVTOOLS_RTF_SBAUTO "\\sbauto"
+#define LO_STRING_SVTOOLS_RTF_SAAUTO "\\saauto"
+#define LO_STRING_SVTOOLS_RTF_HTMAUTSP "\\htmautsp"
 
 #endif // INCLUDED_SVTOOLS_RTFKEYWD_HXX
 
