@@ -6352,7 +6352,7 @@ void MSOPropertyBagStore::Read(SvStream& rStream)
 {
     sal_uInt32 cFactoidType(0);
     rStream.ReadUInt32(cFactoidType);
-    for (sal_uInt32 i = 0; i < cFactoidType; ++i)
+    for (sal_uInt32 i = 0; i < cFactoidType && rStream.good(); ++i)
     {
         MSOFactoidType aFactoidType;
         aFactoidType.Read(rStream);
