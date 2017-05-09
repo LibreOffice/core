@@ -2539,9 +2539,9 @@ void FormulaCompiler::LocalizeString( OUString& /*rName*/ ) const
 {
 }
 
-bool FormulaCompiler::IsForceArrayParameter( const FormulaToken* /*pToken*/, sal_uInt16 /*nParam*/ ) const
+formula::ParamClass FormulaCompiler::GetForceArrayParameter( const FormulaToken* /*pToken*/, sal_uInt16 /*nParam*/ ) const
 {
-    return false;
+    return ParamClass::Unknown;
 }
 
 void FormulaCompiler::ForceArrayOperator( FormulaTokenRef& rCurr )
@@ -2558,9 +2558,13 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef& rCurr )
         return;
     }
 
-    if (nCurrentFactorParam && IsForceArrayParameter( pCurrentFactorToken.get(),
-                static_cast<sal_uInt8>(nCurrentFactorParam - 1)))
-        rCurr->SetInForceArray( true);
+    if (nCurrentFactorParam > 0)
+    {
+        formula::ParamClass eType = GetForceArrayParameter( pCurrentFactorToken.get(),
+                static_cast<sal_uInt8>(nCurrentFactorParam - 1));
+        if (eType == ParamClass::ForceArray || eType == ParamClass::ReferenceOrForceArray)
+            rCurr->SetInForceArray( true);
+    }
 }
 
 void FormulaCompiler::CheckSetForceArrayParameter( FormulaTokenRef& rCurr, sal_uInt8 nParam )

@@ -30,6 +30,7 @@
 #include <formula/opcode.hxx>
 #include <formula/token.hxx>
 #include <formula/types.hxx>
+#include <formula/paramclass.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -292,9 +293,10 @@ protected:
     virtual void CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaToken* pToken ) const;
     virtual void LocalizeString( OUString& rName ) const;   // modify rName - input: exact name
 
-    /** Whether parameter nParam (0-based) is forced to array for OpCode eOp.
-        Calc: ForceArray or ReferenceOrForceArray type. */
-    virtual bool IsForceArrayParameter( const FormulaToken* pToken, sal_uInt16 nParam ) const;
+    /** If a parameter nParam (0-based) is to be forced to array for OpCode
+        eOp, i.e. classified as ParamClass::ForceArray or
+        ParamClass::ReferenceOrForceArray type. */
+    virtual formula::ParamClass GetForceArrayParameter( const FormulaToken* pToken, sal_uInt16 nParam ) const;
 
     void AppendErrorConstant( OUStringBuffer& rBuffer, FormulaError nError ) const;
 
