@@ -24,6 +24,7 @@
 #include <sal/config.h>
 
 #include <iostream>
+#include <mutex>
 #if defined UNX
 #include <signal.h>
 #endif
@@ -480,7 +481,7 @@ OUString ReplaceStringHookProc( const OUString& rStr )
         sBrandName = BrandName::get();
         sVersion = Version::get();
         sAboutBoxVersion = AboutBoxVersion::get();
-        sAboutBoxVersionSuffix =AboutBoxVersionSuffix::get();
+        sAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
         sExtension = Extension::get();
 
         if ( sBrandName.isEmpty() )
