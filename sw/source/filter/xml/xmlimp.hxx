@@ -87,7 +87,6 @@ class SwXMLImport: public SvXMLImport
     bool                m_bBlock : 1;     // Load text block
     bool                m_bOrganizerMode : 1;
     bool                m_bInititedXForms : 1;
-    bool                m_bPreserveRedlineFlags;
 
     SwDoc*      m_pDoc; // cached for getDoc()
 
