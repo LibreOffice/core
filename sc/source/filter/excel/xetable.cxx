@@ -217,7 +217,7 @@ bool XclExpShrfmlaBuffer::IsValidTokenArray( const ScTokenArray& rArray ) const
 {
     using namespace formula;
 
-    FormulaToken** pTokens = rArray.GetArray();
+    FormulaToken* const * pTokens = rArray.GetArray();
     sal_uInt16 nLen = rArray.GetLen();
     for (sal_uInt16 i = 0; i < nLen; ++i)
     {

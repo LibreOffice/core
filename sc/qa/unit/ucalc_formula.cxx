@@ -1071,7 +1071,7 @@ void Test::testFormulaCompilerJumpReordering()
         sal_uInt16 nLen = pCode->GetCodeLen();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong RPN token count.", static_cast<sal_uInt16>(SAL_N_ELEMENTS(aCheckRPN)), nLen);
 
-        FormulaToken** ppTokens = pCode->GetCode();
+        FormulaToken* const * ppTokens = pCode->GetCode();
         for (sal_uInt16 i = 0; i < nLen; ++i)
         {
             const FormulaToken* p = ppTokens[i];

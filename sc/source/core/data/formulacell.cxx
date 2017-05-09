@@ -3855,9 +3855,9 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
     if (!pCode->IsShareable() || !rOther.pCode->IsShareable())
         return NotEqual;
 
-    FormulaToken **pThis = pCode->GetCode();
+    FormulaToken * const *pThis = pCode->GetCode();
     sal_uInt16     nThisLen = pCode->GetCodeLen();
-    FormulaToken **pOther = rOther.pCode->GetCode();
+    FormulaToken * const *pOther = rOther.pCode->GetCode();
     sal_uInt16     nOtherLen = rOther.pCode->GetCodeLen();
 
     if ( !pThis || !pOther )

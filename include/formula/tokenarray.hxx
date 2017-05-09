@@ -117,8 +117,17 @@ class FORMULA_DLLPUBLIC FormulaTokenArray
     friend class FormulaTokenIterator;
     friend class FormulaMissingContext;
 
+public:
+    enum ReplaceMode
+    {
+        CODE_ONLY,      ///< replacement only in pCode
+        CODE_AND_RPN    ///< replacement in pCode and pRPN
+    };
+
+    typedef std::vector < FormulaToken* > FormulaTokenPtrVector;
+
 protected:
-    FormulaToken**  pCode;                  // Token code array
+    FormulaTokenPtrVector  pCode;           // Token code array
     FormulaToken**  pRPN;                   // RPN array
     sal_uInt16      nLen;                   // Length of token array
     sal_uInt16      nRPN;                   // Length of RPN array
@@ -135,13 +144,6 @@ protected:
 
     /// Also used by the compiler. The token MUST had been allocated with new!
     FormulaToken*           Add( FormulaToken* );
-
-public:
-    enum ReplaceMode
-    {
-        CODE_ONLY,      ///< replacement only in pCode
-        CODE_AND_RPN    ///< replacement in pCode and pRPN
-    };
 
 protected:
     /** Also used by the compiler. The token MUST had been allocated with new!
@@ -239,8 +241,8 @@ public:
      */
     bool HasOpCodes( const unordered_opcode_set& rOpCodes ) const;
 
-    FormulaToken** GetArray() const  { return pCode; }
-    FormulaToken** GetCode()  const  { return pRPN; }
+    FormulaToken* const * GetArray() const  { return &pCode[0]; }
+    FormulaToken* const * GetCode()  const  { return pRPN; }
     sal_uInt16     GetLen() const     { return nLen; }
     sal_uInt16     GetCodeLen() const { return nRPN; }
     void           Reset()            { nIndex = 0; }

@@ -4322,7 +4322,7 @@ void ScCompiler::CreateStringFromXMLTokenArray( OUString& rFormula, OUString& rF
     OSL_ENSURE( pArr->GetLen() == nExpectedCount, "ScCompiler::CreateStringFromXMLTokenArray - wrong number of tokens" );
     if( pArr->GetLen() == nExpectedCount )
     {
-        FormulaToken** ppTokens = pArr->GetArray();
+        FormulaToken* const * ppTokens = pArr->GetArray();
         // string tokens expected, GetString() will assert if token type is wrong
         rFormula = ppTokens[0]->GetString().getString();
         if( bExternal )

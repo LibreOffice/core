@@ -674,8 +674,8 @@ static bool lcl_IsEqual( const ScTokenArray* pArr1, const ScTokenArray* pArr2 )
         if ( pArr2->GetLen() != nLen )
             return false;
 
-        FormulaToken** ppToken1 = pArr1->GetArray();
-        FormulaToken** ppToken2 = pArr2->GetArray();
+        FormulaToken* const * ppToken1 = pArr1->GetArray();
+        FormulaToken* const * ppToken2 = pArr2->GetArray();
         for (sal_uInt16 i=0; i<nLen; i++)
         {
             if ( ppToken1[i] != ppToken2[i] &&

@@ -478,7 +478,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             ScAppOptions aAppOpt = pScMod->GetAppOptions();
             bool bOptChanged = false;
 
-            formula::FormulaToken** ppToken = pArr->GetArray();
+            formula::FormulaToken* const * ppToken = pArr->GetArray();
             sal_uInt16 nTokens = pArr->GetLen();
             sal_uInt16 nLevel = 0;
             for (sal_uInt16 nTP=0; nTP<nTokens; nTP++)

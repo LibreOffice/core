@@ -506,7 +506,7 @@ FormulaToken* FormulaTokenArray::GetNextReferenceRPN()
 
 FormulaToken* FormulaTokenArray::GetNextReferenceOrName()
 {
-    if( pCode )
+    if( pCode.size() )
     {
         while ( nIndex < nLen )
         {
@@ -532,7 +532,7 @@ FormulaToken* FormulaTokenArray::GetNextReferenceOrName()
 
 FormulaToken* FormulaTokenArray::GetNextName()
 {
-    if( pCode )
+    if( pCode.size() )
     {
         while ( nIndex < nLen )
         {
@@ -540,13 +540,13 @@ FormulaToken* FormulaTokenArray::GetNextName()
             if( t->GetType() == svIndex )
                 return t;
         }
-    } // if( pCode )
+    } // if( pCode.size() )
     return nullptr;
 }
 
 FormulaToken* FormulaTokenArray::Next()
 {
-    if( pCode && nIndex < nLen )
+    if( pCode.size() && nIndex < nLen )
         return pCode[ nIndex++ ];
     else
         return nullptr;
@@ -554,7 +554,7 @@ FormulaToken* FormulaTokenArray::Next()
 
 FormulaToken* FormulaTokenArray::NextNoSpaces()
 {
-    if( pCode )
+    if( pCode.size() )
     {
         while( (nIndex < nLen) && (pCode[ nIndex ]->GetOpCode() == ocSpaces) )
             ++nIndex;
@@ -604,7 +604,7 @@ FormulaToken* FormulaTokenArray::PeekPrev( sal_uInt16 & nIdx )
 
 FormulaToken* FormulaTokenArray::PeekNext()
 {
-    if( pCode && nIndex < nLen )
+    if( pCode.size() && nIndex < nLen )
         return pCode[ nIndex ];
     else
         return nullptr;
@@ -612,7 +612,7 @@ FormulaToken* FormulaTokenArray::PeekNext()
 
 FormulaToken* FormulaTokenArray::PeekNextNoSpaces()
 {
-    if( pCode && nIndex < nLen )
+    if( pCode.size() && nIndex < nLen )
     {
         sal_uInt16 j = nIndex;
         while ( j < nLen && pCode[j]->GetOpCode() == ocSpaces )
@@ -628,7 +628,7 @@ FormulaToken* FormulaTokenArray::PeekNextNoSpaces()
 
 FormulaToken* FormulaTokenArray::PeekPrevNoSpaces()
 {
-    if( pCode && nIndex > 1 )
+    if( pCode.size() && nIndex > 1 )
     {
         sal_uInt16 j = nIndex - 2;
         while ( pCode[j]->GetOpCode() == ocSpaces && j > 0 )
@@ -701,9 +701,7 @@ bool FormulaTokenArray::HasNameOrColRowName() const
 
 bool FormulaTokenArray::HasOpCodes(const unordered_opcode_set& rOpCodes) const
 {
-    FormulaToken** p = pCode;
-    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
-    for (; p != pEnd; ++p)
+    for (FormulaTokenPtrVector::const_iterator p = pCode.cbegin(); p != pCode.cend(); ++p)
     {
         OpCode eOp = (*p)->GetOpCode();
         if (rOpCodes.count(eOp) > 0)
@@ -714,7 +712,6 @@ bool FormulaTokenArray::HasOpCodes(const unordered_opcode_set& rOpCodes) const
 }
 
 FormulaTokenArray::FormulaTokenArray() :
-    pCode(nullptr),
     pRPN(nullptr),
     nLen(0),
     nRPN(0),
@@ -747,15 +744,13 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
     bHyperLink = r.bHyperLink;
     mbFromRangeName = r.mbFromRangeName;
     mbShareable = r.mbShareable;
-    pCode  = nullptr;
+    pCode  = r.pCode;
     pRPN   = nullptr;
     FormulaToken** pp;
     if( nLen )
     {
-        pp = pCode = new FormulaToken*[ nLen ];
-        memcpy( pp, r.pCode, nLen * sizeof( FormulaToken* ) );
-        for( sal_uInt16 i = 0; i < nLen; i++ )
-            (*pp++)->IncRef();
+        for( FormulaTokenPtrVector::const_iterator i = pCode.cbegin(); i != pCode.cend(); ++i )
+            (*i)->IncRef();
     }
     if( nRPN )
     {
@@ -770,10 +765,10 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
 void FormulaTokenArray::Assign( sal_uInt16 nCode, FormulaToken **pTokens )
 {
     assert( nLen == 0 );
-    assert( pCode == nullptr );
+    assert( pCode.size() == 0 );
 
     nLen = nCode;
-    pCode = new FormulaToken*[ nLen ];
+    pCode.resize(nLen, nullptr);
 
     for( sal_uInt16 i = 0; i < nLen; i++ )
     {
@@ -794,16 +789,15 @@ FormulaTokenArray& FormulaTokenArray::operator=( const FormulaTokenArray& rArr )
 void FormulaTokenArray::Clear()
 {
     if( nRPN ) DelRPN();
-    if( pCode )
+    if( pCode.size() )
     {
-        FormulaToken** p = pCode;
-        for( sal_uInt16 i = 0; i < nLen; i++ )
+        for (FormulaTokenPtrVector::const_iterator p = pCode.cbegin(); p != pCode.cend(); ++p)
         {
-            (*p++)->DecRef();
+            (*p)->DecRef();
         }
-        delete [] pCode;
+        pCode.clear();
     }
-    pCode = nullptr; pRPN = nullptr;
+    pRPN = nullptr;
     nError = FormulaError::NONE;
     nLen = nIndex = nRPN = 0;
     bHyperLink = false;
@@ -918,28 +912,13 @@ sal_uInt16 FormulaTokenArray::RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount
 
 FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
 {
-    if( !pCode )
-        pCode = new FormulaToken*[ FORMULA_MAXTOKENS ];
-    if( nLen < FORMULA_MAXTOKENS - 1 )
-    {
-        CheckToken(*t);
-        pCode[ nLen++ ] = t;
-        t->IncRef();
-        if( t->GetOpCode() == ocArrayClose )
-            return MergeArray();
-        return t;
-    }
-    else
-    {
-        t->DeleteIfZeroRef();
-        if ( nLen == FORMULA_MAXTOKENS - 1 )
-        {
-            t = new FormulaByteToken( ocStop );
-            pCode[ nLen++ ] = t;
-            t->IncRef();
-        }
-        return nullptr;
-    }
+    CheckToken(*t);
+    pCode.push_back(t);
+    nLen = pCode.size();
+    t->IncRef();
+    if( t->GetOpCode() == ocArrayClose )
+        return MergeArray();
+    return t;
 }
 
 FormulaToken* FormulaTokenArray::AddString( const svl::SharedString& rStr )
@@ -1570,7 +1549,7 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissing( const MissingConvention &
 
 bool FormulaTokenArray::MayReferenceFollow()
 {
-    if ( pCode && nLen > 0 )
+    if ( pCode.size() && nLen > 0 )
     {
         // ignore trailing spaces
         sal_uInt16 i = nLen - 1;

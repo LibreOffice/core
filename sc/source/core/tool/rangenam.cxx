@@ -357,8 +357,8 @@ bool ScRangeData::operator== (const ScRangeData& rData) const       // for Undo
     sal_uInt16 nLen = pCode->GetLen();
     if ( nLen != rData.pCode->GetLen() ) return false;
 
-    FormulaToken** ppThis = pCode->GetArray();
-    FormulaToken** ppOther = rData.pCode->GetArray();
+    FormulaToken* const * ppThis = pCode->GetArray();
+    FormulaToken* const * ppOther = rData.pCode->GetArray();
 
     for ( sal_uInt16 i=0; i<nLen; i++ )
         if ( ppThis[i] != ppOther[i] && !(*ppThis[i] == *ppOther[i]) )

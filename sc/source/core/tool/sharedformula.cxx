@@ -372,8 +372,8 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
             xGroup->getAreaListener(ppSharedTop, BCA_LISTEN_ALWAYS, true, true));
     }
 
-    formula::FormulaToken** p = pCode->GetCode();
-    formula::FormulaToken** pEnd = p + pCode->GetCodeLen();
+    formula::FormulaToken* const * p = pCode->GetCode();
+    formula::FormulaToken* const * pEnd = p + pCode->GetCodeLen();
     for (; p != pEnd; ++p)
     {
         const formula::FormulaToken* t = *p;

@@ -67,8 +67,8 @@ bool equalsFormulaCells( const ScFormulaCell* p1, const ScFormulaCell* p2 )
         return false;
 
     sal_uInt16 n = pCode1->GetLen();
-    formula::FormulaToken** ppToken1 = pCode1->GetArray();
-    formula::FormulaToken** ppToken2 = pCode2->GetArray();
+    formula::FormulaToken* const * ppToken1 = pCode1->GetArray();
+    formula::FormulaToken* const * ppToken2 = pCode2->GetArray();
     for (sal_uInt16 i = 0; i < n; ++i)
     {
         if (!ppToken1[i]->TextEqual(*(ppToken2[i])))

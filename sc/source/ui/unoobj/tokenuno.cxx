@@ -364,7 +364,7 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
     bool bError = false;
 
     sal_Int32 nLen = static_cast<sal_Int32>(rTokenArray.GetLen());
-    formula::FormulaToken** pTokens = rTokenArray.GetArray();
+    formula::FormulaToken* const * pTokens = rTokenArray.GetArray();
     if ( pTokens )
     {
         rSequence.realloc(nLen);

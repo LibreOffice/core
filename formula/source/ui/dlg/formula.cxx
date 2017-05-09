@@ -769,7 +769,7 @@ void FormulaDlg_Impl::UpdateTokenArray( const OUString& rStrExp)
     InitFormulaOpCodeMapper();
     m_pTokenArray = m_pHelper->convertToTokenArray(m_aTokenList);
     const sal_Int32 nLen = static_cast<sal_Int32>(m_pTokenArray->GetLen());
-    FormulaToken** pTokens = m_pTokenArray->GetArray();
+    FormulaToken * const * pTokens = m_pTokenArray->GetArray();
     if ( pTokens && nLen == m_aTokenList.getLength() )
     {
         for (sal_Int32 nPos=0; nPos<nLen; nPos++)
