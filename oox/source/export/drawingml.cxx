@@ -25,6 +25,7 @@
 #include <oox/drawingml/color.hxx>
 #include <drawingml/fillproperties.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/relationship.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 
@@ -944,7 +945,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
     if ( bRelPathToMedia )
         sRelPathToMedia = "../" + sRelPathToMedia;
     sRelId = mpFB->addRelation( mpFS->getOutputStream(),
-                                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                                oox::getRelationship(Relationship::IMAGE),
                                 OUStringBuffer()
                                 .appendAscii( GetRelationCompPrefix() )
                                 .appendAscii( sRelPathToMedia.getStr() )
@@ -1477,7 +1478,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         mAny >>= sURL;
         if( !sURL.isEmpty() ) {
             OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
-                                  "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
+                                  oox::getRelationship(Relationship::HYPERLINK),
                                   sURL, true );
 
             mpFS->singleElementNS( XML_a, XML_hlinkClick,
@@ -3454,7 +3455,7 @@ OString DrawingML::WriteWdpPicture( const OUString& rFileId, const Sequence< sal
     xOutStream->closeOutput();
 
     sId = mpFB->addRelation( mpFS->getOutputStream(),
-                             "http://schemas.microsoft.com/office/2007/relationships/hdphoto",
+                             oox::getRelationship(Relationship::HDPHOTO),
                              sFileName );
 
     maWdpCache[rFileId] = sId;

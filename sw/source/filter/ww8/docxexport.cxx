@@ -38,6 +38,7 @@
 #include <oox/export/chartexport.hxx>
 #include <oox/export/shapes.hxx>
 #include <oox/helper/propertyset.hxx>
+#include <oox/token/relationship.hxx>
 
 #include <map>
 #include <algorithm>
@@ -356,7 +357,7 @@ OString DocxExport::OutputChart( uno::Reference< frame::XModel >& xModel, sal_In
 {
     OUString aFileName = "charts/chart" + OUString::number(nCount) + ".xml";
     OUString sId = m_pFilter->addRelation( m_pSerializer->getOutputStream(),
-                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
+                    oox::getRelationship(Relationship::CHART),
                     aFileName );
     aFileName = "word/charts/chart" + OUString::number(nCount) + ".xml";
     ::sax_fastparser::FSHelperPtr pChartFS =
@@ -572,7 +573,7 @@ void DocxExport::InitStyles()
 
     // setup word/styles.xml and the relations + content type
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles",
+            oox::getRelationship(Relationship::STYLES),
             "styles.xml" );
 
     ::sax_fastparser::FSHelperPtr pStylesFS =
@@ -595,7 +596,7 @@ void DocxExport::WriteFootnotesEndnotes()
     {
         // setup word/styles.xml and the relations + content type
         m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes",
+                oox::getRelationship(Relationship::FOOTNOTES),
                 "footnotes.xml" );
 
         ::sax_fastparser::FSHelperPtr pFootnotesFS =
@@ -619,7 +620,7 @@ void DocxExport::WriteFootnotesEndnotes()
     {
         // setup word/styles.xml and the relations + content type
         m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes",
+                oox::getRelationship(Relationship::ENDNOTES),
                 "endnotes.xml" );
 
         ::sax_fastparser::FSHelperPtr pEndnotesFS =
@@ -645,7 +646,7 @@ void DocxExport::WritePostitFields()
     if ( m_pAttrOutput->HasPostitFields() )
     {
         m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments",
+                oox::getRelationship(Relationship::COMMENTS),
                 "comments.xml" );
 
         ::sax_fastparser::FSHelperPtr pPostitFS =
@@ -666,7 +667,7 @@ void DocxExport::WriteNumbering()
         return; // no numbering is used
 
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering",
+        oox::getRelationship(Relationship::NUMBERING),
         "numbering.xml" );
 
     ::sax_fastparser::FSHelperPtr pNumberingFS = m_pFilter->openFragmentStreamWithSerializer( "word/numbering.xml",
@@ -706,7 +707,7 @@ void DocxExport::WriteHeaderFooter( const SwFormat& rFormat, bool bHeader, const
         OUString aName( OUStringBuffer().append("header").append( ++m_nHeaders ).append(".xml").makeStringAndClear() );
 
         aRelId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header",
+                oox::getRelationship(Relationship::HEADER),
                 aName );
 
         pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().append("word/").append( aName ).makeStringAndClear(),
@@ -719,7 +720,7 @@ void DocxExport::WriteHeaderFooter( const SwFormat& rFormat, bool bHeader, const
         OUString aName( OUStringBuffer().append("footer").append( ++m_nFooters ).append(".xml").makeStringAndClear() );
 
         aRelId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer",
+                oox::getRelationship(Relationship::FOOTER),
                 aName );
 
         pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().append("word/").append( aName ).makeStringAndClear(),
@@ -777,7 +778,7 @@ void DocxExport::WriteHeaderFooter( const SwFormat& rFormat, bool bHeader, const
 void DocxExport::WriteFonts()
 {
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable",
+            oox::getRelationship(Relationship::FONTTABLE),
             "fontTable.xml" );
 
     ::sax_fastparser::FSHelperPtr pFS = m_pFilter->openFragmentStreamWithSerializer(
@@ -823,7 +824,7 @@ void DocxExport::WriteSettings()
         return;
 
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings",
+            oox::getRelationship(Relationship::SETTINGS),
             "settings.xml" );
 
     ::sax_fastparser::FSHelperPtr pFS = m_pFilter->openFragmentStreamWithSerializer(
@@ -1003,7 +1004,7 @@ void DocxExport::WriteTheme()
         return;
 
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
+            oox::getRelationship(Relationship::THEME),
             "theme/theme1.xml" );
 
     uno::Reference< xml::sax::XSAXSerializable > serializer( themeDom, uno::UNO_QUERY );
@@ -1050,7 +1051,7 @@ void DocxExport::WriteGlossary()
         return;
 
     m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/glossaryDocument",
+            oox::getRelationship(Relationship::GLOSSARYDOCUMENT),
             "glossary/document.xml" );
 
     uno::Reference< io::XOutputStream > xOutputStream = GetFilter().openFragmentStream( "word/glossary/document.xml",
@@ -1125,7 +1126,7 @@ void DocxExport::WriteCustomXml()
         if ( customXmlDom.is() )
         {
             m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml",
+                    oox::getRelationship(Relationship::CUSTOMXML),
                     "../customXml/item"+OUString::number((j+1))+".xml" );
 
             uno::Reference< xml::sax::XSAXSerializable > serializer( customXmlDom, uno::UNO_QUERY );
@@ -1149,7 +1150,7 @@ void DocxExport::WriteCustomXml()
             // Adding itemprops's relationship entry to item.xml.rels file
             m_pFilter->addRelation( GetFilter().openFragmentStream( "customXml/item"+OUString::number((j+1))+".xml",
                     "application/xml" ) ,
-                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXmlProps",
+                    oox::getRelationship(Relationship::CUSTOMXMLPROPS),
                     "itemProps"+OUString::number((j+1))+".xml" );
 
         }
@@ -1197,7 +1198,7 @@ void DocxExport::WriteActiveX()
         if ( activeXDom.is() )
         {
             m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
-                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/control",
+                    oox::getRelationship(Relationship::CONTROL),
                     "activeX/activeX"+OUString::number((j+1))+".xml" );
 
             uno::Reference< xml::sax::XSAXSerializable > serializer( activeXDom, uno::UNO_QUERY );
@@ -1243,7 +1244,7 @@ void DocxExport::WriteActiveX()
             // Adding itemprops's relationship entry to item.xml.rels file
             m_pFilter->addRelation( GetFilter().openFragmentStream( "/word/activeX/activeX"+OUString::number((j+1))+".xml",
                     "application/vnd.ms-office.activeX+xml" ) ,
-                    "http://schemas.microsoft.com/office/2006/relationships/activeXControlBinary",
+                    oox::getRelationship(Relationship::ACTIVEXCONTROLBINARY),
                     "activeX"+OUString::number((j+1))+".bin" );
 
         }
@@ -1462,7 +1463,7 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
     WriteProperties( );
 
     // relations for the document
-    m_pFilter->addRelation( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+    m_pFilter->addRelation( oox::getRelationship(Relationship::OFFICEDOCUMENT),
             "word/document.xml" );
 
     // the actual document

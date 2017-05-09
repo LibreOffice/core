@@ -26,6 +26,7 @@
 #include <epptooxml.hxx>
 #include <epptdef.hxx>
 #include <oox/export/shapes.hxx>
+#include <oox/token/relationship.hxx>
 
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
@@ -353,13 +354,13 @@ bool PowerPointExport::exportDocument()
     //write document properties
     writeDocumentProperties();
 
-    addRelation( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument", "ppt/presentation.xml" );
+    addRelation( oox::getRelationship(Relationship::OFFICEDOCUMENT), "ppt/presentation.xml" );
 
     mPresentationFS = openFragmentStreamWithSerializer( "ppt/presentation.xml",
                                                     "application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml" );
 
     addRelation( mPresentationFS->getOutputStream(),
-                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
+                 oox::getRelationship(Relationship::THEME),
                  "theme/theme1.xml" );
 
     mPresentationFS->startElementNS( XML_p, XML_presentation, PNMSS, FSEND );
@@ -1405,7 +1406,7 @@ void PowerPointExport::WriteAuthors()
     FSHelperPtr pFS = openFragmentStreamWithSerializer( "ppt/commentAuthors.xml",
                                                         "application/vnd.openxmlformats-officedocument.presentationml.commentAuthors+xml" );
     addRelation( mPresentationFS->getOutputStream(),
-                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/commentAuthors",
+                 oox::getRelationship(Relationship::COMMENTAUTHORS),
                  "commentAuthors.xml" );
 
     pFS->startElementNS( XML_p, XML_cmAuthorLst,
@@ -1512,7 +1513,7 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
 
     // add explicit relation of presentation to this slide
     OUString sRelId = addRelation( mPresentationFS->getOutputStream(),
-                                   "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide",
+                                   oox::getRelationship(Relationship::SLIDE),
                                    OUStringBuffer()
                                    .append( "slides/slide" )
                                    .append( (sal_Int32) nPageNum + 1 )
@@ -1568,7 +1569,7 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
 
     // add implicit relation to slide layout
     addRelation( pFS->getOutputStream(),
-                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout",
+                 oox::getRelationship(Relationship::SLIDELAYOUT),
                  OUStringBuffer()
                  .append( "../slideLayouts/slideLayout" )
                  .append( GetLayoutFileId( GetPPTXLayoutId( GetLayoutOffset( mXPagePropSet ) ), nMasterNum ) )
@@ -1578,7 +1579,7 @@ void PowerPointExport::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNu
     if ( WriteComments( nPageNum ) )
         // add implicit relation to slide comments
         addRelation( pFS->getOutputStream(),
-                     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments",
+                     oox::getRelationship(Relationship::COMMENTS),
                      OUStringBuffer()
                      .append( "../comments/comment" )
                      .append( (sal_Int32) nPageNum + 1 )
@@ -1614,7 +1615,7 @@ void PowerPointExport::ImplWriteNotes( sal_uInt32 nPageNum )
 
     // add implicit relation to slide
     addRelation( pFS->getOutputStream(),
-                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide",
+                 oox::getRelationship(Relationship::SLIDE),
                  OUStringBuffer()
                  .append( "../slides/slide" )
                  .append( (sal_Int32) nPageNum + 1 )
@@ -1624,7 +1625,7 @@ void PowerPointExport::ImplWriteNotes( sal_uInt32 nPageNum )
     // add slide implicit relation to notes
     if( mpSlidesFSArray.size() >= nPageNum )
         addRelation( mpSlidesFSArray[ nPageNum ]->getOutputStream(),
-             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesSlide",
+             oox::getRelationship(Relationship::NOTESSLIDE),
              OUStringBuffer()
              .append( "../notesSlides/notesSlide" )
              .append( (sal_Int32) nPageNum + 1 )
@@ -1633,7 +1634,7 @@ void PowerPointExport::ImplWriteNotes( sal_uInt32 nPageNum )
 
     // add implicit relation to notes master
     addRelation( pFS->getOutputStream(),
-                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesMaster",
+                 oox::getRelationship(Relationship::NOTESMASTER),
           "../notesMasters/notesMaster1.xml" );
 
     SAL_INFO("sd.eppt", "-----------------");
@@ -1643,7 +1644,7 @@ void PowerPointExport::AddLayoutIdAndRelation( const FSHelperPtr& pFS, sal_Int32
 {
     // add implicit relation of slide master to slide layout
     OUString sRelId = addRelation( pFS->getOutputStream(),
-                   "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout",
+                   oox::getRelationship(Relationship::SLIDELAYOUT),
                    OUStringBuffer()
                    .append( "../slideLayouts/slideLayout" )
                    .append( nLayoutFileId )
@@ -1674,7 +1675,7 @@ void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPr
         mPresentationFS->startElementNS( XML_p, XML_sldMasterIdLst, FSEND );
 
     OUString sRelId = addRelation( mPresentationFS->getOutputStream(),
-                                   "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster",
+                                   oox::getRelationship(Relationship::SLIDEMASTER),
                                    OUStringBuffer()
                                    .append( "slideMasters/slideMaster" )
                                    .append( (sal_Int32) nPageNum + 1 )
@@ -1702,7 +1703,7 @@ void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPr
 
     // add implicit relation to the presentation theme
     addRelation( pFS->getOutputStream(),
-                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
+                 oox::getRelationship(Relationship::THEME),
          OUStringBuffer()
          .append( "../theme/theme" )
          .append( (sal_Int32) nPageNum + 1 )
@@ -1810,7 +1811,7 @@ void PowerPointExport::ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMaste
 
     // add implicit relation of slide layout to slide master
     addRelation( pFS->getOutputStream(),
-                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster",
+                 oox::getRelationship(Relationship::SLIDEMASTER),
                  OUStringBuffer()
                  .append( "../slideMasters/slideMaster" )
                  .append( (sal_Int32) nMasterNum + 1 )
@@ -2217,7 +2218,7 @@ bool PowerPointExport::WriteNotesMaster()
     mPresentationFS->startElementNS( XML_p, XML_notesMasterIdLst, FSEND );
 
     OUString sRelId = addRelation( mPresentationFS->getOutputStream(),
-                                   "http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesMaster",
+                                   oox::getRelationship(Relationship::NOTESMASTER),
                                     "notesMasters/notesMaster1.xml" );
 
     mPresentationFS->singleElementNS( XML_p, XML_notesMasterId,
@@ -2234,7 +2235,7 @@ bool PowerPointExport::WriteNotesMaster()
 
     // add implicit relation to the presentation theme
     addRelation( pFS->getOutputStream(),
-                 "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
+                 oox::getRelationship(Relationship::THEME),
          OUStringBuffer()
          .append( "../theme/theme" )
          .append( (sal_Int32) mnMasterPages + 1 )

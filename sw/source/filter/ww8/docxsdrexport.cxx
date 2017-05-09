@@ -17,6 +17,7 @@
 #include <svx/svdogrp.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/relationship.hxx>
 #include <oox/token/properties.hxx>
 #include <textboxhelper.hxx>
 #include <fmtanchr.hxx>
@@ -1038,7 +1039,7 @@ void DocxSdrExport::writeDiagramRels(const uno::Reference<xml::dom::XDocument>& 
                                      int nAnchorId)
 {
     // add image relationships of OOXData, OOXDiagram
-    OUString sType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/image");
+    OUString sType(oox::getRelationship(Relationship::IMAGE));
     uno::Reference< xml::sax::XSAXSerializable > xSerializer(xDom, uno::UNO_QUERY);
     uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create(comphelper::getProcessComponentContext());
     xWriter->setOutputStream(xOutStream);
@@ -1177,26 +1178,26 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
     // add data relation
     OUString dataFileName = "diagrams/data" + OUString::number(diagramCount) + ".xml";
     OString dataRelId = OUStringToOString(m_pImpl->m_rExport.GetFilter().addRelation(pFS->getOutputStream(),
-                                          "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramData",
+                                          oox::getRelationship(Relationship::DIAGRAMDATA),
                                           dataFileName), RTL_TEXTENCODING_UTF8);
 
 
     // add layout relation
     OUString layoutFileName = "diagrams/layout" + OUString::number(diagramCount) + ".xml";
     OString layoutRelId = OUStringToOString(m_pImpl->m_rExport.GetFilter().addRelation(pFS->getOutputStream(),
-                                            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramLayout",
+                                            oox::getRelationship(Relationship::DIAGRAMLAYOUT),
                                             layoutFileName), RTL_TEXTENCODING_UTF8);
 
     // add style relation
     OUString styleFileName = "diagrams/quickStyle" + OUString::number(diagramCount) + ".xml";
     OString styleRelId = OUStringToOString(m_pImpl->m_rExport.GetFilter().addRelation(pFS->getOutputStream(),
-                                           "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramQuickStyle",
+                                           oox::getRelationship(Relationship::DIAGRAMQUICKSTYLE),
                                            styleFileName), RTL_TEXTENCODING_UTF8);
 
     // add color relation
     OUString colorFileName = "diagrams/colors" + OUString::number(diagramCount) + ".xml";
     OString colorRelId = OUStringToOString(m_pImpl->m_rExport.GetFilter().addRelation(pFS->getOutputStream(),
-                                           "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramColors",
+                                           oox::getRelationship(Relationship::DIAGRAMCOLORS),
                                            colorFileName), RTL_TEXTENCODING_UTF8);
 
     OUString drawingFileName;
@@ -1205,7 +1206,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
         // add drawing relation
         drawingFileName = "diagrams/drawing" + OUString::number(diagramCount) + ".xml";
         OUString drawingRelId = m_pImpl->m_rExport.GetFilter().addRelation(pFS->getOutputStream(),
-                                "http://schemas.microsoft.com/office/2007/relationships/diagramDrawing",
+                                oox::getRelationship(Relationship::DIAGRAMDRAWING),
                                 drawingFileName);
 
         // the data dom contains a reference to the drawing relation. We need to update it with the new generated
