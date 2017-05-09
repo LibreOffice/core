@@ -6183,7 +6183,9 @@ bool SAL_CALL TestImportDOC(SvStream &rStream, const OUString &rFltName)
     }
     SwPaM aPaM( aIdx );
     aPaM.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(), 0);
+    pD->SetInReading(true);
     bool bRet = pReader->Read(*pD, OUString(), aPaM, OUString()) == 0;
+    pD->SetInReading(false);
     delete pReader;
 
     FlushFontCache();
