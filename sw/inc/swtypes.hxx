@@ -108,9 +108,6 @@ const sal_uInt8 NO_NUMLEVEL  = 0x20;    // "or" with the levels.
 
 // Some helper functions as macros or inlines.
 
-// One kilobyte is 1024 bytes:
-#define KB 1024
-
 #define SET_CURR_SHELL( shell ) CurrShell aCurr( shell )
 
 // pPathFinder is initialized by the UI.
@@ -181,13 +178,6 @@ namespace o3tl
 }
 
 #define SW_ISPRINTABLE( c ) ( c >= ' ' && 127 != c )
-
-#ifndef SW_CONSTASCII_DECL
-#define SW_CONSTASCII_DECL( n, s ) n[sizeof(s)]
-#endif
-#ifndef SW_CONSTASCII_DEF
-#define SW_CONSTASCII_DEF( n, s ) n[sizeof(s)] = s
-#endif
 
 #define CHAR_HARDBLANK      u'\x00A0'
 #define CHAR_HARDHYPHEN     u'\x2011'
