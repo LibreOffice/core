@@ -50,6 +50,7 @@
 #include <oox/token/tokens.hxx>
 #include <formula/grammar.hxx>
 #include <oox/export/drawingml.hxx>
+#include <oox/token/relationship.hxx>
 #include <oox/ole/vbaexport.hxx>
 #include <excelvbaproject.hxx>
 
@@ -1110,7 +1111,7 @@ bool XclExpXmlStream::exportDocument()
                 openFragmentStream("xl/vbaProject.bin", "application/vnd.ms-office.vbaProject");
             comphelper::OStorageHelper::CopyInputToOutput(xVBAStream, xVBAOutput);
 
-            addRelation(GetCurrentStream()->getOutputStream(), "http://schemas.microsoft.com/office/2006/relationships/vbaProject", "vbaProject.bin");
+            addRelation(GetCurrentStream()->getOutputStream(), oox::getRelationship(Relationship::VBAPROJECT), "vbaProject.bin");
         }
     }
 

@@ -76,6 +76,7 @@
 #include <oox/export/chartexport.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/relationship.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -1425,7 +1426,7 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
             XclXmlUtils::GetStreamName( "../", "comments", mnTab + 1 ),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments" );
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments");
     rStrm.PushStream( rComments );
 
     if( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 )

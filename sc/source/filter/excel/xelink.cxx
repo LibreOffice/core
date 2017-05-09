@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <formula/errorcodes.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/relationship.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <svl/zforlist.hxx>
 #include "document.hxx"
@@ -1673,7 +1674,7 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
     sal_uInt16 nLevel = 0;
     bool bRel = true;
     OUString sId = rStrm.addRelation( pExternalLink->getOutputStream(),
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/externalLinkPath",
+            oox::getRelationship(Relationship::EXTERNALLINKPATH),
             XclExpHyperlink::BuildFileName( nLevel, bRel, maUrl, GetRoot(), true),
             true );
 
