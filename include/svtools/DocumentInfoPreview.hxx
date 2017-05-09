@@ -55,7 +55,6 @@ public:
 private:
     VclPtr<ExtMultiLineEdit> m_pEditWin;
     std::unique_ptr< SvtDocInfoTable_Impl > m_xInfoTable;
-    LanguageTag m_aLanguageTag;
 
     void insertEntry(OUString const & title, OUString const & value);
 
