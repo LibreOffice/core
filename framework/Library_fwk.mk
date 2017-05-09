@@ -153,6 +153,7 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/uielement/statusbarmerger \
     framework/source/uielement/statusbarwrapper \
     framework/source/uielement/statusindicatorinterfacewrapper \
+    framework/source/uielement/styletoolbarcontroller \
     framework/source/uielement/subtoolbarcontroller \
     framework/source/uielement/thesaurusmenucontroller \
     framework/source/uielement/togglebuttontoolbarcontroller \

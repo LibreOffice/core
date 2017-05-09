@@ -18,6 +18,7 @@
  */
 
 #include <uielement/menubarmanager.hxx>
+#include <uielement/styletoolbarcontroller.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <framework/addonmenu.hxx>
 #include <framework/addonsoptions.hxx>
@@ -823,7 +824,9 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
                                     pMenu->HideItem( pMenuItemHandler->nItemId );
                             }
 
-                            if ( m_bIsBookmarkMenu )
+                            if ( aTargetURL.Complete.startsWith( ".uno:StyleApply?" ) )
+                                xMenuItemDispatch = new StyleDispatcher( m_xFrame, m_xURLTransformer, aTargetURL );
+                            else if ( m_bIsBookmarkMenu )
                                 xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, pMenuItemHandler->aTargetFrame, 0 );
                             else
                                 xMenuItemDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
