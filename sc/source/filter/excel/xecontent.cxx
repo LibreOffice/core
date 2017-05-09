@@ -202,7 +202,7 @@ void XclExpSstImpl::SaveXml( XclExpXmlStream& rStrm )
             "sharedStrings.xml",
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml",
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" );
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings");
     rStrm.PushStream( pSst );
 
     pSst->startElement( XML_sst,
