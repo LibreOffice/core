@@ -27,12 +27,16 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <vcl/timer.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/treelistbox.hxx>
+#include <vcl/dialog.hxx>
 #include <vcl/image.hxx>
 
+class Button;
+class SaveInData;
 class SfxMacroInfoItem;
 
 struct SfxStyleInfo_Impl
@@ -81,6 +85,7 @@ enum class SfxCfgKind
     GROUP_SCRIPTCONTAINER    = 3,
     FUNCTION_SCRIPT          = 4,
     GROUP_STYLES             = 5,
+    GROUP_ALLFUNCTIONS       = 6
 };
 
 struct SfxGroupInfo_Impl
@@ -91,6 +96,7 @@ struct SfxGroupInfo_Impl
     bool        bWasOpened;
     OUString    sCommand;
     OUString    sLabel;
+    OUString    sHelpText;
 
                 SfxGroupInfo_Impl( SfxCfgKind n, sal_uInt16 nr, void* pObj = nullptr ) :
                     nKind( n ), nUniqueID( nr ), pObject( pObj ), bWasOpened(false) {}
@@ -116,6 +122,7 @@ public:
     OUString      GetCurCommand();
     OUString      GetCurLabel();
     OUString      GetSelectedScriptURI();
+    OUString      GetHelpText();
     void          SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 
@@ -125,7 +132,7 @@ class SfxConfigGroupListBox : public SvTreeListBox
     std::unique_ptr<SvxConfigGroupBoxResource_Impl> xImp;
     VclPtr<SfxConfigFunctionListBox>  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
-
+    SaveInData* m_pImageProvider;
     OUString m_sModuleLongName;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::frame::XFrame > m_xFrame;
@@ -146,7 +153,9 @@ class SfxConfigGroupListBox : public SvTreeListBox
 
 
     void InitModule();
-
+    void FillScriptList(const css::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
+                         SvTreeListEntry* pParentEntry, bool bCheapChildrenOnDemand);
+    void FillFunctionsList(const css::uno::Sequence< css::frame::DispatchInformation >& xCommands);
     OUString MapCommand2UIName(const OUString& sCommand);
 
     SfxStylesInfo_Impl* pStylesInfo;
@@ -167,10 +176,55 @@ public:
                              bool bEventMode);
     void                SetFunctionListBox( SfxConfigFunctionListBox *pBox )
                         { pFunctionListBox = pBox; }
+    void                SetImageProvider( SaveInData* provider )
+                        { m_pImageProvider = provider; }
     void                GroupSelected();
     void                SelectMacro( const SfxMacroInfoItem* );
     void                SelectMacro( const OUString&, const OUString& );
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
+};
+
+class SvxScriptSelectorDialog : public ModalDialog
+{
+    VclPtr<FixedText>                      m_pDialogDescription;
+    VclPtr<SfxConfigGroupListBox>          m_pCategories;
+    VclPtr<SfxConfigFunctionListBox>       m_pCommands;
+    VclPtr<PushButton>                     m_pOKButton;
+    VclPtr<PushButton>                     m_pCancelButton;
+    VclPtr<VclMultiLineEdit>               m_pDescriptionText;
+    OUString                               m_sDefaultDesc;
+    SfxStylesInfo_Impl                     m_aStylesInfo;
+    bool                                   m_bShowSlots;
+    Link<SvxScriptSelectorDialog&,void>    m_aAddHdl;
+
+    DECL_LINK( ClickHdl, Button *, void );
+    DECL_LINK( SelectHdl, SvTreeListBox*, void );
+    DECL_LINK( FunctionDoubleClickHdl, SvTreeListBox*, bool );
+
+    void                            UpdateUI();
+
+public:
+
+    SvxScriptSelectorDialog (
+        vcl::Window* pParent = nullptr,
+        bool bShowSlots = false,
+        const css::uno::Reference< css::frame::XFrame >& xFrame = nullptr
+    );
+    virtual ~SvxScriptSelectorDialog() override;
+    virtual void dispose() override;
+
+    void        SetAddHdl( const Link<SvxScriptSelectorDialog&,void>& rLink ) { m_aAddHdl = rLink; }
+    const Link<SvxScriptSelectorDialog&,void>& GetAddHdl() const { return m_aAddHdl; }
+
+    void        SetImageProvider(SaveInData* provider)
+    {
+        m_pCategories->SetImageProvider(provider);
+    }
+
+    OUString    GetScriptURL() const;
+    OUString    GetSelectedDisplayName();
+    void        SetRunLabel();
+    void        SetDialogDescription(const OUString& rDescription);
 };
 
 #endif

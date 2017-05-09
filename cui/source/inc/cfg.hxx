@@ -46,7 +46,7 @@
 #include <vector>
 #include <vcl/msgbox.hxx>
 
-#include "selector.hxx"
+#include "cfgutil.hxx"
 
 class SvxConfigEntry;
 class SvxConfigPage;

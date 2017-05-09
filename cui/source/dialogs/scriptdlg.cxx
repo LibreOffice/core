@@ -31,7 +31,7 @@
 #include <bitmaps.hlst>
 #include "scriptdlg.hxx"
 #include <dialmgr.hxx>
-#include "selector.hxx"
+#include "cfgutil.hxx"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>

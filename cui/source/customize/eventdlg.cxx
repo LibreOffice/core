@@ -47,7 +47,7 @@
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include "helpid.hrc"
-#include "selector.hxx"
+#include "cfgutil.hxx"
 #include "cfg.hxx"
 
 

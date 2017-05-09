@@ -32,7 +32,7 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <dialmgr.hxx>
-#include "selector.hxx"
+#include "cfgutil.hxx"
 #include "cfg.hxx"
 #include "helpid.hrc"
 #include <cuires.hrc>
