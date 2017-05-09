@@ -166,6 +166,7 @@ private:
     bool mbIsSplitPara;
     std::unique_ptr< GraphicZOrderHelper > zOrderHelper;
     std::unique_ptr<GraphicNamingHelper> m_pGraphicNamingHelper;
+    OUString m_sGlossaryEntryName;
 };
 
 } // namespace dmapper
