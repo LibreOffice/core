@@ -554,27 +554,26 @@ SvParserState SwHTMLParser::CallParser()
 void SwHTMLParser::Continue( HtmlTokenId nToken )
 {
 #ifdef DBG_UTIL
-    OSL_ENSURE(!m_nContinue, "Continue im Continue - not supposed to happen");
+    OSL_ENSURE(!m_nContinue, "Continue in Continue - not supposed to happen");
     m_nContinue++;
 #endif
 
-    // Wenn der Import (vom SFX) abgebrochen wurde, wird ein Fehler
-    // gesetzt aber trotzdem noch weiter gemacht, damit vernuenftig
-    // aufgeraeumt wird.
+    // When the import (of SFX) is aborted, an error will be set but
+    // we still continue, so that we clean up properly.
     OSL_ENSURE( SvParserState::Error!=eState,
-            "SwHTMLParser::Continue: bereits ein Fehler gesetzt" );
+            "SwHTMLParser::Continue: already set an error" );
     if( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
         eState = SvParserState::Error;
 
-    // Die SwViewShell vom Dokument holen, merken und als aktuelle setzen.
+    // Fetch SwViewShell from document, save it and set as current.
     SwViewShell *pInitVSh = CallStartAction();
 
     if( SvParserState::Error != eState && GetMedium() && !m_bViewCreated )
     {
-        // Beim ersten Aufruf erstmal returnen, Doc anzeigen
-        // und auf Timer Callback warten.
-        // An dieser Stelle wurde im CallParser gerade mal ein Zeichen
-        // gelesen und ein SaveState(0) gerufen.
+        // At first call first return, show document and wait for callback
+        // time.
+        // At this point in CallParser only one digit was read and
+        // a SaveState(0) was called.
         eState = SvParserState::Pending;
         m_bViewCreated = true;
         m_xDoc->SetInLoadAsynchron( true );
@@ -596,7 +595,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
         }
     }
 
-    // waehrend des einlesens kein OLE-Modified rufen
+    // during import don't call OLE-Modified
     Link<bool,void> aOLELink( m_xDoc->GetOle2Link() );
     m_xDoc->SetOle2Link( Link<bool,void>() );
 
@@ -604,31 +603,30 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
     bool const bWasUndo = m_xDoc->GetIDocumentUndoRedo().DoesUndo();
     m_xDoc->GetIDocumentUndoRedo().DoUndo(false);
 
-    // Wenn der Import abgebrochen wird, kein Continue mehr rufen.
-    // Falls ein Pending-Stack existiert aber durch einen Aufruf
-    // von NextToken dafuer sorgen, dass der Pending-Stack noch
-    // beendet wird.
+    // When the import will be aborted, don't call Continue anymore.
+    // If a Pending-Stack exists make sure the stack is ended with a call
+    // of NextToken.
     if( SvParserState::Error == eState )
     {
         OSL_ENSURE( !m_pPendStack || m_pPendStack->nToken != HtmlTokenId::NONE,
-                "SwHTMLParser::Continue: Pending-Stack ohne Token" );
+                "SwHTMLParser::Continue: Pending-Stack without Token" );
         if( m_pPendStack && m_pPendStack->nToken != HtmlTokenId::NONE )
             NextToken( m_pPendStack->nToken );
         OSL_ENSURE( !m_pPendStack,
-                "SwHTMLParser::Continue: Es gibt wieder einen Pend-Stack" );
+                "SwHTMLParser::Continue: There is again a Pending-Stack" );
     }
     else
     {
         HTMLParser::Continue( m_pPendStack ? m_pPendStack->nToken : nToken );
     }
 
-    // Laufbalken wieder abschalten
+    // disable progress bar again
     EndProgress( m_xDoc->GetDocShell() );
 
     bool bLFStripped = false;
     if( SvParserState::Pending != GetStatus() )
     {
-        // noch die letzten Attribute setzen
+        // set the last attributes yet
         {
             if( !m_aScriptSource.isEmpty() )
             {
@@ -648,15 +646,15 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
                     EndObject();
             }
 
-            // ggf. ein noch vorhandes LF hinter dem letzen Absatz entfernen
+            // maybe remove an existing LF after the last paragraph
             if( IsNewDoc() )
                 bLFStripped = StripTrailingLF() > 0;
 
-            // noch offene Nummerierungen beenden.
+            // close still open numbering
             while( GetNumInfo().GetNumRule() )
                 EndNumBulList();
 
-            OSL_ENSURE( !m_nContextStMin, "Es gibt geschuetzte Kontexte" );
+            OSL_ENSURE( !m_nContextStMin, "There are protected contexts" );
             m_nContextStMin = 0;
             while( m_aContexts.size() )
             {
@@ -673,11 +671,11 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
 
             SetAttr( false );
 
-            // Noch die erst verzoegert gesetzten Styles setzen
+            // set the first delayed styles
             m_pCSS1Parser->SetDelayedStyles();
         }
 
-        // den Start wieder korrigieren
+        // again correct the start
         if( !IsNewDoc() && m_pSttNdIdx->GetIndex() )
         {
             SwTextNode* pTextNode = m_pSttNdIdx->GetNode().GetTextNode();
@@ -685,7 +683,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
             if( pTextNode && pTextNode->CanJoinNext( &aNxtIdx ))
             {
                 const sal_Int32 nStt = pTextNode->GetText().getLength();
-                // wenn der Cursor noch in dem Node steht, dann setze in an das Ende
+                // when the cursor is still in the node, then set him at the end
                 if( m_pPam->GetPoint()->nNode == aNxtIdx )
                 {
                     m_pPam->GetPoint()->nNode = *m_pSttNdIdx;
@@ -693,11 +691,11 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
                 }
 
 #if OSL_DEBUG_LEVEL > 0
-// !!! sollte nicht moeglich sein, oder ??
+// !!! shouldn't be possible, or ??
 OSL_ENSURE( m_pSttNdIdx->GetIndex()+1 != m_pPam->GetBound().nNode.GetIndex(),
-            "Pam.Bound1 steht noch im Node" );
+            "Pam.Bound1 is still in the node" );
 OSL_ENSURE( m_pSttNdIdx->GetIndex()+1 != m_pPam->GetBound( false ).nNode.GetIndex(),
-            "Pam.Bound2 steht noch im Node" );
+            "Pam.Bound2 is still in the node" );
 
 if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound().nNode.GetIndex() )
 {
@@ -712,7 +710,7 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
                     pTextNode->GetText().getLength() + nCntPos );
 }
 #endif
-                // Zeichen Attribute beibehalten!
+                // Keep character attribute!
                 SwTextNode* pDelNd = aNxtIdx.GetNode().GetTextNode();
                 if (pTextNode->GetText().getLength())
                     pDelNd->FormatToTextAttr( pTextNode );
@@ -727,12 +725,12 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
     {
         if( m_nMissingImgMaps )
         {
-            // es fehlen noch ein paar Image-Map zuordungen.
-            // vielleicht sind die Image-Maps ja jetzt da?
+            // Some Image-Map relations are still missing.
+            // Maybe now the Image-Maps are there?
             ConnectImageMaps();
         }
 
-        // jetzt noch den letzten ueberfluessigen Absatz loeschen
+        // now remove the last useless paragraph
         SwPosition* pPos = m_pPam->GetPoint();
         if( !pPos->nContent.GetIndex() && !bLFStripped )
         {
@@ -791,22 +789,21 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
             }
         }
 
-        // nun noch das SplitNode vom Anfang aufheben
+        // annul the SplitNode from the beginning
         else if( !IsNewDoc() )
         {
-            if( pPos->nContent.GetIndex() )     // dann gabs am Ende kein <P>,
-                m_pPam->Move( fnMoveForward, GoInNode );  // als zum naechsten Node
+            if( pPos->nContent.GetIndex() )                 // then there was no <p> at the end
+                m_pPam->Move( fnMoveForward, GoInNode );    // therefore to the next
             SwTextNode* pTextNode = pPos->nNode.GetNode().GetTextNode();
             SwNodeIndex aPrvIdx( pPos->nNode );
             if( pTextNode && pTextNode->CanJoinPrev( &aPrvIdx ) &&
                 *m_pSttNdIdx <= aPrvIdx )
             {
-                // eigentlich muss hier ein JoinNext erfolgen, aber alle Cursor
-                // usw. sind im pTextNode angemeldet, so dass der bestehen
-                // bleiben MUSS.
+                // Normally here should take place a JoinNext, but all cursors and
+                // so are registered in pTextNode, so that it MUST remain.
 
-                // Absatz in Zeichen-Attribute umwandeln, aus dem Prev die
-                // Absatzattribute und die Vorlage uebernehmen!
+                // Convert paragraph to character attribute, from Prev adopt
+                // the paragraph attribute and the template!
                 SwTextNode* pPrev = aPrvIdx.GetNode().GetTextNode();
                 pTextNode->ChgFormatColl( pPrev->GetTextColl() );
                 pTextNode->FormatToTextAttr( pPrev );
@@ -855,8 +852,8 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
         m_pSttNdIdx = nullptr;
     }
 
-    // sollte der Parser der Letzte sein, der das Doc haelt, dann braucht
-    // man hier auch nichts mehr tun, Doc wird gleich zerstoert!
+    // should the parser be the last one who hold the document, then nothing
+    // has to be done anymore, document will be destroyed shortly!
     if( 1 < m_xDoc->getReferenceCount() )
     {
         if( bWasUndo )
@@ -866,10 +863,10 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
         }
         else if( !pInitVSh )
         {
-            // Wenn zu Beginn des Continue keine Shell vorhanden war,
-            // kann trotzdem mitlerweile eine angelegt worden sein.
-            // In dieses Fall stimmt das bWasUndo-Flag nicht und
-            // wir muessen das Undo noch anschalten.
+            // When at the beginning of Continue no Shell was available,
+            // it's possible in the meantime one was created.
+            // In that case the bWasUndo flag is wrong and we must
+            // enable Undo.
             SwViewShell *pTmpVSh = CheckActionViewShell();
             if( pTmpVSh )
             {
@@ -887,10 +884,9 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
         }
     }
 
-    // Wenn die Dokuemnt-SwViewShell noch existiert und eine Action
-    // offen ist (muss bei Abbruch nicht sein), die Action beenden,
-    // uns von der Shell abmelden und schliesslich die alte Shell
-    // wieder rekonstruieren.
+    // When the Document-SwVievShell still exists and an Action is open
+    // (doesn't have to be by abort), end the Action, disconnect from Shell
+    // and finally reconstruct the old Shell.
     CallEndAction( true );
 
 #ifdef DBG_UTIL
