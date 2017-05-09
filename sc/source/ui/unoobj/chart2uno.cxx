@@ -72,7 +72,6 @@ SC_SIMPLE_SERVICE_INFO( ScChart2DataSequence, "ScChart2DataSequence",
 using namespace ::com::sun::star;
 using namespace ::formula;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Reference;
 using ::std::unique_ptr;
 using ::std::vector;
 using ::std::list;
@@ -1045,30 +1044,30 @@ sal_Bool SAL_CALL ScChart2DataProvider::createDataSourcePossible( const uno::Seq
 namespace
 {
 
-Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFromTokens(
+uno::Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequenceFromTokens(
     vector< ScTokenRef > && aValueTokens, vector< ScTokenRef > && aLabelTokens,
-    ScDocument* pDoc, const Reference< chart2::data::XDataProvider >& xDP, bool bIncludeHiddenCells )
+    ScDocument* pDoc, const uno::Reference< chart2::data::XDataProvider >& xDP, bool bIncludeHiddenCells )
 {
-    Reference< chart2::data::XLabeledDataSequence >  xResult;
+    uno::Reference< chart2::data::XLabeledDataSequence >  xResult;
     bool bHasValues = !aValueTokens.empty();
     bool bHasLabel = !aLabelTokens.empty();
     if( bHasValues || bHasLabel )
     {
         try
         {
-            Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
             if ( xContext.is() )
             {
                 xResult.set( chart2::data::LabeledDataSequence::create(xContext), uno::UNO_QUERY_THROW );
             }
             if ( bHasValues )
             {
-                Reference< chart2::data::XDataSequence > xSeq( new ScChart2DataSequence( pDoc, xDP, std::move(aValueTokens), bIncludeHiddenCells ) );
+                uno::Reference< chart2::data::XDataSequence > xSeq( new ScChart2DataSequence( pDoc, xDP, std::move(aValueTokens), bIncludeHiddenCells ) );
                 xResult->setValues( xSeq );
             }
             if ( bHasLabel )
             {
-                Reference< chart2::data::XDataSequence > xLabelSeq( new ScChart2DataSequence( pDoc, xDP, std::move(aLabelTokens), bIncludeHiddenCells ) );
+                uno::Reference< chart2::data::XDataSequence > xLabelSeq( new ScChart2DataSequence( pDoc, xDP, std::move(aLabelTokens), bIncludeHiddenCells ) );
                 xResult->setLabel( xLabelSeq );
             }
         }
@@ -1516,7 +1515,7 @@ ScChart2DataProvider::createDataSource(
         return xResult;
 
     ScChart2DataSource* pDS = nullptr;
-    ::std::list< Reference< chart2::data::XLabeledDataSequence > > aSeqs;
+    ::std::list< uno::Reference< chart2::data::XLabeledDataSequence > > aSeqs;
 
     // Fill Categories
     if( bCategories )
@@ -1530,7 +1529,7 @@ ScChart2DataProvider::createDataSource(
         vector<ScTokenRef> aLabelTokens(
                 pChartMap->getLeftUpperCornerRanges());
 
-        Reference< chart2::data::XLabeledDataSequence > xCategories = lcl_createLabeledDataSequenceFromTokens(
+        uno::Reference< chart2::data::XLabeledDataSequence > xCategories = lcl_createLabeledDataSequenceFromTokens(
             std::move(aValueTokens), std::move(aLabelTokens), m_pDocument, this, m_bIncludeHiddenCells ); //ownership of pointers is transferred!
         if ( xCategories.is() )
         {
@@ -1554,7 +1553,7 @@ ScChart2DataProvider::createDataSource(
             aValueTokens = pChartMap->getDataRowRanges(static_cast<SCROW>(i));
             aLabelTokens = pChartMap->getRowHeaderRanges(static_cast<SCROW>(i));
         }
-        Reference< chart2::data::XLabeledDataSequence > xChartSeries = lcl_createLabeledDataSequenceFromTokens(
+        uno::Reference< chart2::data::XLabeledDataSequence > xChartSeries = lcl_createLabeledDataSequenceFromTokens(
             std::move(aValueTokens), std::move(aLabelTokens), m_pDocument, this, m_bIncludeHiddenCells ); //ownership of pointers is transferred!
         if ( xChartSeries.is() && xChartSeries->getValues().is() && xChartSeries->getValues()->getData().getLength() )
         {
@@ -1563,22 +1562,22 @@ ScChart2DataProvider::createDataSource(
     }
 
     pDS = new ScChart2DataSource(m_pDocument);
-    ::std::list< Reference< chart2::data::XLabeledDataSequence > >::iterator aItr( aSeqs.begin() );
-    ::std::list< Reference< chart2::data::XLabeledDataSequence > >::iterator aEndItr( aSeqs.end() );
+    ::std::list< uno::Reference< chart2::data::XLabeledDataSequence > >::iterator aItr( aSeqs.begin() );
+    ::std::list< uno::Reference< chart2::data::XLabeledDataSequence > >::iterator aEndItr( aSeqs.end() );
 
     //reorder labeled sequences according to aSequenceMapping
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aSeqVector;
+    ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSeqVector;
     while(aItr != aEndItr)
     {
         aSeqVector.push_back(*aItr);
         ++aItr;
     }
 
-    ::std::map< sal_Int32, Reference< chart2::data::XLabeledDataSequence > > aSequenceMap;
+    ::std::map< sal_Int32, uno::Reference< chart2::data::XLabeledDataSequence > > aSequenceMap;
     for( sal_Int32 nNewIndex = 0; nNewIndex < aSequenceMapping.getLength(); nNewIndex++ )
     {
         // note: assuming that the values in the sequence mapping are always non-negative
-        ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::size_type nOldIndex( static_cast< sal_uInt32 >( aSequenceMapping[nNewIndex] ) );
+        ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > >::size_type nOldIndex( static_cast< sal_uInt32 >( aSequenceMapping[nNewIndex] ) );
         if( nOldIndex < aSeqVector.size() )
         {
             pDS->AddLabeledSequence( aSeqVector[nOldIndex] );
@@ -1586,11 +1585,11 @@ ScChart2DataProvider::createDataSource(
         }
     }
 
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::iterator aVectorItr( aSeqVector.begin() );
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::iterator aVectorEndItr( aSeqVector.end() );
+    ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > >::iterator aVectorItr( aSeqVector.begin() );
+    ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > >::iterator aVectorEndItr( aSeqVector.end() );
     while(aVectorItr != aVectorEndItr)
     {
-        Reference< chart2::data::XLabeledDataSequence > xSeq( *aVectorItr );
+        uno::Reference< chart2::data::XLabeledDataSequence > xSeq( *aVectorItr );
         if ( xSeq.is() )
         {
             pDS->AddLabeledSequence( xSeq );
@@ -1801,18 +1800,18 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         sal_Int32 nDataInCols = 0;
         bool bRowSourceAmbiguous = false;
 
-        Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences());
+        Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences());
         const sal_Int32 nCount( aSequences.getLength());
         RangeAnalyzer aPrevLabel,aPrevValues;
         for( sal_Int32 nIdx=0; nIdx<nCount; ++nIdx )
         {
-            Reference< chart2::data::XLabeledDataSequence > xLS(aSequences[nIdx]);
+            uno::Reference< chart2::data::XLabeledDataSequence > xLS(aSequences[nIdx]);
             if( xLS.is() )
             {
                 bool bThisIsCategories = false;
                 if(!bHasCategories)
                 {
-                    Reference< beans::XPropertySet > xSeqProp( xLS->getValues(), uno::UNO_QUERY );
+                    uno::Reference< beans::XPropertySet > xSeqProp( xLS->getValues(), uno::UNO_QUERY );
                     OUString aRole;
                     if( xSeqProp.is() && (xSeqProp->getPropertyValue("Role") >>= aRole) &&
                         aRole == "categories" )
@@ -1821,7 +1820,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
 
                 RangeAnalyzer aLabel,aValues;
                 // label
-                Reference< chart2::data::XDataSequence > xLabel( xLS->getLabel());
+                uno::Reference< chart2::data::XDataSequence > xLabel( xLS->getLabel());
                 if( xLabel.is())
                 {
                     bFirstCellAsLabel = true;
@@ -1841,7 +1840,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
                         bHasCategoriesLabels=true;
                 }
                 // values
-                Reference< chart2::data::XDataSequence > xValues( xLS->getValues());
+                uno::Reference< chart2::data::XDataSequence > xValues( xLS->getValues());
                 if( xValues.is())
                 {
                     vector<ScTokenRef> aTokens;
@@ -2148,11 +2147,11 @@ sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByFormulaTokensPossibl
     return true;
 }
 
-Reference<chart2::data::XDataSequence> SAL_CALL
+uno::Reference<chart2::data::XDataSequence> SAL_CALL
 ScChart2DataProvider::createDataSequenceByFormulaTokens(
     const Sequence<sheet::FormulaToken>& aTokens )
 {
-    Reference<chart2::data::XDataSequence> xResult;
+    uno::Reference<chart2::data::XDataSequence> xResult;
     if (aTokens.getLength() <= 0)
         return xResult;
 
@@ -3231,7 +3230,7 @@ uno::Reference< util::XCloneable > SAL_CALL ScChart2DataSequence::createClone()
 
     rtl::Reference<ScChart2DataSequence> p(new ScChart2DataSequence(m_pDocument, m_xDataProvider, std::move(aTokensNew), m_bIncludeHiddenCells));
     p->CopyData(*this);
-    Reference< util::XCloneable > xClone(p.get());
+    uno::Reference< util::XCloneable > xClone(p.get());
 
     return xClone;
 }
