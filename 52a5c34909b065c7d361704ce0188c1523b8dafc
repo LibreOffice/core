@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_1432def1",
+        "filename": "include/formula/paramclass.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-09T19:13:33Z",
+      "side": 1,
+      "message": "scoped enum perhaps?",
+      "revId": "52a5c34909b065c7d361704ce0188c1523b8dafc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
