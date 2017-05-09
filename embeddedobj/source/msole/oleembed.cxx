@@ -715,6 +715,19 @@ namespace
         }
 
         bool bCopied = xCONTENTS.is() && lcl_CopyStream(xCONTENTS->getInputStream(), xStream->getOutputStream());
+        if (!bCopied)
+        {
+            uno::Reference< io::XStream > xEmbeddedOdf;
+            try
+            {
+                xNameContainer->getByName("EmbeddedOdf") >>= xEmbeddedOdf;
+            }
+            catch (container::NoSuchElementException const&)
+            {
+                // ignore
+            }
+            bCopied = xEmbeddedOdf.is() && lcl_CopyStream(xEmbeddedOdf->getInputStream(), xStream->getOutputStream());
+        }
 
         if (!bCopied)
         {
