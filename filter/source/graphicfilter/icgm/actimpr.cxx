@@ -862,7 +862,7 @@ void CGMImpressOutAct::AppendText( const char* pString )
             uno::Any aFirstQuery(  aShape->queryInterface( cppu::UnoType<text::XText>::get()) );
             if( aFirstQuery >>= xText )
             {
-                OUString aStr( OUString::createFromAscii( pString ) );
+                OUString aStr(pString, strlen(pString), RTL_TEXTENCODING_ASCII_US);
 
                 uno::Reference< text::XTextCursor >  aXTextCursor( xText->createTextCursor() );
                 if ( aXTextCursor.is() )
