@@ -1193,6 +1193,17 @@ DECLARE_RTFEXPORT_TEST(testHyperlinkTarget, "hyperlink-target.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("_blank"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkTarget"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf107620, "tdf107620.docx")
+{
+    // This failed, RTF export didn't write the \htmautsp compat flag, the
+    // original bugdoc resulting in 2 pages instead of 1.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSettings(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    bool bAddParaTableSpacing = true;
+    xSettings->getPropertyValue("AddParaTableSpacing") >>= bAddParaTableSpacing;
+    CPPUNIT_ASSERT(!bAddParaTableSpacing);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

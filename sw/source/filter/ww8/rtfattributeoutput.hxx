@@ -595,6 +595,15 @@ private:
     /// If we're in the process of exporting a hyperlink, then its URL.
     OUString m_sURL;
 
+    /// If original file had \sbauto.
+    bool m_bParaBeforeAutoSpacing;
+    /// If m_bParaBeforeAutoSpacing is set, value of \sb.
+    sal_Int32 m_nParaBeforeSpacing;
+    /// If original file had \saauto.
+    bool m_bParaAfterAutoSpacing;
+    /// If m_bParaBeforeAutoSpacing is set, value of \sa.
+    sal_Int32 m_nParaAfterSpacing;
+
 public:
     explicit RtfAttributeOutput(RtfExport& rExport);
 

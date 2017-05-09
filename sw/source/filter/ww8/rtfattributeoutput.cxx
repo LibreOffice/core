@@ -80,6 +80,7 @@
 #include <oox/mathml/export.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <o3tl/make_unique.hxx>
+#include <svl/grabbagitem.hxx>
 
 using namespace ::com::sun::star;
 using namespace sw::util;
@@ -3017,10 +3018,39 @@ void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
         }
         else
         {
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SB);
-            m_aStyles.append((sal_Int32) rULSpace.GetUpper());
-            m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SA);
-            m_aStyles.append((sal_Int32) rULSpace.GetLower());
+            // Spacing before.
+            if (m_bParaBeforeAutoSpacing && m_nParaBeforeSpacing == rULSpace.GetUpper())
+                m_aStyles.append(LO_STRING_SVTOOLS_RTF_SBAUTO "1");
+            else if (m_bParaBeforeAutoSpacing && m_nParaBeforeSpacing == -1)
+            {
+                m_aStyles.append(LO_STRING_SVTOOLS_RTF_SBAUTO "0");
+                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SB);
+                m_aStyles.append(static_cast<sal_Int32>(rULSpace.GetUpper()));
+            }
+            else
+            {
+                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SB);
+                m_aStyles.append(static_cast<sal_Int32>(rULSpace.GetUpper()));
+            }
+            m_bParaBeforeAutoSpacing = false;
+
+            // Spacing after.
+            if (m_bParaAfterAutoSpacing && m_nParaAfterSpacing == rULSpace.GetLower())
+                m_aStyles.append(LO_STRING_SVTOOLS_RTF_SAAUTO "1");
+            else if (m_bParaAfterAutoSpacing && m_nParaAfterSpacing == -1)
+            {
+                m_aStyles.append(LO_STRING_SVTOOLS_RTF_SAAUTO "0");
+                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SA);
+                m_aStyles.append(static_cast<sal_Int32>(rULSpace.GetLower()));
+            }
+            else
+            {
+                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SA);
+                m_aStyles.append(static_cast<sal_Int32>(rULSpace.GetLower()));
+            }
+            m_bParaAfterAutoSpacing = false;
+
+            // Contextual spacing.
             if (rULSpace.GetContext())
                 m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CONTEXTUALSPACE);
         }
@@ -3381,8 +3411,24 @@ void RtfAttributeOutput::FormatFrameDirection(const SvxFrameDirectionItem& rDire
     }
 }
 
-void RtfAttributeOutput::ParaGrabBag(const SfxGrabBagItem& /*rItem*/)
+void RtfAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
 {
+    const std::map<OUString, css::uno::Any>& rMap = rItem.GetGrabBag();
+    for (const auto& rValue : rMap)
+    {
+        if (rValue.first == "ParaTopMarginBeforeAutoSpacing")
+        {
+            m_bParaBeforeAutoSpacing = true;
+            rValue.second >>= m_nParaBeforeSpacing;
+            m_nParaBeforeSpacing = convertMm100ToTwip(m_nParaBeforeSpacing);
+        }
+        else if (rValue.first == "ParaBottomMarginAfterAutoSpacing")
+        {
+            m_bParaAfterAutoSpacing = true;
+            rValue.second >>= m_nParaAfterSpacing;
+            m_nParaAfterSpacing = convertMm100ToTwip(m_nParaAfterSpacing);
+        }
+    }
 }
 
 void RtfAttributeOutput::CharGrabBag(const SfxGrabBagItem& /*rItem*/)
@@ -3497,6 +3543,10 @@ RtfAttributeOutput::RtfAttributeOutput(RtfExport& rExport)
       m_bSingleEmptyRun(false),
       m_bInRun(false),
       m_pFlyFrameSize(nullptr),
+      m_bParaBeforeAutoSpacing(false),
+      m_nParaBeforeSpacing(0),
+      m_bParaAfterAutoSpacing(false),
+      m_nParaAfterSpacing(0),
       m_pPrevPageDesc(nullptr)
 {
 }
