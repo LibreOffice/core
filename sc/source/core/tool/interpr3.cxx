@@ -2822,7 +2822,14 @@ void ScInterpreter::ScChiTest()
                         PushError(FormulaError::DivisionByZero);
                         return;
                     }
-                    fChi += sc::divide( (fValX - fValE) * (fValX - fValE), fValE);
+                    // These fTemp values guard against a failure when compiled
+                    // with optimization (using g++ 4.8.2 on tinderbox 71-TDF),
+                    // where ((fValX - fValE) * (fValX - fValE)) with
+                    // fValE==1e+308 should had produced Infinity but did
+                    // not, instead the result of divide() then was 1e+308.
+                    volatile double fTemp1 = (fValX - fValE) * (fValX - fValE);
+                    double fTemp2 = fTemp1;
+                    fChi += sc::divide( fTemp2, fValE);
                 }
                 else
                 {
