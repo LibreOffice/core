@@ -352,6 +352,7 @@ rss_bugzillas = (
     # 'novell': 'https://bugzilla.novell.com/buglist.cgi',
     ( 'ooo', 'https://bz.apache.org/ooo/buglist.cgi' ),
     ( 'tdf', 'http://bugs.documentfoundation.org/buglist.cgi' ),
+    ( 'suse', 'https://bugzilla.suse.com/buglist.cgi' ),
 )
 
 redhatrpc = 'https://bugzilla.redhat.com/xmlrpc.cgi'
