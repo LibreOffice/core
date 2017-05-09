@@ -52,6 +52,7 @@
 #include "conditio.hxx"
 
 #include <oox/token/tokens.hxx>
+#include <oox/token/relationship.hxx>
 #include <oox/token/namespaces.hxx>
 #include <o3tl/make_unique.hxx>
 

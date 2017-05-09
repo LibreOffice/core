@@ -26,6 +26,7 @@
 #include <epptooxml.hxx>
 #include <epptdef.hxx>
 #include <oox/export/shapes.hxx>
+#include <oox/token/relationship.hxx>
 
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>

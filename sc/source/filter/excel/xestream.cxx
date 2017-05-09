@@ -50,6 +50,7 @@
 #include <oox/token/tokens.hxx>
 #include <formula/grammar.hxx>
 #include <oox/export/drawingml.hxx>
+#include <oox/token/relationship.hxx>
 #include <oox/ole/vbaexport.hxx>
 #include <excelvbaproject.hxx>
 
