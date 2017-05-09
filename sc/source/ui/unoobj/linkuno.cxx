@@ -45,7 +45,6 @@
 using namespace com::sun::star;
 using namespace formula;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::uno::RuntimeException;
@@ -1495,7 +1494,7 @@ ScExternalDocLinkObj::~ScExternalDocLinkObj()
 {
 }
 
-Reference< sheet::XExternalSheetCache > SAL_CALL ScExternalDocLinkObj::addSheetCache(
+uno::Reference< sheet::XExternalSheetCache > SAL_CALL ScExternalDocLinkObj::addSheetCache(
     const OUString& aSheetName, sal_Bool bDynamicCache )
 {
     SolarMutexGuard aGuard;
@@ -1505,7 +1504,7 @@ Reference< sheet::XExternalSheetCache > SAL_CALL ScExternalDocLinkObj::addSheetC
         // Set the whole table cached to prevent access to the source document.
         pTable->setWholeTableCached();
 
-    Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(mpDocShell, pTable, nIndex));
+    uno::Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(mpDocShell, pTable, nIndex));
     return aSheetCache;
 }
 
@@ -1517,7 +1516,7 @@ Any SAL_CALL ScExternalDocLinkObj::getByName(const OUString &aName)
     if (!pTable)
         throw container::NoSuchElementException();
 
-    Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(mpDocShell, pTable, nIndex));
+    uno::Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(mpDocShell, pTable, nIndex));
 
     return Any(aSheetCache);
 }
@@ -1573,15 +1572,15 @@ Any SAL_CALL ScExternalDocLinkObj::getByIndex(sal_Int32 nApiIndex)
     if (!pTable)
         throw lang::IndexOutOfBoundsException();
 
-    Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(mpDocShell, pTable, nIndex));
+    uno::Reference< sheet::XExternalSheetCache > aSheetCache(new ScExternalSheetCacheObj(mpDocShell, pTable, nIndex));
 
     return Any(aSheetCache);
 }
 
-Reference< container::XEnumeration > SAL_CALL ScExternalDocLinkObj::createEnumeration()
+uno::Reference< container::XEnumeration > SAL_CALL ScExternalDocLinkObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    Reference< container::XEnumeration > aRef(
+    uno::Reference< container::XEnumeration > aRef(
         new ScIndexEnumeration(this, "com.sun.star.sheet.ExternalDocLink"));
     return aRef;
 }
@@ -1615,13 +1614,13 @@ ScExternalDocLinksObj::~ScExternalDocLinksObj()
 {
 }
 
-Reference< sheet::XExternalDocLink > SAL_CALL ScExternalDocLinksObj::addDocLink(
+uno::Reference< sheet::XExternalDocLink > SAL_CALL ScExternalDocLinksObj::addDocLink(
     const OUString& aDocName )
 {
     SolarMutexGuard aGuard;
     OUString aDocUrl( ScGlobal::GetAbsDocName( aDocName, mpDocShell));
     sal_uInt16 nFileId = mpRefMgr->getExternalFileId(aDocUrl);
-    Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpDocShell, mpRefMgr, nFileId));
+    uno::Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpDocShell, mpRefMgr, nFileId));
     return aDocLink;
 }
 
@@ -1633,7 +1632,7 @@ Any SAL_CALL ScExternalDocLinksObj::getByName(const OUString &aName)
         throw container::NoSuchElementException();
 
     sal_uInt16 nFileId = mpRefMgr->getExternalFileId(aDocUrl);
-    Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpDocShell, mpRefMgr, nFileId));
+    uno::Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpDocShell, mpRefMgr, nFileId));
 
     return Any(aDocLink);
 }
@@ -1675,14 +1674,14 @@ Any SAL_CALL ScExternalDocLinksObj::getByIndex(sal_Int32 nIndex)
     if (!mpRefMgr->hasExternalFile(nFileId))
         throw lang::IndexOutOfBoundsException();
 
-    Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpDocShell, mpRefMgr, nFileId));
+    uno::Reference< sheet::XExternalDocLink > aDocLink(new ScExternalDocLinkObj(mpDocShell, mpRefMgr, nFileId));
     return Any(aDocLink);
 }
 
-Reference< container::XEnumeration > SAL_CALL ScExternalDocLinksObj::createEnumeration()
+uno::Reference< container::XEnumeration > SAL_CALL ScExternalDocLinksObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    Reference< container::XEnumeration > aRef(
+    uno::Reference< container::XEnumeration > aRef(
         new ScIndexEnumeration(this, "com.sun.star.sheet.ExternalDocLinks"));
     return aRef;
 }
