@@ -21,6 +21,7 @@
 #include <oox/token/tokens.hxx>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/export/chartexport.hxx"
+#include <oox/token/relationship.hxx>
 #include "oox/export/utils.hxx"
 #include "drawingml/chart/typegroupconverter.hxx"
 
@@ -585,6 +586,7 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nC
                             .append(nChartCount)
                             .append( ".xml" )
                             .makeStringAndClear();
+    OUString ChartUri = oox::getRelationship(Relationship::CHART);
     FSHelperPtr pChart = CreateOutputStream(
             sFullStream,
             sRelativeStream,
@@ -805,9 +807,9 @@ void ChartExport::exportExternalData( const Reference< css::chart::XChartDocumen
             }
         }
         FSHelperPtr pFS = GetFS();
-        OUString type = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        OUString type = oox::getRelationship(Relationship::PACKAGE);
         if (relationPath.endsWith(".bin"))
-            type = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+            type = oox::getRelationship(Relationship::OLEOBJECT);
 
         OUString sRelId = GetFB()->addRelation(pFS->getOutputStream(),
                         type,
