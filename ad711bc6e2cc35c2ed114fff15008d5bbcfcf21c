@@ -16,6 +16,24 @@
       "revId": "ad711bc6e2cc35c2ed114fff15008d5bbcfcf21c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_911420f6",
+        "filename": "shell/source/win32/SysShExec.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1001595
+      },
+      "writtenOn": "2017-05-09T08:58:51Z",
+      "side": 1,
+      "message": "You\u0027re right. I forgot that this part has to go into a CALLBACK function that is then called by the EnumWindows function of WinAPI which actually should be called at that point.\nThank you for the hint, I\u0027ll fix it right away.",
+      "parentUuid": "5a3905b3_c9eefeeb",
+      "revId": "ad711bc6e2cc35c2ed114fff15008d5bbcfcf21c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
