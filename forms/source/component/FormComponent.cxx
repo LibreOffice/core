@@ -1986,7 +1986,7 @@ void OBoundControlModel::initFromField( const Reference< XRowSet >& _rxRowSet )
             const Reference< XPropertySet > xPS(_rxRowSet, UNO_QUERY);
             if (xPS.is())
             {
-                assert(shouldTransfer == false);
+                assert(!shouldTransfer);
                 xPS->getPropertyValue("IsNew") >>= shouldTransfer;
             }
         }
