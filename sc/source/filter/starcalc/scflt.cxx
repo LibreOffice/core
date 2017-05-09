@@ -1468,7 +1468,7 @@ void Sc10Import::LoadTables()
         if (nError != 0) return;
 
         if (TabNo == 0)
-            pDoc->RenameTab(static_cast<SCTAB> (TabNo), SC10TOSTRING( TabName ), false);
+            pDoc->RenameTab(static_cast<SCTAB> (TabNo), SC10TOSTRING( TabName ));
         else
             pDoc->InsertTab(SC_TAB_APPEND, SC10TOSTRING( TabName ) );
 

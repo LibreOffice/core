@@ -386,7 +386,7 @@ class ConvertFormulaToValueHandler
     bool mbModified;
 
 public:
-    ConvertFormulaToValueHandler( SCTAB, SCCOL ) :
+    ConvertFormulaToValueHandler() :
         mbModified(false)
     {
         maResValues.reset(MAXROWCOUNT);
@@ -434,7 +434,7 @@ void ScColumn::ConvertFormulaToValue(
     sc::SharedFormulaUtil::splitFormulaCellGroups(maCells, aBounds);
 
     // Parse all formulas within the range and store their results into temporary storage.
-    ConvertFormulaToValueHandler aFunc(nTab, nCol);
+    ConvertFormulaToValueHandler aFunc;
     sc::ParseFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
     if (!aFunc.isModified())
         // No formula cells encountered.

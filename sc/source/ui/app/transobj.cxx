@@ -627,7 +627,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
 
         OUString aTabName;
         pDoc->GetName( aBlock.aStart.Tab(), aTabName );
-        rDestDoc.RenameTab( 0, aTabName, false );          // no UpdateRef (empty)
+        rDestDoc.RenameTab( 0, aTabName );
 
         rDestDoc.CopyStdStylesFrom( pDoc );
 

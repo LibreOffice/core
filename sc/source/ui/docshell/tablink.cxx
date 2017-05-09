@@ -255,7 +255,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                 {
                     rDoc.RenameTab( nTab,
                         ScGlobal::GetDocTabName( aNewUrl, aTabName ),
-                        false, true );  // no RefUpdate, no ValidTabName
+                        true/*bExternalDocument*/ );
                 }
             }
 

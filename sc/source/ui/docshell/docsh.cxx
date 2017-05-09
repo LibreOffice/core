@@ -322,7 +322,7 @@ void ScDocShell::AfterXMLLoading(bool bRet)
                                     !aINetURLObject.HasError()) // the docname should be a valid URL
                                 {
                                     aName = ScGlobal::GetDocTabName( aDocument.GetLinkDoc( i ), aDocument.GetLinkTab( i ) );
-                                    aDocument.RenameTab(i, aName, true, true);
+                                    aDocument.RenameTab(i, aName, true/*bExternalDocument*/);
                                 }
                                 // else;  nothing has to happen, because it is a user given name
                             }
@@ -1236,7 +1236,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     // corresponding places of the external references
                     // manager/cache. Likely then we'd also need a method to
                     // compose a name excluding such characters.
-                    aDocument.RenameTab( 0, INetURLObject( rMedium.GetName()).GetBase(), true, true);
+                    aDocument.RenameTab( 0, INetURLObject( rMedium.GetName()).GetBase(), true/*bExternalDocument*/);
 
                     bOverflowRow = aImpEx.IsOverflowRow();
                     bOverflowCol = aImpEx.IsOverflowCol();

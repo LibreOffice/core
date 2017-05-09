@@ -499,7 +499,7 @@ void ScTabView::DrawEnableAnim(bool bSet)
                 ScDocument* pDoc = aViewData.GetDocument();
                 for (i=0; i<4; i++)
                     if ( pGridWin[i] && pGridWin[i]->IsVisible() )
-                        pDoc->StartAnimations( aViewData.GetTabNo(), pGridWin[i] );
+                        pDoc->StartAnimations( aViewData.GetTabNo() );
             }
         }
         else

@@ -79,7 +79,7 @@ FltError ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, 
                 if( aDifParser.nVector != 0 || aDifParser.nVal != 1 )
                     bSyntErrWarn = true;
                 if( bData )
-                    pDoc->RenameTab( nBaseTab, aData );
+                    pDoc->RenameTab( nBaseTab, aData);
             }
                 break;
             case T_VECTORS:

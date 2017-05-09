@@ -7924,7 +7924,7 @@ void ScTableSheetObj::setExternalName( const OUString& aUrl, const OUString& aSh
         const SCTAB nTab = GetTab_Impl();
         const OUString aAbsDocName( ScGlobal::GetAbsDocName( aUrl, pDocSh ) );
         const OUString aDocTabName( ScGlobal::GetDocTabName( aAbsDocName, aSheetName ) );
-        if ( !rDoc.RenameTab( nTab, aDocTabName, false /*bUpdateRef*/, true /*bExternalDocument*/ ) )
+        if ( !rDoc.RenameTab( nTab, aDocTabName, true /*bExternalDocument*/ ) )
         {
             throw container::ElementExistException( OUString(), *this );
         }
