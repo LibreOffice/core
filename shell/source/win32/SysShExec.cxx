@@ -326,7 +326,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     else
     {
         // Get Permission make changes to the Window of the created Process
-        HWND procHandle = 0;
+        HWND procHandle = nullptr;
         DWORD procId = GetProcessId(sei.hProcess);
         AllowSetForegroundWindow(procId);
 
@@ -336,7 +336,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
         SAL_WARN_IF(check != procId, "shell", "Could not get handle of process called by shell.");
 
         // Move created Window into the foreground
-        if(procHandle != 0)
+        if(procHandle != nullptr)
         {
             SetForegroundWindow(procHandle);
             SetActiveWindow(procHandle);
