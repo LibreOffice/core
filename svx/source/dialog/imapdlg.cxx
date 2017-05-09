@@ -471,7 +471,7 @@ void SvxIMapDlg::DoOpen()
 
         if( pIStm )
         {
-            aLoadIMap.Read( *pIStm, IMAP_FORMAT_DETECT, "" );
+            aLoadIMap.Read( *pIStm, IMAP_FORMAT_DETECT );
 
             if( pIStm->GetError() )
             {
@@ -545,7 +545,7 @@ bool SvxIMapDlg::DoSave()
             std::unique_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE | StreamMode::TRUNC ));
             if( pOStm )
             {
-                pIMapWnd->GetImageMap().Write( *pOStm, nFormat, "" );
+                pIMapWnd->GetImageMap().Write( *pOStm, nFormat );
 
                 if( pOStm->GetError() )
                     ErrorHandler::HandleError( ERRCODE_IO_GENERAL );

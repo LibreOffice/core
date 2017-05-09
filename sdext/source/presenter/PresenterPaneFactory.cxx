@@ -235,7 +235,6 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     {
         return CreatePane(
             rxPaneId,
-            OUString(),
             xParentPane,
             rxPaneId->getFullResourceURL().Arguments == "Sprite=1");
     }
@@ -249,7 +248,6 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
 
 Reference<XResource> PresenterPaneFactory::CreatePane (
     const Reference<XResourceId>& rxPaneId,
-    const OUString& rsTitle,
     const Reference<drawing::framework::XPane>& rxParentPane,
     const bool bIsSpritePane)
 {
@@ -276,7 +274,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     aArguments[0] <<= rxPaneId;
     aArguments[1] <<= rxParentPane->getWindow();
     aArguments[2] <<= rxParentPane->getCanvas();
-    aArguments[3] <<= rsTitle;
+    aArguments[3] <<= OUString();
     aArguments[4] <<= Reference<drawing::framework::XPaneBorderPainter>(
         static_cast<XWeak*>(mpPresenterController->GetPaneBorderPainter().get()),
         UNO_QUERY);

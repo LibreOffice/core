@@ -335,8 +335,7 @@ namespace svt { namespace table
         if ( impl_isAccessibleAlive() )
         {
             impl_commitAccessibleEvent( AccessibleEventId::TABLE_MODEL_CHANGED,
-                makeAny( AccessibleTableModelChange( AccessibleTableModelChangeType::INSERT, i_first, i_last, 0, m_pModel->getColumnCount() ) ),
-                Any()
+                makeAny( AccessibleTableModelChange( AccessibleTableModelChangeType::INSERT, i_first, i_last, 0, m_pModel->getColumnCount() ) )
             );
         }
 
@@ -2320,7 +2319,7 @@ namespace svt { namespace table
 
     void TableControl_Impl::commitAccessibleEvent( sal_Int16 const i_eventID )
     {
-        impl_commitAccessibleEvent( i_eventID, Any(), Any() );
+        impl_commitAccessibleEvent( i_eventID, Any() );
     }
 
 
@@ -2430,10 +2429,10 @@ namespace svt { namespace table
     }
 
 
-    void TableControl_Impl::impl_commitAccessibleEvent( sal_Int16 const i_eventID, Any const & i_newValue, Any const & i_oldValue )
+    void TableControl_Impl::impl_commitAccessibleEvent( sal_Int16 const i_eventID, Any const & i_newValue )
     {
         if ( impl_isAccessibleAlive() )
-             m_pAccessibleTable->commitEvent( i_eventID, i_newValue, i_oldValue );
+             m_pAccessibleTable->commitEvent( i_eventID, i_newValue, Any() );
     }
 
 

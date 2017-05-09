@@ -74,13 +74,11 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::util;
 
-#define SBA_FORMAT_SELECTION_COUNT  4
 #define CELL_X                      1437
 
 ODatabaseImportExport::ODatabaseImportExport(const svx::ODataAccessDescriptor& _aDataDescriptor,
                                              const Reference< XComponentContext >& _rM,
-                                             const Reference< css::util::XNumberFormatter >& _rxNumberF,
-                                             const OUString& rExchange)
+                                             const Reference< css::util::XNumberFormatter >& _rxNumberF)
     :m_bBookmarkSelection( false )
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rM)
@@ -95,14 +93,6 @@ ODatabaseImportExport::ODatabaseImportExport(const svx::ODataAccessDescriptor& _
 
     osl_atomic_increment( &m_refCount );
     impl_initFromDescriptor( _aDataDescriptor, false );
-
-    sal_Int32 nCount = comphelper::string::getTokenCount(rExchange, char(11));
-    if( nCount > SBA_FORMAT_SELECTION_COUNT && !rExchange.getToken(4, ';').isEmpty())
-    {
-        m_pRowMarker = new sal_Int32[nCount-SBA_FORMAT_SELECTION_COUNT];
-        for(sal_Int32 i=SBA_FORMAT_SELECTION_COUNT; i<nCount; ++i)
-            m_pRowMarker[i-SBA_FORMAT_SELECTION_COUNT] = rExchange.getToken(i,char(11)).toInt32();
-    }
     osl_atomic_decrement( &m_refCount );
 }
 
@@ -626,7 +616,7 @@ const char OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\
 OHTMLImportExport::OHTMLImportExport(const svx::ODataAccessDescriptor& _aDataDescriptor,
                                      const Reference< XComponentContext >& _rM,
                                      const Reference< css::util::XNumberFormatter >& _rxNumberF)
-        : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,OUString())
+        : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF)
     ,m_nIndent(0)
 #if OSL_DEBUG_LEVEL > 0
     ,m_bCheckFont(false)

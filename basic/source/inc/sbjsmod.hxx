@@ -32,7 +32,7 @@ class SbJScriptModule : public SbModule
     virtual bool StoreData( SvStream& ) const override;
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_JSCRIPTMOD,1);
-    SbJScriptModule( const OUString& );       // hand through
+    SbJScriptModule();       // hand through
 };
 
 #endif

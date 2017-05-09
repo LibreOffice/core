@@ -299,8 +299,7 @@ namespace svt { namespace table
         bool            impl_isAccessibleAlive() const;
         void            impl_commitAccessibleEvent(
                             sal_Int16 const i_eventID,
-                            css::uno::Any const & i_newValue,
-                            css::uno::Any const & i_oldValue
+                            css::uno::Any const & i_newValue
                         );
 
         /** toggles the cursor visibility

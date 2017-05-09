@@ -86,8 +86,7 @@ namespace dbaui
         // export data
         ODatabaseImportExport(  const svx::ODataAccessDescriptor& _aDataDescriptor,
                                 const css::uno::Reference< css::uno::XComponentContext >& _rM,
-                                const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF,
-                                const OUString& rExchange = OUString());
+                                const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF);
 
         // import data
         ODatabaseImportExport(  const SharedConnection& _rxConnection,
@@ -127,7 +126,7 @@ namespace dbaui
         ORTFImportExport(   const svx::ODataAccessDescriptor& _aDataDescriptor,
                             const css::uno::Reference< css::uno::XComponentContext >& _rM,
                             const css::uno::Reference< css::util::XNumberFormatter >& _rxNumberF)
-                            : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,OUString()) {};
+                            : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF) {};
 
         // import data
         ORTFImportExport(   const SharedConnection& _rxConnection,

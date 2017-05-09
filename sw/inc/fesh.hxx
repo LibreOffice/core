@@ -573,8 +573,7 @@ public:
     void InsertDrawObj( SdrObject& rDrawObj,
                         const Point& rInsertPosition );
 
-    bool ReplaceSdrObj( const OUString& rGrfName, const OUString& rFltName,
-                        const Graphic* pGrf );
+    bool ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf );
 
     // --> #i972#
     /** for starmath formulas anchored 'as char' it aligns it baseline to baseline

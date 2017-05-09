@@ -48,7 +48,7 @@ OQueryTableConnectionData::OQueryTableConnectionData( const OQueryTableConnectio
 
 OQueryTableConnectionData::OQueryTableConnectionData(const TTableWindowData::value_type& _pReferencingTable,
                                                      const TTableWindowData::value_type& _pReferencedTable)
-    : OTableConnectionData( _pReferencingTable,_pReferencedTable, OUString() )
+    : OTableConnectionData( _pReferencingTable,_pReferencedTable )
     , m_nFromEntryIndex(0)
     , m_nDestEntryIndex(0)
     , m_eJoinType (INNER_JOIN)

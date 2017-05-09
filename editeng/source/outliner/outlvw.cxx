@@ -1384,7 +1384,7 @@ sal_uLong OutlinerView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValue
     ESelection aOldSel = pEditView->GetSelection();
     aOldSel.Adjust();
 
-    sal_uLong nRet = pEditView->Read( rInput, OUString(), eFormat, pHTTPHeaderAttrs );
+    sal_uLong nRet = pEditView->Read( rInput, eFormat, pHTTPHeaderAttrs );
 
     long nParaDiff = pEditView->GetEditEngine()->GetParagraphCount() - nOldParaCount;
     sal_Int32 nChangesStart = aOldSel.nStartPara;

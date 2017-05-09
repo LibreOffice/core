@@ -35,11 +35,10 @@ namespace sw { namespace mark
     CrossRefBookmark::CrossRefBookmark(const SwPaM& rPaM,
         const vcl::KeyCode& rCode,
         const OUString& rName,
-        const OUString& rShortName,
         const OUString& rPrefix)
         : Bookmark(
                 // ensure that m_pPos2 is null by only passing start to super
-                SwPaM(*rPaM.Start()), rCode, rName, rShortName)
+                SwPaM(*rPaM.Start()), rCode, rName, OUString())
     {
         assert( IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark(rPaM)
                  && "<CrossRefBookmark::CrossRefBookmark(..)>"
@@ -71,7 +70,7 @@ namespace sw { namespace mark
     CrossRefHeadingBookmark::CrossRefHeadingBookmark(const SwPaM& rPaM,
         const vcl::KeyCode& rCode,
         const OUString& rName)
-        : CrossRefBookmark(rPaM, rCode, rName, OUString(), IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc")
+        : CrossRefBookmark(rPaM, rCode, rName, IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc")
     { }
 
     bool CrossRefHeadingBookmark::IsLegalName(const OUString& rName)
@@ -82,7 +81,7 @@ namespace sw { namespace mark
     CrossRefNumItemBookmark::CrossRefNumItemBookmark(const SwPaM& rPaM,
         const vcl::KeyCode& rCode,
         const OUString& rName)
-        : CrossRefBookmark(rPaM, rCode, rName, OUString(), CrossRefNumItemBookmark_NamePrefix)
+        : CrossRefBookmark(rPaM, rCode, rName, CrossRefNumItemBookmark_NamePrefix)
     { }
 
     bool CrossRefNumItemBookmark::IsLegalName(const OUString& rName)

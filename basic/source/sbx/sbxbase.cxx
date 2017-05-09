@@ -157,7 +157,7 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
         case SBXID_OBJECT:      return new SbxObject( "" );
         case SBXID_COLLECTION:  return new SbxCollection( "" );
         case SBXID_FIXCOLLECTION:
-                                return new SbxStdCollection( "", "" );
+                                return new SbxStdCollection;
         case SBXID_METHOD:      return new SbxMethod( "", SbxEMPTY );
         case SBXID_PROPERTY:    return new SbxProperty( "", SbxEMPTY );
     }

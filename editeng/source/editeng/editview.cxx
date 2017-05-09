@@ -539,12 +539,12 @@ void EditView::Redo()
     pImpEditView->pEditEngine->Redo( this );
 }
 
-sal_uInt32 EditView::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
+sal_uInt32 EditView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     EditSelection aOldSel( pImpEditView->GetEditSelection() );
     pImpEditView->DrawSelection();
     pImpEditView->pEditEngine->pImpEditEngine->UndoActionStart( EDITUNDO_READ );
-    EditPaM aEndPaM = pImpEditView->pEditEngine->pImpEditEngine->Read( rInput, rBaseURL, eFormat, aOldSel, pHTTPHeaderAttrs );
+    EditPaM aEndPaM = pImpEditView->pEditEngine->pImpEditEngine->Read( rInput, "", eFormat, aOldSel, pHTTPHeaderAttrs );
     pImpEditView->pEditEngine->pImpEditEngine->UndoActionEnd();
     EditSelection aNewSel( aEndPaM, aEndPaM );
 

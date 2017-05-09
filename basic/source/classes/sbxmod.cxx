@@ -1913,8 +1913,8 @@ void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rH
 
 
 // Implementation SbJScriptModule (Basic module for JavaScript source code)
-SbJScriptModule::SbJScriptModule( const OUString& rName )
-    :SbModule( rName )
+SbJScriptModule::SbJScriptModule()
+    :SbModule( "" )
 {
 }
 
@@ -2135,8 +2135,8 @@ void SbMethod::Broadcast( SfxHintId nHintId )
 
 // Implementation of SbJScriptMethod (method class as a wrapper for JavaScript-functions)
 
-SbJScriptMethod::SbJScriptMethod( const OUString& r, SbxDataType t )
-        : SbMethod( r, t, nullptr )
+SbJScriptMethod::SbJScriptMethod( SbxDataType t )
+        : SbMethod( "", t, nullptr )
 {
 }
 

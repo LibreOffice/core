@@ -833,7 +833,7 @@ void ScXMLStyleExport::exportStyleContent( const css::uno::Reference<css::style:
 ScXMLStyleExport::ScXMLStyleExport(
         SvXMLExport& rExp,
         SvXMLAutoStylePoolP *pAutoStyleP )
-    : XMLStyleExport(rExp, OUString(), pAutoStyleP)
+    : XMLStyleExport(rExp, pAutoStyleP)
 {
 }
 

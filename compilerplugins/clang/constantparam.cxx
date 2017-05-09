@@ -14,6 +14,7 @@
 
 #include "plugin.hxx"
 #include "compat.hxx"
+#include "check.hxx"
 
 /*
   Find params on methods where the param is only ever passed as a single constant value.
@@ -59,6 +60,14 @@ public:
 
     virtual void run() override
     {
+        // ignore some files that make clang crash inside EvaluateAsInt
+        std::string fn( compiler.getSourceManager().getFileEntryForID(
+                        compiler.getSourceManager().getMainFileID())->getName() );
+        normalizeDotDotInFilePath(fn);
+        if (fn == SRCDIR "/basegfx/source/matrix/b2dhommatrix.cxx"
+            || fn == SRCDIR "/basegfx/source/matrix/b3dhommatrix.cxx")
+             return;
+
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
 
         // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes
@@ -169,10 +178,19 @@ std::string ConstantParam::getCallValue(const Expr* arg)
     if (isa<MaterializeTemporaryExpr>(arg))
     {
         const CXXBindTemporaryExpr* strippedArg = dyn_cast_or_null<CXXBindTemporaryExpr>(arg->IgnoreParenCasts());
-        if (strippedArg && isa<CXXTemporaryObjectExpr>(strippedArg->getSubExpr())
-            && dyn_cast<CXXTemporaryObjectExpr>(strippedArg->getSubExpr())->getNumArgs() == 0)
+        if (strippedArg)
         {
-            return "defaultConstruct";
+            auto temp = dyn_cast<CXXTemporaryObjectExpr>(strippedArg->getSubExpr());
+            if (temp->getNumArgs() == 0)
+            {
+                if (loplugin::TypeCheck(temp->getType()).Class("OUString").Namespace("rtl").GlobalNamespace()) {
+                    return "\"\"";
+                }
+                if (loplugin::TypeCheck(temp->getType()).Class("OString").Namespace("rtl").GlobalNamespace()) {
+                    return "\"\"";
+                }
+                return "defaultConstruct";
+            }
         }
     }
 
@@ -192,6 +210,14 @@ std::string ConstantParam::getCallValue(const Expr* arg)
     std::replace( s.begin(), s.end(), '\r', ' ');
     std::replace( s.begin(), s.end(), '\n', ' ');
     std::replace( s.begin(), s.end(), '\t', ' ');
+
+    // now normalize the value. For some params, like OUString, we can pass it as OUString() or "" and they are the same thing
+    if (s == "OUString()")
+        s = "\"\"";
+    else if (s == "OString()")
+        s = "\"\"";
+    else if (s == "aEmptyOUStr")
+        s = "\"\"";
     return s;
 }
 

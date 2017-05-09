@@ -485,13 +485,13 @@ void XMLTableExport::exportTableStyles()
     if (mbWriter)
     {
         sCellStyleName = "CellStyles";
-        aStEx.set(new XMLStyleExport(mrExport, OUString()));
+        aStEx.set(new XMLStyleExport(mrExport));
     }
     else
     {
         // write graphic family styles
         sCellStyleName = "cell";
-        aStEx.set(new XMLStyleExport(mrExport, OUString(), mrExport.GetAutoStylePool().get()));
+        aStEx.set(new XMLStyleExport(mrExport, mrExport.GetAutoStylePool().get()));
     }
 
     aStEx->exportStyleFamily(sCellStyleName, OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME), mxCellExportPropertySetMapper.get(), true, XML_STYLE_FAMILY_TABLE_CELL);

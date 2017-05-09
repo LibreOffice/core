@@ -34,7 +34,6 @@ namespace sw {
             CrossRefBookmark(const SwPaM& rPaM,
                 const vcl::KeyCode& rCode,
                 const OUString& rName,
-                const OUString& rShortName,
                 const OUString& rPrefix);
 
             // getters

@@ -477,8 +477,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
                 m_pImageMap = new ImageMap( *rURL.GetMap() );
             else if( !rURL.GetURL().isEmpty() )
                 m_pTargetURL = new INetImage( aEmptyOUStr, rURL.GetURL(),
-                                            rURL.GetTargetFrameName(),
-                                            aEmptyOUStr );
+                                            rURL.GetTargetFrameName() );
         }
     }
 
@@ -1003,8 +1002,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
         else if( !rURL.GetURL().isEmpty() )
         {
             m_pTargetURL = new INetImage( sGrfNm, rURL.GetURL(),
-                                        rURL.GetTargetFrameName(),
-                                        aEmptyOUStr );
+                                        rURL.GetTargetFrameName() );
             AddFormat( SotClipboardFormatId::INET_IMAGE );
         }
     }
@@ -1969,7 +1967,7 @@ bool SwTransferable::PasteTargetURL( TransferableDataHelper& rData,
                 case SwPasteSdr::Replace:
                     if( rSh.IsObjSelected() )
                     {
-                        rSh.ReplaceSdrObj( sURL, aEmptyOUStr, &aGraphic );
+                        rSh.ReplaceSdrObj( sURL, &aGraphic );
                         Point aPt( pPt ? *pPt : rSh.GetCursorDocPos() );
                         SwTransferable::SetSelInShell( rSh, true, &aPt );
                     }
@@ -2442,7 +2440,7 @@ bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         if( pStream != nullptr  &&
             !pStream->GetError()  &&
             // mba: no BaseURL for clipboard functionality
-            aMap.Read( *pStream, IMAP_FORMAT_DETECT, OUString() ) == IMAP_ERR_OK &&
+            aMap.Read( *pStream, IMAP_FORMAT_DETECT ) == IMAP_ERR_OK &&
             aMap.GetIMapObjectCount() )
         {
             SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
@@ -3141,8 +3139,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
         else if( !rURL.GetURL().isEmpty() )
         {
             m_pTargetURL = new INetImage( sGrfNm, rURL.GetURL(),
-                                        rURL.GetTargetFrameName(),
-                                        aEmptyOUStr );
+                                        rURL.GetTargetFrameName() );
             AddFormat( SotClipboardFormatId::INET_IMAGE );
         }
     }

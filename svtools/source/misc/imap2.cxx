@@ -140,13 +140,13 @@ void IMapPolygonObject::WriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) 
     rOStm.WriteLine(aStrBuf.makeStringAndClear());
 }
 
-void ImageMap::Write( SvStream& rOStm, sal_uLong nFormat, const OUString& rBaseURL ) const
+void ImageMap::Write( SvStream& rOStm, sal_uLong nFormat ) const
 {
     switch( nFormat )
     {
-        case IMAP_FORMAT_BIN : Write( rOStm, rBaseURL ); break;
-        case IMAP_FORMAT_CERN : ImpWriteCERN( rOStm, rBaseURL ); break;
-        case IMAP_FORMAT_NCSA : ImpWriteNCSA( rOStm, rBaseURL ); break;
+        case IMAP_FORMAT_BIN : Write( rOStm, "" ); break;
+        case IMAP_FORMAT_CERN : ImpWriteCERN( rOStm, "" ); break;
+        case IMAP_FORMAT_NCSA : ImpWriteNCSA( rOStm, "" ); break;
 
         default:
         break;
@@ -209,7 +209,7 @@ void ImageMap::ImpWriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) const
     }
 }
 
-sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat, const OUString& rBaseURL  )
+sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat  )
 {
     sal_uLong nRet = IMAP_ERR_FORMAT;
 
@@ -218,9 +218,9 @@ sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat, const OUString& rB
 
     switch ( nFormat )
     {
-        case IMAP_FORMAT_BIN    : Read( rIStm, rBaseURL ); break;
-        case IMAP_FORMAT_CERN   : nRet = ImpReadCERN( rIStm, rBaseURL ); break;
-        case IMAP_FORMAT_NCSA   : nRet = ImpReadNCSA( rIStm, rBaseURL ); break;
+        case IMAP_FORMAT_BIN    : Read( rIStm, "" ); break;
+        case IMAP_FORMAT_CERN   : nRet = ImpReadCERN( rIStm, "" ); break;
+        case IMAP_FORMAT_NCSA   : nRet = ImpReadNCSA( rIStm, "" ); break;
 
         default:
         break;

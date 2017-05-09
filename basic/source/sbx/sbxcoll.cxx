@@ -237,9 +237,8 @@ bool SbxCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 }
 
 
-SbxStdCollection::SbxStdCollection
-                    ( const OUString& rClass, const OUString& rElem )
-                  : SbxCollection( rClass ), aElemClass( rElem ),
+SbxStdCollection::SbxStdCollection()
+                  : SbxCollection( "" ),
                     bAddRemoveOk( true )
 {}
 

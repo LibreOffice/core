@@ -31,19 +31,16 @@ class INetImage
     OUString        aImageURL;
     OUString        aTargetURL;
     OUString        aTargetFrame;
-    OUString        aAlternateText;
     Size            aSizePixel;
 
 public:
                     INetImage(
                         const OUString& rImageURL,
                         const OUString& rTargetURL,
-                        const OUString& rTargetFrame,
-                        const OUString& rAlternateText )
+                        const OUString& rTargetFrame )
                     :   aImageURL( rImageURL ),
                         aTargetURL( rTargetURL ),
-                        aTargetFrame( rTargetFrame ),
-                        aAlternateText( rAlternateText )
+                        aTargetFrame( rTargetFrame )
                     {}
                     INetImage()
                     {}

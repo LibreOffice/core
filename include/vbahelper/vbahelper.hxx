@@ -262,7 +262,7 @@ class VBAHELPER_DLLPUBLIC DebugHelper
 {
 public:
     /// @throws css::script::BasicErrorException
-    static void basicexception( const OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ );
+    static void basicexception( const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ );
 
     /// @throws css::script::BasicErrorException
     static void basicexception( int err,  const OUString& additionalArgument );

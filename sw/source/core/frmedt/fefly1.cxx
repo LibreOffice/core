@@ -1726,8 +1726,7 @@ ObjCntType SwFEShell::GetObjCntTypeOfSelection() const
     return eType;
 }
 
-bool SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const OUString& rFltName,
-                                const Graphic* pGrf )
+bool SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
 {
     SET_CURR_SHELL( this );
 
@@ -1773,7 +1772,7 @@ bool SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const OUString& rFltNam
         // delete "Sdr-Object", insert the graphic instead
         DelSelectedObj();
 
-        GetDoc()->getIDocumentContentOperations().Insert( *GetCursor(), rGrfName, rFltName, pGrf, &aFrameSet, nullptr, nullptr );
+        GetDoc()->getIDocumentContentOperations().Insert( *GetCursor(), rGrfName, "", pGrf, &aFrameSet, nullptr, nullptr );
 
         EndUndo();
         EndAllAction();

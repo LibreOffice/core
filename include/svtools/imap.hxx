@@ -111,8 +111,8 @@ public:
     void                Write ( SvStream& rOStm, const OUString& rBaseURL ) const;
     void                Read( SvStream& rIStm, const OUString& rBaseURL );
 
-    void                Write( SvStream& rOStm, sal_uLong nFormat, const OUString& rBaseURL ) const;
-    sal_uLong               Read( SvStream& rIStm, sal_uLong nFormat, const OUString& rBaseURL );
+    void                Write( SvStream& rOStm, sal_uLong nFormat ) const;
+    sal_uLong           Read( SvStream& rIStm, sal_uLong nFormat );
 };
 
 class IMapCompat

@@ -38,7 +38,7 @@ def RepresentsInt(s):
     except ValueError:
         return False
 
-consRegex = re.compile("^\w+\(\)$")
+constructor_regex = re.compile("^\w+\(\)$")
 
 tmp1list = list()
 tmp2list = list()
@@ -72,7 +72,7 @@ for callInfo, callValues in callDict.iteritems():
         else:
             tmp2list.append((sourceLoc, functionSig, callInfo[3] + " " + callInfo[2], callValue))
     # look for places where the callsite is always a constructor invocation
-    elif consRegex.match(callValue):
+    elif constructor_regex.match(callValue) or callValue == "\"\"":
         if callValue.startswith("Get"): continue
         if callValue.startswith("get"): continue
         if "operator=" in functionSig: continue
