@@ -69,13 +69,6 @@ SAXEventKeeperImpl::~SAXEventKeeperImpl()
      */
     m_vNewElementCollectors.clear();
     m_pNewBlocker = nullptr;
-
-    std::vector< const ElementMark* >::const_iterator ii = m_vElementMarkBuffers.begin();
-    for( ; ii != m_vElementMarkBuffers.end(); ++ii )
-    {
-        delete (*ii);
-    }
-    m_vElementMarkBuffers.clear();
 }
 
 void SAXEventKeeperImpl::setCurrentBufferNode(BufferNode* pBufferNode)
@@ -182,9 +175,8 @@ BufferNode* SAXEventKeeperImpl::addNewElementMarkBuffers()
 
         if (!m_vNewElementCollectors.empty())
         {
-            std::vector< const ElementCollector* >::const_iterator ii = m_vNewElementCollectors.begin();
-
-            for( ; ii != m_vNewElementCollectors.end(); ++ii )
+            for( auto ii = m_vNewElementCollectors.begin();
+                 ii != m_vNewElementCollectors.end(); ++ii )
             {
                 pBufferNode->addElementCollector(*ii);
             }
@@ -219,13 +211,11 @@ ElementMark* SAXEventKeeperImpl::findElementMarkBuffer(sal_Int32 nId) const
 {
     ElementMark* pElementMark = nullptr;
 
-    std::vector< const ElementMark* >::const_iterator ii = m_vElementMarkBuffers.begin();
-
-    for( ; ii != m_vElementMarkBuffers.end(); ++ii )
+    for( auto&& ii : m_vElementMarkBuffers )
     {
-        if ( nId == (*ii)->getBufferId())
+        if ( nId == ii->getBufferId())
         {
-            pElementMark = const_cast<ElementMark*>(*ii);
+            pElementMark = const_cast<ElementMark*>(ii.get());
             break;
         }
     }
@@ -249,19 +239,18 @@ void SAXEventKeeperImpl::removeElementMarkBuffer(sal_Int32 nId)
  *  nId - the Id of the ElementMark to be removed.
  ******************************************************************************/
 {
-    std::vector< const ElementMark* >::iterator ii = m_vElementMarkBuffers.begin();
-
-    for( ; ii != m_vElementMarkBuffers.end(); ++ii )
+    for( auto ii = m_vElementMarkBuffers.begin();
+         ii != m_vElementMarkBuffers.end(); ++ii )
     {
         if ( nId == (*ii)->getBufferId())
         {
             /*
              * checks whether this ElementMark still in the new ElementCollect array
              */
-            std::vector< const ElementCollector* >::iterator jj = m_vNewElementCollectors.begin();
-            for( ; jj != m_vNewElementCollectors.end(); ++jj )
+            for( auto jj = m_vNewElementCollectors.begin();
+                 jj != m_vNewElementCollectors.end(); ++jj )
             {
-                if ((*ii) == (*jj))
+                if (ii->get() == (*jj))
                 {
                     m_vNewElementCollectors.erase(jj);
                     break;
@@ -271,15 +260,10 @@ void SAXEventKeeperImpl::removeElementMarkBuffer(sal_Int32 nId)
             /*
              * checks whether this ElementMark is the new Blocker
              */
-            if ((*ii) == m_pNewBlocker)
+            if (ii->get() == m_pNewBlocker)
             {
                 m_pNewBlocker = nullptr;
             }
-
-            /*
-             * destroy the ElementMark
-             */
-            delete (*ii);
 
             m_vElementMarkBuffers.erase( ii );
             break;
@@ -353,8 +337,8 @@ OUString SAXEventKeeperImpl::printBufferNode(
     rc += "\n";
 
     std::vector< const BufferNode* >* vChildren = pBufferNode->getChildren();
-    std::vector< const BufferNode* >::const_iterator jj = vChildren->begin();
-    for( ; jj != vChildren->end(); ++jj )
+    for( auto jj = vChildren->begin();
+         jj != vChildren->end(); ++jj )
     {
         rc += printBufferNode(const_cast<BufferNode *>(*jj), nIndent+4);
     }
@@ -387,10 +371,9 @@ cssu::Sequence< cssu::Reference< cssxw::XXMLElementWrapper > >
     cssu::Sequence < cssu::Reference<
         cssxw::XXMLElementWrapper > > aChildrenCollection ( vChildren->size());
 
-    std::vector< const BufferNode* >::const_iterator ii = vChildren->begin();
-
     sal_Int32 nIndex = 0;
-    for( ; ii != vChildren->end(); ++ii )
+    for( auto ii = vChildren->begin();
+         ii != vChildren->end(); ++ii )
     {
         aChildrenCollection[nIndex] = (*ii)->getXMLElement();
         nIndex++;
@@ -531,8 +514,8 @@ void SAXEventKeeperImpl::smashBufferNode(
         pParent->removeChild(pBufferNode);
         pBufferNode->setParent(nullptr);
 
-        std::vector< const BufferNode * >::const_iterator ii = vChildren->begin();
-        for( ; ii != vChildren->end(); ++ii )
+        for( auto ii = vChildren->begin();
+             ii != vChildren->end(); ++ii )
         {
             const_cast<BufferNode *>(*ii)->setParent(pParent);
             pParent->addChild(*ii, nIndex);
@@ -632,7 +615,7 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
     m_bIsReleasing = true;
     while (!m_vReleasedElementMarkBuffers.empty())
     {
-        std::vector< sal_Int32 >::iterator pId = m_vReleasedElementMarkBuffers.begin();
+        auto pId = m_vReleasedElementMarkBuffers.begin();
         sal_Int32 nId = *pId;
         m_vReleasedElementMarkBuffers.erase( pId );
 
@@ -820,7 +803,8 @@ sal_Int32 SAXEventKeeperImpl::createElementCollector(
             bModifyElement,
             xReferenceResolvedListener);
 
-    m_vElementMarkBuffers.push_back( pElementCollector );
+    m_vElementMarkBuffers.push_back(
+        std::unique_ptr<const ElementMark>(pElementCollector));
 
     /*
      * All the new EC to initial EC array.
@@ -850,7 +834,8 @@ sal_Int32 SAXEventKeeperImpl::createBlocker()
     OSL_ASSERT(m_pNewBlocker == nullptr);
 
     m_pNewBlocker = new ElementMark(cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID, nId);
-    m_vElementMarkBuffers.push_back( m_pNewBlocker );
+    m_vElementMarkBuffers.push_back(
+        std::unique_ptr<const ElementMark>(m_pNewBlocker));
 
     return nId;
 }
@@ -913,7 +898,7 @@ void SAL_CALL SAXEventKeeperImpl::setElement(
             BufferNode* pBufferNode = pElementMark->getBufferNode();
             if (pBufferNode != nullptr)
             {
-                bool bIsCurrent = m_xXMLDocument->isCurrent(pBufferNode->getXMLElement());
+                const bool bIsCurrent = m_xXMLDocument->isCurrent(pBufferNode->getXMLElement());
                 pBufferNode->setXMLElement(aElement);
 
                 if (bIsCurrent)
@@ -1072,7 +1057,7 @@ void SAL_CALL SAXEventKeeperImpl::startElement(
 
 void SAL_CALL SAXEventKeeperImpl::endElement( const OUString& aName )
 {
-    bool bIsCurrent = m_xXMLDocument->isCurrent(m_pCurrentBufferNode->getXMLElement());
+    const bool bIsCurrent = m_xXMLDocument->isCurrent(m_pCurrentBufferNode->getXMLElement());
 
     /*
      * If there is a following handler and no blocking now, then
