@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_11bcb004",
+        "filename": "offapi/com/sun/star/document/LockFileCreateErrRequest.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-09T08:45:16Z",
+      "side": 1,
+      "message": "Please don\u0027t rename files in this way. If you need a new file, create it and do \u0027git add\u0027",
+      "revId": "2e9fbf244ce84af54a7bb763308d71abc2e8fb88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_3137ecb1",
+        "filename": "uui/source/lockcorrupt.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-09T08:45:16Z",
+      "side": 1,
+      "message": "The same here (don\u0027t copy/rename)",
+      "revId": "2e9fbf244ce84af54a7bb763308d71abc2e8fb88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b1c4bc92",
+        "filename": "uui/source/lockcorrupt.src",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-09T08:45:16Z",
+      "side": 1,
+      "message": "The same here (don\u0027t rename/copy)",
+      "revId": "2e9fbf244ce84af54a7bb763308d71abc2e8fb88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b14bdc2a",
+        "filename": "uui/source/lockcorrupt.src",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-09T08:45:16Z",
+      "side": 1,
+      "message": "\"corrupted\"",
+      "revId": "2e9fbf244ce84af54a7bb763308d71abc2e8fb88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_315e0cea",
+        "filename": "uui/source/lockcorrupt.src",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-09T08:45:16Z",
+      "side": 1,
+      "message": "\"The lock file is corrupted and probably empty. Opening the document read-only and closing it again removes the corrupted lock file.",
+      "revId": "2e9fbf244ce84af54a7bb763308d71abc2e8fb88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_51ee3823",
+        "filename": "uui/source/lockfailed.src",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-09T08:45:16Z",
+      "side": 1,
+      "message": "\"created\"\n\"lack of free disk space\" or \"no space left on device\"",
+      "revId": "2e9fbf244ce84af54a7bb763308d71abc2e8fb88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

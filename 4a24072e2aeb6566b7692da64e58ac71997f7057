@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_513c7893",
+        "filename": "offapi/com/sun/star/document/LockFileCorruptRequest.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-09T08:45:16Z",
+      "side": 0,
+      "message": "You can\u0027t remove published UNO API, by transitivity you can\u0027t remove/rename this file. If you need new API, you need to create a new .idl file",
+      "revId": "4a24072e2aeb6566b7692da64e58ac71997f7057",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_715894fb",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-09T08:45:16Z",
+      "side": 0,
+      "message": "Are you sure this code can be safely removed?",
+      "revId": "4a24072e2aeb6566b7692da64e58ac71997f7057",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
