@@ -22,6 +22,7 @@
 #include <cassert>
 #include <stdlib.h>
 #include <time.h>
+#include <typeinfo>
 
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/help.hxx>
@@ -949,12 +950,12 @@ MenuSaveInData::GetEntries()
 
         if ( m_xMenuSettings.is() )
         {
-            LoadSubMenus( m_xMenuSettings, OUString(), pRootEntry );
+            LoadSubMenus( m_xMenuSettings, OUString(), pRootEntry, false );
         }
         else if ( GetDefaultData() != nullptr )
         {
             // If the doc has no config settings use module config settings
-            LoadSubMenus( GetDefaultData()->m_xMenuSettings, OUString(), pRootEntry );
+            LoadSubMenus( GetDefaultData()->m_xMenuSettings, OUString(), pRootEntry, false );
         }
     }
 
@@ -971,10 +972,8 @@ MenuSaveInData::SetEntries( SvxEntries* pNewEntries )
     pRootEntry->SetEntries( pNewEntries );
 }
 
-bool SaveInData::LoadSubMenus(
-    const uno::Reference< container::XIndexAccess >& xMenuSettings,
-    const OUString& rBaseTitle,
-    SvxConfigEntry* pParentData )
+bool SaveInData::LoadSubMenus( const uno::Reference< container::XIndexAccess >& xMenuSettings,
+    const OUString& rBaseTitle, SvxConfigEntry* pParentData, bool bContextMenu )
 {
     SvxEntries* pEntries = pParentData->GetEntries();
 
@@ -1019,14 +1018,29 @@ bool SaveInData::LoadSubMenus(
                     uno::Sequence< beans::PropertyValue > aPropSeq;
                     if ( a >>= aPropSeq )
                     {
+                        OUString aMenuLabel;
                         for ( sal_Int32 i = 0; i < aPropSeq.getLength(); ++i )
                         {
-                            if ( aPropSeq[i].Name == ITEM_DESCRIPTOR_LABEL )
+                            if ( bContextMenu )
+                            {
+                                if ( aPropSeq[i].Name == "PopupLabel" )
+                                {
+                                    aPropSeq[i].Value >>= aLabel;
+                                    break;
+                                }
+                                else if ( aPropSeq[i].Name == "Label" )
+                                {
+                                    aPropSeq[i].Value >>= aMenuLabel;
+                                }
+                            }
+                            else if ( aPropSeq[i].Name == "Label" )
                             {
                                 aPropSeq[i].Value >>= aLabel;
                                 break;
                             }
                         }
+                        if ( aLabel.isEmpty() )
+                            aLabel = aMenuLabel;
                     }
                 }
 
@@ -1055,7 +1069,7 @@ bool SaveInData::LoadSubMenus(
 
                     subMenuTitle += stripHotKey( aLabel );
 
-                    LoadSubMenus( xSubMenu, subMenuTitle, pEntry );
+                    LoadSubMenus( xSubMenu, subMenuTitle, pEntry, bContextMenu );
                 }
             }
             else
@@ -1315,7 +1329,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
                 SvxConfigEntry* pEntry = new SvxConfigEntry( aUIMenuName, aUrl, true );
                 pEntry->SetMain();
                 m_pRootEntry->GetEntries()->push_back( pEntry );
-                LoadSubMenus( xPopupMenu, aUIMenuName, pEntry );
+                LoadSubMenus( xPopupMenu, aUIMenuName, pEntry, true );
             }
         }
 
@@ -1360,7 +1374,7 @@ SvxEntries* ContextMenuSaveInData::GetEntries()
                 SvxConfigEntry* pEntry = new SvxConfigEntry( aUIMenuName, aUrl, true, true );
                 pEntry->SetMain();
                 m_pRootEntry->GetEntries()->push_back( pEntry );
-                LoadSubMenus( xPopupMenu, aUIMenuName, pEntry );
+                LoadSubMenus( xPopupMenu, aUIMenuName, pEntry, true );
             }
         }
         std::sort( m_pRootEntry->GetEntries()->begin(), m_pRootEntry->GetEntries()->end(), EntrySort );
@@ -2123,8 +2137,15 @@ SvTreeListEntry* SvxConfigPage::AddFunction(
         return nullptr;
     }
 
+    OUString aDisplayName;
     OUString aModuleId = vcl::CommandInfoProvider::GetModuleIdentifier( m_xFrame );
-    OUString aDisplayName = vcl::CommandInfoProvider::GetMenuLabelForCommand( aURL, aModuleId );
+
+    if ( typeid(*pCurrentSaveInData) == typeid(ContextMenuSaveInData) )
+        aDisplayName = vcl::CommandInfoProvider::GetPopupLabelForCommand( aURL, aModuleId );
+    else if ( typeid(*pCurrentSaveInData) == typeid(MenuSaveInData) )
+        aDisplayName = vcl::CommandInfoProvider::GetMenuLabelForCommand( aURL, aModuleId );
+    else
+        aDisplayName = vcl::CommandInfoProvider::GetLabelForCommand( aURL, aModuleId );
 
     SvxConfigEntry* pNewEntryData =
         new SvxConfigEntry( aDisplayName, aURL, false );
@@ -4315,7 +4336,7 @@ void ToolbarSaveInData::LoadToolbar(
                     {
                         for ( sal_Int32 i = 0; i < aPropSeq.getLength(); ++i )
                         {
-                            if ( aPropSeq[i].Name == ITEM_DESCRIPTOR_LABEL )
+                            if ( aPropSeq[i].Name == "Name" )
                             {
                                 aPropSeq[i].Value >>= aLabel;
                                 break;
