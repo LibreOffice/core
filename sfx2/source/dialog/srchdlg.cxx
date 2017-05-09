@@ -67,7 +67,6 @@ SearchDialog::~SearchDialog()
 void SearchDialog::dispose()
 {
     SaveConfig();
-    m_aCloseHdl.Call( nullptr );
     m_pSearchEdit.clear();
     m_pWholeWordsBox.clear();
     m_pMatchCaseBox.clear();
@@ -151,7 +150,7 @@ void SearchDialog::SetFocusOnEdit()
 bool SearchDialog::Close()
 {
     bool bRet = ModelessDialog::Close();
-    m_aCloseHdl.Call( this );
+    m_aCloseHdl.Call( nullptr );
     return bRet;
 }
 

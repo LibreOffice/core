@@ -43,7 +43,7 @@ private:
     VclPtr<PushButton>         m_pFindBtn;
 
     Link<SearchDialog&,void>   m_aFindHdl;
-    Link<SearchDialog*,void>   m_aCloseHdl;
+    Link<LinkParamNone*,void>  m_aCloseHdl;
 
     OUString            m_sConfigName;
     OString             m_sWinState;
@@ -61,7 +61,7 @@ public:
     virtual void dispose() override;
 
     void         SetFindHdl( const Link<SearchDialog&,void>& rLink ) { m_aFindHdl = rLink; }
-    void         SetCloseHdl( const Link<SearchDialog*,void>& rLink ) { m_aCloseHdl = rLink; }
+    void         SetCloseHdl( const Link<LinkParamNone*,void>& rLink ) { m_aCloseHdl = rLink; }
 
     OUString     GetSearchText() const { return m_pSearchEdit->GetText(); }
     void         SetSearchText( const OUString& _rText ) { m_pSearchEdit->SetText( _rText ); }

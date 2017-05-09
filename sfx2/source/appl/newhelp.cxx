@@ -2288,7 +2288,7 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
 }
 
 
-IMPL_LINK_NOARG( SfxHelpTextWindow_Impl, CloseHdl, sfx2::SearchDialog*, void )
+IMPL_LINK_NOARG( SfxHelpTextWindow_Impl, CloseHdl, LinkParamNone*, void )
 {
     pSrchDlg.clear();
 }
