@@ -926,7 +926,7 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
     return pStream;
 }
 
-XclExpXmlStream::XclExpXmlStream( const Reference< XComponentContext >& rCC, bool bExportVBA )
+XclExpXmlStream::XclExpXmlStream( const uno::Reference< XComponentContext >& rCC, bool bExportVBA )
     : XmlFilterBase( rCC ),
       mpRoot( nullptr ),
       mbExportVBA(bExportVBA)
@@ -990,7 +990,7 @@ sax_fastparser::FSHelperPtr& XclExpXmlStream::WriteAttributesInternal( sal_Int32
 sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
     const OUString& sFullStream,
     const OUString& sRelativeStream,
-    const Reference< XOutputStream >& xParentRelation,
+    const uno::Reference< XOutputStream >& xParentRelation,
     const char* sContentType,
     const char* sRelationshipType,
     OUString* pRelationshipId )
@@ -1039,7 +1039,7 @@ oox::drawingml::chart::ChartConverter* XclExpXmlStream::getChartConverter()
 
 ScDocShell* XclExpXmlStream::getDocShell()
 {
-    Reference< XInterface > xModel( getModel(), UNO_QUERY );
+    uno::Reference< XInterface > xModel( getModel(), UNO_QUERY );
 
     ScModelObj *pObj = dynamic_cast < ScModelObj* >( xModel.get() );
 
@@ -1091,7 +1091,7 @@ bool XclExpXmlStream::exportDocument()
         pWorkbookContentType = "application/vnd.ms-excel.sheet.macroEnabled.main+xml";
 
     PushStream( CreateOutputStream( workbook, workbook,
-                                    Reference <XOutputStream>(),
+                                    uno::Reference <XOutputStream>(),
                                     pWorkbookContentType,
                                     "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ) );
 
@@ -1139,7 +1139,7 @@ bool XclExpXmlStream::exportDocument()
 
 ::oox::ole::VbaProject* XclExpXmlStream::implCreateVbaProject() const
 {
-    return new ::oox::xls::ExcelVbaProject( getComponentContext(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
+    return new ::oox::xls::ExcelVbaProject( getComponentContext(), uno::Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
 }
 
 OUString XclExpXmlStream::getImplementationName()
