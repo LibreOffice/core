@@ -66,9 +66,6 @@ namespace sw
 
             @return
                 a msoffice equivalent charset identifier
-
-            @author
-                <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         sal_uInt8 rtl_TextEncodingToWinCharset(rtl_TextEncoding eTextEncoding);
 
@@ -91,23 +88,16 @@ namespace sw
 
             @param rXE
                 the arguments of the original word XE field
-
-            @author
-                <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         void ImportXE(SwDoc &rDoc, SwPaM &rPaM, const OUString &rXE);
 
         /** Convert from DTTM to Writer's DateTime
 
-            @author
-                <a href="mailto:mmaher@openoffice.org">Martin Maher</a
         */
         long DateTime2DTTM( const DateTime& rDT );
 
         /** Convert from Word Date/Time field str to Writer's Date Time str
 
-            @author
-                <a href="mailto:mmaher@openoffice.org">Martin Maher</a
         */
         sal_uLong MSDateTimeFormatToSwFormat(OUString& rParams, SvNumberFormatter *pFormatter, LanguageType &rLang, bool bHijri, LanguageType nDocLang);
 
@@ -119,15 +109,11 @@ namespace sw
 
         /** Used by MSDateTimeFormatToSwFormat to identify AM time fields
 
-            @author
-                <a href="mailto:mmaher@openoffice.org">Martin Maher</a
         */
         bool IsNotAM(OUString& rParams, sal_Int32 nPos);
 
         /** Another function used by MSDateTimeFormatToSwFormat
 
-            @author
-                <a href="mailto:mmaher@openoffice.org">Martin Maher</a
         */
         void SwapQuotesInField(OUString &rFormat);
 
@@ -149,9 +135,6 @@ namespace sw
             @param nIn
 
             @return nIn clipped to min/max 16bit value
-
-            @author
-                <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         SwTwips MakeSafePositioningValue(SwTwips nIn);
 
@@ -174,9 +157,6 @@ namespace sw
             was already in existence, for the cut and paste/insert file mode we
             should not modify the returned style if it is already in use as it
             is does not belong to us to change.
-
-            @author
-                <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         class ParaStyleMapper
         {
@@ -234,9 +214,6 @@ namespace sw
             was already in existence, for the cut and paste/insert file mode we
             should not modify the returned style if it is already in use as it
             is does not belong to us to change.
-
-            @author
-                <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         class CharStyleMapper
         {
@@ -280,9 +257,6 @@ namespace sw
             Given a fontname description find the best primary and secondary
             fallback font to use from MSWord's persp font
 
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-
             @see #i10242#/#i19164# for examples
         */
         class FontMapExport
@@ -314,9 +288,6 @@ namespace sw
             InsertTable, and before finalization DelAndMakeTableFrames should
             be called.
 
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-
             @see #i25782# for examples
         */
         class InsertedTablesManager
@@ -332,10 +303,6 @@ namespace sw
             TableMap maTables;
         };
 
-        /**
-            @author
-                <a href="mailto:mmaher@openoffice.org">Martin Maher</a>
-         */
         class RedlineStack
         {
         private:
@@ -357,10 +324,6 @@ namespace sw
             ~RedlineStack();
         };
 
-        /**
-            @author
-                <a href="mailto:mmaher@openoffice.org">Martin Maher</a>
-         */
         class SetInDocAndDelete
         {
         private:
@@ -372,10 +335,6 @@ namespace sw
             SetInDocAndDelete& operator=(const SetInDocAndDelete&) = delete;
         };
 
-        /**
-            @author
-                <a href="mailto:mmaher@openoffice.org">Martin Maher</a>
-         */
         class SetEndIfOpen       //Subclass from something ?
         {
         private:
@@ -391,10 +350,6 @@ namespace sw
             SetEndIfOpen& operator=(const SetEndIfOpen&) = delete;
         };
 
-        /**
-            @author
-                <a href="mailto:mmaher@openoffice.org">Martin Maher</a>
-         */
         class CompareRedlines:
             public std::binary_function<const SwFltStackEntry*, const SwFltStackEntry*,
             bool>
@@ -453,9 +408,6 @@ namespace sw
             @return STL container of CharRuns which describe the shared
             direction, script and optionally script of the contiguous sequences
             of characters
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
 
             @see #i22537# for example
         */

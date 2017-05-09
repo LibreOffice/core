@@ -30,9 +30,6 @@ namespace ww
     /** simple template that manages a static array
 
         The template sorts the array at construction in place.
-
-        @author
-        <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
     */
     template<class C> class SortedArray
     {

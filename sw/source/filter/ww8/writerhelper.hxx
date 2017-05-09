@@ -87,9 +87,6 @@ namespace ww8
         Provides a readable way to see if we are anchored inline. (as character)
         Provides a simple way to flag what type of entity this frame describes.
         Provides the size of the element as drawn by writer.
-
-        @author
-        <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
     */
     class Frame
     {
@@ -229,9 +226,6 @@ namespace sw
             @return A rItem upcasted back to a T
 
             @exception std::bad_cast Thrown if the rItem was not a T
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         template<class T> const T & item_cast(const SfxPoolItem &rItem)
         {
@@ -254,9 +248,6 @@ namespace sw
             A SfxPoolItem derived class to cast pItem to
 
             @return A pItem upcasted back to a T or 0 if pItem was not a T
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         template<class T> const T * item_cast(const SfxPoolItem *pItem)
         {
@@ -284,9 +275,6 @@ namespace sw
             @exception std::bad_cast Thrown if the property was not a T
 
             @return The T requested
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         template<class T> const T & ItemGet(const SwContentNode &rNode,
             sal_uInt16 eType)
@@ -313,9 +301,6 @@ namespace sw
             A SfxPoolItem derived class of the retrieved property
 
             @exception std::bad_cast Thrown if the property was not a T
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         template<class T> const T & ItemGet(const SwFormat &rFormat,
             sal_uInt16 eType)
@@ -344,9 +329,6 @@ namespace sw
             @exception std::bad_cast Thrown if the property was not a T
 
             @return The T requested
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         template<class T> const T & ItemGet(const SfxItemSet &rSet,
             sal_uInt16 eType)
@@ -379,9 +361,6 @@ namespace sw
             @exception std::bad_cast Thrown if the property was not a T
 
             @return The T requested
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         template<class T> const T & DefaultItemGet(const SfxItemPool &rPool,
             sal_uInt16 eType)
@@ -415,9 +394,6 @@ namespace sw
             @exception std::bad_cast Thrown if the property was not a T
 
             @return The T requested
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         template<class T> const T & DefaultItemGet(const SwDoc &rDoc,
             sal_uInt16 eType)
@@ -435,9 +411,6 @@ namespace sw
             The SwDoc document to get the styles from
 
             @return A ParaStyles containing the SwDoc's Paragraph Styles
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         ww8::ParaStyles GetParaStyles(const SwDoc &rDoc);
 
@@ -453,9 +426,6 @@ namespace sw
             The name of the style to search for
 
             @return A Paragraph Style if one exists which matches the name
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         SwTextFormatColl* GetParaStyle(SwDoc &rDoc, const OUString& rName);
 
@@ -471,9 +441,6 @@ namespace sw
             The name of the style to search for
 
             @return A Character Style if one exists which matches the name
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         SwCharFormat* GetCharStyle(SwDoc &rDoc, const OUString& rName);
 
@@ -488,9 +455,6 @@ namespace sw
 
             @param rStyles
             The ParaStyles to sort
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         void SortByAssignedOutlineStyleListLevel(ww8::ParaStyles &rStyles);
 
@@ -505,9 +469,6 @@ namespace sw
 
             @param rItems
             The sw::PoolItems to put the items into
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         void GetPoolItems(const SfxItemSet &rSet, ww8::PoolItems &rItems, bool bExportParentItemSet );
 
@@ -535,9 +496,6 @@ namespace sw
             rSet the SfxItemSet from which we want to remove any properties
             which the rFormat would override
 
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-
             @see #i24291# for examples
         */
         void ClearOverridesFromSet(const SwFormatCharFormat &rFormat, SfxItemSet &rSet);
@@ -558,9 +516,6 @@ namespace sw
             elements from. 0 means the entire document.
 
             @return A Frames containing the selections Floating elements
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         ww8::Frames GetFrames(const SwDoc &rDoc, SwPaM *pPaM);
 
@@ -578,9 +533,6 @@ namespace sw
             The SwNode to check for anchors to
 
             @return the Frames in rFrames anchored to rNode
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         ww8::Frames GetFramesInNode(const ww8::Frames &rFrames, const SwNode &rNode);
 
@@ -598,9 +550,6 @@ namespace sw
 
             @return A SwNumFormat pointer that describes the numbering level
             on this paragraph, or 0 if there is none.
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         const SwNumFormat* GetNumFormatFromTextNode(const SwTextNode &rTextNode);
 
@@ -614,9 +563,6 @@ namespace sw
 
             @return A SwNumFormat pointer that describes the numbering level
             or 0 if the nLevel is out of range
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         const SwNumFormat* GetNumFormatFromSwNumRuleLevel(const SwNumRule &rRule,
             int nLevel);
@@ -638,9 +584,6 @@ namespace sw
 
             @return A SwNoTextNode pointer that describes the graphic of this
             frame if there is one, or 0 if there is none.
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         SwNoTextNode *GetNoTextNodeFromSwFrameFormat(const SwFrameFormat &rFormat);
 
@@ -653,9 +596,6 @@ namespace sw
             The SwNode to query the page break of
 
             @return true if there is a page break, false otherwise
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         bool HasPageBreak(const SwNode &rNode);
 
@@ -669,9 +609,6 @@ namespace sw
             The tools::PolyPolygon to try and turn into a Polygon
 
             @return best fit Polygon from rPolyPoly
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         tools::Polygon PolygonFromPolyPolygon(const tools::PolyPolygon &rPolyPoly);
 
@@ -687,9 +624,6 @@ namespace sw
             object's layer through this class with either SendObjectToHell for
             the bottom layer and SendObjectToHeaven for the top and we don't
             worry about the odd form layer design wrinkle.
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         class SetLayer
         {
@@ -749,9 +683,6 @@ namespace sw
             The Id to transform from source to dest
 
             @return 0 on failure, the correct property Id on success
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         sal_uInt16 TransformWhichBetweenPools(const SfxItemPool &rDestPool,
             const SfxItemPool &rSrcPool, sal_uInt16 nWhich);
@@ -779,9 +710,6 @@ namespace sw
             The Id to transform from writer to the SfxItemSet's domain
 
             @return 0 on failure, the correct SfxItemSet Id on success
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         sal_uInt16 GetSetWhichFromSwDocWhich(const SfxItemSet &rSet,
             const SwDoc &rDoc, sal_uInt16 nWhich);
@@ -799,9 +727,6 @@ namespace sw
 
             If the object was not transferred into Writer then it is deleted
             during destruction.
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         class DrawingOLEAdaptor
         {

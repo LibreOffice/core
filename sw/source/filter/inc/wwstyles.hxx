@@ -146,9 +146,6 @@ namespace ww
 
         @return the sti that word would give it. stiUser if word would treat
         it as a user defined style.
-
-        @author
-        <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
     */
     sti GetCanonicalStiFromStc(sal_uInt8 stc) throw();
 
@@ -161,9 +158,6 @@ namespace ww
 
         @return the name word would give it if it's an inbuilt name, otherwise
         NULL
-
-        @author
-        <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
     */
     const sal_Char* GetEnglishNameFromSti(sti eSti) throw();
 
@@ -173,9 +167,6 @@ namespace ww
         sti the Style index
 
         @return true if a known inbuild character style
-
-        @author
-        <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
     */
     bool StandardStiIsCharStyle(sti eSti) throw();
 } // namespace ww

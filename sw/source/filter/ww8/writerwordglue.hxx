@@ -101,9 +101,6 @@ namespace sw
             expressed in word as a single word Section with different title
             page enabled.
 
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-
             @see #i4320#/#i14509#/#i11717# for examples
         */
         bool IsPlausableSingleWordSection(const SwFrameFormat &rTitleFormat,
@@ -114,9 +111,6 @@ namespace sw
             The top and bottom margins in word and writer are expressed in very
             different ways. This class provides the equivalent word values for
             header/footer distances from a given writer attrset of a page
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         class HdFtDistanceGlue
         {

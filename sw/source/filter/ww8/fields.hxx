@@ -141,9 +141,6 @@ namespace ww
 
         @return 0 if not found, otherwise the fieldname as a C style ASCII
         string
-
-        @author
-        <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
     */
     const char *GetEnglishFieldName(eField eIndex) throw();
 }
