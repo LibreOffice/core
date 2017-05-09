@@ -544,12 +544,6 @@
     <glade-widget-class title="SwIdxTreeListBox" name="swuilo-SwIdxTreeListBox"
                         generic-name="SwIdxTreeListBox" parent="svtlo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="SvxConfigGroupListBox" name="cuilo-SvxConfigGroupListBox"
-                        generic-name="SvxConfigGroupListBox" parent="svtlo-SvTreeListBox"
-                        icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="SvxConfigFunctionListBox`" name="cuilo-SvxConfigFunctionListBox"
-                        generic-name="SvxConfigFunctionListBox" parent="svtlo-SvTreeListBox"
-                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Tooltip Tree List" name="swuilo-SwFldRefTreeListBox"
                         generic-name="Tooltip Tree List" parent="svtlo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>

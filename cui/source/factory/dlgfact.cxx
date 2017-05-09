@@ -74,7 +74,7 @@
 #include "postdlg.hxx"
 #include "grfpage.hxx"
 #include "scriptdlg.hxx"
-#include "selector.hxx"
+#include "cfgutil.hxx"
 #include "macropg.hxx"
 #include "sdrcelldlg.hxx"
 #include "newtabledlg.hxx"

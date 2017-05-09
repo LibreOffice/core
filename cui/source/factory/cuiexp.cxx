@@ -39,7 +39,7 @@
 #include "passwdomdlg.hxx"
 #include "screenshotannotationdlg.hxx"
 #include "cuihyperdlg.hxx"
-#include "selector.hxx"
+#include "cfgutil.hxx"
 #include "SpellDialog.hxx"
 #include "zoom.hxx"
 #include "showcols.hxx"
