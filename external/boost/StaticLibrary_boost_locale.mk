@@ -15,7 +15,7 @@ $(eval $(call gb_StaticLibrary_set_warnings_not_errors,boost_locale))
 
 # disable "auto link" "feature" on MSVC
 $(eval $(call gb_StaticLibrary_add_defs,boost_locale,\
-	-DBOOST_ALL_NO_LIB -DBOOST_LOCALE_NO_WINAPI_BACKEND -DBOOST_LOCALE_NO_POSIX_BACKEND \
+	-DBOOST_ALL_NO_LIB -DBOOST_LOCALE_NO_WINAPI_BACKEND -DBOOST_LOCALE_NO_POSIX_BACKEND -DBOOST_USE_WINDOWS_H \
 ))
 
 $(eval $(call gb_StaticLibrary_use_external,boost_locale,boost_headers))
