@@ -38,6 +38,8 @@
 #include <unotxdoc.hxx>
 #include <unotools/streamwrap.hxx>
 
+#define AUTOTEXT_GALLERY "autoTxt"
+
 using namespace css;
 
 extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportDOCX()
@@ -103,6 +105,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
 
     SwNodeIndex aDocEnd( pD->GetNodes().GetEndOfContent() );
     SwNodeIndex aStart( *aDocEnd.GetNode().StartOfSectionNode(), 1 );
+    bool bIsAutoText = false;
 
     if( aStart < aDocEnd && ( aDocEnd.GetIndex() - aStart.GetIndex() > 2 ) )
     {
@@ -118,6 +121,10 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
                 SwNodeIndex& rIdx = aPam.GetPoint()->nNode;
                 ++rIdx;
                 aLNm = aPam.GetNode().GetTextNode()->GetText();
+
+                // is AutoText?
+                bIsAutoText = aLNm.startsWith(AUTOTEXT_GALLERY);
+                aLNm = aLNm.copy(strlen(AUTOTEXT_GALLERY) + 1);
             }
 
             // Do not copy name
@@ -153,32 +160,35 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
             }
             aPam.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
 
-            // Now we have the right selection for one entry
-            rBlocks.ClearDoc();
-
-            OUString sShortcut = aLNm;
-
-            // Need to check make sure the shortcut is not already being used
-            sal_Int32 nStart = 0;
-            sal_uInt16 nCurPos = rBlocks.GetIndex( sShortcut );
-            sal_Int32 nLen = sShortcut.getLength();
-
-            while( (sal_uInt16)-1 != nCurPos )
+            if( bIsAutoText )
             {
-                sShortcut = sShortcut.copy( 0, nLen );
-                // add an Number to it
-                sShortcut += OUString::number( ++nStart );
-                nCurPos = rBlocks.GetIndex( sShortcut );
-            }
+                // Now we have the right selection for one entry
+                rBlocks.ClearDoc();
 
-            if( rBlocks.BeginPutDoc( sShortcut, sShortcut ) )
-            {
-                SwDoc* pGlDoc = rBlocks.GetDoc();
-                SwNodeIndex aIdx( pGlDoc->GetNodes().GetEndOfContent(), -1 );
-                pCNd = aIdx.GetNode().GetContentNode();
-                SwPosition aPos( aIdx, SwIndex( pCNd, ( pCNd ) ? pCNd->Len() : 0 ) );
-                pD->getIDocumentContentOperations().CopyRange( aPam, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
-                rBlocks.PutDoc();
+                OUString sShortcut = aLNm;
+
+                // Need to check make sure the shortcut is not already being used
+                sal_Int32 nStart = 0;
+                sal_uInt16 nCurPos = rBlocks.GetIndex( sShortcut );
+                sal_Int32 nLen = sShortcut.getLength();
+
+                while( (sal_uInt16)-1 != nCurPos )
+                {
+                    sShortcut = sShortcut.copy( 0, nLen );
+                    // add an Number to it
+                    sShortcut += OUString::number( ++nStart );
+                    nCurPos = rBlocks.GetIndex( sShortcut );
+                }
+
+                if( rBlocks.BeginPutDoc( sShortcut, sShortcut ) )
+                {
+                    SwDoc* pGlDoc = rBlocks.GetDoc();
+                    SwNodeIndex aIdx( pGlDoc->GetNodes().GetEndOfContent(), -1 );
+                    pCNd = aIdx.GetNode().GetContentNode();
+                    SwPosition aPos( aIdx, SwIndex( pCNd, ( pCNd ) ? pCNd->Len() : 0 ) );
+                    pD->getIDocumentContentOperations().CopyRange( aPam, aPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
+                    rBlocks.PutDoc();
+                }
             }
 
             aStart = aStart.GetNode().EndOfSectionIndex() + 1;

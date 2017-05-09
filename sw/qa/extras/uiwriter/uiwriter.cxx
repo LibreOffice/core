@@ -124,6 +124,7 @@ public:
     void testDOCXAutoTextEmpty();
     void testDOCXAutoTextMultiple();
     void testDOTMAutoText();
+    void testDOCXAutoTextGallery();
     void testTdf67238();
     void testFdo75110();
     void testFdo75898();
@@ -255,6 +256,7 @@ public:
     CPPUNIT_TEST(testDOCXAutoTextEmpty);
     CPPUNIT_TEST(testDOCXAutoTextMultiple);
     CPPUNIT_TEST(testDOTMAutoText);
+    CPPUNIT_TEST(testDOCXAutoTextGallery);
     CPPUNIT_TEST(testTdf67238);
     CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST(testFdo75898);
@@ -823,6 +825,22 @@ void SwUiWriterTest::testDOTMAutoText()
     SwNodeIndex aStart(*aDocEnd.GetNode().StartOfSectionNode(), 1);
     SwNode& rNode = aStart.GetNode();
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"), rNode.GetTextNode()->GetText());
+}
+
+void SwUiWriterTest::testDOCXAutoTextGallery()
+{
+    // this file contains one AutoText entry and other
+    // entries which are not AutoText (have different "gallery" value)
+    std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext("autotext-gallery.dotx");
+
+    SwDoc* pDoc = pGlossary->GetDoc();
+    CPPUNIT_ASSERT(pDoc != nullptr);
+
+    // check entries count
+    CPPUNIT_ASSERT_EQUAL((sal_uInt16)1, pGlossary->GetCount());
+
+    // check entry name (if not contains gallery type)
+    CPPUNIT_ASSERT_EQUAL(OUString("Multiple"), pGlossary->GetLongName(0));
 }
 
 void SwUiWriterTest::testFdo74981()
