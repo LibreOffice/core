@@ -48,6 +48,7 @@
 #include <oox/export/utils.hxx>
 #include <oox/mathml/export.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/token/relationship.hxx>
 
 #include <editeng/autokernitem.hxx>
 #include <editeng/unoprnms.hxx>
@@ -2350,7 +2351,7 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
         if ( !bBookmarkOnly )
         {
             OString sId = OUStringToOString( GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
-                        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
+                        oox::getRelationship(Relationship::HYPERLINK),
                         sUrl, true ), RTL_TEXTENCODING_UTF8 );
 
             m_pHyperlinkAttrList->add( FSNS( XML_r, XML_id), sId.getStr());
@@ -4302,7 +4303,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         // TODO Convert the file name to relative for better interoperability
 
         aRelId = m_rExport.AddRelation(
-                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                    oox::getRelationship(Relationship::IMAGE),
                     aFileName );
 
         nImageType = XML_link;
@@ -6033,7 +6034,7 @@ void DocxAttributeOutput::EmbedFontStyle( const OUString& name, int tag, FontFam
         }
         xOutStream->closeOutput();
         OString relId = OUStringToOString( GetExport().GetFilter().addRelation( m_pSerializer->getOutputStream(),
-            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/font",
+            oox::getRelationship(Relationship::FONT),
             "fonts/font" + OUString::number( m_nextFontId ) + ".odttf" ), RTL_TEXTENCODING_UTF8 );
         EmbeddedFontRef ref;
         ref.relId = relId;

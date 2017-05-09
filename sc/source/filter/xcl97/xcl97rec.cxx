@@ -76,6 +76,7 @@
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/export/shapes.hxx>
+#include <oox/token/relationship.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
 

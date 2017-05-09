@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <formula/errorcodes.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/token/relationship.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <svl/zforlist.hxx>
 #include "document.hxx"
