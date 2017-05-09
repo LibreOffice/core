@@ -906,8 +906,7 @@ namespace sw
             TableMapIter aEnd = maTables.end();
             for (TableMapIter aIter = maTables.begin(); aIter != aEnd; ++aIter)
             {
-                // exitiert schon ein Layout, dann muss an dieser Tabelle die BoxFrames
-                // neu erzeugt
+                // If already a layout exists, then the BoxFrames must recreated at this table
                 SwTableNode *pTable = aIter->first->GetTableNode();
                 OSL_ENSURE(pTable, "Why no expected table");
                 if (pTable)
