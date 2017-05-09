@@ -799,7 +799,7 @@ SCTAB ScDocShell::MakeScenario( SCTAB nTab, const OUString& rName, const OUStrin
                                                 rName, rComment, rColor, nFlags, rMark ));
             }
 
-            aDocument.RenameTab( nNewTab, rName, false );           // without formula update
+            aDocument.RenameTab( nNewTab, rName);
             aDocument.SetScenario( nNewTab, true );
             aDocument.SetScenarioData( nNewTab, rComment, rColor, nFlags );
 

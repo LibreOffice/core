@@ -1152,7 +1152,7 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
 }
 
 // TimerDelays etc.
-void ScDocument::KeyInput( const KeyEvent& )
+void ScDocument::KeyInput()
 {
     if ( pChartListenerCollection->hasListeners() )
         pChartListenerCollection->StartTimer();

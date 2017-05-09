@@ -2281,7 +2281,7 @@ bool ScViewFunc::DeleteTables(const vector<SCTAB> &TheTabs, bool bRecord )
 
             rDoc.CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, InsertDeleteFlags::ALL,false, *pUndoDoc );
             rDoc.GetName( nTab, aOldName );
-            pUndoDoc->RenameTab( nTab, aOldName, false );
+            pUndoDoc->RenameTab( nTab, aOldName );
             if (rDoc.IsLinked(nTab))
             {
                 bWasLinked = true;
@@ -2640,8 +2640,7 @@ void ScViewFunc::MoveTable(
         {
             while (pDestDoc->GetTableCount() > 1)
                 pDestDoc->DeleteTab(0);
-            pDestDoc->RenameTab( 0, "______42_____",
-                        false );
+            pDestDoc->RenameTab( 0, "______42_____" );
         }
 
         SCTAB       nTabCount   = pDoc->GetTableCount();

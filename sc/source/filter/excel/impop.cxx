@@ -1214,7 +1214,7 @@ void ImportExcel::NewTable()
         // For Excel 2.1 Worksheet file, we need to set the file name as the
         // sheet name.
         INetURLObject aURL(GetDocUrl());
-        pD->RenameTab(0, aURL.getBase(), false);
+        pD->RenameTab(0, aURL.getBase());
     }
 
     pExcRoot->pShrfmlaBuff->Clear();

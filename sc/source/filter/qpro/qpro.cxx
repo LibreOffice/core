@@ -180,7 +180,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
                         OUString aName;
                         aName += OUStringLiteral1( 'A' + nTab );
                         if (!nTab)
-                            pDoc->RenameTab( nTab, aName, false );
+                            pDoc->RenameTab( nTab, aName );
                         else
                             pDoc->InsertTab( nTab, aName );
                     }

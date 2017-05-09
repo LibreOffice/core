@@ -1205,7 +1205,7 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
 
     ScDocument* pDoc = GetViewData().GetDocument();
     if ( pDoc )
-        pDoc->KeyInput( rKEvt );    // TimerDelays etc.
+        pDoc->KeyInput();    // TimerDelays etc.
 
     if( bInPlace )
     {

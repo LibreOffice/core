@@ -313,7 +313,7 @@ void ScUndoDeleteTab::Undo()
 
             OUString aOldName;
             pRefUndoDoc->GetName( nTab, aOldName );
-            rDoc.RenameTab( nTab, aOldName, false );
+            rDoc.RenameTab( nTab, aOldName );
             if (pRefUndoDoc->IsLinked(nTab))
             {
                 rDoc.SetLink( nTab, pRefUndoDoc->GetLinkMode(nTab), pRefUndoDoc->GetLinkDoc(nTab),
@@ -917,7 +917,7 @@ void ScUndoImportTab::Undo()
 
             rDoc.CopyToDocument(0,0,nTabPos, MAXCOL,MAXROW,nTabPos, InsertDeleteFlags::ALL,false, *xRedoDoc);
             rDoc.GetName( nTabPos, aOldName );
-            xRedoDoc->RenameTab(nTabPos, aOldName, false);
+            xRedoDoc->RenameTab(nTabPos, aOldName);
             xRedoDoc->SetTabBgColor(nTabPos, rDoc.GetTabBgColor(nTabPos));
 
             if ( rDoc.IsScenario(nTabPos) )

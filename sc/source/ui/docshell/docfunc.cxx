@@ -3133,7 +3133,7 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord, bool /* bApi */ )
         rDoc.CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, InsertDeleteFlags::ALL,false, *pUndoDoc );
         OUString aOldName;
         rDoc.GetName( nTab, aOldName );
-        pUndoDoc->RenameTab( nTab, aOldName, false );
+        pUndoDoc->RenameTab( nTab, aOldName );
         if (bWasLinked)
             pUndoDoc->SetLink( nTab, rDoc.GetLinkMode(nTab), rDoc.GetLinkDoc(nTab),
                                 rDoc.GetLinkFlt(nTab), rDoc.GetLinkOpt(nTab),

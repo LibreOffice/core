@@ -319,7 +319,7 @@ bool ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* p
     return false;
 }
 
-void ScDocument::StartAnimations( SCTAB nTab, vcl::Window* /*pWin*/ )
+void ScDocument::StartAnimations( SCTAB nTab )
 {
     if (!pDrawLayer)
         return;

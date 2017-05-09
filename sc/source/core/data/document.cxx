@@ -870,8 +870,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
     return bValid;
 }
 
-bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool /* bUpdateRef */,
-        bool bExternalDocument )
+bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDocument )
 {
     bool bValid = false;
     SCTAB i;

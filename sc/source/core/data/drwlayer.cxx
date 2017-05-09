@@ -1514,7 +1514,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
                 if( !aSourceTabName.equals(aDestTabName) &&
                     pDoc->ValidNewTabName(aSourceTabName) )
                 {
-                    bRestoreDestTabName = pDoc->RenameTab( nDestTab, aSourceTabName ); //sal_Bool bUpdateRef = sal_True, sal_Bool bExternalDocument = sal_False
+                    bRestoreDestTabName = pDoc->RenameTab( nDestTab, aSourceTabName );
                 }
             }
         }

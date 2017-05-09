@@ -803,15 +803,14 @@ public:
     void SetTabNameOnLoad(SCTAB nTab, const OUString& rName);
     void InvalidateStreamOnSave();
 
-    SC_DLLPUBLIC bool InsertTab( SCTAB nPos, const OUString& rName,
-                                 bool bExternalDocument = false, bool bUndoDeleteTab = false );
+    SC_DLLPUBLIC bool           InsertTab( SCTAB nPos, const OUString& rName,
+                                          bool bExternalDocument = false, bool bUndoDeleteTab = false );
 
     SC_DLLPUBLIC bool           InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
                                             bool bNamesValid = false );
     SC_DLLPUBLIC bool           DeleteTabs( SCTAB nTab, SCTAB nSheets );
     SC_DLLPUBLIC bool           DeleteTab( SCTAB nTab );
     SC_DLLPUBLIC bool           RenameTab( SCTAB nTab, const OUString& rName,
-                                           bool bUpdateRef = true,
                                            bool bExternalDocument = false );
     bool                        MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress = nullptr );
     bool                        CopyTab( SCTAB nOldPos, SCTAB nNewPos,
@@ -940,7 +939,7 @@ public:
     void            SetChartRangeList( const OUString& rChartName,
                                        const ScRangeListRef& rNewRangeListRef );
 
-    void            StartAnimations( SCTAB nTab, vcl::Window* pWin );
+    void            StartAnimations( SCTAB nTab );
 
     bool            HasBackgroundDraw( SCTAB nTab, const tools::Rectangle& rMMRect ) const;
     bool            HasAnyDraw( SCTAB nTab, const tools::Rectangle& rMMRect ) const;
@@ -2177,7 +2176,7 @@ public:
                                            SCTAB nTab, SCCOL nCol,
                                            SCROW nRowStart, SCROW nRowEnd ) const;
 
-    void            KeyInput( const KeyEvent& rKEvt );      // TimerDelays etc.
+    void            KeyInput();      // TimerDelays etc.
 
     ScChangeTrack*  GetChangeTrack() const { return pChangeTrack; }
 
