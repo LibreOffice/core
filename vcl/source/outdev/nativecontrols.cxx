@@ -332,7 +332,7 @@ bool OutputDevice::GetNativeControlRegion(  ControlType nType,
     tools::Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
     bool bRet = mpGraphics->GetNativeControlRegion(nType, nPart, screenRegion, nState, *aScreenCtrlValue,
-                                OUString(), rNativeBoundingRegion,
+                                rNativeBoundingRegion,
                                 rNativeContentRegion, this );
     if( bRet )
     {

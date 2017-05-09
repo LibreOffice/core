@@ -561,11 +561,11 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions::GetList( EHistoryType e
 
 void SvtHistoryOptions::AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-        const OUString& sPassword, const boost::optional<OUString>& sThumbnail)
+        const boost::optional<OUString>& sThumbnail)
 {
     MutexGuard aGuard(theHistoryOptionsMutex::get());
 
-    m_pImpl->AppendItem(eHistory, sURL, sFilter, sTitle, sPassword, sThumbnail);
+    m_pImpl->AppendItem(eHistory, sURL, sFilter, sTitle, ""/*sPassword*/, sThumbnail);
 }
 
 void SvtHistoryOptions::DeleteItem(EHistoryType eHistory, const OUString& sURL)

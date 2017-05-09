@@ -425,9 +425,9 @@ SbxBase* SbiFactory::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
         case SBXID_BASICMETHOD:
             return new SbMethod( "", SbxVARIANT, nullptr );
         case SBXID_JSCRIPTMOD:
-            return new SbJScriptModule( "" );
+            return new SbJScriptModule;
         case SBXID_JSCRIPTMETH:
-            return new SbJScriptMethod( "", SbxVARIANT );
+            return new SbJScriptMethod( SbxVARIANT );
         }
     }
     return nullptr;

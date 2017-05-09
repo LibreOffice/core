@@ -45,9 +45,8 @@ class SwTableLineFormat : public SwFrameFormat
     friend class SwDoc;
 
 protected:
-    SwTableLineFormat( SwAttrPool& rPool, const OUString &rFormatNm,
-                    SwFrameFormat *pDrvdFrame )
-        : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FRMFMT, aTableLineSetRange )
+    SwTableLineFormat( SwAttrPool& rPool, SwFrameFormat *pDrvdFrame )
+        : SwFrameFormat( rPool, OUString(), pDrvdFrame, RES_FRMFMT, aTableLineSetRange )
     {}
 
 public:
@@ -62,9 +61,8 @@ class SW_DLLPUBLIC SwTableBoxFormat : public SwFrameFormat
     friend class SwDoc;
 
 protected:
-    SwTableBoxFormat( SwAttrPool& rPool, const OUString &rFormatNm,
-                    SwFrameFormat *pDrvdFrame )
-        : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FRMFMT, aTableBoxSetRange )
+    SwTableBoxFormat( SwAttrPool& rPool, SwFrameFormat *pDrvdFrame )
+        : SwFrameFormat( rPool, OUString(), pDrvdFrame, RES_FRMFMT, aTableBoxSetRange )
     {}
 
     // For recognition of changes (especially TableBoxAttribute).

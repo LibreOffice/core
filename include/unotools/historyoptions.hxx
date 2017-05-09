@@ -92,11 +92,10 @@ public:
         @param sURL      URL to save in history
         @param sFilter   filter name to save in history
         @param sTitle    document title to save in history
-        @param sPassword password to save in history
     */
     void AppendItem(EHistoryType eHistory,
             const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-            const OUString& sPassword, const boost::optional<OUString>& sThumbnail);
+            const boost::optional<OUString>& sThumbnail);
 
     /** Delete item from the specified list.
     */

@@ -29,11 +29,9 @@ OTableConnectionData::OTableConnectionData()
 }
 
 OTableConnectionData::OTableConnectionData(const TTableWindowData::value_type& _pReferencingTable
-                                          ,const TTableWindowData::value_type& _pReferencedTable
-                                          ,const OUString& rConnName )
+                                          ,const TTableWindowData::value_type& _pReferencedTable )
  :m_pReferencingTable(_pReferencingTable)
  ,m_pReferencedTable(_pReferencedTable)
- ,m_aConnName( rConnName )
 {
     Init();
 }

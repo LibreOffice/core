@@ -1045,20 +1045,20 @@ void ShapeHelper::setTop(double _fTop)
     xShape->setPosition(aPoint);
 }
 
-void DebugHelper::basicexception( const OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ )
+void DebugHelper::basicexception( const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
-    throw css::script::BasicErrorException( DetailedMessage.concat( " " ).concat( ex.Message ), css::uno::Reference< css::uno::XInterface >(), err, OUString() );
+    throw css::script::BasicErrorException( ex.Message, css::uno::Reference< css::uno::XInterface >(), err, OUString() );
 }
 
 void DebugHelper::basicexception( int err,  const OUString& additionalArgument )
 {
-    basicexception( OUString(), css::uno::Exception(), err, additionalArgument );
+    basicexception( css::uno::Exception(), err, additionalArgument );
 }
 
 void DebugHelper::basicexception( const css::uno::Exception& ex )
 {
-    basicexception( OUString(), ex, ERRCODE_BASIC_INTERNAL_ERROR, OUString() );
+    basicexception( ex, ERRCODE_BASIC_INTERNAL_ERROR, OUString() );
 }
 
 void DebugHelper::runtimeexception( int err )

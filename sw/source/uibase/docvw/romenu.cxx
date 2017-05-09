@@ -151,8 +151,7 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
             else if( !rURL.GetURL().isEmpty() )
                 pTargetURL = new INetImage( bLink ? sGrfName : OUString(),
                                             rURL.GetURL(),
-                                            rURL.GetTargetFrameName(),
-                                            OUString() );
+                                            rURL.GetTargetFrameName() );
         }
     }
 

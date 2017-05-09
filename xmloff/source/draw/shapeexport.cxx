@@ -1253,7 +1253,7 @@ void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape 
 
 void XMLShapeExport::ExportGraphicDefaults()
 {
-    rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(mrExport, OUString(), mrExport.GetAutoStylePool().get()));
+    rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(mrExport, mrExport.GetAutoStylePool().get()));
 
     // construct PropertySetMapper
     rtl::Reference< SvXMLExportPropertyMapper > xPropertySetMapper( CreateShapePropMapper( mrExport ) );

@@ -1699,16 +1699,14 @@ bool SwDoc::DontExpandFormat( const SwPosition& rPos, bool bFlag )
 
 SwTableBoxFormat* SwDoc::MakeTableBoxFormat()
 {
-    SwTableBoxFormat* pFormat = new SwTableBoxFormat( GetAttrPool(), aEmptyOUStr,
-                                                mpDfltFrameFormat );
+    SwTableBoxFormat* pFormat = new SwTableBoxFormat( GetAttrPool(), mpDfltFrameFormat );
     getIDocumentState().SetModified();
     return pFormat;
 }
 
 SwTableLineFormat* SwDoc::MakeTableLineFormat()
 {
-    SwTableLineFormat* pFormat = new SwTableLineFormat( GetAttrPool(), aEmptyOUStr,
-                                                mpDfltFrameFormat );
+    SwTableLineFormat* pFormat = new SwTableLineFormat( GetAttrPool(), mpDfltFrameFormat );
     getIDocumentState().SetModified();
     return pFormat;
 }

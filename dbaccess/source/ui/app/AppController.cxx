@@ -388,7 +388,6 @@ void SAL_CALL OApplicationController::disposing()
                             aURL.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
                             aFilter,
                             getStrippedDatabaseName(),
-                            OUString(),
                             boost::none);
 
                     // add to recent document list

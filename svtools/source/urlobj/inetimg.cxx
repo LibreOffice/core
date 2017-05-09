@@ -34,7 +34,7 @@ void INetImage::Write( SvStream& rOStm, SotClipboardFormatId nFormat ) const
             OUString sString(
                 aImageURL + OUStringLiteral1(TOKEN_SEPARATOR) + aTargetURL
                 + OUStringLiteral1(TOKEN_SEPARATOR) + aTargetFrame
-                + OUStringLiteral1(TOKEN_SEPARATOR) + aAlternateText
+                + OUStringLiteral1(TOKEN_SEPARATOR) /* + aAlternateText */
                 + OUStringLiteral1(TOKEN_SEPARATOR)
                 + OUString::number(aSizePixel.Width())
                 + OUStringLiteral1(TOKEN_SEPARATOR)
@@ -67,7 +67,7 @@ bool INetImage::Read( SvStream& rIStm, SotClipboardFormatId nFormat )
             aImageURL = sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
             aTargetURL = sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
             aTargetFrame = sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
-            aAlternateText = sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
+            /*aAlternateText =*/ sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
             aSizePixel.Width() = sINetImg.getToken( 0, TOKEN_SEPARATOR,
                                                     nStart ).toInt32();
             aSizePixel.Height() = sINetImg.getToken( 0, TOKEN_SEPARATOR,
@@ -112,10 +112,8 @@ bool INetImage::Read( SvStream& rIStm, SotClipboardFormatId nFormat )
             if( nAltOffset )
             {
                 rIStm.Seek( nFilePos + nAltOffset );
-                aAlternateText = read_zeroTerminated_uInt8s_ToOUString(rIStm, eSysCSet);
+                /*aAlternateText =*/ read_zeroTerminated_uInt8s_ToOUString(rIStm, eSysCSet);
             }
-            else if( !aAlternateText.isEmpty() )
-                aAlternateText.clear();
 
             if( nAnchorOffset )
             {

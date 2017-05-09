@@ -1678,7 +1678,7 @@ void SdXMLExport::ImpWritePresentationStyles()
                 // write presentation styles (ONLY if presentation)
                 if(IsImpress() && mxDocStyleFamilies.is() && xNamed.is())
                 {
-                    rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(*this, OUString(), GetAutoStylePool().get()));
+                    rtl::Reference<XMLStyleExport> aStEx(new XMLStyleExport(*this, GetAutoStylePool().get()));
                     const rtl::Reference< SvXMLExportPropertyMapper > aMapperRef( GetPropertySetMapper() );
 
                     OUString aPrefix( xNamed->getName() );

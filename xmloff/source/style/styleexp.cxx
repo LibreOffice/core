@@ -57,7 +57,6 @@ using ::com::sun::star::document::XEventsSupplier;
 
 XMLStyleExport::XMLStyleExport(
         SvXMLExport& rExp,
-        const OUString& rPoolStyleName,
         SvXMLAutoStylePoolP *pAutoStyleP ) :
     rExport( rExp ),
     sIsPhysical( "IsPhysical" ),
@@ -65,7 +64,6 @@ XMLStyleExport::XMLStyleExport(
     sFollowStyle( "FollowStyle" ),
     sNumberingStyleName( "NumberingStyleName" ),
     sOutlineLevel( "OutlineLevel" ),
-    sPoolStyleName( rPoolStyleName ),
     pAutoStylePool( pAutoStyleP  )
 {
 }
@@ -143,8 +141,6 @@ bool XMLStyleExport::exportStyle(
             sParent = *pPrefix;
         sParent += sParentString;
     }
-    else
-        sParent = sPoolStyleName;
 
     if( !sParent.isEmpty() )
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_PARENT_STYLE_NAME,

@@ -174,7 +174,6 @@ void SfxPickListImpl::AddDocumentToPickList( SfxObjectShell* pDocSh )
             aURL.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
             aFilter,
             aTitle,
-            OUString(),
             aThumbnail);
 
     if ( aURL.GetProtocol() == INetProtocol::File )

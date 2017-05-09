@@ -95,7 +95,6 @@ Image PreviewRenderer::RenderPage (
         return RenderPage (
             pPage,
             Size(nWidth,nHeight),
-            OUString(),
             false/*bObeyHighContrastMode*/);
     }
     else
@@ -105,7 +104,6 @@ Image PreviewRenderer::RenderPage (
 Image PreviewRenderer::RenderPage (
     const SdPage* pPage,
     Size aPixelSize,
-    const OUString& rSubstitutionText,
     const bool bObeyHighContrastMode,
     const bool bDisplayPresentationObjects)
 {
@@ -118,7 +116,7 @@ Image PreviewRenderer::RenderPage (
             if (Initialize(pPage, aPixelSize, bObeyHighContrastMode))
             {
                 PaintPage(pPage, bDisplayPresentationObjects);
-                PaintSubstitutionText(rSubstitutionText);
+                PaintSubstitutionText("");
                 PaintFrame();
 
                 Size aSize (mpPreviewDevice->GetOutputSizePixel());

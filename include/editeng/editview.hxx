@@ -188,7 +188,7 @@ public:
     void                RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich );
     void                RemoveAttribsKeepLanguages( bool bRemoveParaAttribs );
 
-    sal_uInt32          Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs );
+    sal_uInt32          Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs );
 
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;

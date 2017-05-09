@@ -57,7 +57,6 @@ class XMLOFF_DLLPUBLIC XMLStyleExport : public salhelper::SimpleReferenceObject
     const OUString sFollowStyle;
     const OUString sNumberingStyleName;
     const OUString sOutlineLevel;
-    const OUString sPoolStyleName;
     SvXMLAutoStylePoolP *pAutoStylePool;
 
 protected:
@@ -79,7 +78,6 @@ protected:
 public:
     XMLStyleExport(
         SvXMLExport& rExp,
-        const OUString& rPoolStyleName,
         SvXMLAutoStylePoolP *pAutoStyleP=nullptr );
     virtual ~XMLStyleExport() override;
 

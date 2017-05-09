@@ -69,10 +69,6 @@ public:
             The page to render.
         @param aPreviewPixelSize
             The size in device coordinates of the preview.
-        @param sSubstitutionText
-            When the actual preview can not be created for some reason, then
-            this text is painted in an empty rectangle of the requested size
-            instead.
         @param bObeyHighContrastMode
             When <FALSE/> then the high contrast mode of the application is
             ignored and the preview is rendered in normal mode.  When
@@ -85,7 +81,6 @@ public:
     Image RenderPage (
         const SdPage* pPage,
         const Size aPreviewPixelSize,
-        const OUString& sSubstitutionText,
         const bool bObeyHighContrastMode,
         const bool bDisplayPresentationObjects = true);
 

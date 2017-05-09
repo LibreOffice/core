@@ -1154,7 +1154,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
         SvXMLExport& rExp,
         SvXMLAutoStylePoolP & rASP
         ) :
-    XMLStyleExport( rExp, OUString(), &rASP ),
+    XMLStyleExport( rExp, &rASP ),
     m_xImpl(new Impl),
     rAutoStylePool( rASP ),
     pBoundFrameSets(new BoundFrameSets(GetExport().GetModel())),

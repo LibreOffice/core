@@ -104,7 +104,6 @@ private:
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId);
     css::uno::Reference<css::drawing::framework::XResource> CreatePane (
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneId,
-        const OUString& rsTitle,
         const css::uno::Reference<css::drawing::framework::XPane>& rxParentPane,
         const bool bIsSpritePane);
 
