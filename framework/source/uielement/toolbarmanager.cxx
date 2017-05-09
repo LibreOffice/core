@@ -23,6 +23,7 @@
 #include <uielement/toolbarmanager.hxx>
 
 #include <uielement/generictoolbarcontroller.hxx>
+#include <uielement/styletoolbarcontroller.hxx>
 #include "services.h"
 #include "general.h"
 #include "properties.h"
@@ -753,6 +754,11 @@ void ToolBarManager::CreateControllers()
                                                          aControlType ), UNO_QUERY );
 
                     xController = xStatusListener;
+                }
+                else if ( aCommandURL.startsWith( ".uno:StyleApply?" ) )
+                {
+                    xController.set( new StyleToolbarController( m_xContext, m_xFrame, aCommandURL ));
+                    m_pToolBar->SetItemBits( nId, m_pToolBar->GetItemBits( nId ) | ToolBoxItemBits::CHECKABLE );
                 }
                 else if ( aCommandURL.startsWith( "private:resource/menubar/" ) )
                 {
