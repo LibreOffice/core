@@ -15,7 +15,12 @@ namespace oox {
 
 enum class Relationship
 {
-    HYPERLINK
+    HYPERLINK,
+    PACKAGE,
+    HDPHOTO,
+    OLEOBJECT,
+    CHART,
+    IMAGE
 };
 
 OUString OOX_DLLPUBLIC getRelationship(Relationship eRelationship);

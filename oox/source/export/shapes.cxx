@@ -26,6 +26,7 @@
 #include "oox/export/shapes.hxx"
 #include "oox/export/utils.hxx"
 #include <oox/token/namespaces.hxx>
+#include <oox/token/relationship.hxx>
 #include <oox/token/tokens.hxx>
 
 #include <cstdio>
@@ -123,91 +124,91 @@ static void lcl_ConvertProgID(OUString const& rProgID,
     if (rProgID == "Excel.Sheet.12")
     {
         o_rMediaType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
         o_rFileExtension = "xlsx";
     }
     else if (rProgID.startsWith("Excel.SheetBinaryMacroEnabled.12") )
     {
         o_rMediaType = "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
-        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
         o_rFileExtension = "xlsb";
     }
     else if (rProgID.startsWith("Excel.SheetMacroEnabled.12"))
     {
         o_rMediaType = "application/vnd.ms-excel.sheet.macroEnabled.12";
-        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
         o_rFileExtension = "xlsm";
     }
     else if (rProgID.startsWith("Excel.Sheet"))
     {
         o_rMediaType = "application/vnd.ms-excel";
-        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
         o_rFileExtension = "xls";
     }
     else if (rProgID == "PowerPoint.Show.12")
     {
         o_rMediaType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
         o_rFileExtension = "pptx";
     }
     else if (rProgID == "PowerPoint.ShowMacroEnabled.12")
     {
         o_rMediaType = "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
-        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
         o_rFileExtension = "pptm";
     }
     else if (rProgID.startsWith("PowerPoint.Show"))
     {
         o_rMediaType = "application/vnd.ms-powerpoint";
-        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
         o_rFileExtension = "ppt";
     }
     else if (rProgID.startsWith("PowerPoint.Slide.12"))
     {
         o_rMediaType = "application/vnd.openxmlformats-officedocument.presentationml.slide";
-       o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+       o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
        o_rFileExtension = "sldx";
     }
     else if (rProgID == "PowerPoint.SlideMacroEnabled.12")
     {
        o_rMediaType = "application/vnd.ms-powerpoint.slide.macroEnabled.12";
-       o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+       o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
        o_rFileExtension = "sldm";
     }
     else if (rProgID == "Word.DocumentMacroEnabled.12")
     {
         o_rMediaType = "application/vnd.ms-word.document.macroEnabled.12";
-        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
         o_rFileExtension = "docm";
     }
     else if (rProgID == "Word.Document.12")
     {
         o_rMediaType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
         o_rFileExtension = "docx";
     }
     else if (rProgID == "Word.Document.8")
     {
         o_rMediaType = "application/msword";
-        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
         o_rFileExtension = "doc";
     }
     else if (rProgID == "Excel.Chart.8")
     {
         o_rMediaType = "application/vnd.ms-excel";
-        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
         o_rFileExtension = "xls";
     }
     else if (rProgID == "AcroExch.Document.11")
     {
         o_rMediaType = "application/pdf";
-        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
         o_rFileExtension = "pdf";
     }
     else
     {
         o_rMediaType = "application/vnd.openxmlformats-officedocument.oleObject";
-        o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        o_rRelationType = oox::getRelationship(Relationship::OLEOBJECT);
         o_rFileExtension = "bin";
     }
 }
@@ -252,7 +253,7 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
             o_rMediaType = OUString::createFromAscii(i.pMediaType);
             o_rpProgID = i.pProgID;
             o_rSuffix = OUString::createFromAscii(i.pSuffix);
-            o_rRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+            o_rRelationType = oox::getRelationship(Relationship::PACKAGE);
             break;
         }
     }
@@ -775,7 +776,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             if( !sURL.isEmpty() )
             {
                 OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
-                        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
+                        oox::getRelationship(Relationship::HYPERLINK),
                         mpURLTransformer->getTransformedString(sURL),
                         mpURLTransformer->isExternalURL(sURL));
 
