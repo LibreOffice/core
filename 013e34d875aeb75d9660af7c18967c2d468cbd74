@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_b154bc54",
+        "filename": "sw/source/core/inc/unobookmark.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-05-09T14:02:30Z",
+      "side": 0,
+      "message": "eh what, that is very unlikely to be unused",
+      "revId": "013e34d875aeb75d9660af7c18967c2d468cbd74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

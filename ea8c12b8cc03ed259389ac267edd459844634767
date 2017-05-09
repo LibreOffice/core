@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_f14e44c0",
+        "filename": "sw/source/core/unocore/unobkm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-05-09T14:02:30Z",
+      "side": 1,
+      "message": "indeed here we pass in a non-null pointer - how did the plugin not see that?",
+      "revId": "ea8c12b8cc03ed259389ac267edd459844634767",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
