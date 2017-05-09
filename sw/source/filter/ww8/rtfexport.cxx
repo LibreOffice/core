@@ -47,6 +47,7 @@
 #include <svx/xflclit.hxx>
 #include <editeng/hyphenzoneitem.hxx>
 #include <fmtmeta.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 using namespace ::com::sun::star;
 
@@ -823,6 +824,10 @@ void RtfExport::ExportDocument_Impl()
         }
         Strm().WriteCharPtr(pOut);
     }
+
+    if (!m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PARA_SPACE_MAX))
+        // RTF default is true, so write compat flag if this should be false.
+        Strm().WriteCharPtr(LO_STRING_SVTOOLS_RTF_HTMAUTSP);
 
     Strm().WriteCharPtr(SAL_NEWLINE_STRING);
 
