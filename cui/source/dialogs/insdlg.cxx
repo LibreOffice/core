@@ -34,6 +34,7 @@
 
 #include "insdlg.hxx"
 #include <dialmgr.hxx>
+#include <svtools/imagemgr.hxx>
 #include <svtools/sores.hxx>
 
 #include <tools/urlobj.hxx>
@@ -164,6 +165,7 @@ SvInsertOleDlg::SvInsertOleDlg
     get(m_pEdFilepath, "urled");
     get(m_pBtnFilepath, "urlbtn");
     get(m_pCbFilelink, "linktofile");
+    get(m_pCbAsIcon, "asicon");
     m_pLbObjecttype->SetDoubleClickHdl( LINK( this, SvInsertOleDlg, DoubleClickHdl ) );
     m_pBtnFilepath->SetClickHdl( LINK( this, SvInsertOleDlg, BrowseHdl ) );
     Link<Button*,void> aLink( LINK( this, SvInsertOleDlg, RadioHdl ) );
@@ -188,6 +190,7 @@ void SvInsertOleDlg::dispose()
     m_pEdFilepath.clear();
     m_pBtnFilepath.clear();
     m_pCbFilelink.clear();
+    m_pCbAsIcon.clear();
     InsertObjectDialog_Impl::dispose();
 }
 
@@ -327,6 +330,19 @@ short SvInsertOleDlg::Execute()
                 OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
                 aErr = aErr.replaceFirst( "%", aFileName );
                 ScopedVclPtrInstance<MessageDialog>(this, aErr)->Execute();
+            }
+            else
+            {
+                if (m_pCbAsIcon->IsChecked())
+                {
+                    //something nice here I guess would be to write the filename into
+                    //the image with this icon above it
+                    Image aImage = SvFileInformationManager::GetImage(aURL, true);
+                    SvMemoryStream aTemp;
+                    WriteDIBBitmapEx(aImage.GetBitmapEx(), aTemp);
+                    m_aIconMetaFile = Sequence<sal_Int8>(static_cast<const sal_Int8*>(aTemp.GetData()), aTemp.Seek(STREAM_SEEK_TO_END));
+                    m_aIconMediaType = "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"";
+                }
             }
         }
     }
