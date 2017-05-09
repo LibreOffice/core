@@ -37,12 +37,6 @@
 #define SPACE      ' '
 #define SEMI_COLON ';'
 
-typedef struct
-{
-    rtl::OUString Server;
-    sal_Int32 Port;
-} ProxyEntry;
-
 typedef enum {
     sHTTP,
     sHTTPS,
@@ -230,8 +224,6 @@ css::uno::Any MacOSXBackend::getPropertyValue(
         return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
     } else if ( PropertyName == "ooInetFTPProxyName" )
     {
-        ProxyEntry aFtpProxy;
-
         char host[MAXHOSTNAMELEN];
         UInt16 port;
         bool retVal;
@@ -240,44 +232,32 @@ css::uno::Any MacOSXBackend::getPropertyValue(
 
         if (retVal)
         {
-            aFtpProxy.Server = rtl::OUString::createFromAscii( host );
-        }
-
-        // ftp proxy name
-        if( aFtpProxy.Server.getLength() > 0 )
-        {
-            return css::uno::makeAny(
-                css::beans::Optional< css::uno::Any >(
-                    true, uno::makeAny( aFtpProxy.Server ) ) );
+            auto const Server = rtl::OUString::createFromAscii( host );
+            if( Server.getLength() > 0 )
+            {
+                return css::uno::makeAny(
+                    css::beans::Optional< css::uno::Any >(
+                        true, uno::makeAny( Server ) ) );
+            }
         }
         return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
     } else if ( PropertyName == "ooInetFTPProxyPort" )
     {
-        ProxyEntry aFtpProxy;
-
         char host[MAXHOSTNAMELEN];
         UInt16 port;
         bool retVal;
 
         retVal = GetProxySetting(sFTP, host, 100, &port);
 
-        if (retVal)
-        {
-            aFtpProxy.Port = port;
-        }
-
-        // ftp proxy port
-        if( aFtpProxy.Port > 0 )
+        if (retVal && port > 0)
         {
             return css::uno::makeAny(
                 css::beans::Optional< css::uno::Any >(
-                    true, uno::makeAny( aFtpProxy.Port ) ) );
+                    true, uno::makeAny( sal_Int32(port) ) ) );
         }
         return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
     } else if ( PropertyName == "ooInetHTTPProxyName" )
     {
-        ProxyEntry aHttpProxy;
-
         char host[MAXHOSTNAMELEN];
         UInt16 port;
         bool retVal;
@@ -286,44 +266,32 @@ css::uno::Any MacOSXBackend::getPropertyValue(
 
         if (retVal)
         {
-            aHttpProxy.Server = rtl::OUString::createFromAscii( host );
-        }
-
-        // http proxy name
-        if( aHttpProxy.Server.getLength() > 0 )
-        {
-            return css::uno::makeAny(
-                css::beans::Optional< css::uno::Any >(
-                    true, uno::makeAny( aHttpProxy.Server ) ) );
+            auto const Server = rtl::OUString::createFromAscii( host );
+            if( Server.getLength() > 0 )
+            {
+                return css::uno::makeAny(
+                    css::beans::Optional< css::uno::Any >(
+                        true, uno::makeAny( Server ) ) );
+            }
         }
         return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
     } else if ( PropertyName == "ooInetHTTPProxyPort" )
     {
-        ProxyEntry aHttpProxy;
-
         char host[MAXHOSTNAMELEN];
         UInt16 port;
         bool retVal;
 
         retVal = GetProxySetting(sHTTP, host, 100, &port);
 
-        if (retVal)
-        {
-            aHttpProxy.Port = port;
-        }
-
-        // http proxy port
-        if( aHttpProxy.Port > 0 )
+        if (retVal && port > 0)
         {
             return css::uno::makeAny(
                 css::beans::Optional< css::uno::Any >(
-                    true, uno::makeAny( aHttpProxy.Port ) ) );
+                    true, uno::makeAny( sal_Int32(port) ) ) );
         }
         return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
     } else if ( PropertyName == "ooInetHTTPSProxyName" )
     {
-        ProxyEntry aHttpsProxy;
-
         char host[MAXHOSTNAMELEN];
         UInt16 port;
         bool retVal;
@@ -332,38 +300,28 @@ css::uno::Any MacOSXBackend::getPropertyValue(
 
         if (retVal)
         {
-            aHttpsProxy.Server = rtl::OUString::createFromAscii( host );
-        }
-
-        // https proxy name
-        if( aHttpsProxy.Server.getLength() > 0 )
-        {
-            return css::uno::makeAny(
-                css::beans::Optional< css::uno::Any >(
-                    true, uno::makeAny( aHttpsProxy.Server ) ) );
+            auto const Server = rtl::OUString::createFromAscii( host );
+            if( Server.getLength() > 0 )
+            {
+                return css::uno::makeAny(
+                    css::beans::Optional< css::uno::Any >(
+                        true, uno::makeAny( Server ) ) );
+            }
         }
         return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
     } else if ( PropertyName == "ooInetHTTPSProxyPort" )
     {
-        ProxyEntry aHttpsProxy;
-
         char host[MAXHOSTNAMELEN];
         UInt16 port;
         bool retVal;
 
         retVal = GetProxySetting(sHTTPS, host, 100, &port);
 
-        if (retVal)
-        {
-            aHttpsProxy.Port = port;
-        }
-
-        // https proxy port
-        if( aHttpsProxy.Port > 0 )
+        if (retVal && port > 0)
         {
             return css::uno::makeAny(
                 css::beans::Optional< css::uno::Any >(
-                    true, uno::makeAny( aHttpsProxy.Port ) ) );
+                    true, uno::makeAny( sal_Int32(port) ) ) );
         }
         return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
     } else if ( PropertyName == "ooInetProxyType" )
