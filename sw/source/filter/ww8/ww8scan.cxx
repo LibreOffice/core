@@ -4008,7 +4008,7 @@ void WW8PLCFx_Book::SetIdx2(sal_uInt32 nI)
     if( nIMax )
     {
         pBook[1]->SetIdx( nI & 0x7fffffff );
-        nIsEnd = (sal_uInt16)( ( nI >> 31 ) & 1 );  // 0 oder 1
+        nIsEnd = (sal_uInt16)( ( nI >> 31 ) & 1 );  // 0 or 1
     }
 }
 
