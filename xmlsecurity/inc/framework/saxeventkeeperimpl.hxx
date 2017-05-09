@@ -38,6 +38,7 @@ class ElementMark;
 class ElementCollector;
 
 #include <vector>
+#include <memory>
 
 class XSECFW_DLLPUBLIC SAXEventKeeperImpl : public cppu::WeakImplHelper
 <
@@ -114,7 +115,7 @@ private:
     /*
      * maintains a collection of all ElementMarks.
      */
-    std::vector< const ElementMark* > m_vElementMarkBuffers;
+    std::vector<std::unique_ptr<const ElementMark>> m_vElementMarkBuffers;
 
     /*
      * maintains a list of new ElementCollectors that will be created
