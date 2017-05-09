@@ -560,7 +560,7 @@ public:
     css::uno::Reference<css::beans::XPropertySet> appendTextSectionAfter(css::uno::Reference<css::text::XTextRange>& xBefore);
 
     /// AutoText import: each entry is placed in the separate section
-    css::uno::Reference<css::beans::XPropertySet> appendGlossaryEntry();
+    void appendGlossaryEntry();
     /// Remember where entry was started
     void setGlossaryEntryStart( css::uno::Reference<css::text::XTextRange>& xStart )
     {
