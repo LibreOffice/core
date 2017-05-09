@@ -2025,7 +2025,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
         nYPos = static_cast< sal_Int16 >( nYPos + nWWPgTop );
     }
 
-    FlySecur1( nWidth, rWW.bBorderLines );          // passen Raender ?
+    FlySecur1( nWidth, rWW.bBorderLines );          // Do the borders match ?
     FlySecur1( nHeight, rWW.bBorderLines );
 
 }
@@ -2060,7 +2060,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     Put( SwFormatHoriOrient(nXPos, pFS->eHAlign, pFS->eHRel, pFS->bToggelPos ));
     Put( SwFormatVertOrient( pFS->nYPos, pFS->eVAlign, pFS->eVRel ) );
 
-    if (pFS->nLeMgn || pFS->nRiMgn)     // Raender setzen
+    if (pFS->nLeMgn || pFS->nRiMgn)     // set borders
         Put(SvxLRSpaceItem(pFS->nLeMgn, pFS->nRiMgn, 0, 0, RES_LR_SPACE));
 
     if (pFS->nUpMgn || pFS->nLoMgn)
@@ -2490,7 +2490,7 @@ void SwWW8ImplReader::StopApo()
     {
         if (!m_xSFlyPara->pMainTextPos)
         {
-            OSL_ENSURE( m_xSFlyPara->pMainTextPos, "StopApo: pMainTextPos ist 0" );
+            OSL_ENSURE( m_xSFlyPara->pMainTextPos, "StopApo: pMainTextPos is 0" );
             return;
         }
 
@@ -4980,11 +4980,11 @@ void SwWW8ImplReader::Read_WidowControl( sal_uInt16, const sal_uInt8* pData, sho
     {
         sal_uInt8 nL = ( *pData & 1 ) ? 2 : 0;
 
-        NewAttr( SvxWidowsItem( nL, RES_PARATR_WIDOWS ) );     // Aus -> nLines = 0
+        NewAttr( SvxWidowsItem( nL, RES_PARATR_WIDOWS ) );     // Off -> nLines = 0
         NewAttr( SvxOrphansItem( nL, RES_PARATR_ORPHANS ) );
 
         if( m_pAktColl && m_pStyles )           // Style-Def ?
-            m_pStyles->bWidowsChanged = true; // merken zur Simulation
+            m_pStyles->bWidowsChanged = true; // save for simulation
                                             // Default-Widows
     }
 }
@@ -5063,7 +5063,7 @@ void SwWW8ImplReader::Read_BreakBefore( sal_uInt16, const sal_uInt8* pData, shor
 
 void SwWW8ImplReader::Read_ApoPPC( sal_uInt16, const sal_uInt8* pData, short )
 {
-    if (m_pAktColl && m_nAktColl < m_vColl.size()) // only for Styledef, sonst anders geloest
+    if (m_pAktColl && m_nAktColl < m_vColl.size()) // only for Styledef, otherwise solved differently
     {
         SwWW8StyInf& rSI = m_vColl[m_nAktColl];
         if (!rSI.m_xWWFly)
@@ -5122,11 +5122,11 @@ bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
     return bRet;
 }
 
-// Seiten - Attribute werden nicht mehr als Attribute gehandhabt
-//  ( ausser OLST )
+// page attribute won't be used as attribute anymore
+// ( except OLST )
 long SwWW8ImplReader::ImportExtSprm(WW8PLCFManResult* pRes)
 {
-    // Arrays zum Lesen der erweiterten ( selbstdefinierten ) SPRMs
+    // array for reading of the extended ( self-defined ) SPRMs
     typedef long (SwWW8ImplReader:: *FNReadRecordExt)(WW8PLCFManResult*);
 
     static const FNReadRecordExt aWwSprmTab[] =
@@ -5172,9 +5172,9 @@ void SwWW8ImplReader::EndExtSprm(sal_uInt16 nSprmId)
         (this->*aWwSprmTab[nIdx])();
 }
 
-// Arrays zum Lesen der SPRMs
+// arrays for reading the SPRMs
 
-// Funktion zum Einlesen von Sprms. Par1: SprmId
+// function for reading of SPRMs. Par1: SprmId
 typedef void (SwWW8ImplReader:: *FNReadRecord)( sal_uInt16, const sal_uInt8*, short );
 
 struct SprmReadInfo
@@ -5194,8 +5194,8 @@ const wwSprmDispatcher *GetWW2SprmDispatcher()
 {
     static SprmReadInfo aSprms[] =
     {
-          {0, nullptr},                                    // "0" Default bzw. Error
-                                                     //wird uebersprungen! ,
+          {0, nullptr},                              // "0" default resp. error
+                                                     // will be skipped! ,
           {2, &SwWW8ImplReader::Read_StyleCode},     //"sprmPIstd",  pap.istd
                                                      //(style code)
           {3, nullptr},                                    //"sprmPIstdPermute", pap.istd
@@ -5350,8 +5350,8 @@ const wwSprmDispatcher *GetWW6SprmDispatcher()
 {
     static SprmReadInfo aSprms[] =
     {
-          {0, nullptr},                                    // "0" Default bzw. Error
-                                                     //wird uebersprungen! ,
+          {0, nullptr},                              // "0" default resp. error
+                                                     // will be skipped!
           {2, &SwWW8ImplReader::Read_StyleCode},     //"sprmPIstd",  pap.istd
                                                      //(style code)
           {3, nullptr},                                    //"sprmPIstdPermute", pap.istd
@@ -5712,7 +5712,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
 {
     static SprmReadInfo aSprms[] =
     {
-        {0,      nullptr},                                 // "0" Default bzw. Error
+        {0,      nullptr},                                 // "0" default resp. error
 
         {0x4600, &SwWW8ImplReader::Read_StyleCode},  //"sprmPIstd" pap.istd;istd
                                                      //(style code);short;
@@ -6300,7 +6300,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
     return &aSprmSrch;
 }
 
-//      Hilfsroutinen : SPRM finden
+//      helper routines : find SPRM
 
 const SprmReadInfo& SwWW8ImplReader::GetSprmReadInfo(sal_uInt16 nId) const
 {
@@ -6326,7 +6326,7 @@ const SprmReadInfo& SwWW8ImplReader::GetSprmReadInfo(sal_uInt16 nId) const
     return *pFound;
 }
 
-//      Hilfsroutinen : SPRMs
+//      helper routines : SPRMs
 
 void SwWW8ImplReader::EndSprm( sal_uInt16 nId )
 {
