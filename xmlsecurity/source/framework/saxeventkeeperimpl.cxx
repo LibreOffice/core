@@ -437,39 +437,39 @@ void SAXEventKeeperImpl::smashBufferNode(
     {
         BufferNode* pParent = const_cast<BufferNode*>(pBufferNode->getParent());
 
-            /*
-             * delete the XML data
-             */
+        /*
+         * delete the XML data
+         */
         if (pParent == m_pRootBufferNode)
         {
             bool bIsNotBlocking = (m_pCurrentBlockingBufferNode == nullptr);
             bool bIsBlockInside = false;
             bool bIsBlockingAfterward = false;
 
-                /*
-                 * If this is a blocker, then remove any out-element data
-                 * which caused by blocking. The removal process will stop
-                 * at the next blocker to avoid removing any useful data.
-                 */
+            /*
+             * If this is a blocker, then remove any out-element data
+             * which caused by blocking. The removal process will stop
+             * at the next blocker to avoid removing any useful data.
+             */
             if (bClearRoot)
             {
                 cssu::Sequence< cssu::Reference< cssxw::XXMLElementWrapper > >
                     aChildElements = collectChildWorkingElement(m_pRootBufferNode);
 
-                    /*
-                     * the clearUselessData only clearup the content in the
-                     * node, not the node itself.
-                     */
+                /*
+                 * the clearUselessData only clearup the content in the
+                 * node, not the node itself.
+                 */
                 m_xXMLDocument->clearUselessData(m_pRootBufferNode->getXMLElement(),
                     aChildElements,
                     bIsNotBlocking?(nullptr):
                                    (m_pCurrentBlockingBufferNode->getXMLElement()));
 
-                    /*
-                     * remove the node if it is empty, then if its parent is also
-                     * empty, remove it, then if the next parent is also empty,
-                     * remove it,..., until parent become null.
-                     */
+                /*
+                 * remove the node if it is empty, then if its parent is also
+                 * empty, remove it, then if the next parent is also empty,
+                 * remove it,..., until parent become null.
+                 */
                 m_xXMLDocument->collapse( m_pRootBufferNode->getXMLElement() );
             }
 
@@ -507,20 +507,20 @@ void SAXEventKeeperImpl::smashBufferNode(
                 cssu::Sequence< cssu::Reference< cssxw::XXMLElementWrapper > >
                     aChildElements = collectChildWorkingElement(pBufferNode);
 
-                    /*
-                     * the clearUselessData only clearup the content in the
-                     * node, not the node itself.
-                     */
+                /*
+                 * the clearUselessData only clearup the content in the
+                 * node, not the node itself.
+                 */
                 m_xXMLDocument->clearUselessData(pBufferNode->getXMLElement(),
                     aChildElements,
                     bIsBlockInside?(m_pCurrentBlockingBufferNode->getXMLElement()):
                                (nullptr));
 
-                    /*
-                     * remove the node if it is empty, then if its parent is also
-                     * empty, remove it, then if the next parent is also empty,
-                     * remove it,..., until parent become null.
-                     */
+                /*
+                 * remove the node if it is empty, then if its parent is also
+                 * empty, remove it, then if the next parent is also empty,
+                 * remove it,..., until parent become null.
+                 */
                 m_xXMLDocument->collapse( pBufferNode->getXMLElement() );
             }
         }
@@ -650,8 +650,8 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
 
                 cssxc::sax::ElementMarkPriority nPriority = pElementCollector->getPriority();
                 /*
-                     * Delete the EC from the buffer node.
-                     */
+                 * Delete the EC from the buffer node.
+                 */
                 BufferNode* pBufferNode = pElementCollector->getBufferNode();
                 pBufferNode->removeElementCollector(pElementCollector);
 
@@ -678,34 +678,34 @@ void SAXEventKeeperImpl::releaseElementMarkBuffer()
              * it is a Blocker
              */
             {
-                    /*
-                     * Delete the TH from the buffer node.
-                     */
+                /*
+                 * Delete the TH from the buffer node.
+                 */
                 BufferNode *pBufferNode = pElementMark->getBufferNode();
                 pBufferNode->setBlocker(nullptr);
 
-                    /*
-                     * If there is a following handler and no blocking now, then
-                     * forward this event
-                     */
+                /*
+                 * If there is a following handler and no blocking now, then
+                 * forward this event
+                 */
                 if (m_pCurrentBlockingBufferNode == pBufferNode)
                 {
-                        /*
-                         * Before forwarding, the next blocking point needs to be
-                         * found.
-                         */
+                    /*
+                     * Before forwarding, the next blocking point needs to be
+                     * found.
+                     */
                     m_pCurrentBlockingBufferNode = findNextBlockingBufferNode(pBufferNode);
 
-                        /*
-                         * Forward the blocked events between these two STHs.
-                         */
-                           if (m_xNextHandler.is())
-                           {
-                               BufferNode* pTempCurrentBufferNode = m_pCurrentBufferNode;
-                               BufferNode* pTempCurrentBlockingBufferNode = m_pCurrentBlockingBufferNode;
+                    /*
+                     * Forward the blocked events between these two STHs.
+                     */
+                    if (m_xNextHandler.is())
+                    {
+                        BufferNode* pTempCurrentBufferNode = m_pCurrentBufferNode;
+                        BufferNode* pTempCurrentBlockingBufferNode = m_pCurrentBlockingBufferNode;
 
-                               m_pCurrentBufferNode = pBufferNode;
-                               m_pCurrentBlockingBufferNode = nullptr;
+                        m_pCurrentBufferNode = pBufferNode;
+                        m_pCurrentBlockingBufferNode = nullptr;
 
                         m_bIsForwarding = true;
 
@@ -822,9 +822,9 @@ sal_Int32 SAXEventKeeperImpl::createElementCollector(
 
     m_vElementMarkBuffers.push_back( pElementCollector );
 
-        /*
-         * All the new EC to initial EC array.
-         */
+    /*
+     * All the new EC to initial EC array.
+     */
     m_vNewElementCollectors.push_back( pElementCollector );
 
     return nId;
@@ -913,7 +913,7 @@ void SAL_CALL SAXEventKeeperImpl::setElement(
             BufferNode* pBufferNode = pElementMark->getBufferNode();
             if (pBufferNode != nullptr)
             {
-                    bool bIsCurrent = m_xXMLDocument->isCurrent(pBufferNode->getXMLElement());
+                bool bIsCurrent = m_xXMLDocument->isCurrent(pBufferNode->getXMLElement());
                 pBufferNode->setXMLElement(aElement);
 
                 if (bIsCurrent)
@@ -1035,10 +1035,10 @@ void SAL_CALL SAXEventKeeperImpl::startElement(
     const OUString& aName,
     const cssu::Reference< cssxs::XAttributeList >& xAttribs )
 {
-        /*
-         * If there is a following handler and no blocking now, then
-         * forward this event
-         */
+    /*
+     * If there is a following handler and no blocking now, then
+     * forward this event
+     */
     if ((m_pCurrentBlockingBufferNode == nullptr) &&
         (m_xNextHandler.is()) &&
         (!m_bIsForwarding) &&
@@ -1046,11 +1046,11 @@ void SAL_CALL SAXEventKeeperImpl::startElement(
     {
         m_xNextHandler->startElement(aName, xAttribs);
     }
-        /*
-         * If not forwarding, buffer this startElement.
-         */
-           if (!m_bIsForwarding)
-           {
+    /*
+     * If not forwarding, buffer this startElement.
+     */
+    if (!m_bIsForwarding)
+    {
         sal_Int32 nLength = xAttribs->getLength();
         cssu::Sequence< cssxcsax::XMLAttribute > aAttributes (nLength);
 
@@ -1064,20 +1064,20 @@ void SAL_CALL SAXEventKeeperImpl::startElement(
     }
 
     BufferNode* pBufferNode = addNewElementMarkBuffers();
-        if (pBufferNode != nullptr)
-        {
+    if (pBufferNode != nullptr)
+    {
         setCurrentBufferNode(pBufferNode);
     }
 }
 
 void SAL_CALL SAXEventKeeperImpl::endElement( const OUString& aName )
 {
-        bool bIsCurrent = m_xXMLDocument->isCurrent(m_pCurrentBufferNode->getXMLElement());
+    bool bIsCurrent = m_xXMLDocument->isCurrent(m_pCurrentBufferNode->getXMLElement());
 
-        /*
-         * If there is a following handler and no blocking now, then
-         * forward this event
-         */
+    /*
+     * If there is a following handler and no blocking now, then
+     * forward this event
+     */
     if ((m_pCurrentBlockingBufferNode == nullptr) &&
         (m_xNextHandler.is()) &&
         (!m_bIsForwarding))
@@ -1099,7 +1099,7 @@ void SAL_CALL SAXEventKeeperImpl::endElement( const OUString& aName )
         * the current buffer node is waiting for the current element,
         * then let it notify.
         */
-           if (bIsCurrent && (m_pCurrentBufferNode != m_pRootBufferNode))
+        if (bIsCurrent && (m_pCurrentBufferNode != m_pRootBufferNode))
         {
             BufferNode* pOldCurrentBufferNode = m_pCurrentBufferNode;
             m_pCurrentBufferNode = const_cast<BufferNode*>(m_pCurrentBufferNode->getParent());

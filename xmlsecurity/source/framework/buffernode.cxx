@@ -614,30 +614,30 @@ const BufferNode* BufferNode::getNextNodeByTreeOrder() const
  *  4. otherwise, no "next" node exists.
  ******************************************************************************/
 {
-        /*
-         * If this buffer node has m_vChildren, then return the first
-         * child.
-         */
+    /*
+     * If this buffer node has m_vChildren, then return the first
+     * child.
+     */
     if (hasChildren())
     {
         return getFirstChild();
     }
 
-        /*
-         * Otherwise, it this buffer node has a following sibling,
-         * then return that sibling.
-         */
+    /*
+     * Otherwise, it this buffer node has a following sibling,
+     * then return that sibling.
+     */
     BufferNode* pNextSibling = const_cast<BufferNode*>(getNextSibling());
     if (pNextSibling != nullptr)
     {
         return pNextSibling;
     }
 
-        /*
-         * Otherwise, it this buffer node has parent, then return
-         * its parent's following sibling.
-         */
-        BufferNode* pNode = const_cast<BufferNode*>(this);
+    /*
+     * Otherwise, it this buffer node has parent, then return
+     * its parent's following sibling.
+     */
+    BufferNode* pNode = const_cast<BufferNode*>(this);
     BufferNode* pParent;
     BufferNode* pNextSiblingParent = nullptr;
 
@@ -655,7 +655,7 @@ const BufferNode* BufferNode::getNextNodeByTreeOrder() const
         }
         pNode = pParent;
 
-    }while (pNextSiblingParent == nullptr);
+    } while (pNextSiblingParent == nullptr);
 
     return pNextSiblingParent;
 }
