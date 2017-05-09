@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_11b7503a",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5125,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2017-05-09T07:59:03Z",
+      "side": 1,
+      "message": "My German is poor, but in this context isn\u0027t seiten more likly to be page/pages ? i.e. page attributes",
+      "revId": "664c9b91ecd05e8a07103ad79c495e7defae35a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
