@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_71441474",
+        "filename": "include/formula/tokenarray.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-09T17:40:09Z",
+      "side": 1,
+      "message": "should probably change the name to vCode or mvCode because it\u0027s not a pointer anymore",
+      "revId": "355c2667c4f831001ae91082c25f41ac3a76553b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_51363804",
+        "filename": "include/formula/tokenarray.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-09T17:40:09Z",
+      "side": 1,
+      "message": "you can drop the nLen field, since a vector already stores it\u0027s own length",
+      "revId": "355c2667c4f831001ae91082c25f41ac3a76553b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_9149808e",
+        "filename": "include/formula/tokenarray.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-09T17:40:09Z",
+      "side": 1,
+      "message": "this should probably be renamed, and should return a\n   FormulaTokenPtrVector const \u0026\nsince we are no longer storing an array",
+      "revId": "355c2667c4f831001ae91082c25f41ac3a76553b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_713b34ec",
+        "filename": "include/formula/tokenarray.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-09T17:40:09Z",
+      "side": 1,
+      "message": "this can just return\n    pCode.size()",
+      "revId": "355c2667c4f831001ae91082c25f41ac3a76553b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b15e7c43",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3863,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-09T17:40:09Z",
+      "side": 1,
+      "message": "this \"if\" block is now useless because the pointers will never be nullptr",
+      "revId": "355c2667c4f831001ae91082c25f41ac3a76553b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_d15b0853",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-09T17:40:09Z",
+      "side": 1,
+      "message": "pCode.data()",
+      "revId": "355c2667c4f831001ae91082c25f41ac3a76553b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_f1580459",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1826,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-09T17:40:09Z",
+      "side": 1,
+      "message": "you need a \n     p-\u003epCode.resize(nLen)\nbefore this loop",
+      "revId": "355c2667c4f831001ae91082c25f41ac3a76553b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_11567029",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2054,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-09T17:40:09Z",
+      "side": 1,
+      "message": "if (pCode.empty() || !nLen)",
+      "revId": "355c2667c4f831001ae91082c25f41ac3a76553b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_3131ac0c",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3286,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-09T17:40:09Z",
+      "side": 1,
+      "message": "here and elsewhere you can use for range loops:\n   for (auto p : pCode)",
+      "revId": "355c2667c4f831001ae91082c25f41ac3a76553b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
