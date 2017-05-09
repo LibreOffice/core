@@ -36,6 +36,8 @@
 #include "sc.hrc"
 #endif
 
+using namespace formula;
+
 /* Following assumptions are made:
  * - OpCodes not specified at all will have at least one and only parameters of
  *   type Value, no check is done on the count of parameters => no Bounds type
@@ -291,7 +293,7 @@ void ScParameterClassification::Init()
                         pRun->aData.nParam[CommonData::nMaxParams-1] != Bounds)
                     pRun->nMinParams = CommonData::nMaxParams;
             }
-            for (ScParameterClassification::Type & j : pRun->aData.nParam)
+            for (formula::ParamClass & j : pRun->aData.nParam)
             {
                 if ( j == ForceArray || j == ReferenceOrForceArray )
                 {
@@ -313,7 +315,7 @@ void ScParameterClassification::Exit()
     pData = nullptr;
 }
 
-ScParameterClassification::Type ScParameterClassification::GetParameterType(
+formula::ParamClass ScParameterClassification::GetParameterType(
         const formula::FormulaToken* pToken, sal_uInt16 nParameter)
 {
     OpCode eOp = pToken->GetOpCode();
@@ -331,7 +333,7 @@ ScParameterClassification::Type ScParameterClassification::GetParameterType(
     if ( 0 <= (short)eOp && eOp <= SC_OPCODE_LAST_OPCODE_ID )
     {
         sal_uInt8 nRepeat;
-        Type eType;
+        formula::ParamClass eType;
         if ( nParameter < CommonData::nMaxParams )
             eType = pData[eOp].aData.nParam[nParameter];
         else if ( (nRepeat = pData[eOp].aData.nRepeatLast) > 0 )
@@ -351,11 +353,10 @@ ScParameterClassification::Type ScParameterClassification::GetParameterType(
     return Unknown;
 }
 
-ScParameterClassification::Type
-ScParameterClassification::GetExternalParameterType( const formula::FormulaToken* pToken,
+formula::ParamClass ScParameterClassification::GetExternalParameterType( const formula::FormulaToken* pToken,
         sal_uInt16 nParameter)
 {
-    Type eRet = Unknown;
+    formula::ParamClass eRet = Unknown;
     // similar to ScInterpreter::ScExternal()
     OUString aFuncName = ScGlobal::pCharClass->uppercase( pToken->GetExternal());
     {
@@ -561,7 +562,7 @@ void ScParameterClassification::GenerateDocumentation()
             {
                 if ( j > 0 )
                     aStr.append(',');
-                Type eType = GetParameterType( &aToken, j);
+                formula::ParamClass eType = GetParameterType( &aToken, j);
                 switch ( eType )
                 {
                     case Value :

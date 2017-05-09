@@ -1418,7 +1418,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                 case svMatrix:
                 {
                     if ( ScParameterClassification::GetParameterType( pCur, nParams - i)
-                            == ScParameterClassification::Value )
+                            == formula::ParamClass::Value )
                     {   // only if single value expected
                         ScConstMatrixRef pMat = p->GetMatrix();
                         if ( !pMat )
@@ -1437,16 +1437,15 @@ bool ScInterpreter::ConvertMatrixParameters()
                 break;
                 case svDoubleRef:
                 {
-                    ScParameterClassification::Type eType =
-                        ScParameterClassification::GetParameterType( pCur, nParams - i);
-                    if ( eType != ScParameterClassification::Reference &&
-                            eType != ScParameterClassification::ReferenceOrForceArray &&
+                    formula::ParamClass eType = ScParameterClassification::GetParameterType( pCur, nParams - i);
+                    if ( eType != formula::ParamClass::Reference &&
+                            eType != formula::ParamClass::ReferenceOrForceArray &&
                             // For scalar Value: convert to Array/JumpMatrix
                             // only if in array formula context, else (function
                             // has ForceArray or ReferenceOrForceArray
                             // parameter *somewhere else*) pick a normal
                             // position dependent implicit intersection later.
-                            (eType != ScParameterClassification::Value || bMatrixFormula || pCur->IsInForceArray()))
+                            (eType != formula::ParamClass::Value || bMatrixFormula || pCur->IsInForceArray()))
                     {
                         SCCOL nCol1, nCol2;
                         SCROW nRow1, nRow2;
@@ -1458,7 +1457,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                                 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
                         if (pMat)
                         {
-                            if ( eType == ScParameterClassification::Value )
+                            if ( eType == formula::ParamClass::Value )
                             {   // only if single value expected
                                 if ( nJumpCols < static_cast<SCSIZE>(nCol2 - nCol1 + 1) )
                                     nJumpCols = static_cast<SCSIZE>(nCol2 - nCol1 + 1);
@@ -1475,9 +1474,8 @@ bool ScInterpreter::ConvertMatrixParameters()
                 break;
                 case svExternalDoubleRef:
                 {
-                    ScParameterClassification::Type eType =
-                        ScParameterClassification::GetParameterType( pCur, nParams - i);
-                    if (eType == ScParameterClassification::Array)
+                    formula::ParamClass eType = ScParameterClassification::GetParameterType( pCur, nParams - i);
+                    if (eType == formula::ParamClass::Array)
                     {
                         sal_uInt16 nFileId = p->GetIndex();
                         OUString aTabName = p->GetString().getString();
@@ -1503,10 +1501,9 @@ bool ScInterpreter::ConvertMatrixParameters()
                 break;
                 case svRefList:
                 {
-                    ScParameterClassification::Type eType =
-                        ScParameterClassification::GetParameterType( pCur, nParams - i);
-                    if ( eType != ScParameterClassification::Reference &&
-                            eType != ScParameterClassification::ReferenceOrForceArray)
+                    formula::ParamClass eType = ScParameterClassification::GetParameterType( pCur, nParams - i);
+                    if ( eType != formula::ParamClass::Reference &&
+                            eType != formula::ParamClass::ReferenceOrForceArray)
                     {
                         // can't convert to matrix
                         SetError( FormulaError::NoValue);
