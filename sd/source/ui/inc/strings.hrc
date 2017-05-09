@@ -36,11 +36,6 @@
 #define STR_UNDO_DRAGDROP       (RID_APP_START+66)
 #define STR_INSERTGRAPHIC       (RID_APP_START+67)
 
-/*
- * Overlay effects: should remain open at the bottom,
- * as FadeEffectLB works with variable numbers
- * (Now via STR_EFFECT_...)
- */
 #define STR_DRAGTYPE_URL            (RID_APP_START+70)
 #define STR_DRAGTYPE_EMBEDDED       (RID_APP_START+71)
 #define STR_DRAGTYPE_LINK           (RID_APP_START+72)

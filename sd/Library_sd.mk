@@ -207,7 +207,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/dlg/animobjs \
 	sd/source/ui/dlg/assclass \
 	sd/source/ui/dlg/diactrl \
-	sd/source/ui/dlg/dlgctrls \
 	sd/source/ui/dlg/docprev \
 	sd/source/ui/dlg/filedlg \
 	sd/source/ui/dlg/gluectrl \

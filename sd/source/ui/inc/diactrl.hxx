@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_DIACTRL_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_DIACTRL_HXX
 
-#include "dlgctrls.hxx"
 #include <svl/intitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <svx/itemwin.hxx>

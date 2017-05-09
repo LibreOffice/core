@@ -688,10 +688,6 @@
                         generic-name="Open Document ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
                         
-    <glade-widget-class title="Fade Effect ListBox" name="sdlo-FadeEffectLB"
-                        generic-name="Fade Effect ListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
-
     <glade-widget-class title="Fill Type ListBox" name="svxlo-SvxFillTypeBox"
                         generic-name="Fill Type ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
