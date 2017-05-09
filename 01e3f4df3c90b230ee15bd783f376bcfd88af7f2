@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_917340b1",
+        "filename": "cui/source/options/optinet2.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-09T07:41:44Z",
+      "side": 1,
+      "message": "why re-read the data in the following lines?  ProxyHdl_Impl should already have loaded the relevant values when m_pProxyModeLB\u0027s value is changed  (and re-reading here means that for nSelPos \u003d\u003d 2, any modifications made to the individual proxy setting elements, m_pHttpProxyED etc., are lost)",
+      "revId": "01e3f4df3c90b230ee15bd783f376bcfd88af7f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
