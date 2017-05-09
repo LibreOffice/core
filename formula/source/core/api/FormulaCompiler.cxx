@@ -2552,18 +2552,18 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef& rCurr )
     if (!(rCurr->GetOpCode() != ocPush && (rCurr->GetType() == svByte || rCurr->GetType() == svJump)))
         return;
 
-    if (pCurrentFactorToken->IsInForceArray())
+    formula::ParamClass eType = pCurrentFactorToken->GetInForceArray();
+    if (eType == formula::ParamClass::ForceArray || eType == formula::ParamClass::ReferenceOrForceArray)
     {
-        rCurr->SetInForceArray( true);
+        rCurr->SetInForceArray( eType);
         return;
     }
 
     if (nCurrentFactorParam > 0)
     {
-        formula::ParamClass eType = GetForceArrayParameter( pCurrentFactorToken.get(),
-                static_cast<sal_uInt8>(nCurrentFactorParam - 1));
+        eType = GetForceArrayParameter( pCurrentFactorToken.get(), static_cast<sal_uInt8>(nCurrentFactorParam - 1));
         if (eType == ParamClass::ForceArray || eType == ParamClass::ReferenceOrForceArray)
-            rCurr->SetInForceArray( true);
+            rCurr->SetInForceArray( eType);
     }
 }
 

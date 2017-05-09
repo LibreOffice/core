@@ -30,6 +30,7 @@
 #include <formula/IFunctionDescription.hxx>
 #include <formula/opcode.hxx>
 #include <formula/types.hxx>
+#include <formula/paramclass.hxx>
 #include <osl/interlck.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -156,6 +157,8 @@ public:
     oslInterlockedCount GetRef() const       { return mnRefCnt; }
     OpCode              GetOpCode() const    { return eOp; }
 
+    bool                IsInForceArray() const;
+
     /**
         Dummy methods to avoid switches and casts where possible,
         the real token classes have to override the appropriate method[s].
@@ -165,16 +168,16 @@ public:
           which of course is 0 on non-functions. FormulaByteToken and ScExternal do
           override it.
 
-        - IsInForceArray() since also this is only used for operators and
-          functions and is false for other tokens.
+        - GetInForceArray() since also this is only used for operators and
+          functions and is ParamClass::Unknown for other tokens.
 
         Any other non-overridden method pops up an assertion.
      */
 
     virtual sal_uInt8           GetByte() const;
     virtual void                SetByte( sal_uInt8 n );
-    virtual bool                IsInForceArray() const;
-    virtual void                SetInForceArray( bool b );
+    virtual ParamClass          GetInForceArray() const;
+    virtual void                SetInForceArray( ParamClass c );
     virtual double              GetDouble() const;
     virtual double&             GetDoubleAsReference();
     virtual short               GetDoubleType() const;
@@ -236,30 +239,30 @@ class FORMULA_DLLPUBLIC FormulaByteToken : public FormulaToken
 {
 private:
             sal_uInt8           nByte;
-            bool                bIsInForceArray;
+            ParamClass          eInForceArray;
 protected:
-                                FormulaByteToken( OpCode e, sal_uInt8 n, StackVar v, bool b ) :
+                                FormulaByteToken( OpCode e, sal_uInt8 n, StackVar v, ParamClass c ) :
                                     FormulaToken( v,e ), nByte( n ),
-                                    bIsInForceArray( b ) {}
+                                    eInForceArray( c ) {}
 public:
-                                FormulaByteToken( OpCode e, sal_uInt8 n, bool b ) :
+                                FormulaByteToken( OpCode e, sal_uInt8 n, ParamClass c ) :
                                     FormulaToken( svByte,e ), nByte( n ),
-                                    bIsInForceArray( b ) {}
+                                    eInForceArray( c ) {}
                                 FormulaByteToken( OpCode e, sal_uInt8 n ) :
                                     FormulaToken( svByte,e ), nByte( n ),
-                                    bIsInForceArray( false ) {}
+                                    eInForceArray( ParamClass::Unknown ) {}
                                 FormulaByteToken( OpCode e ) :
                                     FormulaToken( svByte,e ), nByte( 0 ),
-                                    bIsInForceArray( false ) {}
+                                    eInForceArray( ParamClass::Unknown ) {}
                                 FormulaByteToken( const FormulaByteToken& r ) :
                                     FormulaToken( r ), nByte( r.nByte ),
-                                    bIsInForceArray( r.bIsInForceArray ) {}
+                                    eInForceArray( r.eInForceArray ) {}
 
     virtual FormulaToken*       Clone() const override { return new FormulaByteToken(*this); }
     virtual sal_uInt8           GetByte() const override;
     virtual void                SetByte( sal_uInt8 n ) override;
-    virtual bool                IsInForceArray() const override;
-    virtual void                SetInForceArray( bool b ) override;
+    virtual ParamClass          GetInForceArray() const override;
+    virtual void                SetInForceArray( ParamClass c ) override;
     virtual bool                operator==( const FormulaToken& rToken ) const override;
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaByteToken )
@@ -274,7 +277,7 @@ private:
             FormulaTokenRef     pOrigToken;
 public:
                                 FormulaFAPToken( OpCode e, sal_uInt8 n, FormulaToken* p ) :
-                                    FormulaByteToken( e, n, svFAP, false ),
+                                    FormulaByteToken( e, n, svFAP, ParamClass::Unknown ),
                                     pOrigToken( p ) {}
                                 FormulaFAPToken( const FormulaFAPToken& r ) :
                                     FormulaByteToken( r ), pOrigToken( r.pOrigToken ) {}
@@ -418,18 +421,18 @@ class FORMULA_DLLPUBLIC FormulaJumpToken : public FormulaToken
 private:
             std::unique_ptr<short[]>
                                 pJump;
-            bool                bIsInForceArray;
+            ParamClass          eInForceArray;
 public:
                                 FormulaJumpToken( OpCode e, short* p ) :
                                     FormulaToken( formula::svJump , e),
-                                    bIsInForceArray( false)
+                                    eInForceArray( ParamClass::Unknown)
                                 {
                                     pJump.reset( new short[ p[0] + 1 ] );
                                     memcpy( pJump.get(), p, (p[0] + 1) * sizeof(short) );
                                 }
                                 FormulaJumpToken( const FormulaJumpToken& r ) :
                                     FormulaToken( r ),
-                                    bIsInForceArray( r.bIsInForceArray)
+                                    eInForceArray( r.eInForceArray)
                                 {
                                     pJump.reset( new short[ r.pJump[0] + 1 ] );
                                     memcpy( pJump.get(), r.pJump.get(), (r.pJump[0] + 1) * sizeof(short) );
@@ -438,8 +441,8 @@ public:
     virtual short*              GetJump() const override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
     virtual FormulaToken*       Clone() const override { return new FormulaJumpToken(*this); }
-    virtual bool                IsInForceArray() const override;
-    virtual void                SetInForceArray( bool b ) override;
+    virtual ParamClass          GetInForceArray() const override;
+    virtual void                SetInForceArray( ParamClass c ) override;
 };
 
 

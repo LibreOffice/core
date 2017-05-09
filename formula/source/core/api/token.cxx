@@ -158,6 +158,12 @@ bool FormulaToken::IsRef() const
     return false;
 }
 
+bool FormulaToken::IsInForceArray() const
+{
+    ParamClass eParam = GetInForceArray();
+    return eParam == ParamClass::ForceArray || eParam == ParamClass::ReferenceOrForceArray;
+}
+
 bool FormulaToken::operator==( const FormulaToken& rToken ) const
 {
     // don't compare reference count!
@@ -178,13 +184,13 @@ void FormulaToken::SetByte( sal_uInt8 )
     SAL_WARN( "formula.core", "FormulaToken::SetByte: virtual dummy called" );
 }
 
-bool FormulaToken::IsInForceArray() const
+ParamClass FormulaToken::GetInForceArray() const
 {
     // ok to be called for any derived class
-    return false;
+    return ParamClass::Unknown;
 }
 
-void FormulaToken::SetInForceArray( bool )
+void FormulaToken::SetInForceArray( ParamClass )
 {
     SAL_WARN( "formula.core", "FormulaToken::SetInForceArray: virtual dummy called" );
 }
@@ -348,12 +354,12 @@ bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
 
 sal_uInt8   FormulaByteToken::GetByte() const           { return nByte; }
 void        FormulaByteToken::SetByte( sal_uInt8 n )    { nByte = n; }
-bool        FormulaByteToken::IsInForceArray() const    { return bIsInForceArray; }
-void        FormulaByteToken::SetInForceArray( bool b ) { bIsInForceArray = b; }
+ParamClass  FormulaByteToken::GetInForceArray() const    { return eInForceArray; }
+void        FormulaByteToken::SetInForceArray( ParamClass c ) { eInForceArray = c; }
 bool FormulaByteToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && nByte == r.GetByte() &&
-        bIsInForceArray == r.IsInForceArray();
+        eInForceArray == r.GetInForceArray();
 }
 
 
@@ -364,14 +370,14 @@ bool FormulaFAPToken::operator==( const FormulaToken& r ) const
 }
 
 
-short*  FormulaJumpToken::GetJump() const               { return pJump.get(); }
-bool    FormulaJumpToken::IsInForceArray() const        { return bIsInForceArray; }
-void    FormulaJumpToken::SetInForceArray( bool b )     { bIsInForceArray = b; }
+short*      FormulaJumpToken::GetJump() const                   { return pJump.get(); }
+ParamClass  FormulaJumpToken::GetInForceArray() const           { return eInForceArray; }
+void        FormulaJumpToken::SetInForceArray( ParamClass c )   { eInForceArray = c; }
 bool FormulaJumpToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && pJump[0] == r.GetJump()[0] &&
         memcmp( pJump.get()+1, r.GetJump()+1, pJump[0] * sizeof(short) ) == 0 &&
-        bIsInForceArray == r.IsInForceArray();
+        eInForceArray == r.GetInForceArray();
 }
 FormulaJumpToken::~FormulaJumpToken()
 {
@@ -1620,7 +1626,7 @@ FormulaToken* FormulaTokenArray::AddOpCode( OpCode eOp )
             }
             break;
         default:
-            pRet = new FormulaByteToken( eOp, 0, false );
+            pRet = new FormulaByteToken( eOp, 0, ParamClass::Unknown );
             break;
     }
     return Add( pRet );
@@ -1797,7 +1803,7 @@ bool FormulaStringToken::operator==( const FormulaToken& r ) const
 }
 
 FormulaStringOpToken::FormulaStringOpToken( OpCode e, const svl::SharedString& r ) :
-    FormulaByteToken( e, 0, svString, false ), maString( r ) {}
+    FormulaByteToken( e, 0, svString, ParamClass::Unknown ), maString( r ) {}
 
 FormulaStringOpToken::FormulaStringOpToken( const FormulaStringOpToken& r ) :
     FormulaByteToken( r ), maString( r.maString ) {}

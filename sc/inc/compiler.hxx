@@ -104,8 +104,8 @@ public:
     union {
         double       nValue;
         struct {
-            sal_uInt8   cByte;
-            bool        bIsInForceArray;
+            sal_uInt8           cByte;
+            formula::ParamClass eInForceArray;
         } sbyte;
         ScComplexRefData aRef;
         struct {
