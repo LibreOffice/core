@@ -15,7 +15,34 @@ namespace oox {
 
 enum class Relationship
 {
-    HYPERLINK
+    HYPERLINK,
+    PACKAGE,
+    HDPHOTO,
+    OLEOBJECT,
+    CHART,
+    IMAGE,
+    FONT,
+    STYLES,
+    FOOTNOTES,
+    ENDNOTES,
+    COMMENTS,
+    NUMBERING,
+    HEADER,
+    FOOTER,
+    FONTTABLE,
+    SETTINGS,
+    THEME,
+    GLOSSARYDOCUMENT,
+    CUSTOMXML,
+    CUSTOMXMLPROPS,
+    CONTROL,
+    ACTIVEXCONTROLBINARY,
+    OFFICEDOCUMENT,
+    DIAGRAMDATA,
+    DIAGRAMLAYOUT,
+    DIAGRAMQUICKSTYLE,
+    DIAGRAMCOLORS,
+    DIAGRAMDRAWING
 };
 
 OUString OOX_DLLPUBLIC getRelationship(Relationship eRelationship);
