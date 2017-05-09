@@ -85,7 +85,7 @@ Test::Test() : documentName(), pStream(nullptr)
     CloseHandle(hFile);
 
     HRESULT hr = CreateStreamOnHGlobal(hGlobal, TRUE, &pStream);
-    CPPUNIT_ASSERT_MESSAGE("FileStream: CreateStreamOnHGlobal failure.", hr == S_OK);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("FileStream: CreateStreamOnHGlobal failure.", S_OK, hr);
 }
 
 void Test::test_file_directory()
