@@ -10,7 +10,7 @@
 #ifndef INCLUDED_FPICKER_INC_BITMAPS_HRC
 #define INCLUDED_FPICKER_INC_BITMAPS_HRC
 
-#define BMP_FILEDLG_BTN_UP          "fpicker/res/fp010.png"
+#define BMP_FILEDLG_BTN_UP          "res/fp010.png"
 #define BMP_FILEDLG_CREATEFOLDER    "fpicker/res/fp014.png"
 #define BMP_FILEDLG_PLACE_LOCAL     "fpicker/res/fp015.png"
 #define BMP_FILEDLG_PLACE_REMOTE    "fpicker/res/fp016.png"
