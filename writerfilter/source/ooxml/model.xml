@@ -19006,9 +19006,8 @@
       <attribute name="val" tokenid="ooxml:CT_DocPartType_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_DocPartGallery" resource="Value">
-      <attribute name="val" tokenid="ooxml:CT_DocPartGallery_val" action="setValue"/>
-      <action name="start" action="setDefaultStringValue"/>
+    <resource name="CT_DocPartGallery" resource="Properties">
+        <attribute name="val" tokenid="ooxml:CT_DocPartGallery_val"/>
     </resource>
     <resource name="CT_DocPartName" resource="Properties">
       <attribute name="val" tokenid="ooxml:CT_DocPartName_val"/>
@@ -19065,9 +19064,10 @@
     <resource name="CT_DocPartPr" resource="Properties">
         <action name="start" action="startSectionGroup"/>
         <element name="name" tokenid="ooxml:CT_DocPartPr_name"/>
+        <element name="category" tokenid="ooxml:CT_DocPartPr_category"/>
     </resource>
-    <resource name="CT_DocPartName" resource="Properties">
-        <attribute name="val" tokenid="ooxml:CT_DocPartName_val"/>
+    <resource name="CT_DocPartCategory" resource="Properties">
+        <element name="gallery" tokenid="ooxml:CT_DocPartCategory_gallery"/>
     </resource>
     <resource name="document" resource="Stream"/>
     <resource name="glossaryDocument" resource="Stream"/>
