@@ -159,8 +159,7 @@ public:
     ///** Commits an event to all listeners. */
     virtual void commitEvent(
         sal_Int16 nEventId,
-        const css::uno::Any& rNewValue,
-        const css::uno::Any& rOldValue
+        const css::uno::Any& rNewValue
     ) = 0;
 
 protected:

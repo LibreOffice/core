@@ -43,10 +43,10 @@ private:
     void                ImpReadImageMap( SvStream& rIStm, size_t nCount, const OUString& );
 
     // Import/Export
-    void                ImpWriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const;
-    void                ImpWriteNCSA( SvStream& rOStm, const OUString& rBaseURL ) const;
-    sal_uLong           ImpReadCERN( SvStream& rOStm, const OUString& rBaseURL );
-    sal_uLong           ImpReadNCSA( SvStream& rOStm, const OUString& rBaseURL );
+    void                ImpWriteCERN( SvStream& rOStm ) const;
+    void                ImpWriteNCSA( SvStream& rOStm ) const;
+    sal_uLong           ImpReadCERN( SvStream& rOStm );
+    sal_uLong           ImpReadNCSA( SvStream& rOStm );
 
     void                ImpReadCERNLine( const OString& rLine, const OUString& rBaseURL );
     static Point        ImpReadCERNCoords( const char** ppStr );
@@ -108,8 +108,8 @@ public:
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 
     // Import/Export
-    void                Write ( SvStream& rOStm, const OUString& rBaseURL ) const;
-    void                Read( SvStream& rIStm, const OUString& rBaseURL );
+    void                Write ( SvStream& rOStm ) const;
+    void                Read( SvStream& rIStm );
 
     void                Write( SvStream& rOStm, sal_uLong nFormat ) const;
     sal_uLong           Read( SvStream& rIStm, sal_uLong nFormat );

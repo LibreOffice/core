@@ -222,7 +222,7 @@ protected:
 
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_COLLECTION,1);
-    SbxCollection( const OUString& rClassname );
+    SbxCollection();
     SbxCollection( const SbxCollection& );
     SbxCollection& operator=( const SbxCollection& );
     virtual SbxVariable* FindUserData( sal_uInt32 nUserData ) override;

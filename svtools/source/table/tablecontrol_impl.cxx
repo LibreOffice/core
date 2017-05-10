@@ -2432,7 +2432,7 @@ namespace svt { namespace table
     void TableControl_Impl::impl_commitAccessibleEvent( sal_Int16 const i_eventID, Any const & i_newValue )
     {
         if ( impl_isAccessibleAlive() )
-             m_pAccessibleTable->commitEvent( i_eventID, i_newValue, Any() );
+             m_pAccessibleTable->commitEvent( i_eventID, i_newValue );
     }
 
 
