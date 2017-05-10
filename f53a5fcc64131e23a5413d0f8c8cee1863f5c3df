@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_149d7e65",
+        "filename": "xmlsecurity/source/framework/saxeventkeeperimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-10T07:19:40Z",
+      "side": 1,
+      "message": "is this meant to be auto\u0026\u0026 ?",
+      "revId": "f53a5fcc64131e23a5413d0f8c8cee1863f5c3df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
