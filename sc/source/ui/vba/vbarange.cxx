@@ -4484,6 +4484,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
     if ( ( Field >>= nField )  )
     {
         bool bAll = false;
+        bool bAcceptCriteria2 = true;
 
         uno::Reference< sheet::XSheetFilterDescriptor2 > xDesc(
                 xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY );
@@ -4498,11 +4499,35 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
             if ( !bCritHasNumericValue )
             {
                 Criteria1 >>= sCriteria1;
-                sTabFilts[0].IsNumeric = bCritHasNumericValue;
-                if ( bHasCritValue && !sCriteria1.isEmpty() )
-                    lcl_setTableFieldsFromCriteria( sCriteria1, xDescProps, sTabFilts[0]  );
+                if ( sCriteria1.isEmpty() )
+                {
+                    uno::Sequence< OUString > aCriteria1;
+                    Criteria1 >>= aCriteria1;
+                    sal_uInt16 nLength = aCriteria1.getLength();
+                    if ( nLength )
+                    {
+                        // When sequence is provided for Criteria1 don't care about Criteria2
+                        bAcceptCriteria2 = false;
+
+                        sTabFilts.realloc( nLength );
+                        for ( sal_uInt16 i = 0; i < nLength; ++i )
+                        {
+                            lcl_setTableFieldsFromCriteria( aCriteria1[i], xDescProps, sTabFilts[i] );
+                            sTabFilts[i].Connection = sheet::FilterConnection_OR;
+                            sTabFilts[i].Field = (nField - 1);
+                        }
+                    }
+                    else
+                        bAll = true;
+                }
                 else
-                    bAll = true;
+                {
+                    sTabFilts[0].IsNumeric = bCritHasNumericValue;
+                    if ( bHasCritValue && !sCriteria1.isEmpty() )
+                        lcl_setTableFieldsFromCriteria( sCriteria1, xDescProps, sTabFilts[0]  );
+                    else
+                        bAll = true;
+                }
             }
             else // numeric
             {
@@ -4550,12 +4575,13 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
             }
 
         }
-        if ( !bAll )
+        if ( !bAll && bAcceptCriteria2 )
         {
             sTabFilts[0].Connection = sheet::FilterConnection_AND;
             sTabFilts[0].Field = (nField - 1);
 
             OUString sCriteria2;
+            uno::Sequence< OUString > aCriteria2;
             if ( Criteria2.hasValue() ) // there is a Criteria2
             {
                 sTabFilts.realloc(2);
@@ -4569,6 +4595,15 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
                         uno::Reference< beans::XPropertySet > xProps;
                         lcl_setTableFieldsFromCriteria( sCriteria2, xProps,  sTabFilts[1] );
                         sTabFilts[1].IsNumeric = false;
+                    }
+                }
+                else if ( Criteria2 >>= aCriteria2 )
+                {
+                    sal_uInt16 nLength = aCriteria2.getLength();
+                    if ( nLength )
+                    {
+                        // For compatibility use only the last value form the sequence
+                        lcl_setTableFieldsFromCriteria( aCriteria2[nLength - 1], xDescProps, sTabFilts[1] );
                     }
                 }
                 else // numeric
