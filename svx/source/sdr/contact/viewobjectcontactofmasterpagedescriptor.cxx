@@ -72,15 +72,15 @@ namespace sdr
                 rOwnerPage.GetWdt() - rOwnerPage.GetRgtBorder(), rOwnerPage.GetHgt() - rOwnerPage.GetLwrBorder());
 
             // Modify DisplayInfo for MasterPageContent collection; remember original layers and
-            // set combined LayerSet; set MasterPagePaint flag
-            const SetOfByte aRememberedLayers(rDisplayInfo.GetProcessLayers());
-            SetOfByte aPreprocessedLayers(aRememberedLayers);
+            // set combined SdrLayerIDSet; set MasterPagePaint flag
+            const SdrLayerIDSet aRememberedLayers(rDisplayInfo.GetProcessLayers());
+            SdrLayerIDSet aPreprocessedLayers(aRememberedLayers);
             aPreprocessedLayers &= rDescriptor.GetVisibleLayers();
             rDisplayInfo.SetProcessLayers(aPreprocessedLayers);
             rDisplayInfo.SetSubContentActive(true);
 
             // check layer visibility (traditionally was member of layer 1)
-            if(aPreprocessedLayers.IsSet(1))
+            if(aPreprocessedLayers.IsSet(SdrLayerID(1)))
             {
                 // hide PageBackground for special DrawModes; historical reasons
                 if(!GetObjectContact().isDrawModeGray() && !GetObjectContact().isDrawModeHighContrast())

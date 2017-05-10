@@ -1057,7 +1057,7 @@ void SwUndoInsertLabel::SetFlys( SwFrameFormat& rOldFly, SfxItemSet& rChgSet,
     }
 }
 
-void SwUndoInsertLabel::SetDrawObj( sal_uInt8 nLId )
+void SwUndoInsertLabel::SetDrawObj( SdrLayerID nLId )
 {
     if( LTYPE_DRAW == eType )
     {

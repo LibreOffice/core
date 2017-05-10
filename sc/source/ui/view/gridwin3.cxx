@@ -185,7 +185,7 @@ bool ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
     return false;
 }
 
-void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, sal_uLong nLayer )
+void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, SdrLayerID nLayer )
 {
     const ScViewOptions& rOpts = pViewData->GetOptions();
 
@@ -206,7 +206,7 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, sal_uLong nLayer )
             pDrView->setHideFormControl(!bDrawDraw);
         }
 
-        rOutputData.DrawSelectiveObjects((sal_uInt16)nLayer);
+        rOutputData.DrawSelectiveObjects(nLayer);
     }
 }
 

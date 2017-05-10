@@ -802,7 +802,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             if ( pSh )
                 pSh->InvalidateWindows( Frame() );
             const IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
-            const sal_uInt8 nId = GetFormat()->GetOpaque().GetValue() ?
+            const SdrLayerID nId = GetFormat()->GetOpaque().GetValue() ?
                              rIDDMA.GetHeavenId() :
                              rIDDMA.GetHellId();
             GetVirtDrawObj()->SetLayer( nId );
@@ -883,7 +883,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                     pSh->InvalidateWindows( Frame() );
 
                 const IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
-                const sal_uInt8 nId = static_cast<const SvxOpaqueItem*>(pNew)->GetValue() ?
+                const SdrLayerID nId = static_cast<const SvxOpaqueItem*>(pNew)->GetValue() ?
                                     rIDDMA.GetHeavenId() :
                                     rIDDMA.GetHellId();
                 GetVirtDrawObj()->SetLayer( nId );

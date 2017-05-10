@@ -23,40 +23,40 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <svx/svxdllapi.h>
+#include <svx/svdtypes.hxx>
 
 
 /*
-  Declaration of a static set type. The set can collect elements
-  from 0 to 255 and it takes always 32 Bytes.
+ Stores a bitfield of the layer values that have been set.
 */
 
-class SVX_DLLPUBLIC SetOfByte
+class SVX_DLLPUBLIC SdrLayerIDSet
 {
 protected:
     sal_uInt8 aData[32];
 
 public:
-    explicit SetOfByte(bool bInitVal = false)
+    explicit SdrLayerIDSet(bool bInitVal = false)
     {
         memset(aData, bInitVal ? 0xFF : 0x00, sizeof(aData));
     }
 
-    bool operator!=(const SetOfByte& rCmpSet) const
+    bool operator!=(const SdrLayerIDSet& rCmpSet) const
     {
         return (memcmp(aData, rCmpSet.aData, sizeof(aData))!=0);
     }
 
-    void Set(sal_uInt8 a)
+    void Set(SdrLayerID a)
     {
-        aData[a/8] |= 1<<a%8;
+        aData[sal_uInt8(a)/8] |= 1 << (sal_uInt8(a) % 8);
     }
 
-    void Clear(sal_uInt8 a)
+    void Clear(SdrLayerID a)
     {
-        aData[a/8] &= ~(1<<a%8);
+        aData[sal_uInt8(a)/8] &= ~(1 << (sal_uInt8(a) % 8));
     }
 
-    void Set(sal_uInt8 a, bool b)
+    void Set(SdrLayerID a, bool b)
     {
         if(b)
             Set(a);
@@ -64,9 +64,9 @@ public:
             Clear(a);
     }
 
-    bool IsSet(sal_uInt8 a) const
+    bool IsSet(SdrLayerID a) const
     {
-        return (aData[a/8] & 1<<a%8) != 0;
+        return (aData[sal_uInt8(a)/8] & 1<<sal_uInt8(a)%8) != 0;
     }
 
     void SetAll()
@@ -81,7 +81,7 @@ public:
 
     bool IsEmpty() const;
 
-    void operator&=(const SetOfByte& r2ndSet);
+    void operator&=(const SdrLayerIDSet& r2ndSet);
 
     // initialize this set with a uno sequence of sal_Int8
     void PutValue(const css::uno::Any & rAny);

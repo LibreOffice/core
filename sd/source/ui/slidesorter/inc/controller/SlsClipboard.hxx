@@ -92,14 +92,14 @@ public:
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow,
         sal_uInt16 nPage,
-        sal_uInt16 nLayer );
+        SdrLayerID nLayer );
 
     sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow,
         sal_uInt16 nPage,
-        sal_uInt16 nLayer );
+        SdrLayerID nLayer );
 
     void Abort();
 
@@ -215,7 +215,7 @@ private:
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow,
         sal_uInt16 nPage,
-        sal_uInt16 nLayer);
+        SdrLayerID nLayer);
 
     /** Return whether the insertion defined by the transferable is
         trivial, ie would not change either source nor target document.

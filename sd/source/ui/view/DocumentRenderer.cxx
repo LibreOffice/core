@@ -292,8 +292,8 @@ namespace {
         SdPage& rPage,
         View* pView,
         const bool bPrintMarkedOnly,
-        const SetOfByte& rVisibleLayers,
-        const SetOfByte& rPrintableLayers)
+        const SdrLayerIDSet& rVisibleLayers,
+        const SdrLayerIDSet& rPrintableLayers)
     {
         rPrintView.ShowSdrPage(&rPage);
 
@@ -698,8 +698,8 @@ namespace {
             ViewShell& rViewShell,
             View* pView,
             DrawView& rPrintView,
-            const SetOfByte& rVisibleLayers,
-            const SetOfByte& rPrintableLayers) const = 0;
+            const SdrLayerIDSet& rVisibleLayers,
+            const SdrLayerIDSet& rPrintableLayers) const = 0;
 
         DrawModeFlags GetDrawMode() const { return mnDrawMode; }
         Orientation GetOrientation() const { return meOrientation; }
@@ -744,8 +744,8 @@ namespace {
             ViewShell& rViewShell,
             View* pView,
             DrawView& rPrintView,
-            const SetOfByte& rVisibleLayers,
-            const SetOfByte& rPrintableLayers) const override
+            const SdrLayerIDSet& rVisibleLayers,
+            const SdrLayerIDSet& rPrintableLayers) const override
         {
             (void)rViewShell;
             SdPage* pPageToPrint = rDocument.GetSdPage(mnPageIndex, mePageKind);
@@ -795,8 +795,8 @@ namespace {
             ViewShell& rViewShell,
             View* pView,
             DrawView& rPrintView,
-            const SetOfByte& rVisibleLayers,
-            const SetOfByte& rPrintableLayers) const override
+            const SdrLayerIDSet& rVisibleLayers,
+            const SdrLayerIDSet& rPrintableLayers) const override
         {
             (void)rViewShell;
             SdPage* pPageToPrint = rDocument.GetSdPage(mnPageIndex, mePageKind);
@@ -878,8 +878,8 @@ namespace {
             ViewShell& rViewShell,
             View* pView,
             DrawView& rPrintView,
-            const SetOfByte& rVisibleLayers,
-            const SetOfByte& rPrintableLayers) const override
+            const SdrLayerIDSet& rVisibleLayers,
+            const SdrLayerIDSet& rPrintableLayers) const override
         {
             (void)rViewShell;
             MapMode aMap (maMap);
@@ -948,8 +948,8 @@ namespace {
             ViewShell& rViewShell,
             View* pView,
             DrawView& rPrintView,
-            const SetOfByte& rVisibleLayers,
-            const SetOfByte& rPrintableLayers) const override
+            const SdrLayerIDSet& rVisibleLayers,
+            const SdrLayerIDSet& rPrintableLayers) const override
         {
             SdPage& rHandoutPage (*rDocument.GetSdPage(0, PageKind::Handout));
 
@@ -1094,8 +1094,8 @@ namespace {
             ViewShell& rViewShell,
             View* pView,
             DrawView& rPrintView,
-            const SetOfByte& rVisibleLayers,
-            const SetOfByte& rPrintableLayers) const override
+            const SdrLayerIDSet& rVisibleLayers,
+            const SdrLayerIDSet& rPrintableLayers) const override
         {
             (void)rViewShell;
             (void)pView;

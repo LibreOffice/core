@@ -48,7 +48,7 @@ class SdrModel;
 class SfxItemPool;
 class SdrPageView;
 class SdrLayerAdmin;
-class SetOfByte;
+class SdrLayerIDSet;
 class Color;
 class SfxStyleSheet;
 class SvxUnoDrawPagesAccess;
@@ -405,7 +405,7 @@ protected:
     // new MasterPageDescriptorVector
     sdr::MasterPageDescriptor*                    mpMasterPageDescriptor;
 
-    SetOfByte           aPrefVisiLayers;
+    SdrLayerIDSet           aPrefVisiLayers;
     sal_uInt16          nPageNum;
 
     bool                mbMaster : 1;               // flag if this is a MasterPage
@@ -469,8 +469,8 @@ public:
     void TRG_SetMasterPage(SdrPage& rNew);
     void TRG_ClearMasterPage();
     SdrPage& TRG_GetMasterPage() const;
-    const SetOfByte& TRG_GetMasterPageVisibleLayers() const;
-    void TRG_SetMasterPageVisibleLayers(const SetOfByte& rNew);
+    const SdrLayerIDSet& TRG_GetMasterPageVisibleLayers() const;
+    void TRG_SetMasterPageVisibleLayers(const SdrLayerIDSet& rNew);
     sdr::contact::ViewContact& TRG_GetMasterPageDescriptorViewContact() const;
 
 protected:

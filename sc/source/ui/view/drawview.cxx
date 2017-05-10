@@ -209,7 +209,7 @@ void ScDrawView::InvalidateDrawTextAttrs()
     rBindings.Invalidate( SID_ALIGN_ANY_JUSTIFIED );
 }
 
-void ScDrawView::SetMarkedToLayer( sal_uInt8 nLayerNo )
+void ScDrawView::SetMarkedToLayer( SdrLayerID nLayerNo )
 {
     if (AreObjectsMarked())
     {
@@ -224,7 +224,7 @@ void ScDrawView::SetMarkedToLayer( sal_uInt8 nLayerNo )
             SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
             if ( dynamic_cast<const SdrUnoObj*>( pObj) ==  nullptr && (pObj->GetLayer() != SC_LAYER_INTERN) )
             {
-                AddUndo( new SdrUndoObjectLayerChange( *pObj, pObj->GetLayer(), (SdrLayerID)nLayerNo) );
+                AddUndo( new SdrUndoObjectLayerChange( *pObj, pObj->GetLayer(), nLayerNo) );
                 pObj->SetLayer( nLayerNo );
             }
         }

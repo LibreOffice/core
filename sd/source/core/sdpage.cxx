@@ -1691,13 +1691,13 @@ void SdPage::NbcInsertObject(SdrObject* pObj, size_t nPos)
     SdrLayerID nId = pObj->GetLayer();
     if( mbMaster )
     {
-        if( nId == 0 )
-            pObj->NbcSetLayer( 2 );     // wrong layer. corrected to BackgroundObj layer
+        if( nId == SdrLayerID(0) )
+            pObj->NbcSetLayer( SdrLayerID(2) );     // wrong layer. corrected to BackgroundObj layer
     }
     else
     {
-        if( nId == 2 )
-            pObj->NbcSetLayer( 0 );     // wrong layer. corrected to layout layer
+        if( nId == SdrLayerID(2) )
+            pObj->NbcSetLayer( SdrLayerID(0) );     // wrong layer. corrected to layout layer
     }
 }
 

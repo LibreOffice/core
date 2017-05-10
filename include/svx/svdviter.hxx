@@ -59,7 +59,7 @@ class SdrPageView;
 class SdrModel;
 class SdrPage;
 class SdrObject;
-class SetOfByte;
+class SdrLayerIDSet;
 
 class SVX_DLLPUBLIC SdrViewIter
 {

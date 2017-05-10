@@ -26,8 +26,8 @@
 
 class SdrLayerIdItem: public SfxUInt16Item {
 public:
-    SdrLayerIdItem(sal_uInt16 nId=0): SfxUInt16Item(SDRATTR_LAYERID,nId)  {}
-    SdrLayerID GetValue() const { return (SdrLayerID)SfxUInt16Item::GetValue(); }
+    SdrLayerIdItem(SdrLayerID nId): SfxUInt16Item(SDRATTR_LAYERID,sal_uInt8(nId))  {}
+    SdrLayerID GetValue() const { return SdrLayerID(SfxUInt16Item::GetValue()); }
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
 };
 

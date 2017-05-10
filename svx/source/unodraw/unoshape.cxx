@@ -2299,10 +2299,10 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
         sal_Int16 nLayerId = sal_Int16();
         if( rValue >>= nLayerId )
         {
-            SdrLayer* pLayer = mpModel->GetLayerAdmin().GetLayerPerID((unsigned char)nLayerId);
+            SdrLayer* pLayer = mpModel->GetLayerAdmin().GetLayerPerID(SdrLayerID(nLayerId));
             if( pLayer )
             {
-                mpObj->SetLayer((unsigned char)nLayerId);
+                mpObj->SetLayer(SdrLayerID(nLayerId));
                 return true;
             }
         }
@@ -2747,7 +2747,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
         break;
     }
     case SDRATTR_LAYERID:
-        rValue <<= (sal_Int16)mpObj->GetLayer();
+        rValue <<= sal_uInt16(sal_uInt8(mpObj->GetLayer()));
         break;
 
     case SDRATTR_LAYERNAME:

@@ -284,11 +284,11 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     rPool.FreezeIdRanges();                         // the pool is also used directly
 
     SdrLayerAdmin& rAdmin = GetLayerAdmin();
-    rAdmin.NewLayer("vorne",    SC_LAYER_FRONT);
-    rAdmin.NewLayer("hinten",   SC_LAYER_BACK);
-    rAdmin.NewLayer("intern",   SC_LAYER_INTERN);
-    rAdmin.NewLayer("Controls", SC_LAYER_CONTROLS);
-    rAdmin.NewLayer("hidden",   SC_LAYER_HIDDEN);
+    rAdmin.NewLayer("vorne",    sal_uInt8(SC_LAYER_FRONT));
+    rAdmin.NewLayer("hinten",   sal_uInt8(SC_LAYER_BACK));
+    rAdmin.NewLayer("intern",   sal_uInt8(SC_LAYER_INTERN));
+    rAdmin.NewLayer("Controls", sal_uInt8(SC_LAYER_CONTROLS));
+    rAdmin.NewLayer("hidden",   sal_uInt8(SC_LAYER_HIDDEN));
     // "Controls" is new - must also be created when loading
 
     // Set link for URL-Fields

@@ -944,7 +944,7 @@ sal_Int8 ViewShell::AcceptDrop (
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
     sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    SdrLayerID nLayer)
 {
     ::sd::View* pView = GetView();
     return( pView ? pView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE );
@@ -955,7 +955,7 @@ sal_Int8 ViewShell::ExecuteDrop (
     DropTargetHelper& /*rTargetHelper*/,
     ::sd::Window* pTargetWindow,
     sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    SdrLayerID nLayer)
 {
     ::sd::View* pView = GetView();
     return pView ? pView->ExecuteDrop( rEvt, pTargetWindow, nPage, nLayer ) : DND_ACTION_NONE;

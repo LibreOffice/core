@@ -152,7 +152,7 @@ SdrLayerID SdrObjGroup::GetLayer() const
     for (size_t i=0; i<nObjCount; ++i) {
         SdrLayerID nLay1=pOL->GetObj(i)->GetLayer();
         if (b1st) { nLay=nLay1; b1st = false; }
-        else if (nLay1!=nLay) return 0;
+        else if (nLay1!=nLay) return SdrLayerID(0);
     }
     return nLay;
 }

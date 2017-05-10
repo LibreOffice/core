@@ -254,7 +254,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             if (rSh.IsObjSelected())
             {
                 rSh.StartUndo( SwUndoId::START );
-                if (rSh.GetLayerId() == 0)
+                if (rSh.GetLayerId() == SdrLayerID(0))
                 {
                     SetWrapMode(FN_FRAME_WRAPTHRU);
                     rSh.SelectionToHeaven();
@@ -407,12 +407,12 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
         switch( nWhich )
         {
             case SID_OBJECT_HELL:
-                if ( !rSh.IsObjSelected() || rSh.GetLayerId() == 0 || bProtected )
+                if ( !rSh.IsObjSelected() || rSh.GetLayerId() == SdrLayerID(0) || bProtected )
                     rSet.DisableItem( nWhich );
                 break;
 
             case SID_OBJECT_HEAVEN:
-                if ( !rSh.IsObjSelected() || rSh.GetLayerId() == 1 || bProtected )
+                if ( !rSh.IsObjSelected() || rSh.GetLayerId() == SdrLayerID(1) || bProtected )
                     rSet.DisableItem( nWhich );
                 break;
 

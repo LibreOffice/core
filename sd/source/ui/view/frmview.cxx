@@ -859,21 +859,21 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
             }
             else if (!bImpress && pValue->Name == sUNO_View_VisibleLayers  )
             {
-                SetOfByte aSetOfBytes;
-                aSetOfBytes.PutValue( pValue->Value );
-                SetVisibleLayers( aSetOfBytes );
+                SdrLayerIDSet aSdrLayerIDSets;
+                aSdrLayerIDSets.PutValue( pValue->Value );
+                SetVisibleLayers( aSdrLayerIDSets );
             }
             else if (!bImpress && pValue->Name == sUNO_View_PrintableLayers )
             {
-                SetOfByte aSetOfBytes;
-                aSetOfBytes.PutValue( pValue->Value );
-                SetPrintableLayers( aSetOfBytes );
+                SdrLayerIDSet aSdrLayerIDSets;
+                aSdrLayerIDSets.PutValue( pValue->Value );
+                SetPrintableLayers( aSdrLayerIDSets );
             }
             else if (!bImpress && pValue->Name == sUNO_View_LockedLayers )
             {
-                SetOfByte aSetOfBytes;
-                aSetOfBytes.PutValue( pValue->Value );
-                SetLockedLayers( aSetOfBytes );
+                SdrLayerIDSet aSdrLayerIDSets;
+                aSdrLayerIDSets.PutValue( pValue->Value );
+                SetLockedLayers( aSdrLayerIDSets );
             }
         }
 

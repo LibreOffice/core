@@ -1060,32 +1060,24 @@ void ScShapeChildren::FillShapes(const tools::Rectangle& aPixelPaintRect, const 
                         ScShapeChild aShape;
                         aShape.mxShape = xShape;
                         aShape.mnRangeId = nRangeId;
-                        switch (pObj->GetLayer())
+                        if (pObj->GetLayer().anyOf(SC_LAYER_INTERN, SC_LAYER_FRONT))
                         {
-                            case SC_LAYER_INTERN:
-                            case SC_LAYER_FRONT:
-                            {
-                                maShapeRanges[nRangeId].maForeShapes.push_back(aShape);
-                                bForeAdded = true;
-                            }
-                            break;
-                            case SC_LAYER_BACK:
-                            {
-                                maShapeRanges[nRangeId].maBackShapes.push_back(aShape);
-                                bBackAdded = true;
-                            }
-                            break;
-                            case SC_LAYER_CONTROLS:
-                            {
-                                maShapeRanges[nRangeId].maControls.push_back(aShape);
-                                bControlAdded = true;
-                            }
-                            break;
-                            default:
-                            {
-                                OSL_FAIL("I don't know this layer.");
-                            }
-                            break;
+                            maShapeRanges[nRangeId].maForeShapes.push_back(aShape);
+                            bForeAdded = true;
+                        }
+                        else if (pObj->GetLayer() == SC_LAYER_BACK)
+                        {
+                            maShapeRanges[nRangeId].maBackShapes.push_back(aShape);
+                            bBackAdded = true;
+                        }
+                        else if (pObj->GetLayer() == SC_LAYER_CONTROLS)
+                        {
+                            maShapeRanges[nRangeId].maControls.push_back(aShape);
+                            bControlAdded = true;
+                        }
+                        else
+                        {
+                            OSL_FAIL("I don't know this layer.");
                         }
                     }
                 }

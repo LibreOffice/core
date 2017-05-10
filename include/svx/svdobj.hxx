@@ -69,7 +69,7 @@ class SdrObjUserDataList;
 class SdrObjPlusData;
 class SdrGluePoint;
 class SdrGluePointList;
-class SetOfByte;
+class SdrLayerIDSet;
 class OutputDevice;
 class Fraction;
 
@@ -182,7 +182,7 @@ public:
     Point                       aPos;
     Point                       aDownPos;
     VclPtr<OutputDevice>        pOut;
-    const SetOfByte*            pVisiLayer;
+    const SdrLayerIDSet*            pVisiLayer;
     const SdrPageView*          pPageView;
     sal_uInt16                  nTol;
     bool                        bDown;
@@ -341,8 +341,8 @@ public:
     virtual SdrLayerID GetLayer() const;
     virtual void NbcSetLayer(SdrLayerID nLayer);
     virtual void SetLayer(SdrLayerID nLayer);
-    // renaming GetLayerSet -> getMergedHierarchyLayerSet to make clear what happens here. rSet needs to be empty.
-    void getMergedHierarchyLayerSet(SetOfByte& rSet) const;
+    // renaming GetSdrLayerIDSet -> getMergedHierarchySdrLayerIDSet to make clear what happens here. rSet needs to be empty.
+    void getMergedHierarchySdrLayerIDSet(SdrLayerIDSet& rSet) const;
 
     void SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& rBoundRect) const;
 

@@ -33,6 +33,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <svtools/grfmgr.hxx>
+#include <svx/svdtypes.hxx>
 #include <svx/msdffdef.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
@@ -1036,7 +1037,7 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
         sal_uInt32                  mnCountOfs;
 
         sal_uInt32                  mnGroupLevel;
-        sal_uInt16                  mnHellLayerId;
+        SdrLayerID                  mnHellLayerId;
 
         bool                        mbEscherSpgr;
         bool                        mbEscherDg;
@@ -1184,8 +1185,8 @@ public:
 
     static const SdrObject* GetSdrObject( const css::uno::Reference< css::drawing::XShape >& rXShape );
 
-    void SetHellLayerId( sal_uInt16 nId )       { mnHellLayerId = nId; }
-    sal_uInt16 GetHellLayerId() const           { return mnHellLayerId; }
+    void SetHellLayerId( SdrLayerID nId )       { mnHellLayerId = nId; }
+    SdrLayerID GetHellLayerId() const           { return mnHellLayerId; }
 
 private:
                         EscherEx( const EscherEx& ) = delete;

@@ -1202,7 +1202,7 @@ bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
         bFilled = rFillStyle.GetValue() != drawing::FillStyle_NONE;
     }
 
-    const SetOfByte* pVisiLayer = &mpView->GetSdrPageView()->GetVisibleLayers();
+    const SdrLayerIDSet* pVisiLayer = &mpView->GetSdrPageView()->GetVisibleLayers();
     sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
     const long  n2HitLog = nHitLog * 2;
     Point aHitPosR(rPos);

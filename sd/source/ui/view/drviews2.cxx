@@ -2864,9 +2864,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if (pPage != nullptr
                 && GetDoc() != nullptr)
             {
-                SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
+                SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
                 SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
-                sal_uInt8 aLayerId;
+                SdrLayerID aLayerId;
                 if (nSId == SID_DISPLAY_MASTER_BACKGROUND)
                     aLayerId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
                 else

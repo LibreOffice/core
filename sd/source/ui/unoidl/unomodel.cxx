@@ -468,8 +468,8 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
 {
     sal_uInt16 nPageCount = mpDoc->GetSdPageCount( PageKind::Standard );
     SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
-    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+    SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
+    SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
 
     SdPage* pStandardPage = nullptr;
 
@@ -486,7 +486,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
     {
         // here we determine the page after which we should insert
         SdPage* pPreviousStandardPage = mpDoc->GetSdPage( std::min( (sal_uInt16)(nPageCount - 1), nPage ), PageKind::Standard );
-        SetOfByte aVisibleLayers = pPreviousStandardPage->TRG_GetMasterPageVisibleLayers();
+        SdrLayerIDSet aVisibleLayers = pPreviousStandardPage->TRG_GetMasterPageVisibleLayers();
         bool bIsPageBack = aVisibleLayers.IsSet( aBckgrnd );
         bool bIsPageObj = aVisibleLayers.IsSet( aBckgrndObj );
 
@@ -1824,7 +1824,7 @@ bool ImplRenderPaintProc::IsVisible( const SdrObject* pObj ) const
     SdrLayerID nLayerId = pObj->GetLayer();
     if( pSdrPageView )
     {
-        const SdrLayer* pSdrLayer = rLayerAdmin.GetLayer( nLayerId );
+        const SdrLayer* pSdrLayer = rLayerAdmin.GetLayerPerID( nLayerId );
         if ( pSdrLayer )
         {
             OUString aLayerName = pSdrLayer->GetName();
@@ -1839,7 +1839,7 @@ bool ImplRenderPaintProc::IsPrintable( const SdrObject* pObj ) const
     SdrLayerID nLayerId = pObj->GetLayer();
     if( pSdrPageView )
     {
-        const SdrLayer* pSdrLayer = rLayerAdmin.GetLayer( nLayerId );
+        const SdrLayer* pSdrLayer = rLayerAdmin.GetLayerPerID( nLayerId );
         if ( pSdrLayer )
         {
             OUString aLayerName = pSdrLayer->GetName();

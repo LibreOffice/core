@@ -283,9 +283,9 @@ public:
     bool            IsLayerModeActive() const { return mbIsLayerModeActive;}
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                    ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer ) override;
+                                    ::sd::Window* pTargetWindow, sal_uInt16 nPage, SdrLayerID nLayer ) override;
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                    ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer ) override;
+                                    ::sd::Window* pTargetWindow, sal_uInt16 nPage, SdrLayerID nLayer ) override;
 
     virtual void    WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse ) override;
     virtual void    ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse ) override;

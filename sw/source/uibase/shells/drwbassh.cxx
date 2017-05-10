@@ -134,7 +134,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         aSet.Put(SfxBoolItem(SID_HTML_MODE,
                             0 != ::GetHtmlMode(pSh->GetView().GetDocShell())));
 
-                        aSet.Put(SfxInt16Item(FN_DRAW_WRAP_DLG, pSh->GetLayerId()));
+                        aSet.Put(SfxInt16Item(FN_DRAW_WRAP_DLG, sal_uInt8(pSh->GetLayerId())));
 
                         pSh->GetObjAttr(aSet);
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
