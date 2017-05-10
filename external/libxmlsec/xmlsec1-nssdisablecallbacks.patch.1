@@ -1,4 +1,4 @@
-From b317891749a5dd23ad75ce289ac1a318851bda0d Mon Sep 17 00:00:00 2001
+From 25b4d8494eaf7b2321a931e29af292f336fe0aff Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Fri, 4 Mar 2016 16:09:10 +0100
 Subject: [PATCH] xmlsec1-nssdisablecallbacks.patch
@@ -10,10 +10,10 @@ Conflicts:
  1 file changed, 20 insertions(+)
 
 diff --git a/src/nss/crypto.c b/src/nss/crypto.c
-index ea79519..473429f 100644
+index a0559c89..ba8f2dd0 100644
 --- a/src/nss/crypto.c
 +++ b/src/nss/crypto.c
-@@ -214,6 +214,7 @@ xmlSecCryptoGetFunctions_nss(void) {
+@@ -227,6 +227,7 @@ xmlSecCryptoGetFunctions_nss(void) {
       * High level routines form xmlsec command line utility
       *
       ********************************************************************/
@@ -21,7 +21,7 @@ index ea79519..473429f 100644
      gXmlSecNssFunctions->cryptoAppInit                  = xmlSecNssAppInit;
      gXmlSecNssFunctions->cryptoAppShutdown              = xmlSecNssAppShutdown;
      gXmlSecNssFunctions->cryptoAppDefaultKeysMngrInit   = xmlSecNssAppDefaultKeysMngrInit;
-@@ -231,6 +232,25 @@ xmlSecCryptoGetFunctions_nss(void) {
+@@ -244,6 +245,25 @@ xmlSecCryptoGetFunctions_nss(void) {
      gXmlSecNssFunctions->cryptoAppKeyLoad               = xmlSecNssAppKeyLoad;
      gXmlSecNssFunctions->cryptoAppKeyLoadMemory         = xmlSecNssAppKeyLoadMemory;
      gXmlSecNssFunctions->cryptoAppDefaultPwdCallback    = (void*)xmlSecNssAppGetDefaultPwdCallback();
@@ -48,5 +48,5 @@ index ea79519..473429f 100644
      return(gXmlSecNssFunctions);
  }
 -- 
-2.6.6
+2.12.0
 

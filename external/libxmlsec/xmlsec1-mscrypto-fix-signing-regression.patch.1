@@ -1,0 +1,46 @@
+From 92d28e2a9110c19e75482942702516505714fc72 Mon Sep 17 00:00:00 2001
+From: lsh123 <aleksey@aleksey.com>
+Date: Sun, 7 May 2017 07:53:46 -0700
+Subject: [PATCH] fix regression
+
+---
+ src/mscrypto/x509.c | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
+
+diff --git a/src/mscrypto/x509.c b/src/mscrypto/x509.c
+index 08c9088d..497fa0e9 100644
+--- a/src/mscrypto/x509.c
++++ b/src/mscrypto/x509.c
+@@ -392,12 +392,8 @@ xmlSecMSCryptoKeyDataX509GetCert(xmlSecKeyDataPtr data, xmlSecSize pos) {
+     xmlSecAssert2(ctx->hMemStore != 0, NULL);
+     xmlSecAssert2(ctx->numCerts > pos, NULL);
+ 
+-    while (pos > 0) {
+-       pCert = CertEnumCertificatesInStore(ctx->hMemStore, pCert);
+-       if(pCert == NULL) {
+-            break;
+-       }
+-        pos--;
++    while ((pCert = CertEnumCertificatesInStore(ctx->hMemStore, pCert)) && (pos > 0)) {
++      pos--;
+     }
+ 
+     return(pCert);
+@@ -474,12 +470,8 @@ xmlSecMSCryptoKeyDataX509GetCrl(xmlSecKeyDataPtr data, xmlSecSize pos) {
+     xmlSecAssert2(ctx->hMemStore != 0, NULL);
+     xmlSecAssert2(ctx->numCrls > pos, NULL);
+ 
+-    while(pos > 0) {
+-        pCRL = CertEnumCRLsInStore(ctx->hMemStore, pCRL);
+-       if(pCRL == NULL) {
+-            break;
+-        }
+-        pos--;
++    while ((pCRL = CertEnumCRLsInStore(ctx->hMemStore, pCRL)) && (pos > 0)) {
++      pos--;
+     }
+ 
+     return(pCRL);
+-- 
+2.12.0
+

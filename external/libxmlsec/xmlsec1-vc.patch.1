@@ -1,20 +1,22 @@
-From c821fea172b4ffdb60f65867862dd48049589ea6 Mon Sep 17 00:00:00 2001
+From 223ae3881bedb8070774271ab4300a447f94f845 Mon Sep 17 00:00:00 2001
 From: Miklos Vajna <vmiklos@collabora.co.uk>
 Date: Fri, 4 Mar 2016 16:12:29 +0100
 Subject: [PATCH] xmlsec1-vc.patch
 
+Conflicts:
+	win32/Makefile.msvc
 ---
  win32/Makefile.msvc | 10 +++++++++-
  1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/win32/Makefile.msvc b/win32/Makefile.msvc
-index bbc661a..a474592 100644
+index 8156caa7..ef1909ce 100644
 --- a/win32/Makefile.msvc
 +++ b/win32/Makefile.msvc
-@@ -311,6 +311,10 @@ CFLAGS 			= $(CFLAGS) /D PACKAGE=\"$(XMLSEC_NAME)\"
- CFLAGS 			= $(CFLAGS) /D "HAVE_STDIO_H" /D "HAVE_STDLIB_H"
+@@ -311,6 +311,10 @@ CFLAGS 			= $(CFLAGS) /D "HAVE_STDIO_H" /D "HAVE_STDLIB_H"
  CFLAGS 			= $(CFLAGS) /D "HAVE_STRING_H" /D "HAVE_CTYPE_H"
  CFLAGS 			= $(CFLAGS) /D "HAVE_MALLOC_H" /D "HAVE_MEMORY_H"
+ CFLAGS 			= $(CFLAGS) /D "XMLSEC_NO_GOST" /D "XMLSEC_NO_GOST2012" 
 +CFLAGS 			= $(CFLAGS) -arch:SSE $(SOLARINC) -I$(WORKDIR)\UnpackedTarball\xml2\include -I$(WORKDIR)/UnpackedTarball/icu/source/i18n -I$(WORKDIR)/UnpackedTarball/icu/source/common
 +!if "$(MSVC_USE_DEBUG_RUNTIME)" != ""
 +CFLAGS 			= $(CFLAGS) /MDd
@@ -22,11 +24,11 @@ index bbc661a..a474592 100644
  
  !if "$(UNICODE)" == "1"
  CFLAGS 			= $(CFLAGS) /D "UNICODE" /D "_UNICODE"
-@@ -365,7 +369,11 @@ LIBS 			=
+@@ -363,7 +367,11 @@ LIBS 			=
  !if "$(DEBUG)" == "1"
  LDFLAGS 		= $(LDFLAGS) /DEBUG
  !else
--LDFLAGS 		= $(LDFLAGS) /OPT:NOWIN98
+-LDFLAGS 		= $(LDFLAGS)
 +!if "$(_NMAKE_VER)" >= "10.00.30319.01"
 +LDFLAGS = $(LDFLAGS)
 +!else
@@ -36,5 +38,5 @@ index bbc661a..a474592 100644
  
  SOLIBS 			= $(LIBS) libxml2.lib 
 -- 
-2.6.6
+2.12.0
 

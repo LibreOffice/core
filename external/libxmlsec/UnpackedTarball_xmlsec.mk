@@ -14,10 +14,8 @@ xmlsec_patches += xmlsec1-noverify.patch.1
 xmlsec_patches += xmlsec1-vc.patch.1
 xmlsec_patches += xmlsec1-1.2.14_fix_extern_c.patch.1
 xmlsec_patches += xmlsec1-customkeymanage.patch.1
-# Backport of <https://github.com/lsh123/xmlsec/pull/83>.
-xmlsec_patches += xmlsec1-nss-ecdsa-sha256.patch.1
-# Backport of <https://github.com/lsh123/xmlsec/pull/91>.
-xmlsec_patches += xmlsec1-nss-ecdsa-memset.patch.1
+# Backport of <https://github.com/lsh123/xmlsec/pull/112>.
+xmlsec_patches += xmlsec1-mscrypto-fix-signing-regression.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 
