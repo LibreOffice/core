@@ -140,13 +140,13 @@ public:
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow,
         sal_uInt16 nPage,
-        sal_uInt16 nLayer ) override;
+        SdrLayerID nLayer ) override;
     virtual sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow,
         sal_uInt16 nPage,
-        sal_uInt16 nLayer) override;
+        SdrLayerID nLayer) override;
 
     typedef ::std::vector<SdPage*> PageSelection;
 

@@ -29,7 +29,7 @@ StringMap SdrUIObject::get_state()
     aMap["Description"] = pObject->GetDescription();
     aMap["Title"] = pObject->GetTitle();
     aMap["Z-Order"] = OUString::number(pObject->GetOrdNum());
-    aMap["Layer"] = OUString::number(pObject->GetLayer());
+    aMap["Layer"] = OUString::number(sal_uInt8(pObject->GetLayer()));
     aMap["IsGroupObject"] = OUString::boolean(pObject->IsGroupObject());
     aMap["IsPolyObject"] = OUString::boolean(pObject->IsPolyObj());
     aMap["PointCount"] = OUString::number(pObject->GetPointCount());

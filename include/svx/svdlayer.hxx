@@ -88,8 +88,10 @@ public:
     void          SetStandardLayer();
 };
 
-// When Changing the layer data you currently have to set the Modify flag manually
 #define SDRLAYER_MAXCOUNT 255
+#define SDRLAYERPOS_NOTFOUND 0xffff
+
+// When Changing the layer data you currently have to set the Modify flag manually
 class SVX_DLLPUBLIC SdrLayerAdmin {
 friend class SdrView;
 friend class SdrModel;
@@ -145,8 +147,8 @@ public:
     SdrLayer*          GetLayer(const OUString& rName);
     const SdrLayer*    GetLayer(const OUString& rName) const;
     SdrLayerID         GetLayerID(const OUString& rName) const;
-    SdrLayer*          GetLayerPerID(sal_uInt16 nID) { return const_cast<SdrLayer*>(const_cast<const SdrLayerAdmin*>(this)->GetLayerPerID(nID)); }
-    const SdrLayer*    GetLayerPerID(sal_uInt16 nID) const;
+    SdrLayer*          GetLayerPerID(SdrLayerID nID) { return const_cast<SdrLayer*>(const_cast<const SdrLayerAdmin*>(this)->GetLayerPerID(nID)); }
+    const SdrLayer*    GetLayerPerID(SdrLayerID nID) const;
 
     void               SetControlLayerName(const OUString& rNewName);
     const OUString&    GetControlLayerName() const { return maControlLayerName; }

@@ -24,7 +24,7 @@
 #include <svx/svxdllapi.h>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
-class SetOfByte;
+class SdrLayerIDSet;
 namespace tools { class Rectangle; }
 class SdrPageView;
 class OutputDevice;

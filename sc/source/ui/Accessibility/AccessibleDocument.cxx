@@ -122,16 +122,16 @@ struct ScShapeDataLess
     {
         switch (rLayerID)
         {
-        case SC_LAYER_FRONT:
+        case sal_uInt8(SC_LAYER_FRONT):
             rLayerID = 1;
             break;
-        case SC_LAYER_BACK:
+        case sal_uInt8(SC_LAYER_BACK):
             rLayerID = 0;
             break;
-        case SC_LAYER_INTERN:
+        case sal_uInt8(SC_LAYER_INTERN):
             rLayerID = 2;
             break;
-        case SC_LAYER_CONTROLS:
+        case sal_uInt8(SC_LAYER_CONTROLS):
             rLayerID = 3;
             break;
         }
@@ -146,7 +146,7 @@ struct ScShapeDataLess
             sal_Int16 nLayerID = 0;
             if( (aPropAny >>= nLayerID) )
             {
-                if (nLayerID == SC_LAYER_BACK)
+                if (SdrLayerID(nLayerID) == SC_LAYER_BACK)
                     bResult = true;
             }
         }
@@ -1230,7 +1230,7 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, b
             sal_Int16 nLayerID = 0;
             if( aPropAny >>= nLayerID )
             {
-                if( (nLayerID == SC_LAYER_INTERN) || (nLayerID == SC_LAYER_HIDDEN) )
+                if( (SdrLayerID(nLayerID) == SC_LAYER_INTERN) || (SdrLayerID(nLayerID) == SC_LAYER_HIDDEN) )
                     pShape->bSelectable = false;
                 else
                     pShape->bSelectable = true;

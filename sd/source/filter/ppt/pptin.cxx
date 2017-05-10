@@ -1519,7 +1519,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
             {
                 if(pPage->TRG_HasMasterPage())
                 {
-                    SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
+                    SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
                     aVisibleLayers.Set(mnBackgroundObjectsLayerID, false);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                 }

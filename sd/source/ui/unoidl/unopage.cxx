@@ -792,7 +792,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 if( pDoc->GetMasterPageCount() )
                 {
                     SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
-                    SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
+                    SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
                     aVisibleLayers.Set(rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND)), bVisible);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                 }
@@ -812,7 +812,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 if( pDoc->GetMasterPageCount() )
                 {
                     SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
-                    SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
+                    SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
                     aVisibleLayers.Set(rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ)), bVisible);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                 }
@@ -1217,7 +1217,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             if( pDoc->GetMasterPageCount() )
             {
                 SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
-                SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
+                SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
                 aAny <<= aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND)));
             }
             else
@@ -1236,7 +1236,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             if( pDoc->GetMasterPageCount() )
             {
                 SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
-                SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
+                SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
                 aAny <<= aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ)));
             }
             else

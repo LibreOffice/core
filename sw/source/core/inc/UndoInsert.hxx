@@ -23,6 +23,7 @@
 #include <memory>
 
 #include <undobj.hxx>
+#include <svx/svdtypes.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/mempool.hxx>
 #include <swtypes.hxx>
@@ -175,7 +176,7 @@ class SwUndoInsertLabel : public SwUndo
     // #i26791# - re-store of drawing object position no longer needed
     sal_uInt16 nFieldId;
     SwLabelType eType;
-    sal_uInt8 nLayerId;              // for character objects
+    SdrLayerID nLayerId;              // for character objects
     bool bBefore        :1;
     bool bUndoKeep      :1;
     bool bCpyBrd        :1;
@@ -215,7 +216,7 @@ public:
 
     void SetUndoKeep()  { bUndoKeep = true; }
     void SetFlys( SwFrameFormat& rOldFly, SfxItemSet& rChgSet, SwFrameFormat& rNewFly );
-    void SetDrawObj( sal_uInt8 nLayerId );
+    void SetDrawObj( SdrLayerID nLayerId );
 };
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOINSERT_HXX

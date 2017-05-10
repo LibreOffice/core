@@ -55,17 +55,17 @@ public:
                              { maHandoutHelpLines = rHelpLines; }
     const SdrHelpLineList& GetHandoutHelpLines() { return maHandoutHelpLines; }
 
-    void SetVisibleLayers(const SetOfByte& rVisibleLayers)
+    void SetVisibleLayers(const SdrLayerIDSet& rVisibleLayers)
                          { maVisibleLayers = rVisibleLayers; }
-    const SetOfByte& GetVisibleLayers() { return maVisibleLayers; }
+    const SdrLayerIDSet& GetVisibleLayers() { return maVisibleLayers; }
 
-    void SetLockedLayers(const SetOfByte& rLockedLayers)
+    void SetLockedLayers(const SdrLayerIDSet& rLockedLayers)
                         { maLockedLayers = rLockedLayers; }
-    const SetOfByte& GetLockedLayers() { return maLockedLayers; }
+    const SdrLayerIDSet& GetLockedLayers() { return maLockedLayers; }
 
-    void SetPrintableLayers(const SetOfByte& rPrintableLayers)
+    void SetPrintableLayers(const SdrLayerIDSet& rPrintableLayers)
                          { maPrintableLayers = rPrintableLayers; }
-    const SetOfByte& GetPrintableLayers() { return maPrintableLayers; }
+    const SdrLayerIDSet& GetPrintableLayers() { return maPrintableLayers; }
 
     void SetRuler(const bool bRulerOn)
                  { mbRuler = bRulerOn; }
@@ -171,9 +171,9 @@ public:
 private:
     sal_uInt16          mnRefCount;
     bool                mbRuler;
-    SetOfByte           maVisibleLayers;
-    SetOfByte           maLockedLayers;
-    SetOfByte           maPrintableLayers;
+    SdrLayerIDSet           maVisibleLayers;
+    SdrLayerIDSet           maLockedLayers;
+    SdrLayerIDSet           maPrintableLayers;
     SdrHelpLineList     maStandardHelpLines;
     SdrHelpLineList     maNotesHelpLines;
     SdrHelpLineList     maHandoutHelpLines;

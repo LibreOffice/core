@@ -38,7 +38,7 @@ SdrObject* SdrObjectPrimitiveHit(
     const Point& rPnt,
     sal_uInt16 nTol,
     const SdrPageView& rSdrPageView,
-    const SetOfByte* pVisiLayer,
+    const SdrLayerIDSet* pVisiLayer,
     bool bTextOnly)
 {
     SdrObject* pResult = nullptr;
@@ -95,7 +95,7 @@ SdrObject* SdrObjListPrimitiveHit(
     const Point& rPnt,
     sal_uInt16 nTol,
     const SdrPageView& rSdrPageView,
-    const SetOfByte* pVisiLayer,
+    const SdrLayerIDSet* pVisiLayer,
     bool bTextOnly)
 {
     size_t nObjNum(rList.GetObjCount());

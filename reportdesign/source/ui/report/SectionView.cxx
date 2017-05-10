@@ -229,23 +229,20 @@ bool OSectionView::IsDragResize() const
 }
 
 
-short OSectionView::GetLayerIdOfMarkedObjects() const
+SdrLayerID OSectionView::GetLayerIdOfMarkedObjects() const
 {
-    short nRet = SHRT_MAX;
+    SdrLayerID nRet = SDRLAYER_NOTFOUND;
     const SdrMarkList &rMrkList = GetMarkedObjectList();
     for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
     {
         const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-        if ( nRet == SHRT_MAX )
+        if ( nRet == SDRLAYER_NOTFOUND )
             nRet = pObj->GetLayer();
         else if ( nRet != pObj->GetLayer() )
         {
-            nRet = -1;
             break;
         }
     }
-    if ( nRet == SHRT_MAX )
-        nRet = -1;
     return nRet;
 }
 

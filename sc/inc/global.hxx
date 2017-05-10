@@ -22,6 +22,7 @@
 
 #include "address.hxx"
 #include <i18nlangtag/lang.h>
+#include <svx/svdtypes.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include "scdllapi.h"
@@ -204,12 +205,13 @@ namespace o3tl {
 
 #define EMPTY_OUSTRING ScGlobal::GetEmptyOUString()
 
-                                        //  layer id's for drawing
-#define SC_LAYER_FRONT      0
-#define SC_LAYER_BACK       1
-#define SC_LAYER_INTERN     2
-#define SC_LAYER_CONTROLS   3
-#define SC_LAYER_HIDDEN     4
+// Layer id's for drawing.
+// These are both id's and positions.
+constexpr SdrLayerID SC_LAYER_FRONT   (0);
+constexpr SdrLayerID SC_LAYER_BACK    (1);
+constexpr SdrLayerID SC_LAYER_INTERN  (2);
+constexpr SdrLayerID SC_LAYER_CONTROLS(3);
+constexpr SdrLayerID SC_LAYER_HIDDEN  (4);
 
 //  link tables
 enum class ScLinkMode {

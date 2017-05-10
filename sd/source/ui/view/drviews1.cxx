@@ -1140,7 +1140,7 @@ void DrawViewShell::ResetActualLayer()
         // this is needed when one layer is renamed to
         // restore current layer
         sal_uInt16 nOldLayerCnt = pLayerBar->GetPageCount();
-        sal_uInt16 nOldLayerId = pLayerBar->GetCurPageId();
+        sal_uInt16 nOldLayerPos = pLayerBar->GetCurPageId();
 
         /**
          * Update for LayerTab
@@ -1154,17 +1154,17 @@ void DrawViewShell::ResetActualLayer()
         OUString aLayoutLayer = SD_RESSTR(STR_LAYER_LAYOUT);
         OUString aControlsLayer = SD_RESSTR(STR_LAYER_CONTROLS);
         OUString aMeasureLinesLayer = SD_RESSTR(STR_LAYER_MEASURELINES);
-        sal_uInt16 nActiveLayer = SDRLAYER_NOTFOUND;
+        sal_uInt16 nActiveLayerPos = SDRLAYERPOS_NOTFOUND;
         SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
         sal_uInt16 nLayerCnt = rLayerAdmin.GetLayerCount();
 
-        for ( sal_uInt16 nLayer = 0; nLayer < nLayerCnt; nLayer++ )
+        for ( sal_uInt16 nLayerPos = 0; nLayerPos < nLayerCnt; nLayerPos++ )
         {
-            aName = rLayerAdmin.GetLayer(nLayer)->GetName();
+            aName = rLayerAdmin.GetLayer(nLayerPos)->GetName();
 
             if ( aName == aActiveLayer )
             {
-                nActiveLayer = nLayer;
+                nActiveLayerPos = nLayerPos;
             }
 
             if ( aName != aBackgroundLayer )
@@ -1176,7 +1176,7 @@ void DrawViewShell::ResetActualLayer()
                         aName != aControlsLayer &&
                         aName != aMeasureLinesLayer)
                     {
-                        pLayerBar->InsertPage(nLayer+1, aName);
+                        pLayerBar->InsertPage(nLayerPos+1, aName);
 
                         TabBarPageBits nBits = 0;
                         SdrPageView* pPV = mpDrawView->GetSdrPageView();
@@ -1187,7 +1187,7 @@ void DrawViewShell::ResetActualLayer()
                             nBits = TPB_SPECIAL;
                         }
 
-                        pLayerBar->SetPageBits(nLayer+1, nBits);
+                        pLayerBar->SetPageBits(nLayerPos+1, nBits);
                     }
                 }
                 else
@@ -1195,7 +1195,7 @@ void DrawViewShell::ResetActualLayer()
                     // don't show masterpage layer onto the page
                     if ( aName != aBackgroundObjLayer )
                     {
-                        pLayerBar->InsertPage(nLayer+1, aName);
+                        pLayerBar->InsertPage(nLayerPos+1, aName);
 
                         TabBarPageBits nBits = 0;
 
@@ -1205,27 +1205,27 @@ void DrawViewShell::ResetActualLayer()
                             nBits = TPB_SPECIAL;
                         }
 
-                        pLayerBar->SetPageBits(nLayer+1, nBits);
+                        pLayerBar->SetPageBits(nLayerPos+1, nBits);
                     }
                 }
             }
         }
 
-        if ( nActiveLayer == SDRLAYER_NOTFOUND )
+        if ( nActiveLayerPos == SDRLAYERPOS_NOTFOUND )
         {
             if( nOldLayerCnt == pLayerBar->GetPageCount() )
             {
-                nActiveLayer = nOldLayerId - 1;
+                nActiveLayerPos = nOldLayerPos - 1;
             }
             else
             {
-                nActiveLayer = ( meEditMode == EditMode::MasterPage ) ? 2 : 0;
+                nActiveLayerPos = ( meEditMode == EditMode::MasterPage ) ? 2 : 0;
             }
 
-            mpDrawView->SetActiveLayer( pLayerBar->GetPageText(nActiveLayer + 1) );
+            mpDrawView->SetActiveLayer( pLayerBar->GetPageText(nActiveLayerPos + 1) );
         }
 
-        pLayerBar->SetCurPageId(nActiveLayer + 1);
+        pLayerBar->SetCurPageId(nActiveLayerPos + 1);
         GetViewFrame()->GetBindings().Invalidate( SID_MODIFYLAYER );
         GetViewFrame()->GetBindings().Invalidate( SID_DELETE_LAYER );
     }
@@ -1240,7 +1240,7 @@ sal_Int8 DrawViewShell::AcceptDrop (
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
     sal_uInt16 nPage,
-    sal_uInt16 nLayer )
+    SdrLayerID nLayer )
 {
     if( nPage != SDRPAGE_NOTFOUND )
         nPage = GetDoc()->GetSdPage( nPage, mePageKind )->GetPageNum();
@@ -1260,7 +1260,7 @@ sal_Int8 DrawViewShell::ExecuteDrop (
     DropTargetHelper& /*rTargetHelper*/,
     ::sd::Window* pTargetWindow,
     sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    SdrLayerID nLayer)
 {
     if( nPage != SDRPAGE_NOTFOUND )
         nPage = GetDoc()->GetSdPage( nPage, mePageKind )->GetPageNum();

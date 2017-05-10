@@ -21,6 +21,8 @@
 #define INCLUDED_O3TL_STRONG_INT_HXX
 
 #include <sal/config.h>
+#include <limits>
+#include <cassert>
 
 namespace o3tl
 {
@@ -40,7 +42,13 @@ template <typename UNDERLYING_TYPE, typename PHANTOM_TYPE>
 struct strong_int
 {
 public:
-    explicit constexpr strong_int(UNDERLYING_TYPE value) : m_value(value) {}
+    explicit constexpr strong_int(long value) : m_value(value)
+    {
+        // catch attempts to pass in out-of-range values early
+        assert(value >= std::numeric_limits<UNDERLYING_TYPE>::min()
+               && value <= std::numeric_limits<UNDERLYING_TYPE>::max()
+               && "out of range");
+    }
     strong_int() : m_value(0) {}
 
     explicit constexpr operator UNDERLYING_TYPE() const { return m_value; }

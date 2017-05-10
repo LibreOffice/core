@@ -99,7 +99,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
         pOutl->SetDefTab( mpDoc->GetDefaultTabulator() );
         pOutl->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));
 
-        SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
+        SdrLayerIDSet aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
         sal_uInt16 nActualPageNum = pActualPage->GetPageNum();
         SdPage* pActualNotesPage = static_cast<SdPage*>(mpDoc->GetPage(nActualPageNum + 1));
         SdrTextObj* pActualOutline = static_cast<SdrTextObj*>(pActualPage->GetPresObj(PRESOBJ_OUTLINE));

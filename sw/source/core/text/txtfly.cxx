@@ -491,7 +491,7 @@ bool SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
     if ( bOn && nCount > 0 )
     {
-        const sal_uInt16 nHellId = pPage->getRootFrame()->GetCurrShell()->getIDocumentDrawModelAccess().GetHellId();
+        const SdrLayerID nHellId = pPage->getRootFrame()->GetCurrShell()->getIDocumentDrawModelAccess().GetHellId();
         for( SwAnchoredObjList::size_type i = 0; i < nCount; ++i )
         {
             // #i68520#
@@ -578,7 +578,7 @@ void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect )
     SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
     if ( bOn && nCount > 0 )
     {
-        const sal_uInt16 nHellId = pPage->getRootFrame()->GetCurrShell()->getIDocumentDrawModelAccess().GetHellId();
+        const SdrLayerID nHellId = pPage->getRootFrame()->GetCurrShell()->getIDocumentDrawModelAccess().GetHellId();
         for( SwAnchoredObjList::size_type i = 0; i < nCount; ++i )
         {
             // #i68520#

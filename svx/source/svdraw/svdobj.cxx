@@ -563,14 +563,14 @@ SdrLayerID SdrObject::GetLayer() const
     return mnLayerID;
 }
 
-void SdrObject::getMergedHierarchyLayerSet(SetOfByte& rSet) const
+void SdrObject::getMergedHierarchySdrLayerIDSet(SdrLayerIDSet& rSet) const
 {
     rSet.Set(GetLayer());
     SdrObjList* pOL=GetSubList();
     if (pOL!=nullptr) {
         const size_t nObjCount = pOL->GetObjCount();
         for (size_t nObjNum = 0; nObjNum<nObjCount; ++nObjNum) {
-            pOL->GetObj(nObjNum)->getMergedHierarchyLayerSet(rSet);
+            pOL->GetObj(nObjNum)->getMergedHierarchySdrLayerIDSet(rSet);
         }
     }
 }
@@ -1721,8 +1721,7 @@ OString SdrObject::stringify() const
             append(bInserted).
             append(false).
             append(bVirtObj).
-            //append(maBLIPSizeRectangle).
-            append(mnLayerID);
+            append(sal_uInt8(mnLayerID));
 
     aString.append(GetMergedItemSet().stringify());
 

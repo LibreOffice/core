@@ -197,11 +197,10 @@ void SdrEditView::DeleteLayer(const OUString& rName)
 {
     SdrLayerAdmin& rLA = mpModel->GetLayerAdmin();
     SdrLayer* pLayer = rLA.GetLayer(rName);
-    sal_uInt16 nLayerNum(rLA.GetLayerPos(pLayer));
 
-    if(SDRLAYER_NOTFOUND != nLayerNum)
+    if(pLayer)
     {
-
+        sal_uInt16 nLayerNum(rLA.GetLayerPos(pLayer));
         SdrLayerID nDelID = pLayer->GetID();
 
         const bool bUndo = IsUndoEnabled();
@@ -955,7 +954,7 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
 {
     if (nOptions & SdrInsertFlags::SETDEFLAYER) {
         SdrLayerID nLayer=rPV.GetPage()->GetLayerAdmin().GetLayerID(maActualLayer);
-        if (nLayer==SDRLAYER_NOTFOUND) nLayer=0;
+        if (nLayer==SDRLAYER_NOTFOUND) nLayer=SdrLayerID(0);
         if (rPV.GetLockedLayers().IsSet(nLayer) || !rPV.GetVisibleLayers().IsSet(nLayer)) {
             SdrObject::Free( pObj ); // Layer locked or invisible
             return false;

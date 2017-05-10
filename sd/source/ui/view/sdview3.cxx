@@ -259,7 +259,7 @@ bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPo
 
 bool View::InsertData( const TransferableDataHelper& rDataHelper,
                          const Point& rPos, sal_Int8& rDnDAction, bool bDrag,
-                         SotClipboardFormatId nFormat, sal_uInt16 nPage, sal_uInt16 nLayer )
+                         SotClipboardFormatId nFormat, sal_uInt16 nPage, SdrLayerID nLayer )
 {
     maDropPos = rPos;
     mnAction = rDnDAction;
@@ -411,11 +411,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 if( IsUndoEnabled() )
                                 {
                                     BegUndo(SD_RESSTR(STR_MODIFYLAYER));
-                                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectLayerChange(*pO, pO->GetLayer(), (SdrLayerID)nLayer));
+                                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectLayerChange(*pO, pO->GetLayer(), nLayer));
                                     EndUndo();
                                 }
 
-                                pO->SetLayer( (SdrLayerID) nLayer );
+                                pO->SetLayer( nLayer );
                             }
                         }
 
@@ -1351,7 +1351,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 Point                   aHitPosL( rPos );
                 Point                   aHitPosT( rPos );
                 Point                   aHitPosB( rPos );
-                const SetOfByte*        pVisiLayer = &GetSdrPageView()->GetVisibleLayers();
+                const SdrLayerIDSet*        pVisiLayer = &GetSdrPageView()->GetVisibleLayers();
 
                 aHitPosR.X() += n2HitLog;
                 aHitPosL.X() -= n2HitLog;

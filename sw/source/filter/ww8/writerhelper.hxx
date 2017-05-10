@@ -29,6 +29,7 @@
 #include "types.hxx"
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
+#include <svx/svdtypes.hxx>
 #include <format.hxx>
 #include <node.hxx>
 #include <pam.hxx>
@@ -694,7 +695,7 @@ namespace sw
         class SetLayer
         {
         private:
-            sal_uInt8 mnHeavenLayer, mnHellLayer, mnFormLayer;
+            SdrLayerID mnHeavenLayer, mnHellLayer, mnFormLayer;
             enum Layer {eHeaven, eHell};
             void SetObjectLayer(SdrObject &rObject, Layer eLayer) const;
             void Swap(SetLayer &rOther) throw();

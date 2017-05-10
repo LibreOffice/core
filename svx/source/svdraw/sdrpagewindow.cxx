@@ -307,7 +307,7 @@ void SdrPageWindow::RedrawAll( sdr::contact::ViewObjectContactRedirector* pRedir
 
     // get to be processed layers
     const bool bPrinter(GetPaintWindow().OutputToPrinter());
-    SetOfByte aProcessLayers = bPrinter ? mpImpl->mrPageView.GetPrintableLayers() : mpImpl->mrPageView.GetVisibleLayers();
+    SdrLayerIDSet aProcessLayers = bPrinter ? mpImpl->mrPageView.GetPrintableLayers() : mpImpl->mrPageView.GetVisibleLayers();
 
     // create PaintInfoRec; use Rectangle only temporarily
     const vcl::Region& rRegion = GetPaintWindow().GetRedrawRegion();
@@ -361,7 +361,7 @@ void SdrPageWindow::RedrawLayer(const SdrLayerID* pId,
 
     // get the layers to process
     const bool bPrinter(GetPaintWindow().OutputToPrinter());
-    SetOfByte aProcessLayers = bPrinter ? mpImpl->mrPageView.GetPrintableLayers() : mpImpl->mrPageView.GetVisibleLayers();
+    SdrLayerIDSet aProcessLayers = bPrinter ? mpImpl->mrPageView.GetPrintableLayers() : mpImpl->mrPageView.GetVisibleLayers();
 
     // is the given layer visible at all?
     if(aProcessLayers.IsSet(*pId))

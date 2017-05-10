@@ -82,7 +82,7 @@ namespace sdr
             // support ghosted for now. This is no problem currently but would need to be
             // added when sub-groups in 3d will be added one day.
             const ViewContactOfE3dScene& rViewContact = dynamic_cast< ViewContactOfE3dScene& >(GetViewContact());
-            const SetOfByte& rVisibleLayers = rDisplayInfo.GetProcessLayers();
+            const SdrLayerIDSet& rVisibleLayers = rDisplayInfo.GetProcessLayers();
             drawinglayer::primitive2d::Primitive2DContainer xRetval(rViewContact.createScenePrimitive2DSequence(&rVisibleLayers));
 
             if(!xRetval.empty())

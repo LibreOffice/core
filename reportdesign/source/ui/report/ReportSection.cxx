@@ -163,7 +163,7 @@ void OReportSection::Paint( vcl::RenderContext& rRenderContext, const tools::Rec
         // do paint (unbuffered) and mark repaint end
         if(pPgView)
         {
-            pPgView->DrawLayer(0, &rRenderContext);
+            pPgView->DrawLayer(RPT_LAYER_FRONT, &rRenderContext);
             pPgView->GetView().EndDrawLayers(*pTargetPaintWindow, true);
         }
 

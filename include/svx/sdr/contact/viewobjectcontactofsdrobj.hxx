@@ -24,7 +24,7 @@
 #include <boost/optional.hpp>
 
 class SdrObject;
-class SetOfByte;
+class SdrLayerIDSet;
 class OutputDevice;
 
 namespace sdr { namespace contact {
@@ -37,7 +37,7 @@ class SVX_DLLPUBLIC ViewObjectContactOfSdrObj : public ViewObjectContact
         that have subparts which can be on different layers (that is,
         SdrObjGroup .-)
       */
-    virtual bool isPrimitiveVisibleOnAnyLayer(const SetOfByte& aLayers) const;
+    virtual bool isPrimitiveVisibleOnAnyLayer(const SdrLayerIDSet& aLayers) const;
 
 protected:
     const SdrObject& getSdrObject() const;
