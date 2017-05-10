@@ -27,6 +27,7 @@
 
 #include <tools/tenccvt.hxx>
 #include <tools/datetime.hxx>
+#include <unotools/datetime.hxx>
 #include <svl/inettype.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -1962,18 +1963,29 @@ bool HTMLParser::ParseMetaOptionsImpl(
 
         case HtmlMeta::Created:
         case HtmlMeta::Changed:
-            if ( i_xDocProps.is() && !aContent.isEmpty() &&
-                 comphelper::string::getTokenCount(aContent, ';') == 2 )
+            if (i_xDocProps.is() && !aContent.isEmpty())
             {
-                Date aDate( (sal_uLong)aContent.getToken(0, ';').toInt32() );
-                tools::Time aTime( (sal_uLong)aContent.getToken(1, ';').toInt32() );
-                DateTime aDateTime( aDate, aTime );
-                ::util::DateTime uDT = aDateTime.GetUNODateTime();
-                if ( HtmlMeta::Created==nAction )
-                    i_xDocProps->setCreationDate( uDT );
-                else
-                    i_xDocProps->setModificationDate( uDT );
-                bChanged = true;
+                ::util::DateTime uDT;
+                bool valid = false;
+                if (comphelper::string::getTokenCount(aContent, ';') == 2)
+                {
+                    Date aDate((sal_uLong)aContent.getToken(0, ';').toInt32());
+                    tools::Time aTime((sal_uLong)aContent.getToken(1, ';').toInt32());
+                    DateTime aDateTime(aDate, aTime);
+                    uDT = aDateTime.GetUNODateTime();
+                    valid = true;
+                }
+                else if (utl::ISO8601parseDateTime(aContent, uDT))
+                    valid = true;
+
+                if (valid)
+                {
+                    bChanged = true;
+                    if (HtmlMeta::Created == nAction)
+                        i_xDocProps->setCreationDate(uDT);
+                    else
+                        i_xDocProps->setModificationDate(uDT);
+                }
             }
             break;
 
