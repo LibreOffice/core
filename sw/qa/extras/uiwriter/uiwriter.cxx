@@ -3361,19 +3361,19 @@ void SwUiWriterTest::testUndoDelAsChar()
     rIDCO.DeleteAndJoin(*pShell->GetCursor());
     CPPUNIT_ASSERT_EQUAL(size_t(0), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
     CPPUNIT_ASSERT(!pShell->GetCursor()->GetNode().GetTextNode()->HasHints());
-    CPPUNIT_ASSERT_EQUAL(0, pShell->GetCursor()->GetNode().GetTextNode()->Len());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pShell->GetCursor()->GetNode().GetTextNode()->Len());
     rUndoManager.Undo();
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
     CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->HasHints());
-    CPPUNIT_ASSERT_EQUAL(1, pShell->GetCursor()->GetNode().GetTextNode()->Len());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pShell->GetCursor()->GetNode().GetTextNode()->Len());
     rUndoManager.Redo();
     CPPUNIT_ASSERT_EQUAL(size_t(0), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
     CPPUNIT_ASSERT(!pShell->GetCursor()->GetNode().GetTextNode()->HasHints());
-    CPPUNIT_ASSERT_EQUAL(0, pShell->GetCursor()->GetNode().GetTextNode()->Len());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pShell->GetCursor()->GetNode().GetTextNode()->Len());
     rUndoManager.Undo();
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
     CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->HasHints());
-    CPPUNIT_ASSERT_EQUAL(1, pShell->GetCursor()->GetNode().GetTextNode()->Len());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pShell->GetCursor()->GetNode().GetTextNode()->Len());
 }
 
 void SwUiWriterTest::testTdf86639()
