@@ -1080,7 +1080,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             //and it's one of the initially created sequence fields
             //then the localized names has to be replaced by a programmatic name
             OUString sMyFormula = SwXFieldMaster::LocalizeFormula(*this, GetFormula(), true);
-            rAny <<= OUString( sMyFormula );
+            rAny <<= sMyFormula;
         }
         break;
     case FIELD_PROP_DOUBLE:
@@ -1094,7 +1094,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_PAR3:
-        rAny <<= OUString( aPText );
+        rAny <<= aPText;
         break;
     case FIELD_PROP_BOOL3:
         rAny <<= 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);

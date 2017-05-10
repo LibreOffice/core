@@ -1532,11 +1532,7 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 
                     if (!rIStm.GetError())
                     {
-                        SvgDataPtr aSvgDataPtr(
-                            new SvgData(
-                                aNewData,
-                                OUString(aPath)));
-
+                        SvgDataPtr aSvgDataPtr(new SvgData(aNewData, aPath));
                         rImpGraphic = aSvgDataPtr;
                     }
                 }

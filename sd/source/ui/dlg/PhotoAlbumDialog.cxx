@@ -798,7 +798,7 @@ Reference< graphic::XGraphic> SdPhotoAlbumDialog::createXGraphicFromUrl(const OU
 {
     // The same as above, except this returns an XGraphic from the image URL
     ::comphelper::NamedValueCollection aMediaProperties;
-    aMediaProperties.put( "URL", OUString( sUrl ) );
+    aMediaProperties.put( "URL", sUrl );
     Reference< graphic::XGraphic> xGraphic =
         xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
     return xGraphic;

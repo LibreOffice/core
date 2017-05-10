@@ -551,7 +551,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                     aTarget.transferContent(
                             aSource,
                             ::ucbhelper::InsertOperation::Copy,
-                            OUString(sFileName),
+                            sFileName,
                             css::ucb::NameClash::OVERWRITE);
                 }
             }
@@ -652,7 +652,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 // and append the local filename
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
                 aCheckedArgs[nProps].Name = "LocalFileName";
-                aCheckedArgs[nProps++].Value <<= OUString( sTemp );
+                aCheckedArgs[nProps++].Value <<= sTemp;
             }
             else
             // It's a valid URL. but now we must know, if it is a local one or not.

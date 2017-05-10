@@ -1927,8 +1927,8 @@ bool SwFormatFootnoteEndAtTextEnd::QueryValue( uno::Any& rVal, sal_uInt8 nMember
             rVal <<= GetValue() >= FTNEND_ATTXTEND_OWNNUMANDFMT;
         break;
         case MID_NUM_TYPE    : rVal <<= (sal_Int16)aFormat.GetNumberingType(); break;
-        case MID_PREFIX      : rVal <<= OUString(sPrefix); break;
-        case MID_SUFFIX      : rVal <<= OUString(sSuffix); break;
+        case MID_PREFIX      : rVal <<= sPrefix; break;
+        case MID_SUFFIX      : rVal <<= sSuffix; break;
         default: return false;
     }
     return true;

@@ -116,22 +116,17 @@ public:
 #define PROPERTYHANDLE_DATEPATTERNS     4
 #define PROPERTYHANDLE_IGNORELANGCHANGE 5
 
-//#define PROPERTYCOUNT                   5
-#define PROPERTYCOUNT                   6
-
 const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
 {
-    const OUString pProperties[] =
+    return Sequence< OUString >
     {
-        OUString(PROPERTYNAME_LOCALE),
-        OUString(PROPERTYNAME_UILOCALE),
-        OUString(PROPERTYNAME_CURRENCY),
-        OUString(PROPERTYNAME_DECIMALSEPARATOR),
-        OUString(PROPERTYNAME_DATEPATTERNS),
-        OUString(PROPERTYNAME_IGNORELANGCHANGE)
+        PROPERTYNAME_LOCALE,
+        PROPERTYNAME_UILOCALE,
+        PROPERTYNAME_CURRENCY,
+        PROPERTYNAME_DECIMALSEPARATOR,
+        PROPERTYNAME_DATEPATTERNS,
+        PROPERTYNAME_IGNORELANGCHANGE
     };
-    const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
-    return seqPropertyNames;
 }
 
 SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()

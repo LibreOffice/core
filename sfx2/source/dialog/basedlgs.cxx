@@ -636,7 +636,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl, Button*, void)
         }
 
         SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
-        aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( sData ) ) );
+        aPageOpt.SetUserItem( USERITEM_NAME, makeAny( sData ) );
         EndDialog( RET_OK );
     }
     else

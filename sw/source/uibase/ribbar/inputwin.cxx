@@ -556,7 +556,7 @@ void InputEdit::UpdateRange(const OUString& rBoxes,
             aActText = aActText.replaceAt( nPos, 0, aTmp );
             nPos = nPos + aTmp.getLength();
         }
-        if( GetText() != OUString(aActText) )
+        if( GetText() != aActText )
         {
             SetText( aActText );
             SetSelection( Selection( nPos, nPos ) );

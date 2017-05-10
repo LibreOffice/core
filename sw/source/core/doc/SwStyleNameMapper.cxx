@@ -350,7 +350,7 @@ lcl_NewUINameArray(sal_uInt16 nStt, sal_uInt16 const nEnd)
     while( nStt < nEnd )
     {
         const ResId aRId( nStt, *pSwResMgr );
-        pNameArray->push_back(OUString(aRId));
+        pNameArray->push_back(aRId);
         ++nStt;
     }
     return pNameArray;

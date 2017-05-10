@@ -329,7 +329,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
     if(_pRight == m_pNewColumnNames)
     {
         // we copy the column into the new format for the dest
-        OFieldDescription* pSrcField = static_cast<OFieldDescription*>(_pLeft->GetEntryData(_pLeft->GetEntryPos(OUString(_sColumnName))));
+        OFieldDescription* pSrcField = static_cast<OFieldDescription*>(_pLeft->GetEntryData(_pLeft->GetEntryPos(_sColumnName)));
         createNewColumn(_pRight,pSrcField,_rRightColumns,_sColumnName,_sExtraChars,_nMaxNameLen,_aCase);
     }
     else

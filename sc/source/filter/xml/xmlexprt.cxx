@@ -3629,7 +3629,7 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
                 SvXMLElementExport aDateElem( *this, XML_NAMESPACE_META,
                                                 XML_DATE_STRING, true,
                                                 false );
-                Characters(OUString(aDate));
+                Characters(aDate);
             }
         }
         else
@@ -3637,7 +3637,7 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
             SvXMLElementExport aDateElem( *this, XML_NAMESPACE_META,
                                             XML_DATE_STRING, true,
                                             false );
-            Characters(OUString(aDate));
+            Characters(aDate);
         }
     }
 }

@@ -139,7 +139,7 @@ SfxPoolItem* SwFormatAutoFormat::Clone( SfxItemPool* ) const
 bool SwFormatAutoFormat::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     OUString sCharFormatName = StylePool::nameOf( mpHandle );
-    rVal <<= OUString( sCharFormatName );
+    rVal <<= sCharFormatName;
     return true;
 }
 

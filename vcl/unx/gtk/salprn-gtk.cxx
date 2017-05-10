@@ -938,7 +938,7 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
             }
             aFilterData.realloc(aFilterData.getLength()+1);
             aFilterData[aFilterData.getLength()-1].Name = "PageRange";
-            aFilterData[aFilterData.getLength()-1].Value <<= OUString(aRangeText);
+            aFilterData[aFilterData.getLength()-1].Value <<= aRangeText;
         }
         else if (pStr && !strcmp(pStr, "current"))
         {

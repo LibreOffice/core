@@ -2377,7 +2377,7 @@ void SfxMedium::GetMedium_Impl()
                 {
                     if ( bFromTempFile )
                     {
-                        aMedium[utl::MediaDescriptor::PROP_URL()] <<= OUString( aFileName );
+                        aMedium[utl::MediaDescriptor::PROP_URL()] <<= aFileName;
                         aMedium.erase( utl::MediaDescriptor::PROP_READONLY() );
                         aMedium.addInputStream();
                     }
