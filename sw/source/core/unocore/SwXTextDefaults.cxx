@@ -92,6 +92,9 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
             if(pStyle)
             {
                 rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *pStyle ) );
+                if (xStyle->GetCharFormat() == m_pDoc->GetDfltCharFormat())
+                    return; // don't SetCharFormat with formats from mpDfltCharFormat
+
                 if (RES_PARATR_DROP == pMap->nWID)
                 {
                     pDrop = static_cast<SwFormatDrop*>(rItem.Clone());   // because rItem is const...
