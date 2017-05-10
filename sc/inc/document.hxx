@@ -1293,7 +1293,7 @@ public:
     SC_DLLPUBLIC bool           GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,
                                               bool bNotes = true ) const;
     SC_DLLPUBLIC bool           GetPrintAreaHor( SCTAB nTab, SCROW nStartRow, SCROW nEndRow,
-                                                 SCCOL& rEndCol, bool bNotes ) const;
+                                                 SCCOL& rEndCol ) const;
     SC_DLLPUBLIC bool           GetPrintAreaVer( SCTAB nTab, SCCOL nStartCol, SCCOL nEndCol,
                                                  SCROW& rEndRow, bool bNotes ) const;
     void                        InvalidateTableArea();

@@ -170,8 +170,7 @@ void ScDPFilteredCache::fillTable(
             }
 
             SCROW nIndex = getCache().GetItemDataId(nCol, nRow, bRepeatIfEmpty);
-            SCROW nOrder = getOrder(nCol, nIndex);
-            aAdded[nOrder] = nIndex;
+            aAdded[nIndex] = nIndex;
 
             // tdf#96588 - large numbers of trailing identical empty
             // rows generate the same nIndex & nOrder.
@@ -217,8 +216,7 @@ void ScDPFilteredCache::fillTable()
         for (SCROW nRow = 0; nRow < nRowCount; ++nRow)
         {
             SCROW nIndex = getCache().GetItemDataId(nCol, nRow, false);
-            SCROW nOrder = getOrder(nCol, nIndex);
-            aAdded[nOrder] = nIndex;
+            aAdded[nIndex] = nIndex;
         }
         for (SCROW nRow = 0; nRow < nMemCount; ++nRow)
         {
@@ -366,11 +364,6 @@ void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence
     rTabData.realloc(nTabSize);
     for (sal_Int32 i = 0; i < nTabSize; ++i)
         rTabData[i] = tableData[i];
-}
-
-SCROW ScDPFilteredCache::getOrder(long nDim, SCROW nIndex)
-{
-    return ScDPCache::GetOrder(nDim, nIndex);
 }
 
 void ScDPFilteredCache::clear()

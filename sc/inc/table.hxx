@@ -524,7 +524,7 @@ public:
     bool        GetTableArea( SCCOL& rEndCol, SCROW& rEndRow ) const;
     bool        GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const;
     bool        GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
-                                SCCOL& rEndCol, bool bNotes ) const;
+                                SCCOL& rEndCol ) const;
     bool        GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
                                 SCROW& rEndRow, bool bNotes ) const;
 
