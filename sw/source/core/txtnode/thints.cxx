@@ -1251,9 +1251,11 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
 
     // translate from SetAttrMode to InsertMode (for hints with CH_TXTATR)
     const SwInsertFlags nInsertFlags =
-        (nMode & SetAttrMode::FORCEHINTEXPAND)
-        ? (SwInsertFlags::FORCEHINTEXPAND | SwInsertFlags::EMPTYEXPAND)
-        : SwInsertFlags::EMPTYEXPAND;
+        (nMode & SetAttrMode::NOHINTEXPAND)
+        ? SwInsertFlags::NOHINTEXPAND
+        : (nMode & SetAttrMode::FORCEHINTEXPAND)
+            ? (SwInsertFlags::FORCEHINTEXPAND | SwInsertFlags::EMPTYEXPAND)
+            : SwInsertFlags::EMPTYEXPAND;
 
     // need this after TryInsertHint, when pAttr may be deleted
     const sal_Int32 nStart( pAttr->GetStart() );
