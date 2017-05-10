@@ -151,15 +151,7 @@ static const TokenTable aTokTable_Basic [] = {
     { RSET,     "RSet" }, // JSM
     { SELECT,   "Select" },
     { SET,      "Set" },
-#ifdef SHARED
-#undef SHARED
-#define tmpSHARED
-#endif
     { SHARED,   "Shared" },
-#ifdef tmpSHARED
-#define SHARED
-#undef tmpSHARED
-#endif
     { TSINGLE,  "Single" },
     { STATIC,   "Static" },
     { STEP,     "Step" },

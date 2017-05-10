@@ -212,16 +212,8 @@ void SbiParser::Open()
     }
     switch( Peek() )
     {
-#ifdef SHARED
-#undef SHARED
-#define tmpSHARED
-#endif
         case SHARED:
             Next(); nMode |= StreamMode::SHARE_DENYNONE; break;
-#ifdef tmpSHARED
-#define SHARED
-#undef tmpSHARED
-#endif
         case LOCK:
             Next();
             eTok = Next();
