@@ -1,6 +1,6 @@
 --- configure
 +++ configure
-@@ -18402,44 +18402,6 @@
+@@ -18453,43 +18453,6 @@
  fi
  
  
@@ -41,23 +41,6 @@
 -fi
 -
 -
--
- pre_save_restore_cflags=$CFLAGS
- pre_save_restore_cxxflags=$CXXFLAGS
- pre_save_restore_libs=$LIBS
---- src/common/unicode_util.cpp
-+++ src/common/unicode_util.cpp
-@@ -58,8 +58,13 @@
- 
- namespace {
- #if defined(WIN_NT)
-+#if defined(MSVC_USE_DEBUG_RUNTIME)
-+const char* const inTemplate = "icuind%s.dll";
-+const char* const ucTemplate = "icuucd%s.dll";
-+#else
- const char* const inTemplate = "icuin%s.dll";
- const char* const ucTemplate = "icuuc%s.dll";
-+#endif
- #elif defined(DARWIN)
- //const char* const inTemplate = "/Library/Frameworks/Firebird.framework/Versions/A/Libraries/libicui18n.dylib";
- //const char* const ucTemplate = "/Library/Frameworks/Firebird.framework/versions/A/Libraries/libicuuc.dylib";
+ if test "$TOMBUILD" = "Y"; then
+ 	MATHLIB=-ltommath
+ else
