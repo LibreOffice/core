@@ -901,9 +901,9 @@ void SwHTMLParser::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     case RES_OBJECTDYING:
         if (pOld && static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject == GetRegisteredIn())
         {
-            // dann uns selbst beenden
+            // then we kill ourself
             GetRegisteredInNonConst()->Remove( this );
-            ReleaseRef();                   // ansonsten sind wir fertig!
+            ReleaseRef();                   // otherwise we're done!
         }
         break;
     }
@@ -911,7 +911,7 @@ void SwHTMLParser::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
 void SwHTMLParser::DocumentDetected()
 {
-    OSL_ENSURE( !m_bDocInitalized, "DocumentDetected mehrfach aufgerufen" );
+    OSL_ENSURE( !m_bDocInitalized, "DocumentDetected called multiple times" );
     m_bDocInitalized = true;
     if( IsNewDoc() )
     {
@@ -921,10 +921,8 @@ void SwHTMLParser::DocumentDetected()
         CallEndAction( true );
 
         m_xDoc->GetIDocumentUndoRedo().DoUndo(false);
-        // Durch das DocumentDetected wurde im allgemeinen eine
-        // SwViewShell angelegt. Es kann aber auch sein, dass sie
-        // erst spaeter angelegt wird, naemlich dann, wenn die UI
-        // gecaptured ist.
+        // The DocumentDetected in general a SwViewShell is created.
+        // But it also can be, that she is created later, when UI is captured.
         CallStartAction();
     }
 }
@@ -961,7 +959,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         case HtmlTokenId::SELECT_OFF:
             break;
         default:
-            OSL_ENSURE( !m_pPendStack, "Unbekanntes Token fuer Pending-Stack" );
+            OSL_ENSURE( !m_pPendStack, "Unknown token for Pending-Stack" );
             break;
         }
     }
@@ -2082,13 +2080,13 @@ static void lcl_swhtml_getItemInfo( const HTMLAttr& rAttr,
 
 bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
 {
-    // Ein harter Zeilen-Umbruch am Ende muss immer entfernt werden.
-    // Einen zweiten ersetzen wir durch einen Absatz-Abstand.
+    // A hard line break at the end always must be removed.
+    // A second one we replace with paragraph spacing.
     sal_Int32 nLFStripped = StripTrailingLF();
     if( (AM_NOSPACE==eMode || AM_SOFTNOSPACE==eMode) && nLFStripped > 1 )
         eMode = AM_SPACE;
 
-    // die harten Attribute an diesem Absatz werden nie mehr ungueltig
+    // the hard attributes of this paragraph will never be invalid again
     if( !m_aParaAttrs.empty() )
         m_aParaAttrs.clear();
 
@@ -2130,8 +2128,8 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
 
     bool bRet = m_xDoc->getIDocumentContentOperations().AppendTextNode( *m_pPam->GetPoint() );
 
-    // Zeichen-Attribute aufspalten und ggf keine setzen, die ueber den
-    // ganzen Absatz gesetzt sind
+    // split character attributes and maybe set none,
+    // which are set for the whole paragraph
     const SwNodeIndex& rEndIdx = aOldPos.nNode;
     const sal_Int32 nEndCnt = aOldPos.nContent.GetIndex();
     const SwPosition& rPos = *m_pPam->GetPoint();
@@ -2162,7 +2160,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
                     bool bInsert = true;
                        lcl_swhtml_getItemInfo( *pAttr, bScript, bFont,
                                             nScriptItem );
-                        // den besehrigen Teil setzen
+                        // set previous part
                     if( bInsert && bScript )
                     {
                         const SwTextNode *pTextNd =
@@ -2209,12 +2207,10 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
                             pAttr->Clone( rEndIdx, nEndCnt );
                         pSetAttr->nSttContent = nStt;
 
-                        // Wenn das Attribut den gesamten Absatz umspannt, werden
-                        // alle auesseren Attribute nicht mehr beachtet. Deshalb
-                        // darf es auch nicht in die Prev-Liste eines ausseren
-                        // Attributs eingetragen werden, denn dieses wird ja
-                        // erstmal nicht gesetzt. Das fuehrt zu verschiebenungen,
-                        // wenn Felder ins Rennen kommen
+                        // When the attribute is for the whole paragraph, the outer
+                        // attributes aren't regarded anymore. Hence it may not insert
+                        // in the Prev-List of an outer attribute, then this isn't set
+                        // first. That leads to shifting when fields are used.
                         if( !pNext || bWholePara )
                         {
                             if (pSetAttr->bInsAtStart)
@@ -2230,7 +2226,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
                         HTMLAttr *pPrev = pAttr->GetPrev();
                         if( pPrev )
                         {
-                            // Die Previous-Attribute muessen trotzdem gesetzt werden.
+                            // the previous attributes must be set anyway
                             if( !pNext || bWholePara )
                             {
                                 if (pPrev->bInsAtStart)
