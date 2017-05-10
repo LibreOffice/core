@@ -643,7 +643,7 @@ void ScOpenCLTest::testSharedFormulaXLSStockHistory()
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 33; i < 44; ++i)
@@ -667,7 +667,7 @@ void ScOpenCLTest::testSharedFormulaXLSGroundWater()
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 5; i <= 77; ++i)
@@ -884,7 +884,7 @@ void ScOpenCLTest::testMathFormulaSinh()
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     for (SCROW i = 0; i <= 15; ++i)
     {
@@ -2640,7 +2640,7 @@ void ScOpenCLTest::testMathSumIfsFormula()
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     for (SCROW i = 2; i <= 11; ++i)
     {
@@ -3410,7 +3410,7 @@ void ScOpenCLTest::testMathCountIfsFormula()
         return;
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     for (SCROW i = 1; i < 10; ++i)
     {
@@ -3444,7 +3444,7 @@ void ScOpenCLTest::testMathAverageIfsFormula()
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDocument& rDocRes = xDocShRes->GetDocument();
 
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     for (SCROW i = 1; i <= 11; ++i)
     {
