@@ -1062,29 +1062,26 @@ void SwFEShell::SelectionToBottom( bool bBottom )
 }
 
 // Object above/below the document? 2 Controls, 1 Heaven, 0 Hell,
-// -1 Ambiguous
-short SwFEShell::GetLayerId() const
+// SDRLAYER_NOTFOUND Ambiguous
+SdrLayerID SwFEShell::GetLayerId() const
 {
-    short nRet = SHRT_MAX;
-    if ( Imp()->HasDrawView() )
+    if ( !Imp()->HasDrawView() )
+        return SDRLAYER_NOTFOUND;
+
+    SdrLayerID nRet = SDRLAYER_NOTFOUND;
+    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
+    for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
     {
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-        for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
+        const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
+        if( !pObj )
+            continue;
+        if ( nRet == SDRLAYER_NOTFOUND )
+            nRet = pObj->GetLayer();
+        else if ( nRet != pObj->GetLayer() )
         {
-            const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-            if( !pObj )
-                continue;
-            if ( nRet == SHRT_MAX )
-                nRet = pObj->GetLayer();
-            else if ( nRet != pObj->GetLayer() )
-            {
-                nRet = -1;
-                break;
-            }
+            return SDRLAYER_NOTFOUND;
         }
     }
-    if ( nRet == SHRT_MAX )
-        nRet = -1;
     return nRet;
 }
 

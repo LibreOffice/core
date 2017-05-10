@@ -72,7 +72,7 @@ namespace sdr
         maOwnerPage.TRG_ClearMasterPage();
     }
 
-    void MasterPageDescriptor::SetVisibleLayers(const SetOfByte& rNew)
+    void MasterPageDescriptor::SetVisibleLayers(const SdrLayerIDSet& rNew)
     {
         if(rNew != maVisibleLayers)
         {

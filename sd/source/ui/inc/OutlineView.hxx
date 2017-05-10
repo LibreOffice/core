@@ -128,12 +128,12 @@ public:
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow,
         sal_uInt16 nPage,
-        sal_uInt16 nLayer) override;
+        SdrLayerID nLayer) override;
     virtual sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
         ::sd::Window* pTargetWindow,
         sal_uInt16 nPage,
-        sal_uInt16 nLayer) override;
+        SdrLayerID nLayer) override;
 
     // Re-implement GetScriptType for this view to get correct results
     virtual SvtScriptType GetScriptType() const override;

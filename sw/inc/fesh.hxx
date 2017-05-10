@@ -278,7 +278,7 @@ public:
     void SelectionToTop   ( bool bTop = true );
     void SelectionToBottom( bool bBottom = true );
 
-    short GetLayerId() const;   ///< 1 Heaven, 0 Hell, -1 Ambiguous.
+    SdrLayerID GetLayerId() const;   ///< 1 Heaven, 0 Hell, SDRLAYER_NOTFOUND Ambiguous.
     void  SelectionToHeaven();  ///< Above document.
     void  SelectionToHell();    ///< Below document.
 

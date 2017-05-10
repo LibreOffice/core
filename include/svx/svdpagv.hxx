@@ -69,9 +69,9 @@ private:
     bool         mbHasMarked;
     bool         mbVisible;
 
-    SetOfByte    aLayerVisi;   // Set of visible Layers
-    SetOfByte    aLayerLock;   // Set of non-editable Layers
-    SetOfByte    aLayerPrn;    // Set of printable Layers
+    SdrLayerIDSet    aLayerVisi;   // Set of visible Layers
+    SdrLayerIDSet    aLayerLock;   // Set of non-editable Layers
+    SdrLayerIDSet    aLayerPrn;    // Set of printable Layers
 
     SdrObjList*  pAktList;     // Current List, usually the Page
     SdrObject*   pAktGroup;    // Current Group; nullptr means none
@@ -110,8 +110,8 @@ public:
 private:
     void ImpInvalidateHelpLineArea(sal_uInt16 nNum) const;
 
-    void SetLayer(const OUString& rName, SetOfByte& rBS, bool bJa);
-    bool IsLayer(const OUString& rName, const SetOfByte& rBS) const;
+    void SetLayer(const OUString& rName, SdrLayerIDSet& rBS, bool bJa);
+    bool IsLayer(const OUString& rName, const SdrLayerIDSet& rBS) const;
 
     /// Let's see if the current Group (pAktGroup) is still inserted
     void CheckAktGroup();
@@ -210,12 +210,12 @@ public:
     void LogicToPagePos(tools::Rectangle& rRect) const { rRect.Move(-aPgOrg.X(),-aPgOrg.Y()); }
     void PagePosToLogic(Point& rPnt) const { rPnt+=aPgOrg; }
 
-    void SetVisibleLayers(const SetOfByte& rSet) { aLayerVisi=rSet; }
-    const SetOfByte& GetVisibleLayers() const { return aLayerVisi; }
-    void SetPrintableLayers(const SetOfByte& rSet) { aLayerPrn=rSet; }
-    const SetOfByte& GetPrintableLayers() const { return aLayerPrn;  }
-    void SetLockedLayers(const SetOfByte& rSet) { aLayerLock=rSet; }
-    const SetOfByte& GetLockedLayers() const { return aLayerLock; }
+    void SetVisibleLayers(const SdrLayerIDSet& rSet) { aLayerVisi=rSet; }
+    const SdrLayerIDSet& GetVisibleLayers() const { return aLayerVisi; }
+    void SetPrintableLayers(const SdrLayerIDSet& rSet) { aLayerPrn=rSet; }
+    const SdrLayerIDSet& GetPrintableLayers() const { return aLayerPrn;  }
+    void SetLockedLayers(const SdrLayerIDSet& rSet) { aLayerLock=rSet; }
+    const SdrLayerIDSet& GetLockedLayers() const { return aLayerLock; }
 
     const SdrHelpLineList& GetHelpLines() const { return aHelpLines; }
     void SetHelpLines(const SdrHelpLineList& rHLL);

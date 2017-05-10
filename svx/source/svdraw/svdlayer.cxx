@@ -24,7 +24,7 @@
 #include "svdglob.hxx"
 #include "svx/svdstr.hrc"
 
-bool SetOfByte::IsEmpty() const
+bool SdrLayerIDSet::IsEmpty() const
 {
     for(sal_uInt8 i : aData)
     {
@@ -35,7 +35,7 @@ bool SetOfByte::IsEmpty() const
     return true;
 }
 
-void SetOfByte::operator&=(const SetOfByte& r2ndSet)
+void SdrLayerIDSet::operator&=(const SdrLayerIDSet& r2ndSet)
 {
     for(sal_uInt16 i(0); i < 32; i++)
     {
@@ -45,7 +45,7 @@ void SetOfByte::operator&=(const SetOfByte& r2ndSet)
 
 /** initialize this set with a uno sequence of sal_Int8
 */
-void SetOfByte::PutValue( const css::uno::Any & rAny )
+void SdrLayerIDSet::PutValue( const css::uno::Any & rAny )
 {
     css::uno::Sequence< sal_Int8 > aSeq;
     if( rAny >>= aSeq )
@@ -69,7 +69,7 @@ void SetOfByte::PutValue( const css::uno::Any & rAny )
 
 /** returns a uno sequence of sal_Int8
 */
-void SetOfByte::QueryValue( css::uno::Any & rAny ) const
+void SdrLayerIDSet::QueryValue( css::uno::Any & rAny ) const
 {
     sal_Int16 nNumBytesSet = 0;
     sal_Int16 nIndex;
@@ -229,16 +229,16 @@ void SdrLayerAdmin::NewStandardLayer(sal_uInt16 nPos)
 
 sal_uInt16 SdrLayerAdmin::GetLayerPos(SdrLayer* pLayer) const
 {
-    sal_uIntPtr nRet=SDRLAYER_NOTFOUND;
+    sal_uInt16 nRet=SDRLAYERPOS_NOTFOUND;
     if (pLayer!=nullptr) {
         std::vector<SdrLayer*>::const_iterator it = std::find(aLayer.begin(), aLayer.end(), pLayer);
         if (it==aLayer.end()) {
-            nRet=SDRLAYER_NOTFOUND;
+            nRet=SDRLAYERPOS_NOTFOUND;
         } else {
             nRet=it - aLayer.begin();
         }
     }
-    return sal_uInt16(nRet);
+    return nRet;
 }
 
 SdrLayer* SdrLayerAdmin::GetLayer(const OUString& rName)
@@ -275,15 +275,12 @@ SdrLayerID SdrLayerAdmin::GetLayerID(const OUString& rName) const
     return nRet;
 }
 
-const SdrLayer* SdrLayerAdmin::GetLayerPerID(sal_uInt16 nID) const
+const SdrLayer* SdrLayerAdmin::GetLayerPerID(SdrLayerID nID) const
 {
-    sal_uInt16 i=0;
-    const SdrLayer* pLay=nullptr;
-    while (i<GetLayerCount() && pLay==nullptr) {
-        if (nID==GetLayer(i)->GetID()) pLay=GetLayer(i);
-        else i++;
-    }
-    return pLay;
+    for (SdrLayer* pLayer : aLayer)
+        if (pLayer->GetID() == nID)
+            return pLayer;
+    return nullptr;
 }
 
 // Global LayerIDs begin at 0 and increase,
@@ -292,31 +289,31 @@ const SdrLayer* SdrLayerAdmin::GetLayerPerID(sal_uInt16 nID) const
 
 SdrLayerID SdrLayerAdmin::GetUniqueLayerID() const
 {
-    SetOfByte aSet;
-    bool bDown = (pParent == nullptr);
-    sal_uInt16 j;
-    for (j=0; j<GetLayerCount(); j++)
+    SdrLayerIDSet aSet;
+    for (sal_uInt16 j=0; j<GetLayerCount(); j++)
     {
         aSet.Set(GetLayer(j)->GetID());
     }
-    SdrLayerID i;
-    if (!bDown)
+    sal_uInt8 i;
+    if (pParent != nullptr)
     {
-        i=254;
-        while (i && aSet.IsSet(sal_uInt8(i)))
+        i = 254;
+        while (i && aSet.IsSet(SdrLayerID(i)))
             --i;
+        assert(i != 0);
         if (i == 0)
-            i=254;
+            i = 254;
     }
     else
     {
-        i=0;
-        while (i<=254 && aSet.IsSet(sal_uInt8(i)))
+        i = 0;
+        while (i<=254 && aSet.IsSet(SdrLayerID(i)))
             i++;
+        assert(i <= 254);
         if (i>254)
-            i=0;
+            i = 0;
     }
-    return i;
+    return SdrLayerID(i);
 }
 
 void SdrLayerAdmin::SetControlLayerName(const OUString& rNewName)

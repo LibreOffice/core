@@ -570,7 +570,7 @@ namespace
         const SdrObjList& rList,
         const Point& rPnt,
         const SdrPageView& rTextEditPV,
-        const SetOfByte& rVisLayers,
+        const SdrLayerIDSet& rVisLayers,
         Color& rCol)
     {
         if(!rList.GetModel())
@@ -614,7 +614,7 @@ namespace
         const SdrPage& rPage,
         const Point& rPnt,
         const SdrPageView& rTextEditPV,
-        const SetOfByte& rVisLayers,
+        const SdrLayerIDSet& rVisLayers,
         Color& rCol,
         bool bSkipBackgroundShape)
     {
@@ -627,7 +627,7 @@ namespace
         {
             if(rPage.TRG_HasMasterPage())
             {
-                SetOfByte aSet(rVisLayers);
+                SdrLayerIDSet aSet(rVisLayers);
                 aSet &= rPage.TRG_GetMasterPageVisibleLayers();
                 SdrPage& rMasterPage = rPage.TRG_GetMasterPage();
 

@@ -52,15 +52,15 @@ XMLTableShapeImportHelper::~XMLTableShapeImportHelper()
 {
 }
 
-void XMLTableShapeImportHelper::SetLayer(uno::Reference<drawing::XShape>& rShape, sal_Int16 nLayerID, const OUString& sType)
+void XMLTableShapeImportHelper::SetLayer(uno::Reference<drawing::XShape>& rShape, SdrLayerID nLayerID, const OUString& sType)
 {
     if ( sType == "com.sun.star.drawing.ControlShape" )
         nLayerID = SC_LAYER_CONTROLS;
-    if (nLayerID != -1)
+    if (nLayerID != SDRLAYER_NOTFOUND)
     {
         uno::Reference< beans::XPropertySet > xShapeProp( rShape, uno::UNO_QUERY );
         if( xShapeProp.is() )
-            xShapeProp->setPropertyValue( SC_LAYERID, uno::makeAny(nLayerID) );
+            xShapeProp->setPropertyValue( SC_LAYERID, uno::makeAny<sal_uInt16>(sal_uInt8(nLayerID)) );
     }
 }
 
@@ -97,7 +97,7 @@ void XMLTableShapeImportHelper::finishShape(
             sal_Int32 nEndY(-1);
             sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
             std::unique_ptr<OUString> xRangeList;
-            sal_Int16 nLayerID(-1);
+            SdrLayerID nLayerID = SDRLAYER_NOTFOUND;
             for( sal_Int16 i=0; i < nAttrCount; ++i )
             {
                 const OUString& rAttrName(xAttrList->getNameByIndex( i ));
@@ -215,7 +215,7 @@ void XMLTableShapeImportHelper::finishShape(
             }
         }
         sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
-        sal_Int16 nLayerID(-1);
+        SdrLayerID nLayerID = SDRLAYER_NOTFOUND;
         for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
             const OUString& rAttrName(xAttrList->getNameByIndex( i ));

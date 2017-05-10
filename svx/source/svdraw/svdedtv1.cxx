@@ -789,7 +789,8 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr) const
     bool bSizProtect = false, bSizProtectDC = false;
     bool bPrintable = true, bPrintableDC = false;
     bool bVisible = true, bVisibleDC = false;
-    SdrLayerID nLayerId=0; bool bLayerDC=false;
+    SdrLayerID nLayerId(0);
+    bool bLayerDC=false;
     OUString aObjName;
     bool bObjNameDC=false,bObjNameSet=false;
     long nSnapPosX=0;      bool bSnapPosXDC=false;

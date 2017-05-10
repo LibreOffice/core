@@ -59,7 +59,7 @@ public:
 
     /* returns the common layer id of the marked objects, otherwise -1 will be returned.
     */
-    short GetLayerIdOfMarkedObjects() const;
+    SdrLayerID GetLayerIdOfMarkedObjects() const;
 
     // returns true if objects at Drag & Drop is resize not move
     bool IsDragResize() const;

@@ -643,7 +643,7 @@ sal_Int8 SlideSorterViewShell::AcceptDrop (
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
     sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    SdrLayerID nLayer)
 {
     OSL_ASSERT(mpSlideSorter.get()!=nullptr);
     return mpSlideSorter->GetController().GetClipboard().AcceptDrop (
@@ -659,7 +659,7 @@ sal_Int8 SlideSorterViewShell::ExecuteDrop (
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
     sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    SdrLayerID nLayer)
 {
     OSL_ASSERT(mpSlideSorter.get()!=nullptr);
     return mpSlideSorter->GetController().GetClipboard().ExecuteDrop (

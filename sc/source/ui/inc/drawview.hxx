@@ -84,7 +84,7 @@ public:
 
     void            MarkDropObj( SdrObject* pObj );
 
-    void            SetMarkedToLayer( sal_uInt8 nLayerNo );
+    void            SetMarkedToLayer( SdrLayerID nLayerNo );
 
     void            InvalidateAttribs();
     void            InvalidateDrawTextAttrs();

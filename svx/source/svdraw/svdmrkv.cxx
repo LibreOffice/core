@@ -1621,7 +1621,7 @@ void SdrMarkView::SetMarkHdlSizePixel(sal_uInt16 nSiz)
     }
 }
 
-SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay) const
+SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay) const
 {
     if(((nOptions & SdrSearchOptions::IMPISMASTER) && pObj->IsNotVisibleAsMaster()) || (!pObj->IsVisible()))
     {
@@ -1688,11 +1688,11 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     return pRet;
 }
 
-SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj) const
+SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay, SdrObject*& rpRootObj) const
 {
     return (*this).CheckSingleSdrObjectHit(rPnt,nTol,pOL,pPV,nOptions,pMVisLay,rpRootObj,nullptr);
 }
-SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const
+SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const
 {
     SdrObject* pRet=nullptr;
     rpRootObj=nullptr;
@@ -1797,7 +1797,7 @@ SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpP
             while (pHitObj==nullptr && (bBack ? nPgNum<nPgAnz : nPgNum>0)) {
                 SdrSearchOptions nTmpOptions=nOptions;
                 if (!bBack) nPgNum--;
-                const SetOfByte* pMVisLay=nullptr;
+                const SdrLayerIDSet* pMVisLay=nullptr;
                 SdrObjList* pObjList=nullptr;
                 if (pbHitPassDirect!=nullptr) *pbHitPassDirect = true;
                 if (nPgNum>=nPgAnz-1 || (bExtraPassForWholePage && nPgNum>=nPgAnz-2))

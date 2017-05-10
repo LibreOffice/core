@@ -37,7 +37,7 @@ namespace sdr
             virtual drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInfo) const override;
 
         private:
-            virtual bool isPrimitiveVisibleOnAnyLayer(const SetOfByte& aLayers) const override;
+            virtual bool isPrimitiveVisibleOnAnyLayer(const SdrLayerIDSet& aLayers) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr

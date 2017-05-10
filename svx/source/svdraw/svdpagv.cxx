@@ -605,7 +605,7 @@ void SdrPageView::AdjHdl()
     GetView().AdjustMarkHdl();
 }
 
-void SdrPageView::SetLayer(const OUString& rName, SetOfByte& rBS, bool bJa)
+void SdrPageView::SetLayer(const OUString& rName, SdrLayerIDSet& rBS, bool bJa)
 {
     if(!GetPage())
         return;
@@ -616,7 +616,7 @@ void SdrPageView::SetLayer(const OUString& rName, SetOfByte& rBS, bool bJa)
         rBS.Set(nID, bJa);
 }
 
-bool SdrPageView::IsLayer(const OUString& rName, const SetOfByte& rBS) const
+bool SdrPageView::IsLayer(const OUString& rName, const SdrLayerIDSet& rBS) const
 {
     if(!GetPage())
         return false;
@@ -674,9 +674,9 @@ bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
         return false; // Obj suddenly in different Page
     // the layer has to be visible and must not be locked
     SdrLayerID nL = pObj->GetLayer();
-    if (!aLayerVisi.IsSet(sal_uInt8(nL)))
+    if (!aLayerVisi.IsSet(nL))
         return false;
-    if (aLayerLock.IsSet(sal_uInt8(nL)))
+    if (aLayerLock.IsSet(nL))
         return false;
     return true;
 }

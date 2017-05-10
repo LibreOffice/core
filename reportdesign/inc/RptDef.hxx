@@ -44,9 +44,9 @@ namespace com { namespace sun { namespace star {
 namespace rptui
 {
 // not all used at the moment
-#define RPT_LAYER_FRONT         0
-#define RPT_LAYER_BACK          1
-#define RPT_LAYER_HIDDEN        2
+constexpr SdrLayerID RPT_LAYER_FRONT  (0);
+constexpr SdrLayerID RPT_LAYER_BACK   (1);
+constexpr SdrLayerID RPT_LAYER_HIDDEN (2);
 
 
 

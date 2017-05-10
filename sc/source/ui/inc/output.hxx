@@ -314,12 +314,12 @@ public:
     void    DrawClear();
 
     // #i72502# printer only command set
-    Point PrePrintDrawingLayer(long nLogStX, long nLogStY );
-    void PostPrintDrawingLayer(const Point& rMMOffset); // #i74768# need offset for FormLayer
-    void PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOffset);
+    Point   PrePrintDrawingLayer(long nLogStX, long nLogStY );
+    void    PostPrintDrawingLayer(const Point& rMMOffset); // #i74768# need offset for FormLayer
+    void    PrintDrawingLayer(SdrLayerID nLayer, const Point& rMMOffset);
 
     // only screen:
-    void    DrawSelectiveObjects(const sal_uInt16 nLayer);
+    void    DrawSelectiveObjects(SdrLayerID nLayer);
 
     bool    SetChangedClip();       // sal_False = not
     vcl::Region  GetChangedAreaRegion();

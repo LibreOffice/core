@@ -1346,9 +1346,9 @@ sal_uInt16 SdDrawDocument::DuplicatePage (sal_uInt16 nPageNum)
 
     // Get background flags
     SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
-    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
-    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
-    SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
+    SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
+    SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+    SdrLayerIDSet aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
     return DuplicatePage (
         pActualPage, ePageKind,
@@ -1490,9 +1490,9 @@ void SdDrawDocument::SetupNewPage (
     if (pPreviousPage != nullptr)
     {
         SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
-        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
-        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
-        SetOfByte aVisibleLayers = pPreviousPage->TRG_GetMasterPageVisibleLayers();
+        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
+        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+        SdrLayerIDSet aVisibleLayers = pPreviousPage->TRG_GetMasterPageVisibleLayers();
         aVisibleLayers.Set(aBckgrnd, bIsPageBack);
         aVisibleLayers.Set(aBckgrndObj, bIsPageObj);
         pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);

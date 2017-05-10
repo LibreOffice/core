@@ -351,7 +351,7 @@ void SdLayer::set( LayerAttribute what, bool flag ) throw()
 
             if(pFrameView)
             {
-                SetOfByte aNewLayers;
+                SdrLayerIDSet aNewLayers;
                 switch(what)
                 {
                 case VISIBLE:   aNewLayers = pFrameView->GetVisibleLayers();

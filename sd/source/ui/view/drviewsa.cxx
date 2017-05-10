@@ -668,7 +668,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         if (IsLayerModeActive())
         {
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
-            SdrLayerID nLayer = 0, nOldLayer = 0;
+            SdrLayerID nLayer(0), nOldLayer(0);
             SdrObject* pObj = nullptr;
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
             const size_t nMarkCount = rMarkList.GetMarkCount();

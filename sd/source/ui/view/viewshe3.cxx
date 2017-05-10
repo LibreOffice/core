@@ -202,9 +202,9 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     sal_uInt16 nSId = rRequest.GetSlot();
     SdDrawDocument* pDocument = GetDoc();
     SdrLayerAdmin& rLayerAdmin = pDocument->GetLayerAdmin();
-    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
-    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
-    SetOfByte aVisibleLayers;
+    SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
+    SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+    SdrLayerIDSet aVisibleLayers;
     // Determine the page from which to copy some values, such as layers,
     // size, master page, to the new page.  This is usually the given page.
     // When the given page is NULL then use the first page of the document.

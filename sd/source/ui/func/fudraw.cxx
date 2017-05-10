@@ -603,7 +603,7 @@ bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
 
     if (bAnimationInfo || bImageMapInfo)
     {
-        const SetOfByte* pVisiLayer = &mpView->GetSdrPageView()->GetVisibleLayers();
+        const SdrLayerIDSet* pVisiLayer = &mpView->GetSdrPageView()->GetVisibleLayers();
         sal_uInt16 nHitLog(sal_uInt16 (mpWindow->PixelToLogic(Size(HITPIX,0)).Width()));
         long  n2HitLog(nHitLog * 2);
         Point aHitPosR(rPos);

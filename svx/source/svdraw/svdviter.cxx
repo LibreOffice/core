@@ -76,8 +76,8 @@ bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
         {
             // Looking for an object? First, determine if it visible in
             // this PageView.
-            SetOfByte aObjLay;
-            mpObject->getMergedHierarchyLayerSet(aObjLay);
+            SdrLayerIDSet aObjLay;
+            mpObject->getMergedHierarchySdrLayerIDSet(aObjLay);
             aObjLay &= pPV->GetVisibleLayers();
             return !aObjLay.IsEmpty();
         }
@@ -99,8 +99,8 @@ bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
                 {
                     // Looking for an object? First, determine if it visible in
                     // this PageView.
-                    SetOfByte aObjLay;
-                    mpObject->getMergedHierarchyLayerSet(aObjLay);
+                    SdrLayerIDSet aObjLay;
+                    mpObject->getMergedHierarchySdrLayerIDSet(aObjLay);
                     aObjLay &= pPV->GetVisibleLayers();
                     aObjLay &= pPg->TRG_GetMasterPageVisibleLayers();
 

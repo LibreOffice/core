@@ -632,7 +632,7 @@ sal_Int8 Clipboard::AcceptDrop (
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
     sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    SdrLayerID nLayer)
 {
     sal_Int8 nAction (DND_ACTION_NONE);
 
@@ -700,7 +700,7 @@ sal_Int8 Clipboard::ExecuteDrop (
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
     sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    SdrLayerID nLayer)
 {
     sal_Int8 nResult = DND_ACTION_NONE;
     mxUndoContext.reset();
@@ -886,7 +886,7 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
     sal_uInt16 nPage,
-    sal_uInt16 nLayer)
+    SdrLayerID nLayer)
 {
     sal_Int8 nResult = 0;
 

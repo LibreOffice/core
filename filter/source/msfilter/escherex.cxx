@@ -4934,7 +4934,7 @@ EscherEx::EscherEx(const std::shared_ptr<EscherExGlobal>& rxGlobal, SvStream* pO
     , mnCurrentDg(0)
     , mnCountOfs(0)
     , mnGroupLevel(0)
-    , mnHellLayerId(USHRT_MAX)
+    , mnHellLayerId(SDRLAYER_NOTFOUND)
     , mbEscherSpgr(false)
     , mbEscherDg(false)
     , mbOOXML(bOOXML)
