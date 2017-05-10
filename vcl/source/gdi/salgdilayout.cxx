@@ -720,7 +720,7 @@ bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, 
         mirror( rgn, pOutDev );
         std::unique_ptr< ImplControlValue > mirrorValue( aValue.clone());
         mirror( *mirrorValue, pOutDev );
-        if( getNativeControlRegion( nType, nPart, rgn, nState, *mirrorValue, OUString(),
+        if( getNativeControlRegion( nType, nPart, rgn, nState, *mirrorValue,
                                                 rNativeBoundingRegion, rNativeContentRegion ) )
         {
             mirror( rNativeBoundingRegion, pOutDev, true );
@@ -730,7 +730,7 @@ bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, 
         return false;
     }
     else
-        return getNativeControlRegion( nType, nPart, rControlRegion, nState, aValue, OUString(),
+        return getNativeControlRegion( nType, nPart, rControlRegion, nState, aValue,
                                                 rNativeBoundingRegion, rNativeContentRegion );
 }
 

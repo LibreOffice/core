@@ -50,13 +50,12 @@ MenuItemData* MenuItemList::Insert(
     MenuItemType eType,
     MenuItemBits nBits,
     const OUString& rStr,
-    const Image& rImage,
     Menu* pMenu,
     size_t nPos,
     const OString &rIdent
 )
 {
-    MenuItemData* pData     = new MenuItemData( rStr, rImage );
+    MenuItemData* pData     = new MenuItemData( rStr, Image() );
     pData->nId              = nId;
     pData->sIdent           = rIdent;
     pData->eType            = eType;
@@ -74,7 +73,6 @@ MenuItemData* MenuItemList::Insert(
     aSalMIData.nBits = nBits;
     aSalMIData.pMenu = pMenu;
     aSalMIData.aText = rStr;
-    aSalMIData.aImage = rImage;
 
     // Native-support: returns NULL if not supported
     pData->pSalMenuItem = ImplGetSVData()->mpDefInst->CreateMenuItem( &aSalMIData );

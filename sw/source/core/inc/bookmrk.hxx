@@ -161,8 +161,7 @@ namespace sw {
         public:
             Bookmark(const SwPaM& rPaM,
                 const vcl::KeyCode& rCode,
-                const OUString& rName,
-                const OUString& rShortName);
+                const OUString& rName);
             virtual void InitDoc(SwDoc* const io_Doc) override;
 
             virtual void DeregisterFromDoc(SwDoc* const io_pDoc) override;

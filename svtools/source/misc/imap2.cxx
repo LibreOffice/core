@@ -144,16 +144,16 @@ void ImageMap::Write( SvStream& rOStm, sal_uLong nFormat ) const
 {
     switch( nFormat )
     {
-        case IMAP_FORMAT_BIN : Write( rOStm, "" ); break;
-        case IMAP_FORMAT_CERN : ImpWriteCERN( rOStm, "" ); break;
-        case IMAP_FORMAT_NCSA : ImpWriteNCSA( rOStm, "" ); break;
+        case IMAP_FORMAT_BIN : Write( rOStm ); break;
+        case IMAP_FORMAT_CERN : ImpWriteCERN( rOStm ); break;
+        case IMAP_FORMAT_NCSA : ImpWriteNCSA( rOStm ); break;
 
         default:
         break;
     }
 }
 
-void ImageMap::ImpWriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const
+void ImageMap::ImpWriteCERN( SvStream& rOStm ) const
 {
     size_t      nCount = maList.size();
 
@@ -164,15 +164,15 @@ void ImageMap::ImpWriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const
         switch( pObj->GetType() )
         {
             case IMAP_OBJ_RECTANGLE:
-                static_cast<IMapRectangleObject*>( pObj )->WriteCERN( rOStm, rBaseURL );
+                static_cast<IMapRectangleObject*>( pObj )->WriteCERN( rOStm, OUString() );
             break;
 
             case IMAP_OBJ_CIRCLE:
-                static_cast<IMapCircleObject*>( pObj )->WriteCERN( rOStm, rBaseURL );
+                static_cast<IMapCircleObject*>( pObj )->WriteCERN( rOStm, OUString() );
             break;
 
             case IMAP_OBJ_POLYGON:
-                static_cast<IMapPolygonObject*>( pObj )->WriteCERN( rOStm, rBaseURL );
+                static_cast<IMapPolygonObject*>( pObj )->WriteCERN( rOStm, OUString() );
             break;
 
             default:
@@ -181,7 +181,7 @@ void ImageMap::ImpWriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const
     }
 }
 
-void ImageMap::ImpWriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) const
+void ImageMap::ImpWriteNCSA( SvStream& rOStm  ) const
 {
     size_t      nCount = maList.size();
 
@@ -192,15 +192,15 @@ void ImageMap::ImpWriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) const
         switch( pObj->GetType() )
         {
             case IMAP_OBJ_RECTANGLE:
-                static_cast<IMapRectangleObject*>( pObj )->WriteNCSA( rOStm, rBaseURL );
+                static_cast<IMapRectangleObject*>( pObj )->WriteNCSA( rOStm, OUString() );
             break;
 
             case IMAP_OBJ_CIRCLE:
-                static_cast<IMapCircleObject*>( pObj )->WriteNCSA( rOStm, rBaseURL );
+                static_cast<IMapCircleObject*>( pObj )->WriteNCSA( rOStm, OUString() );
             break;
 
             case IMAP_OBJ_POLYGON:
-                static_cast<IMapPolygonObject*>( pObj )->WriteNCSA( rOStm, rBaseURL );
+                static_cast<IMapPolygonObject*>( pObj )->WriteNCSA( rOStm, OUString() );
             break;
 
             default:
@@ -218,9 +218,9 @@ sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat  )
 
     switch ( nFormat )
     {
-        case IMAP_FORMAT_BIN    : Read( rIStm, "" ); break;
-        case IMAP_FORMAT_CERN   : nRet = ImpReadCERN( rIStm, "" ); break;
-        case IMAP_FORMAT_NCSA   : nRet = ImpReadNCSA( rIStm, "" ); break;
+        case IMAP_FORMAT_BIN    : Read( rIStm ); break;
+        case IMAP_FORMAT_CERN   : nRet = ImpReadCERN( rIStm ); break;
+        case IMAP_FORMAT_NCSA   : nRet = ImpReadNCSA( rIStm ); break;
 
         default:
         break;
@@ -232,14 +232,14 @@ sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat  )
     return nRet;
 }
 
-sal_uLong ImageMap::ImpReadCERN( SvStream& rIStm, const OUString& rBaseURL )
+sal_uLong ImageMap::ImpReadCERN( SvStream& rIStm )
 {
     // delete old content
     ClearImageMap();
 
     OString aStr;
     while ( rIStm.ReadLine( aStr ) )
-        ImpReadCERNLine( aStr, rBaseURL );
+        ImpReadCERNLine( aStr, OUString() );
 
     return IMAP_ERR_OK;
 }
@@ -373,14 +373,14 @@ OUString ImageMap::ImpReadCERNURL( const char** ppStr, const OUString& rBaseURL 
     return INetURLObject::GetAbsURL( rBaseURL, aStr );
 }
 
-sal_uLong ImageMap::ImpReadNCSA( SvStream& rIStm, const OUString& rBaseURL )
+sal_uLong ImageMap::ImpReadNCSA( SvStream& rIStm )
 {
     // delete old content
     ClearImageMap();
 
     OString aStr;
     while ( rIStm.ReadLine( aStr ) )
-        ImpReadNCSALine( aStr, rBaseURL );
+        ImpReadNCSALine( aStr, OUString() );
 
     return IMAP_ERR_OK;
 }

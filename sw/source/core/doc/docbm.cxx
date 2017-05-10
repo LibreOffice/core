@@ -409,7 +409,7 @@ namespace sw { namespace mark
                 pMark = std::shared_ptr<IMark>(new NavigatorReminder(rPaM));
                 break;
             case IDocumentMarkAccess::MarkType::BOOKMARK:
-                pMark = std::shared_ptr<IMark>(new Bookmark(rPaM, vcl::KeyCode(), rName, OUString()));
+                pMark = std::shared_ptr<IMark>(new Bookmark(rPaM, vcl::KeyCode(), rName));
                 break;
             case IDocumentMarkAccess::MarkType::DDE_BOOKMARK:
                 pMark = std::shared_ptr<IMark>(new DdeBookmark(rPaM));
