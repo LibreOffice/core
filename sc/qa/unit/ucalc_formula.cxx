@@ -5221,6 +5221,32 @@ void Test::testFuncINDIRECT2()
     m_pDoc->DeleteTab(0);
 }
 
+// Test for tdf#107724 do not propagate an array context from MATCH to INDIRECT
+// as INDIRECT returns ParamClass::Reference
+void Test::testFunc_MATCH_INDIRECT()
+{
+    CPPUNIT_ASSERT_MESSAGE("failed to insert sheet", m_pDoc->InsertTab( 0, "foo"));
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
+
+    ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
+    ScRangeData* pRangeData = new ScRangeData( m_pDoc, "RoleAssignment", "$D$4:$D$13");
+    pGlobalNames->insert(pRangeData);
+
+    // D6: data to match, in 3rd row of named range.
+    m_pDoc->SetString( 3,5,0, "Test1");
+    // F15: Formula generating indirect reference of corner addresses taking
+    // row+offset and column from named range, which are not in array context
+    // thus don't create arrays of offsets.
+    m_pDoc->SetString( 5,14,0, "=MATCH(\"Test1\";INDIRECT(ADDRESS(ROW(RoleAssignment)+1;COLUMN(RoleAssignment))&\":\"&ADDRESS(ROW(RoleAssignment)+ROWS(RoleAssignment)-1;COLUMN(RoleAssignment)));0)");
+
+    // Match in 2nd row of range offset by 1 expected.
+    ASSERT_DOUBLES_EQUAL_MESSAGE("Failed to not propagate array context from MATCH to INDIRECT",
+            2.0, m_pDoc->GetValue(5,14,0));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaDepTracking()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));

@@ -189,6 +189,7 @@ public:
     void testFuncDATEDIF();
     void testFuncINDIRECT();
     void testFuncINDIRECT2();
+    void testFunc_MATCH_INDIRECT();
     void testFuncIF();
     void testFuncCHOOSE();
     void testFuncIFERROR();
@@ -592,6 +593,7 @@ public:
     CPPUNIT_TEST(testFuncDATEDIF);
     CPPUNIT_TEST(testFuncINDIRECT);
     CPPUNIT_TEST(testFuncINDIRECT2);
+    CPPUNIT_TEST(testFunc_MATCH_INDIRECT);
     CPPUNIT_TEST(testFuncIF);
     CPPUNIT_TEST(testFuncCHOOSE);
     CPPUNIT_TEST(testFuncIFERROR);
