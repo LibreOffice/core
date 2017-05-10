@@ -399,7 +399,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             rReq.Done();
             break;
         case FID_HARD_RECALC:
-            DoHardRecalc( rReq.IsAPI() );
+            DoHardRecalc();
             rReq.Done();
             break;
         case SID_UPDATETABLINKS:
@@ -1250,7 +1250,7 @@ void ScDocShell::DoRecalc( bool bApi )
     }
 }
 
-void ScDocShell::DoHardRecalc( bool /* bApi */ )
+void ScDocShell::DoHardRecalc()
 {
     WaitObject aWaitObj( GetActiveDialogParent() );
     ScTabViewShell* pSh = GetBestViewShell();
@@ -1754,8 +1754,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
     }
 }
 
-void ScDocShell::GetStatePageStyle( SfxViewShell&   /* rCaller */,
-                                    SfxItemSet&     rSet,
+void ScDocShell::GetStatePageStyle( SfxItemSet&     rSet,
                                     SCTAB           nCurTab )
 {
     SfxWhichIter aIter(rSet);
@@ -2180,10 +2179,13 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
         if( aDdeTextFmt == "CSV" ||
             aDdeTextFmt == "FCSV" )
             aObj.SetSeparator( ',' );
-        return ScImportExport::ImportData( rMimeType, rValue );
+        OSL_ENSURE( false, "Implementation is missing" );
+        return false;
     }
-    ScImportExport aObj( &aDocument, rItem );
-    return aObj.IsRef() && ScImportExport::ImportData( rMimeType, rValue );
+    /*ScImportExport aObj( &aDocument, rItem );
+    return aObj.IsRef() && ScImportExport::ImportData( rMimeType, rValue );*/
+    OSL_ENSURE( false, "Implementation is missing" );
+    return false;
 }
 #endif
 

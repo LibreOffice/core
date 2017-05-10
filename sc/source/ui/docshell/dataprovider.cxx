@@ -230,7 +230,7 @@ void CSVDataProvider::StopImport()
 
 void CSVDataProvider::Refresh()
 {
-    mpDocShell->DoHardRecalc(true);
+    mpDocShell->DoHardRecalc();
     mpDocShell->SetDocumentModified();
 }
 

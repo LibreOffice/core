@@ -126,8 +126,6 @@ public:
     bool ImportStream( SvStream&, const OUString& rBaseURL, SotClipboardFormatId );
     bool ExportStream( SvStream&, const OUString& rBaseURL, SotClipboardFormatId );
 
-    static bool ImportData( const OUString& rMimeType,
-                     const css::uno::Any & rValue );
     bool ExportData( const OUString& rMimeType,
                      css::uno::Any & rValue  );
 
