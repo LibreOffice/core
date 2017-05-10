@@ -2350,8 +2350,20 @@ const OUString& ScInterpreter::GetString()
             if (nGlobalError)
                 return EMPTY_OUSTRING;
 
-            aTempStr = pToken->GetString();
-            return aTempStr;
+            if (pToken->GetType() == svDouble)
+            {
+                double fVal = pToken->GetDouble();
+                sal_uLong nIndex = pFormatter->GetStandardFormat(
+                                    NUMBERFORMAT_NUMBER,
+                                    ScGlobal::eLnge);
+                pFormatter->GetInputLineString(fVal, nIndex, aTempStr);
+                return aTempStr;
+            }
+            else // svString or svEmpty
+            {
+                aTempStr = pToken->GetString();
+                return aTempStr;
+            }
         }
         case svExternalDoubleRef:
         {

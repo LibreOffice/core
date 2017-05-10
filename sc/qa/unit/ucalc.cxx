@@ -4857,6 +4857,23 @@ void testExtRefFuncT(ScDocument* pDoc, ScDocument* pExtDoc)
     CPPUNIT_ASSERT_MESSAGE("Unexpected result with T.", aRes.isEmpty());
 }
 
+void testExtRefConcat(ScDocument* pDoc, ScDocument* pExtDoc)
+{
+    clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
+    clearRange(pExtDoc, ScRange(0, 0, 0, 1, 9, 0));
+
+    AutoCalcSwitch aACSwitch(pDoc, true);
+
+    // String and number
+    pExtDoc->SetString(ScAddress(0,0,0), "Answer: ");
+    pExtDoc->SetValue(ScAddress(0,1,0), 42);
+
+    // Concat operation should combine string and number converted to string
+    pDoc->SetString(ScAddress(0,0,0), OUString("='file:///extdata.fake'#Data.A1 & 'file:///extdata.fake'#Data.A2"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Answer: 42"), pDoc->GetString(ScAddress(0,0,0)));
+}
+
+
 void Test::testExternalRefFunctions()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
@@ -4912,6 +4929,7 @@ void Test::testExternalRefFunctions()
 
     pRefMgr->clearCache(nFileId);
     testExtRefFuncT(m_pDoc, pExtDoc);
+    testExtRefConcat(m_pDoc, pExtDoc);
 
     // Unload the external document shell.
     xExtDocSh->DoClose();
