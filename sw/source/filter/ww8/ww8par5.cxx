@@ -657,7 +657,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                             // Store the OLE Id as a parameter
                             pFieldmark->GetParameters()->insert(
                                     std::pair< OUString, uno::Any >(
-                                        ODF_OLE_PARAM, uno::makeAny( OUString( sOleId ) ) ) );
+                                        ODF_OLE_PARAM, uno::makeAny( sOleId ) ) );
                         }
                     }
                 }

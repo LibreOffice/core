@@ -909,10 +909,10 @@ uno::Any SAL_CALL ScTableValidationObj::getPropertyValue( const OUString& aPrope
     else if ( aPropertyName == SC_UNONAME_SHOWERR )  aRet <<= bShowError;
     else if ( aPropertyName == SC_UNONAME_IGNOREBL ) aRet <<= bIgnoreBlank;
     else if ( aPropertyName == SC_UNONAME_SHOWLIST ) aRet <<= nShowList;
-    else if ( aPropertyName == SC_UNONAME_INPTITLE ) aRet <<= OUString( aInputTitle );
-    else if ( aPropertyName == SC_UNONAME_INPMESS )  aRet <<= OUString( aInputMessage );
-    else if ( aPropertyName == SC_UNONAME_ERRTITLE ) aRet <<= OUString( aErrorTitle );
-    else if ( aPropertyName == SC_UNONAME_ERRMESS )  aRet <<= OUString( aErrorMessage );
+    else if ( aPropertyName == SC_UNONAME_INPTITLE ) aRet <<= aInputTitle;
+    else if ( aPropertyName == SC_UNONAME_INPMESS )  aRet <<= aInputMessage;
+    else if ( aPropertyName == SC_UNONAME_ERRTITLE ) aRet <<= aErrorTitle;
+    else if ( aPropertyName == SC_UNONAME_ERRMESS )  aRet <<= aErrorMessage;
     else if ( aPropertyName == SC_UNONAME_TYPE )
     {
         sheet::ValidationType eType = sheet::ValidationType_ANY;

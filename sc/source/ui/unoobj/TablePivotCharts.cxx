@@ -146,7 +146,7 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
                 xReceiver->attachNumberFormatsSupplier(xNumberFormatsSupplier);
 
                 uno::Sequence<beans::PropertyValue> aArgs(3);
-                aArgs[0] = beans::PropertyValue("CellRangeRepresentation", -1, uno::makeAny(OUString(rDataPilotName)), beans::PropertyState_DIRECT_VALUE);
+                aArgs[0] = beans::PropertyValue("CellRangeRepresentation", -1, uno::makeAny(rDataPilotName), beans::PropertyState_DIRECT_VALUE);
                 aArgs[1] = beans::PropertyValue("HasCategories", -1, uno::makeAny(true), beans::PropertyState_DIRECT_VALUE);
                 aArgs[2] = beans::PropertyValue("DataRowSource", -1, uno::makeAny(chart::ChartDataRowSource_COLUMNS), beans::PropertyState_DIRECT_VALUE);
                 xReceiver->setArguments(aArgs);

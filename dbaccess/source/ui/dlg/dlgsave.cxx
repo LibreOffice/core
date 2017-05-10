@@ -158,7 +158,7 @@ void lcl_fillComboList( ComboBox& _rList, const Reference< XConnection >& _rxCon
                 _rList.InsertEntry( sValue );
         }
 
-        sal_Int32 nPos = _rList.GetEntryPos( OUString( _rCurrent ) );
+        sal_Int32 nPos = _rList.GetEntryPos( _rCurrent );
         if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
             _rList.SelectEntryPos( nPos );
         else
@@ -217,12 +217,12 @@ OSaveAsDlg::OSaveAsDlg( vcl::Window * pParent,
                                                    sTable,
                                                    ::dbtools::EComposeRule::InDataManipulation);
 
-                sal_Int32 nPos = m_pImpl->m_pCatalog->GetEntryPos(OUString(sCatalog));
+                sal_Int32 nPos = m_pImpl->m_pCatalog->GetEntryPos(sCatalog);
                 if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
                     m_pImpl->m_pCatalog->SelectEntryPos(nPos);
 
                 if ( !sSchema.isEmpty() ) {
-                    nPos = m_pImpl->m_pSchema->GetEntryPos(OUString(sSchema));
+                    nPos = m_pImpl->m_pSchema->GetEntryPos(sSchema);
                     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
                         m_pImpl->m_pSchema->SelectEntryPos(nPos);
                 }

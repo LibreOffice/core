@@ -335,7 +335,7 @@ void XMLTextMarkImportContext::EndElement()
                                 xContent = CreateAndInsertMark(GetImport(),
                                         (bImportAsField
                                             ? OUString("com.sun.star.text.Fieldmark")
-                                            : OUString(sAPI_bookmark)),
+                                            : sAPI_bookmark),
                                         m_sBookmarkName,
                                         xInsertionCursor,
                                         m_sXmlId);

@@ -724,7 +724,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
                         makeAny( OUString( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) ) );
                 if( bValidMimeType )
                     xSet->setPropertyValue("PluginMimeType",
-                        makeAny( OUString( rMimeType ) ) );
+                        makeAny( rMimeType ) );
             }
 
             SwFrameFormat *const pFrameFormat =
@@ -857,7 +857,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                             INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) ) ) );
 
                 xSet->setPropertyValue("FrameName",
-                    makeAny( OUString( rName ) ) );
+                    makeAny( rName ) );
 
                 if ( eScrollMode == ScrollingMode::Auto )
                     xSet->setPropertyValue("FrameIsAutoScroll",

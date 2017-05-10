@@ -1036,8 +1036,8 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const OUString& rDocName
                 }
                 else
                 {
-                    OSL_ENSURE(OUString(aFltName) == rDoc.GetLinkFlt(i) &&
-                               OUString(aOptions) == rDoc.GetLinkOpt(i),
+                    OSL_ENSURE(aFltName == rDoc.GetLinkFlt(i) &&
+                               aOptions == rDoc.GetLinkOpt(i),
                                     "different Filter for a Document?");
                 }
                 pTabs[nCount] = i;

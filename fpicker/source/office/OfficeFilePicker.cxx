@@ -1000,8 +1000,8 @@ OUString SAL_CALL SvtFilePicker::getCurrentFilter()
     checkAlive();
 
     SolarMutexGuard aGuard;
-    OUString aFilter = getDialog() ? OUString( getDialog()->GetCurFilter() ) :
-                                            OUString( m_aCurrentFilter );
+    OUString aFilter = getDialog() ? getDialog()->GetCurFilter() :
+                                     m_aCurrentFilter;
     return aFilter;
 }
 

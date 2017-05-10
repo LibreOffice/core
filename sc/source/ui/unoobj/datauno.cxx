@@ -2053,7 +2053,7 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropert
             // ScLinkTargetTypeObj::SetLinkTargetBitmap( aRet, SC_LINKTARGETTYPE_DBAREA );
         }
         else if ( aPropertyName == SC_UNO_LINKDISPNAME )
-            aRet <<= OUString( aName );
+            aRet <<= aName;
         else if (aPropertyName == SC_UNONAME_AUTOFLT )
         {
             bool bAutoFilter(GetDBData_Impl()->HasAutoFilter());

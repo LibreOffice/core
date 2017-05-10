@@ -228,7 +228,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
                 uno::Sequence< beans::PropertyValue > aArgs( 4 );
                 aArgs[0] = beans::PropertyValue(
                     "CellRangeRepresentation", -1,
-                    uno::makeAny( OUString( sRangeStr )), beans::PropertyState_DIRECT_VALUE );
+                    uno::makeAny( sRangeStr ), beans::PropertyState_DIRECT_VALUE );
                 aArgs[1] = beans::PropertyValue(
                     "HasCategories", -1,
                     uno::makeAny( bRowHeaders ), beans::PropertyState_DIRECT_VALUE );

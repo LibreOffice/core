@@ -438,8 +438,8 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
             if ( pTemplateFilter )
             {
                 // load the template document, but, well, "as template"
-                io_rDescriptor.put( "FilterName", OUString( pTemplateFilter->GetName() ) );
-                io_rDescriptor.put( "FileName", OUString( sTemplateURL ) );
+                io_rDescriptor.put( "FilterName", pTemplateFilter->GetName() );
+                io_rDescriptor.put( "FileName", sTemplateURL );
                 io_rDescriptor.put( "AsTemplate", true );
 
                 // #i21583#

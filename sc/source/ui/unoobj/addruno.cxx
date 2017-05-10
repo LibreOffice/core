@@ -267,7 +267,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
             OUString aSecond(aRange.aEnd.Format(nFlags, &rDoc, eConv));
             aFormatStr += aSecond ;
         }
-        aRet <<= OUString( aFormatStr );
+        aRet <<= aFormatStr;
     }
     else
         throw beans::UnknownPropertyException();
