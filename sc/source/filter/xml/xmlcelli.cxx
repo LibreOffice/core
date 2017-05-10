@@ -118,7 +118,6 @@ ScXMLTableRowCellContext::Field::~Field()
 }
 
 ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                                       const bool bTempIsCovered,
                                       const sal_Int32 nTempRepeatedRows ) :

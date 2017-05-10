@@ -129,7 +129,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
 
 public:
 
-    ScXMLTableRowCellContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLTableRowCellContext( ScXMLImport& rImport,
                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
                        const bool bIsCovered, const sal_Int32 nRepeatedRows );
 

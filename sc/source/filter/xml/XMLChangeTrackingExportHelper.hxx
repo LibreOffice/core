@@ -68,7 +68,7 @@ class ScChangeTrackingExportHelper
     void WriteContentChange(ScChangeAction* pAction);
     void AddInsertionAttributes(const ScChangeAction* pAction);
     void WriteInsertion(ScChangeAction* pAction);
-    void AddDeletionAttributes(const ScChangeActionDel* pAction, const ScChangeActionDel* pLastAction);
+    void AddDeletionAttributes(const ScChangeActionDel* pAction);
     void WriteCutOffs(const ScChangeActionDel* pAction);
     void WriteDeletion(ScChangeAction* pAction);
     void WriteMovement(ScChangeAction* pAction);

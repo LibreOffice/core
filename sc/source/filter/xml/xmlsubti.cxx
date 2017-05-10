@@ -181,7 +181,7 @@ void ScMyTables::AddColumn(bool bIsCovered)
     //here only need to set column style if this is the first row and
     //the cell is not covered.
     if(maCurrentCellPos.Row() == 0 && !bIsCovered)
-        rImport.GetStylesImportHelper()->InsertCol(maCurrentCellPos.Col(), maCurrentCellPos.Tab(), rImport.GetDocument());
+        rImport.GetStylesImportHelper()->InsertCol(maCurrentCellPos.Col(), maCurrentCellPos.Tab());
 }
 
 void ScMyTables::DeleteTable()

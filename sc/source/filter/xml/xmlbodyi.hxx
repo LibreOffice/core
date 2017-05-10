@@ -41,7 +41,7 @@ class ScXMLBodyContext : public ScXMLImportContext
 
 public:
 
-    ScXMLBodyContext( ScXMLImport& rImport, sal_Int32 nElement,
+    ScXMLBodyContext( ScXMLImport& rImport,
                         const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList );
 
     virtual ~ScXMLBodyContext() override;

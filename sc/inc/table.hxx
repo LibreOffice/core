@@ -738,7 +738,7 @@ public:
     void        SetColWidthOnly( SCCOL nCol, sal_uInt16 nNewWidth );
     void        SetRowHeight( SCROW nRow, sal_uInt16 nNewHeight );
     bool        SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNewHeight,
-                                    double nPPTX, double nPPTY );
+                                   double nPPTY );
 
     /**
      * Set specified row height to specified ranges.  Don't check for drawing

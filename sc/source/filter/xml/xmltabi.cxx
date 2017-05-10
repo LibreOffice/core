@@ -130,7 +130,6 @@ ScXMLExternalTabData::ScXMLExternalTabData() :
 }
 
 ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/,
                                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) :
     ScXMLImportContext( rImport ),
     nStartOffset(-1),
@@ -333,22 +332,19 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     switch (nToken)
     {
     case XML_TOK_TABLE_ROW_GROUP:
-        pContext = new ScXMLTableRowsContext( GetScImport(), nElement, xAttrList,
+        pContext = new ScXMLTableRowsContext( GetScImport(), xAttrList,
                                                    false, true );
         break;
     case XML_TOK_TABLE_HEADER_ROWS:
-        pContext = new ScXMLTableRowsContext( GetScImport(), nElement, xAttrList,
+        pContext = new ScXMLTableRowsContext( GetScImport(), xAttrList,
                                                    true, false );
         break;
     case XML_TOK_TABLE_ROWS:
-        pContext = new ScXMLTableRowsContext( GetScImport(), nElement, xAttrList,
+        pContext = new ScXMLTableRowsContext( GetScImport(), xAttrList,
                                                    false, false );
         break;
     case XML_TOK_TABLE_ROW:
-            pContext = new ScXMLTableRowContext( GetScImport(), nElement,
-                                                      xAttrList//,
-                                                      //this
-                                                      );
+            pContext = new ScXMLTableRowContext( GetScImport(),xAttrList );
         break;
     default:
         pContext = new SvXMLImportContext( GetImport() );

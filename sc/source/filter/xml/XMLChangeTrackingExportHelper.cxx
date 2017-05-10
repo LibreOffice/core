@@ -472,7 +472,7 @@ void ScChangeTrackingExportHelper::WriteInsertion(ScChangeAction* pAction)
     WriteDependings(pAction);
 }
 
-void ScChangeTrackingExportHelper::AddDeletionAttributes(const ScChangeActionDel* pDelAction, const ScChangeActionDel* /* pLastAction */)
+void ScChangeTrackingExportHelper::AddDeletionAttributes(const ScChangeActionDel* pDelAction)
 {
     sal_Int32 nPosition(0);
     const ScBigRange& rBigRange = pDelAction->GetBigRange();
@@ -576,7 +576,7 @@ void ScChangeTrackingExportHelper::WriteCutOffs(const ScChangeActionDel* pAction
 void ScChangeTrackingExportHelper::WriteDeletion(ScChangeAction* pAction)
 {
     ScChangeActionDel* pDelAction = static_cast<ScChangeActionDel*> (pAction);
-    AddDeletionAttributes(pDelAction, pDelAction);
+    AddDeletionAttributes(pDelAction);
     SvXMLElementExport aElemChange(rExport, XML_NAMESPACE_TABLE, XML_DELETION, true, true);
     WriteChangeInfo(pDelAction);
     WriteDependings(pDelAction);

@@ -131,7 +131,7 @@ void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, const OUString* pC
         aItr->mpRanges->addRange(rRange);
 }
 
-void ScMyStyleRanges::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* /*pDoc*/)
+void ScMyStyleRanges::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab)
 {
     if (mpTextList)
         mpTextList->insertCol(static_cast<SCCOL>(nCol), static_cast<SCTAB>(nTab));
@@ -444,14 +444,14 @@ void ScMyStylesImportHelper::AddCell(const ScAddress& rAddress)
     AddRange(aScRange);
 }
 
-void ScMyStylesImportHelper::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc)
+void ScMyStylesImportHelper::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab)
 {
     ScXMLImport::MutexGuard aGuard(rImport);
     ScMyStylesSet::iterator aItr(aCellStyles.begin());
     ScMyStylesSet::iterator aEndItr(aCellStyles.end());
     while (aItr != aEndItr)
     {
-        aItr->xRanges->InsertCol(nCol, nTab, pDoc);
+        aItr->xRanges->InsertCol(nCol, nTab);
         ++aItr;
     }
 }

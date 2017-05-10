@@ -100,7 +100,7 @@ public:
     virtual ~ScMyStyleRanges() override;
     void AddRange(const ScRange& rRange, const sal_Int16 nType);
     void AddCurrencyRange(const ScRange& rRange, const OUString* pCurrency);
-    void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc);
+    void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab);
     void SetStylesToRanges(const OUString* pStyleName, ScXMLImport& rImport);
 };
 
@@ -158,7 +158,7 @@ public:
         OUString* pCurrency, const sal_Int16 nCellType);
     void AddRange(const ScRange& rRange);
     void AddCell(const ScAddress& rAddress);
-    void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc); // a col is inserted before nCol
+    void InsertCol(const sal_Int32 nCol, const sal_Int32 nTab); // a col is inserted before nCol
     void EndTable();
     void SetStylesToRanges();
 };

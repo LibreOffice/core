@@ -2808,7 +2808,7 @@ bool lcl_pixelSizeChanged(
 }
 
 bool ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNewHeight,
-                                    double /* nPPTX */, double nPPTY )
+                                    double nPPTY )
 {
     bool bChanged = false;
     if (ValidRow(nStartRow) && ValidRow(nEndRow) && mpRowHeights)
@@ -2846,9 +2846,9 @@ bool ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNew
             else
             {
                 SCROW nMid = (nStartRow+nEndRow) / 2;
-                if (SetRowHeightRange( nStartRow, nMid, nNewHeight, 1.0, 1.0 ))
+                if (SetRowHeightRange( nStartRow, nMid, nNewHeight, 1.0 ))
                     bChanged = true;
-                if (SetRowHeightRange( nMid+1, nEndRow, nNewHeight, 1.0, 1.0 ))
+                if (SetRowHeightRange( nMid+1, nEndRow, nNewHeight, 1.0 ))
                     bChanged = true;
             }
         }

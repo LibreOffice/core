@@ -160,7 +160,7 @@ struct SetRowHeightRangeFunc : public OptimalHeightsFuncObjBase
 
     virtual bool operator() (SCROW nStartRow, SCROW nEndRow, sal_uInt16 nHeight) override
     {
-        return mpTab->SetRowHeightRange(nStartRow, nEndRow, nHeight, mnPPTX, mnPPTY);
+        return mpTab->SetRowHeightRange(nStartRow, nEndRow, nHeight, mnPPTY);
     }
 };
 

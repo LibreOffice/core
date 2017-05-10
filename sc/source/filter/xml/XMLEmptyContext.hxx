@@ -27,7 +27,7 @@
 class ScXMLEmptyContext : public ScXMLImportContext
 {
 public:
-    ScXMLEmptyContext( ScXMLImport& rImport, sal_Int32 nElement );
+    ScXMLEmptyContext( ScXMLImport& rImport );
 
     virtual ~ScXMLEmptyContext() override;
 
