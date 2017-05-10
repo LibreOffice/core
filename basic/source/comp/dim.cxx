@@ -276,16 +276,9 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
         }
     }
 
-#ifdef SHARED
-#define tmpSHARED
-#undef SHARED
-#endif
     // SHARED were ignored
     if( Peek() == SHARED ) Next();
-#ifdef tmpSHARED
-#define SHARED
-#undef tmpSHARED
-#endif
+
     // PRESERVE only at REDIM
     if( Peek() == PRESERVE )
     {

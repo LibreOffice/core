@@ -23,11 +23,6 @@
 #include "scanner.hxx"
 #include <basic/sbdef.hxx>
 
-#if defined( SHARED )
-#define SbiTokenSHAREDTMPUNDEF
-#undef SHARED
-#endif
-
 #if defined( EXPLICIT )
 #undef EXPLICIT
 #endif
@@ -108,11 +103,6 @@ enum SbiToken {
     JS_INC, JS_DEC, JS_LPAREN, JS_RPAREN, JS_LINDEX, JS_RINDEX
     , VBASUPPORT
 };
-
-#ifdef SbiTokenSHAREDTMPUNDEF
-#define SHARED
-#undef SbiTokenSHAREDTMPUNDEF
-#endif
 
 class SbiTokenizer : public SbiScanner {
 protected:
