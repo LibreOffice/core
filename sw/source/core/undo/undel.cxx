@@ -1048,6 +1048,12 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
             }
             pTableNd->DelFrames();
         }
+        else if (*rPam.GetMark() == *rPam.GetPoint())
+        {   // paragraph with only footnote or as-char fly, delete that
+            // => DelContentIndex has already deleted it! nothing to do here
+            assert(nEndNode == nSttNode);
+            return;
+        }
 
         // avoid asserts from ~SwIndexReg for deleted nodes
         SwPaM aTmp(*rPam.End());

@@ -187,6 +187,7 @@ public:
     void testTdf88899();
     void testTdf90362();
     void testUndoCharAttribute();
+    void testUndoDelAsChar();
     void testTdf86639();
     void testTdf90883TableBoxGetCoordinates();
     void testEmbeddedDataSource();
@@ -319,6 +320,7 @@ public:
     CPPUNIT_TEST(testTdf88899);
     CPPUNIT_TEST(testTdf90362);
     CPPUNIT_TEST(testUndoCharAttribute);
+    CPPUNIT_TEST(testUndoDelAsChar);
     CPPUNIT_TEST(testTdf86639);
     CPPUNIT_TEST(testTdf90883TableBoxGetCoordinates);
     CPPUNIT_TEST(testEmbeddedDataSource);
@@ -3218,6 +3220,39 @@ void SwUiWriterTest::testUndoCharAttribute()
     pCursor->GetNode().GetTextNode()->GetAttr(aSet, 10, 19);
     pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
     CPPUNIT_ASSERT_EQUAL((*pPoolItem == aWeightItem), false);
+}
+
+void SwUiWriterTest::testUndoDelAsChar()
+{
+    SwDoc * pDoc(createDoc());
+    sw::UndoManager & rUndoManager(pDoc->GetUndoManager());
+    IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
+    SwCursorShell * pShell(pDoc->GetEditShell());
+    SfxItemSet frameSet(pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
+    SfxItemSet grfSet(pDoc->GetAttrPool(), RES_GRFATR_BEGIN, RES_GRFATR_END-1);
+    SwFormatAnchor anchor(RndStdIds::FLY_AS_CHAR);
+    frameSet.Put(anchor);
+    GraphicObject grf;
+    CPPUNIT_ASSERT(rIDCO.InsertGraphicObject(*pShell->GetCursor(), grf, &frameSet, &grfSet, nullptr));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    pShell->SetMark();
+    pShell->Left(1, CRSR_SKIP_CHARS);
+    rIDCO.DeleteAndJoin(*pShell->GetCursor());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT(!pShell->GetCursor()->GetNode().GetTextNode()->HasHints());
+    CPPUNIT_ASSERT_EQUAL(0, pShell->GetCursor()->GetNode().GetTextNode()->Len());
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->HasHints());
+    CPPUNIT_ASSERT_EQUAL(1, pShell->GetCursor()->GetNode().GetTextNode()->Len());
+    rUndoManager.Redo();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT(!pShell->GetCursor()->GetNode().GetTextNode()->HasHints());
+    CPPUNIT_ASSERT_EQUAL(0, pShell->GetCursor()->GetNode().GetTextNode()->Len());
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->HasHints());
+    CPPUNIT_ASSERT_EQUAL(1, pShell->GetCursor()->GetNode().GetTextNode()->Len());
 }
 
 void SwUiWriterTest::testTdf86639()
