@@ -2602,7 +2602,7 @@ tools::Rectangle AdjustRectForTextBordersPadding(GtkStyleContext* pStyle, long n
 }
 
 bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState,
-                                                const ImplControlValue& rValue, const OUString&,
+                                                const ImplControlValue& rValue,
                                                 tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion )
 {
     /* TODO: all this functions needs improvements */

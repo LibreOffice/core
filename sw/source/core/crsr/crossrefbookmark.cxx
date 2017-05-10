@@ -38,7 +38,7 @@ namespace sw { namespace mark
         const OUString& rPrefix)
         : Bookmark(
                 // ensure that m_pPos2 is null by only passing start to super
-                SwPaM(*rPaM.Start()), rCode, rName, OUString())
+                SwPaM(*rPaM.Start()), rCode, rName)
     {
         assert( IDocumentMarkAccess::IsLegalPaMForCrossRefHeadingBookmark(rPaM)
                  && "<CrossRefBookmark::CrossRefBookmark(..)>"

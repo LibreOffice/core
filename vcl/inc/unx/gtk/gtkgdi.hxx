@@ -111,7 +111,6 @@ public:
                                                     const tools::Rectangle& rControlRegion,
                                                     ControlState nState,
                                                     const ImplControlValue& aValue,
-                                                    const OUString& rCaption,
                                                     tools::Rectangle &rNativeBoundingRegion,
                                                     tools::Rectangle &rNativeContentRegion ) override;
 #if ENABLE_CAIRO_CANVAS
@@ -276,7 +275,7 @@ public:
                                            ControlState nState, const ImplControlValue& aValue,
                                            const OUString& rCaption ) override;
     virtual bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState nState,
-                                                const ImplControlValue& aValue, const OUString& rCaption,
+                                                const ImplControlValue& aValue,
                                                 tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion ) override;
 
     //helper methods for frame's UpdateSettings
