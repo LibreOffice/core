@@ -324,7 +324,7 @@ formula::ParamClass ScParameterClassification::GetParameterType(
         case ocExternal:
             return GetExternalParameterType( pToken, nParameter);
         case ocMacro:
-            return Reference;
+            return (nParameter == SAL_MAX_UINT16 ? Value : Reference);
         default:
         {
             // added to avoid warnings
@@ -334,7 +334,9 @@ formula::ParamClass ScParameterClassification::GetParameterType(
     {
         sal_uInt8 nRepeat;
         formula::ParamClass eType;
-        if ( nParameter < CommonData::nMaxParams )
+        if (nParameter == SAL_MAX_UINT16)
+            eType = pData[eOp].aData.eReturn;
+        else if ( nParameter < CommonData::nMaxParams )
             eType = pData[eOp].aData.nParam[nParameter];
         else if ( (nRepeat = pData[eOp].aData.nRepeatLast) > 0 )
         {
@@ -357,6 +359,9 @@ formula::ParamClass ScParameterClassification::GetExternalParameterType( const f
         sal_uInt16 nParameter)
 {
     formula::ParamClass eRet = Unknown;
+    if (nParameter == SAL_MAX_UINT16)
+        return eRet;
+
     // similar to ScInterpreter::ScExternal()
     OUString aFuncName = ScGlobal::pCharClass->uppercase( pToken->GetExternal());
     {

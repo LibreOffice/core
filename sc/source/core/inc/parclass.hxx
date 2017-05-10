@@ -42,7 +42,9 @@ public:
 
                                 /** Get one parameter type for function eOp.
                                     @param nParameter
-                                        Which parameter, 0-based */
+                                        Which parameter, 0-based.
+                                        SAL_MAX_UINT16 for return type of eOp.
+                                 */
     static  formula::ParamClass GetParameterType( const formula::FormulaToken* pToken,
                                         sal_uInt16 nParameter);
 
