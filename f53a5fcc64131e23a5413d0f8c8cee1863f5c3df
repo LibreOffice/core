@@ -34,6 +34,24 @@
       "revId": "f53a5fcc64131e23a5413d0f8c8cee1863f5c3df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_541706a3",
+        "filename": "xmlsecurity/source/framework/saxeventkeeperimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-10T09:47:46Z",
+      "side": 1,
+      "message": "what I meant was, should it not be \"auto\u0026\"\nbut then, I\u0027m not even sure what \"auto\u0026\u0026\" means in this context.",
+      "parentUuid": "5a3905b3_5409c694",
+      "revId": "f53a5fcc64131e23a5413d0f8c8cee1863f5c3df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
