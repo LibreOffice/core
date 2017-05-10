@@ -806,6 +806,7 @@ $(eval $(call gb_Helper_register_packages, \
 	$(if $(ENABLE_OOENV),instsetoo_native_ooenv) \
 	odk_headers_generated \
 	postprocess_images \
+	postprocess_helpimages \
 	postprocess_registry \
 	readlicense_oo_readmes \
 	setup_native_misc \

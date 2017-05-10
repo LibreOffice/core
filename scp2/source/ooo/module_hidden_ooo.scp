@@ -83,7 +83,7 @@ Module gid_Module_Root_Files_Images
 	Sortkey = "2050";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Images);
+	Files = (gid_File_Images, gid_File_HelpImages);
 End
 #endif
 
