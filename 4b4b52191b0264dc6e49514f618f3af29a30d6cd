@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_3737dcb1",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1621,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-10T17:30:14Z",
+      "side": 1,
+      "message": "For enums we use e... prefix, so eState. However, actually this variable isn\u0027t necessary at all, all states can be directly returned.",
+      "range": {
+        "startLine": 1621,
+        "startChar": 24,
+        "endLine": 1621,
+        "endChar": 30
+      },
+      "revId": "4b4b52191b0264dc6e49514f618f3af29a30d6cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_775884fb",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1622,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-10T17:30:14Z",
+      "side": 1,
+      "message": "Not only because of -Werror\u003dmaybe-uninitialized, reaching the end of the function without any notes present in the ranges the variable would really be uninitialized.",
+      "range": {
+        "startLine": 1622,
+        "startChar": 43,
+        "endLine": 1622,
+        "endChar": 88
+      },
+      "revId": "4b4b52191b0264dc6e49514f618f3af29a30d6cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_d7c13882",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1623,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-10T17:30:14Z",
+      "side": 1,
+      "message": "As aFirstControl takes only two values 0 and 1 it should be a bool variable instead. Aside, for numeric we\u0027d use n... prefix which would make it nFirstControl, if it shouldn\u0027t be bool bFirstControl.",
+      "range": {
+        "startLine": 1623,
+        "startChar": 14,
+        "endLine": 1623,
+        "endChar": 27
+      },
+      "revId": "4b4b52191b0264dc6e49514f618f3af29a30d6cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_17bca004",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1627,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-10T17:30:14Z",
+      "side": 1,
+      "message": "aFirstControl should be checked first, so HasColNotes() is only called if aFirstControl\u003d\u003d0, as is it\u0027s called on each iteration and then again in the next if() condition.",
+      "revId": "4b4b52191b0264dc6e49514f618f3af29a30d6cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_d76f7890",
+        "filename": "sc/source/ui/view/cellsh.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1077,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-10T17:30:14Z",
+      "side": 1,
+      "message": "Nitpick: eState",
+      "range": {
+        "startLine": 1077,
+        "startChar": 45,
+        "endLine": 1077,
+        "endChar": 51
+      },
+      "revId": "4b4b52191b0264dc6e49514f618f3af29a30d6cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_f76c749e",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 2370,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-10T17:30:14Z",
+      "side": 1,
+      "message": "Nitpick: eState",
+      "range": {
+        "startLine": 2370,
+        "startChar": 37,
+        "endLine": 2370,
+        "endChar": 43
+      },
+      "revId": "4b4b52191b0264dc6e49514f618f3af29a30d6cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
