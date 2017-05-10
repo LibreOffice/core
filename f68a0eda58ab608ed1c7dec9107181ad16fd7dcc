@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_3726fcba",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2109,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-10T14:26:34Z",
+      "side": 1,
+      "message": "Sounds like a plan for a follow-up commit.",
+      "revId": "f68a0eda58ab608ed1c7dec9107181ad16fd7dcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_572b8882",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2118,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-10T14:26:34Z",
+      "side": 1,
+      "message": "The ExternalRefCache holds only results, not formulas, the possible values should only be svDouble, svString and svEmptyCell.\n\nActually I\u0027d reverse the condition and use\n\n if (pToken-\u003eGetType() \u003d\u003d svDouble)\n     ...\n else\n     ...\n\nto return an empty string for svEmptyCell.",
+      "revId": "f68a0eda58ab608ed1c7dec9107181ad16fd7dcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
