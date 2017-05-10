@@ -77,6 +77,9 @@ for callInfo, callValues in callDict.iteritems():
         if callValue.startswith("get"): continue
         if "operator=" in functionSig: continue
         if "&&" in functionSig: continue
+        if callInfo[2] == "###0" and callValue == "InitData()": continue
+        if callInfo[2] == "###0" and callValue == "InitAggregate()": continue
+        if callValue == "shared_from_this()": continue
         tmp3list.append((sourceLoc, functionSig, callInfo[3] + " " + callInfo[2], callValue))
 
 

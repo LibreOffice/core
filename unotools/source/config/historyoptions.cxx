@@ -79,7 +79,7 @@ public:
 
     void AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-        const OUString& sPassword, const boost::optional<OUString>& sThumbnail);
+        const boost::optional<OUString>& sThumbnail);
 
     void DeleteItem(EHistoryType eHistory, const OUString& sURL);
 
@@ -320,7 +320,7 @@ Sequence< Sequence<PropertyValue> > SvtHistoryOptions_Impl::GetList(EHistoryType
 
 void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-        const OUString& sPassword, const boost::optional<OUString>& sThumbnail)
+        const boost::optional<OUString>& sThumbnail)
 {
     uno::Reference<container::XNameAccess> xListAccess(GetListAccess(eHistory));
     if (!xListAccess.is())
@@ -436,7 +436,7 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
             xSet.set(xInst, uno::UNO_QUERY);
             xSet->setPropertyValue(s_sFilter, uno::makeAny(sFilter));
             xSet->setPropertyValue(s_sTitle, uno::makeAny(sTitle));
-            xSet->setPropertyValue(s_sPassword, uno::makeAny(sPassword));
+            xSet->setPropertyValue(s_sPassword, uno::makeAny(OUString()));
             xSet->setPropertyValue(s_sThumbnail, uno::makeAny(sThumbnail.get_value_or(OUString())));
 
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
@@ -565,7 +565,7 @@ void SvtHistoryOptions::AppendItem(EHistoryType eHistory,
 {
     MutexGuard aGuard(theHistoryOptionsMutex::get());
 
-    m_pImpl->AppendItem(eHistory, sURL, sFilter, sTitle, ""/*sPassword*/, sThumbnail);
+    m_pImpl->AppendItem(eHistory, sURL, sFilter, sTitle, sThumbnail);
 }
 
 void SvtHistoryOptions::DeleteItem(EHistoryType eHistory, const OUString& sURL)

@@ -1072,7 +1072,6 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
                                 const tools::Rectangle& rControlRegion,
                                 ControlState nState,
                                 const ImplControlValue& aValue,
-                                const OUString& rCaption,
                                 tools::Rectangle &rNativeBoundingRegion,
                                 tools::Rectangle &rNativeContentRegion )
 {
@@ -1103,7 +1102,7 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     {
 
         rNativeBoundingRegion = NWGetSpinButtonRect( m_nXScreen, nType, nPart, rControlRegion, nState,
-        aValue, rCaption );
+                aValue, OUString() );
         rNativeContentRegion = rNativeBoundingRegion;
 
         returnVal = true;

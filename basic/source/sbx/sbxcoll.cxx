@@ -30,8 +30,8 @@ static OUString pRemove;
 static sal_uInt16 nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
 
 
-SbxCollection::SbxCollection( const OUString& rClass )
-             : SbxObject( rClass )
+SbxCollection::SbxCollection()
+             : SbxObject( "" )
 {
     if( !nCountHash )
     {
@@ -238,8 +238,7 @@ bool SbxCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 
 
 SbxStdCollection::SbxStdCollection()
-                  : SbxCollection( "" ),
-                    bAddRemoveOk( true )
+                  : bAddRemoveOk( true )
 {}
 
 SbxStdCollection::SbxStdCollection( const SbxStdCollection& r )

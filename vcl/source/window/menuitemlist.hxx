@@ -106,7 +106,6 @@ public:
                         MenuItemType eType,
                         MenuItemBits nBits,
                         const OUString& rStr,
-                        const Image& rImage,
                         Menu* pMenu,
                         size_t nPos,
                         const OString &rIdent

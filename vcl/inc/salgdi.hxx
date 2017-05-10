@@ -584,7 +584,6 @@ protected:
                                     const tools::Rectangle& rBoundingControlRegion,
                                     ControlState eState,
                                     const ImplControlValue& aValue,
-                                    const OUString& aCaption,
                                     tools::Rectangle &rNativeBoundingRegion,
                                     tools::Rectangle &rNativeContentRegion );
 

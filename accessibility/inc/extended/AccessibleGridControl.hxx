@@ -203,11 +203,11 @@ protected:
             pContext->commitTableEvent( nEventId, rNewValue, rOldValue );
     }
     virtual void commitEvent( sal_Int16 nEventId,
-        const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) override
+        const css::uno::Any& rNewValue ) override
     {
         AccessibleGridControl* pContext( getContext() );
         if ( pContext )
-            pContext->commitEvent( nEventId, rNewValue, rOldValue );
+            pContext->commitEvent( nEventId, rNewValue, css::uno::Any() );
     }
 
 private:

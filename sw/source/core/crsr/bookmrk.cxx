@@ -270,12 +270,10 @@ namespace sw { namespace mark
 
     Bookmark::Bookmark(const SwPaM& aPaM,
         const vcl::KeyCode& rCode,
-        const OUString& rName,
-        const OUString& rShortName)
+        const OUString& rName)
         : DdeBookmark(aPaM)
         , ::sfx2::Metadatable()
         , m_aCode(rCode)
-        , m_sShortName(rShortName)
     {
         m_aName = rName;
     }
