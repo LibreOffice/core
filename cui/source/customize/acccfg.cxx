@@ -1226,37 +1226,24 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void
 
     GetTabDialog()->EnterWait();
 
-    uno::Reference<frame::XModel> xDoc;
     uno::Reference<ui::XUIConfigurationManager> xCfgMgr;
     uno::Reference<embed::XStorage> xRootStorage; // we must hold the root storage alive, if xCfgMgr is used!
 
     try
     {
-        // first check if URL points to a document already loaded
-        xDoc = SearchForAlreadyLoadedDoc(sCfgName);
-        if (xDoc.is())
-        {
-            // Get ui config manager. There should always be one at the model.
-            uno::Reference<ui::XUIConfigurationManagerSupplier> xCfgSupplier(xDoc, uno::UNO_QUERY_THROW);
-            xCfgMgr = xCfgSupplier->getUIConfigurationManager();
-        }
-        else
-        {
-            // URL doesn't point to a loaded document, try to access it as a single storage
-            // don't forget to release the storage afterwards!
-            uno::Reference<lang::XSingleServiceFactory> xStorageFactory(embed::StorageFactory::create(m_xContext));
-            uno::Sequence<uno::Any> lArgs(2);
-            lArgs[0] <<= sCfgName;
-            lArgs[1] <<= css::embed::ElementModes::READ;
+        // don't forget to release the storage afterwards!
+        uno::Reference<lang::XSingleServiceFactory> xStorageFactory(embed::StorageFactory::create(m_xContext));
+        uno::Sequence<uno::Any> lArgs(2);
+        lArgs[0] <<= sCfgName;
+        lArgs[1] <<= css::embed::ElementModes::READ;
 
-            xRootStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY_THROW);
-            uno::Reference<embed::XStorage> xUIConfig = xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, embed::ElementModes::READ);
-            if (xUIConfig.is())
-            {
-                uno::Reference<ui::XUIConfigurationManager2> xCfgMgr2 = ui::UIConfigurationManager::create(m_xContext);
-                xCfgMgr2->setStorage(xUIConfig);
-                xCfgMgr.set(xCfgMgr2, uno::UNO_QUERY_THROW);
-            }
+        xRootStorage.set(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY_THROW);
+        uno::Reference<embed::XStorage> xUIConfig = xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, embed::ElementModes::READ);
+        if (xUIConfig.is())
+        {
+            uno::Reference<ui::XUIConfigurationManager2> xCfgMgr2 = ui::UIConfigurationManager::create(m_xContext);
+            xCfgMgr2->setStorage(xUIConfig);
+            xCfgMgr.set(xCfgMgr2, uno::UNO_QUERY_THROW);
         }
 
         if (xCfgMgr.is())
@@ -1310,70 +1297,52 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void
 
     GetTabDialog()->EnterWait();
 
-    uno::Reference<frame::XModel> xDoc;
-    uno::Reference<ui::XUIConfigurationManager> xCfgMgr;
     uno::Reference<embed::XStorage> xRootStorage;
 
     try
     {
-        // first check if URL points to a document already loaded
-        xDoc = SearchForAlreadyLoadedDoc(sCfgName);
-        if (xDoc.is())
+        uno::Reference<lang::XSingleServiceFactory> xStorageFactory(embed::StorageFactory::create(m_xContext));
+        uno::Sequence<uno::Any> lArgs(2);
+        lArgs[0] <<= sCfgName;
+        lArgs[1] <<= embed::ElementModes::WRITE;
+
+        xRootStorage.set( xStorageFactory->createInstanceWithArguments(lArgs),
+                          uno::UNO_QUERY_THROW);
+
+        uno::Reference<embed::XStorage> xUIConfig(
+                            xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, embed::ElementModes::WRITE),
+                            uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xUIConfigProps(
+                            xUIConfig,
+                            uno::UNO_QUERY_THROW);
+
+        // set the correct media type if the storage was new created
+        OUString sMediaType;
+        xUIConfigProps->getPropertyValue(MEDIATYPE_PROPNAME) >>= sMediaType;
+        if (sMediaType.isEmpty())
+            xUIConfigProps->setPropertyValue(MEDIATYPE_PROPNAME, uno::Any(OUString("application/vnd.sun.xml.ui.configuration")));
+
+        uno::Reference<ui::XUIConfigurationManager2> xCfgMgr = ui::UIConfigurationManager::create(m_xContext);
+        xCfgMgr->setStorage(xUIConfig);
+
+        // get the target configuration access and update with all shortcuts
+        // which are set currently at the UI!
+        // Don't copy the m_xAct content to it... because m_xAct will be updated
+        // from the UI on pressing the button "OK" only. And inbetween it's not up to date!
+        uno::Reference<ui::XAcceleratorConfiguration> xTargetAccMgr(xCfgMgr->getShortCutManager(), uno::UNO_QUERY_THROW);
+        Apply(xTargetAccMgr);
+
+        // commit (order is important!)
+        uno::Reference<ui::XUIConfigurationPersistence> xCommit1(xTargetAccMgr, uno::UNO_QUERY_THROW);
+        uno::Reference<ui::XUIConfigurationPersistence> xCommit2(xCfgMgr      , uno::UNO_QUERY_THROW);
+        xCommit1->store();
+        xCommit2->store();
+
+        if (xRootStorage.is())
         {
-            // get config manager, force creation if there was none before
-            uno::Reference<ui::XUIConfigurationManagerSupplier> xCfgSupplier(xDoc, uno::UNO_QUERY_THROW);
-            xCfgMgr = xCfgSupplier->getUIConfigurationManager();
-        }
-        else
-        {
-            // URL doesn't point to a loaded document, try to access it as a single storage
-            uno::Reference<lang::XSingleServiceFactory> xStorageFactory(embed::StorageFactory::create(m_xContext));
-            uno::Sequence<uno::Any> lArgs(2);
-            lArgs[0] <<= sCfgName;
-            lArgs[1] <<= embed::ElementModes::WRITE;
-
-            xRootStorage.set( xStorageFactory->createInstanceWithArguments(lArgs),
-                              uno::UNO_QUERY_THROW);
-
-            uno::Reference<embed::XStorage> xUIConfig(
-                                xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, embed::ElementModes::WRITE),
-                                uno::UNO_QUERY_THROW);
-            uno::Reference<beans::XPropertySet> xUIConfigProps(
-                                xUIConfig,
-                                uno::UNO_QUERY_THROW);
-
-            // set the correct media type if the storage was new created
-            OUString sMediaType;
-            xUIConfigProps->getPropertyValue(MEDIATYPE_PROPNAME) >>= sMediaType;
-            if (sMediaType.isEmpty())
-                xUIConfigProps->setPropertyValue(MEDIATYPE_PROPNAME, uno::Any(OUString("application/vnd.sun.xml.ui.configuration")));
-
-            uno::Reference<ui::XUIConfigurationManager2> xCfgMgr2 = ui::UIConfigurationManager::create(m_xContext);
-            xCfgMgr2->setStorage(xUIConfig);
-            xCfgMgr.set( xCfgMgr2, uno::UNO_QUERY_THROW );
-        }
-
-        if (xCfgMgr.is())
-        {
-            // get the target configuration access and update with all shortcuts
-            // which are set currently at the UI!
-            // Don't copy the m_xAct content to it... because m_xAct will be updated
-            // from the UI on pressing the button "OK" only. And inbetween it's not up to date!
-            uno::Reference<ui::XAcceleratorConfiguration> xTargetAccMgr(xCfgMgr->getShortCutManager(), uno::UNO_QUERY_THROW);
-            Apply(xTargetAccMgr);
-
-            // commit (order is important!)
-            uno::Reference<ui::XUIConfigurationPersistence> xCommit1(xTargetAccMgr, uno::UNO_QUERY_THROW);
-            uno::Reference<ui::XUIConfigurationPersistence> xCommit2(xCfgMgr      , uno::UNO_QUERY_THROW);
-            xCommit1->store();
-            xCommit2->store();
-
-            if (xRootStorage.is())
-            {
-                // Commit root storage
-                uno::Reference<embed::XTransactedObject> xCommit3(xRootStorage, uno::UNO_QUERY_THROW);
-                xCommit3->commit();
-            }
+            // Commit root storage
+            uno::Reference<embed::XTransactedObject> xCommit3(xRootStorage, uno::UNO_QUERY_THROW);
+            xCommit3->commit();
         }
 
         if (xRootStorage.is())
@@ -1533,11 +1502,6 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
     }
 
     return sCommand;
-}
-
-uno::Reference<frame::XModel> SfxAcceleratorConfigPage::SearchForAlreadyLoadedDoc(const OUString& /*sName*/)
-{
-    return uno::Reference<frame::XModel>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
