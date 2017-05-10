@@ -170,7 +170,7 @@ public:
 
     bool                        SubTotalAllowed(long nColumn);      //! move to ScDPResultData
 
-    ScDPDimension* AddDuplicated(long nSource, const OUString& rNewName);
+    ScDPDimension* AddDuplicated(const OUString& rNewName);
     long                    GetDupCount() const { return nDupCount; }
 
     long                    GetSourceDim(long nDim);

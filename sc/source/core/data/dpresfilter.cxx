@@ -88,7 +88,7 @@ ScDPResultTree::~ScDPResultTree()
 }
 
 void ScDPResultTree::add(
-    const std::vector<ScDPResultFilter>& rFilters, long /*nCol*/, long /*nRow*/, double fVal)
+    const std::vector<ScDPResultFilter>& rFilters, double fVal)
 {
     // TODO: I'll work on the col / row to value node mapping later.
 

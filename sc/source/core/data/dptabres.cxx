@@ -2152,7 +2152,7 @@ void ScDPDataMember::FillDataRow(
                 if ( bHasChild || bIsSubTotalRow )
                     rRes.Flags |= sheet::DataResultFlags::SUBTOTAL;
 
-                rFilterCxt.maFilterSet.add(rFilterCxt.maFilters, rFilterCxt.mnCol, rFilterCxt.mnRow, rRes.Value);
+                rFilterCxt.maFilterSet.add(rFilterCxt.maFilters, rRes.Value);
                 rFilterCxt.mnCol += 1;
             }
         }

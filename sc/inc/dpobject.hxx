@@ -139,7 +139,7 @@ public:
     void                SetHeaderLayout(bool bUseGrid);
     bool                GetHeaderLayout() const { return mbHeaderLayout;}
 
-    void                SetSheetDesc(const ScSheetSourceDesc& rDesc, bool bFromRefUpdate = false);
+    void                SetSheetDesc(const ScSheetSourceDesc& rDesc);
     void                SetImportDesc(const ScImportSourceDesc& rDesc);
     void                SetServiceData(const ScDPServiceDesc& rDesc);
 
