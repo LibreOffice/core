@@ -910,7 +910,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount, const OUString& 
 |*
 \******************************************************************************/
 
-void ImageMap::Write( SvStream& rOStm, const OUString& rBaseURL ) const
+void ImageMap::Write( SvStream& rOStm ) const
 {
     IMapCompat*             pCompat;
     OUString                aImageName( GetName() );
@@ -934,7 +934,7 @@ void ImageMap::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 
     delete pCompat;
 
-    ImpWriteImageMap( rOStm, rBaseURL );
+    ImpWriteImageMap( rOStm, OUString() );
 
     rOStm.SetEndian( nOldFormat );
 }
@@ -946,7 +946,7 @@ void ImageMap::Write( SvStream& rOStm, const OUString& rBaseURL ) const
 |*
 \******************************************************************************/
 
-void ImageMap::Read( SvStream& rIStm, const OUString& rBaseURL )
+void ImageMap::Read( SvStream& rIStm )
 {
     char            cMagic[6];
     SvStreamEndian  nOldFormat = rIStm.GetEndian();
@@ -975,7 +975,7 @@ void ImageMap::Read( SvStream& rIStm, const OUString& rBaseURL )
         // here one can read in newer versions
 
         delete pCompat;
-        ImpReadImageMap( rIStm, nCount, rBaseURL );
+        ImpReadImageMap( rIStm, nCount, OUString() );
 
     }
     else

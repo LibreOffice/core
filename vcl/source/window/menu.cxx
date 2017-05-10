@@ -389,7 +389,7 @@ MenuItemData* Menu::NbcInsertItem(sal_uInt16 nId, MenuItemBits nBits,
 {
     // put Item in MenuItemList
     MenuItemData* pData = pItemList->Insert(nId, MenuItemType::STRING,
-                             nBits, rStr, Image(), pMenu, nPos, rIdent);
+                             nBits, rStr, pMenu, nPos, rIdent);
 
     // update native menu
     if (ImplGetSalMenu() && pData->pSalMenuItem)
