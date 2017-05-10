@@ -1921,8 +1921,11 @@ void SwXStyle::SetPropertyValue<RES_PARATR_DROP>(const SfxItemPropertySimpleEntr
     OUString sStyle;
     SwStyleNameMapper::FillUIName(sValue, sStyle, SwGetPoolIdFromName::ChrFmt, true);
     auto pStyle(static_cast<SwDocStyleSheet*>(m_pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char)));
-    if(!pStyle)
+    //default character style must not be set as default format
+    if(!pStyle || pStyle->GetCharFormat() == m_pDoc->GetDfltCharFormat() )
+    {
         throw lang::IllegalArgumentException();
+    }
     pDrop->SetCharFormat(pStyle->GetCharFormat());
     rStyleSet.Put(*pDrop);
 }

@@ -64,6 +64,7 @@ SwFormatDrop::~SwFormatDrop()
 
 void SwFormatDrop::SetCharFormat( SwCharFormat *pNew )
 {
+    assert(!pNew->IsDefault()); // expose cases that lead to use-after-free
     // Rewire
     if ( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
