@@ -9,18 +9,37 @@
  #include <stdio.h>
  
  #ifdef WIN32
+--- firebird.org/builds/posix/darwin.defaults	2016-08-01 20:02:48.000000000 +0200
++++ firebird/builds/posix/darwin.defaults	2016-08-01 21:42:45.000000000 +0200
+@@ -46,3 +46,5 @@
+ STATIC_CXX_SUPPORT = -lsupc++ $(GCCS) -lgcc_eh -lSystem
+ 
+ INLINE_EDIT_SED:= -i ""
++
++CXXFLAGS := $(CXXFLAGS) -std=c++11
+--- firebird.org/builds/posix/prefix.darwin_i386	2016-08-01 20:02:48.000000000 +0200
++++ firebird/builds/posix/prefix.darwin_386	2016-08-01 21:42:45.000000000 +0200
+@@ -40,3 +40,7 @@
+ LD_FLAGS+=-m32 -arch i386
+ 
+ include $(ROOT)/gen/darwin.defaults
++
++# This file must be compiled with SSE4.2 support
++%/CRC32C.o: COMMON_FLAGS += -msse4
++
 --- firebird.org/builds/posix/prefix.darwin_x86_64	2016-08-01 20:02:48.000000000 +0200
 +++ firebird/builds/posix/prefix.darwin_x86_64	2016-08-01 21:42:45.000000000 +0200
-@@ -19,8 +19,6 @@
+@@ -19,9 +19,6 @@
  #
  # Default build from 10.7 using Clang
  
 -DYLD_LIBRARY_PATH=$(HOME)/icu54/icu/source/lib
 -export DYLD_LIBRARY_PATH
- 
+-
  #DYLD_PRINT_ENV=1
  #export DYLD_PRINT_ENV
-@@ -31,15 +31,15 @@
+ 
+@@ -31,15 +28,19 @@
  MACOSX_DEPLOYMENT_TARGET=10.7
  export MACOSX_DEPLOYMENT_TARGET
  
@@ -28,7 +47,7 @@
 -DEV_FLAGS=-ggdb -DDARWIN -pipe -MMD -fPIC -fno-omit-frame-pointer -fno-common -Wall -fno-optimize-sibling-calls -mmacosx-version-min=10.7 -Wno-non-virtual-dtor
 +PROD_FLAGS=-O1 -DDARWIN -pipe -MMD -fPIC -fno-common
 +DEV_FLAGS=-ggdb -DDARWIN -pipe -MMD -fPIC -fno-omit-frame-pointer -fno-common -Wall -fno-optimize-sibling-calls -Wno-non-virtual-dtor
- CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden 
+ CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden
  
  EXE_LINK_OPTIONS:= 
  UNDEF_PLATFORM=
@@ -39,6 +58,10 @@
  SO_LINK_LIBS+=-liconv
  
  include $(ROOT)/gen/darwin.defaults
++
++# This file must be compiled with SSE4.2 support
++%/CRC32C.o: COMMON_FLAGS += -msse4
++
 --- firebird.org/builds/posix/postfix.darwin	2016-08-01 20:02:48.000000000 +0200
 +++ firebird/builds/posix/postfix.darwin	2016-08-01 22:17:49.000000000 +0200
 @@ -54,9 +54,9 @@
@@ -91,9 +114,9 @@
  	$(MAKE) plugins
  	$(MAKE) examples
  	$(MAKE) rest
-+	install_name_tool -id @__________________________________________________OOO/libfbclient.dylib.3.0.0 $(LIB)/libfbclient.dylib
++	install_name_tool -id @__________________________________________________OOO/libfbclient.dylib.3.0.2 $(LIB)/libfbclient.dylib
 +	install_name_tool -id @__________________________________________________OOO/libEngine12.dylib $(PLUGINS)/libEngine12.dylib
-+	install_name_tool -change $(LIB)/libfbclient.dylib.3.0.0 @loader_path/libfbclient.dylib.3.0.0 $(PLUGINS)/libEngine12.dylib
++	install_name_tool -change $(LIB)/libfbclient.dylib.3.0.2 @loader_path/libfbclient.dylib.3.0.2 $(PLUGINS)/libEngine12.dylib
  
  
  cross_process:
