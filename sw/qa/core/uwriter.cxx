@@ -974,7 +974,7 @@ void SwDocTest::testGraphicAnchorDeletion()
     SwFormatAnchor aAnchor(RndStdIds::FLY_AS_CHAR);
     aAnchor.SetAnchor(aPaM.GetPoint());
     aFlySet.Put(aAnchor);
-    SwFlyFrameFormat *pFrame = m_pDoc->getIDocumentContentOperations().Insert(aPaM, OUString(), OUString(), nullptr, &aFlySet, nullptr, nullptr);
+    SwFlyFrameFormat *pFrame = m_pDoc->getIDocumentContentOperations().InsertGraphic(aPaM, OUString(), OUString(), nullptr, &aFlySet, nullptr, nullptr);
     CPPUNIT_ASSERT_MESSAGE("Expected frame", pFrame != nullptr);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be 1 graphic", static_cast<size_t>(1), m_pDoc->GetFlyCount(FLYCNTTYPE_GRF));
