@@ -63,6 +63,7 @@ private:
 
         formula::ParamClass nParam[nMaxParams];
         sal_uInt8           nRepeatLast;
+        formula::ParamClass eReturn;
     };
 
     struct RawData
