@@ -414,9 +414,7 @@ lcl_setDropcapCharStyle(SwPaM & rPam, SfxItemSet & rItemSet,
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
             pDoc->GetDocShell()
             ->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
-    if (!pStyle ||
-        (static_cast<SwDocStyleSheet*>(pStyle)->GetCharFormat() ==
-             pDoc->GetDfltCharFormat()))
+    if (!pStyle || pStyle->GetCharFormat() == pDoc->GetDfltCharFormat())
     {
         throw lang::IllegalArgumentException();
     }

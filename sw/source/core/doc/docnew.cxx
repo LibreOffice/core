@@ -41,8 +41,6 @@
 #include <svl/zforlist.hxx>
 #include <unotools/lingucfg.hxx>
 #include <svx/svdpage.hxx>
-#include <paratr.hxx>
-#include <fchrfmt.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
@@ -383,16 +381,6 @@ SwDoc::~SwDoc()
 
     delete mpGrammarContact;
     mpGrammarContact = nullptr;
-
-    //!! needs to be done to destroy a possible SwFormatDrop format that may
-    //!! be connected to a char format which may not otherwise be removed
-    //!! and thus would leave a unremoved SwFormat object. (TL)
-    //!! (this is case is not possible via UI but via API...)
-    SwFormatDrop aDrop;
-    SetDefault(aDrop);
-    //!! same for SwFormatCharFormat
-    SwFormatCharFormat aCharFormat(nullptr);
-    SetDefault(aCharFormat);
 
     getIDocumentTimerAccess().StopIdling();   // stop idle timer
 
