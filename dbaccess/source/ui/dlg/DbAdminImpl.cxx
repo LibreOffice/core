@@ -310,8 +310,8 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
 
         if (!sPassword.isEmpty())
             aReturn.push_back(
-                PropertyValue(  "password", 0,
-                                makeAny(OUString(sPassword)), PropertyState_DIRECT_VALUE));
+                PropertyValue( "password", 0,
+                               makeAny(sPassword), PropertyState_DIRECT_VALUE));
     }
 
     if ( !aReturn.empty() )

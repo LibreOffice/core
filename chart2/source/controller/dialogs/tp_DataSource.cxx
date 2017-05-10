@@ -61,7 +61,7 @@ OUString lcl_GetRoleLBEntry(
     aEntry.append( OUString(
         ::chart::DialogModel::ConvertRoleFromInternalToUI( rRole )) );
     aEntry.append( "\t" );
-    aEntry.append(OUString( rRange ));
+    aEntry.append( rRange );
 
     OUString sFoo = aEntry.makeStringAndClear();
     return sFoo;

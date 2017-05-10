@@ -242,7 +242,7 @@ void Desktop::CreateTemporaryDirectory()
         DesktopResId aResId( STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE );
         aResId.SetRT( RSC_STRING );
         if ( aResId.GetResMgr()->IsAvailable( aResId ))
-            aMsg = OUString( aResId );
+            aMsg = aResId;
         else
             aMsg = "The path manager is not available.\n";
         e.Message = aMsg + e.Message;

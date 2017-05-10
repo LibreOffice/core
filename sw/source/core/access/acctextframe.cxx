@@ -96,7 +96,7 @@ void SwAccessibleTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
             msTitle = sNewTitle;
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::NAME_CHANGED;
-            aEvent.OldValue <<= OUString( sOldTitle );
+            aEvent.OldValue <<= sOldTitle;
             aEvent.NewValue <<= msTitle;
             FireAccessibleEvent( aEvent );
 

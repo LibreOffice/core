@@ -41,8 +41,6 @@ using namespace ::com::sun::star::uno;
 #define PROPERTYHANDLE_FONTHISTORY          1
 #define PROPERTYHANDLE_FONTWYSIWYG          2
 
-#define PROPERTYCOUNT                       3
-
 class SvtFontOptions_Impl : public ConfigItem
 {
     public:
@@ -230,17 +228,12 @@ void SvtFontOptions_Impl::EnableFontWYSIWYG( bool bState )
 
 Sequence< OUString > SvtFontOptions_Impl::impl_GetPropertyNames()
 {
-    // Build list of configuration key names.
-    const OUString pProperties[] =
+    return Sequence< OUString >
     {
-        OUString(PROPERTYNAME_REPLACEMENTTABLE)   ,
-        OUString(PROPERTYNAME_FONTHISTORY)        ,
-        OUString(PROPERTYNAME_FONTWYSIWYG)        ,
+        PROPERTYNAME_REPLACEMENTTABLE   ,
+        PROPERTYNAME_FONTHISTORY        ,
+        PROPERTYNAME_FONTWYSIWYG        ,
     };
-    // Initialize return sequence with these list ...
-    const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
-    // ... and return it.
-    return seqPropertyNames;
 }
 
 namespace {

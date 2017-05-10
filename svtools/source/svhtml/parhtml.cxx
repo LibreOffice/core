@@ -1999,7 +1999,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
                     try {
                         xUDProps->addProperty(aName,
                             beans::PropertyAttribute::REMOVABLE,
-                            uno::makeAny(OUString(aContent)));
+                            uno::makeAny(aContent));
                         AddMetaUserDefined(aName);
                         bChanged = true;
                     } catch (uno::Exception &) {

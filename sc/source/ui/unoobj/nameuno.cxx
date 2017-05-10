@@ -386,7 +386,7 @@ uno::Any SAL_CALL ScNamedRangeObj::getPropertyValue( const OUString& rPropertyNa
         // ScLinkTargetTypeObj::SetLinkTargetBitmap( aRet, SC_LINKTARGETTYPE_RANGENAME );
     }
     else if ( rPropertyName == SC_UNO_LINKDISPNAME )
-        aRet <<= OUString( aName );
+        aRet <<= aName;
     else if ( rPropertyName == SC_UNONAME_TOKENINDEX )
     {
         // get index for use in formula tokens (read-only)

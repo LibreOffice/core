@@ -827,7 +827,7 @@ bool SdrOle2Obj::UpdateLinkURL_Impl()
                         // TODO/LATER: there should be possible to get current mediadescriptor settings from the object
                         uno::Sequence< beans::PropertyValue > aArgs( 1 );
                         aArgs[0].Name = "URL";
-                        aArgs[0].Value <<= OUString( aNewLinkURL );
+                        aArgs[0].Value <<= aNewLinkURL;
                         xPersObj->reload( aArgs, uno::Sequence< beans::PropertyValue >() );
 
                         mpImpl->maLinkURL = aNewLinkURL;

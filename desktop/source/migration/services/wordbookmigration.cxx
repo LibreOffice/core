@@ -109,7 +109,7 @@ namespace migration
 bool IsUserWordbook( const OUString& rFile )
 {
     bool bRet = false;
-    SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( OUString(rFile), StreamMode::STD_READ );
+    SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( rFile, StreamMode::STD_READ );
     if ( pStream && !pStream->GetError() )
     {
         static const sal_Char* const pVerOOo7    = "OOoUserDict1";

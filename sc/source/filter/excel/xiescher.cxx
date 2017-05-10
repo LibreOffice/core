@@ -2051,7 +2051,7 @@ void XclImpTbxObjBase::ConvertLabel( ScfPropertySet& rPropSet ) const
         Reference< css::beans::XPropertySet > xPropset( mxShape, UNO_QUERY );
         try{
         if(xPropset.is())
-            xPropset->setPropertyValue( "Description", makeAny(::rtl::OUString(aLabel)) );
+            xPropset->setPropertyValue( "Description", makeAny(aLabel) );
         }catch( ... )
         {
             SAL_WARN("sc.filter", "Can't set a default text for TBX Control ");

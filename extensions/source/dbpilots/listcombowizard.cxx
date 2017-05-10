@@ -190,9 +190,9 @@ namespace dbp
             {
                 // build the statement to set as list source
                 OUString sStatement = "SELECT DISTINCT " +
-                    OUString( getSettings().sListContentField ) +
-                    " FROM " + OUString( getSettings().sListContentTable );
-                getContext().xObjectModel->setPropertyValue( "ListSource", makeAny(OUString(sStatement)));
+                    getSettings().sListContentField +
+                    " FROM " + getSettings().sListContentTable;
+                getContext().xObjectModel->setPropertyValue( "ListSource", makeAny(sStatement));
             }
 
             // the bound field
