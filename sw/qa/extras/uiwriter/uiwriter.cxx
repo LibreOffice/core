@@ -176,6 +176,7 @@ public:
     void testTableBackgroundColor();
     void testTdf88899();
     void testTdf90362();
+    void testUndoDelAsCharTdf107512();
     void testUndoCharAttribute();
     void testTdf86639();
     void testTdf90883TableBoxGetCoordinates();
@@ -290,6 +291,7 @@ public:
     CPPUNIT_TEST(testTableBackgroundColor);
     CPPUNIT_TEST(testTdf88899);
     CPPUNIT_TEST(testTdf90362);
+    CPPUNIT_TEST(testUndoDelAsCharTdf107512);
     CPPUNIT_TEST(testUndoCharAttribute);
     CPPUNIT_TEST(testTdf86639);
     CPPUNIT_TEST(testTdf90883TableBoxGetCoordinates);
@@ -3029,6 +3031,138 @@ void SwUiWriterTest::testTdf90362()
     uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
     comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(true), comphelper::EConfigurationModes::Standard);
     CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
+}
+
+void SwUiWriterTest::testUndoDelAsCharTdf107512()
+{
+    SwDoc * pDoc(createDoc());
+    sw::UndoManager & rUndoManager(pDoc->GetUndoManager());
+    IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
+    SwCursorShell * pShell(pDoc->GetEditShell());
+    SfxItemSet frameSet(pDoc->GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
+    SfxItemSet grfSet(pDoc->GetAttrPool(), RES_GRFATR_BEGIN, RES_GRFATR_END-1);
+    rIDCO.InsertString(*pShell->GetCursor(), "foo");
+    pShell->ClearMark();
+    SwFormatAnchor anchor(RndStdIds::FLY_AS_CHAR);
+    frameSet.Put(anchor);
+    GraphicObject grf;
+    pShell->SttEndDoc(true);
+    CPPUNIT_ASSERT(rIDCO.Insert(*pShell->GetCursor(), grf, &frameSet, &grfSet, nullptr));
+    pShell->SttEndDoc(false);
+    CPPUNIT_ASSERT(rIDCO.Insert(*pShell->GetCursor(), grf, &frameSet, &grfSet, nullptr));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    SvxCharHiddenItem hidden(true, RES_CHRATR_HIDDEN);
+    pShell->SelectText(1, 4);
+    rIDCO.InsertPoolItem(*pShell->GetCursor(), hidden);
+    // now we have "\1foo\1" with the "foo" hidden
+    CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
+    CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(4, RES_TXTATR_FLYCNT));
+    CPPUNIT_ASSERT_EQUAL(OUString(OUStringLiteral1(CH_TXTATR_BREAKWORD) + "foo" + OUStringLiteral1(CH_TXTATR_BREAKWORD)), pShell->GetCursor()->GetNode().GetTextNode()->GetText());
+    SfxPoolItem const* pItem;
+    SfxItemSet query(pDoc->GetAttrPool(), RES_CHRATR_HIDDEN, RES_CHRATR_HIDDEN);
+    pShell->GetCursor()->GetNode().GetTextNode()->GetAttr(query, 1, 4);
+//    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(SfxItemState::SET == query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(static_cast<SvxCharHiddenItem const*>(pItem)->GetValue());
+    query.ClearItem(RES_CHRATR_HIDDEN);
+
+    // delete from the start
+    pShell->SelectText(0, 4);
+    rIDCO.DeleteAndJoin(*pShell->GetCursor());
+    CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pShell->GetCursor()->GetNode().GetTextNode()->Len());
+    pShell->GetCursor()->GetNode().GetTextNode()->GetAttr(query, 0, 1);
+//    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(SfxItemState::DEFAULT == query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    query.ClearItem(RES_CHRATR_HIDDEN);
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
+    CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(4, RES_TXTATR_FLYCNT));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pShell->GetCursor()->GetNode().GetTextNode()->Len());
+    CPPUNIT_ASSERT_EQUAL(OUString(OUStringLiteral1(CH_TXTATR_BREAKWORD) + "foo" + OUStringLiteral1(CH_TXTATR_BREAKWORD)), pShell->GetCursor()->GetNode().GetTextNode()->GetText());
+    pShell->GetCursor()->GetNode().GetTextNode()->GetAttr(query, 0, 1);
+//    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(SfxItemState::DEFAULT == query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    query.ClearItem(RES_CHRATR_HIDDEN);
+    pShell->GetCursor()->GetNode().GetTextNode()->GetAttr(query, 1, 4);
+//    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(SfxItemState::SET == query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(static_cast<SvxCharHiddenItem const*>(pItem)->GetValue());
+    query.ClearItem(RES_CHRATR_HIDDEN);
+    rUndoManager.Redo();
+    CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pShell->GetCursor()->GetNode().GetTextNode()->Len());
+    pShell->GetCursor()->GetNode().GetTextNode()->GetAttr(query, 0, 1);
+//    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(SfxItemState::DEFAULT == query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    query.ClearItem(RES_CHRATR_HIDDEN);
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
+    CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(4, RES_TXTATR_FLYCNT));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pShell->GetCursor()->GetNode().GetTextNode()->Len());
+    CPPUNIT_ASSERT_EQUAL(OUString(OUStringLiteral1(CH_TXTATR_BREAKWORD) + "foo" + OUStringLiteral1(CH_TXTATR_BREAKWORD)), pShell->GetCursor()->GetNode().GetTextNode()->GetText());
+    pShell->GetCursor()->GetNode().GetTextNode()->GetAttr(query, 0, 1);
+//    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(SfxItemState::DEFAULT == query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    query.ClearItem(RES_CHRATR_HIDDEN);
+    pShell->GetCursor()->GetNode().GetTextNode()->GetAttr(query, 1, 4);
+//    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(SfxItemState::SET == query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(static_cast<SvxCharHiddenItem const*>(pItem)->GetValue());
+    query.ClearItem(RES_CHRATR_HIDDEN);
+
+    // delete from the end
+    pShell->SelectText(1, 5);
+    rIDCO.DeleteAndJoin(*pShell->GetCursor());
+    CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pShell->GetCursor()->GetNode().GetTextNode()->Len());
+    pShell->GetCursor()->GetNode().GetTextNode()->GetAttr(query, 4, 5);
+//    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(SfxItemState::DEFAULT == query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    query.ClearItem(RES_CHRATR_HIDDEN);
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
+    CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(4, RES_TXTATR_FLYCNT));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pShell->GetCursor()->GetNode().GetTextNode()->Len());
+    CPPUNIT_ASSERT_EQUAL(OUString(OUStringLiteral1(CH_TXTATR_BREAKWORD) + "foo" + OUStringLiteral1(CH_TXTATR_BREAKWORD)), pShell->GetCursor()->GetNode().GetTextNode()->GetText());
+    pShell->GetCursor()->GetNode().GetTextNode()->GetAttr(query, 4, 5);
+//    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(SfxItemState::DEFAULT == query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    query.ClearItem(RES_CHRATR_HIDDEN);
+    pShell->GetCursor()->GetNode().GetTextNode()->GetAttr(query, 1, 4);
+//    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(SfxItemState::SET == query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(static_cast<SvxCharHiddenItem const*>(pItem)->GetValue());
+    query.ClearItem(RES_CHRATR_HIDDEN);
+    rUndoManager.Redo();
+    CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pShell->GetCursor()->GetNode().GetTextNode()->Len());
+    pShell->GetCursor()->GetNode().GetTextNode()->GetAttr(query, 4, 5);
+//    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(SfxItemState::DEFAULT == query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    query.ClearItem(RES_CHRATR_HIDDEN);
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
+    CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(4, RES_TXTATR_FLYCNT));
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pShell->GetCursor()->GetNode().GetTextNode()->Len());
+    CPPUNIT_ASSERT_EQUAL(OUString(OUStringLiteral1(CH_TXTATR_BREAKWORD) + "foo" + OUStringLiteral1(CH_TXTATR_BREAKWORD)), pShell->GetCursor()->GetNode().GetTextNode()->GetText());
+    pShell->GetCursor()->GetNode().GetTextNode()->GetAttr(query, 4, 5);
+//    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(SfxItemState::DEFAULT == query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    query.ClearItem(RES_CHRATR_HIDDEN);
+    pShell->GetCursor()->GetNode().GetTextNode()->GetAttr(query, 1, 4);
+//    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(SfxItemState::SET == query.GetItemState(RES_CHRATR_HIDDEN, false, &pItem));
+    CPPUNIT_ASSERT(static_cast<SvxCharHiddenItem const*>(pItem)->GetValue());
+    query.ClearItem(RES_CHRATR_HIDDEN);
 }
 
 void SwUiWriterTest::testUndoCharAttribute()
