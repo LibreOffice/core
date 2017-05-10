@@ -675,7 +675,7 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const
 }
 
 bool ScTable::GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
-                                SCCOL& rEndCol, bool /* bNotes */ ) const
+                                SCCOL& rEndCol ) const
 {
     bool bFound = false;
     SCCOL nMaxX = 0;

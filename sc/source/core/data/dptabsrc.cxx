@@ -312,7 +312,7 @@ void ScDPSource::SetDupCount( long nNew )
     nDupCount = nNew;
 }
 
-ScDPDimension* ScDPSource::AddDuplicated(long /* nSource */, const OUString& rNewName)
+ScDPDimension* ScDPSource::AddDuplicated(const OUString& rNewName)
 {
     OSL_ENSURE( pDimensions.is(), "AddDuplicated without dimensions?" );
 
@@ -1382,7 +1382,7 @@ ScDPDimension* ScDPDimension::CreateCloneObject()
     //TODO: set new name here, or temporary name ???
     OUString aNewName = aName;
 
-    ScDPDimension* pNew = pSource->AddDuplicated( nDim, aNewName );
+    ScDPDimension* pNew = pSource->AddDuplicated( aNewName );
 
     pNew->aName = aNewName;             //TODO: here or in source?
     pNew->nSourceDim = nDim;            //TODO: recursive?

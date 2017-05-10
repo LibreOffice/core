@@ -691,7 +691,7 @@ bool ScPrintFunc::AdjustPrintArea( bool bNew )
         if ( bChangeCol && bChangeRow )
             bFound = pDoc->GetPrintArea( nPrintTab, nEndCol, nEndRow, bNotes );
         else if ( bChangeCol )
-            bFound = pDoc->GetPrintAreaHor( nPrintTab, nStartRow, nEndRow, nEndCol, bNotes );
+            bFound = pDoc->GetPrintAreaHor( nPrintTab, nStartRow, nEndRow, nEndCol );
         else if ( bChangeRow )
             bFound = pDoc->GetPrintAreaVer( nPrintTab, nStartCol, nEndCol, nEndRow, bNotes );
 

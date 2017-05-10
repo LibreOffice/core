@@ -136,7 +136,6 @@ public:
                      css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& rTabData,
                      const std::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
 
-    static SCROW getOrder(long nDim, SCROW nIndex);
     void clear();
     bool empty() const;
 

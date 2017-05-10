@@ -1206,12 +1206,6 @@ sal_Int32 ScDPCache::GetGroupType(long nDim) const
     return 0;
 }
 
-SCROW ScDPCache::GetOrder(long /*nDim*/, SCROW nIndex)
-{
-    return nIndex;
-}
-
-
 #if DUMP_PIVOT_TABLE
 
 namespace {

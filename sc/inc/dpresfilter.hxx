@@ -112,13 +112,9 @@ public:
      * by row dimension order then by column dimension order.
      *
      * @param rFilter set of filters.
-     * @param nCol column position relative to the top-left cell within the
-     *             data field range.
-     * @param nRow row position relative to the top-left cell within the data
-     *             field range.
      * @param fVal result value, as displayed in the table output.
      */
-    void add(const std::vector<ScDPResultFilter>& rFilter, long nCol, long nRow, double fVal);
+    void add(const std::vector<ScDPResultFilter>& rFilter, double fVal);
 
     void swap(ScDPResultTree& rOther);
 

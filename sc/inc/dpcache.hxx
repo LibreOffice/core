@@ -161,7 +161,6 @@ public:
     sal_uInt32 GetNumberFormat( long nDim ) const;
     bool  IsDateDimension( long nDim ) const ;
     long GetDimMemberCount(long nDim) const;
-    static SCROW GetOrder( long nDim, SCROW nIndex );
 
     const IndexArrayType* GetFieldIndexArray( size_t nDim ) const;
     const ScDPItemDataVec& GetDimMemberValues( SCCOL nDim ) const;

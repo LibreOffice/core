@@ -419,7 +419,7 @@ const ScRange& ScDPObject::GetOutRange() const
     return aOutRange;
 }
 
-void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc, bool /*bFromRefUpdate*/)
+void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
 {
     if ( pSheetDesc && rDesc == *pSheetDesc )
         return;             // nothing to do
@@ -1144,7 +1144,7 @@ void ScDPObject::WriteRefsTo( ScDPObject& r ) const
 {
     r.SetOutRange( aOutRange );
     if ( pSheetDesc )
-        r.SetSheetDesc( *pSheetDesc, true );
+        r.SetSheetDesc( *pSheetDesc );
 }
 
 void ScDPObject::GetPositionData(const ScAddress& rPos, DataPilotTablePositionData& rPosData)
