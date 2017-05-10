@@ -256,7 +256,7 @@ void ScDBDocFunc::ModifyAllDBData( const ScDBCollection& rNewColl, const std::ve
         const ScAddress& rStart = iter->aStart;
         const ScAddress& rEnd   = iter->aEnd;
         rDocShell.DBAreaDeleted(
-            rStart.Tab(), rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row());
+            rStart.Tab(), rStart.Col(), rStart.Row(), rEnd.Col());
     }
 
     if (bRecord)

@@ -549,7 +549,7 @@ void ScDBFuncUndo::EndUndo()
             SCROW nRangeY2;
             SCTAB nRangeTab;
             pNoNameData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
-            pDocShell->DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+            pDocShell->DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2 );
 
             *pNoNameData = *pAutoDBRange;
 
@@ -582,7 +582,7 @@ void ScDBFuncUndo::BeginRedo()
             SCROW nRangeY2;
             SCTAB nRangeTab;
             pNoNameData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
-            pDocShell->DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+            pDocShell->DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2 );
 
             pNoNameData->SetSortParam( ScSortParam() );
             pNoNameData->SetQueryParam( ScQueryParam() );

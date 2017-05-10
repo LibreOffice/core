@@ -96,11 +96,12 @@ bool ScDocShell::IsEditable() const
     return !IsReadOnly() || aDocument.IsImportingXML() || aDocument.IsChangeReadOnlyEnabled();
 }
 
-void ScDocShell::DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 )
+void ScDocShell::DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2 )
 {
     ScDocShellModificator aModificator( *this );
-    aDocument.RemoveFlagsTab( nX1, nY1, nX2, nY2, nTab, ScMF::Auto );
-    PostPaint( nX1, nY1, nTab, nX2, nY2, nTab, PaintPartFlags::Grid );
+    // the auto-filter is in the first row of the area
+    aDocument.RemoveFlagsTab( nX1, nY1, nX2, nY1, nTab, ScMF::Auto );
+    PostPaint( nX1, nY1, nTab, nX2, nY1, nTab, PaintPartFlags::Grid );
     // No SetDocumentModified, as the unnamed database range might have to be restored later.
     // The UNO hint is broadcast directly instead, to keep UNO objects in valid state.
     aDocument.BroadcastUno( SfxHint( SfxHintId::DataChanged ) );
@@ -254,7 +255,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                     nStartCol <= nOldY2 && nOldY1 <= nEndCol)
                 bHasHeader = true;
 
-            DBAreaDeleted( nOldTab, nOldX1, nOldY1, nOldX2, nOldY2 );
+            DBAreaDeleted( nOldTab, nOldX1, nOldY1, nOldX2 );
 
             pNoNameData->SetSortParam( ScSortParam() );             // reset parameter
             pNoNameData->SetQueryParam( ScQueryParam() );
@@ -365,7 +366,7 @@ void ScDocShell::CancelAutoDBRange()
             SCROW nRangeY2;
             SCTAB nRangeTab;
             pDBData->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
-            DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
+            DBAreaDeleted( nRangeTab, nRangeX1, nRangeY1, nRangeX2 );
 
             *pDBData = *pOldAutoDBRange;    // restore old settings
 
