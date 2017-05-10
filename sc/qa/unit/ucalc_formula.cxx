@@ -5873,6 +5873,22 @@ void testExtRefFuncVLOOKUP(ScDocument* pDoc, ScDocument& rExtDoc)
     CPPUNIT_ASSERT_EQUAL(OUString("B2"), pDoc->GetString(ScAddress(1,0,0)));
 }
 
+void testExtRefConcat(ScDocument* pDoc, ScDocument& rExtDoc)
+{
+    Test::clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
+    Test::clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
+
+    sc::AutoCalcSwitch aACSwitch(*pDoc, true);
+
+    // String and number
+    rExtDoc.SetString(ScAddress(0,0,0), "Answer: ");
+    rExtDoc.SetValue(ScAddress(0,1,0), 42);
+
+    // Concat operation should combine string and number converted to string
+    pDoc->SetString(ScAddress(0,0,0), "='file:///extdata.fake'#Data.A1 & 'file:///extdata.fake'#Data.A2");
+    CPPUNIT_ASSERT_EQUAL(OUString("Answer: 42"), pDoc->GetString(ScAddress(0,0,0)));
+}
+
 void Test::testExternalRefFunctions()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
@@ -5956,6 +5972,7 @@ void Test::testExternalRefFunctions()
     testExtRefFuncT(m_pDoc, rExtDoc);
     testExtRefFuncOFFSET(m_pDoc, rExtDoc);
     testExtRefFuncVLOOKUP(m_pDoc, rExtDoc);
+    testExtRefConcat(m_pDoc, rExtDoc);
 
     // Unload the external document shell.
     xExtDocSh->DoClose();
