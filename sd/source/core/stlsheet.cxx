@@ -130,7 +130,7 @@ void ModifyListenerForewarder::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*
 }
 
 SdStyleSheet::SdStyleSheet(const OUString& rDisplayName, SfxStyleSheetBasePool& _rPool, SfxStyleFamily eFamily, sal_uInt16 _nMask)
-: SdStyleSheetBase( OUString( rDisplayName ), _rPool, eFamily, _nMask)
+: SdStyleSheetBase( rDisplayName, _rPool, eFamily, _nMask)
 , ::cppu::BaseMutex()
 , msApiName( rDisplayName )
 , mxPool( &_rPool )

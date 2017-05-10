@@ -300,7 +300,7 @@ bool ScTableProtectionImpl::verifyPassword(const OUString& aPassText) const
 {
 #if DEBUG_TAB_PROTECTION
     fprintf(stdout, "ScTableProtectionImpl::verifyPassword: input = '%s'\n",
-            OUStringToOString(OUString(aPassText), RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(aPassText, RTL_TEXTENCODING_UTF8).getStr());
 #endif
 
     if (mbEmptyPass)

@@ -669,7 +669,7 @@ bool ScViewFunc::PasteFile( const Point& rPos, const OUString& rFile, bool bLink
 
         uno::Sequence < beans::PropertyValue > aMedium(1);
         aMedium[0].Name = "URL";
-        aMedium[0].Value <<= OUString( aStrURL );
+        aMedium[0].Value <<= aStrURL;
 
         comphelper::EmbeddedObjectContainer aCnt( xStorage );
         OUString aName;

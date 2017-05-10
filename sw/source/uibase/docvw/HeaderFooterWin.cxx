@@ -199,7 +199,7 @@ void SwHeaderFooterWin::SetOffset(Point aOffset, long nXLineStart, long nXLineEn
 
     // Compute the text size and get the box position & size from it
     ::tools::Rectangle aTextRect;
-    GetTextBoundRect(aTextRect, OUString(m_sLabel));
+    GetTextBoundRect(aTextRect, m_sLabel);
     ::tools::Rectangle aTextPxRect = LogicToPixel(aTextRect);
     FontMetric aFontMetric = GetFontMetric(GetFont());
     Size aBoxSize (aTextPxRect.GetWidth() + BUTTON_WIDTH + TEXT_PADDING * 2,

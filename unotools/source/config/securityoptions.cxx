@@ -90,7 +90,6 @@ using namespace ::com::sun::star::uno;
 #define PROPERTYHANDLE_MACRO_TRUSTEDAUTHORS         14
 #define PROPERTYHANDLE_MACRO_DISABLE                15
 
-#define PROPERTYCOUNT                               16
 #define PROPERTYHANDLE_INVALID                      -1
 
 #define CFG_READONLY_DEFAULT                        false
@@ -904,30 +903,25 @@ bool SvtSecurityOptions_Impl::IsOptionEnabled( SvtSecurityOptions::EOption eOpti
 
 Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
 {
-    // Build static list of configuration key names.
-    const OUString pProperties[] =
+    return Sequence< OUString >
     {
-        OUString(PROPERTYNAME_SECUREURL),
-        OUString(PROPERTYNAME_STAROFFICEBASIC),
-        OUString(PROPERTYNAME_EXECUTEPLUGINS),
-        OUString(PROPERTYNAME_WARNINGENABLED),
-        OUString(PROPERTYNAME_CONFIRMATIONENABLED),
-        OUString(PROPERTYNAME_DOCWARN_SAVEORSEND),
-        OUString(PROPERTYNAME_DOCWARN_SIGNING),
-        OUString(PROPERTYNAME_DOCWARN_PRINT),
-        OUString(PROPERTYNAME_DOCWARN_CREATEPDF),
-        OUString(PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO),
-        OUString(PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD),
-        OUString(PROPERTYNAME_CTRLCLICK_HYPERLINK),
-        OUString(PROPERTYNAME_BLOCKUNTRUSTEDREFERERLINKS),
-        OUString(PROPERTYNAME_MACRO_SECLEVEL),
-        OUString(PROPERTYNAME_MACRO_TRUSTEDAUTHORS),
-        OUString(PROPERTYNAME_MACRO_DISABLE)
+        PROPERTYNAME_SECUREURL,
+        PROPERTYNAME_STAROFFICEBASIC,
+        PROPERTYNAME_EXECUTEPLUGINS,
+        PROPERTYNAME_WARNINGENABLED,
+        PROPERTYNAME_CONFIRMATIONENABLED,
+        PROPERTYNAME_DOCWARN_SAVEORSEND,
+        PROPERTYNAME_DOCWARN_SIGNING,
+        PROPERTYNAME_DOCWARN_PRINT,
+        PROPERTYNAME_DOCWARN_CREATEPDF,
+        PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO,
+        PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD,
+        PROPERTYNAME_CTRLCLICK_HYPERLINK,
+        PROPERTYNAME_BLOCKUNTRUSTEDREFERERLINKS,
+        PROPERTYNAME_MACRO_SECLEVEL,
+        PROPERTYNAME_MACRO_TRUSTEDAUTHORS,
+        PROPERTYNAME_MACRO_DISABLE
     };
-    // Initialize return sequence with these list ...
-    const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
-    // ... and return it.
-    return seqPropertyNames;
 }
 
 namespace {

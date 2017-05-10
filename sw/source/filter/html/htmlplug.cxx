@@ -418,11 +418,9 @@ void SwHTMLParser::InsertEmbed()
         if ( xSet.is() )
         {
             if( bHasURL )
-                xSet->setPropertyValue("PluginURL",
-                    uno::makeAny( OUString( aURL ) ) );
+                xSet->setPropertyValue("PluginURL", uno::makeAny( aURL ) );
             if( bHasType )
-                xSet->setPropertyValue("PluginMimeType",
-                    uno::makeAny( OUString( aType ) ) );
+                xSet->setPropertyValue("PluginMimeType", uno::makeAny( aType ) );
 
             uno::Sequence < beans::PropertyValue > aProps;
             aCmdLst.FillSequence( aProps );

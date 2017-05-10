@@ -367,7 +367,7 @@ bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,co
         if ( _rFilter.Handle == SQLFilterOperator::LIKE ||
              _rFilter.Handle == SQLFilterOperator::NOT_LIKE )
             ::Replace_OS_PlaceHolder( sPredicateValue );
-        _rFilter.Value <<= OUString(sPredicateValue);
+        _rFilter.Value <<= sPredicateValue;
     }
     return bHaving;
 }

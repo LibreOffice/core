@@ -87,7 +87,7 @@ bool SvFileObject::GetData( css::uno::Any & rData,
             // The media in the application must be opened to lookup the
             // relative file links!! This is done through the link manager
             // of the Storage.
-            rData <<= OUString( sFileNm );
+            rData <<= sFileNm;
         }
         break;
 
@@ -191,7 +191,7 @@ bool SvFileObject::GetData( css::uno::Any & rData,
         break;
     case FILETYPE_OBJECT:
         // TODO/LATER: possibility to insert a new object
-        rData <<= OUString( sFileNm );
+        rData <<= sFileNm;
         break;
     }
     return true/*0 != aTypeList.Count()*/;
@@ -350,7 +350,7 @@ OUString impl_getFilter( const OUString& _rURL )
         if ( xTypeDetection.is() )
         {
             utl::MediaDescriptor aDescr;
-            aDescr[ utl::MediaDescriptor::PROP_URL() ] <<= OUString( _rURL );
+            aDescr[ utl::MediaDescriptor::PROP_URL() ] <<= _rURL;
             css::uno::Sequence< css::beans::PropertyValue > aDescrList =
                 aDescr.getAsConstPropertyValueList();
             OUString sType = xTypeDetection->queryTypeByDescriptor( aDescrList, true );

@@ -329,7 +329,7 @@ css::uno::Reference< css::accessibility::XAccessible > ScEditWindow::CreateAcces
         break;
     }
     pAcc = new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), pEdView, this,
-        OUString(sName), OUString(sDescription), ScAccessibleEditObject::EditControl);
+        sName, sDescription, ScAccessibleEditObject::EditControl);
     css::uno::Reference< css::accessibility::XAccessible > xAccessible = pAcc;
     xAcc = xAccessible;
     return pAcc;
