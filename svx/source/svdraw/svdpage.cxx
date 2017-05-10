@@ -1584,13 +1584,13 @@ SdrPage& SdrPage::TRG_GetMasterPage() const
     return mpMasterPageDescriptor->GetUsedPage();
 }
 
-const SetOfByte& SdrPage::TRG_GetMasterPageVisibleLayers() const
+const SdrLayerIDSet& SdrPage::TRG_GetMasterPageVisibleLayers() const
 {
     DBG_ASSERT(mpMasterPageDescriptor != nullptr, "TRG_GetMasterPageVisibleLayers(): No MasterPage available. Use TRG_HasMasterPage() before access (!)");
     return mpMasterPageDescriptor->GetVisibleLayers();
 }
 
-void SdrPage::TRG_SetMasterPageVisibleLayers(const SetOfByte& rNew)
+void SdrPage::TRG_SetMasterPageVisibleLayers(const SdrLayerIDSet& rNew)
 {
     DBG_ASSERT(mpMasterPageDescriptor != nullptr, "TRG_SetMasterPageVisibleLayers(): No MasterPage available. Use TRG_HasMasterPage() before access (!)");
     mpMasterPageDescriptor->SetVisibleLayers(rNew);

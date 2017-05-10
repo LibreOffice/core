@@ -42,7 +42,7 @@ void createSubPrimitive3DVector(
     const sdr::contact::ViewContact& rCandidate,
     drawinglayer::primitive3d::Primitive3DContainer& o_rAllTarget,
     drawinglayer::primitive3d::Primitive3DContainer* o_pVisibleTarget,
-    const SetOfByte* pVisibleLayerSet,
+    const SdrLayerIDSet* pVisibleSdrLayerIDSet,
     const bool bTestSelectedVisibility)
 {
     const sdr::contact::ViewContactOfE3dScene* pViewContactOfE3dScene = dynamic_cast< const sdr::contact::ViewContactOfE3dScene* >(&rCandidate);
@@ -64,7 +64,7 @@ void createSubPrimitive3DVector(
                     rCandidate.GetViewContact(a),
                     aNewAllTarget,
                     o_pVisibleTarget ? &aNewVisibleTarget : nullptr,
-                    pVisibleLayerSet,
+                    pVisibleSdrLayerIDSet,
                     bTestSelectedVisibility);
             }
 
@@ -102,13 +102,13 @@ void createSubPrimitive3DVector(
                     // test visibility. Primitive is visible when both tests are true (AND)
                     bool bVisible(true);
 
-                    if(pVisibleLayerSet)
+                    if(pVisibleSdrLayerIDSet)
                     {
                         // test layer visibility
                         const E3dObject& rE3dObject = pViewContactOfE3d->GetE3dObject();
                         const SdrLayerID aLayerID(rE3dObject.GetLayer());
 
-                        bVisible = pVisibleLayerSet->IsSet(aLayerID);
+                        bVisible = pVisibleSdrLayerIDSet->IsSet(aLayerID);
                     }
 
                     if(bVisible && bTestSelectedVisibility)
@@ -268,7 +268,7 @@ void ViewContactOfE3dScene::createSdrLightingAttribute()
 }
 
 drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3dScene::createScenePrimitive2DSequence(
-    const SetOfByte* pLayerVisibility) const
+    const SdrLayerIDSet* pLayerVisibility) const
 {
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
     const sal_uInt32 nChildrenCount(GetObjectCount());

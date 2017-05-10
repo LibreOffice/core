@@ -99,10 +99,10 @@ namespace sdr
             return xRetval;
         }
 
-        bool ViewObjectContactOfGroup::isPrimitiveVisibleOnAnyLayer(const SetOfByte& aLayers) const
+        bool ViewObjectContactOfGroup::isPrimitiveVisibleOnAnyLayer(const SdrLayerIDSet& aLayers) const
         {
-            SetOfByte aObjectLayers;
-            getSdrObject().getMergedHierarchyLayerSet(aObjectLayers);
+            SdrLayerIDSet aObjectLayers;
+            getSdrObject().getMergedHierarchySdrLayerIDSet(aObjectLayers);
             aObjectLayers &= aLayers;
             return !aObjectLayers.IsEmpty();
         }

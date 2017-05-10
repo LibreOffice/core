@@ -65,8 +65,8 @@ public:
     const drawinglayer::attribute::SdrLightingAttribute& getSdrLightingAttribute() const;
 
     // scene primitive creators. If pLayerVisibility is given, a visibility test with the LayerID and the
-    // given SetOfByte is done.
-    drawinglayer::primitive2d::Primitive2DContainer createScenePrimitive2DSequence(const SetOfByte* pLayerVisibility) const;
+    // given SdrLayerIDSet is done.
+    drawinglayer::primitive2d::Primitive2DContainer createScenePrimitive2DSequence(const SdrLayerIDSet* pLayerVisibility) const;
 
     // helpers to get the sequence of all contained 3D primitives and its range,
     // regardless of layer or visibility constraints and using a neutral ViewInformation3D

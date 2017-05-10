@@ -438,7 +438,7 @@ void View::DragFinished( sal_Int8 nDropAction )
 }
 
 sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                             ::sd::Window*, sal_uInt16, sal_uInt16 nLayer )
+                             ::sd::Window*, sal_uInt16, SdrLayerID nLayer )
 {
     OUString        aLayerName = GetActiveLayer();
     SdrPageView*    pPV = GetSdrPageView();
@@ -615,7 +615,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
 }
 
 sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
-                              ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer )
+                              ::sd::Window* pTargetWindow, sal_uInt16 nPage, SdrLayerID nLayer )
 {
     SdrPageView*    pPV = GetSdrPageView();
     OUString        aActiveLayer = GetActiveLayer();

@@ -255,7 +255,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     SdrObject*      GetEditObject();
     bool            IsMyModel(SdrEditView* pSdrView);
 
-    void            DrawRedraw( ScOutputData& rOutputData, sal_uLong nLayer );
+    void            DrawRedraw( ScOutputData& rOutputData, SdrLayerID nLayer );
     void            DrawSdrGrid( const tools::Rectangle& rDrawingRect, OutputDevice* pContentDev );
     void            DrawAfterScroll();
     tools::Rectangle       GetListValButtonRect( const ScAddress& rButtonPos );

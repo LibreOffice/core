@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLTABLESHAPEIMPORTHELPER_HXX
 
 #include <xmloff/shapeimport.hxx>
+#include <svx/svdtypes.hxx>
 #include "address.hxx"
 
 class ScXMLImport;
@@ -37,7 +38,7 @@ public:
     explicit XMLTableShapeImportHelper( ScXMLImport& rImp );
     virtual ~XMLTableShapeImportHelper() override;
 
-    static void SetLayer(css::uno::Reference<css::drawing::XShape>& rShape, sal_Int16 nLayerID, const OUString& sType);
+    static void SetLayer(css::uno::Reference<css::drawing::XShape>& rShape, SdrLayerID nLayerID, const OUString& sType);
     virtual void finishShape(css::uno::Reference< css::drawing::XShape >& rShape,
             const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList,
             css::uno::Reference< css::drawing::XShapes >& rShapes) override;

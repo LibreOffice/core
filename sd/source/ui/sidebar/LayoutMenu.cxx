@@ -467,9 +467,9 @@ SfxRequest LayoutMenu::CreateRequest (
     do
     {
         SdrLayerAdmin& rLayerAdmin (mrBase.GetDocument()->GetLayerAdmin());
-        sal_uInt8 aBackground (rLayerAdmin.GetLayerID(
+        SdrLayerID aBackground (rLayerAdmin.GetLayerID(
             SD_RESSTR(STR_LAYER_BCKGRND)));
-        sal_uInt8 aBackgroundObject (rLayerAdmin.GetLayerID(
+        SdrLayerID aBackgroundObject (rLayerAdmin.GetLayerID(
             SD_RESSTR(STR_LAYER_BCKGRNDOBJ)));
         ViewShell* pViewShell = mrBase.GetMainViewShell().get();
         if (pViewShell == nullptr)
@@ -478,7 +478,7 @@ SfxRequest LayoutMenu::CreateRequest (
         if (pPage == nullptr)
             break;
 
-        SetOfByte aVisibleLayers (pPage->TRG_GetMasterPageVisibleLayers());
+        SdrLayerIDSet aVisibleLayers (pPage->TRG_GetMasterPageVisibleLayers());
 
         aRequest.AppendItem(
             SfxStringItem (ID_VAL_PAGENAME, OUString()));//pPage->GetName()));

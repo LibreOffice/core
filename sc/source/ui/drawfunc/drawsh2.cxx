@@ -373,7 +373,7 @@ void ScDrawShell::GetAttrFuncState(SfxItemSet &rSet)
         rSet.DisableItem( SID_ATTRIBUTES_AREA );
 }
 
-bool ScDrawShell::AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList& rMark)
+bool ScDrawShell::AreAllObjectsOnLayer(SdrLayerID nLayerNo,const SdrMarkList& rMark)
 {
     bool bResult=true;
     const size_t nCount = rMark.GetMarkCount();

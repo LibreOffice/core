@@ -273,9 +273,9 @@ public:
     void GetMenuState(SfxItemSet& rSet);
 
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                 ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer );
+                                 ::sd::Window* pTargetWindow, sal_uInt16 nPage, SdrLayerID nLayer );
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                  ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer );
+                                  ::sd::Window* pTargetWindow, sal_uInt16 nPage, SdrLayerID nLayer );
 
     virtual void WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse );
     virtual void ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse );

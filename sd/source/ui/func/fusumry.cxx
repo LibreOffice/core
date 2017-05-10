@@ -116,7 +116,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                         bBegUndo = true;
                     }
 
-                    SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
+                    SdrLayerIDSet aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
                     // page with title & structuring!
                     pSummaryPage = mpDoc->AllocSdPage(false);

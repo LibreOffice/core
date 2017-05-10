@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SVDTYPES_HXX
 
 #include <sal/types.h>
+#include <o3tl/strong_int.hxx>
 
 // commands for EndCreate()
 enum class SdrCreateCmd
@@ -52,13 +53,15 @@ enum class SdrDragMode
 /*
  * Layer
  */
-// If there is no layer when it should be identified, then
-// drLayerAdmin::GetLayerID(const String&) returns a value.
-#define SDRLAYER_NOTFOUND 0xFF
 // You can use this value in the methods of SdrLayerSet, but false is returned
 // every time or the method does nothing.
 // type declaration for Layer-IDs
-typedef sal_uInt8 SdrLayerID;
+struct SdrLayerIDTag {};
+typedef o3tl::strong_int<sal_uInt8,SdrLayerIDTag> SdrLayerID;
+
+// If there is no layer when it should be identified, then
+// SdrLayerAdmin::GetLayerID(const String&) returns a value.
+constexpr SdrLayerID SDRLAYER_NOTFOUND(0xff);
 
 /*
  * Page + ObjList

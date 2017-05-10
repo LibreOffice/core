@@ -396,7 +396,7 @@ bool SdrCreateView::ImpBegCreateObj(SdrInventor nInvent, sal_uInt16 nIdent, cons
         }
 
         SdrLayerID nLayer=pCreatePV->GetPage()->GetLayerAdmin().GetLayerID(aLay);
-        if (nLayer==SDRLAYER_NOTFOUND) nLayer=0;
+        if (nLayer==SDRLAYER_NOTFOUND) nLayer = SdrLayerID(0);
         if (!pCreatePV->GetLockedLayers().IsSet(nLayer) && pCreatePV->GetVisibleLayers().IsSet(nLayer))
         {
             if(pPreparedFactoryObject)
@@ -621,7 +621,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
                 if(SDRLAYER_NOTFOUND == nLayer)
                 {
-                    nLayer=0;
+                    nLayer = SdrLayerID(0);
                 }
 
                 pObj->SetLayer(nLayer);

@@ -316,7 +316,7 @@ void ScXMLShapeExport::onExport( const uno::Reference < drawing::XShape >& xShap
     if( xShapeProp.is() )
     {
         sal_Int16 nLayerID = 0;
-        if( (xShapeProp->getPropertyValue( SC_LAYERID ) >>= nLayerID) && (nLayerID == SC_LAYER_BACK) )
+        if( (xShapeProp->getPropertyValue( SC_LAYERID ) >>= nLayerID) && (SdrLayerID(nLayerID) == SC_LAYER_BACK) )
             GetExport().AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_BACKGROUND, XML_TRUE);
     }
 }
@@ -529,7 +529,7 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
             if (!bExtracted)
                 continue;
 
-            if ((nLayerID == SC_LAYER_INTERN) || (nLayerID == SC_LAYER_HIDDEN))
+            if ((SdrLayerID(nLayerID) == SC_LAYER_INTERN) || (SdrLayerID(nLayerID) == SC_LAYER_HIDDEN))
             {
                 CollectInternalShape(xShape);
                 continue;

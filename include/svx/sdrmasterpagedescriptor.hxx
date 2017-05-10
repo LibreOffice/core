@@ -42,7 +42,7 @@ namespace sdr
     private:
         SdrPage&                                        maOwnerPage;
         SdrPage&                                        maUsedPage;
-        SetOfByte                                       maVisibleLayers;
+        SdrLayerIDSet                                       maVisibleLayers;
 
         // ViewContact part
         sdr::contact::ViewContact*                      mpViewContact;
@@ -68,8 +68,8 @@ namespace sdr
         SdrPage& GetOwnerPage() const { return maOwnerPage; }
 
         // member access to VisibleLayers
-        const SetOfByte& GetVisibleLayers() const { return maVisibleLayers; }
-        void SetVisibleLayers(const SetOfByte& rNew);
+        const SdrLayerIDSet& GetVisibleLayers() const { return maVisibleLayers; }
+        void SetVisibleLayers(const SdrLayerIDSet& rNew);
 
         const SdrPageProperties* getCorrectSdrPageProperties() const;
     };

@@ -28,7 +28,7 @@
 
 class SdrObject;
 class SdrPageView;
-class SetOfByte;
+class SdrLayerIDSet;
 class SdrObjList;
 namespace sdr { namespace contact { class ViewObjectContact; }}
 namespace basegfx { class B2DPoint; }
@@ -41,7 +41,7 @@ SVX_DLLPUBLIC SdrObject* SdrObjectPrimitiveHit(
     const Point& rPnt,
     sal_uInt16 nTol,
     const SdrPageView& rSdrPageView,
-    const SetOfByte* pVisiLayer,
+    const SdrLayerIDSet* pVisiLayer,
     bool bTextOnly);
 
 SVX_DLLPUBLIC SdrObject* SdrObjListPrimitiveHit(
@@ -49,7 +49,7 @@ SVX_DLLPUBLIC SdrObject* SdrObjListPrimitiveHit(
     const Point& rPnt,
     sal_uInt16 nTol,
     const SdrPageView& rSdrPageView,
-    const SetOfByte* pVisiLayer,
+    const SdrLayerIDSet* pVisiLayer,
     bool bTextOnly);
 
 

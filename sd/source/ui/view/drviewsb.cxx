@@ -81,9 +81,9 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
         // Undo
         SdPage* pUndoPage = pPageToRename;
         SdrLayerAdmin &  rLayerAdmin = GetDoc()->GetLayerAdmin();
-        sal_uInt8 nBackground = rLayerAdmin.GetLayerID( SD_RESSTR(STR_LAYER_BCKGRND) );
-        sal_uInt8 nBgObj = rLayerAdmin.GetLayerID( SD_RESSTR(STR_LAYER_BCKGRNDOBJ) );
-        SetOfByte aVisibleLayers = mpActualPage->TRG_GetMasterPageVisibleLayers();
+        SdrLayerID nBackground = rLayerAdmin.GetLayerID( SD_RESSTR(STR_LAYER_BCKGRND) );
+        SdrLayerID nBgObj = rLayerAdmin.GetLayerID( SD_RESSTR(STR_LAYER_BCKGRNDOBJ) );
+        SdrLayerIDSet aVisibleLayers = mpActualPage->TRG_GetMasterPageVisibleLayers();
 
         ::svl::IUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
         ModifyPageUndoAction* pAction = new ModifyPageUndoAction(

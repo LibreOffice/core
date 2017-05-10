@@ -205,7 +205,7 @@ SdrItemPool::SdrItemPool(
     rPoolDefaults[SDRATTR_OBJSIZEPROTECT -SDRATTR_START]=new SdrYesNoItem(SDRATTR_OBJSIZEPROTECT, false);
     rPoolDefaults[SDRATTR_OBJPRINTABLE   -SDRATTR_START]=new SdrObjPrintableItem;
     rPoolDefaults[SDRATTR_OBJVISIBLE     -SDRATTR_START]=new SdrObjVisibleItem;
-    rPoolDefaults[SDRATTR_LAYERID        -SDRATTR_START]=new SdrLayerIdItem;
+    rPoolDefaults[SDRATTR_LAYERID        -SDRATTR_START]=new SdrLayerIdItem(SdrLayerID(0));
     rPoolDefaults[SDRATTR_LAYERNAME      -SDRATTR_START]=new SdrLayerNameItem;
     rPoolDefaults[SDRATTR_OBJECTNAME     -SDRATTR_START]=new SfxStringItem(SDRATTR_OBJECTNAME);
     rPoolDefaults[SDRATTR_ALLPOSITIONX   -SDRATTR_START]=new SdrAllPositionXItem;

@@ -131,7 +131,7 @@ void ScOutputData::PostPrintDrawingLayer(const Point& rMMOffset) // #i74768#
 }
 
 // #i72502#
-void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOffset)
+void ScOutputData::PrintDrawingLayer(SdrLayerID nLayer, const Point& rMMOffset)
 {
     bool bHideAllDrawingLayer(false);
 
@@ -166,7 +166,7 @@ void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOf
     }
 }
 
-void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
+void ScOutputData::DrawSelectiveObjects(SdrLayerID nLayer)
 {
     ScDrawLayer* pModel = mpDoc->GetDrawLayer();
     if (!pModel)

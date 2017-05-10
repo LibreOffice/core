@@ -678,7 +678,7 @@ class SdrUndoPageMasterPage : public SdrUndoPage
 {
 protected:
     bool                        mbOldHadMasterPage;
-    SetOfByte                   maOldSet;
+    SdrLayerIDSet                   maOldSet;
     sal_uInt16                  maOldMasterPageNumber;
 
 protected:
@@ -713,7 +713,7 @@ class SVX_DLLPUBLIC SdrUndoPageChangeMasterPage : public SdrUndoPageMasterPage
 {
 protected:
     bool                        mbNewHadMasterPage;
-    SetOfByte                   maNewSet;
+    SdrLayerIDSet                   maNewSet;
     sal_uInt16                  maNewMasterPageNumber;
 
 public:

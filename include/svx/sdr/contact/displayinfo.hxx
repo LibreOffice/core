@@ -32,7 +32,7 @@ namespace sdr
         class SVX_DLLPUBLIC DisplayInfo final
         {
             // The Layers which shall be processed (visible)
-            SetOfByte                                       maProcessLayers;
+            SdrLayerIDSet                                       maProcessLayers;
 
             // The redraw area, in logical coordinates of OutputDevice. If Region
             // is empty, everything needs to be redrawn
@@ -74,8 +74,8 @@ namespace sdr
             ~DisplayInfo();
 
             // access to ProcessLayers
-            void SetProcessLayers(const SetOfByte& rSet);
-            const SetOfByte& GetProcessLayers() const { return maProcessLayers; }
+            void SetProcessLayers(const SdrLayerIDSet& rSet);
+            const SdrLayerIDSet& GetProcessLayers() const { return maProcessLayers; }
 
             // access to RedrawArea
             void SetRedrawArea(const vcl::Region& rRegion);

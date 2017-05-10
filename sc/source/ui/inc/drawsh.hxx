@@ -24,6 +24,7 @@
 #include "shellids.hxx"
 #include <sfx2/module.hxx>
 #include <svx/svdmark.hxx>
+#include <svx/svdtypes.hxx>
 #include <tools/link.hxx>
 #include <rtl/ref.hxx>
 
@@ -84,7 +85,7 @@ public:
 
     ScDrawView* GetDrawView();
 
-    static bool AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList& rMark);
+    static bool AreAllObjectsOnLayer(SdrLayerID nLayerNo,const SdrMarkList& rMark);
 
     void GetDrawAttrStateForIFBX( SfxItemSet& rSet );
     ::rtl::OUString GetSidebarContextName();

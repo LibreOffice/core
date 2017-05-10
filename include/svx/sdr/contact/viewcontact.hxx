@@ -24,7 +24,7 @@
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
-class SetOfByte;
+class SdrLayerIDSet;
 class SdrPage;
 class SdrObject;
 

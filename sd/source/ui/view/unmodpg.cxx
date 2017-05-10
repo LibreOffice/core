@@ -58,9 +58,9 @@ ModifyPageUndoAction::ModifyPageUndoAction(
     {
         maOldName = mpPage->GetName();
         SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
-        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
-        SetOfByte aVisibleLayers = mpPage->TRG_GetMasterPageVisibleLayers();
+        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
+        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+        SdrLayerIDSet aVisibleLayers = mpPage->TRG_GetMasterPageVisibleLayers();
 
         mbOldBckgrndVisible = aVisibleLayers.IsSet(aBckgrnd);
         mbOldBckgrndObjsVisible = aVisibleLayers.IsSet(aBckgrndObj);
@@ -104,9 +104,9 @@ void ModifyPageUndoAction::Undo()
         }
 
         SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
-        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
-        SetOfByte aVisibleLayers;
+        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
+        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+        SdrLayerIDSet aVisibleLayers;
         aVisibleLayers.Set(aBckgrnd, mbOldBckgrndVisible);
         aVisibleLayers.Set(aBckgrndObj, mbOldBckgrndObjsVisible);
         mpPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
@@ -147,9 +147,9 @@ void ModifyPageUndoAction::Redo()
         }
 
         SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-        sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
-        sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
-        SetOfByte aVisibleLayers;
+        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
+        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+        SdrLayerIDSet aVisibleLayers;
         aVisibleLayers.Set(aBckgrnd, mbNewBckgrndVisible);
         aVisibleLayers.Set(aBckgrndObj, mbNewBckgrndObjsVisible);
         mpPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
