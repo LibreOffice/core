@@ -2325,7 +2325,18 @@ svl::SharedString ScInterpreter::GetString()
             if (nGlobalError != FormulaError::NONE)
                 return svl::SharedString::getEmptyString();
 
-            return pToken->GetString();
+            if (pToken->GetType() == svDouble)
+            {
+                double fVal = pToken->GetDouble();
+                sal_uLong nIndex = pFormatter->GetStandardFormat(
+                                    css::util::NumberFormat::NUMBER,
+                                    ScGlobal::eLnge);
+                OUString aStr;
+                pFormatter->GetInputLineString(fVal, nIndex, aStr);
+                return mrStrPool.intern(aStr);
+            }
+            else // svString or svEmpty
+                return pToken->GetString();
         }
         case svExternalDoubleRef:
         {
