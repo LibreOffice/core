@@ -114,7 +114,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
         SwContentNode* pCNd = aAnchor.GetContentAnchor()->nNode.GetNode().GetContentNode();
         OSL_ENSURE( pCNd->IsTextNode(), "no Text Node at position." );
         SwFormatFlyCnt aFormat( pFrameFormat );
-        pCNd->GetTextNode()->InsertItem( aFormat, nCntPos, nCntPos );
+        pCNd->GetTextNode()->InsertItem(aFormat, nCntPos, nCntPos, SetAttrMode::NOHINTEXPAND);
     }
 
     pFrameFormat->MakeFrames();
