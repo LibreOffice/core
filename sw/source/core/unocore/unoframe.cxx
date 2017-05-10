@@ -2844,11 +2844,12 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 (*pFilter) >>= sFltName;
             }
 
-            pFormat =
-                pGrfObj ? pDoc->getIDocumentContentOperations().Insert( aPam, *pGrfObj, &aFrameSet, &aGrSet,
-                                        pParentFrameFormat )
-                        : pDoc->getIDocumentContentOperations().Insert( aPam, sGraphicURL, sFltName, &aGraphic,
-                                        &aFrameSet, &aGrSet, pParentFrameFormat  );
+            pFormat = (pGrfObj)
+                ? pDoc->getIDocumentContentOperations().InsertGraphicObject(
+                        aPam, *pGrfObj, &aFrameSet, &aGrSet, pParentFrameFormat)
+                : pDoc->getIDocumentContentOperations().InsertGraphic(
+                        aPam, sGraphicURL, sFltName, &aGraphic,
+                        &aFrameSet, &aGrSet, pParentFrameFormat);
             delete pGrfObj;
             if(pFormat)
             {
@@ -2955,7 +2956,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     // TODO/LATER: Is it the only possible aspect here?
                     sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
                     ::svt::EmbeddedObjectRef xObjRef( xIPObj, nAspect );
-                    pFormat2 = pDoc->getIDocumentContentOperations().Insert(aPam, xObjRef, &aFrameSet );
+                    pFormat2 = pDoc->getIDocumentContentOperations().InsertEmbObject(
+                            aPam, xObjRef, &aFrameSet );
                     assert(pFormat2 && "Doc->Insert(notxt) failed.");
 
                     pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
@@ -2997,7 +2999,8 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 rPers.GetEmbeddedObjectContainer().InsertEmbeddedObject( obj, rName );
 
                 SwFlyFrameFormat* pFrameFormat = nullptr;
-                pFrameFormat = pDoc->getIDocumentContentOperations().Insert( aPam, xObj, &aFrameSet );
+                pFrameFormat = pDoc->getIDocumentContentOperations().InsertEmbObject(
+                        aPam, xObj, &aFrameSet);
                 pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
                 pFrameFormat->Add(this);
                 if(!m_sName.isEmpty())

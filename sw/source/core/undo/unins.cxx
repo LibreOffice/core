@@ -418,7 +418,8 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
             if( pGrfNd->IsGrfLink() )
                 pGrfNd->GetFileFilterNms( &sFile, &sFilter );
 
-            rDoc.getIDocumentContentOperations().Insert( rContext.GetRepeatPaM(), sFile, sFilter,
+            rDoc.getIDocumentContentOperations().InsertGraphic(
+                                rContext.GetRepeatPaM(), sFile, sFilter,
                                 &pGrfNd->GetGrf(),
                                 nullptr/* Graphics collection*/, nullptr, nullptr );
         }
@@ -438,7 +439,8 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
             if (aCnt.StoreEmbeddedObject(rSwOLE.GetOleRef(), aName, true, OUString(), OUString()))
             {
                 uno::Reference < embed::XEmbeddedObject > aNew = aCnt.GetEmbeddedObject( aName );
-                rDoc.getIDocumentContentOperations().Insert( rContext.GetRepeatPaM(),
+                rDoc.getIDocumentContentOperations().InsertEmbObject(
+                    rContext.GetRepeatPaM(),
                     svt::EmbeddedObjectRef( aNew,
                         static_cast<SwOLENode*>(pCNd)->GetAspect() ),
                     nullptr );

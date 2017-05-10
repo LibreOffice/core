@@ -154,10 +154,15 @@ public:
 
     /** Insert graphic or formula. The XXXX are copied.
      */
-    virtual SwFlyFrameFormat* Insert(const SwPaM &rRg, const OUString& rGrfName, const OUString& rFltName, const Graphic* pGraphic,
-                        const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet, SwFrameFormat*) = 0;
+    virtual SwFlyFrameFormat* InsertGraphic(
+        const SwPaM &rRg, const OUString& rGrfName,
+        const OUString& rFltName, const Graphic* pGraphic,
+        const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet,
+        SwFrameFormat*) = 0;
 
-    virtual SwFlyFrameFormat* Insert(const SwPaM& rRg, const GraphicObject& rGrfObj, const SfxItemSet* pFlyAttrSet,
+    virtual SwFlyFrameFormat* InsertGraphicObject(
+        const SwPaM& rRg, const GraphicObject& rGrfObj,
+        const SfxItemSet* pFlyAttrSet,
         const SfxItemSet* pGrfAttrSet, SwFrameFormat*) = 0;
 
     /** Transpose graphic (with undo)
@@ -167,14 +172,18 @@ public:
     /** Insert a DrawObject. The object must be already registered
         in DrawModel.
     */
-    virtual SwDrawFrameFormat* InsertDrawObj( const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet& rFlyAttrSet ) = 0;
+    virtual SwDrawFrameFormat* InsertDrawObj(
+        const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet& rFlyAttrSet) = 0;
 
     /** Insert OLE-objects.
     */
-    virtual SwFlyFrameFormat* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet) = 0;
+    virtual SwFlyFrameFormat* InsertEmbObject(
+        const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj,
+        const SfxItemSet* pFlyAttrSet) = 0;
 
-    virtual SwFlyFrameFormat* InsertOLE(const SwPaM &rRg, const OUString& rObjName, sal_Int64 nAspect, const SfxItemSet* pFlyAttrSet,
-                           const SfxItemSet* pGrfAttrSet) = 0;
+    virtual SwFlyFrameFormat* InsertOLE(
+        const SwPaM &rRg, const OUString& rObjName, sal_Int64 nAspect,
+        const SfxItemSet* pFlyAttrSet, const SfxItemSet* pGrfAttrSet) = 0;
 
     /** Split a node at rPos (implemented only for TextNode).
     */

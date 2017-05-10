@@ -3031,7 +3031,8 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
             // as a linked graphic -
             if (GraphicType::NONE == eType || CanUseRemoteLink(aGrfName))
             {
-                pRetFrameFormat = m_rDoc.getIDocumentContentOperations().Insert(*m_pPaM, aGrfName, OUString(), nullptr,
+                pRetFrameFormat = m_rDoc.getIDocumentContentOperations().InsertGraphic(
+                    *m_pPaM, aGrfName, OUString(), nullptr,
                     &rFlySet, &aGrSet, nullptr);
                 bDone = true;
             }
@@ -3039,7 +3040,8 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObj
         if (!bDone)
         {
             const Graphic& rGraph = pGrf->GetGraphic();
-            pRetFrameFormat = m_rDoc.getIDocumentContentOperations().Insert(*m_pPaM, OUString(), OUString(), &rGraph,
+            pRetFrameFormat = m_rDoc.getIDocumentContentOperations().InsertGraphic(
+                *m_pPaM, OUString(), OUString(), &rGraph,
                 &rFlySet, &aGrSet, nullptr);
         }
     }

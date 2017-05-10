@@ -300,7 +300,8 @@ SwFrameFormat* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
                 GraphicType::Bitmap == aGraph.GetType()
             )
     {
-        pFormat = m_rDoc.getIDocumentContentOperations().Insert(*m_pPaM, OUString(), OUString(), &aGraph, pFlySet,
+        pFormat = m_rDoc.getIDocumentContentOperations().InsertGraphic(
+            *m_pPaM, OUString(), OUString(), &aGraph, pFlySet,
             pGrfSet, nullptr);
     }
     delete pTempSet;

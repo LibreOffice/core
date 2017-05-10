@@ -709,8 +709,10 @@ IMAGE_SETEVENT:
     aFrameSet.Put( aFrameSize );
 
     // passing empty sGrfNm here, means we don't want the graphic to be linked
-    SwFrameFormat *pFlyFormat = m_xDoc->getIDocumentContentOperations().Insert( *m_pPam, sGrfNm, aEmptyOUStr, &aGraphic,
-                                      &aFrameSet, nullptr, nullptr );
+    SwFrameFormat *const pFlyFormat =
+        m_xDoc->getIDocumentContentOperations().InsertGraphic(
+            *m_pPam, sGrfNm, aEmptyOUStr, &aGraphic,
+            &aFrameSet, nullptr, nullptr);
     SwGrfNode *pGrfNd = m_xDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
                                   ->GetIndex()+1 ]->GetGrfNode();
 

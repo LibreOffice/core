@@ -2406,7 +2406,8 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, OUString& rStr )
             RES_FRMATR_END-1 );
         aFlySet.Put( SwFormatAnchor( RndStdIds::FLY_AS_CHAR ) );
         aFlySet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
-        m_pFlyFormatOfJustInsertedGraphic = m_rDoc.getIDocumentContentOperations().Insert( *m_pPaM,
+        m_pFlyFormatOfJustInsertedGraphic =
+            m_rDoc.getIDocumentContentOperations().InsertGraphic(*m_pPaM,
                                                     aGrfName,
                                                     OUString(),
                                                     nullptr,          // Graphic*

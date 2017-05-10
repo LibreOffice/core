@@ -2620,7 +2620,8 @@ void DocumentContentOperationsManager::TransliterateText(
     m_rDoc.getIDocumentState().SetModified();
 }
 
-SwFlyFrameFormat* DocumentContentOperationsManager::Insert( const SwPaM &rRg,
+SwFlyFrameFormat* DocumentContentOperationsManager::InsertGraphic(
+        const SwPaM &rRg,
                             const OUString& rGrfName,
                             const OUString& rFltName,
                             const Graphic* pGraphic,
@@ -2639,7 +2640,8 @@ SwFlyFrameFormat* DocumentContentOperationsManager::Insert( const SwPaM &rRg,
     return pSwFlyFrameFormat;
 }
 
-SwFlyFrameFormat* DocumentContentOperationsManager::Insert( const SwPaM &rRg, const GraphicObject& rGrfObj,
+SwFlyFrameFormat* DocumentContentOperationsManager::InsertGraphicObject(
+        const SwPaM &rRg, const GraphicObject& rGrfObj,
                             const SfxItemSet* pFlyAttrSet,
                             const SfxItemSet* pGrfAttrSet,
                             SwFrameFormat* pFrameFormat )
@@ -2654,7 +2656,8 @@ SwFlyFrameFormat* DocumentContentOperationsManager::Insert( const SwPaM &rRg, co
     return pSwFlyFrameFormat;
 }
 
-SwFlyFrameFormat* DocumentContentOperationsManager::Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj,
+SwFlyFrameFormat* DocumentContentOperationsManager::InsertEmbObject(
+        const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj,
                         const SfxItemSet* pFlyAttrSet)
 {
     sal_uInt16 nId = RES_POOLFRM_OLE;

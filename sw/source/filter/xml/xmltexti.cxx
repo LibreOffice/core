@@ -287,9 +287,10 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 
                 if( pTextCursor )
                 {
-                    pFrameFormat = pDoc->getIDocumentContentOperations().Insert( *pTextCursor->GetPaM(),
-                                            ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
-                                            &aItemSet );
+                    pFrameFormat = pDoc->getIDocumentContentOperations().InsertEmbObject(
+                        *pTextCursor->GetPaM(),
+                        ::svt::EmbeddedObjectRef(xObj, embed::Aspects::MSOLE_CONTENT),
+                        &aItemSet);
                     pOLENd = lcl_GetOLENode( pFrameFormat );
                 }
 
@@ -590,9 +591,11 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
             uno::UNO_QUERY_THROW );
 
         {
-            SwFrameFormat *pFrameFormat = pDoc->getIDocumentContentOperations().Insert( *pTextCursor->GetPaM(),
-                                            ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
-                                            &aItemSet );
+            SwFrameFormat *const pFrameFormat =
+                pDoc->getIDocumentContentOperations().InsertEmbObject(
+                    *pTextCursor->GetPaM(),
+                    ::svt::EmbeddedObjectRef(xObj, embed::Aspects::MSOLE_CONTENT),
+                    &aItemSet );
 
             // TODO/LATER: in future may need a way to set replacement image url to the link ( may be even to the object ), needs oasis cws???
 
@@ -650,9 +653,10 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
                             Size( nWidth, nHeight ),
                             MapUnit::Map100thMM );
 
-    SwFrameFormat *pFrameFormat = pDoc->getIDocumentContentOperations().Insert( *pTextCursor->GetPaM(),
-                                       ::svt::EmbeddedObjectRef( aAppletImpl.GetApplet(), embed::Aspects::MSOLE_CONTENT ),
-                                       &aAppletImpl.GetItemSet());
+    SwFrameFormat *const pFrameFormat =
+        pDoc->getIDocumentContentOperations().InsertEmbObject( *pTextCursor->GetPaM(),
+        ::svt::EmbeddedObjectRef(aAppletImpl.GetApplet(), embed::Aspects::MSOLE_CONTENT),
+        &aAppletImpl.GetItemSet());
     xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
                 *pDoc, pFrameFormat), uno::UNO_QUERY);
     if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
@@ -723,9 +727,11 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
                         makeAny( OUString( rMimeType ) ) );
             }
 
-            SwFrameFormat *pFrameFormat = pDoc->getIDocumentContentOperations().Insert( *pTextCursor->GetPaM(),
-                                            ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
-                                            &aItemSet);
+            SwFrameFormat *const pFrameFormat =
+                pDoc->getIDocumentContentOperations().InsertEmbObject(
+                    *pTextCursor->GetPaM(),
+                    ::svt::EmbeddedObjectRef(xObj, embed::Aspects::MSOLE_CONTENT),
+                    &aItemSet);
             xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
                             *pDoc, pFrameFormat), uno::UNO_QUERY);
             if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
@@ -874,9 +880,11 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                     makeAny( sal_Int32( aMargin.Height() ) ) );
             }
 
-            SwFrameFormat *pFrameFormat = pDoc->getIDocumentContentOperations().Insert( *pTextCursor->GetPaM(),
-                                            ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
-                                            &aItemSet);
+            SwFrameFormat *const pFrameFormat =
+                pDoc->getIDocumentContentOperations().InsertEmbObject(
+                    *pTextCursor->GetPaM(),
+                    ::svt::EmbeddedObjectRef(xObj, embed::Aspects::MSOLE_CONTENT),
+                    &aItemSet);
             xPropSet.set(SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
                             *pDoc, pFrameFormat), uno::UNO_QUERY);
             if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )

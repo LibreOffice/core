@@ -816,11 +816,12 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
                 }
             }
         }
-        pFormat = GetDoc()->getIDocumentContentOperations().Insert(*pCursor, rGrfName,
+        pFormat = GetDoc()->getIDocumentContentOperations().InsertGraphic(
+                                *pCursor, rGrfName,
                                 rFltName, pGraphic,
                                 pFlyAttrSet,
                                 nullptr, nullptr );
-        OSL_ENSURE( pFormat, "Doc->getIDocumentContentOperations().Insert(notxt) failed." );
+        OSL_ENSURE(pFormat, "IDocumentContentOperations::InsertGraphic failed.");
 
         pCursor = dynamic_cast<SwShellCursor*>(pCursor->GetNext());
     } while( pCursor != pStartCursor );
@@ -855,10 +856,9 @@ SwFlyFrameFormat* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
     StartAllAction();
         for(SwPaM& rPaM : GetCursor()->GetRingContainer())
         {
-            pFormat = GetDoc()->getIDocumentContentOperations().Insert(rPaM, xObj,
-                                    pFlyAttrSet );
-            OSL_ENSURE( pFormat, "Doc->getIDocumentContentOperations().Insert(notxt) failed." );
-
+            pFormat = GetDoc()->getIDocumentContentOperations().InsertEmbObject(
+                            rPaM, xObj, pFlyAttrSet );
+            OSL_ENSURE(pFormat, "IDocumentContentOperations::InsertEmbObject failed.");
         }
     EndAllAction();
 
@@ -1772,7 +1772,8 @@ bool SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const Graphic* pGrf )
         // delete "Sdr-Object", insert the graphic instead
         DelSelectedObj();
 
-        GetDoc()->getIDocumentContentOperations().Insert( *GetCursor(), rGrfName, "", pGrf, &aFrameSet, nullptr, nullptr );
+        GetDoc()->getIDocumentContentOperations().InsertGraphic(
+            *GetCursor(), rGrfName, "", pGrf, &aFrameSet, nullptr, nullptr);
 
         EndUndo();
         EndAllAction();
