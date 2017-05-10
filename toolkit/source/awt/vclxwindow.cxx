@@ -1988,7 +1988,7 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
             case BASEPROPERTY_HELPURL:
             {
                 OUString aHelpId( OStringToOUString( GetWindow()->GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
-                aProp <<= OUString( aHelpId );
+                aProp <<= aHelpId;
             }
             break;
             case BASEPROPERTY_FONTDESCRIPTOR:

@@ -580,9 +580,9 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
                 sRealName += "_";
                 sRealName += sPurePostfix;
                 if (i)
-                    xSecondCol->setPropertyValue(FM_PROP_NAME, makeAny(OUString(sRealName)));
+                    xSecondCol->setPropertyValue(FM_PROP_NAME, makeAny(sRealName));
                 else
-                    xCol->setPropertyValue(FM_PROP_NAME, makeAny(OUString(sRealName)));
+                    xCol->setPropertyValue(FM_PROP_NAME, makeAny(sRealName));
             }
         }
         else

@@ -528,7 +528,7 @@ bool SfxDocumentInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
      }
 
     if ( bIsString )
-        rVal <<= OUString( aValue );
+        rVal <<= aValue;
     else if ( bIsInt )
         rVal <<= nValue;
     else

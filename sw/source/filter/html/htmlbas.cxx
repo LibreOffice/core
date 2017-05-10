@@ -153,7 +153,7 @@ void SwHTMLParser::EndScript()
                 if ( !xModLib->hasByName( aModName ) )
                 {
                     Any aElement;
-                    aElement <<= OUString( m_aScriptSource );
+                    aElement <<= m_aScriptSource;
                     xModLib->insertByName( aModName , aElement );
                 }
             }

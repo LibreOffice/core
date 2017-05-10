@@ -101,7 +101,7 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
                     aRow += aType;
                     aRow += "\t";
                     aRow += xContentAccess->queryContentIdentifierString();
-                    aList.push_back( OUString( aRow ) );
+                    aList.push_back( aRow );
                 }
             }
             catch( const ucb::CommandAbortedException& )

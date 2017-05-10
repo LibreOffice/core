@@ -45,10 +45,9 @@ bool CntUnencodedStringItem::GetPresentation(SfxItemPresentation, MapUnit,
 }
 
 // virtual
-bool CntUnencodedStringItem::QueryValue(css::uno::Any& rVal, sal_uInt8)
-    const
+bool CntUnencodedStringItem::QueryValue(css::uno::Any& rVal, sal_uInt8) const
 {
-    rVal <<= OUString(m_aValue);
+    rVal <<= m_aValue;
     return true;
 }
 

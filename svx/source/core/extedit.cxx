@@ -122,7 +122,7 @@ void ExternalToolEdit::Edit(GraphicObject const*const pGraphicObject)
     }
 
     // Move it to a file name with image extension properly set
-    aTempFileName = aTempFileBase + "." + OUString(fExtension);
+    aTempFileName = aTempFileBase + "." + fExtension;
     // FIXME: this is pretty stupid, need a better osl temp file API
     rc = osl::File::move(aTempFileBase, aTempFileName);
     if (osl::FileBase::E_None != rc)

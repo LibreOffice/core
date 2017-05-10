@@ -3145,11 +3145,8 @@ const OUString& Window::GetHelpText() const
         static const char* pEnv = getenv( "HELP_DEBUG" );
         if( pEnv && *pEnv )
         {
-            OUStringBuffer aTxt( 64+mpWindowImpl->maHelpText.getLength() );
-            aTxt.append( mpWindowImpl->maHelpText );
-            aTxt.append( "\n------------------\n" );
-            aTxt.append( OUString( aStrHelpId ) );
-            mpWindowImpl->maHelpText = aTxt.makeStringAndClear();
+            OUString aTxt = mpWindowImpl->maHelpText + "\n------------------\n" + aStrHelpId;
+            mpWindowImpl->maHelpText = aTxt;
         }
         mpWindowImpl->mbHelpTextDynamic = false;
     }

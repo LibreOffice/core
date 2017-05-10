@@ -1526,7 +1526,7 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
         Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), uno::UNO_QUERY_THROW );
         Reference< beans::XPropertySet > xPropSet( xControlModel, uno::UNO_QUERY_THROW );
 
-        xPropSet->setPropertyValue( "Label" , Any( OUString( rText ) ) );
+        xPropSet->setPropertyValue( "Label" , Any( rText ) );
         xPropSet->setPropertyValue( "TargetURL" , Any( sTargetURL ) );
 
         if( !rTarget.isEmpty() )

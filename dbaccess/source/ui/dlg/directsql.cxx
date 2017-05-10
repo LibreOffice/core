@@ -193,7 +193,7 @@ namespace dbaui
             m_pOutput->SetText(OUString());
             if (xStatement.is())
             {
-                if (OUString(_rStatement).toAsciiUpperCase().startsWith("SELECT") && m_pShowOutput->IsChecked())
+                if (_rStatement.toAsciiUpperCase().startsWith("SELECT") && m_pShowOutput->IsChecked())
                 {
                     // execute it as a query
                     xResultSet = xStatement->executeQuery(_rStatement);
@@ -220,7 +220,7 @@ namespace dbaui
                         {
                         }
                         // report the output
-                        addOutputText(OUString(out));
+                        addOutputText(out);
                     }
                 } else {
                     // execute it

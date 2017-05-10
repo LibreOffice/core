@@ -2403,7 +2403,7 @@ namespace svxform
             {
 
                 m_xTempBinding->setPropertyValue(
-                    sPropName, makeAny( OUString( sNewCondition ) ) );
+                    sPropName, makeAny( sNewCondition ) );
             }
         }
     }

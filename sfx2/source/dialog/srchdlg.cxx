@@ -125,7 +125,7 @@ void SearchDialog::SaveConfig()
     sUserData += ";";
     sUserData += OUString::number( m_pBackwardsBox->IsChecked() ? 1 : 0 );
 
-    Any aUserItem = makeAny( OUString( sUserData ) );
+    Any aUserItem = makeAny( sUserData );
     aViewOpt.SetUserItem( "UserItem", aUserItem );
 }
 

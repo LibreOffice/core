@@ -38,7 +38,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmediaQuickTime_component_getFac
 
     if( rtl_str_compare( pImplName, AVMEDIA_QUICKTIME_MANAGER_IMPLEMENTATIONNAME ) == 0 )
     {
-        const ::rtl::OUString aServiceName( ::rtl::OUString(AVMEDIA_QUICKTIME_MANAGER_SERVICENAME ) );
+        const ::rtl::OUString aServiceName( AVMEDIA_QUICKTIME_MANAGER_SERVICENAME );
 
         xFactory.set( ::cppu::createSingleFactory(
                         static_cast< lang::XMultiServiceFactory* >( pServiceManager ),
