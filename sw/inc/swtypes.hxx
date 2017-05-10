@@ -170,11 +170,13 @@ enum class SetAttrMode
     /// Force hint expand (only matters for hints with CH_TXTATR).
     FORCEHINTEXPAND = 0x0040,
     /// The inserted item is a copy -- intended for use in ndtxt.cxx.
-    IS_COPY         = 0x0080
+    IS_COPY         = 0x0080,
+    /// for Undo, translated to SwInsertFlags::NOHINTEXPAND
+    NOHINTEXPAND    = 0x0100,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SetAttrMode> : is_typed_flags<SetAttrMode, 0x0ff> {};
+    template<> struct typed_flags<SetAttrMode> : is_typed_flags<SetAttrMode, 0x1ff> {};
 }
 
 #define SW_ISPRINTABLE( c ) ( c >= ' ' && 127 != c )
