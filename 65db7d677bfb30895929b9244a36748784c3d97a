@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_d43cd631",
+        "filename": "sw/source/filter/ascii/ascatr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-05-10T09:39:00Z",
+      "side": 1,
+      "message": "why do you want to skip exporting outline numbering? that\u0027s a serious regression as far as my personal usage of Writer is concerned :)",
+      "revId": "65db7d677bfb30895929b9244a36748784c3d97a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
