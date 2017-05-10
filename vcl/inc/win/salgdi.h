@@ -274,7 +274,7 @@ protected:
                                            ControlState nState, const ImplControlValue& aValue,
                                            const OUString& aCaption ) override;
     virtual bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState nState,
-                                                const ImplControlValue& aValue, const OUString& aCaption,
+                                                const ImplControlValue& aValue,
                                                 tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion ) override;
 
     virtual bool        blendBitmap( const SalTwoRect&,

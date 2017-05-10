@@ -44,7 +44,7 @@ bool SalGraphics::drawNativeControl( ControlType, ControlPart,
 bool SalGraphics::getNativeControlRegion( ControlType, ControlPart,
                                           const tools::Rectangle&, ControlState,
                                           const ImplControlValue&,
-                                          const OUString&, tools::Rectangle&, tools::Rectangle& )
+                                          tools::Rectangle&, tools::Rectangle& )
 {
     return false;
 }

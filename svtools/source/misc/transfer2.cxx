@@ -463,7 +463,7 @@ void TransferDataContainer::CopyImageMap( const ImageMap& rImgMap )
 {
     SvMemoryStream aMemStm( 8192, 8192 );
     aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
-    rImgMap.Write( aMemStm, OUString() );
+    rImgMap.Write( aMemStm );
     CopyAnyData( SotClipboardFormatId::SVIM, static_cast<sal_Char const *>(aMemStm.GetData()),
                     aMemStm.Seek( STREAM_SEEK_TO_END ) );
 }

@@ -713,7 +713,7 @@ bool TransferableHelper::SetImageMap( const ImageMap& rIMap )
     SvMemoryStream aMemStm( 8192, 8192 );
 
     aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
-    rIMap.Write( aMemStm, OUString() );
+    rIMap.Write( aMemStm );
     maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
 
     return( maAny.hasValue() );
@@ -1767,7 +1767,7 @@ bool TransferableDataHelper::GetImageMap( const css::datatransfer::DataFlavor& r
 
     if( bRet )
     {
-        rIMap.Read( *xStm, OUString() );
+        rIMap.Read( *xStm );
         bRet = ( xStm->GetError() == ERRCODE_NONE );
     }
 

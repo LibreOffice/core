@@ -1046,7 +1046,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
 }
 
 bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState /*nState*/,
-                                               const ImplControlValue& aValue, const OUString&,
+                                               const ImplControlValue& aValue,
                                                 tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion )
 
 {

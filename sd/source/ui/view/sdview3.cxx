@@ -321,7 +321,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         {
             pImageMap.reset(new ImageMap);
             // mba: clipboard always must contain absolute URLs (could be from alien source)
-            pImageMap->Read( *xStm, OUString() );
+            pImageMap->Read( *xStm );
         }
     }
 
