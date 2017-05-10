@@ -677,19 +677,14 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     xInfoSet->setPropertyValue( "SourceStorage", Any( xStorage ) );
 
     // prepare filter arguments, WARNING: the order is important!
-    Sequence<Any> aFilterArgs( 5 );
-    Any *pArgs = aFilterArgs.getArray();
-    *pArgs++ <<= xInfoSet;
-    *pArgs++ <<= xStatusIndicator;
-    *pArgs++ <<= xGraphicResolver;
-    *pArgs++ <<= xObjectResolver;
-    *pArgs++ <<= aLateInitSettings;
+    Sequence<Any> aFilterArgs{  Any(xInfoSet),
+                                Any(xStatusIndicator),
+                                Any(xGraphicResolver),
+                                Any(xObjectResolver),
+                                Any(aLateInitSettings) };
 
-    Sequence<Any> aEmptyArgs( 3 );
-    // cppcheck-suppress redundantAssignment
-    pArgs = aEmptyArgs.getArray();
-    *pArgs++ <<= xInfoSet;
-    *pArgs++ <<= xStatusIndicator;
+    Sequence<Any> aEmptyArgs{   Any(xInfoSet),
+                                Any(xStatusIndicator) };
 
     // prepare for special modes
     if( aOpt.IsFormatsOnly() )
