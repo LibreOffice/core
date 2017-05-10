@@ -250,7 +250,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         ScDocument* pDocument = GetViewData().GetDocument();
         ScDocShell* pDocShell = GetViewData().GetDocShell();
         ScModelObj* pModelObj = ( pDocShell ? ScModelObj::getImplementation( pDocShell->GetModel() ) : nullptr );
-        ScDrawTransferObj* pTransferObj = ScDrawTransferObj::GetOwnClipboard( nullptr );
+        ScDrawTransferObj* pTransferObj = ScDrawTransferObj::GetOwnClipboard();
         if ( pDocument && pPage && pModelObj && ( pTransferObj || pDrawTrans ) )
         {
             const ScRangeListVector& rProtectedChartRangesVector(

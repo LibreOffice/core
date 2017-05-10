@@ -59,7 +59,7 @@ void ScFiltersTest::testTdf64229()
 {
     ScDocShellRef xDocSh = loadDoc("fdo64229b.", FORMAT_ODS);
 
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load fdo64229b.*", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -77,7 +77,7 @@ void ScFiltersTest::testTdf36933()
 {
     ScDocShellRef xDocSh = loadDoc("fdo36933test.", FORMAT_ODS);
 
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load fdo36933test.*", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -95,7 +95,7 @@ void ScFiltersTest::testTdf43700()
 {
     ScDocShellRef xDocSh = loadDoc("fdo43700test.", FORMAT_ODS);
 
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load fdo43700test.*", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -113,7 +113,7 @@ void ScFiltersTest::testTdf43534()
 {
     ScDocShellRef xDocSh = loadDoc("fdo43534test.", FORMAT_ODS);
 
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load fdo43534test.*", xDocSh.is());
     // ScDocument& rDoc = xDocSh->GetDocument();
@@ -172,7 +172,7 @@ void ScFiltersTest::testTdf40110()
     ScDocShellRef xDocSh = loadDoc("fdo40110test.", FORMAT_ODS);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load fdo40110test.*", xDocSh.Is());
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
     OUString aCSVFileName;
@@ -191,7 +191,7 @@ void ScFiltersTest::testTdf98657()
     ScDocShellRef xDocSh = loadDoc("tdf98657.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     // this was a NaN before the fix
     CPPUNIT_ASSERT_EQUAL(double(285.0), rDoc.GetValue(ScAddress(1, 1, 0)));

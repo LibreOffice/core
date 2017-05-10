@@ -423,7 +423,7 @@ static bool lcl_TestFormat( SvxClipboardFormatItem& rFormats, const Transferable
 void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFormatItem& rFormats )
 {
     vcl::Window* pWin = GetViewData()->GetActiveWin();
-    bool bDraw = ( ScDrawTransferObj::GetOwnClipboard( pWin ) != nullptr );
+    bool bDraw = ScDrawTransferObj::GetOwnClipboard() != nullptr;
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
 
@@ -456,7 +456,7 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFormatItem& rFormats 
 static bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
 {
     bool bPossible = false;
-    if ( ScTransferObj::GetOwnClipboard( nullptr ) || ScDrawTransferObj::GetOwnClipboard( nullptr ) )
+    if ( ScTransferObj::GetOwnClipboard( nullptr ) || ScDrawTransferObj::GetOwnClipboard() )
         bPossible = true;
     else
     {

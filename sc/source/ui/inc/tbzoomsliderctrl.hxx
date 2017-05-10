@@ -47,7 +47,7 @@ private:
 
     sal_uInt16 Offset2Zoom(long nOffset) const;
     long Zoom2Offset(sal_uInt16 nZoom) const;
-    void DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect);
+    void DoPaint(vcl::RenderContext& rRenderContext);
 
 public:
     ScZoomSliderWnd(vcl::Window* pParent, const css::uno::Reference<css::frame::XDispatchProvider >& rDispatchProvider,
