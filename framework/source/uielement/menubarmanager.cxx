@@ -489,68 +489,62 @@ void MenuBarManager::RemoveListener()
 {
     SolarMutexGuard g;
 
-    // Check service manager reference. Remove listener can be called due
-    // to a disposing call from the frame and therefore we already removed
-    // our listeners and release the service manager reference!
-    if ( m_xContext.is() )
+    std::vector< MenuItemHandler* >::iterator p;
+    for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
     {
-        std::vector< MenuItemHandler* >::iterator p;
-        for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
+        MenuItemHandler* pItemHandler = *p;
+        if ( pItemHandler->xMenuItemDispatch.is() )
         {
-            MenuItemHandler* pItemHandler = *p;
-            if ( pItemHandler->xMenuItemDispatch.is() )
-            {
-                URL aTargetURL;
-                aTargetURL.Complete = pItemHandler->aMenuItemURL;
-                m_xURLTransformer->parseStrict( aTargetURL );
+            URL aTargetURL;
+            aTargetURL.Complete = pItemHandler->aMenuItemURL;
+            m_xURLTransformer->parseStrict( aTargetURL );
 
-                pItemHandler->xMenuItemDispatch->removeStatusListener(
-                    static_cast< XStatusListener* >( this ), aTargetURL );
-            }
-
-            pItemHandler->xMenuItemDispatch.clear();
-
-            if ( pItemHandler->xPopupMenu.is() )
-            {
-                {
-                    // Remove popup menu from menu structure
-                    m_pVCLMenu->SetPopupMenu( pItemHandler->nItemId, nullptr );
-                }
-
-                Reference< css::lang::XEventListener > xEventListener( pItemHandler->xPopupMenuController, UNO_QUERY );
-                if ( xEventListener.is() )
-                {
-                    EventObject aEventObject;
-                    aEventObject.Source = static_cast<OWeakObject *>(this);
-                    xEventListener->disposing( aEventObject );
-                }
-
-                // We now provide a popup menu controller to external code.
-                // Therefore the life-time must be explicitly handled via
-                // dispose!!
-                try
-                {
-                    Reference< XComponent > xComponent( pItemHandler->xPopupMenuController, UNO_QUERY );
-                    if ( xComponent.is() )
-                        xComponent->dispose();
-                }
-                catch ( const RuntimeException& )
-                {
-                    throw;
-                }
-                catch ( const Exception& )
-                {
-                }
-
-                // Release references to controller and popup menu
-                pItemHandler->xPopupMenuController.clear();
-                pItemHandler->xPopupMenu.clear();
-            }
-
-            Reference< XComponent > xComponent( pItemHandler->xSubMenuManager, UNO_QUERY );
-            if ( xComponent.is() )
-                xComponent->dispose();
+            pItemHandler->xMenuItemDispatch->removeStatusListener(
+                static_cast< XStatusListener* >( this ), aTargetURL );
         }
+
+        pItemHandler->xMenuItemDispatch.clear();
+
+        if ( pItemHandler->xPopupMenu.is() )
+        {
+            {
+                // Remove popup menu from menu structure
+                m_pVCLMenu->SetPopupMenu( pItemHandler->nItemId, nullptr );
+            }
+
+            Reference< css::lang::XEventListener > xEventListener( pItemHandler->xPopupMenuController, UNO_QUERY );
+            if ( xEventListener.is() )
+            {
+                EventObject aEventObject;
+                aEventObject.Source = static_cast<OWeakObject *>(this);
+                xEventListener->disposing( aEventObject );
+            }
+
+            // We now provide a popup menu controller to external code.
+            // Therefore the life-time must be explicitly handled via
+            // dispose!!
+            try
+            {
+                Reference< XComponent > xComponent( pItemHandler->xPopupMenuController, UNO_QUERY );
+                if ( xComponent.is() )
+                    xComponent->dispose();
+            }
+            catch ( const RuntimeException& )
+            {
+                throw;
+            }
+            catch ( const Exception& )
+            {
+            }
+
+            // Release references to controller and popup menu
+            pItemHandler->xPopupMenuController.clear();
+            pItemHandler->xPopupMenu.clear();
+        }
+
+        Reference< XComponent > xComponent( pItemHandler->xSubMenuManager, UNO_QUERY );
+        if ( xComponent.is() )
+            xComponent->dispose();
     }
 
     try
@@ -591,30 +585,25 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source )
         URL aTargetURL;
         aTargetURL.Complete = pMenuItemDisposing->aMenuItemURL;
 
-        // Check reference of service manager before we use it. Reference could
-        // be cleared due to RemoveListener call!
-        if ( m_xContext.is() )
+        m_xURLTransformer->parseStrict( aTargetURL );
+
+        pMenuItemDisposing->xMenuItemDispatch->removeStatusListener(
+            static_cast< XStatusListener* >( this ), aTargetURL );
+        pMenuItemDisposing->xMenuItemDispatch.clear();
+        if ( pMenuItemDisposing->xPopupMenu.is() )
         {
-            m_xURLTransformer->parseStrict( aTargetURL );
+            Reference< css::lang::XEventListener > xEventListener( pMenuItemDisposing->xPopupMenuController, UNO_QUERY );
+            if ( xEventListener.is() )
+                xEventListener->disposing( Source );
 
-            pMenuItemDisposing->xMenuItemDispatch->removeStatusListener(
-                static_cast< XStatusListener* >( this ), aTargetURL );
-            pMenuItemDisposing->xMenuItemDispatch.clear();
-            if ( pMenuItemDisposing->xPopupMenu.is() )
             {
-                Reference< css::lang::XEventListener > xEventListener( pMenuItemDisposing->xPopupMenuController, UNO_QUERY );
-                if ( xEventListener.is() )
-                    xEventListener->disposing( Source );
-
-                {
-                    // Remove popup menu from menu structure as we release our reference to
-                    // the controller.
-                    m_pVCLMenu->SetPopupMenu( pMenuItemDisposing->nItemId, nullptr );
-                }
-
-                pMenuItemDisposing->xPopupMenuController.clear();
-                pMenuItemDisposing->xPopupMenu.clear();
+                // Remove popup menu from menu structure as we release our reference to
+                // the controller.
+                m_pVCLMenu->SetPopupMenu( pMenuItemDisposing->nItemId, nullptr );
             }
+
+            pMenuItemDisposing->xPopupMenuController.clear();
+            pMenuItemDisposing->xPopupMenu.clear();
         }
         return;
     }
