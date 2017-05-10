@@ -753,7 +753,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             }
             else
             {
-                OSL_ENSURE(pObj, "wo ist das SDR-Object?");
+                OSL_ENSURE(pObj, "Where is the SDR-Object?");
                 if (pObj)
                 {
                     aRect = pObj->GetSnapRect();
@@ -1024,7 +1024,7 @@ sal_uInt32 WW8Export::GetSdrOrdNum( const SwFrameFormat& rFormat ) const
 void WW8Export::AppendFlyInFlys(const ww8::Frame& rFrameFormat,
     const Point& rNdTopLeft)
 {
-    OSL_ENSURE(!m_pEscher, "der EscherStream wurde schon geschrieben!");
+    OSL_ENSURE(!m_pEscher, "the EscherStream was already written!");
     if (m_pEscher)
         return ;
     PlcDrawObj *pDrwO;
@@ -1051,8 +1051,9 @@ void WW8Export::AppendFlyInFlys(const ww8::Frame& rFrameFormat,
             0x55, 0x08, 1           // sprmCFSpec
         };
                                                 // fSpec-Attribut true
-                            // Fuer DrawObjets muss ein Spezial-Zeichen
-                            // in den Text und darum ein fSpec-Attribut
+
+        // A special character is required in the text for DrawObjects,
+        // therefore a fSpec-Attribut
         m_pChpPlc->AppendFkpEntry( Strm().Tell() );
         WriteChar( 0x8 );
         m_pChpPlc->AppendFkpEntry( Strm().Tell(), sizeof( aSpec8 ), aSpec8 );
@@ -1076,9 +1077,8 @@ MSWord_SdrAttrIter::MSWord_SdrAttrIter( MSWordExportBase& rWr,
 void MSWord_SdrAttrIter::NextPara( sal_Int32 nPar )
 {
     nPara = nPar;
-    // Attributwechsel an Pos 0 wird ignoriert, da davon ausgegangen
-    // wird, dass am Absatzanfang sowieso die Attribute neu ausgegeben
-    // werden.
+    // Ignore change of attribute at position 0, because we expect that
+    // the attributes are outputted at start of a paragraph anyway.
     aChrTextAtrArr.clear();
     aChrSetArr.clear();
     nAktSwPos = nTmpSwPos = 0;
@@ -1101,20 +1101,20 @@ rtl_TextEncoding MSWord_SdrAttrIter::GetNextCharSet() const
     return eNdChrSet;
 }
 
-// der erste Parameter in SearchNext() liefert zurueck, ob es ein TextAtr ist.
+// the first parameter in SearchNext() returns if it's a TextAtr
 sal_Int32 MSWord_SdrAttrIter::SearchNext( sal_Int32 nStartPos )
 {
     sal_Int32 nMinPos = SAL_MAX_INT32;
     for(std::vector<EECharAttrib>::const_iterator i = aTextAtrArr.begin(); i < aTextAtrArr.end(); ++i)
     {
-        sal_Int32 nPos = i->nStart; // gibt erstes Attr-Zeichen
+        sal_Int32 nPos = i->nStart; // first character attribute
         if( nPos >= nStartPos && nPos <= nMinPos )
         {
             nMinPos = nPos;
             SetCharSet(*i, true);
         }
 
-        nPos = i->nEnd;              // gibt letztes Attr-Zeichen + 1
+        nPos = i->nEnd;              // last character attribute + 1
         if( nPos >= nStartPos && nPos < nMinPos )
         {
             nMinPos = nPos;
@@ -1248,7 +1248,7 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
         }
         m_rExport.m_bFontSizeWritten = false;
 
-        nTmpSwPos = 0;      // HasTextItem nur in dem obigen Bereich erlaubt
+        nTmpSwPos = 0;      // HasTextItem only allowed in the above area
         m_rExport.m_pOutFormatNode = pOldMod;
     }
 }
@@ -1267,12 +1267,11 @@ bool MSWord_SdrAttrIter::IsTextAttr(sal_Int32 nSwPos)
     return false;
 }
 
-// HasItem ist fuer die Zusammenfassung des Doppel-Attributes Underline
-// und WordLineMode als TextItems. OutAttr() ruft die Ausgabefunktion,
-// die dann ueber HasItem() nach anderen Items an der
-// Attribut-Anfangposition fragen kann.
-// Es koennen nur Attribute mit Ende abgefragt werden.
-// Es wird mit bDeep gesucht
+// HasItem is used for the consolidation  of the double attribute Underline and
+// WordLineMode as a TextItem. OutAttr() calls the output function, which can
+// query for other items at the start position of attribute via HasItem().
+// Only attributes with a end can be queried.
+// The search is done with bDeep.
 const SfxPoolItem* MSWord_SdrAttrIter::HasTextItem(sal_uInt16 nWhich) const
 {
     nWhich = sw::hack::TransformWhichBetweenPools(*pEditPool,
@@ -1284,7 +1283,7 @@ const SfxPoolItem* MSWord_SdrAttrIter::HasTextItem(sal_uInt16 nWhich) const
             if (nWhich == i->pAttr->Which() && nTmpSwPos >= i->nStart && nTmpSwPos < i->nEnd)
                 return i->pAttr;    // Found
             if (nTmpSwPos < i->nStart)
-                return nullptr;        // dann kommt da nichts mehr
+                return nullptr;
         }
     }
     return nullptr;
@@ -1418,7 +1417,7 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
         if( n )
             aAttrIter.NextPara( n );
 
-        OSL_ENSURE( pO->empty(), " pO ist am Zeilenanfang nicht leer" );
+        OSL_ENSURE( pO->empty(), " pO is not empty at start of line" );
 
         OUString aStr( rEditObj.GetText( n ));
         sal_Int32 nAktPos = 0;
@@ -1430,26 +1429,26 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
             if( !bTextAtr )
                 OutSwString(aStr, nAktPos, nNextAttr - nAktPos);
 
-                        // Am Zeilenende werden die Attribute bis ueber das CR
-                        // aufgezogen. Ausnahme: Fussnoten am Zeilenende
+            // At the end of the line the attributes are extended over the CR.
+            // exception: foot note at line end
             if( nNextAttr == nEnd && !bTextAtr )
-                WriteCR();              // CR danach
+                WriteCR();              // CR after it
 
-                                            // Ausgabe der Zeichenattribute
+                                            // output of character attributes
             aAttrIter.OutAttr( nAktPos );   // nAktPos - 1 ??
             m_pChpPlc->AppendFkpEntry( Strm().Tell(),
                                             pO->size(), pO->data() );
             pO->clear();
 
-                        // Ausnahme: Fussnoten am Zeilenende
+            // exception: foot note at line end
             if( nNextAttr == nEnd && bTextAtr )
-                WriteCR();              // CR danach
+                WriteCR();              // CR after it
             nAktPos = nNextAttr;
             aAttrIter.NextPos();
         }
         while( nAktPos < nEnd );
 
-        OSL_ENSURE( pO->empty(), " pO ist am ZeilenEnde nicht leer" );
+        OSL_ENSURE( pO->empty(), " pO is not empty at start of line" );
 
         pO->push_back( bNul );        // Style # as short
         pO->push_back( bNul );
@@ -1502,7 +1501,7 @@ void WW8Export::CreateEscher()
         GetItemState(RES_BACKGROUND);
     if (m_pHFSdrObjs->size() || m_pSdrObjs->size() || SfxItemState::SET == eBackSet)
     {
-        OSL_ENSURE( !m_pEscher, "wer hat den Pointer nicht geloescht?" );
+        OSL_ENSURE( !m_pEscher, "Who did not deleted the pointer?" );
         SvMemoryStream* pEscherStrm = new SvMemoryStream;
         pEscherStrm->SetEndian(SvStreamEndian::LITTLE);
         m_pEscher = new SwEscherEx(pEscherStrm, *this);
