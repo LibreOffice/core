@@ -2552,18 +2552,33 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef& rCurr )
     if (!(rCurr->GetOpCode() != ocPush && (rCurr->GetType() == svByte || rCurr->GetType() == svJump)))
         return;
 
+    // Inherited parameter class.
     formula::ParamClass eType = pCurrentFactorToken->GetInForceArray();
-    if (eType == formula::ParamClass::ForceArray || eType == formula::ParamClass::ReferenceOrForceArray)
+    if (eType == formula::ParamClass::ForceArray)
     {
         rCurr->SetInForceArray( eType);
+        return;
+    }
+    else if (eType == formula::ParamClass::ReferenceOrForceArray)
+    {
+        // Inherit further only if the return class of the nested function is
+        // not Reference.
+        if (GetForceArrayParameter( rCurr.get(), SAL_MAX_UINT16) != ParamClass::Reference)
+            rCurr->SetInForceArray( eType);
         return;
     }
 
     if (nCurrentFactorParam > 0)
     {
-        eType = GetForceArrayParameter( pCurrentFactorToken.get(), static_cast<sal_uInt8>(nCurrentFactorParam - 1));
-        if (eType == ParamClass::ForceArray || eType == ParamClass::ReferenceOrForceArray)
+        // Actual current parameter's class.
+        eType = GetForceArrayParameter( pCurrentFactorToken.get(), static_cast<sal_uInt16>(nCurrentFactorParam - 1));
+        if (eType == ParamClass::ForceArray)
             rCurr->SetInForceArray( eType);
+        else if (eType == ParamClass::ReferenceOrForceArray)
+        {
+            if (GetForceArrayParameter( rCurr.get(), SAL_MAX_UINT16) != ParamClass::Reference)
+                rCurr->SetInForceArray( eType);
+        }
     }
 }
 
