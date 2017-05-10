@@ -2355,7 +2355,7 @@ class WalkElementBlockOperation
 {
 public:
 
-    WalkElementBlockOperation(size_t nRowSize, size_t /*nColSize*/,
+    WalkElementBlockOperation(size_t nRowSize,
             ScFullMatrix::DoubleOpFunction const & aDoubleFunc,
             ScFullMatrix::BoolOpFunction const & aBoolFunc,
             ScFullMatrix::StringOpFunction const & aStringFunc,
@@ -2483,7 +2483,7 @@ void ScMatrixImpl::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
         const ScMatrix::BoolOpFunction& aBoolFunc, const ScMatrix::StringOpFunction& aStringFunc,
         const ScMatrix::EmptyOpFunction& aEmptyFunc) const
 {
-    WalkElementBlockOperation aFunc(maMat.size().row, maMat.size().column,
+    WalkElementBlockOperation aFunc(maMat.size().row,
             aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
     maMat.walk(aFunc, MatrixImplType::size_pair_type(rStartPos.first, rStartPos.second),
             MatrixImplType::size_pair_type(rEndPos.first, rEndPos.second));

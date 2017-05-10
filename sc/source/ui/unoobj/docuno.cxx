@@ -1953,7 +1953,7 @@ void SAL_CALL ScModelObj::calculateAll()
 {
     SolarMutexGuard aGuard;
     if (pDocShell)
-        pDocShell->DoHardRecalc(true);
+        pDocShell->DoHardRecalc();
     else
     {
         OSL_FAIL("no DocShell");     //! throw exception?
@@ -2291,7 +2291,7 @@ void SAL_CALL ScModelObj::setPropertyValue(
             rDoc.SetDocOptions( aNewOpt );
             //! Recalc only for options that need it?
             if ( bHardRecalc )
-                pDocShell->DoHardRecalc( true );
+                pDocShell->DoHardRecalc();
             pDocShell->SetDocumentModified();
         }
     }

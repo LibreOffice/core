@@ -29,7 +29,7 @@ class SearchResultsDlg : public ModelessDialog
 
     DECL_LINK( ListSelectHdl, SvTreeListBox*, void );
 public:
-    SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParent, sal_uInt16 nId );
+    SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParent );
     virtual ~SearchResultsDlg() override;
     virtual void dispose() override;
 

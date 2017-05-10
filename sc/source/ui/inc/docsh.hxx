@@ -228,7 +228,7 @@ public:
     void            Execute( SfxRequest& rReq );
     void            GetState( SfxItemSet &rSet );
     void            ExecutePageStyle ( SfxViewShell& rCaller, SfxRequest& rReq, SCTAB nCurTab );
-    void            GetStatePageStyle( SfxViewShell& rCaller, SfxItemSet& rSet, SCTAB nCurTab );
+    void            GetStatePageStyle( SfxItemSet& rSet, SCTAB nCurTab );
 
     void            CompareDocument( ScDocument& rOtherDoc );
     void            MergeDocument( ScDocument& rOtherDoc, bool bShared = false, bool bCheckDuplicates = false, sal_uLong nOffset = 0, ScChangeActionMergeMap* pMergeMap = nullptr, bool bInverseMap = false );
@@ -277,7 +277,7 @@ public:
     bool            MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRecord );
 
     void            DoRecalc( bool bApi );
-    void            DoHardRecalc( bool bApi );
+    void            DoHardRecalc();
 
     void            UpdateOle( const ScViewData* pViewData, bool bSnapSize = false);
     bool            IsOle();

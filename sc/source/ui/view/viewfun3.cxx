@@ -448,7 +448,7 @@ void ScViewFunc::PasteDraw()
     vcl::Window* pWin = GetActiveWin();
     Point aPos = pWin->PixelToLogic( rViewData.GetScrPos( nPosX, nPosY,
                                      rViewData.GetActivePart() ) );
-    ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard( pWin );
+    ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard();
     if (pDrawClip)
     {
         OUString aSrcShellID = pDrawClip->GetShellID();
@@ -463,7 +463,7 @@ void ScViewFunc::PasteFromSystem()
 
     vcl::Window* pWin = GetActiveWin();
     ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
-    ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard( pWin );
+    ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard();
 
     if (pOwnClip)
     {
