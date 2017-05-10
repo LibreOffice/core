@@ -561,7 +561,7 @@ void WorkbookFragment::recalcFormulaCells()
         bHardRecalc = true;
 
     if (bHardRecalc)
-        rDocSh.DoHardRecalc(false);
+        rDocSh.DoHardRecalc();
     else
         rDoc.CalcFormulaTree(false, true, false);
 }

@@ -58,7 +58,7 @@
 
 using namespace ::com::sun::star;
 
-bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, bool /* bApi */ )
+bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange )
 {
 
     ScDocShellModificator aModificator( rDocShell );

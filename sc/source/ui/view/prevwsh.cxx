@@ -782,7 +782,7 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
         {
             case SID_STATUS_PAGESTYLE:
             case SID_HFEDIT:
-                pDocShell->GetStatePageStyle( *this, rSet, nTab );
+                pDocShell->GetStatePageStyle( rSet, nTab );
                 break;
             case SID_UNDO:
             case SID_REDO:

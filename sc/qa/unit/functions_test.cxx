@@ -36,7 +36,7 @@ bool FunctionsTest::load(const OUString& rFilter, const OUString& rURL,
         OUString(), nFilterFlags, nClipboardID, nFilterVersion );
     CPPUNIT_ASSERT(xDocShRef.is());
 
-    xDocShRef->DoHardRecalc(true);
+    xDocShRef->DoHardRecalc();
 
     ScDocument& rDoc = xDocShRef->GetDocument();
 

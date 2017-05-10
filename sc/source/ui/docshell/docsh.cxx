@@ -497,7 +497,7 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css
         bHardRecalc = true;
 
     if (bHardRecalc)
-        DoHardRecalc(false);
+        DoHardRecalc();
     else
     {
         // still need to recalc volatile formula cells.
