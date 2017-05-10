@@ -57,7 +57,6 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
-                                    sal_Int32 /*nElement*/,
                                     const uno::Reference<xml::sax::XFastAttributeList>& xAttrList ) :
     ScXMLImportContext( rImport ),
     sPassword(),
@@ -213,11 +212,11 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         if (GetScImport().GetTables().GetCurrentSheet() >= MAXTAB)
         {
             GetScImport().SetRangeOverflowType(SCWARN_IMPORT_SHEET_OVERFLOW);
-            pContext = new ScXMLEmptyContext(GetScImport(), nElement );
+            pContext = new ScXMLEmptyContext(GetScImport() );
         }
         else
         {
-            pContext = new ScXMLTableContext( GetScImport(),nElement, xAttrList );
+            pContext = new ScXMLTableContext( GetScImport(), xAttrList );
         }
         break;
 

@@ -20,8 +20,7 @@
 #include "XMLEmptyContext.hxx"
 #include "xmlimprt.hxx"
 
-ScXMLEmptyContext::ScXMLEmptyContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/ ) :
+ScXMLEmptyContext::ScXMLEmptyContext( ScXMLImport& rImport ) :
     ScXMLImportContext( rImport )
 {
 }
@@ -31,10 +30,10 @@ ScXMLEmptyContext::~ScXMLEmptyContext()
 }
 
 css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
-    ScXMLEmptyContext::createFastChildContext( sal_Int32 nElement,
+    ScXMLEmptyContext::createFastChildContext( sal_Int32 /*nElement*/,
     const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
 {
-    SvXMLImportContext *pContext = new ScXMLEmptyContext( GetScImport(), nElement );
+    SvXMLImportContext *pContext = new ScXMLEmptyContext( GetScImport() );
 
     return pContext;
 }

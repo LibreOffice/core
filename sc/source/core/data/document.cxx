@@ -4027,7 +4027,7 @@ void ScDocument::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, 
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->SetRowHeightRange
-            ( nStartRow, nEndRow, nNewHeight, 1.0, 1.0 );
+            ( nStartRow, nEndRow, nNewHeight, 1.0 );
 }
 
 void ScDocument::SetRowHeightOnly( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, sal_uInt16 nNewHeight )

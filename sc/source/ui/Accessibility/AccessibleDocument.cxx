@@ -299,7 +299,7 @@ private:
     ScSplitPos meSplitPos;
 
     void FillShapes(std::vector < uno::Reference < drawing::XShape > >& rShapes) const;
-    bool FindSelectedShapesChanges(const css::uno::Reference<css::drawing::XShapes>& xShapes, bool bCommitChange) const;
+    bool FindSelectedShapesChanges(const css::uno::Reference<css::drawing::XShapes>& xShapes) const;
 
     ScAddress* GetAnchor(const uno::Reference<drawing::XShape>& xShape) const;
     uno::Reference<XAccessibleRelationSet> GetRelationSet(const ScAccessibleShapeData* pData) const;
@@ -350,7 +350,7 @@ ScChildrenShapes::ScChildrenShapes(ScAccessibleDocument* pAccessibleDocument, Sc
 
         uno::Reference<drawing::XShapes> xShapes(xSelectionSupplier->getSelection(), uno::UNO_QUERY);
         if (xShapes.is())
-            FindSelectedShapesChanges(xShapes, false);
+            FindSelectedShapesChanges(xShapes);
     }
     if (pViewShell)
     {
@@ -678,7 +678,7 @@ bool ScChildrenShapes::SelectionChanged()
 
     uno::Reference<drawing::XShapes> xShapes(xSelectionSupplier->getSelection(), uno::UNO_QUERY);
 
-    bResult = FindSelectedShapesChanges(xShapes, true);
+    bResult = FindSelectedShapesChanges(xShapes);
 
     return bResult;
 }
@@ -930,7 +930,7 @@ utl::AccessibleRelationSetHelper* ScChildrenShapes::GetRelationSet(const ScAddre
     return aSetRelation.mpRelationSet;
 }
 
-bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::XShapes>& xShapes, bool /* bCommitChange */) const
+bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::XShapes>& xShapes) const
 {
     bool bResult(false);
     SortedShapes aShapesList;
