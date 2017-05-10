@@ -454,7 +454,7 @@ public:
     OUString m_aMainStg;
     std::vector<const SwTOXType*> m_aTOXArr;
     const SfxItemSet* m_pISet;    // for double attributes
-    WW8_WrPct*  m_pPiece;         // Pointer auf Piece-Table
+    WW8_WrPct*  m_pPiece;         // Pointer to Piece-Table
     SwNumRuleTable* m_pUsedNumTable;  // all used NumRules
     const SwTextNode *m_pTopNodeOfHdFtPage; ///< Top node of host page when in hd/ft
     std::map< sal_uInt16, sal_uInt16 > m_aRuleDuplicates; //map to Duplicated numrules
