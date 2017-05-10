@@ -157,7 +157,6 @@ private:
     OUString                    GetLabel4Command(const OUString& rCommand);
     void                        InitAccCfg();
     sal_uLong                   MapKeyCodeToPos( const vcl::KeyCode &rCode ) const;
-    static css::uno::Reference< css::frame::XModel > SearchForAlreadyLoadedDoc(const OUString& sName);
     void                        StartFileDialog( WinBits nBits, const OUString& rTitle );
 
     void                        Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
