@@ -72,7 +72,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertif
     std::list< CertificateImpl* > certsList;
 
     ctx->setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
-    err = ctx->startKeyListing();
+    err = ctx->startKeyListing("", true);
     while (!err) {
         GpgME::Key k = ctx->nextKey(err);
         if (err)
@@ -124,21 +124,14 @@ sal_Int32 SecurityEnvironmentGpg::getCertificateCharacters(
     const Reference< XCertificate >& aCert)
 {
     const CertificateImpl* xCert;
-    const GpgME::Key* key;
-
     Reference< XUnoTunnel > xCertTunnel(aCert, UNO_QUERY_THROW) ;
     xCert = reinterpret_cast<CertificateImpl*>(sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething(CertificateImpl::getUnoTunnelId()))) ;
     if (xCert == nullptr)
         throw RuntimeException();
 
-    key = xCert->getCertificate();
-    sal_Int32 characters = 0x0;
-
-    // We need to use canSign() instead of hasSecret() because of a bug in the latter.
-    if (key->canSign())
-        characters |= CertificateCharacters::HAS_PRIVATE_KEY;
-
-    return characters;
+    // we only listed private keys anyway, up in
+    // SecurityEnvironmentGpg::getPersonalCertificates
+    return CertificateCharacters::HAS_PRIVATE_KEY;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
