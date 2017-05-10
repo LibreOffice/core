@@ -27,7 +27,7 @@ rm -f "$tiptoe"
 
 # update shared mime database
 if [ -x /usr/bin/update-mime-database ]; then
-  update-mime-database ${PKG_INSTALL_ROOT}/usr/share/mime
+  update-mime-database "${PKG_INSTALL_ROOT}"/usr/share/mime
 fi
 
 exit 0
