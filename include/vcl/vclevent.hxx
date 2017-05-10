@@ -179,6 +179,9 @@ class VCL_DLLPUBLIC VclSimpleEvent
 private:
     VclEventId nId;
 
+    VclSimpleEvent(VclSimpleEvent &) = delete;
+    void operator =(VclSimpleEvent) = delete;
+
 public:
     VclSimpleEvent( VclEventId n ) { nId = n; }
     virtual ~VclSimpleEvent() {}
