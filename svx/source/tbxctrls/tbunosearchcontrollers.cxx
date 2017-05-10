@@ -191,6 +191,8 @@ void FindTextFieldControl::SetTextToSelected_Impl()
 
 bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
 {
+    if (isDisposed())
+        return true;
     bool bRet= ComboBox::PreNotify( rNEvt );
 
     switch ( rNEvt.GetType() )
