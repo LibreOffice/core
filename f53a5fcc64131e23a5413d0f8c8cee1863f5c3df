@@ -16,6 +16,24 @@
       "revId": "f53a5fcc64131e23a5413d0f8c8cee1863f5c3df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_5409c694",
+        "filename": "xmlsecurity/source/framework/saxeventkeeperimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-05-10T09:29:17Z",
+      "side": 1,
+      "message": "yes - not a good idea to use unique_ptr by value here, no?",
+      "parentUuid": "5a3905b3_149d7e65",
+      "revId": "f53a5fcc64131e23a5413d0f8c8cee1863f5c3df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
