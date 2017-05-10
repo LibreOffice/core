@@ -189,7 +189,7 @@ void ScFiltersTest::testRangeNameODS()
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-global.*", xDocSh.is());
 
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
     testRangeNameImpl(rDoc);
@@ -252,7 +252,7 @@ void testContentImpl(ScDocument& rDoc, sal_Int32 nFormat ) //same code for ods, 
 void ScFiltersTest::testContentODS()
 {
     ScDocShellRef xDocSh = loadDoc("universal-content.", FORMAT_ODS);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
     testContentImpl(rDoc, FORMAT_ODS);
@@ -262,7 +262,7 @@ void ScFiltersTest::testContentODS()
 void ScFiltersTest::testContentXLS()
 {
     ScDocShellRef xDocSh = loadDoc("universal-content.", FORMAT_XLS);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
     testContentImpl(rDoc, FORMAT_XLS);
@@ -272,7 +272,7 @@ void ScFiltersTest::testContentXLS()
 void ScFiltersTest::testContentXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("universal-content.", FORMAT_XLSX);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
     testContentImpl(rDoc, FORMAT_XLSX);
@@ -282,7 +282,7 @@ void ScFiltersTest::testContentXLSX()
 void ScFiltersTest::testContentXLSXStrict()
 {
     ScDocShellRef xDocSh = loadDoc("universal-content-strict.", FORMAT_XLSX);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
     testContentImpl(rDoc, FORMAT_XLSX);
@@ -292,7 +292,7 @@ void ScFiltersTest::testContentXLSXStrict()
 void ScFiltersTest::testContentLotus123()
 {
     ScDocShellRef xDocSh = loadDoc("universal-content.", FORMAT_LOTUS123);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
     testContentImpl(rDoc, FORMAT_LOTUS123);
@@ -310,7 +310,7 @@ void ScFiltersTest::testContentDIF()
 void ScFiltersTest::testContentXLSB()
 {
     ScDocShellRef xDocSh = loadDoc("universal-content.", FORMAT_XLSB);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
     testContentImpl(rDoc, FORMAT_XLSB);
@@ -332,7 +332,7 @@ void ScFiltersTest::testSharedFormulaXLS()
     ScDocShellRef xDocSh = loadDoc("shared-formula/basic.", FORMAT_XLS);
     CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 18; ++i)
     {
@@ -388,7 +388,7 @@ void ScFiltersTest::testSharedFormulaXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("shared-formula/basic.", FORMAT_XLSX);
     ScDocument& rDoc = xDocSh->GetDocument();
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 18; ++i)
     {

@@ -3321,10 +3321,10 @@ void ScExportTest::testImageWithSpecialID()
 void ScExportTest::testSheetLocalRangeNameXLS()
 {
     ScDocShellRef xDocSh = loadDoc("named-ranges-local.", FORMAT_XLS);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
     ScDocShellRef xDocSh2 = saveAndReload(xDocSh.get(), FORMAT_XLS);
     xDocSh->DoClose();
-    xDocSh2->DoHardRecalc(true);
+    xDocSh2->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh2->GetDocument();
     ScRangeName* pRangeName = rDoc.GetRangeName(0);

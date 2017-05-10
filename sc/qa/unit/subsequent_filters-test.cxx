@@ -460,7 +460,7 @@ void ScFiltersTest::testBooleanFormatXLSX()
 void ScFiltersTest::testRangeNameXLS()
 {
     ScDocShellRef xDocSh = loadDoc("named-ranges-global.", FORMAT_XLS);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
     testRangeNameImpl(rDoc);
@@ -477,7 +477,7 @@ void ScFiltersTest::testRangeNameXLS()
 void ScFiltersTest::testRangeNameLocalXLS()
 {
     ScDocShellRef xDocSh = loadDoc("named-ranges-local.", FORMAT_XLS);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
     ScRangeName* pRangeName = rDoc.GetRangeName(0);
@@ -498,7 +498,7 @@ void ScFiltersTest::testRangeNameLocalXLS()
 void ScFiltersTest::testRangeNameXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("named-ranges-global.", FORMAT_XLSX);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
     testRangeNameImpl(rDoc);
@@ -521,7 +521,7 @@ void ScFiltersTest::testHyperlinksXLSX()
 void ScFiltersTest::testHardRecalcODS()
 {
     ScDocShellRef xDocSh = loadDoc("hard-recalc.", FORMAT_ODS);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load hard-recalc.*", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -538,7 +538,7 @@ void ScFiltersTest::testHardRecalcODS()
 void ScFiltersTest::testFunctionsODS()
 {
     ScDocShellRef xDocSh = loadDoc("functions.", FORMAT_ODS);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -570,7 +570,7 @@ void ScFiltersTest::testFunctionsODS()
 
     xDocSh = loadDoc("database-functions.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.is());
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
     ScDocument& rDoc2 = xDocSh->GetDocument();
 
     createCSVPath("database-functions.", aCSVFileName);
@@ -580,7 +580,7 @@ void ScFiltersTest::testFunctionsODS()
 
     xDocSh = loadDoc("date-time-functions.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load functions.*", xDocSh.is());
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
     ScDocument& rDoc3 = xDocSh->GetDocument();
     createCSVPath("date-time-functions.", aCSVFileName);
     testFile(aCSVFileName, rDoc3, 0, StringType::PureString);
@@ -589,7 +589,7 @@ void ScFiltersTest::testFunctionsODS()
 
     // crashes at exit while unloading StarBasic code
     // xDocSh = loadDoc("user-defined-function.", FORMAT_ODS);
-    // xDocSh->DoHardRecalc(true);
+    // xDocSh->DoHardRecalc();
     // ScDocument& rDocUserDef = xDocSh->GetDocument();
     // createCSVPath("user-defined-function.", aCSVFileName);
     // testFile(aCSVFileName, rDocUserDef, 0);
@@ -826,7 +826,7 @@ void testDBRanges_Impl(ScDocument& rDoc, sal_Int32 nFormat)
 void ScFiltersTest::testDatabaseRangesODS()
 {
     ScDocShellRef xDocSh = loadDoc("database.", FORMAT_ODS);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -837,7 +837,7 @@ void ScFiltersTest::testDatabaseRangesODS()
 void ScFiltersTest::testDatabaseRangesXLS()
 {
     ScDocShellRef xDocSh = loadDoc("database.", FORMAT_XLS);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -848,7 +848,7 @@ void ScFiltersTest::testDatabaseRangesXLS()
 void ScFiltersTest::testDatabaseRangesXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("database.", FORMAT_XLSX);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -859,7 +859,7 @@ void ScFiltersTest::testDatabaseRangesXLSX()
 void ScFiltersTest::testFormatsODS()
 {
     ScDocShellRef xDocSh = loadDoc("formats.", FORMAT_ODS);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -870,7 +870,7 @@ void ScFiltersTest::testFormatsODS()
 // void ScFiltersTest::testFormatsXLS()
 // {
 //     ScDocShellRef xDocSh = loadDoc("formats.", FORMAT_XLS);
-//     xDocSh->DoHardRecalc(true);
+//     xDocSh->DoHardRecalc();
 //
 //     ScDocument& rDoc = xDocSh->GetDocument();
 //
@@ -881,7 +881,7 @@ void ScFiltersTest::testFormatsODS()
 // void ScFiltersTest::testFormatsXLSX()
 // {
 //     ScDocShellRef xDocSh = loadDoc("formats.", FORMAT_XLSX);
-//     xDocSh->DoHardRecalc(true);
+//     xDocSh->DoHardRecalc();
 //
 //     ScDocument& rDoc = xDocSh->GetDocument();
 //
@@ -892,7 +892,7 @@ void ScFiltersTest::testFormatsODS()
 void ScFiltersTest::testMatrixODS()
 {
     ScDocShellRef xDocSh = loadDoc("matrix.", FORMAT_ODS);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -906,7 +906,7 @@ void ScFiltersTest::testMatrixODS()
 void ScFiltersTest::testMatrixXLS()
 {
     ScDocShellRef xDocSh = loadDoc("matrix.", FORMAT_XLS);
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load matrix.*", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -1090,7 +1090,7 @@ void ScFiltersTest::testBugFixesODS()
     ScDocShellRef xDocSh = loadDoc("bug-fixes.", FORMAT_ODS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.ods", xDocSh.is());
 
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
     ScDocument& rDoc = xDocSh->GetDocument();
 
     {
@@ -1126,7 +1126,7 @@ void ScFiltersTest::testBugFixesXLS()
     ScDocShellRef xDocSh = loadDoc("bug-fixes.", FORMAT_XLS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xls", xDocSh.is());
 
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
     xDocSh->GetDocument();
     xDocSh->DoClose();
 }
@@ -1136,7 +1136,7 @@ void ScFiltersTest::testBugFixesXLSX()
     ScDocShellRef xDocSh = loadDoc("bug-fixes.", FORMAT_XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xls", xDocSh.is());
 
-    xDocSh->DoHardRecalc(true);
+    xDocSh->DoHardRecalc();
     xDocSh->GetDocument();
     xDocSh->DoClose();
 }

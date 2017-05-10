@@ -209,7 +209,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_STATUS_PAGESTYLE:
             case SID_HFEDIT:
-                GetViewData().GetDocShell()->GetStatePageStyle( *this, rSet, nTab );
+                GetViewData().GetDocShell()->GetStatePageStyle( rSet, nTab );
                 break;
 
             case SID_SEARCH_ITEM:

@@ -438,7 +438,7 @@ void DataStream::Refresh()
     double fStart = getNow();
 
     // Hard recalc will repaint the grid area.
-    mpDocShell->DoHardRecalc(true);
+    mpDocShell->DoHardRecalc();
     mpDocShell->SetDocumentModified();
 
     fTimes[ DebugTime::Recalc ] = getNow() - fStart;

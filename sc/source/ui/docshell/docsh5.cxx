@@ -96,11 +96,11 @@ bool ScDocShell::IsEditable() const
     return !IsReadOnly() || aDocument.IsImportingXML() || aDocument.IsChangeReadOnlyEnabled();
 }
 
-void ScDocShell::DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW /* nY2 */ )
+void ScDocShell::DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 )
 {
     ScDocShellModificator aModificator( *this );
-    aDocument.RemoveFlagsTab( nX1, nY1, nX2, nY1, nTab, ScMF::Auto );
-    PostPaint( nX1, nY1, nTab, nX2, nY1, nTab, PaintPartFlags::Grid );
+    aDocument.RemoveFlagsTab( nX1, nY1, nX2, nY2, nTab, ScMF::Auto );
+    PostPaint( nX1, nY1, nTab, nX2, nY2, nTab, PaintPartFlags::Grid );
     // No SetDocumentModified, as the unnamed database range might have to be restored later.
     // The UNO hint is broadcast directly instead, to keep UNO objects in valid state.
     aDocument.BroadcastUno( SfxHint( SfxHintId::DataChanged ) );
