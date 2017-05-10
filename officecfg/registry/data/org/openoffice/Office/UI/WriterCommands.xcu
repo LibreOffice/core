@@ -2753,7 +2753,7 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Horizontal%20Line&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Horizontal Line&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Horizontal ~Line</value>
         </prop>
@@ -2785,7 +2785,7 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Heading%201&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Heading ~1</value>
         </prop>
@@ -2793,7 +2793,7 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Heading%202&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Heading ~2</value>
         </prop>
@@ -2801,7 +2801,7 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Heading%203&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Heading ~3</value>
         </prop>
@@ -2809,7 +2809,7 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Heading%204&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Heading ~4</value>
         </prop>
@@ -2817,7 +2817,7 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Heading%205&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Heading 5&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Heading ~5</value>
         </prop>
@@ -2825,7 +2825,7 @@
           <value>1</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Heading%206&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Heading 6&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Heading ~6</value>
         </prop>
@@ -2838,17 +2838,17 @@
           <value xml:lang="en-US">~Quotations</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Preformatted%20Text&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Preformatted Text&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Pre~formatted Text</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Text%20body&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Text body&amp;FamilyName:string=ParagraphStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Text Body</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Default%20Style&amp;FamilyName:string=CharacterStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Default Style&amp;FamilyName:string=CharacterStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Default ~Character</value>
         </prop>
@@ -2858,7 +2858,7 @@
           <value xml:lang="en-US">E~mphasis</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Strong%20Emphasis&amp;FamilyName:string=CharacterStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Strong Emphasis&amp;FamilyName:string=CharacterStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Strong Emphasis</value>
         </prop>
@@ -2868,7 +2868,7 @@
           <value xml:lang="en-US">Qu~otation</value>
         </prop>
       </node>
-      <node oor:name=".uno:StyleApply?Style:string=Source%20Text&amp;FamilyName:string=CharacterStyles" oor:op="replace">
+      <node oor:name=".uno:StyleApply?Style:string=Source Text&amp;FamilyName:string=CharacterStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sou~rce Text</value>
         </prop>

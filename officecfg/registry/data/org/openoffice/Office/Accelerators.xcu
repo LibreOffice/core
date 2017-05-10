@@ -3269,7 +3269,7 @@
         <node oor:name="0_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StyleApply?Style:string=Text%20body&amp;FamilyName:string=ParagraphStyles</value>
+            <value xml:lang="en-US">.uno:StyleApply?Style:string=Text body&amp;FamilyName:string=ParagraphStyles</value>
           </prop>
         </node>
         <node oor:name="0_SHIFT_MOD1" oor:op="replace">
@@ -3281,31 +3281,31 @@
         <node oor:name="1_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading%201&amp;FamilyName:string=ParagraphStyles</value>
+            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=ParagraphStyles</value>
           </prop>
         </node>
         <node oor:name="2_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading%202&amp;FamilyName:string=ParagraphStyles</value>
+            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles</value>
           </prop>
         </node>
         <node oor:name="3_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading%203&amp;FamilyName:string=ParagraphStyles</value>
+            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles</value>
           </prop>
         </node>
         <node oor:name="4_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading%204&amp;FamilyName:string=ParagraphStyles</value>
+            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles</value>
           </prop>
         </node>
         <node oor:name="5_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading%205&amp;FamilyName:string=ParagraphStyles</value>
+            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading 5&amp;FamilyName:string=ParagraphStyles</value>
           </prop>
         </node>
         <node oor:name="8_MOD1" oor:op="replace">
@@ -5603,7 +5603,7 @@
         <node oor:name="0_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StyleApply?Style:string=Text%20body&amp;FamilyName:string=ParagraphStyles</value>
+            <value xml:lang="en-US">.uno:StyleApply?Style:string=Text body&amp;FamilyName:string=ParagraphStyles</value>
           </prop>
         </node>
         <node oor:name="0_SHIFT_MOD1" oor:op="replace">
@@ -5615,31 +5615,31 @@
         <node oor:name="1_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading%201&amp;FamilyName:string=ParagraphStyles</value>
+            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=ParagraphStyles</value>
           </prop>
         </node>
         <node oor:name="2_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading%202&amp;FamilyName:string=ParagraphStyles</value>
+            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles</value>
           </prop>
         </node>
         <node oor:name="3_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading%203&amp;FamilyName:string=ParagraphStyles</value>
+            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles</value>
           </prop>
         </node>
         <node oor:name="4_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading%204&amp;FamilyName:string=ParagraphStyles</value>
+            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles</value>
           </prop>
         </node>
         <node oor:name="5_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading%205&amp;FamilyName:string=ParagraphStyles</value>
+            <value xml:lang="en-US">.uno:StyleApply?Style:string=Heading 5&amp;FamilyName:string=ParagraphStyles</value>
           </prop>
         </node>
         <node oor:name="8_MOD1" oor:op="replace">
