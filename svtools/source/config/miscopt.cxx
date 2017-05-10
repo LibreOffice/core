@@ -715,27 +715,21 @@ void SvtMiscOptions_Impl::ImplCommit()
 
 Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
 {
-    // Build list of configuration key names.
-    const OUString pProperties[] =
+    return Sequence<OUString>
     {
-        OUString(PROPERTYNAME_PLUGINSENABLED),
-        OUString(PROPERTYNAME_SYMBOLSET),
-        OUString(PROPERTYNAME_TOOLBOXSTYLE),
-        OUString(PROPERTYNAME_USESYSTEMFILEDIALOG),
-        OUString(PROPERTYNAME_ICONTHEME),
-        OUString(PROPERTYNAME_USESYSTEMPRINTDIALOG),
-        OUString(PROPERTYNAME_SHOWLINKWARNINGDIALOG),
-        OUString(PROPERTYNAME_DISABLEUICUSTOMIZATION),
-        OUString(PROPERTYNAME_EXPERIMENTALMODE),
-        OUString(PROPERTYNAME_MACRORECORDERMODE),
-        OUString(PROPERTYNAME_SIDEBARICONSIZE),
-        OUString(PROPERTYNAME_NOTEBOOKBARICONSIZE)
+        PROPERTYNAME_PLUGINSENABLED,
+        PROPERTYNAME_SYMBOLSET,
+        PROPERTYNAME_TOOLBOXSTYLE,
+        PROPERTYNAME_USESYSTEMFILEDIALOG,
+        PROPERTYNAME_ICONTHEME,
+        PROPERTYNAME_USESYSTEMPRINTDIALOG,
+        PROPERTYNAME_SHOWLINKWARNINGDIALOG,
+        PROPERTYNAME_DISABLEUICUSTOMIZATION,
+        PROPERTYNAME_EXPERIMENTALMODE,
+        PROPERTYNAME_MACRORECORDERMODE,
+        PROPERTYNAME_SIDEBARICONSIZE,
+        PROPERTYNAME_NOTEBOOKBARICONSIZE
     };
-
-    // Initialize return sequence with these list ...
-    const Sequence< OUString > seqPropertyNames( pProperties, SAL_N_ELEMENTS( pProperties ) );
-    // ... and return it.
-    return seqPropertyNames;
 }
 
 namespace {

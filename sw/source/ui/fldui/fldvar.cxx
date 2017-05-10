@@ -259,9 +259,9 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
         m_pValueED->SetText(GetFieldMgr().GetCurFieldPar2());
     }
 
-    if (m_pNameFT->GetText() != OUString(sOldNameFT))
+    if (m_pNameFT->GetText() != sOldNameFT)
         m_pNameFT->SetText(sOldNameFT);
-    if (m_pValueFT->GetText() != OUString(sOldValueFT))
+    if (m_pValueFT->GetText() != sOldValueFT)
         m_pValueFT->SetText(sOldValueFT);
 
     m_pNumFormatLB->SetUpdateMode(false);

@@ -134,7 +134,7 @@ OString OutChar(sal_Unicode c, int* pUCMode, rtl_TextEncoding eDestEnc, bool* pS
 
 OString OutString(const OUString& rStr, rtl_TextEncoding eDestEnc, bool bUnicode)
 {
-    SAL_INFO("filter.ms", OSL_THIS_FUNC << ", rStr = '" << OUString(rStr) << "'");
+    SAL_INFO("filter.ms", OSL_THIS_FUNC << ", rStr = '" << rStr << "'");
     OStringBuffer aBuf;
     int nUCMode = 1;
     for (sal_Int32 n = 0; n < rStr.getLength(); ++n)

@@ -186,8 +186,8 @@ static void save_Separators(
     bool bDetectSpecialNum, bool bFixedWidth, sal_Int32 nFromRow,
     sal_Int32 nCharSet, sal_Int32 nLanguage, ScImportAsciiCall eCall )
 {
-    OUString sFieldSeparators = OUString( maSeparators );
-    OUString sTextSeparators = OUString( maTxtSep );
+    OUString sFieldSeparators = maSeparators;
+    OUString sTextSeparators = maTxtSep;
     Sequence<Any> aValues;
     Any *pProperties;
     Sequence<OUString> aNames( eCall == SC_TEXTTOCOLUMNS ? 4 : 9 );

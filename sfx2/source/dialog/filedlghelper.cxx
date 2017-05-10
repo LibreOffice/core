@@ -2011,7 +2011,7 @@ void FileDialogHelper_Impl::saveConfig()
         }
 
         if ( bWriteConfig )
-            aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aUserData ) ) );
+            aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( aUserData ) );
     }
 
     SfxApplication *pSfxApp = SfxGetpApp();

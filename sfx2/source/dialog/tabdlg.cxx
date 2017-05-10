@@ -359,7 +359,7 @@ void SfxTabDialog::dispose()
                 }
 
                 SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
-                aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aPageData ) ) );
+                aPageOpt.SetUserItem( USERITEM_NAME, makeAny( aPageData ) );
             }
 
             pDataObject->pTabPage.disposeAndClear();
@@ -663,7 +663,7 @@ void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
                 }
 
                 SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
-                aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aPageData ) ) );
+                aPageOpt.SetUserItem( USERITEM_NAME, makeAny( aPageData ) );
             }
 
             pDataObject->pTabPage.disposeAndClear();

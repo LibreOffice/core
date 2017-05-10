@@ -307,7 +307,7 @@ short SvInsertOleDlg::Execute()
                 // create MediaDescriptor for file to create object from
                 uno::Sequence < beans::PropertyValue > aMedium( 2 );
                 aMedium[0].Name = "URL";
-                aMedium[0].Value <<= OUString( aFileName );
+                aMedium[0].Value <<= aFileName;
 
                 uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                 uno::Reference< task::XInteractionHandler2 > xInteraction(

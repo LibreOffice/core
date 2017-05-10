@@ -330,7 +330,7 @@ bool SvxThesaurusDialog::UpdateAlternativesBox_Impl()
 
 void SvxThesaurusDialog::LookUp( const OUString &rText )
 {
-    if (OUString(rText) != m_pWordCB->GetText()) // avoid moving of the cursor if the text is the same
+    if (rText != m_pWordCB->GetText()) // avoid moving of the cursor if the text is the same
         m_pWordCB->SetText( rText );
     LookUp_Impl();
 }

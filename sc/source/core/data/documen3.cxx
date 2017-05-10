@@ -585,8 +585,7 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
         ScTableLink* pLink = new ScTableLink( pShell, aFileName, aFilterName, aOptions, nRefreshDelay );
         pLink->SetInCreate( true );
         OUString aFilName = aFilterName;
-        GetLinkManager()->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, OUString(aFileName),
-                                        &aFilName );
+        GetLinkManager()->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName, &aFilName );
         pLink->Update();
         pLink->SetInCreate( false );
         SfxBindings* pBindings = GetViewBindings();
