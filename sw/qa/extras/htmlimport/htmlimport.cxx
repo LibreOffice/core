@@ -13,6 +13,8 @@
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
+#include <tools/datetime.hxx>
+#include <unotools/datetime.hxx>
 #include <vcl/GraphicNativeTransform.hxx>
 #include <sfx2/linkmgr.hxx>
 
@@ -124,6 +126,26 @@ DECLARE_HTMLIMPORT_TEST(testInlinedImagesPageAndParagraph, "PageAndParagraphFill
         CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xParagraphProperties, "FillBitmapName"));
         CPPUNIT_ASSERT_EQUAL(drawing::BitmapMode_REPEAT, getProperty<drawing::BitmapMode>(xParagraphProperties, "FillBitmapMode"));
     }
+}
+
+DECLARE_HTMLIMPORT_TEST(testMetaIsoDates, "meta-ISO8601-dates.html")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDocShell* pDocShell(pTextDoc->GetDocShell());
+    uno::Reference<document::XDocumentProperties> xDocProps;
+
+    CPPUNIT_ASSERT(pDocShell);
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(pDocShell->GetModel(), uno::UNO_QUERY);
+    xDocProps.set(xDPS->getDocumentProperties());
+
+    // get the document properties
+    CPPUNIT_ASSERT(xDocProps.is());
+    DateTime aCreated(xDocProps->getCreationDate()); // in the new format
+    DateTime aModified(xDocProps->getModificationDate()); // in the legacy format (what LibreOffice used to write)
+
+    CPPUNIT_ASSERT_EQUAL(DateTime(Date(7, 5, 2017), tools::Time(12, 34, 3, 921000000)), aCreated);
+    CPPUNIT_ASSERT_EQUAL(DateTime(Date(8, 5, 2017), tools::Time(12, 47, 0, 386000000)), aModified);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

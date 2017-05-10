@@ -2001,7 +2001,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
                 if (comphelper::string::getTokenCount(aContent, ';') == 2)
                 {
                     Date aDate((sal_uLong)aContent.getToken(0, ';').toInt32());
-                    tools::Time aTime((sal_uLong)aContent.getToken(1, ';').toInt32());
+                    tools::Time aTime((sal_uLong)aContent.getToken(1, ';').toInt64());
                     DateTime aDateTime(aDate, aTime);
                     uDT = aDateTime.GetUNODateTime();
                     valid = true;
