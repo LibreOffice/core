@@ -2101,7 +2101,21 @@ svl::SharedString ScInterpreter::GetString()
             if (nGlobalError)
                 return svl::SharedString::getEmptyString();
 
-            return pToken->GetString();
+            if (pToken->GetType() == svString)
+                return pToken->GetString();
+            else if (pToken->GetType() == svDouble)
+            {
+                //FIXME: Separate function maybe? This construct
+                //is used 4x in this file only
+                double fVal = pToken->GetDouble();
+                sal_uLong nIndex = pFormatter->GetStandardFormat(
+                                    css::util::NumberFormat::NUMBER,
+                                    ScGlobal::eLnge);
+                OUString aStr;
+                pFormatter->GetInputLineString(fVal, nIndex, aStr);
+                return mrStrPool.intern(aStr);
+            }
+            //FIXME: what about other token types? Reference to a reference, anyone? :)
         }
         case svExternalDoubleRef:
         {
