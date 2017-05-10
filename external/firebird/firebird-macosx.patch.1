@@ -1,34 +1,26 @@
---- firebird.org/extern/cloop/src/tests/test1/CTest.c	2016-08-01 22:55:35.000000000 +0200
-+++ firebird/extern/cloop/src/tests/test1/CTest.c	2016-08-02 21:11:31.000000000 +0200
-@@ -20,7 +20,7 @@
-  */
- 
- #include "CalcCApi.h"
--#include <malloc.h>
-+#include <stdlib.h>
- #include <stdio.h>
- 
- #ifdef WIN32
+---- firebird.org/extern/cloop/src/tests/test1/CTest.c	2016-08-01 22:55:35.000000000 +0200
+-+++ firebird/extern/cloop/src/tests/test1/CTest.c	2016-08-02 21:11:31.000000000 +0200
+-@@ -20,7 +20,7 @@
+-  */
+- 
+- #include "CalcCApi.h"
+--#include <malloc.h>
+-+#include <stdlib.h>
+- #include <stdio.h>
+- 
+- #ifdef WIN32
 --- firebird.org/builds/posix/prefix.darwin_x86_64	2016-08-01 20:02:48.000000000 +0200
 +++ firebird/builds/posix/prefix.darwin_x86_64	2016-08-01 21:42:45.000000000 +0200
-@@ -19,8 +19,6 @@
- #
- # Default build from 10.7 using Clang
- 
--DYLD_LIBRARY_PATH=$(HOME)/icu54/icu/source/lib
--export DYLD_LIBRARY_PATH
- 
- #DYLD_PRINT_ENV=1
- #export DYLD_PRINT_ENV
-@@ -31,15 +31,15 @@
+@@ -29,15 +29,15 @@
  MACOSX_DEPLOYMENT_TARGET=10.7
  export MACOSX_DEPLOYMENT_TARGET
  
 -PROD_FLAGS=-O1 -DDARWIN -pipe -MMD -fPIC -fno-common -mmacosx-version-min=10.7
 -DEV_FLAGS=-ggdb -DDARWIN -pipe -MMD -fPIC -fno-omit-frame-pointer -fno-common -Wall -fno-optimize-sibling-calls -mmacosx-version-min=10.7 -Wno-non-virtual-dtor
+-CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden 
 +PROD_FLAGS=-O1 -DDARWIN -pipe -MMD -fPIC -fno-common
 +DEV_FLAGS=-ggdb -DDARWIN -pipe -MMD -fPIC -fno-omit-frame-pointer -fno-common -Wall -fno-optimize-sibling-calls -Wno-non-virtual-dtor
- CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden 
++CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden -msse4
  
  EXE_LINK_OPTIONS:= 
  UNDEF_PLATFORM=
@@ -91,9 +83,9 @@
  	$(MAKE) plugins
  	$(MAKE) examples
  	$(MAKE) rest
-+	install_name_tool -id @__________________________________________________OOO/libfbclient.dylib.3.0.0 $(LIB)/libfbclient.dylib
++	install_name_tool -id @__________________________________________________OOO/libfbclient.dylib.3.0.2 $(LIB)/libfbclient.dylib
 +	install_name_tool -id @__________________________________________________OOO/libEngine12.dylib $(PLUGINS)/libEngine12.dylib
-+	install_name_tool -change $(LIB)/libfbclient.dylib.3.0.0 @loader_path/libfbclient.dylib.3.0.0 $(PLUGINS)/libEngine12.dylib
++	install_name_tool -change $(LIB)/libfbclient.dylib.3.0.2 @loader_path/libfbclient.dylib.3.0.2 $(PLUGINS)/libEngine12.dylib
  
  
  cross_process:
