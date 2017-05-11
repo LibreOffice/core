@@ -390,6 +390,7 @@ private:
     Timer m_aDoubleClickTimer;
     bool m_bWaitingForDoubleClick;
     bool m_bWaitingForMouseUp;
+    bool m_bFieldButtonDown;
 
     bool m_bConnectingToView;
     bool m_bDisposed;

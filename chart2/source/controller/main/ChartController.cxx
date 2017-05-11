@@ -114,6 +114,7 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     m_eDragMode(SdrDragMode::Move),
     m_bWaitingForDoubleClick(false),
     m_bWaitingForMouseUp(false),
+    m_bFieldButtonDown(false),
     m_bConnectingToView(false),
     m_bDisposed(false),
     m_xUndoManager( nullptr ),
