@@ -26,7 +26,9 @@
 #include <vcl/lstbox.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/charmap.hxx>
+#include "charwin.hxx"
 
+using namespace ::com::sun::star;
 class SubsetMap;
 
 #define CHARMAP_MAXLEN  32
@@ -68,22 +70,26 @@ private:
     void            init();
 
     VclPtr<SvxShowCharSet> m_pShowSet;
-    VclPtr<Edit>           m_pShowText;
     VclPtr<PushButton>     m_pOKBtn;
     VclPtr<FixedText>      m_pFontText;
     VclPtr<ListBox>        m_pFontLB;
     VclPtr<FixedText>      m_pSubsetText;
     VclPtr<ListBox>        m_pSubsetLB;
-    VclPtr<FixedText>      m_pSymbolText;
     VclPtr<SvxShowText>    m_pShowChar;
     VclPtr<Edit>           m_pHexCodeText;
     VclPtr<Edit>           m_pDecimalCodeText;
+    VclPtr<SvxCharView>    m_pRecentCharView[16];
     vcl::Font       aFont;
     bool            bOne;
     const SubsetMap* pSubsetMap;
+
+    std::deque<OUString> maRecentCharList;
+    std::deque<OUString> maRecentCharFontList;
+
+    uno::Reference< uno::XComponentContext > mxContext;
+
     enum class Radix : sal_Int16 {decimal = 10, hexadecimal=16};
 
-    DECL_LINK(OKHdl, Button*, void);
     DECL_LINK(FontSelectHdl, ListBox&, void);
     DECL_LINK(SubsetSelectHdl, ListBox&, void);
     DECL_LINK(CharDoubleClickHdl, SvxShowCharSet*,void);
@@ -92,6 +98,9 @@ private:
     DECL_LINK(CharPreSelectHdl, SvxShowCharSet*, void);
     DECL_LINK(DecimalCodeChangeHdl, Edit&, void);
     DECL_LINK(HexCodeChangeHdl, Edit&, void);
+    DECL_LINK(RecentClickHdl, SvxCharView*, void);
+    DECL_LINK(InsertClickHdl, Button*, void);
+    DECL_STATIC_LINK(SvxCharacterMap, LoseFocusHdl, Control&, void);
 
     static void fillAllSubsets(ListBox &rListBox);
     void selectCharByCode(Radix radix);
@@ -99,6 +108,7 @@ private:
 public:
                     SvxCharacterMap( vcl::Window* pParent, bool bOne=true, const SfxItemSet* pSet=nullptr );
     virtual         ~SvxCharacterMap() override;
+    virtual short Execute() override;
     virtual void    dispose() override;
 
     void            DisableFontSelection();
@@ -109,9 +119,11 @@ public:
     void            SetChar( sal_UCS4 );
     sal_UCS4        GetChar() const;
 
-    OUString        GetCharacters() const;
+    void            getRecentCharacterList(); //gets both recent char and recent char font list
+    void            updateRecentCharacterList(const OUString& rChar, const OUString& rFont);
 
-    virtual short   Execute() override;
+    void            updateRecentCharControl();
+    void            insertCharToDoc(const OUString& sChar);
 };
 
 #endif
