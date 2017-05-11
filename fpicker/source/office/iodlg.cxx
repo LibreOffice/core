@@ -1812,8 +1812,6 @@ short SvtFileDialog::PrepareExecute()
                 = aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_ONLY );
             if ( xResultSet.is() )
             {
-                Reference< XRow > xRow( xResultSet, UNO_QUERY );
-
                 bool bEmpty = true;
                 if ( !xResultSet->next() )
                 {

@@ -822,7 +822,6 @@ void Parser::parseLine( const OString& rLine )
     OSL_PRECOND( m_xContext.is(), "Invalid service factory" );
 
     m_nNextToken = 0; m_nCharIndex = 0; m_aLine = rLine;
-    uno::Reference<rendering::XPolyPolygon2D> xPoly;
     const OString& rCmd = readNextToken();
     const hash_entry* pEntry = PdfKeywordHash::in_word_set( rCmd.getStr(),
                                                             rCmd.getLength() );

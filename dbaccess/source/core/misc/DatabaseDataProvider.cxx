@@ -722,7 +722,6 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
     uno::Reference< sdbc::XResultSet> xRes( m_xRowSet, uno::UNO_QUERY_THROW );
     uno::Reference< sdbc::XRow> xRow( m_xRowSet,uno::UNO_QUERY_THROW );
     uno::Reference< sdbc::XResultSetMetaDataSupplier > xSuppMeta( m_xRowSet,uno::UNO_QUERY_THROW );
-    uno::Reference< sdbc::XResultSetMetaData > xResultSetMetaData( xSuppMeta->getMetaData(), uno::UNO_SET_THROW );
     uno::Reference< sdbc::XColumnLocate > xColumnLocate( m_xRowSet, uno::UNO_QUERY_THROW );
 
     for (   ColumnDescriptions::iterator col = aColumns.begin();

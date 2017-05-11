@@ -673,7 +673,6 @@ void SAL_CALL TaskManager::page( sal_Int32 CommandId,
                            const OUString& aUnqPath,
                            const uno::Reference< io::XOutputStream >& xOutputStream )
 {
-    uno::Reference< XContentProvider > xProvider( m_pProvider );
     osl::File aFile( aUnqPath );
     osl::FileBase::RC err = aFile.open( osl_File_OpenFlag_Read );
 

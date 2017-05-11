@@ -3631,7 +3631,6 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
 {
     SfxModelGuard aGuard( *this );
 
-    Reference< embed::XStorage > xResult;
     if ( !m_pData->m_pObjectShell.is() )
         throw io::IOException(); // TODO:
 
@@ -3689,7 +3688,6 @@ void SAL_CALL SfxBaseModel::switchToStorage( const Reference< embed::XStorage >&
 {
     SfxModelGuard aGuard( *this );
 
-    Reference< embed::XStorage > xResult;
     if ( !m_pData->m_pObjectShell.is() )
         throw io::IOException(); // TODO:
 
@@ -3718,7 +3716,6 @@ Reference< embed::XStorage > SAL_CALL SfxBaseModel::getDocumentStorage()
 {
     SfxModelGuard aGuard( *this );
 
-    Reference< embed::XStorage > xResult;
     if ( !m_pData->m_pObjectShell.is() )
         throw io::IOException(); // TODO
 

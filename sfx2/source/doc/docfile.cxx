@@ -1632,7 +1632,6 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
 {
     bool bResult = false;
     Reference< css::ucb::XCommandEnvironment > xDummyEnv;
-    Reference< XOutputStream > aDestStream;
     ::ucbhelper::Content aOriginalContent;
 
     try

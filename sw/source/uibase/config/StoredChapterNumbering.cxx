@@ -414,9 +414,6 @@ void ExportStoredChapterNumberingRules(SwChapterNumRules & rRules,
     uno::Reference<io::XActiveDataSource> const xADS(xWriter, uno::UNO_QUERY);
     xADS->setOutputStream(xOutStream);
 
-    uno::Reference<xml::sax::XDocumentHandler> const xHandler(
-            xWriter, uno::UNO_QUERY);
-
     rtl::Reference<StoredChapterNumberingExport> exp(new StoredChapterNumberingExport(xContext, rFileName, xWriter));
 
     // if style name contains a space then name != display-name

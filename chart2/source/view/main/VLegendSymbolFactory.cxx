@@ -181,8 +181,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
             getPropNamesAndValues( xLegendEntryProperties, aPropNames, aPropValues,
                     ePropertyType, awt::Size(0,0) );// PropertyType::FilledSeries
 
-            Reference< drawing::XShape > xShape =
-                pShapeFactory->createRectangle( xResultGroup,
+            pShapeFactory->createRectangle( xResultGroup,
                         rEntryKeyAspectRatio, awt::Point( 0, 0 ),
                         aPropNames, aPropValues );
         }

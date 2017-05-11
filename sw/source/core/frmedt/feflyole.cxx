@@ -105,7 +105,6 @@ bool SwFEShell::FinishOLEObj()                      // Server is terminated
     bool bRet = pIPClient->IsObjectInPlaceActive();
     if( bRet )
     {
-        uno::Reference < embed::XEmbeddedObject > xObj = pIPClient->GetObject();
         if( CNT_OLE == GetCntType() )
             ClearAutomaticContour();
 

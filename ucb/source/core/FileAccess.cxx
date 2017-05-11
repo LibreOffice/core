@@ -535,7 +535,6 @@ Reference< XOutputStream > OFileAccess::openFileWrite( const OUString& FileURL )
 Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
 {
     Reference< XActiveDataStreamer > xSink = static_cast<XActiveDataStreamer*>(new OActiveDataStreamer);
-    Reference< XInterface > xSinkIface( xSink, UNO_QUERY );
 
     OpenCommandArgument2 aArg;
     aArg.Mode       = OpenMode::DOCUMENT;

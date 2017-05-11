@@ -2285,8 +2285,6 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
     , bNeedIntrospection( true )
     , bNativeCOMObject( false )
 {
-    static Reference< XIntrospection > xIntrospection;
-
     // beat out again the default properties of Sbx
     Remove( "Name", SbxClassType::DontCare );
     Remove( "Parent", SbxClassType::DontCare );
@@ -3362,7 +3360,6 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
         {
             // Is it a field(?)
             Reference< XIdlField > xField = m_xClass->getField( rName );
-            Reference< XIdlClass > xClass;
             if( xField.is() )
             {
                 try

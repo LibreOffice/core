@@ -337,7 +337,6 @@ struct AnnotatingVisitor
                             maElementVector[aFound->second]->cloneNode(true), uno::UNO_QUERY);
 
                         xRefElem->removeAttribute("id");
-                        uno::Reference<xml::dom::XNode> xAttrNode;
 
                         const sal_Int32 nNumAttrs( xAttributes->getLength() );
                         OUString sAttributeValue;

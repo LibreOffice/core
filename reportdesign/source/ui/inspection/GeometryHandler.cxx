@@ -2074,8 +2074,6 @@ void GeometryHandler::impl_initFieldList_nothrow( uno::Sequence< OUString >& _rF
         VclPtr<vcl::Window> pInspectorWindow = VCLUnoHelper::GetWindow( xInspectorWindow );
         WaitObject aWaitCursor( pInspectorWindow );
 
-        uno::Reference< sdbc::XPreparedStatement >  xStatement;
-
         // get the form of the control we're inspecting
         uno::Reference< beans::XPropertySet > xFormSet( m_xRowSet, uno::UNO_QUERY );
         if ( !xFormSet.is() )

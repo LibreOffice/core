@@ -280,7 +280,6 @@ SwVbaDocument::setAttachedTemplate( const css::uno::Any& _attachedtemplate )
     else
         osl::FileBase::getFileURLFromSystemPath( sTemplate, aURL );
 
-    uno::Reference< word::XTemplate > xTemplate;
     uno::Reference<css::document::XDocumentPropertiesSupplier> const xDocPropSupp(
             getModel(), uno::UNO_QUERY_THROW );
     uno::Reference< css::document::XDocumentProperties > xDocProps( xDocPropSupp->getDocumentProperties(), uno::UNO_QUERY_THROW );

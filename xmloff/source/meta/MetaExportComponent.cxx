@@ -165,8 +165,7 @@ void XMLMetaExportComponent::ExportMeta_()
         OUString generator( ::utl::DocInfoHelper::GetGeneratorString() );
         // update generator here
         mxDocProps->setGenerator(generator);
-        SvXMLMetaExport * pMeta = new SvXMLMetaExport(*this, mxDocProps);
-        uno::Reference<xml::sax::XDocumentHandler> xMeta(pMeta);
+        rtl::Reference<SvXMLMetaExport> pMeta = new SvXMLMetaExport(*this, mxDocProps);
         pMeta->Export();
     } else {
         SvXMLExport::ExportMeta_();

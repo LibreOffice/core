@@ -385,10 +385,6 @@ uno::Any SwXTextView::getSelection()
             case ShellMode::DrawText        :
             case ShellMode::Bezier          :
             {
-                uno::Reference< drawing::XDrawPageSupplier >  xPageSupp;
-                uno::Reference< frame::XModel > xModel = m_pView->GetDocShell()->GetBaseModel();
-                uno::Reference< lang::XUnoTunnel > xModelTunnel(xModel, uno::UNO_QUERY);
-
                 uno::Reference< drawing::XShapes >  xShCol = drawing::ShapeCollection::create(
                         comphelper::getProcessComponentContext());
 

@@ -505,7 +505,6 @@ void SwXRedline::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    uno::Reference< container::XEnumeration > xRet;
     if(!pDoc)
         throw uno::RuntimeException();
 

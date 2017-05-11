@@ -162,9 +162,7 @@ void setTrendlineVisible(const css::uno::Reference<css::frame::XModel>&
 
     if (bVisible)
     {
-        /* code */
-        uno::Reference< chart2::XRegressionCurve > xCurve =
-            RegressionCurveHelper::addRegressionCurve(
+        RegressionCurveHelper::addRegressionCurve(
                     SvxChartRegress::Linear,
                     xRegressionCurveContainer,
                     comphelper::getProcessComponentContext());

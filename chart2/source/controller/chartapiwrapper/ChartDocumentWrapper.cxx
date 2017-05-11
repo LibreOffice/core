@@ -687,7 +687,6 @@ Reference< drawing::XShape > SAL_CALL ChartDocumentWrapper::getLegend()
     if( ! m_xLegend.is())
     {
         m_xLegend = new LegendWrapper( m_spChart2ModelContact );
-        Reference< lang::XComponent > xComp( m_xLegend, uno::UNO_QUERY );
     }
 
     return m_xLegend;
@@ -698,7 +697,6 @@ Reference< beans::XPropertySet > SAL_CALL ChartDocumentWrapper::getArea()
     if( ! m_xArea.is())
     {
         m_xArea.set( new AreaWrapper( m_spChart2ModelContact ) );
-        Reference< lang::XComponent > xComp( m_xArea, uno::UNO_QUERY );
     }
 
     return m_xArea;

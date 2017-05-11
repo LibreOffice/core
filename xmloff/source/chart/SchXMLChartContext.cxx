@@ -1163,7 +1163,6 @@ void SchXMLChartContext::InitChart(
 {
     uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
     SAL_WARN_IF( !xDoc.is(), "xmloff.chart", "No valid document!" );
-    uno::Reference< frame::XModel > xModel (xDoc, uno::UNO_QUERY );
 
     // Remove Title and Diagram ("De-InitNew")
     uno::Reference< chart2::XChartDocument > xNewDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );

@@ -1008,9 +1008,7 @@ void SwContentTree::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
     {
         ReleaseMouse();
 
-        TransferDataContainer* pContainer = new TransferDataContainer;
-        uno::Reference<
-            datatransfer::XTransferable > xRef( pContainer );
+        rtl::Reference<TransferDataContainer> pContainer = new TransferDataContainer;
 
         sal_Int8 nDragMode = DND_ACTION_COPYMOVE | DND_ACTION_LINK;
         if( FillTransferData( *pContainer, nDragMode ))

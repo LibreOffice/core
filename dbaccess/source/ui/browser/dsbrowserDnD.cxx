@@ -186,13 +186,12 @@ namespace dbaui
         if (!isObject(eEntryType))
             return false;
 
-        TransferableHelper* pTransfer = implCopyObject( pHitEntry, ( etTableOrView == eEntryType ) ? CommandType::TABLE : CommandType::QUERY);
-        Reference< XTransferable> xEnsureDelete = pTransfer;
+        rtl::Reference<TransferableHelper> pTransfer = implCopyObject( pHitEntry, ( etTableOrView == eEntryType ) ? CommandType::TABLE : CommandType::QUERY);
 
         if (pTransfer)
             pTransfer->StartDrag( &m_pTreeView->getListBox(), DND_ACTION_COPY );
 
-        return nullptr != pTransfer;
+        return pTransfer.is();
     }
     IMPL_LINK_NOARG(SbaTableQueryBrowser, OnCopyEntry, LinkParamNone*, void)
     {

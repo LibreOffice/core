@@ -64,8 +64,6 @@ uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetStorageFactory(
 uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetFileSystemStorageFactory(
                             const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Reference< uno::XComponentContext> xContext = rxContext.is() ? rxContext : ::comphelper::getProcessComponentContext();
-
     return embed::FileSystemStorageFactory::create(rxContext);
 }
 

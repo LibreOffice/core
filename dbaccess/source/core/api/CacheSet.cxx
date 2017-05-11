@@ -205,9 +205,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
     if(xIndexSup.is())
         xIndexes.set(xIndexSup->getIndexes(),UNO_QUERY);
 
-    //  Reference<XColumnsSupplier>
     Reference<XPropertySet> xIndexColsSup;
-    Reference<XNameAccess> xIndexColumns;
     std::vector< Reference<XNameAccess> > aAllIndexColumns;
     if(xIndexes.is())
     {
@@ -334,7 +332,6 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
 
     //  Reference<XColumnsSupplier>
     Reference<XPropertySet> xIndexColsSup;
-    Reference<XNameAccess> xIndexColumns;
     std::vector< Reference<XNameAccess> > aAllIndexColumns;
     if(xIndexes.is())
     {

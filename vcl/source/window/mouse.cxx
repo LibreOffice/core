@@ -655,7 +655,7 @@ Reference< css::datatransfer::dnd::XDropTarget > Window::GetDropTarget()
             if( ! mpWindowImpl->mpFrameData->mxDropTarget.is() )
             {
                 // initialization is done in GetDragSource
-                Reference< css::datatransfer::dnd::XDragSource > xDragSource = GetDragSource();
+                GetDragSource();
             }
 
             if( mpWindowImpl->mpFrameData->mxDropTarget.is() )

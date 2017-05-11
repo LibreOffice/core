@@ -47,9 +47,6 @@ static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMo
                                    bool bEnsureFileExists )
 {
     SvStream* pStream = nullptr;
-    Reference< XUniversalContentBroker > ucb(
-        UniversalContentBroker::create(
-            comphelper::getProcessComponentContext() ) );
     UcbLockBytesRef xLockBytes;
     if ( eOpenMode & StreamMode::WRITE )
     {

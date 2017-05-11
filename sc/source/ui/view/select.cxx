@@ -184,8 +184,7 @@ void ScViewFunctionSet::BeginDrag()
                 aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
                 // maSize is set in ScTransferObj ctor
 
-                ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
-                uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+                rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
 
                 // set position of dragged cell within range
                 ScRange aMarkRange = pTransferObj->GetRange();
@@ -203,7 +202,7 @@ void ScViewFunctionSet::BeginDrag()
                 if ( pWindow->IsTracking() )
                     pWindow->EndTracking( TrackingEventFlags::Cancel );    // abort selecting
 
-                SC_MOD()->SetDragObject( pTransferObj, nullptr );      // for internal D&D
+                SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
                 pTransferObj->StartDrag( pWindow, nDragActions );
 
                 return;         // dragging started

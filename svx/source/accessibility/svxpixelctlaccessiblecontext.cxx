@@ -82,7 +82,6 @@ uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleChild( sal_Int
     ::osl::MutexGuard   aGuard( m_aMutex );
     if ( i < 0 || i >= getAccessibleChildCount())
         throw lang::IndexOutOfBoundsException();
-    uno::Reference <XAccessible> xAcc;
     return CreateChild(i, mrPixelCtl.IndexToPoint(i));
 }
 
@@ -213,7 +212,6 @@ uno::Reference<XAccessible > SAL_CALL SvxPixelCtlAccessible::getAccessibleAtPoin
     ::osl::MutexGuard   aGuard( m_aMutex );
     if( !IsAlive() )
         throw lang::DisposedException();
-    uno::Reference <XAccessible> xAcc;
 
     Point childPoint;
     childPoint.X() = aPoint.X;

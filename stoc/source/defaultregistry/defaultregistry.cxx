@@ -1223,8 +1223,6 @@ void SAL_CALL NestedRegistryImpl::destroy(  )
 
 Reference< XRegistryKey > SAL_CALL NestedRegistryImpl::getRootKey(  )
 {
-    Reference<XRegistryKey> tmpKey;
-
     Guard< Mutex > aGuard( m_mutex );
     if ( m_localReg.is() && m_localReg->isValid() )
     {

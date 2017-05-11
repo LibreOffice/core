@@ -3260,7 +3260,6 @@ void DomainMapper_Impl::handleAuthor
         };
         uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(m_xTextDocument, uno::UNO_QUERY);
         uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
-        const uno::Reference< beans::XPropertyContainer > xUserProps = xDocumentProperties->getUserDefinedProperties();
         uno::Reference<beans::XPropertySet>  xUserDefinedProps(xDocumentProperties->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySetInfo> xPropertySetInfo =  xUserDefinedProps->getPropertySetInfo();
         //search for a field mapping

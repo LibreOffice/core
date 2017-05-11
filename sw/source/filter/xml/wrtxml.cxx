@@ -77,7 +77,6 @@ sal_uInt32 SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >&
             comphelper::getProcessComponentContext();
 
     // Get data sink ...
-    uno::Reference< io::XOutputStream > xOut;
     tools::SvRef<SotStorageStream> xDocStream;
     uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
     SvXMLGraphicHelper *pGraphicHelper = nullptr;

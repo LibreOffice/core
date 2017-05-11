@@ -733,8 +733,7 @@ void OTableEditorCtrl::CopyRows()
     }
     if(!vClipboardList.empty())
     {
-        OTableRowExchange* pData = new OTableRowExchange(vClipboardList);
-        Reference< css::datatransfer::XTransferable> xRef = pData;
+        rtl::Reference<OTableRowExchange> pData = new OTableRowExchange(vClipboardList);
         pData->CopyToClipboard(GetParent());
     }
 }

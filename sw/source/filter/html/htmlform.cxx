@@ -575,7 +575,6 @@ void SwHTMLImageWatcher::disposing(const lang::EventObject& evt)
     uno::Reference< awt::XImageConsumer > xTmp;
 
     // Wenn das Shape verschwindet soll muessen wir es loslassen
-    uno::Reference< drawing::XShape > xTmpShape;
     if( evt.Source == xShape )
     {
         clear();
@@ -1849,9 +1848,8 @@ void SwHTMLParser::InsertInput()
 
     if( bSetGrfWidth || bSetGrfHeight )
     {
-        SwHTMLImageWatcher* pWatcher =
+        rtl::Reference<SwHTMLImageWatcher> pWatcher =
             new SwHTMLImageWatcher( xShape, bSetGrfWidth, bSetGrfHeight );
-        uno::Reference< awt::XImageConsumer > xCons = pWatcher;
         pWatcher->start();
     }
 }

@@ -221,12 +221,6 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
                     // connect parser and filter
                     xParser->setDocumentHandler( xFilter );
 
-                    // connect model and filter
-                    uno::Reference<document::XImporter> xImporter( xFilter, UNO_QUERY );
-
-                    // we don't need a model
-                    // xImporter->setTargetDocument( xModelComponent );
-
                     // parse the stream
                     try
                     {

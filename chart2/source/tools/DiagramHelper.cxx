@@ -769,7 +769,6 @@ std::vector< Reference< XAxis > > lcl_getAxisHoldingCategoriesFromDiagram(
 {
     std::vector< Reference< XAxis > > aRet;
 
-    Reference< XAxis > xResult;
     // return first x-axis as fall-back
     Reference< XAxis > xFallBack;
     try

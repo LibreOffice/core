@@ -1173,7 +1173,6 @@ tServiceNameMap & lcl_getStaticServiceNameMap()
 // ____ XMultiServiceFactory ____
 Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString& rServiceSpecifier )
 {
-    uno::Reference< uno::XInterface > xResult;
     tServiceNameMap & rMap = lcl_getStaticServiceNameMap();
 
     tServiceNameMap::const_iterator aIt( rMap.find( rServiceSpecifier ));

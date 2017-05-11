@@ -777,7 +777,6 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
                         uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
                         if (xShape.is())
                         {
-                            uno::Reference< uno::XInterface > xAnchor;
                             if (ScDrawLayer::GetAnchorType(*pObj) == SCA_CELL)
                             {
                                 awt::Size aUnoSize;

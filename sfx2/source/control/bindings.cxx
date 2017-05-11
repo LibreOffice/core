@@ -1137,8 +1137,6 @@ void SfxBindings::UpdateSlotServer_Impl()
     {
         if ( !nRegLevel )
         {
-            css::uno::Reference < css::frame::XFrame > xFrame
-                ( pDispatcher->GetFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
             pImpl->bContextChanged = false;
         }
         else
@@ -1728,7 +1726,6 @@ bool SfxBindings::IsInUpdate() const
 
 void SfxBindings::SetVisibleState( sal_uInt16 nId, bool bShow )
 {
-    css::uno::Reference< css::frame::XDispatch >  xDisp;
     SfxStateCache *pCache = GetStateCache( nId );
     if ( pCache )
         pCache->SetVisibleState( bShow );

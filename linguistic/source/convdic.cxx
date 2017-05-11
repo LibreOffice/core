@@ -142,10 +142,7 @@ bool IsConvDic( const OUString &rFileURL, LanguageType &nLang, sal_Int16 &nConvT
     // first argument being 0 should stop the file from being parsed
     // up to the end (reading all entries) when the required
     // data (language, conversion type) is found.
-    ConvDicXMLImport *pImport = new ConvDicXMLImport( nullptr );
-
-    //!! keep a first reference to ensure the lifetime of the object !!
-    uno::Reference< XInterface > xRef( static_cast<document::XFilter *>(pImport), UNO_QUERY );
+    rtl::Reference<ConvDicXMLImport> pImport = new ConvDicXMLImport( nullptr );
 
     ReadThroughDic( rFileURL, *pImport );    // will implicitly add the entries
     bRes =  !LinguIsUnspecified( pImport->GetLanguage()) &&
@@ -220,9 +217,7 @@ void ConvDic::Load()
 
     //!! prevent function from being called recursively via HasEntry, AddEntry
     bNeedEntries = false;
-    ConvDicXMLImport *pImport = new ConvDicXMLImport( this );
-    //!! keep a first reference to ensure the lifetime of the object !!
-    uno::Reference< XInterface > xRef( static_cast<document::XFilter *>(pImport), UNO_QUERY );
+    rtl::Reference<ConvDicXMLImport> pImport = new ConvDicXMLImport( this );
     ReadThroughDic( aMainURL, *pImport );    // will implicitly add the entries
     bIsModified = false;
 }
@@ -263,10 +258,7 @@ void ConvDic::Save()
 
         // prepare arguments (prepend doc handler to given arguments)
         uno::Reference< xml::sax::XDocumentHandler > xDocHandler( xSaxWriter, UNO_QUERY );
-        ConvDicXMLExport *pExport = new ConvDicXMLExport( *this, aMainURL, xDocHandler );
-        //!! keep a first(!) reference until everything is done to
-        //!! ensure the proper lifetime of the object
-        uno::Reference< document::XFilter > aRef( static_cast<document::XFilter *>(pExport) );
+        rtl::Reference<ConvDicXMLExport> pExport = new ConvDicXMLExport( *this, aMainURL, xDocHandler );
         bool bRet = pExport->Export();     // write entries to file
         DBG_ASSERT( !pStream->GetError(), "I/O error while writing to stream" );
         if (bRet)

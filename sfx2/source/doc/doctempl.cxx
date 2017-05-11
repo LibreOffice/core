@@ -1527,7 +1527,6 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
 
     if ( xResultSet.is() )
     {
-        uno::Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
         uno::Reference< XRow > xRow( xResultSet, UNO_QUERY );
 
         try

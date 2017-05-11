@@ -1303,8 +1303,6 @@ void SAL_CALL LayoutManager::setDockingAreaAcceptor( const Reference< ui::XDocki
             if( pContainerWindow )
                 m_bParentWindowVisible = pContainerWindow->IsVisible();
         }
-
-        uno::Reference< awt::XWindowPeer > xParent( m_xContainerWindow, UNO_QUERY );
     }
 
     aWriteLock.clear();
@@ -1411,7 +1409,6 @@ void SAL_CALL LayoutManager::createElement( const OUString& aName )
 
     SolarMutexClearableGuard aReadLock;
     Reference< XFrame > xFrame = m_xFrame;
-    Reference< XURLTransformer > xURLTransformer = m_xURLTransformer;
     bool    bInPlaceMenu = m_bInplaceMenuSet;
     aReadLock.clear();
 
@@ -1550,7 +1547,6 @@ void SAL_CALL LayoutManager::destroyElement( const OUString& aName )
     OUString aElementType;
     OUString aElementName;
 
-    Reference< XComponent > xComponent;
     parseResourceURL( aName, aElementType, aElementName );
 
     if ( aElementType.equalsIgnoreAsciiCase("menubar") &&

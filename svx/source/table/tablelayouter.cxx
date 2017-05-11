@@ -820,7 +820,6 @@ void TableLayouter::LayoutTable( tools::Rectangle& rRectangle, bool bFitWidth, b
         if( static_cast< sal_Int32 >( maRows.size() ) != nRowCount )
             maRows.resize( nRowCount );
 
-        Reference< XTableRows > xRows( mxTable->getRows() );
         for( sal_Int32 nRow = 0; nRow < nRowCount; nRow++ )
             maRows[nRow].clear();
 

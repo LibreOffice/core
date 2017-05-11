@@ -54,8 +54,6 @@ void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
     if (!pDoc)
         return;
 
-    uno::Reference< frame::XModel > xRes;
-
     SwOLENode *pONd;
     SwStartNode *pStNd;
     SwNodeIndex aIdx( *pDoc->GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );

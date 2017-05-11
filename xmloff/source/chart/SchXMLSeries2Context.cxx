@@ -100,7 +100,6 @@ void SchXMLDomain2Context::StartElement( const uno::Reference< xml::sax::XAttrib
         if( nPrefix == XML_NAMESPACE_TABLE &&
             IsXMLToken( aLocalName, XML_CELL_RANGE_ADDRESS ) )
         {
-            Reference< chart2::XChartDocument > xNewDoc( GetImport().GetModel(), uno::UNO_QUERY );
             mrAddresses.push_back( xAttrList->getValueByIndex( i ));
         }
     }

@@ -277,7 +277,6 @@ void SvxSpellWrapper::SpellDocument( )
 
     if ( FindSpellError() )
     {
-        Reference< XSpellAlternatives >     xAlt( GetLast(), UNO_QUERY );
         Reference< XHyphenatedWord >        xHyphWord( GetLast(), UNO_QUERY );
 
         vcl::Window *pOld = pWin;
@@ -436,8 +435,6 @@ Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic()
 bool SvxSpellWrapper::FindSpellError()
 {
     ShowLanguageErrors();
-
-     Reference< XInterface >    xRef;
 
     WAIT_ON();
     bool bSpell = true;

@@ -292,7 +292,6 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
         OUString             aModule;
         OUString             aService;
         OUString             aHashKey;
-        Reference< XPropertySet > xPropertySet;
         for ( sal_Int32 i = 0; i < aUIElementFactories.getLength(); i++ )
         {
             if ( impl_getElementProps( m_xConfigAccess->getByName( aUIElementFactories[i] ), aType, aName, aModule, aService ))

@@ -202,8 +202,6 @@ void SwXMLExport::ExportAutoStyles_()
     if( getExportFlags() & SvXMLExportFlags::CONTENT )
     {
         GetTextParagraphExport()->exportTrackedChanges( true );
-        Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
-        Reference < XText > xText = xTextDoc->getText();
 
         // collect form autostyle
         // (do this before collectTextAutoStyles, 'cause the shapes need the results of the work

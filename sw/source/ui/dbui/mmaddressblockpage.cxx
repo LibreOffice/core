@@ -1281,9 +1281,7 @@ void  DDListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
     {
         ReleaseMouse();
 
-        TransferDataContainer* pContainer = new TransferDataContainer;
-        uno::Reference<
-             datatransfer::XTransferable > xRef( pContainer );
+        rtl::Reference<TransferDataContainer> pContainer = new TransferDataContainer;
 
         sal_Int32 nUserData = (sal_Int32)reinterpret_cast<sal_IntPtr>(pEntry->GetUserData());
         //special entries can only be once in the address / greeting

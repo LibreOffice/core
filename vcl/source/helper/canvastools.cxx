@@ -197,8 +197,6 @@ namespace vcl
 
             // volatile bitmaps are a bit more complicated to read
             // from..
-            uno::Reference<rendering::XVolatileBitmap> xVolatileBitmap(
-                xInputBitmap, uno::UNO_QUERY);
 
             // loop a few times, until successfully read (for XVolatileBitmap)
             for( int i=0; i<10; ++i )

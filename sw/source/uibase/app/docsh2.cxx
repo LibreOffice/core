@@ -808,8 +808,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                     else
                     {
-                        TransferDataContainer* pClipCntnr = new TransferDataContainer;
-                        css::uno::Reference< css::datatransfer::XTransferable > xRef( pClipCntnr );
+                        rtl::Reference<TransferDataContainer> pClipCntnr = new TransferDataContainer;
 
                         pClipCntnr->CopyAnyData( SotClipboardFormatId::RTF, static_cast<sal_Char const *>(
                                     pStrm->GetData()), pStrm->GetEndOfData() );

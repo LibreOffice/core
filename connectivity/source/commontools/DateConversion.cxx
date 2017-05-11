@@ -444,7 +444,6 @@ OUString DBTypeConversion::getFormattedValue(const Reference< XPropertySet>& _xC
     if (!nKey)
     {
         Reference<XNumberFormats> xFormats( _xFormatter->getNumberFormatsSupplier()->getNumberFormats() );
-        Reference<XNumberFormatTypes> xTypeList(_xFormatter->getNumberFormatsSupplier()->getNumberFormats(), UNO_QUERY);
 
         nKey = ::dbtools::getDefaultNumberFormat(_xColumn,
                                            Reference< XNumberFormatTypes > (xFormats, UNO_QUERY),

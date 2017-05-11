@@ -1124,7 +1124,6 @@ bool FmXFormShell::executeControlConversionSlot(const Reference< XFormComponent 
                 return false;
 
             Reference< XControlModel> xOldModel( pFormObject->GetUnoControlModel() );
-            Reference< lang::XServiceInfo> xModelInfo(xOldModel, UNO_QUERY);
 
             // transfer properties
             Reference< XPropertySet> xOldSet(xOldModel, UNO_QUERY);

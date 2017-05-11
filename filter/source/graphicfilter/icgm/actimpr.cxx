@@ -420,7 +420,7 @@ void CGMImpressOutAct::EndGroup()
                         aXShapes->add( aXShape );
                     }
                 }
-                uno::Reference< drawing::XShapeGroup >  aXShapeGroup = aXShapeGrouper->group( aXShapes );
+                aXShapeGrouper->group( aXShapes );
             }
         }
     }

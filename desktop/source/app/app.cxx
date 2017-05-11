@@ -2021,7 +2021,6 @@ void Desktop::OpenClients()
 
     // check if a document has been recovered - if there is one of if a document was loaded by cmdline, no default document
     // should be created
-    Reference < XComponent > xFirst;
     bool bRecovery = false;
 
     const CommandLineArgs& rArgs = GetCommandLineArgs();

@@ -328,13 +328,7 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const OUString&                    
         aCfg.setEnvironment(JobData::E_DISPATCH);
         const bool bIsEnabled=aCfg.hasCorrectContext(m_sModuleIdentifier);
 
-        /*Attention!
-            Jobs implements interfaces and dies by ref count!
-            And freeing of such uno object is done by uno itself.
-            So we have to use dynamic memory everytimes.
-         */
-        Job* pJob = new Job(m_xContext, m_xFrame);
-        css::uno::Reference< css::uno::XInterface > xJob(static_cast< ::cppu::OWeakObject* >(pJob), css::uno::UNO_QUERY);
+        rtl::Reference<Job> pJob = new Job(m_xContext, m_xFrame);
         pJob->setJobData(aCfg);
 
         aReadLock.clear();
@@ -395,8 +389,7 @@ void JobDispatch::impl_dispatchService( /*IN*/ const OUString&                  
         And freeing of such uno object is done by uno itself.
         So we have to use dynamic memory everytimes.
      */
-    Job* pJob = new Job(m_xContext, m_xFrame);
-    css::uno::Reference< css::uno::XInterface > xJob(static_cast< ::cppu::OWeakObject* >(pJob), css::uno::UNO_QUERY);
+    rtl::Reference<Job> pJob = new Job(m_xContext, m_xFrame);
     pJob->setJobData(aCfg);
 
     aReadLock.clear();
@@ -440,13 +433,7 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const OUString&                    
     aCfg.setAlias(sAlias);
     aCfg.setEnvironment(JobData::E_DISPATCH);
 
-    /*Attention!
-        Jobs implements interfaces and dies by ref count!
-        And freeing of such uno object is done by uno itself.
-        So we have to use dynamic memory everytimes.
-     */
-    Job* pJob = new Job(m_xContext, m_xFrame);
-    css::uno::Reference< css::uno::XInterface > xJob(static_cast< ::cppu::OWeakObject* >(pJob), css::uno::UNO_QUERY);
+    rtl::Reference<Job> pJob = new Job(m_xContext, m_xFrame);
     pJob->setJobData(aCfg);
 
     aReadLock.clear();

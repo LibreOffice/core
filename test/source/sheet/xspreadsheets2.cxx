@@ -247,7 +247,7 @@ void XSpreadsheets2::testImportCellStyle()
     importSheetToCopy();
 
     uno::Reference< table::XCell > xSrcCell = xSrcSheet->getCellByPosition(3,0);
-    uno::Reference< table::XCell > xDestCell = xDestSheet->getCellByPosition(3,0);
+    xDestSheet->getCellByPosition(3,0);
 
     //new style created in dest
     uno::Reference< beans::XPropertySet > xSrcCellPropSet (xSrcCell, UNO_QUERY_THROW);

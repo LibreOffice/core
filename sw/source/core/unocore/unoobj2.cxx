@@ -1191,7 +1191,6 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
         case SwFootnoteStartNode:
         {
             const size_t nFootnoteCnt = rDoc.GetFootnoteIdxs().size();
-            uno::Reference< text::XFootnote >  xRef;
             for (size_t n = 0; n < nFootnoteCnt; ++n )
             {
                 const SwTextFootnote* pTextFootnote = rDoc.GetFootnoteIdxs()[ n ];

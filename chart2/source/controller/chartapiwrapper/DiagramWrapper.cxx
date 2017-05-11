@@ -687,8 +687,6 @@ Reference<
         throw lang::IndexOutOfBoundsException("DataSeries index invalid",
                                               static_cast< ::cppu::OWeakObject * >( this ));
 
-    Reference< chart2::XDataSeries > xSeries;
-
     sal_Int32 nNewAPIIndex = lcl_getNewAPIIndexForOldAPIIndex( nRow, m_spChart2ModelContact->getChart2Diagram() );
     if( nNewAPIIndex < 0 )
         throw lang::IndexOutOfBoundsException("DataSeries index invalid",
@@ -705,8 +703,6 @@ Reference<
     if( nCol < 0 || nRow < 0 )
         throw lang::IndexOutOfBoundsException("DataSeries index invalid",
                                               static_cast< ::cppu::OWeakObject * >( this ));
-
-    Reference< chart2::XDataSeries > xSeries;
 
     sal_Int32 nNewAPIIndex = lcl_getNewAPIIndexForOldAPIIndex( nRow, m_spChart2ModelContact->getChart2Diagram() );
     if( nNewAPIIndex < 0 )

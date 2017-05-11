@@ -63,8 +63,7 @@ VCLXAccessibleBox::~VCLXAccessibleBox()
 
 void VCLXAccessibleBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent )
 {
-       uno::Any aOldValue, aNewValue;
-    uno::Reference<XAccessible> xAcc;
+    uno::Any aOldValue, aNewValue;
 
     switch ( rVclWindowEvent.GetId() )
     {

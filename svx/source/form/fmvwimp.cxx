@@ -1395,8 +1395,6 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
     if ( !m_pView->IsDesignMode() )
         return nullptr;
 
-    Reference< XComponent > xKeepFieldsAlive;
-
     // go
     try
     {

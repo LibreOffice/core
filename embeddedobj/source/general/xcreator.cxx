@@ -69,8 +69,6 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
                                             const OUString& sEntName,
                                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
-    uno::Reference< uno::XInterface > xResult;
-
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             static_cast< ::cppu::OWeakObject* >(this),
@@ -277,8 +275,6 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
         const uno::Sequence< beans::PropertyValue >& aArgs,
         const uno::Sequence< beans::PropertyValue >& aObjectArgs )
 {
-    uno::Reference< uno::XInterface > xResult;
-
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( "No parent storage is provided!",
                                             static_cast< ::cppu::OWeakObject* >(this),

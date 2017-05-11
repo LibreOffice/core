@@ -859,7 +859,6 @@ void ChartController::executeDispatch_ToggleLegend()
 
 void ChartController::executeDispatch_ToggleGridHorizontal()
 {
-    Reference< frame::XModel > xModel( getModel() );
     UndoGuard aUndoGuard(
         SCH_RESSTR( STR_ACTION_TOGGLE_GRID_HORZ ), m_xUndoManager );
     Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( getModel() ));
@@ -893,7 +892,6 @@ void ChartController::executeDispatch_ToggleGridHorizontal()
 
 void ChartController::executeDispatch_ToggleGridVertical()
 {
-    Reference< frame::XModel > xModel( getModel() );
     UndoGuard aUndoGuard(
         SCH_RESSTR( STR_ACTION_TOGGLE_GRID_VERTICAL ), m_xUndoManager );
     Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( getModel() ));

@@ -1335,15 +1335,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 vcl::Window* pWin = GetViewData()->GetActiveWin();
                 ScDocument* pDoc = GetViewData()->GetDocument();
                 bool bOtherDoc = !pDoc->IsClipboardSource();
-                ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
+                // keep a reference in case the clipboard is changed during dialog or PasteFromClip
+                rtl::Reference<ScTransferObj> pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
                 if ( pOwnClip )
                 {
                     bool bSkipEmpty = false;
                     bool bTranspose = false;
                     bool bAsLink    = false;
 
-                    // keep a reference in case the clipboard is changed during dialog or PasteFromClip
-                    uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
                     if ( pReqArgs!=nullptr && pTabViewShell->SelectionEditable() )
                     {
                         const   SfxPoolItem* pItem;

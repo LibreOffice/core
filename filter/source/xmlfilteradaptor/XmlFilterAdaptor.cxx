@@ -77,8 +77,6 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
         xStatusIndicator->start( "Loading :",nProgressRange);
     }
 
-    Reference < XParser > xSaxParser = Parser::create( mxContext );
-
     Sequence< Any > aAnys(1);
     OUString aBaseURI;
     if (aMediaMap.find(OUString( "URL" ))->second >>= aBaseURI)

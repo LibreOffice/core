@@ -981,7 +981,6 @@ void AxisHelper::getAxisOrGridExcistence( Sequence< sal_Bool >& rExistenceList
     if(bAxis)
     {
         sal_Int32 nN;
-        Reference< XAxis > xAxis;
         for(nN=0;nN<3;nN++)
             rExistenceList[nN] = AxisHelper::isAxisShown( nN, true, xDiagram );
         for(nN=3;nN<6;nN++)

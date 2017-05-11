@@ -630,8 +630,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument()
         }
     }
 
-    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
+    rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
     pList->AddAttribute( ATTRIBUTE_XMLNS_TOOLBAR,
                          m_aAttributeType,
@@ -646,7 +645,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument()
                              m_aAttributeType,
                              aUIName );
 
-    m_xWriteDocumentHandler->startElement( ELEMENT_NS_TOOLBAR, pList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_TOOLBAR, pList.get() );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     sal_Int32  nItemCount = m_rItemAccess->getCount();

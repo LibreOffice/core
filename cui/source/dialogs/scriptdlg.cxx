@@ -524,7 +524,6 @@ short SvxScriptOrgDialog::Execute()
                                         ( pDoc->GetModel(), UNO_QUERY );
         if ( xSPS.is() )
         {
-            Reference< provider::XScriptProvider > ScriptProvider =
             xSPS->getScriptProvider();
         }
 

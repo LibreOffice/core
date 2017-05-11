@@ -730,10 +730,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             break;
         case FN_CALCULATE:
             {
-                SwTransferable* pTransfer = new SwTransferable( rWrtSh );
-/*??*/          uno::Reference<
-                    datatransfer::XTransferable > xRef(
-                                                    pTransfer );
+                rtl::Reference<SwTransferable> pTransfer = new SwTransferable( rWrtSh );
                 pTransfer->CalculateAndCopy();
                 rReq.Done();
             }

@@ -180,7 +180,6 @@ namespace xmloff
         Sequence< ScriptEventDescriptor > aElementEvents;
 
         Reference< XPropertySetInfo > xPropsInfo;
-        Reference< XIndexAccess > xCurrentContainer;
         for (sal_Int32 i=0; i<nElements; ++i)
         {
             try

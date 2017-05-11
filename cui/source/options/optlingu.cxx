@@ -1574,7 +1574,6 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, Button *, pBtn, void )
                 xDic = aDics.getConstArray()[ nDicPos ];
                 if (xDic.is())
                 {
-                    uno::Reference< XSpellChecker1 > xSpellChecker1;
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {

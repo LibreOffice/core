@@ -593,7 +593,6 @@ bool ODbaseIndex::CreateImpl()
         Reference< XUnoTunnel> xTunnel(xSet, UNO_QUERY_THROW);
         ODbaseResultSet* pDbaseRes = reinterpret_cast< ODbaseResultSet* >( xTunnel->getSomething(ODbaseResultSet::getUnoTunnelImplementationId()) );
         assert(pDbaseRes); //"No dbase resultset found? What's going on here!
-        Reference<XRowLocate> xRowLocate(xSet,UNO_QUERY);
         nRowsLeft = xSet->getRow();
 
         xSet->beforeFirst();

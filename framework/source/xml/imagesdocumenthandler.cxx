@@ -609,8 +609,7 @@ void OWriteImagesDocumentHandler::WriteImagesDocument()
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
-    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
+    rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
     pList->AddAttribute( ATTRIBUTE_XMLNS_IMAGE,
                          m_aAttributeType,
@@ -620,7 +619,7 @@ void OWriteImagesDocumentHandler::WriteImagesDocument()
                          m_aAttributeType,
                          XMLNS_XLINK );
 
-    m_xWriteDocumentHandler->startElement( ELEMENT_NS_IMAGESCONTAINER, pList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_IMAGESCONTAINER, pList.get() );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     if ( m_aImageListsItems.pImageList )

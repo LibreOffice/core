@@ -136,7 +136,6 @@ SvXMLImportContext* OXMLFixedContent::CreateChildContext_(
 
     static const char s_sStringConcat[] = " & ";
     const SvXMLTokenMap&    rTokenMap   = m_rImport.GetCellElemTokenMap();
-    Reference<XComponentContext> xContext = m_rImport.GetComponentContext();
 
     m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
     const sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );

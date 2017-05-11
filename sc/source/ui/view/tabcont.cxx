@@ -488,8 +488,7 @@ void ScTabControl::DoDrag( const vcl::Region& /* rRegion */ )
     aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScTransferObj ctor
 
-    ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
-    css::uno::Reference<css::datatransfer::XTransferable> xTransferable( pTransferObj );
+    rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
 
     pTransferObj->SetDragSourceFlags(ScDragSrc::Table);
 
@@ -498,7 +497,7 @@ void ScTabControl::DoDrag( const vcl::Region& /* rRegion */ )
     pTransferObj->SetSourceCursorPos( pViewData->GetCurX(), pViewData->GetCurY() );
 
     vcl::Window* pWindow = pViewData->GetActiveWin();
-    SC_MOD()->SetDragObject( pTransferObj, nullptr );      // for internal D&D
+    SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
     pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
 }
 

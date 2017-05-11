@@ -360,8 +360,6 @@ void SAL_CALL OApplicationController::disposing()
             m_xDataSource->removePropertyChangeListener(PROPERTY_TABLEFILTER, this);
             m_xDataSource->removePropertyChangeListener(PROPERTY_TABLETYPEFILTER, this);
             m_xDataSource->removePropertyChangeListener(PROPERTY_USER, this);
-            // otherwise we may delete our datasource twice
-            Reference<XPropertySet> xProp = m_xDataSource;
             m_xDataSource = nullptr;
         }
 
@@ -989,9 +987,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 break;
             case ID_BROWSER_COPY:
                 {
-                    TransferableHelper* pTransfer = copyObject( );
-                    Reference< XTransferable> aEnsureDelete = pTransfer;
-
+                    rtl::Reference<TransferableHelper> pTransfer = copyObject();
                     if ( pTransfer )
                         pTransfer->CopyToClipboard(getView());
                 }
@@ -1584,7 +1580,6 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
         try
         {
             _rEvent.Accessor >>= sName;
-            Reference<XConnection> xConnection;
             Reference<XPropertySet> xProp(_rEvent.Element,UNO_QUERY);
             OUString sNewName;
 
@@ -2305,13 +2300,12 @@ bool OApplicationController::requestQuickHelp( const SvTreeListEntry* /*_pEntry*
 
 bool OApplicationController::requestDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPixel*/ )
 {
-    TransferableHelper* pTransfer = nullptr;
+    rtl::Reference<TransferableHelper> pTransfer;
     if ( getContainer() && getContainer()->getSelectionCount() )
     {
         try
         {
             pTransfer = copyObject( );
-            Reference< XTransferable> xEnsureDelete = pTransfer;
 
             if ( pTransfer && getContainer()->getDetailView() )
             {
@@ -2325,7 +2319,7 @@ bool OApplicationController::requestDrag( sal_Int8 /*_nAction*/, const Point& /*
         }
     }
 
-    return nullptr != pTransfer;
+    return pTransfer.is();
 }
 
 sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors )

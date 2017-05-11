@@ -368,7 +368,6 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::crea
 
 css::uno::Reference< css::container::XEnumeration > SAL_CALL BaseContainer::createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)
 {
-    css::uno::Reference< css::container::XEnumeration > xEnum;
     OUStringList                                        lKeys;
 
     impl_loadOnDemand();

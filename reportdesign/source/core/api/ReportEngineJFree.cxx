@@ -307,7 +307,6 @@ uno::Reference< frame::XModel > SAL_CALL OReportEngineJFree::createDocumentAlive
                 aArgs[nLen++].Value <<= true;
             }
 
-            uno::Reference< lang::XMultiServiceFactory > xFac(m_xContext->getServiceManager(),uno::UNO_QUERY);
             xModel.set( xFrameLoad->loadComponentFromURL(
                 sOutputName,
                 OUString(), // empty frame name

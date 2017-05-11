@@ -500,15 +500,12 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     uno::Reference< uno::XComponentContext > xContext =
             comphelper::getProcessComponentContext();
 
-    uno::Reference< io::XActiveDataSource > xSource;
-    uno::Reference< XInterface > xPipe;
     uno::Reference< document::XGraphicObjectResolver > xGraphicResolver;
     SvXMLGraphicHelper *pGraphicHelper = nullptr;
     uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
     SvXMLEmbeddedObjectHelper *pObjectHelper = nullptr;
 
     // get the input stream (storage or stream)
-    uno::Reference<io::XInputStream> xInputStream;
     uno::Reference<embed::XStorage> xStorage;
     if( pMedium )
         xStorage = pMedium->GetStorage();

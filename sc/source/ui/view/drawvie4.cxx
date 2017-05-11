@@ -123,13 +123,12 @@ void ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
         aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
         // maSize is set in ScDrawTransferObj ctor
 
-        ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
-        uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+        rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
 
         pTransferObj->SetDrawPersist( aDragShellRef.get() );    // keep persist for ole objects alive
         pTransferObj->SetDragSource( this );               // copies selection
 
-        SC_MOD()->SetDragObject( nullptr, pTransferObj );     // for internal D&D
+        SC_MOD()->SetDragObject( nullptr, pTransferObj.get() );     // for internal D&D
         pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
     }
 }
@@ -379,8 +378,7 @@ void ScDrawView::DoCopy()
     aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScDrawTransferObj ctor
 
-    ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
-    uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+    rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
 
     if ( ScGlobal::xDrawClipDocShellRef.is() )
     {
@@ -388,7 +386,7 @@ void ScDrawView::DoCopy()
     }
 
     pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );     // system clipboard
-    SC_MOD()->SetClipObject( nullptr, pTransferObj );                  // internal clipboard
+    SC_MOD()->SetClipObject( nullptr, pTransferObj.get() );                  // internal clipboard
 }
 
 uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()

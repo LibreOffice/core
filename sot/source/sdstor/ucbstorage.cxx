@@ -1737,7 +1737,6 @@ void UCBStorage_Impl::ReadContent()
             return;
 
         Reference< XResultSet > xResultSet = m_pContent->createCursor( aProps, eInclude );
-        Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
         Reference< XRow > xRow( xResultSet, UNO_QUERY );
         if ( xResultSet.is() )
         {

@@ -384,8 +384,6 @@ namespace ucb { namespace ucp { namespace ext
         const sal_Int32 nCount = i_rProperties.getLength();
         if ( nCount )
         {
-            Reference< XPropertySet > xAdditionalPropSet;
-
             const Property* pProps = i_rProperties.getConstArray();
             for ( sal_Int32 n = 0; n < nCount; ++n )
             {

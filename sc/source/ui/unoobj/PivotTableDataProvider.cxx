@@ -331,7 +331,6 @@ void PivotTableDataProvider::collectPivotTableData()
     {
         uno::Reference<uno::XInterface> xDim = ScUnoHelpFunctions::AnyToInterface(xDims->getByIndex(nDim));
         uno::Reference<beans::XPropertySet> xDimProp(xDim, uno::UNO_QUERY);
-        uno::Reference<container::XNamed> xDimName(xDim, uno::UNO_QUERY);
         uno::Reference<sheet::XHierarchiesSupplier> xDimSupp(xDim, uno::UNO_QUERY);
 
         if (!xDimProp.is() || !xDimSupp.is())

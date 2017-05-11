@@ -689,9 +689,7 @@ bool SwGlossaryHdl::CopyToClipboard(SwWrtShell& rSh, const OUString& rShortName)
     SwTextBlocks *pGlossary = pCurGrp ? pCurGrp.get()
                                     : rStatGlossaries.GetGroupDoc(aCurGrp);
 
-    SwTransferable* pTransfer = new SwTransferable( rSh );
-/*??*/uno::Reference<
-        datatransfer::XTransferable > xRef( pTransfer );
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable( rSh );
 
     int nRet = pTransfer->CopyGlossary( *pGlossary, rShortName );
     if( !pCurGrp )

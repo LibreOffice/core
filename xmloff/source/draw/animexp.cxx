@@ -308,7 +308,6 @@ void XMLAnimationsExporter::collect( const Reference< XShape >& xShape, SvXMLExp
         Reference< XPropertySet > xProps( xShape, UNO_QUERY );
         if( xProps.is() )
         {
-            Reference< XPropertySetInfo > xInfo( xProps->getPropertySetInfo() );
             AnimationEffect eEffect;
             XMLEffectHint aEffect;
 

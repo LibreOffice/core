@@ -849,7 +849,6 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                         // start <text:p>
                         SvXMLElementExport aParagraphContent(*this,XML_NAMESPACE_TEXT, XML_P, true, false);
                         Reference<XServiceInfo> xElement(aColIter->xElement,uno::UNO_QUERY);
-                        Reference<XReportComponent> xReportComponent = aColIter->xElement;
 
                         if ( !bShapeHandled )
                         {

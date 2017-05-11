@@ -2773,7 +2773,6 @@ SwXHeadFootText::createEnumeration()
 
     SwFrameFormat & rHeadFootFormat( m_pImpl->GetHeadFootFormatOrThrow() );
 
-    uno::Reference< container::XEnumeration >  aRef;
     const SwFormatContent& rFlyContent = rHeadFootFormat.GetContent();
     const SwNode& rNode = rFlyContent.GetContentIdx()->GetNode();
     SwPosition aPos(rNode);

@@ -3927,7 +3927,6 @@ OUString getObjectTypeName( SbxVariable* pVar )
                 if ( xServInfo.is() )
                 {
                     // is this a VBA object ?
-                    uno::Reference< ooo::vba::XHelperInterface > xVBA( aObj, uno::UNO_QUERY );
                     Sequence< OUString > sServices = xServInfo->getSupportedServiceNames();
                     if ( sServices.getLength() )
                     {

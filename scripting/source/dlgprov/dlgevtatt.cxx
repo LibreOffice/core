@@ -260,7 +260,7 @@ namespace dlgprov
                         // if we had no success, try to attach to the control
                         if ( !bSuccess )
                         {
-                            Reference< XEventListener > xListener_ = m_xEventAttacher->attachSingleEventListener(
+                            m_xEventAttacher->attachSingleEventListener(
                                 xControl, xAllListener, Helper, aDesc.ListenerType,
                                 aDesc.AddListenerParam, aDesc.EventMethod );
                         }

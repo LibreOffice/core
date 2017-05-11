@@ -206,8 +206,7 @@ void OTableWindowListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPi
         // create a description of the source
         OJoinExchangeData jxdSource(this);
         // put it into a exchange object
-        OJoinExchObj* pJoin = new OJoinExchObj(jxdSource,bFirstNotAllowed);
-        Reference< XTransferable > xEnsureDelete(pJoin);
+        rtl::Reference<OJoinExchObj> pJoin = new OJoinExchObj(jxdSource,bFirstNotAllowed);
         pJoin->StartDrag(this, DND_ACTION_LINK, this);
     }
 }

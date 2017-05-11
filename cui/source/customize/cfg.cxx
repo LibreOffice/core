@@ -4166,9 +4166,6 @@ void ToolbarSaveInData::CreateToolbar( SvxConfigEntry* pToolbar )
     uno::Reference< container::XIndexAccess >
         xSettings( GetConfigManager()->createSettings(), uno::UNO_QUERY );
 
-    uno::Reference< container::XIndexContainer >
-        xIndexContainer ( xSettings, uno::UNO_QUERY );
-
     uno::Reference< beans::XPropertySet >
         xPropertySet( xSettings, uno::UNO_QUERY );
 
@@ -5321,8 +5318,6 @@ void SvxIconSelectorDialog::ImportGraphics(
     OUString aIconName;
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
     aMediaProps[0].Name = "URL";
-    uno::Reference< css::ui::XUIConfigurationPersistence >
-        xConfigPer( m_xImportedImageManager, uno::UNO_QUERY );
 
     if ( rPaths.getLength() == 1 )
     {

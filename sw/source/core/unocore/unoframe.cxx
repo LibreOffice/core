@@ -3048,7 +3048,6 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
         attachToRange(xTextRange);
     else if(nullptr != (pFormat = GetFrameFormat()))
     {
-        uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
         SwDoc* pDoc = pFormat->GetDoc();
         SwUnoInternalPaM aIntPam(*pDoc);
         if (::sw::XTextRangeToSwPaM(aIntPam, xTextRange))
