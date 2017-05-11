@@ -6034,6 +6034,9 @@ void SwWW8ImplReader::GetSmartTagInfo(SwFltRDFMark& rMark)
         m_pSmartTagData->Read(*m_pTableStream, m_pWwFib->m_fcFactoidData, m_pWwFib->m_lcbFactoidData);
     }
 
+    if (!m_pSmartTagData)
+        return;
+
     // Check if the handle is a valid smart tag bookmark index.
     size_t nIndex = rMark.GetHandle();
     if (nIndex >= m_pSmartTagData->m_aPropBags.size())
