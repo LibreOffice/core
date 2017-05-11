@@ -1130,10 +1130,10 @@ libo_FUZZ_ARG_ENABLE(directx,
          compile. (DirectX SDK, GDI+ libs)])
 )
 
-libo_FUZZ_ARG_ENABLE(avahi,
+AC_ARG_ENABLE(avahi,
     AS_HELP_STRING([--enable-avahi],
-        [Determines whether to use Avahi to advertise Impress to remote controls.]),
-,)
+        [Determines whether to use Avahi to advertise Impress to remote controls.])
+)
 
 libo_FUZZ_ARG_ENABLE(werror,
     AS_HELP_STRING([--enable-werror],
