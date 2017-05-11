@@ -27,12 +27,13 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <libxml/tree.h>
+#include <xsecxmlsecdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
 
-class XMLElementWrapper_XmlSecImpl : public cppu::WeakImplHelper
+class XSECXMLSEC_DLLPUBLIC XMLElementWrapper_XmlSecImpl : public cppu::WeakImplHelper
 <
     css::xml::wrapper::XXMLElementWrapper,
     css::lang::XUnoTunnel,
