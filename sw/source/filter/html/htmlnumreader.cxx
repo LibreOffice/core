@@ -491,7 +491,7 @@ void SwHTMLParser::NewNumBulListItem( HtmlTokenId nToken )
             aNumFormat.SetBulletFont( &numfunc::GetDefBulletFont() );
         }
         aNumFormat.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
-        aNumFormat.SetBulletChar( cBulletChar );   // das Bulletzeichen !!
+        aNumFormat.SetBulletChar( cBulletChar );   // the bullet character !!
         aNumFormat.SetCharFormat( m_pCSS1Parser->GetCharFormatFromPool(RES_POOLCHR_BUL_LEVEL) );
         aNumFormat.SetFirstLineOffset( HTML_NUMBUL_INDENT );
         aNumRule.Set( 0, aNumFormat );
@@ -499,7 +499,7 @@ void SwHTMLParser::NewNumBulListItem( HtmlTokenId nToken )
         m_xDoc->MakeNumRule( aNumRuleName, &aNumRule );
 
         OSL_ENSURE( m_nOpenParaToken == HtmlTokenId::NONE,
-                "Jetzt geht ein offenes Absatz-Element verloren" );
+                "Now an open paragraph element is lost" );
         // We'll act like we're in a paragraph. On the next paragraph, at least numbering is gone,
         // that's gonna be taken over by the next AppendTextNode
         m_nOpenParaToken = nToken;
@@ -527,7 +527,7 @@ void SwHTMLParser::NewNumBulListItem( HtmlTokenId nToken )
     if( GetNumInfo().GetNumRule() )
         GetNumInfo().GetNumRule()->SetInvalidRule( true );
 
-    // Styles parsen
+    // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
@@ -545,7 +545,7 @@ void SwHTMLParser::NewNumBulListItem( HtmlTokenId nToken )
     // set the new template
     SetTextCollAttrs( pCntxt );
 
-    // Refresh scrollbar
+    // Refresh scroll bar
     ShowStatline();
 }
 
@@ -599,9 +599,9 @@ void SwHTMLParser::EndNumBulListItem( HtmlTokenId nToken, bool bSetColl )
 void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel )
 {
     SwTextNode* pTextNode = m_pPam->GetNode().GetTextNode();
-    OSL_ENSURE( pTextNode, "Kein Text-Node an PaM-Position" );
+    OSL_ENSURE( pTextNode, "No Text-Node at PaM-Position" );
 
-    OSL_ENSURE( GetNumInfo().GetNumRule(), "Kein Numerierungs-Regel" );
+    OSL_ENSURE( GetNumInfo().GetNumRule(), "No numbering rule" );
     const OUString& rName = GetNumInfo().GetNumRule()->GetName();
     static_cast<SwContentNode *>(pTextNode)->SetAttr( SwNumRuleItem(rName) );
 
