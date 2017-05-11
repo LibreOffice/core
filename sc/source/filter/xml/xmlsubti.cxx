@@ -51,7 +51,11 @@ ScXMLTabProtectionData::ScXMLTabProtectionData() :
     meHash2(PASSHASH_UNSPECIFIED),
     mbProtected(false),
     mbSelectProtectedCells(true),
-    mbSelectUnprotectedCells(true)
+    mbSelectUnprotectedCells(true),
+    mbInsertColumns(false),
+    mbInsertRows(false),
+    mbDeleteColumns(false),
+    mbDeleteRows(false)
 {
 }
 
@@ -203,6 +207,10 @@ void ScMyTables::DeleteTable()
         pProtect->setPasswordHash(aHash, maProtectionData.meHash1, maProtectionData.meHash2);
         pProtect->setOption(ScTableProtection::SELECT_LOCKED_CELLS,   maProtectionData.mbSelectProtectedCells);
         pProtect->setOption(ScTableProtection::SELECT_UNLOCKED_CELLS, maProtectionData.mbSelectUnprotectedCells);
+        pProtect->setOption(ScTableProtection::INSERT_COLUMNS, maProtectionData.mbInsertColumns);
+        pProtect->setOption(ScTableProtection::INSERT_ROWS,    maProtectionData.mbInsertRows);
+        pProtect->setOption(ScTableProtection::DELETE_COLUMNS, maProtectionData.mbDeleteColumns);
+        pProtect->setOption(ScTableProtection::DELETE_ROWS,    maProtectionData.mbDeleteRows);
         rImport.GetDocument()->SetTabProtection(maCurrentCellPos.Tab(), pProtect.get());
     }
 }

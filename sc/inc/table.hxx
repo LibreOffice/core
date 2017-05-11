@@ -321,6 +321,8 @@ public:
     void            SetProtection(const ScTableProtection* pProtect);
     ScTableProtection* GetProtection();
 
+    bool IsEditActionAllowed( sc::ColRowEditAction eAction, SCCOLROW nStart, SCCOLROW nEnd ) const;
+
     Size            GetPageSize() const;
     void            SetPageSize( const Size& rSize );
     void            SetRepeatArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow );

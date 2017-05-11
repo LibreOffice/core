@@ -431,6 +431,21 @@ enum ScDBObject
     ScDbQuery
 };
 
+namespace sc {
+
+enum class ColRowEditAction
+{
+    Unknown,
+    InsertColumnsBefore,
+    InsertColumnsAfter,
+    InsertRowsBefore,
+    InsertRowsAfter,
+    DeleteColumns,
+    DeleteRows
+};
+
+}
+
 struct ScImportParam
 {
     SCCOL           nCol1;

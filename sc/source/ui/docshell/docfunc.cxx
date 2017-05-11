@@ -1767,7 +1767,32 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
     SCCOL nEditTestEndCol = (eCmd==INS_INSCOLS_BEFORE || eCmd==INS_INSCOLS_AFTER) ? MAXCOL : nMergeTestEndCol;
     SCROW nEditTestEndRow = (eCmd==INS_INSROWS_BEFORE || eCmd==INS_INSROWS_AFTER) ? MAXROW : nMergeTestEndRow;
-    ScEditableTester aTester( &rDoc, nMergeTestStartCol, nMergeTestStartRow, nEditTestEndCol, nEditTestEndRow, aMark );
+
+    ScEditableTester aTester;
+
+    switch (eCmd)
+    {
+        case INS_INSCOLS_BEFORE:
+            aTester = ScEditableTester(
+                rDoc, sc::ColRowEditAction::InsertColumnsBefore, nMergeTestStartCol, nMergeTestEndCol, aMark);
+            break;
+        case INS_INSCOLS_AFTER:
+            aTester = ScEditableTester(
+                rDoc, sc::ColRowEditAction::InsertColumnsAfter, nMergeTestStartCol, nMergeTestEndCol, aMark);
+            break;
+        case INS_INSROWS_BEFORE:
+            aTester = ScEditableTester(
+                rDoc, sc::ColRowEditAction::InsertRowsBefore, nMergeTestStartRow, nMergeTestEndRow, aMark);
+            break;
+        case INS_INSROWS_AFTER:
+            aTester = ScEditableTester(
+                rDoc, sc::ColRowEditAction::InsertRowsAfter, nMergeTestStartRow, nMergeTestEndRow, aMark);
+            break;
+        default:
+            aTester = ScEditableTester(
+                &rDoc, nMergeTestStartCol, nMergeTestStartRow, nEditTestEndCol, nEditTestEndRow, aMark);
+    }
+
     if (!aTester.IsEditable())
     {
         if (!bApi)
@@ -2223,7 +2248,24 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     SCROW nEditTestEndY = nUndoEndRow;
     if ( eCmd==DEL_DELROWS || eCmd==DEL_CELLSUP )
         nEditTestEndY = MAXROW;
-    ScEditableTester aTester( &rDoc, nUndoStartCol, nUndoStartRow, nEditTestEndX, nEditTestEndY, aMark );
+
+    ScEditableTester aTester;
+
+    switch (eCmd)
+    {
+        case DEL_DELCOLS:
+            aTester = ScEditableTester(
+                rDoc, sc::ColRowEditAction::DeleteColumns, nUndoStartCol, nUndoEndCol, aMark);
+            break;
+        case DEL_DELROWS:
+            aTester = ScEditableTester(
+                rDoc, sc::ColRowEditAction::DeleteRows, nUndoStartRow, nUndoEndRow, aMark);
+            break;
+        default:
+            aTester = ScEditableTester(
+                &rDoc, nUndoStartCol, nUndoStartRow, nEditTestEndX, nEditTestEndY, aMark);
+    }
+
     if (!aTester.IsEditable())
     {
         if (!bApi)

@@ -16,6 +16,7 @@
 #include <sharedformula.hxx>
 #include <cellvalues.hxx>
 #include "olinetab.hxx"
+#include <tabprotection.hxx>
 
 bool ScTable::IsMerged( SCCOL nCol, SCROW nRow ) const
 {
@@ -308,6 +309,87 @@ void ScTable::SetNeedsListeningGroup( SCCOL nCol, SCROW nRow )
         return;
 
     aCol[nCol].SetNeedsListeningGroup(nRow);
+}
+
+bool ScTable::IsEditActionAllowed(
+    sc::ColRowEditAction eAction, SCCOLROW nStart, SCCOLROW nEnd ) const
+{
+    if (!IsProtected())
+    {
+        SCCOL nCol1 = 0, nCol2 = MAXCOL;
+        SCROW nRow1 = 0, nRow2 = MAXROW;
+
+        switch (eAction)
+        {
+            case sc::ColRowEditAction::InsertColumnsBefore:
+            case sc::ColRowEditAction::InsertColumnsAfter:
+            case sc::ColRowEditAction::DeleteColumns:
+            {
+                nCol1 = nStart;
+                nCol2 = nEnd;
+                break;
+            }
+            case sc::ColRowEditAction::InsertRowsBefore:
+            case sc::ColRowEditAction::InsertRowsAfter:
+            case sc::ColRowEditAction::DeleteRows:
+            {
+                nRow1 = nStart;
+                nRow2 = nEnd;
+                break;
+            }
+            default:
+                ;
+        }
+
+        return IsBlockEditable(nCol1, nRow1, nCol2, nRow2, nullptr);
+    }
+
+    if (IsScenario())
+        // TODO: I don't even know what this scenario thingie is. Perhaps we
+        // should check it against the scenario ranges?
+        return false;
+
+    assert(pTabProtection);
+
+    switch (eAction)
+    {
+        case sc::ColRowEditAction::InsertColumnsBefore:
+        case sc::ColRowEditAction::InsertColumnsAfter:
+        {
+            // TODO: improve the matrix range handling for the insert-before action.
+            if (HasBlockMatrixFragment(nStart, 0, nEnd, MAXROW))
+                return false;
+
+            return pTabProtection->isOptionEnabled(ScTableProtection::INSERT_COLUMNS);
+        }
+        case sc::ColRowEditAction::InsertRowsBefore:
+        case sc::ColRowEditAction::InsertRowsAfter:
+        {
+            // TODO: improve the matrix range handling for the insert-before action.
+            if (HasBlockMatrixFragment(0, nStart, MAXCOL, nEnd))
+                return false;
+
+            return pTabProtection->isOptionEnabled(ScTableProtection::INSERT_ROWS);
+        }
+        case sc::ColRowEditAction::DeleteColumns:
+        {
+            if (!pTabProtection->isOptionEnabled(ScTableProtection::DELETE_COLUMNS))
+                return false;
+
+            return !HasAttrib(nStart, 0, nEnd, MAXROW, HasAttrFlags::Protected);
+        }
+        case sc::ColRowEditAction::DeleteRows:
+        {
+            if (!pTabProtection->isOptionEnabled(ScTableProtection::DELETE_ROWS))
+                return false;
+
+            return !HasAttrib(0, nStart, MAXCOL, nEnd, HasAttrFlags::Protected);
+        }
+        default:
+            ;
+    }
+
+    return false;
 }
 
 void ScTable::finalizeOutlineImport()
