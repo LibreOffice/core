@@ -73,10 +73,10 @@ using namespace ::com::sun::star;
 // TODO:
 // 5. convert the MapModes that Widows can't handle
 
-// OutGrf () is called for every GrafNode in the document. Es wird ein PicLocFc-Sprm
-// eingefuegt, der statt Adresse ein Magic sal_uLong enthaelt. Ausserdem wird
-// in der Graf-Klasse der GrfNode-Ptr gemerkt ( fuers spaetere Ausgeben der
-// Grafiken und Patchen der PicLocFc-Attribute )
+// OutGrf () is called for every GrafNode in the document. It will be insert
+// a PicLocFc-Sprm, which instead of an address a magic sal_uLong contains.
+// As well the GrfNode-Ptr is saved in Graf-Class ( used later for output of
+// the graphic and patching of the PicLocFc attributes )
 
 void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
 {
