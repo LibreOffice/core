@@ -58,6 +58,8 @@
 #include <unoport.hxx>
 #include <wrtsh.hxx>
 
+#include "flowfrm.hxx"
+
 using namespace com::sun::star;
 
 #ifdef DBG_UTIL
@@ -301,6 +303,56 @@ bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox&
     return bChg;
 }
 
+namespace
+{
+
+void lcl_LOKInvalidateFrames(const SwModify& rMod, const SwRootFrame* pLayout,
+        SwFrameType const nFrameType, const Point* pPoint)
+{
+    SwIterator<SwFrame,SwModify> aIter( rMod );
+
+    for (SwFrame* pTmpFrame = aIter.First(); pTmpFrame; pTmpFrame = aIter.Next() )
+    {
+        if ((pTmpFrame->GetType() & nFrameType) &&
+            (!pLayout || pLayout == pTmpFrame->getRootFrame()) &&
+            (!pTmpFrame->IsFlowFrame() || !SwFlowFrame::CastFlowFrame( pTmpFrame )->IsFollow()))
+        {
+            if (pPoint)
+            {
+                pTmpFrame->InvalidateSize();
+            }
+        }
+    }
+}
+
+void lcl_LOKInvalidateStartEndFrames(SwShellCursor& rCursor)
+{
+    if (!(rCursor.HasMark() &&
+        rCursor.GetPoint()->nNode.GetNode().IsContentNode() &&
+        rCursor.GetPoint()->nNode.GetNode().GetContentNode()->getLayoutFrame(rCursor.GetShell()->GetLayout()) &&
+        (rCursor.GetMark()->nNode == rCursor.GetPoint()->nNode ||
+        (rCursor.GetMark()->nNode.GetNode().IsContentNode() &&
+         rCursor.GetMark()->nNode.GetNode().GetContentNode()->getLayoutFrame(rCursor.GetShell()->GetLayout())))))
+    {
+        return;
+    }
+
+
+    SwPosition *pStartPos = rCursor.Start(),
+               *pEndPos   = rCursor.GetPoint() == pStartPos ? rCursor.GetMark() : rCursor.GetPoint();
+
+
+    lcl_LOKInvalidateFrames(*(pStartPos->nNode.GetNode().GetContentNode()),
+                            rCursor.GetShell()->GetLayout(),
+                            FRM_CNTNT, &rCursor.GetSttPos());
+
+    lcl_LOKInvalidateFrames(*(pEndPos->nNode.GetNode().GetContentNode()),
+                            rCursor.GetShell()->GetLayout(),
+                            FRM_CNTNT, &rCursor.GetEndPos());
+}
+
+} // anonymous namespace
+
 /// Emits LOK notification about one addition / removal of a redline item.
 void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRedline* pRedline)
 {
@@ -339,6 +391,8 @@ void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRe
 
         const OString sRects = comphelper::string::join("; ", aRects);
         aRedline.put("textRange", sRects.getStr());
+
+        lcl_LOKInvalidateStartEndFrames(aCursor);
     }
 
     boost::property_tree::ptree aTree;
