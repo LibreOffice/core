@@ -332,8 +332,17 @@ void SAL_CALL MenuBarManager::frameAction( const FrameActionEvent& Action )
         std::vector< MenuItemHandler* >::iterator p;
         for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
         {
-            // Clear dispatch reference as we will requery it later o
+            // Clear dispatch reference as we will requery it later
             MenuItemHandler* pItemHandler = *p;
+
+            if ( pItemHandler->xMenuItemDispatch.is() )
+            {
+                URL aTargetURL;
+                aTargetURL.Complete = pItemHandler->aMenuItemURL;
+                m_xURLTransformer->parseStrict( aTargetURL );
+
+                pItemHandler->xMenuItemDispatch->removeStatusListener( this, aTargetURL );
+            }
             pItemHandler->xMenuItemDispatch.clear();
         }
     }
