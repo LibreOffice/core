@@ -80,7 +80,7 @@ Font::~Font()
 
 void Font::SetColor( const Color& rColor )
 {
-    if( mpImplFont->maColor != rColor )
+    if (const_cast<const ImplType&>(mpImplFont)->maColor != rColor)
     {
         mpImplFont->maColor = rColor;
     }
@@ -95,13 +95,13 @@ void Font::SetFillColor( const Color& rColor )
 
 void Font::SetTransparent( bool bTransparent )
 {
-    if( mpImplFont->mbTransparent != bTransparent )
+    if (const_cast<const ImplType&>(mpImplFont)->mbTransparent != bTransparent)
         mpImplFont->mbTransparent = bTransparent;
 }
 
 void Font::SetAlignment( FontAlign eAlign )
 {
-    if( mpImplFont->meAlign != eAlign )
+    if (const_cast<const ImplType&>(mpImplFont)->meAlign != eAlign)
         mpImplFont->SetAlignment(eAlign);
 }
 
@@ -117,19 +117,19 @@ void Font::SetStyleName( const OUString& rStyleName )
 
 void Font::SetFontSize( const Size& rSize )
 {
-    if( mpImplFont->GetFontSize() != rSize )
+    if (const_cast<const ImplType&>(mpImplFont)->GetFontSize() != rSize)
         mpImplFont->SetFontSize( rSize );
 }
 
 void Font::SetFamily( FontFamily eFamily )
 {
-    if( mpImplFont->GetFamilyTypeNoAsk() != eFamily )
+    if (const_cast<const ImplType&>(mpImplFont)->GetFamilyTypeNoAsk() != eFamily)
         mpImplFont->SetFamilyType( eFamily );
 }
 
 void Font::SetCharSet( rtl_TextEncoding eCharSet )
 {
-    if( mpImplFont->GetCharSet() != eCharSet )
+    if (const_cast<const ImplType&>(mpImplFont)->GetCharSet() != eCharSet)
     {
         mpImplFont->SetCharSet( eCharSet );
 
@@ -162,49 +162,49 @@ void Font::SetSymbolFlag( bool bSymbol )
 
 void Font::SetLanguageTag( const LanguageTag& rLanguageTag )
 {
-    if( mpImplFont->maLanguageTag != rLanguageTag )
+    if (const_cast<const ImplType&>(mpImplFont)->maLanguageTag != rLanguageTag)
         mpImplFont->maLanguageTag = rLanguageTag;
 }
 
 void Font::SetCJKContextLanguageTag( const LanguageTag& rLanguageTag )
 {
-    if( mpImplFont->maCJKLanguageTag != rLanguageTag )
+    if (const_cast<const ImplType&>(mpImplFont)->maCJKLanguageTag != rLanguageTag)
         mpImplFont->maCJKLanguageTag = rLanguageTag;
 }
 
 void Font::SetLanguage( LanguageType eLanguage )
 {
-    if( mpImplFont->maLanguageTag.getLanguageType( false) != eLanguage )
+    if (const_cast<const ImplType&>(mpImplFont)->maLanguageTag.getLanguageType(false) != eLanguage)
         mpImplFont->maLanguageTag.reset( eLanguage);
 }
 
 void Font::SetCJKContextLanguage( LanguageType eLanguage )
 {
-    if( mpImplFont->maCJKLanguageTag.getLanguageType( false) != eLanguage )
+    if (const_cast<const ImplType&>(mpImplFont)->maCJKLanguageTag.getLanguageType(false) != eLanguage)
         mpImplFont->maCJKLanguageTag.reset( eLanguage);
 }
 
 void Font::SetPitch( FontPitch ePitch )
 {
-    if( mpImplFont->GetPitchNoAsk() != ePitch )
+    if (const_cast<const ImplType&>(mpImplFont)->GetPitchNoAsk() != ePitch)
         mpImplFont->SetPitch( ePitch );
 }
 
 void Font::SetOrientation( short nOrientation )
 {
-    if( mpImplFont->mnOrientation != nOrientation )
+    if (const_cast<const ImplType&>(mpImplFont)->mnOrientation != nOrientation)
         mpImplFont->mnOrientation = nOrientation;
 }
 
 void Font::SetVertical( bool bVertical )
 {
-    if( mpImplFont->mbVertical != bVertical )
+    if (const_cast<const ImplType&>(mpImplFont)->mbVertical != bVertical)
         mpImplFont->mbVertical = bVertical;
 }
 
 void Font::SetKerning( FontKerning eKerning )
 {
-    if( mpImplFont->meKerning != eKerning )
+    if (const_cast<const ImplType&>(mpImplFont)->meKerning != eKerning)
         mpImplFont->meKerning = eKerning;
 }
 
@@ -215,67 +215,67 @@ bool Font::IsKerning() const
 
 void Font::SetWeight( FontWeight eWeight )
 {
-    if( mpImplFont->GetWeightNoAsk() != eWeight )
+    if (const_cast<const ImplType&>(mpImplFont)->GetWeightNoAsk() != eWeight)
         mpImplFont->SetWeight( eWeight );
 }
 
 void Font::SetWidthType( FontWidth eWidth )
 {
-    if( mpImplFont->GetWidthTypeNoAsk() != eWidth )
+    if (const_cast<const ImplType&>(mpImplFont)->GetWidthTypeNoAsk() != eWidth)
         mpImplFont->SetWidthType( eWidth );
 }
 
 void Font::SetItalic( FontItalic eItalic )
 {
-    if( mpImplFont->GetItalicNoAsk() != eItalic )
+    if (const_cast<const ImplType&>(mpImplFont)->GetItalicNoAsk() != eItalic)
         mpImplFont->SetItalic( eItalic );
 }
 
 void Font::SetOutline( bool bOutline )
 {
-    if( mpImplFont->mbOutline != bOutline )
+    if (const_cast<const ImplType&>(mpImplFont)->mbOutline != bOutline)
         mpImplFont->mbOutline = bOutline;
 }
 
 void Font::SetShadow( bool bShadow )
 {
-    if( mpImplFont->mbShadow != bShadow )
+    if (const_cast<const ImplType&>(mpImplFont)->mbShadow != bShadow)
         mpImplFont->mbShadow = bShadow;
 }
 
 void Font::SetUnderline( FontLineStyle eUnderline )
 {
-    if( mpImplFont->meUnderline != eUnderline )
+    if (const_cast<const ImplType&>(mpImplFont)->meUnderline != eUnderline)
         mpImplFont->meUnderline = eUnderline;
 }
 
 void Font::SetOverline( FontLineStyle eOverline )
 {
-    if( mpImplFont->meOverline != eOverline )
+    if (const_cast<const ImplType&>(mpImplFont)->meOverline != eOverline)
         mpImplFont->meOverline = eOverline;
 }
 
 void Font::SetStrikeout( FontStrikeout eStrikeout )
 {
-    if( mpImplFont->meStrikeout != eStrikeout )
+    if (const_cast<const ImplType&>(mpImplFont)->meStrikeout != eStrikeout)
         mpImplFont->meStrikeout = eStrikeout;
 }
 
 void Font::SetRelief( FontRelief eRelief )
 {
-    if( mpImplFont->meRelief != eRelief )
+    if (const_cast<const ImplType&>(mpImplFont)->meRelief != eRelief)
         mpImplFont->meRelief = eRelief;
 }
 
 void Font::SetEmphasisMark( FontEmphasisMark eEmphasisMark )
 {
-    if( mpImplFont->meEmphasisMark != eEmphasisMark )
+    if (const_cast<const ImplType&>(mpImplFont)->meEmphasisMark != eEmphasisMark )
         mpImplFont->meEmphasisMark = eEmphasisMark;
 }
 
 void Font::SetWordLineMode( bool bWordLine )
 {
-    if( mpImplFont->mbWordLine != bWordLine )
+    if (const_cast<const ImplType&>(mpImplFont)->mbWordLine != bWordLine)
         mpImplFont->mbWordLine = bWordLine;
 }
 
