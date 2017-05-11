@@ -81,6 +81,15 @@ namespace cppcanvas
             HatchStyleSolidDiamond = 0x00000034
         };
 
+        enum EmfPlusBrushType
+        {
+            BrushTypeSolidColor = 0x00000000,
+            BrushTypeHatchFill = 0x00000001,
+            BrushTypeTextureFill = 0x00000002,
+            BrushTypePathGradient = 0x00000003,
+            BrushTypeLinearGradient = 0x00000004
+        };
+
         struct EMFPPath;
 
         struct EMFPBrush : public EMFPObject
