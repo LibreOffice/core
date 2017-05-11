@@ -17,19 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_ERRORCALLBACK_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_ERRORCALLBACK_HXX
+#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSTREAMIO_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSTREAMIO_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
-#include <com/sun/star/xml/crypto/XXMLEncryptionTemplate.hpp>
+#include <com/sun/star/xml/crypto/XUriBinding.hpp>
 
-// Only used for logging
-void setErrorRecorder();
-//ToDo
-//void setErrorRecorder(const css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate >& xTemplate);
-void clearErrorRecorder();
+#include <xsecxmlsecdllapi.h>
 
-#endif
+int xmlEnableStreamInputCallbacks() ;
+void xmlDisableStreamInputCallbacks() ;
+
+XSECXMLSEC_DLLPUBLIC int xmlRegisterStreamInputCallbacks(
+    css::uno::Reference< css::xml::crypto::XUriBinding >& aUriBinding
+) ;
+
+XSECXMLSEC_DLLPUBLIC int xmlUnregisterStreamInputCallbacks() ;
+
+#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSTREAMIO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -21,12 +21,15 @@
 #include <rtl/uuid.h>
 
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
+
 #include "xmlsignature_mscryptimpl.hxx"
-#include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
-#include "xmlelementwrapper_xmlsecimpl.hxx"
 #include "securityenvironment_mscryptimpl.hxx"
-#include "xmlstreamio.hxx"
-#include "errorcallback.hxx"
+
+#include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
+#include "xmlsec/xmlelementwrapper_xmlsecimpl.hxx"
+#include "xmlsec/xmlstreamio.hxx"
+#include "xmlsec/errorcallback.hxx"
+
 #include "xmlsec-wrapper.h"
 
 using namespace ::com::sun::star::uno ;

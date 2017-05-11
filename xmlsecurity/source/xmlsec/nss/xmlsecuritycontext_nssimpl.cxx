@@ -22,7 +22,7 @@
 #include "securityenvironment_nssimpl.hxx"
 
 #include "xmlsecuritycontext_nssimpl.hxx"
-#include "xmlstreamio.hxx"
+#include "xmlsec/xmlstreamio.hxx"
 
 #include "xmlsec-wrapper.h"
 
