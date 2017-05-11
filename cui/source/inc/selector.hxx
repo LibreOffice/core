@@ -104,7 +104,7 @@ public:
     using Window::GetHelpText;
     SvTreeListEntry*                GetLastSelectedEntry();
     void                            FunctionSelected();
-    void    KeyInput( const KeyEvent& aKey ) override;
+
     // drag n drop methods
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
 
@@ -167,7 +167,7 @@ public:
 
     void    ClearAll();
     void    GroupSelected();
-    void    KeyInput( const KeyEvent& aKey ) override;
+
     void    SetFunctionListBox( SvxConfigFunctionListBox *pBox )
         { pFunctionListBox = pBox; }
 

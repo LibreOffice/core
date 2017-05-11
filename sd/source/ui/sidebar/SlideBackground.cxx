@@ -48,7 +48,7 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include "app.hrc"
 #include <editeng/paperinf.hxx>
-#include <editeng/sizeitem.hxx>
+#include <svx/rulritem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xflclit.hxx>
 #include <svx/xgrad.hxx>
@@ -62,14 +62,40 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/dlgutil.hxx>
+#include <sfx2/tabdlg.hxx>
 #include <algorithm>
 #include "EventMultiplexer.hxx"
 #include "glob.hrc"
 #include <vcl/salbtype.hxx>
 
+#include <svx/rulritem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <svl/itemset.hxx>
+
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
+
+namespace
+{
+    FieldUnit lcl_GetFieldUnit()
+    {
+        FieldUnit eUnit = FUNIT_CM;
+        const SfxPoolItem* pItem = nullptr;
+        SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_METRIC, pItem );
+        if ( pItem && eState >= SfxItemState::DEFAULT )
+        {
+            eUnit = (FieldUnit)static_cast<const SfxUInt16Item*>( pItem )->GetValue();
+        }
+        else
+        {
+            return SfxModule::GetCurrentFieldUnit();
+        }
+
+        return eUnit;
+    }
+}
 
 namespace sd { namespace sidebar {
 
@@ -93,6 +119,8 @@ SlideBackground::SlideBackground(
     mrBase( rBase ),
     maPaperSizeController(SID_ATTR_PAGE_SIZE, *pBindings, *this),
     maPaperOrientationController(SID_ATTR_PAGE, *pBindings, *this),
+    maPaperMarginLRController(SID_ATTR_PAGE_LRSPACE, *pBindings, *this),
+    maPaperMarginULController(SID_ATTR_PAGE_ULSPACE, *pBindings, *this),
     maBckColorController(SID_ATTR_PAGE_COLOR, *pBindings, *this),
     maBckGradientController(SID_ATTR_PAGE_GRADIENT, *pBindings, *this),
     maBckHatchController(SID_ATTR_PAGE_HATCH, *pBindings, *this),
@@ -113,6 +141,10 @@ SlideBackground::SlideBackground(
     maContext(),
     maApplication(vcl::EnumContext::Application_None),
     mbTitle(false),
+    m_nPageLeftMargin(0),
+    m_nPageRightMargin(0),
+    m_nPageTopMargin(0),
+    m_nPageBottomMargin(0),
     mpBindings(pBindings)
 {
     get(mpPaperSizeBox,"paperformat");
@@ -127,6 +159,36 @@ SlideBackground::SlideBackground(
     get(mpCloseMaster, "closemasterslide");
     get(mpEditMaster, "masterslidebutton");
     get(mpMasterLabel, "masterlabel");
+    get(m_pLeftMarginEdit, "left");
+    get(m_pRightMarginEdit, "right");
+    get(m_pTopMarginEdit, "top");
+    get(m_pBottomMarginEdit, "bottom");
+
+    const SfxPoolItem* pItem;
+    const SvxSizeItem* pSize = nullptr;
+    if ( SfxViewFrame::Current() )
+    {
+        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pItem );
+        pSize = static_cast<const SvxSizeItem*>( pItem );
+    }
+    m_aPageSize = pSize->GetSize();
+
+    m_pTopMarginEdit->SetUnit( FUNIT_CM );
+    m_pTopMarginEdit->SetDecimalDigits( 2 );
+    m_pTopMarginEdit->SetSpinSize( 10 );
+    SetFieldUnit( *m_pTopMarginEdit.get(), lcl_GetFieldUnit() );
+    m_pBottomMarginEdit->SetUnit( FUNIT_CM );
+    m_pBottomMarginEdit->SetDecimalDigits( 2 );
+    m_pBottomMarginEdit->SetSpinSize( 10 );
+    SetFieldUnit( *m_pBottomMarginEdit.get(), lcl_GetFieldUnit() );
+    m_pLeftMarginEdit->SetUnit( FUNIT_CM );
+    m_pLeftMarginEdit->SetDecimalDigits( 2 );
+    m_pLeftMarginEdit->SetSpinSize( 10 );
+    SetFieldUnit( *m_pLeftMarginEdit.get(), lcl_GetFieldUnit() );
+    m_pRightMarginEdit->SetUnit( FUNIT_CM );
+    m_pRightMarginEdit->SetDecimalDigits( 2 );
+    m_pRightMarginEdit->SetSpinSize( 10 );
+    SetFieldUnit( *m_pRightMarginEdit.get(), lcl_GetFieldUnit() );
     addListener();
     Initialize();
 }
@@ -178,6 +240,21 @@ void SlideBackground::Initialize()
 
     mpDspMasterBackground->SetClickHdl(LINK(this, SlideBackground, DspBackground));
     mpDspMasterObjects->SetClickHdl(LINK(this,SlideBackground, DspObjects));
+
+    m_pLeftMarginEdit->SetModifyHdl(LINK(this, SlideBackground, ModifyLRMarginHdl));
+    // SetMetricValue( *m_pLeftMarginEdit.get(), m_nPageLeftMargin, meUnit );
+
+    m_pRightMarginEdit->SetModifyHdl(LINK(this, SlideBackground, ModifyLRMarginHdl));
+    // SetMetricValue( *m_pRightMarginEdit.get(), m_nPageRightMargin, meUnit );
+
+    m_pTopMarginEdit->SetModifyHdl(LINK(this, SlideBackground, ModifyULMarginHdl));
+    // SetMetricValue( *m_pTopMarginEdit.get(), m_nPageTopMargin, meUnit );
+
+    m_pBottomMarginEdit->SetModifyHdl(LINK(this, SlideBackground, ModifyULMarginHdl));
+    // SetMetricValue( *m_pBottomMarginEdit.get(), m_nPageBottomMargin, meUnit );
+
+    // m_aPageSize = pSize->GetSize();
+    // SetMetricFieldMaxValues( m_aPageSize );
 
     Update();
 }
@@ -486,9 +563,16 @@ void SlideBackground::dispose()
     mpMasterLabel.clear();
     mpEditMaster.clear();
     mpCloseMaster.clear();
+    m_pLeftMarginEdit.clear();
+    m_pRightMarginEdit.clear();
+    m_pTopMarginEdit.clear();
+    m_pBottomMarginEdit.clear();
+    m_pContainer.clear();
 
     maPaperSizeController.dispose();
     maPaperOrientationController.dispose();
+    maPaperMarginLRController.dispose();
+    maPaperMarginULController.dispose();
     maBckColorController.dispose();
     maBckGradientController.dispose();
     maBckHatchController.dispose();
@@ -710,6 +794,60 @@ void SlideBackground::NotifyItemUpdate(
         }
         break;
 
+        case SID_ATTR_PAGE_LRSPACE:
+        {
+            const SvxLongLRSpaceItem* pLRItem = nullptr;
+            if (eState >= SfxItemState::DEFAULT)
+            {
+                pLRItem = dynamic_cast<const SvxLongLRSpaceItem*>(pState);
+                m_nPageLeftMargin = pLRItem->GetLeft();
+                m_nPageRightMargin = pLRItem->GetRight();
+                //sal_Int32 nLeft,nRight;
+                // if ( SfxViewFrame::Current() )
+                // {
+                //     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pItem );
+                //     pSize = static_cast<const SvxSizeItem*>( pItem );
+                //     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_LRSPACE, pItem );
+                //     pLRItem = static_cast<const SvxLongLRSpaceItem*>( pItem );
+                //     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_ULSPACE, pItem );
+                //     pULItem = static_cast<const SvxLongULSpaceItem*>( pItem );
+                // }
+                // mpLRItem.reset( static_cast<SvxLongLRSpaceItem*>(pState->Clone()) );
+                // nLeft = mpLRItem->GetLeft();
+                // nRight = mpLRItem->GetRight();
+                SetFieldUnit(*m_pLeftMarginEdit, lcl_GetFieldUnit(), true);
+                SetMetricValue(*m_pLeftMarginEdit.get(), m_nPageLeftMargin, meUnit);
+                SetFieldUnit(*m_pRightMarginEdit, lcl_GetFieldUnit(), true);
+                SetMetricValue(*m_pRightMarginEdit.get(), m_nPageRightMargin, meUnit);
+                // m_pLeftMarginEdit->SetValue(nLeft,lcl_GetFieldUnit());
+                // m_pRightMarginEdit->SetValue(nRight,lcl_GetFieldUnit());
+                // m_aPageSize = pSize->GetSize();
+            }
+        }
+        break;
+
+        case SID_ATTR_PAGE_ULSPACE:
+        {
+            const SvxLongULSpaceItem* pULItem = nullptr;
+            if (eState >= SfxItemState::DEFAULT)
+            {
+                pULItem = dynamic_cast<const SvxLongULSpaceItem*>(pState);
+                m_nPageTopMargin = pULItem->GetUpper();
+                m_nPageBottomMargin = pULItem->GetLower();
+                // sal_Int32 nUpper,nLower;
+                // mpULItem.reset( static_cast<SvxLongULSpaceItem*>(pState->Clone()) );
+                // nUpper = mpULItem->GetUpper();
+                // nLower = mpULItem->GetLower();
+                SetFieldUnit(*m_pTopMarginEdit, lcl_GetFieldUnit(), true);
+                SetMetricValue(*m_pTopMarginEdit.get(), m_nPageTopMargin, meUnit);
+                SetFieldUnit(*m_pBottomMarginEdit, lcl_GetFieldUnit(), true);
+                SetMetricValue(*m_pBottomMarginEdit.get(), m_nPageBottomMargin, meUnit);
+                // m_pTopMarginEdit->SetValue(nUpper);
+                // m_pBottomMarginEdit->SetValue(nLower);
+            }
+        }
+        break;
+
         case SID_DISPLAY_MASTER_BACKGROUND:
         {
             const SfxBoolItem* pBoolItem = nullptr;
@@ -741,6 +879,33 @@ void SlideBackground::NotifyItemUpdate(
         default:
             break;
     }
+}
+
+void SlideBackground::SetMetricFieldMaxValues( const Size& rPageSize )
+{
+    const long nML = m_pLeftMarginEdit->Denormalize( m_pLeftMarginEdit->GetValue( FUNIT_TWIP ) );
+    const long nMR = m_pRightMarginEdit->Denormalize( m_pRightMarginEdit->GetValue( FUNIT_TWIP ) );
+    const long nMT = m_pTopMarginEdit->Denormalize( m_pTopMarginEdit->GetValue( FUNIT_TWIP ) );
+    const long nMB = m_pBottomMarginEdit->Denormalize( m_pBottomMarginEdit->GetValue( FUNIT_TWIP ) );
+
+    const long nPH  = LogicToLogic( rPageSize.Height(), (MapUnit)meUnit, MapUnit::MapTwip );
+    const long nPW  = LogicToLogic( rPageSize.Width(),  (MapUnit)meUnit, MapUnit::MapTwip );
+
+    // Left
+    long nMax = nPW - nMR - MINBODY;
+    m_pLeftMarginEdit->SetMax( m_pLeftMarginEdit->Normalize( nMax ), FUNIT_TWIP );
+
+    // Right
+    nMax = nPW - nML - MINBODY;
+    m_pRightMarginEdit->SetMax( m_pRightMarginEdit->Normalize( nMax ), FUNIT_TWIP );
+
+    //Top
+    nMax = nPH - nMB - MINBODY;
+    m_pTopMarginEdit->SetMax( m_pTopMarginEdit->Normalize( nMax ), FUNIT_TWIP );
+
+    //Bottom
+    nMax = nPH - nMT -  MINBODY;
+    m_pBottomMarginEdit->SetMax( m_pTopMarginEdit->Normalize( nMax ), FUNIT_TWIP );
 }
 
 IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, ListBox&, void)
@@ -914,6 +1079,37 @@ IMPL_LINK_NOARG(SlideBackground, DspObjects, Button*, void)
     bool IsChecked = mpDspMasterObjects->IsChecked();
     const SfxBoolItem aBoolItem(SID_DISPLAY_MASTER_OBJECTS,IsChecked);
     GetBindings()->GetDispatcher()->ExecuteList(SID_DISPLAY_MASTER_OBJECTS, SfxCallMode::RECORD, { &aBoolItem, &aBoolItem });
+}
+
+IMPL_LINK_NOARG( SlideBackground, ModifyLRMarginHdl, Edit&, void )
+{
+    m_nPageLeftMargin = GetCoreValue( *m_pLeftMarginEdit.get(), meUnit );
+    m_nPageRightMargin = GetCoreValue( *m_pRightMarginEdit.get(), meUnit );
+    if ( SfxViewFrame::Current() )
+    {
+        std::unique_ptr<SvxLongLRSpaceItem> pPageLRMarginItem( new SvxLongLRSpaceItem( 0, 0, SID_ATTR_PAGE_LRSPACE ) );
+        // m_nPageLeftMargin = 567;
+        pPageLRMarginItem->SetLeft( m_nPageLeftMargin );
+        pPageLRMarginItem->SetRight( m_nPageRightMargin );
+        GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_LRSPACE, SfxCallMode::RECORD, { pPageLRMarginItem.get() } );
+        pPageLRMarginItem.reset();
+    }
+    SetMetricFieldMaxValues( m_aPageSize );
+}
+
+IMPL_LINK_NOARG( SlideBackground, ModifyULMarginHdl, Edit&, void )
+{
+    m_nPageTopMargin = GetCoreValue( *m_pTopMarginEdit.get(), meUnit );
+    m_nPageBottomMargin = GetCoreValue( *m_pBottomMarginEdit.get(), meUnit );
+    if ( SfxViewFrame::Current() )
+    {
+        std::unique_ptr<SvxLongULSpaceItem> pPageULMarginItem( new SvxLongULSpaceItem( 0, 0, SID_ATTR_PAGE_ULSPACE ) );
+        pPageULMarginItem->SetUpper( m_nPageTopMargin );
+        pPageULMarginItem->SetLower( m_nPageBottomMargin );
+        GetBindings()->GetDispatcher()->ExecuteList( SID_ATTR_PAGE_ULSPACE, SfxCallMode::RECORD, { pPageULMarginItem.get() } );
+        pPageULMarginItem.reset();
+    }
+    SetMetricFieldMaxValues( m_aPageSize );
 }
 
 }}
