@@ -90,6 +90,16 @@ void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows, sal_uInt32 nHint
     }
 }
 
+void ScColumn::BroadcastRows( SCROW nStartRow, SCROW nEndRow )
+{
+    sc::SingleColumnSpanSet aSpanSet;
+    aSpanSet.scan(*this, nStartRow, nEndRow);
+    std::vector<SCROW> aRows;
+    aSpanSet.getRows(aRows);
+    BroadcastCells(aRows, SC_HINT_DATACHANGED);
+}
+
+
 struct DirtyCellInterpreter
 {
     void operator() (size_t, ScFormulaCell* p)
