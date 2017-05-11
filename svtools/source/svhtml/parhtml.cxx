@@ -1969,7 +1969,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
                 bool valid = false;
                 if (comphelper::string::getTokenCount(aContent, ';') == 2)
                 {
-                    Date aDate((sal_uLong)aContent.getToken(0, ';').toInt32());
+                    Date aDate(aContent.getToken(0, ';').toInt32());
                     tools::Time aTime(aContent.getToken(1, ';').toInt64());
                     DateTime aDateTime(aDate, aTime);
                     uDT = aDateTime.GetUNODateTime();
