@@ -17,11 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_XMLSIGNATURE_NSSIMPL_HXX
-#define INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_XMLSIGNATURE_NSSIMPL_HXX
+#ifndef INCLUDED_XMLSECURITY_SOURCE_GPG_XMLSIGNATURE_GPGIMPL_HXX
+#define INCLUDED_XMLSECURITY_SOURCE_GPG_XMLSIGNATURE_GPGIMPL_HXX
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
+#include <xsecgpgdllapi.h>
+
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -34,15 +36,14 @@
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 
-#include "xsecxmlsecdllapi.h"
-
-class XSECXMLSEC_DLLPUBLIC XMLSignature_NssImpl : public ::cppu::WeakImplHelper<
+// TODO: hack, remove dllpublic again...
+class XSECGPG_DLLPUBLIC XMLSignature_GpgImpl : public ::cppu::WeakImplHelper<
     css::xml::crypto::XXMLSignature ,
     css::lang::XServiceInfo >
 {
     public:
-        explicit XMLSignature_NssImpl();
-        virtual ~XMLSignature_NssImpl() override ;
+        explicit XMLSignature_GpgImpl();
+        virtual ~XMLSignature_GpgImpl() override ;
 
         //Methods from XXMLSignature
         virtual css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate > SAL_CALL generate(
@@ -77,6 +78,6 @@ class XSECXMLSEC_DLLPUBLIC XMLSignature_NssImpl : public ::cppu::WeakImplHelper<
         static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
 } ;
 
-#endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_XMLSIGNATURE_NSSIMPL_HXX
+#endif // INCLUDED_XMLSECURITY_SOURCE_GPG_XMLSIGNATURE_GPGIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
