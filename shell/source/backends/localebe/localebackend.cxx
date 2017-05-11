@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <cassert>
 #include <limits>
 
 #include "localebackend.hxx"
@@ -194,6 +195,7 @@ static css::beans::Optional<css::uno::Any> ImplGetLocale(char const * category)
             return {false, {}};
         }
     }
+    assert(cp >= locale);
     if (cp - locale > std::numeric_limits<sal_Int32>::max()) {
         SAL_INFO("shell", "locale env var content too long");
         return {false, {}};
