@@ -93,11 +93,14 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
                 }
             case CERT_ALT_NAME_RFC822_NAME :
                 arrCertAltNameEntry[i].Type = ExtAltNameType_RFC822_NAME;
-                arrCertAltNameEntry[i].Value <<= OUString(SAL_U(pEntry->pwszRfc822Name));
+                arrCertAltNameEntry[i].Value <<= OUString(
+                    reinterpret_cast<sal_Unicode const *>(
+                        pEntry->pwszRfc822Name));
                 break;
             case CERT_ALT_NAME_DNS_NAME :
                 arrCertAltNameEntry[i].Type = ExtAltNameType_DNS_NAME;
-                arrCertAltNameEntry[i].Value <<= OUString(SAL_U(pEntry->pwszDNSName));
+                arrCertAltNameEntry[i].Value <<= OUString(
+                    reinterpret_cast<sal_Unicode const *>(pEntry->pwszDNSName));
                 break;
             case CERT_ALT_NAME_DIRECTORY_NAME :
                 {
@@ -106,7 +109,8 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
                 }
             case CERT_ALT_NAME_URL :
                 arrCertAltNameEntry[i].Type = ExtAltNameType_URL;
-                arrCertAltNameEntry[i].Value <<= OUString(SAL_U(pEntry->pwszURL));
+                arrCertAltNameEntry[i].Value <<= OUString(
+                    reinterpret_cast<sal_Unicode const *>(pEntry->pwszURL));
                 break;
             case CERT_ALT_NAME_IP_ADDRESS :
                 {

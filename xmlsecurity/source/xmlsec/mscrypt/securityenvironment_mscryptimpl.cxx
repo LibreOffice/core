@@ -282,22 +282,21 @@ void SecurityEnvironment_MSCryptImpl::setCertDb( HCERTSTORE aCertDb ) {
 
 // Based on sample code from MSDN
 
-static void get_system_name(const void *pvSystemStore,
-                            DWORD dwFlags,
-                            LPCWSTR *ppwszSystemName)
+static OUString get_system_name(const void *pvSystemStore,
+                            DWORD dwFlags)
 {
-    *ppwszSystemName = nullptr;
-
+    LPCWSTR ppwszSystemName;
     if (dwFlags & CERT_SYSTEM_STORE_RELOCATE_FLAG)
     {
         _CERT_SYSTEM_STORE_RELOCATE_PARA const * pRelocatePara;
         pRelocatePara = static_cast<_CERT_SYSTEM_STORE_RELOCATE_PARA const *>(pvSystemStore);
-        *ppwszSystemName = pRelocatePara->pwszSystemStore;
+        ppwszSystemName = pRelocatePara->pwszSystemStore;
     }
     else
     {
-        *ppwszSystemName = static_cast<LPCWSTR>(pvSystemStore);
+        ppwszSystemName = static_cast<LPCWSTR>(pvSystemStore);
     }
+    return reinterpret_cast<sal_Unicode const *>(ppwszSystemName);
 }
 
 extern "C" BOOL WINAPI cert_enum_physical_store_callback(const void *,
@@ -307,7 +306,7 @@ extern "C" BOOL WINAPI cert_enum_physical_store_callback(const void *,
                                                          void *,
                                                          void *)
 {
-    OUString name(SAL_U(pwszStoreName));
+    OUString name(reinterpret_cast<sal_Unicode const *>(pwszStoreName));
     if (dwFlags & CERT_PHYSICAL_STORE_PREDEFINED_ENUM_FLAG)
         name += " (implicitly created)";
     SAL_INFO("xmlsecurity.xmlsec", "  Physical store: " << name);
@@ -321,10 +320,7 @@ extern "C" BOOL WINAPI cert_enum_system_store_callback(const void *pvSystemStore
                                                        void *,
                                                        void *)
 {
-    LPCWSTR pwszSystemStore;
-
-    get_system_name(pvSystemStore, dwFlags, &pwszSystemStore);
-    SAL_INFO("xmlsecurity.xmlsec", "System store: " << OUString(SAL_U(pwszSystemStore)));
+    SAL_INFO("xmlsecurity.xmlsec", "System store: " << get_system_name(pvSystemStore, dwFlags));
 
     if (!CertEnumPhysicalStore(pvSystemStore,
                                dwFlags,
