@@ -13,7 +13,7 @@
    height="16"
    id="svg3049"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="sc_pagedialog.svg"
    inkscape:export-filename="/home/uri/.kde/share/icons/NITRUX-KDE/16x16/actions/view-right-new.png"
    inkscape:export-xdpi="30"
@@ -28,8 +28,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="32"
-     inkscape:cx="13.825617"
-     inkscape:cy="3.1986849"
+     inkscape:cx="9.294367"
+     inkscape:cy="2.9486849"
      inkscape:document-units="px"
      inkscape:current-layer="layer1-6"
      showgrid="true"
@@ -37,15 +37,16 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1868"
-     inkscape:window-height="1060"
-     inkscape:window-x="50"
-     inkscape:window-y="-3"
+     inkscape:window-width="2560"
+     inkscape:window-height="1375"
+     inkscape:window-x="0"
+     inkscape:window-y="36"
      inkscape:window-maximized="1"
      inkscape:showpageshadow="false"
      borderlayer="true"
      inkscape:snap-bbox="true"
-     inkscape:snap-global="true">
+     inkscape:snap-global="true"
+     inkscape:object-nodes="true">
     <inkscape:grid
        type="xygrid"
        id="grid4085" />
@@ -104,14 +105,14 @@
              x="16.914654"
              y="1053.0374" /></text>
         <path
-           style="color:#000000;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-           d="M 3 2 L 3 5 L 4 5 L 4 3 L 7 3 L 12 3 L 12 9 L 12 10 L 9 10 L 9 13 L 6 13 L 6 14 L 10 14 L 13 11 L 13 9 L 13 3 L 13 2 L 7 2 L 3 2 z "
+           style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#4d4d4d;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;enable-background:accumulate"
+           d="M 3 2 L 3 3 L 3 14 L 5 14 L 5 13 L 4 13 L 4 3 L 9 3 L 9 6 L 12 6 L 12 7 L 12 11 L 13 11 L 13 7 L 13 5 L 10 2 L 3 2 z "
            transform="matrix(1.3333333,0,0,1.3333367,0.3333327,1030.6957)"
            id="rect3782" />
         <path
            inkscape:connector-curvature="0"
-           style="color:#000000;fill:#f47750;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-           d="m 4.3333327,1048.0291 c 0,0.7363 0.5969985,1.3333 1.3333966,1.3333 0.7362987,0 1.3332967,-0.597 1.3332967,-1.3333 0,-0.7364 -0.596998,-1.3334 -1.3332967,-1.3334 -0.7363981,0 -1.3333966,0.597 -1.3333966,1.3334 z m 0,-4.0001 c 0,0.7364 0.5969985,1.3334 1.3333966,1.3334 0.7362987,0 1.3332967,-0.597 1.3332967,-1.3334 0,-0.7363 -0.596998,-1.3333 -1.3332967,-1.3333 -0.7363981,0 -1.3333966,0.597 -1.3333966,1.3333 z m 0,-4 c 0,0.7364 0.5969985,1.3334 1.3333966,1.3334 0.7362987,0 1.3332967,-0.597 1.3332967,-1.3334 0,-0.7363 -0.596998,-1.3333 -1.3332967,-1.3333 -0.7363981,0 -1.3333966,0.597 -1.3333966,1.3333 z"
+           style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#f47750;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;marker:none;enable-background:accumulate"
+           d="m 9.6666293,1046.6957 c -0.7362981,0 -1.3332966,0.597 -1.3332966,1.3334 0,0.7363 0.5969985,1.3333 1.3332966,1.3333 0.7363987,0 1.3333967,-0.597 1.3333967,-1.3333 0,-0.7364 -0.596998,-1.3334 -1.3333967,-1.3334 z m 4.0000907,0 c -0.736398,0 -1.333397,0.597 -1.333397,1.3334 0,0.7363 0.596999,1.3333 1.333397,1.3333 0.736298,0 1.333296,-0.597 1.333296,-1.3333 0,-0.7364 -0.596998,-1.3334 -1.333296,-1.3334 z m 3.99999,0 c -0.736398,0 -1.333397,0.597 -1.333397,1.3334 0,0.7363 0.596999,1.3333 1.333397,1.3333 0.736298,0 1.333296,-0.597 1.333296,-1.3333 0,-0.7364 -0.596998,-1.3334 -1.333296,-1.3334 z"
            id="path2989" />
       </g>
     </g>
