@@ -23,6 +23,7 @@
 #include <viewsh.hxx>
 #include "swfntcch.hxx"
 #include "fmtcol.hxx"
+#include "fntcache.hxx"
 #include "swfont.hxx"
 
 // from atrstck.cxx
@@ -66,6 +67,7 @@ SwCacheObj *SwFontAccess::NewObj( )
 SAL_DLLPUBLIC_EXPORT void FlushFontCache()
 {
     pSwFontCache->Flush();
+    pFntCache->Flush();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
