@@ -41,7 +41,4 @@
   <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLSecurityContext_NssImpl">
     <service name="com.sun.star.xml.crypto.XMLSecurityContext"/>
   </implementation>
-  <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLSignature_NssImpl">
-    <service name="com.sun.star.xml.crypto.XMLSignature"/>
-  </implementation>
 </component>
