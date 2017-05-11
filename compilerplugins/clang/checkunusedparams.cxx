@@ -127,7 +127,7 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
     }
 
     FunctionDecl const * canon = decl->getCanonicalDecl();
-    std::string fqn = canon->getQualifiedNameAsString(); // becuase sometimes clang returns nonsense for the filename of canon
+    std::string fqn = canon->getQualifiedNameAsString(); // because sometimes clang returns nonsense for the filename of canon
     if (ignoreLocation(canon))
         return true;
     if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(canon->getLocation())))

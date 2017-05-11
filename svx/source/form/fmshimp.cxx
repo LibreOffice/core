@@ -2249,7 +2249,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation&, rfriWhere, void)
         Reference<XControl> xControl( pFormObject ? impl_getControl( xControlModel, *pFormObject ) : Reference< XControl>() );
         Reference< XGrid> xGrid(xControl, UNO_QUERY);
         DBG_ASSERT(xGrid.is(), "FmXFormShell::OnFoundData : invalid control!");
-        // if one of the asserts fires, I probably did somethig wrong on building of m_arrSearchedControls
+        // if one of the asserts fires, I probably did something wrong on building of m_arrSearchedControls
 
         // enable a permanent cursor for the grid so we can see the found text
         Reference< XPropertySet> xModelSet(xControlModel, UNO_QUERY);

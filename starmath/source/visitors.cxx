@@ -937,7 +937,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
  *
  *      FROM
  * \endcode
- * Notice, CSUP, etc. are actually granchildren, but inorder to ignore H, these are visited
+ * Notice, CSUP, etc. are actually grandchildren, but inorder to ignore H, these are visited
  * from here. If they are present, that is if pOper is an instance of SmSubSupNode.
  *
  * Graph over these, where "left" is before the SmOperNode and "right" is after:
