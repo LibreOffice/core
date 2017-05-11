@@ -2215,12 +2215,12 @@ void SwBasicEscherEx::Init()
     MapUnit eMap = MapUnit::MapTwip;
     if (SwDrawModel *pModel = rWrt.m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
     {
-        // PPT arbeitet nur mit Einheiten zu 576DPI
-        // WW hingegen verwendet twips, dh. 1440DPI.
+        // PPT works only with units of 576DPI
+        // WW howerver is using twips, i.e 1440DPI.
         eMap = pModel->GetScaleUnit();
     }
 
-    // MS-DFF-Properties sind grossteils in EMU (English Metric Units) angegeben
+    // MS-DFF-Properties mostly are in EMU (English Metric Units)
     // 1mm=36000emu, 1twip=635emu
     Fraction aFact(360, 1);
     aFact /= GetMapFactor(MapUnit::Map100thMM, eMap).X();
