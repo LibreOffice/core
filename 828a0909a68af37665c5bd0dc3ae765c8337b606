@@ -1,0 +1,514 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_dac15d82",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "This should be __init__(self):",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_fabe19fe",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "We might need a real error here.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_1abcc504",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "We might need a real error here.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_3a37c1b1",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Most likely here as well.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_3a5ee1e9",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Why assign the self.searchedAccessible? I searched the whole file and it is never read.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_5a63adb1",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Again only an assignment.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_7a5869fb",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Missing self.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_9a5d15ec",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_da6f9d90",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Assignment without ever using the variable.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_ba72d17a",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Missing self.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_fa6c599e",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Wrong indentation.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_1a6a0581",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Assignment without reading the variable",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_3a0501c2",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Missing self.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_5a0acdd3",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Wrong indentation",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_7a0f89e1",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Missing self.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_9a1435f6",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Missing self.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_baf9f1ca",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Missing self.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_fa0379b6",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Why not use aObject directly?",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_1a0125af",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Again an assignment.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_5a31eda1",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Missing self.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_7a26a969",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Assignment without using the variable.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_9a2b5530",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Missing self.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_1a53e5e2",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_ba20114b",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Missing self.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_fa5539c6",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "This will surely not work. It would need to be self.printAccessibleTree.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_5a3c8d93",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Trailing whitesapce",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_9a46f521",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "Why do we need a new variable when they always point to the same object?",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_ba4bb12a",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "This makes no sense as instance method.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_da487d30",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "This makes no sense as instance method",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_7a41490b",
+        "filename": "sw/qa/python/accessibility_tools.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-11T12:28:25Z",
+      "side": 1,
+      "message": "What is this? I doubt that this works.",
+      "revId": "828a0909a68af37665c5bd0dc3ae765c8337b606",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
