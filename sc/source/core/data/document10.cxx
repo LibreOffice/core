@@ -881,4 +881,27 @@ bool ScDocument::CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRange
     return true;
 }
 
+bool ScDocument::IsEditActionAllowed(
+    sc::ColRowEditAction eAction, SCTAB nTab, SCCOLROW nStart, SCCOLROW nEnd ) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return false;
+
+    return pTab->IsEditActionAllowed(eAction, nStart, nEnd);
+}
+
+bool ScDocument::IsEditActionAllowed(
+    sc::ColRowEditAction eAction, const ScMarkData& rMark, SCCOLROW nStart, SCCOLROW nEnd ) const
+{
+    ScMarkData::const_iterator it = rMark.begin(), itEnd = rMark.end();
+    for (; it != itEnd; ++it)
+    {
+        if (!IsEditActionAllowed(eAction, *it, nStart, nEnd))
+            return false;
+    }
+
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

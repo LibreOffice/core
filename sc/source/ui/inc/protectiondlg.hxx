@@ -62,6 +62,10 @@ private:
 
     OUString         m_aSelectLockedCells;
     OUString         m_aSelectUnlockedCells;
+    OUString         m_aInsertColumns;
+    OUString         m_aInsertRows;
+    OUString         m_aDeleteColumns;
+    OUString         m_aDeleteRows;
 
     DECL_LINK( OKHdl, Button*, void );
     DECL_LINK( CheckBoxHdl, Button*, void );

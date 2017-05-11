@@ -40,6 +40,10 @@ struct ScXMLTabProtectionData
     bool            mbProtected;
     bool            mbSelectProtectedCells;
     bool            mbSelectUnprotectedCells;
+    bool            mbInsertColumns;
+    bool            mbInsertRows;
+    bool            mbDeleteColumns;
+    bool            mbDeleteRows;
 
     ScXMLTabProtectionData();
 };

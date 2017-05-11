@@ -23,13 +23,21 @@
 
 #include <sal/macros.h>
 #include <vcl/msgbox.hxx>
+#include <vector>
+
+namespace {
 
 // The order must match that of the list box.
-static const ScTableProtection::Option aOptions[] = {
+const std::vector<ScTableProtection::Option> aOptions = {
     ScTableProtection::SELECT_LOCKED_CELLS,
     ScTableProtection::SELECT_UNLOCKED_CELLS,
+    ScTableProtection::INSERT_COLUMNS,
+    ScTableProtection::INSERT_ROWS,
+    ScTableProtection::DELETE_COLUMNS,
+    ScTableProtection::DELETE_ROWS,
 };
-static const sal_uInt16 nOptionCount = SAL_N_ELEMENTS(aOptions);
+
+}
 
 ScTableProtectionDlg::ScTableProtectionDlg(vcl::Window* pParent)
     : ModalDialog( pParent, "ProtectSheetDialog", "modules/scalc/ui/protectsheetdlg.ui" )
@@ -44,6 +52,10 @@ ScTableProtectionDlg::ScTableProtectionDlg(vcl::Window* pParent)
 
     m_aSelectLockedCells = get<FixedText>("protected")->GetText();
     m_aSelectUnlockedCells = get<FixedText>("unprotected")->GetText();
+    m_aInsertColumns = get<FixedText>("insert-columns")->GetText();
+    m_aInsertRows = get<FixedText>("insert-rows")->GetText();
+    m_aDeleteColumns = get<FixedText>("delete-columns")->GetText();
+    m_aDeleteRows = get<FixedText>("delete-rows")->GetText();
 
     Init();
 }
@@ -67,7 +79,7 @@ void ScTableProtectionDlg::dispose()
 
 void ScTableProtectionDlg::SetDialogData(const ScTableProtection& rData)
 {
-    for (sal_uInt16 i = 0; i < nOptionCount; ++i)
+    for (size_t i = 0; i < aOptions.size(); ++i)
         m_pOptionsListBox->CheckEntryPos(i, rData.isOptionEnabled(aOptions[i]));
 }
 
@@ -78,7 +90,7 @@ void ScTableProtectionDlg::WriteData(ScTableProtection& rData) const
     // We assume that the two password texts match.
     rData.setPassword(m_pPassword1Edit->GetText());
 
-    for (sal_uInt16 i = 0; i < nOptionCount; ++i)
+    for (size_t i = 0; i < aOptions.size(); ++i)
         rData.setOption(aOptions[i], m_pOptionsListBox->IsChecked(i));
 }
 
@@ -97,6 +109,10 @@ void ScTableProtectionDlg::Init()
 
     m_pOptionsListBox->InsertEntry(m_aSelectLockedCells);
     m_pOptionsListBox->InsertEntry(m_aSelectUnlockedCells);
+    m_pOptionsListBox->InsertEntry(m_aInsertColumns);
+    m_pOptionsListBox->InsertEntry(m_aInsertRows);
+    m_pOptionsListBox->InsertEntry(m_aDeleteColumns);
+    m_pOptionsListBox->InsertEntry(m_aDeleteRows);
 
     m_pOptionsListBox->CheckEntryPos(0);
     m_pOptionsListBox->CheckEntryPos(1);
