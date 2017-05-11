@@ -32,7 +32,10 @@ SAL_DLLPUBLIC_EXPORT bool GetSpecialCharsForEdit(vcl::Window* i_pParent, const v
     aDlg->SetCharFont(i_rFont);
     if ( aDlg->Execute() == RET_OK )
     {
-        o_rResult = aDlg->GetCharacters();
+        sal_UCS4 cChar = aDlg->GetChar();
+        // using the new UCS4 constructor
+        OUString aOUStr( &cChar, 1 );
+        o_rResult = aOUStr;
         bRet = true;
     }
     return bRet;
