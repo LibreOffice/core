@@ -23,17 +23,17 @@ public:
     explicit SmRtfExport(const SmNode* pIn);
     void ConvertFromStarMath(OStringBuffer& rBuffer, rtl_TextEncoding nEncoding);
 private:
-    virtual void HandleVerticalStack(const SmNode* pNode, int nLevel) override;
-    virtual void HandleText(const SmNode* pNode, int nLevel) override;
-    virtual void HandleFractions(const SmNode* pNode, int nLevel, const char* type) override;
-    virtual void HandleRoot(const SmRootNode* pNode, int nLevel) override;
-    virtual void HandleAttribute(const SmAttributNode* pNode, int nLevel) override;
-    virtual void HandleOperator(const SmOperNode* pNode, int nLevel) override;
-    virtual void HandleSubSupScriptInternal(const SmSubSupNode* pNode, int nLevel, int flags) override;
-    virtual void HandleMatrix(const SmMatrixNode* pNode, int nLevel) override;
-    virtual void HandleBrace(const SmBraceNode* pNode, int nLevel) override;
-    virtual void HandleVerticalBrace(const SmVerticalBraceNode* pNode, int nLevel) override;
-    virtual void HandleBlank() override;
+    void HandleVerticalStack(const SmNode* pNode, int nLevel) override;
+    void HandleText(const SmNode* pNode, int nLevel) override;
+    void HandleFractions(const SmNode* pNode, int nLevel, const char* type) override;
+    void HandleRoot(const SmRootNode* pNode, int nLevel) override;
+    void HandleAttribute(const SmAttributNode* pNode, int nLevel) override;
+    void HandleOperator(const SmOperNode* pNode, int nLevel) override;
+    void HandleSubSupScriptInternal(const SmSubSupNode* pNode, int nLevel, int flags) override;
+    void HandleMatrix(const SmMatrixNode* pNode, int nLevel) override;
+    void HandleBrace(const SmBraceNode* pNode, int nLevel) override;
+    void HandleVerticalBrace(const SmVerticalBraceNode* pNode, int nLevel) override;
+    void HandleBlank() override;
 
     OStringBuffer* m_pBuffer;
     rtl_TextEncoding m_nEncoding;
