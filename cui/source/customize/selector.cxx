@@ -194,11 +194,7 @@ SvxConfigFunctionListBox::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return DND_ACTION_NONE;
 }
-void SvxConfigFunctionListBox::KeyInput(const KeyEvent& aKey)
-{
-    vcl::KeyCode aCode1 = aKey.GetKeyCode();
-    sal_uInt16 nCode1 = aCode1.GetCode();
-}
+
 SvxConfigGroupListBox::SvxConfigGroupListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle |
             WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT | WB_TABSTOP)
@@ -232,15 +228,6 @@ void SvxConfigGroupListBox::dispose()
     ClearAll();
     pFunctionListBox.clear();
     SvTreeListBox::dispose();
-}
-
-void SvxConfigGroupListBox::KeyInput(const KeyEvent& aKey)
-{
-    vcl::KeyCode aCode1 = aKey.GetKeyCode();
-    sal_uInt16 nCode1 = aCode1.GetCode();
-    if(nCode1==KEY_DELETE){
-        sal_uInt16 a = 234;
-    }
 }
 
 void SvxConfigGroupListBox::ClearAll()
@@ -648,7 +635,6 @@ void SvxConfigGroupListBox::fillFunctionList(const Sequence< frame::DispatchInfo
         }
 
         Image aImage;
-
 
         OUString aCmdURL( commands[i].Command );
 

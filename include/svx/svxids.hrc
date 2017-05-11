@@ -251,6 +251,8 @@
 #define SID_ATTR_PAGE_ON                                ( SID_SVX_START + 60 )
 #define SID_ATTR_PAGE_DYNAMIC                           ( SID_SVX_START + 61 )
 #define SID_ATTR_PAGE_SHARED                            ( SID_SVX_START + 62 )
+#define SID_ATTR_PAGE_LRSPACE                           ( SID_SVX_START + 68 )
+#define SID_ATTR_PAGE_ULSPACE                           ( SID_SVX_START + 69 )
 
 // CAUTION! Range <64 .. 67> used by EditEngine (!)
 
