@@ -310,8 +310,6 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
 {
     rWorkbookHandler.getDocImport().initForSheets();
 
-    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-
     // test sequential read in this mode
     comphelper::ThreadPool &rSharedPool = comphelper::ThreadPool::getSharedOptimalPool();
     std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();

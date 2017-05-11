@@ -507,7 +507,6 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         else
         {
             Reference< XTypeConverter > tc = getImpl()->cargo->xTypeConverter;
-            Reference< XSingleServiceFactory > ssf = getImpl()->cargo->xInvocation;
             tc->convertTo (a, cppu::UnoType<decltype(s)>::get()) >>= s;
             PyRef tuple( PyTuple_New (s.getLength()), SAL_NO_ACQUIRE, NOT_NULL);
             int i=0;

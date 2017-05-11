@@ -1376,7 +1376,6 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt)
         return;
 
     // Database event
-    Reference< XRowSet >  xCursor(evt.Source, UNO_QUERY);
     if (evt.PropertyName == FM_PROP_VALUE || m_xCursor == evt.Source)
         pGrid->propertyChange(evt);
     else if (pGrid && m_xColumns.is() && m_xColumns->hasElements())

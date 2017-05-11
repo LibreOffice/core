@@ -486,7 +486,6 @@ void OXUndoEnvironment::AddSection(const Reference< report::XSection > & _xSecti
     try
     {
         uno::Reference<container::XChild> xChild = _xSection.get();
-        uno::Reference<report::XGroup> xGroup(xChild->getParent(),uno::UNO_QUERY);
         m_pImpl->m_aSections.push_back(xChild);
         Reference< XInterface >  xInt(_xSection);
         AddElement(xInt);

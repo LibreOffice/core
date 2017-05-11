@@ -1192,7 +1192,6 @@ void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& 
         m_eLoadState = E_FAILED;
         if( aEvent.State == css::frame::DispatchResultState::SUCCESS )
         {
-            css::uno::Reference < css::frame::XFrame > xFrame;
             if ( aEvent.Result >>= m_xLastFrame )
                 m_eLoadState = E_SUCCESSFUL;
         }

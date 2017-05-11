@@ -731,8 +731,7 @@ OWriteMenuDocumentHandler::~OWriteMenuDocumentHandler()
 
 void OWriteMenuDocumentHandler::WriteMenuDocument()
 {
-    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    Reference< XAttributeList > rList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
+    rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
     m_xWriteDocumentHandler->startDocument();
 
@@ -758,7 +757,7 @@ void OWriteMenuDocumentHandler::WriteMenuDocument()
         aRootElement = ELEMENT_NS_MENUBAR;
     else
         aRootElement = ELEMENT_NS_MENUPOPUP;
-    m_xWriteDocumentHandler->startElement( aRootElement, pList );
+    m_xWriteDocumentHandler->startElement( aRootElement, pList.get() );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     WriteMenu( m_xMenuBarContainer );

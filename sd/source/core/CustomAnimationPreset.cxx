@@ -301,9 +301,6 @@ void CustomAnimationPresets::importEffects()
         Reference< XMultiServiceFactory > xServiceFactory(
             xContext->getServiceManager(), UNO_QUERY_THROW );
 
-        uno::Reference< util::XMacroExpander > xMacroExpander =
-            util::theMacroExpander::get(xContext);
-
         Reference< XMultiServiceFactory > xConfigProvider =
             configuration::theDefaultProvider::get( xContext );
 

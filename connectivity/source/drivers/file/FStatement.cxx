@@ -278,9 +278,8 @@ sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& sql )
 
 
     construct(sql);
-    OResultSet* pResult = createResultSet();
-    Reference< XResultSet > xRS = pResult;
-    initializeResultSet(pResult);
+    rtl::Reference<OResultSet> pResult = createResultSet();
+    initializeResultSet(pResult.get());
     pResult->OpenImpl();
 
     return pResult->getRowCountResult();

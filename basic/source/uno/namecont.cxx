@@ -1058,8 +1058,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             }
             if( mxSFI->isFolder( aPrevFolder ) )
             {
-                SfxLibraryContainer* pPrevCont = createInstanceImpl();
-                Reference< XInterface > xRef = static_cast< XInterface* >( static_cast< OWeakObject* >(pPrevCont) );
+                rtl::Reference<SfxLibraryContainer> pPrevCont = createInstanceImpl();
 
                 // Rename previous basic folder to make storage URLs correct during initialisation
                 OUString aFolderUserBasic = aUserBasicInetObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
@@ -1266,7 +1265,7 @@ void SfxLibraryContainer::implScanExtensions()
 
         // Create link
         const bool bReadOnly = false;
-        Reference< XNameAccess > xLib = createLibraryLink( aLibName, aIndexFileURL, bReadOnly );
+        createLibraryLink( aLibName, aIndexFileURL, bReadOnly );
     }
 #else
     (void) this;
@@ -3261,7 +3260,6 @@ ScriptSubPackageIterator::ScriptSubPackageIterator( Reference< deployment::XPack
     , m_nSubPkgCount( 0 )
     , m_iNextSubPkg( 0 )
 {
-    Reference< deployment::XPackage > xScriptPackage;
     if( !m_xMainPackage.is() )
     {
         return;

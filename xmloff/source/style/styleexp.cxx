@@ -340,9 +340,6 @@ bool XMLStyleExport::exportDefaultStyle(
           const OUString& rXMLFamily,
         const rtl::Reference < SvXMLExportPropertyMapper >& rPropMapper )
 {
-    Reference< XPropertySetInfo > xPropSetInfo =
-            xPropSet->getPropertySetInfo();
-
     // <style:default-style ...>
     GetExport().CheckAttrList();
 

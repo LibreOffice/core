@@ -146,7 +146,6 @@ uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithH
     /*
      * get SAX writer component
      */
-    uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     uno::Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(mxCtx);
 
     /*

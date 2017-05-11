@@ -73,7 +73,6 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFram
         return;
 
     uno::Reference<frame::XFrame> xFrame = pFrame->GetFrame().GetFrameInterface();
-    uno::Reference<frame::XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);
 
     uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
                                         "_beamer",

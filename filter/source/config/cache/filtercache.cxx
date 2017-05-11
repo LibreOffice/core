@@ -610,7 +610,6 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
                                    const OUStringList&                                       lItems)
 {
     css::uno::Reference< css::container::XNameContainer >   xAddRemoveSet(xSet, css::uno::UNO_QUERY);
-    css::uno::Reference< css::container::XNameReplace >     xReplaceeSet(xSet, css::uno::UNO_QUERY);
     css::uno::Reference< css::lang::XSingleServiceFactory > xFactory(xSet, css::uno::UNO_QUERY);
 
     for (OUStringList::const_iterator pIt  = lItems.begin();

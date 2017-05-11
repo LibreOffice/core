@@ -1097,7 +1097,6 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                         ++i;
                     }
 
-                    uno::Reference< lang::XServiceInfo > xInfo( aStart->xGrammarChecker, uno::UNO_QUERY );
                     SpellErrorDescription aDesc( true,
                         aStart->sText,
                         LanguageTag::convertToLocale( aStart->eLanguage ),

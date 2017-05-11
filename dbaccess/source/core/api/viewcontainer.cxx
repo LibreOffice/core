@@ -107,7 +107,6 @@ Reference< XPropertySet > OViewContainer::createDescriptor()
     Reference< XPropertySet > xRet;
     // first we have to look if the master tables support this
     // and if so then create a table object as well with the master tables
-    Reference<XColumnsSupplier > xMasterColumnsSup;
     Reference<XDataDescriptorFactory> xDataFactory(m_xMasterContainer,UNO_QUERY);
     if(xDataFactory.is())
         xRet = xDataFactory->createDataDescriptor();

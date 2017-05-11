@@ -499,8 +499,6 @@ bool SdXMLFilter::Import( ErrCode& nError )
         }
     }
 
-    Reference< io::XActiveDataSource > xSource;
-    Reference< XInterface > xPipe;
     Reference< document::XGraphicObjectResolver > xGraphicResolver;
     SvXMLGraphicHelper *pGraphicHelper = nullptr;
     Reference< document::XEmbeddedObjectResolver > xObjectResolver;
@@ -543,7 +541,6 @@ bool SdXMLFilter::Import( ErrCode& nError )
     // get the input stream (storage or stream)
 
     tools::SvRef<SotStorageStream> xDocStream;
-    Reference<io::XInputStream> xInputStream;
     uno::Reference < embed::XStorage > xStorage = mrMedium.GetStorage();
 
     OUString sSourceStorage( "SourceStorage");

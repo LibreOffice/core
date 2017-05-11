@@ -259,8 +259,6 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
 
         if( xIfc.is() )
         {
-            Reference< XSingleServiceFactory > xFactory( xIfc, UNO_QUERY );
-
             // get root zip folder
             Reference< XInterface > xRootFolder;
             OUString szRootFolder("/");

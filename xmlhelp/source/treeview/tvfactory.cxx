@@ -88,8 +88,6 @@ TVFactory::createInstanceWithArguments(
         m_xHDS.set( p );
     }
 
-    Reference< XInterface > ret = m_xHDS;
-
     OUString hierview;
     for( int i = 0; i < Arguments.getLength(); ++i )
     {

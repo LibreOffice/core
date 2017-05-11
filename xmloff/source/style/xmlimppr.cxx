@@ -367,8 +367,6 @@ void SvXMLImportPropertyMapper::CheckSpecialContext(
     OSL_ENSURE( rPropSet.is(), "need an XPropertySet" );
     sal_Int32 nCount = aProperties.size();
 
-    Reference< XPropertySetInfo > xInfo(rPropSet->getPropertySetInfo());
-
     for( sal_Int32 i=0; i < nCount; i++ )
     {
         const XMLPropertyState& rProp = aProperties[i];

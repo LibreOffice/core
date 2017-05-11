@@ -4333,21 +4333,18 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
     {
         //  within Calc
 
-        ScTransferObj* pCellTransfer = pOwnSelection->GetCellData();
+        // keep a reference to the data in case the selection is changed during paste
+        rtl::Reference<ScTransferObj> pCellTransfer = pOwnSelection->GetCellData();
         if ( pCellTransfer )
         {
-            // keep a reference to the data in case the selection is changed during paste
-            uno::Reference<datatransfer::XTransferable> xRef( pCellTransfer );
-            DropTransferObj( pCellTransfer, nPosX, nPosY, aLogicPos, DND_ACTION_COPY );
+            DropTransferObj( pCellTransfer.get(), nPosX, nPosY, aLogicPos, DND_ACTION_COPY );
         }
         else
         {
-            ScDrawTransferObj* pDrawTransfer = pOwnSelection->GetDrawData();
+            // keep a reference to the data in case the selection is changed during paste
+            rtl::Reference<ScDrawTransferObj> pDrawTransfer = pOwnSelection->GetDrawData();
             if ( pDrawTransfer )
             {
-                // keep a reference to the data in case the selection is changed during paste
-                uno::Reference<datatransfer::XTransferable> xRef( pDrawTransfer );
-
                 //  bSameDocClipboard argument for PasteDraw is needed
                 //  because only DragData is checked directly inside PasteDraw
                 pViewData->GetView()->PasteDraw(

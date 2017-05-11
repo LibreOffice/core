@@ -1102,7 +1102,6 @@ void OStorage_Impl::Commit()
             {
                 // this is the case when xNewPackageFolder refers to m_xPackageFolder
                 // in case the name was changed and it is not a changed storage - rename the element
-                uno::Reference< container::XNamed > xNamed;
                 uno::Any aPackageElement = xNewPackageFolder->getByName( (*pElementIter)->m_aOriginalName );
                 xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
                 xNewPackageFolder->insertByName( (*pElementIter)->m_aName, aPackageElement );
@@ -1130,7 +1129,6 @@ void OStorage_Impl::Commit()
         if ( (*pElementIter)->m_bIsInserted )
         {
             (*pElementIter)->m_aOriginalName = (*pElementIter)->m_aName;
-            uno::Reference< lang::XUnoTunnel > xNewElement;
 
             if ( (*pElementIter)->m_bIsStorage )
             {
@@ -2644,7 +2642,6 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
         if (!pElement->m_xStorage)
             m_pImpl->OpenSubStorage( pElement, nStorageMode );
 
-        uno::Reference< embed::XStorage > xResult;
         if (pElement->m_xStorage)
         {
             // the existence of m_pAntiImpl of the child is not interesting,

@@ -888,10 +888,6 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute()
         awt::Toolkit::create(m_xContext),
         UNO_QUERY_THROW );
 
-    uno::Reference< frame::XDesktop > xDesktop(
-        frame::Desktop::create(m_xContext),
-        UNO_QUERY_THROW );
-
     GtkWindow *pParent = RunDialog::GetTransientFor();
     if (pParent)
         gtk_window_set_transient_for(GTK_WINDOW(m_pDialog), pParent);

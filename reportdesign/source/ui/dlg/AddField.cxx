@@ -139,8 +139,7 @@ void OAddFieldWindowListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_r
         // no drag without a field
         return;
 
-    OMultiColumnTransferable* pDataContainer = new OMultiColumnTransferable(getSelectedFieldDescriptors());
-    Reference< XTransferable> xEnsureDelete = pDataContainer;
+    rtl::Reference<OMultiColumnTransferable> pDataContainer = new OMultiColumnTransferable(getSelectedFieldDescriptors());
 
     EndSelection();
     pDataContainer->StartDrag( this, DND_ACTION_COPYMOVE | DND_ACTION_LINK );

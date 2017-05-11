@@ -262,8 +262,6 @@ Sequence< OUString > ConfigurationAccess_UICategory::getAllIds()
 
     if ( m_xConfigAccess.is() )
     {
-        Reference< XNameAccess > xNameAccess;
-
         try
         {
             Sequence< OUString > aNameSeq = m_xConfigAccess->getElementNames();

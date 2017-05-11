@@ -2432,7 +2432,6 @@ void SchXMLExportHelper_Impl::exportAxes(
 
     // secondary x axis
 
-    Reference< chart::XSecondAxisTitleSupplier > xSecondTitleSupp( xDiagram, uno::UNO_QUERY );
     xNewAxis = lcl_getAxis( xCooSys, XML_X, false );
     if( xNewAxis.is() )
     {
@@ -3057,8 +3056,6 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
         {
             if( bExportContent && nErrorBarStyle == chart::ErrorBarStyle::FROM_DATA )
             {
-                uno::Reference< chart2::XChartDocument > xNewDoc(mrExport.GetModel(), uno::UNO_QUERY);
-
                 // register data ranges for error bars for export in local table
                 ::std::vector< Reference< chart2::data::XDataSequence > > aErrorBarSequences(
                     lcl_getErrorBarSequences( xErrorBarProp ));

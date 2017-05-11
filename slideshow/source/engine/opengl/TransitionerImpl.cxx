@@ -370,9 +370,6 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
 
 void OGLTransitionerImpl::impl_prepareSlides()
 {
-    Reference< XFastPropertySet > xLeavingSet( mxLeavingBitmap , UNO_QUERY );
-    Reference< XFastPropertySet > xEnteringSet( mxEnteringBitmap , UNO_QUERY );
-
     geometry::IntegerRectangle2D aSlideRect;
     aSlideRect.X1 = 0;
     aSlideRect.X2 = maSlideSize.Width;

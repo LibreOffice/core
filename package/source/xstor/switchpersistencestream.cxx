@@ -120,7 +120,6 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
 
 void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io::XInputStream >& xInputStream )
 {
-    uno::Reference< io::XStream > xNewStream;
     uno::Reference< io::XTruncate > xNewTruncate;
     uno::Reference< io::XSeekable > xNewSeekable( xInputStream, uno::UNO_QUERY_THROW );
     uno::Reference< io::XOutputStream > xNewOutStream;

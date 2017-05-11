@@ -159,10 +159,9 @@ void FmFieldWinListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
     ColumnInfo* pInfo = static_cast<ColumnInfo*>(pSelected->GetUserData());
     aDescriptor[ DataAccessDescriptorProperty::ColumnName ] <<= pInfo->sColumnName;
 
-    TransferableHelper* pTransferColumn = new OColumnTransferable(
+    rtl::Reference<OColumnTransferable> pTransferColumn = new OColumnTransferable(
         aDescriptor, ColumnTransferFormatFlags::FIELD_DESCRIPTOR | ColumnTransferFormatFlags::CONTROL_EXCHANGE | ColumnTransferFormatFlags::COLUMN_DESCRIPTOR
     );
-    Reference< XTransferable> xEnsureDelete = pTransferColumn;
     EndSelection();
     pTransferColumn->StartDrag( this, DND_ACTION_COPY );
 }
@@ -306,7 +305,6 @@ void FmFieldWin::UpdateContent(const css::uno::Reference< css::form::XForm > & x
         if (!xForm.is())
             return;
 
-        Reference< XPreparedStatement >  xStatement;
         Reference< XPropertySet >  xSet(xForm, UNO_QUERY);
 
         m_aObjectName   = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_COMMAND));

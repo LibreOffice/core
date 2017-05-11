@@ -307,7 +307,6 @@ uno::Any SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         if ( !pCursor->HasMark() )
             pCursor->SetMark();
 
-        uno::Reference< beans::XPropertySet >  xProp( GetLinguPropertySet() );
         *pMySh->GetCursor()->GetPoint() = *GetCurr();
         *pMySh->GetCursor()->GetMark() = *GetEnd();
         pMySh->GetDoc()->Spell(*pMySh->GetCursor(),

@@ -62,7 +62,6 @@ namespace dbaui
             if ( !_pCommandURL || !*_pCommandURL )
                 return aIcon;
 
-            Reference< XNameAccess > xUICommandLabels;
             OUString sCommandURL = OUString::createFromAscii( _pCommandURL );
             try
             {

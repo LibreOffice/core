@@ -2108,7 +2108,6 @@ uno::Reference<text::XTextTableCursor> SwXTextTable::createCursorByCellName(cons
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this));
-    uno::Reference<text::XTextTableCursor> xRet;
     SwTable* pTable = SwTable::FindTable(pFormat);
     SwTableBox* pBox = const_cast<SwTableBox*>(pTable->GetTableBox(sCellName));
     if(!pBox || pBox->getRowSpan() == 0)
@@ -2298,7 +2297,6 @@ uno::Reference<table::XCellRange>  SwXTextTable::getCellRangeByPosition(sal_Int3
 uno::Reference<table::XCellRange> SwXTextTable::getCellRangeByName(const OUString& sRange)
 {
     SolarMutexGuard aGuard;
-    uno::Reference< table::XCellRange >  aRef;
     SwFrameFormat* pFormat = lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this));
     SwTable* pTable = lcl_EnsureTableNotComplex(SwTable::FindTable(pFormat), static_cast<cppu::OWeakObject*>(this));
     sal_Int32 nPos = 0;

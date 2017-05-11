@@ -273,7 +273,6 @@ namespace dbaui
                 m_pTablesList->GetModel()->SetSortMode(SortAscending);
                 m_pTablesList->GetModel()->SetCompareHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryCompare));
 
-                Reference< XDriver > xDriver;
                 Reference<XPropertySet> xProp = m_pTablesDlg->getCurrentDataSource();
                 OSL_ENSURE(xProp.is(),"No data source set!");
                 if ( xProp.is() )

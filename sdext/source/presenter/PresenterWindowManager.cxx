@@ -276,12 +276,7 @@ void SAL_CALL PresenterWindowManager::windowPaint (const awt::PaintEvent& rEvent
             if (mbIsLayoutPending)
                 Layout();
             PaintBackground(rEvent.UpdateRect);
-            if ( ! PaintChildren(rEvent))
-            {
-                Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxParentCanvas, UNO_QUERY);
-                //                if (xSpriteCanvas.is())
-                //                    xSpriteCanvas->updateScreen(sal_False);
-            }
+            PaintChildren(rEvent);
         }
         catch (RuntimeException&)
         {
@@ -338,10 +333,6 @@ void SAL_CALL PresenterWindowManager::disposing (const lang::EventObject& rEvent
 {
     if (rEvent.Source == mxParentWindow)
         mxParentWindow = nullptr;
-    else
-    {
-        Reference<awt::XWindow> xWindow (rEvent.Source, UNO_QUERY);
-    }
 }
 
 

@@ -550,7 +550,6 @@ void ZipPackage::getZipFileContents()
 
 void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
 {
-    uno::Reference< XProgressHandler > xProgressHandler;
     beans::NamedValue aNamedValue;
 
     if ( aArguments.getLength() )

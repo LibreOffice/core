@@ -467,8 +467,6 @@ Sequence< OUString > ConfigurationAccess_UICommand::getAllCommands()
 
     if ( m_xConfigAccess.is() )
     {
-        Reference< XNameAccess > xNameAccess;
-
         try
         {
             Sequence< OUString > aNameSeq = m_xConfigAccess->getElementNames();

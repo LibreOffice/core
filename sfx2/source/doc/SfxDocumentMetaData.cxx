@@ -1033,7 +1033,6 @@ void SAL_CALL SfxDocumentMetaData::updateUserDefinedAndAttributes()
 css::uno::Reference<css::xml::dom::XDocument> SAL_CALL
 SfxDocumentMetaData::createDOM() const // throw (css::uno::RuntimeException)
 {
-    css::uno::Reference<css::lang::XMultiComponentFactory> xMsf ( m_xContext->getServiceManager());
     css::uno::Reference<css::xml::dom::XDocumentBuilder> xBuilder( css::xml::dom::DocumentBuilder::create(m_xContext) );
     css::uno::Reference<css::xml::dom::XDocument> xDoc = xBuilder->newDocument();
     if (!xDoc.is())

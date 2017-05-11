@@ -2211,7 +2211,6 @@ void ChartExport::exportCandleStickSeries(
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeqCnt(
                 xSource->getDataSequences());
 
-            Reference< chart2::XChartDocument > xNewDoc( getModel(), uno::UNO_QUERY );
             const char* sSeries[] = {"values-first","values-max","values-min","values-last",nullptr};
 
             for( sal_Int32 idx = 0; sSeries[idx] != nullptr ; idx++ )
@@ -2260,7 +2259,6 @@ void ChartExport::exportCandleStickSeries(
 void ChartExport::exportSeriesText( const Reference< chart2::data::XDataSequence > & xValueSeq )
 {
     FSHelperPtr pFS = GetFS();
-    Reference< chart2::XChartDocument > xNewDoc( getModel(), uno::UNO_QUERY );
     pFS->startElement( FSNS( XML_c, XML_tx ),
             FSEND );
 
@@ -2296,7 +2294,6 @@ void ChartExport::exportSeriesText( const Reference< chart2::data::XDataSequence
 void ChartExport::exportSeriesCategory( const Reference< chart2::data::XDataSequence > & xValueSeq )
 {
     FSHelperPtr pFS = GetFS();
-    Reference< chart2::XChartDocument > xNewDoc( getModel(), uno::UNO_QUERY );
     pFS->startElement( FSNS( XML_c, XML_cat ),
             FSEND );
 
@@ -2339,7 +2336,6 @@ void ChartExport::exportSeriesCategory( const Reference< chart2::data::XDataSequ
 void ChartExport::exportSeriesValues( const Reference< chart2::data::XDataSequence > & xValueSeq, sal_Int32 nValueType )
 {
     FSHelperPtr pFS = GetFS();
-    Reference< chart2::XChartDocument > xNewDoc( getModel(), uno::UNO_QUERY );
     pFS->startElement( FSNS( XML_c, nValueType ),
             FSEND );
 
@@ -2449,7 +2445,6 @@ void ChartExport::InitPlotArea( )
 
     xDiagramProperties->getPropertyValue("Dim3D") >>=  mbIs3DChart;
 
-    Reference< chart2::XChartDocument > xNewDoc( getModel(), uno::UNO_QUERY );
     if( mbHasCategoryLabels && mxNewDiagram.is())
     {
         Reference< chart2::data::XLabeledDataSequence > xCategories( lcl_getCategories( mxNewDiagram ) );

@@ -239,7 +239,6 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
 {
     if (aArguments.getLength() > 0)
     {
-        Reference<XConfigurationController> xCC;
         try
         {
             // Get the XController from the first argument.

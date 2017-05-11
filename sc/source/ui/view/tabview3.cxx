@@ -418,7 +418,7 @@ void ScTabView::CheckSelectionTransfer()
     {
         ScModule* pScMod = SC_MOD();
         ScSelectionTransferObj* pOld = pScMod->GetSelectionTransfer();
-        ScSelectionTransferObj* pNew = ScSelectionTransferObj::CreateFromView( this );
+        rtl::Reference<ScSelectionTransferObj> pNew = ScSelectionTransferObj::CreateFromView( this );
         if ( pNew )
         {
             //  create new selection
@@ -426,8 +426,7 @@ void ScTabView::CheckSelectionTransfer()
             if (pOld)
                 pOld->ForgetView();
 
-            uno::Reference<datatransfer::XTransferable> xRef( pNew );
-            pScMod->SetSelectionTransfer( pNew );
+            pScMod->SetSelectionTransfer( pNew.get() );
             pNew->CopyToSelection( GetActiveWin() );                    // may delete pOld
         }
         else if ( pOld && pOld->GetView() == this )

@@ -86,9 +86,7 @@ void ScGlobal::InitAddIns()
 
             if ( xResultSet.is() )
             {
-                Reference< sdbc::XRow > xRow( xResultSet, UNO_QUERY );
-                Reference< XContentAccess >
-                    xContentAccess( xResultSet, UNO_QUERY );
+                Reference< XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
                 try
                 {
                     if ( xResultSet->first() )

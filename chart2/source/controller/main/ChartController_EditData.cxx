@@ -45,18 +45,14 @@ void ChartController::executeDispatch_EditData()
     Reference< chart2::XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
     if( xChartDoc.is())
     {
-        Reference< css::chart2::data::XDataProvider > xDataProvider( xChartDoc->getDataProvider());
-
-        {
-            SolarMutexGuard aSolarGuard;
-            UndoLiveUpdateGuardWithData aUndoGuard(
-                SCH_RESSTR( STR_ACTION_EDIT_CHART_DATA ),
-                m_xUndoManager );
-            ScopedVclPtrInstance<DataEditor> aDataEditorDialog( nullptr, xChartDoc, m_xCC );
-            if (aDataEditorDialog->Execute() == RET_OK)
-                aDataEditorDialog->ApplyChangesToModel();
-            aUndoGuard.commit();
-        }
+        SolarMutexGuard aSolarGuard;
+        UndoLiveUpdateGuardWithData aUndoGuard(
+            SCH_RESSTR( STR_ACTION_EDIT_CHART_DATA ),
+            m_xUndoManager );
+        ScopedVclPtrInstance<DataEditor> aDataEditorDialog( nullptr, xChartDoc, m_xCC );
+        if (aDataEditorDialog->Execute() == RET_OK)
+            aDataEditorDialog->ApplyChangesToModel();
+        aUndoGuard.commit();
     }
 }
 

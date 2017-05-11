@@ -161,7 +161,6 @@ void CSerializationURLEncoded::serialize()
 {
 
     // output stream to the pipe buffer
-    Reference< XOutputStream > out(m_aPipe, UNO_QUERY);
 
     css::uno::Reference< css::xml::dom::XNode > cur = m_aFragment->getFirstChild();
     while (cur.is())

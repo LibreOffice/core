@@ -651,7 +651,6 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
 
                 Sequence<Reference<XControl> > aControlSeq = xControlContainer->getControls();
                 Reference<XControl>  xControl;
-                Reference<XFormComponent>  xControlComponent;
 
                 // Find the right control
                 sal_Int32 i;

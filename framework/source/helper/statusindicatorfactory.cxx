@@ -430,7 +430,6 @@ void StatusIndicatorFactory::impl_showProgress()
     osl::ClearableMutexGuard aReadLock(m_mutex);
 
     css::uno::Reference< css::frame::XFrame >              xFrame (m_xFrame.get()      , css::uno::UNO_QUERY);
-    css::uno::Reference< css::awt::XWindow >               xWindow(m_xPluggWindow.get(), css::uno::UNO_QUERY);
 
     aReadLock.clear();
     // <- SAFE ----------------------------------
@@ -471,7 +470,6 @@ void StatusIndicatorFactory::impl_hideProgress()
     osl::ClearableMutexGuard aReadLock(m_mutex);
 
     css::uno::Reference< css::frame::XFrame >              xFrame (m_xFrame.get()      , css::uno::UNO_QUERY);
-    css::uno::Reference< css::awt::XWindow >               xWindow(m_xPluggWindow.get(), css::uno::UNO_QUERY);
 
     aReadLock.clear();
     // <- SAFE ----------------------------------

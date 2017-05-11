@@ -387,8 +387,7 @@ void OViewsWindow::Copy()
             sectionPtr->getReportSection().Copy(aAllreadyCopiedObjects);
         });
 
-    OReportExchange* pCopy = new OReportExchange(aAllreadyCopiedObjects);
-    uno::Reference< datatransfer::XTransferable> aEnsureDelete = pCopy;
+    rtl::Reference<OReportExchange> pCopy = new OReportExchange(aAllreadyCopiedObjects);
     pCopy->CopyToClipboard(this);
 }
 

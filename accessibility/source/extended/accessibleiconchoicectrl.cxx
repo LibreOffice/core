@@ -321,7 +321,6 @@ namespace accessibility
         if ( nSelectedChildIndex < 0 || nSelectedChildIndex >= getAccessibleChildCount() )
             throw IndexOutOfBoundsException();
 
-        Reference< XAccessible > xChild;
         sal_Int32 nSelCount = 0;
         VclPtr<SvtIconChoiceCtrl> pCtrl = getCtrl();
         sal_Int32 nCount = pCtrl->GetEntryCount();

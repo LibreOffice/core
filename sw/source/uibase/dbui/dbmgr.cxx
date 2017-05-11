@@ -2332,11 +2332,9 @@ bool SwDBManager::OpenDataSource(const OUString& rDataSource, const OUString& rT
     aData.nCommandType = -1;
 
     SwDSParam* pFound = FindDSData(aData, true);
-    uno::Reference< sdbc::XDataSource> xSource;
     if(pFound->xResultSet.is())
         return true;
     SwDSParam* pParam = FindDSConnection(rDataSource, false);
-    uno::Reference< sdbc::XConnection> xConnection;
     if(pParam && pParam->xConnection.is())
         pFound->xConnection = pParam->xConnection;
     if(pFound->xConnection.is())

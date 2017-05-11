@@ -1267,13 +1267,12 @@ static void lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, ScCo
             aObjDesc.maDisplayName = pSrcShell->GetMedium()->GetURLObject().GetURLNoPass();
             // maSize is set in ScDrawTransferObj ctor
 
-            ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pDragModel, pSrcShell, aObjDesc );
-            uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+            rtl::Reference<ScDrawTransferObj> pTransferObj = new ScDrawTransferObj( pDragModel, pSrcShell, aObjDesc );
 
             pTransferObj->SetDragSourceObj( pObject, nTab );
             pTransferObj->SetDragSourceFlags(ScDragSrc::Navigator);
 
-            SC_MOD()->SetDragObject( nullptr, pTransferObj );
+            SC_MOD()->SetDragObject( nullptr, pTransferObj.get() );
             pWin->ReleaseMouse();
             pTransferObj->StartDrag( pWin, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
         }
@@ -1301,13 +1300,12 @@ static void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, ScDra
         aObjDesc.maDisplayName = pSrcShell->GetMedium()->GetURLObject().GetURLNoPass();
         // maSize is set in ScTransferObj ctor
 
-        ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
-        uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+        rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
 
         pTransferObj->SetDragSource( pSrcShell, aMark );
         pTransferObj->SetDragSourceFlags( nFlags );
 
-        SC_MOD()->SetDragObject( pTransferObj, nullptr );      // for internal D&D
+        SC_MOD()->SetDragObject( pTransferObj.get(), nullptr );      // for internal D&D
         pWin->ReleaseMouse();
         pTransferObj->StartDrag( pWin, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
     }
@@ -1446,8 +1444,7 @@ void ScContentTree::DoDrag()
 
         if (bDoLinkTrans)
         {
-            ScLinkTransferObj* pTransferObj = new ScLinkTransferObj;
-            uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+            rtl::Reference<ScLinkTransferObj> pTransferObj = new ScLinkTransferObj;
 
             if ( !aLinkURL.isEmpty() )
                 pTransferObj->SetLinkURL( aLinkURL, aLinkText );

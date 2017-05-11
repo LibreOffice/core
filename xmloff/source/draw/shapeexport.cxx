@@ -1846,8 +1846,6 @@ void XMLShapeExport::ImpExportTextBoxShape(
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-
         // presentation attribute (if presentation)
         bool bIsPresShape(false);
         bool bIsEmptyPresObj(false);
@@ -2255,7 +2253,6 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
     if(xPropSet.is())
     {
         bool bIsEmptyPresObj = false;
-        uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
         // Transformation
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);

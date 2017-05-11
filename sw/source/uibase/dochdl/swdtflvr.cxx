@@ -3569,12 +3569,11 @@ void SwTransferable::CreateSelection( SwWrtShell& rSh,
                                       const SwFrameShell * _pCreatorView )
 {
     SwModule *pMod = SW_MOD();
-    SwTransferable* pNew = new SwTransferable( rSh );
+    rtl::Reference<SwTransferable> pNew = new SwTransferable( rSh );
 
     pNew->m_pCreatorView = _pCreatorView;
 
-    uno::Reference< XTransferable > xRef( pNew );
-    pMod->m_pXSelection = pNew;
+    pMod->m_pXSelection = pNew.get();
     pNew->CopyToSelection( rSh.GetWin() );
 }
 

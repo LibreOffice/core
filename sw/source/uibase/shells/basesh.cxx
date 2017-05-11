@@ -259,8 +259,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             rView.GetEditWin().FlushInBuffer();
             if ( rSh.HasSelection() )
             {
-                SwTransferable* pTransfer = new SwTransferable( rSh );
-/*??*/          uno::Reference< datatransfer::XTransferable > xRef( pTransfer );
+                rtl::Reference<SwTransferable> pTransfer = new SwTransferable( rSh );
 
                 if ( nId == SID_CUT && FlyProtectFlags::NONE == rSh.IsSelObjProtected(FlyProtectFlags::Content|FlyProtectFlags::Parent) )
                     pTransfer->Cut();

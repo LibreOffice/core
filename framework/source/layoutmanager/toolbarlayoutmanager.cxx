@@ -1194,7 +1194,6 @@ void ToolbarLayoutManager::implts_createCustomToolBars()
     if ( !m_bComponentAttached )
         return;
 
-    uno::Reference< ui::XUIElementFactory > xUIElementFactory( m_xUIElementFactoryManager );
     uno::Reference< frame::XFrame > xFrame( m_xFrame );
     uno::Reference< ui::XUIConfigurationManager > xModuleCfgMgr( m_xModuleCfgMgr, uno::UNO_QUERY );
     uno::Reference< ui::XUIConfigurationManager > xDocCfgMgr( m_xDocCfgMgr, uno::UNO_QUERY );
@@ -1226,7 +1225,6 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
     if ( !m_xPersistentWindowState.is() || !m_xFrame.is() || !m_bComponentAttached )
         return;
 
-    uno::Reference< ui::XUIElementFactory >  xUIElementFactory( m_xUIElementFactoryManager );
     uno::Reference< container::XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
     aReadLock.clear();
 
@@ -1245,7 +1243,6 @@ void ToolbarLayoutManager::implts_createNonContextSensitiveToolBars()
             OUString aElementName;
             OUString aName;
 
-            uno::Reference< ui::XUIElement > xUIElement;
             aMakeVisibleToolbars.reserve(aToolbarNames.getLength());
 
             SolarMutexGuard g;

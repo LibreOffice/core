@@ -1497,8 +1497,6 @@ SdrOle2Obj& SdrOle2Obj::assignFrom(const SdrOle2Obj& rObj)
         // ImpAssign( rObj );
         const SdrOle2Obj& rOle2Obj = static_cast< const SdrOle2Obj& >( rObj );
 
-        uno::Reference<util::XCloseable> xClose(mpImpl->mxObjRef.GetObject(), uno::UNO_QUERY);
-
         if( pModel && mpImpl->mbConnected )
             Disconnect();
 

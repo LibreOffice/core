@@ -339,8 +339,7 @@ bool SwFormatINetFormat::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             // Create hyperlink event descriptor. Then copy events
             // from argument into descriptor. Then copy events from
             // the descriptor into the format.
-            SwHyperlinkEventDescriptor* pEvents = new SwHyperlinkEventDescriptor();
-            uno::Reference< lang::XServiceInfo> xHold = pEvents;
+            rtl::Reference<SwHyperlinkEventDescriptor> pEvents = new SwHyperlinkEventDescriptor();
             pEvents->copyMacrosFromNameReplace(xReplace);
             pEvents->copyMacrosIntoINetFormat(*this);
         }

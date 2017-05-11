@@ -536,7 +536,6 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
         return xProp;
 
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-    Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
     Any aCatalog;
     aCatalog = _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME));
     OUString sCatalog;

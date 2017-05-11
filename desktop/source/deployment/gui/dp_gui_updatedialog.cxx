@@ -335,7 +335,6 @@ void UpdateDialog::Thread::execute()
         dp_misc::UPDATE_SOURCE sourceShared = dp_misc::isUpdateSharedExtension(
             bSharedReadOnly, sVersionShared, sVersionBundled, sOnlineVersion);
 
-        uno::Reference<deployment::XPackage> updateSource;
         if (sourceUser != dp_misc::UPDATE_SOURCE_NONE)
         {
             if (sourceUser == dp_misc::UPDATE_SOURCE_SHARED)

@@ -170,8 +170,6 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( OStringList_Impl& aList
     OUString aNextName = *(aListPath.begin());
     aListPath.erase( aListPath.begin() );
 
-    uno::Reference< embed::XExtendedStorageStream > xResult;
-
     uno::Reference< embed::XStorage > xOwnStor;
 
     xOwnStor = m_xOwnStorage.is() ? m_xOwnStorage

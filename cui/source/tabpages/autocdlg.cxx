@@ -2387,8 +2387,7 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
     sal_Int32 nSelCnt = m_pLBEntries->GetSelectEntryCount();
     if (m_pAutoCompleteList && nSelCnt)
     {
-        TransferDataContainer* pCntnr = new TransferDataContainer;
-        css::uno::Reference< css::datatransfer::XTransferable > xRef( pCntnr );
+        rtl::Reference<TransferDataContainer> pCntnr = new TransferDataContainer;
 
         OStringBuffer sData;
 

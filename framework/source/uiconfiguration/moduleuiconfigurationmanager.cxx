@@ -702,8 +702,6 @@ void ModuleUIConfigurationManager::impl_reloadElementTypeData(
 {
     UIElementDataHashMap& rHashMap          = rUserElementType.aElementsHashMap;
     UIElementDataHashMap::iterator pIter    = rHashMap.begin();
-    Reference< XStorage > xUserStorage( rUserElementType.xStorage );
-    Reference< XStorage > xDefaultStorage( rDefaultElementType.xStorage );
     Reference< XNameAccess > xUserNameAccess( rUserElementType.xStorage, UNO_QUERY );
     Reference< XNameAccess > xDefaultNameAccess( rDefaultElementType.xStorage, UNO_QUERY );
 

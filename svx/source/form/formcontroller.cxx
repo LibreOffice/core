@@ -781,13 +781,9 @@ void FormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
             Reference<XConnection> xConnection(getConnection(Reference< XRowSet>(m_xModelAsIndex, UNO_QUERY)));
             if (xConnection.is())
             {
-                Reference< XDatabaseMetaData> xMetaData(xConnection->getMetaData());
                 Reference< XNumberFormatsSupplier> xFormatSupplier( getNumberFormats( xConnection, true ) );
                 Reference< XNumberFormatter> xFormatter = NumberFormatter::create(m_xComponentContext);
                 xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
-
-                Reference< XColumnsSupplier> xSupplyCols(m_xModelAsIndex, UNO_QUERY);
-                Reference< XNameAccess> xFields(xSupplyCols->getColumns(), UNO_QUERY);
 
                 // now add the filter rows
                 try
@@ -1770,7 +1766,6 @@ void FormController::focusLost(const FocusEvent& e)
 
     m_aControlBorderManager.focusLost( e.Source );
 
-    Reference< XControl >  xControl(e.Source, UNO_QUERY);
     Reference< XWindowPeer >  xNext(e.NextFocus, UNO_QUERY);
     Reference< XControl >  xNextControl = isInList(xNext);
     if (!xNextControl.is())
@@ -3233,7 +3228,6 @@ void FormController::startFiltering()
     sal_Int32 nControlCount = aControlsCopy.getLength();
 
     // the control we have to activate after replacement
-    Reference< XDatabaseMetaData >  xMetaData(xConnection->getMetaData());
     Reference< XNumberFormatsSupplier >  xFormatSupplier = getNumberFormats(xConnection, true);
     Reference< XNumberFormatter >  xFormatter = NumberFormatter::create(m_xComponentContext);
     xFormatter->attachNumberFormatsSupplier(xFormatSupplier);

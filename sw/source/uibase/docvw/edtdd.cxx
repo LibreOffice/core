@@ -134,9 +134,7 @@ void SwEditWin::StartExecuteDrag()
 
     m_bIsInDrag = true;
 
-    SwTransferable* pTransfer = new SwTransferable( m_rView.GetWrtShell() );
-    uno::Reference<
-        datatransfer::XTransferable > xRef( pTransfer );
+    rtl::Reference<SwTransferable> pTransfer = new SwTransferable( m_rView.GetWrtShell() );
 
     pTransfer->StartDrag( this, m_aMovePos );
 }

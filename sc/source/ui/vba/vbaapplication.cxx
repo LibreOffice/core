@@ -553,7 +553,6 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll )
         uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
         uno::Reference< sheet::XSpreadsheetView > xSpreadsheet(
                 xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-        uno::Reference< sheet::XSpreadsheet > xDoc = xSpreadsheet->getActiveSheet();
 
         ScTabViewShell* pShell = excel::getCurrentBestViewShell( mxContext );
         ScGridWindow* gridWindow = static_cast<ScGridWindow*>(pShell->GetWindow());

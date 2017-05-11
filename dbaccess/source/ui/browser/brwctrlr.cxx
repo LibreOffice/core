@@ -1825,8 +1825,6 @@ void SbaXDataBrowserController::ExecuteSearch()
     xModelSet->setPropertyValue("AlwaysShowCursor", css::uno::Any(true));
     xModelSet->setPropertyValue("CursorColor", makeAny(sal_Int32(COL_LIGHTRED)));
 
-    Reference< css::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), true, getORB()));
-
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     VclPtr<AbstractFmSearchDialog> pDialog;
     if ( pFact )

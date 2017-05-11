@@ -170,7 +170,6 @@ SAL_CALL PopupMenuDispatcher::queryDispatch(
             m_xUriRefFactory = css::uri::UriReferenceFactory::create( m_xContext );
 
         css::uno::Reference< css::container::XNameAccess > xPopupCtrlQuery( m_xPopupCtrlQuery );
-        css::uno::Reference< css::uri::XUriReferenceFactory > xUriRefFactory( m_xUriRefFactory );
         aGuard.clear();
         // --- SAFE ---
 

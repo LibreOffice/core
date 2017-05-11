@@ -242,7 +242,6 @@ void XmlFilterBase::checkDocumentProperties(const Reference<XDocumentProperties>
 
 void XmlFilterBase::importDocumentProperties()
 {
-    Reference< XMultiServiceFactory > xFactory( getComponentContext()->getServiceManager(), UNO_QUERY );
     MediaDescriptor aMediaDesc( getMediaDescriptor() );
     Reference< XInputStream > xInputStream;
     Reference< XComponentContext > xContext = getComponentContext();

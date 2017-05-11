@@ -2716,7 +2716,6 @@ RTFError RTFDocumentImpl::popState()
         {
             // Find out what is the key, value type and value we want to set.
             uno::Reference<beans::XPropertyContainer> xPropertyContainer = m_xDocumentProperties->getUserDefinedProperties();
-            uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
             const OUString& rKey = m_aStates.top().aPropName;
             OUString aStaticVal = m_aStates.top().pDestinationText->makeStringAndClear();
             uno::Any aAny;

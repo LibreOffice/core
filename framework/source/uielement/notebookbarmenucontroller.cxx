@@ -199,7 +199,6 @@ void SAL_CALL NotebookbarMenuController::itemSelected( const css::awt::MenuEvent
     Reference< css::awt::XPopupMenu >   xPopupMenu;
     Reference< XURLTransformer >        xURLTransformer;
     Reference< XFrame >                 xFrame;
-    Reference< XNameAccess >            xPersistentWindowState;
 
     osl::ClearableMutexGuard aLock( m_aMutex );
     xPopupMenu             = m_xPopupMenu;

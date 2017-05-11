@@ -2154,7 +2154,6 @@ uno::Reference< container::XHierarchicalNameAccess > Content::getPackage(
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    uno::Reference< container::XHierarchicalNameAccess > xPackage;
     if ( rURI.getPackage() == m_aUri.getPackage() )
     {
         if ( !m_xPackage.is() )

@@ -267,8 +267,7 @@ void OFieldExpressionControl::StartDrag( sal_Int8 /*_nAction*/ , const Point& /*
 
         if( aClipboardList.getLength() )
         {
-            OGroupExchange* pData = new OGroupExchange(aClipboardList);
-            uno::Reference< css::datatransfer::XTransferable> xRef = pData;
+            rtl::Reference<OGroupExchange> pData = new OGroupExchange(aClipboardList);
             pData->StartDrag(this, DND_ACTION_MOVE );
         }
     }

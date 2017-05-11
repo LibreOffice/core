@@ -297,7 +297,6 @@ void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNew
         for(sal_Int32 i=0;i<nChildCount;i++)
         {
             css::uno::Reference< css::accessibility::XAccessible > xAccessible = getAccessibleChild(i);
-            css::uno::Reference< css::accessibility::XAccessibleContext > xAccessibleChild = xAccessible->getAccessibleContext();
             if(css::uno::Reference< css::accessibility::XAccessible >(m_xImpl->m_xTable.get()) == xAccessible)
             {
                 std::vector< AccessibleGridControlTableCell* >& rCells =

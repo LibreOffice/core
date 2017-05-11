@@ -175,8 +175,6 @@ Sequence< OUString > SAL_CALL FirebirdDriver::getSupportedServiceNames()
 Reference< XConnection > SAL_CALL FirebirdDriver::connect(
     const OUString& url, const Sequence< PropertyValue >& info )
 {
-    Reference< XConnection > xConnection;
-
     SAL_INFO("connectivity.firebird", "connect(), URL: " << url );
 
     MutexGuard aGuard( m_aMutex );

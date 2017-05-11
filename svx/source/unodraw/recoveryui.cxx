@@ -220,11 +220,10 @@ RecoveryUI::EJob RecoveryUI::impl_classifyJob(const css::util::URL& aURL)
 bool RecoveryUI::impl_doEmergencySave()
 {
     // create core service, which implements the real "emergency save" algorithm.
-    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xContext, true);
-    css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
+    rtl::Reference<svxdr::RecoveryCore> pCore = new svxdr::RecoveryCore(m_xContext, true);
 
     // create dialog for this operation and bind it to the used core service
-    ScopedVclPtrInstance<svxdr::SaveDialog> xDialog(m_pParentWindow, pCore);
+    ScopedVclPtrInstance<svxdr::SaveDialog> xDialog(m_pParentWindow, pCore.get());
 
     // start the dialog
     short nRet = xDialog->Execute();
@@ -234,12 +233,11 @@ bool RecoveryUI::impl_doEmergencySave()
 bool RecoveryUI::impl_doRecovery()
 {
     // create core service, which implements the real "emergency save" algorithm.
-    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xContext, false);
-    css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
+    rtl::Reference<svxdr::RecoveryCore> pCore = new svxdr::RecoveryCore(m_xContext, false);
 
     // create all needed dialogs for this operation
     // and bind it to the used core service
-    ScopedVclPtrInstance<svxdr::RecoveryDialog> xDialog(m_pParentWindow, pCore);
+    ScopedVclPtrInstance<svxdr::RecoveryDialog> xDialog(m_pParentWindow, pCore.get());
 
     // start the dialog
     short nRet = xDialog->Execute();

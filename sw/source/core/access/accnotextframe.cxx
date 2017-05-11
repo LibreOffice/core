@@ -312,8 +312,6 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
 
     ThrowIfDisposed();
 
-    uno::Reference< XAccessibleHyperlink > xRet;
-
     SwFormatURL aURL( static_cast<const SwLayoutFrame*>(GetFrame())->GetFormat()->GetURL() );
 
     if( nLinkIndex > 0 )

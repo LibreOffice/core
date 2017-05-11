@@ -313,7 +313,6 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
 
         const OUString* pColBegin = aColNames.getConstArray();
         const OUString* pColEnd = pColBegin + aColNames.getLength();
-        Reference< XPropertySet> xColumn;
         for(sal_Int32 j=1;pColBegin != pColEnd;++pColBegin,++j)
         {
             aRow[8] = new ORowSetValueDecorator(j);

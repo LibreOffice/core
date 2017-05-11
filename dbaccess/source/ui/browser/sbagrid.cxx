@@ -699,8 +699,7 @@ void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupM
                 std::vector< std::shared_ptr<OTableRow> > vClipboardList;
                 // send it to the clipboard
                 vClipboardList.push_back(std::make_shared<OTableRow>(xField));
-                OTableRowExchange* pData = new OTableRowExchange(vClipboardList);
-                Reference< css::datatransfer::XTransferable> xRef = pData;
+                rtl::Reference<OTableRowExchange> pData = new OTableRowExchange(vClipboardList);
                 pData->CopyToClipboard(GetParent());
             }
             break;
@@ -1143,8 +1142,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
     if (sField.isEmpty())
         return;
 
-    OColumnTransferable* pDataTransfer = new OColumnTransferable(xDataSource, sField, xAffectedField, xActiveConnection, ColumnTransferFormatFlags::FIELD_DESCRIPTOR | ColumnTransferFormatFlags::COLUMN_DESCRIPTOR);
-    Reference< XTransferable > xEnsureDelete = pDataTransfer;
+    rtl::Reference<OColumnTransferable> pDataTransfer = new OColumnTransferable(xDataSource, sField, xAffectedField, xActiveConnection, ColumnTransferFormatFlags::FIELD_DESCRIPTOR | ColumnTransferFormatFlags::COLUMN_DESCRIPTOR);
     pDataTransfer->StartDrag(this, DND_ACTION_COPY | DND_ACTION_LINK);
 }
 
@@ -1176,12 +1174,10 @@ void SbaGridControl::implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfC
         bSelectionBookmarks = true;
     }
 
-    Reference< XResultSet> xRowSetClone;
     try
     {
-        ODataClipboard* pTransfer = new ODataClipboard( xForm, aSelectedRows, bSelectionBookmarks, getContext() );
+        rtl::Reference<ODataClipboard> pTransfer = new ODataClipboard( xForm, aSelectedRows, bSelectionBookmarks, getContext() );
 
-        Reference< XTransferable > xEnsureDelete = pTransfer;
         if ( _bTrueIfClipboardFalseIfDrag )
             pTransfer->CopyToClipboard( this );
         else
@@ -1403,7 +1399,6 @@ Reference< XPropertySet >  SbaGridControl::getDataSource() const
     Reference< XPropertySet >  xReturn;
 
     Reference< XChild >  xColumns(GetPeer()->getColumns(), UNO_QUERY);
-    Reference< XPropertySet >  xDataSource;
     if (xColumns.is())
         xReturn.set(xColumns->getParent(), UNO_QUERY);
 
@@ -1422,8 +1417,7 @@ IMPL_LINK_NOARG(SbaGridControl, AsynchDropEvent, void*, void)
         if ( !bCountFinal )
             setDataSource(nullptr); // detach from grid control
         Reference< XResultSetUpdate > xResultSetUpdate(xDataSource,UNO_QUERY);
-        ODatabaseImportExport* pImExport = new ORowSetImportExport(this,xResultSetUpdate,m_aDataDescriptor, getContext());
-        Reference<XEventListener> xHolder = pImExport;
+        rtl::Reference<ODatabaseImportExport> pImExport = new ORowSetImportExport(this,xResultSetUpdate,m_aDataDescriptor, getContext());
         Hide();
         try
         {

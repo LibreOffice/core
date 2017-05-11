@@ -384,7 +384,6 @@ void Container::removeContainerListener(
 
 void Container::fire( const EventBroadcastHelper &helper )
 {
-    Reference< css::util::XRefreshListener > l;
     cppu::OInterfaceContainerHelper *container = rBHelper.getContainer( helper.getType() );
     if( container )
     {

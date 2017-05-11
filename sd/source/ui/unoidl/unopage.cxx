@@ -2350,7 +2350,6 @@ Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getMasterPage(  )
 
     if(GetPage())
     {
-        Reference< drawing::XDrawPages >    xPages( GetModel()->getMasterPages() );
         Reference< drawing::XDrawPage > xPage;
 
         if(SvxFmDrawPage::mpPage->TRG_HasMasterPage())

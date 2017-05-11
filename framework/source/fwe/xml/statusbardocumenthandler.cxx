@@ -503,8 +503,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument()
         m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
     }
 
-    ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
-    Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );
+    rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
     pList->AddAttribute( ATTRIBUTE_XMLNS_STATUSBAR,
                          m_aAttributeType,
@@ -514,7 +513,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument()
                          m_aAttributeType,
                          XMLNS_XLINK );
 
-    m_xWriteDocumentHandler->startElement( ELEMENT_NS_STATUSBAR, pList );
+    m_xWriteDocumentHandler->startElement( ELEMENT_NS_STATUSBAR, pList.get() );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     sal_Int32  nItemCount = m_aStatusBarItems->getCount();

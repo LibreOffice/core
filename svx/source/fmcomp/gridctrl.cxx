@@ -2790,8 +2790,7 @@ void DbGridControl::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
 
         size_t Location = GetModelColumnPos( nColId );
         DbGridColumn* pColumn = ( Location < m_aColumns.size() ) ? m_aColumns[ Location ] : nullptr;
-        OStringTransferable* pTransferable = new OStringTransferable(GetCurrentRowCellText(pColumn,m_xPaintRow));
-        Reference< XTransferable > xEnsureDelete(pTransferable);
+        rtl::Reference<OStringTransferable> pTransferable = new OStringTransferable(GetCurrentRowCellText(pColumn,m_xPaintRow));
         pTransferable->StartDrag(this, DND_ACTION_COPY);
     }
 }

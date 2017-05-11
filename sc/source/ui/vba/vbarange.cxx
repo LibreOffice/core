@@ -4239,8 +4239,7 @@ ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xC
         return uno::Reference<excel::XRange>();
     }
 
-    ScVbaRange* pRange = new ScVbaRange( excel::getUnoSheetModuleObj( xSheetRange ), xContext, xSheetRange );
-    uno::Reference< excel::XRange > xVbSheetRange( pRange );
+    rtl::Reference<ScVbaRange> pRange = new ScVbaRange( excel::getUnoSheetModuleObj( xSheetRange ), xContext, xSheetRange );
     return pRange->Range( Cell1, Cell2, true );
 }
 
@@ -4385,7 +4384,6 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
     if ( xDataBaseRange.is() )
         bHasAuto = true;
 
-    uno::Reference< table::XCellRange > xFilterRange;
     if ( !bHasAuto )
     {
         if (  m_Areas->getCount() > 1 )
@@ -5221,7 +5219,6 @@ ScVbaRange::Merge( const uno::Any& Across )
         }
         return;
     }
-    uno::Reference< table::XCellRange > oCellRange;
     bool bAcross = false;
     Across >>= bAcross;
     if ( !bAcross )
@@ -5451,7 +5448,6 @@ ScVbaRange::SpecialCellsImpl( sal_Int32 nType, const uno::Any& _oValue)
     try
     {
         uno::Reference< sheet::XCellRangesQuery > xQuery( mxRange, uno::UNO_QUERY_THROW );
-        uno::Reference< excel::XRange > oLocRangeImpl;
         uno::Reference< sheet::XSheetCellRanges > xLocSheetCellRanges;
         switch(nType)
         {

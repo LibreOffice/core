@@ -385,7 +385,6 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         return;
 
     // only for own storage formats
-    uno::Reference< embed::XStorage > xDocStor = pFile->GetStorage();
     if ( !pFile->GetFilter() || !pFile->GetFilter()->IsOwnFormat() )
         return;
 

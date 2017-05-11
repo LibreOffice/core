@@ -462,7 +462,6 @@ Reference< xml::sax::XAttributeList > Style::createElement()
 void ElementDescriptor::addNumberFormatAttr(
     Reference< beans::XPropertySet > const & xFormatProperties )
 {
-    Reference< beans::XPropertyState > xState( xFormatProperties, UNO_QUERY );
     OUString sFormat;
     lang::Locale locale;
     OSL_VERIFY( xFormatProperties->getPropertyValue( "FormatString" ) >>= sFormat );

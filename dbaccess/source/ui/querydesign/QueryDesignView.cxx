@@ -1354,7 +1354,6 @@ namespace
                 if ( xConnection.is() )
                 {
                     OUString aColumnName;
-                    Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                     // the international doesn't matter I have a string
                     pCondition->parseNodeToPredicateStr(aCondition,
                                                         xConnection,
@@ -1430,7 +1429,6 @@ namespace
                 // Parse the function condition
                 OUString sCondition = ParseCondition(rController,pCondition,sDecimal,aLocale,1);
                 Reference< XConnection> xConnection = rController.getConnection();
-                Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                     // the international doesn't matter I have a string
                 OUString sName;
                 pCondition->getChild(0)->parseNodeToPredicateStr(sName,
@@ -1488,7 +1486,6 @@ namespace
             OUString aCondition;
             OUString aColumnName;
             OTableFieldDescRef aDragLeft = new OTableFieldDesc();
-            Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
             pCondition->parseNodeToPredicateStr(aCondition,
                                                 xConnection,
                                                 rController.getNumberFormatter(),
@@ -1656,7 +1653,6 @@ namespace
                 Reference< XConnection> xConnection = rController.getConnection();
                 if(xConnection.is())
                 {
-                    Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                     for (; i >= 0; i--)
                         pCondition->getChild(i)->parseNodeToPredicateStr(aCondition,
                                                 xConnection,

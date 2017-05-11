@@ -236,7 +236,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     applyTableCellProperties( rxCell, *this );
     TextCharacterProperties aTextStyleProps;
     xAt->gotoStart( true );
-    Reference< text::XTextRange > xStart( xAt, UNO_QUERY );
     xAt->gotoEnd( true );
 
     Reference< XPropertySet > xPropSet( rxCell, UNO_QUERY_THROW );

@@ -1480,8 +1480,7 @@ void SvXMLExport::ExportMeta_()
         if (!xDocProps.is()) throw;
         // update generator here
         xDocProps->setGenerator(generator);
-        SvXMLMetaExport * pMeta = new SvXMLMetaExport(*this, xDocProps);
-        uno::Reference<xml::sax::XDocumentHandler> xMeta(pMeta);
+        rtl::Reference<SvXMLMetaExport> pMeta = new SvXMLMetaExport(*this, xDocProps);
         pMeta->Export();
     } else {
         // office:meta

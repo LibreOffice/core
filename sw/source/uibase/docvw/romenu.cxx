@@ -282,7 +282,7 @@ void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
         return;
     }
 
-    TransferDataContainer* pClipCntnr = nullptr;
+    rtl::Reference<TransferDataContainer> pClipCntnr;
 
     sal_uInt16 nExecId = USHRT_MAX;
     bool bFilterSet = false;
@@ -351,10 +351,8 @@ void SwReadOnlyPopup::Execute( vcl::Window* pWin, sal_uInt16 nId )
     if( bFilterSet )
         ::LoadURL(rSh, sURL, nFilter, sTargetFrameName);
 
-    if( pClipCntnr )
+    if( pClipCntnr && pClipCntnr->HasAnyData() )
     {
-        css::uno::Reference< css::datatransfer::XTransferable > xRef( pClipCntnr );
-        if( pClipCntnr->HasAnyData() )
             pClipCntnr->CopyToClipboard( pWin );
     }
 }

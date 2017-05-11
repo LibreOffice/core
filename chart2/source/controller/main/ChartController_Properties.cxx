@@ -174,7 +174,6 @@ wrapper::ItemConverter* createItemConverter(
                     pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
                 uno::Reference<XDataSeries> xSeries = ObjectIdentifier::getDataSeriesForCID(aObjectCID, xChartModel);
-                uno::Reference<XChartType> xChartType = ChartModelHelper::getChartTypeOfSeries(xChartModel, xSeries);
 
                 uno::Reference<XDiagram> xDiagram = ChartModelHelper::findDiagram(xChartModel);
 

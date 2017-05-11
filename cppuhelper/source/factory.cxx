@@ -740,7 +740,6 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
     {
         Reference<XInterface > x = xSMgr->createInstance( aActivatorName );
         Reference<XImplementationLoader > xLoader( x, UNO_QUERY );
-        Reference<XInterface > xMF;
         if (xLoader.is())
         {
             xFactory = xLoader->activate( aImplementationName, aActivatorUrl, aLocation, xImplementationKey );

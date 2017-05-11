@@ -355,7 +355,6 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
     Reference< XChangesNotifier > xNotifier( mpEffect->getNode(), UNO_QUERY );
     if( xNotifier.is() )
     {
-        Reference< XChangesListener > xListener( this );
         xNotifier->addChangesListener( this );
     }
 }
@@ -984,7 +983,6 @@ void MotionPathTag::disposing()
     Reference< XChangesNotifier > xNotifier( mpEffect->getNode(), UNO_QUERY );
     if( xNotifier.is() )
     {
-        Reference< XChangesListener > xListener( this );
         xNotifier->removeChangesListener( this );
     }
 

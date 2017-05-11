@@ -720,13 +720,10 @@ void BibFrameController_Impl::addStatusListener(
                     }
                 }
             }
-            uno::Reference< datatransfer::XTransferable > xContents = xClip->getContents(  );
         }
     }
     else if(aURL.Path == "Bib/DeleteRecord")
     {
-        Reference< css::sdbc::XResultSet >  xCursor(m_xDatMan->getForm(), UNO_QUERY);
-        Reference< XResultSetUpdate >       xUpdateCursor(xCursor, UNO_QUERY);
         Reference< beans::XPropertySet >    xSet(m_xDatMan->getForm(), UNO_QUERY);
         bool  bIsNew  = ::comphelper::getBOOL(xSet->getPropertyValue("IsNew"));
         if(!bIsNew)

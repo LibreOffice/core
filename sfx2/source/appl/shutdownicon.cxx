@@ -365,7 +365,6 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, vo
             {
 
                 css::uno::Reference < XFilePickerControlAccess > xPickerControls ( xPicker, UNO_QUERY );
-                css::uno::Reference < XFilterManager > xFilterManager ( xPicker, UNO_QUERY );
 
                 Sequence< OUString >        sFiles = xPicker->getSelectedFiles();
                 int                         nFiles = sFiles.getLength();

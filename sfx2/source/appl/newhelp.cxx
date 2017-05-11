@@ -2004,7 +2004,6 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
     sCurrentFactory = SfxHelp::GetCurrentModuleIdentifier();
 
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    Reference< XInterface > xConfig;
     OUString sPath( PATH_OFFICE_FACTORIES );
     sPath += sCurrentFactory;
     OUString sKey( KEY_HELP_ON_OPEN );
@@ -2394,8 +2393,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             Reference < XDispatch > xDisp = xFrame->queryDispatch( aURL, OUString(), 0 );
             if(xDisp.is())
             {
-                HelpStatusListener_Impl* pStateListener;
-                Reference<XStatusListener>xStateListener = pStateListener =
+                rtl::Reference<HelpStatusListener_Impl> pStateListener =
                                         new HelpStatusListener_Impl(xDisp, aURL );
                 FeatureStateEvent rEvent = pStateListener->GetStateEvent();
                 bool bCheck = false;

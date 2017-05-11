@@ -201,9 +201,6 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
         Reference< XMultiServiceFactory > xServiceFactory(
             xContext->getServiceManager(), UNO_QUERY_THROW );
 
-        uno::Reference< util::XMacroExpander > xMacroExpander =
-            util::theMacroExpander::get(xContext);
-
         // import ui strings
         Reference< XMultiServiceFactory > xConfigProvider =
             configuration::theDefaultProvider::get( xContext );

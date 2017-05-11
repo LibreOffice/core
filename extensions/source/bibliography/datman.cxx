@@ -110,7 +110,6 @@ Reference< XConnection > getConnection(const OUString& _rURL)
     if (xDataSource.is())
     {
         // need user/pwd for this
-        Reference< XPropertySet >  xDataSourceProps(xDataSource, UNO_QUERY);
         Reference< XCompletedConnection > xComplConn(xDataSource, UNO_QUERY);
         try
         {
@@ -1294,7 +1293,6 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
         {
             aElement = xFields->getByName(rName);
             aElement >>= xField;
-            Reference< XPropertySetInfo >  xInfo = xField.is() ? xField->getPropertySetInfo() : Reference< XPropertySetInfo > ();
 
             const OUString sType("Type");
             sal_Int32 nFormatKey = 0;

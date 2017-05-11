@@ -1809,7 +1809,6 @@ void dumpXShape(const uno::Reference< drawing::XShape >& xShape, xmlTextWriterPt
 {
     xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShape" ) );
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY_THROW);
-    uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xPropSet->getPropertySetInfo();
     OUString aName;
     m_bNameDumped = false;
 

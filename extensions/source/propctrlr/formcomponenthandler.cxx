@@ -2057,7 +2057,6 @@ namespace pcr
         }
         else if ( eDialogControl == m_eComponentClass )
         {
-            Reference< XControlModel > xControlModel( m_xComponent, UNO_QUERY );
             Reference< XServiceInfo > xServiceInfo( m_xComponent, UNO_QUERY );
             if ( xServiceInfo.is() )
             {
@@ -2312,8 +2311,6 @@ namespace pcr
         try
         {
             WaitCursor aWaitCursor( impl_getDefaultDialogParent_nothrow() );
-
-            Reference< XPreparedStatement >  xStatement;
 
             // get the form of the control we're inspecting
             Reference< XPropertySet > xFormSet( impl_getRowSet_throw(), UNO_QUERY );

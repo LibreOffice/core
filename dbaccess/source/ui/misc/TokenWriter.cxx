@@ -271,7 +271,6 @@ void ODatabaseImportExport::initialize()
     }
     if(xNameAccess.is() && xNameAccess->hasByName(m_sName))
     {
-        Reference<XPropertySet> xSourceObject;
         xNameAccess->getByName(m_sName) >>= m_xObject;
     }
 
@@ -473,7 +472,6 @@ bool ORTFImportExport::Write()
         m_pStream->WriteCharPtr( SAL_NEWLINE_STRING ).WriteChar( '}' );
         m_pStream->WriteCharPtr( SAL_NEWLINE_STRING );
 
-        Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
         sal_Int32 k=1;
         sal_Int32 kk=0;
         if ( m_aSelection.getLength() )

@@ -218,8 +218,7 @@ namespace svxform
             desc.szServiceName = FM_COMPONENT_COMMANDBUTTON;
             desc.xPropSet = pItemNode->m_xPropSet;
         }
-        OXFormsTransferable *pTransferable = new OXFormsTransferable(desc);
-        Reference< XTransferable > xEnsureDelete = pTransferable;
+        rtl::Reference<OXFormsTransferable> pTransferable = new OXFormsTransferable(desc);
         EndSelection();
         pTransferable->StartDrag( this, DND_ACTION_COPY );
     }
@@ -1639,8 +1638,7 @@ namespace svxform
                     bool bLinkOnce = aDlg->IsLinkInstance();
                     try
                     {
-                        Reference< css::xml::dom::XDocument > xNewInst =
-                            xUIHelper->newInstance( sName, sURL, !bLinkOnce );
+                        xUIHelper->newInstance( sName, sURL, !bLinkOnce );
                     }
                     catch ( Exception& )
                     {

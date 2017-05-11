@@ -1316,7 +1316,6 @@ void ODocumentDefinition::saveAs()
             ::SolarMutexGuard aSolarGuard;
 
             // the request
-            Reference<XNameAccess> xName(m_xParentContainer,UNO_QUERY);
             DocumentSaveRequest aRequest;
             aRequest.Name = m_pImpl->m_aProps.aTitle;
 

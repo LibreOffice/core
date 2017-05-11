@@ -398,7 +398,6 @@ migrations_vr MigrationImpl::readMigrationSteps(const OUString& rMigrationName)
     uno::Reference< XNameAccess > theNameAccess(xMigrationData->getByName(aMigrationSteps), uno::UNO_QUERY_THROW);
     uno::Sequence< OUString > seqMigrations = theNameAccess->getElementNames();
     uno::Reference< XNameAccess > tmpAccess;
-    uno::Reference< XNameAccess > tmpAccess2;
     uno::Sequence< OUString > tmpSeq;
     migrations_vr vrMigrations(new migrations_v);
     for (sal_Int32 i = 0; i < seqMigrations.getLength(); i++) {

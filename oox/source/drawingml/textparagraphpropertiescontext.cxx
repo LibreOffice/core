@@ -163,7 +163,6 @@ TextParagraphPropertiesContext::~TextParagraphPropertiesContext()
 
 ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
         case A_TOKEN( lnSpc ):          // CT_TextSpacing

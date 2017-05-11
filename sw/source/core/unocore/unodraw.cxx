@@ -588,8 +588,6 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     }
     GetSvxPage()->add(xShape);
 
-    uno::Reference< uno::XAggregation >     xAgg = pShape->GetAggregationInterface();
-
     OSL_ENSURE(pSvxShape, "Why is here no SvxShape?");
     // this position is definitely in 1/100 mm
     awt::Point aMM100Pos(pSvxShape->getPosition());
@@ -2156,7 +2154,6 @@ void SwXShape::dispose()
 void SwXShape::addEventListener(
                     const uno::Reference< lang::XEventListener > & aListener)
 {
-    uno::Reference< lang::XUnoTunnel > xShapeTunnel(xShapeAgg, uno::UNO_QUERY);
     SvxShape* pSvxShape = GetSvxShape();
     if(pSvxShape)
          pSvxShape->addEventListener(aListener);

@@ -1032,14 +1032,12 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrameFormat& rFrameFormat)
 
 }
 
-void DocxSdrExport::writeDiagramRels(const uno::Reference<xml::dom::XDocument>& xDom,
-                                     const uno::Sequence< uno::Sequence< uno::Any > >& xRelSeq,
+void DocxSdrExport::writeDiagramRels(const uno::Sequence< uno::Sequence< uno::Any > >& xRelSeq,
                                      const uno::Reference<io::XOutputStream>& xOutStream, const OUString& sGrabBagProperyName,
                                      int nAnchorId)
 {
     // add image relationships of OOXData, OOXDiagram
     OUString sType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/image");
-    uno::Reference< xml::sax::XSAXSerializable > xSerializer(xDom, uno::UNO_QUERY);
     uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create(comphelper::getProcessComponentContext());
     xWriter->setOutputStream(xOutStream);
 
@@ -1251,7 +1249,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
                           uno::Sequence< beans::StringPair >());
 
     // write the associated Images and rels for data file
-    writeDiagramRels(dataDom, xDataRelSeq, xDataOutputStream, "OOXDiagramDataRels", nAnchorId);
+    writeDiagramRels(xDataRelSeq, xDataOutputStream, "OOXDiagramDataRels", nAnchorId);
 
     // write layout file
     serializer.set(layoutDom, uno::UNO_QUERY);
@@ -1288,7 +1286,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
         // write the associated Images and rels for drawing file
         uno::Sequence< uno::Sequence< uno::Any > > xDrawingRelSeq;
         diagramDrawing[1] >>= xDrawingRelSeq;
-        writeDiagramRels(drawingDom, xDrawingRelSeq, xDrawingOutputStream, "OOXDiagramDrawingRels", nAnchorId);
+        writeDiagramRels(xDrawingRelSeq, xDrawingOutputStream, "OOXDiagramDrawingRels", nAnchorId);
     }
 }
 

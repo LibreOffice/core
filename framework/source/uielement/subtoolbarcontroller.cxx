@@ -224,7 +224,6 @@ css::uno::Reference< css::awt::XWindow > SubToolBarController::createPopupWindow
 
         if ( xUIElement.is() )
         {
-            css::uno::Reference< css::awt::XWindow > xParent = xFrame->getContainerWindow();
             css::uno::Reference< css::awt::XWindow > xSubToolBar( xUIElement->getRealInterface(), css::uno::UNO_QUERY );
             if ( xSubToolBar.is() )
             {
@@ -354,7 +353,6 @@ void SubToolBarController::endPopupMode( const css::awt::EndPopupModeEvent& e )
         xUIElement = xLayoutManager->getElement( aSubToolBarResName );
         if ( xUIElement.is() )
         {
-            css::uno::Reference< css::awt::XWindow > xParent = getFrameInterface()->getContainerWindow();
             css::uno::Reference< css::awt::XWindow > xSubToolBar( xUIElement->getRealInterface(), css::uno::UNO_QUERY );
             css::uno::Reference< css::beans::XPropertySet > xProp( xUIElement, css::uno::UNO_QUERY );
             if ( xSubToolBar.is() && xProp.is() )

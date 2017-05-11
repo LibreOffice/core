@@ -178,7 +178,6 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click, Button*, void)
         Reference<XNameContainer> xNameContainer(m_xContent,UNO_QUERY);
         if ( xNameContainer.is() )
         {
-            Reference< XContent> xContent;
             if ( xNameContainer->hasByName(sName) )
             {
                 ScopedVclPtrInstance< QueryBox > aBox( this, WB_YES_NO, ModuleRes( STR_ALREADYEXISTOVERWRITE ) );

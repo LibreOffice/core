@@ -269,8 +269,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                 aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
                 // maSize is set in ScTransferObj ctor
 
-                ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
-                uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+                rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
                 if ( ScGlobal::xDrawClipDocShellRef.is() )
                 {
                     SfxObjectShellRef aPersistRef( ScGlobal::xDrawClipDocShellRef.get() );
@@ -278,7 +277,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
 
                 }
                 pTransferObj->CopyToClipboard( GetActiveWin() );
-                SC_MOD()->SetClipObject( pTransferObj, nullptr );
+                SC_MOD()->SetClipObject( pTransferObj.get(), nullptr );
             }
 
             bDone = true;
@@ -377,8 +376,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                 aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
                 // maSize is set in ScTransferObj ctor
 
-                ScTransferObj* pTransferObj = new ScTransferObj( pDocClip.release(), aObjDesc );
-                uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+                rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( pDocClip.release(), aObjDesc );
 
                 if ( ScGlobal::xDrawClipDocShellRef.is() )
                 {
@@ -387,7 +385,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                 }
 
                 pTransferObj->CopyToClipboard( GetActiveWin() );    // system clipboard
-                SC_MOD()->SetClipObject( pTransferObj, nullptr );      // internal clipboard
+                SC_MOD()->SetClipObject( pTransferObj.get(), nullptr );      // internal clipboard
             }
 
             bSuccess = true;
@@ -463,12 +461,10 @@ void ScViewFunc::PasteFromSystem()
 
     vcl::Window* pWin = GetActiveWin();
     ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
-    ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard();
-
+    // keep a reference in case the clipboard is changed during PasteFromClip
+    rtl::Reference<ScDrawTransferObj> pDrawClip = ScDrawTransferObj::GetOwnClipboard();
     if (pOwnClip)
     {
-        // keep a reference in case the clipboard is changed during PasteFromClip
-        uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
         PasteFromClip( InsertDeleteFlags::ALL, pOwnClip->GetDocument(),
                         ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                         true );     // allow warning dialog
@@ -706,11 +702,10 @@ bool ScViewFunc::PasteFromSystem( SotClipboardFormatId nFormatId, bool bApi )
 
     bool bRet = true;
     vcl::Window* pWin = GetActiveWin();
-    ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
+    // keep a reference in case the clipboard is changed during PasteFromClip
+    rtl::Reference<ScTransferObj> pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
     if ( nFormatId == SotClipboardFormatId::NONE && pOwnClip )
     {
-        // keep a reference in case the clipboard is changed during PasteFromClip
-        uno::Reference<datatransfer::XTransferable> aOwnClipRef( pOwnClip );
         PasteFromClip( InsertDeleteFlags::ALL, pOwnClip->GetDocument(),
                         ScPasteFunc::NONE, false, false, false, INS_NONE, InsertDeleteFlags::NONE,
                         !bApi );        // allow warning dialog

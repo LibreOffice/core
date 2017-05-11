@@ -170,7 +170,6 @@ namespace frm
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::allEntriesChanged: where did this come from?" );
 
-        Reference< XListEntrySource > xSource( _rEvent.Source, UNO_QUERY );
         if ( _rEvent.Source == m_xListSource )
         {
             impl_lock_refreshList( aLock );

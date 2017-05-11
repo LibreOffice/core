@@ -267,7 +267,6 @@ void SAL_CALL OQueryContainer::elementRemoved( const css::container::ContainerEv
 
 void SAL_CALL OQueryContainer::elementReplaced( const css::container::ContainerEvent& _rEvent )
 {
-    Reference< XPropertySet > xReplacedElement;
     Reference< XContent > xNewElement;
     OUString sAccessor;
     _rEvent.Accessor >>= sAccessor;

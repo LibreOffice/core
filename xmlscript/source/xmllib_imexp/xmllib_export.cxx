@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <rtl/ref.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
 #include <xmlscript/xml_helper.hxx>
 
@@ -99,8 +100,7 @@ SAL_CALL exportLibrary(
         " \"library.dtd\">" );
     xOut->ignorableWhitespace( OUString() );
 
-    XMLElement* pLibElement = new XMLElement( XMLNS_LIBRARY_PREFIX ":library" );
-    Reference< xml::sax::XAttributeList > xAttributes( pLibElement );
+    rtl::Reference<XMLElement> pLibElement = new XMLElement( XMLNS_LIBRARY_PREFIX ":library" );
 
     pLibElement->addAttribute( "xmlns:" XMLNS_LIBRARY_PREFIX, XMLNS_LIBRARY_URI );
 

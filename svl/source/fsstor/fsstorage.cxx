@@ -194,7 +194,6 @@ void FSStorage::CopyContentToStorage_Impl( ::ucbhelper::Content* pContent, const
     try
     {
         uno::Reference< sdbc::XResultSet > xResultSet = pContent->createCursor( aProps, eInclude );
-        uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
         uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
         if ( xResultSet.is() )
         {
@@ -923,7 +922,6 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
 
         sal_Int32 nSize = 0;
         uno::Reference< sdbc::XResultSet > xResultSet = GetContent()->createCursor( aProps, eInclude );
-        uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
         uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
         if ( xResultSet.is() )
         {

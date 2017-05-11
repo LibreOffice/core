@@ -447,8 +447,7 @@ void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
     OUString sDBName( GetDBName( sTableName, sColumnName ));
     if (!sDBName.isEmpty())
     {
-        TransferDataContainer* pContainer = new TransferDataContainer;
-        css::uno::Reference< css::datatransfer::XTransferable > xRef( pContainer );
+        rtl::Reference<TransferDataContainer> pContainer = new TransferDataContainer;
         if( !sColumnName.isEmpty() )
         {
             // drag database field
@@ -457,7 +456,7 @@ void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
                             sTableName,
                             sColumnName,
                             (ColumnTransferFormatFlags::FIELD_DESCRIPTOR|ColumnTransferFormatFlags::COLUMN_DESCRIPTOR) ) );
-            xColTransfer->addDataToContainer( pContainer );
+            xColTransfer->addDataToContainer( pContainer.get() );
         }
 
         sDBName += "." + sTableName;

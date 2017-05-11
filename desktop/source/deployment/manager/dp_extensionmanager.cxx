@@ -762,8 +762,7 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
             {
                 if (xExtensionBackup.is())
                 {
-                    Reference<css::deployment::XPackage> xRestored =
-                        xPackageManager->importExtension(
+                    xPackageManager->importExtension(
                             xExtensionBackup, Reference<task::XAbortChannel>(),
                             Reference<ucb::XCommandEnvironment>());
                 }

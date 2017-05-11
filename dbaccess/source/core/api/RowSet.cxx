@@ -1843,7 +1843,6 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
 
         // get the numberformatTypes
         OSL_ENSURE(m_xActiveConnection.is(),"No ActiveConnection");
-        Reference< XNumberFormatTypes> xNumberFormatTypes;
         Reference< XNumberFormatsSupplier> xNumberFormat = ::dbtools::getNumberFormats(m_xActiveConnection);
         if ( xNumberFormat.is() )
             m_xNumberFormatTypes.set(xNumberFormat->getNumberFormats(),UNO_QUERY);

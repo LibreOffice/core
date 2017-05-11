@@ -356,7 +356,6 @@ void ImpCountGraphicObjects( const Reference< XComponentContext >& rxMSF, const 
             }
 
             // now check for a fillstyle
-            Reference< XPropertySet > xEmptyPagePropSet;
             Reference< XPropertySet > xShapePropertySet( xShape, UNO_QUERY_THROW );
             FillStyle eFillStyle;
             if ( xShapePropertySet->getPropertyValue( "FillStyle" ) >>= eFillStyle )

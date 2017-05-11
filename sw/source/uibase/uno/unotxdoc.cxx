@@ -976,7 +976,6 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
             const Reference< util::XSearchDescriptor > & xDesc)
 {
     SolarMutexGuard aGuard;
-    Reference< XInterface >  xTmp;
     sal_Int32 nResult = 0;
     Reference< XTextCursor >  xCursor;
     if(!xStartAt.is())

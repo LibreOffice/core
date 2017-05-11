@@ -436,8 +436,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
             {
                 if ( _bAttachAutoDisposer )
                 {
-                    OAutoConnectionDisposer* pAutoDispose = new OAutoConnectionDisposer( _rxRowSet, xConnection );
-                    Reference< XPropertyChangeListener > xEnsureDelete(pAutoDispose);
+                    rtl::Reference<OAutoConnectionDisposer> pAutoDispose = new OAutoConnectionDisposer( _rxRowSet, xConnection );
                 }
                 else
                     xRowSetProps->setPropertyValue(

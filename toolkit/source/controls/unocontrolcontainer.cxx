@@ -743,9 +743,6 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
         if( bVis )
             UnoControl::setVisible( false );
 
-        uno::Reference< beans::XPropertySet > xTmpPropSet
-                ( getModel(), uno::UNO_QUERY );
-
         // Create a new peer
         UnoControl::createPeer( rxToolkit, rParent );
 

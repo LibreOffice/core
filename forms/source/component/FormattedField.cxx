@@ -416,7 +416,6 @@ void OFormattedModel::_propertyChanged( const css::beans::PropertyChangeEvent& e
     OSL_ENSURE( evt.Source == m_xAggregateSet, "OFormattedModel::_propertyChanged: where did this come from?" );
     if ( evt.Source == m_xAggregateSet )
     {
-        Reference< XPropertySet > xSourceSet( evt.Source, UNO_QUERY );
         if ( evt.PropertyName == PROPERTY_FORMATKEY )
         {
             if ( evt.NewValue.getValueType().getTypeClass() == TypeClass_LONG )

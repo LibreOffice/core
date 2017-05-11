@@ -504,7 +504,6 @@ void OComboBoxModel::loadData( bool _bForce )
                 // in that case we use the first field of the table
 
                 Reference<XNameAccess> xFieldsByName = getTableFields(xConnection, m_aListSource);
-                Reference<XIndexAccess> xFieldsByIndex(xFieldsByName, UNO_QUERY);
 
                 OUString aFieldName;
                 if ( xFieldsByName.is() && xFieldsByName->hasByName( getControlSource() ) )

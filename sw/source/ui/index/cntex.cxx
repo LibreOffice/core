@@ -107,9 +107,6 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl, SwOneExampleFrame&, void
         if( pDoc )
             pDoc->GetDocShell()->LoadStyles_( *m_rWrtShell.GetView().GetDocShell(), true );
 
-         uno::Reference< lang::XMultiServiceFactory >  xFact(
-                                             xModel, uno::UNO_QUERY);
-
          uno::Reference< text::XTextSectionsSupplier >  xSectionSupplier(
                                                  xModel, uno::UNO_QUERY);
          uno::Reference< container::XNameAccess >  xSections =

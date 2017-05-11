@@ -173,7 +173,6 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUStr
     if(!nCount)
         return;
     rOutTexts.realloc(nCount);
-    Reference< util::XNumberFormats > xNumberFormats( rModel.getNumberFormats() );
 
     sal_Int32 nAxisNumberFormat = 0;
     Reference< XCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( rModel ) );

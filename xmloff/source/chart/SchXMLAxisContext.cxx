@@ -861,7 +861,6 @@ void SchXMLCategoriesContext::StartElement( const Reference< xml::sax::XAttribut
         if( nPrefix == XML_NAMESPACE_TABLE &&
             IsXMLToken( aLocalName, XML_CELL_RANGE_ADDRESS ) )
         {
-            Reference< chart2::XChartDocument > xNewDoc( GetImport().GetModel(), uno::UNO_QUERY );
             mrAddress = xAttrList->getValueByIndex( i );
         }
     }

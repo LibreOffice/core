@@ -495,7 +495,6 @@ void DAVResourceAccess::GET0(
 {
     initialize();
 
-    uno::Reference< io::XInputStream > xStream;
     int errorCount = 0;
     bool bRetry;
     do

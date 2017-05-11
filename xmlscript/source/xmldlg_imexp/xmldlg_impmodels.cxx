@@ -1778,7 +1778,6 @@ Reference< xml::input::XElement > StyleElement::startChildElement(
 
 void StyleElement::endElement()
 {
-    Reference< xml::input::XAttributes > xStyle;
     OUString aStyleId( _xAttributes->getValueByUidName( m_xImport->XMLNS_DIALOGS_UID, "style-id" ) );
     if (!aStyleId.isEmpty())
     {
