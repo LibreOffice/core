@@ -593,6 +593,10 @@ bool ScTable::SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden)
     {
         if (IsStreamValid())
             SetStreamValid(false);
+        for (SCCOL i = 0; i < aCol.size(); i++)
+        {
+            aCol[i].BroadcastRows(nStartRow, nEndRow);
+        }
     }
 
     return bChanged;
