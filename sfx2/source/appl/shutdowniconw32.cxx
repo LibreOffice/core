@@ -121,7 +121,8 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text
             mi.fType=MFT_STRING;
             mi.fState=MFS_ENABLED;
             mi.wID = id;
-            mi.dwTypeData = SAL_W(const_cast<sal_Unicode *>(text.getStr()));
+            mi.dwTypeData = reinterpret_cast<wchar_t *>(
+                const_cast<sal_Unicode *>(text.getStr()));
             mi.cch = text.getLength();
         }
 
