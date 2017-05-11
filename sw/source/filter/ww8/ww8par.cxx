@@ -2661,6 +2661,31 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
             if (bHasRowEnd && ParseTabPos(&aTabPos,pPap))
                 pTabPos = &aTabPos;
 
+            if (pTabPos && !pTabPos->bNoFly && SearchTableEnd(pPap))
+            {
+                // Table is considered to be imported into a fly frame and we
+                // know where the end of the table is.
+                bool bIsUnicode;
+                WW8_FC nFc = m_pSBase->WW8Cp2Fc(pPap->Where(), &bIsUnicode);
+                sal_uInt64 nPos = m_pStrm->Tell();
+                m_pStrm->Seek(nFc);
+                sal_uInt16 nUChar = 0;
+                if (bIsUnicode)
+                    m_pStrm->ReadUInt16(nUChar);
+                else
+                {
+                    sal_uInt8 nChar = 0;
+                    m_pStrm->ReadUChar(nChar);
+                    nUChar = nChar;
+                }
+                m_pStrm->Seek(nPos);
+                if (nUChar == 0xc)
+                    // The pap after the table starts with a page break, so
+                    // there will be no wrapping around the float-table.
+                    // Request no fly in this case, so the table can properly
+                    // be a multi-page one if necessary.
+                    pTabPos->bNoFly = true;
+            }
             m_pPlcxMan->GetPap()->Restore( aSave );
         }
 

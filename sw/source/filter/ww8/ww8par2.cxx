@@ -507,6 +507,44 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
     return false;
 }
 
+bool SwWW8ImplReader::SearchTableEnd(WW8PLCFx_Cp_FKP* pPap) const
+{
+    if (m_bVer67)
+        // The below SPRM is for WW8 only.
+        return false;
+
+    WW8PLCFxDesc aRes;
+    aRes.pMemPos = nullptr;
+    aRes.nEndPos = pPap->Where();
+    bool bReadRes(false);
+    WW8PLCFxDesc aPrevRes;
+
+    while (pPap->HasFkp() && pPap->Where() != WW8_CP_MAX)
+    {
+        // See if the current pap is outside the table.
+        const sal_uInt8* pB = pPap->HasSprm(NS_sprm::LN_PFInTable);
+        if (!pB || *pB != 1)
+            // Yes, this is the position after the end of the table.
+            return true;
+
+        // It is, so seek to the next pap.
+        aRes.nStartPos = aRes.nEndPos;
+        aRes.pMemPos = nullptr;
+        if (!pPap->SeekPos(aRes.nStartPos))
+            return false;
+
+        // Read the sprms and make sure we moved forward to avoid infinite loops.
+        pPap->GetSprms(&aRes);
+        if (bReadRes && aRes.nEndPos == aPrevRes.nEndPos && aRes.nStartPos == aPrevRes.nStartPos)
+            return false;
+
+        bReadRes = true;
+        aPrevRes = aRes;
+    }
+
+    return false;
+}
+
 ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     const WW8_TablePos *pTabPos)
 {
