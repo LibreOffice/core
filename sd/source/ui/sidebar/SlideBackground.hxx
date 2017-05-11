@@ -47,6 +47,8 @@
 
 class SvxColorListBox;
 
+static const long MINBODY = 284;
+
 namespace sd { namespace sidebar {
 
 class SlideBackground :
@@ -89,9 +91,19 @@ private:
     VclPtr<Button> mpCloseMaster;
     VclPtr<Button> mpEditMaster;
     VclPtr<FixedText> mpMasterLabel;
+    VclPtr<MetricField> m_pLeftMarginEdit;
+    VclPtr<MetricField> m_pRightMarginEdit;
+    VclPtr<MetricField> m_pTopMarginEdit;
+    VclPtr<MetricField> m_pBottomMarginEdit;
+    VclPtr<VclVBox> m_pContainer;
+
+    //hidden metric field
+    VclPtr<MetricField> m_pWidthHeightField;
 
     ::sfx2::sidebar::ControllerItem maPaperSizeController;
     ::sfx2::sidebar::ControllerItem maPaperOrientationController;
+    ::sfx2::sidebar::ControllerItem maPaperMarginLRController;
+    ::sfx2::sidebar::ControllerItem maPaperMarginULController;
     ::sfx2::sidebar::ControllerItem maBckColorController;
     ::sfx2::sidebar::ControllerItem maBckGradientController;
     ::sfx2::sidebar::ControllerItem maBckHatchController;
@@ -115,9 +127,16 @@ private:
     vcl::EnumContext maContext;
     vcl::EnumContext::Application maApplication;
     bool         mbTitle;
+    const MapUnit m_eUnit;
+    long m_nPageLeftMargin;
+    long m_nPageRightMargin;
+    long m_nPageTopMargin;
+    long m_nPageBottomMargin;
+
     SfxBindings* mpBindings;
 
     MapUnit meUnit;
+    Size m_aPageSize;
 
     DECL_LINK(FillBackgroundHdl, ListBox&, void);
     DECL_LINK(FillStyleModifyHdl, ListBox&, void);
@@ -128,6 +147,8 @@ private:
     DECL_LINK(DspObjects, Button*, void);
     DECL_LINK(CloseMasterHdl, Button*, void);
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
+    DECL_LINK( ModifyLRMarginHdl, Edit&, void );
+    DECL_LINK( ModifyULMarginHdl, Edit&, void );
 
     void Initialize();
     void Update();
@@ -143,6 +164,7 @@ private:
     void removeListener();
     void populateMasterSlideDropdown();
     void updateMasterSlideSelection();
+    void SetMetricFieldMaxValues(const Size& rPageSize);
 };
 
 }}
