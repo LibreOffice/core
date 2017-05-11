@@ -44,6 +44,7 @@ void VBATest::testMiscVBAFunctions()
     const char* macroSource[] = {
         "bytearraystring.vb",
         "cdec.vb",
+        "constants.vb",
 // datevalue test seems to depend on both locale and language
 // settings, should try and rewrite the test to deal with that
 // for some reason tinderboxes don't seem to complain leaving enabled
