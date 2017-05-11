@@ -33,6 +33,11 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <svl/stritem.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/dispatchcommand.hxx>
+#include <sfx2/app.hxx>
 
 #include <cuires.hrc>
 #include <dialmgr.hxx>
@@ -43,18 +48,19 @@
 #include <editeng/fontitem.hxx>
 #include "macroass.hxx"
 
+using namespace ::com::sun::star;
+
 // class SvxCharacterMap =================================================
 
 SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxItemSet* pSet )
     : SfxModalDialog(pParent, "SpecialCharactersDialog", "cui/ui/specialcharacters.ui")
     , bOne( bOne_ )
     , pSubsetMap( nullptr )
+    , mxContext(comphelper::getProcessComponentContext())
 {
     get(m_pShowSet, "showcharset");
     get(m_pShowChar, "showchar");
     m_pShowChar->SetCentered(true);
-    get(m_pShowText, "showtext");
-    m_pShowText->SetMaxTextLen(CHARMAP_MAXLEN);
     get(m_pOKBtn, "ok");
     get(m_pFontText, "fontft");
     get(m_pFontLB, "fontlb");
@@ -68,7 +74,23 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxIte
     get(m_pDecimalCodeText, "decimalvalue");
     //lock the size request of this widget to the width of the original .ui string
     m_pHexCodeText->set_width_request(m_pHexCodeText->get_preferred_size().Width());
-    get(m_pSymbolText, "symboltext");
+
+    get( m_pRecentCharView[0], "viewchar1" );
+    get( m_pRecentCharView[1], "viewchar2" );
+    get( m_pRecentCharView[2], "viewchar3" );
+    get( m_pRecentCharView[3], "viewchar4" );
+    get( m_pRecentCharView[4], "viewchar5" );
+    get( m_pRecentCharView[5], "viewchar6" );
+    get( m_pRecentCharView[6], "viewchar7" );
+    get( m_pRecentCharView[7], "viewchar8" );
+    get( m_pRecentCharView[8], "viewchar9" );
+    get( m_pRecentCharView[9], "viewchar10" );
+    get( m_pRecentCharView[10], "viewchar11" );
+    get( m_pRecentCharView[11], "viewchar12" );
+    get( m_pRecentCharView[12], "viewchar13" );
+    get( m_pRecentCharView[13], "viewchar14" );
+    get( m_pRecentCharView[14], "viewchar15" );
+    get( m_pRecentCharView[15], "viewchar16" );
 
     const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(pSet, FN_PARAM_1, false);
     if ( pItem )
@@ -110,17 +132,22 @@ SvxCharacterMap::~SvxCharacterMap()
 
 void SvxCharacterMap::dispose()
 {
+    for(int i = 0; i < 16; i++)
+        m_pRecentCharView[i].clear();
+
     m_pShowSet.clear();
-    m_pShowText.clear();
     m_pOKBtn.clear();
     m_pFontText.clear();
     m_pFontLB.clear();
     m_pSubsetText.clear();
     m_pSubsetLB.clear();
-    m_pSymbolText.clear();
     m_pShowChar.clear();
     m_pHexCodeText.clear();
     m_pDecimalCodeText.clear();
+
+    maRecentCharList.clear();
+    maRecentCharFontList.clear();
+
     SfxModalDialog::dispose();
 }
 
@@ -137,37 +164,411 @@ sal_UCS4 SvxCharacterMap::GetChar() const
 }
 
 
-OUString SvxCharacterMap::GetCharacters() const
-{
-    return m_pShowText->GetText();
-}
-
-
 void SvxCharacterMap::DisableFontSelection()
 {
     m_pFontText->Disable();
     m_pFontLB->Disable();
 }
 
-short SvxCharacterMap::Execute()
+
+void SvxCharacterMap::getRecentCharacterList()
 {
-    short nResult = SfxModalDialog::Execute();
-    if ( nResult == RET_OK )
+    //retrieve recent character list
+    css::uno::Sequence< OUString > rRecentCharList( officecfg::Office::Common::RecentCharacters::RecentCharacterList::get() );
+    for (int i = 0; i < rRecentCharList.getLength(); ++i)
     {
-        SfxItemSet* pSet = GetItemSet();
-        if ( pSet )
-        {
-            const SfxItemPool* pPool = pSet->GetPool();
-            const vcl::Font& rFont( GetCharFont() );
-            pSet->Put( SfxStringItem( pPool->GetWhich(SID_CHARMAP), GetCharacters() ) );
-            pSet->Put( SvxFontItem( rFont.GetFamilyType(), rFont.GetFamilyName(),
-                rFont.GetStyleName(), rFont.GetPitch(), rFont.GetCharSet(), pPool->GetWhich(SID_ATTR_CHAR_FONT) ) );
-            pSet->Put( SfxStringItem( pPool->GetWhich(SID_FONT_NAME), rFont.GetFamilyName() ) );
-            pSet->Put( SfxInt32Item( pPool->GetWhich(SID_ATTR_CHAR), GetChar() ) );
-        }
+        maRecentCharList.push_back(rRecentCharList[i]);
     }
 
-    return nResult;
+    //retrieve recent character font list
+    css::uno::Sequence< OUString > rRecentCharFontList( officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::get() );
+    for (int i = 0; i < rRecentCharFontList.getLength(); ++i)
+    {
+        maRecentCharFontList.push_back(rRecentCharFontList[i]);
+    }
+}
+
+void SvxCharacterMap::updateRecentCharControl()
+{
+    int i = 0;
+    for ( std::deque< OUString >::iterator it = maRecentCharList.begin(), it2 = maRecentCharFontList.begin();
+        it != maRecentCharList.end() || it2 != maRecentCharFontList.end();
+        ++it, ++it2, i++)
+    {
+        m_pRecentCharView[i]->SetText(*it);
+        vcl::Font rFont = m_pRecentCharView[i]->GetControlFont();
+        rFont.SetFamilyName( *it2 );
+        m_pRecentCharView[i]->SetFont(rFont);
+        m_pRecentCharView[i]->Show();
+    }
+
+    for(; i < 16 ; i++)
+    {
+        m_pRecentCharView[i]->SetText(OUString());
+        m_pRecentCharView[i]->Hide();
+    }
+}
+
+void SvxCharacterMap::updateRecentCharacterList(const OUString& sTitle, const OUString& rFont)
+{
+    auto itChar = std::find_if(maRecentCharList.begin(),
+         maRecentCharList.end(),
+         [sTitle] (const OUString & a) { return a == sTitle; });
+
+    auto itChar2 = std::find_if(maRecentCharFontList.begin(),
+         maRecentCharFontList.end(),
+         [rFont] (const OUString & a) { return a == rFont; });
+
+    // if recent char to be added is already in list, remove it
+    if( itChar != maRecentCharList.end() &&  itChar2 != maRecentCharFontList.end() )
+    {
+        maRecentCharList.erase( itChar );
+        maRecentCharFontList.erase( itChar2);
+    }
+
+    if (maRecentCharList.size() == 16)
+    {
+        maRecentCharList.pop_back();
+        maRecentCharFontList.pop_back();
+    }
+
+    maRecentCharList.push_front(sTitle);
+    maRecentCharFontList.push_front(rFont);
+
+    css::uno::Sequence< OUString > aRecentCharList(maRecentCharList.size());
+    css::uno::Sequence< OUString > aRecentCharFontList(maRecentCharFontList.size());
+
+    for (size_t i = 0; i < maRecentCharList.size(); ++i)
+    {
+        aRecentCharList[i] = maRecentCharList[i];
+        aRecentCharFontList[i] = maRecentCharFontList[i];
+    }
+
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+    officecfg::Office::Common::RecentCharacters::RecentCharacterList::set(aRecentCharList, batch);
+    officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::set(aRecentCharFontList, batch);
+    batch->commit();
+
+    updateRecentCharControl();
+}
+
+
+void SvxCharacterMap::init()
+{
+    aFont = GetFont();
+    aFont.SetTransparent( true );
+    aFont.SetFamily( FAMILY_DONTKNOW );
+    aFont.SetPitch( PITCH_DONTKNOW );
+    aFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );
+
+    OUString aDefStr( aFont.GetFamilyName() );
+    OUString aLastName;
+    int nCount = GetDevFontCount();
+    for ( int i = 0; i < nCount; i++ )
+    {
+        OUString aFontName( GetDevFont( i ).GetFamilyName() );
+        if ( aFontName != aLastName )
+        {
+            aLastName = aFontName;
+            const sal_Int32 nPos = m_pFontLB->InsertEntry( aFontName );
+            m_pFontLB->SetEntryData( nPos, reinterpret_cast<void*>(i) );
+        }
+    }
+    // the font may not be in the list =>
+    // try to find a font name token in list and select found font,
+    // else select topmost entry
+    bool bFound = (m_pFontLB->GetEntryPos( aDefStr ) == LISTBOX_ENTRY_NOTFOUND );
+    if( !bFound )
+    {
+        sal_Int32 nIndex = 0;
+        do
+        {
+            OUString aToken = aDefStr.getToken(0, ';', nIndex);
+            if ( m_pFontLB->GetEntryPos( aToken ) != LISTBOX_ENTRY_NOTFOUND )
+            {
+                aDefStr = aToken;
+                bFound = true;
+                break;
+            }
+        }
+        while ( nIndex >= 0 );
+    }
+
+    if ( bFound )
+        m_pFontLB->SelectEntry( aDefStr );
+    else if ( m_pFontLB->GetEntryCount() )
+        m_pFontLB->SelectEntryPos(0);
+    FontSelectHdl(*m_pFontLB);
+
+    m_pFontLB->SetSelectHdl( LINK( this, SvxCharacterMap, FontSelectHdl ) );
+    m_pSubsetLB->SetSelectHdl( LINK( this, SvxCharacterMap, SubsetSelectHdl ) );
+    m_pShowSet->SetDoubleClickHdl( LINK( this, SvxCharacterMap, CharDoubleClickHdl ) );
+    m_pShowSet->SetSelectHdl( LINK( this, SvxCharacterMap, CharSelectHdl ) );
+    m_pShowSet->SetHighlightHdl( LINK( this, SvxCharacterMap, CharHighlightHdl ) );
+    m_pShowSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, CharPreSelectHdl ) );
+    m_pDecimalCodeText->SetModifyHdl( LINK( this, SvxCharacterMap, DecimalCodeChangeHdl ) );
+    m_pHexCodeText->SetModifyHdl( LINK( this, SvxCharacterMap, HexCodeChangeHdl ) );
+
+    if( SvxShowCharSet::getSelectedChar() == ' ')
+        m_pOKBtn->Disable();
+    else
+        m_pOKBtn->Enable();
+
+    getRecentCharacterList();
+    updateRecentCharControl();
+
+    for(int i = 0; i < 16; i++)
+    {
+        m_pRecentCharView[i]->setMouseClickHdl(LINK(this,SvxCharacterMap, RecentClickHdl));
+        m_pRecentCharView[i]->SetLoseFocusHdl(LINK(this,SvxCharacterMap, LoseFocusHdl));
+    }
+}
+
+
+void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
+{
+    // first get the underlying info in order to get font names
+    // like "Times New Roman;Times" resolved
+    vcl::Font aTmp( GetFontMetric( rFont ) );
+
+    if (aTmp.GetFamilyName() == "StarSymbol" && m_pFontLB->GetEntryPos(aTmp.GetFamilyName()) == LISTBOX_ENTRY_NOTFOUND)
+    {
+        //if for some reason, like font in an old document, StarSymbol is requested and its not available, then
+        //try OpenSymbol instead
+        aTmp.SetFamilyName("OpenSymbol");
+    }
+
+    if ( m_pFontLB->GetEntryPos( aTmp.GetFamilyName() ) == LISTBOX_ENTRY_NOTFOUND )
+        return;
+
+    m_pFontLB->SelectEntry( aTmp.GetFamilyName() );
+    aFont = aTmp;
+    FontSelectHdl(*m_pFontLB);
+
+    // for compatibility reasons
+    ModalDialog::SetFont( aFont );
+}
+
+
+void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)
+{
+    SubsetMap aAll(nullptr);
+    rListBox.Clear();
+    bool bFirst = true;
+    while (const Subset *s = aAll.GetNextSubset(bFirst))
+    {
+        rListBox.InsertEntry( s->GetName() );
+        bFirst = false;
+    }
+}
+
+
+void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
+{
+    if(sGlyph.isEmpty())
+        return;
+
+    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+
+    uno::Sequence<beans::PropertyValue> aArgs(2);
+    aArgs[0].Name = OUString::fromUtf8("Symbols");
+    aArgs[0].Value <<= sGlyph;
+    //add font settings here
+    aArgs[1].Name = OUString::fromUtf8("FontName");
+    aArgs[1].Value <<= aFont.GetFamilyName();
+    comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
+
+    updateRecentCharacterList(sGlyph, aFont.GetFamilyName());
+}
+
+
+IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, ListBox&, void)
+{
+    const sal_Int32 nPos = m_pFontLB->GetSelectEntryPos();
+    const sal_uInt16 nFont = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFontLB->GetEntryData( nPos ));
+    aFont = GetDevFont( nFont );
+    aFont.SetWeight( WEIGHT_DONTKNOW );
+    aFont.SetItalic( ITALIC_NONE );
+    aFont.SetWidthType( WIDTH_DONTKNOW );
+    aFont.SetPitch( PITCH_DONTKNOW );
+    aFont.SetFamily( FAMILY_DONTKNOW );
+
+    // notify children using this font
+    m_pShowSet->SetFont( aFont );
+    m_pShowChar->SetFont( aFont );
+
+    // setup unicode subset listbar with font specific subsets,
+    // hide unicode subset listbar for symbol fonts
+    // TODO: get info from the Font once it provides it
+    delete pSubsetMap;
+    pSubsetMap = nullptr;
+    m_pSubsetLB->Clear();
+
+    bool bNeedSubset = (aFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL);
+    if( bNeedSubset )
+    {
+        FontCharMapRef xFontCharMap( new FontCharMap() );
+        m_pShowSet->GetFontCharMap( xFontCharMap );
+        pSubsetMap = new SubsetMap( xFontCharMap );
+
+        // update subset listbox for new font's unicode subsets
+        // TODO: is it worth to improve the stupid linear search?
+        bool bFirst = true;
+        const Subset* s;
+        while( nullptr != (s = pSubsetMap->GetNextSubset( bFirst ))  )
+        {
+            const sal_Int32 nPos_ = m_pSubsetLB->InsertEntry( s->GetName() );
+            m_pSubsetLB->SetEntryData( nPos_, const_cast<Subset *>(s) );
+            // NOTE: subset must live at least as long as the selected font
+            if( bFirst )
+                m_pSubsetLB->SelectEntryPos( nPos_ );
+            bFirst = false;
+        }
+        if( m_pSubsetLB->GetEntryCount() <= 1 )
+            bNeedSubset = false;
+    }
+
+    m_pSubsetText->Enable(bNeedSubset);
+    m_pSubsetLB->Enable(bNeedSubset);
+}
+
+
+IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, ListBox&, void)
+{
+    const sal_Int32 nPos = m_pSubsetLB->GetSelectEntryPos();
+    const Subset* pSubset = static_cast<const Subset*> (m_pSubsetLB->GetEntryData(nPos));
+    if( pSubset )
+    {
+        sal_UCS4 cFirst = pSubset->GetRangeMin();
+        m_pShowSet->SelectCharacter( cFirst );
+    }
+    m_pSubsetLB->SelectEntryPos( nPos );
+}
+
+IMPL_LINK(SvxCharacterMap, RecentClickHdl, SvxCharView*, rView, void)
+{
+    m_pShowChar->SetText( rView->GetText() );
+    m_pShowChar->SetFont(rView->GetFont());
+    m_pShowChar->Update();
+    rView->GrabFocus();
+    rView->Invalidate();
+}
+
+IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet*, void)
+{
+    sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
+    // using the new UCS4 constructor
+    OUString aOUStr( &cChar, 1 );
+    insertCharToDoc(aOUStr);
+}
+
+
+IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl, SvxShowCharSet*, void)
+{
+    m_pOKBtn->Enable();
+}
+
+
+IMPL_LINK(SvxCharacterMap, LoseFocusHdl, Control&, pItem, void)
+{
+    pItem.Invalidate();
+}
+
+
+IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
+{
+    OUString aText;
+    OUString aHexText;
+    OUString aDecimalText;
+    sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
+    bool bSelect = (cChar > 0);
+
+    // show char sample
+    if ( bSelect )
+    {
+        // using the new UCS4 constructor
+        aText = OUString( &cChar, 1 );
+
+        const Subset* pSubset = nullptr;
+        if( pSubsetMap )
+            pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
+        if( pSubset )
+            m_pSubsetLB->SelectEntry( pSubset->GetName() );
+        else
+            m_pSubsetLB->SetNoSelection();
+    }
+
+    if(m_pShowSet->HasFocus())
+    {
+        m_pShowChar->SetText( aText );
+        m_pShowChar->SetFont( aFont );
+        m_pShowChar->Update();
+    }
+
+    // show char codes
+    if ( bSelect )
+    {
+        // Get the hexadecimal code
+        char aBuf[32];
+        snprintf( aBuf, sizeof(aBuf), "%X", static_cast<unsigned>(cChar) );
+        aHexText = OUString::createFromAscii(aBuf);
+        // Get the decimal code
+        char aDecBuf[32];
+        snprintf( aDecBuf, sizeof(aDecBuf), "%u", static_cast<unsigned>(cChar) );
+        aDecimalText = OUString::createFromAscii(aDecBuf);
+    }
+
+    // Update the hex and decimal codes only if necessary
+    if (m_pHexCodeText->GetText() != aHexText)
+        m_pHexCodeText->SetText( aHexText );
+    if (m_pDecimalCodeText->GetText() != aDecimalText)
+        m_pDecimalCodeText->SetText( aDecimalText );
+}
+
+void SvxCharacterMap::selectCharByCode(Radix radix)
+{
+    OUString aCodeString;
+    switch(radix)
+    {
+        case Radix::decimal:
+            aCodeString = m_pDecimalCodeText->GetText();
+            break;
+        case Radix::hexadecimal:
+            aCodeString = m_pHexCodeText->GetText();
+            break;
+    }
+    // Convert the code back to a character using the appropriate radix
+    sal_UCS4 cChar = aCodeString.toUInt32(static_cast<sal_Int16> (radix));
+    // Use FontCharMap::HasChar(sal_UCS4 cChar) to see if the desired character is in the font
+    FontCharMapRef xFontCharMap(new FontCharMap());
+    m_pShowSet->GetFontCharMap(xFontCharMap);
+    if (xFontCharMap->HasChar(cChar))
+        // Select the corresponding character
+        SetChar(cChar);
+}
+
+IMPL_LINK_NOARG(SvxCharacterMap, DecimalCodeChangeHdl, Edit&, void)
+{
+    selectCharByCode(Radix::decimal);
+}
+
+IMPL_LINK_NOARG(SvxCharacterMap, HexCodeChangeHdl, Edit&, void)
+{
+    selectCharByCode(Radix::hexadecimal);
+}
+
+IMPL_LINK_NOARG(SvxCharacterMap, CharPreSelectHdl, SvxShowCharSet*, void)
+{
+    // adjust subset selection
+    if( pSubsetMap )
+    {
+        sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
+        const Subset* pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
+        if( pSubset )
+            m_pSubsetLB->SelectEntry( pSubset->GetName() );
+    }
+
+    m_pOKBtn->Enable();
 }
 
 
@@ -301,327 +702,5 @@ void SvxShowText::SetText( const OUString& rText )
     Invalidate();
 }
 
-
-// class SvxCharacterMap =================================================
-
-void SvxCharacterMap::init()
-{
-    aFont = GetFont();
-    aFont.SetTransparent( true );
-    aFont.SetFamily( FAMILY_DONTKNOW );
-    aFont.SetPitch( PITCH_DONTKNOW );
-    aFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );
-
-    if (bOne)
-    {
-        m_pSymbolText->Hide();
-        m_pShowText->Hide();
-    }
-
-    OUString aDefStr( aFont.GetFamilyName() );
-    OUString aLastName;
-    int nCount = GetDevFontCount();
-    for ( int i = 0; i < nCount; i++ )
-    {
-        OUString aFontName( GetDevFont( i ).GetFamilyName() );
-        if ( aFontName != aLastName )
-        {
-            aLastName = aFontName;
-            const sal_Int32 nPos = m_pFontLB->InsertEntry( aFontName );
-            m_pFontLB->SetEntryData( nPos, reinterpret_cast<void*>(i) );
-        }
-    }
-    // the font may not be in the list =>
-    // try to find a font name token in list and select found font,
-    // else select topmost entry
-    bool bFound = (m_pFontLB->GetEntryPos( aDefStr ) == LISTBOX_ENTRY_NOTFOUND );
-    if( !bFound )
-    {
-        sal_Int32 nIndex = 0;
-        do
-        {
-            OUString aToken = aDefStr.getToken(0, ';', nIndex);
-            if ( m_pFontLB->GetEntryPos( aToken ) != LISTBOX_ENTRY_NOTFOUND )
-            {
-                aDefStr = aToken;
-                bFound = true;
-                break;
-            }
-        }
-        while ( nIndex >= 0 );
-    }
-
-    if ( bFound )
-        m_pFontLB->SelectEntry( aDefStr );
-    else if ( m_pFontLB->GetEntryCount() )
-        m_pFontLB->SelectEntryPos(0);
-    FontSelectHdl(*m_pFontLB);
-
-    m_pOKBtn->SetClickHdl( LINK( this, SvxCharacterMap, OKHdl ) );
-    m_pFontLB->SetSelectHdl( LINK( this, SvxCharacterMap, FontSelectHdl ) );
-    m_pSubsetLB->SetSelectHdl( LINK( this, SvxCharacterMap, SubsetSelectHdl ) );
-    m_pShowSet->SetDoubleClickHdl( LINK( this, SvxCharacterMap, CharDoubleClickHdl ) );
-    m_pShowSet->SetSelectHdl( LINK( this, SvxCharacterMap, CharSelectHdl ) );
-    m_pShowSet->SetHighlightHdl( LINK( this, SvxCharacterMap, CharHighlightHdl ) );
-    m_pShowSet->SetPreSelectHdl( LINK( this, SvxCharacterMap, CharPreSelectHdl ) );
-    m_pDecimalCodeText->SetModifyHdl( LINK( this, SvxCharacterMap, DecimalCodeChangeHdl ) );
-    m_pHexCodeText->SetModifyHdl( LINK( this, SvxCharacterMap, HexCodeChangeHdl ) );
-
-    if( SvxShowCharSet::getSelectedChar() == ' ')
-        m_pOKBtn->Disable();
-    else
-        m_pOKBtn->Enable();
-}
-
-
-void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
-{
-    // first get the underlying info in order to get font names
-    // like "Times New Roman;Times" resolved
-    vcl::Font aTmp( GetFontMetric( rFont ) );
-
-    if (aTmp.GetFamilyName() == "StarSymbol" && m_pFontLB->GetEntryPos(aTmp.GetFamilyName()) == LISTBOX_ENTRY_NOTFOUND)
-    {
-        //if for some reason, like font in an old document, StarSymbol is requested and its not available, then
-        //try OpenSymbol instead
-        aTmp.SetFamilyName("OpenSymbol");
-    }
-
-    if ( m_pFontLB->GetEntryPos( aTmp.GetFamilyName() ) == LISTBOX_ENTRY_NOTFOUND )
-        return;
-
-    m_pFontLB->SelectEntry( aTmp.GetFamilyName() );
-    aFont = aTmp;
-    FontSelectHdl(*m_pFontLB);
-
-    // for compatibility reasons
-    ModalDialog::SetFont( aFont );
-}
-
-
-IMPL_LINK_NOARG(SvxCharacterMap, OKHdl, Button*, void)
-{
-    OUString aStr = m_pShowText->GetText();
-
-    if ( aStr.isEmpty() )
-    {
-        sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
-        // using the new UCS4 constructor
-        OUString aOUStr( &cChar, 1 );
-        m_pShowText->SetText( aOUStr );
-    }
-    EndDialog( RET_OK );
-}
-
-void SvxCharacterMap::fillAllSubsets(ListBox &rListBox)
-{
-    SubsetMap aAll(nullptr);
-    rListBox.Clear();
-    bool bFirst = true;
-    while (const Subset *s = aAll.GetNextSubset(bFirst))
-    {
-        rListBox.InsertEntry( s->GetName() );
-        bFirst = false;
-    }
-}
-
-
-IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, ListBox&, void)
-{
-    const sal_Int32 nPos = m_pFontLB->GetSelectEntryPos();
-    const sal_uInt16 nFont = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFontLB->GetEntryData( nPos ));
-    aFont = GetDevFont( nFont );
-    aFont.SetWeight( WEIGHT_DONTKNOW );
-    aFont.SetItalic( ITALIC_NONE );
-    aFont.SetWidthType( WIDTH_DONTKNOW );
-    aFont.SetPitch( PITCH_DONTKNOW );
-    aFont.SetFamily( FAMILY_DONTKNOW );
-
-    // notify children using this font
-    m_pShowSet->SetFont( aFont );
-    m_pShowChar->SetFont( aFont );
-    m_pShowText->SetControlFont( aFont );
-
-    // setup unicode subset listbar with font specific subsets,
-    // hide unicode subset listbar for symbol fonts
-    // TODO: get info from the Font once it provides it
-    delete pSubsetMap;
-    pSubsetMap = nullptr;
-    m_pSubsetLB->Clear();
-
-    bool bNeedSubset = (aFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL);
-    if( bNeedSubset )
-    {
-        FontCharMapRef xFontCharMap( new FontCharMap() );
-        m_pShowSet->GetFontCharMap( xFontCharMap );
-        pSubsetMap = new SubsetMap( xFontCharMap );
-
-        // update subset listbox for new font's unicode subsets
-        // TODO: is it worth to improve the stupid linear search?
-        bool bFirst = true;
-        const Subset* s;
-        while( nullptr != (s = pSubsetMap->GetNextSubset( bFirst ))  )
-        {
-            const sal_Int32 nPos_ = m_pSubsetLB->InsertEntry( s->GetName() );
-            m_pSubsetLB->SetEntryData( nPos_, const_cast<Subset *>(s) );
-            // NOTE: subset must live at least as long as the selected font
-            if( bFirst )
-                m_pSubsetLB->SelectEntryPos( nPos_ );
-            bFirst = false;
-        }
-        if( m_pSubsetLB->GetEntryCount() <= 1 )
-            bNeedSubset = false;
-    }
-
-    m_pSubsetText->Enable(bNeedSubset);
-    m_pSubsetLB->Enable(bNeedSubset);
-}
-
-
-IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, ListBox&, void)
-{
-    const sal_Int32 nPos = m_pSubsetLB->GetSelectEntryPos();
-    const Subset* pSubset = static_cast<const Subset*> (m_pSubsetLB->GetEntryData(nPos));
-    if( pSubset )
-    {
-        sal_UCS4 cFirst = pSubset->GetRangeMin();
-        m_pShowSet->SelectCharacter( cFirst );
-    }
-    m_pSubsetLB->SelectEntryPos( nPos );
-}
-
-
-IMPL_LINK_NOARG(SvxCharacterMap, CharDoubleClickHdl, SvxShowCharSet*, void)
-{
-    if (bOne)
-    {
-        sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
-        m_pShowText->SetText(OUString(&cChar, 1));
-    }
-    EndDialog( RET_OK );
-}
-
-
-IMPL_LINK_NOARG(SvxCharacterMap, CharSelectHdl, SvxShowCharSet*, void)
-{
-    if ( !bOne )
-    {
-        OUString aText = m_pShowText->GetText();
-        Selection aSelection = m_pShowText->GetSelection();
-        aSelection.Justify();
-        long nLen = aSelection.Len();
-
-        if ( aText.getLength() != CHARMAP_MAXLEN || nLen > 0 )
-        {
-            sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
-            // using the new UCS4 constructor
-            OUString aOUStr( &cChar, 1 );
-
-            long nPos = aSelection.Min();
-            if( aText.getLength() )
-            {
-                m_pShowText->SetText( aText.copy( 0, nPos ) + aOUStr + aText.copy( nPos + nLen ) );
-            }
-            else
-                m_pShowText->SetText( aOUStr );
-
-            m_pShowText->SetSelection(Selection(nPos + aOUStr.getLength()));
-        }
-
-    }
-    m_pOKBtn->Enable();
-}
-
-
-IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
-{
-    OUString aText;
-    OUString aHexText;
-    OUString aDecimalText;
-    sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
-    bool bSelect = (cChar > 0);
-
-    // show char sample
-    if ( bSelect )
-    {
-        // using the new UCS4 constructor
-        aText = OUString( &cChar, 1 );
-
-        const Subset* pSubset = nullptr;
-        if( pSubsetMap )
-            pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
-        if( pSubset )
-            m_pSubsetLB->SelectEntry( pSubset->GetName() );
-        else
-            m_pSubsetLB->SetNoSelection();
-    }
-    m_pShowChar->SetText( aText );
-    m_pShowChar->Update();
-
-    // show char codes
-    if ( bSelect )
-    {
-        // Get the hexadecimal code
-        char aBuf[32];
-        snprintf( aBuf, sizeof(aBuf), "%X", static_cast<unsigned>(cChar) );
-        aHexText = OUString::createFromAscii(aBuf);
-        // Get the decimal code
-        char aDecBuf[32];
-        snprintf( aDecBuf, sizeof(aDecBuf), "%u", static_cast<unsigned>(cChar) );
-        aDecimalText = OUString::createFromAscii(aDecBuf);
-    }
-
-    // Update the hex and decimal codes only if necessary
-    if (m_pHexCodeText->GetText() != aHexText)
-        m_pHexCodeText->SetText( aHexText );
-    if (m_pDecimalCodeText->GetText() != aDecimalText)
-        m_pDecimalCodeText->SetText( aDecimalText );
-}
-
-void SvxCharacterMap::selectCharByCode(Radix radix)
-{
-    OUString aCodeString;
-    switch(radix)
-    {
-        case Radix::decimal:
-            aCodeString = m_pDecimalCodeText->GetText();
-            break;
-        case Radix::hexadecimal:
-            aCodeString = m_pHexCodeText->GetText();
-            break;
-    }
-    // Convert the code back to a character using the appropriate radix
-    sal_UCS4 cChar = aCodeString.toUInt32(static_cast<sal_Int16> (radix));
-    // Use FontCharMap::HasChar(sal_UCS4 cChar) to see if the desired character is in the font
-    FontCharMapRef xFontCharMap(new FontCharMap());
-    m_pShowSet->GetFontCharMap(xFontCharMap);
-    if (xFontCharMap->HasChar(cChar))
-        // Select the corresponding character
-        SetChar(cChar);
-}
-
-IMPL_LINK_NOARG(SvxCharacterMap, DecimalCodeChangeHdl, Edit&, void)
-{
-    selectCharByCode(Radix::decimal);
-}
-
-IMPL_LINK_NOARG(SvxCharacterMap, HexCodeChangeHdl, Edit&, void)
-{
-    selectCharByCode(Radix::hexadecimal);
-}
-
-IMPL_LINK_NOARG(SvxCharacterMap, CharPreSelectHdl, SvxShowCharSet*, void)
-{
-    // adjust subset selection
-    if( pSubsetMap )
-    {
-        sal_UCS4 cChar = m_pShowSet->GetSelectCharacter();
-        const Subset* pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
-        if( pSubset )
-            m_pSubsetLB->SelectEntry( pSubset->GetName() );
-    }
-
-    m_pOKBtn->Enable();
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
