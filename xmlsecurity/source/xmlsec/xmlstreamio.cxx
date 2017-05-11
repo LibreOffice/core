@@ -21,7 +21,7 @@
 /*
  * Implementation of the I/O interfaces based on stream and URI binding
  */
-#include "xmlstreamio.hxx"
+#include "xmlsec/xmlstreamio.hxx"
 #include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
 
@@ -180,7 +180,7 @@ int xmlEnableStreamInputCallbacks()
     return 0 ;
 }
 
-int xmlRegisterStreamInputCallbacks(
+SAL_DLLPUBLIC_EXPORT int xmlRegisterStreamInputCallbacks(
     css::uno::Reference< css::xml::crypto::XUriBinding >& aUriBinding
 ) {
     if( !( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) ) {
@@ -197,7 +197,7 @@ int xmlRegisterStreamInputCallbacks(
     return 0 ;
 }
 
-int xmlUnregisterStreamInputCallbacks()
+SAL_DLLPUBLIC_EXPORT int xmlUnregisterStreamInputCallbacks()
 {
     if( ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
         //Clear the uri-stream binding
