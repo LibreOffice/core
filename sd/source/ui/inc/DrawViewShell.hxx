@@ -159,6 +159,7 @@ public:
 
     void            SetPageProperties (SfxRequest& rReq);
     void            GetPageProperties(SfxItemSet& rSet);
+    void            GetMarginProperties(SfxItemSet& rSet);
 
     void            GetState (SfxItemSet& rSet);
     void            Execute (SfxRequest& rReq);
