@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_459bcec9",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5852,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-11T23:30:54Z",
+      "side": 1,
+      "message": "Nitpick: get the habit to use prefix increment instead of postfix increment if possible. It doesn\u0027t matter for integer POD types, but for class object instances or iterators it may.",
+      "range": {
+        "startLine": 5852,
+        "startChar": 53,
+        "endLine": 5852,
+        "endChar": 56
+      },
+      "revId": "0bf829732d31beec7a7fd2a59ea70785642e522c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
