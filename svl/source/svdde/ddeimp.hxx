@@ -62,7 +62,6 @@ protected:
     DWORD       hInst;
 
 public:
-                DdeString( DWORD, const sal_Unicode* );
                 DdeString( DWORD, const OUString& );
                 ~DdeString();
 
