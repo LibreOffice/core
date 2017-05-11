@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_c5417e3b",
+        "filename": "sd/source/ui/func/futempl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-11T22:38:20Z",
+      "side": 1,
+      "message": "So this is a good approach but at the wrong place. This will come to constructor of SdPresLayoutTemplateDlg (sd/source/ui/dlg/prltempl.cxx). SetInputSet() call therein is the one ultimately responsible for passing item sets to style tab-dialog\n\nYou may want to use someItemSet.MergeRange to extend the set\u0027s range to accomodate SID_ATTR_BRUSH_CHAR",
+      "revId": "6cc4d56f907f22fc9be7474e9b3231477f5a3f58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e53e7ab7",
+        "filename": "sd/source/ui/func/futempl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-11T22:38:20Z",
+      "side": 1,
+      "message": "This could even work ...",
+      "revId": "6cc4d56f907f22fc9be7474e9b3231477f5a3f58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_054c666f",
+        "filename": "sd/source/ui/func/futempl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 426,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-11T22:38:20Z",
+      "side": 1,
+      "message": "... but with SvxBackgroundColorItem instead of XFillBackgroundItem and SID_ATTR_BRUSH_CHAR instead of XATTR_FILLBACKGROUND",
+      "revId": "6cc4d56f907f22fc9be7474e9b3231477f5a3f58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
