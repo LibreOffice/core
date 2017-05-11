@@ -33,6 +33,8 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <svl/stritem.hxx>
+#include <officecfg/Office/Common.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <cuires.hrc>
 #include <dialmgr.hxx>
@@ -43,12 +45,15 @@
 #include <editeng/fontitem.hxx>
 #include "macroass.hxx"
 
+using namespace ::com::sun::star;
+
 // class SvxCharacterMap =================================================
 
 SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxItemSet* pSet )
     : SfxModalDialog(pParent, "SpecialCharactersDialog", "cui/ui/specialcharacters.ui")
     , bOne( bOne_ )
     , pSubsetMap( nullptr )
+    , mxContext(comphelper::getProcessComponentContext())
 {
     get(m_pShowSet, "showcharset");
     get(m_pShowChar, "showchar");
@@ -69,6 +74,23 @@ SvxCharacterMap::SvxCharacterMap( vcl::Window* pParent, bool bOne_, const SfxIte
     //lock the size request of this widget to the width of the original .ui string
     m_pHexCodeText->set_width_request(m_pHexCodeText->get_preferred_size().Width());
     get(m_pSymbolText, "symboltext");
+
+    get( m_pRecentCharView[0], "viewchar1" );
+    get( m_pRecentCharView[1], "viewchar2" );
+    get( m_pRecentCharView[2], "viewchar3" );
+    get( m_pRecentCharView[3], "viewchar4" );
+    get( m_pRecentCharView[4], "viewchar5" );
+    get( m_pRecentCharView[5], "viewchar6" );
+    get( m_pRecentCharView[6], "viewchar7" );
+    get( m_pRecentCharView[7], "viewchar8" );
+    get( m_pRecentCharView[8], "viewchar9" );
+    get( m_pRecentCharView[9], "viewchar10" );
+    get( m_pRecentCharView[10], "viewchar11" );
+    get( m_pRecentCharView[11], "viewchar12" );
+    get( m_pRecentCharView[12], "viewchar13" );
+    get( m_pRecentCharView[13], "viewchar14" );
+    get( m_pRecentCharView[14], "viewchar15" );
+    get( m_pRecentCharView[15], "viewchar16" );
 
     const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(pSet, FN_PARAM_1, false);
     if ( pItem )
@@ -110,6 +132,9 @@ SvxCharacterMap::~SvxCharacterMap()
 
 void SvxCharacterMap::dispose()
 {
+    for(int i = 0; i < 16; i++)
+        m_pRecentCharView[i].clear();
+
     m_pShowSet.clear();
     m_pShowText.clear();
     m_pOKBtn.clear();
@@ -121,6 +146,10 @@ void SvxCharacterMap::dispose()
     m_pShowChar.clear();
     m_pHexCodeText.clear();
     m_pDecimalCodeText.clear();
+
+    maRecentCharList.clear();
+    maRecentCharFontList.clear();
+
     SfxModalDialog::dispose();
 }
 
@@ -170,6 +199,82 @@ short SvxCharacterMap::Execute()
     return nResult;
 }
 
+void SvxCharacterMap::getRecentCharacterList()
+{
+    //retrieve recent character list
+    css::uno::Sequence< OUString > rRecentCharList( officecfg::Office::Common::RecentCharacters::RecentCharacterList::get() );
+    for (int i = 0; i < rRecentCharList.getLength(); ++i)
+    {
+        maRecentCharList.push_back(OUString(rRecentCharList[i]));
+    }
+
+    //retrieve recent character font list
+    css::uno::Sequence< OUString > rRecentCharFontList( officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::get() );
+    for (int i = 0; i < rRecentCharFontList.getLength(); ++i)
+    {
+        maRecentCharFontList.push_back(OUString(rRecentCharFontList[i]));
+    }
+}
+
+void SvxCharacterMap::updateRecentCharControl()
+{
+    int i = 0;
+    for ( std::deque< OUString >::iterator it = maRecentCharList.begin(), it2 = maRecentCharFontList.begin();
+        it != maRecentCharList.end() || it2 != maRecentCharFontList.end();
+        ++it, ++it2, i++)
+    {
+        m_pRecentCharView[i]->SetText(*it);
+        vcl::Font rFont = m_pRecentCharView[i]->GetControlFont();
+        rFont.SetFamilyName( *it2 );
+        m_pRecentCharView[i]->SetFont(rFont);
+    }
+
+    for(; i < 16 ; i++)
+        m_pRecentCharView[i]->SetText(OUString());
+}
+
+void SvxCharacterMap::updateRecentCharacterList(const OUString& sTitle, const OUString& rFont)
+{
+    auto itChar = std::find_if(maRecentCharList.begin(),
+         maRecentCharList.end(),
+         [sTitle] (const OUString & a) { return a == sTitle; });
+
+    auto itChar2 = std::find_if(maRecentCharFontList.begin(),
+         maRecentCharFontList.end(),
+         [rFont] (const OUString & a) { return a == rFont; });
+
+    // if recent char to be added is already in list, remove it
+    if( itChar != maRecentCharList.end() &&  itChar2 != maRecentCharFontList.end() )
+    {
+        maRecentCharList.erase( itChar );
+        maRecentCharFontList.erase( itChar2);
+    }
+
+    if (maRecentCharList.size() == 16)
+    {
+        maRecentCharList.pop_back();
+        maRecentCharFontList.pop_back();
+    }
+
+    maRecentCharList.push_front(sTitle);
+    maRecentCharFontList.push_front(rFont);
+
+    css::uno::Sequence< OUString > aRecentCharList(maRecentCharList.size());
+    css::uno::Sequence< OUString > aRecentCharFontList(maRecentCharFontList.size());
+
+    for (size_t i = 0; i < maRecentCharList.size(); ++i)
+    {
+        aRecentCharList[i] = maRecentCharList[i];
+        aRecentCharFontList[i] = maRecentCharFontList[i];
+    }
+
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+    officecfg::Office::Common::RecentCharacters::RecentCharacterList::set(aRecentCharList, batch);
+    officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::set(aRecentCharFontList, batch);
+    batch->commit();
+
+    updateRecentCharControl();
+}
 
 // class SvxShowText =====================================================
 
@@ -371,6 +476,9 @@ void SvxCharacterMap::init()
         m_pOKBtn->Disable();
     else
         m_pOKBtn->Enable();
+
+    getRecentCharacterList();
+    updateRecentCharControl();
 }
 
 
@@ -557,6 +665,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, CharHighlightHdl, SvxShowCharSet*, void)
     }
     m_pShowChar->SetText( aText );
     m_pShowChar->Update();
+    updateRecentCharacterList(aText, aFont.GetFamilyName());
 
     // show char codes
     if ( bSelect )

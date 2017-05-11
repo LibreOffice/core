@@ -26,7 +26,9 @@
 #include <vcl/lstbox.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/charmap.hxx>
+#include "charwin.hxx"
 
+using namespace ::com::sun::star;
 class SubsetMap;
 
 #define CHARMAP_MAXLEN  32
@@ -78,9 +80,16 @@ private:
     VclPtr<SvxShowText>    m_pShowChar;
     VclPtr<Edit>           m_pHexCodeText;
     VclPtr<Edit>           m_pDecimalCodeText;
+    VclPtr<SvxCharView>    m_pRecentCharView[16];
     vcl::Font       aFont;
     bool            bOne;
     const SubsetMap* pSubsetMap;
+
+    std::deque<OUString> maRecentCharList;
+    std::deque<OUString> maRecentCharFontList;
+
+    uno::Reference< uno::XComponentContext > mxContext;
+
     enum class Radix : sal_Int16 {decimal = 10, hexadecimal=16};
 
     DECL_LINK(OKHdl, Button*, void);
@@ -110,6 +119,11 @@ public:
     sal_UCS4        GetChar() const;
 
     OUString        GetCharacters() const;
+
+    void            getRecentCharacterList(); //gets both recent char and recent char font list
+    void            updateRecentCharacterList(const OUString& rChar, const OUString& rFont);
+
+    void            updateRecentCharControl();
 
     virtual short   Execute() override;
 };
