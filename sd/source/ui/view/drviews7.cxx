@@ -16,7 +16,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
 #include <sal/config.h>
 
 #include <utility>
@@ -26,11 +25,14 @@
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <svx/fmglob.hxx>
 #include <svx/globl3d.hxx>
+#include <svx/rulritem.hxx>
 #include <svx/svdouno.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/sizeitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <svx/svxids.hrc>
@@ -39,6 +41,7 @@
 #include <svx/fmshell.hxx>
 #include <svl/eitem.hxx>
 #include <svl/aeitem.hxx>
+#include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
@@ -72,6 +75,7 @@
 
 #include "Outliner.hxx"
 #include "drawdoc.hxx"
+#include "DrawViewShell.hxx"
 #include "sdresid.hxx"
 #include "sdpage.hxx"
 #include "Client.hxx"
@@ -79,6 +83,7 @@
 #include "zoomlist.hxx"
 #include "slideshow.hxx"
 #include "drawview.hxx"
+#include "View.hxx"
 #include "ViewShellBase.hxx"
 #include "ViewShellManager.hxx"
 #include "LayerTabBar.hxx"
@@ -244,6 +249,45 @@ void DrawViewShell::GetDrawAttrState(SfxItemSet& rSet)
     rSel = pOLV->GetSelection();
 
     return pOL;
+}
+
+void DrawViewShell::GetMarginProperties( SfxItemSet &rSet )
+{
+    DrawViewShell *mpDrawViewShell(nullptr);
+    SdPage *mpPage = mpDrawViewShell->getCurrentPage();
+    SfxWhichIter aIter( rSet );
+    sal_uInt16 nWhich = aIter.FirstWhich();
+    while ( nWhich )
+    {
+        switch ( nWhich )
+        {
+            case SID_ATTR_PAGE_LRSPACE:
+            {
+                // const SvxLRSpaceItem aTmpPageLRSpace ( rDesc.GetMaster().GetLRSpace() );
+                const SvxLongLRSpaceItem aLongLR(
+                    (long)mpPage->GetLftBorder(),
+                    (long)mpPage->GetRgtBorder(),
+                    SID_ATTR_PAGE_LRSPACE );
+                rSet.Put( aLongLR );
+            }
+            break;
+
+            case SID_ATTR_PAGE_ULSPACE:
+            {
+                // const SvxULSpaceItem aUL( rDesc.GetMaster().GetULSpace() );
+                SvxLongULSpaceItem aLongUL(
+                    (long)mpPage->GetUppBorder(),
+                    (long)mpPage->GetLwrBorder(),
+                    SID_ATTR_PAGE_ULSPACE );
+                rSet.Put( aLongUL );
+            }
+            break;
+
+            default:
+            break;
+        }
+        nWhich = aIter.NextWhich();
+    }
 }
 
 void DrawViewShell::GetMenuState( SfxItemSet &rSet )
@@ -1706,9 +1750,25 @@ void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
 
 void DrawViewShell::SetPageProperties (SfxRequest& rReq)
 {
+    DrawViewShell *mpDrawViewShell(nullptr);
+    SdDrawDocument *mpDoc;
+    SdPage *mpPage = mpDrawViewShell->getCurrentPage();
     SdPage *pPage = getCurrentPage();
     sal_uInt16 nSlotId = rReq.GetSlot();
     const SfxItemSet *pArgs = rReq.GetArgs();
+    // const size_t nDescId    = rSh->GetCurPageDesc();
+    // const SdPage& rDesc = rSh->GetPageDesc( nDescId );
+    Size maSize = mpPage->GetSize();
+    PageKind ePageKind = mpDrawViewShell->GetPageKind();
+    const SfxPoolItem*  pPoolItem;
+    bool                bSetPageSizeAndBorder = false;
+    Size                aNewSize(maSize);
+    sal_Int32               nLeft  = -1, nRight = -1, nUpper = -1, nLower = -1;
+    bool                bScaleAll = true;
+    Orientation         eOrientation = mpPage->GetOrientation();
+    SdPage*             pMasterPage = mpPage->IsMasterPage() ? mpPage : &static_cast<SdPage&>(mpPage->TRG_GetMasterPage());
+    bool                bFullSize = pMasterPage->IsBackgroundFullSize();
+    sal_uInt16          nPaperBin = mpPage->GetPaperBin();
 
     if ( pPage && pArgs )
     {
@@ -1769,6 +1829,50 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
             }
 
             rReq.Done();
+        }
+        else
+        {
+            switch (nSlotId)
+            {
+                case SID_ATTR_PAGE_LRSPACE:
+                    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_LRSPACE),
+                                            true,&pPoolItem) == SfxItemState::SET )
+                    {
+                        nLeft = static_cast<const SvxLRSpaceItem*>(pPoolItem)->GetLeft();
+                        nRight = static_cast<const SvxLRSpaceItem*>(pPoolItem)->GetRight();
+                        bSetPageSizeAndBorder = true;
+                        if (nLeft == -1 && nUpper != -1)
+                        {
+                            nLeft  = mpPage->GetLftBorder();
+                            nRight = mpPage->GetRgtBorder();
+                        }
+                        if ( bSetPageSizeAndBorder )
+                            mpDrawViewShell->SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower, bScaleAll, eOrientation, nPaperBin, bFullSize );
+
+                    }
+                    break;
+
+                case SID_ATTR_PAGE_ULSPACE:
+                    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_ULSPACE),
+                                            true,&pPoolItem) == SfxItemState::SET )
+                    {
+                        nUpper = static_cast<const SvxULSpaceItem*>(pPoolItem)->GetUpper();
+                        nLower = static_cast<const SvxULSpaceItem*>(pPoolItem)->GetLower();
+                        bSetPageSizeAndBorder = true;
+                        if (nLeft != -1 && nUpper == -1)
+                        {
+                            nUpper = mpPage->GetUppBorder();
+                            nLower = mpPage->GetLwrBorder();
+                        }
+                        if( bSetPageSizeAndBorder )
+                            mpDrawViewShell->SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower, bScaleAll, eOrientation, nPaperBin, bFullSize );
+
+                    }
+                    break;
+
+                default:
+                break;
+            }
         }
     }
 }
