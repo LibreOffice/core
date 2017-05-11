@@ -24,11 +24,10 @@
 #include "xmlencryption_nssimpl.hxx"
 
 #include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
-
-#include "xmlelementwrapper_xmlsecimpl.hxx"
+#include "xmlsec/xmlelementwrapper_xmlsecimpl.hxx"
+#include "xmlsec/errorcallback.hxx"
 
 #include "securityenvironment_nssimpl.hxx"
-#include "errorcallback.hxx"
 
 #include "xmlsec-wrapper.h"
 

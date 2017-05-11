@@ -19,7 +19,7 @@
 
 #include <string.h>
 
-#include "xmlelementwrapper_xmlsecimpl.hxx"
+#include "xmlsec/xmlelementwrapper_xmlsecimpl.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
