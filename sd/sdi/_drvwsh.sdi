@@ -2603,6 +2603,16 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetPageProperties ;
     ]
+    SID_ATTR_PAGE_LRSPACE
+    [
+        ExecMethod = SetPageProperties ;
+        StateMethod = GetMarginProperties ;
+    ]
+    SID_ATTR_PAGE_ULSPACE
+    [
+        ExecMethod = SetPageProperties ;
+        StateMethod = GetMarginProperties ;
+    ]
     SID_ATTR_PAGE_COLOR
     [
         ExecMethod = SetPageProperties ;

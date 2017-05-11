@@ -34,7 +34,9 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include "fupage.hxx"
+#include <editeng/sizeitem.hxx>
 #include <svx/papersizelistbox.hxx>
+#include <svx/rulritem.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
@@ -46,6 +48,8 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 
 class SvxColorListBox;
+
+static const long MINBODY = 284;
 
 namespace sd { namespace sidebar {
 
@@ -89,9 +93,16 @@ private:
     VclPtr<Button> mpCloseMaster;
     VclPtr<Button> mpEditMaster;
     VclPtr<FixedText> mpMasterLabel;
+    VclPtr<MetricField> m_pLeftMarginEdit;
+    VclPtr<MetricField> m_pRightMarginEdit;
+    VclPtr<MetricField> m_pTopMarginEdit;
+    VclPtr<MetricField> m_pBottomMarginEdit;
+    VclPtr<VclVBox> m_pContainer;
 
     ::sfx2::sidebar::ControllerItem maPaperSizeController;
     ::sfx2::sidebar::ControllerItem maPaperOrientationController;
+    ::sfx2::sidebar::ControllerItem maPaperMarginLRController;
+    ::sfx2::sidebar::ControllerItem maPaperMarginULController;
     ::sfx2::sidebar::ControllerItem maBckColorController;
     ::sfx2::sidebar::ControllerItem maBckGradientController;
     ::sfx2::sidebar::ControllerItem maBckHatchController;
@@ -104,6 +115,8 @@ private:
     ::sfx2::sidebar::ControllerItem maCloseMasterController;
 
     std::unique_ptr< SvxPageItem >          mpPageItem;
+    std::unique_ptr< SvxLongLRSpaceItem >   mpLRItem;
+    std::unique_ptr< SvxLongULSpaceItem >   mpULItem;
     std::unique_ptr< XFillColorItem >       mpColorItem;
     std::unique_ptr< XFillGradientItem >    mpGradientItem;
     std::unique_ptr< XFillHatchItem >       mpHatchItem;
@@ -118,9 +131,16 @@ private:
     vcl::EnumContext maImpressOtherContext;
     vcl::EnumContext maImpressMasterContext;
     bool         mbTitle;
+    FieldUnit meFieldUnit;
+    long m_nPageLeftMargin;
+    long m_nPageRightMargin;
+    long m_nPageTopMargin;
+    long m_nPageBottomMargin;
+
     SfxBindings* mpBindings;
 
     MapUnit meUnit;
+    Size m_aPageSize;
 
     DECL_LINK(FillBackgroundHdl, ListBox&, void);
     DECL_LINK(FillStyleModifyHdl, ListBox&, void);
@@ -131,6 +151,8 @@ private:
     DECL_LINK(DspObjects, Button*, void);
     DECL_LINK(CloseMasterHdl, Button*, void);
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
+    DECL_LINK( ModifyLRMarginHdl, Edit&, void );
+    DECL_LINK( ModifyULMarginHdl, Edit&, void );
 
     void Initialize();
     void Update();
@@ -146,6 +168,7 @@ private:
     void removeListener();
     void populateMasterSlideDropdown();
     void updateMasterSlideSelection();
+    void SetMetricFieldMaxValues(const Size& rPageSize);
 };
 
 }}
