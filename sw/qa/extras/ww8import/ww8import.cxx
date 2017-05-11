@@ -59,6 +59,14 @@ DECLARE_WW8IMPORT_TEST(testFloatingTableSectionColumns, "floating-table-section-
     CPPUNIT_ASSERT( tableWidth.toInt32() > 10000 );
 }
 
+DECLARE_WW8IMPORT_TEST(testTdf107773, "tdf107773.doc")
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    // This was 1, multi-page table was imported as a floating one.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+}
+
 DECLARE_WW8IMPORT_TEST(testTdf106291, "tdf106291.doc")
 {
     // Table cell was merged vertically instead of horizontally -> had incorrect dimensions
