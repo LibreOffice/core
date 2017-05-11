@@ -29,8 +29,7 @@ class SwFrameFormat;
 class SwNodeIndex;
 class SwPosFlyFrame;
 
-// ACHTUNG: Die Werte dieses Enumgs gehen direkt in die
-// Augabe Tabelle!!!
+// ATTENTION: The values of this enum are used directly in the output table!!!
 enum SwHTMLFrameType
 {
     HTML_FRMTYPE_TABLE,
@@ -96,11 +95,11 @@ extern AllHtmlFlags aHTMLOutFrameAsCharTable[MAX_FRMTYPES][MAX_BROWSERS];
 
 class SwHTMLPosFlyFrame
 {
-    const SwFrameFormat    *pFrameFormat;  // der Rahmen
-    const SdrObject        *pSdrObject;    // ggf. Sdr-Objekt
+    const SwFrameFormat    *pFrameFormat;  // the frame
+    const SdrObject        *pSdrObject;    // maybe Sdr-Object
     SwNodeIndex            *pNdIdx;        // Node-Index
-    sal_uInt32              nOrdNum;       // Aus SwPosFlyFrame
-    sal_Int32               nContentIdx;   // seine Position im Content
+    sal_uInt32              nOrdNum;       // from SwPosFlyFrame
+    sal_Int32               nContentIdx;   // its position in content
     AllHtmlFlags            nAllFlags;
 
     SwHTMLPosFlyFrame(const SwHTMLPosFlyFrame&) = delete;
