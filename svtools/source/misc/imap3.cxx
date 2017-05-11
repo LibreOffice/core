@@ -67,7 +67,7 @@ IMapCompat::~IMapCompat()
     {
         if ( nStmMode == StreamMode::WRITE )
         {
-            const sal_uLong nEndPos = pRWStm->Tell();
+            const sal_uInt64 nEndPos = pRWStm->Tell();
 
             pRWStm->Seek( nCompatPos );
             pRWStm->WriteUInt32( nEndPos - nTotalSize );
@@ -75,7 +75,7 @@ IMapCompat::~IMapCompat()
         }
         else
         {
-            const sal_uLong nReadSize = pRWStm->Tell() - nCompatPos;
+            const sal_uInt64 nReadSize = pRWStm->Tell() - nCompatPos;
 
             if ( nTotalSize > nReadSize )
                 pRWStm->SeekRel( nTotalSize - nReadSize );

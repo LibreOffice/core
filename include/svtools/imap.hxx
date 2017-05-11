@@ -118,8 +118,8 @@ public:
 class IMapCompat
 {
     SvStream*       pRWStm;
-    sal_uLong       nCompatPos;
-    sal_uLong       nTotalSize;
+    sal_uInt64      nCompatPos;
+    sal_uInt64      nTotalSize;
     StreamMode      nStmMode;
 
                     IMapCompat( const IMapCompat& ) = delete;

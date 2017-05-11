@@ -501,7 +501,7 @@ Point ImageMap::ImpReadNCSACoords( const char** ppStr )
 
 sal_uLong ImageMap::ImpDetectFormat( SvStream& rIStm )
 {
-    sal_uLong   nPos = rIStm.Tell();
+    sal_uInt64  nPos = rIStm.Tell();
     sal_uLong   nRet = IMAP_FORMAT_BIN;
     char    cMagic[6];
 
