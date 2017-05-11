@@ -7384,42 +7384,6 @@ SfxInt16Item PageColumnType SID_ATTR_PAGE_COLUMN
     GroupId = GID_FORMAT;
 ]
 
-SvxLongULSpaceItem SwPageULMargin SID_ATTR_PAGE_ULSPACE
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_FORMAT;
-]
-
-SvxLongLRSpaceItem SwPageLRMargin SID_ATTR_PAGE_LRSPACE
-
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_FORMAT;
-]
-
 SfxVoidItem PageMargin SID_ATTR_PAGE_MARGIN
 
 [

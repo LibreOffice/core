@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+
 #include <sal/config.h>
 
 #include <utility>
@@ -27,11 +28,14 @@
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <svx/fmglob.hxx>
 #include <svx/globl3d.hxx>
+#include <svx/rulritem.hxx>
 #include <svx/svdouno.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/sizeitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <svx/svxids.hrc>
@@ -40,6 +44,7 @@
 #include <svx/fmshell.hxx>
 #include <svl/eitem.hxx>
 #include <svl/aeitem.hxx>
+#include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
@@ -73,6 +78,7 @@
 
 #include "Outliner.hxx"
 #include "drawdoc.hxx"
+#include "DrawViewShell.hxx"
 #include "sdresid.hxx"
 #include "sdpage.hxx"
 #include "Client.hxx"
@@ -80,6 +86,7 @@
 #include "zoomlist.hxx"
 #include "slideshow.hxx"
 #include "drawview.hxx"
+#include "View.hxx"
 #include "ViewShellBase.hxx"
 #include "ViewShellManager.hxx"
 #include "LayerTabBar.hxx"
@@ -148,6 +155,7 @@ using namespace ::com::sun::star::linguistic2;
 
                     break;
                 }
+
 
                 case SotClipboardFormatId::LINK_SOURCE:
                 case SotClipboardFormatId::DRAWING:
@@ -247,6 +255,44 @@ void DrawViewShell::GetDrawAttrState(SfxItemSet& rSet)
     rSel = pOLV->GetSelection();
 
     return pOL;
+}
+
+void DrawViewShell::GetMarginProperties( SfxItemSet &rSet )
+{
+    SdPage *pPage = getCurrentPage();
+    SfxWhichIter aIter( rSet );
+    sal_uInt16 nWhich = aIter.FirstWhich();
+    while ( nWhich )
+    {
+        switch ( nWhich )
+        {
+            case SID_ATTR_PAGE_LRSPACE:
+            {
+                // const SvxLRSpaceItem aTmpPageLRSpace ( rDesc.GetMaster().GetLRSpace() );
+                const SvxLongLRSpaceItem aLongLR(
+                    (long)pPage->GetLftBorder(),
+                    (long)pPage->GetRgtBorder(),
+                    SID_ATTR_PAGE_LRSPACE );
+                rSet.Put( aLongLR );
+            }
+            break;
+
+            case SID_ATTR_PAGE_ULSPACE:
+            {
+                // const SvxULSpaceItem aUL( rDesc.GetMaster().GetULSpace() );
+                SvxLongULSpaceItem aLongUL(
+                    (long)pPage->GetUppBorder(),
+                    (long)pPage->GetLwrBorder(),
+                    SID_ATTR_PAGE_ULSPACE );
+                rSet.Put( aLongUL );
+            }
+            break;
+
+            default:
+            break;
+        }
+        nWhich = aIter.NextWhich();
+    }
 }
 
 void DrawViewShell::GetMenuState( SfxItemSet &rSet )
@@ -1712,6 +1758,18 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
     SdPage *pPage = getCurrentPage();
     sal_uInt16 nSlotId = rReq.GetSlot();
     const SfxItemSet *pArgs = rReq.GetArgs();
+    // const size_t nDescId    = rSh->GetCurPageDesc();
+    // const SdPage& rDesc = rSh->GetPageDesc( nDescId );
+    Size maSize = pPage->GetSize();
+    PageKind ePageKind = GetPageKind();
+    const SfxPoolItem*  pPoolItem = nullptr;
+    Size                aNewSize(maSize);
+    sal_Int32               nLeft  = -1, nRight = -1, nUpper = -1, nLower = -1;
+    bool                bScaleAll = true;
+    Orientation         eOrientation = pPage->GetOrientation();
+    SdPage*             pMasterPage = pPage->IsMasterPage() ? pPage : &static_cast<SdPage&>(pPage->TRG_GetMasterPage());
+    bool                bFullSize = pMasterPage->IsBackgroundFullSize();
+    sal_uInt16          nPaperBin = pPage->GetPaperBin();
 
     if ( pPage && pArgs )
     {
@@ -1783,6 +1841,44 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
             delete pTempSet;
 
             rReq.Done();
+        }
+        else
+        {
+            switch (nSlotId)
+            {
+                case SID_ATTR_PAGE_LRSPACE:
+                    if( pArgs->GetItemState(GetPool().GetWhich(SID_ATTR_PAGE_LRSPACE),
+                                            true,&pPoolItem) == SfxItemState::SET )
+                    {
+                        nLeft = static_cast<const SvxLongLRSpaceItem*>(pPoolItem)->GetLeft();
+                        nRight = static_cast<const SvxLongLRSpaceItem*>(pPoolItem)->GetRight();
+                        if (nLeft != -1 && nUpper == -1)
+                        {
+                            nUpper  = pPage->GetUppBorder();
+                            nLower  = pPage->GetLwrBorder();
+                        }
+                        SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower, bScaleAll, eOrientation, nPaperBin, bFullSize );
+                    }
+                    break;
+
+                case SID_ATTR_PAGE_ULSPACE:
+                    if( pArgs->GetItemState(SID_ATTR_PAGE_ULSPACE,
+                                            true,&pPoolItem) == SfxItemState::SET )
+                    {
+                        nUpper = static_cast<const SvxLongULSpaceItem*>(pPoolItem)->GetUpper();
+                        nLower = static_cast<const SvxLongULSpaceItem*>(pPoolItem)->GetLower();
+                        if (nLeft == -1 && nUpper != -1)
+                        {
+                            nLeft   = pPage->GetLftBorder();
+                            nRight  = pPage->GetRgtBorder();
+                        }
+                        SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower, bScaleAll, eOrientation, nPaperBin, bFullSize );
+                    }
+                    break;
+
+                default:
+                break;
+            }
         }
     }
 }
