@@ -3467,6 +3467,23 @@
         <value/>
       </prop>
     </group>
+    <group oor:name="RecentCharacters">
+      <info>
+        <desc>Contains recent characters</desc>
+      </info>
+      <prop oor:name="RecentCharacterList" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>List of Recent characters</desc>
+        </info>
+        <value/>
+      </prop>
+      <prop oor:name="RecentCharacterFontList" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>List of Recent character font</desc>
+        </info>
+        <value/>
+      </prop>
+    </group>
     <group oor:name="Help">
       <info>
         <desc>Contains settings that specify the common help settings.</desc>
