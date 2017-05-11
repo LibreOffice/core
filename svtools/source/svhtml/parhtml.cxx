@@ -374,7 +374,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                 sTmpBuffer.append( '&' );
             else
             {
-                sal_uLong nStreamPos = rInput.Tell();
+                sal_uInt64 nStreamPos = rInput.Tell();
                 sal_uLong nLinePos = GetLinePos();
 
                 sal_uInt32 cChar = 0U;
@@ -459,7 +459,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                         if( 0U == cChar && ';' != nNextCh )
                         {
                             DBG_ASSERT( rInput.Tell() - nStreamPos ==
-                                        (sal_uLong)(nPos+1L)*GetCharSize(),
+                                        static_cast<sal_uInt64>(nPos+1)*GetCharSize(),
                                         "UTF-8 is failing here" );
                             for( sal_Int32 i = nPos-1; i>1; i-- )
                             {
@@ -469,8 +469,8 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                                 cChar = GetHTMLCharName( sEntity );
                                 if( cChar )
                                 {
-                                    rInput.SeekRel( -(long)
-                                            ((nPos-i)*GetCharSize()) );
+                                    rInput.SeekRel( -static_cast<sal_Int64>
+                                            (nPos-i)*GetCharSize() );
                                     nlLinePos -= sal_uInt32(nPos-i);
                                     nPos = i;
                                     ClearTxtConvContext();
@@ -486,7 +486,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                             sTmpBuffer.append( '&' );
 
                             DBG_ASSERT( rInput.Tell()-nStreamPos ==
-                                        (sal_uLong)(nPos+1)*GetCharSize(),
+                                        static_cast<sal_uInt64>(nPos+1)*GetCharSize(),
                                         "Wrong stream position" );
                             DBG_ASSERT( nlLinePos-nLinePos ==
                                         (sal_uLong)(nPos+1),
@@ -523,7 +523,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                                     // restart with character
                                     nNextCh = '&';
                                     DBG_ASSERT( rInput.Tell()-nStreamPos ==
-                                                (sal_uLong)(nPos+1)*GetCharSize(),
+                                                static_cast<sal_uInt64>(nPos+1)*GetCharSize(),
                                                 "Wrong stream position" );
                                     DBG_ASSERT( nlLinePos-nLinePos ==
                                                 (sal_uLong)(nPos+1),
@@ -584,7 +584,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                         // during the next execution a new character is read.
                         // Thus we have to position in front of the '&'.
                         nNextCh = 0U;
-                        rInput.Seek( nStreamPos-(sal_uInt32)GetCharSize() );
+                        rInput.Seek( nStreamPos - GetCharSize() );
                         nlLinePos = nLinePos-1;
                         ClearTxtConvContext();
                         bReadNextChar = true;
@@ -787,7 +787,7 @@ HtmlTokenId HTMLParser::GetNextRawToken()
                 aToken += sTmpBuffer.makeStringAndClear();
 
                 // and remember position in stream.
-                sal_uLong nStreamPos = rInput.Tell();
+                sal_uInt64 nStreamPos = rInput.Tell();
                 sal_uLong nLineNr = GetLineNr();
                 sal_uLong nLinePos = GetLinePos();
 
@@ -1017,7 +1017,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
         {
         case '<':
             {
-                sal_uLong nStreamPos = rInput.Tell();
+                sal_uInt64 nStreamPos = rInput.Tell();
                 sal_uLong nLineNr = GetLineNr();
                 sal_uLong nLinePos = GetLinePos();
 
@@ -1082,7 +1082,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
                         aToken = sSaveToken;
                         if( '>'!=nNextCh )
                             aToken += " ";
-                        sal_uLong nCStreamPos = 0;
+                        sal_uInt64 nCStreamPos = 0;
                         sal_uLong nCLineNr = 0;
                         sal_uLong nCLinePos = 0;
                         sal_Int32 nCStrLen = 0;
@@ -1187,7 +1187,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
                     {
                         nRet = HtmlTokenId::UNKNOWNCONTROL_ON;
 
-                        sal_uLong nCStreamPos = rInput.Tell();
+                        sal_uInt64 nCStreamPos = rInput.Tell();
                         sal_uLong nCLineNr = GetLineNr(), nCLinePos = GetLinePos();
 
                         bool bDone = false;

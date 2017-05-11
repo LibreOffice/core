@@ -32,7 +32,7 @@ template<typename T>
 struct SvParser_Impl
 {
     OUString        aToken;             // gescanntes Token
-    sal_uLong       nFilePos;           // actual position in stream
+    sal_uInt64      nFilePos;           // actual position in stream
     sal_uLong       nlLineNr;           // actual line number
     sal_uLong       nlLinePos;          // actual column number
     long            nTokenValue;        // extra value (RTF)

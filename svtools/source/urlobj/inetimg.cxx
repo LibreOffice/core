@@ -94,7 +94,8 @@ bool INetImage::Read( SvStream& rIStm, SotClipboardFormatId nFormat )
     sal_Char pImageURL[1];      // Append all variable-length strings starting here
 */
             rtl_TextEncoding eSysCSet = osl_getThreadTextEncoding();
-            sal_Int32 nVal, nAnchorOffset, nAltOffset, nFilePos;
+            sal_Int32 nVal, nAnchorOffset, nAltOffset;
+            sal_uInt64 nFilePos;
 
             nFilePos = rIStm.Tell();
             // skip over iSize (int), bIsMao ( sal_Bool ) alignment of 4 !!!!
