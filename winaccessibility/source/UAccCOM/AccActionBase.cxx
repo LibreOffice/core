@@ -117,7 +117,7 @@ STDMETHODIMP CAccActionBase::get_description(long actionIndex,BSTR __RPC_FAR *de
     // #CHECK#
 
     SAFE_SYSFREESTRING(*description);
-    *description = SysAllocString(SAL_W(ouStr.getStr()));
+    *description = SysAllocString(reinterpret_cast<wchar_t const *>(ouStr.getStr()));
 
     return S_OK;
 
@@ -166,8 +166,6 @@ STDMETHODIMP CAccActionBase::get_keyBinding(
 
     long nCount = (binding.get())->getAccessibleKeyBindingCount();
 
-    OLECHAR wString[64];
-
     *keyBinding = static_cast<BSTR*>(::CoTaskMemAlloc(nCount*sizeof(BSTR)));
 
     // #CHECK Memory Allocation#
@@ -176,10 +174,10 @@ STDMETHODIMP CAccActionBase::get_keyBinding(
 
     for( int index = 0;index < nCount;index++ )
     {
-        memset(wString,0,sizeof(wString));
-        GetkeyBindingStrByXkeyBinding( (binding.get())->getAccessibleKeyBinding(index), wString );
+        auto const wString = GetkeyBindingStrByXkeyBinding( (binding.get())->getAccessibleKeyBinding(index) );
 
-        (*keyBinding)[index] = SysAllocString(wString);
+        (*keyBinding)[index] = SysAllocString(
+            reinterpret_cast<wchar_t const *>(wString.getStr()));
     }
 
     *nBinding = nCount;
@@ -222,23 +220,17 @@ STDMETHODIMP CAccActionBase::put_XInterface(hyper pXInterface)
  * Helper function used for converting keybinding to string.
  *
  * @param    keySet    the key stroke sequence.
- * @param    pString   the output keybinding string.
  */
-void CAccActionBase::GetkeyBindingStrByXkeyBinding( const Sequence< KeyStroke > &keySet, OLECHAR* pString )
+OUString CAccActionBase::GetkeyBindingStrByXkeyBinding( const Sequence< KeyStroke > &keySet )
 {
-    // #CHECK#
-    if(pString == nullptr)
-        return;
-
+    OUStringBuffer buf;
     for( int iIndex = 0;iIndex < keySet.getLength();iIndex++ )
     {
         KeyStroke stroke = keySet[iIndex];
-        OLECHAR wString[64] = {NULL};
-        wcscat(wString, OLESTR("\n"));
-        wcscat(wString, SAL_W(&stroke.KeyChar));
-
-        wcscat( pString, wString);
+        buf.append('\n');
+        buf.append(stroke.KeyChar);
     }
+    return buf.makeStringAndClear();
 }
 
 /**

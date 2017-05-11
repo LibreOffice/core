@@ -119,7 +119,7 @@ STDMETHODIMP CAccEditableText::insertText(long offset, BSTR * text)
     if( !pRXEdtTxt.is() )
         return E_FAIL;
 
-    ::rtl::OUString ouStr(SAL_U(*text));
+    ::rtl::OUString ouStr(reinterpret_cast<sal_Unicode const *>(*text));
 
     if( GetXInterface()->insertText( ouStr, offset ) )
         return S_OK;
@@ -196,7 +196,7 @@ STDMETHODIMP CAccEditableText::replaceText(long startOffset, long endOffset, BST
     if( !pRXEdtTxt.is() )
         return E_FAIL;
 
-    ::rtl::OUString ouStr(SAL_U(*text));
+    ::rtl::OUString ouStr(reinterpret_cast<sal_Unicode const *>(*text));
 
     if( GetXInterface()->replaceText( startOffset,endOffset, ouStr) )
         return S_OK;
@@ -225,7 +225,7 @@ STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, B
     if( !pRXEdtTxt.is() )
         return E_FAIL;
 
-    ::rtl::OUString ouStr(SAL_U(*attributes));
+    ::rtl::OUString ouStr(reinterpret_cast<sal_Unicode const *>(*attributes));
 
     sal_Int32 nIndex = 0;
     sal_Unicode cTok = ';';

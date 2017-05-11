@@ -242,11 +242,10 @@ public:
         return static_cast<CMAccessible*>(pv)->SmartQI(pv,iid,ppvObject);
     }
 
-    static void get_OLECHARFromAny(css::uno::Any& pAny, OLECHAR* pChar);
+    static OUString get_StringFromAny(css::uno::Any& pAny);
 
-    static void get_OLECHAR4Numbering(const css::uno::Any& pAny,
-            short numberingLevel, const OUString& numberingPrefix,
-            OLECHAR* pChar);
+    static OUString get_String4Numbering(const css::uno::Any& pAny,
+            sal_Int16 numberingLevel, const OUString& numberingPrefix);
 
     // Helper function for data conversion.
     static void ConvertAnyToVariant(const css::uno::Any &rAnyVal,

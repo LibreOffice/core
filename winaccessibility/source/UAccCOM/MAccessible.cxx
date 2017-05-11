@@ -591,17 +591,17 @@ STDMETHODIMP CMAccessible::get_accHelpTopic(BSTR *, VARIANT, long *)
     return E_NOTIMPL;
 }
 
-static void GetMnemonicChar( const ::rtl::OUString& aStr, WCHAR* wStr)
+static bool GetMnemonicChar( const ::rtl::OUString& aStr, sal_Unicode* wStr)
 {
     for (sal_Int32 i = 0;; i += 2) {
         i = aStr.indexOf('~', i);
         if (i == -1 || i == aStr.getLength() - 1) {
-            break;
+            return false;
         }
         auto c = aStr[i + 1];
         if (c != '~') {
             *wStr = c;
-            break;
+            return true;
         }
     }
 }
@@ -639,7 +639,7 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
 
                     Reference<XAccessibleAction> pRXI(pRContext,UNO_QUERY);
 
-                    OLECHAR wString[64]={0};
+                    OUString wString;
 
                     if( pRXI.is() && pRXI->getAccessibleActionCount() >= 1)
                     {
@@ -649,11 +649,11 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
                             long nCount = binding->getAccessibleKeyBindingCount();
                             if(nCount >= 1)
                             {
-                                CAccAction::GetkeyBindingStrByXkeyBinding( binding->getAccessibleKeyBinding(0),wString );
+                                wString = CAccAction::GetkeyBindingStrByXkeyBinding( binding->getAccessibleKeyBinding(0) );
                             }
                         }
                     }
-                    if(wString[0] == 0)
+                    if(wString.isEmpty())
                     {
                         Reference<XAccessibleRelationSet> pRrelationSet = pRContext->getAccessibleRelationSet();
                         if(!pRrelationSet.is())
@@ -727,19 +727,18 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
                             return S_FALSE;
 
                         ::rtl::OUString ouStr = pRXIE->getTitledBorderText();
-                        WCHAR key[2] = {NULL};
-                        GetMnemonicChar(ouStr, key);
-                        if(key[0] != 0)
+                        sal_Unicode key;
+                        if(GetMnemonicChar(ouStr, &key))
                         {
-                            wcscat(wString, L"Alt+");
-                            wcscat(wString, key);
+                            wString = "Alt+" + OUStringLiteral1(key);
                         }
                         else
                             return S_FALSE;
                     }
 
                     SAFE_SYSFREESTRING(*pszKeyboardShortcut);
-                    *pszKeyboardShortcut = SysAllocString(wString);
+                    *pszKeyboardShortcut = SysAllocString(
+                        reinterpret_cast<wchar_t const *>(wString.getStr()));
 
                     return S_OK;
                 }
@@ -2661,83 +2660,69 @@ CMAccessible::get_IAccessibleFromXAccessible(XAccessible * pXAcc, IAccessible **
         LEAVE_PROTECTED_BLOCK
 }
 
-void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
+OUString CMAccessible::get_StringFromAny(Any& pAny)
 {
-    // #CHECK#
-    if(pChar == nullptr)
-        return;
-
     switch(pAny.getValueTypeClass())
     {
     case TypeClass_CHAR:
         {
             sal_Int8 val;
             pAny >>= val;
-            swprintf( pChar, L"%d", val);
-            break;
+            return OUString::number(val);
         }
     case TypeClass_BOOLEAN:
         {
             bool val;
             pAny >>= val;
-            swprintf( pChar, L"%d", val);
-            break;
+            return OUString::number(int(val));
         }
     case TypeClass_BYTE:
         {
             sal_Int8 val;
             pAny >>= val;
-            swprintf( pChar, L"%d", val);
-            break;
+            return OUString::number(val);
         }
     case TypeClass_SHORT:
         {
-            SHORT val;
+            sal_Int16 val;
             pAny >>= val;
-            swprintf( pChar, L"%d", val);
-            break;
+            return OUString::number(val);
         }
     case TypeClass_UNSIGNED_SHORT:
         {
-            USHORT val;
+            sal_uInt16 val;
             pAny >>= val;
-            swprintf( pChar, L"%d", val);
-            break;
+            return OUString::number(val);
         }
     case TypeClass_LONG:
         {
-            LONG val;
+            sal_Int32 val;
             pAny >>= val;
-            swprintf( pChar, L"%ld", val);
-            break;
+            return OUString::number(val);
         }
     case TypeClass_UNSIGNED_LONG:
         {
-            ULONG val;
+            sal_uInt32 val;
             pAny >>= val;
-            swprintf( pChar, L"%ld", val);
-            break;
+            return OUString::number(val);
         }
     case TypeClass_FLOAT:
         {
-            FLOAT val;
+            float val;
             pAny >>= val;
-            swprintf( pChar, L"%.3f", val);
-            break;
+            return OUString::number(val);
         }
     case TypeClass_DOUBLE:
         {
-            DOUBLE val;
+            double val;
             pAny >>= val;
-            swprintf( pChar, L"%.6lf", val);
-            break;
+            return OUString::number(val);
         }
     case TypeClass_STRING:
         {
             ::rtl::OUString val;
             pAny >>= val;
-            wcscpy(pChar, SAL_W(val.getStr()));
-            break;
+            return val;
         }
     case TypeClass_SEQUENCE:
         {
@@ -2746,15 +2731,15 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
                 Sequence < ::rtl::OUString > val;
                 pAny >>= val;
 
-                ::rtl::OUString pString;
+                ::rtl::OUStringBuffer pString;
 
                 int count = val.getLength();
 
                 for( int iIndex = 0;iIndex < count;iIndex++ )
                 {
-                    pString += val[iIndex];
+                    pString.append(val[iIndex]);
                 }
-                wcscpy(pChar, SAL_W(pString.getStr()));
+                return pString.makeStringAndClear();
             }
             else if (pAny.getValueType() == cppu::UnoType<Sequence< css::style::TabStop >>::get())
             {
@@ -2762,35 +2747,32 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
                 pAny >>= val;
                 int count = val.getLength();
 
+                OUStringBuffer buf;
                 for( int iIndex = 0;iIndex < count;iIndex++ )
                 {
-                    OLECHAR pAttrs[512] = {NULL};
-
-                    OLECHAR pAttrsPosition[512] = {NULL};
-                    OLECHAR pAttrsDescimalChar[512] = {NULL};
-                    OLECHAR pAttrsFillChar[512] = {NULL};
-
                     css::style::TabStop sigleVal = val[iIndex];
 
-                    swprintf( pAttrsPosition, L"Position=%ld,TabAlign=%ld",
-                        sigleVal.Position, sigleVal.Alignment);
+                    buf.append("Position=");
+                    buf.append(sigleVal.Position);
+                    buf.append(",TabAlign=");
+                    buf.append(sal_Int32(sigleVal.Alignment));
+                    buf.append(",");
 
+                    buf.append("DecimalChar=");
                     if(sigleVal.DecimalChar==';' || sigleVal.DecimalChar == ':' || sigleVal.DecimalChar == ',' ||
                         sigleVal.DecimalChar == '=' || sigleVal.DecimalChar == '\\')
-                        swprintf( pAttrsDescimalChar, L"DecimalChar=\\%c",sigleVal.DecimalChar);
-                    else
-                        swprintf( pAttrsDescimalChar, L"DecimalChar=%c",sigleVal.DecimalChar);
+                        buf.append('\\');
+                    buf.append(sigleVal.DecimalChar);
+                    buf.append(",");
 
+                    buf.append("FillChar=");
                     if(sigleVal.FillChar==';' || sigleVal.FillChar == ':' || sigleVal.FillChar == ',' ||
                         sigleVal.FillChar == '=' || sigleVal.FillChar == '\\')
-                        swprintf( pAttrsFillChar, L"FillChar=\\%c",sigleVal.FillChar);
-                    else
-                        swprintf( pAttrsFillChar, L"FillChar=%c",sigleVal.FillChar);
-
-                    swprintf( pAttrs, L"%s,%s,%s,",pAttrsPosition,pAttrsDescimalChar,pAttrsFillChar);
-
-                    wcscat(pChar,pAttrs);
+                        buf.append('\\');
+                    buf.append(sigleVal.FillChar);
+                    buf.append(",");
                 }
+                return buf.makeStringAndClear();
             }
             break;
         }
@@ -2800,7 +2782,7 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
             {
                 css::awt::FontSlant val;
                 pAny >>= val;
-                swprintf( pChar, L"%d", val);
+                return OUString::number(sal_Int32(val));
             }
             break;
         }
@@ -2810,14 +2792,14 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
             {
                 css::style::LineSpacing val;
                 pAny >>= val;
-                swprintf( pChar, L"Mode=%ld,Height=%ld,", val.Mode, val.Height);
+                return "Mode=" + OUString::number(val.Mode) + ",Height="
+                    + OUString::number(val.Height) + ",";
             }
             else if (pAny.getValueType() == cppu::UnoType<css::accessibility::TextSegment>::get())
             {
                 css::accessibility::TextSegment val;
                 pAny >>= val;
-                ::rtl::OUString realVal(val.SegmentText);
-                wcscpy(pChar, SAL_W(realVal.getStr()));
+                return val.SegmentText;
             }
             break;
         }
@@ -2842,12 +2824,11 @@ void CMAccessible::get_OLECHARFromAny(Any& pAny, OLECHAR* pChar)
     default:
         break;
     }
+    return OUString();
 }
 
-void CMAccessible::get_OLECHAR4Numbering(const Any& pAny, short numberingLevel,const OUString& numberingPrefix,OLECHAR* pChar)
+OUString CMAccessible::get_String4Numbering(const Any& pAny, sal_Int16 numberingLevel,const OUString& numberingPrefix)
 {
-    if(pChar == nullptr)
-        return;
     Reference< css::container::XIndexReplace > pXIndex;
     if((pAny>>=pXIndex) && (numberingLevel !=-1))//numbering level is -1,means invalid value
     {
@@ -2856,7 +2837,9 @@ void CMAccessible::get_OLECHAR4Numbering(const Any& pAny, short numberingLevel,c
         aAny >>= aProps;
         const css::beans::PropertyValue* pPropArray = aProps.getConstArray();
         sal_Int32 nCount = aProps.getLength();
-        swprintf(pChar,L"Numbering:NumberingLevel=%d,",numberingLevel);
+        OUStringBuffer buf("Numbering:NumberingLevel=");
+        buf.append(sal_Int32(numberingLevel));
+        buf.append(',');
         for( sal_Int32 i=0; i<nCount; i++ )
         {
             css::beans::PropertyValue rProp = pPropArray[i];
@@ -2864,30 +2847,40 @@ void CMAccessible::get_OLECHAR4Numbering(const Any& pAny, short numberingLevel,c
                 (rProp.Name == "GraphicURL" ) ||
                 (rProp.Name == "NumberingType" ))
             {
-                OLECHAR propStr[512] = {NULL};
-                swprintf(propStr,L"%s=",rProp.Name.getStr());
-                OLECHAR pTemp[256] = {NULL};
-                CMAccessible::get_OLECHARFromAny(rProp.Value,pTemp);
+                buf.append(rProp.Name);
+                buf.append('=');
+                auto const pTemp = CMAccessible::get_StringFromAny(rProp.Value);
                 if(rProp.Name == "GraphicURL")
                 {
-                    OLECHAR* pOccur = wcschr(pTemp,':');
-                    if(pOccur)
-                        *pOccur = '.';
+                    auto const pOccur = pTemp.indexOf(':');
+                    if(pOccur != -1)
+                    {
+                        buf.append(pTemp.copy(0, pOccur));
+                        buf.append('.');
+                        buf.append(pTemp.copy(pOccur + 1));
+                    }
+                    else
+                    {
+                        buf.append(pTemp);
+                    }
                 }
-                wcscat(propStr,pTemp);
-                wcscat(pChar,propStr);
-                wcscat(pChar,L",");
+                else
+                {
+                    buf.append(pTemp);
+                }
+                buf.append(',');
 
                 if(rProp.Name == "NumberingType")
                 {
                     if(numberingPrefix.getLength()!=0)
                     {
-                        swprintf(pTemp,L"NumberingPrefix=%s,",numberingPrefix.getStr());
-                        wcscat(pChar,pTemp);
+                        buf.append("NumberingPrefix=");
+                        buf.append(numberingPrefix);
                     }
                 }
             }
         }
+        return buf.makeStringAndClear();
     }
 
     //Because now have three types numbering level:
@@ -2898,11 +2891,11 @@ void CMAccessible::get_OLECHAR4Numbering(const Any& pAny, short numberingLevel,c
     // so NumberingLevel value will be decreased 1 in bridge code.
     else if(numberingLevel >0)
     {
-        swprintf(pChar,L"Numbering:NumberingLevel=%d,NumberingType=4,NumberingPrefix=,",numberingLevel-1);
+        return "Numbering:NumberingLevel=" + OUString::number(numberingLevel-1) + ",NumberingType=4,NumberingPrefix=,";
     }
     else
     {
-        swprintf(pChar,L"Numbering:");
+        return OUString("Numbering:");
     }
 }
 
@@ -2966,7 +2959,8 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
                 pvData->vt = VT_BSTR;
                 ::rtl::OUString val;
                 rAnyVal >>= val;
-                pvData->bstrVal = SysAllocString(SAL_W(val.getStr()));
+                pvData->bstrVal = SysAllocString(
+                    reinterpret_cast<wchar_t const *>(val.getStr()));
                 break;
             }
 
@@ -3019,7 +3013,7 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
         case TypeClass::TypeClass_MAKE_FIXED_SIZE:
             // Output the type string, if there is other uno value type.
             pvData->vt = VT_BSTR;
-            pvData->bstrVal = SysAllocString(SAL_W(rAnyVal.getValueTypeName().getStr()));
+            pvData->bstrVal = SysAllocString(reinterpret_cast<wchar_t const *>(rAnyVal.getValueTypeName().getStr()));
             break;
 
         default:
@@ -3133,9 +3127,12 @@ STDMETHODIMP CMAccessible:: get_locale( IA2Locale __RPC_FAR *locale  )
         return E_FAIL;
 
     css::lang::Locale unoLoc = m_xContext.get()->getLocale();
-    locale->language = SysAllocString(SAL_W(unoLoc.Language.getStr()));
-    locale->country = SysAllocString(SAL_W(unoLoc.Country.getStr()));
-    locale->variant = SysAllocString(SAL_W(unoLoc.Variant.getStr()));
+    locale->language = SysAllocString(
+        reinterpret_cast<wchar_t const *>(unoLoc.Language.getStr()));
+    locale->country = SysAllocString(
+        reinterpret_cast<wchar_t const *>(unoLoc.Country.getStr()));
+    locale->variant = SysAllocString(
+        reinterpret_cast<wchar_t const *>(unoLoc.Variant.getStr()));
 
     return S_OK;
 
@@ -3222,7 +3219,8 @@ STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *pAttr)
 
         if(*pAttr)
             SAFE_SYSFREESTRING(*pAttr);
-        *pAttr = SysAllocString(SAL_W(val.getStr()));
+        *pAttr = SysAllocString(
+            reinterpret_cast<wchar_t const *>(val.getStr()));
 
         return S_OK;
     }

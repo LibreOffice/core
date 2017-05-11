@@ -21,7 +21,6 @@
 // AccTextBase.cpp: implementation of the CAccTextBase class.
 
 #include "stdafx.h"
-#include <string>
 
 #include "AccTextBase.h"
 
@@ -110,14 +109,12 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
     if( offset < 0 || offset > GetXInterface()->getCharacterCount() )
         return E_FAIL;
 
-    std::wstring strAttrs;
-
-    strAttrs += L"Version:1;";
+    OUStringBuffer strAttrs("Version:1;");
 
     Sequence< css::beans::PropertyValue > pValues = GetXInterface()->getCharacterAttributes(offset, Sequence< rtl::OUString >());
     int nCount = pValues.getLength();
 
-    short numberingLevel = 0;
+    sal_Int16 numberingLevel = 0;
     OUString numberingPrefix;
     Any anyNumRule;
     bool bHaveNumberingPrefixAttr = false;
@@ -150,23 +147,19 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
         }
         if (bHaveNumberingLevel && bHaveNumberingRules && bHaveNumberingPrefixAttr)
         {
-            OLECHAR numProps[512] = {0};
-            strAttrs+=L";";
+            strAttrs.append(';');
             numberingPrefix = ReplaceFourChar(numberingPrefix);
-            CMAccessible::get_OLECHAR4Numbering(anyNumRule,numberingLevel,numberingPrefix,numProps);
-            strAttrs += numProps;
+            strAttrs.append(CMAccessible::get_String4Numbering(anyNumRule,numberingLevel,numberingPrefix));
             bHaveNumberingLevel = false;
             bHaveNumberingRules = false;
         }
         if( (bHaveNumberingPrefixAttr && i > 1 ) ||
             (!bHaveNumberingPrefixAttr && i > 0 ) ) //element 0 is NumberingPrefix, not write alone
         {
-            strAttrs+=L";";
+            strAttrs.append(';');
         }
-        strAttrs += SAL_W(pValue.Name.getStr());
-        strAttrs += L":";
-
-        OLECHAR pTemp[2048] = {0};
+        strAttrs.append(pValue.Name);
+        strAttrs.append(':');
 
         if (pValue.Name == "CharBackColor" ||
                 pValue.Name == "CharColor" ||
@@ -174,24 +167,25 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
         {
             unsigned long nColor;
             pValue.Value >>= nColor;
-            OLECHAR pBuf[64];
-            swprintf( pBuf, L"%08lX", nColor );
-            pTemp[0]=L'#';
-            wcscat( pTemp, pBuf );
-
+            strAttrs.append('#');
+            auto const hex = OUString::number(nColor, 16).toAsciiUpperCase();
+            for (sal_Int32 j = hex.getLength(); j < 8; ++j) {
+                strAttrs.append('0');
+            }
+            strAttrs.append(hex);
         }
         else
         {
-            CMAccessible::get_OLECHARFromAny(pValue.Value,pTemp);
+            strAttrs.append(CMAccessible::get_StringFromAny(pValue.Value));
         }
-
-        strAttrs +=pTemp;
     }
-    strAttrs +=L";";
+    strAttrs.append(';');
     // #CHECK#
     if(*textAttributes)
         SysFreeString(*textAttributes);
-    *textAttributes = SysAllocString(strAttrs.c_str());
+    *textAttributes = SysAllocString(
+        reinterpret_cast<wchar_t const *>(
+            strAttrs.makeStringAndClear().getStr()));
 
     if( offset < GetXInterface()->getCharacterCount() )
     {
@@ -499,7 +493,7 @@ STDMETHODIMP CAccTextBase::get_text(long startOffset, long endOffset, BSTR * tex
     }
 
     SysFreeString(*text);
-    *text = SysAllocString(SAL_W(ouStr.getStr()));
+    *text = SysAllocString(reinterpret_cast<wchar_t const *>(ouStr.getStr()));
     return S_OK;
 
     LEAVE_PROTECTED_BLOCK
@@ -584,7 +578,7 @@ STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset, IA2TextBoundaryType
     TextSegment segment = GetXInterface()->getTextBeforeIndex( offset, sal_Int16(lUnoBoundaryType));
     ::rtl::OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
-    *text = SysAllocString(SAL_W(ouStr.getStr()));
+    *text = SysAllocString(reinterpret_cast<wchar_t const *>(ouStr.getStr()));
     *startOffset = segment.SegmentStart;
     *endOffset = segment.SegmentEnd;
 
@@ -670,7 +664,7 @@ STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset, IA2TextBoundaryType 
     TextSegment segment = GetXInterface()->getTextBehindIndex( offset, sal_Int16(lUnoBoundaryType));
     ::rtl::OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
-    *text = SysAllocString(SAL_W(ouStr.getStr()));
+    *text = SysAllocString(reinterpret_cast<wchar_t const *>(ouStr.getStr()));
     *startOffset = segment.SegmentStart;
     *endOffset = segment.SegmentEnd;
 
@@ -757,7 +751,7 @@ STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA2TextBoundaryType bou
     TextSegment segment = GetXInterface()->getTextAtIndex( offset, sal_Int16(lUnoBoundaryType));
     ::rtl::OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
-    *text = SysAllocString(SAL_W(ouStr.getStr()));
+    *text = SysAllocString(reinterpret_cast<wchar_t const *>(ouStr.getStr()));
     *startOffset = segment.SegmentStart;
     *endOffset = segment.SegmentEnd;
 
