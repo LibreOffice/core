@@ -17,26 +17,38 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/msgbox.hxx>
-#include "cuicharmap.hxx"
+#ifndef INCLUDED_CUI_SOURCE_INC_CHARWIN_HXX
+#define INCLUDED_CUI_SOURCE_INC_CHARWIN_HXX
 
-// hook to call special character dialog for edits
-// caution: needs C-Linkage since dynamically loaded via symbol name
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT bool GetSpecialCharsForEdit(vcl::Window* i_pParent, const vcl::Font& i_rFont, OUString& /*o_rResult*/)
-{
-    bool bRet = false;
-    ScopedVclPtrInstance<SvxCharacterMap> aDlg(i_pParent);
-    aDlg->DisableFontSelection();
-    aDlg->SetCharFont(i_rFont);
-    if ( aDlg->Execute() == RET_OK )
-    {
-        //o_rResult = aDlg->GetCharacters();
-        bRet = true;
-    }
-    return bRet;
-}
-}
+#include <vcl/ctrl.hxx>
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+class SvxCharView : public Control
+{
+public:
+    SvxCharView(vcl::Window* pParent);
+
+    void            SetFont( const vcl::Font& rFont );
+    void            SetText( const OUString& rText ) override;
+    void            InsertCharToDoc();
+
+    virtual void    Resize() override;
+
+    virtual Size    GetOptimalSize() const override;
+
+    void setInsertCharHdl(const Link<SvxCharView*,void> &rLink);
+
+protected:
+    virtual void    Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&) override;
+
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) override;
+
+    virtual void KeyInput( const KeyEvent& rKEvt ) override;
+
+private:
+    long            mnY;
+    vcl::Font       maFont;
+
+    Link<SvxCharView*, void> maInsertCharHdl;
+};
+
+#endif
