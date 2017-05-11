@@ -50,6 +50,43 @@
 
 using namespace formula;
 
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+#include <iostream>
+
+namespace {
+
+class stack_printer
+{
+public:
+    explicit stack_printer(const char* msg) :
+        m_msg(msg)
+    {
+        fprintf(stderr, "%s: --begin\n", m_msg.c_str());
+        m_start_time = get_time();
+    }
+
+    ~stack_printer()
+    {
+        double end_time = get_time();
+        fprintf(stderr, "%s: --end (duration: %g sec)\n", m_msg.c_str(), (end_time-m_start_time));
+    }
+
+private:
+    double get_time() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string m_msg;
+    double m_start_time;
+};
+
+}
+
 /** (Goal Seek) Find a value of x that is a root of f(x)
 
     This function is used internally for the goal seek operation.  It uses the
@@ -262,6 +299,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
                                      const ScTokenArray* pArr,
                                      const formula::FormulaGrammar::Grammar eGram )
 {
+    stack_printer __stack_printer__("ScDocument::InsertMatrixFormula");
     PutInOrder(nCol1, nCol2);
     PutInOrder(nRow1, nRow2);
     nCol2 = std::min<SCCOL>(nCol2, MAXCOL);

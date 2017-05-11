@@ -27,6 +27,12 @@ class ScViewFunc;
 class ScMarkData;
 class ScRange;
 
+namespace sc {
+
+enum class ColRowEditAction;
+
+}
+
 class ScEditableTester
 {
     bool mbIsEditable;
@@ -53,6 +59,10 @@ public:
             // calls TestView
             ScEditableTester( ScViewFunc* pView );
 
+    ScEditableTester(
+        const ScDocument& rDoc, sc::ColRowEditAction eAction, SCCOLROW nStart, SCCOLROW nEnd,
+        const ScMarkData& rMark );
+
             // Several calls to the Test... methods check if *all* of the ranges
             // are editable. For several independent checks, Reset() has to be used.
     void    TestBlock( ScDocument* pDoc, SCTAB nTab,
@@ -62,6 +72,10 @@ public:
                         const ScMarkData& rMark );
     void    TestRange( ScDocument* pDoc, const ScRange& rRange );
     void    TestSelection( ScDocument* pDoc, const ScMarkData& rMark );
+
+    void TestBlockForAction(
+        const ScDocument& rDoc, sc::ColRowEditAction eAction, SCCOLROW nStart, SCCOLROW nEnd,
+        const ScMarkData& rMark );
 
     bool IsEditable() const { return mbIsEditable; }
     bool IsFormatEditable() const { return mbIsEditable || mbOnlyMatrix; }
