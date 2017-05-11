@@ -73,6 +73,13 @@ ScEditableTester::ScEditableTester( ScViewFunc* pView ) :
     }
 }
 
+ScEditableTester::ScEditableTester(
+    const ScDocument& rDoc, sc::ColRowEditAction eAction, SCCOLROW nStart, SCCOLROW nEnd, const ScMarkData& rMark ) :
+    ScEditableTester()
+{
+    TestBlockForAction(rDoc, eAction, nStart, nEnd, rMark);
+}
+
 void ScEditableTester::TestBlock( ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
@@ -121,6 +128,21 @@ void ScEditableTester::TestSelection( ScDocument* pDoc, const ScMarkData& rMark 
             if ( !bThisMatrix )
                 mbOnlyMatrix = false;
         }
+    }
+}
+
+void ScEditableTester::TestBlockForAction(
+    const ScDocument& rDoc, sc::ColRowEditAction eAction, SCCOLROW nStart, SCCOLROW nEnd,
+    const ScMarkData& rMark )
+{
+    mbOnlyMatrix = false;
+
+    for (ScMarkData::const_iterator it = rMark.begin(), itEnd = rMark.end(); it != itEnd; ++it)
+    {
+        if (!mbIsEditable)
+            return;
+
+        mbIsEditable = rDoc.IsEditActionAllowed(eAction, *it, nStart, nEnd);
     }
 }
 

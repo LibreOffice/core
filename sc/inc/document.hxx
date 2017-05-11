@@ -791,6 +791,9 @@ public:
                                                     SCCOL nEndCol, SCROW nEndRow,
                                                     const ScMarkData& rMark ) const;
 
+    bool IsEditActionAllowed( sc::ColRowEditAction eAction, SCTAB nTab, SCCOLROW nStart, SCCOLROW nEnd ) const;
+    bool IsEditActionAllowed( sc::ColRowEditAction eAction, const ScMarkData& rMark, SCCOLROW nStart, SCCOLROW nEnd ) const;
+
     SC_DLLPUBLIC bool GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMatrix );
 
     bool            IsEmbedded() const { return bIsEmbedded;}

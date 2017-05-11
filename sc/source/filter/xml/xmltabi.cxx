@@ -442,6 +442,10 @@ ScXMLTableProtectionContext::ScXMLTableProtectionContext(
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableProtectionAttrTokenMap();
     bool bSelectProtectedCells = false;
     bool bSelectUnprotectedCells = false;
+    bool bInsertColumns = false;
+    bool bInsertRows = false;
+    bool bDeleteColumns = false;
+    bool bDeleteRows = false;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
@@ -459,11 +463,23 @@ ScXMLTableProtectionContext::ScXMLTableProtectionContext(
             case XML_TOK_TABLE_SELECT_PROTECTED_CELLS:
             case XML_TOK_TABLE_SELECT_PROTECTED_CELLS_EXT:
                 bSelectProtectedCells = IsXMLToken(aValue, XML_TRUE);
-            break;
+                break;
             case XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS:
             case XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS_EXT:
                 bSelectUnprotectedCells = IsXMLToken(aValue, XML_TRUE);
-            break;
+                break;
+            case XML_TOK_TABLE_INSERT_COLUMNS_EXT:
+                bInsertColumns = IsXMLToken(aValue, XML_TRUE);
+                break;
+            case XML_TOK_TABLE_INSERT_ROWS_EXT:
+                bInsertRows = IsXMLToken(aValue, XML_TRUE);
+                break;
+            case XML_TOK_TABLE_DELETE_COLUMNS_EXT:
+                bDeleteColumns = IsXMLToken(aValue, XML_TRUE);
+                break;
+            case XML_TOK_TABLE_DELETE_ROWS_EXT:
+                bDeleteRows = IsXMLToken(aValue, XML_TRUE);
+                break;
             default:
                 SAL_WARN("sc", "unknown attribute: " << aAttrName);
         }
@@ -472,6 +488,10 @@ ScXMLTableProtectionContext::ScXMLTableProtectionContext(
     ScXMLTabProtectionData& rProtectData = GetScImport().GetTables().GetCurrentProtectionData();
     rProtectData.mbSelectProtectedCells   = bSelectProtectedCells;
     rProtectData.mbSelectUnprotectedCells = bSelectUnprotectedCells;
+    rProtectData.mbInsertColumns = bInsertColumns;
+    rProtectData.mbInsertRows = bInsertRows;
+    rProtectData.mbDeleteColumns = bDeleteColumns;
+    rProtectData.mbDeleteRows = bDeleteRows;
 }
 
 ScXMLTableProtectionContext::~ScXMLTableProtectionContext()

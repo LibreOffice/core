@@ -529,6 +529,8 @@ default-style
 default-style-name
 degree
 delay
+delete-columns
+delete-rows
 deletion
 deletions
 denomalign
@@ -957,6 +959,8 @@ index-title-template
 information
 initial-creator
 inproceedings
+insert-columns
+insert-rows
 insertion
 insertion-cut-off
 insertion-position
