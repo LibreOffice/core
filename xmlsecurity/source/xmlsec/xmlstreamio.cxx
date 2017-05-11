@@ -21,7 +21,7 @@
 /*
  * Implementation of the I/O interfaces based on stream and URI binding
  */
-#include "xmlstreamio.hxx"
+#include "xmlsec/xmlstreamio.hxx"
 #include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
 

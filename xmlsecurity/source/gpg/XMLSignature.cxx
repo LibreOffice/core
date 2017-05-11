@@ -27,9 +27,58 @@ XMLSignatureGpg::~XMLSignatureGpg()
 }
 
 /* XXMLSignature */
-Reference< XXMLSignatureTemplate > SAL_CALL XMLSignatureGpg::generate(const Reference< XXMLSignatureTemplate >& /*aTemplate*/,
-                                                                   const Reference< XSecurityEnvironment >& /*aEnvironment*/)
+Reference< XXMLSignatureTemplate > SAL_CALL XMLSignatureGpg::generate(const Reference< XXMLSignatureTemplate >& aTemplate,
+                                                                   const Reference< XSecurityEnvironment >& aEnvironment)
 {
+    (void)aTemplate;
+    (void)aEnvironment;
+# if 0
+    xmlSecKeysMngrPtr pMngr = nullptr ;
+    xmlSecDSigCtxPtr pDsigCtx = nullptr ;
+    xmlNodePtr pNode = nullptr ;
+
+    if( !aTemplate.is() )
+        throw RuntimeException() ;
+
+    if( !aEnvironment.is() )
+        throw RuntimeException() ;
+
+    //Get the xml node
+    Reference< XXMLElementWrapper > xElement = aTemplate->getTemplate() ;
+    if( !xElement.is() ) {
+        throw RuntimeException() ;
+    }
+
+    Reference< XUnoTunnel > xNodTunnel( xElement , UNO_QUERY_THROW ) ;
+    XMLElementWrapper_XmlSecImpl* pElement =
+        reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
+            sal::static_int_cast<sal_uIntPtr>(
+                xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() )));
+    if( pElement == nullptr ) {
+        throw RuntimeException() ;
+    }
+
+    pNode = pElement->getNativeElement() ;
+
+    //Get the stream/URI binding
+    Reference< XUriBinding > xUriBinding = aTemplate->getBinding() ;
+    if( xUriBinding.is() ) {
+        //Register the stream input callbacks into libxml2
+        if( xmlRegisterStreamInputCallbacks( xUriBinding ) < 0 )
+            throw RuntimeException() ;
+    }
+
+    // stubbed out - call xmlsec to calculate c14n & process
+    // references, then hand that to gpgme for actual signing
+    xmlSecTransformCtxPtr transformCtx;
+    if( xmlSecTransformCtxExecute(transformCtx, pNode) < 0 )
+    {
+        xmlSecInternalError("xmlSecTransformCtxExecute", NULL);
+        return nullptr;
+    }
+    // result = transformCtx->result;
+#endif
+
     return nullptr;
 }
 

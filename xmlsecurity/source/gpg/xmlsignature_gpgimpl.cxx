@@ -19,16 +19,12 @@
 
 #include <sal/config.h>
 #include <rtl/uuid.h>
-#include "xmlsignature_nssimpl.hxx"
+#include "xmlsignature_gpgimpl.hxx"
 
 #include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
 #include "xmlsec/xmlelementwrapper_xmlsecimpl.hxx"
 #include "xmlsec/xmlstreamio.hxx"
 #include "xmlsec/errorcallback.hxx"
-
-#include "securityenvironment_nssimpl.hxx"
-
-#include "xmlsecuritycontext_nssimpl.hxx"
 
 #include "xmlsec-wrapper.h"
 
@@ -45,15 +41,15 @@ using ::com::sun::star::xml::crypto::XXMLSignatureTemplate ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 using ::com::sun::star::xml::crypto::XUriBinding ;
 
-XMLSignature_NssImpl::XMLSignature_NssImpl() {
+XMLSignature_GpgImpl::XMLSignature_GpgImpl() {
 }
 
-XMLSignature_NssImpl::~XMLSignature_NssImpl() {
+XMLSignature_GpgImpl::~XMLSignature_GpgImpl() {
 }
 
 /* XXMLSignature */
 Reference< XXMLSignatureTemplate >
-SAL_CALL XMLSignature_NssImpl::generate(
+SAL_CALL XMLSignature_GpgImpl::generate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
 )
@@ -61,6 +57,7 @@ SAL_CALL XMLSignature_NssImpl::generate(
     xmlSecKeysMngrPtr pMngr = nullptr ;
     xmlSecDSigCtxPtr pDsigCtx = nullptr ;
     xmlNodePtr pNode = nullptr ;
+    (void)pMngr; (void)pDsigCtx; (void)pNode;
 
     if( !aTemplate.is() )
         throw RuntimeException() ;
@@ -98,6 +95,7 @@ SAL_CALL XMLSignature_NssImpl::generate(
 
     // the key manager should be retrieved from SecurityEnvironment, instead of SecurityContext
 
+#if 0
     SecurityEnvironment_NssImpl* pSecEnv =
         reinterpret_cast<SecurityEnvironment_NssImpl*>(
             sal::static_int_cast<sal_uIntPtr>(
@@ -143,13 +141,15 @@ SAL_CALL XMLSignature_NssImpl::generate(
     if( xUriBinding.is() )
         xmlUnregisterStreamInputCallbacks() ;
 
+#endif
+
     clearErrorRecorder();
     return aTemplate ;
 }
 
 /* XXMLSignature */
 Reference< XXMLSignatureTemplate >
-SAL_CALL XMLSignature_NssImpl::validate(
+SAL_CALL XMLSignature_GpgImpl::validate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
 ) {
@@ -157,6 +157,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
     xmlSecDSigCtxPtr pDsigCtx = nullptr ;
     xmlNodePtr pNode = nullptr ;
     //sal_Bool valid ;
+    (void)pMngr; (void)pDsigCtx; (void)pNode;
 
     if( !aTemplate.is() )
         throw RuntimeException() ;
@@ -198,6 +199,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
 
         //Get Keys Manager
         Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY_THROW ) ;
+#if 0
         SecurityEnvironment_NssImpl* pSecEnv =
             reinterpret_cast<SecurityEnvironment_NssImpl*>(
                 sal::static_int_cast<sal_uIntPtr>(
@@ -250,6 +252,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
         }
         xmlSecDSigCtxDestroy( pDsigCtx ) ;
         SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
+#endif
     }
 
 
@@ -263,12 +266,12 @@ SAL_CALL XMLSignature_NssImpl::validate(
 }
 
 /* XServiceInfo */
-OUString SAL_CALL XMLSignature_NssImpl::getImplementationName() {
+OUString SAL_CALL XMLSignature_GpgImpl::getImplementationName() {
     return impl_getImplementationName() ;
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLSignature_NssImpl::supportsService( const OUString& serviceName) {
+sal_Bool SAL_CALL XMLSignature_GpgImpl::supportsService( const OUString& serviceName) {
     Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
     const OUString* pArray = seqServiceNames.getConstArray() ;
     for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
@@ -279,27 +282,27 @@ sal_Bool SAL_CALL XMLSignature_NssImpl::supportsService( const OUString& service
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL XMLSignature_NssImpl::getSupportedServiceNames() {
+Sequence< OUString > SAL_CALL XMLSignature_GpgImpl::getSupportedServiceNames() {
     return impl_getSupportedServiceNames() ;
 }
 
 //Helper for XServiceInfo
-Sequence< OUString > XMLSignature_NssImpl::impl_getSupportedServiceNames() {
+Sequence< OUString > XMLSignature_GpgImpl::impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence<OUString> seqServiceNames { "com.sun.star.xml.crypto.XMLSignature" };
     return seqServiceNames ;
 }
 
-OUString XMLSignature_NssImpl::impl_getImplementationName() {
-    return OUString("com.sun.star.xml.security.bridge.xmlsec.XMLSignature_NssImpl") ;
+OUString XMLSignature_GpgImpl::impl_getImplementationName() {
+    return OUString("com.sun.star.xml.security.bridge.xmlsec.XMLSignature_GpgImpl") ;
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL XMLSignature_NssImpl::impl_createInstance( const Reference< XMultiServiceFactory >& ) {
-    return Reference< XInterface >( *new XMLSignature_NssImpl ) ;
+Reference< XInterface > SAL_CALL XMLSignature_GpgImpl::impl_createInstance( const Reference< XMultiServiceFactory >& ) {
+    return Reference< XInterface >( *new XMLSignature_GpgImpl ) ;
 }
 
-Reference< XSingleServiceFactory > XMLSignature_NssImpl::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
+Reference< XSingleServiceFactory > XMLSignature_GpgImpl::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
     return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 

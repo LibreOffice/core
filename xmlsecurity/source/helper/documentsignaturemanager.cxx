@@ -251,12 +251,15 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         return false;
     }
 
+#if 0
+    // no serial number currently on gpg keys
     OUString aCertSerial = xmlsecurity::bigIntegerToNumericString(xCert->getSerialNumber());
     if (aCertSerial.isEmpty())
     {
         SAL_WARN("xmlsecurity.helper", "Error in Certificate, problem with serial number!");
         return false;
     }
+#endif
 
     if (!mxStore.is())
     {
@@ -273,7 +276,9 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         return true;
     }
 
-    maSignatureHelper.StartMission(mxSecurityContext);
+    //maSignatureHelper.StartMission(mxSecurityContext);
+    //if(gpgKey) ->
+    maSignatureHelper.StartMission(mxGpgSecurityContext);
 
     nSecurityId = maSignatureHelper.GetNewSecurityId();
 
@@ -290,6 +295,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
     else
         SAL_WARN("xmlsecurity.helper", "XCertificate implementation without an xmlsecurity::Certificate one");
 
+#if 0
     maSignatureHelper.SetX509Certificate(nSecurityId, xCert->getIssuerName(), aCertSerial, aStrBuffer.makeStringAndClear(), aCertDigest);
 
     uno::Sequence< uno::Reference< security::XCertificate > > aCertPath = getSecurityEnvironment()->buildCertificatePath(xCert);
@@ -301,6 +307,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         sax::Converter::encodeBase64(aStrBuffer, pCertPath[i]->getEncoded());
         maSignatureHelper.AddEncapsulatedX509Certificate(aStrBuffer.makeStringAndClear());
     }
+#endif
 
     std::vector< OUString > aElements = DocumentSignatureHelper::CreateElementList(mxStore, meSignatureMode, DocumentSignatureAlgorithm::OOo3_2);
     DocumentSignatureHelper::AppendContentTypes(mxStore, aElements);
