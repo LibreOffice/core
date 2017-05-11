@@ -330,7 +330,7 @@ namespace cppcanvas
                 rState.isFillColorSet = false;
                 rState.isLineColorSet = false;
 
-                if (brush->type == 1)
+                if (brush->type == BrushTypeHatchFill)
                 {
                     // EMF+ like hatching is currently not supported. These are just color blends which serve as an approximation for some of them
                     // for the others the hatch "background" color (secondColor in brush) is used.
@@ -371,11 +371,12 @@ namespace cppcanvas
                     rState.fillColor = vcl::unotools::colorToDoubleSequence(fillColor, rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
                     pPolyAction = ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon, rParms.mrCanvas, rState ) );
                 }
-                else if (brush->type == 3 || brush->type == 4)
+                else if (brush->type == BrushTypePathGradient || brush->type == BrushTypeLinearGradient)
                 {
-                    if (brush->type == 3 && !(brush->additionalFlags & 0x1))
-                        return;  // we are unable to parse these brushes yet
-
+                    if (brush->type == BrushTypePathGradient && !(brush->additionalFlags & 0x1))
+                    {
+                        SAL_WARN("cppcanvas.emf", "EMF+\t TODO Verify proper displaying of BrushTypePathGradient with flags: " <<  std::hex << brush->additionalFlags << std::dec);
+                    }
                     ::basegfx::B2DHomMatrix aTextureTransformation;
                     ::basegfx::B2DHomMatrix aWorldTransformation;
                     ::basegfx::B2DHomMatrix aBaseTransformation;
@@ -395,14 +396,13 @@ namespace cppcanvas
                     aBaseTransformation.set (1, 1, aBaseTransform.eM22);
                     aBaseTransformation.set (1, 2, aBaseTransform.eDy);
 
-                    if (brush->type == 4) {
-                        aTextureTransformation.scale (brush->areaWidth, brush->areaHeight);
-                        aTextureTransformation.translate (brush->areaX, brush->areaY);
-                    } else {
+                    // TODO Verify on example image, why there is shift (-0.5, -0.5)
+                    if (brush->type == BrushTypePathGradient && (brush->additionalFlags & 0x1))
+                    {
                         aTextureTransformation.translate (-0.5, -0.5);
-                        aTextureTransformation.scale (brush->areaWidth, brush->areaHeight);
-                        aTextureTransformation.translate (brush->areaX,brush->areaY);
                     }
+                    aTextureTransformation.scale (brush->areaWidth, brush->areaHeight);
+                    aTextureTransformation.translate (brush->areaX, brush->areaY);
 
                     if (brush->hasTransformation) {
                         ::basegfx::B2DHomMatrix aTransformation;
@@ -452,7 +452,7 @@ namespace cppcanvas
                             aStops[i] = brush->blendPositions [i];
 
                             for (int j = 0; j < length; j++) {
-                                if (brush->type == 4) {
+                                if (brush->type == BrushTypeLinearGradient) {
                                     aColor [j] = aStartColor [j]*(1 - brush->blendFactors[i]) + aEndColor [j]*brush->blendFactors[i];
                                 } else
                                     aColor [j] = aStartColor [j]*brush->blendFactors[i] + aEndColor [j]*(1 - brush->blendFactors[i]);
@@ -467,14 +467,14 @@ namespace cppcanvas
 
                         for (int i = 0; i < brush->colorblendPoints; i++) {
                             aStops[i] = brush->colorblendPositions [i];
-                            aColors[(brush->type == 4) ? i : brush->colorblendPoints - 1 - i] = vcl::unotools::colorToDoubleSequence( brush->colorblendColors [i],
+                            aColors[(brush->type == BrushTypeLinearGradient) ? i : brush->colorblendPoints - 1 - i] = vcl::unotools::colorToDoubleSequence( brush->colorblendColors [i],
                                     rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace() );
                         }
                     } else {
                         aStops[0] = 0.0;
                         aStops[1] = 1.0;
 
-                        if (brush->type == 4) {
+                        if (brush->type == BrushTypeLinearGradient) {
                             aColors[0] = aStartColor;
                             aColors[1] = aEndColor;
                         } else {
@@ -485,7 +485,7 @@ namespace cppcanvas
 
                     SAL_INFO("cppcanvas.emf", "EMF+\t\tset gradient");
                     basegfx::B2DRange aBoundsRectangle (0, 0, 1, 1);
-                    if (brush->type == 4) {
+                    if (brush->type == BrushTypeLinearGradient) {
                         aGradientService = "LinearGradient";
                         aGradInfo = basegfx::tools::createLinearODFGradientInfo(
                                 aBoundsRectangle,

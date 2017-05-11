@@ -43,16 +43,6 @@ namespace cppcanvas
 {
     namespace internal
     {
-
-        enum EmfPlusBrushType
-        {
-            BrushTypeSolidColor = 0x00000000,
-            BrushTypeHatchFill = 0x00000001,
-            BrushTypeTextureFill = 0x00000002,
-            BrushTypePathGradient = 0x00000003,
-            BrushTypeLinearGradient = 0x00000004
-        };
-
         EMFPBrush::EMFPBrush()
             : type(0)
             , additionalFlags(0)
@@ -154,7 +144,7 @@ namespace cppcanvas
                 SAL_INFO("cppcanvas.emf", "EMF+\tcenter point: " << areaX << "," << areaY);
 
                 s.ReadInt32(surroundColorsNumber);
-                SAL_INFO("cppcanvas.emf", "EMF+\tsurround colors: " << surroundColorsNumber);
+                SAL_INFO("cppcanvas.emf", "EMF+\t number of surround colors: " << surroundColorsNumber);
 
                 if (surroundColorsNumber<0 || sal_uInt32(surroundColorsNumber)>SAL_MAX_INT32 / sizeof(::Color))
                     surroundColorsNumber = SAL_MAX_INT32 / sizeof(::Color);
@@ -191,57 +181,73 @@ namespace cppcanvas
                     const ::basegfx::B2DRectangle aBounds(::basegfx::tools::getRange(path->GetPolygon(rR, false)));
                     areaWidth = aBounds.getWidth();
                     areaHeight = aBounds.getHeight();
+                    SAL_INFO("cppcanvas.emf", "EMF+\t polygon bounding box: " << aBounds.getMinX() << "," << aBounds.getMinY() << " " << aBounds.getWidth() << "x" << aBounds.getHeight());
+                }
+                else
+                {
+                    sal_Int32 boundaryPointCount;
+                    s.ReadInt32(boundaryPointCount);
 
-                    SAL_INFO("cppcanvas.emf", "EMF+\tpolygon bounding box: " << aBounds.getMinX() << "," << aBounds.getMinY() << " " << aBounds.getWidth() << "x" << aBounds.getHeight());
+                    sal_uInt64 const pos = s.Tell();
+                    SAL_INFO("cppcanvas.emf", "EMF+\t use boundary, points: " << boundaryPointCount);
+                    path = new EMFPPath(boundaryPointCount);
+                    path->Read(s, 0x0, rR);
 
+                    s.Seek(pos + 8 * boundaryPointCount);
 
-                    if (additionalFlags & 0x02) {
-                        SAL_INFO("cppcanvas.emf", "EMF+\tuse transformation");
-                        ReadXForm(s, brush_transformation);
-                        hasTransformation = true;
-                        SAL_INFO("cppcanvas.emf",
-                            "EMF+\tm11: " << brush_transformation.eM11 << " m12: " << brush_transformation.eM12 <<
-                            "\nEMF+\tm21: " << brush_transformation.eM21 << " m22: " << brush_transformation.eM22 <<
-                            "\nEMF+\tdx: " << brush_transformation.eDx << " dy: " << brush_transformation.eDy);
+                    const ::basegfx::B2DRectangle aBounds(::basegfx::tools::getRange(path->GetPolygon(rR, false)));
+                    areaWidth = aBounds.getWidth();
+                    areaHeight = aBounds.getHeight();
+                    SAL_INFO("cppcanvas.emf", "EMF+\t polygon bounding box: " << aBounds.getMinX() << "," << aBounds.getMinY() << " " << aBounds.getWidth() << "x" << aBounds.getHeight());
+                }
 
+                if (additionalFlags & 0x02) {
+                    SAL_INFO("cppcanvas.emf", "EMF+\tuse transformation");
+                    ReadXForm(s, brush_transformation);
+                    hasTransformation = true;
+                    SAL_INFO("cppcanvas.emf",
+                             "EMF+\tm11: " << brush_transformation.eM11 << " m12: " << brush_transformation.eM12 <<
+                             "\nEMF+\tm21: " << brush_transformation.eM21 << " m22: " << brush_transformation.eM22 <<
+                             "\nEMF+\tdx: " << brush_transformation.eDx << " dy: " << brush_transformation.eDy);
+
+                }
+                if (additionalFlags & 0x08) {
+                    s.ReadInt32(blendPoints);
+                    SAL_INFO("cppcanvas.emf", "EMF+\tuse blend, points: " << blendPoints);
+                    if (blendPoints<0 || sal_uInt32(blendPoints)>SAL_MAX_INT32 / (2 * sizeof(float)))
+                        blendPoints = SAL_MAX_INT32 / (2 * sizeof(float));
+                    blendPositions = new float[2 * blendPoints];
+                    blendFactors = blendPositions + blendPoints;
+                    for (int i = 0; i < blendPoints; i++) {
+                        s.ReadFloat(blendPositions[i]);
+                        SAL_INFO("cppcanvas.emf", "EMF+\tposition[" << i << "]: " << blendPositions[i]);
                     }
-                    if (additionalFlags & 0x08) {
-                        s.ReadInt32(blendPoints);
-                        SAL_INFO("cppcanvas.emf", "EMF+\tuse blend, points: " << blendPoints);
-                        if (blendPoints<0 || sal_uInt32(blendPoints)>SAL_MAX_INT32 / (2 * sizeof(float)))
-                            blendPoints = SAL_MAX_INT32 / (2 * sizeof(float));
-                        blendPositions = new float[2 * blendPoints];
-                        blendFactors = blendPositions + blendPoints;
-                        for (int i = 0; i < blendPoints; i++) {
-                            s.ReadFloat(blendPositions[i]);
-                            SAL_INFO("cppcanvas.emf", "EMF+\tposition[" << i << "]: " << blendPositions[i]);
-                        }
-                        for (int i = 0; i < blendPoints; i++) {
-                            s.ReadFloat(blendFactors[i]);
-                            SAL_INFO("cppcanvas.emf", "EMF+\tfactor[" << i << "]: " << blendFactors[i]);
-                        }
-                    }
-
-                    if (additionalFlags & 0x04) {
-                        s.ReadInt32(colorblendPoints);
-                        SAL_INFO("cppcanvas.emf", "EMF+\tuse color blend, points: " << colorblendPoints);
-                        if (colorblendPoints<0 || sal_uInt32(colorblendPoints)>SAL_MAX_INT32 / sizeof(float))
-                            colorblendPoints = SAL_MAX_INT32 / sizeof(float);
-                        if (sal_uInt32(colorblendPoints)>SAL_MAX_INT32 / sizeof(::Color))
-                            colorblendPoints = SAL_MAX_INT32 / sizeof(::Color);
-                        colorblendPositions = new float[colorblendPoints];
-                        colorblendColors = new ::Color[colorblendPoints];
-                        for (int i = 0; i < colorblendPoints; i++) {
-                            s.ReadFloat(colorblendPositions[i]);
-                            SAL_INFO("cppcanvas.emf", "EMF+\tposition[" << i << "]: " << colorblendPositions[i]);
-                        }
-                        for (int i = 0; i < colorblendPoints; i++) {
-                            s.ReadUInt32(color);
-                            colorblendColors[i] = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
-                            SAL_INFO("cppcanvas.emf", "EMF+\tcolor[" << i << "]: 0x" << std::hex << color << std::dec);
-                        }
+                    for (int i = 0; i < blendPoints; i++) {
+                        s.ReadFloat(blendFactors[i]);
+                        SAL_INFO("cppcanvas.emf", "EMF+\tfactor[" << i << "]: " << blendFactors[i]);
                     }
                 }
+
+                if (additionalFlags & 0x04) {
+                    s.ReadInt32(colorblendPoints);
+                    SAL_INFO("cppcanvas.emf", "EMF+\tuse color blend, points: " << colorblendPoints);
+                    if (colorblendPoints<0 || sal_uInt32(colorblendPoints)>SAL_MAX_INT32 / sizeof(float))
+                        colorblendPoints = SAL_MAX_INT32 / sizeof(float);
+                    if (sal_uInt32(colorblendPoints)>SAL_MAX_INT32 / sizeof(::Color))
+                        colorblendPoints = SAL_MAX_INT32 / sizeof(::Color);
+                    colorblendPositions = new float[colorblendPoints];
+                    colorblendColors = new ::Color[colorblendPoints];
+                    for (int i = 0; i < colorblendPoints; i++) {
+                        s.ReadFloat(colorblendPositions[i]);
+                        SAL_INFO("cppcanvas.emf", "EMF+\tposition[" << i << "]: " << colorblendPositions[i]);
+                    }
+                    for (int i = 0; i < colorblendPoints; i++) {
+                        s.ReadUInt32(color);
+                        colorblendColors[i] = ::Color(0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
+                        SAL_INFO("cppcanvas.emf", "EMF+\tcolor[" << i << "]: 0x" << std::hex << color << std::dec);
+                    }
+                }
+
                 break;
             }
             case BrushTypeLinearGradient:
