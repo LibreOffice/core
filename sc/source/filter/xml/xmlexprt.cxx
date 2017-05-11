@@ -2894,6 +2894,16 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
         if (pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS))
             AddAttribute(XML_NAMESPACE_LO_EXT, XML_SELECT_UNPROTECTED_CELLS, XML_TRUE);
 
+        if (pProtect->isOptionEnabled(ScTableProtection::INSERT_COLUMNS))
+            AddAttribute(XML_NAMESPACE_LO_EXT, XML_INSERT_COLUMNS, XML_TRUE);
+        if (pProtect->isOptionEnabled(ScTableProtection::INSERT_ROWS))
+            AddAttribute(XML_NAMESPACE_LO_EXT, XML_INSERT_ROWS, XML_TRUE);
+
+        if (pProtect->isOptionEnabled(ScTableProtection::DELETE_COLUMNS))
+            AddAttribute(XML_NAMESPACE_LO_EXT, XML_DELETE_COLUMNS, XML_TRUE);
+        if (pProtect->isOptionEnabled(ScTableProtection::DELETE_ROWS))
+            AddAttribute(XML_NAMESPACE_LO_EXT, XML_DELETE_ROWS, XML_TRUE);
+
         OUString aElemName = GetNamespaceMap().GetQNameByKey(
             XML_NAMESPACE_LO_EXT, GetXMLToken(XML_TABLE_PROTECTION));
 

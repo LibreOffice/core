@@ -231,6 +231,19 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_INS_ROW:
             case FID_INS_ROWS_BEFORE:           // insert rows
             case FID_INS_ROWS_AFTER:
+            {
+                sc::ColRowEditAction eAction = sc::ColRowEditAction::InsertRowsBefore;
+                if (nWhich == FID_INS_ROWS_AFTER)
+                    eAction = sc::ColRowEditAction::InsertRowsAfter;
+
+                bDisable = (!bSimpleArea) || GetViewData()->SimpleColMarked();
+                if (!bEditable && nCol1 == 0 && nCol2 == MAXCOL)
+                {
+                    // See if row insertions are allowed.
+                    bEditable = pDoc->IsEditActionAllowed(eAction, rMark, nRow1, nRow2);
+                }
+                break;
+            }
             case FID_INS_CELLSDOWN:
             case SID_ROW_OPERATIONS:
                 bDisable = (!bSimpleArea) || GetViewData()->SimpleColMarked();
@@ -239,6 +252,19 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_INS_COLUMN:
             case FID_INS_COLUMNS_BEFORE:        // insert columns
             case FID_INS_COLUMNS_AFTER:
+            {
+                sc::ColRowEditAction eAction = sc::ColRowEditAction::InsertColumnsBefore;
+                if (nWhich == FID_INS_COLUMNS_AFTER)
+                    eAction = sc::ColRowEditAction::InsertColumnsAfter;
+
+                bDisable = (!bSimpleArea) || GetViewData()->SimpleRowMarked();
+                if (!bEditable && nRow1 == 0 && nRow2 == MAXROW)
+                {
+                    // See if row insertions are allowed.
+                    bEditable = pDoc->IsEditActionAllowed(eAction, rMark, nCol1, nCol2);
+                }
+                break;
+            }
             case FID_INS_CELLSRIGHT:
             case SID_COLUMN_OPERATIONS:
                 bDisable = (!bSimpleArea) || GetViewData()->SimpleRowMarked();
