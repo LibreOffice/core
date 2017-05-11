@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_7a5a2985",
+        "filename": "sw/source/filter/ww8/ww8par.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2600,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-05-11T16:49:44Z",
+      "side": 1,
+      "message": "Ah, I meant pTabPos \u0026\u0026 !pTabPos-\u003ebNoFly here.",
+      "revId": "28d87f6b53e63c53a09a215c3eba570e307b92ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
