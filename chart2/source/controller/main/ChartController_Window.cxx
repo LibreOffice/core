@@ -547,6 +547,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
     SolarMutexGuard aGuard;
 
     m_bWaitingForMouseUp = true;
+    m_bFieldButtonDown = false;
 
     if( isDoubleClick(rMEvt) )
         stopDoubleClickWaiting();
@@ -568,7 +569,10 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
     {
         OUString aCID = pObject->GetName();
         if (aCID.startsWith("FieldButton"))
+        {
+            m_bFieldButtonDown = true;
             return; // Don't take any action if button was clicked
+        }
     }
 
     if ( MOUSE_LEFT == rMEvt.GetButtons() )
@@ -738,14 +742,18 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         Point aMPos = pChartWindow->PixelToLogic(rMEvt.GetPosPixel());
 
         // Check if button was clicked
-        SdrObject* pObject = pDrawViewWrapper->getHitObject(aMPos);
-        if (pObject)
+        if (m_bFieldButtonDown)
         {
-            OUString aCID = pObject->GetName();
-            if (aCID.startsWith("FieldButton"))
+            m_bFieldButtonDown = false;
+            SdrObject* pObject = pDrawViewWrapper->getHitObject(aMPos);
+            if (pObject)
             {
-                sendPopupRequest(aCID, pObject->GetCurrentBoundRect());
-                return;
+                OUString aCID = pObject->GetName();
+                if (aCID.startsWith("FieldButton"))
+                {
+                    sendPopupRequest(aCID, pObject->GetCurrentBoundRect());
+                    return;
+                }
             }
         }
 

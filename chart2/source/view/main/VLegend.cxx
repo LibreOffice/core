@@ -267,12 +267,13 @@ awt::Size lcl_placeLegendEntries(
     tPropertyValues & rTextProperties,
     const Reference< drawing::XShapes > & xTarget,
     const Reference< lang::XMultiServiceFactory > & xShapeFactory,
-    const awt::Rectangle& rRemainingSpace)
+    const awt::Size& rRemainingSpace,
+    sal_Int32 nYStartPosition)
 {
     bool bIsCustomSize = (eExpansion == css::chart::ChartLegendExpansion_CUSTOM);
     awt::Size aResultingLegendSize(0,0);
     if( bIsCustomSize )
-        aResultingLegendSize = awt::Size(rRemainingSpace.Width, rRemainingSpace.Height);
+        aResultingLegendSize = awt::Size(rRemainingSpace.Width, rRemainingSpace.Height + nYStartPosition);
 
     // #i109336# Improve auto positioning in chart
     sal_Int32 nXPadding = static_cast< sal_Int32 >( std::max( 100.0, fViewFontSize * 0.33 ) );
@@ -517,7 +518,7 @@ awt::Size lcl_placeLegendEntries(
 
     for (sal_Int32 nColumn = 0; nColumn < nNumberOfColumns; ++nColumn)
     {
-        sal_Int32 nCurrentYPos = nYPadding + rRemainingSpace.Y;
+        sal_Int32 nCurrentYPos = nYPadding + nYStartPosition;
         for (sal_Int32 nRow = 0; nRow < nNumberOfRows; ++nRow)
         {
             sal_Int32 nEntry = (nColumn + nRow * nNumberOfColumns);
@@ -649,8 +650,13 @@ chart2::RelativePosition lcl_getDefaultPosition( LegendPosition ePos, const awt:
                 // #i109336# Improve auto positioning in chart
                 const double fDefaultDistance = ( static_cast< double >( lcl_getLegendTopBottomMargin() ) /
                     static_cast< double >( rPageSize.Height ) );
+
+                double fDistance = double(rPageSize.Height - (rOutAvailableSpace.Y + rOutAvailableSpace.Height));
+                fDistance += fDefaultDistance;
+                fDistance /= double(rPageSize.Height);
+
                 aResult = chart2::RelativePosition(
-                    0.5, 1.0 - fDefaultDistance, drawing::Alignment_BOTTOM );
+                    0.5, 1.0 - fDistance, drawing::Alignment_BOTTOM );
             }
             break;
 
@@ -765,9 +771,9 @@ bool lcl_shouldSymbolsBePlacedOnTheLeftSide( const Reference< beans::XPropertySe
 }
 
 std::vector<std::shared_ptr<VButton>> lcl_createButtons(
-                       const uno::Reference< drawing::XShapes>& xLegendContainer,
-                       const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory,
-                       ChartModel& rModel, long& nUsedHeight)
+                       uno::Reference<drawing::XShapes> const & xLegendContainer,
+                       uno::Reference<lang::XMultiServiceFactory> const & xShapeFactory,
+                       ChartModel& rModel, bool bPlaceButtonsVertically, long & nUsedHeight)
 {
     std::vector<std::shared_ptr<VButton>> aButtons;
 
@@ -779,13 +785,15 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
         return aButtons;
 
     awt::Size aSize(2000, 700);
+    int x = 100;
     int y = 100;
+
     for (chart2::data::PivotTableFieldEntry const & sColumnFieldEntry : xPivotTableDataProvider->getColumnFields())
     {
         std::shared_ptr<VButton> pButton(new VButton);
         aButtons.push_back(pButton);
         pButton->init(xLegendContainer, xShapeFactory);
-        awt::Point aNewPosition = awt::Point(100, y);
+        awt::Point aNewPosition = awt::Point(x, y);
         pButton->setLabel(sColumnFieldEntry.Name);
         pButton->setCID("FieldButton.Column." + OUString::number(sColumnFieldEntry.DimensionIndex));
         pButton->setPosition(aNewPosition);
@@ -794,9 +802,16 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
             pButton->showArrow(false);
         if (sColumnFieldEntry.HasHiddenMembers)
             pButton->setArrowColor(0x0000FF);
-        y += aSize.Height + 100;
+
+        if (bPlaceButtonsVertically)
+            y += aSize.Height + 100;
+        else
+            x += aSize.Width + 100;
     }
-    nUsedHeight += y + 100;
+    if (bPlaceButtonsVertically)
+        nUsedHeight += y + 100;
+    else
+        nUsedHeight += aSize.Height + 100;
 
     return aButtons;
 }
@@ -866,10 +881,6 @@ void VLegend::createShapes(
         Reference< drawing::XShapes > xLegendContainer( m_xShape, uno::UNO_QUERY );
         if( xLegendContainer.is())
         {
-            long nUsedHeight = 0;
-            std::vector<std::shared_ptr<VButton>> aButtons;
-            aButtons = lcl_createButtons(xLegendContainer, m_xShapeFactory, mrModel, nUsedHeight);
-
             // for quickly setting properties
             tPropertyValues aLineFillProperties;
             tPropertyValues aTextProperties;
@@ -878,21 +889,27 @@ void VLegend::createShapes(
             css::chart::ChartLegendExpansion eExpansion = css::chart::ChartLegendExpansion_HIGH;
             awt::Size aLegendSize( rAvailableSpace );
 
-            if( xLegendProp.is())
+            bool bCustom = false;
+            LegendPosition eLegendPosition = LegendPosition_CUSTOM;
+            if (xLegendProp.is())
             {
                 // get Expansion property
-                xLegendProp->getPropertyValue( "Expansion") >>= eExpansion;
+                xLegendProp->getPropertyValue("Expansion") >>= eExpansion;
                 if( eExpansion == css::chart::ChartLegendExpansion_CUSTOM )
                 {
                     RelativeSize aRelativeSize;
-                    if ((xLegendProp->getPropertyValue( "RelativeSize") >>= aRelativeSize))
+                    if (xLegendProp->getPropertyValue("RelativeSize") >>= aRelativeSize)
                     {
                         aLegendSize.Width = static_cast<sal_Int32>(::rtl::math::approxCeil( aRelativeSize.Primary * rPageSize.Width ));
                         aLegendSize.Height = static_cast<sal_Int32>(::rtl::math::approxCeil( aRelativeSize.Secondary * rPageSize.Height ));
+                        bCustom = true;
                     }
                     else
+                    {
                         eExpansion = css::chart::ChartLegendExpansion_HIGH;
+                    }
                 }
+                xLegendProp->getPropertyValue("AnchorPosition") >>= eLegendPosition;
                 lcl_getProperties( xLegendProp, aLineFillProperties, aTextProperties, rPageSize );
             }
 
@@ -933,18 +950,34 @@ void VLegend::createShapes(
 
             if (!aViewEntries.empty())
             {
-                awt::Rectangle aRectangle(0, nUsedHeight, aLegendSize.Width, aLegendSize.Height - nUsedHeight);
+                // create buttons
+                long nUsedButtonHeight = 0;
+                bool bPlaceButtonsVertically = (eLegendPosition != LegendPosition_PAGE_START &&
+                                                eLegendPosition != LegendPosition_PAGE_END &&
+                                                eExpansion != css::chart::ChartLegendExpansion_WIDE);
 
-                // place entries
-                aLegendSize = lcl_placeLegendEntries(aViewEntries, eExpansion, bSymbolsLeftSide, fViewFontSize, aMaxSymbolExtent,
-                                                     aTextProperties, xLegendContainer, m_xShapeFactory, aRectangle);
+                std::vector<std::shared_ptr<VButton>> aButtons;
+                aButtons = lcl_createButtons(xLegendContainer, m_xShapeFactory, mrModel, bPlaceButtonsVertically, nUsedButtonHeight);
 
+                // A custom size includes the size we used for buttons already, so we need to
+                // subtract that from the size that is available for the legend
+                if (bCustom)
+                    aLegendSize.Height -= nUsedButtonHeight;
+
+                // place the legend entries
+                aLegendSize = lcl_placeLegendEntries(aViewEntries, eExpansion, bSymbolsLeftSide, fViewFontSize,
+                                                     aMaxSymbolExtent, aTextProperties, xLegendContainer,
+                                                     m_xShapeFactory, aLegendSize, nUsedButtonHeight);
 
                 uno::Reference<beans::XPropertySet> xModelPage(mrModel.getPageBackground());
 
                 for (std::shared_ptr<VButton> const & pButton : aButtons)
                 {
-                    pButton->setSize({aLegendSize.Width - 200, pButton->getSize().Height});
+                    // adjust the width of the buttons if we place them vertically
+                    if (bPlaceButtonsVertically)
+                        pButton->setSize({aLegendSize.Width - 200, pButton->getSize().Height});
+
+                    // create the buttons
                     pButton->createShapes(xModelPage);
                 }
             }
