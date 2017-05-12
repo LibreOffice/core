@@ -85,53 +85,53 @@ seconds (!!!).
 /* Error codes according to errno */
 
 typedef enum {
-    osl_File_E_None,
-    osl_File_E_PERM,
-    osl_File_E_NOENT,
-    osl_File_E_SRCH,
-    osl_File_E_INTR,
-    osl_File_E_IO,
-    osl_File_E_NXIO,
-    osl_File_E_2BIG,
-    osl_File_E_NOEXEC,
-    osl_File_E_BADF,
-    osl_File_E_CHILD,
-    osl_File_E_AGAIN,
-    osl_File_E_NOMEM,
-    osl_File_E_ACCES,
-    osl_File_E_FAULT,
-    osl_File_E_BUSY,
-    osl_File_E_EXIST,
-    osl_File_E_XDEV,
-    osl_File_E_NODEV,
-    osl_File_E_NOTDIR,
-    osl_File_E_ISDIR,
-    osl_File_E_INVAL,
-    osl_File_E_NFILE,
-    osl_File_E_MFILE,
-    osl_File_E_NOTTY,
-    osl_File_E_FBIG,
-    osl_File_E_NOSPC,
-    osl_File_E_SPIPE,
-    osl_File_E_ROFS,
-    osl_File_E_MLINK,
-    osl_File_E_PIPE,
-    osl_File_E_DOM,
-    osl_File_E_RANGE,
-    osl_File_E_DEADLK,
-    osl_File_E_NAMETOOLONG,
-    osl_File_E_NOLCK,
-    osl_File_E_NOSYS,
-    osl_File_E_NOTEMPTY,
-    osl_File_E_LOOP,
-    osl_File_E_ILSEQ,
-    osl_File_E_NOLINK,
-    osl_File_E_MULTIHOP,
-    osl_File_E_USERS,
-    osl_File_E_OVERFLOW,
-    osl_File_E_NOTREADY,
-    osl_File_E_invalidError,        /* unmapped error: always last entry in enum! */
-    osl_File_E_TIMEDOUT,
+    osl_File_E_None,            /*!< on success                                                  */
+    osl_File_E_PERM,            /*!< operation not permitted                                     */
+    osl_File_E_NOENT,           /*!< no such file or directory                                   */
+    osl_File_E_SRCH,            /*!< no process matches the PID                                  */
+    osl_File_E_INTR,            /*!< function call was interrupted                               */
+    osl_File_E_IO,              /*!< I/O error occured                                           */
+    osl_File_E_NXIO,            /*!< no such device or address                                   */
+    osl_File_E_2BIG,            /*!< argument list too long                                      */
+    osl_File_E_NOEXEC,          /*!< invalid executable file format                              */
+    osl_File_E_BADF,            /*!< bad file descriptor                                         */
+    osl_File_E_CHILD,           /*!< there are no child processes                                */
+    osl_File_E_AGAIN,           /*!< resource temp unavailable, try again later                  */
+    osl_File_E_NOMEM,           /*!< no memory available                                         */
+    osl_File_E_ACCES,           /*!< file permissions do not allow operation                     */
+    osl_File_E_FAULT,           /*!< bad address; an invalid pointer detected                    */
+    osl_File_E_BUSY,            /*!< resource busy                                               */
+    osl_File_E_EXIST,           /*!< file exists where should only be created                    */
+    osl_File_E_XDEV,            /*!< improper link across file systems detected                  */
+    osl_File_E_NODEV,           /*!< wrong device type specified                                 */
+    osl_File_E_NOTDIR,          /*!< file isn't a directory where one is needed                  */
+    osl_File_E_ISDIR,           /*!< file is a directory, invalid operation                      */
+    osl_File_E_INVAL,           /*!< invalid argument to library function                        */
+    osl_File_E_NFILE,           /*!< too many distinct file openings                             */
+    osl_File_E_MFILE,           /*!< process has too many distinct files open                    */
+    osl_File_E_NOTTY,           /*!< inappropriate I/O control operation                         */
+    osl_File_E_FBIG,            /*!< file too large                                              */
+    osl_File_E_NOSPC,           /*!< no space left on device, write failed                       */
+    osl_File_E_SPIPE,           /*!< invalid seek operation (such as on pipe)                    */
+    osl_File_E_ROFS,            /*!< illegal modification to read-only filesystem                */
+    osl_File_E_MLINK,           /*!< too many links to file                                      */
+    osl_File_E_PIPE,            /*!< broken pipe; no process reading from other end of pipe      */
+    osl_File_E_DOM,             /*!< domain error (mathematical error)                           */
+    osl_File_E_RANGE,           /*!< range error (mathematical error)                            */
+    osl_File_E_DEADLK,          /*!< deadlock avoided                                            */
+    osl_File_E_NAMETOOLONG,     /*!< filename too long                                           */
+    osl_File_E_NOLCK,           /*!< no locks available                                          */
+    osl_File_E_NOSYS,           /*!< function not implemented                                    */
+    osl_File_E_NOTEMPTY,        /*!< directory not empty                                         */
+    osl_File_E_LOOP,            /*!< too many levels of symbolic links found during name lookup  */
+    osl_File_E_ILSEQ,           /*!< invalid or incomplete byte sequence of multibyte char found */
+    osl_File_E_NOLINK,          /*!< link has been severed                                       */
+    osl_File_E_MULTIHOP,        /*!< remote resource is not directly available                   */
+    osl_File_E_USERS,           /*!< file quote system is confused as there are too many users   */
+    osl_File_E_OVERFLOW,        /*!< value too large for defined data type                       */
+    osl_File_E_NOTREADY,        /*!< device not ready                                            */
+    osl_File_E_invalidError,    /*!< unmapped error: always last entry in enum!                  */
+    osl_File_E_TIMEDOUT,        /*!< socket operation timed out                                  */
     osl_File_E_NETWORK,
     osl_File_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslFileError;
