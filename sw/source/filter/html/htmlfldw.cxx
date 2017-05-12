@@ -203,16 +203,16 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                 {
                     if( bFixed )
                     {
-                        // Fuer ein fixes Feld och den Num-Value ausgeben.
-                        // Fixe Felder ohne Zahlenformate sollte es
-                        // eigentlich nicht geben. OSL_ENSURE(ist unten.
+                        // For a fixed field output the num value too.
+                        // Fixed fields without number format shouldn't
+                        // exist. See below for OSL_ENSURE().
                         dNumValue = static_cast<const SwDocInfoField*>(pField)->GetValue();
                         bNumValue = true;
                     }
                     else if( !nFormat  )
                     {
-                        // Nicht fixe Felder muessen kein Zahlenformat haben,
-                        // wenn sie aus 4.0-Dokumenten stammen.
+                        // Non-fixed fields may not have a number format, when
+                        // they come from a 4.0-document.
                         bNumFormat = false;
                     }
                 }
@@ -291,7 +291,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
         }
         if( bNumFormat )
         {
-            OSL_ENSURE( nFormat, "Zahlenformat ist 0" );
+            OSL_ENSURE( nFormat, "number format is 0" );
             sOut.append(HTMLOutFuncs::CreateTableDataOptionsValNum(
                 bNumValue, dNumValue, nFormat,
                 *rHTMLWrt.pDoc->GetNumberFormatter(), rHTMLWrt.m_eDestEnc,
@@ -305,7 +305,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
         rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     }
 
-    // Inhalt des Feldes ausgeben
+    // output content of the field
     OUString const sExpand( pField->ExpandField(true) );
     bool bNeedsCJKProcessing = false;
     if( !sExpand.isEmpty() )
@@ -449,7 +449,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
         rWrt.Strm().WriteChar( '<' );
         if( !bOn )
             rWrt.Strm().WriteChar( '/' );
-        // TODO: HTML-Tags are written without entitities, that for, characters
+        // TODO: HTML-Tags are written without entities, that for, characters
         // not contained in the destination encoding are lost!
         OString sTmp(OUStringToOString(rText,
             static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc));
@@ -457,8 +457,8 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else if( SwFieldIds::Postit == pFieldTyp->Which() )
     {
-        // Kommentare werden im ANSI-Zeichensetz, aber mit System-Zeilen-
-        // Umbruechen gesschrieben.
+        // Comments will be written in ANSI character set, but with system
+        // line breaks.
         const OUString& rComment = pField->GetPar2();
         bool bWritten = false;
 
@@ -468,9 +468,9 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
              rComment.startsWith( "<!--" ) &&
              rComment.endsWith( "-->" )) )
         {
-            // META-Tags direkt ausgeben
+            // directly output META tags
             OUString sComment(convertLineEnd(rComment, GetSystemLineEnd()));
-            // TODO: HTML-Tags are written without entitities, that for,
+            // TODO: HTML-Tags are written without entities, that for,
             // characters not contained in the destination encoding are lost!
             OString sTmp(OUStringToOString(sComment,
                 static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc));
@@ -485,7 +485,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
             if( '<' == sComment[0] )
             {
                 sComment = convertLineEnd(sComment, GetSystemLineEnd());
-                // TODO: HTML-Tags are written without entitities, that for,
+                // TODO: HTML-Tags are written without entities, that for,
                 // characters not contained in the destination encoding are
                 // lost!
                 OString sTmp(OUStringToOString(sComment,
@@ -521,8 +521,8 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
         else
             aContents = pField->GetPar2();
 
-        // sonst ist es der Script-Inhalt selbst. Da nur noh JavaScript
-        // in Feldern landet, muss es sich um JavaScript handeln...:)
+        // otherwise is the script content itself. Since only JavaScript
+        // is in fields, it must be JavaScript ...:)
         HTMLOutFuncs::OutScript( rWrt.Strm(), rWrt.GetBaseURL(), aContents, rType, JAVASCRIPT,
                                  aURL, nullptr, nullptr, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
 
