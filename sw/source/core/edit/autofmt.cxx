@@ -2200,7 +2200,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags& rFlags,
                 if( m_aFlags.bAFormatByInput && m_aFlags.bCreateTable && DoTable() )
                 {
                     //JP 30.09.96: DoTable() builds on PopCursor and MoveCursor after AutoFormat!
-                    pEdShell->Pop( false );
+                    pEdShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
                     *pEdShell->GetCursor() = m_aDelPam;
                     pEdShell->Push();
 
@@ -2608,7 +2608,7 @@ void SwEditShell::AutoFormatBySplitNode()
                                     &pCursor->GetPoint()->nNode );
 
             //JP 30.09.96: DoTable() builds on PopCursor and MoveCursor!
-            Pop( false );
+            Pop(PopMode::DeleteCurrent);
             pCursor = GetCursor();
         }
         pCursor->DeleteMark();

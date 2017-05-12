@@ -940,7 +940,7 @@ void SwEditWin::FlushInBuffer()
 
             // at this point now we will insert the buffer text 'normally' some lines below...
 
-            rSh.Pop( false );  // pop old cursor from stack
+            rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
 
             if (m_aInBuffer.isEmpty())
                 return;
@@ -1638,7 +1638,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     sFormulaEntry = "=";
                 }
                 else
-                    rSh.Pop( false );
+                    rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
             }
             else
             {

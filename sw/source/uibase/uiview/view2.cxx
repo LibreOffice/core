@@ -181,7 +181,7 @@ static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, sal_uInt16 nWhi
         aAttribs.insert( nWhichId );
         rWrtSh.ResetAttr( aAttribs );
 
-        rWrtSh.Pop( false );
+        rWrtSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
         rWrtSh.LockView( false );
         rWrtSh.EndAction();
     }

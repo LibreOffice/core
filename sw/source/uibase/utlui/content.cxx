@@ -2451,7 +2451,7 @@ void SwContentTree::ExecCommand(const OUString& rCmd, bool bOutlineWithChildren)
         }
 
         pShell->ClearMark();
-        pShell->Pop(false); // Cursor is now back at the current heading.
+        pShell->Pop(SwCursorShell::PopMode::DeleteCurrent); // Cursor is now back at the current heading.
     }
 
     if (bStartedAction)

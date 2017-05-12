@@ -728,7 +728,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
         //JP 16.05.97: In case the SFX revokes the View while saving
         if (m_pWrtShell)
         {
-            m_pWrtShell->Pop(false);
+            m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
             m_pWrtShell->EndAllAction();
             // #i106906#
             m_pWrtShell->LockView( bFormerLockView );

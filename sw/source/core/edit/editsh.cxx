@@ -801,7 +801,7 @@ void SwEditShell::SetNumberingRestart()
         }
     }
 
-    Pop(false);
+    Pop(PopMode::DeleteCurrent);
     EndAllAction();
 }
 

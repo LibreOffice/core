@@ -2000,11 +2000,11 @@ void SwCursorShell::Push()
 
 /** delete cursor
 
-    @param bOldCursor If <true> so delete from stack, if <false> delete current
+    @param eDelete  delete from stack, or delete current
                     and assign the one from stack as the new current cursor.
     @return <true> if there was one on the stack, <false> otherwise
 */
-bool SwCursorShell::Pop( bool bOldCursor )
+bool SwCursorShell::Pop(PopMode const eDelete)
 {
     SwCallLink aLk( *this ); // watch Cursor-Moves; call Link if needed
 
@@ -2020,12 +2020,12 @@ bool SwCursorShell::Pop( bool bOldCursor )
         pTmp = dynamic_cast<SwShellCursor*>(m_pStackCursor->GetNext());
     }
 
-    if( bOldCursor ) // delete from stack
+    if (PopMode::DeleteStack == eDelete)
         delete m_pStackCursor;
 
     m_pStackCursor = pTmp; // assign new one
 
-    if( !bOldCursor )
+    if (PopMode::DeleteCurrent == eDelete)
     {
         SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
@@ -3477,7 +3477,7 @@ void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
             const sal_Int32 nLineStart = GetCursor()->GetPoint()->nContent.GetIndex();
             RightMargin();
             const sal_Int32 nLineEnd = GetCursor()->GetPoint()->nContent.GetIndex();
-            Pop(false);
+            Pop(PopMode::DeleteCurrent);
 
             // make sure the selection build later from the data below does not
             // include "in word" character to the left and right in order to
@@ -3517,7 +3517,7 @@ void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
             SwRect aEndRect;
             pContentFrame->GetCharRect( aEndRect, *pCursor->GetPoint(),&aState );
             rSelectRect = aStartRect.Union( aEndRect );
-            Pop(false);
+            Pop(PopMode::DeleteCurrent);
         }
     }
 }

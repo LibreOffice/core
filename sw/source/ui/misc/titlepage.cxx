@@ -111,7 +111,7 @@ namespace
 
     void lcl_PopCursor(SwWrtShell *pSh)
     {
-        pSh->SwCursorShell::Pop( false );
+        pSh->SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
         pSh->EndAllAction();
         pSh->LockView( false );
     }

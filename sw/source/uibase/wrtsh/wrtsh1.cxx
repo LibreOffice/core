@@ -1669,9 +1669,9 @@ SwWrtShell::~SwWrtShell()
     SwTransferable::ClearSelection( *this );
 }
 
-bool SwWrtShell::Pop( bool bOldCursor )
+bool SwWrtShell::Pop(SwCursorShell::PopMode const eDelete)
 {
-    bool bRet = SwCursorShell::Pop( bOldCursor );
+    bool bRet = SwCursorShell::Pop(eDelete);
     if( bRet && IsSelection() )
     {
         m_fnSetCursor = &SwWrtShell::SetCursorKillSel;

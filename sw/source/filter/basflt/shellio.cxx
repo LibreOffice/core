@@ -875,7 +875,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
         if(!bHasMark)
         {
             if( pShell )
-                pShell->Pop( false );
+                pShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
             else
                 delete pPam;
         }

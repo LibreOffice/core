@@ -71,7 +71,7 @@ bool SwWrtShell::NxtWrd_()
     {
         if(!SwCursorShell::Right(1,CRSR_SKIP_CHARS))  // Document - end ??
         {
-            Pop( false );
+            Pop(PopMode::DeleteCurrent);
             return bRet;
         }
         bRet = IsStartWord();
@@ -102,7 +102,7 @@ bool SwWrtShell::PrvWrd_()
     {                            // if already at the beginning, then the next???
         if(!SwCursorShell::Left(1,CRSR_SKIP_CHARS))
         {                        // Document - beginning ??
-            Pop( false );
+            Pop(PopMode::DeleteCurrent);
             return bRet;
         }
         bRet = IsStartWord() || IsEndPara();
@@ -134,7 +134,7 @@ bool SwWrtShell::NxtWrdForDelete()
     {
         if ( !SwCursorShell::Right(1,CRSR_SKIP_CHARS) )
         {
-            Pop( false );
+            Pop(PopMode::DeleteCurrent);
             return false;
         }
         return true;
@@ -157,7 +157,7 @@ bool SwWrtShell::PrvWrdForDelete()
     {
         if ( !SwCursorShell::Left(1,CRSR_SKIP_CHARS) )
         {
-            Pop( false );
+            Pop(PopMode::DeleteCurrent);
             return false;
         }
         return true;
@@ -179,7 +179,7 @@ bool SwWrtShell::FwdSentence_()
     ClearMark();
     if(!SwCursorShell::Right(1,CRSR_SKIP_CHARS))
     {
-        Pop(false);
+        Pop(PopMode::DeleteCurrent);
         return false;
     }
     if( !GoNextSentence() && !IsEndPara() )
@@ -196,7 +196,7 @@ bool SwWrtShell::BwdSentence_()
     ClearMark();
     if(!SwCursorShell::Left(1,CRSR_SKIP_CHARS))
     {
-        Pop(false);
+        Pop(PopMode::DeleteCurrent);
         return false;
     }
     if( !GoStartSentence()  && !IsSttPara() )

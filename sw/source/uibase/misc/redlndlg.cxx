@@ -736,7 +736,7 @@ void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedli
             pSh->SwCursorShell::Push();
             if( nullptr == (pCurrRedline = pSh->SelNextRedline()))
                 pCurrRedline = pSh->SelPrevRedline();
-            pSh->SwCursorShell::Pop( false );
+            pSh->SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
         }
     }
     else

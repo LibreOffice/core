@@ -1106,7 +1106,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
     Push();
     if(!GotoPage(nStartPage))
     {
-        Pop(false);
+        Pop(PopMode::DeleteCurrent);
         return false;
     }
     MovePage( GetThisFrame, GetFirstSub );
@@ -1118,7 +1118,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
 
     if(!GotoPage(nEndPage))
     {
-        Pop(false);
+        Pop(PopMode::DeleteCurrent);
         return false;
     }
     //if the page starts with a table a paragraph has to be inserted before
@@ -1181,7 +1181,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
     }
     GetDoc()->getIDocumentFieldsAccess().UnlockExpFields();
     GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
-    Pop(false);
+    Pop(PopMode::DeleteCurrent);
     EndAllAction();
 
     return true;

@@ -770,7 +770,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                 }
             }
 
-            m_pWrtShell->Pop( false );
+            m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
             m_pWrtShell->LockView( bOldViewLock );
         }
     }
@@ -817,7 +817,7 @@ void SwView::ExecSmartTagPopup( const Point& rPt )
             xComponent->dispose();
     }
 
-    m_pWrtShell->Pop( false );
+    m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     m_pWrtShell->LockView( bOldViewLock );
 }
 

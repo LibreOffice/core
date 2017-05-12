@@ -856,7 +856,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             m_pSh->Push();        // save cursor
             SwLangHelper::SelectCurrentPara( *m_pSh );
             SwLangHelper::SetLanguage( *m_pSh, aNewLangText, true, aCoreSet );
-            m_pSh->Pop( false );  // restore cursor
+            m_pSh->Pop(SwCursorShell::PopMode::DeleteCurrent); // restore cursor
         }
         else if (nId == MN_SET_PARA_NONE)
         {
@@ -864,7 +864,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             m_pSh->Push();        // save cursor
             SwLangHelper::SelectCurrentPara( *m_pSh );
             SwLangHelper::SetLanguage_None( *m_pSh, true, aCoreSet );
-            m_pSh->Pop( false );  // restore cursor
+            m_pSh->Pop(SwCursorShell::PopMode::DeleteCurrent); // restore cursor
         }
         else if (nId == MN_SET_PARA_RESET)
         {
@@ -872,7 +872,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             m_pSh->Push();        // save cursor
             SwLangHelper::SelectCurrentPara( *m_pSh );
             SwLangHelper::ResetLanguages( *m_pSh, true );
-            m_pSh->Pop( false );  // restore cursor
+            m_pSh->Pop(SwCursorShell::PopMode::DeleteCurrent); // restore cursor
         }
         else if (nId == MN_SET_PARA_MORE)
         {
@@ -880,7 +880,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             SwLangHelper::SelectCurrentPara( *m_pSh );
             //Open Format/Character Dialog
             sw_CharDialog( *m_pSh, true, SID_ATTR_CHAR_FONT, nullptr, nullptr );
-            m_pSh->Pop( false );  // restore cursor
+            m_pSh->Pop(SwCursorShell::PopMode::DeleteCurrent); // restore cursor
         }
     }
 

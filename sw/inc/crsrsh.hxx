@@ -418,16 +418,17 @@ public:
                       bool bTstHit = false);   // only exact matches
     void KillPams();
 
-    // story a copy of the cursor in the stack
+    /// store a copy of the current cursor on the cursor stack
     void Push();
+    enum class PopMode { DeleteCurrent, DeleteStack };
     /*
-     * Delete a cursor (controlled by bOldCursor)
-     *      - from stack or (bOldCursor = true)
-     *      - delete the current one and replace it with the cursor from the
+     * Delete a cursor
+     *    - either from the top of the stack
+     *    - or delete the current one and replace it with the cursor from the
      *      stack
-     * Return: whether there was one left one the stack
+     *  @return <true> if there was one on the stack, <false> otherwise
      */
-    bool Pop( bool bOldCursor = true );
+    bool Pop(PopMode = PopMode::DeleteStack);
     /*
      * Combine 2 Cursors.
      * Delete the topmost from the stack and move its Mark into the current.

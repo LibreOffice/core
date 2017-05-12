@@ -1335,7 +1335,7 @@ bool SwFieldMgr::InsertField(
                 false, (INP_VAR == (nSubType & 0xff)) ? 1 : 2, false );
         pCurShell->StartInputFieldDlg(pField, false, rData.m_pParent);
 
-        pCurShell->Pop(false);
+        pCurShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
 
     if(bExp && bEvalExp)

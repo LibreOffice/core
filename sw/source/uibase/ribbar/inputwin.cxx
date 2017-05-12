@@ -336,7 +336,7 @@ void  SwInputWindow::ApplyFormula()
     pView->GetViewFrame()->GetDispatcher()->Lock(false);
     pView->GetEditWin().LockKeyInput(false);
     CleanupUglyHackWithUndo();
-    pWrtShell->Pop( false );
+    pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
 
     // Formular should always begin with "=", so remove it here again
     OUString sEdit(comphelper::string::strip(aEdit->GetText(), ' '));
@@ -359,7 +359,7 @@ void  SwInputWindow::CancelFormula()
         pView->GetViewFrame()->GetDispatcher()->Lock( false );
         pView->GetEditWin().LockKeyInput(false);
         CleanupUglyHackWithUndo();
-        pWrtShell->Pop( false );
+        pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
 
         if( bDelSel )
             pWrtShell->EnterStdMode();
@@ -449,7 +449,7 @@ void SwInputWindow::DelBoxContent()
     {
         pWrtShell->StartAllAction();
         pWrtShell->ClearMark();
-        pWrtShell->Pop( false );
+        pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
         pWrtShell->Push();
         pWrtShell->MoveSection( GoCurrSection, fnSectionStart );
         pWrtShell->SetMark();

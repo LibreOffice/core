@@ -415,7 +415,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
             m_aParaStyle = pFormat->GetName();
     }
 
-    rWrtShell.Pop(false);
+    rWrtShell.Pop(SwCursorShell::PopMode::DeleteCurrent);
     rWrtShell.EndAction();
 }
 

@@ -94,7 +94,7 @@ void SwWrtShell::DelLine()
     SwCursorShell::RightMargin();
 
     long nRet = Delete();
-    Pop(false);
+    Pop(PopMode::DeleteCurrent);
     if( nRet )
         UpdateAttr();
 }
@@ -293,7 +293,7 @@ long SwWrtShell::DelRight()
             }
 
             // restore cursor
-            SwCursorShell::Pop( false );
+            SwCursorShell::Pop(PopMode::DeleteCurrent);
 
             if( bDelFull )
             {
@@ -338,7 +338,7 @@ long SwWrtShell::DelRight()
                 }
 
                 // restore cursor
-                SwCursorShell::Pop( false );
+                SwCursorShell::Pop(PopMode::DeleteCurrent);
             }
 
             // If we are just ahead of a fieldmark, then remove it completely
@@ -417,11 +417,11 @@ void SwWrtShell::DelToEndOfPara()
     SetMark();
     if( !MovePara(GoCurrPara,fnParaEnd))
     {
-        Pop(false);
+        Pop(PopMode::DeleteCurrent);
         return;
     }
     long nRet = Delete();
-    Pop(false);
+    Pop(PopMode::DeleteCurrent);
     if( nRet )
         UpdateAttr();
 }
@@ -434,11 +434,11 @@ void SwWrtShell::DelToStartOfPara()
     SetMark();
     if( !MovePara(GoCurrPara,fnParaStart))
     {
-        Pop(false);
+        Pop(PopMode::DeleteCurrent);
         return;
     }
     long nRet = Delete();
-    Pop(false);
+    Pop(PopMode::DeleteCurrent);
     if( nRet )
         UpdateAttr();
 }
@@ -480,7 +480,7 @@ long SwWrtShell::DelToEndOfSentence()
                 nRet = DelFullPara() ? 1 : 0;
             }
         }
-        Pop(false);
+        Pop(PopMode::DeleteCurrent);
     }
     else
     {

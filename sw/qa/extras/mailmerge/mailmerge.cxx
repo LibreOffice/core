@@ -342,7 +342,7 @@ int MMTest::documentStartPageNumber( int document ) const
     shell->Push();
     shell->GotoMark( mark->get());
     shell->GetPageNum( page, dummy );
-    shell->Pop(false);
+    shell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     return page;
 }
 

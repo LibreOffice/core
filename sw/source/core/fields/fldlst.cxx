@@ -105,7 +105,7 @@ void SwInputFieldList::PushCursor()
 /// get cursor
 void SwInputFieldList::PopCursor()
 {
-    pSh->Pop(false);
+    pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
 }
 
 /// go to position of a field

@@ -381,7 +381,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                             // create it just to overwrite it with stack cursor
                             m_pWrtShell->CreateCursor();
                             // i#8288 restore the original cursor position
-                            m_pWrtShell->Pop(false);
+                            m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
                         }
                         m_pWrtShell->EndAllAction();
                     }
@@ -601,7 +601,7 @@ bool SwView::SearchAndWrap(bool bApi)
         // Try again with WrapAround?
 
     m_pWrtShell->StartAllAction();
-    m_pWrtShell->Pop(false);
+    m_pWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
     pWait.reset(new SwWait( *GetDocShell(), true ));
 
     bool bSrchBkwrd = SwDocPositions::Start == aOpts.eEnd;

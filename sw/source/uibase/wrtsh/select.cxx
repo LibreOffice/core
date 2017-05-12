@@ -150,7 +150,7 @@ long SwWrtShell::SelAll()
             bool bIsFullSel = !MoveSection( GoCurrSection, fnSectionStart);
             SwapPam();
             bIsFullSel &= !MoveSection( GoCurrSection, fnSectionEnd);
-            Pop(false);
+            Pop(PopMode::DeleteCurrent);
             GoStart(true, &bMoveTable, false, !bIsFullSel);
         }
         else
@@ -445,7 +445,7 @@ long SwWrtShell::ExtSelWrd(const Point *pPt, bool )
     default:    bMoveCursor = false;  break;
     }
 
-    SwCursorShell::Pop( false );              // restore the saved cursor
+    SwCursorShell::Pop(PopMode::DeleteCurrent); // restore the saved cursor
 
     if( bMoveCursor )
     {
@@ -464,7 +464,7 @@ long SwWrtShell::ExtSelWrd(const Point *pPt, bool )
         }
         else
         {
-            SwCursorShell::Pop( false );
+            SwCursorShell::Pop(PopMode::DeleteCurrent);
             if( bToTop )
                 SwapPam();
         }
@@ -889,7 +889,7 @@ int SwWrtShell::IntelligentCut(SelectionType nSelection, bool bCut)
             SetMark();
             SwCursorShell::Left(1,CRSR_SKIP_CHARS);
             SwFEShell::Delete();
-            Pop( false );
+            Pop(PopMode::DeleteCurrent);
         }
     }
     else if(cWord == WORD_NO_SPACE && cNext == ' ')
@@ -903,7 +903,7 @@ int SwWrtShell::IntelligentCut(SelectionType nSelection, bool bCut)
             SetMark();
             SwCursorShell::Right(1,CRSR_SKIP_CHARS);
             SwFEShell::Delete();
-            Pop( false );
+            Pop(PopMode::DeleteCurrent);
         }
     }
     return cWord;

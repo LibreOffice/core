@@ -210,7 +210,7 @@ namespace SwLangHelper
                 if (!bForSelection)
                 {
                     // need to release view and restore selection...
-                    rSh.Pop( false );
+                    rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
                     rSh.LockView( false );
                     rSh.EndAction();
                 }

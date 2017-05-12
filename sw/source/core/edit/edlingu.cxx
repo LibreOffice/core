@@ -224,7 +224,7 @@ void SwLinguIter::Start_( SwEditShell *pShell, SwDocPositions eStart,
             pSh->Push();
             pSh->DestroyCursor();
         }
-        pSh->Pop( false );
+        pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
     else
     {
@@ -260,7 +260,7 @@ void SwLinguIter::End_(bool bRestoreSelection)
     if(bRestoreSelection)
     {
         while( nCursorCnt-- )
-            pSh->Pop( false );
+            pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
 
         pSh->KillPams();
         pSh->ClearMark();
@@ -322,7 +322,7 @@ uno::Any SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         }
         if( bGoOn )
         {
-            pMySh->Pop( false );
+            pMySh->Pop(SwCursorShell::PopMode::DeleteCurrent);
             pCursor = pMySh->GetCursor();
             if ( *pCursor->GetPoint() > *pCursor->GetMark() )
                 pCursor->Exchange();
@@ -390,7 +390,7 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
         }
         if( bGoOn )
         {
-            pMySh->Pop( false );
+            pMySh->Pop(SwCursorShell::PopMode::DeleteCurrent);
             pCursor = pMySh->GetCursor();
             if ( *pCursor->GetPoint() > *pCursor->GetMark() )
                 pCursor->Exchange();
@@ -494,7 +494,7 @@ uno::Any SwHyphIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 
         if( bGoOn )
         {
-            pMySh->Pop( false );
+            pMySh->Pop(SwCursorShell::PopMode::DeleteCurrent);
             pCursor = pMySh->GetCursor();
             if ( *pCursor->GetPoint() > *pCursor->GetMark() )
                 pCursor->Exchange();
@@ -892,7 +892,7 @@ uno::Reference< XSpellAlternatives >
                 const sal_Int32 nLineStart = GetCursor()->GetPoint()->nContent.GetIndex();
                 RightMargin();
                 const sal_Int32 nLineEnd = GetCursor()->GetPoint()->nContent.GetIndex();
-                Pop(false);
+                Pop(PopMode::DeleteCurrent);
 
                 // make sure the selection build later from the data below does
                 // not "in word" character to the left and right in order to
@@ -932,7 +932,7 @@ uno::Reference< XSpellAlternatives >
                 SwRect aEndRect;
                 pContentFrame->GetCharRect( aEndRect, *pCursor->GetPoint(),&aState );
                 rSelectRect = aStartRect.Union( aEndRect );
-                Pop(false);
+                Pop(PopMode::DeleteCurrent);
             }
         }
     }
@@ -1017,7 +1017,7 @@ bool SwEditShell::GetGrammarCorrection(
                 const sal_Int32 nLineStart = GetCursor()->GetPoint()->nContent.GetIndex();
                 RightMargin();
                 const sal_Int32 nLineEnd = GetCursor()->GetPoint()->nContent.GetIndex();
-                Pop(false);
+                Pop(PopMode::DeleteCurrent);
 
                 // make sure the selection build later from the data below does
                 // not include "in word" character to the left and right in
@@ -1057,7 +1057,7 @@ bool SwEditShell::GetGrammarCorrection(
                 SwRect aEndRect;
                 pContentFrame->GetCharRect( aEndRect, *pCursor->GetPoint(),&aState );
                 rSelectRect = aStartRect.Union( aEndRect );
-                Pop(false);
+                Pop(PopMode::DeleteCurrent);
             }
         }
     }
@@ -1247,7 +1247,7 @@ void SwEditShell::ApplyChangedSentence(const svx::SpellPortions& rNewPortions, b
         // restore cursor to the end of the sentence
         // (will work also if the sentence length has changed,
         // since cursors get updated automatically!)
-        Pop( false );
+        Pop(PopMode::DeleteCurrent);
 
         // collapse cursor to the end of the modified sentence
         *pCursor->Start() = *pCursor->End();
@@ -1388,7 +1388,7 @@ bool SwSpellIter::SpellSentence(svx::SpellPortions& rPortions, bool bIsGrammarCh
         }
         if( bGoOn )
         {
-            pMySh->Pop( false );
+            pMySh->Pop(SwCursorShell::PopMode::DeleteCurrent);
             pCursor = pMySh->GetCursor();
             if ( *pCursor->GetPoint() > *pCursor->GetMark() )
                 pCursor->Exchange();

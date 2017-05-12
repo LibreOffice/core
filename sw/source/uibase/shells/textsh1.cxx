@@ -152,7 +152,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         bSelectionPut = true;
         if(!bSel)
         {
-            rWrtSh.Pop(false);
+            rWrtSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
             rWrtSh.EndAction();
         }
     }
@@ -413,7 +413,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                     if (bForParagraph || !bForSelection)
                     {
-                        rWrtSh.Pop(false); // restore selection...
+                        rWrtSh.Pop(SwCursorShell::PopMode::DeleteCurrent); // restore selection...
                     }
                 }
 
@@ -836,7 +836,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rWrtSh.ResetAttr( aAttribs );
             if(!bSel)
             {
-                rWrtSh.Pop(false);
+                rWrtSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
                 rWrtSh.EndAction();
             }
         }
@@ -863,7 +863,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rWrtSh.Push();          //save current cursor
             SwLangHelper::SelectCurrentPara( rWrtSh );
             sw_CharDialog( rWrtSh, bUseDialog, nSlot, pArgs, &rReq );
-            rWrtSh.Pop( false );    //restore old cursor
+            rWrtSh.Pop(SwCursorShell::PopMode::DeleteCurrent); // restore old cursor
         }
         break;
         case SID_ATTR_LRSPACE :

@@ -217,7 +217,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     if(!bTableSel)
     {
         rSh.ClearMark();
-        rSh.Pop(false);
+        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
         rSh.EndAllAction();
     }
 
@@ -351,7 +351,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
             {
                 rSh.ClearMark();
             }
-            rSh.Pop(false);
+            rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
         }
 
         rSh.EndAllAction();

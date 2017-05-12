@@ -2170,7 +2170,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
     // Restore view, cursor, and outdev:
     mrSh.LockView( bOldLockView );
-    mrSh.SwCursorShell::Pop( false );
+    mrSh.SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
     mrOut.Pop();
 }
 

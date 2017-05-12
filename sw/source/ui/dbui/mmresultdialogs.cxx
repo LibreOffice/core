@@ -525,7 +525,7 @@ int documentStartPageNumber(SwMailMergeConfigItem* pConfigItem, int document)
     shell.Push();
     shell.GotoMark( info.startPageInTarget );
     shell.GetPageNum( page, dummy );
-    shell.Pop(false);
+    shell.Pop(SwCursorShell::PopMode::DeleteCurrent);
     return page;
 }
 
@@ -543,7 +543,7 @@ int documentEndPageNumber(SwMailMergeConfigItem* pConfigItem, int document)
         shell.GotoMark( info.startPageInTarget );
         shell.EndPrvPg();
         shell.GetPageNum( page, dummy );
-        shell.Pop(false);
+        shell.Pop(SwCursorShell::PopMode::DeleteCurrent);
         return page;
     }
     else
@@ -552,7 +552,7 @@ int documentEndPageNumber(SwMailMergeConfigItem* pConfigItem, int document)
         shell.Push();
         shell.SttEndDoc( false ); // go to doc end
         shell.GetPageNum( page, dummy );
-        shell.Pop(false);
+        shell.Pop(SwCursorShell::PopMode::DeleteCurrent);
         return page;
     }
 }

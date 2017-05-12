@@ -3493,7 +3493,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             }
         }
         rSrcSh.KillPams();
-        rSrcSh.Pop( false );
+        rSrcSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
 
         /* after dragging a table selection inside one shell
             set cursor to the drop position. */

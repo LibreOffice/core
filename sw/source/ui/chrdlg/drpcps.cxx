@@ -293,7 +293,7 @@ void SwDropCapsPict::UpdatePaintSettings()
             GetFontSettings( *mpPage, maCTLFont, RES_CHRATR_CTL_FONT );
 
             mpPage->rSh.EndCursorMove();
-            mpPage->rSh.Pop(false);
+            mpPage->rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
         }
         else
         {

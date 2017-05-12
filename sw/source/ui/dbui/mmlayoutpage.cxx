@@ -214,7 +214,7 @@ void SwMailMergeLayoutPage::ActivatePage()
                 m_pExampleWrtShell->GotoFly( m_pAddressBlockFormat->GetName() );
                 m_pExampleWrtShell->DelRight();
                 m_pAddressBlockFormat = nullptr;
-                m_pExampleWrtShell->Pop(false);
+                m_pExampleWrtShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
             }
             else
             {
@@ -612,7 +612,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     {
         rShell.Push();
         rShell.SplitNode();
-        rShell.Pop(false);
+        rShell.Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
     //put the cursor to the start of the paragraph
     rShell.SttPara();

@@ -451,7 +451,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     rSh.Push();
                     rSh.SwCursorShell::Left(1, CRSR_SKIP_CHARS);
                     pPostIt = static_cast<SwPostItField*>(aFieldMgr.GetCurField());
-                    rSh.Pop(false); // Restore cursor position
+                    rSh.Pop(SwCursorShell::PopMode::DeleteCurrent); // Restore cursor position
                 }
 
                 // Client has disabled annotations rendering, no need to
@@ -569,7 +569,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     }
 
                     bool bPrev = pActRed != nullptr;
-                    rSh.Pop(false);
+                    rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
                     rSh.EndAction();
 
                     rSh.ClearMark();
@@ -579,7 +579,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     rSh.Push();
                     pActRed = rSh.SelNextRedline();
                     bool bNext = pActRed != nullptr;
-                    rSh.Pop(false); // Restore cursor position
+                    rSh.Pop(SwCursorShell::PopMode::DeleteCurrent); // Restore cursor position
 
                     if( rSh.IsCursorPtAtEnd() )
                         rSh.SwapPam();
@@ -961,7 +961,7 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog&, rDlg, void )
 
         pSh->Push();
         const SwRangeRedline *pActRed = pSh->SelNextRedline();
-        pSh->Pop(pActRed != nullptr);
+        pSh->Pop((pActRed != nullptr) ? SwCursorShell::PopMode::DeleteStack : SwCursorShell::PopMode::DeleteCurrent);
 
         bool bEnable = false;
 
@@ -970,7 +970,7 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog&, rDlg, void )
             pSh->StartAction();
             pSh->Push();
             bEnable = pSh->SelNextRedline() != nullptr;
-            pSh->Pop(false);
+            pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
             pSh->EndAction();
         }
 
@@ -1005,7 +1005,7 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog&, rDlg, void )
         // Traveling only if more than one field.
         pSh->Push();
         const SwRangeRedline *pActRed = pSh->SelPrevRedline();
-        pSh->Pop(pActRed != nullptr);
+        pSh->Pop((pActRed != nullptr) ? SwCursorShell::PopMode::DeleteStack : SwCursorShell::PopMode::DeleteCurrent);
 
         bool bEnable = false;
 
@@ -1014,7 +1014,7 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog&, rDlg, void )
             pSh->StartAction();
             pSh->Push();
             bEnable = pSh->SelPrevRedline() != nullptr;
-            pSh->Pop(false);
+            pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
             pSh->EndAction();
         }
 

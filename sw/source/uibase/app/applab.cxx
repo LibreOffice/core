@@ -327,7 +327,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
                                 pSh->Push();
                                 pSh->SttDoc();
                                 bool bInFly = nullptr != pSh->WizardGetFly();
-                                pSh->Pop( bInFly );
+                                pSh->Pop((bInFly) ? SwCursorShell::PopMode::DeleteStack : SwCursorShell::PopMode::DeleteCurrent);
 
                                 if( bInFly )
                                     pSh->EndDoc(true);  // select all content
@@ -354,7 +354,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
                             pSh->EndDoc(true);  // Select everything in the frame
                             pSh->InsertSection(aSect);
                         }
-                        pSh->Pop( false );
+                        pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
                     }
                 }
             }

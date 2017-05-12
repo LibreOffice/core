@@ -141,7 +141,7 @@ void SwEditShell::FieldToText( SwFieldType* pType )
         pClient->SwClientNotifyCall( *pType, aHint );
     }
 
-    Pop( false );
+    Pop(PopMode::DeleteCurrent);
     EndAllAction();
     EndUndo( SwUndoId::DELETE );
 }

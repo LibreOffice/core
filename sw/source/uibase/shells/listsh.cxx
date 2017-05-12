@@ -125,7 +125,7 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
         }
 
         rSh.ClearMark();
-        rSh.Pop( false );
+        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
     }
 }
 

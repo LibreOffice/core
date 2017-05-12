@@ -550,7 +550,7 @@ public:
     {
         if (m_bSaveCursor)
         {
-            m_rShell.Pop( false );
+            m_rShell.Pop(SwCursorShell::PopMode::DeleteCurrent);
         }
     }
 private:

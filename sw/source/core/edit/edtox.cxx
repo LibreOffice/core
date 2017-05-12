@@ -395,7 +395,7 @@ void SwEditShell::ApplyAutoMark()
             }
         }
         KillPams();
-        Pop(false);
+        Pop(PopMode::DeleteCurrent);
     }
     DoUndo(bDoesUndo);
     EndAllAction();

@@ -503,7 +503,7 @@ void SwIndexMarkPane::InsertMark()
     SwTOXMgr aMgr(pSh);
     aMgr.InsertTOXMark(aDesc);
     if(bApplyAll)
-        pSh->Pop(false);
+        pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
 
     pSh->EndAllAction();
 }

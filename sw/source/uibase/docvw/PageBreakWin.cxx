@@ -250,7 +250,7 @@ void SwPageBreakWin::Select()
                         SfxCallMode::SYNCHRON | SfxCallMode::RECORD,
                         { &aItem });
 
-                rSh.Pop( false );
+                rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
             }
             else
             {

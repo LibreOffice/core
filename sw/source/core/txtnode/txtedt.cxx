@@ -1199,7 +1199,7 @@ bool SwTextNode::Convert( SwConversionArgs &rArgs )
                 pEditShell->Push();             // save current cursor on stack
                 pEditShell->SetSelection( aCurPaM );
                 bool bIsAsianScript = (SvtScriptType::ASIAN == pEditShell->GetScriptType());
-                pEditShell->Pop( false );   // restore cursor from stack
+                pEditShell->Pop(SwCursorShell::PopMode::DeleteCurrent); // restore cursor from stack
 
                 if (!bIsAsianScript && rArgs.bAllowImplicitChangesForNotConvertibleText)
                 {

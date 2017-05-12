@@ -1415,7 +1415,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
         if( pESh )
         {
-            pESh->Pop( false );
+            pESh->Pop(SwCursorShell::PopMode::DeleteCurrent);
             pPam = nullptr; // pam was deleted earlier
         }
     }
