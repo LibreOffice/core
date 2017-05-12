@@ -426,6 +426,7 @@ bool GetBool() { return GetDouble() != 0.0; }
 bool GetDoubleOrString( double& rValue, svl::SharedString& rString );
 svl::SharedString GetString();
 svl::SharedString GetStringFromMatrix(const ScMatrixRef& pMat);
+svl::SharedString GetStringFromDouble( const double fVal);
 // pop matrix and obtain one element, upper left or according to jump matrix
 ScMatValType GetDoubleOrStringFromMatrix( double& rDouble, svl::SharedString& rString );
 ScMatrixRef CreateMatrixFromDoubleRef( const formula::FormulaToken* pToken,
