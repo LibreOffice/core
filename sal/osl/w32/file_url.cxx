@@ -99,13 +99,9 @@ static bool IsValidFilePathComponent(
                     break;
                 }
                 break;
-                /* '?' and '*' are valid wildcards but not valid file name characters */
+                /* The following characters are reserved */
             case '?':
             case '*':
-                if ( dwFlags & VALIDATEPATH_ALLOW_WILDCARDS )
-                    break;
-                SAL_FALLTHROUGH;
-                /* The following characters are reserved */
             case '<':
             case '>':
             case '\"':
