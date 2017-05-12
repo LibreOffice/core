@@ -6,7 +6,7 @@ Dim result As String
 
 Function doUnitTest() As String
 result = verify_testHex()
-If failCount <> 0 And passCount > 0 Then
+If failCount <> 0 Or passCount = 0 Then
     doUnitTest = result
 Else
     doUnitTest = "OK"

@@ -11,7 +11,7 @@ End Type
 
 Function doUnitTest() As String
 result = verify_testARRAY()
-If failCount <> 0 And passCount > 0 Then
+If failCount <> 0 Or passCount = 0 Then
     doUnitTest = result
 Else
     doUnitTest = "OK"
