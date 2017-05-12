@@ -1154,15 +1154,6 @@ void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
     }
 }
 
-static ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const OUString& rText, const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
-{
-    ScTokenArray* pCode = new ScTokenArray;
-    pCode->AddStringXML( rText );
-    if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && (!rFormulaNmsp.isEmpty()) )
-        pCode->AddStringXML( rFormulaNmsp );
-    return pCode;
-}
-
 bool ScDocFunc::SetCellText(
     const ScAddress& rPos, const OUString& rText, bool bInterpret, bool bEnglish, bool bApi,
     const formula::FormulaGrammar::Grammar eGrammar )
@@ -4160,10 +4151,11 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         }
         else if ( rDoc.IsImportingXML() )
         {
-            ScTokenArray* pCode = lcl_ScDocFunc_CreateTokenArrayXML( rString, rFormulaNmsp, eGrammar );
+            ScTokenArray aCode;
+            aCode.AssignXMLString( rString,
+                    ((eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) ? rFormulaNmsp : OUString()));
             rDoc.InsertMatrixFormula( nStartCol, nStartRow, nEndCol, nEndRow,
-                    aMark, EMPTY_OUSTRING, pCode, eGrammar);
-            delete pCode;
+                    aMark, EMPTY_OUSTRING, &aCode, eGrammar);
             rDoc.IncXMLImportedFormulaCount( rString.getLength() );
         }
         else if (bEnglish)
