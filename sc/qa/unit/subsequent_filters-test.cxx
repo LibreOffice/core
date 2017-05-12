@@ -13,6 +13,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
+#include <config_features.h>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
@@ -279,7 +280,9 @@ public:
     CPPUNIT_TEST(testRowIndex1BasedXLSX);
     CPPUNIT_TEST(testControlImport);
     CPPUNIT_TEST(testChartImportODS);
+#if HAVE_MORE_FONTS
     CPPUNIT_TEST(testChartImportXLS);
+#endif
 
     CPPUNIT_TEST(testDataBarODS);
     CPPUNIT_TEST(testDataBarXLSX);
