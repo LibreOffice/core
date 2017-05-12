@@ -4317,7 +4317,7 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
         Rectangle aRect(0, 0, 100, 100); // A dummy, we don't care about the size
         SvxMSDffImportData aData(aRect);
         SdrObject* pObject = nullptr;
-        if (mrReader.m_pMSDffManager->GetShape(0x401, pObject, aData))
+        if (mrReader.m_pMSDffManager->GetShape(0x401, pObject, aData) && !aData.empty())
         {
             // Only handle shape if it is a background shape
             if (((*aData.begin())->nFlags & 0x400) != 0)
