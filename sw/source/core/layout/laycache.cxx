@@ -756,11 +756,6 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
           ( ++mnIndex < mpImpl->size() &&
           mpImpl->GetBreakIndex( mnIndex ) == nNodeIndex ) ) )
         mbFirst = false;
-#if OSL_DEBUG_LEVEL > 1
-    sal_uLong nBreakIndex = ( pImpl && nIndex < pImpl->size() ) ?
-                        pImpl->GetBreakIndex(nIndex) : 0xffff;
-    (void)nBreakIndex;
-#endif
     // OD 09.04.2003 #108698# - always split a big tables.
     if ( !mbFirst ||
          ( mrpFrame->IsTabFrame() && bLongTab )
@@ -771,11 +766,6 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
         {
             if( mpImpl || bLongTab )
             {
-#if OSL_DEBUG_LEVEL > 1
-                sal_uLong nBrkIndex = ( pImpl && nIndex < pImpl->size() ) ?
-                        pImpl->GetBreakIndex(nIndex) : 0xffff;
-                (void)nBrkIndex;
-#endif
                 sal_Int32 nOfst = COMPLETE_STRING;
                 sal_uInt16 nType = SW_LAYCACHE_IO_REC_PAGES;
                 if( bLongTab )
