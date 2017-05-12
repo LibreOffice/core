@@ -461,7 +461,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         i = 0;
         pEle = rSlotList.empty() ? nullptr : rSlotList[ i ];
         pNextSlot = pEle;
-        while ( pNextSlot != this )
+        while (pNextSlot && pNextSlot != this)
         {
             if ( pNextSlot->GetStateMethod() == GetStateMethod() )
                 break;
