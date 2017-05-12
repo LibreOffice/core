@@ -309,9 +309,9 @@ CBenTOCReader::ReadTOC()
 
                     if (PropertyID == BEN_PROPID_GLOBAL_PROPERTY_NAME)
                         pObject = new CBenPropertyName(cpContainer, ObjectID,
-                          pPrevObject, sBuffer, pPrevNamedObjectListElmt);
+                          pPrevObject, OString(sBuffer, Length), pPrevNamedObjectListElmt);
                     else pObject = new CBenTypeName(cpContainer, ObjectID,
-                      pPrevObject, sBuffer, pPrevNamedObjectListElmt);
+                      pPrevObject, OString(sBuffer, Length), pPrevNamedObjectListElmt);
 
                     delete[] sAllocBuffer;
                 }
