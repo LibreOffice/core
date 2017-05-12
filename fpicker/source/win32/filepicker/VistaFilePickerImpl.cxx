@@ -62,7 +62,8 @@ bool createFolderItem(OUString const & url, ComPtr<IShellItem> & folder) {
         return false;
     }
     HRESULT res = SHCreateItemFromParsingName(
-        SAL_W(path.getStr()), nullptr, IID_PPV_ARGS(&folder));
+        reinterpret_cast<wchar_t const *>(path.getStr()), nullptr,
+        IID_PPV_ARGS(&folder));
     return SUCCEEDED(res);
 }
 
