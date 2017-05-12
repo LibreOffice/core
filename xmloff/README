@@ -1,4 +1,4 @@
-Contains ODF import and export filter logic.
+## Contains ODF import and export filter logic.
 
 The main library "xo" contains the basic ODF import/export filter
 implementation for most applications.  The document is accessed
@@ -9,7 +9,7 @@ The filter consumes/produces via SAX UNO API interface (implemented in
 applications, for example sw/source/filter/xml.
 
 There is a central list of all element or attribute names in
-xmloff/inc/xmloff/token.hxx.  The main class of the import filter
+include/xmloff/xmltoken.hxx.  The main class of the import filter
 is SvXMLImport, and of the export filter SvXMLExport.
 
 The Import filter maintains a stack of contexts for each element being
@@ -37,3 +37,13 @@ http://www.openoffice.org/xml/xml_specification.pdf
 
 There is some stuff in the "dtd" directory which is most likely related
 to the OpenOffice.org XML format but is possibly outdated and obsolete.
+
+### Add new XML tokens
+
+When adding a new XML token, you need to add its entry in the following three
+files:
+
+* include/xmloff/xmltoken.hxx
+* xmloff/source/core/xmltoken.cxx
+* xmloff/source/token/tokens.txt
+
