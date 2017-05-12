@@ -805,7 +805,7 @@ void SwUiWriterTest::testDOCXAutoTextGallery()
 {
     // this file contains one AutoText entry and other
     // entries which are not AutoText (have different "gallery" value)
-    SwTextBlocks *pGlossary = readDOCXAutotext("autotext-gallery.dotx");
+    std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext("autotext-gallery.dotx");
 
     SwDoc* pDoc = pGlossary->GetDoc();
     CPPUNIT_ASSERT(pDoc != nullptr);
