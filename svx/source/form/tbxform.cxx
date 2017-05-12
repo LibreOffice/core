@@ -130,7 +130,7 @@ void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
         pWin->SetText(OUString());
 
 
-    // Enablen/disablen des Fensters
+    // enabling/disabling of the window
     pToolBox->EnableItem(nId, bEnable);
     SfxToolBoxControl::StateChanged( nSID, eState,pState );
 }
@@ -220,7 +220,7 @@ VclPtr<vcl::Window> SvxFmTbxCtlRecTotal::CreateItemWindow( vcl::Window* pParent 
 void SvxFmTbxCtlRecTotal::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
 
-    // Setzen des FixedTextes
+    // setting the FixedText
     if (GetSlotId() != SID_FM_RECORD_TOTAL)
         return;
 

@@ -180,7 +180,7 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
             OUString aText = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_TARGET_URL));
             INetURLObject aUrl(aText);
 
-            // testen, ob es ein Protokoll-Typ ist, den ich anzeigen will
+            // test if it is a protocol type that I want to display
             INetProtocol aProtocol = aUrl.GetProtocol();
             static const INetProtocol s_aQuickHelpSupported[] =
                 {   INetProtocol::Ftp, INetProtocol::Http, INetProtocol::File, INetProtocol::Mailto,
@@ -197,7 +197,7 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
     }
     if ( !aHelpText.isEmpty() )
     {
-        // Hilfe anzeigen
+        // display the help
         tools::Rectangle aItemRect = pObj->GetCurrentBoundRect();
         aItemRect = pWindow->LogicToPixel( aItemRect );
         Point aPt = pWindow->OutputToScreenPixel( aItemRect.TopLeft() );

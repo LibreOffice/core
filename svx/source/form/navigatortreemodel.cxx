@@ -833,7 +833,7 @@ namespace svxform
             if(!m_pFormShell) return;       // no shell
 
             FmFormView* pFormView = m_pFormShell->GetFormView();
-            DBG_ASSERT(pFormView != nullptr, "NavigatorTreeModel::UpdateContent : keine FormView");
+            DBG_ASSERT(pFormView != nullptr, "NavigatorTreeModel::UpdateContent : no FormView");
             BroadcastMarkedObjects(pFormView->GetMarkedObjectList());
         }
     }

@@ -18,7 +18,7 @@
  */
 
 #include "svx/fmresids.hrc"
-/* Strings fuer Uebersetzung */
+/* Strings for translation */
 String RID_ERR_FIELDREQUIRED
 {
     Text [ en-US ] = "Input required in field '#'. Please enter a value.";

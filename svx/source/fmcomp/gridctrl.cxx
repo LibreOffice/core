@@ -756,7 +756,7 @@ void DbGridControl::NavigationBar::SetState(DbGridControlNavigationBarState nWhi
         }   break;
         default: break;
     }
-    DBG_ASSERT(pWnd, "kein Fenster");
+    DBG_ASSERT(pWnd, "no window");
     if (pWnd && (pWnd->IsEnabled() != bAvailable))
         // this "pWnd->IsEnabled() != bAvailable" is a little hack : Window::Enable always generates a user
         // event (ImplGenerateMouseMove) even if nothing happened. This may lead to some unwanted effects, so we
@@ -1858,7 +1858,7 @@ void DbGridControl::RecalcRows(long nNewTopRow, sal_uInt16 nLinesOnScreen, bool 
     // If no cursor -> no rows in the browser.
     if (!m_pSeekCursor)
     {
-        DBG_ASSERT(GetRowCount() == 0,"DbGridControl: ohne Cursor darf es keine Rows geben");
+        DBG_ASSERT(GetRowCount() == 0,"DbGridControl: without cursor no rows are allowed to be there");
         return;
     }
 
@@ -2882,7 +2882,7 @@ IMPL_LINK_NOARG(DbGridControl, OnDelete, void*, void)
 
 void DbGridControl::DeleteSelectedRows()
 {
-    DBG_ASSERT(GetSelection(), "keine selection!!!");
+    DBG_ASSERT(GetSelection(), "no selection!!!");
 
     if (!m_pSeekCursor)
         return;

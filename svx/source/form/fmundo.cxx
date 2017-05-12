@@ -391,7 +391,7 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
     if ( !pObj )
         return;
 
-    // ist das Control noch einer Form zugeordnet
+    // is the control still assigned to a form
     Reference< XInterface >  xModel(pObj->GetUnoControlModel(), UNO_QUERY);
     Reference< XFormComponent >  xContent(xModel, UNO_QUERY);
     if (xContent.is() && pObj->GetPage())
@@ -436,7 +436,7 @@ void FmXUndoEnvironment::Inserted(FmFormObj* pObj)
             }
         }
 
-        // FormObject zuruecksetzen
+        // reset FormObject
         pObj->ClearObjEnv();
     }
 }
@@ -469,21 +469,20 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
     if ( !pObj )
         return;
 
-    // ist das Control noch einer Form zugeordnet
+    // is the control still assigned to a form
     Reference< XFormComponent >  xContent(pObj->GetUnoControlModel(), UNO_QUERY);
     if (xContent.is())
     {
-        // das Object wird aus einer Liste herausgenommen
-        // existiert ein Vater wird das Object beim beim Vater entfernt und
-        // am FormObject gemerkt!
+        // The object is taken out of a list.
+        // If a father exists, the object is removed at the father and
+        // noted at the FormObject!
 
-        // wird das Object wieder eingefuegt und ein Parent existiert, so wird dieser
-        // Parent wiederum gesetzt
+        // If the object is reinserted and a parent exists, this parent is set though.
         Reference< XIndexContainer >  xForm(xContent->getParent(), UNO_QUERY);
         if (xForm.is())
         {
             Reference< XIndexAccess >  xIndexAccess(xForm.get());
-            // Feststellen an welcher Position sich das Kind befunden hat
+            // determine which position the child was at
             const sal_Int32 nPos = getElementPos(xIndexAccess, xContent);
             if (nPos >= 0)
             {
@@ -727,7 +726,7 @@ void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt)
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    // neues Object zum lauschen
+    // new object for listening
     Reference< XInterface >  xIface;
     evt.Element >>= xIface;
     OSL_ENSURE(xIface.is(), "FmXUndoEnvironment::elementInserted: invalid container notification!");
@@ -800,7 +799,7 @@ void FmXUndoEnvironment::RemoveForms(const Reference< XNameContainer > & rForms)
 
 void FmXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > & Element)
 {
-    // am Container horchen
+    // listen at the container
     Reference< XIndexContainer >  xContainer(Element, UNO_QUERY);
     if (xContainer.is())
     {
@@ -919,7 +918,7 @@ void FmXUndoEnvironment::AddElement(const Reference< XInterface >& _rxElement )
 {
     OSL_ENSURE( !m_bDisposed, "FmXUndoEnvironment::AddElement: not when I'm already disposed!" );
 
-    // am Container horchen
+    // listen at the container
     Reference< XIndexContainer > xContainer( _rxElement, UNO_QUERY );
     if ( xContainer.is() )
         switchListening( xContainer, true );
