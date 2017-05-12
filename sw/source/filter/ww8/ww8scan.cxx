@@ -7956,10 +7956,21 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm, 
                     nL = static_cast< sal_uInt16 >(pSprm[1 + mnDelta] + aSprm.nLen);
                     break;
                 case L_VAR2:
+                {
                     // Variable 2-Byte Length?
                     // Excl. Token + Var-Lengthbyte
-                    nL = static_cast< sal_uInt16 >(SVBT16ToShort( &pSprm[1 + mnDelta] ) + aSprm.nLen - 1);
+                    sal_uInt8 nIndex = 1 + mnDelta;
+                    sal_uInt16 nCount;
+                    if (nIndex + 1 >= nRemLen)
+                    {
+                        SAL_WARN("sw.ww8", "sprm longer than remaining bytes, doc or parser is wrong");
+                        nCount = 0;
+                    }
+                    else
+                        nCount = SVBT16ToShort(&pSprm[nIndex]);
+                    nL = static_cast< sal_uInt16 >(nCount + aSprm.nLen - 1);
                     break;
+                }
                 default:
                     OSL_ENSURE(false, "Unknown sprm variant");
                     break;
