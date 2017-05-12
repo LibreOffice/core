@@ -3458,6 +3458,22 @@ void SwTabFrame::Cut()
                 pSct->InvalidateSize_();
             }
         }
+        // table-in-footnote: delete empty footnote frames (like SwContentFrame::Cut)
+        else if (!pUp->Lower() && pUp->IsFootnoteFrame() && !pUp->IsColLocked())
+        {
+            if (pUp->GetNext() && !pUp->GetPrev())
+            {
+                if (SwFrame *const pTmp = static_cast<SwLayoutFrame*>(pUp->GetNext())->ContainsAny())
+                {
+                    pTmp->InvalidatePrt_();
+                }
+            }
+            if (!pUp->IsDeleteForbidden())
+            {
+                pUp->Cut();
+                SwFrame::DestroyFrame(pUp);
+            }
+        }
         else if( aRectFnSet.GetHeight(Frame()) )
         {
             // OD 26.08.2003 #i18103# - *no* 'ColUnlock' of section -
@@ -3465,6 +3481,7 @@ void SwTabFrame::Cut()
             pUp->Shrink( Frame().Height() );
         }
     }
+
 
     if ( pPage && !IsFollow() && pPage->GetUpper() )
         static_cast<SwRootFrame*>(pPage->GetUpper())->InvalidateBrowseWidth();

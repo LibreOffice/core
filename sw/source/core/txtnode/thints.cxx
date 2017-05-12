@@ -1384,6 +1384,10 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                         SwContentNode* pCNd = rNodes[ nSttIdx ]->GetContentNode();
                         if( nullptr != pCNd )
                             pCNd->DelFrames();
+                        else if (SwTableNode *const pTable = rNodes[nSttIdx]->GetTableNode())
+                        {
+                            pTable->DelFrames();
+                        }
                     }
                 }
 
