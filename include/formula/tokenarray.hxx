@@ -125,9 +125,10 @@ protected:
     sal_uInt16      nIndex;                 // Current step index
     FormulaError    nError;                 // Error code
     ScRecalcMode    nMode;                  // Flags to indicate when to recalc this code
-    bool            bHyperLink;             // If HYPERLINK() occurs in the formula.
-    bool            mbFromRangeName;        // If this array originates from a named expression
-    bool            mbShareable;            // Whether or not it can be shared with adjacent cells.
+    bool            bHyperLink      :1;     // If HYPERLINK() occurs in the formula.
+    bool            mbFromRangeName :1;     // If this array originates from a named expression
+    bool            mbShareable     :1;     // Whether or not it can be shared with adjacent cells.
+    bool            mbFinalized     :1;     // Whether code arrays have their final used size and no more tokens can be added.
 
 protected:
     void                    Assign( const FormulaTokenArray& );

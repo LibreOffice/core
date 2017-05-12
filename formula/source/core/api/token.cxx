@@ -728,7 +728,8 @@ FormulaTokenArray::FormulaTokenArray() :
     nMode(ScRecalcMode::NORMAL),
     bHyperLink(false),
     mbFromRangeName(false),
-    mbShareable(true)
+    mbShareable(true),
+    mbFinalized(false)
 {
 }
 
@@ -752,6 +753,7 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
     bHyperLink = r.bHyperLink;
     mbFromRangeName = r.mbFromRangeName;
     mbShareable = r.mbShareable;
+    mbFinalized = r.mbFinalized;
     pCode  = nullptr;
     pRPN   = nullptr;
     FormulaToken** pp;
@@ -761,6 +763,7 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
         memcpy( pp, r.pCode, nLen * sizeof( FormulaToken* ) );
         for( sal_uInt16 i = 0; i < nLen; i++ )
             (*pp++)->IncRef();
+        mbFinalized = true;
     }
     if( nRPN )
     {
@@ -779,6 +782,7 @@ void FormulaTokenArray::Assign( sal_uInt16 nCode, FormulaToken **pTokens )
 
     nLen = nCode;
     pCode = new FormulaToken*[ nLen ];
+    mbFinalized = true;
 
     for( sal_uInt16 i = 0; i < nLen; i++ )
     {
@@ -814,6 +818,7 @@ void FormulaTokenArray::Clear()
     bHyperLink = false;
     mbFromRangeName = false;
     mbShareable = true;
+    mbFinalized = false;
     ClearRecalcMode();
 }
 
@@ -923,6 +928,13 @@ sal_uInt16 FormulaTokenArray::RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount
 
 FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
 {
+    assert(!mbFinalized);
+    if (mbFinalized)
+    {
+        t->DeleteIfZeroRef();
+        return nullptr;
+    }
+
     if( !pCode )
         pCode = new FormulaToken*[ FORMULA_MAXTOKENS ];
     if( nLen < FORMULA_MAXTOKENS - 1 )
