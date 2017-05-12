@@ -40,6 +40,41 @@ public:
     }
 };
 
+class SharedHDC
+{
+private:
+    struct Impl
+    {
+        HDC m_hDC;
+
+        ~Impl()
+        {
+            DeleteDC(m_hDC);
+        }
+    };
+    std::shared_ptr<Impl> m_pImpl;
+
+public:
+    SharedHDC(HDC hDC):
+        m_pImpl(new Impl)
+    {
+        m_pImpl->m_hDC = hDC;
+    }
+
+    HDC get() const
+    {
+        if (!m_pImpl)
+            return nullptr;
+
+        return m_pImpl->m_hDC;
+    }
+
+    explicit operator bool() const
+    {
+        return m_pImpl && m_pImpl->m_hDC != nullptr;
+    }
+};
+
 #endif // INCLUDED_VCL_INC_WIN_SCOPEDHDC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
