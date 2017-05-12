@@ -288,9 +288,11 @@ CBenTOCReader::ReadTOC()
                         return Err;
                     }
 
+                    OString sName(sBuffer, Length);
+
                     pCUtListElmt pPrevNamedObjectListElmt;
                     if (FindNamedObject(&cpContainer->GetNamedObjects(),
-                      sBuffer, &pPrevNamedObjectListElmt) != nullptr)
+                      sName, &pPrevNamedObjectListElmt) != nullptr)
                     {
                         delete[] sAllocBuffer;
                         return BenErr_DuplicateName;
@@ -301,9 +303,9 @@ CBenTOCReader::ReadTOC()
 
                     if (PropertyID == BEN_PROPID_GLOBAL_PROPERTY_NAME)
                         pObject = new CBenPropertyName(cpContainer, ObjectID,
-                          pPrevObject, sBuffer, pPrevNamedObjectListElmt);
+                          pPrevObject, sName, pPrevNamedObjectListElmt);
                     else pObject = new CBenTypeName(cpContainer, ObjectID,
-                      pPrevObject, sBuffer, pPrevNamedObjectListElmt);
+                      pPrevObject, sName, pPrevNamedObjectListElmt);
 
                     delete[] sAllocBuffer;
                 }
