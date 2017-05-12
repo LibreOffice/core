@@ -557,9 +557,10 @@ void SwUndoSetFlyFormat::UndoImpl(::sw::UndoRedoContext & rContext)
                 const sal_Int32 nIdx = pPos->nContent.GetIndex();
                 SwTextAttr * pHint = pTextNode->GetTextAttrForCharAt(
                         nIdx, RES_TXTATR_FLYCNT );
-                OSL_ENSURE( pHint && pHint->Which() == RES_TXTATR_FLYCNT,
+                assert(pHint && "Missing Hint.");
+                OSL_ENSURE( pHint->Which() == RES_TXTATR_FLYCNT,
                             "Missing FlyInCnt-Hint." );
-                OSL_ENSURE( pHint && pHint->GetFlyCnt().GetFrameFormat() == pFrameFormat,
+                OSL_ENSURE( pHint->GetFlyCnt().GetFrameFormat() == pFrameFormat,
                             "Wrong TextFlyCnt-Hint." );
                 const_cast<SwFormatFlyCnt&>(pHint->GetFlyCnt()).SetFlyFormat();
 

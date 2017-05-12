@@ -800,9 +800,11 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                     SwTextAttr * const pHint =
                         pTextNode->GetTextAttrForCharAt(nIdx, RES_TXTATR_FLYCNT);
 
-                    OSL_ENSURE( pHint && pHint->Which() == RES_TXTATR_FLYCNT,
+                    assert(pHint && "Missing Hint.");
+
+                    OSL_ENSURE( pHint->Which() == RES_TXTATR_FLYCNT,
                                 "Missing FlyInCnt-Hint." );
-                    OSL_ENSURE( pHint && pHint->GetFlyCnt().GetFrameFormat() == pOldFormat,
+                    OSL_ENSURE( pHint->GetFlyCnt().GetFrameFormat() == pOldFormat,
                                 "Wrong TextFlyCnt-Hint." );
 
                     const_cast<SwFormatFlyCnt&>(pHint->GetFlyCnt()).SetFlyFormat(
@@ -1117,10 +1119,12 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
         SwTextAttr * const pHint =
             pTextNode->GetTextAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
 
+        assert(pHint && "Missing Hint.");
+
 #if OSL_DEBUG_LEVEL > 0
-        OSL_ENSURE( pHint && pHint->Which() == RES_TXTATR_FLYCNT,
+        OSL_ENSURE( pHint->Which() == RES_TXTATR_FLYCNT,
                     "Missing FlyInCnt-Hint." );
-        OSL_ENSURE( pHint && pHint->GetFlyCnt().
+        OSL_ENSURE( pHint->GetFlyCnt().
                     GetFrameFormat() == static_cast<SwFrameFormat*>(pOldFormat),
                     "Wrong TextFlyCnt-Hint." );
 #endif
