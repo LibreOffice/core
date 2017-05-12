@@ -369,7 +369,7 @@ static DWORD GetCaseCorrectPathNameEx(
     LPWSTR  lpszPath,   // path buffer to convert
     DWORD   cchBuffer,      // size of path buffer
     DWORD   nSkipLevels,
-    BOOL bCheckExistence )
+    bool bCheckExistence )
 {
         ::osl::LongPathBuffer< WCHAR > szFile( MAX_PATH + 1 );
         sal_Int32 nRemoved = PathRemoveFileSpec( lpszPath, szFile, MAX_PATH + 1 );
@@ -383,24 +383,24 @@ static DWORD GetCaseCorrectPathNameEx(
 
         if ( nRemoved )
         {
-            BOOL bSkipThis = FALSE;
+            bool bSkipThis = false;
 
             if ( 0 == _tcscmp( szFile, TEXT("..") ) )
             {
-                bSkipThis = TRUE;
+                bSkipThis = true;
                 nSkipLevels += 1;
             }
             else if ( 0 == _tcscmp( szFile, TEXT(".") ) )
             {
-                bSkipThis = TRUE;
+                bSkipThis = true;
             }
             else if ( nSkipLevels )
             {
-                bSkipThis = TRUE;
+                bSkipThis = true;
                 nSkipLevels--;
             }
             else
-                bSkipThis = FALSE;
+                bSkipThis = false;
 
             if ( !GetCaseCorrectPathNameEx( lpszPath, cchBuffer, nSkipLevels, bCheckExistence ) )
                 return 0;
@@ -453,7 +453,7 @@ DWORD GetCaseCorrectPathName(
     LPCWSTR lpszShortPath,  // file name
     LPWSTR  lpszLongPath,   // path buffer
     DWORD   cchBuffer,      // size of path buffer
-    BOOL bCheckExistence
+    bool bCheckExistence
 )
 {
     /* Special handling for "\\.\" as system root */
