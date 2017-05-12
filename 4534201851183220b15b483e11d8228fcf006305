@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_45ee6e8c",
+        "filename": "sc/source/core/data/conditio.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T14:01:29Z",
+      "side": 1,
+      "message": "Nitpick: we use the p... prefix for pointers, this is an object instance though, so the prefix should be a..., hence aTemp.",
+      "range": {
+        "startLine": 391,
+        "startChar": 29,
+        "endLine": 391,
+        "endChar": 34
+      },
+      "revId": "4534201851183220b15b483e11d8228fcf006305",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
