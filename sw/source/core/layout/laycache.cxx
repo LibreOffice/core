@@ -47,6 +47,8 @@
 
 using namespace ::com::sun::star;
 
+SwLayoutCache::SwLayoutCache() : nLockCount( 0 ) {}
+
 /*
  *  Reading and writing of the layout cache.
  *  The layout cache is not necessary, but it improves
@@ -62,11 +64,10 @@ void SwLayoutCache::Read( SvStream &rStream )
 {
     if( !pImpl )
     {
-        pImpl = new SwLayCacheImpl;
+        pImpl.reset( new SwLayCacheImpl );
         if( !pImpl->Read( rStream ) )
         {
-            delete pImpl;
-            pImpl = nullptr;
+            pImpl.reset();
         }
     }
 }
@@ -429,15 +430,13 @@ void SwLayoutCache::ClearImpl()
 {
     if( !IsLocked() )
     {
-        delete pImpl;
-        pImpl = nullptr;
+        pImpl.reset();
     }
 }
 
 SwLayoutCache::~SwLayoutCache()
 {
     OSL_ENSURE( !nLockCount, "Deleting a locked SwLayoutCache!?" );
-    delete pImpl;
 }
 
 /// helper class to create not nested section frames for nested sections.

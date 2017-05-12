@@ -26,6 +26,7 @@
 #include <i18nlangtag/lang.h>
 #include <svtools/parhtml.hxx>
 #include <svl/macitem.hxx>
+#include <memory>
 
 
 class ImageMap;
@@ -37,7 +38,7 @@ class SFX2_DLLPUBLIC SfxHTMLParser : public HTMLParser
     OUString                aScriptType;
 
     SfxMedium*              pMedium;
-    SfxMedium *pDLMedium;   // Medium for Download Files
+    std::unique_ptr<SfxMedium> pDLMedium;   // Medium for Download Files
 
     ScriptType eScriptType;
 
