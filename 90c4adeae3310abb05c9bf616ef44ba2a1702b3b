@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_05f3869f",
+        "filename": "sc/source/ui/drawfunc/fuconarc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-05-12T11:53:05Z",
+      "side": 1,
+      "message": "kill this, entirely",
+      "revId": "90c4adeae3310abb05c9bf616ef44ba2a1702b3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_25f08290",
+        "filename": "sc/source/ui/drawfunc/fuconarc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-05-12T11:53:05Z",
+      "side": 1,
+      "message": "same - pointless white noise / non-information",
+      "revId": "90c4adeae3310abb05c9bf616ef44ba2a1702b3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_6530ca57",
+        "filename": "sc/source/ui/drawfunc/fuconarc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-05-12T11:53:05Z",
+      "side": 1,
+      "message": "also, feel free to kill this pointless ascii-art embellishment, but perhaps in a separate commit",
+      "revId": "90c4adeae3310abb05c9bf616ef44ba2a1702b3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a53ab234",
+        "filename": "sc/source/ui/drawfunc/fuconarc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-05-12T11:53:05Z",
+      "side": 1,
+      "message": "kill this - carries exactly zero information\n\nif there\u0027s ever anything useful, move to header file \u0026 format as doxygen documentation",
+      "revId": "90c4adeae3310abb05c9bf616ef44ba2a1702b3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e53cba31",
+        "filename": "sc/source/ui/drawfunc/fuconcustomshape.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-05-12T11:53:05Z",
+      "side": 1,
+      "message": "same as the other file, kill those with fire...",
+      "revId": "90c4adeae3310abb05c9bf616ef44ba2a1702b3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_4512eeb5",
+        "filename": "sc/source/ui/drawfunc/fuins2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-05-12T11:53:05Z",
+      "side": 1,
+      "message": "english does not like composita so much, better as \u0027object position\u0027",
+      "revId": "90c4adeae3310abb05c9bf616ef44ba2a1702b3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_6517eaa3",
+        "filename": "sc/source/ui/drawfunc/fusel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-05-12T11:53:05Z",
+      "side": 1,
+      "message": "better selection / highlighting?",
+      "revId": "90c4adeae3310abb05c9bf616ef44ba2a1702b3b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
