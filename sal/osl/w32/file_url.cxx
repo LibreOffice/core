@@ -154,7 +154,7 @@ static BOOL IsValidFilePathComponent(
 
 #define CHARSET_SEPARATOR TEXT("\\/")
 
-DWORD IsValidFilePath(rtl_uString *path, LPCWSTR *lppError, DWORD dwFlags, rtl_uString **corrected)
+DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
 {
         LPCWSTR lpszPath = SAL_W(path->buffer);
         LPCWSTR lpComponent = lpszPath;
@@ -302,11 +302,7 @@ DWORD IsValidFilePath(rtl_uString *path, LPCWSTR *lppError, DWORD dwFlags, rtl_u
         if ( fValid && !( dwPathType &  PATHTYPE_IS_LONGPATH ) && _tcslen( lpszPath ) >= MAX_PATH )
         {
             fValid = FALSE;
-            lpComponent = lpszPath + MAX_PATH;
         }
-
-        if ( lppError )
-            *lppError = lpComponent;
 
         return fValid ? dwPathType : PATHTYPE_ERROR;
 }
@@ -722,7 +718,7 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
                 }
             }
 
-            if ( IsValidFilePath( strTempPath, nullptr, VALIDATEPATH_ALLOW_ELLIPSE, &strTempPath ) )
+            if ( IsValidFilePath( strTempPath, VALIDATEPATH_ALLOW_ELLIPSE, &strTempPath ) )
                 nError = osl_File_E_None;
         }
         else if ( bAllowRelative )  /* This maybe a relative file URL */
@@ -730,7 +726,7 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
             /* In future the relative path could be converted to absolute if it is too long */
             rtl_uString_assign( &strTempPath, strDecodedURL );
 
-            if ( IsValidFilePath( strTempPath, nullptr, VALIDATEPATH_ALLOW_RELATIVE | VALIDATEPATH_ALLOW_ELLIPSE, &strTempPath ) )
+            if ( IsValidFilePath( strTempPath, VALIDATEPATH_ALLOW_RELATIVE | VALIDATEPATH_ALLOW_ELLIPSE, &strTempPath ) )
                 nError = osl_File_E_None;
         }
         else
@@ -761,7 +757,7 @@ oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** p
     DWORD dwPathType = PATHTYPE_ERROR;
 
     if (strPath)
-        dwPathType = IsValidFilePath(strPath, nullptr, VALIDATEPATH_ALLOW_RELATIVE, nullptr);
+        dwPathType = IsValidFilePath(strPath, VALIDATEPATH_ALLOW_RELATIVE, nullptr);
 
     if (dwPathType)
     {

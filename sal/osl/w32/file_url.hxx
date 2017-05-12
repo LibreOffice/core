@@ -55,7 +55,6 @@
 
 DWORD IsValidFilePath (
     rtl_uString *  path,
-    LPCWSTR *      lppError,
     DWORD          dwFlags,
     rtl_uString ** corrected
 );
