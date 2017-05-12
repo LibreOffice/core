@@ -193,6 +193,7 @@ public:
         m_pInsertAnnotation(nullptr),
         m_pDeleteComment(nullptr),
         m_pTrackChanges(nullptr),
+        m_pAddressbarEntry(nullptr),
         m_pFormulabarEntry(nullptr),
         m_pScrolledWindow(nullptr),
         m_bToolItemBroadcast(true),
