@@ -55,7 +55,8 @@ make_autoload() {
     local lib="${DESTDIR}${autoloaddir}/$2/$3"
     local merged="$4"
 
-    local resolved="$(readlink "${DESTDIR}${installdir}/$2/$3")"
+    local resolved;
+    resolved=$(readlink "${DESTDIR}${installdir}/$2/$3")
     [ -n "$resolved" ] && lib=$resolved
     local dir="${lib%/*}"
 
