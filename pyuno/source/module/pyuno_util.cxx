@@ -39,16 +39,11 @@ PyRef ustring2PyUnicode( const OUString & str )
 {
     PyRef ret;
 #if Py_UNICODE_SIZE == 2
-    // YD force conversion since python/2 uses wchar_t
 #ifdef MACOSX
-    // on Sierra, python 2.7 (builtin)
-    // no known conversion from 'const sal_Unicode *' (aka 'const char16_t *') to
-    // 'const Py_UNICODE *' (aka 'const unsigned short *')
-    // An explicit cast to sal_Unicode does not work
-    // Hack to avoid that error
-    ret = PyRef( PyUnicode_FromUnicode( (const unsigned short *)str.getStr(), str.getLength() ), SAL_NO_ACQUIRE );
+    ret = PyRef( PyUnicode_FromUnicode( reinterpret_cast<const unsigned short *>(str.getStr()), str.getLength() ), SAL_NO_ACQUIRE );
 #else
-    ret = PyRef( PyUnicode_FromUnicode( SAL_W(str.getStr()), str.getLength() ), SAL_NO_ACQUIRE );
+    static_assert(sizeof (wchar_t) == Py_UNICODE_SIZE, "bad assumption");
+    ret = PyRef( PyUnicode_FromUnicode( reinterpret_cast<wchar_t const *>(str.getStr()), str.getLength() ), SAL_NO_ACQUIRE );
 #endif
 #else
     OString sUtf8(OUStringToOString(str, RTL_TEXTENCODING_UTF8));
@@ -69,15 +64,8 @@ OUString pyString2ustring( PyObject *pystr )
     if( PyUnicode_Check( pystr ) )
     {
 #if Py_UNICODE_SIZE == 2
-#ifdef MACOSX
-    // on Sierra, python 2.7 (builtin)
-    // no known conversion from 'Py_UNICODE *' (aka 'unsigned short *') to
-    // 'sal_Unicode' (aka 'char16_t') for 1st argument
-    // Hack to avoid that error
-    ret = OUString( (sal_Unicode *)PyUnicode_AS_UNICODE( pystr ) );
-#else
-    ret = OUString( SAL_U(PyUnicode_AS_UNICODE( pystr )) );
-#endif
+    ret = OUString(
+        reinterpret_cast<sal_Unicode const *>(PyUnicode_AS_UNICODE( pystr )) );
 #else
 #if PY_MAJOR_VERSION >= 3
     Py_ssize_t size(0);
