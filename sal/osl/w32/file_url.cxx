@@ -45,12 +45,13 @@
 oslMutex g_CurrentDirectoryMutex = nullptr; /* Initialized in dllentry.c */
 
 static bool IsValidFilePathComponent(
-    LPCWSTR lpComponent, LPCWSTR *lppComponentEnd, DWORD dwFlags)
+    sal_Unicode const * lpComponent, sal_Unicode const **lppComponentEnd,
+    DWORD dwFlags)
 {
-        LPCWSTR lpComponentEnd = nullptr;
-        LPCWSTR lpCurrent = lpComponent;
+        sal_Unicode const * lpComponentEnd = nullptr;
+        sal_Unicode const * lpCurrent = lpComponent;
         bool    fValid = true;  /* Assume success */
-        WCHAR   cLast = 0;
+        sal_Unicode cLast = 0;
 
         /* Path component length must not exceed MAX_PATH even if long path with "\\?\" prefix is used */
 
@@ -148,12 +149,18 @@ static bool IsValidFilePathComponent(
         return fValid;
 }
 
-#define CHARSET_SEPARATOR TEXT("\\/")
+static sal_Int32 countInitialSeparators(sal_Unicode const * path) {
+    sal_Unicode const * p = path;
+    while (*p == '\\' || *p == '/') {
+        ++p;
+    }
+    return p - path;
+}
 
 DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
 {
-        LPCWSTR lpszPath = SAL_W(path->buffer);
-        LPCWSTR lpComponent = lpszPath;
+        sal_Unicode const * lpszPath = path->buffer;
+        sal_Unicode const * lpComponent = lpszPath;
         bool    fValid = true;
         DWORD   dwPathType = PATHTYPE_ERROR;
         sal_Int32 nLength = rtl_uString_getLength( path );
@@ -183,7 +190,7 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
                 dwCandidatPathType = PATHTYPE_ABSOLUTE_LOCAL | PATHTYPE_IS_LONGPATH;
             }
         }
-        else if ( 2 == _tcsspn( lpszPath, CHARSET_SEPARATOR ) )
+        else if ( 2 == countInitialSeparators( lpszPath ) )
         {
             /* The UNC path notation */
             lpComponent = lpszPath + 2;
@@ -231,7 +238,7 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
         }
         else if (  ( dwCandidatPathType & PATHTYPE_MASK_TYPE ) == PATHTYPE_ABSOLUTE_LOCAL )
         {
-            if ( 1 == _tcsspn( lpComponent, CHARSET_SEPARATOR ) )
+            if ( 1 == countInitialSeparators( lpComponent ) )
                 lpComponent++;
             else if ( *lpComponent )
                 fValid = false;
@@ -253,7 +260,7 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
 
             /* Relative path can start with a backslash */
 
-            if ( 1 == _tcsspn( lpComponent, CHARSET_SEPARATOR ) )
+            if ( 1 == countInitialSeparators( lpComponent ) )
             {
                 lpComponent++;
                 if ( !*lpComponent )
@@ -277,7 +284,7 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
                 sal_Int32 i = lpComponent - lpszPath;
                 rtl_uString_newReplaceStrAt(corrected, path, i, 1, nullptr);
                     //TODO: handle out-of-memory
-                lpszPath = SAL_W((*corrected)->buffer);
+                lpszPath = (*corrected)->buffer;
                 lpComponent = lpszPath + i;
             }
 
@@ -295,7 +302,7 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
         }
 
         /* The path can be longer than MAX_PATH only in case it has the longpath prefix */
-        if ( fValid && !( dwPathType &  PATHTYPE_IS_LONGPATH ) && _tcslen( lpszPath ) >= MAX_PATH )
+        if ( fValid && !( dwPathType &  PATHTYPE_IS_LONGPATH ) && rtl_ustr_getLength( lpszPath ) >= MAX_PATH )
         {
             fValid = false;
         }
