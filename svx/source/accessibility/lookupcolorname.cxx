@@ -58,15 +58,16 @@ ColorNameMap::ColorNameMap() {
     try
     {
         // Create color table in which to look up the given color.
-            css::uno::Reference< css::container::XNameContainer > xColorTable =
-                 css::drawing::ColorTable::create( comphelper::getProcessComponentContext() );
+        css::uno::Reference< css::container::XNameContainer > xColorTable =
+             css::drawing::ColorTable::create( comphelper::getProcessComponentContext() );
 
         // Get list of color names in order to iterate over the color table.
 
         // Lock the solar mutex here as workaround for missing lock in
         // called function.
         SolarMutexGuard aGuard;
-        aNames = xNA->getElementNames();
+        xNA = xColorTable;
+        aNames = xColorTable->getElementNames();
     }
     catch (css::uno::RuntimeException const&)
     {
@@ -81,7 +82,7 @@ ColorNameMap::ColorNameMap() {
             // Get the numerical value for the i-th color name.
             try
             {
-                css::uno::Any aColor (xNA->getByName (aNames[i]));
+                css::uno::Any aColor = xNA->getByName(aNames[i]);
                 long nColor = 0;
                 aColor >>= nColor;
                 map_[nColor] = aNames[i];
