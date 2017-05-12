@@ -388,8 +388,9 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
             {
                 //  temporary formula string as string tokens
                 //TODO: merge with lcl_ScDocFunc_CreateTokenArrayXML
-                pFormula1 = new ScTokenArray;
-                pFormula1->AddStringXML( rExpr1 );
+                ScTokenArray pTemp;
+                pTemp.AddStringXML(rExpr1);
+                pFormula1 = new ScTokenArray(pTemp);
                 // bRelRef1 is set when the formula is compiled again (CompileXML)
             }
             else
@@ -426,8 +427,9 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
             {
                 //  temporary formula string as string tokens
                 //TODO: merge with lcl_ScDocFunc_CreateTokenArrayXML
-                pFormula2 = new ScTokenArray;
-                pFormula2->AddStringXML( rExpr2 );
+                ScTokenArray pTemp;
+                pTemp.AddStringXML(rExpr2);
+                pFormula2 = new ScTokenArray(pTemp);
                 // bRelRef2 is set when the formula is compiled again (CompileXML)
             }
             else
