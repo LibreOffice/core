@@ -538,11 +538,11 @@ void ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
     }
 }
 
-//          Attribute
+//          Attributes
 
 void ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
 {
-    //  Unterstreichung
+    //  Underline
 
     SdrView* pView = pViewData->GetScDrawView();
 
@@ -553,7 +553,7 @@ void ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
     SfxItemSet aViewAttr(pView->GetModel()->GetItemPool());
     pView->GetAttributes(aViewAttr);
 
-    //  Unterstreichung
+    //  Underline
     FontLineStyle eOld = static_cast<const SvxUnderlineItem&>( aViewAttr.
                                         Get(EE_CHAR_UNDERLINE)).GetLineStyle();
     FontLineStyle eNew = eOld;

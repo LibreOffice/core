@@ -253,7 +253,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 SfxInPlaceClient* pClient = pViewShell->GetIPClient();
                 bool bWasOleActive = ( pClient && pClient->IsObjectInPlaceActive() );
 
-                //  Markieren
+                //  Marking
 
                 // do not allow multiselection with note caption
                 bool bCaptionClicked = IsNoteCaptionClicked( aMDPos );

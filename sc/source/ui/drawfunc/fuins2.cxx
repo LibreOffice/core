@@ -582,7 +582,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
 
                 pScDocSh->Broadcast( ScTablesHint( SC_TAB_INSERTED, nNewTab ) );
                 pViewSh->SetTabNo( nNewTab, true );
-                pScDocSh->PostPaintExtras();            //! erst hinterher ???
+                pScDocSh->PostPaintExtras();            //! done afterwards ???
             }
             else
             {
@@ -597,7 +597,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
 
     lcl_ChartInit(xObj, &rData, aRangeString, bRangeIsPivotTable);         // set source range, auto-detect column/row headers
 
-    //  Objekt-Position
+    //  Object-position
 
     Point aStart;
     if ( bDrawRect )

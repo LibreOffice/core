@@ -169,7 +169,6 @@ sal_uInt8 FuPoor::Command(const CommandEvent& rCEvt)
 {
     if ( CommandEventId::StartDrag == rCEvt.GetCommand() )
     {
-        //!!! sollte Joe eigentlich machen:
         // Only if a selection is in Outliner, then Command is allowed
         // to return sal_True
 
@@ -213,7 +212,7 @@ IMPL_LINK_NOARG(FuPoor, DragHdl, void*, void)
     }
 }
 
-//  Detektiv-Linie
+//  Detective-line
 
 bool FuPoor::IsDetectiveHit( const Point& rLogicPos )
 {
