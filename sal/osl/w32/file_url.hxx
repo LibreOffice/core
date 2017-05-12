@@ -61,7 +61,7 @@ DWORD IsValidFilePath (
 DWORD GetCaseCorrectPathName (
     LPCWSTR lpszShortPath,  // file name
     LPWSTR  lpszLongPath,   // path buffer
-    DWORD   cchBuffer,      // size of path buffer
+    sal_uInt32 cchBuffer,      // size of path buffer
     bool bCheckExistence
 );
 

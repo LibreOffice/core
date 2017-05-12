@@ -346,13 +346,13 @@ static sal_Int32 PathRemoveFileSpec(LPWSTR lpPath, LPWSTR lpFileName, sal_Int32 
 }
 
 // Undocumented in SHELL32.DLL ordinal 32
-static LPWSTR PathAddBackslash(LPWSTR lpPath, sal_Int32 nBufLen)
+static LPWSTR PathAddBackslash(LPWSTR lpPath, sal_uInt32 nBufLen)
 {
     LPWSTR  lpEndPath = nullptr;
 
     if ( lpPath )
     {
-            int     nLen = _tcslen(lpPath);
+            std::size_t nLen = _tcslen(lpPath);
 
             if ( !nLen || ( lpPath[nLen-1] != '\\' && lpPath[nLen-1] != '/' && nLen < nBufLen - 1 ) )
             {
@@ -367,7 +367,7 @@ static LPWSTR PathAddBackslash(LPWSTR lpPath, sal_Int32 nBufLen)
 // Same as GetLongPathName but also 95/NT4
 static DWORD GetCaseCorrectPathNameEx(
     LPWSTR  lpszPath,   // path buffer to convert
-    DWORD   cchBuffer,      // size of path buffer
+    sal_uInt32 cchBuffer,      // size of path buffer
     DWORD   nSkipLevels,
     bool bCheckExistence )
 {
@@ -452,7 +452,7 @@ static DWORD GetCaseCorrectPathNameEx(
 DWORD GetCaseCorrectPathName(
     LPCWSTR lpszShortPath,  // file name
     LPWSTR  lpszLongPath,   // path buffer
-    DWORD   cchBuffer,      // size of path buffer
+    sal_uInt32 cchBuffer,      // size of path buffer
     bool bCheckExistence
 )
 {
