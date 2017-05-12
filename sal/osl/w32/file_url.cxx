@@ -44,12 +44,12 @@
 
 oslMutex g_CurrentDirectoryMutex = nullptr; /* Initialized in dllentry.c */
 
-static BOOL IsValidFilePathComponent(
+static bool IsValidFilePathComponent(
     LPCWSTR lpComponent, LPCWSTR *lppComponentEnd, DWORD dwFlags)
 {
         LPCWSTR lpComponentEnd = nullptr;
         LPCWSTR lpCurrent = lpComponent;
-        BOOL    fValid = TRUE;  /* Assume success */
+        bool    fValid = true;  /* Assume success */
         WCHAR   cLast = 0;
 
         /* Path component length must not exceed MAX_PATH even if long path with "\\?\" prefix is used */
@@ -91,7 +91,7 @@ static BOOL IsValidFilePathComponent(
                     else
                     {
                         lpComponentEnd = lpCurrent - 1;
-                        fValid = FALSE;
+                        fValid = false;
                     }
                     break;
                 default:
@@ -112,14 +112,14 @@ static BOOL IsValidFilePathComponent(
             case '|':
             case ':':
                 lpComponentEnd = lpCurrent;
-                fValid = FALSE;
+                fValid = false;
                 break;
             default:
                 /* Characters below ASCII 32 are not allowed */
                 if ( *lpCurrent < ' ' )
                 {
                     lpComponentEnd = lpCurrent;
-                    fValid = FALSE;
+                    fValid = false;
                 }
                 break;
             }
@@ -130,7 +130,7 @@ static BOOL IsValidFilePathComponent(
             ( See condition of while loop ) */
         if ( !lpComponentEnd )
         {
-            fValid = FALSE;
+            fValid = false;
             lpComponentEnd = lpCurrent;
         }
 
@@ -138,7 +138,7 @@ static BOOL IsValidFilePathComponent(
         {
             // Empty components are not allowed
             if ( lpComponentEnd - lpComponent < 1 )
-                fValid = FALSE;
+                fValid = false;
 
             // If we reached the end of the string nullptr is returned
             else if ( !*lpComponentEnd )
@@ -158,7 +158,7 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
 {
         LPCWSTR lpszPath = SAL_W(path->buffer);
         LPCWSTR lpComponent = lpszPath;
-        BOOL    fValid = TRUE;
+        bool    fValid = true;
         DWORD   dwPathType = PATHTYPE_ERROR;
         sal_Int32 nLength = rtl_uString_getLength( path );
 
@@ -166,7 +166,7 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
             dwFlags |= VALIDATEPATH_ALLOW_ELLIPSE;
 
         if ( !lpszPath )
-            fValid = FALSE;
+            fValid = false;
 
         DWORD   dwCandidatPathType = PATHTYPE_ERROR;
 
@@ -238,7 +238,7 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
             if ( 1 == _tcsspn( lpComponent, CHARSET_SEPARATOR ) )
                 lpComponent++;
             else if ( *lpComponent )
-                fValid = FALSE;
+                fValid = false;
 
             dwPathType = dwCandidatPathType;
 
@@ -269,7 +269,7 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
         else
         {
             /* Anything else is an error */
-            fValid = FALSE;
+            fValid = false;
             lpComponent = lpszPath;
         }
 
@@ -301,7 +301,7 @@ DWORD IsValidFilePath(rtl_uString *path, DWORD dwFlags, rtl_uString **corrected)
         /* The path can be longer than MAX_PATH only in case it has the longpath prefix */
         if ( fValid && !( dwPathType &  PATHTYPE_IS_LONGPATH ) && _tcslen( lpszPath ) >= MAX_PATH )
         {
-            fValid = FALSE;
+            fValid = false;
         }
 
         return fValid ? dwPathType : PATHTYPE_ERROR;
