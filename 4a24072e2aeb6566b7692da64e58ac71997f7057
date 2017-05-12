@@ -33,6 +33,23 @@
       "revId": "4a24072e2aeb6566b7692da64e58ac71997f7057",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_2575e2f8",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-12T12:45:01Z",
+      "side": 0,
+      "message": "So I\u0027m not sure if removing this is such a great idea. Yeah UseDocumentSystemFileLocking is set to true by default, but we never know who has set it to false and this change has a potential to explode in such case",
+      "revId": "4a24072e2aeb6566b7692da64e58ac71997f7057",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

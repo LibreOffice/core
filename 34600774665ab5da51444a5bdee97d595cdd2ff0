@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_4504ae7d",
+        "filename": "include/svl/documentlockfile.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-12T12:45:01Z",
+      "side": 1,
+      "message": "\"remove\" and \"erase\" are synonyms in English, so it is now unclear what either function does and what\u0027s the difference between them. \n\nPlease choose some other name for the second one. And please also add some doxygen-style comments here",
+      "revId": "34600774665ab5da51444a5bdee97d595cdd2ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c5541e56",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 913,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-12T12:45:01Z",
+      "side": 1,
+      "message": "Functions with bool arguments like this make code somehow less readable, it is totally non-obvious what ShowLockFileProblemDialog(true) and ShowLockFileProblemDialog(false) does. \n\nIn ideal case, you should use some enum { LockFileIgnore, LockFileCorrupt} as an argument",
+      "revId": "34600774665ab5da51444a5bdee97d595cdd2ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a511d2ae",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-12T12:45:01Z",
+      "side": 1,
+      "message": "bCancel\n\n+ I\u0027d use reversed logic (given that you\u0027re returning !Cancel anyway)",
+      "revId": "34600774665ab5da51444a5bdee97d595cdd2ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_85fe9669",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-12T12:45:01Z",
+      "side": 1,
+      "message": "bIoErr",
+      "revId": "34600774665ab5da51444a5bdee97d595cdd2ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_65652a44",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-12T12:45:01Z",
+      "side": 1,
+      "message": "Sorry for my ignorance but how\u0027s (bLoading \u0026\u0026 !bNoUI) equivalent to (bUseSystemLock || !IsOOoLockFileUsed) ?",
+      "revId": "34600774665ab5da51444a5bdee97d595cdd2ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_254c02c7",
+        "filename": "uui/source/iahndl-locking.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-12T12:45:01Z",
+      "side": 1,
+      "message": "and this is equaly sub-optimal design w/ bool arguments",
+      "revId": "34600774665ab5da51444a5bdee97d595cdd2ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_054f06be",
+        "filename": "uui/source/lockfailed.src",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-12T12:45:01Z",
+      "side": 1,
+      "message": "\"... file location or lack of free disk space\"\n(\u0027or\u0027 missing)",
+      "revId": "34600774665ab5da51444a5bdee97d595cdd2ff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
