@@ -25,7 +25,7 @@ Private Declare Function QueryPerformanceFrequency Lib "kernel32" (ByRef lpFrequ
 
 Function doUnitTest() As String
     result = verify_win32compat()
-    If failCount <> 0 Then
+    If failCount <> 0 Or passCount = 0 Then
         doUnitTest = result
     Else
         doUnitTest = "OK"
