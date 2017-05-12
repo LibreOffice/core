@@ -453,7 +453,7 @@
       </node>
       <node oor:name=".uno:SlideMasterPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Slide Master</value>
+          <value xml:lang="en-US">Slide ~Master</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -461,7 +461,7 @@
       </node>
       <node oor:name=".uno:NotesMasterPage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Notes Master</value>
+          <value xml:lang="en-US">Notes M~aster</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertPageQuick" oor:op="replace">
@@ -917,7 +917,7 @@
       </node>
       <node oor:name=".uno:NotesMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Notes</value>
+          <value xml:lang="en-US">Not~es</value>
         </prop>
       </node>
       <node oor:name=".uno:DisplayMode" oor:op="replace">
@@ -933,7 +933,7 @@
           <value xml:lang="en-US">Views Tab Bar</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Toggle Views Tab Bar Visibility</value>
+          <value xml:lang="en-US">Toggle Views Tab ~Bar Visibility</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -941,7 +941,7 @@
       </node>
       <node oor:name=".uno:HandoutMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">H~andout Master</value>
+          <value xml:lang="en-US">Hando~ut Master</value>
         </prop>
       </node>
       <node oor:name=".uno:DeletePage" oor:op="replace">
@@ -1617,7 +1617,7 @@
       </node>
       <node oor:name=".uno:LeftPaneImpress" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">S~lide Pane</value>
+          <value xml:lang="en-US">Slide ~Pane</value>
         </prop>
       </node>
       <node oor:name=".uno:LeftPaneDraw" oor:op="replace">

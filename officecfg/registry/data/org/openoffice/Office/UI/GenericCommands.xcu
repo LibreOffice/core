@@ -5842,7 +5842,7 @@
       </node>
       <node oor:name=".uno:ToolbarMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Toolbar Layout</value>
+          <value xml:lang="en-US">Toolbar ~Layout</value>
         </prop>
       </node>
       <node oor:name=".uno:AvailableToolbars" oor:op="replace">
