@@ -269,11 +269,10 @@ void ScMyTables::AddMatrixRange(
     maMatrixRangeList.Append(aScRange);
 
     ScDocumentImport& rDoc = rImport.GetDoc();
-    std::unique_ptr<ScTokenArray> pCode(new ScTokenArray);
-    pCode->AddStringXML( rFormula );
-    if( (eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) && !rFormulaNmsp.isEmpty() )
-        pCode->AddStringXML( rFormulaNmsp );
-    rDoc.setMatrixCells(aScRange, *pCode, eGrammar);
+    ScTokenArray aCode;
+    aCode.AssignXMLString( rFormula,
+            ((eGrammar == formula::FormulaGrammar::GRAM_EXTERNAL) ? rFormulaNmsp : OUString()));
+    rDoc.setMatrixCells(aScRange, aCode, eGrammar);
     rDoc.getDoc().IncXMLImportedFormulaCount( rFormula.getLength() );
 }
 
