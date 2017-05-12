@@ -30,6 +30,7 @@
 #include "docoptio.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
+#include <officecfg/Office/Calc.hxx>
 
 #include "tpcalc.hxx"
 
@@ -118,16 +119,32 @@ void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )
     *pLocalOptions  = *pOldOptions;
 
     m_pBtnCase->Check( !pLocalOptions->IsIgnoreCase() );
+    m_pBtnCase->Enable( !officecfg::Office::Calc::Calculate::Other::CaseSensitive::isReadOnly() );
     m_pBtnCalc->Check( pLocalOptions->IsCalcAsShown() );
+    m_pBtnCalc->Enable( !officecfg::Office::Calc::Calculate::Other::Precision::isReadOnly() );
     m_pBtnMatch->Check( pLocalOptions->IsMatchWholeCell() );
+    m_pBtnMatch->Enable( !officecfg::Office::Calc::Calculate::Other::SearchCriteria::isReadOnly() );
     bool bWildcards = pLocalOptions->IsFormulaWildcardsEnabled();
     bool bRegex = pLocalOptions->IsFormulaRegexEnabled();
-    if (bWildcards && bRegex)
+    if ( bWildcards && bRegex )
+    {
         bRegex = false;
+    }
     m_pBtnWildcards->Check( bWildcards );
     m_pBtnRegex->Check( bRegex );
+    m_pBtnWildcards->Enable( !officecfg::Office::Calc::Calculate::Other::Wildcards::isReadOnly() );
+    m_pBtnRegex->Enable( !officecfg::Office::Calc::Calculate::Other::RegularExpressions::isReadOnly() );
     m_pBtnLiteral->Check( !bWildcards && !bRegex );
+    m_pBtnLiteral->Enable( m_pBtnWildcards->IsEnabled() || m_pBtnRegex->IsEnabled() );
+    // if either regex or wildcards radio button is set and read-only, disable all three
+    if ( (!m_pBtnWildcards->IsEnabled() && bWildcards) || (!m_pBtnRegex->IsEnabled() && bRegex) )
+    {
+        m_pBtnWildcards->Enable( false );
+        m_pBtnRegex->Enable( false );
+        m_pBtnLiteral->Enable( false );
+    }
     m_pBtnLookUp->Check( pLocalOptions->IsLookUpColRowNames() );
+    m_pBtnLookUp->Enable( !officecfg::Office::Calc::Calculate::Other::FindLabel::isReadOnly() );
     m_pBtnIterate->Check( pLocalOptions->IsIter() );
     m_pEdSteps->SetValue( pLocalOptions->GetIterCount() );
     m_pEdEps->SetValue( pLocalOptions->GetIterEps(), 6 );
