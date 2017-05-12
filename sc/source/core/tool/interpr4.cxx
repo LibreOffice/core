@@ -260,13 +260,7 @@ void ScInterpreter::GetCellString( svl::SharedString& rStr, ScRefCellValue& rCel
             nErr = pFCell->GetErrCode();
             if (pFCell->IsValue())
             {
-                double fVal = pFCell->GetValue();
-                sal_uLong nIndex = pFormatter->GetStandardFormat(
-                                    css::util::NumberFormat::NUMBER,
-                                    ScGlobal::eLnge);
-                OUString aStr;
-                pFormatter->GetInputLineString(fVal, nIndex, aStr);
-                rStr = mrStrPool.intern(aStr);
+                rStr = GetStringFromDouble( pFCell->GetValue() );
             }
             else
                 rStr = pFCell->GetString();
@@ -274,13 +268,7 @@ void ScInterpreter::GetCellString( svl::SharedString& rStr, ScRefCellValue& rCel
         break;
         case CELLTYPE_VALUE:
         {
-            double fVal = rCell.mfValue;
-            sal_uLong nIndex = pFormatter->GetStandardFormat(
-                                    css::util::NumberFormat::NUMBER,
-                                    ScGlobal::eLnge);
-            OUString aStr;
-            pFormatter->GetInputLineString(fVal, nIndex, aStr);
-            rStr = mrStrPool.intern(aStr);
+            rStr = GetStringFromDouble( rCell.mfValue );
         }
         break;
         default:
@@ -2279,13 +2267,7 @@ svl::SharedString ScInterpreter::GetString()
             return svl::SharedString::getEmptyString();
         case svDouble:
         {
-            double fVal = PopDouble();
-            sal_uLong nIndex = pFormatter->GetStandardFormat(
-                                    css::util::NumberFormat::NUMBER,
-                                    ScGlobal::eLnge);
-            OUString aStr;
-            pFormatter->GetInputLineString(fVal, nIndex, aStr);
-            return mrStrPool.intern(aStr);
+            return GetStringFromDouble( PopDouble() );
         }
         case svString:
             return PopString();
@@ -2327,13 +2309,7 @@ svl::SharedString ScInterpreter::GetString()
 
             if (pToken->GetType() == svDouble)
             {
-                double fVal = pToken->GetDouble();
-                sal_uLong nIndex = pFormatter->GetStandardFormat(
-                                    css::util::NumberFormat::NUMBER,
-                                    ScGlobal::eLnge);
-                OUString aStr;
-                pFormatter->GetInputLineString(fVal, nIndex, aStr);
-                return mrStrPool.intern(aStr);
+                return GetStringFromDouble( pToken->GetDouble() );
             }
             else // svString or svEmpty
                 return pToken->GetString();
@@ -2438,6 +2414,16 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix(
     }
 
     return nMatValType;
+}
+
+svl::SharedString ScInterpreter::GetStringFromDouble( double fVal )
+{
+    sal_uLong nIndex = pFormatter->GetStandardFormat(
+                        css::util::NumberFormat::NUMBER,
+                        ScGlobal::eLnge);
+    OUString aStr;
+    pFormatter->GetInputLineString(fVal, nIndex, aStr);
+    return mrStrPool.intern(aStr);
 }
 
 void ScInterpreter::ScDBGet()
