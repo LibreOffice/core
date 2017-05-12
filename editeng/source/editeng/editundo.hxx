@@ -20,7 +20,6 @@
 #ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EDITUNDO_HXX
 #define INCLUDED_EDITENG_SOURCE_EDITENG_EDITUNDO_HXX
 
-#include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <editdoc.hxx>
 #include <editeng/editund2.hxx>
 #include <editeng/editdata.hxx>
@@ -28,7 +27,6 @@
 #include <memory>
 
 class EditEngine;
-class EditView;
 enum class SetAttribsMode;
 enum class TransliterationFlags;
 

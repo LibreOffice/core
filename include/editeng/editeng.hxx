@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
 
 #include <rsc/rscsfx.hxx>
 #include <editeng/editdata.hxx>
@@ -69,20 +68,16 @@ namespace editeng {
 class ImpEditEngine;
 class EditView;
 class OutputDevice;
-class EditUndo;
 class SvxFont;
 class SfxItemPool;
 class SfxStyleSheet;
 class SfxStyleSheetPool;
 class SvxSearchItem;
 class SvxFieldItem;
-class SvxCharSetColorItem;
-class SfxUndoAction;
 class MapMode;
 class Color;
 namespace vcl { class Font; }
 class KeyEvent;
-namespace tools { class PolyPolygon; }
 class Size;
 class Point;
 namespace tools { class Rectangle; }
@@ -90,13 +85,9 @@ class SvStream;
 class OutputDevice;
 namespace vcl { class Window; }
 class SfxPoolItem;
-class SvxNumBulletItem;
-class SvxBulletItem;
-class SvxLRSpaceItem;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
 class SvxNumberFormat;
-class FontList;
 class SvxFieldData;
 class ContentNode;
 class ParaPortion;

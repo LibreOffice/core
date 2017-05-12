@@ -47,7 +47,6 @@ namespace vcl { class Window; }
 class Pointer;
 class KeyEvent;
 class MouseEvent;
-class DropEvent;
 class CommandEvent;
 namespace tools { class Rectangle; }
 class Pair;

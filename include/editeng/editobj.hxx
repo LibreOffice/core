@@ -34,7 +34,6 @@
 #include <memory>
 
 class SfxItemSet;
-class SfxStyleSheetPool;
 class SvxFieldItem;
 class SvxFieldData;
 class SvStream;
