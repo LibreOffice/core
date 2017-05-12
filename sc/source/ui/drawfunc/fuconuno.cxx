@@ -22,12 +22,6 @@
 #include "sc.hrc"
 #include "drawview.hxx"
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuConstUnoControl::FuConstUnoControl(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq)
     : FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
@@ -41,12 +35,6 @@ FuConstUnoControl::FuConstUnoControl(ScTabViewShell* pViewSh, vcl::Window* pWin,
     if( pIdentifierItem )
         nIdentifier = pIdentifierItem->GetValue();
 }
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 FuConstUnoControl::~FuConstUnoControl()
 {
@@ -105,7 +93,7 @@ bool FuConstUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 
 /*************************************************************************
 |*
-|* Function aktivieren
+|* Activate function
 |*
 \************************************************************************/
 
@@ -126,7 +114,7 @@ void FuConstUnoControl::Activate()
 
 /*************************************************************************
 |*
-|* Function deaktivieren
+|* Deactivate function
 |*
 \************************************************************************/
 

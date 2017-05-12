@@ -48,12 +48,6 @@ FuConstCustomShape::FuConstCustomShape( ScTabViewShell* pViewSh, vcl::Window* pW
     }
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
-
 FuConstCustomShape::~FuConstCustomShape()
 {
 }
@@ -122,7 +116,7 @@ bool FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 
 /*************************************************************************
 |*
-|* Function aktivieren
+|* Activate function
 |*
 \************************************************************************/
 
@@ -143,7 +137,7 @@ void FuConstCustomShape::Activate()
 
 /*************************************************************************
 |*
-|* Function deaktivieren
+|* Deactivate function
 |*
 \************************************************************************/
 

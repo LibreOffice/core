@@ -26,23 +26,11 @@
 #include <svx/svdocirc.hxx>
 #include <svx/sxciaitm.hxx>
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuConstArc::FuConstArc( ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq )
     : FuConstruct( pViewSh, pWin, pViewP, pDoc, rReq )
 {
 }
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 FuConstArc::~FuConstArc()
 {
@@ -100,7 +88,7 @@ bool FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 
 /*************************************************************************
 |*
-|* Function aktivieren
+|* Activate function
 |*
 \************************************************************************/
 
@@ -141,7 +129,7 @@ void FuConstArc::Activate()
 
 /*************************************************************************
 |*
-|* Function deaktivieren
+|* Deactivate functions
 |*
 \************************************************************************/
 

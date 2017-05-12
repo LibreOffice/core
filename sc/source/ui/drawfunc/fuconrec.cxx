@@ -41,23 +41,11 @@
 
 #include "scresid.hxx"
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuConstRectangle::FuConstRectangle(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq)
     : FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
 {
 }
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 FuConstRectangle::~FuConstRectangle()
 {
@@ -185,7 +173,7 @@ bool FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 
 /*************************************************************************
 |*
-|* Function aktivieren
+|* Activate function
 |*
 \************************************************************************/
 
@@ -378,7 +366,7 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj, sal_uInt1
 
 /*************************************************************************
 |*
-|* Function deaktivieren
+|* Deactivate function
 |*
 \************************************************************************/
 

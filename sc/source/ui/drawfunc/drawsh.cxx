@@ -120,7 +120,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
             }
             break;
 
-        case SID_TEXT_STANDARD: // Harte Textattributierung loeschen
+        case SID_TEXT_STANDARD: // delete hard text attributes
             {
                 SfxItemSet aEmptyAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
                 pView->SetAttributes(aEmptyAttr, true);
@@ -152,7 +152,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
         case SID_ATTR_SHADOW_XDISTANCE:
         case SID_ATTR_SHADOW_YDISTANCE:
             {
-                // Wenn ToolBar vertikal :
+                // if toolbar is vertical :
                 if ( !rReq.GetArgs() )
                 {
                     switch ( nSlot )
