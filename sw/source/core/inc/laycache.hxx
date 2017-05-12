@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_LAYCACHE_HXX
 
 #include <tools/solar.h>
+#include <memory>
 
 class SwDoc;
 class SwLayCacheImpl;
@@ -39,11 +40,11 @@ class SvStream;
  */
 class SwLayoutCache
 {
-    SwLayCacheImpl *pImpl;
+    std::unique_ptr<SwLayCacheImpl> pImpl;
     sal_uInt16 nLockCount;
 
 public:
-    SwLayoutCache() : pImpl( nullptr ), nLockCount( 0 ) {}
+    SwLayoutCache();
     ~SwLayoutCache();
 
     void Read( SvStream &rStream );
@@ -56,7 +57,7 @@ public:
         { if( nLockCount & 0x8000 ) return nullptr;
           if ( pImpl )
             ++nLockCount;
-          return pImpl; }
+          return pImpl.get(); }
     void UnlockImpl() { --nLockCount; }
 
 #ifdef DBG_UTIL

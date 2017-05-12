@@ -78,7 +78,6 @@ SfxHTMLParser::SfxHTMLParser( SvStream& rStream, bool bIsNewDoc,
 SfxHTMLParser::~SfxHTMLParser()
 {
     DBG_ASSERT( !pDLMedium, "Here is a File Download that has got stuck" );
-    delete pDLMedium;
 }
 
 bool SfxHTMLParser::ParseMapOptions(
@@ -227,7 +226,7 @@ void SfxHTMLParser::StartFileDownload(const OUString& rURL)
     if( pDLMedium )
         return;
 
-    pDLMedium = new SfxMedium( rURL, SFX_STREAM_READONLY );
+    pDLMedium.reset( new SfxMedium( rURL, SFX_STREAM_READONLY ) );
     pDLMedium->Download();
 }
 
@@ -250,8 +249,7 @@ bool SfxHTMLParser::FinishFileDownload( OUString& rStr )
         rStr = OStringToOUString( sBuffer, RTL_TEXTENCODING_UTF8 );
     }
 
-    delete pDLMedium;
-    pDLMedium = nullptr;
+    pDLMedium.reset();
 
     return bOK;
 }

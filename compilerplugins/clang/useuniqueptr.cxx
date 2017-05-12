@@ -50,10 +50,21 @@ bool UseUniquePtr::VisitCXXDestructorDecl(const CXXDestructorDecl* destructorDec
     if (compoundStmt == nullptr) {
         return true;
     }
-    if (compoundStmt->size() != 1) {
+
+    const CXXDeleteExpr* deleteExpr;
+    if (compoundStmt->size() == 1) {
+        deleteExpr = dyn_cast<CXXDeleteExpr>(compoundStmt->body_front());
+    }
+    else if (compoundStmt->size() == 2) {
+        // ignore SAL_INFO type stuff
+        // TODO should probably be a little more specific here
+        if (!isa<DoStmt>(compoundStmt->body_front())) {
+            return true;
+        }
+        deleteExpr = dyn_cast<CXXDeleteExpr>(compoundStmt->body_back());
+    } else {
         return true;
     }
-    const CXXDeleteExpr* deleteExpr = dyn_cast<CXXDeleteExpr>(compoundStmt->body_front());
     if (deleteExpr == nullptr) {
         return true;
     }
@@ -103,6 +114,9 @@ bool UseUniquePtr::VisitCXXDestructorDecl(const CXXDestructorDecl* destructorDec
         return true;
     // @TODO SwDoc has some weird ref-counting going on
     if (aFileName.startswith(SRCDIR "/sw/inc/shellio.hxx"))
+        return true;
+    // @TODO it's sharing pointers with another class
+    if (aFileName.startswith(SRCDIR "/sc/inc/formulacell.hxx"))
         return true;
 
     report(
