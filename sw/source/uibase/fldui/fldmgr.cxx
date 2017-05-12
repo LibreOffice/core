@@ -1328,10 +1328,14 @@ bool SwFieldMgr::InsertField(
 
     if (TYP_INPUTFLD == rData.m_nTypeId)
     {
+        pCurShell->Push();
+
         // start dialog, not before the field is inserted tdf#99529
         pCurShell->Left(CRSR_SKIP_CHARS,
                 false, (INP_VAR == (nSubType & 0xff)) ? 1 : 2, false );
         pCurShell->StartInputFieldDlg(pField, false, rData.m_pParent);
+
+        pCurShell->Pop(false);
     }
 
     if(bExp && bEvalExp)
