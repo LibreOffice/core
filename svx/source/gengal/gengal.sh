@@ -22,19 +22,19 @@ SAL_ENABLE_FILE_LOCKING=1
 export SAL_ENABLE_FILE_LOCKING
 
 # resolve installation directory
-sd_cwd=`pwd`
+sd_cwd=$(pwd)
 sd_res=$0
 while [ -h "$sd_res" ] ; do
-    cd "`dirname "$sd_res"`"
-    sd_basename=`basename "$sd_res"`
-    sd_res=`ls -l "$sd_basename" | sed "s/.*$sd_basename -> //g"`
+    cd "$(dirname "$sd_res")"
+    sd_basename=$(basename "$sd_res")
+    sd_res=$(ls -l "$sd_basename" | sed "s/.*$sd_basename -> //g")
 done
-cd "`dirname "$sd_res"`"
-sd_prog=`pwd`
+cd "$(dirname "$sd_res")"
+sd_prog=$(pwd)
 cd "$sd_cwd"
 
 # this is a temporary hack until we can live with the default search paths
-case "`uname -s`" in
+case "$(uname -s)" in
 NetBSD|OpenBSD|FreeBSD|DragonFly)
     LD_LIBRARY_PATH=$sd_prog${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
     JAVA_HOME=$(javaPathHelper -h libreoffice-java 2> /dev/null)
@@ -51,7 +51,7 @@ esac
 
 #collect all bootstrap variables specified on the command line
 #so that they can be passed as arguments to javaldx later on
-for arg in $@
+for arg in "$@"
 do
   case "$arg" in
        -env:*) BOOTSTRAPVARS=$BOOTSTRAPVARS" ""$arg";;
@@ -62,10 +62,10 @@ done
 
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
 if [ -x "$sd_prog/javaldx" ] ; then
-    my_path=`"$sd_prog/javaldx" $BOOTSTRAPVARS \
-        "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"`
+    my_path=$("$sd_prog/javaldx" "$BOOTSTRAPVARS" \
+        "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc")
     if [ -n "$my_path" ] ; then
-        sd_platform=`uname -s`
+        sd_platform=$(uname -s)
         case $sd_platform in
           AIX)
             LIBPATH=$my_path${LIBPATH:+:$LIBPATH}
