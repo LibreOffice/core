@@ -1,0 +1,399 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_c5c41e94",
+        "filename": "include/oox/token/relationship.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "Please sort all alphabetically.",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 14
+      },
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a5cf12af",
+        "filename": "include/oox/token/relationship.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "Please sort all alphabetically.",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 18
+      },
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_45e90e1a",
+        "filename": "oox/source/token/relationship.inc",
+        "patchSetId": 9
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "COMMENTAUTHORS is unused in this patch.",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 29
+      },
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_65ee0a24",
+        "filename": "oox/source/token/relationship.inc",
+        "patchSetId": 9
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "DRAWING is unused in this patch.",
+      "range": {
+        "startLine": 13,
+        "startChar": 15,
+        "endLine": 13,
+        "endChar": 22
+      },
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_85f3f609",
+        "filename": "oox/source/token/relationship.inc",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "EXTERNALLINKPATH is unused in this patch.",
+      "range": {
+        "startLine": 15,
+        "startChar": 15,
+        "endLine": 15,
+        "endChar": 31
+      },
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a5f8f2e6",
+        "filename": "oox/source/token/relationship.inc",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "HDPHOTO was originally used as \"http://schemas.microsoft.com/office/2007/relationships/hdphoto\"",
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c5ddfe71",
+        "filename": "oox/source/token/relationship.inc",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "NOTESMASTER is unused in this patch.",
+      "range": {
+        "startLine": 25,
+        "startChar": 15,
+        "endLine": 25,
+        "endChar": 26
+      },
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e5dafa77",
+        "filename": "oox/source/token/relationship.inc",
+        "patchSetId": 9
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "NOTESSLIDE is unused in this patch.",
+      "range": {
+        "startLine": 26,
+        "startChar": 15,
+        "endLine": 26,
+        "endChar": 25
+      },
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e593daa1",
+        "filename": "oox/source/token/relationship.inc",
+        "patchSetId": 9
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "SHAREDSTRINGS is defined differently from its usage (microsoft.com/office/2007 vs openxmlformats.org/officeDocument/2006) and is unused.",
+      "range": {
+        "startLine": 32,
+        "startChar": 46,
+        "endLine": 32,
+        "endChar": 71
+      },
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_05e8e60f",
+        "filename": "oox/source/token/relationship.inc",
+        "patchSetId": 9
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "All four SLIDE* are unused in this patch.",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 98
+      },
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_25e5e236",
+        "filename": "oox/source/token/relationship.inc",
+        "patchSetId": 9
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "VBAPROJECT is unused in this patch.",
+      "range": {
+        "startLine": 39,
+        "startChar": 15,
+        "endLine": 39,
+        "endChar": 25
+      },
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_45d02e54",
+        "filename": "oox/source/token/relationship.inc",
+        "patchSetId": 9
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "VMLDRAWING is unused in this patch.",
+      "range": {
+        "startLine": 40,
+        "startChar": 15,
+        "endLine": 40,
+        "endChar": 25
+      },
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_65d52a42",
+        "filename": "oox/source/token/relationship.inc",
+        "patchSetId": 9
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "WORKSHEET is unused in this patch.",
+      "range": {
+        "startLine": 41,
+        "startChar": 15,
+        "endLine": 41,
+        "endChar": 24
+      },
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_25b7a23a",
+        "filename": "sc/source/filter/excel/xeescher.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "Why include this header file?",
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_4582ee53",
+        "filename": "sc/source/filter/excel/xelink.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "Why include this header file?",
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_6587ea61",
+        "filename": "sc/source/filter/excel/xestream.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "Why include this header file?",
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_857cd673",
+        "filename": "sc/source/filter/excel/xestyle.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "Why include this header file?",
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a581d24c",
+        "filename": "sc/source/filter/xcl97/xcl97rec.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "Why include this header file?",
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c596de93",
+        "filename": "sd/source/filter/eppt/pptx-epptooxml.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 1,
+      "message": "Why include this header file?",
+      "revId": "32856007c1306b93fa6aa6fa1076f2a7f65e4384",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

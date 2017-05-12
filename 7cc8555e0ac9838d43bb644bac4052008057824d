@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_e5acbaef",
+        "filename": "sc/source/filter/excel/xecontent.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 0,
+      "message": "Please no unrelated cosmetical changes. This even adds an otherwise unchanged file.",
+      "range": {
+        "startLine": 205,
+        "startChar": 95,
+        "endLine": 205,
+        "endChar": 96
+      },
+      "revId": "7cc8555e0ac9838d43bb644bac4052008057824d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_05baa623",
+        "filename": "sc/source/filter/excel/xeescher.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1428,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-12T00:27:37Z",
+      "side": 0,
+      "message": "Please no unrelated cosmetical changes.",
+      "range": {
+        "startLine": 1428,
+        "startChar": 90,
+        "endLine": 1428,
+        "endChar": 91
+      },
+      "revId": "7cc8555e0ac9838d43bb644bac4052008057824d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
