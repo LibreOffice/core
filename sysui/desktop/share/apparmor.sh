@@ -37,10 +37,11 @@ INST_ROOT_FORMAT=${INST_ROOT_FORMAT////.}
 #Need to escape / for sed
 INST_ROOT_SED=${INST_ROOT////\\/}
 
-for filename in $(ls $PROFILESFROM)
+for filename in $PROFILESFROM
 do
     tourl=$INSTALLTO$INST_ROOT_FORMAT$filename
-    sed "s/INSTDIR-/$INST_ROOT_SED/g" $PROFILESFROM$filename > $tourl
+    sed "s/INSTDIR-/$INST_ROOT_SED/g" "$PROFILESFROM""$filename" > "$tourl"
+    [[ -e $filename ]] || break
     echo "$tourl"
 
 done
