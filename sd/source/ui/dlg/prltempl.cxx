@@ -277,6 +277,11 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         aSet.Put(CntUInt16Item(SID_SVXTEXTATTRPAGE_OBJKIND, OBJ_TEXT));
         rPage.PageCreated(aSet);
     }
+    else if (nId == mnBackground)
+    {
+        aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_HIGHLIGHTING)));
+        rPage.PageCreated(aSet);
+    }
 }
 
 const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
