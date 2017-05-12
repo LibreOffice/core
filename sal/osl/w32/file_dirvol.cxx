@@ -755,7 +755,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString *strDirectoryPath, oslDirect
         if ( osl_File_E_None != error )
                 return error;
 
-        dwPathType = IsValidFilePath( strSysDirectoryPath, nullptr, VALIDATEPATH_NORMAL, nullptr );
+        dwPathType = IsValidFilePath( strSysDirectoryPath, VALIDATEPATH_NORMAL, nullptr );
 
         if ( dwPathType & PATHTYPE_IS_SERVER )
         {
@@ -996,7 +996,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
     if ( osl_File_E_None != error )
             return error;
 
-    dwPathType = IsValidFilePath( strSysFilePath, nullptr, VALIDATEPATH_NORMAL, nullptr );
+    dwPathType = IsValidFilePath( strSysFilePath, VALIDATEPATH_NORMAL, nullptr );
 
     if ( dwPathType & PATHTYPE_IS_VOLUME )
         type = PATHTYPE_VOLUME;
