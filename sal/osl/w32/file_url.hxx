@@ -73,11 +73,6 @@ oslFileError osl_getSystemPathFromFileURL_ (
     bool       bAllowRelative
 );
 
-oslFileError osl_getFileURLFromSystemPath_ (
-    rtl_uString *  strPath,
-    rtl_uString ** pstrURL
-);
-
 extern oslMutex g_CurrentDirectoryMutex;
 
 #endif

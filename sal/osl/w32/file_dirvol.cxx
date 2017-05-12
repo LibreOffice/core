@@ -601,7 +601,7 @@ static DWORD create_dir_with_callback(
         if (aDirectoryCreationCallbackFunc)
         {
             rtl::OUString url;
-            osl_getFileURLFromSystemPath_(dir_path, &(url.pData));
+            osl_getFileURLFromSystemPath(dir_path, &(url.pData));
             aDirectoryCreationCallbackFunc(pData, url.pData);
         }
         return ERROR_SUCCESS;
