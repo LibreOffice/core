@@ -1330,7 +1330,7 @@ bool SwFrame::IsMoveable( const SwLayoutFrame* _pLayoutFrame ) const
                         }
                     }
                 }
-                else
+                else if (!(_pLayoutFrame->IsInFootnote() && (IsTabFrame() || IsInTab())))
                 {
                     bRetVal = true;
                 }
