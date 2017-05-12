@@ -754,7 +754,7 @@ oslFileError osl_getSystemPathFromFileURL_( rtl_uString *strURL, rtl_uString **p
     return nError;
 }
 
-oslFileError osl_getFileURLFromSystemPath_( rtl_uString* strPath, rtl_uString** pstrURL )
+oslFileError osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** pstrURL )
 {
     oslFileError nError = osl_File_E_INVAL; /* Assume failure */
     rtl_uString *strTempURL = nullptr;
@@ -857,12 +857,6 @@ oslFileError osl_getFileURLFromSystemPath_( rtl_uString* strPath, rtl_uString** 
     SAL_INFO_IF(nError, "sal.osl",
         "osl_getFileURLFromSystemPath: \"" << rtl::OUString(strPath) << "\" is not a systemPath");
     return nError;
-}
-
-oslFileError SAL_CALL osl_getFileURLFromSystemPath(
-    rtl_uString* ustrPath, rtl_uString** pustrURL )
-{
-    return osl_getFileURLFromSystemPath_( ustrPath, pustrURL );
 }
 
 oslFileError SAL_CALL osl_getSystemPathFromFileURL(
