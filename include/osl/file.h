@@ -35,7 +35,8 @@ extern "C" {
 Main goals and usage hints
 
 The main intention of this interface is to provide an universal portable and
-high performance access to file system issues on any operating system.
+high performance access to file system functionality on any operating
+system.
 
 There are a few main goals:
 
