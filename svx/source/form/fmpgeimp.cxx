@@ -371,7 +371,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
         // check whether there is a "standard" form
         if ( Reference<XNameAccess>(xForms,UNO_QUERY_THROW)->hasElements() )
         {
-            // suche die Standardform
+            // find the standard form
             OUString sStandardFormname = SVX_RESSTR(RID_STR_STDFORMNAME);
 
             try
@@ -453,14 +453,13 @@ Reference< css::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy
 
     Reference< XForm >  xForm;
 
-    // Wenn Datenbank und CursorSource gesetzt sind, dann wird
-    // die Form anhand dieser Kriterien gesucht, ansonsten nur aktuelle
-    // und die StandardForm
+    // If database and CursorSource are set, the form is searched for using
+    // these criteria, otherwise only current and the DefaultForm.
     if (rDatabase.is() && !rCursorSource.isEmpty())
     {
         validateCurForm();
 
-        // erst in der aktuellen form suchen
+        // first search in the current form
         xForm = findFormForDataSource( xCurrentForm, rDatabase, rCursorSource, nCommandType );
 
         Reference< css::container::XIndexAccess >  xFormsByIndex( getForms(), UNO_QUERY );
@@ -473,7 +472,7 @@ Reference< css::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy
             xForm = findFormForDataSource( xToSearch, rDatabase, rCursorSource, nCommandType );
         }
 
-        // wenn keine css::form gefunden, dann eine neue erzeugen
+        // If no css::form found, then create a new one
         if (!xForm.is())
         {
             SdrModel* pModel = m_rPage.GetModel();
@@ -589,13 +588,13 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
 
     if (sLookupName == sFormDataSourceName)
     {
-        // jetzt noch ueberpruefen ob CursorSource und Type uebereinstimmen
+        // now check whether CursorSource and type match
         OUString aCursorSource = ::comphelper::getString(xFormProps->getPropertyValue(FM_PROP_COMMAND));
         sal_Int32 nType = ::comphelper::getINT32(xFormProps->getPropertyValue(FM_PROP_COMMANDTYPE));
         if (aCursorSource.isEmpty() || ((nType == nCommandType) && (aCursorSource == _rCursorSource))) // found the form
         {
             xResultForm = rForm;
-            // Ist noch keine Datenquelle gesetzt, wird dieses hier nachgeholt
+            // if no data source is set yet, it is done here
             if (aCursorSource.isEmpty())
             {
                 xFormProps->setPropertyValue(FM_PROP_COMMAND, makeAny(_rCursorSource));
@@ -640,14 +639,14 @@ OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xForm
 
         if (sName.isEmpty() || xNameAcc->hasByName(sName))
         {
-            // setzen eines default Namens ueber die ClassId
+            // set a default name via the ClassId
             sal_Int16 nClassId( FormComponentType::CONTROL );
             xSet->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
 
             OUString sDefaultName = FormControlFactory::getDefaultUniqueName_ByComponentType(
                 Reference< XNameAccess >( xControls, UNO_QUERY ), xSet );
 
-            // bei Radiobuttons, die einen Namen haben, diesen nicht ueberschreiben!
+            // do not overwrite the name of radio buttons that have it!
             if (sName.isEmpty() || nClassId != css::form::FormComponentType::RADIOBUTTON)
             {
                 xSet->setPropertyValue(FM_PROP_NAME, makeAny(sDefaultName));

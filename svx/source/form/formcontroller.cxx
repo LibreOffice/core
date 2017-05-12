@@ -1648,7 +1648,7 @@ void FormController::focusGained(const FocusEvent& e)
             // normally, a locked control should not be modified, so probably my bModified must
             // have been set from a different context, which I would not understand ...
 #endif
-            DBG_ASSERT(m_xCurrentControl.is(), "kein CurrentControl gesetzt");
+            DBG_ASSERT(m_xCurrentControl.is(), "no CurrentControl set");
             // first the control ask if it supports the IFace
             Reference< XBoundComponent >  xBound(m_xCurrentControl, UNO_QUERY);
             if (!xBound.is() && m_xCurrentControl.is())
@@ -1705,7 +1705,7 @@ void FormController::focusGained(const FocusEvent& e)
         &&  ( xControl == m_xCurrentControl )
         )
     {
-        DBG_ASSERT(m_xCurrentControl.is(), "Kein CurrentControl selektiert");
+        DBG_ASSERT(m_xCurrentControl.is(), "No CurrentControl selected");
         return;
     }
 
@@ -2371,7 +2371,7 @@ void FormController::stopListening()
 Reference< XControl >  FormController::findControl(Sequence< Reference< XControl > >& _rControls, const Reference< XControlModel > & xCtrlModel ,bool _bRemove,bool _bOverWrite) const
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
-    DBG_ASSERT( xCtrlModel.is(), "findControl - welches ?!" );
+    DBG_ASSERT( xCtrlModel.is(), "findControl - which ?!" );
 
     Reference< XControl >* pControls = _rControls.getArray();
     Reference< XControlModel >  xModel;

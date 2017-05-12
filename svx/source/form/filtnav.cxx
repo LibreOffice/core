@@ -62,11 +62,11 @@
 #include <functional>
 
 #define DROP_ACTION_TIMER_INITIAL_TICKS     10
-    // solange dauert es, bis das Scrollen anspringt
+    // it takes this long for the scrolling to begin
 #define DROP_ACTION_TIMER_SCROLL_TICKS      3
-    // in diesen Intervallen wird jeweils eine Zeile gescrollt
+    // a line is scrolled in these intervals
 #define DROP_ACTION_TIMER_TICK_BASE         10
-    // das ist die Basis, mit der beide Angaben multipliziert werden (in ms)
+    // this is the basis for multiplying both figures (in ms)
 
 using namespace ::svxform;
 using namespace ::connectivity;
@@ -235,7 +235,7 @@ public:
     FmFilterCurrentChangedHint(){}
 };
 
-// class FmFilterAdapter, Listener an den FilterControls
+// class FmFilterAdapter, listener at the FilterControls
 class FmFilterAdapter : public ::cppu::WeakImplHelper< XFilterControllerListener >
 {
     FmFilterModel*              m_pModel;
@@ -388,7 +388,7 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& Event )
         if ( !Event.PredicateExpression.isEmpty())
         {
             pFilterItem->SetText( Event.PredicateExpression );
-            // UI benachrichtigen
+            // notify the UI
             FmFilterTextChangedHint aChangeHint(pFilterItem);
             m_pModel->Broadcast( aChangeHint );
         }
@@ -728,7 +728,7 @@ void FmFilterModel::Insert(const ::std::vector<FmFilterData*>::iterator& rPos, F
         rItems.insert(rPos, pData);
     }
 
-    // UI benachrichtigen
+    // notify the UI
     FmFilterInsertedHint aInsertedHint(pData, nPos);
     Broadcast( aInsertedHint );
 }
@@ -921,7 +921,7 @@ void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
         m_pCurrentItems = nullptr;
 
 
-    // UI benachrichtigen
+    // notify the UI
     FmFilterCurrentChangedHint aHint;
     Broadcast( aHint );
 }
@@ -1379,7 +1379,7 @@ void FmFilterNavigator::InitEntry(SvTreeListEntry* pEntry,
 
 bool FmFilterNavigator::Select( SvTreeListEntry* pEntry, bool bSelect )
 {
-    if (bSelect == IsSelected(pEntry))  // das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)
+    if (bSelect == IsSelected(pEntry))  // This happens sometimes. I think the basic class errs too much on the side of caution. ;)
         return true;
 
     if (SvTreeListBox::Select(pEntry, bSelect))
@@ -1470,7 +1470,7 @@ void FmFilterNavigator::Insert(FmFilterData* pItem, sal_uLong nPos)
 
 void FmFilterNavigator::Remove(FmFilterData* pItem)
 {
-    // der Entry zu den Daten
+    // the entry for the data
     SvTreeListEntry* pEntry = FindEntry(pItem);
 
     if (pEntry == m_pEditingCurrently)
@@ -1570,7 +1570,7 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
     {
         case CommandEventId::ContextMenu:
         {
-            // die Stelle, an der geklickt wurde
+            // the place where it was clicked
             Point aWhere;
             SvTreeListEntry* pClicked = nullptr;
             if (rEvt.IsMouseEvent())

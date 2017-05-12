@@ -252,10 +252,10 @@ FmFormData::FmFormData(const Reference< XForm >& _rxForm, FmFormData* _pParent)
     : FmEntryData(_pParent, _rxForm)
     , m_xForm(_rxForm)
 {
-    // Images setzen
+    // set images
     m_aNormalImage = Image(RID_SVXBMP_FORM);
 
-    // Titel setzen
+    // set titel
     if (m_xForm.is())
     {
         Reference< XPropertySet >  xSet(m_xForm, UNO_QUERY);
@@ -304,11 +304,11 @@ FmControlData::FmControlData(const Reference< XFormComponent >& _rxComponent, Fm
     m_xFormComponent( _rxComponent )
 {
 
-    // Images setzen
+    // set images
     m_aNormalImage = GetImage();
 
 
-    // Titel setzen
+    // set titel
     Reference< XPropertySet >  xSet(m_xFormComponent, UNO_QUERY);
     if( xSet.is() )
     {
@@ -460,7 +460,7 @@ void FmControlData::ModelReplaced(const Reference< XFormComponent >& _rxNew)
 {
     m_xFormComponent = _rxNew;
     newObject( m_xFormComponent );
-    // Images neu setzen
+    // set images anew
     m_aNormalImage = GetImage();
 }
 

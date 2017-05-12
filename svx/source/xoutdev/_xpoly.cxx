@@ -431,7 +431,7 @@ tools::Rectangle XPolygon::GetBoundRect() const
 
 const Point& XPolygon::operator[]( sal_uInt16 nPos ) const
 {
-    DBG_ASSERT(nPos < pImpXPolygon->nPoints, "Ungueltiger Index bei const-Arrayzugriff auf XPolygon");
+    DBG_ASSERT(nPos < pImpXPolygon->nPoints, "Invalid index at const array access to XPolygon");
 
     pImpXPolygon->CheckPointDelete();
     return pImpXPolygon->pPointAry[nPos];
@@ -443,7 +443,7 @@ Point& XPolygon::operator[]( sal_uInt16 nPos )
 
     if( nPos >= pImpXPolygon->nSize )
     {
-        DBG_ASSERT(pImpXPolygon->nResize, "Ungueltiger Index bei Arrayzugriff auf XPolygon");
+        DBG_ASSERT(pImpXPolygon->nResize, "Invalid index at array access to XPolygon");
         pImpXPolygon->Resize(nPos + 1, false);
     }
     if( nPos >= pImpXPolygon->nPoints )
