@@ -1803,6 +1803,8 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
     SwFootnoteBossFrame *pOldBoss = m_rThis.FindFootnoteBossFrame();
     if (m_rThis.IsInFootnote())
     {
+        assert(!m_rThis.IsTabFrame()); // prevented by IsMoveable()
+        assert(!m_rThis.IsInTab());
         if (!m_rThis.IsContentFrame() || !pOldBoss)
         {
             SAL_WARN("sw.core", "Tables in footnotes are not truly supported");
