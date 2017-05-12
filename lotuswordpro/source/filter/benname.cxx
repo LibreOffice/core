@@ -59,10 +59,10 @@ namespace OpenStormBento
 {
 // changed to remove warning
 CBenNamedObject::CBenNamedObject(pLtcBenContainer pContainer,
-  BenObjectID ObjectID, pCBenObject pPrevObject, const char * sName,
+  BenObjectID ObjectID, pCBenObject pPrevObject, const OString& rName,
   pCUtListElmt pPrevNamedObjectListElmt)
     : CBenObject(pContainer, ObjectID, pPrevObject)
-    , csName(sName)
+    , csName(rName)
     , cNameListElmt(pPrevNamedObjectListElmt)
 {
     cNameListElmt.SetNamedObject(this);

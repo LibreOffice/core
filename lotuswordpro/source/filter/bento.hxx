@@ -344,13 +344,13 @@ public: // Methods
 
 public: // Internal methods
     CBenNamedObject(pLtcBenContainer pContainer, BenObjectID ObjectID,
-    pCBenObject pPrevObject, const char * sName,
+    pCBenObject pPrevObject, const OString& rName,
     pCUtListElmt pPrevNamedObjectListElmt);
 
-    const char * GetNameCStr() { return csName.c_str(); }
+    const OString& GetName() { return csName; }
 
 private: // Data
-    std::string csName;
+    OString csName;
     CBenNamedObjectListElmt cNameListElmt;
 };
 
@@ -358,9 +358,9 @@ class CBenPropertyName : public CBenNamedObject
 {
 public: // Internal methods
     CBenPropertyName(pLtcBenContainer pContainer, BenObjectID ObjectID,
-    pCBenObject pPrevObject, const char * sName,
+    pCBenObject pPrevObject, const OString& rName,
     pCUtListElmt pPrevNamedObjectListElmt) :
-    CBenNamedObject(pContainer, ObjectID, pPrevObject, sName,
+    CBenNamedObject(pContainer, ObjectID, pPrevObject, rName,
     pPrevNamedObjectListElmt) { ; }
     virtual bool IsPropertyName() override;
 };
@@ -369,9 +369,9 @@ class CBenTypeName : public CBenNamedObject
 {
 public: // Internal methods
     CBenTypeName(pLtcBenContainer pContainer, BenObjectID ObjectID,
-    pCBenObject pPrevObject, const char * sName,
+    pCBenObject pPrevObject, const OString& rName,
     pCUtListElmt pPrevNamedObjectListElmt) :
-    CBenNamedObject(pContainer, ObjectID, pPrevObject, sName,
+    CBenNamedObject(pContainer, ObjectID, pPrevObject, rName,
     pPrevNamedObjectListElmt) { ; }
 };
 
