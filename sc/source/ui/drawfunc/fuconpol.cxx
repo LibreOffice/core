@@ -27,23 +27,11 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 
-/*************************************************************************
-|*
-|* Konstruktor
-|*
-\************************************************************************/
-
 FuConstPolygon::FuConstPolygon(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq)
     : FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
 {
 }
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 FuConstPolygon::~FuConstPolygon()
 {
@@ -199,7 +187,7 @@ void FuConstPolygon::Activate()
 
 /*************************************************************************
 |*
-|* Function deaktivieren
+|* Deactivate function
 |*
 \************************************************************************/
 
