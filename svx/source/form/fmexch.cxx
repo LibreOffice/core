@@ -225,7 +225,7 @@ namespace svxform
                 ++loop, ++pAllPaths
             )
         {
-            // erst mal sammeln wir den Pfad in einem Array ein
+            // first we collect the path in an array
             ::std::vector< sal_uInt32 > aCurrentPath;
             SvTreeListEntry* pCurrentEntry = *loop;
 
@@ -235,10 +235,11 @@ namespace svxform
                 aCurrentPath.push_back(pLoop->GetChildListPos());
                 pLoop = pTreeBox->GetParent(pLoop);
                 DBG_ASSERT((pLoop != nullptr) || (pRoot == nullptr), "OControlTransferData::buildPathFormat: invalid root or entry !");
-                    // pLoop == NULL heisst, dass ich am oberen Ende angelangt bin, dann sollte das Ganze abbrechen, was nur bei pRoot == NULL der Fall sein wird
+                    // pLoop == NULL means that I am at the top end, then the whole
+                    // thing should abort, which will only be the case with pRoot == NULL
             }
 
-            // dann koennen wir ihn in die css::uno::Sequence uebertragen
+            // then we can transfer it into css::uno::Sequence
             Sequence<sal_uInt32>& rCurrentPath = *pAllPaths;
             sal_Int32 nDepth = aCurrentPath.size();
 

@@ -60,7 +60,7 @@ FmFormObjFactory::FmFormObjFactory()
         SdrObjFactory::InsertMakeObjectHdl(LINK(this, FmFormObjFactory, MakeObject));
 
 
-        // Konfigurations-css::frame::Controller und NavigationBar registrieren
+        // register the configuration css::frame::Controller and the NavigationBar
         SvxFmTbxCtlAbsRec::RegisterControl( SID_FM_RECORD_ABSOLUTE );
         SvxFmTbxCtlRecText::RegisterControl( SID_FM_RECORD_TEXT );
         SvxFmTbxCtlRecFromText::RegisterControl( SID_FM_RECORD_FROM_TEXT );
@@ -68,7 +68,7 @@ FmFormObjFactory::FmFormObjFactory()
         SvxFmTbxPrevRec::RegisterControl( SID_FM_RECORD_PREV );
         SvxFmTbxNextRec::RegisterControl( SID_FM_RECORD_NEXT );
 
-        // Registrieung von globalen fenstern
+        // registering global windows
         FmFieldWinMgr::RegisterChildWindow();
         FmPropBrwMgr::RegisterChildWindow();
         NavigatorFrameManager::RegisterChildWindow();
@@ -77,7 +77,7 @@ FmFormObjFactory::FmFormObjFactory()
         FmFilterNavigatorWinMgr::RegisterChildWindow();
 #endif
 
-        // Interface fuer die Formshell registrieren
+        // register the interface for the Formshell
         FmFormShell::RegisterInterface();
 
         ImplSmartRegisterUnoServices();
@@ -89,7 +89,7 @@ FmFormObjFactory::~FmFormObjFactory()
 {
 }
 
-// css::form::Form-Objekte erzeugen
+// create css::form::Form objects
 namespace
 {
     void    lcl_initProperty( FmFormObj* _pObject, const OUString& _rPropName, const Any& _rValue )

@@ -90,9 +90,9 @@
 
 #include <memory>
 
-// wird fuer Invalidate verwendet -> mitpflegen
-// aufsteigend sortieren !!!!!!
-sal_uInt16 const ControllerSlotMap[] =    // slots des Controllers
+// is used for Invalidate -> maintain it as well
+// sort ascending !!!!!!
+sal_uInt16 const ControllerSlotMap[] =    // slots of the controller
 {
     SID_FM_CONFIG,
     SID_FM_PUSHBUTTON,
@@ -241,8 +241,8 @@ bool FmFormShell::PrepareClose(bool bUI)
 
         if(pWindow)
         {
-            // Zunaechst werden die aktuellen Inhalte der Controls gespeichert
-            // Wenn alles glatt gelaufen ist, werden die modifizierten Datensaetze gespeichert
+            // First, the current contents of the controls are stored.
+            // If everything has gone smoothly, the modified records are stored.
             if ( GetImpl()->getActiveController().is() )
             {
                 const svx::ControllerFeatures& rController = GetImpl()->getActiveControllerFeatures();
@@ -284,7 +284,7 @@ void FmFormShell::impl_setDesignMode(bool bDesign)
             m_nLastSlot = SID_FM_DESIGN_MODE;
 
         GetImpl()->SetDesignMode(bDesign);
-        // mein m_bDesignMode wird auch von der Impl gesetzt ...
+        // my m_bDesignMode is also set by the Impl ...
     }
     else
     {
@@ -303,12 +303,12 @@ bool FmFormShell::HasUIFeature(SfxShellFeature nFeature) const
     bool bResult = false;
     if (nFeature & SfxShellFeature::FormShowDatabaseBar)
     {
-        // nur wenn auch formulare verfuegbar
+        // only if forms are also available
         bResult = !m_bDesignMode && GetImpl()->hasDatabaseBar() && !GetImpl()->isInFilterMode();
     }
     else if (nFeature & SfxShellFeature::FormShowFilterBar)
     {
-        // nur wenn auch formulare verfuegbar
+        // only if forms are also available
         bResult = !m_bDesignMode && GetImpl()->hasDatabaseBar() && GetImpl()->isInFilterMode();
     }
     else if (nFeature & SfxShellFeature::FormShowFilterNavigator)
@@ -352,7 +352,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
     sal_uInt16 nSlot = rReq.GetSlot();
 
 
-    // MasterSlot setzen
+    // set MasterSlot
     switch( nSlot )
     {
         case SID_FM_PUSHBUTTON:
@@ -381,7 +381,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
     }
 
 
-    // Identifier und Inventor des Uno-Controls setzen
+    // set the Identifier and Inventor of the Uno control
     sal_uInt16 nIdentifier = 0;
     switch( nSlot )
     {
@@ -514,7 +514,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         }   break;
     }
 
-    // Individuelle Aktionen
+    // individual actions
     switch( nSlot )
     {
         case SID_FM_MORE_CONTROLS:
@@ -577,8 +577,8 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_CONVERTTO_SPINBUTTON    :
         case SID_FM_CONVERTTO_NAVIGATIONBAR :
             GetImpl()->executeControlConversionSlot(FmXFormShell::SlotToIdent(nSlot));
-            // nach dem Konvertieren die Selektion neu bestimmern, da sich ja das selektierte Objekt
-            // geaendert hat
+            // after the conversion, re-determine the selection, since the
+            // selected object has changed
             GetImpl()->SetSelection(GetFormView()->GetMarkedObjectList());
             break;
         case SID_FM_LEAVE_CREATE:
@@ -598,7 +598,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
         case SID_FM_PROPERTIES:
         {
-            // PropertyBrowser anzeigen
+            // display the PropertyBrowser
             const SfxBoolItem* pShowItem = rReq.GetArg<SfxBoolItem>(nSlot);
             bool bShow = pShowItem == nullptr || pShowItem->GetValue();
 
@@ -633,7 +633,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         }   break;
         case SID_FM_SHOW_FMEXPLORER:
         {
-            if (!m_pFormView)   // setzen der View Forcieren
+            if (!m_pFormView)   // force setting the view
                 GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_CREATE_SW_DRAWVIEW);
 
             GetViewShell()->GetViewFrame()->ChildWindowExecute(rReq);
@@ -888,7 +888,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     bool bLayerLocked = false;
                     if (m_pFormView)
                     {
-                        // Ist der css::drawing::Layer gelocked, so müssen die Slots disabled werden. #36897
+                        // If the css::drawing::Layer is locked, the slots must be disabled. #36897
                         SdrPageView* pPV = m_pFormView->GetSdrPageView();
                         if (pPV != nullptr)
                             bLayerLocked = pPV->IsLayerLocked(m_pFormView->GetActiveLayer());
@@ -944,8 +944,8 @@ void FmFormShell::GetState(SfxItemSet &rSet)
 
             case SID_FM_CTL_PROPERTIES:
             {
-                // der Impl eventuell die Moeglichjkeit geben, ihre an der aktuellen MarkList ausgerichteten Objekte
-                // auf den neuesten Stand zu bringen
+                // potentially, give the Impl the opportunity to update its
+                // current objects which are aligned with the current MarkList
                 if (GetImpl()->IsSelectionUpdatePending())
                     GetImpl()->ForceUpdateSelection();
 
@@ -963,8 +963,8 @@ void FmFormShell::GetState(SfxItemSet &rSet)
 
             case SID_FM_PROPERTIES:
             {
-                // der Impl eventuell die Moeglichjkeit geben, ihre an der aktuellen MarkList ausgerichteten Objekte
-                // auf den neuesten Stand zu bringen
+                // potentially, give the Impl the opportunity to update its
+                // current objects which are aligned with the current MarkList
                 if (GetImpl()->IsSelectionUpdatePending())
                     GetImpl()->ForceUpdateSelection();
 
@@ -977,8 +977,8 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 }
             }   break;
             case SID_FM_TAB_DIALOG:
-                // der Impl eventuell die Moeglichjkeit geben, ihre an der aktuellen MarkList ausgerichteten Objekte
-                // auf den neuesten Stand zu bringen
+                // potentially, give the Impl the opportunity to update its
+                // current objects which are aligned with the current MarkList
                 if (GetImpl()->IsSelectionUpdatePending())
                     GetImpl()->ForceUpdateSelection();
 
@@ -1204,7 +1204,7 @@ void FmFormShell::SetView( FmFormView* _pView )
 
 void FmFormShell::DetermineForms(bool bInvalidate)
 {
-    // Existieren Formulare auf der aktuellen Page
+    // are there forms on the current page
     bool bForms = GetImpl()->hasForms();
     if (bForms != m_bHasForms)
     {
@@ -1433,17 +1433,17 @@ void FmFormShell::SetDesignMode( bool _bDesignMode )
 
     FmFormModel* pModel = GetFormModel();
     if (pModel)
-        // fuer die Zeit des Uebergangs das Undo-Environment ausschalten, das sichert, dass man dort auch nicht-transiente
-        // Properties mal eben aendern kann (sollte allerdings mit Vorsicht genossen und beim Rueckschalten des Modes
-        // auch immer wieder rueckgaegig gemacht werden. Ein Beispiel ist das Setzen der maximalen Text-Laenge durch das
-        // OEditModel an seinem Control.)
+        // Switch off the undo environment for the time of the transition. This ensures that
+        // one can also change non-transient properties there. (It should be done with
+        // caution, however, and it should always be reversed when one switches the mode back.
+        // An example is the setting of the maximum text length by the OEditModel on its control.)
         pModel->GetUndoEnv().Lock();
 
-    // dann die eigentliche Umschaltung
+    // then the actual switch
     if ( m_bDesignMode || PrepareClose() )
         impl_setDesignMode(!m_bDesignMode );
 
-    // und mein Undo-Environment wieder an
+    // and my undo environment back on
     if ( pModel )
         pModel->GetUndoEnv().UnLock();
 }

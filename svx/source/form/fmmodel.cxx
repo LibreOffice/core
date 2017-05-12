@@ -91,7 +91,7 @@ FmFormModel::~FmFormModel()
         SetObjectShell(nullptr);
 
     ClearUndoBuffer();
-    // minimale grenze fuer undos
+    // minimum limit for undos
     SetMaxUndoActionCount(1);
 }
 

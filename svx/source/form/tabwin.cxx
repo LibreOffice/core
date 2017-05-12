@@ -358,7 +358,7 @@ void FmFieldWin::UpdateContent(const css::uno::Reference< css::form::XForm > & x
         m_pChangeListener->addProperty(FM_PROP_COMMAND);
         m_pChangeListener->addProperty(FM_PROP_COMMANDTYPE);
 
-        // Titel setzen
+        // set title
         aTitle = aTitle + " " + aPrefix + " " + OUString(m_aObjectName.getStr());
         SetText( aTitle );
     }

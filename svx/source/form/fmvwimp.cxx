@@ -346,7 +346,7 @@ void FormViewPageWindowAdapter::setController(const Reference< XForm > & xForm, 
         xEventManager->attach(m_aControllerList.size() - 1, Reference<XInterface>( xController, UNO_QUERY ), makeAny(xController) );
     }
 
-    // jetzt die Subforms durchgehen
+    // now go through the subforms
     sal_uInt32 nLength = xFormCps->getCount();
     Reference< XForm >  xSubForm;
     for (sal_uInt32 i = 0; i < nLength; i++)
@@ -560,7 +560,7 @@ void FmXFormView::addWindow(const SdrPageWindow& rWindow)
         PFormViewPageWindowAdapter pAdapter = new FormViewPageWindowAdapter( comphelper::getProcessComponentContext(), rWindow, this );
         m_aPageWindowAdapters.push_back( pAdapter );
 
-        // Am ControlContainer horchen um Aenderungen mitzbekommen
+        // listen at the ControlContainer to notice changes
         Reference< XContainer >  xContainer( xCC, UNO_QUERY );
         if ( xContainer.is() )
             xContainer->addContainerListener( this );
@@ -570,11 +570,10 @@ void FmXFormView::addWindow(const SdrPageWindow& rWindow)
 
 void FmXFormView::removeWindow( const Reference< XControlContainer >& _rxCC )
 {
-    // Wird gerufen, wenn
-    // - in den Design-Modus geschaltet wird
-    // - ein Window geloescht wird, waehrend man im Design-Modus ist
-    // - der Control-Container fuer ein Window entfernt wird, waehrend
-    //   der aktive Modus eingeschaltet ist.
+    // Is called if
+    // - the design mode is being switched to
+    // - a window is deleted while one is in the design mode
+    // - the control container for a window is removed while the active mode is on
 
     for (   PageWindowAdapterList::iterator i = m_aPageWindowAdapters.begin();
             i != m_aPageWindowAdapters.end();
@@ -1252,12 +1251,12 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
         OUString sLabelPostfix;
 
 
-        // nur fuer Textgroesse
+        // only for text size
         OutputDevice* pOutDev = nullptr;
         if (m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
             pOutDev = const_cast<OutputDevice*>(m_pView->GetActualOutDev());
         else
-        {// OutDev suchen
+        {// find OutDev
             SdrPageView* pPageView = m_pView->GetSdrPageView();
             if( pPageView && !pOutDev )
             {
@@ -1377,7 +1376,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
             }
         }
 
-        return pGroup; // und fertig
+        return pGroup; // and done
     }
     catch (const Exception&)
     {
@@ -1403,12 +1402,12 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
         OUString sLabelPostfix = _rDesc.szName;
 
 
-        // nur fuer Textgroesse
+        // only for text size
         OutputDevice* pOutDev = nullptr;
         if (m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
             pOutDev = const_cast<OutputDevice*>(m_pView->GetActualOutDev());
         else
-        {// OutDev suchen
+        {// find OutDev
             SdrPageView* pPageView = m_pView->GetSdrPageView();
             if( pPageView && !pOutDev )
             {
@@ -1565,8 +1564,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
     MapMode   eTargetMode( _rOutDev.GetMapMode() ),
               eSourceMode( MapUnit::Map100thMM );
 
-    // Textbreite ist mindestens 4cm
-    // Texthoehe immer halber cm
+    // text width is at least 4 centimeters
+    // text hight is always half a centimeter
     ::Size aDefTxtSize(4000, 500);
     ::Size aDefSize(4000, 500);
     ::Size aDefImageSize(4000, 4000);
@@ -1713,9 +1712,10 @@ void FmXFormView::ObjectRemoveListener::Notify( SfxBroadcaster& /*rBC*/, const S
 
 void FmXFormView::ObjectRemovedInAliveMode( const SdrObject* pObject )
 {
-    // wenn das entfernte Objekt in meiner MarkList, die ich mir beim Umschalten in den Alive-Mode gemerkt habe, steht,
-    // muss ich es jetzt da rausnehmen, da ich sonst beim Zurueckschalten versuche, die Markierung wieder zu setzen
-    // (interesanterweise geht das nur bei gruppierten Objekten schief (beim Zugriff auf deren ObjList GPF), nicht bei einzelnen)
+    // if the remote object in my MarkList, which I have memorized when switching to the
+    // Alive mode, I have to take it out now, because I otherwise try to set the mark
+    // again when switching back (interestingly, this fails only with grouped objects
+    // (when accessing their ObjList GPF), not with individual ones)
 
     const size_t nCount = m_aMark.GetMarkCount();
     for (size_t i = 0; i < nCount; ++i)
@@ -1727,8 +1727,8 @@ void FmXFormView::ObjectRemovedInAliveMode( const SdrObject* pObject )
             m_aMark.DeleteMark(i);
             return;
         }
-        // ich brauche nicht in GroupObjects absteigen : wenn dort unten ein Objekt geloescht wird, dann bleibt der
-        // Zeiger auf das GroupObject, den ich habe, trotzdem weiter gueltig bleibt ...
+        // I do not need to descend into GroupObjects: if an object is deleted there,
+        // then the pointer, which I have, to the GroupObject still remains valid ...
     }
 }
 
@@ -1858,13 +1858,13 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
                 return;
             }
         }
-        // wichtig ist das auf die Objecte der markliste nicht zugegriffen wird
-        // da diese bereits zerstoert sein koennen
+        // it is important that the objects of the mark list are not accessed,
+        // because they can be already destroyed
         SdrPageView* pCurPageView = m_pView->GetSdrPageView();
         SdrObjListIter aPageIter( *pPage );
         bool bFound = true;
 
-        // gibt es noch alle Objecte
+        // are there still all objects
         const size_t nCount = m_aMark.GetMarkCount();
         for (size_t i = 0; i < nCount && bFound; ++i)
         {
@@ -1884,8 +1884,8 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
 
         if (bFound)
         {
-            // Das LastObject auswerten
-            if (nCount) // Objecte jetzt Markieren
+            // evaluate the LastObject
+            if (nCount) // now mark the objects
             {
                 for (size_t i = 0; i < nCount; ++i)
                 {

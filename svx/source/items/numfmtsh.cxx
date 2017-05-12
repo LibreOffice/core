@@ -533,7 +533,7 @@ void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
 {
 
     // precondition: number formater found
-    DBG_ASSERT( pFormatter != nullptr, "Zahlenformatierer nicht gefunden!" );
+    DBG_ASSERT( pFormatter != nullptr, "Number formatter not found!" );
 
     short                   nSelPos     = SELPOS_NONE;
 
