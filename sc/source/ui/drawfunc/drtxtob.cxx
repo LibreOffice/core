@@ -538,11 +538,11 @@ void ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
     }
 }
 
-//          Attribute
+//          Attributes
 
 void ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
 {
-    //  Unterstreichung
+    //  Underline
 
     SdrView* pView = pViewData->GetScDrawView();
 
@@ -553,7 +553,7 @@ void ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
     SfxItemSet aViewAttr(pView->GetModel()->GetItemPool());
     pView->GetAttributes(aViewAttr);
 
-    //  Unterstreichung
+    //  Underline
     FontLineStyle eOld = static_cast<const SvxUnderlineItem&>( aViewAttr.
                                         Get(EE_CHAR_UNDERLINE)).GetLineStyle();
     FontLineStyle eNew = eOld;
@@ -795,7 +795,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
     {
         switch ( nSlot )
         {
-            case SID_TEXT_STANDARD: // Harte Textattributierung loeschen
+            case SID_TEXT_STANDARD: // delete hard text attributes
             {
                 OutlinerView* pOutView = pView->IsTextEdit() ?
                                 pView->GetTextEditOutlinerView() : nullptr;
@@ -813,7 +813,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 
                 rReq.Done( aEmptyAttr );
                 pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
-                bDone = false; // bereits hier passiert
+                bDone = false; // already happend here
             }
             break;
 
@@ -835,7 +835,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             break;
 
             case SID_CHAR_DLG_EFFECT:
-            case SID_CHAR_DLG:                      // Dialog-Button
+            case SID_CHAR_DLG:                      // dialog button
             case SID_ATTR_CHAR_FONT:                // Controller not shown
             case SID_ATTR_CHAR_FONTHEIGHT:
                 bDone = ExecuteCharDlg( aEditAttr, aNewAttr , nSlot);
@@ -974,7 +974,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     SfxItemSet aAttrSet(pView->GetModel()->GetItemPool());
     pView->GetAttributes(aAttrSet);
 
-    //  direkte Attribute
+    //  direct attributes
 
     rDestSet.Put( aAttrSet );
 
@@ -1001,7 +1001,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
         ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_WEIGHT, nScript );
     if ( rDestSet.GetItemState( EE_CHAR_ITALIC ) != SfxItemState::UNKNOWN )
         ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_ITALIC, nScript );
-    //  Ausrichtung
+    //  Alignment
 
     SvxAdjust eAdj = static_cast<const SvxAdjustItem&>(aAttrSet.Get(EE_PARA_JUST)).GetAdjust();
     switch( eAdj )
@@ -1078,7 +1078,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
         rDestSet.InvalidateItem(SID_ATTR_PARA_ULSPACE);
     }
 
-    //  Zeilenabstand
+    //  Line spacing
 
     sal_uInt16 nLineSpace = static_cast<const SvxLineSpacingItem&>(aAttrSet.
                         Get( EE_PARA_SBL )).GetPropLineSpace();
@@ -1095,7 +1095,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
             break;
     }
 
-    //  hoch-/tiefgestellt
+    //  super-/subscript
 
     SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                     aAttrSet.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
@@ -1104,7 +1104,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     else if( eEsc == SvxEscapement::Subscript )
         rDestSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, true ) );
 
-    //  Unterstreichung
+    //  Underline
 
     eState = aAttrSet.GetItemState( EE_CHAR_UNDERLINE );
     if ( eState == SfxItemState::DONTCARE )

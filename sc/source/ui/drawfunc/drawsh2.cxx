@@ -77,7 +77,7 @@ ScDrawShell::~ScDrawShell()
     mpSelectionChangeHandler->Disconnect();
 }
 
-void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
+void ScDrawShell::GetState( SfxItemSet& rSet )          // Conditions / Toggles
 {
     ScDrawView* pView    = pViewData->GetScDrawView();
     SdrDragMode eMode    = pView->GetDragMode();
@@ -242,19 +242,19 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
         rSet.DisableItem( SID_TITLE_DESCRIPTION_OBJECT );
     }
 
-    if ( !nMarkCount )                          // nichts selektiert
+    if ( !nMarkCount )                          // nothing selected
     {
-            //  Anordnung
+            //  Arrangement
         rSet.DisableItem( SID_FRAME_UP );
         rSet.DisableItem( SID_FRAME_DOWN );
         rSet.DisableItem( SID_FRAME_TO_TOP );
         rSet.DisableItem( SID_FRAME_TO_BOTTOM );
-            //  Clipboard / loeschen
+            //  Clipboard / delete
         rSet.DisableItem( SID_DELETE );
         rSet.DisableItem( SID_DELETE_CONTENTS );
         rSet.DisableItem( SID_CUT );
         rSet.DisableItem( SID_COPY );
-            //  sonstiges
+            //  other
         rSet.DisableItem( SID_ANCHOR_TOGGLE );
         rSet.DisableItem( SID_ORIGINALSIZE );
         rSet.DisableItem( SID_ATTR_TRANSFORM );
@@ -275,7 +275,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
     svx::FontworkBar::getState( pView, rSet );
 }
 
-//          Attribute fuer Drawing-Objekte
+//          Attributes for Drawing-Objects
 
 void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
 {
@@ -342,7 +342,7 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
 
 void ScDrawShell::GetAttrFuncState(SfxItemSet &rSet)
 {
-    //  Dialoge fuer Draw-Attribute disablen, wenn noetig
+    //  Disable dialogs for Draw-attributes if neccessary
 
     ScDrawView* pDrView = pViewData->GetScDrawView();
     SfxItemSet aViewSet = pDrView->GetAttrFromMarked(false);

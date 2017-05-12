@@ -119,12 +119,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
     }
 }
 
-/*************************************************************************
-|*
-|* Timer-Handler fuer Fensterscrolling
-|*
-\************************************************************************/
-
+// Timer handler for window scrolling
 IMPL_LINK_NOARG(FuPoor, ScrollHdl, Timer *, void)
 {
     Point aPosPixel = pWindow->GetPointerPosPixel();
@@ -134,7 +129,6 @@ IMPL_LINK_NOARG(FuPoor, ScrollHdl, Timer *, void)
     MouseMove(MouseEvent(aPosPixel, 1, MouseEventModifiers::NONE, GetMouseButtonCode()));
 }
 
-// moved from inline to *.cxx
 bool FuPoor::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -143,7 +137,6 @@ bool FuPoor::MouseButtonUp(const MouseEvent& rMEvt)
     return false;
 }
 
-// moved from inline to *.cxx
 bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -169,7 +162,6 @@ sal_uInt8 FuPoor::Command(const CommandEvent& rCEvt)
 {
     if ( CommandEventId::StartDrag == rCEvt.GetCommand() )
     {
-        //!!! sollte Joe eigentlich machen:
         // Only if a selection is in Outliner, then Command is allowed
         // to return sal_True
 
@@ -213,7 +205,7 @@ IMPL_LINK_NOARG(FuPoor, DragHdl, void*, void)
     }
 }
 
-//  Detektiv-Linie
+//  Detective-line
 
 bool FuPoor::IsDetectiveHit( const Point& rLogicPos )
 {

@@ -220,7 +220,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
 
 /*************************************************************************
 |*
-|* FuInsertGraphic::Konstruktor
+|* FuInsertGraphic::Constructor
 |*
 \************************************************************************/
 
@@ -293,7 +293,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
 
 /*************************************************************************
 |*
-|* FuInsertGraphic::Destruktor
+|* FuInsertGraphic::Destructor
 |*
 \************************************************************************/
 
@@ -303,7 +303,7 @@ FuInsertGraphic::~FuInsertGraphic()
 
 /*************************************************************************
 |*
-|* FuInsertMedia::Konstruktor
+|* FuInsertMedia::Constructor
 |*
 \************************************************************************/
 
@@ -359,7 +359,7 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
 
 /*************************************************************************
 |*
-|* FuInsertMedia::Destruktor
+|* FuInsertMedia::Destructor
 |*
 \************************************************************************/
 
