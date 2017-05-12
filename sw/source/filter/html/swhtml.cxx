@@ -2462,13 +2462,13 @@ void SwHTMLParser::AddParSpace()
 
 void SwHTMLParser::Show()
 {
-    // Hier wird
-    // - ein EndAction gerufen, damit formatiert wird
-    // - ein Reschedule gerufen,
-    // - die eiegen View-Shell wieder gesetzt
-    // - und Start-Action gerufen
+    // Here
+    // - a EndAction is called, so it can be formatted
+    // - a reschedule is called,
+    // - the own View-Shell is set again
+    // - and a StartAction is called
 
-    OSL_ENSURE( SvParserState::Working==eState, "Show nicht im Working-State - Das kann ins Auge gehen" );
+    OSL_ENSURE( SvParserState::Working==eState, "Show not in working state - That can go wrong" );
     SwViewShell *pOldVSh = CallEndAction();
 
     Application::Reschedule();
@@ -2476,16 +2476,14 @@ void SwHTMLParser::Show()
     if( ( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
         || 1 == m_xDoc->getReferenceCount() )
     {
-        // wurde der Import vom SFX abgebrochen?
+        // was the import aborted by SFX?
         eState = SvParserState::Error;
     }
 
-    // Die SwViewShell nochmal holen, denn sie koennte im Reschedule
-    // zerstoert wirden sein.
+    // Fetch the SwViewShell again, then it could be destroyed in Reschedule.
     SwViewShell *pVSh = CallStartAction( pOldVSh );
 
-    // ist der aktuelle Node nicht mehr sichtbar, dann benutzen wir
-    // eine groessere Schrittweite
+    // is the current node not visible anymore, then we use a bigger increment
     if( pVSh )
     {
         m_nParaCnt = (m_pPam->GetPoint()->nNode.GetNode().IsInVisibleArea(pVSh))
@@ -2495,14 +2493,14 @@ void SwHTMLParser::Show()
 
 void SwHTMLParser::ShowStatline()
 {
-    // Hier wird
-    // - ein Reschedule gerufen, damit gescrollt werden kann
-    // - die eiegen View-Shell wieder gesetzt
-    // - ein Start/End-Action gerufen, wenn gescrollt wurde.
+    // Here
+    // - a reschedule is called, so it can be scrolled
+    // - the own View-Shell is set again
+    // - a StartAction/EndAction is called, when there was scrolling.
 
-    OSL_ENSURE( SvParserState::Working==eState, "ShowStatLine nicht im Working-State - Das kann ins Auge gehen" );
+    OSL_ENSURE( SvParserState::Working==eState, "ShowStatLine not in working state - That can go wrong" );
 
-    // Laufbalkenanzeige
+    // scroll bar
     if( !GetMedium() || !GetMedium()->IsRemote() )
     {
         ::SetProgressState( rInput.Tell(), m_xDoc->GetDocShell() );
@@ -2514,7 +2512,7 @@ void SwHTMLParser::ShowStatline()
 
         if( ( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
             || 1 == m_xDoc->getReferenceCount() )
-            // wurde der Import vom SFX abgebrochen?
+            // was the import aborted by SFX?
             eState = SvParserState::Error;
 
         SwViewShell *pVSh = CheckActionViewShell();
@@ -2528,7 +2526,7 @@ void SwHTMLParser::ShowStatline()
 
 SwViewShell *SwHTMLParser::CallStartAction( SwViewShell *pVSh, bool bChkPtr )
 {
-    OSL_ENSURE( !m_pActionViewShell, "CallStartAction: SwViewShell schon gesetzt" );
+    OSL_ENSURE( !m_pActionViewShell, "CallStartAction: SwViewShell already set" );
 
     if( !pVSh || bChkPtr )
     {
@@ -2537,7 +2535,7 @@ SwViewShell *SwHTMLParser::CallStartAction( SwViewShell *pVSh, bool bChkPtr )
 #endif
         pVSh = m_xDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
 #if OSL_DEBUG_LEVEL > 0
-        OSL_ENSURE( !pVSh || !pOldVSh || pOldVSh == pVSh, "CallStartAction: Wer hat die SwViewShell ausgetauscht?" );
+        OSL_ENSURE( !pVSh || !pOldVSh || pOldVSh == pVSh, "CallStartAction: Who swapped the SwViewShell?" );
         if( pOldVSh && !pVSh )
             pVSh = nullptr;
 #endif
@@ -2561,7 +2559,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
     {
         SwViewShell *pVSh = m_xDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
         OSL_ENSURE( !pVSh || m_pActionViewShell == pVSh,
-                "CallEndAction: Wer hat die SwViewShell ausgetauscht?" );
+                "CallEndAction: Who swapped the SwViewShell?" );
 #if OSL_DEBUG_LEVEL > 0
         if( m_pActionViewShell && !pVSh )
             pVSh = nullptr;
@@ -2575,7 +2573,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
 
     if( dynamic_cast< const SwEditShell *>( m_pActionViewShell ) !=  nullptr )
     {
-        //Schon gescrollt?, dann dafuer sorgen, dass die View sich nicht bewegt!
+        // Already scrolled?, then make sure, that the view doesn't move!
         const bool bOldLock = m_pActionViewShell->IsViewLocked();
         m_pActionViewShell->LockView( true );
         const bool bOldEndActionByVirDev = m_pActionViewShell->IsEndActionByVirDev();
@@ -2584,7 +2582,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
         m_pActionViewShell->SetEndActionByVirDev( bOldEndActionByVirDev );
         m_pActionViewShell->LockView( bOldLock );
 
-        // bChkJumpMark ist nur gesetzt, wenn das Object auch gefunden wurde
+        // bChkJumpMark is only set, when the object was also found
         if( m_bChkJumpMark )
         {
             const Point aVisSttPos( DOCUMENTBORDER, DOCUMENTBORDER );
@@ -2597,8 +2595,8 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
     else
         m_pActionViewShell->EndAction();
 
-    // sollte der Parser der Letzte sein, der das Doc haelt, dann kann
-    // man hier abbrechen und einen Fehler setzen.
+    // if the parser holds the last reference to the document, then we can
+    // abort here and set an error.
     if( 1 == m_xDoc->getReferenceCount() )
     {
         eState = SvParserState::Error;
@@ -2614,7 +2612,7 @@ SwViewShell *SwHTMLParser::CheckActionViewShell()
 {
     SwViewShell *pVSh = m_xDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     OSL_ENSURE( !pVSh || m_pActionViewShell == pVSh,
-            "CheckActionViewShell: Wer hat die SwViewShell ausgetauscht?" );
+            "CheckActionViewShell: Who has swapped SwViewShell?" );
 #if OSL_DEBUG_LEVEL > 0
     if( m_pActionViewShell && !pVSh )
         pVSh = nullptr;
