@@ -79,7 +79,7 @@ sal_Int32 SAL_CALL java_io_Reader::available(  )
     if(m_buf != boost::none)
         return 1;
     jboolean out;
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
 
     {
         static const char * const cSignature = "()Z";
@@ -129,7 +129,7 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( css::uno::Sequence< sal_Int8 >& aD
     sal_Int32 nCharsToRead = (nBytesToRead + 1)/2;
 
     jint outChars(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
 
     {
         jcharArray pCharArray = t.pEnv->NewCharArray(nCharsToRead);

@@ -50,7 +50,7 @@ jclass java_sql_Clob::getMyClass() const
 sal_Int64 SAL_CALL java_sql_Clob::length(  )
 {
     jlong out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
 
     {
         // initialize temporary variable
@@ -67,7 +67,7 @@ sal_Int64 SAL_CALL java_sql_Clob::length(  )
 
 OUString SAL_CALL java_sql_Clob::getSubString( sal_Int64 pos, sal_Int32 subStringLength )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     OUString aStr;
     {
         // initialize temporary variable
@@ -97,7 +97,7 @@ css::uno::Reference< css::io::XInputStream > SAL_CALL java_sql_Clob::getCharacte
 sal_Int64 SAL_CALL java_sql_Clob::position( const OUString& searchstr, sal_Int32 start )
 {
     jlong out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
 
     {
         jvalue args[1];

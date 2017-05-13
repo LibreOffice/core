@@ -104,7 +104,7 @@ void java_sql_ResultSet::disposing()
 m_xMetaData.clear();
     if( object )
     {
-        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
         static jmethodID mID(nullptr);
         callVoidMethod_ThrowSQL("close", mID);
         clearObject(*t.pEnv);
@@ -137,7 +137,7 @@ sal_Int32 SAL_CALL java_sql_ResultSet::findColumn( const OUString& columnName )
 
 Reference< css::io::XInputStream > SAL_CALL java_sql_ResultSet::getBinaryStream( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getBinaryStream","(I)Ljava/io/InputStream;", mID, columnIndex);
 
@@ -147,7 +147,7 @@ Reference< css::io::XInputStream > SAL_CALL java_sql_ResultSet::getBinaryStream(
 
 Reference< css::io::XInputStream > SAL_CALL java_sql_ResultSet::getCharacterStream( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getCharacterStream","(I)Ljava/io/Reader;", mID, columnIndex);
 
@@ -174,7 +174,7 @@ sal_Int8 SAL_CALL java_sql_ResultSet::getByte( sal_Int32 columnIndex )
 Sequence< sal_Int8 > SAL_CALL java_sql_ResultSet::getBytes( sal_Int32 columnIndex )
 {
     Sequence< sal_Int8 > aSeq;
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     static jmethodID mID(nullptr);
     jbyteArray out = static_cast<jbyteArray>(callObjectMethodWithIntArg(t.pEnv,"getBytes","(I)[B", mID, columnIndex));
     if (out)
@@ -190,7 +190,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_ResultSet::getBytes( sal_Int32 columnInde
 
 css::util::Date SAL_CALL java_sql_ResultSet::getDate( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getDate","(I)Ljava/sql/Date;", mID, columnIndex);
     // WARNING: the caller becomes the owner of the returned pointer
@@ -238,7 +238,7 @@ sal_Int64 SAL_CALL java_sql_ResultSet::getLong( sal_Int32 columnIndex )
 
 css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL java_sql_ResultSet::getMetaData(  )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     static jmethodID mID(nullptr);
     jobject out = callObjectMethod(t.pEnv,"getMetaData","()Ljava/sql/ResultSetMetaData;", mID);
 
@@ -247,7 +247,7 @@ css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL java_sql_ResultSet
 
 Reference< XArray > SAL_CALL java_sql_ResultSet::getArray( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getArray","(I)Ljava/sql/Array;", mID, columnIndex);
 
@@ -258,7 +258,7 @@ Reference< XArray > SAL_CALL java_sql_ResultSet::getArray( sal_Int32 columnIndex
 
 Reference< XClob > SAL_CALL java_sql_ResultSet::getClob( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getClob","(I)Ljava/sql/Clob;", mID, columnIndex);
     // WARNING: the caller becomes the owner of the returned pointer
@@ -267,7 +267,7 @@ Reference< XClob > SAL_CALL java_sql_ResultSet::getClob( sal_Int32 columnIndex )
 
 Reference< XBlob > SAL_CALL java_sql_ResultSet::getBlob( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getBlob","(I)Ljava/sql/Blob;", mID, columnIndex);
     // WARNING: the caller becomes the owner of the returned pointer
@@ -277,7 +277,7 @@ Reference< XBlob > SAL_CALL java_sql_ResultSet::getBlob( sal_Int32 columnIndex )
 
 Reference< XRef > SAL_CALL java_sql_ResultSet::getRef( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getRef","(I)Ljava/sql/Ref;", mID, columnIndex);
 
@@ -290,7 +290,7 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
 {
     jobject out(nullptr);
     Any aRet;
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     {
         jvalue args[2];
         // convert parameter
@@ -364,7 +364,7 @@ OUString SAL_CALL java_sql_ResultSet::getString( sal_Int32 columnIndex )
 
 css::util::Time SAL_CALL java_sql_ResultSet::getTime( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getTime","(I)Ljava/sql/Time;", mID, columnIndex);
     // WARNING: the caller becomes the owner of the returned pointer
@@ -374,7 +374,7 @@ css::util::Time SAL_CALL java_sql_ResultSet::getTime( sal_Int32 columnIndex )
 
 css::util::DateTime SAL_CALL java_sql_ResultSet::getTimestamp( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getTimestamp","(I)Ljava/sql/Timestamp;", mID, columnIndex);
     // WARNING: the caller becomes the owner of the returned pointer

@@ -338,7 +338,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
         bool bIdentifierChar;
         do
         {
-            // Naechstes Zeichen holen
+            // Fetch next character
             c = *pos;
             bIdentifierChar = testCharFlags( c, CharFlags::InIdentifier );
             if( bIdentifierChar )

@@ -36,7 +36,7 @@ public:
 
     // listen to all chart selection changes
     explicit ChartSidebarSelectionListener(ChartSidebarSelectionListenerParent* pParent);
-    // only liste to the changes of eType
+    // only listen to the changes of eType
     ChartSidebarSelectionListener(ChartSidebarSelectionListenerParent* pParent, ObjectType eType);
     virtual ~ChartSidebarSelectionListener() override;
 

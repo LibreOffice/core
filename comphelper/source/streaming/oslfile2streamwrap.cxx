@@ -58,7 +58,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8
     if (eError != FileBase::E_None)
         throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
 
-    // Wenn gelesene Zeichen < MaxLength, css::uno::Sequence anpassen
+    // If the read character < MaxLength, adjust css::uno::Sequence
     if (nRead < (sal_uInt32)nBytesToRead)
         aData.realloc( sal::static_int_cast< sal_Int32 >(nRead) );
 

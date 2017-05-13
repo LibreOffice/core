@@ -53,7 +53,7 @@ const css::uno::Reference<css::io::XObjectInputStream>& operator >> (
         const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream,
         css::awt::FontDescriptor& _rFont)
 {
-    // schreiben des Fontdescriptors
+    // writing the FontDescriptor
     _rFont.Name = _rxInStream->readUTF();
     _rFont.Height = _rxInStream->readShort();
     _rFont.Width = _rxInStream->readShort();
