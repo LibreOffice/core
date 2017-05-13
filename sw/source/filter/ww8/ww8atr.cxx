@@ -19,7 +19,7 @@
 
 /*
  * This file contains methods for the WW8 output
- * (nodes, attributes, formats und chars).
+ * (nodes, attributes, formats and chars).
  */
 
 #include <hintids.hxx>
@@ -203,7 +203,6 @@ bool WW8Export::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich 
     return bRet;
 }
 
-//  Hilfsroutinen fuer Styles
 
 void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 nScript )
 {
@@ -227,8 +226,8 @@ void MSWordExportBase::ExportPoolItemsToCHP( ww8::PoolItems &rItems, sal_uInt16 
 }
 
 /*
- * Format wie folgt ausgeben:
- *      - gebe die Attribute aus; ohne Parents!
+ * Output format as follows:
+ *      - output the attributes; without parents!
  */
 
 void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, bool bChpFormat, sal_uInt16 nScript,
@@ -237,7 +236,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
     if( bExportParentItemSet || rSet.Count() )
     {
         const SfxPoolItem* pItem;
-        m_pISet = &rSet;                  // fuer Doppel-Attribute
+        m_pISet = &rSet;                  // for double attributes
 
         // If frame dir is set, but not adjust, then force adjust as well
         if ( bPapFormat && SfxItemState::SET == rSet.GetItemState( RES_FRAMEDIR, bExportParentItemSet ) )
@@ -292,7 +291,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
                 AttrOutput().OutputItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
             }
         }
-        m_pISet = nullptr;                      // fuer Doppel-Attribute
+        m_pISet = nullptr;                      // for double attributes
     }
 }
 
@@ -379,13 +378,16 @@ bool MSWordExportBase::SetAktPageDescFromNode(const SwNode &rNd)
     return bNewPageDesc;
 }
 
-// Da WW nur Break-After ( Pagebreak und Sectionbreaks ) kennt, im SW aber
-// Pagebreaks "vor" und "nach" und Pagedescs nur "vor" existieren, werden
-// die Breaks 2* durchgeklimpert, naemlich vor und hinter jeder Zeile.
-// Je nach BreakTyp werden sie vor oder nach der Zeile gesetzt.
-// Es duerfen nur Funktionen gerufen werden, die nicht in den
-// Ausgabebereich pO schreiben, da dieser nur einmal fuer CHP und PAP existiert
-// und damit im falschen landen wuerden.
+/**
+ * Because WW only knows Break-After (page break and section breaks),
+ * but in SW page breaks "before" and "after" exists and page descriptions
+ * only "before" exists. Therefore the breaks iterate two-times, namely before
+ * and after every line.
+ * Depending on the break type they're set before and after line.
+ * Only functions can be called, which aren't will write in output area pO,
+ * because that one only exits once for CHP and PAL and therefore wind up in
+ * the wrong one.
+ */
 void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode& rNd, bool isCellOpen, bool isTextNodeEmpty)
 {
     if ( m_bStyDef || m_bOutKF || m_bInWriteEscher || m_bOutPageDescs )
@@ -590,15 +592,15 @@ void WW8Export::PrepareNewPageDesc( const SfxItemSet*pSet,
                                       const SwFormatPageDesc* pNewPgDescFormat,
                                       const SwPageDesc* pNewPgDesc )
 {
-    // Die PageDescs werden beim Auftreten von PageDesc-Attributen nur in
-    // WW8Writer::pSepx mit der entsprechenden Position eingetragen.  Das
-    // Aufbauen und die Ausgabe der am PageDesc haengenden Attribute und
-    // Kopf/Fusszeilen passiert nach dem Haupttext und seinen Attributen.
+    // The PageDescs will only insert in WW8Writer::pSepx with the corresponding
+    // position by the appearances of PageDesc attributes. The construction and
+    // output of the attributes and header/footer of the PageDesc are done
+    // after the main text and his attributes.
 
     sal_uLong nFcPos = ReplaceCr( msword::PageBreak ); // Page/Section-Break
 
-    // tatsaechlich wird hier NOCH NICHTS ausgegeben, sondern
-    // nur die Merk-Arrays aCps, aSects entsprechend ergaenzt
+    // actually nothing is outputted here, rather the arrays aCps, aSects
+    // accordingly completed
     if ( !nFcPos )
         return;
 
@@ -621,7 +623,7 @@ void MSWordExportBase::CorrectTabStopInSet( SfxItemSet& rSet, sal_uInt16 nAbsLef
 {
     if (const SvxTabStopItem *pItem = rSet.GetItem<SvxTabStopItem>(RES_PARATR_TABSTOP))
     {
-        // dann muss das fuer die Ausgabe korrigiert werden
+        // then it must corrected for the output
         SvxTabStopItem aTStop(*pItem);
         for ( sal_uInt16 nCnt = 0; nCnt < aTStop.Count(); ++nCnt )
         {
@@ -656,7 +658,7 @@ sal_uInt8 WW8Export::GetNumId( sal_uInt16 eNumType )
     case SVX_NUM_BITMAP:
     case SVX_NUM_CHAR_SPECIAL:          nRet = 23;      break;
 
-    // nix, macht WW undokumentiert auch so
+    // nothing, does WW as well without documentation
     case SVX_NUM_NUMBER_NONE:           nRet = 0xff;    break;
     }
     return nRet;
@@ -786,8 +788,8 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
                     0);
                 aSet.Set(rFrameFormat.GetAttrSet());
 
-                // Fly als Zeichen werden bei uns zu Absatz-gebundenen
-                // jetzt den Abstand vom Absatz-Rand setzen
+                // Fly as character becomes a paragraph bound
+                // now set the distance of paragraph margin
                 if (m_pFlyOffset)
                 {
                     aSet.Put(SwFormatHoriOrient(m_pFlyOffset->X()));
@@ -1023,11 +1025,11 @@ void WW8AttributeOutput::OutputFKP(bool bForce)
 
 void WW8AttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
 {
-    OSL_ENSURE( m_rWW8Export.pO->empty(), " pO ist am ZeilenEnde nicht leer" );
+    OSL_ENSURE( m_rWW8Export.pO->empty(), " pO is not empty at line end" );
 
     SVBT16 nSty;
     ShortToSVBT16( nStyle, nSty );
-    m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), nSty, nSty+2 );     // Style #
+    m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), nSty, nSty+2 );     // style #
 }
 
 void WW8AttributeOutput::OutputWW8Attribute( sal_uInt8 nId, bool bVal )
@@ -1092,7 +1094,7 @@ void WW8AttributeOutput::CharWeight( const SvxWeightItem& rWeight )
     OutputWW8Attribute( 0, WEIGHT_BOLD == rWeight.GetWeight() );
 }
 
-// Shadowed und Contour are not in WW-UI. JP: ??
+// Shadowed and Contour are not in WW-UI. JP: ??
 void WW8AttributeOutput::CharContour( const SvxContourItem& rContour )
 {
     OutputWW8Attribute( 3, rContour.GetValue() );
@@ -1462,16 +1464,18 @@ void WW8AttributeOutput::CharEmphasisMark( const SvxEmphasisMarkItem& rEmphasisM
     m_rWW8Export.pO->push_back( nVal );
 }
 
-// TransBrush uebersetzt SW-Brushes in WW. Heraus kommt WW8_SHD.
-// Nicht-Standardfarben des SW werden noch nicht in die
-// Misch-Werte ( 0 .. 95% ) vom WW uebersetzt.
-// Return: Echte Brush ( nicht transparent )
-// auch bei Transparent wird z.B. fuer Tabellen eine transparente Brush
-// geliefert
+/**
+ * TransBrush converts SW-Brushes in WW. The result is WW8_SHD.
+ * None-standard colours of SW won't be convert now in the mixed values
+ * ( 0 .. 95% ) of WW.
+ * Also if transparent for e.g. for tables a transparen brush is returned
+ *
+ * @return real brush ( not transparent )
+ */
 bool WW8Export::TransBrush(const Color& rCol, WW8_SHD& rShd)
 {
     if( rCol.GetTransparency() )
-        rShd = WW8_SHD();               // alles Nullen : transparent
+        rShd = WW8_SHD();               // all zeros: transparent
     else
     {
         rShd.SetFore( 0);
@@ -1657,7 +1661,7 @@ WW8_WrPlcField* WW8Export::CurrentFieldPlc() const
             pFieldP = m_pFieldHFTextBxs;
             break;
         default:
-            OSL_ENSURE( false, "was ist das fuer ein SubDoc-Type?" );
+            OSL_ENSURE( false, "what type of SubDoc is that?" );
     }
     return pFieldP;
 }
@@ -1695,7 +1699,7 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
         //#i3958#, Needed to make this field work correctly in Word 2000
         if (eFieldType == ww::eSHAPE)
             aField13[0] |= 0x80;
-        aField13[1] = static_cast< sal_uInt8 >(eFieldType);  // Typ nachtragen
+        aField13[1] = static_cast< sal_uInt8 >(eFieldType);  // add type
         pFieldP->Append( Fc2Cp( Strm().Tell() ), aField13 );
         InsertSpecialChar( *this, 0x13, nullptr, bIncludeEmptyPicLocation );
     }
@@ -2924,14 +2928,14 @@ void AttributeOutputBase::TextFlyContent( const SwFormatFlyCnt& rFlyContent )
     }
 }
 
-// TOXMarks fehlen noch
+// TOXMarks are still missing
 
-// Detaillierte Einstellungen zur Trennung erlaubt WW nur dokumentenweise.
-// Man koennte folgende Mimik einbauen: Die Werte des Style "Standard" werden,
-// falls vorhanden, in die Document Properties ( DOP ) gesetzt.
+// Detailed settings for separation WW only allows only for the whole document.
+// One could implement following mimic: The values of the style "Standard" will
+// be set in the Document Properties ( DOP ) if they exists.
 
-// ACK.  Dieser Vorschlag passt exakt zu unserer Implementierung des Import,
-// daher setze ich das gleich mal um. (KHZ, 07/15/2000)
+// ACK. This suggestion fits exactly to our implementation of the import,
+// therefore I'll implement that right now. (KHZ, 07/15/2000)
 void WW8AttributeOutput::ParaHyphenZone( const SvxHyphenZoneItem& rHyphenZone )
 {
     // sprmPFNoAutoHyph
@@ -2999,14 +3003,14 @@ void WW8AttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign )
     m_rWW8Export.InsUInt16( nVal );
 }
 
-// NoHyphen: ich habe keine Entsprechung in der SW-UI und WW-UI gefunden
+// NoHyphen: I didn't find an equal in the SW UI and WW UI
 
-// RefMark, NoLineBreakHere  fehlen noch
+// RefMark, NoLineBreakHere are still missing
 
 void WW8Export::WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes* pOutArr )
 {
     ww::bytes aAttrArr;
-    const bool bAutoNum = rFootnote.GetNumStr().isEmpty();    // Auto-Nummer
+    const bool bAutoNum = rFootnote.GetNumStr().isEmpty();
     if( bAutoNum )
     {
         static const sal_uInt8 aSpec[] =
@@ -3031,13 +3035,13 @@ void WW8Export::WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes
     SwWW8Writer::InsUInt16( aAttrArr, GetId( pCFormat ) );
 
                                                 // fSpec-Attribut true
-                            // Fuer Auto-Nummer muss ein Spezial-Zeichen
-                            // in den Text und darum ein fSpec-Attribut
+                            // For Auto-Number a special character must
+                            // in the text and therefore a fSpec attribute
     m_pChpPlc->AppendFkpEntry( Strm().Tell() );
     if( bAutoNum )
-        WriteChar( 0x02 );              // Auto-Nummer-Zeichen
+        WriteChar( 0x02 );              // auto number character
     else
-        // User-Nummerierung
+        // user numbering
         OutSwString(rFootnote.GetNumStr(), 0, rFootnote.GetNumStr().getLength());
 
     if( pOutArr )
@@ -3283,9 +3287,9 @@ void WW8AttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
     if( m_rWW8Export.m_bOutFlyFrameAttrs )                   // Flys
     {
         if( m_rWW8Export.m_bOutGrf )
-            return;                // Fly um Grafik -> Auto-Groesse
+            return;                // Fly around graphic -> Auto-size
 
-//???? was ist bei Prozentangaben ???
+        //???? What is it by percentage ???
         if ( rSize.GetWidth() && rSize.GetWidthSizeType() == ATT_FIX_SIZE)
         {
             //"sprmPDxaWidth"
@@ -3308,7 +3312,7 @@ void WW8AttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
             m_rWW8Export.InsUInt16( nH );
         }
     }
-    else if( m_rWW8Export.m_bOutPageDescs )            // PageDesc : Breite + Hoehe
+    else if( m_rWW8Export.m_bOutPageDescs )            // PageDesc : width + height
     {
         if( m_rWW8Export.m_pAktPageDesc->GetLandscape() )
         {
@@ -3329,13 +3333,15 @@ void WW8AttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
     }
 }
 
-// FillOrder fehlt noch
+// FillOrder is still missing
 
-// ReplaceCr() wird fuer Pagebreaks und Pagedescs gebraucht. Es wird ein
-// bereits geschriebenes CR durch ein Break-Zeichen ersetzt. Replace muss
-// direkt nach Schreiben des CR gerufen werden.
-// Rueckgabe: FilePos des ersetzten CRs + 1 oder 0 fuer nicht ersetzt
-
+/**
+ * ReplaceCr() are used for Pagebreaks and Pagedescs. A already written CR
+ * will be replaced by a break character. Replace must be called right after
+ * the writing of CR.
+ *
+ * @return FilePos + 1 of the replaced CR or 0 if nothing was replaced.
+ */
 sal_uLong WW8Export::ReplaceCr( sal_uInt8 nChar )
 {
     OSL_ENSURE( nChar, "gegen 0 ersetzt bringt WW97/95 zum Absturz" );
@@ -3428,9 +3434,11 @@ void WW8AttributeOutput::PageBreakBefore( bool bBreak )
     m_rWW8Export.pO->push_back( bBreak ? 1 : 0 );
 }
 
-// Breaks schreiben nichts in das Ausgabe-Feld rWrt.pO,
-// sondern nur in den Text-Stream ( Bedingung dafuer, dass sie von Out_Break...
-// gerufen werden duerfen )
+/**
+ * breaks write nothing in the output field rWrt.pO,
+ * but only in the text stream ( condition for this, that they
+ * shouldn't be called from Out_Break... )
+ */
 void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
 {
     if ( GetExport().m_bStyDef )
@@ -3455,7 +3463,7 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
 
         switch ( rBreak.GetBreak() )
         {
-            case SvxBreak::NONE:                                // Ausgeschaltet
+            case SvxBreak::NONE:                                // disabled
                 if ( !GetExport().m_bBreakBefore )
                     PageBreakBefore( false );
                 return;
@@ -3614,13 +3622,13 @@ void WW8AttributeOutput::FormatPaperBin( const SvxPaperBinItem& rPaperBin )
 
 void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
 {
-    // Flys fehlen noch ( siehe RTF )
+    // Flys are still missing ( see RTF )
 
     if ( m_rWW8Export.m_bOutFlyFrameAttrs )                   // Flys
     {
         // sprmPDxaFromText10
         m_rWW8Export.InsUInt16( NS_sprm::LN_PDxaFromText10 );
-        // Mittelwert nehmen, da WW nur 1 Wert kennt
+        // use average, since WW only knows one value
         m_rWW8Export.InsUInt16( (sal_uInt16) ( ( rLR.GetLeft() + rLR.GetRight() ) / 2 ) );
     }
     else if ( m_rWW8Export.m_bOutPageDescs )                // PageDescs
@@ -3646,7 +3654,7 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
         m_rWW8Export.InsUInt16( nRDist );
     }
     else
-    {                                          // normale Absaetze
+    {                                          // normal paragraphs
         // sprmPDxaLeft
         m_rWW8Export.InsUInt16( 0x845E );        //asian version ?
         m_rWW8Export.InsUInt16( (sal_uInt16)rLR.GetTextLeft() );
@@ -3663,13 +3671,13 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
 
 void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
 {
-    // Flys fehlen noch ( siehe RTF )
+    // Flys are still missing ( see RTF )
 
     if ( m_rWW8Export.m_bOutFlyFrameAttrs )                   // Flys
     {
         // sprmPDyaFromText
         m_rWW8Export.InsUInt16( NS_sprm::sprmPDyaFromText );
-        // Mittelwert nehmen, da WW nur 1 Wert kennt
+        // use average, since WW only knows one value
         m_rWW8Export.InsUInt16( (sal_uInt16) ( ( rUL.GetUpper() + rUL.GetLower() ) / 2 ) );
     }
     else if ( m_rWW8Export.m_bOutPageDescs )            // Page-UL
@@ -3719,7 +3727,7 @@ void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
     }
 }
 
-// Print, Opaque, Protect fehlen noch
+// print, opaque, protect are still missing
 
 void WW8AttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
 {
@@ -3734,8 +3742,8 @@ void WW8AttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
 
 void WW8AttributeOutput::FormatVertOrientation( const SwFormatVertOrient& rFlyVert )
 {
-//!!!! Ankertyp und entsprechende Umrechnung fehlt noch
 
+    //!!!! anchor type and corresponding borders are still missing
     if ( m_rWW8Export.m_bOutFlyFrameAttrs )
     {
         short nPos;
@@ -3773,7 +3781,7 @@ void WW8AttributeOutput::FormatHorizOrientation( const SwFormatHoriOrient& rFlyH
         return;
     }
 
-//!!!! Ankertyp und entsprechende Umrechnung fehlt noch
+    //!!!! anchor type and corresponding borders are still missing
     if ( m_rWW8Export.m_bOutFlyFrameAttrs )
     {
         short nPos;
@@ -3782,7 +3790,7 @@ void WW8AttributeOutput::FormatHorizOrientation( const SwFormatHoriOrient& rFlyH
             case text::HoriOrientation::NONE:
                 nPos = (short)rFlyHori.GetPos();
                 if( !nPos )
-                    nPos = 1;   // WW: 0 ist reserviert
+                    nPos = 1;   // WW: 0 is reserved
                 break;
             case text::HoriOrientation::LEFT:
                 nPos = rFlyHori.IsPosToggle() ? -12 : 0;
@@ -3791,7 +3799,7 @@ void WW8AttributeOutput::FormatHorizOrientation( const SwFormatHoriOrient& rFlyH
                 nPos = rFlyHori.IsPosToggle() ? -16 : -8;
                 break;
             case text::HoriOrientation::CENTER:
-            case text::HoriOrientation::FULL:                         // FULL nur fuer Tabellen
+            case text::HoriOrientation::FULL: // FULL only for tables
             default:
                 nPos = -4;
                 break;
@@ -3813,15 +3821,15 @@ void WW8AttributeOutput::FormatAnchor( const SwFormatAnchor& rAnchor )
         switch ( rAnchor.GetAnchorId() )
         {
             case RndStdIds::FLY_AT_PAGE:
-                // Vert: Page | Horz: Page
+                // vertical: page | horizontal: page
                 nP |= (1 << 4) | (2 << 6);
                 break;
-            // Im Fall eine Flys als Zeichen: Absatz-gebunden setzen!!!
+            // in case of Fly as characters: set paragraph-bound!!!
             case RndStdIds::FLY_AT_FLY:
             case RndStdIds::FLY_AT_CHAR:
             case RndStdIds::FLY_AT_PARA:
             case RndStdIds::FLY_AS_CHAR:
-                // Vert: Page | Horz: Page
+                // vertical: page | horizontal: page
                 nP |= (2 << 4) | (0 << 6);
                 break;
             default:
@@ -3872,7 +3880,7 @@ WW8_BRCVer9 WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
             rLine.GetBorderLineStyle(), rLine.GetWidth());
     sal_uInt8 brcType = 0;
 
-    if( nWidth )                                // Linie ?
+    if( nWidth ) // line ?
     {
         // BRC.brcType
         brcType = 0;
@@ -3945,8 +3953,8 @@ WW8_BRCVer9 WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
         if( 0xff < nWidth )
             nWidth = 0xff;
 
-        if( 0 == nWidth )                       // ganz duenne Linie
-            nWidth = 1;                         //       nicht weglassen
+        if( 0 == nWidth )                       // really thin line
+            nWidth = 1;                         // don't omit
 
         // BRC.cv
         nColBGR = wwUtility::RGBToBGR(rLine.GetColor().GetRGBColor());
@@ -3954,7 +3962,7 @@ WW8_BRCVer9 WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
 
     // BRC.dptSpace
     sal_uInt16 nLDist = nDist;
-    nLDist /= 20;               // Masseinheit : pt
+    nLDist /= 20;               // unit of measurement: pt
     if( nLDist > 0x1f )
         nLDist = 0x1f;
 
@@ -3962,10 +3970,15 @@ WW8_BRCVer9 WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
         bShadow, false);
 }
 
-// MakeBorderLine() bekommt einen WW8Bytes* uebergeben, um die Funktion
-// auch fuer die Tabellen-Umrandungen zu benutzen.
-// Wenn nSprmNo == 0, dann wird der Opcode nicht ausgegeben.
-// bShadow darf bei Tabellenzellen *nicht* gesetzt sein !
+/**
+ * Gets passed a WW8Bytes*, so the function also can be used for the table border.
+ *
+ * @param rO
+ * @param pLine
+ * @param nDist
+ * @param nSprmNo  If nSprmNo == 0, then the opcode isn't outputted.
+ * @param bShadow  SHOULDN'T be set by table cells !
+ */
 void WW8Export::Out_BorderLine(ww::bytes& rO, const SvxBorderLine* pLine,
     sal_uInt16 nDist, sal_uInt16 nSprmNo, sal_uInt16 nSprmNoVer9, bool bShadow)
 {
@@ -4002,8 +4015,12 @@ void WW8Export::Out_BorderLine(ww::bytes& rO, const SvxBorderLine* pLine,
     }
 }
 
-// FormatBox1() ist fuer alle Boxen ausser in Tabellen.
-// es wird pO des WW8Writers genommen
+/**
+ * is for all boxes except in tables. pO of the WW8Writer is used
+ *
+ * @param rBox
+ * @param bShadow
+ */
 void WW8Export::Out_SwFormatBox(const SvxBoxItem& rBox, bool bShadow)
 {
     static const SvxBoxItemLine aBorders[] =
@@ -4051,15 +4068,17 @@ void WW8Export::Out_SwFormatBox(const SvxBoxItem& rBox, bool bShadow)
     }
 }
 
-// FormatBox2() ist fuer TC-Strukturen in Tabellen. Der Sprm-Opcode
-// wird nicht geschrieben, da es in der TC-Structur ohne Opcode gepackt ist.
-// dxpSpace wird immer 0, da WW das in Tabellen so verlangt
-// ( Tabellenumrandungen fransen sonst aus )
-// Ein WW8Bytes-Ptr wird als Ausgabe-Parameter uebergeben
-
+/**
+ * FormatBox2() if for TC structures in tables. The Sprm opcode wasn't written
+ * because it is packed into the TC structure without opcode.
+ * dxpSpace always becomes 0, because WW requires that in tables
+ * ( table borders otherwise will fray )
+ *
+ * @param A WW8Bytes pointer is passed in as output parameter
+ */
 void WW8Export::Out_SwFormatTableBox( ww::bytes& rO, const SvxBoxItem * pBox )
 {
-    // moeglich und vielleicht besser waere 0xffff
+    // possible and maybe better will be 0xffff
     static const SvxBoxItemLine aBorders[] =
     {
         SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT, SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT
@@ -4106,8 +4125,8 @@ void WW8Export::Out_CellRangeBorders( const SvxBoxItem * pBox, sal_uInt8 nStart,
 
 void WW8AttributeOutput::FormatBox( const SvxBoxItem& rBox )
 {
-    // Fly um Grafik-> keine Umrandung hier, da
-    // der GrafikHeader bereits die Umrandung hat
+    // Fly around graphic -> here no border, because the
+    // graphics header already has the border
     if ( !m_rWW8Export.m_bOutGrf )
     {
         bool bShadow = false;
@@ -4185,7 +4204,7 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
     sal_uInt16 nCols = rColumns.size();
     if ( 1 < nCols && !GetExport( ).m_bOutFlyFrameAttrs )
     {
-        // dann besorge mal die Seitenbreite ohne Raender !!
+        // get the page width without borders !!
 
         const SwFrameFormat* pFormat = GetExport( ).m_pAktPageDesc ? &GetExport( ).m_pAktPageDesc->GetMaster() : &const_cast<const SwDoc *>(GetExport( ).m_pDoc)->GetPageDesc(0).GetMaster();
         const SvxFrameDirectionItem &frameDirection = pFormat->GetFrameDir();
@@ -4225,7 +4244,7 @@ void AttributeOutputBase::FormatColumns( const SwFormatCol& rCol )
 
         }
 
-        // Nachsehen, ob alle Spalten gleich sind
+        // look if all columns are equal
         bool bEven = true;
         sal_uInt16 n;
         sal_uInt16 nColWidth = rCol.CalcPrtColWidth( 0, (sal_uInt16)nPageSize );
@@ -4292,8 +4311,7 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
         {
             if( rSpacing.GetInterLineSpaceRule() == SvxInterLineSpaceRule::Fix ) // Leading
             {
-                // gibt es aber nicht in WW - also wie kommt man an
-                // die MaxLineHeight heran?
+                // doesn't exists in WW - how do you get the MaxLineHeight?
                 nSpace = rSpacing.GetInterLineSpace();
                 sal_uInt16 nScript =
                     i18n::ScriptType::LATIN;
@@ -4484,12 +4502,14 @@ void WW8AttributeOutput::ParaSplit( const SvxFormatSplitItem& rSplit )
     m_rWW8Export.pO->push_back( rSplit.GetValue() ? 0 : 1 );
 }
 
-//  Es wird nur das Item "SvxWidowItem" und nicht die Orphans uebersetzt,
-//  da es fuer beides im WW nur ein Attribut "Absatzkontrolle" gibt und
-//  im SW wahrscheinlich vom Anwender immer Beide oder keiner gesetzt werden.
+/**
+ * Only convert the item "SvxWidowItem" and not the orphans, because
+ * for both in WW only one attribute "paragraph controll" exists and
+ * in SW probably both or none is set from the user.
+ */
 void WW8AttributeOutput::ParaWidows( const SvxWidowsItem& rWidows )
 {
-// sprmPFWidowControl
+    // sprmPFWidowControl
     m_rWW8Export.InsUInt16( NS_sprm::sprmPFWidowControl );
     m_rWW8Export.pO->push_back( rWidows.GetValue() ? 1 : 0 );
 }
@@ -4499,8 +4519,8 @@ class SwWW8WrTabu
     sal_uInt8* pDel;            // DelArray
     sal_uInt8* pAddPos;         // AddPos-Array
     sal_uInt8* pAddTyp;         // AddTyp-Array
-    sal_uInt16 nAdd;            // so viele Tabs kommen hinzu
-    sal_uInt16 nDel;            // so viele Tabs fallen weg
+    sal_uInt16 nAdd;            // number of tabs to be added
+    sal_uInt16 nDel;            // number of tabs to be deleted
 
     SwWW8WrTabu(const SwWW8WrTabu&) = delete;
     SwWW8WrTabu& operator=(const SwWW8WrTabu&) = delete;
@@ -4529,14 +4549,16 @@ SwWW8WrTabu::~SwWW8WrTabu()
     delete[] pDel;
 }
 
-// Add( const SvxTabStop & rTS ) fuegt einen Tab in die WW-Struktur ein
+/**
+ * insert a tab in the WW structure
+ */
 void SwWW8WrTabu::Add(const SvxTabStop & rTS, long nAdjustment)
 {
-    // Tab-Position eintragen
+    // insert tab position
     ShortToSVBT16(msword_cast<sal_Int16>(rTS.GetTabPos() + nAdjustment),
         pAddPos + (nAdd * 2));
 
-    // Tab-Typ eintragen
+    // insert tab type
     sal_uInt8 nPara = 0;
     switch (rTS.GetAdjustment())
     {
@@ -4548,7 +4570,7 @@ void SwWW8WrTabu::Add(const SvxTabStop & rTS, long nAdjustment)
             break;
         case SvxTabAdjust::Decimal:
             /*
-            Theres nothing we can do btw the decimal separator has been
+            There is nothing we can do btw the decimal separator has been
             customized, but if you think different remember that different
             locales have different separators, i.e. german is a , while english
             is a .
@@ -4579,17 +4601,20 @@ void SwWW8WrTabu::Add(const SvxTabStop & rTS, long nAdjustment)
     ++nAdd;
 }
 
-// Del( const SvxTabStop & rTS ) fuegt einen zu loeschenden Tab
-// in die WW-Struktur ein
+/**
+ * Insert a to be deleted tab in the WW structure
+ */
 void SwWW8WrTabu::Del(const SvxTabStop &rTS, long nAdjustment)
 {
-    // Tab-Position eintragen
+    // insert tab position
     ShortToSVBT16(msword_cast<sal_Int16>(rTS.GetTabPos() + nAdjustment),
         pDel + (nDel * 2));
     ++nDel;
 }
 
-//  PutAll( WW8Export& rWW8Wrt ) schreibt das Attribut nach rWrt.pO
+/**
+ * Writes the attribute to rWrt.pO
+ */
 void SwWW8WrTabu::PutAll(WW8Export& rWrt)
 {
     if (!nAdd && !nDel) //If it's a no-op
@@ -4606,12 +4631,12 @@ void SwWW8WrTabu::PutAll(WW8Export& rWrt)
         nSiz = 255;
 
     rWrt.InsUInt16(NS_sprm::sprmPChgTabsPapx);
-    // cch eintragen
+    // insert cch
     rWrt.pO->push_back(msword_cast<sal_uInt8>(nSiz));
-    // DelArr schreiben
+    // write DelArr
     rWrt.pO->push_back(msword_cast<sal_uInt8>(nDel));
     rWrt.OutSprmBytes(pDel, nDel * 2);
-    // InsArr schreiben
+    // write InsArr
     rWrt.pO->push_back(msword_cast<sal_uInt8>(nAdd));
     rWrt.OutSprmBytes(pAddPos, 2 * nAdd);         // AddPosArray
     rWrt.OutSprmBytes(pAddTyp, nAdd);             // AddTypArray
@@ -4626,7 +4651,7 @@ static void ParaTabStopAdd( WW8Export& rWrt,
     for( sal_uInt16 n = 0; n < rTStops.Count(); n++ )
     {
         const SvxTabStop& rTS = rTStops[n];
-        // Def-Tabs ignorieren
+        // ignore default tabs
         if (SvxTabAdjust::Default != rTS.GetAdjustment())
             aTab.Add(rTS, nLParaMgn);
     }
@@ -4658,13 +4683,13 @@ static void ParaTabStopDelAdd( WW8Export& rWrt,
     do {
         const SvxTabStop* pTO;
         long nOP;
-        if( nO < rTStyle.Count() )                  // alt noch nicht am Ende ?
+        if( nO < rTStyle.Count() )                  // old not yet at the end?
         {
             pTO = &rTStyle[ nO ];
             nOP = pTO->GetTabPos() + nLStypeMgn;
             if( SvxTabAdjust::Default == pTO->GetAdjustment() )
             {
-                nO++;                                // Default-Tab ignorieren
+                nO++;                                // ignore default tab
                 continue;
             }
         }
@@ -4676,13 +4701,13 @@ static void ParaTabStopDelAdd( WW8Export& rWrt,
 
         const SvxTabStop* pTN;
         long nNP;
-        if( nN < rTNew.Count() )                    // neu noch nicht am Ende
+        if( nN < rTNew.Count() )                    // new not yet at the end
         {
             pTN = &rTNew[ nN ];
             nNP = pTN->GetTabPos() + nLParaMgn;
             if( SvxTabAdjust::Default == pTN->GetAdjustment() )
             {
-                nN++;                               // Default-Tab ignorieren
+                nN++;                               // ignore default tab
                 continue;
             }
         }
@@ -4693,27 +4718,27 @@ static void ParaTabStopDelAdd( WW8Export& rWrt,
         }
 
         if( nOP == LONG_MAX && nNP == LONG_MAX )
-            break;                                  // alles fertig
+            break;                                  // everything ready
 
-        if( nOP < nNP )                             // naechster Tab ist alt
+        if( nOP < nNP )                             // next tab is old
         {
-            aTab.Del(*pTO, nLStypeMgn);             // muss geloescht werden
+            aTab.Del(*pTO, nLStypeMgn);             // must be deleted
             nO++;
         }
-        else if( nNP < nOP )                        // naechster Tab ist neu
+        else if( nNP < nOP )                        // next tab is new
         {
-            aTab.Add(*pTN, nLParaMgn);              // muss eigefuegt werden
+            aTab.Add(*pTN, nLParaMgn);              // must be insert
             nN++;
         }
-        else if (lcl_IsEqual(nOP, *pTO, nNP, *pTN)) // Tabs sind gleich:
+        else if (lcl_IsEqual(nOP, *pTO, nNP, *pTN)) // tabs are equal
         {
-            nO++;                                   // nichts zu tun
+            nO++;                                   // nothing to do
             nN++;
         }
-        else                                        // Tabs selbe Pos, diff Typ
+        else                                        // tabs same position, different type
         {
-            aTab.Del(*pTO, nLStypeMgn);             // alten loeschen
-            aTab.Add(*pTN, nLParaMgn);              // neuen einfuegen
+            aTab.Del(*pTO, nLStypeMgn);             // delete old one
+            aTab.Add(*pTN, nLParaMgn);              // insert new one
             nO++;
             nN++;
         }
@@ -5050,7 +5075,7 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, bool bTest
     const SfxPoolItem* pItem;
     if ( !pSet->GetParent() )
     {
-        OSL_ENSURE( rSet.Count(), "Wurde doch schon behandelt oder?" );
+        OSL_ENSURE( rSet.Count(), "Was already handled or?" );
         SfxItemIter aIter( *pSet );
         pItem = aIter.GetCurItem();
         do {
