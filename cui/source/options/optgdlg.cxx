@@ -1569,6 +1569,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
 void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
 {
     LanguageTag aLanguageTag( pLangConfig->aSysLocaleOptions.GetLanguageTag());
+    m_pUserInterfaceLB->SelectEntryPos(0);
     if ( aLanguageTag.isSystemLocale() )
         m_pLocaleSettingLB->SelectLanguage( LANGUAGE_USER_SYSTEM_CONFIG );
     else
