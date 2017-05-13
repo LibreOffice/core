@@ -871,6 +871,12 @@ void CuiAboutConfigTabPage::InsertEntry( SvTreeListEntry *pEntry)
     {
         int prevIndex = index;
         index = sPath.indexOf("/", index+1);
+        // deal with no parent case (tdf#107811)
+        if (index < 0)
+        {
+            m_pPrefBox->Insert( pEntry, nullptr);
+            return;
+        }
         OUString sParentName = sPath.copy(prevIndex+1, index - prevIndex - 1);
 
         bool hasEntry = false;
