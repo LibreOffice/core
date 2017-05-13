@@ -3259,7 +3259,7 @@ void SvxColorListBox::ShowPreview(const NamedColor &rColor)
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Size aImageSize(rStyleSettings.GetListBoxPreviewDefaultPixelSize());
 
-    VclPtr<VirtualDevice> xDevice = VclPtr<VirtualDevice>::Create();
+    ScopedVclPtrInstance<VirtualDevice> xDevice;
     xDevice->SetOutputSize(aImageSize);
     const tools::Rectangle aRect(Point(0, 0), aImageSize);
     if (m_bShowNoneButton && rColor.first == COL_NONE_COLOR)
