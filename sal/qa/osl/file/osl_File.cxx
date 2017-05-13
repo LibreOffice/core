@@ -426,17 +426,17 @@ namespace osl_FileBase
         void getAbsoluteFileURL_004();
 
         CPPUNIT_TEST_SUITE(getAbsoluteFileURL);
-                CPPUNIT_TEST(getAbsoluteFileURL_001_1);
-                CPPUNIT_TEST(getAbsoluteFileURL_001_2);
-                CPPUNIT_TEST(getAbsoluteFileURL_001_3);
-                CPPUNIT_TEST(getAbsoluteFileURL_001_4);
-                CPPUNIT_TEST(getAbsoluteFileURL_001_5);
-                CPPUNIT_TEST(getAbsoluteFileURL_001_6);
-                CPPUNIT_TEST(getAbsoluteFileURL_001_7);
-                CPPUNIT_TEST(getAbsoluteFileURL_001_8);
-                CPPUNIT_TEST(getAbsoluteFileURL_002);
-                CPPUNIT_TEST(getAbsoluteFileURL_003);
-                CPPUNIT_TEST(getAbsoluteFileURL_004);
+            CPPUNIT_TEST(getAbsoluteFileURL_001_1);
+            CPPUNIT_TEST(getAbsoluteFileURL_001_2);
+            CPPUNIT_TEST(getAbsoluteFileURL_001_3);
+            CPPUNIT_TEST(getAbsoluteFileURL_001_4);
+            CPPUNIT_TEST(getAbsoluteFileURL_001_5);
+            CPPUNIT_TEST(getAbsoluteFileURL_001_6);
+            CPPUNIT_TEST(getAbsoluteFileURL_001_7);
+            CPPUNIT_TEST(getAbsoluteFileURL_001_8);
+            CPPUNIT_TEST(getAbsoluteFileURL_002);
+            CPPUNIT_TEST(getAbsoluteFileURL_003);
+            CPPUNIT_TEST(getAbsoluteFileURL_004);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -1078,11 +1078,11 @@ namespace osl_FileBase
         }
 
         CPPUNIT_TEST_SUITE(searchFileURL);
-                CPPUNIT_TEST(searchFileURL_001);
-                CPPUNIT_TEST(searchFileURL_002);
-                CPPUNIT_TEST(searchFileURL_003);
-                CPPUNIT_TEST(searchFileURL_004);
-                CPPUNIT_TEST(searchFileURL_005);
+            CPPUNIT_TEST(searchFileURL_001);
+            CPPUNIT_TEST(searchFileURL_002);
+            CPPUNIT_TEST(searchFileURL_003);
+            CPPUNIT_TEST(searchFileURL_004);
+            CPPUNIT_TEST(searchFileURL_005);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -1244,10 +1244,10 @@ namespace osl_FileBase
         }
 
         CPPUNIT_TEST_SUITE(createTempFile);
-                CPPUNIT_TEST(createTempFile_001);
-                CPPUNIT_TEST(createTempFile_002);
-                CPPUNIT_TEST(createTempFile_003);
-                CPPUNIT_TEST(createTempFile_004);
+            CPPUNIT_TEST(createTempFile_001);
+            CPPUNIT_TEST(createTempFile_002);
+            CPPUNIT_TEST(createTempFile_003);
+            CPPUNIT_TEST(createTempFile_004);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -1497,10 +1497,10 @@ namespace osl_FileStatus
         }
 
         CPPUNIT_TEST_SUITE(isValid);
-                CPPUNIT_TEST(isValid_001);
-                CPPUNIT_TEST(isValid_002);
-                CPPUNIT_TEST(isValid_003);
-                CPPUNIT_TEST(isValid_004);
+            CPPUNIT_TEST(isValid_001);
+            CPPUNIT_TEST(isValid_002);
+            CPPUNIT_TEST(isValid_003);
+            CPPUNIT_TEST(isValid_004);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -1618,10 +1618,10 @@ namespace osl_FileStatus
         }
 
         CPPUNIT_TEST_SUITE(getFileType);
-                CPPUNIT_TEST(getFileType_001);
-                CPPUNIT_TEST(getFileType_002);
-                CPPUNIT_TEST(getFileType_003);
-                CPPUNIT_TEST(getFileType_007);
+            CPPUNIT_TEST(getFileType_001);
+            CPPUNIT_TEST(getFileType_002);
+            CPPUNIT_TEST(getFileType_003);
+            CPPUNIT_TEST(getFileType_007);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -1745,10 +1745,10 @@ namespace osl_FileStatus
 #endif
 
         CPPUNIT_TEST_SUITE(getAttributes);
-                CPPUNIT_TEST(getAttributes_001);
-                CPPUNIT_TEST(getAttributes_002);
-                CPPUNIT_TEST(getAttributes_003);
-                CPPUNIT_TEST(getAttributes_004);
+            CPPUNIT_TEST(getAttributes_001);
+            CPPUNIT_TEST(getAttributes_002);
+            CPPUNIT_TEST(getAttributes_003);
+            CPPUNIT_TEST(getAttributes_004);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -1804,7 +1804,7 @@ namespace osl_FileStatus
         }
 
         CPPUNIT_TEST_SUITE(getAccessTime);
-                CPPUNIT_TEST(getAccessTime_001);
+            CPPUNIT_TEST(getAccessTime_001);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -1858,7 +1858,7 @@ namespace osl_FileStatus
         }
 
         CPPUNIT_TEST_SUITE(getModifyTime);
-                CPPUNIT_TEST(getModifyTime_001);
+            CPPUNIT_TEST(getModifyTime_001);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -1921,8 +1921,8 @@ namespace osl_FileStatus
         }
 
         CPPUNIT_TEST_SUITE(getFileSize);
-                CPPUNIT_TEST(getFileSize_001);
-                CPPUNIT_TEST(getFileSize_002);
+            CPPUNIT_TEST(getFileSize_001);
+            CPPUNIT_TEST(getFileSize_002);
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -2567,9 +2567,9 @@ namespace osl_File
 
         void isEndOfFile_001()
         {
-            File   testFile(aTmpName4);
-            sal_Bool      bEOF  = false;
-            sal_Bool      *pEOF = &bEOF;
+            File testFile(aTmpName4);
+            sal_Bool bEOF  = false;
+            sal_Bool *pEOF = &bEOF;
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
             CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
@@ -2588,10 +2588,10 @@ namespace osl_File
 
         void isEndOfFile_002()
         {
-            File   testFile(aTmpName4);
-            sal_Bool      bEOF  = false;
-            sal_Bool      *pEOF = &bEOF;
-            sal_uInt64    nFilePointer = 0;
+            File testFile(aTmpName4);
+            sal_Bool bEOF  = false;
+            sal_Bool *pEOF = &bEOF;
+            sal_uInt64 nFilePointer = 0;
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
             CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
@@ -2666,10 +2666,8 @@ namespace osl_File
 
         void setSize_001()
         {
-            File   testFile(aTmpName4);
-            // sal_Bool      bEOF  = sal_False;
-            // sal_Bool      *pEOF = &bEOF;
-            sal_uInt64     nFilePointer;
+            File testFile(aTmpName4);
+            sal_uInt64 nFilePointer;
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
             CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
@@ -2693,8 +2691,8 @@ namespace osl_File
 
         void setSize_002()
         {
-            File   testFile(aTmpName4);
-            sal_uInt64     nFilePointer;
+            File testFile(aTmpName4);
+            sal_uInt64 nFilePointer;
 
             nError1 = testFile.open(osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
             CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
@@ -3086,7 +3084,8 @@ namespace osl_File
             newFile.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Read);
             nError1 = newFile.setPos(osl_Pos_End, 0);
             CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
-            sal_uInt64     nFilePointer;
+
+            sal_uInt64 nFilePointer;
             nError1 = newFile.getPos(nFilePointer);
             CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
             newFile.close();
@@ -3236,7 +3235,8 @@ namespace osl_File
             CPPUNIT_ASSERT_EQUAL_MESSAGE("test for move function: move a directory to an exist file with same name",
                                     osl::FileBase::E_EXIST, nError2);
         }
-      // bugid# 115420, after the bug fix, add the case
+
+        // bugid# 115420, after the bug fix, add the case
         CPPUNIT_TEST_SUITE(move);
             CPPUNIT_TEST(move_001);
             CPPUNIT_TEST(move_002);
