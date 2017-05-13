@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_8035a447",
+        "filename": "sc/source/ui/docshell/dataprovider.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-13T15:23:50Z",
+      "side": 1,
+      "message": "This looks like a memory leak.",
+      "revId": "c36d29225abeb7850ddcb9b6aa16513c8aa1b5eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a03aa034",
+        "filename": "sc/source/ui/docshell/dataprovider.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-13T15:23:50Z",
+      "side": 1,
+      "message": "Why do we need to use new here? Would allocating on the stack not be enough?",
+      "revId": "c36d29225abeb7850ddcb9b6aa16513c8aa1b5eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c03fac23",
+        "filename": "sc/source/ui/docshell/dataprovider.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-13T15:23:50Z",
+      "side": 1,
+      "message": "This looks strange. If we need a ScDocument that we will destroy soon again just allocate it on the stack and pass it as a reference to CSVFetchThread.",
+      "revId": "c36d29225abeb7850ddcb9b6aa16513c8aa1b5eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_6030b857",
+        "filename": "sc/source/ui/docshell/dataprovider.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-13T15:23:50Z",
+      "side": 1,
+      "message": "I would replace this whole code with one of our copy\u0026paste functions in a follow-up commit.",
+      "revId": "c36d29225abeb7850ddcb9b6aa16513c8aa1b5eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_402bbceb",
+        "filename": "sc/source/ui/docshell/dataprovider.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-13T15:23:50Z",
+      "side": 1,
+      "message": "Definition can be used in the place where we need it.",
+      "revId": "c36d29225abeb7850ddcb9b6aa16513c8aa1b5eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
