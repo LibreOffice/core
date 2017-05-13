@@ -240,6 +240,8 @@ public:
     void testTdf100709XLSX();
     void testTdf97598XLSX();
 
+    void testUnicodeFileNameGnumeric();
+
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
     CPPUNIT_TEST(testBasicCellContentODS);
@@ -359,6 +361,8 @@ public:
     CPPUNIT_TEST(testTdf100458);
     CPPUNIT_TEST(testTdf100709XLSX);
     CPPUNIT_TEST(testTdf97598XLSX);
+
+    CPPUNIT_TEST(testUnicodeFileNameGnumeric);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3877,6 +3881,15 @@ void ScFiltersTest::testTdf97598XLSX()
     ScDocument& rDoc = xDocSh->GetDocument();
     OUString aStr = rDoc.GetString(0, 0, 0); // A1
     CPPUNIT_ASSERT_EQUAL(OUString("Cell A1"), aStr);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testUnicodeFileNameGnumeric()
+{
+    OString aFileNamePrefix= "t" + OString(RTL_CONSTASCII_STRINGPARAM("\u00e4\u00df")) + "t.";
+    ScDocShellRef xDocSh = loadDoc(OStringToOUString(aFileNamePrefix, RTL_TEXTENCODING_UTF8), FORMAT_GNUMERIC);
+    CPPUNIT_ASSERT(xDocSh.is());
 
     xDocSh->DoClose();
 }
