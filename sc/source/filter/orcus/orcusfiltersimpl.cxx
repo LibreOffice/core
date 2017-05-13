@@ -88,13 +88,23 @@ bool ScOrcusFiltersImpl::importGnumeric(ScDocument& rDoc, SfxMedium& rMedium) co
 {
     ScOrcusFactory aFactory(rDoc);
     aFactory.setStatusIndicator(getStatusIndicator(rMedium));
-    OString aSysPath = toSystemPath(rMedium.GetName());
-    const char* path = aSysPath.getStr();
+    SvStream* pStream = rMedium.GetInStream();
+    pStream->Seek(0);
+    static const size_t nReadBuffer = 1024*32;
+    OStringBuffer aBuffer((int(nReadBuffer)));
+    size_t nRead = 0;
+    do
+    {
+        char pData[nReadBuffer];
+        nRead = pStream->ReadBytes(pData, nReadBuffer);
+        aBuffer.append(static_cast<sal_Char*>(pData), nRead);
+    }
+    while (nRead == nReadBuffer);
 
     try
     {
         orcus::orcus_gnumeric filter(&aFactory);
-        filter.read_file(path);
+        filter.read_stream(aBuffer.getStr(), aBuffer.getLength());
     }
     catch (const std::exception& e)
     {
