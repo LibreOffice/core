@@ -131,6 +131,8 @@ sal_Int32 AccFrameSelector::getAccessibleIndexInParent(  )
     if( meBorder == FrameBorderType::NONE )
     {
         vcl::Window* pTabPage = mpFrameSel->GetParent();
+        if (!pTabPage)
+            return nIdx;
         sal_Int32 nChildren = pTabPage->GetChildCount();
         for( nIdx = 0; nIdx < nChildren; ++nIdx )
             if( pTabPage->GetChild( static_cast< sal_uInt16 >( nIdx ) ) == mpFrameSel )
