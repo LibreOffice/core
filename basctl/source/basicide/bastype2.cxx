@@ -606,7 +606,7 @@ SvTreeListEntry* TreeListBox::CloneEntry( SvTreeListEntry* pSource )
     SvTreeListEntry* pNew = SvTreeListBox::CloneEntry( pSource );
     Entry* pUser = static_cast<Entry*>(pSource->GetUserData());
 
-    assert(pUser && "User-Daten?!");
+    assert(pUser && "User data?!");
     DBG_ASSERT( pUser->GetType() != OBJ_TYPE_DOCUMENT, "TreeListBox::CloneEntry: document?!" );
 
     Entry* pNewUser = new Entry( *pUser );

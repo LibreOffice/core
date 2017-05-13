@@ -70,7 +70,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL java_sql_CallableStatement::getTyp
 
 sal_Bool SAL_CALL java_sql_CallableStatement::wasNull(  )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     return callBooleanMethod( "wasNull", mID );
@@ -78,14 +78,14 @@ sal_Bool SAL_CALL java_sql_CallableStatement::wasNull(  )
 
 sal_Bool SAL_CALL java_sql_CallableStatement::getBoolean( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "getBoolean", mID,columnIndex );
 }
 sal_Int8 SAL_CALL java_sql_CallableStatement::getByte( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     jbyte (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallByteMethod;
@@ -97,7 +97,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_CallableStatement::getBytes( sal_Int32 co
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
     Sequence< sal_Int8 > aSeq;
 
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     jbyteArray out = static_cast<jbyteArray>(callObjectMethodWithIntArg(t.pEnv,"getBytes","(I)[B", mID, columnIndex));
@@ -112,7 +112,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_CallableStatement::getBytes( sal_Int32 co
 }
 css::util::Date SAL_CALL java_sql_CallableStatement::getDate( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getDate","(I)Ljava/sql/Date;", mID, columnIndex);
@@ -120,7 +120,7 @@ css::util::Date SAL_CALL java_sql_CallableStatement::getDate( sal_Int32 columnIn
 }
 double SAL_CALL java_sql_CallableStatement::getDouble( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     double (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallDoubleMethod;
@@ -129,7 +129,7 @@ double SAL_CALL java_sql_CallableStatement::getDouble( sal_Int32 columnIndex )
 
 float SAL_CALL java_sql_CallableStatement::getFloat( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     jfloat (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallFloatMethod;
@@ -138,7 +138,7 @@ float SAL_CALL java_sql_CallableStatement::getFloat( sal_Int32 columnIndex )
 
 sal_Int32 SAL_CALL java_sql_CallableStatement::getInt( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     return callIntMethodWithIntArg_ThrowSQL("getInt",mID,columnIndex);
@@ -146,7 +146,7 @@ sal_Int32 SAL_CALL java_sql_CallableStatement::getInt( sal_Int32 columnIndex )
 
 sal_Int64 SAL_CALL java_sql_CallableStatement::getLong( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     jlong (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallLongMethod;
@@ -155,7 +155,7 @@ sal_Int64 SAL_CALL java_sql_CallableStatement::getLong( sal_Int32 columnIndex )
 
 Any SAL_CALL java_sql_CallableStatement::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     callObjectMethodWithIntArg(t.pEnv,"getObject","(I)Ljava/lang/Object;", mID, columnIndex);
@@ -165,7 +165,7 @@ Any SAL_CALL java_sql_CallableStatement::getObject( sal_Int32 columnIndex, const
 
 sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     jshort (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallShortMethod;
@@ -176,7 +176,7 @@ OUString SAL_CALL java_sql_CallableStatement::getString( sal_Int32 columnIndex )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     return callStringMethodWithIntArg("getString",mID,columnIndex);
@@ -184,7 +184,7 @@ OUString SAL_CALL java_sql_CallableStatement::getString( sal_Int32 columnIndex )
 
  css::util::Time SAL_CALL java_sql_CallableStatement::getTime( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getTime","(I)Ljava/sql/Time;", mID, columnIndex);
@@ -194,7 +194,7 @@ OUString SAL_CALL java_sql_CallableStatement::getString( sal_Int32 columnIndex )
 
  css::util::DateTime SAL_CALL java_sql_CallableStatement::getTimestamp( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getTimestamp","(I)Ljava/sql/Timestamp;", mID, columnIndex);
@@ -206,7 +206,7 @@ void SAL_CALL java_sql_CallableStatement::registerOutParameter( sal_Int32 parame
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
 
     {
         createStatement(t.pEnv);
@@ -227,7 +227,7 @@ void SAL_CALL java_sql_CallableStatement::registerNumericOutParameter( sal_Int32
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
 
     {
         createStatement(t.pEnv);
@@ -265,7 +265,7 @@ Reference< css::io::XInputStream > SAL_CALL java_sql_CallableStatement::getChara
 
 Reference< css::sdbc::XArray > SAL_CALL java_sql_CallableStatement::getArray( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getArray","(I)Ljava/sql/Array;", mID, columnIndex);
@@ -275,7 +275,7 @@ Reference< css::sdbc::XArray > SAL_CALL java_sql_CallableStatement::getArray( sa
 
 Reference< css::sdbc::XClob > SAL_CALL java_sql_CallableStatement::getClob( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getClob","(I)Ljava/sql/Clob;", mID, columnIndex);
@@ -284,7 +284,7 @@ Reference< css::sdbc::XClob > SAL_CALL java_sql_CallableStatement::getClob( sal_
 }
 Reference< css::sdbc::XBlob > SAL_CALL java_sql_CallableStatement::getBlob( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getBlob","(I)Ljava/sql/Blob;", mID, columnIndex);
@@ -294,7 +294,7 @@ Reference< css::sdbc::XBlob > SAL_CALL java_sql_CallableStatement::getBlob( sal_
 
 Reference< css::sdbc::XRef > SAL_CALL java_sql_CallableStatement::getRef( sal_Int32 columnIndex )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     createStatement(t.pEnv);
     static jmethodID mID(nullptr);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getRef","(I)Ljava/sql/Ref;", mID, columnIndex);
@@ -318,7 +318,7 @@ void java_sql_CallableStatement::createStatement(JNIEnv* /*_pEnv*/)
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
 
 
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     if( t.pEnv && !object ){
         // initialize temporary variable
         static const char * const cMethodName = "prepareCall";

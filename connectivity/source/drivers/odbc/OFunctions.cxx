@@ -20,7 +20,7 @@
 #include "odbc/OFunctions.hxx"
 #include <osl/process.h>
 
-// Implib-Definitionen fuer ODBC-DLL/shared library:
+// Implib definitions for ODBC-DLL/shared library:
 
 namespace connectivity
 {

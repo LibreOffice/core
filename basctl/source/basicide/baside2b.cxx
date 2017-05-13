@@ -1237,7 +1237,7 @@ void EditorWindow::DoSyntaxHighlight( sal_uLong nPara )
 
 void EditorWindow::DoDelayedSyntaxHighlight( sal_uLong nPara )
 {
-    // line is only added to 'Liste' (list), processed in TimerHdl
+    // line is only added to list, processed in TimerHdl
     // => don't manipulate breaks while EditEngine is formatting
     if ( pProgress )
         pProgress->StepProgress();

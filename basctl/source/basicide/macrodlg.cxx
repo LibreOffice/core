@@ -539,7 +539,7 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox, void )
 
 IMPL_LINK_NOARG( MacroChooser, EditModifyHdl, Edit&, void )
 {
-    // select the module in which the macro is put at Neu (new),
+    // select the module in which the macro is put at "new",
     // if BasicManager or Lib is selecting
     SvTreeListEntry* pCurEntry = m_pBasicBox->GetCurEntry();
     if ( pCurEntry )

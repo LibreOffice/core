@@ -180,7 +180,7 @@ void SbiCodeGen::Save()
     {
         p->SetFlag( SbiImageFlags::INITCODE );
     }
-    // Die Entrypoints:
+    // The entry points:
     for( SbiSymDef* pDef = pParser->aPublics.First(); pDef;
          pDef = pParser->aPublics.Next() )
     {

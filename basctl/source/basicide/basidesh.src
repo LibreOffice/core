@@ -147,12 +147,12 @@ String RID_STR_BASIC
 };
 String RID_STR_LINE
 {
-     // Abkuerzung fuer 'Zeile'
+     // Abbreviation for 'line'
     Text [ en-US ] = "Ln" ;
 };
 String RID_STR_COLUMN
 {
-     // Abkuerzung fuer 'Spalte'
+     // Abbreviation for 'column'
     Text [ en-US ] = "Col" ;
 };
 String RID_BASICIDE_OBJECTBAR
