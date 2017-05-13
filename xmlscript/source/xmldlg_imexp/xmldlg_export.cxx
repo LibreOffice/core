@@ -1245,7 +1245,7 @@ inline bool equalFont( Style const & style1, Style const & style2 )
 OUString StyleBag::getStyleId( Style const & rStyle )
     SAL_THROW( () )
 {
-    if (! rStyle._set) // nothin set
+    if (! rStyle._set) // nothing set
     {
         return OUString(); // everything default: no need to export a specific style
     }
