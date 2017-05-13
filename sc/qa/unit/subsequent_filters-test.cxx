@@ -239,6 +239,9 @@ public:
     void testTdf97598XLSX();
 
     void testPageScalingXLSX();
+#ifdef UNX
+    void testUnicodeFileNameGnumeric();
+#endif
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBooleanFormatXLSX);
@@ -361,6 +364,9 @@ public:
     CPPUNIT_TEST(testTdf97598XLSX);
 
     CPPUNIT_TEST(testPageScalingXLSX);
+#ifdef UNX
+    CPPUNIT_TEST(testUnicodeFileNameGnumeric);
+#endif
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3879,6 +3885,17 @@ void ScFiltersTest::testTdf97598XLSX()
 
     xDocSh->DoClose();
 }
+
+#ifdef UNX
+void ScFiltersTest::testUnicodeFileNameGnumeric()
+{
+    OString aFileNamePrefix= "t" + OString(RTL_CONSTASCII_STRINGPARAM("\u00e4\u00df")) + "t.";
+    ScDocShellRef xDocSh = loadDoc(OStringToOUString(aFileNamePrefix, RTL_TEXTENCODING_UTF8), FORMAT_GNUMERIC);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    xDocSh->DoClose();
+}
+#endif
 
 void ScFiltersTest::testCondFormatXLSB()
 {
