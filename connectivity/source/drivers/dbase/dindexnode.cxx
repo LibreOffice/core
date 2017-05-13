@@ -334,7 +334,7 @@ bool ONDXPage::Insert(sal_uInt16 nPos, ONDXNode& rNode)
 
 bool ONDXPage::Append(ONDXNode& rNode)
 {
-    DBG_ASSERT(!IsFull(), "kein Append moeglich");
+    DBG_ASSERT(!IsFull(), "no Append possible");
     return Insert(nCount, rNode);
 }
 
@@ -476,8 +476,8 @@ ONDXNode ONDXPage::Split(ONDXPage& rPage)
 
 void ONDXPage::Merge(sal_uInt16 nParentNodePos, const ONDXPagePtr& xPage)
 {
-    DBG_ASSERT(HasParent(), "kein Vater vorhanden");
-    DBG_ASSERT(nParentNodePos != NODE_NOTFOUND, "Falscher Indexaufbau");
+    DBG_ASSERT(HasParent(), "no father existing");
+    DBG_ASSERT(nParentNodePos != NODE_NOTFOUND, "Wrong index setup");
 
     /*  Merge 2 pages   */
     ONDXNode aResultNode;

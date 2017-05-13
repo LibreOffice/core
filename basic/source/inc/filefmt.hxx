@@ -156,8 +156,8 @@ enum class FileOffset {
 //  sal_uInt32 the record's length
 //  sal_uInt16 number of strings
 // Data for every public:
-//  sal_uInt16 1. Zeile (Sub XXX)
-//  sal_uInt16 2. Zeile (End Sub)
+//  sal_uInt16 1st line (Sub XXX)
+//  sal_uInt16 2nd line (End Sub)
 
 // SBX-objects:
 // sal_uInt16 number of objects

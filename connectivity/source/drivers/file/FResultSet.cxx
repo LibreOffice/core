@@ -1291,7 +1291,7 @@ bool OResultSet::OpenImpl()
                             m_pFileSet->get().push_back(i + 1);
                     }
                 }
-                OSL_ENSURE(m_pFileSet.is(),"Kein KeySet vorhanden! :-(");
+                OSL_ENSURE(m_pFileSet.is(),"No KeySet existing! :-(");
 
                 if(bDistinct && m_pFileSet.is())
                 {
