@@ -187,7 +187,7 @@ void CompressGraphicsDialog::Update()
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     sal_Unicode cSeparator = rLocaleWrapper.getNumDecimalSep()[0];
 
-    VclPtr<VirtualDevice> pDummyVDev = VclPtr<VirtualDevice>::Create();
+    ScopedVclPtrInstance<VirtualDevice> pDummyVDev;
     pDummyVDev->EnableOutput( false );
     pDummyVDev->SetMapMode( m_aGraphic.GetPrefMapMode() );
 
