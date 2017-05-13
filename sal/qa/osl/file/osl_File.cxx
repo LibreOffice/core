@@ -21,8 +21,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include "osl/thread.h"
-
+#include <osl/thread.h>
 #include <osl/file.hxx>
 #include <osl_File_Const.h>
 
