@@ -3556,7 +3556,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
 
             /* please don't translate -- for cultural reasons this comment is protected
                until the redline implementation is finally fixed some day */
-            //JP 06.01.98: MUSS noch optimiert werden!!!
+            //JP 06.01.98: MUST be optimized!!!
             m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
                 RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete );
 
@@ -3592,7 +3592,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
                     }
                 }
             }
-            //JP 06.01.98: MUSS noch optimiert werden!!!
+            //JP 06.01.98: MUST be optimized!!!
             m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
         }
         return true;
@@ -3865,7 +3865,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 // If any Redline will change (split!) the node
                 const ::sw::mark::IMark* pBkmk = m_rDoc.getIDocumentMarkAccess()->makeMark( aDelPam, OUString(), IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
 
-                //JP 06.01.98: MUSS noch optimiert werden!!!
+                //JP 06.01.98: MUST be optimized!!!
                 m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags(
                     RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete );
 
@@ -3963,7 +3963,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 rPam.GetPoint()->nNode = 0;
                 rPam.GetPoint()->nContent = rIdx;
                 *rPam.GetMark() = *rPam.GetPoint();
-                //JP 06.01.98: MUSS noch optimiert werden!!!
+                //JP 06.01.98: MUST be optimized!!!
                 m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
 
                 *rPam.GetPoint() = pBkmk->GetMarkPos();
