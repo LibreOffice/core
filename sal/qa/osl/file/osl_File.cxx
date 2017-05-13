@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// include files
-
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -44,8 +42,6 @@ using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
 using ::rtl::OStringToOUString;
-
-// helper functions
 
 /** detailed wrong message.
 */
@@ -369,12 +365,12 @@ inline bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheckMode
 
             default:
                 bCheckResult = false;
-        }// switch
+        }
 
         rc = aDir.close();
         CPPUNIT_ASSERT_EQUAL( FileBase::E_None, rc );
 
-    }//if
+    }
 
     return bCheckResult;
 }
@@ -462,7 +458,7 @@ namespace osl_FileBase
       CPPUNIT_TEST( getAbsoluteFileURL_004 );
       CPPUNIT_TEST_SUITE_END();
 
-        }; //class getAbsoluteFileURL
+        };
 
     void getAbsoluteFileURL::check_getAbsoluteFileURL( rtl::OUString const& _suBaseURL,  rtl::OString const& _sRelativeURL, ::osl::FileBase::RC _nAssumeError, rtl::OUString const& _suAssumeResultStr )
     {
@@ -657,7 +653,7 @@ namespace osl_FileBase
         CPPUNIT_TEST( getFileURLFromSystemPath_004 );
         CPPUNIT_TEST( getFileURLFromSystemPath_005 );
         CPPUNIT_TEST_SUITE_END();
-    };// class SystemPath_FileURL
+    };
 
     // if bDirection==sal_True, check getSystemPathFromFileURL
     // if bDirection==sal_False, check getFileURLFromSystemPath
@@ -1085,7 +1081,7 @@ namespace osl_FileBase
         CPPUNIT_TEST( searchFileURL_004 );
         CPPUNIT_TEST( searchFileURL_005 );
         CPPUNIT_TEST_SUITE_END();
-    };// class searchFileURL
+    };
 
     // testing the method
     // static inline RC getTempDirURL( ::rtl::OUString& ustrTempDirURL )
@@ -1126,7 +1122,7 @@ namespace osl_FileBase
         CPPUNIT_TEST( getTempDirURL_001 );
         CPPUNIT_TEST( getTempDirURL_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getTempDirURL
+    };
 
     //  testing the method
     //  static inline RC createTempFile( ::rtl::OUString* pustrDirectoryURL,
@@ -1250,7 +1246,7 @@ namespace osl_FileBase
         CPPUNIT_TEST( createTempFile_003 );
         CPPUNIT_TEST( createTempFile_004 );
         CPPUNIT_TEST_SUITE_END();
-    };// class createTempFile
+    };
 
 // FIXME: remove the _disabled to enable:
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileBase::getAbsoluteFileURL, "osl_FileBase_disabled" );
@@ -1260,7 +1256,7 @@ namespace osl_FileBase
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileBase::createTempFile, "osl_FileBase_disabled" );
 
     CPPUNIT_REGISTRY_ADD_TO_DEFAULT( "osl_FileBase" );
-}// namespace osl_FileBase
+}
 
 namespace osl_FileStatus
 {
@@ -1325,7 +1321,7 @@ namespace osl_FileStatus
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST( ctors_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class ctors
+    };
 
     //  testing the method
     //  inline sal_Bool isValid( sal_uInt32 nMask ) const
@@ -1528,7 +1524,7 @@ namespace osl_FileStatus
         CPPUNIT_TEST( isValid_003 );
         CPPUNIT_TEST( isValid_004 );
         CPPUNIT_TEST_SUITE_END();
-    };// class ctors
+    };
 
     //  testing the method
     //  inline Type getFileType() const
@@ -1656,7 +1652,7 @@ namespace osl_FileStatus
         CPPUNIT_TEST( getFileType_003 );
         CPPUNIT_TEST( getFileType_007 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getFileType
+    };
 
     //  testing the method
     //  inline sal_uInt64 getAttributes() const
@@ -1783,7 +1779,7 @@ namespace osl_FileStatus
         CPPUNIT_TEST( getAttributes_003 );
         CPPUNIT_TEST( getAttributes_004 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getAttributes
+    };
 
     //  testing the method
     //  inline TimeValue getAccessTime() const
@@ -1839,7 +1835,7 @@ namespace osl_FileStatus
         CPPUNIT_TEST_SUITE( getAccessTime );
         CPPUNIT_TEST( getAccessTime_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getAccessTime
+    };
 
     //  testing the method
     //  inline TimeValue getModifyTime() const
@@ -1893,7 +1889,7 @@ namespace osl_FileStatus
         CPPUNIT_TEST_SUITE( getModifyTime );
         CPPUNIT_TEST( getModifyTime_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getModifyTime
+    };
 
     //  testing the method
     //  inline sal_uInt64 getFileSize() const
@@ -1958,7 +1954,7 @@ namespace osl_FileStatus
         CPPUNIT_TEST( getFileSize_001 );
         CPPUNIT_TEST( getFileSize_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getFileSize
+    };
 
     //  testing the method
     //  inline ::rtl::OUString getFileName() const
@@ -2002,7 +1998,7 @@ namespace osl_FileStatus
         CPPUNIT_TEST_SUITE( getFileName );
         CPPUNIT_TEST( getFileName_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getFileName
+    };
 
     //  testing the method
     //  inline ::rtl::OUString getFileURL() const
@@ -2044,7 +2040,7 @@ namespace osl_FileStatus
         CPPUNIT_TEST_SUITE( getFileURL );
         CPPUNIT_TEST( getFileURL_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getFileURL
+    };
 
     //  testing the method
     //  inline ::rtl::OUString getLinkTargetURL() const
@@ -2115,7 +2111,7 @@ namespace osl_FileStatus
         CPPUNIT_TEST_SUITE( getLinkTargetURL );
         CPPUNIT_TEST( getLinkTargetURL_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getLinkTargetURL
+    };
 
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileStatus::ctors, "osl_FileStatus" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileStatus::isValid, "osl_FileStatus" );
@@ -2127,9 +2123,7 @@ namespace osl_FileStatus
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileStatus::getFileName, "osl_FileStatus" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileStatus::getFileURL, "osl_FileStatus" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_FileStatus::getLinkTargetURL, "osl_FileStatus" );
-}// namespace osl_FileStatus
-
-// Beginning of the test cases for File class
+}
 
 namespace osl_File
 {
@@ -2190,7 +2184,7 @@ namespace osl_File
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST( ctors_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class ctors
+    };
 
     //  testing the method
     //  inline RC open( sal_uInt32 uFlags )
@@ -2318,7 +2312,7 @@ namespace osl_File
         CPPUNIT_TEST( open_005 );
         CPPUNIT_TEST( open_006 );
         CPPUNIT_TEST_SUITE_END();
-    };// class open
+    };
 
     //  testing the method
     //  inline RC close()
@@ -2382,7 +2376,7 @@ namespace osl_File
         CPPUNIT_TEST( close_001 );
         CPPUNIT_TEST( close_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class close
+    };
 
     //  testing the method
     //  inline RC setPos( sal_uInt32 uHow, sal_Int64 uPos )
@@ -2491,7 +2485,7 @@ namespace osl_File
         CPPUNIT_TEST( setPos_002 );
         CPPUNIT_TEST( setPos_003 );
         CPPUNIT_TEST_SUITE_END();
-    };// class setPos
+    };
 
     //  testing the method
     //  inline RC getPos( sal_uInt64& uPos )
@@ -2560,7 +2554,7 @@ namespace osl_File
         CPPUNIT_TEST_SUITE( getPos );
         CPPUNIT_TEST( getPos_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getPos
+    };
 
     //  testing the method
     //  inline RC isEndOfFile( sal_Bool *pIsEOF )
@@ -2657,7 +2651,7 @@ namespace osl_File
         CPPUNIT_TEST( isEndOfFile_001 );
         CPPUNIT_TEST( isEndOfFile_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class isEndOfFile
+    };
 
     //  testing the method
     //  inline RC setSize( sal_uInt64 uSize )
@@ -2758,7 +2752,7 @@ namespace osl_File
         CPPUNIT_TEST( setSize_001 );
         CPPUNIT_TEST( setSize_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class setSize
+    };
 
     //  testing the method
     //  inline RC read( void *pBuffer, sal_uInt64 uBytesRequested, sal_uInt64& rBytesRead )
@@ -2855,7 +2849,7 @@ namespace osl_File
         CPPUNIT_TEST( read_001 );
         CPPUNIT_TEST( read_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class read
+    };
 
     //  testing the method
     //  inline RC write(const void *pBuffer, sal_uInt64 uBytesToWrite, sal_uInt64& rBytesWritten)
@@ -2922,7 +2916,7 @@ namespace osl_File
         CPPUNIT_TEST_SUITE( write );
         CPPUNIT_TEST( write_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class write
+    };
 
     //  testing the method
     //  inline RC readLine( ::rtl::ByteSequence& aSeq )
@@ -3011,7 +3005,7 @@ namespace osl_File
         CPPUNIT_TEST( readLine_001 );
         CPPUNIT_TEST( readLine_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class readLine
+    };
 
     //  testing the method
     //  inline static RC copy( const ::rtl::OUString& ustrSourceFileURL, const ::rtl::OUString& ustrDestFileURL )
@@ -3141,7 +3135,7 @@ namespace osl_File
         CPPUNIT_TEST( copy_005 );
         CPPUNIT_TEST( copy_006 );
         CPPUNIT_TEST_SUITE_END();
-    };// class copy
+    };
 
     //  testing the method
     //  inline static RC move( const ::rtl::OUString& ustrSourceFileURL, const ::rtl::OUString& ustrDestFileURL )
@@ -3285,7 +3279,7 @@ namespace osl_File
         CPPUNIT_TEST( move_006 );
         CPPUNIT_TEST( move_007 );
         CPPUNIT_TEST_SUITE_END();
-    };// class move
+    };
 
     //  testing the method
     //  inline static RC remove( const ::rtl::OUString& ustrFileURL )
@@ -3376,7 +3370,7 @@ namespace osl_File
         CPPUNIT_TEST( remove_003 );
         CPPUNIT_TEST( remove_004 );
         CPPUNIT_TEST_SUITE_END();
-    };// class remove
+    };
 
     //  testing the method
     //  inline static RC setAttributes( const ::rtl::OUString& ustrFileURL, sal_uInt64 uAttributes )
@@ -3466,7 +3460,7 @@ namespace osl_File
         CPPUNIT_TEST( setAttributes_001 );
         CPPUNIT_TEST( setAttributes_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class setAttributes
+    };
 
     //  testing the method
     //  inline static RC setTime(
@@ -3553,7 +3547,7 @@ namespace osl_File
         CPPUNIT_TEST_SUITE( setTime );
         CPPUNIT_TEST( setTime_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class setTime
+    };
 
     //  testing the method
     //  inline static RC sync()
@@ -3612,7 +3606,7 @@ namespace osl_File
         CPPUNIT_TEST_SUITE( sync );
         CPPUNIT_TEST( sync_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class setTime
+    };
 
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::ctors, "osl_File" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_File::open, "osl_File" );
@@ -3633,7 +3627,7 @@ namespace osl_File
 // FIXME: to enable these tests (when they work cross-platform) we need to add the below:
 //    CPPUNIT_REGISTRY_ADD_TO_DEFAULT( "osl_File" );
 
-}// namespace osl_File
+}
 
 // Beginning of the test cases for DirectoryItem class
 
@@ -3679,7 +3673,7 @@ namespace osl_DirectoryItem
         CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST_SUITE_END();
-    };// class ctors
+    };
 
     //  testing the method
     //  DirectoryItem( const DirectoryItem& rItem ): _pData( rItem._pData)
@@ -3741,7 +3735,7 @@ namespace osl_DirectoryItem
         CPPUNIT_TEST( copy_assin_Ctors_001 );
         CPPUNIT_TEST( copy_assin_Ctors_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class copy_assin_Ctors
+    };
 
     //  testing the method
     //  inline sal_Bool is()
@@ -3789,7 +3783,7 @@ namespace osl_DirectoryItem
         CPPUNIT_TEST( is_001 );
         CPPUNIT_TEST( is_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class is
+    };
 
     //  testing the method
     //  static inline RC get( const ::rtl::OUString& ustrFileURL, DirectoryItem& rItem )
@@ -3856,7 +3850,7 @@ namespace osl_DirectoryItem
         CPPUNIT_TEST( get_002 );
         CPPUNIT_TEST( get_003 );
         CPPUNIT_TEST_SUITE_END();
-    };// class get
+    };
 
     //  testing the method
     //  inline RC getFileStatus( FileStatus& rStatus )
@@ -3936,14 +3930,14 @@ namespace osl_DirectoryItem
         CPPUNIT_TEST( getFileStatus_002 );
         CPPUNIT_TEST( getFileStatus_003 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getFileStatus
+    };
 
      CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_DirectoryItem::ctors, "osl_DirectoryItem" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_DirectoryItem::copy_assin_Ctors, "osl_DirectoryItem" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_DirectoryItem::is, "osl_DirectoryItem" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_DirectoryItem::get, "osl_DirectoryItem" );
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_DirectoryItem::getFileStatus, "osl_DirectoryItem" );
-}// namespace osl_DirectoryItem
+}
 
 // Beginning of the test cases for Directory class
 
@@ -4014,7 +4008,7 @@ namespace osl_Directory
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST( ctors_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class ctors
+    };
 
     //  testing the method
     //  inline RC open()
@@ -4114,7 +4108,7 @@ namespace osl_Directory
         CPPUNIT_TEST( open_003 );
         CPPUNIT_TEST( open_004 );
         CPPUNIT_TEST_SUITE_END();
-    };// class open
+    };
 
     //  testing the method
     //  inline sal_Bool isOpen() { return _pData != NULL; };
@@ -4171,7 +4165,7 @@ namespace osl_Directory
         CPPUNIT_TEST( isOpen_001 );
         CPPUNIT_TEST( isOpen_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class isOpen
+    };
 
     //  testing the method
     //  inline RC close()
@@ -4226,7 +4220,7 @@ namespace osl_Directory
         CPPUNIT_TEST( close_001 );
         CPPUNIT_TEST( close_002 );
         CPPUNIT_TEST_SUITE_END();
-    };// class close
+    };
 
     //  testing the method
     //  inline RC reset()
@@ -4341,7 +4335,7 @@ namespace osl_Directory
         CPPUNIT_TEST( reset_003 );
         CPPUNIT_TEST( reset_004 );
         CPPUNIT_TEST_SUITE_END();
-    };// class reset
+    };
 
     //  testing the method
     //  inline RC getNextItem( DirectoryItem& rItem, sal_uInt32 nHint = 0 )
@@ -4515,7 +4509,7 @@ namespace osl_Directory
         CPPUNIT_TEST( getNextItem_003 );
         CPPUNIT_TEST( getNextItem_004 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getNextItem
+    };
 
     //  testing the method
     //  inline static RC getVolumeInfo( const ::rtl::OUString& ustrDirectoryURL, VolumeInfo& rInfo )
@@ -4692,7 +4686,7 @@ namespace osl_Directory
         CPPUNIT_TEST( getVolumeInfo_002 );
         CPPUNIT_TEST( getVolumeInfo_003 );
         CPPUNIT_TEST_SUITE_END();
-    };// class getVolumeInfo
+    };
 
     //  testing the method
     //  inline static RC create( const ::rtl::OUString& ustrDirectoryURL )
@@ -4771,7 +4765,7 @@ namespace osl_Directory
         CPPUNIT_TEST( create_002 );
         CPPUNIT_TEST( create_003 );
         CPPUNIT_TEST_SUITE_END();
-    };// class create
+    };
 
     //  testing the method
     //  inline static RC remove( const ::rtl::OUString& ustrDirectoryURL )
@@ -4867,7 +4861,7 @@ namespace osl_Directory
         CPPUNIT_TEST( remove_004 );
         CPPUNIT_TEST( remove_005 );
         CPPUNIT_TEST_SUITE_END();
-    };// class remove
+    };
 
     // TEST Directory::createPath
 
@@ -5086,7 +5080,7 @@ namespace osl_Directory
 #endif
     CPPUNIT_TEST_SUITE_END();
 
-    }; // class createPath
+    };
 
     CPPUNIT_TEST_SUITE_REGISTRATION( osl_Directory::ctors );
     CPPUNIT_TEST_SUITE_REGISTRATION( osl_Directory::open );
@@ -5098,7 +5092,7 @@ namespace osl_Directory
     CPPUNIT_TEST_SUITE_REGISTRATION( osl_Directory::create );
     CPPUNIT_TEST_SUITE_REGISTRATION( osl_Directory::remove );
     CPPUNIT_TEST_SUITE_REGISTRATION( osl_Directory::createPath );
-}// namespace osl_Directory
+}
 
 /** get Current PID.
 */
