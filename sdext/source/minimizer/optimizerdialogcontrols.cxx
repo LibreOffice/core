@@ -105,7 +105,7 @@ OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& rContr
         Any( rOptimizerDialog.getString( nResID ) ),
         Any( nXPos ),
         Any( nYPos ),
-        Any( nPushButtonType ),
+        Any( static_cast< sal_Int16 >(nPushButtonType) ),
         Any( (sal_Int16)0 ),
         Any( nTabIndex ),
         Any( nWidth ) };
