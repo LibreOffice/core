@@ -181,6 +181,9 @@ void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet* /*rSet*/ )
 
     aPrinterOptions.GetPrinterOptions( maPrinterOptions );
     aPrintFileOptions.GetPrinterOptions( maPrintFileOptions );
+    if(m_pPrintFileOutputRB->IsChecked()){
+       m_pPrinterOutputRB->Check();
+    }
 
     ImplUpdateControls( m_pPrinterOutputRB->IsChecked() ? &maPrinterOptions : &maPrintFileOptions );
 }
