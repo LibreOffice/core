@@ -74,6 +74,7 @@ public:
     void testContentDIF();
     void testContentXLSB();
     void testContentXLS_XML();
+    void testContentGnumeric();
     void testSharedFormulaXLS();
     void testSharedFormulaXLSX();
     void testSheetNamesXLSX();
@@ -96,6 +97,7 @@ public:
     CPPUNIT_TEST(testContentDIF);
     CPPUNIT_TEST(testContentXLSB);
     CPPUNIT_TEST(testContentXLS_XML);
+    CPPUNIT_TEST(testContentGnumeric);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaXLSX);
     CPPUNIT_TEST(testSheetNamesXLSX);
@@ -230,7 +232,8 @@ void testContentImpl(ScDocument& rDoc, sal_Int32 nFormat ) //same code for ods, 
     ASSERT_DOUBLES_EQUAL_MESSAGE("=C1+C2", 11.0, fValue);
 
     //check merged cells import
-    if (nFormat != FORMAT_LOTUS123 && nFormat != FORMAT_DIF && nFormat != FORMAT_XLS_XML)
+    if (nFormat != FORMAT_LOTUS123 && nFormat != FORMAT_DIF && nFormat != FORMAT_XLS_XML
+            && nFormat != FORMAT_GNUMERIC)
     {
         SCCOL nCol = 4;
         SCROW nRow = 1;
@@ -324,6 +327,16 @@ void ScFiltersTest::testContentXLS_XML()
 
     ScDocument& rDoc = xDocSh->GetDocument();
     testContentImpl(rDoc, FORMAT_XLS_XML);
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testContentGnumeric()
+{
+    ScDocShellRef xDocSh = loadDoc("universal-content.", FORMAT_GNUMERIC);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    testContentImpl(rDoc, FORMAT_GNUMERIC);
     xDocSh->DoClose();
 }
 
