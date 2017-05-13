@@ -107,12 +107,6 @@ rtl::OString errorToStr( ::osl::FileBase::RC const& nError)
 
 inline bool t_compareTime( TimeValue *m_aEndTime,  TimeValue *m_aStartTime, sal_Int32 nDelta)
 {
-    // sal_uInt64 uTimeValue;
-    // sal_Int64 iTimeValue;
-
-    // iTimeValue = t_abs64(( tv1->Seconds - tv2->Seconds) * 1000000000 + tv1->Nanosec - tv2->Nanosec);
-    // uTimeValue = ( iTimeValue / 1000000 );
-
     sal_Int32 nDeltaSeconds = m_aEndTime->Seconds - m_aStartTime->Seconds;
     sal_Int32 nDeltaNanoSec = sal_Int32(m_aEndTime->Nanosec) - sal_Int32(m_aStartTime->Nanosec);
     if (nDeltaNanoSec < 0)
@@ -188,7 +182,6 @@ inline void createTestFile( const ::rtl::OUString& filename )
 
     File aFile(aPathURL);
     nError = aFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
-    //CPPUNIT_ASSERT_MESSAGE( "In createTestFile Function: creation ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_EXIST ) );
     if ( ( ::osl::FileBase::E_None != nError ) && ( nError != ::osl::FileBase::E_EXIST ))
     {
         printf("createTestFile failed!\n");
@@ -211,7 +204,6 @@ inline void createTestFile( const ::rtl::OUString& basename, const ::rtl::OUStri
 */
 inline void deleteTestFile( const ::rtl::OUString& filename )
 {
-    // LLA: printf("deleteTestFile\n");
     ::rtl::OUString     aPathURL   = filename.copy( 0 );
     ::osl::FileBase::RC nError;
 
@@ -245,7 +237,6 @@ inline void createTestDirectory( const ::rtl::OUString& dirname )
     if ( !isURL( dirname ) )
         ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); //convert if not full qualified URL
     nError = ::osl::Directory::create( aPathURL );
-    //CPPUNIT_ASSERT_MESSAGE( "In createTestDirectory Function: creation: ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_EXIST ) );
     if ( ( ::osl::FileBase::E_None != nError ) && ( nError != ::osl::FileBase::E_EXIST ))
       printf("createTestDirectory failed!\n");
 }
@@ -345,17 +336,14 @@ inline bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheckMode
                     bCheckResult = true;
                 break;
             case oslCheckMode::ReadAccess:
-                //rc = pDir->getNextItem( rItem, 0 );
                 rc = aDir.getNextItem( rItem );
                 bCheckResult = ( rc == ::osl::FileBase::E_None ) || ( rc == ::osl::FileBase::E_NOENT );
                 break;
             case oslCheckMode::WriteAccess:
                 ( ( aUString += str ) += aSlashURL ) += aTmpName2;
-                //if ( ( rc = pDir->create( aUString ) ) == ::osl::FileBase::E_None )
                 if ( ( rc = Directory::create( aUString ) ) == ::osl::FileBase::E_None )
                 {
                     bCheckResult = true;
-                    //rc = pDir->remove( aUString );
                     rc = Directory::remove( aUString );
                     CPPUNIT_ASSERT_EQUAL( ::osl::FileBase::E_None, rc );
                 }
@@ -579,11 +567,6 @@ namespace osl_FileBase
 
     class SystemPath_FileURL:public CppUnit::TestFixture
     {
-        //::osl::FileBase aFileBase;
-        // ::rtl::OUString aUStr;
-        // ::osl::FileBase::RC nError;
-
-      //void check_getSystemPathFromFileURL(rtl::OString const& _sURL, ::osl::FileBase::RC _nAssumeError, rtl::OString const& _sAssumeResultStr);
       void check_SystemPath_FileURL(rtl::OString const& _sSource, ::osl::FileBase::RC _nAssumeError, rtl::OString const& _sAssumeResultStr, bool bDirection = true );
       void checkWNTBehaviour_getSystemPathFromFileURL(rtl::OString const& _sURL, ::osl::FileBase::RC _nAssumeError, rtl::OString const& _sWNTAssumeResultString );
       void checkUNXBehaviour_getSystemPathFromFileURL(rtl::OString const& _sURL, ::osl::FileBase::RC _nAssumeError, rtl::OString const& _sUnixAssumeResultString );
@@ -677,10 +660,6 @@ namespace osl_FileBase
       printf("getSystemPathFromFileURL('%s') deliver system path: '%s', error '%s'\n", _sSource.getStr(), sStr.getStr(), sError.getStr() );
     else
       printf("getFileURLFromSystemPath('%s') deliver File URL: '%s', error '%s'\n", _sSource.getStr(), sStr.getStr(), sError.getStr() );
-
-        // rtl::OUString suStrEncode = rtl::Uri::encode(suStr, rtl_UriCharClassUnoParamValue, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
-        // sStr = rtl::OUStringToOString(suStr, RTL_TEXTENCODING_UTF8);
-        // printf("UTF8: %s\n", sStr.getStr() );
 
         if (!_sAssumeResultStr.isEmpty())
         {
@@ -865,7 +844,6 @@ namespace osl_FileBase
         rtl::OString expResult(home_path);
         expResult += "/tmp";
         checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, expResult );
-//      checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "\\tmp");
 #endif
     }
     void SystemPath_FileURL::getSystemPathFromFileURL_001_9()
@@ -1156,7 +1134,6 @@ namespace osl_FileBase
             pHandle = new oslFileHandle();
             pUStr_DirURL = new ::rtl::OUString( aUserDirectoryURL );
             pUStr_FileURL = new ::rtl::OUString();
-            //*pUStr_DirURL = aUserDirectoryURL;                /// create temp file in /tmp/PID or c:\temp\PID.*/
         }
 
         void tearDown() override
@@ -1476,7 +1453,6 @@ namespace osl_FileStatus
                     rItem_link.getFileStatus( rFileStatus );
                     if ( compareFileName( rFileStatus.getFileName(), aFileName) )
                     {
-                        //printf("find the link file");
                         if ( rFileStatus.isValid( osl_FileStatus_Mask_LinkTargetURL ) )
                         {
                             bOk = true;
@@ -1504,18 +1480,13 @@ namespace osl_FileStatus
             CPPUNIT_ASSERT_EQUAL( nError1, ::osl::FileBase::E_None );
 
                 check_FileStatus(rFileStatus_all);
-// LLA: this is wrong
-//          sal_Bool bOk1 = rFileStatus_all.isValid( mask_file_all );
 
             sal_uInt32 mask_file_val = osl_FileStatus_Mask_Validate;
              ::osl::FileStatus   rFileStatus_val( mask_file_val );
             nError1 = rItem_file.getFileStatus( rFileStatus_val );
             CPPUNIT_ASSERT_EQUAL( nError1, ::osl::FileBase::E_None );
-                // sal_Bool bOk2 = rFileStatus_val.isValid( mask_file_val );
 
                 check_FileStatus(rFileStatus_val);
-                // CPPUNIT_ASSERT_MESSAGE( "test for isValid function: check for Mask_All and Validate, really not sure what validate used for and how to use it, help me.  did not pass (W32)(UNX).",
-                //                      ( sal_False == bOk1 ) && ( sal_True == bOk2 )  );
         }
 
         CPPUNIT_TEST_SUITE( isValid );
@@ -2724,8 +2695,6 @@ namespace osl_File
         void setSize_002()
         {
             ::osl::File   testFile( aTmpName4 );
-            // sal_Bool      bEOF  = sal_False;
-            // sal_Bool      *pEOF = &bEOF;
             sal_uInt64     nFilePointer;
 
             nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
