@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_40b65cdd",
+        "filename": "sc/source/ui/optdlg/tpcalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-13T11:40:34Z",
+      "side": 1,
+      "message": "This is wrong. If both are set in the configuration then Wildcards shall take precedence, like before.",
+      "revId": "4c8c2b41f6ae592eba5bba5984f4dc8544d6c5e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
