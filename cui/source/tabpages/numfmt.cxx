@@ -589,7 +589,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     if ( pValFmtAttr )
     {
-        EditHdl_Impl(m_pEdFormat); // UpdateOptions_Impl() als Seiteneffekt
+        EditHdl_Impl(m_pEdFormat); // UpdateOptions_Impl() as a side effect
     }
     else    // DONT_KNOW
     {

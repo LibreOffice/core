@@ -54,7 +54,7 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  )
 
 css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArray( const css::uno::Reference< css::container::XNameAccess >& typeMap )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     {
         jobject obj = convertTypeMapToJavaMap(typeMap);
         static const char * const cSignature = "(Ljava/util/Map;)[Ljava/lang/Object;";
@@ -72,7 +72,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArray( const css
 
 css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArrayAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     {
         jobject obj = convertTypeMapToJavaMap(typeMap);
         static const char * const cSignature = "(IILjava/util/Map;)[Ljava/lang/Object;";
@@ -90,7 +90,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArrayAtIndex( sa
 
 css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_Array::getResultSet( const css::uno::Reference< css::container::XNameAccess >& typeMap )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     {
         // convert Parameter
         jobject obj = convertTypeMapToJavaMap(typeMap);
@@ -110,7 +110,7 @@ css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_Array::getResultS
 
 css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_Array::getResultSetAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     {
         // convert parameter
         jobject obj = convertTypeMapToJavaMap(typeMap);

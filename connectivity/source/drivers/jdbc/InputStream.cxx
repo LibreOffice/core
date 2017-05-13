@@ -86,7 +86,7 @@ sal_Int32 SAL_CALL java_io_InputStream::readBytes( css::uno::Sequence< sal_Int8 
         throw css::io::BufferSizeExceededException( THROW_WHERE, *this );
 
     jint out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
 
     {
         jbyteArray pByteArray = t.pEnv->NewByteArray(nBytesToRead);

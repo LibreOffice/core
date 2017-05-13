@@ -2063,7 +2063,7 @@ ErrCode SbMethod::Call( SbxValue* pRet, SbxVariable* pCaller )
         SAL_INFO("basic", "SbMethod::Call Have been passed a caller 0x" << pCaller );
         mCaller = pCaller;
     }
-    // RefCount vom Modul hochzaehlen
+    // Increment the RefCount from the module
     tools::SvRef<SbModule> pMod_ = static_cast<SbModule*>(GetParent());
 
     tools::SvRef<StarBASIC> pBasic = static_cast<StarBASIC*>(pMod_->GetParent());

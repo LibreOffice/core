@@ -51,7 +51,7 @@ jclass java_sql_Blob::getMyClass() const
 sal_Int64 SAL_CALL java_sql_Blob::length(  )
 {
     jlong out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
 
     {
         // initialize temporary variable
@@ -68,7 +68,7 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  )
 css::uno::Sequence< sal_Int8 > SAL_CALL java_sql_Blob::getBytes( sal_Int64 pos, sal_Int32 count )
 {
 
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     css::uno::Sequence< sal_Int8 > aSeq;
     {
         // initialize temporary variable
@@ -93,7 +93,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL java_sql_Blob::getBytes( sal_Int64 pos, 
 
 css::uno::Reference< css::io::XInputStream > SAL_CALL java_sql_Blob::getBinaryStream(  )
 {
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
     static jmethodID mID(nullptr);
     jobject out = callObjectMethod(t.pEnv,"getBinaryStream","()Ljava/io/InputStream;", mID);
     // WARNING: the caller becomes the owner of the returned pointer
@@ -103,7 +103,7 @@ css::uno::Reference< css::io::XInputStream > SAL_CALL java_sql_Blob::getBinarySt
 sal_Int64 SAL_CALL java_sql_Blob::position( const css::uno::Sequence< sal_Int8 >& pattern, sal_Int64 start )
 {
     jlong out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java enviroment has been deleted!");
 
     {
         // initialize temporary variable

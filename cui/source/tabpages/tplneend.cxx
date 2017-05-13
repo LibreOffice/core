@@ -369,7 +369,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl, Button*, void)
                 m_pLbLineEnds->Modify(*pLineEndList->GetLineEnd(nPos), nPos, pLineEndList->GetUiBitmap(nPos));
                 m_pLbLineEnds->SelectEntryPos( nPos );
 
-                // Flag fuer modifiziert setzen
+                // set flag for modified
                 *pnLineEndListState |= ChangeType::MODIFIED;
 
                 *pPageType = PageType::Bitmap;

@@ -3647,7 +3647,7 @@ RTLFUNC(Rnd)
 
 
 //  Syntax: Shell("Path",[ Window-Style,[ "Params", [ bSync = sal_False ]]])
-//  WindowStyles (VBA-kompatibel):
+//  WindowStyles (VBA compatible):
 //      2 == Minimized
 //      3 == Maximized
 //     10 == Full-Screen (text mode applications OS/2, WIN95, WNT)

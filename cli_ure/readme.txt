@@ -187,7 +187,7 @@ CLI_URETYPES_POLICY_ASSEMBLY=policy.2.0.cli_uretypes
 Because a change of a major is only done if the code has changed incompatibly, we must not 
 redirect old client code to the new assembly. Actually we would not need a policy file here.
 The name of the policy file has changed as well so as to refer to the new version. Since
-the name is new and refers to the version 2 auf cli_uretypes, we can start with the policy version
+the name is new and refers to the version 2 of cli_uretypes, we can start with the policy version
 from 1.
 
 The next compatible change would require to change the version to these:

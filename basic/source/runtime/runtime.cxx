@@ -203,7 +203,7 @@ SbiRuntime::pStep0 SbiRuntime::aStep0[] = { // all opcodes without operands
 SbiRuntime::pStep1 SbiRuntime::aStep1[] = { // all opcodes with one operand
     &SbiRuntime::StepLOADNC,        // loading a numeric constant (+ID)
     &SbiRuntime::StepLOADSC,        // loading a string constant (+ID)
-    &SbiRuntime::StepLOADI,     // Immediate Load (+Wert)
+    &SbiRuntime::StepLOADI,     // Immediate Load (+value)
     &SbiRuntime::StepARGN,      // save a named Args in Argv (+StringID)
     &SbiRuntime::StepPAD,       // bring string to a definite length (+length)
     // branches
@@ -2777,7 +2777,7 @@ void SbiRuntime::StepLOADSC( sal_uInt32 nOp1 )
     PushVar( p );
 }
 
-// Immediate Load (+Wert)
+// Immediate Load (+value)
 
 void SbiRuntime::StepLOADI( sal_uInt32 nOp1 )
 {

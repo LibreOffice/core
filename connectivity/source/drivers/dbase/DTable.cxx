@@ -1316,7 +1316,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
             switch(cTyp)
             {
                 case 'C':
-                    OSL_ENSURE(nPrecision < 255, "ODbaseTable::Create: Column zu lang!");
+                    OSL_ENSURE(nPrecision < 255, "ODbaseTable::Create: Column too long!");
                     if (nPrecision > 254)
                     {
                         throwInvalidColumnType(STR_INVALID_COLUMN_PRECISION, aName);
@@ -1328,7 +1328,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
                 case 'F':
                 case 'N':
                     OSL_ENSURE(nPrecision >=  nScale,
-                            "ODbaseTable::Create: Feldlaenge muss groesser Nachkommastellen sein!");
+                            "ODbaseTable::Create: Field length must be larger than decimal places!");
                     if (nPrecision <  nScale)
                     {
                         throwInvalidColumnType(STR_INVALID_PRECISION_SCALE, aName);
