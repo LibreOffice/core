@@ -16,6 +16,23 @@
       "revId": "4c8c2b41f6ae592eba5bba5984f4dc8544d6c5e9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e0c74843",
+        "filename": "sc/source/ui/optdlg/tpcalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-13T11:57:53Z",
+      "side": 1,
+      "message": "This is also wrong. One of them must be enabled. Like before.",
+      "revId": "4c8c2b41f6ae592eba5bba5984f4dc8544d6c5e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
