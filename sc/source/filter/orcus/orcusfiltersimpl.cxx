@@ -102,6 +102,7 @@ bool ScOrcusFiltersImpl::importGnumeric(ScDocument& rDoc, SfxMedium& rMedium) co
 
     try
     {
+        rDoc.ClearTabs();
         orcus::orcus_gnumeric filter(&aFactory);
         filter.read_stream(aBuffer.getStr(), aBuffer.getLength());
     }
