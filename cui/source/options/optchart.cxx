@@ -43,7 +43,7 @@ void SvxDefaultColorOptPage::InsertColorEntry(const XColorEntry& rEntry, sal_Int
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Size aImageSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
 
-    VclPtr<VirtualDevice> xDevice = VclPtr<VirtualDevice>::Create();
+    ScopedVclPtrInstance<VirtualDevice> xDevice;
     xDevice->SetOutputSize(aImageSize);
     const ::tools::Rectangle aRect(Point(0, 0), aImageSize);
     xDevice->SetFillColor(rColor);
