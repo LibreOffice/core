@@ -364,7 +364,7 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
         for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
         {
             MenuItemHandler* pMenuItemHandler = *p;
-            if ( pMenuItemHandler->aMenuItemURL == aFeatureURL )
+            if ( pMenuItemHandler->aParsedItemURL == aFeatureURL )
             {
                 bool            bCheckmark( false );
                 bool            bMenuItemEnabled( m_pVCLMenu->IsItemEnabled( pMenuItemHandler->nItemId ));
@@ -851,7 +851,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
                             if ( xMenuItemDispatch.is() )
                             {
                                 pMenuItemHandler->xMenuItemDispatch = xMenuItemDispatch;
-                                pMenuItemHandler->aMenuItemURL      = aTargetURL.Complete;
+                                pMenuItemHandler->aParsedItemURL    = aTargetURL.Complete;
 
                                 if ( !bPopupMenu )
                                 {

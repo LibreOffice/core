@@ -169,6 +169,7 @@ class MenuBarManager:
             sal_uInt16                                                        nItemId;
             OUString                                                          aTargetFrame;
             OUString                                                          aMenuItemURL;
+            OUString                                                          aParsedItemURL;
             css::uno::Reference< css::frame::XStatusListener >                xSubMenuManager;
             css::uno::Reference< css::frame::XDispatch >                      xMenuItemDispatch;
             css::uno::Reference< css::frame::XPopupMenuController >           xPopupMenuController;
