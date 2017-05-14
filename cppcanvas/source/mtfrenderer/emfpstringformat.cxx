@@ -52,7 +52,7 @@ namespace cppcanvas
             s.ReadFloat(firstTabOffset).ReadInt32(hotkeyPrefix).ReadFloat(leadingMargin).ReadFloat(trailingMargin).ReadFloat(tracking);
             s.ReadInt32(trimming).ReadInt32(tabStopCount).ReadInt32(rangeCount);
 
-            OSL_ASSERT((header >> 12) == 0xdbc01);
+            SAL_WARN_IF((header >> 12) != 0xdbc01, "cppcanvas.emf", "Invalid header - not 0xdbc01");
 
             SAL_INFO("cppcanvas.emf", "EMF+\t string format\nEMF+\theader: 0x" << std::hex << (header >> 12) << " version: 0x" << (header & 0x1fff) << " StringFormatFlags: " << std::dec << stringFormatFlags << " Language: " << language);
             SAL_INFO("cppcanvas.emf", "EMF+\t StringAlignment: " << stringAlignment << " LineAlign: " << lineAlign << " DigitSubstitution: " << digitSubstitution << " DigitLanguage: " << digitLanguage);
