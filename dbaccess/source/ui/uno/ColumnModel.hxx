@@ -69,7 +69,7 @@ protected:
 public:
     explicit OColumnControlModel(const css::uno::Reference< css::lang::XMultiServiceFactory>& _rxFactory);
 
-// UNO Anbindung
+// UNO connection
     DECLARE_XINTERFACE( )
 
 // css::lang::XServiceInfo

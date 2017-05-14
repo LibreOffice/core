@@ -163,7 +163,7 @@ namespace
 
         // we found a table in our view where we can insert some connections
         // the key columns have a property called RelatedColumn
-        // OQueryTableConnectionData aufbauen
+        // build OQueryTableConnectionData
         OQueryTableConnectionData* pNewConnData = new OQueryTableConnectionData( _rSource.GetData(), _rDest.GetData() );
         TTableConnectionData::value_type aNewConnData(pNewConnData);
 

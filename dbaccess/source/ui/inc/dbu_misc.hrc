@@ -45,7 +45,7 @@
 // please adjust checking before insert new strings
 
 #if STR_INVALID_TABLE_NAME_LENGTH > RID_STR_MISC_END
-#error Resource-Id Ueberlauf in #file, #line
+#error Resource ID overflow in #file, #line
 #endif
 
 #endif

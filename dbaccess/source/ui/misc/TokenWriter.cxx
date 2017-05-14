@@ -987,7 +987,7 @@ void OHTMLImportExport::FontOn()
 inline void OHTMLImportExport::FontOff()
 {
 #if OSL_DEBUG_LEVEL > 0
-    OSL_ENSURE(m_bCheckFont,"Kein FontOn() gerufen");
+    OSL_ENSURE(m_bCheckFont,"No FontOn() called");
 #endif
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_font );
 #if OSL_DEBUG_LEVEL > 0

@@ -98,7 +98,7 @@ void OTableConnectionData::SetConnLine( sal_uInt16 nIndex, const OUString& rSour
     }
 
     OConnectionLineDataRef pConnLineData = m_vConnLineData[nIndex];
-    OSL_ENSURE(pConnLineData != nullptr, "OTableConnectionData::SetConnLine : habe ungueltiges LineData-Objekt");
+    OSL_ENSURE(pConnLineData != nullptr, "OTableConnectionData::SetConnLine : have invalid LineData object");
 
     pConnLineData->SetSourceFieldName( rSourceFieldName );
     pConnLineData->SetDestFieldName( rDestFieldName );

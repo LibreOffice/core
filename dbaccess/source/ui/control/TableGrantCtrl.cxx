@@ -52,7 +52,7 @@ OTableGrantControl::OTableGrantControl( vcl::Window* pParent, WinBits nBits)
     ,m_nDataPos( 0 )
     ,m_nDeactivateEvent(nullptr)
 {
-    // Spalten einfuegen
+    // insert columns
     sal_uInt16 i=1;
     InsertDataColumn( i, OUString(ModuleRes(STR_TABLE_PRIV_NAME)  ), 75);
     FreezeColumn(i++);
@@ -124,7 +124,7 @@ void OTableGrantControl::Init()
 {
     EditBrowseBox::Init();
 
-    // ComboBox instanzieren
+    // instantiate ComboBox
     if(!m_pCheckCell)
     {
         m_pCheckCell    = VclPtr<CheckBoxControl>::Create( &GetDataWindow() );
@@ -136,7 +136,7 @@ void OTableGrantControl::Init()
     }
 
     UpdateTables();
-    // Browser Mode setzen
+    // set browser mode
     BrowserMode nMode = BrowserMode::COLUMNSELECTION | BrowserMode::HLINES | BrowserMode::VLINES |
                         BrowserMode::HIDECURSOR      | BrowserMode::HIDESELECT;
 

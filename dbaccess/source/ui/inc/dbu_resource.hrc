@@ -68,7 +68,7 @@
 #define RID_STR_APP_END                 RID_STR_APP_START       + 50    // 504 - 543
 
 #if RID_STR_GEN_END > RID_DBACCESS_END
-#error Resource-Id Ueberlauf in #file, #line
+#error Resource ID overflow in #file, #line
 #endif
 
 // tab pages

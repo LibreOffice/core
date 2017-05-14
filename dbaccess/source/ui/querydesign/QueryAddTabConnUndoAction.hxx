@@ -23,7 +23,7 @@
 
 namespace dbaui
 {
-    // OQueryAddTabConnUndoAction - Undo-Klasse fuer Einfuegen einer Connection
+    // OQueryAddTabConnUndoAction - Undo class for inserting a connection
 
     class OQueryTableView;
     class OQueryAddTabConnUndoAction : public OQueryTabConnUndoAction
@@ -35,7 +35,7 @@ namespace dbaui
         virtual void Redo() override;
     };
 
-    // OQueryDelTabConnUndoAction - Undo-Klasse fuer Einfuegen einer Connection
+    // OQueryDelTabConnUndoAction - Undo class for inserting a connection
 
     class OQueryDelTabConnUndoAction : public OQueryTabConnUndoAction
     {

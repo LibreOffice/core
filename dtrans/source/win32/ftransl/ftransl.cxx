@@ -148,7 +148,7 @@ static const std::vector< FormatEntry > g_TranslTable {
     // SotClipboardFormatId::EDITENGINE
         FormatEntry("application/x-openoffice-editengine;windows_formatname=\"EditEngineFormat\"", "EditEngineFormat", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::INTERNALLINK_STATE
-        FormatEntry("application/x-openoffice-internallink-state;windows_formatname=\"StatusInfo vom SvxInternalLink\"", "StatusInfo vom SvxInternalLink", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
+        FormatEntry("application/x-openoffice-internallink-state;windows_formatname=\"StatusInfo of SvxInternalLink\"", "StatusInfo of SvxInternalLink", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::SOLK
         FormatEntry("application/x-openoffice-solk;windows_formatname=\"SOLK (StarOffice Link)\"", "SOLK (StarOffice Link)", nullptr, CF_INVALID, CPPUTYPE_DEFAULT),
     // SotClipboardFormatId::NETSCAPE_BOOKMARK

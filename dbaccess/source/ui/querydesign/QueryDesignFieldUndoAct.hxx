@@ -89,7 +89,7 @@ namespace dbaui
     class OTabFieldUndoAct : public OQueryDesignFieldUndoAct
     {
     protected:
-        OTableFieldDescRef      pDescr;     // geloeschte Spaltenbeschreibung
+        OTableFieldDescRef      pDescr;     // the deleted column description
 
     public:
         OTabFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, sal_uInt16 nCommentID) : OQueryDesignFieldUndoAct(pSelBrwBox, nCommentID) { }
@@ -109,8 +109,7 @@ namespace dbaui
         explicit OTabFieldDelUndoAct(OSelectionBrowseBox* pSelBrwBox) : OTabFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_TABFIELDDELETE) { }
     };
 
-    // OTabFieldDelUndoAct - Undo-Klasse fuer Anlegen eines Feldes
-    // OTabFieldDelUndoAct - undo class to create a field
+    // OTabFieldCreateUndoAct - undo class for creating a field
 
     class OTabFieldCreateUndoAct : public OTabFieldUndoAct
     {

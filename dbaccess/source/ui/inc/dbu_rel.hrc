@@ -31,7 +31,7 @@
 // please adjust checking before insert new strings
 
 #if STR_QUERY_REL_COULD_NOT_CREATE > RID_STR_REL_END
-#error Resource-Id Ueberlauf in #file, #line
+#error Resource ID overflow in #file, #line
 #endif
 
 #endif

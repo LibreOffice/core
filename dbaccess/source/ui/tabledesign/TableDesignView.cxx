@@ -45,7 +45,7 @@ OTableBorderWindow::OTableBorderWindow(vcl::Window* pParent) : Window(pParent,WB
 {
 
     ImplInitSettings();
-    // Children erzeugen
+    // create children
     m_pEditorCtrl   = VclPtr<OTableEditorCtrl>::Create( this);
     m_pFieldDescWin = VclPtr<OTableFieldDescWin>::Create( this );
 
@@ -54,7 +54,7 @@ OTableBorderWindow::OTableBorderWindow(vcl::Window* pParent) : Window(pParent,WB
     // set depending windows and controls
     m_pEditorCtrl->SetDescrWin(m_pFieldDescWin);
 
-    // Splitter einrichten
+    // set up splitter
     m_aHorzSplitter->SetSplitHdl( LINK(this, OTableBorderWindow, SplitHdl) );
     m_aHorzSplitter->Show();
 }
@@ -66,7 +66,7 @@ OTableBorderWindow::~OTableBorderWindow()
 
 void OTableBorderWindow::dispose()
 {
-    // Children zerstoeren
+    // destroy children
     //  ::dbaui::notifySystemWindow(this,m_pFieldDescWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     m_pEditorCtrl->Hide();
     m_pFieldDescWin->Hide();
@@ -80,24 +80,24 @@ void OTableBorderWindow::Resize()
 {
     const long nSplitterHeight(3);
 
-    // Abmessungen parent window
+    // dimensions of parent window
     Size aOutputSize( GetOutputSize() );
     long nOutputWidth   = aOutputSize.Width();
     long nOutputHeight  = aOutputSize.Height();
     long nSplitPos      = m_aHorzSplitter->GetSplitPosPixel();
 
-    // Verschiebebereich Splitter mittleres Drittel des Outputs
+    // shift range of the splitter is the middle third of the output
     long nDragPosY = nOutputHeight/3;
     long nDragSizeHeight = nOutputHeight/3;
     m_aHorzSplitter->SetDragRectPixel( tools::Rectangle(Point(0,nDragPosY), Size(nOutputWidth,nDragSizeHeight) ), this );
     if( (nSplitPos < nDragPosY) || (nSplitPos > (nDragPosY+nDragSizeHeight)) )
         nSplitPos = nDragPosY+nDragSizeHeight-5;
 
-    // Splitter setzen
+    // set splitter
     m_aHorzSplitter->SetPosSizePixel( Point( 0, nSplitPos ), Size(nOutputWidth, nSplitterHeight));
     m_aHorzSplitter->SetSplitPosPixel( nSplitPos );
 
-    // Fenster setzen
+    // set window
     m_pEditorCtrl->SetPosSizePixel( Point(0, 0), Size(nOutputWidth , nSplitPos) );
 
     m_pFieldDescWin->SetPosSizePixel(   Point(0, nSplitPos+nSplitterHeight),
