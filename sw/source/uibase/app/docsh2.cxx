@@ -1155,6 +1155,19 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SAL_WARN("sw.ui", "missing parameter for SID_CLASSIFICATION_APPLY");
         }
         break;
+        case SID_WATERMARK:
+        {
+            SwWrtShell* pSh = GetWrtShell();
+            if ( pSh )
+            {
+                OUString aText = "Watermark";
+                if (pArgs && pArgs->GetItemState(SID_WATERMARK, false, &pItem) == SfxItemState::SET)
+                    aText = static_cast<const SfxStringItem*>(pItem)->GetValue();
+
+                pSh->SetWatermark(aText);
+            }
+        }
+        break;
         case SID_NOTEBOOKBAR:
         {
             const SfxStringItem* pFile = rReq.GetArg<SfxStringItem>( SID_NOTEBOOKBAR );

@@ -273,6 +273,10 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                 break;
             case SID_STYLE_EDIT:
                 break;
+            case SID_WATERMARK:
+                // Just trigger ClassificationCategoriesController::statusChanged().
+                rSet.InvalidateItem(nWhich);
+                break;
             default:
                 OSL_FAIL("Invalid SlotId");
         }
