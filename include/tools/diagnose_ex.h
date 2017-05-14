@@ -110,18 +110,6 @@ TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
         return;   \
     }
 
-
-
-/** This macro asserts the given condition (in debug mode), and
-    returns afterwards, without return value "void".
- */
-#define ENSURE_OR_RETURN_VOID( c, m ) \
-    if( !(c) )  \
-    { \
-        OSL_ENSURE( c, m ); \
-        return;   \
-    }
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
