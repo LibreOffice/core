@@ -54,6 +54,7 @@ class CommandExtTextInputData;
 class SvNumberFormatter;
 class SfxPoolItem;
 class SfxItemSet;
+class SfxWatermarkItem;
 class SvxAutoCorrect;
 
 class SwField;
@@ -365,6 +366,9 @@ public:
         { return static_cast<SwCharFormat*>(SwEditShell::GetFormatFromPool( nId )); }
 
     void SetClassification(const OUString& rName, SfxClassificationPolicyType eType);
+
+    SfxWatermarkItem GetWatermark();
+    void SetWatermark(const OUString& rText);
 
     void Insert2(SwField&, const bool bForceExpandHints);
 

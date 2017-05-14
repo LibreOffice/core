@@ -40,6 +40,7 @@
 #include <svx/pageitem.hxx>
 #include <svl/srchitem.hxx>
 #include <sfx2/tplpitem.hxx>
+#include <sfx2/watermarkitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/opaqitem.hxx>
