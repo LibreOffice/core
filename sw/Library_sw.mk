@@ -592,6 +592,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/dialog/regionsw \
     sw/source/uibase/dialog/swabstdlg \
     sw/source/uibase/dialog/swwrtshitem \
+    sw/source/uibase/dialog/watermarkdialog \
     sw/source/uibase/dochdl/gloshdl \
     sw/source/uibase/dochdl/swdtflvr \
     sw/source/uibase/docvw/AnchorOverlayObject \

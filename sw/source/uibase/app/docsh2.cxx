@@ -123,6 +123,7 @@
 
 #include "dialog.hrc"
 #include "swabstdlg.hxx"
+#include "watermarkdialog.hxx"
 
 #include <ndtxt.hxx>
 
@@ -1153,6 +1154,25 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
             else
                 SAL_WARN("sw.ui", "missing parameter for SID_CLASSIFICATION_APPLY");
+        }
+        break;
+        case SID_WATERMARK:
+        {
+            SwWrtShell* pSh = GetWrtShell();
+            if ( pSh )
+            {
+                if (pArgs && pArgs->GetItemState( SID_WATERMARK, false, &pItem ) == SfxItemState::SET)
+                {
+                    OUString aText = static_cast<const SfxStringItem*>( pItem )->GetValue();
+                    pSh->SetWatermark( aText );
+                }
+                else
+                {
+                    ScopedVclPtr<SwWatermarkDialog> pDlg( VclPtr<SwWatermarkDialog>::Create( nullptr ) );
+                    pDlg->Execute();
+                    pDlg.disposeAndClear();
+                }
+            }
         }
         break;
         case SID_NOTEBOOKBAR:
