@@ -282,20 +282,22 @@ enum class oslCheckMode {
     WriteAccess
 };
 
-// check if the file exist
+/** check if the file exist
+*/
 inline bool ifFileExist(const OUString & str)
 {
     File testFile(str);
     return (osl::FileBase::E_None == testFile.open(osl_File_OpenFlag_Read));
 }
 
-// check if the file can be written
+/** check if the file can be written
+*/
 inline bool ifFileCanWrite(const OUString & str)
 {
     // on Windows, the file has no write right, but can be written
 #ifdef _WIN32
-    bool  bCheckResult = false;
-    OUString  aUStr  = str.copy(0);
+    bool bCheckResult = false;
+    OUString aUStr = str.copy(0);
     if (isURL(str))
         osl::FileBase::getSystemPathFromFileURL(str, aUStr);
 
@@ -311,17 +313,17 @@ inline bool ifFileCanWrite(const OUString & str)
     return bCheckResult;
 }
 
-inline bool checkDirectory(const OUString & str, oslCheckMode nCheckMode)
+inline bool checkDirectory(const OUString& str, oslCheckMode nCheckMode)
 {
-    OUString   aUString;
-    DirectoryItem   rItem;
+    OUString aUString;
+    DirectoryItem rItem;
     osl::FileBase::RC rc;
-    bool        bCheckResult= false;
+    bool bCheckResult= false;
 
     Directory aDir(str);
     rc = aDir.open();
 
-    if ((osl::FileBase::E_NOENT != rc) && (osl::FileBase::E_ACCES != rc))
+    if ((rc != osl::FileBase::E_NOENT) && (rc != osl::FileBase::E_ACCES))
     {
         switch (nCheckMode)
         {
@@ -342,7 +344,9 @@ inline bool checkDirectory(const OUString & str, oslCheckMode nCheckMode)
                     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, rc);
                 }
                 else
+                {
                     bCheckResult = false;
+                }
                 break;
 
             default:
@@ -375,7 +379,7 @@ inline OString outputError(const OString & returnVal, const OString & rightVal, 
 
 /** Change file mode, two version in UNIX and Windows;.
 */
-#if (defined UNX)         // chmod() method is differ in Windows
+#if (defined UNX) /* chmod() method is different in Windows */
 inline void changeFileMode(OUString & filepath, sal_Int32 mode)
 {
     OString aString;
@@ -388,7 +392,7 @@ inline void changeFileMode(OUString & filepath, sal_Int32 mode)
     int ret = chmod(aString.getStr(), mode);
     CPPUNIT_ASSERT_EQUAL(0, ret);
 }
-#else                                          // Windows version
+#else /* Windows version */
 inline void changeFileMode(OUString & filepath, sal_Int32 mode)
 {
     (void)filepath;
@@ -411,7 +415,10 @@ namespace osl_FileBase
     class getAbsoluteFileURL : public CppUnit::TestFixture
     {
     public:
-        void check_getAbsoluteFileURL(OUString const& _suBaseURL,  OString const& _sRelativeURL, osl::FileBase::RC _nAssumeError, OUString const& _suAssumeResultStr);
+        void check_getAbsoluteFileURL(OUString const& _suBaseURL,
+                                      OString const& _sRelativeURL,
+                                      osl::FileBase::RC _nAssumeError,
+                                      OUString const& _suAssumeResultStr);
 
         void getAbsoluteFileURL_001_1();
         void getAbsoluteFileURL_001_2();
@@ -440,16 +447,21 @@ namespace osl_FileBase
         CPPUNIT_TEST_SUITE_END();
     };
 
-    void getAbsoluteFileURL::check_getAbsoluteFileURL(OUString const& _suBaseURL,  OString const& _sRelativeURL, osl::FileBase::RC _nAssumeError, OUString const& _suAssumeResultStr)
+    void getAbsoluteFileURL::check_getAbsoluteFileURL(OUString const& _suBaseURL,
+                                                      OString const& _sRelativeURL,
+                                                      osl::FileBase::RC _nAssumeError,
+                                                      OUString const& _suAssumeResultStr)
     {
         OUString suRelativeURL = OStringToOUString(_sRelativeURL, RTL_TEXTENCODING_UTF8);
         OString sBaseURL = OUStringToOString(_suBaseURL, RTL_TEXTENCODING_UTF8);
         OUString suResultURL;
-        osl::FileBase::RC nError = osl::FileBase::getAbsoluteFileURL(_suBaseURL,  suRelativeURL, suResultURL);
+        osl::FileBase::RC nError = osl::FileBase::getAbsoluteFileURL(_suBaseURL, suRelativeURL, suResultURL);
         OString sResultURL = OUStringToOString(suResultURL, RTL_TEXTENCODING_UTF8);
         OString sError = errorToString(nError);
-        printf("getAbsoluteFileURL('%s','%s') deliver absolute URL: '%s', error '%s'\n", sBaseURL.getStr(), _sRelativeURL.getStr(),sResultURL.getStr(), sError.getStr());
+        printf("getAbsoluteFileURL('%s','%s') deliver absolute URL: '%s', error '%s'\n",
+                sBaseURL.getStr(), _sRelativeURL.getStr(),sResultURL.getStr(), sError.getStr());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Assumption is wrong: error number is wrong", _nAssumeError, nError);
+
         if (nError == osl::FileBase::E_None)
         {
             bool bStrAreEqual = _suAssumeResultStr.equals(suResultURL);
@@ -521,7 +533,7 @@ namespace osl_FileBase
 
     void getAbsoluteFileURL::getAbsoluteFileURL_002()
     {
-#if (defined UNX)     // Link is not defined in Windows
+#if (defined UNX) // Link is not defined in Windows
         OUString aUStr_LnkFileSys(aTempDirectorySys), aUStr_SrcFileSys(aTempDirectorySys);
         aUStr_LnkFileSys += aSlashURL + getCurrentPID() + "/link.file";
         aUStr_SrcFileSys += aSlashURL + getCurrentPID() + "/canonical.name";
@@ -569,15 +581,7 @@ namespace osl_FileBase
 
     class SystemPath_FileURL : public CppUnit::TestFixture
     {
-    private:
-        void check_SystemPath_FileURL(OString const& _sSource, osl::FileBase::RC _nAssumeError, OString const& _sAssumeResultStr, bool bDirection = true);
-        void checkWNTBehaviour_getSystemPathFromFileURL(OString const& _sURL, osl::FileBase::RC _nAssumeError, OString const& _sWNTAssumeResultString);
-        void checkUNXBehaviour_getSystemPathFromFileURL(OString const& _sURL, osl::FileBase::RC _nAssumeError, OString const& _sUnixAssumeResultString);
-        void checkWNTBehaviour_getFileURLFromSystemPath(OString const& _sSysPath, osl::FileBase::RC _nAssumeError, OString const& _sWNTAssumeResultString);
-        void checkUNXBehaviour_getFileURLFromSystemPath(OString const& _sSysPath, osl::FileBase::RC _nAssumeError, OString const& _sUnixAssumeResultString);
-
     public:
-
         void getSystemPathFromFileURL_001_1();
         void getSystemPathFromFileURL_001_2();
         void getSystemPathFromFileURL_001_21();
@@ -639,11 +643,42 @@ namespace osl_FileBase
             CPPUNIT_TEST(getFileURLFromSystemPath_004);
             CPPUNIT_TEST(getFileURLFromSystemPath_005);
         CPPUNIT_TEST_SUITE_END();
+
+    private:
+        void check_SystemPath_FileURL(
+                OString const& _sSource,
+                osl::FileBase::RC _nAssumeError,
+                OString const& _sAssumeResultStr,
+                bool bDirection = true);
+
+        void checkWNTBehaviour_getSystemPathFromFileURL(
+                OString const& _sURL,
+                osl::FileBase::RC _nAssumeError,
+                OString const& _sWNTAssumeResultString);
+
+        void checkUNXBehaviour_getSystemPathFromFileURL(
+                OString const& _sURL,
+                osl::FileBase::RC _nAssumeError,
+                OString const& _sUnixAssumeResultString);
+
+        void checkWNTBehaviour_getFileURLFromSystemPath(OString const& _sSysPath,
+                osl::FileBase::RC _nAssumeError,
+                OString const& _sWNTAssumeResultString);
+
+        void checkUNXBehaviour_getFileURLFromSystemPath(
+                OString const& _sSysPath,
+                osl::FileBase::RC _nAssumeError,
+                OString const& _sUnixAssumeResultString);
+
     };
 
     // if bDirection==sal_True, check getSystemPathFromFileURL
     // if bDirection==sal_False, check getFileURLFromSystemPath
-    void SystemPath_FileURL::check_SystemPath_FileURL(OString const& _sSource, osl::FileBase::RC _nAssumeError, OString const& _sAssumeResultStr, bool bDirection)
+    void SystemPath_FileURL::check_SystemPath_FileURL(
+            OString const& _sSource,
+            osl::FileBase::RC _nAssumeError,
+            OString const& _sAssumeResultStr,
+            bool bDirection)
     {
         // PRE: URL as String
         OUString suSource;
@@ -662,9 +697,11 @@ namespace osl_FileBase
         OString sError = errorToString(nError);
 
         if (bDirection)
-            printf("getSystemPathFromFileURL('%s') deliver system path: '%s', error '%s'\n", _sSource.getStr(), sStr.getStr(), sError.getStr());
+            printf("getSystemPathFromFileURL('%s') deliver system path: '%s', error '%s'\n",
+                    _sSource.getStr(), sStr.getStr(), sError.getStr());
         else
-            printf("getFileURLFromSystemPath('%s') deliver File URL: '%s', error '%s'\n", _sSource.getStr(), sStr.getStr(), sError.getStr());
+            printf("getFileURLFromSystemPath('%s') deliver File URL: '%s', error '%s'\n",
+                    _sSource.getStr(), sStr.getStr(), sError.getStr());
 
         if (!_sAssumeResultStr.isEmpty())
         {
@@ -680,7 +717,10 @@ namespace osl_FileBase
         }
     }
 
-    void SystemPath_FileURL::checkWNTBehaviour_getSystemPathFromFileURL(OString const& _sURL, osl::FileBase::RC _nAssumeError, OString const& _sWNTAssumeResultString)
+    void SystemPath_FileURL::checkWNTBehaviour_getSystemPathFromFileURL(
+            OString const& _sURL,
+            osl::FileBase::RC _nAssumeError,
+            OString const& _sWNTAssumeResultString)
     {
 #if defined(_WIN32)
         check_SystemPath_FileURL(_sURL, _nAssumeError, _sWNTAssumeResultString);
@@ -691,7 +731,10 @@ namespace osl_FileBase
 #endif
     }
 
-    void SystemPath_FileURL::checkUNXBehaviour_getSystemPathFromFileURL(OString const& _sURL, osl::FileBase::RC _nAssumeError, OString const& _sUnixAssumeResultString)
+    void SystemPath_FileURL::checkUNXBehaviour_getSystemPathFromFileURL(
+            OString const& _sURL,
+            osl::FileBase::RC _nAssumeError,
+            OString const& _sUnixAssumeResultString)
     {
 #if (defined UNX)
         check_SystemPath_FileURL(_sURL, _nAssumeError, _sUnixAssumeResultString);
@@ -702,7 +745,10 @@ namespace osl_FileBase
 #endif
     }
 
-    void SystemPath_FileURL::checkWNTBehaviour_getFileURLFromSystemPath(OString const& _sSysPath, osl::FileBase::RC _nAssumeError, OString const& _sWNTAssumeResultString)
+    void SystemPath_FileURL::checkWNTBehaviour_getFileURLFromSystemPath(
+            OString const& _sSysPath,
+            osl::FileBase::RC _nAssumeError,
+            OString const& _sWNTAssumeResultString)
     {
 #if defined(_WIN32)
         check_SystemPath_FileURL(_sSysPath, _nAssumeError, _sWNTAssumeResultString, sal_False);
@@ -713,7 +759,10 @@ namespace osl_FileBase
 #endif
     }
 
-    void SystemPath_FileURL::checkUNXBehaviour_getFileURLFromSystemPath(OString const& _sSysPath, osl::FileBase::RC _nAssumeError, OString const& _sUnixAssumeResultString)
+    void SystemPath_FileURL::checkUNXBehaviour_getFileURLFromSystemPath(
+            OString const& _sSysPath,
+            osl::FileBase::RC _nAssumeError,
+            OString const& _sUnixAssumeResultString)
     {
 #if (defined UNX)
         check_SystemPath_FileURL(_sSysPath, _nAssumeError, _sUnixAssumeResultString, false);
