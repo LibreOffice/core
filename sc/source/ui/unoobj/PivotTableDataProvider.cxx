@@ -700,14 +700,12 @@ uno::Sequence<beans::PropertyValue> SAL_CALL PivotTableDataProvider::detectArgum
 
 sal_Bool SAL_CALL PivotTableDataProvider::createDataSequenceByRangeRepresentationPossible(const OUString& /*aRangeRepresentation*/)
 {
-    SolarMutexGuard aGuard;
     return false;
 }
 
 uno::Reference<chart2::data::XDataSequence> SAL_CALL
     PivotTableDataProvider::createDataSequenceByRangeRepresentation(const OUString& /*rRangeRepresentation*/)
 {
-    SolarMutexGuard aGuard;
     uno::Reference<chart2::data::XDataSequence> xDataSequence;
     return xDataSequence;
 }

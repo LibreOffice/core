@@ -122,8 +122,6 @@ Sequence< OUString > VCLXAccessibleHeaderBarItem::getSupportedServiceNames()
 // XAccessible
 Reference< XAccessibleContext > VCLXAccessibleHeaderBarItem::getAccessibleContext()
 {
-    OExternalLockGuard aGuard( this );
-
     return this;
 }
 
@@ -133,8 +131,6 @@ Reference< XAccessibleContext > VCLXAccessibleHeaderBarItem::getAccessibleContex
 
 sal_Int32 VCLXAccessibleHeaderBarItem::getAccessibleChildCount()
 {
-    OExternalLockGuard aGuard( this );
-
     return 0;
 }
 

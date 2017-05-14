@@ -1595,7 +1595,6 @@ void SmEditAccessible::ClearWin()
 // XAccessible
 uno::Reference< XAccessibleContext > SAL_CALL SmEditAccessible::getAccessibleContext(  )
 {
-    SolarMutexGuard aGuard;
     return this;
 }
 

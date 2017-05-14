@@ -1185,7 +1185,6 @@ void SAL_CALL ScShapeObj::insertControlCharacter( const uno::Reference<text::XTe
 
 uno::Reference<text::XText> SAL_CALL ScShapeObj::getText()
 {
-    SolarMutexGuard aGuard;
     return this;
 }
 

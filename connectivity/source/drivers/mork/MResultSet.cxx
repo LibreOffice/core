@@ -177,42 +177,36 @@ sal_Bool SAL_CALL OResultSet::getBoolean( sal_Int32 /*columnIndex*/ )
 
 sal_Int8 SAL_CALL OResultSet::getByte( sal_Int32 /*columnIndex*/ )
 {
-    ResultSetEntryGuard aGuard( *this );
     return 0;
 }
 
 
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 /*columnIndex*/ )
 {
-    ResultSetEntryGuard aGuard( *this );
     return Sequence< sal_Int8 >();
 }
 
 
 Date SAL_CALL OResultSet::getDate( sal_Int32 /*columnIndex*/ )
 {
-    ResultSetEntryGuard aGuard( *this );
     return Date();
 }
 
 
 double SAL_CALL OResultSet::getDouble( sal_Int32 /*columnIndex*/ )
 {
-    ResultSetEntryGuard aGuard( *this );
     return 0.0;
 }
 
 
 float SAL_CALL OResultSet::getFloat( sal_Int32 /*columnIndex*/ )
 {
-    ResultSetEntryGuard aGuard( *this );
     return 0;
 }
 
 
 sal_Int32 SAL_CALL OResultSet::getInt( sal_Int32 /*columnIndex*/ )
 {
-    ResultSetEntryGuard aGuard( *this );
     return 0;
 }
 
@@ -228,7 +222,6 @@ sal_Int32 SAL_CALL OResultSet::getRow(  )
 
 sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 /*columnIndex*/ )
 {
-    ResultSetEntryGuard aGuard( *this );
     return sal_Int64();
 }
 
