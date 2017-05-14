@@ -676,28 +676,24 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     SetUpdateMode(false);
     ClearAll(); // Remove all old entries from treelist box
 
+    m_xContext = xContext;
     m_xFrame = xFrame;
-    if( xContext.is() )
+    if( bEventMode )
     {
-        m_xContext        = xContext;
         m_sModuleLongName = sModuleLongName;
-
         m_xGlobalCategoryInfo = css::ui::theUICategoryDescription::get( m_xContext );
         m_xModuleCategoryInfo.set(m_xGlobalCategoryInfo->getByName(m_sModuleLongName), css::uno::UNO_QUERY_THROW);
         m_xUICmdDescription   = css::frame::theUICommandDescription::get( m_xContext );
 
-        if ( bEventMode )
-            InitModule();
+        InitModule();
     }
 
     SAL_INFO("cui.customize", "** ** About to initialise SF Scripts");
     // Add Scripting Framework entries
     Reference< browse::XBrowseNode > rootNode;
-    Reference< XComponentContext > xCtx(
-        comphelper::getProcessComponentContext() );
     try
     {
-        Reference< browse::XBrowseNodeFactory > xFac = browse::theBrowseNodeFactory::get( xCtx );
+        Reference< browse::XBrowseNodeFactory > xFac = browse::theBrowseNodeFactory::get( m_xContext );
         rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
     }
     catch( Exception& e )
@@ -731,7 +727,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     }
 
     // add styles
-    if ( bEventMode && m_xContext.is() )
+    if ( bEventMode )
     {
         OUString sStyle(xImp->m_aStrGroupStyles);
         SvTreeListEntry *pEntry = InsertEntry( sStyle );

@@ -375,7 +375,7 @@ IMPL_LINK( SfxMacroTabPage, TimeOut_Impl, Timer*,, void )
     }
     // fill macro list
     mpImpl->pGroupLB->Init(
-        css::uno::Reference<css::uno::XComponentContext >(),
+        comphelper::getProcessComponentContext(),
         GetFrame(),
         OUString(), false);
     if ( pTabDlg )
