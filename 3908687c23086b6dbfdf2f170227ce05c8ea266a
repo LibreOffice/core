@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_cbd18dfd",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2785,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-05-14T22:31:02Z",
+      "side": 1,
+      "message": "This seems to be a slang mix of German and English (there are other German comments still there in this file, but we\u0027ll get to them eventually). In this context, it would be more fitting to translate it as \"enable link manager\". (As an explanation to what the line is to do, as opposed to a precondition, which would mean the opposite.)",
+      "revId": "3908687c23086b6dbfdf2f170227ce05c8ea266a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
