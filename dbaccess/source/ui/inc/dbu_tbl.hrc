@@ -73,7 +73,7 @@
 // please adjust checking before insert new strings
 
 #if STR_BUTTON_FORMAT > RID_STR_TBL_END
-#error Resource-Id Ueberlauf in #file, #line
+#error Resource ID overflow in #file, #line
 #endif
 
 #endif

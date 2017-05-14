@@ -37,7 +37,7 @@
 // please adjust checking before insert new strings
 
 #if STR_ALL_VIEWS > RID_STR_CONTROL_END
-#error Resource-Id Ueberlauf in #file, #line
+#error Resource ID overflow in #file, #line
 #endif
 
 #endif

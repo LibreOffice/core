@@ -38,7 +38,7 @@
 // please adjust checking before insert new strings
 
 #if STR_LOADING_TABLE > RID_STR_BRW_END
-#error Resource-Id Ueberlauf in #file, #line
+#error Resource ID overflow in #file, #line
 #endif
 
 #endif

@@ -44,7 +44,7 @@ String STR_VALUE_NO
 
 String STR_VALUE_NONE
 {
-    // Bemerkung : sollte auch in anderen Sprachen irgendwie zum Wort 'Wert' passen : Wert - keiner ....
+    // Note: should somehow fit to the word "value" in other languages as well: value - none ....
     Text [ en-US ] = "<none>";
 };
 

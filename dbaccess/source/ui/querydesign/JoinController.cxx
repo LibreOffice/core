@@ -291,7 +291,7 @@ void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabW
     // If the TabWins had a SetData, I could save that effort... but they don't, further I also would still have to set information anew, which actually didn't change.
     // So I don't delete the TabWinDatas, but only update them.
     OSL_ENSURE(m_vTableData.size() == pTabWinList->size(),
-        "OJoinController::SaveTabWinsPosSize : inkonsistenter Zustand : sollte genausviel TabWinDatas haben wie TabWins !");
+        "OJoinController::SaveTabWinsPosSize : inconsistent state : should have as many TabWinDatas as TabWins !");
 
     OJoinTableView::OTableWindowMap::const_iterator aIter = pTabWinList->begin();
     OJoinTableView::OTableWindowMap::const_iterator aEnd = pTabWinList->end();

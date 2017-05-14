@@ -26,7 +26,7 @@
 namespace dbaui
 {
 
-    // OQueryMoveTabWinUndoAct - Undo-Klasse fuer Verschieben eines TabWins
+    // OQueryMoveTabWinUndoAct - Undo class for moving a TabWin
     class OTableWindow;
     class OJoinMoveTabWinUndoAct : public OQueryDesignUndoAction
     {

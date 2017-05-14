@@ -154,7 +154,7 @@ void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionD
 
 IMPL_LINK_NOARG( ORelationDialog, OKClickHdl, Button*, void )
 {
-    // RadioButtons auslesen
+    // Read out RadioButtons
     sal_uInt16 nAttrib = 0;
 
     // Delete Rules
@@ -184,8 +184,8 @@ IMPL_LINK_NOARG( ORelationDialog, OKClickHdl, Button*, void )
 
     m_xTableControl->SaveModified();
 
-    //// wenn die ComboBoxen fuer die Tabellenauswahl enabled sind (Constructor mit bAllowTableSelect==sal_True), dann muss ich in die
-    //// Connection auch die Tabellennamen stecken
+    //// if the ComboBoxes for the table selection are enabled (constructor with bAllowTableSelect==sal_True),
+    //// then I must also put the table names into the connection
     //m_pConnData->SetSourceWinName(m_xTableControl->getSourceWinName());
     //m_pConnData->SetDestWinName(m_xTableControl->getDestWinName());
 

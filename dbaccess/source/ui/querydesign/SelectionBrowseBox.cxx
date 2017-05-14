@@ -1261,7 +1261,7 @@ void OSelectionBrowseBox::RemoveColumn(sal_uInt16 _nColumnId)
     EditBrowseBox::RemoveColumn( _nColumnId );
     InsertDataColumn( _nColumnId , OUString(), DEFAULT_SIZE );
 
-    // Neuzeichnen
+    // redraw
     tools::Rectangle aInvalidRect = GetInvalidRect( _nColumnId );
     Invalidate( aInvalidRect );
 
@@ -2116,7 +2116,7 @@ OUString OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
         case BROW_FIELD_ROW:
         {
             OUString aField = pEntry->GetField();
-            if (!aField.isEmpty() && aField[0] == '*')                   // * durch alias.* ersetzen
+            if (!aField.isEmpty() && aField[0] == '*')                   // * replace with alias.*
             {
                 aField = pEntry->GetAlias();
                 if(!aField.isEmpty())

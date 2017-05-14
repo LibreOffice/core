@@ -96,7 +96,7 @@ void OWizNameMatching::dispose()
 
 void OWizNameMatching::Reset()
 {
-    // urspr"unglichen zustand wiederherstellen
+    // restore original state;
     // the left tree contains bitmaps so i need to resize the right one
     if(m_bFirstTime)
     {

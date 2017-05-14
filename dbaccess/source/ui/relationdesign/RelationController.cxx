@@ -421,7 +421,7 @@ namespace
                         }
                         pTabConnData->SetConnLine( j, sColumnName, sRelatedName );
                     }
-                    // Update/Del-Flags setzen
+                    // set update/del flags
                     sal_Int32   nUpdateRule = 0;
                     sal_Int32   nDeleteRule = 0;
                     xKey->getPropertyValue(PROPERTY_UPDATERULE) >>= nUpdateRule;
@@ -430,7 +430,7 @@ namespace
                     pTabConnData->SetUpdateRules( nUpdateRule );
                     pTabConnData->SetDeleteRules( nDeleteRule );
 
-                    // Kardinalitaet setzen
+                    // set cardinality
                     pTabConnData->SetCardinality();
                 }
             }

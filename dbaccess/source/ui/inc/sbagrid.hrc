@@ -21,15 +21,15 @@
 #define DBACCESS_SBA_GRID_HRC
 
 //----------------Menueitems-------------------------------------------------
-// Tabelle
+// Table
 #define SBA_WHICHID_START       100
 
-// Spalten
-// Formatierung
+// Columns
+// Formatting
 #define SBA_DEF_RANGEFORMAT     (SBA_WHICHID_START+143) // RangeItem
 #define SBA_DEF_FMTVALUE        (SBA_WHICHID_START+144) // SfxULONG, Format
 
-// Ausrichtung
+// Justification
 #define SBA_ATTR_ALIGN_HOR_JUSTIFY  (SBA_WHICHID_START + 145) //  SvxHorJustifyItem
 
 #endif // DBACCESS_SBA_GRID_HRC

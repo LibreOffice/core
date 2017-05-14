@@ -54,7 +54,7 @@
 // please adjust checking before insert new strings
 
 #if RID_STR_UNSUPPORTED_OBJECT_TYPE > RID_STR_APP_END
-#error Resource-Id Ueberlauf in #file, #line
+#error Resource ID overflow in #file, #line
 #endif
 
 #endif
