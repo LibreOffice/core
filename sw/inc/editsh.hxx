@@ -366,6 +366,8 @@ public:
 
     void SetClassification(const OUString& rName, SfxClassificationPolicyType eType);
 
+    void SetWatermark(const OUString& rText);
+
     void Insert2(SwField&, const bool bForceExpandHints);
 
     void UpdateFields( SwField & );   ///< One single field.
