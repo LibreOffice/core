@@ -2643,14 +2643,12 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         bool bSetAttr;
         if( bChkEnd )
         {
-            // Zechen-Attribute mit Ende moeglich frueh,
-            // also noch im aktuellen Absatz setzen (wegen JavaScript
-            // und diversen Chats). das darf man aber nicht fuer Attribute,
-            // die ueber den ganzen Absatz aufgspannt werden sollen, weil
-            // sie aus Absatzvorlgen stammen, die nicht gesetzt werden
-            // koennen. Weil die Attribute mit SETATTR_DONTREPLACE
-            // eingefuegt werden, sollte man sie auch anchtraeglich
-            // noch setzen koennen.
+            // Set character attribute with end early on, so set them still in
+            // the current paragraph (because of JavaScript and various chats).
+            // You shouldn't do that for attributes which are should be used for
+            // the whole paragraph, because they could be from the template
+            // which can't be set. Because the attributes are insert with
+            // SETATTR_DONTREPLACE, they should be able to be set later.
             bSetAttr = ( nEndParaIdx < rEndIdx.GetIndex() &&
                          (RES_LR_SPACE != nWhich || !GetNumInfo().GetNumRule()) ) ||
                        ( !pAttr->IsLikePara() &&
@@ -2663,9 +2661,8 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         }
         else
         {
-            // Attribute im Content-Bereich duerfen nicht gesetzt
-            // werden, wenn wir in einem Sonderbereich stehen, aber
-            // umgekekehrt schon.
+            // Attributes in content area shouldn't be set if we are in a
+            // special area, but vice versa it's possible.
             sal_uLong nEndOfIcons = m_xDoc->GetNodes().GetEndOfExtras().GetIndex();
             bSetAttr = nEndParaIdx < rEndIdx.GetIndex() ||
                        rEndIdx.GetIndex() > nEndOfIcons ||
@@ -2674,16 +2671,16 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
 
         if( bSetAttr )
         {
-            // Das Attribute darf nicht in der liste der vorlaeufigen
-            // Absatz-Attribute stehen, weil es sonst geloescht wurde.
+            // The attribute shouldn't be in the list of temporary paragraph
+            // attributes, because otherwise it would be deleted.
             while( !m_aParaAttrs.empty() )
             {
                 OSL_ENSURE( pAttr != m_aParaAttrs.back(),
-                        "SetAttr: Attribut duerfte noch nicht gesetzt werden" );
+                        "SetAttr: Attribute must not yet be set" );
                 m_aParaAttrs.pop_back();
             }
 
-            // dann also setzen
+            // then set it
             m_aSetAttrTab.erase( m_aSetAttrTab.begin() + n );
 
             while( pAttr )
@@ -2691,7 +2688,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                 HTMLAttr *pPrev = pAttr->GetPrev();
                 if( !pAttr->bValid )
                 {
-                    // ungueltige Attribute koennen gloescht werden
+                    // invalid attributes can be deleted
                     delete pAttr;
                     pAttr = pPrev;
                     continue;
@@ -2700,14 +2697,13 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                 pCNd = pAttr->nSttPara.GetNode().GetContentNode();
                 if( !pCNd )
                 {
-                    // durch die elende Loescherei von Nodes kann auch mal
-                    // ein Index auf einen End-Node zeigen :-(
+                    // because of the awful deleting of nodes an index can also
+                    // point to an end node :-(
                     if ( (pAttr->GetSttPara() == pAttr->GetEndPara()) &&
                          !isTXTATR_NOEND(nWhich) )
                     {
-                        // wenn der End-Index auch auf den Node zeigt
-                        // brauchen wir auch kein Attribut mehr zu setzen,
-                        // es sei denn, es ist ein Text-Attribut.
+                        // when the end index also point to the node, we don't
+                        // need to set attribute anymore, except it's a text attribute.
                         delete pAttr;
                         pAttr = pPrev;
                         continue;
@@ -2725,8 +2721,8 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                 }
                 pAttrPam->GetPoint()->nNode = pAttr->nSttPara;
 
-                // durch das Loeschen von BRs kann der Start-Index
-                // auch mal hinter das Ende des Textes zeigen
+                // because of the deleting of BRs the start index can also
+                // point behind the end the text
                 if( pAttr->nSttContent > pCNd->Len() )
                     pAttr->nSttContent = pCNd->Len();
                 pAttrPam->GetPoint()->nContent.Assign( pCNd, pAttr->nSttContent );
@@ -2758,8 +2754,8 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     pAttr->nEndContent = pCNd->Len();
                 }
 
-                // durch das Loeschen von BRs kann der End-Index
-                // auch mal hinter das Ende des Textes zeigen
+                // because of the deleting of BRs the start index can also
+                // point behind the end the text
                 if( pAttr->nEndContent > pCNd->Len() )
                     pAttr->nEndContent = pCNd->Len();
 
@@ -2779,7 +2775,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                             rEndIdx.GetIndex() )
                         {
                             OSL_ENSURE( !pAttrPam->GetPoint()->nContent.GetIndex(),
-                                    "Content-Position vor Tabelle nicht 0???" );
+                                    "Content-Position before table not 0???" );
                             pAttrPam->Move( fnMoveBackward );
                         }
                         else
@@ -2843,13 +2839,12 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                         pAttrPam->GetMark()->nNode.GetIndex() &&
                         pCNd )
                     {
-                        // wegen Numerierungen dieses Attribut direkt
-                        // am Node setzen
+                        // because of numbering set this attribute directly at node
                         pCNd->SetAttr( *pAttr->pItem );
                         break;
                     }
                     OSL_ENSURE( false,
-                            "LRSpace ueber mehrere Absaetze gesetzt!" );
+                            "LRSpace set over multiple paragraph!" );
                     SAL_FALLTHROUGH; // (shouldn't reach this point anyway)
 
                 // tdf#94088 expand RES_BACKGROUND to the new fill attribute
@@ -2867,7 +2862,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                 }
                 default:
 
-                    // ggfs. ein Bookmark anspringen
+                    // maybe jump to a bookmark
                     if( RES_TXTATR_INETFMT == nWhich &&
                         JUMPTO_MARK == m_eJumpTo &&
                         m_sJmpMark == static_cast<SwFormatINetFormat*>(pAttr->pItem.get())->GetName() )
@@ -2892,7 +2887,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
 
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
         OSL_ENSURE( RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId(),
-                "Nur Auto-Rahmen brauchen eine Spezialbehandlung" );
+                "Only Auto-Border need a special handling" );
         const SwPosition *pFlyPos = rAnchor.GetContentAnchor();
         sal_uLong nFlyParaIdx = pFlyPos->nNode.GetIndex();
         bool bMoveFly;
@@ -2951,9 +2946,9 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         if( bBeforeTable &&
             pAttrPam->GetPoint()->nNode.GetIndex() == rEndIdx.GetIndex() )
         {
-            OSL_ENSURE( !bBeforeTable, "Aha, der Fall tritt also doch ein" );
+            OSL_ENSURE( !bBeforeTable, "Aha, the case does occurs" );
             OSL_ENSURE( !pAttrPam->GetPoint()->nContent.GetIndex(),
-                    "Content-Position vor Tabelle nicht 0???" );
+                    "Content-Position before table not 0???" );
             // !!!
             pAttrPam->Move( fnMoveBackward );
         }
