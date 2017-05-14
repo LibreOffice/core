@@ -2782,7 +2782,7 @@ void ScInterpreter::ScDde()
             {
                 SfxBindings* pBindings = pDok->GetViewBindings();
                 if (pBindings)
-                    pBindings->Invalidate( SID_LINKS );             // Link-Manager enablen
+                    pBindings->Invalidate( SID_LINKS );             // Link-Manager enabled
             }
 
                                     //TODO: evaluate asynchron ???
