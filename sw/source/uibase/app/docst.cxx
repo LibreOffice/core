@@ -85,6 +85,7 @@
 #include <list.hxx>
 #include <paratr.hxx>
 #include <tblafmt.hxx>
+#include <sfx2/watermarkitem.hxx>
 
 extern bool g_bNoInterrupt;       // in swmodule.cxx
 
@@ -272,6 +273,14 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             case SID_CLASSIFICATION_APPLY:
                 // Just trigger ClassificationCategoriesController::statusChanged().
                 rSet.InvalidateItem(nWhich);
+                break;
+            case SID_WATERMARK:
+                {
+                    if( pSh )
+                        rSet.Put(pSh->GetWatermark());
+
+                    rSet.InvalidateItem(nWhich);
+                }
                 break;
             default:
                 OSL_FAIL("Invalid SlotId");

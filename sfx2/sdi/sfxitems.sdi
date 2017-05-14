@@ -34,6 +34,7 @@
     item String     SfxObjectShellItem      //! Dummy
     item String     SfxUsrAnyItem           //! Dummy
     item String     SfxUnoFrameItem         //! Dummy
+    item String     SfxWatermarkItem        //! Dummy
 
     struct Point
     {
