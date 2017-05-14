@@ -1792,6 +1792,7 @@ var ESCAPE_KEY = 27;
 var HIDDEN = 0;
 var VISIBLE = 1;
 var INHERIT = 2;
+var aVisibilityAttributeValue = [ 'hidden', 'visible', 'inherit' ];  // eslint-disable-line no-unused-vars
 var aVisibilityValue = { 'hidden' : HIDDEN, 'visible' : VISIBLE, 'inherit' : INHERIT };
 
 // Parameters
@@ -2055,6 +2056,15 @@ function getSafeIndex( nIndex, nMin, nMax )
 function getRandomInt( nMax )
 {
     return Math.floor( Math.random() * nMax );
+}
+
+function isTextFieldElement( aElement ) // eslint-disable-line no-unused-vars
+{
+    var sClassName = aElement.getAttribute( 'class' );
+    return ( sClassName === aSlideNumberClassName ) ||
+           ( sClassName === aFooterClassName ) ||
+           ( sClassName === aHeaderClassName ) ||
+           ( sClassName === aDateTimeClassName );
 }
 
 
@@ -2363,6 +2373,11 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
     this.aSlideAnimationsHandler = new SlideAnimations( aSlideShow.getContext() );
     this.aSlideAnimationsHandler.importAnimations( this.getSlideAnimationsRoot() );
     this.aSlideAnimationsHandler.parseElements();
+
+    // this statement is used only for debugging
+    // eslint-disable-next-line no-constant-condition
+    if( false && this.aSlideAnimationsHandler.aRootNode )
+        log( this.aSlideAnimationsHandler.aRootNode.info( true ) );
 
     // We collect text shapes included in this slide .
     this.aTextShapeSet = this.collectTextShapes();
@@ -3277,7 +3292,7 @@ CurrentDateTimeProvider.prototype.update = function( aDateTimeField )
 
 /*** private methods ***/
 
-CurrentDateTimeProvider.prototype.createDateTimeText = function()
+CurrentDateTimeProvider.prototype.createDateTimeText = function( /*sDateTimeFormat*/ )
 {
     // TODO handle date/time format
     var aDate = new Date();
@@ -3335,7 +3350,7 @@ SlideNumberProvider.prototype.update = function( aSlideNumberField, nSlideNumber
 
 /*** private methods ***/
 
-SlideNumberProvider.prototype.createSlideNumberText = function( nSlideNumber )
+SlideNumberProvider.prototype.createSlideNumberText = function( nSlideNumber /*, sNumberingType*/ )
 {
     // TODO handle page numbering type
     return String( nSlideNumber );
@@ -3995,6 +4010,12 @@ function getCurrentSystemTime()
     return ( new Date() ).getTime();
 }
 
+// eslint-disable-next-line no-unused-vars
+function getSlideAnimationsRoot( sSlideId )
+{
+    return theMetaDoc.aSlideAnimationsMap[ sSlideId ];
+}
+
 /** This function return an array populated with all children nodes of the
  *  passed element that are elements
  *
@@ -4057,8 +4078,30 @@ function makeMatrixString( a, b, c, d, e, f )
     return s;
 }
 
+// eslint-disable-next-line no-unused-vars
+function matrixToString( aSVGMatrix )
+{
+    return makeMatrixString( aSVGMatrix.a, aSVGMatrix.b, aSVGMatrix.c,
+                             aSVGMatrix.d, aSVGMatrix.e, aSVGMatrix.f );
+}
+
+
+
 
 // Attribute Parsers
+
+// eslint-disable-next-line no-unused-vars
+function numberParser( sValue )
+{
+    if( sValue === '.' )
+        return undefined;
+    var reFloatNumber = /^[+-]?[0-9]*[.]?[0-9]*$/;
+
+    if( reFloatNumber.test( sValue ) )
+        return parseFloat( sValue );
+    else
+        return undefined;
+}
 
 function booleanParser( sValue )
 {
@@ -4073,6 +4116,27 @@ function booleanParser( sValue )
 
 function colorParser( sValue )
 {
+    // The following 3 color functions are used in evaluating sValue string
+    // so don't remove them.
+
+    // eslint-disable-next-line no-unused-vars
+    function hsl( nHue, nSaturation, nLuminance )
+    {
+        return new HSLColor( nHue, nSaturation / 100, nLuminance / 100 );
+    }
+
+    // eslint-disable-next-line no-unused-vars
+    function rgb( nRed, nGreen, nBlue )
+    {
+        return new RGBColor( nRed / 255, nGreen / 255, nBlue / 255 );
+    }
+
+    // eslint-disable-next-line no-unused-vars
+    function prgb( nRed, nGreen, nBlue )
+    {
+        return new RGBColor( nRed / 100, nGreen / 100, nBlue / 100 );
+    }
+
     var sCommaPattern = ' *[,] *';
     var sIntegerPattern = '[+-]?[0-9]+';
     var sHexDigitPattern = '[0-9A-Fa-f]';
@@ -4883,6 +4947,7 @@ var aPresetIdInMap = {};
 
 // Restart Modes
 var RESTART_MODE_DEFAULT            = 0;
+var RESTART_MODE_INHERIT            = 0; // eslint-disable-line no-unused-vars
 var RESTART_MODE_ALWAYS             = 1;
 var RESTART_MODE_WHEN_NOT_ACTIVE    = 2;
 var RESTART_MODE_NEVER              = 3;
@@ -4899,6 +4964,7 @@ var aRestartModeOutMap = [ 'inherit','always', 'whenNotActive', 'never' ];
 
 // Fill Modes
 var FILL_MODE_DEFAULT           = 0;
+var FILL_MODE_INHERIT           = 0; // eslint-disable-line no-unused-vars
 var FILL_MODE_REMOVE            = 1;
 var FILL_MODE_FREEZE            = 2;
 var FILL_MODE_HOLD              = 3;
@@ -4918,6 +4984,7 @@ var aFillModeOutMap = [ 'inherit', 'remove', 'freeze', 'hold', 'transition', 'au
 
 
 // Additive Modes
+var ADDITIVE_MODE_UNKNOWN       = 0; // eslint-disable-line no-unused-vars
 var ADDITIVE_MODE_BASE          = 1;
 var ADDITIVE_MODE_SUM           = 2;
 var ADDITIVE_MODE_REPLACE       = 3;
@@ -5055,7 +5122,7 @@ var TRANSITION_SPECIAL              = 2;    // Transition expressed by hand-craf
 
 /*
  * All Transition types should be in sync with aTransitionTypeInMap:
- * Comments '//' followed by integers represent the transition values in their 
+ * Comments '//' followed by integers represent the transition values in their
  * C++ implementations.
  */
 
@@ -5331,6 +5398,10 @@ var REVERSEMETHOD_ROTATE_180                = 4;
 var REVERSEMETHOD_FLIP_X                    = 5;
 // Reverse by flipping polygon at the x axis.
 var REVERSEMETHOD_FLIP_Y                    = 6;
+
+// eslint-disable-next-line no-unused-vars
+var aReverseMethodOutMap = ['ignore', 'invert sweep', 'subtract polygon',
+                            'subtract and invert', 'rotate 180', 'flip x', 'flip y'];
 
 
 // Transition filter info table
@@ -7325,7 +7396,7 @@ BaseNode.prototype.activate_st = function()
     this.scheduleDeactivationEvent();
 };
 
-BaseNode.prototype.deactivate_st = function( )
+BaseNode.prototype.deactivate_st = function( /*aNodeState*/ )
 {
     // empty body
 };
@@ -8061,7 +8132,7 @@ BaseContainerNode.prototype.activate_st = function()
     log( 'BaseContainerNode.activate_st: abstract method called' );
 };
 
-BaseContainerNode.prototype.notifyDeactivating = function( )
+BaseContainerNode.prototype.notifyDeactivating = function( /*aAnimationNode*/ )
 {
     log( 'BaseContainerNode.notifyDeactivating: abstract method called' );
 };
@@ -8436,6 +8507,7 @@ SequentialTimeContainer.prototype.rewindLastEffect = function( aChildNode )
         // lately we noticed that when interactive animation sequences are
         // involved into the shape effect invoking such a method causes
         // some issue.
+        //aChildNode.removeEffect();
 
         // As we rewind the previous effect we need to decrease the finished
         // children counter.
@@ -8848,12 +8920,16 @@ function createAnimationNode( aElement, aParentNode, aNodeContext )
             aCreatedNode = new AnimationSetNode( aElement, aParentNode, aNodeContext );
             break;
         case ANIMATION_NODE_ANIMATEMOTION:
+            //aCreatedNode = new AnimationPathMotionNode( aElement, aParentNode, aNodeContext );
+            //break;
             log( 'createAnimationNode: ANIMATEMOTION not implemented' );
             return null;
         case ANIMATION_NODE_ANIMATECOLOR:
             aCreatedNode = new AnimationColorNode( aElement, aParentNode, aNodeContext );
             break;
         case ANIMATION_NODE_ANIMATETRANSFORM:
+            //aCreatedNode = new AnimationTransformNode( aElement, aParentNode, aNodeContext );
+            //break;
             log( 'createAnimationNode: ANIMATETRANSFORM not implemented' );
             return null;
         case ANIMATION_NODE_TRANSITIONFILTER:
@@ -8915,7 +8991,7 @@ function createChildNode( aElement, aParentNode, aNodeContext )
 
 
 
-function createIteratedNodes( )
+function createIteratedNodes( /*aElement, aContainerNode, aNodeContext*/ )
 {
     // not implemented
 }
@@ -8944,8 +9020,8 @@ function makeScaler( nScale )
 
 
 
-
-function createPropertyAnimation( sAttrName, aAnimatedElement )
+// eslint-disable-next-line no-unused-vars
+function createPropertyAnimation( sAttrName, aAnimatedElement, nWidth, nHeight )
 {
     if( !aAttributeMap[ sAttrName ] )
     {
@@ -9877,6 +9953,7 @@ function createClipPolyPolygon( nType, nSubtype )
                 nSubtype == TOPRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE    ||
                 nSubtype == BOTTOMRIGHTCOUNTERCLOCKWISE_TRANS_SUBTYPE ||
                 nSubtype == BOTTOMLEFTCOUNTERCLOCKWISE_TRANS_SUBTYPE );
+
         case BOXSNAKESWIPE_TRANSITION:
             return new BoxSnakesWipePath(
                 // elements
@@ -9884,7 +9961,6 @@ function createClipPolyPolygon( nType, nSubtype )
                 // fourBox
                 nSubtype == FOURBOXVERTICAL_TRANS_SUBTYPE ||
                 nSubtype == FOURBOXHORIZONTAL_TRANS_SUBTYPE );
-
     }
 }
 
@@ -11332,7 +11408,7 @@ AnimatedElement.prototype.notifyAnimationEnd = function()
     // empty body
 };
 
-AnimatedElement.prototype.notifyNextEffectStart = function( )
+AnimatedElement.prototype.notifyNextEffectStart = function( /*nEffectIndex*/ )
 {
     // empty body
 };
@@ -12779,7 +12855,7 @@ SourceEventElement.prototype.charge = function()
     this.setPointerCursor();
 };
 
-SourceEventElement.prototype.handleClick = function( )
+SourceEventElement.prototype.handleClick = function( /*aMouseEvent*/ )
 {
     if( !this.bIsPointerOver ) return false;
 
@@ -13870,7 +13946,7 @@ DiscreteActivityBase.prototype.calcRepeatCount = function( nCurrCalls, nVectorSi
     }
 };
 
-DiscreteActivityBase.prototype.performDiscreteHook = function( )
+DiscreteActivityBase.prototype.performDiscreteHook = function( /*nFrame, nRepeatCount*/ )
 {
     throw ( 'DiscreteActivityBase.performDiscreteHook: abstract method invoked' );
 };
@@ -14145,7 +14221,7 @@ SimpleContinuousActivityBase.prototype.perform = function()
     return this.isActive();
 };
 
-SimpleContinuousActivityBase.prototype.simplePerform = function( )
+SimpleContinuousActivityBase.prototype.simplePerform = function( /*nSimpleTime, nRepeatCount*/ )
 {
     throw ( 'SimpleContinuousActivityBase.simplePerform: abstract method invoked' );
 };
@@ -14179,7 +14255,7 @@ ContinuousKeyTimeActivityBase.prototype.activate = function( aEndElement )
     this.aLerper.reset();
 };
 
-ContinuousKeyTimeActivityBase.prototype.performContinuousHook = function( )
+ContinuousKeyTimeActivityBase.prototype.performContinuousHook = function( /*nIndex, nFractionalIndex, nRepeatCount*/ )
 {
     throw ( 'ContinuousKeyTimeActivityBase.performContinuousHook: abstract method invoked' );
 };
@@ -14204,7 +14280,7 @@ function ContinuousActivityBase( aCommonParamSet )
 extend( ContinuousActivityBase, SimpleContinuousActivityBase );
 
 
-ContinuousActivityBase.prototype.performContinuousHook = function( )
+ContinuousActivityBase.prototype.performContinuousHook = function( /*nModifiedTime, nRepeatCount*/ )
 {
     throw ( 'ContinuousActivityBase.performContinuousHook: abstract method invoked' );
 };
@@ -14251,7 +14327,7 @@ SimpleActivity.prototype.endAnimation = function()
 
 };
 
-SimpleActivity.prototype.performContinuousHook = function( nModifiedTime )
+SimpleActivity.prototype.performContinuousHook = function( nModifiedTime /*, nRepeatCount*/ )
 {
     // nRepeatCount is not used
 
@@ -14445,6 +14521,7 @@ function FromToByActivityTemplate( BaseType ) // template parameter
         // the target attribute, cumulative animation is not defined.
         if( this.bCumulative && !this.bDynamicStartValue )
         {
+            // aValue = this.aEndValue * nRepeatCount + aValue;
             aValue = this.add( this.scale( nRepeatCount, this.aEndValue ), aValue );
         }
 
@@ -14459,15 +14536,12 @@ function FromToByActivityTemplate( BaseType ) // template parameter
     };
 
     // perform hook override for DiscreteActivityBase
-    FromToByActivity.prototype.performDiscreteHook = function( )
+    FromToByActivity.prototype.performDiscreteHook = function( /*nFrame, nRepeatCount*/ )
     {
         if (this.isDisposed() || !this.aAnimation) {
             log('FromToByActivity.performDiscreteHook: activity disposed or not valid animation');
             return;
         }
-
-
-
     };
 
     FromToByActivity.prototype.performEnd = function()
@@ -14582,6 +14656,7 @@ function  ValueListActivityTemplate( BaseType ) // template parameter
 
         if( this.bCumulative )
         {
+            //aValue = aValue + nRepeatCount * this.aLastValue;
             aValue = this.add( aValue, this.scale( nRepeatCount, this.aLastValue ) );
         }
 
@@ -14679,10 +14754,21 @@ function createActivity( aActivityParamSet, aAnimationNode, aAnimation, aInterpo
         sFormula = sFormula.replace(/e(?!\w)/g, 'Math.E');
         sFormula = sFormula.replace(/\$/g, '__PARAM0__');
 
-        aActivityParamSet.aFormula = function( ) {
+        var aAnimatedElement = aAnimationNode.getAnimatedElement();
+        var aBBox = aAnimatedElement.getBaseBBox();
+
+        // the following variable are used for evaluating sFormula
+        /* eslint-disable no-unused-vars */
+        var width = aBBox.width / aActivityParamSet.nSlideWidth;
+        var height = aBBox.height / aActivityParamSet.nSlideHeight;
+        var x = ( aBBox.x + aBBox.width / 2 ) / aActivityParamSet.nSlideWidth;
+        var y = ( aBBox.y + aBBox.height / 2 ) / aActivityParamSet.nSlideHeight;
+
+        aActivityParamSet.aFormula = function( __PARAM0__ ) {
 
             return eval(sFormula);
         };
+        /* eslint-enable no-unused-vars */
     }
 
     aActivityParamSet.aDiscreteTimes = aAnimationNode.getKeyTimes();
@@ -14883,8 +14969,16 @@ function extractAttributeValues( eValueType, aValueList, aValueSet, aBBox, nSlid
 }
 
 
-function evalValuesAttribute( aValueList, aValueSet )
+function evalValuesAttribute( aValueList, aValueSet, aBBox, nSlideWidth, nSlideHeight )
 {
+    // the following variables are used for evaluating sValue later
+    /* eslint-disable no-unused-vars */
+    var width = aBBox.width / nSlideWidth;
+    var height = aBBox.height / nSlideHeight;
+    var x = ( aBBox.x + aBBox.width / 2 ) / nSlideWidth;
+    var y = ( aBBox.y + aBBox.height / 2 ) / nSlideHeight;
+    /* eslint-enable no-unused-vars */
+
     var reMath = /abs|sqrt|asin|acos|atan|sin|cos|tan|exp|log|min|max/g;
 
     for( var i = 0; i < aValueSet.length; ++i )
