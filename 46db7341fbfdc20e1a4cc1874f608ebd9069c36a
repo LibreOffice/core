@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_2bd93122",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-14T23:10:31Z",
+      "side": 1,
+      "message": "Based on my experience with orcus I guess that this approach will only work with ascii file names. Windows is picky with the UTF-16 stuff and it seems that it completely ignores non-ascii UTF-8 file names passed to std::ifstream.",
+      "revId": "46db7341fbfdc20e1a4cc1874f608ebd9069c36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
