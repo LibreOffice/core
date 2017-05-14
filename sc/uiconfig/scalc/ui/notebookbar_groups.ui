@@ -163,7 +163,7 @@
       <object class="GtkMenuItem" id="stylemenuacc1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Accent%201&amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Accent 1&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Accent 1</property>
         <property name="use_underline">True</property>
       </object>
@@ -172,7 +172,7 @@
       <object class="GtkMenuItem" id="stylemenuacc2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Accent%202&amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Accent 2&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Accent 2</property>
         <property name="use_underline">True</property>
       </object>
@@ -181,7 +181,7 @@
       <object class="GtkMenuItem" id="stylemenuacc3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Accent%203&amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Accent 3&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Accent 3</property>
         <property name="use_underline">True</property>
       </object>
@@ -196,7 +196,7 @@
       <object class="GtkMenuItem" id="stylemenuhed1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Heading%201&amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Heading 1</property>
         <property name="use_underline">True</property>
       </object>
@@ -205,7 +205,7 @@
       <object class="GtkMenuItem" id="stylemenuhed2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Heading%202&amp;FamilyName:string=CellStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Heading 2</property>
         <property name="use_underline">True</property>
       </object>

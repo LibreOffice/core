@@ -34,15 +34,15 @@
  <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Standard&amp;FamilyName:string=ParagraphStyles" toolbar:text="Default" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Title&amp;FamilyName:string=ParagraphStyles" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Subtitle&amp;FamilyName:string=ParagraphStyles" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading%201&amp;FamilyName:string=ParagraphStyles" toolbar:text="H1"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading%202&amp;FamilyName:string=ParagraphStyles" toolbar:text="H2"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading%203&amp;FamilyName:string=ParagraphStyles" toolbar:text="H3"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading%204&amp;FamilyName:string=ParagraphStyles" toolbar:text="H4" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading%203&amp;FamilyName:string=ParagraphStyles" toolbar:text="H5" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading%204&amp;FamilyName:string=ParagraphStyles" toolbar:text="H6" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Text%20body&amp;FamilyName:string=ParagraphStyles" toolbar:text="Text"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=ParagraphStyles" toolbar:text="H1"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles" toolbar:text="H2"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles" toolbar:text="H3"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles" toolbar:text="H4" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading 5&amp;FamilyName:string=ParagraphStyles" toolbar:text="H5" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Heading 6&amp;FamilyName:string=ParagraphStyles" toolbar:text="H6" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Text body&amp;FamilyName:string=ParagraphStyles" toolbar:text="Text"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Quotations&amp;FamilyName:string=ParagraphStyles" toolbar:text="Quote"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Preformatted%20Text&amp;FamilyName:string=ParagraphStyles" toolbar:text="Pre"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Preformatted Text&amp;FamilyName:string=ParagraphStyles" toolbar:text="Pre"/>
  <toolbar:toolbarseparator/>
  <!-- These commands can be enabled when tdf#88512 and tdf#106782 are fixed -->
  <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:text="Character Styles" toolbar:visible="false"/>
@@ -50,12 +50,12 @@
  <toolbar:toolbaritem xlink:href=".uno:StyleNewByExample" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:EditStyle" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Default%20Style&amp;FamilyName:string=CharacterStyles" toolbar:text="Default"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Default Style&amp;FamilyName:string=CharacterStyles" toolbar:text="Default"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Emphasis&amp;FamilyName:string=CharacterStyles"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Strong%20Emphasis&amp;FamilyName:string=CharacterStyles" toolbar:text="Strong"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Strong Emphasis&amp;FamilyName:string=CharacterStyles" toolbar:text="Strong"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Quotation&amp;FamilyName:string=CharacterStyles" toolbar:text="Quote" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Source%20Text&amp;FamilyName:string=CharacterStyles" toolbar:text="Code"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=User%20Entry&amp;FamilyName:string=CharacterStyles" toolbar:text="User" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Source Text&amp;FamilyName:string=CharacterStyles" toolbar:text="Code"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=User Entry&amp;FamilyName:string=CharacterStyles" toolbar:text="User" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Bold" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Italic" toolbar:visible="false"/>
@@ -73,9 +73,9 @@
  <!-- These command can be enabled when tdf#107000 is fixed -->
  <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:text="List Styles" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=List%201&amp;FamilyName:string=NumberingStyles" toolbar:text="Bullet"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Numbering%201&amp;FamilyName:string=NumberingStyles" toolbar:text="Number"/>
- <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Numbering%204&amp;FamilyName:string=NumberingStyles" toolbar:text="Roman"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=List 1&amp;FamilyName:string=NumberingStyles" toolbar:text="Bullet"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Numbering 1&amp;FamilyName:string=NumberingStyles" toolbar:text="Number"/>
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply?Style:string=Numbering 4&amp;FamilyName:string=NumberingStyles" toolbar:text="Roman"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultBullet" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering" toolbar:visible="false"/>

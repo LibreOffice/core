@@ -3196,21 +3196,21 @@
       <object class="GtkMenuItem" id="heading1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Heading%201&amp;FamilyName:string=ParagraphStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=ParagraphStyles</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="heading2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Heading%202&amp;FamilyName:string=ParagraphStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles</property>
       </object>
     </child>
     <child>
       <object class="GtkMenuItem" id="heading3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Heading%203&amp;FamilyName:string=ParagraphStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles</property>
       </object>
     </child>
     <child>
@@ -3223,7 +3223,7 @@
       <object class="GtkMenuItem" id="chardefault">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Default%20Style&amp;FamilyName:string=CharacterStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Default Style&amp;FamilyName:string=CharacterStyles</property>
       </object>
     </child>
     <child>
@@ -3237,7 +3237,7 @@
       <object class="GtkMenuItem" id="bold">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StyleApply?Style:string=Strong%20Emphasis&amp;FamilyName:string=CharacterStyles</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Strong Emphasis&amp;FamilyName:string=CharacterStyles</property>
       </object>
     </child>
     <child>
