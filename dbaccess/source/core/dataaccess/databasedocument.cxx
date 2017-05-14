@@ -1999,7 +1999,6 @@ sal_Bool SAL_CALL ODatabaseDocument::getAllowMacroExecution()
 
 Reference< XEmbeddedScripts > SAL_CALL ODatabaseDocument::getScriptContainer()
 {
-    DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
     return this;
 }
 

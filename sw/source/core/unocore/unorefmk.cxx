@@ -1079,7 +1079,6 @@ SwXMeta::getAnchor()
 uno::Reference< text::XText > SAL_CALL
 SwXMeta::getText()
 {
-    SolarMutexGuard g;
     return this;
 }
 

@@ -6292,7 +6292,6 @@ void SAL_CALL ScCellObj::removeTextContent( const uno::Reference<text::XTextCont
 
 uno::Reference<text::XText> SAL_CALL ScCellObj::getText()
 {
-    SolarMutexGuard aGuard;
     return this;
 }
 
@@ -6896,7 +6895,6 @@ uno::Reference<sheet::XSheetCellCursor> SAL_CALL ScTableSheetObj::createCursorBy
 
 uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTableSheetObj::getSpreadsheet()
 {
-    SolarMutexGuard aGuard;
     return this;        //!???
 }
 

@@ -592,8 +592,6 @@ Sequence< OUString > AccessibleDialogWindow::getSupportedServiceNames()
 // XAccessible
 Reference< XAccessibleContext > AccessibleDialogWindow::getAccessibleContext(  )
 {
-    OExternalLockGuard aGuard( this );
-
     return this;
 }
 

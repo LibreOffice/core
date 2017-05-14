@@ -307,16 +307,12 @@ Sequence< OUString > AccessibleDialogControlShape::getSupportedServiceNames()
 // XAccessible
 Reference< XAccessibleContext > AccessibleDialogControlShape::getAccessibleContext(  )
 {
-    OExternalLockGuard aGuard( this );
-
     return this;
 }
 
 // XAccessibleContext
 sal_Int32 AccessibleDialogControlShape::getAccessibleChildCount()
 {
-    OExternalLockGuard aGuard( this );
-
     return 0;
 }
 

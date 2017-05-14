@@ -902,7 +902,6 @@ sal_Int32 SAL_CALL SmModel::getRendererCount(
         const uno::Any& /*rSelection*/,
         const uno::Sequence< beans::PropertyValue >& /*xOptions*/ )
 {
-    SolarMutexGuard aGuard;
     return 1;
 }
 

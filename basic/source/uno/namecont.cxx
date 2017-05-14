@@ -2717,25 +2717,21 @@ void SAL_CALL SfxLibraryContainer::disposing()
 // Methods XLibraryContainerPassword
 sal_Bool SAL_CALL SfxLibraryContainer::isLibraryPasswordProtected( const OUString& )
 {
-    LibraryContainerMethodGuard aGuard( *this );
     return false;
 }
 
 sal_Bool SAL_CALL SfxLibraryContainer::isLibraryPasswordVerified( const OUString& )
 {
-    LibraryContainerMethodGuard aGuard( *this );
     throw IllegalArgumentException();
 }
 
 sal_Bool SAL_CALL SfxLibraryContainer::verifyLibraryPassword( const OUString&, const OUString& )
 {
-    LibraryContainerMethodGuard aGuard( *this );
     throw IllegalArgumentException();
 }
 
 void SAL_CALL SfxLibraryContainer::changeLibraryPassword(const OUString&, const OUString&, const OUString& )
 {
-    LibraryContainerMethodGuard aGuard( *this );
     throw IllegalArgumentException();
 }
 
