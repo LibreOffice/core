@@ -377,6 +377,12 @@ interface BaseTextSelection
         StateMethod = StateStyle ;
     ]
 
+    SID_WATERMARK
+    [
+        ExecMethod = Execute ;
+        StateMethod = StateStyle ;
+    ]
+
      //OS: Selection.Escape gibt es zusaetzlich zu Window.Escape
 
     FN_ESCAPE // status(final|play|rec)
