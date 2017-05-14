@@ -233,6 +233,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/syspath \
     sfx2/source/doc/zoomitem \
     sfx2/source/doc/templatedlg \
+    sfx2/source/doc/watermarkitem \
     sfx2/source/doc/saveastemplatedlg \
     sfx2/source/explorer/nochaos \
     sfx2/source/inet/inettbc \
