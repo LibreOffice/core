@@ -279,7 +279,7 @@ namespace
 ScValidityRefChildWin::ScValidityRefChildWin( vcl::Window*               pParentP,
                                              sal_uInt16             nId,
                                              SfxBindings*       p,
-                                             SfxChildWinInfo*   /*pInfo*/ )
+                                             SAL_UNUSED_PARAMETER SfxChildWinInfo* /*pInfo*/ )
                                              : SfxChildWindow(pParentP, nId),
                                              m_bVisibleLock( false ),
                                              m_bFreeWindowLock( false ),

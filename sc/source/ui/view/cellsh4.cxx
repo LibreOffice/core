@@ -240,7 +240,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     rReq.Done();
 }
 
-void ScCellShell::GetStateCursor( SfxItemSet& /* rSet */ )
+void ScCellShell::GetStateCursor( SAL_UNUSED_PARAMETER SfxItemSet& /* rSet */ )
 {
 }
 

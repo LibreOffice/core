@@ -694,12 +694,12 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
                     for (; itr != itrEnd; ++itr)
-                        rFunc.SetLayoutRTL( *itr, bSet, false );
+                        rFunc.SetLayoutRTL( *itr, bSet );
 
                     pUndoManager->LeaveListAction();
                 }
                 else
-                    rFunc.SetLayoutRTL( nCurrentTab, bSet, false );
+                    rFunc.SetLayoutRTL( nCurrentTab, bSet );
             }
             break;
 

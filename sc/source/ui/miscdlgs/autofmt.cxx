@@ -480,7 +480,7 @@ void ScAutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
     Invalidate(tools::Rectangle(Point(0,0), GetSizePixel()));
 }
 
-void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
+void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext)
 {
     DrawModeFlags nOldDrawMode = aVD->GetDrawMode();
 
@@ -510,9 +510,9 @@ void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext, const tools::
     aVD->SetDrawMode(nOldDrawMode);
 }
 
-void ScAutoFmtPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void ScAutoFmtPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    DoPaint(rRenderContext, rRect);
+    DoPaint(rRenderContext);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

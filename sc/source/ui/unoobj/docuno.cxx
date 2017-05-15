@@ -1997,7 +1997,7 @@ void SAL_CALL ScModelObj::protect( const OUString& aPassword )
     // #i108245# if already protected, don't change anything
     if ( pDocShell && !pDocShell->GetDocument().IsDocProtected() )
     {
-        pDocShell->GetDocFunc().Protect( TABLEID_DOC, aPassword, true );
+        pDocShell->GetDocFunc().Protect( TABLEID_DOC, aPassword );
     }
 }
 
@@ -3089,7 +3089,7 @@ void SAL_CALL ScDrawPagesObj::remove( const uno::Reference<drawing::XDrawPage>& 
         if (pPage)
         {
             SCTAB nPageNum = static_cast<SCTAB>(pPage->GetPageNum());
-            pDocShell->GetDocFunc().DeleteTable( nPageNum, true, true );
+            pDocShell->GetDocFunc().DeleteTable( nPageNum, true );
         }
     }
 }
@@ -3293,7 +3293,7 @@ void SAL_CALL ScTableSheetsObj::replaceByName( const OUString& aName, const uno:
                 SCTAB nPosition;
                 if ( pDocShell->GetDocument().GetTable( aName, nPosition ) )
                 {
-                    if ( pDocShell->GetDocFunc().DeleteTable( nPosition, true, true ) )
+                    if ( pDocShell->GetDocFunc().DeleteTable( nPosition, true ) )
                     {
                         //  InsertTable can't really go wrong now
                         bDone = pDocShell->GetDocFunc().InsertTable( nPosition, aName, true, true );
@@ -3331,7 +3331,7 @@ void SAL_CALL ScTableSheetsObj::removeByName( const OUString& aName )
     {
         SCTAB nIndex;
         if ( pDocShell->GetDocument().GetTable( aName, nIndex ) )
-            bDone = pDocShell->GetDocFunc().DeleteTable( nIndex, true, true );
+            bDone = pDocShell->GetDocFunc().DeleteTable( nIndex, true );
         else // not found
             throw container::NoSuchElementException();
     }
@@ -3707,9 +3707,9 @@ void SAL_CALL ScTableColumnsObj::setPropertyValue(
         bool bSet = ScUnoHelpFunctions::GetBoolFromAny( aValue );
         for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
             if (bSet)
-                rFunc.InsertPageBreak( true, ScAddress(nCol,0,nTab), true, true, true );
+                rFunc.InsertPageBreak( true, ScAddress(nCol,0,nTab), true, true );
             else
-                rFunc.RemovePageBreak( true, ScAddress(nCol,0,nTab), true, true, true );
+                rFunc.RemovePageBreak( true, ScAddress(nCol,0,nTab), true, true );
     }
 }
 
@@ -3952,9 +3952,9 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
         bool bSet = ScUnoHelpFunctions::GetBoolFromAny( aValue );
         for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
             if (bSet)
-                rFunc.InsertPageBreak( false, ScAddress(0,nRow,nTab), true, true, true );
+                rFunc.InsertPageBreak( false, ScAddress(0,nRow,nTab), true, true );
             else
-                rFunc.RemovePageBreak( false, ScAddress(0,nRow,nTab), true, true, true );
+                rFunc.RemovePageBreak( false, ScAddress(0,nRow,nTab), true, true );
     }
     else if ( aPropertyName == SC_UNONAME_CELLBACK || aPropertyName == SC_UNONAME_CELLTRAN )
     {
@@ -4280,7 +4280,7 @@ void SAL_CALL ScScenariosObj::removeByName( const OUString& aName )
     SolarMutexGuard aGuard;
     SCTAB nIndex;
     if ( pDocShell && GetScenarioIndex_Impl( aName, nIndex ) )
-        pDocShell->GetDocFunc().DeleteTable( nTab+nIndex+1, true, true );
+        pDocShell->GetDocFunc().DeleteTable( nTab+nIndex+1, true );
 }
 
 // XEnumerationAccess
