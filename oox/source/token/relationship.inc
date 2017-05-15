@@ -15,7 +15,7 @@
 {Relationship::FOOTER, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer"},
 {Relationship::FOOTNOTES, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes"},
 {Relationship::GLOSSARYDOCUMENT, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/glossaryDocument"},
-{Relationship::HDPHOTO, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hdphoto"},
+{Relationship::HDPHOTO, "http://schemas.microsoft.com/office/2007/relationships/hdphoto"},
 {Relationship::HEADER, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header"},
 {Relationship::HYPERLINK, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink"},
 {Relationship::IMAGE, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"},
