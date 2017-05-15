@@ -38,7 +38,6 @@ private:
     sal_uLong           nBitsPerPlanePix;   // bits per plane per pixel
     sal_uLong           nPlanes;            // no of planes
     sal_uLong           nBytesPerPlaneLin;  // bytes per plane line
-    sal_uInt16          nPaletteInfo;
 
     sal_uLong           nWidth, nHeight;    // dimension in pixel
     sal_uInt16          nResX, nResY;       // resolution in pixel per inch or 0,0
@@ -67,7 +66,6 @@ PCXReader::PCXReader(SvStream &rStream)
     , nBitsPerPlanePix(0)
     , nPlanes(0)
     , nBytesPerPlaneLin(0)
-    , nPaletteInfo(0)
     , nWidth(0)
     , nHeight(0)
     , nResX(0)
@@ -178,6 +176,7 @@ void PCXReader::ImplReadHeader()
     m_rPCX.ReadUChar( nbyte );   nPlanes = (sal_uLong)nbyte;
     sal_uInt16 nushort(0);
     m_rPCX.ReadUInt16( nushort ); nBytesPerPlaneLin = (sal_uLong)nushort;
+    sal_uInt16 nPaletteInfo;
     m_rPCX.ReadUInt16( nPaletteInfo );
 
     m_rPCX.SeekRel( 58 );

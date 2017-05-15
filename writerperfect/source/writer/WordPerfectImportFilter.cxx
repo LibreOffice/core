@@ -205,23 +205,8 @@ OUString SAL_CALL WordPerfectImportFilter::detect(Sequence< PropertyValue > &Des
 
 
 // XInitialization
-void SAL_CALL WordPerfectImportFilter::initialize(const Sequence< Any > &aArguments)
+void SAL_CALL WordPerfectImportFilter::initialize(const Sequence< Any > &/*aArguments*/)
 {
-    Sequence < PropertyValue > aAnySeq;
-    sal_Int32 nLength = aArguments.getLength();
-    if (nLength && (aArguments[0] >>= aAnySeq))
-    {
-        const PropertyValue *pValue = aAnySeq.getConstArray();
-        nLength = aAnySeq.getLength();
-        for (sal_Int32 i = 0 ; i < nLength; i++)
-        {
-            if (pValue[i].Name == "Type")
-            {
-                pValue[i].Value >>= msFilterName;
-                break;
-            }
-        }
-    }
 }
 
 // XServiceInfo

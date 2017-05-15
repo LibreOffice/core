@@ -58,7 +58,6 @@ class GraphicCollector
         css::uno::Reference< css::beans::XPropertySet >   mxPropertySet;      // to be used otherwise the PropertySet
         css::uno::Reference< css::beans::XPropertySet >   mxPagePropertySet;
         OUString                       maGraphicURL;
-        OUString                       maGraphicStreamURL;
         css::text::GraphicCrop         maGraphicCropLogic;
         css::awt::Size                 maLogicalSize;
         bool                            mbFillBitmap;

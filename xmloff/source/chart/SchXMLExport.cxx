@@ -254,7 +254,6 @@ public:
     OUString msString;
 
     // members filled by InitRangeSegmentationProperties (retrieved from DataProvider)
-    bool mbHasSeriesLabels;
     bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
     bool mbRowSourceColumns;
     OUString msChartAddress;
@@ -1022,7 +1021,6 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
     SvXMLAutoStylePoolP& rASPool ) :
         mrExport( rExport ),
         mrAutoStylePool( rASPool ),
-        mbHasSeriesLabels( false ),
         mbHasCategoryLabels( false ),
         mbRowSourceColumns( true ),
         msCLSID( SvGlobalName( SO3_SCH_CLASSID ).GetHexName() )
@@ -3659,8 +3657,6 @@ void SchXMLExportHelper_Impl::InitRangeSegmentationProperties( const Reference< 
                         aArgs[i].Value >>= eRowSource;
                         mbRowSourceColumns = ( eRowSource == chart::ChartDataRowSource_COLUMNS );
                     }
-                    else if ( aArgs[i].Name == "FirstCellAsLabel" )
-                        aArgs[i].Value >>= mbHasSeriesLabels;
                     else if ( aArgs[i].Name == "SequenceMapping" )
                         aArgs[i].Value >>= maSequenceMapping;
                     else if ( aArgs[i].Name == "TableNumberList" )

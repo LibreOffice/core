@@ -45,9 +45,7 @@ class GraphicExportFilter :
 
     void gatherProperties( const Sequence<PropertyValue>& rDescriptor );
 
-    bool        mExportSelection;
     OUString    mFilterExtension;
-    util::URL   mTargetUrl;
 
     Sequence<PropertyValue> mFilterDataSequence;
 

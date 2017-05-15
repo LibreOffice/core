@@ -235,7 +235,6 @@ public:
         PresenterConfigurationAccess& rConfiguration,
         ReadContext& rReadContext);
 
-    OUString msThemeName;
     OUString msConfigurationNodeName;
     std::shared_ptr<Theme> mpParentTheme;
     SharedBitmapDescriptor mpBackground;
@@ -282,7 +281,8 @@ std::shared_ptr<PresenterTheme::Theme> PresenterTheme::ReadTheme()
         "/org.openoffice.Office.PresenterScreen/",
         PresenterConfigurationAccess::READ_ONLY);
 
-    return aReadContext.ReadTheme(aConfiguration, msThemeName);
+    OUString sThemeName;
+    return aReadContext.ReadTheme(aConfiguration, sThemeName);
 }
 
 bool PresenterTheme::HasCanvas() const
@@ -578,11 +578,10 @@ double PresenterTheme::FontDescriptor::GetCellSizeForDesignSize (
 //===== Theme =================================================================
 
 PresenterTheme::Theme::Theme (
-    const OUString& rsName,
+    const OUString& /*rsName*/,
     const Reference<container::XHierarchicalNameAccess>& rxThemeRoot,
     const OUString& rsNodeName)
-    : msThemeName(rsName),
-      msConfigurationNodeName(rsNodeName),
+    : msConfigurationNodeName(rsNodeName),
       mpParentTheme(),
       maPaneStyles(),
       maViewStyles(),
@@ -596,9 +595,6 @@ void PresenterTheme::Theme::Read (
     PresenterConfigurationAccess& rConfiguration,
     ReadContext& rReadContext)
 {
-    PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, "ThemeName")
-        >>= msThemeName;
-
     // Parent theme name.
     OUString sParentThemeName;
     if ((PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, "ParentTheme")

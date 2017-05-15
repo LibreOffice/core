@@ -469,7 +469,6 @@ PresenterTextParagraph::PresenterTextParagraph (
       mnAscent(0),
       mnDescent(0),
       mnLineHeight(-1),
-      meAdjust(style::ParagraphAdjust_LEFT),
       mnWritingMode (text::WritingMode2::LR_TB),
       mnCharacterOffset(0),
       maCells()
@@ -481,14 +480,6 @@ PresenterTextParagraph::PresenterTextParagraph (
         try
         {
             xProperties->getPropertyValue("CharLocale") >>= aLocale;
-        }
-        catch(beans::UnknownPropertyException&)
-        {
-            // Ignore the exception.  Use the default value.
-        }
-        try
-        {
-            xProperties->getPropertyValue("ParaAdjust") >>= meAdjust;
         }
         catch(beans::UnknownPropertyException&)
         {

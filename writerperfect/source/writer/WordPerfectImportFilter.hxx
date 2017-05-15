@@ -37,7 +37,6 @@ class WordPerfectImportFilter : public cppu::WeakImplHelper
 protected:
     css::uno::Reference< css::uno::XComponentContext > mxContext;
     css::uno::Reference< css::lang::XComponent > mxDoc;
-    OUString msFilterName;
 
     /// @throws css::uno::RuntimeException
     bool SAL_CALL importImpl(const css::uno::Sequence< css::beans::PropertyValue > &aDescriptor);

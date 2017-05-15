@@ -24,8 +24,7 @@
 #include <svtools/DocumentToGraphicRenderer.hxx>
 
 GraphicExportFilter::GraphicExportFilter( const Reference<XComponentContext>&  )
-    : mExportSelection(false)
-    , mTargetWidth(0)
+    : mTargetWidth(0)
     , mTargetHeight(0)
 {}
 
@@ -52,17 +51,6 @@ void GraphicExportFilter::gatherProperties( const Sequence<PropertyValue>& rProp
         else if ( aProperty.Name == "FilterData" )
         {
             aProperty.Value >>= mFilterDataSequence;
-        }
-        else if ( aProperty.Name == "SelectionOnly" )
-        {
-            aProperty.Value >>= mExportSelection;
-        }
-        else if ( aProperty.Name == "URL" )
-        {
-            if( !( aProperty.Value >>= mTargetUrl ) )
-            {
-                aProperty.Value >>= mTargetUrl.Complete;
-            }
         }
         else if ( aProperty.Name == "OutputStream" )
         {

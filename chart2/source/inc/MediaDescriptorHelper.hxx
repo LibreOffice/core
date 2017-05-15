@@ -71,30 +71,15 @@ public:
     //@todo define this for debug only, except URL
     bool            AsTemplate; //document is a template.
     bool            ISSET_AsTemplate;
-    OUString     Author;
-    bool            ISSET_Author;
-    OUString     CharacterSet; //identifier of used character set.
-    bool            ISSET_CharacterSet;
-    OUString     Comment;
-    bool            ISSET_Comment;
 
     css::uno::Any
                         ComponentData;
     bool            ISSET_ComponentData;
-    OUString     FileName; //deprecated, same as url
-    bool            ISSET_FileName;
     css::uno::Any
                         FilterData;
     bool            ISSET_FilterData;
     OUString     FilterName; //internal filter name.
     bool            ISSET_FilterName;
-    OUString     FilterFlags;//deprecated,
-    bool            ISSET_FilterFlags;
-    OUString     FilterOptions;
-    bool            ISSET_FilterOptions;
-            //not documented ... @todo remove?
-    OUString     FrameName; //name of target frame.
-    bool            ISSET_FrameName;
     bool            Hidden; //load document, invisible.
     bool            ISSET_Hidden;
 
@@ -107,50 +92,20 @@ public:
     css::uno::Reference< css::io::XInputStream >
                         InputStream; //content of document.
     bool            ISSET_InputStream;
-    css::uno::Reference< css::uno::XInterface >
-                        InteractionHandler; //css::task::XInteractionHandler
-    bool            ISSET_InteractionHandler;
 
-    OUString     JumpMark;   //specifies the name of a mark within the document where the first view is to position itself.
-    bool            ISSET_JumpMark;
-    OUString     MediaType; //mime type.
-    bool            ISSET_MediaType;
-    OUString     OpenFlags; //deprecated
-    bool            ISSET_OpenFlags;
     bool            OpenNewView; //opens a new view for an already loaded document.
     bool            ISSET_OpenNewView;
     bool            Overwrite; //opens a new view for an already loaded document.
     bool            ISSET_Overwrite;
-    OUString     Password;
-    bool            ISSET_Password;
 
-        //not documented ... @todo remove?
-    css::awt::Rectangle
-                        PosSize; //position and size of document window.
-    bool            ISSET_PosSize;
-
-    css::uno::Sequence< sal_Int8 >
-                        PostData; //contains the data for HTTP post method as a sequence of bytes.
-    bool            ISSET_PostData;
-    OUString     PostString; //deprecated, contains the data for HTTP post method as a sequence of bytes.
-    bool            ISSET_PostString;
     bool            Preview; //show preview.
     bool            ISSET_Preview;
     bool            ReadOnly; //open document readonly.
     bool            ISSET_ReadOnly;
-    OUString     Referer; //name of document referrer.
-    bool            ISSET_Referer;
 
-    css::uno::Reference< css::uno::XInterface >
-                        StatusIndicator; //css::task::XStatusIndicator
-    bool            ISSET_StatusIndicator;
         //not documented ... @todo remove?
     bool            Silent; //prevents dialogs to query for more information.
     bool            ISSET_Silent;
-    OUString     TemplateName; //deprecated, name of the template instead of the URL.
-    bool            ISSET_TemplateName;
-    OUString     TemplateRegionName; //deprecated, name of the region of the template.
-    bool            ISSET_TemplateRegionName;
     bool            Unpacked;
     bool            ISSET_Unpacked;
     OUString     URL;// FileName, URL of the document.
@@ -172,10 +127,6 @@ public:
                         Stream;
     bool            ISSET_Stream;
 
-    // undocumented SFX Properties
-    css::uno::Sequence< sal_Int32 >
-                        WinExtent;
-    bool            ISSET_WinExtent;
     bool            SetEmbedded;
     bool            ISSET_SetEmbedded;
 

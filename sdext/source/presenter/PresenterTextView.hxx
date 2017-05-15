@@ -190,7 +190,6 @@ private:
     double mnAscent;
     double mnDescent;
     double mnLineHeight;
-    css::style::ParagraphAdjust meAdjust;
     sal_Int8 mnWritingMode;
     /// The index of the first character in this paragraph with respect to
     /// the whole text.

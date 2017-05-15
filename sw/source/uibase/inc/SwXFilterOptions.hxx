@@ -37,7 +37,6 @@ class SwXFilterOptions : public ::cppu::WeakImplHelper<
                             css::document::XExporter,
                             css::lang::XServiceInfo >
 {
-    OUString     sFilterName;
     OUString     sFilterOptions;
 
     css::uno::Reference< css::io::XInputStream > xInputStream;

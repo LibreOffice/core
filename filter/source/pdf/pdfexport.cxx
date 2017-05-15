@@ -95,7 +95,6 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mnPDFTypeSelection          ( 0 ),
     mbExportNotes               ( true ),
     mbExportPlaceholders        ( false ),
-    mbViewPDF                   ( true ),
     mbUseReferenceXObject       ( false ),
     mbExportNotesPages          ( false ),
     mbExportOnlyNotesPages      ( false ),
@@ -457,8 +456,6 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rFilterData[ nData ].Value >>= mnPDFTypeSelection;
                 else if ( rFilterData[ nData ].Name == "ExportNotes" )
                     rFilterData[ nData ].Value >>= mbExportNotes;
-                else if ( rFilterData[ nData ].Name == "ViewPDFAfterExport" )
-                    rFilterData[ nData ].Value >>= mbViewPDF;
                 else if ( rFilterData[ nData ].Name == "ExportNotesPages" )
                     rFilterData[ nData ].Value >>= mbExportNotesPages;
                 else if ( rFilterData[ nData ].Name == "ExportOnlyNotesPages" )

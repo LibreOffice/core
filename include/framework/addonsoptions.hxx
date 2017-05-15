@@ -74,7 +74,6 @@ struct FWE_DLLPUBLIC MergeStatusbarInstruction
     ::rtl::OUString     aMergePoint;
     ::rtl::OUString     aMergeCommand;
     ::rtl::OUString     aMergeCommandParameter;
-    ::rtl::OUString     aMergeFallback;
     ::rtl::OUString     aMergeContext;
     css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > aMergeStatusbarItems;
 };

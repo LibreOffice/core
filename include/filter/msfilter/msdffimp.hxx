@@ -151,7 +151,6 @@ typedef ::std::multiset< std::shared_ptr<SvxMSDffShapeInfo>,
 
 struct SvxMSDffConnectorRule
 {
-    sal_uInt32  nRuleId;
     sal_uInt32  nShapeA;   ///< SPID of shape A
     sal_uInt32  nShapeB;   ///< SPID of shape B
     sal_uInt32  nShapeC;   ///< SPID of connector shape
@@ -166,8 +165,7 @@ struct SvxMSDffConnectorRule
     SdrObject*  pCObj;     ///< pPtr of connector object
 
     SvxMSDffConnectorRule()
-        : nRuleId(0)
-        , nShapeA(0)
+        : nShapeA(0)
         , nShapeB(0)
         , nShapeC(0)
         , ncptiA(0)
@@ -194,7 +192,6 @@ struct MSFILTER_DLLPUBLIC SvxMSDffSolverContainer
 struct FIDCL
 {
     sal_uInt32  dgid;       ///< DG owning the SPIDs in this cluster
-    sal_uInt32  cspidCur;   ///< number of SPIDs used so far
 };
 
 /// provided by SvxMSDffManager for each shape in a group
@@ -414,7 +411,6 @@ protected:
 
     OUString        maBaseURL;
     sal_uInt32      mnCurMaxShapeId;    // we need this information to
-    sal_uInt32      mnDrawingsSaved;    // access the right drawing
     sal_uInt32      mnIdClusters;       // while only knowing the shapeid
     std::vector<FIDCL> maFidcls;
     OffsetMap       maDgOffsetTable;    ///< array of fileoffsets

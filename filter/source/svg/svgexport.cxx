@@ -1373,10 +1373,6 @@ void SVGFilter::implGetPagePropSet( const Reference< XDrawPage > & rxPage )
 
             implSafeGetPagePropSet( "IsDateTimeFixed", xPropSet, xPropSetInfo )              >>= mVisiblePagePropSet.bIsDateTimeFieldFixed;
             implSafeGetPagePropSet( "DateTimeFormat", xPropSet, xPropSetInfo )               >>= mVisiblePagePropSet.nDateTimeFormat;
-            implSafeGetPagePropSet( "Number", xPropSet, xPropSetInfo )                       >>= mVisiblePagePropSet.nPageNumber;
-            implSafeGetPagePropSet( "DateTimeText", xPropSet, xPropSetInfo )                 >>= mVisiblePagePropSet.sDateTimeText;
-            implSafeGetPagePropSet( "FooterText", xPropSet, xPropSetInfo )                   >>= mVisiblePagePropSet.sFooterText;
-            implSafeGetPagePropSet( "HeaderText", xPropSet, xPropSetInfo )                   >>= mVisiblePagePropSet.sHeaderText;
 
             if( mVisiblePagePropSet.bIsPageNumberFieldVisible )
             {

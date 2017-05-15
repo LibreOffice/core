@@ -396,8 +396,6 @@ void MenuBarMerger::GetMenuEntry(
             rAddonMenuEntry[i].Value >>= rAddonMenuItem.aURL;
         else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_TITLE )
             rAddonMenuEntry[i].Value >>= rAddonMenuItem.aTitle;
-        else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_TARGET )
-            rAddonMenuEntry[i].Value >>= rAddonMenuItem.aTarget;
         else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_SUBMENU )
         {
             uno::Sequence< uno::Sequence< beans::PropertyValue > > aSubMenu;
@@ -406,8 +404,6 @@ void MenuBarMerger::GetMenuEntry(
         }
         else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_CONTEXT )
             rAddonMenuEntry[i].Value >>= rAddonMenuItem.aContext;
-        else if ( aMenuEntryPropName == ADDONSMENUITEM_STRING_IMAGEIDENTIFIER )
-            rAddonMenuEntry[i].Value >>= rAddonMenuItem.aImageId;
     }
 }
 

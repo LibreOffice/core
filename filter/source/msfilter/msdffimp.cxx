@@ -390,7 +390,8 @@ DffPropertyReader::~DffPropertyReader()
 
 SvStream& operator>>( SvStream& rIn, SvxMSDffConnectorRule& rRule )
 {
-    rIn.ReadUInt32( rRule.nRuleId )
+    sal_uInt32 nRuleId;
+    rIn.ReadUInt32( nRuleId )
        .ReadUInt32( rRule.nShapeA )
        .ReadUInt32( rRule.nShapeB )
        .ReadUInt32( rRule.nShapeC )
@@ -5594,7 +5595,6 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
                                             // files may yield to this being uninitialized
      maBaseURL( rBaseURL ),
      mnCurMaxShapeId(0),
-     mnDrawingsSaved(0),
      mnIdClusters(0),
      rStCtrl(  rStCtrl_  ),
      pStData(  pStData_  ),
@@ -5639,7 +5639,6 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
      nGroupShapeFlags(0),
      maBaseURL( rBaseURL ),
      mnCurMaxShapeId(0),
-     mnDrawingsSaved(0),
      mnIdClusters(0),
      rStCtrl(  rStCtrl_  ),
      pStData( nullptr ),
@@ -5720,7 +5719,7 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
             rStCtrl.ReadUInt32( mnCurMaxShapeId )
                    .ReadUInt32( mnIdClusters )
                    .ReadUInt32( nDummy )
-                   .ReadUInt32( mnDrawingsSaved );
+                   .ReadUInt32( nDummy ); // nDrawingsSaved
 
             if ( mnIdClusters-- > 2 )
             {
@@ -5735,8 +5734,9 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
                     maFidcls.resize(mnIdClusters);
                     for (sal_uInt32 i = 0; i < mnIdClusters; ++i)
                     {
+                        sal_uInt32  cspidCur;   ///< number of SPIDs used so far
                         rStCtrl.ReadUInt32( maFidcls[ i ].dgid )
-                               .ReadUInt32( maFidcls[ i ].cspidCur );
+                               .ReadUInt32( cspidCur );
                     }
                 }
             }
