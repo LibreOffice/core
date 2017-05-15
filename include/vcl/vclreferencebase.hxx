@@ -44,6 +44,13 @@ public:
         if (osl_atomic_decrement(&mnRefCnt) == 0)
             delete this;
     }
+#ifdef DBG_UTIL
+#ifndef WNT
+    int getRefCount() const { return mnRefCnt; }
+#endif
+#endif
+
+
 private:
     VclReferenceBase(const VclReferenceBase&) = delete;
     VclReferenceBase& operator=(const VclReferenceBase&) = delete;
