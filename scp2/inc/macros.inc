@@ -388,6 +388,16 @@ End
         Styles = (); \
     End
 
+#define REGISTRY_ENTRY_CAPABILITIES_URL(scheme,name,modid,handler) \
+    RegistryItem CONCAT2(gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_URLAssociations_,name) \
+        ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
+        ModuleID = modid; \
+        Subkey = STRING(Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\URLAssociations); \
+        Name = scheme; \
+        Value = handler; \
+        Styles = (); \
+    End
+
 #define CONDITIONAL_REGISTER_DOC_OPEN_EXTENSION(name,modid,key,cond,disp_name,icon_id,app,default,doc_type) \
     CONDITIONAL_MODULE_ENTRY(name,modid) \
     REGISTRY_ENTRY_OPEN_WITH(name,cond,doc_type,modid,key) \

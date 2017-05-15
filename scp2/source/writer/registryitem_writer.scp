@@ -1748,3 +1748,4 @@ CONDITIONAL_REGISTER_DOC_EXTENSION( 602,  gid_Module_Prg_Wrt_Other_Reg, 602,  60
 
 // registering ms-word URI scheme handler
 CONDITIONAL_REGISTER_URI_HANDLER( ms-word, ms_word, gid_Module_Prg_Wrt_MSO_Reg, SELECT_WORD )
+REGISTRY_ENTRY_CAPABILITIES_URL(ms-word, ms_word, gid_Module_Prg_Wrt_MSO_Reg, vnd.libreoffice.command)
