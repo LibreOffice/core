@@ -1804,7 +1804,6 @@ var INDEX_OFFSET = 0;
 // Initialization.
 var Detect = configureDetectionTools();
 var theMetaDoc;
-var theSlideIndexPage;
 var currentMode = SLIDE_MODE;
 var processingEffect = false;
 var nCurSlide = undefined;
@@ -3762,7 +3761,15 @@ function init()
     aSlideShow = new SlideShow();
     theMetaDoc =  new MetaDocument();
     aSlideShow.bIsEnabled = theMetaDoc.bIsAnimated;
-    theSlideIndexPage = new SlideIndexPage();
+    Object.defineProperty(this, "theSlideIndexPage", {
+      get() {
+        if (!this._theSlideIndexPage) {
+          this._theSlideIndexPage = new SlideIndexPage();
+        }
+        return this._theSlideIndexPage;
+      }
+    });
+
     aSlideShow.displaySlide( theMetaDoc.nStartSlideNumber, false );
 }
 
