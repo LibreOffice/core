@@ -947,6 +947,11 @@ Path2DContext::Path2DContext( ContextHandler2Helper& rParent, const AttributeLis
 {
     rPath2D.w = rAttribs.getString( XML_w, "" ).toInt64();
     rPath2D.h = rAttribs.getString( XML_h, "" ).toInt64();
+    // Try to avoid drawing issues due to zero path dimensions
+    if (rPath2D.w == 0)
+        rPath2D.w = 1;
+    if (rPath2D.h == 0)
+        rPath2D.h = 1;
     rPath2D.fill = rAttribs.getToken( XML_fill, XML_norm );
     rPath2D.stroke = rAttribs.getBool( XML_stroke, true );
     rPath2D.extrusionOk = rAttribs.getBool( XML_extrusionOk, true );
