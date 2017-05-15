@@ -61,13 +61,13 @@ struct SfxStyleInfo_Impl
 struct SfxStylesInfo_Impl
 {
 private:
-
+        OUString m_aModuleName;
         css::uno::Reference< css::frame::XModel > m_xDoc;
 
 public:
 
         SfxStylesInfo_Impl();
-        void setModel(const css::uno::Reference< css::frame::XModel >& xModel);
+        void init(const OUString& rModuleName, const css::uno::Reference< css::frame::XModel >& xModel);
 
         static bool parseStyleCommand(SfxStyleInfo_Impl& aStyle);
         void getLabel4Style(SfxStyleInfo_Impl& aStyle);

@@ -924,7 +924,7 @@ void SfxAcceleratorConfigPage::Init(const uno::Reference<ui::XAcceleratorConfigu
         if (xController.is())
             xModel = xController->getModel();
 
-        m_aStylesInfo.setModel(xModel);
+        m_aStylesInfo.init(m_sModuleLongName, xModel);
         m_pFunctionBox->SetStylesInfo(&m_aStylesInfo);
         m_pGroupLBox->SetStylesInfo(&m_aStylesInfo);
         m_bStylesInfoInitialized = true;

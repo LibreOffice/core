@@ -76,8 +76,9 @@ using namespace ::com::sun::star::document;
 SfxStylesInfo_Impl::SfxStylesInfo_Impl()
 {}
 
-void SfxStylesInfo_Impl::setModel(const css::uno::Reference< css::frame::XModel >& xModel)
+void SfxStylesInfo_Impl::init(const OUString& rModuleName, const css::uno::Reference< css::frame::XModel >& xModel)
 {
+    m_aModuleName = rModuleName;
     m_xDoc = xModel;
 }
 
@@ -171,12 +172,14 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyleFamilies()
     css::uno::Reference< css::container::XNameAccess > xCont = xModel->getStyleFamilies();
     css::uno::Sequence< OUString > lFamilyNames = xCont->getElementNames();
     std::vector< SfxStyleInfo_Impl > lFamilies;
-    sal_Int32 c = lFamilyNames.getLength();
-    sal_Int32 i = 0;
-    for(i=0; i<c; ++i)
+    for (const auto& aFamily : lFamilyNames)
     {
+        if ((aFamily == "CellStyles" && m_aModuleName != "com.sun.star.sheet.SpreadsheetDocument") ||
+             aFamily == "cell" || aFamily == "table" || aFamily == "Default")
+            continue;
+
         SfxStyleInfo_Impl aFamilyInfo;
-        aFamilyInfo.sFamily = lFamilyNames[i];
+        aFamilyInfo.sFamily = aFamily;
 
         try
         {
@@ -1189,9 +1192,9 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     m_pOKButton->Show();
 
     get(m_pCategories, "categories");
+    const OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
     m_pCategories->SetFunctionListBox(m_pCommands);
-    m_pCategories->Init(comphelper::getProcessComponentContext(), xFrame,
-                        vcl::CommandInfoProvider::GetModuleIdentifier(xFrame), bShowSlots);
+    m_pCategories->Init(comphelper::getProcessComponentContext(), xFrame, aModuleName, bShowSlots);
 
     m_pCategories->SetSelectHdl(
             LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
@@ -1211,7 +1214,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     if (xController.is())
         xModel = xController->getModel();
 
-    m_aStylesInfo.setModel(xModel);
+    m_aStylesInfo.init(aModuleName, xModel);
     m_pCommands->SetStylesInfo(&m_aStylesInfo);
     m_pCategories->SetStylesInfo(&m_aStylesInfo);
 
