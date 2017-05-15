@@ -1,0 +1,147 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_c63fc423",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-15T14:49:15Z",
+      "side": 1,
+      "message": "It\u0027s an instance, so should be name aRange instead of rRange.",
+      "range": {
+        "startLine": 102,
+        "startChar": 12,
+        "endLine": 102,
+        "endChar": 18
+      },
+      "revId": "b3c5bac83d6b713e4d7e2173d0c829a9ddc43287",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e63cc031",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-15T14:49:15Z",
+      "side": 1,
+      "message": "Why m btw? rRangeList would be appropriate.",
+      "range": {
+        "startLine": 139,
+        "startChar": 66,
+        "endLine": 139,
+        "endChar": 67
+      },
+      "revId": "b3c5bac83d6b713e4d7e2173d0c829a9ddc43287",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_064aacc5",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-15T14:49:15Z",
+      "side": 1,
+      "message": "Should be aRange.",
+      "range": {
+        "startLine": 168,
+        "startChar": 12,
+        "endLine": 168,
+        "endChar": 18
+      },
+      "revId": "b3c5bac83d6b713e4d7e2173d0c829a9ddc43287",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e6f5a083",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-15T14:49:15Z",
+      "side": 1,
+      "message": "Which aMark? Should be range list.",
+      "range": {
+        "startLine": 238,
+        "startChar": 52,
+        "endLine": 238,
+        "endChar": 57
+      },
+      "revId": "b3c5bac83d6b713e4d7e2173d0c829a9ddc43287",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_06f38c9f",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-15T14:49:15Z",
+      "side": 1,
+      "message": "This only creates Undo of the first selected sheet.",
+      "revId": "b3c5bac83d6b713e4d7e2173d0c829a9ddc43287",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_26f08890",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-15T14:49:15Z",
+      "side": 1,
+      "message": "All this operates only on the first selected sheet.",
+      "revId": "b3c5bac83d6b713e4d7e2173d0c829a9ddc43287",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_2647a8bc",
+        "filename": "sc/source/ui/inc/impex.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-15T14:49:15Z",
+      "side": 1,
+      "message": "GetRange() should return const ScRange\u0026 instead to avoid unnecessary copying.",
+      "revId": "b3c5bac83d6b713e4d7e2173d0c829a9ddc43287",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
