@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_c602643e",
+        "filename": "icon-themes/breeze_svg/cmd/lc_smallcaps.svg",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-05-15T19:11:16Z",
+      "side": 1,
+      "message": "This one is missing the blue arrow. (Easy to check in Gerrit, at least with Firefox - just click the \"Download\" button in the file diff view.)",
+      "revId": "3b86a867c5a870a51d0392d9e0f4713e73e8be99",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
