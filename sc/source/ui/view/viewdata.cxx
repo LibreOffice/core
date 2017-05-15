@@ -126,7 +126,7 @@ ScViewDataTable::~ScViewDataTable()
 {
 }
 
-void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings, const ScViewData& rViewData, SCTAB /*nTab*/) const
+void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSettings, const ScViewData& rViewData) const
 {
     rSettings.realloc(SC_TABLE_VIEWSETTINGS_COUNT);
     beans::PropertyValue* pSettings = rSettings.getArray();
@@ -2751,7 +2751,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
             if (maTabData[nTab])
             {
                 uno::Sequence <beans::PropertyValue> aTableViewSettings;
-                maTabData[nTab]->WriteUserDataSequence(aTableViewSettings, *this, nTab);
+                maTabData[nTab]->WriteUserDataSequence(aTableViewSettings, *this);
                 OUString sTabName;
                 GetDocument()->GetName( nTab, sTabName );
                 try

@@ -749,7 +749,7 @@ void XclImpChSourceLink::ReadChSourceLink( XclImpStream& rStrm )
         rStrm >> aXclTokArr;
 
         // convert BIFF formula tokens to Calc token array
-        if( const ScTokenArray* pTokens = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CHART, aXclTokArr ) )
+        if( const ScTokenArray* pTokens = GetFormulaCompiler().CreateFormula( aXclTokArr ) )
             mxTokenArray.reset( pTokens->Clone() );
     }
 

@@ -1956,7 +1956,7 @@ void XclImpControlHelper::ReadRangeList( ScRangeList& rScRanges, XclImpStream& r
     aXclTokArr.ReadSize( rStrm );
     rStrm.Ignore( 4 );
     aXclTokArr.ReadArray( rStrm );
-    mrRoot.GetFormulaCompiler().CreateRangeList( rScRanges, EXC_FMLATYPE_CONTROL, aXclTokArr, rStrm );
+    mrRoot.GetFormulaCompiler().CreateRangeList( rScRanges, aXclTokArr );
 }
 
 void XclImpControlHelper::ReadRangeList( ScRangeList& rScRanges, XclImpStream& rStrm, bool bWithBoundSize )
