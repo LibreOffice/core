@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -59,6 +60,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
+#include <test/mtfxmldump.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -1305,6 +1307,49 @@ DECLARE_OOXMLIMPORT_TEST(testTdf101627, "tdf101627.docx")
     CPPUNIT_ASSERT(xFrame->getString().startsWith( "1" ) );
     CPPUNIT_ASSERT_EQUAL(sal_Int32(466), getProperty<sal_Int32>(xFrame, "Height"));
 }
+
+DECLARE_OOXMLIMPORT_TEST(testTdf100072, "tdf100072.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+
+    // Ensure that shape has non-zero height
+    CPPUNIT_ASSERT(xShape->getSize().Height > 0);
+
+    // Ensure that shape left corner is within page (positive)
+    CPPUNIT_ASSERT(xShape->getPosition().X > 0);
+
+    // Save the first shape to a metafile.
+    uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter = drawing::GraphicExportFilter::create(comphelper::getProcessComponentContext());
+    uno::Reference<lang::XComponent> xSourceDoc(xShape, uno::UNO_QUERY);
+    xGraphicExporter->setSourceDocument(xSourceDoc);
+
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
+    uno::Sequence<beans::PropertyValue> aDescriptor =
+    {
+        beans::PropertyValue("OutputStream", sal_Int32(0), uno::makeAny(xOutputStream), beans::PropertyState_DIRECT_VALUE),
+        beans::PropertyValue("FilterName", sal_Int32(0), uno::makeAny(OUString("SVM")), beans::PropertyState_DIRECT_VALUE)
+    };
+    xGraphicExporter->filter(aDescriptor);
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+    // Read it back and dump it as an XML file.
+    Graphic aGraphic;
+    ReadGraphic(aStream, aGraphic);
+    const GDIMetaFile& rMetaFile = aGraphic.GetGDIMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocPtr pXmlDoc = dumper.dumpAndParse(rMetaFile);
+
+    // Get first polyline rightside x coordinate
+    sal_Int32 nFirstEnd = getXPath(pXmlDoc, "/metafile/polyline[1]/point[2]", "x").toInt32();
+
+    // Get last stroke x coordinate
+    sal_Int32 nSecondEnd = getXPath(pXmlDoc, "/metafile/polyline[last()]/point[2]", "x").toInt32();
+
+    // Assert that the difference is less than half point.
+    CPPUNIT_ASSERT_MESSAGE("Shape line width does not match", abs(nFirstEnd - nSecondEnd) < 10);
+}
+
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
