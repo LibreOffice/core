@@ -37,9 +37,9 @@ private:
     sal_uInt16      nSelPageIdByMouse;      /// Selected page ID, if selected with mouse
     bool            bErrorShown;
 
-    void            DoDrag( const vcl::Region& rRegion );
+    void            DoDrag();
 
-    sal_uInt16          GetMaxId() const;
+    sal_uInt16      GetMaxId() const;
     SCTAB           GetPrivatDropPos(const Point& rPos );
 
     DECL_LINK(ShowPageList, const CommandEvent&, void);

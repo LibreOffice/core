@@ -153,7 +153,7 @@ void ScGraphicShell::GetExternalEditState( SfxItemSet& rSet )
         rSet.DisableItem( SID_EXTERNAL_EDIT );
 }
 
-void ScGraphicShell::ExecuteExternalEdit( SfxRequest& )
+void ScGraphicShell::ExecuteExternalEdit( SAL_UNUSED_PARAMETER SfxRequest& )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -191,7 +191,7 @@ void ScGraphicShell::GetCompressGraphicState( SfxItemSet& rSet )
         rSet.DisableItem( SID_COMPRESS_GRAPHIC );
 }
 
-void ScGraphicShell::ExecuteCompressGraphic( SfxRequest& )
+void ScGraphicShell::ExecuteCompressGraphic( SAL_UNUSED_PARAMETER SfxRequest& )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -236,7 +236,7 @@ void ScGraphicShell::GetCropGraphicState( SfxItemSet& rSet )
         rSet.DisableItem( SID_OBJECT_CROP );
 }
 
-void ScGraphicShell::ExecuteCropGraphic( SfxRequest& )
+void ScGraphicShell::ExecuteCropGraphic( SAL_UNUSED_PARAMETER SfxRequest& )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -255,7 +255,7 @@ void ScGraphicShell::ExecuteCropGraphic( SfxRequest& )
     Invalidate();
 }
 
-void ScGraphicShell::ExecuteSaveGraphic(SfxRequest& /*rReq*/)
+void ScGraphicShell::ExecuteSaveGraphic( SAL_UNUSED_PARAMETER SfxRequest& /*rReq*/)
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -291,7 +291,7 @@ void ScGraphicShell::GetSaveGraphicState(SfxItemSet &rSet)
         rSet.DisableItem( SID_SAVE_GRAPHIC );
 }
 
-void ScGraphicShell::ExecuteChangePicture(SfxRequest& /*rReq*/)
+void ScGraphicShell::ExecuteChangePicture( SAL_UNUSED_PARAMETER SfxRequest& /*rReq*/)
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();

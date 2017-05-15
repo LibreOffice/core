@@ -834,7 +834,7 @@ void ScViewFunc::InsertPageBreak( bool bColumn, bool bRecord, const ScAddress* p
         aCursor = ScAddress( GetViewData().GetCurX(), GetViewData().GetCurY(), nTab );
 
     bool bSuccess = GetViewData().GetDocShell()->GetDocFunc().
-                        InsertPageBreak( bColumn, aCursor, bRecord, bSetModified, false );
+                        InsertPageBreak( bColumn, aCursor, bRecord, bSetModified );
 
     if ( bSuccess && bSetModified )
         UpdatePageBreakData( true );    // for PageBreak-Mode
@@ -851,7 +851,7 @@ void ScViewFunc::DeletePageBreak( bool bColumn, bool bRecord, const ScAddress* p
         aCursor = ScAddress( GetViewData().GetCurX(), GetViewData().GetCurY(), nTab );
 
     bool bSuccess = GetViewData().GetDocShell()->GetDocFunc().
-                        RemovePageBreak( bColumn, aCursor, bRecord, bSetModified, false );
+                        RemovePageBreak( bColumn, aCursor, bRecord, bSetModified );
 
     if ( bSuccess && bSetModified )
         UpdatePageBreakData( true );    // for PageBreak-Mode
@@ -2196,7 +2196,7 @@ void ScViewFunc::DeleteTable( SCTAB nTab, bool bRecord )
     ScDocShell* pDocSh  = GetViewData().GetDocShell();
     ScDocument& rDoc    = pDocSh->GetDocument();
 
-    bool bSuccess = pDocSh->GetDocFunc().DeleteTable( nTab, bRecord, false );
+    bool bSuccess = pDocSh->GetDocFunc().DeleteTable( nTab, bRecord );
     if (bSuccess)
     {
         SCTAB nNewTab = nTab;

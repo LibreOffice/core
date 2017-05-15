@@ -40,7 +40,7 @@
 SFX_IMPL_CHILDWINDOW_WITHID( ScSpellDialogChildWindow, SID_SPELL_DIALOG )
 
 ScSpellDialogChildWindow::ScSpellDialogChildWindow( vcl::Window* pParentP, sal_uInt16 nId,
-        SfxBindings* pBindings, SfxChildWinInfo* /*pInfo*/ ) :
+        SfxBindings* pBindings, SAL_UNUSED_PARAMETER SfxChildWinInfo* /*pInfo*/ ) :
     svx::SpellDialogChildWindow( pParentP, nId, pBindings ),
     mpViewShell( nullptr ),
     mpViewData( nullptr ),
