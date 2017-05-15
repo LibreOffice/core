@@ -27,7 +27,7 @@
 
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/range/b2ibox.hxx>
-
+#include <o3tl/safeint.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmap.hxx>
 
@@ -112,7 +112,21 @@ BitmapBuffer* ImplCreateDIB(
     pDIB->mnFormat |= ScanlineFormat::TopDown;
     pDIB->mnWidth = rSize.Width();
     pDIB->mnHeight = rSize.Height();
-    pDIB->mnScanlineSize = AlignedWidth4Bytes( pDIB->mnWidth * nBitCount );
+    long nScanlineBase;
+    bool bFail = o3tl::checked_multiply<long>(pDIB->mnWidth, nBitCount, nScanlineBase);
+    if (bFail)
+    {
+        SAL_WARN("vcl.gdi", "checked multiply failed");
+        delete pDIB;
+        return nullptr;
+    }
+    pDIB->mnScanlineSize = AlignedWidth4Bytes(nScanlineBase);
+    if (pDIB->mnScanlineSize < nScanlineBase)
+    {
+        SAL_WARN("vcl.gdi", "scanline calculation wraparound");
+        delete pDIB;
+        return nullptr;
+    }
     pDIB->mnBitCount = nBitCount;
 
     if( nColors )
