@@ -87,7 +87,9 @@ $(i18npool_BIDIR)/%_brk.c : $(i18npool_BIDIR)/%.brk $(call gb_ExternalExecutable
 $(i18npool_BIDIR)/%.brk : $(i18npool_BIDIR)/%.txt $(call gb_ExternalExecutable_get_dependencies,genbrk)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),BRK,1)
 	$(call gb_Helper_abbreviate_dirs,\
-		$(call gb_ExternalExecutable_get_command,genbrk) -i $(call gb_UnpackedTarball_get_dir,icu)/source/data/out/tmp -r $< -o $@ $(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
+		$(call gb_ExternalExecutable_get_command,genbrk) \
+		$(if $(SYSTEM_ICU),,-i $(call gb_UnpackedTarball_get_dir,icu)/source/data/out/tmp) \
+		-r $< -o $@ $(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
 # fdo#31271 ")" reclassified in more recent Unicode Standards / ICU 4.4
 # * Prepend set empty as of Unicode Version 6.1 / ICU 49, which bails out if used.
