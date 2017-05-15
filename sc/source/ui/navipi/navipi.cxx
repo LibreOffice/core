@@ -437,7 +437,7 @@ SFX_IMPL_CHILDWINDOWCONTEXT( ScNavigatorDialogWrapper, SID_NAVIGATOR )
 ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(vcl::Window* pParent,
                                                    sal_uInt16 nId,
                                                    SfxBindings* pBind,
-                                                   SfxChildWinInfo* /* pInfo */)
+                                                   SAL_UNUSED_PARAMETER SfxChildWinInfo* /* pInfo */)
     : SfxChildWindowContext(nId)
 {
     pNavigator = VclPtr<ScNavigatorDlg>::Create(pBind, pParent);

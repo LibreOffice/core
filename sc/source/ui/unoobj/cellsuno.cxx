@@ -7745,7 +7745,7 @@ void SAL_CALL ScTableSheetObj::protect( const OUString& aPassword )
     // #i108245# if already protected, don't change anything
     if ( pDocSh && !pDocSh->GetDocument().IsTabProtected( GetTab_Impl() ) )
     {
-        pDocSh->GetDocFunc().Protect( GetTab_Impl(), aPassword, true );
+        pDocSh->GetDocFunc().Protect( GetTab_Impl(), aPassword );
     }
 }
 
@@ -8236,9 +8236,9 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             if (aValue >>= nValue)
             {
                 if (nValue == css::text::WritingMode2::RL_TB)
-                    rFunc.SetLayoutRTL(nTab, true, true);
+                    rFunc.SetLayoutRTL(nTab, true);
                 else
-                    rFunc.SetLayoutRTL(nTab, false, true);
+                    rFunc.SetLayoutRTL(nTab, false);
             }
         }
         else if ( pEntry->nWID == SC_WID_UNO_AUTOPRINT )
@@ -8623,9 +8623,9 @@ void ScTableColumnObj::SetOnePropertyValue(const SfxItemPropertySimpleEntry* pEn
         {
             bool bSet = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             if (bSet)
-                rFunc.InsertPageBreak( true, rRange.aStart, true, true, true );
+                rFunc.InsertPageBreak( true, rRange.aStart, true, true );
             else
-                rFunc.RemovePageBreak( true, rRange.aStart, true, true, true );
+                rFunc.RemovePageBreak( true, rRange.aStart, true, true );
         }
         else
             ScCellRangeObj::SetOnePropertyValue(pEntry, aValue);        // base class, no Item WID
@@ -8770,9 +8770,9 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
         {
             bool bSet = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             if (bSet)
-                rFunc.InsertPageBreak( false, rRange.aStart, true, true, true );
+                rFunc.InsertPageBreak( false, rRange.aStart, true, true );
             else
-                rFunc.RemovePageBreak( false, rRange.aStart, true, true, true );
+                rFunc.RemovePageBreak( false, rRange.aStart, true, true );
         }
         else
             ScCellRangeObj::SetOnePropertyValue(pEntry, aValue);        // base class, no Item WID

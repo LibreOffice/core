@@ -2363,7 +2363,7 @@ void ScViewFunc::Protect( SCTAB nTab, const OUString& rPassword )
     bool bUndo(rDoc.IsUndoEnabled());
 
     if ( nTab == TABLEID_DOC || rMark.GetSelectCount() <= 1 )
-        rFunc.Protect( nTab, rPassword, false );
+        rFunc.Protect( nTab, rPassword );
     else
     {
         //  modifying several tabs is handled here
@@ -2376,7 +2376,7 @@ void ScViewFunc::Protect( SCTAB nTab, const OUString& rPassword )
 
         ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd; ++itr)
-            rFunc.Protect( *itr, rPassword, false );
+            rFunc.Protect( *itr, rPassword );
 
         if (bUndo)
             pDocSh->GetUndoManager()->LeaveListAction();

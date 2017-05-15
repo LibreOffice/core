@@ -3097,7 +3097,7 @@ bool ScDocFunc::InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bo
     return bSuccess;
 }
 
-bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord, bool /* bApi */ )
+bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord )
 {
     WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
@@ -3249,7 +3249,7 @@ void ScDocFunc::SetTableVisible( SCTAB nTab, bool bVisible, bool bApi )
     aModificator.SetDocumentModified();
 }
 
-bool ScDocFunc::SetLayoutRTL( SCTAB nTab, bool bRTL, bool /* bApi */ )
+bool ScDocFunc::SetLayoutRTL( SCTAB nTab, bool bRTL )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bUndo(rDoc.IsUndoEnabled());
@@ -3602,7 +3602,7 @@ bool ScDocFunc::SetWidthOrHeight(
 }
 
 bool ScDocFunc::InsertPageBreak( bool bColumn, const ScAddress& rPos,
-                                bool bRecord, bool bSetModified, bool /* bApi */ )
+                                bool bRecord, bool bSetModified )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -3666,7 +3666,7 @@ bool ScDocFunc::InsertPageBreak( bool bColumn, const ScAddress& rPos,
 }
 
 bool ScDocFunc::RemovePageBreak( bool bColumn, const ScAddress& rPos,
-                                bool bRecord, bool bSetModified, bool /* bApi */ )
+                                bool bRecord, bool bSetModified )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -3754,7 +3754,7 @@ void ScDocFunc::ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect )
     aModificator.SetDocumentModified();
 }
 
-bool ScDocFunc::Protect( SCTAB nTab, const OUString& rPassword, bool /*bApi*/ )
+bool ScDocFunc::Protect( SCTAB nTab, const OUString& rPassword )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     if (nTab == TABLEID_DOC)
