@@ -43,7 +43,9 @@ void VBATest::testMiscVBAFunctions()
 {
     const char* macroSource[] = {
         "bytearraystring.vb",
-        "cdec.vb",
+#ifdef _WIN32
+        "cdec.vb", // currently CDec is implemented only on Windows
+#endif
         "constants.vb",
 // datevalue test seems to depend on both locale and language
 // settings, should try and rewrite the test to deal with that
