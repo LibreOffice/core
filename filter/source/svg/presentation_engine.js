@@ -1532,7 +1532,7 @@ function configureDetectionTools()
             return flag;
         };
 
-        Source.prototype.parseSegment = function() {
+        Source.prototype.parseSegment = function(owningPathSegList) {
             var lookahead = this._string[this._currentIndex];
             var command = this._pathSegTypeFromChar(lookahead);
             if (command == SVGPathSeg.PATHSEG_UNKNOWN) {
@@ -1638,7 +1638,7 @@ function configureDetectionTools()
                 return [];
             var builder = new Builder();
             while (source.hasMoreData()) {
-                var pathSeg = source.parseSegment();
+                var pathSeg = source.parseSegment(owningPathSegList);
                 if (!pathSeg)
                     return [];
                 builder.appendSegment(pathSeg);
