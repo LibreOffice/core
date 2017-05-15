@@ -258,6 +258,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107033, "tdf107033.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(25), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf107889, "tdf107889.docx")
+{
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    // This was 1, multi-page table was imported as a floating one.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf100072, "tdf100072.docx")
+{
+    // Ensure that shape has non-zero height
+    CPPUNIT_ASSERT(getShape(1)->getSize().Height > 0);
+
+    // Ensure that shape left corner is within page (positive)
+    CPPUNIT_ASSERT(getShape(1)->getPosition().X > 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
