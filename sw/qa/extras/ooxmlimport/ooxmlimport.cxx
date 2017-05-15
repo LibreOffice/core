@@ -677,13 +677,6 @@ DECLARE_OOXMLIMPORT_TEST(testN820504, "n820504.docx")
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
-DECLARE_OOXMLIMPORT_TEST(testKern, "kern.docx")
-{
-    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(1), 1), "CharAutoKerning"));
-    // This failed: kerning was also enabled for the second paragraph.
-    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(2), 1), "CharAutoKerning"));
-}
-
 DECLARE_OOXMLIMPORT_TEST(testFdo43641, "fdo43641.docx")
 {
     uno::Reference<container::XIndexAccess> xGroupShape(getShape(1), uno::UNO_QUERY);
