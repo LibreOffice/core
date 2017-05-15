@@ -1903,7 +1903,7 @@ void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uI
         aTmpData.SetTabNo(nVisTab);
         SnapVisArea( aBoundRect );
         aTmpData.SetScreen( aBoundRect );
-        ScPrintFunc::DrawToDev( &aDocument, pDev, 1.0, aBoundRect, &aTmpData, true );
+        ScPrintFunc::DrawToDev( &aDocument, pDev, aBoundRect, &aTmpData, true );
     }
     else
     {
@@ -1912,7 +1912,7 @@ void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, sal_uI
         aTmpData.SetTabNo(nVisTab);
         SnapVisArea( aBoundRect );
         aTmpData.SetScreen( aBoundRect );
-        ScPrintFunc::DrawToDev( &aDocument, pDev, 1.0, aBoundRect, &aTmpData, true );
+        ScPrintFunc::DrawToDev( &aDocument, pDev, aBoundRect, &aTmpData, true );
     }
 
     pDev->SetLayoutMode( nOldLayoutMode );

@@ -36,11 +36,10 @@ public:
     explicit            XclImpFormulaCompiler( const XclImpRoot& rRoot );
     virtual             ~XclImpFormulaCompiler() override;
 
-    /** Creates a range list from the passed Excel token array.
-        @param rStrm  Stream pointing to additional formula data (e.g. constant array data). */
+    /** Creates a range list from the passed Excel token array. */
     void                CreateRangeList(
-                            ScRangeList& rScRanges, XclFormulaType eType,
-                            const XclTokenArray& rXclTokArr, XclImpStream& rStrm );
+                            ScRangeList& rScRanges,
+                            const XclTokenArray& rXclTokArr );
 
     /**
      * Creates a formula token array from the Excel token array.  Note that
@@ -48,7 +47,7 @@ public:
      * this function if the caller needs to persistently store the array,
      * because the pointer points to an array instance on the stack.
      */
-    const ScTokenArray* CreateFormula( XclFormulaType eType, const XclTokenArray& rXclTokArr );
+    const ScTokenArray* CreateFormula( const XclTokenArray& rXclTokArr );
 
 private:
     typedef std::shared_ptr< XclImpFmlaCompImpl > XclImpFmlaCompImplRef;

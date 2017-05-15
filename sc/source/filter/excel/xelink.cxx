@@ -1511,7 +1511,7 @@ XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot ) :
 {
 }
 
-XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const OUString& rUrl, XclSupbookType ) :
+XclExpSupbook::XclExpSupbook( const XclExpRoot& rRoot, const OUString& rUrl, SAL_UNUSED_PARAMETER XclSupbookType ) :
     XclExpExternSheetBase( rRoot, EXC_ID_SUPBOOK ),
     maUrl( rUrl ),
     maUrlEncoded( rUrl ),
