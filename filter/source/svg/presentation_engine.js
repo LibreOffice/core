@@ -4011,7 +4011,7 @@ function bind2( aFunction )
 
 function getCurrentSystemTime()
 {
-    return ( new Date() ).getTime();
+    return ( Date.now && Date.now() ) || ( new Date() ).getTime();
 }
 
 /** This function return an array populated with all children nodes of the
