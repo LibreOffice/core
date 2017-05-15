@@ -651,10 +651,23 @@ void EnhancedCustomShape2d::SetPathSize( sal_Int32 nIndex )
             "svx",
             "ooxml shape, path width: " << nCoordWidth << " height: "
                 << nCoordHeight);
+
+        // Try to set up scale separately, if given only width or height
+        // This is possible case in OOXML when only width or height is non-zero
         if ( nCoordWidth == 0 )
-            fXScale = 1.0;
+        {
+            if ( nWidth )
+                fXScale = (double)aLogicRect.GetWidth() / (double)nWidth;
+            else
+                fXScale = 1.0;
+        }
         if ( nCoordHeight == 0 )
-            fYScale = 1.0;
+        {
+            if ( nHeight )
+                fYScale = (double)aLogicRect.GetHeight() / (double)nHeight;
+            else
+                fYScale = 1.0;
+        }
     }
     if ( (sal_uInt32)nXRef != 0x80000000 && aLogicRect.GetHeight() )
     {
