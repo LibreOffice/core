@@ -545,6 +545,8 @@ void EnhWMFReader::ReadAndDrawPolyLine()
     pWMF->SeekRel( 0x10 ); // TODO Skipping Bounds. A 128-bit WMF RectL object (specifies the bounding rectangle in device units.)
     pWMF->ReadUInt32( nNumberOfPolylines );
     pWMF->ReadUInt32( nCount ); // total number of points in all polylines
+    if (pWMF->Tell() >= nEndPos)
+        return;
 
     // taking the amount of points of each polygon, retrieving the total number of points
     if ( pWMF->good() &&
