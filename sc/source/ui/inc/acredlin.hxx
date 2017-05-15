@@ -120,7 +120,7 @@ protected:
     OUString* MakeTypeString(ScChangeActionType eType);
 
     SvTreeListEntry* AppendChangeAction(
-        const ScChangeAction* pScChangeAction,ScChangeActionState eState,
+        const ScChangeAction* pScChangeAction,
         SvTreeListEntry* pParent=nullptr,bool bDelMaster = false,
         bool bDisabled = false);
 
@@ -145,8 +145,7 @@ protected:
 
     bool            InsertChildren( ScChangeActionMap* pActionMap, SvTreeListEntry* pParent );
 
-    void            AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartAction, sal_uLong nEndAction,
-                                    sal_uLong nPos=TREELIST_APPEND);
+    void            AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartAction, sal_uLong nEndAction);
 
     void            RemoveEntrys(sal_uLong nStartAction,sal_uLong nEndAction);
     void            UpdateEntrys(ScChangeTrack* pChgTrack, sal_uLong nStartAction,sal_uLong nEndAction);

@@ -211,7 +211,7 @@ void Test::testCondFormatInsertDeleteSheets()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Format should be applied to B2:B4 on the 2nd sheet after the sheet insertion.", ScRange(1,1,1,1,3,1), *pRange);
 
     // Delete the sheet to the left.
-    bool bDeleted = rFunc.DeleteTable(0, true, true);
+    bool bDeleted = rFunc.DeleteTable(0, true);
     CPPUNIT_ASSERT(bDeleted);
 
     pList = m_pDoc->GetCondFormList(0);
