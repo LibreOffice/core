@@ -590,21 +590,18 @@ oslFileError osl_getAbsoluteFileURL(
     else if (relUrl.startsWith("/"))
         relUrl = "file://" + relUrl;
 
-    FileBase::RC  rc;
     rtl::OUString unresolved_path;
 
-    rc = FileBase::getSystemPathFromFileURL(relUrl, unresolved_path);
-
-    if (rc != FileBase::E_None)
-        return oslFileError(rc);
+    FileBase::RC frc = FileBase::getSystemPathFromFileURL(relUrl, unresolved_path);
+    if (frc != FileBase::E_None)
+        return oslFileError(frc);
 
     if (systemPathIsRelativePath(unresolved_path))
     {
         rtl::OUString base_path;
-        rc = (FileBase::RC) osl_getSystemPathFromFileURL_Ex(ustrBaseDirURL, &base_path.pData);
-
-        if (rc != FileBase::E_None)
-            return oslFileError(rc);
+        oslFileError rc = osl_getSystemPathFromFileURL_Ex(ustrBaseDirURL, &base_path.pData);
+        if (rc != osl_File_E_None)
+            return rc;
 
         rtl::OUString abs_path;
         systemPathMakeAbsolutePath(base_path, unresolved_path, abs_path);
@@ -613,14 +610,14 @@ oslFileError osl_getAbsoluteFileURL(
     }
 
     rtl::OUString resolved_path;
-    rc = (FileBase::RC) osl_getAbsoluteFileURL_impl_(unresolved_path, resolved_path);
-    if (rc == FileBase::E_None)
+    oslFileError rc = osl_getAbsoluteFileURL_impl_(unresolved_path, resolved_path);
+    if (rc == osl_File_E_None)
     {
-        rc = (FileBase::RC) osl_getFileURLFromSystemPath(resolved_path.pData, pustrAbsoluteURL);
-        OSL_ASSERT(FileBase::E_None == rc);
+        rc = osl_getFileURLFromSystemPath(resolved_path.pData, pustrAbsoluteURL);
+        OSL_ASSERT(osl_File_E_None == rc);
     }
 
-    return oslFileError(rc);
+    return rc;
 }
 
 namespace osl {
