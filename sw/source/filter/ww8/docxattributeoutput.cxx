@@ -3999,7 +3999,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             bMustWrite = static_cast< const SvxWeightItem& >(rHt).GetWeight() != WEIGHT_NORMAL;
             break;
         case RES_CHRATR_AUTOKERN:
-            bMustWrite = static_cast< const SvxAutoKernItem& >(rHt).GetValue();
+            bMustWrite = static_cast< const SvxAutoKernItem& >(rHt).GetValue() != false;
             break;
         case RES_CHRATR_BLINK:
             bMustWrite = static_cast< const SvxBlinkItem& >(rHt).GetValue();
@@ -6483,9 +6483,12 @@ void DocxAttributeOutput::CharWeight( const SvxWeightItem& rWeight )
         m_pSerializer->singleElementNS( XML_w, XML_b, FSNS( XML_w, XML_val ), "false", FSEND );
 }
 
-void DocxAttributeOutput::CharAutoKern( const SvxAutoKernItem& )
+void DocxAttributeOutput::CharAutoKern( const SvxAutoKernItem& rAutoKern )
 {
-    SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::CharAutoKern()" );
+    // auto kerning is bound to a minimum font size in Word - but is just a boolean in Writer :-(
+    // kerning is based on half-point sizes, so 2 enables kerning for fontsize 1pt or higher. (1 is treated as size 12, and 0 is treated as disabled.)
+    const OString sFontSize = OString::number( (sal_uInt32) rAutoKern.GetValue() * 2 );
+    m_pSerializer->singleElementNS(XML_w, XML_kern, FSNS( XML_w, XML_val ), sFontSize.getStr(), FSEND );
 }
 
 void DocxAttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
