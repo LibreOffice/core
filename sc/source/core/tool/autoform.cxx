@@ -911,6 +911,8 @@ ScAutoFormat::ScAutoFormat() :
 bool DefaultFirstEntry::operator() (const OUString& left, const OUString& right) const
 {
     OUString aStrStandard(ScGlobal::GetRscString(STR_STYLENAME_STANDARD));
+    if ( ScGlobal::GetpTransliteration()->isEqual( left, right ) )
+        return false;
     if ( ScGlobal::GetpTransliteration()->isEqual( left, aStrStandard ) )
         return true;
     if ( ScGlobal::GetpTransliteration()->isEqual( right, aStrStandard ) )
