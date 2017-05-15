@@ -4468,6 +4468,8 @@ css::uno::Any SAL_CALL SwXTextTableStyle::getPropertyValue(const OUString& rProp
         bIsRow = m_pTableAutoFormat->LastRowEndColumnIsRow();
     else if (rPropertyName == UNO_NAME_TABLE_LAST_ROW_START_COLUMN)
         bIsRow = m_pTableAutoFormat->LastRowStartColumnIsRow();
+    else if (rPropertyName == UNO_NAME_DISPLAY_NAME)
+        return uno::makeAny(m_pTableAutoFormat->GetName());
     else
         throw css::beans::UnknownPropertyException();
 
