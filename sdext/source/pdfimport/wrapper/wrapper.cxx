@@ -525,6 +525,24 @@ void Parser::parseFontFamilyName( FontAttributes& rResult )
             nLen -= nAttribLen;
             pCopy += nAttribLen;
         }
+        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-LightOblique"), rResult, true, false))
+        {
+            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-LightOblique");
+            nLen -= nAttribLen;
+            pCopy += nAttribLen;
+        }
+        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Light"), rResult, false, false))
+        {
+            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-Light");
+            nLen -= nAttribLen;
+            pCopy += nAttribLen;
+        }
+        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-BoldOblique"), rResult, true, true))
+        {
+            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-BoldOblique");
+            nLen -= nAttribLen;
+            pCopy += nAttribLen;
+        }
         else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Bold"), rResult, false, true))
         {
             sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-Bold");
@@ -543,21 +561,9 @@ void Parser::parseFontFamilyName( FontAttributes& rResult )
             nLen -= nAttribLen;
             pCopy += nAttribLen;
         }
-        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-LightOblique"), rResult, true, false))
+        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Oblique"), rResult, true, false))
         {
-            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-LightOblique");
-            nLen -= nAttribLen;
-            pCopy += nAttribLen;
-        }
-        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-BoldOblique"), rResult, true, true))
-        {
-            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-BoldOblique");
-            nLen -= nAttribLen;
-            pCopy += nAttribLen;
-        }
-        else if (parseFontCheckForString(pCopy, nLen, RTL_CONSTASCII_STRINGPARAM("-Light"), rResult, false, false))
-        {
-            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-Light");
+            sal_Int32 nAttribLen = RTL_CONSTASCII_LENGTH("-Oblique");
             nLen -= nAttribLen;
             pCopy += nAttribLen;
         }
