@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_c68984cc",
+        "filename": "sd/source/ui/dlg/prltempl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-15T20:11:04Z",
+      "side": 1,
+      "message": "Where do those ranges come from?\n\nIf anything, you may want to have aInputSet ranges copy those of pOrgSet, i.e. pOrgSet-\u003eGetRanges; aInputSet.SetRanges",
+      "revId": "5896426203829c82a0286820f7f50fc23293a970",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_269168f1",
+        "filename": "sd/source/ui/dlg/prltempl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-15T20:11:04Z",
+      "side": 1,
+      "message": "We should do this operation every time i.e. also when we have an outline style (IS_OUTLINE(ePO)). \n\nThat said, please try to preserve if-else from orig. code (anything else tends to break things unexpectedly) and either do this EE_CHAR_BKGCOLOR vs. SID_ATTR_BRUSHCOLOR substitution before for both, or do it in \u0027if\u0027 as well as in \u0027else\u0027 branch",
+      "revId": "5896426203829c82a0286820f7f50fc23293a970",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
