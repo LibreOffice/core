@@ -53,22 +53,22 @@
 
 static sal_uInt16 nDefWidth = ( sal_uInt16 ) ( TWIPS_PER_CHAR * 10 );
 
-void NI(LotusContext& /*rContext*/, SvStream& r, sal_uInt16 n)
+void NI(SAL_UNUSED_PARAMETER LotusContext& /*rContext*/, SvStream& r, sal_uInt16 n)
 {
     r.SeekRel( n );
 }
 
-void OP_BOF(LotusContext& /*rContext*/, SvStream& r, sal_uInt16 /*n*/)
+void OP_BOF(SAL_UNUSED_PARAMETER LotusContext& /*rContext*/, SvStream& r, SAL_UNUSED_PARAMETER sal_uInt16 /*n*/)
 {
     r.SeekRel( 2 );        // skip version number
 }
 
-void OP_EOF(LotusContext& rContext, SvStream& /*r*/, sal_uInt16 /*n*/)
+void OP_EOF(LotusContext& rContext, SAL_UNUSED_PARAMETER SvStream& /*r*/, SAL_UNUSED_PARAMETER sal_uInt16 /*n*/)
 {
     rContext.bEOF = true;
 }
 
-void OP_Integer(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
+void OP_Integer(SAL_UNUSED_PARAMETER LotusContext& rContext, SvStream& r, SAL_UNUSED_PARAMETER sal_uInt16 /*n*/)
 {
     sal_uInt8 nFormat(0);
     sal_uInt16 nTmpCol(0), nTmpRow(0);
@@ -87,7 +87,7 @@ void OP_Integer(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     }
 }
 
-void OP_Number(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
+void OP_Number(LotusContext& rContext, SvStream& r, SAL_UNUSED_PARAMETER sal_uInt16 /*n*/)
 {
     sal_uInt8 nFormat(0);
     sal_uInt16 nTmpCol(0), nTmpRow(0);
@@ -131,7 +131,7 @@ void OP_Label(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     }
 }
 
-void OP_Formula(LotusContext &rContext, SvStream& r, sal_uInt16 /*n*/)
+void OP_Formula(LotusContext &rContext, SvStream& r, SAL_UNUSED_PARAMETER sal_uInt16 /*n*/)
 {
     sal_uInt8 nFormat(0);
     sal_uInt16 nTmpCol(0), nTmpRow(0);
@@ -164,7 +164,7 @@ void OP_Formula(LotusContext &rContext, SvStream& r, sal_uInt16 /*n*/)
     }
 }
 
-void OP_ColumnWidth(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
+void OP_ColumnWidth(LotusContext& rContext, SvStream& r, SAL_UNUSED_PARAMETER sal_uInt16 /*n*/)
 {
     sal_uInt16 nTmpCol(0);
     sal_uInt8 nWidthSpaces(0);
@@ -189,7 +189,7 @@ void OP_ColumnWidth(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     }
 }
 
-void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
+void OP_NamedRange(LotusContext& rContext, SvStream& r, SAL_UNUSED_PARAMETER sal_uInt16 /*n*/)
 {
     // POST: don't save for invalid coordinates
     sal_uInt16              nColSt, nRowSt, nColEnd, nRowEnd;
@@ -227,7 +227,7 @@ void OP_NamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     }
 }
 
-void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
+void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, SAL_UNUSED_PARAMETER sal_uInt16 /*n*/)
 {
     // POST:don't save for invalid coordinates
     sal_uInt16              nColSt, nRowSt, nColEnd, nRowEnd;
@@ -265,22 +265,22 @@ void OP_SymphNamedRange(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     }
 }
 
-void OP_Footer(LotusContext& /*rContext*/, SvStream& r, sal_uInt16 n)
+void OP_Footer(SAL_UNUSED_PARAMETER LotusContext& /*rContext*/, SvStream& r, sal_uInt16 n)
 {
     r.SeekRel( n );
 }
 
-void OP_Header(LotusContext& /*rContext*/, SvStream& r, sal_uInt16 n)
+void OP_Header(SAL_UNUSED_PARAMETER LotusContext& /*rContext*/, SvStream& r, sal_uInt16 n)
 {
     r.SeekRel( n );
 }
 
-void OP_Margins(LotusContext& /*rContext*/, SvStream& r, sal_uInt16 n)
+void OP_Margins(SAL_UNUSED_PARAMETER LotusContext& /*rContext*/, SvStream& r, sal_uInt16 n)
 {
     r.SeekRel( n );
 }
 
-void OP_HiddenCols(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
+void OP_HiddenCols(LotusContext& rContext, SvStream& r, SAL_UNUSED_PARAMETER sal_uInt16 /*n*/)
 {
     sal_uInt16      nByte, nBit;
     SCCOL       nCount;
@@ -323,7 +323,7 @@ void OP_Window1(LotusContext& rContext, SvStream& r, sal_uInt16 n)
         rContext.pDoc->SetColWidth( nCol, 0, nDefWidth );
 }
 
-void OP_Blank(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
+void OP_Blank(LotusContext& rContext, SvStream& r, SAL_UNUSED_PARAMETER sal_uInt16 /*n*/)
 {
     sal_uInt8 nFormat(0);
     sal_uInt16 nTmpCol(0), nTmpRow(0);
@@ -334,12 +334,12 @@ void OP_Blank(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
     SetFormat(rContext, nCol, nRow, 0, nFormat, nDezFloat);
 }
 
-void OP_BOF123(LotusContext& /*rContext*/, SvStream& r, sal_uInt16 /*n*/)
+void OP_BOF123(SAL_UNUSED_PARAMETER LotusContext& /*rContext*/, SvStream& r, SAL_UNUSED_PARAMETER sal_uInt16 /*n*/)
 {
     r.SeekRel( 26 );
 }
 
-void OP_EOF123(LotusContext& rContext, SvStream& /*r*/, sal_uInt16 /*n*/)
+void OP_EOF123(LotusContext& rContext, SAL_UNUSED_PARAMETER SvStream& /*r*/, SAL_UNUSED_PARAMETER sal_uInt16 /*n*/)
 {
     rContext.bEOF = true;
 }
@@ -362,7 +362,7 @@ void OP_Label123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     PutFormString(rContext, nCol, nRow, nTab, pText.get());
 }
 
-void OP_Number123(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
+void OP_Number123(LotusContext& rContext, SvStream& r, SAL_UNUSED_PARAMETER sal_uInt16 /*n*/)
 {
     sal_uInt16 nTmpRow(0);
     sal_uInt8 nTmpCol(0), nTmpTab(0);
@@ -408,7 +408,7 @@ void OP_Formula123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     }
 }
 
-void OP_IEEENumber123(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
+void OP_IEEENumber123(LotusContext& rContext, SvStream& r, SAL_UNUSED_PARAMETER sal_uInt16 /*n*/)
 {
     sal_uInt16 nTmpRow(0);
     sal_uInt8 nTmpCol(0), nTmpTab(0);

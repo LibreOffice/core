@@ -1350,7 +1350,6 @@ public:
     /** Writes gradient or bitmap area properties to the passed property set. */
     void                WriteEscherProperties(
                             ScfPropertySet& rPropSet,
-                            XclChObjectTable& rGradientTable,
                             XclChObjectTable& rHatchTable,
                             XclChObjectTable& rBitmapTable,
                             const XclChEscherFormat& rEscherFmt,

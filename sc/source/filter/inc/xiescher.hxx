@@ -1094,7 +1094,7 @@ protected:
 
 private:
     /** Reads and returns a bitmap from WMF/PICT format. */
-    static void         ReadWmf( Graphic& rGraphic, const XclImpRoot& rRoot, XclImpStream& rStrm );
+    static void         ReadWmf( Graphic& rGraphic, XclImpStream& rStrm );
     /** Reads and returns a bitmap from BMP format. */
     static void         ReadBmp( Graphic& rGraphic, const XclImpRoot& rRoot, XclImpStream& rStrm );
 

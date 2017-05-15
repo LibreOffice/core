@@ -198,7 +198,7 @@ IMPL_LINK( ScRTFParser, RTFImportHdl, RtfImportInfo&, rInfo, void )
 // Bad behavior:
 // For RTF_INTBL or respectively at the start of the first RTF_CELL
 // after RTF_CELLX if there was no RTF_INTBL
-void ScRTFParser::NewCellRow( RtfImportInfo* /*pInfo*/ )
+void ScRTFParser::NewCellRow()
 {
     if ( bNewDef )
     {
@@ -317,7 +317,7 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
             // or e.g. \intbl ... \cell \pard \intbl ... \cell
             if ( nRtfLastToken != RTF_INTBL && nRtfLastToken != RTF_CELL && nRtfLastToken != RTF_PAR )
             {
-                NewCellRow( pInfo );
+                NewCellRow();
                 nRtfLastToken = pInfo->nToken;
             }
         }
@@ -326,7 +326,7 @@ void ScRTFParser::ProcToken( RtfImportInfo* pInfo )
         {
             OSL_ENSURE( pActDefault, "RTF_CELL: pActDefault==0" );
             if ( bNewDef || !pActDefault )
-                NewCellRow( pInfo );    // before was no \intbl, bad behavior
+                NewCellRow();    // before was no \intbl, bad behavior
             // Broken RTF? Let's save what we can
             if ( !pActDefault )
                 pActDefault = pInsDefault;

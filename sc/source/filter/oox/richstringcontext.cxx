@@ -35,10 +35,10 @@ ContextHandlerRef RichStringContext::onCreateContext( sal_Int32 nElement, const 
         switch( nElement )
         {
             case XLS_TOKEN( t ):
-                mxPortion = mxString->importText( rAttribs );
+                mxPortion = mxString->importText();
                 return this;    // collect text in onCharacters()
             case XLS_TOKEN( r ):
-                mxPortion = mxString->importRun( rAttribs );
+                mxPortion = mxString->importRun();
                 return this;
             case XLS_TOKEN( rPh ):
                 mxPhonetic = mxString->importPhoneticRun( rAttribs );

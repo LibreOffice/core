@@ -471,7 +471,7 @@ public:
     virtual VclPtr<AbstractScNameCreateDlg> CreateScNameCreateDlg(vcl::Window * pParent,
         CreateNameFlags nFlags) = 0;
 
-    virtual VclPtr<AbstractScNamePasteDlg> CreateScNamePasteDlg ( vcl::Window * pParent, ScDocShell* pShell, bool bInsList=true ) = 0;
+    virtual VclPtr<AbstractScNamePasteDlg> CreateScNamePasteDlg ( vcl::Window * pParent, ScDocShell* pShell ) = 0;
 
     virtual VclPtr<AbstractScPivotFilterDlg> CreateScPivotFilterDlg(vcl::Window* pParent,
         const SfxItemSet& rArgSet, sal_uInt16 nSourceTab) = 0;

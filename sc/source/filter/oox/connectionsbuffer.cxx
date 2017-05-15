@@ -152,7 +152,7 @@ void Connection::importWebPr( const AttributeList& rAttribs )
     rWebPr.mbHtmlTables      = rAttribs.getBool( XML_htmlTables, false );
 }
 
-void Connection::importTables( const AttributeList& /*rAttribs*/ )
+void Connection::importTables()
 {
     if( maModel.mxWebPr.get() )
     {

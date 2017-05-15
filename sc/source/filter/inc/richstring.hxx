@@ -211,9 +211,9 @@ public:
     explicit            RichString( const WorkbookHelper& rHelper );
 
     /** Appends and returns a portion object for a plain string (t element). */
-    RichStringPortionRef importText( const AttributeList& rAttribs );
+    RichStringPortionRef importText();
     /** Appends and returns a portion object for a new formatting run (r element). */
-    RichStringPortionRef importRun( const AttributeList& rAttribs );
+    RichStringPortionRef importRun();
     /** Appends and returns a phonetic text object for a new phonetic run (rPh element). */
     RichStringPhoneticRef importPhoneticRun( const AttributeList& rAttribs );
     /** Imports phonetic settings from the rPhoneticPr element. */

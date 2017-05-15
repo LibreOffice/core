@@ -57,7 +57,7 @@ public:
     virtual ~ScDataFormDlg() override;
     virtual void dispose() override;
 
-    void FillCtrls(SCROW nCurrentRow);
+    void FillCtrls();
 private:
 
     void SetButtonState();

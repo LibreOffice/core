@@ -28,7 +28,7 @@
 
 #include <o3tl/make_unique.hxx>
 
-ScNamePasteDlg::ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell, bool )
+ScNamePasteDlg::ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell )
     : ModalDialog( pParent, "InsertNameDialog", "modules/scalc/ui/insertname.ui" )
 {
     get(m_pBtnPasteAll, "pasteall");

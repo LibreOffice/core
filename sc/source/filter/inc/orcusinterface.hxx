@@ -148,7 +148,7 @@ private:
 class ScOrcusAutoFilter : public orcus::spreadsheet::iface::import_auto_filter
 {
 public:
-    ScOrcusAutoFilter(ScDocument& rDoc);
+    ScOrcusAutoFilter();
 
     virtual ~ScOrcusAutoFilter() override;
 

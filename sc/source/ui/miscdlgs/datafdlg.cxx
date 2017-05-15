@@ -181,7 +181,7 @@ ScDataFormDlg::ScDataFormDlg(vcl::Window* pParent, ScTabViewShell* pTabViewShell
         }
     }
 
-    FillCtrls(nCurrentRow);
+    FillCtrls();
 
     m_pSlider->SetPageSize( 10 );
     m_pSlider->SetVisibleSize( 1 );
@@ -227,7 +227,7 @@ void ScDataFormDlg::dispose()
     ModalDialog::dispose();
 }
 
-void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
+void ScDataFormDlg::FillCtrls()
 {
     for (sal_uInt16 i = 0; i < aColLength; ++i)
     {
@@ -289,7 +289,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl, Button*, void)
                     m_pSlider->SetRange( Range( 0, nEndRow - nStartRow + 1) );
             }
             SetButtonState();
-            FillCtrls(nCurrentRow);
+            FillCtrls();
             pDocSh->SetDocumentModified();
             pDocSh->PostPaintGridAll();
             }
@@ -304,7 +304,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_PrevHdl, Button*, void)
             nCurrentRow--;
 
         SetButtonState();
-        FillCtrls(nCurrentRow);
+        FillCtrls();
     }
 }
 
@@ -316,7 +316,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_NextHdl, Button*, void)
             nCurrentRow++;
 
         SetButtonState();
-        FillCtrls(nCurrentRow);
+        FillCtrls();
     }
 }
 
@@ -324,7 +324,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_RestoreHdl, Button*, void)
 {
     if (pDoc)
     {
-        FillCtrls(nCurrentRow);
+        FillCtrls();
     }
 }
 
@@ -341,7 +341,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_DeleteHdl, Button*, void)
         SetButtonState();
         pDocSh->GetUndoManager()->Clear();
 
-        FillCtrls(nCurrentRow);
+        FillCtrls();
         pDocSh->SetDocumentModified();
         pDocSh->PostPaintGridAll();
     }
@@ -357,7 +357,7 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_ScrollHdl, ScrollBar*, void)
     long nOffset = m_pSlider->GetThumbPos();
     nCurrentRow = nStartRow + nOffset + 1;
     SetButtonState();
-    FillCtrls(nCurrentRow);
+    FillCtrls();
 }
 
 void ScDataFormDlg::SetButtonState()

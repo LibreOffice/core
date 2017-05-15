@@ -577,7 +577,7 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
     aPropOpt.Commit( mrEscherEx.GetStream() );
 
     // anchor
-    ImplWriteAnchor( GetRoot(), SdrObject::getSdrObjectFromXShape( xShape ), pChildAnchor );
+    ImplWriteAnchor( SdrObject::getSdrObjectFromXShape( xShape ), pChildAnchor );
 
     mrEscherEx.AddAtom( 0, ESCHER_ClientData );                       // OBJ record
     mrEscherEx.CloseContainer();  // ESCHER_SpContainer
@@ -727,7 +727,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     aPropOpt.Commit( mrEscherEx.GetStream() );
 
     // anchor
-    ImplWriteAnchor( GetRoot(), SdrObject::getSdrObjectFromXShape( xShape ), pChildAnchor );
+    ImplWriteAnchor( SdrObject::getSdrObjectFromXShape( xShape ), pChildAnchor );
 
     mrEscherEx.AddAtom( 0, ESCHER_ClientData );                       // OBJ record
     mrEscherEx.UpdateDffFragmentEnd();
@@ -1088,7 +1088,7 @@ XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape 
 
     // anchor
     SdrObject* pSdrObj = SdrObject::getSdrObjectFromXShape( xShape );
-    ImplWriteAnchor( GetRoot(), pSdrObj, pChildAnchor );
+    ImplWriteAnchor( pSdrObj, pChildAnchor );
 
     // client data (the following OBJ record)
     mrEscherEx.AddAtom( 0, ESCHER_ClientData );

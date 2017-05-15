@@ -101,7 +101,7 @@ public:
     /** Imports web query settings from the webPr element. */
     void                importWebPr( const AttributeList& rAttribs );
     /** Imports web query table settings from the tables element. */
-    void                importTables( const AttributeList& rAttribs );
+    void                importTables();
     /** Imports a web query table identifier from the m, s, or x element. */
     void                importTable( const AttributeList& rAttribs, sal_Int32 nElement );
 

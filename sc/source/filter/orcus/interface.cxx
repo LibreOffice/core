@@ -458,7 +458,7 @@ ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& r
     mnTab(nTab),
     mrFactory(rFactory),
     mrStyles(static_cast<ScOrcusStyles&>(*mrFactory.get_styles())),
-    maAutoFilter(rDoc.getDoc()),
+    maAutoFilter(),
     maProperties(mnTab, mrDoc),
     maConditionalFormat(mnTab, rDoc.getDoc()),
     mnCellCount(0)
@@ -1592,7 +1592,7 @@ size_t ScOrcusStyles::commit_cell_style()
 
 // auto filter import
 
-ScOrcusAutoFilter::ScOrcusAutoFilter(ScDocument&)
+ScOrcusAutoFilter::ScOrcusAutoFilter()
 {
 }
 

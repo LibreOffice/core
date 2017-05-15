@@ -773,9 +773,9 @@ VclPtr<AbstractScNameCreateDlg> ScAbstractDialogFactory_Impl::CreateScNameCreate
     return VclPtr<AbstractScNameCreateDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractScNamePasteDlg> ScAbstractDialogFactory_Impl::CreateScNamePasteDlg ( vcl::Window * pParent, ScDocShell* pShell, bool bInsList )
+VclPtr<AbstractScNamePasteDlg> ScAbstractDialogFactory_Impl::CreateScNamePasteDlg ( vcl::Window * pParent, ScDocShell* pShell )
 {
-    VclPtr<ScNamePasteDlg> pDlg = VclPtr<ScNamePasteDlg>::Create( pParent, pShell, bInsList );
+    VclPtr<ScNamePasteDlg> pDlg = VclPtr<ScNamePasteDlg>::Create( pParent, pShell );
     return VclPtr<AbstractScNamePasteDlg_Impl>::Create( pDlg );
 }
 

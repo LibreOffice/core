@@ -68,7 +68,7 @@ private:
     void                ProcToken( RtfImportInfo* );
     void                ColAdjust();
     bool                SeekTwips( sal_uInt16 nTwips, SCCOL* pCol );
-    void                NewCellRow( RtfImportInfo* );
+    void                NewCellRow();
 
 public:
                         ScRTFParser( EditEngine* );

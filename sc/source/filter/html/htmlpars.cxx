@@ -2879,7 +2879,7 @@ void ScHTMLQueryParser::ProcessToken( const HtmlImportInfo& rInfo )
         case HtmlTokenId::META:             MetaOn( rInfo );                break;  // <meta>
 
 // --- title handling ---
-        case HtmlTokenId::TITLE_ON:         TitleOn( rInfo );               break;  // <title>
+        case HtmlTokenId::TITLE_ON:         TitleOn();                      break;  // <title>
         case HtmlTokenId::TITLE_OFF:        TitleOff( rInfo );              break;  // </title>
 
         case HtmlTokenId::STYLE_ON:                                         break;
@@ -3018,7 +3018,7 @@ void ScHTMLQueryParser::MetaOn( const HtmlImportInfo& rInfo )
     }
 }
 
-void ScHTMLQueryParser::TitleOn( const HtmlImportInfo& /*rInfo*/ )
+void ScHTMLQueryParser::TitleOn()
 {
     mbTitleOn = true;
     maTitle.setLength(0);
@@ -3098,7 +3098,7 @@ class CSSHandler
 public:
     explicit CSSHandler(ScHTMLStyles& rStyles) : mrStyles(rStyles) {}
 
-    static void at_rule_name(const char* /*p*/, size_t /*n*/)
+    static void at_rule_name(SAL_UNUSED_PARAMETER const char* /*p*/, SAL_UNUSED_PARAMETER size_t /*n*/)
     {
         // TODO: For now, we ignore at-rule properties.
     }
@@ -3144,31 +3144,31 @@ public:
     }
 
     // new members
-    static void simple_selector_type(const char* /*p*/, size_t /*n*/) {}
+    static void simple_selector_type(SAL_UNUSED_PARAMETER const char* /*p*/, SAL_UNUSED_PARAMETER size_t /*n*/) {}
 
-    static void simple_selector_class(const char* /*p*/, size_t /*n*/) {}
+    static void simple_selector_class(SAL_UNUSED_PARAMETER const char* /*p*/, SAL_UNUSED_PARAMETER size_t /*n*/) {}
 
-    static void simple_selector_pseudo_element(orcus::css::pseudo_element_t /*pe*/) {}
+    static void simple_selector_pseudo_element(SAL_UNUSED_PARAMETER orcus::css::pseudo_element_t /*pe*/) {}
 
-    static void simple_selector_pseudo_class(orcus::css::pseudo_class_t /*pc*/) {}
+    static void simple_selector_pseudo_class(SAL_UNUSED_PARAMETER orcus::css::pseudo_class_t /*pc*/) {}
 
-    static void simple_selector_id(const char* /*p*/, size_t /*n*/) {}
+    static void simple_selector_id(SAL_UNUSED_PARAMETER const char* /*p*/, SAL_UNUSED_PARAMETER size_t /*n*/) {}
 
     static void end_simple_selector() {}
 
     static void end_selector() {}
 
-    static void combinator(orcus::css::combinator_t /*combinator*/) {}
+    static void combinator(SAL_UNUSED_PARAMETER orcus::css::combinator_t /*combinator*/) {}
 
-    static void rgb(uint8_t /*red*/ , uint8_t /*green*/ , uint8_t /*blue*/ ) {}
+    static void rgb(SAL_UNUSED_PARAMETER uint8_t /*red*/ , SAL_UNUSED_PARAMETER uint8_t /*green*/ , SAL_UNUSED_PARAMETER uint8_t /*blue*/ ) {}
 
-    static void rgba(uint8_t /*red*/ , uint8_t /*green*/ , uint8_t /*blue*/ , double /*alpha*/ ) {}
+    static void rgba(SAL_UNUSED_PARAMETER uint8_t /*red*/ , SAL_UNUSED_PARAMETER uint8_t /*green*/ , SAL_UNUSED_PARAMETER uint8_t /*blue*/ , SAL_UNUSED_PARAMETER double /*alpha*/ ) {}
 
-    static void hsl(uint8_t /*hue*/ , uint8_t /*sat*/ , uint8_t /*light*/ ) {}
+    static void hsl(SAL_UNUSED_PARAMETER uint8_t /*hue*/ , SAL_UNUSED_PARAMETER uint8_t /*sat*/ , SAL_UNUSED_PARAMETER uint8_t /*light*/ ) {}
 
-    static void hsla(uint8_t /*hue*/ , uint8_t /*sat*/ , uint8_t /*light*/ , double /*alpha*/ ) {}
+    static void hsla(SAL_UNUSED_PARAMETER uint8_t /*hue*/ , SAL_UNUSED_PARAMETER uint8_t /*sat*/ , SAL_UNUSED_PARAMETER uint8_t /*light*/ , SAL_UNUSED_PARAMETER double /*alpha*/ ) {}
 
-    static void url(const char* /*p*/, size_t /*n*/) {}
+    static void url(SAL_UNUSED_PARAMETER const char* /*p*/, SAL_UNUSED_PARAMETER size_t /*n*/) {}
 
 };
 

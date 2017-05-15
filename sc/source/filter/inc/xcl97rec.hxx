@@ -105,7 +105,7 @@ protected:
         See SetOwnEscher() for details. */
     explicit                    XclObj( XclExpObjectManager& rObjMgr, sal_uInt16 nObjType, bool bOwnEscher = false );
 
-    void                        ImplWriteAnchor( const XclExpRoot& rRoot, const SdrObject* pSdrObj, const tools::Rectangle* pChildAnchor );
+    void                        ImplWriteAnchor( const SdrObject* pSdrObj, const tools::Rectangle* pChildAnchor );
 
                                 // overwritten for writing MSODRAWING record
     virtual void                WriteBody( XclExpStream& rStrm ) override;

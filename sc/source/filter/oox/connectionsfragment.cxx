@@ -51,7 +51,7 @@ ContextHandlerRef ConnectionContext::onCreateContext( sal_Int32 nElement, const 
         case XLS_TOKEN( webPr ):
             if( nElement == XLS_TOKEN( tables ) )
             {
-                mrConnection.importTables( rAttribs );
+                mrConnection.importTables();
                 return this;
             }
         break;

@@ -3829,7 +3829,7 @@ Graphic XclImpDrawing::ReadImgData( const XclImpRoot& rRoot, XclImpStream& rStrm
     {
         switch( nFormat )
         {
-            case EXC_IMGDATA_WMF:   ReadWmf( aGraphic, rRoot, rStrm );  break;
+            case EXC_IMGDATA_WMF:   ReadWmf( aGraphic, rStrm );  break;
             case EXC_IMGDATA_BMP:   ReadBmp( aGraphic, rRoot, rStrm );  break;
             default:    OSL_FAIL( "XclImpDrawing::ReadImgData - unknown image format" );
         }
@@ -3986,7 +3986,7 @@ void XclImpDrawing::AppendRawObject( const XclImpDrawObjRef& rxDrawObj )
 
 // private --------------------------------------------------------------------
 
-void XclImpDrawing::ReadWmf( Graphic& rGraphic, const XclImpRoot&, XclImpStream& rStrm ) // static helper
+void XclImpDrawing::ReadWmf( Graphic& rGraphic, XclImpStream& rStrm ) // static helper
 {
     // extract graphic data from IMGDATA and following CONTINUE records
     rStrm.Ignore( 8 );

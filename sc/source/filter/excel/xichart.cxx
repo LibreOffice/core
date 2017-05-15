@@ -367,7 +367,7 @@ void XclImpChRoot::ConvertEscherFormat( ScfPropertySet& rPropSet,
         sal_uInt32 nDffFillType, XclChPropertyMode ePropMode ) const
 {
     GetChartPropSetHelper().WriteEscherProperties( rPropSet,
-        *mxChData->mxGradientTable, *mxChData->mxHatchTable, *mxChData->mxBitmapTable,
+        *mxChData->mxGradientTable, *mxChData->mxBitmapTable,
         rEscherFmt, pPicFmt, nDffFillType, ePropMode );
 }
 

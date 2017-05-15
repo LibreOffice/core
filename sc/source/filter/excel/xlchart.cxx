@@ -1009,7 +1009,7 @@ void XclChPropSetHelper::WriteAreaProperties( ScfPropertySet& rPropSet,
 }
 
 void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
-        XclChObjectTable& rGradientTable, XclChObjectTable& /*rHatchTable*/, XclChObjectTable& rBitmapTable,
+        XclChObjectTable& rGradientTable, XclChObjectTable& rBitmapTable,
         const XclChEscherFormat& rEscherFmt, const XclChPicFormat* pPicFmt,
         sal_uInt32 nDffFillType, XclChPropertyMode ePropMode )
 {
