@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_668d3031",
+        "filename": "basic/source/classes/sbxmod.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2066,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-15T13:27:13Z",
+      "side": 1,
+      "message": "of",
+      "range": {
+        "startLine": 2066,
+        "startChar": 30,
+        "endLine": 2066,
+        "endChar": 34
+      },
+      "revId": "de03986e4a9ad556ba106c64336897a685682860",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_46883423",
+        "filename": "connectivity/source/drivers/dbase/dindexnode.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 479,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-15T13:27:13Z",
+      "side": 1,
+      "message": "Rather \"parent\".",
+      "range": {
+        "startLine": 479,
+        "startChar": 32,
+        "endLine": 479,
+        "endChar": 38
+      },
+      "revId": "de03986e4a9ad556ba106c64336897a685682860",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
