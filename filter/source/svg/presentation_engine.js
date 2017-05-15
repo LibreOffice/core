@@ -2174,7 +2174,7 @@ function MetaDocument()
 
     // The collections for handling properties of each slide, svg elements
     // related to master pages and content and properties of text fields.
-    this.aMetaSlideSet = [];
+    this.aMetaSlideSet = new Array(this.nNumberOfSlides);
     this.aMasterPageSet = {};
     this.aTextFieldHandlerSet = {};
     this.aTextFieldContentProviderSet = [];
@@ -2191,11 +2191,23 @@ function MetaDocument()
 
     // We initialize the set of MetaSlide objects that handle the meta
     // information for each slide.
+
+    var that = this;
     for( var i = 0; i < this.nNumberOfSlides; ++i )
     {
-        var sMetaSlideId = aOOOElemMetaSlide + '_' + i;
-        this.aMetaSlideSet.push( new MetaSlide( sMetaSlideId, this ) );
+      Object.defineProperty(this.aMetaSlideSet, i, {
+        get: (function() {
+          var sMetaSlideId = aOOOElemMetaSlide + '_' + i;
+          return function(){
+            if (!that[sMetaSlideId]) {
+              that[sMetaSlideId] = new MetaSlide( sMetaSlideId, that );
+            }
+            return that[sMetaSlideId];
+          }
+        })()
+      });
     }
+
     assert( this.aMetaSlideSet.length == this.nNumberOfSlides,
             'MetaDocument: aMetaSlideSet.length != nNumberOfSlides.' );
 }
