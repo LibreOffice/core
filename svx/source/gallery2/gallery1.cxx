@@ -101,7 +101,30 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
     // This is awful - we shouldn't use these resources if we
     // possibly can avoid them
     if( aName.isEmpty() && nId && bThemeNameFromResource )
-        aName = GAL_RESSTR( RID_GALLERYSTR_THEME_START + (sal_uInt16) nId );
+    {
+        //some of these are supposed to *not* be localized
+        //so catch them before looking up the resource
+        const std::pair<sal_uInt16, const char*> aUnlocalized[] =
+        {
+            { GALLERY_THEME_HOMEPAGE, RID_GALLERYSTR_THEME_HTMLBUTTONS },
+            { GALLERY_THEME_POWERPOINT, RID_GALLERYSTR_THEME_POWERPOINT },
+            { GALLERY_THEME_USERSOUNDS, RID_GALLERYSTR_THEME_USERSOUNDS },
+            { GALLERY_THEME_DUMMY5, RID_GALLERYSTR_THEME_DUMMY5 },
+            { GALLERY_THEME_FONTWORK, RID_GALLERYSTR_THEME_FONTWORK },
+            { GALLERY_THEME_FONTWORK_VERTICAL, RID_GALLERYSTR_THEME_FONTWORK_VERTICAL }
+        };
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aUnlocalized); ++i)
+        {
+            if (aUnlocalized[i].first == nId)
+            {
+                aName = OUString::createFromAscii(aUnlocalized[i].second);
+                break;
+            }
+        }
+        //look up the rest of the ids in string resources
+        if (aName.isEmpty())
+            aName = GAL_RESSTR(RID_GALLERYSTR_THEME_START + (sal_uInt16) nId);
+    }
 
     if( aName.isEmpty() )
         aName = rName;
