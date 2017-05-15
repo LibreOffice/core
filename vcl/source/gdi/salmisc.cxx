@@ -20,6 +20,7 @@
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/salbtype.hxx>
 #include <bmpfast.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <memory>
 
@@ -328,7 +329,23 @@ BitmapBuffer* StretchAndConvert(
     pDstBuffer->mnFormat = nDstBitmapFormat;
     pDstBuffer->mnWidth = rTwoRect.mnDestWidth;
     pDstBuffer->mnHeight = rTwoRect.mnDestHeight;
-    pDstBuffer->mnScanlineSize = AlignedWidth4Bytes( pDstBuffer->mnBitCount * pDstBuffer->mnWidth );
+    long nScanlineBase;
+    bool bFail = o3tl::checked_multiply<long>(pDstBuffer->mnBitCount, pDstBuffer->mnWidth, nScanlineBase);
+    if (bFail)
+    {
+        SAL_WARN("vcl.gdi", "checked multiply failed");
+        pDstBuffer->mpBits = nullptr;
+        delete pDstBuffer;
+        return nullptr;
+    }
+    pDstBuffer->mnScanlineSize = AlignedWidth4Bytes(nScanlineBase);
+    if (pDstBuffer->mnScanlineSize < nScanlineBase/8)
+    {
+        SAL_WARN("vcl.gdi", "scanline calculation wraparound");
+        pDstBuffer->mpBits = nullptr;
+        delete pDstBuffer;
+        return nullptr;
+    }
     try
     {
         pDstBuffer->mpBits = new sal_uInt8[ pDstBuffer->mnScanlineSize * pDstBuffer->mnHeight ];
