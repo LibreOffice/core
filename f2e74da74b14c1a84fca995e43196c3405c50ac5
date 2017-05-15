@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_66bb70c5",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1410,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-15T14:00:06Z",
+      "side": 1,
+      "message": "This overwrites \"the\" nTab obtained from aRanges.front()-\u003eaStart.Tab() at the top of this function, it should be local scope instead.\n\nAlso, determining the sheets/tabs from the ScRangeList is done for each and every cell that is imported. Rather set up a vector of SCTAB values beforehand which is iterated.\n\nNote also that further below the nTab value is used to adjust row heights and to check if values are to be overwritten and ask the user for confirmation. Those have to operate on the selected sheets then as well.\n\nProbably the function wide nTab can be removed then.",
+      "range": {
+        "startLine": 1410,
+        "startChar": 32,
+        "endLine": 1410,
+        "endChar": 36
+      },
+      "revId": "f2e74da74b14c1a84fca995e43196c3405c50ac5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
