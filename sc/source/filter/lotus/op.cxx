@@ -308,7 +308,8 @@ void OP_Window1(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 {
     r.SeekRel( 4 );    // skip Cursor Pos
 
-    r.ReadUChar(rContext.nDefaultFormat);
+    sal_uInt8  nDefaultFormat; // -> op.cpp, standard cell format
+    r.ReadUChar(nDefaultFormat);
 
     r.SeekRel( 1 );    // skip 'unused'
 

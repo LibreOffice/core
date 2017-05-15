@@ -38,7 +38,6 @@ using namespace css::lang;
 
 GraphicExportDialog::GraphicExportDialog( const Reference< XComponentContext >& )
     : meFieldUnit(FUNIT_NONE)
-    , mbExportSelection( false )
 {
 }
 
@@ -85,10 +84,6 @@ void GraphicExportDialog::setPropertyValues( const Sequence<PropertyValue>& aPro
         if ( maMediaDescriptor[ i ].Name == "FilterData" )
         {
             maMediaDescriptor[ i ].Value >>= maFilterDataSequence;
-        }
-        else if ( maMediaDescriptor[ i ].Name == "SelectionOnly" )
-        {
-            maMediaDescriptor[ i ].Value >>= mbExportSelection;
         }
     }
 }

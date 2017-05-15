@@ -38,36 +38,6 @@ compilerplugins/clang/test/unnecessaryoverride-dtor.hxx:42
     IncludedDerived3 m rtl::Reference<Incomplete>
 connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
-connectivity/source/inc/OTypeInfo.hxx:31
-    connectivity::OTypeInfo aTypeName class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:32
-    connectivity::OTypeInfo aLiteralPrefix class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:33
-    connectivity::OTypeInfo aLiteralSuffix class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:34
-    connectivity::OTypeInfo aCreateParams class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:35
-    connectivity::OTypeInfo aLocalTypeName class rtl::OUString
-connectivity/source/inc/OTypeInfo.hxx:37
-    connectivity::OTypeInfo nPrecision sal_Int32
-connectivity/source/inc/OTypeInfo.hxx:39
-    connectivity::OTypeInfo nMaximumScale sal_Int16
-connectivity/source/inc/OTypeInfo.hxx:40
-    connectivity::OTypeInfo nMinimumScale sal_Int16
-connectivity/source/inc/OTypeInfo.hxx:43
-    connectivity::OTypeInfo nSearchType sal_Int16
-connectivity/source/inc/OTypeInfo.hxx:44
-    connectivity::OTypeInfo nNumPrecRadix sal_Int16
-connectivity/source/inc/OTypeInfo.hxx:46
-    connectivity::OTypeInfo bCurrency _Bool
-connectivity/source/inc/OTypeInfo.hxx:47
-    connectivity::OTypeInfo bAutoIncrement _Bool
-connectivity/source/inc/OTypeInfo.hxx:48
-    connectivity::OTypeInfo bNullable _Bool
-connectivity/source/inc/OTypeInfo.hxx:49
-    connectivity::OTypeInfo bCaseSensitive _Bool
-connectivity/source/inc/OTypeInfo.hxx:50
-    connectivity::OTypeInfo bUnsigned _Bool
 cppu/source/threadpool/threadpool.cxx:377
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:61
@@ -96,9 +66,9 @@ include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
 include/LibreOfficeKit/LibreOfficeKitGtk.h:38
     _LOKDocViewClass parent_class GtkDrawingAreaClass
-include/sfx2/msg.hxx:116
+include/sfx2/msg.hxx:117
     SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:118
+include/sfx2/msg.hxx:119
     SfxType0 nAttribs sal_uInt16
 include/svtools/genericunodialog.hxx:170
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
@@ -120,46 +90,48 @@ pyuno/source/module/pyuno_impl.hxx:326
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/ui/inc/ReportWindow.hxx:54
     rptui::OReportWindow m_pObjFac ::std::unique_ptr<DlgEdFactory>
-sal/osl/unx/thread.cxx:97
+sal/osl/unx/thread.cxx:93
     osl_thread_priority_st m_Highest int
-sal/osl/unx/thread.cxx:98
+sal/osl/unx/thread.cxx:94
     osl_thread_priority_st m_Above_Normal int
-sal/osl/unx/thread.cxx:99
+sal/osl/unx/thread.cxx:95
     osl_thread_priority_st m_Normal int
-sal/osl/unx/thread.cxx:100
+sal/osl/unx/thread.cxx:96
     osl_thread_priority_st m_Below_Normal int
-sal/osl/unx/thread.cxx:101
+sal/osl/unx/thread.cxx:97
     osl_thread_priority_st m_Lowest int
-sal/osl/unx/thread.cxx:119
+sal/osl/unx/thread.cxx:115
     osl_thread_global_st m_priority struct osl_thread_priority_st
+sc/inc/formulalogger.hxx:42
+    sc::FormulaLogger maMessages std::vector<OUString>
 sc/qa/unit/ucalc_column.cxx:103
     aInputs aName const char *
 sc/source/filter/inc/sheetdatacontext.hxx:61
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
-sc/source/ui/inc/docsh.hxx:441
+sc/source/ui/inc/docsh.hxx:438
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port uint
-sd/source/ui/table/TableDesignPane.hxx:110
+sd/source/ui/table/TableDesignPane.hxx:113
     sd::TableDesignPane aImpl class sd::TableDesignWidget
 sd/source/ui/view/DocumentRenderer.cxx:1335
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1235
-    sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
 sd/source/ui/view/viewshel.cxx:1236
-    sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
+    sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
 sd/source/ui/view/viewshel.cxx:1237
-    sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
+    sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
 sd/source/ui/view/viewshel.cxx:1238
+    sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
+sd/source/ui/view/viewshel.cxx:1239
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
 sd/source/ui/view/ViewShellBase.cxx:201
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
-sfx2/source/doc/doctempl.cxx:118
+sfx2/source/doc/doctempl.cxx:119
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
 starmath/inc/view.hxx:224
     SmViewShell maGraphicController class SmGraphicController
 svtools/source/svhtml/htmlkywd.cxx:558
-    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at svtools/source/svhtml/htmlkywd.cxx:558:5)
+    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo/svtools/source/svhtml/htmlkywd.cxx:558:5)
 svtools/source/svhtml/htmlkywd.cxx:560
     HTML_OptionEntry::(anonymous) sToken const sal_Char *
 svtools/source/svhtml/htmlkywd.cxx:561
@@ -182,9 +154,9 @@ unoidl/source/unoidlprovider.cxx:673
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference2_ rtl::Reference<UnoidlModuleEntity>
 vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone class OpenGLZone
-vcl/source/gdi/jobset.cxx:35
+vcl/source/gdi/jobset.cxx:34
     ImplOldJobSetupData cDeviceName char [32]
-vcl/source/gdi/jobset.cxx:36
+vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cPortName char [32]
 vcl/source/gdi/pdfwriter_impl.cxx:5448
     (anonymous namespace)::(anonymous) extnID SECItem
@@ -200,11 +172,11 @@ vcl/source/uitest/uno/uitest_uno.cxx:35
     UITestUnoObj mpUITest std::unique_ptr<UITest>
 vcl/unx/generic/dtrans/X11_clipboard.hxx:45
     x11::X11Clipboard m_xSelectionManager css::uno::Reference<css::lang::XInitialization>
-vcl/unx/generic/dtrans/X11_dndcontext.hxx:41
+vcl/unx/generic/dtrans/X11_dndcontext.hxx:40
     x11::DropTargetDropContext m_xManagerRef css::uno::Reference<XInterface>
-vcl/unx/generic/dtrans/X11_dndcontext.hxx:58
+vcl/unx/generic/dtrans/X11_dndcontext.hxx:56
     x11::DropTargetDragContext m_xManagerRef css::uno::Reference<XInterface>
-vcl/unx/generic/dtrans/X11_dndcontext.hxx:74
+vcl/unx/generic/dtrans/X11_dndcontext.hxx:71
     x11::DragSourceContext m_xManagerRef css::uno::Reference<XInterface>
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link AtkHyperlink

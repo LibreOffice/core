@@ -12,6 +12,7 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+#include <algorithm>
 #include "plugin.hxx"
 #include "compat.hxx"
 
@@ -181,6 +182,13 @@ bool UnusedFields::VisitFieldDecl( const FieldDecl* fieldDecl )
     return true;
 }
 
+static char easytolower(char in)
+{
+    if (in<='Z' && in>='A')
+        return in-('Z'-'z');
+    return in;
+}
+
 bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
 {
     const ValueDecl* decl = memberExpr->getMemberDecl();
@@ -236,7 +244,25 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
             bPotentiallyReadFrom = dyn_cast<DoStmt>(parent)->getCond() == child;
             break;
         }
-        else if (isa<ReturnStmt>(parent) || isa<CXXConstructExpr>(parent) || isa<CallExpr>(parent)
+        else if (auto callExpr = dyn_cast<CallExpr>(parent))
+        {
+            // check for calls to ReadXXX() type methods and the operator>>= methods on Any.
+            const FunctionDecl * calleeFunctionDecl = callExpr->getDirectCallee();
+            if (calleeFunctionDecl)
+            {
+                std::string name = calleeFunctionDecl->getQualifiedNameAsString();
+                std::transform(name.begin(), name.end(), name.begin(), easytolower);
+                if (name.find("read") != std::string::npos || name.find(">>=") != std::string::npos)
+                    // this is a write-only call
+                    ;
+                else
+                    bPotentiallyReadFrom = true;
+            }
+            else
+                bPotentiallyReadFrom = true;
+            break;
+        }
+        else if (isa<ReturnStmt>(parent) || isa<CXXConstructExpr>(parent)
                  || isa<ConditionalOperator>(parent) || isa<SwitchStmt>(parent) || isa<ArraySubscriptExpr>(parent)
                  || isa<DeclStmt>(parent) || isa<WhileStmt>(parent) || isa<CXXNewExpr>(parent)
                  || isa<ForStmt>(parent) || isa<InitListExpr>(parent)

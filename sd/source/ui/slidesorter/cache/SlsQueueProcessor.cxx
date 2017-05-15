@@ -33,9 +33,6 @@ QueueProcessor::QueueProcessor (
     const SharedCacheContext& rpCacheContext)
     : maMutex(),
       maTimer(),
-      mnTimeBetweenHighPriorityRequests (10/*ms*/),
-      mnTimeBetweenLowPriorityRequests (100/*ms*/),
-      mnTimeBetweenRequestsWhenNotIdle (1000/*ms*/),
       maPreviewSize(rPreviewSize),
       mbDoSuperSampling(bDoSuperSampling),
       mpCacheContext(rpCacheContext),
@@ -44,20 +41,6 @@ QueueProcessor::QueueProcessor (
       maBitmapFactory(),
       mbIsPaused(false)
 {
-    // Look into the configuration if there for overriding values.
-    css::uno::Any aTimeBetweenReqeusts;
-    aTimeBetweenReqeusts = CacheConfiguration::Instance()->GetValue("TimeBetweenHighPriorityRequests");
-    if (aTimeBetweenReqeusts.has<sal_Int32>())
-        aTimeBetweenReqeusts >>= mnTimeBetweenHighPriorityRequests;
-
-    aTimeBetweenReqeusts = CacheConfiguration::Instance()->GetValue("TimeBetweenLowPriorityRequests");
-    if (aTimeBetweenReqeusts.has<sal_Int32>())
-        aTimeBetweenReqeusts >>= mnTimeBetweenLowPriorityRequests;
-
-    aTimeBetweenReqeusts = CacheConfiguration::Instance()->GetValue("TimeBetweenRequestsDuringShow");
-    if (aTimeBetweenReqeusts.has<sal_Int32>())
-        aTimeBetweenReqeusts >>= mnTimeBetweenRequestsWhenNotIdle;
-
     maTimer.SetInvokeHandler (LINK(this,QueueProcessor,ProcessRequestHdl));
     maTimer.SetTimeout (10);
 }

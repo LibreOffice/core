@@ -565,6 +565,10 @@ bool MathType::Parse(SotStorage *pStor)
 
     EQNOLEFILEHDR aHdr;
     aHdr.Read(pS);
+    sal_uInt8 nProdVersion;
+    sal_uInt8 nProdSubVersion;
+    sal_uInt8 nPlatform;
+    sal_uInt8 nProduct;
     pS->ReadUChar( nVersion );
     pS->ReadUChar( nPlatform );
     pS->ReadUChar( nProduct );
@@ -2640,6 +2644,7 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
 
 bool MathType::HandlePile(int &rSetAlign, int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariation)
 {
+    sal_uInt8 nVAlign;
     pS->ReadUChar( nHAlign );
     pS->ReadUChar( nVAlign );
 
@@ -2660,7 +2665,7 @@ bool MathType::HandlePile(int &rSetAlign, int nLevel, sal_uInt8 nSelector, sal_u
 
 bool MathType::HandleMatrix(int nLevel, sal_uInt8 nSelector, sal_uInt8 nVariation)
 {
-    sal_uInt8 nH_just,nV_just,nRows,nCols;
+    sal_uInt8 nH_just,nV_just,nRows,nCols,nVAlign;
     pS->ReadUChar( nVAlign );
     pS->ReadUChar( nH_just );
     pS->ReadUChar( nV_just );

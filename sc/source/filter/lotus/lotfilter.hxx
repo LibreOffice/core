@@ -43,8 +43,6 @@ struct LotusContext
     LOTUS_ROOT*      pLotusRoot;
     std::map<sal_uInt16, ScPatternAttr> aLotusPatternPool;
 
-    sal_uInt8        nDefaultFormat; // -> op.cpp, standard cell format
-
     SvxHorJustifyItem *pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
     ScProtectionAttr* pAttrUnprot;
 
@@ -57,7 +55,6 @@ struct LotusContext
         , pDoc(nullptr)
         , pLotusRoot(nullptr)
 
-        , nDefaultFormat(0)
         , pAttrRight(nullptr)
         , pAttrLeft(nullptr)
         , pAttrCenter(nullptr)

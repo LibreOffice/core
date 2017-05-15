@@ -93,9 +93,6 @@ private:
 
     Timer  maTimer;
     DECL_LINK(ProcessRequestHdl, Timer *, void);
-    sal_uInt32 mnTimeBetweenHighPriorityRequests;
-    sal_uInt32 mnTimeBetweenLowPriorityRequests;
-    sal_uInt32 mnTimeBetweenRequestsWhenNotIdle;
     Size maPreviewSize;
     bool mbDoSuperSampling;
     SharedCacheContext mpCacheContext;

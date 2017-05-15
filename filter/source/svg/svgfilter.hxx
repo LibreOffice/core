@@ -147,13 +147,9 @@ struct PagePropertySet
     bool               bIsDateTimeFieldVisible;
     bool               bIsFooterFieldVisible;
     bool               bIsHeaderFieldVisible;
-    sal_Int32              nPageNumberingType;
+    sal_Int32          nPageNumberingType;
     bool               bIsDateTimeFieldFixed;
-    sal_Int16              nPageNumber;
-    sal_Int32              nDateTimeFormat;
-    OUString        sDateTimeText;
-    OUString        sFooterText;
-    OUString        sHeaderText;
+    sal_Int32          nDateTimeFormat;
 };
 
 struct HashReferenceXInterface

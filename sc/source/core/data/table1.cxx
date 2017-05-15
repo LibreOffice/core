@@ -149,12 +149,10 @@ struct SetRowHeightOnlyFunc : public OptimalHeightsFuncObjBase
 struct SetRowHeightRangeFunc : public OptimalHeightsFuncObjBase
 {
     ScTable* mpTab;
-    double mnPPTX;
     double mnPPTY;
 
-    SetRowHeightRangeFunc(ScTable* pTab, double nPPTX, double nPPTY) :
+    SetRowHeightRangeFunc(ScTable* pTab, double nPPTY) :
         mpTab(pTab),
-        mnPPTX(nPPTX),
         mnPPTY(nPPTY)
     {}
 
@@ -499,7 +497,7 @@ bool ScTable::SetOptimalHeight(
     GetOptimalHeightsInColumn(rCxt, aCol, nStartRow, nEndRow, pProgress, nProgressStart);
 
     rCxt.getHeightArray().enableTreeSearch(true);
-    SetRowHeightRangeFunc aFunc(this, rCxt.getPPTX(), rCxt.getPPTY());
+    SetRowHeightRangeFunc aFunc(this, rCxt.getPPTY());
     bool bChanged = SetOptimalHeightsToRows(rCxt, aFunc, pRowFlags, nStartRow, nEndRow);
 
     if ( pProgress != pOuterProgress )

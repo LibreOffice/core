@@ -631,8 +631,6 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
                         if( aArgs[i].Value >>= sBrokenRange )
                             bBrokenRangeAvailable = true;
                     }
-                    else if ( aArgs[i].Name == "SequenceMapping" )
-                        aArgs[i].Value >>= maSequenceMapping;
                 }
 
                 // #i79009# For Writer we have to export a broken version of the

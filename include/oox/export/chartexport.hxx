@@ -105,7 +105,6 @@ private:
     // members filled by InitRangeSegmentationProperties (retrieved from DataProvider)
     bool mbHasCategoryLabels; //if the categories are only automatically generated this will be false
     OUString msChartAddress;
-    css::uno::Sequence< sal_Int32 > maSequenceMapping;
 
     //css::uno::Reference< css::drawing::XShapes > mxAdditionalShapes;
     css::uno::Reference< css::chart2::data::XDataSequence > mxCategoriesValues;

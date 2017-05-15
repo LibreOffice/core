@@ -66,17 +66,14 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "Author")
         {
-            ISSET_Author = rProp.Value >>= Author;
             addModelProp(rProp);
         }
         else if (rProp.Name == "CharacterSet")
         {
-            ISSET_CharacterSet = rProp.Value >>= CharacterSet;
             addModelProp(rProp);
         }
         else if (rProp.Name == "Comment")
         {
-            ISSET_Comment = rProp.Value >>= Comment;
             addModelProp(rProp);
         }
         else if (rProp.Name == "ComponentData")
@@ -87,7 +84,6 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "FileName")
         {
-            ISSET_FileName = rProp.Value >>= FileName;
             addDepreciatedProp(rProp);
         }
         else if (rProp.Name == "FilterData")
@@ -103,17 +99,14 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "FilterFlags")
         {
-            ISSET_FilterFlags = rProp.Value >>= FilterFlags;
             addDepreciatedProp(rProp);
         }
         else if (rProp.Name == "FilterOptions")
         {
-            ISSET_FilterOptions = rProp.Value >>= FilterOptions;
             addModelProp(rProp);
         }
         else if (rProp.Name == "FrameName")
         {
-            ISSET_FrameName = rProp.Value >>= FrameName;
             addModelProp(rProp);
         }
         else if (rProp.Name == "Hidden")
@@ -138,22 +131,18 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "InteractionHandler")
         {
-            ISSET_InteractionHandler = rProp.Value >>= InteractionHandler;
             addRegularProp(rProp);
         }
         else if (rProp.Name == "JumpMark")
         {
-            ISSET_JumpMark = rProp.Value >>= JumpMark;
             addRegularProp(rProp);
         }
         else if (rProp.Name == "MediaType")
         {
-            ISSET_MediaType = rProp.Value >>= MediaType;
             addModelProp(rProp);
         }
         else if (rProp.Name == "OpenFlags")
         {
-            ISSET_OpenFlags = rProp.Value >>= OpenFlags;
             addDepreciatedProp(rProp);
         }
         else if (rProp.Name == "OpenNewView")
@@ -168,22 +157,18 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "Password")
         {
-            ISSET_Password = rProp.Value >>= Password;
             addModelProp(rProp);
         }
         else if (rProp.Name == "PosSize")
         {
-            ISSET_PosSize = rProp.Value >>= PosSize;
             addRegularProp(rProp);
         }
         else if (rProp.Name == "PostData")
         {
-            ISSET_PostData = rProp.Value >>= PostData;
             addRegularProp(rProp);
         }
         else if (rProp.Name == "PostString")
         {
-            ISSET_PostString = rProp.Value >>= PostString;
             addDepreciatedProp(rProp);
         }
         else if (rProp.Name == "Preview")
@@ -198,7 +183,6 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "Referer")
         {
-            ISSET_Referer = rProp.Value >>= Referer;
             addModelProp(rProp);
         }
         else if (rProp.Name == "SetEmbedded")
@@ -213,7 +197,6 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "StatusIndicator")
         {
-            ISSET_StatusIndicator = rProp.Value >>= StatusIndicator;
             addRegularProp(rProp);
         }
         else if (rProp.Name == "Storage")
@@ -228,12 +211,10 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "TemplateName")
         {
-            ISSET_TemplateName = rProp.Value >>= TemplateName;
             addDepreciatedProp(rProp);
         }
         else if (rProp.Name == "TemplateRegionName")
         {
-            ISSET_TemplateRegionName = rProp.Value >>= TemplateRegionName;
             addDepreciatedProp(rProp);
         }
         else if (rProp.Name == "Unpacked")
@@ -264,7 +245,6 @@ MediaDescriptorHelper::MediaDescriptorHelper( const uno::Sequence<
         }
         else if (rProp.Name == "WinExtent")
         {
-            ISSET_WinExtent = rProp.Value >>= WinExtent;
             addDepreciatedProp(rProp);
         }
         else
@@ -285,64 +265,36 @@ void MediaDescriptorHelper::impl_init()
     AsTemplate = false;
     ISSET_AsTemplate = false;
 
-    ISSET_Author = false;
-    ISSET_CharacterSet = false;
-    ISSET_Comment = false;
-
-//  css::uno::Any  ComponentData;
     ISSET_ComponentData = false;
-    ISSET_FileName = false;
 
-//  css::uno::Any  FilterData;
     ISSET_FilterData = false;
     ISSET_FilterName = false;
-    ISSET_FilterFlags = false;
-    ISSET_FilterOptions = false;
-    ISSET_FrameName = false;
 
     Hidden = false;
     ISSET_Hidden = false;
     ISSET_HierarchicalDocumentName = false;
     ISSET_OutputStream = false;
     ISSET_InputStream = false;
-    ISSET_InteractionHandler = false;
-    ISSET_JumpMark = false;
-    ISSET_MediaType = false;
-    ISSET_OpenFlags = false;
     OpenNewView = false;
     ISSET_OpenNewView = false;
     Overwrite = false;
     ISSET_Overwrite = false;
-    ISSET_Password = false;
 
-//  css::awt::Rectangle PosSize;
-    ISSET_PosSize = false;
-
-//  css::uno::Sequence< sal_Int8 > PostData;
-    ISSET_PostData = false;
-    ISSET_PostString = false;
     Preview = false;
     ISSET_Preview = false;
     ReadOnly = false;
     ISSET_ReadOnly = false;
-    ISSET_Referer = false;
-    ISSET_StatusIndicator = false;
     Silent = false;
     ISSET_Silent = false;
-    ISSET_TemplateName = false;
-    ISSET_TemplateRegionName = false;
     Unpacked = false;
     ISSET_Unpacked = false;
     ISSET_URL = false;
     Version = 0;
     ISSET_Version = false;
 
-//  css::uno::Any ViewData;
     ISSET_ViewData = false;
     ViewId = 0;
     ISSET_ViewId = false;
-
-    ISSET_WinExtent = false;
 
     SetEmbedded = false;
     ISSET_SetEmbedded = false;

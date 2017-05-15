@@ -55,15 +55,10 @@ class MathType
 public:
     explicit MathType(OUString &rIn)
         : nVersion(0)
-        , nPlatform(0)
-        , nProduct(0)
-        , nProdVersion(0)
-        , nProdSubVersion(0)
         , pS(nullptr)
         , rRet(rIn)
         , pTree(nullptr)
         , nHAlign(0)
-        , nVAlign(0)
         , nPendingAttributes(0)
         , nInsertion(0)
         , nLSize(0)
@@ -81,15 +76,10 @@ public:
 
     MathType(OUString &rIn,SmNode *pIn)
         : nVersion(0)
-        , nPlatform(0)
-        , nProduct(0)
-        , nProdVersion(0)
-        , nProdSubVersion(0)
         , pS(nullptr)
         , rRet(rIn)
         , pTree(pIn)
         , nHAlign(2)
-        , nVAlign(0)
         , nPendingAttributes(0)
         , nInsertion(0)
         , nLSize(0)
@@ -111,10 +101,6 @@ public:
 private:
 /*Ver 2 Header*/
     sal_uInt8 nVersion;
-    sal_uInt8 nPlatform;
-    sal_uInt8 nProduct;
-    sal_uInt8 nProdVersion;
-    sal_uInt8 nProdSubVersion;
 
     SotStorageStream *pS;
 
@@ -164,7 +150,6 @@ private:
     SmNode *pTree;
 
     sal_uInt8 nHAlign;
-    sal_uInt8 nVAlign;
 
     int nPendingAttributes;
     sal_uLong nInsertion;

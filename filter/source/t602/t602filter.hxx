@@ -126,12 +126,10 @@ class T602ImportFilter : public cppu::WeakImplHelper <
 >
 {
 private:
-//    css::uno::Reference<css::io::XInputStream> xInputStream;
     css::uno::Reference<css::xml::sax::XDocumentHandler> mxHandler;
     css::uno::Reference< css::lang::XMultiServiceFactory > mxMSF;
     css::uno::Reference< css::lang::XComponent >         mxDoc;
     css::uno::Reference < css::io::XInputStream >        mxInputStream;
-    OUString msFilterName;
 
     SvXMLAttributeList *mpAttrList;
 

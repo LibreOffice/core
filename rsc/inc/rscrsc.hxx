@@ -40,7 +40,6 @@ public:
     RSCBYTEORDER_TYPE   nByteOrder;
     CommandFlags   nCommands;      // command bits
     OString        aOutputSrs;     // Srs output file name
-    OString        aILDir;
 
     struct OutputFile
     {

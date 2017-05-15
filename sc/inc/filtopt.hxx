@@ -29,8 +29,6 @@ class SC_DLLPUBLIC ScFilterOptions : public utl::ConfigItem
 {
 private:
     bool        bWK3Flag;
-    double      fExcelColScale;
-    double      fExcelRowScale;
 
     virtual void    ImplCommit() override;
 

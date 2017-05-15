@@ -100,7 +100,6 @@ void ImpAddGraphicEntity( const Reference< XComponentContext >& rxMSF, Reference
         aUser.mxShape = rxShape;
         aUser.mbFillBitmap = false;
         xShapePropertySet->getPropertyValue( "GraphicURL" ) >>= aUser.maGraphicURL;
-        xShapePropertySet->getPropertyValue( "GraphicStreamURL" ) >>= aUser.maGraphicStreamURL;
         xShapePropertySet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropLogic;
         awt::Size aLogicalSize( rxShape->getSize() );
 

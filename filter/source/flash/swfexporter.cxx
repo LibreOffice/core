@@ -577,22 +577,6 @@ void FlashExporter::exportShape( const Reference< XShape >& xShape, bool bMaster
             pShapeInfo->mnWidth = aBoundRect.Width;
             pShapeInfo->mnHeight = aBoundRect.Height;
 
-            if( mbPresentation )
-            {
-                xPropSet->getPropertyValue( "Bookmark" ) >>= pShapeInfo->maBookmark;
-                xPropSet->getPropertyValue( "DimColor" ) >>= pShapeInfo->mnDimColor;
-                xPropSet->getPropertyValue( "DimHide" ) >>= pShapeInfo->mbDimHide;
-                xPropSet->getPropertyValue( "DimPrevious" ) >>= pShapeInfo->mbDimPrev;
-                xPropSet->getPropertyValue( "Effect" ) >>= pShapeInfo->meEffect;
-                xPropSet->getPropertyValue( "PlayFull" ) >>= pShapeInfo->mbPlayFull;
-                xPropSet->getPropertyValue( "PresentationOrder" ) >>= pShapeInfo->mnPresOrder;
-                xPropSet->getPropertyValue( "Sound" ) >>= pShapeInfo->maSoundURL;
-                xPropSet->getPropertyValue( "SoundOn" ) >>= pShapeInfo->mbSoundOn;
-                xPropSet->getPropertyValue( "Speed" )  >>= pShapeInfo->meEffectSpeed;
-                xPropSet->getPropertyValue( "TextEffect" )  >>= pShapeInfo->meTextEffect;
-                xPropSet->getPropertyValue( "TransparentColor" )  >>= pShapeInfo->mnBlueScreenColor;
-            }
-
             GDIMetaFile     aMtf;
             Reference< XComponent > xComponent( xShape, UNO_QUERY );
 

@@ -29,15 +29,11 @@ using namespace css::uno;
 
 #define CFGPATH_FILTER          "Office.Calc/Filter/Import"
 
-#define SCFILTOPT_COLSCALE      0
-#define SCFILTOPT_ROWSCALE      1
 #define SCFILTOPT_WK3           2
 
 ScFilterOptions::ScFilterOptions() :
     ConfigItem( CFGPATH_FILTER ),
-    bWK3Flag( false ),
-    fExcelColScale( 0 ),
-    fExcelRowScale( 0 )
+    bWK3Flag( false )
 {
     Sequence<OUString> aNames { "MS_Excel/ColScale",  // SCFILTOPT_COLSCALE
                                 "MS_Excel/RowScale",  // SCFILTOPT_ROWSCALE
@@ -54,12 +50,6 @@ ScFilterOptions::ScFilterOptions() :
             {
                 switch(nProp)
                 {
-                    case SCFILTOPT_COLSCALE:
-                        pValues[nProp] >>= fExcelColScale;
-                        break;
-                    case SCFILTOPT_ROWSCALE:
-                        pValues[nProp] >>= fExcelRowScale;
-                        break;
                     case SCFILTOPT_WK3:
                         bWK3Flag = ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] );
                         break;

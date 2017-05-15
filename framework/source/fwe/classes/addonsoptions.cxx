@@ -970,7 +970,7 @@ void AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructi
             aNodePropValues[0] >>= aMergeStatusbarInstruction.aMergePoint;
             aNodePropValues[1] >>= aMergeStatusbarInstruction.aMergeCommand;
             aNodePropValues[2] >>= aMergeStatusbarInstruction.aMergeCommandParameter;
-            aNodePropValues[3] >>= aMergeStatusbarInstruction.aMergeFallback;
+            // aNodePropValues[3] >>= aMergeStatusbarInstruction.aMergeFallback;
             aNodePropValues[4] >>= aMergeStatusbarInstruction.aMergeContext;
 
             ReadMergeStatusbarData( aMergeAddonInstructionBase.makeStringAndClear(),

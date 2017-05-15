@@ -45,7 +45,6 @@ private:
     sal_Int32           mnPDFTypeSelection;
     bool                mbExportNotes;
     bool                mbExportPlaceholders;
-    bool                mbViewPDF;
     bool                mbUseReferenceXObject;
     bool                mbExportNotesPages;
     bool                mbExportOnlyNotesPages;

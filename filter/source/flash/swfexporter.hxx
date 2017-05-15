@@ -64,36 +64,8 @@ public:
     sal_Int32       mnWidth;
     sal_Int32       mnHeight;
 
-    css::presentation::AnimationEffect meEffect;
-    css::presentation::AnimationEffect meTextEffect;
-    css::presentation::AnimationSpeed  meEffectSpeed;
-
-    sal_Int32       mnPresOrder;
-
-    OUString        maBookmark;
-
-    sal_Int32       mnDimColor;
-    bool            mbDimHide;
-    bool            mbDimPrev;
-
-    bool            mbSoundOn;
-    bool            mbPlayFull;
-    OUString        maSoundURL;
-
-    sal_Int32       mnBlueScreenColor;
-
     ShapeInfo() :
-        mnID(0), mnX(0), mnY(0), mnWidth(0), mnHeight(0),
-        meEffect( css::presentation::AnimationEffect_NONE ),
-        meTextEffect( css::presentation::AnimationEffect_NONE ),
-        meEffectSpeed( css::presentation::AnimationSpeed_MEDIUM ),
-        mnPresOrder( 0 ),
-        mnDimColor( 0 ),
-        mbDimHide( false ),
-        mbDimPrev( false ),
-        mbSoundOn( false ),
-        mbPlayFull( false ),
-        mnBlueScreenColor( 0 ) {}
+        mnID(0), mnX(0), mnY(0), mnWidth(0), mnHeight(0) {}
 };
 
 
