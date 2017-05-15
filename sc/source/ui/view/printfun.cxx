@@ -408,7 +408,7 @@ static void lcl_HidePrint( ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
 //      -   Ole-Object (DocShell::Draw)
 //      -   Preview of templates
 
-void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPrintFactor */,
+void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev,
                             const tools::Rectangle& rBound, ScViewData* pViewData, bool bMetaFile )
 {
     //! evaluate nPrintFactor !!!

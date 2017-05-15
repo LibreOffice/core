@@ -1365,7 +1365,7 @@ void XclMacroHelper::WriteMacroSubRec( XclExpStream& rStrm )
 bool
 XclMacroHelper::SetMacroLink( const ScriptEventDescriptor& rEvent, const XclTbxEventType& nEventType )
 {
-    OUString aMacroName = XclControlHelper::ExtractFromMacroDescriptor( rEvent, nEventType, GetDocShell() );
+    OUString aMacroName = XclControlHelper::ExtractFromMacroDescriptor( rEvent, nEventType );
     if( !aMacroName.isEmpty() )
     {
         return SetMacroLink( aMacroName );

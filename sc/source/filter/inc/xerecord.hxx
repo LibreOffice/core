@@ -341,11 +341,8 @@ public:
             (*aIt)->Save( rStrm );
     }
 
-    virtual void SaveXml( XclExpXmlStream& rStrm ) override
+    virtual void SaveXml( XclExpXmlStream& /*rStrm*/ ) override
     {
-        // inlining prevents warning in wntmsci10
-        for( typename RecordVec::iterator aIt = maRecs.begin(), aEnd = maRecs.end(); aIt != aEnd; ++aIt )
-            (*aIt)->SaveXml( rStrm );
     }
 
 private:

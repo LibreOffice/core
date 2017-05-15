@@ -33,10 +33,10 @@ public:
 
     /** Creates a range list from the passed Excel token array. */
     void                CreateRangeList(
-                            ScRangeList& rScRanges, XclFormulaType eType,
-                            const XclTokenArray& rXclTokArr, XclImpStream& rStrm );
+                            ScRangeList& rScRanges,
+                            const XclTokenArray& rXclTokArr );
 
-    const ScTokenArray* CreateFormula( XclFormulaType eType, const XclTokenArray& rXclTokArr );
+    const ScTokenArray* CreateFormula( const XclTokenArray& rXclTokArr );
 
 };
 
@@ -46,8 +46,8 @@ XclImpFmlaCompImpl::XclImpFmlaCompImpl( const XclImpRoot& rRoot ) :
 }
 
 void XclImpFmlaCompImpl::CreateRangeList(
-        ScRangeList& rScRanges, XclFormulaType /*eType*/,
-        const XclTokenArray& rXclTokArr, XclImpStream& /*rStrm*/ )
+        ScRangeList& rScRanges,
+        const XclTokenArray& rXclTokArr )
 {
     rScRanges.RemoveAll();
 
@@ -63,8 +63,7 @@ void XclImpFmlaCompImpl::CreateRangeList(
     }
 }
 
-const ScTokenArray* XclImpFmlaCompImpl::CreateFormula(
-        XclFormulaType /*eType*/, const XclTokenArray& rXclTokArr )
+const ScTokenArray* XclImpFmlaCompImpl::CreateFormula( const XclTokenArray& rXclTokArr )
 {
     if (rXclTokArr.Empty())
         return nullptr;
@@ -92,16 +91,15 @@ XclImpFormulaCompiler::~XclImpFormulaCompiler()
 }
 
 void XclImpFormulaCompiler::CreateRangeList(
-        ScRangeList& rScRanges, XclFormulaType eType,
-        const XclTokenArray& rXclTokArr, XclImpStream& rStrm )
+        ScRangeList& rScRanges,
+        const XclTokenArray& rXclTokArr )
 {
-    mxImpl->CreateRangeList( rScRanges, eType, rXclTokArr, rStrm );
+    mxImpl->CreateRangeList( rScRanges, rXclTokArr );
 }
 
-const ScTokenArray* XclImpFormulaCompiler::CreateFormula(
-        XclFormulaType eType, const XclTokenArray& rXclTokArr )
+const ScTokenArray* XclImpFormulaCompiler::CreateFormula( const XclTokenArray& rXclTokArr )
 {
-    return mxImpl->CreateFormula(eType, rXclTokArr);
+    return mxImpl->CreateFormula(rXclTokArr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

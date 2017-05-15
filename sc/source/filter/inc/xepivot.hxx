@@ -183,7 +183,6 @@ public:
 
     /** Writes related records into Workbook stream and creates the pivot cache storage stream. */
     void        Save( XclExpStream& rStrm );
-    static void SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Adds all pivot cache fields. */
@@ -321,7 +320,7 @@ class XclExpPivotTable : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     explicit            XclExpPivotTable( const XclExpRoot& rRoot,
-                            const ScDPObject& rDPObj, const XclExpPivotCache& rPCache, size_t nId );
+                            const ScDPObject& rDPObj, const XclExpPivotCache& rPCache );
 
     /** Returns a pivot cache field. */
     const XclExpPCField* GetCacheField( sal_uInt16 nCacheIdx ) const;

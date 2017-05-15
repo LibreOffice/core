@@ -95,7 +95,7 @@ void ScTransferObj::GetAreaSize( ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCR
     nCol = nMaxCol;
 }
 
-void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPrintFactor,
+void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double /*nPrintFactor*/,
                                 const ScRange& rBlock )
 {
     if (!pDoc)
@@ -111,7 +111,7 @@ void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPr
     aViewData.SetScreen( rBlock.aStart.Col(), rBlock.aStart.Row(),
                             rBlock.aEnd.Col(), rBlock.aEnd.Row() );
 
-    ScPrintFunc::DrawToDev( pDoc, pDev, nPrintFactor, aBound, &aViewData, false/*bMetaFile*/ );
+    ScPrintFunc::DrawToDev( pDoc, pDev, aBound, &aViewData, false/*bMetaFile*/ );
 }
 
 ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDescriptor& rDesc ) :
