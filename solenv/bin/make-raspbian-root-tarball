@@ -61,7 +61,7 @@ rm $FILELIST
 
 cd $STAGINGDIR
 # Change absolute symlinks to relative
-find . -type l | xargs ls -ld | grep -- '-> /' | 
+find . -type l -print0 | xargs -0 ls -ld | grep -- '-> /' | 
     while read mode links user group size month day yearortime link arrow target; do
 	target=`echo "$target" | sed -e 's,/,..;,'`
 	while test `expr index $target /` -gt 0; do
