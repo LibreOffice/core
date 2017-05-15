@@ -214,7 +214,7 @@ void FormulaLogger::GroupScope::addRefMessage(
     mpImpl->maMessages.push_back(aBuf.makeStringAndClear());
 }
 
-void FormulaLogger::GroupScope::addGroupSizeThreasholdMessage( const ScFormulaCell& rCell )
+void FormulaLogger::GroupScope::addGroupSizeThresholdMessage( const ScFormulaCell& rCell )
 {
     OUStringBuffer aBuf;
     aBuf.append("group length below minimum threshold (");

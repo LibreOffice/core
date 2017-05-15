@@ -4088,7 +4088,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
     if (GetWeight() < ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize)
     {
         mxGroup->meCalcState = sc::GroupCalcDisabled;
-        aScope.addGroupSizeThreasholdMessage(*this);
+        aScope.addGroupSizeThresholdMessage(*this);
         return false;
     }
 
