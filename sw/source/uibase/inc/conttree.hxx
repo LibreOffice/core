@@ -259,20 +259,20 @@ namespace sfx2 { class FileDialogHelper; }
 class SwGlobalTree : public SvTreeListBox
 {
 private:
-    VclPtr<SwNavigationPI>  xDialog;
-    AutoTimer               aUpdateTimer;
-    OUString                aContextStrings[GLOBAL_CONTEXT_COUNT];
+    VclPtr<SwNavigationPI>  m_xDialog;
+    AutoTimer               m_aUpdateTimer;
+    OUString                m_aContextStrings[GLOBAL_CONTEXT_COUNT];
 
-    SwWrtShell*             pActiveShell;
-    SvTreeListEntry*        pEmphasisEntry; // Drag'n Drop emphasis
-    SvTreeListEntry*        pDDSource;      // source for Drag'n Drop
-    SwGlblDocContents*      pSwGlblDocContents; // array with sorted content
+    SwWrtShell*             m_pActiveShell;
+    SvTreeListEntry*        m_pEmphasisEntry; // Drag'n Drop emphasis
+    SvTreeListEntry*        m_pDDSource;      // source for Drag'n Drop
+    SwGlblDocContents*      m_pSwGlblDocContents; // array with sorted content
 
-    SwGlblDocContent*       pDocContent;
-    sfx2::DocumentInserter* pDocInserter;
+    SwGlblDocContent*       m_pDocContent;
+    sfx2::DocumentInserter* m_pDocInserter;
 
-    bool                bIsInternalDrag     :1;
-    bool                bLastEntryEmphasis  :1; // Drag'n Drop
+    bool                m_bIsInternalDrag     :1;
+    bool                m_bLastEntryEmphasis  :1; // Drag'n Drop
 
     static const SfxObjectShell* pShowShell;
 
