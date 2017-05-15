@@ -1211,7 +1211,7 @@ void Test::testSharedFormulasRefUpdateDeleteSheets()
 
     // Delete Sheet2.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
-    rFunc.DeleteTable(1, true, true);
+    rFunc.DeleteTable(1, true);
 
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,0,0), "#REF!.B2", "Wrong formula");
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,1,0), "#REF!.B3", "Wrong formula");

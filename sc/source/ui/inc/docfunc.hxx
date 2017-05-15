@@ -134,27 +134,27 @@ public:
 
     SC_DLLPUBLIC bool InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi );
     bool            RenameTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi );
-    bool            DeleteTable( SCTAB nTab, bool bRecord, bool bApi );
+    bool            DeleteTable( SCTAB nTab, bool bRecord );
 
     bool            SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bool bApi );
     bool            SetTabBgColor( ScUndoTabColorInfo::List& rUndoTabColorList, bool bApi );
 
     void            SetTableVisible( SCTAB nTab, bool bVisible, bool bApi );
 
-    bool            SetLayoutRTL( SCTAB nTab, bool bRTL, bool bApi );
+    bool            SetLayoutRTL( SCTAB nTab, bool bRTL );
 
     SC_DLLPUBLIC bool SetWidthOrHeight(
         bool bWidth, const std::vector<sc::ColRowSpan>& rRanges, SCTAB nTab,
         ScSizeMode eMode, sal_uInt16 nSizeTwips, bool bRecord, bool bApi );
 
     bool            InsertPageBreak( bool bColumn, const ScAddress& rPos,
-                                             bool bRecord, bool bSetModified, bool bApi );
+                                             bool bRecord, bool bSetModified );
     bool            RemovePageBreak( bool bColumn, const ScAddress& rPos,
-                                             bool bRecord, bool bSetModified, bool bApi );
+                                             bool bRecord, bool bSetModified );
 
     void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
 
-    bool            Protect( SCTAB nTab, const OUString& rPassword, bool bApi );
+    bool            Protect( SCTAB nTab, const OUString& rPassword );
     bool            Unprotect( SCTAB nTab, const OUString& rPassword, bool bApi );
 
     void            ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, bool bApi );
