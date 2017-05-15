@@ -1104,3 +1104,4 @@ CONDITIONAL_REGISTER_DOC_EXTENSION( PCD,  gid_Module_Prg_Draw_Other_Reg, pcd,  P
 
 // registering ms-visio URI scheme handler
 CONDITIONAL_REGISTER_URI_HANDLER( ms-visio, ms_visio, gid_Module_Prg_Draw_MSO_Reg, SELECT_VISIO )
+REGISTRY_ENTRY_CAPABILITIES_URL(ms-visio, ms_visio, gid_Module_Prg_Draw_MSO_Reg, vnd.libreoffice.command)

@@ -1126,3 +1126,4 @@ CONDITIONAL_REGISTER_DOC_EXTENSION( Cgm, gid_Module_Prg_Impress_Other_Reg, cgm, 
 
 // registering ms-powerpoint URI scheme handler
 CONDITIONAL_REGISTER_URI_HANDLER( ms-powerpoint, ms_powerpoint, gid_Module_Prg_Impress_MSO_Reg, SELECT_POWERPOINT )
+REGISTRY_ENTRY_CAPABILITIES_URL(ms-powerpoint, ms_powerpoint, gid_Module_Prg_Impress_MSO_Reg, vnd.libreoffice.command)
