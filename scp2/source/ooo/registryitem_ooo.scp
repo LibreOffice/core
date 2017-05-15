@@ -679,3 +679,4 @@ End
 
 // registering vnd.libreoffice.command URI scheme handler
 REGISTER_URI_HANDLER( vnd.libreoffice.command, vnd_libreoffice_command, gid_Module_Root )
+REGISTRY_ENTRY_CAPABILITIES_URL(vnd.libreoffice.command, vnd_libreoffice_command, gid_Module_Root, vnd.libreoffice.command)

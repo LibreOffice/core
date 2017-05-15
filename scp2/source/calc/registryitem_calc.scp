@@ -1263,3 +1263,4 @@ CONDITIONAL_REGISTER_DOC_EXTENSION( Wb2, gid_Module_Prg_Calc_Other_Reg, wb2, WB2
 
 // registering ms-excel URI scheme handler
 CONDITIONAL_REGISTER_URI_HANDLER( ms-excel, ms_excel, gid_Module_Prg_Calc_MSO_Reg, SELECT_EXCEL )
+REGISTRY_ENTRY_CAPABILITIES_URL(ms-excel, ms_excel, gid_Module_Prg_Calc_MSO_Reg, vnd.libreoffice.command)
