@@ -245,7 +245,7 @@
       <prop oor:name="BackgroundCache" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: Draw/Other -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- UIHints: Tools - Options - Drawing  Other  [Section] Other -->
+        <!-- UIHints: Tools - Options - Draw - Other  [Section] Other -->
         <info>
           <desc>Indicates whether to store master pages in a cache to speed up drawing.</desc>
           <label>Use background cache</label>
@@ -255,7 +255,7 @@
       <prop oor:name="CopyWhileMoving" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: Draw/Other -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- UIHints: Tools - Options - Drawing  Other  [Section] Other -->
+        <!-- UIHints: Tools - Options - Draw - Other  [Section] Other -->
         <info>
           <desc>Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
           <label>Copy while moving</label>
@@ -265,7 +265,7 @@
       <prop oor:name="ObjectMoveable" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: Draw/Other -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- UIHints: Tools - Options - Drawing  Other  [Section] Other -->
+        <!-- UIHints: Tools - Options - Draw - Other  [Section] Other -->
         <info>
           <desc>Indicates whether objects can still be moved while in rotating mode.</desc>
           <label>Objects always moveable</label>
@@ -275,7 +275,7 @@
       <prop oor:name="NoDistort" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: Draw/Other -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- UIHints: Tools - Options - Drawing  Other  [Section] Other -->
+        <!-- UIHints: Tools - Options - Draw - Other  [Section] Other -->
         <info>
           <desc>Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
           <label>Don't distort objects in curve</label>
@@ -353,7 +353,7 @@
         <prop oor:name="QuickEditing" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Other/Text_Objects -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Other  [Section] Text objects -->
+          <!-- UIHints: Tools - Options - Draw - Other  [Section] Text objects -->
           <info>
             <desc>Indicates whether a simple click on a text object changes it to edit mode.</desc>
             <label>Allow quick editing</label>
@@ -363,7 +363,7 @@
         <prop oor:name="Selectable" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Other/Text_Objects -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Other  [Section] Text objects -->
+          <!-- UIHints: Tools - Options - Draw - Other  [Section] Text objects -->
           <info>
             <desc>Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
             <label>Only text area selectable</label>
@@ -467,7 +467,7 @@
         <prop oor:name="Grid" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Snap to -->
           <info>
             <desc>Indicates whether to snap an object when moved to the next grid point.</desc>
             <label>Grid lines</label>
@@ -477,7 +477,7 @@
         <prop oor:name="SnapLine" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Snap to -->
           <info>
             <desc>Indicates whether to snap at snap lines.</desc>
             <label>Snap lines</label>
@@ -487,7 +487,7 @@
         <prop oor:name="PageMargin" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Snap to -->
           <info>
             <desc>Indicates whether the outline of an object is justified with adjacent page margins.</desc>
             <label>Page margins</label>
@@ -497,7 +497,7 @@
         <prop oor:name="ObjectFrame" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Snap to -->
           <info>
             <desc>Indicates whether to justify the outline of an object to that of an adjacent object.</desc>
             <label>Object frame</label>
@@ -507,7 +507,7 @@
         <prop oor:name="ObjectPoint" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Snap to -->
           <info>
             <desc>Indicates whether to snap corner points of adjacent objects.</desc>
             <label>Object points</label>
@@ -517,7 +517,7 @@
         <prop oor:name="Range" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Draw/Snap/Objects -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap to -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Snap to -->
           <info>
             <desc>Specifies the maximal range in pixel along the coordinate axes at which snapping becomes active.</desc>
             <label>Snap range</label>
@@ -544,7 +544,7 @@
         <prop oor:name="CreatingMoving" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Snap/Position -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Constrain Objects -->
           <info>
             <desc>Indicates whether to restrict the creation of objects to squares, circles, etc. and to retain the x/y ratio when resizing.</desc>
             <label>When creating or moving objects</label>
@@ -554,7 +554,7 @@
         <prop oor:name="ExtendEdges" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Snap/Position -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Constrain Objects -->
           <info>
             <desc>Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square's edge length or a new circle's diameter.</desc>
             <label>Extend edges</label>
@@ -564,9 +564,9 @@
         <prop oor:name="Rotating" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Snap/Position -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Constrain Objects -->
           <info>
-            <desc>Indicates whether to use snapping while rotating an object.</desc>
+            <desc>Indicates whether to use steps while rotating an object.</desc>
             <label>When rotating</label>
           </info>
           <value>false</value>
@@ -574,9 +574,9 @@
         <prop oor:name="RotatingValue" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Draw/Snap/Position -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Constrain Objects -->
           <info>
-            <desc>Specifies the rotation angle as a multiple of this input value when snapping for rotation is enabled. [UNIT=Degree/100]</desc>
+            <desc>Specifies the rotation angle as a multiple of this input value when constrained rotation is enabled. [UNIT=Degree/100]</desc>
             <label>When rotating</label>
           </info>
           <constraints>
@@ -596,7 +596,7 @@
         <prop oor:name="PointReduction" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Draw/Snap/Position -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Snap to Grid - [Section] Snap position -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Constrain Objects -->
           <info>
             <desc>Specifies the maximum angle that you can move a line before it snaps into place in the point editor that connects two points [UNIT=Degree/100].</desc>
             <label>Point reduction</label>
@@ -624,7 +624,7 @@
       <prop oor:name="ScaleX" oor:type="xs:int" oor:nillable="false">
         <!-- OldPath: Draw/Zoom -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- UIHints: Tools - Options - Drawing  Zoom - [Section] Scale -->
+        <!-- UIHints: Tools - Options - Draw - Zoom - [Section] Scale -->
         <info>
           <desc>Specifies zoom factor along the horizontal axis.</desc>
           <label>Scale</label>
@@ -634,7 +634,7 @@
       <prop oor:name="ScaleY" oor:type="xs:int" oor:nillable="false">
         <!-- OldPath: Draw/Zoom -->
         <!-- OldLocation: Soffice.cfg -->
-        <!-- UIHints: Tools - Options - Drawing  Zoom - [Section] Scale -->
+        <!-- UIHints: Tools - Options - Draw - Zoom - [Section] Scale -->
         <info>
           <desc>Specifies zoom factor along the vertical axis.</desc>
           <label>Scale</label>
@@ -653,7 +653,7 @@
         <prop oor:name="SnapToGrid" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Grid/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Options -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Options -->
           <info>
             <desc>Indicates whether to force frames and drawing elements on grid points.</desc>
             <label>Snap to grid</label>
@@ -663,7 +663,7 @@
         <prop oor:name="VisibleGrid" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Grid/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Options -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Options -->
           <info>
             <desc>Indicates whether to show the grid.</desc>
             <label>Visible grid</label>
@@ -673,7 +673,7 @@
         <prop oor:name="Synchronize" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Grid/Options -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Options -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Options -->
           <info>
             <desc>Indicates whether to synchronize the resolutions of x- and y-grids.</desc>
             <label>Synchronize axes</label>
@@ -688,7 +688,7 @@
         <group oor:name="XAxis">
           <!-- OldPath: Draw/Grid/Resolution -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Grid -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Grid -->
           <!-- Notice: Default-nonmetrical value: 1270 1/100 mm. -->
           <info>
             <desc>Defines the horizontal distance between adjacent grid points.</desc>
@@ -712,7 +712,7 @@
         <group oor:name="YAxis">
           <!-- OldPath: Draw/Grid/Resolution -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Grid -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Grid -->
           <!-- Notice: Default- nonmetrical value: 1270 1/100 mm. -->
           <info>
             <desc>Defines the vertical distance between adjacent grid points.</desc>
@@ -741,7 +741,7 @@
         <prop oor:name="XAxis" oor:type="xs:double" oor:nillable="false">
           <!-- OldPath: Draw/Grid/Subdivision -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Grid -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Grid -->
           <!-- Notice: Default value for English Version only: 254 Points) -->
           <info>
             <desc>Specifies the number of points between two grid points on the X axis.</desc>
@@ -752,7 +752,7 @@
         <prop oor:name="YAxis" oor:type="xs:double" oor:nillable="false">
           <!-- OldPath: Draw/Grid/Subdivision -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Grid -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Grid -->
           <!-- Notice: Default value for English Version only: 254 Points) -->
           <info>
             <desc>Specifies the number of points between two grid points on the Y axis.</desc>
@@ -768,7 +768,7 @@
         <prop oor:name="Size" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Grid/Snap_Grid -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Snap grid -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Snap grid -->
           <info>
             <desc>Indicates whether to synchronize grid and snap-grid.</desc>
             <label>Size to grid</label>
@@ -778,7 +778,7 @@
         <group oor:name="XAxis">
           <!-- OldPath: Draw/Grid/Snap_Grid -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Snap grid -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Snap grid -->
           <!-- Notice: Default-nonmetrical value: 1270 1/100 mm. -->
           <info>
             <desc>Defines the horizontal distance between adjacent points of the snap grid.</desc>
@@ -802,7 +802,7 @@
         <group oor:name="YAxis">
           <!-- OldPath: Draw/Grid/Snap_Grid -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Grid - [Section] Snap grid -->
+          <!-- UIHints: Tools - Options - Draw - Grid - [Section] Snap grid -->
           <!-- Notice: Default-Default-nonmetrical value: 1270 1/100 mm. -->
           <info>
             <desc>Defines the vertical distance between adjacent points of the snap grid.</desc>
@@ -836,7 +836,7 @@
         <prop oor:name="Drawing" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Print - [Section] Contents -->
+          <!-- UIHints: Tools - Options - Draw - Print - [Section] Contents -->
           <info>
             <desc>Indicates whether the drawing page (in contrast to master page) will be printed.</desc>
             <label>Drawing</label>
@@ -851,7 +851,7 @@
         <prop oor:name="PageSize" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Print/Page -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options  Drawing  Print - [Section] Page options -->
+          <!-- UIHints: Tools - Options  Draw - Print - [Section] Page options -->
           <info>
             <desc>Indicates whether to enlarge or shrink a document's page size while printing to fit the physical paper size.</desc>
             <label>Fit to page</label>
@@ -861,7 +861,7 @@
         <prop oor:name="PageTile" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Print/Page -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options  Drawing  Print - [Section] Page options -->
+          <!-- UIHints: Tools - Options  Draw - Print - [Section] Page options -->
           <info>
             <desc>Indicates whether to print the pages' titles at the top of every page.</desc>
             <label>Tile pages</label>
@@ -871,7 +871,7 @@
         <prop oor:name="Booklet" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Print/Page -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options  Drawing  Print - [Section] Page options -->
+          <!-- UIHints: Tools - Options  Draw - Print - [Section] Page options -->
           <info>
             <desc>Indicates whether to print a document in the form of a brochure.</desc>
             <label>Brochure</label>
@@ -881,7 +881,7 @@
         <prop oor:name="BookletFront" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Print/Page -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options  Drawing  Print - [Section] Page options -->
+          <!-- UIHints: Tools - Options  Draw - Print - [Section] Page options -->
           <info>
             <desc>Indicates whether to print the front side pages of a brochure.</desc>
             <label>Front side</label>
@@ -891,7 +891,7 @@
         <prop oor:name="BookletBack" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Print/Page -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options  Drawing  Print - [Section] Page options -->
+          <!-- UIHints: Tools - Options  Draw - Print - [Section] Page options -->
           <info>
             <desc>Indicates whether to print the back side pages of a brochure.</desc>
             <label>Back side</label>
@@ -906,7 +906,7 @@
         <prop oor:name="PageName" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Print - [Section] Print -->
+          <!-- UIHints: Tools - Options - Draw - Print - [Section] Print -->
           <info>
             <desc>Indicates whether to print page names.</desc>
             <label>Page name</label>
@@ -916,7 +916,7 @@
         <prop oor:name="Date" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Print - [Section] Print -->
+          <!-- UIHints: Tools - Options - Draw - Print - [Section] Print -->
           <info>
             <desc>Indicates whether to print the current date at the top of every page.</desc>
             <label>Date</label>
@@ -926,7 +926,7 @@
         <prop oor:name="Time" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Print - [Section] Print -->
+          <!-- UIHints: Tools - Options - Draw - Print - [Section] Print -->
           <info>
             <desc>Indicates whether to print the current time at the top of every page.</desc>
             <label>Time</label>
@@ -936,7 +936,7 @@
         <prop oor:name="HiddenPage" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Print - [Section] Print -->
+          <!-- UIHints: Tools - Options - Draw - Print - [Section] Print -->
           <info>
             <desc>Indicates whether to print hidden pages.</desc>
             <label>Hidden pages</label>
@@ -946,7 +946,7 @@
         <prop oor:name="Quality" oor:type="xs:int" oor:nillable="false">
           <!-- OldPath: Draw/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Print - [Section] Quality -->
+          <!-- UIHints: Tools - Options - Draw - Print - [Section] Quality -->
           <info>
             <desc>Specifies the quality of the printed colors.</desc>
           </info>
@@ -972,7 +972,7 @@
         <prop oor:name="FromPrinterSetup" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Draw/Print -->
           <!-- OldLocation: Soffice.cfg -->
-          <!-- UIHints: Tools - Options - Drawing  Print  [Check box] From printer setup -->
+          <!-- UIHints: Tools - Options - Draw - Print  [Check box] From printer setup -->
           <info>
             <desc>Indicates whether to use the system settings of the printer to choose the paper tray.</desc>
             <label>From printer setup</label>
