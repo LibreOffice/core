@@ -134,8 +134,7 @@ inline OUString Thesaurus::getImplementationName_Static() throw()
 }
 
 void * SAL_CALL Thesaurus_getFactory(
-    char const * pImplName, css::lang::XMultiServiceFactory * pServiceManager,
-    void *);
+    char const * pImplName, css::lang::XMultiServiceFactory * pServiceManager);
 
 #endif
 

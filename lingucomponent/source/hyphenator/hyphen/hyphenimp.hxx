@@ -131,8 +131,7 @@ inline OUString Hyphenator::getImplementationName_Static() throw()
 }
 
 void * SAL_CALL Hyphenator_getFactory(
-    char const * pImplName, css::lang::XMultiServiceFactory * pServiceManager,
-    void *);
+    char const * pImplName, css::lang::XMultiServiceFactory * pServiceManager);
 
 #endif
 

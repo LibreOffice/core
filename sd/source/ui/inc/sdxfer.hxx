@@ -69,7 +69,7 @@ public:
     const std::vector<OUString>&    GetPageBookmarks() const { return maPageBookmarks; }
     ::sd::DrawDocShell*             GetPageDocShell() const { return mpPageDocShell; }
 
-    bool                            SetTableRTF( SdDrawDocument*, const css::datatransfer::DataFlavor& );
+    bool                            SetTableRTF( SdDrawDocument* );
 
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
     static SdTransferable*          getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) throw();

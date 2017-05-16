@@ -193,7 +193,7 @@ bool TheExtensionManager::isVisible()
 }
 
 
-void TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bParentVisible*/ )
+void TheExtensionManager::checkUpdates()
 {
     std::vector< uno::Reference< deployment::XPackage >  > vEntries;
     uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;

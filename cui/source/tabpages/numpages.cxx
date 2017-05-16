@@ -1649,7 +1649,7 @@ void SvxNumOptionsTabPage::InitControls()
 }
 
 // 0 - Number; 1 - Bullet; 2 - Bitmap
-void SvxNumOptionsTabPage::SwitchNumberType( sal_uInt8 nType, bool )
+void SvxNumOptionsTabPage::SwitchNumberType( sal_uInt8 nType )
 {
     if(nBullet == nType)
         return;
@@ -1797,7 +1797,7 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox&, rBox, void 
                 if(!bBmp)
                     aNumFmt.SetGraphic("");
                 pActNum->SetLevel(i, aNumFmt);
-                SwitchNumberType(SHOW_BITMAP, bBmp );
+                SwitchNumberType(SHOW_BITMAP);
                 bShowOrient = true;
             }
             else if( SVX_NUM_CHAR_SPECIAL == nNumberingType )

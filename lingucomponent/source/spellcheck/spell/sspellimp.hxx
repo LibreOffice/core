@@ -119,8 +119,7 @@ inline OUString SpellChecker::getImplementationName_Static() throw()
 }
 
 void * SAL_CALL SpellChecker_getFactory(
-    char const * pImplName, css::lang::XMultiServiceFactory * pServiceManager,
-    void *);
+    char const * pImplName, css::lang::XMultiServiceFactory * pServiceManager);
 
 #endif
 

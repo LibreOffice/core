@@ -271,7 +271,7 @@ namespace oglcanvas
         };
     }
 
-    bool SpriteDeviceHelper::showBuffer( bool bIsVisible, bool /*bUpdateAll*/ )
+    bool SpriteDeviceHelper::showBuffer( bool bIsVisible, SAL_UNUSED_PARAMETER bool /*bUpdateAll*/ )
     {
         // hidden or disposed?
         if( !bIsVisible || !mxContext->isInitialized() || !mpSpriteCanvas )

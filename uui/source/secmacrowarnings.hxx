@@ -64,7 +64,7 @@ private:
     void                InitControls();
 
 public:
-    MacroWarning( vcl::Window* pParent, bool _bShowSignatures, ResMgr& rResMgr );
+    MacroWarning( vcl::Window* pParent, bool _bShowSignatures );
     virtual ~MacroWarning() override;
     virtual void dispose() override;
 

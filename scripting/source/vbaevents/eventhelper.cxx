@@ -740,7 +740,7 @@ EventListener::getPropertySetInfo(  )
 
 
 //decide if the control should execute the event
-bool ApproveAll(const ScriptEvent&, void const * )
+bool ApproveAll(SAL_UNUSED_PARAMETER const ScriptEvent&, SAL_UNUSED_PARAMETER void const * )
 {
     return true;
 }
@@ -783,7 +783,7 @@ bool DenyType(const ScriptEvent& evt, void const * pPara)
 //when mouse is moving, either the mouse button is pressed or some key is pressed can trigger the OO mouseDragged event,
 //the former should be denied, and the latter allowed, only by doing so can the VBA MouseMove event when the "Shift" key is
 //pressed can be correctly triggered
-bool DenyMouseDrag(const ScriptEvent& evt, void const * )
+bool DenyMouseDrag(const ScriptEvent& evt, SAL_UNUSED_PARAMETER void const * )
 {
     awt::MouseEvent aEvent;
     evt.Arguments[ 0 ] >>= aEvent;

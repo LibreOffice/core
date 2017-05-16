@@ -673,7 +673,7 @@ Sequence< OUString > SpellChecker::getSupportedServiceNames_Static()
 }
 
 void * SAL_CALL SpellChecker_getFactory( const sal_Char * pImplName,
-            XMultiServiceFactory * pServiceManager, void *  )
+            XMultiServiceFactory * pServiceManager  )
 {
     void * pRet = nullptr;
     if ( SpellChecker::getImplementationName_Static().equalsAscii( pImplName ) )

@@ -314,7 +314,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
         0 - Number;
         1 - Bullet;
         2 - Bitmap; */
-    void                SwitchNumberType( sal_uInt8 nType, bool bBmp = false );
+    void                SwitchNumberType( sal_uInt8 nType );
     void                CheckForStartValue_Impl(sal_uInt16 nNumberingType);
 
         DECL_LINK( NumberTypeSelectHdl_Impl, ListBox&, void );

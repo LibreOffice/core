@@ -32,13 +32,12 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL spell_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = nullptr;
     pRet = SpellChecker_getFactory(
         pImplName,
-        static_cast< XMultiServiceFactory * >( pServiceManager ),
-        pRegistryKey );
+        static_cast< XMultiServiceFactory * >( pServiceManager ) );
 
     return pRet;
 }

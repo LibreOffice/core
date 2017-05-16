@@ -932,7 +932,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleExtTypeCbx, Button*, void)
 IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn, Button*, void)
 {
 #if ENABLE_EXTENSION_UPDATE
-    m_pManager->checkUpdates( false, true );
+    m_pManager->checkUpdates();
 #else
     (void) this;
 #endif
@@ -1433,7 +1433,7 @@ void ShowLicenseDialog::dispose()
 
 // UpdateRequiredDialogService
 
-UpdateRequiredDialogService::UpdateRequiredDialogService( uno::Sequence< uno::Any > const&,
+UpdateRequiredDialogService::UpdateRequiredDialogService( SAL_UNUSED_PARAMETER uno::Sequence< uno::Any > const&,
                                                           uno::Reference< uno::XComponentContext > const& xComponentContext )
     : m_xComponentContext( xComponentContext )
 {
