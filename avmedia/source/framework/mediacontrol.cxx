@@ -106,7 +106,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     mpMediaPath->Show();
     maMinSize.Width() += mpMediaPath->GetSizePixel().Width();
 
-    if( MEDIACONTROLSTYLE_MULTILINE == meControlStyle )
+    if( meControlStyle == MEDIACONTROLSTYLE_MULTILINE )
     {
         maMinSize.Width() = 256;
         maMinSize.Height() = ( maMinSize.Height() << 1 ) + AVMEDIA_CONTROLOFFSET;
@@ -121,7 +121,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
 
 void MediaControl::InitializeWidgets()
 {
-    if( MEDIACONTROLSTYLE_SINGLELINE != meControlStyle )
+    if( meControlStyle != MEDIACONTROLSTYLE_SINGLELINE )
     {
         mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_OPEN, GetImage(AVMEDIA_TOOLBOXITEM_OPEN), OUString( AVMEDIA_RESID( AVMEDIA_STR_OPEN ) ) );
         mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_OPEN, HID_AVMEDIA_TOOLBOXITEM_OPEN );
@@ -190,7 +190,7 @@ void MediaControl::Resize()
     const sal_Int32 nMediaPathWidth = mpMediaPath->GetSizePixel().Width();
     const sal_Int32 nTimeSliderHeight = mpTimeSlider->GetSizePixel().Height();
 
-    if( MEDIACONTROLSTYLE_SINGLELINE == meControlStyle )
+    if( meControlStyle == MEDIACONTROLSTYLE_SINGLELINE )
     {
         const sal_Int32 nTimeSliderWidth = GetSizePixel().Width() - ( AVMEDIA_CONTROLOFFSET * 4 ) -
                                            nPlayToolBoxWidth - nMuteToolBoxWidth - nVolumeSliderWidth - nTimeEditWidth - nZoomToolBoxWidth - nMediaPathWidth;

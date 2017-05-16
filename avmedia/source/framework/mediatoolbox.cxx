@@ -103,7 +103,7 @@ void MediaToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const S
 
         const MediaItem* pMediaItem = dynamic_cast<const MediaItem*>( pState  );
 
-        if( pMediaItem && ( SfxItemState::DEFAULT == eState ) )
+        if( pMediaItem && ( eState == SfxItemState::DEFAULT ) )
             pCtrl->setState( *pMediaItem );
     }
 }
