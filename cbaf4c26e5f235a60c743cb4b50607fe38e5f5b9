@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_1aee808b",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 6489,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-05-16T13:14:22Z",
+      "side": 1,
+      "message": "This is why I didn\u0027t try to treat it as a boolean. The documentation isn\u0027t clear about those low numbers, but the spec is for a number and not a true/false.",
+      "range": {
+        "startLine": 6489,
+        "startChar": 45,
+        "endLine": 6489,
+        "endChar": 150
+      },
+      "revId": "cbaf4c26e5f235a60c743cb4b50607fe38e5f5b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
