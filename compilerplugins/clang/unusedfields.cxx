@@ -188,6 +188,10 @@ static char easytolower(char in)
         return in-('Z'-'z');
     return in;
 }
+bool startswith(const std::string& rStr, const char* pSubStr)
+{
+    return rStr.compare(0, strlen(pSubStr), pSubStr) == 0;
+}
 
 bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
 {
@@ -248,11 +252,11 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
         {
             // check for calls to ReadXXX() type methods and the operator>>= methods on Any.
             const FunctionDecl * calleeFunctionDecl = callExpr->getDirectCallee();
-            if (calleeFunctionDecl)
+            if (calleeFunctionDecl && calleeFunctionDecl->getIdentifier())
             {
-                std::string name = calleeFunctionDecl->getQualifiedNameAsString();
+                std::string name = calleeFunctionDecl->getNameAsString();
                 std::transform(name.begin(), name.end(), name.begin(), easytolower);
-                if (name.find("read") != std::string::npos || name.find(">>=") != std::string::npos)
+                if (startswith(name, "read") || name.find(">>=") != std::string::npos)
                     // this is a write-only call
                     ;
                 else
