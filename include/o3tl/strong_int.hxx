@@ -23,9 +23,34 @@
 #include <sal/config.h>
 #include <limits>
 #include <cassert>
+#include <type_traits>
 
 namespace o3tl
 {
+
+#if HAVE_CXX14_CONSTEXPR
+
+namespace detail {
+
+template<typename T> constexpr
+typename std::enable_if<std::is_signed<T>::value, bool>::type isInRange(
+    long value)
+{
+    return value >= std::numeric_limits<T>::min()
+        && value <= std::numeric_limits<T>::max();
+}
+
+template<typename T> constexpr
+typename std::enable_if<std::is_unsigned<T>::value, bool>::type isInRange(
+    long value)
+{
+    return value >= 0
+        && static_cast<unsigned long>(value) <= std::numeric_limits<T>::max();
+}
+
+}
+
+#endif
 
 ///
 /// Wrap up an integer type so that we prevent accidental conversion to other integer types.
@@ -46,8 +71,7 @@ public:
     {
 #if HAVE_CXX14_CONSTEXPR
         // catch attempts to pass in out-of-range values early
-        assert(value >= std::numeric_limits<UNDERLYING_TYPE>::min()
-               && value <= std::numeric_limits<UNDERLYING_TYPE>::max()
+        assert(detail::isInRange<UNDERLYING_TYPE>(value)
                && "out of range");
 #endif
     }
