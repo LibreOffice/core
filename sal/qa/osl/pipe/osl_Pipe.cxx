@@ -817,7 +817,7 @@ namespace osl_StreamPipe
                 {
                     //start server and wait for connection.
                     printf("accept\n");
-                    if ( osl_Pipe_E_None != aListenPipe.accept( aConnectionPipe ) )
+                    if ( aListenPipe.accept( aConnectionPipe ) != osl_Pipe_E_None )
                     {
                         printf("pipe accept failed!");
                         return;

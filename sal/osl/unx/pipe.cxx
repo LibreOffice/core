@@ -327,7 +327,7 @@ void SAL_CALL osl_releasePipe( oslPipe pPipe )
     if( nullptr == pPipe )
         return;
 
-    if( 0 == osl_atomic_decrement( &(pPipe->m_nRefCount) ) )
+    if( osl_atomic_decrement( &(pPipe->m_nRefCount) ) == 0 )
     {
         if( ! pPipe->m_bClosed )
             osl_closePipe( pPipe );

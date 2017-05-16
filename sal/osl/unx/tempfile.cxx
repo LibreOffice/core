@@ -119,13 +119,13 @@ static oslFileError osl_setup_base_directory_impl_(
     else
         error = osl_getTempDirURL(&dir_url);
 
-    if (osl_File_E_None == error)
+    if (error == osl_File_E_None)
     {
         error = osl_getSystemPathFromFileURL_Ex(dir_url, &dir);
         rtl_uString_release(dir_url);
     }
 
-    if (osl_File_E_None == error)
+    if (error == osl_File_E_None)
     {
         rtl_uString_assign(ppustr_base_dir, dir);
         rtl_uString_release(dir);
@@ -206,7 +206,7 @@ static oslFileError osl_create_temp_file_impl_(
 
     /* ensure that the last character is a '/' */
 
-    if ('/' != puchr[len_base_dir - 1])
+    if (puchr[len_base_dir - 1] != '/')
     {
         rtl_uStringbuffer_insert_ascii(
             &tmp_file_path,
@@ -232,7 +232,7 @@ static oslFileError osl_create_temp_file_impl_(
         osl_error = osl_getFileURLFromSystemPath(
             tmp_file_path, &tmp_file_url);
 
-        if (osl_File_E_None == osl_error)
+        if (osl_error == osl_File_E_None)
         {
             osl_error = openFile(
                 tmp_file_url,
@@ -245,7 +245,7 @@ static oslFileError osl_create_temp_file_impl_(
 
         /* in case of error osl_File_E_EXIST we simply try again else we give up */
 
-        if ((osl_File_E_None == osl_error) || (osl_error != osl_File_E_EXIST))
+        if ((osl_error == osl_File_E_None) || (osl_error != osl_File_E_EXIST))
         {
             rtl_uString_release(rand_name);
 
@@ -256,7 +256,7 @@ static oslFileError osl_create_temp_file_impl_(
         }
     } /* while(1) */
 
-    if (osl_File_E_None == osl_error)
+    if (osl_error == osl_File_E_None)
         rtl_uString_assign(ppustr_temp_file_name, tmp_file_path);
 
     rtl_uString_release(tmp_file_path);
@@ -281,7 +281,7 @@ oslFileError SAL_CALL osl_createTempFile(
         &base_directory,
         &b_delete_on_close);
 
-    if (osl_File_E_None != osl_error)
+    if (osl_error != osl_File_E_None)
         return osl_error;
 
     rtl_uString*  temp_file_name = nullptr;
@@ -289,19 +289,19 @@ oslFileError SAL_CALL osl_createTempFile(
         base_directory, &temp_file_handle, &temp_file_name);
 
     rtl_uString* temp_file_url = nullptr;
-    if (osl_File_E_None == osl_error)
+    if (osl_error == osl_File_E_None)
     {
         osl_error = osl_getFileURLFromSystemPath(temp_file_name, &temp_file_url);
         rtl_uString_release(temp_file_name);
     }
 
-    if (osl_File_E_None == osl_error)
+    if (osl_error == osl_File_E_None)
     {
         if (b_delete_on_close)
         {
             osl_error = osl_removeFile(temp_file_url);
 
-            if (osl_File_E_None == osl_error)
+            if (osl_error == osl_File_E_None)
                 *pHandle = temp_file_handle;
             else
                 osl_closeFile(temp_file_handle);

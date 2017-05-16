@@ -36,7 +36,8 @@ public:
     bool VisitBinaryOperator(const BinaryOperator *);
 private:
     bool rewrite(const BinaryOperator *);
-    std::string getExprAsString(const Expr* expr);
+    std::string getExprAsString(SourceRange range);
+    SourceRange ignoreMacroExpansions(SourceRange range);
 };
 
 bool ComparisonWithConstant::VisitBinaryOperator(const BinaryOperator* binaryOp)
@@ -78,11 +79,18 @@ bool ComparisonWithConstant::rewrite(const BinaryOperator * binaryOp) {
     if (rewriter == nullptr) {
         return false;
     }
-    const Expr* LHS = binaryOp->getLHS();
-    const Expr* RHS = binaryOp->getRHS();
 
-    const std::string lhsString = getExprAsString(LHS);
-    const std::string rhsString = getExprAsString(RHS);
+    auto lhsRange = ignoreMacroExpansions(binaryOp->getLHS()->getSourceRange());
+    if (!lhsRange.isValid()) {
+        return false;
+    }
+    auto rhsRange = ignoreMacroExpansions(binaryOp->getRHS()->getSourceRange());
+    if (!rhsRange.isValid()) {
+        return false;
+    }
+
+    const std::string lhsString = getExprAsString(lhsRange);
+    const std::string rhsString = getExprAsString(rhsRange);
 
     /* we can't safely move around stuff containing comments, we mess up the resulting code */
     if ( lhsString.find("/*") != std::string::npos || lhsString.find("//") != std::string::npos ) {
@@ -94,10 +102,10 @@ bool ComparisonWithConstant::rewrite(const BinaryOperator * binaryOp) {
 
     // switch LHS and RHS
     RewriteOptions opts;
-    if (!replaceText(SourceRange(LHS->getLocStart(), LHS->getLocEnd()), rhsString)) {
+    if (!replaceText(lhsRange, rhsString)) {
         return false;
     }
-    if (!replaceText(SourceRange(RHS->getLocStart(), RHS->getLocEnd()), lhsString)) {
+    if (!replaceText(rhsRange, lhsString)) {
         return false;
     }
 
@@ -105,17 +113,39 @@ bool ComparisonWithConstant::rewrite(const BinaryOperator * binaryOp) {
 }
 
 // get the expression contents
-std::string ComparisonWithConstant::getExprAsString(const Expr* expr)
+std::string ComparisonWithConstant::getExprAsString(SourceRange range)
 {
     SourceManager& SM = compiler.getSourceManager();
-    SourceLocation startLoc = expr->getLocStart();
-    SourceLocation endLoc = expr->getLocEnd();
+    SourceLocation startLoc = range.getBegin();
+    SourceLocation endLoc = range.getEnd();
     const char *p1 = SM.getCharacterData( startLoc );
     const char *p2 = SM.getCharacterData( endLoc );
     unsigned n = Lexer::MeasureTokenLength( endLoc, SM, compiler.getLangOpts());
     return std::string( p1, p2 - p1 + n);
 }
 
+SourceRange ComparisonWithConstant::ignoreMacroExpansions(SourceRange range) {
+    if (range.getBegin().isMacroID()) {
+        SourceLocation loc;
+        if (Lexer::isAtStartOfMacroExpansion(
+                range.getBegin(), compiler.getSourceManager(),
+                compiler.getLangOpts(), &loc))
+        {
+            range.setBegin(loc);
+        }
+    }
+    if (range.getEnd().isMacroID()) {
+        SourceLocation loc;
+        if (Lexer::isAtEndOfMacroExpansion(
+                range.getEnd(), compiler.getSourceManager(),
+                compiler.getLangOpts(), &loc))
+        {
+            range.setEnd(loc);
+        }
+    }
+    return range.getBegin().isMacroID() || range.getEnd().isMacroID()
+        ? SourceRange() : range;
+}
 
 loplugin::Plugin::Registration< ComparisonWithConstant > X("comparisonwithconstant", false);
 

@@ -121,7 +121,7 @@ private:
         sal_Int32 pos_equal_sign =
             env_var.indexOf('=');
 
-        if (-1 != pos_equal_sign)
+        if (pos_equal_sign != -1)
             return env_var.copy(0, pos_equal_sign);
 
         return OString();

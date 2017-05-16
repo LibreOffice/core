@@ -1019,7 +1019,7 @@ rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding()
     /* check for thread specific encoding, use default if not set */
     threadEncoding = static_cast<rtl_TextEncoding>(
         reinterpret_cast<sal_uIntPtr>(pthread_getspecific(g_thread.m_textencoding.m_key)));
-    if (0 == threadEncoding)
+    if (threadEncoding == 0)
         threadEncoding = g_thread.m_textencoding.m_default;
 
     return threadEncoding;
