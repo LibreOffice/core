@@ -5780,7 +5780,7 @@ void ScInterpreter::ScMaxIfs_MS()
 
     sc::ParamIfsResult aRes;
     IterateParametersIfs(aRes);
-    PushDouble((aRes.mfMax > std::numeric_limits<double>::min()) ? aRes.mfMax : 0.0);
+    PushDouble((aRes.mfMax > std::numeric_limits<double>::lowest()) ? aRes.mfMax : 0.0);
 }
 
 void ScInterpreter::ScLookup()
