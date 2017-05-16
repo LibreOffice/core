@@ -530,6 +530,7 @@ public:
     void testPrecisionAsShown();
     void testProtectedSheetEditByRow();
     void testProtectedSheetEditByColumn();
+    void testFuncRowsHidden();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -800,6 +801,7 @@ public:
     CPPUNIT_TEST(testPrecisionAsShown);
     CPPUNIT_TEST(testProtectedSheetEditByRow);
     CPPUNIT_TEST(testProtectedSheetEditByColumn);
+    CPPUNIT_TEST(testFuncRowsHidden);
     CPPUNIT_TEST_SUITE_END();
 
 private:

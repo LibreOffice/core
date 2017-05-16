@@ -88,15 +88,14 @@ void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows, SfxHintId nHint 
     }
 }
 
-void ScColumn::BroadcastRows( SCROW nStartRow, SCROW nEndRow )
+void ScColumn::BroadcastRows( SCROW nStartRow, SCROW nEndRow, SfxHintId nHint )
 {
     sc::SingleColumnSpanSet aSpanSet;
     aSpanSet.scan(*this, nStartRow, nEndRow);
     std::vector<SCROW> aRows;
     aSpanSet.getRows(aRows);
-    BroadcastCells(aRows, SfxHintId::ScDataChanged);
+    BroadcastCells(aRows, nHint);
 }
-
 
 struct DirtyCellInterpreter
 {

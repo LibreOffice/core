@@ -7860,4 +7860,48 @@ void Test::testIntersectionOpExcel()
     m_pDoc->DeleteTab(0);
 }
 
+//Test Subtotal and Aggregate during hide rows #tdf93171
+void Test::testFuncRowsHidden()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->SetValue(0, 0, 0, 1); //A1
+    m_pDoc->SetValue(0, 1, 0, 2); //A2
+    m_pDoc->SetValue(0, 2, 0, 4); //A3
+    m_pDoc->SetValue(0, 3, 0, 8); //A4
+    m_pDoc->SetValue(0, 4, 0, 16); //A5
+    m_pDoc->SetValue(0, 5, 0, 32); //A6
+
+    ScAddress aPos(0,6,0);
+    m_pDoc->SetString(aPos, "=SUBTOTAL(109; A1:A6)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUBTOTAL failed", 63.0, m_pDoc->GetValue(aPos));
+    //Hide row 1
+    m_pDoc->SetRowHidden(0, 0, 0, true);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUBTOTAL failed", 62.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetRowHidden(0, 0, 0, false);
+    //Hide row 2 and 3
+    m_pDoc->SetRowHidden(1, 2, 0, true);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUBTOTAL failed", 57.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetRowHidden(1, 2, 0, false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUBTOTAL failed", 63.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->SetString(aPos, "=AGGREGATE(9; 5; A1:A6)"); //9=SUM 5=Ignore only hidden rows
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of AGGREGATE failed", 63.0, m_pDoc->GetValue(aPos));
+    //Hide row 1
+    m_pDoc->SetRowHidden(0, 0, 0, true);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of AGGREGATE failed", 62.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetRowHidden(0, 0, 0, false);
+    //Hide rows 3 to 5
+    m_pDoc->SetRowHidden(2, 4, 0, true);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of AGGREGATE failed", 35.0, m_pDoc->GetValue(aPos));
+    m_pDoc->SetRowHidden(2, 4, 0, false);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of AGGREGATE failed", 63.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->SetString(aPos, "=SUM(A1:A6)");
+    m_pDoc->SetRowHidden(2, 4, 0, true);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Calculation of SUM failed", 63.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
