@@ -1227,6 +1227,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
 
                     xTextRange = xTextAppend->finishParagraph( comphelper::containerToSequence(aProperties) );
                     m_xPreviousParagraph.set(xTextRange, uno::UNO_QUERY);
+                    // We're no longer right after a table conversion.
+                    m_bConvertedTable = false;
 
                     if (xCursor.is())
                     {
