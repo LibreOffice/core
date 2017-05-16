@@ -38,9 +38,9 @@ using namespace ::com::sun::star;
 |*
 |************************************************************************/
 
-SvxHyperlinkMailTp::SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet)
+SvxHyperlinkMailTp::SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet* pItemSet)
 :   SvxHyperlinkTabPageBase ( pParent, pDlg, "HyperlinkMailPage", "cui/ui/hyperlinkmailpage.ui",
-                              rItemSet )
+                              pItemSet )
 {
     get(m_pCbbReceiver, "receiver");
     m_pCbbReceiver->SetSmartProtocol(INetProtocol::Mailto);
@@ -173,9 +173,9 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
 |*
 |************************************************************************/
 
-VclPtr<IconChoicePage> SvxHyperlinkMailTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
+VclPtr<IconChoicePage> SvxHyperlinkMailTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet* pItemSet )
 {
-    return VclPtr<SvxHyperlinkMailTp>::Create( pWindow, pDlg, rItemSet );
+    return VclPtr<SvxHyperlinkMailTp>::Create( pWindow, pDlg, pItemSet );
 }
 
 /*************************************************************************

@@ -66,11 +66,11 @@ protected:
     OUString GetCurrentURL    ();
 
 public:
-    SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
+    SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet* pItemSet);
     virtual ~SvxHyperlinkDocTp() override;
     virtual void dispose() override;
 
-    static VclPtr<IconChoicePage> Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
+    static VclPtr<IconChoicePage> Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet* pItemSet );
 
     virtual void        SetMarkStr ( const OUString& aStrMark ) override;
 

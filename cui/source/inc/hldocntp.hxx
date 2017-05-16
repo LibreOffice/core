@@ -48,11 +48,11 @@ protected:
                              SvxLinkInsertMode& eMode ) override;
 
 public:
-    SvxHyperlinkNewDocTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
+    SvxHyperlinkNewDocTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet* pItemSet);
     virtual ~SvxHyperlinkNewDocTp () override;
     virtual void dispose() override;
 
-    static  VclPtr<IconChoicePage> Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
+    static  VclPtr<IconChoicePage> Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet* pItemSet );
 
     virtual bool        AskApply () override;
     virtual void        DoApply () override;

@@ -42,9 +42,9 @@ using std::vector;
 
 IconChoicePage::IconChoicePage( vcl::Window *pParent, const OString& rID,
                                 const OUString& rUIXMLDescription,
-                                const SfxItemSet &rAttrSet )
+                                const SfxItemSet* pItemSet )
 :   TabPage                   ( pParent, rID, rUIXMLDescription ),
-    pSet                      ( &rAttrSet ),
+    pSet                      ( pItemSet ),
     bHasExchangeSupport       ( false ),
     pDialog                   ( nullptr )
 {
@@ -407,20 +407,8 @@ void IconChoiceDialog::ActivatePageImpl ()
     {
         if ( !pData->pPage )
         {
-            const SfxItemSet* pTmpSet = nullptr;
-
-            if ( pSet )
-            {
-                pTmpSet = pSet;
-            }
-
-            if ( pTmpSet )
-                pData->pPage = (pData->fnCreatePage)( m_pTabContainer, this, *pTmpSet );
-            else
-                pData->pPage = (pData->fnCreatePage)( m_pTabContainer, this, *CreateInputItemSet( mnCurrentPageId ) );
-
+            pData->pPage = (pData->fnCreatePage)( m_pTabContainer, this, pSet );
             pData->pPage->Reset( *pSet );
-
             PageCreated( mnCurrentPageId, *pData->pPage );
         }
         else if ( pData->bRefresh )
@@ -567,13 +555,6 @@ void IconChoiceDialog::PageCreated( sal_uInt16 /*nId*/, IconChoicePage& /*rPage*
     // not interested in
 }
 
-
-SfxItemSet* IconChoiceDialog::CreateInputItemSet( sal_uInt16 )
-{
-    SAL_INFO( "cui.dialogs", "CreateInputItemSet not implemented" );
-
-    return nullptr;
-}
 
 /**********************************************************************
 |

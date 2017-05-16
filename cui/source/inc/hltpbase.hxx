@@ -107,7 +107,7 @@ public:
         IconChoiceDialog* pDlg,
         const OString& rID,
         const OUString& rUIXMLDescription,
-        const SfxItemSet& rItemSet
+        const SfxItemSet* pItemSet
     );
     virtual ~SvxHyperlinkTabPageBase () override;
     virtual void dispose() override;
