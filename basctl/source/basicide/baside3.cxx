@@ -253,7 +253,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
         }
     }
 
-    for ( sal_uInt16 nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich() )
+    for ( sal_uInt16 nWh = aIter.FirstWhich(); nWh != 0; nWh = aIter.NextWhich() )
     {
         switch ( nWh )
         {
@@ -913,19 +913,19 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
 
                 ScopedVclPtrInstance< NameClashQueryBox > aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
                 sal_uInt16 nRet = aQueryBox->Execute();
-                if( RET_YES == nRet )
+                if( nRet == RET_YES )
                 {
                     // RET_YES == Rename, see NameClashQueryBox::NameClashQueryBox
                     eNameClashMode = CLASH_RENAME_DIALOG;
 
                     aNewDlgName = rDocument.createObjectName( E_DIALOGS, aLibName );
                 }
-                else if( RET_NO == nRet )
+                else if( nRet == RET_NO )
                 {
                     // RET_NO == Replace, see NameClashQueryBox::NameClashQueryBox
                     eNameClashMode = CLASH_OVERWRITE_DIALOG;
                 }
-                else if( RET_CANCEL == nRet )
+                else if( nRet == RET_CANCEL )
                 {
                     return bDone;
                 }
@@ -975,7 +975,7 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
                 OUString aQueryBoxText(IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_TEXT));
                 ScopedVclPtrInstance< LanguageMismatchQueryBox > aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
                 sal_uInt16 nRet = aQueryBox->Execute();
-                if( RET_YES == nRet )
+                if( nRet == RET_YES )
                 {
                     // RET_YES == Add, see LanguageMismatchQueryBox::LanguageMismatchQueryBox
                     bAddDialogLanguagesToLib = true;
@@ -985,7 +985,7 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
                 //else if( RET_NO == nRet )
                 //{
                 //}
-                else if( RET_CANCEL == nRet )
+                else if( nRet == RET_CANCEL )
                 {
                     return bDone;
                 }
