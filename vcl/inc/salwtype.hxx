@@ -151,7 +151,7 @@ struct SalWheelMouseEvent
     long            mnY;            // Y-Position (Pixel, TopLeft-Output)
     long            mnDelta;        // Number of rotations
     long            mnNotchDelta;   // Number of fixed rotations
-    sal_uLong       mnScrollLines;  // Actual number of lines to scroll
+    double          mnScrollLines;  // Actual number of lines to scroll
     sal_uInt16      mnCode;         // SV-Modifiercode (KEY_SHIFT|KEY_MOD1|KEY_MOD2|MOUSE_LEFT|MOUSE_MIDDLE|MOUSE_RIGHT)
     bool        mbHorz;         // Horizontal
     bool        mbDeltaIsPixel; // delta value is a pixel value (on touch devices)

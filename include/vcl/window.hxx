@@ -714,9 +714,9 @@ private:
     SAL_DLLPRIVATE void                 ImplCallActivateListeners(vcl::Window*);
     SAL_DLLPRIVATE void                 ImplCallDeactivateListeners(vcl::Window*);
 
-    SAL_DLLPRIVATE static void          ImplHandleScroll( ScrollBar* pHScrl, long nX, ScrollBar* pVScrl, long nY );
+    SAL_DLLPRIVATE static void          ImplHandleScroll(ScrollBar* pHScrl, double nX, ScrollBar* pVScrl, double nY);
 
-    SAL_DLLPRIVATE tools::Rectangle            ImplOutputToUnmirroredAbsoluteScreenPixel( const tools::Rectangle& rRect ) const;
+    SAL_DLLPRIVATE tools::Rectangle     ImplOutputToUnmirroredAbsoluteScreenPixel( const tools::Rectangle& rRect ) const;
     SAL_DLLPRIVATE long                 ImplGetUnmirroredOutOffX();
 
     // retrieves the list of owner draw decorated windows for this window hiearchy
@@ -724,7 +724,7 @@ private:
 
     SAL_DLLPRIVATE vcl::Window*         ImplGetTopmostFrameWindow();
 
-    SAL_DLLPRIVATE tools::Rectangle            ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow, bool bClientOnly ) const;
+    SAL_DLLPRIVATE tools::Rectangle     ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow, bool bClientOnly ) const;
 
     SAL_DLLPRIVATE bool                 ImplStopDnd();
     SAL_DLLPRIVATE void                 ImplStartDnd();
