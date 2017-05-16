@@ -15,7 +15,7 @@ $(eval $(call gb_Library_add_defs,getuid,\
 ))
 endif
 
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,getuid)) : gb_CC := $(filter-out -fsanitize=%,$(gb_CC))
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,getuid)) : gb_CC := $(filter-out -fsanitize%,$(gb_CC))
 
 # the library is used by LD_PRELOAD; make sure that we see the symbols ;-)
 ifeq ($(COM),GCC)

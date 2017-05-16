@@ -11,7 +11,7 @@
 CLANG_COMMA :=,
 
 ifeq ($(COMPILER_PLUGINS_CXX),)
-CLANGCXX=$(filter-out -m32 -m64 -fsanitize=%,$(CXX))
+CLANGCXX=$(filter-out -m32 -m64 -fsanitize%,$(CXX))
 else
 CLANGCXX=$(COMPILER_PLUGINS_CXX)
 endif

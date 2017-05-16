@@ -79,9 +79,9 @@ $(eval $(call gb_Library_add_libs,jpipe, \
 ))
 
 $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,jpipe)): \
-    gb_CC := $(filter-out -fsanitize=%,$(gb_CC))
+    gb_CC := $(filter-out -fsanitize%,$(gb_CC))
 $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,jpipe)): \
-    gb_CXX := $(filter-out -fsanitize=%,$(gb_CXX))
+    gb_CXX := $(filter-out -fsanitize%,$(gb_CXX))
 
 endif
 endif
