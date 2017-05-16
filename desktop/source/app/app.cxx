@@ -456,18 +456,8 @@ CommandLineArgs& Desktop::GetCommandLineArgs()
 
 namespace
 {
-    struct BrandName
-        : public rtl::Static< OUString, BrandName > {};
-    struct Version
-        : public rtl::Static< OUString, Version > {};
-    struct AboutBoxVersion
-        : public rtl::Static< OUString, AboutBoxVersion > {};
-    struct AboutBoxVersionSuffix
-        : public rtl::Static< OUString, AboutBoxVersionSuffix > {};
     struct OOOVendor
         : public rtl::Static< OUString, OOOVendor > {};
-    struct Extension
-        : public rtl::Static< OUString, Extension > {};
 }
 
 OUString ReplaceStringHookProc( const OUString& rStr )
@@ -478,23 +468,11 @@ OUString ReplaceStringHookProc( const OUString& rStr )
     static std::once_flag aInitOnce;
     std::call_once(aInitOnce, []
     {
-        sBrandName = BrandName::get();
-        sVersion = Version::get();
-        sAboutBoxVersion = AboutBoxVersion::get();
-        sAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
-        sExtension = Extension::get();
-
-        if ( sBrandName.isEmpty() )
-        {
-            sBrandName = utl::ConfigManager::getProductName();
-            sVersion = utl::ConfigManager::getProductVersion();
-            sAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
-            sAboutBoxVersionSuffix = utl::ConfigManager::getAboutBoxProductVersionSuffix();
-            if (sExtension.isEmpty())
-            {
-                sExtension = utl::ConfigManager::getProductExtension();
-            }
-        }
+        sBrandName = utl::ConfigManager::getProductName();
+        sVersion = utl::ConfigManager::getProductVersion();
+        sAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
+        sAboutBoxVersionSuffix = utl::ConfigManager::getAboutBoxProductVersionSuffix();
+        sExtension = utl::ConfigManager::getProductExtension();
     } );
 
     OUString sRet(rStr);
