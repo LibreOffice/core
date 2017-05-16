@@ -634,7 +634,7 @@ Sequence< OUString > Thesaurus::getSupportedServiceNames_Static()
 }
 
 void * SAL_CALL Thesaurus_getFactory( const sal_Char * pImplName,
-            XMultiServiceFactory * pServiceManager, void *  )
+            XMultiServiceFactory * pServiceManager  )
 {
     void * pRet = nullptr;
     if ( Thesaurus::getImplementationName_Static().equalsAscii( pImplName ) )

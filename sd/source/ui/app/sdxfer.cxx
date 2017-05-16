@@ -468,7 +468,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
 
     if( nFormat == SotClipboardFormatId::RTF && lcl_HasOnlyOneTable( mpSdDrawDocument ) )
     {
-        bOK = SetTableRTF( mpSdDrawDocument, rFlavor );
+        bOK = SetTableRTF( mpSdDrawDocument );
     }
     else if( mpOLEDataHelper && mpOLEDataHelper->HasFormat( rFlavor ) )
     {
@@ -832,7 +832,7 @@ void SdTransferable::SetView(const ::sd::View* pView)
         StartListening(*const_cast<sd::View*>(mpSdView));
 }
 
-bool SdTransferable::SetTableRTF( SdDrawDocument* pModel, const DataFlavor& /*rFlavor*/)
+bool SdTransferable::SetTableRTF( SdDrawDocument* pModel )
 {
     if ( pModel )
     {

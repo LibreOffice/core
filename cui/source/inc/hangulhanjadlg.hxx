@@ -310,7 +310,7 @@ namespace svx
         void            SetEditText( Edit& _rEdit, sal_uInt16 _nEntryNum );
         void            EditModify( Edit* _pEdit, sal_uInt8 _nEntryOffset );
 
-        bool            DeleteEntryFromDictionary( const OUString& rEntry, const css::uno::Reference< css::linguistic2::XConversionDictionary >& xDict );
+        bool            DeleteEntryFromDictionary( const css::uno::Reference< css::linguistic2::XConversionDictionary >& xDict );
 
     public:
                         HangulHanjaEditDictDialog( vcl::Window* _pParent, HHDictList& _rDictList, sal_uInt32 _nSelDict );

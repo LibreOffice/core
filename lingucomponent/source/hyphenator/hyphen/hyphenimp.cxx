@@ -872,7 +872,7 @@ Sequence< OUString > Hyphenator::getSupportedServiceNames_Static()
 }
 
 void * SAL_CALL Hyphenator_getFactory( const sal_Char * pImplName,
-            XMultiServiceFactory * pServiceManager, void *  )
+            XMultiServiceFactory * pServiceManager  )
 {
     void * pRet = nullptr;
     if ( Hyphenator::getImplementationName_Static().equalsAscii( pImplName ) )

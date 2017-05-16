@@ -94,7 +94,7 @@ public:
     bool isVisible();
 
 
-    void checkUpdates( bool showUpdateOnly, bool parentVisible );
+    void checkUpdates();
     bool installPackage( const OUString &rPackageURL, bool bWarnUser = false );
     void createPackageList();
 

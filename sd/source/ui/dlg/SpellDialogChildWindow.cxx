@@ -35,7 +35,7 @@ SpellDialogChildWindow::SpellDialogChildWindow (
     vcl::Window* _pParent,
     sal_uInt16 nId,
     SfxBindings* pBindings,
-    SfxChildWinInfo* /*pInfo*/)
+    SAL_UNUSED_PARAMETER SfxChildWinInfo* /*pInfo*/)
     : svx::SpellDialogChildWindow (_pParent, nId, pBindings),
       mpSdOutliner (nullptr),
       mbOwnOutliner (false)

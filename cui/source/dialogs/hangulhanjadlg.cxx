@@ -1533,7 +1533,7 @@ namespace svx
         if( xDict.is() && m_pSuggestions )
         {
             //delete old entry
-            bool bRemovedSomething = DeleteEntryFromDictionary( m_aOriginal, xDict );
+            bool bRemovedSomething = DeleteEntryFromDictionary( xDict );
 
             OUString                aLeft( m_aOriginal );
             const OUString*           pRight = m_pSuggestions->First();
@@ -1565,7 +1565,7 @@ namespace svx
         }
     }
 
-    bool HangulHanjaEditDictDialog::DeleteEntryFromDictionary( const OUString&, const Reference< XConversionDictionary >& xDict  )
+    bool HangulHanjaEditDictDialog::DeleteEntryFromDictionary( const Reference< XConversionDictionary >& xDict  )
     {
         bool bRemovedSomething = false;
         if( xDict.is() )
@@ -1596,7 +1596,7 @@ namespace svx
 
     IMPL_LINK_NOARG( HangulHanjaEditDictDialog, DeletePBPushHdl, Button*, void )
     {
-        if( DeleteEntryFromDictionary( m_aOriginal, m_rDictList[ m_nCurrentDict ] ) )
+        if( DeleteEntryFromDictionary( m_rDictList[ m_nCurrentDict ] ) )
         {
             m_aOriginal.clear();
             m_bModifiedOriginal = true;

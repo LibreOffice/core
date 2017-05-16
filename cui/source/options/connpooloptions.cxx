@@ -338,7 +338,7 @@ namespace offapp
         return VclPtr<ConnectionPoolOptionsPage>::Create(_pParent, *_rAttrSet);
     }
 
-    void ConnectionPoolOptionsPage::implInitControls(const SfxItemSet& _rSet, bool /*_bFromReset*/)
+    void ConnectionPoolOptionsPage::implInitControls(const SfxItemSet& _rSet)
     {
         // the enabled flag
         const SfxBoolItem* pEnabled = _rSet.GetItem<SfxBoolItem>(SID_SB_POOLING_ENABLED);
@@ -399,13 +399,13 @@ namespace offapp
     void ConnectionPoolOptionsPage::ActivatePage( const SfxItemSet& _rSet)
     {
         SfxTabPage::ActivatePage(_rSet);
-        implInitControls(_rSet, false);
+        implInitControls(_rSet);
     }
 
 
     void ConnectionPoolOptionsPage::Reset(const SfxItemSet* _rSet)
     {
-        implInitControls(*_rSet, true);
+        implInitControls(*_rSet);
     }
 
 

@@ -64,7 +64,7 @@ namespace
 }
 
 
-MacroWarning::MacroWarning( vcl::Window* _pParent, bool _bWithSignatures, ResMgr& )
+MacroWarning::MacroWarning( vcl::Window* _pParent, bool _bWithSignatures )
     :ModalDialog            ( _pParent, "MacroWarnMedium", "uui/ui/macrowarnmedium.ui" )
     ,mpInfos                ( nullptr )
     ,mbSignedMode           ( true )

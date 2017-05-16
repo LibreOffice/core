@@ -32,12 +32,11 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL lnth_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = Thesaurus_getFactory(
             pImplName,
-            static_cast< XMultiServiceFactory * >( pServiceManager ),
-            pRegistryKey );
+            static_cast< XMultiServiceFactory * >( pServiceManager ) );
 
     return pRet;
 }

@@ -1156,25 +1156,21 @@ UUIInteractionHelper::handleMacroConfirmRequest(
 
     bool bApprove = false;
 
-    std::unique_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( "uui" ) );
-    if ( pResMgr.get() )
+    bool bShowSignatures = aSignInfo.getLength() > 0;
+    ScopedVclPtrInstance<MacroWarning> aWarning(
+        getParentProperty(), bShowSignatures );
+
+    aWarning->SetDocumentURL( aDocumentURL );
+    if ( aSignInfo.getLength() > 1 )
     {
-        bool bShowSignatures = aSignInfo.getLength() > 0;
-        ScopedVclPtrInstance<MacroWarning> aWarning(
-            getParentProperty(), bShowSignatures, *pResMgr.get() );
-
-        aWarning->SetDocumentURL( aDocumentURL );
-        if ( aSignInfo.getLength() > 1 )
-        {
-            aWarning->SetStorage( xZipStorage, aDocumentVersion, aSignInfo );
-        }
-        else if ( aSignInfo.getLength() == 1 )
-        {
-            aWarning->SetCertificate( aSignInfo[ 0 ].Signer );
-        }
-
-        bApprove = aWarning->Execute() == RET_OK;
+        aWarning->SetStorage( xZipStorage, aDocumentVersion, aSignInfo );
     }
+    else if ( aSignInfo.getLength() == 1 )
+    {
+        aWarning->SetCertificate( aSignInfo[ 0 ].Signer );
+    }
+
+    bApprove = aWarning->Execute() == RET_OK;
 
     if ( bApprove && xApprove.is() )
         xApprove->select();

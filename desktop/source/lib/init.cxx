@@ -1944,7 +1944,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         pDocument->mpCallbackFlushHandlers[nOrigViewId]->setPartTilePainting(false);
 }
 
-static int doc_getTileMode(LibreOfficeKitDocument* /*pThis*/)
+static int doc_getTileMode(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
     return LOK_TILEMODE_BGRA;
 }
@@ -2815,49 +2815,49 @@ static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int 
     pDoc->setClientVisibleArea(aRectangle);
 }
 
-static int doc_createView(LibreOfficeKitDocument* /*pThis*/)
+static int doc_createView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
     SolarMutexGuard aGuard;
 
     return SfxLokHelper::createView();
 }
 
-static void doc_destroyView(LibreOfficeKitDocument* /*pThis*/, int nId)
+static void doc_destroyView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId)
 {
     SolarMutexGuard aGuard;
 
     SfxLokHelper::destroyView(nId);
 }
 
-static void doc_setView(LibreOfficeKitDocument* /*pThis*/, int nId)
+static void doc_setView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int nId)
 {
     SolarMutexGuard aGuard;
 
     SfxLokHelper::setView(nId);
 }
 
-static int doc_getView(LibreOfficeKitDocument* /*pThis*/)
+static int doc_getView(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
     SolarMutexGuard aGuard;
 
     return SfxLokHelper::getView();
 }
 
-static int doc_getViewsCount(LibreOfficeKitDocument* /*pThis*/)
+static int doc_getViewsCount(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/)
 {
     SolarMutexGuard aGuard;
 
     return SfxLokHelper::getViewsCount();
 }
 
-static bool doc_getViewIds(LibreOfficeKitDocument* /*pThis*/, int* pArray, size_t nSize)
+static bool doc_getViewIds(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/, int* pArray, size_t nSize)
 {
     SolarMutexGuard aGuard;
 
     return SfxLokHelper::getViewIds(pArray, nSize);
 }
 
-unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
+unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pThis*/,
                     const char* pFontName,
                     const char* pChar,
                     int* pFontWidth,
@@ -2999,7 +2999,7 @@ static void lo_setDocumentPassword(LibreOfficeKit* pThis,
     pLib->mInteractionMap.find(OString(pURL))->second->SetPassword(pPassword);
 }
 
-static char* lo_getVersionInfo(LibreOfficeKit* /*pThis*/)
+static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER LibreOfficeKit* /*pThis*/)
 {
     const OUString sVersionStrTemplate(
         "{ "

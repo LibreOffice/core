@@ -258,7 +258,7 @@ void ServiceImpl::startExecuteModal(
         }
         if ( m_bShowUpdateOnly )
         {
-            myExtMgr->checkUpdates( true, !bCloseDialog );
+            myExtMgr->checkUpdates();
             if ( bCloseDialog )
                 myExtMgr->Close();
             else
