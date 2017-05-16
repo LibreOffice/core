@@ -16,6 +16,24 @@
       "revId": "45c5632daae9ed15064cb6b6eb53361fdd89846f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_dd4b1258",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2017-05-16T16:37:37Z",
+      "side": 1,
+      "message": "Hi Bubli,\nDone. However it\u0027s the first time I use SAL_WARN, so I\u0027m not 100% I did it right...",
+      "parentUuid": "5a3905b3_9d134a5c",
+      "revId": "45c5632daae9ed15064cb6b6eb53361fdd89846f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
