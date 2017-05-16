@@ -103,8 +103,7 @@ namespace dbaui
                 the type of the object. Must be one of the css.sdb.application.DatabaseObject
                 constants.
             @return
-                the resource ID image to be used for the object type. Must be fed into a
-                ModuleRes instance to actually load the image.
+                the resource image name to be used for the object type.
         */
         static OUString getDefaultImageResourceID(sal_Int32 _nDatabaseObjectType);
 
