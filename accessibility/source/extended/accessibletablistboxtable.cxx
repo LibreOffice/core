@@ -79,7 +79,7 @@ namespace accessibility
                 case VclEventId::ControlLoseFocus :
                 {
                     uno::Any aOldValue, aNewValue;
-                    if ( VclEventId::ControlGetFocus == nEventId )
+                    if ( nEventId == VclEventId::ControlGetFocus )
                         aNewValue <<= AccessibleStateType::FOCUSED;
                     else
                         aOldValue <<= AccessibleStateType::FOCUSED;

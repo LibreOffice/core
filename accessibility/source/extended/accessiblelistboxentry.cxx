@@ -316,7 +316,7 @@ namespace accessibility
         if ( !xParent.is() )
         {
             OSL_ENSURE( m_aEntryPath.size(), "AccessibleListBoxEntry::getAccessibleParent: invalid path!" );
-            if ( 1 == m_aEntryPath.size() )
+            if ( m_aEntryPath.size() == 1 )
             {   // we're a top level entry
                 // -> our parent is the tree listbox itself
                 if ( getListBox() )

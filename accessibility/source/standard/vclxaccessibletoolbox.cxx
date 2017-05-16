@@ -160,8 +160,8 @@ namespace
 
     sal_Int64 SAL_CALL OToolBoxWindowItem::getSomething( const Sequence< sal_Int8 >& _rId )
     {
-        if  (   ( 16 == _rId.getLength() )
-            &&  ( 0 == memcmp( getUnoTunnelImplementationId().getConstArray(),  _rId.getConstArray(), 16 ) )
+        if  (   ( _rId.getLength() == 16 )
+            &&  ( memcmp( getUnoTunnelImplementationId().getConstArray(),  _rId.getConstArray(), 16 ) == 0 )
             )
             return reinterpret_cast< sal_Int64>( this );
 
