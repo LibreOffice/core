@@ -40,7 +40,7 @@ inline const rtl::OUString FPH_PARENT_DIR_ENTRY()
 void SAL_CALL osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
 {
     OSL_PRECOND(nullptr != pustrPath, "osl_systemPathRemoveSeparator: Invalid parameter");
-    if (nullptr != pustrPath)
+    if (pustrPath != nullptr)
     {
         // maybe there are more than one separator at end
         // so we run in a loop
@@ -60,7 +60,7 @@ void SAL_CALL osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
 void SAL_CALL osl_systemPathEnsureSeparator(rtl_uString** ppustrPath)
 {
     OSL_PRECOND((nullptr != ppustrPath) && (nullptr != *ppustrPath), "osl_systemPathEnsureSeparator: Invalid parameter");
-    if ((nullptr != ppustrPath) && (nullptr != *ppustrPath))
+    if ((ppustrPath != nullptr) && (*ppustrPath != nullptr))
     {
         rtl::OUString path(*ppustrPath);
         sal_Int32    lp = path.getLength();
@@ -81,7 +81,7 @@ void SAL_CALL osl_systemPathEnsureSeparator(rtl_uString** ppustrPath)
 bool SAL_CALL osl_systemPathIsRelativePath(const rtl_uString* pustrPath)
 {
     OSL_PRECOND(nullptr != pustrPath, "osl_systemPathIsRelativePath: Invalid parameter");
-    return ((nullptr == pustrPath) || (pustrPath->length == 0) || (pustrPath->buffer[0] != FPH_CHAR_PATH_SEPARATOR));
+    return ((pustrPath == nullptr) || (pustrPath->length == 0) || (pustrPath->buffer[0] != FPH_CHAR_PATH_SEPARATOR));
 }
 
 void SAL_CALL osl_systemPathMakeAbsolutePath(
@@ -127,7 +127,7 @@ bool SAL_CALL osl_systemPathIsHiddenFileOrDirectoryEntry(
     const rtl_uString* pustrPath)
 {
     OSL_PRECOND(nullptr != pustrPath, "osl_systemPathIsHiddenFileOrDirectoryEntry: Invalid parameter");
-    if ((nullptr == pustrPath) || (pustrPath->length == 0))
+    if ((pustrPath == nullptr) || (pustrPath->length == 0))
         return false;
 
     rtl::OUString fdp;

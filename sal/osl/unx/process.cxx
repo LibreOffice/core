@@ -1130,7 +1130,7 @@ oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const Ti
     OSL_PRECOND(Process, "osl_joinProcess: Invalid parameter");
     OSL_ASSERT(ChildListMutex);
 
-    if (nullptr == Process || nullptr == ChildListMutex)
+    if (Process == nullptr || ChildListMutex == nullptr)
         return osl_Process_E_Unknown;
 
     osl_acquireMutex(ChildListMutex);

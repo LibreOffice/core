@@ -152,7 +152,7 @@ namespace
 
     void read_parent_environment(string_container_t* env_container)
     {
-        for (int i = 0; nullptr != environ[i]; i++)
+        for (int i = 0; environ[i] != nullptr; i++)
             env_container->push_back(OString(environ[i]));
         tidy_container(*env_container);
     }

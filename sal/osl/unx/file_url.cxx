@@ -289,7 +289,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
         sal_Int32 nDeleted = 0;
 
         /* if pTmp is not already allocated, copy ustrSystemPath for modification */
-        if( nullptr == pTmp )
+        if( pTmp == nullptr )
             rtl_uString_newFromString( &pTmp, ustrSystemPath );
 
         /* adapt index to pTmp */
@@ -308,7 +308,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
         pTmp->length -= nDeleted;
     }
 
-    if( nullptr == pTmp )
+    if( pTmp == nullptr )
         rtl_uString_assign( &pTmp, ustrSystemPath );
 
     /* file URLs must be URI encoded */

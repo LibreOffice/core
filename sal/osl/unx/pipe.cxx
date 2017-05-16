@@ -324,7 +324,7 @@ void SAL_CALL osl_acquirePipe( oslPipe pPipe )
 void SAL_CALL osl_releasePipe( oslPipe pPipe )
 {
 
-    if( nullptr == pPipe )
+    if( pPipe == nullptr )
         return;
 
     if( osl_atomic_decrement( &(pPipe->m_nRefCount) ) == 0 )

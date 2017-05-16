@@ -150,7 +150,7 @@ static oslFileError osl_setup_base_directory_impl_(
 
     OSL_PRECOND(((nullptr != pHandle) || (nullptr != ppustrTempFileURL)), "Invalid parameter!");
 
-    if ((nullptr == pHandle) && (nullptr == ppustrTempFileURL))
+    if ((pHandle == nullptr) && (ppustrTempFileURL == nullptr))
     {
         osl_error = osl_File_E_INVAL;
     }
@@ -159,7 +159,7 @@ static oslFileError osl_setup_base_directory_impl_(
         osl_error = osl_setup_base_directory_impl_(
             pustrDirectoryURL, ppustr_base_dir);
 
-        *b_delete_on_close = (nullptr == ppustrTempFileURL);
+        *b_delete_on_close = (ppustrTempFileURL == nullptr);
     }
 
     return osl_error;

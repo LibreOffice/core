@@ -571,7 +571,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
     char *codeset      = nullptr;
 
     /* default to process locale if pLocale == NULL */
-    if( nullptr == pLocale )
+    if( pLocale == nullptr )
         osl_getProcessLocale( &pLocale );
 
     /* convert rtl_Locale to locale string */

@@ -58,10 +58,10 @@ bool ComparisonWithConstant::VisitBinaryOperator(const BinaryOperator* binaryOp)
         return true;
     }
     APValue result;
-    if (!binaryOp->getLHS()->isIntegerConstantExpr(compiler.getASTContext())) {
+    if (!binaryOp->getLHS()->isEvaluatable(compiler.getASTContext())) {
         return true;
     }
-    if (binaryOp->getRHS()->isIntegerConstantExpr(compiler.getASTContext())) {
+    if (binaryOp->getRHS()->isEvaluatable(compiler.getASTContext())) {
         return true;
     }
     if (!rewrite(binaryOp))

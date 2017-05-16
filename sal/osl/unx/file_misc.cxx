@@ -143,7 +143,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
 
     char path[PATH_MAX];
 
-    if ((nullptr == ustrDirectoryURL) || (ustrDirectoryURL->length == 0) || (nullptr == pDirectory))
+    if ((ustrDirectoryURL == nullptr) || (ustrDirectoryURL->length == 0) || (pDirectory == nullptr))
         return osl_File_E_INVAL;
 
     /* convert file URL to system path */
@@ -231,7 +231,7 @@ oslFileError SAL_CALL osl_closeDirectory( oslDirectory Directory )
 
     OSL_ASSERT( Directory );
 
-    if( nullptr == pDirImpl )
+    if( pDirImpl == nullptr )
         return osl_File_E_INVAL;
 
 #ifdef ANDROID
@@ -287,7 +287,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
     OSL_ASSERT(Directory);
     OSL_ASSERT(pItem);
 
-    if ((nullptr == Directory) || (nullptr == pItem))
+    if ((Directory == nullptr) || (pItem == nullptr))
         return osl_File_E_INVAL;
 
 #ifdef ANDROID
@@ -301,7 +301,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
         pEntry = osl_readdir_impl_(pDirImpl->pDirStruct, true);
     }
 
-    if (nullptr == pEntry)
+    if (pEntry == nullptr)
         return osl_File_E_NOENT;
 
 #if defined(MACOSX)
@@ -328,7 +328,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory Directory, oslDirect
     rtl_uString_release( ustrFileName );
 
     DirectoryItem_Impl * pImpl = static_cast< DirectoryItem_Impl* >(*pItem);
-    if (nullptr != pImpl)
+    if (pImpl != nullptr)
     {
         pImpl->release();
         pImpl = nullptr;
@@ -350,7 +350,7 @@ oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirecto
     oslFileError osl_error      = osl_File_E_INVAL;
 
     OSL_ASSERT((nullptr != ustrFileURL) && (nullptr != pItem));
-    if ((nullptr == ustrFileURL) || (ustrFileURL->length == 0) || (nullptr == pItem))
+    if ((ustrFileURL == nullptr) || (ustrFileURL->length == 0) || (pItem == nullptr))
         return osl_File_E_INVAL;
 
     osl_error = osl_getSystemPathFromFileURL_Ex(ustrFileURL, &ustrSystemPath);
@@ -375,7 +375,7 @@ oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirecto
 oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item )
 {
     DirectoryItem_Impl * pImpl = static_cast< DirectoryItem_Impl* >(Item);
-    if (nullptr == pImpl)
+    if (pImpl == nullptr)
         return osl_File_E_INVAL;
 
     pImpl->acquire();
@@ -385,7 +385,7 @@ oslFileError SAL_CALL osl_acquireDirectoryItem( oslDirectoryItem Item )
 oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
 {
     DirectoryItem_Impl * pImpl = static_cast< DirectoryItem_Impl* >(Item);
-    if (nullptr == pImpl)
+    if (pImpl == nullptr)
         return osl_File_E_INVAL;
 
     pImpl->release();

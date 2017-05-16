@@ -185,7 +185,7 @@ namespace
     inline oslFileError setup_osl_getFileStatus(
         DirectoryItem_Impl * pImpl, oslFileStatus* pStat, rtl::OUString& file_path)
     {
-        if ((nullptr == pImpl) || (nullptr == pStat))
+        if ((pImpl == nullptr) || (pStat == nullptr))
             return osl_File_E_INVAL;
 
         file_path = rtl::OUString(pImpl->m_ustrFilePath);
