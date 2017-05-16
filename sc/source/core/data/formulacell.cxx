@@ -2275,7 +2275,7 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
 
     if ( pDocument->GetHardRecalcState() == ScDocument::HARDRECALCSTATE_OFF )
     {
-        if (nHint == SfxHintId::ScDataChanged || nHint == SfxHintId::ScTableOpDirty)
+        if (nHint == SfxHintId::ScDataChanged || nHint == SfxHintId::ScTableOpDirty || (bSubTotal && nHint == SfxHintId::ScHiddenRowsChanged))
         {
             bool bForceTrack = false;
             if ( nHint == SfxHintId::ScTableOpDirty )
