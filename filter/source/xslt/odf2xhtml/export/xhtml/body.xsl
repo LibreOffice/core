@@ -1222,7 +1222,7 @@
 		<!-- writing out a heading number if desired.-->
 		<!-- if a corresponding 'text:outline-style' exist or is not empty -->
 		<xsl:choose>
-			<xsl:when test="$globalData/office:styles/text:outline-style/text:outline-level-style[@text:level = current()/@text:outline-level]/@style:num-format != ''">
+			<xsl:when test="$globalData/office:styles/text:outline-style/text:outline-level-style[@text:level = current()/@text:outline-level]/@style:num-format != '' and not(@text:is-list-header='true')">
 
 				<!-- Every heading element will get an unique anchor for its file, from its hiearchy level and name:
 					 For example:  The heading title 'My favorite heading' might get <a name="1_2_2_My_favorite_heading" /> -->
