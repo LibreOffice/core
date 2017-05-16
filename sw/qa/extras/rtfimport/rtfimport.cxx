@@ -1333,6 +1333,15 @@ DECLARE_RTFIMPORT_TEST(testN825305, "n825305.rtf")
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf106953, "tdf106953.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
+    uno::Reference<beans::XPropertyState> xPropertyState(getParagraph(1), uno::UNO_QUERY);
+    beans::PropertyState ePropertyState = xPropertyState->getPropertyState("ParaLeftMargin");
+    // Was beans::PropertyState_DEFAULT_VALUE.
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
+}
+
 DECLARE_RTFIMPORT_TEST(testParaBottomMargin, "para-bottom-margin.rtf")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
