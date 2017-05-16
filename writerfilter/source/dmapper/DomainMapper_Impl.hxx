@@ -308,6 +308,8 @@ struct FloatingTableInfo
     css::uno::Reference<css::text::XTextRange> m_xEnd;
     css::uno::Sequence<css::beans::PropertyValue> m_aFrameProperties;
     sal_Int32 m_nTableWidth;
+    /// Break type of the section that contains this table.
+    sal_Int32 m_nBreakType = -1;
 
     FloatingTableInfo(css::uno::Reference<css::text::XTextRange> const& xStart,
             css::uno::Reference<css::text::XTextRange> const& xEnd,
@@ -752,6 +754,9 @@ public:
     bool IsLineNumberingSet() const {return m_bLineNumberingSet;}
 
     DeletableTabStop                m_aCurrentTabStop;
+
+    /// If we're right after the end of a table.
+    bool m_bConvertedTable = false;
 
     bool IsOOXMLImport() const { return m_eDocumentType == SourceDocumentType::OOXML; }
 
