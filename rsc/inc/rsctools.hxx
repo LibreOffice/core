@@ -101,10 +101,6 @@ public:
                     *pTo++ = *pFrom++;
                     return bSwap ? OSL_SWAPDWORD( nVal ) : nVal;
                 }
-    char *      GetUTF8( sal_uInt32 nPos )
-                {
-                    return GetPointer( nPos );
-                }
     sal_uInt32  Size(){ return nLen; }
     void        Put( sal_uInt64 lVal )
                 {

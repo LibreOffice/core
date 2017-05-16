@@ -1378,13 +1378,13 @@ void OutlinerView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallback
     pEditView->ExecuteSpellPopup( rPosPixel, pStartDlg );
 }
 
-sal_uLong OutlinerView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
+void OutlinerView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     sal_Int32 nOldParaCount = pEditView->GetEditEngine()->GetParagraphCount();
     ESelection aOldSel = pEditView->GetSelection();
     aOldSel.Adjust();
 
-    sal_uLong nRet = pEditView->Read( rInput, eFormat, pHTTPHeaderAttrs );
+    pEditView->Read( rInput, eFormat, pHTTPHeaderAttrs );
 
     long nParaDiff = pEditView->GetEditEngine()->GetParagraphCount() - nOldParaCount;
     sal_Int32 nChangesStart = aOldSel.nStartPara;
@@ -1408,8 +1408,6 @@ sal_uLong OutlinerView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValue
     {
         pOwner->ImpFilterIndents( nChangesStart, nChangesEnd );
     }
-
-    return nRet;
 }
 
 void OutlinerView::SetBackgroundColor( const Color& rColor )

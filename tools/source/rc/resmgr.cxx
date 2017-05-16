@@ -1067,18 +1067,6 @@ sal_Int32 ResMgr::GetLong( void const * pLong )
             (*(static_cast<const sal_uInt8*>(pLong) + 3) <<  0)   );
 }
 
-sal_uInt64 ResMgr::GetUInt64( void const * pDatum )
-{
-    return ((sal_uInt64(*(static_cast<const sal_uInt8*>(pDatum) + 0)) << 56) |
-            (sal_uInt64(*(static_cast<const sal_uInt8*>(pDatum) + 1)) << 48) |
-            (sal_uInt64(*(static_cast<const sal_uInt8*>(pDatum) + 2)) << 40) |
-            (sal_uInt64(*(static_cast<const sal_uInt8*>(pDatum) + 3)) << 32) |
-            (sal_uInt64(*(static_cast<const sal_uInt8*>(pDatum) + 4)) << 24) |
-            (sal_uInt64(*(static_cast<const sal_uInt8*>(pDatum) + 5)) << 16) |
-            (sal_uInt64(*(static_cast<const sal_uInt8*>(pDatum) + 6)) <<  8) |
-            (sal_uInt64(*(static_cast<const sal_uInt8*>(pDatum) + 7)) <<  0)   );
-}
-
 sal_uInt32 ResMgr::GetStringWithoutHook( OUString& rStr, const sal_uInt8* pStr )
 {
     sal_uInt32 nLen=0;

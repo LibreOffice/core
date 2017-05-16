@@ -3,30 +3,30 @@ chart2/source/view/main/OpenGLRender.hxx:69
 chart2/source/view/main/OpenGLRender.hxx:70
     int OpenGLRender::MoveModelf(const struct PosVecf3 &,const struct PosVecf3 &,const struct PosVecf3 &)
 chart2/source/view/main/OpenGLRender.hxx:74
-    int OpenGLRender::RenderLine2FBO(int)
+    int OpenGLRender::RenderLine2FBO()
 chart2/source/view/main/OpenGLRender.hxx:75
     int OpenGLRender::SetLine2DShapePoint(float,float,int)
 chart2/source/view/main/OpenGLRender.hxx:79
     int OpenGLRender::Bubble2DShapePoint(float,float,float,float)
 chart2/source/view/main/OpenGLRender.hxx:80
-    int OpenGLRender::RenderBubble2FBO(int)
+    int OpenGLRender::RenderBubble2FBO()
 chart2/source/view/main/OpenGLRender.hxx:84
     int OpenGLRender::RenderRectangleShape(_Bool,_Bool)
 chart2/source/view/main/OpenGLRender.hxx:85
     int OpenGLRender::RectangleShapePoint(float,float,float,float)
-chart2/source/view/main/OpenGLRender.hxx:93
-    int OpenGLRender::CreateTextTexture(const class BitmapEx &,const struct com::sun::star::awt::Point &,const struct com::sun::star::awt::Size &,long,const struct com::sun::star::drawing::HomogenMatrix3 &)
-chart2/source/view/main/OpenGLRender.hxx:96
+chart2/source/view/main/OpenGLRender.hxx:92
+    int OpenGLRender::CreateTextTexture(const class BitmapEx &,const struct com::sun::star::awt::Size &,long,const struct com::sun::star::drawing::HomogenMatrix3 &)
+chart2/source/view/main/OpenGLRender.hxx:95
     int OpenGLRender::RenderTextShape()
-chart2/source/view/main/OpenGLRender.hxx:98
+chart2/source/view/main/OpenGLRender.hxx:97
     int OpenGLRender::SetArea2DShapePoint(float,float,int)
-chart2/source/view/main/OpenGLRender.hxx:99
+chart2/source/view/main/OpenGLRender.hxx:98
     int OpenGLRender::RenderArea2DShape()
-chart2/source/view/main/OpenGLRender.hxx:103
+chart2/source/view/main/OpenGLRender.hxx:102
     int OpenGLRender::RenderPieSegment2DShape(float,float,float)
-chart2/source/view/main/OpenGLRender.hxx:105
-    int OpenGLRender::RenderSymbol2DShape(float,float,float,float,int)
-chart2/source/view/main/OpenGLRender.hxx:122
+chart2/source/view/main/OpenGLRender.hxx:104
+    int OpenGLRender::RenderSymbol2DShape(float,float,int)
+chart2/source/view/main/OpenGLRender.hxx:121
     int OpenGLRender::Create2DCircle(int)
 compilerplugins/clang/test/externvar.hxx:23
     int f(int)
@@ -52,13 +52,11 @@ connectivity/source/inc/odbc/OConnection.hxx:82
     short connectivity::odbc::OConnection::Construct(const class rtl::OUString &,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> &)
 dbaccess/source/ui/browser/genericcontroller.cxx:1267
     const type-parameter-?-? & dbaui::(anonymous namespace)::SGI_identity::operator()(const type-parameter-?-? &) const
-hwpfilter/source/hwpfile.h:141
-    int HWPFile::Read1b(void *,unsigned long)
 i18nlangtag/source/languagetag/languagetag.cxx:275
     const class rtl::OUString & LanguageTagImpl::getBcp47() const
-include/basegfx/matrix/b2dhommatrix.hxx:86
+include/basegfx/matrix/b2dhommatrix.hxx:90
     class basegfx::B2DHomMatrix & basegfx::B2DHomMatrix::operator*=(double)
-include/basegfx/matrix/b2dhommatrix.hxx:87
+include/basegfx/matrix/b2dhommatrix.hxx:91
     class basegfx::B2DHomMatrix & basegfx::B2DHomMatrix::operator/=(double)
 include/basegfx/matrix/b3dhommatrix.hxx:103
     class basegfx::B3DHomMatrix & basegfx::B3DHomMatrix::operator*=(double)
@@ -272,9 +270,9 @@ include/vcl/fontcharmap.hxx:48
     class tools::SvRef<class FontCharMap> FontCharMap::GetDefaultMap(_Bool)
 include/vcl/gdimtf.hxx:185
     class SvStream & GDIMetaFile::Read(class SvStream &)
-include/vcl/graphicfilter.hxx:257
+include/vcl/graphicfilter.hxx:261
     unsigned short GraphicFilter::ExportGraphic(const class Graphic &,const class INetURLObject &,unsigned short,const class com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
-include/vcl/menu.hxx:464
+include/vcl/menu.hxx:468
     unsigned short MenuBar::AddMenuBarButton(const class Image &,const class Link<struct MenuBar::MenuBarButtonCallbackArg &, _Bool> &,const class rtl::OUString &)
 lotuswordpro/source/filter/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)

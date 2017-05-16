@@ -64,11 +64,6 @@ UNOTOOLS_DLLPUBLIC bool ensureFolder(
     const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
     const OUString& rFolder, ucbhelper::Content & result) throw();
 
-/// @return the value of the "Size" property of the given content, or zero if
-///     obtaining the property yields a void value or raises a
-///     non-RuntimeException (RuntimeExceptions are passed through)
-UNOTOOLS_DLLPUBLIC sal_Int64 GetSize(OUString const & url);
-
 UNOTOOLS_DLLPUBLIC bool IsYounger(
     OUString const & younger, OUString const & older);
 

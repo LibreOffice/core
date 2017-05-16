@@ -114,7 +114,6 @@ public:
                           }
                       // deletes all resource objects of this file
     void              Delete( RscFileTab::Index lFileKey );
-    sal_uInt32        PutSysName( RESOURCE_TYPE nRscTyp, char * pName );
     void              ClearSysNames();
     ERRTYPE           WriteRc( WriteRcContext& rContext );
     void              WriteSrc( FILE * fOutput, RscFileTab::Index nFileIndex );
