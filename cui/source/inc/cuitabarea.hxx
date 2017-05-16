@@ -625,8 +625,6 @@ private:
     ChangeType*         m_pnColorListState;
     sal_Int32*          m_pPos;
 
-    bool                m_bPtrnChanged;
-
     XFillStyleItem      m_aXFStyleItem;
     XFillBitmapItem     m_aXPatternItem;
     XFillAttrSetItem    m_aXFillAttr;
