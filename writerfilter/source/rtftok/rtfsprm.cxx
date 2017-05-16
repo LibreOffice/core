@@ -163,6 +163,11 @@ static bool isSPRMDeduplicateBlacklist(Id nId)
     case NS_ooxml::LN_CT_TabStop_pos:
         // See the NS_ooxml::LN_CT_PPrBase_tabs handler in DomainMapper,
         // deduplication is explicitly not wanted for these tokens.
+    // Erasing these just because they equal to the style one is
+    // problematic, as then the used value won't be from the style, but
+    // possibly from the numbering.
+    case NS_ooxml::LN_CT_Ind_left:
+    case NS_ooxml::LN_CT_Ind_right:
         return true;
 
     default:
