@@ -718,7 +718,7 @@ sal_Bool SAL_CALL Player::isPlaying()
     // return whether the pipeline is in PLAYING STATE or not
     if( !mbPlayPending && mbInitialized && mpPlaybin )
     {
-        bRet = GST_STATE_PLAYING == GST_STATE( mpPlaybin );
+        bRet = GST_STATE( mpPlaybin ) == GST_STATE_PLAYING;
     }
 
     SAL_INFO( "avmedia.gstreamer", AVVERSION "isPlaying " << bRet );

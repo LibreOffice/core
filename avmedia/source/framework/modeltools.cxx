@@ -143,7 +143,7 @@ static void lcl_EmbedExternals(const OUString& rSourceURL, const uno::Reference<
     OUString sTempFileURL;
     const ::osl::FileBase::RC  aErr =
         ::osl::FileBase::createTempFile(nullptr, nullptr, &sTempFileURL);
-    if (::osl::FileBase::E_None != aErr)
+    if (aErr != ::osl::FileBase::E_None)
     {
         SAL_WARN("avmedia.opengl", "Cannot create temp file");
         return;

@@ -55,8 +55,8 @@ sal_Bool SAL_CALL Window::setZoomLevel( media::ZoomLevel eZoomLevel )
 {
         bool bRet = false;
 
-        if( media::ZoomLevel_NOT_AVAILABLE != meZoomLevel &&
-            media::ZoomLevel_NOT_AVAILABLE != eZoomLevel )
+        if( meZoomLevel != media::ZoomLevel_NOT_AVAILABLE &&
+            eZoomLevel != media::ZoomLevel_NOT_AVAILABLE )
         {
             if( eZoomLevel != meZoomLevel )
             {

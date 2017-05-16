@@ -153,7 +153,7 @@ void MediaControlBase::UpdateToolBoxes(MediaItem aMediaItem)
     {
         mpPlayToolBox->Enable();
         mpMuteToolBox->Enable();
-        if( MediaState::Play == aMediaItem.getState() )
+        if( aMediaItem.getState() == MediaState::Play )
         {
             mpPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PLAY );
             mpPlayToolBox->CheckItem( AVMEDIA_TOOLBOXITEM_PAUSE, false );
