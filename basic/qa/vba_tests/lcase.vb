@@ -6,7 +6,7 @@ Dim result As String
 
 Function doUnitTest() As String
 result = verify_testLCase()
-If failCount <> 0 And passCount > 0 Then
+If failCount <> 0 Or passCount = 0 Then
     doUnitTest = result
 Else
     doUnitTest = "OK"
@@ -23,27 +23,25 @@ Function verify_testLCase() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
-    Dim date1, date2 As Date   'variables for test
+    Dim str1, str2 As String 'variables for test
     testName = "Test LCase function"
     On Error GoTo errorHandler
 
-    date2 = "lowercase"
-    date1 = LCase("LOWERCASE")
-    TestLog_ASSERT date1 = date2, "the return LCase is: " & date1
+    str2 = "lowercase"
+    str1 = LCase("LOWERCASE")
+    TestLog_ASSERT str1 = str2, "the return LCase is: " & str1
 
-    date2 = "lowercase"
-    date1 = LCase("LowerCase")
-    TestLog_ASSERT date1 = date2, "the return LCase is: " & date1
+    str2 = "lowercase"
+    str1 = LCase("LowerCase")
+    TestLog_ASSERT str1 = str2, "the return LCase is: " & str1
 
-    date2 = "lowercase"
-    date1 = LCase("lowercase")
-    TestLog_ASSERT date1 = date2, "the return LCase is: " & date1
+    str2 = "lowercase"
+    str1 = LCase("lowercase")
+    TestLog_ASSERT str1 = str2, "the return LCase is: " & str1
 
-    date2 = "lowercase"
-    date1 = LCase("LOWER CASE")
-    TestLog_ASSERT date1 = date2, "the return LCase is: " & date1
+    str2 = "lower case"
+    str1 = LCase("LOWER CASE")
+    TestLog_ASSERT str1 = str2, "the return LCase is: " & str1
 
 
     result = result & Chr$(10) & "Tests passed: " & passCount & Chr$(10) & "Tests failed: " & failCount & Chr$(10)
