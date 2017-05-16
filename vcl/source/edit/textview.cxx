@@ -157,8 +157,6 @@ struct ImpTextView
 
     std::unique_ptr<TextDDInfo> mpDDInfo;
 
-    VclPtr<VirtualDevice>  mpVirtDev;
-
     std::unique_ptr<SelectionEngine> mpSelEngine;
     std::unique_ptr<TextSelFunctionSet> mpSelFuncSet;
 
@@ -185,7 +183,6 @@ TextView::TextView( ExtTextEngine* pEng, vcl::Window* pWindow ) :
 
     mpImpl->mpWindow = pWindow;
     mpImpl->mpTextEngine = pEng;
-    mpImpl->mpVirtDev = nullptr;
 
     mpImpl->mbPaintSelection = true;
     mpImpl->mbAutoScroll = true;
@@ -234,8 +231,6 @@ TextView::~TextView()
 {
     mpImpl->mpSelEngine.reset();
     mpImpl->mpSelFuncSet.reset();
-
-    mpImpl->mpVirtDev.disposeAndClear();
 
     if ( mpImpl->mpWindow->GetCursor() == mpImpl->mpCursor.get() )
         mpImpl->mpWindow->SetCursor( nullptr );
@@ -474,11 +469,6 @@ void TextView::ImpShowHideSelection(const TextSelection* pRange)
             }
         }
     }
-}
-
-void TextView::EraseVirtualDevice()
-{
-    mpImpl->mpVirtDev.disposeAndClear();
 }
 
 bool TextView::KeyInput( const KeyEvent& rKeyEvent )
