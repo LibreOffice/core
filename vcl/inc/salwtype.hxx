@@ -79,8 +79,6 @@ enum class SalEvent {
     SurroundingTextRequest,
     SurroundingTextSelectionChange,
     StartReconversion,
-    ExternalZoom,
-    ExternalScroll,
     QueryCharPosition,
     Swipe,
     LongPress
