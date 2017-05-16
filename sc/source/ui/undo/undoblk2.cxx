@@ -30,8 +30,6 @@
 
 #include "undoolk.hxx"
 
-#include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
 
 /** Change column widths or row heights */
 ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
@@ -96,7 +94,6 @@ void ScUndoWidthOrHeight::Undo()
     if (pUndoTab)                                           // Outlines are included when saving ?
         rDoc.SetOutlineTable( nStartTab, pUndoTab );
 
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     SCTAB nTabCount = rDoc.GetTableCount();
     ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
@@ -120,6 +117,7 @@ void ScUndoWidthOrHeight::Undo()
 
     DoSdrUndoAction( pDrawUndo, &rDoc );
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
         pViewShell->UpdateScrollBars();
@@ -127,12 +125,6 @@ void ScUndoWidthOrHeight::Undo()
         SCTAB nCurrentTab = pViewShell->GetViewData().GetTabNo();
         if ( nCurrentTab < nStartTab || nCurrentTab > nEndTab )
             pViewShell->SetTabNo( nStartTab );
-
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            OString aPayload = bWidth ? "column" : "row";
-            ScTabViewShell::notifyAllViewsHeaderInvalidation(aPayload, pViewShell->GetViewData().GetTabNo());
-        }
     }
 
     EndUndo();

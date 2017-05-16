@@ -23,8 +23,6 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <sfx2/app.hxx>
-#include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
 
 #include "undoblk.hxx"
 #include "undoutil.hxx"
@@ -259,19 +257,7 @@ void ScUndoInsertCells::DoChange( const bool bUndo )
     }
     pDocShell->PostDataChanged();
     if (pViewShell)
-    {
         pViewShell->CellContentChanged();
-
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            if (eCmd == INS_INSCOLS_BEFORE || eCmd == INS_INSCOLS_AFTER || eCmd == INS_CELLSRIGHT)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation("column",  pViewShell->GetViewData().GetTabNo());
-
-            if (eCmd == INS_INSROWS_BEFORE || eCmd == INS_INSROWS_AFTER || eCmd == INS_CELLSDOWN)
-                ScTabViewShell::notifyAllViewsHeaderInvalidation("row",  pViewShell->GetViewData().GetTabNo());
-        }
-
-    }
 }
 
 void ScUndoInsertCells::Undo()
