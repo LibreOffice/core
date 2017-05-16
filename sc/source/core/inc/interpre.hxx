@@ -69,7 +69,7 @@ struct ParamIfsResult
     double mfMem = 0.0;
     double mfCount = 0.0;
     double mfMin = std::numeric_limits<double>::max();
-    double mfMax = std::numeric_limits<double>::min();
+    double mfMax = std::numeric_limits<double>::lowest();
 };
 
 }
