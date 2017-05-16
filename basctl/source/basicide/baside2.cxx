@@ -1035,7 +1035,7 @@ void ModulWindow::ExecuteGlobal (SfxRequest& rReq)
 void ModulWindow::GetState( SfxItemSet &rSet )
 {
     SfxWhichIter aIter(rSet);
-    for ( sal_uInt16 nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich() )
+    for ( sal_uInt16 nWh = aIter.FirstWhich(); nWh != 0; nWh = aIter.NextWhich() )
     {
         switch ( nWh )
         {

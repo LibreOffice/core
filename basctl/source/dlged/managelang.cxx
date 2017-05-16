@@ -147,7 +147,7 @@ void ManageLanguageDialog::ClearLanguageBox()
 IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl, Button*, void)
 {
     ScopedVclPtrInstance< SetDefaultLanguageDialog > aDlg( this, m_xLocalizationMgr );
-    if ( RET_OK == aDlg->Execute() )
+    if ( aDlg->Execute() == RET_OK )
     {
         // add new locales
         Sequence< Locale > aLocaleSeq = aDlg->GetLocales();
