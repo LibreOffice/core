@@ -628,7 +628,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         if (m_aStates.top().eDestination == Destination::LISTOVERRIDEENTRY)
             m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_AbstractNum_nsid, pIntValue);
         else
-            putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_tabs, NS_ooxml::LN_CT_NumPr_numId, pIntValue);
+            putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_numPr, NS_ooxml::LN_CT_NumPr_numId, pIntValue);
     }
     break;
     case RTF_UC:
