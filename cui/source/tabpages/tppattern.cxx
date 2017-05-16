@@ -93,7 +93,6 @@ SvxPatternTabPage::SvxPatternTabPage(  vcl::Window* pParent, const SfxItemSet& r
     m_pnPatternListState  ( nullptr ),
     m_pnColorListState    ( nullptr ),
     m_pPos                ( nullptr ),
-    m_bPtrnChanged        ( false ),
 
     m_aXFStyleItem        ( drawing::FillStyle_BITMAP ),
     m_aXPatternItem       ( OUString(), Graphic() ),
@@ -214,7 +213,7 @@ DeactivateRC SvxPatternTabPage::DeactivatePage( SfxItemSet* _pSet)
 bool SvxPatternTabPage::FillItemSet( SfxItemSet* _rOutAttrs )
 {
     _rOutAttrs->Put(XFillStyleItem(drawing::FillStyle_BITMAP));
-    size_t nPos = m_pPatternLB->GetSelectItemPos();
+    size_t nPos = m_pPatternLB->IsNoSelection() ? VALUESET_ITEM_NOTFOUND : m_pPatternLB->GetSelectItemPos();
     if(VALUESET_ITEM_NOTFOUND != nPos)
     {
         const XBitmapEntry* pXBitmapEntry = m_pPatternList->GetBitmap( static_cast<sal_uInt16>(nPos) );
@@ -341,8 +340,6 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
         }
 
         m_pCtlPixel->Invalidate();
-
-        m_bPtrnChanged = false;
     }
 }
 
@@ -464,8 +461,6 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickModifyHdl_Impl, Button*, void)
         m_pPatternLB->SelectItem( nId );
 
         *m_pnPatternListState |= ChangeType::MODIFIED;
-
-        m_bPtrnChanged = false;
     }
 }
 
@@ -504,8 +499,6 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
                 m_pPatternLB->SelectItem( nId );
 
                 *m_pnPatternListState |= ChangeType::MODIFIED;
-
-                m_bPtrnChanged = false;
             }
             else
             {
@@ -555,6 +548,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 IMPL_LINK_NOARG(SvxPatternTabPage, ChangeColorHdl_Impl, SvxColorListBox&, void)
 {
     ChangeColor_Impl();
+    m_pPatternLB->SetNoSelection();
 }
 
 void SvxPatternTabPage::ChangeColor_Impl()
@@ -570,8 +564,6 @@ void SvxPatternTabPage::ChangeColor_Impl()
     m_rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_pBitmapCtl->GetBitmapEx())));
     m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
     m_pCtlPreview->Invalidate();
-
-    m_bPtrnChanged = true;
 }
 
 
@@ -585,9 +577,9 @@ void SvxPatternTabPage::PointChanged( vcl::Window* pWindow, RectPoint )
         m_rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_pBitmapCtl->GetBitmapEx())));
         m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
         m_pCtlPreview->Invalidate();
-
-        m_bPtrnChanged = true;
     }
+
+    m_pPatternLB->SetNoSelection();
 }
 
 sal_Int32 SvxPatternTabPage::SearchPatternList(const OUString& rPatternName)
