@@ -68,6 +68,7 @@
 #include <editable.hxx>
 #include <bcaslot.hxx>
 #include <sharedformula.hxx>
+#include <tabprotection.hxx>
 
 #include <formula/IFunctionDescription.hxx>
 
@@ -6946,6 +6947,158 @@ void Test::testPrecisionAsShown()
     }
 
     setCalcAsShown( m_pDoc, false);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testProtectedSheetEditByRow()
+{
+    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
+    m_pDoc->InsertTab(0, "Protected");
+
+    {
+        // Remove protected flags from rows 2-5.
+        ScPatternAttr aAttr(m_pDoc->GetPool());
+        aAttr.GetItemSet().Put(ScProtectionAttr(false));
+        m_pDoc->ApplyPatternAreaTab(0, 1, MAXCOL, 4, 0, aAttr);
+
+        // Protect the sheet without any options.
+        ScTableProtection aProtect;
+        aProtect.setProtected(true);
+        m_pDoc->SetTabProtection(0, &aProtect);
+
+        // Try to delete row 3.  It should fail.
+        ScRange aRow3(0,2,0,MAXCOL,2,0);
+        ScMarkData aMark;
+        aMark.SelectOneTable(0);
+        bool bDeleted = rDocFunc.DeleteCells(aRow3, &aMark, DEL_DELROWS, true);
+        CPPUNIT_ASSERT_MESSAGE("deletion of row 3 should fail.", !bDeleted);
+
+        // Protect the sheet but allow row deletion.
+        aProtect.setOption(ScTableProtection::DELETE_ROWS, true);
+        m_pDoc->SetTabProtection(0, &aProtect);
+
+        // Now we should be able to delete row 3.
+        bDeleted = rDocFunc.DeleteCells(aRow3, &aMark, DEL_DELROWS, true);
+        CPPUNIT_ASSERT_MESSAGE("deletion of row 3 should succeed.", bDeleted);
+
+        // But, row deletion should still fail on a protected row.
+        ScRange aRow10(0,9,0,MAXCOL,9,0);
+        bDeleted = rDocFunc.DeleteCells(aRow10, &aMark, DEL_DELROWS, true);
+        CPPUNIT_ASSERT_MESSAGE("deletion of row 10 should not be allowed.", !bDeleted);
+
+        // Try inserting a new row.  It should fail.
+        bool bInserted = rDocFunc.InsertCells(aRow3, &aMark, INS_INSROWS_AFTER, true, true);
+        CPPUNIT_ASSERT_MESSAGE("row insertion at row 3 should fail.", !bInserted);
+
+        // Allow row insertions.
+        aProtect.setOption(ScTableProtection::INSERT_ROWS, true);
+        m_pDoc->SetTabProtection(0, &aProtect);
+
+        bInserted = rDocFunc.InsertCells(aRow3, &aMark, INS_INSROWS_AFTER, true, true);
+        CPPUNIT_ASSERT_MESSAGE("row insertion at row 3 should succeed.", bInserted);
+
+        // Row insertion is allowed even when the rows above and below have protected flags set.
+        bInserted = rDocFunc.InsertCells(aRow10, &aMark, INS_INSROWS_AFTER, true, true);
+        CPPUNIT_ASSERT_MESSAGE("row insertion at row 10 should succeed.", bInserted);
+    }
+
+    m_pDoc->InsertTab(1, "Matrix"); // This sheet is unprotected.
+
+    {
+        // Insert matrix into B2:C3.
+        ScMarkData aMark;
+        aMark.SelectOneTable(1);
+        m_pDoc->InsertMatrixFormula(1, 1, 2, 2, aMark, "={1;2|3;4}");
+
+        CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,1,1)));
+        CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,1,1)));
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,1)));
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(2,2,1)));
+
+        // Try to insert a row at row 3.  It should fail because of matrix's presence.
+
+        ScRange aRow3(0,2,1,MAXCOL,2,1);
+        bool bInserted = rDocFunc.InsertCells(aRow3, &aMark, INS_INSROWS_BEFORE, true, true);
+        CPPUNIT_ASSERT_MESSAGE("row insertion at row 3 should fail.", !bInserted);
+    }
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testProtectedSheetEditByColumn()
+{
+    ScDocFunc& rDocFunc = getDocShell().GetDocFunc();
+    m_pDoc->InsertTab(0, "Protected");
+
+    {
+        // Remove protected flags from columns B to E.
+        ScPatternAttr aAttr(m_pDoc->GetPool());
+        aAttr.GetItemSet().Put(ScProtectionAttr(false));
+        m_pDoc->ApplyPatternAreaTab(1, 0, 4, MAXROW, 0, aAttr);
+
+        // Protect the sheet without any options.
+        ScTableProtection aProtect;
+        aProtect.setProtected(true);
+        m_pDoc->SetTabProtection(0, &aProtect);
+
+        // Try to delete column C.  It should fail.
+        ScRange aCol3(2,0,0,2,MAXROW,0);
+        ScMarkData aMark;
+        aMark.SelectOneTable(0);
+        bool bDeleted = rDocFunc.DeleteCells(aCol3, &aMark, DEL_DELCOLS, true);
+        CPPUNIT_ASSERT_MESSAGE("deletion of column 3 should fail.", !bDeleted);
+
+        // Protect the sheet but allow column deletion.
+        aProtect.setOption(ScTableProtection::DELETE_COLUMNS, true);
+        m_pDoc->SetTabProtection(0, &aProtect);
+
+        // Now we should be able to delete column C.
+        bDeleted = rDocFunc.DeleteCells(aCol3, &aMark, DEL_DELCOLS, true);
+        CPPUNIT_ASSERT_MESSAGE("deletion of column 3 should succeed.", bDeleted);
+
+        // But, column deletion should still fail on a protected column.
+        ScRange aCol10(9,0,0,9,MAXROW,0);
+        bDeleted = rDocFunc.DeleteCells(aCol10, &aMark, DEL_DELCOLS, true);
+        CPPUNIT_ASSERT_MESSAGE("deletion of column 10 should not be allowed.", !bDeleted);
+
+        // Try inserting a new column.  It should fail.
+        bool bInserted = rDocFunc.InsertCells(aCol3, &aMark, INS_INSCOLS_AFTER, true, true);
+        CPPUNIT_ASSERT_MESSAGE("column insertion at column 3 should fail.", !bInserted);
+
+        // Allow column insertions.
+        aProtect.setOption(ScTableProtection::INSERT_COLUMNS, true);
+        m_pDoc->SetTabProtection(0, &aProtect);
+
+        bInserted = rDocFunc.InsertCells(aCol3, &aMark, INS_INSCOLS_AFTER, true, true);
+        CPPUNIT_ASSERT_MESSAGE("column insertion at column 3 should succeed.", bInserted);
+
+        // Column insertion is allowed even when the columns above and below have protected flags set.
+        bInserted = rDocFunc.InsertCells(aCol10, &aMark, INS_INSCOLS_AFTER, true, true);
+        CPPUNIT_ASSERT_MESSAGE("column insertion at column 10 should succeed.", bInserted);
+    }
+
+    m_pDoc->InsertTab(1, "Matrix"); // This sheet is unprotected.
+
+    {
+        // Insert matrix into B2:C3.
+        ScMarkData aMark;
+        aMark.SelectOneTable(1);
+        m_pDoc->InsertMatrixFormula(1, 1, 2, 2, aMark, "={1;2|3;4}");
+
+        CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1,1,1)));
+        CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,1,1)));
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,1)));
+        CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(2,2,1)));
+
+        // Try to insert a column at column C.  It should fail because of matrix's presence.
+
+        ScRange aCol3(2,0,1,2,MAXROW,1);
+        bool bInserted = rDocFunc.InsertCells(aCol3, &aMark, INS_INSCOLS_BEFORE, true, true);
+        CPPUNIT_ASSERT_MESSAGE("column insertion at column C should fail.", !bInserted);
+    }
+
+    m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
 

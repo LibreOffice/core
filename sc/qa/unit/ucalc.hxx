@@ -527,6 +527,8 @@ public:
     void testEmptyCalcDocDefaults();
 
     void testPrecisionAsShown();
+    void testProtectedSheetEditByRow();
+    void testProtectedSheetEditByColumn();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -794,6 +796,8 @@ public:
     CPPUNIT_TEST(testTdf97587);
     CPPUNIT_TEST(testEmptyCalcDocDefaults);
     CPPUNIT_TEST(testPrecisionAsShown);
+    CPPUNIT_TEST(testProtectedSheetEditByRow);
+    CPPUNIT_TEST(testProtectedSheetEditByColumn);
     CPPUNIT_TEST_SUITE_END();
 
 private:
