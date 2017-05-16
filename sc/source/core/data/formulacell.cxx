@@ -2305,6 +2305,11 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
                     && !pDocument->IsInFormulaTrack( this ) )
                 pDocument->AppendToFormulaTrack( this );
         }
+        else if (nHint == SfxHintId::ScRowsHidden)
+        {
+            if (bSubTotal) //flag set for subtotal and aggregate function
+                SetDirty();
+        }
     }
 }
 

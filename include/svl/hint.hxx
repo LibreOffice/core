@@ -85,6 +85,7 @@ enum class SfxHintId {
     ScRefModeChanged,
     ScKillEditView,
     ScKillEditViewNoPaint,
+    ScRowsHidden,
 
 // SC accessibility hints
     ScAccTableChanged,

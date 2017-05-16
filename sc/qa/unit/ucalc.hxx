@@ -527,6 +527,7 @@ public:
     void testEmptyCalcDocDefaults();
 
     void testPrecisionAsShown();
+    void testFuncRowsHidden();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -794,6 +795,7 @@ public:
     CPPUNIT_TEST(testTdf97587);
     CPPUNIT_TEST(testEmptyCalcDocDefaults);
     CPPUNIT_TEST(testPrecisionAsShown);
+    CPPUNIT_TEST(testFuncRowsHidden);
     CPPUNIT_TEST_SUITE_END();
 
 private:
