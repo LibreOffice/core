@@ -22,6 +22,24 @@
       "revId": "cbaf4c26e5f235a60c743cb4b50607fe38e5f5b9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_1a4a0084",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 6489,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-05-16T14:18:31Z",
+      "side": 1,
+      "message": "OK, so does that mean it would be useful to adapt WW8AttributeOutput::CharAutoKern() to do the same, or you\u0027re just not confident enough and better to leave it unchanged?\n\nI asked just  because in many cases there is no reason for WW8AttributeOutput and DocxAttributeOutput to differ (apart from the obvious binary vs XML). :-)",
+      "parentUuid": "5a3905b3_1aee808b",
+      "revId": "cbaf4c26e5f235a60c743cb4b50607fe38e5f5b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
