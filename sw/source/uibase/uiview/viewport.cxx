@@ -41,7 +41,6 @@
 #include <usrpref.hxx>
 #include <pagedesc.hxx>
 #include <workctrl.hxx>
-#include <touch/touch.h>
 
 #include <PostItMgr.hxx>
 
@@ -1215,48 +1214,6 @@ bool SwView::HandleWheelCommands( const CommandEvent& rCEvt )
             nFact = std::min( (long) 600, basegfx::zoomtools::zoomIn( nFact ));
 
         SetZoom( SvxZoomType::PERCENT, nFact );
-        bOk = true;
-    }
-    else if (pWData && CommandWheelMode::ZOOM_SCALE == pWData->GetMode())
-    {
-        // mobile touch zoom (pinch) section
-        // remember the center location to reach in logic
-
-        Size winSize = GetViewFrame()->GetWindow().GetOutputSizePixel();
-        Point centerInPixels(winSize.getWidth() / 2, winSize.getHeight() / 2);
-        const Point & preZoomTargetCenterInLogic = GetEditWin().PixelToLogic(centerInPixels);
-
-        double scale = double(pWData->GetDelta()) / double(MOBILE_ZOOM_SCALE_MULTIPLIER);
-
-        int preZoomByVCL = m_pWrtShell->GetViewOptions()->GetZoom();
-
-        // each zooming event is scaling the initial zoom
-        int zoomTarget = int(preZoomByVCL * scale);
-
-        // thresholding the zoom
-        zoomTarget = std::max( MOBILE_MAX_ZOOM_OUT, std::min( MOBILE_MAX_ZOOM_IN, zoomTarget ) );
-
-        // no point zooming if the target zoom is the same as the current zoom
-        if(zoomTarget!=preZoomByVCL)
-        {
-
-            SetZoom( SvxZoomType::PERCENT, zoomTarget );
-        }
-        // we move to the center, and add additional tilt from center
-        const Point & postZoomTargetCenterInPixels = GetEditWin().LogicToPixel(preZoomTargetCenterInLogic);
-        long deltaX = rCEvt.GetMousePosPixel().X() + centerInPixels.X() - postZoomTargetCenterInPixels.X();
-        long deltaY = rCEvt.GetMousePosPixel().Y() + centerInPixels.Y() - postZoomTargetCenterInPixels.Y();
-
-        if((deltaX!=0) || (deltaY!=0))
-        {
-
-            // scrolling the deltaX deltaY
-            Point deltaPoint( deltaX, deltaY );
-            CommandWheelData cmd( 0, 0, 0, CommandWheelMode::SCROLL, 0, false, true);
-            CommandEvent event(deltaPoint , CommandEventId::Wheel, true, &cmd );
-            m_pEditWin->HandleScrollCommand(event, m_pHScrollbar, m_pVScrollbar);
-        }
-
         bOk = true;
     }
     else
