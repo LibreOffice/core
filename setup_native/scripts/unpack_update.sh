@@ -47,4 +47,4 @@ else
   exit 2
 fi
 
-UPDATE=`eval ls */update` && SUBFOLDER=`dirname $UPDATE` && mv $SUBFOLDER/* . && rmdir $SUBFOLDER && echo "$DESTPATH/update"
+UPDATE=`eval ls ./*/update` && SUBFOLDER=`dirname $UPDATE` && mv $SUBFOLDER/* . && rmdir $SUBFOLDER && echo "$DESTPATH/update"
