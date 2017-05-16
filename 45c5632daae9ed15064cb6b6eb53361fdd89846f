@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_9d134a5c",
+        "filename": "cui/source/tabpages/tpbitmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-16T15:36:10Z",
+      "side": 1,
+      "message": "I\u0027d add some SAL_WARN etc. here. Deleting all bitmaps is sufficiently odd corner case, but if we\u0027d get into this situation by some other means, perhaps it\u0027s better to have some tracing/logging/warning about that",
+      "revId": "45c5632daae9ed15064cb6b6eb53361fdd89846f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
