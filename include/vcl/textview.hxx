@@ -169,8 +169,6 @@ public:
 
     void                SetPaintSelection( bool bPaint);
 
-    void                EraseVirtualDevice();
-
     // aus dem protected Teil hierher verschoben
     // For 'SvtXECTextCursor' (TL). Must ggf nochmal anders gel?st werden.
     TextPaM             PageUp( const TextPaM& rPaM );
