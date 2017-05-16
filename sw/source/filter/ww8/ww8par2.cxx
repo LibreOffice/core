@@ -986,24 +986,18 @@ void SwWW8ImplReader::SetNumOlst(SwNumRule* pNumR, WW8_OLST* pO, sal_uInt8 nSwLe
 // when outline-paragraphs occur.
 void SwWW8ImplReader::Read_OLST( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    delete m_pNumOlst;
+    m_xNumOlst.reset();
     if (nLen <= 0)
-    {
-        m_pNumOlst = nullptr;
         return;
-    }
 
     if (static_cast<size_t>(nLen) < sizeof(WW8_OLST))
     {
         SAL_WARN("sw.ww8", "WW8_OLST property is " << nLen << " long, needs to be at least " << sizeof(WW8_OLST));
-        m_pNumOlst = nullptr;
         return;
     }
 
-    m_pNumOlst = new WW8_OLST;
-    if( nLen < sal::static_int_cast< sal_Int32 >(sizeof( WW8_OLST )) )   // fill if to short
-        memset( m_pNumOlst, 0, sizeof( *m_pNumOlst ) );
-    *m_pNumOlst = *reinterpret_cast<WW8_OLST const *>(pData);
+    m_xNumOlst.reset(new WW8_OLST);
+    *m_xNumOlst = *reinterpret_cast<WW8_OLST const *>(pData);
 }
 
 WW8LvlType GetNumType(sal_uInt8 nWwLevelNo)
@@ -1135,16 +1129,16 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
         // undefined
         if (!pNumRule->GetNumFormat(m_nSwNumLevel))
         {
-            if (m_pNumOlst)                       // there was a OLST
+            if (m_xNumOlst)                       // there was a OLST
             {
                 //Assure upper levels are set, #i9556#
                 for (sal_uInt8 nI = 0; nI < m_nSwNumLevel; ++nI)
                 {
                     if (!pNumRule->GetNumFormat(nI))
-                        SetNumOlst(pNumRule, m_pNumOlst, nI);
+                        SetNumOlst(pNumRule, m_xNumOlst.get(), nI);
                 }
 
-                SetNumOlst(pNumRule, m_pNumOlst , m_nSwNumLevel);
+                SetNumOlst(pNumRule, m_xNumOlst.get(), m_nSwNumLevel);
             }
             else                                // no Olst -> use Anld
             {

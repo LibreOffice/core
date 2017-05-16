@@ -4178,7 +4178,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_pStandardFormatColl(nullptr)
     , m_pHdFt(nullptr)
     , m_pTableDesc(nullptr)
-    , m_pNumOlst(nullptr)
     , m_pDrawModel(nullptr)
     , m_pDrawPg(nullptr)
     , m_pDrawEditEngine(nullptr)

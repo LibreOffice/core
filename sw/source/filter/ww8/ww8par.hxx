@@ -1223,7 +1223,7 @@ private:
     std::stack<WW8TabDesc*> m_aTableStack;
 
     ANLDRuleMap m_aANLDRules;
-    WW8_OLST* m_pNumOlst;         // position in text
+    std::unique_ptr<WW8_OLST> m_xNumOlst;         // position in text
 
     SdrModel* m_pDrawModel;
     SdrPage* m_pDrawPg;
