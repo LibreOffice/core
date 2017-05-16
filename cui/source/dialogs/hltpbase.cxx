@@ -105,8 +105,8 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( vcl::Window *pParent,
                                                    IconChoiceDialog* pDlg,
                                                    const OString& rID,
                                                    const OUString& rUIXMLDescription,
-                                                   const SfxItemSet& rItemSet )
-:   IconChoicePage          ( pParent, rID, rUIXMLDescription, rItemSet ),
+                                                   const SfxItemSet* pItemSet )
+:   IconChoicePage          ( pParent, rID, rUIXMLDescription, pItemSet ),
     mpCbbFrame              ( nullptr ),
     mpLbForm                ( nullptr ),
     mpEdIndication          ( nullptr ),

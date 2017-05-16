@@ -35,8 +35,8 @@ sal_Char const sFileScheme[]    = INET_FILE_SCHEME;
 |*
 |************************************************************************/
 
-SvxHyperlinkDocTp::SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet)
-    : SvxHyperlinkTabPageBase ( pParent, pDlg, "HyperlinkDocPage", "cui/ui/hyperlinkdocpage.ui", rItemSet ),
+SvxHyperlinkDocTp::SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet* pItemSet)
+    : SvxHyperlinkTabPageBase ( pParent, pDlg, "HyperlinkDocPage", "cui/ui/hyperlinkdocpage.ui", pItemSet ),
     mbMarkWndOpen   ( false )
 {
     get(m_pCbbPath, "path");
@@ -172,9 +172,9 @@ void SvxHyperlinkDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrNam
 |*
 |************************************************************************/
 
-VclPtr<IconChoicePage> SvxHyperlinkDocTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
+VclPtr<IconChoicePage> SvxHyperlinkDocTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet* pItemSet )
 {
-    return VclPtr<SvxHyperlinkDocTp>::Create( pWindow, pDlg, rItemSet );
+    return VclPtr<SvxHyperlinkDocTp>::Create( pWindow, pDlg, pItemSet );
 }
 
 /*************************************************************************

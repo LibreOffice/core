@@ -38,7 +38,7 @@ class SfxItemPool;
 class SfxItemSet;
 
 // Create-Function
-typedef VclPtr<IconChoicePage> (*CreatePage)(vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet &rAttrSet);
+typedef VclPtr<IconChoicePage> (*CreatePage)(vcl::Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet* pAttrSet);
 
 /// Data-structure for pages in dialog
 struct IconChoicePageData
@@ -71,7 +71,7 @@ protected:
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    IconChoicePage( vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet );
+    IconChoicePage( vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet* pItemSet );
 
 public:
     virtual ~IconChoicePage() override;
@@ -137,7 +137,6 @@ protected:
     static void             HidePageImpl ( IconChoicePageData* pData );
 
     virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage );
-    static SfxItemSet*      CreateInputItemSet( sal_uInt16 nId );
     IconChoicePage*  GetTabPage( sal_uInt16 nPageId )
                                 { return ( GetPageData (nPageId)->pPage ? GetPageData (nPageId)->pPage.get() : nullptr); }
 
