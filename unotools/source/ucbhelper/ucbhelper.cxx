@@ -304,31 +304,6 @@ bool utl::UCBContentHelper::MakeFolder(
     }
 }
 
-sal_Int64 utl::UCBContentHelper::GetSize(OUString const & url) {
-    try {
-        sal_Int64 n = 0;
-        bool ok = (content(url).getPropertyValue("Size") >>= n);
-        SAL_INFO_IF(
-            !ok, "unotools.ucbhelper",
-            "UCBContentHelper::GetSize(" << url
-                << "): Size cannot be determined");
-        return n;
-    } catch (css::uno::RuntimeException const &) {
-        throw;
-    } catch (css::ucb::CommandAbortedException const &) {
-        assert(false && "this cannot happen");
-        throw;
-    } catch (css::uno::Exception const &) {
-        css::uno::Any e(cppu::getCaughtException());
-        SAL_INFO(
-            "unotools.ucbhelper",
-            "UCBContentHelper::GetSize(" << url << ") "
-                << e.getValueType().getTypeName() << " \""
-                << e.get<css::uno::Exception>().Message << '"');
-        return 0;
-    }
-}
-
 bool utl::UCBContentHelper::IsYounger(
     OUString const & younger, OUString const & older)
 {

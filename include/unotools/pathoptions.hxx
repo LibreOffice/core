@@ -124,7 +124,6 @@ public:
     OUString        ExpandMacros( const OUString& rPath ) const;
     OUString        UseVariable( const OUString& rVar ) const;
     bool            SearchFile( OUString& rIniFile, Paths ePath = PATH_USERCONFIG );
-    const LanguageTag& GetLanguageTag() const;
 };
 
 #endif // INCLUDED_UNOTOOLS_PATHOPTIONS_HXX

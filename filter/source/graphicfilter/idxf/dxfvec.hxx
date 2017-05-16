@@ -145,9 +145,6 @@ public:
         // arbitrary position would be created, sal_False is returned.
         // (The center point will not be transformed, use Transform(..))
 
-    sal_uInt32 TransLineWidth(double fW) const;
-        // Transforms the thickness of a line (as good as possible)
-
     double CalcRotAngle() const;
         // Calculates the rotation angle around z-axis (in degrees)
 

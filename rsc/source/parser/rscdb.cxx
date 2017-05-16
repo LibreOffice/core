@@ -188,38 +188,6 @@ void RscTypCont::ClearSysNames()
     aSysLst.clear();
 }
 
-sal_uInt32 RscTypCont::PutSysName( RESOURCE_TYPE nRscTyp, char * pFileName )
-{
-    RscSysEntry *pFoundEntry = nullptr;
-
-    for (RscSysEntry* pItem: aSysLst)
-    {
-        if( !strcmp( pItem->aFileName.getStr(), pFileName ) &&
-            pItem->nRscTyp == nRscTyp &&
-            pItem->nTyp    == 0 &&
-            pItem->nRefId  == 0)
-        {
-            pFoundEntry = pItem;
-            break;
-        }
-    }
-    RscSysEntry *pSysEntry = pFoundEntry;
-
-    if ( !pSysEntry )
-    {
-        pSysEntry = new RscSysEntry;
-        pSysEntry->nKey = nUniqueId++;
-        pSysEntry->nRscTyp = nRscTyp;
-        pSysEntry->nTyp = 0;
-        pSysEntry->nRefId = 0;
-        pSysEntry->aFileName = pFileName;
-        aSysLst.push_back( pSysEntry );
-    }
-
-    return pSysEntry->nKey;
-}
-
-
 class RscEnumerateObj
 {
 friend class RscEnumerateRef;

@@ -600,30 +600,6 @@ bool SwFieldFuncPage::FillItemSet(SfxItemSet* )
     return false;
 }
 
-OUString SwFieldFuncPage::TurnMacroString(const OUString &rMacro)
-{
-    if (!rMacro.isEmpty())
-    {
-        // reverse content of aName
-        OUString sMacro;
-        sal_Int32 nPos = 0;
-
-        for (int i = 0; i < 4 && nPos != -1; i++)
-        {
-            OUString sTmp = (i == 3)
-                ? rMacro.copy(nPos)
-                : rMacro.getToken(0, '.', nPos);
-
-            sMacro = !sMacro.isEmpty()
-                ? sTmp + "." + sMacro
-                : sTmp;
-        }
-        return sMacro;
-    }
-
-    return rMacro;
-}
-
 VclPtr<SfxTabPage> SwFieldFuncPage::Create( vcl::Window* pParent,
                                           const SfxItemSet *const pAttrSet)
 {
