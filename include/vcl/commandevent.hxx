@@ -129,8 +129,7 @@ enum class CommandWheelMode
     NONE              = 0,
     SCROLL            = 1,
     ZOOM              = 2,
-    ZOOM_SCALE        = 3,
-    DATAZOOM          = 4
+    DATAZOOM          = 3
 };
 
 // Magic value used in mnLines field in CommandWheelData

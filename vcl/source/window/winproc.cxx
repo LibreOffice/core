@@ -37,7 +37,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/lazydelete.hxx>
-#include <touch/touch.h>
 #include <vcl/uitest/logger.hxx>
 
 #include <svdata.hxx>
@@ -1441,16 +1440,14 @@ class HandleWheelEvent : public HandleGestureEventBase
 private:
     CommandWheelData m_aWheelData;
 public:
-    HandleWheelEvent(vcl::Window *pWindow, const SalWheelMouseEvent& rEvt, bool bScaleDirectly)
+    HandleWheelEvent(vcl::Window *pWindow, const SalWheelMouseEvent& rEvt)
         : HandleGestureEventBase(pWindow, Point(rEvt.mnX, rEvt.mnY))
     {
         CommandWheelMode nMode;
         sal_uInt16 nCode = rEvt.mnCode;
         bool bHorz = rEvt.mbHorz;
         bool bPixel = rEvt.mbDeltaIsPixel;
-        if (bScaleDirectly)
-            nMode = CommandWheelMode::ZOOM_SCALE;
-        else if ( nCode & KEY_MOD1 )
+        if ( nCode & KEY_MOD1 )
             nMode = CommandWheelMode::ZOOM;
         else if ( nCode & KEY_MOD2 )
             nMode = CommandWheelMode::DATAZOOM;
@@ -1518,9 +1515,9 @@ bool HandleGestureEvent::HandleEvent()
     return bHandled;
 }
 
-static bool ImplHandleWheelEvent( vcl::Window* pWindow, const SalWheelMouseEvent& rEvt, bool scaleDirectly = false )
+static bool ImplHandleWheelEvent(vcl::Window* pWindow, const SalWheelMouseEvent& rEvt)
 {
-    HandleWheelEvent aHandler(pWindow, rEvt, scaleDirectly);
+    HandleWheelEvent aHandler(pWindow, rEvt);
     return aHandler.HandleEvent(rEvt);
 }
 
@@ -2537,35 +2534,6 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
         case SalEvent::StartReconversion:
             ImplHandleStartReconversion( pWindow );
             break;
-        case SalEvent::ExternalZoom:
-            {
-            SalWheelMouseEvent aSalWheelMouseEvent;
-            aSalWheelMouseEvent.mnTime = tools::Time::GetSystemTicks();
-            aSalWheelMouseEvent.mnX = 0;
-            aSalWheelMouseEvent.mnY = 0;
-            // Pass on the scale as a percentage * 100 of current zoom factor
-            // so to assure zoom granularity
-            aSalWheelMouseEvent.mnDelta = long(MOBILE_ZOOM_SCALE_MULTIPLIER);
-            // Other SalWheelMouseEvent fields ignored when the
-            // scaleDirectly parameter to ImplHandleWheelEvent() is
-            // true.
-            bRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent, true );
-            }
-            break;
-        case SalEvent::ExternalScroll:
-            {
-            SalWheelMouseEvent aSalWheelMouseEvent;
-            aSalWheelMouseEvent.mnTime = tools::Time::GetSystemTicks();
-            aSalWheelMouseEvent.mbDeltaIsPixel = true;
-            // event location holds delta values instead
-            aSalWheelMouseEvent.mnX = 0;
-            aSalWheelMouseEvent.mnY = 0;
-            aSalWheelMouseEvent.mnScrollLines = 0;
-            if (aSalWheelMouseEvent.mnX != 0 || aSalWheelMouseEvent.mnY != 0)
-            {
-                bRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent );
-            }
-        }
         break;
         case SalEvent::QueryCharPosition:
             ImplHandleSalQueryCharPosition( pWindow, const_cast<SalQueryCharPositionEvent *>(static_cast<SalQueryCharPositionEvent const *>(pEvent)) );
