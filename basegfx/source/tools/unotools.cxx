@@ -70,7 +70,7 @@ namespace unotools
             basegfx::B2DPoint aControlB;
 
             // first point is not allowed to be a control point
-            if(drawing::PolygonFlags_CONTROL == ePolyFlag)
+            if(ePolyFlag == drawing::PolygonFlags_CONTROL)
                 throw lang::IllegalArgumentException();
 
             // add first point as start point
@@ -86,7 +86,7 @@ namespace unotools
                 ePolyFlag = *pArrayFlags;
                 pArray++; pArrayFlags++; b++;
 
-                if(b < nInnerSequenceCount && drawing::PolygonFlags_CONTROL == ePolyFlag)
+                if(b < nInnerSequenceCount && ePolyFlag == drawing::PolygonFlags_CONTROL)
                 {
                     aControlA = aNewCoordinatePair;
                     bControlA = true;
@@ -97,7 +97,7 @@ namespace unotools
                     pArray++; pArrayFlags++; b++;
                 }
 
-                if(b < nInnerSequenceCount && drawing::PolygonFlags_CONTROL == ePolyFlag)
+                if(b < nInnerSequenceCount && ePolyFlag == drawing::PolygonFlags_CONTROL)
                 {
                     aControlB = aNewCoordinatePair;
                     bControlB = true;
@@ -110,7 +110,7 @@ namespace unotools
 
                 // two or no control points are consumed, another one would be an error.
                 // It's also an error if only one control point was read
-                if(drawing::PolygonFlags_CONTROL == ePolyFlag || bControlA != bControlB)
+                if(ePolyFlag == drawing::PolygonFlags_CONTROL || bControlA != bControlB)
                     throw lang::IllegalArgumentException();
 
                 // the previous writes used the B2DPolyPoygon -> tools::PolyPolygon converter
@@ -214,11 +214,11 @@ namespace unotools
                     {
                         const basegfx::B2VectorContinuity eCont(rPoly.getContinuityInPoint(b));
 
-                        if(basegfx::B2VectorContinuity::C1 == eCont)
+                        if(eCont == basegfx::B2VectorContinuity::C1)
                         {
                             aFlags[nStartPointIndex] = drawing::PolygonFlags_SMOOTH;
                         }
-                        else if(basegfx::B2VectorContinuity::C2 == eCont)
+                        else if(eCont == basegfx::B2VectorContinuity::C2)
                         {
                             aFlags[nStartPointIndex] = drawing::PolygonFlags_SYMMETRIC;
                         }

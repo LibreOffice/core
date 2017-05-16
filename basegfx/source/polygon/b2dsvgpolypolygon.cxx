@@ -62,7 +62,7 @@ namespace basegfx
                 bool bRelative(false);
                 const sal_Unicode aCurrChar(rSvgDStatement[nPos]);
 
-                if(o_rPolyPolygon.count() && !aCurrPoly.count() && !('m' == aCurrChar || 'M' == aCurrChar))
+                if(o_rPolyPolygon.count() && !aCurrPoly.count() && !(aCurrChar == 'm' || aCurrChar == 'M'))
                 {
                     // we have a new sub-polygon starting, but without a 'moveto' command.
                     // this requires to add the current point as start point to the polygon
@@ -113,7 +113,7 @@ namespace basegfx
                     case 'l' :
                     case 'L' :
                     {
-                        if('m' == aCurrChar || 'l' == aCurrChar)
+                        if(aCurrChar == 'm' || aCurrChar == 'l')
                         {
                             bRelative = true;
                         }
@@ -756,8 +756,8 @@ namespace basegfx
                             // That's what is done from our import, so avoid exporting it as first statement
                             // is necessary.
                             const bool bSymmetricAtEdgeStart(
-                                0 != nIndex
-                                && B2VectorContinuity::C2 == aPolygon.getContinuityInPoint(nIndex));
+                                nIndex != 0
+                                && aPolygon.getContinuityInPoint(nIndex) == B2VectorContinuity::C2);
 
                             if(bDetectQuadraticBeziers)
                             {
@@ -849,7 +849,7 @@ namespace basegfx
                         else
                         {
                             // straight edge
-                            if(0 == nNextIndex)
+                            if(nNextIndex == 0)
                             {
                                 // it's a closed polygon's last edge and it's not a bezier edge, so there is
                                 // no need to write it

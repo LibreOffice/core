@@ -29,7 +29,7 @@ namespace basegfx
                         const sal_Int32 nLen)
         {
             while( io_rPos < nLen &&
-                    ' ' == rStr[io_rPos] )
+                    rStr[io_rPos] == ' ' )
             {
                 ++io_rPos;
             }
@@ -40,7 +40,7 @@ namespace basegfx
                                  const sal_Int32 nLen)
         {
             while(io_rPos < nLen
-                    && (' ' == rStr[io_rPos] || ',' == rStr[io_rPos]))
+                    && (rStr[io_rPos] == ' ' || rStr[io_rPos] == ','))
             {
                 ++io_rPos;
             }
@@ -54,7 +54,7 @@ namespace basegfx
             OUStringBuffer sNumberString;
 
             // sign
-            if('+' == aChar || '-' == aChar)
+            if(aChar == '+' || aChar == '-')
             {
                 sNumberString.append(rStr[io_rPos]);
                 aChar = rStr[++io_rPos];
@@ -69,7 +69,7 @@ namespace basegfx
             }
 
             // point
-            if('.' == aChar)
+            if(aChar == '.')
             {
                 sNumberString.append(rStr[io_rPos]);
                 io_rPos++;
@@ -85,14 +85,14 @@ namespace basegfx
             }
 
             // 'e'
-            if('e' == aChar || 'E' == aChar)
+            if(aChar == 'e' || aChar == 'E')
             {
                 sNumberString.append(rStr[io_rPos]);
                 io_rPos++;
                 aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
 
                 // sign for 'e'
-                if('+' == aChar || '-' == aChar)
+                if(aChar == '+' || aChar == '-')
                 {
                     sNumberString.append(rStr[io_rPos]);
                     io_rPos++;
@@ -141,12 +141,12 @@ namespace basegfx
         {
             sal_Unicode aChar( rStr[io_rPos] );
 
-            if('0' == aChar)
+            if(aChar == '0')
             {
                 o_nRetval = 0;
                 ++io_rPos;
             }
-            else if ('1' == aChar)
+            else if (aChar == '1')
             {
                 o_nRetval = 1;
                 ++io_rPos;

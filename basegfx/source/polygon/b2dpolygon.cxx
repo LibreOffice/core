@@ -285,7 +285,7 @@ public:
 
     bool isUsed() const
     {
-        return (0 != mnUsedVectors);
+        return (mnUsedVectors != 0);
     }
 
     const basegfx::B2DVector& getPrevVector(sal_uInt32 nIndex) const
@@ -1412,7 +1412,7 @@ namespace basegfx
                 nCount = rPoly.count();
             }
 
-            if(0 == nIndex && nCount == rPoly.count())
+            if(nIndex == 0 && nCount == rPoly.count())
             {
                 mpPolygon->insert(mpPolygon->count(), *rPoly.mpPolygon);
             }

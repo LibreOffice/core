@@ -279,7 +279,7 @@ namespace basegfx
                         const B2DVector aLeft(pEdgeA->getEnd() - pEdgeA->getStart());
                         const B2DVector aRight(pEdgeB->getEnd() - pEdgeA->getStart());
 
-                        if(B2VectorOrientation::Neutral == getOrientation(aLeft, aRight))
+                        if(getOrientation(aLeft, aRight) == B2VectorOrientation::Neutral)
                         {
                             // edges are parallel and have different length -> neutral triangle,
                             // delete both edges and handle closing edge
@@ -391,7 +391,7 @@ namespace basegfx
             aCandidate.removeDoublePoints();
             aCandidate = tools::removeNeutralPoints(aCandidate);
 
-            if(2 == aCandidate.count())
+            if(aCandidate.count() == 2)
             {
                 // candidate IS a triangle, just append
                 aRetval.append(aCandidate);
@@ -422,7 +422,7 @@ namespace basegfx
             // subdivide locally (triangulate does not work with beziers)
             B2DPolyPolygon aCandidate(rCandidate.areControlPointsUsed() ? tools::adaptiveSubdivideByAngle(rCandidate) : rCandidate);
 
-            if(1 == aCandidate.count())
+            if(aCandidate.count() == 1)
             {
                 // single polygon -> single polygon triangulation
                 const B2DPolygon aSinglePolygon(aCandidate.getB2DPolygon(0));

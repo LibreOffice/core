@@ -288,7 +288,7 @@ public:
 
     bool isUsed() const
     {
-        return (0 != mnUsedEntries);
+        return (mnUsedEntries != 0);
     }
 
     const ::basegfx::BColor& getBColor(sal_uInt32 nIndex) const
@@ -441,7 +441,7 @@ public:
 
     bool isUsed() const
     {
-        return (0 != mnUsedEntries);
+        return (mnUsedEntries != 0);
     }
 
     const ::basegfx::B3DVector& getNormal(sal_uInt32 nIndex) const
@@ -604,7 +604,7 @@ public:
 
     bool isUsed() const
     {
-        return (0 != mnUsedEntries);
+        return (mnUsedEntries != 0);
     }
 
     const ::basegfx::B2DPoint& getTextureCoordinate(sal_uInt32 nIndex) const
@@ -1655,7 +1655,7 @@ namespace basegfx
                 nCount = rPoly.count();
             }
 
-            if(0 == nIndex && nCount == rPoly.count())
+            if(nIndex == 0 && nCount == rPoly.count())
             {
                 mpPolygon->insert(mpPolygon->count(), *rPoly.mpPolygon);
             }

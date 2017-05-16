@@ -246,7 +246,7 @@ namespace basegfx
             if(aRetval.count())
             {
                 // against Y-Axis, lower value
-                if(1 == aRetval.count())
+                if(aRetval.count() == 1)
                 {
                     aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0), false, bInside, rRange.getMinX(), bStroke);
                 }
@@ -258,7 +258,7 @@ namespace basegfx
                 if(aRetval.count())
                 {
                     // against X-Axis, higher value
-                    if(1 == aRetval.count())
+                    if(aRetval.count() == 1)
                     {
                         aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0), true, !bInside, rRange.getMaxY(), bStroke);
                     }
@@ -270,7 +270,7 @@ namespace basegfx
                     if(aRetval.count())
                     {
                         // against Y-Axis, higher value
-                        if(1 == aRetval.count())
+                        if(aRetval.count() == 1)
                         {
                             aRetval = clipPolygonOnParallelAxis(aRetval.getB2DPolygon(0), false, !bInside, rRange.getMaxX(), bStroke);
                         }

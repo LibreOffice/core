@@ -911,7 +911,7 @@ namespace basegfx
         {
             return false;
         }
-        else if(1 == nCount)
+        else if(nCount == 1)
         {
             rfResult = aAllResults[0];
             return true;

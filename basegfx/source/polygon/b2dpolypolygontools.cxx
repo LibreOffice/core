@@ -54,10 +54,10 @@ namespace basegfx
                     }
                 }
 
-                const bool bShallBeHole(1 == (nDepth & 0x00000001));
-                const bool bIsHole(B2VectorOrientation::Negative == aOrientation);
+                const bool bShallBeHole((nDepth & 0x00000001) == 1);
+                const bool bIsHole(aOrientation == B2VectorOrientation::Negative);
 
-                if(bShallBeHole != bIsHole && B2VectorOrientation::Neutral != aOrientation)
+                if(bShallBeHole != bIsHole && aOrientation != B2VectorOrientation::Neutral)
                 {
                     B2DPolygon aFlipped(aCandidate);
                     aFlipped.flip();
@@ -174,7 +174,7 @@ namespace basegfx
         {
             const sal_uInt32 nPolygonCount(rCandidate.count());
 
-            if(1 == nPolygonCount)
+            if(nPolygonCount == 1)
             {
                 return isInside(rCandidate.getB2DPolygon(0), rPoint, bWithBorder);
             }

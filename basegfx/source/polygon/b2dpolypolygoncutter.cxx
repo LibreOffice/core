@@ -712,7 +712,7 @@ namespace basegfx
             {
                 const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
 
-                if(B2VectorOrientation::Neutral != tools::getOrientation(aCandidate))
+                if(tools::getOrientation(aCandidate) != B2VectorOrientation::Neutral)
                 {
                     aRetval.append(aCandidate);
                 }
@@ -755,7 +755,7 @@ namespace basegfx
                     pNewHelper->meOrinetation = tools::getOrientation(aCand);
 
                     // initialize with own orientation
-                    pNewHelper->mnDepth = (B2VectorOrientation::Negative == pNewHelper->meOrinetation ? -1 : 1);
+                    pNewHelper->mnDepth = (pNewHelper->meOrinetation == B2VectorOrientation::Negative ? -1 : 1);
                 }
 
                 for(a = 0; a < nCount - 1; a++)
@@ -772,7 +772,7 @@ namespace basegfx
                         if(bAInB)
                         {
                             // A is inside B, add orientation of B to A
-                            rHelperA.mnDepth += (B2VectorOrientation::Negative == rHelperB.meOrinetation ? -1 : 1);
+                            rHelperA.mnDepth += (rHelperB.meOrinetation == B2VectorOrientation::Negative ? -1 : 1);
                         }
 
                         const bool bBInA(rHelperA.maRange.isInside(rHelperB.maRange) && tools::isInside(aCandA, aCandB, true));
@@ -780,7 +780,7 @@ namespace basegfx
                         if(bBInA)
                         {
                             // B is inside A, add orientation of A to B
-                            rHelperB.mnDepth += (B2VectorOrientation::Negative == rHelperA.meOrinetation ? -1 : 1);
+                            rHelperB.mnDepth += (rHelperA.meOrinetation == B2VectorOrientation::Negative ? -1 : 1);
                         }
                     }
                 }
@@ -816,7 +816,7 @@ namespace basegfx
             {
                 if(nCount == 1)
                 {
-                    if(!bKeepAboveZero && B2VectorOrientation::Positive == tools::getOrientation(rCandidate.getB2DPolygon(0)))
+                    if(!bKeepAboveZero && tools::getOrientation(rCandidate.getB2DPolygon(0)) == B2VectorOrientation::Positive)
                     {
                         aRetval = rCandidate;
                     }
@@ -833,7 +833,7 @@ namespace basegfx
                         StripHelper* pNewHelper = &(aHelpers[a]);
                         pNewHelper->maRange = tools::getRange(aCandidate);
                         pNewHelper->meOrinetation = tools::getOrientation(aCandidate);
-                        pNewHelper->mnDepth = (B2VectorOrientation::Negative == pNewHelper->meOrinetation ? -1 : 0);
+                        pNewHelper->mnDepth = (pNewHelper->meOrinetation == B2VectorOrientation::Negative ? -1 : 0);
                     }
 
                     for(a = 0; a < nCount - 1; a++)
@@ -869,7 +869,7 @@ namespace basegfx
                             {
                                 if(bAInB)
                                 {
-                                    if(B2VectorOrientation::Negative == rHelperB.meOrinetation)
+                                    if(rHelperB.meOrinetation == B2VectorOrientation::Negative)
                                     {
                                         rHelperA.mnDepth--;
                                     }
@@ -880,7 +880,7 @@ namespace basegfx
                                 }
                                 else if(bBInA)
                                 {
-                                    if(B2VectorOrientation::Negative == rHelperA.meOrinetation)
+                                    if(rHelperA.meOrinetation == B2VectorOrientation::Negative)
                                     {
                                         rHelperB.mnDepth--;
                                     }
@@ -896,7 +896,7 @@ namespace basegfx
                     for(a = 0; a < nCount; a++)
                     {
                         const StripHelper& rHelper = aHelpers[a];
-                        bool bAcceptEntry(bKeepAboveZero ? 1 <= rHelper.mnDepth : 0 == rHelper.mnDepth);
+                        bool bAcceptEntry(bKeepAboveZero ? 1 <= rHelper.mnDepth : rHelper.mnDepth == 0);
 
                         if(bAcceptEntry)
                         {
@@ -1098,7 +1098,7 @@ namespace basegfx
             }
 
             // third step: get result
-            if(1 == aInput.size())
+            if(aInput.size() == 1)
             {
                 return aInput[0];
             }
