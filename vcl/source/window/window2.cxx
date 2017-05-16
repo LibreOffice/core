@@ -664,7 +664,7 @@ long Window::GetDrawPixel( OutputDevice* pDev, long nPixels ) const
     return nP;
 }
 
-static void lcl_HandleScrollHelper( ScrollBar* pScrl, long nN, bool isMultiplyByLineSize )
+static void lcl_HandleScrollHelper( ScrollBar* pScrl, double nN, bool isMultiplyByLineSize )
 {
     if ( pScrl && nN && pScrl->IsEnabled() && pScrl->IsInputEnabled() && ! pScrl->IsInModalMode() )
     {
@@ -681,7 +681,7 @@ static void lcl_HandleScrollHelper( ScrollBar* pScrl, long nN, bool isMultiplyBy
                 nN*=pScrl->GetLineSize();
             }
 
-            const double fVal = (double)(nNewPos - nN);
+            const double fVal = nNewPos - nN;
 
             if ( fVal < LONG_MIN )
                 nNewPos = LONG_MIN;
@@ -737,8 +737,8 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                 {
                     if (!pData->IsDeltaPixel())
                     {
-                        sal_uLong nScrollLines = pData->GetScrollLines();
-                        long nLines;
+                        double nScrollLines = pData->GetScrollLines();
+                        double nLines;
                         if ( nScrollLines == COMMAND_WHEEL_PAGESCROLL )
                         {
                             if ( pData->GetDelta() < 0 )
@@ -747,7 +747,7 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                                 nLines = LONG_MAX;
                         }
                         else
-                            nLines = pData->GetNotchDelta() * (long)nScrollLines;
+                            nLines = pData->GetNotchDelta() * nScrollLines;
                         if ( nLines )
                         {
                             ImplHandleScroll( nullptr,
@@ -860,8 +860,8 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
 // horizontal or vertical scroll bar. nY is correspondingly either
 // the horizontal or vertical scroll amount.
 
-void Window::ImplHandleScroll( ScrollBar* pHScrl, long nX,
-                               ScrollBar* pVScrl, long nY )
+void Window::ImplHandleScroll( ScrollBar* pHScrl, double nX,
+                               ScrollBar* pVScrl, double nY )
 {
     lcl_HandleScrollHelper( pHScrl, nX, true );
     lcl_HandleScrollHelper( pVScrl, nY, true );

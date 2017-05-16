@@ -719,7 +719,7 @@ private:
     SAL_DLLPRIVATE void                 ImplCallActivateListeners(vcl::Window*);
     SAL_DLLPRIVATE void                 ImplCallDeactivateListeners(vcl::Window*);
 
-    SAL_DLLPRIVATE static void          ImplHandleScroll( ScrollBar* pHScrl, long nX, ScrollBar* pVScrl, long nY );
+    SAL_DLLPRIVATE static void          ImplHandleScroll(ScrollBar* pHScrl, double nX, ScrollBar* pVScrl, double nY);
 
     SAL_DLLPRIVATE Rectangle            ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle& rRect ) const;
     SAL_DLLPRIVATE long                 ImplGetUnmirroredOutOffX();
