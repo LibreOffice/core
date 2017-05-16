@@ -337,7 +337,7 @@ namespace accessibility
         }
 
         // if only one entry is selected and its index is chosen to deselect -> no selection anymore
-        if ( 1 == nSelCount && bFound )
+        if ( nSelCount == 1 && bFound )
             pCtrl->SetNoSelection();
     }
 

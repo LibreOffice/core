@@ -30,16 +30,6 @@ public:
 
     virtual void run() override
     {
-        /*
-        StringRef fn( compiler.getSourceManager().getFileEntryForID(
-                          compiler.getSourceManager().getMainFileID())->getName() );
-        if (fn == SRCDIR "/sd/source/ui/framework/factories/ChildWindowPane.cxx")
-             return;
-        if (fn == SRCDIR "/forms/source/component/Date.cxx")
-             return;
-        if (fn == SRCDIR "/forms/source/component/Time.cxx")
-            return;
-*/
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 

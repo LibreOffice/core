@@ -73,7 +73,7 @@ namespace {
 inline bool hasFloatingChild(vcl::Window *pWindow)
 {
     vcl::Window * pChild = pWindow->GetAccessibleChildWindow(0);
-    return pChild && WindowType::FLOATINGWINDOW == pChild->GetType();
+    return pChild && pChild->GetType() == WindowType::FLOATINGWINDOW;
 }
 
 // IAccessibleFactory

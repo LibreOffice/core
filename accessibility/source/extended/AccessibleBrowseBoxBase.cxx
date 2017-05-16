@@ -389,7 +389,7 @@ tools::Rectangle AccessibleBrowseBoxBase::getBoundingBox()
     ensureIsAlive();
 
     tools::Rectangle aRect = implGetBoundingBox();
-    if ( 0 == aRect.Left() && 0 == aRect.Top() && 0 == aRect.Right() && 0 == aRect.Bottom() )
+    if ( aRect.Left() == 0 && aRect.Top() == 0 && aRect.Right() == 0 && aRect.Bottom() == 0 )
     {
         SAL_WARN( "accessibility", "rectangle doesn't exist" );
     }
@@ -402,7 +402,7 @@ tools::Rectangle AccessibleBrowseBoxBase::getBoundingBoxOnScreen()
     ensureIsAlive();
 
     tools::Rectangle aRect = implGetBoundingBoxOnScreen();
-    if ( 0 == aRect.Left() && 0 == aRect.Top() && 0 == aRect.Right() && 0 == aRect.Bottom() )
+    if ( aRect.Left() == 0 && aRect.Top() == 0 && aRect.Right() == 0 && aRect.Bottom() == 0 )
     {
         SAL_WARN( "accessibility", "rectangle doesn't exist" );
     }
