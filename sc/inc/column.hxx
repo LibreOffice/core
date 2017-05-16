@@ -588,7 +588,7 @@ public:
 
     void Broadcast( SCROW nRow );
     void BroadcastCells( const std::vector<SCROW>& rRows, SfxHintId nHint );
-    void BroadcastRows( SCROW nStartRow, SCROW nEndRow );
+    void BroadcastRows( SCROW nStartRow, SCROW nEndRow, SfxHintId nHint );
 
     // cell notes
     ScPostIt* GetCellNote( SCROW nRow );
