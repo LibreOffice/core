@@ -811,7 +811,7 @@ namespace basegfx
                                              rPolygonPool,
                                              rCurrEvent );
 
-            if( SweepLineEvent::PROCEED_DOWN == rCurrEvent.getEdgeDirection() )
+            if( rCurrEvent.getEdgeDirection() == SweepLineEvent::PROCEED_DOWN )
                 processActiveEdgesTopDown<NoErase>(
                     rCurrEvent, rActiveEdgeList, rPolygonPool, rRes);
             else
@@ -824,7 +824,7 @@ namespace basegfx
                                   VectorOfPolygons& rPolygonPool,
                                   B2DPolyPolygon&   rRes)
         {
-            if( SweepLineEvent::PROCEED_DOWN == rCurrEvent.getEdgeDirection() )
+            if( rCurrEvent.getEdgeDirection() == SweepLineEvent::PROCEED_DOWN )
                 processActiveEdgesTopDown<PerformErase>(
                     rCurrEvent, rActiveEdgeList, rPolygonPool, rRes);
             else
@@ -837,7 +837,7 @@ namespace basegfx
                                           VectorOfPolygons& rPolygonPool,
                                           B2DPolyPolygon&   rRes)
         {
-            if( SweepLineEvent::STARTING_EDGE == rCurrEvent.getEdgeType() )
+            if( rCurrEvent.getEdgeType() == SweepLineEvent::STARTING_EDGE )
                 handleStartingEdge(rCurrEvent,rActiveEdgeList,rPolygonPool,rRes);
             else
                 handleFinishingEdge(rCurrEvent,rActiveEdgeList,rPolygonPool,rRes);

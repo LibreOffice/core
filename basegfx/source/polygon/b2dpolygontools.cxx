@@ -533,7 +533,7 @@ namespace basegfx
             B2DPoint aRetval;
             const sal_uInt32 nPointCount(rCandidate.count());
 
-            if( 1 == nPointCount )
+            if( nPointCount == 1 )
             {
                 // only one point (i.e. no edge) - simply take that point
                 aRetval = rCandidate.getB2DPoint(0);
@@ -1666,7 +1666,7 @@ namespace basegfx
             B2DPoint aForward(1.0, fScaledKappa);
             B2DPoint aBackward(1.0, -fScaledKappa);
 
-            if(0 != nStartQuadrant)
+            if(nStartQuadrant != 0)
             {
                 const B2DHomMatrix aQuadrantMatrix(createRotateB2DHomMatrix(F_PI2 * (nStartQuadrant % 4)));
                 aPoint *= aQuadrantMatrix;
@@ -1907,7 +1907,7 @@ namespace basegfx
                     const B2DVector aNextVec(aNextPoint - aCurrPoint);
                     const B2VectorOrientation aOrientation(getOrientation(aNextVec, aPrevVec));
 
-                    if(B2VectorOrientation::Neutral == aOrientation)
+                    if(aOrientation == B2VectorOrientation::Neutral)
                     {
                         // current has neutral orientation
                         return true;
@@ -1940,7 +1940,7 @@ namespace basegfx
                     const B2DVector aNextVec(aNextPoint - aCurrPoint);
                     const B2VectorOrientation aOrientation(getOrientation(aNextVec, aPrevVec));
 
-                    if(B2VectorOrientation::Neutral == aOrientation)
+                    if(aOrientation == B2VectorOrientation::Neutral)
                     {
                         // current has neutral orientation, leave it out and prepare next
                         aCurrPoint = aNextPoint;
@@ -1956,7 +1956,7 @@ namespace basegfx
                     }
                 }
 
-                while(aRetval.count() && B2VectorOrientation::Neutral == getOrientationForIndex(aRetval, 0))
+                while(aRetval.count() && getOrientationForIndex(aRetval, 0) == B2VectorOrientation::Neutral)
                 {
                     aRetval.remove(0);
                 }
@@ -1990,14 +1990,14 @@ namespace basegfx
                     const B2DVector aNextVec(aNextPoint - aCurrPoint);
                     const B2VectorOrientation aCurrentOrientation(getOrientation(aNextVec, aCurrVec));
 
-                    if(B2VectorOrientation::Neutral == aOrientation)
+                    if(aOrientation == B2VectorOrientation::Neutral)
                     {
                         // set start value, maybe neutral again
                         aOrientation = aCurrentOrientation;
                     }
                     else
                     {
-                        if(B2VectorOrientation::Neutral != aCurrentOrientation && aCurrentOrientation != aOrientation)
+                        if(aCurrentOrientation != B2VectorOrientation::Neutral && aCurrentOrientation != aOrientation)
                         {
                             // different orientations found, that's it
                             return false;
@@ -2511,7 +2511,7 @@ namespace basegfx
                 // predecessor
                 if(!rCandidate.isPrevControlPointUsed(nIndex))
                 {
-                    if(!rCandidate.isClosed() && 0 == nIndex)
+                    if(!rCandidate.isClosed() && nIndex == 0)
                     {
                         // do not create previous vector for start point of open polygon
                     }
@@ -2558,7 +2558,7 @@ namespace basegfx
                     {
                         if(rCandidate.isPrevControlPointUsed(nIndex))
                         {
-                            if(!rCandidate.isClosed() && 0 == nIndex)
+                            if(!rCandidate.isClosed() && nIndex == 0)
                             {
                                 // remove existing previous vector for start point of open polygon
                                 rCandidate.resetPrevControlPoint(nIndex);
@@ -2603,7 +2603,7 @@ namespace basegfx
                             aVectorNext.normalize();
                             const B2VectorOrientation aOrientation(getOrientation(aVectorPrev, aVectorNext));
 
-                            if(B2VectorOrientation::Neutral == aOrientation && aVectorPrev.scalar(aVectorNext) < 0.0)
+                            if(aOrientation == B2VectorOrientation::Neutral && aVectorPrev.scalar(aVectorNext) < 0.0)
                             {
                                 // parallel and opposite direction; check length
                                 if(fTools::equal(fLenPrev, fLenNext))
@@ -2625,7 +2625,7 @@ namespace basegfx
                                 // not parallel or same direction, set vectors and length
                                 const B2DVector aNormalizedPerpendicular(getNormalizedPerpendicular(aVectorPrev + aVectorNext));
 
-                                if(B2VectorOrientation::Positive == aOrientation)
+                                if(aOrientation == B2VectorOrientation::Positive)
                                 {
                                     rCandidate.setControlPoints(nIndex,
                                         aCurrentPoint - (aNormalizedPerpendicular * fLenPrev),
@@ -2655,7 +2655,7 @@ namespace basegfx
                             aVectorNext.normalize();
                             const B2VectorOrientation aOrientation(getOrientation(aVectorPrev, aVectorNext));
 
-                            if(B2VectorOrientation::Neutral == aOrientation && aVectorPrev.scalar(aVectorNext) < 0.0)
+                            if(aOrientation == B2VectorOrientation::Neutral && aVectorPrev.scalar(aVectorNext) < 0.0)
                             {
                                 // parallel and opposite direction; set length. Use one direction for better numerical correctness
                                 const B2DVector aScaledDirection(aVectorPrev * fCommonLength);
@@ -2670,7 +2670,7 @@ namespace basegfx
                                 const B2DVector aNormalizedPerpendicular(getNormalizedPerpendicular(aVectorPrev + aVectorNext));
                                 const B2DVector aPerpendicular(aNormalizedPerpendicular * fCommonLength);
 
-                                if(B2VectorOrientation::Positive == aOrientation)
+                                if(aOrientation == B2VectorOrientation::Positive)
                                 {
                                     rCandidate.setControlPoints(nIndex,
                                         aCurrentPoint - aPerpendicular,
@@ -3318,7 +3318,7 @@ namespace basegfx
                 ePolygonFlag = *pFlagSequence;
                 pPointSequence++; pFlagSequence++; b++;
 
-                if(b < nCount && css::drawing::PolygonFlags_CONTROL == ePolygonFlag)
+                if(b < nCount && ePolygonFlag == css::drawing::PolygonFlags_CONTROL)
                 {
                     aControlA = aNewCoordinatePair;
                     bControlA = true;
@@ -3329,7 +3329,7 @@ namespace basegfx
                     pPointSequence++; pFlagSequence++; b++;
                 }
 
-                if(b < nCount && css::drawing::PolygonFlags_CONTROL == ePolygonFlag)
+                if(b < nCount && ePolygonFlag == css::drawing::PolygonFlags_CONTROL)
                 {
                     aControlB = aNewCoordinatePair;
                     bControlB = true;
@@ -3452,11 +3452,11 @@ namespace basegfx
                             {
                                 const B2VectorContinuity eCont(rPolygon.getContinuityInPoint(a));
 
-                                if(B2VectorContinuity::C1 == eCont)
+                                if(eCont == B2VectorContinuity::C1)
                                 {
                                     aCollectFlags[nStartPointIndex] = css::drawing::PolygonFlags_SMOOTH;
                                 }
-                                else if(B2VectorContinuity::C2 == eCont)
+                                else if(eCont == B2VectorContinuity::C2)
                                 {
                                     aCollectFlags[nStartPointIndex] = css::drawing::PolygonFlags_SYMMETRIC;
                                 }

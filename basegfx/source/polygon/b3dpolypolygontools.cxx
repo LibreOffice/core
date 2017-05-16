@@ -459,7 +459,7 @@ namespace basegfx
         {
             const sal_uInt32 nPolygonCount(rCandidate.count());
 
-            if(1 == nPolygonCount)
+            if(nPolygonCount == 1)
             {
                 return isInside(rCandidate.getB3DPolygon(0), rPoint, bWithBorder);
             }

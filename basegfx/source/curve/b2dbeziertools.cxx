@@ -97,7 +97,7 @@ namespace basegfx
 
         // fDistance is in ]0.0 .. fLength[
 
-        if(1 == mnEdgeCount)
+        if(mnEdgeCount == 1)
         {
             // not a bezier, linear edge
             return fDistance / fLength;

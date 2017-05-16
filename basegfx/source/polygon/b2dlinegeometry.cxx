@@ -363,7 +363,7 @@ namespace basegfx
                     rEdge.getStartPoint(), aPerpendStartA,
                     rEdge.getEndPoint(), aPerpendEndA,
                     CutFlagValue::ALL, &fCutA));
-                const bool bCutA(CutFlagValue::NONE != aCutA);
+                const bool bCutA(aCutA != CutFlagValue::NONE);
 
                 // create lower displacement vectors and check if they cut
                 const B2DVector aPerpendStartB(aNormalizedPerpendicularA * fHalfLineWidth);
@@ -373,7 +373,7 @@ namespace basegfx
                     rEdge.getEndPoint(), aPerpendEndB,
                     rEdge.getStartPoint(), aPerpendStartB,
                     CutFlagValue::ALL, &fCutB));
-                const bool bCutB(CutFlagValue::NONE != aCutB);
+                const bool bCutB(aCutB != CutFlagValue::NONE);
 
                 // check if cut happens
                 const bool bCut(bCutA || bCutB);
@@ -688,7 +688,7 @@ namespace basegfx
 
             // test if for Miter, the angle is too small and the fallback
             // to bevel needs to be used
-            if(B2DLineJoin::Miter == eJoin)
+            if(eJoin == B2DLineJoin::Miter)
             {
                 const double fAngle(fabs(rPerpendPrev.angle(rPerpendEdge)));
 
@@ -828,14 +828,14 @@ namespace basegfx
                 B2DPolyPolygon aRetval;
                 const bool bIsClosed(aCandidate.isClosed());
                 const sal_uInt32 nEdgeCount(bIsClosed ? nPointCount : nPointCount - 1);
-                const bool bLineCap(!bIsClosed && css::drawing::LineCap_BUTT != eCap);
+                const bool bLineCap(!bIsClosed && eCap != css::drawing::LineCap_BUTT);
 
                 if(nEdgeCount)
                 {
                     B2DCubicBezier aEdge;
                     B2DCubicBezier aPrev;
 
-                    const bool bEventuallyCreateLineJoin(B2DLineJoin::NONE != eJoin);
+                    const bool bEventuallyCreateLineJoin(eJoin != B2DLineJoin::NONE);
                     // prepare edge
                     aEdge.setStartPoint(aCandidate.getB2DPoint(0));
 
@@ -858,13 +858,13 @@ namespace basegfx
                         aEdge.setEndPoint(aCandidate.getB2DPoint(nNextIndex));
 
                         // check and create linejoin
-                        if(bEventuallyCreateLineJoin && (bIsClosed || 0 != a))
+                        if(bEventuallyCreateLineJoin && (bIsClosed || a != 0))
                         {
                             B2DVector aTangentPrev(aPrev.getTangent(1.0)); aTangentPrev.normalize();
                             B2DVector aTangentEdge(aEdge.getTangent(0.0)); aTangentEdge.normalize();
                             B2VectorOrientation aOrientation(getOrientation(aTangentPrev, aTangentEdge));
 
-                            if(B2VectorOrientation::Neutral == aOrientation)
+                            if(aOrientation == B2VectorOrientation::Neutral)
                             {
                                    // they are parallel or empty; if they are both not zero and point
                                    // in opposite direction, a half-circle is needed
@@ -881,7 +881,7 @@ namespace basegfx
                                 }
                             }
 
-                            if(B2VectorOrientation::Positive == aOrientation)
+                            if(aOrientation == B2VectorOrientation::Positive)
                             {
                                 const B2DVector aPerpendPrev(getPerpendicular(aTangentPrev) * -fHalfLineWidth);
                                 const B2DVector aPerpendEdge(getPerpendicular(aTangentEdge) * -fHalfLineWidth);
@@ -897,7 +897,7 @@ namespace basegfx
                                         eJoin,
                                         fMiterMinimumAngle));
                             }
-                            else if(B2VectorOrientation::Negative == aOrientation)
+                            else if(aOrientation == B2VectorOrientation::Negative)
                             {
                                 const B2DVector aPerpendPrev(getPerpendicular(aTangentPrev) * fHalfLineWidth);
                                 const B2DVector aPerpendEdge(getPerpendicular(aTangentEdge) * fHalfLineWidth);
@@ -926,10 +926,10 @@ namespace basegfx
                                 createAreaGeometryForEdge(
                                     aEdge,
                                     fHalfLineWidth,
-                                    bFirst && css::drawing::LineCap_ROUND == eCap,
-                                    bLast && css::drawing::LineCap_ROUND == eCap,
-                                    bFirst && css::drawing::LineCap_SQUARE == eCap,
-                                    bLast && css::drawing::LineCap_SQUARE == eCap));
+                                    bFirst && eCap == css::drawing::LineCap_ROUND,
+                                    bLast && eCap == css::drawing::LineCap_ROUND,
+                                    bFirst && eCap == css::drawing::LineCap_SQUARE,
+                                    bLast && eCap == css::drawing::LineCap_SQUARE));
                         }
                         else
                         {

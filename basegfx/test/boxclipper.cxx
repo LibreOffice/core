@@ -173,7 +173,7 @@ public:
         for( sal_uInt32 i=0; i<rPoly.count(); ++i )
         {
             B2DPolygon aTmp=rPoly.getB2DPolygon(i);
-            if( B2VectorOrientation::Negative == tools::getOrientation(aTmp) )
+            if( tools::getOrientation(aTmp) == B2VectorOrientation::Negative )
                 aTmp.flip();
 
             aTmp=tools::removeNeutralPoints(aTmp);

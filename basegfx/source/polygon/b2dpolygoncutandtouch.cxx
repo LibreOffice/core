@@ -869,7 +869,7 @@ namespace basegfx
             {
                 B2DPolyPolygon aRetval;
 
-                if(1 == nCount)
+                if(nCount == 1)
                 {
                     if(bSelfIntersections)
                     {

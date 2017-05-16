@@ -81,7 +81,7 @@ namespace basegfx
             // it is not always used
             sal_uInt32 getSortValue() const
             {
-                if(0 != mnSortValue)
+                if(mnSortValue != 0)
                     return mnSortValue;
 
                 // get radiant; has to be in the range ]0.0 .. pi[, thus scale to full
