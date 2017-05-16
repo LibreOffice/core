@@ -2684,10 +2684,7 @@ gboolean GtkSalFrame::signalScroll(GtkWidget*, GdkEventScroll* pEvent, gpointer 
                 if (aEvent.mnDelta == 0)
                     aEvent.mnDelta = aEvent.mnNotchDelta;
                 aEvent.mbHorz = true;
-                aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40;
-                if (aEvent.mnScrollLines == 0)
-                    aEvent.mnScrollLines = 1;
-
+                aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40.0;
                 pThis->CallCallbackExc(SalEvent::WheelMouse, &aEvent);
             }
 
@@ -2698,10 +2695,7 @@ gboolean GtkSalFrame::signalScroll(GtkWidget*, GdkEventScroll* pEvent, gpointer 
                 if (aEvent.mnDelta == 0)
                     aEvent.mnDelta = aEvent.mnNotchDelta;
                 aEvent.mbHorz = false;
-                aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40;
-                if (aEvent.mnScrollLines == 0)
-                    aEvent.mnScrollLines = 1;
-
+                aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40.0;
                 pThis->CallCallbackExc(SalEvent::WheelMouse, &aEvent);
             }
 

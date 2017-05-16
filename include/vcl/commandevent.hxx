@@ -141,7 +141,7 @@ class VCL_DLLPUBLIC CommandWheelData
 private:
     long              mnDelta;
     long              mnNotchDelta;
-    sal_uLong         mnLines;
+    double            mnLines;
     CommandWheelMode  mnWheelMode;
     sal_uInt16        mnCode;
     bool              mbHorz;
@@ -150,13 +150,13 @@ private:
 public:
                     CommandWheelData();
                     CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
-                                      sal_uLong nScrollLines,
+                                      double nScrollLines,
                                       CommandWheelMode nWheelMode, sal_uInt16 nKeyModifier,
                                       bool bHorz, bool bDeltaIsPixel = false );
 
     long            GetDelta() const { return mnDelta; }
     long            GetNotchDelta() const { return mnNotchDelta; }
-    sal_uLong       GetScrollLines() const { return mnLines; }
+    double          GetScrollLines() const { return mnLines; }
     bool            IsHorz() const { return mbHorz; }
     bool            IsDeltaPixel() const { return mbDeltaIsPixel; }
 
