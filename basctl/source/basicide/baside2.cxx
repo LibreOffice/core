@@ -1195,8 +1195,6 @@ void ModulWindow::Activating ()
 void ModulWindow::Deactivating()
 {
     Hide();
-    if ( GetEditView() )
-        GetEditView()->EraseVirtualDevice();
 }
 
 sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem, bool bFromStart )

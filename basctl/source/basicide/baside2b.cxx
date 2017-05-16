@@ -1004,7 +1004,6 @@ void EditorWindow::CreateEditEngine()
 
     pProgress.reset();
 
-    pEditView->EraseVirtualDevice();
     pEditEngine->SetModified( false );
     pEditEngine->EnableUndo( true );
 
