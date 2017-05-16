@@ -471,7 +471,7 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
         m_pEndRB->Check (pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::EndDoc ) ;
         m_pEndPageRB->Check (pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::EndPage ) ;
         m_pInMarginsRB->Check (pAddPrinterAttr->m_nPrintPostIts== SwPostItMode::InMargins ) ;
-        m_pFaxLB->SelectEntry( pAddPrinterAttr->m_sFaxName );
+        m_pFaxLB->SelectEntryPos(0);
     }
     if (m_pProspectCB->IsChecked())
     {
