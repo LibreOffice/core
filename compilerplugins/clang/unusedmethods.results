@@ -64,30 +64,40 @@ include/comphelper/configuration.hxx:264
     void comphelper::ConfigurationLocalizedProperty::set(const type-parameter-?-? &,const class std::shared_ptr<class comphelper::ConfigurationChanges> &)
 include/comphelper/configuration.hxx:300
     class com::sun::star::uno::Reference<class com::sun::star::container::XHierarchicalNameReplace> comphelper::ConfigurationGroup::get(const class std::shared_ptr<class comphelper::ConfigurationChanges> &)
-include/comphelper/hash.hxx:40
-    class std::__debug::vector<unsigned char, class std::allocator<unsigned char> > comphelper::Hash::calculateHash(const unsigned char *,unsigned long,enum comphelper::HashType)
 include/comphelper/logging.hxx:57
     class rtl::OUString convertLogArgToString(char16_t)
-include/comphelper/logging.hxx:129
-    _Bool comphelper::EventLogger::log(const int,const class rtl::OUString &,type-parameter-?-?) const
-include/comphelper/logging.hxx:139
-    _Bool comphelper::EventLogger::log(const int,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:150
-    _Bool comphelper::EventLogger::log(const int,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:162
-    _Bool comphelper::EventLogger::log(const int,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:175
-    _Bool comphelper::EventLogger::log(const int,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:189
-    _Bool comphelper::EventLogger::log(const int,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:224
+include/comphelper/logging.hxx:232
     _Bool comphelper::EventLogger::log(const int,const char *,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:247
+include/comphelper/logging.hxx:255
     _Bool comphelper::EventLogger::log(const int,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:260
+include/comphelper/logging.hxx:268
     _Bool comphelper::EventLogger::log(const int,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/logging.hxx:274
+include/comphelper/logging.hxx:282
     _Bool comphelper::EventLogger::log(const int,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
+include/comphelper/logging.hxx:307
+    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const class rtl::OUString &,type-parameter-?-?) const
+include/comphelper/logging.hxx:317
+    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?) const
+include/comphelper/logging.hxx:328
+    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
+include/comphelper/logging.hxx:340
+    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
+include/comphelper/logging.hxx:353
+    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
+include/comphelper/logging.hxx:367
+    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const class rtl::OUString &,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
+include/comphelper/logging.hxx:392
+    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?) const
+include/comphelper/logging.hxx:402
+    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?) const
+include/comphelper/logging.hxx:413
+    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
+include/comphelper/logging.hxx:425
+    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
+include/comphelper/logging.hxx:438
+    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
+include/comphelper/logging.hxx:452
+    _Bool comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
 include/comphelper/lok.hxx:44
     _Bool isLocalRendering()
 include/comphelper/proparrhlp.hxx:87
@@ -190,7 +200,7 @@ include/oox/helper/propertymap.hxx:114
     void oox::PropertyMap::dumpData(const class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> &)
 include/opencl/OpenCLZone.hxx:42
     _Bool OpenCLZone::isInInitialTest()
-include/sfx2/msg.hxx:119
+include/sfx2/msg.hxx:120
     const class std::type_info * SfxType0::Type() const
 include/svl/itempool.hxx:209
     void SfxItemPool::dumpAsXml(struct _xmlTextWriter *) const
@@ -212,6 +222,8 @@ include/tools/bigint.hxx:143
     _Bool operator!=(const class BigInt &,const class BigInt &)
 include/tools/bigint.hxx:146
     _Bool operator<=(const class BigInt &,const class BigInt &)
+include/tools/date.hxx:83
+    _Bool Date::IsEmpty() const
 include/tools/datetime.hxx:47
      DateTime::DateTime(const class tools::Time &)
 include/tools/datetime.hxx:93
@@ -230,9 +242,9 @@ include/unotest/assertion_traits.hxx:25
     _Bool CppUnit::assertion_traits::equal(signed char,signed char)
 include/unotest/assertion_traits.hxx:27
     class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > CppUnit::assertion_traits::toString(signed char)
-include/vcl/commandevent.hxx:249
+include/vcl/commandevent.hxx:251
      CommandMediaData::CommandMediaData(enum MediaCommand)
-include/vcl/menu.hxx:472
+include/vcl/menu.hxx:476
     class tools::Rectangle MenuBar::GetMenuBarButtonRectPixel(unsigned short)
 include/vcl/opengl/OpenGLContext.hxx:99
     void OpenGLContext::UseNoProgram()
@@ -252,47 +264,45 @@ include/vcl/uitest/uiobject.hxx:312
      SpinUIObject::SpinUIObject(class VclPtr<class SpinButton>)
 include/vcl/uitest/uiobject.hxx:320
     class std::unique_ptr<class UIObject, struct std::default_delete<class UIObject> > SpinUIObject::create(class vcl::Window *)
-include/vcl/window.hxx:427
+include/vcl/window.hxx:428
     const char * ImplDbgCheckWindow(const void *)
 oox/inc/drawingml/textliststyle.hxx:49
     void oox::drawingml::TextListStyle::dump() const
 sc/inc/compressedarray.hxx:158
      ScBitMaskCompressedArray::ScBitMaskCompressedArray<A, D>(type-parameter-?-?,const type-parameter-?-? *,unsigned long)
-sc/inc/dpfilteredcache.hxx:145
+sc/inc/dpfilteredcache.hxx:144
     void ScDPFilteredCache::dump() const
 sc/inc/formulacell.hxx:433
     void ScFormulaCell::Dump() const
 sc/inc/formulagroup.hxx:140
     void sc::FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly()
-sc/inc/PivotTableDataProvider.hxx:150
-    void sc::PivotTableDataProvider::setLabeledDataSequence(class com::sun::star::uno::Reference<class com::sun::star::chart2::data::XLabeledDataSequence> &,const class rtl::OUString &,const class rtl::OUString &,const class std::__debug::vector<struct sc::ValueAndFormat, class std::allocator<struct sc::ValueAndFormat> > &,const class rtl::OUString &,const class rtl::OUString &,const class std::__debug::vector<struct sc::ValueAndFormat, class std::allocator<struct sc::ValueAndFormat> > &)
 sc/inc/postit.hxx:47
      ScCaptionPtr::ScCaptionPtr(class SdrCaptionObj *)
 sc/inc/scdll.hxx:42
      ScDLL::ScDLL()
-sc/inc/table.hxx:291
+sc/inc/table.hxx:292
     _Bool ScTable::IsColRowTabValid(short,int,short) const
 sc/inc/userlist.hxx:86
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > *, class std::__cxx1998::vector<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> >, class std::allocator<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > > > >, class std::__debug::vector<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> >, class std::allocator<class std::unique_ptr<class ScUserListData, struct std::default_delete<class ScUserListData> > > > > ScUserList::begin() const
-sc/qa/unit/helper/qahelper.hxx:199
+sc/qa/unit/helper/qahelper.hxx:201
     class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > print(const class ScAddress &)
 sc/qa/unit/ucalc.hxx:141
     void Test::testFormulaHashAndTag()
 sc/qa/unit/ucalc.hxx:170
     void Test::testSingleCellCopyColumnLabel()
-sc/qa/unit/ucalc.hxx:221
+sc/qa/unit/ucalc.hxx:222
     void Test::testExternalRefUnresolved()
-sc/qa/unit/ucalc.hxx:360
+sc/qa/unit/ucalc.hxx:361
     void Test::testCopyPasteSkipEmptyConditionalFormatting()
-sc/qa/unit/ucalc.hxx:387
+sc/qa/unit/ucalc.hxx:388
     void Test::testSharedFormulaMoveBlock()
-sc/qa/unit/ucalc.hxx:494
-    void Test::testCondFormatUpdateMoveTab()
 sc/qa/unit/ucalc.hxx:495
-    void Test::testCondFormatUpdateDeleteTab()
+    void Test::testCondFormatUpdateMoveTab()
 sc/qa/unit/ucalc.hxx:496
-    void Test::testCondFormatUpdateInsertTab()
+    void Test::testCondFormatUpdateDeleteTab()
 sc/qa/unit/ucalc.hxx:497
+    void Test::testCondFormatUpdateInsertTab()
+sc/qa/unit/ucalc.hxx:498
     void Test::testCondFormatUpdateReference()
 sc/source/core/opencl/formulagroupcl.cxx:936
     _Bool sc::opencl::DynamicKernelSlidingArgument::NeedParallelReduction() const
@@ -434,19 +444,19 @@ sw/inc/dbgoutsw.hxx:109
     const char * dbg_out(const struct SwFormToken &)
 sw/inc/dbgoutsw.hxx:110
     const char * dbg_out(const class std::__debug::vector<struct SwFormToken, class std::allocator<struct SwFormToken> > &)
-sw/inc/docary.hxx:141
+sw/inc/docary.hxx:143
     void SwVectorModifyBase::dumpAsXml(struct _xmlTextWriter *)
-sw/inc/docary.hxx:223
+sw/inc/docary.hxx:228
     void SwFrameFormats::erase(unsigned long)
-sw/inc/docary.hxx:238
+sw/inc/docary.hxx:243
     struct std::pair<class boost::multi_index::detail::bidir_node_iterator<struct boost::multi_index::detail::ordered_index_node<struct boost::multi_index::detail::null_augment_policy, struct boost::multi_index::detail::index_node_base<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> > > >, class boost::multi_index::detail::bidir_node_iterator<struct boost::multi_index::detail::ordered_index_node<struct boost::multi_index::detail::null_augment_policy, struct boost::multi_index::detail::index_node_base<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> > > > > SwFrameFormats::rangeFind(class SwFrameFormat *const &) const
-sw/inc/docary.hxx:240
+sw/inc/docary.hxx:245
     class boost::multi_index::detail::bidir_node_iterator<struct boost::multi_index::detail::ordered_index_node<struct boost::multi_index::detail::null_augment_policy, struct boost::multi_index::detail::index_node_base<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> > > > SwFrameFormats::rangeEnd() const
-sw/inc/docary.hxx:241
-    class boost::multi_index::detail::rnd_node_iterator<struct boost::multi_index::detail::random_access_index_node<struct boost::multi_index::detail::ordered_index_node<struct boost::multi_index::detail::null_augment_policy, struct boost::multi_index::detail::index_node_base<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> > > > > SwFrameFormats::rangeProject(const class boost::multi_index::detail::bidir_node_iterator<struct boost::multi_index::detail::ordered_index_node<struct boost::multi_index::detail::null_augment_policy, struct boost::multi_index::detail::index_node_base<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> > > > &)
 sw/inc/docary.hxx:246
+    class boost::multi_index::detail::rnd_node_iterator<struct boost::multi_index::detail::random_access_index_node<struct boost::multi_index::detail::ordered_index_node<struct boost::multi_index::detail::null_augment_policy, struct boost::multi_index::detail::index_node_base<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> > > > > SwFrameFormats::rangeProject(const class boost::multi_index::detail::bidir_node_iterator<struct boost::multi_index::detail::ordered_index_node<struct boost::multi_index::detail::null_augment_policy, struct boost::multi_index::detail::index_node_base<class SwFrameFormat *, class std::allocator<class SwFrameFormat *> > > > &)
+sw/inc/docary.hxx:251
     class SwFrameFormat *const & SwFrameFormats::front() const
-sw/inc/docary.hxx:247
+sw/inc/docary.hxx:252
     class SwFrameFormat *const & SwFrameFormats::back() const
 sw/inc/pagedesc.hxx:418
     void SwPageDescs::erase(class SwPageDesc *const &)
@@ -460,7 +470,7 @@ sw/inc/swrect.hxx:105
     class SvStream & WriteSwRect(class SvStream &,const class SwRect &)
 sw/qa/extras/inc/swmodeltestbase.hxx:523
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> SwModelTestBase::getParagraphAnchoredObject(const int,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextRange> &) const
-sw/qa/extras/uiwriter/uiwriter.cxx:4621
+sw/qa/extras/uiwriter/uiwriter.cxx:4894
     int main()
 sw/source/core/inc/flowfrm.hxx:171
     class SwFlowFrame * SwFlowFrame::GetPrecede()
@@ -514,7 +524,7 @@ vcl/inc/salwtype.hxx:117
      SalMenuEvent::SalMenuEvent()
 vcl/inc/unx/glyphcache.hxx:71
     void GlyphCache::ClearFontOptions()
-vcl/inc/unx/gtk/gtkdata.hxx:182
+vcl/inc/unx/gtk/gtkdata.hxx:181
     void GtkSalDisplay::RefreshMenusUnity()
 vcl/inc/unx/gtk/gtkinst.hxx:120
     void GtkDropTarget::fire_dragExit(const struct com::sun::star::datatransfer::dnd::DropTargetEvent &)
@@ -540,7 +550,7 @@ vcl/source/fontsubset/xlat.hxx:35
     unsigned short TranslateChar16(unsigned short)
 vcl/source/gdi/pdfwriter_impl.hxx:1282
     void vcl::PDFWriterImpl::setAutoAdvanceTime(unsigned int,int)
-workdir/LexTarget/l10ntools/source/xrmlex.cxx:730
+workdir/LexTarget/l10ntools/source/srclex.cxx:1380
     void YYWarning()
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:160
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> *, class std::__cxx1998::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > >, class std::__debug::vector<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class std::shared_ptr<class writerfilter::ooxml::OOXMLProperty> > > > writerfilter::ooxml::OOXMLPropertySet::begin() const
@@ -554,6 +564,8 @@ xmlsecurity/inc/xmlsignaturehelper.hxx:112
     void XMLSignatureHelper::SignatureCreationResultListener(struct XMLSignatureCreationResult &)
 xmlsecurity/inc/xmlsignaturehelper.hxx:113
     void XMLSignatureHelper::SignatureVerifyResultListener(struct XMLSignatureVerifyResult &)
+xmlsecurity/source/gpg/CertificateImpl.hxx:83
+    const class GpgME::Key * CertificateImpl::getCertificate() const
 xmlsecurity/source/gpg/XMLEncryption.hxx:27
      XMLEncryptionGpg::XMLEncryptionGpg()
 xmlsecurity/source/gpg/XMLSignature.hxx:27

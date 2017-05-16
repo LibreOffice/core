@@ -259,7 +259,7 @@ public:
 
     void        AdjustHeight( long nDY );
 
-    sal_uLong   Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs );
+    void        Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs );
 
     void        InsertText( const OUString& rNew, bool bSelect = false );
     void        InsertText( const OutlinerParaObject& rParaObj );

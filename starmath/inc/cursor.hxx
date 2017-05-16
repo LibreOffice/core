@@ -138,17 +138,6 @@ public:
      */
     void InsertSubSup(SmSubSup eSubSup);
 
-    /** Create a limit on an SmOperNode
-     *
-     * This method only work if the caret is inside an SmOperNode, or to the right of one.
-     * Notice also that this method ignores any selection made.
-     *
-     * The caret will be moved into the limit.
-     *
-     * @returns True, if the caret was in a context where this operation was possible.
-     */
-    bool InsertLimit(SmSubSup eSubSup);
-
     /** Insert a new row or newline
      *
      * Inserts a new row if position is in an matrix or stack command.

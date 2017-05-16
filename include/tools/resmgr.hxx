@@ -157,8 +157,6 @@ public:
                             { nLen++; return (nLen + nLen%2); }
     static sal_uInt32   GetStringSize( const sal_uInt8* pStr, sal_uInt32& nLen );
 
-    /// Return a int64
-    static sal_uInt64   GetUInt64( void const * pDatum );
     /// Return a long
     static sal_Int32    GetLong( void const * pLong );
 

@@ -88,7 +88,6 @@ class SvtPathOptions_Impl
         mutable EnumToHandleMap             m_aMapEnumToPropHandle;
         VarNameSet                          m_aSystemPathVarNames;
 
-        LanguageTag                         m_aLanguageTag;
         OUString                            m_aEmptyString;
         mutable ::osl::Mutex                m_aMutex;
 
@@ -151,8 +150,6 @@ class SvtPathOptions_Impl
         OUString   SubstVar( const OUString& rVar ) const;
         OUString   ExpandMacros( const OUString& rPath ) const;
         OUString   UsePathVariables( const OUString& rPath ) const;
-
-        const LanguageTag& GetLanguageTag() const { return m_aLanguageTag; }
 };
 
 // global ----------------------------------------------------------------
@@ -397,8 +394,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
 }
 
 SvtPathOptions_Impl::SvtPathOptions_Impl() :
-    m_aPathArray( (sal_Int32)SvtPathOptions::PATH_COUNT ),
-    m_aLanguageTag( LANGUAGE_DONTKNOW )
+    m_aPathArray( (sal_Int32)SvtPathOptions::PATH_COUNT )
 {
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
@@ -441,9 +437,6 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
     {
         m_aSystemPathVarNames.insert( OUString::createFromAscii( aVarNameAttribute[i].pVarName ) );
     }
-
-    // Set language type!
-    m_aLanguageTag.reset( ConfigManager::getLocale() );
 }
 
 // class SvtPathOptions --------------------------------------------------
@@ -842,11 +835,6 @@ bool SvtPathOptions::SearchFile( OUString& rIniFile, Paths ePath )
     }
 
     return bRet;
-}
-
-const LanguageTag& SvtPathOptions::GetLanguageTag() const
-{
-    return pImpl->GetLanguageTag();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

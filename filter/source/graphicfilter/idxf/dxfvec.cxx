@@ -221,18 +221,6 @@ LineInfo DXFTransform::Transform(const DXFLineInfo& aDXFLineInfo) const
     return aLineInfo;
 }
 
-sal_uInt32 DXFTransform::TransLineWidth(double fW) const
-{
-    double fex,fey;
-
-    fex=sqrt(aMX.fx*aMX.fx + aMX.fy*aMX.fy);
-    fey=sqrt(aMY.fx*aMY.fx + aMY.fy*aMY.fy);
-    // ###
-    // printf("fex=%f fey=%f\n", fex, fey);
-    return (sal_uInt32)(fabs(fW)*(fex+fey)/2.0+0.5);
-}
-
-
 double DXFTransform::CalcRotAngle() const
 {
     return atan2(aMX.fy,aMX.fx)/3.14159265359*180.0;

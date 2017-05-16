@@ -94,8 +94,6 @@ public:
 
 typedef std::vector<ScaFuncData> ScaFuncDataList;
 
-void InitScaFuncDataList ( ScaFuncDataList& rList, ResMgr& rResMgr );
-
 // Predicate for use with std::find_if
 struct FindScaFuncData
 {

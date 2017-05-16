@@ -80,7 +80,6 @@ class SwFieldFuncPage : public SwFieldPage
     DECL_LINK( MacroHdl, Button *, void );
 
     void                UpdateSubType();
-    static OUString     TurnMacroString(const OUString &rMacro);
 
 protected:
     virtual sal_uInt16      GetGroup() override;

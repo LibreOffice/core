@@ -71,8 +71,6 @@ public:
     void                            SetNoURLSelection( bool bSet );
     INetProtocol                    GetSmartProtocol() const { return eSmartProtocol; }
     void                            SetSmartProtocol( INetProtocol eProt );
-    bool                            IsCtrlOpen()
-                                        { return bCtrlClick; }
     OUString                        GetURL();
     void                            DisableHistory();
 
@@ -82,7 +80,7 @@ public:
 
     void                            SetFilter(const OUString& _sFilter);
 
-    void                     EnableAutocompletion( bool _bEnable )
+    void                            EnableAutocompletion( bool _bEnable )
                                         { bIsAutoCompleteEnabled = _bEnable; }
     void                            SetPlaceHolder( const OUString& sPlaceHolder )
                                         { aPlaceHolder = sPlaceHolder; }
