@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_5d7c8272",
+        "filename": "include/svl/hint.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-16T17:29:14Z",
+      "side": 1,
+      "message": "To clarify the purpose I\u0027d prefer if we named this ScHiddenRowsChanged, which also aligns with other Sc...Changed values.",
+      "revId": "350990a0dfc7b8e29047d8239fe0e7dff83a2654",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_fdb60e3c",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7842,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-16T17:29:14Z",
+      "side": 1,
+      "message": "Rather move setting the formula after setting the values, otherwise it\u0027s unnecessarily recalculated 6 times, for each cell value that\u0027s set.",
+      "revId": "350990a0dfc7b8e29047d8239fe0e7dff83a2654",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_1d82fa52",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7848,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-16T17:29:14Z",
+      "side": 1,
+      "message": "Just a hint: when summing values for a test it is convenient to use powers of 2, i.e. 1,2,4,8,..., which makes it very easy to spot which value(s) failed if any.",
+      "revId": "350990a0dfc7b8e29047d8239fe0e7dff83a2654",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_3d87b662",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2312,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-16T17:29:14Z",
+      "side": 1,
+      "message": "No extra code path for this. Just add to the condition above so it uses the same logic to decide if and how the formula cell is to be tracked.\n\n if (nHint \u003d\u003d SfxHintId::ScDataChanged || nHint \u003d\u003d SfxHintId::ScTableOpDirty || (bSubTotal \u0026\u0026 nHint \u003d\u003d SfxHintId::ScRowsHidden))",
+      "revId": "350990a0dfc7b8e29047d8239fe0e7dff83a2654",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
