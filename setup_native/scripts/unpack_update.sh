@@ -27,7 +27,7 @@ NUM=1
 DESTPATH="$BASEDIR/$FOLDER"
 
 while [ -d "$DESTPATH" ]; do
-  NUM=`expr $NUM + 1`
+  NUM=$(expr $NUM + 1)
   DESTPATH="$BASEDIR/$FOLDER-$NUM"
 done
 
@@ -47,4 +47,4 @@ else
   exit 2
 fi
 
-UPDATE=`eval ls */update` && SUBFOLDER=`dirname $UPDATE` && mv $SUBFOLDER/* . && rmdir $SUBFOLDER && echo "$DESTPATH/update"
+UPDATE=$(eval ls ./*/update) && SUBFOLDER=$(dirname $UPDATE) && mv $SUBFOLDER/* . && rmdir $SUBFOLDER && echo "$DESTPATH/update"
