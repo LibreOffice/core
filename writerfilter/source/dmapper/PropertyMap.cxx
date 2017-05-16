@@ -1057,11 +1057,16 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(bool bFirstPage, DomainMapper
     PrepareHeaderFooterProperties( bFirstPage );
 }
 
-bool SectionPropertyMap::FloatingTableConversion(FloatingTableInfo& rInfo)
+bool SectionPropertyMap::FloatingTableConversion(DomainMapper_Impl& rDM_Impl, FloatingTableInfo& rInfo)
 {
     // Note that this is just a list of heuristics till sw core can have a
     // table that is floating and can span over multiple pages at the same
     // time.
+
+    // If there is an explicit section break right after a table, then there
+    // will be no wrapping anyway.
+    if (rDM_Impl.m_bConvertedTable && !rDM_Impl.GetIsLastSectionGroup() && rInfo.m_nBreakType == NS_ooxml::LN_Value_ST_SectionMark_nextPage)
+        return false;
 
     sal_Int32 nPageWidth = GetPageWidth();
     sal_Int32 nTextAreaWidth = nPageWidth - GetLeftMargin() - GetRightMargin();
@@ -1154,12 +1159,17 @@ throw ( css::beans::UnknownPropertyException,
 
 void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 {
+    // The default section type is nextPage.
+    if ( m_nBreakType == -1 )
+        m_nBreakType = NS_ooxml::LN_Value_ST_SectionMark_nextPage;
+
     // Text area width is known at the end of a section: decide if tables should be converted or not.
     std::vector<FloatingTableInfo>& rPendingFloatingTables = rDM_Impl.m_aPendingFloatingTables;
     uno::Reference<text::XTextAppendAndConvert> xBodyText( rDM_Impl.GetBodyText(), uno::UNO_QUERY );
     for (FloatingTableInfo & rInfo : rPendingFloatingTables)
     {
-        if (FloatingTableConversion(rInfo))
+        rInfo.m_nBreakType = m_nBreakType;
+        if (FloatingTableConversion(rDM_Impl, rInfo))
             xBodyText->convertToTextFrame(rInfo.m_xStart, rInfo.m_xEnd, rInfo.m_aFrameProperties);
     }
     rPendingFloatingTables.clear();

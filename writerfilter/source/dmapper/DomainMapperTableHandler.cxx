@@ -1142,6 +1142,9 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                     xTextAppendAndConvert->convertToTextFrame(xStart, xEnd, comphelper::containerToSequence(aFrameProperties));
             }
         }
+
+        // We're right after a table conversion.
+        m_rDMapper_Impl.m_bConvertedTable = true;
     }
 
     m_aTableProperties.reset();
