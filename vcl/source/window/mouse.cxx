@@ -55,7 +55,6 @@ WindowHitTest Window::ImplHitTest( const Point& rFramePos )
     Point aFramePos( rFramePos );
     if( ImplIsAntiparallel() )
     {
-        // - RTL - re-mirror frame pos at this window
         const OutputDevice *pOutDev = GetOutDev();
         pOutDev->ReMirror( aFramePos );
     }
@@ -505,7 +504,6 @@ void Window::SetPointerPosPixel( const Point& rPos )
     {
         if( !IsRTLEnabled() )
         {
-            // --- RTL --- (re-mirror mouse pos at this window)
             pOutDev->ReMirror( aPos );
         }
         // mirroring is required here, SetPointerPos bypasses SalGraphics
@@ -533,7 +531,6 @@ Point Window::GetPointerPosPixel()
     Point aPos( mpWindowImpl->mpFrameData->mnLastMouseX, mpWindowImpl->mpFrameData->mnLastMouseY );
     if( ImplIsAntiparallel() )
     {
-        // --- RTL --- (re-mirror mouse pos at this window)
         const OutputDevice *pOutDev = GetOutDev();
         pOutDev->ReMirror( aPos );
     }
@@ -546,7 +543,6 @@ Point Window::GetLastPointerPosPixel()
     Point aPos( mpWindowImpl->mpFrameData->mnBeforeLastMouseX, mpWindowImpl->mpFrameData->mnBeforeLastMouseY );
     if( ImplIsAntiparallel() )
     {
-        // --- RTL --- (re-mirror mouse pos at this window)
         const OutputDevice *pOutDev = GetOutDev();
         pOutDev->ReMirror( aPos );
     }
@@ -578,7 +574,6 @@ Window::PointerState Window::GetPointerState()
         aSalPointerState = mpWindowImpl->mpFrame->GetPointerState();
         if( ImplIsAntiparallel() )
         {
-            // --- RTL --- (re-mirror mouse pos at this window)
             const OutputDevice *pOutDev = GetOutDev();
             pOutDev->ReMirror( aSalPointerState.maPos );
         }

@@ -2644,7 +2644,6 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
         aEvent.mnY      = (long)pEvent->y_root - pThis->maGeometry.nY;
         aEvent.mnCode   = GetMouseModCode( pEvent->state );
 
-        // --- RTL --- (mirror mouse pos)
         if( AllSettings::GetLayoutRTL() )
             aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
 
@@ -2664,7 +2663,7 @@ gboolean GtkSalFrame::signalScroll(GtkWidget*, GdkEventScroll* pEvent, gpointer 
 
     aEvent.mnTime = pEvent->time;
     aEvent.mnX = (sal_uLong)pEvent->x;
-    // --- RTL --- (mirror mouse pos)
+
     if (AllSettings::GetLayoutRTL())
         aEvent.mnX = pThis->maGeometry.nWidth - 1 - aEvent.mnX;
     aEvent.mnY = (sal_uLong)pEvent->y;
@@ -2814,7 +2813,6 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
         aEvent.mnCode   = GetMouseModCode( pEvent->state );
         aEvent.mnButton = 0;
 
-        // --- RTL --- (mirror mouse pos)
         if( AllSettings::GetLayoutRTL() )
             aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
 

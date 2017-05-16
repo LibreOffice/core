@@ -1291,7 +1291,6 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 
     if ( !(nPosSize & SWP_NOMOVE) && ::GetParent( mhWnd ) )
     {
-            // --- RTL --- (mirror window pos)
             RECT aParentRect;
             GetClientRect( ImplGetParentHwnd( mhWnd ), &aParentRect );
             if( AllSettings::GetLayoutRTL() )
@@ -3149,7 +3148,6 @@ static long ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
         if ( nEvent == SalEvent::MouseButtonDown )
             UpdateWindow( hWnd );
 
-        // --- RTL --- (mirror mouse pos)
         if( AllSettings::GetLayoutRTL() )
             aMouseEvt.mnX = pFrame->maGeometry.nWidth-1-aMouseEvt.mnX;
 
@@ -3233,7 +3231,6 @@ static long ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
         if ( GetKeyState( VK_MENU ) & 0x8000 )
             aWheelEvt.mnCode |= KEY_MOD2;
 
-        // --- RTL --- (mirror mouse pos)
         if( AllSettings::GetLayoutRTL() )
             aWheelEvt.mnX = pFrame->maGeometry.nWidth-1-aWheelEvt.mnX;
 

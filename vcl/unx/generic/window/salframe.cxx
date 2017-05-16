@@ -1938,7 +1938,6 @@ void X11SalFrame::SetPosSize( const tools::Rectangle &rPosSize )
 
      if( mpParent && ! IsSysChildWindow() )
      {
-        // --- RTL --- (mirror window pos)
         if( AllSettings::GetLayoutRTL() )
             values.x = mpParent->maGeometry.nWidth-values.width-1-values.x;
 
@@ -2839,7 +2838,6 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
 
             nEvent = SalEvent::WheelMouse;
 
-            // --- RTL --- (mirror mouse pos)
             if( AllSettings::GetLayoutRTL() )
                 aWheelEvt.mnX = nWidth_-1-aWheelEvt.mnX;
             return CallCallback( nEvent, &aWheelEvt );
@@ -2853,7 +2851,6 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
         || pDisplay_->MouseCaptured( this )
         )
     {
-        // --- RTL --- (mirror mouse pos)
         if( AllSettings::GetLayoutRTL() )
             aMouseEvt.mnX = nWidth_-1-aMouseEvt.mnX;
         nRet = CallCallback( nEvent, &aMouseEvt );

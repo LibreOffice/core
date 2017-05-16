@@ -289,7 +289,7 @@ void Edit::ImplInitEditData()
     mpIMEInfos              = nullptr;
     mcEchoChar              = 0;
 
-    // --- RTL --- no default mirroring for Edit controls
+    // no default mirroring for Edit controls
     // note: controls that use a subedit will revert this (SpinField, ComboBox)
     EnableRTL( false );
 
@@ -326,7 +326,7 @@ void Edit::ImplInit(vcl::Window* pParent, WinBits nStyle)
 
     mnAlign = EDIT_ALIGN_LEFT;
 
-    // --- RTL --- hack: right align until keyinput and cursor travelling works
+    // hack: right align until keyinput and cursor travelling works
     if( IsRTLEnabled() )
         mnAlign = EDIT_ALIGN_RIGHT;
 
@@ -2192,7 +2192,7 @@ void Edit::StateChanged( StateChangedType nType )
         sal_uInt16 nOldAlign = mnAlign;
         mnAlign = EDIT_ALIGN_LEFT;
 
-        // --- RTL --- hack: right align until keyinput and cursor travelling works
+        // hack: right align until keyinput and cursor travelling works
         // edits are always RTL disabled
         // however the parent edits contain the correct setting
         if (mbIsSubEdit && GetParent()->IsRTLEnabled())

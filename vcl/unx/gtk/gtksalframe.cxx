@@ -2747,7 +2747,6 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
         pThis->askForXEmbedFocus( pEvent->time );
     }
 
-    // --- RTL --- (mirror mouse pos)
     if( AllSettings::GetLayoutRTL() )
         aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
 
@@ -2807,7 +2806,6 @@ gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEventScroll* pEvent, gpointer
     aEvent.mnCode           = GetMouseModCode( pEvent->state );
     aEvent.mbHorz           = (pEvent->direction == GDK_SCROLL_LEFT || pEvent->direction == GDK_SCROLL_RIGHT);
 
-    // --- RTL --- (mirror mouse pos)
     if( AllSettings::GetLayoutRTL() )
         aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
 
@@ -2827,7 +2825,6 @@ gboolean GtkSalFrame::signalMotion( GtkWidget*, GdkEventMotion* pEvent, gpointer
     aEvent.mnCode   = GetMouseModCode( pEvent->state );
     aEvent.mnButton = 0;
 
-    // --- RTL --- (mirror mouse pos)
     if( AllSettings::GetLayoutRTL() )
         aEvent.mnX = pThis->maGeometry.nWidth-1-aEvent.mnX;
 

@@ -38,7 +38,7 @@ void Window::InitClipRegion()
     else
     {
         aRegion = *(ImplGetWinChildClipRegion());
-        // --- RTL -- only this region is in frame coordinates, so re-mirror it
+        // only this region is in frame coordinates, so re-mirror it
         // the mpWindowImpl->mpPaintRegion above is already correct (see ImplCallPaint()) !
         if( ImplIsAntiparallel() )
             ReMirror ( aRegion );
@@ -88,7 +88,7 @@ void Window::ExpandPaintClipRegion( const vcl::Region& rRegion )
         vcl::Region aDevPixRegion = ImplPixelToDevicePixel( aPixRegion );
 
         vcl::Region aWinChildRegion = *ImplGetWinChildClipRegion();
-        // --- RTL -- only this region is in frame coordinates, so re-mirror it
+        // only this region is in frame coordinates, so re-mirror it
         if( ImplIsAntiparallel() )
         {
             const OutputDevice *pOutDev = GetOutDev();

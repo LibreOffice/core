@@ -648,7 +648,7 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
 
     if ( rPosAry.mnSrcWidth && rPosAry.mnSrcHeight && rPosAry.mnDestWidth && rPosAry.mnDestHeight )
     {
-        // --- RTL --- if this is no window, but pSrcDev is a window
+        // if this is no window, but pSrcDev is a window
         // mirroring may be required
         // because only windows have a SalGraphicsLayout
         // mirroring is performed here

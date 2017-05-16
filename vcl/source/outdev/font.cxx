@@ -1194,7 +1194,6 @@ void OutputDevice::ImplDrawEmphasisMark( long nBaseX, long nX, long nY,
                                          const tools::Rectangle& rRect1, const tools::Rectangle& rRect2 )
 {
     if( IsRTLEnabled() )
-        // --- RTL --- mirror at basex
         nX = nBaseX - (nX - nBaseX - 1);
 
     nX -= mnOutOffX;

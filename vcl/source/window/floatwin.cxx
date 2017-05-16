@@ -307,7 +307,7 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
                 aPos.X() = devRect.Left()-aSize.Width()+1;
                 aPos.Y() = devRect.Top();
                 aPos.Y() -= pWindow->mpWindowImpl->mnTopBorder;
-                if( bRTL ) // --- RTL --- we're comparing screen coordinates here
+                if( bRTL )
                 {
                     if( (devRectRTL.Right()+aSize.Width()) > aScreenRect.Right() )
                         bBreak = false;
@@ -331,7 +331,7 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
             case FloatWinPopupFlags::Right:
                 aPos     = devRect.TopRight();
                 aPos.Y() -= pWindow->mpWindowImpl->mnTopBorder;
-                if( bRTL ) // --- RTL --- we're comparing screen coordinates here
+                if( bRTL )
                 {
                     if( (devRectRTL.Left() - aSize.Width()) < aScreenRect.Left() )
                         bBreak = false;
@@ -401,7 +401,7 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
             }
             else
             {
-                if( bRTL ) // --- RTL --- we're comparing screen coordinates here
+                if( bRTL )
                 {
                     if( devRectRTL.Right()-aSize.Width()+1 < aScreenRect.Left() )
                         aPos.X() -= aScreenRect.Left() - devRectRTL.Right() + aSize.Width() - 1;
@@ -446,7 +446,6 @@ Point FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, const Point& 
     if( pReference->HasMirroredGraphics()  )
     {
         if(!pReference->IsRTLEnabled() )
-            // --- RTL --- re-mirror back to get device coordinates
             pWindowOutDev->ReMirror( aAbsolute );
 
         tools::Rectangle aRect( pReference->ScreenToOutputPixel(aAbsolute), Size(1,1) ) ;
@@ -471,7 +470,6 @@ tools::Rectangle FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, co
     if( pReference->HasMirroredGraphics()  )
     {
         if(!pReference->IsRTLEnabled() )
-            // --- RTL --- re-mirror back to get device coordinates
             pParentWinOutDev->ReMirror(aFloatRect);
 
         aFloatRect.SetPos(pReference->ScreenToOutputPixel(aFloatRect.TopLeft()));

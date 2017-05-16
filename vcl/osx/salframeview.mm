@@ -638,7 +638,6 @@ private:
         aEvent.mnButton = nButton;
         aEvent.mnCode   =  aEvent.mnButton | nModMask;
 
-        // --- RTL --- (mirror mouse pos)
         if( AllSettings::GetLayoutRTL() )
             aEvent.mnX = pDispatchFrame->maGeometry.nWidth-1-aEvent.mnX;
 
@@ -800,7 +799,6 @@ private:
         aEvent.mnCode           |= KEY_MOD1; // we want zooming, no scrolling
         aEvent.mbDeltaIsPixel   = TRUE;
 
-        // --- RTL --- (mirror mouse pos)
         if( AllSettings::GetLayoutRTL() )
             aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
 
@@ -859,7 +857,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
         aEvent.mbDeltaIsPixel   = TRUE;
 
-        // --- RTL --- (mirror mouse pos)
         if( AllSettings::GetLayoutRTL() )
             aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
 
@@ -922,7 +919,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         aEvent.mnCode         = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
         aEvent.mbDeltaIsPixel = FALSE;
 
-        // --- RTL --- (mirror mouse pos)
         if( AllSettings::GetLayoutRTL() )
             aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
 

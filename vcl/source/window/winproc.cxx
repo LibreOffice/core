@@ -359,7 +359,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
     {
         if( pChild->ImplIsAntiparallel() )
         {
-            // - RTL - re-mirror frame pos at pChild
+            // re-mirror frame pos at pChild
             const OutputDevice *pChildWinOutDev = pChild->GetOutDev();
             pChildWinOutDev->ReMirror( aMousePos );
         }
@@ -971,7 +971,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
     if ( !pChild )
         return false;
 
-    // --- RTL --- mirror cursor keys
+    // RTL: mirror cursor keys
     const OutputDevice *pChildOutDev = pChild->GetOutDev();
     if( (aKeyCode.GetCode() == KEY_LEFT || aKeyCode.GetCode() == KEY_RIGHT) &&
       pChildOutDev->HasMirroredGraphics() && pChild->IsRTLEnabled() )
@@ -2416,7 +2416,6 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
 
             if( AllSettings::GetLayoutRTL() )
             {
-                // --- RTL --- (mirror paint rect)
                 SalFrame* pSalFrame = pWindow->ImplGetWindowImpl()->mpFrame;
                 const_cast<SalPaintEvent *>(pPaintEvt)->mnBoundX = pSalFrame->maGeometry.nWidth-pPaintEvt->mnBoundWidth-pPaintEvt->mnBoundX;
             }

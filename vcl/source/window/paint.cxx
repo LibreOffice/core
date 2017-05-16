@@ -476,7 +476,7 @@ void Window::PushPaintHelper(PaintHelper *pHelper, vcl::RenderContext& rRenderCo
     rPaintRegion = mpWindowImpl->maInvalidateRegion;
     tools::Rectangle aPaintRect = rPaintRegion.GetBoundRect();
 
-    // - RTL - re-mirror paint rect and region at this window
+    // RTL: re-mirror paint rect and region at this window
     if (ImplIsAntiparallel())
     {
         rRenderContext.ReMirror(aPaintRect);
@@ -625,8 +625,8 @@ void Window::ImplCallOverlapPaint()
     // only then ourself
     if ( mpWindowImpl->mnPaintFlags & (ImplPaintFlags::Paint | ImplPaintFlags::PaintChildren) )
     {
-        // - RTL - notify ImplCallPaint to check for re-mirroring (CHECKRTL)
-        //         because we were called from the Sal layer
+        // RTL: notify ImplCallPaint to check for re-mirroring
+        // because we were called from the Sal layer
         ImplCallPaint(nullptr, mpWindowImpl->mnPaintFlags /*| ImplPaintFlags::CheckRtl */);
     }
 }
@@ -801,7 +801,7 @@ void Window::ImplInvalidate( const vcl::Region* pRegion, InvalidateFlags nFlags 
         vcl::Region      aRegion( aRect );
         if ( pRegion )
         {
-            // --- RTL --- remirror region before intersecting it
+            // RTL: remirror region before intersecting it
             if ( ImplIsAntiparallel() )
             {
                 const OutputDevice *pOutDev = GetOutDev();
@@ -1536,13 +1536,13 @@ void Window::ImplScroll( const tools::Rectangle& rRect,
 
     OutputDevice *pOutDev = GetOutDev();
 
-    // --- RTL --- check if this window requires special action
+    // RTL: check if this window requires special action
     bool bReMirror = ( ImplIsAntiparallel() );
 
     tools::Rectangle aRectMirror( rRect );
     if( bReMirror )
     {
-        // --- RTL --- make sure the invalidate region of this window is
+        //  make sure the invalidate region of this window is
         // computed in the same coordinate space as the one from the overlap windows
         pOutDev->ReMirror( aRectMirror );
     }
@@ -1552,7 +1552,6 @@ void Window::ImplScroll( const tools::Rectangle& rRect,
 
     ImplCalcOverlapRegion( aRectMirror, aInvalidateRegion, !bScrollChildren, false );
 
-    // --- RTL ---
     // if the scrolling on the device is performed in the opposite direction
     // then move the overlaps in that direction to compute the invalidate region
     // on the correct side, i.e., revert nHorzScroll
@@ -1620,7 +1619,6 @@ void Window::ImplScroll( const tools::Rectangle& rRect,
         {
             if( bReMirror )
             {
-                // --- RTL --- frame coordinates require re-mirroring
                 pOutDev->ReMirror( aRegion );
             }
 
@@ -1642,7 +1640,7 @@ void Window::ImplScroll( const tools::Rectangle& rRect,
 
     if ( !aInvalidateRegion.IsEmpty() )
     {
-        // --- RTL --- the invalidate region for this windows is already computed in frame coordinates
+        // RTL: the invalidate region for this windows is already computed in frame coordinates
         // so it has to be re-mirrored before calling the Paint-handler
         mpWindowImpl->mnPaintFlags |= ImplPaintFlags::CheckRtl;
 

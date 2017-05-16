@@ -124,7 +124,7 @@ void ScPreviewShell::Construct( vcl::Window* pParent )
     pHorScroll = VclPtr<ScrollBar>::Create(pParent, WB_HSCROLL );
     pVerScroll = VclPtr<ScrollBar>::Create(pParent, WB_VSCROLL);
 
-    // SSA: --- RTL --- no mirroring for horizontal scrollbars
+    // RTL: no mirroring for horizontal scrollbars
     pHorScroll->EnableRTL( false );
 
     pHorScroll->SetEndScrollHdl( LINK( this, ScPreviewShell, ScrollHandler ) );

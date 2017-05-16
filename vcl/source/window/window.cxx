@@ -1505,7 +1505,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
     if ( nFlags & PosSizeFlags::X )
     {
         long nOrgX = nX;
-        // --- RTL ---  (compare the screen coordinates)
         Point aPtDev( Point( nX+mnOutOffX, 0 ) );
         OutputDevice *pOutDev = GetOutDev();
         if( pOutDev->HasMirroredGraphics() )
@@ -1514,10 +1513,9 @@ void Window::ImplPosSizeWindow( long nX, long nY,
 
             // #106948# always mirror our pos if our parent is not mirroring, even
             // if we are also not mirroring
-            // --- RTL --- check if parent is in different coordinates
+            // RTL: check if parent is in different coordinates
             if( !bnXRecycled && mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->ImplIsAntiparallel() )
             {
-                // --- RTL --- (re-mirror at parent window)
                 nX = mpWindowImpl->mpParent->mnOutWidth - mnOutWidth - nX;
             }
             /* #i99166# An LTR window in RTL UI that gets sized only would be
@@ -1536,7 +1534,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         {
             // mirrored window in LTR UI
             {
-                // --- RTL --- (re-mirror at parent window)
                 nX = mpWindowImpl->mpParent->mnOutWidth - mnOutWidth - nX;
             }
         }
@@ -1553,7 +1550,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             }
             mpWindowImpl->mnX = nX;
             mpWindowImpl->maPos.X() = nOrgX;
-            mpWindowImpl->mnAbsScreenX = aPtDev.X();    // --- RTL --- (store real screen pos)
+            mpWindowImpl->mnAbsScreenX = aPtDev.X();
             bNewPos = true;
         }
     }
@@ -2763,7 +2760,6 @@ void Window::setPosSizePixel( long nX, long nY,
             }
             if( pParent && pParent->ImplIsAntiparallel() )
             {
-                // --- RTL --- (re-mirror at parent window)
                 tools::Rectangle aRect( Point ( nX, nY ), Size( nWidth, nHeight ) );
                 const OutputDevice *pParentOutDev = pParent->GetOutDev();
                 pParentOutDev->ReMirror( aRect );
@@ -2772,8 +2768,8 @@ void Window::setPosSizePixel( long nX, long nY,
         }
         if( !(nFlags & PosSizeFlags::X) && bHasValidSize && pWindow->mpWindowImpl->mpFrame->maGeometry.nWidth )
         {
-            // --- RTL ---  make sure the old right aligned position is not changed
-            //              system windows will always grow to the right
+            // RTL: make sure the old right aligned position is not changed
+            // system windows will always grow to the right
             if ( pWinParent )
             {
                 OutputDevice *pParentOutDev = pWinParent->GetOutDev();

@@ -690,7 +690,6 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
 
     if ( IsRTLEnabled() )
     {
-        // --- RTL --- mirror at basex
         long nXAdd = nWidth - nDistX;
         if( mpFontInstance->mnOrientation )
             nXAdd = FRound( nXAdd * cos( mpFontInstance->mnOrientation * F_PI1800 ) );
@@ -803,7 +802,6 @@ void OutputDevice::ImplDrawMnemonicLine( long nX, long nY, long nWidth )
     long nBaseX = nX;
     if( /*HasMirroredGraphics() &&*/ IsRTLEnabled() )
     {
-        // --- RTL ---
         // add some strange offset
         nX += 2;
         // revert the hack that will be done later in ImplDrawTextLine

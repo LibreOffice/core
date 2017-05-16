@@ -507,12 +507,12 @@ void SwSrcEditWindow::CreateTextEngine()
 
     // create Scrollbars
     m_pHScrollbar = VclPtr<ScrollBar>::Create(this, WB_3DLOOK |WB_HSCROLL|WB_DRAG);
-        m_pHScrollbar->EnableRTL( false ); // --- RTL --- no mirroring for scrollbars
+    m_pHScrollbar->EnableRTL( false );
     m_pHScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
     m_pHScrollbar->Show();
 
     m_pVScrollbar = VclPtr<ScrollBar>::Create(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
-        m_pVScrollbar->EnableRTL( false ); // --- RTL --- no mirroring for scrollbars
+    m_pVScrollbar->EnableRTL( false );
     m_pVScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
     m_pHScrollbar->EnableDrag();
     m_pVScrollbar->Show();

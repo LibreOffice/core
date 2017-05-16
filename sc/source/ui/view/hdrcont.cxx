@@ -64,7 +64,7 @@ ScHeaderControl::ScHeaderControl( vcl::Window* pParent, SelectionEngine* pSelect
             bInRefMode  ( false ),
             pTabView    ( pTab )
 {
-    // --- RTL --- no default mirroring for this window, the spreadsheet itself
+    // RTL: no default mirroring for this window, the spreadsheet itself
     // is also not mirrored
     // mirror the vertical window for correct border drawing
     // table layout depends on sheet format, not UI setting, so the

@@ -215,7 +215,7 @@ void Ruler::ImplInit( WinBits nWinBits )
     {
         nWinBits |= WB_HORZ;
 
-        // --- RTL --- no UI mirroring for horizontal rulers, because
+        // RTL: no UI mirroring for horizontal rulers, because
         // the document is also not mirrored
         EnableRTL( false );
     }
