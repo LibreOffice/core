@@ -57,7 +57,6 @@ bool ComparisonWithConstant::VisitBinaryOperator(const BinaryOperator* binaryOp)
     if (binaryOp->getLHS()->isValueDependent() || binaryOp->getRHS()->isValueDependent()) {
         return true;
     }
-    APValue result;
     if (!binaryOp->getLHS()->isEvaluatable(compiler.getASTContext())) {
         return true;
     }
