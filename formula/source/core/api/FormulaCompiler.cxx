@@ -1245,7 +1245,7 @@ bool FormulaCompiler::GetToken()
     if ( nRecursion > nRecursionMax )
     {
         SetError( FormulaError::StackOverflow );
-        mpToken = new FormulaByteToken( ocStop );
+        mpLastToken = mpToken = new FormulaByteToken( ocStop );
         return false;
     }
     if ( bAutoCorrect && !pStack )
@@ -1258,7 +1258,6 @@ bool FormulaCompiler::GetToken()
         bStop = true;
     else
     {
-        FormulaTokenRef pCurrToken = mpToken;
         FormulaTokenRef pSpacesToken;
         short nWasColRowName;
         if ( pArr->nIndex > 0 && pArr->pCode[ pArr->nIndex-1 ]->GetOpCode() == ocColRowName )
@@ -1284,6 +1283,9 @@ bool FormulaCompiler::GetToken()
             if( pStack )
             {
                 PopTokenArray();
+                // mpLastToken was popped as well and corresponds to the
+                // then current last token during PushTokenArray(), e.g. for
+                // HandleRange().
                 return GetToken();
             }
             else
@@ -1293,17 +1295,17 @@ bool FormulaCompiler::GetToken()
         {
             if ( nWasColRowName >= 2 && mpToken->GetOpCode() == ocColRowName )
             {   // convert an ocSpaces to ocIntersect in RPN
-                mpToken = new FormulaByteToken( ocIntersect );
+                mpLastToken = mpToken = new FormulaByteToken( ocIntersect );
                 pArr->nIndex--;     // we advanced to the second ocColRowName, step back
             }
             else if (pSpacesToken && FormulaGrammar::isExcelSyntax( meGrammar) &&
-                    pCurrToken && mpToken &&
-                    isPotentialRangeType( pCurrToken.get(), false, false) &&
+                    mpLastToken && mpToken &&
+                    isPotentialRangeType( mpLastToken.get(), false, false) &&
                     isPotentialRangeType( mpToken.get(), false, true))
             {
                 // Let IntersectionLine() <- Factor() decide how to treat this,
                 // once the actual arguments are determined in RPN.
-                mpToken = pSpacesToken;
+                mpLastToken = mpToken = pSpacesToken;
                 pArr->nIndex--;     // step back from next non-spaces token
                 return true;
             }
@@ -1311,9 +1313,14 @@ bool FormulaCompiler::GetToken()
     }
     if( bStop )
     {
-        mpToken = new FormulaByteToken( ocStop );
+        mpLastToken = mpToken = new FormulaByteToken( ocStop );
         return false;
     }
+
+    // Remember token for next round and any PushTokenArray() calls that may
+    // occur in handlers.
+    mpLastToken = mpToken;
+
     if ( mpToken->IsExternalRef() )
     {
         return HandleExternalReference(*mpToken);
@@ -2042,6 +2049,7 @@ void FormulaCompiler::PopTokenArray()
         if( p->bTemp )
             delete pArr;
         pArr = p->pArr;
+        mpLastToken = p->mpLastToken;
         delete p;
     }
 }
@@ -2602,6 +2610,7 @@ void FormulaCompiler::PushTokenArray( FormulaTokenArray* pa, bool bTemp )
     FormulaArrayStack* p = new FormulaArrayStack;
     p->pNext      = pStack;
     p->pArr       = pArr;
+    p->mpLastToken = mpLastToken;
     p->bTemp      = bTemp;
     pStack        = p;
     pArr          = pa;

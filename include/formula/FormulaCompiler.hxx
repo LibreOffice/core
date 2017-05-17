@@ -59,6 +59,7 @@ struct FormulaArrayStack
 {
     FormulaArrayStack*  pNext;
     FormulaTokenArray*  pArr;
+    FormulaTokenRef     mpLastToken;
     bool bTemp;
 };
 
@@ -330,6 +331,7 @@ protected:
     FormulaTokenRef     pCurrentFactorToken;    // current factor token (of Factor() method)
     sal_uInt16          nCurrentFactorParam;    // current factor token's parameter, 1-based
     FormulaTokenArray*  pArr;
+    FormulaTokenRef     mpLastToken;            // last token
 
     FormulaToken**      pCode;
     FormulaArrayStack*  pStack;
