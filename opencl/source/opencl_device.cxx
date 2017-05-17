@@ -40,15 +40,16 @@
 
 #define STRINGIFY(...) #__VA_ARGS__"\n"
 
-#define DS_CHECK_STATUS(status, name) \
-    if (CL_SUCCESS != status) \
-    { \
-    SAL_INFO("opencl.device", "Error code is " << status << " at " name); \
-    }
-
 namespace opencl {
 
 namespace {
+
+void DS_CHECK_STATUS(cl_int status, char const * name) {
+    if (CL_SUCCESS != status)
+    {
+    SAL_INFO("opencl.device", "Error code is " << status << " at " << name);
+    }
+}
 
 bool bIsDeviceSelected = false;
 ds_device selectedDevice;
