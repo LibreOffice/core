@@ -2228,6 +2228,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
     SCROW nRow1;
     SCCOL nCol2;
     SCROW nRow2;
+    bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
 
     PutInOrder( nStartCol, nEndCol );
     PutInOrder( nStartRow, nEndRow );
@@ -2249,7 +2250,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
         SCCOL nLastX = 0;
         SCROW nLastY = 0;
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (bIsTiledRendering)
         {
             nLastX = aViewData.GetMaxTiledCol();
             nLastY = aViewData.GetMaxTiledRow();
@@ -2296,7 +2297,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
         Point aStart = aViewData.GetScrPos( nCol1, nRow1, (ScSplitPos) i );
         Point aEnd   = aViewData.GetScrPos( nCol2+1, nRow2+1, (ScSplitPos) i );
         if ( eMode == ScUpdateMode::All )
-            aEnd.X() = bLayoutRTL ? 0 : (pGridWin[i]->GetOutputSizePixel().Width());
+            aEnd.X() = bLayoutRTL ? 0 : (bIsTiledRendering ? aEnd.X() : pGridWin[i]->GetOutputSizePixel().Width());
         aEnd.X() -= nLayoutSign;
         aEnd.Y() -= 1;
 
