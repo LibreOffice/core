@@ -1947,31 +1947,6 @@ void SvNumberformat::ImpGetOutputStdToPrecision(double& rNumber, OUString& rOutS
     // Make sure the precision doesn't go over the maximum allowable precision.
     nPrecision = ::std::min(UPPER_PRECISION, nPrecision);
 
-#if 0
-{
-    // debugger test case for ANSI standard correctness
-    OUString aTest;
-    // expect 0.00123   OK
-    aTest = ::rtl::math::doubleToUString( 0.001234567,
-                                          rtl_math_StringFormat_G, 3, '.', true );
-    // expect 123       OK
-    aTest = ::rtl::math::doubleToUString( 123.4567,
-                                          rtl_math_StringFormat_G, 3, '.', true );
-    // expect 123.5     OK
-    aTest = ::rtl::math::doubleToUString( 123.4567,
-                                          rtl_math_StringFormat_G, 4, '.', true );
-    // expect 1e+03 (as 999.6 rounded to 3 significant digits results in
-    // 1000 with an exponent equal to significant digits)
-    // Currently (24-Jan-2003) we do fail in this case and output 1000
-    // instead, negligible.
-    aTest = ::rtl::math::doubleToUString( 999.6,
-                                          rtl_math_StringFormat_G, 3, '.', true );
-    // expect what? result is 1.2e+004
-    aTest = ::rtl::math::doubleToUString( 12345.6789,
-                                          rtl_math_StringFormat_G, -3, '.', true );
-}
-#endif
-
     // We decided to strip trailing zeros unconditionally, since binary
     // double-precision rounding error makes it impossible to determine e.g.
     // whether 844.10000000000002273737 is what the user has typed, or the
