@@ -73,8 +73,6 @@ class FWE_DLLPUBLIC AddonMenuManager
 
         static bool       HasAddonMenuElements();
 
-        static bool       IsAddonMenuId( sal_uInt16 nId ) { return (( nId >= ADDONMENU_ITEMID_START ) && ( nId < ADDONMENU_ITEMID_END )); }
-
         // Check if the context string matches the provided xModel context
         static bool IsCorrectContext(const OUString& rModuleIdentifier, const OUString& rContext);
 

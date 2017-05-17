@@ -1254,36 +1254,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         else if ( pMenu->GetItemType( i ) != MenuItemType::SEPARATOR )
         {
             if ( bItemShowMenuImages )
-            {
-                if ( AddonMenuManager::IsAddonMenuId( nItemId ))
-                {
-                    // Add-Ons uses images from different places
-                    Image           aImage;
-                    OUString   aImageId;
-
-                    MenuAttributes* pMenuAttributes =
-                        reinterpret_cast<MenuAttributes*>(pMenu->GetUserValue( nItemId ));
-
-                    if ( pMenuAttributes && !pMenuAttributes->aImageId.isEmpty() )
-                    {
-                        // Retrieve image id from menu attributes
-                        aImage = vcl::CommandInfoProvider::GetImageForCommand(aImageId, m_xFrame);
-                    }
-
-                    if ( !aImage )
-                    {
-                        aImage = vcl::CommandInfoProvider::GetImageForCommand(aItemCommand, m_xFrame);
-                        if ( !aImage )
-                            aImage = AddonsOptions().GetImageFromURL( aItemCommand, false );
-                    }
-
-                    if ( !!aImage )
-                        pMenu->SetItemImage( nItemId, aImage );
-                    else
-                        m_bRetrieveImages = true;
-                }
                 m_bRetrieveImages = true;
-            }
 
             MenuItemHandler* pItemHandler = new MenuItemHandler( nItemId, xStatusListener, xDispatch );
             pItemHandler->aMenuItemURL = aItemCommand;
