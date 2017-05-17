@@ -488,7 +488,12 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     sw::annotation::SwAnnotationWin* pAnnotationWin = GetView().GetPostItMgr()->GetAnnotationWin(pIdItem->GetValue().toUInt32());
                     if (pAnnotationWin)
+                    {
                         pAnnotationWin->UpdateText(sText);
+
+                        // explicit state update to get the Undo state right
+                        GetView().AttrChangedNotify(GetShellPtr());
+                    }
                 }
             }
             break;
