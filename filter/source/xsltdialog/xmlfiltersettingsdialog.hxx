@@ -55,11 +55,20 @@ public:
     virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 };
 
+class EnsureResMgr
+{
+    std::unique_ptr<ResMgr> m_xResMgr;
+public:
+    EnsureResMgr();
+    ~EnsureResMgr();
+};
+
 class HeaderBar;
 
 class XMLFilterListBox : public SvTabListBox
 {
 private:
+    EnsureResMgr       m_aEnsureResMgr;
     VclPtr<HeaderBar>  m_pHeaderBar;
 
     DECL_LINK( TabBoxScrollHdl_Impl, SvTreeListBox*, void );
@@ -118,7 +127,7 @@ private:
     OUString createUniqueInterfaceName( const OUString& rInterfaceName );
 
 private:
-
+    EnsureResMgr                                          maEnsureResMgr;
     css::uno::Reference< css::uno::XComponentContext >    mxContext;
     css::uno::Reference< css::container::XNameContainer > mxFilterContainer;
     css::uno::Reference< css::container::XNameContainer > mxTypeDetection;
