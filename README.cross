@@ -189,10 +189,10 @@ But this cross-compilation work is tested from Debian and openSUSE to Raspbian.
 
 You will need headers, pkg-config files and libraries from a Raspbian
 system to build against. Available at
-http://dev-www.libreoffice.org/extern/ . Look for the latest
+https://dev-www.libreoffice.org/extern/ . Look for the latest
 raspbian-root-*.tar.gz . For instance:
 
-$ wget http://dev-www.libreoffice.org/extern/raspbian-root-20140120.tar.gz
+$ wget https://dev-www.libreoffice.org/extern/raspbian-root-20140120.tar.gz
 $ mkdir raspbian-root
 $ cd raspbian-root
 $ tar -xf raspbian-root-20140120.tar.gz
