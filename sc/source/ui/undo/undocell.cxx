@@ -805,7 +805,7 @@ void ScUndoReplaceNote::DoRemoveNote( const ScNoteData& rNoteData )
                 caption object from the drawing layer while deleting pNote
                 (removing the caption is done by a drawing undo action). */
             pNote->ForgetCaption();
-            ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Remove, &rDoc, maPos, nullptr);
+            ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Remove, &rDoc, maPos, pNote);
             delete pNote;
         }
     }
