@@ -523,6 +523,11 @@ public:
         GetChapterNumbering() const;
 
     bool HasFrameByName( const OUString& rName ) const;
+
+    bool IsDuplicateFrame(const OUString& sName, sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight) const;
+    void StoreLastImportedFrameName(const OUString& rName);
+    void ClearLastImportedTextFrameName();
+
     void ConnectFrameChains( const OUString& rFrmName,
         const OUString& rNextFrmName,
         const css::uno::Reference< css::beans::XPropertySet >& rFrmPropSet );
