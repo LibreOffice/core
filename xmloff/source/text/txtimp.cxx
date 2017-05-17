@@ -537,6 +537,9 @@ struct XMLTextImportHelper::Impl
     /// name of the last 'open' redline that started between paragraphs
     OUString m_sOpenRedlineIdentifier;
 
+    // Used for frame deduplication, the name of the last frame imported directly before the current one
+    OUString msLastImportedFrameName;
+
     uno::Reference<text::XText> m_xText;
     uno::Reference<text::XTextCursor> m_xCursor;
     uno::Reference<text::XTextRange> m_xCursorAsRange;
@@ -1106,6 +1109,72 @@ bool XMLTextImportHelper::HasFrameByName( const OUString& rName ) const
             m_xImpl->m_xGraphics->hasByName(rName))
         || (m_xImpl->m_xObjects.is() &&
             m_xImpl->m_xObjects->hasByName(rName));
+}
+
+bool XMLTextImportHelper::IsDuplicateFrame(const OUString& sName, sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight) const
+{
+    if (HasFrameByName(sName))
+    {
+        uno::Reference<beans::XPropertySet> xOtherFrame;
+        if(m_xImpl->m_xTextFrames.is() && m_xImpl->m_xTextFrames->hasByName(sName))
+            xOtherFrame.set(m_xImpl->m_xTextFrames->getByName(sName), uno::UNO_QUERY);
+        else if(m_xImpl->m_xGraphics.is() && m_xImpl->m_xGraphics->hasByName(sName))
+            xOtherFrame.set(m_xImpl->m_xGraphics->getByName(sName), uno::UNO_QUERY);
+        else if (m_xImpl->m_xObjects.is() && m_xImpl->m_xObjects->hasByName(sName))
+            xOtherFrame.set(m_xImpl->m_xObjects->getByName(sName), uno::UNO_QUERY);
+
+        Reference< XPropertySetInfo > xPropSetInfo = xOtherFrame->getPropertySetInfo();
+        if(xPropSetInfo->hasPropertyByName("Width"))
+        {
+            sal_Int32 nOtherWidth = 0;
+            xOtherFrame->getPropertyValue("Width") >>= nOtherWidth;
+            if(nWidth != nOtherWidth)
+                return false;
+        }
+
+        if (xPropSetInfo->hasPropertyByName("Height"))
+        {
+            sal_Int32 nOtherHeight = 0;
+            xOtherFrame->getPropertyValue("Height") >>= nOtherHeight;
+            if (nHeight != nOtherHeight)
+                return false;
+        }
+
+        if (xPropSetInfo->hasPropertyByName("HoriOrientPosition"))
+        {
+            sal_Int32 nOtherX = 0;
+            xOtherFrame->getPropertyValue("HoriOrientPosition") >>= nOtherX;
+            if (nX != nOtherX)
+                return false;
+        }
+
+        if (xPropSetInfo->hasPropertyByName("VertOrientPosition"))
+        {
+            sal_Int32 nOtherY = 0;
+            xOtherFrame->getPropertyValue("VertOrientPosition") >>= nOtherY;
+            if (nY != nOtherY)
+                return false;
+        }
+
+        // In some case, position is not defined for frames, so check whether the two frames follow each other (are anchored to the same position)
+        if (m_xImpl->msLastImportedFrameName != sName)
+        {
+            return false;
+        }
+
+        return true;
+    }
+    return false;
+}
+
+void XMLTextImportHelper::StoreLastImportedFrameName(const OUString& rName)
+{
+    m_xImpl->msLastImportedFrameName = rName;
+}
+
+void XMLTextImportHelper::ClearLastImportedTextFrameName()
+{
+    m_xImpl->msLastImportedFrameName.clear();
 }
 
 void XMLTextImportHelper::InsertString( const OUString& rChars )
@@ -2342,6 +2411,8 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         m_xImpl->m_bBodyContentStarted = false;
     }
 
+    if( nToken != XML_TOK_TEXT_FRAME_PAGE )
+        ClearLastImportedTextFrameName();
     return pContext;
 }
 
