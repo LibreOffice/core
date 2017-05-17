@@ -36,9 +36,6 @@
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
 
-const sal_uInt16 START_ITEMID_PICKLIST      = 4500;
-const sal_uInt16 END_ITEMID_PICKLIST        = 4599;
-const sal_uInt16 MAX_ITEMCOUNT_PICKLIST     =   99; // difference between START_... & END_... for picklist / must be changed too, if these values are changed!
 const sal_uInt16 START_ITEMID_WINDOWLIST    = 4600;
 const sal_uInt16 END_ITEMID_WINDOWLIST      = 4699;
 const sal_uInt16 ITEMID_ADDONLIST           = 6678; // used to be a SID in sfx2, now just a unique id...
