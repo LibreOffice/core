@@ -300,21 +300,42 @@ void PivotTableDataProvider::collectPivotTableData()
     double fNan;
     rtl::math::setNan(&fNan);
 
+    std::unordered_set<size_t> aValidRowIndex;
+
+    size_t nRowIndex = 0;
     for (uno::Sequence<sheet::DataResult> const & xDataResults : xDataResultsSequence)
     {
-        size_t nIndex = 0;
+        std::vector<ValueAndFormat> aRow;
+        bool bRowEmpty = true;
+        // First pass - collect a row of valid data and track if the row is empty
         for (sheet::DataResult const & rDataResult : xDataResults)
         {
             if (rDataResult.Flags & css::sheet::DataResultFlags::SUBTOTAL)
                 continue;
             if (rDataResult.Flags == 0 || rDataResult.Flags & css::sheet::DataResultFlags::HASDATA)
             {
-                if (nIndex >= m_aDataRowVector.size())
-                    m_aDataRowVector.resize(nIndex + 1);
-                m_aDataRowVector[nIndex].push_back(ValueAndFormat(rDataResult.Flags ? rDataResult.Value : fNan, 0));
+                aRow.push_back(ValueAndFormat(rDataResult.Flags ? rDataResult.Value : fNan, 0));
+                if (rDataResult.Flags != 0) // set as valid only if we have data
+                {
+                    bRowEmpty = false;
+                    // We need to remember all valid (non-empty) row indices
+                    aValidRowIndex.insert(nRowIndex);
+                }
             }
-            nIndex++;
         }
+        // Second pass: add to collection only non-empty rows
+        if (!bRowEmpty)
+        {
+            size_t nColumnIndex = 0;
+            for (ValueAndFormat const & aValue : aRow)
+            {
+                if (nColumnIndex >= m_aDataRowVector.size())
+                    m_aDataRowVector.resize(nColumnIndex + 1);
+                m_aDataRowVector[nColumnIndex].push_back(aValue);
+                nColumnIndex++;
+            }
+        }
+        nRowIndex++;
     }
 
     uno::Reference<sheet::XDimensionsSupplier> xDimensionsSupplier(pDPObject->GetSource());
@@ -382,10 +403,10 @@ void PivotTableDataProvider::collectPivotTableData()
                         OUString sName;
                         for (sheet::MemberResult const & rMember : aSequence)
                         {
+                            // Skip grandtotals and subtotals
                             if (rMember.Flags & sheet::MemberResultFlags::SUBTOTAL ||
                                 rMember.Flags & sheet::MemberResultFlags::GRANDTOTAL)
                                     continue;
-
                             if (rMember.Flags & sheet::MemberResultFlags::HASMEMBER ||
                                 rMember.Flags & sheet::MemberResultFlags::CONTINUE)
                             {
@@ -423,53 +444,55 @@ void PivotTableDataProvider::collectPivotTableData()
                         uno::Sequence<sheet::MemberResult> aSequence = xLevelResult->getResults();
 
                         size_t i = 0;
+                        size_t nEachIndex = 0;
+                        std::unique_ptr<ValueAndFormat> pItem;
+
                         for (sheet::MemberResult const & rMember : aSequence)
                         {
+                            bool bFound = aValidRowIndex.find(nEachIndex) != aValidRowIndex.end();
+
+                            nEachIndex++;
+
                             bool bHasContinueFlag = rMember.Flags & sheet::MemberResultFlags::CONTINUE;
-                            if (rMember.Flags & sheet::MemberResultFlags::SUBTOTAL ||
-                                rMember.Flags & sheet::MemberResultFlags::GRANDTOTAL)
-                                    continue;
 
                             if (rMember.Flags & sheet::MemberResultFlags::HASMEMBER || bHasContinueFlag)
                             {
-                                std::unique_ptr<ValueAndFormat> pItem;
-
-                                double fValue = rMember.Value;
-
-                                if (rtl::math::isNan(fValue))
+                                if (!bHasContinueFlag)
                                 {
-                                    OUString sStringValue = bHasContinueFlag ? "" : rMember.Caption;
-                                    pItem.reset(new ValueAndFormat(sStringValue));
-                                }
-                                else
-                                {
-                                    if (bHasContinueFlag)
-                                        pItem.reset(new ValueAndFormat());
+                                    double fValue = rMember.Value;
+                                    if (rtl::math::isNan(fValue))
+                                        pItem.reset(new ValueAndFormat(rMember.Caption));
                                     else
                                         pItem.reset(new ValueAndFormat(fValue, nNumberFormat));
                                 }
 
-                                if (i >= m_aCategoriesRowOrientation.size())
-                                    m_aCategoriesRowOrientation.resize(i + 1);
-
-                                if (size_t(nDimPos) >= m_aCategoriesColumnOrientation.size())
-                                    m_aCategoriesColumnOrientation.resize(nDimPos + 1);
-                                m_aCategoriesColumnOrientation[nDimPos].push_back(*pItem);
-
-                                if (size_t(nDimPos) >= m_aCategoriesRowOrientation[i].size())
-                                    m_aCategoriesRowOrientation[i].resize(nDimPos + 1);
-                                m_aCategoriesRowOrientation[i][nDimPos] = *pItem;
-
-                                if (bIsDataLayout)
+                                if (bFound)
                                 {
-                                    // Remember data fields to determine the number format of data
-                                    aDataFieldNamesVectors.push_back(rMember.Name);
-                                    eDataFieldOrientation = sheet::DataPilotFieldOrientation_ROW;
+                                    if (i >= m_aCategoriesRowOrientation.size())
+                                        m_aCategoriesRowOrientation.resize(i + 1);
 
-                                    // Remember the caption name
-                                    aDataFieldCaptionNames[rMember.Name] = rMember.Caption;
+                                    if (size_t(nDimPos) >= m_aCategoriesColumnOrientation.size())
+                                        m_aCategoriesColumnOrientation.resize(nDimPos + 1);
+                                    m_aCategoriesColumnOrientation[nDimPos].push_back(*pItem);
+
+                                    if (size_t(nDimPos) >= m_aCategoriesRowOrientation[i].size())
+                                        m_aCategoriesRowOrientation[i].resize(nDimPos + 1);
+                                    m_aCategoriesRowOrientation[i][nDimPos] = *pItem;
+
+                                    if (bIsDataLayout)
+                                    {
+                                        // Remember data fields to determine the number format of data
+                                        aDataFieldNamesVectors.push_back(rMember.Name);
+                                        eDataFieldOrientation = sheet::DataPilotFieldOrientation_ROW;
+
+                                        // Remember the caption name
+                                        aDataFieldCaptionNames[rMember.Name] = rMember.Caption;
+                                    }
+
+                                    // Set to empty so the sub categories are set to empty when they continue
+                                    pItem.reset(new ValueAndFormat);
+                                    i++;
                                 }
-                                i++;
                             }
                         }
                     }
