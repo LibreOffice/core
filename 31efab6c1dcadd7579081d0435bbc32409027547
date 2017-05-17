@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_7d405e57",
+        "filename": "svx/source/customshapes/EnhancedCustomShape2d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-05-17T13:48:15Z",
+      "side": 1,
+      "message": "Nitpick: please follow the style of the surrounding code: { goes to its own line.",
+      "revId": "31efab6c1dcadd7579081d0435bbc32409027547",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_9d250ac4",
+        "filename": "svx/source/customshapes/EnhancedCustomShape2d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-05-17T13:48:15Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "31efab6c1dcadd7579081d0435bbc32409027547",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
