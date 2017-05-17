@@ -349,12 +349,11 @@ HtmlTokenId HTMLParser::FilterToken( HtmlTokenId nToken )
     return nToken;
 }
 
-#define HTML_ISDIGIT( c ) rtl::isAsciiDigit(c)
-#define HTML_ISALPHA( c ) rtl::isAsciiAlpha(c)
-#define HTML_ISALNUM( c ) rtl::isAsciiAlphanumeric(c)
-#define HTML_ISSPACE( c ) ( ' ' == c || (c >= 0x09 && c <= 0x0d) )
-#define HTML_ISPRINTABLE( c ) ( c >= 32 && c != 127)
-#define HTML_ISHEXDIGIT( c ) rtl::isAsciiHexDigit(c)
+namespace {
+
+constexpr bool HTML_ISPRINTABLE(sal_Unicode c) { return c >= 32 && c != 127; }
+
+}
 
 HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
 {
@@ -382,13 +381,13 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                 {
                     nNextCh = GetNextChar();
                     const bool bIsHex( 'x' == nNextCh );
-                    const bool bIsDecOrHex( bIsHex || HTML_ISDIGIT(nNextCh) );
+                    const bool bIsDecOrHex( bIsHex || rtl::isAsciiDigit(nNextCh) );
                     if ( bIsDecOrHex )
                     {
                         if ( bIsHex )
                         {
                             nNextCh = GetNextChar();
-                            while ( HTML_ISHEXDIGIT(nNextCh) )
+                            while ( rtl::isAsciiHexDigit(nNextCh) )
                             {
                                 cChar = cChar * 16U +
                                         ( nNextCh <= '9'
@@ -406,7 +405,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                                 cChar = cChar * 10U + sal_uInt32( nNextCh - '0');
                                 nNextCh = GetNextChar();
                             }
-                            while( HTML_ISDIGIT(nNextCh) );
+                            while( rtl::isAsciiDigit(nNextCh) );
                         }
 
                         if( RTL_TEXTENCODING_DONTKNOW != eSrcEnc &&
@@ -436,7 +435,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                     if ( ! rtl::isUnicodeCodePoint( cChar ) )
                         cChar = '?';
                 }
-                else if( HTML_ISALPHA( nNextCh ) )
+                else if( rtl::isAsciiAlpha( nNextCh ) )
                 {
                     OUStringBuffer sEntityBuffer( MAX_ENTITY_LEN );
                     sal_Int32 nPos = 0L;
@@ -446,7 +445,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                         nPos++;
                         nNextCh = GetNextChar();
                     }
-                    while( nPos < MAX_ENTITY_LEN && HTML_ISALNUM( nNextCh ) &&
+                    while( nPos < MAX_ENTITY_LEN && rtl::isAsciiAlphanumeric( nNextCh ) &&
                            !rInput.IsEof() );
 
                     if( IsParserWorking() && !rInput.IsEof() )
@@ -736,7 +735,7 @@ HtmlTokenId HTMLParser::ScanText( const sal_Unicode cBreak )
                             aToken += sTmpBuffer.makeStringAndClear();
                         return HtmlTokenId::TEXTTOKEN;
                     }
-                } while( HTML_ISALPHA( nNextCh ) || HTML_ISDIGIT( nNextCh ) );
+                } while( rtl::isAsciiAlpha( nNextCh ) || rtl::isAsciiDigit( nNextCh ) );
                 bNextCh = false;
             }
         }
@@ -805,7 +804,7 @@ HtmlTokenId HTMLParser::GetNextRawToken()
                 }
 
                 // Read following letters
-                while( (HTML_ISALPHA(nNextCh) || '-'==nNextCh) &&
+                while( (rtl::isAsciiAlpha(nNextCh) || '-'==nNextCh) &&
                        IsParserWorking() && sTmpBuffer.getLength() < MAX_LEN )
                 {
                     sTmpBuffer.appendUtf32( nNextCh );
@@ -1027,7 +1026,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
                     bOffState = true;
                     nNextCh = GetNextChar();
                 }
-                if( HTML_ISALPHA( nNextCh ) || '!'==nNextCh )
+                if( rtl::isAsciiAlpha( nNextCh ) || '!'==nNextCh )
                 {
                     OUStringBuffer sTmpBuffer;
                     do {
@@ -1035,14 +1034,14 @@ HtmlTokenId HTMLParser::GetNextToken_()
                         if( MAX_LEN == sTmpBuffer.getLength() )
                             aToken += sTmpBuffer.makeStringAndClear();
                         nNextCh = GetNextChar();
-                    } while( '>' != nNextCh && '/' != nNextCh && !HTML_ISSPACE( nNextCh ) &&
+                    } while( '>' != nNextCh && '/' != nNextCh && !rtl::isAsciiWhiteSpace( nNextCh ) &&
                              IsParserWorking() && !rInput.IsEof() );
 
                     if( !sTmpBuffer.isEmpty() )
                         aToken += sTmpBuffer.makeStringAndClear();
 
                     // Skip blanks
-                    while( HTML_ISSPACE( nNextCh ) && IsParserWorking() )
+                    while( rtl::isAsciiWhiteSpace( nNextCh ) && IsParserWorking() )
                         nNextCh = GetNextChar();
 
                     if( !IsParserWorking() )
@@ -1373,7 +1372,7 @@ const HTMLOptions& HTMLParser::GetOptions( HtmlOptionId *pNoConvertToken )
     while( nPos < aToken.getLength() )
     {
         // A letter? Option beginning here.
-        if( HTML_ISALPHA( aToken[nPos] ) )
+        if( rtl::isAsciiAlpha( aToken[nPos] ) )
         {
             HtmlOptionId nToken;
             OUString aValue;
@@ -1384,7 +1383,7 @@ const HTMLOptions& HTMLParser::GetOptions( HtmlOptionId *pNoConvertToken )
             // Netscape only looks for "=" and white space (c.f.
             // Mozilla: PA_FetchRequestedNameValues in libparse/pa_mdl.c)
             while( nPos < aToken.getLength() && '=' != (cChar=aToken[nPos]) &&
-                   HTML_ISPRINTABLE(cChar) && !HTML_ISSPACE(cChar) )
+                   HTML_ISPRINTABLE(cChar) && !rtl::isAsciiWhiteSpace(cChar) )
                 nPos++;
 
             OUString sName( aToken.copy( nStt, nPos-nStt ) );
@@ -1399,7 +1398,7 @@ const HTMLOptions& HTMLParser::GetOptions( HtmlOptionId *pNoConvertToken )
 
             while( nPos < aToken.getLength() &&
                    ( !HTML_ISPRINTABLE( (cChar=aToken[nPos]) ) ||
-                     HTML_ISSPACE(cChar) ) )
+                     rtl::isAsciiWhiteSpace(cChar) ) )
                 nPos++;
 
             // Option with value?
