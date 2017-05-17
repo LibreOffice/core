@@ -7788,6 +7788,7 @@ consult https://github.com/libjpeg-turbo/libjpeg-turbo/blob/master/BUILDING.md
 _EOS
             fi
             AC_MSG_WARN([no suitable nasm (Netwide Assembler) found])
+            add_warning "no suitable nasm (Netwide Assembler) found for internal jpeg-turbo"
         fi
       ;;
     esac
