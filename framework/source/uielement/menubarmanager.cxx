@@ -1131,9 +1131,31 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 pMenu->SetHelpCommand( nItemId, "" );
             }
 
-            assert(!m_xPopupMenuControllerFactory.is() || !m_xPopupMenuControllerFactory->hasController( aItemCommand, m_aModuleIdentifier ));
+            if ( m_xPopupMenuControllerFactory.is() &&
+                 pPopup->GetItemCount() == 0 &&
+                 m_xPopupMenuControllerFactory->hasController( aItemCommand, m_aModuleIdentifier )
+                  )
+            {
+                // Check if we have to create a popup menu for a uno based popup menu controller.
+                // We have to set an empty popup menu into our menu structure so the controller also
+                // works with inplace OLE. Remove old dummy popup menu!
+                MenuItemHandler* pItemHandler = new MenuItemHandler( nItemId, xStatusListener, xDispatch );
+                VCLXPopupMenu* pVCLXPopupMenu = new VCLXPopupMenu;
+                PopupMenu* pNewPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
+                pMenu->SetPopupMenu( nItemId, pNewPopupMenu );
+                pItemHandler->xPopupMenu.set( static_cast<OWeakObject *>(pVCLXPopupMenu), UNO_QUERY );
+                pItemHandler->aMenuItemURL = aItemCommand;
+                m_aMenuItemHandlerVector.push_back( pItemHandler );
+                pPopup.disposeAndClear();
 
-            if ( aItemCommand.startsWith( ADDONSPOPUPMENU_URL_PREFIX_STR ) )
+                if ( bAccessibilityEnabled )
+                {
+                    if ( CreatePopupMenuController( pItemHandler ))
+                        pItemHandler->xPopupMenuController->updatePopupMenu();
+                }
+                lcl_CheckForChildren(pMenu, nItemId);
+            }
+            else if ( aItemCommand.startsWith( ADDONSPOPUPMENU_URL_PREFIX_STR ) )
             {
                 // A special addon popup menu, must be created with a different ctor
                 MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer, pPopup, true );
