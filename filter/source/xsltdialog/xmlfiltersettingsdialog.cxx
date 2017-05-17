@@ -1215,7 +1215,6 @@ std::vector< application_info_impl* >& getApplicationInfos()
 
     if( aInfos.empty() )
     {
-        auto resmgr = getXSLTDialogResMgr();
         aInfos.push_back( new application_info_impl(
             "com.sun.star.text.TextDocument",
             STR_APPL_NAME_WRITER,
