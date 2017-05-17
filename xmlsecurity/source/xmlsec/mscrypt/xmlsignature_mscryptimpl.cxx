@@ -196,6 +196,9 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
         return aTemplate;
     }
 
+    // We do certificate verification ourselves.
+    pDsigCtx->keyInfoReadCtx.flags |= XMLSEC_KEYINFO_FLAGS_X509DATA_DONT_VERIFY_CERTS;
+
     //Verify signature
     //The documentation says that the signature is only valid if the return value is 0 (that is, not < 0)
     //AND pDsigCtx->status == xmlSecDSigStatusSucceeded. That is, we must not make any assumptions, if
