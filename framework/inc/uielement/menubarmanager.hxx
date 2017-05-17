@@ -51,9 +51,8 @@
 #include <vcl/accel.hxx>
 #include <vcl/timer.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <cppuhelper/weakref.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <framework/addonsoptions.hxx>
 
 namespace framework
@@ -67,11 +66,11 @@ struct PopupControllerEntry
 typedef std::unordered_map< OUString, PopupControllerEntry, OUStringHash > PopupControllerCache;
 
 class MenuBarManager:
-    public cppu::WeakImplHelper<
+    protected cppu::BaseMutex,
+    public cppu::WeakComponentImplHelper<
         css::frame::XStatusListener,
         css::frame::XFrameActionListener,
         css::ui::XUIConfigurationListener,
-        css::lang::XComponent,
         css::awt::XSystemDependentMenuPeer>
 {
     protected:
@@ -94,11 +93,6 @@ class MenuBarManager:
             bool bHasMenuBar = true );
 
         virtual ~MenuBarManager() override;
-
-        // XComponent
-        virtual void SAL_CALL dispose() override;
-        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // XStatusListener
         virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
@@ -145,6 +139,7 @@ class MenuBarManager:
         DECL_LINK( Deactivate, Menu *, bool );
         DECL_LINK( AsyncSettingsHdl, Timer *, void );
 
+        void SAL_CALL disposing() override;
         void RemoveListener();
         void RequestImages();
         void RetrieveImageManagers();
@@ -191,7 +186,6 @@ class MenuBarManager:
         void             Init(const css::uno::Reference< css::frame::XFrame >& rFrame,Menu* pAddonMenu,bool _bHandlePopUp);
         void             SetHdl();
 
-        bool                                                         m_bDisposed;
         bool                                                         m_bDeleteMenu;
         bool                                                         m_bActive;
         bool                                                         m_bIsBookmarkMenu;
@@ -207,8 +201,6 @@ class MenuBarManager:
         css::uno::Reference< css::container::XNameAccess >           m_xUICommandLabels;
         css::uno::Reference< css::frame::XUIControllerFactory >      m_xPopupMenuControllerFactory;
         ::std::vector< MenuItemHandler* >                            m_aMenuItemHandlerVector;
-        osl::Mutex                                                   m_mutex;
-        ::cppu::OMultiTypeInterfaceContainerHelper                   m_aListenerContainer;   /// container for ALL Listener
         css::uno::Reference< css::frame::XDispatchProvider >         m_xDispatchProvider;
         css::uno::Reference< css::ui::XImageManager >                m_xDocImageManager;
         css::uno::Reference< css::ui::XImageManager >                m_xModuleImageManager;

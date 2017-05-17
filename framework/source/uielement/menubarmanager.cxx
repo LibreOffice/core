@@ -71,10 +71,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <osl/mutex.hxx>
 #include <osl/file.hxx>
-#include <cppuhelper/implbase.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/miscopt.hxx>
 #include <uielement/menubarmerger.hxx>
@@ -127,12 +124,11 @@ MenuBarManager::MenuBarManager(
     const Reference< XDispatchProvider >& rDispatchProvider,
     const OUString& rModuleIdentifier,
     Menu* pMenu, bool bDelete, bool bHasMenuBar ):
-    m_bDisposed( false )
+    WeakComponentImplHelper( m_aMutex )
     , m_bRetrieveImages( false )
     , m_bAcceleratorCfg( false )
     , m_bModuleIdentified( false )
     , m_bHasMenuBar( bHasMenuBar )
-    , m_aListenerContainer( m_mutex )
     , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
     , m_sIconTheme( SvtMiscOptions().GetIconTheme() )
@@ -148,12 +144,11 @@ MenuBarManager::MenuBarManager(
     const Reference< XURLTransformer >& _xURLTransformer,
     Menu* pAddonMenu,
     bool popup):
-    m_bDisposed( false )
+    WeakComponentImplHelper( m_aMutex )
     , m_bRetrieveImages( true )
     , m_bAcceleratorCfg( false )
     , m_bModuleIdentified( false )
     , m_bHasMenuBar( true )
-    , m_aListenerContainer( m_mutex )
     , m_xContext(rxContext)
     , m_xURLTransformer(_xURLTransformer)
     , m_sIconTheme( SvtMiscOptions().GetIconTheme() )
@@ -166,7 +161,7 @@ Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*Proces
 {
     SolarMutexGuard aSolarGuard;
 
-    if ( m_bDisposed )
+    if ( rBHelper.bDisposed || rBHelper.bInDispose )
         throw css::lang::DisposedException();
 
     Any a;
@@ -203,7 +198,7 @@ void MenuBarManager::Destroy()
 {
     SolarMutexGuard aGuard;
 
-    if ( !m_bDisposed )
+    if ( !rBHelper.bDisposed )
     {
         // stop asynchronous settings timer and
         // release defered item container reference
@@ -230,69 +225,45 @@ void MenuBarManager::Destroy()
 }
 
 // XComponent
-void SAL_CALL MenuBarManager::dispose()
+void SAL_CALL MenuBarManager::disposing()
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
-    EventObject aEvent( xThis );
-    m_aListenerContainer.disposeAndClear( aEvent );
+    SolarMutexGuard g;
+    Destroy();
 
+    if ( m_xDocImageManager.is() )
     {
-        SolarMutexGuard g;
-        Destroy();
-        m_bDisposed = true;
-
-        if ( m_xDocImageManager.is() )
+        try
         {
-            try
-            {
-                m_xDocImageManager->removeConfigurationListener(
-                    Reference< XUIConfigurationListener >(
-                        static_cast< OWeakObject* >( this ), UNO_QUERY ));
-            }
-            catch ( const Exception& )
-            {
-            }
+            m_xDocImageManager->removeConfigurationListener(
+                Reference< XUIConfigurationListener >(
+                    static_cast< OWeakObject* >( this ), UNO_QUERY ));
         }
-        if ( m_xModuleImageManager.is() )
+        catch ( const Exception& )
         {
-            try
-            {
-                m_xModuleImageManager->removeConfigurationListener(
-                    Reference< XUIConfigurationListener >(
-                        static_cast< OWeakObject* >( this ), UNO_QUERY ));
-            }
-            catch ( const Exception& )
-            {
-            }
         }
-        m_xDocImageManager.clear();
-        m_xModuleImageManager.clear();
-        m_xGlobalAcceleratorManager.clear();
-        m_xModuleAcceleratorManager.clear();
-        m_xDocAcceleratorManager.clear();
-        m_xUICommandLabels.clear();
-        m_xPopupMenuControllerFactory.clear();
-        m_xContext.clear();
     }
-}
-
-void SAL_CALL MenuBarManager::addEventListener( const Reference< XEventListener >& xListener )
-{
-    SolarMutexGuard g;
-
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    m_aListenerContainer.addInterface( cppu::UnoType<XEventListener>::get(), xListener );
-}
-
-void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListener >& xListener )
-{
-    SolarMutexGuard g;
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    m_aListenerContainer.removeInterface( cppu::UnoType<XEventListener>::get(), xListener );
+    if ( m_xModuleImageManager.is() )
+    {
+        try
+        {
+            m_xModuleImageManager->removeConfigurationListener(
+                Reference< XUIConfigurationListener >(
+                    static_cast< OWeakObject* >( this ), UNO_QUERY ));
+        }
+        catch ( const Exception& )
+        {
+        }
+    }
+    m_xDocImageManager.clear();
+    m_xModuleImageManager.clear();
+    m_xGlobalAcceleratorManager.clear();
+    m_xModuleAcceleratorManager.clear();
+    m_xDocAcceleratorManager.clear();
+    m_xUICommandLabels.clear();
+    m_xPopupMenuControllerFactory.clear();
+    m_xContext.clear();
 }
 
 void SAL_CALL MenuBarManager::elementInserted( const css::ui::ConfigurationEvent& Event )
@@ -300,7 +271,7 @@ void SAL_CALL MenuBarManager::elementInserted( const css::ui::ConfigurationEvent
     SolarMutexGuard g;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    if ( m_bDisposed )
+    if ( rBHelper.bDisposed || rBHelper.bInDispose )
         return;
 
     sal_Int16 nImageType = sal_Int16();
@@ -325,7 +296,7 @@ void SAL_CALL MenuBarManager::frameAction( const FrameActionEvent& Action )
 {
     SolarMutexGuard g;
 
-    if ( m_bDisposed )
+    if ( rBHelper.bDisposed || rBHelper.bInDispose )
         throw css::lang::DisposedException();
 
     if ( Action.Action == FrameAction_CONTEXT_CHANGED )
@@ -356,7 +327,7 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
 
     SolarMutexGuard aSolarGuard;
     {
-        if ( m_bDisposed )
+        if ( rBHelper.bDisposed || rBHelper.bInDispose )
             return;
 
         // We have to check all menu entries as there can be identical entries in a popup menu.
