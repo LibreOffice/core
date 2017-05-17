@@ -133,7 +133,7 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
 
         if( bOutput )
         {
-            OUString aPageStr = " [" + IDE_RESSTR(RID_STR_PAGE) + " " + OUString::number( nCurPage ) + "]";
+            OUString aPageStr = " [" + OUString(IDEResId(RID_STR_PAGE)) + " " + OUString::number( nCurPage ) + "]";
             pPrinter->DrawText( aPos, aPageStr );
         }
     }
@@ -304,7 +304,7 @@ void ModulWindow::BasicExecute()
     {
         if ( !aDocument.allowMacros() )
         {
-            ScopedVclPtrInstance<MessageDialog>(this, IDE_RESSTR(RID_STR_CANNOTRUNMACRO), VclMessageType::Warning)->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_CANNOTRUNMACRO), VclMessageType::Warning)->Execute();
             return;
         }
     }
@@ -408,7 +408,7 @@ void ModulWindow::LoadBasic()
         xFP->setDisplayDirectory ( m_sCurPath );
 
     xFP->appendFilter( "BASIC" , "*.bas" );
-    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), FilterMask_All );
+    xFP->appendFilter( IDEResId(RID_STR_FILTER_ALLFILES), FilterMask_All );
     xFP->setCurrentFilter( "BASIC" );
 
     if( xFP->execute() == RET_OK )
@@ -422,7 +422,7 @@ void ModulWindow::LoadBasic()
             AssertValidEditEngine();
             sal_uLong nLines = CalcLineCount( *pStream );
             // nLines*4: ReadText/Formatting/Highlighting/Formatting
-            GetEditorWindow().CreateProgress( IDEResId(RID_STR_GENERATESOURCE).toString(), nLines*4 );
+            GetEditorWindow().CreateProgress( IDEResId(RID_STR_GENERATESOURCE), nLines*4 );
             GetEditEngine()->SetUpdateMode( false );
             GetEditView()->Read( *pStream );
             GetEditEngine()->SetUpdateMode( true );
@@ -434,7 +434,7 @@ void ModulWindow::LoadBasic()
                 ErrorHandler::HandleError( nError );
         }
         else
-            ScopedVclPtrInstance<MessageDialog>(this, IDE_RESSTR(RID_STR_COULDNTREAD))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_COULDNTREAD))->Execute();
     }
 }
 
@@ -454,7 +454,7 @@ void ModulWindow::SaveBasicSource()
         xFP->setDisplayDirectory ( m_sCurPath );
 
     xFP->appendFilter( "BASIC", "*.bas" );
-    xFP->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), FilterMask_All );
+    xFP->appendFilter( IDEResId(RID_STR_FILTER_ALLFILES), FilterMask_All );
     xFP->setCurrentFilter( "BASIC" );
 
     if( xFP->execute() == RET_OK )
@@ -1434,7 +1434,7 @@ void ModulWindowLayout::UpdateDebug (bool bBasicStopped)
 
 void ModulWindowLayout::Paint (vcl::RenderContext& rRenderContext, tools::Rectangle const&)
 {
-    rRenderContext.DrawText(Point(), IDEResId(RID_STR_NOMODULE).toString());
+    rRenderContext.DrawText(Point(), IDEResId(RID_STR_NOMODULE));
 }
 
 void ModulWindowLayout::Activating (BaseWindow& rChild)

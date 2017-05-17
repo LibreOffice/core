@@ -34,10 +34,10 @@ ObjectCatalog::ObjectCatalog (vcl::Window* pParent)
     , aTree(VclPtr<TreeListBox>::Create(this, WB_TABSTOP))
 {
     SetHelpId("basctl:FloatingWindow:RID_BASICIDE_OBJCAT");
-    SetText(IDEResId(RID_BASICIDE_OBJCAT).toString());
+    SetText(IDEResId(RID_BASICIDE_OBJCAT));
 
     // title
-    aTitle->SetText(IDEResId(RID_BASICIDE_OBJCAT).toString());
+    aTitle->SetText(IDEResId(RID_BASICIDE_OBJCAT));
     aTitle->SetStyle(WB_CENTER);
 
     // tree list
@@ -47,7 +47,7 @@ ObjectCatalog::ObjectCatalog (vcl::Window* pParent)
         WB_HASLINES | WB_HASLINESATROOT |
         WB_HASBUTTONS | WB_HASBUTTONSATROOT
     );
-    aTree->SetAccessibleName(IDEResId(RID_STR_TLB_MACROS).toString());
+    aTree->SetAccessibleName(IDEResId(RID_STR_TLB_MACROS));
     aTree->SetHelpId(HID_BASICIDE_OBJECTCAT);
     aTree->ScanAllEntries();
     aTree->GrabFocus();

@@ -86,7 +86,7 @@ bool ExtTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewT
 {
     if ( !IsValidSbxName(rNewText) )
     {
-        ScopedVclPtrInstance<MessageDialog>(this, IDE_RESSTR(RID_STR_BADSBXNAME))->Execute();
+        ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_BADSBXNAME))->Execute();
         return false;
     }
 
@@ -661,7 +661,7 @@ void ObjectPage::CheckButtons()
     // enable/disable delete button
     if ( nDepth >= 2 && !bReadOnly && eLocation != LIBRARY_LOCATION_SHARE )
     {
-        if( bVBAEnabled && ( nMode & BrowseMode::Modules ) && ( ( nDepth == 2 ) || aLibSubName == IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) ) )
+        if( bVBAEnabled && ( nMode & BrowseMode::Modules ) && ( ( nDepth == 2 ) || aLibSubName == IDEResId(RID_STR_DOCUMENT_OBJECTS) ) )
             m_pDelButton->Disable();
         else
         m_pDelButton->Enable();
@@ -696,7 +696,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton, void )
             {
                 OUString aModName( aDesc.GetName() );
                 // extract the module name from the string like "Sheet1 (Example1)"
-                if( aDesc.GetLibSubName() == IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) )
+                if( aDesc.GetLibSubName() == IDEResId(RID_STR_DOCUMENT_OBJECTS) )
                 {
                     sal_Int32 nIndex = 0;
                     aModName = aModName.getToken( 0, ' ', nIndex );
@@ -819,7 +819,7 @@ void ObjectPage::NewDialog()
 
             if ( aDocument.hasDialog( aLibName, aDlgName ) )
             {
-                ScopedVclPtrInstance<MessageDialog>(this, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2))->Execute();
+                ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_SBXNAMEALLREADYUSED2))->Execute();
             }
             else
             {
@@ -944,7 +944,7 @@ void LibDialog::dispose()
 
 void LibDialog::SetStorageName( const OUString& rName )
 {
-    OUString aName = IDE_RESSTR(RID_STR_FILENAME) + rName;
+    OUString aName = OUString(IDEResId(RID_STR_FILENAME)) + rName;
     m_pStorageFrame->set_label(aName);
 }
 
@@ -1007,7 +1007,7 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                     if( pBasic && rDocument.isInVBAMode() )
                     {
                         // add the new module in the "Modules" entry
-                        SvTreeListEntry* pLibSubEntry = rBasicBox.FindEntry( pLibEntry, IDE_RESSTR(RID_STR_NORMAL_MODULES) , OBJ_TYPE_NORMAL_MODULES );
+                        SvTreeListEntry* pLibSubEntry = rBasicBox.FindEntry( pLibEntry, IDEResId(RID_STR_NORMAL_MODULES) , OBJ_TYPE_NORMAL_MODULES );
                         if( pLibSubEntry )
                         {
                             if( !rBasicBox.IsExpanded( pLibSubEntry ) )
@@ -1033,7 +1033,7 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
         }
         catch (const container::ElementExistException& )
         {
-            ScopedVclPtrInstance<MessageDialog>(pWin, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(pWin, IDEResId(RID_STR_SBXNAMEALLREADYUSED2))->Execute();
         }
         catch (const container::NoSuchElementException& )
         {

@@ -759,7 +759,7 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
         // set new title
         if ( bNewTitle )
         {
-            OUString aTitle(IDE_RESSTR(RID_STR_ENTERPASSWORD));
+            OUString aTitle(IDEResId(RID_STR_ENTERPASSWORD));
             aTitle = aTitle.replaceAll("XX", rLibName);
             aDlg->SetText( aTitle );
         }
@@ -781,7 +781,7 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
 
                     if ( !bOK )
                     {
-                        ScopedVclPtrInstance< MessageDialog > aErrorBox(Application::GetDefDialogParent(), IDE_RESSTR(RID_STR_WRONGPASSWORD));
+                        ScopedVclPtrInstance< MessageDialog > aErrorBox(Application::GetDefDialogParent(), IDEResId(RID_STR_WRONGPASSWORD));
                         aErrorBox->Execute();
                     }
                 }

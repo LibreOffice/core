@@ -31,11 +31,6 @@ public:
     IDEResId( sal_uInt16 nId );
 };
 
-inline OUString IDE_RESSTR (sal_uInt16 nId)
-{
-    return IDEResId(nId).toString();
-}
-
 } // namespace basctl
 
 #endif // INCLUDED_BASCTL_SOURCE_INC_IDERID_HXX

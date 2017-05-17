@@ -264,7 +264,7 @@ bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
     OUString aLibName = GetEntryText( pEntry, 0 );
     if ( aLibName.equalsIgnoreAsciiCase( "Standard" ) )
     {
-        ScopedVclPtrInstance<MessageDialog>(this, IDE_RESSTR(RID_STR_CANNOTCHANGENAMESTDLIB))->Execute();
+        ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_CANNOTCHANGENAMESTDLIB))->Execute();
         return false;
     }
 
@@ -274,7 +274,7 @@ bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
     if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) && !xModLibContainer->isLibraryLink( aLibName ) ) ||
          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
     {
-        ScopedVclPtrInstance<MessageDialog>(this, IDE_RESSTR(RID_STR_LIBISREADONLY))->Execute();
+        ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_LIBISREADONLY))->Execute();
         return false;
     }
 
@@ -324,7 +324,7 @@ bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewName )
         }
         catch (const container::ElementExistException& )
         {
-            ScopedVclPtrInstance<MessageDialog>(this, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_SBXNAMEALLREADYUSED))->Execute();
             return false;
         }
         catch (const container::NoSuchElementException& )
@@ -337,9 +337,9 @@ bool CheckBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewName )
     if ( !bValid )
     {
         if ( rNewName.getLength() > 30 )
-            ScopedVclPtrInstance<MessageDialog>(this, IDE_RESSTR(RID_STR_LIBNAMETOLONG))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_LIBNAMETOLONG))->Execute();
         else
-            ScopedVclPtrInstance<MessageDialog>(this, IDE_RESSTR(RID_STR_BADSBXNAME))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_BADSBXNAME))->Execute();
     }
 
     return bValid;
@@ -352,7 +352,7 @@ IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler, Button*, void)
         EndDialog(1);
     else
     {
-        ScopedVclPtrInstance<MessageDialog>(this, IDE_RESSTR(RID_STR_BADSBXNAME))->Execute();
+        ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_BADSBXNAME))->Execute();
         m_pEdit->GrabFocus();
     }
 }
@@ -369,13 +369,13 @@ NewObjectDialog::NewObjectDialog(vcl::Window * pParent, ObjectMode eMode,
     switch (eMode)
     {
         case ObjectMode::Library:
-            SetText( IDE_RESSTR(RID_STR_NEWLIB) );
+            SetText( IDEResId(RID_STR_NEWLIB) );
             break;
         case ObjectMode::Module:
-            SetText( IDE_RESSTR(RID_STR_NEWMOD) );
+            SetText( IDEResId(RID_STR_NEWMOD) );
             break;
         case ObjectMode::Dialog:
-            SetText( IDE_RESSTR(RID_STR_NEWDLG) );
+            SetText( IDEResId(RID_STR_NEWDLG) );
             break;
         default:
             assert(false);
@@ -732,10 +732,10 @@ void LibPage::InsertLib()
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     // file open dialog
     Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILEOPEN_SIMPLE);
-    xFP->setTitle(IDEResId(RID_STR_APPENDLIBS).toString());
+    xFP->setTitle(IDEResId(RID_STR_APPENDLIBS));
 
     // filter
-    OUString aTitle(IDEResId(RID_STR_BASIC).toString());
+    OUString aTitle(IDEResId(RID_STR_BASIC));
     OUString aFilter;
     aFilter = "*.sbl;*.xlc;*.xlb"        // library files
               ";*.sdw;*.sxw;*.odt"       // text
@@ -765,7 +765,7 @@ void LibPage::InsertLib()
     if ( !aLastFilter.isEmpty() )
         xFP->setCurrentFilter( aLastFilter );
     else
-        xFP->setCurrentFilter( IDE_RESSTR(RID_STR_BASIC) );
+        xFP->setCurrentFilter( IDEResId(RID_STR_BASIC) );
 
     if ( xFP->execute() == RET_OK )
     {
@@ -837,7 +837,7 @@ void LibPage::InsertLib()
             }
 
             if ( !pLibDlg )
-                ScopedVclPtrInstance<MessageDialog>(this, IDE_RESSTR(RID_STR_NOLIBINSTORAGE), VclMessageType::Info)->Execute();
+                ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_NOLIBINSTORAGE), VclMessageType::Info)->Execute();
             else
             {
                 bool bChanges = false;
@@ -874,7 +874,7 @@ void LibPage::InsertLib()
                                     // check, if the library is the Standard library
                                     if ( aLibName == "Standard" )
                                     {
-                                        ScopedVclPtrInstance<MessageDialog>(this, IDE_RESSTR(RID_STR_REPLACESTDLIB))->Execute();
+                                        ScopedVclPtrInstance<MessageDialog>(this, IDEResId(RID_STR_REPLACESTDLIB))->Execute();
                                         continue;
                                     }
 
@@ -882,8 +882,8 @@ void LibPage::InsertLib()
                                     if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) && !xModLibContainer->isLibraryLink( aLibName ) ) ||
                                          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
                                     {
-                                        OUString aErrStr( IDE_RESSTR(RID_STR_REPLACELIB) );
-                                        aErrStr = aErrStr.replaceAll("XX", aLibName) + "\n" + IDE_RESSTR(RID_STR_LIBISREADONLY);
+                                        OUString aErrStr( IDEResId(RID_STR_REPLACELIB) );
+                                        aErrStr = aErrStr.replaceAll("XX", aLibName) + "\n" + OUString(IDEResId(RID_STR_LIBISREADONLY));
                                         ScopedVclPtrInstance<MessageDialog>(this, aErrStr)->Execute();
                                         continue;
                                     }
@@ -895,10 +895,10 @@ void LibPage::InsertLib()
                                 {
                                     OUString aErrStr;
                                     if ( bReference )
-                                        aErrStr = IDE_RESSTR(RID_STR_REFNOTPOSSIBLE);
+                                        aErrStr = IDEResId(RID_STR_REFNOTPOSSIBLE);
                                     else
-                                        aErrStr = IDE_RESSTR(RID_STR_IMPORTNOTPOSSIBLE);
-                                    aErrStr = aErrStr.replaceAll("XX", aLibName) + "\n" +IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED);
+                                        aErrStr = IDEResId(RID_STR_IMPORTNOTPOSSIBLE);
+                                    aErrStr = aErrStr.replaceAll("XX", aLibName) + "\n" + OUString(IDEResId(RID_STR_SBXNAMEALLREADYUSED));
                                     ScopedVclPtrInstance<MessageDialog>(this, aErrStr)->Execute();
                                     continue;
                                 }
@@ -916,7 +916,7 @@ void LibPage::InsertLib()
 
                                     if ( !bOK )
                                     {
-                                        OUString aErrStr( IDE_RESSTR(RID_STR_NOIMPORT) );
+                                        OUString aErrStr( IDEResId(RID_STR_NOIMPORT) );
                                         aErrStr = aErrStr.replaceAll("XX", aLibName);
                                         ScopedVclPtrInstance<MessageDialog>(this, aErrStr)->Execute();
                                         continue;
@@ -1176,10 +1176,10 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
 
     Reference < XFilePicker3 > xFP = FilePicker::createWithMode(xContext, TemplateDescription::FILESAVE_SIMPLE);
 
-    xFP->setTitle(IDEResId(RID_STR_EXPORTPACKAGE).toString());
+    xFP->setTitle(IDEResId(RID_STR_EXPORTPACKAGE));
 
     // filter
-    OUString aTitle(IDEResId(RID_STR_PACKAGE_BUNDLE).toString());
+    OUString aTitle(IDEResId(RID_STR_PACKAGE_BUNDLE));
     OUString aFilter;
     aFilter = "*.oxt" ;       // library files
     xFP->appendFilter( aTitle, aFilter );
@@ -1294,7 +1294,7 @@ void LibPage::ExportAsBasic( const OUString& aLibName )
     Reference< XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, nullptr) );
 
-    xFolderPicker->setTitle(IDEResId(RID_STR_EXPORTBASIC).toString());
+    xFolderPicker->setTitle(IDEResId(RID_STR_EXPORTBASIC));
 
     // set display directory and filter
     OUString aPath =GetExtraData()->GetAddLibPath();
@@ -1480,15 +1480,15 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
 
         if ( aLibName.getLength() > 30 )
         {
-            ScopedVclPtrInstance<MessageDialog>(pWin, IDEResId(RID_STR_LIBNAMETOLONG).toString())->Execute();
+            ScopedVclPtrInstance<MessageDialog>(pWin, IDEResId(RID_STR_LIBNAMETOLONG))->Execute();
         }
         else if ( !IsValidSbxName( aLibName ) )
         {
-            ScopedVclPtrInstance<MessageDialog>(pWin, IDEResId(RID_STR_BADSBXNAME).toString())->Execute();
+            ScopedVclPtrInstance<MessageDialog>(pWin, IDEResId(RID_STR_BADSBXNAME))->Execute();
         }
         else if ( rDocument.hasLibrary( E_SCRIPTS, aLibName ) || rDocument.hasLibrary( E_DIALOGS, aLibName ) )
         {
-            ScopedVclPtrInstance<MessageDialog>(pWin, IDEResId(RID_STR_SBXNAMEALLREADYUSED2).toString())->Execute();
+            ScopedVclPtrInstance<MessageDialog>(pWin, IDEResId(RID_STR_SBXNAMEALLREADYUSED2))->Execute();
         }
         else
         {
