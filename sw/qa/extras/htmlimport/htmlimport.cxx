@@ -148,6 +148,31 @@ DECLARE_HTMLIMPORT_TEST(testMetaIsoDates, "meta-ISO8601-dates.html")
     CPPUNIT_ASSERT_EQUAL(DateTime(Date(8, 5, 2017), tools::Time(12, 47, 0, 386000000)), aModified);
 }
 
+DECLARE_HTMLIMPORT_TEST(testChangedby, "meta-changedby.html")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDocShell* pDocShell(pTextDoc->GetDocShell());
+    uno::Reference<document::XDocumentProperties> xDocProps;
+
+    CPPUNIT_ASSERT(pDocShell);
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS(pDocShell->GetModel(), uno::UNO_QUERY);
+    xDocProps.set(xDPS->getDocumentProperties());
+
+    // get the document properties
+    CPPUNIT_ASSERT(xDocProps.is());
+
+    // the doc's property ModifiedBy is set correctly, ...
+    CPPUNIT_ASSERT_EQUAL(OUString("Blah"), xDocProps->getModifiedBy());
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // ...but there is no comment 'HTML: <meta name="changedby" content="Blah">'
+    CPPUNIT_ASSERT(!xFields->hasMoreElements());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
