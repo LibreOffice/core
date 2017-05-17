@@ -26,10 +26,9 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
 
 #include <tools/config.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svl/solar.hrc>
@@ -46,31 +45,13 @@ const sal_uInt16 SID_HELPMENU            = (SID_SFX_START + 410);
 namespace framework
 {
 
-static OUString GetModuleIdentifier(const Reference<XComponentContext>& rContext,
-    const Reference< XFrame >& rFrame)
-{
-    Reference< XModuleManager > xModuleManager(ModuleManager::create(rContext));
-    if ( xModuleManager.is() )
-    {
-        try
-        {
-            return xModuleManager->identify( rFrame );
-        }
-        catch ( Exception& )
-        {
-        }
-    }
-    return OUString();
-}
-
 bool AddonMenuManager::HasAddonMenuElements()
 {
     return AddonsOptions().HasAddonsMenu();
 }
 
 // Create the Add-Ons menu
-VclPtr<PopupMenu> AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& rFrame,
-                                                     const Reference< XComponentContext >& rContext )
+VclPtr<PopupMenu> AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& rFrame )
 {
     AddonsOptions     aOptions;
     VclPtr<PopupMenu> pAddonMenu;
@@ -80,7 +61,7 @@ VclPtr<PopupMenu> AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& 
     if ( rAddonMenuEntries.getLength() > 0 )
     {
         pAddonMenu = VclPtr<PopupMenu>::Create();
-        ::rtl::OUString aModuleIdentifier = GetModuleIdentifier( rContext, rFrame );
+        ::rtl::OUString aModuleIdentifier = vcl::CommandInfoProvider::GetModuleIdentifier( rFrame );
         AddonMenuManager::BuildMenu( pAddonMenu, MENU_APPEND, nUniqueMenuId, rAddonMenuEntries, rFrame, aModuleIdentifier );
 
         // Don't return an empty Add-On menu
@@ -116,8 +97,7 @@ static sal_uInt16 FindMenuId( Menu* pMenu, const OUString& aCommand )
 
 // Merge the Add-Ons help menu items into the given menu bar at a defined pos
 void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame,
-                                           MenuBar* pMergeMenuBar,
-                                           const Reference<XComponentContext>& rContext )
+                                           MenuBar* pMergeMenuBar )
 {
     if ( pMergeMenuBar )
     {
@@ -146,7 +126,7 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame,
             if ( nInsPos < nItemCount && pHelpMenu->GetItemType( nInsPos ) != MenuItemType::SEPARATOR )
                 nInsSepAfterPos = nInsPos;
 
-            ::rtl::OUString aModuleIdentifier = GetModuleIdentifier(rContext, rFrame);
+            ::rtl::OUString aModuleIdentifier = vcl::CommandInfoProvider::GetModuleIdentifier(rFrame);
             AddonMenuManager::BuildMenu( pHelpMenu, nInsPos, nUniqueMenuId, rAddonHelpMenuEntries, rFrame, aModuleIdentifier );
 
             if ( pHelpMenu->GetItemCount() > nItemCount )
@@ -166,8 +146,7 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame,
 // Merge the addon popup menus into the given menu bar at the provided pos.
 void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
                                              sal_uInt16               nMergeAtPos,
-                                             MenuBar*             pMergeMenuBar,
-                                             const Reference< XComponentContext >& rContext )
+                                             MenuBar*             pMergeMenuBar )
 {
     if ( pMergeMenuBar )
     {
@@ -181,7 +160,8 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
         OUString                              aContext;
         Sequence< Sequence< PropertyValue > > aAddonSubMenu;
         sal_uInt16                            nUniqueMenuId = ADDONMENU_ITEMID_START;
-        OUString                              aModuleIdentifier = GetModuleIdentifier(rContext, rFrame);
+
+        OUString aModuleIdentifier = vcl::CommandInfoProvider::GetModuleIdentifier(rFrame);
 
         const Sequence< Sequence< PropertyValue > >&    rAddonMenuEntries = aAddonsOptions.GetAddonsMenuBarPart();
         for ( sal_Int32 i = 0; i < rAddonMenuEntries.getLength(); i++ )

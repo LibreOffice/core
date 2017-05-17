@@ -43,19 +43,16 @@ class FWE_DLLPUBLIC AddonMenuManager
         static bool IsCorrectContext(const OUString& rModuleIdentifier, const OUString& rContext);
 
         // Create the Add-Ons menu
-        static VclPtr<PopupMenu> CreateAddonMenu( const css::uno::Reference< css::frame::XFrame >& rFrame,
-                                                  const css::uno::Reference< css::uno::XComponentContext >& rContext );
+        static VclPtr<PopupMenu> CreateAddonMenu( const css::uno::Reference< css::frame::XFrame >& rFrame );
 
         // Merge the Add-Ons help menu items into the given menu bar at a defined pos
         static void       MergeAddonHelpMenu( const css::uno::Reference< css::frame::XFrame >& rFrame,
-                                              MenuBar* pMergeMenuBar,
-                                              const css::uno::Reference< css::uno::XComponentContext >& rContext );
+                                              MenuBar* pMergeMenuBar );
 
         // Merge the addon popup menus into the given menu bar at the provided pos.
         static void       MergeAddonPopupMenus( const css::uno::Reference< css::frame::XFrame >& rFrame,
                                                 sal_uInt16   nMergeAtPos,
-                                                MenuBar* pMergeMenuBar,
-                                                const css::uno::Reference< css::uno::XComponentContext >& rContext );
+                                                MenuBar* pMergeMenuBar );
 
         // Returns the next position to insert a menu item/sub menu
         static sal_uInt16     GetNextPos( sal_uInt16 nPos );
