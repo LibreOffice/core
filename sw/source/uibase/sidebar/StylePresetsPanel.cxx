@@ -171,7 +171,7 @@ void StylePresetsPanel::RefreshList()
     for (sal_uInt16 i = 0; i < nCount; ++i)
     {
         OUString aRegionName(aTemplates.GetFullRegionName(i));
-        if (aRegionName == "styles")
+        if (aRegionName == "Styles")
         {
             for (sal_uInt16 j = 0; j < aTemplates.GetCount(i); ++j)
             {
