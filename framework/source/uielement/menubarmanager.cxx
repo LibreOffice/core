@@ -1232,45 +1232,23 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                         if ( pPopup->GetItemType( nCount-1 ) != MenuItemType::SEPARATOR )
                             pPopup->InsertSeparator();
 
-                        // Use resource to load popup menu title
-                        OUString aAddonsStrRes(FwkResId(STR_MENU_ADDONS));
-                        pPopup->InsertItem( ITEMID_ADDONLIST, aAddonsStrRes );
+                        pPopup->InsertItem( ITEMID_ADDONLIST, OUString() );
                         pPopup->SetPopupMenu( ITEMID_ADDONLIST, pSubMenu );
-
-                        // Set item command for popup menu to enable it for GetImageFromURL
-                        OUString aNewItemCommand = "slot:" + OUString::number( ITEMID_ADDONLIST );
-                        pPopup->SetItemCommand( ITEMID_ADDONLIST, aNewItemCommand );
+                        pPopup->SetItemCommand( ITEMID_ADDONLIST, ".uno:Addons" );
                     }
                     else
                         pSubMenu.disposeAndClear();
                 }
 
+                MenuBarManager* pSubMenuManager;
                 if ( nItemId == ITEMID_ADDONLIST )
-                {
-                    AddonMenu* pSubMenu = dynamic_cast< AddonMenu* >( pPopup.get() );
-                    if ( pSubMenu )
-                    {
-                        MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, m_xFrame,
-                                                                              m_xURLTransformer,pSubMenu, false );
-                        AddMenu(pSubMenuManager,aItemCommand,nItemId);
-                        (pSubMenuManager->m_aMenuItemCommand).clear();
-
-                        // Set image for the addon popup menu item
-                        if ( bItemShowMenuImages && !pPopup->GetItemImage( ITEMID_ADDONLIST ))
-                        {
-                            Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aItemCommand, rFrame);
-                            if ( !!aImage )
-                                   pPopup->SetItemImage( ITEMID_ADDONLIST, aImage );
-                        }
-                    }
-                }
+                    pSubMenuManager = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer, pPopup, false );
                 else
-                {
-                    MenuBarManager* pSubMenuMgr = new MenuBarManager( m_xContext, rFrame, m_xURLTransformer,
-                                                                      rDispatchProvider, aModuleIdentifier,
-                                                                      pPopup, false, m_bHasMenuBar );
-                    AddMenu(pSubMenuMgr,aItemCommand,nItemId);
-                }
+                    pSubMenuManager = new MenuBarManager( m_xContext, rFrame, m_xURLTransformer,
+                                                          rDispatchProvider, aModuleIdentifier,
+                                                          pPopup, false, m_bHasMenuBar );
+
+                AddMenu(pSubMenuManager, aItemCommand, nItemId);
             }
         }
         else if ( pMenu->GetItemType( i ) != MenuItemType::SEPARATOR )
