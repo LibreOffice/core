@@ -92,21 +92,9 @@ const sal_uInt16 ADDONMENU_MERGE_ITEMID_START = 1500;
 namespace framework
 {
 
-// special menu ids/command ids for dynamic popup menus
-#define SID_SFX_START           5000
-#define SID_MDIWINDOWLIST       (SID_SFX_START + 610)
-#define SID_HELPMENU            (SID_SFX_START + 410)
-
 #define aCmdHelpIndex ".uno:HelpIndex"
 #define aCmdToolsMenu ".uno:ToolsMenu"
 #define aCmdHelpMenu ".uno:HelpMenu"
-#define aSlotHelpMenu "slot:5410"
-
-#define aSpecialWindowMenu "window"
-#define aSlotSpecialWindowMenu "slot:5610"
-#define aSlotSpecialToolsMenu "slot:6677"
-
-// special uno commands for window list
 #define aSpecialWindowCommand ".uno:WindowList"
 
 static sal_Int16 getImageTypeFromBools( bool bBig )
@@ -696,10 +684,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
 
         m_bActive = true;
 
-        OUString aMenuCommand( m_aMenuItemCommand );
-        if ( m_aMenuItemCommand == aSpecialWindowMenu ||
-             m_aMenuItemCommand == aSlotSpecialWindowMenu ||
-             aMenuCommand == aSpecialWindowCommand )
+        if ( m_aMenuItemCommand == aSpecialWindowCommand )
             UpdateSpecialWindowMenu( pMenu, m_xContext );
 
         // Check if some modes have changed so we have to update our menu images
@@ -1087,8 +1072,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         {
             sal_uInt16          nItemId  = pMenu->GetItemId( nPos );
             OUString aCommand = pMenu->GetItemCommand( nItemId );
-            if ( nItemId == SID_MDIWINDOWLIST || aCommand == aSpecialWindowCommand ||
-                 nItemId == SID_HELPMENU || aCommand == aCmdHelpMenu )
+            if ( aCommand == aSpecialWindowCommand || aCommand == aCmdHelpMenu )
             {
                 // Retrieve addon popup menus and add them to our menu bar
                 framework::AddonMenuManager::MergeAddonPopupMenus( rFrame, nPos, static_cast<MenuBar *>(pMenu) );
@@ -1165,13 +1149,12 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     xPopupMenuDispatchProvider = pAttributes->xDispatchProvider;
 
                 // Check if this is the help menu. Add menu item if needed
-                if ( nItemId == SID_HELPMENU || aItemCommand == aSlotHelpMenu || aItemCommand == aCmdHelpMenu )
+                if ( aItemCommand == aCmdHelpMenu )
                 {
                     // Check if this is the help menu. Add menu item if needed
                     CheckAndAddMenuExtension( pPopup );
                 }
-                else if (( aItemCommand == aSlotSpecialToolsMenu || aItemCommand == aCmdToolsMenu ) &&
-                        AddonMenuManager::HasAddonMenuElements() )
+                else if ( aItemCommand == aCmdToolsMenu && AddonMenuManager::HasAddonMenuElements() )
                 {
                     // Create addon popup menu if there exist elements and this is the tools popup menu
                     VclPtr<PopupMenu> pSubMenu = AddonMenuManager::CreateAddonMenu(rFrame);
