@@ -203,6 +203,39 @@ public:
                     rtl_math_StringFormat_Automatic,
                     rtl_math_DecimalPlaces_Max, '.', true);
         CPPUNIT_ASSERT_EQUAL( OUString("9.00719925474099E+015"), aRes);
+
+        // Test rtl_math_StringFormat_G
+
+        fVal = 0.001234567;
+        aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 3, '.', true);
+        CPPUNIT_ASSERT_EQUAL( OUString("0.00123"), aRes);
+
+        fVal = 123.4567;
+        aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 3, '.', true);
+        CPPUNIT_ASSERT_EQUAL( OUString("123"), aRes);
+
+        fVal = 123.4567;
+        aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 4, '.', true);
+        CPPUNIT_ASSERT_EQUAL( OUString("123.5"), aRes);
+
+        fVal = 99.6;
+        aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 3, '.', true);
+        CPPUNIT_ASSERT_EQUAL( OUString("99.6"), aRes);
+
+        // Expected could be 1E+03 (as 999.6 rounded to 3 significant digits
+        // results in 1000 with an exponent equal to significant digits).
+        // Currently we don't and output 1000 instead, negligible.
+        fVal = 999.6;
+        aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 3, '.', true);
+        CPPUNIT_ASSERT_EQUAL( OUString("1000"), aRes);
+
+        fVal = 9999.6;
+        aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, 3, '.', true);
+        CPPUNIT_ASSERT_EQUAL( OUString("1E+004"), aRes);
+
+        fVal = 12345.6789;
+        aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_G, -3, '.', true);
+        CPPUNIT_ASSERT_EQUAL( OUString("1.2E+004"), aRes);
     }
 
     void test_approx() {
