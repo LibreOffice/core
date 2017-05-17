@@ -745,6 +745,7 @@ void SAL_CALL ScConditionEntryObj::setPropertyValue(
             if ((aValue >>= aFormula) && !aFormula.isEmpty())
             {
                 ScCompiler aComp(&mpDocShell->GetDocument(), getCoreObject()->GetSrcPos());
+                aComp.SetGrammar(mpDocShell->GetDocument().GetGrammar());
                 std::unique_ptr<ScTokenArray> pArr(aComp.CompileString(aFormula));
                 getCoreObject()->SetFormula1(*pArr);
             }
@@ -756,6 +757,7 @@ void SAL_CALL ScConditionEntryObj::setPropertyValue(
             if ((aValue >>= aFormula) && !aFormula.isEmpty())
             {
                 ScCompiler aComp(&mpDocShell->GetDocument(), getCoreObject()->GetSrcPos());
+                aComp.SetGrammar(mpDocShell->GetDocument().GetGrammar());
                 std::unique_ptr<ScTokenArray> pArr(aComp.CompileString(aFormula));
                 getCoreObject()->SetFormula2(*pArr);
             }
