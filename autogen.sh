@@ -102,18 +102,30 @@ sub read_args($)
     return @lst;
 }
 
+sub show_distro_configs($$)
+{
+    my ($prefix, $path) = @_;
+    my $dirh;
+    opendir ($dirh, "$path");
+    while (($_ = readdir ($dirh))) {
+        if (-d "$path/$_") {
+            show_distro_configs(
+                    $prefix eq "" ? "$_/" : "$prefix/$_/", "$path/$_")
+                unless $_ eq '.' || $_ eq '..';
+            next;
+        }
+        /(.*)\.conf$/ || next;
+        print STDERR "\t$prefix$1\n";
+    }
+    closedir ($dirh);
+}
+
 sub invalid_distro($$)
 {
     my ($config, $distro) = @_;
     print STDERR "Can't find distro option set: $config\nThis is not necessarily a problem.\n";
     print STDERR "Distros with distro option sets are:\n";
-    my $dirh;
-    opendir ($dirh, "$src_path/distro-configs");
-    while (($_ = readdir ($dirh))) {
-        /(.*)\.conf$/ || next;
-        print STDERR "\t$1\n";
-    }
-    closedir ($dirh);
+    show_distro_configs("", "$src_path/distro-configs");
 }
 
 # Avoid confusing "aclocal: error: non-option arguments are not accepted: '.../m4'." error message.
