@@ -773,5 +773,21 @@ DECLARE_ODFIMPORT_TEST(testTdf107392, "tdf107392.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(getShapeByName("SVG"), "ZOrder"));
 }
 
+DECLARE_ODFIMPORT_TEST(testTdf100033_1, "tdf100033_1.odt")
+{
+    // Test document have three duplicated frames with the same name and position/size -> import one frame
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+}
+
+DECLARE_ODFIMPORT_TEST(testTdf100033_2, "tdf100033_2.odt")
+{
+    // Test document have three different frames anchored to different paragraphs -> import all frames
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
