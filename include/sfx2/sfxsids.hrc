@@ -194,7 +194,6 @@
 #define SID_STOP_RECORDING                  (SID_SFX_START + 1671)
 #define SID_INTERACTIONHANDLER              (SID_SFX_START + 1675)
 #define SID_OPENHYPERLINK                   (SID_SFX_START + 1676)
-#define SID_ADDONS                          (SID_SFX_START + 1678)
 #define SID_CONTENT                         (SID_SFX_START + 1679)
 #define SID_SHOW_IME_STATUS_WINDOW          (SID_SFX_START + 1680)
 #define SID_VIEWONLY                        (SID_SFX_START + 1682)

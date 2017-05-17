@@ -120,9 +120,6 @@ interface Application
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
     ]
-    SID_ADDONS
-    [
-    ]
     SID_SHOW_IME_STATUS_WINDOW
     [
         ExecMethod = MiscExec_Impl ;
