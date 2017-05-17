@@ -21,7 +21,7 @@
 
 #include "services.h"
 #include <classes/resource.hrc>
-#include <classes/fwlresid.hxx>
+#include <classes/fwkresid.hxx>
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

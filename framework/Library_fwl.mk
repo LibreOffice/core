@@ -51,7 +51,6 @@ $(eval $(call gb_Library_use_libraries,fwl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fwl,\
-    framework/source/classes/fwlresid \
     framework/source/dispatch/mailtodispatcher \
     framework/source/dispatch/oxt_handler \
     framework/source/dispatch/popupmenudispatcher \

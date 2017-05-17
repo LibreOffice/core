@@ -40,7 +40,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>
-#include <classes/fwlresid.hxx>
+#include <classes/fwkresid.hxx>
 
 #include <classes/resource.hrc>
 
@@ -224,19 +224,19 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
 
     // entry for LANGUAGE_NONE
     ++nItemId;
-    pPopupMenu->InsertItem( nItemId, FwlResId(STR_LANGSTATUS_NONE).toString() );
+    pPopupMenu->InsertItem( nItemId, FwkResId(STR_LANGSTATUS_NONE) );
     aCmd = aCmd_Language + "LANGUAGE_NONE";
     pPopupMenu->SetItemCommand( nItemId, aCmd );
 
     // entry for 'Reset to default language'
     ++nItemId;
-    pPopupMenu->InsertItem( nItemId, FwlResId(STR_RESET_TO_DEFAULT_LANGUAGE).toString() );
+    pPopupMenu->InsertItem( nItemId, FwkResId(STR_RESET_TO_DEFAULT_LANGUAGE) );
     aCmd = aCmd_Language + "RESET_LANGUAGES";
     pPopupMenu->SetItemCommand( nItemId, aCmd );
 
     // entry for opening the Format/Character dialog
     ++nItemId;
-    pPopupMenu->InsertItem( nItemId, FwlResId(STR_LANGSTATUS_MORE).toString());
+    pPopupMenu->InsertItem( nItemId, FwkResId(STR_LANGSTATUS_MORE));
     pPopupMenu->SetItemCommand( nItemId, aCmd_Dialog );
 }
 

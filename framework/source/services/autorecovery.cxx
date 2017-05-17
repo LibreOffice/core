@@ -4157,8 +4157,8 @@ bool AutoRecovery::impl_enoughDiscSpace(sal_Int32 nRequiredSpace)
 
 void AutoRecovery::impl_showFullDiscError()
 {
-    OUString sBtn(FWK_RESSTR(STR_FULL_DISC_RETRY_BUTTON));
-    OUString sMsg(FWK_RESSTR(STR_FULL_DISC_MSG));
+    OUString sBtn(FwkResId(STR_FULL_DISC_RETRY_BUTTON));
+    OUString sMsg(FwkResId(STR_FULL_DISC_MSG));
 
     OUString sBackupURL(SvtPathOptions().GetBackupPath());
     INetURLObject aConverter(sBackupURL);
