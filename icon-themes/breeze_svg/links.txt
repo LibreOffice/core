@@ -240,7 +240,7 @@ cmd/sc_imagebutton.png cmd/sc_gallery.png
 
 # shapes
 cmd/lc_fontworkshapetype.fontwork-circle-pour.png cmd/lc_basicshapes.ring.png
-cmd/lc_flowchartshapes.flowchart-connector.png cmd/lc_.circle.png
+cmd/lc_flowchartshapes.flowchart-connector.png cmd/lc_circle.png
 cmd/lc_basicshapes.circle.png cmd/lc_circle.png
 cmd/lc_symbolshapes.smiley.png cmd/lc_symbolshapes.png
 cmd/lc_basicshapes.round-rectangle.png cmd/lc_rect_rounded.png
@@ -256,6 +256,9 @@ cmd/lc_basicshapes.circle-pie.png cmd/lc_pie.png
 cmd/lc_flowchartshapes.flowchart-merge.png cmd/lc_fontworkshapetype.fontwork-triangle-down.png
 cmd/lc_fontworkshapetype.fontwork-fade-down.png cmd/lc_basicshapes.trapezoid.png
 cmd/lc_flowchartshapes.flowchart-magnetic-disk.png cmd/lc_basicshapes.can.png
+
+cmd/lc_emojicontrol.png cmd/lc_symbolshapes.png
+cmd/sc_emojicontrol.png cmd/sc_symbolshapes.png
 
 cmd/sc_fontworkshapetype.fontwork-circle-pour.png cmd/sc_basicshapes.ring.png
 cmd/sc_basicshapes.circle.png cmd/sc_circle.png
@@ -355,10 +358,6 @@ cmd/sc_dbnewformautopilot.png cmd/sc_autoformat.png
 cmd/sc_commontaskbarvisible.png cmd/sc_autoformat.png
 cmd/sc_autopilotmenu.png cmd/sc_autoformat.png
 cmd/sc_newarrangement.png cmd/sc_autoformat.png
-
-# Changes
-cmd/lc_trackchangesbar.png cmd/lc_ok.png
-cmd/sc_trackchangesbar.png cmd/sc_ok.png
 
 # Filter
 cmd/lc_formfilterexecute.png cmd/lc_datafilterstandardfilter.png
@@ -495,12 +494,10 @@ cmd/sc_navigateback.png cmd/sc_prevrecord.png
 cmd/sc_browsebackward.png cmd/sc_prevrecord.png
 # >
 cmd/lc_nexttrackedchange.png cmd/lc_nextrecord.png
-cmd/lc_gotopage.png cmd/lc_nextrecord.png
 cmd/lc_nextpage.png cmd/lc_nextrecord.png
 cmd/lc_navigateforward.png cmd/lc_nextrecord.png
 cmd/lc_pagedown.png cmd/lc_nextrecord.png
 cmd/sc_nexttrackedchange.png cmd/sc_nextrecord.png
-cmd/sc_gotopage.png cmd/sc_nextrecord.png
 cmd/sc_nextpage.png cmd/sc_nextrecord.png
 cmd/sc_navigateforward.png cmd/sc_nextrecord.png
 cmd/sc_pagedown.png cmd/sc_nextrecord.png
@@ -563,6 +560,7 @@ cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
 cmd/sc_insertrowsmenu.png cmd/sc_insertrows.png
 cmd/sc_insertcolumnsmenu.png cmd/sc_insertcolumns.png
 cmd/sc_functiondialog.png cmd/sc_dbviewfunctions.png
+cmd/sc_sheetcommentmenu.png cmd/sc_showannotations.png
 
 # Shapes
 cmd/lc_basicshapes.png cmd/lc_basicshapes.diamond.png
@@ -1360,3 +1358,6 @@ cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png 
 cmd/lc_rowoperations.png cmd/lc_entirerow.png 
 cmd/sc_rowoperations.png cmd/sc_entirerow.png
+
+cmd/sc_cellprotection.png cmd/sc_protect.png
+cmd/lc_cellprotection.png cmd/lc_protect.png
