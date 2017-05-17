@@ -123,9 +123,10 @@ sub show_distro_configs($$)
 sub invalid_distro($$)
 {
     my ($config, $distro) = @_;
-    print STDERR "Can't find distro option set: $config\nThis is not necessarily a problem.\n";
+    print STDERR "Can't find distro option set: $config\n";
     print STDERR "Distros with distro option sets are:\n";
     show_distro_configs("", "$src_path/distro-configs");
+    exit (1);
 }
 
 # Avoid confusing "aclocal: error: non-option arguments are not accepted: '.../m4'." error message.
@@ -247,9 +248,8 @@ for my $arg (@cmdline_args) {
         my $config = "$src_path/distro-configs/$1.conf";
         if (! -f $config) {
             invalid_distro ($config, $1);
-        } else {
-            push @args, read_args ($config);
         }
+        push @args, read_args ($config);
     } elsif ($arg =~ m/--best-effort$/) {
         $option_checking = 'warn';
     } else {
