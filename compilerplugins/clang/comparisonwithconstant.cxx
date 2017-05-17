@@ -100,7 +100,6 @@ bool ComparisonWithConstant::rewrite(const BinaryOperator * binaryOp) {
     }
 
     // switch LHS and RHS
-    RewriteOptions opts;
     if (!replaceText(lhsRange, rhsString)) {
         return false;
     }
