@@ -179,8 +179,7 @@ OUString SAL_CALL _getImplementationName() {
 
 css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > s { "com.sun.star.rdf.Literal" };
-    return s;
+    return { "com.sun.star.rdf.Literal" };
 }
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
