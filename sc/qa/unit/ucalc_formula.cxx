@@ -7854,6 +7854,12 @@ void Test::testIntersectionOpExcel()
     aPos.IncRow();
     m_pDoc->SetString(aPos,"=horz vert");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A5 intersecting named expressions failed", 1.0, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    m_pDoc->SetString(aPos,"=(horz vert)*2");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A6 calculating with intersecting named expressions failed", 2.0, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    m_pDoc->SetString(aPos,"=2*(horz vert)");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A7 calculating with intersecting named expressions failed", 2.0, m_pDoc->GetValue(aPos));
 
     m_pDoc->SetGrammar(FormulaGrammar::GRAM_ENGLISH);
 
