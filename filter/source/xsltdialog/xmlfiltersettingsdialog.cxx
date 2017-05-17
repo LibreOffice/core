@@ -61,16 +61,30 @@ using namespace com::sun::star::util;
 using ::rtl::Uri;
 
 namespace {
+    static ResMgr* pXSLTResMgr = nullptr;
 
-std::unique_ptr<ResMgr> getXSLTDialogResMgr() {
-    return std::unique_ptr<ResMgr>(
-        ResMgr::CreateResMgr(
-            "xsltdlg", Application::GetSettings().GetUILanguageTag()));
+    ResMgr* getXSLTDialogResMgr()
+    {
+        return pXSLTResMgr;
+    }
 }
 
+EnsureResMgr::EnsureResMgr()
+{
+    if (!pXSLTResMgr)
+    {
+        m_xResMgr.reset(ResMgr::CreateResMgr("xsltdlg", Application::GetSettings().GetUILanguageTag()));
+        pXSLTResMgr = m_xResMgr.get();
+    }
 }
 
-#define RESID(x) ResId(x, *getXSLTDialogResMgr().get())
+EnsureResMgr::~EnsureResMgr()
+{
+    if (m_xResMgr)
+        pXSLTResMgr = nullptr;
+}
+
+#define RESID(x) ResId(x, *getXSLTDialogResMgr())
 #define RESIDSTR(x) RESID(x).toString()
 
 XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
@@ -246,7 +260,7 @@ void XMLFilterSettingsDialog::onNew()
     aTempInfo.maDocumentService = "com.sun.star.text.TextDocument";
 
     // execute XML Filter Dialog
-    ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResMgr().get(), mxContext, &aTempInfo );
+    ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResMgr(), mxContext, &aTempInfo );
     if ( aDlg->Execute() == RET_OK )
     {
         // insert the new filter
@@ -265,7 +279,7 @@ void XMLFilterSettingsDialog::onEdit()
         filter_info_impl* pOldInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
 
         // execute XML Filter Dialog
-        ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResMgr().get(), mxContext, pOldInfo );
+        ScopedVclPtrInstance< XMLFilterTabDialog > aDlg( this, *getXSLTDialogResMgr(), mxContext, pOldInfo );
         if ( aDlg->Execute() == RET_OK )
         {
             filter_info_impl* pNewInfo = aDlg->getNewFilterInfo();
