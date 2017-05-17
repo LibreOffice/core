@@ -22,7 +22,6 @@
 
 #include <xml/menudocumenthandler.hxx>
 #include <framework/menuconfiguration.hxx>
-#include <framework/addonmenu.hxx>
 
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
@@ -790,14 +789,7 @@ void OWriteMenuDocumentHandler::WriteMenu( const Reference< XIndexAccess >& rMen
             ExtractMenuParameters( aProps, aCommandURL, aLabel, aHelpURL, xSubMenu, nType, nItemBits );
             if ( xSubMenu.is() )
             {
-                // special popup menus (filled during runtime) must be saved as an empty popup menu or menuitem!!!
-                if ( aCommandURL == ".uno:AddDirect" ||
-                    aCommandURL == ".uno:AutoPilotMenu" )
-                {
-                    WriteMenuItem( aCommandURL, aLabel, aHelpURL, nItemBits );
-                    bSeparator = false;
-                }
-                else if ( !aCommandURL.isEmpty() && !AddonPopupMenu::IsCommandURLPrefix( aCommandURL ))
+                if ( !aCommandURL.isEmpty() )
                 {
                     ::comphelper::AttributeList* pListMenu = new ::comphelper::AttributeList;
                     Reference< XAttributeList > xListMenu( static_cast<XAttributeList *>(pListMenu) , UNO_QUERY );

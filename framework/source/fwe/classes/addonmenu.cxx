@@ -55,12 +55,6 @@ AddonMenu::~AddonMenu()
     disposeOnce();
 }
 
-// Check if command URL string has the unique prefix to identify addon popup menus
-bool AddonPopupMenu::IsCommandURLPrefix( const OUString& aCmdURL )
-{
-    return aCmdURL.startsWith( ADDONSPOPUPMENU_URL_PREFIX_STR );
-}
-
 AddonPopupMenu::AddonPopupMenu() :
     AddonMenu()
 {
