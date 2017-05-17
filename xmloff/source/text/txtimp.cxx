@@ -1116,11 +1116,11 @@ bool XMLTextImportHelper::IsDuplicateFrame(const OUString& sName, sal_Int32 nX, 
     if (HasFrameByName(sName))
     {
         uno::Reference<beans::XPropertySet> xOtherFrame;
-        if(m_xImpl->m_xTextFrames && m_xImpl->m_xTextFrames->hasByName(sName))
+        if(m_xImpl->m_xTextFrames.is() && m_xImpl->m_xTextFrames->hasByName(sName))
             xOtherFrame.set(m_xImpl->m_xTextFrames->getByName(sName), uno::UNO_QUERY);
-        else if(m_xImpl->m_xGraphics && m_xImpl->m_xGraphics->hasByName(sName))
+        else if(m_xImpl->m_xGraphics.is() && m_xImpl->m_xGraphics->hasByName(sName))
             xOtherFrame.set(m_xImpl->m_xGraphics->getByName(sName), uno::UNO_QUERY);
-        else if (m_xImpl->m_xObjects && m_xImpl->m_xObjects->hasByName(sName))
+        else if (m_xImpl->m_xObjects.is() && m_xImpl->m_xObjects->hasByName(sName))
             xOtherFrame.set(m_xImpl->m_xObjects->getByName(sName), uno::UNO_QUERY);
 
         Reference< XPropertySetInfo > xPropSetInfo = xOtherFrame->getPropertySetInfo();
