@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_50e709e4",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 582,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-17T21:40:25Z",
+      "side": 1,
+      "message": "clear() of m_pWidthHeightField is missing, this is why one of the Jenkins builds fails",
+      "revId": "fd0a8b2712bf403f477c5d24bd2effb0dbd396f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b0ce6d58",
+        "filename": "sd/source/ui/view/drviews7.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1754,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-17T21:40:25Z",
+      "side": 1,
+      "message": "This variable is not initialized ...",
+      "revId": "fd0a8b2712bf403f477c5d24bd2effb0dbd396f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_d0dbf919",
+        "filename": "sd/source/ui/view/drviews7.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1755,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-17T21:40:25Z",
+      "side": 1,
+      "message": "And this must be segfaulting too, mpDrawViewShell is nullptr by now",
+      "revId": "fd0a8b2712bf403f477c5d24bd2effb0dbd396f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_90d171fe",
+        "filename": "sd/source/ui/view/drviews7.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1756,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-17T21:40:25Z",
+      "side": 1,
+      "message": "This is equivalent to getCurrentPage(), ain\u0027t it?",
+      "revId": "fd0a8b2712bf403f477c5d24bd2effb0dbd396f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_70ec05c8",
+        "filename": "sd/source/ui/view/drviews7.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1838,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-17T21:40:25Z",
+      "side": 1,
+      "message": "... which is likely why it segfaults here (but I don\u0027t know for sure, haven\u0027t any master build at hand). You can do this: GetDoc()-\u003eGetPool()",
+      "revId": "fd0a8b2712bf403f477c5d24bd2effb0dbd396f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
