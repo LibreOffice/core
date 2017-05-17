@@ -19,11 +19,6 @@
 
 #include <classes/resource.hrc>
 
-String STR_MENU_ADDONS
-{
-    Text [ en-US ] = "Add-Ons" ;
-};
-
 String STR_MENU_HEADFOOTALL
 {
     Text [ en-US ] = "All" ;
