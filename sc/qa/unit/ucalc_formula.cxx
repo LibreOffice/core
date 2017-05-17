@@ -7832,4 +7832,32 @@ void Test::testSingleCellCopyColumnLabel()
     m_pDoc->DeleteTab(0);
 }
 
+// Significant whitespace operator intersection in Excel syntax, tdf#96426
+void Test::testIntersectionOpExcel()
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
+
+    ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
+    // Horizontal cell range covering C2.
+    pGlobalNames->insert( new ScRangeData( m_pDoc, "horz", "$B$2:$D$2"));
+    // Vertical cell range covering C2.
+    pGlobalNames->insert( new ScRangeData( m_pDoc, "vert", "$C$1:$C$3"));
+    // Data in C2.
+    m_pDoc->SetString(2,1,0,"1");
+
+    m_pDoc->SetGrammar(FormulaGrammar::GRAM_ENGLISH_XL_A1);
+
+    // Choose formular positions that don't intersect with those data ranges.
+    ScAddress aPos(0,3,0);
+    m_pDoc->SetString(aPos,"=B2:D2 C1:C3");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A4 intersecting references failed", 1.0, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    m_pDoc->SetString(aPos,"=horz vert");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("A5 intersecting named expressions failed", 1.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->SetGrammar(FormulaGrammar::GRAM_ENGLISH);
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

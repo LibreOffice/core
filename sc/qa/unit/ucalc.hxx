@@ -168,6 +168,7 @@ public:
     void testFormulaRefUpdateValidity();
     void testTokenArrayRefUpdateMove();
     void testSingleCellCopyColumnLabel();
+    void testIntersectionOpExcel();
     void testMultipleOperations();
     void testFuncCOLUMN();
     void testFuncCOUNT();
@@ -574,6 +575,7 @@ public:
     CPPUNIT_TEST(testFormulaRefUpdateNameDelete);
     CPPUNIT_TEST(testFormulaRefUpdateValidity);
     CPPUNIT_TEST(testTokenArrayRefUpdateMove);
+    CPPUNIT_TEST(testIntersectionOpExcel);
     CPPUNIT_TEST(testMultipleOperations);
     CPPUNIT_TEST(testFuncCOLUMN);
     CPPUNIT_TEST(testFuncCOUNT);
