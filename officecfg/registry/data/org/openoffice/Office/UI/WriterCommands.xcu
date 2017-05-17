@@ -1323,7 +1323,7 @@
       </node>
       <node oor:name=".uno:HeadingRowsRepeat" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Repeat Heading Rows</value>
+          <value xml:lang="en-US">Header Rows Repeat Across Pages</value>
         </prop>
       </node>
       <node oor:name=".uno:TableSort" oor:op="replace">
@@ -2281,7 +2281,7 @@
       </node>
       <node oor:name=".uno:RowSplit" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Break Across Pages</value>
+          <value xml:lang="en-US">Row to ~Break Across Pages</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>8</value>
@@ -2871,6 +2871,21 @@
       <node oor:name=".uno:StyleApply?Style:string=Source Text&amp;FamilyName:string=CharacterStyles" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Sou~rce Text</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=List 1&amp;FamilyName:string=NumberingStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Bullet List</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Numbering 1&amp;FamilyName:string=NumberingStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Number List</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:StyleApply?Style:string=Numbering 4&amp;FamilyName:string=NumberingStyles" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Roman List</value>
         </prop>
       </node>
       <node oor:name=".uno:StyleApply" oor:op="replace">
