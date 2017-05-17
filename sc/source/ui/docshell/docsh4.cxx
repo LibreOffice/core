@@ -2254,8 +2254,10 @@ void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocu
                                (nType == LOKCommentNotificationType::Remove ? "Remove" :
                                 (nType == LOKCommentNotificationType::Modify ? "Modify" : "???"))));
 
+    assert(pNote);
     aAnnotation.put("id", pNote->GetId());
     aAnnotation.put("tab", rPos.Tab());
+
     if (nType != LOKCommentNotificationType::Remove && pNote)
     {
         aAnnotation.put("author", pNote->GetAuthor());
