@@ -66,8 +66,6 @@ struct PopupControllerEntry
 
 typedef std::unordered_map< OUString, PopupControllerEntry, OUStringHash > PopupControllerCache;
 
-class AddonMenu;
-class AddonPopupMenu;
 class MenuBarManager:
     public cppu::WeakImplHelper<
         css::frame::XStatusListener,

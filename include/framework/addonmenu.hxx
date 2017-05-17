@@ -34,51 +34,17 @@
 namespace framework
 {
 
-class FWE_DLLPUBLIC AddonMenu : public PopupMenu
-{
-    public:
-        AddonMenu();
-        virtual ~AddonMenu() override;
-};
-
-class AddonMenuManager;
-
-class FWE_DLLPUBLIC AddonPopupMenu : public AddonMenu
-{
-    public:
-        virtual ~AddonPopupMenu() override;
-
-        void               SetCommandURL( const OUString& aCmdURL ) { m_aCommandURL = aCmdURL; }
-
-    private:
-        AddonPopupMenu();
-
-        OUString               m_aCommandURL;
-
-    friend class AddonMenuManager;
-    friend class ::VclPtr<AddonPopupMenu>;
-};
-
 class FWE_DLLPUBLIC AddonMenuManager
 {
     public:
-        enum MenuType
-        {
-            ADDON_MENU,
-            ADDON_POPUPMENU
-        };
-
         static bool       HasAddonMenuElements();
 
         // Check if the context string matches the provided xModel context
         static bool IsCorrectContext(const OUString& rModuleIdentifier, const OUString& rContext);
 
-        // Factory method to create different Add-On menu types
-        static VclPtr<PopupMenu> CreatePopupMenuType( MenuType eMenuType );
-
         // Create the Add-Ons menu
-        static VclPtr<AddonMenu> CreateAddonMenu( const css::uno::Reference< css::frame::XFrame >& rFrame,
-                                           const css::uno::Reference< css::uno::XComponentContext >& rContext );
+        static VclPtr<PopupMenu> CreateAddonMenu( const css::uno::Reference< css::frame::XFrame >& rFrame,
+                                                  const css::uno::Reference< css::uno::XComponentContext >& rContext );
 
         // Merge the Add-Ons help menu items into the given menu bar at a defined pos
         static void       MergeAddonHelpMenu( const css::uno::Reference< css::frame::XFrame >& rFrame,
@@ -96,7 +62,6 @@ class FWE_DLLPUBLIC AddonMenuManager
 
         // Build up the menu item and sub menu into the provided pCurrentMenu. The sub menus should be of type nSubMenuType.
         static void       BuildMenu( PopupMenu*  pCurrentMenu,
-                                     MenuType    nSubMenuType,
                                      sal_uInt16      nInsPos,
                                      sal_uInt16&     nUniqueMenuId,
                                      const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& aAddonMenuDefinition,

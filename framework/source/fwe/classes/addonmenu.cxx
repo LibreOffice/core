@@ -46,24 +46,6 @@ const sal_uInt16 SID_HELPMENU            = (SID_SFX_START + 410);
 namespace framework
 {
 
-AddonMenu::AddonMenu()
-{
-}
-
-AddonMenu::~AddonMenu()
-{
-    disposeOnce();
-}
-
-AddonPopupMenu::AddonPopupMenu() :
-    AddonMenu()
-{
-}
-
-AddonPopupMenu::~AddonPopupMenu()
-{
-}
-
 static OUString GetModuleIdentifier(const Reference<XComponentContext>& rContext,
     const Reference< XFrame >& rFrame)
 {
@@ -86,31 +68,20 @@ bool AddonMenuManager::HasAddonMenuElements()
     return AddonsOptions().HasAddonsMenu();
 }
 
-// Factory method to create different Add-On menu types
-VclPtr<PopupMenu> AddonMenuManager::CreatePopupMenuType( MenuType eMenuType )
-{
-    if ( eMenuType == ADDON_MENU )
-        return VclPtr<AddonMenu>::Create();
-    else if ( eMenuType == ADDON_POPUPMENU )
-        return VclPtr<AddonPopupMenu>::Create();
-    else
-        return nullptr;
-}
-
 // Create the Add-Ons menu
-VclPtr<AddonMenu> AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& rFrame,
-                                              const Reference< XComponentContext >& rContext )
+VclPtr<PopupMenu> AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& rFrame,
+                                                     const Reference< XComponentContext >& rContext )
 {
     AddonsOptions     aOptions;
-    VclPtr<AddonMenu> pAddonMenu;
+    VclPtr<PopupMenu> pAddonMenu;
     sal_uInt16        nUniqueMenuId   = ADDONMENU_ITEMID_START;
 
     const Sequence< Sequence< PropertyValue > >& rAddonMenuEntries = aOptions.GetAddonsMenu();
     if ( rAddonMenuEntries.getLength() > 0 )
     {
-        pAddonMenu = static_cast<AddonMenu *>(AddonMenuManager::CreatePopupMenuType( ADDON_MENU ).get());
+        pAddonMenu = VclPtr<PopupMenu>::Create();
         ::rtl::OUString aModuleIdentifier = GetModuleIdentifier( rContext, rFrame );
-        AddonMenuManager::BuildMenu( pAddonMenu, ADDON_MENU, MENU_APPEND, nUniqueMenuId, rAddonMenuEntries, rFrame, aModuleIdentifier );
+        AddonMenuManager::BuildMenu( pAddonMenu, MENU_APPEND, nUniqueMenuId, rAddonMenuEntries, rFrame, aModuleIdentifier );
 
         // Don't return an empty Add-On menu
         if ( pAddonMenu->GetItemCount() == 0 )
@@ -176,7 +147,7 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame,
                 nInsSepAfterPos = nInsPos;
 
             ::rtl::OUString aModuleIdentifier = GetModuleIdentifier(rContext, rFrame);
-            AddonMenuManager::BuildMenu( pHelpMenu, ADDON_MENU, nInsPos, nUniqueMenuId, rAddonHelpMenuEntries, rFrame, aModuleIdentifier );
+            AddonMenuManager::BuildMenu( pHelpMenu, nInsPos, nUniqueMenuId, rAddonHelpMenuEntries, rFrame, aModuleIdentifier );
 
             if ( pHelpMenu->GetItemCount() > nItemCount )
             {
@@ -228,13 +199,12 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
                  AddonMenuManager::IsCorrectContext( aModuleIdentifier, aContext ))
             {
                 sal_uInt16          nId             = nUniqueMenuId++;
-                VclPtr<AddonPopupMenu> pAddonPopupMenu = static_cast<AddonPopupMenu *>(AddonMenuManager::CreatePopupMenuType( ADDON_POPUPMENU ).get());
+                VclPtrInstance<PopupMenu> pAddonPopupMenu;
 
-                AddonMenuManager::BuildMenu( pAddonPopupMenu, ADDON_MENU, MENU_APPEND, nUniqueMenuId, aAddonSubMenu, rFrame, aModuleIdentifier );
+                AddonMenuManager::BuildMenu( pAddonPopupMenu, MENU_APPEND, nUniqueMenuId, aAddonSubMenu, rFrame, aModuleIdentifier );
 
                 if ( pAddonPopupMenu->GetItemCount() > 0 )
                 {
-                    pAddonPopupMenu->SetCommandURL( aURL );
                     pMergeMenuBar->InsertItem( nId, aTitle, MenuItemBits::NONE, OString(), nInsertPos++ );
                     pMergeMenuBar->SetPopupMenu( nId, pAddonPopupMenu );
 
@@ -250,7 +220,6 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
 
 // Insert the menu and sub menu entries into pCurrentMenu with the aAddonMenuDefinition provided
 void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrentMenu,
-                                  MenuType                              nSubMenuType,
                                   sal_uInt16                            nInsPos,
                                   sal_uInt16&                           nUniqueMenuId,
                                   const Sequence< Sequence< PropertyValue > >& aAddonMenuDefinition,
@@ -284,8 +253,8 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
             VclPtr<PopupMenu> pSubMenu;
             if ( aAddonSubMenu.getLength() > 0 )
             {
-                pSubMenu = AddonMenuManager::CreatePopupMenuType( nSubMenuType );
-                AddonMenuManager::BuildMenu( pSubMenu, nSubMenuType, MENU_APPEND, nUniqueMenuId, aAddonSubMenu, rFrame, rModuleIdentifier );
+                pSubMenu = VclPtr<PopupMenu>::Create();
+                AddonMenuManager::BuildMenu( pSubMenu, MENU_APPEND, nUniqueMenuId, aAddonSubMenu, rFrame, rModuleIdentifier );
 
                 // Don't create a menu item for an empty sub menu
                 if ( pSubMenu->GetItemCount() == 0 )

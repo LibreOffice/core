@@ -1225,7 +1225,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                         AddonMenuManager::HasAddonMenuElements() )
                 {
                     // Create addon popup menu if there exist elements and this is the tools popup menu
-                    VclPtr<AddonMenu> pSubMenu = AddonMenuManager::CreateAddonMenu(rFrame, m_xContext);
+                    VclPtr<PopupMenu> pSubMenu = AddonMenuManager::CreateAddonMenu(rFrame, m_xContext);
                     if ( pSubMenu && ( pSubMenu->GetItemCount() > 0 ))
                     {
                         sal_uInt16 nCount = 0;
