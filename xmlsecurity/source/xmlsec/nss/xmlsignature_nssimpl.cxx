@@ -221,6 +221,9 @@ SAL_CALL XMLSignature_NssImpl::validate(
             return aTemplate;
         }
 
+        // We do certificate verification ourselves.
+        pDsigCtx->keyInfoReadCtx.flags |= XMLSEC_KEYINFO_FLAGS_X509DATA_DONT_VERIFY_CERTS;
+
         //Verify signature
         int rs = xmlSecDSigCtxVerify( pDsigCtx , pNode );
 

@@ -10,7 +10,6 @@
 xmlsec_patches :=
 xmlsec_patches += xmlsec1-configure.patch.1
 xmlsec_patches += xmlsec1-nssdisablecallbacks.patch.1
-xmlsec_patches += xmlsec1-noverify.patch.1
 xmlsec_patches += xmlsec1-vc.patch.1
 xmlsec_patches += xmlsec1-1.2.14_fix_extern_c.patch.1
 xmlsec_patches += xmlsec1-customkeymanage.patch.1
