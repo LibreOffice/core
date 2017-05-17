@@ -7770,7 +7770,7 @@ install a pre-compiled binary for Win32
 
 mkdir -p /opt/lo/bin
 cd /opt/lo/bin
-wget http://dev-www.libreoffice.org/bin/cygwin/nasm.exe
+wget https://dev-www.libreoffice.org/bin/cygwin/nasm.exe
 chmod +x nasm
 
 or get and install one from http://www.nasm.us/
@@ -12730,7 +12730,7 @@ to install a pre-compiled binary make for Win32
 
  mkdir -p /opt/lo/bin
  cd /opt/lo/bin
- wget http://dev-www.libreoffice.org/bin/cygwin/make-85047eb-msvc.exe
+ wget https://dev-www.libreoffice.org/bin/cygwin/make-85047eb-msvc.exe
  cp make-85047eb-msvc.exe make
  chmod +x make
 
