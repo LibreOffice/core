@@ -1957,6 +1957,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
         case HtmlMeta::ChangedBy:
             if (i_xDocProps.is()) {
                 i_xDocProps->setModifiedBy( aContent );
+                bChanged = true;
             }
             break;
 
