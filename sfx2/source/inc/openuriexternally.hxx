@@ -25,7 +25,7 @@ namespace sfx2 {
 /// given handleSystemShellExecuteException is false (in which case the
 /// exception is re-thrown).
 ///
-/// @return true if execution was successful
+/// @return true iff execution was successful
 bool openUriExternally(
     OUString const & uri, bool handleSystemShellExecuteException);
 

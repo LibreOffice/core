@@ -565,7 +565,7 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
                     //            is to be understood as "inclusive the lower bound, exclusive in upper bound".
 
                     assert(nYear1 == nYear2 || nYear1 + 1 == nYear2);
-                    // as a consequence, nYearDifferent if nYear2 == nYear + 1, and
+                    // as a consequence, nYearDifferent iff nYear2 == nYear + 1, and
                     // there are only two possible 29 Februaries to consider:
                     // "29 February nYear1" and "29 February nYear2"
 

@@ -31,7 +31,7 @@ struct _typelib_TypeDescription;
 struct _uno_Interface;
 
 /** Function pointer declaration for the binary C uno dispatch function. Any pure out or return
-    value will be constructed by the callee, if no exception is signalled.
+    value will be constructed by the callee, iff no exception is signalled.
     If an exception is signalled, the any *ppException is properly constructed by the callee,
     otherwise the pointer *ppException is set to 0.
     An attribute get call is indicated by a non-null return pointer.

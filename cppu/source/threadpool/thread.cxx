@@ -119,7 +119,7 @@ namespace cppu_threadpool {
     bool ORequestThread::launch()
     {
         // Assumption is that osl::Thread::create returns normally with a true
-        // return value if it causes osl::Thread::run to start executing:
+        // return value iff it causes osl::Thread::run to start executing:
         acquire();
         ThreadAdmin & rThreadAdmin = m_aThreadPool->getThreadAdmin();
         osl::ClearableMutexGuard g(rThreadAdmin.m_mutex);

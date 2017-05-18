@@ -438,7 +438,7 @@ mkException( OUString const & i_rMessage,
         <li>ignore the error and continue</li>
         <li>retry the action that led to the error</li></ul></p>
     N.B.: must not be called before DMA is fully initialized!
-    @returns true if caller should retry
+    @returns true iff caller should retry
  */
 static bool
 handleError( ucb::InteractiveAugmentedIOException const & i_rException,

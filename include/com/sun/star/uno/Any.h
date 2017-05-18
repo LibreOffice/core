@@ -341,7 +341,7 @@ template<> inline Any toAny(Any const & value);
     @param value  a non-null pointer, receiving the extracted value if
     extraction succeeded (and left unmodified otherwise)
 
-    @return  true if extraction succeeded
+    @return  true iff extraction succeeded
 
     @since LibreOffice 5.3
 */

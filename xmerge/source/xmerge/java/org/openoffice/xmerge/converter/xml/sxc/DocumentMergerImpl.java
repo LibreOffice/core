@@ -135,7 +135,7 @@ public class DocumentMergerImpl implements DocumentMerger {
             // try to match the workSheet
             Node matchingWorkSheet = matchWorkSheet(workSheet, workSheetList1);
 
-            // add the new WorkSheet to the original document if match not found
+            // add the new WorkSheet to the original document iff match not found
             if (matchingWorkSheet == null) {
                 Node cloneNode = XmlUtil.deepClone(officeBody, workSheet);
                 officeBody.appendChild(cloneNode);

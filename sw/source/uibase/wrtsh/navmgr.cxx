@@ -123,7 +123,7 @@ void SwNavigationMgr::goBack()  {
             // We are adding the current Point to the navigation history
             // so we could later navigate forward to it
 
-            // The addEntry() method returns true if we should decrement
+            // The addEntry() method returns true iff we should decrement
             // the index before navigating back
 
             if (addEntry(*pPaM->GetPoint()) ) {

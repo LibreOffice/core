@@ -208,7 +208,7 @@ namespace canvas
 
             This method recomputes the maCurrClipBounds and
             mbIsCurrClipRectangle members from the current clip and
-            transformation. If the clip changed from rectangular to
+            transformation. IFF the clip changed from rectangular to
             rectangular again, this method issues a sequence of
             optimized SpriteSurface::updateSprite() calls.
 
@@ -258,22 +258,22 @@ namespace canvas
          */
         mutable bool                                        mbIsContentFullyOpaque;
 
-        /// True, if mfAlpha has changed
+        /// True, iff mfAlpha has changed
         mutable bool                                        mbAlphaDirty;
 
-        /// True, if maPosition has changed
+        /// True, iff maPosition has changed
         mutable bool                                        mbPositionDirty;
 
-        /// True, if maTransform has changed
+        /// True, iff maTransform has changed
         mutable bool                                        mbTransformDirty;
 
-        /// True, if mxClipPoly has changed
+        /// True, iff mxClipPoly has changed
         mutable bool                                        mbClipDirty;
 
-        /// True, if mnPriority has changed
+        /// True, iff mnPriority has changed
         mutable bool                                        mbPrioDirty;
 
-        /// True, if mbActive has changed
+        /// True, iff mbActive has changed
         mutable bool                                        mbVisibilityDirty;
     };
 }

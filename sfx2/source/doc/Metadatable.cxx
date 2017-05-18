@@ -168,7 +168,7 @@ public:
         </p>
 
         @returns
-            true if the element has successfully been registered
+            true iff the element has successfully been registered
      */
     virtual bool TryRegisterMetadatable(Metadatable& i_xObject,
         OUString const& i_rStreamName, OUString const& i_rIdref)
@@ -222,7 +222,7 @@ public:
     virtual void RemoveXmlIdForElement(Metadatable const&) override;
 
     /** register i_rCopy as a copy of i_rSource,
-        with precedence if i_bCopyPrecedesSource is true */
+        with precedence iff i_bCopyPrecedesSource is true */
     void RegisterCopy(Metadatable const& i_rSource, Metadatable & i_rCopy,
         const bool i_bCopyPrecedesSource);
 

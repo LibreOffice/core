@@ -43,7 +43,7 @@ UNOTOOLS_DLLPUBLIC bool IsDocument(OUString const & url);
 UNOTOOLS_DLLPUBLIC bool IsFolder(OUString const & url);
 
 /// @param title must not be null
-/// @return true if title has been set (i.e., if obtaining the "Title" property
+/// @return true iff title has been set (i.e., if obtaining the "Title" property
 ///     of the given content yields a non-void value without raising a
 ///     non-RuntimeException; RuntimeExceptions are passed through)
 UNOTOOLS_DLLPUBLIC bool GetTitle(

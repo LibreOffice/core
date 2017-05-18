@@ -98,7 +98,7 @@ class XMLTextListsHelper
             const OUString& i_ListId,
             sal_Int16 & io_rLevel, const OUString& i_StyleName);
 
-        /// get ID of the last numbered-paragraph if it has given style-name
+        /// get ID of the last numbered-paragraph iff it has given style-name
         OUString GetNumberedParagraphListId(
             const sal_uInt16 i_Level,
             const OUString& i_StyleName);

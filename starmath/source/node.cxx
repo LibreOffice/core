@@ -897,7 +897,7 @@ double Det(const Point &rHeading1, const Point &rHeading2)
 }
 
 
-/// Is true if the point 'rPoint1' belongs to the straight line through 'rPoint2'
+/// Is true iff the point 'rPoint1' belongs to the straight line through 'rPoint2'
 /// and has the direction vector 'rHeading2'
 bool IsPointInLine(const Point &rPoint1,
                    const Point &rPoint2, const Point &rHeading2)

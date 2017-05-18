@@ -1505,7 +1505,7 @@ jcopy_markers_setup (j_decompress_ptr srcinfo, JCOPY_OPTION option)
   if (option != JCOPYOPT_NONE) {
     jpeg_save_markers(srcinfo, JPEG_COM, 0xFFFF);
   }
-  /* Save all types of APPn markers if ALL option */
+  /* Save all types of APPn markers iff ALL option */
   if (option == JCOPYOPT_ALL) {
     for (m = 0; m < 16; m++)
       jpeg_save_markers(srcinfo, JPEG_APP0 + m, 0xFFFF);

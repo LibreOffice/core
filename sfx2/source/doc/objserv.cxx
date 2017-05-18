@@ -1322,7 +1322,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
 
     // Please fix this comment if you can: Note that the talk about "ODF version" around here is a
     // bit silly, as there should be nothing ODF-specific in this code, right? What we mean, I
-    // think, is "ODF version if it is ODF that is the format the document is being stored as", and
+    // think, is "ODF version iff it is ODF that is the format the document is being stored as", and
     // otherwise the "ODF version" is ignored. Not sure why such format-specific things needs to be
     // handled here. Digital signatures then complicate matters further, as it's only ODF 1.2 and
     // OOXML that have digital signatures.

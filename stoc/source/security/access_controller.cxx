@@ -597,7 +597,7 @@ PermissionCollection AccessController::getEffectivePermissions(
     }
 
     // call on policy
-    // if this is a recurring call for the default user, then grant all permissions
+    // iff this is a recurring call for the default user, then grant all permissions
     t_rec_vec * rec = static_cast< t_rec_vec * >( m_rec.getData() );
     if (rec) // tls entry exists => this is recursive call
     {

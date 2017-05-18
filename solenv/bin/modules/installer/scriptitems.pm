@@ -1605,7 +1605,7 @@ sub collect_directories_from_filesarray
             {
                 # Adding the modules to the module list!
                 $alldirectoryhash{$destinationpath}->{'modules'} .= "," . $onefile->{'modules'};
-                # Save file's gid if this directory appears in only a single
+                # Save file's gid iff this directory appears in only a single
                 # file's FILELIST (so that unused directories will be filtered
                 # out in remove_not_required_spellcheckerlanguage_files, based
                 # on gid):

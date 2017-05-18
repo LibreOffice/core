@@ -71,10 +71,10 @@ private:
    exception com.sun.star.uno.RuntimeException and its subtypes are pruned
    completely from the hierarchy.  Each node of the hierarchy is represented by
    an instance of ExceptionTreeNode, where name gives the name of the UNO
-   exception type, present is true if the given exception type is a member of
+   exception type, present is true iff the given exception type is a member of
    the set S, and children contains all the relevant direct subtypes of the
    given exception type, in no particular order (for nodes other than the root
-   node it holds that children is non-empty if present is false).
+   node it holds that children is non-empty iff present is false).
  */
 class ExceptionTree {
 public:
