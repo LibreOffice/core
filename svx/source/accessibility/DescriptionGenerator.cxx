@@ -73,7 +73,7 @@ void DescriptionGenerator::Initialize (sal_Int32 nResourceId)
     OUString sPrefix;
     {
         SolarMutexGuard aGuard;
-        sPrefix = OUString (SVX_RESSTR (nResourceId));
+        sPrefix = OUString (SvxResId (nResourceId));
     }
 
     // Forward the call with the resulting string.
@@ -90,10 +90,10 @@ void DescriptionGenerator::Initialize (const OUString& sPrefix)
             SolarMutexGuard aGuard;
 
             msDescription.append(' ');
-            msDescription.append(OUString (SVX_RESSTR(RID_SVXSTR_A11Y_WITH)));
+            msDescription.append(OUString (SvxResId(RID_SVXSTR_A11Y_WITH)));
             msDescription.append(' ');
 
-            msDescription.append(OUString (SVX_RESSTR (RID_SVXSTR_A11Y_STYLE)));
+            msDescription.append(OUString (SvxResId (RID_SVXSTR_A11Y_STYLE)));
             msDescription.append('=');
         }
 
@@ -133,7 +133,7 @@ void DescriptionGenerator::AddProperty (
     OUString sLocalizedName;
     {
         SolarMutexGuard aGuard;
-        sLocalizedName = SVX_RESSTR (nLocalizedNameId);
+        sLocalizedName = SvxResId (nLocalizedNameId);
     }
     AddProperty (sPropertyName, aType, sLocalizedName, nWhichId);
 }
@@ -155,7 +155,7 @@ void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
                 SolarMutexGuard aGuard;
 
                 msDescription.append(' ');
-                msDescription.append(OUString (SVX_RESSTR(RID_SVXSTR_A11Y_AND)));
+                msDescription.append(OUString (SvxResId(RID_SVXSTR_A11Y_AND)));
                 msDescription.append(' ');
                 mbIsFirstProperty = false;
             }
@@ -325,19 +325,19 @@ void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
                 switch (aFillStyle)
                 {
                     case drawing::FillStyle_NONE:
-                        sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_NONE);
+                        sFillStyleName = SvxResId(RID_SVXSTR_A11Y_FILLSTYLE_NONE);
                         break;
                     case drawing::FillStyle_SOLID:
-                        sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_SOLID);
+                        sFillStyleName = SvxResId(RID_SVXSTR_A11Y_FILLSTYLE_SOLID);
                         break;
                     case drawing::FillStyle_GRADIENT:
-                        sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT);
+                        sFillStyleName = SvxResId(RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT);
                         break;
                     case drawing::FillStyle_HATCH:
-                        sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_HATCH);
+                        sFillStyleName = SvxResId(RID_SVXSTR_A11Y_FILLSTYLE_HATCH);
                         break;
                     case drawing::FillStyle_BITMAP:
-                        sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_BITMAP);
+                        sFillStyleName = SvxResId(RID_SVXSTR_A11Y_FILLSTYLE_BITMAP);
                         break;
                     default:
                         break;

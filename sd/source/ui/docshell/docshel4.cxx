@@ -1037,13 +1037,13 @@ void DrawDocShell::FillClass(SvGlobalName* pClassName,
         {
             *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
             *pFormat = SotClipboardFormatId::STARDRAW_60;
-            *pFullTypeName = OUString(SdResId(STR_GRAPHIC_DOCUMENT_FULLTYPE_60));
+            *pFullTypeName = SdResId(STR_GRAPHIC_DOCUMENT_FULLTYPE_60);
         }
         else
         {
             *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
             *pFormat = SotClipboardFormatId::STARIMPRESS_60;
-            *pFullTypeName = OUString(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_60));
+            *pFullTypeName = SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_60);
         }
     }
     else if (nFileFormat == SOFFICE_FILEFORMAT_8)
@@ -1062,8 +1062,8 @@ void DrawDocShell::FillClass(SvGlobalName* pClassName,
         }
     }
 
-    *pShortTypeName = OUString(SdResId( (meDocType == DocumentType::Draw) ?
-                                      STR_GRAPHIC_DOCUMENT : STR_IMPRESS_DOCUMENT ));
+    *pShortTypeName = SdResId((meDocType == DocumentType::Draw) ?
+                                     STR_GRAPHIC_DOCUMENT : STR_IMPRESS_DOCUMENT);
 }
 
 OutputDevice* DrawDocShell::GetDocumentRefDev()

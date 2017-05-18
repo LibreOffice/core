@@ -810,7 +810,7 @@ ScFunctionList::ScFunctionList()
     // OpCodes, which is utopian...
     for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
     {
-        ScResId aRes(RID_SC_FUNC_DESCRIPTIONS_START + i);
+        ResId aRes(RID_SC_FUNC_DESCRIPTIONS_START + i, *SC_MOD()->GetResMgr());
         aRes.SetRT(RSC_STRINGARRAY);
         // Opcode Resource available?
         if (SC_MOD()->GetResMgr()->IsAvailable(aRes))
@@ -1179,7 +1179,7 @@ OUString ScFunctionMgr::GetCategoryName(sal_uInt32 _nCategoryNumber )
         return OUString();
     }
 
-    ResStringArray aStringArray(ScResId(RID_FUNCTION_CATEGORIES));
+    ResStringArray aStringArray(ResId(RID_FUNCTION_CATEGORIES, *SC_MOD()->GetResMgr()));
     return aStringArray.GetString(_nCategoryNumber);
 }
 

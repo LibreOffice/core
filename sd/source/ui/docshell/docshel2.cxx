@@ -282,7 +282,7 @@ bool DrawDocShell::CheckPageName (vcl::Window* pWin, OUString& rName )
 
     if( ! bIsNameValid )
     {
-        OUString aDesc( SD_RESSTR( STR_WARN_PAGE_EXISTS ) );
+        OUString aDesc( SdResId( STR_WARN_PAGE_EXISTS ) );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         VclPtr<AbstractSvxNameDialog> aNameDlg = pFact ? pFact->CreateSvxNameDialog( pWin, aStrForDlg, aDesc ) : nullptr;
         if( aNameDlg )
@@ -312,7 +312,7 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
     bool bCanUseNewName = false;
 
     // check if name is something like 'Slide n'
-    OUString aStrPage(SD_RESSTR(STR_SD_PAGE) + " ");
+    OUString aStrPage(SdResId(STR_SD_PAGE) + " ");
 
     bool bIsStandardName = false;
 

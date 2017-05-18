@@ -71,7 +71,7 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
             assert(pDlg && "Dialog creation failed!");
 
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(FN_EDIT_FOOTNOTE)->GetCommand());
-            pDlg->SetText( SW_RESSTR(STR_EDIT_FOOTNOTE) );
+            pDlg->SetText( SwResId(STR_EDIT_FOOTNOTE) );
             pDlg->Execute();
             break;
         }

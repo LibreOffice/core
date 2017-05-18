@@ -151,34 +151,34 @@ void CompressGraphicsDialog::Update()
     switch(aLinkType)
     {
         case GfxLinkType::NativeGif:
-            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_GIF);
+            aGraphicTypeString = SvxResId(STR_IMAGE_GIF);
             break;
         case GfxLinkType::NativeJpg:
-            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_JPEG);
+            aGraphicTypeString = SvxResId(STR_IMAGE_JPEG);
             break;
         case GfxLinkType::NativePng:
-            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_PNG);
+            aGraphicTypeString = SvxResId(STR_IMAGE_PNG);
             break;
         case GfxLinkType::NativeTif:
-            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_TIFF);
+            aGraphicTypeString = SvxResId(STR_IMAGE_TIFF);
             break;
         case GfxLinkType::NativeWmf:
-            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_WMF);
+            aGraphicTypeString = SvxResId(STR_IMAGE_WMF);
             break;
         case GfxLinkType::NativeMet:
-            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_MET);
+            aGraphicTypeString = SvxResId(STR_IMAGE_MET);
             break;
         case GfxLinkType::NativePct:
-            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_PCT);
+            aGraphicTypeString = SvxResId(STR_IMAGE_PCT);
             break;
         case GfxLinkType::NativeSvg:
-            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_SVG);
+            aGraphicTypeString = SvxResId(STR_IMAGE_SVG);
             break;
         case GfxLinkType::NativeBmp:
-            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_BMP);
+            aGraphicTypeString = SvxResId(STR_IMAGE_BMP);
             break;
         default:
-            aGraphicTypeString = SVX_RESSTR(STR_IMAGE_UNKNOWN);
+            aGraphicTypeString = SvxResId(STR_IMAGE_UNKNOWN);
             break;
     }
     m_pLabelGraphicType->SetText(aGraphicTypeString);
@@ -194,7 +194,7 @@ void CompressGraphicsDialog::Update()
     Size aPixelSize = m_aGraphic.GetSizePixel();
     Size aOriginalSize100mm( pDummyVDev->PixelToLogic( m_aGraphic.GetSizePixel(), MapUnit::Map100thMM ) );
 
-    OUString aBitmapSizeString = SVX_RESSTR(STR_IMAGE_ORIGINAL_SIZE);
+    OUString aBitmapSizeString = SvxResId(STR_IMAGE_ORIGINAL_SIZE);
     OUString aWidthString  = GetUnitString( aOriginalSize100mm.Width(),  eFieldUnit, cSeparator );
     OUString aHeightString = GetUnitString( aOriginalSize100mm.Height(), eFieldUnit, cSeparator );
     aBitmapSizeString = aBitmapSizeString.replaceAll("$(WIDTH)",  aWidthString);
@@ -205,7 +205,7 @@ void CompressGraphicsDialog::Update()
 
     int aValX = (int) (aPixelSize.Width() / GetViewWidthInch());
 
-    OUString aViewSizeString = SVX_RESSTR(STR_IMAGE_VIEW_SIZE);
+    OUString aViewSizeString = SvxResId(STR_IMAGE_VIEW_SIZE);
 
     aWidthString  = GetUnitString( m_aViewSize100mm.Width(),  eFieldUnit, cSeparator );
     aHeightString = GetUnitString( m_aViewSize100mm.Height(), eFieldUnit, cSeparator );
@@ -220,7 +220,7 @@ void CompressGraphicsDialog::Update()
     aMemStream.Seek( STREAM_SEEK_TO_END );
     sal_Int32 aNativeSize = aMemStream.Tell();
 
-    OUString aNativeSizeString = SVX_RESSTR(STR_IMAGE_CAPACITY);
+    OUString aNativeSizeString = SvxResId(STR_IMAGE_CAPACITY);
     aNativeSizeString = aNativeSizeString.replaceAll("$(CAPACITY)",  OUString::number(aNativeSize / 1024));
     m_pFixedText5->SetText(aNativeSizeString);
 
@@ -385,7 +385,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl, Button*, void )
     {
         OUString aSizeAsString = OUString::number(aSize / 1024);
 
-        OUString aNewSizeString = SVX_RESSTR(STR_IMAGE_CAPACITY);
+        OUString aNewSizeString = SvxResId(STR_IMAGE_CAPACITY);
         aNewSizeString = aNewSizeString.replaceAll("$(CAPACITY)", aSizeAsString);
         m_pFixedText6->SetText(aNewSizeString);
     }

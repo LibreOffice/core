@@ -111,7 +111,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl, void*, void)
         try
         {
             mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
-                                       SD_RESSTR( STR_PLAY ) );
+                                       SdResId( STR_PLAY ) );
             mbLabelPlaying = false;
         }
         catch(const css::lang::IllegalArgumentException&)
@@ -143,7 +143,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl, void*, void)
                 try
                 {
                     mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
-                                               SD_RESSTR( STR_STOP ) );
+                                               SdResId( STR_STOP ) );
                     mbLabelPlaying = true;
                 }
                 catch (const css::lang::IllegalArgumentException&)
@@ -173,7 +173,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl, Timer *, void)
         try
         {
             mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
-                                       SD_RESSTR( STR_PLAY ) );
+                                       SdResId( STR_PLAY ) );
             mbLabelPlaying = false;
         }
         catch (const css::lang::IllegalArgumentException&)
@@ -194,7 +194,7 @@ void SdFileDialog_Imp::CheckSelectionState()
 
         try
         {
-            if( aCurrFilter.isEmpty() || ( aCurrFilter == SD_RESSTR( STR_EXPORT_HTML_NAME ) ) )
+            if( aCurrFilter.isEmpty() || ( aCurrFilter == SdResId( STR_EXPORT_HTML_NAME ) ) )
                 mxControlAccess->enableControl( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, false );
             else
                 mxControlAccess->enableControl( css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_SELECTION, true );
@@ -227,7 +227,7 @@ SdFileDialog_Imp::SdFileDialog_Imp() :
         try
         {
             mxControlAccess->setLabel( css::ui::dialogs::ExtendedFilePickerElementIds::PUSHBUTTON_PLAY,
-                                       SD_RESSTR( STR_PLAY ) );
+                                       SdResId( STR_PLAY ) );
         }
         catch (const css::lang::IllegalArgumentException&)
         {
@@ -258,25 +258,25 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
     mpImpl( new SdFileDialog_Imp() )
 {
     OUString aDescr;
-    aDescr = SD_RESSTR(STR_ALL_FILES);
+    aDescr = SdResId(STR_ALL_FILES);
     mpImpl->AddFilter( aDescr, "*.*");
 
     // setup filter
 #if defined UNX
-    aDescr = SD_RESSTR(STR_AU_FILE);
+    aDescr = SdResId(STR_AU_FILE);
     mpImpl->AddFilter( aDescr, "*.au;*.snd");
-    aDescr = SD_RESSTR(STR_VOC_FILE);
+    aDescr = SdResId(STR_VOC_FILE);
     mpImpl->AddFilter( aDescr, "*.voc");
-    aDescr = SD_RESSTR(STR_WAV_FILE);
+    aDescr = SdResId(STR_WAV_FILE);
     mpImpl->AddFilter( aDescr, "*.wav");
-    aDescr = SD_RESSTR(STR_AIFF_FILE);
+    aDescr = SdResId(STR_AIFF_FILE);
     mpImpl->AddFilter( aDescr, "*.aiff");
-    aDescr = SD_RESSTR(STR_SVX_FILE);
+    aDescr = SdResId(STR_SVX_FILE);
     mpImpl->AddFilter( aDescr, "*.svx");
 #else
-    aDescr = SD_RESSTR(STR_WAV_FILE);
+    aDescr = SdResId(STR_WAV_FILE);
     mpImpl->AddFilter( aDescr, "*.wav;*.mp3;*.ogg" );
-    aDescr = SD_RESSTR(STR_MIDI_FILE);
+    aDescr = SdResId(STR_MIDI_FILE);
     mpImpl->AddFilter( aDescr, "*.mid" );
 #endif
 }

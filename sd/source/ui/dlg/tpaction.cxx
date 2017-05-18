@@ -220,7 +220,7 @@ void SdTPAction::Construct()
         bOLEAction = true;
 
         aVerbVector.push_back( 0 );
-        m_pLbOLEAction->InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( SD_RESSTR( STR_EDIT_OBJ ) ) );
+        m_pLbOLEAction->InsertEntry( MnemonicGenerator::EraseAllMnemonicChars( SdResId( STR_EDIT_OBJ ) ) );
     }
     else if( pOleObj )
     {
@@ -270,7 +270,7 @@ void SdTPAction::Construct()
     for (presentation::ClickAction & rAction : maCurrentActions)
     {
         sal_uInt16 nRId = GetClickActionSdResId( rAction );
-        m_pLbAction->InsertEntry( SD_RESSTR( nRId ) );
+        m_pLbAction->InsertEntry( SdResId( nRId ) );
     }
 
 }
@@ -452,7 +452,7 @@ void SdTPAction::OpenFileDialog()
             // filter makes the (Windows system) open file dialog follow
             // links on the desktop to directories.
             aFileDialog.AddFilter (
-                SFX2_RESSTR(STR_SFX_FILTERNAME_ALL),
+                SfxResId(STR_SFX_FILTERNAME_ALL),
                 "*.*");
 
             if( aFileDialog.Execute() == ERRCODE_NONE )
@@ -583,7 +583,7 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl, ListBox&, void)
             m_pEdtSound->Enable();
             m_pBtnSearch->Show();
             m_pBtnSearch->Enable();
-            m_pFrame->set_label( SD_RESSTR( STR_EFFECTDLG_SOUND ) );
+            m_pFrame->set_label( SdResId( STR_EFFECTDLG_SOUND ) );
             break;
 
         case presentation::ClickAction_PROGRAM:
@@ -594,12 +594,12 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl, ListBox&, void)
             if( eCA == presentation::ClickAction_MACRO )
             {
                 m_pEdtMacro->Show();
-                m_pFrame->set_label( SD_RESSTR( STR_EFFECTDLG_MACRO ) );
+                m_pFrame->set_label( SdResId( STR_EFFECTDLG_MACRO ) );
             }
             else
             {
                 m_pEdtProgram->Show();
-                m_pFrame->set_label( SD_RESSTR( STR_EFFECTDLG_PROGRAM ) );
+                m_pFrame->set_label( SdResId( STR_EFFECTDLG_PROGRAM ) );
             }
             break;
 
@@ -612,8 +612,8 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl, ListBox&, void)
             m_pBtnSearch->Show();
             m_pBtnSearch->Enable();
 
-            m_pFtTree->SetText( SD_RESSTR( STR_EFFECTDLG_JUMP ) );
-            m_pFrame->set_label( SD_RESSTR( STR_EFFECTDLG_DOCUMENT ) );
+            m_pFtTree->SetText( SdResId( STR_EFFECTDLG_JUMP ) );
+            m_pFrame->set_label( SdResId( STR_EFFECTDLG_DOCUMENT ) );
 
             CheckFileHdl( *m_pEdtDocument );
             break;
@@ -622,7 +622,7 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl, ListBox&, void)
             m_pFtTree->Show();
             m_pLbOLEAction->Show();
 
-            m_pFtTree->SetText( SD_RESSTR( STR_EFFECTDLG_ACTION ) );
+            m_pFtTree->SetText( SdResId( STR_EFFECTDLG_ACTION ) );
             break;
 
         case presentation::ClickAction_BOOKMARK:
@@ -635,8 +635,8 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl, ListBox&, void)
             m_pEdtBookmark->Show();
             m_pBtnSeek->Show();
 
-            m_pFtTree->SetText( SD_RESSTR( STR_EFFECTDLG_JUMP ) );
-            m_pFrame->set_label( SD_RESSTR( STR_EFFECTDLG_PAGE_OBJECT ) );
+            m_pFtTree->SetText( SdResId( STR_EFFECTDLG_JUMP ) );
+            m_pFrame->set_label( SdResId( STR_EFFECTDLG_PAGE_OBJECT ) );
             break;
         default:
             break;

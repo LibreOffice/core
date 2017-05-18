@@ -192,7 +192,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
                             SwGlossaryHdl * pGlosHdl, SwWrtShell *pWrtShell)
     : SvxStandardDialog(&pViewFrame->GetWindow(), "AutoTextDialog",
         "modules/swriter/ui/autotext.ui")
-    , sReadonlyPath(SW_RESSTR(STR_READONLY_PATH))
+    , sReadonlyPath(SwResId(STR_READONLY_PATH))
     , pExampleFrame(nullptr)
     , pGlossaryHdl(pGlosHdl)
     , bResume(false)
@@ -465,7 +465,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
         const OUString aShortName(m_pShortNameEdit->GetText());
         if(pGlossaryHdl->HasShortName(aShortName))
         {
-            ScopedVclPtrInstance<MessageDialog>(this, SW_RES(STR_DOUBLE_SHORTNAME), VclMessageType::Info)->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, SwResId(STR_DOUBLE_SHORTNAME), VclMessageType::Info)->Execute();
             m_pShortNameEdit->SetSelection(Selection(0, SELECTION_MAX));
             m_pShortNameEdit->GrabFocus();
             return true;
@@ -592,7 +592,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn, bool )
                 Init();
             else
             {
-                ScopedVclPtrInstance<MessageDialog>(this, SW_RES( STR_NO_GLOSSARIES ), VclMessageType::Info)->Execute();
+                ScopedVclPtrInstance<MessageDialog>(this, SwResId( STR_NO_GLOSSARIES ), VclMessageType::Info)->Execute();
             }
         }
     }
@@ -691,7 +691,7 @@ void SwGlossaryDlg::Init()
     const sal_Int32 nSelPath = ::GetCurrGlosGroup().getToken(1, GLOS_DELIM).toInt32();
     // #i66304# - "My AutoText" comes from mytexts.bau, but should be translated
     const OUString sMyAutoTextEnglish("My AutoText");
-    const OUString sMyAutoTextTranslated(SW_RES(STR_MY_AUTOTEXT));
+    const OUString sMyAutoTextTranslated(SwResId(STR_MY_AUTOTEXT));
     for(size_t nId = 0; nId < nCnt; ++nId )
     {
         OUString sTitle;
@@ -805,7 +805,7 @@ IMPL_LINK_NOARG(SwNewGlosNameDlg, Rename, Button*, void)
     if( pDlg->pGlossaryHdl->HasShortName(m_pNewShort->GetText())
         && sNew != m_pOldShort->GetText() )
     {
-        ScopedVclPtrInstance<MessageDialog>(this, SW_RES(STR_DOUBLE_SHORTNAME), VclMessageType::Info)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(this, SwResId(STR_DOUBLE_SHORTNAME), VclMessageType::Info)->Execute();
         m_pNewShort->GrabFocus();
     }
     else
@@ -828,7 +828,7 @@ IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, Button *, pBox, void )
 // TreeListBox for groups and blocks
 SwGlTreeListBox::SwGlTreeListBox(vcl::Window* pParent, WinBits nBits)
     : SvTreeListBox(pParent, nBits)
-    , sReadonly(SW_RESSTR(SW_STR_READONLY)),
+    , sReadonly(SwResId(SW_STR_READONLY)),
     pDragEntry(nullptr)
 {
     SetDragDropMode( DragDropMode::CTRL_MOVE|DragDropMode::CTRL_COPY );
@@ -1141,7 +1141,7 @@ void SwGlossaryDlg::DeleteEntry()
     const bool bExists = nullptr != pChild;
     const bool bIsGroup = pEntry && !pParent;
 
-    ScopedVclPtrInstance< MessageDialog > aQuery(this, SW_RES(STR_QUERY_DELETE), VclMessageType::Question, VclButtonsType::YesNo);
+    ScopedVclPtrInstance< MessageDialog > aQuery(this, SwResId(STR_QUERY_DELETE), VclMessageType::Question, VclButtonsType::YesNo);
     if (bExists && !bIsGroup && RET_YES == aQuery->Execute())
     {
         if (!aTitle.isEmpty() && pGlossaryHdl->DelGlossary(aShortName))

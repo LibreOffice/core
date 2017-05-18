@@ -93,7 +93,7 @@ bool DrawCommandDispatch::isFeatureSupported( const OUString& rCommandURL )
     XLineEndListRef pLineEndList = rModel.GetLineEndList();
     if ( pLineEndList.is() )
     {
-        OUString aName( SVX_RESSTR( nResId ) );
+        OUString aName( SvxResId( nResId ) );
         long nCount = pLineEndList->Count();
         for ( long nIndex = 0; nIndex < nCount; ++nIndex )
         {
@@ -215,7 +215,7 @@ void DrawCommandDispatch::setLineEnds( SfxItemSet& rAttr )
                 }
             }
 
-            rAttr.Put( XLineEndItem( SVX_RESSTR( RID_SVXSTR_ARROW ), aArrow ) );
+            rAttr.Put( XLineEndItem( SvxResId( RID_SVXSTR_ARROW ), aArrow ) );
             rAttr.Put( XLineEndWidthItem( nWidth ) );
         }
     }

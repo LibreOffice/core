@@ -128,16 +128,16 @@ void TemplateSearchView::Command( const CommandEvent& rCEvt )
 void TemplateSearchView::createContextMenu( const bool bIsDefault)
 {
     ScopedVclPtrInstance<PopupMenu> pItemMenu;
-    pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN).toString());
-    pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE).toString());
+    pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN));
+    pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE));
 
     if(!bIsDefault)
-        pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_DEFAULT_TEMPLATE).toString());
+        pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_DEFAULT_TEMPLATE));
     else
-        pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_RESET_DEFAULT).toString());
+        pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_RESET_DEFAULT));
 
     pItemMenu->InsertSeparator();
-    pItemMenu->InsertItem(MNI_DELETE,SfxResId(STR_DELETE).toString());
+    pItemMenu->InsertItem(MNI_DELETE,SfxResId(STR_DELETE));
     maSelectedItem->setSelection(true);
     maItemStateHdl.Call(maSelectedItem);
     pItemMenu->SetSelectHdl(LINK(this, TemplateSearchView, ContextMenuSelectHdl));

@@ -500,9 +500,9 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     aTbxCmd->SetLineCount(2);
     aLbDocuments->SetDropDownLineCount(9);
     aLbDocuments->SetSelectHdl(LINK(this, ScNavigatorDlg, DocumentSelectHdl));
-    aStrActive    = " (" + OUString(ScResId(SCSTR_ACTIVE)) + ")";     // " (active)"
-    aStrNotActive = " (" + OUString(ScResId(SCSTR_NOTACTIVE)) + ")";  // " (not active)"
-    aStrHidden    = " (" + OUString(ScResId(SCSTR_HIDDEN)) + ")";     // " (hidden)"
+    aStrActive    = " (" + ScResId(SCSTR_ACTIVE) + ")";     // " (active)"
+    aStrNotActive = " (" + ScResId(SCSTR_NOTACTIVE) + ")";  // " (not active)"
+    aStrHidden    = " (" + ScResId(SCSTR_HIDDEN) + ")";     // " (hidden)"
 
     aTitleBase = GetText();
 

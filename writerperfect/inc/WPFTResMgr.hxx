@@ -12,8 +12,10 @@ struct WRITERPERFECT_DLLPUBLIC WPFTResMgr
     static ResMgr &GetResMgr();
 };
 
-#define WPFT_RES(i) ResId((i), WPFTResMgr::GetResMgr())
-#define WPFT_RESSTR(i) WPFT_RES(i).toString()
+inline OUString WpResId(sal_uInt16 nId)
+{
+    return ResId(nId, WPFTResMgr::GetResMgr());
+}
 
 #endif
 

@@ -92,19 +92,19 @@ void GlueEscDirLB::Select()
  */
 void GlueEscDirLB::Fill()
 {
-    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_SMART ) );
-    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_LEFT ) );
-    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_RIGHT ) );
-    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_TOP ) );
-    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_BOTTOM ) );
+    InsertEntry( SdResId( STR_GLUE_ESCDIR_SMART ) );
+    InsertEntry( SdResId( STR_GLUE_ESCDIR_LEFT ) );
+    InsertEntry( SdResId( STR_GLUE_ESCDIR_RIGHT ) );
+    InsertEntry( SdResId( STR_GLUE_ESCDIR_TOP ) );
+    InsertEntry( SdResId( STR_GLUE_ESCDIR_BOTTOM ) );
     /*
-    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_LO ) );
-    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_LU ) );
-    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_RO ) );
-    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_RU ) );
-    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_HORZ ) );
-    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_VERT ) );
-    InsertEntry( SD_RESSTR( STR_GLUE_ESCDIR_ALL ) );
+    InsertEntry( SdResId( STR_GLUE_ESCDIR_LO ) );
+    InsertEntry( SdResId( STR_GLUE_ESCDIR_LU ) );
+    InsertEntry( SdResId( STR_GLUE_ESCDIR_RO ) );
+    InsertEntry( SdResId( STR_GLUE_ESCDIR_RU ) );
+    InsertEntry( SdResId( STR_GLUE_ESCDIR_HORZ ) );
+    InsertEntry( SdResId( STR_GLUE_ESCDIR_VERT ) );
+    InsertEntry( SdResId( STR_GLUE_ESCDIR_ALL ) );
     */
 }
 

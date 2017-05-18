@@ -1865,9 +1865,9 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aSelectIdle         ( "sfx2 appl SfxHelpTextWindow_Impl Select" ),
     aIndexOnImage       (BitmapEx(BMP_HELP_TOOLBOX_INDEX_ON)),
     aIndexOffImage      (BitmapEx(BMP_HELP_TOOLBOX_INDEX_OFF)),
-    aIndexOnText        ( SfxResId( STR_HELP_BUTTON_INDEX_ON ).toString() ),
-    aIndexOffText       ( SfxResId( STR_HELP_BUTTON_INDEX_OFF ).toString() ),
-    aOnStartupText      ( SfxResId( RID_HELP_ONSTARTUP_TEXT ).toString() ),
+    aIndexOnText        ( SfxResId( STR_HELP_BUTTON_INDEX_ON ) ),
+    aIndexOffText       ( SfxResId( STR_HELP_BUTTON_INDEX_OFF ) ),
+    aOnStartupText      ( SfxResId( RID_HELP_ONSTARTUP_TEXT ) ),
     pHelpWin            ( pParent ),
     pTextWin            ( VclPtr<TextWin_Impl>::Create( this ) ),
     pSrchDlg            ( nullptr ),
@@ -1891,18 +1891,18 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aToolBox->InsertItem( TBI_INDEX, aIndexOffText );
     aToolBox->SetHelpId( TBI_INDEX, HID_HELP_TOOLBOXITEM_INDEX );
     aToolBox->InsertSeparator();
-    aToolBox->InsertItem( TBI_BACKWARD, SfxResId( STR_HELP_BUTTON_PREV ).toString() );
+    aToolBox->InsertItem( TBI_BACKWARD, SfxResId( STR_HELP_BUTTON_PREV ) );
     aToolBox->SetHelpId( TBI_BACKWARD, HID_HELP_TOOLBOXITEM_BACKWARD );
-    aToolBox->InsertItem( TBI_FORWARD, SfxResId( STR_HELP_BUTTON_NEXT ).toString() );
+    aToolBox->InsertItem( TBI_FORWARD, SfxResId( STR_HELP_BUTTON_NEXT ) );
     aToolBox->SetHelpId( TBI_FORWARD, HID_HELP_TOOLBOXITEM_FORWARD );
-    aToolBox->InsertItem( TBI_START, SfxResId( STR_HELP_BUTTON_START ).toString() );
+    aToolBox->InsertItem( TBI_START, SfxResId( STR_HELP_BUTTON_START ) );
     aToolBox->SetHelpId( TBI_START, HID_HELP_TOOLBOXITEM_START );
     aToolBox->InsertSeparator();
-    aToolBox->InsertItem( TBI_PRINT, SfxResId( STR_HELP_BUTTON_PRINT ).toString() );
+    aToolBox->InsertItem( TBI_PRINT, SfxResId( STR_HELP_BUTTON_PRINT ) );
     aToolBox->SetHelpId( TBI_PRINT, HID_HELP_TOOLBOXITEM_PRINT );
-    aToolBox->InsertItem( TBI_BOOKMARKS, SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ).toString() );
+    aToolBox->InsertItem( TBI_BOOKMARKS, SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) );
     aToolBox->SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
-    aToolBox->InsertItem( TBI_SEARCHDIALOG, SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ).toString() );
+    aToolBox->InsertItem( TBI_SEARCHDIALOG, SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ) );
     aToolBox->SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
 
     InitToolBoxImages();
@@ -2351,40 +2351,40 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aMenu->SetHelpId( TBI_INDEX, HID_HELP_TOOLBOXITEM_INDEX );
             aMenu->InsertSeparator();
             aMenu->InsertItem( TBI_BACKWARD,
-                              SfxResId( STR_HELP_BUTTON_PREV  ).toString(),
+                              SfxResId( STR_HELP_BUTTON_PREV  ),
                               Image(BitmapEx(BMP_HELP_TOOLBOX_PREV))
             );
             aMenu->SetHelpId( TBI_BACKWARD, HID_HELP_TOOLBOXITEM_BACKWARD );
             aMenu->EnableItem( TBI_BACKWARD, pHelpWin->HasHistoryPredecessor() );
             aMenu->InsertItem( TBI_FORWARD,
-                              SfxResId( STR_HELP_BUTTON_NEXT ).toString(),
+                              SfxResId( STR_HELP_BUTTON_NEXT ),
                               Image(BitmapEx(BMP_HELP_TOOLBOX_NEXT))
             );
             aMenu->SetHelpId( TBI_FORWARD, HID_HELP_TOOLBOXITEM_FORWARD );
             aMenu->EnableItem( TBI_FORWARD, pHelpWin->HasHistorySuccessor() );
             aMenu->InsertItem( TBI_START,
-                              SfxResId( STR_HELP_BUTTON_START ).toString(),
+                              SfxResId( STR_HELP_BUTTON_START ),
                               Image(BitmapEx(BMP_HELP_TOOLBOX_START))
             );
             aMenu->SetHelpId( TBI_START, HID_HELP_TOOLBOXITEM_START );
             aMenu->InsertSeparator();
             aMenu->InsertItem( TBI_PRINT,
-                              SfxResId( STR_HELP_BUTTON_PRINT ).toString(),
+                              SfxResId( STR_HELP_BUTTON_PRINT ),
                               Image(BitmapEx(BMP_HELP_TOOLBOX_PRINT))
             );
             aMenu->SetHelpId( TBI_PRINT, HID_HELP_TOOLBOXITEM_PRINT );
             aMenu->InsertItem( TBI_BOOKMARKS,
-                              SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ).toString(),
+                              SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ),
                               Image(BitmapEx(BMP_HELP_TOOLBOX_BOOKMARKS))
              );
             aMenu->SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
             aMenu->InsertItem( TBI_SEARCHDIALOG,
-                              SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ).toString(),
+                              SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ),
                               Image(BitmapEx(BMP_HELP_TOOLBOX_SEARCHDIALOG))
             );
             aMenu->SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
             aMenu->InsertSeparator();
-            aMenu->InsertItem( TBI_SELECTIONMODE, SfxResId( STR_HELP_MENU_TEXT_SELECTION_MODE ).toString() );
+            aMenu->InsertItem( TBI_SELECTIONMODE, SfxResId( STR_HELP_MENU_TEXT_SELECTION_MODE ) );
             aMenu->SetHelpId( TBI_SELECTIONMODE, HID_HELP_TEXT_SELECTION_MODE );
             URL aURL;
             aURL.Complete = ".uno:SelectTextMode";
@@ -2402,7 +2402,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             }
             aMenu->InsertSeparator();
             aMenu->InsertItem( TBI_COPY,
-                              SfxResId(STR_HELP_MENU_TEXT_COPY).toString(),
+                              SfxResId(STR_HELP_MENU_TEXT_COPY),
                               Image(BitmapEx(BMP_HELP_TOOLBOX_COPY))
                 );
             aMenu->SetHelpId( TBI_COPY, ".uno:Copy" );
@@ -2411,7 +2411,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             if ( bIsDebug )
             {
                 aMenu->InsertSeparator();
-                aMenu->InsertItem( TBI_SOURCEVIEW, SfxResId(STR_HELP_BUTTON_SOURCEVIEW).toString() );
+                aMenu->InsertItem( TBI_SOURCEVIEW, SfxResId(STR_HELP_BUTTON_SOURCEVIEW) );
             }
 
             if( ! SvtMenuOptions().IsEntryHidingEnabled() )

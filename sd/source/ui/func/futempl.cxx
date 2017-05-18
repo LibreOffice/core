@@ -183,7 +183,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             }
             else
             {
-                pStyleSheet->SetParent(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME));
+                pStyleSheet->SetParent(SdResId(STR_STANDARD_STYLESHEET_NAME));
             }
         }
         break;
@@ -198,7 +198,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 p = nullptr;
             }
             pStyleSheet = &pSSPool->Make( aStyleName, nFamily, SFXSTYLEBIT_USERDEF );
-            pStyleSheet->SetParent(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME));
+            pStyleSheet->SetParent(SdResId(STR_STANDARD_STYLESHEET_NAME));
         }
         break;
 
@@ -326,39 +326,39 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     OUString aName(pStyleSheet->GetName());
                     sal_uInt16 nDlgId = 0;
 
-                    if (aName == SD_RESSTR(STR_PSEUDOSHEET_TITLE))
+                    if (aName == SdResId(STR_PSEUDOSHEET_TITLE))
                     {
                         nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_TITLE;
                     }
-                    else if (aName == SD_RESSTR(STR_PSEUDOSHEET_SUBTITLE))
+                    else if (aName == SdResId(STR_PSEUDOSHEET_SUBTITLE))
                     {
                         nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_SUBTITLE;
                     }
                     else if (aName ==
-                             SD_RESSTR(STR_PSEUDOSHEET_BACKGROUND))
+                             SdResId(STR_PSEUDOSHEET_BACKGROUND))
                     {
                         nDlgId = TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND;
                         ePO    = PO_BACKGROUND;
                     }
                     else if (aName ==
-                             SD_RESSTR(STR_PSEUDOSHEET_BACKGROUNDOBJECTS))
+                             SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS))
                     {
                         nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_BACKGROUNDOBJECTS;
                     }
                     else if (aName ==
-                             SD_RESSTR(STR_PSEUDOSHEET_NOTES))
+                             SdResId(STR_PSEUDOSHEET_NOTES))
                     {
                         nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_NOTES;
                     }
-                    else if(aName.indexOf(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE)) != -1)
+                    else if(aName.indexOf(SdResId(STR_PSEUDOSHEET_OUTLINE)) != -1)
                     {
                         nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
 
-                        OUString aOutlineStr(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE));
+                        OUString aOutlineStr(SdResId(STR_PSEUDOSHEET_OUTLINE));
                         // determine number, mind the blank between name and number
                         OUString aNumStr(aName.copy(aOutlineStr.getLength() + 1));
                         sal_uInt16 nLevel = (sal_uInt16)aNumStr.toInt32();
@@ -434,7 +434,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                 {
                                     SvxNumRule aRule(*aTempSet.GetItem<SvxNumBulletItem>(EE_PARA_NUMBULLET)->GetNumRule());
 
-                                    OUString sStyleName(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE) + " 1");
+                                    OUString sStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " 1");
                                     SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( sStyleName, SD_STYLE_FAMILY_PSEUDO);
 
                                     if(pFirstStyleSheet)

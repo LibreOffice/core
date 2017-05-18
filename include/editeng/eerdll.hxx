@@ -35,7 +35,7 @@ class EDITENG_DLLPUBLIC EditResId: public ResId
 public:
     EditResId( sal_uInt16 nId );
     static OUString GetString(sal_uInt16 nId)
-        { return EditResId(nId).toString(); }
+        { return EditResId(nId); }
 };
 
 class EditDLL

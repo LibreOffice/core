@@ -366,11 +366,11 @@ bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
 
     // click to - button
     if ( nXDiff >= nButtonLeftOffset && nXDiff <= nButtonRightOffset )
-        GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(RID_SVXSTR_ZOOM_OUT));
+        GetStatusBar().SetQuickHelpText(GetId(), SvxResId(RID_SVXSTR_ZOOM_OUT));
     // click to + button
     else if ( nXDiff >= aControlRect.GetWidth() - nSliderXOffset + nButtonLeftOffset &&
               nXDiff <= aControlRect.GetWidth() - nSliderXOffset + nButtonRightOffset )
-        GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(RID_SVXSTR_ZOOM_IN));
+        GetStatusBar().SetQuickHelpText(GetId(), SvxResId(RID_SVXSTR_ZOOM_IN));
     else
         // don't hide the slider and its handle with a tooltip during zooming
         GetStatusBar().SetQuickHelpText(GetId(), "");

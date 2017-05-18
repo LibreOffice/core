@@ -37,16 +37,16 @@
 #define SmModule
 #include "smslots.hxx"
 
-SmResId::SmResId( sal_uInt16 nId )
-    : ResId(nId, *SM_MOD()->GetResMgr())
+OUString SmResId(sal_uInt16 nId)
 {
+    return ResId(nId, *SM_MOD()->GetResMgr());
 }
 
 SmLocalizedSymbolData::SmLocalizedSymbolData() :
-    aUiSymbolNamesAry       ( SmResId(RID_UI_SYMBOL_NAMES) ),
-    aExportSymbolNamesAry   ( SmResId(RID_EXPORT_SYMBOL_NAMES) ),
-    aUiSymbolSetNamesAry    ( SmResId(RID_UI_SYMBOLSET_NAMES) ),
-    aExportSymbolSetNamesAry( SmResId(RID_EXPORT_SYMBOLSET_NAMES) )
+    aUiSymbolNamesAry       (ResId(RID_UI_SYMBOL_NAMES, *SM_MOD()->GetResMgr())),
+    aExportSymbolNamesAry   (ResId(RID_EXPORT_SYMBOL_NAMES, *SM_MOD()->GetResMgr())),
+    aUiSymbolSetNamesAry    (ResId(RID_UI_SYMBOLSET_NAMES, *SM_MOD()->GetResMgr())),
+    aExportSymbolSetNamesAry(ResId(RID_EXPORT_SYMBOLSET_NAMES, *SM_MOD()->GetResMgr()))
 {
 }
 

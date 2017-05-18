@@ -448,7 +448,7 @@ void SwAnnotationWin::InitControls()
 
     // window controls for author and date
     mpMetadataAuthor = VclPtr<Edit>::Create( this, 0 );
-    mpMetadataAuthor->SetAccessibleName( SW_RES( STR_ACCESS_ANNOTATION_AUTHOR_NAME ) );
+    mpMetadataAuthor->SetAccessibleName( SwResId( STR_ACCESS_ANNOTATION_AUTHOR_NAME ) );
     mpMetadataAuthor->EnableRTL(AllSettings::GetLayoutRTL());
     mpMetadataAuthor->SetReadOnly();
     mpMetadataAuthor->AlwaysDisableInput(true);
@@ -467,7 +467,7 @@ void SwAnnotationWin::InitControls()
     }
 
     mpMetadataDate = VclPtr<Edit>::Create( this, 0 );
-    mpMetadataDate->SetAccessibleName( SW_RES( STR_ACCESS_ANNOTATION_DATE_NAME ) );
+    mpMetadataDate->SetAccessibleName( SwResId( STR_ACCESS_ANNOTATION_DATE_NAME ) );
     mpMetadataDate->EnableRTL(AllSettings::GetLayoutRTL());
     mpMetadataDate->SetReadOnly();
     mpMetadataDate->AlwaysDisableInput(true);
@@ -554,7 +554,7 @@ void SwAnnotationWin::CheckMetaText()
     OUString sMeta = GetAuthor();
     if (sMeta.isEmpty())
     {
-        sMeta = SW_RESSTR(STR_NOAUTHOR);
+        sMeta = SwResId(STR_NOAUTHOR);
     }
     else if (sMeta.getLength() > 23)
     {
@@ -572,7 +572,7 @@ void SwAnnotationWin::CheckMetaText()
     }
     else
     {
-        sMeta = SW_RESSTR(STR_NODATE);
+        sMeta = SwResId(STR_NODATE);
     }
     if (GetTime()!=0)
     {

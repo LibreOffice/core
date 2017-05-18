@@ -198,7 +198,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     // Separator style
     m_pLineTypeBox->SetSourceUnit( FUNIT_TWIP );
 
-    m_pLineTypeBox->SetNone(SW_RESSTR(SW_STR_NONE));
+    m_pLineTypeBox->SetNone(SwResId(SW_STR_NONE));
     m_pLineTypeBox->InsertEntry(
         ::editeng::SvxBorderLine::getWidthImpl(SvxBorderLineStyle::SOLID),
         SvxBorderLineStyle::SOLID );

@@ -352,7 +352,7 @@ IMPL_LINK_NOARG(SwFieldRefPage, TypeHdl, ListBox&, void)
                     break;
 
                 case REF_SETREFATTR:
-                    sName = SW_RESSTR(STR_GETREFFLD);
+                    sName = SwResId(STR_GETREFFLD);
                     nFlag = REF_SETREFATTR;
                     break;
 
@@ -811,7 +811,7 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
         if (!IsFieldEdit())
             m_pFormatLB->SelectEntry(sOldSel);
         else
-            m_pFormatLB->SelectEntry(SW_RESSTR(FMT_REF_BEGIN + GetCurField()->GetFormat()));
+            m_pFormatLB->SelectEntry(SwResId(FMT_REF_BEGIN + GetCurField()->GetFormat()));
 
         if (!m_pFormatLB->GetSelectEntryCount())
         {

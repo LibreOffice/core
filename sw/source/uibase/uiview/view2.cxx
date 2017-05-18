@@ -205,7 +205,7 @@ OUString SwView::GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUStr
     else if (nPhyNum != nVirtNum)
         extra = OUString::number(nVirtNum);
 
-    OUString aStr(extra.isEmpty() ? SW_RES(STR_PAGE_COUNT) : SW_RES(STR_PAGE_COUNT_CUSTOM));
+    OUString aStr(extra.isEmpty() ? SwResId(STR_PAGE_COUNT) : SwResId(STR_PAGE_COUNT_CUSTOM));
     aStr = aStr.replaceFirst("%1", OUString::number(nPhyNum));
     aStr = aStr.replaceFirst("%2", OUString::number(GetWrtShell().GetPageCnt()));
     aStr = aStr.replaceFirst("%3", extra);
@@ -293,7 +293,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     std::unique_ptr<FileDialogHelper> pFileDlg(new FileDialogHelper(
         ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE,
         FileDialogFlags::Graphic ));
-    pFileDlg->SetTitle(SW_RESSTR(STR_INSERT_GRAPHIC ));
+    pFileDlg->SetTitle(SwResId(STR_INSERT_GRAPHIC ));
     pFileDlg->SetContext( FileDialogHelper::SW_INSERT_GRAPHIC );
     uno::Reference < XFilePicker2 > xFP = pFileDlg->GetFilePicker();
     uno::Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
@@ -329,7 +329,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     Sequence<OUString> aListBoxEntries(aFormats.size());
     OUString* pEntries = aListBoxEntries.getArray();
     sal_Int16 nSelect = 0;
-    OUString sGraphicFormat = SW_RESSTR(STR_POOLFRM_GRAPHIC);
+    OUString sGraphicFormat = SwResId(STR_POOLFRM_GRAPHIC);
     for( size_t i = 0; i < aFormats.size(); ++i )
     {
         pEntries[i] = aFormats[i];
@@ -442,7 +442,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         rSh.StartAction();
 
         SwRewriter aRewriter;
-        aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_GRAPHIC_DEFNAME));
+        aRewriter.AddRule(UndoArg1, SwResId(STR_GRAPHIC_DEFNAME));
 
         // #i123922# determine if we really want to insert or replace the graphic at a selected object
         const bool bReplaceMode(rSh.HasSelection() && SelectionType::Frame == rSh.GetSelectionType());
@@ -496,7 +496,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         {
             if( bShowError )
             {
-                ScopedVclPtrInstance< MessageDialog > aInfoBox( GetWindow(), SW_RESSTR( nResId ), VclMessageType::Info);
+                ScopedVclPtrInstance< MessageDialog > aInfoBox( GetWindow(), SwResId( nResId ), VclMessageType::Info);
                 aInfoBox->Execute();
             }
             rReq.Ignore();
@@ -1337,7 +1337,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
 
                 sal_uLong nWord = selectionStats.nWord ? selectionStats.nWord : documentStats.nWord;
                 sal_uLong nChar = selectionStats.nChar ? selectionStats.nChar : documentStats.nChar;
-                OUString aWordCount( SW_RES( selectionStats.nWord ? STR_STATUSBAR_WORDCOUNT : STR_STATUSBAR_WORDCOUNT_NO_SELECTION ) );
+                OUString aWordCount( SwResId( selectionStats.nWord ? STR_STATUSBAR_WORDCOUNT : STR_STATUSBAR_WORDCOUNT_NO_SELECTION ) );
                 const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetUILocaleDataWrapper();
                 aWordCount = aWordCount.replaceFirst( "%1", rLocaleData.getNum( nWord, 0 ) );
                 aWordCount = aWordCount.replaceFirst( "%2", rLocaleData.getNum( nChar, 0 ) );
@@ -1547,7 +1547,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         }
                         if (!sStr.isEmpty())
                             sStr += sStatusDelim;
-                        sStr += SW_RESSTR(STR_NUM_LEVEL);
+                        sStr += SwResId(STR_NUM_LEVEL);
                         sStr += OUString::number( nNumLevel + 1 );
 
                     }
@@ -1559,12 +1559,12 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         sStr += " , ";
                     if( bOutlineNum )
                     {
-                        sStr += SW_RESSTR(STR_OUTLINE_NUMBERING);
+                        sStr += SwResId(STR_OUTLINE_NUMBERING);
                         sStr += sStatusDelim;
-                        sStr += SW_RESSTR(STR_NUM_LEVEL);
+                        sStr += SwResId(STR_NUM_LEVEL);
                     }
                     else
-                        sStr += SW_RESSTR(STR_NUM_OUTLINE);
+                        sStr += SwResId(STR_NUM_OUTLINE);
                     sStr += OUString::number( nOutlineLevel);
                 }
 
@@ -1572,7 +1572,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 {
                     if (!sStr.isEmpty())
                         sStr = sStatusDelim + sStr;
-                    sStr = SW_RESSTR(SW_STR_READONLY) + sStr;
+                    sStr = SwResId(SW_STR_READONLY) + sStr;
                 }
                 if (!sStr.isEmpty())
                     rSet.Put( SfxStringItem( SID_TABLE_CELL, sStr ));
@@ -2258,7 +2258,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
             if (!bCompare && !nFound)
             {
                 vcl::Window* pWin = &GetEditWin();
-                ScopedVclPtrInstance<MessageDialog>(pWin, SW_RES(STR_NO_MERGE_ENTRY), VclMessageType::Info)->Execute();
+                ScopedVclPtrInstance<MessageDialog>(pWin, SwResId(STR_NO_MERGE_ENTRY), VclMessageType::Info)->Execute();
             }
             if( nRet==2 && xDocSh.is() )
                 xDocSh->DoClose();

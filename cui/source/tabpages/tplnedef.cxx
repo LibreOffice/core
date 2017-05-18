@@ -203,7 +203,7 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
 
             // determining (and possibly cutting) the name
             // and displaying it in the GroupBox
-//             OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) );
+//             OUString        aString( CuiResId( RID_SVXSTR_TABLE ) );
 //             aString         += ": ";
             INetURLObject   aURL( pDashList->GetPath() );
 
@@ -244,7 +244,7 @@ void SvxLineDefTabPage::CheckChanges_Impl()
         ResMgr& rMgr = CUI_MGR();
         Image aWarningBoxImage = WarningBox::GetStandardImage();
         ScopedVclPtrInstance<SvxMessDialog> aMessDlg( GetParentDialog(),
-                                                      SVX_RESSTR( RID_SVXSTR_LINESTYLE ),
+                                                      SvxResId( RID_SVXSTR_LINESTYLE ),
                                                       OUString( ResId( RID_SVXSTR_ASK_CHANGE_LINESTYLE, rMgr ) ),
                                                       &aWarningBoxImage );
         DBG_ASSERT(aMessDlg, "Dialog creation failed!");
@@ -534,7 +534,7 @@ void  SvxLineDefTabPage::SelectTypeHdl_Impl(ListBox* p)
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl, Button*, void)
 {
     ResMgr& rMgr = CUI_MGR();
-    OUString aNewName( SVX_RES( RID_SVXSTR_LINESTYLE ) );
+    OUString aNewName( SvxResId( RID_SVXSTR_LINESTYLE ) );
     OUString aDesc( ResId( RID_SVXSTR_DESC_LINESTYLE, rMgr ) );
     OUString aName;
 

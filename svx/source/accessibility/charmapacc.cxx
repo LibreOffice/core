@@ -176,13 +176,13 @@ sal_Int16 SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleRole(  )
 OUString SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleDescription(  )
 {
     OExternalLockGuard aGuard( this );
-    return SVX_RESSTR( RID_SVXSTR_CHARACTER_SELECTION);
+    return SvxResId( RID_SVXSTR_CHARACTER_SELECTION);
 }
 
 OUString SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleName(  )
 {
     OExternalLockGuard aGuard( this );
-    return SVX_RESSTR( RID_SVXSTR_CHAR_SEL_DESC);
+    return SvxResId( RID_SVXSTR_CHAR_SEL_DESC);
 }
 
 Reference< XAccessibleRelationSet > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleRelationSet(  )
@@ -370,7 +370,7 @@ sal_Int16 SAL_CALL SvxShowCharSetAcc::getAccessibleRole()
 OUString SAL_CALL SvxShowCharSetAcc::getAccessibleDescription()
 {
     OExternalLockGuard aGuard( this );
-    return SVX_RESSTR( RID_SVXSTR_CHARACTER_SELECTION );
+    return SvxResId( RID_SVXSTR_CHARACTER_SELECTION );
 }
 
 
@@ -378,7 +378,7 @@ OUString SAL_CALL SvxShowCharSetAcc::getAccessibleName()
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    return SVX_RESSTR( RID_SVXSTR_CHAR_SEL_DESC );
+    return SvxResId( RID_SVXSTR_CHAR_SEL_DESC );
 }
 
 
@@ -637,7 +637,7 @@ OUString SAL_CALL SvxShowCharSetItemAcc::getAccessibleDescription()
     if( c < 256 )
         snprintf( buf+6, 10, " (%" SAL_PRIuUINT32 ")", c );
 
-    sDescription = SVX_RESSTR( RID_SVXSTR_CHARACTER_CODE )
+    sDescription = SvxResId( RID_SVXSTR_CHARACTER_CODE )
                  + " "
                  + OUString(buf, strlen(buf), RTL_TEXTENCODING_ASCII_US);
 

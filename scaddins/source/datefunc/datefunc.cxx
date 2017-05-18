@@ -252,7 +252,7 @@ OUString SAL_CALL ScaDateAddIn::getDisplayFunctionName( const OUString& aProgram
                                 FindScaFuncData( aProgrammaticName ) );
     if( fDataIt != pFuncDataList->end() )
     {
-        aRet = ScaResId(fDataIt->GetUINameID(), GetResMgr()).toString();
+        aRet = ScaResId(fDataIt->GetUINameID(), GetResMgr());
         if( fDataIt->IsDouble() )
             aRet += "_ADD";
     }

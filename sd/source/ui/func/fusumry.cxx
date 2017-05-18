@@ -112,7 +112,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
 
                     if( bUndo )
                     {
-                        mpView->BegUndo(SD_RESSTR(STR_UNDO_SUMMARY_PAGE));
+                        mpView->BegUndo(SdResId(STR_UNDO_SUMMARY_PAGE));
                         bBegUndo = true;
                     }
 

@@ -322,7 +322,7 @@ bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortNam
                             rCfg.IsSaveRelFile(), pOnlyText );
     if(nSuccess == (sal_uInt16) -1 )
     {
-        ScopedVclPtrInstance<MessageDialog>(pWrtShell->GetView().GetWindow(), SW_RES(STR_ERR_INSERT_GLOS), VclMessageType::Info)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(pWrtShell->GetView().GetWindow(), SwResId(STR_ERR_INSERT_GLOS), VclMessageType::Info)->Execute();
     }
     if( !pCurGrp )
         delete pTmp;
@@ -474,7 +474,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
             {
                 aShortName = aShortName.copy(0, nMaxLen) + " ...";
             }
-            OUString aTmp( SW_RES(STR_NOGLOS));
+            OUString aTmp( SwResId(STR_NOGLOS));
             aTmp = aTmp.replaceFirst("%1", aShortName);
             ScopedVclPtrInstance<InfoBox>(pWrtShell->GetView().GetWindow(), aTmp)->Execute();
         }

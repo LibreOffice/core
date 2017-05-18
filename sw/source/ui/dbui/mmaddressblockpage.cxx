@@ -511,29 +511,29 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     {
         m_pFieldFT->Show();
         m_pFieldCB->Show();
-        SvTreeListEntry* pEntry = m_pAddressElementsLB->InsertEntry(SW_RESSTR(ST_SALUTATION));
+        SvTreeListEntry* pEntry = m_pAddressElementsLB->InsertEntry(SwResId(ST_SALUTATION));
         pEntry->SetUserData(reinterpret_cast<void*>((sal_Int32)USER_DATA_SALUTATION) );
-        pEntry = m_pAddressElementsLB->InsertEntry(SW_RESSTR(ST_PUNCTUATION));
+        pEntry = m_pAddressElementsLB->InsertEntry(SwResId(ST_PUNCTUATION));
         pEntry->SetUserData(reinterpret_cast<void*>((sal_Int32)USER_DATA_PUNCTUATION) );
-        pEntry = m_pAddressElementsLB->InsertEntry(SW_RESSTR(ST_TEXT));
+        pEntry = m_pAddressElementsLB->InsertEntry(SwResId(ST_TEXT));
         pEntry->SetUserData(reinterpret_cast<void*>((sal_Int32)USER_DATA_TEXT)       );
-        ResStringArray aSalutArr(SW_RES(RA_SALUTATION));
+        ResStringArray aSalutArr(ResId(RA_SALUTATION, *pSwResMgr));
         for(sal_uInt32 i = 0; i < aSalutArr.Count(); ++i)
             m_aSalutations.push_back(aSalutArr.GetString(i));
-        ResStringArray aPunctArr(SW_RES(RA_PUNCTUATION));
+        ResStringArray aPunctArr(ResId(RA_PUNCTUATION, *pSwResMgr));
         for(sal_uInt32 i = 0; i < aPunctArr.Count(); ++i)
             m_aPunctuations.push_back(aPunctArr.GetString(i));
         m_pDragED->SetText("            ");
-        SetText(SW_RESSTR(eType == GREETING_MALE ? ST_TITLE_MALE : ST_TITLE_FEMALE));
-        m_pAddressElementsFT->SetText(SW_RESSTR(ST_SALUTATIONELEMENTS));
-        m_pInsertFieldIB->SetQuickHelpText(SW_RESSTR(ST_INSERTSALUTATIONFIELD));
-        m_pRemoveFieldIB->SetQuickHelpText(SW_RESSTR(ST_REMOVESALUTATIONFIELD));
-        m_pDragFT->SetText(SW_RESSTR(ST_DRAGSALUTATION));
+        SetText(SwResId(eType == GREETING_MALE ? ST_TITLE_MALE : ST_TITLE_FEMALE));
+        m_pAddressElementsFT->SetText(SwResId(ST_SALUTATIONELEMENTS));
+        m_pInsertFieldIB->SetQuickHelpText(SwResId(ST_INSERTSALUTATIONFIELD));
+        m_pRemoveFieldIB->SetQuickHelpText(SwResId(ST_REMOVESALUTATIONFIELD));
+        m_pDragFT->SetText(SwResId(ST_DRAGSALUTATION));
     }
     else
     {
         if(eType == ADDRESSBLOCK_EDIT)
-            SetText(SW_RESSTR(ST_TITLE_EDIT));
+            SetText(SwResId(ST_TITLE_EDIT));
         m_pDragED->SetText("\n\n\n\n\n");
     }
 
@@ -894,7 +894,7 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
         pNewText->SetText("<" + rHeader + ">");
         VclPtr<ListBox> pNewLB = VclPtr<ListBox>::Create(m_aWindow.get(), WB_DROPDOWN | WB_VCENTER | WB_TABSTOP);
         pNewText->set_mnemonic_widget(pNewLB);
-        pNewLB->InsertEntry(SW_RESSTR(SW_STR_NONE));
+        pNewLB->InsertEntry(SwResId(SW_STR_NONE));
         pNewLB->SelectEntryPos(0);
         pNewLB->SetDropDownLineCount(5);
 
@@ -1154,7 +1154,7 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
         const OUString& rPreview,
         bool bIsAddressBlock) :
     SfxModalDialog(pParent, "AssignFieldsDialog", "modules/swriter/ui/assignfieldsdialog.ui"),
-    m_sNone(SW_RESSTR(SW_STR_NONE)),
+    m_sNone(SwResId(SW_STR_NONE)),
     m_rPreviewString(rPreview),
     m_rConfigItem(rConfigItem)
 {
@@ -1168,14 +1168,14 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
     get(m_pFieldsControl, "FIELDS");
     m_pFieldsControl->Init(rConfigItem);
     //resize the HeaderBar
-    OUString sAddressElement( SW_RESSTR(ST_ADDRESSELEMENT) );
-    const OUString sMatchesTo( SW_RESSTR(ST_MATCHESTO) );
-    const OUString sPreview( SW_RESSTR(ST_PREVIEW) );
+    OUString sAddressElement( SwResId(ST_ADDRESSELEMENT) );
+    const OUString sMatchesTo( SwResId(ST_MATCHESTO) );
+    const OUString sPreview( SwResId(ST_PREVIEW) );
     if(!bIsAddressBlock)
     {
-        m_pPreviewFI->SetText(SW_RESSTR(ST_SALUTATIONPREVIEW));
-        m_pMatchingFI->SetText(SW_RESSTR(ST_SALUTATIONMATCHING));
-        sAddressElement = SW_RESSTR(ST_SALUTATIONELEMENT);
+        m_pPreviewFI->SetText(SwResId(ST_SALUTATIONPREVIEW));
+        m_pMatchingFI->SetText(SwResId(ST_SALUTATIONMATCHING));
+        sAddressElement = SwResId(ST_SALUTATIONELEMENT);
     }
 
     Size aOutputSize(m_pFieldsControl->m_aHeaderHB->GetSizePixel());

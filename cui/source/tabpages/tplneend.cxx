@@ -419,7 +419,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl, Button*, void)
         SdrObject::Free( pConvPolyObj );
 
         ResMgr& rMgr = CUI_MGR();
-        OUString aNewName( SVX_RES( RID_SVXSTR_LINEEND ) );
+        OUString aNewName( SvxResId( RID_SVXSTR_LINEEND ) );
         OUString aDesc( ResId( RID_SVXSTR_DESC_LINEEND, rMgr ) );
         OUString aName;
 

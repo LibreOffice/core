@@ -61,8 +61,8 @@ bool SfxRecordingFloatWrapper_Impl::QueryClose()
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
     if ( xRecorder.is() && !xRecorder->getRecordedMacro().isEmpty() )
     {
-        ScopedVclPtrInstance< QueryBox > aBox(GetWindow(), WB_YES_NO | WB_DEF_NO , SfxResId(STR_MACRO_LOSS).toString());
-        aBox->SetText( SfxResId(STR_CANCEL_RECORDING).toString() );
+        ScopedVclPtrInstance< QueryBox > aBox(GetWindow(), WB_YES_NO | WB_DEF_NO , SfxResId(STR_MACRO_LOSS));
+        aBox->SetText( SfxResId(STR_CANCEL_RECORDING) );
         bRet = ( aBox->Execute() == RET_YES );
     }
 

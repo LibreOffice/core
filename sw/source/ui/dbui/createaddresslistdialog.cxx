@@ -395,7 +395,7 @@ void SwAddressControl_Impl::Resize()
 SwCreateAddressListDialog::SwCreateAddressListDialog(
         vcl::Window* pParent, const OUString& rURL, SwMailMergeConfigItem& rConfig) :
     SfxModalDialog(pParent, "CreateAddressList", "modules/swriter/ui/createaddresslist.ui"),
-    m_sAddressListFilterName( SW_RES(    ST_FILTERNAME)),
+    m_sAddressListFilterName( SwResId(    ST_FILTERNAME)),
     m_sURL(rURL),
     m_pCSVData( new SwCSVData ),
     m_pFindDlg(nullptr)

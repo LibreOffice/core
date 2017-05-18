@@ -81,7 +81,7 @@ SwFrameDlg::SwFrameDlg( SfxViewFrame*       pViewFrame,
 
     if(pStr)
     {
-        SetText(GetText() + SW_RESSTR(STR_COLL_HEADER) + *pStr + ")");
+        SetText(GetText() + SwResId(STR_COLL_HEADER) + *pStr + ")");
     }
 
     m_nStdId = AddTabPage("type",  SwFramePage::Create, nullptr);

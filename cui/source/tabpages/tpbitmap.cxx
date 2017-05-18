@@ -557,7 +557,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        OUString aDesc( CUI_RES( RID_SVXSTR_DESC_NEW_BITMAP ) );
+        OUString aDesc( CuiResId( RID_SVXSTR_DESC_NEW_BITMAP ) );
         OUString aName( m_pBitmapList->GetBitmap( nPos )->GetName() );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

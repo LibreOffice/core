@@ -1671,7 +1671,7 @@ OUString SwPostItField::Expand() const
 
 OUString SwPostItField::GetDescription() const
 {
-    return SW_RES(STR_NOTE);
+    return SwResId(STR_NOTE);
 }
 
 SwField* SwPostItField::Copy() const

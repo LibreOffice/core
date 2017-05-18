@@ -1075,14 +1075,14 @@ FontStyleBox::FontStyleBox(vcl::Window* pParent, WinBits nBits)
 {
     //Use the standard texts to get an optimal size and stick to that size.
     //That should stop the character dialog dancing around.
-    InsertEntry(SVT_RESSTR(STR_SVT_STYLE_LIGHT));
-    InsertEntry(SVT_RESSTR(STR_SVT_STYLE_LIGHT_ITALIC));
-    InsertEntry(SVT_RESSTR(STR_SVT_STYLE_NORMAL));
-    InsertEntry(SVT_RESSTR(STR_SVT_STYLE_NORMAL_ITALIC));
-    InsertEntry(SVT_RESSTR(STR_SVT_STYLE_BOLD));
-    InsertEntry(SVT_RESSTR(STR_SVT_STYLE_BOLD_ITALIC));
-    InsertEntry(SVT_RESSTR(STR_SVT_STYLE_BLACK));
-    InsertEntry(SVT_RESSTR(STR_SVT_STYLE_BLACK_ITALIC));
+    InsertEntry(SvtResId(STR_SVT_STYLE_LIGHT));
+    InsertEntry(SvtResId(STR_SVT_STYLE_LIGHT_ITALIC));
+    InsertEntry(SvtResId(STR_SVT_STYLE_NORMAL));
+    InsertEntry(SvtResId(STR_SVT_STYLE_NORMAL_ITALIC));
+    InsertEntry(SvtResId(STR_SVT_STYLE_BOLD));
+    InsertEntry(SvtResId(STR_SVT_STYLE_BOLD_ITALIC));
+    InsertEntry(SvtResId(STR_SVT_STYLE_BLACK));
+    InsertEntry(SvtResId(STR_SVT_STYLE_BLACK_ITALIC));
     aOptimalSize = GetOptimalSize();
     Clear();
 }

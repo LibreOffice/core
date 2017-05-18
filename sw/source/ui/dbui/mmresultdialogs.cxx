@@ -316,7 +316,7 @@ void SwMMResultPrintDialog::dispose()
 
 SwMMResultEmailDialog::SwMMResultEmailDialog()
     : SfxModalDialog(nullptr, "MMResultEmailDialog", "modules/swriter/ui/mmresultemaildialog.ui"),
-     m_sConfigureMail(SW_RES(ST_CONFIGUREMAIL))
+     m_sConfigureMail(SwResId(ST_CONFIGUREMAIL))
 {
     get(m_pMailToFT, "mailtoft");
     get(m_pMailToLB, "mailto");
@@ -687,7 +687,7 @@ IMPL_LINK(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void)
                 sExtension = pSfxFlt->GetWildcard().getGlob().getToken(1, '.');
                 sPath += "." + sExtension;
             }
-            OUString sStat = OUString(SW_RES(STR_STATSTR_LETTER)) + " " + OUString::number( nDoc );
+            OUString sStat = SwResId(STR_STATSTR_LETTER) + " " + OUString::number( nDoc );
             aSaveMonitor->m_pPrintInfo->SetText(sStat);
 
             //now extract a document from the target document

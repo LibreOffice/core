@@ -80,7 +80,7 @@ ClientBox::ClientBox( vcl::Window* pParent, WinBits nStyle ) :
     m_aScrollBar->EnableDrag();
 
     m_aPinBox->SetUseThousandSep(false);
-    m_aDeauthoriseButton->SetText( SD_RESSTR(STR_DEAUTHORISE_CLIENT) );
+    m_aDeauthoriseButton->SetText( SdResId(STR_DEAUTHORISE_CLIENT) );
     m_aDeauthoriseButton->SetClickHdl( LINK( this, ClientBox, DeauthoriseHdl ) );
 
     SetPosPixel( Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP ) );
@@ -331,7 +331,7 @@ void ClientBox::DrawRow(vcl::RenderContext& rRenderContext, const ::tools::Recta
     aPos.Y() += aTextHeight;
     if (rEntry->m_bActive)
     {
-      OUString sPinText(SD_RESSTR(STR_ENTER_PIN));
+      OUString sPinText(SdResId(STR_ENTER_PIN));
       DrawText(m_sPinTextRect, sPinText);
     }
 
@@ -373,7 +373,7 @@ void ClientBox::RecalcAll()
                                         aEntryRect.Right(),
                                         aEntryRect.Bottom() - TOP_OFFSET);
 
-            OUString sPinText(SD_RESSTR(STR_ENTER_PIN));
+            OUString sPinText(SdResId(STR_ENTER_PIN));
 
             aPos = Point( aEntryRect.Left() + GetTextWidth( sPinText ),
                           aEntryRect.Bottom() - TOP_OFFSET - aPinBoxSize.Height() );

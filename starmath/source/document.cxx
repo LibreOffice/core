@@ -1281,15 +1281,15 @@ void SmDocShell::FillClass(SvGlobalName* pClassName,
     {
         *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
         *pFormat        = SotClipboardFormatId::STARMATH_60;
-        *pFullTypeName  = SM_RESSTR(STR_MATH_DOCUMENT_FULLTYPE_CURRENT);
-        *pShortTypeName = SM_RESSTR(RID_DOCUMENTSTR);
+        *pFullTypeName  = SmResId(STR_MATH_DOCUMENT_FULLTYPE_CURRENT);
+        *pShortTypeName = SmResId(RID_DOCUMENTSTR);
     }
     else if (nFileFormat == SOFFICE_FILEFORMAT_8 )
     {
         *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
         *pFormat        = bTemplate ? SotClipboardFormatId::STARMATH_8_TEMPLATE : SotClipboardFormatId::STARMATH_8;
-        *pFullTypeName  = SM_RESSTR(STR_MATH_DOCUMENT_FULLTYPE_CURRENT);
-        *pShortTypeName = SM_RESSTR(RID_DOCUMENTSTR);
+        *pFullTypeName  = SmResId(STR_MATH_DOCUMENT_FULLTYPE_CURRENT);
+        *pShortTypeName = SmResId(RID_DOCUMENTSTR);
     }
 }
 

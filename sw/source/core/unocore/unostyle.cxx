@@ -1045,7 +1045,7 @@ uno::Any SAL_CALL XStyleFamily::getPropertyValue( const OUString& sPropertyName 
     if(sPropertyName != "DisplayName")
         throw beans::UnknownPropertyException( "unknown property: " + sPropertyName, static_cast<OWeakObject *>(this) );
     SolarMutexGuard aGuard;
-    return uno::makeAny(SW_RESSTR(m_rEntry.m_nResId));
+    return uno::makeAny(SwResId(m_rEntry.m_nResId));
 }
 
 
@@ -1527,7 +1527,7 @@ const SwPageDesc* SwStyleBase_Impl::GetOldPageDesc()
         {
             for(sal_uInt16 i = RC_POOLPAGEDESC_BEGIN; i <= STR_POOLPAGE_LANDSCAPE; ++i)
             {
-                if(SW_RESSTR(i) == m_rStyleName)
+                if(SwResId(i) == m_rStyleName)
                 {
                     m_pOldPageDesc = m_rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( static_cast<sal_uInt16>(RES_POOLPAGE_BEGIN + i - RC_POOLPAGEDESC_BEGIN));
                     break;

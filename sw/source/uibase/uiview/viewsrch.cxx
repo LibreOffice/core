@@ -402,7 +402,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
 
                     if( !bQuiet && ULONG_MAX != nFound)
                     {
-                        OUString sText( SW_RES( STR_NB_REPLACED ) );
+                        OUString sText( SwResId( STR_NB_REPLACED ) );
                         sText = sText.replaceFirst("XX", OUString::number( nFound ));
                         SvxSearchDialogWrapper::SetSearchLabel(sText);
                     }
@@ -684,7 +684,7 @@ void SwView::Replace()
     {
         SwRewriter aRewriter;
         aRewriter.AddRule(UndoArg1, m_pSrchItem->GetSearchString());
-        aRewriter.AddRule(UndoArg2, SW_RESSTR(STR_YIELDS));
+        aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
         aRewriter.AddRule(UndoArg3, m_pSrchItem->GetReplaceString());
 
         m_pWrtShell->StartUndo(SwUndoId::UI_REPLACE_STYLE, &aRewriter);

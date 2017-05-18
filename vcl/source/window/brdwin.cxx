@@ -342,7 +342,7 @@ OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
     }
 
     if( nHelpId && ImplGetResMgr() )
-        aHelpStr = ResId(nHelpId, *ImplGetResMgr()).toString();
+        aHelpStr = ResId(nHelpId, *ImplGetResMgr());
 
     return aHelpStr;
 }

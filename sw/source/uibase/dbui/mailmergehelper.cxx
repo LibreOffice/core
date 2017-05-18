@@ -465,7 +465,7 @@ OUString SwAddressPreview::FillData(
     const OUString* pAssignment = aAssignment.getConstArray();
     const ResStringArray& rDefHeaders = rConfigItem.GetDefaultAddressHeaders();
     OUString sAddress(rAddress);
-    OUString sNotAssigned = "<" + OUString(SW_RES(STR_NOTASSIGNED)) + ">";
+    OUString sNotAssigned = "<" + SwResId(STR_NOTASSIGNED) + ">";
 
     bool bIncludeCountry = rConfigItem.IsIncludeCountry();
     const OUString rExcludeCountry = rConfigItem.GetExcludeCountry();

@@ -840,7 +840,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 ScopedVclPtrInstance<MessageDialog> aSecurityWarningBox(pWindow,
                                                   SfxResId(STR_SECURITY_WARNING_NO_HYPERLINKS),
                                                   VclMessageType::Warning);
-                aSecurityWarningBox->SetText( SfxResId(RID_SECURITY_WARNING_TITLE).toString() );
+                aSecurityWarningBox->SetText( SfxResId(RID_SECURITY_WARNING_TITLE) );
                 aSecurityWarningBox->Execute();
                 return;
             }

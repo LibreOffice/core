@@ -95,7 +95,7 @@ static void lcl_GetState( SwDocShell& rSh, SfxItemSet& rSet )
         if( !rSh.GetDoc()->getIDocumentState().IsModified() )
             rSet.DisableItem( SID_SAVEDOC );
         else
-            rSet.Put( SfxStringItem( SID_SAVEDOC, SW_RESSTR(STR_SAVE_GLOSSARY)));
+            rSet.Put( SfxStringItem( SID_SAVEDOC, SwResId(STR_SAVE_GLOSSARY)));
     }
 }
 
@@ -228,7 +228,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const OUString& rGroup, const OUString
 
         // set document title
         SfxViewFrame* pFrame = bShow ? SfxViewFrame::LoadDocument( *xDocSh, nViewId ) : SfxViewFrame::LoadHiddenDocument( *xDocSh, nViewId );
-        const OUString aDocTitle(SW_RESSTR( STR_GLOSSARY ) + " " + sLongName);
+        const OUString aDocTitle(SwResId( STR_GLOSSARY ) + " " + sLongName);
 
         bool const bDoesUndo =
             xDocSh->GetDoc()->GetIDocumentUndoRedo().DoesUndo();

@@ -247,7 +247,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox&, rBox, void )
     sal_Int32 nc = aSel.indexOf('(');
     if (nc != -1 && nc != 0)
         aSel = aSel.replaceAt(nc-1, 1, "");
-    if ( aSel.compareToIgnoreAsciiCase( SfxResId(STR_STANDARD).toString() ) == 0 )
+    if ( aSel.compareToIgnoreAsciiCase( SfxResId(STR_STANDARD) ) == 0 )
         m_pTemplateLb->InsertEntry(aNone);
     for (sal_uInt16 i = 0; i < nCount; ++i)
         m_pTemplateLb->InsertEntry(aTemplates.GetName(nRegion, i));
@@ -295,7 +295,7 @@ sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
     sal_Int32 nc = aSel.indexOf('(');
     if (nc != -1 && nc != 0)
         aSel = aSel.replaceAt(nc-1, 1, "");
-    if ( aSel.compareToIgnoreAsciiCase(SfxResId(STR_STANDARD).toString()) != 0 )
+    if ( aSel.compareToIgnoreAsciiCase(SfxResId(STR_STANDARD)) != 0 )
         nEntry++;
     if (!m_pTemplateLb->GetSelectEntryCount())
         nEntry = 0;
@@ -342,7 +342,7 @@ void    SfxNewFileDialog_Impl::SetTemplateFlags(SfxTemplateFlags nSet)
 
 SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     SfxNewFileDialog* pAntiImplP, SfxNewFileDialogMode nFl)
-    : aNone(SfxResId(STR_NONE).toString())
+    : aNone(SfxResId(STR_NONE))
     , nFlags(nFl)
     , pAntiImpl(pAntiImplP)
 {

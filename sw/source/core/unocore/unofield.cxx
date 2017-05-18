@@ -636,10 +636,10 @@ void SAL_CALL SwXFieldMaster::setPropertyValue(
 
         if(pType2 ||
             (SwFieldIds::SetExp == m_pImpl->m_nResTypeId &&
-            ( sTypeName == SW_RESSTR(STR_POOLCOLL_LABEL_TABLE) ||
-              sTypeName == SW_RESSTR(STR_POOLCOLL_LABEL_DRAWING) ||
-              sTypeName == SW_RESSTR(STR_POOLCOLL_LABEL_FRAME) ||
-              sTypeName == SW_RESSTR(STR_POOLCOLL_LABEL_ABB) )))
+            ( sTypeName == SwResId(STR_POOLCOLL_LABEL_TABLE) ||
+              sTypeName == SwResId(STR_POOLCOLL_LABEL_DRAWING) ||
+              sTypeName == SwResId(STR_POOLCOLL_LABEL_FRAME) ||
+              sTypeName == SwResId(STR_POOLCOLL_LABEL_ABB) )))
         {
             throw lang::IllegalArgumentException();
         }

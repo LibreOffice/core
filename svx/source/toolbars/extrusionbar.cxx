@@ -69,7 +69,7 @@ ExtrusionBar::ExtrusionBar(SfxViewShell* pViewShell )
     if( pViewShell )
         SetPool(&pViewShell->GetPool());
 
-    SetName(SVX_RESSTR(RID_SVX_EXTRUSION_BAR));
+    SetName(SvxResId(RID_SVX_EXTRUSION_BAR));
 }
 
 ExtrusionBar::~ExtrusionBar()
@@ -541,7 +541,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
                     {
                         if( bUndo )
                         {
-                            OUString aStr( SVX_RESSTR( nStrResId ) );
+                            OUString aStr( SvxResId( nStrResId ) );
                             pSdrView->BegUndo( aStr );
                             pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
                         }

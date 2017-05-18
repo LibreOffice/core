@@ -190,7 +190,7 @@ FontworkBar::FontworkBar(SfxViewShell* pViewShell )
     if( pViewShell )
         SetPool(&pViewShell->GetPool());
 
-    SetName( SVX_RESSTR( RID_SVX_FONTWORK_BAR ));
+    SetName( SvxResId( RID_SVX_FONTWORK_BAR ));
 }
 
 FontworkBar::~FontworkBar()
@@ -451,7 +451,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
 
                         if( bUndo )
                         {
-                            OUString aStr( SVX_RESSTR( RID_SVXSTR_UNDO_APPLY_FONTWORK_SHAPE ) );
+                            OUString aStr( SvxResId( RID_SVXSTR_UNDO_APPLY_FONTWORK_SHAPE ) );
                             pSdrView->BegUndo( aStr );
                             pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
                         }
@@ -529,7 +529,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
                     const bool bUndo = pSdrView->IsUndoEnabled();
                     if( bUndo )
                     {
-                        OUString aStr( SVX_RESSTR( nStrResId ) );
+                        OUString aStr( SvxResId( nStrResId ) );
                         pSdrView->BegUndo( aStr );
                         pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
                     }

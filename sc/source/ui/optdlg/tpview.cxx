@@ -329,7 +329,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
                                         const SfxItemSet&   rArgSet ) :
     SfxTabPage( pParent, "ScGeneralPage",
                 "modules/scalc/ui/scgeneralpage.ui", &rArgSet),
-    aUnitArr(               ScResId(SCSTR_UNIT           )),
+    aUnitArr(ResId(SCSTR_UNIT, *SC_MOD()->GetResMgr())),
     pDoc(nullptr)
 {
     get( m_pUnitLB, "unitlb");

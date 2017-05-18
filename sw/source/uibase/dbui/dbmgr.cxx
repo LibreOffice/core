@@ -1395,7 +1395,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                     PrintMonitor *pPrintMonDlg = static_cast<PrintMonitor*>( pProgressDlg.get() );
                     pPrintMonDlg->m_pPrinter->SetText( bNeedsTempFiles
                         ? aTempFileURL->GetBase() : pSourceDocSh->GetTitle( 22 ) );
-                    OUString sStat( SW_RES(STR_STATSTR_LETTER) );
+                    OUString sStat( SwResId(STR_STATSTR_LETTER) );
                     sStat += " " + OUString::number( nDocNo );
                     pPrintMonDlg->m_pPrintInfo->SetText( sStat );
                 }
@@ -2563,17 +2563,17 @@ OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
 
     uno::Reference<ui::dialogs::XFilterManager> xFltMgr(xFP, uno::UNO_QUERY);
 
-    OUString sFilterAll(SW_RES(STR_FILTER_ALL));
-    OUString sFilterAllData(SW_RES(STR_FILTER_ALL_DATA));
-    OUString sFilterSXB(SW_RES(STR_FILTER_SXB));
-    OUString sFilterSXC(SW_RES(STR_FILTER_SXC));
-    OUString sFilterDBF(SW_RES(STR_FILTER_DBF));
-    OUString sFilterXLS(SW_RES(STR_FILTER_XLS));
-    OUString sFilterTXT(SW_RES(STR_FILTER_TXT));
-    OUString sFilterCSV(SW_RES(STR_FILTER_CSV));
+    OUString sFilterAll(SwResId(STR_FILTER_ALL));
+    OUString sFilterAllData(SwResId(STR_FILTER_ALL_DATA));
+    OUString sFilterSXB(SwResId(STR_FILTER_SXB));
+    OUString sFilterSXC(SwResId(STR_FILTER_SXC));
+    OUString sFilterDBF(SwResId(STR_FILTER_DBF));
+    OUString sFilterXLS(SwResId(STR_FILTER_XLS));
+    OUString sFilterTXT(SwResId(STR_FILTER_TXT));
+    OUString sFilterCSV(SwResId(STR_FILTER_CSV));
 #ifdef _WIN32
-    OUString sFilterMDB(SW_RES(STR_FILTER_MDB));
-    OUString sFilterACCDB(SW_RES(STR_FILTER_ACCDB));
+    OUString sFilterMDB(SwResId(STR_FILTER_MDB));
+    OUString sFilterACCDB(SwResId(STR_FILTER_ACCDB));
 #endif
     xFltMgr->appendFilter( sFilterAll, "*" );
     xFltMgr->appendFilter( sFilterAllData, "*.ods;*.sxc;*.dbf;*.xls;*.txt;*.csv");

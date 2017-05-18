@@ -651,7 +651,7 @@ void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
 
     ::FillCharStyleListBox(*m_pTemplateBox, rSh.GetView().GetDocShell(), true);
 
-    m_pTemplateBox->InsertEntry(SW_RESSTR(SW_STR_NONE), 0);
+    m_pTemplateBox->InsertEntry(SwResId(SW_STR_NONE), 0);
 
     // Reset format
     m_pTemplateBox->SelectEntryPos(0);

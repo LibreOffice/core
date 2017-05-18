@@ -425,8 +425,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     ? GetDoc()->GetSdPage( nPage, GetPageKind() )
                     : GetDoc()->GetMasterSdPage( nPage, GetPageKind() );
 
-                OUString aTitle = SD_RESSTR(STR_TITLE_RENAMESLIDE);
-                OUString aDescr = SD_RESSTR(STR_DESC_RENAMESLIDE);
+                OUString aTitle = SdResId(STR_TITLE_RENAMESLIDE);
+                OUString aDescr = SdResId(STR_DESC_RENAMESLIDE);
                 OUString aPageName = pCurrentPage->GetName();
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -604,7 +604,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -649,7 +649,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -677,7 +677,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected(true,true,true) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -690,7 +690,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     case SID_CONVERT_TO_METAFILE:
                     {
                         // switch on undo for the next operations
-                        mpDrawView->BegUndo(SD_RESSTR(STR_UNDO_CONVERT_TO_METAFILE));
+                        mpDrawView->BegUndo(SdResId(STR_UNDO_CONVERT_TO_METAFILE));
                         GDIMetaFile aMetaFile(mpDrawView->GetMarkedObjMetaFile());
                         aGraphic = Graphic(aMetaFile);
                     }
@@ -698,7 +698,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     case SID_CONVERT_TO_BITMAP:
                     {
                         // switch on undo for the next operations
-                        mpDrawView->BegUndo(SD_RESSTR(STR_UNDO_CONVERT_TO_BITMAP));
+                        mpDrawView->BegUndo(SdResId(STR_UNDO_CONVERT_TO_BITMAP));
                         bool bDone(false);
 
                         // I have to get the image here directly since GetMarkedObjBitmapEx works
@@ -1160,7 +1160,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected(false) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -1345,7 +1345,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 #endif
 
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(nId))->Execute();
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(nId))->Execute();
             }
             else
             {
@@ -1376,7 +1376,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
             sal_uInt16 nLayerCnt = rLayerAdmin.GetLayerCount();
             sal_uInt16 nLayer = nLayerCnt - 2 + 1;
-            OUString aLayerName = SD_RESSTR(STR_LAYER) + OUString::number(nLayer);
+            OUString aLayerName = SdResId(STR_LAYER) + OUString::number(nLayer);
             OUString aLayerTitle, aLayerDesc;
             bool bIsVisible = false;
             bool bIsLocked = false;
@@ -1397,7 +1397,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 aNewAttr.Put( makeSdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(GetActiveWindow(), aNewAttr, true, SD_RESSTR(STR_INSERTLAYER)) : nullptr);
+                ScopedVclPtr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(GetActiveWindow(), aNewAttr, true, SdResId(STR_INSERTLAYER)) : nullptr);
                 if( pDlg )
                 {
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_INSERTLAYER )->GetCommand() );
@@ -1416,7 +1416,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                             ScopedVclPtrInstance<WarningBox> aWarningBox (
                                 GetParentWindow(),
                                 WinBits( WB_OK ),
-                                SD_RESSTR(STR_WARN_NAME_DUPLICATE));
+                                SdResId(STR_WARN_NAME_DUPLICATE));
                             aWarningBox->Execute();
                         }
                         else
@@ -1539,11 +1539,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             // is it allowed to delete the layer?
             bool bDelete = true;
 
-            OUString aLayoutLayer = SD_RESSTR(STR_LAYER_LAYOUT);
-            OUString aControlsLayer = SD_RESSTR(STR_LAYER_CONTROLS);
-            OUString aMeasureLinesLayer = SD_RESSTR(STR_LAYER_MEASURELINES);
-            OUString aBackgroundLayer = SD_RESSTR(STR_LAYER_BCKGRND);
-            OUString aBackgroundObjLayer = SD_RESSTR(STR_LAYER_BCKGRNDOBJ);
+            OUString aLayoutLayer = SdResId(STR_LAYER_LAYOUT);
+            OUString aControlsLayer = SdResId(STR_LAYER_CONTROLS);
+            OUString aMeasureLinesLayer = SdResId(STR_LAYER_MEASURELINES);
+            OUString aBackgroundLayer = SdResId(STR_LAYER_BCKGRND);
+            OUString aBackgroundObjLayer = SdResId(STR_LAYER_BCKGRNDOBJ);
 
             if( aLayerName == aLayoutLayer       || aLayerName == aControlsLayer ||
                 aLayerName == aMeasureLinesLayer ||
@@ -1565,7 +1565,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 aNewAttr.Put( makeSdAttrLayerThisPage() );
 
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(GetActiveWindow(), aNewAttr, bDelete, SD_RESSTR(STR_MODIFYLAYER)) : nullptr);
+                ScopedVclPtr<AbstractSdInsertLayerDlg> pDlg(pFact ? pFact->CreateSdInsertLayerDlg(GetActiveWindow(), aNewAttr, bDelete, SdResId(STR_MODIFYLAYER)) : nullptr);
                 if( pDlg )
                 {
                     pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_MODIFYLAYER )->GetCommand() );
@@ -1585,7 +1585,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                             ScopedVclPtrInstance<WarningBox> aWarningBox (
                                 GetParentWindow(),
                                 WinBits( WB_OK ),
-                                SD_RESSTR(STR_WARN_NAME_DUPLICATE));
+                                SdResId(STR_WARN_NAME_DUPLICATE));
                             aWarningBox->Execute();
                         }
                         else
@@ -1815,7 +1815,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     if (nDepth != sal_uInt16(-1) && nDepth < 8)
                     {
                         sal_uInt16 nNewDepth = nDepth+1;
-                        pOL->Insert(SD_RESSTR(STR_PRESOBJ_MPOUTLINE+nNewDepth), EE_PARA_APPEND, nNewDepth);
+                        pOL->Insert(SdResId(STR_PRESOBJ_MPOUTLINE+nNewDepth), EE_PARA_APPEND, nNewDepth);
                     }
                 }
             }
@@ -2052,7 +2052,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected( true, true, true ) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -2171,7 +2171,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -2188,7 +2188,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -2208,7 +2208,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -2229,7 +2229,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -2250,7 +2250,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -2292,7 +2292,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -2384,7 +2384,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected() )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -2868,9 +2868,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
                 SdrLayerID aLayerId;
                 if (nSId == SID_DISPLAY_MASTER_BACKGROUND)
-                    aLayerId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
+                    aLayerId = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND));
                 else
-                    aLayerId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+                    aLayerId = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ));
                 aVisibleLayers.Set(aLayerId, !aVisibleLayers.IsSet(aLayerId));
                 pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
             }

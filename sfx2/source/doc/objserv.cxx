@@ -952,7 +952,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 {
                     if ( !IsReadOnly() )
                         rSet.Put(SfxStringItem(
-                            nWhich, SfxResId(STR_SAVEDOC).toString()));
+                            nWhich, SfxResId(STR_SAVEDOC)));
                     else
                         rSet.DisableItem(nWhich);
                 }
@@ -968,7 +968,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 if ( GetFlags() & SfxObjectShellFlags::DONTCLOSE )
                     rSet.DisableItem(nWhich);
                 else
-                    rSet.Put(SfxStringItem(nWhich, SfxResId(STR_CLOSEDOC).toString()));
+                    rSet.Put(SfxStringItem(nWhich, SfxResId(STR_CLOSEDOC)));
                 break;
             }
 
@@ -982,7 +982,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 if ( /*!pCombinedFilters ||*/ !GetMedium() )
                     rSet.DisableItem( nWhich );
                 else
-                    rSet.Put( SfxStringItem( nWhich, SfxResId(STR_SAVEASDOC).toString() ) );
+                    rSet.Put( SfxStringItem( nWhich, SfxResId(STR_SAVEASDOC) ) );
                 break;
             }
 
@@ -996,7 +996,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 if ( /*!pCombinedFilters ||*/ !GetMedium() )
                     rSet.DisableItem( nWhich );
                 else
-                    rSet.Put( SfxStringItem( nWhich, SfxResId(STR_SAVEACOPY).toString() ) );
+                    rSet.Put( SfxStringItem( nWhich, SfxResId(STR_SAVEACOPY) ) );
                 break;
             }
 

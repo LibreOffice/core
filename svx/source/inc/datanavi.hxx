@@ -156,9 +156,9 @@ namespace svxform
             m_sInstance_API( "instance" ),
             m_sNone_API(     "none" )
         {
-            m_sDoc_UI = SVX_RESSTR(RID_STR_REPLACE_DOC);
-            m_sInstance_UI = SVX_RESSTR(RID_STR_REPLACE_INST);
-            m_sNone_UI = SVX_RESSTR(RID_STR_REPLACE_NONE);
+            m_sDoc_UI = SvxResId(RID_STR_REPLACE_DOC);
+            m_sInstance_UI = SvxResId(RID_STR_REPLACE_INST);
+            m_sNone_UI = SvxResId(RID_STR_REPLACE_NONE);
         }
 
         /** convert submission replace string from API value to UI value.
@@ -205,9 +205,9 @@ namespace svxform
             m_sPut_API(  "put" ),
             m_sGet_API(  "get" )
         {
-            m_sPost_UI = SVX_RESSTR(RID_STR_METHOD_POST);
-            m_sPut_UI  = SVX_RESSTR(RID_STR_METHOD_PUT);
-            m_sGet_UI  = SVX_RESSTR(RID_STR_METHOD_GET);
+            m_sPost_UI = SvxResId(RID_STR_METHOD_POST);
+            m_sPut_UI  = SvxResId(RID_STR_METHOD_PUT);
+            m_sGet_UI  = SvxResId(RID_STR_METHOD_GET);
         }
 
         /** convert from API to UI; put is default. */

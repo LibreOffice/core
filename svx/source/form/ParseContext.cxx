@@ -36,7 +36,7 @@ OSystemParseContext::OSystemParseContext()
     : IParseContext()
 {
     SolarMutexGuard aGuard;
-    ResStringArray aLocalizedKeywords(SVX_RES(RID_RSC_SQL_INTERNATIONAL));
+    ResStringArray aLocalizedKeywords(ResId(RID_RSC_SQL_INTERNATIONAL, DIALOG_MGR()));
     for (sal_uInt32 i = 0; i < aLocalizedKeywords.Count(); ++i)
         m_aLocalizedKeywords.push_back(aLocalizedKeywords.GetString(i));
 }
@@ -56,18 +56,18 @@ OUString OSystemParseContext::getErrorMessage(ErrorCode _eCode) const
     SolarMutexGuard aGuard;
     switch (_eCode)
     {
-        case ErrorCode::General:               aMsg = SVX_RESSTR(RID_STR_SVT_SQL_SYNTAX_ERROR); break;
-        case ErrorCode::ValueNoLike:           aMsg = SVX_RESSTR(RID_STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE); break;
-        case ErrorCode::FieldNoLike:           aMsg = SVX_RESSTR(RID_STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE); break;
-        case ErrorCode::InvalidCompare:        aMsg = SVX_RESSTR(RID_STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE); break;
-        case ErrorCode::InvalidIntCompare:     aMsg = SVX_RESSTR(RID_STR_SVT_SQL_SYNTAX_INT_NO_VALID); break;
-        case ErrorCode::InvalidDateCompare:    aMsg = SVX_RESSTR(RID_STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID); break;
-        case ErrorCode::InvalidRealCompare:    aMsg = SVX_RESSTR(RID_STR_SVT_SQL_SYNTAX_REAL_NO_VALID); break;
-        case ErrorCode::InvalidTableNosuch:    aMsg = SVX_RESSTR(RID_STR_SVT_SQL_SYNTAX_TABLE); break;
-        case ErrorCode::InvalidTableOrQuery:   aMsg = SVX_RESSTR(RID_STR_SVT_SQL_SYNTAX_TABLE_OR_QUERY); break;
-        case ErrorCode::InvalidColumn:         aMsg = SVX_RESSTR(RID_STR_SVT_SQL_SYNTAX_COLUMN); break;
-        case ErrorCode::InvalidTableExist:     aMsg = SVX_RESSTR(RID_STR_SVT_SQL_SYNTAX_TABLE_EXISTS); break;
-        case ErrorCode::InvalidQueryExist:     aMsg = SVX_RESSTR(RID_STR_SVT_SQL_SYNTAX_QUERY_EXISTS); break;
+        case ErrorCode::General:               aMsg = SvxResId(RID_STR_SVT_SQL_SYNTAX_ERROR); break;
+        case ErrorCode::ValueNoLike:           aMsg = SvxResId(RID_STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE); break;
+        case ErrorCode::FieldNoLike:           aMsg = SvxResId(RID_STR_SVT_SQL_SYNTAX_FIELD_NO_LIKE); break;
+        case ErrorCode::InvalidCompare:        aMsg = SvxResId(RID_STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE); break;
+        case ErrorCode::InvalidIntCompare:     aMsg = SvxResId(RID_STR_SVT_SQL_SYNTAX_INT_NO_VALID); break;
+        case ErrorCode::InvalidDateCompare:    aMsg = SvxResId(RID_STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID); break;
+        case ErrorCode::InvalidRealCompare:    aMsg = SvxResId(RID_STR_SVT_SQL_SYNTAX_REAL_NO_VALID); break;
+        case ErrorCode::InvalidTableNosuch:    aMsg = SvxResId(RID_STR_SVT_SQL_SYNTAX_TABLE); break;
+        case ErrorCode::InvalidTableOrQuery:   aMsg = SvxResId(RID_STR_SVT_SQL_SYNTAX_TABLE_OR_QUERY); break;
+        case ErrorCode::InvalidColumn:         aMsg = SvxResId(RID_STR_SVT_SQL_SYNTAX_COLUMN); break;
+        case ErrorCode::InvalidTableExist:     aMsg = SvxResId(RID_STR_SVT_SQL_SYNTAX_TABLE_EXISTS); break;
+        case ErrorCode::InvalidQueryExist:     aMsg = SvxResId(RID_STR_SVT_SQL_SYNTAX_QUERY_EXISTS); break;
         default: break;
     }
     return aMsg;

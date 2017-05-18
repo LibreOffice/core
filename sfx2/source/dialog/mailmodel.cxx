@@ -173,7 +173,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                                 //used in filter/source/pdf/impdialog.cxx
                                 uno::Sequence< beans::PropertyValue > aFilterDataValue(1);
                                 aFilterDataValue[0].Name = "_OkButtonString";
-                                aFilterDataValue[0].Value <<= SfxResId(STR_PDF_EXPORT_SEND ).toString();
+                                aFilterDataValue[0].Value <<= SfxResId(STR_PDF_EXPORT_SEND );
 
                                 //add to the filterdata property, the only one the PDF export filter dialog will care for
                                 aPropsForDialog[0].Name = "FilterData";

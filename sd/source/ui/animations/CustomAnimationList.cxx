@@ -231,13 +231,13 @@ CustomAnimationListEntryItem::CustomAnimationListEntryItem( const OUString& aDes
     switch(mpEffect->getPresetClass())
     {
     case EffectPresetClass::ENTRANCE:
-        msEffectName = SD_RESSTR(STR_CUSTOMANIMATION_ENTRANCE); break;
+        msEffectName = SdResId(STR_CUSTOMANIMATION_ENTRANCE); break;
     case EffectPresetClass::EXIT:
-        msEffectName = SD_RESSTR(STR_CUSTOMANIMATION_EXIT); break;
+        msEffectName = SdResId(STR_CUSTOMANIMATION_EXIT); break;
     case EffectPresetClass::EMPHASIS:
-        msEffectName = SD_RESSTR(STR_CUSTOMANIMATION_EMPHASIS); break;
+        msEffectName = SdResId(STR_CUSTOMANIMATION_EMPHASIS); break;
     case EffectPresetClass::MOTIONPATH:
-        msEffectName = SD_RESSTR(STR_CUSTOMANIMATION_MOTION_PATHS); break;
+        msEffectName = SdResId(STR_CUSTOMANIMATION_MOTION_PATHS); break;
     }
     msEffectName = msEffectName.replaceFirst( "%1" , mpCustomAnimationPresets->getUINameForPresetId(mpEffect->getPresetId()));
 }
@@ -635,7 +635,7 @@ void CustomAnimationList::update()
             {
                 SvTreeListEntry* pLBoxEntry = new CustomAnimationListEntry;
                 pLBoxEntry->AddItem(o3tl::make_unique<SvLBoxContextBmp>(Image(), Image(), false));
-                OUString aDescription = SD_RESSTR(STR_CUSTOMANIMATION_TRIGGER);
+                OUString aDescription = SdResId(STR_CUSTOMANIMATION_TRIGGER);
                 aDescription += ": ";
                 aDescription += getShapeDescription( xShape, false );
                 pLBoxEntry->AddItem(o3tl::make_unique<CustomAnimationTriggerEntryItem>(aDescription));
@@ -960,7 +960,7 @@ void CustomAnimationList::Paint(vcl::RenderContext& rRenderContext, const ::tool
         aRect.Right() -= aOffset.X();
         aRect.Bottom() -= aOffset.Y();
 
-        rRenderContext.DrawText(aRect, SD_RESSTR(STR_CUSTOMANIMATION_LIST_HELPTEXT),
+        rRenderContext.DrawText(aRect, SdResId(STR_CUSTOMANIMATION_LIST_HELPTEXT),
                                 DrawTextFlags::MultiLine | DrawTextFlags::WordBreak | DrawTextFlags::Center | DrawTextFlags::VCenter );
 
         rRenderContext.SetTextColor(aOldColor);

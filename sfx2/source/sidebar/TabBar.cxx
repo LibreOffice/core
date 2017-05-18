@@ -62,7 +62,7 @@ TabBar::TabBar(vcl::Window* pParentWindow,
 
     mpMenuButton->SetModeImage(Theme::GetImage(Theme::Image_TabBarMenu));
     mpMenuButton->SetClickHdl(LINK(this, TabBar, OnToolboxClicked));
-    mpMenuButton->SetQuickHelpText(SFX2_RESSTR(SFX_STR_SIDEBAR_SETTINGS));
+    mpMenuButton->SetQuickHelpText(SfxResId(SFX_STR_SIDEBAR_SETTINGS));
     Layout();
 
 #ifdef DEBUG

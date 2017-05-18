@@ -1325,7 +1325,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
                     break;
                 case DataType::TIMESTAMP:
                     bDateNTimeField = true;
-                    sLabelPostfix = SVX_RESSTR(RID_STR_POSTFIX_DATE);
+                    sLabelPostfix = SvxResId(RID_STR_POSTFIX_DATE);
                     SAL_FALLTHROUGH;
                 case DataType::DATE:
                     nOBJID = OBJ_FM_DATEFIELD;
@@ -1367,7 +1367,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
         {   // so far we created a date field only, but we also need a time field
             pLabel = pControl = nullptr;
             if  (   createControlLabelPair( *pOutDev, 0, 1000, xField, xNumberFormats, OBJ_FM_TIMEFIELD,
-                        SVX_RESSTR(RID_STR_POSTFIX_TIME), pLabel, pControl,
+                        SvxResId(RID_STR_POSTFIX_TIME), pLabel, pControl,
                         xDataSource, sDataSource, sCommand, nCommandType )
                 )
             {
@@ -1602,7 +1602,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
                 sLabel = sFieldName;
 
             xLabelModel->setPropertyValue( FM_PROP_LABEL, makeAny( sLabel + _rFieldPostfix ) );
-            OUString sObjectLabel(SVX_RESSTR(RID_STR_OBJECT_LABEL).replaceAll("#object#", sFieldName));
+            OUString sObjectLabel(SvxResId(RID_STR_OBJECT_LABEL).replaceAll("#object#", sFieldName));
             xLabelModel->setPropertyValue(FM_PROP_NAME, makeAny(sObjectLabel));
         }
 

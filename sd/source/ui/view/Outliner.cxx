@@ -1196,9 +1196,9 @@ void SdOutliner::ShowEndOfSearchDialog()
 
     OUString aString;
     if (mpView->AreObjectsMarked())
-        aString = SD_RESSTR(STR_END_SPELLING_OBJ);
+        aString = SdResId(STR_END_SPELLING_OBJ);
     else
-        aString = SD_RESSTR(STR_END_SPELLING);
+        aString = SdResId(STR_END_SPELLING);
 
     // Show the message in an info box that is modal with respect to the
     // whole application.
@@ -1241,7 +1241,7 @@ bool SdOutliner::ShowWrapArroundDialog()
 
     // Pop up question box that asks the user whether to wrap around.
     // The dialog is made modal with respect to the whole application.
-    ScopedVclPtrInstance<QueryBox> aQuestionBox(nullptr, WB_YES_NO | WB_DEF_YES, SD_RESSTR(nStringId));
+    ScopedVclPtrInstance<QueryBox> aQuestionBox(nullptr, WB_YES_NO | WB_DEF_YES, SdResId(nStringId));
     aQuestionBox->SetImage(QueryBox::GetStandardImage());
     sal_uInt16 nBoxResult = ShowModalMessageBox(*aQuestionBox.get());
 

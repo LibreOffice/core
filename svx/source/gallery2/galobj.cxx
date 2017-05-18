@@ -239,7 +239,7 @@ const OUString SgaObject::GetTitle() const
                     aResId.SetRT( RSC_STRING );
                     if ( pResMgr->IsAvailable( aResId ) )
                     {
-                        aReturnValue = aResId.toString();
+                        aReturnValue = aResId;
                     }
                 }
             }

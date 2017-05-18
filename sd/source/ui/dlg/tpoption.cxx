@@ -369,7 +369,7 @@ DeactivateRC SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
             FillItemSet( pActiveSet );
         return DeactivateRC::LeavePage;
     }
-    ScopedVclPtrInstance< WarningBox > aWarnBox( GetParent(), WB_YES_NO, SD_RESSTR( STR_WARN_SCALE_FAIL ) );
+    ScopedVclPtrInstance< WarningBox > aWarnBox( GetParent(), WB_YES_NO, SdResId( STR_WARN_SCALE_FAIL ) );
 
     if( aWarnBox->Execute() == RET_YES )
         return DeactivateRC::KeepPage;

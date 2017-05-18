@@ -349,7 +349,7 @@ OUString SAL_CALL
 
 OUString SAL_CALL ScAccessibleTableBase::createAccessibleName()
 {
-    OUString sName(SC_RESSTR(STR_ACC_TABLE_NAME));
+    OUString sName(ScResId(STR_ACC_TABLE_NAME));
     OUString sCoreName;
     if (mpDoc && mpDoc->GetName( maRange.aStart.Tab(), sCoreName ))
         sName = sName.replaceFirst("%1", sCoreName);

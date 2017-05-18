@@ -105,7 +105,7 @@ void UndoAnimation::Redo()
 
 OUString UndoAnimation::GetComment() const
 {
-    return SdResId(STR_UNDO_ANIMATION).toString();
+    return SdResId(STR_UNDO_ANIMATION);
 }
 
 struct UndoAnimationPathImpl
@@ -180,7 +180,7 @@ void UndoAnimationPath::Redo()
 
 OUString UndoAnimationPath::GetComment() const
 {
-    return SdResId(STR_UNDO_ANIMATION).toString();
+    return SdResId(STR_UNDO_ANIMATION);
 }
 
 struct UndoTransitionImpl
@@ -270,7 +270,7 @@ void UndoTransition::Redo()
 
 OUString UndoTransition::GetComment() const
 {
-    return SdResId(STR_UNDO_SLIDE_PARAMS).toString();
+    return SdResId(STR_UNDO_SLIDE_PARAMS);
 }
 
 }

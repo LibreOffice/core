@@ -23,7 +23,7 @@
 
 // class SvtDocInfoTable_Impl --------------------------------------------
 SvtDocInfoTable_Impl::SvtDocInfoTable_Impl()
-    : ResStringArray(SvtResId(STRARY_SVT_DOCINFO))
+    : ResStringArray(ResId(STRARY_SVT_DOCINFO, *SvtResMgr::GetResMgr()))
 
 {
 }

@@ -586,7 +586,7 @@ OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleDescription()
 
 OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleName()
 {
-    OUString sName(SC_RESSTR(STR_ACC_TABLE_NAME));
+    OUString sName(ScResId(STR_ACC_TABLE_NAME));
 
     if (mpViewShell)
     {
