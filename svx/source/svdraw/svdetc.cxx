@@ -395,7 +395,7 @@ ResMgr* ImpGetResMgr()
 
 OUString ImpGetResStr(sal_uInt16 nResID)
 {
-    return ResId(nResID, *ImpGetResMgr()).toString();
+    return ResId(nResID, *ImpGetResMgr());
 }
 
 namespace sdr

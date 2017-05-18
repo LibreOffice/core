@@ -102,12 +102,12 @@ bool SwFormatCharFormat::GetPresentation
     if ( pCharFormat )
     {
         OUString aStr;
-        rText = OUString( SW_RESSTR( STR_CHARFMT ) );
+        rText = OUString( SwResId( STR_CHARFMT ) );
         pCharFormat->GetPresentation( ePres, eCoreUnit, ePresUnit, aStr );
         rText = rText + "(" + aStr + ")";
     }
     else
-        rText = OUString( SW_RESSTR( STR_NO_CHARFMT ) );
+        rText = OUString( SwResId( STR_NO_CHARFMT ) );
     return true;
 }
 
@@ -162,14 +162,14 @@ bool SwFormatDrop::GetPresentation
             rText = OUString::number( GetChars() ) + " ";
         }
         rText = rText +
-                OUString( SW_RESSTR( STR_DROP_OVER ) ) +
+                OUString( SwResId( STR_DROP_OVER ) ) +
                 " " +
                 OUString::number( GetLines() ) +
                 " " +
-                OUString( SW_RESSTR( STR_DROP_LINES ) );
+                OUString( SwResId( STR_DROP_LINES ) );
     }
     else
-        rText = SW_RESSTR( STR_NO_DROP_LINES );
+        rText = SwResId( STR_NO_DROP_LINES );
     return true;
 }
 
@@ -183,7 +183,7 @@ bool SwRegisterItem::GetPresentation
 )   const
 {
     const sal_uInt16 nId = GetValue() ? STR_REGISTER_ON : STR_REGISTER_OFF;
-    rText = SW_RESSTR( nId );
+    rText = SwResId( nId );
     return true;
 }
 
@@ -197,10 +197,10 @@ bool SwNumRuleItem::GetPresentation
 )   const
 {
     if( !GetValue().isEmpty() )
-        rText = SW_RESSTR( STR_NUMRULE_ON ) +
+        rText = SwResId( STR_NUMRULE_ON ) +
             "(" + GetValue() + ")";
     else
-        rText = SW_RESSTR( STR_NUMRULE_OFF );
+        rText = SwResId( STR_NUMRULE_OFF );
     return true;
 }
 
@@ -214,7 +214,7 @@ bool SwParaConnectBorderItem::GetPresentation
 )   const
 {
     const sal_uInt16 nId = GetValue() ? STR_CONNECT_BORDER_ON : STR_CONNECT_BORDER_OFF;
-    rText = SW_RESSTR( nId );
+    rText = SwResId( nId );
     return true;
 }
 
@@ -229,7 +229,7 @@ bool SwFormatFrameSize::GetPresentation
     const IntlWrapper*        pIntl
 )   const
 {
-    rText = SW_RESSTR( STR_FRM_WIDTH ) + " ";
+    rText = SwResId( STR_FRM_WIDTH ) + " ";
     if ( GetWidthPercent() )
     {
         rText = rText + unicode::formatPercent(GetWidthPercent(),
@@ -244,7 +244,7 @@ bool SwFormatFrameSize::GetPresentation
     {
         const sal_uInt16 nId = ATT_FIX_SIZE == m_eFrameHeightType ?
                                 STR_FRM_FIXEDHEIGHT : STR_FRM_MINHEIGHT;
-        rText = rText + ", " + SW_RESSTR( nId ) + " ";
+        rText = rText + ", " + SwResId( nId ) + " ";
         if ( GetHeightPercent() )
         {
             rText = rText + unicode::formatPercent(GetHeightPercent(),
@@ -272,7 +272,7 @@ bool SwFormatHeader::GetPresentation
 )   const
 {
     const sal_uInt16 nId = GetHeaderFormat() ? STR_HEADER : STR_NO_HEADER;
-    rText = SW_RESSTR( nId );
+    rText = SwResId( nId );
     return true;
 }
 
@@ -289,7 +289,7 @@ bool SwFormatFooter::GetPresentation
 )   const
 {
     const sal_uInt16 nId = GetFooterFormat() ? STR_FOOTER : STR_NO_FOOTER;
-    rText = SW_RESSTR( nId );
+    rText = SwResId( nId );
     return true;
 }
 
@@ -326,11 +326,11 @@ bool SwFormatSurround::GetPresentation
         default:;//prevent warning
     }
     if ( nId )
-        rText = SW_RESSTR( nId );
+        rText = SwResId( nId );
 
     if ( IsAnchorOnly() )
     {
-        rText = rText + " " + SW_RESSTR( STR_SURROUND_ANCHORONLY );
+        rText = rText + " " + SwResId( STR_SURROUND_ANCHORONLY );
     }
     return true;
 }
@@ -351,7 +351,7 @@ bool SwFormatVertOrient::GetPresentation
     {
         case text::VertOrientation::NONE:
         {
-            rText = rText + SW_RESSTR( STR_POS_Y ) + " " +
+            rText = rText + SwResId( STR_POS_Y ) + " " +
                     ::GetMetricText( GetPos(), eCoreUnit, ePresUnit, pIntl ) +
                     " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
         }
@@ -377,7 +377,7 @@ bool SwFormatVertOrient::GetPresentation
         default:;//prevent warning
     }
     if ( nId )
-        rText += SW_RESSTR( nId );
+        rText += SwResId( nId );
     return true;
 }
 
@@ -397,7 +397,7 @@ bool SwFormatHoriOrient::GetPresentation
     {
         case text::HoriOrientation::NONE:
         {
-            rText = rText + SW_RESSTR( STR_POS_X ) + " " +
+            rText = rText + SwResId( STR_POS_X ) + " " +
                     ::GetMetricText( GetPos(), eCoreUnit, ePresUnit, pIntl ) +
                     " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
         }
@@ -423,7 +423,7 @@ bool SwFormatHoriOrient::GetPresentation
         default:;//prevent warning
     }
     if ( nId )
-        rText += SW_RESSTR( nId );
+        rText += SwResId( nId );
     return true;
 }
 
@@ -453,7 +453,7 @@ bool SwFormatAnchor::GetPresentation
         default:;//prevent warning
     }
     if ( nId )
-        rText += SW_RESSTR( nId );
+        rText += SwResId( nId );
     return true;
 }
 
@@ -470,7 +470,7 @@ bool SwFormatPageDesc::GetPresentation
     if ( pPageDesc )
         rText = pPageDesc->GetName();
     else
-        rText = SW_RESSTR( STR_NO_PAGEDESC );
+        rText = SwResId( STR_NO_PAGEDESC );
     return true;
 }
 
@@ -488,11 +488,11 @@ bool SwFormatCol::GetPresentation
     sal_uInt16 nCnt = GetNumCols();
     if ( nCnt > 1 )
     {
-        rText = OUString::number(nCnt) + " " + SW_RESSTR( STR_COLUMNS );
+        rText = OUString::number(nCnt) + " " + SwResId( STR_COLUMNS );
         if ( COLADJ_NONE != GetLineAdj() )
         {
             const long nWdth = static_cast<long>(GetLineWidth());
-            rText = rText + " " + SW_RESSTR( STR_LINE_WIDTH ) + " " +
+            rText = rText + " " + SwResId( STR_LINE_WIDTH ) + " " +
                     ::GetMetricText( nWdth, eCoreUnit,
                                       MapUnit::MapPoint, pIntl );
         }
@@ -542,7 +542,7 @@ bool SwFormatEditInReadonly::GetPresentation
 {
     rText.clear();
     if ( GetValue() )
-        rText = SW_RESSTR(STR_EDIT_IN_READONLY);
+        rText = SwResId(STR_EDIT_IN_READONLY);
     return true;
 }
 
@@ -564,7 +564,7 @@ bool SwFormatLayoutSplit::GetPresentation
 )   const
 {
     if ( GetValue() )
-        rText = SW_RESSTR(STR_LAYOUT_SPLIT);
+        rText = SwResId(STR_LAYOUT_SPLIT);
     return true;
 }
 
@@ -603,12 +603,12 @@ bool SwFormatChain::GetPresentation
 {
     if ( GetPrev() || GetNext() )
     {
-        rText = SW_RESSTR(STR_CONNECT1);
+        rText = SwResId(STR_CONNECT1);
         if ( GetPrev() )
         {
             rText += GetPrev()->GetName();
             if ( GetNext() )
-                rText += SW_RESSTR(STR_CONNECT2);
+                rText += SwResId(STR_CONNECT2);
         }
         if ( GetNext() )
             rText += GetNext()->GetName();
@@ -626,12 +626,12 @@ bool SwFormatLineNumber::GetPresentation
 )   const
 {
     if ( IsCount() )
-        rText += SW_RESSTR(STR_LINECOUNT);
+        rText += SwResId(STR_LINECOUNT);
     else
-        rText += SW_RESSTR(STR_DONTLINECOUNT);
+        rText += SwResId(STR_DONTLINECOUNT);
     if ( GetStartValue() )
     {
-        rText = rText + " " + SW_RESSTR(STR_LINCOUNT_START) +
+        rText = rText + " " + SwResId(STR_LINCOUNT_START) +
                 OUString::number( GetStartValue() );
     }
     return true;
@@ -661,7 +661,7 @@ bool SwTextGridItem::GetPresentation
         break;
     }
     if ( nId )
-        rText += SW_RESSTR( nId );
+        rText += SwResId( nId );
     return true;
 }
 
@@ -694,9 +694,9 @@ bool SwMirrorGrf::GetPresentation(
     }
     if ( nId )
     {
-        rText = SW_RESSTR( nId );
+        rText = SwResId( nId );
         if (bGrfToggle)
-            rText += SW_RESSTR( STR_MIRROR_TOGGLE );
+            rText += SwResId( STR_MIRROR_TOGGLE );
     }
     return true;
 }
@@ -706,7 +706,7 @@ bool SwRotationGrf::GetPresentation(
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     if( SfxItemPresentation::Complete == ePres )
-        rText = SW_RESSTR( STR_ROTATION );
+        rText = SwResId( STR_ROTATION );
     else if( rText.getLength() )
         rText.clear();
     rText = rText + OUString::number( GetValue() ) + "\xB0";
@@ -718,7 +718,7 @@ bool SwLuminanceGrf::GetPresentation(
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     if( SfxItemPresentation::Complete == ePres )
-        rText = SW_RESSTR( STR_LUMINANCE );
+        rText = SwResId( STR_LUMINANCE );
     else if( rText.getLength() )
         rText.clear();
     rText = rText + unicode::formatPercent(GetValue(),
@@ -731,7 +731,7 @@ bool SwContrastGrf::GetPresentation(
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     if( SfxItemPresentation::Complete == ePres )
-        rText = SW_RESSTR( STR_CONTRAST );
+        rText = SwResId( STR_CONTRAST );
     else if( rText.getLength() )
         rText.clear();
     rText = rText + unicode::formatPercent(GetValue(),
@@ -754,7 +754,7 @@ bool SwChannelGrf::GetPresentation(
         default:                    nId = 0; break;
         }
         if( nId )
-            rText = SW_RESSTR( nId );
+            rText = SwResId( nId );
         else if( rText.getLength() )
             rText.clear();
     }
@@ -771,7 +771,7 @@ bool SwGammaGrf::GetPresentation(
 {
     OUStringBuffer aText;
     if( SfxItemPresentation::Complete == ePres )
-        aText.append(SW_RESSTR(STR_GAMMA));
+        aText.append(SwResId(STR_GAMMA));
     aText.append(unicode::formatPercent(GetValue(),
         Application::GetSettings().GetUILanguageTag()));
     rText = aText.makeStringAndClear();
@@ -786,7 +786,7 @@ bool SwInvertGrf::GetPresentation(
     if( SfxItemPresentation::Complete == ePres )
     {
         const sal_uInt16 nId = GetValue() ? STR_INVERT : STR_INVERT_NOT;
-        rText = SW_RESSTR( nId );
+        rText = SwResId( nId );
     }
     return true;
 }
@@ -796,7 +796,7 @@ bool SwTransparencyGrf::GetPresentation(
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
     if( SfxItemPresentation::Complete == ePres )
-        rText = SW_RESSTR( STR_TRANSPARENCY );
+        rText = SwResId( STR_TRANSPARENCY );
     else if( rText.getLength() )
         rText.clear();
     rText = rText + unicode::formatPercent(GetValue(),
@@ -820,7 +820,7 @@ bool SwDrawModeGrf::GetPresentation(
         case GraphicDrawMode::Watermark: nId = STR_DRAWMODE_WATERMARK; break;
         default:                        nId = STR_DRAWMODE_STD; break;
         }
-        rText = SW_RESSTR( STR_DRAWMODE ) + SW_RESSTR( nId );
+        rText = SwResId( STR_DRAWMODE ) + SwResId( nId );
     }
     return true;
 }
@@ -835,7 +835,7 @@ bool SwFormatFollowTextFlow::GetPresentation( SfxItemPresentation ePres,
     if( SfxItemPresentation::Complete == ePres )
     {
         const sal_uInt16 nId = GetValue() ? STR_FOLLOW_TEXT_FLOW : STR_DONT_FOLLOW_TEXT_FLOW;
-        rText = SW_RESSTR( nId );
+        rText = SwResId( nId );
     }
     return true;
 }

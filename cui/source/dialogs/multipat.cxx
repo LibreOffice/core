@@ -90,7 +90,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl, Button*, void)
         }
         else
         {
-            OUString sMsg( CUI_RES( RID_MULTIPATH_DBL_ERR ) );
+            OUString sMsg( CuiResId( RID_MULTIPATH_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sInsPath );
             ScopedVclPtrInstance<InfoBox>(this, sMsg)->Execute();
         }
@@ -114,7 +114,7 @@ IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, Button*, void)
 
         if ( LISTBOX_ENTRY_NOTFOUND != m_pPathLB->GetEntryPos( sInsPath ) )
         {
-            OUString sMsg( CUI_RES( RID_MULTIPATH_DBL_ERR ) );
+            OUString sMsg( CuiResId( RID_MULTIPATH_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sInsPath );
             ScopedVclPtrInstance<InfoBox>(this, sMsg)->Execute();
         }

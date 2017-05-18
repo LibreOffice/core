@@ -978,7 +978,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
                                     bIsDefault = true;
                                 if(!bHasCJKFontPrefix)
                                 {
-                                    aItemPresentation = SW_RESSTR(STR_CJK_FONT) + aItemPresentation;
+                                    aItemPresentation = SwResId(STR_CJK_FONT) + aItemPresentation;
                                     bHasCJKFontPrefix = true;
                                 }
                                 break;
@@ -989,7 +989,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
                                 case RES_CHRATR_WEIGHT:
                                 if(!bHasWesternFontPrefix)
                                 {
-                                    aItemPresentation = SW_RESSTR(STR_WESTERN_FONT) + aItemPresentation;
+                                    aItemPresentation = SwResId(STR_WESTERN_FONT) + aItemPresentation;
                                     bHasWesternFontPrefix = true;
                                 }
                                 SAL_FALLTHROUGH;
@@ -1012,10 +1012,10 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
         {
             if (!aDesc.isEmpty())
                 aDesc += sPlus;
-            aDesc += SW_RESSTR(STR_PAGEBREAK) + sPlus + sModel;
+            aDesc += SwResId(STR_PAGEBREAK) + sPlus + sModel;
             if (sPageNum != "0")
             {
-                aDesc += sPlus + SW_RESSTR(STR_PAGEOFFSET) + sPageNum;
+                aDesc += sPlus + SwResId(STR_PAGEOFFSET) + sPageNum;
             }
         }
         else if (!sBreak.isEmpty()) // Break can be valid only when NO Model

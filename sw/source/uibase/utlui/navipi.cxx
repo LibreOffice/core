@@ -656,11 +656,11 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
 
     for (sal_uInt16 i = 0; i <= static_cast<sal_uInt16>(RegionMode::EMBEDDED); ++i)
     {
-        m_aContextArr[i] = SW_RESSTR(STR_HYPERLINK + i);
-        m_aStatusArr[i] = SW_RESSTR(STR_STATUS_FIRST + i);
+        m_aContextArr[i] = SwResId(STR_HYPERLINK + i);
+        m_aStatusArr[i] = SwResId(STR_STATUS_FIRST + i);
     }
 
-    m_aStatusArr[3] = SW_RESSTR(STR_ACTIVE_VIEW);
+    m_aStatusArr[3] = SwResId(STR_ACTIVE_VIEW);
 
     m_aContentTree->SetStyle(m_aContentTree->GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|
                              WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
@@ -724,8 +724,8 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     m_aPageChgIdle.SetInvokeHandler(LINK(this, SwNavigationPI, ChangePageHdl));
     m_aPageChgIdle.SetPriority(TaskPriority::LOWEST);
 
-    m_aContentTree->SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_CONTENT));
-    m_aGlobalTree->SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_GLOBAL));
+    m_aContentTree->SetAccessibleName(SwResId(STR_ACCESS_TL_CONTENT));
+    m_aGlobalTree->SetAccessibleName(SwResId(STR_ACCESS_TL_GLOBAL));
     m_aDocListBox->SetAccessibleName(m_aStatusArr[3]);
 
     m_aExpandedSize = GetOptimalSize();

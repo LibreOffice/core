@@ -128,31 +128,31 @@ ScRange ScRegressionDialog::ApplyOutput(ScDocShell* pDocShell)
     aTemplate.autoReplaceRange("%VARIABLE1_RANGE%", pVariable1Iterator->get());
     aTemplate.autoReplaceRange("%VARIABLE2_RANGE%", pVariable2Iterator->get());
 
-    aOutput.writeBoldString(SC_RESSTR(STR_REGRESSION));
+    aOutput.writeBoldString(ScResId(STR_REGRESSION));
     aOutput.newLine();
     aOutput.newLine();
     aOutput.push();
 
     // REGRESSION MODEL
-    aOutput.writeString(SC_RESSTR(STR_LABEL_REGRESSION_MODEL));
+    aOutput.writeString(ScResId(STR_LABEL_REGRESSION_MODEL));
     aOutput.nextRow();
 
     // RSQUARED
-    aOutput.writeString(SC_RESSTR(STR_LABEL_RSQUARED));
+    aOutput.writeString(ScResId(STR_LABEL_RSQUARED));
     aOutput.nextRow();
 
     // Standard Error
-    aOutput.writeString(SC_RESSTR(STRID_CALC_STD_ERROR));
+    aOutput.writeString(ScResId(STRID_CALC_STD_ERROR));
     aOutput.nextRow();
 
     aOutput.nextRow();
 
     // Slope
-    aOutput.writeString(SC_RESSTR(STR_LABEL_SLOPE));
+    aOutput.writeString(ScResId(STR_LABEL_SLOPE));
     aOutput.nextRow();
 
     // Intercept
-    aOutput.writeString(SC_RESSTR(STR_LABEL_INTERCEPT));
+    aOutput.writeString(ScResId(STR_LABEL_INTERCEPT));
     aOutput.nextRow();
 
     aOutput.nextRow();
@@ -192,7 +192,7 @@ ScRange ScRegressionDialog::ApplyOutput(ScDocShell* pDocShell)
         nColumn += 1;
 
         // REGRESSION MODEL
-        aOutput.writeString(SC_RESSTR(constRegressionModel[nRegressionIndex]));
+        aOutput.writeString(ScResId(constRegressionModel[nRegressionIndex]));
         aOutput.nextRow();
 
         // RSQUARED

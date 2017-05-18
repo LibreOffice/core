@@ -245,7 +245,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
             aRepresentation = pDoc->CreatePageNumValue((sal_uInt16)nPgNum);
         }
         else
-            aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_NUMBER).toString();
+            aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_NUMBER);
 
         pInfo->SetRepresentation( aRepresentation );
     }
@@ -275,8 +275,8 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
         {
             DocumentType eDocType = pDoc ? pDoc->GetDocumentType() : DocumentType::Impress;
             aRepresentation = ( ( eDocType == DocumentType::Impress )
-                                ? SdResId(STR_FIELD_PLACEHOLDER_SLIDENAME).toString()
-                                : SdResId(STR_FIELD_PLACEHOLDER_PAGENAME).toString() );
+                                ? SdResId(STR_FIELD_PLACEHOLDER_SLIDENAME)
+                                : SdResId(STR_FIELD_PLACEHOLDER_PAGENAME) );
         }
 
         pInfo->SetRepresentation( aRepresentation );
@@ -315,7 +315,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
         if( nPageCount > 0 )
             aRepresentation = pDoc->CreatePageNumValue(nPageCount);
         else
-            aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_COUNT).toString();
+            aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_COUNT);
 
         pInfo->SetRepresentation( aRepresentation );
     }
@@ -361,11 +361,11 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
             if( (pPage == nullptr) || bMasterView )
             {
                 if( bHeaderField )
-                    aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_HEADER).toString();
+                    aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_HEADER);
                 else if (bFooterField )
-                    aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_FOOTER).toString();
+                    aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_FOOTER);
                 else if (bDateTimeField )
-                    aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_DATETIME).toString();
+                    aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_DATETIME);
             }
             else
             {
@@ -806,14 +806,14 @@ SfxStyleFamilies* SdModule::CreateStyleFamilies()
     SfxStyleFamilies *pStyleFamilies = new SfxStyleFamilies;
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
-                                                    SD_RESSTR(STR_GRAPHICS_STYLE_FAMILY),
+                                                    SdResId(STR_GRAPHICS_STYLE_FAMILY),
                                                     Image(BitmapEx(BMP_STYLES_FAMILY_GRAPHICS)),
-                                                    SdResId(RID_GRAPHICSTYLEFAMILY)));
+                                                    ResId(RID_GRAPHICSTYLEFAMILY, *SD_MOD()->GetResMgr())));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Pseudo,
-                                                    SD_RESSTR(STR_PRESENTATIONS_STYLE_FAMILY),
+                                                    SdResId(STR_PRESENTATIONS_STYLE_FAMILY),
                                                     Image(BitmapEx(BMP_STYLES_FAMILY_PRESENTATIONS)),
-                                                    SdResId(RID_PRESENTATIONSTYLEFAMILY)));
+                                                    ResId(RID_PRESENTATIONSTYLEFAMILY, *SD_MOD()->GetResMgr())));
 
     return pStyleFamilies;
 }

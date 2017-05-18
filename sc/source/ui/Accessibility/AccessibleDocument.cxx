@@ -1566,7 +1566,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     mpTempAccEdit = new ScAccessibleEditObject(this, rViewData.GetEditView(meSplitPos),
                         mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(),
-                        OUString(ScResId(STR_ACC_EDITLINE_DESCR)), ScAccessibleEditObject::CellInEditMode);
+                        ScResId(STR_ACC_EDITLINE_DESCR), ScAccessibleEditObject::CellInEditMode);
                     uno::Reference<XAccessible> xAcc = mpTempAccEdit;
 
                     AddChild(xAcc, true);
@@ -2120,7 +2120,7 @@ OUString SAL_CALL
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
-    OUString sName = OUString(ScResId(STR_ACC_DOC_NAME));
+    OUString sName = ScResId(STR_ACC_DOC_NAME);
     sal_Int32 nNumber(sal_Int32(meSplitPos) + 1);
     sName += OUString::number(nNumber);
     return sName;
@@ -2238,7 +2238,7 @@ void ScAccessibleDocument::RemoveChild(const uno::Reference<XAccessible>& xAcc, 
 
 OUString ScAccessibleDocument::GetCurrentCellName() const
 {
-    OUString sName(SC_RESSTR(STR_ACC_CELL_NAME));
+    OUString sName(ScResId(STR_ACC_CELL_NAME));
     if (mpViewShell)
     {
         // Document not needed, because only the cell address, but not the tablename is needed

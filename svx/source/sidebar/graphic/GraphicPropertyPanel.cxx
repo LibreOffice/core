@@ -97,10 +97,10 @@ void GraphicPropertyPanel::Initialize()
     mpMtrContrast->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyContrastHdl ) );
     mpMtrTrans->SetModifyHdl( LINK( this, GraphicPropertyPanel, ModifyTransHdl ) );
 
-    mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_STANDARD));
-    mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_GREYS));
-    mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_MONO));
-    mpLBColorMode->InsertEntry(SVX_RESSTR(RID_SVXSTR_GRAFMODE_WATERMARK));
+    mpLBColorMode->InsertEntry(SvxResId(RID_SVXSTR_GRAFMODE_STANDARD));
+    mpLBColorMode->InsertEntry(SvxResId(RID_SVXSTR_GRAFMODE_GREYS));
+    mpLBColorMode->InsertEntry(SvxResId(RID_SVXSTR_GRAFMODE_MONO));
+    mpLBColorMode->InsertEntry(SvxResId(RID_SVXSTR_GRAFMODE_WATERMARK));
     mpLBColorMode->SetSelectHdl( LINK( this, GraphicPropertyPanel, ClickColorModeHdl ));
 
     mpMtrRed->SetModifyHdl( LINK( this, GraphicPropertyPanel, RedHdl ) );

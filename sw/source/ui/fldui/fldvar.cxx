@@ -326,7 +326,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
             else
             {
                 m_pNumFormatLB->Clear();
-                sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SW_RESSTR(FMT_SETVAR_TEXT), 0);
+                sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SwResId(FMT_SETVAR_TEXT), 0);
                 m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(ULONG_MAX));
                 m_pNumFormatLB->SelectEntryPos(0);
             }
@@ -370,7 +370,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
             {
                 bValue = true;
                 bNumFormat = true;
-                m_pValueFT->SetText(SW_RESSTR(STR_FORMULA));
+                m_pValueFT->SetText(SwResId(STR_FORMULA));
                 m_pValueED->SetDropEnable(true);
             }
             break;
@@ -415,7 +415,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
             break;
 
         case TYP_INPUTFLD:
-            m_pValueFT->SetText(SW_RESSTR(STR_PROMPT));
+            m_pValueFT->SetText(SwResId(STR_PROMPT));
 
             if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
             {
@@ -442,7 +442,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
                         {
                             m_pNumFormatLB->Clear();
 
-                            sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SW_RESSTR(FMT_USERVAR_TEXT), 0);
+                            sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SwResId(FMT_USERVAR_TEXT), 0);
                             m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(ULONG_MAX));
                             m_pNumFormatLB->SelectEntryPos(0);
                         }
@@ -456,7 +456,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
             break;
 
         case TYP_DDEFLD:
-            m_pValueFT->SetText(SW_RESSTR(STR_DDE_CMD));
+            m_pValueFT->SetText(SwResId(STR_DDE_CMD));
 
             if (IsFieldEdit() || pBox)    // only when interacting via mouse
             {
@@ -525,7 +525,7 @@ void SwFieldVarPage::SubTypeHdl(ListBox* pBox)
         case TYP_SETREFPAGEFLD:
             {
                 bValue = false;
-                m_pValueFT->SetText( SW_RESSTR( STR_OFFSET ));
+                m_pValueFT->SetText( SwResId( STR_OFFSET ));
 
                 if (IsFieldEdit() || pBox)    // only when interacting via mouse
                     m_pNameED->SetText(OUString());
@@ -752,9 +752,9 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
         {
             if (!IsFieldEdit() || bSpecialFormat)
             {
-                sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SW_RESSTR(FMT_MARK_TEXT), 0);
+                sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SwResId(FMT_MARK_TEXT), 0);
                 m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(ULONG_MAX));
-                nPos = m_pNumFormatLB->InsertEntry(SW_RESSTR(FMT_USERVAR_CMD), 1);
+                nPos = m_pNumFormatLB->InsertEntry(SwResId(FMT_USERVAR_CMD), 1);
                 m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(ULONG_MAX));
             }
         }
@@ -764,7 +764,7 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
         {
             if (!IsFieldEdit() || bSpecialFormat)
             {
-                sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SW_RESSTR(FMT_SETVAR_TEXT), 0);
+                sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SwResId(FMT_SETVAR_TEXT), 0);
                 m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(ULONG_MAX));
             }
         }
@@ -772,14 +772,14 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
 
         case TYP_FORMELFLD:
         {
-            sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SW_RESSTR(FMT_GETVAR_NAME), 0);
+            sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SwResId(FMT_GETVAR_NAME), 0);
             m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(ULONG_MAX));
         }
         break;
 
         case TYP_GETFLD:
         {
-            sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SW_RESSTR(FMT_GETVAR_NAME), 0);
+            sal_Int32 nPos = m_pNumFormatLB->InsertEntry(SwResId(FMT_GETVAR_NAME), 0);
             m_pNumFormatLB->SetEntryData(nPos, reinterpret_cast<void *>(ULONG_MAX));
         }
         break;
@@ -817,10 +817,10 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
 
         if (!m_pFormatLB->GetSelectEntryCount())
         {
-            m_pFormatLB->SelectEntry(SW_RESSTR(FMT_NUM_PAGEDESC));
+            m_pFormatLB->SelectEntry(SwResId(FMT_NUM_PAGEDESC));
             if (!m_pFormatLB->GetSelectEntryCount())
             {
-                m_pFormatLB->SelectEntry(SW_RESSTR(FMT_NUM_ARABIC));
+                m_pFormatLB->SelectEntry(SwResId(FMT_NUM_ARABIC));
                 if (!m_pFormatLB->GetSelectEntryCount())
                     m_pFormatLB->SelectEntryPos(0);
             }
@@ -1159,7 +1159,7 @@ bool SwFieldVarPage::FillItemSet(SfxItemSet* )
         {
             nSubType = (nFormat == ULONG_MAX) ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR;
 
-            if (nFormat == ULONG_MAX && m_pNumFormatLB->GetSelectEntry() == SW_RESSTR(FMT_USERVAR_CMD))
+            if (nFormat == ULONG_MAX && m_pNumFormatLB->GetSelectEntry() == SwResId(FMT_USERVAR_CMD))
                 nSubType |= nsSwExtendedSubType::SUB_CMD;
 
             if (m_pInvisibleCB->IsChecked())

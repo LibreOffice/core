@@ -2493,7 +2493,7 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
         {
             boost::property_tree::ptree aChild;
 
-            OUString sClearFormat = SVX_RESSTR( RID_SVXSTR_CLEARFORM );
+            OUString sClearFormat = SvxResId(RID_SVXSTR_CLEARFORM);
 
             boost::property_tree::ptree aName;
             aName.put("", sClearFormat.toUtf8());

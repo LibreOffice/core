@@ -96,7 +96,7 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, cons
     else if ( mpImpl->mnState == SignatureState::PARTIAL_OK )
         nResId = RID_SVXSTR_XMLSEC_SIG_CERT_OK_PARTIAL_SIG;
 
-    GetStatusBar().SetQuickHelpText( GetId(), SVX_RESSTR( nResId ) );
+    GetStatusBar().SetQuickHelpText( GetId(), SvxResId( nResId ) );
 }
 
 void XmlSecStatusBarControl::Command( const CommandEvent& rCEvt )

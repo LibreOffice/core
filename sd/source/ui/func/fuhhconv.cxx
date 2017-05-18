@@ -99,7 +99,7 @@ void FuHangulHanjaConversion::StartConversion( LanguageType nSourceLanguage, Lan
         const vcl::Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive )
 {
 
-    mpView->BegUndo(SD_RESSTR(STR_UNDO_HANGULHANJACONVERSION));
+    mpView->BegUndo(SdResId(STR_UNDO_HANGULHANJACONVERSION));
 
     ViewShellBase* pBase = dynamic_cast<ViewShellBase*>( SfxViewShell::Current() );
     if (pBase != nullptr)

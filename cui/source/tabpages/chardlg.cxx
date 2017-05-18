@@ -254,7 +254,7 @@ SvxCharNamePage::SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rInSet
     : SvxCharBasePage(pParent, "CharNamePage", "cui/ui/charnamepage.ui", rInSet)
     , m_pImpl(new SvxCharNamePage_Impl)
 {
-    m_pImpl->m_aNoStyleText = CUI_RES( RID_SVXSTR_CHARNAME_NOSTYLE );
+    m_pImpl->m_aNoStyleText = CuiResId( RID_SVXSTR_CHARNAME_NOSTYLE );
 
     SvtLanguageOptions aLanguageOptions;
     bool bShowCJK = aLanguageOptions.IsCJKFontEnabled();
@@ -319,18 +319,18 @@ SvxCharNamePage::SvxCharNamePage( vcl::Window* pParent, const SfxItemSet& rInSet
     //In Windows the standard dialogs name font-name, font-style as
     //Font, Style
 #ifdef _WIN32
-    OUString sFontFamilyString(CUI_RES(RID_SVXSTR_CHARNAME_FONT));
+    OUString sFontFamilyString(CuiResId(RID_SVXSTR_CHARNAME_FONT));
 #else
-    OUString sFontFamilyString(CUI_RES(RID_SVXSTR_CHARNAME_FAMILY));
+    OUString sFontFamilyString(CuiResId(RID_SVXSTR_CHARNAME_FAMILY));
 #endif
     m_pWestFontNameFT->SetText(sFontFamilyString);
     m_pEastFontNameFT->SetText(sFontFamilyString);
     m_pCTLFontNameFT->SetText(sFontFamilyString);
 
 #ifdef MACOSX
-    OUString sFontStyleString(CUI_RES(RID_SVXSTR_CHARNAME_TYPEFACE));
+    OUString sFontStyleString(CuiResId(RID_SVXSTR_CHARNAME_TYPEFACE));
 #else
-    OUString sFontStyleString(CUI_RES(RID_SVXSTR_CHARNAME_STYLE));
+    OUString sFontStyleString(CuiResId(RID_SVXSTR_CHARNAME_STYLE));
 #endif
     m_pWestFontStyleFT->SetText(sFontStyleString);
     m_pEastFontStyleFT->SetText(sFontStyleString);

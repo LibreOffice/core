@@ -475,7 +475,7 @@ namespace svxform
                     }
 
                     if ( nTitleResId )
-                        sInitialLabel = SVX_RESSTR(nTitleResId);
+                        sInitialLabel = SvxResId(nTitleResId);
 
                     _rxControlModel->setPropertyValue(
                         FM_PROP_LABEL,
@@ -679,7 +679,7 @@ namespace svxform
                 nResId = RID_STR_CONTROL;     break;
         }
 
-        return SVX_RESSTR(nResId);
+        return SvxResId(nResId);
     }
 
 

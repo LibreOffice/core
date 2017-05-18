@@ -647,7 +647,7 @@ OUString GetTypeRes_Impl( const ResId& rTypeId )
             rTypeId.SetRT( RSC_STRING );
             if ( rTypeId.GetResMgr()->IsAvailable( rTypeId ) )
             {
-                aTypStr = rTypeId.toString();
+                aTypStr = rTypeId;
                 // Set class pointer to the end
                 rTypeId.GetResMgr()->Increment( sizeof( RSHEADER_TYPE ) );
             }

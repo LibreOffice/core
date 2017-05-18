@@ -2283,7 +2283,7 @@ IMPL_LINK_NOARG( SvxConfigPage, AsyncInfoMsg, void*, void )
 {
     // Asynchronous msg because of D&D
     ScopedVclPtrInstance<MessageDialog>(this,
-        CUI_RES( RID_SVXSTR_MNUCFG_ALREADY_INCLUDED ),
+        CuiResId( RID_SVXSTR_MNUCFG_ALREADY_INCLUDED ),
         VclMessageType::Info)->Execute();
 }
 
@@ -2421,7 +2421,7 @@ SvxMenuConfigPage::SvxMenuConfigPage(vcl::Window *pParent, const SfxItemSet& rSe
 
     if ( !bIsMenuBar )
     {
-        m_pTopLevel->set_label( CUI_RES( RID_SVXSTR_PRODUCTNAME_CONTEXTMENUS ) );
+        m_pTopLevel->set_label( CuiResId( RID_SVXSTR_PRODUCTNAME_CONTEXTMENUS ) );
         m_pNewTopLevelButton->Hide();
         pMenu->HideItem( pMenu->GetItemId( "move" ) );
         pMenu->HideItem( pMenu->GetItemId( "menuitem3" ) );
@@ -2561,7 +2561,7 @@ void SvxMenuConfigPage::DeleteSelectedContent()
 
 short SvxMenuConfigPage::QueryReset()
 {
-    OUString msg = CUI_RES( RID_SVXSTR_CONFIRM_MENU_RESET );
+    OUString msg = CuiResId( RID_SVXSTR_CONFIRM_MENU_RESET );
 
     OUString saveInName = m_pSaveInListBox->GetEntry(
         m_pSaveInListBox->GetSelectEntryPos() );
@@ -2617,11 +2617,11 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton, void )
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
         OUString aNewName( stripHotKey( pMenuData->GetName() ) );
-        OUString aDesc = CUI_RES( RID_SVXSTR_LABEL_NEW_NAME );
+        OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
 
         VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
         pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU );
-        pNameDialog->SetText( CUI_RES( RID_SVXSTR_RENAME_MENU ) );
+        pNameDialog->SetText( CuiResId( RID_SVXSTR_RENAME_MENU ) );
 
         if ( pNameDialog->Execute() == RET_OK ) {
             pNameDialog->GetName( aNewName );
@@ -2661,11 +2661,11 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
             static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
 
         OUString aNewName( stripHotKey( pEntry->GetName() ) );
-        OUString aDesc = CUI_RES( RID_SVXSTR_LABEL_NEW_NAME );
+        OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
 
         VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
         pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU_ITEM );
-        pNameDialog->SetText( CUI_RES( RID_SVXSTR_RENAME_MENU ) );
+        pNameDialog->SetText( CuiResId( RID_SVXSTR_RENAME_MENU ) );
 
         if ( pNameDialog->Execute() == RET_OK ) {
             pNameDialog->GetName(aNewName);
@@ -2716,7 +2716,7 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, AddCommandsHdl, Button *, void )
         m_pSelectorDlg->SetAddHdl(
             LINK( this, SvxMenuConfigPage, AddFunctionHdl ) );
 
-        m_pSelectorDlg->SetDialogDescription( CUI_RES( RID_SVXSTR_MENU_ADDCOMMANDS_DESCRIPTION ) );
+        m_pSelectorDlg->SetDialogDescription( CuiResId( RID_SVXSTR_MENU_ADDCOMMANDS_DESCRIPTION ) );
     }
 
     // Position the Script Selector over the Add button so it is
@@ -2743,11 +2743,11 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, AddSeparatorHdl, Button *, void )
 IMPL_LINK_NOARG( SvxMenuConfigPage, AddSubmenuHdl, Button *, void )
 {
     OUString aNewName;
-    OUString aDesc = CUI_RES( RID_SVXSTR_SUBMENU_NAME );
+    OUString aDesc = CuiResId( RID_SVXSTR_SUBMENU_NAME );
 
     VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
     pNameDialog->SetHelpId( HID_SVX_CONFIG_NAME_SUBMENU );
-    pNameDialog->SetText( CUI_RES( RID_SVXSTR_ADD_SUBMENU ) );
+    pNameDialog->SetText( CuiResId( RID_SVXSTR_ADD_SUBMENU ) );
 
     if ( pNameDialog->Execute() == RET_OK )
     {
@@ -2828,7 +2828,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     if ( bCreateMenu )
     {
         // Generate custom name for new menu
-        OUString prefix = CUI_RES( RID_SVXSTR_NEW_MENU );
+        OUString prefix = CuiResId( RID_SVXSTR_NEW_MENU );
 
         OUString newname = generateCustomName( prefix, entries );
         OUString newurl = generateCustomMenuURL( mpEntries );
@@ -2859,7 +2859,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         // hide name label and textfield
         m_pMenuBox->Hide();
         // change the title
-        SetText( CUI_RES( RID_SVXSTR_MOVE_MENU ) );
+        SetText( CuiResId( RID_SVXSTR_MOVE_MENU ) );
     }
 
     m_pMenuListBox->SetSelectHdl(
@@ -3072,12 +3072,12 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(vcl::Window *pParent, const SfxItemSe
     m_pMoveDownButton->SetHelpId( HID_SVX_DOWN_TOOLBAR_ITEM );
     m_pDescriptionField->SetHelpId ( HID_SVX_DESCFIELD );
 
-    m_pTopLevel->set_label(CUI_RES(RID_SVXSTR_PRODUCTNAME_TOOLBARS));
+    m_pTopLevel->set_label(CuiResId(RID_SVXSTR_PRODUCTNAME_TOOLBARS));
 
-    m_pTopLevelLabel->SetText( CUI_RES( RID_SVXSTR_TOOLBAR ) );
-    m_pModifyTopLevelButton->SetText( CUI_RES( RID_SVXSTR_TOOLBAR ) );
-    m_pContents->set_label(CUI_RES(RID_SVXSTR_TOOLBAR_CONTENT));
-    m_pContentsLabel->SetText( CUI_RES( RID_SVXSTR_COMMANDS ) );
+    m_pTopLevelLabel->SetText( CuiResId( RID_SVXSTR_TOOLBAR ) );
+    m_pModifyTopLevelButton->SetText( CuiResId( RID_SVXSTR_TOOLBAR ) );
+    m_pContents->set_label(CuiResId(RID_SVXSTR_TOOLBAR_CONTENT));
+    m_pContentsLabel->SetText( CuiResId( RID_SVXSTR_COMMANDS ) );
 
     // The reset button will be used in the toolbar config tab
     m_pResetTopLevelButton->Show();
@@ -3239,7 +3239,7 @@ void SvxToolbarConfigPage::DeleteSelectedContent()
              GetTopLevelSelection()->IsDeletable() )
         {
             ScopedVclPtrInstance<MessageDialog> qbox(this,
-                CUI_RES(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR), VclMessageType::Question, VclButtonsType::YesNo);
+                CuiResId(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR), VclMessageType::Question, VclButtonsType::YesNo);
 
             if ( qbox->Execute() == RET_YES )
             {
@@ -3288,11 +3288,11 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton, void )
     else if (sCommand == "modtoolrename")
     {
         OUString aNewName( stripHotKey( pToolbar->GetName() ) );
-        OUString aDesc = CUI_RES( RID_SVXSTR_LABEL_NEW_NAME );
+        OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
 
         VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
         pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR );
-        pNameDialog->SetText( CUI_RES( RID_SVXSTR_RENAME_TOOLBAR ) );
+        pNameDialog->SetText( CuiResId( RID_SVXSTR_RENAME_TOOLBAR ) );
 
         if ( pNameDialog->Execute() == RET_OK )
         {
@@ -3327,11 +3327,11 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
             static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
 
         OUString aNewName( stripHotKey( pEntry->GetName() ) );
-        OUString aDesc = CUI_RES( RID_SVXSTR_LABEL_NEW_NAME );
+        OUString aDesc = CuiResId( RID_SVXSTR_LABEL_NEW_NAME );
 
         VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
         pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM );
-        pNameDialog->SetText( CUI_RES( RID_SVXSTR_RENAME_TOOLBAR ) );
+        pNameDialog->SetText( CuiResId( RID_SVXSTR_RENAME_TOOLBAR ) );
 
         if ( pNameDialog->Execute() == RET_OK ) {
             pNameDialog->GetName(aNewName);
@@ -4413,7 +4413,7 @@ void SvxToolbarConfigPage::UpdateButtonStates()
 
 short SvxToolbarConfigPage::QueryReset()
 {
-    OUString msg = CUI_RES( RID_SVXSTR_CONFIRM_TOOLBAR_RESET );
+    OUString msg = CuiResId( RID_SVXSTR_CONFIRM_TOOLBAR_RESET );
 
     OUString saveInName = m_pSaveInListBox->GetEntry(
         m_pSaveInListBox->GetSelectEntryPos() );
@@ -4539,7 +4539,7 @@ IMPL_LINK( SvxToolbarConfigPage, StyleChangeHdl, Button*, pButton, void )
 
 IMPL_LINK_NOARG( SvxToolbarConfigPage, NewToolbarHdl, Button *, void )
 {
-    OUString prefix = CUI_RES( RID_SVXSTR_NEW_TOOLBAR );
+    OUString prefix = CuiResId( RID_SVXSTR_NEW_TOOLBAR );
 
     OUString aNewName =
         generateCustomName( prefix, GetSaveInData()->GetEntries() );
@@ -4646,7 +4646,7 @@ IMPL_LINK_NOARG( SvxToolbarConfigPage, ResetTopLevelHdl, Button *, void )
         static_cast<SvxConfigEntry*>(m_pTopLevelListBox->GetEntryData( nSelectionPos ));
 
     ScopedVclPtrInstance<MessageDialog> qbox(this,
-        CUI_RES(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VclMessageType::Question, VclButtonsType::YesNo);
+        CuiResId(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VclMessageType::Question, VclButtonsType::YesNo);
 
     if ( qbox->Execute() == RET_YES )
     {
@@ -5204,7 +5204,7 @@ IMPL_LINK_NOARG( SvxIconSelectorDialog, ImportHdl, Button *, void)
 
 IMPL_LINK_NOARG( SvxIconSelectorDialog, DeleteHdl, Button *, void )
 {
-    OUString message = CUI_RES( RID_SVXSTR_DELETE_ICON_CONFIRM );
+    OUString message = CuiResId( RID_SVXSTR_DELETE_ICON_CONFIRM );
     if (ScopedVclPtrInstance<WarningBox>(this, WinBits(WB_OK_CANCEL), message)->Execute() == RET_OK)
     {
         ToolBox::ImplToolItems::size_type nCount = pTbSymbol->GetItemCount();
@@ -5492,21 +5492,21 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 SvxIconReplacementDialog::SvxIconReplacementDialog(
     vcl::Window *pWindow, const OUString& aMessage, bool /*bYestoAll*/ )
     :
-MessBox( pWindow, WB_DEF_YES, CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) )
+MessBox( pWindow, WB_DEF_YES, CuiResId( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING ) )
 
 {
     SetImage( WarningBox::GetStandardImage() );
     SetMessText( ReplaceIconName( aMessage ) );
     RemoveButton( 1 );
     AddButton( StandardButtonType::Yes, 2);
-    AddButton( CUI_RES( RID_SVXSTR_YESTOALL ), 5);
+    AddButton( CuiResId( RID_SVXSTR_YESTOALL ), 5);
     AddButton( StandardButtonType::No, 3);
     AddButton( StandardButtonType::Cancel, 4);
 }
 
 SvxIconReplacementDialog::SvxIconReplacementDialog(
     vcl::Window *pWindow, const OUString& aMessage )
-    : MessBox( pWindow, WB_YES_NO_CANCEL, CUI_RES( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) )
+    : MessBox( pWindow, WB_YES_NO_CANCEL, CuiResId( RID_SVXSTR_REPLACE_ICON_CONFIRM ),  CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING ) )
 {
     SetImage( WarningBox::GetStandardImage() );
     SetMessText( ReplaceIconName( aMessage ));
@@ -5515,7 +5515,7 @@ SvxIconReplacementDialog::SvxIconReplacementDialog(
 OUString SvxIconReplacementDialog::ReplaceIconName( const OUString& rMessage )
 {
     OUString name;
-    OUString message = CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING );
+    OUString message = CuiResId( RID_SVXSTR_REPLACE_ICON_WARNING );
     OUString placeholder("%ICONNAME" );
     sal_Int32 pos = message.indexOf( placeholder );
     if ( pos != -1 )

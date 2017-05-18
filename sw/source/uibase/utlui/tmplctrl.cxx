@@ -64,7 +64,7 @@ SwTemplateControl::SwTemplateControl( sal_uInt16 _nSlotId,
                                       StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb )
 {
-    GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_TMPLCTRL_HINT));
+    GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_TMPLCTRL_HINT));
 }
 
 SwTemplateControl::~SwTemplateControl()

@@ -347,7 +347,7 @@ void FuConstruct::SetStyleSheet( SfxItemSet& rAttr, SdrObject* pObj,
         ************************************/
         if ( bForceNoFillStyle )
         {
-            OUString aName(SD_RESSTR(STR_POOLSHEET_OBJWITHOUTFILL));
+            OUString aName(SdResId(STR_POOLSHEET_OBJWITHOUTFILL));
             SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pPage->GetModel()->
                                          GetStyleSheetPool()->
                                          Find(aName, SD_STYLE_FAMILY_GRAPHICS));

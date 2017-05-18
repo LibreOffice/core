@@ -2222,7 +2222,7 @@ bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete 
         {
             SwRewriter aRewriter;
             aRewriter.AddRule(UndoArg1, OUString::number(nRet));
-            aTmpStr = aRewriter.Apply(OUString(SW_RES(STR_N_REDLINES)));
+            aTmpStr = aRewriter.Apply(SwResId(STR_N_REDLINES));
         }
 
         SwRewriter aRewriter;
@@ -2336,7 +2336,7 @@ bool DocumentRedlineManager::RejectRedline( const SwPaM& rPam, bool bCallDelete 
         {
             SwRewriter aRewriter;
             aRewriter.AddRule(UndoArg1, OUString::number(nRet));
-            aTmpStr = aRewriter.Apply(OUString(SW_RES(STR_N_REDLINES)));
+            aTmpStr = aRewriter.Apply(SwResId(STR_N_REDLINES));
         }
 
         SwRewriter aRewriter;

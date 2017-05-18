@@ -133,7 +133,7 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
     // Read user label from writer.cfg
     SwLabItem aItem(static_cast<const SwLabItem&>(rSet.Get( FN_LABEL )));
     std::unique_ptr<SwLabRec> pRec(new SwLabRec);
-    pRec->aMake = pRec->aType = SW_RESSTR( STR_CUSTOM );
+    pRec->aMake = pRec->aType = SwResId( STR_CUSTOM );
     pRec->SetFromItem( aItem );
 
     bool bDouble = false;
@@ -204,7 +204,7 @@ SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, bool bCont)
 {
     SwLabRec* pRec = nullptr;
     bool bFound = false;
-    const OUString sCustom(SW_RES(STR_CUSTOM));
+    const OUString sCustom(SwResId(STR_CUSTOM));
 
     const size_t nCount = Recs().size();
     for (size_t i = 0; i < nCount; ++i)
@@ -380,7 +380,7 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl, ListBox&, void)
     const size_t nCount   = GetParentSwLabDlg()->Recs().size();
     size_t nLstType = 0;
 
-    const OUString sCustom(SW_RES(STR_CUSTOM));
+    const OUString sCustom(SwResId(STR_CUSTOM));
     //insert the entries into the sorted list box
     for ( size_t i = 0; i < nCount; ++i )
     {

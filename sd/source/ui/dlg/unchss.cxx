@@ -51,7 +51,7 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
     mpOldSet = o3tl::make_unique<SfxItemSet>(static_cast<SfxItemPool&>(SdrObject::GetGlobalDrawObjectItemPool()), mpStyleSheet->GetItemSet().GetRanges());
     SdrModel::MigrateItemSet( &mpStyleSheet->GetItemSet(), mpOldSet.get(), pTheDoc );
 
-    OUString aComment(SD_RESSTR(STR_UNDO_CHANGE_PRES_OBJECT));
+    OUString aComment(SdResId(STR_UNDO_CHANGE_PRES_OBJECT));
     OUString aName(mpStyleSheet->GetName());
 
     // delete layout name and separator
@@ -61,27 +61,27 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
 
     if (aName == STR_LAYOUT_TITLE)
     {
-        aName = SD_RESSTR(STR_PSEUDOSHEET_TITLE);
+        aName = SdResId(STR_PSEUDOSHEET_TITLE);
     }
     else if (aName == STR_LAYOUT_SUBTITLE)
     {
-        aName = SD_RESSTR(STR_PSEUDOSHEET_SUBTITLE);
+        aName = SdResId(STR_PSEUDOSHEET_SUBTITLE);
     }
     else if (aName == STR_LAYOUT_BACKGROUND)
     {
-        aName = SD_RESSTR(STR_PSEUDOSHEET_BACKGROUND);
+        aName = SdResId(STR_PSEUDOSHEET_BACKGROUND);
     }
     else if (aName == STR_LAYOUT_BACKGROUNDOBJECTS)
     {
-        aName = SD_RESSTR(STR_PSEUDOSHEET_BACKGROUNDOBJECTS);
+        aName = SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS);
     }
     else if (aName == STR_LAYOUT_NOTES)
     {
-        aName = SD_RESSTR(STR_PSEUDOSHEET_NOTES);
+        aName = SdResId(STR_PSEUDOSHEET_NOTES);
     }
     else
     {
-        OUString aOutlineStr(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE));
+        OUString aOutlineStr(SdResId(STR_PSEUDOSHEET_OUTLINE));
         nPos = aName.indexOf(aOutlineStr);
         if (nPos != -1)
         {

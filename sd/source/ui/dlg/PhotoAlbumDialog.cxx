@@ -109,7 +109,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 {
     if (pImagesLst->GetEntryCount() == 0)
     {
-        ScopedVclPtrInstance< WarningBox > aWarning(this, WB_OK, SD_RESSTR(STR_PHOTO_ALBUM_EMPTY_WARNING));
+        ScopedVclPtrInstance< WarningBox > aWarning(this, WB_OK, SdResId(STR_PHOTO_ALBUM_EMPTY_WARNING));
         aWarning->Execute();
     }
     else
@@ -610,7 +610,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl, ListBox&, void)
     OUString* pData = static_cast<OUString*>(pImagesLst->GetSelectEntryData());
     OUString sImgUrl = pData ? OUString(*pData) : "";
 
-    if (sImgUrl != SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX))
+    if (sImgUrl != SdResId(STR_PHOTO_ALBUM_TEXTBOX))
     {
         GraphicFilter aCurFilter;
         Graphic aGraphic;

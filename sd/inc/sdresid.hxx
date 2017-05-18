@@ -22,14 +22,12 @@
 
 #include <tools/resid.hxx>
 #include "sddllapi.h"
+#include "sdmod.hxx"
 
-class SD_DLLPUBLIC SdResId : public ResId
+inline OUString SdResId(sal_uInt16 nId)
 {
-public:
-    SdResId(sal_uInt16 nId);
-};
-
-#define SD_RESSTR(x) SdResId(x).toString()
+    return ResId(nId, *SD_MOD()->GetResMgr());
+}
 
 #endif /* _SD_SDRESID_HXX */
 

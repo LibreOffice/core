@@ -49,7 +49,10 @@ namespace XmlSec
     OUString        GetHexString( const css::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, sal_uInt16 _nLineBreak = 0xFFFF );
 }
 
-#define XMLSEC_RES(id)      ResId(id,*XmlSec::GetResMgr())
+inline OUString XsResId(sal_uInt16 nId)
+{
+    return ResId(nId, *XmlSec::GetResMgr());
+}
 
 #endif
 

@@ -168,8 +168,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
     if (aUniqueName.isEmpty())
     {
         sal_Int32 nUserIndex = 1;
-        const ResId aRes(SVX_RES(nPrefixResId));
-        OUString aUser( aRes.toString() );
+        OUString aUser(SvxResId(nPrefixResId));
         aUser += " ";
 
         if( pDefaults.get() )
@@ -402,7 +401,7 @@ bool XLineStyleItem::GetPresentation
     }
 
     if ( nId )
-        rText = SVX_RESSTR( nId );
+        rText = SvxResId( nId );
     return true;
 }
 
@@ -1484,8 +1483,7 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
             bool bFoundExisting = false;
 
             sal_Int32 nUserIndex = 1;
-            const ResId aRes(SVX_RES(RID_SVXSTR_LINEEND));
-            const OUString aUser( aRes.toString() );
+            const OUString aUser(SvxResId(RID_SVXSTR_LINEEND));
 
             if( pPool1 )
             {
@@ -1767,8 +1765,7 @@ XLineEndItem* XLineEndItem::checkForUniqueItem( SdrModel* pModel ) const
             bool bFoundExisting = false;
 
             sal_Int32 nUserIndex = 1;
-            const ResId aRes(SVX_RES(RID_SVXSTR_LINEEND));
-            const OUString aUser( aRes.toString() );
+            const OUString aUser(SvxResId(RID_SVXSTR_LINEEND));
 
             if( pPool1 )
             {
@@ -2160,7 +2157,7 @@ bool XFillStyleItem::GetPresentation
     }
 
     if ( nId )
-        rText = SVX_RESSTR( nId );
+        rText = SvxResId( nId );
     return true;
 }
 

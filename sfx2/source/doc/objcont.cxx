@@ -461,7 +461,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                         bLoad = true;
                     else if ( bCanUpdateFromTemplate == document::UpdateDocMode::ACCORDING_TO_CONFIG )
                     {
-                        const OUString sMessage( SfxResId(STR_QRYTEMPL_MESSAGE).toString().replaceAll( "$(ARG1)", aTemplName ) );
+                        const OUString sMessage( SfxResId(STR_QRYTEMPL_MESSAGE).replaceAll( "$(ARG1)", aTemplName ) );
                         ScopedVclPtrInstance< sfx2::QueryTemplateBox > aBox(GetDialogParent(), sMessage);
                         if ( RET_YES == aBox->Execute() )
                             bLoad = true;

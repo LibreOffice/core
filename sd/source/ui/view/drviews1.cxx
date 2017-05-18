@@ -1149,11 +1149,11 @@ void DrawViewShell::ResetActualLayer()
 
         OUString aName;
         OUString aActiveLayer = mpDrawView->GetActiveLayer();
-        OUString aBackgroundLayer = SD_RESSTR(STR_LAYER_BCKGRND);
-        OUString aBackgroundObjLayer = SD_RESSTR(STR_LAYER_BCKGRNDOBJ);
-        OUString aLayoutLayer = SD_RESSTR(STR_LAYER_LAYOUT);
-        OUString aControlsLayer = SD_RESSTR(STR_LAYER_CONTROLS);
-        OUString aMeasureLinesLayer = SD_RESSTR(STR_LAYER_MEASURELINES);
+        OUString aBackgroundLayer = SdResId(STR_LAYER_BCKGRND);
+        OUString aBackgroundObjLayer = SdResId(STR_LAYER_BCKGRNDOBJ);
+        OUString aLayoutLayer = SdResId(STR_LAYER_LAYOUT);
+        OUString aControlsLayer = SdResId(STR_LAYER_CONTROLS);
+        OUString aMeasureLinesLayer = SdResId(STR_LAYER_MEASURELINES);
         sal_uInt16 nActiveLayerPos = SDRLAYERPOS_NOTFOUND;
         SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
         sal_uInt16 nLayerCnt = rLayerAdmin.GetLayerCount();

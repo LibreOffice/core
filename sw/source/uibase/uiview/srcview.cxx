@@ -160,7 +160,7 @@ static void lcl_PrintHeader( vcl::RenderContext &rOutDev, sal_Int32 nPages, sal_
         aFont.SetWeight( WEIGHT_NORMAL );
         rOutDev.SetFont( aFont );
         OUString aPageStr( " [" );
-        aPageStr += SW_RES( STR_PAGE );
+        aPageStr += SwResId( STR_PAGE );
         aPageStr += " ";
         aPageStr += OUString::number( nCurPage );
         aPageStr += "]";
@@ -426,10 +426,10 @@ void SwSrcView::GetState(SfxItemSet& rSet)
         switch(nWhich)
         {
             case SID_SAVEASDOC:
-                rSet.Put(SfxStringItem(nWhich, OUString(SW_RES(STR_SAVEAS_SRC))));
+                rSet.Put(SfxStringItem(nWhich, SwResId(STR_SAVEAS_SRC)));
             break;
             case SID_SAVEACOPY:
-                rSet.Put(SfxStringItem(nWhich, OUString(SW_RES(STR_SAVEACOPY_SRC))));
+                rSet.Put(SfxStringItem(nWhich, SwResId(STR_SAVEACOPY_SRC)));
             break;
             case SID_SAVEDOC:
             {
@@ -443,11 +443,11 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             break;
             case SID_TABLE_CELL:
             {
-                OUString aPos( SW_RES(STR_SRCVIEW_ROW) );
+                OUString aPos( SwResId(STR_SRCVIEW_ROW) );
                 TextSelection aSel = pTextView->GetSelection();
                 aPos += OUString::number( aSel.GetEnd().GetPara()+1 );
                 aPos += " : ";
-                aPos += SW_RES(STR_SRCVIEW_COL);
+                aPos += SwResId(STR_SRCVIEW_COL);
                 aPos += OUString::number( aSel.GetEnd().GetIndex()+1 );
                 SfxStringItem aItem( nWhich, aPos );
                 rSet.Put( aItem );
@@ -807,7 +807,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         else
         {
             vcl::Window *pTmpWindow = &GetViewFrame()->GetWindow();
-            ScopedVclPtrInstance<MessageDialog>(pTmpWindow, SW_RES(STR_ERR_SRCSTREAM), VclMessageType::Info)->Execute();
+            ScopedVclPtrInstance<MessageDialog>(pTmpWindow, SwResId(STR_ERR_SRCSTREAM), VclMessageType::Info)->Execute();
         }
     }
     else

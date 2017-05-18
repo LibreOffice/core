@@ -2794,7 +2794,7 @@ void SwFrameFormat::SetPositionLayoutDir( const sal_Int16 )
 
 OUString SwFrameFormat::GetDescription() const
 {
-    return SW_RES(STR_FRAME);
+    return SwResId(STR_FRAME);
 }
 
 void SwFrameFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -3368,7 +3368,7 @@ OUString SwDrawFrameFormat::GetDescription() const
         aResult = m_sSdrObjectCachedComment;
     }
     else
-        aResult = SW_RESSTR(STR_GRAPHIC);
+        aResult = SwResId(STR_GRAPHIC);
 
     return aResult;
 }

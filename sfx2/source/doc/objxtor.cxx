@@ -598,7 +598,7 @@ bool SfxObjectShell::PrepareClose
             const SfxPoolItem *pPoolItem;
             if ( IsSaveVersionOnClose() )
             {
-                SfxStringItem aItem( SID_DOCINFO_COMMENTS, SfxResId(STR_AUTOMATICVERSION).toString() );
+                SfxStringItem aItem( SID_DOCINFO_COMMENTS, SfxResId(STR_AUTOMATICVERSION) );
                 SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
                 const SfxPoolItem* ppArgs[] = { &aItem, &aWarnItem, nullptr };
                 pPoolItem = pFrame->GetBindings().ExecuteSynchron( SID_SAVEDOC, ppArgs );

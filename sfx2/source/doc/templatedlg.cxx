@@ -170,17 +170,17 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     // Create popup menus
     mpActionMenu = VclPtr<PopupMenu>::Create();
     mpActionMenu->InsertItem(MNI_ACTION_NEW_FOLDER,
-        SfxResId(STR_CATEGORY_NEW).toString(),
+        SfxResId(STR_CATEGORY_NEW),
         Image(BitmapEx(BMP_ACTION_REFRESH)));
     mpActionMenu->InsertItem(MNI_ACTION_RENAME_FOLDER,
-        SfxResId(STR_CATEGORY_RENAME).toString());
+        SfxResId(STR_CATEGORY_RENAME));
     mpActionMenu->InsertItem(MNI_ACTION_DELETE_FOLDER,
-        SfxResId(STR_CATEGORY_DELETE).toString());
+        SfxResId(STR_CATEGORY_DELETE));
     mpActionMenu->InsertSeparator();
     mpActionMenu->InsertItem(MNI_ACTION_REFRESH,
-        SfxResId(STR_ACTION_REFRESH).toString(),
+        SfxResId(STR_ACTION_REFRESH),
         Image(BitmapEx(BMP_ACTION_REFRESH)));
-    mpActionMenu->InsertItem(MNI_ACTION_DEFAULT,SfxResId(STR_ACTION_DEFAULT).toString());
+    mpActionMenu->InsertItem(MNI_ACTION_DEFAULT,SfxResId(STR_ACTION_DEFAULT));
     mpActionMenu->SetSelectHdl(LINK(this,SfxTemplateManagerDlg,MenuSelectHdl));
 
     mpTemplateDefaultMenu = VclPtr<PopupMenu>::Create();
@@ -246,7 +246,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
 
     mpExportButton->Disable();
     mpMoveButton->Disable();
-    mpOKButton->SetText(SfxResId(STR_OPEN).toString());
+    mpOKButton->SetText(SfxResId(STR_OPEN));
 
     mpCBApp->SetSelectHdl(LINK(this, SfxTemplateManagerDlg, SelectApplicationHdl));
     mpCBFolder->SetSelectHdl(LINK(this, SfxTemplateManagerDlg, SelectRegionHdl));
@@ -629,7 +629,7 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, ImportClickHdl, Button*, void)
             }
             else
             {
-                OUString aMsg( SfxResId(STR_CREATE_ERROR).toString() );
+                OUString aMsg( SfxResId(STR_CREATE_ERROR) );
                 ScopedVclPtrInstance<MessageDialog>(this, aMsg.replaceFirst("$1", sCategory))->Execute();
                 return;
             }
@@ -747,7 +747,7 @@ IMPL_LINK(SfxTemplateManagerDlg, DeleteTemplateHdl, ThumbnailViewItem*, pItem, v
 
     if (!aDeletedTemplate.isEmpty())
     {
-        OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_TEMPLATE).toString() );
+        OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_TEMPLATE) );
         ScopedVclPtrInstance<MessageDialog>(this, aMsg.replaceFirst("$1",aDeletedTemplate))->Execute();
     }
 }
@@ -892,12 +892,12 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(const OUString& sCategory)
     sfx2::FileDialogHelper aFileDlg(nDialogType, FileDialogFlags::MultiSelection);
 
     // add "All" filter
-    aFileDlg.AddFilter( SfxResId(STR_SFX_FILTERNAME_ALL).toString(),
+    aFileDlg.AddFilter( SfxResId(STR_SFX_FILTERNAME_ALL),
                         FILEDIALOG_FILTER_ALL );
 
     // add template filter
     OUString sFilterExt;
-    OUString sFilterName( SfxResId( STR_TEMPLATE_FILTER ).toString() );
+    OUString sFilterName( SfxResId( STR_TEMPLATE_FILTER ) );
 
     // add filters of modules which are installed
     SvtModuleOptions aModuleOpt;
@@ -967,7 +967,7 @@ void SfxTemplateManagerDlg::OnTemplateImportCategory(const OUString& sCategory)
 
                 if (!aTemplateList.isEmpty())
                 {
-                    OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
+                    OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT));
                     aMsg = aMsg.replaceFirst("$1",pContItem->maTitle);
                     ScopedVclPtrInstance<MessageDialog>(this, aMsg.replaceFirst("$2",aTemplateList))->Execute();
                 }
@@ -1057,12 +1057,12 @@ void SfxTemplateManagerDlg::OnTemplateExport()
 
         if (!aTemplateList.isEmpty())
         {
-            OUString aText( SfxResId(STR_MSG_ERROR_EXPORT).toString() );
+            OUString aText( SfxResId(STR_MSG_ERROR_EXPORT) );
             ScopedVclPtrInstance<MessageDialog>(this, aText.replaceFirst("$1",aTemplateList))->Execute();
         }
         else
         {
-            OUString sText( SfxResId(STR_MSG_EXPORT_SUCCESS).toString() );
+            OUString sText( SfxResId(STR_MSG_EXPORT_SUCCESS) );
             ScopedVclPtrInstance<MessageDialog>(this, sText.replaceFirst("$1", OUString::number(nCount)), VclMessageType::Info)->Execute();
         }
     }
@@ -1110,7 +1110,7 @@ void SfxTemplateManagerDlg::OnTemplateOpen ()
 
 void SfxTemplateManagerDlg::OnCategoryNew()
 {
-    ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW).toString(),this);
+    ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW),this);
 
     int ret = dlg->Execute();
 
@@ -1122,7 +1122,7 @@ void SfxTemplateManagerDlg::OnCategoryNew()
             mpCBFolder->InsertEntry(aName);
         else
         {
-            OUString aMsg( SfxResId(STR_CREATE_ERROR).toString() );
+            OUString aMsg( SfxResId(STR_CREATE_ERROR) );
             ScopedVclPtrInstance<MessageDialog>(this, aMsg.replaceFirst("$1", aName))->Execute();
         }
     }
@@ -1131,7 +1131,7 @@ void SfxTemplateManagerDlg::OnCategoryNew()
 void SfxTemplateManagerDlg::OnCategoryRename()
 {
     OUString sCategory = mpCBFolder->GetSelectEntry();
-    ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW).toString(),this);
+    ScopedVclPtrInstance< InputDialog > dlg(SfxResId(STR_INPUT_NEW),this);
 
     dlg->SetEntryText(sCategory);
     int ret = dlg->Execute();
@@ -1152,7 +1152,7 @@ void SfxTemplateManagerDlg::OnCategoryRename()
         }
         else
         {
-            OUString aMsg( SfxResId(STR_CREATE_ERROR).toString() );
+            OUString aMsg( SfxResId(STR_CREATE_ERROR) );
             ScopedVclPtrInstance<MessageDialog>(this, aMsg.replaceFirst("$1", aName))->Execute();
         }
     }
@@ -1163,8 +1163,8 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
     ScopedVclPtrInstance< SfxTemplateCategoryDialog > aDlg;
     aDlg->SetCategoryLBEntries(mpLocalView->getFolderNames());
     aDlg->HideNewCategoryOption();
-    aDlg->SetText(SfxResId(STR_CATEGORY_DELETE).toString());
-    aDlg->SetSelectLabelText(SfxResId(STR_CATEGORY_SELECT).toString());
+    aDlg->SetText(SfxResId(STR_CATEGORY_DELETE));
+    aDlg->SetSelectLabelText(SfxResId(STR_CATEGORY_SELECT));
 
     if (aDlg->Execute() == RET_OK)
     {
@@ -1180,7 +1180,7 @@ void SfxTemplateManagerDlg::OnCategoryDelete()
 
         if (!mpLocalView->removeRegion(nItemId))
         {
-            OUString sMsg( SfxResId(STR_MSG_ERROR_DELETE_FOLDER).toString() );
+            OUString sMsg( SfxResId(STR_MSG_ERROR_DELETE_FOLDER) );
             ScopedVclPtrInstance<MessageDialog>(this, sMsg.replaceFirst("$1",sCategory))->Execute();
         }
         else
@@ -1246,7 +1246,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nItemId)
             if(!mpLocalView->moveTemplate(pItem,pItem->mnRegionId,nItemId))
             {
                 OUString sDst = mpLocalView->getRegionItemName(nItemId);
-                OUString sMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
+                OUString sMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE));
                 sMsg = sMsg.replaceFirst("$1",sDst);
                 ScopedVclPtrInstance<MessageDialog>(this, sMsg.replaceFirst( "$2",pItem->maTitle))->Execute();
             }
@@ -1401,7 +1401,7 @@ SfxTemplateSelectionDlg::SfxTemplateSelectionDlg(vcl::Window* pParent):
 {
     mpCBApp->SelectEntryPos(MNI_IMPRESS);
     mpCBFolder->SelectEntryPos(0);
-    SetText(SfxResId(STR_TEMPLATE_SELECTION).toString());
+    SetText(SfxResId(STR_TEMPLATE_SELECTION));
 
     if(mpLocalView->IsVisible())
     {

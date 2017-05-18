@@ -166,7 +166,7 @@ sal_uInt32 SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >&
         sal_Int32 nProgressRange(1000000);
         if (xStatusIndicator.is())
         {
-            xStatusIndicator->start(SW_RESSTR( STR_STATSTR_SWGWRITE),
+            xStatusIndicator->start(SwResId( STR_STATSTR_SWGWRITE),
                                     nProgressRange);
         }
         xInfoSet->setPropertyValue("ProgressRange", Any(nProgressRange));

@@ -82,8 +82,8 @@ SFTreeListBox::SFTreeListBox(vcl::Window* pParent)
     , m_libImage(BitmapEx(RID_CUIBMP_LIB))
     , m_macImage(BitmapEx(RID_CUIBMP_MACRO))
     , m_docImage(BitmapEx(RID_CUIBMP_DOC))
-    , m_sMyMacros(CUI_RES(RID_SVXSTR_MYMACROS))
-    , m_sProdMacros(CUI_RES(RID_SVXSTR_PRODMACROS))
+    , m_sMyMacros(CuiResId(RID_SVXSTR_MYMACROS))
+    , m_sProdMacros(CuiResId(RID_SVXSTR_PRODMACROS))
 {
     SetSelectionMode( SelectionMode::Single );
 
@@ -451,15 +451,15 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( vcl::Window* pParent, const OUString& la
     : SfxModalDialog(pParent, "ScriptOrganizerDialog",
         "cui/ui/scriptorganizer.ui")
     , m_sLanguage(language)
-    , m_delErrStr(CUI_RES(RID_SVXSTR_DELFAILED))
-    , m_delErrTitleStr(CUI_RES(RID_SVXSTR_DELFAILED_TITLE))
-    , m_delQueryStr(CUI_RES(RID_SVXSTR_DELQUERY))
-    , m_delQueryTitleStr(CUI_RES(RID_SVXSTR_DELQUERY_TITLE))
-    , m_createErrStr(CUI_RES(RID_SVXSTR_CREATEFAILED))
-    , m_createDupStr(CUI_RES(RID_SVXSTR_CREATEFAILEDDUP))
-    , m_createErrTitleStr(CUI_RES(RID_SVXSTR_CREATEFAILED_TITLE))
-    , m_renameErrStr(CUI_RES(RID_SVXSTR_RENAMEFAILED))
-    , m_renameErrTitleStr(CUI_RES(RID_SVXSTR_RENAMEFAILED_TITLE))
+    , m_delErrStr(CuiResId(RID_SVXSTR_DELFAILED))
+    , m_delErrTitleStr(CuiResId(RID_SVXSTR_DELFAILED_TITLE))
+    , m_delQueryStr(CuiResId(RID_SVXSTR_DELQUERY))
+    , m_delQueryTitleStr(CuiResId(RID_SVXSTR_DELQUERY_TITLE))
+    , m_createErrStr(CuiResId(RID_SVXSTR_CREATEFAILED))
+    , m_createDupStr(CuiResId(RID_SVXSTR_CREATEFAILEDDUP))
+    , m_createErrTitleStr(CuiResId(RID_SVXSTR_CREATEFAILED_TITLE))
+    , m_renameErrStr(CuiResId(RID_SVXSTR_RENAMEFAILED))
+    , m_renameErrTitleStr(CuiResId(RID_SVXSTR_RENAMEFAILED_TITLE))
 {
     get(m_pScriptsBox, "scripts");
     get(m_pRunButton, "run");
@@ -1227,12 +1227,12 @@ OUString FormatErrorString(
 
     if ( !type.isEmpty() )
     {
-        result += "\n\n" + OUString(CUI_RES(RID_SVXSTR_ERROR_TYPE_LABEL)) + " " + type;
+        result += "\n\n" + OUString(CuiResId(RID_SVXSTR_ERROR_TYPE_LABEL)) + " " + type;
     }
 
     if ( !message.isEmpty() )
     {
-        result += "\n\n" + OUString(CUI_RES(RID_SVXSTR_ERROR_MESSAGE_LABEL)) + " " + message;
+        result += "\n\n" + OUString(CuiResId(RID_SVXSTR_ERROR_MESSAGE_LABEL)) + " " + message;
     }
 
     return result;
@@ -1241,7 +1241,7 @@ OUString FormatErrorString(
 OUString GetErrorMessage(
     const provider::ScriptErrorRaisedException& eScriptError )
 {
-    OUString unformatted = CUI_RES( RID_SVXSTR_ERROR_AT_LINE );
+    OUString unformatted = CuiResId( RID_SVXSTR_ERROR_AT_LINE );
 
     OUString unknown("UNKNOWN");
     OUString language = unknown;
@@ -1267,11 +1267,11 @@ OUString GetErrorMessage(
         if ( eScriptError.lineNum != -1 )
         {
             line = OUString::number( eScriptError.lineNum );
-            unformatted = CUI_RES( RID_SVXSTR_ERROR_AT_LINE );
+            unformatted = CuiResId( RID_SVXSTR_ERROR_AT_LINE );
         }
         else
         {
-            unformatted = CUI_RES( RID_SVXSTR_ERROR_RUNNING );
+            unformatted = CuiResId( RID_SVXSTR_ERROR_RUNNING );
         }
 
     return FormatErrorString(
@@ -1281,7 +1281,7 @@ OUString GetErrorMessage(
 OUString GetErrorMessage(
     const provider::ScriptExceptionRaisedException& eScriptException )
 {
-    OUString unformatted = CUI_RES( RID_SVXSTR_EXCEPTION_AT_LINE );
+    OUString unformatted = CuiResId( RID_SVXSTR_EXCEPTION_AT_LINE );
 
     OUString unknown("UNKNOWN");
     OUString language = unknown;
@@ -1307,11 +1307,11 @@ OUString GetErrorMessage(
     if ( eScriptException.lineNum != -1 )
     {
         line = OUString::number( eScriptException.lineNum );
-        unformatted = CUI_RES( RID_SVXSTR_EXCEPTION_AT_LINE );
+        unformatted = CuiResId( RID_SVXSTR_EXCEPTION_AT_LINE );
     }
     else
     {
-        unformatted = CUI_RES( RID_SVXSTR_EXCEPTION_RUNNING );
+        unformatted = CuiResId( RID_SVXSTR_EXCEPTION_RUNNING );
     }
 
     if ( !eScriptException.exceptionType.isEmpty() )
@@ -1326,7 +1326,7 @@ OUString GetErrorMessage(
 OUString GetErrorMessage(
     const provider::ScriptFrameworkErrorException& sError )
 {
-    OUString unformatted = CUI_RES( RID_SVXSTR_FRAMEWORK_ERROR_RUNNING );
+    OUString unformatted = CuiResId( RID_SVXSTR_FRAMEWORK_ERROR_RUNNING );
 
     OUString language("UNKNOWN");
 
@@ -1345,7 +1345,7 @@ OUString GetErrorMessage(
     if ( sError.errorType == provider::ScriptFrameworkErrorType::NOTSUPPORTED )
     {
         message = OUString(
-            CUI_RES(  RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED ) );
+            CuiResId(  RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED ) );
         message = ReplaceString(message, "%LANGUAGENAME", language );
 
     }
@@ -1440,11 +1440,11 @@ IMPL_STATIC_LINK( SvxScriptErrorDialog, ShowDialog, void*, p, void )
     }
     else
     {
-        message = OUString( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
+        message = OUString( CuiResId( RID_SVXSTR_ERROR_TITLE ) );
     }
 
     ScopedVclPtrInstance<MessageDialog> pBox( nullptr, message, VclMessageType::Warning );
-    pBox->SetText( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
+    pBox->SetText( CuiResId( RID_SVXSTR_ERROR_TITLE ) );
     pBox->Execute();
 
     delete pMessage;

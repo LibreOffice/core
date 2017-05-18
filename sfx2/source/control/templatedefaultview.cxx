@@ -81,8 +81,8 @@ void TemplateDefaultView::MouseButtonDown( const MouseEvent& rMEvt )
 void TemplateDefaultView::createContextMenu()
 {
     ScopedVclPtrInstance<PopupMenu> pItemMenu;
-    pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN).toString());
-    pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE).toString());
+    pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN));
+    pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE));
     deselectItems();
     maSelectedItem->setSelection(true);
     pItemMenu->SetSelectHdl(LINK(this, TemplateLocalView, ContextMenuSelectHdl));

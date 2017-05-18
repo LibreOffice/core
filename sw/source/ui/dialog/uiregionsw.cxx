@@ -424,7 +424,7 @@ bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
                 }
                 else
                 {
-                    ScopedVclPtrInstance<MessageDialog>(this, SW_RES(STR_WRONG_PASSWORD), VclMessageType::Info)->Execute();
+                    ScopedVclPtrInstance<MessageDialog>(this, SwResId(STR_WRONG_PASSWORD), VclMessageType::Info)->Execute();
                 }
             }
         }
@@ -989,7 +989,7 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, Button *, pButton, void )
             bool bContent = pSectRepr->IsContent();
             if( pBox->IsChecked() && bContent && rSh.HasSelection() )
             {
-                if (RET_NO == ScopedVclPtrInstance<MessageDialog>(this, SW_RES(STR_QUERY_CONNECT), VclMessageType::Question, VclButtonsType::YesNo)->Execute())
+                if (RET_NO == ScopedVclPtrInstance<MessageDialog>(this, SwResId(STR_QUERY_CONNECT), VclMessageType::Question, VclButtonsType::YesNo)->Execute())
                     pBox->Check( false );
             }
             if( bFile )
@@ -1265,7 +1265,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox, void )
                     }
                     else
                     {
-                        ScopedVclPtrInstance<MessageDialog>(pBox, SW_RES(STR_WRONG_PASSWD_REPEAT), VclMessageType::Info)->Execute();
+                        ScopedVclPtrInstance<MessageDialog>(pBox, SwResId(STR_WRONG_PASSWD_REPEAT), VclMessageType::Info)->Execute();
                         ChangePasswdHdl(pBox);
                         break;
                     }
@@ -1702,7 +1702,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton, void )
                 }
                 else
                 {
-                    ScopedVclPtrInstance<MessageDialog>(pButton, SW_RES(STR_WRONG_PASSWD_REPEAT), VclMessageType::Info)->Execute();
+                    ScopedVclPtrInstance<MessageDialog>(pButton, SwResId(STR_WRONG_PASSWD_REPEAT), VclMessageType::Info)->Execute();
                 }
             }
             else if(!bChange)
@@ -1726,7 +1726,7 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, Button *, pButton, void )
     if( pBox->IsChecked() )
     {
         if( m_pWrtSh->HasSelection() &&
-            RET_NO == ScopedVclPtrInstance<MessageDialog>(this, SW_RES(STR_QUERY_CONNECT), VclMessageType::Question, VclButtonsType::YesNo)->Execute())
+            RET_NO == ScopedVclPtrInstance<MessageDialog>(this, SwResId(STR_QUERY_CONNECT), VclMessageType::Question, VclButtonsType::YesNo)->Execute())
             pBox->Check( false );
     }
 

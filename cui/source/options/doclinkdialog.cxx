@@ -124,7 +124,7 @@ namespace svx
 
         if (!bFileExists)
         {
-            OUString sMsg = CUI_RES(STR_LINKEDDOC_DOESNOTEXIST);
+            OUString sMsg = CuiResId(STR_LINKEDDOC_DOESNOTEXIST);
             sMsg = sMsg.replaceFirst("$file$", m_pURL->GetText());
             ScopedVclPtrInstance< MessageDialog > aError(this, sMsg);
             aError->Execute();
@@ -133,7 +133,7 @@ namespace svx
         INetURLObject aURL( sURL );
         if ( aURL.GetProtocol() != INetProtocol::File )
         {
-            OUString sMsg = CUI_RES(STR_LINKEDDOC_NO_SYSTEM_FILE);
+            OUString sMsg = CuiResId(STR_LINKEDDOC_NO_SYSTEM_FILE);
             sMsg = sMsg.replaceFirst("$file$", m_pURL->GetText());
             ScopedVclPtrInstance< MessageDialog > aError(this, sMsg);
             aError->Execute();
@@ -145,7 +145,7 @@ namespace svx
         {
             if ( !m_aNameValidator.Call( sCurrentText ) )
             {
-                OUString sMsg = CUI_RES(STR_NAME_CONFLICT);
+                OUString sMsg = CuiResId(STR_NAME_CONFLICT);
                 sMsg = sMsg.replaceFirst("$file$", sCurrentText);
                 ScopedVclPtrInstance< MessageDialog > aError(this, sMsg, VclMessageType::Info);
                 aError->Execute();

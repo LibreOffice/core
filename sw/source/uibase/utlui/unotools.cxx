@@ -66,7 +66,7 @@ SwOneExampleFrame::SwOneExampleFrame( vcl::Window& rWin,
                                         const OUString* pURL ) :
     m_aTopWindow(VclPtr<SwFrameCtrlWindow>::Create(&rWin, this)),
     m_aLoadedIdle("sw uibase SwOneExampleFrame Loaded"),
-    m_aMenuRes(SW_RES(RES_FRMEX_MENU)),
+    m_aMenuRes(ResId(RES_FRMEX_MENU, *pSwResMgr)),
     m_pModuleView(SW_MOD()->GetView()),
     m_nStyleFlags(nFlags),
     m_bIsInitialized(false),
@@ -93,7 +93,7 @@ void SwOneExampleFrame::CreateErrorMessage()
 {
     if(SwOneExampleFrame::bShowServiceNotAvailableMessage)
     {
-        OUString sInfo(SW_RES(STR_SERVICE_UNAVAILABLE));
+        OUString sInfo(SwResId(STR_SERVICE_UNAVAILABLE));
         sInfo += "com.sun.star.frame.FrameControl";
         ScopedVclPtrInstance<InfoBox>(nullptr, sInfo)->Execute();
         SwOneExampleFrame::bShowServiceNotAvailableMessage = false;
@@ -294,35 +294,35 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
                 {
                   if (pSh->GetCurWord() == "HEADING1")
                   {
-                    pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_HEADING1));
+                    pSh->Overwrite(SwResId(STR_IDXEXAMPLE_IDXTXT_HEADING1));
                   }
                   else if (pSh->GetCurWord() == "ENTRY1")
                   {
-                    pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_ENTRY1));
+                    pSh->Overwrite(SwResId(STR_IDXEXAMPLE_IDXTXT_ENTRY1));
                   }
                   else if (pSh->GetCurWord() == "HEADING11")
                   {
-                    pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_HEADING11));
+                    pSh->Overwrite(SwResId(STR_IDXEXAMPLE_IDXTXT_HEADING11));
                   }
                   else if (pSh->GetCurWord() == "ENTRY11")
                   {
-                    pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_ENTRY11));
+                    pSh->Overwrite(SwResId(STR_IDXEXAMPLE_IDXTXT_ENTRY11));
                   }
                   else if (pSh->GetCurWord() == "HEADING12")
                   {
-                    pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_HEADING12));
+                    pSh->Overwrite(SwResId(STR_IDXEXAMPLE_IDXTXT_HEADING12));
                   }
                   else if (pSh->GetCurWord() == "ENTRY12")
                   {
-                    pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_ENTRY12));
+                    pSh->Overwrite(SwResId(STR_IDXEXAMPLE_IDXTXT_ENTRY12));
                   }
                   else if (pSh->GetCurWord() == "TABLE1")
                   {
-                    pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_TABLE1));
+                    pSh->Overwrite(SwResId(STR_IDXEXAMPLE_IDXTXT_TABLE1));
                   }
                   else if (pSh->GetCurWord() == "IMAGE1")
                   {
-                    pSh->Overwrite(SW_RESSTR(STR_IDXEXAMPLE_IDXTXT_IMAGE1));
+                    pSh->Overwrite(SwResId(STR_IDXEXAMPLE_IDXTXT_IMAGE1));
                   }
                   else
                   {}

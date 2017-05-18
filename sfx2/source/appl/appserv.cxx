@@ -1029,7 +1029,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     if ( pImpl->nDocModalMode )
                         rSet.DisableItem(nWhich);
                     else
-                        rSet.Put(SfxStringItem(nWhich, SfxResId(STR_QUITAPP).toString()));
+                        rSet.Put(SfxStringItem(nWhich, SfxResId(STR_QUITAPP)));
                     break;
                 }
 
@@ -1621,7 +1621,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             SvtModuleOptions aModuleOpt;
             if ( !aModuleOpt.IsImpress() )
             {
-                ScopedVclPtrInstance<MessageDialog>( nullptr, SFX2_RESSTR( STR_MODULENOTINSTALLED ))->Execute();
+                ScopedVclPtrInstance<MessageDialog>( nullptr, SfxResId( STR_MODULENOTINSTALLED ))->Execute();
                 return;
             }
 

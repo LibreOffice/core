@@ -113,8 +113,8 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
 {
     {
         ::SolarMutexGuard aSolarGuard;
-        msName = SVX_RESSTR( RID_SVXSTR_RECTCTL_ACC_CORN_NAME );
-        msDescription = SVX_RESSTR( RID_SVXSTR_RECTCTL_ACC_CORN_DESCR );
+        msName = SvxResId( RID_SVXSTR_RECTCTL_ACC_CORN_NAME );
+        msDescription = SvxResId( RID_SVXSTR_RECTCTL_ACC_CORN_DESCR );
     }
 
     mpChildren = new SvxRectCtlChildAccessibleContext*[ MAX_NUM_OF_CHILDREN ];
@@ -226,8 +226,8 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
         if( !xChild.is() )
         {
             const ChildIndexToPointData*    p = IndexToPoint( nIndex );
-            OUString aName(SVX_RESSTR(p->nResIdName));
-            OUString aDescr(SVX_RESSTR(p->nResIdDescr));
+            OUString aName(SvxResId(p->nResIdName));
+            OUString aDescr(SvxResId(p->nResIdDescr));
 
             tools::Rectangle       aFocusRect( mpRepr->CalculateFocusRectangle( p->ePoint ) );
 

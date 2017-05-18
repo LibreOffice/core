@@ -209,7 +209,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
         OUString aTmp;
         if(bLabel)
         {
-            aTmp = SW_RES( STR_LAB_TITLE);
+            aTmp = SwResId( STR_LAB_TITLE);
             aTmp += OUString::number(++nLabelTitleNo );
         }
         else

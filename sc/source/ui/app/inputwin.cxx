@@ -1721,8 +1721,8 @@ void ScTextWnd::ImplInitSettings()
 css::uno::Reference< css::accessibility::XAccessible > ScTextWnd::CreateAccessible()
 {
     return new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), nullptr, this,
-        OUString(ScResId(STR_ACC_EDITLINE_NAME)),
-        OUString(ScResId(STR_ACC_EDITLINE_DESCR)), ScAccessibleEditObject::EditLine);
+        ScResId(STR_ACC_EDITLINE_NAME),
+        ScResId(STR_ACC_EDITLINE_DESCR), ScAccessibleEditObject::EditLine);
 }
 
 void ScTextWnd::InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData )

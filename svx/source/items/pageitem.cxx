@@ -74,10 +74,10 @@ inline OUString GetUsageText( const SvxPageUsage eU )
 {
     switch( eU )
     {
-        case SvxPageUsage::Left  : return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_LEFT);
-        case SvxPageUsage::Right : return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_RIGHT);
-        case SvxPageUsage::All   : return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_ALL);
-        case SvxPageUsage::Mirror: return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_MIRROR);
+        case SvxPageUsage::Left  : return SvxResId(RID_SVXITEMS_PAGE_USAGE_LEFT);
+        case SvxPageUsage::Right : return SvxResId(RID_SVXITEMS_PAGE_USAGE_RIGHT);
+        case SvxPageUsage::All   : return SvxResId(RID_SVXITEMS_PAGE_USAGE_ALL);
+        case SvxPageUsage::Mirror: return SvxResId(RID_SVXITEMS_PAGE_USAGE_MIRROR);
         default:              return OUString();
     }
 }
@@ -103,11 +103,11 @@ bool SvxPageItem::GetPresentation
                 rText = aDescName + cpDelimTmp;
             }
             DBG_ASSERT( eNumType <= css::style::NumberingType::NUMBER_NONE, "enum overflow" );
-            rText += SVX_RESSTR(RID_SVXITEMS_PAGE_NUM_BEGIN + eNumType) + cpDelimTmp;
+            rText += SvxResId(RID_SVXITEMS_PAGE_NUM_BEGIN + eNumType) + cpDelimTmp;
             if ( bLandscape )
-                rText += SVX_RESSTR(RID_SVXITEMS_PAGE_LAND_TRUE);
+                rText += SvxResId(RID_SVXITEMS_PAGE_LAND_TRUE);
             else
-                rText += SVX_RESSTR(RID_SVXITEMS_PAGE_LAND_FALSE);
+                rText += SvxResId(RID_SVXITEMS_PAGE_LAND_FALSE);
             OUString aUsageText = GetUsageText( eUse );
             if (!aUsageText.isEmpty())
             {
@@ -117,17 +117,17 @@ bool SvxPageItem::GetPresentation
         }
         case SfxItemPresentation::Complete:
         {
-            rText += SVX_RESSTR(RID_SVXITEMS_PAGE_COMPLETE);
+            rText += SvxResId(RID_SVXITEMS_PAGE_COMPLETE);
             if ( !aDescName.isEmpty() )
             {
                 rText += aDescName + cpDelimTmp;
             }
             DBG_ASSERT( eNumType <= css::style::NumberingType::NUMBER_NONE, "enum overflow" );
-            rText += SVX_RESSTR(RID_SVXITEMS_PAGE_NUM_BEGIN + eNumType) + cpDelimTmp;
+            rText += SvxResId(RID_SVXITEMS_PAGE_NUM_BEGIN + eNumType) + cpDelimTmp;
             if ( bLandscape )
-                rText += SVX_RESSTR(RID_SVXITEMS_PAGE_LAND_TRUE);
+                rText += SvxResId(RID_SVXITEMS_PAGE_LAND_TRUE);
             else
-                rText += SVX_RESSTR(RID_SVXITEMS_PAGE_LAND_FALSE);
+                rText += SvxResId(RID_SVXITEMS_PAGE_LAND_FALSE);
             OUString aUsageText = GetUsageText( eUse );
             if (!aUsageText.isEmpty())
             {

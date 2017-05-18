@@ -501,7 +501,7 @@ bool SfxFilterMatcher::IsFilterInstalled_Impl( const std::shared_ptr<const SfxFi
     if ( pFilter->GetFilterFlags() & SfxFilterFlags::MUSTINSTALL )
     {
         // Here could a  re-installation be offered
-        OUString aText( SfxResId(STR_FILTER_NOT_INSTALLED).toString() );
+        OUString aText( SfxResId(STR_FILTER_NOT_INSTALLED) );
         aText = aText.replaceFirst( "$(FILTER)", pFilter->GetUIName() );
         ScopedVclPtrInstance< QueryBox > aQuery(nullptr, WB_YES_NO | WB_DEF_YES, aText);
         short nRet = aQuery->Execute();
@@ -519,7 +519,7 @@ bool SfxFilterMatcher::IsFilterInstalled_Impl( const std::shared_ptr<const SfxFi
     }
     else if ( pFilter->GetFilterFlags() & SfxFilterFlags::CONSULTSERVICE )
     {
-        OUString aText( SfxResId(STR_FILTER_CONSULT_SERVICE).toString() );
+        OUString aText( SfxResId(STR_FILTER_CONSULT_SERVICE) );
         aText = aText.replaceFirst( "$(FILTER)", pFilter->GetUIName() );
         ScopedVclPtrInstance<InfoBox>( nullptr, aText )->Execute();
         return false;

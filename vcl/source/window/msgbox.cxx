@@ -407,7 +407,7 @@ void WarningBox::SetDefaultCheckBoxText()
 {
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
-        maCheckBoxText = ResId(SV_STDTEXT_DONTWARNAGAIN, *pResMgr).toString();
+        maCheckBoxText = ResId(SV_STDTEXT_DONTWARNAGAIN, *pResMgr);
 }
 
 Image WarningBox::GetStandardImage()
@@ -456,7 +456,7 @@ void QueryBox::SetDefaultCheckBoxText()
 {
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
-        maCheckBoxText = ResId(SV_STDTEXT_DONTASKAGAIN, *pResMgr).toString();
+        maCheckBoxText = ResId(SV_STDTEXT_DONTASKAGAIN, *pResMgr);
 }
 
 Image QueryBox::GetStandardImage()

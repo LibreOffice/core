@@ -237,7 +237,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(vcl::Window* pParent,
     , pNumItem(nullptr)
     , pNumFmtShell(nullptr)
     , nInitFormat(ULONG_MAX)
-    , sAutomaticEntry(CUI_RES(RID_SVXSTR_AUTO_ENTRY))
+    , sAutomaticEntry(CuiResId(RID_SVXSTR_AUTO_ENTRY))
     , pLastActivWindow(nullptr)
 {
     get(m_pFtCategory, "categoryft");

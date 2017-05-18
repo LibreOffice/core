@@ -990,7 +990,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, Button*, void)
 {
 
     sfx2::FileDialogHelper aFileDialog(0);
-    aFileDialog.SetTitle(CUI_RES(RID_SVXSTR_ADD_IMAGE));
+    aFileDialog.SetTitle(CuiResId(RID_SVXSTR_ADD_IMAGE));
     if ( aFileDialog.Execute() != ERRCODE_NONE )
         return;
 
@@ -1178,7 +1178,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
 
     // Fill ListBox with predefined / translated numbering types.
-    ResStringArray aNames( SVX_RES( RID_SVXSTRARY_NUMBERINGTYPE ));
+    ResStringArray aNames(ResId(RID_SVXSTRARY_NUMBERINGTYPE, DIALOG_MGR()));
     sal_uInt32 nCount = aNames.Count();
     for (sal_uInt32 i = 0; i < nCount; ++i)
     {
@@ -1950,7 +1950,7 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton, void )
     OUString                aGrfName;
     Size                    aSize;
     bool                bSucc(false);
-    SvxOpenGraphicDialog    aGrfDlg( CUI_RES(RID_SVXSTR_EDIT_GRAPHIC) );
+    SvxOpenGraphicDialog    aGrfDlg( CuiResId(RID_SVXSTR_EDIT_GRAPHIC) );
 
     if(MN_GALLERY_ENTRY <= nItemId )
     {

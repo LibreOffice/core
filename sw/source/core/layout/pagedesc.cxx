@@ -364,7 +364,7 @@ SwPageDesc* SwPageDesc::GetByName(SwDoc& rDoc, const OUString& rName)
 
     for( sal_Int32 i = RC_POOLPAGEDESC_BEGIN; i <= STR_POOLPAGE_LANDSCAPE; ++i)
     {
-        if (rName==SW_RESSTR(i))
+        if (rName==SwResId(i))
         {
             return rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( static_cast< sal_uInt16 >(
                         i - RC_POOLPAGEDESC_BEGIN + RES_POOLPAGE_BEGIN) );

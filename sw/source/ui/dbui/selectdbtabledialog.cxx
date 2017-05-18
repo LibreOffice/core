@@ -92,10 +92,10 @@ void SwAddressTable::setColSizes()
 SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
         const uno::Reference< sdbc::XConnection>& rConnection)
     : SfxModalDialog(pParent, "SelectTableDialog", "modules/swriter/ui/selecttabledialog.ui")
-    , m_sName(SW_RES(ST_NAME))
-    , m_sType(SW_RES(ST_TYPE))
-    , m_sTable(SW_RES(ST_TABLE))
-    , m_sQuery(SW_RES(ST_QUERY))
+    , m_sName(SwResId(ST_NAME))
+    , m_sType(SwResId(ST_TYPE))
+    , m_sTable(SwResId(ST_TABLE))
+    , m_sQuery(SwResId(ST_QUERY))
     , m_xConnection(rConnection)
 {
     get(m_pPreviewPB, "preview");

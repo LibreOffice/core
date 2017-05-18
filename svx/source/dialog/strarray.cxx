@@ -21,14 +21,11 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strarray.hxx>
 
-
 SvxStringArray::SvxStringArray( sal_uInt32 nResId ) :
-
-    ResStringArray( SVX_RES( nResId ) )
+    ResStringArray(ResId(nResId, DIALOG_MGR()))
 
 {
 }
-
 
 SvxStringArray::SvxStringArray( const ResId& rResId ) :
     ResStringArray( rResId )
@@ -39,7 +36,6 @@ SvxStringArray::SvxStringArray( const ResId& rResId ) :
 SvxStringArray::~SvxStringArray()
 {
 }
-
 
 const OUString SvxStringArray::GetStringByPos( sal_uInt32 nPos ) const
 {

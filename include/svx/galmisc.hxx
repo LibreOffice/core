@@ -31,6 +31,7 @@
 #include <svx/svxdllapi.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
+#include <tools/resid.hxx>
 
 class GalleryTheme;
 class SotStorageStream;
@@ -62,8 +63,15 @@ enum class SgaObjKind
 
 #define ID_IMAPINFO             2
 
-#define GAL_RES(nId)            ResId(nId, *GetGalleryResMgr())
-#define GAL_RESSTR(nId)         GAL_RES(nId).toString()
+class ResMgr;
+
+SVX_DLLPUBLIC ResMgr* GetGalleryResMgr();
+
+inline OUString GalResId(sal_uInt16 nId)
+{
+    return ResId(nId, *GetGalleryResMgr());
+}
+
 #define STREAMBUF_SIZE          16384L
 
 enum class GalleryGraphicImportRet
@@ -77,15 +85,12 @@ enum class GalleryGraphicImportRet
 #define GALLERY_BG_COLOR        Application::GetSettings().GetStyleSettings().GetWindowColor()
 #define GALLERY_DLG_COLOR       Application::GetSettings().GetStyleSettings().GetDialogColor()
 
-class ResMgr;
 class SvStream;
 class Graphic;
 class FmFormModel;
 class ImageMap;
 class Gallery;
 
-SVX_DLLPUBLIC ResMgr*
-                    GetGalleryResMgr();
 GalleryGraphicImportRet  GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, OUString& rFilterName, bool bShowProgress = false );
 bool                GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel );
 bool                CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap );

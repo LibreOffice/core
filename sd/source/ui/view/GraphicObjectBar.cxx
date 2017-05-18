@@ -133,7 +133,7 @@ void GraphicObjectBar::ExecuteFilter( SfxRequest& rReq )
                 {
                     SdrGrafObj* pFilteredObj = static_cast<SdrGrafObj*>( pObj->Clone() );
                     OUString    aStr = mpView->GetDescriptionOfMarkedObjects();
-                    aStr += " " + SD_RESSTR(STR_UNDO_GRAFFILTER);
+                    aStr += " " + SdResId(STR_UNDO_GRAFFILTER);
                     mpView->BegUndo( aStr );
                     pFilteredObj->SetGraphicObject( aFilterObj );
                     ::sd::View* const pView = mpView;

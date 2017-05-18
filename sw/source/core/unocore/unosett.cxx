@@ -194,7 +194,7 @@ static SwCharFormat* lcl_getCharFormat(SwDoc* pDoc, const uno::Any& aValue)
     aValue >>= uTmp;
     OUString sCharFormat;
     SwStyleNameMapper::FillUIName(uTmp, sCharFormat, SwGetPoolIdFromName::ChrFmt, true);
-    if (sCharFormat != SW_RESSTR(STR_POOLCOLL_STANDARD))
+    if (sCharFormat != SwResId(STR_POOLCOLL_STANDARD))
     {
         pRet = pDoc->FindCharFormatByName( sCharFormat );
     }
@@ -1295,7 +1295,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     if (pDocShell) // -> Chapter Numbering
     {
         // template name
-        OUString sValue(SW_RES(STR_POOLCOLL_HEADLINE1 + nIndex));
+        OUString sValue(SwResId(STR_POOLCOLL_HEADLINE1 + nIndex));
         const SwTextFormatColls* pColls = pDocShell->GetDoc()->GetTextFormatColls();
         const size_t nCount = pColls->size();
         for(size_t i = 0; i < nCount; ++i)

@@ -213,7 +213,7 @@ void TextUndoConnectParas::Redo()
 
 OUString TextUndoConnectParas::GetComment () const
 {
-    return ResId(STR_TEXTUNDO_CONNECTPARAS, *ImplGetResMgr()).toString();
+    return ResId(STR_TEXTUNDO_CONNECTPARAS, *ImplGetResMgr());
 }
 
 TextUndoSplitPara::TextUndoSplitPara( TextEngine* pTextEngine, sal_uInt32 nPara, sal_Int32 nPos )
@@ -290,7 +290,7 @@ OUString TextUndoInsertChars::GetComment () const
     // multiple lines?
     OUString sText(maText);
     Shorten(sText);
-    return ResId(STR_TEXTUNDO_INSERTCHARS, *ImplGetResMgr()).toString().replaceAll("$1", sText);
+    return OUString(ResId(STR_TEXTUNDO_INSERTCHARS, *ImplGetResMgr())).replaceAll("$1", sText);
 }
 
 TextUndoRemoveChars::TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const OUString& rStr )

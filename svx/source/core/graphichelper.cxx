@@ -109,7 +109,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
 
     // fish out the graphic's name
 
-    aDialogHelper.SetTitle( SVX_RESSTR(RID_SVXSTR_EXPORT_GRAPHIC_TITLE));
+    aDialogHelper.SetTitle( SvxResId(RID_SVXSTR_EXPORT_GRAPHIC_TITLE));
     aDialogHelper.SetDisplayDirectory( aPath.GetMainURL(INetURLObject::DecodeMechanism::ToIUri) );
     INetURLObject aURL;
     aURL.SetSmartURL( rGraphicName );
@@ -217,7 +217,7 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
         FileDialogHelper aDialogHelper( TemplateDescription::FILESAVE_AUTOEXTENSION );
         Reference < XFilePicker2 > xFilePicker = aDialogHelper.GetFilePicker();
 
-        aDialogHelper.SetTitle( SVX_RESSTR(RID_SVXSTR_SAVEAS_IMAGE) );
+        aDialogHelper.SetTitle( SvxResId(RID_SVXSTR_SAVEAS_IMAGE) );
 
         INetURLObject aPath;
         aPath.SetSmartURL( sGraphicPath );

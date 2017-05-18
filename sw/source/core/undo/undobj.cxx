@@ -271,7 +271,7 @@ OUString SwUndo::GetComment() const
     {
         if (! pComment)
         {
-            pComment.reset( new OUString(SW_RES(UNDO_BASE + (int)GetId())) );
+            pComment.reset( new OUString(SwResId(UNDO_BASE + (int)GetId())) );
 
             SwRewriter aRewriter = GetRewriter();
 
@@ -282,7 +282,7 @@ OUString SwUndo::GetComment() const
     }
     else
     {
-        aResult = SW_RES(UNDO_BASE + (int)GetId());
+        aResult = SwResId(UNDO_BASE + (int)GetId());
 
         SwRewriter aRewriter = GetRewriter();
 

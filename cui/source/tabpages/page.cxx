@@ -218,11 +218,11 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
 
     //  fill text flow listbox with valid entries
 
-    m_pTextFlowBox->InsertEntryValue( CUI_RES( RID_SVXSTR_PAGEDIR_LTR_HORI ), SvxFrameDirection::Horizontal_LR_TB );
+    m_pTextFlowBox->InsertEntryValue( CuiResId( RID_SVXSTR_PAGEDIR_LTR_HORI ), SvxFrameDirection::Horizontal_LR_TB );
 
 
     if( bCTL )
-        m_pTextFlowBox->InsertEntryValue( CUI_RES( RID_SVXSTR_PAGEDIR_RTL_HORI ), SvxFrameDirection::Horizontal_RL_TB );
+        m_pTextFlowBox->InsertEntryValue( CuiResId( RID_SVXSTR_PAGEDIR_RTL_HORI ), SvxFrameDirection::Horizontal_RL_TB );
 
 
     // #109989# do not show vertical directions in Writer/Web
@@ -230,8 +230,8 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
     {
         if( bCJK )
         {
-            m_pTextFlowBox->InsertEntryValue( CUI_RES( RID_SVXSTR_PAGEDIR_RTL_VERT ), SvxFrameDirection::Vertical_RL_TB );
-            m_pTextFlowBox->InsertEntryValue( CUI_RES( RID_SVXSTR_PAGEDIR_LTR_VERT ), SvxFrameDirection::Vertical_LR_TB );
+            m_pTextFlowBox->InsertEntryValue( CuiResId( RID_SVXSTR_PAGEDIR_RTL_VERT ), SvxFrameDirection::Vertical_RL_TB );
+            m_pTextFlowBox->InsertEntryValue( CuiResId( RID_SVXSTR_PAGEDIR_LTR_VERT ), SvxFrameDirection::Vertical_LR_TB );
         }
     }
 

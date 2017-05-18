@@ -124,7 +124,7 @@ static bool lcl_IsPasswordCorrect( const OUString &rPassword )
     if (SvPasswordHelper::CompareHashPassword( aPasswordHash, rPassword ))
         bRes = true;    // password was correct
     else
-        ScopedVclPtrInstance<InfoBox>(nullptr, SFX2_RESSTR(RID_SVXSTR_INCORRECT_PASSWORD))->Execute();
+        ScopedVclPtrInstance<InfoBox>(nullptr, SfxResId(RID_SVXSTR_INCORRECT_PASSWORD))->Execute();
 
     return bRes;
 }
@@ -162,7 +162,7 @@ SfxSecurityPage_Impl::SfxSecurityPage_Impl( SfxSecurityPage &rTabPage ) :
     m_eRedlingMode                  ( RL_NONE ),
     m_bOrigPasswordIsConfirmed      ( false ),
     m_bNewPasswordIsValid           ( false ),
-    m_aEndRedliningWarning          ( SFX2_RESSTR(RID_SVXSTR_END_REDLINING_WARNING) ),
+    m_aEndRedliningWarning          ( SfxResId(RID_SVXSTR_END_REDLINING_WARNING) ),
     m_bEndRedliningWarningDone      ( false )
 {
     rTabPage.get(m_pOpenReadonlyCB, "readonly");

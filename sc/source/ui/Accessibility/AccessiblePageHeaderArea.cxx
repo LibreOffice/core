@@ -229,13 +229,13 @@ OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName()
     switch (meAdjust)
     {
     case SvxAdjust::Left :
-        sName = OUString(ScResId(STR_ACC_LEFTAREA_NAME));
+        sName = ScResId(STR_ACC_LEFTAREA_NAME);
         break;
     case SvxAdjust::Right:
-        sName = OUString(ScResId(STR_ACC_RIGHTAREA_NAME));
+        sName = ScResId(STR_ACC_RIGHTAREA_NAME);
         break;
     case SvxAdjust::Center:
-        sName = OUString(ScResId(STR_ACC_CENTERAREA_NAME));
+        sName = ScResId(STR_ACC_CENTERAREA_NAME);
         break;
     default:
         OSL_FAIL("wrong adjustment found");

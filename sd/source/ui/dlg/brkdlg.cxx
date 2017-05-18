@@ -58,7 +58,7 @@ BreakDlg::BreakDlg(
 
     m_pBtnCancel->SetClickHdl( LINK( this, BreakDlg, CancelButtonHdl));
 
-    mpProgress = new SfxProgress( pShell, SD_RESSTR(STR_BREAK_METAFILE), nSumActionCount*3 );
+    mpProgress = new SfxProgress( pShell, SdResId(STR_BREAK_METAFILE), nSumActionCount*3 );
 
     pProgrInfo = new SvdProgressInfo( LINK(this, BreakDlg, UpDate) );
     // every action is edited 3 times in DoImport()
@@ -107,7 +107,7 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit, bool )
     // update status bar or show a error message?
     if(nInit == reinterpret_cast<void*>(1L))
     {
-        ScopedVclPtrInstance< MessageDialog > aErrBox(this, SD_RESSTR(STR_BREAK_FAIL));
+        ScopedVclPtrInstance< MessageDialog > aErrBox(this, SdResId(STR_BREAK_FAIL));
         aErrBox->Execute();
     }
     else

@@ -273,7 +273,7 @@ bool DigitalSignaturesDialog::canAddRemove()
     if ( (!bSave1_1  && bDoc1_1) || (bSave1_1 && bDoc1_1) )
     {
         //#4
-        ScopedVclPtrInstance< MessageDialog > err(nullptr, XMLSEC_RES(STR_XMLSECDLG_OLD_ODF_FORMAT));
+        ScopedVclPtrInstance< MessageDialog > err(nullptr, XsResId(STR_XMLSECDLG_OLD_ODF_FORMAT));
         err->Execute();
         ret = false;
     }
@@ -292,7 +292,7 @@ bool DigitalSignaturesDialog::canAddRemove()
             //is shown every time until the user presses 'OK'. From then on, the warning
             //is not displayed anymore as long as the signatures dialog is alive.
             if (ScopedVclPtrInstance<MessageDialog>(
-                  nullptr, XMLSEC_RES(STR_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN), VclMessageType::Question, VclButtonsType::YesNo)->Execute() == RET_NO)
+                  nullptr, XsResId(STR_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN), VclMessageType::Question, VclButtonsType::YesNo)->Execute() == RET_NO)
                 ret = false;
             else
                 m_bWarningShowSignMacro = true;

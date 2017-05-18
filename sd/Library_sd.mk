@@ -191,7 +191,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/app/sdmod1 \
 	sd/source/ui/app/sdmod2 \
 	sd/source/ui/app/sdpopup \
-	sd/source/ui/app/sdresid \
 	sd/source/ui/app/sdxfer \
 	sd/source/ui/app/tmplctrl \
 	sd/source/ui/controller/slidelayoutcontroller \
