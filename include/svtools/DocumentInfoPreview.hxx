@@ -23,7 +23,6 @@
 #include <memory>
 #include <sal/config.h>
 
-#include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <svtools/svtdllapi.h>
 #include <tools/wintypes.hxx>

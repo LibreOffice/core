@@ -28,7 +28,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/unwrapargs.hxx>
-#include <i18nlangtag/languagetag.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

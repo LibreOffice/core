@@ -24,6 +24,8 @@
 #include <tools/ref.hxx>
 #include "fontattributes.hxx"
 
+#include <vector>
+
 class ImplFontMetricData;
 typedef tools::SvRef<ImplFontMetricData> ImplFontMetricDataRef;
 

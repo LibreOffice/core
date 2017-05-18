@@ -18,6 +18,7 @@
  */
 
 #include <ThemeTable.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <ooxml/resourceids.hxx>
 
 using namespace com::sun::star;

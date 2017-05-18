@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_INC_FONTATTRIBUTES_HXX
 
 #include <rtl/ustring.hxx>
-#include <i18nlangtag/languagetag.hxx>
 #include <vcl/vclenum.hxx>
 
 
