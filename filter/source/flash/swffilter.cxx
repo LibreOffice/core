@@ -49,7 +49,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::view;
 

@@ -23,8 +23,12 @@
 #include "svgscript.hxx"
 #include "impsvgdialog.hxx"
 
+#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
+#include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/graphic/PrimitiveFactory2D.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
+#include <com/sun/star/presentation/XPresentationSupplier.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
@@ -51,6 +55,8 @@
 
 #include <memory>
 
+using namespace css::animations;
+using namespace css::presentation;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::geometry;
 using namespace ::com::sun::star;

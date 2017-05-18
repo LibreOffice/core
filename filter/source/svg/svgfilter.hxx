@@ -21,26 +21,14 @@
 #define INCLUDED_FILTER_SOURCE_SVG_SVGFILTER_HXX
 
 #include <memory>
-#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
-#include <com/sun/star/drawing/XMasterPageTarget.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 
-#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
-#include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/xml/sax/XWriter.hpp>
 
 #include <osl/diagnose.h>
@@ -65,16 +53,11 @@
 #include <unordered_set>
 #include <unordered_map>
 
-using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::presentation;
-using namespace ::com::sun::star::style;
-using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
