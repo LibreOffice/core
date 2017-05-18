@@ -1758,7 +1758,7 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
 }
 
 /**
- * Multiple selecton
+ * Multiple selection
  */
 void ScModule::AddRefEntry()
 {

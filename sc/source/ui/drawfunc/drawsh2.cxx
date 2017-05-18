@@ -342,7 +342,7 @@ void ScDrawShell::GetDrawAttrState( SfxItemSet& rSet )
 
 void ScDrawShell::GetAttrFuncState(SfxItemSet &rSet)
 {
-    //  Disable dialogs for Draw-attributes if neccessary
+    //  Disable dialogs for Draw-attributes if necessary
 
     ScDrawView* pDrView = pViewData->GetScDrawView();
     SfxItemSet aViewSet = pDrView->GetAttrFromMarked(false);

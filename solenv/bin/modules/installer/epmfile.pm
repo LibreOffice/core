@@ -1071,7 +1071,7 @@ sub set_solaris_parameter_in_pkginfo
 }
 
 #####################################################################
-# epm uses as archtecture for Solaris x86 "i86pc". This has to be
+# epm uses as architecture for Solaris x86 "i86pc". This has to be
 # changed to "i386".
 #####################################################################
 

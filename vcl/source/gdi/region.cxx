@@ -1289,7 +1289,7 @@ const tools::PolyPolygon vcl::Region::GetAsPolyPolygon() const
 
     if(getB2DPolyPolygon())
     {
-        // the polygon needs to be converted, buffer the down converion
+        // the polygon needs to be converted, buffer the down conversion
         const tools::PolyPolygon aPolyPolgon(*getB2DPolyPolygon());
         const_cast< vcl::Region* >(this)->mpPolyPolygon.reset(new tools::PolyPolygon(aPolyPolgon));
 
@@ -1298,7 +1298,7 @@ const tools::PolyPolygon vcl::Region::GetAsPolyPolygon() const
 
     if(getRegionBand())
     {
-        // the BandRegion needs to be converted, buffer the converion
+        // the BandRegion needs to be converted, buffer the conversion
         const tools::PolyPolygon aPolyPolgon(ImplCreatePolyPolygonFromRegionBand());
         const_cast< vcl::Region* >(this)->mpPolyPolygon.reset(new tools::PolyPolygon(aPolyPolgon));
 
@@ -1326,7 +1326,7 @@ const basegfx::B2DPolyPolygon vcl::Region::GetAsB2DPolyPolygon() const
 
     if(getRegionBand())
     {
-        // the BandRegion needs to be converted, buffer the converion
+        // the BandRegion needs to be converted, buffer the conversion
         const basegfx::B2DPolyPolygon aB2DPolyPolygon(ImplCreateB2DPolyPolygonFromRegionBand());
         const_cast< vcl::Region* >(this)->mpB2DPolyPolygon.reset(new basegfx::B2DPolyPolygon(aB2DPolyPolygon));
 

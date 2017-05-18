@@ -523,7 +523,7 @@ void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
 #endif
 
     if (!strcmp(TIMEZONE, p))
-        pjvm->pushProp("user.timezone=ECT");
+        pjvm->pushProp("user.timezone=ETC");
 }
 
 /// @throws css::uno::Exception

@@ -153,7 +153,7 @@ rtl::Reference<FuPoor> FuText::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
     return xFunc;
 }
 
-/** Destruktor */
+/* Destructor */
 void FuText::disposing()
 {
     if(mpView)
