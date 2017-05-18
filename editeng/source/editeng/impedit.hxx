@@ -132,6 +132,10 @@ struct DragAndDropInfo
             bHasValidData = false; bUndoAction = false; bOutlinerMode = false;
             nSensibleRange = 0; nCursorWidth = 0; pField = nullptr; nOutlinerDropDest = 0; bDragAccepted = false;
     }
+    ~DragAndDropInfo()
+    {
+            pBackground.disposeAndClear();
+    }
 };
 
 struct ImplIMEInfos
