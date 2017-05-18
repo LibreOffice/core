@@ -222,6 +222,14 @@ RewritePlugin::RewriteOption operator|( RewritePlugin::RewriteOption option1, Re
     return static_cast< RewritePlugin::RewriteOption >( int( option1 ) | int( option2 ));
     }
 
+// Same as pathname.startswith(prefix), except on Windows, where pathname (but
+// not prefix) may also contain backslashes:
+bool hasPathnamePrefix(StringRef pathname, StringRef prefix);
+
+// Same as pathname == other, except on Windows, where pathname (but not other)
+// may also contain backslashes:
+bool isSamePathname(StringRef pathname, StringRef other);
+
 } // namespace
 
 #endif // COMPILEPLUGIN_H

@@ -64,8 +64,8 @@ public:
         std::string fn( compiler.getSourceManager().getFileEntryForID(
                         compiler.getSourceManager().getMainFileID())->getName() );
         normalizeDotDotInFilePath(fn);
-        if (fn == SRCDIR "/basegfx/source/matrix/b2dhommatrix.cxx"
-            || fn == SRCDIR "/basegfx/source/matrix/b3dhommatrix.cxx")
+        if (loplugin::isSamePathname(fn, SRCDIR "/basegfx/source/matrix/b2dhommatrix.cxx")
+            || loplugin::isSamePathname(fn, SRCDIR "/basegfx/source/matrix/b3dhommatrix.cxx"))
              return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
@@ -118,7 +118,7 @@ void ConstantParam::addToCallSet(const FunctionDecl* functionDecl, int paramInde
         return;
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( functionDecl->getLocation() );
     StringRef filename = compiler.getSourceManager().getFilename(expansionLoc);
-    if (!filename.startswith(SRCDIR))
+    if (!loplugin::hasPathnamePrefix(filename, SRCDIR))
         return;
     filename = filename.substr(strlen(SRCDIR)+1);
 

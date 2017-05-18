@@ -763,8 +763,9 @@ bool SalBool::TraverseStaticAssertDecl(StaticAssertDecl * decl) {
     //
     // inside static_assert in cppu/source/uno/check.cxx:
     return
-        (compiler.getSourceManager().getFilename(decl->getLocation())
-         == SRCDIR "/cppu/source/uno/check.cxx")
+        loplugin::isSamePathname(
+            compiler.getSourceManager().getFilename(decl->getLocation()),
+            SRCDIR "/cppu/source/uno/check.cxx")
         || RecursiveASTVisitor::TraverseStaticAssertDecl(decl);
 }
 
@@ -800,8 +801,9 @@ bool SalBool::isInSpecialMainFile(SourceLocation spellingLocation) const {
         return false;
     }
     auto f = compiler.getSourceManager().getFilename(spellingLocation);
-    return f == SRCDIR "/cppu/qa/test_any.cxx"
-        || f == SRCDIR "/cppu/source/uno/check.cxx"; // TODO: the offset checks
+    return loplugin::isSamePathname(f, SRCDIR "/cppu/qa/test_any.cxx")
+        || loplugin::isSamePathname(f, SRCDIR "/cppu/source/uno/check.cxx");
+        // TODO: the offset checks
 }
 
 bool SalBool::rewrite(SourceLocation location) {

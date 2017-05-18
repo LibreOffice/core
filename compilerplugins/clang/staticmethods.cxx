@@ -99,12 +99,12 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         return true;
     }
     // don't mess with the backwards compatibility stuff
-    if (getFilename(pCXXMethodDecl->getLocStart()) == SRCDIR "/cppuhelper/source/compat.cxx") {
+    if (loplugin::isSamePathname(getFilename(pCXXMethodDecl->getLocStart()), SRCDIR "/cppuhelper/source/compat.cxx")) {
         return true;
     }
     // the DDE has a dummy implementation on Linux and a real one on Windows
     std::string aFilename = getFilename(pCXXMethodDecl->getCanonicalDecl()->getLocStart());
-    if (aFilename == SRCDIR "/include/svl/svdde.hxx") {
+    if (loplugin::isSamePathname(aFilename, SRCDIR "/include/svl/svdde.hxx")) {
         return true;
     }
     auto cdc = loplugin::DeclCheck(pCXXMethodDecl->getParent());
@@ -124,17 +124,17 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         return true;
     }
     // the unotools and svl config code stuff is doing weird stuff with a reference-counted statically allocated pImpl class
-    if (startsWith(aFilename, SRCDIR "/include/unotools")) {
+    if (loplugin::hasPathnamePrefix(aFilename, SRCDIR "/include/unotools")) {
         return true;
     }
-    if (startsWith(aFilename, SRCDIR "/include/svl")) {
+    if (loplugin::hasPathnamePrefix(aFilename, SRCDIR "/include/svl")) {
         return true;
     }
-    if (startsWith(aFilename, SRCDIR "/include/framework") || startsWith(aFilename, SRCDIR "/framework")) {
+    if (loplugin::hasPathnamePrefix(aFilename, SRCDIR "/include/framework") || loplugin::hasPathnamePrefix(aFilename, SRCDIR "/framework")) {
         return true;
     }
     // there is some odd stuff happening here I don't fully understand, leave it for now
-    if (startsWith(aFilename, SRCDIR "/include/canvas") || startsWith(aFilename, SRCDIR "/canvas")) {
+    if (loplugin::hasPathnamePrefix(aFilename, SRCDIR "/include/canvas") || loplugin::hasPathnamePrefix(aFilename, SRCDIR "/canvas")) {
         return true;
     }
     // classes that have static data and some kind of weird reference-counting trick in its constructor

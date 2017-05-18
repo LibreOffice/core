@@ -12,6 +12,7 @@
 #include "plugin.hxx"
 
 #include <cassert>
+#include <cstddef>
 #include <string>
 
 #include <clang/Basic/FileManager.h>
@@ -42,8 +43,8 @@ bool Plugin::ignoreLocation( SourceLocation loc )
         return true;
     const char* bufferName = compiler.getSourceManager().getPresumedLoc( expansionLoc ).getFilename();
     if (bufferName == NULL
-        || strncmp( bufferName, SRCDIR "/external/", strlen( SRCDIR "/external/" )) == 0
-        || strcmp( bufferName, SRCDIR "/sdext/source/pdfimport/wrapper/keyword_list" ) == 0 )
+        || hasPathnamePrefix(bufferName, SRCDIR "/external/")
+        || isSamePathname(bufferName, SRCDIR "/sdext/source/pdfimport/wrapper/keyword_list") )
             // workdir/CustomTarget/sdext/pdfimport/hash.cxx is generated from
             // sdext/source/pdfimport/wrapper/keyword_list by gperf, which
             // inserts various #line directives denoting the latter into the
@@ -55,7 +56,7 @@ bool Plugin::ignoreLocation( SourceLocation loc )
             // generated into the start of hash.cxx, #if'ed for __GNUC__, but
             // for clang-cl it is an issue)
         return true;
-    if( strncmp( bufferName, WORKDIR, strlen( WORKDIR )) == 0 )
+    if( hasPathnamePrefix(bufferName, WORKDIR) )
     {
         // workdir/CustomTarget/vcl/unx/kde4/tst_exclude_socket_notifiers.moc
         // includes
@@ -67,12 +68,12 @@ bool Plugin::ignoreLocation( SourceLocation loc )
         }
         std::string s(bufferName);
         normalizeDotDotInFilePath(s);
-        if (strncmp(s.c_str(), WORKDIR, strlen(WORKDIR)) == 0) {
+        if (hasPathnamePrefix(s, WORKDIR)) {
             return true;
         }
     }
-    if( strncmp( bufferName, BUILDDIR, strlen( BUILDDIR )) == 0
-        || strncmp( bufferName, SRCDIR, strlen( SRCDIR )) == 0 )
+    if( hasPathnamePrefix(bufferName, BUILDDIR)
+        || hasPathnamePrefix(bufferName, SRCDIR) )
         return false; // ok
     return true;
     }
@@ -165,19 +166,19 @@ bool Plugin::isInUnoIncludeFile(SourceLocation spellingLocation) const {
     StringRef name {
         compiler.getSourceManager().getFilename(spellingLocation) };
     return compiler.getSourceManager().isInMainFile(spellingLocation)
-        ? (name == SRCDIR "/cppu/source/cppu/compat.cxx"
-           || name == SRCDIR "/cppuhelper/source/compat.cxx"
-           || name == SRCDIR "/sal/osl/all/compat.cxx")
-        : (name.startswith(SRCDIR "/include/com/")
-           || name.startswith(SRCDIR "/include/cppu/")
-           || name.startswith(SRCDIR "/include/cppuhelper/")
-           || name.startswith(SRCDIR "/include/osl/")
-           || name.startswith(SRCDIR "/include/rtl/")
-           || name.startswith(SRCDIR "/include/sal/")
-           || name.startswith(SRCDIR "/include/salhelper/")
-           || name.startswith(SRCDIR "/include/systools/")
-           || name.startswith(SRCDIR "/include/typelib/")
-           || name.startswith(SRCDIR "/include/uno/"));
+        ? (isSamePathname(name, SRCDIR "/cppu/source/cppu/compat.cxx")
+           || isSamePathname(name, SRCDIR "/cppuhelper/source/compat.cxx")
+           || isSamePathname(name, SRCDIR "/sal/osl/all/compat.cxx"))
+        : (hasPathnamePrefix(name, SRCDIR "/include/com/")
+           || hasPathnamePrefix(name, SRCDIR "/include/cppu/")
+           || hasPathnamePrefix(name, SRCDIR "/include/cppuhelper/")
+           || hasPathnamePrefix(name, SRCDIR "/include/osl/")
+           || hasPathnamePrefix(name, SRCDIR "/include/rtl/")
+           || hasPathnamePrefix(name, SRCDIR "/include/sal/")
+           || hasPathnamePrefix(name, SRCDIR "/include/salhelper/")
+           || hasPathnamePrefix(name, SRCDIR "/include/systools/")
+           || hasPathnamePrefix(name, SRCDIR "/include/typelib/")
+           || hasPathnamePrefix(name, SRCDIR "/include/uno/"));
 }
 
 bool Plugin::isInUnoIncludeFile(const FunctionDecl* functionDecl) const {
@@ -422,6 +423,44 @@ bool RewritePlugin::reportEditFailure( SourceLocation loc )
     report( DiagnosticsEngine::Warning, "cannot perform source modification (macro expansion involved?)", loc );
     return false;
     }
+
+namespace {
+
+template<typename Fn> bool checkPathname(
+    StringRef pathname, StringRef against, Fn check)
+{
+    if (check(pathname, against)) {
+        return true;
+    }
+#if defined _WIN32
+    for (std::size_t n = 0;;) {
+        std::size_t n1 = pathname.find('\\', n);
+        if (n1 >= against.size()) {
+            return check(pathname.substr(n), against.substr(n));
+        }
+        if (against[n1] != '/'
+            || pathname.substr(n, n1 - n) != against.substr(n, n1 - n))
+        {
+            break;
+        }
+        n = n1 + 1;
+    }
+#endif
+    return false;
+}
+
+}
+
+bool hasPathnamePrefix(StringRef pathname, StringRef prefix) {
+    return checkPathname(
+        pathname, prefix,
+        [](StringRef p, StringRef a) { return p.startswith(a); });
+}
+
+bool isSamePathname(StringRef pathname, StringRef other) {
+    return checkPathname(
+        pathname, other, [](StringRef p, StringRef a) { return p == a; });
+}
 
 } // namespace
 

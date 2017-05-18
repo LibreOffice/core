@@ -230,8 +230,9 @@ bool Nullptr::TraverseLinkageSpecDecl(LinkageSpecDecl * decl) {
 }
 
 bool Nullptr::isInLokIncludeFile(SourceLocation spellingLocation) const {
-    return compiler.getSourceManager().getFilename(spellingLocation)
-        .startswith(SRCDIR "/include/LibreOfficeKit/");
+    return loplugin::hasPathnamePrefix(
+        compiler.getSourceManager().getFilename(spellingLocation),
+        SRCDIR "/include/LibreOfficeKit/");
 }
 
 bool Nullptr::isFromCIncludeFile(SourceLocation spellingLocation) const {

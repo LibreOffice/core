@@ -39,23 +39,23 @@ void CheckUnusedParams::run()
 {
     StringRef fn( compiler.getSourceManager().getFileEntryForID(
                       compiler.getSourceManager().getMainFileID())->getName() );
-    if (fn.startswith(SRCDIR "/sal/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/"))
          return;
     // Taking pointer to function
-    if (fn == SRCDIR "/l10ntools/source/xmlparse.cxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/l10ntools/source/xmlparse.cxx"))
          return;
     // macro magic which declares something needed by an external library
-    if (fn == SRCDIR "/svl/source/misc/gridprinter.cxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/svl/source/misc/gridprinter.cxx"))
          return;
 
     // valid test/qa code
-    if (fn.startswith(SRCDIR "/compilerplugins/clang/test/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/compilerplugins/clang/test/"))
          return;
-    if (fn == SRCDIR "/cppu/qa/test_reference.cxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/cppu/qa/test_reference.cxx"))
          return;
 
     // leave this alone for now
-    if (fn.startswith(SRCDIR "/libreofficekit/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/libreofficekit/"))
          return;
 
     m_phase = PluginPhase::FindAddressOf;
@@ -135,104 +135,104 @@ bool CheckUnusedParams::VisitFunctionDecl(FunctionDecl const * decl) {
     StringRef fn = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(canon->getLocStart()));
     // Some backwards compat magic.
     // TODO Can probably be removed, but need to do some checking
-    if (fn == SRCDIR "/include/sax/fshelper.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/include/sax/fshelper.hxx"))
          return true;
     // Platform-specific code
-    if (fn == SRCDIR "/include/svl/svdde.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/include/svl/svdde.hxx"))
          return true;
-    if (fn == SRCDIR "/include/vcl/svmain.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/include/vcl/svmain.hxx"))
          return true;
     // passing pointer to function
-    if (fn == SRCDIR "/include/vcl/bitmapaccess.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/include/vcl/bitmapaccess.hxx"))
          return true;
-    if (fn == SRCDIR "/vcl/inc/unx/gtk/gtkobject.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/vcl/inc/unx/gtk/gtkobject.hxx"))
          return true;
-    if (fn == SRCDIR "/vcl/inc/unx/gtk/gtksalframe.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/vcl/inc/unx/gtk/gtksalframe.hxx"))
          return true;
-    if (fn == SRCDIR "/vcl/inc/unx/gtk/gtkframe.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/vcl/inc/unx/gtk/gtkframe.hxx"))
          return true;
-    if (fn == SRCDIR "/vcl/unx/gtk/fpicker/SalGtkFilePicker.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/vcl/unx/gtk/fpicker/SalGtkFilePicker.hxx"))
          return true;
-    if (fn == SRCDIR "/extensions/source/propctrlr/propertyeditor.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/extensions/source/propctrlr/propertyeditor.hxx"))
          return true;
-    if (fn == SRCDIR "/forms/source/solar/inc/navtoolbar.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/forms/source/solar/inc/navtoolbar.hxx"))
          return true;
-    if (fn == SRCDIR "/hwpfilter/source/grammar.cxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/hwpfilter/source/grammar.cxx"))
          return true;
-    if (fn == SRCDIR "/hwpfilter/source/lexer.cxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/hwpfilter/source/lexer.cxx"))
          return true;
     // marked with a TODO/FIXME
-    if (fn == SRCDIR "/vcl/inc/sallayout.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/vcl/inc/sallayout.hxx"))
          return true;
-    if (fn == SRCDIR "/accessibility/inc/standard/vclxaccessiblelist.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/accessibility/inc/standard/vclxaccessiblelist.hxx"))
          return true;
     // these are "extern C" but clang doesn't seem to report that accurately
-    if (fn == SRCDIR "/sax/source/fastparser/fastparser.cxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/sax/source/fastparser/fastparser.cxx"))
          return true;
     // these all follow the same pattern, seems a pity to break that
-    if (fn == SRCDIR "/include/vcl/graphicfilter.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/include/vcl/graphicfilter.hxx"))
          return true;
     // looks like work in progress
-    if (fn == SRCDIR "/vcl/source/filter/ipdf/pdfdocument.cxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/vcl/source/filter/ipdf/pdfdocument.cxx"))
          return true;
     // macro magic
-    if (fn == SRCDIR "/basctl/source/inc/basidesh.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/basctl/source/inc/basidesh.hxx"))
          return true;
     // template magic
-    if (fn.startswith(SRCDIR "/canvas/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/canvas/"))
          return true;
-    if (fn.startswith(SRCDIR "/include/canvas/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/include/canvas/"))
          return true;
-    if (fn == SRCDIR "/include/comphelper/unwrapargs.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/include/comphelper/unwrapargs.hxx"))
          return true;
     // this looks like vaguely useful code (ParseError) that I'm loathe to remove
-    if (fn == SRCDIR "/connectivity/source/inc/RowFunctionParser.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/connectivity/source/inc/RowFunctionParser.hxx"))
          return true;
-    if (fn == SRCDIR "/include/svx/EnhancedCustomShapeFunctionParser.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/include/svx/EnhancedCustomShapeFunctionParser.hxx"))
          return true;
     // TODO marker parameter in constructor, should probably be using an enum
-    if (fn == SRCDIR "/framework/inc/uielement/uicommanddescription.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/framework/inc/uielement/uicommanddescription.hxx"))
          return true;
-    if (fn == SRCDIR "/sd/source/ui/inc/SlideTransitionPane.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/sd/source/ui/inc/SlideTransitionPane.hxx"))
          return true;
-    if (fn == SRCDIR "/sd/source/ui/animations/CustomAnimationPane.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/sd/source/ui/animations/CustomAnimationPane.hxx"))
          return true;
-    if (fn == SRCDIR "/sd/source/ui/table/TableDesignPane.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/sd/source/ui/table/TableDesignPane.hxx"))
          return true;
     // debug stuff
-    if (fn == SRCDIR "/sc/source/core/data/column2.cxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/core/data/column2.cxx"))
          return true;
     // weird stuff
-    if (fn == SRCDIR "/scaddins/source/analysis/analysishelper.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/scaddins/source/analysis/analysishelper.hxx"))
          return true;
     // SFX_DECL_CHILDWINDOWCONTEXT macro stuff
-    if (fn == SRCDIR "/sd/source/ui/inc/NavigatorChildWindow.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/sd/source/ui/inc/NavigatorChildWindow.hxx"))
          return true;
     // TODO, need to remove this from the .sdi file too
-    if (fn == SRCDIR "/sd/source/ui/inc/SlideSorterViewShell.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/sd/source/ui/inc/SlideSorterViewShell.hxx"))
          return true;
-    if (fn == SRCDIR "/sd/source/ui/inc/OutlineViewShell.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/sd/source/ui/inc/OutlineViewShell.hxx"))
          return true;
     // SFX_DECL_INTERFACE macro stuff
-    if (fn == SRCDIR "/sd/source/ui/inc/ViewShellBase.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/sd/source/ui/inc/ViewShellBase.hxx"))
          return true;
     // debug stuff
-    if (fn == SRCDIR "/sd/source/filter/ppt/pptinanimations.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/sd/source/filter/ppt/pptinanimations.hxx"))
          return true;
     // takes pointer to fn
-    if (fn == SRCDIR "/include/sfx2/shell.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/include/sfx2/shell.hxx"))
          return true;
     // TODO, need to remove this from the .sdi file too
     if (fqn == "SfxObjectShell::StateView_Impl")
          return true;
     // SFX_DECL_CHILDWINDOW_WITHID macro
-    if (fn == SRCDIR "/include/sfx2/infobar.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/include/sfx2/infobar.hxx"))
          return true;
     // this looks like vaguely useful code (ParseError) that I'm loathe to remove
-    if (fn == SRCDIR "/slideshow/source/inc/slideshowexceptions.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/slideshow/source/inc/slideshowexceptions.hxx"))
          return true;
     // SFX_DECL_VIEWFACTORY macro
-    if (fn == SRCDIR "/starmath/inc/view.hxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/starmath/inc/view.hxx"))
          return true;
     // debugging
     if (fqn == "BrowseBox::DoShowCursor" || fqn == "BrowseBox::DoHideCursor")

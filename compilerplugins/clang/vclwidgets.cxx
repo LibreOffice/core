@@ -235,9 +235,9 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
         SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
                               pCXXDestructorDecl->getLocStart());
         StringRef filename = compiler.getSourceManager().getFilename(spellingLocation);
-        if (   !(filename.startswith(SRCDIR "/vcl/source/window/window.cxx"))
-            && !(filename.startswith(SRCDIR "/vcl/source/gdi/virdev.cxx"))
-            && !(filename.startswith(SRCDIR "/vcl/qa/cppunit/lifecycle.cxx")) )
+        if (   !(loplugin::hasPathnamePrefix(filename, SRCDIR "/vcl/source/window/window.cxx"))
+            && !(loplugin::hasPathnamePrefix(filename, SRCDIR "/vcl/source/gdi/virdev.cxx"))
+            && !(loplugin::hasPathnamePrefix(filename, SRCDIR "/vcl/qa/cppunit/lifecycle.cxx")) )
         {
             report(
                 DiagnosticsEngine::Warning,
@@ -274,7 +274,7 @@ void VCLWidgets::checkAssignmentForVclPtrToRawConversion(const SourceLocation& s
         return;
     }
     StringRef filename = compiler.getSourceManager().getFilename(spellingLocation);
-    if (filename == SRCDIR "/include/rtl/ref.hxx") {
+    if (loplugin::isSamePathname(filename, SRCDIR "/include/rtl/ref.hxx")) {
         return;
     }
     const CXXRecordDecl* pointeeClass = lhsType->getPointeeType()->getAsCXXRecordDecl();
@@ -356,9 +356,9 @@ bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
         checkAssignmentForVclPtrToRawConversion(spellingLocation, pVarDecl->getType().getTypePtr(), pVarDecl->getInit());
     }
     StringRef aFileName = compiler.getSourceManager().getFilename(spellingLocation);
-    if (aFileName == SRCDIR "/include/vcl/vclptr.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/vcl/vclptr.hxx"))
         return true;
-    if (aFileName == SRCDIR "/vcl/source/window/layout.cxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/vcl/source/window/layout.cxx"))
         return true;
     // whitelist the valid things that can contain pointers.
     // It is containing stuff like std::unique_ptr we get worried
@@ -408,13 +408,13 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
         return true;
     }
     StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(fieldDecl->getLocStart()));
-    if (aFileName == SRCDIR "/include/vcl/vclptr.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/vcl/vclptr.hxx"))
         return true;
-    if (aFileName == SRCDIR "/include/rtl/ref.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/rtl/ref.hxx"))
         return true;
-    if (aFileName == SRCDIR "/include/o3tl/enumarray.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/o3tl/enumarray.hxx"))
         return true;
-    if (aFileName == SRCDIR "/vcl/source/window/layout.cxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/vcl/source/window/layout.cxx"))
         return true;
     if (fieldDecl->isBitField()) {
         return true;
@@ -665,7 +665,7 @@ bool VCLWidgets::VisitCXXDeleteExpr(const CXXDeleteExpr *pCXXDeleteExpr)
         SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
                               pCXXDeleteExpr->getLocStart());
         StringRef filename = compiler.getSourceManager().getFilename(spellingLocation);
-        if ( !(filename.startswith(SRCDIR "/include/vcl/vclreferencebase.hxx")))
+        if ( !(loplugin::hasPathnamePrefix(filename, SRCDIR "/include/vcl/vclreferencebase.hxx")))
         {
             report(
                 DiagnosticsEngine::Warning,
@@ -841,7 +841,7 @@ bool VCLWidgets::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr )
     const CXXRecordDecl* recordDecl = pConstructorDecl->getParent();
     if (isDerivedFromVclReferenceBase(recordDecl)) {
         StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(constructExpr->getLocStart()));
-        if (aFileName != SRCDIR "/include/vcl/vclptr.hxx") {
+        if (!loplugin::isSamePathname(aFileName, SRCDIR "/include/vcl/vclptr.hxx")) {
             report(
                 DiagnosticsEngine::Warning,
                 "Calling constructor of a VclReferenceBase-derived type directly; all such creation should go via VclPtr<>::Create",

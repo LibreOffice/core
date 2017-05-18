@@ -94,16 +94,16 @@ bool ConstParams::VisitFunctionDecl(FunctionDecl * functionDecl)
     }
 
     StringRef aFileName = getFilename(functionDecl->getLocStart());
-    if (aFileName.startswith(SRCDIR "/sal/")
-        || aFileName.startswith(SRCDIR "/bridges/")
-        || aFileName.startswith(SRCDIR "/binaryurp/")
-        || aFileName.startswith(SRCDIR "/stoc/")
-        || aFileName.startswith(WORKDIR "/YaccTarget/unoidl/source/sourceprovider-parser.cxx")
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sal/")
+        || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/bridges/")
+        || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/binaryurp/")
+        || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/stoc/")
+        || loplugin::hasPathnamePrefix(aFileName, WORKDIR "/YaccTarget/unoidl/source/sourceprovider-parser.cxx")
         // some weird calling through a function pointer
-        || aFileName.startswith(SRCDIR "/svtools/source/table/defaultinputhandler.cxx")
+        || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/svtools/source/table/defaultinputhandler.cxx")
         // windows only
-        || aFileName.startswith(SRCDIR "/basic/source/sbx/sbxdec.cxx")
-        || aFileName.startswith(SRCDIR "/sfx2/source/doc/syspath.cxx")) {
+        || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/basic/source/sbx/sbxdec.cxx")
+        || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sfx2/source/doc/syspath.cxx")) {
         return true;
     }
 

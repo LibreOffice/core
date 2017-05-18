@@ -48,12 +48,12 @@ bool FragileDestructor::TraverseCXXDestructorDecl(CXXDestructorDecl* pCXXDestruc
     // ignore this for now, too tricky for me to work out
     StringRef aFileName = compiler.getSourceManager().getFilename(
             compiler.getSourceManager().getSpellingLoc(pCXXDestructorDecl->getLocStart()));
-    if (aFileName.startswith(SRCDIR "/include/comphelper/")
-        || aFileName.startswith(SRCDIR "/include/cppuhelper/")
-        || aFileName.startswith(SRCDIR "/cppuhelper/")
-        || aFileName.startswith(SRCDIR "/comphelper/")
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/comphelper/")
+        || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/cppuhelper/")
+        || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/cppuhelper/")
+        || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/comphelper/")
         // don't know how to detect this in clang - it is making an explicit call to it's own method, so presumably OK
-        || aFileName == SRCDIR "/basic/source/sbx/sbxvalue.cxx"
+        || loplugin::isSamePathname(aFileName, SRCDIR "/basic/source/sbx/sbxvalue.cxx")
        )
         return RecursiveASTVisitor::TraverseCXXDestructorDecl(pCXXDestructorDecl);
     mbChecking = true;
@@ -87,9 +87,9 @@ bool FragileDestructor::VisitCXXMemberCallExpr(const CXXMemberCallExpr* callExpr
     }
     // e.g. osl/thread.hxx and cppuhelper/compbase.hxx
     StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(methodDecl->getLocStart()));
-    if (aFileName.startswith(SRCDIR "/include/osl/")
-        || aFileName.startswith(SRCDIR "/include/comphelper/")
-        || aFileName.startswith(SRCDIR "/include/cppuhelper/"))
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/osl/")
+        || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/comphelper/")
+        || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/cppuhelper/"))
         return true;
     report(
         DiagnosticsEngine::Warning,

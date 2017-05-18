@@ -47,53 +47,53 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
 
     // FIXME complex stuff to fix later
 
-    if (aFileName == SRCDIR "/connectivity/source/inc/calc/CTable.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/connectivity/source/inc/calc/CTable.hxx"))
         return true;
-    if (aFileName.startswith(SRCDIR "/chart2/source/"))
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/chart2/source/"))
         return true;
-    if (aFileName == SRCDIR "/cppcanvas/source/mtfrenderer/emfplus.cxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/cppcanvas/source/mtfrenderer/emfplus.cxx"))
         return true;
-    if (aFileName == SRCDIR "/cui/source/customize/eventdlg.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/cui/source/customize/eventdlg.hxx"))
         return true;
-    if (aFileName == SRCDIR "/include/sfx2/recentdocsview.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/sfx2/recentdocsview.hxx"))
         return true;
-    if (aFileName == SRCDIR "/include/sfx2/templatelocalview.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/include/sfx2/templatelocalview.hxx"))
         return true;
-    if (aFileName == SRCDIR "/filter/source/graphicfilter/idxf/dxfentrd.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/filter/source/graphicfilter/idxf/dxfentrd.hxx"))
         return true;
-    if (aFileName == SRCDIR "/framework/source/uielement/popuptoolbarcontroller.cxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/framework/source/uielement/popuptoolbarcontroller.cxx"))
         return true;
-    if (aFileName == SRCDIR "/lotuswordpro/source/filter/xfilter/xfcellstyle.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/lotuswordpro/source/filter/xfilter/xfcellstyle.hxx"))
         return true;
-    if (aFileName == SRCDIR "/lotuswordpro/source/filter/xfilter/xfdrawobj.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/lotuswordpro/source/filter/xfilter/xfdrawobj.hxx"))
         return true;
-    if (aFileName == SRCDIR "/sc/source/ui/vba/vbastyles.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/sc/source/ui/vba/vbastyles.hxx"))
         return true;
-    if (aFileName == SRCDIR "/sd/inc/Outliner.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/sd/inc/Outliner.hxx"))
         return true;
-    if (aFileName == SRCDIR "/sd/source/ui/annotations/annotationtag.cxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/sd/source/ui/annotations/annotationtag.cxx"))
         return true;
-    if (aFileName == SRCDIR "/sd/source/ui/inc/FrameView.hxx"
-        || aFileName == SRCDIR "/sd/source/filter/ppt/../../ui/inc/FrameView.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/sd/source/ui/inc/FrameView.hxx")
+        || loplugin::isSamePathname(aFileName, SRCDIR "/sd/source/filter/ppt/../../ui/inc/FrameView.hxx"))
         return true;
-    if (aFileName == SRCDIR "/sd/source/ui/inc/unopage.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/sd/source/ui/inc/unopage.hxx"))
         return true;
-    if (aFileName == SRCDIR "/sd/source/ui/view/viewoverlaymanager.cxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/sd/source/ui/view/viewoverlaymanager.cxx"))
         return true;
-    if (aFileName == SRCDIR "/sdext/source/presenter/PresenterSpritePane.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/sdext/source/presenter/PresenterSpritePane.hxx"))
         return true;
-    if (aFileName == SRCDIR "/store/source/stortree.hxx"
-        || aFileName == SRCDIR "/store/source/stordata.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/store/source/stortree.hxx")
+        || loplugin::isSamePathname(aFileName, SRCDIR "/store/source/stordata.hxx"))
         return true;
-    if (aFileName == SRCDIR "/svx/source/table/cell.hxx"
-        || aFileName == SRCDIR "/svx/source/unodraw/../table/cell.hxx"
-        || aFileName == SRCDIR "/svx/source/accessibility/../table/cell.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/svx/source/table/cell.hxx")
+        || loplugin::isSamePathname(aFileName, SRCDIR "/svx/source/unodraw/../table/cell.hxx")
+        || loplugin::isSamePathname(aFileName, SRCDIR "/svx/source/accessibility/../table/cell.hxx"))
         return true;
-    if (aFileName == SRCDIR "/sw/source/uibase/inc/dbtree.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/sw/source/uibase/inc/dbtree.hxx"))
         return true;
-    if (aFileName == SRCDIR "/vcl/unx/generic/print/genpspgraphics.cxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/vcl/unx/generic/print/genpspgraphics.cxx"))
         return true;
-    if (aFileName == SRCDIR "/xmloff/source/draw/ximplink.hxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/xmloff/source/draw/ximplink.hxx"))
         return true;
 
     const CXXRecordDecl* parentCXXRecordDecl = dyn_cast<CXXRecordDecl>(fieldDecl->getDeclContext());

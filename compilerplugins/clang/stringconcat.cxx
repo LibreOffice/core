@@ -98,8 +98,10 @@ bool StringConcat::VisitCallExpr(CallExpr const * expr) {
     StringRef name {
         compiler.getSourceManager().getFilename(
             compiler.getSourceManager().getSpellingLoc(expr->getLocStart())) };
-    if (name == SRCDIR "/sal/qa/rtl/strings/test_ostring_concat.cxx"
-        || name == SRCDIR "/sal/qa/rtl/strings/test_oustring_concat.cxx")
+    if (loplugin::isSamePathname(
+            name, SRCDIR "/sal/qa/rtl/strings/test_ostring_concat.cxx")
+        || loplugin::isSamePathname(
+            name, SRCDIR "/sal/qa/rtl/strings/test_oustring_concat.cxx"))
     {
         return true;
     }

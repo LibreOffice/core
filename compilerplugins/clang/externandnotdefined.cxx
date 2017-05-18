@@ -59,7 +59,7 @@ bool ExternAndNotDefined::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     }
     StringRef fileName { compiler.getSourceManager().getFilename(functionDecl->getLocation()) };
     // the filters use some kind of dynamic loading stunt
-    if (fileName.startswith(SRCDIR "/filter/qa/")) {
+    if (loplugin::hasPathnamePrefix(fileName, SRCDIR "/filter/qa/")) {
         return true;
     }
     report(

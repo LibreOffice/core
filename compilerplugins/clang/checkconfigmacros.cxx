@@ -67,8 +67,8 @@ void CheckConfigMacros::MacroDefined( const Token& macroToken, const MacroDirect
     SourceLocation location = info->getLocation();
     const char* filename = compiler.getSourceManager().getPresumedLoc( location ).getFilename();
     if( filename != NULL
-        && ( strncmp( filename, BUILDDIR "/config_host/", strlen( BUILDDIR "/config_host/" )) == 0
-            || strncmp( filename, BUILDDIR "/config_build/", strlen( BUILDDIR "/config_build/" )) == 0 ))
+        && ( hasPathnamePrefix(filename, BUILDDIR "/config_host/")
+            || hasPathnamePrefix(filename, BUILDDIR "/config_build/") ))
         {
 //        fprintf(stderr,"DEF: %s %s\n", macroToken.getIdentifierInfo()->getName().data(), filename );
         configMacros.insert( macroToken.getIdentifierInfo()->getName());
@@ -105,7 +105,7 @@ void CheckConfigMacros::checkMacro( const Token& macroToken, SourceLocation loca
         {
         const char* filename = compiler.getSourceManager().getPresumedLoc( location ).getFilename();
         if( filename == NULL
-            || strncmp( filename, SRCDIR "/include/LibreOfficeKit/", strlen( SRCDIR "/include/LibreOfficeKit/" )) != 0 )
+            || !hasPathnamePrefix(filename, SRCDIR "/include/LibreOfficeKit/") )
             {
             report( DiagnosticsEngine::Error, "checking whether a config macro %0 is defined",
                 location ) << macroToken.getIdentifierInfo()->getName();

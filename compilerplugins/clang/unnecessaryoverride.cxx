@@ -34,24 +34,24 @@ public:
         // ignore some files with problematic macros
         StringRef fn( compiler.getSourceManager().getFileEntryForID(
                           compiler.getSourceManager().getMainFileID())->getName() );
-        if (fn == SRCDIR "/sd/source/ui/framework/factories/ChildWindowPane.cxx")
+        if (loplugin::isSamePathname(fn, SRCDIR "/sd/source/ui/framework/factories/ChildWindowPane.cxx"))
              return;
-        if (fn == SRCDIR "/forms/source/component/Date.cxx")
+        if (loplugin::isSamePathname(fn, SRCDIR "/forms/source/component/Date.cxx"))
              return;
-        if (fn == SRCDIR "/forms/source/component/Time.cxx")
+        if (loplugin::isSamePathname(fn, SRCDIR "/forms/source/component/Time.cxx"))
             return;
-        if (fn == SRCDIR "/svx/source/dialog/hyperdlg.cxx")
+        if (loplugin::isSamePathname(fn, SRCDIR "/svx/source/dialog/hyperdlg.cxx"))
             return;
-        if (fn == SRCDIR "/svx/source/dialog/rubydialog.cxx")
+        if (loplugin::isSamePathname(fn, SRCDIR "/svx/source/dialog/rubydialog.cxx"))
             return;
-        if (fn.startswith(SRCDIR "/canvas"))
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/canvas"))
             return;
-        if (fn == SRCDIR "/sc/source/ui/view/spelldialog.cxx")
+        if (loplugin::isSamePathname(fn, SRCDIR "/sc/source/ui/view/spelldialog.cxx"))
             return;
-        if (fn == SRCDIR "/sd/source/ui/dlg/SpellDialogChildWindow.cxx")
+        if (loplugin::isSamePathname(fn, SRCDIR "/sd/source/ui/dlg/SpellDialogChildWindow.cxx"))
             return;
         // HAVE_ODBC_ADMINISTRATION
-        if (fn == SRCDIR "/dbaccess/source/ui/dlg/dsselect.cxx")
+        if (loplugin::isSamePathname(fn, SRCDIR "/dbaccess/source/ui/dlg/dsselect.cxx"))
             return;
 
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
@@ -84,7 +84,7 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
        && !isInUnoIncludeFile(methodDecl))
     {
         // the code is this method is only __compiled__ if OSL_DEBUG_LEVEL > 1
-        if (aFileName == SRCDIR "/tools/source/stream/strmunx.cxx")
+        if (loplugin::isSamePathname(aFileName, SRCDIR "/tools/source/stream/strmunx.cxx"))
             return true;
 
         // Warn about unnecessarily user-declared destructors.
@@ -206,16 +206,16 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         }
     }
     // sometimes the disambiguation happens in a base class
-    if (aFileName == SRCDIR "/comphelper/source/property/propertycontainer.cxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/comphelper/source/property/propertycontainer.cxx"))
         return true;
     // not sure what is happening here
-    if (aFileName == SRCDIR "/extensions/source/bibliography/datman.cxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/extensions/source/bibliography/datman.cxx"))
         return true;
     // some very creative method hiding going on here
-    if (aFileName == SRCDIR "/svx/source/dialog/checklbx.cxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/svx/source/dialog/checklbx.cxx"))
         return true;
     // entertaining template magic
-    if (aFileName == SRCDIR "/sc/source/ui/vba/vbaformatcondition.cxx")
+    if (loplugin::isSamePathname(aFileName, SRCDIR "/sc/source/ui/vba/vbaformatcondition.cxx"))
         return true;
     // not sure what is going on here, but removing the override causes a crash
      if (methodDecl->getQualifiedNameAsString() == "SwXTextDocument::queryAdapter")

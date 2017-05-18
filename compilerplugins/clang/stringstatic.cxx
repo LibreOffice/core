@@ -42,10 +42,10 @@ void StringStatic::run()
     StringRef fn( compiler.getSourceManager().getFileEntryForID(
                       compiler.getSourceManager().getMainFileID())->getName() );
     // passing around pointers to global OUString
-    if (fn.startswith(SRCDIR "/filter/source/svg/"))
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/filter/source/svg/"))
          return;
     // has a mix of literals and refs to external OUStrings
-    if (fn == SRCDIR "/ucb/source/ucp/webdav-neon/ContentProperties.cxx")
+    if (loplugin::isSamePathname(fn, SRCDIR "/ucb/source/ucp/webdav-neon/ContentProperties.cxx"))
          return;
 
     TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());

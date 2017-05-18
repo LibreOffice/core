@@ -92,31 +92,31 @@ bool UseUniquePtr::VisitCXXDestructorDecl(const CXXDestructorDecl* destructorDec
         return true;
     // to ignore things like the CPPUNIT macros
     StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(pFieldDecl->getLocStart()));
-    if (aFileName.startswith(WORKDIR))
+    if (loplugin::hasPathnamePrefix(aFileName, WORKDIR))
         return true;
     // passes and stores pointers to member fields
-    if (aFileName.startswith(SRCDIR "/sot/source/sdstor/stgdir.hxx"))
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sot/source/sdstor/stgdir.hxx"))
         return true;
     // something platform-specific
-    if (aFileName.startswith(SRCDIR "/hwpfilter/source/htags.h"))
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/hwpfilter/source/htags.h"))
         return true;
     // @TODO there is clearly a bug in the ownership here, the operator= method cannot be right
-    if (aFileName.startswith(SRCDIR "/include/formula/formdata.hxx"))
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/formula/formdata.hxx"))
         return true;
     // passes pointers to member fields
-    if (aFileName.startswith(SRCDIR "/sd/inc/sdpptwrp.hxx"))
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sd/inc/sdpptwrp.hxx"))
         return true;
     // @TODO there is clearly a bug in the ownership here, the ScJumpMatrixToken copy constructor cannot be right
-    if (aFileName.startswith(SRCDIR "/sc/inc/token.hxx"))
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sc/inc/token.hxx"))
         return true;
     // @TODO intrusive linked-lists here, with some trickiness
-    if (aFileName.startswith(SRCDIR "/sw/source/filter/html/parcss1.hxx"))
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sw/source/filter/html/parcss1.hxx"))
         return true;
     // @TODO SwDoc has some weird ref-counting going on
-    if (aFileName.startswith(SRCDIR "/sw/inc/shellio.hxx"))
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sw/inc/shellio.hxx"))
         return true;
     // @TODO it's sharing pointers with another class
-    if (aFileName.startswith(SRCDIR "/sc/inc/formulacell.hxx"))
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sc/inc/formulacell.hxx"))
         return true;
 
     report(

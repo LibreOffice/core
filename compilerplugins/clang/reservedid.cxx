@@ -75,8 +75,14 @@ void ReservedId::run() {
                         if (loc.isValid() && !ignoreLocation(loc)) {
                             auto file = compiler.getSourceManager()
                                 .getFilename(loc);
-                            if (file != SRCDIR "/include/cppuhelper/implbase_ex_post.hxx"
-                                && file != SRCDIR "/include/cppuhelper/implbase_ex_pre.hxx")
+                            if (!loplugin::isSamePathname(
+                                    file,
+                                    SRCDIR
+                                        "/include/cppuhelper/implbase_ex_post.hxx")
+                                && !loplugin::isSamePathname(
+                                    file,
+                                    SRCDIR
+                                        "/include/cppuhelper/implbase_ex_pre.hxx"))
                             {
                                 report(
                                     DiagnosticsEngine::Warning,
@@ -102,7 +108,7 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
         return true;
     }
     auto filename = compiler.getSourceManager().getFilename(spelLoc);
-    if (filename.startswith(SRCDIR "/bridges/source/cpp_uno/")
+    if (loplugin::hasPathnamePrefix(filename, SRCDIR "/bridges/source/cpp_uno/")
         && filename.endswith("share.hxx"))
     {
         return true;
@@ -215,7 +221,8 @@ ReservedId::Kind ReservedId::determineKind(llvm::StringRef const & id) {
 }
 
 bool ReservedId::isInLokIncludeFile(SourceLocation spellingLocation) const {
-    return compiler.getSourceManager().getFilename(spellingLocation).startswith(
+    return loplugin::hasPathnamePrefix(
+        compiler.getSourceManager().getFilename(spellingLocation),
         SRCDIR "/include/LibreOfficeKit/");
 }
 

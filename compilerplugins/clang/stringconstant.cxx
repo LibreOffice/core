@@ -320,7 +320,9 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         // u.equalsIngoreAsciiCase("foo"):
         auto file = compiler.getSourceManager().getFilename(
             compiler.getSourceManager().getSpellingLoc(expr->getLocStart()));
-        if (file == SRCDIR "/sal/qa/rtl/strings/test_oustring_compare.cxx") {
+        if (loplugin::isSamePathname(
+                file, SRCDIR "/sal/qa/rtl/strings/test_oustring_compare.cxx"))
+        {
             return true;
         }
         handleChar(
@@ -336,7 +338,9 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         // u.equalsIngoreAsciiCase("foo"):
         auto file = compiler.getSourceManager().getFilename(
             compiler.getSourceManager().getSpellingLoc(expr->getLocStart()));
-        if (file == SRCDIR "/sal/qa/rtl/strings/test_oustring_compare.cxx") {
+        if (loplugin::isSamePathname(
+                file, SRCDIR "/sal/qa/rtl/strings/test_oustring_compare.cxx"))
+        {
             return true;
         }
         handleCharLen(
@@ -702,8 +706,9 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
                 auto file = compiler.getSourceManager().getFilename(
                     compiler.getSourceManager().getSpellingLoc(
                         expr->getLocStart()));
-                if (file
-                    == SRCDIR "/sal/qa/OStringBuffer/rtl_OStringBuffer.cxx")
+                if (loplugin::isSamePathname(
+                        file,
+                        SRCDIR "/sal/qa/OStringBuffer/rtl_OStringBuffer.cxx"))
                 {
                     return true;
                 }
@@ -990,12 +995,14 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                             compiler.getSourceManager()
                                             .getSpellingLoc(
                                                 expr->getLocStart()));
-                                    if (file
-                                        == (SRCDIR
-                                            "/sal/qa/rtl/strings/test_ostring_concat.cxx")
-                                        || (file
-                                            == (SRCDIR
-                                            "/sal/qa/rtl/strings/test_oustring_concat.cxx")))
+                                    if (loplugin::isSamePathname(
+                                            file,
+                                            (SRCDIR
+                                             "/sal/qa/rtl/strings/test_ostring_concat.cxx"))
+                                        || loplugin::isSamePathname(
+                                            file,
+                                            (SRCDIR
+                                             "/sal/qa/rtl/strings/test_oustring_concat.cxx")))
                                     {
                                         return true;
                                     }
