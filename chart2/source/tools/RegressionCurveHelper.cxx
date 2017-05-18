@@ -631,31 +631,31 @@ OUString RegressionCurveHelper::getRegressionCurveGenericName(const Reference< X
 
     if( aServiceName == "com.sun.star.chart2.MeanValueRegressionCurve" )
     {
-        aResult = SCH_RESSTR(STR_REGRESSION_MEAN);
+        aResult = SchResId(STR_REGRESSION_MEAN);
     }
     else if( aServiceName == "com.sun.star.chart2.LinearRegressionCurve" )
     {
-        aResult = SCH_RESSTR(STR_REGRESSION_LINEAR);
+        aResult = SchResId(STR_REGRESSION_LINEAR);
     }
     else if( aServiceName == "com.sun.star.chart2.LogarithmicRegressionCurve" )
     {
-        aResult = SCH_RESSTR(STR_REGRESSION_LOG);
+        aResult = SchResId(STR_REGRESSION_LOG);
     }
     else if( aServiceName == "com.sun.star.chart2.ExponentialRegressionCurve" )
     {
-        aResult = SCH_RESSTR(STR_REGRESSION_EXP);
+        aResult = SchResId(STR_REGRESSION_EXP);
     }
     else if( aServiceName == "com.sun.star.chart2.PotentialRegressionCurve" )
     {
-        aResult = SCH_RESSTR(STR_REGRESSION_POWER);
+        aResult = SchResId(STR_REGRESSION_POWER);
     }
     else if( aServiceName == "com.sun.star.chart2.PolynomialRegressionCurve" )
     {
-        aResult = SCH_RESSTR(STR_REGRESSION_POLYNOMIAL);
+        aResult = SchResId(STR_REGRESSION_POLYNOMIAL);
     }
     else if( aServiceName == "com.sun.star.chart2.MovingAverageRegressionCurve" )
     {
-        aResult = SCH_RESSTR(STR_REGRESSION_MOVING_AVERAGE);
+        aResult = SchResId(STR_REGRESSION_MOVING_AVERAGE);
     }
     return aResult;
 }

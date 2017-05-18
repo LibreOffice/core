@@ -32,8 +32,6 @@ public:
     SchResId( sal_Int16 nId );
 };
 
-#define SCH_RESSTR(x) SchResId(x).toString()
-
 } //  namespace chart
 
 // INCLUDED_CHART2_SOURCE_INC_RESID_HXX

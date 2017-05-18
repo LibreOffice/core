@@ -58,7 +58,7 @@ CreationWizard::CreationWizard(vcl::Window* pParent, const uno::Reference<frame:
     m_pDialogModel.reset(new DialogModel(m_xChartModel, m_xComponentContext));
     defaultButton(WizardButtonFlags::FINISH);
 
-    this->setTitleBase(SCH_RESSTR(STR_DLG_CHART_WIZARD));
+    this->setTitleBase(SchResId(STR_DLG_CHART_WIZARD));
 
     WizardPath aPath = {
         STATE_CHARTTYPE,
@@ -187,7 +187,7 @@ OUString CreationWizard::getStateDisplayName( WizardState nState ) const
     default:
         break;
     }
-    return SCH_RESSTR(nResId);
+    return SchResId(nResId);
 }
 
 } //namespace chart

@@ -99,7 +99,7 @@ awt::Point AccessibleChartView::GetUpperLeftOnScreen() const
 // ________ XAccessibleContext ________
 OUString SAL_CALL AccessibleChartView::getAccessibleName()
 {
-    return SCH_RESSTR(STR_OBJECT_DIAGRAM);
+    return SchResId(STR_OBJECT_DIAGRAM);
 }
 
 OUString SAL_CALL AccessibleChartView::getAccessibleDescription()

@@ -53,9 +53,9 @@ View3DDialog::View3DDialog(vcl::Window* pParent, const uno::Reference< frame::XM
     m_pAppearance = VclPtr<ThreeD_SceneAppearance_TabPage>::Create(m_pTabControl,xChartModel,m_aControllerLocker);
     m_pIllumination = VclPtr<ThreeD_SceneIllumination_TabPage>::Create(m_pTabControl,xSceneProperties,xChartModel);
 
-    m_pTabControl->InsertPage( TP_3D_SCENEGEOMETRY, SCH_RESSTR(STR_PAGE_PERSPECTIVE) );
-    m_pTabControl->InsertPage( TP_3D_SCENEAPPEARANCE, SCH_RESSTR(STR_PAGE_APPEARANCE) );
-    m_pTabControl->InsertPage( TP_3D_SCENEILLUMINATION, SCH_RESSTR(STR_PAGE_ILLUMINATION) );
+    m_pTabControl->InsertPage( TP_3D_SCENEGEOMETRY, SchResId(STR_PAGE_PERSPECTIVE) );
+    m_pTabControl->InsertPage( TP_3D_SCENEAPPEARANCE, SchResId(STR_PAGE_APPEARANCE) );
+    m_pTabControl->InsertPage( TP_3D_SCENEILLUMINATION, SchResId(STR_PAGE_ILLUMINATION) );
 
     m_pTabControl->SetTabPage( TP_3D_SCENEGEOMETRY, m_pGeometry );
     m_pTabControl->SetTabPage( TP_3D_SCENEAPPEARANCE, m_pAppearance );

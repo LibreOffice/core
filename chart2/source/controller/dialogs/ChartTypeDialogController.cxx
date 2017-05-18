@@ -435,7 +435,7 @@ ColumnChartDialogController::~ColumnChartDialogController()
 }
 OUString ColumnChartDialogController::getName()
 {
-    return SCH_RESSTR( STR_TYPE_COLUMN );
+    return SchResId( STR_TYPE_COLUMN );
 }
 
 Image ColumnChartDialogController::getImage()
@@ -496,10 +496,10 @@ void ColumnChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const
         rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_COLUMNS_2D_3)));
     }
 
-    rSubTypeList.SetItemText( 1, SCH_RESSTR( STR_NORMAL ) );
-    rSubTypeList.SetItemText( 2, SCH_RESSTR( STR_STACKED ) );
-    rSubTypeList.SetItemText( 3, SCH_RESSTR( STR_PERCENT ) );
-    rSubTypeList.SetItemText( 4, SCH_RESSTR( STR_DEEP ) );
+    rSubTypeList.SetItemText( 1, SchResId( STR_NORMAL ) );
+    rSubTypeList.SetItemText( 2, SchResId( STR_STACKED ) );
+    rSubTypeList.SetItemText( 3, SchResId( STR_PERCENT ) );
+    rSubTypeList.SetItemText( 4, SchResId( STR_DEEP ) );
 }
 
 BarChartDialogController::BarChartDialogController()
@@ -512,7 +512,7 @@ BarChartDialogController::~BarChartDialogController()
 
 OUString BarChartDialogController::getName()
 {
-    return SCH_RESSTR( STR_TYPE_BAR );
+    return SchResId( STR_TYPE_BAR );
 }
 
 Image BarChartDialogController::getImage()
@@ -572,10 +572,10 @@ void BarChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Ch
         rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_BARS_2D_2)));
         rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_BARS_2D_3)));
     }
-    rSubTypeList.SetItemText( 1, SCH_RESSTR( STR_NORMAL ) );
-    rSubTypeList.SetItemText( 2, SCH_RESSTR( STR_STACKED ) );
-    rSubTypeList.SetItemText( 3, SCH_RESSTR( STR_PERCENT ) );
-    rSubTypeList.SetItemText( 4, SCH_RESSTR( STR_DEEP ) );
+    rSubTypeList.SetItemText( 1, SchResId( STR_NORMAL ) );
+    rSubTypeList.SetItemText( 2, SchResId( STR_STACKED ) );
+    rSubTypeList.SetItemText( 3, SchResId( STR_PERCENT ) );
+    rSubTypeList.SetItemText( 4, SchResId( STR_DEEP ) );
 }
 
 PieChartDialogController::PieChartDialogController()
@@ -586,7 +586,7 @@ PieChartDialogController::~PieChartDialogController()
 }
 OUString PieChartDialogController::getName()
 {
-    return SCH_RESSTR( STR_TYPE_PIE );
+    return SchResId( STR_TYPE_PIE );
 }
 Image PieChartDialogController::getImage()
 {
@@ -623,10 +623,10 @@ void PieChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Ch
         rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_DONUT_2D)));
         rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_DONUT_2D_EXPLODED)));
     }
-    rSubTypeList.SetItemText( 1, SCH_RESSTR( STR_NORMAL         ) );
-    rSubTypeList.SetItemText( 2, SCH_RESSTR( STR_PIE_EXPLODED   ) );
-    rSubTypeList.SetItemText( 3, SCH_RESSTR( STR_DONUT          ) );
-    rSubTypeList.SetItemText( 4, SCH_RESSTR( STR_DONUT_EXPLODED ) );
+    rSubTypeList.SetItemText( 1, SchResId( STR_NORMAL         ) );
+    rSubTypeList.SetItemText( 2, SchResId( STR_PIE_EXPLODED   ) );
+    rSubTypeList.SetItemText( 3, SchResId( STR_DONUT          ) );
+    rSubTypeList.SetItemText( 4, SchResId( STR_DONUT_EXPLODED ) );
 }
 
 bool PieChartDialogController::shouldShow_3DLookControl() const
@@ -646,7 +646,7 @@ LineChartDialogController::~LineChartDialogController()
 }
 OUString LineChartDialogController::getName()
 {
-    return SCH_RESSTR( STR_TYPE_LINE );
+    return SchResId( STR_TYPE_LINE );
 }
 
 Image LineChartDialogController::getImage()
@@ -731,10 +731,10 @@ void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const C
             }
     }
 
-    rSubTypeList.SetItemText( 1, SCH_RESSTR( STR_POINTS_ONLY ) );
-    rSubTypeList.SetItemText( 2, SCH_RESSTR( STR_POINTS_AND_LINES ) );
-    rSubTypeList.SetItemText( 3, SCH_RESSTR( STR_LINES_ONLY ) );
-    rSubTypeList.SetItemText( 4, SCH_RESSTR( STR_LINES_3D ) );
+    rSubTypeList.SetItemText( 1, SchResId( STR_POINTS_ONLY ) );
+    rSubTypeList.SetItemText( 2, SchResId( STR_POINTS_AND_LINES ) );
+    rSubTypeList.SetItemText( 3, SchResId( STR_LINES_ONLY ) );
+    rSubTypeList.SetItemText( 4, SchResId( STR_LINES_3D ) );
 }
 bool LineChartDialogController::shouldShow_StackingControl() const
 {
@@ -797,7 +797,7 @@ XYChartDialogController::~XYChartDialogController()
 
 OUString XYChartDialogController::getName()
 {
-    return SCH_RESSTR( STR_TYPE_XY );
+    return SchResId( STR_TYPE_XY );
 }
 
 Image XYChartDialogController::getImage()
@@ -848,10 +848,10 @@ void XYChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Cha
             rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_LINE3D_XVALUES)));
     }
 
-    rSubTypeList.SetItemText( 1, SCH_RESSTR( STR_POINTS_ONLY ) );
-    rSubTypeList.SetItemText( 2, SCH_RESSTR( STR_POINTS_AND_LINES ) );
-    rSubTypeList.SetItemText( 3, SCH_RESSTR( STR_LINES_ONLY ) );
-    rSubTypeList.SetItemText( 4, SCH_RESSTR( STR_LINES_3D ) );
+    rSubTypeList.SetItemText( 1, SchResId( STR_POINTS_ONLY ) );
+    rSubTypeList.SetItemText( 2, SchResId( STR_POINTS_AND_LINES ) );
+    rSubTypeList.SetItemText( 3, SchResId( STR_LINES_ONLY ) );
+    rSubTypeList.SetItemText( 4, SchResId( STR_LINES_3D ) );
 }
 bool XYChartDialogController::shouldShow_SplineControl() const
 {
@@ -900,7 +900,7 @@ AreaChartDialogController::~AreaChartDialogController()
 
 OUString AreaChartDialogController::getName()
 {
-    return SCH_RESSTR(STR_TYPE_AREA);
+    return SchResId(STR_TYPE_AREA);
 }
 
 Image AreaChartDialogController::getImage()
@@ -942,9 +942,9 @@ void AreaChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const C
         rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_AREAS_2D_3)));
     }
 
-    rSubTypeList.SetItemText( 1, SCH_RESSTR( rParameter.b3DLook ? STR_DEEP : STR_NORMAL ) );
-    rSubTypeList.SetItemText( 2, SCH_RESSTR( STR_STACKED ) );
-    rSubTypeList.SetItemText( 3, SCH_RESSTR( STR_PERCENT ) );
+    rSubTypeList.SetItemText( 1, SchResId( rParameter.b3DLook ? STR_DEEP : STR_NORMAL ) );
+    rSubTypeList.SetItemText( 2, SchResId( STR_STACKED ) );
+    rSubTypeList.SetItemText( 3, SchResId( STR_PERCENT ) );
 }
 void AreaChartDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
 {
@@ -987,7 +987,7 @@ NetChartDialogController::~NetChartDialogController()
 
 OUString NetChartDialogController::getName()
 {
-    return SCH_RESSTR(STR_TYPE_NET);
+    return SchResId(STR_TYPE_NET);
 }
 
 Image NetChartDialogController::getImage()
@@ -1040,10 +1040,10 @@ void NetChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Ch
         rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_NET_FILL_STACK)));
     }
 
-    rSubTypeList.SetItemText( 1, SCH_RESSTR( STR_POINTS_ONLY ) );
-    rSubTypeList.SetItemText( 2, SCH_RESSTR( STR_POINTS_AND_LINES ) );
-    rSubTypeList.SetItemText( 3, SCH_RESSTR( STR_LINES_ONLY ) );
-    rSubTypeList.SetItemText( 4, SCH_RESSTR( STR_FILLED ) );
+    rSubTypeList.SetItemText( 1, SchResId( STR_POINTS_ONLY ) );
+    rSubTypeList.SetItemText( 2, SchResId( STR_POINTS_AND_LINES ) );
+    rSubTypeList.SetItemText( 3, SchResId( STR_LINES_ONLY ) );
+    rSubTypeList.SetItemText( 4, SchResId( STR_FILLED ) );
 }
 void NetChartDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
 {
@@ -1082,7 +1082,7 @@ StockChartDialogController::~StockChartDialogController()
 
 OUString StockChartDialogController::getName()
 {
-    return SCH_RESSTR(STR_TYPE_STOCK);
+    return SchResId(STR_TYPE_STOCK);
 }
 
 Image StockChartDialogController::getImage()
@@ -1108,10 +1108,10 @@ void StockChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const 
     rSubTypeList.InsertItem(3, Image(BitmapEx(BMP_STOCK_3)));
     rSubTypeList.InsertItem(4, Image(BitmapEx(BMP_STOCK_4)));
 
-    rSubTypeList.SetItemText( 1, SCH_RESSTR(STR_STOCK_1) );
-    rSubTypeList.SetItemText( 2, SCH_RESSTR(STR_STOCK_2) );
-    rSubTypeList.SetItemText( 3, SCH_RESSTR(STR_STOCK_3) );
-    rSubTypeList.SetItemText( 4, SCH_RESSTR(STR_STOCK_4) );
+    rSubTypeList.SetItemText( 1, SchResId(STR_STOCK_1) );
+    rSubTypeList.SetItemText( 2, SchResId(STR_STOCK_2) );
+    rSubTypeList.SetItemText( 3, SchResId(STR_STOCK_3) );
+    rSubTypeList.SetItemText( 4, SchResId(STR_STOCK_4) );
 }
 
 void StockChartDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
@@ -1129,7 +1129,7 @@ CombiColumnLineChartDialogController::CombiColumnLineChartDialogController()
 
 OUString CombiColumnLineChartDialogController::getName()
 {
-    return SCH_RESSTR(STR_TYPE_COMBI_COLUMN_LINE);
+    return SchResId(STR_TYPE_COMBI_COLUMN_LINE);
 }
 
 Image CombiColumnLineChartDialogController::getImage( )
@@ -1151,8 +1151,8 @@ void CombiColumnLineChartDialogController::fillSubTypeList( ValueSet& rSubTypeLi
     rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_COLUMN_LINE)));
     rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_COLUMN_LINE_STACKED)));
 
-    rSubTypeList.SetItemText(1, SCH_RESSTR(STR_LINE_COLUMN));
-    rSubTypeList.SetItemText(2, SCH_RESSTR(STR_LINE_STACKEDCOLUMN));
+    rSubTypeList.SetItemText(1, SchResId(STR_LINE_COLUMN));
+    rSubTypeList.SetItemText(2, SchResId(STR_LINE_STACKEDCOLUMN));
 }
 
 void CombiColumnLineChartDialogController::showExtraControls( VclBuilderContainer* pParent )
@@ -1263,7 +1263,7 @@ BubbleChartDialogController::~BubbleChartDialogController()
 
 OUString BubbleChartDialogController::getName()
 {
-    return SCH_RESSTR(STR_TYPE_BUBBLE);
+    return SchResId(STR_TYPE_BUBBLE);
 }
 
 Image BubbleChartDialogController::getImage()
@@ -1282,7 +1282,7 @@ void BubbleChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const
     rSubTypeList.Clear();
     rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_BUBBLE_1)));
 
-    rSubTypeList.SetItemText( 1, SCH_RESSTR(STR_BUBBLE_1) );
+    rSubTypeList.SetItemText( 1, SchResId(STR_BUBBLE_1) );
 }
 void BubbleChartDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
 {

@@ -1535,7 +1535,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         bReturn = executeDispatch_Delete();
         if( ! bReturn )
         {
-            ScopedVclPtrInstance<InfoBox>(pChartWindow, SCH_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+            ScopedVclPtrInstance<InfoBox>(pChartWindow, SchResId(STR_ACTION_NOTPOSSIBLE))->Execute();
         }
     }
 

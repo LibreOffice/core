@@ -817,7 +817,7 @@ void ChartController::executeDispatch_View3D()
     try
     {
         UndoLiveUpdateGuard aUndoGuard(
-            SCH_RESSTR( STR_ACTION_EDIT_3D_VIEW ),
+            SchResId( STR_ACTION_EDIT_3D_VIEW ),
             m_xUndoManager );
 
         //open dialog
