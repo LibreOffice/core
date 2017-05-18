@@ -126,6 +126,9 @@ void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )
     m_pBtnMatch->Enable( !officecfg::Office::Calc::Calculate::Other::SearchCriteria::isReadOnly() );
     bool bWildcards = pLocalOptions->IsFormulaWildcardsEnabled();
     bool bRegex = pLocalOptions->IsFormulaRegexEnabled();
+    // If both, Wildcards and Regex, are set then Wildcards shall take
+    // precedence. This is also how other code calling Search handles it. Both
+    // simultaneously couldn't be set using UI but editing the configuration.
     if (bWildcards && bRegex)
         bRegex = false;
     m_pBtnWildcards->Check( bWildcards );
