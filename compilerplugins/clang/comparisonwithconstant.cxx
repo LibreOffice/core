@@ -74,11 +74,6 @@ bool ComparisonWithConstant::VisitBinaryOperator(const BinaryOperator* binaryOp)
     if (!(binaryOp->getOpcode() == BO_EQ || binaryOp->getOpcode() == BO_NE)) {
         return true;
     }
-    // ignore logging macros
-    if (compiler.getSourceManager().isMacroBodyExpansion(binaryOp->getSourceRange().getBegin())
-        || compiler.getSourceManager().isMacroArgExpansion(binaryOp->getSourceRange().getBegin())) {
-        return true;
-    }
     // protect against clang assert
     if (binaryOp->getLHS()->isValueDependent() || binaryOp->getRHS()->isValueDependent()) {
         return true;
@@ -117,14 +112,6 @@ bool ComparisonWithConstant::rewrite(const BinaryOperator * binaryOp) {
 
     const std::string lhsString = getExprAsString(lhsRange);
     const std::string rhsString = getExprAsString(rhsRange);
-
-    /* we can't safely move around stuff containing comments, we mess up the resulting code */
-    if ( lhsString.find("/*") != std::string::npos || lhsString.find("//") != std::string::npos ) {
-        return false;
-    }
-    if ( rhsString.find("/*") != std::string::npos || rhsString.find("//") != std::string::npos ) {
-        return false;
-    }
 
     // switch LHS and RHS
     if (!replaceText(lhsRange, rhsString)) {
