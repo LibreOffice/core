@@ -78,8 +78,8 @@ classname* classname::getImplementation( const uno::Reference< uno::XInterface >
 UNO3_GETIMPLEMENTATION_BASE_IMPL(classname)\
 sal_Int64 SAL_CALL classname::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) \
 { \
-    if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), \
-                                                         rId.getConstArray(), 16 ) ) \
+    if( rId.getLength() == 16 && memcmp( getUnoTunnelId().getConstArray(), \
+                                                         rId.getConstArray(), 16 ) == 0 ) \
     { \
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this)); \
     } \
@@ -90,8 +90,8 @@ sal_Int64 SAL_CALL classname::getSomething( const css::uno::Sequence< sal_Int8 >
 UNO3_GETIMPLEMENTATION_BASE_IMPL(classname)\
 sal_Int64 SAL_CALL classname::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) \
 { \
-    if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), \
-                                                         rId.getConstArray(), 16 ) ) \
+    if( rId.getLength() == 16 && memcmp( getUnoTunnelId().getConstArray(), \
+                                                         rId.getConstArray(), 16 ) == 0 ) \
     { \
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this)); \
     } \

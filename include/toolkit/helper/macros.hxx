@@ -27,7 +27,7 @@
 #define IMPL_XUNOTUNNEL_MINIMAL( ClassName ) \
 sal_Int64 ClassName::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) \
 { \
-    if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( ClassName::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) ) \
+    if( ( rIdentifier.getLength() == 16 ) && ( memcmp( ClassName::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) == 0 ) ) \
     { \
         return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(this)); \
     } \

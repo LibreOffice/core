@@ -98,7 +98,7 @@ bool DoClassHeader( RSCHEADER * pHeader, bool bMember )
     else
         aCopyInst.pClass = pHeader->pClass;
 
-    if( TYPE_COPY == pHeader->nTyp )
+    if( pHeader->nTyp == TYPE_COPY )
     {
         ObjNode * pCopyObj = aCopyInst.pClass->GetObjNode( aName2 );
 
@@ -172,7 +172,7 @@ bool DoClassHeader( RSCHEADER * pHeader, bool bMember )
             }
             else if( aError.IsError() )
             {
-                if( ERR_CONT_INVALIDTYPE == aError.GetError() )
+                if( aError.GetError() == ERR_CONT_INVALIDTYPE )
                     pTC->pEH->Error( aError, S.Top().pClass, aName1,
                                      pHS->getString( pHeader->pClass->GetId() ).getStr() );
                 else
@@ -187,7 +187,7 @@ bool DoClassHeader( RSCHEADER * pHeader, bool bMember )
             S.Push( aTmpI );
         }
     }
-    if( TYPE_REF == pHeader->nTyp )
+    if( pHeader->nTyp == TYPE_REF )
     {
         ERRTYPE aError;
 
@@ -391,7 +391,7 @@ resource_definition
 class_definition
   : class_header class_body
   {
-      if( TYPE_REF == $1.nTyp )
+      if( $1.nTyp == TYPE_REF )
       {
           pTC->pEH->Error( ERR_REFNOTALLOWED, S.Top().pClass,
                            RscId( $1.nName1 ) );
@@ -403,9 +403,9 @@ class_definition
       ERRTYPE aError;
       RscId aRscId( $1.nName1 );
 
-      if( TYPE_NOTHING == $1.nTyp && aRscId.IsId() )
+      if( $1.nTyp == TYPE_NOTHING && aRscId.IsId() )
           aError = S.Top().pClass->SetRef( S.Top(), aRscId );
-      else if( TYPE_COPY == $1.nTyp )
+      else if( $1.nTyp == TYPE_COPY )
           aError = ERR_COPYNOTALLOWED;
       if( aError.IsError() || aError.IsWarning() )
           pTC->pEH->Error( aError, S.Top().pClass, aRscId );
@@ -506,7 +506,7 @@ var_definition
   | class_definition ';'
   | var_header_class class_body ';'
   {
-      if( TYPE_REF == $1.nTyp )
+      if( $1.nTyp == TYPE_REF )
           pTC->pEH->Error( ERR_REFNOTALLOWED, S.Top().pClass,
                            RscId( $1.nName1 ) );
 
@@ -521,9 +521,9 @@ var_definition
       ERRTYPE aError;
       RscId aRscId( $1.nName1 );
 
-      if( TYPE_NOTHING == $1.nTyp && aRscId.IsId() )
+      if( $1.nTyp == TYPE_NOTHING && aRscId.IsId() )
           aError = S.Top().pClass->SetRef( S.Top(), aRscId );
-      else if( TYPE_COPY == $1.nTyp )
+      else if( $1.nTyp == TYPE_COPY )
           aError = ERR_COPYNOTALLOWED;
       if( S.Top().pClass->GetCount( S.Top() ) )
           aError = WRN_SUBINMEMBER;
@@ -1011,7 +1011,7 @@ macro_expression
   {
       if( $1.IsNumber() && $3.IsNumber() )
       {
-          if( 0 == $3.GetLong() )
+          if( $3.GetLong() == 0 )
           {
               $$.cType = RSCEXP_EXP;
               $$.aExp.pExp = new RscExpression( $1, '/', $3 );
@@ -1090,7 +1090,7 @@ id_expression
   : id_expression line_number
   | macro_expression
   {  // evaluate pExpession and delete it
-      if( RSCEXP_EXP == $1.cType )
+      if( $1.cType == RSCEXP_EXP )
       {
           sal_Int32       lValue;
 
