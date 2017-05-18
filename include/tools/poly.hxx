@@ -161,7 +161,6 @@ public:
     bool                operator==( const tools::Polygon& rPoly ) const;
     bool                operator!=( const tools::Polygon& rPoly ) const
                             { return !(Polygon::operator==( rPoly )); }
-    bool                IsEqual( const tools::Polygon& rPoly ) const;
 
     // streaming a Polygon does ignore PolyFlags, so use the Write Or Read
     // method to take care of PolyFlags

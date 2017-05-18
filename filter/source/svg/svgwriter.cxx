@@ -3211,7 +3211,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     if(mapCurShape.get())
                     {
                         if(1 != mapCurShape->maShapePolyPoly.Count()
-                            || !mapCurShape->maShapePolyPoly[0].IsEqual(aPoly))
+                            || mapCurShape->maShapePolyPoly[0] != aPoly)
                         {
                             // this path action is not covering the same path than the already existing
                             // fill polypolygon, so write out the fill polygon
