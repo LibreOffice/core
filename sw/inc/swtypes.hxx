@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_SWTYPES_HXX
 #define INCLUDED_SW_INC_SWTYPES_HXX
 #include <rtl/ustring.hxx>
+#include <tools/resid.hxx>
 #include <tools/solar.h>
 #include <tools/mapunit.hxx>
 #include <SwGetPoolIdFromName.hxx>
@@ -132,10 +133,12 @@ const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 #define INIT_SEQ_FLDTYPES   4
 
 extern ResMgr* pSwResMgr;
-    // defined in sw/source/uibase/app/swmodule.cxx for the sw library and in
-    // sw/source/ui/dialog/swdialmgr.cxx for the swui library
-#define SW_RES(i)       ResId(i,*pSwResMgr)
-#define SW_RESSTR(i)    SW_RES(i).toString()
+// defined in sw/source/uibase/app/swmodule.cxx for the sw library and in
+// sw/source/ui/dialog/swdialmgr.cxx for the swui library
+inline OUString SwResId(sal_uInt16 nId)
+{
+    return ResId(nId, *pSwResMgr);
+}
 
 css::uno::Reference< css::linguistic2::XSpellChecker1 > GetSpellChecker();
 css::uno::Reference< css::linguistic2::XHyphenator >    GetHyphenator();

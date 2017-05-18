@@ -482,17 +482,17 @@ UpdateDialog::UpdateDialog(
     std::vector< dp_gui::UpdateData > * updateData):
     ModalDialog(parent, "UpdateDialog", "desktop/ui/updatedialog.ui"),
     m_context(context),
-    m_none(DPGUI_RESSTR(RID_DLG_UPDATE_NONE)),
-    m_noInstallable(DPGUI_RESSTR(RID_DLG_UPDATE_NOINSTALLABLE)),
-    m_failure(DPGUI_RESSTR(RID_DLG_UPDATE_FAILURE)),
-    m_unknownError(DPGUI_RESSTR(RID_DLG_UPDATE_UNKNOWNERROR)),
-    m_noDescription(DPGUI_RESSTR(RID_DLG_UPDATE_NODESCRIPTION)),
-    m_noInstall(DPGUI_RESSTR(RID_DLG_UPDATE_NOINSTALL)),
-    m_noDependency(DPGUI_RESSTR(RID_DLG_UPDATE_NODEPENDENCY)),
-    m_noDependencyCurVer(DPGUI_RESSTR(RID_DLG_UPDATE_NODEPENDENCY_CUR_VER)),
-    m_browserbased(DPGUI_RESSTR(RID_DLG_UPDATE_BROWSERBASED)),
-    m_version(DPGUI_RESSTR(RID_DLG_UPDATE_VERSION)),
-    m_ignoredUpdate(DPGUI_RESSTR(RID_DLG_UPDATE_IGNORED_UPDATE)),
+    m_none(DpGuiResId(RID_DLG_UPDATE_NONE)),
+    m_noInstallable(DpGuiResId(RID_DLG_UPDATE_NOINSTALLABLE)),
+    m_failure(DpGuiResId(RID_DLG_UPDATE_FAILURE)),
+    m_unknownError(DpGuiResId(RID_DLG_UPDATE_UNKNOWNERROR)),
+    m_noDescription(DpGuiResId(RID_DLG_UPDATE_NODESCRIPTION)),
+    m_noInstall(DpGuiResId(RID_DLG_UPDATE_NOINSTALL)),
+    m_noDependency(DpGuiResId(RID_DLG_UPDATE_NODEPENDENCY)),
+    m_noDependencyCurVer(DpGuiResId(RID_DLG_UPDATE_NODEPENDENCY_CUR_VER)),
+    m_browserbased(DpGuiResId(RID_DLG_UPDATE_BROWSERBASED)),
+    m_version(DpGuiResId(RID_DLG_UPDATE_VERSION)),
+    m_ignoredUpdate(DpGuiResId(RID_DLG_UPDATE_IGNORED_UPDATE)),
     m_updateData(*updateData),
     m_thread(
         new UpdateDialog::Thread(
@@ -598,9 +598,9 @@ short UpdateDialog::Execute() {
 
 UpdateDialog::CheckListBox::CheckListBox( vcl::Window* pParent, UpdateDialog & dialog):
     SvxCheckListBox( pParent, WinBits(WB_BORDER) ),
-    m_ignoreUpdate( DPGUI_RESSTR( RID_DLG_UPDATE_IGNORE ) ),
-    m_ignoreAllUpdates( DPGUI_RESSTR( RID_DLG_UPDATE_IGNORE_ALL ) ),
-    m_enableUpdate( DPGUI_RESSTR( RID_DLG_UPDATE_ENABLE ) ),
+    m_ignoreUpdate( DpGuiResId( RID_DLG_UPDATE_IGNORE ) ),
+    m_ignoreAllUpdates( DpGuiResId( RID_DLG_UPDATE_IGNORE_ALL ) ),
+    m_enableUpdate( DpGuiResId( RID_DLG_UPDATE_ENABLE ) ),
     m_dialog(dialog)
 {
     SetNormalStaticImage(Image(BitmapEx(RID_DLG_UPDATE_NORMALALERT)));

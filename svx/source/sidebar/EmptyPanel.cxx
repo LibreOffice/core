@@ -27,7 +27,7 @@ EmptyPanel::EmptyPanel (vcl::Window* pParent)
     : Control(pParent)
     , maMessageControl(VclPtr<FixedText>::Create(this))
 {
-    maMessageControl->SetText(SVX_RES(RID_SIDEBAR_EMPTY_PANEL_TEXT));
+    maMessageControl->SetText(SvxResId(RID_SIDEBAR_EMPTY_PANEL_TEXT));
     maMessageControl->setPosSizePixel(5, 5, 250, 15);
     maMessageControl->SetStyle(WB_WORDBREAK);
     maMessageControl->Show();

@@ -275,7 +275,7 @@ OUString SAL_CALL ScaPricingAddIn::getDisplayFunctionName( const OUString& aProg
                                 FindScaFuncData( aProgrammaticName ) );
     if(fDataIt != pFuncDataList->end() )
     {
-        aRet = ScaResId(fDataIt->GetUINameID(), GetResMgr()).toString();
+        aRet = ScaResId(fDataIt->GetUINameID(), GetResMgr());
         if( fDataIt->IsDouble() )
             aRet += "_ADD";
     }

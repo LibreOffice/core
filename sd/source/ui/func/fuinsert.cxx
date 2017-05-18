@@ -783,12 +783,12 @@ void FuInsert3DModel::DoExecute( SfxRequest& )
 {
     sfx2::FileDialogHelper aDlg( ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
 
-    aDlg.SetTitle( SD_RESSTR( STR_INSERT_3D_MODEL_TITLE ) );
+    aDlg.SetTitle( SdResId( STR_INSERT_3D_MODEL_TITLE ) );
 
 #if HAVE_FEATURE_COLLADA
-    aDlg.AddFilter( SD_RESSTR( STR_INSERT_3D_MODEL_ALL_SUPPORTED_FORMATS ), "*.json;*.dae;*.kmz"  );
+    aDlg.AddFilter( SdResId( STR_INSERT_3D_MODEL_ALL_SUPPORTED_FORMATS ), "*.json;*.dae;*.kmz"  );
 #else
-    aDlg.AddFilter( SD_RESSTR( STR_INSERT_3D_MODEL_ALL_SUPPORTED_FORMATS ), "*.json"  );
+    aDlg.AddFilter( SdResId( STR_INSERT_3D_MODEL_ALL_SUPPORTED_FORMATS ), "*.json"  );
 #endif
 
     aDlg.AddFilter( "JSON - GL Transmission Format", "*.json" );

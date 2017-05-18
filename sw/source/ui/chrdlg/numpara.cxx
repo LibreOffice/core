@@ -45,7 +45,7 @@ const sal_uInt16 SwParagraphNumTabPage::aPageRg[] = {
 SwParagraphNumTabPage::SwParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rAttr ) :
     SfxTabPage(pParent, "NumParaPage", "modules/swriter/ui/numparapage.ui", &rAttr),
 
-    msOutlineNumbering( SW_RES( STR_OUTLINE_NUMBERING ) ),
+    msOutlineNumbering( SwResId( STR_OUTLINE_NUMBERING ) ),
     bModified(false),
     bCurNumrule(false)
 {

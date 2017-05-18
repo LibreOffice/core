@@ -139,7 +139,7 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUStri
 
     aTableButton->SetPosSizePixel( Point( mnTablePosX, mnTableHeight + 5 ),
             Size( mnTableWidth - mnTablePosX, 24 ) );
-    aTableButton->SetText( SVX_RESSTR( RID_SVXSTR_MORE ) );
+    aTableButton->SetText( SvxResId( RID_SVXSTR_MORE ) );
     aTableButton->SetClickHdl( LINK( this, TableWindow, SelectHdl ) );
     aTableButton->Show();
 
@@ -285,7 +285,7 @@ void TableWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         if(GetId() == FN_SHOW_MULTIPLE_PAGES)
         {
             aText += " ";
-            aText += SVX_RESSTR(RID_SVXSTR_PAGES);
+            aText += SvxResId(RID_SVXSTR_PAGES);
         }
 
         Size aTextSize(rRenderContext.GetTextWidth(aText), rRenderContext.GetTextHeight());

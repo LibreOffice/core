@@ -21,16 +21,9 @@
 #include <sfx2/sfxresid.hxx>
 #include "tools/resmgr.hxx"
 
-
 static ResMgr* pMgr=nullptr;
 
-SfxResId::SfxResId( sal_uInt16 nId ) :
-
-    ResId( nId, *GetResMgr() )
-{
-}
-
-ResMgr* SfxResId::GetResMgr()
+ResMgr* SfxResMgr::GetResMgr()
 {
     if ( !pMgr )
     {
@@ -40,7 +33,7 @@ ResMgr* SfxResId::GetResMgr()
     return pMgr;
 }
 
-void SfxResId::DeleteResMgr()
+void SfxResMgr::DeleteResMgr()
 {
     DELETEZ( pMgr );
 }

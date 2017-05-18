@@ -91,8 +91,8 @@ namespace offapp
         :EditBrowseBox(_pParent, EditBrowseBoxFlags::NO_HANDLE_COLUMN_CONTENT, WB_BORDER,
                        BrowserMode::AUTO_VSCROLL | BrowserMode::AUTO_HSCROLL | BrowserMode::HIDECURSOR | BrowserMode::AUTOSIZE_LASTCOL | BrowserMode::KEEPHIGHLIGHT)
         ,m_aSeekRow(m_aSettings.end())
-        ,m_sYes(CUI_RES(RID_SVXSTR_YES))
-        ,m_sNo(CUI_RES(RID_SVXSTR_NO))
+        ,m_sYes(CuiResId(RID_SVXSTR_YES))
+        ,m_sNo(CuiResId(RID_SVXSTR_NO))
     {
         SetStyle((GetStyle() & ~WB_HSCROLL) | WB_AUTOHSCROLL);
     }
@@ -128,11 +128,11 @@ namespace offapp
         EditBrowseBox::Init();
 
         Size aColWidth = LogicToPixel(Size(160, 0), MapUnit::MapAppFont);
-        InsertDataColumn(1, OUString(CUI_RES(RID_SVXSTR_DRIVER_NAME)), aColWidth.Width());
+        InsertDataColumn(1, OUString(CuiResId(RID_SVXSTR_DRIVER_NAME)), aColWidth.Width());
         aColWidth = LogicToPixel(Size(30, 0), MapUnit::MapAppFont);
-        InsertDataColumn(2, OUString(CUI_RES(RID_SVXSTR_POOLED_FLAG)), aColWidth.Width());
+        InsertDataColumn(2, OUString(CuiResId(RID_SVXSTR_POOLED_FLAG)), aColWidth.Width());
         aColWidth = LogicToPixel(Size(60, 0), MapUnit::MapAppFont);
-        InsertDataColumn(3, OUString(CUI_RES(RID_SVXSTR_POOL_TIMEOUT)), aColWidth.Width());
+        InsertDataColumn(3, OUString(CuiResId(RID_SVXSTR_POOL_TIMEOUT)), aColWidth.Width());
             // Attention: the resource of the string is local to the resource of the enclosing dialog!
     }
 

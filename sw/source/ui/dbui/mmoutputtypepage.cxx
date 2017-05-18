@@ -252,13 +252,13 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
     m_pContainer(get<SvSimpleTableContainer>("container")),
     m_pStop(get<PushButton>("stop")),
     m_pClose(get<PushButton>("close")),
-    m_sContinue(SW_RES( ST_CONTINUE )),
+    m_sContinue(SwResId( ST_CONTINUE )),
     m_sStop(m_pStop->GetText()),
     m_sTransferStatus(m_pTransferStatus->GetText()),
     m_sErrorStatus(   m_pErrorStatus->GetText()),
-    m_sSendingTo(   SW_RES(ST_SENDINGTO )),
-    m_sCompleted(   SW_RES(ST_COMPLETED )),
-    m_sFailed(      SW_RES(ST_FAILED     )),
+    m_sSendingTo(   SwResId(ST_SENDINGTO )),
+    m_sCompleted(   SwResId(ST_COMPLETED )),
+    m_sFailed(      SwResId(ST_FAILED     )),
     m_bCancel(false),
     m_bDesctructionEnabled(false),
     m_pImpl(new SwSendMailDialog_Impl),
@@ -273,8 +273,8 @@ SwSendMailDialog::SwSendMailDialog(vcl::Window *pParent, SwMailMergeConfigItem& 
     m_pStatusHB = &(m_pStatus->GetTheHeaderBar());
 
     m_nStatusHeight = m_pContainer->get_height_request();
-    OUString sTask(SW_RES(ST_TASK));
-    OUString sStatus(SW_RES(ST_STATUS));
+    OUString sTask(SwResId(ST_TASK));
+    OUString sStatus(SwResId(ST_STATUS));
 
     m_pStop->SetClickHdl(LINK( this, SwSendMailDialog, StopHdl_Impl));
     m_pClose->SetClickHdl(LINK( this, SwSendMailDialog, CloseHdl_Impl));

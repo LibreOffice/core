@@ -111,7 +111,7 @@ OUString SwWrtShell::GetDoString( DoType eDoType ) const
     default:;//prevent warning
     }
 
-    return  SvtResId( nResStr ).toString() + aUndoStr;
+    return  SvtResId(nResStr) + aUndoStr;
 }
 
 void SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) const
@@ -147,7 +147,7 @@ OUString SwWrtShell::GetRepeatString() const
         return str;
     }
 
-    return SvtResId(STR_REPEAT).toString() + str;
+    return SvtResId(STR_REPEAT) + str;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

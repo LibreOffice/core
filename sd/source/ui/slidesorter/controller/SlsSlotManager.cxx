@@ -834,7 +834,7 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
             nPageCount = mrSlideSorter.GetModel().GetPageCount();
             nActivePageCount = static_cast<sal_Int32>(mrSlideSorter.GetModel().GetDocument()->GetActiveSdPageCount());
 
-            aPageStr = (nPageCount == nActivePageCount) ? SD_RESSTR(STR_SD_PAGE_COUNT) : SD_RESSTR(STR_SD_PAGE_COUNT_CUSTOM);
+            aPageStr = (nPageCount == nActivePageCount) ? SdResId(STR_SD_PAGE_COUNT) : SdResId(STR_SD_PAGE_COUNT_CUSTOM);
 
             aPageStr = aPageStr.replaceFirst("%1", OUString::number(nFirstPage));
             aPageStr = aPageStr.replaceFirst("%2", OUString::number(nPageCount));
@@ -946,8 +946,8 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
             // Undo
             SdPage* pUndoPage = pPageToRename;
             SdrLayerAdmin &  rLayerAdmin = pDocument->GetLayerAdmin();
-            SdrLayerID nBackground = rLayerAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRND ) );
-            SdrLayerID nBgObj = rLayerAdmin.GetLayerID( SD_RESSTR( STR_LAYER_BCKGRNDOBJ ) );
+            SdrLayerID nBackground = rLayerAdmin.GetLayerID( SdResId( STR_LAYER_BCKGRND ) );
+            SdrLayerID nBgObj = rLayerAdmin.GetLayerID( SdResId( STR_LAYER_BCKGRNDOBJ ) );
             SdrLayerIDSet aVisibleLayers = pPageToRename->TRG_GetMasterPageVisibleLayers();
 
             // (#67720#)
@@ -1089,7 +1089,7 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
     // created pages in aPagesToSelect.
     const bool bUndo (aPagesToDuplicate.size()>1 && mrSlideSorter.GetView().IsUndoEnabled());
     if (bUndo)
-        mrSlideSorter.GetView().BegUndo(SD_RESSTR(STR_INSERTPAGE));
+        mrSlideSorter.GetView().BegUndo(SdResId(STR_INSERTPAGE));
 
     ::std::vector<SdPage*> aPagesToSelect;
     for(::std::vector<SdPage*>::const_iterator

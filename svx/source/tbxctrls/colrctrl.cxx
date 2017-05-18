@@ -90,7 +90,7 @@ SvxColorValueSet_docking::SvxColorValueSet_docking( vcl::Window* _pParent ) :
     DragSourceHelper( this ),
     mbLeftButton(true)
 {
-    SetAccessibleName(SVX_RESSTR(STR_COLORTABLE));
+    SetAccessibleName(SvxResId(STR_COLORTABLE));
 }
 
 void SvxColorValueSet_docking::MouseButtonDown( const MouseEvent& rMEvt )
@@ -183,7 +183,7 @@ SvxColorDockingWindow::SvxColorDockingWindow
     nLines          ( 1 ),
     nCount          ( 0 )
 {
-    SetText(SVX_RESSTR(STR_COLORTABLE));
+    SetText(SvxResId(STR_COLORTABLE));
     SetSizePixel(LogicToPixel(Size(150, 22), MapMode(MapUnit::MapAppFont)));
     SetHelpId(HID_CTRL_COLOR);
 
@@ -277,7 +277,7 @@ void SvxColorDockingWindow::FillValueSet()
 
         Bitmap aBmp( pVD->GetBitmap( Point(), aColorSize ) );
 
-        aColorSet->InsertItem( (sal_uInt16)1, Image(aBmp), SVX_RESSTR( RID_SVXSTR_INVISIBLE ) );
+        aColorSet->InsertItem( (sal_uInt16)1, Image(aBmp), SvxResId( RID_SVXSTR_INVISIBLE ) );
 
         aColorSet->addEntriesForXColorList(*pColorList, 2);
     }

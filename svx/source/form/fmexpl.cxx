@@ -476,7 +476,7 @@ namespace svxform
 
         m_pNavigatorTree = VclPtr<NavigatorTree>::Create( this );
         m_pNavigatorTree->Show();
-        SetText( SVX_RES(RID_STR_FMEXPLORER) );
+        SetText( SvxResId(RID_STR_FMEXPLORER) );
         SfxDockingWindow::SetFloatingSize( Size(200,200) );
     }
 

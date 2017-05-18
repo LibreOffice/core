@@ -670,7 +670,7 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWi
 {
     SetHelpId( HID_SMA_COMMAND_WIN );
     SetSizePixel(LogicToPixel(Size(292 , 94), MapMode(MapUnit::MapAppFont)));
-    SetText(SM_RESSTR(STR_CMDBOXWINDOW));
+    SetText(SmResId(STR_CMDBOXWINDOW));
 
     Hide();
 

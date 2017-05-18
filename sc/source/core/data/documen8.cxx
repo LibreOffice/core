@@ -814,7 +814,7 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
     sc::WaitPointerSwitch aWaitSwitch(pWin);
 
     pExternalRefMgr->enableDocTimer(false);
-    ScProgress aProgress(GetDocumentShell(), ScResId(SCSTR_UPDATE_EXTDOCS).toString(), aRefLinks.size(), true);
+    ScProgress aProgress(GetDocumentShell(), ScResId(SCSTR_UPDATE_EXTDOCS), aRefLinks.size(), true);
     for (size_t i = 0, n = aRefLinks.size(); i < n; ++i)
     {
         aProgress.SetState(i+1);
@@ -835,7 +835,7 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
         aFile = aUrl.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
 
         OUStringBuffer aBuf;
-        aBuf.append(OUString(ScResId(SCSTR_EXTDOC_NOT_LOADED)));
+        aBuf.append(ScResId(SCSTR_EXTDOC_NOT_LOADED));
         aBuf.append("\n\n");
         aBuf.append(aFile);
         ScopedVclPtrInstance< MessageDialog > aBox(pWin, aBuf.makeStringAndClear());

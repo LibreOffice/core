@@ -343,12 +343,12 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                     {
                         if( IsImpress() )
                         {
-                            SetPanelTitle(SD_RESSTR(STR_MASTERSLIDE_NAME));
+                            SetPanelTitle(SdResId(STR_MASTERSLIDE_NAME));
                             mpEditMaster->Hide();
                             mpCloseMaster->Show();
                         }
                         else
-                            SetPanelTitle(SD_RESSTR(STR_MASTERPAGE_NAME));
+                            SetPanelTitle(SdResId(STR_MASTERPAGE_NAME));
                         mpMasterSlide->Disable();
                         mpDspMasterBackground->Disable();
                         mpDspMasterObjects->Disable();
@@ -357,12 +357,12 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                     {
                         if( IsImpress() )
                         {
-                            SetPanelTitle(SD_RESSTR(STR_SLIDE_NAME));
+                            SetPanelTitle(SdResId(STR_SLIDE_NAME));
                             mpCloseMaster->Hide();
                             mpEditMaster->Show();
                         }
                         else
-                            SetPanelTitle(SD_RESSTR(STR_PAGE_NAME));
+                            SetPanelTitle(SdResId(STR_PAGE_NAME));
                         mpMasterSlide->Enable();
                         mpDspMasterBackground->Enable();
                         mpDspMasterObjects->Enable();
@@ -401,25 +401,25 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                                                        vcl::EnumContext::Context::MasterPage);
                 if(maContext == aDrawOtherContext || maContext == aDrawMasterContext)
                 {
-                    mpMasterLabel->SetText(SD_RESSTR(STR_MASTERPAGE_NAME));
+                    mpMasterLabel->SetText(SdResId(STR_MASTERPAGE_NAME));
                     maApplication = vcl::EnumContext::Application::Draw;
                     mpCloseMaster->Hide();
                     mpEditMaster->Hide();
                     if( maContext == aDrawMasterContext)
-                        SetPanelTitle(SD_RESSTR(STR_MASTERPAGE_NAME));
+                        SetPanelTitle(SdResId(STR_MASTERPAGE_NAME));
                     else
-                        SetPanelTitle(SD_RESSTR(STR_PAGE_NAME));
+                        SetPanelTitle(SdResId(STR_PAGE_NAME));
                 }
                 else if ( maContext == aImpressOtherContext || maContext == aImpressMasterContext )
                 {
-                    mpMasterLabel->SetText(SD_RESSTR(STR_MASTERSLIDE_NAME));
+                    mpMasterLabel->SetText(SdResId(STR_MASTERSLIDE_NAME));
                     maApplication = vcl::EnumContext::Application::Impress;
                     mpCloseMaster->Hide();
                     mpEditMaster->Show();
                     if( maContext == aImpressMasterContext )
-                        SetPanelTitle(SD_RESSTR(STR_MASTERSLIDE_NAME));
+                        SetPanelTitle(SdResId(STR_MASTERSLIDE_NAME));
                     else
-                        SetPanelTitle(SD_RESSTR(STR_SLIDE_NAME));
+                        SetPanelTitle(SdResId(STR_SLIDE_NAME));
                 }
                 mbTitle = true;
             }

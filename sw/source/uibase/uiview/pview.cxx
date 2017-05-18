@@ -1180,7 +1180,7 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     SfxViewShell( pViewFrame, SWVIEWFLAGS ),
     m_pViewWin( VclPtr<SwPagePreviewWin>::Create(&(GetViewFrame())->GetWindow(), *this ) ),
     m_nNewPage(USHRT_MAX),
-    m_sPageStr(SW_RES(STR_PAGE)),
+    m_sPageStr(SwResId(STR_PAGE)),
     m_pHScrollbar(nullptr),
     m_pVScrollbar(nullptr),
     m_pScrollFill(VclPtr<ScrollBarBox>::Create( &pViewFrame->GetWindow(), WB_SIZEABLE )),

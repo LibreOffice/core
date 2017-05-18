@@ -118,9 +118,9 @@ public:
         if (mpDocument!=nullptr && mpDocument->IsUndoEnabled())
         {
             if (mpMainViewShell && mpMainViewShell->GetShellType() == ViewShell::ST_DRAW)
-                mpDocument->BegUndo(SD_RESSTR(STRING_DRAG_AND_DROP_PAGES));
+                mpDocument->BegUndo(SdResId(STRING_DRAG_AND_DROP_PAGES));
             else
-                mpDocument->BegUndo(SD_RESSTR(STRING_DRAG_AND_DROP_SLIDES));
+                mpDocument->BegUndo(SdResId(STRING_DRAG_AND_DROP_SLIDES));
         }
     }
 

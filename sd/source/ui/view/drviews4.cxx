@@ -101,7 +101,7 @@ void DrawViewShell::DeleteActualLayer()
 
     SdrLayerAdmin& rAdmin = GetDoc()->GetLayerAdmin();
     const OUString& rName = GetLayerTabControl()->GetPageText(GetLayerTabControl()->GetCurPageId());
-    OUString aString(SD_RESSTR(STR_ASK_DELETE_LAYER));
+    OUString aString(SdResId(STR_ASK_DELETE_LAYER));
 
     // replace placeholder
     aString = aString.replaceFirst("$", rName);
@@ -875,21 +875,21 @@ void DrawViewShell::ShowSnapLineContextMenu (
     {
         pMenu->InsertItem(
             SID_SET_SNAPITEM,
-            SD_RESSTR(STR_POPUP_EDIT_SNAPPOINT));
+            SdResId(STR_POPUP_EDIT_SNAPPOINT));
         pMenu->InsertSeparator();
         pMenu->InsertItem(
             SID_DELETE_SNAPITEM,
-            SD_RESSTR(STR_POPUP_DELETE_SNAPPOINT));
+            SdResId(STR_POPUP_DELETE_SNAPPOINT));
     }
     else
     {
         pMenu->InsertItem(
             SID_SET_SNAPITEM,
-            SD_RESSTR(STR_POPUP_EDIT_SNAPLINE));
+            SdResId(STR_POPUP_EDIT_SNAPLINE));
         pMenu->InsertSeparator();
         pMenu->InsertItem(
             SID_DELETE_SNAPITEM,
-            SD_RESSTR(STR_POPUP_DELETE_SNAPLINE));
+            SdResId(STR_POPUP_DELETE_SNAPLINE));
     }
 
     pMenu->RemoveDisabledEntries(false);

@@ -121,7 +121,7 @@ void FuConstructUnoControl::Activate()
     mpWindow->SetPointer( aNewPointer );
 
     aOldLayer = mpView->GetActiveLayer();
-    mpView->SetActiveLayer( SD_RESSTR(STR_LAYER_CONTROLS) );
+    mpView->SetActiveLayer( SdResId(STR_LAYER_CONTROLS) );
 
     FuConstruct::Activate();
 }

@@ -3850,16 +3850,16 @@ OUString SAL_CALL SfxBaseModel::getTitle()
             }
             const SfxBoolItem* pRepairedDocItem = SfxItemSet::GetItem<SfxBoolItem>(pMedium->GetItemSet(), SID_REPAIRPACKAGE, false);
             if ( pRepairedDocItem && pRepairedDocItem->GetValue() )
-                aResult += SfxResId(STR_REPAIREDDOCUMENT).toString();
+                aResult += SfxResId(STR_REPAIREDDOCUMENT);
         }
 
         if ( m_pData->m_pObjectShell->IsReadOnlyUI() || (pMedium && pMedium->IsReadOnly()) )
-            aResult += SfxResId(STR_READONLY).toString();
+            aResult += SfxResId(STR_READONLY);
         else if ( m_pData->m_pObjectShell->IsDocShared() )
-            aResult += SfxResId(STR_SHARED).toString();
+            aResult += SfxResId(STR_SHARED);
 
         if ( m_pData->m_pObjectShell->GetDocumentSignatureState() == SignatureState::OK )
-            aResult += SfxResId(RID_XMLSEC_DOCUMENTSIGNED).toString();
+            aResult += SfxResId(RID_XMLSEC_DOCUMENTSIGNED);
     }
 
     return aResult;

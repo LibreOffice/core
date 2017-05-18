@@ -102,8 +102,8 @@ void SfxApplication::Deinitialize()
 
     // free administration managers
     DELETEZ(pImpl->pAppDispat);
-    SfxResId::DeleteResMgr();
-    SvtResId::DeleteResMgr();
+    SfxResMgr::DeleteResMgr();
+    SvtResMgr::DeleteResMgr();
 
     // from here no SvObjects have to exists
     DELETEZ(pImpl->pMatcher);

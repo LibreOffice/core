@@ -151,7 +151,7 @@ VclPtr<SfxDocumentInfoDialog> SwDocShell::CreateDocumentInfoDialog(const SfxItem
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
             pDlg->AddFontTabPage();
-            pDlg->AddTabPage(TP_DOC_STAT, SW_RESSTR(STR_DOC_STAT),pFact->GetTabPageCreatorFunc( TP_DOC_STAT ),nullptr);
+            pDlg->AddTabPage(TP_DOC_STAT, SwResId(STR_DOC_STAT),pFact->GetTabPageCreatorFunc( TP_DOC_STAT ),nullptr);
         }
     }
     return pDlg;
@@ -751,7 +751,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     SwView      *pCurrView = static_cast<SwView*>( pFrame->GetViewShell());
 
                     // Set document's title
-                    OUString aTmp( SW_RES(STR_ABSTRACT_TITLE) );
+                    OUString aTmp( SwResId(STR_ABSTRACT_TITLE) );
                     aTmp += GetTitle();
                     xDocSh->SetTitle( aTmp );
                     pCurrView->GetWrtShell().SetNewDoc();
@@ -972,14 +972,14 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         OUString* pEntries = aListBoxEntries.getArray();
                         sal_Int32   nIdx = 0 ;
 
-                        OUString    sOutline( SW_RESSTR(STR_FDLG_OUTLINE_LEVEL) );
+                        OUString    sOutline( SwResId(STR_FDLG_OUTLINE_LEVEL) );
                         for( sal_uInt16 i = 0; i < MAXLEVEL; ++i )
                         {
                             if( bOutline[i] )
                                 pEntries[nIdx++] = sOutline + OUString::number( i+1 );
                         }
 
-                        OUString    sStyle( SW_RESSTR(STR_FDLG_STYLE) );
+                        OUString    sStyle( SwResId(STR_FDLG_STYLE) );
                         for(sal_uInt16 i = 0; i < nStyleCount; ++i)
                         {
                             SwTextFormatColl &rTextColl = *(*m_pDoc->GetTextFormatColls())[ i ];
@@ -1002,14 +1002,14 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
                                 ListboxControlActions::SET_SELECT_ITEM, aSelectPos );
                             xCtrlAcc->setLabel( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
-                                                    SW_RES( STR_FDLG_TEMPLATE_NAME ));
+                                                    SwResId( STR_FDLG_TEMPLATE_NAME ));
                         }
                         catch (const Exception&)
                         {
                             OSL_FAIL("control access failed");
                         }
 
-                        xFP->setTitle( SW_RESSTR( nStrId ));
+                        xFP->setTitle( SwResId( nStrId ));
                         SvtPathOptions aPathOpt;
                         xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
                         if( ERRCODE_NONE == aDlgHelper.Execute())
@@ -1088,7 +1088,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                     if( !bDone && !rReq.IsAPI() )
                     {
-                        ScopedVclPtrInstance<InfoBox>(nullptr, SW_RESSTR( STR_CANTCREATE))->Execute();
+                        ScopedVclPtrInstance<InfoBox>(nullptr, SwResId( STR_CANTCREATE))->Execute();
                     }
                 }
             }
@@ -1237,13 +1237,13 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
     {
         *pClassName     = SvGlobalName( SO3_SW_CLASSID_60 );
         *pClipFormat    = SotClipboardFormatId::STARWRITER_60;
-        *pLongUserName = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE);
+        *pLongUserName = SwResId(STR_WRITER_DOCUMENT_FULLTYPE);
     }
     else if (nVersion == SOFFICE_FILEFORMAT_8)
     {
         *pClassName     = SvGlobalName( SO3_SW_CLASSID_60 );
         *pClipFormat    = bTemplate ? SotClipboardFormatId::STARWRITER_8_TEMPLATE : SotClipboardFormatId::STARWRITER_8;
-        *pLongUserName = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE);
+        *pLongUserName = SwResId(STR_WRITER_DOCUMENT_FULLTYPE);
     }
 // #FIXME check with new Event handling
 #if 0
@@ -1252,7 +1252,7 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
         lcl_processCompatibleSfxHint( xVbaEventsHelper, rHint );
 #endif
 
-    *pUserName = SW_RESSTR(STR_HUMAN_SWDOC_NAME);
+    *pUserName = SwResId(STR_HUMAN_SWDOC_NAME);
 }
 
 void SwDocShell::SetModified( bool bSet )

@@ -1706,7 +1706,7 @@ bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
 
     if( bMsg && nResId )
     {
-        ScopedVclPtrInstance<MessageDialog>(nullptr, SW_RES(nResId), VclMessageType::Info)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(nResId), VclMessageType::Info)->Execute();
     }
     return bRet;
 }
@@ -1780,7 +1780,7 @@ bool SwTransferable::PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         if( !IsError( aReader.Read( *pRead )) )
             bRet = true;
         else if( bMsg )
-            ScopedVclPtrInstance<MessageDialog>(nullptr, SW_RES(STR_ERROR_CLPBRD_READ), VclMessageType::Info)->Execute();
+            ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(STR_ERROR_CLPBRD_READ), VclMessageType::Info)->Execute();
     }
     else
     {
@@ -2159,7 +2159,7 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
                 if (nRows > USHRT_MAX || nCols > USHRT_MAX)
                 {
                     if( bMsg )
-                        ScopedVclPtrInstance<MessageDialog>(nullptr, SW_RESSTR(STR_TABLE_TOO_LARGE), VclMessageType::Info)->Execute();
+                        ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(STR_TABLE_TOO_LARGE), VclMessageType::Info)->Execute();
                     pDDETyp = nullptr;
                     break;
                 }
@@ -2168,7 +2168,7 @@ bool SwTransferable::PasteDDE( TransferableDataHelper& rData,
                 if( !nRows || !nCols )
                 {
                     if( bMsg )
-                        ScopedVclPtrInstance<MessageDialog>(nullptr, SW_RESSTR(STR_NO_TABLE), VclMessageType::Info)->Execute();
+                        ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(STR_NO_TABLE), VclMessageType::Info)->Execute();
                     pDDETyp = nullptr;
                     break;
                 }
@@ -2714,7 +2714,7 @@ bool SwTransferable::PasteDBData( TransferableDataHelper& rData,
     }
     else if( bMsg )
     {
-        ScopedVclPtrInstance<MessageDialog>(nullptr, SW_RES(STR_CLPBRD_FORMAT_ERROR), VclMessageType::Info)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(STR_CLPBRD_FORMAT_ERROR), VclMessageType::Info)->Execute();
     }
     return bRet;
 }
@@ -2753,7 +2753,7 @@ bool SwTransferable::PasteFileList( TransferableDataHelper& rData,
     }
     else if( bMsg )
     {
-        ScopedVclPtrInstance<MessageDialog>(nullptr, SW_RES(STR_CLPBRD_FORMAT_ERROR), VclMessageType::Info)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(STR_CLPBRD_FORMAT_ERROR), VclMessageType::Info)->Execute();
     }
     return bRet;
 }
@@ -2919,7 +2919,7 @@ bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rDat
                 aFormats.insert( aFormats.begin(), aFlavorEx );
             }
             pDlg->SetObjName( pClipboard->m_aObjDesc.maClassName,
-                                SW_RES( nResId ) );
+                                SwResId( nResId ) );
             pDlg->Insert( SotClipboardFormatId::EMBED_SOURCE, aEmptyOUStr );
         }
     }
@@ -2938,7 +2938,7 @@ bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rDat
     }
 
     if( SwTransferable::TestAllowedFormat( rData, SotClipboardFormatId::LINK, nDest ))
-        pDlg->Insert( SotClipboardFormatId::LINK, SW_RES(STR_DDEFORMAT) );
+        pDlg->Insert( SotClipboardFormatId::LINK, SwResId(STR_DDEFORMAT) );
 
     for( SotClipboardFormatId* pIds = aPasteSpecialIds; *pIds != SotClipboardFormatId::NONE; ++pIds )
         if( SwTransferable::TestAllowedFormat( rData, *pIds, nDest ))
@@ -2976,7 +2976,7 @@ void SwTransferable::FillClipFormatItem( const SwWrtShell& rSh,
 
         if( nResId )
             rToFill.AddClipbrdFormat( SotClipboardFormatId::EMBED_SOURCE,
-                                        SW_RESSTR( nResId ) );
+                                        SwResId( nResId ) );
     }
     else
     {
@@ -3003,7 +3003,7 @@ void SwTransferable::FillClipFormatItem( const SwWrtShell& rSh,
     }
 
     if( SwTransferable::TestAllowedFormat( rData, SotClipboardFormatId::LINK, nDest ))
-        rToFill.AddClipbrdFormat( SotClipboardFormatId::LINK, SW_RESSTR(STR_DDEFORMAT) );
+        rToFill.AddClipbrdFormat( SotClipboardFormatId::LINK, SwResId(STR_DDEFORMAT) );
 
     for( SotClipboardFormatId* pIds = aPasteSpecialIds; *pIds != SotClipboardFormatId::NONE; ++pIds )
         if( SwTransferable::TestAllowedFormat( rData, *pIds, nDest ))

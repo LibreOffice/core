@@ -93,8 +93,8 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
 
     {
         ::SolarMutexGuard aSolarGuard;
-        msName = SVX_RESSTR( RID_SVXSTR_GRAPHCTRL_ACC_NAME );
-        msDescription = SVX_RESSTR( RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION );
+        msName = SvxResId( RID_SVXSTR_GRAPHCTRL_ACC_NAME );
+        msDescription = SvxResId( RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION );
     }
 
     maTreeInfo.SetSdrView( mpView );

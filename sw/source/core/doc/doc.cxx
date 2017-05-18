@@ -1688,16 +1688,16 @@ OUString SwDoc::GetPaMDescr(const SwPaM & rPam)
             const sal_Int32 nStart = rPam.Start()->nContent.GetIndex();
             const sal_Int32 nEnd = rPam.End()->nContent.GetIndex();
 
-            return SW_RESSTR(STR_START_QUOTE)
+            return SwResId(STR_START_QUOTE)
                 + ShortenString(pTextNode->GetText().copy(nStart, nEnd - nStart),
                                 nUndoStringLength,
-                                SW_RESSTR(STR_LDOTS))
-                + SW_RESSTR(STR_END_QUOTE);
+                                SwResId(STR_LDOTS))
+                + SwResId(STR_END_QUOTE);
         }
     }
     else
     {
-        return SW_RESSTR(STR_PARAGRAPHS);
+        return SwResId(STR_PARAGRAPHS);
     }
 
     return OUString("??");

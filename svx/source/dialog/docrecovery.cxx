@@ -831,7 +831,7 @@ void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
 
 short impl_askUserForWizardCancel(vcl::Window* pParent, sal_Int16 nRes)
 {
-    ScopedVclPtrInstance< MessageDialog > aQuery(pParent, SVX_RES(nRes), VclMessageType::Question, VclButtonsType::YesNo);
+    ScopedVclPtrInstance< MessageDialog > aQuery(pParent, SvxResId(nRes), VclMessageType::Question, VclButtonsType::YesNo);
     if (aQuery->Execute() == RET_YES)
         return DLG_RET_OK;
     else
@@ -841,9 +841,9 @@ short impl_askUserForWizardCancel(vcl::Window* pParent, sal_Int16 nRes)
 RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
     : Dialog(pParent, "DocRecoveryRecoverDialog",
         "svx/ui/docrecoveryrecoverdialog.ui")
-    , m_aTitleRecoveryInProgress(SVX_RESSTR(RID_SVXSTR_RECOVERY_INPROGRESS))
-    , m_aRecoveryOnlyFinish (SVX_RESSTR(RID_SVXSTR_RECOVERYONLY_FINISH))
-    , m_aRecoveryOnlyFinishDescr(SVX_RESSTR(RID_SVXSTR_RECOVERYONLY_FINISH_DESCR))
+    , m_aTitleRecoveryInProgress(SvxResId(RID_SVXSTR_RECOVERY_INPROGRESS))
+    , m_aRecoveryOnlyFinish (SvxResId(RID_SVXSTR_RECOVERYONLY_FINISH))
+    , m_aRecoveryOnlyFinishDescr(SvxResId(RID_SVXSTR_RECOVERYONLY_FINISH_DESCR))
     , m_pCore(pCore)
     , m_eRecoveryState(RecoveryDialog::E_RECOVERY_PREPARED)
     , m_bWaitForCore(false)

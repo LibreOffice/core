@@ -56,7 +56,7 @@ OUString GetDicInfoStr( const OUString& rName, const LanguageType nLang, bool bN
     }
 
     if ( LANGUAGE_NONE == nLang )
-        aTmp += SVX_RESSTR(RID_SVXSTR_LANGUAGE_ALL);
+        aTmp += SvxResId(RID_SVXSTR_LANGUAGE_ALL);
     else
     {
         aTmp += "[";
@@ -149,7 +149,7 @@ void SvxLanguageBoxBase::ImplLanguageBoxBaseInit()
 {
     m_aNotCheckedImage = Image(BitmapEx(RID_SVXBMP_NOTCHECKED));
     m_aCheckedImage = Image(BitmapEx(RID_SVXBMP_CHECKED));
-    m_aAllString            = SVX_RESSTR( RID_SVXSTR_LANGUAGE_ALL );
+    m_aAllString            = SvxResId( RID_SVXSTR_LANGUAGE_ALL );
     m_nLangList             = SvxLanguageListFlags::EMPTY;
     m_bHasLangNone          = false;
     m_bLangNoneIsLangAll    = false;

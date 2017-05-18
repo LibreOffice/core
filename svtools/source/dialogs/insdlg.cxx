@@ -174,7 +174,7 @@ void SvObjectServerList::FillInsertObjects()
 
 #ifdef _WIN32
         SvGlobalName aOleFact( SO3_OUT_CLASSID );
-        OUString aOleObj( SVT_RESSTR( STR_FURTHER_OBJECT ) );
+        OUString aOleObj( SvtResId( STR_FURTHER_OBJECT ) );
         aObjectServerList.push_back( SvObjectServer( aOleFact, aOleObj ) );
 #endif
 
@@ -277,7 +277,7 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotClipboardFormatId nId )
     }
 
     if( nResId )
-        aUIName = SVT_RESSTR( nResId );
+        aUIName = SvtResId( nResId );
     else
         aUIName = SotExchange::GetFormatName( nId );
 
@@ -334,7 +334,7 @@ bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, O
                 _rSource += pSrcOfCopy;
             }
             else
-                _rSource = SVT_RESSTR(STR_UNKNOWN_SOURCE);
+                _rSource = SvtResId(STR_UNKNOWN_SOURCE);
         }
         bRet = true;
     }

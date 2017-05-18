@@ -65,7 +65,7 @@ void DeckTitleBar::SetCloserVisible (const bool bIsCloserVisible)
             maToolBox->InsertItem(mnCloserItemIndex,
                                   Theme::GetImage(Theme::Image_Closer));
             maToolBox->SetQuickHelpText(mnCloserItemIndex,
-                                        SFX2_RESSTR(SFX_STR_SIDEBAR_CLOSE_DECK));
+                                        SfxResId(SFX_STR_SIDEBAR_CLOSE_DECK));
         }
         else
             maToolBox->RemoveItem(maToolBox->GetItemPos(mnCloserItemIndex));

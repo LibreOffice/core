@@ -3288,13 +3288,13 @@ OUString SwXTextDocument::getPartName(int nPart)
 {
     SolarMutexGuard aGuard;
 
-    return OUString(SW_RES(STR_PAGE)) + OUString::number(nPart + 1);
+    return SwResId(STR_PAGE) + OUString::number(nPart + 1);
 }
 
 OUString SwXTextDocument::getPartHash(int nPart)
 {
     SolarMutexGuard aGuard;
-    OUString sPart(OUString(SW_RES(STR_PAGE)) + OUString::number(nPart + 1));
+    OUString sPart(SwResId(STR_PAGE) + OUString::number(nPart + 1));
 
     return OUString::number(sPart.hashCode());
 }
@@ -3769,13 +3769,13 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
 SwXLinkTargetSupplier::SwXLinkTargetSupplier(SwXTextDocument& rxDoc) :
     pxDoc(&rxDoc)
 {
-    sTables     = SW_RES(STR_CONTENT_TYPE_TABLE);
-    sFrames     = SW_RES(STR_CONTENT_TYPE_FRAME);
-    sGraphics   = SW_RES(STR_CONTENT_TYPE_GRAPHIC);
-    sOLEs       = SW_RES(STR_CONTENT_TYPE_OLE);
-    sSections   = SW_RES(STR_CONTENT_TYPE_REGION);
-    sOutlines   = SW_RES(STR_CONTENT_TYPE_OUTLINE);
-    sBookmarks  = SW_RES(STR_CONTENT_TYPE_BOOKMARK);
+    sTables     = SwResId(STR_CONTENT_TYPE_TABLE);
+    sFrames     = SwResId(STR_CONTENT_TYPE_FRAME);
+    sGraphics   = SwResId(STR_CONTENT_TYPE_GRAPHIC);
+    sOLEs       = SwResId(STR_CONTENT_TYPE_OLE);
+    sSections   = SwResId(STR_CONTENT_TYPE_REGION);
+    sOutlines   = SwResId(STR_CONTENT_TYPE_OUTLINE);
+    sBookmarks  = SwResId(STR_CONTENT_TYPE_BOOKMARK);
 }
 
 SwXLinkTargetSupplier::~SwXLinkTargetSupplier()

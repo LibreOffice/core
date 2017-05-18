@@ -879,8 +879,8 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
         if ( xControlAccess.is() )
         {
-            xControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, SfxResId(STR_EXPORTBUTTON).toString() );
-            xControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER_LABEL, SfxResId(STR_LABEL_FILEFORMAT).toString() );
+            xControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::PUSHBUTTON_OK, SfxResId(STR_EXPORTBUTTON) );
+            xControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER_LABEL, SfxResId(STR_LABEL_FILEFORMAT) );
         }
     }
     else

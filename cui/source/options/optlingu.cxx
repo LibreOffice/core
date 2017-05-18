@@ -986,16 +986,16 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, bool bEnable 
 SvxLinguTabPage::SvxLinguTabPage( vcl::Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, "OptLinguPage", "cui/ui/optlingupage.ui", &rSet),
 
-    sCapitalWords   (CUI_RES(RID_SVXSTR_CAPITAL_WORDS)),
-    sWordsWithDigits(CUI_RES(RID_SVXSTR_WORDS_WITH_DIGITS)),
-    sSpellSpecial   (CUI_RES(RID_SVXSTR_SPELL_SPECIAL)),
-    sSpellAuto      (CUI_RES(RID_SVXSTR_SPELL_AUTO)),
-    sGrammarAuto    (CUI_RES(RID_SVXSTR_GRAMMAR_AUTO)),
-    sNumMinWordlen  (CUI_RES(RID_SVXSTR_NUM_MIN_WORDLEN)),
-    sNumPreBreak    (CUI_RES(RID_SVXSTR_NUM_PRE_BREAK)),
-    sNumPostBreak   (CUI_RES(RID_SVXSTR_NUM_POST_BREAK)),
-    sHyphAuto       (CUI_RES(RID_SVXSTR_HYPH_AUTO)),
-    sHyphSpecial    (CUI_RES(RID_SVXSTR_HYPH_SPECIAL)),
+    sCapitalWords   (CuiResId(RID_SVXSTR_CAPITAL_WORDS)),
+    sWordsWithDigits(CuiResId(RID_SVXSTR_WORDS_WITH_DIGITS)),
+    sSpellSpecial   (CuiResId(RID_SVXSTR_SPELL_SPECIAL)),
+    sSpellAuto      (CuiResId(RID_SVXSTR_SPELL_AUTO)),
+    sGrammarAuto    (CuiResId(RID_SVXSTR_GRAMMAR_AUTO)),
+    sNumMinWordlen  (CuiResId(RID_SVXSTR_NUM_MIN_WORDLEN)),
+    sNumPreBreak    (CuiResId(RID_SVXSTR_NUM_PRE_BREAK)),
+    sNumPostBreak   (CuiResId(RID_SVXSTR_NUM_POST_BREAK)),
+    sHyphAuto       (CuiResId(RID_SVXSTR_HYPH_AUTO)),
+    sHyphSpecial    (CuiResId(RID_SVXSTR_HYPH_SPECIAL)),
 
     pLinguData(nullptr)
 {
@@ -1751,10 +1751,10 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
 SvxEditModulesDlg::SvxEditModulesDlg(vcl::Window* pParent, SvxLinguData_Impl& rData)
     : ModalDialog( pParent, "EditModulesDialog",
         "cui/ui/editmodulesdialog.ui")
-    , sSpell(CUI_RES(RID_SVXSTR_SPELL))
-    , sHyph(CUI_RES(RID_SVXSTR_HYPH))
-    , sThes(CUI_RES(RID_SVXSTR_THES))
-    , sGrammar(CUI_RES(RID_SVXSTR_GRAMMAR))
+    , sSpell(CuiResId(RID_SVXSTR_SPELL))
+    , sHyph(CuiResId(RID_SVXSTR_HYPH))
+    , sThes(CuiResId(RID_SVXSTR_THES))
+    , sGrammar(CuiResId(RID_SVXSTR_GRAMMAR))
     , rLinguData(rData)
 {
     get(m_pClosePB, "close");

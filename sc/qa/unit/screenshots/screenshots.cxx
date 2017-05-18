@@ -206,7 +206,7 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
         {
             const OString aEmpty("");
             pReturnDialog = mpFact->CreateScStringInputDlg(mpViewShell->GetDialogParent(),
-                                OUString(ScResId(SCSTR_APDTABLE)), OUString(ScResId(SCSTR_NAME)),
+                                ScResId(SCSTR_APDTABLE), ScResId(SCSTR_NAME),
                                 aDefaultSheetName, aEmpty, aEmpty );
             break;
         }
@@ -214,8 +214,8 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
         case 9: // "modules/scalc/ui/tabcolordialog.ui"
         {
             pReturnDialog = mpFact->CreateScTabBgColorDlg(mpViewShell->GetDialogParent(),
-                                OUString(ScResId(SCSTR_SET_TAB_BG_COLOR)),
-                                OUString(ScResId(SCSTR_NO_TAB_BG_COLOR)), Color(0xff00ff) );
+                                ScResId(SCSTR_SET_TAB_BG_COLOR),
+                                ScResId(SCSTR_NO_TAB_BG_COLOR), Color(0xff00ff) );
             break;
         }
 

@@ -209,12 +209,12 @@ void SwWrtShell::Insert( const OUString &rStr )
         SwRewriter aRewriter;
 
         aRewriter.AddRule(UndoArg1, GetCursorDescr());
-        aRewriter.AddRule(UndoArg2, OUString(SW_RES(STR_YIELDS)));
+        aRewriter.AddRule(UndoArg2, OUString(SwResId(STR_YIELDS)));
         {
             OUString aTmpStr;
-            aTmpStr += SW_RES(STR_START_QUOTE);
+            aTmpStr += SwResId(STR_START_QUOTE);
             aTmpStr += rStr;
-            aTmpStr += SW_RES(STR_END_QUOTE);
+            aTmpStr += SwResId(STR_END_QUOTE);
 
             aRewriter.AddRule(UndoArg3, rStr);
         }
@@ -248,7 +248,7 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
     StartAllAction();
 
     SwRewriter aRewriter;
-    aRewriter.AddRule(UndoArg1, SW_RES(STR_GRAPHIC));
+    aRewriter.AddRule(UndoArg1, SwResId(STR_GRAPHIC));
 
     StartUndo(SwUndoId::INSERT, &aRewriter);
 
@@ -554,11 +554,11 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
     SwRewriter aRewriter;
 
     if ( bStarMath )
-        aRewriter.AddRule(UndoArg1, SW_RES(STR_MATH_FORMULA));
+        aRewriter.AddRule(UndoArg1, SwResId(STR_MATH_FORMULA));
     else if ( SotExchange::IsChart( aCLSID ) )
-        aRewriter.AddRule(UndoArg1, SW_RES(STR_CHART));
+        aRewriter.AddRule(UndoArg1, SwResId(STR_CHART));
     else
-        aRewriter.AddRule(UndoArg1, SW_RES(STR_OLE));
+        aRewriter.AddRule(UndoArg1, SwResId(STR_OLE));
 
     EndUndo(SwUndoId::INSERT, &aRewriter);
 
@@ -1598,15 +1598,15 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
             StartAllAction();
 
             OUString aTmpStr1;
-            aTmpStr1 += SW_RES(STR_START_QUOTE);
+            aTmpStr1 += SwResId(STR_START_QUOTE);
             aTmpStr1 += GetSelText();
-            aTmpStr1 += SW_RES(STR_END_QUOTE);
+            aTmpStr1 += SwResId(STR_END_QUOTE);
             OUString aTmpStr3;
-            aTmpStr3 += SW_RES(STR_START_QUOTE);
+            aTmpStr3 += SwResId(STR_START_QUOTE);
             aTmpStr3 += OUStringLiteral1(cChar);
-            aTmpStr3 += SW_RES(STR_END_QUOTE);
+            aTmpStr3 += SwResId(STR_END_QUOTE);
             aRewriter.AddRule( UndoArg1, aTmpStr1 );
-            aRewriter.AddRule( UndoArg2, SW_RES(STR_YIELDS) );
+            aRewriter.AddRule( UndoArg2, SwResId(STR_YIELDS) );
             aRewriter.AddRule( UndoArg3, aTmpStr3 );
 
             StartUndo( SwUndoId::REPLACE, &aRewriter );
@@ -1720,7 +1720,7 @@ OUString SwWrtShell::GetSelDescr() const
     switch (nSelType)
     {
     case SelectionType::Graphic:
-        aResult = SW_RESSTR(STR_GRAPHIC);
+        aResult = SwResId(STR_GRAPHIC);
 
         break;
     case SelectionType::Frame:
@@ -1733,7 +1733,7 @@ OUString SwWrtShell::GetSelDescr() const
         break;
     case SelectionType::DrawObject:
         {
-            aResult = SW_RESSTR(STR_DRAWING_OBJECTS);
+            aResult = SwResId(STR_DRAWING_OBJECTS);
         }
         break;
     default:

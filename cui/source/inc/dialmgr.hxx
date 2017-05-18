@@ -24,13 +24,16 @@
 // forward ---------------------------------------------------------------
 
 #define CUI_MGR()       (*CuiResMgr::GetResMgr())
-#define CUI_RES(i)      ResId(i,CUI_MGR())
 
-class ResMgr;
 struct CuiResMgr
 {
     static ResMgr*      GetResMgr();
 };
+
+inline OUString CuiResId(sal_uInt16 nId)
+{
+    return ResId(nId, CUI_MGR());
+}
 
 #endif
 

@@ -2351,7 +2351,7 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
             OUString aStr;
             ResMgr* pResMgr = ImplGetResMgr();
             if( pResMgr )
-                aStr = ResId( nHelpResId, *pResMgr ).toString();
+                aStr = ResId( nHelpResId, *pResMgr );
             if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
                 Help::ShowBalloon( this, aHelpRect.Center(), aHelpRect, aStr );
             else

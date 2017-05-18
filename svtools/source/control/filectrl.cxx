@@ -37,7 +37,7 @@ FileControl::FileControl( vcl::Window* pParent, WinBits nStyle ) :
     Window( pParent, nStyle|WB_DIALOGCONTROL ),
     maEdit( VclPtr<Edit>::Create(this, (nStyle&(~WB_BORDER))|WB_NOTABSTOP) ),
     maButton( VclPtr<PushButton>::Create( this, (nStyle&(~WB_BORDER))|WB_NOLIGHTBORDER|WB_NOPOINTERFOCUS|WB_NOTABSTOP ) ),
-    maButtonText( SVT_RESSTR(STR_FILECTRL_BUTTONTEXT) ),
+    maButtonText( SvtResId(STR_FILECTRL_BUTTONTEXT) ),
     mnInternalFlags( FileControlMode_Internal::ORIGINALBUTTONTEXT )
 {
     maButton->SetClickHdl( LINK( this, FileControl, ButtonHdl ) );

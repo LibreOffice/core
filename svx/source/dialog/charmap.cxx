@@ -793,7 +793,7 @@ void SubsetMap::InitList()
     {
         bInit = false;
 
-        ResStringArray aStringList(SVX_RES(RID_SUBSETMAP));
+        ResStringArray aStringList(ResId(RID_SUBSETMAP, DIALOG_MGR()));
 
         //I wish icu had a way to give me the block ranges
         for (int i = UBLOCK_BASIC_LATIN; i < UBLOCK_COUNT; ++i)

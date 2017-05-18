@@ -139,7 +139,7 @@ View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
 
     SetMinMoveDistancePixel(2);
     SetHitTolerancePixel(2);
-    SetMeasureLayer(SD_RESSTR(STR_LAYER_MEASURELINES));
+    SetMeasureLayer(SdResId(STR_LAYER_MEASURELINES));
 
     // Timer for delayed drop (has to be for MAC)
     maDropErrorIdle.SetInvokeHandler( LINK(this, View, DropErrorHdl) );
@@ -305,7 +305,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                             {
                                 if(pObjectsSdPage && pObjectsSdPage->GetPageKind() == PageKind::Standard)
                                 {
-                                    static OUString aTitleAreaStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_TITLE));
+                                    static OUString aTitleAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_TITLE));
                                     aObjectString = aTitleAreaStr;
                                 }
 
@@ -313,31 +313,31 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                             }
                             case PRESOBJ_OUTLINE:
                             {
-                                static OUString aOutlineAreaStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_OUTLINE));
+                                static OUString aOutlineAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_OUTLINE));
                                 aObjectString = aOutlineAreaStr;
                                 break;
                             }
                             case PRESOBJ_FOOTER:
                             {
-                                static OUString aFooterAreaStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_FOOTER));
+                                static OUString aFooterAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_FOOTER));
                                 aObjectString = aFooterAreaStr;
                                 break;
                             }
                             case PRESOBJ_HEADER:
                             {
-                                static OUString aHeaderAreaStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_HEADER));
+                                static OUString aHeaderAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_HEADER));
                                 aObjectString = aHeaderAreaStr;
                                 break;
                             }
                             case PRESOBJ_DATETIME:
                             {
-                                static OUString aDateTimeStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_DATETIME));
+                                static OUString aDateTimeStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_DATETIME));
                                 aObjectString = aDateTimeStr;
                                 break;
                             }
                             case PRESOBJ_NOTES:
                             {
-                                static OUString aDateTimeStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_NOTES));
+                                static OUString aDateTimeStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_NOTES));
                                 aObjectString = aDateTimeStr;
                                 break;
                             }
@@ -345,12 +345,12 @@ drawinglayer::primitive2d::Primitive2DContainer ViewRedirector::createRedirected
                             {
                                 if(pObjectsSdPage && pObjectsSdPage->GetPageKind() == PageKind::Standard)
                                 {
-                                    static OUString aSlideAreaStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_SLIDE));
+                                    static OUString aSlideAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_SLIDE));
                                     aObjectString = aSlideAreaStr;
                                 }
                                 else
                                 {
-                                    static OUString aNumberAreaStr(SD_RESSTR(STR_PLACEHOLDER_DESCRIPTION_NUMBER));
+                                    static OUString aNumberAreaStr(SdResId(STR_PLACEHOLDER_DESCRIPTION_NUMBER));
                                     aObjectString = aNumberAreaStr;
                                 }
                                 break;
@@ -917,7 +917,7 @@ void View::SetMarkedOriginalSize()
 
     if( bOK )
     {
-        pUndoGroup->SetComment(SD_RESSTR(STR_UNDO_ORIGINALSIZE));
+        pUndoGroup->SetComment(SdResId(STR_UNDO_ORIGINALSIZE));
         mpDocSh->GetUndoManager()->AddUndoAction(pUndoGroup);
     }
     else

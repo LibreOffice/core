@@ -60,11 +60,13 @@ void CloseBibModul(HdlBibModul ppBibModul)
     }
 }
 
-BibResId::BibResId( sal_uInt16 nId ) :
-    ResId( nId, *pBibModul->GetResMgr() )
+OUString BibResId(sal_uInt16 nId)
 {
+    return ResId(nId, *pBibModul->GetResMgr());
 }
+
 BibConfig* BibModul::pBibConfig = nullptr;
+
 BibModul::BibModul()
 {
     pResMgr = ResMgr::CreateResMgr( "bib" );

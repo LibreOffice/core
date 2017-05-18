@@ -174,8 +174,8 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
 
         OUString aString( pBox->GetSelectEntry() );
         pBox->Clear();
-        pBox->InsertEntry( SVX_RESSTR(RID_SVXSTR_INVISIBLE) );
-        pBox->InsertEntry( SVX_RESSTR(RID_SVXSTR_SOLID) );
+        pBox->InsertEntry( SvxResId(RID_SVXSTR_INVISIBLE) );
+        pBox->InsertEntry( SvxResId(RID_SVXSTR_SOLID) );
         pBox->Fill( static_cast<const SvxDashListItem*>(pState)->GetDashList() );
         pBox->SelectEntry( aString );
     }
@@ -276,7 +276,7 @@ SvxLineEndWindow::SvxLineEndWindow( svt::ToolboxController& rController, vcl::Wi
     mnLines         ( 12 ),
     mrController    ( rController )
 {
-    SetText( SVX_RESSTR( RID_SVXSTR_LINEEND ) );
+    SetText( SvxResId( RID_SVXSTR_LINEEND ) );
     SetHelpId( HID_POPUP_LINEEND );
     mpLineEndSet->SetHelpId( HID_POPUP_LINEEND_CTRL );
 
@@ -374,7 +374,7 @@ void SvxLineEndWindow::FillValueSet()
         // First entry: no line end.
         // An entry is temporarily added to get the UI bitmap
         basegfx::B2DPolyPolygon aNothing;
-        mpLineEndList->Insert(o3tl::make_unique<XLineEndEntry>(aNothing, SVX_RESSTR(RID_SVXSTR_NONE)));
+        mpLineEndList->Insert(o3tl::make_unique<XLineEndEntry>(aNothing, SvxResId(RID_SVXSTR_NONE)));
         const XLineEndEntry* pEntry = mpLineEndList->GetLineEnd(nCount);
         Bitmap aBmp = mpLineEndList->GetUiBitmap( nCount );
         OSL_ENSURE( !aBmp.IsEmpty(), "UI bitmap was not created" );

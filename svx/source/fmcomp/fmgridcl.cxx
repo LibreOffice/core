@@ -539,10 +539,10 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
 
         if (bDateNTimeCol)
         {
-            OUString sTimePostfix(SVX_RESSTR(RID_STR_POSTFIX_TIME));
+            OUString sTimePostfix(SvxResId(RID_STR_POSTFIX_TIME));
             xCol->setPropertyValue(FM_PROP_LABEL, makeAny( OUString( sFieldName + sTimePostfix ) ) );
 
-            OUString sDatePostfix(SVX_RESSTR( RID_STR_POSTFIX_DATE));
+            OUString sDatePostfix(SvxResId( RID_STR_POSTFIX_DATE));
             xSecondCol->setPropertyValue(FM_PROP_LABEL, makeAny( OUString( sFieldName + sDatePostfix ) ) );
         }
         else
@@ -567,8 +567,8 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
             OUString sRealName,sPurePostfix;
 
             OUString aPostfix[] = {
-                SVX_RESSTR(RID_STR_POSTFIX_DATE),
-                SVX_RESSTR(RID_STR_POSTFIX_TIME)
+                SvxResId(RID_STR_POSTFIX_DATE),
+                SvxResId(RID_STR_POSTFIX_TIME)
             };
 
             for ( size_t i=0; i<2; ++i )

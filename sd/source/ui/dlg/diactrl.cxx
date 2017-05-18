@@ -43,7 +43,7 @@ SdPagesField::SdPagesField( vcl::Window* pParent,
     SvxMetricField  ( pParent, rFrame ),
     m_xFrame        ( rFrame )
 {
-    OUString aStr( SD_RESSTR( STR_SLIDE_PLURAL ) );
+    OUString aStr( SdResId( STR_SLIDE_PLURAL ) );
     SetCustomUnitText( aStr );
 
     // set size
@@ -74,9 +74,9 @@ void SdPagesField::UpdatePagesField( const SfxUInt16Item* pItem )
         long nValue = (long) pItem->GetValue();
         SetValue( nValue );
         if( nValue == 1 )
-            SetCustomUnitText( SD_RESSTR( STR_SLIDE_SINGULAR ) );
+            SetCustomUnitText( SdResId( STR_SLIDE_SINGULAR ) );
         else
-            SetCustomUnitText( SD_RESSTR( STR_SLIDE_PLURAL ) );
+            SetCustomUnitText( SdResId( STR_SLIDE_PLURAL ) );
     }
     else
         SetText( OUString() );

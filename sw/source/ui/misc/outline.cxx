@@ -421,7 +421,7 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(vcl::Window* pParent,
     const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OutlineNumberingPage",
         "modules/swriter/ui/outlinenumberingpage.ui", &rSet)
-    , aNoFormatName(SW_RESSTR(SW_STR_NONE))
+    , aNoFormatName(SwResId(SW_STR_NONE))
     , pSh(nullptr)
     , pNumRule(nullptr)
     , pCollNames(nullptr)

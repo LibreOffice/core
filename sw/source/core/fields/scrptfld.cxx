@@ -43,7 +43,7 @@ SwScriptField::SwScriptField( SwScriptFieldType* pInitType,
 
 OUString SwScriptField::GetDescription() const
 {
-    return SW_RES(STR_SCRIPT);
+    return SwResId(STR_SCRIPT);
 }
 
 OUString SwScriptField::Expand() const

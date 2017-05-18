@@ -793,7 +793,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 {
                     SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                     SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND)), bVisible);
+                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND)), bVisible);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                 }
             }
@@ -813,7 +813,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 {
                     SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                     SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ)), bVisible);
+                    aVisibleLayers.Set(rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ)), bVisible);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                 }
             }
@@ -1218,7 +1218,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             {
                 SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                 SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                aAny <<= aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND)));
+                aAny <<= aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND)));
             }
             else
             {
@@ -1237,7 +1237,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
             {
                 SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
                 SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                aAny <<= aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ)));
+                aAny <<= aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ)));
             }
             else
             {
@@ -2164,7 +2164,7 @@ OUString getPageApiNameFromUiName( const OUString& rUIName )
 {
     OUString aApiName;
 
-    OUString aDefPageName(SD_RESSTR(STR_PAGE) + " ");
+    OUString aDefPageName(SdResId(STR_PAGE) + " ");
 
     if( rUIName.startsWith( aDefPageName ) )
     {
@@ -2212,7 +2212,7 @@ OUString getUiNameFromPageApiNameImpl( const OUString& rApiName )
         if( nPageNumber != -1)
         {
             OUStringBuffer sBuffer;
-            sBuffer.append( SD_RESSTR(STR_PAGE) );
+            sBuffer.append( SdResId(STR_PAGE) );
             sBuffer.append( ' ' );
             sBuffer.append( aNumber );
             return sBuffer.makeStringAndClear();
@@ -2295,7 +2295,7 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
         }
         else
         {
-            OUString aDefaultPageName( SD_RESSTR(STR_PAGE) + " " );
+            OUString aDefaultPageName( SdResId(STR_PAGE) + " " );
             if( aName.startsWith( aDefaultPageName ) )
                 aName.clear();
         }

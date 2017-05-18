@@ -403,7 +403,7 @@ std::size_t SwModule::GetRedlineAuthor()
         {
             m_sActAuthor = rOpt.GetID();
             if (m_sActAuthor.isEmpty())
-                m_sActAuthor = SW_RESSTR( STR_REDLINE_UNKNOWN_AUTHOR );
+                m_sActAuthor = SwResId( STR_REDLINE_UNKNOWN_AUTHOR );
         }
         m_bAuthorInitialised = true;
     }

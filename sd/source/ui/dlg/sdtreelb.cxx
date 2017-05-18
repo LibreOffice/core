@@ -404,7 +404,7 @@ OUString SdPageObjsTLB::GetObjectName(
         && aRet.isEmpty()
         && pObject!=nullptr)
     {
-        aRet = SD_RESSTR(STR_NAVIGATOR_SHAPE_BASE_NAME);
+        aRet = SdResId(STR_NAVIGATOR_SHAPE_BASE_NAME);
         aRet = aRet.replaceFirst("%1", OUString::number(pObject->GetOrdNum() + 1));
     }
 
@@ -988,7 +988,7 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
 
         if ( !mpBookmarkDoc )
         {
-            ScopedVclPtrInstance< MessageDialog > aErrorBox(this, SD_RESSTR(STR_READ_DATA_ERROR));
+            ScopedVclPtrInstance< MessageDialog > aErrorBox(this, SdResId(STR_READ_DATA_ERROR));
             aErrorBox->Execute();
             mpMedium = nullptr; //On failure the SfxMedium is invalid
         }

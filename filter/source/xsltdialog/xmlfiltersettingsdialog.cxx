@@ -84,8 +84,13 @@ EnsureResMgr::~EnsureResMgr()
         pXSLTResMgr = nullptr;
 }
 
-#define RESID(x) ResId(x, *getXSLTDialogResMgr())
-#define RESIDSTR(x) RESID(x).toString()
+namespace
+{
+    OUString XsltResId(sal_uInt16 nId)
+    {
+        return ResId(nId, *getXSLTDialogResMgr());
+    }
+}
 
 XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
     const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -109,7 +114,7 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog(vcl::Window* pParent,
     m_pFilterListBox->SetSelectHdl( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
     m_pFilterListBox->SetDeselectHdl( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
     m_pFilterListBox->SetDoubleClickHdl( LINK( this, XMLFilterSettingsDialog, DoubleClickHdl_Impl ) );
-    m_pFilterListBox->SetAccessibleName(RESIDSTR(STR_XML_FILTER_LISTBOX));
+    m_pFilterListBox->SetAccessibleName(XsltResId(STR_XML_FILTER_LISTBOX));
     m_pFilterListBox->SetHelpId(m_pCtrlFilterList->GetHelpId());
 
     m_pPBNew->SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
@@ -248,13 +253,13 @@ void XMLFilterSettingsDialog::onNew()
     filter_info_impl aTempInfo;
 
     // create a unique filter name
-    aTempInfo.maFilterName = createUniqueFilterName(RESIDSTR(STR_DEFAULT_FILTER_NAME));
+    aTempInfo.maFilterName = createUniqueFilterName(XsltResId(STR_DEFAULT_FILTER_NAME));
 
     // init default extension
     aTempInfo.maExtension = STR_DEFAULT_EXTENSION;
 
     // set default ui name
-    aTempInfo.maInterfaceName = createUniqueInterfaceName(RESIDSTR(STR_DEFAULT_UI_NAME));
+    aTempInfo.maInterfaceName = createUniqueInterfaceName(XsltResId(STR_DEFAULT_UI_NAME));
 
     // set default application
     aTempInfo.maDocumentService = "com.sun.star.text.TextDocument";
@@ -802,7 +807,7 @@ void XMLFilterSettingsDialog::onDelete()
         filter_info_impl* pInfo = static_cast<filter_info_impl*>(pEntry->GetUserData());
 
         OUString aPlaceHolder( "%s" );
-        OUString aMessage(RESIDSTR(STR_WARN_DELETE));
+        OUString aMessage(XsltResId(STR_WARN_DELETE));
         aMessage = aMessage.replaceFirst( aPlaceHolder, pInfo->maFilterName );
 
         ScopedVclPtrInstance< WarningBox > aWarnBox(this, (WinBits)(WB_YES_NO | WB_DEF_YES), aMessage );
@@ -904,7 +909,7 @@ void XMLFilterSettingsDialog::onSave()
         css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION );
 
     OUString aExtensions( "*.jar" );
-    OUString aFilterName(RESIDSTR(STR_FILTER_PACKAGE));
+    OUString aFilterName(XsltResId(STR_FILTER_PACKAGE));
     aFilterName += " (" + aExtensions + ")";
 
     aDlg.AddFilter( aFilterName, aExtensions );
@@ -921,13 +926,13 @@ void XMLFilterSettingsDialog::onSave()
         OUString aMsg;
         if( nFilters > 0 )
         {
-            aMsg = RESIDSTR(STR_FILTERS_HAVE_BEEN_SAVED);
+            aMsg = XsltResId(STR_FILTERS_HAVE_BEEN_SAVED);
             aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
             aMsg = aMsg.replaceFirst( sPlaceholder, aURL.GetName() );
         }
         else
         {
-            aMsg = RESIDSTR(STR_FILTER_HAS_BEEN_SAVED);
+            aMsg = XsltResId(STR_FILTER_HAS_BEEN_SAVED);
             aMsg = aMsg.replaceFirst( sPlaceholder, (*aFilters.begin())->maFilterName );
             aMsg = aMsg.replaceFirst( sPlaceholder, aURL.GetName() );
         }
@@ -946,7 +951,7 @@ void XMLFilterSettingsDialog::onOpen()
         css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE );
 
     OUString aExtensions( "*.jar" );
-    OUString aFilterName(RESIDSTR(STR_FILTER_PACKAGE));
+    OUString aFilterName(XsltResId(STR_FILTER_PACKAGE));
     aFilterName += " (" + aExtensions + ")";
 
     aDlg.AddFilter( aFilterName, aExtensions );
@@ -981,18 +986,18 @@ void XMLFilterSettingsDialog::onOpen()
         if( nFilters == 0 )
         {
             INetURLObject aURLObj( aURL );
-            aMsg = RESIDSTR(STR_NO_FILTERS_FOUND);
+            aMsg = XsltResId(STR_NO_FILTERS_FOUND);
             aMsg = aMsg.replaceFirst( sPlaceholder, aURLObj.GetName() );
         }
         else if( nFilters == 1 )
         {
-            aMsg = RESIDSTR(STR_FILTER_INSTALLED);
+            aMsg = XsltResId(STR_FILTER_INSTALLED);
             aMsg = aMsg.replaceFirst( sPlaceholder, aFilterName );
 
         }
         else
         {
-            aMsg = RESIDSTR(STR_FILTERS_INSTALLED);
+            aMsg = XsltResId(STR_FILTERS_INSTALLED);
             aMsg = aMsg.replaceFirst( sPlaceholder, OUString::number( nFilters ) );
         }
 
@@ -1306,7 +1311,7 @@ OUString getApplicationUIName( const OUString& rServiceName )
     }
     else
     {
-        OUString aRet = RESIDSTR(STR_UNKNOWN_APPLICATION);
+        OUString aRet = XsltResId(STR_UNKNOWN_APPLICATION);
         if( !rServiceName.isEmpty() )
         {
             aRet += " (" + rServiceName + ")";
@@ -1410,8 +1415,8 @@ XMLFilterListBox::XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl
 
     m_pHeaderBar->SetEndDragHdl( LINK( this, XMLFilterListBox, HeaderEndDrag_Impl ) );
 
-    OUString aStr1(RESIDSTR(STR_COLUMN_HEADER_NAME));
-    OUString aStr2(RESIDSTR(STR_COLUMN_HEADER_TYPE));
+    OUString aStr1(XsltResId(STR_COLUMN_HEADER_NAME));
+    OUString aStr2(XsltResId(STR_COLUMN_HEADER_TYPE));
 
     long nTabSize = aBoxSize.Width() / 2;
 
@@ -1510,20 +1515,20 @@ OUString XMLFilterListBox::getEntryString( const filter_info_impl* pInfo )
     {
         if( pInfo->maFlags & 2 )
         {
-            aEntryStr += RESIDSTR(STR_IMPORT_EXPORT);
+            aEntryStr += XsltResId(STR_IMPORT_EXPORT);
         }
         else
         {
-            aEntryStr += RESIDSTR(STR_IMPORT_ONLY);
+            aEntryStr += XsltResId(STR_IMPORT_ONLY);
         }
     }
     else if( pInfo->maFlags & 2 )
     {
-        aEntryStr += RESIDSTR(STR_EXPORT_ONLY);
+        aEntryStr += XsltResId(STR_EXPORT_ONLY);
     }
     else
     {
-        aEntryStr += RESIDSTR(STR_UNDEFINED_FILTER);
+        aEntryStr += XsltResId(STR_UNDEFINED_FILTER);
     }
 
     return aEntryStr;

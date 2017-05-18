@@ -80,7 +80,7 @@ static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon )
     OUStringBuffer sBuf;
     if( nResId )
     {
-        sBuf.append(SW_RESSTR(nResId));
+        sBuf.append(SwResId(nResId));
         sBuf.append(": ");
         sBuf.append(rRedl.GetAuthorString());
         sBuf.append(" - ");
@@ -237,7 +237,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 OUString aModStr( aModifiedCode.GetName() );
                 aModStr = aModStr.replaceFirst(aCode.GetName(), "");
                 aModStr = aModStr.replaceAll("+", "");
-                sText = SW_RESSTR(STR_SMARTTAG_CLICK).replaceAll("%s", aModStr);
+                sText = SwResId(STR_SMARTTAG_CLICK).replaceAll("%s", aModStr);
             }
             break;
 
@@ -247,7 +247,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     const SwFormatFootnote* pFootnote = static_cast<const SwFormatFootnote*>(aContentAtPos.aFnd.pAttr);
                     OUString sTmp;
                     pFootnote->GetFootnoteText( sTmp );
-                    sText = SW_RESSTR( pFootnote->IsEndNote()
+                    sText = SwResId( pFootnote->IsEndNote()
                                     ? STR_ENDNOTE : STR_FTNNOTE ) + sTmp;
                     bBalloon = true;
                     if( aContentAtPos.IsInRTLText() )
@@ -275,7 +275,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             case IsAttrAtPos::RefMark:
                 if(aContentAtPos.aFnd.pAttr)
                 {
-                    sText = SW_RESSTR(STR_CONTENT_TYPE_SINGLE_REFERENCE);
+                    sText = SwResId(STR_CONTENT_TYPE_SINGLE_REFERENCE);
                     sText += ": ";
                     sText += static_cast<const SwFormatRefMark*>(aContentAtPos.aFnd.pAttr)->GetRefName();
                 }
@@ -418,7 +418,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             }
             if(nTabRes)
             {
-                sText = SW_RESSTR(nTabRes);
+                sText = SwResId(nTabRes);
                 Size aTextSize( GetTextWidth(sText), GetTextHeight());
                 tools::Rectangle aRect(rEvt.GetMousePosPixel(), aTextSize);
                 OUString sDisplayText(ClipLongToolTip(sText));

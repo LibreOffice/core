@@ -1096,7 +1096,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const tools:
                 // paint empty page text
                 vcl::Font aOldFont( pOutputDev->GetFont() );
                 pOutputDev->SetFont( rEmptyPgFont );
-                pOutputDev->DrawText( aPageRect, SW_RESSTR( STR_EMPTYPAGE ),
+                pOutputDev->DrawText( aPageRect, SwResId( STR_EMPTYPAGE ),
                                     DrawTextFlags::VCenter |
                                     DrawTextFlags::Center |
                                     DrawTextFlags::Clip );

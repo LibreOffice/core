@@ -246,7 +246,7 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium* pMedium)
 
     if (!bOK)
     {
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, SD_RESSTR(STR_READ_DATA_ERROR));
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, SdResId(STR_READ_DATA_ERROR));
         aErrorBox->Execute();
 
         CloseBookmarkDoc();
@@ -467,7 +467,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
             pBMPage->GetUppBorder()   != pRefPage->GetUppBorder()    ||
             pBMPage->GetLwrBorder()   != pRefPage->GetLwrBorder())
         {
-            OUString aStr(SD_RESSTR(STR_SCALE_OBJECTS));
+            OUString aStr(SdResId(STR_SCALE_OBJECTS));
             sal_uInt16 nBut = ScopedVclPtrInstance<QueryBox>(nullptr, WB_YES_NO_CANCEL, aStr)->Execute();
 
             bScaleObjects = nBut == RET_YES;
@@ -489,7 +489,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
         ViewShellId nViewShellId(-1);
         if (sd::ViewShell* pViewShell = mpDocSh->GetViewShell())
             nViewShellId = pViewShell->GetViewShellBase().GetViewShellId();
-        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_INSERTPAGES), "", 0, nViewShellId);
+        pUndoMgr->EnterListAction(SdResId(STR_UNDO_INSERTPAGES), "", 0, nViewShellId);
     }
 
     // Refactored copy'n'pasted layout name collection into IterateBookmarkPages
@@ -544,7 +544,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     const bool bUndo = IsUndoEnabled();
 
     if( bUndo )
-        BegUndo(SD_RESSTR(STR_UNDO_INSERTPAGES));
+        BegUndo(SdResId(STR_UNDO_INSERTPAGES));
 
     if (rBookmarkList.empty())
     {
@@ -1418,7 +1418,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         ViewShellId nViewShellId(-1);
         if (sd::ViewShell* pViewShell = mpDocSh->GetViewShell())
             nViewShellId = pViewShell->GetViewShellBase().GetViewShellId();
-        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_SET_PRESLAYOUT), OUString(), 0, nViewShellId);
+        pUndoMgr->EnterListAction(SdResId(STR_UNDO_SET_PRESLAYOUT), OUString(), 0, nViewShellId);
     }
 
     SdPage* pSelectedPage   = GetSdPage(nSdPageNum, PageKind::Standard);

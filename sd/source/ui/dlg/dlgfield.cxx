@@ -179,8 +179,8 @@ void SdModifyFieldDlg::FillFormatList()
 
         //SVXDATEFORMAT_APPDEFAULT,     // not used
         //SVXDATEFORMAT_SYSTEM,         // not used
-        m_pLbFormat->InsertEntry( SD_RESSTR( STR_STANDARD_SMALL ) );
-        m_pLbFormat->InsertEntry( SD_RESSTR( STR_STANDARD_BIG ) );
+        m_pLbFormat->InsertEntry( SdResId( STR_STANDARD_SMALL ) );
+        m_pLbFormat->InsertEntry( SdResId( STR_STANDARD_BIG ) );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
         aDateField.SetFormat( SVXDATEFORMAT_A );    // 13.02.96
@@ -205,7 +205,7 @@ void SdModifyFieldDlg::FillFormatList()
 
         //SVXTIMEFORMAT_APPDEFAULT,     // not used
         //SVXTIMEFORMAT_SYSTEM,         // not used
-        m_pLbFormat->InsertEntry( SD_RESSTR( STR_STANDARD_NORMAL ) );
+        m_pLbFormat->InsertEntry( SdResId( STR_STANDARD_NORMAL ) );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
         aTimeField.SetFormat( SVXTIMEFORMAT_24_HM );    // 13:49
@@ -231,10 +231,10 @@ void SdModifyFieldDlg::FillFormatList()
         const SvxExtFileField* pFileField = static_cast<const SvxExtFileField*>( pField );
         SvxExtFileField aFileField( *pFileField );
 
-        m_pLbFormat->InsertEntry( SD_RESSTR( STR_FILEFORMAT_NAME_EXT ) );
-        m_pLbFormat->InsertEntry( SD_RESSTR( STR_FILEFORMAT_FULLPATH ) );
-        m_pLbFormat->InsertEntry( SD_RESSTR( STR_FILEFORMAT_PATH ) );
-        m_pLbFormat->InsertEntry( SD_RESSTR( STR_FILEFORMAT_NAME ) );
+        m_pLbFormat->InsertEntry( SdResId( STR_FILEFORMAT_NAME_EXT ) );
+        m_pLbFormat->InsertEntry( SdResId( STR_FILEFORMAT_FULLPATH ) );
+        m_pLbFormat->InsertEntry( SdResId( STR_FILEFORMAT_PATH ) );
+        m_pLbFormat->InsertEntry( SdResId( STR_FILEFORMAT_NAME ) );
 
         m_pLbFormat->SelectEntryPos( (sal_uInt16) ( pFileField->GetFormat() ) );
     }

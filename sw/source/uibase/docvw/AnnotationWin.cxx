@@ -368,7 +368,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     const LocaleDataWrapper& rLocalData = aSysLocale.GetLocaleData();
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, pWin->GetAuthor());
-    const OUString aText = aRewriter.Apply(SW_RESSTR(STR_REPLY))
+    const OUString aText = aRewriter.Apply(SwResId(STR_REPLY))
             + " (" + rLocalData.getDate( pWin->GetDate())
             + ", " + rLocalData.getTime( pWin->GetTime(), false)
             + "): \"";

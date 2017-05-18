@@ -134,7 +134,7 @@ IMPL_LINK_NOARG( SfxStyleDialog, CancelHdl, Button *, void )
 
 OUString SfxStyleDialog::GenerateUnusedName(SfxStyleSheetBasePool &rPool)
 {
-    OUString aNoName(SfxResId(STR_NONAME).toString());
+    OUString aNoName(SfxResId(STR_NONAME));
     sal_uInt16 nNo = 1;
     OUString aNo(aNoName);
     aNoName += OUString::number(nNo);

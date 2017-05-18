@@ -43,19 +43,19 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeC
         m_pSwView(&rView),
         m_bDocumentLoad( false ),
         m_xConfigItem(rItem),
-        m_sStarting(        SW_RES( ST_STARTING      )),
-        m_sDocumentType(    SW_RES( ST_DOCUMENTTYPE   )),
-        m_sAddressBlock(    SW_RES( ST_ADDRESSBLOCK   )),
-        m_sAddressList(     SW_RES( ST_ADDRESSLIST )),
-        m_sGreetingsLine(   SW_RES( ST_GREETINGSLINE   )),
-        m_sLayout(          SW_RES( ST_LAYOUT        )),
-        m_sFinish(          SW_RES( ST_FINISH       )),
+        m_sStarting(        SwResId( ST_STARTING      )),
+        m_sDocumentType(    SwResId( ST_DOCUMENTTYPE   )),
+        m_sAddressBlock(    SwResId( ST_ADDRESSBLOCK   )),
+        m_sAddressList(     SwResId( ST_ADDRESSLIST )),
+        m_sGreetingsLine(   SwResId( ST_GREETINGSLINE   )),
+        m_sLayout(          SwResId( ST_LAYOUT        )),
+        m_sFinish(          SwResId( ST_FINISH       )),
         m_nRestartPage( MM_DOCUMENTSELECTPAGE )
 {
     defaultButton(WizardButtonFlags::NEXT);
     enableButtons(WizardButtonFlags::FINISH, false);
 
-    setTitleBase(SW_RESSTR( ST_MMWTITLE ) );
+    setTitleBase(SwResId( ST_MMWTITLE ) );
 
     m_pFinish->SetText(m_sFinish);
     m_pNextPage->SetHelpId(HID_MM_NEXT_PAGE);

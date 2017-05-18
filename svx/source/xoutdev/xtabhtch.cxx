@@ -63,7 +63,7 @@ uno::Reference< container::XNameContainer > XHatchList::createInstance()
 
 bool XHatchList::Create()
 {
-    OUStringBuffer aStr(SVX_RESSTR(RID_SVXSTR_HATCH));
+    OUStringBuffer aStr(SvxResId(RID_SVXSTR_HATCH));
     aStr.append(" 1");
 
     sal_Int32 nLen = aStr.getLength() - 1;

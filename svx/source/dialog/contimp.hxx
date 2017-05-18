@@ -25,8 +25,6 @@
 #include <vcl/status.hxx>
 #include <vcl/idle.hxx>
 
-#define CONT_RESID(nId)  ResId( nId, DIALOG_MGR() )
-
 class SvxSuperContourDlg;
 
 class SvxContourDlgItem : public SfxControllerItem

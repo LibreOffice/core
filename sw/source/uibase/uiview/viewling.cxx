@@ -420,8 +420,8 @@ void SwView::HyphenateDocument()
     // do not hyphenate if interactive hyphenation is active elsewhere
     if (SwEditShell::HasHyphIter())
     {
-        ScopedVclPtrInstance<MessBox>( nullptr, WB_OK, OUString( SW_RES( STR_HYPH_TITLE ) ),
-                                       OUString( SW_RES( STR_MULT_INTERACT_HYPH_WARN ) ) )->Execute();
+        ScopedVclPtrInstance<MessBox>( nullptr, WB_OK, OUString( SwResId( STR_HYPH_TITLE ) ),
+                                       OUString( SwResId( STR_MULT_INTERACT_HYPH_WARN ) ) )->Execute();
         return;
     }
 
@@ -460,7 +460,7 @@ void SwView::HyphenateDocument()
         // turned on no special area
         {
             // I want also in special areas hyphenation
-            ScopedVclPtrInstance< MessageDialog > aBox(&GetEditWin(), SW_RES(STR_QUERY_SPECIAL_FORCED), VclMessageType::Question, VclButtonsType::YesNo);
+            ScopedVclPtrInstance< MessageDialog > aBox(&GetEditWin(), SwResId(STR_QUERY_SPECIAL_FORCED), VclMessageType::Question, VclButtonsType::YesNo);
             if( aBox->Execute() == RET_YES )
             {
                 bOther = true;

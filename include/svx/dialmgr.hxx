@@ -24,15 +24,17 @@
 
 // forward ---------------------------------------------------------------
 
-class ResMgr;
 struct SVX_DLLPUBLIC DialogsResMgr
 {
     static ResMgr*      GetResMgr();
 };
 
 #define DIALOG_MGR()    (*DialogsResMgr::GetResMgr())
-#define SVX_RES(i)      ResId(i,DIALOG_MGR())
-#define SVX_RESSTR(i)   SVX_RES(i).toString()
+
+inline OUString SvxResId(sal_uInt16 nId)
+{
+    return ResId(nId, DIALOG_MGR());
+}
 
 #endif
 

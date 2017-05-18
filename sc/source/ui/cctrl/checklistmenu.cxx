@@ -1082,7 +1082,7 @@ void ScCheckListMenuWindow::packWindow()
     maEdSearch->SetPosSizePixel(aPos, aSize);
     maEdSearch->SetFont(getLabelFont());
     maEdSearch->SetControlBackground(rStyle.GetFieldColor());
-    maEdSearch->SetPlaceholderText(SC_RESSTR(STR_EDIT_SEARCH_ITEMS));
+    maEdSearch->SetPlaceholderText(ScResId(STR_EDIT_SEARCH_ITEMS));
     maEdSearch->SetModifyHdl( LINK(this, ScCheckListMenuWindow, EdModifyHdl) );
     maEdSearch->Show();
 
@@ -1095,7 +1095,7 @@ void ScCheckListMenuWindow::packWindow()
     getSectionPosSize(aPos, aSize, CHECK_TOGGLE_ALL);
     maChkToggleAll->SetPosSizePixel(aPos, aSize);
     maChkToggleAll->SetFont(getLabelFont());
-    maChkToggleAll->SetText(SC_RESSTR(STR_BTN_TOGGLE_ALL));
+    maChkToggleAll->SetText(ScResId(STR_BTN_TOGGLE_ALL));
     maChkToggleAll->SetTextColor(rStyle.GetMenuTextColor());
     maChkToggleAll->SetControlBackground(rStyle.GetMenuColor());
     maChkToggleAll->SetClickHdl( LINK(this, ScCheckListMenuWindow, TriStateHdl) );
@@ -1110,7 +1110,7 @@ void ScCheckListMenuWindow::packWindow()
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_SELECT);
     maBtnSelectSingle->SetPosSizePixel(aPos, aSize);
-    maBtnSelectSingle->SetQuickHelpText(SC_RESSTR(STR_BTN_SELECT_CURRENT));
+    maBtnSelectSingle->SetQuickHelpText(ScResId(STR_BTN_SELECT_CURRENT));
     maBtnSelectSingle->SetModeImage(aSingleSelect);
     maBtnSelectSingle->SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
     maBtnSelectSingle->Show();
@@ -1122,7 +1122,7 @@ void ScCheckListMenuWindow::packWindow()
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_UNSELECT);
     maBtnUnselectSingle->SetPosSizePixel(aPos, aSize);
-    maBtnUnselectSingle->SetQuickHelpText(SC_RESSTR(STR_BTN_UNSELECT_CURRENT));
+    maBtnUnselectSingle->SetQuickHelpText(ScResId(STR_BTN_UNSELECT_CURRENT));
     maBtnUnselectSingle->SetModeImage(aSingleUnselect);
     maBtnUnselectSingle->SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
     maBtnUnselectSingle->Show();

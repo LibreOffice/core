@@ -64,7 +64,7 @@ void StartProgress( sal_uInt16 nMessResId, long nStartValue, long nEndValue,
         {
             pProgress = new SwProgress;
             pProgress->pProgress = new SfxProgress( pDocShell,
-                                                    SW_RESSTR(nMessResId),
+                                                    SwResId(nMessResId),
                                                     nEndValue - nStartValue );
             pProgress->nStartCount = 1;
             pProgress->pDocShell = pDocShell;
@@ -123,7 +123,7 @@ void SetProgressText( sal_uInt16 nId, SwDocShell *pDocShell )
     {
         SwProgress *pProgress = lcl_SwFindProgress( pDocShell );
         if ( pProgress )
-            pProgress->pProgress->SetStateText( 0, SW_RESSTR(nId) );
+            pProgress->pProgress->SetStateText( 0, SwResId(nId) );
     }
 }
 

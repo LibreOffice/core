@@ -63,7 +63,7 @@ bool XLineEndList::Create()
     aTriangle.append(basegfx::B2DPoint(0.0, 30.0));
     aTriangle.append(basegfx::B2DPoint(20.0, 30.0));
     aTriangle.setClosed(true);
-    Insert( o3tl::make_unique<XLineEndEntry>( basegfx::B2DPolyPolygon(aTriangle), SVX_RESSTR( RID_SVXSTR_ARROW ) ) );
+    Insert( o3tl::make_unique<XLineEndEntry>( basegfx::B2DPolyPolygon(aTriangle), SvxResId( RID_SVXSTR_ARROW ) ) );
 
     basegfx::B2DPolygon aSquare;
     aSquare.append(basegfx::B2DPoint(0.0, 0.0));
@@ -71,10 +71,10 @@ bool XLineEndList::Create()
     aSquare.append(basegfx::B2DPoint(10.0, 10.0));
     aSquare.append(basegfx::B2DPoint(0.0, 10.0));
     aSquare.setClosed(true);
-    Insert( o3tl::make_unique<XLineEndEntry>( basegfx::B2DPolyPolygon(aSquare), SVX_RESSTR( RID_SVXSTR_SQUARE ) ) );
+    Insert( o3tl::make_unique<XLineEndEntry>( basegfx::B2DPolyPolygon(aSquare), SvxResId( RID_SVXSTR_SQUARE ) ) );
 
     basegfx::B2DPolygon aCircle(basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), 100.0));
-    Insert( o3tl::make_unique<XLineEndEntry>( basegfx::B2DPolyPolygon(aCircle), SVX_RESSTR( RID_SVXSTR_CIRCLE ) ) );
+    Insert( o3tl::make_unique<XLineEndEntry>( basegfx::B2DPolyPolygon(aCircle), SvxResId( RID_SVXSTR_CIRCLE ) ) );
 
     return true;
 }

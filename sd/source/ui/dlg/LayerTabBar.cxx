@@ -170,11 +170,11 @@ bool LayerTabBar::StartRenaming()
 {
     bool bOK = true;
     OUString aLayerName = GetPageText( GetEditPageId() );
-    OUString aLayoutLayer = SD_RESSTR(STR_LAYER_LAYOUT);
-    OUString aControlsLayer = SD_RESSTR(STR_LAYER_CONTROLS);
-    OUString aMeasureLinesLayer = SD_RESSTR(STR_LAYER_MEASURELINES);
-    OUString aBackgroundLayer = SD_RESSTR(STR_LAYER_BCKGRND);
-    OUString aBackgroundObjLayer = SD_RESSTR(STR_LAYER_BCKGRNDOBJ);
+    OUString aLayoutLayer = SdResId(STR_LAYER_LAYOUT);
+    OUString aControlsLayer = SdResId(STR_LAYER_CONTROLS);
+    OUString aMeasureLinesLayer = SdResId(STR_LAYER_MEASURELINES);
+    OUString aBackgroundLayer = SdResId(STR_LAYER_BCKGRND);
+    OUString aBackgroundObjLayer = SdResId(STR_LAYER_BCKGRNDOBJ);
 
     if ( aLayerName == aLayoutLayer       || aLayerName == aControlsLayer  ||
          aLayerName == aMeasureLinesLayer ||
@@ -212,18 +212,18 @@ TabBarAllowRenamingReturnCode LayerTabBar::AllowRenaming()
     {
         // Name already exists
         ScopedVclPtrInstance<WarningBox> aWarningBox( &pDrViewSh->GetViewFrame()->GetWindow(), WinBits( WB_OK ),
-                                SD_RESSTR( STR_WARN_NAME_DUPLICATE ) );
+                                SdResId( STR_WARN_NAME_DUPLICATE ) );
         aWarningBox->Execute();
         bOK = false;
     }
 
     if (bOK)
     {
-        OUString aLayoutLayer = SD_RESSTR(STR_LAYER_LAYOUT);
-        OUString aControlsLayer = SD_RESSTR(STR_LAYER_CONTROLS);
-        OUString aMeasureLinesLayer = SD_RESSTR(STR_LAYER_MEASURELINES);
-        OUString aBackgroundLayer = SD_RESSTR(STR_LAYER_BCKGRND);
-        OUString aBackgroundObjLayer = SD_RESSTR(STR_LAYER_BCKGRNDOBJ);
+        OUString aLayoutLayer = SdResId(STR_LAYER_LAYOUT);
+        OUString aControlsLayer = SdResId(STR_LAYER_CONTROLS);
+        OUString aMeasureLinesLayer = SdResId(STR_LAYER_MEASURELINES);
+        OUString aBackgroundLayer = SdResId(STR_LAYER_BCKGRND);
+        OUString aBackgroundObjLayer = SdResId(STR_LAYER_BCKGRNDOBJ);
 
         if ( aNewName == aLayoutLayer       || aNewName == aControlsLayer  ||
              aNewName == aMeasureLinesLayer ||

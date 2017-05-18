@@ -402,19 +402,19 @@ GalleryBrowser2::GalleryBrowser2( vcl::Window* pParent, Gallery* pGallery ) :
     maViewBox->InsertItem( TBX_ID_ICON, aDummyImage );
     maViewBox->SetItemBits( TBX_ID_ICON, ToolBoxItemBits::RADIOCHECK | ToolBoxItemBits::AUTOCHECK );
     maViewBox->SetHelpId( TBX_ID_ICON, HID_GALLERY_ICONVIEW );
-    maViewBox->SetQuickHelpText( TBX_ID_ICON, GAL_RESSTR(RID_SVXSTR_GALLERY_ICONVIEW) );
+    maViewBox->SetQuickHelpText( TBX_ID_ICON, GalResId(RID_SVXSTR_GALLERY_ICONVIEW) );
 
     maViewBox->InsertItem( TBX_ID_LIST, aDummyImage );
     maViewBox->SetItemBits( TBX_ID_LIST, ToolBoxItemBits::RADIOCHECK | ToolBoxItemBits::AUTOCHECK );
     maViewBox->SetHelpId( TBX_ID_LIST, HID_GALLERY_LISTVIEW );
-    maViewBox->SetQuickHelpText( TBX_ID_LIST, GAL_RESSTR(RID_SVXSTR_GALLERY_LISTVIEW) );
+    maViewBox->SetQuickHelpText( TBX_ID_LIST, GalResId(RID_SVXSTR_GALLERY_LISTVIEW) );
 
     MiscHdl( nullptr );
     maViewBox->SetSelectHdl( LINK( this, GalleryBrowser2, SelectTbxHdl ) );
     maViewBox->Show();
 
-    mpIconView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
-    mpListView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
+    mpIconView->SetAccessibleName(SvxResId(RID_SVXSTR_GALLERY_THEMEITEMS));
+    mpListView->SetAccessibleName(SvxResId(RID_SVXSTR_GALLERY_THEMEITEMS));
 
     maInfoBar->Show();
     maSeparator->Show();
@@ -713,9 +713,9 @@ void GalleryBrowser2::SelectTheme( const OUString& rThemeName )
     mpListView = VclPtr<GalleryListView>::Create( this, mpCurTheme );
     mpPreview = VclPtr<GalleryPreview>::Create( this, WB_TABSTOP | WB_BORDER, mpCurTheme );
 
-    mpIconView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
-    mpListView->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_THEMEITEMS));
-    mpPreview->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERY_PREVIEW));
+    mpIconView->SetAccessibleName(SvxResId(RID_SVXSTR_GALLERY_THEMEITEMS));
+    mpListView->SetAccessibleName(SvxResId(RID_SVXSTR_GALLERY_THEMEITEMS));
+    mpPreview->SetAccessibleName(SvxResId(RID_SVXSTR_GALLERY_PREVIEW));
 
     mpIconView->SetSelectHdl( LINK( this, GalleryBrowser2, SelectObjectValueSetHdl ) );
     mpListView->SetSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );

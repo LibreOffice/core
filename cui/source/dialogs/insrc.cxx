@@ -34,8 +34,8 @@ sal_uInt16 SvxInsRowColDlg::getInsertCount() const
 
 SvxInsRowColDlg::SvxInsRowColDlg(vcl::Window* pParent, bool bCol, const OString& sHelpId )
     : m_pDialog(VclPtr<ModalDialog>::Create(pParent, "InsertRowColumnDialog", "cui/ui/insertrowcolumn.ui"))
-    , aRow(CUI_RES(RID_SVXSTR_ROW))
-    , aCol(CUI_RES(RID_SVXSTR_COL))
+    , aRow(CuiResId(RID_SVXSTR_ROW))
+    , aCol(CuiResId(RID_SVXSTR_COL))
     , bColumn(bCol)
 {
     m_pDialog->get(m_pCountEdit, "insert_number");

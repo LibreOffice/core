@@ -478,7 +478,7 @@ void FmXAutoControl::createPeer( const Reference< XToolkit > & rxToolkit, const 
     Reference< XTextComponent >  xText(getPeer() , UNO_QUERY);
     if (xText.is())
     {
-        xText->setText(SVX_RESSTR(RID_STR_AUTOFIELD));
+        xText->setText(SvxResId(RID_STR_AUTOFIELD));
         xText->setEditable(false);
     }
 }
@@ -3585,7 +3585,7 @@ namespace
     void displayErrorSetFocus( const OUString& _rMessage, const Reference< XControl >& _rxFocusControl, vcl::Window* _pDialogParent )
     {
         SQLContext aError;
-        aError.Message = SVX_RESSTR(RID_STR_WRITEERROR);
+        aError.Message = SvxResId(RID_STR_WRITEERROR);
         aError.Details = _rMessage;
         displayException( aError, _pDialogParent );
 
@@ -3708,7 +3708,7 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
             if ( !rColInfo.xColumn->getString().isEmpty() || !rColInfo.xColumn->wasNull() )
                 continue;
 
-            OUString sMessage( SVX_RESSTR( RID_ERR_FIELDREQUIRED ) );
+            OUString sMessage( SvxResId( RID_ERR_FIELDREQUIRED ) );
             sMessage = sMessage.replaceFirst( "#", rColInfo.sName );
 
             // the control to focus
@@ -3971,11 +3971,11 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent)
     sal_Int32 nLength = aEvent.Rows;
     if ( nLength > 1 )
     {
-        sTitle = SVX_RESSTR( RID_STR_DELETECONFIRM_RECORDS );
+        sTitle = SvxResId( RID_STR_DELETECONFIRM_RECORDS );
         sTitle = sTitle.replaceFirst( "#", OUString::number(nLength) );
     }
     else
-        sTitle = SVX_RESSTR( RID_STR_DELETECONFIRM_RECORD );
+        sTitle = SvxResId( RID_STR_DELETECONFIRM_RECORD );
 
     try
     {
@@ -3990,7 +3990,7 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent)
         SQLWarning aWarning;
         aWarning.Message = sTitle;
         SQLWarning aDetails;
-        aDetails.Message = SVX_RESSTR(RID_STR_DELETECONFIRM);
+        aDetails.Message = SvxResId(RID_STR_DELETECONFIRM);
         aWarning.NextException <<= aDetails;
 
         OInteractionRequest* pRequest = new OInteractionRequest( makeAny( aWarning ) );

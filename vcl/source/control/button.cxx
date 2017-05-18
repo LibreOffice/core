@@ -161,7 +161,7 @@ OUString Button::GetStandardText( StandardButtonType eButton )
     else if (nResId == SV_BUTTONTEXT_CANCEL)
         nResId = SV_BUTTONTEXT_CANCEL_NOMNEMONIC;
 #endif
-    return ResId(nResId, *pResMgr).toString();
+    return ResId(nResId, *pResMgr);
 }
 
 bool Button::SetModeImage( const Image& rImage )

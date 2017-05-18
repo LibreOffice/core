@@ -28,7 +28,7 @@ bool ScCorrelationDialog::Close()
 
 const OUString ScCorrelationDialog::getLabel()
 {
-    return SC_RESSTR(STR_CORRELATION_LABEL);
+    return ScResId(STR_CORRELATION_LABEL);
 }
 
 const OUString ScCorrelationDialog::getTemplate()

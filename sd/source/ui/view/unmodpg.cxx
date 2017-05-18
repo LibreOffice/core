@@ -58,8 +58,8 @@ ModifyPageUndoAction::ModifyPageUndoAction(
     {
         maOldName = mpPage->GetName();
         SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
-        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND));
+        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ));
         SdrLayerIDSet aVisibleLayers = mpPage->TRG_GetMasterPageVisibleLayers();
 
         mbOldBckgrndVisible = aVisibleLayers.IsSet(aBckgrnd);
@@ -71,7 +71,7 @@ ModifyPageUndoAction::ModifyPageUndoAction(
         mbOldBckgrndObjsVisible = false;
     }
 
-    SetComment( SD_RESSTR(STR_UNDO_MODIFY_PAGE) );
+    SetComment( SdResId(STR_UNDO_MODIFY_PAGE) );
 }
 
 void ModifyPageUndoAction::Undo()
@@ -104,8 +104,8 @@ void ModifyPageUndoAction::Undo()
         }
 
         SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
-        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND));
+        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ));
         SdrLayerIDSet aVisibleLayers;
         aVisibleLayers.Set(aBckgrnd, mbOldBckgrndVisible);
         aVisibleLayers.Set(aBckgrndObj, mbOldBckgrndObjsVisible);
@@ -147,8 +147,8 @@ void ModifyPageUndoAction::Redo()
         }
 
         SdrLayerAdmin& rLayerAdmin = mpDoc->GetLayerAdmin();
-        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
-        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND));
+        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ));
         SdrLayerIDSet aVisibleLayers;
         aVisibleLayers.Set(aBckgrnd, mbNewBckgrndVisible);
         aVisibleLayers.Set(aBckgrndObj, mbNewBckgrndObjsVisible);
@@ -171,7 +171,7 @@ RenameLayoutTemplateUndoAction::RenameLayoutTemplateUndoAction(
     : SdUndoAction(pDocument)
     , maOldName(rOldLayoutName)
     , maNewName(rNewLayoutName)
-    , maComment(SD_RESSTR(STR_TITLE_RENAMESLIDE))
+    , maComment(SdResId(STR_TITLE_RENAMESLIDE))
 {
     sal_Int32 nPos = maOldName.indexOf(SD_LT_SEPARATOR);
     if (nPos != -1)

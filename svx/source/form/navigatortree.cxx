@@ -450,8 +450,8 @@ namespace svxform
                         sIdent = aContextMenu->GetCurItemIdent();
                     if (sIdent == "form")
                     {
-                        OUString aStr(SVX_RESSTR(RID_STR_FORM));
-                        OUString aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT).replaceAll("#", aStr);
+                        OUString aStr(SvxResId(RID_STR_FORM));
+                        OUString aUndoStr = SvxResId(RID_STR_UNDO_CONTAINER_INSERT).replaceAll("#", aStr);
 
                         pFormModel->BegUndo(aUndoStr);
                         // slot was only available, if there is only one selected entry,
@@ -461,8 +461,8 @@ namespace svxform
                     }
                     else if (sIdent == "hidden")
                     {
-                        OUString aStr(SVX_RESSTR(RID_STR_CONTROL));
-                        OUString aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT).replaceAll("#", aStr);
+                        OUString aStr(SvxResId(RID_STR_CONTROL));
+                        OUString aUndoStr = SvxResId(RID_STR_UNDO_CONTAINER_INSERT).replaceAll("#", aStr);
 
                         pFormModel->BegUndo(aUndoStr);
                         // slot was valid for (exactly) one selected form
@@ -585,7 +585,7 @@ namespace svxform
 
             // default-entry "Forms"
             Image aRootImage(BitmapEx(RID_SVXBMP_FORMS));
-            m_pRootEntry = InsertEntry( SVX_RESSTR(RID_STR_FORMS), aRootImage, aRootImage,
+            m_pRootEntry = InsertEntry( SvxResId(RID_STR_FORMS), aRootImage, aRootImage,
                 nullptr, false, 0 );
         }
         else if (!m_bMarkingObjects && dynamic_cast<const FmNavRequestSelectHint*>(&rHint))
@@ -956,8 +956,8 @@ namespace svxform
             // within undo
             if (pFormModel)
             {
-                OUString aStr(SVX_RESSTR(RID_STR_CONTROL));
-                OUString aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT).replaceAll("#", aStr);
+                OUString aStr(SvxResId(RID_STR_CONTROL));
+                OUString aUndoStr = SvxResId(RID_STR_UNDO_CONTAINER_INSERT).replaceAll("#", aStr);
                 pFormModel->BegUndo(aUndoStr);
             }
 
@@ -1031,7 +1031,7 @@ namespace svxform
 
         if( bUndo )
         {
-            OUString strUndoDescription(SVX_RESSTR(RID_STR_UNDO_CONTAINER_REPLACE));
+            OUString strUndoDescription(SvxResId(RID_STR_UNDO_CONTAINER_REPLACE));
             pFormModel->BegUndo(strUndoDescription);
         }
 
@@ -1425,9 +1425,9 @@ namespace svxform
         // create base name
         OUString aBaseName;
         if( dynamic_cast<const FmFormData*>( pEntryData) !=  nullptr )
-            aBaseName = SVX_RESSTR( RID_STR_STDFORMNAME );
+            aBaseName = SvxResId( RID_STR_STDFORMNAME );
         else if( dynamic_cast<const FmControlData*>( pEntryData) !=  nullptr )
-            aBaseName = SVX_RESSTR( RID_STR_CONTROL );
+            aBaseName = SvxResId( RID_STR_CONTROL );
 
 
         // create new name
@@ -1747,16 +1747,16 @@ namespace svxform
             OUString aUndoStr;
             if ( m_arrCurrentSelection.size() == 1 )
             {
-                aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_REMOVE);
+                aUndoStr = SvxResId(RID_STR_UNDO_CONTAINER_REMOVE);
                 if (m_nFormsSelected)
-                    aUndoStr = aUndoStr.replaceFirst( "#", SVX_RESSTR( RID_STR_FORM ) );
+                    aUndoStr = aUndoStr.replaceFirst( "#", SvxResId( RID_STR_FORM ) );
                 else
                     // it must be a control (else the root would be selected, but it cannot be deleted)
-                    aUndoStr = aUndoStr.replaceFirst( "#", SVX_RESSTR( RID_STR_CONTROL ) );
+                    aUndoStr = aUndoStr.replaceFirst( "#", SvxResId( RID_STR_CONTROL ) );
             }
             else
             {
-                aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE);
+                aUndoStr = SvxResId(RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE);
                 aUndoStr = aUndoStr.replaceFirst( "#", OUString::number( m_arrCurrentSelection.size() ) );
             }
             pFormModel->BegUndo(aUndoStr);

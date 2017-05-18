@@ -463,7 +463,7 @@ void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
         break;
         default:
         {
-            SvxOpenGraphicDialog aGrfDlg(CUI_RES(RID_SVXSTR_EDIT_GRAPHIC));
+            SvxOpenGraphicDialog aGrfDlg(CuiResId(RID_SVXSTR_EDIT_GRAPHIC));
             aGrfDlg.EnableLink(false);
             aGrfDlg.AsLink(false);
             if( !aGrfDlg.Execute() )
@@ -525,7 +525,7 @@ void SvxLineTabPage::FillListboxes()
     m_pLbLineStyle->SelectEntryPos( nOldSelect );
 
     // Line end style
-    OUString sNone( SVX_RES( RID_SVXSTR_NONE ) );
+    OUString sNone( SvxResId( RID_SVXSTR_NONE ) );
     nOldSelect = m_pLbStartStyle->GetSelectEntryPos();
     m_pLbStartStyle->Clear();
     m_pLbStartStyle->InsertEntry( sNone );
@@ -562,8 +562,8 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             nPos = m_pLbLineStyle->GetSelectEntryPos();
 
             m_pLbLineStyle->Clear();
-            m_pLbLineStyle->InsertEntry( SVX_RESSTR( RID_SVXSTR_INVISIBLE ) );
-            m_pLbLineStyle->InsertEntry( SVX_RESSTR( RID_SVXSTR_SOLID ) );
+            m_pLbLineStyle->InsertEntry( SvxResId( RID_SVXSTR_INVISIBLE ) );
+            m_pLbLineStyle->InsertEntry( SvxResId( RID_SVXSTR_SOLID ) );
             m_pLbLineStyle->Fill( m_pDashList );
             nCount = m_pLbLineStyle->GetEntryCount();
 
@@ -589,7 +589,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             *m_pnLineEndListState = ChangeType::NONE;
 
             nPos = m_pLbLineStyle->GetSelectEntryPos();
-            OUString sNone( SVX_RES( RID_SVXSTR_NONE ) );
+            OUString sNone( SvxResId( RID_SVXSTR_NONE ) );
             m_pLbStartStyle->Clear();
             m_pLbStartStyle->InsertEntry( sNone );
 

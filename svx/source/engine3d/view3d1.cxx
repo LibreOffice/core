@@ -58,7 +58,7 @@ void E3dView::ConvertMarkedToPolyObj()
                 pNewObj = pScene->ConvertToPolyObj(bBezier, false/*bLineToArea*/);
                 if (pNewObj)
                 {
-                    BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_EXTRUDE));
+                    BegUndo(SvxResId(RID_SVX_3D_UNDO_EXTRUDE));
                     ReplaceObjectAtView(pObj, *GetSdrPageView(), pNewObj);
                     EndUndo();
                 }
