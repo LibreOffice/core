@@ -26,6 +26,8 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 
+#include <config_features.h>
+
 class Test : public SwModelTestBase
 {
 public:
@@ -1030,7 +1032,7 @@ DECLARE_OOXMLEXPORT_TEST(testTextVerticalAdjustment, "tdf36117_verticalAdjustmen
     CPPUNIT_ASSERT_EQUAL( drawing::TextVerticalAdjust_BLOCK, nVA );
 }
 
-
+#if HAVE_MORE_FONTS
 DECLARE_OOXMLEXPORT_TEST(testTDF87348, "tdf87348_linkedTextboxes.docx")
 {
     int followCount=0;
@@ -1093,6 +1095,7 @@ DECLARE_OOXMLEXPORT_TEST(testTDF87348, "tdf87348_linkedTextboxes.docx")
     //  (unknown number of flys, unknown order of leftovers)
     CPPUNIT_ASSERT ( (followCount >= 6) && (precedeCount >= 6) );
 }
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testTDF93675, "no-numlevel-but-indented.odt")
 {
