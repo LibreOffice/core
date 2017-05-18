@@ -33,11 +33,37 @@ public:
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
+    // Deliberatley drop RecursiveASTVisitor::TraverseBinEQ's DataRecursionQueue
+    // parameter; TraveseBinEQ must use stack instead of data recursion for any
+    // children's VisitBinaryOperator to see changes to occurrence_ by a parent
+    // VisitBinaryOperator:
+    bool TraverseBinEQ(BinaryOperator * S)
+    {
+        auto const saved = occurrence_;
+        auto const ret = RecursiveASTVisitor::TraverseBinEQ(S);
+        occurrence_ = saved;
+        return ret;
+    }
+
+    // Deliberatley drop RecursiveASTVisitor::TraverseBinNE's DataRecursionQueue
+    // parameter; TraveseBinNE must use stack instead of data recursion for any
+    // children's VisitBinaryOperator to see changes to occurrence_ by a parent
+    // VisitBinaryOperator:
+    bool TraverseBinNE(BinaryOperator * S)
+    {
+        auto const saved = occurrence_;
+        auto const ret = RecursiveASTVisitor::TraverseBinNE(S);
+        occurrence_ = saved;
+        return ret;
+    }
+
     bool VisitBinaryOperator(const BinaryOperator *);
 private:
     bool rewrite(const BinaryOperator *);
     std::string getExprAsString(SourceRange range);
     SourceRange ignoreMacroExpansions(SourceRange range);
+
+    bool occurrence_ = false;
 };
 
 bool ComparisonWithConstant::VisitBinaryOperator(const BinaryOperator* binaryOp)
@@ -63,13 +89,14 @@ bool ComparisonWithConstant::VisitBinaryOperator(const BinaryOperator* binaryOp)
     if (binaryOp->getRHS()->isEvaluatable(compiler.getASTContext())) {
         return true;
     }
-    if (!rewrite(binaryOp))
+    if (occurrence_ || !rewrite(binaryOp))
     {
         report(
             DiagnosticsEngine::Warning, "Rather put constant on right when comparing",
             binaryOp->getSourceRange().getBegin())
             << binaryOp->getSourceRange();
     }
+    occurrence_ = true;
     return true;
 }
 
