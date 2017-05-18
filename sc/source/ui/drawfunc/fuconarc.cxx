@@ -36,12 +36,6 @@ FuConstArc::~FuConstArc()
 {
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
-
 bool FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
     // remember button state for creation of own MouseEvents
@@ -65,12 +59,6 @@ bool FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
-
 bool FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
     // remember button state for creation of own MouseEvents
@@ -85,12 +73,6 @@ bool FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
     }
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }
-
-/*************************************************************************
-|*
-|* Activate function
-|*
-\************************************************************************/
 
 void FuConstArc::Activate()
 {
@@ -126,12 +108,6 @@ void FuConstArc::Activate()
 
     FuDraw::Activate();
 }
-
-/*************************************************************************
-|*
-|* Deactivate functions
-|*
-\************************************************************************/
 
 void FuConstArc::Deactivate()
 {

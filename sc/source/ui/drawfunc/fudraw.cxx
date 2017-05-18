@@ -41,12 +41,7 @@
 #include "globstr.hrc"
 #include "drawview.hxx"
 
-/*************************************************************************
-|*
-|* base class for draw module specific functions
-|*
-\************************************************************************/
-
+// base class for draw module specific functions
 FuDraw::FuDraw(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq) :
     FuPoor      (pViewSh, pWin, pViewP, pDoc, rReq),
@@ -55,21 +50,9 @@ FuDraw::FuDraw(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
 {
 }
 
-/*************************************************************************
-|*
-|* destructor
-|*
-\************************************************************************/
-
 FuDraw::~FuDraw()
 {
 }
-
-/*************************************************************************
-|*
-|* evaluate modifier keys
-|*
-\************************************************************************/
 
 void FuDraw::DoModifiers(const MouseEvent& rMEvt)
 {
@@ -128,12 +111,6 @@ void FuDraw::ResetModifiers()
         pView->SetResizeAtCenter(false);
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
-
 bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -142,12 +119,6 @@ bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
     DoModifiers( rMEvt );
     return false;
 }
-
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
 
 bool FuDraw::MouseMove(const MouseEvent& rMEvt)
 {
@@ -159,12 +130,6 @@ bool FuDraw::MouseMove(const MouseEvent& rMEvt)
     return false;
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
-
 bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -174,15 +139,7 @@ bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
     return false;
 }
 
-/*************************************************************************
-|*
-|* process keyboard events
-|*
-|* if a keyevent is processed -> returns sal_True
-|*                            -> else  FALSE
-|*
-\************************************************************************/
-
+// Process Keyboard events. Return SAL_TRUE if an event is being handled
 static bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const KeyEvent* pInitialKey )
 {
     bool bReturn = false;
@@ -664,12 +621,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* toggle mouse-pointer
-|*
-\************************************************************************/
-
+// toggle mouse-pointer
 static bool lcl_UrlHit( SdrView* pView, const Point& rPosPixel, vcl::Window* pWindow )
 {
     SdrViewEvent aVEvt;

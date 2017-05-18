@@ -83,12 +83,6 @@ namespace {
 
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
-
 bool FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -132,12 +126,6 @@ bool FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
-
 bool FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -170,12 +158,6 @@ bool FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
     }
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }
-
-/*************************************************************************
-|*
-|* Activate function
-|*
-\************************************************************************/
 
 void FuConstRectangle::Activate()
 {
@@ -362,13 +344,6 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj, sal_uInt1
         }
     }
 }
-
-
-/*************************************************************************
-|*
-|* Deactivate function
-|*
-\************************************************************************/
 
 void FuConstRectangle::Deactivate()
 {

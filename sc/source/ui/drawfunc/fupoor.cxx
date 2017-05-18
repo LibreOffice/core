@@ -75,12 +75,7 @@ void FuPoor::Deactivate()
     }
 }
 
-/*************************************************************************
-|*
-|* Scroll when reached the window border; is called from MouseMove
-|*
-\************************************************************************/
-
+// Scroll when reached the window border; is called from MouseMove
 void FuPoor::ForceScroll(const Point& aPixPos)
 {
     aScrollTimer.Stop();
@@ -145,14 +140,7 @@ bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
     return false;
 }
 
-/*************************************************************************
-|*
-|* Handle keyboard events
-|*
-|* If we handle a KeyEvent, then the return value is sal_True else FALSE.
-|*
-\************************************************************************/
-
+// If we handle a KeyEvent, then the return value is sal_True else FALSE.
 bool FuPoor::KeyInput(const KeyEvent& /* rKEvt */)
 {
     return false;
@@ -176,11 +164,7 @@ sal_uInt8 FuPoor::Command(const CommandEvent& rCEvt)
         return pView->Command(rCEvt,pWindow) ? 1 : 0;
 }
 
-/*************************************************************************
-|*
-|* Timer-Handler for Drag&Drop
-|*
-\************************************************************************/
+// Timer-Handler for Drag&Drop
 IMPL_LINK_NOARG(FuPoor, DragTimerHdl, Timer *, void)
 {
     //  Calling ExecuteDrag (and that associated reschedule) directly from
@@ -238,12 +222,6 @@ void FuPoor::StopDragTimer()
     if (aDragTimer.IsActive() )
         aDragTimer.Stop();
 }
-
-/*************************************************************************
-|*
-|* Create default drawing objects via keyboard
-|*
-\************************************************************************/
 
 SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16 /* nID */, const tools::Rectangle& /* rRectangle */)
 {

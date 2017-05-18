@@ -52,12 +52,6 @@ FuConstCustomShape::~FuConstCustomShape()
 {
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
-
 bool FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -93,12 +87,6 @@ bool FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
-
 bool FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -114,12 +102,6 @@ bool FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }
 
-/*************************************************************************
-|*
-|* Activate function
-|*
-\************************************************************************/
-
 void FuConstCustomShape::Activate()
 {
     pView->SetCurrentObj( OBJ_CUSTOMSHAPE );
@@ -134,12 +116,6 @@ void FuConstCustomShape::Activate()
 
     FuConstruct::Activate();
 }
-
-/*************************************************************************
-|*
-|* Deactivate function
-|*
-\************************************************************************/
 
 void FuConstCustomShape::Deactivate()
 {
@@ -168,12 +144,6 @@ SdrObject* FuConstCustomShape::CreateDefaultObject(const sal_uInt16 /* nID */, c
     }
     return pObj;
 }
-
-/*************************************************************************
-|*
-|* applying attributes
-|*
-\************************************************************************/
 
 void FuConstCustomShape::SetAttributes( SdrObject* pObj )
 {

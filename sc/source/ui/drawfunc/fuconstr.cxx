@@ -36,23 +36,11 @@
 //! fusel,fuconstr,futext - combine them!
 #define SC_MAXDRAGMOVE  3
 
-/*************************************************************************
-|*
-|* ctor
-|*
-\************************************************************************/
-
 FuConstruct::FuConstruct(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq) :
     FuDraw(pViewSh, pWin, pViewP, pDoc, rReq)
 {
 }
-
-/*************************************************************************
-|*
-|* dtor
-|*
-\************************************************************************/
 
 FuConstruct::~FuConstruct()
 {
@@ -98,11 +86,6 @@ Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
     }
     return aRetGridOff;
 }
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
 
 bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -144,12 +127,6 @@ bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 
     return bReturn;
 }
-
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
 
 bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
 {
@@ -197,12 +174,6 @@ bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
     }
     return true;
 }
-
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
 
 bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -293,14 +264,7 @@ bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* Handle keyboard events
-|*
-|* If we handle a KeyEvent, then the return value is sal_True else FALSE.
-|*
-\************************************************************************/
-
+// If we handle a KeyEvent, then the return value is sal_True else FALSE.
 bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
 {
     bool bReturn = false;

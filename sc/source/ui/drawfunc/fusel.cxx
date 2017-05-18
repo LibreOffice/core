@@ -57,33 +57,15 @@
 
 using namespace com::sun::star;
 
-/*************************************************************************
-|*
-|* ctor
-|*
-\************************************************************************/
-
 FuSelection::FuSelection(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq ) :
     FuDraw(pViewSh, pWin, pViewP, pDoc, rReq)
 {
 }
 
-/*************************************************************************
-|*
-|* dtor
-|*
-\************************************************************************/
-
 FuSelection::~FuSelection()
 {
 }
-
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
 
 bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -314,12 +296,6 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
-
 bool FuSelection::MouseMove(const MouseEvent& rMEvt)
 {
     bool bReturn = FuDraw::MouseMove(rMEvt);
@@ -347,12 +323,6 @@ bool FuSelection::MouseMove(const MouseEvent& rMEvt)
 
     return bReturn;
 }
-
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
 
 bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -383,9 +353,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     {
         if ( pView->IsDragObj() )
         {
-            /******************************************************************
-            * object was moved
-            ******************************************************************/
+            // object was moved
             if ( rMEvt.IsMod1() )
             {
                 if ( pPage )
@@ -413,10 +381,8 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 std::abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
                 std::abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
             {
-                /*************************************************************
-                * If a user wants to click on an object in front of a marked
-                * one, he releases the mouse button immediately
-                **************************************************************/
+                /* If a user wants to click on an object in front of a marked
+                   one, he releases the mouse button immediately */
                 SdrPageView* pPV = nullptr;
                 pObj = pView->PickObj(aMDPos, pView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK);
                 if (pObj)
@@ -462,9 +428,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         }
     }
 
-    /**************************************************************************
-    * maybe consider OLE object
-    **************************************************************************/
+    // maybe consider OLE object
     SfxInPlaceClient* pIPClient = pViewShell ? pViewShell->GetIPClient() : nullptr;
 
     if (pIPClient)

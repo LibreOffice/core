@@ -40,12 +40,6 @@ FuConstUnoControl::~FuConstUnoControl()
 {
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
-
 bool FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -70,12 +64,6 @@ bool FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
-
 bool FuConstUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -91,12 +79,6 @@ bool FuConstUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }
 
-/*************************************************************************
-|*
-|* Activate function
-|*
-\************************************************************************/
-
 void FuConstUnoControl::Activate()
 {
     pView->SetCurrentObj( nIdentifier, nInventor );
@@ -111,12 +93,6 @@ void FuConstUnoControl::Activate()
 
     FuConstruct::Activate();
 }
-
-/*************************************************************************
-|*
-|* Deactivate function
-|*
-\************************************************************************/
 
 void FuConstUnoControl::Deactivate()
 {
