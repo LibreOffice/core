@@ -51,8 +51,8 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
 {
     sal_uInt16 nID = 1;
     MenuItemBits nStyle = MenuItemBits::RADIOCHECK | MenuItemBits::AUTOCHECK;
-    InsertItem( nID++, SD_RESSTR( STR_FIX ), nStyle );
-    InsertItem( nID++, SD_RESSTR( STR_VAR ), nStyle );
+    InsertItem( nID++, SdResId( STR_FIX ), nStyle );
+    InsertItem( nID++, SdResId( STR_VAR ), nStyle );
     InsertSeparator();
 
     if( dynamic_cast< const SvxDateField *>( pField ) !=  nullptr )
@@ -67,8 +67,8 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
 
         //SVXDATEFORMAT_APPDEFAULT,     // is not used
         //SVXDATEFORMAT_SYSTEM,         // is not used
-        InsertItem( nID++, SD_RESSTR( STR_STANDARD_SMALL ), nStyle );
-        InsertItem( nID++, SD_RESSTR( STR_STANDARD_BIG ), nStyle );
+        InsertItem( nID++, SdResId( STR_STANDARD_SMALL ), nStyle );
+        InsertItem( nID++, SdResId( STR_STANDARD_BIG ), nStyle );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
         aDateField.SetFormat( SVXDATEFORMAT_A );    // 13.02.96
@@ -99,7 +99,7 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
 
         //SVXTIMEFORMAT_APPDEFAULT,     // is not used
         //SVXTIMEFORMAT_SYSTEM,         // is not used
-        InsertItem( nID++, SD_RESSTR( STR_STANDARD_NORMAL ), nStyle );
+        InsertItem( nID++, SdResId( STR_STANDARD_NORMAL ), nStyle );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
         aTimeField.SetFormat( SVXTIMEFORMAT_24_HM );    // 13:49
@@ -131,10 +131,10 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         else
             CheckItem( 2 );
 
-        InsertItem( nID++, SD_RESSTR( STR_FILEFORMAT_NAME_EXT ), nStyle );
-        InsertItem( nID++, SD_RESSTR( STR_FILEFORMAT_FULLPATH ), nStyle );
-        InsertItem( nID++, SD_RESSTR( STR_FILEFORMAT_PATH ), nStyle );
-        InsertItem( nID++, SD_RESSTR( STR_FILEFORMAT_NAME ), nStyle );
+        InsertItem( nID++, SdResId( STR_FILEFORMAT_NAME_EXT ), nStyle );
+        InsertItem( nID++, SdResId( STR_FILEFORMAT_FULLPATH ), nStyle );
+        InsertItem( nID++, SdResId( STR_FILEFORMAT_PATH ), nStyle );
+        InsertItem( nID++, SdResId( STR_FILEFORMAT_NAME ), nStyle );
 
         CheckItem( (sal_uInt16) ( pFileField->GetFormat() ) + 3 );
     }

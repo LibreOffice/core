@@ -42,7 +42,7 @@ ScCondFrmtEntry::ScCondFrmtEntry(vcl::Window* pParent, ScDocument* pDoc, const S
     : VclContainer(pParent, WB_CLIPCHILDREN | WB_BORDER)
     , mbActive(false)
     , mnIndex(0)
-    , maStrCondition(ScResId(SCSTR_CONDITION).toString())
+    , maStrCondition(ScResId(SCSTR_CONDITION))
     , mpDoc(pDoc)
     , maPos(rPos)
 {

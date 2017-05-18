@@ -219,8 +219,8 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
     SwTypeNumber(CTYPE_CTT),
     pWrtShell(pShell),
     pMember(nullptr),
-    sContentTypeName(SW_RES(STR_CONTENT_TYPE_FIRST + (int)nType)),
-    sSingleContentTypeName(SW_RES(STR_CONTENT_TYPE_SINGLE_FIRST + (int)nType)),
+    sContentTypeName(SwResId(STR_CONTENT_TYPE_FIRST + (int)nType)),
+    sSingleContentTypeName(SwResId(STR_CONTENT_TYPE_SINGLE_FIRST + (int)nType)),
     nMemberCount(0),
     nContentType(nType),
     nOutlineLevel(nLevel),
@@ -771,15 +771,15 @@ SwContentTree::SwContentTree(vcl::Window* pParent, SwNavigationPI* pDialog)
     : SvTreeListBox(pParent)
     , m_xDialog(pDialog)
     , m_sSpace(OUString("                    "))
-    , m_sRemoveIdx(SW_RES(STR_REMOVE_INDEX))
-    , m_sUpdateIdx(SW_RES(STR_UPDATE))
-    , m_sUnprotTable(SW_RES(STR_REMOVE_TBL_PROTECTION))
-    , m_sRename(SW_RES(STR_RENAME))
-    , m_sReadonlyIdx(SW_RES(STR_READONLY_IDX))
-    , m_sInvisible(SW_RES(STR_INVISIBLE))
-    , m_sPostItShow(SW_RES(STR_POSTIT_SHOW))
-    , m_sPostItHide(SW_RES(STR_POSTIT_HIDE))
-    , m_sPostItDelete(SW_RES(STR_POSTIT_DELETE))
+    , m_sRemoveIdx(SwResId(STR_REMOVE_INDEX))
+    , m_sUpdateIdx(SwResId(STR_UPDATE))
+    , m_sUnprotTable(SwResId(STR_REMOVE_TBL_PROTECTION))
+    , m_sRename(SwResId(STR_RENAME))
+    , m_sReadonlyIdx(SwResId(STR_READONLY_IDX))
+    , m_sInvisible(SwResId(STR_INVISIBLE))
+    , m_sPostItShow(SwResId(STR_POSTIT_SHOW))
+    , m_sPostItHide(SwResId(STR_POSTIT_HIDE))
+    , m_sPostItDelete(SwResId(STR_POSTIT_DELETE))
     , m_pHiddenShell(nullptr)
     , m_pActiveShell(nullptr)
     , m_pConfig(SW_MOD()->GetNavigationConfig())
@@ -810,7 +810,7 @@ SwContentTree::SwContentTree(vcl::Window* pParent, SwNavigationPI* pDialog)
     }
     for (int i = 0; i < CONTEXT_COUNT; ++i)
     {
-        m_aContextStrings[i] = SW_RESSTR(i+STR_CONTEXT_FIRST);
+        m_aContextStrings[i] = SwResId(i+STR_CONTEXT_FIRST);
     }
     m_nActiveBlock = m_pConfig->GetActiveBlock();
     m_aUpdTimer.SetInvokeHandler(LINK(this, SwContentTree, TimerUpdate));
@@ -3167,11 +3167,11 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, EditEntryMode nMode)
             else if(nMode == EditEntryMode::DELETE)
             {
                 m_pActiveShell->StartAction();
-                OUString sTable = SW_RES(STR_TABLE_NAME);
+                OUString sTable = SwResId(STR_TABLE_NAME);
                 SwRewriter aRewriterTableName;
-                aRewriterTableName.AddRule(UndoArg1, SW_RES(STR_START_QUOTE));
+                aRewriterTableName.AddRule(UndoArg1, SwResId(STR_START_QUOTE));
                 aRewriterTableName.AddRule(UndoArg2, pCnt->GetName());
-                aRewriterTableName.AddRule(UndoArg3, SW_RES(STR_END_QUOTE));
+                aRewriterTableName.AddRule(UndoArg3, SwResId(STR_END_QUOTE));
                 sTable = aRewriterTableName.Apply(sTable);
 
                 SwRewriter aRewriter;

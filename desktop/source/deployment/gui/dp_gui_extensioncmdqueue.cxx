@@ -436,15 +436,15 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
                 //hypothetical: requires two instances of an extension with the same
                 //version to have different display names. Probably the developer forgot
                 //to change the version.
-                s = ResId(RID_STR_WARNINGBOX_VERSION_EQUAL_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()).toString();
+                s = ResId(RID_STR_WARNINGBOX_VERSION_EQUAL_DIFFERENT_NAMES, *DeploymentGuiResMgr::get());
             }
             else if (id == RID_STR_WARNING_VERSION_LESS)
             {
-                s = ResId(RID_STR_WARNINGBOX_VERSION_LESS_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()).toString();
+                s = ResId(RID_STR_WARNINGBOX_VERSION_LESS_DIFFERENT_NAMES, *DeploymentGuiResMgr::get());
             }
             else if (id == RID_STR_WARNING_VERSION_GREATER)
             {
-               s = ResId(RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()).toString();
+               s = ResId(RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES, *DeploymentGuiResMgr::get());
             }
             s = s.replaceAll("$NAME", verExc.NewDisplayName);
             s = s.replaceAll("$OLDNAME", verExc.Deployed->getDisplayName());
@@ -477,7 +477,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
     else if (request >>= platExc)
     {
         SolarMutexGuard guard;
-        OUString sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *DeploymentGuiResMgr::get()).toString());
+        OUString sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *DeploymentGuiResMgr::get()));
         sMsg = sMsg.replaceAll("%Name", platExc.package->getDisplayName());
         ScopedVclPtrInstance< MessageDialog > box(m_pDialogHelper? m_pDialogHelper->getWindow() : nullptr, sMsg);
         box->Execute();

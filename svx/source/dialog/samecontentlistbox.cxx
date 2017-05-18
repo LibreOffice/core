@@ -25,7 +25,7 @@
 SameContentListBox::SameContentListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
 {
-    ResStringArray aSameContentAry( SVX_RES( RID_SVXSTRARY_SAMECONTENT ) );
+    ResStringArray aSameContentAry( ResId(RID_SVXSTRARY_SAMECONTENT, DIALOG_MGR()) );
     sal_uInt32 nCnt = aSameContentAry.Count();
 
     for ( sal_uInt32 i = 0; i < nCnt; ++i )

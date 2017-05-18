@@ -247,7 +247,7 @@ void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
 {
     if (rDBData.sDataSource.isEmpty() && rDBData.sCommand.isEmpty())
     {
-        m_pDocDBNameFT->SetText(SW_RESSTR(SW_STR_NONE));
+        m_pDocDBNameFT->SetText(SwResId(SW_STR_NONE));
     }
     else
     {

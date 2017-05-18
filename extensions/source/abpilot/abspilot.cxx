@@ -105,7 +105,7 @@ namespace abp
 #else
         m_aSettings.eType = AST_OTHER;
 #endif
-        m_aSettings.sDataSourceName = ModuleRes(RID_STR_DEFAULT_NAME).toString();
+        m_aSettings.sDataSourceName = ModuleRes(RID_STR_DEFAULT_NAME);
         m_aSettings.bRegisterDataSource = false;
         m_aSettings.bEmbedDataSource = false;
         m_aSettings.bIgnoreNoTable = false;
@@ -116,7 +116,7 @@ namespace abp
 
         typeSelectionChanged( m_aSettings.eType );
 
-        OUString sDialogTitle = ModuleRes(RID_STR_ABSOURCEDIALOGTITLE).toString();
+        OUString sDialogTitle = ModuleRes(RID_STR_ABSOURCEDIALOGTITLE);
         setTitleBase(sDialogTitle);
         SetHelpId(HID_ABSPILOT);
     }
@@ -137,7 +137,7 @@ namespace abp
         OUString sDisplayName;
         if ( nResId )
         {
-            sDisplayName = ModuleRes(nResId).toString();
+            sDisplayName = ModuleRes(nResId);
         }
 
         return sDisplayName;

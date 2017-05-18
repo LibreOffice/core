@@ -119,7 +119,7 @@ static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info* pIn
     Size aLayoutItemSize;
     for( ; pInfo->mnId; pInfo++ )
     {
-        OUString aText( SD_RESSTR( pInfo->mnStrResId ) );
+        OUString aText( SdResId( pInfo->mnStrResId ) );
         BitmapEx aBmp(OUString::createFromAscii(pInfo->msBmpResId));
 
         pValue->InsertItem(pInfo->mnId, Image(aBmp), aText);
@@ -140,8 +140,8 @@ DisplayModeToolbarMenu::DisplayModeToolbarMenu( DisplayModeController& rControll
 {
     const sal_Int32 LAYOUT_BORDER_PIX = 7;
 
-    OUString aTitle1( SD_RESSTR( STR_DISPLAYMODE_EDITMODES ) );
-    OUString aTitle2( SD_RESSTR( STR_DISPLAYMODE_MASTERMODES ) );
+    OUString aTitle1( SdResId( STR_DISPLAYMODE_EDITMODES ) );
+    OUString aTitle2( SdResId( STR_DISPLAYMODE_MASTERMODES ) );
 
     SetSelectHdl( LINK( this, DisplayModeToolbarMenu, SelectToolbarMenuHdl ) );
 

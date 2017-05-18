@@ -333,7 +333,7 @@ void SfxPrinterController::jobFinished( css::view::PrintableState nState )
             case view::PrintableState_JOB_FAILED :
             {
                 // "real" problem (not simply printing cancelled by user)
-                OUString aMsg( SfxResId(STR_NOSTARTPRINTER).toString() );
+                OUString aMsg( SfxResId(STR_NOSTARTPRINTER) );
                 if ( !m_bApi )
                     ScopedVclPtrInstance<MessageDialog>(mpViewShell->GetWindow(), aMsg)->Execute();
                 SAL_FALLTHROUGH;
@@ -489,17 +489,17 @@ void SfxViewShell::SetPrinter_Impl( VclPtr<SfxPrinter>& pNewPrinter )
     SfxPrinterChangeFlags nNewOpt = SfxPrinterChangeFlags::NONE;
     if( bOriChg && bPgSzChg )
     {
-        aMsg = SfxResId(STR_PRINT_NEWORISIZE).toString();
+        aMsg = SfxResId(STR_PRINT_NEWORISIZE);
         nNewOpt = SfxPrinterChangeFlags::CHG_ORIENTATION | SfxPrinterChangeFlags::CHG_SIZE;
     }
     else if (bOriChg )
     {
-        aMsg = SfxResId(STR_PRINT_NEWORI).toString();
+        aMsg = SfxResId(STR_PRINT_NEWORI);
         nNewOpt = SfxPrinterChangeFlags::CHG_ORIENTATION;
     }
     else if (bPgSzChg)
     {
-        aMsg = SfxResId(STR_PRINT_NEWSIZE).toString();
+        aMsg = SfxResId(STR_PRINT_NEWSIZE);
         nNewOpt = SfxPrinterChangeFlags::CHG_SIZE;
     }
 

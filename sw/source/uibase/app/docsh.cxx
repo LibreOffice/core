@@ -176,7 +176,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
     {
         if(!bAPICall)
         {
-            ScopedVclPtrInstance<InfoBox>(nullptr, SW_RESSTR(STR_CANTOPEN))->Execute();
+            ScopedVclPtrInstance<InfoBox>(nullptr, SwResId(STR_CANTOPEN))->Execute();
         }
         return nullptr;
     }
@@ -536,7 +536,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     SwReaderWriter::GetWriter( pFlt->GetUserData(), rMedium.GetBaseURL( true ), xWriter );
     if( !xWriter.is() )
     {   // Filter not available
-        ScopedVclPtrInstance<InfoBox>(nullptr, SW_RESSTR(STR_DLLNOTFOUND))->Execute();
+        ScopedVclPtrInstance<InfoBox>(nullptr, SwResId(STR_DLLNOTFOUND))->Execute();
         return false;
     }
 

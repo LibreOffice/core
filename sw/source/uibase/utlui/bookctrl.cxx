@@ -84,9 +84,9 @@ void SwBookmarkControl::StateChanged(
     else if (const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(pState))
     {
         if (pBoolItem->GetValue()) // Indicates whether to show extended tooltip
-            GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_BOOKCTRL_HINT_EXTENDED));
+            GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_BOOKCTRL_HINT_EXTENDED));
         else
-            GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_BOOKCTRL_HINT));
+            GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_BOOKCTRL_HINT));
     }
 
 }

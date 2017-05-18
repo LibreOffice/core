@@ -371,7 +371,7 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
 
             if( mpFilter )
             {
-                aProgressText = GAL_RESSTR(RID_SVXSTR_GALLERY_FILTER);
+                aProgressText = GalResId(RID_SVXSTR_GALLERY_FILTER);
 //              mpFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );     // sj: progress wasn't working up from SO7 at all
 //                                                                                          // so I am removing this. The gallery progress should
 //                                                                                          // be changed to use the XStatusIndicator instead of XProgressMonitor

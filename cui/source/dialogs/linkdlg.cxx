@@ -88,12 +88,12 @@ static long nTabs[] =
 
 SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool bHtml )
     : ModalDialog( pParent, "BaseLinksDialog", "cui/ui/baselinksdialog.ui"),
-    aStrAutolink( CUI_RES( STR_AUTOLINK ) ),
-    aStrManuallink( CUI_RES( STR_MANUALLINK ) ),
-    aStrBrokenlink( CUI_RES( STR_BROKENLINK ) ),
-    aStrCloselinkmsg( CUI_RES( STR_CLOSELINKMSG ) ),
-    aStrCloselinkmsgMulti( CUI_RES( STR_CLOSELINKMSG_MULTI ) ),
-    aStrWaitinglink( CUI_RES( STR_WAITINGLINK ) ),
+    aStrAutolink( CuiResId( STR_AUTOLINK ) ),
+    aStrManuallink( CuiResId( STR_MANUALLINK ) ),
+    aStrBrokenlink( CuiResId( STR_BROKENLINK ) ),
+    aStrCloselinkmsg( CuiResId( STR_CLOSELINKMSG ) ),
+    aStrCloselinkmsgMulti( CuiResId( STR_CLOSELINKMSG_MULTI ) ),
+    aStrWaitinglink( CuiResId( STR_WAITINGLINK ) ),
     pLinkMgr( nullptr ),
     bHtmlMode(bHtml),
     aUpdateIdle("cui SvBaseLinksDlg UpdateIdle")

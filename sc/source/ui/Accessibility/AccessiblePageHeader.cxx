@@ -299,13 +299,13 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServiceName
 OUString SAL_CALL ScAccessiblePageHeader::createAccessibleDescription()
 {
     OUString sDesc(mbHeader ? OUString(STR_ACC_HEADER_DESCR) : OUString(STR_ACC_FOOTER_DESCR));
-    return sDesc.replaceFirst("%1", SC_RESSTR(SCSTR_UNKNOWN));
+    return sDesc.replaceFirst("%1", ScResId(SCSTR_UNKNOWN));
 }
 
 OUString SAL_CALL ScAccessiblePageHeader::createAccessibleName()
 {
-    OUString sName(SC_RESSTR(mbHeader ? STR_ACC_HEADER_NAME : STR_ACC_FOOTER_NAME));
-    return sName.replaceFirst("%1", SC_RESSTR(SCSTR_UNKNOWN));
+    OUString sName(ScResId(mbHeader ? STR_ACC_HEADER_NAME : STR_ACC_FOOTER_NAME));
+    return sName.replaceFirst("%1", ScResId(SCSTR_UNKNOWN));
 }
 
 tools::Rectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const

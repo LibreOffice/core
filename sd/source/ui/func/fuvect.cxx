@@ -73,7 +73,7 @@ void FuVectorize::DoExecute( SfxRequest& )
                 {
                     SdrGrafObj* pVectObj = static_cast<SdrGrafObj*>( pObj->Clone() );
                     OUString aStr( mpView->GetDescriptionOfMarkedObjects() );
-                    aStr += " " + SD_RESSTR( STR_UNDO_VECTORIZE );
+                    aStr += " " + SdResId( STR_UNDO_VECTORIZE );
                     mpView->BegUndo( aStr );
                     pVectObj->SetGraphic( rMtf );
                     mpView->ReplaceObjectAtView( pObj, *pPageView, pVectObj );

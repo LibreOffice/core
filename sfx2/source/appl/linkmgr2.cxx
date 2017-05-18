@@ -239,7 +239,7 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                         *pType = SfxResId(
                                     ( OBJECT_CLIENT_FILE == nObjType || OBJECT_CLIENT_OLE == nObjType )
                                             ? RID_SVXSTR_FILELINK
-                                            : RID_SVXSTR_GRAFIKLINK).toString();
+                                            : RID_SVXSTR_GRAFIKLINK);
                     }
                     bRet = true;
                 }
@@ -307,7 +307,7 @@ void LinkManager::UpdateAllLinks(
 
         if( bAskUpdate )
         {
-            int nRet = ScopedVclPtrInstance<QueryBox>(pParentWin, WB_YES_NO | WB_DEF_YES, SfxResId( STR_QUERY_UPDATE_LINKS ).toString())->Execute();
+            int nRet = ScopedVclPtrInstance<QueryBox>(pParentWin, WB_YES_NO | WB_DEF_YES, SfxResId( STR_QUERY_UPDATE_LINKS ))->Execute();
             if( RET_YES != nRet )
             {
                 SfxObjectShell* pShell = pLink->GetLinkManager()->GetPersist();

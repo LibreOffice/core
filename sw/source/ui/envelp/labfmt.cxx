@@ -101,16 +101,16 @@ void DrawArrow(vcl::RenderContext& rRenderContext, const Point &rP1, const Point
 SwLabPreview::SwLabPreview(vcl::Window* pParent)
     : Window(pParent, 0)
     , m_aGrayColor(COL_LIGHTGRAY)
-    , m_aHDistStr(SW_RESSTR(STR_HDIST))
-    , m_aVDistStr(SW_RESSTR(STR_VDIST))
-    , m_aWidthStr(SW_RESSTR(STR_WIDTH))
-    , m_aHeightStr(SW_RESSTR(STR_HEIGHT))
-    , m_aLeftStr(SW_RESSTR(STR_LEFT))
-    , m_aUpperStr(SW_RESSTR(STR_UPPER))
-    , m_aColsStr(SW_RESSTR(STR_COLS))
-    , m_aRowsStr(SW_RESSTR(STR_ROWS))
-    , m_aPWidthStr(SW_RESSTR(STR_PWIDTH))
-    , m_aPHeightStr(SW_RESSTR(STR_PHEIGHT))
+    , m_aHDistStr(SwResId(STR_HDIST))
+    , m_aVDistStr(SwResId(STR_VDIST))
+    , m_aWidthStr(SwResId(STR_WIDTH))
+    , m_aHeightStr(SwResId(STR_HEIGHT))
+    , m_aLeftStr(SwResId(STR_LEFT))
+    , m_aUpperStr(SwResId(STR_UPPER))
+    , m_aColsStr(SwResId(STR_COLS))
+    , m_aRowsStr(SwResId(STR_ROWS))
+    , m_aPWidthStr(SwResId(STR_PWIDTH))
+    , m_aPHeightStr(SwResId(STR_PHEIGHT))
 {
     SetMapMode(MapUnit::MapPixel);
 
@@ -507,7 +507,7 @@ void SwLabFormatPage::FillItem(SwLabItem& rItem)
 {
     if (bModified)
     {
-        rItem.m_aMake = rItem.m_aType = SW_RESSTR(STR_CUSTOM);
+        rItem.m_aMake = rItem.m_aType = SwResId(STR_CUSTOM);
 
         SwLabRec& rRec = *GetParentSwLabDlg()->Recs()[0];
         rItem.m_lHDist  = rRec.lHDist  = static_cast< long >(GETFLDVAL(*m_pHDistField ));

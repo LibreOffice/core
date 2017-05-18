@@ -322,7 +322,7 @@ void DocumentHelper::AssignMasterPageToPageList (
 
     ::svl::IUndoManager* pUndoMgr = rTargetDocument.GetDocSh()->GetUndoManager();
     if( pUndoMgr )
-        pUndoMgr->EnterListAction(SD_RESSTR(STR_UNDO_SET_PRESLAYOUT), OUString(), 0, rTargetDocument.GetDocSh()->GetViewShell()->GetViewShellBase().GetViewShellId());
+        pUndoMgr->EnterListAction(SdResId(STR_UNDO_SET_PRESLAYOUT), OUString(), 0, rTargetDocument.GetDocSh()->GetViewShell()->GetViewShellBase().GetViewShellId());
 
     SdPage* pMasterPageInDocument = ProvideMasterPage(rTargetDocument,pMasterPage,rpPageList);
     if (pMasterPageInDocument == nullptr)

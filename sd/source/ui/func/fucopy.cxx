@@ -69,7 +69,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
     {
         // Undo
         OUString aString( mpView->GetDescriptionOfMarkedObjects() );
-        aString += " " + SD_RESSTR( STR_UNDO_COPYOBJECTS );
+        aString += " " + SdResId( STR_UNDO_COPYOBJECTS );
         mpView->BegUndo( aString );
 
         const SfxItemSet* pArgs = rReq.GetArgs();
@@ -174,8 +174,8 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
         if( nNumber > 1 )
         {
-            OUString aStr( SD_RESSTR( STR_OBJECTS ) );
-            aStr += " " + SD_RESSTR( STR_UNDO_COPYOBJECTS );
+            OUString aStr( SdResId( STR_OBJECTS ) );
+            aStr += " " + SdResId( STR_UNDO_COPYOBJECTS );
 
             pProgress.reset(new SfxProgress( mpDocSh, aStr, nNumber ));
             mpDocSh->SetWaitCursor( true );

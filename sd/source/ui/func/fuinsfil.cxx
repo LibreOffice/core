@@ -145,7 +145,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
         OUString aOwnCont;
         OUString aOtherCont;
 
-        aFileDialog.SetTitle( SD_RESSTR(STR_DLG_INSERT_PAGES_FROM_FILE) );
+        aFileDialog.SetTitle( SdResId(STR_DLG_INSERT_PAGES_FROM_FILE) );
 
         if( mpDoc->GetDocumentType() == DocumentType::Impress )
         {
@@ -216,7 +216,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 }
 
                 // set default-filter (<All>)
-                OUString aAllSpec( SD_RESSTR( STR_ALL_FILES ) );
+                OUString aAllSpec( SdResId( STR_ALL_FILES ) );
                 OUString aExtensions = lcl_GetExtensionsList( aFilterVector );
                 OUString aGUIName = aAllSpec + " (" + aExtensions + ")";
 
@@ -317,7 +317,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
     if( !bInserted )
     {
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(mpWindow, SD_RESSTR( STR_READ_DATA_ERROR));
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(mpWindow, SdResId( STR_READ_DATA_ERROR));
         aErrorBox->Execute();
     }
 }
@@ -460,7 +460,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
         if (nErr || pOutliner->GetEditEngine().GetText().isEmpty())
         {
-            ScopedVclPtrInstance< MessageDialog > aErrorBox(mpWindow, SD_RESSTR(STR_READ_DATA_ERROR));
+            ScopedVclPtrInstance< MessageDialog > aErrorBox(mpWindow, SdResId(STR_READ_DATA_ERROR));
             aErrorBox->Execute();
         }
         else
@@ -509,7 +509,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
                 const bool bUndo = mpView->IsUndoEnabled();
                 if( bUndo )
-                    mpView->BegUndo(SD_RESSTR(STR_UNDO_INSERT_TEXTFRAME));
+                    mpView->BegUndo(SdResId(STR_UNDO_INSERT_TEXTFRAME));
                 pPage->InsertObject(pTO);
 
                 /* can be bigger as the maximal allowed size:
@@ -604,7 +604,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
     if (nErr || pOutliner->GetEditEngine().GetText().isEmpty())
     {
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(mpWindow, SD_RESSTR(STR_READ_DATA_ERROR));
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(mpWindow, SdResId(STR_READ_DATA_ERROR));
         aErrorBox->Execute();
     }
     else
@@ -624,7 +624,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
         mpDocSh->SetWaitCursor( false );
 
-        std::unique_ptr<SfxProgress> pProgress(new SfxProgress( mpDocSh, SD_RESSTR(STR_CREATE_PAGES), nNewPages));
+        std::unique_ptr<SfxProgress> pProgress(new SfxProgress( mpDocSh, SdResId(STR_CREATE_PAGES), nNewPages));
         if( pProgress )
             pProgress->SetState( 0, 100 );
 
@@ -632,7 +632,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
         ViewShellId nViewShellId = mpViewShell ? mpViewShell->GetViewShellBase().GetViewShellId() : ViewShellId(-1);
         rDocliner.GetUndoManager().EnterListAction(
-                                    SD_RESSTR(STR_UNDO_INSERT_FILE), OUString(), 0, nViewShellId );
+                                    SdResId(STR_UNDO_INSERT_FILE), OUString(), 0, nViewShellId );
 
         sal_Int32 nSourcePos = 0;
         SfxStyleSheet* pStyleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );

@@ -314,17 +314,17 @@ css::uno::Reference< css::accessibility::XAccessible > ScEditWindow::CreateAcces
     {
     case Left:
         {
-            sName = OUString(ScResId(STR_ACC_LEFTAREA_NAME));
+            sName = ScResId(STR_ACC_LEFTAREA_NAME);
         }
         break;
     case Center:
         {
-            sName = OUString(ScResId(STR_ACC_CENTERAREA_NAME));
+            sName = ScResId(STR_ACC_CENTERAREA_NAME);
         }
         break;
     case Right:
         {
-            sName = OUString(ScResId(STR_ACC_RIGHTAREA_NAME));
+            sName = ScResId(STR_ACC_RIGHTAREA_NAME);
         }
         break;
     }

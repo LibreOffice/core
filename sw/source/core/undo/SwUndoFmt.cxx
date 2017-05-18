@@ -184,7 +184,7 @@ SwRewriter SwUndoRenameFormat::GetRewriter() const
     SwRewriter aRewriter;
 
     aRewriter.AddRule(UndoArg1, sOldName);
-    aRewriter.AddRule(UndoArg2, SW_RES(STR_YIELDS));
+    aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
     aRewriter.AddRule(UndoArg3, sNewName);
 
     return aRewriter;
@@ -460,7 +460,7 @@ SwRewriter SwUndoNumruleRename::GetRewriter() const
     SwRewriter aRewriter;
 
     aRewriter.AddRule(UndoArg1, aOldName);
-    aRewriter.AddRule(UndoArg2, SW_RESSTR(STR_YIELDS));
+    aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
     aRewriter.AddRule(UndoArg3, aNewName);
 
     return aRewriter;

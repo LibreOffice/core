@@ -43,7 +43,7 @@ SdPresentationLayoutUndoAction::SdPresentationLayoutUndoAction(
 
     DBG_ASSERT(pThePage, "No Page set!");
     pPage = pThePage;
-    aComment = SD_RESSTR(STR_UNDO_SET_PRESLAYOUT);
+    aComment = SdResId(STR_UNDO_SET_PRESLAYOUT);
 }
 
 void SdPresentationLayoutUndoAction::Undo()

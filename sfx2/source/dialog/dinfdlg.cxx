@@ -104,7 +104,7 @@ namespace {
 OUString CreateSizeText( sal_Int64 nSize )
 {
     OUString aUnitStr(" ");
-    aUnitStr += SfxResId(STR_BYTES).toString();
+    aUnitStr += SfxResId(STR_BYTES);
     sal_Int64 nSize1 = nSize;
     sal_Int64 nSize2 = nSize1;
     sal_Int64 nMega = 1024 * 1024;
@@ -116,7 +116,7 @@ OUString CreateSizeText( sal_Int64 nSize )
     {
         nSize1 /= 1024;
         aUnitStr = " ";
-        aUnitStr += SfxResId(STR_KB).toString();
+        aUnitStr += SfxResId(STR_KB);
         fSize /= 1024;
         nDec = 0;
     }
@@ -124,7 +124,7 @@ OUString CreateSizeText( sal_Int64 nSize )
     {
         nSize1 /= nMega;
         aUnitStr = " ";
-        aUnitStr += SfxResId(STR_MB).toString();
+        aUnitStr += SfxResId(STR_MB);
         fSize /= nMega;
         nDec = 2;
     }
@@ -132,7 +132,7 @@ OUString CreateSizeText( sal_Int64 nSize )
     {
         nSize1 /= nGiga;
         aUnitStr = " ";
-        aUnitStr += SfxResId(STR_GB).toString();
+        aUnitStr += SfxResId(STR_GB);
         fSize /= nGiga;
         nDec = 3;
     }
@@ -150,7 +150,7 @@ OUString CreateSizeText( sal_Int64 nSize )
         aSizeStr += " (";
         aSizeStr += rLocaleWrapper.getNum( nSize2, 0 );
         aSizeStr += " ";
-        aSizeStr += SfxResId(STR_BYTES).toString();
+        aSizeStr += SfxResId(STR_BYTES);
         aSizeStr += ")";
     }
     return aSizeStr;
@@ -1036,7 +1036,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     INetURLObject aURL(aFile);
     OUString aName = aURL.GetName( INetURLObject::DecodeMechanism::WithCharset );
     if ( aName.isEmpty() || aURL.GetProtocol() == INetProtocol::PrivSoffice )
-        aName = SfxResId( STR_NONAME ).toString();
+        aName = SfxResId( STR_NONAME );
     m_pNameED->SetText( aName );
 
     // determine context symbol
@@ -1063,7 +1063,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
 
     OUString aDescription = SvFileInformationManager::GetDescription( INetURLObject(rMainURL) );
     if ( aDescription.isEmpty() )
-        aDescription = SfxResId( STR_SFX_NEWOFFICEDOC ).toString();
+        aDescription = SfxResId( STR_SFX_NEWOFFICEDOC );
     m_pShowTypeFT->SetText( aDescription );
 
     // determine location
@@ -1199,7 +1199,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( vcl::Window* pParent,
                 aTitle = aTitle.replaceFirst("%1", aFile);
         }
         else
-            aTitle = aTitle.replaceFirst("%1", SfxResId( STR_NONAME ).toString());
+            aTitle = aTitle.replaceFirst("%1", SfxResId( STR_NONAME ));
     }
     else
     {
@@ -1226,7 +1226,7 @@ void SfxDocumentInfoDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
 void SfxDocumentInfoDialog::AddFontTabPage()
 {
-    AddTabPage( FONT_PAGE_ID, SfxResId( STR_FONT_TABPAGE ).toString(), SfxDocumentFontsPage::Create, nullptr);
+    AddTabPage( FONT_PAGE_ID, SfxResId( STR_FONT_TABPAGE ), SfxDocumentFontsPage::Create, nullptr);
 }
 
 // class CustomPropertiesYesNoButton -------------------------------------
@@ -1409,7 +1409,7 @@ namespace
                                                                     WB_AUTOSIZE|WB_AUTOHSCROLL));
         aNameBox->SetPosSizePixel(aNameBox->LogicToPixel(Point(0, 2), MapUnit::MapAppFont),
                                   aNameBox->LogicToPixel(Size(60, 72), MapUnit::MapAppFont));
-        ResStringArray aStrArr(SfxResId(SFX_CB_PROPERTY_STRINGARRAY));
+        ResStringArray aStrArr(ResId(SFX_CB_PROPERTY_STRINGARRAY, *SfxResMgr::GetResMgr()));
         for (sal_uInt32 i = 0; i < aStrArr.Count(); ++i)
             aNameBox->InsertEntry(aStrArr.GetString(i));
         return aNameBox;
@@ -1422,7 +1422,7 @@ CustomPropertiesTypeBox::CustomPropertiesTypeBox(vcl::Window* pParent, CustomPro
 {
     SetPosSizePixel(LogicToPixel(Point(63, 2), MapUnit::MapAppFont),
                     LogicToPixel(Size(60, 80), MapUnit::MapAppFont));
-    ResStringArray aStrArr(SfxResId(SFX_LB_PROPERTY_STRINGARRAY));
+    ResStringArray aStrArr(ResId(SFX_LB_PROPERTY_STRINGARRAY, *SfxResMgr::GetResMgr()));
     for (sal_uInt32 i = 0; i < aStrArr.Count(); ++i)
     {
         InsertEntry(aStrArr.GetString(i));
@@ -1438,7 +1438,7 @@ CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
     m_aValueEdit    ( VclPtr<CustomPropertiesEdit>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_LEFT, this ) ),
     m_aDateField    ( VclPtr<CustomPropertiesDateField>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
     m_aTimeField    ( VclPtr<CustomPropertiesTimeField>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_SPIN|WB_LEFT ) ),
-    m_sDurationFormat( SfxResId( SFX_ST_DURATION_FORMAT ).toString() ),
+    m_sDurationFormat( SfxResId( SFX_ST_DURATION_FORMAT ) ),
     m_aDurationField( VclPtr<CustomPropertiesDurationField>::Create(pParent, WB_BORDER|WB_TABSTOP|WB_READONLY, this ) ),
     m_aEditButton   ( VclPtr<CustomPropertiesEditButton>::Create(pParent, WB_TABSTOP, this) ),
     m_aYesNoButton  ( VclPtr<CustomPropertiesYesNoButton>::Create(pParent) ),
@@ -1452,9 +1452,9 @@ CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
     m_aDateField->SetExtDateFormat( ExtDateFieldFormat::SystemShortYYYY );
 
     m_aRemoveButton->SetModeImage(Image(BitmapEx(SFX_BMP_PROPERTY_REMOVE)));
-    m_aRemoveButton->SetQuickHelpText(SfxResId(STR_SFX_REMOVE_PROPERTY).toString());
+    m_aRemoveButton->SetQuickHelpText(SfxResId(STR_SFX_REMOVE_PROPERTY));
 
-    m_aEditButton->SetText(SfxResId(SFX_ST_EDIT).toString());
+    m_aEditButton->SetText(SfxResId(SFX_ST_EDIT));
 }
 
 void CustomPropertyLine::SetRemoved()

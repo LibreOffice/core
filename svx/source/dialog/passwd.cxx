@@ -67,8 +67,8 @@ IMPL_LINK_NOARG(SvxPasswordDialog, EditModifyHdl, Edit&, void)
 
 SvxPasswordDialog::SvxPasswordDialog(vcl::Window* pParent, bool bAllowEmptyPasswords, bool bDisableOldPassword)
     : SfxModalDialog(pParent, "PasswordDialog", "svx/ui/passwd.ui")
-    , aOldPasswdErrStr(SVX_RESSTR(RID_SVXSTR_ERR_OLD_PASSWD))
-    , aRepeatPasswdErrStr(SVX_RESSTR(RID_SVXSTR_ERR_REPEAT_PASSWD ))
+    , aOldPasswdErrStr(SvxResId(RID_SVXSTR_ERR_OLD_PASSWD))
+    , aRepeatPasswdErrStr(SvxResId(RID_SVXSTR_ERR_REPEAT_PASSWD ))
     , bEmpty(bAllowEmptyPasswords)
 {
     get(m_pOldFL, "oldpass");

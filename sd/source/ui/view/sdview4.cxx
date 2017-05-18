@@ -107,7 +107,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     {
         // hit on SdrGrafObj with wanted new linked graphic (or PresObj placeholder hit)
         if( IsUndoEnabled() )
-            BegUndo(OUString(SdResId(STR_INSERTGRAPHIC)));
+            BegUndo(SdResId(STR_INSERTGRAPHIC));
 
         SdPage* pPage = static_cast<SdPage*>( pPickObj->GetPage() );
 
@@ -156,7 +156,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         // and thus of DND_ACTION_LINK or DND_ACTION_MOVE
         if( IsUndoEnabled() )
         {
-            BegUndo(OUString(SdResId(STR_UNDO_DRAGDROP)));
+            BegUndo(SdResId(STR_UNDO_DRAGDROP));
             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pPickObj));
             EndUndo();
         }
@@ -238,7 +238,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             const bool bUndo = IsUndoEnabled();
 
             if( bUndo )
-                BegUndo(SD_RESSTR(STR_UNDO_DRAGDROP));
+                BegUndo(SdResId(STR_UNDO_DRAGDROP));
             pNewGrafObj->NbcSetLayer(pPickObj->GetLayer());
             SdrPage* pP = pPV->GetPage();
             pP->InsertObject(pNewGrafObj);
@@ -334,7 +334,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
         pNewMediaObj = static_cast< SdrMediaObj* >( pPickObj->Clone() );
         pNewMediaObj->setURL( rMediaURL, ""/*TODO?*/, rMimeType );
 
-        BegUndo(SD_RESSTR(STR_UNDO_DRAGDROP));
+        BegUndo(SdResId(STR_UNDO_DRAGDROP));
         ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj);
         EndUndo();
     }
@@ -578,7 +578,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
  */
 IMPL_LINK_NOARG(View, DropErrorHdl, Timer *, void)
 {
-    ScopedVclPtrInstance<InfoBox>( mpViewSh ? mpViewSh->GetActiveWindow() : nullptr, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) )->Execute();
+    ScopedVclPtrInstance<InfoBox>( mpViewSh ? mpViewSh->GetActiveWindow() : nullptr, SdResId(STR_ACTION_NOTPOSSIBLE) )->Execute();
 }
 
 /**

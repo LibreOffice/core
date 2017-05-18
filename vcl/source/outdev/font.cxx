@@ -985,7 +985,7 @@ void OutputDevice::ImplInitFontList() const
                 ResMgr* pMgr = ImplGetResMgr();
                 if( pMgr )
                 {
-                    OUString aResStr(ResId(SV_ACCESSERROR_NO_FONTS, *pMgr).toString());
+                    OUString aResStr(ResId(SV_ACCESSERROR_NO_FONTS, *pMgr));
                     if( !aResStr.isEmpty() )
                         aError = aResStr;
                 }

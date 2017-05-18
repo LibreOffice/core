@@ -95,7 +95,7 @@ using namespace ::com::sun::star::document;
 using namespace sdr::table;
 
 // get parameter from Itemset
-#define RESTOHTML( res ) StringToHTMLString(SD_RESSTR(res))
+#define RESTOHTML( res ) StringToHTMLString(SdResId(res))
 
 const char * const pButtonNames[] =
 {
@@ -846,7 +846,7 @@ void HtmlExport::SetDocColors( SdPage* pPage )
 
 void HtmlExport::InitProgress( sal_uInt16 nProgrCount )
 {
-    mpProgress = new SfxProgress( mpDocSh, SD_RESSTR(STR_CREATE_PAGES), nProgrCount );
+    mpProgress = new SfxProgress( mpDocSh, SdResId(STR_CREATE_PAGES), nProgrCount );
 }
 
 void HtmlExport::ResetProgress()
@@ -2417,7 +2417,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.append("<center>\r\n");
 
         // first page
-        aButton = SD_RESSTR(STR_HTMLEXP_FIRSTPAGE);
+        aButton = SdResId(STR_HTMLEXP_FIRSTPAGE);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName((nFile == 0 || mnSdPageCount == 1?
                                   BTN_FIRST_0:BTN_FIRST_1)), aButton);
@@ -2429,7 +2429,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.append("\r\n");
 
         // to the previous page
-        aButton = SD_RESSTR(STR_PUBLISH_BACK);
+        aButton = SdResId(STR_PUBLISH_BACK);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName((nFile == 0 || mnSdPageCount == 1?
                                     BTN_PREV_0:BTN_PREV_1)), aButton);
@@ -2441,7 +2441,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.append("\r\n");
 
         // to the next page
-        aButton = SD_RESSTR(STR_PUBLISH_NEXT);
+        aButton = SdResId(STR_PUBLISH_NEXT);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName((nFile ==2 || mnSdPageCount == 1?
                                     BTN_NEXT_0:BTN_NEXT_1)), aButton);
@@ -2453,7 +2453,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.append("\r\n");
 
         // to the last page
-        aButton = SD_RESSTR(STR_HTMLEXP_LASTPAGE);
+        aButton = SdResId(STR_HTMLEXP_LASTPAGE);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName((nFile ==2 || mnSdPageCount == 1?
                                   BTN_LAST_0:BTN_LAST_1)), aButton);
@@ -2472,7 +2472,7 @@ bool HtmlExport::CreateNavBarFrames()
         // content
         if (mbContentsPage)
         {
-            aButton = SD_RESSTR(STR_PUBLISH_OUTLINE);
+            aButton = SdResId(STR_PUBLISH_OUTLINE);
             if(mnButtonThema != -1)
                 aButton = CreateImage(GetButtonName(BTN_INDEX), aButton);
 
@@ -2484,7 +2484,7 @@ bool HtmlExport::CreateNavBarFrames()
         // text mode
         if(mbImpress)
         {
-            aButton = SD_RESSTR(STR_HTMLEXP_SETTEXT);
+            aButton = SdResId(STR_HTMLEXP_SETTEXT);
             if(mnButtonThema != -1)
                 aButton = CreateImage(GetButtonName(BTN_TEXT), aButton);
 
@@ -2515,7 +2515,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.append("</title>\r\n</head>\r\n");
         aStr.append(CreateBodyTag());
 
-        aButton = SD_RESSTR(STR_HTMLEXP_OUTLINE);
+        aButton = SdResId(STR_HTMLEXP_OUTLINE);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName(BTN_MORE), aButton);
 
@@ -2538,7 +2538,7 @@ bool HtmlExport::CreateNavBarFrames()
         aStr.append("</title>\r\n</head>\r\n");
         aStr.append(CreateBodyTag());
 
-        aButton = SD_RESSTR(STR_HTMLEXP_NOOUTLINE);
+        aButton = SdResId(STR_HTMLEXP_NOOUTLINE);
         if(mnButtonThema != -1)
             aButton = CreateImage(GetButtonName(BTN_LESS), aButton);
 
@@ -2559,19 +2559,19 @@ bool HtmlExport::CreateNavBarFrames()
 OUString HtmlExport::CreateNavBar( sal_uInt16 nSdPage, bool bIsText ) const
 {
     // prepare button bar
-    OUString aStrNavFirst(SD_RESSTR(STR_HTMLEXP_FIRSTPAGE));
-    OUString aStrNavPrev(SD_RESSTR(STR_PUBLISH_BACK));
-    OUString aStrNavNext(SD_RESSTR(STR_PUBLISH_NEXT));
-    OUString aStrNavLast(SD_RESSTR(STR_HTMLEXP_LASTPAGE));
-    OUString aStrNavContent(SD_RESSTR(STR_PUBLISH_OUTLINE));
+    OUString aStrNavFirst(SdResId(STR_HTMLEXP_FIRSTPAGE));
+    OUString aStrNavPrev(SdResId(STR_PUBLISH_BACK));
+    OUString aStrNavNext(SdResId(STR_PUBLISH_NEXT));
+    OUString aStrNavLast(SdResId(STR_HTMLEXP_LASTPAGE));
+    OUString aStrNavContent(SdResId(STR_PUBLISH_OUTLINE));
     OUString aStrNavText;
     if( bIsText )
     {
-        aStrNavText = SD_RESSTR(STR_HTMLEXP_SETGRAPHIC);
+        aStrNavText = SdResId(STR_HTMLEXP_SETGRAPHIC);
     }
     else
     {
-        aStrNavText = SD_RESSTR(STR_HTMLEXP_SETTEXT);
+        aStrNavText = SdResId(STR_HTMLEXP_SETTEXT);
     }
 
     if(!bIsText && mnButtonThema != -1)
@@ -3101,7 +3101,7 @@ bool HtmlExport::checkForExistingFiles()
             if( pResMgr )
             {
                 ResId aResId( 4077, *pResMgr );
-                OUString aMsg( aResId.toString() );
+                OUString aMsg( aResId );
 
                 OUString aSystemPath;
                 osl::FileBase::getSystemPathFromFileURL( maExportPath, aSystemPath );
@@ -3232,7 +3232,7 @@ bool HtmlErrorContext::GetString( sal_uInt32, OUString& rCtxStr )
     if( mnResId == 0 )
         return false;
 
-    rCtxStr = SdResId( mnResId ).toString();
+    rCtxStr = SdResId(mnResId);
 
     rCtxStr = rCtxStr.replaceAll( "$(URL1)", maURL1 );
     rCtxStr = rCtxStr.replaceAll( "$(URL2)", maURL2 );

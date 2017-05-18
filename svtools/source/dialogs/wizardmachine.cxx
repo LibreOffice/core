@@ -136,7 +136,7 @@ namespace svt
             m_pPrevPage = VclPtr<PushButton>::Create(this, WB_TABSTOP);
             m_pPrevPage->SetHelpId( HID_WIZARD_PREVIOUS );
             m_pPrevPage->SetSizePixel( LogicToPixel( Size( 50, 14 ), MapUnit::MapAppFont ) );
-            m_pPrevPage->SetText(SVT_RESSTR(STR_WIZDLG_PREVIOUS));
+            m_pPrevPage->SetText(SvtResId(STR_WIZDLG_PREVIOUS));
             m_pPrevPage->Show();
             m_pPrevPage->set_id("previous");
 
@@ -154,7 +154,7 @@ namespace svt
             m_pNextPage = VclPtr<PushButton>::Create(this, WB_TABSTOP);
             m_pNextPage->SetHelpId( HID_WIZARD_NEXT );
             m_pNextPage->SetSizePixel( LogicToPixel( Size( 50, 14 ), MapUnit::MapAppFont ) );
-            m_pNextPage->SetText(OUString(SVT_RESSTR(STR_WIZDLG_NEXT)));
+            m_pNextPage->SetText(OUString(SvtResId(STR_WIZDLG_NEXT)));
             m_pNextPage->Show();
             m_pNextPage->set_id("next");
 
@@ -168,7 +168,7 @@ namespace svt
         {
             m_pFinish = VclPtr<OKButton>::Create(this, WB_TABSTOP);
             m_pFinish->SetSizePixel( LogicToPixel( Size( 50, 14 ), MapUnit::MapAppFont ) );
-            m_pFinish->SetText(SVT_RESSTR(STR_WIZDLG_FINISH));
+            m_pFinish->SetText(SvtResId(STR_WIZDLG_FINISH));
             m_pFinish->Show();
             m_pFinish->set_id("finish");
 

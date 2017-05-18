@@ -347,9 +347,9 @@ SwRewriter SwUndoInsTable::GetRewriter() const
 {
     SwRewriter aRewriter;
 
-    aRewriter.AddRule(UndoArg1, SW_RES(STR_START_QUOTE));
+    aRewriter.AddRule(UndoArg1, SwResId(STR_START_QUOTE));
     aRewriter.AddRule(UndoArg2, sTableNm);
-    aRewriter.AddRule(UndoArg3, SW_RES(STR_END_QUOTE));
+    aRewriter.AddRule(UndoArg3, SwResId(STR_END_QUOTE));
 
     return aRewriter;
 }

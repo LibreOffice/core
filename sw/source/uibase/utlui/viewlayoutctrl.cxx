@@ -181,15 +181,15 @@ bool SwViewLayoutControl::MouseMove( const MouseEvent & rEvt )
 
     if ( nXDiff < nXOffset + nImageWidthSingle )
     {
-        GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_VIEWLAYOUT_ONE));
+        GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_VIEWLAYOUT_ONE));
     }
     else if ( nXDiff < nXOffset + nImageWidthSingle + nImageWidthAuto )
     {
-        GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_VIEWLAYOUT_MULTI));
+        GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_VIEWLAYOUT_MULTI));
     }
     else
     {
-        GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_VIEWLAYOUT_BOOK));
+        GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_VIEWLAYOUT_BOOK));
     }
     return true;
 }

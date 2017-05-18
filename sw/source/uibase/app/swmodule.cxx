@@ -403,34 +403,34 @@ SfxStyleFamilies* SwModule::CreateStyleFamilies()
     SfxStyleFamilies *pStyleFamilies = new SfxStyleFamilies;
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
-                                                    SW_RESSTR(STR_PARAGRAPHSTYLEFAMILY),
+                                                    SwResId(STR_PARAGRAPHSTYLEFAMILY),
                                                     Image(BitmapEx(BMP_STYLES_FAMILY_PARA)),
-                                                    SW_RES(RID_PARAGRAPHSTYLEFAMILY)));
+                                                    ResId(RID_PARAGRAPHSTYLEFAMILY, *pSwResMgr)));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Char,
-                                                    SW_RESSTR(STR_CHARACTERSTYLEFAMILY),
+                                                    SwResId(STR_CHARACTERSTYLEFAMILY),
                                                     Image(BitmapEx(BMP_STYLES_FAMILY_CHAR)),
-                                                    SW_RES(RID_CHARACTERSTYLEFAMILY)));
+                                                    ResId(RID_CHARACTERSTYLEFAMILY, *pSwResMgr)));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Frame,
-                                                    SW_RESSTR(STR_FRAMESTYLEFAMILY),
+                                                    SwResId(STR_FRAMESTYLEFAMILY),
                                                     Image(BitmapEx(BMP_STYLES_FAMILY_FRAME)),
-                                                    SW_RES(RID_FRAMESTYLEFAMILY)));
+                                                    ResId(RID_FRAMESTYLEFAMILY, *pSwResMgr)));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Page,
-                                                    SW_RESSTR(STR_PAGESTYLEFAMILY),
+                                                    SwResId(STR_PAGESTYLEFAMILY),
                                                     Image(BitmapEx(BMP_STYLES_FAMILY_PAGE)),
-                                                    SW_RES(RID_PAGESTYLEFAMILY)));
+                                                    ResId(RID_PAGESTYLEFAMILY, *pSwResMgr)));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Pseudo,
-                                                    SW_RESSTR(STR_LISTSTYLEFAMILY),
+                                                    SwResId(STR_LISTSTYLEFAMILY),
                                                     Image(BitmapEx(BMP_STYLES_FAMILY_LIST)),
-                                                    SW_RES(RID_LISTSTYLEFAMILY)));
+                                                    ResId(RID_LISTSTYLEFAMILY, *pSwResMgr)));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Table,
-                                                    SW_RESSTR(STR_TABLESTYLEFAMILY),
+                                                    SwResId(STR_TABLESTYLEFAMILY),
                                                     Image(BitmapEx(BMP_STYLES_FAMILY_TABLE)),
-                                                    SW_RES(RID_TABLESTYLEFAMILY)));
+                                                    ResId(RID_TABLESTYLEFAMILY, *pSwResMgr)));
 
     return pStyleFamilies;
 }

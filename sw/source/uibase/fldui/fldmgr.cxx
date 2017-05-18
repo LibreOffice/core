@@ -388,12 +388,12 @@ OUString SwFieldMgr::GetTypeStr(sal_uInt16 nPos)
     // special treatment for date/time fields (without var/fix)
     if( TYP_DATEFLD == nFieldWh )
     {
-        static OUString g_aDate( SW_RES( STR_DATEFLD ) );
+        static OUString g_aDate( SwResId( STR_DATEFLD ) );
         return g_aDate;
     }
     if( TYP_TIMEFLD == nFieldWh )
     {
-        static OUString g_aTime( SW_RES( STR_TIMEFLD ) );
+        static OUString g_aTime( SwResId( STR_TIMEFLD ) );
         return g_aTime;
     }
 
@@ -442,7 +442,7 @@ void SwFieldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
             }
             case TYP_INPUTFLD:
             {
-                rToFill.push_back(SW_RES(aSwFields[nPos].nSubTypeStart));
+                rToFill.push_back(SwResId(aSwFields[nPos].nSubTypeStart));
                 SAL_FALLTHROUGH; // move on at generic types
             }
             case TYP_DDEFLD:
@@ -505,12 +505,12 @@ void SwFieldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
                         if (nTypeId == TYP_DOCINFOFLD)
                         {
                             if ( i == DI_CUSTOM )
-                                sNew = SW_RES( STR_CUSTOM );
+                                sNew = SwResId( STR_CUSTOM );
                             else
                                 sNew = SwViewShell::GetShellRes()->aDocInfoLst[i];
                         }
                         else
-                            sNew = SW_RES(aSwFields[nPos].nSubTypeStart + i);
+                            sNew = SwResId(aSwFields[nPos].nSubTypeStart + i);
 
                         rToFill.push_back(sNew);
                     }
@@ -587,14 +587,14 @@ OUString SwFieldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
         nFormatId &= ~FF_FIXED;     // mask out Fixed-Flag
 
     if((nStart + nFormatId) < aSwFields[nPos].nFormatEnd)
-        return SW_RES((sal_uInt16)(nStart + nFormatId));
+        return SwResId((sal_uInt16)(nStart + nFormatId));
 
     OUString aRet;
     if( FMT_NUM_BEGIN == nStart)
     {
         if(xNumberingInfo.is())
         {
-            ResStringArray aNames( SVX_RES( RID_SVXSTRARY_NUMBERINGTYPE ));
+            ResStringArray aNames(ResId(RID_SVXSTRARY_NUMBERINGTYPE, *pSwResMgr));
 
             Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
             const sal_Int16* pTypes = aTypes.getConstArray();
@@ -1610,7 +1610,7 @@ void SwFieldType::GetFieldName_()
     SwFieldType::s_pFieldNames->reserve(SAL_N_ELEMENTS(coFieldNms));
     for(sal_uInt16 i : coFieldNms)
     {
-        const OUString aTmp(SW_RES( i ));
+        const OUString aTmp(SwResId( i ));
         SwFieldType::s_pFieldNames->push_back(MnemonicGenerator::EraseAllMnemonicChars( aTmp ));
     }
 }

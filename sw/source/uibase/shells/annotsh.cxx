@@ -1186,7 +1186,7 @@ void SwAnnotationShell::GetNoteState(SfxItemSet &rSet)
             else
             {
                 OUString aText( nSlotId == FN_DELETE_NOTE_AUTHOR ?
-                                SW_RES( STR_DELETE_NOTE_AUTHOR ) : SW_RES( STR_HIDE_NOTE_AUTHOR ) );
+                                SwResId( STR_DELETE_NOTE_AUTHOR ) : SwResId( STR_HIDE_NOTE_AUTHOR ) );
                 SwRewriter aRewriter;
                 aRewriter.AddRule( UndoArg1, pPostItMgr->GetActiveSidebarWin()->GetAuthor() );
                 aText = aRewriter.Apply( aText );
@@ -1208,7 +1208,7 @@ void SwAnnotationShell::GetNoteState(SfxItemSet &rSet)
                     OUString sAuthor;
                     if( (sAuthor = aUserOpt.GetFullName()).isEmpty() &&
                         (sAuthor = aUserOpt.GetID()).isEmpty() )
-                        sAuthor = SW_RES( STR_REDLINE_UNKNOWN_AUTHOR );
+                        sAuthor = SwResId( STR_REDLINE_UNKNOWN_AUTHOR );
                     if (sAuthor == pPostItMgr->GetActiveSidebarWin()->GetAuthor())
                         rSet.DisableItem(nWhich);
                 }

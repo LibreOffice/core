@@ -58,7 +58,7 @@ SelectPersonaDialog::SelectPersonaDialog( vcl::Window *pParent )
     get( m_vSearchSuggestions[4], "suggestion5" );
     get( m_vSearchSuggestions[5], "suggestion6" );
 
-    ResStringArray aCategoriesArr(CUI_RES(RID_SVXSTR_PERSONA_CATEGORIES));
+    ResStringArray aCategoriesArr(ResId(RID_SVXSTR_PERSONA_CATEGORIES, CUI_MGR()));
     assert(aCategoriesArr.Count() >= CATEGORYCOUNT);
     for(sal_uInt32 i = 0; i < CATEGORYCOUNT; ++i)
     {
@@ -209,7 +209,7 @@ IMPL_LINK( SelectPersonaDialog, SelectPersona, Button*, pButton, void )
                 // get the persona name from the setting variable to show in the progress.
                 sal_Int32 nNameIndex = m_aSelectedPersona.indexOf( ';' );
                 OUString aName = m_aSelectedPersona.copy( 0, nNameIndex );
-                OUString aProgress = OUString(CUI_RES(RID_SVXSTR_SELECTEDPERSONA)) + aName;
+                OUString aProgress = OUString(CuiResId(RID_SVXSTR_SELECTEDPERSONA)) + aName;
                 SetProgress( aProgress );
             }
             break;
@@ -676,7 +676,7 @@ void SearchAndParseThread::execute()
     if( m_aURL.startsWith( "https://" ) )
     {
         m_pPersonaDialog->ClearSearchResults();
-        OUString sProgress( CUI_RES( RID_SVXSTR_SEARCHING ) ), sError;
+        OUString sProgress( CuiResId( RID_SVXSTR_SEARCHING ) ), sError;
         m_pPersonaDialog->SetProgress( sProgress );
 
         PersonasDocHandler* pHandler = new PersonasDocHandler();
@@ -703,7 +703,7 @@ void SearchAndParseThread::execute()
                 {
                     // in case of a returned CommandFailedException
                     // SimpleFileAccess serves it, returning an empty stream
-                    sError = CUI_RES(RID_SVXSTR_SEARCHERROR);
+                    sError = CuiResId(RID_SVXSTR_SEARCHERROR);
                     sError = sError.replaceAll("%1", m_aURL);
                     m_pPersonaDialog->SetProgress( OUString() );
                     ScopedVclPtrInstance< ErrorBox > aBox( nullptr, WB_OK, sError);
@@ -715,7 +715,7 @@ void SearchAndParseThread::execute()
             {
                 // a catch all clause, in case the exception is not
                 // served elsewhere
-                sError = CUI_RES(RID_SVXSTR_SEARCHERROR);
+                sError = CuiResId(RID_SVXSTR_SEARCHERROR);
                 sError = sError.replaceAll("%1", m_aURL);
                 m_pPersonaDialog->SetProgress( OUString() );
                 ScopedVclPtrInstance< ErrorBox > aBox( nullptr, WB_OK, sError );
@@ -729,7 +729,7 @@ void SearchAndParseThread::execute()
 
             if( !pHandler->hasResults() )
             {
-                sProgress = CUI_RES( RID_SVXSTR_NORESULTS );
+                sProgress = CuiResId( RID_SVXSTR_NORESULTS );
                 m_pPersonaDialog->SetProgress( sProgress );
                 return;
             }
@@ -755,7 +755,7 @@ void SearchAndParseThread::execute()
             {
                 if( m_bDirectURL )
                 {
-                    sError = CUI_RES(RID_SVXSTR_SEARCHERROR);
+                    sError = CuiResId(RID_SVXSTR_SEARCHERROR);
                     sError = sError.replaceAll("%1", m_aURL);
                     m_pPersonaDialog->SetProgress( OUString() );
                     ScopedVclPtrInstance< ErrorBox > aBox( nullptr, WB_OK, sError);
@@ -789,7 +789,7 @@ void SearchAndParseThread::execute()
 
     else
     {
-        OUString sProgress( CUI_RES( RID_SVXSTR_APPLYPERSONA ) ), sError;
+        OUString sProgress( CuiResId( RID_SVXSTR_APPLYPERSONA ) ), sError;
         m_pPersonaDialog->SetProgress( sProgress );
 
         uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
@@ -838,7 +838,7 @@ void SearchAndParseThread::execute()
         }
         catch ( const uno::Exception & )
         {
-            sError = CUI_RES( RID_SVXSTR_SEARCHERROR );
+            sError = CuiResId( RID_SVXSTR_SEARCHERROR );
             sError = sError.replaceAll("%1", m_aURL);
             m_pPersonaDialog->SetProgress( OUString() );
             ScopedVclPtrInstance< ErrorBox > aBox( nullptr, WB_OK, sError);

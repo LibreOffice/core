@@ -494,7 +494,7 @@ OUString SfxDocumentTemplates::ConvertResourceString(const OUString& rString)
     for (int i = 0; i < NUM_TEMPLATE_NAMES; ++i)
     {
         if (rString == aTemplateNames[i])
-            return SFX2_RESSTR(STR_TEMPLATE_NAME1 + i);
+            return SfxResId(STR_TEMPLATE_NAME1 + i);
     }
     return rString;
 }
@@ -1604,7 +1604,7 @@ bool SfxDocTemplate_Impl::Construct( )
     mbConstructed = true;
     maRootURL = aRootContent->getIdentifier()->getContentIdentifier();
 
-    ResStringArray  aLongNames( SfxResId( TEMPLATE_LONG_NAMES_ARY ) );
+    ResStringArray aLongNames(ResId(TEMPLATE_LONG_NAMES_ARY, *SfxResMgr::GetResMgr()));
 
     if ( aLongNames.Count() )
         maStandardGroup = aLongNames.GetString( 0 );

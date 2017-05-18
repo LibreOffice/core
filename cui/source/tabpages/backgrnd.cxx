@@ -382,7 +382,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
 
     m_pBackgroundColorSet->SetSelectHdl( HDL(BackgroundColorHdl_Impl) );
     m_pBackgroundColorSet->SetStyle(m_pBackgroundColorSet->GetStyle() | WB_ITEMBORDER | WB_NAMEFIELD | WB_NONEFIELD);
-    m_pBackgroundColorSet->SetText(SVX_RESSTR(RID_SVXSTR_NOFILL));
+    m_pBackgroundColorSet->SetText(SvxResId(RID_SVXSTR_NOFILL));
 }
 
 SvxBackgroundTabPage::~SvxBackgroundTabPage()
@@ -1528,7 +1528,7 @@ void SvxBackgroundTabPage::PageCreated(const SfxAllItemSet& aSet)
         }
         if ( nFlags & SvxBackgroundTabFlags::SHOW_HIGHLIGHTING )
         {
-            m_pBackGroundColorLabelFT->SetText(CUI_RES(RID_SVXSTR_CHARNAME_HIGHLIGHTING));
+            m_pBackGroundColorLabelFT->SetText(CuiResId(RID_SVXSTR_CHARNAME_HIGHLIGHTING));
             bHighlighting = true;
         }
     }

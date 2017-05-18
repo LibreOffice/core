@@ -281,8 +281,8 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
 template<class RNG>
 void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG& randomGenerator, const sal_Int16 aDistributionStringId, boost::optional<sal_Int8> aDecimalPlaces)
 {
-    OUString aUndo = SC_RESSTR(STR_UNDO_DISTRIBUTION_TEMPLATE);
-    OUString aDistributionName = SC_RESSTR(aDistributionStringId);
+    OUString aUndo = ScResId(STR_UNDO_DISTRIBUTION_TEMPLATE);
+    OUString aDistributionName = ScResId(aDistributionStringId);
     aUndo = aUndo.replaceAll("$(DISTRIBUTION)",  aDistributionName);
 
     ScDocShell* pDocShell = mpViewData->GetDocShell();
@@ -435,19 +435,19 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged, ListBox&, vo
     {
         case DIST_UNIFORM:
         {
-            mpParameter1Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_MINIMUM));
-            mpParameter2Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_MAXIMUM));
+            mpParameter1Text->SetText(ScResId(STR_RNG_PARAMETER_MINIMUM));
+            mpParameter2Text->SetText(ScResId(STR_RNG_PARAMETER_MAXIMUM));
             mpParameter2Text->Show();
             mpParameter2Value->Show();
             break;
         }
         case DIST_UNIFORM_INTEGER:
         {
-            mpParameter1Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_MINIMUM));
+            mpParameter1Text->SetText(ScResId(STR_RNG_PARAMETER_MINIMUM));
             mpParameter1Value->SetDecimalDigits(0);
             mpParameter1Value->SetSpinSize(1);
 
-            mpParameter2Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_MAXIMUM));
+            mpParameter2Text->SetText(ScResId(STR_RNG_PARAMETER_MAXIMUM));
             mpParameter2Value->SetDecimalDigits(0);
             mpParameter2Value->SetSpinSize(1);
 
@@ -457,16 +457,16 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged, ListBox&, vo
         }
         case DIST_NORMAL:
         {
-            mpParameter1Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_MEAN));
-            mpParameter2Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_STANDARD_DEVIATION));
+            mpParameter1Text->SetText(ScResId(STR_RNG_PARAMETER_MEAN));
+            mpParameter2Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_DEVIATION));
             mpParameter2Text->Show();
             mpParameter2Value->Show();
             break;
         }
         case DIST_CAUCHY:
         {
-            mpParameter1Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_STANDARD_MEDIAN));
-            mpParameter2Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_STANDARD_SIGMA));
+            mpParameter1Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_MEDIAN));
+            mpParameter2Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_SIGMA));
             mpParameter2Text->Show();
             mpParameter2Value->Show();
             break;
@@ -474,7 +474,7 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged, ListBox&, vo
         case DIST_BERNOULLI:
         case DIST_GEOMETRIC:
         {
-            mpParameter1Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_STANDARD_PROBABILITY));
+            mpParameter1Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_PROBABILITY));
             mpParameter1Value->SetMin(         0 );
             mpParameter1Value->SetMax( PERCISION );
             mpParameter1Value->SetSpinSize(1000);
@@ -486,12 +486,12 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged, ListBox&, vo
         case DIST_BINOMIAL:
         case DIST_NEGATIVE_BINOMIAL:
         {
-            mpParameter1Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_STANDARD_PROBABILITY));
+            mpParameter1Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_PROBABILITY));
             mpParameter1Value->SetMin(         0 );
             mpParameter1Value->SetMax( PERCISION );
             mpParameter1Value->SetSpinSize(1000);
 
-            mpParameter2Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_STANDARD_NUMBER_OF_TRIALS));
+            mpParameter2Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_NUMBER_OF_TRIALS));
             mpParameter2Value->SetDecimalDigits(0);
             mpParameter2Value->SetSpinSize(1);
             mpParameter2Value->SetMin(0);
@@ -502,7 +502,7 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged, ListBox&, vo
         }
         case DIST_CHI_SQUARED:
         {
-            mpParameter1Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_STANDARD_NU_VALUE));
+            mpParameter1Text->SetText(ScResId(STR_RNG_PARAMETER_STANDARD_NU_VALUE));
 
             mpParameter2Text->Hide();
             mpParameter2Value->Hide();

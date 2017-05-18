@@ -281,7 +281,7 @@ void FmFieldWin::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoo
 void FmFieldWin::UpdateContent(FmFormShell* pShell)
 {
     pListBox->Clear();
-    OUString aTitle(SVX_RESSTR(RID_STR_FIELDSELECTION));
+    OUString aTitle(SvxResId(RID_STR_FIELDSELECTION));
     SetText( aTitle );
 
     if (!pShell || !pShell->GetImpl())
@@ -299,7 +299,7 @@ void FmFieldWin::UpdateContent(const css::uno::Reference< css::form::XForm > & x
     {
         // delete ListBox
         pListBox->Clear();
-        OUString aTitle(SVX_RES(RID_STR_FIELDSELECTION));
+        OUString aTitle(SvxResId(RID_STR_FIELDSELECTION));
         SetText(aTitle);
 
         if (!xForm.is())
@@ -332,7 +332,7 @@ void FmFieldWin::UpdateContent(const css::uno::Reference< css::form::XForm > & x
 
         // set prefix
         OUString  aPrefix;
-        ResStringArray aPrefixes(SVX_RES(RID_RSC_TABWIN_PREFIX));
+        ResStringArray aPrefixes(ResId(RID_RSC_TABWIN_PREFIX, DIALOG_MGR()));
 
         switch (m_nObjectType)
         {

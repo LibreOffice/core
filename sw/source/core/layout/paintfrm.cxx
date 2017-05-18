@@ -3467,7 +3467,7 @@ void SwRootFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
                 const vcl::Font aOldFont( pSh->GetOut()->GetFont() );
 
                 pSh->GetOut()->SetFont( rEmptyPageFont );
-                pSh->GetOut()->DrawText( aEmptyPageRect.SVRect(), SW_RESSTR( STR_EMPTYPAGE ),
+                pSh->GetOut()->DrawText( aEmptyPageRect.SVRect(), SwResId( STR_EMPTYPAGE ),
                                     DrawTextFlags::VCenter |
                                     DrawTextFlags::Center |
                                     DrawTextFlags::Clip );
@@ -3822,7 +3822,7 @@ void SwColumnFrame::PaintBreak( ) const
                     aSeq.resize( aSeq.size( ) + 1 );
 
                     // Add the text above
-                    OUString aBreakText = SW_RESSTR(STR_COLUMN_BREAK);
+                    OUString aBreakText = SwResId(STR_COLUMN_BREAK);
 
                     basegfx::B2DVector aFontSize;
                     OutputDevice* pOut = gProp.pSGlobalShell->GetOut();

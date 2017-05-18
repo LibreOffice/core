@@ -123,7 +123,7 @@ void ScGraphicShell::ExecuteFilter( SfxRequest& rReq )
                 if( pPageView )
                 {
                     SdrGrafObj* pFilteredObj = static_cast<SdrGrafObj*>(pObj->Clone());
-                    OUString    aStr = pView->GetDescriptionOfMarkedObjects() + " " + OUString(ScResId( SCSTR_UNDO_GRAFFILTER ));
+                    OUString    aStr = pView->GetDescriptionOfMarkedObjects() + " " + ScResId(SCSTR_UNDO_GRAFFILTER);
                     pView->BegUndo( aStr );
                     pFilteredObj->SetGraphicObject( aFilterObj );
                     pView->ReplaceObjectAtView( pObj, *pPageView, pFilteredObj );

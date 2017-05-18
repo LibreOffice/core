@@ -426,9 +426,9 @@ void SvxSearchDialog::Construct_Impl()
     aCalcStr += "#";
     aCalcStr += m_pWordBtn->GetText();
 
-    aLayoutStr = SVX_RESSTR( RID_SVXSTR_SEARCH_STYLES );
-    aLayoutWriterStr = SVX_RESSTR( RID_SVXSTR_WRITER_STYLES );
-    aLayoutCalcStr = SVX_RESSTR( RID_SVXSTR_CALC_STYLES );
+    aLayoutStr = SvxResId( RID_SVXSTR_SEARCH_STYLES );
+    aLayoutWriterStr = SvxResId( RID_SVXSTR_WRITER_STYLES );
+    aLayoutCalcStr = SvxResId( RID_SVXSTR_CALC_STYLES );
     aStylesStr = m_pLayoutBtn->GetText();
 
     // Get stored search-strings from the application
@@ -1996,12 +1996,12 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, Button*, void)
 
     if ( bSearch )
     {
-        aTxt = SVX_RESSTR( RID_SVXSTR_SEARCH );
+        aTxt = SvxResId( RID_SVXSTR_SEARCH );
         pSearchList->Get( aSet );
     }
     else
     {
-        aTxt = SVX_RESSTR( RID_SVXSTR_REPLACE );
+        aTxt = SvxResId( RID_SVXSTR_REPLACE );
         pReplaceList->Get( aSet );
     }
     aSet.DisableItem(SID_ATTR_PARA_MODEL);
@@ -2160,7 +2160,7 @@ OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
         default: ;//prevent warning
     }
 
-    ResStringArray aAttrNames( SVX_RES( RID_ATTR_NAMES ) );
+    ResStringArray aAttrNames(ResId(RID_ATTR_NAMES, DIALOG_MGR()));
 
     for ( sal_uInt16 i = 0; i < pList->Count(); ++i )
     {
@@ -2179,7 +2179,7 @@ OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
         else if ( rItem.nSlot == SID_ATTR_BRUSH_CHAR )
         {
             // Special treatment for text background
-            rStr += SVX_RESSTR( RID_SVXITEMS_BRUSH_CHAR );
+            rStr += SvxResId( RID_SVXITEMS_BRUSH_CHAR );
         }
         else
         {
@@ -2399,13 +2399,13 @@ void SvxSearchDialogWrapper::SetSearchLabel(const SearchLabel& rSL)
 {
     OUString sStr;
     if (rSL == SearchLabel::End)
-        sStr = SVX_RESSTR(RID_SVXSTR_SEARCH_END);
+        sStr = SvxResId(RID_SVXSTR_SEARCH_END);
     else if (rSL == SearchLabel::Start)
-        sStr = SVX_RESSTR(RID_SVXSTR_SEARCH_START);
+        sStr = SvxResId(RID_SVXSTR_SEARCH_START);
     else if (rSL == SearchLabel::EndSheet)
-        sStr = SVX_RESSTR(RID_SVXSTR_SEARCH_END_SHEET);
+        sStr = SvxResId(RID_SVXSTR_SEARCH_END_SHEET);
     else if (rSL == SearchLabel::NotFound)
-        sStr = SVX_RESSTR(RID_SVXSTR_SEARCH_NOT_FOUND);
+        sStr = SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND);
 
     if (vcl::Window *pSearchLabel = lcl_GetSearchLabelWindow())
     {

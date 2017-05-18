@@ -900,7 +900,7 @@ FontStylePropertyBox::FontStylePropertyBox( sal_Int32 nControlType, vcl::Window*
     , maModifyHdl( rModifyHdl )
 {
     mpEdit.set( VclPtr<Edit>::Create( pParent, WB_TABSTOP|WB_IGNORETAB|WB_NOBORDER|WB_READONLY) );
-    mpEdit->SetText( SD_RESSTR(STR_CUSTOMANIMATION_SAMPLE) );
+    mpEdit->SetText( SdResId(STR_CUSTOMANIMATION_SAMPLE) );
 
     mpMenu = maBuilder.get_menu("menu");
     mpControl = VclPtr<DropdownMenuBox>::Create( pParent, mpEdit, mpMenu );
@@ -1455,14 +1455,14 @@ void CustomAnimationEffectTabPage::fillSoundListBox()
     GalleryExplorer::FillObjList( GALLERY_THEME_SOUNDS, maSoundList );
     GalleryExplorer::FillObjList( GALLERY_THEME_USERSOUNDS, maSoundList );
 
-    mpLBSound->InsertEntry( SD_RESSTR(STR_CUSTOMANIMATION_NO_SOUND) );
-    mpLBSound->InsertEntry( SD_RESSTR(STR_CUSTOMANIMATION_STOP_PREVIOUS_SOUND) );
+    mpLBSound->InsertEntry( SdResId(STR_CUSTOMANIMATION_NO_SOUND) );
+    mpLBSound->InsertEntry( SdResId(STR_CUSTOMANIMATION_STOP_PREVIOUS_SOUND) );
     for(const OUString & rString : maSoundList)
     {
         INetURLObject aURL( rString );
         mpLBSound->InsertEntry( aURL.GetBase() );
     }
-    mpLBSound->InsertEntry( SD_RESSTR(STR_CUSTOMANIMATION_BROWSE_SOUND) );
+    mpLBSound->InsertEntry( SdResId(STR_CUSTOMANIMATION_BROWSE_SOUND) );
 }
 
 void CustomAnimationEffectTabPage::clearSoundListBox()
@@ -1516,7 +1516,7 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
             }
             else
             {
-                OUString aStrWarning(SD_RESSTR(STR_WARNING_NOSOUNDFILE));
+                OUString aStrWarning(SdResId(STR_WARNING_NOSOUNDFILE));
                 aStrWarning = aStrWarning.replaceFirst("%", aFile);
                 ScopedVclPtrInstance< WarningBox > aWarningBox( nullptr, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
                 aWarningBox->SetModalInputMode (true);

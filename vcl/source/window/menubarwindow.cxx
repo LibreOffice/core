@@ -140,13 +140,13 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
         aCloseBtn->InsertItem(IID_DOCUMENTCLOSE, aCloseBtn->maImage);
         aCloseBtn->SetSelectHdl(LINK(this, MenuBarWindow, CloseHdl));
         aCloseBtn->AddEventListener(LINK(this, MenuBarWindow, ToolboxEventHdl));
-        aCloseBtn->SetQuickHelpText(IID_DOCUMENTCLOSE, ResId(SV_HELPTEXT_CLOSEDOCUMENT, *pResMgr).toString());
+        aCloseBtn->SetQuickHelpText(IID_DOCUMENTCLOSE, ResId(SV_HELPTEXT_CLOSEDOCUMENT, *pResMgr));
 
         aFloatBtn->SetSymbol( SymbolType::FLOAT );
-        aFloatBtn->SetQuickHelpText( ResId(SV_HELPTEXT_RESTORE, *pResMgr).toString() );
+        aFloatBtn->SetQuickHelpText( ResId(SV_HELPTEXT_RESTORE, *pResMgr) );
 
         aHideBtn->SetSymbol( SymbolType::HIDE );
-        aHideBtn->SetQuickHelpText( ResId(SV_HELPTEXT_MINIMIZE, *pResMgr).toString() );
+        aHideBtn->SetQuickHelpText( ResId(SV_HELPTEXT_MINIMIZE, *pResMgr) );
     }
 
     ImplInitStyleSettings();

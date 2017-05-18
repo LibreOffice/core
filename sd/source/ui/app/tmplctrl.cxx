@@ -66,7 +66,7 @@ SdTemplateControl::SdTemplateControl( sal_uInt16 _nSlotId,
                                       StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb )
 {
-    GetStatusBar().SetQuickHelpText(GetId(), SD_RESSTR(STR_STATUSBAR_MASTERPAGE));
+    GetStatusBar().SetQuickHelpText(GetId(), SdResId(STR_STATUSBAR_MASTERPAGE));
 }
 
 SdTemplateControl::~SdTemplateControl()

@@ -131,7 +131,7 @@ void SwFieldDokPage::Reset(const SfxItemSet* )
                 case TYP_PAGENUMBERFLD:
                     if (!bPage)
                     {
-                        nPos = m_pTypeLB->InsertEntry(SW_RESSTR(FMT_REF_PAGE));
+                        nPos = m_pTypeLB->InsertEntry(SwResId(FMT_REF_PAGE));
                         m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(USHRT_MAX));
                         bPage = true;
                     }
@@ -384,14 +384,14 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, ListBox&, void)
                 break;
 
             case TYP_CHAPTERFLD:
-                m_pValueFT->SetText(SW_RESSTR(STR_LEVEL));
+                m_pValueFT->SetText(SwResId(STR_LEVEL));
                 if (IsFieldEdit())
                     m_pLevelED->SetText(OUString::number(static_cast<SwChapterField*>(GetCurField())->GetLevel() + 1));
                 bLevel = true;
                 break;
 
             case TYP_PAGENUMBERFLD:
-                m_pValueFT->SetText( SW_RESSTR( STR_OFFSET ));
+                m_pValueFT->SetText( SwResId( STR_OFFSET ));
                 if (IsFieldEdit())
                     m_pValueED->SetText(GetCurField()->GetPar2());
                 bValue = true;
@@ -487,7 +487,7 @@ IMPL_LINK_NOARG(SwFieldDokPage, SubTypeHdl, ListBox&, void)
     }
 
     if( nTextRes )
-        m_pValueFT->SetText( SW_RESSTR( nTextRes ));
+        m_pValueFT->SetText( SwResId( nTextRes ));
 }
 
 sal_Int32 SwFieldDokPage::FillFormatLB(sal_uInt16 nTypeId)
@@ -511,10 +511,10 @@ sal_Int32 SwFieldDokPage::FillFormatLB(sal_uInt16 nTypeId)
 
     if( nSize && !m_pFormatLB->GetSelectEntryCount() )
     {
-        m_pFormatLB->SelectEntry( SW_RESSTR(FMT_NUM_PAGEDESC) );
+        m_pFormatLB->SelectEntry( SwResId(FMT_NUM_PAGEDESC) );
         if( !m_pFormatLB->GetSelectEntryCount() )
         {
-            m_pFormatLB->SelectEntry( SW_RESSTR(FMT_NUM_ARABIC) );
+            m_pFormatLB->SelectEntry( SwResId(FMT_NUM_ARABIC) );
             if( !m_pFormatLB->GetSelectEntryCount() )
                 m_pFormatLB->SelectEntryPos( 0 );
         }
@@ -544,7 +544,7 @@ IMPL_LINK_NOARG(SwFieldDokPage, FormatHdl, ListBox&, void)
         sal_uInt16 nTmp = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatLB->GetEntryData(
                                         m_pFormatLB->GetSelectEntryPos() ));
         const OUString sOldText( m_pValueFT->GetText() );
-        const OUString sNewText( SW_RES( SVX_NUM_CHAR_SPECIAL == nTmp  ? STR_VALUE
+        const OUString sNewText( SwResId( SVX_NUM_CHAR_SPECIAL == nTmp  ? STR_VALUE
                                                          : STR_OFFSET ));
 
         if( sOldText != sNewText )

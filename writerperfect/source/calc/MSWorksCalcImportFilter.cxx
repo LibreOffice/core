@@ -200,22 +200,22 @@ bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInp
         OUString title, encoding;
         if (creator == libwps::WPS_MSWORKS)
         {
-            title=WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE_MSWORKS);
+            title=WpResId(STR_ENCODING_DIALOG_TITLE_MSWORKS);
             encoding="CP850";
         }
         else if (creator == libwps::WPS_LOTUS)
         {
-            title=WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE_LOTUS);
+            title=WpResId(STR_ENCODING_DIALOG_TITLE_LOTUS);
             encoding="CP437";
         }
         else if (creator == libwps::WPS_SYMPHONY)
         {
-            title=WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE_SYMPHONY);
+            title=WpResId(STR_ENCODING_DIALOG_TITLE_SYMPHONY);
             encoding="CP437";
         }
         else
         {
-            title=WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE_QUATTROPRO);
+            title=WpResId(STR_ENCODING_DIALOG_TITLE_QUATTROPRO);
             encoding="CP437";
         }
         try

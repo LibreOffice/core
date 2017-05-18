@@ -191,7 +191,8 @@ bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>&
             sExpression = sLabel;
         }
 
-        OUString sTitle( ModuleRes(_nResId).toString() );
+        ModuleRes aRes(_nResId);
+        OUString sTitle(aRes);
         sTitle = sTitle.replaceFirst("#", sExpression);
         m_aStartMarker->setTitle( sTitle );
         m_aStartMarker->Invalidate(InvalidateFlags::Children);

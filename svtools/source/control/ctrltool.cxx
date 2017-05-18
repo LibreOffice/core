@@ -341,14 +341,14 @@ FontList::FontList(OutputDevice* pDevice, OutputDevice* pDevice2)
     mpSizeAry = nullptr;
 
     // store style names
-    maLight         = SVT_RESSTR(STR_SVT_STYLE_LIGHT);
-    maLightItalic   = SVT_RESSTR(STR_SVT_STYLE_LIGHT_ITALIC);
-    maNormal        = SVT_RESSTR(STR_SVT_STYLE_NORMAL);
-    maNormalItalic  = SVT_RESSTR(STR_SVT_STYLE_NORMAL_ITALIC);
-    maBold          = SVT_RESSTR(STR_SVT_STYLE_BOLD);
-    maBoldItalic    = SVT_RESSTR(STR_SVT_STYLE_BOLD_ITALIC);
-    maBlack         = SVT_RESSTR(STR_SVT_STYLE_BLACK);
-    maBlackItalic   = SVT_RESSTR(STR_SVT_STYLE_BLACK_ITALIC);
+    maLight         = SvtResId(STR_SVT_STYLE_LIGHT);
+    maLightItalic   = SvtResId(STR_SVT_STYLE_LIGHT_ITALIC);
+    maNormal        = SvtResId(STR_SVT_STYLE_NORMAL);
+    maNormalItalic  = SvtResId(STR_SVT_STYLE_NORMAL_ITALIC);
+    maBold          = SvtResId(STR_SVT_STYLE_BOLD);
+    maBoldItalic    = SvtResId(STR_SVT_STYLE_BOLD_ITALIC);
+    maBlack         = SvtResId(STR_SVT_STYLE_BLACK);
+    maBlackItalic   = SvtResId(STR_SVT_STYLE_BLACK_ITALIC);
 
     ImplInsertFonts(pDevice, true);
 
@@ -492,7 +492,7 @@ OUString FontList::GetFontMapText( const FontMetric& rInfo ) const
     if ( !pData )
     {
         if (maMapNotAvailable.isEmpty())
-            maMapNotAvailable = SVT_RESSTR(STR_SVT_FONTMAP_NOTAVAILABLE);
+            maMapNotAvailable = SvtResId(STR_SVT_FONTMAP_NOTAVAILABLE);
         return maMapNotAvailable;
     }
 
@@ -520,7 +520,7 @@ OUString FontList::GetFontMapText( const FontMetric& rInfo ) const
         if ( !bNotSynthetic )
         {
             if (maMapStyleNotAvailable.isEmpty())
-                const_cast<FontList*>(this)->maMapStyleNotAvailable = SVT_RESSTR(STR_SVT_FONTMAP_STYLENOTAVAILABLE);
+                const_cast<FontList*>(this)->maMapStyleNotAvailable = SvtResId(STR_SVT_FONTMAP_STYLENOTAVAILABLE);
             return maMapStyleNotAvailable;
         }
     }
@@ -529,13 +529,13 @@ OUString FontList::GetFontMapText( const FontMetric& rInfo ) const
     if ( nType == FontListFontNameType::PRINTER )
     {
         if (maMapPrinterOnly.isEmpty())
-            const_cast<FontList*>(this)->maMapPrinterOnly = SVT_RESSTR(STR_SVT_FONTMAP_PRINTERONLY);
+            const_cast<FontList*>(this)->maMapPrinterOnly = SvtResId(STR_SVT_FONTMAP_PRINTERONLY);
         return maMapPrinterOnly;
     }
     else
     {
         if (maMapBoth.isEmpty())
-            const_cast<FontList*>(this)->maMapBoth = SVT_RESSTR(STR_SVT_FONTMAP_BOTH);
+            const_cast<FontList*>(this)->maMapBoth = SvtResId(STR_SVT_FONTMAP_BOTH);
         return maMapBoth;
     }
 }

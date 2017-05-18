@@ -743,7 +743,7 @@ OUString SwFormulaField::GetExpandedFormula() const
 
 OUString SwField::GetDescription() const
 {
-    return SW_RES(STR_FIELD);
+    return SwResId(STR_FIELD);
 }
 
 bool SwField::IsClickable() const

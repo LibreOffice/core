@@ -65,7 +65,7 @@ uno::Reference< container::XNameContainer > XGradientList::createInstance()
 
 bool XGradientList::Create()
 {
-    rtl::OUStringBuffer aStr(SVX_RESSTR(RID_SVXSTR_GRADIENT));
+    rtl::OUStringBuffer aStr(SvxResId(RID_SVXSTR_GRADIENT));
     aStr.append(" 1");
     sal_Int32 nLen = aStr.getLength() - 1;
     Insert(o3tl::make_unique<XGradientEntry>(XGradient(RGB_Color(COL_BLACK  ),RGB_Color(COL_WHITE  ),css::awt::GradientStyle_LINEAR    ,    0,10,10, 0,100,100),aStr.toString()));

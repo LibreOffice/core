@@ -1228,12 +1228,12 @@ void FillTypeLB::Fill()
 {
     SetUpdateMode( false );
 
-    InsertEntry( SVX_RESSTR(RID_SVXSTR_INVISIBLE) );
-    InsertEntry( SVX_RESSTR(RID_SVXSTR_COLOR) );
-    InsertEntry( SVX_RESSTR(RID_SVXSTR_GRADIENT) );
-    InsertEntry( SVX_RESSTR(RID_SVXSTR_HATCH) );
-    InsertEntry( SVX_RESSTR(RID_SVXSTR_BITMAP) );
-    InsertEntry( SVX_RESSTR(RID_SVXSTR_PATTERN) );
+    InsertEntry( SvxResId(RID_SVXSTR_INVISIBLE) );
+    InsertEntry( SvxResId(RID_SVXSTR_COLOR) );
+    InsertEntry( SvxResId(RID_SVXSTR_GRADIENT) );
+    InsertEntry( SvxResId(RID_SVXSTR_HATCH) );
+    InsertEntry( SvxResId(RID_SVXSTR_BITMAP) );
+    InsertEntry( SvxResId(RID_SVXSTR_PATTERN) );
 
     AdaptDropDownLineCountToMaximum();
     SetUpdateMode( true );

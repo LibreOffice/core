@@ -968,7 +968,7 @@ FmUndoPropertyAction::FmUndoPropertyAction(FmFormModel& rNewMod, const PropertyC
     if (rNewMod.GetObjectShell())
         rNewMod.GetObjectShell()->SetModified();
     if(static_STR_UNDO_PROPERTY.isEmpty())
-        static_STR_UNDO_PROPERTY = SVX_RESSTR(RID_STR_UNDO_PROPERTY);
+        static_STR_UNDO_PROPERTY = SvxResId(RID_STR_UNDO_PROPERTY);
 }
 
 
@@ -1260,7 +1260,7 @@ void FmUndoModelReplaceAction::Undo()
 
 OUString FmUndoModelReplaceAction::GetComment() const
 {
-    return SVX_RESSTR(RID_STR_UNDO_MODEL_REPLACE);
+    return SvxResId(RID_STR_UNDO_MODEL_REPLACE);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,7 +33,7 @@ SwBorderDlg::SwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes n
     SfxSingleTabDialog(pParent, rSet)
 
 {
-    SetText(SW_RESSTR(STR_FRMUI_BORDER));
+    SetText(SwResId(STR_FRMUI_BORDER));
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");

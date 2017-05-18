@@ -2702,9 +2702,9 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
 
             if (rSh.GetTableFormat())
             {
-                aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_START_QUOTE));
+                aRewriter.AddRule(UndoArg1, SwResId(STR_START_QUOTE));
                 aRewriter.AddRule(UndoArg2, rSh.GetTableFormat()->GetName());
-                aRewriter.AddRule(UndoArg3, SW_RESSTR(STR_END_QUOTE));
+                aRewriter.AddRule(UndoArg3, SwResId(STR_END_QUOTE));
 
             }
             rSh.EndUndo(SwUndoId::INSTABLE, &aRewriter); // If possible change the Shell
@@ -2728,7 +2728,7 @@ void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
             nTableRowPos  = nTableCellPos = nPagePos =
             nHeaderPos    = nFooterPos = 0;
             sal_uInt8 nPos = 1;
-            rLst.push_back( SW_RESSTR( STR_SWBG_PAGE ) );
+            rLst.push_back( SwResId( STR_SWBG_PAGE ) );
             nPagePos = nPos++;
             sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
             bool bHtmlMode = 0 != (nHtmlMode & HTMLMODE_ON);
@@ -2736,50 +2736,50 @@ void SwBaseShell::GetGalleryState( SfxItemSet &rSet )
             if ( (!bHtmlMode || (nHtmlMode & HTMLMODE_FULL_STYLES)) &&
                  (nSel & SelectionType::Text) )
             {
-                rLst.push_back( SW_RESSTR( STR_SWBG_PARAGRAPH ) );
+                rLst.push_back( SwResId( STR_SWBG_PARAGRAPH ) );
                 nParagraphPos = nPos++;
             }
             if ( (!bHtmlMode || (nHtmlMode & HTMLMODE_SOME_STYLES)) &&
                     nSel & (SelectionType::Table|SelectionType::TableCell) )
             {
-                rLst.push_back( SW_RESSTR( STR_SWBG_TABLE ) );
+                rLst.push_back( SwResId( STR_SWBG_TABLE ) );
                 nTablePos = nPos++;
 
                 if(!bHtmlMode)
                 {
-                    rLst.push_back( SW_RESSTR( STR_SWBG_TABLE_ROW ) );
+                    rLst.push_back( SwResId( STR_SWBG_TABLE_ROW ) );
                     nTableRowPos = nPos++;
                 }
 
-                rLst.push_back( SW_RESSTR( STR_SWBG_TABLE_CELL) );
+                rLst.push_back( SwResId( STR_SWBG_TABLE_CELL) );
                 nTableCellPos = nPos++;
             }
             if(!bHtmlMode)
             {
                 if ( nSel & SelectionType::Frame )
                 {
-                    rLst.push_back( SW_RESSTR( STR_SWBG_FRAME ) );
+                    rLst.push_back( SwResId( STR_SWBG_FRAME ) );
                     nFramePos = nPos++;
                 }
                 if ( nSel & SelectionType::Graphic )
                 {
-                    rLst.push_back( SW_RESSTR( STR_SWBG_GRAPHIC ) );
+                    rLst.push_back( SwResId( STR_SWBG_GRAPHIC ) );
                     nGraphicPos = nPos++;
                 }
                 if ( nSel & SelectionType::Ole )
                 {
-                    rLst.push_back( SW_RESSTR( STR_SWBG_OLE ) );
+                    rLst.push_back( SwResId( STR_SWBG_OLE ) );
                     nOlePos = nPos++;
                 }
                 const FrameTypeFlags nType = rSh.GetFrameType(nullptr,true);
                 if ( nType & FrameTypeFlags::HEADER )
                 {
-                    rLst.push_back( SW_RESSTR( STR_SWBG_HEADER ) );
+                    rLst.push_back( SwResId( STR_SWBG_HEADER ) );
                     nHeaderPos = nPos++;
                 }
                 if ( nType & FrameTypeFlags::FOOTER )
                 {
-                    rLst.push_back( SW_RESSTR( STR_SWBG_FOOTER ) );
+                    rLst.push_back( SwResId( STR_SWBG_FOOTER ) );
                     nFooterPos = nPos;
                 }
             }

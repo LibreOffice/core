@@ -39,14 +39,6 @@
 
 #define STR_AUTOMATICVERSION                (RID_SFX_DOC_START+ 68)
 
-#define STR_DOCTYPENAME_SW                  (RID_SFX_DOC_START+ 69)
-#define STR_DOCTYPENAME_SWWEB               (RID_SFX_DOC_START+ 70)
-#define STR_DOCTYPENAME_SWGLOB              (RID_SFX_DOC_START+ 71)
-#define STR_DOCTYPENAME_SC                  (RID_SFX_DOC_START+ 72)
-#define STR_DOCTYPENAME_SI                  (RID_SFX_DOC_START+ 73)
-#define STR_DOCTYPENAME_SD                  (RID_SFX_DOC_START+ 74)
-#define STR_DOCTYPENAME_MESSAGE             (RID_SFX_DOC_START+ 75)
-
 #define TEMPLATE_LONG_NAMES_ARY             (RID_SFX_DOC_START+ 81)
 #define TEMPLATE_SHORT_NAMES_ARY            (RID_SFX_DOC_START+ 82)
 #define RID_CNT_STR_WAITING                 (RID_SFX_DOC_START+ 83)

@@ -312,7 +312,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
                 if (i == SvtPathOptions::PATH_CLASSIFICATION)
                     // RID_SVXSTR_KEY_USERDICTIONARY_DIR already took our slot, so name the key explicitly.
                     nId = RID_SVXSTR_KEY_CLASSIFICATION_PATH;
-                OUString aStr(CUI_RES(nId));
+                OUString aStr(CuiResId(nId));
 
                 nWidth1 = std::max(nWidth1, pPathBox->GetTextWidth(aStr));
                 aStr += "\t";

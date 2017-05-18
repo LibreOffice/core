@@ -84,41 +84,6 @@ String STR_AUTOMATICVERSION
     Text [ en-US ] = "Automatically saved version" ;
 };
 
-String STR_DOCTYPENAME_SW
-{
-    Text [ en-US ] = "Text Document";
-};
-
-String STR_DOCTYPENAME_SWWEB
-{
-    Text [ en-US ] = "HTML Document";
-};
-
-String STR_DOCTYPENAME_SWGLOB
-{
-    Text [ en-US ] = "Master Document";
-};
-
-String STR_DOCTYPENAME_SC
-{
-    Text [ en-US ] = "Spreadsheet";
-};
-
-String STR_DOCTYPENAME_SI
-{
-    Text [ en-US ] = "Presentation";
-};
-
-String STR_DOCTYPENAME_SD
-{
-    Text [ en-US ] = "Drawing";
-};
-
-String STR_DOCTYPENAME_MESSAGE
-{
-    Text [ en-US ] = "Message";
-};
-
 String STR_EXPORTBUTTON
 {
     Text [ en-US ] = "Export" ;

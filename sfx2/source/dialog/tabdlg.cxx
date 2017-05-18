@@ -455,7 +455,7 @@ void SfxTabDialog::Init_Impl(bool bFmtFlag)
     m_pOKBtn->SetClickHdl( LINK( this, SfxTabDialog, OkHdl ) );
     m_pCancelBtn->SetClickHdl( LINK( this, SfxTabDialog, CancelHdl ) );
     m_pResetBtn->SetClickHdl( LINK( this, SfxTabDialog, ResetHdl ) );
-    m_pResetBtn->SetText( SfxResId( STR_RESET ).toString() );
+    m_pResetBtn->SetText( SfxResId( STR_RESET ) );
     m_pTabCtrl->SetActivatePageHdl(
             LINK( this, SfxTabDialog, ActivatePageHdl ) );
     m_pTabCtrl->SetDeactivatePageHdl(
@@ -477,7 +477,7 @@ void SfxTabDialog::Init_Impl(bool bFmtFlag)
 
     if ( bFmtFlag )
     {
-        m_pBaseFmtBtn->SetText( SfxResId( STR_STANDARD_SHORTCUT ).toString() );
+        m_pBaseFmtBtn->SetText( SfxResId( STR_STANDARD_SHORTCUT ) );
         m_pBaseFmtBtn->SetClickHdl( LINK( this, SfxTabDialog, BaseFmtHdl ) );
         m_pBaseFmtBtn->SetHelpId( HID_TABDLG_STANDARD_BTN );
         m_pBaseFmtBtn->Show();

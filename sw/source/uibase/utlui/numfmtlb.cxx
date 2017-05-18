@@ -251,7 +251,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
 
         if (!pOwnFormatter)
         {
-            const sal_Int32 nPos = InsertEntry(SW_RESSTR( STR_DEFINE_NUMBERFORMAT ));
+            const sal_Int32 nPos = InsertEntry(SwResId( STR_DEFINE_NUMBERFORMAT ));
             SetEntryData( nPos, nullptr );
         }
 
@@ -341,7 +341,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefaultFormat)
          )
        )
     {
-        sValue += SW_RES(RID_STR_SYSTEM);
+        sValue += SwResId(RID_STR_SYSTEM);
     }
 
     nPos = InsertEntry(sValue, nPos);   // Insert as first numeric entry
@@ -360,7 +360,7 @@ sal_uLong NumFormatListBox::GetFormat() const
 IMPL_LINK( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
 {
     const sal_Int32 nPos = rBox.GetSelectEntryPos();
-    OUString sDefine(SW_RES( STR_DEFINE_NUMBERFORMAT ));
+    OUString sDefine(SwResId( STR_DEFINE_NUMBERFORMAT ));
     SwView *pView = GetView();
 
     if( pView && nPos == rBox.GetEntryCount() - 1 &&

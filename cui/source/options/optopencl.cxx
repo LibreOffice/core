@@ -102,7 +102,7 @@ bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )
 
     if (bModified)
     {
-        ScopedVclPtrInstance<MessageDialog> aWarnBox(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VclMessageType::Info);
+        ScopedVclPtrInstance<MessageDialog> aWarnBox(this, CuiResId(RID_SVXSTR_OPTIONS_RESTART), VclMessageType::Info);
         aWarnBox->Execute();
         batch->commit();
     }

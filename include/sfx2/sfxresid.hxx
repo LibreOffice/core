@@ -22,15 +22,16 @@
 #include <sfx2/dllapi.h>
 #include <tools/resid.hxx>
 
-class SFX2_DLLPUBLIC SfxResId: public ResId
+struct SFX2_DLLPUBLIC SfxResMgr
 {
-public:
-    SfxResId( sal_uInt16 nId );
     static ResMgr* GetResMgr();
     static void DeleteResMgr();
 };
 
-#define SFX2_RESSTR(x) SfxResId(x).toString()
+inline OUString SfxResId(sal_uInt16 nId)
+{
+    return ResId(nId, *SfxResMgr::GetResMgr());
+}
 
 #endif
 

@@ -123,7 +123,7 @@ void SidebarTextControl::RequestHelp(const HelpEvent &rEvt)
     if ( nResId &&
          mrDocView.GetWrtShell().GetContentAtPos( mrSidebarWin.GetAnchorPos(), aContentAtPos ) )
     {
-        OUString sText = SW_RESSTR( nResId ) + ": " +
+        OUString sText = SwResId( nResId ) + ": " +
                         aContentAtPos.aFnd.pRedl->GetAuthorString() + " - " +
                         GetAppLangDateTimeString( aContentAtPos.aFnd.pRedl->GetTimeStamp() );
         Help::ShowQuickHelp( this,PixelToLogic(tools::Rectangle(rEvt.GetMousePosPixel(),Size(50,10))),sText);

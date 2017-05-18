@@ -711,7 +711,7 @@ LibInfo::Item::~Item ()
 
 bool QueryDel( const OUString& rName, const ResId& rId, vcl::Window* pParent )
 {
-    OUString aQuery(rId.toString());
+    OUString aQuery(rId);
     OUStringBuffer aNameBuf( rName );
     aNameBuf.append('\'');
     aNameBuf.insert(0, '\'');

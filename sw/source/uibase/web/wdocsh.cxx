@@ -75,15 +75,15 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
     {
         *pClassName = SvGlobalName( SO3_SWWEB_CLASSID_60 );
         *pClipFormat = SotClipboardFormatId::STARWRITERWEB_60;
-        *pLongUserName = SW_RESSTR(STR_WRITER_WEBDOC_FULLTYPE);
+        *pLongUserName = SwResId(STR_WRITER_WEBDOC_FULLTYPE);
     }
     else if (nVersion == SOFFICE_FILEFORMAT_8)
     {
         *pClassName     = SvGlobalName( SO3_SWWEB_CLASSID_60 );
         *pClipFormat    = SotClipboardFormatId::STARWRITERWEB_8;
-        *pLongUserName = SW_RESSTR(STR_WRITER_WEBDOC_FULLTYPE);
+        *pLongUserName = SwResId(STR_WRITER_WEBDOC_FULLTYPE);
     }
-    *pUserName = SW_RESSTR(STR_HUMAN_SWWEBDOC_NAME);
+    *pUserName = SwResId(STR_HUMAN_SWWEBDOC_NAME);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

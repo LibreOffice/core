@@ -153,7 +153,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
     if ( bFound )
     {
         // duplicate names?
-        ScopedVclPtrInstance<MessageDialog>(this, CUI_RES(RID_SVXSTR_OPT_DOUBLE_DICTS), VclMessageType::Info)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(this, CuiResId(RID_SVXSTR_OPT_DOUBLE_DICTS), VclMessageType::Info)->Execute();
         pNameEdit->GrabFocus();
         return;
     }
@@ -217,7 +217,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
 
     ModalDialog( pParent, "EditDictionaryDialog" ,"cui/ui/editdictionarydialog.ui" ),
 
-    sModify         (CUI_RES(STR_MODIFY)),
+    sModify         (CuiResId(STR_MODIFY)),
     nOld            ( NOACTDICT ),
     bFirstSelect    (true),
     bDoNothing      (false),
@@ -452,7 +452,7 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox&, void)
 
     if ( nLang != nOldLang )
     {
-        ScopedVclPtrInstance< MessageDialog > aBox(this, CUI_RES( RID_SVXSTR_CONFIRM_SET_LANGUAGE), VclMessageType::Question, VclButtonsType::YesNo);
+        ScopedVclPtrInstance< MessageDialog > aBox(this, CuiResId( RID_SVXSTR_CONFIRM_SET_LANGUAGE), VclMessageType::Question, VclButtonsType::YesNo);
         OUString sTxt(aBox->get_primary_text());
         sTxt = sTxt.replaceFirst( "%1", pAllDictsLB->GetSelectEntry() );
         aBox->set_primary_text(sTxt);

@@ -61,25 +61,21 @@ typedef std::vector<SfxViewFactory*> SfxViewFactoryArr_Impl;
 struct SfxObjectFactory_Impl
 {
     SfxViewFactoryArr_Impl      aViewFactoryArr;// List of <SfxViewFactory>s
-    ResId*                      pNameResId;
     OUString             aServiceName;
     SfxFilterContainer*         pFilterContainer;
     SfxModule*                  pModule;
     SvGlobalName                aClassName;
 
     SfxObjectFactory_Impl() :
-        pNameResId          ( nullptr ),
         pFilterContainer    ( nullptr ),
         pModule             ( nullptr )
         {}
 };
 
-
 SfxFilterContainer* SfxObjectFactory::GetFilterContainer() const
 {
     return pImpl->pFilterContainer;
 }
-
 
 SfxObjectFactory::SfxObjectFactory
 (
@@ -91,29 +87,11 @@ SfxObjectFactory::SfxObjectFactory
        nFlags( nFlagsP )
 {
     pImpl->pFilterContainer = new SfxFilterContainer( m_sFactoryName );
-
-    const OUString aShortName( m_sFactoryName.toAsciiLowerCase() );
     pImpl->aClassName = rName;
-    if ( aShortName == "swriter" )
-        pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SW );
-    else if ( aShortName == "swriter/web" )
-        pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SWWEB );
-    else if ( aShortName == "swriter/globaldocument" )
-        pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SWGLOB );
-    else if ( aShortName == "scalc" )
-        pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SC );
-    else if ( aShortName == "simpress" )
-        pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SI );
-    else if ( aShortName == "sdraw" )
-        pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SD );
-    else if ( aShortName == "message" )
-        pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_MESSAGE );
 }
-
 
 SfxObjectFactory::~SfxObjectFactory()
 {
-    delete pImpl->pNameResId;
     delete pImpl->pFilterContainer;
 }
 
