@@ -82,8 +82,8 @@ SFTreeListBox::SFTreeListBox(vcl::Window* pParent)
     , m_libImage(BitmapEx(RID_CUIBMP_LIB))
     , m_macImage(BitmapEx(RID_CUIBMP_MACRO))
     , m_docImage(BitmapEx(RID_CUIBMP_DOC))
-    , m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS))
-    , m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS))
+    , m_sMyMacros(CUI_RES(RID_SVXSTR_MYMACROS))
+    , m_sProdMacros(CUI_RES(RID_SVXSTR_PRODMACROS))
 {
     SetSelectionMode( SelectionMode::Single );
 
@@ -451,15 +451,15 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( vcl::Window* pParent, const OUString& la
     : SfxModalDialog(pParent, "ScriptOrganizerDialog",
         "cui/ui/scriptorganizer.ui")
     , m_sLanguage(language)
-    , m_delErrStr(CUI_RESSTR(RID_SVXSTR_DELFAILED))
-    , m_delErrTitleStr(CUI_RESSTR(RID_SVXSTR_DELFAILED_TITLE))
+    , m_delErrStr(CUI_RES(RID_SVXSTR_DELFAILED))
+    , m_delErrTitleStr(CUI_RES(RID_SVXSTR_DELFAILED_TITLE))
     , m_delQueryStr(CUI_RES(RID_SVXSTR_DELQUERY))
-    , m_delQueryTitleStr(CUI_RESSTR(RID_SVXSTR_DELQUERY_TITLE))
-    , m_createErrStr(CUI_RESSTR(RID_SVXSTR_CREATEFAILED))
-    , m_createDupStr(CUI_RESSTR(RID_SVXSTR_CREATEFAILEDDUP))
-    , m_createErrTitleStr(CUI_RESSTR(RID_SVXSTR_CREATEFAILED_TITLE))
-    , m_renameErrStr(CUI_RESSTR(RID_SVXSTR_RENAMEFAILED))
-    , m_renameErrTitleStr(CUI_RESSTR(RID_SVXSTR_RENAMEFAILED_TITLE))
+    , m_delQueryTitleStr(CUI_RES(RID_SVXSTR_DELQUERY_TITLE))
+    , m_createErrStr(CUI_RES(RID_SVXSTR_CREATEFAILED))
+    , m_createDupStr(CUI_RES(RID_SVXSTR_CREATEFAILEDDUP))
+    , m_createErrTitleStr(CUI_RES(RID_SVXSTR_CREATEFAILED_TITLE))
+    , m_renameErrStr(CUI_RES(RID_SVXSTR_RENAMEFAILED))
+    , m_renameErrTitleStr(CUI_RES(RID_SVXSTR_RENAMEFAILED_TITLE))
 {
     get(m_pScriptsBox, "scripts");
     get(m_pRunButton, "run");

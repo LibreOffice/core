@@ -810,7 +810,7 @@ void SvxJavaParameterDlg::EditParameter()
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ScopedVclPtrInstance< InputDialog > pParamEditDlg( CUI_RES( RID_SVXSTR_JAVA_START_PARAM ).toString(), this);
+        ScopedVclPtrInstance< InputDialog > pParamEditDlg(CUI_RES(RID_SVXSTR_JAVA_START_PARAM), this);
         OUString editableClassPath = m_pAssignedList->GetSelectEntry();
         pParamEditDlg->SetEntryText( editableClassPath );
         pParamEditDlg->HideHelpBtn();

@@ -695,13 +695,11 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     m_pFiMSImage->SetImage(Image(BitmapEx(sId)));
 }
 
-
 bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet* /*rSet*/ )
 {
     pData->aEditedTitle = m_pEdtMSName->GetText();
     return true;
 }
-
 
 VclPtr<SfxTabPage> TPGalleryThemeGeneral::Create( vcl::Window* pParent, const SfxItemSet* rSet )
 {
@@ -949,7 +947,7 @@ void TPGalleryThemeProperties::FillFilterList()
 #endif
 
     pFilterEntry = new FilterEntry;
-    pFilterEntry->aFilterName = CUI_RESSTR(RID_SVXSTR_GALLERY_ALLFILES);
+    pFilterEntry->aFilterName = CUI_RES(RID_SVXSTR_GALLERY_ALLFILES);
     pFilterEntry->aFilterName = addExtension( pFilterEntry->aFilterName, aExtensions );
     size_t pos = m_pCbbFileType->InsertEntry( pFilterEntry->aFilterName, 0 );
     if ( pos < aFilterEntryList.size() ) {

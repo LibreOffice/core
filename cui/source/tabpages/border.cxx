@@ -1014,7 +1014,7 @@ void SvxBorderTabPage::FillPresetVS()
     {
         m_pWndPresets->InsertItem( nVSIdx );
         m_pWndPresets->SetItemImage(nVSIdx, Image(m_aBorderImgVec[nVSIdx-1]));
-        m_pWndPresets->SetItemText( nVSIdx, CUI_RESSTR( GetPresetStringId( nVSIdx ) ) );
+        m_pWndPresets->SetItemText( nVSIdx, CUI_RES( GetPresetStringId( nVSIdx ) ) );
     }
 
     // show the control
@@ -1037,7 +1037,7 @@ void SvxBorderTabPage::FillShadowVS()
     {
         m_pWndShadows->InsertItem( nVSIdx );
         m_pWndShadows->SetItemImage(nVSIdx, Image(m_aShadowImgVec[nVSIdx-1]));
-        m_pWndShadows->SetItemText( nVSIdx, CUI_RESSTR( pnStrIds[ nVSIdx - 1 ] ) );
+        m_pWndShadows->SetItemText( nVSIdx, CUI_RES( pnStrIds[ nVSIdx - 1 ] ) );
     }
 
     // show the control

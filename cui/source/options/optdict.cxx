@@ -153,7 +153,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
     if ( bFound )
     {
         // duplicate names?
-        ScopedVclPtrInstance<MessageDialog>(this, CUI_RESSTR(RID_SVXSTR_OPT_DOUBLE_DICTS), VclMessageType::Info)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(this, CUI_RES(RID_SVXSTR_OPT_DOUBLE_DICTS), VclMessageType::Info)->Execute();
         pNameEdit->GrabFocus();
         return;
     }
@@ -177,13 +177,11 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, Button*, void)
     catch(...)
     {
         xNewDic = nullptr;
-
         // error: couldn't create new dictionary
         SfxErrorContext aContext( ERRCTX_SVX_LINGU_DICTIONARY, OUString(),
             this, RID_SVXERRCTX, &DIALOG_MGR() );
         ErrorHandler::HandleError( *new StringErrorInfo(
                 ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE, sDict ) );
-
         EndDialog();
     }
 
@@ -219,7 +217,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
 
     ModalDialog( pParent, "EditDictionaryDialog" ,"cui/ui/editdictionarydialog.ui" ),
 
-    sModify         (CUI_RESSTR(STR_MODIFY)),
+    sModify         (CUI_RES(STR_MODIFY)),
     nOld            ( NOACTDICT ),
     bFirstSelect    (true),
     bDoNothing      (false),

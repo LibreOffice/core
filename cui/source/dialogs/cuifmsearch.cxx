@@ -712,7 +712,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProgress, 
             break;
 
         case FmSearchProgress::State::ProgressCounting:
-            m_pftHint->SetText(CUI_RESSTR(RID_STR_SEARCH_COUNTING));
+            m_pftHint->SetText(CUI_RES(RID_STR_SEARCH_COUNTING));
             m_pftHint->Invalidate();
 
             m_pftRecord->SetText(OUString::number(pProgress->nCurrentRecord));

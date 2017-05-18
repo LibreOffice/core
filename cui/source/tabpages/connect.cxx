@@ -59,7 +59,7 @@ SvxConnectionDialog::SvxConnectionDialog( vcl::Window* pParent, const SfxItemSet
     _pPage->Construct();
 
     SetTabPage( _pPage );
-    SetText(CUI_RESSTR( RID_SVXSTR_CONNECTOR ));
+    SetText(CUI_RES( RID_SVXSTR_CONNECTOR ));
 }
 
 /*************************************************************************

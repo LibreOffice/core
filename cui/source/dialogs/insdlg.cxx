@@ -637,7 +637,7 @@ IMPL_LINK_NOARG( SfxInsertFloatingFrameDialog, OpenHdl, Button*, void)
             ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, OUString() );
 
     // set the title
-    aFileDlg.SetTitle(CUI_RESSTR(RID_SVXSTR_SELECT_FILE_IFRAME));
+    aFileDlg.SetTitle(CUI_RES(RID_SVXSTR_SELECT_FILE_IFRAME));
 
     // show the dialog
     if ( aFileDlg.Execute() == ERRCODE_NONE )

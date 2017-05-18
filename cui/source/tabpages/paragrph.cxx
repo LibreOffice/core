@@ -1044,9 +1044,9 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( vcl::Window* pParent, const SfxItemSet
     m_pLastLineLB->SetSelectHdl( LINK( this, SvxParaAlignTabPage, LastLineHdl_Impl ) );
     m_pTextDirectionLB->SetSelectHdl( LINK( this, SvxParaAlignTabPage, TextDirectionHdl_Impl ) );
 
-    m_pTextDirectionLB->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), SvxFrameDirection::Environment );
-    m_pTextDirectionLB->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), SvxFrameDirection::Horizontal_LR_TB );
-    m_pTextDirectionLB->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), SvxFrameDirection::Horizontal_RL_TB );
+    m_pTextDirectionLB->InsertEntryValue( CUI_RES( RID_SVXSTR_FRAMEDIR_SUPER ), SvxFrameDirection::Environment );
+    m_pTextDirectionLB->InsertEntryValue( CUI_RES( RID_SVXSTR_FRAMEDIR_LTR ), SvxFrameDirection::Horizontal_LR_TB );
+    m_pTextDirectionLB->InsertEntryValue( CUI_RES( RID_SVXSTR_FRAMEDIR_RTL ), SvxFrameDirection::Horizontal_RL_TB );
 
     setPreviewsToSamePlace(pParent, this);
 }

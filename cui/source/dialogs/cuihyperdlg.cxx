@@ -98,21 +98,21 @@ SvxHpLinkDlg::SvxHpLinkDlg (vcl::Window* pParent, SfxBindings* pBindings)
         aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality);
         aImage = Image(aBitmap);
     }
-    aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP );
+    aStrTitle = CUI_RES( RID_SVXSTR_HYPERDLG_HLINETTP );
     pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, imgVector[0], SvxHyperlinkInternetTp::Create );
-    pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP_HELP ) );
-    aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP );
+    pEntry->SetQuickHelpText( CUI_RES( RID_SVXSTR_HYPERDLG_HLINETTP_HELP ) );
+    aStrTitle = CUI_RES( RID_SVXSTR_HYPERDLG_HLMAILTP );
     pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_MAIL, aStrTitle, imgVector[1], SvxHyperlinkMailTp::Create );
-    pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP_HELP ) );
-    aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP );
+    pEntry->SetQuickHelpText( CUI_RES( RID_SVXSTR_HYPERDLG_HLMAILTP_HELP ) );
+    aStrTitle = CUI_RES( RID_SVXSTR_HYPERDLG_HLDOCTP );
     pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_DOCUMENT, aStrTitle, imgVector[2], SvxHyperlinkDocTp::Create );
-    pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP_HELP ) );
-    aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP );
+    pEntry->SetQuickHelpText( CUI_RES( RID_SVXSTR_HYPERDLG_HLDOCTP_HELP ) );
+    aStrTitle = CUI_RES( RID_SVXSTR_HYPERDLG_HLDOCNTP );
     pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, imgVector[3], SvxHyperlinkNewDocTp::Create );
-    pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
+    pEntry->SetQuickHelpText( CUI_RES( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
 
     // set OK/Cancel - button
-    GetCancelButton().SetText ( CUI_RESSTR(RID_SVXSTR_HYPDLG_CLOSEBUT) );
+    GetCancelButton().SetText ( CUI_RES(RID_SVXSTR_HYPDLG_CLOSEBUT) );
 
     // create itemset for tabpages
     mpItemSet = new SfxItemSet( SfxGetpApp()->GetPool(), SID_HYPERLINK_GETLINK,

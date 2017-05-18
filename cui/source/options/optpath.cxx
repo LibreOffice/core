@@ -344,36 +344,8 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
     aTabs[3] = aTabs[2] + nWidth2 + 12;
     pPathBox->SetTabs(aTabs, MapUnit::MapPixel);
 
-#if 0
-    String aUserData = GetUserData();
-    if ( aUserData.Len() )
-    {
-        fprintf(stderr, "FOO\n");
-
-        // restore column width
-        rBar.SetItemSize( ITEMID_TYPE, aUserData.GetToken(0).ToInt32() );
-        HeaderEndDrag_Impl( &rBar );
-        // restore sort direction
-        sal_Bool bUp = (sal_Bool)(sal_uInt16)aUserData.GetToken(1).ToInt32();
-        HeaderBarItemBits nBits = rBar.GetItemBits(ITEMID_TYPE);
-
-        if ( bUp )
-        {
-            nBits &= ~HeaderBarItemBits::UPARROW;
-            nBits |= HeaderBarItemBits::DOWNARROW;
-        }
-        else
-        {
-            nBits &= ~HeaderBarItemBits::DOWNARROW;
-            nBits |= HeaderBarItemBits::UPARROW;
-        }
-        rBar.SetItemBits( ITEMID_TYPE, nBits );
-        HeaderSelect_Impl( &rBar );
-    }
-#endif
     PathSelect_Impl( nullptr );
 }
-
 
 void SvxPathTabPage::FillUserData()
 {
@@ -385,7 +357,6 @@ void SvxPathTabPage::FillUserData()
     aUserData += bUp ? OUString("1") : OUString("0");
     SetUserData( aUserData );
 }
-
 
 IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl, SvTreeListBox*, void)
 {
@@ -406,7 +377,6 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl, SvTreeListBox*, void)
     m_pPathBtn->Enable( 1 == nSelCount && bEnable);
     m_pStandardBtn->Enable( nSelCount > 0 && bEnable);
 }
-
 
 IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl, Button*, void)
 {

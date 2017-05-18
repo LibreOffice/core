@@ -530,7 +530,7 @@ void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
         }
 
         OUString eventURL = h_it->second.second;
-        OUString displayName( CUI_RES( displayableEvent->nEventResourceID ) );
+        OUString displayName(CUI_RES(displayableEvent->nEventResourceID));
 
         displayName += "\t";
 

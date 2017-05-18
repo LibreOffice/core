@@ -2617,11 +2617,11 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton, void )
         SvxConfigEntry* pMenuData = GetTopLevelSelection();
 
         OUString aNewName( stripHotKey( pMenuData->GetName() ) );
-        OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
+        OUString aDesc = CUI_RES( RID_SVXSTR_LABEL_NEW_NAME );
 
         VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
         pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU );
-        pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_MENU ) );
+        pNameDialog->SetText( CUI_RES( RID_SVXSTR_RENAME_MENU ) );
 
         if ( pNameDialog->Execute() == RET_OK ) {
             pNameDialog->GetName( aNewName );
@@ -2661,11 +2661,11 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
             static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
 
         OUString aNewName( stripHotKey( pEntry->GetName() ) );
-        OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
+        OUString aDesc = CUI_RES( RID_SVXSTR_LABEL_NEW_NAME );
 
         VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
         pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU_ITEM );
-        pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_MENU ) );
+        pNameDialog->SetText( CUI_RES( RID_SVXSTR_RENAME_MENU ) );
 
         if ( pNameDialog->Execute() == RET_OK ) {
             pNameDialog->GetName(aNewName);
@@ -2743,11 +2743,11 @@ IMPL_LINK_NOARG( SvxMenuConfigPage, AddSeparatorHdl, Button *, void )
 IMPL_LINK_NOARG( SvxMenuConfigPage, AddSubmenuHdl, Button *, void )
 {
     OUString aNewName;
-    OUString aDesc = CUI_RESSTR( RID_SVXSTR_SUBMENU_NAME );
+    OUString aDesc = CUI_RES( RID_SVXSTR_SUBMENU_NAME );
 
     VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
     pNameDialog->SetHelpId( HID_SVX_CONFIG_NAME_SUBMENU );
-    pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_ADD_SUBMENU ) );
+    pNameDialog->SetText( CUI_RES( RID_SVXSTR_ADD_SUBMENU ) );
 
     if ( pNameDialog->Execute() == RET_OK )
     {
@@ -3288,11 +3288,11 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton, void )
     else if (sCommand == "modtoolrename")
     {
         OUString aNewName( stripHotKey( pToolbar->GetName() ) );
-        OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
+        OUString aDesc = CUI_RES( RID_SVXSTR_LABEL_NEW_NAME );
 
         VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
         pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR );
-        pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_TOOLBAR ) );
+        pNameDialog->SetText( CUI_RES( RID_SVXSTR_RENAME_TOOLBAR ) );
 
         if ( pNameDialog->Execute() == RET_OK )
         {
@@ -3327,11 +3327,11 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
             static_cast<SvxConfigEntry*>(pActEntry->GetUserData());
 
         OUString aNewName( stripHotKey( pEntry->GetName() ) );
-        OUString aDesc = CUI_RESSTR( RID_SVXSTR_LABEL_NEW_NAME );
+        OUString aDesc = CUI_RES( RID_SVXSTR_LABEL_NEW_NAME );
 
         VclPtrInstance< SvxNameDialog > pNameDialog( this, aNewName, aDesc );
         pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM );
-        pNameDialog->SetText( CUI_RESSTR( RID_SVXSTR_RENAME_TOOLBAR ) );
+        pNameDialog->SetText( CUI_RES( RID_SVXSTR_RENAME_TOOLBAR ) );
 
         if ( pNameDialog->Execute() == RET_OK ) {
             pNameDialog->GetName(aNewName);

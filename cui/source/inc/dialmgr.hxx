@@ -25,7 +25,6 @@
 
 #define CUI_MGR()       (*CuiResMgr::GetResMgr())
 #define CUI_RES(i)      ResId(i,CUI_MGR())
-#define CUI_RESSTR(i)   CUI_RES(i).toString()
 
 class ResMgr;
 struct CuiResMgr
