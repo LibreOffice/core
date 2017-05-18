@@ -22,7 +22,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <textconversionImpl.hxx>
 #include <localedata.hxx>
-#include <i18nlangtag/languagetag.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;

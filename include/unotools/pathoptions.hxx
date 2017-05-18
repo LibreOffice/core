@@ -19,8 +19,8 @@
 #ifndef INCLUDED_UNOTOOLS_PATHOPTIONS_HXX
 #define INCLUDED_UNOTOOLS_PATHOPTIONS_HXX
 
+#include <rtl/ustring.hxx>
 #include <unotools/unotoolsdllapi.h>
-#include <i18nlangtag/languagetag.hxx>
 #include <unotools/options.hxx>
 
 #define SVT_SEARCHPATH_DELIMITER      ';'

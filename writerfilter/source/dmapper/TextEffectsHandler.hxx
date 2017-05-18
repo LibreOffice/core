@@ -15,7 +15,6 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <i18nlangtag/languagetag.hxx>
 
 #include <PropertyIds.hxx>
 
