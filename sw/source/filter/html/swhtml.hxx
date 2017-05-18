@@ -83,7 +83,7 @@ class HTMLAttr
     bool bValid : 1;    // is the attribute valid?
 
     std::unique_ptr<SfxPoolItem> pItem;
-    HTMLAttr *pNext;   // still to close attributes with different values
+    HTMLAttr *pNext;   // still too close attributes with different values
     HTMLAttr *pPrev;   // already closed but not set attributes
     HTMLAttr **ppHead; // list head
 

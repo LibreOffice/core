@@ -33,7 +33,7 @@ public:
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
-    // Deliberatley drop RecursiveASTVisitor::TraverseBinEQ's DataRecursionQueue
+    // Deliberately drop RecursiveASTVisitor::TraverseBinEQ's DataRecursionQueue
     // parameter; TraveseBinEQ must use stack instead of data recursion for any
     // children's VisitBinaryOperator to see changes to occurrence_ by a parent
     // VisitBinaryOperator:
@@ -45,7 +45,7 @@ public:
         return ret;
     }
 
-    // Deliberatley drop RecursiveASTVisitor::TraverseBinNE's DataRecursionQueue
+    // Deliberately drop RecursiveASTVisitor::TraverseBinNE's DataRecursionQueue
     // parameter; TraveseBinNE must use stack instead of data recursion for any
     // children's VisitBinaryOperator to see changes to occurrence_ by a parent
     // VisitBinaryOperator:
