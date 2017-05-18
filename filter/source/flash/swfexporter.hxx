@@ -24,11 +24,6 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XGraphicExportFilter.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/presentation/AnimationEffect.hpp>
-#include <com/sun/star/presentation/AnimationSpeed.hpp>
-#include <com/sun/star/presentation/ClickAction.hpp>
-#include <com/sun/star/presentation/FadeEffect.hpp>
-#include <osl/file.hxx>
 #include <vcl/checksum.hxx>
 
 #include <vector>

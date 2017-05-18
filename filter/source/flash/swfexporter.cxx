@@ -40,7 +40,6 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::task;
 using namespace ::swf;
 
