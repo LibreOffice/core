@@ -96,6 +96,9 @@ class SwRootFrame: public SwLayoutFrame
     static bool           s_isInPaint; // Protection against double Paints
     static bool           s_isNoVirDev;// No virt. Device for SystemPaints
 
+    /// Width of the HTML / Web document if not defined otherwise: 20cm.
+    static const sal_Int64 MIN_BROWSE_WIDTH = convertMm100ToTwip(20000);
+
     bool    mbCheckSuperfluous   :1; // Search for empty Pages?
     bool    mbIdleFormat         :1; // Trigger Idle Formatter?
     bool    mbBrowseWidthValid   :1; // Is mnBrowseWidth valid?

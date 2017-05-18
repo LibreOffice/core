@@ -34,20 +34,14 @@ enum class MapUnit
     LASTENUMDUMMY // used as an error return
 };
 
-inline sal_Int64 convertTwipToMm100(sal_Int64 n)
+constexpr sal_Int64 convertTwipToMm100(sal_Int64 n)
 {
-    if (n >= 0)
-        return (n*127+36)/72;
-    else
-        return (n*127-36)/72;
+    return (n >= 0)? (n*127+36)/72: (n*127-36)/72;
 }
 
-inline sal_Int64 convertMm100ToTwip(sal_Int64 n)
+constexpr sal_Int64 convertMm100ToTwip(sal_Int64 n)
 {
-    if (n >= 0)
-        return (n*72+63)/127;
-    else
-        return (n*72-63)/127;
+    return (n >= 0)? (n*72+63)/127: (n*72-63)/127;
 }
 
 #endif
