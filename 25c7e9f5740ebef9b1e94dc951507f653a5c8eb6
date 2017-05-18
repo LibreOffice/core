@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_539f1303",
+        "filename": "stoc/source/javavm/javavm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-18T16:52:04Z",
+      "side": 1,
+      "message": "Careful! This is a timezone identifier, not just some string. Though ECT looks odd it likely is the old \"European Central Time\" name.",
+      "revId": "25c7e9f5740ebef9b1e94dc951507f653a5c8eb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
