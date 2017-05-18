@@ -184,6 +184,8 @@ struct CompareSwRedlineTable
     bool operator()(SwRangeRedline* const &lhs, SwRangeRedline* const &rhs) const;
 };
 
+typedef SwRangeRedline* SwRangeRedlinePtr;
+
 class SwRedlineTable
 {
 public:
@@ -197,9 +199,9 @@ public:
     bool Contains(const SwRangeRedline* p) const { return maVector.find(const_cast<SwRangeRedline* const>(p)) != maVector.end(); }
     sal_uInt16 GetPos(const SwRangeRedline* p) const;
 
-    bool Insert( SwRangeRedline* p );
-    bool Insert( SwRangeRedline* p, sal_uInt16& rInsPos );
-    bool InsertWithValidRanges( SwRangeRedline* p, sal_uInt16* pInsPos = nullptr );
+    bool Insert(SwRangeRedlinePtr& p);
+    bool Insert(SwRangeRedlinePtr& p, sal_uInt16& rInsPos);
+    bool InsertWithValidRanges(SwRangeRedlinePtr& p, sal_uInt16* pInsPos = nullptr);
 
     void Remove( sal_uInt16 nPos );
     bool Remove( const SwRangeRedline* p );
