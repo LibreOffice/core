@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_f3a71f4d",
+        "filename": "sc/source/ui/drawfunc/fudraw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-18T17:39:32Z",
+      "side": 1,
+      "message": "If you change a comment then please change it to something meaningful. SAL_TRUE doesn\u0027t exist, sal_True does.\n\nMake that \"return true\" instead, the sal_True was a value used with sal_Bool but the function was changed to return bool without adjusting the comment.",
+      "range": {
+        "startLine": 142,
+        "startChar": 28,
+        "endLine": 142,
+        "endChar": 43
+      },
+      "revId": "8bc749ada10d572d62dbfca638a54f247ae7a332",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

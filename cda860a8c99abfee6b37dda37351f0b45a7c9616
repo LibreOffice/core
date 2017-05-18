@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_1363cb1b",
+        "filename": "sc/source/ui/drawfunc/fupoor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-18T17:39:32Z",
+      "side": 0,
+      "message": "Let\u0027s keep that comment though.",
+      "range": {
+        "startLine": 244,
+        "startChar": 3,
+        "endLine": 244,
+        "endChar": 46
+      },
+      "revId": "cda860a8c99abfee6b37dda37351f0b45a7c9616",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
