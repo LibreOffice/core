@@ -274,6 +274,8 @@ RewritePlugin::RewritePlugin( const InstantiationData& data )
 bool RewritePlugin::insertText( SourceLocation Loc, StringRef Str, bool InsertAfter, bool indentNewLines )
     {
     assert( rewriter );
+    if (wouldRewriteWorkdir(Loc))
+        return false;
     if( rewriter->InsertText( Loc, Str, InsertAfter, indentNewLines ))
         return reportEditFailure( Loc );
     return true;
@@ -282,6 +284,8 @@ bool RewritePlugin::insertText( SourceLocation Loc, StringRef Str, bool InsertAf
 bool RewritePlugin::insertTextAfter( SourceLocation Loc, StringRef Str )
     {
     assert( rewriter );
+    if (wouldRewriteWorkdir(Loc))
+        return false;
     if( rewriter->InsertTextAfter( Loc, Str ))
         return reportEditFailure( Loc );
     return true;
@@ -290,6 +294,8 @@ bool RewritePlugin::insertTextAfter( SourceLocation Loc, StringRef Str )
 bool RewritePlugin::insertTextAfterToken( SourceLocation Loc, StringRef Str )
     {
     assert( rewriter );
+    if (wouldRewriteWorkdir(Loc))
+        return false;
     if( rewriter->InsertTextAfterToken( Loc, Str ))
         return reportEditFailure( Loc );
     return true;
@@ -298,6 +304,8 @@ bool RewritePlugin::insertTextAfterToken( SourceLocation Loc, StringRef Str )
 bool RewritePlugin::insertTextBefore( SourceLocation Loc, StringRef Str )
     {
     assert( rewriter );
+    if (wouldRewriteWorkdir(Loc))
+        return false;
     if( rewriter->InsertTextBefore( Loc, Str ))
         return reportEditFailure( Loc );
     return true;
@@ -317,6 +325,8 @@ bool RewritePlugin::removeText( SourceRange range, RewriteOptions opts )
 bool RewritePlugin::removeText( CharSourceRange range, RewriteOptions opts )
     {
     assert( rewriter );
+    if (wouldRewriteWorkdir(range.getBegin()))
+        return false;
     if( rewriter->getRangeSize( range, opts ) == -1 )
         return reportEditFailure( range.getBegin());
     if( !handler.addRemoval( range.getBegin() ) )
@@ -378,6 +388,8 @@ bool RewritePlugin::adjustRangeForOptions( CharSourceRange* range, RewriteOption
 bool RewritePlugin::replaceText( SourceLocation Start, unsigned OrigLength, StringRef NewStr )
     {
     assert( rewriter );
+    if (wouldRewriteWorkdir(Start))
+        return false;
     if( OrigLength != 0 && !handler.addRemoval( Start ) )
         {
         report( DiagnosticsEngine::Warning, "double code replacement, possible plugin error", Start );
@@ -391,6 +403,8 @@ bool RewritePlugin::replaceText( SourceLocation Start, unsigned OrigLength, Stri
 bool RewritePlugin::replaceText( SourceRange range, StringRef NewStr )
     {
     assert( rewriter );
+    if (wouldRewriteWorkdir(range.getBegin()))
+        return false;
     if( rewriter->getRangeSize( range ) == -1 )
         return reportEditFailure( range.getBegin());
     if( !handler.addRemoval( range.getBegin() ) )
@@ -406,6 +420,8 @@ bool RewritePlugin::replaceText( SourceRange range, StringRef NewStr )
 bool RewritePlugin::replaceText( SourceRange range, SourceRange replacementRange )
     {
     assert( rewriter );
+    if (wouldRewriteWorkdir(range.getBegin()))
+        return false;
     if( rewriter->getRangeSize( range ) == -1 )
         return reportEditFailure( range.getBegin());
     if( !handler.addRemoval( range.getBegin() ) )
@@ -417,6 +433,16 @@ bool RewritePlugin::replaceText( SourceRange range, SourceRange replacementRange
         return reportEditFailure( range.getBegin());
     return true;
     }
+
+bool RewritePlugin::wouldRewriteWorkdir(SourceLocation loc) {
+    if (loc.isInvalid() || loc.isMacroID()) {
+        return false;
+    }
+    return
+        compiler.getSourceManager().getFilename(
+            compiler.getSourceManager().getSpellingLoc(loc))
+        .startswith(WORKDIR "/");
+}
 
 bool RewritePlugin::reportEditFailure( SourceLocation loc )
     {

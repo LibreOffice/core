@@ -141,6 +141,7 @@ class RewritePlugin
     private:
         template< typename T > friend class Plugin::Registration;
         enum { isRewriter = true };
+        bool wouldRewriteWorkdir(SourceLocation loc);
         bool reportEditFailure( SourceLocation loc );
         bool adjustRangeForOptions( CharSourceRange* range, RewriteOptions options );
     };
