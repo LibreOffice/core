@@ -1228,9 +1228,10 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                 if( bCallDelete )
                                 {
                                     ::comphelper::FlagGuard g(m_isForbidCompressRedlines);
+                                    //Insert may delete pNewRedl, in which case it sets pNewRedl to nullptr
                                     mpRedlineTable->Insert( pNewRedl );
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( *pRedl );
-                                    if( !mpRedlineTable->Remove( pNewRedl ) )
+                                    if (pNewRedl && !mpRedlineTable->Remove(pNewRedl))
                                     {
                                         assert(false); // can't happen
                                         pNewRedl = nullptr;
@@ -1260,9 +1261,10 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                     // We insert temporarily so that pNew is
                                     // also dealt with when moving the indices.
                                     ::comphelper::FlagGuard g(m_isForbidCompressRedlines);
+                                    //Insert may delete pNewRedl, in which case it sets pNewRedl to nullptr
                                     mpRedlineTable->Insert( pNewRedl );
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
-                                    if( !mpRedlineTable->Remove( pNewRedl ) )
+                                    if (pNewRedl && !mpRedlineTable->Remove(pNewRedl))
                                     {
                                         assert(false); // can't happen
                                         pNewRedl = nullptr;
@@ -1291,9 +1293,10 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                     // We insert temporarily so that pNew is
                                     // also dealt with when moving the indices.
                                     ::comphelper::FlagGuard g(m_isForbidCompressRedlines);
+                                    //Insert may delete pNewRedl, in which case it sets pNewRedl to nullptr
                                     mpRedlineTable->Insert( pNewRedl );
                                     m_rDoc.getIDocumentContentOperations().DeleteAndJoin( aPam );
-                                    if( !mpRedlineTable->Remove( pNewRedl ) )
+                                    if (pNewRedl && !mpRedlineTable->Remove(pNewRedl))
                                     {
                                         assert(false); // can't happen
                                         pNewRedl = nullptr;
