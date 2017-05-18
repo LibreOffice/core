@@ -1770,6 +1770,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
 
     SolarMutexGuard aVclGuard;
 
+    delete pDragAndDropInfo;
     pDragAndDropInfo = nullptr;
 
     Point aMousePosPixel( rDGE.DragOriginX, rDGE.DragOriginY );
