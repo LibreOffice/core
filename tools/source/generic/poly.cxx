@@ -1506,32 +1506,20 @@ tools::Polygon& Polygon::operator=( tools::Polygon&& rPoly )
 
 bool Polygon::operator==( const tools::Polygon& rPoly ) const
 {
-
-    if ( (rPoly.mpImplPolygon == mpImplPolygon) )
+    if (rPoly.mpImplPolygon == mpImplPolygon)
         return true;
-    else
-        return false;
-}
 
-bool Polygon::IsEqual( const tools::Polygon& rPoly ) const
-{
-    bool bIsEqual = true;
-    sal_uInt16 i;
     if ( GetSize() != rPoly.GetSize() )
-        bIsEqual = false;
-    else
+        return false;
+    for ( sal_uInt16  i = 0; i < GetSize(); i++ )
     {
-        for ( i = 0; i < GetSize(); i++ )
+        if ( ( GetPoint( i ) != rPoly.GetPoint( i ) ) ||
+            ( GetFlags( i ) != rPoly.GetFlags( i ) ) )
         {
-            if ( ( GetPoint( i ) != rPoly.GetPoint( i ) ) ||
-                ( GetFlags( i ) != rPoly.GetFlags( i ) ) )
-            {
-                bIsEqual = false;
-                break;
-            }
+            return false;
         }
     }
-    return bIsEqual;
+    return true;
 }
 
 SvStream& ReadPolygon( SvStream& rIStream, tools::Polygon& rPoly )
