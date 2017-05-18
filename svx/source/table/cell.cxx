@@ -1425,7 +1425,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName )
             }
 
             // if a item is set, this doesn't mean we want it :)
-            if( ( PropertyState_DIRECT_VALUE == eState ) )
+            if( PropertyState_DIRECT_VALUE == eState )
             {
                 switch( pMap->nWID )
                 {

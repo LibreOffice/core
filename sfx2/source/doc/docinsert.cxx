@@ -255,7 +255,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
             m_pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
         else
         {
-            if ( ( TemplateDescription::FILEOPEN_READONLY_VERSION == nDlgType ) )
+            if ( TemplateDescription::FILEOPEN_READONLY_VERSION == nDlgType )
             {
                 try
                 {

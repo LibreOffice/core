@@ -746,7 +746,7 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
 
         // if nothing changed, do nothing
         // alas, this does not check for permutations, or attributes...
-        if ((nullptr == i_pAttrs)) {
+        if (nullptr == i_pAttrs) {
             if (static_cast<size_t>(i_rValue.getLength()) == vec.size()) {
                 bool isEqual(true);
                 for (sal_Int32 i = 0; i < i_rValue.getLength(); ++i) {

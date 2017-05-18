@@ -2017,7 +2017,7 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
         }
 
         // if a item is set, this doesn't mean we want it :)
-        if( ( beans::PropertyState_DIRECT_VALUE == eState ) )
+        if( beans::PropertyState_DIRECT_VALUE == eState )
         {
             switch( pMap->nWID )
             {

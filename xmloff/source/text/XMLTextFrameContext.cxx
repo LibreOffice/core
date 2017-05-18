@@ -1069,7 +1069,7 @@ SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
                                                xAttrList, aParamMap );
         }
     }
-    else if( (XML_NAMESPACE_OFFICE == nPrefix) )
+    else if( XML_NAMESPACE_OFFICE == nPrefix )
     {
         if( IsXMLToken( rLocalName, XML_BINARY_DATA ) )
         {

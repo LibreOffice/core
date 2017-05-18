@@ -223,7 +223,7 @@ inline bool IsControlChar( sal_UCS4 cChar )
     // deprecated formatting characters
     if( (0x206A <= cChar) && (cChar <= 0x206F) )
         return true;
-    if( (0x2060 == cChar) )
+    if( 0x2060 == cChar )
         return true;
     // byte order markers and invalid unicode
     if( (cChar == 0xFEFF) || (cChar == 0xFFFE) || (cChar == 0xFFFF) )

@@ -1410,7 +1410,7 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
         {
             sal_uInt16 nEntryData = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFmtLB->GetEntryData(i - 1));
             if(/*SVX_NUM_NUMBER_NONE == nEntryData ||*/
-                ((SVX_NUM_BITMAP|LINK_TOKEN) ==  nEntryData))
+                (SVX_NUM_BITMAP|LINK_TOKEN) ==  nEntryData)
                 m_pFmtLB->RemoveEntry(i - 1);
         }
     }

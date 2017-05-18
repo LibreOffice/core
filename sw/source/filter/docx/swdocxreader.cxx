@@ -151,7 +151,7 @@ bool SwDOCXReader::MakeEntries( SwDoc *pD, SwTextBlocks &rBlocks )
                 if( rIdx.GetNode().GetTextNode() &&
                     rIdx.GetNode().GetTextNode()->GetText().isEmpty() )
                     rIdx = aStart.GetNode().EndOfSectionIndex() - 2;
-                if( ( nullptr == ( pCNd = rIdx.GetNode().GetContentNode() ) ) )
+                if( nullptr == ( pCNd = rIdx.GetNode().GetContentNode() ) )
                 {
                     ++rIdx;
                     pCNd = pD->GetNodes().MakeTextNode( rIdx, pColl );
