@@ -37,12 +37,6 @@ FuConstPolygon::~FuConstPolygon()
 {
 }
 
-/*************************************************************************
-|*
-|* MouseButtonDown-event
-|*
-\************************************************************************/
-
 bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -69,23 +63,11 @@ bool FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-/*************************************************************************
-|*
-|* MouseMove-event
-|*
-\************************************************************************/
-
 bool FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
 {
     pView->MouseMove(rMEvt, pWindow);
     return FuConstruct::MouseMove(rMEvt);
 }
-
-/*************************************************************************
-|*
-|* MouseButtonUp-event
-|*
-\************************************************************************/
 
 bool FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -114,12 +96,6 @@ bool FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 
     return (bParent || bReturn);
 }
-
-/*************************************************************************
-|*
-|* Activate function
-|*
-\************************************************************************/
 
 void FuConstPolygon::Activate()
 {
@@ -184,12 +160,6 @@ void FuConstPolygon::Activate()
     aOldPointer = pWindow->GetPointer();
     pViewShell->SetActivePointer( aNewPointer );
 }
-
-/*************************************************************************
-|*
-|* Deactivate function
-|*
-\************************************************************************/
 
 void FuConstPolygon::Deactivate()
 {
