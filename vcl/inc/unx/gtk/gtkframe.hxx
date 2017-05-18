@@ -30,6 +30,7 @@
 #include <gdk/gdkkeysyms.h>
 
 #include <salframe.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/sysdata.hxx>
 #include <unx/nativewindowhandleprovider.hxx>
 #include <unx/saltype.h>
@@ -280,7 +281,7 @@ class GtkSalFrame : public SalFrame
     static gboolean     signalKey( GtkWidget*, GdkEventKey*, gpointer );
     static gboolean     signalDelete( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalWindowState( GtkWidget*, GdkEvent*, gpointer );
-    static gboolean     signalScroll( GtkWidget*, GdkEventScroll*, gpointer );
+    static gboolean     signalScroll( GtkWidget*, GdkEvent*, gpointer );
     static gboolean     signalCrossing( GtkWidget*, GdkEventCrossing*, gpointer );
     static gboolean     signalVisibility( GtkWidget*, GdkEventVisibility*, gpointer );
     static void         signalDestroy( GtkWidget*, gpointer );
@@ -347,6 +348,8 @@ public:
     cairo_surface_t*                m_pSurface;
     basegfx::B2IVector              m_aFrameSize;
     DamageHandler                   m_aDamageHandler;
+    std::vector<GdkEvent*>          m_aPendingScrollEvents;
+    Idle                            m_aSmoothScrollIdle;
     int                             m_nGrabLevel;
     bool                            m_bSalObjectSetPosSize;
 #endif
@@ -427,6 +430,10 @@ public:
     void removeGrabLevel();
 
     void nopaint_container_resize_children(GtkContainer*);
+
+    void LaunchAsyncScroll(GdkEvent* pEvent);
+    DECL_LINK(AsyncScroll, Timer *, void);
+
 #endif
     virtual ~GtkSalFrame() override;
 

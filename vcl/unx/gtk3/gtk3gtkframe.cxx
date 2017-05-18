@@ -807,6 +807,9 @@ void GtkSalFrame::InvalidateGraphics()
 
 GtkSalFrame::~GtkSalFrame()
 {
+    m_aSmoothScrollIdle.Stop();
+    m_aSmoothScrollIdle.ClearInvokeHandler();
+
     if (m_pDropTarget)
     {
         m_pDropTarget->deinitialize();
@@ -991,6 +994,8 @@ void GtkSalFrame::InitCommon()
 
     m_aDamageHandler.handle = this;
     m_aDamageHandler.damaged = ::damaged;
+
+    m_aSmoothScrollIdle.SetInvokeHandler(LINK(this, GtkSalFrame, AsyncScroll));
 
     m_pTopLevelGrid = GTK_GRID(gtk_grid_new());
     gtk_container_add(GTK_CONTAINER(m_pWindow), GTK_WIDGET(m_pTopLevelGrid));
@@ -2654,53 +2659,107 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     return true;
 }
 
-gboolean GtkSalFrame::signalScroll(GtkWidget*, GdkEventScroll* pEvent, gpointer frame)
+void GtkSalFrame::LaunchAsyncScroll(GdkEvent* pEvent)
 {
-    UpdateLastInputEventTime(pEvent->time);
+    //if we don't match previous pending states, flush that queue now
+    if (!m_aPendingScrollEvents.empty() && pEvent->scroll.state != m_aPendingScrollEvents.back()->scroll.state)
+    {
+        m_aSmoothScrollIdle.Stop();
+        m_aSmoothScrollIdle.Invoke();
+        assert(m_aPendingScrollEvents.empty());
+    }
+    //add scroll event to queue
+    m_aPendingScrollEvents.push_back(gdk_event_copy(pEvent));
+    if (!m_aSmoothScrollIdle.IsActive())
+        m_aSmoothScrollIdle.Start();
+}
 
-    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+IMPL_LINK_NOARG(GtkSalFrame, AsyncScroll, Timer *, void)
+{
+    assert(!m_aPendingScrollEvents.empty());
 
     SalWheelMouseEvent aEvent;
 
-    aEvent.mnTime = pEvent->time;
-    aEvent.mnX = (sal_uLong)pEvent->x;
+    GdkEvent* pEvent = m_aPendingScrollEvents.back();
+
+    aEvent.mnTime = pEvent->scroll.time;
+    aEvent.mnX = (sal_uLong)pEvent->scroll.x;
+    // --- RTL --- (mirror mouse pos)
+    if (AllSettings::GetLayoutRTL())
+        aEvent.mnX = maGeometry.nWidth - 1 - aEvent.mnX;
+    aEvent.mnY = (sal_uLong)pEvent->scroll.y;
+    aEvent.mnCode = GetMouseModCode( pEvent->scroll.state );
+
+    double delta_x(0.0), delta_y(0.0);
+    for (auto pSubEvent : m_aPendingScrollEvents)
+    {
+        delta_x += pSubEvent->scroll.delta_x;
+        delta_y += pSubEvent->scroll.delta_y;
+        gdk_event_free(pSubEvent);
+    }
+    m_aPendingScrollEvents.clear();
+
+    // rhbz#1344042 "Traditionally" in gtk3 we tool a single up/down event as
+    // equating to 3 scroll lines and a delta of 120. So scale the delta here
+    // by 120 where a single mouse wheel click is an incoming delta_x of 1
+    // and divide that by 40 to get the number of scroll lines
+    if (delta_x != 0.0)
+    {
+        aEvent.mnDelta = -delta_x * 120;
+        aEvent.mnNotchDelta = aEvent.mnDelta < 0 ? -1 : +1;
+        if (aEvent.mnDelta == 0)
+            aEvent.mnDelta = aEvent.mnNotchDelta;
+        aEvent.mbHorz = true;
+        aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40.0;
+        CallCallbackExc(SalEvent::WheelMouse, &aEvent);
+    }
+
+    if (delta_y != 0.0)
+    {
+        aEvent.mnDelta = -delta_y * 120;
+        aEvent.mnNotchDelta = aEvent.mnDelta < 0 ? -1 : +1;
+        if (aEvent.mnDelta == 0)
+            aEvent.mnDelta = aEvent.mnNotchDelta;
+        aEvent.mbHorz = false;
+        aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40.0;
+        CallCallbackExc(SalEvent::WheelMouse, &aEvent);
+    }
+}
+
+gboolean GtkSalFrame::signalScroll(GtkWidget*, GdkEvent* pInEvent, gpointer frame)
+{
+    GdkEventScroll& rEvent = pInEvent->scroll;
+
+    UpdateLastInputEventTime(rEvent.time);
+
+    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
+
+    if (rEvent.direction == GDK_SCROLL_SMOOTH)
+    {
+        pThis->LaunchAsyncScroll(pInEvent);
+        return true;
+    }
+
+    //if we have smooth scrolling previous pending states, flush that queue now
+    if (!pThis->m_aPendingScrollEvents.empty())
+    {
+        pThis->m_aSmoothScrollIdle.Stop();
+        pThis->m_aSmoothScrollIdle.Invoke();
+        assert(pThis->m_aPendingScrollEvents.empty());
+    }
+
+    SalWheelMouseEvent aEvent;
+
+    aEvent.mnTime = rEvent.time;
+    aEvent.mnX = (sal_uLong)rEvent.x;
     // --- RTL --- (mirror mouse pos)
     if (AllSettings::GetLayoutRTL())
         aEvent.mnX = pThis->maGeometry.nWidth - 1 - aEvent.mnX;
-    aEvent.mnY = (sal_uLong)pEvent->y;
-    aEvent.mnCode = GetMouseModCode( pEvent->state );
+    aEvent.mnY = (sal_uLong)rEvent.y;
+    aEvent.mnCode = GetMouseModCode(rEvent.state);
 
-    switch (pEvent->direction)
+    switch (rEvent.direction)
     {
-        case GDK_SCROLL_SMOOTH:
-            // rhbz#1344042 "Traditionally" in gtk3 we tool a single up/down event as
-            // equating to 3 scroll lines and a delta of 120. So scale the delta here
-            // by 120 where a single mouse wheel click is an incoming delta_x of 1
-            // and divide that by 40 to get the number of scroll lines
-            if (pEvent->delta_x != 0.0)
-            {
-                aEvent.mnDelta = -pEvent->delta_x * 120;
-                aEvent.mnNotchDelta = aEvent.mnDelta < 0 ? -1 : +1;
-                if (aEvent.mnDelta == 0)
-                    aEvent.mnDelta = aEvent.mnNotchDelta;
-                aEvent.mbHorz = true;
-                aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40.0;
-                pThis->CallCallbackExc(SalEvent::WheelMouse, &aEvent);
-            }
-
-            if (pEvent->delta_y != 0.0)
-            {
-                aEvent.mnDelta = -pEvent->delta_y * 120;
-                aEvent.mnNotchDelta = aEvent.mnDelta < 0 ? -1 : +1;
-                if (aEvent.mnDelta == 0)
-                    aEvent.mnDelta = aEvent.mnNotchDelta;
-                aEvent.mbHorz = false;
-                aEvent.mnScrollLines = std::abs(aEvent.mnDelta) / 40.0;
-                pThis->CallCallbackExc(SalEvent::WheelMouse, &aEvent);
-            }
-
-            break;
-
         case GDK_SCROLL_UP:
             aEvent.mnDelta = 120;
             aEvent.mnNotchDelta = 1;
@@ -2731,6 +2790,8 @@ gboolean GtkSalFrame::signalScroll(GtkWidget*, GdkEventScroll* pEvent, gpointer 
             aEvent.mnScrollLines = 3;
             aEvent.mbHorz = true;
             pThis->CallCallbackExc(SalEvent::WheelMouse, &aEvent);
+            break;
+        default:
             break;
     }
 
