@@ -628,8 +628,7 @@ void ScOrcusSheet::set_shared_formula(
     formula::FormulaGrammar::Grammar eGram = getCalcGrammarFromOrcus(grammar);
 
     // Compile the formula expression into tokens.
-    ScCompiler aComp(&mrDoc.getDoc(), aPos);
-    aComp.SetGrammar(eGram);
+    ScCompiler aComp(&mrDoc.getDoc(), aPos, eGram);
     ScTokenArray* pArray = aComp.CompileString(aFormula);
     if (!pArray)
         // Tokenization failed.
@@ -677,8 +676,7 @@ void ScOrcusSheet::set_array_formula(
 
     ScRange aRange(col, row, mnTab, col+array_cols, row + array_rows, mnTab);
 
-    ScCompiler aComp(&mrDoc.getDoc(), aRange.aStart);
-    aComp.SetGrammar(eGrammar);
+    ScCompiler aComp(&mrDoc.getDoc(), aRange.aStart, eGrammar);
     std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(aFormula));
     if (!pArray)
         return;

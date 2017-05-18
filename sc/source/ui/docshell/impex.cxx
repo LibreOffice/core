@@ -1835,8 +1835,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                              * R1C1 is what Excel writes in SYLK, or even
                              * better GRAM_ENGLISH_XL_R1C1. */
                             const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_PODF_A1;
-                            ScCompiler aComp( pDoc, aPos);
-                            aComp.SetGrammar(eGrammar);
+                            ScCompiler aComp( pDoc, aPos, eGrammar);
                             ScTokenArray* pCode = aComp.CompileString( aText );
                             if ( ch == 'M' )
                             {

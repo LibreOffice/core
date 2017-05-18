@@ -268,8 +268,7 @@ void ScViewFunc::DoRefConversion()
                 {
                     ScAddress aPos = pCell->aPos;
                     OUString aNew = aFinder.GetText();
-                    ScCompiler aComp( pDoc, aPos);
-                    aComp.SetGrammar(pDoc->GetGrammar());
+                    ScCompiler aComp( pDoc, aPos, pDoc->GetGrammar());
                     std::unique_ptr<ScTokenArray> pArr(aComp.CompileString(aNew));
                     ScFormulaCell* pNewCell =
                         new ScFormulaCell(

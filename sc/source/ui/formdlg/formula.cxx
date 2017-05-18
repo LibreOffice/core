@@ -430,8 +430,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
                 aArray.AddSingleReference(aRefData.Ref1);
             else
                 aArray.AddDoubleReference(aRefData);
-            ScCompiler aComp(m_pDoc, m_CursorPos, aArray);
-            aComp.SetGrammar(m_pDoc->GetGrammar());
+            ScCompiler aComp(m_pDoc, m_CursorPos, aArray, m_pDoc->GetGrammar());
             OUStringBuffer aBuf;
             aComp.CreateStringFromTokenArray(aBuf);
             aRefStr = aBuf.makeStringAndClear();
