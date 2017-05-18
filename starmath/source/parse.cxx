@@ -308,7 +308,7 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const OUString &rName )
 namespace {
 
 bool IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
-    // returns 'true' iff cChar is '\0' or a delimiter
+    // returns 'true' if cChar is '\0' or a delimiter
 {
     assert(nPos <= rTxt.getLength()); //index out of range
 

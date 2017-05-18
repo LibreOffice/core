@@ -56,7 +56,7 @@ struct FileHandle_Impl
      */
     enum StateBits
     {
-        STATE_SEEKABLE  = 1, /* open() sets, iff regular file */
+        STATE_SEEKABLE  = 1, /* open() sets, if regular file */
         STATE_READABLE  = 2, /* open() sets, read() requires */
         STATE_WRITEABLE = 4, /* open() sets, write() requires */
         STATE_MODIFIED  = 8  /* write() sets, flush() resets */

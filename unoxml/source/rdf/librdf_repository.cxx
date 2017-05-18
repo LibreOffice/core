@@ -1208,7 +1208,7 @@ librdf_Repository::createGraph(const uno::Reference< rdf::XURI > & i_xGraphName)
     ::osl::MutexGuard g(m_aMutex); // don't call i_x* with mutex locked
 
     // NB: librdf does not have a concept of graphs as such;
-    //     a librdf named graph exists iff the model contains a statement with
+    //     a librdf named graph exists if the model contains a statement with
     //     the graph name as context
 
     if (m_NamedGraphs.find(contextU) != m_NamedGraphs.end()) {

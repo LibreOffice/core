@@ -172,14 +172,14 @@ public:
     SwRegHistory* GetHistory() const    { return m_pHistory; }
 
     /// try to insert the hint
-    /// @return true iff hint successfully inserted
+    /// @return true if hint successfully inserted
     bool TryInsertHint( SwTextAttr * const pHint, SwTextNode & rNode,
             const SetAttrMode nMode = SetAttrMode::DEFAULT );
 
     bool HasFootnote() const          { return m_bFootnote; }
     bool IsInSplitNode() const   { return m_bInSplitNode; }
 
-    /// calc current value of m_bHasHiddenParaField, returns true iff changed
+    /// calc current value of m_bHasHiddenParaField, returns true if changed
     bool CalcHiddenParaField();
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwpHints)

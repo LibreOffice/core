@@ -463,7 +463,7 @@ endef
 
 # establish the dependency that actually causes inclusion of the compiled help
 # into the .oxt, for one language; in principle, this would only need to be done
-# once per language iff the extension uses any help -- currently it is done from
+# once per language if the extension uses any help -- currently it is done from
 # each individual gb_Extension_add_helpfile call (and thus requires $strip
 # to remove duplicates from FILES)
 # $(1): extension identifier

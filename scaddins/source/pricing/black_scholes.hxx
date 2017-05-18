@@ -130,7 +130,7 @@ double prob_hit(double S, double vol, double mu,
 
 
 // probability of being in-the-money, ie payoff is greater zero,
-// assuming payoff(S_T) > 0 iff S_T in [B1, B2]
+// assuming payoff(S_T) > 0 if S_T in [B1, B2]
 double prob_in_money(double S, double vol, double mu,
                      double tau, double B1, double B2);
 double prob_in_money(double S, double vol, double mu,

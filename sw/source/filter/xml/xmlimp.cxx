@@ -300,7 +300,7 @@ SvXMLImportContext* SwXMLOfficeDocContext_Impl::CreateChildContext(
         }
     }
 
-    // behave like meta base class iff we encounter office:meta
+    // behave like meta base class if we encounter office:meta
     if ( XML_TOK_DOC_META == rTokenMap.Get( nPrefix, rLocalName ) ) {
         return SvXMLMetaDocumentContext::CreateChildContext(
                     nPrefix, rLocalName, xAttrList );

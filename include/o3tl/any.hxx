@@ -101,7 +101,7 @@ template<typename T> inline boost::optional<T const> tryGetConverted(
     ">>=" are considered.
 
     The returned object is a proxy.  Proxies can be either positive or negative.
-    Each proxy can be contextually converted to bool, yielding true iff the
+    Each proxy can be contextually converted to bool, yielding true if the
     proxy is positive.  For a positive proxy P representing a value of requested
     type T, for any T other than void, the expression *P yields that value of
     type T.  (Technically, the proxy is either a plain pointer or a

@@ -1982,7 +1982,7 @@ SvXMLImportContext *SmXMLFlatDocContext_Impl::CreateChildContext(
     sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
 {
-    // behave like meta base class iff we encounter office:meta
+    // behave like meta base class if we encounter office:meta
     if ( XML_NAMESPACE_OFFICE == i_nPrefix &&
             i_rLocalName == GetXMLToken(XML_META) )
     {

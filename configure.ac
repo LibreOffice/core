@@ -1182,7 +1182,7 @@ libo_FUZZ_ARG_ENABLE(runtime-optimizations,
     AS_HELP_STRING([--disable-runtime-optimizations],
         [Statically disable certain runtime optimizations (like rtl/alloc.h or
          JVM JIT) that are known to interact badly with certain dynamic analysis
-         tools (like -fsanitize=address or Valgrind).  By default, disabled iff
+         tools (like -fsanitize=address or Valgrind).  By default, disabled if
          CC contains "-fsanitize=*".  (For Valgrind, those runtime optimizations
          are typically disabled dynamically via RUNNING_ON_VALGRIND.)]))
 

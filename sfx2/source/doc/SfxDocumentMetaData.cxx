@@ -278,10 +278,10 @@ protected:
         const css::uno::Sequence<css::beans::PropertyValue> & i_rMedium) const;
     /// get text of standard meta data element
     OUString SAL_CALL getMetaText(const char* i_name) const;
-    /// set text of standard meta data element iff not equal to existing text
+    /// set text of standard meta data element if not equal to existing text
     bool SAL_CALL setMetaText(const char* i_name,
         const OUString & i_rValue);
-    /// set text of standard meta data element iff not equal to existing text
+    /// set text of standard meta data element if not equal to existing text
     void SAL_CALL setMetaTextAndNotify(const char* i_name,
         const OUString & i_rValue);
     /// get text of standard meta data element's attribute
@@ -927,7 +927,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
     return std::make_pair(comphelper::containerToSequence(values), attrs);
 }
 
-// remove the given element from the DOM, and iff i_pAttrs != 0 insert new one
+// remove the given element from the DOM, and if i_pAttrs != 0 insert new one
 void SAL_CALL
 SfxDocumentMetaData::updateElement(const char *i_name,
         std::vector<std::pair<const char *, OUString> >* i_pAttrs)

@@ -122,7 +122,7 @@ namespace dxcanvas
 
         // indicates whether the associated surface needs
         // to refresh its contents or not. in other words,
-        // this flag is set iff both representations are
+        // this flag is set if both representations are
         // out of sync.
         mutable bool mbIsSurfaceDirty;
 

@@ -626,7 +626,7 @@ void BaseNode::notifyEndListeners() const
     // notify state change
     maContext.mrEventMultiplexer.notifyAnimationEnd( mpSelf );
 
-    // notify main sequence end (iff we're the main
+    // notify main sequence end (if we're the main
     // sequence root node). This is because the main
     // sequence determines the active duration of the
     // slide. All other sequences are secondary, in that
