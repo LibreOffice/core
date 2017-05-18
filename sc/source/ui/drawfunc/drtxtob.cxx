@@ -813,7 +813,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 
                 rReq.Done( aEmptyAttr );
                 pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
-                bDone = false; // already happend here
+                bDone = false; // already happened here
             }
             break;
 

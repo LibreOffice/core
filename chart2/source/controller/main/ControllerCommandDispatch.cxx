@@ -613,7 +613,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ ".uno:View3D" ] = bIsWritable && bModelStateIsValid && m_apModelState->bIsThreeD;
     m_aCommandAvailability[ ".uno:DiagramFloor" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasFloor;
 
-    //some mor format commands with different ui text
+    //some more format commands with different ui text
     m_aCommandAvailability[ ".uno:FormatWall" ] = m_aCommandAvailability[ ".uno:DiagramWall" ];
     m_aCommandAvailability[ ".uno:FormatFloor" ] = m_aCommandAvailability[ ".uno:DiagramFloor" ];
     m_aCommandAvailability[ ".uno:FormatChartArea" ] = m_aCommandAvailability[ ".uno:DiagramArea" ];

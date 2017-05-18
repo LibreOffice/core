@@ -357,7 +357,7 @@ IMPL_LINK(ScNavigatorDlg, ToolBoxSelectHdl, ToolBox*, pToolBox, void)
 
 IMPL_LINK(ScNavigatorDlg, ToolBoxDropdownClickHdl, ToolBox *, pToolBox, void)
 {
-    // the popup menue of the drop modus has to be called in the
+    // the popup menu of the drop modus has to be called in the
     // click (button down) and not in the select (button up)
     if (pToolBox->GetCurItemId() == nDragModeId)
     {
