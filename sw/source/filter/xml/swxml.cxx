@@ -662,7 +662,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     sal_Int32 nProgressRange(1000000);
     if (xStatusIndicator.is())
     {
-        xStatusIndicator->start(SW_RESSTR(STR_STATSTR_SWGREAD), nProgressRange);
+        xStatusIndicator->start(SwResId(STR_STATSTR_SWGREAD), nProgressRange);
     }
     uno::Any aProgRange;
     aProgRange <<= nProgressRange;

@@ -257,18 +257,18 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
 static short lcl_AskRedlineFlags(vcl::Window *pWin)
 {
     ScopedVclPtrInstance<MessBox> aQBox( pWin, 0,
-                    OUString( SW_RES( STR_REDLINE_TITLE ) ),
-                    OUString( SW_RES( STR_REDLINE_MSG ) ) );
+                    OUString( SwResId( STR_REDLINE_TITLE ) ),
+                    OUString( SwResId( STR_REDLINE_MSG ) ) );
     aQBox->SetImage( QueryBox::GetStandardImage() );
     const ButtonDialogFlags nBtnFlags = ButtonDialogFlags::Default |
                         ButtonDialogFlags::OK |
                         ButtonDialogFlags::Focus;
 
-    aQBox->AddButton(OUString(SW_RES(STR_REDLINE_ACCEPT_ALL)), RET_OK, nBtnFlags);
+    aQBox->AddButton(SwResId(STR_REDLINE_ACCEPT_ALL), RET_OK, nBtnFlags);
     aQBox->GetPushButton( RET_OK )->SetHelpId(HID_AUTOFORMAT_ACCEPT);
-    aQBox->AddButton(OUString(SW_RES(STR_REDLINE_REJECT_ALL)), RET_CANCEL, ButtonDialogFlags::Cancel);
+    aQBox->AddButton(SwResId(STR_REDLINE_REJECT_ALL), RET_CANCEL, ButtonDialogFlags::Cancel);
     aQBox->GetPushButton( RET_CANCEL )->SetHelpId(HID_AUTOFORMAT_REJECT  );
-    aQBox->AddButton(OUString(SW_RES(STR_REDLINE_EDIT)), 2);
+    aQBox->AddButton(SwResId(STR_REDLINE_EDIT), 2);
     aQBox->GetPushButton( 2 )->SetHelpId(HID_AUTOFORMAT_EDIT_CHG);
     aQBox->SetButtonHelpText( RET_OK, OUString() );
 
@@ -303,7 +303,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 SwRewriter aRewriter;
                 aRewriter.AddRule( UndoArg1, aToggle.StringToReplace() );
-                aRewriter.AddRule( UndoArg2, SW_RES(STR_YIELDS) );
+                aRewriter.AddRule( UndoArg2, SwResId(STR_YIELDS) );
                 aRewriter.AddRule( UndoArg3, sReplacement );
                 rWrtSh.StartUndo(SwUndoId::REPLACE, &aRewriter);
                 rWrtSh.GetCursor()->Normalize(false);

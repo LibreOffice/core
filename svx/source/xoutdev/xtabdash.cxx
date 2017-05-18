@@ -66,7 +66,7 @@ uno::Reference< container::XNameContainer > XDashList::createInstance()
 
 bool XDashList::Create()
 {
-    const OUString aStr(SVX_RESSTR(RID_SVXSTR_LINESTYLE));
+    const OUString aStr(SvxResId(RID_SVXSTR_LINESTYLE));
 
     Insert(o3tl::make_unique<XDashEntry>(XDash(css::drawing::DashStyle_RECT,1, 50,1, 50, 50),aStr + " 1"));
     Insert(o3tl::make_unique<XDashEntry>(XDash(css::drawing::DashStyle_RECT,1,500,1,500,500),aStr + " 2"));
@@ -199,7 +199,7 @@ OUString const & XDashList::GetStringForUiSolidLine() const
 {
     if(maStringSolidLine.isEmpty())
     {
-        const_cast< XDashList* >(this)->maStringSolidLine = ResId(RID_SVXSTR_SOLID, DIALOG_MGR()).toString();
+        const_cast< XDashList* >(this)->maStringSolidLine = SvxResId(RID_SVXSTR_SOLID);
     }
 
     return maStringSolidLine;
@@ -211,7 +211,7 @@ OUString const & XDashList::GetStringForUiNoLine() const
     {
         // formerly was RID_SVXSTR_INVISIBLE, but to make equal
         // everywhere, use RID_SVXSTR_NONE
-        const_cast< XDashList* >(this)->maStringNoLine = ResId(RID_SVXSTR_NONE, DIALOG_MGR()).toString();
+        const_cast< XDashList* >(this)->maStringNoLine = SvxResId(RID_SVXSTR_NONE);
     }
 
     return maStringNoLine;

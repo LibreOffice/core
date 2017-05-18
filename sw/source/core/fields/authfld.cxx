@@ -593,7 +593,7 @@ void    SwAuthorityField::SetPar1(const OUString& rStr)
 
 OUString SwAuthorityField::GetDescription() const
 {
-    return SW_RES(STR_AUTHORITY_ENTRY);
+    return SwResId(STR_AUTHORITY_ENTRY);
 }
 
 const char* const aFieldNames[] =

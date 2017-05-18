@@ -49,8 +49,8 @@ AnnotationMenuButton::AnnotationMenuButton(sw::annotation::SwAnnotationWin& rSid
 {
     AddEventListener(LINK(&mrSidebarWin, sw::annotation::SwAnnotationWin, WindowEventListener));
 
-    SetAccessibleName(SW_RES(STR_ACCESS_ANNOTATION_BUTTON_NAME));
-    SetAccessibleDescription(SW_RES(STR_ACCESS_ANNOTATION_BUTTON_DESC));
+    SetAccessibleName(SwResId(STR_ACCESS_ANNOTATION_BUTTON_NAME));
+    SetAccessibleDescription(SwResId(STR_ACCESS_ANNOTATION_BUTTON_DESC));
     SetQuickHelpText(GetAccessibleDescription());
 }
 
@@ -111,7 +111,7 @@ void AnnotationMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
         {
             if ((sAuthor = aUserOpt.GetID()).isEmpty())
             {
-                sAuthor = SW_RES(STR_REDLINE_UNKNOWN_AUTHOR);
+                sAuthor = SwResId(STR_REDLINE_UNKNOWN_AUTHOR);
             }
         }
         // do not allow to reply to ourself and no answer possible if this note is in a protected section

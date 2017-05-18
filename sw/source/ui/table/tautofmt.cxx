@@ -142,13 +142,13 @@ void SwStringInputDlg::dispose()
 SwAutoFormatDlg::SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pWrtShell,
                     bool bAutoFormat, const SwTableAutoFormat* pSelFormat )
     : SfxModalDialog(pParent, "AutoFormatTableDialog", "modules/swriter/ui/autoformattable.ui")
-    , aStrTitle(SW_RES(STR_ADD_AUTOFORMAT_TITLE))
-    , aStrLabel(SW_RES(STR_ADD_AUTOFORMAT_LABEL))
-    , aStrClose(SW_RES(STR_BTN_AUTOFORMAT_CLOSE))
-    , aStrDelTitle(SW_RES(STR_DEL_AUTOFORMAT_TITLE))
-    , aStrDelMsg(SW_RES(STR_DEL_AUTOFORMAT_MSG))
-    , aStrRenameTitle(SW_RES(STR_RENAME_AUTOFORMAT_TITLE))
-    , aStrInvalidFormat(SW_RES(STR_INVALID_AUTOFORMAT_NAME))
+    , aStrTitle(SwResId(STR_ADD_AUTOFORMAT_TITLE))
+    , aStrLabel(SwResId(STR_ADD_AUTOFORMAT_LABEL))
+    , aStrClose(SwResId(STR_BTN_AUTOFORMAT_CLOSE))
+    , aStrDelTitle(SwResId(STR_DEL_AUTOFORMAT_TITLE))
+    , aStrDelMsg(SwResId(STR_DEL_AUTOFORMAT_MSG))
+    , aStrRenameTitle(SwResId(STR_RENAME_AUTOFORMAT_TITLE))
+    , aStrInvalidFormat(SwResId(STR_INVALID_AUTOFORMAT_NAME))
     , pShell(pWrtShell)
     , nIndex(0)
     , nDfltStylePos(0)
@@ -509,13 +509,13 @@ AutoFormatPreview::AutoFormatPreview(vcl::Window* pParent, WinBits nStyle) :
         aVD             ( VclPtr<VirtualDevice>::Create(*this) ),
         bFitWidth       ( false ),
         mbRTL           ( false ),
-        aStrJan         ( SW_RES( STR_JAN ) ),
-        aStrFeb         ( SW_RES( STR_FEB ) ),
-        aStrMar         ( SW_RES( STR_MAR ) ),
-        aStrNorth       ( SW_RES( STR_NORTH ) ),
-        aStrMid         ( SW_RES( STR_MID ) ),
-        aStrSouth       ( SW_RES( STR_SOUTH ) ),
-        aStrSum         ( SW_RES( STR_SUM ) )
+        aStrJan         ( SwResId( STR_JAN ) ),
+        aStrFeb         ( SwResId( STR_FEB ) ),
+        aStrMar         ( SwResId( STR_MAR ) ),
+        aStrNorth       ( SwResId( STR_NORTH ) ),
+        aStrMid         ( SwResId( STR_MID ) ),
+        aStrSouth       ( SwResId( STR_SOUTH ) ),
+        aStrSum         ( SwResId( STR_SUM ) )
 {
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     m_xBreak = i18n::BreakIterator::create(xContext);

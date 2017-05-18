@@ -143,15 +143,15 @@ OUString SfxSlotPool::SeekGroup( sal_uInt16 nNo )
             }
         }
 
-        SfxResId aResId( (sal_uInt16)_vGroups[_nCurGroup] );
+        ResId aResId((sal_uInt16)_vGroups[_nCurGroup], *SfxResMgr::GetResMgr());
         aResId.SetRT(RSC_STRING);
-        if ( !SfxResId::GetResMgr()->IsAvailable(aResId) )
+        if ( !SfxResMgr::GetResMgr()->IsAvailable(aResId) )
         {
             OSL_FAIL( "GroupId-Name not defined in SFX!" );
             return OUString();
         }
 
-        return aResId.toString();
+        return aResId;
     }
 
     return OUString();

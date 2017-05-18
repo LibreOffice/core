@@ -3338,7 +3338,7 @@ OUString SwCursorShell::GetCursorDescr() const
     OUString aResult;
 
     if (IsMultiSelection())
-        aResult += SW_RES(STR_MULTISEL);
+        aResult += SwResId(STR_MULTISEL);
     else
         aResult = SwDoc::GetPaMDescr(*GetCursor());
 

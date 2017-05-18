@@ -106,7 +106,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         {
             // Undo
             OUString aString( mpView->GetDescriptionOfMarkedObjects() );
-            aString += " " + SD_RESSTR( STR_TRANSFORM );
+            aString += " " + SdResId( STR_TRANSFORM );
             mpView->BegUndo( aString );
 
             mpView->SetGeoAttrToMarked( *pArgs );

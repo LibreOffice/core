@@ -38,7 +38,7 @@ SdPresLayoutDlg::SdPresLayoutDlg(::sd::DrawDocShell* pDocShell,
         "modules/simpress/ui/slidedesigndialog.ui")
     , mpDocSh(pDocShell)
     , mrOutAttrs(rInAttrs)
-    , maStrNone(SD_RESSTR(STR_NULL))
+    , maStrNone(SdResId(STR_NULL))
 {
     get(m_pVS, "select");
     Size aPref(LogicToPixel(Size(144 , 141), MapUnit::MapAppFont));
@@ -180,7 +180,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLayoutHdl, ValueSet*, void)
 IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl, Button*, void)
 {
     VclPtrInstance< SfxNewFileDialog > pDlg(this, SfxNewFileDialogMode::Preview);
-    pDlg->SetText(SD_RESSTR(STR_LOAD_PRESENTATION_LAYOUT));
+    pDlg->SetText(SdResId(STR_LOAD_PRESENTATION_LAYOUT));
 
     if(!IsReallyVisible())
         return;

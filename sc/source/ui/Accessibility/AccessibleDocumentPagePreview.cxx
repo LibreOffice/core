@@ -1521,7 +1521,7 @@ OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleDescription()
 
 OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleName()
 {
-    OUString sName = OUString(ScResId(STR_ACC_PREVIEWDOC_NAME));
+    OUString sName = ScResId(STR_ACC_PREVIEWDOC_NAME);
     return sName;
 }
 

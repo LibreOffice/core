@@ -478,7 +478,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
     if( pPage )
     {
         if( mpDoc->IsUndoEnabled() )
-            mpDoc->BegUndo( SD_RESSTR( STR_ANNOTATION_UNDO_INSERT ) );
+            mpDoc->BegUndo( SdResId( STR_ANNOTATION_UNDO_INSERT ) );
 
         // find free space for new annotation
         int y = 0, x = 0;
@@ -600,10 +600,10 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
         SdDrawDocument::SetCalcFieldValueHdl( pOutliner.get() );
         pOutliner->SetUpdateMode( true );
 
-        OUString aStr(SD_RESSTR(STR_ANNOTATION_REPLY));
+        OUString aStr(SdResId(STR_ANNOTATION_REPLY));
         OUString sAuthor( xAnnotation->getAuthor() );
         if( sAuthor.isEmpty() )
-            sAuthor = SD_RESSTR( STR_ANNOTATION_NOAUTHOR );
+            sAuthor = SdResId( STR_ANNOTATION_NOAUTHOR );
 
         aStr = aStr.replaceFirst("%1", sAuthor);
 
@@ -671,7 +671,7 @@ void AnnotationManagerImpl::DeleteAnnotation( const Reference< XAnnotation >& xA
     if( xAnnotation.is() && pPage )
     {
         if( mpDoc->IsUndoEnabled() )
-            mpDoc->BegUndo( SD_RESSTR( STR_ANNOTATION_UNDO_DELETE ) );
+            mpDoc->BegUndo( SdResId( STR_ANNOTATION_UNDO_DELETE ) );
 
         pPage->removeAnnotation( xAnnotation );
 
@@ -685,7 +685,7 @@ void AnnotationManagerImpl::DeleteAnnotation( const Reference< XAnnotation >& xA
 void AnnotationManagerImpl::DeleteAnnotationsByAuthor( const OUString& sAuthor )
 {
     if( mpDoc->IsUndoEnabled() )
-        mpDoc->BegUndo( SD_RESSTR( STR_ANNOTATION_UNDO_DELETE ) );
+        mpDoc->BegUndo( SdResId( STR_ANNOTATION_UNDO_DELETE ) );
 
     SdPage* pPage = nullptr;
     do
@@ -715,7 +715,7 @@ void AnnotationManagerImpl::DeleteAnnotationsByAuthor( const OUString& sAuthor )
 void AnnotationManagerImpl::DeleteAllAnnotations()
 {
     if( mpDoc->IsUndoEnabled() )
-        mpDoc->BegUndo( SD_RESSTR( STR_ANNOTATION_UNDO_DELETE ) );
+        mpDoc->BegUndo( SdResId( STR_ANNOTATION_UNDO_DELETE ) );
 
     SdPage* pPage = nullptr;
     do
@@ -887,7 +887,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
 
         // Pop up question box that asks the user whether to wrap around.
         // The dialog is made modal with respect to the whole application.
-        ScopedVclPtrInstance< QueryBox > aQuestionBox( nullptr, (WB_YES_NO | WB_DEF_YES), SD_RESSTR(nStringId));
+        ScopedVclPtrInstance< QueryBox > aQuestionBox( nullptr, (WB_YES_NO | WB_DEF_YES), SdResId(nStringId));
         aQuestionBox->SetImage( QueryBox::GetStandardImage() );
         if (aQuestionBox->Execute() != RET_YES)
             break;
@@ -1145,7 +1145,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( const Reference< XAnno
     OUString aStr(pMenu->GetItemText(pMenu->GetItemId("deleteby")));
     OUString aReplace( sAuthor );
     if( aReplace.isEmpty() )
-        aReplace = SD_RESSTR( STR_ANNOTATION_NOAUTHOR );
+        aReplace = SdResId( STR_ANNOTATION_NOAUTHOR );
     aStr = aStr.replaceFirst("%1", aReplace);
     pMenu->SetItemText(pMenu->GetItemId("deleteby"), aStr);
     pMenu->EnableItem(pMenu->GetItemId("reply"), (sAuthor != sCurrentAuthor) && !bReadOnly);

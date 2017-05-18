@@ -1014,7 +1014,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                     // add undo to allow user to take back this step
                     if( pModel->IsUndoEnabled() )
                     {
-                        pModel->BegUndo(SVX_RESSTR(SIP_XA_FILLTRANSPARENCE));
+                        pModel->BegUndo(SvxResId(SIP_XA_FILLTRANSPARENCE));
                         pModel->AddUndo(pModel->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
                         pModel->EndUndo();
                     }

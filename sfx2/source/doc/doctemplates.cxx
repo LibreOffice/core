@@ -487,9 +487,8 @@ void SfxDocTplService_Impl::readFolderList()
 {
     SolarMutexGuard aGuard;
 
-    ResStringArray  aShortNames( SfxResId( TEMPLATE_SHORT_NAMES_ARY ) );
-    ResStringArray  aLongNames( SfxResId( TEMPLATE_LONG_NAMES_ARY ) );
-
+    ResStringArray aShortNames(ResId(TEMPLATE_SHORT_NAMES_ARY, *SfxResMgr::GetResMgr()));
+    ResStringArray aLongNames(ResId(TEMPLATE_LONG_NAMES_ARY, *SfxResMgr::GetResMgr()));
 
     sal_uInt16 nCount = (sal_uInt16)( std::min( aShortNames.Count(), aLongNames.Count() ) );
 
@@ -2282,7 +2281,7 @@ void SAL_CALL SfxDocTplService::update()
 WaitWindow_Impl::WaitWindow_Impl() : WorkWindow(nullptr, WB_BORDER | WB_3DLOOK)
 {
     tools::Rectangle aRect = tools::Rectangle(0, 0, 300, 30000);
-    maText = SfxResId(RID_CNT_STR_WAITING).toString();
+    maText = SfxResId(RID_CNT_STR_WAITING);
     maRect = GetTextRect(aRect, maText, mnTextStyle);
     aRect = maRect;
     aRect.Right() += 2 * X_OFFSET;

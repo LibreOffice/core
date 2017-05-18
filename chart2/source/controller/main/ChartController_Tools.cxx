@@ -385,7 +385,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
         if ( pDestPage )
         {
             Reference< drawing::XShape > xSelShape;
-            m_pDrawViewWrapper->BegUndo( SVX_RESSTR( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
+            m_pDrawViewWrapper->BegUndo( SvxResId( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
             sal_uInt16 nCount = pModel->GetPageCount();
             for ( sal_uInt16 i = 0; i < nCount; ++i )
             {
@@ -470,7 +470,7 @@ void ChartController::impl_PasteStringAsTextShape( const OUString& rString, cons
                 SdrObject* pObj = DrawViewWrapper::getSdrObject( xTextShape );
                 if ( pObj )
                 {
-                    m_pDrawViewWrapper->BegUndo( SVX_RESSTR( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
+                    m_pDrawViewWrapper->BegUndo( SvxResId( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
                     m_pDrawViewWrapper->AddUndo( new SdrUndoInsertObj( *pObj ) );
                     m_pDrawViewWrapper->EndUndo();
 

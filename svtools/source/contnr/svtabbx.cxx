@@ -402,7 +402,7 @@ OUString SvTabListBox::GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
                     {
                         OUString sRet = static_cast<const SvLBoxString&>(rBoxItem).GetText();
                         if ( sRet.isEmpty() )
-                            sRet = SVT_RESSTR( STR_SVT_ACC_EMPTY_FIELD );
+                            sRet = SvtResId( STR_SVT_ACC_EMPTY_FIELD );
                         return sRet;
                     }
                     --nCol;
@@ -996,7 +996,7 @@ OUString SvHeaderTabListBox::GetAccessibleObjectDescription( ::svt::AccessibleBr
             sal_Int32 nRow = _nPos / nColumnCount;
             sal_uInt16 nColumn  = static_cast< sal_uInt16 >( _nPos % nColumnCount );
 
-            OUString aText( SVT_RESSTR(STR_SVT_ACC_DESC_TABLISTBOX) );
+            OUString aText( SvtResId(STR_SVT_ACC_DESC_TABLISTBOX) );
             aText = aText.replaceFirst( sVar1, OUString::number( nRow ) );
             OUString sColHeader = m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( nColumn ) );
             if ( sColHeader.isEmpty() )

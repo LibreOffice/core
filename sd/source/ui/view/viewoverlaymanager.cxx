@@ -182,7 +182,6 @@ void ImageButtonHdl::HideTip()
 
 void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
 {
-
     if( pHdlList && pHdlList->GetView())
     {
         int nHighlightId = 0;
@@ -204,10 +203,7 @@ void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
 
             if( pHdlList )
             {
-                SdResId aResId( gButtonToolTips[mnHighlightId] );
-                aResId.SetRT( RSC_STRING );
-
-                OUString aHelpText( aResId );
+                OUString aHelpText(SdResId(gButtonToolTips[mnHighlightId]));
                 ::tools::Rectangle aScreenRect( pDev->LogicToPixel( GetPos() ), maImageSize );
                 Help::ShowQuickHelp(static_cast< vcl::Window* >( pHdlList->GetView()->GetFirstOutputDevice() ), aScreenRect, aHelpText);
             }

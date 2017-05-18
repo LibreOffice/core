@@ -435,25 +435,25 @@ OUString CreateExactSizeText( sal_Int64 nSize )
 
     if ( nSize < 10000 )
     {
-        aUnitStr += SVT_RESSTR(STR_SVT_BYTES );
+        aUnitStr += SvtResId(STR_SVT_BYTES );
         nDec = 0;
     }
     else if ( nSize < nMega )
     {
         fSize /= 1024;
-        aUnitStr += SVT_RESSTR(STR_SVT_KB);
+        aUnitStr += SvtResId(STR_SVT_KB);
         nDec = 1;
     }
     else if ( nSize < nGiga )
     {
         fSize /= nMega;
-        aUnitStr += SVT_RESSTR(STR_SVT_MB);
+        aUnitStr += SvtResId(STR_SVT_MB);
         nDec = 2;
     }
     else
     {
         fSize /= nGiga;
-        aUnitStr += SVT_RESSTR(STR_SVT_GB);
+        aUnitStr += SvtResId(STR_SVT_GB);
         nDec = 3;
     }
 
@@ -474,9 +474,9 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
 
     mpHeaderBar         ( nullptr ),
     mpParent            ( pParent ),
-    msAccessibleDescText( SVT_RESSTR(STR_SVT_ACC_DESC_FILEVIEW) ),
-    msFolder            ( SVT_RESSTR(STR_SVT_ACC_DESC_FOLDER) ),
-    msFile              ( SVT_RESSTR(STR_SVT_ACC_DESC_FILE) ),
+    msAccessibleDescText( SvtResId(STR_SVT_ACC_DESC_FILEVIEW) ),
+    msFolder            ( SvtResId(STR_SVT_ACC_DESC_FOLDER) ),
+    msFile              ( SvtResId(STR_SVT_ACC_DESC_FILE) ),
     mnSearchIndex       ( 0 ),
     mbResizeDisabled    ( false ),
     mbAutoResize        ( false ),
@@ -493,7 +493,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
         long pTabs[] = { 2, 20, 600 };
         SetTabs(&pTabs[0], MapUnit::MapPixel);
 
-        mpHeaderBar->InsertItem(COLUMN_TITLE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TITLE), 600, nBits | HeaderBarItemBits::UPARROW);
+        mpHeaderBar->InsertItem(COLUMN_TITLE, SvtResId(STR_SVT_FILEVIEW_COLUMN_TITLE), 600, nBits | HeaderBarItemBits::UPARROW);
     }
     else
     {
@@ -501,13 +501,13 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
         SetTabs(&pTabs[0], MapUnit::MapPixel);
         SetTabJustify(2, AdjustRight); // column "Size"
 
-        mpHeaderBar->InsertItem(COLUMN_TITLE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TITLE), 180, nBits | HeaderBarItemBits::UPARROW);
+        mpHeaderBar->InsertItem(COLUMN_TITLE, SvtResId(STR_SVT_FILEVIEW_COLUMN_TITLE), 180, nBits | HeaderBarItemBits::UPARROW);
         if (nFlags & FileViewFlags::SHOW_TYPE)
         {
-            mpHeaderBar->InsertItem(COLUMN_TYPE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TYPE), 140, nBits);
+            mpHeaderBar->InsertItem(COLUMN_TYPE, SvtResId(STR_SVT_FILEVIEW_COLUMN_TYPE), 140, nBits);
         }
-        mpHeaderBar->InsertItem(COLUMN_SIZE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_SIZE), 80, nBits);
-        mpHeaderBar->InsertItem(COLUMN_DATE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_DATE), 500, nBits);
+        mpHeaderBar->InsertItem(COLUMN_SIZE, SvtResId(STR_SVT_FILEVIEW_COLUMN_SIZE), 80, nBits);
+        mpHeaderBar->InsertItem(COLUMN_DATE, SvtResId(STR_SVT_FILEVIEW_COLUMN_DATE), 500, nBits);
     }
 
     Size aHeadSize = mpHeaderBar->GetSizePixel();

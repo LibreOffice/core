@@ -753,7 +753,7 @@ namespace sfx2
     bool lcl_hasAllFilesFilter( TSortedFilterList& _rFilterMatcher, OUString& /* [out] */ _rAllFilterName )
     {
         bool        bHasAll = false;
-        _rAllFilterName = SfxResId( STR_SFX_FILTERNAME_ALL ).toString();
+        _rAllFilterName = SfxResId( STR_SFX_FILTERNAME_ALL );
 
 
         // check if there's already a filter <ALL>

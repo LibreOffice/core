@@ -78,11 +78,11 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher)
     aPos->SetSizePixel(aPos->LogicToPixel(Size(45, 11), MapMode(MapUnit::MapAppFont)));
 
     InsertItem(FN_FORMULA_CALC, Image(BitmapEx(RID_BMP_FORMULA_CALC)),
-               SW_RESSTR(STR_FORMULA_CALC));
+               SwResId(STR_FORMULA_CALC));
     InsertItem(FN_FORMULA_CANCEL, Image(BitmapEx(RID_BMP_FORMULA_CANCEL)),
-               SW_RESSTR(STR_FORMULA_CANCEL));
+               SwResId(STR_FORMULA_CANCEL));
     InsertItem(FN_FORMULA_APPLY, Image(BitmapEx(RID_BMP_FORMULA_APPLY)),
-               SW_RESSTR(STR_FORMULA_APPLY));
+               SwResId(STR_FORMULA_APPLY));
 
     SetHelpId(FN_FORMULA_CALC, HID_TBX_FORMULA_CALC);
     SetHelpId(FN_FORMULA_CANCEL, HID_TBX_FORMULA_CANCEL);
@@ -95,14 +95,14 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher)
     pWrtShell = pView ? pView->GetWrtShellPtr() : nullptr;
 
     InsertWindow(ED_POS, aPos.get(), ToolBoxItemBits::NONE, 0);
-    SetItemText(ED_POS, SW_RESSTR(STR_ACCESS_FORMULA_TYPE));
-    aPos->SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TYPE));
-    SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TOOLBAR));
+    SetItemText(ED_POS, SwResId(STR_ACCESS_FORMULA_TYPE));
+    aPos->SetAccessibleName(SwResId(STR_ACCESS_FORMULA_TYPE));
+    SetAccessibleName(SwResId(STR_ACCESS_FORMULA_TOOLBAR));
     InsertSeparator ( 1 );
     InsertSeparator ();
     InsertWindow(ED_FORMULA, aEdit.get());
-    SetItemText(ED_FORMULA, SW_RESSTR(STR_ACCESS_FORMULA_TEXT));
-    aEdit->SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TEXT));
+    SetItemText(ED_FORMULA, SwResId(STR_ACCESS_FORMULA_TEXT));
+    aEdit->SetAccessibleName(SwResId(STR_ACCESS_FORMULA_TEXT));
     SetHelpId(ED_FORMULA, HID_EDIT_FORMULA);
 
     SetItemBits( FN_FORMULA_CALC, GetItemBits( FN_FORMULA_CALC ) | ToolBoxItemBits::DROPDOWNONLY );
@@ -211,7 +211,7 @@ void SwInputWindow::ShowWin()
             aAktTableName = pWrtShell->GetTableFormat()->GetName();
         }
         else
-            aPos->SetText(SW_RESSTR(STR_TBL_FORMULA));
+            aPos->SetText(SwResId(STR_TBL_FORMULA));
 
         // Edit current field
         OSL_ENSURE(pMgr == nullptr, "FieldManager not deleted");

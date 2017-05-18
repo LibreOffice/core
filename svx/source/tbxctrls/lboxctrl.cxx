@@ -150,7 +150,7 @@ void SvxUndoRedoControl::Impl_SetInfo( sal_Int32 nCount )
     else
         nId = SID_UNDO == GetSlotId() ? RID_SVXSTR_NUM_UNDO_ACTIONS : RID_SVXSTR_NUM_REDO_ACTIONS;
 
-    aActionStr = SVX_RESSTR(nId);
+    aActionStr = SvxResId(nId);
 
     OUString aText = aActionStr.replaceAll("$(ARG1)", OUString::number(nCount));
     pPopupWin->SetText(aText);
@@ -245,7 +245,7 @@ VclPtr<SfxPopupWindow> SvxUndoRedoControl::CreatePopupWindow()
         rListBox.InsertEntry( s );
 
     rListBox.SelectEntryPos( 0 );
-    aActionStr = SVX_RESSTR(SID_UNDO == GetSlotId() ?
+    aActionStr = SvxResId(SID_UNDO == GetSlotId() ?
                                   RID_SVXSTR_NUM_UNDO_ACTIONS : RID_SVXSTR_NUM_REDO_ACTIONS);
     Impl_SetInfo( rListBox.GetSelectEntryCount() );
 

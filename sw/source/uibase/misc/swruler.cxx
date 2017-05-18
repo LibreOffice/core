@@ -128,7 +128,7 @@ void SwCommentRuler::DrawCommentControl(vcl::RenderContext& rRenderContext)
     maVirDev->DrawRect( tools::Rectangle( Point(), aControlRect.GetSize() ) );
 
     // Label and arrow tip
-    OUString aLabel( SW_RESSTR ( STR_COMMENTS_LABEL ) );
+    OUString aLabel( SwResId ( STR_COMMENTS_LABEL ) );
     // Get label and arrow coordinates
     Point aLabelPos;
     Point aArrowPos;
@@ -261,7 +261,7 @@ void SwCommentRuler::UpdateCommentHelpText()
         nTooltipResId = STR_HIDE_COMMENTS;
     else
         nTooltipResId = STR_SHOW_COMMENTS;
-    SetQuickHelpText( OUString( SW_RESSTR( nTooltipResId ) ) );
+    SetQuickHelpText( OUString( SwResId( nTooltipResId ) ) );
 }
 
 // TODO Make Ruler return its central rectangle instead of margins.

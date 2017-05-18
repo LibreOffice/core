@@ -350,9 +350,8 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 
 ResMgr* SfxApplication::GetSfxResManager()
 {
-    return SfxResId::GetResMgr();
+    return SfxResMgr::GetResMgr();
 }
-
 
 void SfxApplication::SetProgress_Impl
 (

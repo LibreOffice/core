@@ -367,7 +367,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
             SfxItemSet aNewAttr(pDrawDoc->GetItemPool(), ATTR_LAYER_START, ATTR_LAYER_END);
-            const OUString aLayerName = SD_RESSTR(STR_LAYER); // + OUString::number(2);
+            const OUString aLayerName = SdResId(STR_LAYER); // + OUString::number(2);
             aNewAttr.Put(makeSdAttrLayerName(aLayerName));
             aNewAttr.Put(makeSdAttrLayerTitle());
             aNewAttr.Put(makeSdAttrLayerDesc());
@@ -379,7 +379,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 getViewShell()->GetActiveWindow(),
                 aNewAttr,
                 true, // alternative: false
-                SD_RESSTR(STR_INSERTLAYER) /* alternative: STR_MODIFYLAYER */);
+                SdResId(STR_INSERTLAYER) /* alternative: STR_MODIFYLAYER */);
             break;
         }
         case 9:

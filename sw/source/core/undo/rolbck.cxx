@@ -115,13 +115,13 @@ OUString SwHistorySetFormat::GetDescription() const
         case SvxBreak::PageBefore:
         case SvxBreak::PageAfter:
         case SvxBreak::PageBoth:
-            aResult = SW_RESSTR(STR_UNDO_PAGEBREAKS);
+            aResult = SwResId(STR_UNDO_PAGEBREAKS);
 
             break;
         case SvxBreak::ColumnBefore:
         case SvxBreak::ColumnAfter:
         case SvxBreak::ColumnBoth:
-            aResult = SW_RESSTR(STR_UNDO_COLBRKS);
+            aResult = SwResId(STR_UNDO_COLBRKS);
 
             break;
         default:
@@ -449,7 +449,7 @@ SwHistorySetFootnote::SwHistorySetFootnote( const SwTextFootnote &rTextFootnote 
 
 OUString SwHistorySetFootnote::GetDescription() const
 {
-    return SW_RES(STR_FOOTNOTE);
+    return SwResId(STR_FOOTNOTE);
 }
 
 SwHistorySetFootnote::~SwHistorySetFootnote()

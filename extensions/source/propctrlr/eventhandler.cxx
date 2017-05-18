@@ -138,7 +138,7 @@ namespace pcr
 
     EventDescription::EventDescription( EventId _nId, const sal_Char* _pListenerNamespaceAscii, const sal_Char* _pListenerClassAsciiName,
             const sal_Char* _pListenerMethodAsciiName, sal_uInt16 _nDisplayNameResId, const OString& _sHelpId, const OString& _sUniqueBrowseId )
-        :sDisplayName(PcrRes( _nDisplayNameResId ).toString())
+        :sDisplayName(PcrRes( _nDisplayNameResId ))
         ,sListenerMethodName( OUString::createFromAscii( _pListenerMethodAsciiName ) )
         ,sHelpId( _sHelpId )
         ,sUniqueBrowseId( _sUniqueBrowseId )

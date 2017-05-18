@@ -484,7 +484,7 @@ struct OptionsGroupInfo
 #define INI_LIST() \
     pCurrentPageEntry   ( nullptr ),\
     sTitle              ( GetText() ),\
-    sNotLoadedError     (       CUI_RES( RID_SVXSTR_LOAD_ERROR ) ),\
+    sNotLoadedError     (       CuiResId( RID_SVXSTR_LOAD_ERROR ) ),\
     bForgetSelection    ( false ),\
     bIsFromExtensionManager( false ), \
     bIsForSetDocumentLanguage( false )
@@ -1102,18 +1102,18 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
 }
 
 OfaPageResource::OfaPageResource() :
-    aGeneralDlgAry(CUI_RES(SID_GENERAL_OPTIONS)),
-    aInetDlgAry(CUI_RES(SID_INET_DLG)),
-    aLangDlgAry(CUI_RES(SID_LANGUAGE_OPTIONS)),
-    aTextDlgAry(CUI_RES(SID_SW_EDITOPTIONS)),
-    aHTMLDlgAry(CUI_RES(SID_SW_ONLINEOPTIONS)),
-    aCalcDlgAry(CUI_RES(SID_SC_EDITOPTIONS)),
-    aStarMathDlgAry(CUI_RES(SID_SM_EDITOPTIONS)),
-    aImpressDlgAry(CUI_RES(SID_SD_EDITOPTIONS)),
-    aDrawDlgAry(CUI_RES(SID_SD_GRAPHIC_OPTIONS)),
-    aChartDlgAry(CUI_RES(SID_SCH_EDITOPTIONS)),
-    aFilterDlgAry(CUI_RES(SID_FILTER_DLG)),
-    aDatasourcesDlgAry(CUI_RES(SID_SB_STARBASEOPTIONS))
+    aGeneralDlgAry(ResId(SID_GENERAL_OPTIONS, CUI_MGR())),
+    aInetDlgAry(ResId(SID_INET_DLG, CUI_MGR())),
+    aLangDlgAry(ResId(SID_LANGUAGE_OPTIONS, CUI_MGR())),
+    aTextDlgAry(ResId(SID_SW_EDITOPTIONS, CUI_MGR())),
+    aHTMLDlgAry(ResId(SID_SW_ONLINEOPTIONS, CUI_MGR())),
+    aCalcDlgAry(ResId(SID_SC_EDITOPTIONS, CUI_MGR())),
+    aStarMathDlgAry(ResId(SID_SM_EDITOPTIONS, CUI_MGR())),
+    aImpressDlgAry(ResId(SID_SD_EDITOPTIONS, CUI_MGR())),
+    aDrawDlgAry(ResId(SID_SD_GRAPHIC_OPTIONS, CUI_MGR())),
+    aChartDlgAry(ResId(SID_SCH_EDITOPTIONS, CUI_MGR())),
+    aFilterDlgAry(ResId(SID_FILTER_DLG, CUI_MGR())),
+    aDatasourcesDlgAry(ResId(SID_SB_STARBASEOPTIONS, CUI_MGR()))
 {
 }
 

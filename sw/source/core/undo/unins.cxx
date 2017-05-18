@@ -468,7 +468,7 @@ SwRewriter SwUndoInsert::GetRewriter() const
     {
         OUString aString = ShortenString(DenoteSpecialCharacters(*pStr),
                                        nUndoStringLength,
-                                       OUString(SW_RES(STR_LDOTS)));
+                                       SwResId(STR_LDOTS));
 
         aResult.AddRule(UndoArg1, aString);
 
@@ -541,13 +541,13 @@ MakeUndoReplaceRewriter(sal_uLong const occurrences,
     if (1 < occurrences)
     {
         aResult.AddRule(UndoArg1, OUString::number(occurrences));
-        aResult.AddRule(UndoArg2, OUString(SW_RES(STR_OCCURRENCES_OF)));
+        aResult.AddRule(UndoArg2, SwResId(STR_OCCURRENCES_OF));
 
         OUString aTmpStr;
-        aTmpStr += SW_RES(STR_START_QUOTE);
+        aTmpStr += SwResId(STR_START_QUOTE);
         aTmpStr += ShortenString(sOld, nUndoStringLength,
-                                 SW_RES(STR_LDOTS));
-        aTmpStr += SW_RES(STR_END_QUOTE);
+                                 SwResId(STR_LDOTS));
+        aTmpStr += SwResId(STR_END_QUOTE);
         aResult.AddRule(UndoArg3, aTmpStr);
     }
     else if (1 == occurrences)
@@ -555,24 +555,24 @@ MakeUndoReplaceRewriter(sal_uLong const occurrences,
         {
             OUString aTmpStr;
 
-            aTmpStr += SW_RES(STR_START_QUOTE);
+            aTmpStr += SwResId(STR_START_QUOTE);
             // #i33488 #
             aTmpStr += ShortenString(sOld, nUndoStringLength,
-                                     SW_RES(STR_LDOTS));
-            aTmpStr += SW_RES(STR_END_QUOTE);
+                                     SwResId(STR_LDOTS));
+            aTmpStr += SwResId(STR_END_QUOTE);
             aResult.AddRule(UndoArg1, aTmpStr);
         }
 
-        aResult.AddRule(UndoArg2, OUString(SW_RES(STR_YIELDS)));
+        aResult.AddRule(UndoArg2, SwResId(STR_YIELDS));
 
         {
             OUString aTmpStr;
 
-            aTmpStr += SW_RES(STR_START_QUOTE);
+            aTmpStr += SwResId(STR_START_QUOTE);
             // #i33488 #
             aTmpStr += ShortenString(sNew, nUndoStringLength,
-                                     SW_RES(STR_LDOTS));
-            aTmpStr += SW_RES(STR_END_QUOTE);
+                                     SwResId(STR_LDOTS));
+            aTmpStr += SwResId(STR_END_QUOTE);
             aResult.AddRule(UndoArg3, aTmpStr);
         }
     }
@@ -1031,10 +1031,10 @@ SwRewriter SwUndoInsertLabel::CreateRewriter(const OUString &rStr)
 
     if (!rStr.isEmpty())
     {
-        aTmpStr += SW_RES(STR_START_QUOTE);
+        aTmpStr += SwResId(STR_START_QUOTE);
         aTmpStr += ShortenString(rStr, nUndoStringLength,
-                                 OUString(SW_RES(STR_LDOTS)));
-        aTmpStr += SW_RES(STR_END_QUOTE);
+                                 SwResId(STR_LDOTS));
+        aTmpStr += SwResId(STR_END_QUOTE);
     }
 
     aRewriter.AddRule(UndoArg1, aTmpStr);

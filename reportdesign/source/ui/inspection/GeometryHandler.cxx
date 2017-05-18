@@ -1751,7 +1751,7 @@ void GeometryHandler::impl_fillScopeList_nothrow(::std::vector< OUString >& _out
         else if ( xSection == xReportDefinition->getDetail() )
             nPos = xGroups->getCount()-1;
 
-        const OUString sGroup = ModuleRes(RID_STR_SCOPE_GROUP).toString();
+        const OUString sGroup = ModuleRes(RID_STR_SCOPE_GROUP);
         for (sal_Int32 i = 0 ; i <= nPos ; ++i)
         {
             xGroup.set(xGroups->getByIndex(i),uno::UNO_QUERY_THROW);
@@ -1778,7 +1778,7 @@ uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(OUS
         const uno::Reference< report::XGroup> xGroup(xSection->getGroup(),uno::UNO_QUERY);
         if ( xGroup.is() )
         {
-            OUString sGroupName = ModuleRes(RID_STR_SCOPE_GROUP).toString();
+            OUString sGroupName = ModuleRes(RID_STR_SCOPE_GROUP);
             _rsNamePostfix = xGroup->getExpression();
             m_sScope = sGroupName.replaceFirst("%1",_rsNamePostfix);
             xReturn = xGroup.get();

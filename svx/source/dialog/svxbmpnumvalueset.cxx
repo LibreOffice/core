@@ -398,7 +398,7 @@ void SvxNumValueSet::init(NumberingPageType eType)
         for ( sal_uInt16 i = 0; i < 8; i++ )
         {
             InsertItem( i + 1, i );
-            SetItemText( i + 1, SVX_RESSTR( RID_SVXSTR_BULLET_DESCRIPTIONS + i ) );
+            SetItemText( i + 1, SvxResId( RID_SVXSTR_BULLET_DESCRIPTIONS + i ) );
         }
     }
 }
@@ -428,7 +428,7 @@ void SvxNumValueSet::SetNumberingSettings(
     {
             InsertItem( i + 1, i );
             if( i < 8 )
-                SetItemText( i + 1, SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i ));
+                SetItemText( i + 1, SvxResId( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i ));
     }
 }
 
@@ -446,7 +446,7 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
     {
         InsertItem( i + 1, i );
         if( i < 8 )
-            SetItemText( i + 1, SVX_RESSTR( RID_SVXSTR_OUTLINENUM_DESCRIPTIONS + i ));
+            SetItemText( i + 1, SvxResId( RID_SVXSTR_OUTLINENUM_DESCRIPTIONS + i ));
     }
 }
 

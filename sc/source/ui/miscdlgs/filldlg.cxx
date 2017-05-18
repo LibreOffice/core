@@ -42,7 +42,7 @@ ScFillSeriesDlg::ScFillSeriesDlg( vcl::Window*       pParent,
                                   sal_uInt16        nPossDir )
     : ModalDialog(pParent, "FillSeriesDialog", "modules/scalc/ui/filldlg.ui"),
         aStartStrVal    ( aStartStr),
-        aErrMsgInvalidVal( SC_RESSTR(SCSTR_VALERR) ),
+        aErrMsgInvalidVal( ScResId(SCSTR_VALERR) ),
         rDoc            ( rDocument ),
         theFillDir      ( eFillDir ),
         theFillCmd      ( eFillCmd ),

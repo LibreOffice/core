@@ -106,17 +106,17 @@ NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
     OUString aMoreItemText;
     if ( mePageType == NumberingPageType::BULLET )
     {
-        aMoreItemText = SVX_RESSTR( RID_SVXSTR_MOREBULLETS );
+        aMoreItemText = SvxResId( RID_SVXSTR_MOREBULLETS );
         AddStatusListener( ".uno:CurrentBulletListType" );
     }
     else if ( mePageType == NumberingPageType::SINGLENUM )
     {
-        aMoreItemText = SVX_RESSTR( RID_SVXSTR_MORENUMBERING );
+        aMoreItemText = SvxResId( RID_SVXSTR_MORENUMBERING );
         AddStatusListener( ".uno:CurrentNumListType" );
     }
     else
     {
-        aMoreItemText = SVX_RESSTR( RID_SVXSTR_MORE );
+        aMoreItemText = SvxResId( RID_SVXSTR_MORE );
         AddStatusListener( ".uno:CurrentOutlineType" );
     }
 

@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <osl/diagnose.h>
 #include "rangeutl.hxx"
 #include "document.hxx"
 #include "global.hxx"

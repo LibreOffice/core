@@ -74,7 +74,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
         if ( aStr.isEmpty() )
         {
-            aStr = SD_RESSTR( STR_PAGE ) + OUString::number( nPage + 1 );
+            aStr = SdResId( STR_PAGE ) + OUString::number( nPage + 1 );
         }
 
         aPageNameList[ nPage ] = aStr;

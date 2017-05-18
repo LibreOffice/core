@@ -352,8 +352,8 @@ IMPL_LINK(SvxColorTabPage, ModifiedHdl_Impl, Edit&, rEdit, void)
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
 {
-    OUString aNewName( SVX_RES( RID_SVXSTR_COLOR ) );
-    OUString aDesc( CUI_RES( RID_SVXSTR_DESC_COLOR ) );
+    OUString aNewName( SvxResId( RID_SVXSTR_COLOR ) );
+    OUString aDesc( CuiResId( RID_SVXSTR_DESC_COLOR ) );
     OUString aName;
 
     long j = 1;

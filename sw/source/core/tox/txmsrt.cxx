@@ -523,7 +523,7 @@ TextAndReading SwTOXPara::GetText_Impl() const
                             : SwTOXElement::Graphic == eType
                                 ? STR_GRAPHIC_DEFNAME
                                 : STR_FRAME_DEFNAME;
-            return TextAndReading(SW_RESSTR( nId ), OUString());
+            return TextAndReading(SwResId( nId ), OUString());
         }
         break;
     default: break;
@@ -633,7 +633,7 @@ TextAndReading SwTOXTable::GetText_Impl() const
     }
 
     OSL_ENSURE( false, "Where's my table?" );
-    return TextAndReading(SW_RESSTR( STR_TABLE_DEFNAME ), OUString());
+    return TextAndReading(SwResId( STR_TABLE_DEFNAME ), OUString());
 }
 
 sal_uInt16 SwTOXTable::GetLevel() const

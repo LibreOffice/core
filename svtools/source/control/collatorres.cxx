@@ -24,20 +24,18 @@
 //  implementation of the collator-algorithm-name translation
 CollatorResource::CollatorResource()
 {
-    #define RESSTR(rid) SvtResId(rid).toString()
-
-    m_aData.push_back(CollatorResourceData("alphanumeric", RESSTR(STR_SVT_COLLATE_ALPHANUMERIC)));
-    m_aData.push_back(CollatorResourceData("charset", RESSTR(STR_SVT_COLLATE_CHARSET)));
-    m_aData.push_back(CollatorResourceData("dict", RESSTR(STR_SVT_COLLATE_DICTIONARY)));
-    m_aData.push_back(CollatorResourceData("normal", RESSTR(STR_SVT_COLLATE_NORMAL)));
-    m_aData.push_back(CollatorResourceData("pinyin", RESSTR(STR_SVT_COLLATE_PINYIN)));
-    m_aData.push_back(CollatorResourceData("radical", RESSTR(STR_SVT_COLLATE_RADICAL)));
-    m_aData.push_back(CollatorResourceData("stroke", RESSTR(STR_SVT_COLLATE_STROKE)));
-    m_aData.push_back(CollatorResourceData("unicode", RESSTR(STR_SVT_COLLATE_UNICODE)));
-    m_aData.push_back(CollatorResourceData("zhuyin", RESSTR(STR_SVT_COLLATE_ZHUYIN)));
-    m_aData.push_back(CollatorResourceData("phonebook", RESSTR(STR_SVT_COLLATE_PHONEBOOK)));
-    m_aData.push_back(CollatorResourceData("phonetic (alphanumeric first)", RESSTR(STR_SVT_COLLATE_PHONETIC_F)));
-    m_aData.push_back(CollatorResourceData("phonetic (alphanumeric last)", RESSTR(STR_SVT_COLLATE_PHONETIC_L)));
+    m_aData.push_back(CollatorResourceData("alphanumeric", SvtResId(STR_SVT_COLLATE_ALPHANUMERIC)));
+    m_aData.push_back(CollatorResourceData("charset", SvtResId(STR_SVT_COLLATE_CHARSET)));
+    m_aData.push_back(CollatorResourceData("dict", SvtResId(STR_SVT_COLLATE_DICTIONARY)));
+    m_aData.push_back(CollatorResourceData("normal", SvtResId(STR_SVT_COLLATE_NORMAL)));
+    m_aData.push_back(CollatorResourceData("pinyin", SvtResId(STR_SVT_COLLATE_PINYIN)));
+    m_aData.push_back(CollatorResourceData("radical", SvtResId(STR_SVT_COLLATE_RADICAL)));
+    m_aData.push_back(CollatorResourceData("stroke", SvtResId(STR_SVT_COLLATE_STROKE)));
+    m_aData.push_back(CollatorResourceData("unicode", SvtResId(STR_SVT_COLLATE_UNICODE)));
+    m_aData.push_back(CollatorResourceData("zhuyin", SvtResId(STR_SVT_COLLATE_ZHUYIN)));
+    m_aData.push_back(CollatorResourceData("phonebook", SvtResId(STR_SVT_COLLATE_PHONEBOOK)));
+    m_aData.push_back(CollatorResourceData("phonetic (alphanumeric first)", SvtResId(STR_SVT_COLLATE_PHONETIC_F)));
+    m_aData.push_back(CollatorResourceData("phonetic (alphanumeric last)", SvtResId(STR_SVT_COLLATE_PHONETIC_L)));
 }
 
 const OUString&

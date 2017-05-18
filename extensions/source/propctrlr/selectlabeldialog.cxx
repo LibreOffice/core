@@ -112,7 +112,7 @@ namespace pcr
 
             // insert the root
             Image aRootImage(BitmapEx(RID_EXTBMP_FORMS));
-            SvTreeListEntry* pRoot = m_pControlTree->InsertEntry(PcrRes(RID_STR_FORMS).toString(), aRootImage, aRootImage);
+            SvTreeListEntry* pRoot = m_pControlTree->InsertEntry(PcrRes(RID_STR_FORMS), aRootImage, aRootImage);
 
             // build the tree
             m_pInitialSelection = nullptr;

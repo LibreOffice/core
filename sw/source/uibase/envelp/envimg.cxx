@@ -52,7 +52,7 @@ OUString MakeSender()
     SvtUserOptions& rUserOpt = SW_MOD()->GetUserOptions();
 
     OUString sRet;
-    OUString sSenderToken(SW_RES(STR_SENDER_TOKENS));
+    OUString sSenderToken(SwResId(STR_SENDER_TOKENS));
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(sSenderToken, ';');
     sal_Int32 nSttPos = 0;
     bool bLastLength = true;

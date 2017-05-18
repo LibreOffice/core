@@ -375,7 +375,7 @@ IMPL_LINK(SafeModeDialog, CreateZipBtnHdl, Button*, /*pBtn*/, void)
     }
     catch (uno::Exception)
     {
-        ScopedVclPtrInstance< MessageDialog > aErrorBox(this, SVX_RESSTR(RID_SVXSTR_SAFEMODE_ZIP_FAILURE));
+        ScopedVclPtrInstance< MessageDialog > aErrorBox(this, SvxResId(RID_SVXSTR_SAFEMODE_ZIP_FAILURE));
         aErrorBox->Execute();
         return;
     }

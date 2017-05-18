@@ -2767,13 +2767,13 @@ namespace
 {
     OUString lcl_makeColorName(const Color& rColor)
     {
-        OUString aStr = SVX_RESSTR(RID_SVXFLOAT3D_FIX_R) +
+        OUString aStr = SvxResId(RID_SVXFLOAT3D_FIX_R) +
                         OUString::number(rColor.GetRed()) +
                         " " +
-                        SVX_RESSTR(RID_SVXFLOAT3D_FIX_G) +
+                        SvxResId(RID_SVXFLOAT3D_FIX_G) +
                         OUString::number(rColor.GetGreen()) +
                         " " +
-                        SVX_RESSTR(RID_SVXFLOAT3D_FIX_B) +
+                        SvxResId(RID_SVXFLOAT3D_FIX_B) +
                         OUString::number(rColor.GetBlue());
         return aStr;
     }

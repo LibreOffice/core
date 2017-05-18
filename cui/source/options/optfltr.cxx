@@ -143,13 +143,13 @@ void OfaMSFilterTabPage::Reset( const SfxItemSet* )
 
 OfaMSFilterTabPage2::OfaMSFilterTabPage2( vcl::Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, "OptFilterPage", "cui/ui/optfltrembedpage.ui", &rSet ),
-    sHeader1(CUI_RES(RID_SVXSTR_HEADER1)),
-    sHeader2(CUI_RES(RID_SVXSTR_HEADER2)),
-    sChgToFromMath(CUI_RES(RID_SVXSTR_CHG_MATH)),
-    sChgToFromWriter(CUI_RES(RID_SVXSTR_CHG_WRITER)),
-    sChgToFromCalc(CUI_RES(RID_SVXSTR_CHG_CALC)),
-    sChgToFromImpress(CUI_RES(RID_SVXSTR_CHG_IMPRESS)),
-    sChgToFromSmartArt(CUI_RES(RID_SVXSTR_CHG_SMARTART)),
+    sHeader1(CuiResId(RID_SVXSTR_HEADER1)),
+    sHeader2(CuiResId(RID_SVXSTR_HEADER2)),
+    sChgToFromMath(CuiResId(RID_SVXSTR_CHG_MATH)),
+    sChgToFromWriter(CuiResId(RID_SVXSTR_CHG_WRITER)),
+    sChgToFromCalc(CuiResId(RID_SVXSTR_CHG_CALC)),
+    sChgToFromImpress(CuiResId(RID_SVXSTR_CHG_IMPRESS)),
+    sChgToFromSmartArt(CuiResId(RID_SVXSTR_CHG_SMARTART)),
     pCheckButtonData(nullptr)
 {
     get(m_pCheckLBContainer, "checklbcontainer");

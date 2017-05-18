@@ -276,7 +276,7 @@ UndoManager::StartUndo(SwUndoId const i_eUndoId,
     assert(SwUndoId::END != eUndoId);
     OUString comment( (SwUndoId::START == eUndoId)
         ?   OUString("??")
-        :   OUString(SW_RES(UNDO_BASE + (int)eUndoId)) );
+        :   SwResId(UNDO_BASE + (int)eUndoId) );
     if (pRewriter)
     {
         assert(SwUndoId::START != eUndoId);
@@ -324,7 +324,7 @@ UndoManager::EndUndo(SwUndoId eUndoId, SwRewriter const*const pRewriter)
             OSL_ENSURE((SwUndoId)pListAction->GetId() == eUndoId,
                     "EndUndo(): given ID different from StartUndo()");
             // comment set by caller of EndUndo
-            OUString comment = SW_RES(UNDO_BASE + (int)eUndoId);
+            OUString comment = SwResId(UNDO_BASE + (int)eUndoId);
             if (pRewriter)
             {
                 comment = pRewriter->Apply(comment);

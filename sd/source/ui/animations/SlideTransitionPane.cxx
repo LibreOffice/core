@@ -462,7 +462,7 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
     // dummy list box of slide transitions for startup.
     mpVS_TRANSITION_ICONS->InsertItem(
         0, Image( BitmapEx( "sd/cmd/transition-none.png" ) ),
-        SD_RESSTR( STR_SLIDETRANSITION_NONE ),
+        SdResId( STR_SLIDETRANSITION_NONE ),
         VALUESET_APPEND, /* show legend */ true );
     mpVS_TRANSITION_ICONS->RecalculateItemSizes();
 
@@ -763,7 +763,7 @@ void SlideTransitionPane::openSoundFileDialog()
             }
             else
             {
-                OUString aStrWarning(SD_RESSTR(STR_WARNING_NOSOUNDFILE));
+                OUString aStrWarning(SdResId(STR_WARNING_NOSOUNDFILE));
                 aStrWarning = aStrWarning.replaceFirst("%", aFile);
                 ScopedVclPtrInstance< WarningBox > aWarningBox( nullptr, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
                 aWarningBox->SetModalInputMode (true);

@@ -460,7 +460,7 @@ bool E3dView::Paste(
     if(pOwner && dynamic_cast< const E3dScene* >(pOwner) !=  nullptr)
     {
         E3dScene* pDstScene = static_cast<E3dScene*>(pOwner);
-        BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_EXCHANGE_PASTE));
+        BegUndo(SvxResId(RID_SVX_3D_UNDO_EXCHANGE_PASTE));
 
         // Copy all objects from E3dScenes and insert them directly
         for(sal_uInt16 nPg(0); nPg < rMod.GetPageCount(); nPg++)
@@ -833,9 +833,9 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
     {
         // Create undo
         if(bExtrude)
-            BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_EXTRUDE));
+            BegUndo(SvxResId(RID_SVX_3D_UNDO_EXTRUDE));
         else
-            BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_LATHE));
+            BegUndo(SvxResId(RID_SVX_3D_UNDO_LATHE));
 
         // Create a new scene for the created 3D object
         E3dScene* pScene = new E3dScene;
@@ -1566,7 +1566,7 @@ void E3dView::Break3DObj()
         // ALL selected objects are changed
         const size_t nCount = GetMarkedObjectCount();
 
-        BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_BREAK_LATHE));
+        BegUndo(SvxResId(RID_SVX_3D_UNDO_BREAK_LATHE));
         for(size_t a=0; a<nCount; ++a)
         {
             E3dObject* pObj = static_cast<E3dObject*>(GetMarkedObjectByIndex(a));

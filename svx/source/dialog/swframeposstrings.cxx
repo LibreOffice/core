@@ -24,7 +24,7 @@
 #include <svx/dialogs.hrc>
 
 SvxSwFramePosString::SvxSwFramePosString() :
-    pImpl(new ResStringArray(SVX_RES(RID_SVXSW_FRAMEPOSITIONS)))
+    pImpl(new ResStringArray(ResId(RID_SVXSW_FRAMEPOSITIONS, DIALOG_MGR())))
 {
     assert(pImpl->Count() == SvxSwFramePosString::STR_MAX);
 }

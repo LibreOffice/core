@@ -511,11 +511,11 @@ void PivotTableDataProvider::collectPivotTableData()
                             if (aMembers.size() == 1)
                                 aFieldOutputDescription = aMembers[0];
                             else
-                                aFieldOutputDescription = ScResId(SCSTR_MULTIPLE).toString();
+                                aFieldOutputDescription = ScResId(SCSTR_MULTIPLE);
                         }
                         else
                         {
-                            aFieldOutputDescription = ScResId(SCSTR_ALL).toString();
+                            aFieldOutputDescription = ScResId(SCSTR_ALL);
                         }
                         m_aFieldOutputDescriptionMap[nDim] = aFieldOutputDescription;
                     }

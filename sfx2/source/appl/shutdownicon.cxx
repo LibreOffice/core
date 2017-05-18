@@ -309,13 +309,13 @@ OUString ShutdownIcon::GetResString( int id )
     ::SolarMutexGuard aGuard;
 
     if( ! m_pResMgr )
-        m_pResMgr = SfxResId::GetResMgr();
+        m_pResMgr = SfxResMgr::GetResMgr();
     ResId aResId( id, *m_pResMgr );
     aResId.SetRT( RSC_STRING );
     if (!m_pResMgr->IsAvailable(aResId))
         return OUString();
 
-    return ResId(id, *m_pResMgr).toString();
+    return ResId(id, *m_pResMgr);
 }
 
 
@@ -560,7 +560,7 @@ void ShutdownIcon::init()
 {
     // access resource system and sfx only protected by solarmutex
     ::SolarMutexGuard aSolarGuard;
-    ResMgr *pResMgr = SfxResId::GetResMgr();
+    ResMgr *pResMgr = SfxResMgr::GetResMgr();
 
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     m_pResMgr = pResMgr;
@@ -719,11 +719,11 @@ OUString ShutdownIcon::getShortcutName()
 #else
 
     OUString aShortcutName( "StarOffice 6.0"  );
-    ResMgr* pMgr = SfxResId::GetResMgr();
+    ResMgr* pMgr = SfxResMgr::GetResMgr();
     if( pMgr )
     {
         ::SolarMutexGuard aGuard;
-        aShortcutName = SFX2_RESSTR(STR_QUICKSTART_LNKNAME);
+        aShortcutName = SfxResId(STR_QUICKSTART_LNKNAME);
     }
 #ifdef _WIN32
     aShortcutName += ".lnk";

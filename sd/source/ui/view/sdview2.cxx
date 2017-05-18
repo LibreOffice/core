@@ -242,7 +242,7 @@ void View::DoCut()
         const_cast<OutlinerView*>(pOLV)->Cut();
     else if( AreObjectsMarked() )
     {
-        OUString aStr(SD_RESSTR(STR_UNDO_CUT));
+        OUString aStr(SdResId(STR_UNDO_CUT));
 
         DoCopy();
         BegUndo(aStr + " " + GetDescriptionOfMarkedObjects());
@@ -367,7 +367,7 @@ void View::StartDrag( const Point& rStartPos, vcl::Window* pWindow )
 
         if( IsUndoEnabled() )
         {
-            OUString aStr(SD_RESSTR(STR_UNDO_DRAGDROP));
+            OUString aStr(SdResId(STR_UNDO_DRAGDROP));
             BegUndo(aStr + " " + mpDragSrcMarkList->GetMarkDescription());
         }
         CreateDragDataObject( this, *pWindow, rStartPos );
@@ -874,8 +874,8 @@ bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
         {
             if( mrDoc.GetObj( aNewName ) )
             {
-                OUString aTitle(SD_RESSTR(STR_TITLE_NAMEGROUP));
-                OUString aDesc(SD_RESSTR(STR_DESC_NAMEGROUP));
+                OUString aTitle(SdResId(STR_TITLE_NAMEGROUP));
+                OUString aDesc(SdResId(STR_DESC_NAMEGROUP));
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact ? pFact->CreateSvxNameDialog(mpViewSh->GetActiveWindow(), aNewName, aDesc) : nullptr);

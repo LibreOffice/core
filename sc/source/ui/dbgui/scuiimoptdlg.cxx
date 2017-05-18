@@ -135,8 +135,8 @@ ScImportOptionsDlg::ScImportOptionsDlg(
     get(m_pBtnOk, "ok");
 
     OUString sFieldSep(SCSTR_FIELDSEP);
-    sFieldSep = sFieldSep.replaceFirst( "%TAB",   SC_RESSTR(SCSTR_FIELDSEP_TAB) );
-    sFieldSep = sFieldSep.replaceFirst( "%SPACE", SC_RESSTR(SCSTR_FIELDSEP_SPACE) );
+    sFieldSep = sFieldSep.replaceFirst( "%TAB",   ScResId(SCSTR_FIELDSEP_TAB) );
+    sFieldSep = sFieldSep.replaceFirst( "%SPACE", ScResId(SCSTR_FIELDSEP_SPACE) );
 
     // not possible in the Ctor initializer (MSC cannot do that):
     pFieldSepTab = new ScDelimiterTable(sFieldSep);

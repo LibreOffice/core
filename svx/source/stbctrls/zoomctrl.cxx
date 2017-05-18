@@ -105,7 +105,7 @@ SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
     nZoom( 100 ),
     nValueSet( SvxZoomEnableFlags::ALL )
 {
-    GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(RID_SVXSTR_ZOOMTOOL_HINT));
+    GetStatusBar().SetQuickHelpText(GetId(), SvxResId(RID_SVXSTR_ZOOMTOOL_HINT));
 }
 
 void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
@@ -184,7 +184,7 @@ SvxZoomPageStatusBarControl::SvxZoomPageStatusBarControl(sal_uInt16 _nSlotId,
     : SfxStatusBarControl(_nSlotId, _nId, rStb)
     , maImage(BitmapEx(RID_SVXBMP_ZOOM_PAGE))
 {
-    GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(RID_SVXSTR_FIT_SLIDE));
+    GetStatusBar().SetQuickHelpText(GetId(), SvxResId(RID_SVXSTR_FIT_SLIDE));
 }
 
 void SvxZoomPageStatusBarControl::Paint(const UserDrawEvent& rUsrEvt)

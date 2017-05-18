@@ -37,7 +37,7 @@ SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParen
     mpList = VclPtr<SvSimpleTable>::Create(*pContainer);
     long nTabs[] = {3, 0, 40, 60};
     mpList->SetTabs(&nTabs[0]);
-    mpList->InsertHeaderEntry(SC_RESSTR(STR_SHEET) + "\t" + SC_RESSTR(STR_CELL) + "\t" + SC_RESSTR(STR_CONTENT));
+    mpList->InsertHeaderEntry(ScResId(STR_SHEET) + "\t" + ScResId(STR_CELL) + "\t" + ScResId(STR_CONTENT));
     mpList->SetSelectHdl( LINK(this, SearchResultsDlg, ListSelectHdl) );
 }
 

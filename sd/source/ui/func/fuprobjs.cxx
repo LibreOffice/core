@@ -140,7 +140,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
             SfxStyleSheetBase& rStyleSheet = *pStyleSheet;
 
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, mpViewShell->GetActiveWindow(), SdResId( nDlgId ), rStyleSheet, ePO, pStyleSheetPool ) : nullptr);
+            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh, mpViewShell->GetActiveWindow(), nDlgId, rStyleSheet, ePO, pStyleSheetPool ) : nullptr);
             if( pDlg && (pDlg->Execute() == RET_OK) )
             {
                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();

@@ -1491,7 +1491,7 @@ void SwPostItMgr::Delete(const OUString& rAuthor)
         SetActiveSidebarWin(nullptr);
     }
     SwRewriter aRewriter;
-    aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_DELETE_AUTHOR_NOTES) + rAuthor);
+    aRewriter.AddRule(UndoArg1, SwResId(STR_DELETE_AUTHOR_NOTES) + rAuthor);
     mpWrtShell->StartUndo( SwUndoId::DELETE, &aRewriter );
 
     IsPostitFieldWithAuthorOf aFilter(rAuthor);
@@ -1518,7 +1518,7 @@ void SwPostItMgr::Delete(sal_uInt32 nPostItId)
         SetActiveSidebarWin(nullptr);
     }
     SwRewriter aRewriter;
-    aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_CONTENT_TYPE_SINGLE_POSTIT));
+    aRewriter.AddRule(UndoArg1, SwResId(STR_CONTENT_TYPE_SINGLE_POSTIT));
     mpWrtShell->StartUndo( SwUndoId::DELETE, &aRewriter );
 
     IsPostitFieldWithPostitId aFilter(nPostItId);
@@ -1539,7 +1539,7 @@ void SwPostItMgr::Delete()
     mpWrtShell->StartAllAction();
     SetActiveSidebarWin(nullptr);
     SwRewriter aRewriter;
-    aRewriter.AddRule(UndoArg1, SW_RES(STR_DELETE_ALL_NOTES) );
+    aRewriter.AddRule(UndoArg1, SwResId(STR_DELETE_ALL_NOTES) );
     mpWrtShell->StartUndo( SwUndoId::DELETE, &aRewriter );
 
     IsPostitField aFilter;
@@ -1598,7 +1598,7 @@ void SwPostItMgr::FormatAll(const SfxItemSet &rNewAttr)
 {
     mpWrtShell->StartAllAction();
     SwRewriter aRewriter;
-    aRewriter.AddRule(UndoArg1, SW_RES(STR_FORMAT_ALL_NOTES) );
+    aRewriter.AddRule(UndoArg1, SwResId(STR_FORMAT_ALL_NOTES) );
     mpWrtShell->StartUndo( SwUndoId::INSATTR, &aRewriter );
 
     for(SwSidebarItem_iterator i = mvPostItFields.begin(); i != mvPostItFields.end() ; ++i)

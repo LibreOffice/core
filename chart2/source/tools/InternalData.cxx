@@ -21,6 +21,7 @@
 #include "ResId.hxx"
 #include "Strings.hrc"
 
+#include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #ifdef DEBUG_CHART2_TOOLS
 #define DEBUG_INTERNAL_DATA 1

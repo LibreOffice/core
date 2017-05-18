@@ -197,8 +197,8 @@ void Calendar::ImplInit( WinBits nWinStyle )
     ImplCalendarSelectDate( mpSelectTable, maCurDate, true );
 
     // Sonstige Strings erzeugen
-    maDayText = SVT_RESSTR(STR_SVT_CALENDAR_DAY);
-    maWeekText = SVT_RESSTR(STR_SVT_CALENDAR_WEEK);
+    maDayText = SvtResId(STR_SVT_CALENDAR_DAY);
+    maWeekText = SvtResId(STR_SVT_CALENDAR_WEEK);
 
     // Tagestexte anlegen
     for (sal_Int32 i = 0; i < 31; ++i)
@@ -2020,7 +2020,7 @@ PushButton* ImplCFieldFloatWin::EnableTodayBtn( bool bEnable )
         if ( !mpTodayBtn )
         {
             mpTodayBtn = VclPtr<PushButton>::Create( this, WB_NOPOINTERFOCUS );
-            OUString aTodayText(SVT_RESSTR(STR_SVT_CALENDAR_TODAY));
+            OUString aTodayText(SvtResId(STR_SVT_CALENDAR_TODAY));
             mpTodayBtn->SetText( aTodayText );
             Size aSize;
             aSize.Width()   = mpTodayBtn->GetCtrlTextWidth( mpTodayBtn->GetText() );
@@ -2046,7 +2046,7 @@ PushButton* ImplCFieldFloatWin::EnableNoneBtn( bool bEnable )
         if ( !mpNoneBtn )
         {
             mpNoneBtn = VclPtr<PushButton>::Create( this, WB_NOPOINTERFOCUS );
-            OUString aNoneText(SVT_RESSTR(STR_SVT_CALENDAR_NONE));
+            OUString aNoneText(SvtResId(STR_SVT_CALENDAR_NONE));
             mpNoneBtn->SetText( aNoneText );
             Size aSize;
             aSize.Width()   = mpNoneBtn->GetCtrlTextWidth( mpNoneBtn->GetText() );

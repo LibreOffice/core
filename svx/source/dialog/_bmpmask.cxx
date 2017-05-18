@@ -37,7 +37,6 @@
 #include <memory>
 #include "helpid.hrc"
 
-#define BMP_RESID(nId)  ResId(nId, DIALOG_MGR())
 #define OWN_CALLMODE    SfxCallMode::ASYNCHRON | SfxCallMode::RECORD
 
 
@@ -427,7 +426,7 @@ SvxBmpMask::SvxBmpMask(SfxBindings *pBindinx, SfxChildWindow *pCW, vcl::Window* 
     m_pLbColor4->SetGetFocusHdl( LINK( pData, MaskData, FocusLbHdl ) );
     m_pLbColorTrans->Disable();
 
-    OUString sColorPalette (BMP_RESID( RID_SVXDLG_BMPMASK_STR_PALETTE));
+    OUString sColorPalette (SvxResId( RID_SVXDLG_BMPMASK_STR_PALETTE));
     OUString sColorPaletteN;
 
     m_pQSet1->SetStyle( m_pQSet1->GetStyle() | WB_DOUBLEBORDER | WB_ITEMBORDER );
@@ -1096,7 +1095,7 @@ bool SvxBmpMask::IsEyedropping() const
 void SvxBmpMask::SetAccessibleNames()
 {
     // set the accessible name for valueset
-    OUString sColorPalette (BMP_RESID( RID_SVXDLG_BMPMASK_STR_PALETTE));
+    OUString sColorPalette (SvxResId( RID_SVXDLG_BMPMASK_STR_PALETTE));
     OUString sColorPaletteN;
 
     sColorPaletteN = sColorPalette + " 1";

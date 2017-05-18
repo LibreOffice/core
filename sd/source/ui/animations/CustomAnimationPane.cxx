@@ -109,7 +109,7 @@ namespace sd {
 
 void fillRepeatComboBox( ListBox* pBox )
 {
-    OUString aNone( SD_RESSTR( STR_CUSTOMANIMATION_REPEAT_NONE ) );
+    OUString aNone( SdResId( STR_CUSTOMANIMATION_REPEAT_NONE ) );
     pBox->InsertEntry(aNone);
     pBox->InsertEntry(OUString::number(2));
     pBox->InsertEntry(OUString::number(3));
@@ -117,10 +117,10 @@ void fillRepeatComboBox( ListBox* pBox )
     pBox->InsertEntry(OUString::number(5));
     pBox->InsertEntry(OUString::number(10));
 
-    OUString aUntilClick( SD_RESSTR( STR_CUSTOMANIMATION_REPEAT_UNTIL_NEXT_CLICK ) );
+    OUString aUntilClick( SdResId( STR_CUSTOMANIMATION_REPEAT_UNTIL_NEXT_CLICK ) );
     pBox->InsertEntry(aUntilClick);
 
-    OUString aEndOfSlide( SD_RESSTR( STR_CUSTOMANIMATION_REPEAT_UNTIL_END_OF_SLIDE ) );
+    OUString aEndOfSlide( SdResId( STR_CUSTOMANIMATION_REPEAT_UNTIL_END_OF_SLIDE ) );
     pBox->InsertEntry(aEndOfSlide);
 }
 
@@ -441,55 +441,55 @@ OUString getPropertyName( sal_Int32 nPropertyType )
     switch( nPropertyType )
     {
     case nPropertyTypeDirection:
-        return SD_RESSTR(STR_CUSTOMANIMATION_DIRECTION_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_DIRECTION_PROPERTY);
 
     case nPropertyTypeSpokes:
-        return SD_RESSTR(STR_CUSTOMANIMATION_SPOKES_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_SPOKES_PROPERTY);
 
     case nPropertyTypeFirstColor:
-        return SD_RESSTR(STR_CUSTOMANIMATION_FIRST_COLOR_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_FIRST_COLOR_PROPERTY);
 
     case nPropertyTypeSecondColor:
-        return SD_RESSTR(STR_CUSTOMANIMATION_SECOND_COLOR_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_SECOND_COLOR_PROPERTY);
 
     case nPropertyTypeZoom:
-        return SD_RESSTR(STR_CUSTOMANIMATION_ZOOM_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_ZOOM_PROPERTY);
 
     case nPropertyTypeFillColor:
-        return SD_RESSTR(STR_CUSTOMANIMATION_FILL_COLOR_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_FILL_COLOR_PROPERTY);
 
     case nPropertyTypeColorStyle:
-        return SD_RESSTR(STR_CUSTOMANIMATION_STYLE_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_STYLE_PROPERTY);
 
     case nPropertyTypeFont:
-        return SD_RESSTR(STR_CUSTOMANIMATION_FONT_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_FONT_PROPERTY);
 
     case nPropertyTypeCharHeight:
-        return SD_RESSTR(STR_CUSTOMANIMATION_SIZE_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_SIZE_PROPERTY);
 
     case nPropertyTypeCharColor:
-        return SD_RESSTR(STR_CUSTOMANIMATION_FONT_COLOR_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_FONT_COLOR_PROPERTY);
 
     case nPropertyTypeCharHeightStyle:
-        return SD_RESSTR(STR_CUSTOMANIMATION_FONT_SIZE_STYLE_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_FONT_SIZE_STYLE_PROPERTY);
 
     case nPropertyTypeCharDecoration:
-        return SD_RESSTR(STR_CUSTOMANIMATION_FONT_STYLE_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_FONT_STYLE_PROPERTY);
 
     case nPropertyTypeLineColor:
-        return SD_RESSTR(STR_CUSTOMANIMATION_LINE_COLOR_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_LINE_COLOR_PROPERTY);
 
     case nPropertyTypeRotate:
-        return SD_RESSTR(STR_CUSTOMANIMATION_AMOUNT_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_AMOUNT_PROPERTY);
 
     case nPropertyTypeColor:
-        return SD_RESSTR(STR_CUSTOMANIMATION_COLOR_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_COLOR_PROPERTY);
 
     case nPropertyTypeTransparency:
-        return SD_RESSTR(STR_CUSTOMANIMATION_AMOUNT_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_AMOUNT_PROPERTY);
 
     case nPropertyTypeScale:
-        return SD_RESSTR(STR_CUSTOMANIMATION_SCALE_PROPERTY);
+        return SdResId(STR_CUSTOMANIMATION_SCALE_PROPERTY);
     }
 
     return OUString();
@@ -2210,7 +2210,7 @@ sal_uInt32 CustomAnimationPane::fillAnimationLB( bool bHasText )
 
     if(nPosition == mnMotionPathPos)
     {
-        OUString sMotionPathLabel( SD_RESSTR( STR_CUSTOMANIMATION_USERPATH ) );
+        OUString sMotionPathLabel( SdResId( STR_CUSTOMANIMATION_USERPATH ) );
         mpLBAnimation->InsertCategory( sMotionPathLabel );
         mnCurvePathPos = mpLBAnimation->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulCOMBLINE) );
         mnPolygonPathPos = mpLBAnimation->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulPOLY) );

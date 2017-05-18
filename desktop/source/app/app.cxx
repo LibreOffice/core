@@ -370,7 +370,7 @@ OUString GetMsgString(
     {
         ResMgr* resMgr = Desktop::GetDesktopResManager();
         if ( resMgr )
-            return ResId(nId, *resMgr).toString();
+            return ResId(nId, *resMgr);
     }
     return aFallbackMsg;
 }
@@ -398,7 +398,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 
     ResMgr* pResMgr = Desktop::GetDesktopResManager();
     if ( pResMgr )
-        aDiagnosticMessage.append( ResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS, *pResMgr).toString() );
+        aDiagnosticMessage.append( ResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS, *pResMgr) );
     else
         aDiagnosticMessage.append( "The program cannot be started." );
 
@@ -406,7 +406,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
     {
         aDiagnosticMessage.append( "\n\n" );
         if ( pResMgr )
-            aDiagnosticMessage.append( ResId(STR_INTERNAL_ERRMSG, *pResMgr).toString() );
+            aDiagnosticMessage.append( ResId(STR_INTERNAL_ERRMSG, *pResMgr) );
         else
             aDiagnosticMessage.append( "The following internal error has occurred:\n\n" );
         aDiagnosticMessage.append( aInternalErrMsg );
@@ -1159,7 +1159,7 @@ void restartOnMac(bool passArguments) {
 #if HAVE_FEATURE_MACOSX_SANDBOX
     (void) passArguments; // avoid warnings
     ResMgr *resMgr = Desktop::GetDesktopResManager();
-    OUString aMessage = ResId(STR_LO_MUST_BE_RESTARTED, *resMgr).toString();
+    OUString aMessage = ResId(STR_LO_MUST_BE_RESTARTED, *resMgr);
 
     MessageDialog aRestartBox(NULL, aMessage);
     aRestartBox.Execute();

@@ -1015,7 +1015,7 @@ IMPL_LINK( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent&, event,
         {
             font.SetItalic( ITALIC_NONE );
             SetControlFont( font );
-            SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_CHARFONTNAME ));
+            SetQuickHelpText( SvxResId( RID_SVXSTR_CHARFONTNAME ));
         }
     }
     else
@@ -1024,7 +1024,7 @@ IMPL_LINK( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent&, event,
         {
             font.SetItalic( ITALIC_NORMAL );
             SetControlFont( font );
-            SetQuickHelpText( SVX_RESSTR( RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE ));
+            SetQuickHelpText( SvxResId( RID_SVXSTR_CHARFONTNAME_NOTAVAILABLE ));
         }
     }
 }
@@ -1286,17 +1286,17 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
         case SID_BACKGROUND_COLOR:
         case SID_ATTR_CHAR_BACK_COLOR:
         {
-            mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_NOFILL ) );
+            mpButtonAutoColor->SetText( SvxResId( RID_SVXSTR_NOFILL ) );
             break;
         }
         case SID_AUTHOR_COLOR:
         {
-            mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_BY_AUTHOR ) );
+            mpButtonAutoColor->SetText( SvxResId( RID_SVXSTR_BY_AUTHOR ) );
             break;
         }
         case SID_BMPMASK_COLOR:
         {
-            mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
+            mpButtonAutoColor->SetText( SvxResId( RID_SVXSTR_TRANSPARENT ) );
             break;
         }
         case SID_ATTR_CHAR_COLOR:
@@ -1405,15 +1405,15 @@ namespace
             case SID_BACKGROUND_COLOR:
             case SID_ATTR_CHAR_BACK_COLOR:
                 aColor = COL_TRANSPARENT;
-                sColorName = SVX_RESSTR(RID_SVXSTR_NOFILL);
+                sColorName = SvxResId(RID_SVXSTR_NOFILL);
                 break;
             case SID_AUTHOR_COLOR:
                 aColor = COL_TRANSPARENT;
-                sColorName = SVX_RESSTR(RID_SVXSTR_BY_AUTHOR);
+                sColorName = SvxResId(RID_SVXSTR_BY_AUTHOR);
                 break;
             case SID_BMPMASK_COLOR:
                 aColor = COL_TRANSPARENT;
-                sColorName = SVX_RESSTR(RID_SVXSTR_TRANSPARENT);
+                sColorName = SvxResId(RID_SVXSTR_TRANSPARENT);
                 break;
             case SID_ATTR_CHAR_COLOR:
             case SID_ATTR_CHAR_COLOR2:
@@ -1429,7 +1429,7 @@ namespace
 
     NamedColor GetNoneColor()
     {
-        return std::make_pair(Color(COL_NONE_COLOR), SVX_RESSTR(RID_SVXSTR_NONE));
+        return std::make_pair(Color(COL_NONE_COLOR), SvxResId(RID_SVXSTR_NONE));
     }
 }
 
@@ -1730,8 +1730,8 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl ( svt::ToolboxController& rController, 
     CalcSizeValueSet();
 
     SetHelpId( HID_POPUP_FRAME );
-    SetText( SVX_RESSTR(RID_SVXSTR_FRAME) );
-    aFrameSet->SetAccessibleName( SVX_RESSTR(RID_SVXSTR_FRAME) );
+    SetText( SvxResId(RID_SVXSTR_FRAME) );
+    aFrameSet->SetAccessibleName( SvxResId(RID_SVXSTR_FRAME) );
     aFrameSet->Show();
 }
 
@@ -2029,7 +2029,7 @@ SvxCurrencyList_Impl::SvxCurrencyList_Impl(
         }
     }
     m_pCurrencyLb->SetSelectHdl( LINK( this, SvxCurrencyList_Impl, SelectHdl ) );
-    SetText( SVX_RESSTR( RID_SVXSTR_TBLAFMT_CURRENCY ) );
+    SetText( SvxResId( RID_SVXSTR_TBLAFMT_CURRENCY ) );
     if ( nSelectedPos >= 0 )
         m_pCurrencyLb->SelectEntryPos( nSelectedPos );
     m_pCurrencyLb->Show();
@@ -2060,7 +2060,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( svt::ToolboxController& rController, vcl
     SetOutputSizePixel( Size( 114, 144 ) );
 
     m_aLineStyleLb->SetSourceUnit( FUNIT_TWIP );
-    m_aLineStyleLb->SetNone( SVX_RESSTR(RID_SVXSTR_NONE) );
+    m_aLineStyleLb->SetNone( SvxResId(RID_SVXSTR_NONE) );
 
     m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( SvxBorderLineStyle::SOLID ), SvxBorderLineStyle::SOLID );
     m_aLineStyleLb->InsertEntry( SvxBorderLine::getWidthImpl( SvxBorderLineStyle::DOTTED ), SvxBorderLineStyle::DOTTED );
@@ -2093,7 +2093,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( svt::ToolboxController& rController, vcl
     m_aLineStyleLb->SetSelectHdl( LINK( this, SvxLineWindow_Impl, SelectHdl ) );
 
     SetHelpId( HID_POPUP_LINE );
-    SetText( SVX_RESSTR(RID_SVXSTR_FRAME_STYLE) );
+    SetText( SvxResId(RID_SVXSTR_FRAME_STYLE) );
     m_aLineStyleLb->Show();
 }
 
@@ -2199,8 +2199,8 @@ struct SvxStyleToolBoxControl::Impl
     bool                     bSpecModeCalc;
 
     Impl()
-        :aClearForm         ( SVX_RESSTR( RID_SVXSTR_CLEARFORM ) )
-        ,aMore              ( SVX_RESSTR( RID_SVXSTR_MORE_STYLES ) )
+        :aClearForm         ( SvxResId( RID_SVXSTR_CLEARFORM ) )
+        ,aMore              ( SvxResId( RID_SVXSTR_MORE_STYLES ) )
         ,bSpecModeWriter    ( false )
         ,bSpecModeCalc      ( false )
     {

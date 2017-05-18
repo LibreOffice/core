@@ -509,13 +509,13 @@ void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScr
         // Populate the menus.
         ScTabViewShell* pViewShell = pViewData->GetViewShell();
         mpDPFieldPopup->addMenuItem(
-            SC_RESSTR(STR_MENU_SORT_ASC),
+            ScResId(STR_MENU_SORT_ASC),
             new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::ASCENDING, 0, pViewShell));
         mpDPFieldPopup->addMenuItem(
-            SC_RESSTR(STR_MENU_SORT_DESC),
+            ScResId(STR_MENU_SORT_DESC),
             new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::DESCENDING, 0, pViewShell));
         ScMenuFloatingWindow* pSubMenu = mpDPFieldPopup->addSubMenuItem(
-            SC_RESSTR(STR_MENU_SORT_CUSTOM), !aUserSortNames.empty());
+            ScResId(STR_MENU_SORT_CUSTOM), !aUserSortNames.empty());
 
         if (pSubMenu && !aUserSortNames.empty())
         {

@@ -410,7 +410,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                                 // #i11702#
                                 if( IsUndoEnabled() )
                                 {
-                                    BegUndo(SD_RESSTR(STR_MODIFYLAYER));
+                                    BegUndo(SdResId(STR_MODIFYLAYER));
                                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectLayerChange(*pO, pO->GetLayer(), nLayer));
                                     EndUndo();
                                 }
@@ -494,7 +494,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                         if( IsUndoEnabled() )
                                         {
-                                            BegUndo(SD_RESSTR(STR_UNDO_DRAGDROP));
+                                            BegUndo(SdResId(STR_UNDO_DRAGDROP));
                                             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
                                             EndUndo();
                                         }
@@ -731,7 +731,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             const bool bUndo = IsUndoEnabled();
 
                             if( bUndo )
-                                BegUndo(SD_RESSTR(STR_UNDO_DRAGDROP));
+                                BegUndo(SdResId(STR_UNDO_DRAGDROP));
                             pNewObj->NbcSetLayer( pPickObj->GetLayer() );
                             SdrPage* pWorkPage = GetSdrPageView()->GetPage();
                             pWorkPage->InsertObject( pNewObj );
@@ -763,7 +763,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             const bool bUndo = IsUndoEnabled();
                             if( bUndo )
                             {
-                                BegUndo( SD_RESSTR(STR_UNDO_DRAGDROP) );
+                                BegUndo( SdResId(STR_UNDO_DRAGDROP) );
                                 AddUndo( mrDoc.GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj ) );
                             }
 
@@ -1327,7 +1327,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             if( IsUndoEnabled() )
             {
-                BegUndo( SD_RESSTR(STR_UNDO_DRAGDROP) );
+                BegUndo( SdResId(STR_UNDO_DRAGDROP) );
                 AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj ) );
                 EndUndo();
             }

@@ -359,8 +359,8 @@ DbGridControl::NavigationBar::NavigationBar(vcl::Window* pParent)
     m_aLastBtn->SetClickHdl(LINK(this,NavigationBar,OnClick));
     m_aNewBtn->SetClickHdl(LINK(this,NavigationBar,OnClick));
 
-    m_aRecordText->SetText(SVX_RESSTR(RID_STR_REC_TEXT));
-    m_aRecordOf->SetText(SVX_RESSTR(RID_STR_REC_FROM_TEXT));
+    m_aRecordText->SetText(SvxResId(RID_STR_REC_TEXT));
+    m_aRecordOf->SetText(SvxResId(RID_STR_REC_FROM_TEXT));
     m_aRecordCount->SetText(OUString('?'));
 
     m_aFirstBtn->Disable();
@@ -975,7 +975,7 @@ DbGridControl::DbGridControl(
             ,m_bUpdating(false)
 {
 
-    OUString sName(SVX_RESSTR(RID_STR_NAVIGATIONBAR));
+    OUString sName(SvxResId(RID_STR_NAVIGATIONBAR));
     m_aBar->SetAccessibleName(sName);
     m_aBar->Show();
     ImplInitWindow( InitWindowFacet::All );

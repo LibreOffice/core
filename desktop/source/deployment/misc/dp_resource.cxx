@@ -68,7 +68,7 @@ ResId getResId( sal_uInt16 id )
 OUString getResourceString( sal_uInt16 id )
 {
     const osl::MutexGuard guard(theResourceMutex::get());
-    OUString ret(ResId(id, *DeploymentResMgr::get()).toString());
+    OUString ret(ResId(id, *DeploymentResMgr::get()));
     return ret.replaceAll("%PRODUCTNAME", utl::ConfigManager::getProductName());
 }
 

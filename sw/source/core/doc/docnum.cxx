@@ -2224,7 +2224,7 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
     else
     {
         pChkStr = nullptr;
-        aName = SW_RESSTR( STR_NUMRULE_DEFNAME );
+        aName = SwResId( STR_NUMRULE_DEFNAME );
     }
 
     sal_uInt16 nNum(0), nTmp, nFlagSize = ( mpNumRuleTable->size() / 8 ) +2;

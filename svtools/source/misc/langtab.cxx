@@ -130,8 +130,8 @@ const OUString ApplyLreOrRleEmbedding( const OUString &rText )
     return aRes;
 }
 
-SvtLanguageTableImpl::SvtLanguageTableImpl() :
-    ResStringArray( SvtResId( STR_ARR_SVT_LANGUAGE_TABLE ) )
+SvtLanguageTableImpl::SvtLanguageTableImpl()
+    : ResStringArray(ResId(STR_ARR_SVT_LANGUAGE_TABLE, *SvtResMgr::GetResMgr()))
 {
     auto xNA = officecfg::VCL::ExtraLanguages::get();
     uno::Sequence <OUString> rElementNames = xNA->getElementNames();

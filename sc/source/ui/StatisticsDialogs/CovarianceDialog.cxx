@@ -33,7 +33,7 @@ bool ScCovarianceDialog::Close()
 
 const OUString ScCovarianceDialog::getLabel()
 {
-    return SC_RESSTR(STR_COVARIANCE_LABEL);
+    return ScResId(STR_COVARIANCE_LABEL);
 }
 
 const OUString ScCovarianceDialog::getTemplate()

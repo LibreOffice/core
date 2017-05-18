@@ -590,7 +590,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner::DepthChangeHdlParam, aParam
             if (mnPagesToProcess > PROCESS_WITH_PROGRESS_THRESHOLD)
             {
                 delete mpProgress;
-                mpProgress = new SfxProgress( GetDocSh(), SD_RESSTR(STR_CREATE_PAGES), mnPagesToProcess );
+                mpProgress = new SfxProgress( GetDocSh(), SdResId(STR_CREATE_PAGES), mnPagesToProcess );
             }
             else
             {
@@ -1010,7 +1010,7 @@ bool OutlineView::PrepareClose()
 
     mrOutliner.GetUndoManager().Clear();
 
-    BegUndo(SD_RESSTR(STR_UNDO_CHANGE_TITLE_AND_LAYOUT));
+    BegUndo(SdResId(STR_UNDO_CHANGE_TITLE_AND_LAYOUT));
     UpdateDocument();
     EndUndo();
     mrDoc.SetSelected(GetActualPage(), true);
@@ -1169,7 +1169,7 @@ IMPL_LINK_NOARG(OutlineView, RemovingPagesHdl, OutlinerView*, bool)
     if (mnPagesToProcess)
     {
         delete mpProgress;
-        mpProgress = new SfxProgress( GetDocSh(), SD_RESSTR(STR_DELETE_PAGES), mnPagesToProcess );
+        mpProgress = new SfxProgress( GetDocSh(), SdResId(STR_DELETE_PAGES), mnPagesToProcess );
     }
     mrOutliner.UpdateFields();
 
@@ -1457,7 +1457,7 @@ void OutlineView::IgnoreCurrentPageChanges (bool bIgnoreChanges)
 void OutlineView::BeginModelChange()
 {
     mrOutliner.GetUndoManager().EnterListAction("", "", 0, mrOutlineViewShell.GetViewShellBase().GetViewShellId());
-    BegUndo(SD_RESSTR(STR_UNDO_CHANGE_TITLE_AND_LAYOUT));
+    BegUndo(SdResId(STR_UNDO_CHANGE_TITLE_AND_LAYOUT));
 }
 
 /** call this method after BeginModelChange(), when all possible model

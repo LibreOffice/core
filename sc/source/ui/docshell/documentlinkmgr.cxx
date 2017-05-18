@@ -177,7 +177,7 @@ bool DocumentLinkManager::updateDdeOrOleLinks( vcl::Window* pWin )
             OUString aType = pDdeLink->GetAppl();
 
             OUStringBuffer aBuf;
-            aBuf.append(OUString(ScResId(SCSTR_DDEDOC_NOT_LOADED)));
+            aBuf.append(ScResId(SCSTR_DDEDOC_NOT_LOADED));
             aBuf.append("\n\n");
             aBuf.append("Source : ");
             aBuf.append(aFile);

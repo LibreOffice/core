@@ -66,7 +66,7 @@ ScRange ScExponentialSmoothingDialog::ApplyOutput(ScDocShell* pDocShell)
     double aSmoothingFactor = mpSmoothingFactor->GetValue() / 100.0;
 
     // Alpha
-    output.writeBoldString(SC_RESSTR(STR_LABEL_ALPHA));
+    output.writeBoldString(ScResId(STR_LABEL_ALPHA));
     output.nextRow();
 
     // Alpha Value
@@ -91,9 +91,9 @@ ScRange ScExponentialSmoothingDialog::ApplyOutput(ScDocShell* pDocShell)
 
         // Write column label
         if (mGroupedBy == BY_COLUMN)
-            aTemplate.setTemplate(SC_RESSTR(STR_COLUMN_LABEL_TEMPLATE));
+            aTemplate.setTemplate(ScResId(STR_COLUMN_LABEL_TEMPLATE));
         else
-            aTemplate.setTemplate(SC_RESSTR(STR_ROW_LABEL_TEMPLATE));
+            aTemplate.setTemplate(ScResId(STR_ROW_LABEL_TEMPLATE));
         aTemplate.applyNumber("%NUMBER%", pIterator->index() + 1);
         output.writeBoldString(aTemplate.getTemplate());
         output.nextRow();

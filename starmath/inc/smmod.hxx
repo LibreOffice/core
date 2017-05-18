@@ -51,13 +51,7 @@ class SvtSysLocale;
 class VirtualDevice;
 
 
-class SmResId : public ResId
-{
-public:
-    explicit SmResId(sal_uInt16 nId);
-};
-
-#define SM_RESSTR(x) SmResId(x).toString()
+OUString SmResId(sal_uInt16 nId);
 
 class SmLocalizedSymbolData
 {

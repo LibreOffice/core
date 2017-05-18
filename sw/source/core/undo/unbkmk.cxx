@@ -114,8 +114,8 @@ SwUndoRenameBookmark::~SwUndoRenameBookmark()
 
 static OUString lcl_QuoteName(const OUString& rName)
 {
-    static const OUString sStart = SW_RES(STR_START_QUOTE);
-    static const OUString sEnd = SW_RES(STR_END_QUOTE);
+    static const OUString sStart = SwResId(STR_START_QUOTE);
+    static const OUString sEnd = SwResId(STR_END_QUOTE);
     return sStart + rName + sEnd;
 }
 
@@ -123,7 +123,7 @@ SwRewriter SwUndoRenameBookmark::GetRewriter() const
 {
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, lcl_QuoteName(m_sOldName));
-    aRewriter.AddRule(UndoArg2, SW_RES(STR_YIELDS));
+    aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
     aRewriter.AddRule(UndoArg3, lcl_QuoteName(m_sNewName));
     return aRewriter;
 }

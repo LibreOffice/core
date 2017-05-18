@@ -124,7 +124,7 @@ long SwEditShell::Delete()
         if( bUndo ) // more than one selection?
         {
             SwRewriter aRewriter;
-            aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_MULTISEL));
+            aRewriter.AddRule(UndoArg1, SwResId(STR_MULTISEL));
 
             GetDoc()->GetIDocumentUndoRedo().StartUndo(SwUndoId::DELETE, &aRewriter);
         }

@@ -61,10 +61,10 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
         sal_uInt16 nMaxPasswdLen,
         bool bIsPasswordToModify )
     : m_pParent( pParent )
-    , m_aOneMismatch( CUI_RES( RID_SVXSTR_ONE_PASSWORD_MISMATCH ) )
-    , m_aTwoMismatch( CUI_RES( RID_SVXSTR_TWO_PASSWORDS_MISMATCH ) )
-    , m_aInvalidStateForOkButton( CUI_RES( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON ) )
-    , m_aInvalidStateForOkButton_v2( CUI_RES( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON_V2 ) )
+    , m_aOneMismatch( CuiResId( RID_SVXSTR_ONE_PASSWORD_MISMATCH ) )
+    , m_aTwoMismatch( CuiResId( RID_SVXSTR_TWO_PASSWORDS_MISMATCH ) )
+    , m_aInvalidStateForOkButton( CuiResId( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON ) )
+    , m_aInvalidStateForOkButton_v2( CuiResId( RID_SVXSTR_INVALID_STATE_FOR_OK_BUTTON_V2 ) )
     , m_bIsPasswordToModify( bIsPasswordToModify )
 {
     pParent->get(m_pPasswdToOpenED, "newpassEntry");

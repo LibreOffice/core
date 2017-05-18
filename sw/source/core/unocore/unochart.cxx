@@ -1860,8 +1860,8 @@ SwChartDataSequence::SwChartDataSequence(
     SwClient( &rTableFormat ),
     m_aEvtListeners( GetChartMutex() ),
     m_aModifyListeners( GetChartMutex() ),
-    m_aRowLabelText( SW_RES( STR_CHART2_ROW_LABEL_TEXT ) ),
-    m_aColLabelText( SW_RES( STR_CHART2_COL_LABEL_TEXT ) ),
+    m_aRowLabelText( SwResId( STR_CHART2_ROW_LABEL_TEXT ) ),
+    m_aColLabelText( SwResId( STR_CHART2_COL_LABEL_TEXT ) ),
     m_xDataProvider( &rProvider ),
     m_pTableCursor( pTableCursor ),
     m_pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_CHART2_DATA_SEQUENCE ) )
@@ -1907,8 +1907,8 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     m_aEvtListeners( GetChartMutex() ),
     m_aModifyListeners( GetChartMutex() ),
     m_aRole( rObj.m_aRole ),
-    m_aRowLabelText( SW_RES(STR_CHART2_ROW_LABEL_TEXT) ),
-    m_aColLabelText( SW_RES(STR_CHART2_COL_LABEL_TEXT) ),
+    m_aRowLabelText( SwResId(STR_CHART2_ROW_LABEL_TEXT) ),
+    m_aColLabelText( SwResId(STR_CHART2_COL_LABEL_TEXT) ),
     m_xDataProvider( rObj.m_xDataProvider ),
     m_pTableCursor( rObj.m_pTableCursor ),
     m_pPropSet( rObj.m_pPropSet )

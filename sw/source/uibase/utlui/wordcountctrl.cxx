@@ -32,7 +32,7 @@ void SwWordCountStatusBarControl::StateChanged(
     if (eState == SfxItemState::DEFAULT) // Can access pState
         GetStatusBar().SetItemText( GetId(), static_cast<const SfxStringItem*>(pState)->GetValue() );
 
-    GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_WORDCOUNT_HINT));
+    GetStatusBar().SetQuickHelpText(GetId(), SwResId(STR_WORDCOUNT_HINT));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

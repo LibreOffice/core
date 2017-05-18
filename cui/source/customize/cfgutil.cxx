@@ -388,11 +388,11 @@ SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     m_libImage(BitmapEx(RID_CUIBMP_LIB)),
     m_macImage(BitmapEx(RID_CUIBMP_MACRO)),
     m_docImage(BitmapEx(RID_CUIBMP_DOC)),
-    m_sMyMacros(CUI_RES(RID_SVXSTR_MYMACROS)),
-    m_sProdMacros(CUI_RES(RID_SVXSTR_PRODMACROS)),
-    m_sMacros(CUI_RES(RID_SVXSTR_BASICMACROS)),
-    m_sDlgMacros(CUI_RES(RID_SVXSTR_PRODMACROS)),
-    m_aStrGroupStyles(CUI_RES(RID_SVXSTR_GROUP_STYLES)),
+    m_sMyMacros(CuiResId(RID_SVXSTR_MYMACROS)),
+    m_sProdMacros(CuiResId(RID_SVXSTR_PRODMACROS)),
+    m_sMacros(CuiResId(RID_SVXSTR_BASICMACROS)),
+    m_sDlgMacros(CuiResId(RID_SVXSTR_PRODMACROS)),
+    m_aStrGroupStyles(CuiResId(RID_SVXSTR_GROUP_STYLES)),
     m_collapsedImage(BitmapEx(RID_CUIBMP_COLLAPSED)),
     m_expandedImage(BitmapEx(RID_CUIBMP_EXPANDED))
 {
@@ -461,7 +461,7 @@ void SfxConfigGroupListBox::InitModule()
         if ( c1 )
         {
             // Add All Commands category
-            SvTreeListEntry* pEntry = InsertEntry( CUI_RES(RID_SVXSTR_ALLFUNCTIONS) );
+            SvTreeListEntry* pEntry = InsertEntry( CuiResId(RID_SVXSTR_ALLFUNCTIONS) );
             aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_ALLFUNCTIONS, 0 ) );
             pEntry->SetUserData(aArr.back().get());
         }
@@ -1176,7 +1176,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     if (m_bShowSlots)
     {
         // If we are showing Slot API commands update labels in the UI
-        SetText(CUI_RES(RID_SVXSTR_SELECTOR_ADD_COMMANDS));
+        SetText(CuiResId(RID_SVXSTR_SELECTOR_ADD_COMMANDS));
         get(m_pCancelButton, "close");
         get(m_pDialogDescription, "helptoolbar");
         get(m_pOKButton, "add");
@@ -1306,7 +1306,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton, void )
 void
 SvxScriptSelectorDialog::SetRunLabel()
 {
-    m_pOKButton->SetText(CUI_RES(RID_SVXSTR_SELECTOR_RUN));
+    m_pOKButton->SetText(CuiResId(RID_SVXSTR_SELECTOR_RUN));
 }
 
 void

@@ -200,7 +200,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
         m_bIsAuthentication(false),
 
         m_bIsEMailSupported(false),
-        m_AddressHeaderSA( SW_RES( SA_ADDRESS_HEADER )),
+        m_AddressHeaderSA(ResId(SA_ADDRESS_HEADER, *pSwResMgr)),
         m_bUserSettingWereOverwritten(false),
         m_bIsAddressBlock_LastUserSetting(false),
         m_bIsGreetingLineInMail_LastUserSetting(false),

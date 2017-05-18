@@ -519,7 +519,7 @@ QString KDE4FilePicker::getResString( sal_Int16 aRedId )
 
     try
     {
-        aResString = toQString(ResId(aRedId, *ImplGetResMgr()).toString());
+        aResString = toQString(ResId(aRedId, *ImplGetResMgr()));
     }
     catch(...)
     {
