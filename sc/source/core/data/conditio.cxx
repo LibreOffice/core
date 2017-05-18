@@ -1327,8 +1327,7 @@ OUString ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 n
     {
         if ( pFormula1 )
         {
-            ScCompiler aComp(mpDoc, rCursor, *pFormula1);
-            aComp.SetGrammar(eGrammar);
+            ScCompiler aComp(mpDoc, rCursor, *pFormula1, eGrammar);
             OUStringBuffer aBuffer;
             aComp.CreateStringFromTokenArray( aBuffer );
             aRet = aBuffer.makeStringAndClear();
@@ -1346,8 +1345,7 @@ OUString ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 n
     {
         if ( pFormula2 )
         {
-            ScCompiler aComp(mpDoc, rCursor, *pFormula2);
-            aComp.SetGrammar(eGrammar);
+            ScCompiler aComp(mpDoc, rCursor, *pFormula2, eGrammar);
             OUStringBuffer aBuffer;
             aComp.CreateStringFromTokenArray( aBuffer );
             aRet = aBuffer.makeStringAndClear();

@@ -51,8 +51,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
         if (nOffset < 0)
             break;
 
-        ScCompiler aCompiler(pDoc, ScAddress(0,0,0));
-        aCompiler.SetGrammar(eGrammar);
+        ScCompiler aCompiler(pDoc, ScAddress(0,0,0), eGrammar);
         std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(aToken));
 
         // There MUST be exactly one reference per range token and nothing

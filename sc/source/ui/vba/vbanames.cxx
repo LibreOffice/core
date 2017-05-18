@@ -152,8 +152,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
         if ( !xRange.is() && !sFormula.isEmpty() )
         {
             ScAddress aBlank;
-            ScCompiler aComp( getScDocument(), aBlank );
-            aComp.SetGrammar( eGram );
+            ScCompiler aComp( getScDocument(), aBlank, eGram );
             std::unique_ptr<ScTokenArray> pTokens(aComp.CompileString(sFormula));
             if ( pTokens )
             {

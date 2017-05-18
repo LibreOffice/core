@@ -722,8 +722,7 @@ OUString ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSub
 
     pArray->AddOpCode(ocClose);
 
-    ScCompiler aComp(pDoc, rAddr, *pArray);
-    aComp.SetGrammar(pDoc->GetGrammar());
+    ScCompiler aComp(pDoc, rAddr, *pArray, pDoc->GetGrammar());
     OUStringBuffer aBuf;
     aComp.CreateStringFromTokenArray(aBuf);
     OUString aFormula = aBuf.makeStringAndClear();

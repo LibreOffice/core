@@ -117,8 +117,7 @@ protected:
             {
                 // formula string
                 ScDocument& rDoc = getScDocument();
-                ScCompiler aComp(&rDoc, mrPos);
-                aComp.SetGrammar(formula::FormulaGrammar::GRAM_OOXML);
+                ScCompiler aComp(&rDoc, mrPos, formula::FormulaGrammar::GRAM_OOXML);
                 ScTokenArray* pArray = aComp.CompileString(rChars);
                 if (!pArray)
                     break;
