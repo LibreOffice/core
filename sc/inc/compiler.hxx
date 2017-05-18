@@ -335,11 +335,19 @@ private:
 public:
     ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos );
 
-    ScCompiler( ScDocument* pDocument, const ScAddress&);
+    /** If eGrammar == GRAM_UNSPECIFIED then the grammar of pDocument is used,
+        if pDocument==nullptr then GRAM_DEFAULT.
+     */
+    ScCompiler( ScDocument* pDocument, const ScAddress&,
+            formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED );
 
     ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr );
 
-    ScCompiler( ScDocument* pDocument, const ScAddress&,ScTokenArray& rArr);
+    /** If eGrammar == GRAM_UNSPECIFIED then the grammar of pDocument is used,
+        if pDocument==nullptr then GRAM_DEFAULT.
+     */
+    ScCompiler( ScDocument* pDocument, const ScAddress&, ScTokenArray& rArr,
+            formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_UNSPECIFIED );
 
     virtual ~ScCompiler() override;
 
