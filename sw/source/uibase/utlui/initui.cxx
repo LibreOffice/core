@@ -174,38 +174,38 @@ void InitUI()
 }
 
 ShellResource::ShellResource()
-    : aPostItAuthor( SW_RES( STR_POSTIT_AUTHOR ) ),
-    aPostItPage( SW_RES( STR_POSTIT_PAGE ) ),
-    aPostItLine( SW_RES( STR_POSTIT_LINE ) ),
+    : aPostItAuthor( SwResId( STR_POSTIT_AUTHOR ) ),
+    aPostItPage( SwResId( STR_POSTIT_PAGE ) ),
+    aPostItLine( SwResId( STR_POSTIT_LINE ) ),
 
-    aCalc_Syntax( SW_RES( STR_CALC_SYNTAX ) ),
-    aCalc_ZeroDiv( SW_RES( STR_CALC_ZERODIV ) ),
-    aCalc_Brack( SW_RES( STR_CALC_BRACK ) ),
-    aCalc_Pow( SW_RES( STR_CALC_POW ) ),
-    aCalc_Overflow( SW_RES( STR_CALC_OVERFLOW ) ),
-    aCalc_Default( SW_RES( STR_CALC_DEFAULT ) ),
-    aCalc_Error( SW_RES( STR_CALC_ERROR ) ),
+    aCalc_Syntax( SwResId( STR_CALC_SYNTAX ) ),
+    aCalc_ZeroDiv( SwResId( STR_CALC_ZERODIV ) ),
+    aCalc_Brack( SwResId( STR_CALC_BRACK ) ),
+    aCalc_Pow( SwResId( STR_CALC_POW ) ),
+    aCalc_Overflow( SwResId( STR_CALC_OVERFLOW ) ),
+    aCalc_Default( SwResId( STR_CALC_DEFAULT ) ),
+    aCalc_Error( SwResId( STR_CALC_ERROR ) ),
 
     // #i81002#
-    aGetRefField_RefItemNotFound( SW_RES( STR_GETREFFLD_REFITEMNOTFOUND ) ),
-    aStrNone( SW_RES( STR_TEMPLATE_NONE )),
-    aFixedStr( SW_RES( STR_FIELD_FIXED )),
-    sDurationFormat( SW_RES( STR_DURATION_FORMAT )),
+    aGetRefField_RefItemNotFound( SwResId( STR_GETREFFLD_REFITEMNOTFOUND ) ),
+    aStrNone( SwResId( STR_TEMPLATE_NONE )),
+    aFixedStr( SwResId( STR_FIELD_FIXED )),
+    sDurationFormat( SwResId( STR_DURATION_FORMAT )),
 
-    aTOXIndexName(          SW_RES(STR_TOI)),
-    aTOXUserName(           SW_RES(STR_TOU)),
-    aTOXContentName(        SW_RES(STR_TOC)),
-    aTOXIllustrationsName(  SW_RES(STR_TOX_ILL)),
-    aTOXObjectsName(        SW_RES(STR_TOX_OBJ)),
-    aTOXTablesName(         SW_RES(STR_TOX_TBL)),
-    aTOXAuthoritiesName(    SW_RES(STR_TOX_AUTH)),
-    aTOXCitationName(    SW_RES(STR_TOX_CITATION)),
-    aLinkCtrlClick(SW_RESSTR(STR_LINK_CTRL_CLICK)),
-    aLinkClick(SW_RESSTR(STR_LINK_CLICK)),
+    aTOXIndexName(          SwResId(STR_TOI)),
+    aTOXUserName(           SwResId(STR_TOU)),
+    aTOXContentName(        SwResId(STR_TOC)),
+    aTOXIllustrationsName(  SwResId(STR_TOX_ILL)),
+    aTOXObjectsName(        SwResId(STR_TOX_OBJ)),
+    aTOXTablesName(         SwResId(STR_TOX_TBL)),
+    aTOXAuthoritiesName(    SwResId(STR_TOX_AUTH)),
+    aTOXCitationName(    SwResId(STR_TOX_CITATION)),
+    aLinkCtrlClick(SwResId(STR_LINK_CTRL_CLICK)),
+    aLinkClick(SwResId(STR_LINK_CLICK)),
     pAutoFormatNameLst(nullptr),
-    sPageDescFirstName(     SW_RES(STR_PAGEDESC_FIRSTNAME)),
-    sPageDescFollowName(    SW_RES(STR_PAGEDESC_FOLLOWNAME)),
-    sPageDescName(          SW_RES(STR_PAGEDESC_NAME))
+    sPageDescFirstName(     SwResId(STR_PAGEDESC_FIRSTNAME)),
+    sPageDescFollowName(    SwResId(STR_PAGEDESC_FOLLOWNAME)),
+    sPageDescName(          SwResId(STR_PAGEDESC_NAME))
 {
     const sal_uInt16 nCount = FLD_DOCINFO_END - FLD_DOCINFO_BEGIN;
 
@@ -217,7 +217,7 @@ ShellResource::ShellResource()
     aLinkCtrlClick = aLinkCtrlClick.replaceAll("%s", aModStr);
 
     for(sal_uInt16 i = 0; i < nCount; ++i)
-        aDocInfoLst.push_back(OUString(SW_RESSTR(FLD_DOCINFO_BEGIN + i)));
+        aDocInfoLst.push_back(SwResId(FLD_DOCINFO_BEGIN + i));
 }
 
 OUString ShellResource::GetPageDescName(sal_uInt16 nNo, PageNameMode eMode)
@@ -289,7 +289,7 @@ OUString SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
         pAuthFieldNameList = new std::vector<OUString>;
         pAuthFieldNameList->reserve(AUTH_FIELD_END);
         for(sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i)
-            pAuthFieldNameList->push_back(SW_RES(STR_AUTH_FIELD_START + i));
+            pAuthFieldNameList->push_back(SwResId(STR_AUTH_FIELD_START + i));
     }
     return (*pAuthFieldNameList)[static_cast< sal_uInt16 >(eType)];
 }
@@ -301,7 +301,7 @@ OUString SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
         pAuthFieldTypeList = new std::vector<OUString>;
         pAuthFieldTypeList->reserve(AUTH_TYPE_END);
         for(sal_uInt16 i = 0; i < AUTH_TYPE_END; ++i)
-            pAuthFieldTypeList->push_back(SW_RES(STR_AUTH_TYPE_START + i));
+            pAuthFieldTypeList->push_back(SwResId(STR_AUTH_TYPE_START + i));
     }
     return (*pAuthFieldTypeList)[static_cast< sal_uInt16 >(eType)];
 }

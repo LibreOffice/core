@@ -245,7 +245,7 @@ uno::Reference<awt::XWindow> MMExcludeEntryController::createItemWindow(const un
     {
         // make it visible
         m_pExcludeCheckbox = VclPtr<CheckBox>::Create(pToolbar);
-        m_pExcludeCheckbox->SetText(SW_RES(ST_EXCLUDE));
+        m_pExcludeCheckbox->SetText(SwResId(ST_EXCLUDE));
         m_pExcludeCheckbox->SetSizePixel(m_pExcludeCheckbox->GetOptimalSize());
 
         m_pExcludeCheckbox->SetToggleHdl(LINK(this, MMExcludeEntryController, ExcludeHdl));

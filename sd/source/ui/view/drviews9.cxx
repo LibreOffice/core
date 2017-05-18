@@ -157,7 +157,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
                         pNewGrafObj->SetGraphic(aGraphic);
 
                         OUString aStr(mpDrawView->GetDescriptionOfMarkedObjects());
-                        aStr += " " + SD_RESSTR(STR_UNDO_REPLACE);
+                        aStr += " " + SdResId(STR_UNDO_REPLACE);
                         mpDrawView->BegUndo(aStr);
                         SdrPageView* pPV = mpDrawView->GetSdrPageView();
                         mpDrawView->ReplaceObjectAtView(pGrafObj, *pPV, pNewGrafObj);

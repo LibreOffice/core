@@ -2283,12 +2283,12 @@ SfxStyleFamilies* ScModule::CreateStyleFamilies()
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
                                                     ScGlobal::GetRscString(STR_STYLE_FAMILY_CELL),
                                                     Image(BitmapEx(BMP_STYLES_FAMILY_CELL)),
-                                                    ScResId(RID_CELLSTYLEFAMILY)));
+                                                    ResId(RID_CELLSTYLEFAMILY, *SC_MOD()->GetResMgr())));
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Page,
                                                     ScGlobal::GetRscString(STR_STYLE_FAMILY_PAGE),
                                                     Image(BitmapEx(BMP_STYLES_FAMILY_PAGE)),
-                                                    ScResId(RID_PAGESTYLEFAMILY)));
+                                                    ResId(RID_PAGESTYLEFAMILY, *SC_MOD()->GetResMgr())));
 
     return pStyleFamilies;
 }

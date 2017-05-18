@@ -156,7 +156,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
     {
         if ( pStyle->HasClearParentSupport() )
             // the base template can be set to NULL
-            m_pBaseLb->InsertEntry( SfxResId(STR_NONE).toString() );
+            m_pBaseLb->InsertEntry( SfxResId(STR_NONE) );
 
         SfxStyleSheetBase* pPoolStyle = pPool->First();
 
@@ -523,11 +523,11 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet* /*rAttrSet*/ )
             pStyle->SetParent( aParent );
 
         if ( aParent.isEmpty() )
-            m_pBaseLb->SelectEntry( SfxResId(STR_NONE).toString() );
+            m_pBaseLb->SelectEntry( SfxResId(STR_NONE) );
         else
             m_pBaseLb->SelectEntry( aParent );
 
-        if ( SfxResId(STR_STANDARD).toString().equals(aName) )
+        if ( SfxResId(STR_STANDARD).equals(aName) )
         {
             // the default template can not be linked
             m_pBaseFt->Disable();
@@ -640,7 +640,7 @@ DeactivateRC SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
     {
         OUString aParentEntry( m_pBaseLb->GetSelectEntry() );
 
-        if ( SfxResId(STR_NONE).toString().equals(aParentEntry) || aParentEntry == pStyle->GetName() )
+        if ( SfxResId(STR_NONE).equals(aParentEntry) || aParentEntry == pStyle->GetName() )
             aParentEntry.clear();
 
         if ( pStyle->GetParent() != aParentEntry )

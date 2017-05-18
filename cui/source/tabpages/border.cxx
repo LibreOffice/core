@@ -1014,7 +1014,7 @@ void SvxBorderTabPage::FillPresetVS()
     {
         m_pWndPresets->InsertItem( nVSIdx );
         m_pWndPresets->SetItemImage(nVSIdx, Image(m_aBorderImgVec[nVSIdx-1]));
-        m_pWndPresets->SetItemText( nVSIdx, CUI_RES( GetPresetStringId( nVSIdx ) ) );
+        m_pWndPresets->SetItemText( nVSIdx, CuiResId( GetPresetStringId( nVSIdx ) ) );
     }
 
     // show the control
@@ -1037,7 +1037,7 @@ void SvxBorderTabPage::FillShadowVS()
     {
         m_pWndShadows->InsertItem( nVSIdx );
         m_pWndShadows->SetItemImage(nVSIdx, Image(m_aShadowImgVec[nVSIdx-1]));
-        m_pWndShadows->SetItemText( nVSIdx, CUI_RES( pnStrIds[ nVSIdx - 1 ] ) );
+        m_pWndShadows->SetItemText( nVSIdx, CuiResId( pnStrIds[ nVSIdx - 1 ] ) );
     }
 
     // show the control
@@ -1096,7 +1096,7 @@ void SvxBorderTabPage::FillLineListBox_Impl()
 
     m_pLbLineStyle->SetSourceUnit( FUNIT_TWIP );
 
-    m_pLbLineStyle->SetNone( SVX_RESSTR( RID_SVXSTR_NONE ) );
+    m_pLbLineStyle->SetNone( SvxResId( RID_SVXSTR_NONE ) );
 
     for (size_t i = 0, n = SAL_N_ELEMENTS(aLines); i < n; ++i)
     {

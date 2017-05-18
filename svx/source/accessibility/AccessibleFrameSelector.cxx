@@ -59,8 +59,8 @@ AccFrameSelector::AccFrameSelector( FrameSelector& rFrameSel, FrameBorderType eB
     meBorder( eBorder ),
     maFocusListeners( maFocusMutex ),
     maPropertyListeners( maPropertyMutex ),
-    maNames( SVX_RES( RID_SVXSTR_FRMSEL_TEXTS ) ),
-    maDescriptions( SVX_RES(RID_SVXSTR_FRMSEL_DESCRIPTIONS) ),
+    maNames( ResId(RID_SVXSTR_FRMSEL_TEXTS, DIALOG_MGR()) ),
+    maDescriptions( ResId(RID_SVXSTR_FRMSEL_DESCRIPTIONS, DIALOG_MGR()) ),
     mnClientId( 0 )
 {
     if ( mpFrameSel )

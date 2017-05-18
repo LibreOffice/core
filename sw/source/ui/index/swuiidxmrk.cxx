@@ -135,7 +135,7 @@ SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,
         m_pPhoneticED2->Show();
     }
 
-    rDialog.SetText( SW_RESSTR( bNewMark ? STR_IDXMRK_INSERT : STR_IDXMRK_EDIT));
+    rDialog.SetText( SwResId( bNewMark ? STR_IDXMRK_INSERT : STR_IDXMRK_EDIT));
 
     m_pDelBT->SetClickHdl(LINK(this,SwIndexMarkPane,        DelHdl));
     m_pPrevBT->SetClickHdl(LINK(this,SwIndexMarkPane,       PrevHdl));
@@ -1115,7 +1115,7 @@ SwAuthorMarkPane::SwAuthorMarkPane(Dialog &rDialog, bool bNewDlg)
     m_pFromDocContentRB->SetClickHdl(LINK(this,SwAuthorMarkPane, ChangeSourceHdl));
     m_pEntryED->SetModifyHdl(LINK(this,SwAuthorMarkPane, EditModifyHdl));
 
-    m_rDialog.SetText(SW_RESSTR(
+    m_rDialog.SetText(SwResId(
                     bNewEntry ? STR_AUTHMRK_INSERT : STR_AUTHMRK_EDIT));
 
     m_pEntryED->Show(!bNewEntry);
@@ -1224,7 +1224,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl, Button*, void)
                 bDifferent |= m_sFields[i] != pEntry->GetAuthorField((ToxAuthorityField)i);
             if(bDifferent)
             {
-                ScopedVclPtrInstance< MessageDialog > aQuery(&m_rDialog, SW_RES(STR_QUERY_CHANGE_AUTH_ENTRY), VclMessageType::Question, VclButtonsType::YesNo);
+                ScopedVclPtrInstance< MessageDialog > aQuery(&m_rDialog, SwResId(STR_QUERY_CHANGE_AUTH_ENTRY), VclMessageType::Question, VclButtonsType::YesNo);
                 if(RET_YES != aQuery->Execute())
                     return;
             }
@@ -1462,14 +1462,14 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
 
         pFixedTexts[nIndex]->set_grid_left_attach(0);
         pFixedTexts[nIndex]->set_grid_top_attach(bLeft ? nLeftRow : nRightRow);
-        pFixedTexts[nIndex]->SetText(SW_RES(STR_AUTH_FIELD_START + aCurInfo.nToxField));
+        pFixedTexts[nIndex]->SetText(SwResId(STR_AUTH_FIELD_START + aCurInfo.nToxField));
         pFixedTexts[nIndex]->Show();
         pEdits[nIndex] = nullptr;
         if( AUTH_FIELD_AUTHORITY_TYPE == aCurInfo.nToxField )
         {
             pTypeListBox = VclPtr<ListBox>::Create(bLeft ? pLeft : pRight, WB_DROPDOWN|WB_BORDER|WB_VCENTER);
             for(int j = 0; j < AUTH_TYPE_END; j++)
-                pTypeListBox->InsertEntry(SW_RESSTR(STR_AUTH_TYPE_START + j));
+                pTypeListBox->InsertEntry(SwResId(STR_AUTH_TYPE_START + j));
             if(!pFields[aCurInfo.nToxField].isEmpty())
             {
                 pTypeListBox->SelectEntryPos(pFields[aCurInfo.nToxField].toInt32());

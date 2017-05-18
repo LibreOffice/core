@@ -559,7 +559,7 @@ IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl, Button*, void)
 
         if( ( pInfo->GetId() == nId ) && ( pInfo->GetThemeName() != pThm->GetName() ) )
         {
-            OUString aStr( CUI_RES( RID_SVXSTR_GALLERY_ID_EXISTS ) );
+            OUString aStr( CuiResId( RID_SVXSTR_GALLERY_ID_EXISTS ) );
 
             aStr += " (" + pInfo->GetThemeName() + ")";
 
@@ -592,7 +592,7 @@ GalleryThemeProperties::GalleryThemeProperties(vcl::Window* pParent,
     OUString aText = GetText() + pData->pTheme->GetName();
 
     if( pData->pTheme->IsReadOnly() )
-        aText +=  CUI_RES( RID_SVXSTR_GALLERY_READONLY );
+        aText +=  CuiResId( RID_SVXSTR_GALLERY_READONLY );
 
     SetText( aText );
 }
@@ -645,9 +645,9 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 
     GalleryTheme*       pThm = pData->pTheme;
     OUString            aOutStr( OUString::number(pThm->GetObjectCount()) );
-    OUString            aObjStr( CUI_RES( RID_SVXSTR_GALLERYPROPS_OBJECT ) );
+    OUString            aObjStr( CuiResId( RID_SVXSTR_GALLERYPROPS_OBJECT ) );
     OUString            aAccess;
-    OUString            aType( SVX_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
+    OUString            aType( SvxResId( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
     bool            bReadOnly = pThm->IsReadOnly();
 
     m_pEdtMSName->SetText( pThm->GetName() );
@@ -659,7 +659,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
         m_pEdtMSName->Enable();
 
     if( pThm->IsReadOnly() )
-        aType += CUI_RES( RID_SVXSTR_GALLERY_READONLY );
+        aType += CuiResId( RID_SVXSTR_GALLERY_READONLY );
 
     m_pFtMSShowType->SetText( aType );
     m_pFtMSShowPath->SetText( pThm->GetSdgURL().GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ) );
@@ -748,7 +748,7 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
     m_pCbbFileType->EnableDDAutoWidth( false );
     m_pLbxFound->SetDoubleClickHdl(LINK(this, TPGalleryThemeProperties, DClickFoundHdl));
     m_pLbxFound->SetSelectHdl(LINK(this, TPGalleryThemeProperties, SelectFoundHdl));
-    m_pLbxFound->InsertEntry(OUString(CUI_RES(RID_SVXSTR_GALLERY_NOFILES)));
+    m_pLbxFound->InsertEntry(OUString(CuiResId(RID_SVXSTR_GALLERY_NOFILES)));
     m_pLbxFound->Show();
 
     FillFilterList();
@@ -947,7 +947,7 @@ void TPGalleryThemeProperties::FillFilterList()
 #endif
 
     pFilterEntry = new FilterEntry;
-    pFilterEntry->aFilterName = CUI_RES(RID_SVXSTR_GALLERY_ALLFILES);
+    pFilterEntry->aFilterName = CuiResId(RID_SVXSTR_GALLERY_ALLFILES);
     pFilterEntry->aFilterName = addExtension( pFilterEntry->aFilterName, aExtensions );
     size_t pos = m_pCbbFileType->InsertEntry( pFilterEntry->aFilterName, 0 );
     if ( pos < aFilterEntryList.size() ) {
@@ -1182,7 +1182,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl, Dialog&, void)
   }
   else
   {
-      m_pLbxFound->InsertEntry( OUString( CUI_RES( RID_SVXSTR_GALLERY_NOFILES ) ) );
+      m_pLbxFound->InsertEntry( OUString( CuiResId( RID_SVXSTR_GALLERY_NOFILES ) ) );
       m_pBtnTakeAll->Disable();
       m_pCbxPreview->Disable();
       bEntriesFound = false;

@@ -163,7 +163,7 @@ sal_Int16 SAL_CALL AccessibleSlideSorterObject::getAccessibleRole()
 OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleDescription()
 {
     ThrowIfDisposed();
-    return SD_RESSTR(STR_PAGE);
+    return SdResId(STR_PAGE);
 }
 
 OUString SAL_CALL AccessibleSlideSorterObject::getAccessibleName()

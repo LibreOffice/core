@@ -151,7 +151,7 @@ bool E3dDragMethod::EndSdrDrag(bool /*bCopy*/)
     {
         const bool bUndo = getSdrDragView().IsUndoEnabled();
         if( bUndo )
-            getSdrDragView().BegUndo(SVX_RESSTR(RID_SVX_3D_UNDO_ROTATE));
+            getSdrDragView().BegUndo(SvxResId(RID_SVX_3D_UNDO_ROTATE));
         sal_uInt32 nOb(0);
 
         for(nOb=0;nOb<nCnt;nOb++)

@@ -99,7 +99,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         // from 'Outline 1' style sheet.
         if( SfxItemState::SET != aInputSet.GetItemState(EE_PARA_NUMBULLET, false, &pItem ))
         {
-            OUString aStyleName(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE) + " 1");
+            OUString aStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " 1");
             SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SD_STYLE_FAMILY_PSEUDO);
 
             if(pFirstStyleSheet)
@@ -180,19 +180,19 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     switch( ePO )
     {
         case PO_TITLE:
-            aTitle = OUString(SdResId( STR_PSEUDOSHEET_TITLE ));
+            aTitle = SdResId(STR_PSEUDOSHEET_TITLE);
         break;
 
         case PO_SUBTITLE:
-            aTitle = OUString(SdResId( STR_PSEUDOSHEET_SUBTITLE ));
+            aTitle = SdResId(STR_PSEUDOSHEET_SUBTITLE);
         break;
 
         case PO_BACKGROUND:
-            aTitle = OUString(SdResId( STR_PSEUDOSHEET_BACKGROUND ));
+            aTitle = SdResId(STR_PSEUDOSHEET_BACKGROUND);
         break;
 
         case PO_BACKGROUNDOBJECTS:
-            aTitle = OUString(SdResId( STR_PSEUDOSHEET_BACKGROUNDOBJECTS ));
+            aTitle = SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS);
         break;
 
         case PO_OUTLINE_1:
@@ -204,12 +204,12 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         case PO_OUTLINE_7:
         case PO_OUTLINE_8:
         case PO_OUTLINE_9:
-            aTitle = OUString(SdResId( STR_PSEUDOSHEET_OUTLINE )) + " " +
+            aTitle = SdResId(STR_PSEUDOSHEET_OUTLINE) + " " +
                 OUString::number( ePO - PO_OUTLINE_1 + 1 );
         break;
 
         case PO_NOTES:
-            aTitle = OUString(SdResId( STR_PSEUDOSHEET_NOTES ));
+            aTitle = SdResId(STR_PSEUDOSHEET_NOTES);
         break;
     }
     SetText( aTitle );

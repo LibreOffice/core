@@ -701,7 +701,7 @@ Any TableDesignFamily::getPropertyValue( const OUString& PropertyName )
 {
     if ( PropertyName == "DisplayName" )
     {
-        OUString sDisplayName( SVX_RESSTR( RID_SVXSTR_STYLEFAMILY_TABLEDESIGN ) );
+        OUString sDisplayName( SvxResId( RID_SVXSTR_STYLEFAMILY_TABLEDESIGN ) );
         return Any( sDisplayName );
     }
     else

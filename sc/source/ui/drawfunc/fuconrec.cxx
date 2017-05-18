@@ -64,7 +64,7 @@ namespace {
 
     if( pLineEndList.is() )
     {
-        OUString aArrowName( SVX_RES(nResId) );
+        OUString aArrowName( SvxResId(nResId) );
         long nCount = pLineEndList->Count();
         long nIndex;
         for( nIndex = 0L; nIndex < nCount; nIndex++ )
@@ -279,9 +279,9 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj, sal_uInt1
             case SID_LINE_ARROWS:
             {
                 // connector with arrow ends
-                rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW), aArrow));
+                rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
                 rAttr.Put(XLineStartWidthItem(nWidth));
-                rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW), aArrow));
+                rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
                 rAttr.Put(XLineEndWidthItem(nWidth));
             }
             break;
@@ -291,7 +291,7 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj, sal_uInt1
             case SID_LINE_ARROW_SQUARE:
             {
                 // connector with arrow start
-                rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW), aArrow));
+                rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
                 rAttr.Put(XLineStartWidthItem(nWidth));
             }
             break;
@@ -301,7 +301,7 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj, sal_uInt1
             case SID_LINE_SQUARE_ARROW:
             {
                 // connector with arrow end
-                rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW), aArrow));
+                rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW), aArrow));
                 rAttr.Put(XLineEndWidthItem(nWidth));
             }
             break;
@@ -313,7 +313,7 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj, sal_uInt1
             case SID_LINE_ARROW_CIRCLE:
             {
                 // circle end
-                rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_CIRCLE), aCircle));
+                rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
                 rAttr.Put(XLineEndWidthItem(nWidth));
             }
             break;
@@ -321,7 +321,7 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj, sal_uInt1
             case SID_LINE_CIRCLE_ARROW:
             {
                 // circle start
-                rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_CIRCLE), aCircle));
+                rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_CIRCLE), aCircle));
                 rAttr.Put(XLineStartWidthItem(nWidth));
             }
             break;
@@ -329,7 +329,7 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj, sal_uInt1
             case SID_LINE_ARROW_SQUARE:
             {
                 // square end
-                rAttr.Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_SQUARE), aSquare));
+                rAttr.Put(XLineEndItem(SvxResId(RID_SVXSTR_SQUARE), aSquare));
                 rAttr.Put(XLineEndWidthItem(nWidth));
             }
             break;
@@ -337,7 +337,7 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj, sal_uInt1
             case SID_LINE_SQUARE_ARROW:
             {
                 // square start
-                rAttr.Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_SQUARE), aSquare));
+                rAttr.Put(XLineStartItem(SvxResId(RID_SVXSTR_SQUARE), aSquare));
                 rAttr.Put(XLineStartWidthItem(nWidth));
             }
             break;

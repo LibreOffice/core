@@ -49,9 +49,9 @@ ScTpFormulaOptions::ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& r
     get(mpLbOOXMLRecalcOptions, "ooxmlrecalc");
     get(mpLbODFRecalcOptions, "odfrecalc");
 
-    mpLbFormulaSyntax->InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_CALC_A1).toString());
-    mpLbFormulaSyntax->InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_XL_A1).toString());
-    mpLbFormulaSyntax->InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_XL_R1C1).toString());
+    mpLbFormulaSyntax->InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_CALC_A1));
+    mpLbFormulaSyntax->InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_XL_A1));
+    mpLbFormulaSyntax->InsertEntry(ScResId(SCSTR_FORMULA_SYNTAX_XL_R1C1));
 
     Link<Button*,void> aLink2 = LINK( this, ScTpFormulaOptions, ButtonHdl );
     mpBtnSepReset->SetClickHdl(aLink2);

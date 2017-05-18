@@ -1120,20 +1120,17 @@ bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount
     for( i = 0; i < nCount; i++ )
     {
         sal_uInt16 nResId = (sal_uInt16)(nSourceResIds + i);
-        const ResId aRes( SVX_RES(nResId));
-        const OUString aCompare( aRes.toString() );
+        const OUString aCompare(SvxResId(nResId));
         if( aShortString == aCompare )
         {
             sal_uInt16 nNewResId = (sal_uInt16)(nDestResIds + i);
-            ResId aNewRes( SVX_RES( nNewResId ));
-            rString = rString.replaceAt( 0, aShortString.getLength(), aNewRes.toString() );
+            rString = rString.replaceAt( 0, aShortString.getLength(), SvxResId( nNewResId ) );
             return true;
         }
         else if( rString == aCompare )
         {
             sal_uInt16 nNewResId = (sal_uInt16)(nDestResIds + i);
-            ResId aNewRes( SVX_RES( nNewResId ));
-            rString = aNewRes.toString();
+            rString = SvxResId(nNewResId);
             return true;
         }
     }
@@ -1258,10 +1255,10 @@ bool SvxUnoConvertResourceString( const sal_uInt16* pSourceResIds, const sal_uIn
 
     for(int i = 0; i < nCount; ++i )
     {
-        OUString aStrDefName = SVX_RESSTR( pSourceResIds[i] );
+        OUString aStrDefName = SvxResId( pSourceResIds[i] );
         if( sStr == aStrDefName )
         {
-            OUString aReplace = SVX_RESSTR( pDestResIds[i] );
+            OUString aReplace = SvxResId( pDestResIds[i] );
             rString = rString.replaceAt( 0, aStrDefName.getLength(), aReplace );
             return true;
         }

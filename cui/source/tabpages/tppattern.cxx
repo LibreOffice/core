@@ -176,7 +176,7 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
 
         // determining (possibly cutting) the name and
         // displaying it in the GroupBox
-        OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) );
+        OUString        aString( CuiResId( RID_SVXSTR_TABLE ) );
         aString         += ": ";
         INetURLObject   aURL( m_pPatternList->GetPath() );
 
@@ -350,8 +350,8 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
 IMPL_LINK_NOARG(SvxPatternTabPage, ClickAddHdl_Impl, Button*, void)
 {
 
-    OUString aNewName( SVX_RES( RID_SVXSTR_PATTERN_UNTITLED ) );
-    OUString aDesc( CUI_RES( RID_SVXSTR_DESC_NEW_PATTERN ) );
+    OUString aNewName( SvxResId( RID_SVXSTR_PATTERN_UNTITLED ) );
+    OUString aDesc( CuiResId( RID_SVXSTR_DESC_NEW_PATTERN ) );
     OUString aName;
 
     long nCount = m_pPatternList->Count();

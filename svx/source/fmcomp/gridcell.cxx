@@ -487,7 +487,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
                     nStyle |= DrawTextFlags::Left;
             }
 
-            rDev.DrawText(rRect, SVX_RESSTR(RID_STR_AUTOFIELD), nStyle);
+            rDev.DrawText(rRect, SvxResId(RID_STR_AUTOFIELD), nStyle);
         }
         else if (pRow->HasField(m_nFieldPos))
         {

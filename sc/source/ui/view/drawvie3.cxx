@@ -62,7 +62,7 @@ void ScDrawView::SetPageAnchored()
         const SdrMarkList* pMark = &GetMarkedObjectList();
         const size_t nCount = pMark->GetMarkCount();
 
-        BegUndo( OUString(ScResId( SCSTR_UNDO_PAGE_ANCHOR )) );
+        BegUndo(ScResId(SCSTR_UNDO_PAGE_ANCHOR));
         for( size_t i=0; i<nCount; ++i )
         {
             SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
@@ -90,7 +90,7 @@ void ScDrawView::SetCellAnchored()
         const SdrMarkList* pMark = &GetMarkedObjectList();
         const size_t nCount = pMark->GetMarkCount();
 
-        BegUndo( OUString(ScResId( SCSTR_UNDO_CELL_ANCHOR )) );
+        BegUndo(ScResId(SCSTR_UNDO_CELL_ANCHOR));
         for( size_t i=0; i<nCount; ++i )
         {
             SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();

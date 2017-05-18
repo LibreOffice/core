@@ -322,7 +322,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg(vcl::Window* pParent, SwWrtShell& rS, S
     m_pEditBox->SetText(m_pBookmarksBox->GetNameProposal());
     m_pEditBox->SetCursorAtLast();
 
-    sRemoveWarning = OUString(SW_RES(STR_REMOVE_WARNING));
+    sRemoveWarning = SwResId(STR_REMOVE_WARNING);
 }
 
 SwInsertBookmarkDlg::~SwInsertBookmarkDlg()
@@ -349,9 +349,9 @@ BookmarkTable::BookmarkTable(SvSimpleTableContainer& rParent) :
 
     SetTabs(nTabs, MapUnit::MapPixel);
     SetSelectionMode(SelectionMode::Multiple);
-    InsertHeaderEntry(OUString(SW_RES(STR_PAGE)));
-    InsertHeaderEntry(OUString(SW_RES(STR_BOOKMARK_NAME)));
-    InsertHeaderEntry(OUString(SW_RES(STR_BOOKMARK_TEXT)));
+    InsertHeaderEntry(SwResId(STR_PAGE));
+    InsertHeaderEntry(SwResId(STR_BOOKMARK_NAME));
+    InsertHeaderEntry(SwResId(STR_BOOKMARK_TEXT));
 
     rParent.SetTable(this);
 }
@@ -428,7 +428,7 @@ void BookmarkTable::SelectByName(const OUString& sName)
 
 OUString BookmarkTable::GetNameProposal()
 {
-    OUString sDefaultBookmarkName = SW_RES(STR_BOOKMARK_DEF_NAME);
+    OUString sDefaultBookmarkName = SwResId(STR_BOOKMARK_DEF_NAME);
     sal_Int32 nHighestBookmarkId = 0;
     SvTreeListEntry* pEntry = First();
     while (pEntry)

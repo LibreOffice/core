@@ -955,9 +955,9 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
         else
         {
             if ( m_bNew )
-                SetText( SW_RESSTR(STR_OLE_INSERT));
+                SetText( SwResId(STR_OLE_INSERT));
             else
-                SetText( SW_RESSTR(STR_OLE_EDIT));
+                SetText( SwResId(STR_OLE_EDIT));
         }
     }
     else

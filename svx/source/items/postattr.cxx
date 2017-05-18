@@ -55,7 +55,7 @@ bool SvxPostItAuthorItem::GetPresentation
             rText = GetValue();
             return true;
         case SfxItemPresentation::Complete:
-            rText = SVX_RESSTR(RID_SVXITEMS_AUTHOR_COMPLETE) + GetValue();
+            rText = SvxResId(RID_SVXITEMS_AUTHOR_COMPLETE) + GetValue();
             return true;
         default: ;//prevent warning
     }
@@ -95,7 +95,7 @@ bool SvxPostItDateItem::GetPresentation
             rText = GetValue();
             return true;
         case SfxItemPresentation::Complete:
-            rText = SVX_RESSTR(RID_SVXITEMS_DATE_COMPLETE) + GetValue();
+            rText = SvxResId(RID_SVXITEMS_DATE_COMPLETE) + GetValue();
             return true;
         default: ;//prevent warning
     }
@@ -133,7 +133,7 @@ bool SvxPostItTextItem::GetPresentation
             rText = GetValue();
             return true;
         case SfxItemPresentation::Complete:
-            rText = SVX_RESSTR(RID_SVXITEMS_TEXT_COMPLETE) + GetValue();
+            rText = SvxResId(RID_SVXITEMS_TEXT_COMPLETE) + GetValue();
             return true;
         default: ;//prevent warning
     }

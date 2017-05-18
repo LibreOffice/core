@@ -255,15 +255,15 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
         {
             // -2, there's no string for Next/Prev
             sal_uInt16 nResStr = ST_TBL - 2 + nNaviId - NID_START;
-            sText = SW_RESSTR(nResStr);
+            sText = SwResId(nResStr);
             nTbxBits = ToolBoxItemBits::CHECKABLE;
         }
         else
         {
             if (nNaviId == NID_PREV)
-                sText = SW_RESSTR(STR_IMGBTN_PGE_UP);
+                sText = SwResId(STR_IMGBTN_PGE_UP);
             else if (nNaviId == NID_NEXT)
-                sText = SW_RESSTR(STR_IMGBTN_PGE_DOWN);
+                sText = SwResId(STR_IMGBTN_PGE_DOWN);
         }
 
         m_pToolBox->InsertItem(nNaviId, Image(BitmapEx(aNavigationImgIds[i])),
@@ -276,7 +276,7 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
     // these are global strings
     for( i = 0; i < 2 * NID_COUNT; i++)
     {
-        sQuickHelp[i] = SW_RESSTR(STR_IMGBTN_START + i);
+        sQuickHelp[i] = SwResId(STR_IMGBTN_START + i);
     }
 
     sal_uInt16 nItemId = SwView::GetMoveType();
@@ -358,7 +358,7 @@ OUString SwScrollNaviPopup::GetToolTip(bool bNext)
     nResId += SwView::GetMoveType() - NID_START;
     if(!bNext)
         nResId += NID_COUNT;
-    return SW_RESSTR(nResId);
+    return SwResId(nResId);
 }
 
 class SwZoomBox_Impl : public ComboBox
@@ -395,7 +395,7 @@ SwZoomBox_Impl::SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
       RID_SVXSTR_ZOOM_OPTIMAL_VIEW };
     for(sal_uInt16 aZoomValue : aZoomValues)
     {
-        OUString sEntry = SVX_RESSTR( aZoomValue );
+        OUString sEntry = SvxResId( aZoomValue );
         InsertEntry(sEntry);
     }
 
@@ -407,11 +407,11 @@ void    SwZoomBox_Impl::Select()
     {
         OUString sEntry = GetText().replaceAll("%", "");
         SvxZoomItem aZoom(SvxZoomType::PERCENT,100);
-        if(sEntry == SVX_RESSTR( RID_SVXSTR_ZOOM_PAGE_WIDTH ) )
+        if(sEntry == SvxResId( RID_SVXSTR_ZOOM_PAGE_WIDTH ) )
             aZoom.SetType(SvxZoomType::PAGEWIDTH);
-        else if(sEntry == SVX_RESSTR( RID_SVXSTR_ZOOM_OPTIMAL_VIEW ) )
+        else if(sEntry == SvxResId( RID_SVXSTR_ZOOM_OPTIMAL_VIEW ) )
             aZoom.SetType(SvxZoomType::OPTIMAL);
-        else if(sEntry == SVX_RESSTR( RID_SVXSTR_ZOOM_WHOLE_PAGE) )
+        else if(sEntry == SvxResId( RID_SVXSTR_ZOOM_WHOLE_PAGE) )
             aZoom.SetType(SvxZoomType::WHOLEPAGE);
         else
         {

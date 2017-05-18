@@ -80,7 +80,7 @@ SwJavaEditDialog::SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh) :
     CheckTravel();
 
     if( !bNew )
-        SetText( SW_RES( STR_JAVA_EDIT ) );
+        SetText( SwResId( STR_JAVA_EDIT ) );
 
     RadioButtonHdl(nullptr);
 }

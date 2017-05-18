@@ -54,17 +54,17 @@ void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
     {
         *pClassName = SvGlobalName( SO3_SWGLOB_CLASSID_60 );
         *pClipFormat = SotClipboardFormatId::STARWRITERGLOB_60;
-        *pLongUserName = SW_RESSTR(STR_WRITER_GLOBALDOC_FULLTYPE);
+        *pLongUserName = SwResId(STR_WRITER_GLOBALDOC_FULLTYPE);
         OSL_ENSURE( !bTemplate, "No template for Writer Global" );
     }
     else if (nVersion == SOFFICE_FILEFORMAT_8)
     {
         *pClassName     = SvGlobalName( SO3_SWGLOB_CLASSID_60 );
         *pClipFormat    = bTemplate ? SotClipboardFormatId::STARWRITERGLOB_8_TEMPLATE : SotClipboardFormatId::STARWRITERGLOB_8;
-        *pLongUserName = SW_RESSTR(STR_WRITER_GLOBALDOC_FULLTYPE);
+        *pLongUserName = SwResId(STR_WRITER_GLOBALDOC_FULLTYPE);
     }
 
-    *pUserName = SW_RESSTR(STR_HUMAN_SWGLOBDOC_NAME);
+    *pUserName = SwResId(STR_HUMAN_SWGLOBDOC_NAME);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

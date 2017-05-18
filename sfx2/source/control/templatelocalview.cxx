@@ -235,17 +235,17 @@ TemplateContainerItem* TemplateLocalView::getRegion(OUString const & rName)
 void TemplateLocalView::createContextMenu(const bool bIsDefault)
 {
     ScopedVclPtrInstance<PopupMenu> pItemMenu;
-    pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN).toString());
-    pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE).toString());
+    pItemMenu->InsertItem(MNI_OPEN,SfxResId(STR_OPEN));
+    pItemMenu->InsertItem(MNI_EDIT,SfxResId(STR_EDIT_TEMPLATE));
 
     if(!bIsDefault)
-        pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_DEFAULT_TEMPLATE).toString());
+        pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_DEFAULT_TEMPLATE));
     else
-        pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_RESET_DEFAULT).toString());
+        pItemMenu->InsertItem(MNI_DEFAULT_TEMPLATE,SfxResId(STR_RESET_DEFAULT));
 
     pItemMenu->InsertSeparator();
-    pItemMenu->InsertItem(MNI_RENAME,SfxResId(STR_RENAME).toString());
-    pItemMenu->InsertItem(MNI_DELETE,SfxResId(STR_DELETE).toString());
+    pItemMenu->InsertItem(MNI_RENAME,SfxResId(STR_RENAME));
+    pItemMenu->InsertItem(MNI_DELETE,SfxResId(STR_DELETE));
     pItemMenu->InsertSeparator();
     deselectItems();
     maSelectedItem->setSelection(true);
@@ -269,7 +269,7 @@ IMPL_LINK(TemplateLocalView, ContextMenuSelectHdl, Menu*, pMenu, bool)
         break;
     case MNI_RENAME:
     {
-        ScopedVclPtrInstance< InputDialog > m_pTitleEditDlg( SfxResId(STR_RENAME_TEMPLATE).toString(), this);
+        ScopedVclPtrInstance< InputDialog > m_pTitleEditDlg( SfxResId(STR_RENAME_TEMPLATE), this);
         OUString sOldTitle = maSelectedItem->getTitle();
         m_pTitleEditDlg->SetEntryText( sOldTitle );
         m_pTitleEditDlg->HideHelpBtn();
@@ -517,7 +517,7 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
 
         if (bCopy)
         {
-            OUString sQuery = (OUString(SfxResId(STR_MSG_QUERY_COPY).toString()).replaceFirst("$1", pViewItem->maTitle)).replaceFirst("$2",
+            OUString sQuery = SfxResId(STR_MSG_QUERY_COPY).replaceFirst("$1", pViewItem->maTitle).replaceFirst("$2",
                 getRegionName(nTargetRegion));
             ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, sQuery, VclMessageType::Question, VclButtonsType::YesNo);
             if ( aQueryDlg->Execute() != RET_YES )
@@ -618,13 +618,13 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
 
                 if (bCopy)
                 {
-                    OUString sQuery = (OUString(SfxResId(STR_MSG_QUERY_COPY).toString()).replaceFirst("$1", pViewItem->maTitle)).replaceFirst("$2",
+                    OUString sQuery = SfxResId(STR_MSG_QUERY_COPY).replaceFirst("$1", pViewItem->maTitle).replaceFirst("$2",
                         getRegionName(nTargetRegion));
                     ScopedVclPtrInstance< MessageDialog > aQueryDlg(this, sQuery, VclMessageType::Question, VclButtonsType::YesNo);
 
                     if ( aQueryDlg->Execute() != RET_YES )
                     {
-                        OUString sMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
+                        OUString sMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE));
                         sMsg = sMsg.replaceFirst("$1",getRegionName(nTargetRegion));
                         ScopedVclPtrInstance<MessageDialog>(this, sMsg.replaceFirst( "$2",pViewItem->maTitle))->Execute();
 
@@ -799,7 +799,7 @@ void TemplateLocalView::insertItems(const std::vector<TemplateItemProperties> &r
             pChild->setHelpText(pCur->aName);
         else
         {
-            OUString sHelpText = SfxResId(STR_TEMPLATE_TOOLTIP).toString();
+            OUString sHelpText = SfxResId(STR_TEMPLATE_TOOLTIP);
             sHelpText = (sHelpText.replaceFirst("$1", pCur->aName)).replaceFirst("$2", pCur->aRegionName);
             pChild->setHelpText(sHelpText);
         }

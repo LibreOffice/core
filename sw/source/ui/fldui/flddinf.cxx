@@ -160,7 +160,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
 
                     if( rProperties.getLength() )
                     {
-                        pInfo = m_pTypeTLB->InsertEntry( OUString(SW_RES( STR_CUSTOM )) );
+                        pInfo = m_pTypeTLB->InsertEntry( SwResId( STR_CUSTOM ) );
                         pInfo->SetUserData(reinterpret_cast<void*>(USHRT_MAX));
 
                         for (sal_Int32 n=0; n < rProperties.getLength(); n++)

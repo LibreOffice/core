@@ -153,7 +153,7 @@ SvxFmTbxCtlRecText::~SvxFmTbxCtlRecText()
 
 VclPtr<vcl::Window> SvxFmTbxCtlRecText::CreateItemWindow( vcl::Window* pParent )
 {
-    OUString aText(SVX_RESSTR(RID_STR_REC_TEXT));
+    OUString aText(SvxResId(RID_STR_REC_TEXT));
     VclPtrInstance<FixedText> pFixedText( pParent );
     Size aSize( pFixedText->GetTextWidth( aText ), pFixedText->GetTextHeight( ) );
     pFixedText->SetText( aText );
@@ -179,7 +179,7 @@ SvxFmTbxCtlRecFromText::~SvxFmTbxCtlRecFromText()
 
 VclPtr<vcl::Window> SvxFmTbxCtlRecFromText::CreateItemWindow( vcl::Window* pParent )
 {
-    OUString aText(SVX_RESSTR(RID_STR_REC_FROM_TEXT));
+    OUString aText(SvxResId(RID_STR_REC_FROM_TEXT));
     VclPtrInstance<FixedText> pFixedText( pParent, WB_CENTER );
     Size aSize( pFixedText->GetTextWidth( aText ), pFixedText->GetTextHeight( ) );
     aSize.Width() += 12;

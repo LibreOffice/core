@@ -52,7 +52,7 @@ SfxSaveAsTemplateDialog::SfxSaveAsTemplateDialog():
     mpOKButton->SetClickHdl(LINK(this, SfxSaveAsTemplateDialog, OkClickHdl));
 
     mpOKButton->Disable();
-    mpOKButton->SetText(SfxResId(STR_SAVEDOC).toString());
+    mpOKButton->SetText(SfxResId(STR_SAVEDOC));
 }
 
 SfxSaveAsTemplateDialog::~SfxSaveAsTemplateDialog()
@@ -81,7 +81,7 @@ IMPL_LINK_NOARG(SfxSaveAsTemplateDialog, OkClickHdl, Button*, void)
 
     if(!IsTemplateNameUnique())
     {
-        OUString sQueryMsg(SfxResId(STR_QMSG_TEMPLATE_OVERWRITE).toString());
+        OUString sQueryMsg(SfxResId(STR_QMSG_TEMPLATE_OVERWRITE));
         sQueryMsg = sQueryMsg.replaceFirst("$1",msTemplateName);
         aQueryDlg->set_primary_text(sQueryMsg.replaceFirst("$2", msSelectedCategory));
 
@@ -93,7 +93,7 @@ IMPL_LINK_NOARG(SfxSaveAsTemplateDialog, OkClickHdl, Button*, void)
         Close();
     else
     {
-        OUString sText( SfxResId(STR_ERROR_SAVEAS).toString() );
+        OUString sText( SfxResId(STR_ERROR_SAVEAS) );
         ScopedVclPtrInstance<MessageDialog>(this, sText.replaceFirst("$1", msTemplateName))->Execute();
     }
 }

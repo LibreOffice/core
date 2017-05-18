@@ -69,7 +69,7 @@ SvxMeasureDialog::SvxMeasureDialog( vcl::Window* pParent, const SfxItemSet& rInA
     _pPage->Construct();
 
     SetTabPage(_pPage );
-    SetText(CUI_RES(RID_SVXSTR_DIMENSION_LINE));
+    SetText(CuiResId(RID_SVXSTR_DIMENSION_LINE));
 }
 
 /*************************************************************************
@@ -804,7 +804,7 @@ void SvxMeasurePage::ChangeAttrHdl_Impl( void* p )
 void SvxMeasurePage::FillUnitLB()
 {
     // fill ListBox with metrics
-    SvxStringArray aMetricArr( SVX_RES( RID_SVXSTR_FIELDUNIT_TABLE ) );
+    SvxStringArray aMetricArr(ResId(RID_SVXSTR_FIELDUNIT_TABLE, DIALOG_MGR()));
 
     sal_IntPtr nUnit = FUNIT_NONE;
     OUString aStrMetric( m_pFtAutomatic->GetText());

@@ -265,7 +265,7 @@ ScRange ScSamplingDialog::PerformRandomSampling(ScDocShell* pDocShell)
 
 void ScSamplingDialog::PerformSampling()
 {
-    OUString aUndo(SC_RESSTR(STR_SAMPLING_UNDO_NAME));
+    OUString aUndo(ScResId(STR_SAMPLING_UNDO_NAME));
     ScDocShell* pDocShell = mViewData->GetDocShell();
     svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
 

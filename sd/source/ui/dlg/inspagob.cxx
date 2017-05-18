@@ -49,7 +49,7 @@ SdInsertPagesObjsDlg::SdInsertPagesObjsDlg(
 
     // insert text
     if( !pMedium )
-        SetText( SD_RESSTR( STR_INSERT_TEXT ) );
+        SetText( SdResId( STR_INSERT_TEXT ) );
 
     Reset();
 }

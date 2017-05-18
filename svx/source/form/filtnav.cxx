@@ -434,7 +434,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& Event 
     // if the first term was removed, then the to-be first term needs its text updated
     if ( Event.DisjunctiveTerm == 0 )
     {
-        rTermItems[1]->SetText( SVX_RESSTR(RID_STR_FILTER_FILTER_FOR));
+        rTermItems[1]->SetText( SvxResId(RID_STR_FILTER_FILTER_FOR));
         FmFilterTextChangedHint aChangeHint( rTermItems[1] );
         m_pModel->Broadcast( aChangeHint );
     }
@@ -470,7 +470,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& Event )
 
     const ::std::vector< FmFilterData* >::iterator insertPos = pFormItem->GetChildren().begin() + nInsertPos;
 
-    FmFilterItems* pFilterItems = new FmFilterItems(pFormItem, SVX_RESSTR(RID_STR_FILTER_FILTER_OR));
+    FmFilterItems* pFilterItems = new FmFilterItems(pFormItem, SvxResId(RID_STR_FILTER_FILTER_OR));
     m_pModel->Insert( insertPos, pFilterItems );
 }
 
@@ -566,7 +566,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
             Reference< XFilterController > xFilterController( pFormItem->GetFilterController(), UNO_SET_THROW );
 
             // insert the existing filters for the form
-            OUString aTitle(SVX_RESSTR(RID_STR_FILTER_FILTER_FOR));
+            OUString aTitle(SvxResId(RID_STR_FILTER_FILTER_FOR));
 
             Sequence< Sequence< OUString > > aExpressions = xFilterController->getPredicateExpressions();
             for (   const Sequence< OUString >* pConjunctionTerm = aExpressions.getConstArray();
@@ -600,7 +600,7 @@ void FmFilterModel::Update(const Reference< XIndexAccess > & xControllers, FmPar
                 }
 
                 // title for the next conditions
-                aTitle = SVX_RESSTR( RID_STR_FILTER_FILTER_OR );
+                aTitle = SvxResId( RID_STR_FILTER_FILTER_OR );
             }
 
             // now add dependent controllers
@@ -1186,7 +1186,7 @@ bool FmFilterNavigator::EditedEntry( SvTreeListEntry* pEntry, const OUString& rN
         {
             // display the error and return sal_False
             SQLContext aError;
-            aError.Message = SVX_RESSTR(RID_STR_SYNTAXERROR);
+            aError.Message = SvxResId(RID_STR_SYNTAXERROR);
             aError.Details = aErrorMsg;
             displayException(aError, this);
 
@@ -1811,7 +1811,7 @@ FmFilterNavigatorWin::FmFilterNavigatorWin( SfxBindings* _pBindings, SfxChildWin
 
     m_pNavigator = VclPtr<FmFilterNavigator>::Create( this );
     m_pNavigator->Show();
-    SetText( SVX_RES(RID_STR_FILTER_NAVIGATOR) );
+    SetText( SvxResId(RID_STR_FILTER_NAVIGATOR) );
     SfxDockingWindow::SetFloatingSize( Size(200,200) );
 }
 

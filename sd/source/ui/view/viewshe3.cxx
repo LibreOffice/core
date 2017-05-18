@@ -145,7 +145,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             // Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1072 ff.
-            OUString aTmp(SVT_RESSTR(STR_UNDO));
+            OUString aTmp(SvtResId(STR_UNDO));
             aTmp += pUndoManager->GetUndoActionComment();
             rSet.Put(SfxStringItem(SID_UNDO, aTmp));
         }
@@ -177,7 +177,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             // Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
-            OUString aTmp(SVT_RESSTR(STR_REDO));
+            OUString aTmp(SvtResId(STR_REDO));
             aTmp += pUndoManager->GetRedoActionComment();
             rSet.Put(SfxStringItem(SID_REDO, aTmp));
         }
@@ -202,8 +202,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     sal_uInt16 nSId = rRequest.GetSlot();
     SdDrawDocument* pDocument = GetDoc();
     SdrLayerAdmin& rLayerAdmin = pDocument->GetLayerAdmin();
-    SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
-    SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+    SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND));
+    SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ));
     SdrLayerIDSet aVisibleLayers;
     // Determine the page from which to copy some values, such as layers,
     // size, master page, to the new page.  This is usually the given page.
@@ -314,7 +314,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     View* pDrView = GetView();
     const bool bUndo = pDrView && pDrView->IsUndoEnabled();
     if( bUndo )
-        pDrView->BegUndo(SD_RESSTR(STR_INSERTPAGE));
+        pDrView->BegUndo(SdResId(STR_INSERTPAGE));
 
     sal_uInt16 nNewPageIndex = 0xffff;
     switch (nSId)

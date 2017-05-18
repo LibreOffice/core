@@ -247,7 +247,7 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
         RID_STR_SEARCH_WHOLE
     };
     for (unsigned short nResId : nResIds)
-        m_plbPosition->InsertEntry( OUString( CUI_RES( nResId ) ) );
+        m_plbPosition->InsertEntry( OUString( CuiResId( nResId ) ) );
     m_plbPosition->SelectEntryPos(MATCHING_ANYWHERE);
 
     // the field listbox
@@ -438,7 +438,7 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox&, rBox, void)
     // direction -> pass on and reset the checkbox-text for StartOver
     else if (&rBox == m_pcbBackwards)
     {
-        m_pcbStartOver->SetText( OUString( CUI_RES( bChecked ? RID_STR_FROM_BOTTOM : RID_STR_FROM_TOP ) ) );
+        m_pcbStartOver->SetText( OUString( CuiResId( bChecked ? RID_STR_FROM_BOTTOM : RID_STR_FROM_TOP ) ) );
         m_pSearchEngine->SetDirection(!bChecked);
     }
     // similarity-search or regular expression
@@ -702,7 +702,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProgress, 
         case FmSearchProgress::State::Progress:
             if (pProgress->bOverflow)
             {
-                OUString sHint( CUI_RES( m_pcbBackwards->IsChecked() ? RID_STR_OVERFLOW_BACKWARD : RID_STR_OVERFLOW_FORWARD ) );
+                OUString sHint( CuiResId( m_pcbBackwards->IsChecked() ? RID_STR_OVERFLOW_BACKWARD : RID_STR_OVERFLOW_FORWARD ) );
                 m_pftHint->SetText( sHint );
                 m_pftHint->Invalidate();
             }
@@ -712,7 +712,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProgress, 
             break;
 
         case FmSearchProgress::State::ProgressCounting:
-            m_pftHint->SetText(CUI_RES(RID_STR_SEARCH_COUNTING));
+            m_pftHint->SetText(CuiResId(RID_STR_SEARCH_COUNTING));
             m_pftHint->Invalidate();
 
             m_pftRecord->SetText(OUString::number(pProgress->nCurrentRecord));
@@ -730,7 +730,7 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, const FmSearchProgress*, pProgress, 
             sal_uInt16 nErrorId = (FmSearchProgress::State::Error == pProgress->aSearchState)
                 ? RID_STR_SEARCH_GENERAL_ERROR
                 : RID_STR_SEARCH_NORECORD;
-            ScopedVclPtrInstance<MessageDialog>(this, CUI_RES(nErrorId))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(this, CuiResId(nErrorId))->Execute();
             SAL_FALLTHROUGH;
         }
         case FmSearchProgress::State::Canceled:

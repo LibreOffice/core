@@ -55,7 +55,7 @@ namespace dbp
         m_pNextPage->SetHelpId(HID_GROUPWIZARD_NEXT);
         m_pCancel->SetHelpId(HID_GROUPWIZARD_CANCEL);
         m_pFinish->SetHelpId(HID_GROUPWIZARD_FINISH);
-        setTitleBase(ModuleRes(RID_STR_GROUPWIZARD_TITLE).toString());
+        setTitleBase(ModuleRes(RID_STR_GROUPWIZARD_TITLE));
     }
 
 
@@ -468,7 +468,7 @@ namespace dbp
     OOptionDBFieldPage::OOptionDBFieldPage( OControlWizard* _pParent )
         :ODBFieldPage(_pParent)
     {
-        setDescriptionText(ModuleRes(RID_STR_GROUPWIZ_DBFIELD).toString());
+        setDescriptionText(ModuleRes(RID_STR_GROUPWIZ_DBFIELD));
     }
 
 

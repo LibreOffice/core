@@ -138,7 +138,7 @@ static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info_layo
     Size aLayoutItemSize;
     for( ; pInfo->mnStrResId; pInfo++ )
     {
-        OUString aText( SD_RESSTR( pInfo->mnStrResId ) );
+        OUString aText( SdResId( pInfo->mnStrResId ) );
         BitmapEx aBmp(OUString::createFromAscii(pInfo->msBmpResId));
 
         pValue->InsertItem(static_cast<sal_uInt16>(pInfo->maAutoLayout)+1,
@@ -176,8 +176,8 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, vcl::W
 
     const sal_Int32 LAYOUT_BORDER_PIX = 7;
 
-    OUString aTitle1( SD_RESSTR( STR_GLUE_ESCDIR_HORZ ) );
-    OUString aTitle2( SD_RESSTR( STR_GLUE_ESCDIR_VERT ) );
+    OUString aTitle1( SdResId( STR_GLUE_ESCDIR_HORZ ) );
+    OUString aTitle2( SdResId( STR_GLUE_ESCDIR_VERT ) );
 
     SvtLanguageOptions aLanguageOptions;
     const bool bVerticalEnabled = aLanguageOptions.IsVerticalTextEnabled();
@@ -248,7 +248,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, vcl::W
             if( bInsertPage )
                 sSlotTitle = vcl::CommandInfoProvider::GetLabelForCommand( sSlotStr, rController.getModuleName() );
             else
-                sSlotTitle = SD_RESSTR( STR_RESET_LAYOUT );
+                sSlotTitle = SdResId( STR_RESET_LAYOUT );
             appendEntry( 2, sSlotTitle, aSlotImage);
         }
     }

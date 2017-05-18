@@ -24,14 +24,16 @@
 #include <tools/resid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 
-class SVT_DLLPUBLIC SvtResId: public ResId
+struct SVT_DLLPUBLIC SvtResMgr
 {
-public:
-    SvtResId(sal_uInt16 nId);
+    static ResMgr* GetResMgr();
     static void DeleteResMgr();
 };
 
-#define SVT_RESSTR(i)    SvtResId(i).toString()
+inline OUString SvtResId(sal_uInt16 nId)
+{
+    return ResId(nId, *SvtResMgr::GetResMgr());
+}
 
 #endif // INCLUDED_SVTOOLS_SVTRESID_HXX
 

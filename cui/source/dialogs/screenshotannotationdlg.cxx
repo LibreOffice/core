@@ -204,7 +204,7 @@ ScreenshotAnnotationDlg_Impl::ScreenshotAnnotationDlg_Impl(
     mpPicture(nullptr),
     mpText(nullptr),
     mpSave(nullptr),
-    maSaveAsText(CUI_RES(RID_SVXSTR_SAVE_SCREENSHOT_AS))
+    maSaveAsText(CuiResId(RID_SVXSTR_SAVE_SCREENSHOT_AS))
 {
     // image ain't empty
     assert(!maParentDialogBitmap.IsEmpty());

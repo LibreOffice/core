@@ -73,9 +73,9 @@ ScTabPageSortFields::ScTabPageSortFields(vcl::Window* pParent,
         "modules/scalc/ui/sortcriteriapage.ui", &rArgSet)
     ,
 
-        aStrUndefined   ( SC_RESSTR( SCSTR_UNDEFINED ) ),
-        aStrColumn      ( SC_RESSTR( SCSTR_COLUMN ) ),
-        aStrRow         ( SC_RESSTR( SCSTR_ROW ) ),
+        aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
+        aStrColumn      ( ScResId( SCSTR_COLUMN ) ),
+        aStrRow         ( ScResId( SCSTR_ROW ) ),
 
         nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
         pDlg            ( static_cast<ScSortDlg*>(GetParentDialog()) ),
@@ -488,9 +488,9 @@ ScTabPageSortOptions::ScTabPageSortOptions( vcl::Window*             pParent,
                                             const SfxItemSet&   rArgSet )
     : SfxTabPage(pParent, "SortOptionsPage",
         "modules/scalc/ui/sortoptionspage.ui", &rArgSet)
-    , aStrRowLabel(SC_RESSTR(SCSTR_ROW_LABEL))
-    , aStrColLabel(SC_RESSTR(SCSTR_COL_LABEL))
-    , aStrUndefined(SC_RESSTR(SCSTR_UNDEFINED))
+    , aStrRowLabel(ScResId(SCSTR_ROW_LABEL))
+    , aStrColLabel(ScResId(SCSTR_COL_LABEL))
+    , aStrUndefined(ScResId(SCSTR_UNDEFINED))
     , nWhichSort(rArgSet.GetPool()->GetWhich(SID_SORT))
     , aSortData(static_cast<const ScSortItem&>(rArgSet.Get(nWhichSort)).GetSortData())
     , pViewData(nullptr)

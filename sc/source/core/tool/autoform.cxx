@@ -773,7 +773,7 @@ bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
             if( RID_SVXSTR_TBLAFMT_BEGIN <= nId &&
                 nId < RID_SVXSTR_TBLAFMT_END )
             {
-                aName = SVX_RESSTR( nId );
+                aName = SvxResId( nId );
             }
             else
                 nStrResId = USHRT_MAX;

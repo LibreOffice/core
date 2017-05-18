@@ -668,7 +668,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
     , m_bWantHierarchical(false)
     , bBindingUpdate(true)
 {
-    aFmtLb->SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST).toString());
+    aFmtLb->SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST));
     aFmtLb->SetHelpId( HID_TEMPLATE_FMT );
     aFilterLb->SetHelpId( HID_TEMPLATE_FILTER );
     aFmtLb->SetStyle( aFmtLb->GetStyle() | WB_SORT | WB_HIDESELECTION );
@@ -1116,7 +1116,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
             aFilterLb->SetUpdateMode(false);
             aFilterLb->Clear();
             //insert hierarchical at the beginning
-            sal_Int32 nPos = aFilterLb->InsertEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString(), 0);
+            sal_Int32 nPos = aFilterLb->InsertEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL), 0);
             aFilterLb->SetEntryData( nPos, reinterpret_cast<void*>(SFXSTYLEBIT_ALL) );
             const SfxStyleFilter& rFilter = pItem->GetFilterList();
             for(const SfxFilterTupel& i : rFilter)
@@ -1138,7 +1138,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(StyleFlags nFlags)
             // if the tree view again, select family hierarchy
             if (pTreeBox || m_bWantHierarchical)
             {
-                aFilterLb->SelectEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString());
+                aFilterLb->SelectEntry(SfxResId(STR_STYLE_FILTER_HIERARCHICAL));
                 EnableHierarchical(true);
             }
 
@@ -1613,7 +1613,7 @@ void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable)
             pTreeBox->SetOptimalImageIndent();
             FillTreeBox();
             SelectStyle(aSelectEntry);
-            pTreeBox->SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST).toString());
+            pTreeBox->SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST));
             pTreeBox->Show();
         }
     }
@@ -1631,7 +1631,7 @@ void SfxCommonTemplateDialog_Impl::EnableHierarchical(bool const bEnable)
 
 IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox&, rBox, void )
 {
-    if (SfxResId(STR_STYLE_FILTER_HIERARCHICAL).toString() == rBox.GetSelectEntry())
+    if (SfxResId(STR_STYLE_FILTER_HIERARCHICAL) == rBox.GetSelectEntry())
     {
         EnableHierarchical(true);
     }
@@ -1857,8 +1857,8 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl()
         SvTreeListEntry* pEntry = pTreeBox ? pTreeBox->FirstSelected() : aFmtLb->FirstSelected();
         const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
 
-        OUString aMsg = SfxResId(STR_DELETE_STYLE_USED).toString()
-                      + SfxResId(STR_DELETE_STYLE).toString();
+        OUString aMsg = SfxResId(STR_DELETE_STYLE_USED)
+                      + SfxResId(STR_DELETE_STYLE);
 
         while (pEntry)
         {
@@ -2161,13 +2161,13 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanel
     , m_aActionTbL(VclPtrInstance<DropToolBox_Impl>(pDlgWindow, this))
     , m_aActionTbR(VclPtrInstance<ToolBox>(pDlgWindow))
 {
-    m_aActionTbR->InsertItem(SID_STYLE_WATERCAN, Image(BitmapEx(RID_SFXBMP_WATERCAN)), SfxResId(STR_STYLE_FILL_FORMAT_MODE).toString());
+    m_aActionTbR->InsertItem(SID_STYLE_WATERCAN, Image(BitmapEx(RID_SFXBMP_WATERCAN)), SfxResId(STR_STYLE_FILL_FORMAT_MODE));
     m_aActionTbR->SetHelpId(SID_STYLE_WATERCAN, HID_TEMPLDLG_WATERCAN);
 
-    m_aActionTbR->InsertItem(SID_STYLE_NEW_BY_EXAMPLE, Image(BitmapEx(RID_SFXBMP_NEW_BY_EXAMPLE)), SfxResId(STR_STYLE_NEW_STYLE_FROM_SELECTION).toString());
+    m_aActionTbR->InsertItem(SID_STYLE_NEW_BY_EXAMPLE, Image(BitmapEx(RID_SFXBMP_NEW_BY_EXAMPLE)), SfxResId(STR_STYLE_NEW_STYLE_FROM_SELECTION));
     m_aActionTbR->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
-    m_aActionTbR->InsertItem(SID_STYLE_UPDATE_BY_EXAMPLE, Image(BitmapEx(RID_SFXBMP_UPDATE_BY_EXAMPLE)), SfxResId(STR_STYLE_UPDATE_STYLE).toString());
+    m_aActionTbR->InsertItem(SID_STYLE_UPDATE_BY_EXAMPLE, Image(BitmapEx(RID_SFXBMP_UPDATE_BY_EXAMPLE)), SfxResId(STR_STYLE_UPDATE_STYLE));
     m_aActionTbR->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
     Initialize();

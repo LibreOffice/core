@@ -81,7 +81,7 @@ long EvalGridWidthAdd( const SwTextGridItem *const pGrid, const SwDrawTextInfo &
     SwDocShell* pDocShell = rInf.GetShell()->GetDoc()->GetDocShell();
     SfxStyleSheetBasePool* pBasePool = pDocShell->GetStyleSheetPool();
 
-    OUString sString(SW_RESSTR(STR_POOLCOLL_STANDARD));
+    OUString sString(SwResId(STR_POOLCOLL_STANDARD));
 
     SfxStyleSheetBase* pStyle = pBasePool->Find(sString, SfxStyleFamily::Para);
     SfxItemSet& aTmpSet = pStyle->GetItemSet();

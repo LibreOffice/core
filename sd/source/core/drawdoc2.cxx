@@ -309,7 +309,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(const OUString& rOldName, const OUSt
                     }
                     else
                     {
-                        const OUString sNotes(SD_RESSTR(STR_NOTES));
+                        const OUString sNotes(SdResId(STR_NOTES));
                         if (aURL.getLength() == rOldName.getLength() + 2 + sNotes.getLength()
                             && aURL.indexOf(sNotes, rOldName.getLength() + 2) == rOldName.getLength() + 2)
                         {
@@ -346,12 +346,12 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage* pPage, sal_uInt16 nPos, sal_
                 if (!aURL.isEmpty() && (aURL[0] == 35))
                 {
                     OUString aHashSlide("#");
-                    aHashSlide += SD_RESSTR(STR_PAGE);
+                    aHashSlide += SdResId(STR_PAGE);
 
                     if (aURL.startsWith(aHashSlide))
                     {
                         OUString aURLCopy = aURL;
-                        const OUString sNotes(SD_RESSTR(STR_NOTES));
+                        const OUString sNotes(SdResId(STR_NOTES));
 
                         aURLCopy = aURLCopy.replaceAt(0, aHashSlide.getLength(), "");
 
@@ -547,7 +547,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         }
 
         pHandoutPage->SetPageKind(PageKind::Handout);
-        pHandoutPage->SetName( SD_RESSTR(STR_HANDOUT) );
+        pHandoutPage->SetName( SdResId(STR_HANDOUT) );
         InsertPage(pHandoutPage, 0);
 
         // Insert master page and register this with the handout page
@@ -760,7 +760,7 @@ bool SdDrawDocument::MovePages(sal_uInt16 nTargetPage)
     const bool bUndo = IsUndoEnabled();
 
     if( bUndo )
-        BegUndo(SD_RESSTR(STR_UNDO_MOVEPAGES));
+        BegUndo(SdResId(STR_UNDO_MOVEPAGES));
 
     // List of selected pages
     std::vector<SdPage*> aPageList;
@@ -1346,8 +1346,8 @@ sal_uInt16 SdDrawDocument::DuplicatePage (sal_uInt16 nPageNum)
 
     // Get background flags
     SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
-    SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
-    SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+    SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND));
+    SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ));
     SdrLayerIDSet aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
     return DuplicatePage (
@@ -1490,8 +1490,8 @@ void SdDrawDocument::SetupNewPage (
     if (pPreviousPage != nullptr)
     {
         SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
-        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
-        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+        SdrLayerID aBckgrnd = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND));
+        SdrLayerID aBckgrndObj = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ));
         SdrLayerIDSet aVisibleLayers = pPreviousPage->TRG_GetMasterPageVisibleLayers();
         aVisibleLayers.Set(aBckgrnd, bIsPageBack);
         aVisibleLayers.Set(aBckgrndObj, bIsPageObj);

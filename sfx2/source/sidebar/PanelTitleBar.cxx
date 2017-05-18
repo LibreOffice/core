@@ -96,7 +96,7 @@ void PanelTitleBar::SetMoreOptionsCommand(const OUString& rsCommandName,
             maToolBox->SetOutStyle(TOOLBOX_STYLE_FLAT);
             maToolBox->SetQuickHelpText(
                 mnMenuItemIndex,
-                SFX2_RESSTR(SFX_STR_SIDEBAR_MORE_OPTIONS));
+                SfxResId(SFX_STR_SIDEBAR_MORE_OPTIONS));
         }
     }
 }

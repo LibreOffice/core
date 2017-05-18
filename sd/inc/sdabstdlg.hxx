@@ -54,7 +54,6 @@ class SdrModel;
 class SdrView;
 class Bitmap;
 class List;
-class SdResId;
 namespace vcl { class Window; }
 class SdPage;
 class TabPage;

@@ -129,7 +129,7 @@ static OUString ImplPrnDlgAddString(const OUString& rStr, const OUString& rAddSt
 
 static OUString ImplPrnDlgAddResString(const OUString& rStr, sal_uInt16 nResId)
 {
-    return ImplPrnDlgAddString(rStr, SVT_RESSTR(nResId));
+    return ImplPrnDlgAddString(rStr, SvtResId(nResId));
 }
 
 
@@ -199,7 +199,7 @@ OUString ImplPrnDlgGetStatusText( const QueueInfo& rInfo )
     sal_uLong nJobs = rInfo.GetJobs();
     if ( nJobs && (nJobs != QUEUE_JOBS_DONTKNOW) )
     {
-        OUString aJobStr( SVT_RESSTR( STR_SVT_PRNDLG_JOBCOUNT ) );
+        OUString aJobStr( SvtResId( STR_SVT_PRNDLG_JOBCOUNT ) );
         OUString aJobs( OUString::number( nJobs ) );
         aStr = ImplPrnDlgAddString(aStr, aJobStr.replaceAll("%d", aJobs));
     }

@@ -213,7 +213,7 @@ SwGetRefField::~SwGetRefField()
 
 OUString SwGetRefField::GetDescription() const
 {
-    return SW_RES(STR_REFERENCE);
+    return SwResId(STR_REFERENCE);
 }
 
 sal_uInt16 SwGetRefField::GetSubType() const
@@ -773,7 +773,7 @@ void SwGetRefField::ConvertProgrammaticToUIName()
                 break;
             }
             if( nResId != USHRT_MAX )
-                SetPar1(SW_RESSTR( nResId ));
+                SetPar1(SwResId( nResId ));
         }
     }
 }

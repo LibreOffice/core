@@ -372,13 +372,13 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     switch ( nSlot )
                     {
                         case FID_TAB_APPEND:
-                            aDlgTitle = OUString(ScResId(SCSTR_APDTABLE));
+                            aDlgTitle = ScResId(SCSTR_APDTABLE);
                             pDoc->CreateValidTabName( aName );
                             pHelpId = HID_SC_APPEND_NAME;
                             break;
 
                         case FID_TAB_RENAME:
-                            aDlgTitle = OUString(ScResId(SCSTR_RENAMETAB));
+                            aDlgTitle = ScResId(SCSTR_RENAMETAB);
                             pDoc->GetName( rViewData.GetTabNo(), aName );
                             pHelpId = HID_SC_RENAME_NAME;
                             break;
@@ -388,7 +388,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     ScopedVclPtr<AbstractScStringInputDlg> pDlg(pFact->CreateScStringInputDlg(
-                        GetDialogParent(), aDlgTitle, OUString(ScResId(SCSTR_NAME)),
+                        GetDialogParent(), aDlgTitle, ScResId(SCSTR_NAME),
                         aName, GetStaticInterface()->GetSlot(nSlot)->GetCommand(),
                         pHelpId));
 
@@ -773,8 +773,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
                     ScopedVclPtr<AbstractScTabBgColorDlg> pDlg(pFact->CreateScTabBgColorDlg(
                                                                 GetDialogParent(),
-                                                                OUString(ScResId(SCSTR_SET_TAB_BG_COLOR)),
-                                                                OUString(ScResId(SCSTR_NO_TAB_BG_COLOR)),
+                                                                ScResId(SCSTR_SET_TAB_BG_COLOR),
+                                                                ScResId(SCSTR_NO_TAB_BG_COLOR),
                                                                 aTabBgColor));
                     while ( !bDone && nRet == RET_OK )
                     {

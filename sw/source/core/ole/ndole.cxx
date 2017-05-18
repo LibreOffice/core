@@ -1000,12 +1000,12 @@ OUString SwOLEObj::GetDescription()
 
     SvGlobalName aClassID( xEmbObj->getClassID() );
     if ( SotExchange::IsMath( aClassID ) )
-        return SW_RESSTR(STR_MATH_FORMULA);
+        return SwResId(STR_MATH_FORMULA);
 
     if ( SotExchange::IsChart( aClassID ) )
-        return SW_RESSTR(STR_CHART);
+        return SwResId(STR_CHART);
 
-    return SW_RESSTR(STR_OLE);
+    return SwResId(STR_OLE);
 }
 
 drawinglayer::primitive2d::Primitive2DContainer const & SwOLEObj::tryToGetChartContentAsPrimitive2DSequence(

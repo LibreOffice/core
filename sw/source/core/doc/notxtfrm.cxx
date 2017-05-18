@@ -975,7 +975,7 @@ void SwNoTextFrame::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfAr
                     nResId = STR_COMCORE_READERROR;
                 }
                 if ( nResId )
-                    aText = SW_RESSTR( nResId );
+                    aText = SwResId( nResId );
 
                 ::lcl_PaintReplacement( aAlignedGrfArea, aText, *pShell, this, true );
             }

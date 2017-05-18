@@ -27,7 +27,7 @@
 PageNumberListBox::PageNumberListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
 {
-    ResStringArray aPaperAry( SVX_RES( RID_SVXSTRARY_NUMBERINGTYPE ) );
+    ResStringArray aPaperAry( ResId(RID_SVXSTRARY_NUMBERINGTYPE, DIALOG_MGR()) );
     sal_uInt32 nCnt = aPaperAry.Count();
 
     for ( sal_uInt32 i = 0; i < nCnt; ++i )

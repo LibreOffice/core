@@ -44,10 +44,10 @@ ScPivotFilterDlg::ScPivotFilterDlg(vcl::Window* pParent, const SfxItemSet& rArgS
             "modules/scalc/ui/pivotfilterdialog.ui" )
     ,
 
-        aStrNone        ( SC_RESSTR(SCSTR_NONE) ),
-        aStrEmpty       ( SC_RESSTR(SCSTR_FILTER_EMPTY) ),
-        aStrNotEmpty    ( SC_RESSTR(SCSTR_FILTER_NOTEMPTY) ),
-        aStrColumn      ( SC_RESSTR(SCSTR_COLUMN) ),
+        aStrNone        ( ScResId(SCSTR_NONE) ),
+        aStrEmpty       ( ScResId(SCSTR_FILTER_EMPTY) ),
+        aStrNotEmpty    ( ScResId(SCSTR_FILTER_NOTEMPTY) ),
+        aStrColumn      ( ScResId(SCSTR_COLUMN) ),
 
         nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
         theQueryData    ( static_cast<const ScQueryItem&>(

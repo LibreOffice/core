@@ -47,7 +47,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
 
     :   ScAnyRefDlg ( pB, pCW, pParent, "AdvancedFilterDialog", "modules/scalc/ui/advancedfilterdialog.ui" ),
 
-        aStrUndefined   ( SC_RESSTR(SCSTR_UNDEFINED) ),
+        aStrUndefined   ( ScResId(SCSTR_UNDEFINED) ),
         pOptionsMgr     ( nullptr ),
         nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
         theQueryData    ( static_cast<const ScQueryItem&>(

@@ -78,7 +78,7 @@ using namespace nsSwDocInfoSubType;
 
 static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )
 {
-    const OUString sTitle(SW_RESSTR(STR_REDLINE_COMMENT));
+    const OUString sTitle(SwResId(STR_REDLINE_COMMENT));
 
     sal_uInt16 nResId = 0;
     switch( pRedline->GetType() )
@@ -103,7 +103,7 @@ static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )
             return sTitle;
     }
 
-    return sTitle + SW_RESSTR( nResId );
+    return sTitle + SwResId( nResId );
 }
 
 void SwTextShell::ExecField(SfxRequest &rReq)

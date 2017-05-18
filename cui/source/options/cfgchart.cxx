@@ -129,7 +129,7 @@ OUString SvxChartColorTable::getDefaultName( size_t _nIndex )
 
     if (sDefaultNamePrefix.getLength() == 0)
     {
-        OUString aResName( CUI_RES( RID_SVXSTR_DIAGRAM_ROW ) );
+        OUString aResName( CuiResId( RID_SVXSTR_DIAGRAM_ROW ) );
         sal_Int32 nPos = aResName.indexOf( "$(ROW)" );
         if( nPos != -1 )
         {
@@ -217,7 +217,7 @@ bool SvxChartOptions::RetrieveOptions()
         Color aCol;
 
         // create strings for entry names
-        OUString aResName( CUI_RES( RID_SVXSTR_DIAGRAM_ROW ) );
+        OUString aResName( CuiResId( RID_SVXSTR_DIAGRAM_ROW ) );
         OUString aPrefix, aPostfix, aName;
         sal_Int32 nPos = aResName.indexOf( "$(ROW)" );
         if( nPos != -1 )

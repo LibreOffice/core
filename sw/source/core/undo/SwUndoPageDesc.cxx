@@ -364,7 +364,7 @@ SwRewriter SwUndoPageDesc::GetRewriter() const
     SwRewriter aResult;
 
     aResult.AddRule(UndoArg1, aOld.GetName());
-    aResult.AddRule(UndoArg2, SW_RESSTR(STR_YIELDS));
+    aResult.AddRule(UndoArg2, SwResId(STR_YIELDS));
     aResult.AddRule(UndoArg3, aNew.GetName());
 
     return aResult;

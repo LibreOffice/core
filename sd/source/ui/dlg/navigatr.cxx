@@ -81,7 +81,7 @@ SdNavigatorWin::SdNavigatorWin(vcl::Window* pParent, SfxBindings* pInBindings)
 
     maTlbObjects->SetViewFrame( mpBindings->GetDispatcher()->GetFrame() );
 
-    maTlbObjects->SetAccessibleName(SD_RESSTR(STR_OBJECTS_TREE));
+    maTlbObjects->SetAccessibleName(SdResId(STR_OBJECTS_TREE));
 
     maTlbObjects->SetDoubleClickHdl(LINK(this, SdNavigatorWin, ClickObjectHdl));
     maTlbObjects->SetSelectionMode(SelectionMode::Single);
@@ -271,7 +271,7 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
             if( nRId > 0 )
             {
                 DBG_ASSERT(aHIDs[nID-NAVIGATOR_DRAGTYPE_URL],"HelpId not added!");
-                pMenu->InsertItem(nID, SD_RESSTR(nRId), MenuItemBits::RADIOCHECK);
+                pMenu->InsertItem(nID, SdResId(nRId), MenuItemBits::RADIOCHECK);
                 pMenu->SetHelpId(nID, aHIDs[nID - NAVIGATOR_DRAGTYPE_URL]);
             }
 
@@ -297,11 +297,11 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox, void )
 
         pMenu->InsertItem(
             nShowNamedShapesFilter,
-            SD_RESSTR(STR_NAVIGATOR_SHOW_NAMED_SHAPES),
+            SdResId(STR_NAVIGATOR_SHOW_NAMED_SHAPES),
             MenuItemBits::RADIOCHECK);
         pMenu->InsertItem(
             nShowAllShapesFilter,
-            SD_RESSTR(STR_NAVIGATOR_SHOW_ALL_SHAPES),
+            SdResId(STR_NAVIGATOR_SHOW_ALL_SHAPES),
             MenuItemBits::RADIOCHECK);
 
         if (maTlbObjects->GetShowAllShapes())

@@ -82,37 +82,37 @@ SmPrintUIOptions::SmPrintUIOptions()
     // create Section for formula (results in an extra tab page in dialog)
     SvtModuleOptions aOpt;
     OUString aAppGroupname(
-        SM_RESSTR( RID_PRINTUIOPT_PRODNAME ).
+        SmResId( RID_PRINTUIOPT_PRODNAME ).
             replaceFirst( "%s", aOpt.GetModuleName( SvtModuleOptions::EModule::MATH ) ) );
     m_aUIProperties[nIdx++].Value = setGroupControlOpt("tabcontrol-page2", aAppGroupname, ".HelpID:vcl:PrintDialog:TabPage:AppPage");
 
     // create subgroup for print options
-    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("contents", SM_RESSTR( RID_PRINTUIOPT_CONTENTS ), OUString());
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("contents", SmResId( RID_PRINTUIOPT_CONTENTS ), OUString());
 
     // create a bool option for title row (matches to SID_PRINTTITLE)
-    m_aUIProperties[nIdx++].Value = setBoolControlOpt("title", SM_RESSTR( RID_PRINTUIOPT_TITLE ),
+    m_aUIProperties[nIdx++].Value = setBoolControlOpt("title", SmResId( RID_PRINTUIOPT_TITLE ),
                                                   ".HelpID:vcl:PrintDialog:TitleRow:CheckBox",
                                                   PRTUIOPT_TITLE_ROW,
                                                   pConfig->IsPrintTitle());
     // create a bool option for formula text (matches to SID_PRINTTEXT)
-    m_aUIProperties[nIdx++].Value = setBoolControlOpt("formulatext", SM_RESSTR( RID_PRINTUIOPT_FRMLTXT ),
+    m_aUIProperties[nIdx++].Value = setBoolControlOpt("formulatext", SmResId( RID_PRINTUIOPT_FRMLTXT ),
                                                   ".HelpID:vcl:PrintDialog:FormulaText:CheckBox",
                                                   PRTUIOPT_FORMULA_TEXT,
                                                   pConfig->IsPrintFormulaText());
     // create a bool option for border (matches to SID_PRINTFRAME)
-    m_aUIProperties[nIdx++].Value = setBoolControlOpt("borders", SM_RESSTR( RID_PRINTUIOPT_BORDERS ),
+    m_aUIProperties[nIdx++].Value = setBoolControlOpt("borders", SmResId( RID_PRINTUIOPT_BORDERS ),
                                                   ".HelpID:vcl:PrintDialog:Border:CheckBox",
                                                   PRTUIOPT_BORDER,
                                                   pConfig->IsPrintFrame());
 
     // create subgroup for print format
-    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("size", SM_RESSTR( RID_PRINTUIOPT_SIZE ), OUString());
+    m_aUIProperties[nIdx++].Value = setSubgroupControlOpt("size", SmResId( RID_PRINTUIOPT_SIZE ), OUString());
 
     // create a radio button group for print format (matches to SID_PRINTSIZE)
     Sequence< OUString > aChoices{
-        SM_RESSTR( RID_PRINTUIOPT_ORIGSIZE ),
-        SM_RESSTR( RID_PRINTUIOPT_FITTOPAGE ),
-        SM_RESSTR( RID_PRINTUIOPT_SCALING )
+        SmResId( RID_PRINTUIOPT_ORIGSIZE ),
+        SmResId( RID_PRINTUIOPT_FITTOPAGE ),
+        SmResId( RID_PRINTUIOPT_SCALING )
     };
     Sequence< OUString > aHelpIds{
         ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:0",

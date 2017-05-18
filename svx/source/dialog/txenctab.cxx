@@ -23,8 +23,7 @@
 #include "svx/txenctab.hxx"
 
 SvxTextEncodingTable::SvxTextEncodingTable()
-    :
-    ResStringArray( SVX_RES( RID_SVXSTR_TEXTENCODING_TABLE ) )
+    : ResStringArray(ResId(RID_SVXSTR_TEXTENCODING_TABLE, DIALOG_MGR()))
 {
 }
 

@@ -77,7 +77,7 @@ void ToolTip::SetPage (const model::SharedPageDescriptor& rpDescriptor)
             }
             if (sHelpText.isEmpty())
             {
-                sHelpText = SD_RESSTR(STR_PAGE);
+                sHelpText = SdResId(STR_PAGE);
                 sHelpText += OUString::number(mpDescriptor->GetPageIndex()+1);
             }
 

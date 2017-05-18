@@ -187,7 +187,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet& rSet )
 
         // determining (and possibly cutting) the name and
         // displaying it in the GroupBox
-        OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) );
+        OUString        aString( CuiResId( RID_SVXSTR_TABLE ) );
         aString         += ": ";
         INetURLObject   aURL( m_pGradientList->GetPath() );
 
@@ -360,8 +360,8 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void* pControl )
 
 IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl, Button*, void)
 {
-    OUString aNewName( SVX_RES( RID_SVXSTR_GRADIENT ) );
-    OUString aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
+    OUString aNewName( SvxResId( RID_SVXSTR_GRADIENT ) );
+    OUString aDesc( CuiResId( RID_SVXSTR_DESC_GRADIENT ) );
     OUString aName;
 
     long nCount = m_pGradientList->Count();
@@ -501,7 +501,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        OUString aDesc( CUI_RES( RID_SVXSTR_DESC_GRADIENT ) );
+        OUString aDesc( CuiResId( RID_SVXSTR_DESC_GRADIENT ) );
         OUString aName( m_pGradientList->GetGradient( nPos )->GetName() );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

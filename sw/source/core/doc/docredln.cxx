@@ -976,7 +976,7 @@ void SwRedlineData::SetExtraData( const SwRedlineExtraData* pData )
 
 OUString SwRedlineData::GetDescr() const
 {
-    return SW_RES(STR_REDLINE_INSERT + GetType());
+    return SwResId(STR_REDLINE_INSERT + GetType());
 }
 
 sal_uInt32 SwRangeRedline::m_nLastId = 1;
@@ -1761,9 +1761,9 @@ OUString SwRangeRedline::GetDescr()
     }
 
     // replace $1 in description by description of the redlines text
-    const OUString aTmpStr = SW_RESSTR(STR_START_QUOTE)
-        + ShortenString(pPaM->GetText(), nUndoStringLength, SW_RESSTR(STR_LDOTS))
-        + SW_RESSTR(STR_END_QUOTE);
+    const OUString aTmpStr = SwResId(STR_START_QUOTE)
+        + ShortenString(pPaM->GetText(), nUndoStringLength, SwResId(STR_LDOTS))
+        + SwResId(STR_END_QUOTE);
 
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, aTmpStr);

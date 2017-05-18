@@ -137,15 +137,15 @@ void CommandEnvironmentImpl::printLicense(
     const OUString & sName, const OUString& sLicense, bool & accept, bool &decline)
 {
     ResMgr * pResMgr = DeploymentResMgr::get();
-    OUString s1tmp(ResId(RID_STR_UNOPKG_ACCEPT_LIC_1, *pResMgr).toString());
+    OUString s1tmp(ResId(RID_STR_UNOPKG_ACCEPT_LIC_1, *pResMgr));
     OUString s1(s1tmp.replaceAll("$NAME", sName));
-    OUString s2 = ResId(RID_STR_UNOPKG_ACCEPT_LIC_2, *pResMgr).toString();
-    OUString s3 = ResId(RID_STR_UNOPKG_ACCEPT_LIC_3, *pResMgr).toString();
-    OUString s4 = ResId(RID_STR_UNOPKG_ACCEPT_LIC_4, *pResMgr).toString();
-    OUString sYES = ResId(RID_STR_UNOPKG_ACCEPT_LIC_YES, *pResMgr).toString();
-    OUString sY = ResId(RID_STR_UNOPKG_ACCEPT_LIC_Y, *pResMgr).toString();
-    OUString sNO = ResId(RID_STR_UNOPKG_ACCEPT_LIC_NO, *pResMgr).toString();
-    OUString sN = ResId(RID_STR_UNOPKG_ACCEPT_LIC_N, *pResMgr).toString();
+    OUString s2 = ResId(RID_STR_UNOPKG_ACCEPT_LIC_2, *pResMgr);
+    OUString s3 = ResId(RID_STR_UNOPKG_ACCEPT_LIC_3, *pResMgr);
+    OUString s4 = ResId(RID_STR_UNOPKG_ACCEPT_LIC_4, *pResMgr);
+    OUString sYES = ResId(RID_STR_UNOPKG_ACCEPT_LIC_YES, *pResMgr);
+    OUString sY = ResId(RID_STR_UNOPKG_ACCEPT_LIC_Y, *pResMgr);
+    OUString sNO = ResId(RID_STR_UNOPKG_ACCEPT_LIC_NO, *pResMgr);
+    OUString sN = ResId(RID_STR_UNOPKG_ACCEPT_LIC_N, *pResMgr);
 
     OUString sNewLine("\n");
 
@@ -264,7 +264,7 @@ void CommandEnvironmentImpl::handle(
     }
     else if (request >>= platExc)
     {
-        OUString sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *dp_gui::DeploymentGuiResMgr::get()).toString());
+        OUString sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *dp_gui::DeploymentGuiResMgr::get()));
         sMsg = sMsg.replaceAll("%Name", platExc.package->getDisplayName());
         dp_misc::writeConsole("\n" + sMsg + "\n\n");
         approve = true;

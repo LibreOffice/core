@@ -818,11 +818,11 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             const OUString& rName = GetLayerTabControl()->GetPageText(nCurrentLayer);
 
             bool bDisableIt = !IsLayerModeActive();
-            bDisableIt |= (rName == SD_RESSTR(STR_LAYER_LAYOUT));
-            bDisableIt |= (rName == SD_RESSTR(STR_LAYER_BCKGRND));
-            bDisableIt |= (rName == SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
-            bDisableIt |= (rName == SD_RESSTR(STR_LAYER_CONTROLS));
-            bDisableIt |= (rName == SD_RESSTR(STR_LAYER_MEASURELINES));
+            bDisableIt |= (rName == SdResId(STR_LAYER_LAYOUT));
+            bDisableIt |= (rName == SdResId(STR_LAYER_BCKGRND));
+            bDisableIt |= (rName == SdResId(STR_LAYER_BCKGRNDOBJ));
+            bDisableIt |= (rName == SdResId(STR_LAYER_CONTROLS));
+            bDisableIt |= (rName == SdResId(STR_LAYER_MEASURELINES));
 
             if (bDisableIt)
             {
@@ -1522,8 +1522,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             SdrLayerIDSet aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
-            SdrLayerID aBackgroundId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND));
-            SdrLayerID aObjectId = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+            SdrLayerID aBackgroundId = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRND));
+            SdrLayerID aObjectId = rLayerAdmin.GetLayerID(SdResId(STR_LAYER_BCKGRNDOBJ));
             rSet.Put(SfxBoolItem(SID_DISPLAY_MASTER_BACKGROUND,
                     aVisibleLayers.IsSet(aBackgroundId)));
             rSet.Put(SfxBoolItem(SID_DISPLAY_MASTER_OBJECTS,

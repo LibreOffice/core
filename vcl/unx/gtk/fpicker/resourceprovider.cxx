@@ -75,7 +75,7 @@ OUString SalGtkPicker::getResString( sal_Int32 aId )
         // translate the control id to a resource id
         sal_Int16 aResId = CtrlIdToResId( aId );
         if ( aResId > -1 )
-            aResString = ResId(aResId, *ImplGetResMgr()).toString();
+            aResString = ResId(aResId, *ImplGetResMgr());
     }
     catch(...)
     {

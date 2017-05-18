@@ -1531,7 +1531,7 @@ const OUString& GalleryTheme::GetName() const { return pThm->GetThemeName(); }
 void GalleryTheme::InsertAllThemes( ListBox& rListBox )
 {
     for( sal_uInt16 i = RID_GALLERYSTR_THEME_FIRST; i <= RID_GALLERYSTR_THEME_LAST; i++ )
-        rListBox.InsertEntry(GAL_RESSTR(i));
+        rListBox.InsertEntry(GalResId(i));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

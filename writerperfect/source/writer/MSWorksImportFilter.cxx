@@ -48,19 +48,19 @@ bool MSWorksImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, 
             switch (creator)
             {
             case libwps::WPS_MSWORKS:
-                title = WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE_MSWORKS);
+                title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWORKS);
                 encoding = "CP850";
                 break;
             case libwps::WPS_RESERVED_0: // MS Write
-                title = WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE_MSWRITE);
+                title = WpResId(STR_ENCODING_DIALOG_TITLE_MSWRITE);
                 encoding = "CP1252";
                 break;
             case libwps::WPS_RESERVED_1: // DosWord
-                title = WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE_DOSWORD);
+                title = WpResId(STR_ENCODING_DIALOG_TITLE_DOSWORD);
                 encoding = "CP850";
                 break;
             default:
-                title = WPFT_RESSTR(STR_ENCODING_DIALOG_TITLE);
+                title = WpResId(STR_ENCODING_DIALOG_TITLE);
                 encoding = "CP850";
                 break;
             }

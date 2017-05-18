@@ -94,7 +94,7 @@ OUString TextFilterAutoConvert::filter(const OUString &rText)
 
 SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     SvxStandardDialog( pParent, "InsertCaptionDialog", "modules/swriter/ui/insertcaption.ui" ),
-    m_sNone( SW_RESSTR(SW_STR_NONE) ),
+    m_sNone( SwResId(SW_STR_NONE) ),
     m_aTextFilter(m_sNone),
     rView( rV ),
     pMgr( new SwFieldMgr(rView.GetWrtShellPtr()) ),
@@ -234,14 +234,14 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
         || eType == SelectionType::DrawObject
         || eType == (SelectionType::DrawObject | SelectionType::Ornament))
     {
-        m_pPosBox->InsertEntry(SW_RESSTR(STR_CAPTION_ABOVE));
-        m_pPosBox->InsertEntry(SW_RESSTR(STR_CAPTION_BELOW));
+        m_pPosBox->InsertEntry(SwResId(STR_CAPTION_ABOVE));
+        m_pPosBox->InsertEntry(SwResId(STR_CAPTION_BELOW));
     }
     else if(eType == SelectionType::Frame
             || eType == SelectionType::Text)
     {
-        m_pPosBox->InsertEntry(SW_RESSTR(STR_CAPTION_BEGINNING));
-        m_pPosBox->InsertEntry(SW_RESSTR(STR_CAPTION_END     ));
+        m_pPosBox->InsertEntry(SwResId(STR_CAPTION_BEGINNING));
+        m_pPosBox->InsertEntry(SwResId(STR_CAPTION_END     ));
     }
     m_pPosBox->SelectEntryPos(1);
 
@@ -440,7 +440,7 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV
 
     SwWrtShell &rSh = rView.GetWrtShell();
 
-    const OUString sNone(SW_RESSTR(SW_STR_NONE));
+    const OUString sNone(SwResId(SW_STR_NONE));
 
     m_pLbLevel->InsertEntry(sNone);
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )

@@ -92,7 +92,7 @@ struct StrAllFiles : public rtl::StaticWithInit< OUString, StrAllFiles >
         const SolarMutexGuard guard;
         std::unique_ptr< ResMgr > const resmgr( ResMgr::CreateResMgr( "fps_office" ) );
         OSL_ASSERT( resmgr.get() != nullptr );
-        return ResId(STR_FILTERNAME_ALL, *resmgr.get()).toString();
+        return ResId(STR_FILTERNAME_ALL, *resmgr.get());
     }
 };
 
@@ -358,7 +358,7 @@ ResId DialogHelper::getResId( sal_uInt16 nId )
 OUString DialogHelper::getResourceString(sal_uInt16 id)
 {
     const SolarMutexGuard guard;
-    OUString ret(ResId(id, *DeploymentGuiResMgr::get()).toString());
+    OUString ret(ResId(id, *DeploymentGuiResMgr::get()));
     if (ret.indexOf("%PRODUCTNAME" ) != -1)
     {
         ret = ret.replaceAll("%PRODUCTNAME", utl::ConfigManager::getProductName());

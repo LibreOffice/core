@@ -138,7 +138,7 @@ bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
         if (xStatusIndicator.is())
         {
             sal_Int32 nProgressRange = bFlat ? 1 : 3;
-            xStatusIndicator->start(SM_RESSTR(STR_STATSTR_WRITING),
+            xStatusIndicator->start(SmResId(STR_STATSTR_WRITING),
                 nProgressRange);
         }
     }

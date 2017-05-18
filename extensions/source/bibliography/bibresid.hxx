@@ -20,16 +20,9 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBRESID_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBRESID_HXX
 
-#include <tools/resid.hxx>
+#include <rtl/ustring.hxx>
 
-
-class BibResId : public ResId
-{
- public:
-    explicit BibResId(sal_uInt16 nId);
-};
-
-#define BIB_RESSTR(i)   BibResId(i).toString()
+OUString BibResId(sal_uInt16 nId);
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBRESID_HXX
 

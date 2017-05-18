@@ -123,7 +123,7 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
         }
         //look up the rest of the ids in string resources
         if (aName.isEmpty())
-            aName = GAL_RESSTR(RID_GALLERYSTR_THEME_START + (sal_uInt16) nId);
+            aName = GalResId(RID_GALLERYSTR_THEME_START + (sal_uInt16) nId);
     }
 
     if( aName.isEmpty() )
@@ -474,13 +474,13 @@ OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
         switch( nThemeId )
         {
             case GALLERY_THEME_3D:
-                aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_3D);
+                aFallback = GalResId(RID_GALLERYSTR_THEME_3D);
                 break;
             case GALLERY_THEME_BULLETS:
-                aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_BULLETS);
+                aFallback = GalResId(RID_GALLERYSTR_THEME_BULLETS);
                 break;
             case GALLERY_THEME_HOMEPAGE:
-                aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_HOMEPAGE);
+                aFallback = GalResId(RID_GALLERYSTR_THEME_HOMEPAGE);
                 break;
             case GALLERY_THEME_POWERPOINT:
                 aFallback = RID_GALLERYSTR_THEME_POWERPOINT;
@@ -492,7 +492,7 @@ OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
                 aFallback = RID_GALLERYSTR_THEME_FONTWORK_VERTICAL;
                 break;
             case GALLERY_THEME_SOUNDS:
-                aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_SOUNDS);
+                aFallback = GalResId(RID_GALLERYSTR_THEME_SOUNDS);
                 break;
             case RID_GALLERYSTR_THEME_ARROWS:
             case RID_GALLERYSTR_THEME_COMPUTERS:
@@ -504,7 +504,7 @@ OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
             case RID_GALLERYSTR_THEME_SYMBOLS:
             case RID_GALLERYSTR_THEME_TRANSPORT:
             case RID_GALLERYSTR_THEME_TXTSHAPES:
-                aFallback = GAL_RESSTR(static_cast<sal_uInt32>(nThemeId));
+                aFallback = GalResId(static_cast<sal_uInt32>(nThemeId));
                 break;
             default:
                 break;

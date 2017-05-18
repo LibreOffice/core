@@ -47,7 +47,7 @@ uno::Reference< container::XNameContainer > XPatternList::createInstance()
 
 bool XPatternList::Create()
 {
-    OUStringBuffer aStr(SVX_RESSTR(RID_SVXSTR_PATTERN));
+    OUStringBuffer aStr(SvxResId(RID_SVXSTR_PATTERN));
     sal_uInt16 aArray[64];
     Bitmap aBitmap;
     const sal_Int32 nLen(aStr.getLength() - 1);

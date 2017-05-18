@@ -32,7 +32,7 @@ LineWidthPopup::LineWidthPopup(LinePropertyPanelBase& rParent)
     : FloatingWindow(&rParent, "FloatingLineProperty", "svx/ui/floatinglineproperty.ui")
     , m_rParent(rParent)
     , m_pStr(nullptr)
-    , m_sPt(SVX_RESSTR(RID_SVXSTR_PT))
+    , m_sPt(SvxResId(RID_SVXSTR_PT))
     , m_eMapUnit(MapUnit::MapTwip)
     , m_bVSFocus(true)
     , m_bCustom(false)
@@ -60,7 +60,7 @@ LineWidthPopup::LineWidthPopup(LinePropertyPanelBase& rParent)
     m_pStr[5] = "3.0";
     m_pStr[6] = "4.5";
     m_pStr[7] = "6.0";
-    m_pStr[8] = SVX_RESSTR(RID_SVXSTR_WIDTH_LAST_CUSTOM);
+    m_pStr[8] = SvxResId(RID_SVXSTR_WIDTH_LAST_CUSTOM);
 
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];

@@ -121,7 +121,7 @@ GalleryBrowser1::GalleryBrowser1(
     StartListening( *mpGallery );
 
     maNewTheme->SetHelpId( HID_GALLERY_NEWTHEME );
-    maNewTheme->SetText( GAL_RESSTR(RID_SVXSTR_GALLERY_CREATETHEME));
+    maNewTheme->SetText( GalResId(RID_SVXSTR_GALLERY_CREATETHEME));
     maNewTheme->SetClickHdl( LINK( this, GalleryBrowser1, ClickNewThemeHdl ) );
 
     // disable creation of new themes if a writable directory is not available
@@ -130,7 +130,7 @@ GalleryBrowser1::GalleryBrowser1(
 
     mpThemes->SetHelpId( HID_GALLERY_THEMELIST );
     mpThemes->SetSelectHdl( LINK( this, GalleryBrowser1, SelectThemeHdl ) );
-    mpThemes->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERYPROPS_GALTHEME));
+    mpThemes->SetAccessibleName(SvxResId(RID_SVXSTR_GALLERYPROPS_GALTHEME));
 
     for( sal_uIntPtr i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; i++ )
         ImplInsertThemeEntry( mpGallery->GetThemeInfo( i ) );
@@ -604,7 +604,7 @@ IMPL_LINK_NOARG(GalleryBrowser1, SelectThemeHdl, ListBox&, void)
 
 IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl, Button*, void)
 {
-    OUString  aNewTheme( GAL_RESSTR(RID_SVXSTR_GALLERY_NEWTHEME) );
+    OUString  aNewTheme( GalResId(RID_SVXSTR_GALLERY_NEWTHEME) );
     OUString  aName( aNewTheme );
     sal_uIntPtr nCount = 0;
 
