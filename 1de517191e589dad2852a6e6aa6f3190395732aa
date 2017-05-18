@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_7317af51",
+        "filename": "sw/source/filter/html/swhtml.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-18T20:40:16Z",
+      "side": 1,
+      "message": "This is wrong. It\u0027s about attributes that aren\u0027t closed yet, so to be closed, not too close to some others ;-)",
+      "range": {
+        "startLine": 86,
+        "startChar": 32,
+        "endLine": 86,
+        "endChar": 35
+      },
+      "revId": "1de517191e589dad2852a6e6aa6f3190395732aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
