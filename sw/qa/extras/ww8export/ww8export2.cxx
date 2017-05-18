@@ -47,6 +47,34 @@ DECLARE_WW8EXPORT_TEST(testTdf49102_mergedCellNumbering, "tdf49102_mergedCellNum
     CPPUNIT_ASSERT_EQUAL( OUString("2."), parseDump("/root/page/body/tab/row[4]/cell/txt/Special[@nType='POR_NUMBER']", "rText") );
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf107931_KERN_DocEnabled_disabledDefStyle, "testTdf107931_KERN_DocEnabled_disabledDefStyle.doc")
+{
+    // Paragraph 3: the default style has kerning disabled
+    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(3), 1), "CharAutoKerning"));
+    // Paragraph 4: style with kerning disabled
+    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(4), 1), "CharAutoKerning"));
+    // Paragraph 5: style with kerning enabled
+    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(5), 1), "CharAutoKerning"));
+    // Paragraph 6: directly applied character properties: kerning disabled
+    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(6), 1), "CharAutoKerning"));
+    // Paragraph 7: directly applied character properties: kerning enabled
+    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(7), 1), "CharAutoKerning"));
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf107931_KERN_enabledDefStyle, "testTdf107931_KERN_enabledDefStyle.doc")
+{
+    // Paragraph 3: the default style has kerning enabled
+    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(3), 1), "CharAutoKerning"));
+    // Paragraph 4: style with kerning disabled
+    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(4), 1), "CharAutoKerning"));
+    // Paragraph 5: style with kerning enabled
+    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(5), 1), "CharAutoKerning"));
+    // Paragraph 6: directly applied character properties: kerning disabled
+    CPPUNIT_ASSERT(!getProperty<bool>(getRun(getParagraph(6), 1), "CharAutoKerning"));
+    // Paragraph 7: directly applied character properties: kerning enabled
+    CPPUNIT_ASSERT(getProperty<bool>(getRun(getParagraph(7), 1), "CharAutoKerning"));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf89377, "tdf89377_tableWithBreakBeforeParaStyle.doc")
 {
     // the paragraph style should set table's text-flow break-before-page

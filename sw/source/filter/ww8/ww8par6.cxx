@@ -3915,12 +3915,15 @@ void SwWW8ImplReader::Read_Kern( sal_uInt16, const sal_uInt8* pData, short nLen 
     NewAttr( SvxKerningItem( nKern, RES_CHRATR_KERNING ) );
 }
 
-void SwWW8ImplReader::Read_FontKern( sal_uInt16, const sal_uInt8* , short nLen )
+void SwWW8ImplReader::Read_FontKern( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    if (nLen < 0) // end of attribute
+    if (nLen < 2) // end of attribute
+    {
         m_pCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_CHRATR_AUTOKERN );
-    else
-        NewAttr(SvxAutoKernItem(true, RES_CHRATR_AUTOKERN));
+        return;
+    }
+    sal_Int16 nAutoKern = SVBT16ToShort( pData );    // Kerning in Twips
+    NewAttr(SvxAutoKernItem((bool)nAutoKern, RES_CHRATR_AUTOKERN));
 }
 
 void SwWW8ImplReader::Read_CharShadow(  sal_uInt16, const sal_uInt8* pData, short nLen )
