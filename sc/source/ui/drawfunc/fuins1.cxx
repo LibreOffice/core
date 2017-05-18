@@ -218,12 +218,6 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
     pView->InsertObjectAtView( pObj, *pPV, bApi ? SdrInsertFlags::DONTMARK : SdrInsertFlags::NONE );
 }
 
-/*************************************************************************
-|*
-|* FuInsertGraphic::Constructor
-|*
-\************************************************************************/
-
 FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
                                   vcl::Window*           pWin,
                                   ScDrawView*       pViewP,
@@ -291,21 +285,9 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
     }
 }
 
-/*************************************************************************
-|*
-|* FuInsertGraphic::Destructor
-|*
-\************************************************************************/
-
 FuInsertGraphic::~FuInsertGraphic()
 {
 }
-
-/*************************************************************************
-|*
-|* FuInsertMedia::Constructor
-|*
-\************************************************************************/
 
 FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
                               vcl::Window*           pWin,
@@ -356,12 +338,6 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
         }
     }
 }
-
-/*************************************************************************
-|*
-|* FuInsertMedia::Destructor
-|*
-\************************************************************************/
 
 FuInsertMedia::~FuInsertMedia()
 {
