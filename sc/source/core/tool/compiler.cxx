@@ -195,7 +195,7 @@ void ScCompiler::InitCharClassEnglish()
 
 void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
 {
-    OSL_ENSURE( eGrammar != FormulaGrammar::GRAM_UNSPECIFIED, "ScCompiler::SetGrammar: don't pass FormulaGrammar::GRAM_UNSPECIFIED");
+    assert( eGrammar != FormulaGrammar::GRAM_UNSPECIFIED && "ScCompiler::SetGrammar: don't pass FormulaGrammar::GRAM_UNSPECIFIED");
     if (eGrammar == GetGrammar())
         return;     // nothing to be done
 
