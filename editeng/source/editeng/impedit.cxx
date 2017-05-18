@@ -109,6 +109,7 @@ ImpEditView::~ImpEditView()
     delete pCursor;
     delete pBackgroundColor;
     delete pPointer;
+    pDragAndDropInfo->pBackground.disposeAndClear();
     delete pDragAndDropInfo;
 }
 
