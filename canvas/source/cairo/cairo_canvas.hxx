@@ -140,7 +140,6 @@ namespace cairocanvas
 
      private:
         css::uno::Sequence< css::uno::Any >                maArguments;
-        css::uno::Reference< css::uno::XComponentContext > mxComponentContext;
     };
 
     typedef ::rtl::Reference< Canvas > CanvasRef;

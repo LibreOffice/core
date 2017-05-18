@@ -42,9 +42,8 @@ using namespace ::com::sun::star;
 namespace vclcanvas
 {
     SpriteCanvas::SpriteCanvas( const uno::Sequence< uno::Any >&                aArguments,
-                                const uno::Reference< uno::XComponentContext >& rxContext ) :
-        maArguments(aArguments),
-        mxComponentContext( rxContext )
+                                const uno::Reference< uno::XComponentContext >& /*rxContext*/ ) :
+        maArguments(aArguments)
     {
     }
 
@@ -112,8 +111,6 @@ namespace vclcanvas
     void SpriteCanvas::disposeThis()
     {
         SolarMutexGuard aGuard;
-
-        mxComponentContext.clear();
 
         // forward to parent
         SpriteCanvasBaseT::disposeThis();

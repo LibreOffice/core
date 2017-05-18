@@ -110,7 +110,6 @@ OSection::OSection(const uno::Reference< report::XReportDefinition >& xParentDef
 :SectionBase(m_aMutex)
 ,SectionPropertySet(context,SectionPropertySet::IMPLEMENTS_PROPERTY_SET,rStrings)
 ,m_aContainerListeners(m_aMutex)
-,m_xContext(context)
 ,m_xGroup(xParentGroup)
 ,m_xReportDefinition(xParentDef)
 ,m_nHeight(3000)
@@ -168,7 +167,6 @@ void SAL_CALL OSection::disposing()
 {
     lang::EventObject aDisposeEvent( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aContainerListeners.disposeAndClear( aDisposeEvent );
-    m_xContext.clear();
 }
 
 OUString SAL_CALL OSection::getImplementationName(  )

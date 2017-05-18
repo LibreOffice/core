@@ -34,9 +34,8 @@ namespace sdecl = comphelper::service_decl;
 namespace oglcanvas
 {
     SpriteCanvas::SpriteCanvas( const uno::Sequence< uno::Any >&                aArguments,
-                                const uno::Reference< uno::XComponentContext >& rxContext ) :
-        maArguments(aArguments),
-        mxComponentContext( rxContext )
+                                const uno::Reference< uno::XComponentContext >& /*rxContext*/ ) :
+        maArguments(aArguments)
     {
     }
 
@@ -81,8 +80,6 @@ namespace oglcanvas
     void SpriteCanvas::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-
-        mxComponentContext.clear();
 
         // forward to parent
         SpriteCanvasBaseT::disposeThis();

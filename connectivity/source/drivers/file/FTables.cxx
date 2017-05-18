@@ -45,12 +45,6 @@ void OTables::impl_refresh(  )
     static_cast<OFileCatalog&>(m_rParent).refreshTables();
 }
 
-void OTables::disposing()
-{
-m_xMetaData.clear();
-    OCollection::disposing();
-}
-
 Any SAL_CALL OTables::queryInterface( const Type & rType )
 {
     if( rType == cppu::UnoType<XColumnLocate>::get()||

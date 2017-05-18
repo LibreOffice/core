@@ -45,8 +45,7 @@ IconChoicePage::IconChoicePage( vcl::Window *pParent, const OString& rID,
                                 const SfxItemSet* pItemSet )
 :   TabPage                   ( pParent, rID, rUIXMLDescription ),
     pSet                      ( pItemSet ),
-    bHasExchangeSupport       ( false ),
-    pDialog                   ( nullptr )
+    bHasExchangeSupport       ( false )
 {
     SetStyle ( GetStyle()  | WB_DIALOGCONTROL | WB_HIDE );
 }
@@ -55,12 +54,6 @@ IconChoicePage::IconChoicePage( vcl::Window *pParent, const OString& rID,
 IconChoicePage::~IconChoicePage()
 {
     disposeOnce();
-}
-
-void IconChoicePage::dispose()
-{
-    pDialog.clear();
-    TabPage::dispose();
 }
 
 /**********************************************************************

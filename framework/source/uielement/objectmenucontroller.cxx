@@ -82,8 +82,6 @@ public:
 
 private:
     void fillPopupMenu( const css::uno::Sequence< css::embed::VerbDescriptor >& rVerbCommandSeq, css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
-
-    css::uno::Reference< css::frame::XDispatch >  m_xObjectUpdateDispatch;
 };
 
 ObjectMenuController::ObjectMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
@@ -131,7 +129,6 @@ void SAL_CALL ObjectMenuController::disposing( const EventObject& )
     osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
-    m_xObjectUpdateDispatch.clear();
 
     if ( m_xPopupMenu.is() )
         m_xPopupMenu->removeMenuListener( Reference< css::awt::XMenuListener >(static_cast<OWeakObject *>(this), UNO_QUERY ));

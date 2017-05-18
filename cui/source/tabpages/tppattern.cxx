@@ -151,9 +151,7 @@ void SvxPatternTabPage::dispose()
     m_pCtlPreview.clear();
     m_pBtnAdd.clear();
     m_pBtnModify.clear();
-    m_pBxPixelEditor.clear();
     m_pPatternLB.clear();
-    m_pBtnDelete.clear();
     SvxTabPage::dispose();
 }
 

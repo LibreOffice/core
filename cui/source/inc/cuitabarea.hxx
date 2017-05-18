@@ -606,7 +606,6 @@ class SvxPatternTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    VclPtr<VclBox>             m_pBxPixelEditor;
     VclPtr<SvxPixelCtl>        m_pCtlPixel;
     VclPtr<SvxColorListBox>    m_pLbColor;
     VclPtr<SvxColorListBox>    m_pLbBackgroundColor;
@@ -614,7 +613,6 @@ private:
     VclPtr<SvxXRectPreview>    m_pCtlPreview;
     VclPtr<PushButton>         m_pBtnAdd;
     VclPtr<PushButton>         m_pBtnModify;
-    VclPtr<PushButton>         m_pBtnDelete;
 
     SvxBitmapCtl*       m_pBitmapCtl;
 

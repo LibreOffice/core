@@ -46,23 +46,12 @@ struct WriteRcContext
     RscCmdLine*    pCmdLine;
 };
 
-// table for system dependent resources
-struct RscSysEntry
-{
-    sal_uInt32      nKey;
-    RESOURCE_TYPE   nRscTyp;
-    OString         aFileName;
-    sal_uInt32      nTyp;
-    sal_uInt32      nRefId;
-};
-
 class RscTypCont
 {
     rtl_TextEncoding    nSourceCharSet;
     RSCBYTEORDER_TYPE   nByteOrder;         // Intel or
     OString             aLanguage;          // output language
     std::vector< sal_uInt32 > aLangFallbacks;   // language fallback list (entry 0 is language itself)
-    sal_uInt32          nUniqueId;          // unique id for system resources
     sal_uLong           nFilePos;           // position in file (MTF)
     sal_uInt32          nPMId;              // unique id for PR-resource file
                                             // must be greater that RSC_VERSIONCONTROL_ID
@@ -71,8 +60,6 @@ class RscTypCont
 
     ::std::vector< RscTop* >
                         aBaseLst;           // list of simple resource class
-    ::std::vector< RscSysEntry* >
-                        aSysLst;            // list of system resources
 
     void        Init();         // initializes classes and tables
     void        SETCONST( RscEnum *, const char *, sal_uInt32 );
@@ -114,7 +101,6 @@ public:
                           }
                       // deletes all resource objects of this file
     void              Delete( RscFileTab::Index lFileKey );
-    void              ClearSysNames();
     ERRTYPE           WriteRc( WriteRcContext& rContext );
     void              WriteSrc( FILE * fOutput, RscFileTab::Index nFileIndex );
     void              PutTranslatorKey( sal_uInt64 nKey );

@@ -249,7 +249,6 @@ void SAL_CALL MenuBarManager::disposing()
     m_xGlobalAcceleratorManager.clear();
     m_xModuleAcceleratorManager.clear();
     m_xDocAcceleratorManager.clear();
-    m_xUICommandLabels.clear();
     m_xPopupMenuControllerFactory.clear();
     m_xContext.clear();
 }

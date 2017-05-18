@@ -97,7 +97,6 @@ void SAL_CALL OFormattedField::dispose()
     FormattedFieldPropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
     m_xFormatsSupplier.clear();
-    m_xFunction.clear();
 }
 
 OUString OFormattedField::getImplementationName_Static(  )

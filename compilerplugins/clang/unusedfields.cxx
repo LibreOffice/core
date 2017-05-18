@@ -259,6 +259,11 @@ bool UnusedFields::VisitMemberExpr( const MemberExpr* memberExpr )
                 if (startswith(name, "read") || name.find(">>=") != std::string::npos)
                     // this is a write-only call
                     ;
+                else if (name == "clear" || name == "dispose" || name == "clearAndDispose" || name == "swap")
+                    // we're abusing the write-only analysis here to look for fields which don't have anything useful
+                    // being done to them, so we're ignoreing things like std::vector::clear, vector::swap,
+                    // and VclPtr::clearAndDispose
+                    ;
                 else
                     bPotentiallyReadFrom = true;
             }

@@ -41,9 +41,8 @@ using namespace ::com::sun::star;
 namespace cairocanvas
 {
     SpriteCanvas::SpriteCanvas( const uno::Sequence< uno::Any >&                aArguments,
-                                const uno::Reference< uno::XComponentContext >& rxContext ) :
-        maArguments(aArguments),
-        mxComponentContext( rxContext )
+                                const uno::Reference< uno::XComponentContext >& /*rxContext*/ ) :
+        maArguments(aArguments)
     {
     }
 
@@ -108,8 +107,6 @@ namespace cairocanvas
     void SpriteCanvas::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-
-        mxComponentContext.clear();
 
         // forward to parent
         SpriteCanvasBaseT::disposeThis();

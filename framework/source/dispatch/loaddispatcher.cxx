@@ -27,8 +27,7 @@ LoadDispatcher::LoadDispatcher(const css::uno::Reference< css::uno::XComponentCo
                                const css::uno::Reference< css::frame::XFrame >&          xOwnerFrame ,
                                const OUString&                                           sTargetName ,
                                      sal_Int32                                           nSearchFlags)
-    : m_xContext    (xContext    )
-    , m_xOwnerFrame (xOwnerFrame )
+    : m_xOwnerFrame (xOwnerFrame )
     , m_sTarget     (sTargetName )
     , m_nSearchFlags(nSearchFlags)
     , m_aLoader     (xContext    )
@@ -37,7 +36,6 @@ LoadDispatcher::LoadDispatcher(const css::uno::Reference< css::uno::XComponentCo
 
 LoadDispatcher::~LoadDispatcher()
 {
-    m_xContext.clear();
 }
 
 void SAL_CALL LoadDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,

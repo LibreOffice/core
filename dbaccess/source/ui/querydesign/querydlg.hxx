@@ -46,7 +46,6 @@ namespace dbaui
 
         OTableListBoxControl*               m_pTableControl;
         OJoinTableView::OTableWindowMap*    m_pTableMap;
-        VclPtr<OQueryTableView>             m_pTableView;
 
         EJoinType                           eJoinType;
         TTableConnectionData::value_type    m_pConnData; // contains left and right table

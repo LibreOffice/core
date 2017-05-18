@@ -32,20 +32,14 @@ namespace connectivity
             public sdbcx::OCollection
         {
         protected:
-            css::uno::Reference< css::sdbc::XDatabaseMetaData >   m_xMetaData;
-
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
             virtual void impl_refresh() override;
         public:
             OTables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector) : sdbcx::OCollection(_rParent,_rMetaData->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
-                ,m_xMetaData(_rMetaData)
             {}
 
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-
-            // only the name is identical to ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing() override;
         };
     }
 }

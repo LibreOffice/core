@@ -63,7 +63,6 @@ private:
     const SfxItemSet*   pSet;
     OUString            aUserString;
     bool                bHasExchangeSupport;
-    VclPtr<IconChoiceDialog>   pDialog;
 
     void                ImplInitSettings();
 
@@ -75,7 +74,6 @@ protected:
 
 public:
     virtual ~IconChoicePage() override;
-    virtual void        dispose() override;
 
     const SfxItemSet&   GetItemSet() const { return *pSet; }
 

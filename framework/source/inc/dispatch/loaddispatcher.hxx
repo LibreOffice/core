@@ -44,9 +44,6 @@ class LoadDispatcher : public  ::cppu::WeakImplHelper< css::frame::XNotifyingDis
     private:
         osl::Mutex m_mutex;
 
-        /** @short  can be used to create own needed services on demand. */
-        css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
         /** @short  TODO document me */
         css::uno::WeakReference< css::frame::XFrame > m_xOwnerFrame;
 
