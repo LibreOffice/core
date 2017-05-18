@@ -179,7 +179,7 @@ namespace o3tl
     template<> struct typed_flags<SetAttrMode> : is_typed_flags<SetAttrMode, 0x1ff> {};
 }
 
-#define SW_ISPRINTABLE( c ) ( c >= ' ' && 127 != c )
+constexpr bool SW_ISPRINTABLE(sal_Unicode c) { return c >= ' ' && 127 != c; }
 
 #define CHAR_HARDBLANK      u'\x00A0'
 #define CHAR_HARDHYPHEN     u'\x2011'
