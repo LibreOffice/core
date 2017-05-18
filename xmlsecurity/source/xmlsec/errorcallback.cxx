@@ -48,12 +48,12 @@ void errorCallback(const char* file,
     SAL_WARN("xmlsecurity.xmlsec", file << ":" << line << ": " << func << "() '" << pErrorObject << "' '" << pErrorSubject << "' " << reason << " '" << pMsg << "'" << systemErrorString);
 }
 
-SAL_DLLPUBLIC_EXPORT void setErrorRecorder()
+XSECXMLSEC_DLLPUBLIC void setErrorRecorder()
 {
     xmlSecErrorsSetCallback(errorCallback);
 }
 
-SAL_DLLPUBLIC_EXPORT void clearErrorRecorder()
+XSECXMLSEC_DLLPUBLIC void clearErrorRecorder()
 {
     xmlSecErrorsSetCallback(nullptr);
 }

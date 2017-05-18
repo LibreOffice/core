@@ -112,9 +112,9 @@ SAL_CALL XMLSignature_GpgImpl::generate(
 
     // Calculate digest for all references
     xmlNodePtr cur = xmlSecGetNextElementNode(pNode->children);
-    if( cur != NULL )
+    if( cur != nullptr )
         cur = xmlSecGetNextElementNode(cur->children);
-    while( cur != NULL )
+    while( cur != nullptr )
     {
         // some of those children I suppose should be reference elements
         if( xmlSecCheckNodeName(cur, xmlSecNodeReference, xmlSecDSigNs) )
@@ -122,7 +122,7 @@ SAL_CALL XMLSignature_GpgImpl::generate(
             xmlSecDSigReferenceCtxPtr pDsigRefCtx =
                 xmlSecDSigReferenceCtxCreate(pDsigCtx,
                                              xmlSecDSigReferenceOriginSignedInfo);
-            if(pDsigRefCtx == NULL)
+            if(pDsigRefCtx == nullptr)
                 throw RuntimeException();
 
             // add this one to the list
@@ -152,9 +152,9 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     // -------------------------------------------------------
 
     // run the transformations
-    xmlSecNodeSetPtr nodeset = NULL;
+    xmlSecNodeSetPtr nodeset = nullptr;
     nodeset = xmlSecNodeSetGetChildren(pNode->doc, pNode, 1, 0);
-    if(nodeset == NULL)
+    if(nodeset == nullptr)
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
     if( xmlSecTransformCtxXmlExecute(&(pDsigCtx->transformCtx), nodeset) < 0 )

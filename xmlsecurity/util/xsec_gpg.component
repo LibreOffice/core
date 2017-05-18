@@ -20,6 +20,6 @@
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="xsec_gpg" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.xml.security.bridge.xmlsec.XMLSignature_GpgImpl">
-    <service name="com.sun.star.xml.crypto.XMLSignature"/>
+    <service name="com.sun.star.xml.crypto.XMLSignature2"/>
   </implementation>
 </component>

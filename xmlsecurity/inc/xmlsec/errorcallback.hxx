@@ -24,11 +24,13 @@
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
 #include <com/sun/star/xml/crypto/XXMLEncryptionTemplate.hpp>
 
+#include <xsecxmlsecdllapi.h>
+
 // Only used for logging
-void setErrorRecorder();
+XSECXMLSEC_DLLPUBLIC void setErrorRecorder();
 //ToDo
 //void setErrorRecorder(const css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate >& xTemplate);
-void clearErrorRecorder();
+XSECXMLSEC_DLLPUBLIC void clearErrorRecorder();
 
 #endif
 

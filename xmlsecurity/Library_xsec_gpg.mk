@@ -9,9 +9,7 @@
 
 $(eval $(call gb_Library_Library,xsec_gpg))
 
-ifneq ($(OS),WNT)
 $(eval $(call gb_Library_set_componentfile,xsec_gpg,xmlsecurity/util/xsec_gpg))
-endif
 
 $(eval $(call gb_Library_set_include,xsec_gpg,\
 	$$(INCLUDE) \

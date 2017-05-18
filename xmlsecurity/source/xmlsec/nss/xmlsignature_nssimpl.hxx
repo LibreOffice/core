@@ -34,9 +34,7 @@
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 
-#include "xsecxmlsecdllapi.h"
-
-class XSECXMLSEC_DLLPUBLIC XMLSignature_NssImpl : public ::cppu::WeakImplHelper<
+class XMLSignature_NssImpl : public ::cppu::WeakImplHelper<
     css::xml::crypto::XXMLSignature ,
     css::lang::XServiceInfo >
 {

@@ -24,7 +24,7 @@ using namespace ::com::sun::star::registry;
 extern "C"
 {
 
-void* SAL_CALL gpg_component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL xsec_gpg_component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* /*pRegistryKey*/ )
 {
     void* pRet = nullptr;
     Reference< XSingleServiceFactory > xFactory ;

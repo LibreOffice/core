@@ -21,10 +21,10 @@
 #include "securityenvironment_mscryptimpl.hxx"
 
 #include "xmlsecuritycontext_mscryptimpl.hxx"
-#include "xmlstreamio.hxx"
+#include "xmlsec/xmlstreamio.hxx"
+#include "xmlsec/mscrypto/akmngr.h"
 
 #include "xmlsec-wrapper.h"
-#include "xmlsec/mscrypto/akmngr.h"
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::lang ;

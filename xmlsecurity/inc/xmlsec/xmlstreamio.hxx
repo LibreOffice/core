@@ -23,14 +23,16 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/crypto/XUriBinding.hpp>
 
+#include <xsecxmlsecdllapi.h>
+
 int xmlEnableStreamInputCallbacks() ;
 void xmlDisableStreamInputCallbacks() ;
 
-int xmlRegisterStreamInputCallbacks(
+XSECXMLSEC_DLLPUBLIC int xmlRegisterStreamInputCallbacks(
     css::uno::Reference< css::xml::crypto::XUriBinding >& aUriBinding
 ) ;
 
-int xmlUnregisterStreamInputCallbacks() ;
+XSECXMLSEC_DLLPUBLIC int xmlUnregisterStreamInputCallbacks() ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSTREAMIO_HXX
 

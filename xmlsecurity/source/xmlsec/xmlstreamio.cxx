@@ -180,7 +180,7 @@ int xmlEnableStreamInputCallbacks()
     return 0 ;
 }
 
-SAL_DLLPUBLIC_EXPORT int xmlRegisterStreamInputCallbacks(
+XSECXMLSEC_DLLPUBLIC int xmlRegisterStreamInputCallbacks(
     css::uno::Reference< css::xml::crypto::XUriBinding >& aUriBinding
 ) {
     if( !( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) ) {
@@ -197,7 +197,7 @@ SAL_DLLPUBLIC_EXPORT int xmlRegisterStreamInputCallbacks(
     return 0 ;
 }
 
-SAL_DLLPUBLIC_EXPORT int xmlUnregisterStreamInputCallbacks()
+XSECXMLSEC_DLLPUBLIC int xmlUnregisterStreamInputCallbacks()
 {
     if( ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
         //Clear the uri-stream binding
