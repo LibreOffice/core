@@ -1758,7 +1758,8 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, 
     SetGrammar(rCxt.getGrammar());
 }
 
-ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArray& rArr)
+ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos, ScTokenArray& rArr,
+            formula::FormulaGrammar::Grammar eGrammar )
         : FormulaCompiler(rArr),
         pDoc( pDocument ),
         aPos( rPos ),
@@ -1774,6 +1775,9 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,ScTokenArra
         mbCloseBrackets( true ),
         mbRewind( false )
 {
+    SetGrammar( ((eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED) ?
+                (pDocument ? pDocument->GetGrammar() : formula::FormulaGrammar::GRAM_DEFAULT) :
+                eGrammar));
     nMaxTab = pDoc->GetTableCount() - 1;
 }
 
@@ -1796,7 +1800,8 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos )
     SetGrammar(rCxt.getGrammar());
 }
 
-ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
+ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
+            formula::FormulaGrammar::Grammar eGrammar )
         :
         pDoc( pDocument ),
         aPos( rPos ),
@@ -1812,6 +1817,9 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos)
         mbCloseBrackets( true ),
         mbRewind( false )
 {
+    SetGrammar( ((eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED) ?
+                (pDocument ? pDocument->GetGrammar() : formula::FormulaGrammar::GRAM_DEFAULT) :
+                eGrammar));
     nMaxTab = pDoc ? pDoc->GetTableCount() - 1 : 0;
 }
 
