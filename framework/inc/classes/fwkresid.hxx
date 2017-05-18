@@ -34,8 +34,6 @@ class FWE_DLLPUBLIC FwkResId : public ResId
     static ResMgr*  GetResManager();
 };
 
-#define FWK_RESSTR(x) FwkResId(x).toString()
-
 }
 
 #endif // __FRAMEWORK_CLASSES_FWKRESID

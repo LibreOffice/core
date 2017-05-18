@@ -37,7 +37,10 @@ namespace fpicker
     };
 }
 
-#define SVT_RESSTR(i)    SvtResId(i).toString()
+inline OUString FpsResId(sal_uInt16 nId)
+{
+    return fpicker::SvtResId(nId);
+}
 
 #endif
 
