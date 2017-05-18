@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_b33757e2",
+        "filename": "sc/qa/unit/ucalc_formula.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 7869,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-18T10:12:35Z",
+      "side": 1,
+      "message": "Sidenote: I always wonder why some devs don\u0027t use a blank between // and the comment text. It\u0027s just easier to read with a blank.\n\nAnd no, please don\u0027t submit another patch for this ;-)",
+      "revId": "6f9d7c3506ca13d79c8a2c732f42ce029452bd36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
