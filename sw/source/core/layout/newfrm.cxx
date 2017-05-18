@@ -464,7 +464,7 @@ SwRootFrame::SwRootFrame( SwFrameFormat *pFormat, SwViewShell * pSh ) :
     mbIsNewLayout( true ),
     mbCallbackActionEnabled ( false ),
     mbLayoutFreezed ( false ),
-    mnBrowseWidth( MM50*4 ), //2cm minimum
+    mnBrowseWidth(MIN_BROWSE_WIDTH),
     mpTurbo( nullptr ),
     mpLastPage( nullptr ),
     mpCurrShell( pSh ),
