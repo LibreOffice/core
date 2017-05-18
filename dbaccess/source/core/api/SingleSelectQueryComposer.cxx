@@ -135,7 +135,7 @@ namespace
             _rIterator.setParseTree( pOldNode );
             // and now really ...
             SQLException aError1( _rOriginatingCommand, _rxContext, getStandardSQLState( StandardSQLState::GENERAL_ERROR ), 1000, Any() );
-            throw SQLException( DBACORE_RESSTRING( RID_STR_ONLY_QUERY ), _rxContext,
+            throw SQLException( DBA_RES( RID_STR_ONLY_QUERY ), _rxContext,
                 getStandardSQLState( StandardSQLState::GENERAL_ERROR ), 1000, makeAny( aError1 ) );
         }
 
@@ -365,7 +365,7 @@ void SAL_CALL OSingleSelectQueryComposer::setCommand( const OUString& Command,sa
             }
             else
             {
-                OUString sMessage( DBACORE_RESSTRING( RID_STR_TABLE_DOES_NOT_EXIST ) );
+                OUString sMessage( DBA_RES( RID_STR_TABLE_DOES_NOT_EXIST ) );
                 throwGenericSQLException(sMessage.replaceAll( "$table$", Command ),*this);
             }
             break;
@@ -380,7 +380,7 @@ void SAL_CALL OSingleSelectQueryComposer::setCommand( const OUString& Command,sa
             }
             else
             {
-                OUString sMessage( DBACORE_RESSTRING( RID_STR_QUERY_DOES_NOT_EXIST ) );
+                OUString sMessage( DBA_RES( RID_STR_QUERY_DOES_NOT_EXIST ) );
                 throwGenericSQLException(sMessage.replaceAll( "$table$", Command ),*this);
             }
 
@@ -447,9 +447,9 @@ OUString OSingleSelectQueryComposer::impl_getColumnRealName_throw(const Referenc
         || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME)
         )
         {
-            OUString sError(DBACORE_RESSTRING(RID_STR_COLUMN_UNKNOWN_PROP));
+            OUString sError(DBA_RES(RID_STR_COLUMN_UNKNOWN_PROP));
             SQLException aErr(sError.replaceAll("%value", PROPERTY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
-            throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
+            throw SQLException(DBA_RES(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
         }
 
     OUString aName, aNewName;
@@ -460,7 +460,7 @@ OUString OSingleSelectQueryComposer::impl_getColumnRealName_throw(const Referenc
          m_aCurrentColumns[SelectColumns] &&
          !m_aCurrentColumns[SelectColumns]->hasByName(aName) )
     {
-        OUString sError(DBACORE_RESSTRING(RID_STR_COLUMN_MUST_VISIBLE));
+        OUString sError(DBA_RES(RID_STR_COLUMN_MUST_VISIBLE));
         throw SQLException(sError.replaceAll("%name", aName),*this,SQLSTATE_GENERAL,1000,Any() );
     }
 
@@ -517,9 +517,9 @@ OUString OSingleSelectQueryComposer::impl_getColumnNameOrderBy_throw(const Refer
         || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME)
         )
         {
-            OUString sError(DBACORE_RESSTRING(RID_STR_COLUMN_UNKNOWN_PROP));
+            OUString sError(DBA_RES(RID_STR_COLUMN_UNKNOWN_PROP));
             SQLException aErr(sError.replaceAll("%value", PROPERTY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
-            throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
+            throw SQLException(DBA_RES(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
         }
 
     OUString aName;
@@ -538,7 +538,7 @@ OUString OSingleSelectQueryComposer::impl_getColumnNameOrderBy_throw(const Refer
     // Is that supported?
     if ( !m_xMetaData->supportsOrderByUnrelated() )
     {
-        OUString sError(DBACORE_RESSTRING(RID_STR_COLUMN_MUST_VISIBLE));
+        OUString sError(DBA_RES(RID_STR_COLUMN_MUST_VISIBLE));
         throw SQLException(sError.replaceAll("%name", aName),*this,SQLSTATE_GENERAL,1000,Any() );
     }
 
@@ -1537,13 +1537,13 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
              || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_VALUE)
              || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME)
              || !column->getPropertySetInfo()->hasPropertyByName(PROPERTY_TYPE))
-            throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,Any() );
+            throw SQLException(DBA_RES(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,Any() );
 
         sal_Int32 nType = 0;
         column->getPropertyValue(PROPERTY_TYPE) >>= nType;
         sal_Int32 nSearchable = dbtools::getSearchColumnFlag(m_xConnection,nType);
         if(nSearchable == ColumnSearch::NONE)
-            throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_SEARCHABLE),*this,SQLSTATE_GENERAL,1000,Any() );
+            throw SQLException(DBA_RES(RID_STR_COLUMN_NOT_SEARCHABLE),*this,SQLSTATE_GENERAL,1000,Any() );
 
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -1648,7 +1648,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                             aSQL.append( "\'" );
                     }
                     else
-                        throw SQLException(DBACORE_RESSTRING(RID_STR_NOT_SEQUENCE_INT8),*this,SQLSTATE_GENERAL,1000,Any() );
+                        throw SQLException(DBA_RES(RID_STR_NOT_SEQUENCE_INT8),*this,SQLSTATE_GENERAL,1000,Any() );
                 }
                 break;
             case DataType::BIT:

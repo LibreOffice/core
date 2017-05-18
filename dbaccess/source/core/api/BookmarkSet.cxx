@@ -76,7 +76,7 @@ void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const conne
 {
     Reference<XRowUpdate> xUpdRow(m_xRowLocate,UNO_QUERY);
     if(!xUpdRow.is())
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_XROWUPDATE ), StandardSQLState::GENERAL_ERROR, *this );
+        ::dbtools::throwSQLException( DBA_RES( RID_STR_NO_XROWUPDATE ), StandardSQLState::GENERAL_ERROR, *this );
 
     Reference<XResultSetUpdate> xUpd(m_xRowLocate,UNO_QUERY);
     if(xUpd.is())
@@ -93,14 +93,14 @@ void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const conne
         (*_rInsertRow->get().begin()) = m_xRowLocate->getBookmark();
     }
     else
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_XRESULTSETUPDATE ), StandardSQLState::GENERAL_ERROR, *this );
+        ::dbtools::throwSQLException( DBA_RES( RID_STR_NO_XRESULTSETUPDATE ), StandardSQLState::GENERAL_ERROR, *this );
 }
 
 void SAL_CALL OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& /*_xTable*/  )
 {
     Reference<XRowUpdate> xUpdRow(m_xRowLocate,UNO_QUERY);
     if(!xUpdRow.is())
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_XROWUPDATE ), StandardSQLState::GENERAL_ERROR, *this );
+        ::dbtools::throwSQLException( DBA_RES( RID_STR_NO_XROWUPDATE ), StandardSQLState::GENERAL_ERROR, *this );
 
     sal_Int32 i = 1;
     connectivity::ORowVector< ORowSetValue > ::Vector::const_iterator aOrgIter = _rOriginalRow->get().begin()+1;
@@ -116,7 +116,7 @@ void SAL_CALL OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowS
     if(xUpd.is())
         xUpd->updateRow();
     else
-        ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_XRESULTSETUPDATE ), StandardSQLState::GENERAL_ERROR, *this );
+        ::dbtools::throwSQLException( DBA_RES( RID_STR_NO_XRESULTSETUPDATE ), StandardSQLState::GENERAL_ERROR, *this );
 }
 
 void SAL_CALL OBookmarkSet::deleteRow(const ORowSetRow& /*_rDeleteRow*/ ,const connectivity::OSQLTable& /*_xTable*/  )

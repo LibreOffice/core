@@ -676,11 +676,11 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
     if ( !xReturn.is() )
     {
-        OUString sMessage = DBACORE_RESSTRING( nExceptionMessageId )
+        OUString sMessage = DBA_RES(nExceptionMessageId)
             .replaceAll("$name$", m_pImpl->m_sConnectURL);
 
         SQLContext aContext;
-        aContext.Message = DBACORE_RESSTRING(RID_STR_CONNECTION_REQUEST).
+        aContext.Message = DBA_RES(RID_STR_CONNECTION_REQUEST).
             replaceFirst("$name$", m_pImpl->m_sConnectURL);
 
         throwGenericSQLException( sMessage, static_cast< XDataSource* >( this ), makeAny( aContext ) );

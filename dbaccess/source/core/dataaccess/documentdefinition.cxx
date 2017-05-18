@@ -1227,9 +1227,9 @@ bool ODocumentDefinition::save(bool _bApprove)
             if ( aRequest.Name.isEmpty() )
             {
                 if ( m_bForm )
-                    aRequest.Name = DBACORE_RESSTRING( RID_STR_FORM );
+                    aRequest.Name = DBA_RES( RID_STR_FORM );
                 else
-                    aRequest.Name = DBACORE_RESSTRING( RID_STR_REPORT );
+                    aRequest.Name = DBA_RES( RID_STR_REPORT );
                 aRequest.Name = ::dbtools::createUniqueName(xName,aRequest.Name);
             }
 
@@ -1586,7 +1586,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
                     if ( !xEnumDrivers.is() || !xEnumDrivers->hasMoreElements() )
                     {
                         css::io::WrongFormatException aWFE;
-                        aWFE.Message = DBACORE_RESSTRING( RID_STR_MISSING_EXTENSION );
+                        aWFE.Message = DBA_RES( RID_STR_MISSING_EXTENSION );
                         throw aWFE;
                     }
                 }
@@ -2059,9 +2059,9 @@ void ODocumentDefinition::updateDocumentTitle()
         if ( sName.isEmpty() )
         {
             if ( m_bForm )
-                sName = DBACORE_RESSTRING( RID_STR_FORM );
+                sName = DBA_RES( RID_STR_FORM );
             else
-                sName = DBACORE_RESSTRING( RID_STR_REPORT );
+                sName = DBA_RES( RID_STR_REPORT );
             Reference< XUntitledNumbers > xUntitledProvider(m_pImpl->m_pDataSource->getModel_noCreate(), UNO_QUERY      );
             if ( xUntitledProvider.is() )
                 sName += OUString::number( xUntitledProvider->leaseNumber(getComponent()) );

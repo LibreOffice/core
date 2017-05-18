@@ -780,7 +780,7 @@ void OConnection::impl_checkTableQueryNames_nothrow()
         {
             if ( aSortedTableNames.find( *pQueryName ) != aSortedTableNames.end() )
             {
-                OUString sConflictWarning( DBACORE_RESSTRING( RID_STR_CONFLICTING_NAMES ) );
+                OUString sConflictWarning( DBA_RES( RID_STR_CONFLICTING_NAMES ) );
                 m_aWarnings.appendWarning( sConflictWarning, "01SB0", *this );
             }
         }

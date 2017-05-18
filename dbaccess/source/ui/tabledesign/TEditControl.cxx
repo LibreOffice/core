@@ -961,7 +961,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const css::uno
         case FIELD_PROPERTY_AUTOINC:
             {
                 sValue = ::comphelper::getString(_rNewData);
-                pFieldDescr->SetAutoIncrement(sValue == ModuleRes(STR_VALUE_YES).toString());
+                pFieldDescr->SetAutoIncrement(sValue == ModuleRes(STR_VALUE_YES));
             }
             break;
         case FIELD_PROPERTY_SCALE:

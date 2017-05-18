@@ -334,7 +334,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
             )
         {
             // #i40463# #i39187#
-            OUString sErrorMessage( DBACORE_RESSTRING( RID_STR_FILE_DOES_NOT_EXIST ) );
+            OUString sErrorMessage( DBA_RES( RID_STR_FILE_DOES_NOT_EXIST ) );
             ::svt::OFileNotation aTransformer( _sURL );
 
             SQLException aError;
@@ -438,7 +438,7 @@ void ODatabaseContext::registerObject(const OUString& _rName, const Reference< X
 
     OUString sURL = xModel->getURL();
     if ( sURL.isEmpty() )
-        throw IllegalArgumentException( DBACORE_RESSTRING( RID_STR_DATASOURCE_NOT_STORED ), *this, 2 );
+        throw IllegalArgumentException( DBA_RES( RID_STR_DATASOURCE_NOT_STORED ), *this, 2 );
 
     registerDatabaseLocation( _rName, sURL );
 

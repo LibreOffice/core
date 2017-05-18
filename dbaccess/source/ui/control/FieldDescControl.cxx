@@ -232,7 +232,7 @@ OUString OFieldDescControl::BoolStringUI(const OUString& rPersistentString) cons
     if (rPersistentString == "1")
         return aYes;
 
-    return ModuleRes(STR_VALUE_NONE).toString();
+    return ModuleRes(STR_VALUE_NONE);
 }
 
 void OFieldDescControl::Init()

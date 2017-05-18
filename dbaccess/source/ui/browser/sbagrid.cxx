@@ -666,13 +666,13 @@ void SbaGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rM
             case DataType::REF:
                 break;
             default:
-                rMenu.InsertItem(ID_BROWSER_COLATTRSET, ModuleRes(RID_STR_COLUMN_FORMAT).toString(), MenuItemBits::NONE, OString(), nPos++);
+                rMenu.InsertItem(ID_BROWSER_COLATTRSET, ModuleRes(RID_STR_COLUMN_FORMAT), MenuItemBits::NONE, OString(), nPos++);
                 rMenu.SetHelpId(ID_BROWSER_COLATTRSET, HID_BROWSER_COLUMNFORMAT);
                 rMenu.InsertSeparator(OString(), nPos++);
             }
         }
 
-        rMenu.InsertItem(ID_BROWSER_COLWIDTH, ModuleRes(RID_STR_COLUMN_WIDTH).toString(), MenuItemBits::NONE, OString(), nPos++);
+        rMenu.InsertItem(ID_BROWSER_COLWIDTH, ModuleRes(RID_STR_COLUMN_WIDTH), MenuItemBits::NONE, OString(), nPos++);
         rMenu.SetHelpId(ID_BROWSER_COLWIDTH, HID_BROWSER_COLUMNWIDTH);
         rMenu.InsertSeparator(OString(), nPos++);
     }
@@ -751,17 +751,17 @@ void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
 
     if (!IsReadOnlyDB())
     {
-        rMenu.InsertItem(ID_BROWSER_TABLEATTR, ModuleRes(RID_STR_TABLE_FORMAT).toString(), MenuItemBits::NONE, OString(), nPos++);
+        rMenu.InsertItem(ID_BROWSER_TABLEATTR, ModuleRes(RID_STR_TABLE_FORMAT), MenuItemBits::NONE, OString(), nPos++);
         rMenu.SetHelpId(ID_BROWSER_TABLEATTR, HID_BROWSER_TABLEFORMAT);
 
-        rMenu.InsertItem(ID_BROWSER_ROWHEIGHT, ModuleRes(RID_STR_ROW_HEIGHT).toString(), MenuItemBits::NONE, OString(), nPos++);
+        rMenu.InsertItem(ID_BROWSER_ROWHEIGHT, ModuleRes(RID_STR_ROW_HEIGHT), MenuItemBits::NONE, OString(), nPos++);
         rMenu.SetHelpId(ID_BROWSER_ROWHEIGHT, HID_BROWSER_ROWHEIGHT);
         rMenu.InsertSeparator(OString(), nPos++);
     }
 
     if ( GetSelectRowCount() > 0 )
     {
-        rMenu.InsertItem(ID_BROWSER_COPY, ModuleRes(RID_STR_COPY).toString(), MenuItemBits::NONE, OString(), nPos++);
+        rMenu.InsertItem(ID_BROWSER_COPY, ModuleRes(RID_STR_COPY), MenuItemBits::NONE, OString(), nPos++);
         rMenu.InsertSeparator(OString(), nPos++);
     }
 }

@@ -31,9 +31,6 @@ namespace dbaccess
 #define DBA_RES( id )                       ResourceManager::loadString( id )
 #define DBA_RES_PARAM( id, ascii, replace ) ResourceManager::loadString( id, ascii, replace )
 
-#define DBACORE_RESSTRING( id ) DBA_RES( id )
-        // (compatibility)
-
     // ResourceManager
     // handling resources within the DBA-Core library
     class ResourceManager

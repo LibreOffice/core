@@ -1138,7 +1138,7 @@ sal_Int32 ORowSetCache::getRow(  )
 bool ORowSetCache::absolute( sal_Int32 row )
 {
     if(!row )
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_ABS_ZERO),nullptr,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBA_RES(RID_STR_NO_ABS_ZERO),nullptr,SQLSTATE_GENERAL,1000,Any() );
 
     if(row < 0)
     {
@@ -1201,7 +1201,7 @@ bool ORowSetCache::relative( sal_Int32 rows )
             nNewPosition = m_nRowCount + 1 + rows;
         else
             if ( m_bBeforeFirst || ( m_bRowCountFinal && m_bAfterLast ) )
-                throw SQLException( DBACORE_RESSTRING( RID_STR_NO_RELATIVE ), nullptr, SQLSTATE_GENERAL, 1000, Any() );
+                throw SQLException( DBA_RES( RID_STR_NO_RELATIVE ), nullptr, SQLSTATE_GENERAL, 1000, Any() );
         if ( nNewPosition )
         {
             bErg = absolute( nNewPosition );
@@ -1250,7 +1250,7 @@ bool ORowSetCache::previous(  )
 void ORowSetCache::refreshRow(  )
 {
     if(isAfterLast())
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_REFESH_AFTERLAST),nullptr,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBA_RES(RID_STR_NO_REFESH_AFTERLAST),nullptr,SQLSTATE_GENERAL,1000,Any() );
     OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"refreshRow() called for invalid row!");
     m_xCacheSet->refreshRow();
     m_xCacheSet->fillValueRow(*m_aMatrixIter,m_nPosition);
@@ -1274,7 +1274,7 @@ bool ORowSetCache::rowInserted(  )
 bool ORowSetCache::insertRow(std::vector< Any >& o_aBookmarks)
 {
     if ( !m_bNew || !m_aInsertRow->is() )
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_MOVETOINSERTROW_CALLED),nullptr,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBA_RES(RID_STR_NO_MOVETOINSERTROW_CALLED),nullptr,SQLSTATE_GENERAL,1000,Any() );
 
     m_xCacheSet->insertRow(*m_aInsertRow,m_aUpdateTable);
 
@@ -1330,7 +1330,7 @@ void ORowSetCache::cancelRowModification()
 void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow,std::vector< Any >& o_aBookmarks )
 {
     if(isAfterLast() || isBeforeFirst())
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_UPDATEROW),nullptr,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBA_RES(RID_STR_NO_UPDATEROW),nullptr,SQLSTATE_GENERAL,1000,Any() );
 
     Any aBookmark = ((*_rUpdateRow)->get())[0].makeAny();
     OSL_ENSURE(aBookmark.hasValue(),"Bookmark must have a value!");
@@ -1361,7 +1361,7 @@ void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow,std::vector< 
 bool ORowSetCache::deleteRow(  )
 {
     if(isAfterLast() || isBeforeFirst())
-        throw SQLException(DBACORE_RESSTRING(RID_STR_NO_DELETEROW),nullptr,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBA_RES(RID_STR_NO_DELETEROW),nullptr,SQLSTATE_GENERAL,1000,Any() );
 
     m_xCacheSet->deleteRow(*m_aMatrixIter,m_aUpdateTable);
     if ( !m_xCacheSet->rowDeleted() )
