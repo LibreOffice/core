@@ -279,7 +279,7 @@ class SwUndoDelSection
 {
 private:
     std::unique_ptr<SwSectionData> const m_pSectionData; /// section not TOX
-    std::unique_ptr<SwTOXBase> const m_pTOXBase; /// set iff section is TOX
+    std::unique_ptr<SwTOXBase> const m_pTOXBase; /// set if section is TOX
     std::unique_ptr<SfxItemSet> const m_pAttrSet;
     std::shared_ptr< ::sfx2::MetadatableUndo > const m_pMetadataUndo;
     sal_uLong const m_nStartNode;

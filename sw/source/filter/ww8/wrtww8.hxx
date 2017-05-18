@@ -523,7 +523,7 @@ public:
     SwWW8WrGrf* m_pGrf;
     const SwAttrSet* m_pStyAttr;      // StyleAttr for Tabs
     const SwModify* m_pOutFormatNode;    // write Format or Node
-    const SwFormat *m_pCurrentStyle;     // iff bStyDef=true, then this store the current style
+    const SwFormat *m_pCurrentStyle;     // if bStyDef=true, then this store the current style
 
     MainTextPlcDrawObj *m_pSdrObjs;   // Draw-/Fly-Objects
     HdFtPlcDrawObj *m_pHFSdrObjs;     // Draw-/Fly-Objects in header or footer

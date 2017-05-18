@@ -112,7 +112,7 @@ bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
 }
 
 bool SmIsMathAlpha(const OUString &rText)
-    // true iff symbol (from StarMath Font) should be treated as letter
+    // true if symbol (from StarMath Font) should be treated as letter
 {
     // Set of symbols, which should be treated as letters in StarMath Font
     // (to get a normal (non-clipped) SmRect in contrast to the other operators
@@ -554,7 +554,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
 
 long SmRect::OrientedDist(const Point &rPoint) const
     // return oriented distance of rPoint to the current rectangle,
-    // especially the return value is <= 0 iff the point is inside the
+    // especially the return value is <= 0 if the point is inside the
     // rectangle.
     // For simplicity the maximum-norm is used.
 {

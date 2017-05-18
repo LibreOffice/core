@@ -547,7 +547,7 @@ bool FTPDirectoryParser::parseDOS (
  *
  * For directories, the returned name is the <filename> part; for non-
  * directory files, the returned name is the <filename "." filetype> part.
- * An entry is a directory iff its filetype is "DIR" (ignoring case).
+ * An entry is a directory if its filetype is "DIR" (ignoring case).
  *
  * The READ, WRITE, and ISLINK mode bits are not supported.
  *

@@ -66,7 +66,7 @@ final class Cache {
                     first = e;
                 }
             } else {
-                // Reached iff maxSize == 0:
+                // Reached if maxSize == 0:
                 return NOT_CACHED;
             }
             map.put(content, e);

@@ -52,7 +52,7 @@ public:
 
        @param type a UNO type registry name
 
-       @return true iff the given type has already been generated
+       @return true if the given type has already been generated
      */
     bool contains(OString const & type) const
     { return m_set.find(type) != m_set.end(); }

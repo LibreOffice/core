@@ -342,7 +342,7 @@ splitting of exising hints that is necessary for backward compatibility.
 
     @param rNode    the text node
     @param rHint    the hint to be inserted
-    @returns        true iff hint was successfully inserted
+    @returns        true if hint was successfully inserted
 */
 bool
 SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )

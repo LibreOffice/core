@@ -298,7 +298,7 @@ struct IsReference
 
 /**
  * IsArithmetic determines whether a type is arithmetic.  A type is arithmetic
- * iff it is an integral type or a floating point type.
+ * if it is an integral type or a floating point type.
  *
  * mozilla::IsArithmetic<int>::value is true;
  * mozilla::IsArithmetic<double>::value is true;
@@ -384,7 +384,7 @@ struct IsEmptyHelper
 /**
  * IsEmpty determines whether a type is a class (but not a union) that is empty.
  *
- * A class is empty iff it and all its base classes have no non-static data
+ * A class is empty if it and all its base classes have no non-static data
  * members (except bit-fields of length 0) and no virtual member functions, and
  * no base class is empty or a virtual base class.
  *

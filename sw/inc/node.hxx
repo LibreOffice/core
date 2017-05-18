@@ -94,7 +94,7 @@ class SW_DLLPUBLIC SwNode
 #endif
 
     /// all SwFrameFormat that are anchored at the node
-    /// invariant: SwFrameFormat is in the list iff
+    /// invariant: SwFrameFormat is in the list if
     /// SwFrameFormat::GetAnchor().GetContentAnchor() points to this node
     std::unique_ptr<std::vector<SwFrameFormat*>> m_pAnchoredFlys;
 

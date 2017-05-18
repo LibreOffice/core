@@ -282,7 +282,7 @@ public:
     /// initialize the hints after file loading (which takes shortcuts)
     void    FileLoadedInitHints();
 
-    /// Insert pAttr into hints array. @return true iff inserted successfully
+    /// Insert pAttr into hints array. @return true if inserted successfully
     bool    InsertHint( SwTextAttr * const pAttr,
                   const SetAttrMode nMode = SetAttrMode::DEFAULT );
     /// create new text attribute from rAttr and insert it

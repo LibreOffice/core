@@ -376,7 +376,7 @@ public class java_remote_bridge
             String[] oid = new String[1];
             object = _java_environment.registerInterface(object, oid, type);
             if (!proxyFactory.isProxy(object)) {
-                // This branch must be taken iff object either is no proxy at
+                // This branch must be taken if object either is no proxy at
                 // all or a proxy from some other bridge.  There are objects
                 // that behave like objects for this bridge but that are not
                 // detected as such by proxyFactory.isProxy.  The only known

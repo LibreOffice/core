@@ -51,7 +51,7 @@ namespace comphelper
         /** allow adding property with empty string as name
             (by default, such names are rejected with IllegalActionException).
             @param i_isAllowed
-                iff true, empty property name will be allowed
+                if true, empty property name will be allowed
          */
         void setAllowEmptyPropertyName(bool i_isAllowed);
 

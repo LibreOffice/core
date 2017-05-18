@@ -34,7 +34,7 @@ class SwUndoInsSection : public SwUndo, private SwUndRng
 {
 private:
     const std::unique_ptr<SwSectionData> m_pSectionData;
-    const std::unique_ptr<SwTOXBase> m_pTOXBase; /// set iff section is TOX
+    const std::unique_ptr<SwTOXBase> m_pTOXBase; /// set if section is TOX
     const std::unique_ptr<SfxItemSet> m_pAttrSet;
     std::unique_ptr<SwHistory> m_pHistory;
     std::unique_ptr<SwRedlineData> m_pRedlData;

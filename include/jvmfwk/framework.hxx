@@ -294,7 +294,7 @@ JVMFWK_DLLPUBLIC bool jfw_areEqualJavaInfo(
     that the changed setting may not be effective immediately.</p>
 
     @return
-    true iff a VM is running.
+    true if a VM is running.
 */
 JVMFWK_DLLPUBLIC bool jfw_isVMRunning();
 
