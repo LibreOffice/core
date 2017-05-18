@@ -198,8 +198,7 @@ void Test::testFormulaCreateStringFromTokens()
 #if 0
         OUString aFormula = OUString::createFromAscii(aTests[i]);
 #endif
-        ScCompiler aComp(m_pDoc, aPos);
-        aComp.SetGrammar(FormulaGrammar::GRAM_ENGLISH);
+        ScCompiler aComp(m_pDoc, aPos, FormulaGrammar::GRAM_ENGLISH);
 #if 0 // TODO: This call to CompileString() causes the cppunittester to somehow fail on Windows.
         pArray.reset(aComp.CompileString(aFormula));
         CPPUNIT_ASSERT_MESSAGE("Failed to compile formula string.", pArray.get());
@@ -1053,8 +1052,7 @@ void Test::testFormulaCompilerJumpReordering()
         CPPUNIT_ASSERT(pCode.get());
 
         // Then generate RPN tokens.
-        ScCompiler aCompRPN(m_pDoc, ScAddress(), *pCode);
-        aCompRPN.SetGrammar(FormulaGrammar::GRAM_NATIVE);
+        ScCompiler aCompRPN(m_pDoc, ScAddress(), *pCode, FormulaGrammar::GRAM_NATIVE);
         aCompRPN.CompileTokenArray();
 
         // RPN tokens should be ordered: B1, ocIf, C1, ocSep, D1, ocClose.
@@ -1082,8 +1080,7 @@ void Test::testFormulaCompilerJumpReordering()
 
         // Generate RPN tokens again, but this time no jump command reordering.
         pCode->DelRPN();
-        ScCompiler aCompRPN2(m_pDoc, ScAddress(), *pCode);
-        aCompRPN2.SetGrammar(FormulaGrammar::GRAM_NATIVE);
+        ScCompiler aCompRPN2(m_pDoc, ScAddress(), *pCode, FormulaGrammar::GRAM_NATIVE);
         aCompRPN2.EnableJumpCommandReorder(false);
         aCompRPN2.CompileTokenArray();
 
@@ -3526,8 +3523,7 @@ void Test::testTokenArrayRefUpdateMove()
 
     for (const OUString& aTest : aTests)
     {
-        ScCompiler aComp(m_pDoc, aPos);
-        aComp.SetGrammar(m_pDoc->GetGrammar());
+        ScCompiler aComp(m_pDoc, aPos, m_pDoc->GetGrammar());
         std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(aTest));
 
         OUString aStr = pArray->CreateString(aCxt, aPos);
@@ -7780,8 +7776,7 @@ void Test::testRefR1C1WholeCol()
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
 
     ScAddress aPos(1, 1, 1);
-    ScCompiler aComp(m_pDoc, aPos);
-    aComp.SetGrammar(FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+    ScCompiler aComp(m_pDoc, aPos, FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
     std::unique_ptr<ScTokenArray> pTokens(aComp.CompileString("=C[10]"));
     sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
     OUString aFormula = pTokens->CreateString(aCxt, aPos);
@@ -7796,8 +7791,7 @@ void Test::testRefR1C1WholeRow()
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
 
     ScAddress aPos(1, 1, 1);
-    ScCompiler aComp(m_pDoc, aPos);
-    aComp.SetGrammar(FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+    ScCompiler aComp(m_pDoc, aPos, FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
     std::unique_ptr<ScTokenArray> pTokens(aComp.CompileString("=R[3]"));
     sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
     OUString aFormula = pTokens->CreateString(aCxt, aPos);

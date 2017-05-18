@@ -119,8 +119,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
     aRefData.SetFlag3D( true );
     pCode->AddSingleReference( aRefData );
     pCode->SetFromRangeName(true);
-    ScCompiler aComp( pDoc, aPos, *pCode );
-    aComp.SetGrammar(pDoc->GetGrammar());
+    ScCompiler aComp( pDoc, aPos, *pCode, pDoc->GetGrammar() );
     aComp.CompileTokenArray();
     if ( pCode->GetCodeError() == FormulaError::NONE )
         eType |= Type::AbsPos;
@@ -156,8 +155,7 @@ void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
         eTempGrammar = FormulaGrammar::GRAM_NATIVE;
     }
 
-    ScCompiler aComp( pDoc, aPos );
-    aComp.SetGrammar( eTempGrammar);
+    ScCompiler aComp( pDoc, aPos, eTempGrammar );
     if (bSetError)
         aComp.SetExtendedErrorDetection( ScCompiler::EXTENDED_ERROR_DETECTION_NAME_NO_BREAK);
     ScTokenArray* pNewCode = aComp.CompileString( rSymbol );
@@ -252,16 +250,14 @@ void ScRangeData::GuessPosition()
 
 void ScRangeData::GetSymbol( OUString& rSymbol, const FormulaGrammar::Grammar eGrammar ) const
 {
-    ScCompiler aComp(pDoc, aPos, *pCode);
-    aComp.SetGrammar(eGrammar);
+    ScCompiler aComp(pDoc, aPos, *pCode, eGrammar);
     aComp.CreateStringFromTokenArray( rSymbol );
 }
 
 void ScRangeData::GetSymbol( OUString& rSymbol, const ScAddress& rPos, const FormulaGrammar::Grammar eGrammar ) const
 {
     OUString aStr;
-    ScCompiler aComp(pDoc, rPos, *pCode);
-    aComp.SetGrammar(eGrammar);
+    ScCompiler aComp(pDoc, rPos, *pCode, eGrammar);
     aComp.CreateStringFromTokenArray( aStr );
     rSymbol = aStr;
 }
@@ -269,8 +265,7 @@ void ScRangeData::GetSymbol( OUString& rSymbol, const ScAddress& rPos, const For
 void ScRangeData::UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress& rPos )
 {
     std::unique_ptr<ScTokenArray> pTemp( pCode->Clone() );
-    ScCompiler aComp( pDoc, rPos, *pTemp.get());
-    aComp.SetGrammar(formula::FormulaGrammar::GRAM_DEFAULT);
+    ScCompiler aComp( pDoc, rPos, *pTemp.get(), formula::FormulaGrammar::GRAM_DEFAULT);
     aComp.MoveRelWrap(GetMaxCol(), GetMaxRow());
     aComp.CreateStringFromTokenArray( rBuffer );
 }

@@ -96,8 +96,7 @@ bool ScGroupTokenConverter::convert( ScTokenArray& rCode, sc::FormulaLogger::Gro
 {
 #if 0
     { // debug to start with:
-        ScCompiler aComp( &mrDoc, mrPos, rCode);
-        aComp.SetGrammar(formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1);
+        ScCompiler aComp( &mrDoc, mrPos, rCode, formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1);
         OUStringBuffer aAsString;
         aComp.CreateStringFromTokenArray(aAsString);
     }

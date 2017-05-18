@@ -480,8 +480,7 @@ ScTokenArray* compileFormula(
     ScAddress aPos(0,0,0);
     if (pPos)
         aPos = *pPos;
-    ScCompiler aComp(pDoc, aPos);
-    aComp.SetGrammar(eGram);
+    ScCompiler aComp(pDoc, aPos, eGram);
     return aComp.CompileString(rFormula);
 }
 
@@ -554,8 +553,7 @@ bool isFormulaWithoutError(ScDocument& rDoc, const ScAddress& rPos)
 OUString toString(
     ScDocument& rDoc, const ScAddress& rPos, ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram)
 {
-    ScCompiler aComp(&rDoc, rPos, rArray);
-    aComp.SetGrammar(eGram);
+    ScCompiler aComp(&rDoc, rPos, rArray, eGram);
     OUStringBuffer aBuf;
     aComp.CreateStringFromTokenArray(aBuf);
     return aBuf.makeStringAndClear();

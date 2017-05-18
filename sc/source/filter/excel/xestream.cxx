@@ -808,6 +808,7 @@ OUString XclXmlUtils::ToOUString(
 {
     ScCompiler aCompiler( rCtx, rAddress, const_cast<ScTokenArray&>(*pTokenArray));
 
+    /* TODO: isn't this the same as passed in rCtx and thus superfluous? */
     aCompiler.SetGrammar(FormulaGrammar::GRAM_OOXML);
 
     OUStringBuffer aBuffer( pTokenArray->GetLen() * 5 );

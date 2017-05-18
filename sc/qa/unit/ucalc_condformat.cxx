@@ -739,8 +739,7 @@ void Test::testFormulaListenerSingleCellToSingleCell()
 {
     m_pDoc->InsertTab(0, "test");
 
-    ScCompiler aCompiler(m_pDoc, ScAddress(10, 10, 0));
-    aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH);
+    ScCompiler aCompiler(m_pDoc, ScAddress(10, 10, 0), formula::FormulaGrammar::GRAM_ENGLISH);
 
     std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString("A1"));
 
@@ -758,8 +757,7 @@ void Test::testFormulaListenerSingleCellToMultipleCells()
 {
     m_pDoc->InsertTab(0, "test");
 
-    ScCompiler aCompiler(m_pDoc, ScAddress(10, 10, 0));
-    aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH);
+    ScCompiler aCompiler(m_pDoc, ScAddress(10, 10, 0), formula::FormulaGrammar::GRAM_ENGLISH);
 
     std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString("A1"));
 
@@ -777,8 +775,7 @@ void Test::testFormulaListenerMultipleCellsToSingleCell()
 {
     m_pDoc->InsertTab(0, "test");
 
-    ScCompiler aCompiler(m_pDoc, ScAddress(10, 10, 0));
-    aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH);
+    ScCompiler aCompiler(m_pDoc, ScAddress(10, 10, 0), formula::FormulaGrammar::GRAM_ENGLISH);
 
     std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString("A1"));
 
@@ -796,8 +793,7 @@ void Test::testFormulaListenerMultipleCellsToMultipleCells()
 {
     m_pDoc->InsertTab(0, "test");
 
-    ScCompiler aCompiler(m_pDoc, ScAddress(10, 10, 0));
-    aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH);
+    ScCompiler aCompiler(m_pDoc, ScAddress(10, 10, 0), formula::FormulaGrammar::GRAM_ENGLISH);
 
     std::unique_ptr<ScTokenArray> pTokenArray(aCompiler.CompileString("A1"));
 

@@ -582,8 +582,7 @@ bool ScTabViewShell::IsRefInputMode() const
                     if ( pDoc )
                     {
                         const ScAddress aPos( rViewData.GetCurPos() );
-                        ScCompiler aComp( pDoc, aPos );
-                        aComp.SetGrammar(pDoc->GetGrammar());
+                        ScCompiler aComp( pDoc, aPos, pDoc->GetGrammar() );
                         aComp.SetCloseBrackets( false );
                         std::unique_ptr<ScTokenArray> pArr(aComp.CompileString(aString));
                         if ( pArr && pArr->MayReferenceFollow() )

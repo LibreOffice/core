@@ -295,8 +295,7 @@ bool ScNameDlg::IsNameValid()
 
 bool ScNameDlg::IsFormulaValid()
 {
-    ScCompiler aComp( mpDoc, maCursorPos);
-    aComp.SetGrammar( mpDoc->GetGrammar() );
+    ScCompiler aComp( mpDoc, maCursorPos, mpDoc->GetGrammar());
     ScTokenArray* pCode = aComp.CompileString(m_pEdAssign->GetText());
     if (pCode->GetCodeError() != FormulaError::NONE)
     {

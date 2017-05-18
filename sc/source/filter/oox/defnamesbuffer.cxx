@@ -324,8 +324,7 @@ std::unique_ptr<ScTokenArray> DefinedName::getScTokens(
         const css::uno::Sequence<css::sheet::ExternalLinkInfo>& rExternalLinks )
 {
     ScTokenArray aTokenArray;
-    ScCompiler aCompiler(&getScDocument(), ScAddress(0, 0, mnCalcSheet));
-    aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_OOXML);
+    ScCompiler aCompiler(&getScDocument(), ScAddress(0, 0, mnCalcSheet), formula::FormulaGrammar::GRAM_OOXML);
     aCompiler.SetExternalLinks( rExternalLinks);
     std::unique_ptr<ScTokenArray> pArray(aCompiler.CompileString(maModel.maFormula));
     // Compile the tokens into RPN once to populate information into tokens
