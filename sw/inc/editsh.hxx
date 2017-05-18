@@ -368,7 +368,7 @@ public:
     void SetClassification(const OUString& rName, SfxClassificationPolicyType eType);
 
     SfxWatermarkItem GetWatermark();
-    void SetWatermark(const OUString& rText);
+    void SetWatermark(const SfxWatermarkItem& rText);
 
     void Insert2(SwField&, const bool bForceExpandHints);
 
