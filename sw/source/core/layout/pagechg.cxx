@@ -1603,10 +1603,8 @@ void SwRootFrame::ImplCalcBrowseWidth()
 
     mbBrowseWidthValid = true;
     SwViewShell *pSh = getRootFrame()->GetCurrShell();
-    mnBrowseWidth = pSh
-                    ? MINLAY + 2 * pSh->GetOut()->
-                                PixelToLogic( pSh->GetBrowseBorder() ).Width()
-                    : 5000;
+    mnBrowseWidth = (!comphelper::LibreOfficeKit::isActive() && pSh)? MINLAY + 2 * pSh->GetOut()-> PixelToLogic( pSh->GetBrowseBorder() ).Width(): MIN_BROWSE_WIDTH;
+
     do
     {
         if ( pFrame->IsInTab() )
