@@ -2906,7 +2906,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
 
                 // our first message says: we caught an exception
                 sdb::SQLContext aFirstMessage;
-                OUString sInfo(ModuleRes(RID_STR_CAUGHT_FOREIGN_EXCEPTION).toString());
+                OUString sInfo(ModuleRes(RID_STR_CAUGHT_FOREIGN_EXCEPTION));
                 sInfo = sInfo.replaceAll("$type$", aCaughtException.getValueTypeName());
                 aFirstMessage.Message = sInfo;
 
@@ -3261,12 +3261,12 @@ void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs
     SequenceAsHashMap aMap(_aArgs);
     bool bStateOfPage = aMap.getUnpackedValueOrDefault(PROPERTY_STATE, false);
 
-    OUString sFunction( ModuleRes(STR_RPT_PN_PAGE).toString() );
+    OUString sFunction( ModuleRes(STR_RPT_PN_PAGE) );
     sFunction = sFunction.replaceFirst("#PAGENUMBER#", "PageNumber()");
 
     if ( bStateOfPage )
     {
-        sFunction += ModuleRes(STR_RPT_PN_PAGE_OF).toString();
+        sFunction += ModuleRes(STR_RPT_PN_PAGE_OF);
         sFunction = sFunction.replaceFirst("#PAGECOUNT#", "PageCount()");
     }
 

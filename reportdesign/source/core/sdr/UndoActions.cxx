@@ -383,7 +383,7 @@ void ORptUndoPropertyAction::setProperty(bool _bOld)
 
 OUString ORptUndoPropertyAction::GetComment() const
 {
-    OUString aStr( ModuleRes(RID_STR_UNDO_PROPERTY).toString() );
+    OUString aStr( ModuleRes(RID_STR_UNDO_PROPERTY) );
 
     return aStr.replaceFirst("#", m_aPropertyName);
 }
