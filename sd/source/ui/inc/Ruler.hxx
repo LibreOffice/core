@@ -49,7 +49,6 @@ public:
 
     using ::Ruler::SetNullOffset;
 protected:
-    VclPtr< ::sd::Window> pSdWin;
     DrawViewShell* pDrViewShell;
     RulerCtrlItem* pCtrlItem;
     bool bHorz;

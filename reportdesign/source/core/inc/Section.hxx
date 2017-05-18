@@ -53,8 +53,7 @@ namespace reportdesign
                     public SectionBase,
                     public SectionPropertySet
     {
-        ::comphelper::OInterfaceContainerHelper2                                                  m_aContainerListeners;
-        css::uno::Reference< css::uno::XComponentContext >                                  m_xContext;
+        ::comphelper::OInterfaceContainerHelper2                                            m_aContainerListeners;
         css::uno::Reference< css::drawing::XDrawPage >                                      m_xDrawPage;
         css::uno::Reference< css::drawing::XShapeGrouper >                                  m_xDrawPage_ShapeGrouper;
         css::uno::Reference< css::form::XFormsSupplier2 >                                   m_xDrawPage_FormSupplier;

@@ -43,9 +43,8 @@ using namespace ::com::sun::star;
 namespace cairocanvas
 {
     Canvas::Canvas( const uno::Sequence< uno::Any >&                aArguments,
-                    const uno::Reference< uno::XComponentContext >& rxContext ) :
-        maArguments(aArguments),
-        mxComponentContext( rxContext )
+                    const uno::Reference< uno::XComponentContext >& /*rxContext*/ ) :
+        maArguments(aArguments)
     {
     }
 
@@ -114,8 +113,6 @@ namespace cairocanvas
     void Canvas::disposeThis()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-
-        mxComponentContext.clear();
 
         // forward to parent
         CanvasBaseT::disposeThis();

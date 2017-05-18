@@ -27,7 +27,6 @@
 
 class SwCalendarWrapper : public CalendarWrapper
 {
-    OUString sUniqueId;
     LanguageType nLang;
 
 public:

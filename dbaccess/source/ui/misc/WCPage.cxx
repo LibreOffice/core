@@ -54,8 +54,6 @@ namespace CopyTableOperation = css::sdb::application::CopyTableOperation;
 OCopyTable::OCopyTable(vcl::Window * pParent)
     : OWizardPage(pParent, "CopyTablePage", "dbaccess/ui/copytablepage.ui")
     , m_nOldOperation(0)
-    , m_pPage2(nullptr)
-    , m_pPage3(nullptr)
     , m_bPKeyAllowed(false)
     , m_bUseHeaderAllowed(true)
 {
@@ -116,8 +114,6 @@ void OCopyTable::dispose()
     m_pCB_PrimaryColumn.clear();
     m_pFT_KeyName.clear();
     m_pEdKeyName.clear();
-    m_pPage2.clear();
-    m_pPage3.clear();
     OWizardPage::dispose();
 }
 

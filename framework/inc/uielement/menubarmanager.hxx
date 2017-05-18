@@ -198,7 +198,6 @@ class MenuBarManager:
         OUString                                                     m_aModuleIdentifier;
         VclPtr<Menu>                                                 m_pVCLMenu;
         css::uno::Reference< css::frame::XFrame >                    m_xFrame;
-        css::uno::Reference< css::container::XNameAccess >           m_xUICommandLabels;
         css::uno::Reference< css::frame::XUIControllerFactory >      m_xPopupMenuControllerFactory;
         ::std::vector< MenuItemHandler* >                            m_aMenuItemHandlerVector;
         css::uno::Reference< css::frame::XDispatchProvider >         m_xDispatchProvider;

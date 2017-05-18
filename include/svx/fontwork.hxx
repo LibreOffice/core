@@ -96,9 +96,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     VclPtr<ToolBox>         m_pTbxStyle;
     VclPtr<ToolBox>         m_pTbxAdjust;
 
-    VclPtr<FixedImage>      m_pFbDistance;
     VclPtr<MetricField>     m_pMtrFldDistance;
-    VclPtr<FixedImage>      m_pFbTextStart;
     VclPtr<MetricField>     m_pMtrFldTextStart;
 
     VclPtr<ToolBox>         m_pTbxShadow;

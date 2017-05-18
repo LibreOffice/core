@@ -84,10 +84,6 @@ class BackingComp : public  css::lang::XTypeProvider
                   , public  ::cppu::OWeakObject
 {
 private:
-    /** the global uno service manager.
-        Must be used to create own needed services. */
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-
     /** reference to the component window. */
     css::uno::Reference< css::awt::XWindow > m_xWindow;
 
@@ -96,7 +92,7 @@ private:
 
 public:
 
-    explicit BackingComp(const css::uno::Reference< css::uno::XComponentContext >& xContext);
+    explicit BackingComp();
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
@@ -146,8 +142,7 @@ public:
     virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) override;
 };
 
-BackingComp::BackingComp( const css::uno::Reference< css::uno::XComponentContext >& xContext )
-    : m_xContext(xContext)
+BackingComp::BackingComp()
 {
 }
 
@@ -597,7 +592,6 @@ void SAL_CALL BackingComp::dispose()
 
     // forget all other used references
     m_xFrame.clear();
-    m_xContext.clear();
 
     /* } SAFE */
 }
@@ -770,10 +764,10 @@ void SAL_CALL BackingComp::removeStatusListener( const css::uno::Reference< css:
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_sfx2_BackingComp_get_implementation(
-    css::uno::XComponentContext *context,
+    css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new BackingComp(context));
+    return cppu::acquire(new BackingComp);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -286,9 +286,7 @@ void SvxFontWorkDialog::dispose()
         pCtrlItem->dispose();
     m_pTbxStyle.clear();
     m_pTbxAdjust.clear();
-    m_pFbDistance.clear();
     m_pMtrFldDistance.clear();
-    m_pFbTextStart.clear();
     m_pMtrFldTextStart.clear();
     m_pTbxShadow.clear();
     m_pFbShadowX.clear();

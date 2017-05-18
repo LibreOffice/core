@@ -39,7 +39,6 @@ RscTypCont::RscTypCont( RscError * pErrHdl,
                           CommandFlags nFlagsP )
     : nSourceCharSet( RTL_TEXTENCODING_UTF8 )
     , nByteOrder( nOrder )
-    , nUniqueId(256)
     , nFilePos( 0 )
     , nPMId(RSC_VERSIONCONTROL + RESOURCE_TYPE(1)) // at least one more
     , aEnumLong( pHS->getID( "enum_long" ), RSC_NOTYPE )
@@ -175,17 +174,6 @@ RscTypCont::~RscTypCont()
 
     for (RscTop* pItem : aBaseLst)
         delete pItem;
-
-    for (RscSysEntry* pItem: aSysLst)
-        delete pItem;
-}
-
-void RscTypCont::ClearSysNames()
-{
-    for (RscSysEntry* pItem: aSysLst)
-        delete pItem;
-
-    aSysLst.clear();
 }
 
 class RscEnumerateObj

@@ -65,9 +65,8 @@ namespace vclcanvas
     }
 
     Canvas::Canvas( const uno::Sequence< uno::Any >&                aArguments,
-                    const uno::Reference< uno::XComponentContext >& rxContext ) :
-        maArguments(aArguments),
-        mxComponentContext( rxContext )
+                    const uno::Reference< uno::XComponentContext >& /*rxContext*/ ) :
+        maArguments(aArguments)
     {
     }
 
@@ -120,8 +119,6 @@ namespace vclcanvas
     void Canvas::disposeThis()
     {
         SolarMutexGuard aGuard;
-
-        mxComponentContext.clear();
 
         // forward to parent
         CanvasBaseT::disposeThis();

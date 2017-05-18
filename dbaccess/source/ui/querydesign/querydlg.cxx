@@ -49,7 +49,6 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
     : ModalDialog( pParent, "JoinDialog", "dbaccess/ui/joindialog.ui" )
     , m_pTableControl( nullptr )
     , m_pTableMap(_pTableMap)
-    , m_pTableView(pParent)
     , eJoinType(static_cast<OQueryTableConnectionData*>(_pData.get())->GetJoinType())
     , m_pOrigConnData(_pData)
     , m_xConnection(_xConnection)
@@ -150,7 +149,6 @@ void DlgQryJoin::dispose()
     m_pPB_OK.clear();
     m_pLB_JoinType.clear();
     m_pCBNatural.clear();
-    m_pTableView.clear();
     ModalDialog::dispose();
 }
 

@@ -130,7 +130,6 @@ const size_t AnimationWindow::EMPTY_FRAMELIST = std::numeric_limits<size_t>::max
 AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* pParent)
     : SfxDockingWindow(pInBindings, pCW, pParent,
         "DockingAnimation", "modules/simpress/ui/dockinganimation.ui")
-    , pWin(pParent)
     , m_nCurrentFrame(EMPTY_FRAMELIST)
     , bMovie(false)
     , bAllObjects(false)
@@ -240,7 +239,6 @@ void AnimationWindow::dispose()
     m_pFtAdjustment.clear();
     m_pLbAdjustment.clear();
     m_pBtnCreateGroup.clear();
-    pWin.clear();
     SfxDockingWindow::dispose();
 }
 

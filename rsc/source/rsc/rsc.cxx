@@ -610,7 +610,6 @@ ERRTYPE RscCompiler::Link()
             // write file
             pTC->ChangeLanguage( it->aLangName );
             pTC->SetSourceCharSet( RTL_TEXTENCODING_UTF8 );
-            pTC->ClearSysNames();
 
             WriteRcContext  aContext;
 

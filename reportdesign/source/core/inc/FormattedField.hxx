@@ -48,7 +48,6 @@ namespace reportdesign
         OReportControlModel                             m_aProps;
         css::uno::Reference< css::util::XNumberFormatsSupplier >
                                                         m_xFormatsSupplier;
-        css::uno::Reference< css::report::XFunction> m_xFunction;
         ::sal_Int32                                     m_nFormatKey;
 
     private:

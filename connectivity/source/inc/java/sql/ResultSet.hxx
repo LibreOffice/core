@@ -61,7 +61,6 @@ namespace connectivity
                                 public  ::comphelper::OPropertyArrayUsageHelper<java_sql_ResultSet>
     {
         css::uno::Reference< css::uno::XInterface>            m_xStatement;
-        css::uno::Reference< css::sdbc::XResultSetMetaData>   m_xMetaData;
         java::sql::ConnectionLog                              m_aLogger;
         java_sql_Connection*                                  m_pConnection;
 

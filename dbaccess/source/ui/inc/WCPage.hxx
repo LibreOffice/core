@@ -45,9 +45,6 @@ namespace dbaui
         VclPtr<Edit>              m_pEdKeyName;
         sal_Int16          m_nOldOperation;
 
-        VclPtr<OWizColumnSelect>  m_pPage2;
-        VclPtr<OWizNormalExtend>  m_pPage3;
-
         bool               m_bPKeyAllowed;
         bool               m_bUseHeaderAllowed;
 

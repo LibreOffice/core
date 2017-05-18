@@ -1,3 +1,9 @@
+basctl/source/basicide/basicbox.hxx:69
+    basctl::DocListenerBox m_aNotifier class basctl::DocumentEventNotifier
+basctl/source/inc/basidesh.hxx:85
+    basctl::Shell m_aNotifier class basctl::DocumentEventNotifier
+basctl/source/inc/bastype2.hxx:180
+    basctl::TreeListBox m_aNotifier class basctl::DocumentEventNotifier
 basctl/source/inc/dlged.hxx:121
     basctl::DlgEditor pObjFac std::unique_ptr<DlgEdFactory>
 basegfx/source/polygon/b2dtrapezoid.cxx:201
@@ -42,6 +48,8 @@ canvas/source/vcl/impltools.hxx:117
     vclcanvas::tools::LocalGuard aSolarGuard class SolarMutexGuard
 chart2/source/controller/inc/RangeSelectionListener.hxx:62
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
+chart2/source/inc/LifeTime.hxx:198
+    apphelper::LifeTimeGuard m_guard osl::ClearableMutexGuard
 chart2/source/view/inc/GL3DRenderer.hxx:54
     chart::opengl3D::MaterialParameters pad float
 chart2/source/view/inc/GL3DRenderer.hxx:55
@@ -76,10 +84,16 @@ compilerplugins/clang/test/salbool.cxx:15
     S b sal_Bool
 compilerplugins/clang/test/unnecessaryoverride-dtor.hxx:42
     IncludedDerived3 m rtl::Reference<Incomplete>
+configmgr/source/components.cxx:163
+    configmgr::Components::WriteThread reference_ rtl::Reference<WriteThread> *
 connectivity/source/drivers/mork/MDatabaseMetaData.hxx:29
     connectivity::mork::ODatabaseMetaData m_pMetaDataHelper std::unique_ptr<MDatabaseMetaDataHelper>
 connectivity/source/drivers/mozab/bootstrap/MNSProfileDiscover.hxx:55
     connectivity::mozab::ProfileStruct product enum com::sun::star::mozilla::MozillaProductType
+connectivity/source/inc/dbase/DTable.hxx:60
+    connectivity::dbase::ODbaseTable::DBFHeader db_aedat sal_uInt8 [3]
+connectivity/source/inc/dbase/DTable.hxx:70
+    connectivity::dbase::ODbaseTable::DBFColumn db_adr sal_uInt32
 connectivity/source/inc/OTypeInfo.hxx:31
     connectivity::OTypeInfo aTypeName class rtl::OUString
 connectivity/source/inc/OTypeInfo.hxx:32
@@ -110,6 +124,10 @@ connectivity/source/inc/OTypeInfo.hxx:49
     connectivity::OTypeInfo bCaseSensitive _Bool
 connectivity/source/inc/OTypeInfo.hxx:50
     connectivity::OTypeInfo bUnsigned _Bool
+cppcanvas/source/mtfrenderer/emfpbrush.hxx:102
+    cppcanvas::internal::EMFPBrush wrapMode sal_Int32
+cppcanvas/source/mtfrenderer/emfppen.hxx:41
+    cppcanvas::internal::EMFPPen pen_transformation struct cppcanvas::internal::XForm
 cppu/source/threadpool/threadpool.cxx:377
     _uno_ThreadPool dummy sal_Int32
 cppu/source/typelib/typelib.cxx:61
@@ -160,8 +178,14 @@ cppu/source/uno/check.cxx:134
     (anonymous namespace)::Char3 c3 char
 cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
+cui/source/inc/cuihyperdlg.hxx:43
+    SvxHlinkCtrl aRdOnlyForwarder class SfxStatusForwarder
+cui/source/inc/cuihyperdlg.hxx:63
+    SvxHpLinkDlg maCtrl class SvxHlinkCtrl
 cui/source/inc/cuitabarea.hxx:251
     SvxAreaTabPage maFixed_ChangeType enum ChangeType
+dbaccess/source/core/dataaccess/documentdefinition.cxx:298
+    dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
 dbaccess/source/sdbtools/connection/connectiondependent.hxx:116
     sdbtools::ConnectionDependentComponent::EntryGuard m_aMutexGuard ::osl::MutexGuard
 dbaccess/source/sdbtools/connection/connectiontools.hxx:48
@@ -170,6 +194,10 @@ dbaccess/source/sdbtools/connection/objectnames.hxx:44
     sdbtools::ObjectNames m_aModuleClient class sdbtools::SdbtClient
 dbaccess/source/sdbtools/connection/tablename.cxx:56
     sdbtools::TableName_Impl m_aModuleClient class sdbtools::SdbtClient
+dbaccess/source/ui/misc/dbaundomanager.cxx:137
+    dbaui::UndoManagerMethodGuard m_aGuard ::osl::ResettableMutexGuard
+desktop/source/deployment/gui/dp_gui_updateinstalldialog.cxx:121
+    dp_gui::UpdateCommandEnv m_installThread ::rtl::Reference<UpdateInstallDialog::Thread>
 embeddedobj/source/inc/oleembobj.hxx:127
     OleEmbeddedObject m_nTargetState sal_Int32
 embeddedobj/source/inc/oleembobj.hxx:139
@@ -200,10 +228,66 @@ filter/source/graphicfilter/icgm/chart.hxx:46
     DataNode nBoxX2 sal_Int16
 filter/source/graphicfilter/icgm/chart.hxx:47
     DataNode nBoxY2 sal_Int16
+filter/source/graphicfilter/ipsd/ipsd.cxx:44
+    (anonymous) nPad1 sal_uInt32
+filter/source/graphicfilter/ipsd/ipsd.cxx:45
+    (anonymous) nPad2 sal_uInt16
+filter/source/graphicfilter/itga/itga.cxx:33
+    TGAFileHeader nColorMapFirstEntryIndex sal_uInt16
+filter/source/graphicfilter/itga/itga.cxx:36
+    TGAFileHeader nColorMapXOrigin sal_uInt16
+filter/source/graphicfilter/itga/itga.cxx:37
+    TGAFileHeader nColorMapYOrigin sal_uInt16
+filter/source/graphicfilter/itga/itga.cxx:49
+    TGAFileFooter nDeveloperDirectoryOffset sal_uInt32
+filter/source/graphicfilter/itga/itga.cxx:51
+    TGAFileFooter nPadByte sal_uInt8
+filter/source/graphicfilter/itga/itga.cxx:52
+    TGAFileFooter nStringTerminator sal_uInt8
+filter/source/graphicfilter/itga/itga.cxx:60
+    TGAExtension sAuthorName char [41]
+filter/source/graphicfilter/itga/itga.cxx:61
+    TGAExtension sAuthorComment char [324]
+filter/source/graphicfilter/itga/itga.cxx:62
+    TGAExtension sDateTimeStamp char [12]
+filter/source/graphicfilter/itga/itga.cxx:64
+    TGAExtension sSoftwareID char [41]
+filter/source/graphicfilter/itga/itga.cxx:65
+    TGAExtension nSoftwareVersionNumber sal_uInt16
+filter/source/graphicfilter/itga/itga.cxx:66
+    TGAExtension nSoftwareVersionLetter sal_uInt8
+filter/source/graphicfilter/itga/itga.cxx:67
+    TGAExtension nKeyColor sal_uInt32
+filter/source/graphicfilter/itga/itga.cxx:68
+    TGAExtension nPixelAspectRatioNumerator sal_uInt16
+filter/source/graphicfilter/itga/itga.cxx:69
+    TGAExtension nPixelAspectRatioDeNumerator sal_uInt16
+filter/source/graphicfilter/itga/itga.cxx:70
+    TGAExtension nGammaValueNumerator sal_uInt16
+filter/source/graphicfilter/itga/itga.cxx:71
+    TGAExtension nGammaValueDeNumerator sal_uInt16
+filter/source/graphicfilter/itga/itga.cxx:72
+    TGAExtension nColorCorrectionOffset sal_uInt32
+filter/source/graphicfilter/itga/itga.cxx:73
+    TGAExtension nPostageStampOffset sal_uInt32
+filter/source/graphicfilter/itga/itga.cxx:74
+    TGAExtension nScanLineOffset sal_uInt32
+filter/source/graphicfilter/itga/itga.cxx:75
+    TGAExtension nAttributesType sal_uInt8
+filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:71
+    XMLFilterListBox m_aEnsureResMgr class EnsureResMgr
+filter/source/xsltdialog/xmlfiltersettingsdialog.hxx:130
+    XMLFilterSettingsDialog maEnsureResMgr class EnsureResMgr
 formula/source/core/api/FormulaCompiler.cxx:49
     formula::(anonymous namespace)::FormulaCompilerRecursionGuard rRecursion short &
 framework/inc/dispatch/oxt_handler.hxx:95
     framework::Oxt_Handler m_xSelfHold css::uno::Reference<css::uno::XInterface>
+framework/inc/services/layoutmanager.hxx:270
+    framework::LayoutManager m_bGlobalSettings _Bool
+framework/source/layoutmanager/toolbarlayoutmanager.hxx:287
+    framework::ToolbarLayoutManager m_pGlobalSettings class framework::GlobalSettings *
+framework/source/layoutmanager/toolbarlayoutmanager.hxx:292
+    framework::ToolbarLayoutManager m_bGlobalSettings _Bool
 hwpfilter/source/drawdef.h:69
     BAREHWPDOProperty line_pstyle int
 hwpfilter/source/drawdef.h:70
@@ -254,6 +338,18 @@ hwpfilter/source/drawdef.h:113
     RotationProperty rot_originy int
 hwpfilter/source/drawdef.h:114
     RotationProperty parall ZZParall
+hwpfilter/source/drawdef.h:158
+    HWPDOProperty offset1 ZZPoint
+hwpfilter/source/drawdef.h:159
+    HWPDOProperty offset2 ZZPoint
+hwpfilter/source/drawdef.h:209
+    HWPDrawingObject offset ZZPoint
+hwpfilter/source/drawdef.h:218
+    HWPDrawingObject vrect ZZRect
+hwpfilter/source/hbox.h:131
+    DateFormat format hchar [40]
+hwpfilter/source/hbox.h:168
+    Tab leader unsigned short
 hwpfilter/source/hbox.h:197
     CellLine key unsigned char
 hwpfilter/source/hbox.h:198
@@ -268,56 +364,320 @@ hwpfilter/source/hbox.h:202
     CellLine color short
 hwpfilter/source/hbox.h:203
     CellLine shade unsigned char
+hwpfilter/source/hbox.h:219
+    Cell p short
+hwpfilter/source/hbox.h:228
+    Cell diagonal unsigned char
+hwpfilter/source/hbox.h:295
+    FBox option short
+hwpfilter/source/hbox.h:296
+    FBox ctrl_ch hchar
+hwpfilter/source/hbox.h:303
+    FBox cap_margin short
+hwpfilter/source/hbox.h:305
+    FBox smart_linesp unsigned char
+hwpfilter/source/hbox.h:334
+    TxtBox dummy1 short
 hwpfilter/source/hbox.h:335
     TxtBox cap_len short
 hwpfilter/source/hbox.h:336
     TxtBox next_box short
-hwpfilter/source/hbox.h:536
-    PicDefFile path char [256]
+hwpfilter/source/hbox.h:337
+    TxtBox dummy2 short
+hwpfilter/source/hbox.h:338
+    TxtBox reserved1 unsigned char
+hwpfilter/source/hbox.h:343
+    TxtBox num short
+hwpfilter/source/hbox.h:345
+    TxtBox dummy3 short
+hwpfilter/source/hbox.h:346
+    TxtBox baseline short
+hwpfilter/source/hbox.h:360
+    TxtBox protect short
 hwpfilter/source/hbox.h:537
-    PicDefFile img void *
+    PicDefFile path char [256]
 hwpfilter/source/hbox.h:538
+    PicDefFile img void *
+hwpfilter/source/hbox.h:539
     PicDefFile skipfind _Bool
-hwpfilter/source/hbox.h:554
-    PicDefOle embname char [16]
 hwpfilter/source/hbox.h:555
+    PicDefOle embname char [16]
+hwpfilter/source/hbox.h:556
     PicDefOle hwpole void *
-hwpfilter/source/hbox.h:579
+hwpfilter/source/hbox.h:566
+    PicDefDraw vrect ZZRect
+hwpfilter/source/hbox.h:567
+    PicDefDraw mbrcnt int
+hwpfilter/source/hbox.h:580
     (anonymous) picfile struct PicDefFile
-hwpfilter/source/hbox.h:581
+hwpfilter/source/hbox.h:582
     (anonymous) picole struct PicDefOle
+hwpfilter/source/hbox.h:598
+    Picture reserved hchar [2]
+hwpfilter/source/hbox.h:605
+    Picture dummy1 short
+hwpfilter/source/hbox.h:606
+    Picture dummy2 short
+hwpfilter/source/hbox.h:607
+    Picture reserved1 uchar
+hwpfilter/source/hbox.h:615
+    Picture num short
+hwpfilter/source/hbox.h:650
+    Line reserved hchar [2]
+hwpfilter/source/hbox.h:653
+    Line reserved2 char [8]
+hwpfilter/source/hbox.h:669
+    Hidden reserved hchar [2]
+hwpfilter/source/hbox.h:672
+    Hidden info unsigned char [8]
+hwpfilter/source/hbox.h:686
+    HeaderFooter reserved hchar [2]
+hwpfilter/source/hbox.h:689
+    HeaderFooter info unsigned char [8]
+hwpfilter/source/hbox.h:716
+    Footnote reserved hchar [2]
+hwpfilter/source/hbox.h:719
+    Footnote info unsigned char [8]
+hwpfilter/source/hbox.h:776
+    NewNum type unsigned short
+hwpfilter/source/hbox.h:777
+    NewNum number unsigned short
+hwpfilter/source/hbox.h:816
+    PageNumCtrl kind unsigned short
+hwpfilter/source/hbox.h:820
+    PageNumCtrl what unsigned short
+hwpfilter/source/hbox.h:851
+    Compose compose hchar [3]
+hwpfilter/source/hbox.h:868
+    Hyphen width hchar
+hwpfilter/source/hbox.h:884
+    TocMark kind hchar
+hwpfilter/source/hbox.h:902
+    IndexMark pgno unsigned short
+hwpfilter/source/hinfo.h:72
+    PaperBackInfo luminance int
+hwpfilter/source/hinfo.h:73
+    PaperBackInfo contrast int
+hwpfilter/source/hinfo.h:74
+    PaperBackInfo effect char
+hwpfilter/source/hinfo.h:108
+    DocChainInfo chain_page_no unsigned char
+hwpfilter/source/hinfo.h:109
+    DocChainInfo chain_footnote_no unsigned char
+hwpfilter/source/hinfo.h:154
+    HWPInfo cur_col short
+hwpfilter/source/hinfo.h:158
+    HWPInfo cur_row short
+hwpfilter/source/hinfo.h:168
+    HWPInfo readonly short
+hwpfilter/source/hinfo.h:173
+    HWPInfo chain_info struct DocChainInfo
+hwpfilter/source/hinfo.h:182
+    HWPInfo countfn short
+hwpfilter/source/hinfo.h:185
+    HWPInfo fnchar unsigned char
+hwpfilter/source/hinfo.h:194
+    HWPInfo empty_line_hide unsigned char
+hwpfilter/source/hinfo.h:195
+    HWPInfo table_move unsigned char
+hwpfilter/source/hinfo.h:197
+    HWPInfo reserved3 unsigned char
+hwpfilter/source/hinfo.h:233
+    CharShape reserved unsigned char [4]
+hwpfilter/source/hinfo.h:277
+    ParaShape condense unsigned char
+hwpfilter/source/hinfo.h:283
+    ParaShape outline_continue unsigned char
+hwpfilter/source/hpara.h:61
+    LineInfo pos unsigned short
 hwpfilter/source/hpara.h:70
     LineInfo softbreak unsigned short
+hwpfilter/source/hpara.h:105
+    HWPPara pstyno unsigned char
+hwpfilter/source/htags.h:31
+    EmPicture type char [16]
+hwpfilter/source/htags.h:46
+    HyperText macro char [325]
+hwpfilter/source/htags.h:48
+    HyperText reserve char [3]
+idl/inc/database.hxx:103
+    SvIdlDataBase aIFaceName class rtl::OString
+include/comphelper/componentbase.hxx:130
+    comphelper::ComponentMethodGuard m_aMutexGuard ::osl::ResettableMutexGuard
 include/comphelper/MasterPropertySet.hxx:38
     comphelper::SlaveData mxSlave css::uno::Reference<css::beans::XPropertySet>
+include/connectivity/OSubComponent.hxx:54
+    connectivity::OSubComponent m_xParent css::uno::Reference<css::uno::XInterface>
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:61
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
 include/editeng/outliner.hxx:405
     DrawPortionInfo mnPara sal_Int32
 include/editeng/unotext.hxx:606
     SvxUnoTextRangeEnumeration mxParentText css::uno::Reference<css::text::XText>
-include/filter/msfilter/svdfppt.hxx:865
+include/filter/msfilter/mstoolbar.hxx:121
+    TBCExtraInfo wstrHelpFile class WString
+include/filter/msfilter/mstoolbar.hxx:122
+    TBCExtraInfo idHelpContext sal_Int32
+include/filter/msfilter/mstoolbar.hxx:123
+    TBCExtraInfo wstrTag class WString
+include/filter/msfilter/mstoolbar.hxx:125
+    TBCExtraInfo wstrParam class WString
+include/filter/msfilter/mstoolbar.hxx:126
+    TBCExtraInfo tbcu sal_Int8
+include/filter/msfilter/mstoolbar.hxx:127
+    TBCExtraInfo tbmg sal_Int8
+include/filter/msfilter/mstoolbar.hxx:144
+    TBCGeneralInfo descriptionText class WString
+include/filter/msfilter/mstoolbar.hxx:161
+    TBCBitMap cbDIB sal_Int32
+include/filter/msfilter/mstoolbar.hxx:191
+    TBCCDData cwstrMRU sal_Int16
+include/filter/msfilter/mstoolbar.hxx:192
+    TBCCDData iSel sal_Int16
+include/filter/msfilter/mstoolbar.hxx:193
+    TBCCDData cLines sal_Int16
+include/filter/msfilter/mstoolbar.hxx:194
+    TBCCDData dxWidth sal_Int16
+include/filter/msfilter/mstoolbar.hxx:195
+    TBCCDData wstrEdit class WString
+include/filter/msfilter/mstoolbar.hxx:260
+    TBCHeader bSignature sal_Int8
+include/filter/msfilter/mstoolbar.hxx:261
+    TBCHeader bVersion sal_Int8
+include/filter/msfilter/mstoolbar.hxx:266
+    TBCHeader bPriority sal_uInt8
+include/filter/msfilter/mstoolbar.hxx:304
+    TB bSignature sal_uInt8
+include/filter/msfilter/mstoolbar.hxx:305
+    TB bVersion sal_uInt8
+include/filter/msfilter/mstoolbar.hxx:307
+    TB ltbid sal_Int32
+include/filter/msfilter/mstoolbar.hxx:309
+    TB cRowsDefault sal_uInt16
+include/filter/msfilter/mstoolbar.hxx:328
+    SRECT left sal_Int16
+include/filter/msfilter/mstoolbar.hxx:329
+    SRECT top sal_Int16
+include/filter/msfilter/mstoolbar.hxx:330
+    SRECT right sal_Int16
+include/filter/msfilter/mstoolbar.hxx:331
+    SRECT bottom sal_Int16
+include/filter/msfilter/mstoolbar.hxx:341
+    TBVisualData tbds sal_Int8
+include/filter/msfilter/mstoolbar.hxx:342
+    TBVisualData tbv sal_Int8
+include/filter/msfilter/mstoolbar.hxx:343
+    TBVisualData tbdsDock sal_Int8
+include/filter/msfilter/mstoolbar.hxx:344
+    TBVisualData iRow sal_Int8
+include/filter/msfilter/mstoolbar.hxx:346
+    TBVisualData rcDock class SRECT
+include/filter/msfilter/mstoolbar.hxx:347
+    TBVisualData rcFloat class SRECT
+include/filter/msfilter/svdfppt.hxx:79
+    PptCurrentUserAtom nMagic sal_uInt32
+include/filter/msfilter/svdfppt.hxx:81
+    PptCurrentUserAtom nDocFileVersion sal_uInt16
+include/filter/msfilter/svdfppt.hxx:82
+    PptCurrentUserAtom nMajorVersion sal_uInt8
+include/filter/msfilter/svdfppt.hxx:83
+    PptCurrentUserAtom nMinorVersion sal_uInt8
+include/filter/msfilter/svdfppt.hxx:109
+    SdHyperlinkEntry nPrivate1 sal_Int32
+include/filter/msfilter/svdfppt.hxx:110
+    SdHyperlinkEntry nPrivate2 sal_Int32
+include/filter/msfilter/svdfppt.hxx:111
+    SdHyperlinkEntry nPrivate3 sal_Int32
+include/filter/msfilter/svdfppt.hxx:112
+    SdHyperlinkEntry nInfo sal_Int32
+include/filter/msfilter/svdfppt.hxx:125
+    PptInteractiveInfoAtom nOleVerb sal_uInt8
+include/filter/msfilter/svdfppt.hxx:127
+    PptInteractiveInfoAtom nFlags sal_uInt8
+include/filter/msfilter/svdfppt.hxx:131
+    PptInteractiveInfoAtom nUnknown1 sal_uInt8
+include/filter/msfilter/svdfppt.hxx:132
+    PptInteractiveInfoAtom nUnknown2 sal_uInt8
+include/filter/msfilter/svdfppt.hxx:133
+    PptInteractiveInfoAtom nUnknown3 sal_uInt8
+include/filter/msfilter/svdfppt.hxx:191
+    PptDocumentAtom n1stPageNumber sal_uInt16
+include/filter/msfilter/svdfppt.hxx:275
+    PptFontEntityAtom lfClipPrecision sal_uInt8
+include/filter/msfilter/svdfppt.hxx:276
+    PptFontEntityAtom lfQuality sal_uInt8
+include/filter/msfilter/svdfppt.hxx:290
+    PptUserEditAtom nLastSlideID sal_Int32
+include/filter/msfilter/svdfppt.hxx:291
+    PptUserEditAtom nVersion sal_uInt32
+include/filter/msfilter/svdfppt.hxx:334
+    PptSlidePersistEntry aNotesAtom struct PptNotesAtom
+include/filter/msfilter/svdfppt.hxx:678
+    PPTExtParaLevel mpfPP10Ext sal_uInt32
+include/filter/msfilter/svdfppt.hxx:680
+    PPTExtParaLevel mcfPP10Ext sal_uInt32
+include/filter/msfilter/svdfppt.hxx:837
+    PPTStyleSheet maTxSI struct PPTTextSpecInfo
+include/filter/msfilter/svdfppt.hxx:863
     ImplPPTParaPropSet nDontKnow1 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:866
+include/filter/msfilter/svdfppt.hxx:864
     ImplPPTParaPropSet nDontKnow2 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:867
+include/filter/msfilter/svdfppt.hxx:865
     ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
+include/filter/msfilter/svdfppt.hxx:900
+    ImplPPTCharPropSet mnANSITypeface sal_uInt16
+include/filter/msfilter/svdfppt.hxx:1011
+    StyleTextProp9 mpfPP10Ext sal_uInt32
+include/filter/msfilter/svdfppt.hxx:1013
+    StyleTextProp9 mncfPP10Ext sal_uInt32
+include/filter/msfilter/svdfppt.hxx:1015
+    StyleTextProp9 mnPP10Ext sal_uInt32
+include/filter/msfilter/svdfppt.hxx:1016
+    StyleTextProp9 mfBidi sal_uInt16
 include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
 include/LibreOfficeKit/LibreOfficeKitGtk.h:38
     _LOKDocViewClass parent_class GtkDrawingAreaClass
-include/sfx2/msg.hxx:116
+include/oox/ole/axbinaryreader.hxx:238
+    oox::ole::AxBinaryPropertyReader maDummyPicData oox::StreamDataSequence
+include/oox/ole/axbinaryreader.hxx:239
+    oox::ole::AxBinaryPropertyReader maDummyString class rtl::OUString
+include/oox/ole/axbinaryreader.hxx:240
+    oox::ole::AxBinaryPropertyReader maDummyArrayString oox::ole::AxArrayString
+include/oox/ole/axcontrol.hxx:603
+    oox::ole::AxTabStripModel mnTabData sal_uInt32
+include/oox/ole/axcontrol.hxx:604
+    oox::ole::AxTabStripModel mnVariousPropertyBits sal_uInt32
+include/oox/ole/axcontrol.hxx:606
+    oox::ole::AxTabStripModel maTabNames std::vector< ::rtl::OUString>
+include/oox/ole/axcontrol.hxx:826
+    oox::ole::AxContainerModelBase mnBorderColor sal_uInt32
+include/oox/ole/axcontrol.hxx:829
+    oox::ole::AxContainerModelBase mnCycleType sal_Int32
+include/oox/ole/axcontrol.hxx:831
+    oox::ole::AxContainerModelBase mnPicAlign sal_Int32
+include/oox/ole/axcontrol.hxx:832
+    oox::ole::AxContainerModelBase mnPicSizeMode sal_Int32
+include/oox/ole/axcontrol.hxx:833
+    oox::ole::AxContainerModelBase mbPicTiling _Bool
+include/oox/ole/vbacontrol.hxx:100
+    oox::ole::VbaSiteModel mnHelpContextId sal_Int32
+include/oox/ole/vbacontrol.hxx:105
+    oox::ole::VbaSiteModel mnGroupId sal_uInt16
+include/sfx2/msg.hxx:117
     SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
-include/sfx2/msg.hxx:118
+include/sfx2/msg.hxx:119
     SfxType0 nAttribs sal_uInt16
-include/sfx2/sidebar/ControllerItem.hxx:91
-    sfx2::sidebar::ControllerItem mxFrame css::uno::Reference<css::frame::XFrame>
 include/svtools/genericunodialog.hxx:170
     svt::UnoDialogEntryGuard m_aGuard ::osl::MutexGuard
 include/svtools/unoevent.hxx:159
     SvEventDescriptor xParentRef css::uno::Reference<css::uno::XInterface>
 include/svx/AccessibleShapeInfo.hxx:66
     accessibility::AccessibleShapeInfo mpChildrenManager class accessibility::IAccessibleParent *
+include/svx/bmpmask.hxx:129
+    SvxBmpMask aSelItem class SvxBmpMaskSelectItem
+include/svx/imapdlg.hxx:118
+    SvxIMapDlg aIMapItem class SvxIMapDlgItem
 include/vcl/uitest/uiobject.hxx:241
     TabPageUIObject mxTabPage VclPtr<class TabPage>
 include/vcl/vclptr.hxx:58
@@ -344,6 +704,350 @@ lingucomponent/source/languageguessing/simpleguesser.cxx:96
     textcat_t output char [1024]
 lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
+lotuswordpro/source/filter/lwpcelllayout.hxx:124
+    LwpCellLayout cLayDiagonalLine class LwpObjectID
+lotuswordpro/source/filter/lwpcharacterstyle.hxx:97
+    LwpTextStyle m_aDescription class LwpAtomHolder
+lotuswordpro/source/filter/lwpcharacterstyle.hxx:98
+    LwpTextStyle m_aLangOverride class LwpTextLanguageOverride
+lotuswordpro/source/filter/lwpcharacterstyle.hxx:99
+    LwpTextStyle m_aTxtAttrOverride class LwpTextAttributeOverride
+lotuswordpro/source/filter/lwpcharacterstyle.hxx:101
+    LwpTextStyle m_aCharacterBorderOverride class LwpCharacterBorderOverride
+lotuswordpro/source/filter/lwpcharacterstyle.hxx:102
+    LwpTextStyle m_aAmikakeOverride class LwpAmikakeOverride
+lotuswordpro/source/filter/lwpcharacterstyle.hxx:104
+    LwpTextStyle m_CharacterBorder class LwpObjectID
+lotuswordpro/source/filter/lwpcharacterstyle.hxx:105
+    LwpTextStyle m_Amikake class LwpObjectID
+lotuswordpro/source/filter/lwpcharacterstyle.hxx:106
+    LwpTextStyle m_FaceStyle class LwpObjectID
+lotuswordpro/source/filter/lwpcharacterstyle.hxx:108
+    LwpTextStyle m_SizeStyle class LwpObjectID
+lotuswordpro/source/filter/lwpcharacterstyle.hxx:109
+    LwpTextStyle m_AttributeStyle class LwpObjectID
+lotuswordpro/source/filter/lwpcharacterstyle.hxx:110
+    LwpTextStyle m_FontStyle class LwpObjectID
+lotuswordpro/source/filter/lwpcharacterstyle.hxx:111
+    LwpTextStyle m_CharacterBorderStyle class LwpObjectID
+lotuswordpro/source/filter/lwpcharacterstyle.hxx:112
+    LwpTextStyle m_AmikakeStyle class LwpObjectID
+lotuswordpro/source/filter/lwpcontent.hxx:82
+    LwpContent m_PreviousEnumerated class LwpObjectID
+lotuswordpro/source/filter/lwpdivinfo.hxx:95
+    LwpDivInfo m_LayoutID class LwpObjectID
+lotuswordpro/source/filter/lwpdivinfo.hxx:97
+    LwpDivInfo m_ExternalName class LwpAtomHolder
+lotuswordpro/source/filter/lwpdivinfo.hxx:98
+    LwpDivInfo m_ExternalType class LwpAtomHolder
+lotuswordpro/source/filter/lwpdivinfo.hxx:104
+    LwpDivInfo m_TabColor class LwpColor
+lotuswordpro/source/filter/lwpdivopts.hxx:112
+    LwpDivisionOptions m_HyphOpts class LwpHyphenOptions
+lotuswordpro/source/filter/lwpdivopts.hxx:114
+    LwpDivisionOptions m_Lang class LwpTextLanguage
+lotuswordpro/source/filter/lwpdoc.hxx:107
+    LwpDocument m_DivOpts class LwpObjectID
+lotuswordpro/source/filter/lwpdoc.hxx:111
+    LwpDocument m_Epoch class LwpAtomHolder
+lotuswordpro/source/filter/lwpdoc.hxx:115
+    LwpDocument m_STXInfo class LwpObjectID
+lotuswordpro/source/filter/lwpdoc.hxx:230
+    LwpDocSock m_Doc class LwpObjectID
+lotuswordpro/source/filter/lwpdocdata.hxx:68
+    LwpDocOptions encrypt1password class LwpAtomHolder
+lotuswordpro/source/filter/lwpdocdata.hxx:69
+    LwpDocOptions encrypt2password class LwpAtomHolder
+lotuswordpro/source/filter/lwpdocdata.hxx:70
+    LwpDocOptions characterSet class LwpAtomHolder
+lotuswordpro/source/filter/lwpdocdata.hxx:71
+    LwpDocOptions grammerSet class LwpAtomHolder
+lotuswordpro/source/filter/lwpdocdata.hxx:84
+    LwpDocInfo cpVerDocInfo class LwpObjectID
+lotuswordpro/source/filter/lwpdocdata.hxx:90
+    LwpDocControl cGreeting class LwpAtomHolder
+lotuswordpro/source/filter/lwpdocdata.hxx:99
+    LwpDocControl cDocControlOnlyEditor class LwpAtomHolder
+lotuswordpro/source/filter/lwpdocdata.hxx:111
+    LwpFontDescriptionOverrideBase cColor class LwpColor
+lotuswordpro/source/filter/lwpdocdata.hxx:112
+    LwpFontDescriptionOverrideBase cBackgroundColor class LwpColor
+lotuswordpro/source/filter/lwpdocdata.hxx:128
+    LwpFontDescriptionOverride cFaceName class LwpAtomHolder
+lotuswordpro/source/filter/lwpdocdata.hxx:129
+    LwpFontDescriptionOverride cAltFaceName class LwpAtomHolder
+lotuswordpro/source/filter/lwpdocdata.hxx:146
+    LwpEditorAttr cInitials class LwpAtomHolder
+lotuswordpro/source/filter/lwpdrawobj.hxx:294
+    LwpDrawTextBox m_aVector struct SdwPoint
+lotuswordpro/source/filter/lwpfilehdr.hxx:68
+    LwpFileHeader m_nAppRevision sal_uInt16
+lotuswordpro/source/filter/lwpfilehdr.hxx:69
+    LwpFileHeader m_nAppReleaseNo sal_uInt16
+lotuswordpro/source/filter/lwpfilehdr.hxx:70
+    LwpFileHeader m_nRequiredAppRevision sal_uInt16
+lotuswordpro/source/filter/lwpfilehdr.hxx:71
+    LwpFileHeader m_nRequiredFileRevision sal_uInt16
+lotuswordpro/source/filter/lwpfootnote.hxx:248
+    LwpFootnoteOptions m_EndnoteDivisionNumbering class LwpFootnoteNumberOptions
+lotuswordpro/source/filter/lwpfootnote.hxx:249
+    LwpFootnoteOptions m_EndnoteDivisionGroupNumbering class LwpFootnoteNumberOptions
+lotuswordpro/source/filter/lwpfootnote.hxx:252
+    LwpFootnoteOptions m_FootnoteContinuedSeparator class LwpFootnoteSeparatorOptions
+lotuswordpro/source/filter/lwpfoundry.hxx:93
+    LwpObjectManager m_Division class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:128
+    LwpContentManager m_EnumTail class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:129
+    LwpContentManager m_OleObjCount class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:132
+    LwpContentManager m_GrapTail class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:133
+    LwpContentManager m_OleHead class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:134
+    LwpContentManager m_OleTail class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:149
+    LwpPieceManager m_GeometryPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:150
+    LwpPieceManager m_ScalePieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:151
+    LwpPieceManager m_MarginsPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:152
+    LwpPieceManager m_ColumnsPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:153
+    LwpPieceManager m_BorderStuffPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:154
+    LwpPieceManager m_GutterStuffPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:155
+    LwpPieceManager m_BackgroundStuffPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:156
+    LwpPieceManager m_JoinStuffPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:157
+    LwpPieceManager m_ShadowPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:158
+    LwpPieceManager m_NumericsPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:159
+    LwpPieceManager m_RelativityPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:160
+    LwpPieceManager m_AlignmentPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:161
+    LwpPieceManager m_IndentPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:162
+    LwpPieceManager m_ParaBorderPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:163
+    LwpPieceManager m_SpacingPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:164
+    LwpPieceManager m_BreaksPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:165
+    LwpPieceManager m_NumberingPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:166
+    LwpPieceManager m_TabPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:167
+    LwpPieceManager m_CharacterBorderPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:168
+    LwpPieceManager m_AmikakePieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:170
+    LwpPieceManager m_ParaBackgroundPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:171
+    LwpPieceManager m_ExternalBorderStuffPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:172
+    LwpPieceManager m_ExternalJoinStuffPieceList class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:207
+    LwpFoundry m_ObjMgr class LwpObjectManager
+lotuswordpro/source/filter/lwpfoundry.hxx:208
+    LwpFoundry m_MarkerHead class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:209
+    LwpFoundry m_FootnoteMgr class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:217
+    LwpFoundry m_DefaultClickStyle class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:220
+    LwpFoundry m_TableStyle class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:222
+    LwpFoundry m_DftFrameStyle class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:223
+    LwpFoundry m_DftPageStyle class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:224
+    LwpFoundry m_DftTableStyle class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:225
+    LwpFoundry m_DftCellStyle class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:226
+    LwpFoundry m_DftColumnStyle class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:227
+    LwpFoundry m_DftLeftColumnStyle class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:228
+    LwpFoundry m_DftRighColumnStyle class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:231
+    LwpFoundry m_DdeLinkHead class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:232
+    LwpFoundry m_DirtBagHead class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:233
+    LwpFoundry m_NamedOutlineSeqHead class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:234
+    LwpFoundry m_EnumLayoutHead class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:235
+    LwpFoundry m_EnumLayoutTail class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:237
+    LwpFoundry m_NamedObjects class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:240
+    LwpFoundry m_SmartTextMgr class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:246
+    LwpFoundry m_DftDropCapStyle class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:247
+    LwpFoundry m_DftHeaderStyle class LwpObjectID
+lotuswordpro/source/filter/lwpfoundry.hxx:249
+    LwpFoundry m_DftFooterStyle class LwpObjectID
+lotuswordpro/source/filter/lwpfrib.hxx:75
+    ModifierInfo Language class LwpTextLanguageOverride
+lotuswordpro/source/filter/lwpfribtext.hxx:169
+    LwpFribDocVar m_aName class LwpAtomHolder
+lotuswordpro/source/filter/lwplayout.hxx:235
+    LwpVirtualLayout m_NextEnumerated class LwpObjectID
+lotuswordpro/source/filter/lwplayout.hxx:236
+    LwpVirtualLayout m_PreviousEnumerated class LwpObjectID
+lotuswordpro/source/filter/lwplayout.hxx:327
+    LwpLayoutMisc m_aContentStyle class LwpAtomHolder
+lotuswordpro/source/filter/lwplayout.hxx:404
+    LwpMiddleLayout m_aStyleStuff class LwpLayoutStyle
+lotuswordpro/source/filter/lwplayout.hxx:405
+    LwpMiddleLayout m_aMiscStuff class LwpLayoutMisc
+lotuswordpro/source/filter/lwplayout.hxx:411
+    LwpMiddleLayout m_LayExtBorderStuff class LwpObjectID
+lotuswordpro/source/filter/lwplayout.hxx:434
+    LwpLayout m_LayJoinStuff class LwpObjectID
+lotuswordpro/source/filter/lwplayout.hxx:436
+    LwpLayout m_LayExtJoinStuff class LwpObjectID
+lotuswordpro/source/filter/lwplayout.hxx:501
+    LwpPlacableLayout m_Script class LwpAtomHolder
+lotuswordpro/source/filter/lwplaypiece.hxx:99
+    LwpLayoutGeometry m_ContainerRotor class LwpRotor
+lotuswordpro/source/filter/lwplaypiece.hxx:146
+    LwpLayoutMargins m_ExtraMargins class LwpMargins
+lotuswordpro/source/filter/lwplaypiece.hxx:186
+    LwpExternalBorder m_LeftName class LwpAtomHolder
+lotuswordpro/source/filter/lwplaypiece.hxx:187
+    LwpExternalBorder m_TopName class LwpAtomHolder
+lotuswordpro/source/filter/lwplaypiece.hxx:188
+    LwpExternalBorder m_RightName class LwpAtomHolder
+lotuswordpro/source/filter/lwplaypiece.hxx:189
+    LwpExternalBorder m_BottomName class LwpAtomHolder
+lotuswordpro/source/filter/lwplaypiece.hxx:201
+    LwpLayoutExternalBorder m_ExtranalBorder class LwpExternalBorder
+lotuswordpro/source/filter/lwplaypiece.hxx:293
+    LwpJoinStuff m_Color class LwpColor
+lotuswordpro/source/filter/lwplaypiece.hxx:304
+    LwpLayoutJoins m_JoinStuff class LwpJoinStuff
+lotuswordpro/source/filter/lwpmarker.hxx:85
+    LwpMarker m_objLayout class LwpObjectID
+lotuswordpro/source/filter/lwpmarker.hxx:86
+    LwpMarker m_objMarkerList class LwpObjectID
+lotuswordpro/source/filter/lwpmarker.hxx:87
+    LwpMarker m_objContent class LwpObjectID
+lotuswordpro/source/filter/lwpmarker.hxx:97
+    LwpFribRange m_StartPara class LwpObjectID
+lotuswordpro/source/filter/lwpmarker.hxx:98
+    LwpFribRange m_EndPara class LwpObjectID
+lotuswordpro/source/filter/lwpmarker.hxx:107
+    LwpStoryMarker m_Range class LwpFribRange
+lotuswordpro/source/filter/lwpmarker.hxx:164
+    LwpCHBlkMarker m_Mirror class LwpAtomHolder
+lotuswordpro/source/filter/lwpmarker.hxx:235
+    LwpFieldMark m_objFormulaStory class LwpObjectID
+lotuswordpro/source/filter/lwpmarker.hxx:236
+    LwpFieldMark m_objResultContent class LwpObjectID
+lotuswordpro/source/filter/lwpmarker.hxx:260
+    LwpRubyMarker m_objLayout class LwpObjectID
+lotuswordpro/source/filter/lwpoleobject.hxx:105
+    LwpGraphicOleObject m_pPrevObj class LwpObjectID
+lotuswordpro/source/filter/lwpoleobject.hxx:106
+    LwpGraphicOleObject m_pNextObj class LwpObjectID
+lotuswordpro/source/filter/lwppagehint.hxx:75
+    LwpSLVListHead m_ListHead class LwpObjectID
+lotuswordpro/source/filter/lwppagehint.hxx:84
+    LwpContentHintHead m_ListHead class LwpSLVListHead
+lotuswordpro/source/filter/lwppagehint.hxx:93
+    LwpFootnoteSeenHead m_ListHead class LwpSLVListHead
+lotuswordpro/source/filter/lwppagehint.hxx:109
+    LwpPageHint m_ContentHints class LwpContentHintHead
+lotuswordpro/source/filter/lwppagehint.hxx:115
+    LwpPageHint m_BeforeText class LwpAtomHolder
+lotuswordpro/source/filter/lwppagehint.hxx:116
+    LwpPageHint m_AfterText class LwpAtomHolder
+lotuswordpro/source/filter/lwppagehint.hxx:119
+    LwpPageHint m_CurrentSection class LwpObjectID
+lotuswordpro/source/filter/lwppagehint.hxx:121
+    LwpPageHint m_FootnoteSeen class LwpFootnoteSeenHead
+lotuswordpro/source/filter/lwppagelayout.hxx:95
+    LwpPageLayout m_PrinterBinName class LwpAtomHolder
+lotuswordpro/source/filter/lwppagelayout.hxx:98
+    LwpPageLayout m_PaperName class LwpAtomHolder
+lotuswordpro/source/filter/lwppara.hxx:95
+    LwpNotifyListPersistent m_Head class LwpObjectID
+lotuswordpro/source/filter/lwppara.hxx:104
+    LwpForked3NotifyList m_PersistentList class LwpNotifyListPersistent
+lotuswordpro/source/filter/lwppara.hxx:197
+    LwpPara m_Hint class LwpPoint
+lotuswordpro/source/filter/lwpparastyle.hxx:116
+    LwpParaStyle m_KinsokuOptsOverride class LwpKinsokuOptsOverride
+lotuswordpro/source/filter/lwprowlayout.hxx:125
+    LwpRowHeadingLayout cRowLayout class LwpObjectID
+lotuswordpro/source/filter/lwpsection.hxx:102
+    LwpSection m_Color class LwpColor
+lotuswordpro/source/filter/lwpsection.hxx:130
+    LwpIndexSection m_TextMarker class LwpAtomHolder
+lotuswordpro/source/filter/lwpsection.hxx:131
+    LwpIndexSection m_ParentName class LwpAtomHolder
+lotuswordpro/source/filter/lwpsection.hxx:132
+    LwpIndexSection m_DivisionName class LwpAtomHolder
+lotuswordpro/source/filter/lwpsection.hxx:133
+    LwpIndexSection m_SectionName class LwpAtomHolder
+lotuswordpro/source/filter/lwpstory.hxx:78
+    LwpStory m_FirstParaStyle class LwpObjectID
+lotuswordpro/source/filter/lwptable.hxx:103
+    LwpForkedNotifyList m_PersistentList class LwpNotifyListPersistent
+lotuswordpro/source/filter/lwptable.hxx:129
+    LwpTable m_CPNotifyList class LwpForkedNotifyList
+lotuswordpro/source/filter/lwptable.hxx:170
+    LwpParallelColumns cDefaultLeftColumnStyle class LwpObjectID
+lotuswordpro/source/filter/lwptable.hxx:171
+    LwpParallelColumns cDefaultRightColumnStyle class LwpObjectID
+lotuswordpro/source/filter/lwptblcell.hxx:113
+    LwpRowList cParent class LwpObjectID
+lotuswordpro/source/filter/lwptblcell.hxx:188
+    LwpFolder cParent class LwpObjectID
+lotuswordpro/source/filter/lwptblcell.hxx:189
+    LwpFolder cqTable class LwpObjectID
+lotuswordpro/source/filter/lwptblcell.hxx:206
+    LwpDependent cFormulaInfo class LwpObjectID
+lotuswordpro/source/filter/lwptoc.hxx:121
+    LwpTocSuperLayout m_TextMarker class LwpAtomHolder
+lotuswordpro/source/filter/lwptoc.hxx:122
+    LwpTocSuperLayout m_ParentName class LwpAtomHolder
+lotuswordpro/source/filter/lwptoc.hxx:123
+    LwpTocSuperLayout m_DivisionName class LwpAtomHolder
+lotuswordpro/source/filter/lwptoc.hxx:124
+    LwpTocSuperLayout m_SectionName class LwpAtomHolder
+lotuswordpro/source/filter/lwpuidoc.hxx:94
+    LwpAutoRunMacroOptions m_OpenName class LwpAtomHolder
+lotuswordpro/source/filter/lwpuidoc.hxx:95
+    LwpAutoRunMacroOptions m_CloseName class LwpAtomHolder
+lotuswordpro/source/filter/lwpuidoc.hxx:96
+    LwpAutoRunMacroOptions m_NewName class LwpAtomHolder
+lotuswordpro/source/filter/lwpuidoc.hxx:113
+    LwpMergeOptions m_RecordFile class LwpAtomHolder
+lotuswordpro/source/filter/lwpuidoc.hxx:114
+    LwpMergeOptions m_DescriptionFile class LwpAtomHolder
+lotuswordpro/source/filter/lwpuidoc.hxx:115
+    LwpMergeOptions m_Filter class LwpAtomHolder
+lotuswordpro/source/filter/lwpuidoc.hxx:131
+    LwpUIDocument m_ARMacroOpts class LwpAutoRunMacroOptions
+lotuswordpro/source/filter/lwpuidoc.hxx:132
+    LwpUIDocument m_MergedOpts class LwpMergeOptions
+lotuswordpro/source/filter/lwpuidoc.hxx:133
+    LwpUIDocument m_SheetFullPath class LwpAtomHolder
+lotuswordpro/source/filter/lwpuidoc.hxx:135
+    LwpUIDocument m_InitialSaveAsType class LwpAtomHolder
+mysqlc/source/mysqlc_connection.hxx:74
+    connectivity::mysqlc::ConnectionSettings quoteIdentifier rtl::OUString
 oox/source/drawingml/chart/objectformatter.cxx:705
     oox::drawingml::chart::ObjectFormatterData maModelObjHelper class oox::ModelObjectHelper
 opencl/source/openclwrapper.cxx:302
@@ -354,19 +1058,25 @@ pyuno/source/module/pyuno_impl.hxx:226
     pyuno::(anonymous) ob_base PyObject
 pyuno/source/module/pyuno_impl.hxx:326
     pyuno::stRuntimeImpl ob_base PyObject
+registry/source/reflread.cxx:578
+    FieldList m_pCP class ConstantPool *
+registry/source/reflread.cxx:764
+    ReferenceList m_pCP class ConstantPool *
+registry/source/reflread.cxx:868
+    MethodList m_pCP class ConstantPool *
 reportdesign/source/ui/inc/ReportWindow.hxx:54
     rptui::OReportWindow m_pObjFac ::std::unique_ptr<DlgEdFactory>
-sal/osl/unx/thread.cxx:97
+sal/osl/unx/thread.cxx:93
     osl_thread_priority_st m_Highest int
-sal/osl/unx/thread.cxx:98
+sal/osl/unx/thread.cxx:94
     osl_thread_priority_st m_Above_Normal int
-sal/osl/unx/thread.cxx:99
+sal/osl/unx/thread.cxx:95
     osl_thread_priority_st m_Normal int
-sal/osl/unx/thread.cxx:100
+sal/osl/unx/thread.cxx:96
     osl_thread_priority_st m_Below_Normal int
-sal/osl/unx/thread.cxx:101
+sal/osl/unx/thread.cxx:97
     osl_thread_priority_st m_Lowest int
-sal/osl/unx/thread.cxx:119
+sal/osl/unx/thread.cxx:115
     osl_thread_global_st m_priority struct osl_thread_priority_st
 sc/inc/compiler.hxx:258
     ScCompiler::AddInMap pODFF const char *
@@ -374,17 +1084,39 @@ sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:261
     ScCompiler::AddInMap pUpper const char *
+sc/inc/formulalogger.hxx:42
+    sc::FormulaLogger maMessages std::vector<OUString>
 sc/qa/unit/ucalc_column.cxx:103
     aInputs aName const char *
-sc/source/core/data/document.cxx:1248
+sc/source/core/data/document.cxx:1256
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1249
+sc/source/core/data/document.cxx:1257
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk class ScBulkBroadcast
 sc/source/core/data/formulacell.cxx:1778
     StackCleaner pInt class ScInterpreter *
+sc/source/filter/excel/xltoolbar.hxx:23
+    TBCCmd cmdID sal_uInt16
+sc/source/filter/excel/xltoolbar.hxx:54
+    ScCTB ectbid sal_uInt32
+sc/source/filter/excel/xltoolbar.hxx:72
+    CTBS bSignature sal_uInt8
+sc/source/filter/excel/xltoolbar.hxx:73
+    CTBS bVersion sal_uInt8
+sc/source/filter/excel/xltoolbar.hxx:74
+    CTBS reserved1 sal_uInt16
+sc/source/filter/excel/xltoolbar.hxx:75
+    CTBS reserved2 sal_uInt16
+sc/source/filter/excel/xltoolbar.hxx:76
+    CTBS reserved3 sal_uInt16
+sc/source/filter/excel/xltoolbar.hxx:79
+    CTBS ictbView sal_uInt16
+sc/source/filter/inc/root.hxx:96
+    LOTUS_ROOT aActRange class ScRange
 sc/source/filter/inc/sheetdatacontext.hxx:61
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
-sc/source/ui/inc/docsh.hxx:441
+sc/source/filter/inc/XclImpChangeTrack.hxx:138
+    XclImpChTrFmlConverter rChangeTrack class XclImpChangeTrack &
+sc/source/ui/inc/docsh.hxx:438
     ScDocShellModificator mpProtector std::unique_ptr<ScRefreshTimerProtector>
 scaddins/source/analysis/analysishelper.hxx:205
     sca::analysis::FuncDataBase nUINameID sal_uInt16
@@ -422,26 +1154,42 @@ scaddins/source/pricing/pricing.hxx:73
     sca::pricing::ScaFuncDataBase bDouble _Bool
 scaddins/source/pricing/pricing.hxx:74
     sca::pricing::ScaFuncDataBase bWithOpt _Bool
+sd/source/filter/ppt/ppt97animations.hxx:41
+    Ppt97AnimationInfoAtom nSlideCount sal_uInt16
+sd/source/filter/ppt/ppt97animations.hxx:47
+    Ppt97AnimationInfoAtom nOLEVerb sal_uInt8
+sd/source/filter/ppt/ppt97animations.hxx:50
+    Ppt97AnimationInfoAtom nUnknown1 sal_uInt8
+sd/source/filter/ppt/ppt97animations.hxx:51
+    Ppt97AnimationInfoAtom nUnknown2 sal_uInt8
 sd/source/ui/remotecontrol/ZeroconfService.hxx:36
     sd::ZeroconfService port uint
+sd/source/ui/sidebar/MasterPageContainerProviders.hxx:136
+    sd::sidebar::TemplatePreviewProvider msURL class rtl::OUString
 sd/source/ui/slidesorter/inc/controller/SlsVisibleAreaManager.hxx:64
     sd::slidesorter::controller::VisibleAreaManager::TemporaryDisabler mrVisibleAreaManager class sd::slidesorter::controller::VisibleAreaManager &
-sd/source/ui/table/TableDesignPane.hxx:110
+sd/source/ui/table/TableDesignPane.hxx:113
     sd::TableDesignPane aImpl class sd::TableDesignWidget
 sd/source/ui/view/DocumentRenderer.cxx:1335
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1235
-    sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
 sd/source/ui/view/viewshel.cxx:1236
-    sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
+    sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
 sd/source/ui/view/viewshel.cxx:1237
-    sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
+    sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
 sd/source/ui/view/viewshel.cxx:1238
+    sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
+sd/source/ui/view/viewshel.cxx:1239
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
 sd/source/ui/view/ViewShellBase.cxx:201
     sd::ViewShellBase::Implementation mpPageCacheManager std::shared_ptr<slidesorter::cache::PageCacheManager>
-sfx2/source/doc/doctempl.cxx:118
+sfx2/source/doc/doctempl.cxx:119
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
+sfx2/source/doc/docundomanager.cxx:198
+    sfx2::UndoManagerGuard m_guard class SfxModelGuard
+sfx2/source/inc/docundomanager.hxx:92
+    SfxModelGuard m_aGuard class SolarMutexResettableGuard
+sfx2/source/view/classificationcontroller.cxx:59
+    sfx2::ClassificationCategoriesController m_aPropertyListener class sfx2::ClassificationPropertyListener
 slideshow/source/engine/activities/activityparameters.hxx:107
     slideshow::internal::ActivityParameters mrEventQueue class slideshow::internal::EventQueue &
 slideshow/source/engine/activities/activityparameters.hxx:119
@@ -460,17 +1208,45 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:297
     Vertex texcoord glm::vec2
 slideshow/source/inc/transitioninfo.hxx:119
     slideshow::internal::TransitionInfo mbScaleIsotrophically _Bool
+starmath/inc/view.hxx:163
+    SmCmdBoxWindow aController class SmEditController
 starmath/inc/view.hxx:224
     SmViewShell maGraphicController class SmGraphicController
 svtools/source/svhtml/htmlkywd.cxx:558
-    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at svtools/source/svhtml/htmlkywd.cxx:558:5)
+    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo2/svtools/source/svhtml/htmlkywd.cxx:558:5)
 svtools/source/svhtml/htmlkywd.cxx:560
     HTML_OptionEntry::(anonymous) sToken const sal_Char *
 svtools/source/svhtml/htmlkywd.cxx:561
     HTML_OptionEntry::(anonymous) pUToken const class rtl::OUString *
 svtools/source/uno/treecontrolpeer.cxx:69
     LockGuard mrLock sal_Int32 &
-sw/qa/extras/uiwriter/uiwriter.cxx:3503
+svx/source/dialog/contimp.hxx:59
+    SvxSuperContourDlg aContourItem class SvxContourDlgItem
+svx/source/sidebar/line/LinePropertyPanel.hxx:97
+    svx::sidebar::LinePropertyPanel maStyleControl sfx2::sidebar::ControllerItem
+svx/source/sidebar/line/LinePropertyPanel.hxx:98
+    svx::sidebar::LinePropertyPanel maDashControl sfx2::sidebar::ControllerItem
+svx/source/sidebar/line/LinePropertyPanel.hxx:100
+    svx::sidebar::LinePropertyPanel maStartControl sfx2::sidebar::ControllerItem
+svx/source/sidebar/line/LinePropertyPanel.hxx:101
+    svx::sidebar::LinePropertyPanel maEndControl sfx2::sidebar::ControllerItem
+svx/source/sidebar/line/LinePropertyPanel.hxx:102
+    svx::sidebar::LinePropertyPanel maLineEndListControl sfx2::sidebar::ControllerItem
+svx/source/sidebar/line/LinePropertyPanel.hxx:103
+    svx::sidebar::LinePropertyPanel maLineStyleListControl sfx2::sidebar::ControllerItem
+svx/source/sidebar/line/LinePropertyPanel.hxx:104
+    svx::sidebar::LinePropertyPanel maTransControl sfx2::sidebar::ControllerItem
+svx/source/sidebar/line/LinePropertyPanel.hxx:105
+    svx::sidebar::LinePropertyPanel maEdgeStyle sfx2::sidebar::ControllerItem
+svx/source/sidebar/line/LinePropertyPanel.hxx:106
+    svx::sidebar::LinePropertyPanel maCapStyle sfx2::sidebar::ControllerItem
+svx/source/table/tablertfimporter.cxx:53
+    sdr::table::RTFCellDefault maItemSet class SfxItemSet
+sw/inc/doc.hxx:328
+    SwDoc mxForbiddenCharsTable rtl::Reference<SvxForbiddenCharactersTable>
+sw/inc/shellio.hxx:147
+    SwReader aFileName class rtl::OUString
+sw/qa/extras/uiwriter/uiwriter.cxx:3759
     PortionItem msText class rtl::OUString
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
@@ -500,6 +1276,8 @@ ucb/source/ucp/gio/gio_mount.hxx:51
     OOoMountOperationClass _gtk_reserved3 void (*)(void)
 ucb/source/ucp/gio/gio_mount.hxx:52
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
+unoidl/source/legacyprovider.cxx:87
+    unoidl::detail::(anonymous namespace)::Cursor manager_ rtl::Reference<Manager>
 unoidl/source/unoidlprovider.cxx:672
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference1_ rtl::Reference<UnoidlProvider>
 unoidl/source/unoidlprovider.cxx:673
@@ -516,9 +1294,13 @@ vcl/inc/salmenu.hxx:43
     SalMenuButtonItem maImage class Image
 vcl/inc/salmenu.hxx:44
     SalMenuButtonItem maToolTipText class rtl::OUString
-vcl/source/gdi/jobset.cxx:35
+vcl/source/filter/wmf/enhwmf.cxx:325
+    (anonymous namespace)::BLENDFUNCTION aBlendOperation unsigned char
+vcl/source/filter/wmf/enhwmf.cxx:326
+    (anonymous namespace)::BLENDFUNCTION aBlendFlags unsigned char
+vcl/source/gdi/jobset.cxx:34
     ImplOldJobSetupData cDeviceName char [32]
-vcl/source/gdi/jobset.cxx:36
+vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cPortName char [32]
 vcl/source/gdi/pdfwriter_impl.cxx:5448
     (anonymous namespace)::(anonymous) extnID SECItem
@@ -534,11 +1316,11 @@ vcl/source/uitest/uno/uitest_uno.cxx:35
     UITestUnoObj mpUITest std::unique_ptr<UITest>
 vcl/unx/generic/dtrans/X11_clipboard.hxx:45
     x11::X11Clipboard m_xSelectionManager css::uno::Reference<css::lang::XInitialization>
-vcl/unx/generic/dtrans/X11_dndcontext.hxx:41
+vcl/unx/generic/dtrans/X11_dndcontext.hxx:40
     x11::DropTargetDropContext m_xManagerRef css::uno::Reference<XInterface>
-vcl/unx/generic/dtrans/X11_dndcontext.hxx:58
+vcl/unx/generic/dtrans/X11_dndcontext.hxx:56
     x11::DropTargetDragContext m_xManagerRef css::uno::Reference<XInterface>
-vcl/unx/generic/dtrans/X11_dndcontext.hxx:74
+vcl/unx/generic/dtrans/X11_dndcontext.hxx:71
     x11::DragSourceContext m_xManagerRef css::uno::Reference<XInterface>
 vcl/unx/generic/gdi/x11cairotextrender.cxx:34
     _XRegion size long
@@ -556,3 +1338,7 @@ vcl/unx/gtk/glomenu.cxx:20
     GLOMenu parent_instance GMenuModel
 writerfilter/source/rtftok/rtfdocumentimpl.hxx:220
     writerfilter::rtftok::RTFParserState m_pDocumentImpl class writerfilter::rtftok::RTFDocumentImpl *
+xmloff/source/chart/SchXMLPlotAreaContext.hxx:170
+    SchXMLCoordinateRegionContext m_rPositioning class SchXMLPositionAttributesHelper &
+xmlsecurity/source/helper/ooxmlsecexporter.cxx:32
+    OOXMLSecExporter::Impl m_xComponentContext const uno::Reference<uno::XComponentContext> &

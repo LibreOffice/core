@@ -5594,7 +5594,6 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      nGroupShapeFlags(0),                   // ensure initialization here, as some corrupted
                                             // files may yield to this being uninitialized
      maBaseURL( rBaseURL ),
-     mnCurMaxShapeId(0),
      mnIdClusters(0),
      rStCtrl(  rStCtrl_  ),
      pStData(  pStData_  ),
@@ -5638,7 +5637,6 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
      nBLIPCount(  USHRT_MAX ),              // initialize with error, since we first have to check
      nGroupShapeFlags(0),
      maBaseURL( rBaseURL ),
-     mnCurMaxShapeId(0),
      mnIdClusters(0),
      rStCtrl(  rStCtrl_  ),
      pStData( nullptr ),
@@ -5716,7 +5714,8 @@ void SvxMSDffManager::GetFidclData( sal_uInt32 nOffsDggL )
         if (bOk && SeekToRec(rStCtrl, DFF_msofbtDgg, aRecHd.GetRecEndFilePos(), &aDggAtomHd))
         {
             aDggAtomHd.SeekToContent( rStCtrl );
-            rStCtrl.ReadUInt32( mnCurMaxShapeId )
+            sal_uInt32 nCurMaxShapeId;
+            rStCtrl.ReadUInt32( nCurMaxShapeId )
                    .ReadUInt32( mnIdClusters )
                    .ReadUInt32( nDummy )
                    .ReadUInt32( nDummy ); // nDrawingsSaved

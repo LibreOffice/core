@@ -70,7 +70,6 @@ void RulerCtrlItem::StateChanged( sal_uInt16 nSId, SfxItemState, const SfxPoolIt
 
 Ruler::Ruler( DrawViewShell& rViewSh, vcl::Window* pParent, ::sd::Window* pWin, SvxRulerSupportFlags nRulerFlags,  SfxBindings& rBindings, WinBits nWinStyle)
     : SvxRuler(pParent, pWin, nRulerFlags, rBindings, nWinStyle)
-    , pSdWin(pWin)
     , pDrViewShell(&rViewSh)
 {
     rBindings.EnterRegistrations();
@@ -100,7 +99,6 @@ void Ruler::dispose()
     rBindings.EnterRegistrations();
     DELETEZ( pCtrlItem );
     rBindings.LeaveRegistrations();
-    pSdWin.clear();
     SvxRuler::dispose();
 }
 
