@@ -109,6 +109,7 @@ ImpEditView::~ImpEditView()
     delete pCursor;
     delete pBackgroundColor;
     delete pPointer;
+    pDragAndDropInfo->pBackground.disposeAndClear();
     delete pDragAndDropInfo;
 }
 
@@ -1765,6 +1766,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
 
     SolarMutexGuard aVclGuard;
 
+    delete(pDragAndDropInfo);
     pDragAndDropInfo = nullptr;
 
     Point aMousePosPixel( rDGE.DragOriginX, rDGE.DragOriginY );
