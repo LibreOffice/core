@@ -331,7 +331,7 @@ static void lcl_RedlineNotification(RedlineNotification nType, size_t nPos, SwRa
     }
 }
 
-bool SwRedlineTable::Insert( SwRangeRedline* p )
+bool SwRedlineTable::Insert(SwRangeRedlinePtr& p)
 {
     if( p->HasValidRange() )
     {
@@ -344,7 +344,7 @@ bool SwRedlineTable::Insert( SwRangeRedline* p )
     return InsertWithValidRanges( p );
 }
 
-bool SwRedlineTable::Insert( SwRangeRedline* p, sal_uInt16& rP )
+bool SwRedlineTable::Insert(SwRangeRedlinePtr& p, sal_uInt16& rP)
 {
     if( p->HasValidRange() )
     {
@@ -356,7 +356,7 @@ bool SwRedlineTable::Insert( SwRangeRedline* p, sal_uInt16& rP )
     return InsertWithValidRanges( p, &rP );
 }
 
-bool SwRedlineTable::InsertWithValidRanges( SwRangeRedline* p, sal_uInt16* pInsPos )
+bool SwRedlineTable::InsertWithValidRanges(SwRangeRedlinePtr& p, sal_uInt16* pInsPos)
 {
     // Create valid "sub-ranges" from the Selection
     bool bAnyIns = false;
