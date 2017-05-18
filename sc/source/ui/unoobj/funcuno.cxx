@@ -461,8 +461,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
 
     /// TODO: check
     ScAddress aAdr;
-    ScCompiler aCompiler(pDoc,aAdr);
-    aCompiler.SetGrammar(pDoc->GetGrammar());
+    ScCompiler aCompiler(pDoc, aAdr, pDoc->GetGrammar());
 
     //  find function
 

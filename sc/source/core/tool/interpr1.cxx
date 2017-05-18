@@ -2361,8 +2361,7 @@ void ScInterpreter::ScCellExternal()
         // ODF 1.2 says we need to always display address using the ODF A1 grammar.
         ScTokenArray aArray;
         aArray.AddExternalSingleReference(nFileId, svl::SharedString( aTabName), aRef); // string not interned
-        ScCompiler aComp(pDok, aPos, aArray);
-        aComp.SetGrammar(formula::FormulaGrammar::GRAM_ODFF_A1);
+        ScCompiler aComp(pDok, aPos, aArray, formula::FormulaGrammar::GRAM_ODFF_A1);
         OUString aStr;
         aComp.CreateStringFromTokenArray(aStr);
         PushString(aStr);
@@ -7303,8 +7302,7 @@ void ScInterpreter::ScIndirect()
             {
                 do
                 {
-                    ScCompiler aComp( pDok, aPos);
-                    aComp.SetGrammar( pDok->GetGrammar());
+                    ScCompiler aComp( pDok, aPos, pDok->GetGrammar());
                     aComp.SetRefConvention( eConv);     // must be after grammar
                     std::unique_ptr<ScTokenArray> pArr( aComp.CompileString( sRefStr));
 

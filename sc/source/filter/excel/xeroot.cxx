@@ -251,8 +251,7 @@ void XclExpRoot::InitializeGlobals()
                 SAL_WARN( "sc", "XclExpRoot::InitializeGlobals - no OpCodeMap");
                 break;
             }
-            ScCompiler aCompiler( &rDoc, ScAddress());
-            aCompiler.SetGrammar( rDoc.GetGrammar());
+            ScCompiler aCompiler( &rDoc, ScAddress(), rDoc.GetGrammar());
             mrExpData.mxOpCodeMap = formula::FormulaCompiler::CreateOpCodeMap( aOpCodeMapping, true);
         } while(false);
     }

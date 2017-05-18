@@ -28,8 +28,7 @@ ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const Sc
     , mbMatrixFormula(bMatrixFormula)
 {
     // compile already here
-    ScCompiler aComp(mpDoc, maAddr);
-    aComp.SetGrammar(eGram);
+    ScCompiler aComp(mpDoc, maAddr, eGram);
     mpCode.reset(aComp.CompileString(rFormula));
     if(mpCode->GetCodeError() == FormulaError::NONE && mpCode->GetLen())
         aComp.CompileTokenArray();
@@ -56,8 +55,7 @@ void ScSimpleFormulaCalculator::Calculate()
     formula::StackVar aIntType = aInt.Interpret();
     if ( aIntType == formula::svMatrixCell )
     {
-        ScCompiler aComp(mpDoc, maAddr);
-        aComp.SetGrammar(maGram);
+        ScCompiler aComp(mpDoc, maAddr, maGram);
         OUStringBuffer aStr;
         aComp.CreateStringFromToken(aStr, aInt.GetResultToken().get());
 

@@ -314,8 +314,7 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit&, rEdit, void)
         return;
     }
 
-    ScCompiler aComp( mpDoc, maPos );
-    aComp.SetGrammar( mpDoc->GetGrammar() );
+    ScCompiler aComp( mpDoc, maPos, mpDoc->GetGrammar() );
     std::unique_ptr<ScTokenArray> ta(aComp.CompileString(aFormula));
 
     // Error, warn the user

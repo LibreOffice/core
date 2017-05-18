@@ -120,8 +120,7 @@ void ScNameDefDlg::CancelPushed()
 
 bool ScNameDefDlg::IsFormulaValid()
 {
-    ScCompiler aComp( mpDoc, maCursorPos);
-    aComp.SetGrammar( mpDoc->GetGrammar() );
+    ScCompiler aComp( mpDoc, maCursorPos, mpDoc->GetGrammar());
     ScTokenArray* pCode = aComp.CompileString(m_pEdRange->GetText());
     if (pCode->GetCodeError() != FormulaError::NONE)
     {

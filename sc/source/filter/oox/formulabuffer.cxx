@@ -120,9 +120,8 @@ void applySharedFormulas(
             sal_Int32 nId = rEntry.mnSharedId;
             const OUString& rTokenStr = rEntry.maTokenStr;
 
-            ScCompiler aComp(&rDoc.getDoc(), aPos);
+            ScCompiler aComp(&rDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_OOXML);
             aComp.SetNumberFormatter(&rFormatter);
-            aComp.SetGrammar(formula::FormulaGrammar::GRAM_OOXML);
             ScTokenArray* pArray = aComp.CompileString(rTokenStr);
             if (pArray)
             {
@@ -206,9 +205,8 @@ void applyCellFormulas(
             continue;
         }
 
-        ScCompiler aCompiler(&rDoc.getDoc(), aPos);
+        ScCompiler aCompiler(&rDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_OOXML);
         aCompiler.SetNumberFormatter(&rFormatter);
-        aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_OOXML);
         aCompiler.SetExternalLinks(rExternalLinks);
         ScTokenArray* pCode = aCompiler.CompileString(rItem.maTokenStr);
         if (!pCode)
@@ -229,9 +227,8 @@ void applyArrayFormulas(
     {
         const ScAddress& aPos = rAddressItem.maTokenAndAddress.maAddress;
 
-        ScCompiler aComp(&rDoc.getDoc(), aPos);
+        ScCompiler aComp(&rDoc.getDoc(), aPos, formula::FormulaGrammar::GRAM_OOXML);
         aComp.SetNumberFormatter(&rFormatter);
-        aComp.SetGrammar(formula::FormulaGrammar::GRAM_OOXML);
         std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(rAddressItem.maTokenAndAddress.maTokenStr));
         if (pArray)
             rDoc.setMatrixCells(rAddressItem.maRange, *pArray, formula::FormulaGrammar::GRAM_OOXML);

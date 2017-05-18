@@ -328,8 +328,7 @@ void ScFormulaReferenceHelper::Init()
         SCTAB nTab = pViewData->GetTabNo();
         ScAddress aCursorPos( nCol, nRow, nTab );
 
-        pRefComp.reset( new ScCompiler( pDoc, aCursorPos) );
-        pRefComp->SetGrammar( pDoc->GetGrammar() );
+        pRefComp.reset( new ScCompiler( pDoc, aCursorPos, pDoc->GetGrammar()) );
         pRefComp->EnableJumpCommandReorder(false);
         pRefComp->EnableStopOnError(false);
 

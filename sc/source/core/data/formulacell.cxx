@@ -556,8 +556,7 @@ void ScFormulaCellGroup::compileCode(
 
     if (mpCode->GetLen() && mpCode->GetCodeError() == FormulaError::NONE && !mpCode->GetCodeLen())
     {
-        ScCompiler aComp(&rDoc, rPos, *mpCode);
-        aComp.SetGrammar(eGram);
+        ScCompiler aComp(&rDoc, rPos, *mpCode, eGram);
         mbSubTotal = aComp.CompileTokenArray();
         mnFormatType = aComp.GetNumFormatType();
     }
@@ -699,8 +698,7 @@ ScFormulaCell::ScFormulaCell(
     // Generate RPN token array.
     if (pCode->GetLen() && pCode->GetCodeError() == FormulaError::NONE && !pCode->GetCodeLen())
     {
-        ScCompiler aComp( pDocument, aPos, *pCode);
-        aComp.SetGrammar(eTempGrammar);
+        ScCompiler aComp( pDocument, aPos, *pCode, eTempGrammar);
         bSubTotal = aComp.CompileTokenArray();
         nFormatType = aComp.GetNumFormatType();
     }
@@ -749,8 +747,7 @@ ScFormulaCell::ScFormulaCell(
     // RPN array generation
     if( pCode->GetLen() && pCode->GetCodeError() == FormulaError::NONE && !pCode->GetCodeLen() )
     {
-        ScCompiler aComp( pDocument, aPos, *pCode);
-        aComp.SetGrammar(eTempGrammar);
+        ScCompiler aComp( pDocument, aPos, *pCode, eTempGrammar);
         bSubTotal = aComp.CompileTokenArray();
         nFormatType = aComp.GetNumFormatType();
     }
@@ -1001,8 +998,7 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
             }
             else
             {
-                ScCompiler aComp( pDocument, aPos, *pCode);
-                aComp.SetGrammar(eGrammar);
+                ScCompiler aComp( pDocument, aPos, *pCode, eGrammar);
                 aComp.CreateStringFromTokenArray( rBuffer );
             }
         }
@@ -1013,8 +1009,7 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
     }
     else
     {
-        ScCompiler aComp( pDocument, aPos, *pCode);
-        aComp.SetGrammar(eGrammar);
+        ScCompiler aComp( pDocument, aPos, *pCode, eGrammar);
         aComp.CreateStringFromTokenArray( rBuffer );
     }
 
@@ -1132,8 +1127,7 @@ void ScFormulaCell::Compile( const OUString& rFormula, bool bNoListening,
     if ( pCode )
         pCode->Clear();
     ScTokenArray* pCodeOld = pCode;
-    ScCompiler aComp( pDocument, aPos);
-    aComp.SetGrammar(eGrammar);
+    ScCompiler aComp( pDocument, aPos, eGrammar);
     pCode = aComp.CompileString( rFormula );
     delete pCodeOld;
     if( pCode->GetCodeError() == FormulaError::NONE )
@@ -1209,8 +1203,7 @@ void ScFormulaCell::CompileTokenArray( bool bNoListening )
 
         if( !bNoListening && pCode->GetCodeLen() )
             EndListeningTo( pDocument );
-        ScCompiler aComp(pDocument, aPos, *pCode);
-        aComp.SetGrammar(pDocument->GetGrammar());
+        ScCompiler aComp(pDocument, aPos, *pCode, pDocument->GetGrammar());
         bSubTotal = aComp.CompileTokenArray();
         if( pCode->GetCodeError() == FormulaError::NONE )
         {
@@ -4279,8 +4272,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
             }
         }
 
-        ScCompiler aComp(pDocument, aPos, aCode);
-        aComp.SetGrammar(pDocument->GetGrammar());
+        ScCompiler aComp(pDocument, aPos, aCode, pDocument->GetGrammar());
         aComp.CompileTokenArray(); // Create RPN token array.
         ScInterpreter aInterpreter(this, pDocument, aPos, aCode);
         aInterpreter.Interpret();

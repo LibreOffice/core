@@ -897,8 +897,7 @@ sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > c
     // Compile the range representation string into token array.  Note that the
     // source range text depends on the current grammar.
     OUString aRangeRepr = xDataSeq->getSourceRangeRepresentation();
-    ScCompiler aComp( &GetDocRef(), ScAddress() );
-    aComp.SetGrammar( GetDocRef().GetGrammar() );
+    ScCompiler aComp( &GetDocRef(), ScAddress(), GetDocRef().GetGrammar() );
     std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(aRangeRepr));
     if( !pArray )
         return nDefCount;
