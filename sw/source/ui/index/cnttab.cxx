@@ -222,7 +222,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
     , m_rWrtShell(rShell)
     , m_pExampleFrame(nullptr)
     , m_pParamTOXBase(pCurTOX)
-    , m_sUserDefinedIndex(SW_RESSTR(STR_USER_DEFINED_INDEX))
+    , m_sUserDefinedIndex(SwResId(STR_USER_DEFINED_INDEX))
     , m_nInitialTOXType(nToxType)
     , m_bEditTOX(false)
     , m_bExampleCreated(false)
@@ -438,7 +438,7 @@ SwTOXDescription& SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
             }
         }
         else if(TOX_INDEX == eType.eType)
-            m_pDescriptionArray[nIndex]->SetMainEntryCharStyle(SW_RESSTR(STR_POOLCHR_IDX_MAIN_ENTRY));
+            m_pDescriptionArray[nIndex]->SetMainEntryCharStyle(SwResId(STR_POOLCHR_IDX_MAIN_ENTRY));
 
     }
     return *m_pDescriptionArray[nIndex];
@@ -485,7 +485,7 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl, Button*, void )
 
             if(!bExist)
             {
-                OUString sInfo(SW_RESSTR(STR_FILE_NOT_FOUND));
+                OUString sInfo(SwResId(STR_FILE_NOT_FOUND));
                 sInfo = sInfo.replaceFirst( "%1", sTemplate );
                 sInfo = sInfo.replaceFirst( "%2", aOpt.GetTemplatePath() );
                 ScopedVclPtrInstance< InfoBox > aInfo(GetParent(), sInfo);
@@ -779,9 +779,9 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, Button*, pBtn, void)
 SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "TocIndexPage",
         "modules/swriter/ui/tocindexpage.ui", &rAttrSet)
-    , aFromNames(SW_RES(RES_SRCTYPES))
+    , aFromNames(ResId(RES_SRCTYPES, *pSwResMgr))
     , pIndexRes(nullptr)
-    , sAutoMarkType(SW_RESSTR(STR_AUTOMARK_TYPE))
+    , sAutoMarkType(SwResId(STR_AUTOMARK_TYPE))
     , m_bWaitingInitialSettings(true)
 {
     get(m_pTitleED, "title");
@@ -1793,9 +1793,9 @@ void SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 SwTOXEntryTabPage::SwTOXEntryTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "TocEntriesPage",
         "modules/swriter/ui/tocentriespage.ui", &rAttrSet)
-    , sDelimStr(SW_RESSTR(STR_DELIM))
-    , sNoCharStyle(SW_RESSTR(STR_NO_CHAR_STYLE))
-    , sNoCharSortKey(SW_RESSTR(STR_NOSORTKEY))
+    , sDelimStr(SwResId(STR_DELIM))
+    , sNoCharStyle(SwResId(STR_NO_CHAR_STYLE))
+    , sNoCharSortKey(SwResId(STR_NOSORTKEY))
     , m_pCurrentForm(nullptr)
     , bInLevelHdl(false)
 {
@@ -1919,7 +1919,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(vcl::Window* pParent, const SfxItemSet& rAt
     //fill the types in
     for (sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i)
     {
-        sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SW_RESSTR(STR_AUTH_FIELD_START + i));
+        sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SwResId(STR_AUTH_FIELD_START + i));
         m_pAuthFieldsLB->SetEntryData(nPos, reinterpret_cast< void * >(sal::static_int_cast< sal_uIntPtr >(i)));
     }
     sal_Int32 nPos = m_pFirstKeyLB->InsertEntry(sNoCharSortKey);
@@ -2255,7 +2255,7 @@ void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
 {
     //fill it into the ListBox
     sal_uInt32 nData = rToken.nAuthorityField;
-    sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SW_RESSTR(STR_AUTH_FIELD_START + nData));
+    sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SwResId(STR_AUTH_FIELD_START + nData));
     m_pAuthFieldsLB->SetEntryData(nPos, reinterpret_cast<void*>((sal_uIntPtr)nData));
 }
 
@@ -2324,7 +2324,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, Button*, pBtn, void)
     {
         sText = SwForm::GetFormLinkStt();
         eTokenType = TOKEN_LINK_START;
-        sCharStyle = SW_RES(STR_POOLCHR_TOXJUMP);
+        sCharStyle = SwResId(STR_POOLCHR_TOXJUMP);
     }
     else if(pBtn == m_pTabPB)
     {
@@ -2380,7 +2380,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox, void)
         m_pAuthFieldsLB->Clear();
         for( sal_uInt32 i = 0; i < AUTH_FIELD_END; i++)
         {
-            sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SW_RESSTR(STR_AUTH_FIELD_START + i));
+            sal_Int32 nPos = m_pAuthFieldsLB->InsertEntry(SwResId(STR_AUTH_FIELD_START + i));
             m_pAuthFieldsLB->SetEntryData(nPos, reinterpret_cast<void*>((sal_uIntPtr)i));
         }
 
@@ -2644,7 +2644,7 @@ void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
 {
     SwDocShell* pDocSh = rSh.GetView().GetDocShell();
     ::FillCharStyleListBox(*m_pCharStyleLB, pDocSh, true, true);
-    const OUString sDefault(SW_RES(STR_POOLCOLL_STANDARD));
+    const OUString sDefault(SwResId(STR_POOLCOLL_STANDARD));
     for(sal_Int32 i = 0; i < m_pCharStyleLB->GetEntryCount(); i++)
     {
         const OUString sEntry = m_pCharStyleLB->GetEntry(i);
@@ -2680,7 +2680,7 @@ SwTokenWindow::SwTokenWindow(vcl::Window* pParent)
     , m_pForm(nullptr)
     , m_nLevel(0)
     , m_bValid(false)
-    , m_sCharStyle(SW_RESSTR(STR_CHARSTYLE))
+    , m_sCharStyle(SwResId(STR_CHARSTYLE))
     , m_pActiveCtrl(nullptr)
     , m_pParent(nullptr)
 {
@@ -2696,18 +2696,18 @@ SwTokenWindow::SwTokenWindow(vcl::Window* pParent)
         sal_uInt32 nTextId = STR_BUTTON_TEXT_START + i;
         if( STR_TOKEN_ENTRY_TEXT == nTextId )
             nTextId = STR_TOKEN_ENTRY;
-        m_aButtonTexts[i] = SW_RESSTR(nTextId);
+        m_aButtonTexts[i] = SwResId(nTextId);
 
         sal_uInt32 nHelpId = STR_BUTTON_HELP_TEXT_START + i;
         if(STR_TOKEN_HELP_ENTRY_TEXT == nHelpId)
             nHelpId = STR_TOKEN_HELP_ENTRY;
-        m_aButtonHelpTexts[i] = SW_RESSTR(nHelpId);
+        m_aButtonHelpTexts[i] = SwResId(nHelpId);
     }
 
-    m_sAccessibleName = SW_RESSTR(STR_STRUCTURE);
-    m_sAdditionalAccnameString1 = SW_RESSTR(STR_ADDITIONAL_ACCNAME_STRING1);
-    m_sAdditionalAccnameString2 = SW_RESSTR(STR_ADDITIONAL_ACCNAME_STRING2);
-    m_sAdditionalAccnameString3 = SW_RESSTR(STR_ADDITIONAL_ACCNAME_STRING3);
+    m_sAccessibleName = SwResId(STR_STRUCTURE);
+    m_sAdditionalAccnameString1 = SwResId(STR_ADDITIONAL_ACCNAME_STRING1);
+    m_sAdditionalAccnameString2 = SwResId(STR_ADDITIONAL_ACCNAME_STRING2);
+    m_sAdditionalAccnameString3 = SwResId(STR_ADDITIONAL_ACCNAME_STRING3);
 
     Link<Button*,void> aLink(LINK(this, SwTokenWindow, ScrollHdl));
     m_pLeftScrollWin->SetClickHdl(aLink);
@@ -3648,7 +3648,7 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     // display form pattern without title
 
     // display 1st TemplateEntry
-    OUString aStr( SW_RES( STR_TITLE ));
+    OUString aStr( SwResId( STR_TITLE ));
     if( !m_pCurrentForm->GetTemplate( 0 ).isEmpty() )
     {
         aStr += " " + OUStringLiteral1(aDeliStart)
@@ -3662,11 +3662,11 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
         if( TOX_INDEX == m_pCurrentForm->GetTOXType() &&
             FORM_ALPHA_DELIMITTER == i )
         {
-            aStr = SW_RESSTR(STR_ALPHA);
+            aStr = SwResId(STR_ALPHA);
         }
         else
         {
-            aStr = SW_RESSTR(STR_LEVEL) + OUString::number(
+            aStr = SwResId(STR_LEVEL) + OUString::number(
                     TOX_INDEX == m_pCurrentForm->GetTOXType() ? i - 1 : i );
         }
         if( !m_pCurrentForm->GetTemplate( i ).isEmpty() )

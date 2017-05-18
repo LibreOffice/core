@@ -389,7 +389,7 @@ The code below would only be part of the solution.
             if(m_pSpellState->m_xStartRange.is())
             {
                 LockFocusNotification( true );
-                sal_uInt16 nRet = ScopedVclPtrInstance<MessageDialog>(GetWindow(), SW_RES(STR_QUERY_SPELL_CONTINUE),
+                sal_uInt16 nRet = ScopedVclPtrInstance<MessageDialog>(GetWindow(), SwResId(STR_QUERY_SPELL_CONTINUE),
                                                 VclMessageType::Question, VclButtonsType::YesNo)->Execute();
                 if(RET_YES == nRet)
                 {
@@ -416,7 +416,7 @@ The code below would only be part of the solution.
             if(bCloseMessage)
             {
                 LockFocusNotification( true );
-                OUString sInfo(SW_RES(STR_SPELLING_COMPLETED));
+                OUString sInfo(SwResId(STR_SPELLING_COMPLETED));
                 // #i84610#
                 vcl::Window* pTemp = GetWindow();    // temporary needed for g++ 3.3.5
                 ScopedVclPtrInstance<MessageDialog>(pTemp, sInfo, VclMessageType::Info)->Execute();

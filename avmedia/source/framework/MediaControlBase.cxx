@@ -97,27 +97,27 @@ void MediaControlBase::UpdateTimeSlider( MediaItem aMediaItem )
 
 void MediaControlBase::InitializeWidgets()
 {
-    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_PLAY, GetImage(AVMEDIA_TOOLBOXITEM_PLAY), OUString( AVMEDIA_RESID( AVMEDIA_STR_PLAY ) ), ToolBoxItemBits::CHECKABLE );
+    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_PLAY, GetImage(AVMEDIA_TOOLBOXITEM_PLAY), OUString( AvmResId( AVMEDIA_STR_PLAY ) ), ToolBoxItemBits::CHECKABLE );
     mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_PLAY, HID_AVMEDIA_TOOLBOXITEM_PLAY );
 
-    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_PAUSE, GetImage(AVMEDIA_TOOLBOXITEM_PAUSE), OUString( AVMEDIA_RESID( AVMEDIA_STR_PAUSE ) ), ToolBoxItemBits::CHECKABLE );
+    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_PAUSE, GetImage(AVMEDIA_TOOLBOXITEM_PAUSE), OUString( AvmResId( AVMEDIA_STR_PAUSE ) ), ToolBoxItemBits::CHECKABLE );
     mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_PAUSE, HID_AVMEDIA_TOOLBOXITEM_PAUSE );
 
-    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_STOP, GetImage(AVMEDIA_TOOLBOXITEM_STOP), OUString( AVMEDIA_RESID( AVMEDIA_STR_STOP ) ), ToolBoxItemBits::CHECKABLE );
+    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_STOP, GetImage(AVMEDIA_TOOLBOXITEM_STOP), OUString( AvmResId( AVMEDIA_STR_STOP ) ), ToolBoxItemBits::CHECKABLE );
     mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_STOP, HID_AVMEDIA_TOOLBOXITEM_STOP );
 
     mpPlayToolBox->InsertSeparator();
 
-    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_LOOP, GetImage(AVMEDIA_TOOLBOXITEM_LOOP), OUString( AVMEDIA_RESID( AVMEDIA_STR_LOOP ) ) );
+    mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_LOOP, GetImage(AVMEDIA_TOOLBOXITEM_LOOP), OUString( AvmResId( AVMEDIA_STR_LOOP ) ) );
     mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_LOOP, HID_AVMEDIA_TOOLBOXITEM_LOOP );
 
-    mpMuteToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_MUTE, GetImage(AVMEDIA_TOOLBOXITEM_MUTE), OUString( AVMEDIA_RESID( AVMEDIA_STR_MUTE ) ) );
+    mpMuteToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_MUTE, GetImage(AVMEDIA_TOOLBOXITEM_MUTE), OUString( AvmResId( AVMEDIA_STR_MUTE ) ) );
     mpMuteToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_MUTE, HID_AVMEDIA_TOOLBOXITEM_MUTE );
 
-    mpZoomListBox->InsertEntry( OUString( AVMEDIA_RESID( AVMEDIA_STR_ZOOM_50 ) ), AVMEDIA_ZOOMLEVEL_50 );
-    mpZoomListBox->InsertEntry( OUString( AVMEDIA_RESID( AVMEDIA_STR_ZOOM_100 ) ), AVMEDIA_ZOOMLEVEL_100 );
-    mpZoomListBox->InsertEntry( OUString( AVMEDIA_RESID( AVMEDIA_STR_ZOOM_200 ) ), AVMEDIA_ZOOMLEVEL_200 );
-    mpZoomListBox->InsertEntry( OUString( AVMEDIA_RESID( AVMEDIA_STR_ZOOM_FIT ) ), AVMEDIA_ZOOMLEVEL_FIT );
+    mpZoomListBox->InsertEntry( OUString( AvmResId( AVMEDIA_STR_ZOOM_50 ) ), AVMEDIA_ZOOMLEVEL_50 );
+    mpZoomListBox->InsertEntry( OUString( AvmResId( AVMEDIA_STR_ZOOM_100 ) ), AVMEDIA_ZOOMLEVEL_100 );
+    mpZoomListBox->InsertEntry( OUString( AvmResId( AVMEDIA_STR_ZOOM_200 ) ), AVMEDIA_ZOOMLEVEL_200 );
+    mpZoomListBox->InsertEntry( OUString( AvmResId( AVMEDIA_STR_ZOOM_FIT ) ), AVMEDIA_ZOOMLEVEL_FIT );
     mpZoomListBox->SetHelpId( HID_AVMEDIA_ZOOMLISTBOX );
 
     const OUString aTimeText( " 00:00:00/00:00:00 " );

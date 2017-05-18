@@ -137,7 +137,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(vcl::Window* pParent,
     SfxObjectShell* pSh = SfxObjectShell::Current();
     DBG_ASSERT( pSh, "No DocShell" );
 
-    ResStringArray aAttrNames( SVX_RES( RID_ATTR_NAMES ) );
+    ResStringArray aAttrNames(ResId(RID_ATTR_NAMES, DIALOG_MGR()));
     SfxItemPool& rPool = pSh->GetPool();
     SfxItemSet aSet( rPool, pWhRanges );
     SfxWhichIter aIter( aSet );

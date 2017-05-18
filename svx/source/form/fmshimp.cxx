@@ -1472,7 +1472,7 @@ void FmXFormShell::ExecuteSearch()
 
     if (m_aSearchForms.empty() )
     {   // there are no controls that meet all the conditions for a search
-        ScopedVclPtrInstance<MessageDialog>(nullptr, SVX_RESSTR(RID_STR_NODATACONTROLS))->Execute();
+        ScopedVclPtrInstance<MessageDialog>(nullptr, SvxResId(RID_STR_NODATACONTROLS))->Execute();
         return;
     }
 
@@ -3147,7 +3147,7 @@ void FmXFormShell::CreateExternalView()
 
         if (!bHaveUsableControls)
         {
-            ScopedVclPtrInstance<MessageDialog>(nullptr, SVX_RESSTR(RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY))->Execute();
+            ScopedVclPtrInstance<MessageDialog>(nullptr, SvxResId(RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY))->Execute();
             return;
         }
     }

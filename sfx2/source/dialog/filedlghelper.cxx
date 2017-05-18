@@ -618,7 +618,7 @@ void FileDialogHelper_Impl::updateVersions()
                 uno::Sequence < util::RevisionTag > xVersions = SfxMedium::GetVersionList( xStorage );
 
                 aEntries.realloc( xVersions.getLength() + 1 );
-                aEntries[0] = SfxResId( STR_SFX_FILEDLG_ACTUALVERSION ).toString();
+                aEntries[0] = SfxResId( STR_SFX_FILEDLG_ACTUALVERSION );
 
                 for ( sal_Int32 i=0; i<xVersions.getLength(); i++ )
                     aEntries[ i + 1 ] = xVersions[i].Identifier;
@@ -1092,7 +1092,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     // Export dialog
     if ( mbExport )
     {
-        mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_EXPORT ).toString() );
+        mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_EXPORT ) );
         try {
                 css::uno::Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY_THROW );
                 xCtrlAccess->enableControl( ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR, true );
@@ -1103,7 +1103,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     // Save a copy dialog
     if ( nFlags & FileDialogFlags::SaveACopy )
     {
-        mxFileDlg->setTitle( SfxResId( STR_PB_SAVEACOPY ).toString() );
+        mxFileDlg->setTitle( SfxResId( STR_PB_SAVEACOPY ) );
     }
 
     // the "insert file" dialog needs another title
@@ -1111,15 +1111,15 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     {
         if ( nFlags & FileDialogFlags::InsertCompare )
         {
-            mxFileDlg->setTitle( SfxResId( STR_PB_COMPAREDOC ).toString() );
+            mxFileDlg->setTitle( SfxResId( STR_PB_COMPAREDOC ) );
         }
         else if ( nFlags & FileDialogFlags::InsertMerge )
         {
-            mxFileDlg->setTitle( SfxResId( STR_PB_MERGEDOC ).toString() );
+            mxFileDlg->setTitle( SfxResId( STR_PB_MERGEDOC ) );
         }
         else
         {
-            mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_INSERT ).toString() );
+            mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_INSERT ) );
         }
         uno::Reference < XFilePickerControlAccess > xExtDlg( mxFileDlg, UNO_QUERY );
         if ( xExtDlg.is() )
@@ -1127,7 +1127,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
             try
             {
                 xExtDlg->setLabel( CommonFilePickerElementIds::PUSHBUTTON_OK,
-                                   SfxResId( STR_SFX_EXPLORERFILE_BUTTONINSERT ).toString() );
+                                   SfxResId( STR_SFX_EXPLORERFILE_BUTTONINSERT ) );
             }
             catch( const IllegalArgumentException& ){}
         }
@@ -1845,7 +1845,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
 
     try
     {
-        OUString aAllFilterName = SfxResId( STR_SFX_IMPORT_ALL ).toString();
+        OUString aAllFilterName = SfxResId( STR_SFX_IMPORT_ALL );
         aAllFilterName = ::sfx2::addExtension( aAllFilterName, aExtensions, bIsInOpenMode, *this );
 
         xFltMgr->appendFilter( aAllFilterName, aExtensions );
@@ -2610,7 +2610,7 @@ ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
     // read-only to discourage editing (which would invalidate existing
     // signatures).
     if (nFlags & FileDialogFlags::SignPDF)
-        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, SfxResId(STR_SFX_FILTERNAME_PDF).toString(), "pdf", rStandardDir, rBlackList));
+        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, SfxResId(STR_SFX_FILTERNAME_PDF), "pdf", rStandardDir, rBlackList));
     else
         pDialog.reset(new FileDialogHelper(nDialogType, nFlags, rFact, nDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, rStandardDir, rBlackList));
 

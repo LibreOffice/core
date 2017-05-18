@@ -71,7 +71,7 @@ bool SwPageFootnoteInfoItem::GetPresentation
     const SwTwips nHght = GetPageFootnoteInfo().GetHeight();
     if ( nHght )
     {
-        rText = SW_RESSTR( STR_MAX_FTN_HEIGHT ) + " " +
+        rText = SwResId( STR_MAX_FTN_HEIGHT ) + " " +
                 ::GetMetricText( nHght, eCoreUnit, ePresUnit, pIntl ) + " " +
                 ::GetSvxString( ::GetMetricId( ePresUnit ) );
     }

@@ -127,7 +127,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     SdStyleSheetPool*       pSSPool = static_cast<SdStyleSheetPool*>(GetStyleSheetPool());
     SfxStyleSheetBase*      pSheet = nullptr;
     OUString                aHelpFile;
-    OUString                aStdName(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME));
+    OUString                aStdName(SdResId(STR_STANDARD_STYLESHEET_NAME));
 
     // Default style
 
@@ -253,7 +253,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     SfxItemSet* pISet = nullptr;
 
     // Object with arrowhead
-    aName = SD_RESSTR(STR_POOLSHEET_OBJWITHARROW);
+    aName = SdResId(STR_POOLSHEET_OBJWITHARROW);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHARROW );
@@ -268,14 +268,14 @@ void SdDrawDocument::CreateLayoutTemplates()
     aArrow.append(::basegfx::B2DPoint(0.0, 30.0));
     aArrow.append(::basegfx::B2DPoint(20.0, 30.0));
     aArrow.setClosed(true);
-    pISet->Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
+    pISet->Put(XLineStartItem(SvxResId(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
 
     pISet->Put(XLineStartWidthItem(700));
     pISet->Put(XLineEndWidthItem(300));
     pISet->Put(XLineStartCenterItem(true));
 
     // Object with Shadow
-    aName = SD_RESSTR(STR_POOLSHEET_OBJWITHSHADOW);
+    aName = SdResId(STR_POOLSHEET_OBJWITHSHADOW);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHSHADOW );
@@ -287,7 +287,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(makeSdrShadowYDistItem(200));
 
     // Object without filling
-    aName = SD_RESSTR(STR_POOLSHEET_OBJWITHOUTFILL);
+    aName = SdResId(STR_POOLSHEET_OBJWITHOUTFILL);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHOUTFILL );
@@ -298,7 +298,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Object no fill no line
 
-    aName = SD_RESSTR(STR_POOLSHEET_OBJNOLINENOFILL);
+    aName = SdResId(STR_POOLSHEET_OBJNOLINENOFILL);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJNOLINENOFILL );
@@ -309,7 +309,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Text
 
-    aName = SD_RESSTR(STR_POOLSHEET_TEXT);
+    aName = SdResId(STR_POOLSHEET_TEXT);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXT );
@@ -319,7 +319,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
 
     // Text body
-    aName = SD_RESSTR(STR_POOLSHEET_TEXTBODY);
+    aName = SdResId(STR_POOLSHEET_TEXTBODY);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY );
@@ -331,7 +331,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(SvxFontHeightItem(564, 100, EE_CHAR_FONTHEIGHT));        // 16 pt
 
     // Text body, justified
-    aName = SD_RESSTR(STR_POOLSHEET_TEXTBODY_JUSTIFY);
+    aName = SdResId(STR_POOLSHEET_TEXTBODY_JUSTIFY);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY_JUSTIFY );
@@ -343,7 +343,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(SvxAdjustItem(SvxAdjust::Block, EE_PARA_JUST ));
 
     // Text body, indented
-    aName = SD_RESSTR(STR_POOLSHEET_TEXTBODY_INDENT);
+    aName = SdResId(STR_POOLSHEET_TEXTBODY_INDENT);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY_INDENT );
@@ -358,7 +358,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Title
 
-    aName = SD_RESSTR(STR_POOLSHEET_TITLE);
+    aName = SdResId(STR_POOLSHEET_TITLE);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE );
@@ -370,7 +370,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(SvxFontHeightItem(1551, 100, EE_CHAR_FONTHEIGHT ));      // 44 pt
 
     // Title1
-    aName = SD_RESSTR(STR_POOLSHEET_TITLE1);
+    aName = SdResId(STR_POOLSHEET_TITLE1);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE1 );
@@ -391,7 +391,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Title2
 
-    aName = SD_RESSTR(STR_POOLSHEET_TITLE2);
+    aName = SdResId(STR_POOLSHEET_TITLE2);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE2 );
@@ -420,7 +420,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     // Headline
 
-    aName = SD_RESSTR(STR_POOLSHEET_HEADLINE);
+    aName = SdResId(STR_POOLSHEET_HEADLINE);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE );
@@ -435,7 +435,7 @@ void SdDrawDocument::CreateLayoutTemplates()
                                                 // Paragraph margin below: 2,1 mm
 
     // Headline1
-    aName = SD_RESSTR(STR_POOLSHEET_HEADLINE1);
+    aName = SdResId(STR_POOLSHEET_HEADLINE1);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE1 );
@@ -452,7 +452,7 @@ void SdDrawDocument::CreateLayoutTemplates()
                                                 // Paragraph margin below: 2,1 mm
 
     // Headline2
-    aName = SD_RESSTR(STR_POOLSHEET_HEADLINE2);
+    aName = SdResId(STR_POOLSHEET_HEADLINE2);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE2 );
@@ -470,7 +470,7 @@ void SdDrawDocument::CreateLayoutTemplates()
                                                 // Paragraph margin below: 2,1 mm
 
     // Measurements
-    aName = SD_RESSTR(STR_POOLSHEET_MEASURE);
+    aName = SdResId(STR_POOLSHEET_MEASURE);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_MEASURE );
@@ -481,15 +481,15 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(SvxFontHeightItem(423, 100, EE_CHAR_FONTHEIGHT ));         // 12 pt
 
-    pISet->Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
+    pISet->Put(XLineStartItem(SvxResId(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
     pISet->Put(XLineStartWidthItem(200));
-    pISet->Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
+    pISet->Put(XLineEndItem(SvxResId(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
     pISet->Put(XLineEndWidthItem(200));
     pISet->Put(XLineStyleItem(drawing::LineStyle_SOLID));
     pISet->Put(SdrYesNoItem(SDRATTR_MEASURESHOWUNIT, true));
 
     // Generate presentation templates for default layout.
-    OUString aPrefix = SD_RESSTR(STR_LAYOUT_DEFAULT_NAME);
+    OUString aPrefix = SdResId(STR_LAYOUT_DEFAULT_NAME);
     pSSPool->CreateLayoutStyleSheets(aPrefix);
 }
 
@@ -1006,23 +1006,23 @@ void SdDrawDocument::RestoreLayerNames()
 
             if (aLayerName == "LAYER_LAYOUT")
             {
-                pLayer->SetName(SD_RESSTR(STR_LAYER_LAYOUT));
+                pLayer->SetName(SdResId(STR_LAYER_LAYOUT));
             }
             else if (aLayerName == "LAYER_BCKGRND")
             {
-                pLayer->SetName(SD_RESSTR(STR_LAYER_BCKGRND));
+                pLayer->SetName(SdResId(STR_LAYER_BCKGRND));
             }
             else if (aLayerName == "LAYER_BACKGRNDOBJ")
             {
-                pLayer->SetName(SD_RESSTR(STR_LAYER_BCKGRNDOBJ));
+                pLayer->SetName(SdResId(STR_LAYER_BCKGRNDOBJ));
             }
             else if (aLayerName == "LAYER_CONTROLS")
             {
-                pLayer->SetName(SD_RESSTR(STR_LAYER_CONTROLS));
+                pLayer->SetName(SdResId(STR_LAYER_CONTROLS));
             }
             else if (aLayerName == "LAYER_MEASURELINES")
             {
-                pLayer->SetName(SD_RESSTR(STR_LAYER_MEASURELINES));
+                pLayer->SetName(SdResId(STR_LAYER_MEASURELINES));
             }
         }
     }

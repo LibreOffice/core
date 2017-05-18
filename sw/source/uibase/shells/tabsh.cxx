@@ -760,7 +760,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     case TableMergeErr::TooComplex:
                     {
                         ScopedVclPtrInstance<MessageDialog> aInfoBox( GetView().GetWindow(),
-                                    SW_RES( STR_ERR_TABLE_MERGE ), VclMessageType::Info );
+                                    SwResId( STR_ERR_TABLE_MERGE ), VclMessageType::Info );
                         aInfoBox->Execute();
                         break;
                     }

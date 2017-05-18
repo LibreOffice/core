@@ -121,7 +121,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( vcl::Window* _pParent, C
     if ( !bCertValid )
     {
         m_pCertImg->SetImage(Image(BitmapEx(BMP_STATE_NOT_VALIDATED)));
-        m_pHintNotTrustedFT->SetText( XMLSEC_RES( STR_CERTIFICATE_NOT_VALIDATED ) );
+        m_pHintNotTrustedFT->SetText( XsResId( STR_CERTIFICATE_NOT_VALIDATED ) );
     }
 
     // insert data
@@ -250,7 +250,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
     constexpr int CS_LB_WIDTH = (DLGS_WIDTH - RSC_SP_DLG_INNERBORDER_RIGHT) - RSC_SP_DLG_INNERBORDER_LEFT;
     static long nTabs[] = { 2, 0, 30*CS_LB_WIDTH/100 };
     m_pElementsLB->SetTabs( &nTabs[ 0 ] );
-    m_pElementsLB->InsertHeaderEntry( XMLSEC_RES( STR_HEADERBAR ) );
+    m_pElementsLB->InsertHeaderEntry( XsResId( STR_HEADERBAR ) );
 
     // fill list box
     Reference< security::XCertificate > xCert = mpDlg->mxCert;
@@ -260,62 +260,62 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
     OUString                aDetails;
     // Certificate Versions are reported wrong (#i35107#) - 0 == "V1", 1 == "V2", ..., n = "V(n+1)"
     aLBEntry = "V" + OUString::number( xCert->getVersion() + 1 );
-    InsertElement( XMLSEC_RES( STR_VERSION ), aLBEntry, aLBEntry );
+    InsertElement( XsResId( STR_VERSION ), aLBEntry, aLBEntry );
     Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( XMLSEC_RES( STR_SERIALNUM ), aLBEntry, aDetails, true );
+    InsertElement( XsResId( STR_SERIALNUM ), aLBEntry, aDetails, true );
 
     std::pair< OUString, OUString> pairIssuer =
         XmlSec::GetDNForCertDetailsView(xCert->getIssuerName());
     aLBEntry = pairIssuer.first;
     aDetails = pairIssuer.second;
-    InsertElement( XMLSEC_RES( STR_ISSUER ), aLBEntry, aDetails );
+    InsertElement( XsResId( STR_ISSUER ), aLBEntry, aDetails );
 
     DateTime aDateTime( DateTime::EMPTY );
     utl::typeConvert( xCert->getNotValidBefore(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( Date( aDateTime.GetDate()) );
     aLBEntry += " ";
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
-    InsertElement( XMLSEC_RES( STR_VALIDFROM ), aLBEntry, aLBEntry  );
+    InsertElement( XsResId( STR_VALIDFROM ), aLBEntry, aLBEntry  );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( Date( aDateTime.GetDate()) );
     aLBEntry += " ";
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
-    InsertElement( XMLSEC_RES( STR_VALIDTO ), aLBEntry, aLBEntry );
+    InsertElement( XsResId( STR_VALIDTO ), aLBEntry, aLBEntry );
 
     std::pair< OUString, OUString > pairSubject =
         XmlSec::GetDNForCertDetailsView(xCert->getSubjectName());
     aLBEntry = pairSubject.first;
     aDetails = pairSubject.second;
-    InsertElement( XMLSEC_RES( STR_SUBJECT ), aLBEntry, aDetails );
+    InsertElement( XsResId( STR_SUBJECT ), aLBEntry, aDetails );
 
     aLBEntry = aDetails = xCert->getSubjectPublicKeyAlgorithm();
-    InsertElement( XMLSEC_RES( STR_SUBJECT_PUBKEY_ALGO ), aLBEntry, aDetails );
+    InsertElement( XsResId( STR_SUBJECT_PUBKEY_ALGO ), aLBEntry, aDetails );
     aSeq = xCert->getSubjectPublicKeyValue();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( XMLSEC_RES( STR_SUBJECT_PUBKEY_VAL ), aLBEntry, aDetails, true );
+    InsertElement( XsResId( STR_SUBJECT_PUBKEY_VAL ), aLBEntry, aDetails, true );
 
     aLBEntry = aDetails = xCert->getSignatureAlgorithm();
-    InsertElement( XMLSEC_RES( STR_SIGNATURE_ALGO ), aLBEntry, aDetails );
+    InsertElement( XsResId( STR_SIGNATURE_ALGO ), aLBEntry, aDetails );
 
     CertificateChooser* pChooser = dynamic_cast<CertificateChooser*>(mpDlg->GetParent());
     if (pChooser)
     {
         aLBEntry = pChooser->UsageInClearText( mpDlg->mxCert->getCertificateUsage() );
-        InsertElement( XMLSEC_RES( STR_USE ), aLBEntry, aLBEntry );
+        InsertElement( XsResId( STR_USE ), aLBEntry, aLBEntry );
     }
 
     aSeq = xCert->getSHA1Thumbprint();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( XMLSEC_RES( STR_THUMBPRINT_SHA1 ), aLBEntry, aDetails, true );
+    InsertElement( XsResId( STR_THUMBPRINT_SHA1 ), aLBEntry, aDetails, true );
 
     aSeq = xCert->getMD5Thumbprint();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( XMLSEC_RES( STR_THUMBPRINT_MD5 ), aLBEntry, aDetails, true );
+    InsertElement( XsResId( STR_THUMBPRINT_MD5 ), aLBEntry, aDetails, true );
 
     m_pElementsLB->SetSelectHdl( LINK( this, CertificateViewerDetailsTP, ElementSelectHdl ) );
 }

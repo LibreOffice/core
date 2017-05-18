@@ -643,7 +643,7 @@ gboolean ensure_dbus_setup( gpointer data )
 
             GMenu *firstsubmenu = g_menu_new ();
 
-            OString sNew(OUStringToOString(ResId(SV_BUTTONTEXT_NEW, *pMgr).toString(),
+            OString sNew(OUStringToOString(ResId(SV_BUTTONTEXT_NEW, *pMgr),
                 RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
             item = g_menu_item_new(sNew.getStr(), "app.New");
@@ -655,7 +655,7 @@ gboolean ensure_dbus_setup( gpointer data )
 
             GMenu *secondsubmenu = g_menu_new ();
 
-            OString sPreferences(OUStringToOString(ResId(SV_STDTEXT_PREFERENCES, *pMgr).toString(),
+            OString sPreferences(OUStringToOString(ResId(SV_STDTEXT_PREFERENCES, *pMgr),
                 RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
             item = g_menu_item_new(sPreferences.getStr(), "app.OptionsTreeDialog");
@@ -667,21 +667,21 @@ gboolean ensure_dbus_setup( gpointer data )
 
             GMenu *thirdsubmenu = g_menu_new ();
 
-            OString sHelp(OUStringToOString(ResId(SV_BUTTONTEXT_HELP, *pMgr).toString(),
+            OString sHelp(OUStringToOString(ResId(SV_BUTTONTEXT_HELP, *pMgr),
                 RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
             item = g_menu_item_new(sHelp.getStr(), "app.HelpIndex");
             g_menu_append_item( thirdsubmenu, item );
             g_object_unref(item);
 
-            OString sAbout(OUStringToOString(ResId(SV_STDTEXT_ABOUT, *pMgr).toString(),
+            OString sAbout(OUStringToOString(ResId(SV_STDTEXT_ABOUT, *pMgr),
                 RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
             item = g_menu_item_new(sAbout.getStr(), "app.About");
             g_menu_append_item( thirdsubmenu, item );
             g_object_unref(item);
 
-            OString sQuit(OUStringToOString(ResId(SV_MENU_MAC_QUITAPP, *pMgr).toString(),
+            OString sQuit(OUStringToOString(ResId(SV_MENU_MAC_QUITAPP, *pMgr),
                 RTL_TEXTENCODING_UTF8).replaceFirst("~", "_"));
 
             item = g_menu_item_new(sQuit.getStr(), "app.Quit");

@@ -58,7 +58,7 @@ namespace
 void FillLineEndListBox(ListBox& rListBoxStart, ListBox& rListBoxEnd, const XLineEndList& rList, const Bitmap& rBitmapZero)
 {
     const sal_uInt32 nCount(rList.Count());
-    const OUString sNone(SVX_RESSTR(RID_SVXSTR_NONE));
+    const OUString sNone(SvxResId(RID_SVXSTR_NONE));
 
     rListBoxStart.SetUpdateMode(false);
     rListBoxEnd.SetUpdateMode(false);

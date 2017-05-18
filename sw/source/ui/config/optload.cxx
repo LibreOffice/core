@@ -82,7 +82,7 @@ SwLoadOptPage::SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pShowStandardizedPageCount, "standardizedpageshow");
     get(m_pStandardizedPageSizeNF, "standardpagesize");
 
-    SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
+    SvxStringArray aMetricArr(ResId(STR_ARR_METRIC, *pSwResMgr));
     for ( sal_uInt32 i = 0; i < aMetricArr.Count(); ++i )
     {
         const OUString sMetric = aMetricArr.GetStringByPos( i );
@@ -433,15 +433,15 @@ void SwCaptionPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
 
 SwCaptionOptPage::SwCaptionOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptCaptionPage", "modules/swriter/ui/optcaptionpage.ui", &rSet)
-    , m_sSWTable(SW_RESSTR(STR_CAPTION_TABLE))
-    , m_sSWFrame(SW_RESSTR(STR_CAPTION_FRAME))
-    , m_sSWGraphic(SW_RESSTR(STR_CAPTION_GRAPHIC))
-    , m_sOLE(SW_RESSTR(STR_CAPTION_OLE))
-    , m_sBegin(SW_RESSTR(STR_CAPTION_BEGINNING))
-    , m_sEnd(SW_RESSTR(STR_CAPTION_END))
-    , m_sAbove(SW_RESSTR(STR_CAPTION_ABOVE))
-    , m_sBelow(SW_RESSTR(STR_CAPTION_BELOW))
-    , m_sNone(SW_RESSTR(SW_STR_NONE))
+    , m_sSWTable(SwResId(STR_CAPTION_TABLE))
+    , m_sSWFrame(SwResId(STR_CAPTION_FRAME))
+    , m_sSWGraphic(SwResId(STR_CAPTION_GRAPHIC))
+    , m_sOLE(SwResId(STR_CAPTION_OLE))
+    , m_sBegin(SwResId(STR_CAPTION_BEGINNING))
+    , m_sEnd(SwResId(STR_CAPTION_END))
+    , m_sAbove(SwResId(STR_CAPTION_ABOVE))
+    , m_sBelow(SwResId(STR_CAPTION_BELOW))
+    , m_sNone(SwResId(SW_STR_NONE))
     , pMgr(new SwFieldMgr())
     , bHTMLMode(false)
 {

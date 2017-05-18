@@ -25,7 +25,7 @@
 SpacingListBox::SpacingListBox(vcl::Window* pParent)
     : ListBox( pParent, WB_BORDER | WB_DROPDOWN)
 {
-    ResStringArray aSpacingAry( SVX_RES( RID_SVXSTRARY_SPACING ) );
+    ResStringArray aSpacingAry( ResId(RID_SVXSTRARY_SPACING, DIALOG_MGR()) );
     sal_uInt32 nCnt = aSpacingAry.Count();
 
     for ( sal_uInt32 i = 0; i < nCnt; ++i )

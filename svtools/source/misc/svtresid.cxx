@@ -32,19 +32,14 @@ namespace
             pMgr = ResMgr::CreateResMgr("svt", aLocale );
         return pMgr;
     }
-
-    ResMgr* getResMgr()
-    {
-        return getResMgr(Application::GetSettings().GetUILanguageTag());
-    }
 }
 
-SvtResId::SvtResId(sal_uInt16 nId) :
-    ResId(nId, *getResMgr())
+ResMgr* SvtResMgr::GetResMgr()
 {
+    return getResMgr(Application::GetSettings().GetUILanguageTag());
 }
 
-void SvtResId::DeleteResMgr()
+void SvtResMgr::DeleteResMgr()
 {
     DELETEZ( pMgr );
 }

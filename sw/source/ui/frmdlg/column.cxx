@@ -447,19 +447,19 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
         switch( i )
         {
             case 0:
-                aItemText =  SW_RESSTR( STR_COLUMN_VALUESET_ITEM0 ) ;
+                aItemText =  SwResId( STR_COLUMN_VALUESET_ITEM0 ) ;
                 break;
             case 1:
-                aItemText =  SW_RESSTR( STR_COLUMN_VALUESET_ITEM1 ) ;
+                aItemText =  SwResId( STR_COLUMN_VALUESET_ITEM1 ) ;
                 break;
             case 2:
-                aItemText =  SW_RESSTR( STR_COLUMN_VALUESET_ITEM2 ) ;
+                aItemText =  SwResId( STR_COLUMN_VALUESET_ITEM2 ) ;
                 break;
             case 3:
-                aItemText =  SW_RESSTR( STR_COLUMN_VALUESET_ITEM3 );
+                aItemText =  SwResId( STR_COLUMN_VALUESET_ITEM3 );
                 break;
             default:
-                aItemText =  SW_RESSTR( STR_COLUMN_VALUESET_ITEM4 );
+                aItemText =  SwResId( STR_COLUMN_VALUESET_ITEM4 );
                 break;
         }
         m_pDefaultVS->InsertItem( i + 1, aItemText, i );
@@ -497,7 +497,7 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
     m_pLineTypeDLB->SetSourceUnit( FUNIT_TWIP );
 
     // Fill the line styles listbox
-    m_pLineTypeDLB->SetNone( SVX_RESSTR( RID_SVXSTR_NONE ) );
+    m_pLineTypeDLB->SetNone( SvxResId( RID_SVXSTR_NONE ) );
     m_pLineTypeDLB->InsertEntry(
         ::editeng::SvxBorderLine::getWidthImpl(SvxBorderLineStyle::SOLID),
         SvxBorderLineStyle::SOLID );
@@ -926,12 +926,12 @@ void SwColumnPage::SetLabels( sal_uInt16 nVis )
     const OUString sLbl3(OUString::number( nVis + 3 ));
     m_pLbl3->SetText(sLbl3.replaceAt(sLbl3.getLength()-1, 0, sLbl));
 
-    const OUString sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH ) ;
+    const OUString sColumnWidth = SwResId( STR_ACCESS_COLUMN_WIDTH ) ;
     m_aEd1.SetAccessibleName(sColumnWidth.replaceFirst("%1", sLbl1));
     m_aEd2.SetAccessibleName(sColumnWidth.replaceFirst("%1", sLbl2));
     m_aEd3.SetAccessibleName(sColumnWidth.replaceFirst("%1", sLbl3));
 
-    const OUString sDist = SW_RESSTR( STR_ACCESS_PAGESETUP_SPACING ) ;
+    const OUString sDist = SwResId( STR_ACCESS_PAGESETUP_SPACING ) ;
     m_aDistEd1.SetAccessibleName(
         sDist.replaceFirst("%1", sLbl1).replaceFirst("%2", sLbl2));
 

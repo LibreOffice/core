@@ -759,7 +759,7 @@ OUString SfxObjectShell::GetTitle( sal_uInt16  nMaxLength ) const
             return pImpl->aTitle;
 
         // must it be numbered?
-        const OUString aNoName(SFX2_RESSTR(STR_NONAME));
+        const OUString aNoName(SfxResId(STR_NONAME));
         if (pImpl->bIsNamedVisible)
         {
             // Append number
@@ -1833,10 +1833,10 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions(const OUString& aErrMess
         if (Application::GetDialogCancelMode() == Application::DialogCancelMode::Off)
         {
             // Ask the user to try to continue or abort loading
-            OUString aMessage = SfxResId(STR_QMSG_ERROR_OPENING_FILE).toString();
+            OUString aMessage = SfxResId(STR_QMSG_ERROR_OPENING_FILE);
             if (!aErrMessage.isEmpty())
-                aMessage += SfxResId(STR_QMSG_ERROR_OPENING_FILE_DETAILS).toString() + aErrMessage;
-            aMessage += SfxResId(STR_QMSG_ERROR_OPENING_FILE_CONTINUE).toString();
+                aMessage += SfxResId(STR_QMSG_ERROR_OPENING_FILE_DETAILS) + aErrMessage;
+            aMessage += SfxResId(STR_QMSG_ERROR_OPENING_FILE_CONTINUE);
             ScopedVclPtrInstance< MessageDialog > aBox(nullptr, aMessage, VclMessageType::Question, VclButtonsType::YesNo);
             mbContinueImportOnFilterExceptions = (aBox->Execute() == RET_YES) ? yes : no;
         }

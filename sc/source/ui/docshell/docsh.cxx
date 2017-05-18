@@ -194,7 +194,7 @@ void ScDocShell::FillClass( SvGlobalName* pClassName,
         *pClassName     = SvGlobalName( SO3_SC_CLASSID_60 );
         *pFormat        = bTemplate ? SotClipboardFormatId::STARCALC_8_TEMPLATE : SotClipboardFormatId::STARCALC_8;
         *pFullTypeName  = "calc8";
-        *pShortTypeName = ScResId(SCSTR_SHORT_SCDOC_NAME).toString();
+        *pShortTypeName = ScResId(SCSTR_SHORT_SCDOC_NAME);
     }
     else
     {

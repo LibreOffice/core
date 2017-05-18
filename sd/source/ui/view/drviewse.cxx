@@ -327,10 +327,10 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                     if ( mpDrawView->IsPresObjSelected() )
                     {
                         ::sd::Window* pWindow = GetActiveWindow();
-                        ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) )->Execute();
+                        ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE) )->Execute();
                     }
                     else if ( ScopedVclPtrInstance<QueryBox>(GetActiveWindow(), WB_YES_NO,
-                                      SD_RESSTR(STR_ASK_FOR_CONVERT_TO_BEZIER)
+                                      SdResId(STR_ASK_FOR_CONVERT_TO_BEZIER)
                                       )->Execute() == RET_YES )
                     {
                         // implicit transformation into bezier
@@ -364,10 +364,10 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                     if ( mpDrawView->IsPresObjSelected() )
                     {
                         ::sd::Window* pWindow = GetActiveWindow();
-                        ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) )->Execute();
+                        ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE) )->Execute();
                     }
                     else if ( ScopedVclPtrInstance<QueryBox>(GetActiveWindow(), WB_YES_NO,
-                                      SD_RESSTR(STR_ASK_FOR_CONVERT_TO_BEZIER)
+                                      SdResId(STR_ASK_FOR_CONVERT_TO_BEZIER)
                                       )->Execute() == RET_YES )
                     {
                         // implicit transformation into bezier
@@ -670,7 +670,7 @@ void DrawViewShell::FuDeleteSelectedObjects()
     if (mpDrawView->IsPresObjSelected(false, true, false, true))
     {
         ::sd::Window* pWindow = GetActiveWindow();
-        ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) )->Execute();
+        ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE) )->Execute();
         bConsumed = true;
     }
 
@@ -763,7 +763,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 SdrPathObj* pPathObj = static_cast<SdrPathObj*>( rMarkList.GetMark(0)->GetMarkedSdrObj());
                 const bool bUndo = mpDrawView->IsUndoEnabled();
                 if( bUndo )
-                    mpDrawView->BegUndo(SD_RESSTR(STR_UNDO_BEZCLOSE));
+                    mpDrawView->BegUndo(SdResId(STR_UNDO_BEZCLOSE));
 
                 mpDrawView->UnmarkAllPoints();
 
@@ -784,7 +784,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected(false, true, false, true) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -806,7 +806,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             if ( mpDrawView->IsPresObjSelected(false, true, false, true) )
             {
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
             }
             else
             {
@@ -1002,7 +1002,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
 
             // turn on default layer of MasterPage
-            mpDrawView->SetActiveLayer( SD_RESSTR(STR_LAYER_BCKGRNDOBJ) );
+            mpDrawView->SetActiveLayer( SdResId(STR_LAYER_BCKGRNDOBJ) );
 
             ChangeEditMode(EditMode::MasterPage, mbIsLayerModeActive);
 

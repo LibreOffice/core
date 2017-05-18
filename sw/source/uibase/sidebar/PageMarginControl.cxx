@@ -284,10 +284,10 @@ void PageMarginControl::SetMetricFieldMaxValues( const Size& rPageSize )
 
 void PageMarginControl::FillHelpText( const bool bUserCustomValuesAvailable )
 {
-    const OUString aLeft = SW_RESSTR( STR_MARGIN_TOOLTIP_LEFT );
-    const OUString aRight = SW_RESSTR( STR_MARGIN_TOOLTIP_RIGHT );
-    const OUString aTop = SW_RESSTR( STR_MARGIN_TOOLTIP_TOP );
-    const OUString aBottom = SW_RESSTR( STR_MARGIN_TOOLTIP_BOT );
+    const OUString aLeft = SwResId( STR_MARGIN_TOOLTIP_LEFT );
+    const OUString aRight = SwResId( STR_MARGIN_TOOLTIP_RIGHT );
+    const OUString aTop = SwResId( STR_MARGIN_TOOLTIP_TOP );
+    const OUString aBottom = SwResId( STR_MARGIN_TOOLTIP_BOT );
 
     SetMetricValue( *m_pWidthHeightField.get(), SWPAGE_NARROW_VALUE, m_eUnit );
     const OUString aNarrowValText = m_pWidthHeightField->GetText();
@@ -327,8 +327,8 @@ void PageMarginControl::FillHelpText( const bool bUserCustomValuesAvailable )
     aHelpText += aWide1ValText;
     m_pWide->SetQuickHelpText( aHelpText );
 
-    const OUString aInner = SW_RESSTR( STR_MARGIN_TOOLTIP_INNER );
-    const OUString aOuter = SW_RESSTR( STR_MARGIN_TOOLTIP_OUTER );
+    const OUString aInner = SwResId( STR_MARGIN_TOOLTIP_INNER );
+    const OUString aOuter = SwResId( STR_MARGIN_TOOLTIP_OUTER );
 
     SetMetricValue( *m_pWidthHeightField.get(), SWPAGE_WIDE_VALUE3, m_eUnit );
     const OUString aWide3ValText = m_pWidthHeightField->GetText();

@@ -550,7 +550,7 @@ static SwRewriter lcl_RewriterFromHistory(SwHistory & rHistory)
 
     if (! bDone)
     {
-        aRewriter.AddRule(UndoArg2, SW_RESSTR(STR_FIELD));
+        aRewriter.AddRule(UndoArg2, SwResId(STR_FIELD));
     }
 
     return aRewriter;
@@ -585,11 +585,11 @@ static OUString lcl_DenotedPortion(const OUString& rStr, sal_Int32 nStart, sal_I
             switch(cLast)
             {
             case CH_TXTATR_TAB:
-                aResult = SW_RESSTR(STR_UNDO_TABS);
+                aResult = SwResId(STR_UNDO_TABS);
 
                 break;
             case CH_TXTATR_NEWLINE:
-                aResult = SW_RESSTR(STR_UNDO_NLS);
+                aResult = SwResId(STR_UNDO_NLS);
 
                 break;
 
@@ -606,9 +606,9 @@ static OUString lcl_DenotedPortion(const OUString& rStr, sal_Int32 nStart, sal_I
         }
         else
         {
-            aResult = SW_RESSTR(STR_START_QUOTE);
+            aResult = SwResId(STR_START_QUOTE);
             aResult += rStr.copy(nStart, nEnd - nStart);
-            aResult += SW_RESSTR(STR_END_QUOTE);
+            aResult += SwResId(STR_END_QUOTE);
         }
     }
 
@@ -668,15 +668,15 @@ SwRewriter SwUndoDelete::GetRewriter() const
         {
 
             SwRewriter aRewriter;
-            aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_START_QUOTE));
+            aRewriter.AddRule(UndoArg1, SwResId(STR_START_QUOTE));
             aRewriter.AddRule(UndoArg2, m_sTableName);
-            aRewriter.AddRule(UndoArg3, SW_RESSTR(STR_END_QUOTE));
+            aRewriter.AddRule(UndoArg3, SwResId(STR_END_QUOTE));
 
-            OUString sTmp = aRewriter.Apply(SW_RES(STR_TABLE_NAME));
+            OUString sTmp = aRewriter.Apply(SwResId(STR_TABLE_NAME));
             aResult.AddRule(UndoArg1, sTmp);
         }
         else
-            aResult.AddRule(UndoArg1, SW_RESSTR(STR_PARAGRAPHS));
+            aResult.AddRule(UndoArg1, SwResId(STR_PARAGRAPHS));
     }
     else
     {
@@ -685,7 +685,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
         if (m_pSttStr != nullptr && m_pEndStr != nullptr && m_pSttStr->isEmpty() &&
             m_pEndStr->isEmpty())
         {
-            aStr = SW_RESSTR(STR_PARAGRAPH_UNDO);
+            aStr = SwResId(STR_PARAGRAPH_UNDO);
         }
         else
         {
@@ -705,7 +705,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
             }
         }
 
-        aStr = ShortenString(aStr, nUndoStringLength, OUString(SW_RES(STR_LDOTS)));
+        aStr = ShortenString(aStr, nUndoStringLength, SwResId(STR_LDOTS));
         if (pHistory)
         {
             SwRewriter aRewriter = lcl_RewriterFromHistory(*pHistory);

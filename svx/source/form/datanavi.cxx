@@ -238,15 +238,15 @@ namespace svxform
 
             if ( DGTSubmission == m_eGroup )
             {
-                m_xMenu->SetItemText(m_xMenu->GetItemId("additem"), SVX_RESSTR(RID_STR_DATANAV_ADD_SUBMISSION));
-                m_xMenu->SetItemText(m_xMenu->GetItemId("edit"), SVX_RESSTR(RID_STR_DATANAV_EDIT_SUBMISSION));
-                m_xMenu->SetItemText(m_xMenu->GetItemId("delete"), SVX_RESSTR(RID_STR_DATANAV_REMOVE_SUBMISSION));
+                m_xMenu->SetItemText(m_xMenu->GetItemId("additem"), SvxResId(RID_STR_DATANAV_ADD_SUBMISSION));
+                m_xMenu->SetItemText(m_xMenu->GetItemId("edit"), SvxResId(RID_STR_DATANAV_EDIT_SUBMISSION));
+                m_xMenu->SetItemText(m_xMenu->GetItemId("delete"), SvxResId(RID_STR_DATANAV_REMOVE_SUBMISSION));
             }
             else
             {
-                m_xMenu->SetItemText(m_xMenu->GetItemId("additem"), SVX_RESSTR(RID_STR_DATANAV_ADD_BINDING));
-                m_xMenu->SetItemText(m_xMenu->GetItemId("edit"), SVX_RESSTR(RID_STR_DATANAV_EDIT_BINDING));
-                m_xMenu->SetItemText(m_xMenu->GetItemId("delete"), SVX_RESSTR(RID_STR_DATANAV_REMOVE_BINDING));
+                m_xMenu->SetItemText(m_xMenu->GetItemId("additem"), SvxResId(RID_STR_DATANAV_ADD_BINDING));
+                m_xMenu->SetItemText(m_xMenu->GetItemId("edit"), SvxResId(RID_STR_DATANAV_EDIT_BINDING));
+                m_xMenu->SetItemText(m_xMenu->GetItemId("delete"), SvxResId(RID_STR_DATANAV_REMOVE_BINDING));
             }
         }
         m_pXFormsPage->EnableMenuItems(m_xMenu.get());
@@ -359,15 +359,15 @@ namespace svxform
 
             if ( DGTSubmission == m_eGroup )
             {
-                m_pToolBox->SetItemText( m_nAddId, SVX_RESSTR( RID_STR_DATANAV_ADD_SUBMISSION ) );
-                m_pToolBox->SetItemText( m_nEditId, SVX_RESSTR( RID_STR_DATANAV_EDIT_SUBMISSION ) );
-                m_pToolBox->SetItemText( m_nRemoveId, SVX_RESSTR( RID_STR_DATANAV_REMOVE_SUBMISSION ) );
+                m_pToolBox->SetItemText( m_nAddId, SvxResId( RID_STR_DATANAV_ADD_SUBMISSION ) );
+                m_pToolBox->SetItemText( m_nEditId, SvxResId( RID_STR_DATANAV_EDIT_SUBMISSION ) );
+                m_pToolBox->SetItemText( m_nRemoveId, SvxResId( RID_STR_DATANAV_REMOVE_SUBMISSION ) );
             }
             else
             {
-                m_pToolBox->SetItemText( m_nAddId, SVX_RESSTR( RID_STR_DATANAV_ADD_BINDING ) );
-                m_pToolBox->SetItemText( m_nEditId, SVX_RESSTR( RID_STR_DATANAV_EDIT_BINDING ) );
-                m_pToolBox->SetItemText( m_nRemoveId, SVX_RESSTR( RID_STR_DATANAV_REMOVE_BINDING ) );
+                m_pToolBox->SetItemText( m_nAddId, SvxResId( RID_STR_DATANAV_ADD_BINDING ) );
+                m_pToolBox->SetItemText( m_nEditId, SvxResId( RID_STR_DATANAV_EDIT_BINDING ) );
+                m_pToolBox->SetItemText( m_nRemoveId, SvxResId( RID_STR_DATANAV_REMOVE_BINDING ) );
             }
         }
 
@@ -622,7 +622,7 @@ namespace svxform
                 }
 
                 ScopedVclPtrInstance< AddDataItemDialog > aDlg( this, pNode, m_xUIHelper );
-                aDlg->SetText( SVX_RESSTR( nResId ) );
+                aDlg->SetText( SvxResId( nResId ) );
                 aDlg->InitText( eType );
                 short nReturn = aDlg->Execute();
                 if (  DGTInstance == m_eGroup )
@@ -718,7 +718,7 @@ namespace svxform
                         nResId = RID_STR_DATANAV_EDIT_BINDING;
                         eType = DITBinding;
                     }
-                    aDlg->SetText( SVX_RESSTR( nResId ) );
+                    aDlg->SetText( SvxResId( nResId ) );
                     aDlg->InitText( eType );
                     if ( aDlg->Execute() == RET_OK )
                     {
@@ -761,7 +761,7 @@ namespace svxform
                 else
                 {
                     ScopedVclPtrInstance< AddSubmissionDialog > aDlg( this, pNode, m_xUIHelper );
-                    aDlg->SetText( SVX_RESSTR( RID_STR_DATANAV_EDIT_SUBMISSION ) );
+                    aDlg->SetText( SvxResId( RID_STR_DATANAV_EDIT_SUBMISSION ) );
                     if ( aDlg->Execute() == RET_OK )
                     {
                         EditEntry( pNode->m_xPropSet );
@@ -828,27 +828,27 @@ namespace svxform
                 pEntry = m_pItemList->InsertEntry( sTemp, aImage, aImage, nullptr, false, TREELIST_APPEND, pNode );
                 // Action
                 _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
-                OUString sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_ACTION );
+                OUString sEntry = SvxResId( RID_STR_DATANAV_SUBM_ACTION );
                 sEntry += sTemp;
                 m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Method
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
-                sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_METHOD );
+                sEntry = SvxResId( RID_STR_DATANAV_SUBM_METHOD );
                 sEntry +=  m_aMethodString.toUI( sTemp );
                 m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Ref
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
-                sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REF );
+                sEntry = SvxResId( RID_STR_DATANAV_SUBM_REF );
                 sEntry += sTemp;
                 m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Bind
                 _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
-                sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_BIND );
+                sEntry = SvxResId( RID_STR_DATANAV_SUBM_BIND );
                 sEntry += sTemp;
                 m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
                 // Replace
                 _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
-                sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REPLACE );
+                sEntry = SvxResId( RID_STR_DATANAV_SUBM_REPLACE );
                 sEntry += m_aReplaceString.toUI( sTemp );
                 m_pItemList->InsertEntry( sEntry, aImage, aImage, pEntry );
             }
@@ -903,28 +903,28 @@ namespace svxform
                 m_pItemList->SetEntryText( pEntry, sTemp );
 
                 _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
-                OUString sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_BIND );
+                OUString sEntry = SvxResId( RID_STR_DATANAV_SUBM_BIND );
                 sEntry += sTemp;
                 sal_uIntPtr nPos = 0;
                 SvTreeListEntry* pChild = m_pItemList->GetEntry( pEntry, nPos++ );
                 m_pItemList->SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
-                sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REF );
+                sEntry = SvxResId( RID_STR_DATANAV_SUBM_REF );
                 sEntry += sTemp;
                 pChild = m_pItemList->GetEntry( pEntry, nPos++ );
                 m_pItemList->SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
-                sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_ACTION );
+                sEntry = SvxResId( RID_STR_DATANAV_SUBM_ACTION );
                 sEntry += sTemp;
                 pChild = m_pItemList->GetEntry( pEntry, nPos++ );
                 m_pItemList->SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
-                sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_METHOD );
+                sEntry = SvxResId( RID_STR_DATANAV_SUBM_METHOD );
                 sEntry += m_aMethodString.toUI( sTemp );
                 pChild = m_pItemList->GetEntry( pEntry, nPos++ );
                 m_pItemList->SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_REPLACE ) >>= sTemp;
-                sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_REPLACE );
+                sEntry = SvxResId( RID_STR_DATANAV_SUBM_REPLACE );
                 sEntry += m_aReplaceString.toUI( sTemp );
                 pChild = m_pItemList->GetEntry( pEntry, nPos++ );
                 m_pItemList->SetEntryText( pChild, sEntry );
@@ -958,7 +958,7 @@ namespace svxform
                     bool bIsElement = ( eChildType == css::xml::dom::NodeType_ELEMENT_NODE );
                     sal_uInt16 nResId = bIsElement ? RID_STR_QRY_REMOVE_ELEMENT : RID_STR_QRY_REMOVE_ATTRIBUTE;
                     OUString sVar = bIsElement ? OUString(ELEMENTNAME) : OUString(ATTRIBUTENAME);
-                    ScopedVclPtrInstance< MessageDialog > aQBox(this, SVX_RES(nResId), VclMessageType::Question, VclButtonsType::YesNo);
+                    ScopedVclPtrInstance< MessageDialog > aQBox(this, SvxResId(nResId), VclMessageType::Question, VclButtonsType::YesNo);
                     OUString sMessText = aQBox->get_primary_text();
                     sMessText = sMessText.replaceFirst(
                         sVar, m_xUIHelper->getNodeDisplayName( pNode->m_xNode, false ) );
@@ -1000,7 +1000,7 @@ namespace svxform
                 {
                     SAL_WARN( "svx.form", "XFormsPage::RemoveEntry(): exception caught" );
                 }
-                ScopedVclPtrInstance<MessageDialog> aQBox(this, SVX_RES(nResId),
+                ScopedVclPtrInstance<MessageDialog> aQBox(this, SvxResId(nResId),
                                                           VclMessageType::Question, VclButtonsType::YesNo);
                 OUString sMessText = aQBox->get_primary_text();
                 sMessText = sMessText.replaceFirst( sSearch, sName);
@@ -1345,12 +1345,12 @@ namespace svxform
                     }
                 }
             }
-            m_pToolBox->SetItemText( m_nEditId, SVX_RESSTR( nResId1 ) );
-            m_pToolBox->SetItemText( m_nRemoveId, SVX_RESSTR( nResId2 ) );
+            m_pToolBox->SetItemText( m_nEditId, SvxResId( nResId1 ) );
+            m_pToolBox->SetItemText( m_nRemoveId, SvxResId( nResId2 ) );
             if ( _pMenu )
             {
-                _pMenu->SetItemText(_pMenu->GetItemId("edit"), SVX_RESSTR( nResId1 ) );
-                _pMenu->SetItemText(_pMenu->GetItemId("delete"), SVX_RESSTR( nResId2 ) );
+                _pMenu->SetItemText(_pMenu->GetItemId("edit"), SvxResId( nResId1 ) );
+                _pMenu->SetItemText(_pMenu->GetItemId("delete"), SvxResId( nResId2 ) );
             }
         }
     }
@@ -1506,7 +1506,7 @@ namespace svxform
                         if ( m_pModelsBox->GetEntryPos( sNewName ) != LISTBOX_ENTRY_NOTFOUND )
                         {
                             // error: model name already exists
-                            ScopedVclPtrInstance< MessageDialog > aErrBox( this, SVX_RES( RID_STR_DOUBLE_MODELNAME ) );
+                            ScopedVclPtrInstance< MessageDialog > aErrBox( this, SvxResId( RID_STR_DOUBLE_MODELNAME ) );
                             aErrBox->set_primary_text(aErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
                             aErrBox->Execute();
                             bShowDialog = true;
@@ -1596,7 +1596,7 @@ namespace svxform
             }
             else if (sIdent == "modelsremove")
             {
-                ScopedVclPtrInstance<MessageDialog> aQBox(this, SVX_RES( RID_STR_QRY_REMOVE_MODEL),
+                ScopedVclPtrInstance<MessageDialog> aQBox(this, SvxResId( RID_STR_QRY_REMOVE_MODEL),
                                     VclMessageType::Question, VclButtonsType::YesNo);
                 OUString sText = aQBox->get_primary_text();
                 sText = sText.replaceFirst( MODELNAME, sSelectedModel );
@@ -1696,7 +1696,7 @@ namespace svxform
                 if ( pPage )
                 {
                     OUString sInstName = pPage->GetInstanceName();
-                    ScopedVclPtrInstance<MessageDialog> aQBox(this, SVX_RES(RID_STR_QRY_REMOVE_INSTANCE),
+                    ScopedVclPtrInstance<MessageDialog> aQBox(this, SvxResId(RID_STR_QRY_REMOVE_INSTANCE),
                                                               VclMessageType::Question, VclButtonsType::YesNo);
                     OUString sMessText = aQBox->get_primary_text();
                     sMessText = sMessText.replaceFirst( INSTANCENAME, sInstName );
@@ -2150,7 +2150,7 @@ namespace svxform
 
     {
 
-        SetText( SVX_RES( RID_STR_DATANAVIGATOR ) );
+        SetText( SvxResId( RID_STR_DATANAVIGATOR ) );
 
         Size aSize = m_aDataWin->GetOutputSizePixel();
         Size aLogSize = PixelToLogic( aSize, MapUnit::MapAppFont );
@@ -2241,10 +2241,10 @@ namespace svxform
         , m_xUIHelper(_rUIHelper)
         , m_pItemNode(_pNode)
         , m_eItemType(DITNone)
-        , m_sFL_Element(SVX_RESSTR(RID_STR_ELEMENT))
-        , m_sFL_Attribute(SVX_RESSTR(RID_STR_ATTRIBUTE))
-        , m_sFL_Binding(SVX_RESSTR(RID_STR_BINDING))
-        , m_sFT_BindingExp(SVX_RESSTR(RID_STR_BINDING_EXPR))
+        , m_sFL_Element(SvxResId(RID_STR_ELEMENT))
+        , m_sFL_Attribute(SvxResId(RID_STR_ATTRIBUTE))
+        , m_sFL_Binding(SvxResId(RID_STR_BINDING))
+        , m_sFT_BindingExp(SvxResId(RID_STR_BINDING_EXPR))
     {
         get(m_pItemFrame, "itemframe");
         get(m_pNameFT, "nameft");
@@ -2451,7 +2451,7 @@ namespace svxform
              ( bIsHandleBinding && sNewName.isEmpty() ) )
         {
             // Error and don't close the dialog
-            ScopedVclPtrInstance< MessageDialog > aErrBox( this, SVX_RES( RID_STR_INVALID_XMLNAME ) );
+            ScopedVclPtrInstance< MessageDialog > aErrBox( this, SvxResId( RID_STR_INVALID_XMLNAME ) );
             aErrBox->set_primary_text(aErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sNewName));
             aErrBox->Execute();
             return;
@@ -3084,7 +3084,7 @@ namespace svxform
         {
             if ( !m_pConditionDlg->GetUIHelper()->isValidPrefixName( sPrefix ) )
             {
-                ScopedVclPtrInstance< MessageDialog > aErrBox(this, SVX_RES( RID_STR_INVALID_XMLPREFIX ) );
+                ScopedVclPtrInstance< MessageDialog > aErrBox(this, SvxResId( RID_STR_INVALID_XMLPREFIX ) );
                 aErrBox->set_primary_text(aErrBox->get_primary_text().replaceFirst(MSG_VARIABLE, sPrefix));
                 aErrBox->Execute();
                 return;
@@ -3158,7 +3158,7 @@ namespace svxform
         OUString sName(m_pNameED->GetText());
         if(sName.isEmpty()) {
 
-            ScopedVclPtrInstance< MessageDialog > aErrorBox(this,SVX_RES(RID_STR_EMPTY_SUBMISSIONNAME));
+            ScopedVclPtrInstance< MessageDialog > aErrorBox(this,SvxResId(RID_STR_EMPTY_SUBMISSIONNAME));
             aErrorBox->set_primary_text( Application::GetDisplayName() );
             aErrorBox->Execute();
             return;
@@ -3219,9 +3219,9 @@ namespace svxform
     void AddSubmissionDialog::FillAllBoxes()
     {
         // method box
-        m_pMethodLB->InsertEntry( SVX_RESSTR( RID_STR_METHOD_POST   ) );
-        m_pMethodLB->InsertEntry( SVX_RESSTR( RID_STR_METHOD_PUT ) );
-        m_pMethodLB->InsertEntry( SVX_RESSTR( RID_STR_METHOD_GET ) );
+        m_pMethodLB->InsertEntry( SvxResId( RID_STR_METHOD_POST   ) );
+        m_pMethodLB->InsertEntry( SvxResId( RID_STR_METHOD_PUT ) );
+        m_pMethodLB->InsertEntry( SvxResId( RID_STR_METHOD_GET ) );
         m_pMethodLB->SelectEntryPos(0);
 
         // binding box
@@ -3278,9 +3278,9 @@ namespace svxform
         }
 
         // replace box
-        m_pReplaceLB->InsertEntry( SVX_RESSTR( RID_STR_REPLACE_NONE ) );
-        m_pReplaceLB->InsertEntry( SVX_RESSTR( RID_STR_REPLACE_INST ) );
-        m_pReplaceLB->InsertEntry( SVX_RESSTR( RID_STR_REPLACE_DOC ) );
+        m_pReplaceLB->InsertEntry( SvxResId( RID_STR_REPLACE_NONE ) );
+        m_pReplaceLB->InsertEntry( SvxResId( RID_STR_REPLACE_INST ) );
+        m_pReplaceLB->InsertEntry( SvxResId( RID_STR_REPLACE_DOC ) );
 
 
         // init the controls with the values of the submission
@@ -3366,7 +3366,7 @@ namespace svxform
         m_pFilePickerBtn->SetClickHdl( LINK( this, AddInstanceDialog, FilePickerHdl ) );
 
         // load the filter name from fps_office resource
-        m_sAllFilterName = ResId(STR_FILTERNAME_ALL, *ResMgr::CreateResMgr("fps_office")).toString();
+        m_sAllFilterName = ResId(STR_FILTERNAME_ALL, *ResMgr::CreateResMgr("fps_office"));
     }
 
     AddInstanceDialog::~AddInstanceDialog()

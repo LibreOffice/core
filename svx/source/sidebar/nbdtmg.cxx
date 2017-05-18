@@ -267,7 +267,7 @@ void BulletsTypeMgr::Init()
         pActualBullets[i] = new BulletsSettings;
         pActualBullets[i]->cBulletChar = aDefaultBulletTypes[i];
         pActualBullets[i]->aFont = rActBulletFont;
-        pActualBullets[i]->sDescription = SVX_RESSTR( RID_SVXSTR_BULLET_DESCRIPTION_0 + i );
+        pActualBullets[i]->sDescription = SvxResId( RID_SVXSTR_BULLET_DESCRIPTION_0 + i );
     }
 }
 sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLevel,sal_uInt16 nFromIndex)
@@ -365,7 +365,7 @@ void BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
         pActualBullets[nIndex]->aFont = *pFont;
     pActualBullets[nIndex]->bIsCustomized = true;
 
-    OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
+    OUString aStrFromRES = SvxResId( RID_SVXSTR_NUMBULLET_CUSTOM_BULLET_DESCRIPTION);
     OUString aReplace = "%LIST_NUM";
     OUString sNUM = OUString::number( nIndex + 1 );
     aStrFromRES = aStrFromRES.replaceFirst(aReplace,sNUM);
@@ -465,7 +465,7 @@ void NumberingTypeMgr::Init()
             pNumEntry->nIndexDefault = i;
             pNumEntry->pNumSetting = pNew;
             if ( i < 8 )
-                pNumEntry->sDescription = SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i );
+                pNumEntry->sDescription = SvxResId( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i );
             maNumberSettingsArr.push_back(std::shared_ptr<NumberSettings_Impl>(pNumEntry));
         }
     }
@@ -537,7 +537,7 @@ void NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_
     ApplyNumRule(aTmpRule2,nIndex,mLevel);
     if (aTmpRule1==aTmpRule2) _pSet->bIsCustomized=false;
     if (_pSet->bIsCustomized) {
-        OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_NUMBERING_DESCRIPTION);
+        OUString aStrFromRES = SvxResId( RID_SVXSTR_NUMBULLET_CUSTOM_NUMBERING_DESCRIPTION);
         OUString sNUM = OUString::number( nIndex + 1 );
         aStrFromRES = aStrFromRES.replaceFirst("%LIST_NUM",sNUM);
         _pSet->sDescription = aStrFromRES;
@@ -647,7 +647,7 @@ void OutlineTypeMgr::Init()
         {
             pOutlineSettingsArrs[ nItem ] = new OutlineSettings_Impl;
             OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[ nItem ];
-            pItemArr->sDescription = SVX_RESSTR( RID_SVXSTR_OUTLINENUM_DESCRIPTION_0 + nItem );
+            pItemArr->sDescription = SvxResId( RID_SVXSTR_OUTLINENUM_DESCRIPTION_0 + nItem );
             pItemArr->pNumSettingsArr = new NumSettingsArr_Impl;
             Reference<XIndexAccess> xLevel = aOutlineAccess.getConstArray()[nItem];
             for(sal_Int32 nLevel = 0; nLevel < xLevel->getCount() && nLevel < 5; nLevel++)
@@ -800,7 +800,7 @@ void OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
     ApplyNumRule(aTmpRule2,nIndex,mLevel);
     if (aTmpRule1==aTmpRule2) pItemArr->bIsCustomized=false;
     if (pItemArr->bIsCustomized) {
-        OUString aStrFromRES = SVX_RESSTR( RID_SVXSTR_NUMBULLET_CUSTOM_MULTILEVEL_DESCRIPTION);
+        OUString aStrFromRES = SvxResId( RID_SVXSTR_NUMBULLET_CUSTOM_MULTILEVEL_DESCRIPTION);
         OUString sNUM = OUString::number( nIndex + 1 );
         aStrFromRES = aStrFromRES.replaceFirst("%LIST_NUM",sNUM);
         pItemArr->sDescription = aStrFromRES;

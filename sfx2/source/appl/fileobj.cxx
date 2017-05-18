@@ -403,7 +403,7 @@ void SvFileObject::Edit( vcl::Window* /*pParent*/, sfx2::SvBaseLink* pLink, cons
             {
                 nType = FILETYPE_GRF;       // If not set already
 
-                SvxOpenGraphicDialog aDlg(SfxResId(RID_SVXSTR_EDITGRFLINK).toString());
+                SvxOpenGraphicDialog aDlg(SfxResId(RID_SVXSTR_EDITGRFLINK));
                 aDlg.EnableLink(false);
                 aDlg.SetPath( sFile, true );
                 aDlg.SetCurrentFilter( sTmpFilter );

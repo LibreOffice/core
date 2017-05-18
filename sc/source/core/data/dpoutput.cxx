@@ -977,13 +977,13 @@ void ScDPOutput::Output()
         FieldCell(nHdrCol, nHdrRow, nTab, pPageFields[nField], false);
         SCCOL nFldCol = nHdrCol + 1;
 
-        OUString aPageValue = ScResId(SCSTR_ALL).toString();
+        OUString aPageValue = ScResId(SCSTR_ALL);
         const uno::Sequence<sheet::MemberResult>& rRes = pPageFields[nField].maResult;
         sal_Int32 n = rRes.getLength();
         if (n == 1)
             aPageValue = rRes[0].Caption;
         else if (n > 1)
-            aPageValue = ScResId(SCSTR_MULTIPLE).toString();
+            aPageValue = ScResId(SCSTR_MULTIPLE);
 
         ScSetStringParam aParam;
         aParam.setTextInput();

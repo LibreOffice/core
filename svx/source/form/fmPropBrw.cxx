@@ -180,7 +180,7 @@ OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
             nClassNameResourceId = RID_STR_CONTROL; break;
     }
 
-    return SVX_RESSTR(nClassNameResourceId);
+    return SvxResId(nClassNameResourceId);
 }
 
 FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* _pBindings,
@@ -414,13 +414,13 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
 
         if ( _rSelection.empty() )
         {
-            sTitle = SVX_RESSTR(RID_STR_NO_PROPERTIES);
+            sTitle = SvxResId(RID_STR_NO_PROPERTIES);
         }
         else if ( _rSelection.size() > 1 )
         {
             // no form component and (no form or no name) -> Multiselection
-            sTitle = SVX_RESSTR(RID_STR_PROPERTIES_CONTROL);
-            sTitle += SVX_RESSTR(RID_STR_PROPTITLE_MULTISELECT);
+            sTitle = SvxResId(RID_STR_PROPERTIES_CONTROL);
+            sTitle += SvxResId(RID_STR_PROPTITLE_MULTISELECT);
         }
         else
         {
@@ -430,15 +430,15 @@ void FmPropBrw::implSetNewSelection( const InterfaceBag& _rSelection )
                 sal_Int16 nClassID = FormComponentType::CONTROL;
                 xSingleSelection->getPropertyValue( FM_PROP_CLASSID ) >>= nClassID;
 
-                sTitle = SVX_RESSTR(RID_STR_PROPERTIES_CONTROL);
+                sTitle = SvxResId(RID_STR_PROPERTIES_CONTROL);
                 sTitle += GetUIHeadlineName(nClassID, makeAny(xSingleSelection));
             }
             else if ( Reference< XForm >( xSingleSelection, UNO_QUERY ).is() )
-                sTitle = SVX_RESSTR(RID_STR_PROPERTIES_FORM);
+                sTitle = SvxResId(RID_STR_PROPERTIES_FORM);
         }
 
         if ( implIsReadOnlyModel() )
-            sTitle += SVX_RESSTR(RID_STR_READONLY_VIEW);
+            sTitle += SvxResId(RID_STR_READONLY_VIEW);
 
         SetText( sTitle );
 

@@ -418,7 +418,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                     for ( sal_uInt16 nProp = SvtPathOptions::PATH_ADDIN;
                           nProp <= SvtPathOptions::PATH_WORK; nProp++ )
                     {
-                        aNames.InsertValue( nProp, SfxResId(CONFIG_PATH_START + nProp).toString() );
+                        aNames.InsertValue( nProp, SfxResId(CONFIG_PATH_START + nProp) );
                         OUString aValue;
                         switch ( nProp )
                         {

@@ -522,7 +522,7 @@ bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
         // empty documents always get their macros from the user, so there is no reason to restrict access
         pImpl->aMacroMode.allowMacroExecution();
         if ( SfxObjectCreateMode::EMBEDDED == eCreateMode )
-            SetTitle(SfxResId(STR_NONAME).toString());
+            SetTitle(SfxResId(STR_NONAME));
 
         uno::Reference< frame::XModel >  xModel ( GetModel(), uno::UNO_QUERY );
         if ( xModel.is() )
@@ -734,7 +734,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     {
         // set name before ConvertFrom, so that GetSbxObject() already works
         bHasName = true;
-        SetName( SfxResId(STR_NONAME).toString() );
+        SetName( SfxResId(STR_NONAME) );
 
         if( !bHasStorage )
             pMedium->GetInStream();
@@ -2903,7 +2903,7 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, vcl::
 
     if ( SvtSecurityOptions().IsOptionSet( eOption ) )
     {
-        OUString sMessage( SfxResId(STR_HIDDENINFO_CONTAINS).toString() );
+        OUString sMessage( SfxResId(STR_HIDDENINFO_CONTAINS) );
         HiddenInformation nWantedStates = HiddenInformation::RECORDEDCHANGES | HiddenInformation::NOTES;
         if ( eFact != HiddenWarningFact::WhenPrinting )
             nWantedStates |= HiddenInformation::DOCUMENTVERSIONS;
@@ -2912,19 +2912,19 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, vcl::
 
         if ( nStates & HiddenInformation::RECORDEDCHANGES )
         {
-            sMessage += SfxResId(STR_HIDDENINFO_RECORDCHANGES).toString();
+            sMessage += SfxResId(STR_HIDDENINFO_RECORDCHANGES);
             sMessage += "\n";
             bWarning = true;
         }
         if ( nStates & HiddenInformation::NOTES )
         {
-            sMessage += SfxResId(STR_HIDDENINFO_NOTES).toString();
+            sMessage += SfxResId(STR_HIDDENINFO_NOTES);
             sMessage += "\n";
             bWarning = true;
         }
         if ( nStates & HiddenInformation::DOCUMENTVERSIONS )
         {
-            sMessage += SfxResId(STR_HIDDENINFO_DOCVERSIONS).toString();
+            sMessage += SfxResId(STR_HIDDENINFO_DOCVERSIONS);
             sMessage += "\n";
             bWarning = true;
         }
@@ -2932,7 +2932,7 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, vcl::
         if ( bWarning )
         {
             sMessage += "\n";
-            sMessage += SfxResId(nResId).toString();
+            sMessage += SfxResId(nResId);
             ScopedVclPtrInstance< WarningBox > aWBox(pParent, WB_YES_NO | WB_DEF_NO, sMessage);
             nRet = aWBox->Execute();
         }

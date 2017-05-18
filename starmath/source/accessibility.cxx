@@ -110,7 +110,7 @@ static awt::Point lcl_GetLocationOnScreen( vcl::Window *pWin )
 
 
 SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
-    aAccName            (SM_RESSTR(RID_DOCUMENTSTR)),
+    aAccName            (SmResId(RID_DOCUMENTSTR)),
     nClientId           (0),
     pWin                (pGraphicWin)
 {
@@ -1542,7 +1542,7 @@ bool SmEditViewForwarder::Paste()
 
 
 SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
-    aAccName            (SM_RESSTR(STR_CMDBOXWINDOW)),
+    aAccName            (SmResId(STR_CMDBOXWINDOW)),
     pTextHelper         (),
     pWin                (pEditWin)
 {

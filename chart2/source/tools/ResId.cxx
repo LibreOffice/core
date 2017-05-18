@@ -19,15 +19,14 @@
 
 #include "ResId.hxx"
 #include "ResourceManager.hxx"
+#include <tools/resid.hxx>
 
 namespace chart
 {
-
-    SchResId::SchResId( sal_Int16 nId )
-        : ResId( nId, ResourceManager::getResourceManager() )
+    OUString SchResId(sal_uInt16 nId)
     {
+        return ResId(nId, ResourceManager::getResourceManager());
     }
-
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

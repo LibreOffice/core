@@ -262,9 +262,9 @@ namespace svxform
         {
             OUString aStr;
             if (dynamic_cast<const FmFormData*>( pEntry) !=  nullptr)
-                aStr = SVX_RESSTR(RID_STR_FORM);
+                aStr = SvxResId(RID_STR_FORM);
             else
-                aStr = SVX_RESSTR(RID_STR_CONTROL);
+                aStr = SvxResId(RID_STR_CONTROL);
 
             Reference< XIndexContainer >  xContainer;
             if (pFolder)
@@ -276,7 +276,7 @@ namespace svxform
 
             if( bUndo )
             {
-                OUString aUndoStr(SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT));
+                OUString aUndoStr(SvxResId(RID_STR_UNDO_CONTAINER_INSERT));
                 aUndoStr = aUndoStr.replaceFirst("#", aStr);
                 m_pFormModel->BegUndo(aUndoStr);
             }
@@ -367,13 +367,13 @@ namespace svxform
         {
             OUString        aStr;
             if (dynamic_cast<const FmFormData*>( pEntry) !=  nullptr)
-                aStr = SVX_RESSTR(RID_STR_FORM);
+                aStr = SvxResId(RID_STR_FORM);
             else
-                aStr = SVX_RESSTR(RID_STR_CONTROL);
+                aStr = SvxResId(RID_STR_CONTROL);
 
             if( bUndo )
             {
-                OUString aUndoStr(SVX_RESSTR(RID_STR_UNDO_CONTAINER_REMOVE));
+                OUString aUndoStr(SvxResId(RID_STR_UNDO_CONTAINER_REMOVE));
                 aUndoStr = aUndoStr.replaceFirst("#", aStr);
                 m_pFormModel->BegUndo(aUndoStr);
             }

@@ -449,7 +449,7 @@ static OUString GetDescriptionByFactory_Impl( const OUString& rFactory )
     if ( nResId )
     {
         SolarMutexGuard aGuard;
-        return SvtResId(nResId).toString();
+        return SvtResId(nResId);
     }
     return OUString();
 }
@@ -750,7 +750,7 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
             sDescription += "-";
         }
         SolarMutexGuard aGuard;
-        sDescription += SvtResId(nResId).toString();
+        sDescription += SvtResId(nResId);
     }
 
     DBG_ASSERT( !sDescription.isEmpty(), "file without description" );
@@ -829,7 +829,7 @@ OUString SvFileInformationManager::GetFolderDescription( const svtools::VolumeIn
     else if ( rInfo.m_bIsRemoveable || rInfo.m_bIsVolume )
         nResId = STR_DESCRIPTION_LOCALE_VOLUME;
 
-    return SvtResId(nResId).toString();
+    return SvtResId(nResId);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

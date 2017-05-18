@@ -67,7 +67,7 @@ bool XLineTransparenceItem::GetPresentation
     switch ( ePres )
     {
         case SfxItemPresentation::Complete:
-            rText = OUString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) ) + ": ";
+            rText = OUString( SvxResId(RID_SVXSTR_TRANSPARENCE) ) + ": ";
             SAL_FALLTHROUGH;
         case SfxItemPresentation::Nameless:
             rText += unicode::formatPercent(GetValue(),
@@ -146,7 +146,7 @@ bool XLineJointItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUnit /*e
     }
 
     if( nId )
-        rText = SVX_RESSTR( nId );
+        rText = SvxResId( nId );
 
     return true;
 }
@@ -338,7 +338,7 @@ bool XLineCapItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUnit /*eCo
     }
 
     if( nId )
-        rText = SVX_RESSTR( nId );
+        rText = SvxResId( nId );
 
     return true;
 }
@@ -425,7 +425,7 @@ bool XFillTransparenceItem::GetPresentation
     switch ( ePres )
     {
         case SfxItemPresentation::Complete:
-            rText = OUString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) ) + ": ";
+            rText = SvxResId(RID_SVXSTR_TRANSPARENCE) + ": ";
             SAL_FALLTHROUGH;
         case SfxItemPresentation::Nameless:
             rText += unicode::formatPercent(GetValue(),

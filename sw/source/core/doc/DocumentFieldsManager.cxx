@@ -1646,13 +1646,13 @@ void DocumentFieldsManager::InitFieldTypes()       // is being called by the CTO
     // MIB 14.04.95: In Sw3StringPool::Setup (sw3imp.cxx) and
     //               lcl_sw3io_InSetExpField (sw3field.cxx) now also
     mpFieldTypes->push_back( new SwSetExpFieldType(&m_rDoc,
-                SW_RESSTR(STR_POOLCOLL_LABEL_ABB), nsSwGetSetExpType::GSE_SEQ) );
+                SwResId(STR_POOLCOLL_LABEL_ABB), nsSwGetSetExpType::GSE_SEQ) );
     mpFieldTypes->push_back( new SwSetExpFieldType(&m_rDoc,
-                SW_RESSTR(STR_POOLCOLL_LABEL_TABLE), nsSwGetSetExpType::GSE_SEQ) );
+                SwResId(STR_POOLCOLL_LABEL_TABLE), nsSwGetSetExpType::GSE_SEQ) );
     mpFieldTypes->push_back( new SwSetExpFieldType(&m_rDoc,
-                SW_RESSTR(STR_POOLCOLL_LABEL_FRAME), nsSwGetSetExpType::GSE_SEQ) );
+                SwResId(STR_POOLCOLL_LABEL_FRAME), nsSwGetSetExpType::GSE_SEQ) );
     mpFieldTypes->push_back( new SwSetExpFieldType(&m_rDoc,
-                SW_RESSTR(STR_POOLCOLL_LABEL_DRAWING), nsSwGetSetExpType::GSE_SEQ) );
+                SwResId(STR_POOLCOLL_LABEL_DRAWING), nsSwGetSetExpType::GSE_SEQ) );
 
     assert( mpFieldTypes->size() == INIT_FLDTYPES );
 }

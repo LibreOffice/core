@@ -165,7 +165,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     pNewView->AttrChangedNotify( &pNewView->GetWrtShell() ); // so that SelectShell is being called
     pSh = pNewView->GetWrtShellPtr();
 
-    OUString aTmp( SW_RES(STR_ENV_TITLE) );
+    OUString aTmp( SwResId(STR_ENV_TITLE) );
     aTmp += OUString::number( ++nTitleNo );
     xDocSh->SetTitle( aTmp );
 

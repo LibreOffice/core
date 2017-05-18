@@ -151,12 +151,12 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
     : m_pParentDlg(pParent)
     , m_aTabPagesCTRL(VclPtr<SvxAcceptChgCtr>::Create(pContentArea, pBuilder))
     , m_xPopup(pBuilder->get_menu("writermenu"))
-    , m_sInserted(SW_RES(STR_REDLINE_INSERTED))
-    , m_sDeleted(SW_RES(STR_REDLINE_DELETED))
-    , m_sFormated(SW_RES(STR_REDLINE_FORMATED))
-    , m_sTableChgd(SW_RES(STR_REDLINE_TABLECHG))
-    , m_sFormatCollSet(SW_RES(STR_REDLINE_FMTCOLLSET))
-    , m_sAutoFormat(SW_RES(STR_REDLINE_AUTOFMT))
+    , m_sInserted(SwResId(STR_REDLINE_INSERTED))
+    , m_sDeleted(SwResId(STR_REDLINE_DELETED))
+    , m_sFormated(SwResId(STR_REDLINE_FORMATED))
+    , m_sTableChgd(SwResId(STR_REDLINE_TABLECHG))
+    , m_sFormatCollSet(SwResId(STR_REDLINE_FMTCOLLSET))
+    , m_sAutoFormat(SwResId(STR_REDLINE_AUTOFMT))
     , m_bOnlyFormatedRedlines(false)
     , m_bRedlnAutoFormat(bAutoFormat)
     , m_bInhibitActivate(false)
@@ -819,7 +819,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
             SwRewriter aRewriter;
             aRewriter.AddRule(UndoArg1,
                               OUString::number(aRedlines.size()));
-            aTmpStr = aRewriter.Apply(OUString(SW_RES(STR_N_REDLINES)));
+            aTmpStr = aRewriter.Apply(SwResId(STR_N_REDLINES));
         }
 
         SwRewriter aRewriter;
@@ -1111,9 +1111,9 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
                     break;
                 default:;//prevent warning
             }
-            OUString sTitle(SW_RES(STR_REDLINE_COMMENT));
+            OUString sTitle(SwResId(STR_REDLINE_COMMENT));
             if( nResId )
-                sTitle += SW_RESSTR( nResId );
+                sTitle += SwResId( nResId );
             pDlg->SetText(sTitle);
 
             SwViewShell::SetCareWin(pDlg->GetWindow());

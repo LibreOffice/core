@@ -24,7 +24,7 @@
 #include <tools/rcid.h>
 #include <tools/resmgr.hxx>
 
-OUString ResId::toString() const
+OUString ResId::toFooString() const
 {
     SetRT( RSC_STRING );
 

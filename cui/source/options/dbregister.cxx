@@ -102,8 +102,8 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( vcl::Window* pParent, cons
 
     SfxTabPage( pParent, "DbRegisterPage", "cui/ui/dbregisterpage.ui", &rSet ),
 
-    m_aTypeText       ( CUI_RES( RID_SVXSTR_TYPE ) ),
-    m_aPathText       ( CUI_RES( RID_SVXSTR_PATH ) ),
+    m_aTypeText       ( CuiResId( RID_SVXSTR_TYPE ) ),
+    m_aPathText       ( CuiResId( RID_SVXSTR_PATH ) ),
     m_pPathBox        ( nullptr ),
     m_pCurEntry     ( nullptr ),
     m_nOldCount     ( 0 ),
@@ -275,7 +275,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl, Button*, void)
     SvTreeListEntry* pEntry = m_pPathBox->FirstSelected();
     if ( pEntry )
     {
-        ScopedVclPtrInstance< MessageDialog > aQuery(this, CUI_RES(RID_SVXSTR_QUERY_DELETE_CONFIRM), VclMessageType::Question, VclButtonsType::YesNo);
+        ScopedVclPtrInstance< MessageDialog > aQuery(this, CuiResId(RID_SVXSTR_QUERY_DELETE_CONFIRM), VclMessageType::Question, VclButtonsType::YesNo);
         if ( aQuery->Execute() == RET_YES )
             m_pPathBox->GetModel()->Remove(pEntry);
     }

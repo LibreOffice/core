@@ -21,10 +21,17 @@
 #define INCLUDED_AVMEDIA_SOURCE_INC_MEDIAMISC_HXX
 
 #include <config_features.h>
+#include <tools/resid.hxx>
 
-class ResMgr;
+namespace avmedia
+{
+    ResMgr* GetResMgr();
+}
 
-#define AVMEDIA_RESID( nId ) ResId( nId, * ::avmedia::GetResMgr() )
+inline OUString AvmResId(sal_uInt16 nId)
+{
+    return ResId(nId, * ::avmedia::GetResMgr());
+}
 
 #define AVMEDIA_MANAGER_SERVICE_PREFERRED "com.sun.star.comp.avmedia.Manager_VLC"
 #ifdef _WIN32
@@ -47,12 +54,6 @@ class ResMgr;
 #if HAVE_FEATURE_GLTF
 #define AVMEDIA_MIMETYPE_JSON             "model/vnd.gltf+json"
 #endif
-
-
-namespace avmedia
-{
-    ResMgr* GetResMgr();
-}
 
 #endif
 

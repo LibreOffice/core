@@ -69,7 +69,7 @@ SwCharDlg::SwCharDlg(vcl::Window* pParent, SwView& rVw, const SfxItemSet& rCoreS
 {
     if(pStr)
     {
-        SetText(GetText() + SW_RESSTR(STR_TEXTCOLL_HEADER) + *pStr + ")");
+        SetText(GetText() + SwResId(STR_TEXTCOLL_HEADER) + *pStr + ")");
     }
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialog creation failed!");

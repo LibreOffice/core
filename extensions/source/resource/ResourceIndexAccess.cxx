@@ -112,7 +112,7 @@ Any SAL_CALL ResourceStringIndexAccess::getByIndex(sal_Int32 nIdx)
     if(!m_pResMgr->IsAvailable(aId))
         throw RuntimeException("string resource for id not available");
 
-    return makeAny(aId.toString());
+    return makeAny(aId.toFooString());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

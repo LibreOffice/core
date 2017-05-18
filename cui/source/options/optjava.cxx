@@ -545,12 +545,12 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
     }
     else if ( JFW_E_NOT_RECOGNIZED == eErr )
     {
-        ScopedVclPtrInstance< MessageDialog > aErrBox( this, CUI_RES( RID_SVXSTR_JRE_NOT_RECOGNIZED ) );
+        ScopedVclPtrInstance< MessageDialog > aErrBox( this, CuiResId( RID_SVXSTR_JRE_NOT_RECOGNIZED ) );
         aErrBox->Execute();
     }
     else if ( JFW_E_FAILED_VERSION == eErr )
     {
-        ScopedVclPtrInstance< MessageDialog > aErrBox( this, CUI_RES( RID_SVXSTR_JRE_FAILED_VERSION ) );
+        ScopedVclPtrInstance< MessageDialog > aErrBox( this, CuiResId( RID_SVXSTR_JRE_FAILED_VERSION ) );
         aErrBox->Execute();
     }
 
@@ -810,7 +810,7 @@ void SvxJavaParameterDlg::EditParameter()
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ScopedVclPtrInstance< InputDialog > pParamEditDlg(CUI_RES(RID_SVXSTR_JAVA_START_PARAM), this);
+        ScopedVclPtrInstance< InputDialog > pParamEditDlg(CuiResId(RID_SVXSTR_JAVA_START_PARAM), this);
         OUString editableClassPath = m_pAssignedList->GetSelectEntry();
         pParamEditDlg->SetEntryText( editableClassPath );
         pParamEditDlg->HideHelpBtn();
@@ -911,8 +911,8 @@ void SvxJavaClassPathDlg::dispose()
 IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
 {
     sfx2::FileDialogHelper aDlg( TemplateDescription::FILEOPEN_SIMPLE );
-    aDlg.SetTitle( CUI_RES( RID_SVXSTR_ARCHIVE_TITLE ) );
-    aDlg.AddFilter( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ), "*.jar;*.zip" );
+    aDlg.SetTitle( CuiResId( RID_SVXSTR_ARCHIVE_TITLE ) );
+    aDlg.AddFilter( CuiResId( RID_SVXSTR_ARCHIVE_HEADLINE ), "*.jar;*.zip" );
     OUString sFolder;
     if ( m_pPathList->GetSelectEntryCount() > 0 )
     {
@@ -934,7 +934,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl, Button*, void)
         }
         else
         {
-            OUString sMsg( CUI_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
+            OUString sMsg( CuiResId( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sFile );
             ScopedVclPtrInstance<MessageDialog>(this, sMsg)->Execute();
         }
@@ -969,7 +969,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl, Button*, void)
         }
         else
         {
-            OUString sMsg( CUI_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
+            OUString sMsg( CuiResId( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sNewFolder );
             ScopedVclPtrInstance<MessageDialog>(this, sMsg)->Execute();
         }

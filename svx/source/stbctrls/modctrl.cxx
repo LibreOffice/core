@@ -89,7 +89,7 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
     _repaint();
 
     int nResId = modified ? RID_SVXSTR_DOC_MODIFIED_YES : RID_SVXSTR_DOC_MODIFIED_NO;
-    GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(nResId));
+    GetStatusBar().SetQuickHelpText(GetId(), SvxResId(nResId));
 
     if ( start )
         mxImpl->maIdle.Start();

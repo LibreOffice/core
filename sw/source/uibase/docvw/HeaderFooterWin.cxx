@@ -147,13 +147,13 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwFrame *pFrame
     // Rewrite the menu entries' text
     if (m_bIsHeader)
     {
-        m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("edit"), SW_RESSTR(STR_FORMAT_HEADER));
-        m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("delete"), SW_RESSTR(STR_DELETE_HEADER));
+        m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("edit"), SwResId(STR_FORMAT_HEADER));
+        m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("delete"), SwResId(STR_DELETE_HEADER));
     }
     else
     {
-        m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("edit"), SW_RESSTR(STR_FORMAT_FOOTER));
-        m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("delete"), SW_RESSTR(STR_DELETE_FOOTER));
+        m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("edit"), SwResId(STR_FORMAT_FOOTER));
+        m_pPopupMenu->SetItemText(m_pPopupMenu->GetItemId("delete"), SwResId(STR_DELETE_FOOTER));
     }
 
     SetPopupMenu(m_pPopupMenu);
@@ -182,17 +182,17 @@ void SwHeaderFooterWin::SetOffset(Point aOffset, long nXLineStart, long nXLineEn
     bool bIsFirst = !pDesc->IsFirstShared() && GetPageFrame()->OnFirstPage();
     bool bIsLeft  = !pDesc->IsHeaderShared() && !GetPageFrame()->OnRightPage();
     bool bIsRight = !pDesc->IsHeaderShared() && GetPageFrame()->OnRightPage();
-    m_sLabel = SW_RESSTR(STR_HEADER_TITLE);
+    m_sLabel = SwResId(STR_HEADER_TITLE);
     if (!m_bIsHeader)
-        m_sLabel = bIsFirst ? SW_RESSTR(STR_FIRST_FOOTER_TITLE)
-            : bIsLeft  ? SW_RESSTR(STR_LEFT_FOOTER_TITLE)
-            : bIsRight ? SW_RESSTR(STR_RIGHT_FOOTER_TITLE)
-            : SW_RESSTR(STR_FOOTER_TITLE );
+        m_sLabel = bIsFirst ? SwResId(STR_FIRST_FOOTER_TITLE)
+            : bIsLeft  ? SwResId(STR_LEFT_FOOTER_TITLE)
+            : bIsRight ? SwResId(STR_RIGHT_FOOTER_TITLE)
+            : SwResId(STR_FOOTER_TITLE );
     else
-        m_sLabel = bIsFirst ? SW_RESSTR(STR_FIRST_HEADER_TITLE)
-            : bIsLeft  ? SW_RESSTR(STR_LEFT_HEADER_TITLE)
-            : bIsRight ? SW_RESSTR(STR_RIGHT_HEADER_TITLE)
-            : SW_RESSTR(STR_HEADER_TITLE);
+        m_sLabel = bIsFirst ? SwResId(STR_FIRST_HEADER_TITLE)
+            : bIsLeft  ? SwResId(STR_LEFT_HEADER_TITLE)
+            : bIsRight ? SwResId(STR_RIGHT_HEADER_TITLE)
+            : SwResId(STR_HEADER_TITLE);
 
     sal_Int32 nPos = m_sLabel.lastIndexOf("%1");
     m_sLabel = m_sLabel.replaceAt(nPos, 2, pDesc->GetName());

@@ -845,7 +845,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
 
     sal_uInt16 nUsedMask = SFXSTYLEBIT_USED;
 
-    aName = SD_RESSTR(STR_PSEUDOSHEET_TITLE);
+    aName = SdResId(STR_PSEUDOSHEET_TITLE);
     if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == nullptr )
     {
         pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
@@ -854,7 +854,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_TITLE );
 
-    aName = SD_RESSTR(STR_PSEUDOSHEET_SUBTITLE);
+    aName = SdResId(STR_PSEUDOSHEET_SUBTITLE);
     if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == nullptr )
     {
         pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
@@ -863,7 +863,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_SUBTITLE );
 
-    aName = SD_RESSTR(STR_PSEUDOSHEET_BACKGROUNDOBJECTS);
+    aName = SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS);
     if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == nullptr )
     {
         pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
@@ -872,7 +872,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUNDOBJECTS );
 
-    aName = SD_RESSTR(STR_PSEUDOSHEET_BACKGROUND);
+    aName = SdResId(STR_PSEUDOSHEET_BACKGROUND);
     if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == nullptr )
     {
         pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
@@ -881,7 +881,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUND );
 
-    aName = SD_RESSTR(STR_PSEUDOSHEET_NOTES);
+    aName = SdResId(STR_PSEUDOSHEET_NOTES);
     if( (pSheet = Find(aName, SD_STYLE_FAMILY_PSEUDO)) == nullptr )
     {
         pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
@@ -892,7 +892,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
 
     pParent = nullptr;
     SetSearchMask(SD_STYLE_FAMILY_PSEUDO);
-    aName = SD_RESSTR(STR_PSEUDOSHEET_OUTLINE);
+    aName = SdResId(STR_PSEUDOSHEET_OUTLINE);
     for (sal_Int32 nLevel = 1; nLevel < 10; nLevel++)
     {
         OUString aLevelName( aName + " " + OUString::number( nLevel ) );
@@ -1002,7 +1002,7 @@ void SdStyleSheetPool::UpdateStdNames()
             {
                 if( nNameId )
                 {
-                    aNewName = SD_RESSTR( nNameId );
+                    aNewName = SdResId( nNameId );
                     if( nNameId == STR_PSEUDOSHEET_OUTLINE )
                     {
                         aNewName += " " + OUString::number( sal_Int32( nHelpId - HID_PSEUDOSHEET_OUTLINE ) );

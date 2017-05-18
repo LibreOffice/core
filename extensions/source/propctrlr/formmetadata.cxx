@@ -79,7 +79,7 @@ namespace pcr
 
 #define DEF_INFO( ident, uinameres, pos, helpid, flags )       \
     OPropertyInfoImpl( PROPERTY_##ident, PROPERTY_ID_##ident, \
-            PcrRes( RID_STR_##uinameres ).toString(), pos, HID_PROP_##helpid, flags )
+            PcrRes( RID_STR_##uinameres ).toFooString(), pos, HID_PROP_##helpid, flags )
 
 #define DEF_INFO_1( ident, uinameres, pos, helpid, flag1 )   \
     DEF_INFO( ident, uinameres, pos, helpid, PROP_FLAG_##flag1 )

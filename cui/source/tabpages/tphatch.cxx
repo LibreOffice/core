@@ -174,7 +174,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 
         // determining (possibly cutting) the name
         // and displaying it in the GroupBox
-        OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) );
+        OUString        aString( CuiResId( RID_SVXSTR_TABLE ) );
         aString         += ": ";
         INetURLObject   aURL( m_pHatchingList->GetPath() );
 
@@ -431,8 +431,8 @@ void SvxHatchTabPage::ChangeHatchHdl_Impl()
 
 IMPL_LINK_NOARG(SvxHatchTabPage, ClickAddHdl_Impl, Button*, void)
 {
-    OUString aNewName( SVX_RES( RID_SVXSTR_HATCH ) );
-    OUString aDesc( CUI_RES( RID_SVXSTR_DESC_HATCH ) );
+    OUString aNewName( SvxResId( RID_SVXSTR_HATCH ) );
+    OUString aDesc( CuiResId( RID_SVXSTR_DESC_HATCH ) );
     OUString aName;
 
     long nCount = m_pHatchingList->Count();
@@ -563,7 +563,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
 
     if( nPos != VALUESET_ITEM_NOTFOUND )
     {
-        OUString aDesc( CUI_RES( RID_SVXSTR_DESC_HATCH ) );
+        OUString aDesc( CuiResId( RID_SVXSTR_DESC_HATCH ) );
         OUString aName( m_pHatchingList->GetHatch( nPos )->GetName() );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

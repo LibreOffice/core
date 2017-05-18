@@ -245,7 +245,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     if (TOX_CONTENT == m_eType || TOX_ILLUSTRATIONS == m_eType )
     {
         SwFormToken aLinkStt (TOKEN_LINK_START);
-        aLinkStt.sCharStyleName = SW_RES(STR_POOLCHR_TOXJUMP);
+        aLinkStt.sCharStyleName = SwResId(STR_POOLCHR_TOXJUMP);
         aTokens.push_back(aLinkStt);
     }
 
@@ -273,7 +273,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     if (TOX_CONTENT == m_eType || TOX_ILLUSTRATIONS == m_eType)
         aTokens.push_back(SwFormToken(TOKEN_LINK_END));
 
-    SetTemplate( 0, SW_RESSTR( nPoolId++ ));
+    SetTemplate( 0, SwResId( nPoolId++ ));
 
     if(TOX_INDEX == m_eType)
     {
@@ -286,12 +286,12 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
                 aTmpTokens.push_back(aTmpToken);
 
                 SetPattern( i, aTmpTokens );
-                SetTemplate( i, SW_RESSTR( STR_POOLCOLL_TOX_IDXBREAK    ));
+                SetTemplate( i, SwResId( STR_POOLCOLL_TOX_IDXBREAK    ));
             }
             else
             {
                 SetPattern( i, aTokens );
-                SetTemplate( i, SW_RESSTR( STR_POOLCOLL_TOX_IDX1 + i - 2 ));
+                SetTemplate( i, SwResId( STR_POOLCOLL_TOX_IDX1 + i - 2 ));
             }
         }
     }
@@ -313,7 +313,7 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
                 nPoolId = STR_POOLCOLL_TOX_USER6;
             else if( TOX_AUTHORITIES == m_eType )
                 nPoolId = STR_POOLCOLL_TOX_AUTHORITIES1;
-            SetTemplate( i, SW_RESSTR( nPoolId ) );
+            SetTemplate( i, SwResId( nPoolId ) );
         }
 }
 

@@ -180,8 +180,8 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                     mpDocSh->SetWaitCursor( true );
 
                     // replace placeholder by template name
-                    OUString aComment(SD_RESSTR(STR_UNDO_CHANGE_PRES_OBJECT));
-                    aComment = aComment.replaceFirst("$", SD_RESSTR(STR_PSEUDOSHEET_OUTLINE));
+                    OUString aComment(SdResId(STR_UNDO_CHANGE_PRES_OBJECT));
+                    aComment = aComment.replaceFirst("$", SdResId(STR_PSEUDOSHEET_OUTLINE));
                     mpDocSh->GetUndoManager()->EnterListAction( aComment, OUString(), 0, mpDrawViewShell->GetViewShellBase().GetViewShellId() );
 
                     std::vector<Paragraph*> aSelList;
@@ -435,7 +435,7 @@ bool DrawView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAtt
         if (IsPresObjSelected(false))
         {
             ScopedVclPtrInstance<InfoBox>(mpDrawViewShell->GetActiveWindow(),
-                    SD_RESSTR(STR_ACTION_NOTPOSSIBLE))->Execute();
+                    SdResId(STR_ACTION_NOTPOSSIBLE))->Execute();
             bResult = false;
         }
         else
@@ -518,7 +518,7 @@ void DrawView::DeleteMarked()
 
     if( pUndoManager )
     {
-        OUString aUndo(SVX_RESSTR(STR_EditDelete));
+        OUString aUndo(SvxResId(STR_EditDelete));
         aUndo = aUndo.replaceFirst("%1", GetDescriptionOfMarkedObjects());
         ViewShellId nViewShellId = mpDrawViewShell ? mpDrawViewShell->GetViewShellBase().GetViewShellId() : ViewShellId(-1);
         pUndoManager->EnterListAction(aUndo, aUndo, 0, nViewShellId);

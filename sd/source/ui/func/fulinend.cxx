@@ -92,8 +92,8 @@ void FuLineEnd::DoExecute( SfxRequest& )
 
         XLineEndListRef pLineEndList = mpDoc->GetLineEndList();
 
-        OUString aNewName( SD_RESSTR( STR_LINEEND ) );
-        OUString aDesc( SD_RESSTR( STR_DESC_LINEEND ) );
+        OUString aNewName( SdResId( STR_LINEEND ) );
+        OUString aDesc( SdResId( STR_DESC_LINEEND ) );
         OUString aName;
 
         long nCount = pLineEndList->Count();
@@ -138,7 +138,7 @@ void FuLineEnd::DoExecute( SfxRequest& )
                 else
                 {
                     ScopedVclPtrInstance<WarningBox> aWarningBox( mpWindow, WinBits( WB_OK ),
-                            SD_RESSTR( STR_WARN_NAME_DUPLICATE ) );
+                            SdResId( STR_WARN_NAME_DUPLICATE ) );
                     aWarningBox->Execute();
                 }
             }

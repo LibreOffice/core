@@ -2219,7 +2219,7 @@ void SmParser::AddError(SmParseError Type, SmNode *pNode)
 
     pErrDesc->m_eType = Type;
     pErrDesc->m_pNode = pNode;
-    pErrDesc->m_aText = SM_RESSTR(RID_ERR_IDENT);
+    pErrDesc->m_aText = SmResId(RID_ERR_IDENT);
 
     sal_uInt16  nRID;
     switch (Type)
@@ -2242,7 +2242,7 @@ void SmParser::AddError(SmParseError Type, SmNode *pNode)
             assert(false);
             return;
     }
-    pErrDesc->m_aText += SM_RESSTR(nRID);
+    pErrDesc->m_aText += SmResId(nRID);
 
     m_aErrDescList.push_back(std::move(pErrDesc));
 }

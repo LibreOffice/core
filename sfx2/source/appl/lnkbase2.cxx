@@ -496,7 +496,7 @@ bool SvBaseLink::ExecuteEdit( const OUString& _rNewName )
             sfx2::LinkManager::GetDisplayNames( this, &sApp, &sTopic, &sItem );
             if( nObjType == OBJECT_CLIENT_DDE )
             {
-                sError = SFX2_RESSTR(STR_DDE_ERROR);
+                sError = SfxResId(STR_DDE_ERROR);
 
                 sal_Int32 nFndPos = sError.indexOf( "%1" );
                 if( -1 != nFndPos )

@@ -77,7 +77,7 @@ sal_uLong SwCursor::Find( const SwTextFormatColl& rFormatColl, SwDocPositions nS
     {
         SwRewriter aRewriter;
         aRewriter.AddRule(UndoArg1, rFormatColl.GetName());
-        aRewriter.AddRule(UndoArg2, SW_RES(STR_YIELDS));
+        aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
         aRewriter.AddRule(UndoArg3, pReplFormatColl->GetName());
 
         pDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::UI_REPLACE_STYLE,

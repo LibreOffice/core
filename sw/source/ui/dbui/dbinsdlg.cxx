@@ -191,7 +191,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
     , ConfigItem("Office.Writer/InsertData/DataSet",
         ConfigItemMode::DelayedUpdate)
     , aDBData(rData)
-    , sNoTmpl(SW_RESSTR(SW_STR_NONE))
+    , sNoTmpl(SwResId(SW_STR_NONE))
     , pView(&rView)
     , pTAutoFormat(nullptr)
     , pTableSet(nullptr)

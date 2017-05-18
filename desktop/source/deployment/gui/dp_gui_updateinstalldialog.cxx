@@ -205,14 +205,14 @@ UpdateInstallDialog::UpdateInstallDialog(
         m_thread(new Thread(xCtx, *this, aVecUpdateData)),
         m_bError(false),
         m_bNoEntry(true),
-        m_sInstalling(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_INSTALLING)),
-        m_sFinished(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_FINISHED)),
-        m_sNoErrors(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_NO_ERRORS)),
-        m_sErrorDownload(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_ERROR_DOWNLOAD)),
-        m_sErrorInstallation(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_ERROR_INSTALLATION)),
-        m_sErrorLicenseDeclined(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED)),
-        m_sNoInstall(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL)),
-        m_sThisErrorOccurred(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED))
+        m_sInstalling(DpGuiResId(RID_DLG_UPDATE_INSTALL_INSTALLING)),
+        m_sFinished(DpGuiResId(RID_DLG_UPDATE_INSTALL_FINISHED)),
+        m_sNoErrors(DpGuiResId(RID_DLG_UPDATE_INSTALL_NO_ERRORS)),
+        m_sErrorDownload(DpGuiResId(RID_DLG_UPDATE_INSTALL_ERROR_DOWNLOAD)),
+        m_sErrorInstallation(DpGuiResId(RID_DLG_UPDATE_INSTALL_ERROR_INSTALLATION)),
+        m_sErrorLicenseDeclined(DpGuiResId(RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED)),
+        m_sNoInstall(DpGuiResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL)),
+        m_sThisErrorOccurred(DpGuiResId(RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED))
 {
     get(m_pFt_action, "DOWNLOADING");
     get(m_pStatusbar, "STATUSBAR");

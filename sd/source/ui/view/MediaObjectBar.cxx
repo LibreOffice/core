@@ -65,7 +65,7 @@ MediaObjectBar::MediaObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView ) :
     SetPool( &pDocShell->GetPool() );
     SetUndoManager( pDocShell->GetUndoManager() );
     SetRepeatTarget( mpView );
-    SetName(SD_RESSTR(RID_DRAW_MEDIA_TOOLBOX));
+    SetName(SdResId(RID_DRAW_MEDIA_TOOLBOX));
 }
 
 MediaObjectBar::~MediaObjectBar()

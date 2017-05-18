@@ -123,7 +123,7 @@ SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
         m_pVRulerRightCBox->Hide();
     m_pVRulerCBox->SetClickHdl(LINK(this, SwContentOptPage, VertRulerHdl ));
 
-    SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
+    SvxStringArray aMetricArr(ResId(STR_ARR_METRIC, *pSwResMgr));
     for ( size_t i = 0; i < aMetricArr.Count(); ++i )
     {
         const OUString sMetric = aMetricArr.GetStringByPos( i );
@@ -297,7 +297,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(vcl::Window* pParent,
     const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "PrintOptionsPage",
         "modules/swriter/ui/printoptionspage.ui", &rCoreSet)
-    , sNone(SW_RESSTR(SW_STR_NONE))
+    , sNone(SwResId(SW_STR_NONE))
     , bAttrModified(false)
     , bPreview(false)
 {
@@ -559,9 +559,9 @@ SwStdFontTabPage::SwStdFontTabPage( vcl::Window* pParent,
 
     m_nFontGroup(FONT_GROUP_DEFAULT),
 
-    m_sScriptWestern(SW_RES(ST_SCRIPT_WESTERN)),
-    m_sScriptAsian(SW_RES(ST_SCRIPT_ASIAN)),
-    m_sScriptComplex(SW_RES(ST_SCRIPT_CTL))
+    m_sScriptWestern(SwResId(ST_SCRIPT_WESTERN)),
+    m_sScriptAsian(SwResId(ST_SCRIPT_ASIAN)),
+    m_sScriptComplex(SwResId(ST_SCRIPT_CTL))
 {
     get(m_pLabelFT,"label1");
     get(m_pStandardBox,"standardbox");

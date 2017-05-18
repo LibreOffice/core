@@ -560,16 +560,16 @@ void TabBar::ImplInit( WinBits nWinStyle )
     ImplInitControls();
 
     if (mpImpl->mpFirstButton)
-        mpImpl->mpFirstButton->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVET0HOME));
+        mpImpl->mpFirstButton->SetAccessibleName(SvtResId(STR_TABBAR_PUSHBUTTON_MOVET0HOME));
     if (mpImpl->mpPrevButton)
-        mpImpl->mpPrevButton->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVELEFT));
+        mpImpl->mpPrevButton->SetAccessibleName(SvtResId(STR_TABBAR_PUSHBUTTON_MOVELEFT));
     if (mpImpl->mpNextButton)
-        mpImpl->mpNextButton->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVERIGHT));
+        mpImpl->mpNextButton->SetAccessibleName(SvtResId(STR_TABBAR_PUSHBUTTON_MOVERIGHT));
     if (mpImpl->mpLastButton)
-        mpImpl->mpLastButton->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_MOVETOEND));
+        mpImpl->mpLastButton->SetAccessibleName(SvtResId(STR_TABBAR_PUSHBUTTON_MOVETOEND));
 
     if (mpImpl->mpAddButton)
-        mpImpl->mpAddButton->SetAccessibleName(SVT_RESSTR(STR_TABBAR_PUSHBUTTON_ADDTAB));
+        mpImpl->mpAddButton->SetAccessibleName(SvtResId(STR_TABBAR_PUSHBUTTON_ADDTAB));
 
     SetSizePixel( Size( 100, CalcWindowSizePixel().Height() ) );
     ImplInitSettings( true, true );

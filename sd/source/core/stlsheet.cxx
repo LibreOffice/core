@@ -417,23 +417,23 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
     OUString aInternalName;
     OUString aStyleName(aName);
 
-    if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_TITLE)))
+    if (aStyleName == SdResId(STR_PSEUDOSHEET_TITLE))
     {
         aInternalName = STR_LAYOUT_TITLE;
     }
-    else if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_SUBTITLE)))
+    else if (aStyleName == SdResId(STR_PSEUDOSHEET_SUBTITLE))
     {
         aInternalName = STR_LAYOUT_SUBTITLE;
     }
-    else if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_BACKGROUND)))
+    else if (aStyleName == SdResId(STR_PSEUDOSHEET_BACKGROUND))
     {
         aInternalName = STR_LAYOUT_BACKGROUND;
     }
-    else if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS)))
+    else if (aStyleName == SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS))
     {
         aInternalName = STR_LAYOUT_BACKGROUNDOBJECTS;
     }
-    else if (aStyleName == OUString(SdResId(STR_PSEUDOSHEET_NOTES)))
+    else if (aStyleName == SdResId(STR_PSEUDOSHEET_NOTES))
     {
         aInternalName = STR_LAYOUT_NOTES;
     }
@@ -482,23 +482,23 @@ SdStyleSheet* SdStyleSheet::GetPseudoStyleSheet() const
 
     if (aStyleName == STR_LAYOUT_TITLE)
     {
-        aStyleName = OUString(SdResId(STR_PSEUDOSHEET_TITLE));
+        aStyleName = SdResId(STR_PSEUDOSHEET_TITLE);
     }
     else if (aStyleName == STR_LAYOUT_SUBTITLE)
     {
-        aStyleName = OUString(SdResId(STR_PSEUDOSHEET_SUBTITLE));
+        aStyleName = SdResId(STR_PSEUDOSHEET_SUBTITLE);
     }
     else if (aStyleName == STR_LAYOUT_BACKGROUND)
     {
-        aStyleName = OUString(SdResId(STR_PSEUDOSHEET_BACKGROUND));
+        aStyleName = SdResId(STR_PSEUDOSHEET_BACKGROUND);
     }
     else if (aStyleName == STR_LAYOUT_BACKGROUNDOBJECTS)
     {
-        aStyleName = OUString(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS));
+        aStyleName = SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS);
     }
     else if (aStyleName == STR_LAYOUT_NOTES)
     {
-        aStyleName = OUString(SdResId(STR_PSEUDOSHEET_NOTES));
+        aStyleName = SdResId(STR_PSEUDOSHEET_NOTES);
     }
     else
     {
@@ -507,7 +507,7 @@ SdStyleSheet* SdStyleSheet::GetPseudoStyleSheet() const
         if (nPos != -1)
         {
             OUString aNumStr(aStyleName.copy(aOutlineStr.getLength()));
-            aStyleName = OUString(SdResId(STR_PSEUDOSHEET_OUTLINE));
+            aStyleName = SdResId(STR_PSEUDOSHEET_OUTLINE);
             aStyleName += aNumStr;
         }
     }
@@ -1331,7 +1331,7 @@ void SdStyleSheet::BroadcastSdStyleSheetChange(SfxStyleSheetBase* pStyleSheet,
 
     if( (ePO >= PO_OUTLINE_1) && (ePO <= PO_OUTLINE_8) )
     {
-        OUString sStyleName(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE) + " ");
+        OUString sStyleName(SdResId(STR_PSEUDOSHEET_OUTLINE) + " ");
 
         for( sal_uInt16 n = (sal_uInt16)(ePO - PO_OUTLINE_1 + 2); n < 10; n++ )
         {

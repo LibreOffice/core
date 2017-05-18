@@ -906,18 +906,18 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
         rSet.DisableItem( SID_CLEARHISTORY );
 
     if ( pShUndoMgr && pShUndoMgr->GetUndoActionCount() )
-        rSet.Put( SfxStringItem( SID_UNDO, SvtResId(STR_UNDO).toString()+pShUndoMgr->GetUndoActionComment() ) );
+        rSet.Put( SfxStringItem( SID_UNDO, SvtResId(STR_UNDO)+pShUndoMgr->GetUndoActionComment() ) );
     else
         rSet.DisableItem( SID_UNDO );
 
     if ( pShUndoMgr && pShUndoMgr->GetRedoActionCount() )
-        rSet.Put( SfxStringItem( SID_REDO, SvtResId(STR_REDO).toString()+pShUndoMgr->GetRedoActionComment() ) );
+        rSet.Put( SfxStringItem( SID_REDO, SvtResId(STR_REDO)+pShUndoMgr->GetRedoActionComment() ) );
     else
         rSet.DisableItem( SID_REDO );
 
     SfxRepeatTarget *pTarget = pSh->GetRepeatTarget();
     if ( pShUndoMgr && pTarget && pShUndoMgr->GetRepeatActionCount() && pShUndoMgr->CanRepeat(*pTarget) )
-        rSet.Put( SfxStringItem( SID_REPEAT, SvtResId(STR_REPEAT).toString()+pShUndoMgr->GetRepeatActionComment(*pTarget) ) );
+        rSet.Put( SfxStringItem( SID_REPEAT, SvtResId(STR_REPEAT)+pShUndoMgr->GetRepeatActionComment(*pTarget) ) );
     else
         rSet.DisableItem( SID_REPEAT );
 }

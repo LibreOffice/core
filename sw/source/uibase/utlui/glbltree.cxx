@@ -155,7 +155,7 @@ SwGlobalTree::SwGlobalTree(vcl::Window* pParent, SwNavigationPI* pDialog)
     m_aUpdateTimer.Start();
     for(sal_uInt16 i = 0; i < GLOBAL_CONTEXT_COUNT; i++)
     {
-        m_aContextStrings[i] = SW_RESSTR(i+ STR_GLOBAL_CONTEXT_FIRST);
+        m_aContextStrings[i] = SwResId(i+ STR_GLOBAL_CONTEXT_FIRST);
     }
     SetHelpId(HID_NAVIGATOR_GLOB_TREELIST);
     SelectHdl();

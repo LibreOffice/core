@@ -172,7 +172,7 @@ FindTextFieldControl::FindTextFieldControl( vcl::Window* pParent, WinBits nStyle
     m_xFrame(xFrame),
     m_xContext(xContext)
 {
-    SetPlaceholderText(SVX_RESSTR(RID_SVXSTR_FINDBAR_FIND));
+    SetPlaceholderText(SvxResId(RID_SVXSTR_FINDBAR_FIND));
     EnableAutocomplete(true, true);
 }
 
@@ -821,7 +821,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL MatchCaseToolboxController::cr
     {
         ToolBox* pToolbar = static_cast<ToolBox*>(pParent.get());
         m_pMatchCaseControl = VclPtr<CheckBox>::Create( pToolbar, 0 );
-        m_pMatchCaseControl->SetText( SVX_RESSTR( RID_SVXSTR_FINDBAR_MATCHCASE ) );
+        m_pMatchCaseControl->SetText( SvxResId( RID_SVXSTR_FINDBAR_MATCHCASE ) );
         Size aSize( m_pMatchCaseControl->GetOptimalSize() );
         m_pMatchCaseControl->SetSizePixel( aSize );
     }
@@ -940,7 +940,7 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL SearchFormattedToolboxControll
     {
         ToolBox* pToolbar = static_cast<ToolBox*>(pParent.get());
         m_pSearchFormattedControl = VclPtr<CheckBox>::Create( pToolbar, 0 );
-        m_pSearchFormattedControl->SetText( SVX_RESSTR( RID_SVXSTR_FINDBAR_SEARCHFORMATTED ) );
+        m_pSearchFormattedControl->SetText( SvxResId( RID_SVXSTR_FINDBAR_SEARCHFORMATTED ) );
         Size aSize( m_pSearchFormattedControl->GetOptimalSize() );
         m_pSearchFormattedControl->SetSizePixel( aSize );
     }

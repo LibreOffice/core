@@ -170,7 +170,7 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
 
     for( std::vector<Bitmap *>::size_type nFavorite = 1; nFavorite <= nFavCount; nFavorite++ )
     {
-        OUString aStr(SVX_RESSTR(RID_SVXFLOAT3D_FAVORITE));
+        OUString aStr(SvxResId(RID_SVXFLOAT3D_FAVORITE));
         aStr += " ";
         aStr += OUString::number(nFavorite);
         Image aThumbImage( maFavoritesHorizontal[nFavorite-1] );
@@ -278,11 +278,11 @@ FontworkAlignmentWindow::FontworkAlignmentWindow(svt::ToolboxController& rContro
 {
     SetSelectHdl( LINK( this, FontworkAlignmentWindow, SelectHdl ) );
 
-    appendEntry(0, SVX_RESSTR(RID_SVXSTR_ALIGN_LEFT), maImgAlgin1);
-    appendEntry(1, SVX_RESSTR(RID_SVXSTR_ALIGN_CENTER), maImgAlgin2);
-    appendEntry(2, SVX_RESSTR(RID_SVXSTR_ALIGN_RIGHT), maImgAlgin3);
-    appendEntry(3, SVX_RESSTR(RID_SVXSTR_ALIGN_WORD), maImgAlgin4);
-    appendEntry(4, SVX_RESSTR(RID_SVXSTR_ALIGN_STRETCH), maImgAlgin5);
+    appendEntry(0, SvxResId(RID_SVXSTR_ALIGN_LEFT), maImgAlgin1);
+    appendEntry(1, SvxResId(RID_SVXSTR_ALIGN_CENTER), maImgAlgin2);
+    appendEntry(2, SvxResId(RID_SVXSTR_ALIGN_RIGHT), maImgAlgin3);
+    appendEntry(3, SvxResId(RID_SVXSTR_ALIGN_WORD), maImgAlgin4);
+    appendEntry(4, SvxResId(RID_SVXSTR_ALIGN_STRETCH), maImgAlgin5);
 
     SetOutputSizePixel( getMenuSize() );
 
@@ -434,14 +434,14 @@ FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::ToolboxContr
 {
     SetSelectHdl( LINK( this, FontworkCharacterSpacingWindow, SelectHdl ) );
 
-    appendEntry(0, SVX_RESSTR(RID_SVXSTR_CHARS_SPACING_VERY_TIGHT), MenuItemBits::RADIOCHECK);
-    appendEntry(1, SVX_RESSTR(RID_SVXSTR_CHARS_SPACING_TIGHT), MenuItemBits::RADIOCHECK);
-    appendEntry(2, SVX_RESSTR(RID_SVXSTR_CHARS_SPACING_NORMAL), MenuItemBits::RADIOCHECK);
-    appendEntry(3, SVX_RESSTR(RID_SVXSTR_CHARS_SPACING_LOOSE), MenuItemBits::RADIOCHECK);
-    appendEntry(4, SVX_RESSTR(RID_SVXSTR_CHARS_SPACING_VERY_LOOSE), MenuItemBits::RADIOCHECK);
-    appendEntry(5, SVX_RESSTR(RID_SVXSTR_CHARS_SPACING_CUSTOM), MenuItemBits::RADIOCHECK);
+    appendEntry(0, SvxResId(RID_SVXSTR_CHARS_SPACING_VERY_TIGHT), MenuItemBits::RADIOCHECK);
+    appendEntry(1, SvxResId(RID_SVXSTR_CHARS_SPACING_TIGHT), MenuItemBits::RADIOCHECK);
+    appendEntry(2, SvxResId(RID_SVXSTR_CHARS_SPACING_NORMAL), MenuItemBits::RADIOCHECK);
+    appendEntry(3, SvxResId(RID_SVXSTR_CHARS_SPACING_LOOSE), MenuItemBits::RADIOCHECK);
+    appendEntry(4, SvxResId(RID_SVXSTR_CHARS_SPACING_VERY_LOOSE), MenuItemBits::RADIOCHECK);
+    appendEntry(5, SvxResId(RID_SVXSTR_CHARS_SPACING_CUSTOM), MenuItemBits::RADIOCHECK);
     appendSeparator();
-    appendEntry(6, SVX_RESSTR(RID_SVXSTR_CHARS_SPACING_KERN_PAIRS), MenuItemBits::CHECKABLE);
+    appendEntry(6, SvxResId(RID_SVXSTR_CHARS_SPACING_KERN_PAIRS), MenuItemBits::CHECKABLE);
 
     SetOutputSizePixel( getMenuSize() );
 

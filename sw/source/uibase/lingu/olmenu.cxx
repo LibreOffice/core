@@ -207,12 +207,12 @@ void SwSpellPopup::fillLangPopupMenu(
         }
     }
 
-    pPopupMenu->InsertItem( nLangItemIdStart + MN_NONE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_NONE )), MenuItemBits::RADIOCHECK );
+    pPopupMenu->InsertItem( nLangItemIdStart + MN_NONE_OFFSET,  SwResId( STR_LANGSTATUS_NONE ), MenuItemBits::RADIOCHECK );
     if ( SvtLanguageTable::GetLanguageString( LANGUAGE_NONE ) == aCurLang )
         pPopupMenu->CheckItem( nLangItemIdStart + MN_NONE_OFFSET );
 
-    pPopupMenu->InsertItem( nLangItemIdStart + MN_RESET_OFFSET, OUString(SW_RES( STR_RESET_TO_DEFAULT_LANGUAGE )) );
-    pPopupMenu->InsertItem( nLangItemIdStart + MN_MORE_OFFSET,  OUString(SW_RES( STR_LANGSTATUS_MORE )) );
+    pPopupMenu->InsertItem( nLangItemIdStart + MN_RESET_OFFSET, SwResId( STR_RESET_TO_DEFAULT_LANGUAGE ) );
+    pPopupMenu->InsertItem( nLangItemIdStart + MN_MORE_OFFSET,  SwResId( STR_LANGSTATUS_MORE ) );
 }
 
 SwSpellPopup::SwSpellPopup(
@@ -294,7 +294,7 @@ SwSpellPopup::SwSpellPopup(
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
 
-    OUString aIgnoreSelection( SW_RES( STR_IGNORE_SELECTION ) );
+    OUString aIgnoreSelection( SwResId( STR_IGNORE_SELECTION ) );
     m_xPopupMenu->SetItemText(m_nSpellDialogId,
         vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:SpellingAndGrammarDialog", aModuleName));
     m_xPopupMenu->SetItemText(m_nCorrectDialogId,
@@ -473,7 +473,7 @@ SwSpellPopup::SwSpellPopup(
 
     if ( !m_sExplanationLink.isEmpty( ) )
     {
-        m_xPopupMenu->InsertItem(MN_EXPLANATION_LINK, SW_RESSTR(STR_EXPLANATION_LINK), MenuItemBits::TEXT | MenuItemBits::HELP, OString(), nPos++);
+        m_xPopupMenu->InsertItem(MN_EXPLANATION_LINK, SwResId(STR_EXPLANATION_LINK), MenuItemBits::TEXT | MenuItemBits::HELP, OString(), nPos++);
     }
 
     m_xPopupMenu->SetMenuFlags(MenuFlags::NoAutoMnemonics);
@@ -512,7 +512,7 @@ SwSpellPopup::SwSpellPopup(
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(xFrame));
 
-    OUString aIgnoreSelection( SW_RES( STR_IGNORE_SELECTION ) );
+    OUString aIgnoreSelection( SwResId( STR_IGNORE_SELECTION ) );
     m_xPopupMenu->SetItemText(m_nSpellDialogId,
         vcl::CommandInfoProvider::GetPopupLabelForCommand(".uno:SpellingAndGrammarDialog", aModuleName));
     sal_uInt16 nItemPos = m_xPopupMenu->GetItemPos(m_nIgnoreWordId);
@@ -661,11 +661,11 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             SwRewriter aRewriter;
 
             aRewriter.AddRule(UndoArg1, m_pSh->GetCursorDescr());
-            aRewriter.AddRule(UndoArg2, OUString(SW_RES(STR_YIELDS)));
+            aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
 
-            OUString aTmpStr( SW_RES(STR_START_QUOTE) );
+            OUString aTmpStr( SwResId(STR_START_QUOTE) );
             aTmpStr += aTmp;
-            aTmpStr += OUString(SW_RES(STR_END_QUOTE));
+            aTmpStr += SwResId(STR_END_QUOTE);
             aRewriter.AddRule(UndoArg3, aTmpStr);
 
             m_pSh->StartUndo(SwUndoId::UI_REPLACE, &aRewriter);

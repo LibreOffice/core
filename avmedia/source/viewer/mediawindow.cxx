@@ -219,7 +219,7 @@ bool MediaWindow::executeMediaURLDialog(OUString& rURL, bool *const o_pbLink)
     static const char               aSeparator[] = ";";
     OUString                        aAllTypes;
 
-    aDlg.SetTitle( AVMEDIA_RESID( (o_pbLink)
+    aDlg.SetTitle( AvmResId( (o_pbLink)
                 ? AVMEDIA_STR_INSERTMEDIA_DLG : AVMEDIA_STR_OPENMEDIA_DLG ) );
 
     getMediaFilters( aFilters );
@@ -236,7 +236,7 @@ bool MediaWindow::executeMediaURLDialog(OUString& rURL, bool *const o_pbLink)
     }
 
     // add filter for all media types
-    aDlg.AddFilter( AVMEDIA_RESID( AVMEDIA_STR_ALL_MEDIAFILES ), aAllTypes );
+    aDlg.AddFilter( AvmResId( AVMEDIA_STR_ALL_MEDIAFILES ), aAllTypes );
 
     for( FilterNameVector::size_type i = 0; i < aFilters.size(); ++i )
     {
@@ -255,7 +255,7 @@ bool MediaWindow::executeMediaURLDialog(OUString& rURL, bool *const o_pbLink)
     }
 
     // add filter for all types
-    aDlg.AddFilter( AVMEDIA_RESID( AVMEDIA_STR_ALL_FILES ), "*.*" );
+    aDlg.AddFilter( AvmResId( AVMEDIA_STR_ALL_FILES ), "*.*" );
 
     uno::Reference<ui::dialogs::XFilePicker2> const xFP(aDlg.GetFilePicker());
     uno::Reference<ui::dialogs::XFilePickerControlAccess> const xCtrlAcc(xFP,
@@ -297,7 +297,7 @@ bool MediaWindow::executeMediaURLDialog(OUString& rURL, bool *const o_pbLink)
 
 void MediaWindow::executeFormatErrorBox( vcl::Window* pParent )
 {
-    ScopedVclPtrInstance< MessageDialog > aErrBox( pParent, AVMEDIA_RESID( AVMEDIA_STR_ERR_URL ) );
+    ScopedVclPtrInstance< MessageDialog > aErrBox( pParent, AvmResId( AVMEDIA_STR_ERR_URL ) );
 
     aErrBox->Execute();
     aErrBox.disposeAndClear();

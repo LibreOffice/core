@@ -25,18 +25,16 @@
 //  implementation of the indexentry-algorithm-name translation
 IndexEntryResource::IndexEntryResource()
 {
-    #define RESSTR(rid) SvtResId(rid).toString()
-
-    m_aData.push_back(IndexEntryResourceData("alphanumeric", RESSTR(STR_SVT_INDEXENTRY_ALPHANUMERIC)));
-    m_aData.push_back(IndexEntryResourceData("dict", RESSTR(STR_SVT_INDEXENTRY_DICTIONARY)));
-    m_aData.push_back(IndexEntryResourceData("pinyin", RESSTR(STR_SVT_INDEXENTRY_PINYIN)));
-    m_aData.push_back(IndexEntryResourceData("radical", RESSTR(STR_SVT_INDEXENTRY_RADICAL)));
-    m_aData.push_back(IndexEntryResourceData("stroke", RESSTR(STR_SVT_INDEXENTRY_STROKE)));
-    m_aData.push_back(IndexEntryResourceData("zhuyin", RESSTR(STR_SVT_INDEXENTRY_ZHUYIN)));
-    m_aData.push_back(IndexEntryResourceData("phonetic (alphanumeric first) (grouped by syllable)", RESSTR(STR_SVT_INDEXENTRY_PHONETIC_FS)));
-    m_aData.push_back(IndexEntryResourceData("phonetic (alphanumeric first) (grouped by consonant)", RESSTR(STR_SVT_INDEXENTRY_PHONETIC_FC)));
-    m_aData.push_back(IndexEntryResourceData("phonetic (alphanumeric last) (grouped by syllable)", RESSTR(STR_SVT_INDEXENTRY_PHONETIC_LS)));
-    m_aData.push_back(IndexEntryResourceData("phonetic (alphanumeric last) (grouped by consonant)", RESSTR(STR_SVT_INDEXENTRY_PHONETIC_LC)));
+    m_aData.push_back(IndexEntryResourceData("alphanumeric", SvtResId(STR_SVT_INDEXENTRY_ALPHANUMERIC)));
+    m_aData.push_back(IndexEntryResourceData("dict", SvtResId(STR_SVT_INDEXENTRY_DICTIONARY)));
+    m_aData.push_back(IndexEntryResourceData("pinyin", SvtResId(STR_SVT_INDEXENTRY_PINYIN)));
+    m_aData.push_back(IndexEntryResourceData("radical", SvtResId(STR_SVT_INDEXENTRY_RADICAL)));
+    m_aData.push_back(IndexEntryResourceData("stroke", SvtResId(STR_SVT_INDEXENTRY_STROKE)));
+    m_aData.push_back(IndexEntryResourceData("zhuyin", SvtResId(STR_SVT_INDEXENTRY_ZHUYIN)));
+    m_aData.push_back(IndexEntryResourceData("phonetic (alphanumeric first) (grouped by syllable)", SvtResId(STR_SVT_INDEXENTRY_PHONETIC_FS)));
+    m_aData.push_back(IndexEntryResourceData("phonetic (alphanumeric first) (grouped by consonant)", SvtResId(STR_SVT_INDEXENTRY_PHONETIC_FC)));
+    m_aData.push_back(IndexEntryResourceData("phonetic (alphanumeric last) (grouped by syllable)", SvtResId(STR_SVT_INDEXENTRY_PHONETIC_LS)));
+    m_aData.push_back(IndexEntryResourceData("phonetic (alphanumeric last) (grouped by consonant)", SvtResId(STR_SVT_INDEXENTRY_PHONETIC_LC)));
 }
 
 const OUString& IndexEntryResource::GetTranslation(const OUString &r_Algorithm)

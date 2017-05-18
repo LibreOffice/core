@@ -143,7 +143,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
             std::set<Color> aColors = pDocSh->GetDocColors();
             mnColorCount = aColors.size();
             rColorSet.Clear();
-            rColorSet.addEntriesForColorSet(aColors, SVX_RESSTR( RID_SVXSTR_DOC_COLOR_PREFIX ) + " " );
+            rColorSet.addEntriesForColorSet(aColors, SvxResId( RID_SVXSTR_DOC_COLOR_PREFIX ) + " " );
         }
     }
     else
@@ -175,12 +175,12 @@ std::vector<OUString> PaletteManager::GetPaletteList()
 {
     std::vector<OUString> aPaletteNames;
 
-    aPaletteNames.push_back( SVX_RESSTR( RID_SVXSTR_CUSTOM_PAL ) );
+    aPaletteNames.push_back( SvxResId( RID_SVXSTR_CUSTOM_PAL ) );
     for (auto const& it : m_Palettes)
     {
         aPaletteNames.push_back( (*it).GetName() );
     }
-    aPaletteNames.push_back( SVX_RESSTR ( RID_SVXSTR_DOC_COLORS ) );
+    aPaletteNames.push_back( SvxResId ( RID_SVXSTR_DOC_COLORS ) );
 
     return aPaletteNames;
 }

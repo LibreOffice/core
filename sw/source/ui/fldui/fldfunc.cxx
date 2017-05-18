@@ -245,7 +245,7 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, ListBox&, void)
         if (nSize)
         {
             if (IsFieldEdit() && nTypeId == TYP_JUMPEDITFLD)
-                m_pFormatLB->SelectEntry(SW_RESSTR(FMT_MARK_BEGIN + GetCurField()->GetFormat()));
+                m_pFormatLB->SelectEntry(SwResId(FMT_MARK_BEGIN + GetCurField()->GetFormat()));
 
             if (!m_pFormatLB->GetSelectEntryCount())
                 m_pFormatLB->SelectEntryPos(0);
@@ -314,15 +314,15 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, ListBox&, void)
                 else
                     bInsert = false;
 
-                m_pNameFT->SetText(SW_RESSTR(STR_MACNAME));
-                m_pValueFT->SetText(SW_RESSTR(STR_PROMPT));
+                m_pNameFT->SetText(SwResId(STR_MACNAME));
+                m_pValueFT->SetText(SwResId(STR_PROMPT));
                 m_pNameED->SetText(GetFieldMgr().GetMacroName());
                 m_pNameED->SetAccessibleName(m_pNameFT->GetText());
                 m_pValueED->SetAccessibleName(m_pValueFT->GetText());
                 break;
 
             case TYP_HIDDENPARAFLD:
-                m_pNameFT->SetText(SW_RESSTR(STR_COND));
+                m_pNameFT->SetText(SwResId(STR_COND));
                 m_pNameED->SetDropEnable(true);
                 bName = true;
                 m_pNameED->SetAccessibleName(m_pNameFT->GetText());
@@ -331,9 +331,9 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, ListBox&, void)
 
             case TYP_HIDDENTXTFLD:
             {
-                m_pNameFT->SetText(SW_RESSTR(STR_COND));
+                m_pNameFT->SetText(SwResId(STR_COND));
                 m_pNameED->SetDropEnable(true);
-                m_pValueFT->SetText(SW_RESSTR(STR_INSTEXT));
+                m_pValueFT->SetText(SwResId(STR_INSTEXT));
                 SwWrtShell* pSh = GetActiveWrtShell();
                 if (!IsFieldEdit() && pSh )
                     m_pValueED->SetText(pSh->GetSelText());
@@ -344,7 +344,7 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, ListBox&, void)
             break;
 
             case TYP_CONDTXTFLD:
-                m_pNameFT->SetText(SW_RESSTR(STR_COND));
+                m_pNameFT->SetText(SwResId(STR_COND));
                 m_pNameED->SetDropEnable(true);
                 if (IsFieldEdit())
                 {
@@ -358,15 +358,15 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, ListBox&, void)
                 break;
 
             case TYP_JUMPEDITFLD:
-                m_pNameFT->SetText(SW_RESSTR(STR_JUMPEDITFLD));
-                m_pValueFT->SetText(SW_RESSTR(STR_PROMPT));
+                m_pNameFT->SetText(SwResId(STR_JUMPEDITFLD));
+                m_pValueFT->SetText(SwResId(STR_PROMPT));
                 bName = bValue = true;
                 m_pNameED->SetAccessibleName(m_pNameFT->GetText());
                 m_pValueED->SetAccessibleName(m_pValueFT->GetText());
                 break;
 
             case TYP_INPUTFLD:
-                m_pValueFT->SetText(SW_RESSTR(STR_PROMPT));
+                m_pValueFT->SetText(SwResId(STR_PROMPT));
                 bValue = true;
                 m_pNameED->SetAccessibleName(m_pNameFT->GetText());
                 m_pValueED->SetAccessibleName(m_pValueFT->GetText());
@@ -374,7 +374,7 @@ IMPL_LINK_NOARG(SwFieldFuncPage, TypeHdl, ListBox&, void)
 
             case TYP_COMBINED_CHARS:
                 {
-                    m_pNameFT->SetText(SW_RESSTR(STR_COMBCHRS_FT));
+                    m_pNameFT->SetText(SwResId(STR_COMBCHRS_FT));
                     m_pNameED->SetDropEnable(true);
                     bName = true;
 

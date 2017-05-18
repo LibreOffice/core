@@ -19,18 +19,13 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_RESID_HXX
 #define INCLUDED_CHART2_SOURCE_INC_RESID_HXX
 
-#include <tools/resid.hxx>
 #include <rtl/ustring.hxx>
 #include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS SchResId : public ResId
-{
-public:
-    SchResId( sal_Int16 nId );
-};
+OUString OOO_DLLPUBLIC_CHARTTOOLS SchResId(sal_uInt16 nId);
 
 } //  namespace chart
 

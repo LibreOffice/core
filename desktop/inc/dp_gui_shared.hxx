@@ -33,13 +33,10 @@ struct DeploymentGuiResMgr :
     }
 };
 
-class DpGuiResId : public ResId
+inline OUString DpGuiResId(sal_uInt16 nId)
 {
-public:
-    explicit DpGuiResId( sal_uInt16 nId ):ResId( nId, *DeploymentGuiResMgr::get() ) {}
-};
-
-#define DPGUI_RESSTR(i)   DpGuiResId(i).toString()
+    return ResId(nId, *DeploymentGuiResMgr::get());
+}
 
 } // namespace dp_gui
 

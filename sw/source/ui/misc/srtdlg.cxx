@@ -108,9 +108,9 @@ static bool lcl_GetSelTable( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 // init list
 SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
     : SvxStandardDialog(pParent, "SortDialog", "modules/swriter/ui/sortdialog.ui")
-    , aColText(SW_RES(STR_COL))
-    , aRowText(SW_RES(STR_ROW))
-    , aNumericText(SW_RES(STR_NUMERIC))
+    , aColText(SwResId(STR_COL))
+    , aRowText(SwResId(STR_ROW))
+    , aNumericText(SwResId(STR_NUMERIC))
     , rSh(rShell)
     , pColRes(nullptr)
     , nX(99)
@@ -365,7 +365,7 @@ void SwSortDlg::Apply()
     }
 
     if( !bRet )
-        ScopedVclPtrInstance<MessageDialog>(this->GetParent(), SW_RES(STR_SRTERR), VclMessageType::Info)->Execute();
+        ScopedVclPtrInstance<MessageDialog>(this->GetParent(), SwResId(STR_SRTERR), VclMessageType::Info)->Execute();
 }
 
 IMPL_LINK( SwSortDlg, DelimHdl, Button*, pButton, void )

@@ -34,8 +34,8 @@ VCL_BUILDER_FACTORY(PaperSizeListBox);
 
 void PaperSizeListBox::FillPaperSizeEntries( PaperSizeApp eApp )
 {
-    ResStringArray aPaperAry( SVX_RES( ( eApp == PaperSizeApp::Std  ) ?
-                              RID_SVXSTRARY_PAPERSIZE_STD : RID_SVXSTRARY_PAPERSIZE_DRAW ) );
+    ResStringArray aPaperAry( ResId( ( eApp == PaperSizeApp::Std  ) ?
+                              RID_SVXSTRARY_PAPERSIZE_STD : RID_SVXSTRARY_PAPERSIZE_DRAW, DIALOG_MGR() ) );
     sal_uInt32 nCnt = aPaperAry.Count();
 
     for ( sal_uInt32 i = 0; i < nCnt; ++i )
