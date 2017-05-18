@@ -150,6 +150,11 @@ std::string ComparisonWithConstant::getExprAsString(SourceRange range)
 }
 
 SourceRange ComparisonWithConstant::ignoreMacroExpansions(SourceRange range) {
+    while (compiler.getSourceManager().isMacroArgExpansion(range.getBegin())) {
+        range.setBegin(
+            compiler.getSourceManager().getImmediateMacroCallerLoc(
+                range.getBegin()));
+    }
     if (range.getBegin().isMacroID()) {
         SourceLocation loc;
         if (Lexer::isAtStartOfMacroExpansion(
@@ -158,6 +163,11 @@ SourceRange ComparisonWithConstant::ignoreMacroExpansions(SourceRange range) {
         {
             range.setBegin(loc);
         }
+    }
+    while (compiler.getSourceManager().isMacroArgExpansion(range.getEnd())) {
+        range.setEnd(
+            compiler.getSourceManager().getImmediateMacroCallerLoc(
+                range.getEnd()));
     }
     if (range.getEnd().isMacroID()) {
         SourceLocation loc;
