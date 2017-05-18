@@ -74,6 +74,7 @@ public:
     void testTokenize();
     /// Test handling of unknown SubFilter values.
     void testUnknownSubFilter();
+    void testTdf107782();
 
     CPPUNIT_TEST_SUITE(PDFSigningTest);
     CPPUNIT_TEST(testPDFAdd);
@@ -90,6 +91,7 @@ public:
     CPPUNIT_TEST(testGood);
     CPPUNIT_TEST(testTokenize);
     CPPUNIT_TEST(testUnknownSubFilter);
+    CPPUNIT_TEST(testTdf107782);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -282,6 +284,24 @@ void PDFSigningTest::testPDFRemoveAll()
     // (instead of doing that when removal failed).
     // Then this was 1, when the chained signature wasn't removed.
     CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(0), rInformations.size());
+}
+
+void PDFSigningTest::testTdf107782()
+{
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
+
+    // Load the test document as a storage and read its signatures.
+    DocumentSignatureManager aManager(mxComponentContext, DocumentSignatureMode::Content);
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf107782.pdf";
+    SvStream* pStream = utl::UcbStreamHelper::CreateStream(aURL, StreamMode::READ | StreamMode::WRITE);
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+    aManager.mxSignatureStream = xStream;
+    aManager.read(/*bUseTempStream=*/false);
+    CPPUNIT_ASSERT(aManager.mpPDFSignatureHelper);
+
+    // This failed with an std::bad_alloc exception on Windows.
+    aManager.mpPDFSignatureHelper->GetDocumentSignatureInformations(aManager.getSecurityEnvironment());
 }
 
 void PDFSigningTest::testPDF14Adobe()
