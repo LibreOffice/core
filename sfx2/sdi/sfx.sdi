@@ -4268,7 +4268,10 @@ SfxVoidItem ClassificationApply SID_CLASSIFICATION_APPLY
 ]
 
 SfxWatermarkItem Watermark SID_WATERMARK
-(SfxStringItem Text SID_WATERMARK)
+(SfxStringItem Text SID_WATERMARK, SfxStringItem Font SID_WATERMARK_FONT,
+ SfxInt16Item Angle SID_WATERMARK_ANGLE, SfxInt16Item Transparency SID_WATERMARK_TRANSPARENCY,
+ SfxInt32Item Color SID_WATERMARK_COLOR
+)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

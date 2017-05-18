@@ -330,7 +330,10 @@
 #define SID_INSERT_FLOATINGFRAME            (SID_SFX_START + 563)
 #define SID_CLASSIFICATION_APPLY            (SID_SFX_START + 672)
 #define SID_WATERMARK                       (SID_SFX_START + 676)
-// FREE                                     (SID_SFX_START + 677)
+#define SID_WATERMARK_FONT                  (SID_SFX_START + 677)
+#define SID_WATERMARK_TRANSPARENCY          (SID_SFX_START + 805)
+#define SID_WATERMARK_COLOR                 (SID_SFX_START + 806)
+#define SID_WATERMARK_ANGLE                 (SID_SFX_START + 807)
 
 #define SID_HYPERLINK_DIALOG                (SID_SFX_START + 678)
 
@@ -394,9 +397,6 @@
 #define SID_PASTE_ONLY_TEXT                 (SID_SFX_START + 802)
 #define SID_PASTE_ONLY_FORMULA              (SID_SFX_START + 803)
 #define SID_PASTE_ONLY_VALUE                (SID_SFX_START + 804)
-    // FREE: SID_SFX_START + 805
-    // FREE: SID_SFX_START + 806
-    // FREE: SID_SFX_START + 807
     // FREE: SID_SFX_START + 808
     // FREE: SID_SFX_START + 809
     // FREE: SID_SFX_START + 810

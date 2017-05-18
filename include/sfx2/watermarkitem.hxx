@@ -17,17 +17,29 @@ class SFX2_DLLPUBLIC SfxWatermarkItem: public SfxPoolItem
 public:
     static SfxPoolItem* CreateDefault();
     SfxWatermarkItem();
-    SfxWatermarkItem( sal_uInt16 nWhich, const OUString &rText );
     SfxWatermarkItem( const SfxWatermarkItem& );
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    const OUString&         GetText() const { return m_aText; }
+    const OUString          GetText() const { return m_aText; }
+    void                    SetText(const OUString& aText) { m_aText = aText; }
+    const OUString          GetFont() const { return m_aFont; }
+    void                    SetFont(const OUString& aFont) { m_aFont = aFont; }
+    sal_Int16               GetAngle() const { return m_nAngle; }
+    void                    SetAngle(const sal_Int16 nAngle) { m_nAngle = nAngle; }
+    sal_Int16               GetTransparency() const { return m_nTransparency; }
+    void                    SetTransparency(const sal_Int16 nTransparency) { m_nTransparency = nTransparency; }
+    sal_Int32               GetColor() const { return m_nColor; }
+    void                    SetColor(const sal_Int16 nColor) { m_nColor = nColor; }
 
 private:
     OUString                m_aText;
+    OUString                m_aFont;
+    sal_Int16               m_nAngle;
+    sal_Int16               m_nTransparency;
+    sal_Int32               m_nColor;
 };
 
 #endif

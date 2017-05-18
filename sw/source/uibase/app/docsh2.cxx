@@ -56,6 +56,7 @@
 #include <svx/fmshell.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/classificationhelper.hxx>
+#include <sfx2/watermarkitem.hxx>
 
 #include <svtools/htmlcfg.hxx>
 #include <svx/ofaitem.hxx>
@@ -1163,8 +1164,19 @@ void SwDocShell::Execute(SfxRequest& rReq)
             {
                 if (pArgs && pArgs->GetItemState( SID_WATERMARK, false, &pItem ) == SfxItemState::SET)
                 {
-                    OUString aText = static_cast<const SfxStringItem*>( pItem )->GetValue();
-                    pSh->SetWatermark( aText );
+                    SfxWatermarkItem aItem;
+                    aItem.SetText( static_cast<const SfxStringItem*>( pItem )->GetValue() );
+
+                    if ( pArgs->GetItemState( SID_WATERMARK_FONT, false, &pItem ) == SfxItemState::SET )
+                        aItem.SetFont( static_cast<const SfxStringItem*>( pItem )->GetValue() );
+                    if ( pArgs->GetItemState( SID_WATERMARK_ANGLE, false, &pItem ) == SfxItemState::SET )
+                        aItem.SetAngle( static_cast<const SfxInt16Item*>( pItem )->GetValue() );
+                    if ( pArgs->GetItemState( SID_WATERMARK_TRANSPARENCY, false, &pItem ) == SfxItemState::SET )
+                        aItem.SetTransparency( static_cast<const SfxInt16Item*>( pItem )->GetValue() );
+                    if ( pArgs->GetItemState( SID_WATERMARK_COLOR, false, &pItem ) == SfxItemState::SET )
+                        aItem.SetColor( static_cast<const SfxInt32Item*>( pItem )->GetValue() );
+
+                    pSh->SetWatermark( aItem );
                 }
                 else
                 {

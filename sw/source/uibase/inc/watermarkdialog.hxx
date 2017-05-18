@@ -10,7 +10,10 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WATERMARKDIALOG_HXX
 
 #include <sfx2/bindings.hxx>
+#include <vcl/field.hxx>
 #include <vcl/layout.hxx>
+#include <svtools/ctrlbox.hxx>
+#include <svx/colorbox.hxx>
 
 class SwWatermarkDialog : public ModelessDialog
 {
@@ -32,6 +35,10 @@ private:
     VclPtr<CheckBox> m_pEnableWatermarkCB;
     VclPtr<Edit> m_pTextInput;
     VclPtr<PushButton> m_pOKButton;
+    VclPtr<FontNameBox> m_pFont;
+    VclPtr<NumericField> m_pAngle;
+    VclPtr<NumericField> m_pTransparency;
+    VclPtr<SvxColorListBox> m_pColor;
 };
 
 #endif

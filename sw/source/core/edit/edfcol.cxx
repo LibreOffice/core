@@ -229,7 +229,11 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
                 }
             }
 
-            SetWatermark(aWatermark);
+            OutputDevice* pOut = Application::GetDefaultDevice();
+            SfxWatermarkItem aWatermarkItem;
+            aWatermarkItem.SetText(aWatermark);
+            aWatermarkItem.SetFont(pOut->GetFont().GetFamilyName());
+            SetWatermark(aWatermarkItem);
         }
 
         if (bFooterIsNeeded)
@@ -260,7 +264,7 @@ SfxWatermarkItem SwEditShell::GetWatermark()
 {
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
     if (!pDocShell)
-        return SfxWatermarkItem(SID_WATERMARK, "");
+        return SfxWatermarkItem();
 
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
@@ -286,14 +290,32 @@ SfxWatermarkItem SwEditShell::GetWatermark()
 
         if (xWatermark.is())
         {
+            SfxWatermarkItem aItem;
             uno::Reference<text::XTextRange> xTextRange(xWatermark, uno::UNO_QUERY);
-            return SfxWatermarkItem(SID_WATERMARK, xTextRange->getString());
+            uno::Reference<beans::XPropertySet> xPropertySet(xWatermark, uno::UNO_QUERY);
+            drawing::HomogenMatrix3 aMatrix;
+            sal_Int32 nColor;
+            sal_Int16 nAngle = 45;
+            sal_Int16 nTransparency;
+            OUString aFont = "";
+
+            aItem.SetText(xTextRange->getString());
+            xPropertySet->getPropertyValue(UNO_NAME_CHAR_FONT_NAME) >>= aFont;
+            aItem.SetFont(aFont);
+            xPropertySet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= nColor;
+            aItem.SetColor(nColor);
+            xPropertySet->getPropertyValue("Transformation") >>= aMatrix;
+            // TODO: Angle
+            aItem.SetAngle(nAngle);
+            xPropertySet->getPropertyValue(UNO_NAME_FILL_TRANSPARENCE) >>= nTransparency;
+            aItem.SetTransparency(nTransparency);
+            return aItem;
         }
     }
-    return SfxWatermarkItem(SID_WATERMARK, "");
+    return SfxWatermarkItem();
 }
 
-void SwEditShell::SetWatermark(const OUString& rWatermark)
+void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
 {
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
     if (!pDocShell)
@@ -326,12 +348,26 @@ void SwEditShell::SetWatermark(const OUString& rWatermark)
         static const OUString sWatermark = SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCWATERMARK();
         uno::Reference<drawing::XShape> xWatermark = lcl_getWatermark(xHeaderText, aShapeServiceName, sWatermark);
 
-        bool bDeleteWatermark = rWatermark.isEmpty();
+        bool bDeleteWatermark = rWatermark.GetText().isEmpty();
         if (xWatermark.is())
         {
+            sal_Int32 nColor;
+            sal_Int16 nTransparency;
+            OUString aFont = "";
+
+            uno::Reference<beans::XPropertySet> xPropertySet(xWatermark, uno::UNO_QUERY);
+            xPropertySet->getPropertyValue(UNO_NAME_CHAR_FONT_NAME) >>= aFont;
+            xPropertySet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= nColor;
+            // TODO: Angle
+            xPropertySet->getPropertyValue(UNO_NAME_FILL_TRANSPARENCE) >>= nTransparency;
+
             // If the header already contains a watermark, see if it its text is up to date.
             uno::Reference<text::XTextRange> xTextRange(xWatermark, uno::UNO_QUERY);
-            if (xTextRange->getString() != rWatermark || bDeleteWatermark)
+            if (xTextRange->getString() != rWatermark.GetText()
+                || aFont != rWatermark.GetFont()
+                || nColor != rWatermark.GetColor()
+                || nTransparency != rWatermark.GetTransparency()
+                || bDeleteWatermark)
             {
                 // No: delete it and we'll insert a replacement.
                 uno::Reference<lang::XComponent> xComponent(xWatermark, uno::UNO_QUERY);
@@ -342,12 +378,18 @@ void SwEditShell::SetWatermark(const OUString& rWatermark)
 
         if (!xWatermark.is() && !bDeleteWatermark)
         {
+            OUString sFont = rWatermark.GetFont();
+            sal_Int16 nAngle = rWatermark.GetAngle();
+            sal_Int16 nTransparency = rWatermark.GetTransparency();
+            sal_Int32 nColor = rWatermark.GetColor();
+
             // Calc the ratio.
             double fRatio = 0;
             OutputDevice* pOut = Application::GetDefaultDevice();
             vcl::Font aFont(pOut->GetFont());
+            aFont.SetFamilyName(sFont);
             fRatio = aFont.GetFontSize().Height();
-            fRatio /= pOut->GetTextWidth(rWatermark);
+            fRatio /= pOut->GetTextWidth(rWatermark.GetText());
 
             // Calc the size.
             sal_Int32 nWidth = 0;
@@ -378,7 +420,7 @@ void SwEditShell::SetWatermark(const OUString& rWatermark)
             basegfx::B2DHomMatrix aTransformation;
             aTransformation.identity();
             aTransformation.scale(nWidth, nHeight);
-            aTransformation.rotate(F_PI180 * -45);
+            aTransformation.rotate(F_PI180 * -1 * nAngle);
             drawing::HomogenMatrix3 aMatrix;
             aMatrix.Line1.Column1 = aTransformation.get(0, 0);
             aMatrix.Line1.Column2 = aTransformation.get(0, 1);
@@ -397,9 +439,9 @@ void SwEditShell::SetWatermark(const OUString& rWatermark)
             // The remaining properties have to be set after the shape is inserted: do that in one batch to avoid flickering.
             uno::Reference<document::XActionLockable> xLockable(xShape, uno::UNO_QUERY);
             xLockable->addActionLock();
-            xPropertySet->setPropertyValue(UNO_NAME_FILLCOLOR, uno::makeAny(static_cast<sal_Int32>(0xc0c0c0)));
+            xPropertySet->setPropertyValue(UNO_NAME_FILLCOLOR, uno::makeAny(static_cast<sal_Int32>(nColor)));
             xPropertySet->setPropertyValue(UNO_NAME_FILLSTYLE, uno::makeAny(drawing::FillStyle_SOLID));
-            xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::makeAny(static_cast<sal_Int16>(50)));
+            xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::makeAny(nTransparency));
             xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION, uno::makeAny(static_cast<sal_Int16>(text::RelOrientation::PAGE_PRINT_AREA)));
             xPropertySet->setPropertyValue(UNO_NAME_LINESTYLE, uno::makeAny(drawing::LineStyle_NONE));
             xPropertySet->setPropertyValue(UNO_NAME_OPAQUE, uno::makeAny(false));
@@ -409,13 +451,13 @@ void SwEditShell::SetWatermark(const OUString& rWatermark)
             xPropertySet->setPropertyValue(UNO_NAME_TEXT_MINFRAMEWIDTH, uno::makeAny(nWidth));
             xPropertySet->setPropertyValue(UNO_NAME_TEXT_WRAP, uno::makeAny(text::WrapTextMode_THROUGH));
             xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION, uno::makeAny(static_cast<sal_Int16>(text::RelOrientation::PAGE_PRINT_AREA)));
-            xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME, uno::makeAny(OUString("Liberation Sans")));
+            xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME, uno::makeAny(sFont));
             xPropertySet->setPropertyValue("Transformation", uno::makeAny(aMatrix));
             xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::HoriOrientation::CENTER)));
             xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT, uno::makeAny(static_cast<sal_Int16>(text::VertOrientation::CENTER)));
 
             uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
-            xTextRange->setString(rWatermark);
+            xTextRange->setString(rWatermark.GetText());
 
             uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
             xDefaulter->createCustomShapeDefaults("fontwork-plain-text");

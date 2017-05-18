@@ -10,11 +10,14 @@
 #include <watermarkdialog.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
+#include <editeng/editids.hrc>
+#include <editeng/flstitem.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/watermarkitem.hxx>
+#include <svtools/ctrltool.hxx>
 
 SwWatermarkDialog::SwWatermarkDialog( vcl::Window* pParent, SfxBindings& rBindings )
 : ModelessDialog( pParent, "WatermarkDialog", "modules/swriter/ui/watermarkdialog.ui" )
@@ -24,9 +27,10 @@ SwWatermarkDialog::SwWatermarkDialog( vcl::Window* pParent, SfxBindings& rBindin
     get( m_pEnableWatermarkCB, "EnableWatermarkCB" );
     get( m_pTextInput, "TextInput" );
     get( m_pOKButton, "ok" );
-
-    m_pEnableWatermarkCB->SetClickHdl( LINK( this, SwWatermarkDialog, CheckBoxHdl ) );
-    m_pOKButton->SetClickHdl( LINK( this, SwWatermarkDialog, OKButtonHdl ) );
+    get( m_pFont, "FontBox" );
+    get( m_pAngle, "Angle" );
+    get( m_pTransparency, "Transparency" );
+    get( m_pColor, "Color" );
 
     InitFields();
     Update();
@@ -39,6 +43,10 @@ SwWatermarkDialog::~SwWatermarkDialog()
 
 void SwWatermarkDialog::dispose()
 {
+    m_pFont.clear();
+    m_pAngle.clear();
+    m_pTransparency.clear();
+    m_pColor.clear();
     m_pTextGrid.clear();
     m_pEnableWatermarkCB.clear();
     m_pTextInput.clear();
@@ -49,14 +57,36 @@ void SwWatermarkDialog::dispose()
 
 void SwWatermarkDialog::InitFields()
 {
+    // Update font list
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    const SfxPoolItem* pFontItem;
+    const FontList* pFontList = nullptr;
+
+    if ( pDocSh && ( ( pFontItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST ) ) != nullptr ) )
+        pFontList = static_cast<const SvxFontListItem*>( pFontItem )->GetFontList();
+
+    if(!pFontList)
+        pFontList = new FontList(Application::GetDefaultDevice(), nullptr);
+
+    m_pFont->Fill( pFontList );
+
+    m_pEnableWatermarkCB->SetClickHdl( LINK( this, SwWatermarkDialog, CheckBoxHdl ) );
+    m_pOKButton->SetClickHdl( LINK( this, SwWatermarkDialog, OKButtonHdl ) );
+
+    // Get watermark properties
     const SfxPoolItem* pItem;
     SfxItemState eState = m_rBindings.GetDispatcher()->QueryState( SID_WATERMARK, pItem );
 
-    if( eState >= SfxItemState::DEFAULT && pItem )
+    if( eState >= SfxItemState::DEFAULT && pItem && pItem->Which() == SID_WATERMARK)
     {
-        OUString sText = static_cast<const SfxWatermarkItem*>( pItem )->GetText();
+        const SfxWatermarkItem* pWatermark = static_cast<const SfxWatermarkItem*>( pItem );
+        OUString sText = pWatermark->GetText();
         m_pEnableWatermarkCB->Check( !sText.isEmpty() );
         m_pTextInput->SetText( sText );
+        m_pFont->SelectEntryPos( m_pFont->GetEntryPos( pWatermark->GetFont() ) );
+        m_pAngle->SetValue( pWatermark->GetAngle() );
+        m_pColor->SelectEntry( pWatermark->GetColor() );
+        m_pTransparency->SetValue( pWatermark->GetTransparency() );
     }
 }
 
@@ -81,7 +111,11 @@ IMPL_LINK_NOARG( SwWatermarkDialog, OKButtonHdl, Button*, void )
 
     css::uno::Sequence<css::beans::PropertyValue> aPropertyValues( comphelper::InitPropertySequence(
     {
-        { "Text", css::uno::makeAny( sText ) }
+        { "Text", css::uno::makeAny( sText ) },
+        { "Font", css::uno::makeAny( m_pFont->GetSelectEntry() ) },
+        { "Angle", css::uno::makeAny( static_cast<sal_Int16>( m_pAngle->GetValue() ) ) },
+        { "Transparency", css::uno::makeAny( static_cast<sal_Int16>( m_pTransparency->GetValue() ) ) },
+        { "Color", css::uno::makeAny( static_cast<sal_Int32>( m_pColor->GetSelectEntryColor().GetRGBColor() ) ) }
     } ) );
     comphelper::dispatchCommand( ".uno:Watermark", aPropertyValues );
 
