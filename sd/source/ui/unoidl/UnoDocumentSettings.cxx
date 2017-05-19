@@ -1097,7 +1097,7 @@ DocumentSettings::_getPropertyValues(
             case HANDLE_PRINTERNAME:
                 {
                     SfxPrinter *pTempPrinter = pDocSh->GetPrinter( false );
-                    *pValue <<= pTempPrinter ? OUString ( pTempPrinter->GetName()) : OUString();
+                    *pValue <<= pTempPrinter ? pTempPrinter->GetName() : OUString();
                 }
                 break;
             case HANDLE_PRINTERJOB:

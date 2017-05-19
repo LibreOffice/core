@@ -266,10 +266,10 @@ uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
         break;
     }
     case WID_LAYER_TITLE:
-        aValue <<= OUString( pLayer->GetTitle() );
+        aValue <<= pLayer->GetTitle();
         break;
     case WID_LAYER_DESC:
-        aValue <<= OUString( pLayer->GetDescription() );
+        aValue <<= pLayer->GetDescription();
         break;
     default:
         throw beans::UnknownPropertyException( PropertyName, static_cast<cppu::OWeakObject*>(this));

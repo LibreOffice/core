@@ -1492,7 +1492,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             pProperties->State = beans::PropertyState_DIRECT_VALUE;
             pProperties++;
 
-            aAny <<= OUString( pInfo->GetBookmark() );
+            aAny <<= pInfo->GetBookmark();
             pProperties->Name = maStrScript;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
@@ -1525,7 +1525,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             sBuffer.append( '.' );
             sBuffer.append( aMacroName );
 
-            aAny <<= OUString( sBuffer.makeStringAndClear() );
+            aAny <<= sBuffer.makeStringAndClear();
             pProperties->Name = maStrMacroName;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
@@ -1613,7 +1613,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
         case presentation::ClickAction_SOUND:
             if( eClickAction == presentation::ClickAction_SOUND || pInfo->mbSecondSoundOn )
             {
-                aAny <<= OUString( pInfo->GetBookmark());
+                aAny <<= pInfo->GetBookmark();
                 pProperties->Name = maStrSoundURL;
                 pProperties->Handle = -1;
                 pProperties->Value = aAny;

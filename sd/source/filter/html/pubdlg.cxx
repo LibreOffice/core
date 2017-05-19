@@ -797,15 +797,15 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
         aProps.push_back( aValue );
 
         aValue.Name = "WebCastCGIURL";
-        aValue.Value <<= OUString( pPage2_CGI->GetText() );
+        aValue.Value <<= pPage2_CGI->GetText();
         aProps.push_back( aValue );
 
         aValue.Name = "WebCastTargetURL";
-        aValue.Value <<= OUString( pPage2_URL->GetText() );
+        aValue.Value <<= pPage2_URL->GetText();
         aProps.push_back( aValue );
     }
     aValue.Name = "IndexURL";
-    aValue.Value <<= OUString( pPage2_Index->GetText() );
+    aValue.Value <<= pPage2_Index->GetText();
     aProps.push_back( aValue );
 
     if( pPage2_Kiosk->IsChecked() && pPage2_ChgAuto->IsChecked() )
@@ -832,7 +832,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     aProps.push_back( aValue );
 
     aValue.Name = "Compression";
-    aValue.Value <<= OUString( pPage3_Quality->GetText() );
+    aValue.Value <<= pPage3_Quality->GetText();
     aProps.push_back( aValue );
 
     aValue.Name = "Format";
@@ -856,11 +856,11 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
 
     // Page 4
     aValue.Name = "Author";
-    aValue.Value <<= OUString( pPage4_Author->GetText() );
+    aValue.Value <<= pPage4_Author->GetText();
     aProps.push_back( aValue );
 
     aValue.Name = "EMail";
-    aValue.Value <<= OUString( pPage4_Email->GetText() );
+    aValue.Value <<= pPage4_Email->GetText();
     aProps.push_back( aValue );
 
     // try to guess protocol for user's homepage
@@ -869,11 +869,11 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
                             INetURLObject::EncodeMechanism::All );
 
     aValue.Name = "HomepageURL";
-    aValue.Value <<= OUString( aHomeURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+    aValue.Value <<= aHomeURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
     aProps.push_back( aValue );
 
     aValue.Name = "UserText";
-    aValue.Value <<= OUString( pPage4_Misc->GetText() );
+    aValue.Value <<= pPage4_Misc->GetText();
     aProps.push_back( aValue );
 
     if( m_bImpress )

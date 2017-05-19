@@ -498,7 +498,7 @@ bool ImplSdPPTImport::Import()
                                                     pHyperlink->aConvSubString = maSlideNameList[ nPageNumber ];
                                                 if ( pHyperlink->aConvSubString.isEmpty() )
                                                 {
-                                                    pHyperlink->aConvSubString = OUString( SdResId( STR_PAGE ) ) + " " + ( mpDoc->CreatePageNumValue( (sal_uInt16)nPageNumber + 1 ) );
+                                                    pHyperlink->aConvSubString = SdResId( STR_PAGE ) + " " + ( mpDoc->CreatePageNumValue( (sal_uInt16)nPageNumber + 1 ) );
                                                 }
                                             } else {
                                                 // if sub address is given but not internal, use it as it is

@@ -307,7 +307,7 @@ bool RemoteServer::connectClient( const std::shared_ptr< ClientInfo >& pClient, 
             }
             if ( !aSaved )
                 xConfig->insertByName( apClient->mName, makeAny( xChild ) );
-            aValue <<= OUString( apClient->mPin );
+            aValue <<= apClient->mPin;
             xChild->replaceByName("PIN", aValue);
             aChanges->commit();
         }

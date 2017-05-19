@@ -208,11 +208,11 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 // grab the left one
                 void* pD1 = pImagesLst->GetEntryData(i);
                 pData = static_cast<OUString const *>(pD1);
-                sUrl1 = pData ? OUString(*pData) : "";
+                sUrl1 = pData ? *pData : "";
                 // grab the right one
                 void* pD2 = pImagesLst->GetEntryData(i+1);
                 pData = static_cast<OUString const *>(pD2);
-                sUrl2 = pData ? OUString(*pData) : "";
+                sUrl2 = pData ? *pData : "";
 
                 if( !sUrl1.isEmpty() )
                 {
@@ -318,22 +318,22 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 // grab the upper left one
                 void* pD1 = pImagesLst->GetEntryData(i);
                 pData = static_cast<OUString*>(pD1);
-                sUrl1 = pData ? OUString(*pData) : "";
+                sUrl1 = pData ? *pData : "";
 
                 // grab the upper right one
                 void* pD2 = pImagesLst->GetEntryData(i+1);
                 pData = static_cast<OUString *>(pD2);
-                sUrl2 = pData ? OUString(*pData) : "";
+                sUrl2 = pData ? *pData : "";
 
                 // grab the lower left one
                 void* pD3 = pImagesLst->GetEntryData(i+2);
                 pData = static_cast<OUString*>(pD3);
-                sUrl3 = pData ? OUString(*pData) : "";
+                sUrl3 = pData ? *pData : "";
 
                 // grab the lower right one
                 void* pD4 = pImagesLst->GetEntryData(i+3);
                 pData = static_cast<OUString*>(pD4);
-                sUrl4 = pData ? OUString(*pData) : "";
+                sUrl4 = pData ? *pData : "";
 
                 if( !sUrl1.isEmpty() )
                 {
@@ -608,7 +608,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, RemoveHdl, Button*, void)
 IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl, ListBox&, void)
 {
     OUString* pData = static_cast<OUString*>(pImagesLst->GetSelectEntryData());
-    OUString sImgUrl = pData ? OUString(*pData) : "";
+    OUString sImgUrl = pData ? *pData : "";
 
     if (sImgUrl != SdResId(STR_PHOTO_ALBUM_TEXTBOX))
     {

@@ -871,7 +871,7 @@ bool SdXMLFilter::Export()
         beans::PropertyValue* pProps = aDescriptor.getArray();
 
         pProps[0].Name = "FileName";
-        pProps[0].Value <<= OUString( mrMedium.GetName() );
+        pProps[0].Value <<= mrMedium.GetName();
 
         {
             uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;

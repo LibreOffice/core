@@ -339,7 +339,7 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( vcl::Window* pWindow,
     else
     {
         rpCustomShow = new SdCustomShow;
-        m_pEdtName->SetText( OUString( SdResId( STR_NEW_CUSTOMSHOW ) ) );
+        m_pEdtName->SetText( SdResId( STR_NEW_CUSTOMSHOW ) );
         m_pEdtName->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
         rpCustomShow->SetName( m_pEdtName->GetText() );
     }

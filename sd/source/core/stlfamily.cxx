@@ -196,7 +196,7 @@ OUString SAL_CALL SdStyleFamily::getName()
         if( nIndex != -1 )
             aLayoutName = aLayoutName.copy(0, nIndex);
 
-        return OUString( aLayoutName );
+        return aLayoutName;
     }
     else
     {
