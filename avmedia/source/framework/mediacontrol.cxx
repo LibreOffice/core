@@ -89,7 +89,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     mpZoomListBox->SetSizePixel( Size( mpTimeEdit->GetSizePixel().Width(), 260 ) );
     mpZoomListBox->SetSelectHdl( LINK( this, MediaControl, implZoomSelectHdl ) );
 
-    mpZoomToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_ZOOM, OUString( AvmResId( AVMEDIA_STR_ZOOM ) ) );
+    mpZoomToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_ZOOM, AvmResId( AVMEDIA_STR_ZOOM ) );
     mpZoomToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_ZOOM, HID_AVMEDIA_ZOOMLISTBOX );
 
     mpZoomToolBox->SetItemWindow( AVMEDIA_TOOLBOXITEM_ZOOM, mpZoomListBox );
@@ -123,9 +123,9 @@ void MediaControl::InitializeWidgets()
 {
     if( meControlStyle != MEDIACONTROLSTYLE_SINGLELINE )
     {
-        mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_OPEN, GetImage(AVMEDIA_TOOLBOXITEM_OPEN), OUString( AvmResId( AVMEDIA_STR_OPEN ) ) );
+        mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_OPEN, GetImage(AVMEDIA_TOOLBOXITEM_OPEN), AvmResId( AVMEDIA_STR_OPEN ) );
         mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_OPEN, HID_AVMEDIA_TOOLBOXITEM_OPEN );
-        mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_INSERT, GetImage(AVMEDIA_TOOLBOXITEM_INSERT), OUString( AvmResId( AVMEDIA_STR_INSERT ) ) );
+        mpPlayToolBox->InsertItem( AVMEDIA_TOOLBOXITEM_INSERT, GetImage(AVMEDIA_TOOLBOXITEM_INSERT), AvmResId( AVMEDIA_STR_INSERT ) );
         mpPlayToolBox->SetHelpId( AVMEDIA_TOOLBOXITEM_INSERT, HID_AVMEDIA_TOOLBOXITEM_INSERT );
         mpPlayToolBox->InsertSeparator();
     }
@@ -170,7 +170,7 @@ const Size& MediaControl::getMinSizePixel() const
 
 void MediaControl::UpdateURLField(MediaItem tempItem)
 {
-    const OUString aURL( OUString(AvmResId(AVMEDIA_MEDIA_PATH)) + ":  " + tempItem.getURL() ) ;
+    const OUString aURL( AvmResId(AVMEDIA_MEDIA_PATH) + ":  " + tempItem.getURL() ) ;
     mpMediaPath->SetText(aURL);
     mpMediaPath->SetUpdateMode( false );
     mpMediaPath->SetSizePixel( Size( mpMediaPath->GetTextWidth( aURL ) + 8, mpPlayToolBox->GetSizePixel().Height() ) );
