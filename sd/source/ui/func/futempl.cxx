@@ -383,7 +383,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                     if( !bOldDocInOtherLanguage )
                     {
-                        pPresDlg.disposeAndReset(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh,  mpViewShell->GetActiveWindow(), SdResId(nDlgId), *pStyleSheet, ePO, pSSPool ) : nullptr);
+                        pPresDlg.disposeAndReset(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh,  mpViewShell->GetActiveWindow(), nDlgId, *pStyleSheet, ePO, pSSPool ) : nullptr);
                     }
                 }
                 else if (eFamily == SD_STYLE_FAMILY_CELL)

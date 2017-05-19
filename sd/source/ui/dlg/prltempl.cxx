@@ -50,7 +50,7 @@
  */
 SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
                                 vcl::Window* pParent,
-                                SdResId DlgId,
+                                sal_uInt16 nDlgId,
                                 SfxStyleSheetBase& rStyleBase,
                                 PresentationObjects _ePO,
                                 SfxStyleSheetBasePool* pSSPool ) :
@@ -155,7 +155,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     if( !aCJKOptions.IsAsianTypographyEnabled() )
         RemoveTabPage( "RID_SVXPAGE_PARA_ASIAN" );
 
-    if (DlgId.GetId() == TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND)
+    if (nDlgId == TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND)
     {
         RemoveTabPage( "RID_SVXPAGE_LINE");
 
