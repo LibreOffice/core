@@ -39,13 +39,13 @@
             <info>
                 <desc>The URL that is used for the update check</desc>
             </info>
-            <value>http://updater.libreofficecrash.org/</value>
+            <value>http://vm195.documentfoundation.org/</value>
         </prop>
         <prop oor:name="UpdateChannel" oor:type="xs:string" oor:nillable="false">
             <info>
                 <desc>The update channel that is currently in use</desc>
             </info>
-            <value>Release</value>
+            <value>daily-master-gandalf</value>
         </prop>
     </group>
   </component>
