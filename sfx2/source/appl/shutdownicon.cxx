@@ -81,7 +81,7 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
 #ifdef ENABLE_QUICKSTART_APPLET
-# if !defined(WIN32) && !defined(MACOSX)
+# if !defined(_WIN32) && !defined(MACOSX)
 extern "C" { static void SAL_CALL thisModule() {} }
 # endif
 #endif
@@ -137,7 +137,7 @@ bool LoadModule()
     if (boost::logic::indeterminate(loaded))
     {
 #ifdef ENABLE_QUICKSTART_APPLET
-#  ifdef WIN32
+#  ifdef _WIN32
         pInitSystray = win32_init_sys_tray;
         pDeInitSystray = win32_shutdown_sys_tray;
         loaded = true;

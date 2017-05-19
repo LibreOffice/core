@@ -10,7 +10,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <string.h>
 
 #include <windows.h>

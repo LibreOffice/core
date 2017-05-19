@@ -1307,7 +1307,7 @@ void SAL_CALL BluetoothServer::run()
     mpImpl->mpConnection = nullptr;
     mpImpl->mpContext = nullptr;
 
-#elif defined(WIN32)
+#elif defined(_WIN32)
     WORD wVersionRequested;
     WSADATA wsaData;
 
