@@ -923,7 +923,7 @@ static OUString ImpCreateFullFilterPath( const OUString& rPath, const OUString& 
     ::osl::FileBase::getSystemPathFromFileURL( aPathURL, aSystemPath );
     aSystemPath += rFilterName;
 
-    return OUString( aSystemPath );
+    return aSystemPath;
 }
 
 class ImpFilterLibCache;

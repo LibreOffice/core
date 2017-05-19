@@ -779,7 +779,7 @@ void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
 {
     mpImplData->mxPrinter = i_rPrinter;
     setValue( "Name",
-              css::uno::makeAny( OUString( i_rPrinter->GetName() ) ) );
+              css::uno::makeAny( i_rPrinter->GetName() ) );
     mpImplData->mnDefaultPaperBin = mpImplData->mxPrinter->GetPaperBin();
     mpImplData->mxPrinter->Push();
     mpImplData->mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));

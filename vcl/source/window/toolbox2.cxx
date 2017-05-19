@@ -1476,7 +1476,7 @@ OUString ToolBox::GetDisplayText() const
 {
     if( ! mpData->m_pLayoutData )
         const_cast<ToolBox *>(this)->ImplFillLayoutData();
-    return mpData->m_pLayoutData ? OUString(mpData->m_pLayoutData->m_aDisplayText) : OUString();
+    return mpData->m_pLayoutData ? mpData->m_pLayoutData->m_aDisplayText : OUString();
 }
 
 tools::Rectangle ToolBox::GetCharacterBounds( sal_uInt16 nItemID, long nIndex )

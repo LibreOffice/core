@@ -222,7 +222,7 @@ OUString Control::GetDisplayText() const
 {
     if( !HasLayoutData() )
         FillLayoutData();
-    return mpControlData->mpLayoutData ? OUString(mpControlData->mpLayoutData->m_aDisplayText) : GetText();
+    return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->m_aDisplayText : GetText();
 }
 
 bool Control::EventNotify( NotifyEvent& rNEvt )

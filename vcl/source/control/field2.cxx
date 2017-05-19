@@ -236,7 +236,7 @@ static OUString ImplPatternReformat( const OUString& rStr,
     if (rEditMask.isEmpty())
         return rStr;
 
-    OUStringBuffer    aOutStr = OUString(rLiteralMask);
+    OUStringBuffer    aOutStr = rLiteralMask;
     sal_Unicode cTempChar;
     sal_Unicode cChar;
     sal_Unicode cLiteral;

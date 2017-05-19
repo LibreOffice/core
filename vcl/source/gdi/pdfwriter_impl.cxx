@@ -13640,7 +13640,7 @@ void PDFWriterImpl::addStream( const OUString& rMimeType, PDFOutputStream* pStre
         m_aAdditionalStreams.push_back( PDFAddStream() );
         PDFAddStream& rStream = m_aAdditionalStreams.back();
         rStream.m_aMimeType = !rMimeType.isEmpty()
-                              ? OUString( rMimeType )
+                              ? rMimeType
                               : OUString( "application/octet-stream"  );
         rStream.m_pStream = pStream;
         rStream.m_bCompress = false;

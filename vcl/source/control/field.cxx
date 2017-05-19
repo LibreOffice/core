@@ -561,7 +561,7 @@ void NumericFormatter::SetValue( sal_Int64 nNewValue )
 
 OUString NumericFormatter::CreateFieldText( sal_Int64 nValue ) const
 {
-    return OUString(ImplGetLocaleDataWrapper().getNum( nValue, GetDecimalDigits(), IsUseThousandSep(), IsShowTrailingZeros() ));
+    return ImplGetLocaleDataWrapper().getNum( nValue, GetDecimalDigits(), IsUseThousandSep(), IsShowTrailingZeros() );
 }
 
 void NumericFormatter::ImplSetUserValue( sal_Int64 nNewValue, Selection* pNewSelection )
