@@ -1,9 +1,17 @@
 package org.libreoffice;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import org.json.JSONArray;
@@ -31,7 +39,38 @@ public class FontController implements AdapterView.OnItemSelectedListener {
     public FontController(Activity activity) {
         mActivity = activity;
     }
+    private BottomSheetBehavior colorPickerBehavior;
+    private BottomSheetBehavior toolBarBottomBehavior;
+    private ColorPickerAdapter colorPickerAdapter;
 
+    ColorPaletteListener colorPaletteListener = new ColorPaletteListener() {
+        @Override
+        public void applyColor(int color) {
+            sendFontColorChange(color);
+        }
+
+        @Override
+        public void updateColorPickerPosition(int color) {
+            colorPickerAdapter.findSelectedTextColor(color);
+            changeFontColorBoxColor(color);
+        }
+    };
+
+    private void changeFontColorBoxColor(final int color){
+        final ImageButton fontColorPickerButton = (ImageButton)mActivity.findViewById(R.id.font_color_picker_button);
+
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                if(color == -1){ //Libreoffice recognizes -1 as black
+                    fontColorPickerButton.setBackgroundColor(Color.BLACK);
+                }else{
+                    fontColorPickerButton.setBackgroundColor(color);
+
+                }
+            }
+        });
+    }
     private void sendFontChange(String fontName) {
         try {
             JSONObject json = new JSONObject();
@@ -61,6 +100,23 @@ public class FontController implements AdapterView.OnItemSelectedListener {
             e.printStackTrace();
         }
     }
+
+    private void sendFontColorChange(int color){
+        try {
+            JSONObject json = new JSONObject();
+            JSONObject valueJson = new JSONObject();
+            valueJson.put("type", "long");
+            valueJson.put("value", color);
+            json.put("Color", valueJson);
+
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Color", json.toString()));
+            changeFontColorBoxColor(color);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -114,6 +170,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
             public void run() {
                 setupFontNameSpinner();
                 setupFontSizeSpinner();
+                setupColorPicker();
             }
         });
     }
@@ -130,6 +187,64 @@ public class FontController implements AdapterView.OnItemSelectedListener {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mActivity, android.R.layout.simple_spinner_item, mFontSizes);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         fontSizeSpinner.setAdapter(dataAdapter);
+    }
+
+    private void setupColorPicker(){
+        RecyclerView recyclerView = (RecyclerView) mActivity.findViewById(R.id.fontColorView);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(mActivity, 11, GridLayoutManager.VERTICAL, true);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(gridLayoutManager);
+
+
+
+        RecyclerView recyclerView2 = (RecyclerView) mActivity.findViewById(R.id.fontColorViewSub);
+        GridLayoutManager gridLayoutManager2 = new GridLayoutManager(mActivity,4);
+        recyclerView2.setHasFixedSize(true);
+        recyclerView2.addItemDecoration(new RecyclerView.ItemDecoration() {
+
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                outRect.bottom = 3;
+                outRect.top = 3;
+                outRect.left = 3;
+                outRect.right = 3;
+            }
+        });
+        recyclerView2.setLayoutManager(gridLayoutManager2);
+
+        ColorPaletteAdapter colorPaletteAdapter = new ColorPaletteAdapter(mActivity, colorPaletteListener);
+        recyclerView2.setAdapter(colorPaletteAdapter);
+
+        this.colorPickerAdapter = new ColorPickerAdapter(mActivity, colorPaletteAdapter, colorPaletteListener);
+        recyclerView.setAdapter(colorPickerAdapter);
+        RelativeLayout fontColorPicker = (RelativeLayout) mActivity.findViewById(R.id.font_color_picker);
+        ImageButton fontColorPickerButton = (ImageButton)mActivity.findViewById(R.id.font_color_picker_button);
+        View.OnClickListener clickListener = new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                toolBarBottomBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                colorPickerBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                mActivity.findViewById(R.id.search_toolbar).setVisibility(View.GONE);
+            }
+        };
+        LinearLayout toolbarColorPicker = (LinearLayout) mActivity.findViewById(R.id.toolbar_color_picker);
+        LinearLayout toolbarBottomLayout = (LinearLayout) mActivity.findViewById(R.id.toolbar_bottom);
+        colorPickerBehavior = BottomSheetBehavior.from(toolbarColorPicker);
+        toolBarBottomBehavior = BottomSheetBehavior.from(toolbarBottomLayout);
+
+        ImageButton pickerGoBackButton = (ImageButton)mActivity.findViewById(R.id.button_go_back_color_picker);
+        pickerGoBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toolBarBottomBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                colorPickerBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+
+
+        fontColorPicker.setOnClickListener(clickListener);
+        fontColorPickerButton.setOnClickListener(clickListener);
+
     }
 
     public void selectFont(final String fontName) {

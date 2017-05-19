@@ -82,6 +82,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private String newDocumentType = null;
 
     BottomSheetBehavior bottomToolbarSheetBehavior;
+    BottomSheetBehavior toolbarColorPickerBottomSheetBehavior;
     private FormattingController mFormattingController;
     private ToolbarController mToolbarController;
     private FontController mFontController;
@@ -222,8 +223,11 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         host.addTab(spec);
 
         LinearLayout bottomToolbarLayout = (LinearLayout) findViewById(R.id.toolbar_bottom);
+        LinearLayout toolbarColorPickerLayout = (LinearLayout) findViewById(R.id.toolbar_color_picker);
         bottomToolbarSheetBehavior = BottomSheetBehavior.from(bottomToolbarLayout);
+        toolbarColorPickerBottomSheetBehavior = BottomSheetBehavior.from(toolbarColorPickerLayout);
         bottomToolbarSheetBehavior.setHideable(true);
+        toolbarColorPickerBottomSheetBehavior.setHideable(true);
     }
 
     // Loads a new Document
@@ -501,7 +505,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                if (findViewById(R.id.toolbar_bottom).getVisibility() != View.VISIBLE) {
+                if (findViewById(R.id.toolbar_bottom).getVisibility() != View.VISIBLE
+                        && findViewById(R.id.toolbar_color_picker).getVisibility() != View.VISIBLE) {
                     showSoftKeyboardDirect();
                 }
             }
@@ -545,6 +550,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 bottomToolbarSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                toolbarColorPickerBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 findViewById(R.id.search_toolbar).setVisibility(View.GONE);
                 isFormattingToolbarOpen=false;
                 isSearchToolbarOpen=false;
@@ -589,6 +595,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
                 } else {
                     showBottomToolbar();
                     findViewById(R.id.formatting_toolbar).setVisibility(View.GONE);
+                    toolbarColorPickerBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                     findViewById(R.id.search_toolbar).setVisibility(View.VISIBLE);
                     hideSoftKeyboardDirect();
                     isFormattingToolbarOpen=false;

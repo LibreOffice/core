@@ -98,5 +98,30 @@
     <color name="handle_color">#26a69a</color>
 
     <color name="button_selected_background">#33000000</color>
+    <color name="fontBlack">#000000</color>
+    <color name="fontDarkRed">#990000</color>
+    <color name="fontRed">#FF0000</color>
+    <color name="fontOrange">#FF8000</color>
+    <color name="fontYellow">#FFFF00</color>
+    <color name="fontGreen">#00FF00</color>
+    <color name="fontCyan">#00FFFF</color>
+    <color name="fontLightBlue">#0080FF</color>
+    <color name="fontBlue">#0000FF</color>
+    <color name="fontPurple">#990099</color>
+    <color name="fontPink">#FF00FF</color>
+
+    <integer-array name="fontcolors">
+        <item>@color/fontBlack</item>
+        <item>@color/fontDarkRed</item>
+        <item>@color/fontRed</item>
+        <item>@color/fontOrange</item>
+        <item>@color/fontYellow</item>
+        <item>@color/fontGreen</item>
+        <item>@color/fontCyan</item>
+        <item>@color/fontLightBlue</item>
+        <item>@color/fontBlue</item>
+        <item>@color/fontPurple</item>
+        <item>@color/fontPink</item>
+    </integer-array>
 </resources>
 
