@@ -2333,7 +2333,7 @@ AC_ARG_WITH(macosx-sdk,
                           not terribly useful. It works fine to build with a new SDK and run the result
                           on an older OS.
 
-                          e. g.: --with-macosx-sdk=10.8
+                          e. g.: --with-macosx-sdk=10.9
 
                           there are 3 options to control the MacOSX build:
                           --with-macosx-sdk (referred as 'sdk' below)
@@ -2348,10 +2348,10 @@ AC_ARG_WITH(macosx-sdk,
                            command line      || config result
                           ==========================================
                           min  | max  | sdk  || min  | max  | sdk  |
-                          ?    | ?    | ?    || 10.8 | 10.s | 10.s |
-                          ?    | ?    | 10.x || 10.8 | 10.x | 10.x |
-                          ?    | 10.x | ?    || 10.8 | 10.s | 10.s |
-                          ?    | 10.x | 10.y || 10.8 | 10.x | 10.y |
+                          ?    | ?    | ?    || 10.9 | 10.s | 10.s |
+                          ?    | ?    | 10.x || 10.9 | 10.x | 10.x |
+                          ?    | 10.x | ?    || 10.9 | 10.s | 10.s |
+                          ?    | 10.x | 10.y || 10.9 | 10.x | 10.y |
                           10.x | ?    | ?    || 10.x | 10.s | 10.s |
                           10.x | ?    | 10.y || 10.x | 10.y | 10.y |
                           10.x | 10.y | ?    || 10.x | 10.y | 10.y |
@@ -2369,7 +2369,7 @@ AC_ARG_WITH(macosx-version-min-required,
     AS_HELP_STRING([--with-macosx-version-min-required=<version>],
         [set the minimum OS version needed to run the built LibreOffice])
     [
-                          e. g.: --with-macos-version-min-required=10.8
+                          e. g.: --with-macos-version-min-required=10.9
                           see --with-macosx-sdk for more info
     ],
 ,)
@@ -2378,7 +2378,7 @@ AC_ARG_WITH(macosx-version-max-allowed,
     AS_HELP_STRING([--with-macosx-version-max-allowed=<version>],
         [set the maximum allowed OS version the LibreOffice compilation can use APIs from])
     [
-                          e. g.: --with-macos-version-max-allowed=10.8
+                          e. g.: --with-macos-version-max-allowed=10.9
                           see --with-macosx-sdk for more info
     ],
 ,)
@@ -2744,7 +2744,7 @@ if test $_os = Darwin; then
 
     AC_MSG_CHECKING([what Mac OS X SDK to use])
 
-    for _macosx_sdk in $with_macosx_sdk 10.8 10.9 10.10 10.11 10.12; do
+    for _macosx_sdk in $with_macosx_sdk 10.9 10.10 10.11 10.12; do
         MACOSX_SDK_PATH=`xcrun --sdk macosx${_macosx_sdk} --show-sdk-path 2> /dev/null`
         if test -d "$MACOSX_SDK_PATH"; then
             with_macosx_sdk="${_macosx_sdk}"
@@ -2763,9 +2763,6 @@ if test $_os = Darwin; then
     AC_MSG_RESULT([SDK $with_macosx_sdk at $MACOSX_SDK_PATH])
 
     case $with_macosx_sdk in
-    10.8)
-        MACOSX_SDK_VERSION=1080
-        ;;
     10.9)
         MACOSX_SDK_VERSION=1090
         ;;
@@ -2779,12 +2776,12 @@ if test $_os = Darwin; then
         MACOSX_SDK_VERSION=101200
         ;;
     *)
-        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported values are 10.8--12])
+        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported values are 10.9--12])
         ;;
     esac
 
     if test "$with_macosx_version_min_required" = "" ; then
-        with_macosx_version_min_required="10.8";
+        with_macosx_version_min_required="10.9";
     fi
 
     if test "$with_macosx_version_max_allowed" = "" ; then
@@ -2799,9 +2796,6 @@ if test $_os = Darwin; then
     MACOSX_DEPLOYMENT_TARGET="$with_macosx_version_min_required"
 
     case "$with_macosx_version_min_required" in
-    10.8)
-        MAC_OS_X_VERSION_MIN_REQUIRED="1080"
-        ;;
     10.9)
         MAC_OS_X_VERSION_MIN_REQUIRED="1090"
         ;;
@@ -2815,7 +2809,7 @@ if test $_os = Darwin; then
         MAC_OS_X_VERSION_MIN_REQUIRED="101200"
         ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.8--12])
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.9--12])
         ;;
     esac
 
@@ -2839,9 +2833,6 @@ if test $_os = Darwin; then
     fi
 
     case "$with_macosx_version_max_allowed" in
-    10.8)
-        MAC_OS_X_VERSION_MAX_ALLOWED="1080"
-        ;;
     10.9)
         MAC_OS_X_VERSION_MAX_ALLOWED="1090"
         ;;
@@ -2855,7 +2846,7 @@ if test $_os = Darwin; then
         MAC_OS_X_VERSION_MAX_ALLOWED="101200"
         ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.8--12])
+        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.9--12])
         ;;
     esac
 
@@ -5901,18 +5892,7 @@ if test "$GCC" = "yes"; then
     dnl 20080519, 4.3.1 is 20080606) for Clang (for which GCC_VERSION is notoriously
     dnl "too old"):
     if test "$_os" = Darwin; then
-        dnl On Mac OS X, both /usr/lib/libstdc++.6.dylib and
-        dnl /usr/lib/libc++1.dylib delegate to /usr/lib/libc++abi.dylib for the
-        dnl __cxa_guard_* functionality; up to 10.8, libc++abi.dylib is
-        dnl apparently provided by a libcppabi project that has broken semantics
-        dnl (cf. <http://www.opensource.apple.com/source/libcppabi/libcppabi-26/
-        dnl src/cxa_guard.cxx>), while in 10.9 (verified at least on 10.9.4) it
-        dnl is apparently provided by LLVM's libcxxabi project, which has good
-        dnl semantics (cf. <http://llvm.org/svn/llvm-project/libcxxabi/trunk/
-        dnl src/cxa_guard.cpp>):
-        if test "$MAC_OS_X_VERSION_MIN_REQUIRED" -ge 1090; then
-            HAVE_THREADSAFE_STATICS=TRUE
-        fi
+        HAVE_THREADSAFE_STATICS=TRUE
     elif test "$_os" != Android; then
         if test "$COM_IS_CLANG" = TRUE; then
             AC_LANG_PUSH([C++])
