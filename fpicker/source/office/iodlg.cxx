@@ -1268,7 +1268,7 @@ IMPL_LINK_NOARG ( SvtFileDialog, AddPlacePressed_Hdl, Button*, void )
     INetURLObject aURLObj( _pFileView->GetViewURL() );
     PlacePtr newPlace(
         new Place( aURLObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset),
-                OUString(_pFileView->GetViewURL()), true));
+                _pFileView->GetViewURL(), true));
     pImpl->_pPlaces->AppendPlace(newPlace);
 }
 
@@ -1800,8 +1800,8 @@ short SvtFileDialog::PrepareExecute()
         try
         {
             INetURLObject aStdDir( GetStandardDir() );
-            ::ucbhelper::Content aCnt( OUString( aStdDir.GetMainURL(
-                                                    INetURLObject::DecodeMechanism::NONE ) ),
+            ::ucbhelper::Content aCnt( aStdDir.GetMainURL(
+                                                    INetURLObject::DecodeMechanism::NONE ),
                                  Reference< XCommandEnvironment >(),
                                  comphelper::getProcessComponentContext() );
             Sequence< OUString > aProps(2);

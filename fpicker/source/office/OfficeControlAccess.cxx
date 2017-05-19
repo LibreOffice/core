@@ -416,7 +416,7 @@ namespace svt
                     case LISTBOX_FILTER:
                         if ( ControlActions::GET_SELECTED_ITEM == _nControlAction )
                         {
-                            aRet <<= OUString( m_pFilePickerController->getCurFilter() );
+                            aRet <<= m_pFilePickerController->getCurFilter();
                         }
                         else
                         {
@@ -690,7 +690,7 @@ namespace svt
         switch ( _nProperty )
         {
             case PropFlags::Text:
-                aReturn <<= OUString( _pControl->GetText() );
+                aReturn <<= _pControl->GetText();
                 break;
 
             case PropFlags::Enabled:
