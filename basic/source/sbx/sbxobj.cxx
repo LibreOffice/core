@@ -288,7 +288,7 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
 bool SbxObject::Call( const OUString& rName, SbxArray* pParam )
 {
     SbxVariable* pMeth = FindQualified( rName, SbxClassType::DontCare);
-    if( pMeth && nullptr != dynamic_cast<const SbxMethod*>( pMeth) )
+    if( pMeth && dynamic_cast<const SbxMethod*>( pMeth) != nullptr )
     {
         // FindQualified() might have struck already!
         if( pParam )
@@ -384,7 +384,7 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
         return nullptr;
     }
     // Collections may contain objects of the same name
-    if( !( ct == SbxClassType::Object && nullptr != dynamic_cast<const SbxCollection*>( this ) ) )
+    if( !( ct == SbxClassType::Object && dynamic_cast<const SbxCollection*>( this ) != nullptr ) )
     {
         SbxVariable* pRes = pArray->Find( rName, ct );
         if( pRes )
@@ -428,7 +428,7 @@ void SbxObject::Insert( SbxVariable* pVar )
         {
             // Then this element exists already
             // There are objects of the same name allowed at collections
-            if( pArray == pObjs.get() && nullptr != dynamic_cast<const SbxCollection*>( this ) )
+            if( pArray == pObjs.get() && dynamic_cast<const SbxCollection*>( this ) != nullptr )
             {
                 nIdx = pArray->Count();
             }

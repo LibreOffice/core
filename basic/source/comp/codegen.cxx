@@ -205,7 +205,7 @@ void SbiCodeGen::Save()
                 {
                     const OUString& rIfaceName = pParser->aIfaceVector[i];
                     int nFound = aPureProcName.indexOf( rIfaceName );
-                    if( nFound == 0 && '_' == aPureProcName[rIfaceName.getLength()] )
+                    if( nFound == 0 && aPureProcName[rIfaceName.getLength()] == '_' )
                     {
                         if( nPropPrefixFound == 0 )
                         {

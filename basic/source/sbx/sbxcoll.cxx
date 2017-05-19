@@ -170,7 +170,7 @@ void SbxCollection::CollAdd( SbxArray* pPar_ )
     else
     {
         SbxBase* pObj = pPar_->Get( 1 )->GetObject();
-        if( !pObj || !( nullptr != dynamic_cast<const SbxObject*>( pObj) ) )
+        if( !pObj || dynamic_cast<const SbxObject*>(pObj) == nullptr )
         {
             SetError( ERRCODE_SBX_NOTIMP );
         }

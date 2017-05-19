@@ -445,7 +445,7 @@ namespace basic
                 for(const auto& rError : aErrors)
                 {
                     // show message to user
-                    if ( DialogMask::ButtonsCancel == ErrorHandler::HandleError( rError.GetErrorId() ) )
+                    if ( ErrorHandler::HandleError( rError.GetErrorId() ) == DialogMask::ButtonsCancel )
                     {
                         // user wants to break loading of BASIC-manager
                         delete _out_rpBasicManager;

@@ -1321,7 +1321,7 @@ void SbModule::ClearPrivateVars()
 
 void SbModule::implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic )
 {
-    if( pVar->SbxValue::GetType() != SbxOBJECT || nullptr != dynamic_cast<const SbProcedureProperty*>( pVar) )
+    if( pVar->SbxValue::GetType() != SbxOBJECT || dynamic_cast<const SbProcedureProperty*>( pVar) != nullptr )
         return;
 
     SbxObject* pObj = dynamic_cast<SbxObject*>( pVar->GetObject() );
@@ -1380,7 +1380,7 @@ void StarBASIC::ClearAllModuleVars()
     for (const auto& rModule: pModules)
     {
         // Initialise only, if the startcode was already executed
-        if( rModule->pImage && rModule->pImage->bInit && !rModule->isProxyModule() && nullptr == dynamic_cast<const SbObjModule*>( rModule.get()) )
+        if( rModule->pImage && rModule->pImage->bInit && !rModule->isProxyModule() && dynamic_cast<const SbObjModule*>( rModule.get()) == nullptr )
             rModule->ClearPrivateVars();
     }
 

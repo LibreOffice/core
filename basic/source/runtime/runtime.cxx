@@ -833,7 +833,7 @@ bool SbiRuntime::Step()
                 // there's no error handler -> find one farther above
                 SbiRuntime* pRtErrHdl = nullptr;
                 SbiRuntime* pRt = this;
-                while( nullptr != (pRt = pRt->pNext) )
+                while( (pRt = pRt->pNext) != nullptr )
                 {
                     if( !pRt->bError || pRt->pError != nullptr )
                     {
@@ -1587,11 +1587,11 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
             return false;
     }
     // #115826: Exclude ProcedureProperties to avoid call to Property Get procedure
-    else if( nullptr != dynamic_cast<const SbProcedureProperty*>( refVar.get() ) )
+    else if( dynamic_cast<const SbProcedureProperty*>( refVar.get() ) != nullptr )
         return false;
 
     SbxObjectRef xValObj = static_cast<SbxObject*>(refVal->GetObject());
-    if( !xValObj.is() || nullptr != dynamic_cast<const SbUnoAnyObject*>( xValObj.get() ) )
+    if( !xValObj.is() || dynamic_cast<const SbUnoAnyObject*>( xValObj.get() ) != nullptr )
         return false;
 
     SbUnoObject* pUnoVal =  dynamic_cast<SbUnoObject*>( xValObj.get() );
@@ -1902,7 +1902,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
         }
         if ( bDimAsNew )
         {
-            if( nullptr == dynamic_cast<const SbxObject*>( refVar.get() ) )
+            if( dynamic_cast<const SbxObject*>( refVar.get() ) == nullptr )
             {
                 SbxBase* pValObjBase = refVal->GetObject();
                 if( pValObjBase == nullptr )
@@ -2387,9 +2387,9 @@ void SbiRuntime::StepARGV()
         SbxVariableRef pVal = PopVar();
 
         // Before fix of #94916:
-        if( nullptr != dynamic_cast<const SbxMethod*>( pVal.get() )
-            || nullptr != dynamic_cast<const SbUnoProperty*>( pVal.get() )
-            || nullptr != dynamic_cast<const SbProcedureProperty*>( pVal.get() ) )
+        if( dynamic_cast<const SbxMethod*>( pVal.get() ) != nullptr
+            || dynamic_cast<const SbUnoProperty*>( pVal.get() ) != nullptr
+            || dynamic_cast<const SbProcedureProperty*>( pVal.get() ) != nullptr )
         {
             // evaluate methods and properties!
             SbxVariable* pRes = new SbxVariable( *pVal );
@@ -2797,9 +2797,9 @@ void SbiRuntime::StepARGN( sal_uInt32 nOp1 )
         OUString aAlias( pImg->GetString( static_cast<short>( nOp1 ) ) );
         SbxVariableRef pVal = PopVar();
         if( bVBAEnabled &&
-                ( nullptr != dynamic_cast<const SbxMethod*>( pVal.get())
-                  || nullptr != dynamic_cast<const SbUnoProperty*>( pVal.get())
-                  || nullptr != dynamic_cast<const SbProcedureProperty*>( pVal.get()) ) )
+                ( dynamic_cast<const SbxMethod*>( pVal.get()) != nullptr
+                  || dynamic_cast<const SbUnoProperty*>( pVal.get()) != nullptr
+                  || dynamic_cast<const SbProcedureProperty*>( pVal.get()) != nullptr ) )
         {
             // named variables ( that are Any especially properties ) can be empty at this point and need a broadcast
             if ( pVal->GetType() == SbxEMPTY )
@@ -3531,7 +3531,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
         // definitely we want this for VBA where properties are often
         // collections ( which need index access ), but lets only do
         // this if we actually have params following
-        else if( bVBAEnabled && nullptr != dynamic_cast<const SbUnoProperty*>( pElem) && pElem->GetParameters() )
+        else if( bVBAEnabled && dynamic_cast<const SbUnoProperty*>( pElem) != nullptr && pElem->GetParameters() )
         {
             SbxVariableRef refTemp = pElem;
 
@@ -3665,7 +3665,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                         }
                     }
                 }
-                else if( bVBAEnabled && p->GetType() == SbxOBJECT && (nullptr == dynamic_cast<const SbxMethod*>( p) || !p->IsBroadcaster()) )
+                else if( bVBAEnabled && p->GetType() == SbxOBJECT && (dynamic_cast<const SbxMethod*>( p) == nullptr || !p->IsBroadcaster()) )
                 {
                     // Check for default method with named parameters
                     SbxBaseRef xObj = p->GetObject();
@@ -3787,8 +3787,8 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
     }
     // consider index-access for UnoObjects
     else if( pElem->GetType() == SbxOBJECT &&
-            nullptr == dynamic_cast<const SbxMethod*>( pElem) &&
-            ( !bVBAEnabled || nullptr == dynamic_cast<const SbxProperty*>( pElem) ) )
+            dynamic_cast<const SbxMethod*>( pElem) == nullptr &&
+            ( !bVBAEnabled || dynamic_cast<const SbxProperty*>( pElem) == nullptr ) )
     {
         pPar = pElem->GetParameters();
         if ( pPar )

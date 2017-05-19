@@ -1536,7 +1536,7 @@ namespace
 
 bool BasicManager::HasMacro( OUString const& i_fullyQualifiedName ) const
 {
-    return ( nullptr != lcl_queryMacro( const_cast< BasicManager* >( this ), i_fullyQualifiedName ) );
+    return ( lcl_queryMacro( const_cast< BasicManager* >( this ), i_fullyQualifiedName ) != nullptr );
 }
 
 ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, SbxArray* i_arguments, SbxValue* i_retValue )
