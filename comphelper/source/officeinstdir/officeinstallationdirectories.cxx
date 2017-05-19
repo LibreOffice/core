@@ -102,7 +102,7 @@ OUString SAL_CALL
 OfficeInstallationDirectories::getOfficeInstallationDirectoryURL()
 {
     initDirs();
-    return OUString( *m_pOfficeBrandDir );
+    return *m_pOfficeBrandDir;
 }
 
 
@@ -111,7 +111,7 @@ OUString SAL_CALL
 OfficeInstallationDirectories::getOfficeUserDataDirectoryURL()
 {
     initDirs();
-    return OUString( *m_pUserDir );
+    return *m_pUserDir;
 }
 
 
@@ -130,24 +130,24 @@ OfficeInstallationDirectories::makeRelocatableURL( const OUString& URL )
         sal_Int32 nIndex = aCanonicalURL.indexOf( *m_pOfficeBrandDir );
         if ( nIndex  != -1 )
         {
-            return OUString(
+            return
                 aCanonicalURL.replaceAt( nIndex,
                                          m_pOfficeBrandDir->getLength(),
-                                         m_aOfficeBrandDirMacro ) );
+                                         m_aOfficeBrandDirMacro );
         }
         else
         {
             nIndex = aCanonicalURL.indexOf( *m_pUserDir );
             if ( nIndex  != -1 )
             {
-                return OUString(
+                return
                     aCanonicalURL.replaceAt( nIndex,
                                              m_pUserDir->getLength(),
-                                             m_aUserDirMacro ) );
+                                             m_aUserDirMacro );
             }
         }
     }
-    return OUString( URL );
+    return URL;
 }
 
 
@@ -162,10 +162,10 @@ OfficeInstallationDirectories::makeAbsoluteURL( const OUString& URL )
         {
             initDirs();
 
-            return OUString(
+            return
                 URL.replaceAt( nIndex,
                                m_aOfficeBrandDirMacro.getLength(),
-                               *m_pOfficeBrandDir ) );
+                               *m_pOfficeBrandDir );
         }
         else
         {
@@ -174,14 +174,14 @@ OfficeInstallationDirectories::makeAbsoluteURL( const OUString& URL )
             {
                 initDirs();
 
-                return OUString(
+                return
                     URL.replaceAt( nIndex,
                                    m_aUserDirMacro.getLength(),
-                                   *m_pUserDir ) );
+                                   *m_pUserDir );
             }
         }
     }
-    return OUString( URL );
+    return URL;
 }
 
 
