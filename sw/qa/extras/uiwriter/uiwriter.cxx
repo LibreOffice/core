@@ -3802,6 +3802,7 @@ class PortionHandler : public SwPortionHandler
     }
 };
 
+#if HAVE_MORE_FONTS
 void SwUiWriterTest::testTdf77014()
 {
     // The problem described in the bug tdf#77014 is that the input
@@ -3948,6 +3949,7 @@ void SwUiWriterTest::testTdf77014()
         CPPUNIT_ASSERT_EQUAL(OUString("finish"), rPortionItem.msItemType);
     }
 }
+#endif
 
 void SwUiWriterTest::testTdf92648()
 {
@@ -4675,6 +4677,7 @@ void SwUiWriterTest::testTdf66405()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nBottomMargin);
 }
 
+#if HAVE_MORE_FONTS
 void SwUiWriterTest::testTdf35021_tabOverMarginDemo()
 {
     createDoc("tdf35021_tabOverMarginDemo.doc");
@@ -4695,6 +4698,7 @@ void SwUiWriterTest::testTdf35021_tabOverMarginDemo()
     nWidth = getXPath(pXmlDoc, "//Text[@nType='POR_TABDECIMAL']", "nWidth").toInt32();
     CPPUNIT_ASSERT_MESSAGE("Decimal Tab width is ~4096", nMargin < nWidth);
 }
+#endif
 
 void SwUiWriterTest::testTdf106701_tabOverMarginAutotab()
 {
