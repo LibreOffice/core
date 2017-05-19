@@ -87,7 +87,7 @@ void SbiExprNode::Gen( SbiCodeGen& rGen, RecursiveMode eRecMode )
         if( aVar.pDef->GetScope() == SbPARAM )
         {
             eOp = SbiOpcode::PARAM_;
-            if( 0 == aVar.pDef->GetPos() )
+            if( aVar.pDef->GetPos() == 0 )
             {
                 bool bTreatFunctionAsParam = true;
                 if( eRecMode == FORCE_CALL )

@@ -156,8 +156,8 @@ void SbxValue::Clear()
                 {
                     SAL_INFO("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
                     SbxVariable *pThisVar = dynamic_cast<SbxVariable*>( this );
-                    bool bParentProp = pThisVar && 5345 ==
-                        static_cast<sal_uInt16>(pThisVar->GetUserData());
+                    bool bParentProp = pThisVar && static_cast<sal_uInt16>(pThisVar->GetUserData()) ==
+                        5345;
                     if ( !bParentProp )
                         aData.pObj->ReleaseRef();
                 }
@@ -497,8 +497,8 @@ bool SbxValue::Put( const SbxValues& rVal )
                             }
                             SAL_INFO("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
                             SbxVariable *pThisVar = dynamic_cast<SbxVariable*>( this );
-                            bool bParentProp = pThisVar && 5345 ==
-                                static_cast<sal_uInt16>(pThisVar->GetUserData());
+                            bool bParentProp = pThisVar && static_cast<sal_uInt16>(pThisVar->GetUserData()) ==
+                                5345;
                             if ( !bParentProp )
                                 p->aData.pObj->AddFirstRef();
                         }
@@ -688,7 +688,7 @@ bool SbxValue::ImpIsNumeric( bool bOnlyIntntl ) const
         return false;
     }
     // Test downcast!!!
-    if( nullptr != dynamic_cast<const SbxVariable*>( this) )
+    if( dynamic_cast<const SbxVariable*>( this) != nullptr )
         const_cast<SbxVariable*>(static_cast<const SbxVariable*>(this))->Broadcast( SfxHintId::BasicDataWanted );
     SbxDataType t = GetType();
     if( t == SbxSTRING )
@@ -763,7 +763,7 @@ bool SbxValue::SetType( SbxDataType t )
                                     : 0;
                         DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName() == "Parent",
                                     "SID_PARENTOBJECT is not named 'Parent'" );
-                        bool bParentProp = 5345 == nSlotId;
+                        bool bParentProp = nSlotId == 5345;
                         if ( !bParentProp )
                             aData.pObj->ReleaseRef();
                     }

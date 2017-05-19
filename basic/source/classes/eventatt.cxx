@@ -279,7 +279,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         }
 
         // Default: Be tolerant and search everywhere
-        if( (!pMethVar || nullptr == dynamic_cast<const SbMethod*>( pMethVar)) && maBasicRef.is() )
+        if( (!pMethVar || dynamic_cast<const SbMethod*>( pMethVar) == nullptr) && maBasicRef.is() )
         {
             pMethVar = maBasicRef->FindQualified( aMacro, SbxClassType::DontCare );
         }
@@ -328,7 +328,7 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
     css::uno::Reference< css::container::XNameContainer > aRetDlgLib;
 
     SbxVariable* pDlgLibContVar = pBasic->Find("DialogLibraries", SbxClassType::Object);
-    if( pDlgLibContVar && nullptr != dynamic_cast<const SbUnoObject*>( pDlgLibContVar) )
+    if( pDlgLibContVar && dynamic_cast<const SbUnoObject*>( pDlgLibContVar) != nullptr )
     {
         SbUnoObject* pDlgLibContUnoObj = static_cast<SbUnoObject*>(static_cast<SbxBase*>(pDlgLibContVar));
         Any aDlgLibContAny = pDlgLibContUnoObj->getUnoAny();
@@ -427,7 +427,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 
     // Get dialog
     SbxBaseRef pObj = rPar.Get( 1 )->GetObject();
-    if( !(pObj.is() && nullptr != dynamic_cast<const SbUnoObject*>( pObj.get() )) )
+    if( !(pObj.is() && dynamic_cast<const SbUnoObject*>( pObj.get() ) != nullptr) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;

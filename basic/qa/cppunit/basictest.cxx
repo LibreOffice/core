@@ -49,15 +49,15 @@ void MacroSnippet::LoadSourceFromFile( const OUString& sMacroFileURL )
     fprintf(stderr,"loadSource opening macro file %s\n", OUStringToOString( sMacroFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     osl::File aFile(sMacroFileURL);
-    if(osl::FileBase::E_None == aFile.open(osl_File_OpenFlag_Read))
+    if(aFile.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
     {
         sal_uInt64 size;
         sal_uInt64 size_read;
-        if(osl::FileBase::E_None == aFile.getSize(size))
+        if(aFile.getSize(size) == osl::FileBase::E_None)
         {
             void* buffer = calloc(1, size+1);
             CPPUNIT_ASSERT(buffer);
-            if(osl::FileBase::E_None == aFile.read( buffer, size, size_read))
+            if(aFile.read( buffer, size, size_read) == osl::FileBase::E_None)
             {
                 if(size == size_read)
                 {

@@ -58,7 +58,7 @@ bool SbModule::Compile()
     bool bRet = IsCompiled();
     if( bRet )
     {
-        if( nullptr == dynamic_cast<const SbObjModule*>( this) )
+        if( dynamic_cast<const SbObjModule*>( this) == nullptr )
             pBasic->ClearAllModuleVars();
         RemoveVars(); // remove 'this' Modules variables
         // clear all method statics

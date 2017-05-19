@@ -99,7 +99,7 @@ std::vector< OUString > Coverage::get_subdirnames( const OUString& sDirName )
     osl::DirectoryItem aItem;
     osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
 
-    if(osl::FileBase::E_None == aDir.open())
+    if(aDir.open() == osl::FileBase::E_None)
     {
         while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
         {
@@ -116,7 +116,7 @@ void Coverage::process_directory(const OUString& sDirName)
     osl::DirectoryItem aItem;
     osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL|osl_FileStatus_Mask_Type);
 
-    if(osl::FileBase::E_None == aDir.open())
+    if(aDir.open() == osl::FileBase::E_None)
     {
         while (aDir.getNextItem(aItem) == osl::FileBase::E_None)
         {

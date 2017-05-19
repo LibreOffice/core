@@ -125,7 +125,7 @@ RTLFUNC(CallByName)
     SbxObject* pObj = nullptr;
     if( pObjVar )
         pObj = dynamic_cast<SbxObject*>( pObjVar );
-    if( !pObj && pObjVar && nullptr != dynamic_cast<const SbxVariable*>( pObjVar) )
+    if( !pObj && pObjVar && dynamic_cast<const SbxVariable*>( pObjVar) != nullptr )
     {
         SbxBase* pObjVarObj = static_cast<SbxVariable*>(pObjVar)->GetObject();
         pObj = dynamic_cast<SbxObject*>( pObjVarObj );
@@ -957,7 +957,7 @@ RTLFUNC(FindPropertyObject)
     {
         pObj = dynamic_cast<SbxObject*>( pObjVar );
     }
-    if( !pObj && pObjVar && nullptr != dynamic_cast<const SbxVariable*>( pObjVar) )
+    if( !pObj && pObjVar && dynamic_cast<const SbxVariable*>( pObjVar) != nullptr )
     {
         SbxBase* pObjVarObj = static_cast<SbxVariable*>(pObjVar)->GetObject();
         pObj = dynamic_cast<SbxObject*>( pObjVarObj );

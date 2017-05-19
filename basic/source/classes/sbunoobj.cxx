@@ -995,7 +995,7 @@ Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmallestType
                 if( pClassModule->createCOMWrapperForIface( aRetAny, pClassModuleObj ) )
                     return aRetAny;
             }
-            if( nullptr == dynamic_cast<const SbUnoObject*>( xObj.get() ) )
+            if( dynamic_cast<const SbUnoObject*>( xObj.get() ) == nullptr )
             {
                 // Create NativeObjectWrapper to identify object in case of callbacks
                 SbxObject* pObj = dynamic_cast<SbxObject*>( pVar->GetObject() );
@@ -4246,7 +4246,7 @@ ModuleInvocationProxy::ModuleInvocationProxy( const OUString& aPrefix, SbxObject
     , m_xScopeObj( xScopeObj )
     , m_aListeners( m_aMutex )
 {
-    m_bProxyIsClassModuleObject = xScopeObj.is() && nullptr != dynamic_cast<const SbClassModuleObject*>( xScopeObj.get() );
+    m_bProxyIsClassModuleObject = xScopeObj.is() && dynamic_cast<const SbClassModuleObject*>( xScopeObj.get() ) != nullptr;
 }
 
 Reference< XIntrospectionAccess > SAL_CALL ModuleInvocationProxy::getIntrospection()

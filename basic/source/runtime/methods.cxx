@@ -2601,7 +2601,7 @@ RTLFUNC(IsObject)
 
         SbUnoClass* pUnoClass;
         bool bObject;
-        if( pObj &&  nullptr != ( pUnoClass=dynamic_cast<SbUnoClass*>( pObj) )  )
+        if( pObj &&  ( pUnoClass=dynamic_cast<SbUnoClass*>( pObj) ) != nullptr  )
         {
             bObject = pUnoClass->getUnoClass().is();
         }

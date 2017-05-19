@@ -1256,7 +1256,7 @@ void StarBASIC::DeInitAllModules()
     // Deinit own modules
     for (const auto& pModule: pModules)
     {
-        if( pModule->pImage && !pModule->isProxyModule() && nullptr == dynamic_cast<SbObjModule*>( pModule.get()) )
+        if( pModule->pImage && !pModule->isProxyModule() && dynamic_cast<SbObjModule*>( pModule.get()) == nullptr )
         {
             pModule->pImage->bInit = false;
         }
@@ -1853,7 +1853,7 @@ bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
         {
             return false;
         }
-        else if( nullptr != dynamic_cast<const SbJScriptModule*>( pMod) )
+        else if( dynamic_cast<const SbJScriptModule*>( pMod) != nullptr )
         {
             // assign Ref, so that pMod will be deleted
             SbModuleRef xRef = pMod;
