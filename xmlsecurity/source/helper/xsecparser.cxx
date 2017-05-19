@@ -30,8 +30,7 @@ namespace cssxc = com::sun::star::xml::crypto;
 namespace cssxs = com::sun::star::xml::sax;
 
 XSecParser::XSecParser(XMLSignatureHelper& rXMLSignatureHelper,
-    XSecController* pXSecController,
-    const cssu::Reference< cssxs::XDocumentHandler >& xNextHandler)
+    XSecController* pXSecController)
     : m_bInX509IssuerName(false)
     , m_bInX509SerialNumber(false)
     , m_bInX509Certificate(false)
@@ -43,7 +42,6 @@ XSecParser::XSecParser(XMLSignatureHelper& rXMLSignatureHelper,
     , m_bInDate(false)
     , m_bInDescription(false)
     , m_pXSecController(pXSecController)
-    , m_xNextHandler(xNextHandler)
     , m_bReferenceUnresolved(false)
     , m_nReferenceDigestID(cssxc::DigestID::SHA1)
     , m_rXMLSignatureHelper(rXMLSignatureHelper)

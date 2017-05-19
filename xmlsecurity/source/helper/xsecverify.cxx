@@ -404,7 +404,7 @@ cssu::Reference< cssxs::XDocumentHandler > const & XSecController::createSignatu
     if (nType == embed::StorageFormats::OFOPXML)
         m_xSecParser = new OOXMLSecParser(rXMLSignatureHelper, this);
     else
-        m_xSecParser = new XSecParser(rXMLSignatureHelper, this, nullptr);
+        m_xSecParser = new XSecParser(rXMLSignatureHelper, this);
     cssu::Reference< cssl::XInitialization > xInitialization(m_xSecParser, uno::UNO_QUERY);
 
     setSAXChainConnector(xInitialization, nullptr, nullptr);
