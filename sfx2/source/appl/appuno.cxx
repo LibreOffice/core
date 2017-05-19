@@ -1527,7 +1527,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         if ( rSet.GetItemState( SID_STANDARD_DIR, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = sStandardDir;
-            pValue[nActProp++].Value <<= OUString( static_cast<const SfxStringItem*>(pItem)->GetValue());
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_BLACK_LIST, false, &pItem ) == SfxItemState::SET )
         {
@@ -1540,7 +1540,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         if ( rSet.GetItemState( SID_TARGETNAME, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = sFrameName;
-            pValue[nActProp++].Value <<= OUString( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+            pValue[nActProp++].Value <<= static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_DOC_SALVAGE, false, &pItem ) == SfxItemState::SET )
         {

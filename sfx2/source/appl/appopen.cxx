@@ -390,7 +390,7 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
         sal_Int32 nLength = aArgs.getLength();
         aArgs.realloc( nLength + 1 );
         aArgs[nLength].Name = "Title";
-        aArgs[nLength].Value <<= OUString( xDoc->GetTitle( SFX_TITLE_DETECT ) );
+        aArgs[nLength].Value <<= xDoc->GetTitle( SFX_TITLE_DETECT );
         xModel->attachResource( OUString(), aArgs );
         delete pNew;
     }

@@ -539,12 +539,12 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                 if (aSplitter.removeSegment() && !sFileName.isEmpty())
                 {
                     ::ucbhelper::Content aSource(
-                            OUString((*ppTempFile)->GetURL()),
+                            (*ppTempFile)->GetURL(),
                             css::uno::Reference< css::ucb::XCommandEnvironment >(),
                             comphelper::getProcessComponentContext());
 
                     ::ucbhelper::Content aTarget(
-                            OUString(aSplitter.GetMainURL(INetURLObject::DecodeMechanism::NONE)),
+                            aSplitter.GetMainURL(INetURLObject::DecodeMechanism::NONE),
                             css::uno::Reference< css::ucb::XCommandEnvironment >(),
                             comphelper::getProcessComponentContext());
 
@@ -687,7 +687,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
 
                 //FIXME: does it work?
                 aCheckedArgs[nProps].Name = "LocalFileName";
-                aCheckedArgs[nProps++].Value <<= OUString( pUCBPrintTempFile->GetFileName() );
+                aCheckedArgs[nProps++].Value <<= pUCBPrintTempFile->GetFileName();
                 sUcbUrl = sURL;
             }
         }

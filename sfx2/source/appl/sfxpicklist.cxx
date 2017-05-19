@@ -114,7 +114,7 @@ void SfxPickListImpl::AddDocumentToPickList( SfxObjectShell* pDocSh )
         return;
 
     // Help not in History
-    INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : OUString( pMed->GetOrigURL() ) );
+    INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : pMed->GetOrigURL() );
     if ( aURL.GetProtocol() == INetProtocol::VndSunStarHelp )
         return;
 

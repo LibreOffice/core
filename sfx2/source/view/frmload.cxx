@@ -375,7 +375,7 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
 
     if ( pFilter )
     {
-        io_rDescriptor.put( "FilterName", OUString( pFilter->GetFilterName() ) );
+        io_rDescriptor.put( "FilterName", pFilter->GetFilterName() );
 
         // If detected filter indicates using of an own template format
         // add property "AsTemplate" to descriptor. But suppress this step
@@ -385,7 +385,7 @@ void SfxFrameLoader_Impl::impl_determineFilter( ::comphelper::NamedValueCollecti
 
         // The DocumentService property will finally be used to determine the document type to create, so
         // override it with the service name as indicated by the found filter.
-        io_rDescriptor.put( "DocumentService", OUString( pFilter->GetServiceName() ) );
+        io_rDescriptor.put( "DocumentService", pFilter->GetServiceName() );
     }
 }
 
@@ -445,7 +445,7 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
                 // #i21583#
                 // the DocumentService property will finally be used to create the document. Thus, override any possibly
                 // present value with the document service of the template.
-                io_rDescriptor.put( "DocumentService", OUString( pTemplateFilter->GetServiceName() ) );
+                io_rDescriptor.put( "DocumentService", pTemplateFilter->GetServiceName() );
                 return true;
             }
         }

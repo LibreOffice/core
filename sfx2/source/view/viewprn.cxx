@@ -302,7 +302,7 @@ void SfxPrinterController::jobStarted()
         m_aLastPrinted = xDocProps->getPrintDate();
 
         xDocProps->setPrintedBy( mpObjectShell->IsUseUserData()
-            ? OUString( SvtUserOptions().GetFullName() )
+            ? SvtUserOptions().GetFullName()
             : OUString() );
         ::DateTime now( ::DateTime::SYSTEM );
 
@@ -597,7 +597,7 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
 
     SfxObjectShell *pObjShell = GetObjectShell();
     xNewController->setValue( "JobName",
-                        makeAny( OUString( pObjShell->GetTitle(1) ) ) );
+                        makeAny( pObjShell->GetTitle(1) ) );
     xNewController->setPrinterModified( mbPrinterSettingsModified );
 }
 

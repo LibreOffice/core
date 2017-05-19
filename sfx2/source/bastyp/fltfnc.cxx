@@ -443,8 +443,8 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, s
 
             if ( pOldFilter )
             {
-                aDescriptor[utl::MediaDescriptor::PROP_TYPENAME()  ] <<= OUString( pOldFilter->GetTypeName()   );
-                aDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= OUString( pOldFilter->GetFilterName() );
+                aDescriptor[utl::MediaDescriptor::PROP_TYPENAME()  ] <<= pOldFilter->GetTypeName();
+                aDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= pOldFilter->GetFilterName();
             }
 
             uno::Sequence< beans::PropertyValue > lDescriptor = aDescriptor.getAsConstPropertyValueList();

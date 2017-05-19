@@ -977,7 +977,7 @@ void SearchTabPage_Impl::dispose()
     }
 
     aUserData = comphelper::string::stripEnd(aUserData, ';');
-    Any aUserItem = makeAny( OUString( aUserData ) );
+    Any aUserItem = makeAny( aUserData );
     aViewOpt.SetUserItem( USERITEM_NAME, aUserItem );
 
     m_pSearchED.clear();
@@ -1579,7 +1579,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl, Timer *, void)
     OUString* pFactory = static_cast<OUString*>(m_pActiveLB->GetSelectEntryData());
     if ( pFactory )
     {
-        SetFactory( OUString( *pFactory ).toAsciiLowerCase(), false );
+        SetFactory( pFactory->toAsciiLowerCase(), false );
         aSelectFactoryLink.Call( this );
     }
 }
@@ -2785,7 +2785,7 @@ void SfxHelpWindow_Impl::SaveConfig()
     aUserData += ";";
     aUserData += OUString::number( aWinPos.Y() );
 
-    aViewOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aUserData ) ) );
+    aViewOpt.SetUserItem( USERITEM_NAME, makeAny( aUserData ) );
 }
 
 
@@ -2818,10 +2818,10 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl, Control*, bool)
 
     OUString sHelpURL;
 
-    bool bComplete = OUString(aEntry).toAsciiLowerCase().match("vnd.sun.star.help");
+    bool bComplete = aEntry.toAsciiLowerCase().match("vnd.sun.star.help");
 
     if (bComplete)
-        sHelpURL = OUString(aEntry);
+        sHelpURL = aEntry;
     else
     {
         OUString aId;

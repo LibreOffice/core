@@ -1444,7 +1444,7 @@ OUString SAL_CALL SfxBaseModel::getLocation()
         if ( m_pData->m_pObjectShell->IsDocShared() )
             return m_pData->m_pObjectShell->GetSharedFileURL();
         else
-            return OUString(m_pData->m_pObjectShell->GetMedium()->GetName());
+            return m_pData->m_pObjectShell->GetMedium()->GetName();
     }
 
     return m_pData->m_sURL;

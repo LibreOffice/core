@@ -323,7 +323,7 @@ OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
 {
     ::SolarMutexGuard aGuard;
 
-    return OUString( SvFileInformationManager::GetDescription( INetURLObject( aUrl ) ) );
+    return SvFileInformationManager::GetDescription( INetURLObject( aUrl ) );
 }
 
 

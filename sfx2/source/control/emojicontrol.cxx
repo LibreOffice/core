@@ -161,7 +161,7 @@ IMPL_LINK_NOARG(SfxEmojiControl, ActivatePageHdl, TabControl*, void)
 IMPL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, pItem, void)
 {
     OUStringBuffer sHexText = "";
-    sHexText.appendUtf32(OUString(pItem->getTitle()).toUInt32(16));
+    sHexText.appendUtf32(pItem->getTitle().toUInt32(16));
 
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
     OUString sFontName(officecfg::Office::Common::Misc::EmojiFont::get(xContext));
