@@ -124,11 +124,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf41542_borderlessPadding, "tdf41542_borderlessPad
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
 }
 
+#if HAVE_MORE_FONTS
 DECLARE_OOXMLEXPORT_TEST(tdf105490_negativeMargins, "tdf105490_negativeMargins.docx")
 {
     // negative margins should change to minimal margins, not default margins.
     CPPUNIT_ASSERT_EQUAL( 1, getPages() );
 }
+#endif
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104061_tableSectionColumns,"tdf104061_tableSectionColumns.docx")
 {
@@ -490,6 +492,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107033, "tdf107033.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(25), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
 }
 
+#if HAVE_MORE_FONTS
 DECLARE_OOXMLEXPORT_TEST(testTdf107889, "tdf107889.docx")
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
@@ -497,6 +500,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107889, "tdf107889.docx")
     // This was 1, multi-page table was imported as a floating one.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
 }
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
