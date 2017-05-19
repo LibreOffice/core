@@ -20,7 +20,7 @@ interface XConditionalFormat : com::sun::star::container::XIndexAccess
     /**
      * Creates a new conditional format entry and insert its at the position.
      *
-     * @param Type: a com.sun.star.sheet.ConditionFormatEntryType specifying the
+     * @param Type: a com.sun.star.sheet.ConditionEntryType specifying the
      *              type of the new entry
      *
      * @param Position: the position in the conditional format
