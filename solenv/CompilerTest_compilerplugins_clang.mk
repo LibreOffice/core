@@ -24,6 +24,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/salbool \
     compilerplugins/clang/test/salunicodeliteral \
     compilerplugins/clang/test/stringconstant \
+    compilerplugins/clang/test/stringcopy \
     compilerplugins/clang/test/unnecessaryoverride-dtor \
     compilerplugins/clang/test/unoany \
     compilerplugins/clang/test/vclwidgets \

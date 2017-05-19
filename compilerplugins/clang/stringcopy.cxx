@@ -1,0 +1,53 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "check.hxx"
+#include "plugin.hxx"
+
+namespace {
+
+class Visitor final:
+    public RecursiveASTVisitor<Visitor>, public loplugin::Plugin
+{
+public:
+    explicit Visitor(InstantiationData const & data): Plugin(data) {}
+
+    bool VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * expr) {
+        if (ignoreLocation(expr)) {
+            return true;
+        }
+        auto const t1 = expr->getTypeAsWritten();
+        auto const t2 = expr->getSubExprAsWritten()->getType();
+        if ((t1.getCanonicalType().getTypePtr()
+             != t2.getCanonicalType().getTypePtr())
+            || !(loplugin::TypeCheck(t1).Class("OUString").Namespace("rtl")
+                 .GlobalNamespace()))
+        {
+            return true;
+        }
+        report(
+            DiagnosticsEngine::Warning,
+            "redundant copy construction from %0 to %1", expr->getExprLoc())
+            << t2 << t1 << expr->getSourceRange();
+        return true;
+    }
+
+private:
+    void run() override {
+        if (compiler.getLangOpts().CPlusPlus) {
+            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+        }
+    }
+};
+
+static loplugin::Plugin::Registration<Visitor> reg("stringcopy");
+
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
