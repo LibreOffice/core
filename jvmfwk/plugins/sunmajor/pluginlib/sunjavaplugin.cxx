@@ -631,8 +631,8 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     if ( ! isVendorSupported(pInfo->sVendor))
         return javaPluginError::WrongVendor;
 #ifdef MACOSX
-    rtl::Reference<VendorBase> aVendorInfo = getJREInfoByPath( OUString( pInfo->sLocation ) );
-    if ( !aVendorInfo.is() || aVendorInfo->compareVersions( OUString( pInfo->sVersion ) ) < 0 )
+    rtl::Reference<VendorBase> aVendorInfo = getJREInfoByPath( pInfo->sLocation );
+    if ( !aVendorInfo.is() || aVendorInfo->compareVersions( pInfo->sVersion ) < 0 )
         return javaPluginError::VmCreationFailed;
 #endif
     OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
