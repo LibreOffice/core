@@ -78,13 +78,13 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
             const util::RevisionTag& rInfo = maVersions[n];
             AddAttribute( XML_NAMESPACE_FRAMEWORK,
                           xmloff::token::XML_TITLE,
-                          OUString( rInfo.Identifier ) );
+                          rInfo.Identifier );
             AddAttribute( XML_NAMESPACE_FRAMEWORK,
                           xmloff::token::XML_COMMENT,
-                          OUString( rInfo.Comment ) );
+                          rInfo.Comment );
             AddAttribute( XML_NAMESPACE_FRAMEWORK,
                           xmloff::token::XML_CREATOR,
-                          OUString( rInfo.Author ) );
+                          rInfo.Author );
 
             OUString aDateStr =
                 SvXMLMetaExport::GetISODateTimeString( rInfo.TimeStamp );

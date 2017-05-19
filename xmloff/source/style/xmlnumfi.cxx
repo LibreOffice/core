@@ -2199,7 +2199,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
 
         const SvNumberformat* pFormat = pFormatter->GetEntry(l_nKey);
         if ( pFormat )
-            aConditions.append( OUString( pFormat->GetFormatstring() ) );
+            aConditions.append( pFormat->GetFormatstring() );
 
         aConditions.append( ';' );
     }

@@ -1034,9 +1034,9 @@ void XMLTextParagraphExport::exportListChange(
                      !rNextInfo.ListLabelString().isEmpty() )
                 {
                     const OUString aTextNumberElem =
-                            OUString( GetExport().GetNamespaceMap().GetQNameByKey(
+                            GetExport().GetNamespaceMap().GetQNameByKey(
                                       XML_NAMESPACE_TEXT,
-                                      GetXMLToken(XML_NUMBER) ) );
+                                      GetXMLToken(XML_NUMBER) );
                     GetExport().IgnorableWhitespace();
                     GetExport().StartElement( aTextNumberElem, false );
                     GetExport().Characters( rNextInfo.ListLabelString() );
@@ -1115,9 +1115,9 @@ void XMLTextParagraphExport::exportListChange(
              !rNextInfo.ListLabelString().isEmpty() )
         {
             const OUString aTextNumberElem =
-                    OUString( GetExport().GetNamespaceMap().GetQNameByKey(
+                    GetExport().GetNamespaceMap().GetQNameByKey(
                               XML_NAMESPACE_TEXT,
-                              GetXMLToken(XML_NUMBER) ) );
+                              GetXMLToken(XML_NUMBER) );
             GetExport().IgnorableWhitespace();
             GetExport().StartElement( aTextNumberElem, false );
             GetExport().Characters( rNextInfo.ListLabelString() );
