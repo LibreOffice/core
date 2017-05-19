@@ -462,7 +462,7 @@ void ScXMLExportDataPilot::WriteMembers(ScDPSaveDimension* pDim)
         rExport.CheckAttrList();
         for (ScDPSaveDimension::MemberList::const_iterator i=rMembers.begin(); i != rMembers.end() ; ++i)
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, OUString((*i)->GetName()));
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, (*i)->GetName());
 
             if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
             {

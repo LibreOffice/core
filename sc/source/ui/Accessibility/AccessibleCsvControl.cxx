@@ -741,12 +741,12 @@ void ScAccessibleCsvRuler::SendCaretEvent()
 
 OUString SAL_CALL ScAccessibleCsvRuler::createAccessibleName()
 {
-    return OUString( ScResId( STR_ACC_CSVRULER_NAME ) );
+    return ScResId( STR_ACC_CSVRULER_NAME );
 }
 
 OUString SAL_CALL ScAccessibleCsvRuler::createAccessibleDescription()
 {
-    return OUString( ScResId( STR_ACC_CSVRULER_DESCR ) );
+    return ScResId( STR_ACC_CSVRULER_DESCR );
 }
 
 void ScAccessibleCsvRuler::ensureValidIndex( sal_Int32 nIndex ) const
@@ -1269,12 +1269,12 @@ void ScAccessibleCsvGrid::SendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uI
 
 OUString SAL_CALL ScAccessibleCsvGrid::createAccessibleName()
 {
-    return OUString( ScResId( STR_ACC_CSVGRID_NAME ) );
+    return ScResId( STR_ACC_CSVGRID_NAME );
 }
 
 OUString SAL_CALL ScAccessibleCsvGrid::createAccessibleDescription()
 {
-    return OUString( ScResId( STR_ACC_CSVGRID_DESCR ) );
+    return ScResId( STR_ACC_CSVGRID_DESCR );
 }
 
 void ScAccessibleCsvGrid::ensureValidIndex( sal_Int32 nIndex ) const

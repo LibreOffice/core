@@ -702,7 +702,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
         // uses Calc A1 syntax even when another formula syntax is specified
         // in the UI.
         EnterMatrix("='"
-            + OUString(ScGlobal::GetAbsDocName(*pTopic, GetViewData().GetDocument()->GetDocumentShell()))
+            + ScGlobal::GetAbsDocName(*pTopic, GetViewData().GetDocument()->GetDocumentShell())
             + "'#" + *pItem
                 , ::formula::FormulaGrammar::GRAM_NATIVE);
         return true;
@@ -712,7 +712,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
         // DDE in all other cases.
 
         // TODO: we could define ocQuote for "
-        EnterMatrix("=" + OUString(ScCompiler::GetNativeSymbol(ocDde))
+        EnterMatrix("=" + ScCompiler::GetNativeSymbol(ocDde)
             + ScCompiler::GetNativeSymbol(ocOpen)
             + "\"" + *pApp + "\""
             + ScCompiler::GetNativeSymbol(ocSep)

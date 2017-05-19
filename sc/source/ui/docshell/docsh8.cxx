@@ -142,7 +142,7 @@ namespace
 
         uno::Sequence<beans::PropertyValue> aProps(2);
         aProps[0].Name = SC_DBPROP_EXTENSION;
-        aProps[0].Value <<= OUString( aExtension );
+        aProps[0].Value <<= aExtension;
         aProps[1].Name = SC_DBPROP_CHARSET;
         aProps[1].Value <<= aCharSetStr;
 

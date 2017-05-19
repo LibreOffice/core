@@ -2862,10 +2862,10 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
                 //  initialize
                 uno::Sequence<uno::Any> aSeq(4);
                 uno::Any* pArray = aSeq.getArray();
-                pArray[0] <<= OUString( rDesc.aParSource );
-                pArray[1] <<= OUString( rDesc.aParName );
-                pArray[2] <<= OUString( rDesc.aParUser );
-                pArray[3] <<= OUString( rDesc.aParPass );
+                pArray[0] <<= rDesc.aParSource;
+                pArray[1] <<= rDesc.aParName;
+                pArray[2] <<= rDesc.aParUser;
+                pArray[3] <<= rDesc.aParPass;
                 xInit->initialize( aSeq );
             }
             xRet.set( xInterface, uno::UNO_QUERY );
@@ -3295,7 +3295,7 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
     catch ( const sdbc::SQLException& rError )
     {
         //! store error message
-        ScopedVclPtrInstance< InfoBox > aInfoBox( nullptr, OUString(rError.Message) );
+        ScopedVclPtrInstance< InfoBox > aInfoBox( nullptr, rError.Message );
         aInfoBox->Execute();
     }
     catch ( uno::Exception& )

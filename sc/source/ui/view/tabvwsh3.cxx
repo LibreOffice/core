@@ -854,8 +854,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScopedVclPtr<AbstractScShowTabDlg> pDlg(pFact->CreateScShowTabDlg(GetDialogParent()));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 pDlg->SetDescription(
-                    OUString( ScResId( STR_DLG_SELECTTABLES_TITLE ) ),
-                    OUString( ScResId( STR_DLG_SELECTTABLES_LBNAME ) ),
+                    ScResId( STR_DLG_SELECTTABLES_TITLE ),
+                    ScResId( STR_DLG_SELECTTABLES_LBNAME ),
                     GetStaticInterface()->GetSlot(SID_SELECT_TABLES)->GetCommand(), HID_SELECTTABLES );
 
                 // fill all table names with selection state

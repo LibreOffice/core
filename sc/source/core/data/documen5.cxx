@@ -240,7 +240,7 @@ uno::Reference< chart2::XChartDocument > ScDocument::GetChartByName( const OUStr
             while (pObject)
             {
                 if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
-                        OUString(static_cast<SdrOle2Obj*>(pObject)->GetPersistName()) == rChartName )
+                        static_cast<SdrOle2Obj*>(pObject)->GetPersistName() == rChartName )
                 {
                     xReturn.set( ScChartHelper::GetChartFromSdrObject( pObject ) );
                     return xReturn;
@@ -305,7 +305,7 @@ void ScDocument::GetOldChartParameters( const OUString& rName,
         while (pObject)
         {
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
-                    OUString(static_cast<SdrOle2Obj*>(pObject)->GetPersistName()) == rName )
+                    static_cast<SdrOle2Obj*>(pObject)->GetPersistName() == rName )
             {
                 uno::Reference< chart2::XChartDocument > xChartDoc( ScChartHelper::GetChartFromSdrObject( pObject ) );
                 if ( xChartDoc.is() )
@@ -352,7 +352,7 @@ void ScDocument::UpdateChartArea( const OUString& rChartName,
         while (pObject)
         {
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
-                    OUString(static_cast<SdrOle2Obj*>(pObject)->GetPersistName()) == rChartName )
+                    static_cast<SdrOle2Obj*>(pObject)->GetPersistName() == rChartName )
             {
                 uno::Reference< chart2::XChartDocument > xChartDoc( ScChartHelper::GetChartFromSdrObject( pObject ) );
                 uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
@@ -587,7 +587,7 @@ void ScDocument::SetChartRangeList( const OUString& rChartName,
         while (pObject)
         {
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
-                    OUString(static_cast<SdrOle2Obj*>(pObject)->GetPersistName()) == rChartName )
+                    static_cast<SdrOle2Obj*>(pObject)->GetPersistName() == rChartName )
             {
                 uno::Reference< chart2::XChartDocument > xChartDoc( ScChartHelper::GetChartFromSdrObject( pObject ) );
                 uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
@@ -645,7 +645,7 @@ uno::Reference< embed::XEmbeddedObject >
             {
                 SdrOle2Obj * pOleObject ( dynamic_cast< SdrOle2Obj * >( pObject ));
                 if( pOleObject &&
-                    OUString(pOleObject->GetPersistName()) == rName )
+                    pOleObject->GetPersistName() == rName )
                 {
                     return pOleObject->GetObjRef();
                 }

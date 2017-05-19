@@ -186,8 +186,8 @@ void ScDocShell::FillClass( SvGlobalName* pClassName,
     {
         *pClassName     = SvGlobalName( SO3_SC_CLASSID_60 );
         *pFormat        = SotClipboardFormatId::STARCALC_60;
-        *pFullTypeName  = OUString( ScResId( SCSTR_LONG_SCDOC_NAME ) );
-        *pShortTypeName = OUString( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
+        *pFullTypeName  = ScResId( SCSTR_LONG_SCDOC_NAME );
+        *pShortTypeName = ScResId( SCSTR_SHORT_SCDOC_NAME );
     }
     else if ( nFileFormat == SOFFICE_FILEFORMAT_8 )
     {
@@ -871,7 +871,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                             // TODO/LATER: More entries from the MediaDescriptor might be interesting for the merge
                                             uno::Sequence< beans::PropertyValue > aValues(1);
                                             aValues[0].Name = "FilterName";
-                                            aValues[0].Value <<= OUString( GetMedium()->GetFilter()->GetFilterName() );
+                                            aValues[0].Value <<= GetMedium()->GetFilter()->GetFilterName();
 
                                             const SfxStringItem* pPasswordItem = SfxItemSet::GetItem<SfxStringItem>(GetMedium()->GetItemSet(), SID_PASSWORD, false);
                                             if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() )

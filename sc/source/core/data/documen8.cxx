@@ -918,9 +918,9 @@ ScDdeLink* lclGetDdeLink(
             ::sfx2::SvBaseLink* pLink = rLinks[ nIndex ].get();
             if( ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>( pLink )  )
             {
-                if( (OUString(pDdeLink->GetAppl()) == rAppl) &&
-                    (OUString(pDdeLink->GetTopic()) == rTopic) &&
-                    (OUString(pDdeLink->GetItem()) == rItem) &&
+                if( (pDdeLink->GetAppl() == rAppl) &&
+                    (pDdeLink->GetTopic() == rTopic) &&
+                    (pDdeLink->GetItem() == rItem) &&
                     ((nMode == SC_DDE_IGNOREMODE) || (nMode == pDdeLink->GetMode())) )
                     return pDdeLink;
                 if( pnDdePos ) ++*pnDdePos;

@@ -1183,7 +1183,7 @@ bool ScDocShell::ExecuteChangeProtectionDialog( bool bJustQueryIfProtected )
                 else
                 {
                     ScopedVclPtrInstance<InfoBox> aBox( GetActiveDialogParent(),
-                        OUString( ScResId( SCSTR_WRONGPASSWORD ) ) );
+                        ScResId( SCSTR_WRONGPASSWORD ) );
                     aBox->Execute();
                 }
             }

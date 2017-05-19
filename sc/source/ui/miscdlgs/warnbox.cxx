@@ -25,7 +25,7 @@
 #include "scres.hrc"
 
 ScReplaceWarnBox::ScReplaceWarnBox( vcl::Window* pParent ) :
-    WarningBox( pParent, WB_YES_NO | WB_DEF_YES, OUString( ScResId( STR_REPLCELLSWARN ) ) )
+    WarningBox( pParent, WB_YES_NO | WB_DEF_YES, ScResId( STR_REPLCELLSWARN ) )
 {
     // By default, the check box is ON, and the user needs to un-check it to
     // disable all future warnings.

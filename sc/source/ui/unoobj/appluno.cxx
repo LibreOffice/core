@@ -535,11 +535,11 @@ static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, co
 
     pArray[2].Name = SC_UNONAME_NAME;
     if (rDesc.pFuncName)
-        pArray[2].Value <<= OUString( *rDesc.pFuncName );
+        pArray[2].Value <<= *rDesc.pFuncName;
 
     pArray[3].Name = SC_UNONAME_DESCRIPTION;
     if (rDesc.pFuncDesc)
-        pArray[3].Value <<= OUString( *rDesc.pFuncDesc );
+        pArray[3].Value <<= *rDesc.pFuncDesc;
 
     pArray[4].Name = SC_UNONAME_ARGUMENTS;
     if (!rDesc.maDefArgNames.empty() && !rDesc.maDefArgDescs.empty() && rDesc.pDefArgFlags )

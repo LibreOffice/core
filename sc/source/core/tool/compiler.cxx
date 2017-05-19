@@ -5215,7 +5215,7 @@ void ScCompiler::fillAddInToken(::std::vector< css::sheet::FormulaOpCodeMapEntry
             }
             else
                 aEntry.Name = pFuncData->GetUpperLocal();
-            aEntry.Token.Data <<= OUString( pFuncData->GetOriginalName());
+            aEntry.Token.Data <<= pFuncData->GetOriginalName();
             _rVec.push_back( aEntry);
         }
     }

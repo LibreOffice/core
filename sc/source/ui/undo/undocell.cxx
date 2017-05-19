@@ -490,7 +490,7 @@ ScUndoPageBreak::~ScUndoPageBreak()
 OUString ScUndoPageBreak::GetComment() const
 {
     //"Column break" | "Row break"  "insert" | "delete"
-    return OUString ( bColumn ?
+    return bColumn ?
         ( bInsert ?
             ScGlobal::GetRscString( STR_UNDO_INSCOLBREAK ) :
             ScGlobal::GetRscString( STR_UNDO_DELCOLBREAK )
@@ -498,7 +498,7 @@ OUString ScUndoPageBreak::GetComment() const
         ( bInsert ?
             ScGlobal::GetRscString( STR_UNDO_INSROWBREAK ) :
             ScGlobal::GetRscString( STR_UNDO_DELROWBREAK )
-        ) );
+        );
 }
 
 void ScUndoPageBreak::DoChange( bool bInsertP ) const

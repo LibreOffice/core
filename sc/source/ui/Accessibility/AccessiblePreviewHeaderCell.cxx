@@ -392,7 +392,7 @@ void ScAccessiblePreviewHeaderCell::CreateTextHelper()
         mpTextHelper = new ::accessibility::AccessibleTextHelper(
             o3tl::make_unique<ScAccessibilityEditSource>(
                 o3tl::make_unique<ScAccessiblePreviewHeaderCellTextData>(
-                    mpViewShell, OUString(getAccessibleName()), maCellPos,
+                    mpViewShell, getAccessibleName(), maCellPos,
                     mbColumnHeader, mbRowHeader)));
         mpTextHelper->SetEventSource(this);
     }

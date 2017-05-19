@@ -210,9 +210,9 @@ void DocumentLinkManager::updateDdeLink( const OUString& rAppl, const OUString& 
         if (!pDdeLink)
             continue;
 
-        if ( OUString(pDdeLink->GetAppl()) == rAppl &&
-             OUString(pDdeLink->GetTopic()) == rTopic &&
-             OUString(pDdeLink->GetItem()) == rItem )
+        if ( pDdeLink->GetAppl() == rAppl &&
+             pDdeLink->GetTopic() == rTopic &&
+             pDdeLink->GetItem() == rItem )
         {
             pDdeLink->TryUpdate();
             // Could be multiple (Mode), so continue searching

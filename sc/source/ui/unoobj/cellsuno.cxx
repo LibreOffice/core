@@ -2061,8 +2061,8 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
                         aAny <<= false;
                         break;
                     case SC_WID_UNO_CELLSTYL:
-                        aAny <<= OUString( ScStyleNameConversion::DisplayToProgrammaticName(
-                                    ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SfxStyleFamily::Para ) );
+                        aAny <<= ScStyleNameConversion::DisplayToProgrammaticName(
+                                    ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SfxStyleFamily::Para );
                         break;
                     case SC_WID_UNO_TBLBORD:
                     case SC_WID_UNO_TBLBORD2:
@@ -2526,8 +2526,8 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                         const ScStyleSheet* pStyle = pDocShell->GetDocument().GetSelectionStyle(*GetMarkData());
                         if (pStyle)
                             aStyleName = pStyle->GetName();
-                        rAny <<= OUString( ScStyleNameConversion::DisplayToProgrammaticName(
-                                                                aStyleName, SfxStyleFamily::Para ) );
+                        rAny <<= ScStyleNameConversion::DisplayToProgrammaticName(
+                                                                aStyleName, SfxStyleFamily::Para );
                     }
                     break;
                 case SC_WID_UNO_TBLBORD:
@@ -6564,7 +6564,7 @@ void ScCellObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, u
         if ( pEntry->nWID == SC_WID_UNO_FORMLOC )
         {
             // sal_False = lokal
-            rAny <<= OUString( GetInputString_Impl(false) );
+            rAny <<= GetInputString_Impl(false);
         }
         else if ( pEntry->nWID == SC_WID_UNO_FORMRT )
         {
@@ -8298,8 +8298,8 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         }
         else if ( pEntry->nWID == SC_WID_UNO_PAGESTL )
         {
-            rAny <<= OUString( ScStyleNameConversion::DisplayToProgrammaticName(
-                                rDoc.GetPageStyle( nTab ), SfxStyleFamily::Page ) );
+            rAny <<= ScStyleNameConversion::DisplayToProgrammaticName(
+                                rDoc.GetPageStyle( nTab ), SfxStyleFamily::Page );
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {

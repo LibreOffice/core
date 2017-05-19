@@ -438,7 +438,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
             // (as in SwXDocumentSettings)
             SfxPrinter* pPrinter = rDoc.GetPrinter( false );
             if (pPrinter)
-                aRet <<= OUString ( pPrinter->GetName());
+                aRet <<= pPrinter->GetName();
             else
                 aRet <<= OUString();
         }

@@ -389,7 +389,7 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                 case svExternal:
                     // Function name is stored as string.
                     // Byte (parameter count) is ignored.
-                    rAPI.Data <<= OUString( rToken.GetExternal() );
+                    rAPI.Data <<= rToken.GetExternal();
                     break;
                 case svSingleRef:
                     {

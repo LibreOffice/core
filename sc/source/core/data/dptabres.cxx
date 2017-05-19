@@ -3460,7 +3460,7 @@ ScDPDataMember* ScDPResultDimension::GetColReferenceMember(
 #if DUMP_PIVOT_TABLE
 void ScDPResultDimension::DumpState( const ScDPResultMember* pRefMember, ScDocument* pDoc, ScAddress& rPos ) const
 {
-    OUString aDimName = bIsDataLayout ? OUString("(data layout)") : OUString(GetName());
+    OUString aDimName = bIsDataLayout ? OUString("(data layout)") : GetName();
     dumpRow("ScDPResultDimension", aDimName, nullptr, pDoc, rPos);
 
     SCROW nStartRow = rPos.Row();

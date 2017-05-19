@@ -309,7 +309,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     load_Separators (sFieldSeparators, sTextSeparators, bMergeDelimiters,
                          bQuotedFieldAsText, bDetectSpecialNum, bFixedWidth, nFromRow, nCharSet, nLanguage, meCall);
     // load from saved settings
-    maFieldSeparators = OUString(sFieldSeparators);
+    maFieldSeparators = sFieldSeparators;
 
     if( bMergeDelimiters && !bIsTSV )
         pCkbAsOnce->Check();

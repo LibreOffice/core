@@ -1441,7 +1441,7 @@ ScUndoRenameObject::~ScUndoRenameObject()
 OUString ScUndoRenameObject::GetComment() const
 {
     //  string resource shared with title for dialog
-    return OUString( ScResId(SCSTR_RENAMEOBJECT) );
+    return ScResId(SCSTR_RENAMEOBJECT);
 }
 
 SdrObject* ScUndoRenameObject::GetObject()

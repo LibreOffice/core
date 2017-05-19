@@ -1802,7 +1802,7 @@ uno::Any ScStyleObj::getPropertyValue_Impl( const OUString& aPropertyName )
     {
         //  core always has the display name
         if ( pStyle )
-            aAny <<= OUString( pStyle->GetName() );
+            aAny <<= pStyle->GetName();
     }
     else
     {

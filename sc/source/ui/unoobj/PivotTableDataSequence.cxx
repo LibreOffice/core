@@ -81,7 +81,7 @@ uno::Sequence<uno::Any> SAL_CALL PivotTableDataSequence::getData()
         if (rItem.m_eType == ValueType::Numeric)
             aSeq[i] <<= double(rItem.m_fValue);
         else if (rItem.m_eType == ValueType::String)
-            aSeq[i] <<= OUString(rItem.m_aString);
+            aSeq[i] <<= rItem.m_aString;
 
         i++;
     }

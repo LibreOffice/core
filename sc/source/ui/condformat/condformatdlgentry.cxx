@@ -514,7 +514,7 @@ void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPre
             {
                 for( sal_Int32 i = 1, n = rLbStyle.GetEntryCount(); i <= n && !bFound; ++i)
                 {
-                    OUString aStyleName = ScGlobal::pCharClass->uppercase(OUString(rLbStyle.GetEntry(i)));
+                    OUString aStyleName = ScGlobal::pCharClass->uppercase(rLbStyle.GetEntry(i));
                     if( i == n )
                     {
                         rLbStyle.InsertEntry(aName);

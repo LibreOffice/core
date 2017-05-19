@@ -427,7 +427,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
     {
         const SfxPoolItem* pItem;
         if( pReqArgs->HasItem( FN_PARAM_5, &pItem ) )
-            aRangeString = OUString( static_cast<const SfxStringItem*>(pItem)->GetValue());
+            aRangeString = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
         aPositionRange = pViewSh->GetViewData().GetCurPos();
     }
