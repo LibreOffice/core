@@ -1072,7 +1072,7 @@ OUString ToolbarLayoutManager::implts_generateGenericAddonToolbarTitle( sal_Int3
     OUString aNumStr = rI18nHelper.GetNum( nNumber, 0, false, false );
     aAddonGenericTitle = aAddonGenericTitle.replaceFirst( "%num%", aNumStr );
 
-    return OUString( aAddonGenericTitle );
+    return aAddonGenericTitle;
 }
 
 void ToolbarLayoutManager::implts_createAddonsToolBars()

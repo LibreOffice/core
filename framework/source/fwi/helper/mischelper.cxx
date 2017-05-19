@@ -77,7 +77,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
     if( rSystemLanguage != LANGUAGE_DONTKNOW )
     {
         if ( IsScriptTypeMatchingToLanguage( nScriptType, rSystemLanguage ))
-            rLangItems.insert( OUString( SvtLanguageTable::GetLanguageString( rSystemLanguage )) );
+            rLangItems.insert( SvtLanguageTable::GetLanguageString( rSystemLanguage ) );
     }
 
     //3--UI
@@ -85,7 +85,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
     if( rUILanguage != LANGUAGE_DONTKNOW )
     {
         if ( IsScriptTypeMatchingToLanguage( nScriptType, rUILanguage ))
-            rLangItems.insert( OUString( SvtLanguageTable::GetLanguageString( rUILanguage )) );
+            rLangItems.insert( SvtLanguageTable::GetLanguageString( rUILanguage ) );
     }
 
     //4--guessed language
@@ -132,7 +132,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
                     break;
                 const Locale& rLocale=rLocales[i];
                 if( IsScriptTypeMatchingToLanguage( nScriptType, SvtLanguageTable::GetLanguageType( rLocale.Language )))
-                    rLangItems.insert( OUString( rLocale.Language ) );
+                    rLangItems.insert( rLocale.Language );
             }
         }
     }

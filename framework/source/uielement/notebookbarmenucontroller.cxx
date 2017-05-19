@@ -106,7 +106,7 @@ void NotebookbarMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
     const utl::OConfigurationTreeRoot aImplementationsNode(
                                         m_xContext,
-                                        OUString( aPath.makeStringAndClear() ),
+                                        aPath.makeStringAndClear(),
                                         false);
     if ( !aImplementationsNode.isValid() )
         return;

@@ -42,7 +42,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE_2(
     DispatchRecorder,
     ::cppu::OWeakObject,
     "com.sun.star.frame.DispatchRecorder",
-    OUString("com.sun.star.comp.framework.DispatchRecorder"))
+    "com.sun.star.comp.framework.DispatchRecorder")
 
 DEFINE_INIT_SERVICE(
     DispatchRecorder,
