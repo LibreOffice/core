@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_6e7c2273",
+        "filename": "editeng/source/editeng/impedit.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-19T01:59:57Z",
+      "side": 1,
+      "message": "Please add this to the destructor of the pDragAndDropInfo object.",
+      "revId": "d1dfa1b30e4cce6b7350c321c36b67ebb55c118b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_8e814e4d",
+        "filename": "editeng/source/editeng/impedit.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1768,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-19T01:59:57Z",
+      "side": 1,
+      "message": "No need for () around a variabe name. All in all the variable looks more like we should use std::unique_ptr.",
+      "revId": "d1dfa1b30e4cce6b7350c321c36b67ebb55c118b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
