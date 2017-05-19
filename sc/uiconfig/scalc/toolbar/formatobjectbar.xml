@@ -65,7 +65,6 @@
  <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
  <toolbar:toolbaritem xlink:href=".uno:DecrementIndent"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:CellProtection"/>
  <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:FrameLineColor"/>

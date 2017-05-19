@@ -105,7 +105,9 @@
                     <menu:menuitem menu:id=".uno:SelectData"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SetInputMode"/>
+            <menu:menuitem menu:id=".uno:CellProtection"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
             <menu:menuitem menu:id=".uno:SearchDialog"/>
