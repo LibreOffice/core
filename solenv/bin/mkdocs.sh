@@ -20,28 +20,28 @@ function header {
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html>
 <head>
-	<title>$title</title>
+    <title>$title</title>
 
-	<style>
-	* { margin: 0; padding: 0; }
-	body { font-family: sans-serif; font-size: 12px; }
+    <style>
+    * { margin: 0; padding: 0; }
+    body { font-family: sans-serif; font-size: 12px; }
         #head { padding: 20px; background: #00A500; }
-	#head a { color: #000; }
-	#body { padding: 20px; }
-	#foot { padding: 10px; font-size: 9px; border-top: 1px #18A303 solid; margin-top: 25px; }
-	p { line-height: 1.7em; margin-bottom: 1em; }
-	pre { margin-bottom: 0.5em; }
+    #head a { color: #000; }
+    #body { padding: 20px; }
+    #foot { padding: 10px; font-size: 9px; border-top: 1px #18A303 solid; margin-top: 25px; }
+    p { line-height: 1.7em; margin-bottom: 1em; }
+    pre { margin-bottom: 0.5em; }
         .multi-col { -moz-column-width: 20em; -webkit-column-width: 20em; -moz-column-gap: 1em; -webkit-column-gap: 1em; }
         h1 { margin-bottom: 0.5em; }
-	h2,h3,h4 { margin: 1.3em 0 0.5em 0; }
-	ul, ol { margin: 0.5em 1.5em; }
-	</style>
+    h2,h3,h4 { margin: 1.3em 0 0.5em 0; }
+    ul, ol { margin: 0.5em 1.5em; }
+    </style>
 </head>
 <body>
-	<div id="head">
-	<h1>$title</h1>
-	<p>$breadcrumb</p>
-	</div>
+    <div id="head">
+    <h1>$title</h1>
+    <p>$breadcrumb</p>
+    </div>
         <div id="body" style="multi-col">
 EOF
 }
@@ -209,26 +209,26 @@ header "LibreOffice Modules" " " "$BASE_OUTPUT/index.html"
 for module_name in *; do
   if [ -d $module_name ]; then
     cur_file=$(echo $module_name/README* $module_name/readme.txt*)
-	if [ -f "$cur_file" ]; then
+    if [ -f "$cur_file" ]; then
       # write index.html entry
       text="<h2><a href=\"${module_name}.html\">${module_name}</a></h2>\n"
-	  text="${text}$(head -n1 $cur_file | proc_text )"
-	  echo -e $text >> "$BASE_OUTPUT/index.html"
+      text="${text}$(head -n1 $cur_file | proc_text )"
+      echo -e $text >> "$BASE_OUTPUT/index.html"
 
       # write detailed module content
       header "$module_name" "<a href=\"index.html\">LibreOffice</a> &raquo; ${module_name}" "$BASE_OUTPUT/${module_name}.html"
       text="<p><b>View module in:</b>"
-	  text="${text} &nbsp; <a href=\"http://cgit.freedesktop.org/libreoffice/core/tree/${module_name}\">cgit</a>"
+      text="${text} &nbsp; <a href=\"http://cgit.freedesktop.org/libreoffice/core/tree/${module_name}\">cgit</a>"
       if $(echo $INPUT_PROJECTS | grep -q $module_name); then
         text="${text} &nbsp; <a href=\"${module_name}/html/classes.html\">Doxygen</a>"
       fi
       text="${text} </p><p>&nbsp;</p>"
-	  echo -e $text >> "$BASE_OUTPUT/${module_name}.html"
-	  proc_text < $cur_file >> "$BASE_OUTPUT/${module_name}.html"
-	  footer "$BASE_OUTPUT/${module_name}.html"
+      echo -e $text >> "$BASE_OUTPUT/${module_name}.html"
+      proc_text < $cur_file >> "$BASE_OUTPUT/${module_name}.html"
+      footer "$BASE_OUTPUT/${module_name}.html"
     else
       empty_modules[${#empty_modules[*]}]=$module_name
-	fi
+    fi
   fi
 done
 if [ ${#empty_modules[*]} -gt 0 ]; then
