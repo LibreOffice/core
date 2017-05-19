@@ -459,7 +459,7 @@ void IterateMatrix(
     }
 }
 
-double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
+void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
 {
     short nParamCount = GetByte();
     double fRes = ( eFunc == ifPRODUCT ) ? 1.0 : 0.0;
@@ -614,7 +614,10 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
             {
                 PopSingleRef( aAdr );
                 if (nGlobalError == FormulaError::NoRef)
-                    return 0.0;
+                {
+                    PushError( FormulaError::NoRef);
+                    return;
+                }
 
                 if ( nGlobalError != FormulaError::NONE && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
                      ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) ) )
@@ -680,7 +683,10 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
             {
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 if (nGlobalError == FormulaError::NoRef)
-                    return 0.0;
+                {
+                    PushError( FormulaError::NoRef);
+                    return;
+                }
 
                 if ( nGlobalError != FormulaError::NONE && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
                      ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) ) )
@@ -717,8 +723,8 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         FormulaError nErr = aAction.getError();
                         if ( nErr != FormulaError::NONE )
                         {
-                            SetError( nErr );
-                            return fRes;
+                            PushError( nErr );
+                            return;
                         }
                         fRes += aAction.getSum();
 
@@ -881,37 +887,38 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
     // Counts are always numbers.
     if( nFuncFmtType == css::util::NumberFormat::LOGICAL || eFunc == ifCOUNT || eFunc == ifCOUNT2 )
         nFuncFmtType = css::util::NumberFormat::NUMBER;
-    return fRes;
+
+    PushDouble( fRes);
 }
 
 void ScInterpreter::ScSumSQ()
 {
-    PushDouble( IterateParameters( ifSUMSQ ) );
+    IterateParameters( ifSUMSQ );
 }
 
 void ScInterpreter::ScSum()
 {
-    PushDouble( IterateParameters( ifSUM ) );
+    IterateParameters( ifSUM );
 }
 
 void ScInterpreter::ScProduct()
 {
-    PushDouble( IterateParameters( ifPRODUCT ) );
+    IterateParameters( ifPRODUCT );
 }
 
 void ScInterpreter::ScAverage( bool bTextAsZero )
 {
-    PushDouble( IterateParameters( ifAVERAGE, bTextAsZero ) );
+    IterateParameters( ifAVERAGE, bTextAsZero );
 }
 
 void ScInterpreter::ScCount()
 {
-    PushDouble( IterateParameters( ifCOUNT ) );
+    IterateParameters( ifCOUNT );
 }
 
 void ScInterpreter::ScCount2()
 {
-    PushDouble( IterateParameters( ifCOUNT2 ) );
+    IterateParameters( ifCOUNT2 );
 }
 
 void ScInterpreter::ScRawSubtract()

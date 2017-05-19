@@ -568,7 +568,7 @@ void ScUnicode();
 void ScUnichar();
 void ScMin( bool bTextAsZero = false );
 void ScMax( bool bTextAsZero = false );
-double IterateParameters( ScIterFunc, bool bTextAsZero = false );
+void IterateParameters( ScIterFunc, bool bTextAsZero = false );
 void ScSumSQ();
 void ScSum();
 void ScProduct();
