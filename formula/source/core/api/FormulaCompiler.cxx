@@ -581,7 +581,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
                 {
                     FormulaOpCodeMapEntry aEntry;
                     aEntry.Name = (*it).first;
-                    aEntry.Token.Data <<= OUString( (*it).second);
+                    aEntry.Token.Data <<= (*it).second;
                     aEntry.Token.OpCode = ocExternal;
                     aVec.push_back( aEntry);
                 }
