@@ -2522,7 +2522,7 @@ namespace pcr
         OSL_PRECOND( m_xComponent.is(), "FormComponentPropertyHandler::impl_describeListSourceUI_throw: no component!" );
 
 
-        // Auslesen des ListSourceTypes
+        // read out ListSourceTypes
         Any aListSourceType( m_xComponent->getPropertyValue( PROPERTY_LISTSOURCETYPE ) );
 
         sal_Int32 nListSourceType = (sal_Int32)ListSourceType_VALUELIST;
@@ -2533,7 +2533,7 @@ namespace pcr
         _out_rDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( PROPERTY_ID_LISTSOURCE ) );
 
 
-        // Enums setzen
+        // set enums
         switch( eListSourceType )
         {
         case ListSourceType_VALUELIST:

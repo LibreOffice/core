@@ -418,7 +418,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
         for ( sal_Int32 nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
         {
             EditLine& rLine = pPPortion->GetLines()[nLine];
-            fprintf( fp, "\nZeile %" SAL_PRIdINT32 ":\tStart: %" SAL_PRIdINT32 ",\tEnd: %" SAL_PRIdINT32, nLine, rLine.GetStart(), rLine.GetEnd() );
+            fprintf( fp, "\nLine %" SAL_PRIdINT32 ":\tStart: %" SAL_PRIdINT32 ",\tEnd: %" SAL_PRIdINT32, nLine, rLine.GetStart(), rLine.GetEnd() );
             fprintf( fp, "\t\tPortions: %" SAL_PRIdINT32 " - %" SAL_PRIdINT32 ".\tHight: %i, Ascent=%i", rLine.GetStartPortion(), rLine.GetEndPortion(), rLine.GetHeight(), rLine.GetMaxAscent() );
         }
 
