@@ -67,7 +67,7 @@ bool XLineTransparenceItem::GetPresentation
     switch ( ePres )
     {
         case SfxItemPresentation::Complete:
-            rText = OUString( SvxResId(RID_SVXSTR_TRANSPARENCE) ) + ": ";
+            rText = SvxResId(RID_SVXSTR_TRANSPARENCE) + ": ";
             SAL_FALLTHROUGH;
         case SfxItemPresentation::Nameless:
             rText += unicode::formatPercent(GetValue(),

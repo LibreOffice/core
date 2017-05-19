@@ -4122,7 +4122,7 @@ sal_Int16 SAL_CALL FmXListBoxCell::getItemCount()
 OUString SAL_CALL FmXListBoxCell::getItem(sal_Int16 nPos)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    return m_pBox ? OUString(m_pBox->GetEntry(nPos)) : OUString();
+    return m_pBox ? m_pBox->GetEntry(nPos) : OUString();
 }
 
 css::uno::Sequence<OUString> SAL_CALL FmXListBoxCell::getItems()
@@ -4450,7 +4450,7 @@ sal_Int16 SAL_CALL FmXComboBoxCell::getItemCount()
 OUString SAL_CALL FmXComboBoxCell::getItem( sal_Int16 Pos )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    return m_pComboBox ? OUString(m_pComboBox->GetEntry(Pos)) : OUString();
+    return m_pComboBox ? m_pComboBox->GetEntry(Pos) : OUString();
 }
 
 Sequence< OUString > SAL_CALL FmXComboBoxCell::getItems()

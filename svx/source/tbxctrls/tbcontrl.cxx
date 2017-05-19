@@ -475,7 +475,7 @@ void SvxStyleBox_Impl::Select()
             pPool->SetSearchMask( eStyleFamily );
 
             pStyle = pPool->First();
-            while ( pStyle && OUString( pStyle->GetName() ) != aSearchEntry )
+            while ( pStyle && pStyle->GetName() != aSearchEntry )
                 pStyle = pPool->Next();
         }
 

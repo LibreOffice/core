@@ -232,7 +232,7 @@ void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEnt
 
                     if( pObj )
                     {
-                        if( OUString( pObj->GetTitle() ) != aNewTitle )
+                        if( pObj->GetTitle() != aNewTitle )
                         {
                             pObj->SetTitle( aNewTitle );
                             pGalTheme->InsertObject( *pObj );
@@ -270,7 +270,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
                 ::GalleryTheme* pGalTheme = ( isValid() ? mpTheme->implGetTheme() : nullptr );
 
                 if( pGalTheme )
-                    *pValue <<= OUString( implGetObject()->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+                    *pValue <<= implGetObject()->aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
             }
             break;
 
@@ -284,7 +284,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
 
                     if( pObj )
                     {
-                        *pValue <<= OUString( pObj->GetTitle() );
+                        *pValue <<= pObj->GetTitle();
                         ::GalleryTheme::ReleaseObject( pObj );
                     }
                 }

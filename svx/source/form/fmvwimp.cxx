@@ -1433,11 +1433,11 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
 
         // The service name decides which control should be created
         sal_uInt16 nOBJID = OBJ_FM_EDIT;
-        if(OUString(_rDesc.szServiceName) == FM_SUN_COMPONENT_NUMERICFIELD)
+        if(_rDesc.szServiceName == FM_SUN_COMPONENT_NUMERICFIELD)
             nOBJID = OBJ_FM_NUMERICFIELD;
-        if(OUString(_rDesc.szServiceName) == FM_SUN_COMPONENT_CHECKBOX)
+        if(_rDesc.szServiceName == FM_SUN_COMPONENT_CHECKBOX)
             nOBJID = OBJ_FM_CHECKBOX;
-        if(OUString(_rDesc.szServiceName) == FM_COMPONENT_COMMANDBUTTON)
+        if(_rDesc.szServiceName == FM_COMPONENT_COMMANDBUTTON)
             nOBJID = OBJ_FM_BUTTON;
 
         Reference< css::form::submission::XSubmission > xSubmission(_rDesc.xPropSet, UNO_QUERY);
@@ -1493,7 +1493,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
 
             // set the button label
             Reference< XPropertySet > xControlSet(pControl->GetUnoControlModel(), UNO_QUERY);
-            xControlSet->setPropertyValue(FM_PROP_LABEL, makeAny(OUString(_rDesc.szName)));
+            xControlSet->setPropertyValue(FM_PROP_LABEL, makeAny(_rDesc.szName));
 
             // connect the submission with the submission supplier (aka the button)
             xControlSet->setPropertyValue( FM_PROP_BUTTON_TYPE,

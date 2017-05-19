@@ -145,10 +145,10 @@ bool SvxGrfCrop::GetPresentation(
     case SfxItemPresentation::Nameless:
         return true;
     case SfxItemPresentation::Complete:
-        rText = "L: "  + OUString(::GetMetricText( GetLeft(), eCoreUnit, MapUnit::MapMM, pIntl )) +
-                " R: " + OUString(::GetMetricText( GetRight(), eCoreUnit, MapUnit::MapMM, pIntl )) +
-                " T: " + OUString(::GetMetricText( GetTop(), eCoreUnit, MapUnit::MapMM, pIntl )) +
-                " B: " + OUString(::GetMetricText( GetBottom(), eCoreUnit, MapUnit::MapMM, pIntl ));
+        rText = "L: "  + ::GetMetricText( GetLeft(), eCoreUnit, MapUnit::MapMM, pIntl ) +
+                " R: " + ::GetMetricText( GetRight(), eCoreUnit, MapUnit::MapMM, pIntl ) +
+                " T: " + ::GetMetricText( GetTop(), eCoreUnit, MapUnit::MapMM, pIntl ) +
+                " B: " + ::GetMetricText( GetBottom(), eCoreUnit, MapUnit::MapMM, pIntl );
         return true;
         break;
 

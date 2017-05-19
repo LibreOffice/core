@@ -318,7 +318,7 @@ OUString
     if (nResourceId != -1)
     {
         SolarMutexGuard aGuard;
-        sName = OUString (SvxResId((unsigned short)nResourceId));
+        sName = SvxResId((unsigned short)nResourceId);
     }
 
     return sName;

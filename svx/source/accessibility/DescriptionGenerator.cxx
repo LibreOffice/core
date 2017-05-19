@@ -73,7 +73,7 @@ void DescriptionGenerator::Initialize (sal_Int32 nResourceId)
     OUString sPrefix;
     {
         SolarMutexGuard aGuard;
-        sPrefix = OUString (SvxResId (nResourceId));
+        sPrefix = SvxResId (nResourceId);
     }
 
     // Forward the call with the resulting string.
@@ -90,10 +90,10 @@ void DescriptionGenerator::Initialize (const OUString& sPrefix)
             SolarMutexGuard aGuard;
 
             msDescription.append(' ');
-            msDescription.append(OUString (SvxResId(RID_SVXSTR_A11Y_WITH)));
+            msDescription.append(SvxResId(RID_SVXSTR_A11Y_WITH));
             msDescription.append(' ');
 
-            msDescription.append(OUString (SvxResId (RID_SVXSTR_A11Y_STYLE)));
+            msDescription.append(SvxResId (RID_SVXSTR_A11Y_STYLE));
             msDescription.append('=');
         }
 
@@ -155,7 +155,7 @@ void DescriptionGenerator::AddProperty (const OUString& sPropertyName,
                 SolarMutexGuard aGuard;
 
                 msDescription.append(' ');
-                msDescription.append(OUString (SvxResId(RID_SVXSTR_A11Y_AND)));
+                msDescription.append(SvxResId(RID_SVXSTR_A11Y_AND));
                 msDescription.append(' ');
                 mbIsFirstProperty = false;
             }

@@ -393,7 +393,7 @@ static bool lcl_HandlePackageURL(
     }
     catch (container::NoSuchElementException const&)
     {
-        SAL_INFO("svx", "not found: '" << OUString(rURL) << "'");
+        SAL_INFO("svx", "not found: '" << rURL << "'");
         return false;
     }
     catch (uno::Exception const& e)

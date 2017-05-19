@@ -1477,7 +1477,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
     {
         if( static_cast< SdrGrafObj*>( mpObj.get() )->IsLinkedGraphic() )
         {
-            rValue <<= OUString( static_cast< SdrGrafObj*>( mpObj.get() )->GetFileName() );
+            rValue <<= static_cast< SdrGrafObj*>( mpObj.get() )->GetFileName();
         }
         else
         {

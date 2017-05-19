@@ -772,7 +772,7 @@ void OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
             OUString sChar(cChar);
             _pSet->sBulletChar = sChar;
             if ( aFmt.GetBulletFont() )
-                _pSet->sBulletFont = rtl::OUString(aFmt.GetBulletFont()->GetFamilyName());
+                _pSet->sBulletFont = aFmt.GetBulletFont()->GetFamilyName();
             _pSet->nNumberType = eNumType;
             pItemArr->bIsCustomized = true;
         }else if ((eNumType&(~LINK_TOKEN)) == SVX_NUM_BITMAP ) {
@@ -790,7 +790,7 @@ void OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
             _pSet->sSuffix = aFmt.GetSuffix();
             _pSet->nNumberType = eNumType;
             if ( aFmt.GetBulletFont() )
-                _pSet->sBulletFont = rtl::OUString(aFmt.GetBulletFont()->GetFamilyName());
+                _pSet->sBulletFont = aFmt.GetBulletFont()->GetFamilyName();
             pItemArr->bIsCustomized = true;
          }
     }
