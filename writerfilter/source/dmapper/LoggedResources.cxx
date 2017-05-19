@@ -287,6 +287,11 @@ void LoggedStream::substream(Id name, writerfilter::Reference<Stream>::Pointer_t
 #endif
 }
 
+void LoggedStream::resetSubstreamHeaderFooterState()
+{
+    lcl_resetSubstreamHeaderFooterState();
+}
+
 void LoggedStream::info(const std::string & _info)
 {
 #ifdef DEBUG_WRITERFILTER

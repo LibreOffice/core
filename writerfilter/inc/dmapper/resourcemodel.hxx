@@ -286,6 +286,12 @@ public:
 
 
     /**
+        Resets Flags for Header and Footer handling inside of substreams.
+        Has to be done after each section.
+    */
+    virtual void resetSubstreamHeaderFooterState() = 0;
+
+    /**
        Debugging: Receives information about current point in stream.
 
        @param info     the information

@@ -621,8 +621,13 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     // The trick is that we send properties of the previous section right now, which will be exactly what dmapper expects.
     Mapper().props(pProperties);
     Mapper().endParagraphGroup();
+
+    // End Section
     if (!m_pSuperstream)
+    {
+        Mapper().resetSubstreamHeaderFooterState();
         Mapper().endSectionGroup();
+    }
     m_bNeedPar = false;
     m_bNeedSect = false;
 }

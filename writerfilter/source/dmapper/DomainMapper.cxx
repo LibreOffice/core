@@ -3464,6 +3464,11 @@ void DomainMapper::lcl_info(const std::string & /*info_*/)
 {
 }
 
+void DomainMapper::lcl_resetSubstreamHeaderFooterState()
+{
+    m_pImpl->resetHeaderFooterStates();
+}
+
 void DomainMapper::lcl_startGlossaryEntry()
 {
     uno::Reference< text::XTextRange > xTextRange =  GetCurrentTextRange();

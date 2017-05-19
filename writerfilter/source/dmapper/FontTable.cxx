@@ -210,6 +210,10 @@ void FontTable::lcl_substream(Id, ::writerfilter::Reference<Stream>::Pointer_t)
 {
 }
 
+void FontTable::lcl_resetSubstreamHeaderFooterState()
+{
+}
+
 void FontTable::lcl_info(const std::string& )
 {
 }

@@ -373,6 +373,12 @@ private:
     bool                                                                            m_bTOCPageRef;
     bool                                                                            m_bStartGenericField;
     bool                                                                            m_bTextInserted;
+    bool                                                                            m_bHeaderLIsSet;
+    bool                                                                            m_bHeaderRIsSet;
+    bool                                                                            m_bHeaderFIsSet;
+    bool                                                                            m_bFooterLIsSet;
+    bool                                                                            m_bFooterRIsSet;
+    bool                                                                            m_bFooterFIsSet;
     LineNumberSettings                                                              m_aLineNumberSettings;
 
     BookmarkMap_t                                                                   m_aBookmarkMap;
@@ -883,6 +889,7 @@ public:
     SmartTagHandler& getSmartTagHandler() { return m_aSmartTagHandler; }
 
     void substream(Id rName, ::writerfilter::Reference<Stream>::Pointer_t const& ref);
+    void resetHeaderFooterStates();
 
     /// If the document needs to split paragraph.
     bool m_bIsSplitPara;
