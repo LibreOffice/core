@@ -683,9 +683,12 @@ bool ScDoubleRefToken::operator==( const FormulaToken& r ) const
 
 const ScRefList*        ScRefListToken::GetRefList() const  { return &aRefList; }
       ScRefList*        ScRefListToken::GetRefList()        { return &aRefList; }
+      bool              ScRefListToken::IsArrayResult() const { return mbArrayResult; }
 bool ScRefListToken::operator==( const FormulaToken& r ) const
 {
-    return FormulaToken::operator==( r ) && &aRefList == r.GetRefList();
+    const ScRefListToken* p;
+    return FormulaToken::operator==( r ) && &aRefList == r.GetRefList() &&
+        ((p = dynamic_cast<const ScRefListToken*>(&r)) != nullptr) && mbArrayResult == p->IsArrayResult();
 }
 
 ScMatrixToken::ScMatrixToken( const ScMatrixRef& p ) :

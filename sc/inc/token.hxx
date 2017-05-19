@@ -265,11 +265,15 @@ class ScRefListToken : public formula::FormulaToken
 {
 private:
             ScRefList           aRefList;
+            bool                mbArrayResult;  // whether RefList is an array result
 public:
                                 ScRefListToken() :
-                                    FormulaToken( formula::svRefList ) {}
+                                    FormulaToken( formula::svRefList ), mbArrayResult(false) {}
+            explicit            ScRefListToken( bool bArrayResult ) :
+                                    FormulaToken( formula::svRefList ), mbArrayResult( bArrayResult ) {}
                                 ScRefListToken( const ScRefListToken & r ) :
-                                    FormulaToken( r ), aRefList( r.aRefList ) {}
+                                    FormulaToken( r ), aRefList( r.aRefList ), mbArrayResult( r.mbArrayResult ) {}
+            bool                IsArrayResult() const;
     virtual const ScRefList*    GetRefList() const override;
     virtual       ScRefList*    GetRefList() override;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const override;
