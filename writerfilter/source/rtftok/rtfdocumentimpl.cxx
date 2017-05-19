@@ -286,7 +286,13 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_nCellxMax(0),
       m_nListPictureId(0),
       m_bIsNewDoc(!rMediaDescriptor.getUnpackedValueOrDefault("InsertMode", false)),
-      m_rMediaDescriptor(rMediaDescriptor)
+      m_rMediaDescriptor(rMediaDescriptor),
+      m_hasLHeader(false),
+      m_hasRHeader(false),
+      m_hasFHeader(false),
+      m_hasLFooter(false),
+      m_hasRFooter(false),
+      m_hasFFooter(false)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, true));
@@ -621,8 +627,18 @@ void RTFDocumentImpl::sectBreak(bool bFinal)
     // The trick is that we send properties of the previous section right now, which will be exactly what dmapper expects.
     Mapper().props(pProperties);
     Mapper().endParagraphGroup();
+
+    // End Section
     if (!m_pSuperstream)
+    {
+        m_hasFHeader = false;
+        m_hasRHeader = false;
+        m_hasLHeader = false;
+        m_hasLFooter = false;
+        m_hasRFooter = false;
+        m_hasFFooter = false;
         Mapper().endSectionGroup();
+    }
     m_bNeedPar = false;
     m_bNeedSect = false;
 }

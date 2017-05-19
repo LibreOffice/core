@@ -202,34 +202,70 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 switch (nKeyword)
                 {
                 case RTF_HEADER:
-                    nId = NS_ooxml::LN_headerr;
+                    if (!m_hasRHeader)
+                    {
+                        nId = NS_ooxml::LN_headerr;
+                        m_hasRHeader = true;
+                    }
                     break;
                 case RTF_FOOTER:
-                    nId = NS_ooxml::LN_footerr;
+                    if (!m_hasRFooter)
+                    {
+                        nId = NS_ooxml::LN_footerr;
+                        m_hasRFooter = true;
+                    }
                     break;
                 case RTF_HEADERL:
-                    nId = NS_ooxml::LN_headerl;
+                    if (!m_hasLHeader)
+                    {
+                        nId = NS_ooxml::LN_headerl;
+                        m_hasLHeader = true;
+                    }
                     break;
                 case RTF_HEADERR:
-                    nId = NS_ooxml::LN_headerr;
+                    if (!m_hasRHeader)
+                    {
+                        nId = NS_ooxml::LN_headerr;
+                        m_hasRHeader = true;
+                    }
                     break;
                 case RTF_HEADERF:
-                    nId = NS_ooxml::LN_headerf;
+                    if (!m_hasFHeader)
+                    {
+                        nId = NS_ooxml::LN_headerf;
+                        m_hasFHeader = true;
+                    }
                     break;
                 case RTF_FOOTERL:
-                    nId = NS_ooxml::LN_footerl;
+                    if (!m_hasLFooter)
+                    {
+                        nId = NS_ooxml::LN_footerl;
+                        m_hasLFooter = true;
+                    }
                     break;
                 case RTF_FOOTERR:
-                    nId = NS_ooxml::LN_footerr;
+                    if (!m_hasRFooter)
+                    {
+                        nId = NS_ooxml::LN_footerr;
+                        m_hasRFooter = true;
+                    }
                     break;
                 case RTF_FOOTERF:
-                    nId = NS_ooxml::LN_footerf;
+                    if (!m_hasFFooter)
+                    {
+                        nId = NS_ooxml::LN_footerf;
+                        m_hasFFooter = true;
+                    }
                     break;
                 default:
                     break;
                 }
-                m_nHeaderFooterPositions.push(std::make_pair(nId, nPos));
+
+                if (nId != 0)
+                    m_nHeaderFooterPositions.push(std::make_pair(nId, nPos));
+
                 m_aStates.top().eDestination = Destination::SKIP;
+
             }
             break;
         case RTF_FOOTNOTE:
