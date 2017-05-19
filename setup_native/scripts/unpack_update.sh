@@ -17,17 +17,17 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-EXTENSION=`expr "//$1" : '.*\/.*\.\(t.*\)'`
-[ -z $EXTENSION ] && ( echo "Unable to determine file type"; exit 2 )
+EXTENSION=$(expr "//$1" : '.*\/.*\.\(t.*\)')
+[ -z "$EXTENSION" ] && ( echo "Unable to determine file type"; exit 2 )
 
-BASEDIR=`dirname "$1"`
-FOLDER=`basename "$1" ".$EXTENSION"`
+BASEDIR=$(dirname "$1")
+FOLDER=$(basename "$1" ".$EXTENSION")
 NUM=1
 
 DESTPATH="$BASEDIR/$FOLDER"
 
 while [ -d "$DESTPATH" ]; do
-  NUM=`expr $NUM + 1`
+  NUM=$(expr $NUM + 1)
   DESTPATH="$BASEDIR/$FOLDER-$NUM"
 done
 
@@ -47,4 +47,4 @@ else
   exit 2
 fi
 
-UPDATE=`eval ls */update` && SUBFOLDER=`dirname $UPDATE` && mv $SUBFOLDER/* . && rmdir $SUBFOLDER && echo "$DESTPATH/update"
+UPDATE=$(eval ls ./*/update) && SUBFOLDER=$(dirname "$UPDATE") && mv "$SUBFOLDER/*" . && rmdir "$SUBFOLDER" && echo "$DESTPATH/update"
