@@ -2471,7 +2471,7 @@ void ScInterpreter::ScZTest()
     double rValCount = 0.0;
     switch (GetStackType())
     {
-        case formula::svDouble :
+        case svDouble :
         {
             fVal = GetDouble();
             fSum    += fVal;
@@ -2494,7 +2494,7 @@ void ScInterpreter::ScZTest()
         }
         break;
         case svRefList :
-        case formula::svDoubleRef :
+        case svDoubleRef :
         {
             short nParam = 1;
             size_t nRefInList = 0;
@@ -2912,7 +2912,7 @@ void ScInterpreter::ScHarMean()
     {
         switch (GetStackType())
         {
-            case formula::svDouble    :
+            case svDouble    :
             {
                 double x = GetDouble();
                 if (x > 0.0)
@@ -2941,7 +2941,7 @@ void ScInterpreter::ScHarMean()
                 }
                 break;
             }
-            case formula::svDoubleRef :
+            case svDoubleRef :
             case svRefList :
             {
                 FormulaError nErr = FormulaError::NONE;
@@ -3034,7 +3034,7 @@ void ScInterpreter::ScGeoMean()
     {
         switch (GetStackType())
         {
-            case formula::svDouble    :
+            case svDouble    :
             {
                 double x = GetDouble();
                 if (x > 0.0)
@@ -3063,7 +3063,7 @@ void ScInterpreter::ScGeoMean()
                 }
                 break;
             }
-            case formula::svDoubleRef :
+            case svDoubleRef :
             case svRefList :
             {
                 FormulaError nErr = FormulaError::NONE;
@@ -3175,7 +3175,7 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
     {
         switch (GetStackType())
         {
-            case formula::svDouble :
+            case svDouble :
             {
                 fVal = GetDouble();
                 fSum += fVal;
@@ -3196,7 +3196,7 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
                 }
             }
             break;
-            case formula::svDoubleRef :
+            case svDoubleRef :
             case svRefList :
             {
                 PopDoubleRef( aRange, nParamCount, nRefInList);
@@ -3663,7 +3663,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
         const StackVar eStackType = GetStackType();
         switch (eStackType)
         {
-            case formula::svDouble :
+            case svDouble :
                 rArray.push_back( PopDouble());
             break;
             case svSingleRef :
@@ -3674,7 +3674,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                     rArray.push_back(GetCellValue(aAdr, aCell));
             }
             break;
-            case formula::svDoubleRef :
+            case svDoubleRef :
             case svRefList :
             {
                 PopDoubleRef( aRange, nParam, nRefInList);
@@ -3946,7 +3946,7 @@ void ScInterpreter::ScAveDev()
     {
         switch (GetStackType())
         {
-            case formula::svDouble :
+            case svDouble :
                 rVal += GetDouble();
                 rValCount++;
                 break;
@@ -3961,7 +3961,7 @@ void ScInterpreter::ScAveDev()
                 }
             }
             break;
-            case formula::svDoubleRef :
+            case svDoubleRef :
             case svRefList :
             {
                 FormulaError nErr = FormulaError::NONE;
@@ -4029,7 +4029,7 @@ void ScInterpreter::ScAveDev()
     {
         switch (GetStackType())
         {
-            case formula::svDouble :
+            case svDouble :
                 rVal += fabs(GetDouble() - nMiddle);
                 break;
             case svSingleRef :
@@ -4040,7 +4040,7 @@ void ScInterpreter::ScAveDev()
                     rVal += fabs(GetCellValue(aAdr, aCell) - nMiddle);
             }
             break;
-            case formula::svDoubleRef :
+            case svDoubleRef :
             case svRefList :
             {
                 FormulaError nErr = FormulaError::NONE;
@@ -4278,7 +4278,7 @@ void ScInterpreter::ScRSQ()
     {
         switch (GetStackType())
         {
-            case formula::svDouble:
+            case svDouble:
                 {
                     double fVal = PopDouble();
                     PushDouble( fVal * fVal);

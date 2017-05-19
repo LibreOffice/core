@@ -564,7 +564,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 StackVar eType = pToken->GetType();
                 if (eFunc == ifCOUNT2)
                 {
-                    if ( eType != formula::svEmptyCell &&
+                    if ( eType != svEmptyCell &&
                          ( ( pToken->GetOpCode() != ocSubTotal &&
                              pToken->GetOpCode() != ocAggregate ) ||
                            ( mnSubTotalFlags & SubtotalFlags::IgnoreNestedStAg ) ) )
@@ -572,7 +572,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     if (nGlobalError != FormulaError::NONE)
                         nGlobalError = FormulaError::NONE;
                 }
-                else if (eType == formula::svDouble)
+                else if (eType == svDouble)
                 {
                     nCount++;
                     fVal = pToken->GetDouble();
@@ -602,7 +602,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         default: ; // nothing
                     }
                 }
-                else if (bTextAsZero && eType == formula::svString)
+                else if (bTextAsZero && eType == svString)
                 {
                     nCount++;
                     if ( eFunc == ifPRODUCT )
