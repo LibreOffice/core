@@ -1210,6 +1210,11 @@ DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
     // This failed, pdf+png replacement graphics pair didn't survive an ODT roundtrip.
     CPPUNIT_ASSERT(!getProperty<OUString>(xShape, "ReplacementGraphicURL").isEmpty());
 
+    auto xGraphic = getProperty< uno::Reference<graphic::XGraphic> >(xShape, "Graphic");
+    CPPUNIT_ASSERT(xGraphic.is());
+    // This was image/x-vclgraphic, not exposing the info that the image is a PDF one.
+    CPPUNIT_ASSERT_EQUAL(OUString("application/pdf"), getProperty<OUString>(xGraphic, "MimeType"));
+
     if (mbExported)
     {
         uno::Sequence<uno::Any> aArgs(1);
