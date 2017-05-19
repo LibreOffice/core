@@ -1420,7 +1420,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const OLEHandler
             xOLEProperties->setPropertyValue(getPropertyName( PROP_STREAM_NAME ),
                             uno::makeAny( rStreamName ));
         else
-            xOLEProperties->setPropertyValue("CLSID", uno::makeAny(OUString(aCLSID)));
+            xOLEProperties->setPropertyValue("CLSID", uno::makeAny(aCLSID));
 
         awt::Size aSize = pOLEHandler->getSize();
         if( !aSize.Width )
