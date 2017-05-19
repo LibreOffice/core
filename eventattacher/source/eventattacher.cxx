@@ -212,7 +212,7 @@ public:
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
 
-    // Methoden von XEventAttacher
+    // methods of XEventAttacher
     virtual Reference< XEventListener > SAL_CALL attachListener(const Reference< XInterface >& xObject,
             const Reference< XAllListener >& AllListener, const Any& Helper,
             const OUString& ListenerType, const OUString& AddListenerParam) override;

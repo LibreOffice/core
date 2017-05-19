@@ -590,7 +590,7 @@ String RID_SVXITEMS_METRIC_PIXEL
 {
     Text [ en-US ] = "pixel" ;
 };
- // GetValueText von BoolItems
+ // GetValueText of BoolItems
 String RID_SVXITEMS_SHADOWED_TRUE
 {
     Text [ en-US ] = "Shadowed" ;

@@ -16,7 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-// EvtListener.h : Deklaration von CEvtListener
+// EvtListener.h : Declaration of CEvtListener
 
 #ifndef INCLUDED_EXTENSIONS_TEST_OLE_EVENTLISTENERSAMPLE_EVENTLISTENER_EVTLISTENER_H
 #define INCLUDED_EXTENSIONS_TEST_OLE_EVENTLISTENERSAMPLE_EVENTLISTENER_EVTLISTENER_H
