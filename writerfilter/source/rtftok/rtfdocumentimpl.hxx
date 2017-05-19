@@ -650,6 +650,14 @@ private:
     bool m_bIsNewDoc;
     /// The media descriptor contains e.g. the base URL of the document.
     const utl::MediaDescriptor& m_rMediaDescriptor;
+
+    /// Flags for ensuring that only one header and footer is added per section
+    bool m_hasLHeader;
+    bool m_hasRHeader;
+    bool m_hasFHeader;
+    bool m_hasLFooter;
+    bool m_hasRFooter;
+    bool m_hasFFooter;
 };
 } // namespace rtftok
 } // namespace writerfilter
