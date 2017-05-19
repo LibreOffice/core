@@ -8,6 +8,7 @@
  */
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -23,7 +24,7 @@ public:
             return true;
         }
         auto const t1 = expr->getTypeAsWritten();
-        auto const t2 = expr->getSubExprAsWritten()->getType();
+        auto const t2 = compat::getSubExprAsWritten(expr)->getType();
         if ((t1.getCanonicalType().getTypePtr()
              != t2.getCanonicalType().getTypePtr())
             || !(loplugin::TypeCheck(t1).Class("OUString").Namespace("rtl")
@@ -46,7 +47,7 @@ private:
     }
 };
 
-static loplugin::Plugin::Registration<Visitor> reg("stringcopy", false);
+static loplugin::Plugin::Registration<Visitor> reg("stringcopy");
 
 }
 

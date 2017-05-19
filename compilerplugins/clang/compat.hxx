@@ -17,6 +17,7 @@
 #include "clang/AST/DeclBase.h"
 #include "clang/AST/DeclCXX.h"
 #include "clang/AST/Expr.h"
+#include "clang/AST/ExprCXX.h"
 #include "clang/AST/Type.h"
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/DiagnosticIDs.h"
@@ -242,6 +243,78 @@ inline bool isStdNamespace(clang::DeclContext const & context) {
     const clang::IdentifierInfo *II = ND->getIdentifier();
     return II && II->isStr("std");
 #endif
+}
+
+// Work around <http://reviews.llvm.org/D22128>:
+//
+// SfxErrorHandler::GetClassString (svtools/source/misc/ehdl.cxx):
+//
+//   ErrorResource_Impl aEr(aId, (sal_uInt16)lClassId);
+//   if(aEr)
+//   {
+//       rStr = static_cast<ResString>(aEr).GetString();
+//   }
+//
+// expr->dump():
+//  CXXStaticCastExpr 0x2b74e8e657b8 'class ResString' static_cast<class ResString> <ConstructorConversion>
+//  `-CXXBindTemporaryExpr 0x2b74e8e65798 'class ResString' (CXXTemporary 0x2b74e8e65790)
+//    `-CXXConstructExpr 0x2b74e8e65758 'class ResString' 'void (class ResString &&) noexcept(false)' elidable
+//      `-MaterializeTemporaryExpr 0x2b74e8e65740 'class ResString' xvalue
+//        `-CXXBindTemporaryExpr 0x2b74e8e65720 'class ResString' (CXXTemporary 0x2b74e8e65718)
+//          `-ImplicitCastExpr 0x2b74e8e65700 'class ResString' <UserDefinedConversion>
+//            `-CXXMemberCallExpr 0x2b74e8e656d8 'class ResString'
+//              `-MemberExpr 0x2b74e8e656a0 '<bound member function type>' .operator ResString 0x2b74e8dc1f00
+//                `-DeclRefExpr 0x2b74e8e65648 'struct ErrorResource_Impl' lvalue Var 0x2b74e8e653b0 'aEr' 'struct ErrorResource_Impl'
+// expr->getSubExprAsWritten()->dump():
+//  MaterializeTemporaryExpr 0x2b74e8e65740 'class ResString' xvalue
+//  `-CXXBindTemporaryExpr 0x2b74e8e65720 'class ResString' (CXXTemporary 0x2b74e8e65718)
+//    `-ImplicitCastExpr 0x2b74e8e65700 'class ResString' <UserDefinedConversion>
+//      `-CXXMemberCallExpr 0x2b74e8e656d8 'class ResString'
+//        `-MemberExpr 0x2b74e8e656a0 '<bound member function type>' .operator ResString 0x2b74e8dc1f00
+//          `-DeclRefExpr 0x2b74e8e65648 'struct ErrorResource_Impl' lvalue Var 0x2b74e8e653b0 'aEr' 'struct ErrorResource_Impl'
+//
+// Copies code from Clang's lib/AST/Expr.cpp:
+namespace detail {
+  inline clang::Expr *skipImplicitTemporary(clang::Expr *expr) {
+    // Skip through reference binding to temporary.
+    if (clang::MaterializeTemporaryExpr *Materialize
+                                  = clang::dyn_cast<clang::MaterializeTemporaryExpr>(expr))
+      expr = Materialize->GetTemporaryExpr();
+
+    // Skip any temporary bindings; they're implicit.
+    if (clang::CXXBindTemporaryExpr *Binder = clang::dyn_cast<clang::CXXBindTemporaryExpr>(expr))
+      expr = Binder->getSubExpr();
+
+    return expr;
+  }
+}
+inline clang::Expr *getSubExprAsWritten(clang::CastExpr *This) {
+  clang::Expr *SubExpr = nullptr;
+  clang::CastExpr *E = This;
+  do {
+    SubExpr = detail::skipImplicitTemporary(E->getSubExpr());
+
+    // Conversions by constructor and conversion functions have a
+    // subexpression describing the call; strip it off.
+    if (E->getCastKind() == clang::CK_ConstructorConversion)
+      SubExpr =
+        detail::skipImplicitTemporary(clang::cast<clang::CXXConstructExpr>(SubExpr)->getArg(0));
+    else if (E->getCastKind() == clang::CK_UserDefinedConversion) {
+      assert((clang::isa<clang::CXXMemberCallExpr>(SubExpr) ||
+              clang::isa<clang::BlockExpr>(SubExpr)) &&
+             "Unexpected SubExpr for CK_UserDefinedConversion.");
+      if (clang::isa<clang::CXXMemberCallExpr>(SubExpr))
+        SubExpr = clang::cast<clang::CXXMemberCallExpr>(SubExpr)->getImplicitObjectArgument();
+    }
+
+    // If the subexpression we're left with is an implicit cast, look
+    // through that, too.
+  } while ((E = clang::dyn_cast<clang::ImplicitCastExpr>(SubExpr)));
+
+  return SubExpr;
+}
+inline const clang::Expr *getSubExprAsWritten(const clang::CastExpr *This) {
+  return getSubExprAsWritten(const_cast<clang::CastExpr *>(This));
 }
 
 }
