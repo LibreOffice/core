@@ -306,6 +306,10 @@ void SAL_CALL AnnotationManagerImpl::notifyEvent( const css::document::EventObje
             {
                 lcl_CommentNotification(CommentNotificationType::Add, &mrBase, xAnnotation);
             }
+            else if ( aEvent.EventName == "OnAnnotationEditedByUndoRedo" )
+            {
+                lcl_CommentNotification(CommentNotificationType::Modify, &mrBase, xAnnotation);
+            }
         }
     }
 }
@@ -467,6 +471,12 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest& rReq)
 
         if (xAnnotation.is() && !sText.isEmpty())
         {
+            if( mpDoc->IsUndoEnabled() )
+            {
+                SdrUndoAction* pAction = CreateUndoEditAnnotation( xAnnotation );
+                mpDoc->AddUndo( pAction );
+            }
+
             // TODO: Not allow other authors to change others' comments ?
             Reference<XText> xText(xAnnotation->getTextRange());
             xText->setString(sText);
