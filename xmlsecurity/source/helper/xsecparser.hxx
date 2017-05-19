@@ -116,9 +116,7 @@ private:
             css::xml::sax::XAttributeList >& xAttribs );
 
 public:
-    XSecParser(XMLSignatureHelper& rXMLSignatureHelper, XSecController* pXSecController,
-        const css::uno::Reference<
-            css::xml::sax::XDocumentHandler >& xNextHandler );
+    XSecParser(XMLSignatureHelper& rXMLSignatureHelper, XSecController* pXSecController);
 
     /*
      * XDocumentHandler
