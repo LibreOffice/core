@@ -54,7 +54,7 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, const OUString& rBaseURL, SvKeyVa
     DBG_ASSERT( !IsSwitchToUCS2(), "EditHTMLParser::::EditHTMLParser: Switch to UCS2?" );
 
     // Although the real default encoding is ISO8859-1, we use MS-1252
-    // als default encoding.
+    // as default encoding.
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
 
     // If the file starts with a BOM, switch to UCS2.
@@ -443,7 +443,7 @@ void EditHTMLParser::NextToken( HtmlTokenId nToken )
     // misc
     case HtmlTokenId::DIRLIST_ON:
     case HtmlTokenId::DIRLIST_OFF:
-    case HtmlTokenId::FOOTNOTE_ON:          //! land so im Text
+    case HtmlTokenId::FOOTNOTE_ON:          //! they land so in the text
     case HtmlTokenId::FOOTNOTE_OFF:
     case HtmlTokenId::MENULIST_ON:
     case HtmlTokenId::MENULIST_OFF:

@@ -29,7 +29,7 @@ import "ocidl.idl";
         object,
         uuid(86653399-24C6-4C2B-9E8A-564175250CB2),
         dual,
-        helpstring("IEvtListener-Schnittstelle"),
+        helpstring("IEvtListener interface"),
         pointer_default(unique)
     ]
     interface IEvtListener : IDispatch

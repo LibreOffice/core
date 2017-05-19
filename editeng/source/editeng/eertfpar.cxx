@@ -344,7 +344,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
     if( SfxItemState::SET == rSet.GetAttrSet().GetItemState( EE_CHAR_ESCAPEMENT, false, &pItem ))
     {
-        // die richtige
+        // the correct one
         long nEsc = static_cast<const SvxEscapementItem*>(pItem)->GetEsc();
 
         if( ( DFLT_ESC_AUTO_SUPER != nEsc ) && ( DFLT_ESC_AUTO_SUB != nEsc ) )
