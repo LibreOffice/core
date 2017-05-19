@@ -491,8 +491,8 @@ public class TypeDetection extends ComplexTestCase {
          try{
 
             /*
-             *als Dateien die typeDetection.props und eine der csv-Dateien
-             *benutzten. diese können per dmake einfach auf andere Rechte setzten
+             * As files, use the typeDetection.props and one of the csv files.
+             * Those can, via dmake, simply set rights on others.
              *
              */
             log.println("### checkStreamLoader() ###");
