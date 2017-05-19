@@ -104,7 +104,7 @@ public:
     bool                ReadTGA(Graphic &rGraphic);
 };
 
-//=================== Methoden von TGAReader ==============================
+//=================== Methods of TGAReader ==============================
 
 TGAReader::TGAReader(SvStream &rTGA)
     : m_rTGA(rTGA)

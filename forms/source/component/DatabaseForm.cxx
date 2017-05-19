@@ -426,7 +426,7 @@ OUString ODatabaseForm::GetDataEncoded(bool _bURLEncoded,const Reference<XContro
     FillSuccessfulList( aSuccObjList, SubmitButton, MouseEvt );
 
 
-    // Aggregate Liste to OUString
+    // Aggregate the list to OUString
     OUStringBuffer aResult;
     OUString aName;
     OUString aValue;

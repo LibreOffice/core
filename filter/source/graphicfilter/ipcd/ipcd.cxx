@@ -195,7 +195,7 @@ void PCDReader::ReadImage()
     sal_uInt8 * pL0; // luminance for each pixel of the 1st row of the current pair of rows
     sal_uInt8 * pL1; // luminance for each pixel of the 2nd row of the current pair of rows
     sal_uInt8 * pCb; // blue chrominance for each 2x2 pixel of the current pair of rows
-    sal_uInt8 * pCr; // red chrominance fuer je 2x2 pixel of the current pair of rows
+    sal_uInt8 * pCr; // red chrominance for each 2x2 pixel of the current pair of rows
     sal_uInt8 * pL0N, * pL1N, * pCbN, * pCrN; // like above, but for the next pair of rows
 
     if ( !bStatus )

@@ -338,8 +338,8 @@ void EditBox::GetFocus()
     }
 }
 
-//When an Event is cleared, this Routine is
-//first called and a PostUserEvent is sent.
+// When an event is being triggered, this routine is called first and
+// a PostUserEvent is sent.
 bool EditBox::PreNotify( NotifyEvent& rNEvt )
 {
     bool bResult = true;
@@ -375,8 +375,7 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
     return bResult;
 }
 
-//When an Event cleared wurde, this routine is
-//first called.
+// When an event was triggered, this routine is called first.
 IMPL_LINK_NOARG(EditBox, ChangedHdl, void*, void)
 {
     if(pMEdit!=nullptr)

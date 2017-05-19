@@ -591,7 +591,7 @@ private:
     css::uno::Type                      m_aExternalValueType;
 
 // <properties>
-    OUString                            m_aControlSource;           // Datenquelle, Name des Feldes
+    OUString                            m_aControlSource;           // data source, name of the field
     css::uno::Reference< css::beans::XPropertySet >
                                         m_xLabelControl;            // reference to a sibling control (model) which is our label
     bool                                m_bInputRequired;
