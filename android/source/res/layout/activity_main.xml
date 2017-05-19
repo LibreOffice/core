@@ -86,6 +86,7 @@
         </LinearLayout>
 
         <include layout="@layout/toolbar_bottom"/>
+        <include layout="@layout/toolbar_color_picker"/>
 
         <RelativeLayout
             android:id="@+id/loadingPanel"
