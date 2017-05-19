@@ -379,7 +379,7 @@ namespace toolkit
         Any aReturn;
         switch (nPropId)
         {
-            case BASEPROPERTY_DEFAULTCONTROL: aReturn <<= OUString( OUString::createFromAscii( szServiceName_UnoControlFormattedField ) ); break;
+            case BASEPROPERTY_DEFAULTCONTROL: aReturn <<= OUString::createFromAscii( szServiceName_UnoControlFormattedField ); break;
 
             case BASEPROPERTY_TREATASNUMBER: aReturn <<= true; break;
 

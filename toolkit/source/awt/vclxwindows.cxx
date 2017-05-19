@@ -2094,7 +2094,7 @@ void SAL_CALL VCLXListBox::listItemModified( const ItemListEvent& i_rEvent )
 
     // VCL's ListBox does not support changing an entry's text or image, so remove and re-insert
 
-    const OUString sNewText = i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : OUString( pListBox->GetEntry( i_rEvent.ItemPosition ) );
+    const OUString sNewText = i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : pListBox->GetEntry( i_rEvent.ItemPosition );
     const Image aNewImage( i_rEvent.ItemImageURL.IsPresent ? TkResMgr::getImageFromURL( i_rEvent.ItemImageURL.Value ) : pListBox->GetEntryImage( i_rEvent.ItemPosition  ) );
 
     pListBox->RemoveEntry( i_rEvent.ItemPosition );
@@ -4536,7 +4536,7 @@ void SAL_CALL VCLXComboBox::listItemModified( const ItemListEvent& i_rEvent )
 
     // VCL's ComboBox does not support changing an entry's text or image, so remove and re-insert
 
-    const OUString sNewText = i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : OUString( pComboBox->GetEntry( i_rEvent.ItemPosition ) );
+    const OUString sNewText = i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : pComboBox->GetEntry( i_rEvent.ItemPosition );
     const Image aNewImage( i_rEvent.ItemImageURL.IsPresent ? lcl_getImageFromURL( i_rEvent.ItemImageURL.Value ) : pComboBox->GetEntryImage( i_rEvent.ItemPosition  ) );
 
     pComboBox->RemoveEntryAt( i_rEvent.ItemPosition );
@@ -5940,7 +5940,7 @@ css::uno::Any VCLXMetricField::getProperty( const OUString& PropertyName )
                 aProp <<= (sal_uInt16) (GetAs< MetricField >()->GetUnit());
                 break;
             case BASEPROPERTY_CUSTOMUNITTEXT:
-                aProp <<= OUString( GetAs< MetricField >()->GetCustomUnitText() );
+                aProp <<= GetAs< MetricField >()->GetCustomUnitText();
                 break;
             default:
             {
@@ -6292,7 +6292,7 @@ css::uno::Any VCLXCurrencyField::getProperty( const OUString& PropertyName )
             break;
             case BASEPROPERTY_CURRENCYSYMBOL:
             {
-                aProp <<= OUString( GetAs< LongCurrencyField >()->GetCurrencySymbol() );
+                aProp <<= GetAs< LongCurrencyField >()->GetCurrencySymbol();
             }
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
