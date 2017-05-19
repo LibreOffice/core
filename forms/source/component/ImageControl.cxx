@@ -825,7 +825,7 @@ bool OImageControlControl::implInsertGraphics()
                  xSet->setPropertyValue( PROPERTY_GRAPHIC, makeAny( aGraphic.GetXGraphic() ) );
             }
             else
-                xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( OUString( aDialog.GetPath() ) ) );
+                xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( aDialog.GetPath() ) );
 
             return true;
         }
