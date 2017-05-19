@@ -45,7 +45,6 @@
 #include <com/sun/star/form/XLoadListener.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/awt/XTabControllerModel.hpp>
-#include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
 #include <com/sun/star/sdbc/XCloseable.hpp>

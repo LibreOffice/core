@@ -62,7 +62,6 @@
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 
-#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/awt/DialogProvider.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>

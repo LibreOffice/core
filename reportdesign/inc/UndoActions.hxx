@@ -26,9 +26,6 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/script/ScriptEvent.hpp>
-#include <com/sun/star/script/XScriptListener.hpp>
-#include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/ContainerEvent.hpp>
 #include <com/sun/star/report/XReportComponent.hpp>

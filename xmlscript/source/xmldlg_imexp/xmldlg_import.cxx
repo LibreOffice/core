@@ -55,8 +55,6 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
-#include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
-#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 
 using namespace ::com::sun::star;

@@ -26,8 +26,6 @@
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
-#include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
-
 #include "MasterScriptProvider.hxx"
 #include "ActiveMSPList.hxx"
 

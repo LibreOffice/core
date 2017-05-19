@@ -26,7 +26,6 @@
 #include "iderdll2.hxx"
 
 #include <basic/basmgr.hxx>
-#include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/passwd.hxx>

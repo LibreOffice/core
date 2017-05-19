@@ -25,7 +25,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
-#include <com/sun/star/script/XInvocation.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
 #include <tools/color.hxx>

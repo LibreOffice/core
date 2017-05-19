@@ -40,7 +40,6 @@
 
 #include <basic/sbstar.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/script/XLibraryContainer.hpp>
 
 #include "viewfunc.hxx"
 

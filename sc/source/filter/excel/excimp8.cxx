@@ -95,7 +95,6 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/implbase.hxx>

@@ -35,11 +35,6 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
-#include <com/sun/star/script/XEventAttacher.hpp>
-#include <com/sun/star/script/XAllListener.hpp>
-#include <com/sun/star/script/XScriptEventsSupplier.hpp>
-#include <com/sun/star/script/XScriptEventsAttacher.hpp>
-#include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>

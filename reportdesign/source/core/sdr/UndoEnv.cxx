@@ -29,7 +29,6 @@
 #include "RptResId.hrc"
 #include "RptModel.hxx"
 
-#include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/theIntrospection.hpp>

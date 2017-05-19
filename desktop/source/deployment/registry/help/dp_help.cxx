@@ -44,7 +44,6 @@
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
-#include <com/sun/star/script/XInvocation.hpp>
 #include <boost/optional.hpp>
 
 using namespace ::dp_misc;
