@@ -598,7 +598,7 @@ extern "C" int unopkg_main()
         Any exc( ::cppu::getCaughtException() );
 
         dp_misc::writeConsoleError("\nERROR: " +
-            OUString(option_verbose ? e.Message + "\nException details: \n" +
+            (option_verbose ? e.Message + "\nException details: \n" +
             ::comphelper::anyToString(exc) : e.Message) + "\n");
     }
     if (!bNoOtherErrorMsg)

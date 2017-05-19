@@ -632,7 +632,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                             // create the printer
                             Sequence < PropertyValue > aPrinterArgs( 1 );
                             aPrinterArgs[0].Name = "Name";
-                            aPrinterArgs[0].Value <<= OUString( aDispatchRequest.aPrinterName );
+                            aPrinterArgs[0].Value <<= aDispatchRequest.aPrinterName;
                             xDoc->setPrinter( aPrinterArgs );
                         }
 
