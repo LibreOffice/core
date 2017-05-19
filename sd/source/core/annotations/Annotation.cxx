@@ -168,6 +168,20 @@ protected:
     AnnotationData maRedoData;
 };
 
+class UndoEditAnnotation : public SdrUndoAction
+{
+public:
+    explicit UndoEditAnnotation( Annotation& rAnnotation );
+
+    virtual void Undo() override;
+    virtual void Redo() override;
+
+protected:
+    rtl::Reference< Annotation > mxAnnotation;
+    OUString maUndoData;
+    OUString maRedoData;
+};
+
 void createAnnotation( Reference< XAnnotation >& xAnnotation, SdPage* pPage )
 {
     xAnnotation.set(
@@ -371,6 +385,19 @@ SdrUndoAction* CreateUndoInsertOrRemoveAnnotation( const Reference< XAnnotation 
     }
 }
 
+SdrUndoAction* CreateUndoEditAnnotation( const Reference< XAnnotation >& xAnnotation )
+{
+    Annotation* pAnnotation = dynamic_cast< Annotation* >( xAnnotation.get() );
+    if( pAnnotation )
+    {
+        return new UndoEditAnnotation( *pAnnotation );
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
 sal_uInt32 getAnnotationId(const Reference<XAnnotation>& xAnnotation)
 {
     Annotation* pAnnotation = dynamic_cast<Annotation*>(xAnnotation.get());
@@ -478,6 +505,51 @@ void UndoAnnotation::Redo()
 {
     maUndoData.get( mxAnnotation );
     maRedoData.set( mxAnnotation );
+}
+
+UndoEditAnnotation::UndoEditAnnotation( Annotation& rAnnotation )
+: SdrUndoAction( *rAnnotation.GetModel() )
+, mxAnnotation( &rAnnotation )
+{
+    if (mxAnnotation.is())
+    {
+        Reference<XText> xText(mxAnnotation->getTextRange());
+        maUndoData = xText->getString();
+    }
+}
+
+void UndoEditAnnotation::Undo()
+{
+    if (mxAnnotation.is())
+    {
+        Reference<XText> xText(mxAnnotation->getTextRange());
+        maRedoData = xText->getString();
+        xText->setString(maUndoData);
+
+        SdrModel* pModel = mxAnnotation->GetModel();
+        Reference< XAnnotation > xAnnotation( mxAnnotation.get() );
+        NotifyDocumentEvent(
+                static_cast< SdDrawDocument* >( pModel ),
+                "OnAnnotationEditedByUndoRedo",
+                Reference<XInterface>( xAnnotation, UNO_QUERY ) );
+    }
+}
+
+void UndoEditAnnotation::Redo()
+{
+    if (mxAnnotation.is())
+    {
+        Reference<XText> xText(mxAnnotation->getTextRange());
+        maUndoData = xText->getString();
+        xText->setString(maRedoData);
+
+        SdrModel* pModel = mxAnnotation->GetModel();
+        Reference< XAnnotation > xAnnotation( mxAnnotation.get() );
+        NotifyDocumentEvent(
+                static_cast< SdDrawDocument* >( pModel ),
+                "OnAnnotationEditedByUndoRedo",
+                Reference<XInterface>( xAnnotation, UNO_QUERY ) );
+    }
 }
 
 } // namespace sd
