@@ -245,7 +245,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_vTextFramesForChaining(),
         m_bParaHadField(false),
         m_bParaAutoBefore(false)
-
 {
     m_aBaseUrl = rMediaDesc.getUnpackedValueOrDefault(
         utl::MediaDescriptor::PROP_DOCUMENTBASEURL(), OUString());
@@ -1654,6 +1653,7 @@ void DomainMapper_Impl::PopPageHeaderFooter()
     //header and footer always have an empty paragraph at the end
     //this has to be removed
     RemoveLastParagraph( );
+
     if (!m_aTextAppendStack.empty())
     {
         if (!m_bDiscardHeaderFooter)
@@ -5445,6 +5445,7 @@ void DomainMapper_Impl::substream(Id rName,
         propSize[i] = m_aPropertyStacks[i].size();
     }
 #endif
+
     // Save "has footnote" state, which is specific to a section in the body
     // text, so state from substreams is not relevant.
     bool bHasFtn = m_bHasFtn;
@@ -5460,32 +5461,27 @@ void DomainMapper_Impl::substream(Id rName,
     getTableManager().startLevel();
 
     //import of page header/footer
+    //Ensure that only one header/footer per section is pushed
 
     switch( rName )
     {
     case NS_ooxml::LN_headerl:
-
-        PushPageHeader(SectionPropertyMap::PAGE_LEFT);
+            PushPageHeader(SectionPropertyMap::PAGE_LEFT);
         break;
     case NS_ooxml::LN_headerr:
-
-        PushPageHeader(SectionPropertyMap::PAGE_RIGHT);
+            PushPageHeader(SectionPropertyMap::PAGE_RIGHT);
         break;
     case NS_ooxml::LN_headerf:
-
-        PushPageHeader(SectionPropertyMap::PAGE_FIRST);
+            PushPageHeader(SectionPropertyMap::PAGE_FIRST);
         break;
     case NS_ooxml::LN_footerl:
-
-        PushPageFooter(SectionPropertyMap::PAGE_LEFT);
+            PushPageFooter(SectionPropertyMap::PAGE_LEFT);
         break;
     case NS_ooxml::LN_footerr:
-
-        PushPageFooter(SectionPropertyMap::PAGE_RIGHT);
+            PushPageFooter(SectionPropertyMap::PAGE_RIGHT);
         break;
     case NS_ooxml::LN_footerf:
-
-        PushPageFooter(SectionPropertyMap::PAGE_FIRST);
+            PushPageFooter(SectionPropertyMap::PAGE_FIRST);
         break;
     case NS_ooxml::LN_footnote:
     case NS_ooxml::LN_endnote:
@@ -5496,6 +5492,7 @@ void DomainMapper_Impl::substream(Id rName,
     break;
     }
     ref->resolve(m_rDMapper);
+
     switch( rName )
     {
     case NS_ooxml::LN_headerl:
@@ -5534,7 +5531,6 @@ void DomainMapper_Impl::substream(Id rName,
         assert(m_aPropertyStacks[i].size() == propSize[i]);
     }
 }
-
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
