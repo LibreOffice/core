@@ -677,7 +677,7 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
 
         if (aPropertyName == PROPERTYNAME_FMTSTR)
         {
-            aRet <<= OUString( pFormat->GetFormatstring() );
+            aRet <<= pFormat->GetFormatstring();
         }
         else if (aPropertyName == PROPERTYNAME_LOCALE)
         {
@@ -690,7 +690,7 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
         }
         else if (aPropertyName == PROPERTYNAME_COMMENT)
         {
-            aRet <<= OUString( pFormat->GetComment() );
+            aRet <<= pFormat->GetComment();
         }
         else if (aPropertyName == PROPERTYNAME_STDFORM)
         {
@@ -741,7 +741,7 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
             const NfCurrencyEntry* pCurr = SvNumberFormatter::GetCurrencyEntry( bBank,
                 aSymbol, aExt, pFormat->GetLanguage() );
             if ( pCurr )
-                aRet <<= OUString( pCurr->GetBankSymbol() );
+                aRet <<= pCurr->GetBankSymbol();
             else
                 aRet <<= OUString();
         }

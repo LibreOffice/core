@@ -1319,7 +1319,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                     {
                         eScannedType = css::util::NumberFormat::UNDEFINED;
                     }
-                    else if ( sStrArray[i] != OUString(pFormatter->GetDateSep()) )
+                    else if ( sStrArray[i] != pFormatter->GetDateSep() )
                     {
                         return nPos;
                     }
@@ -1358,7 +1358,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                     {
                         eScannedType = css::util::NumberFormat::UNDEFINED;
                     }
-                    else if ( OUString(pFormatter->GetDateSep()) != sStrArray[i] &&
+                    else if ( pFormatter->GetDateSep() != sStrArray[i] &&
                               !pLoc->getTimeSep().equals(sStrArray[i]) )
                     {
                         return nPos;

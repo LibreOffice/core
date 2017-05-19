@@ -166,7 +166,7 @@ void CntContentTypeItem::SetValue( const INetContentType eType )
 // virtual
 bool CntContentTypeItem::QueryValue( css::uno::Any& rVal, sal_uInt8) const
 {
-    rVal <<= OUString(GetValue());
+    rVal <<= GetValue();
     return true;
 }
 
