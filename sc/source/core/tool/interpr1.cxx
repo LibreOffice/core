@@ -6725,9 +6725,9 @@ void ScInterpreter::ScSubTotal()
         }
         mnSubTotalFlags = SubtotalFlags::NONE;
         // Get rid of the 1st (fished) parameter.
-        double nVal = GetDouble();
+        FormulaConstTokenRef xRef( PopToken());
         Pop();
-        PushDouble( nVal );
+        PushTokenRef( xRef);
     }
 }
 
@@ -6806,11 +6806,11 @@ void ScInterpreter::ScAggregate()
             }
             mnSubTotalFlags = SubtotalFlags::NONE;
         }
-        double nVal = GetDouble();
+        FormulaConstTokenRef xRef( PopToken());
         // Get rid of the 1st and 2nd (fished) parameters.
         Pop();
         Pop();
-        PushDouble( nVal );
+        PushTokenRef( xRef);
     }
 }
 
