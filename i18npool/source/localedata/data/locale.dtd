@@ -26,15 +26,23 @@
     ATTENTION! PLEASE! HEADS UP! IMPORTANT!
     ===========================================================================
 
-    Please validate your locale data contribution using a validating parser. A
-    validating parser, for example, may be found at
+    Please validate your locale data contribution.
+
+    A quick validation check can be done if you have xmllint installed and the
+    current locale.dtd file at hand, you can download the locale.dtd file from
+    https://cgit.freedesktop.org/libreoffice/core/plain/i18npool/source/localedata/data/locale.dtd
+
+    xmllint --dtdvalid locale.dtd --noout your_data.xml
+
+
+    Second, using a validating parser. A validating parser, for example, may be found at
     http://unicode.org/cldr/data/tools/java/org/unicode/cldr/util/XMLValidator.java
     Compile it into a class-jar and call it in the
     i18npool/source/localedata/data/ directory:
     java -cp <your_path>/XMLValidator.jar org.unicode.cldr.util.XMLValidator your_data.xml
 
 
-    A second possibility is:
+    A third possibility is:
 
     - temporarily (!) change the DOCTYPE of your file to read (all on one line)
       <!DOCTYPE Locale SYSTEM "http://cgit.freedesktop.org/libreoffice/core/plain/i18npool/source/localedata/data/locale.dtd">
