@@ -2818,6 +2818,56 @@ DECLARE_RTFIMPORT_TEST(testTdf107116, "tdf107116.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(120)), getProperty<sal_Int32>(getParagraph(2), "TopBorderDistance"));
 }
 
+DECLARE_RTFIMPORT_TEST(testImportHeaderFooter, "tdf108055.rtf")
+{
+    // The RTF import sometimes added Header and Footer multiple Times
+    // as well as added the Header to the document body.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+
+    // Check if any Header or Footer text snuck into the TextBody
+    uno::Reference<text::XTextRange> paragraph = getParagraph(1);
+    uno::Reference<text::XTextRange> text(paragraph, uno::UNO_QUERY);
+    OUString value = text->getString();
+    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), value);
+
+    paragraph = getParagraph(4);
+    uno::Reference<text::XTextRange> text2(paragraph, uno::UNO_QUERY);
+    value = text2->getString();
+    CPPUNIT_ASSERT_EQUAL(OUString("Second Page"), value);
+
+    paragraph = getParagraph(7);
+    uno::Reference<text::XTextRange> text3(paragraph, uno::UNO_QUERY);
+    value = text3->getString();
+    CPPUNIT_ASSERT_EQUAL(OUString("Third Page"), value);
+
+    //Check if Headers/Footers only contain what they should in this document
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("First Page"), "HeaderText");
+    OUString aActual = xHeaderText->getString();
+    CPPUNIT_ASSERT_EQUAL(OUString("First Page Header"), aActual);
+
+    uno::Reference<text::XText> xHeaderTextLeft = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Default Style"), "HeaderTextLeft");
+    aActual = xHeaderTextLeft->getString();
+    CPPUNIT_ASSERT_EQUAL(OUString("Header even"), aActual);
+
+    uno::Reference<text::XText> xHeaderTextRight = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Default Style"), "HeaderTextRight");
+    aActual = xHeaderTextRight->getString();
+    CPPUNIT_ASSERT_EQUAL(OUString("Header uneven"), aActual);
+
+    uno::Reference<text::XText> xFooterText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("First Page"), "FooterText");
+    aActual = xFooterText->getString();
+    CPPUNIT_ASSERT_EQUAL(OUString("First Page Footer"), aActual);
+
+    uno::Reference<text::XText> xFooterTextLeft = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Default Style"), "FooterTextLeft");
+    aActual = xFooterTextLeft->getString();
+    CPPUNIT_ASSERT_EQUAL(OUString("Footer even"), aActual);
+
+    uno::Reference<text::XText> xFooterTextRight = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Default Style"), "FooterTextRight");
+    aActual = xFooterTextRight->getString();
+    CPPUNIT_ASSERT_EQUAL(OUString("Footer uneven"), aActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
