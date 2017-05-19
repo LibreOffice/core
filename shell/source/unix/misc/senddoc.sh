@@ -17,9 +17,9 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-URI_ENCODE=`dirname "$0"`/uri-encode
+URI_ENCODE=$(dirname "$0")/uri-encode
 FOPTS=""
-sd_platform=`uname -s`
+sd_platform=$(uname -s)
 
 # linux file utility needs -L option to resolve symlinks
 if [ "$sd_platform" = "Linux" ] ; then
@@ -40,7 +40,7 @@ esac
 # as first parameter in the user's path.
 which() {
     if [ ! -z "$1" ]; then
-        for i in `echo $PATH | sed -e 's/^:/.:/g' -e 's/:$/:./g' -e 's/::/:.:/g' -e 's/:/ /g'`; do
+        for i in $(echo "$PATH" | sed -e 's/^:/.:/g' -e 's/:$/:./g' -e 's/::/:.:/g' -e 's/:/ /g'); do
             if [ -x "$i/$1" -a ! -d "$i/$1" ]; then
                 echo "$i/$1"
                 break;
@@ -53,8 +53,8 @@ which() {
 # and restrict the "-remote" semantics to those.
 run_mozilla() {
     # find mozilla script in PATH if necessary
-    if [ "`basename $1`" = "$1" ]; then
-        moz=`which $1`
+    if [ "$(basename "$1")" = "$1" ]; then
+        moz=$(which "$1")
     else
         moz=$1
     fi
@@ -78,7 +78,7 @@ if [ "$1" = "--mailclient" ]; then
 fi
 
 # autodetect mail client from executable name
-case `basename "$MAILER" | sed 's/-.*$//'` in
+case $(basename "$MAILER" | sed 's/-.*$//') in
 
     iceape | mozilla | netscape | seamonkey | icedove | thunderbird)
 
@@ -105,7 +105,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --attach)
-                    ATTACH=${ATTACH:-}${ATTACH:+,}`echo "file://$2" | "${URI_ENCODE}"`
+                    ATTACH=${ATTACH:-}${ATTACH:+,}$(echo "file://$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -165,7 +165,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --attach)
-                    ATTACH="${ATTACH:-}${ATTACH:+ }--attach "`echo "file://$2" | "${URI_ENCODE}"`
+                    ATTACH="${ATTACH:-}${ATTACH:+ }--attach "$(echo "file://$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -209,9 +209,9 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --body)
-                    TEMPLATE="`basename $0`.mutt.XXXXXXXX"
-                    BODY=`mktemp -q -t ${TEMPLATE}`
-                    echo "$2" > $BODY
+                    TEMPLATE="$(basename "$0").mutt.XXXXXXXX"
+                    BODY=$(mktemp -q -t "${TEMPLATE}")
+                    echo "$2" > "$BODY"
                     shift
                     ;;
                 --attach)
@@ -232,7 +232,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             ${BODY:+-i} ${BODY:+"${BODY}"} \
             ${ATTACH:+-a} ${ATTACH:+"${ATTACH}"} \
             ${TO:+"${TO}"} &
-        rm -f $BODY
+        rm -f "$BODY"
         ;;
 
     evolution | gnome | xdg) # NB. shortened from the dash on
@@ -248,23 +248,23 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --cc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="`echo "$2" | "${URI_ENCODE}"`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="$(echo "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --bcc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="`echo "$2" | "${URI_ENCODE}"`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="$(echo "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --subject)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=`echo "$2" | "${URI_ENCODE}"`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=$(echo "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --body)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}body="`echo "$2" | "${URI_ENCODE}"`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}body="$(echo "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --attach)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}attach="`echo "file://$2" | "${URI_ENCODE}"`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}attach="$(echo "file://$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -290,23 +290,23 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --cc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="`echo "$2" | "${URI_ENCODE}"`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="$(echo "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --bcc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="`echo "$2" | "${URI_ENCODE}"`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="$(echo "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --subject)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=`echo "$2" | "${URI_ENCODE}"`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=$(echo "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --body)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}body="`echo "$2" | "${URI_ENCODE}"`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}body="$(echo "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --attach)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}attachment="`echo "file://$2" | "${URI_ENCODE}"`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}attachment="$(echo "file://$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -337,7 +337,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             shift;
         done
 
-        ${MAILER} ${TO:+-T} ${TO:-} ${ATTACH:+-a} ${ATTACH:+"${ATTACH}"}
+        ${MAILER} "${TO:+-T}" "${TO:-}" "${ATTACH:+-a}" "${ATTACH:+"${ATTACH}"}"
         ;;
 
     sylpheed | claws)
@@ -358,7 +358,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             shift;
         done
 
-         ${MAILER} ${TO:+--compose} "${TO:-}" ${ATTACH:+--attach} "${ATTACH:-}"
+         ${MAILER} "${TO:+--compose}" "${TO:-}" "${ATTACH:+--attach}" "${ATTACH:-}"
         ;;
 
     Mail | Thunderbird | *.app )
@@ -367,7 +367,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             case $1 in
                 --attach)
                     #i95688# fix filenames containing accented chars, whatever alien
-                    ATTACH="${ATTACH:-}${ATTACH:+ }"`echo "file://$2" | "${URI_ENCODE}"`
+                    ATTACH="${ATTACH:-}${ATTACH:+ }"$(echo "file://$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 *)
@@ -375,7 +375,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
             esac
             shift;
         done
-        /usr/bin/open -a "${MAILER}" ${ATTACH}
+        /usr/bin/open -a "${MAILER}" "${ATTACH}"
         ;;
 
     *)
@@ -394,7 +394,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         elif [ -x /usr/bin/xdg-open ] ; then
             MAILER=/usr/bin/xdg-open
         else
-            echo "Unsupported mail client: `basename $MAILER | sed 's/-.*^//'`"
+            echo "Unsupported mail client: $(basename $MAILER | sed 's/-.*^//')"
             exit 2
         fi
 
@@ -409,26 +409,26 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --cc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="`echo "$2" | "${URI_ENCODE}"`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="$(echo "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --bcc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="`echo "$2" | "${URI_ENCODE}"`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="$(echo "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --subject)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=`echo "$2" | "${URI_ENCODE}"`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=$(echo "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --body)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}body="`echo "$2" | "${URI_ENCODE}"`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}body="$(echo "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --attach)
                     if [ "$MAILER" = "/usr/bin/xdg-email" ]; then
-                        MAILTO="${MAILTO:-}${MAILTO:+&}attach="`echo "file://$2" | "${URI_ENCODE}"`
+                        MAILTO="${MAILTO:-}${MAILTO:+&}attach="$(echo "file://$2" | "${URI_ENCODE}")
                     else
-                        MAILTO="${MAILTO:-}${MAILTO:+&}attachment="`echo "file://$2" | "${URI_ENCODE}"`
+                        MAILTO="${MAILTO:-}${MAILTO:+&}attachment="$(echo "file://$2" | "${URI_ENCODE}")
                     fi
                     shift
                     ;;
