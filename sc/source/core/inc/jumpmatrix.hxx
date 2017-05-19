@@ -26,6 +26,7 @@
 #include <vector>
 #include "types.hxx"
 #include "address.hxx"
+#include "token.hxx"
 
 typedef ::std::vector< const formula::FormulaToken*> ScTokenVec;
 
@@ -58,6 +59,7 @@ class ScJumpMatrix
 {
     std::vector<ScJumpMatrixEntry> mvJump;      // the jumps
     ScMatrixRef         pMat;       // the results
+    ScRefList           mvRefList;  // array of references result, if any
     ScTokenVec*         pParams;    // parameter stack
     SCSIZE              nCols;
     SCSIZE              nRows;
@@ -108,6 +110,7 @@ public:
     bool Next( SCSIZE& rCol, SCSIZE& rRow );
     void GetResMatDimensions( SCSIZE& rCols, SCSIZE& rRows );
     void SetNewResMat( SCSIZE nNewCols, SCSIZE nNewRows );
+    ScRefList& GetRefList();
 
     void PutResultDouble( double fVal, SCSIZE nC, SCSIZE nR );
     void PutResultString( const svl::SharedString& rStr, SCSIZE nC, SCSIZE nR );

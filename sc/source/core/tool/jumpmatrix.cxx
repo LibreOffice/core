@@ -176,6 +176,11 @@ bool ScJumpMatrix::HasResultMatrix() const
     return pMat.get() != nullptr;
 }
 
+ScRefList& ScJumpMatrix::GetRefList()
+{
+    return mvRefList;
+}
+
 void ScJumpMatrix::FlushBufferOtherThan( ScJumpMatrix::BufferType eType, SCSIZE nC, SCSIZE nR )
 {
     if (!mvBufferDoubles.empty() &&
