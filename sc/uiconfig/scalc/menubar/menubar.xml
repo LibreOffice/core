@@ -147,7 +147,6 @@
             <menu:menuitem menu:id=".uno:ViewRowColumnHeaders"/>
             <menu:menuitem menu:id=".uno:ViewValueHighlighting"/>
             <menu:menuitem menu:id=".uno:ToggleFormula"/>
-            <menu:menuitem menu:id=".uno:ShowAnnotations"/>
             <menu:menu menu:id=".uno:GridMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:GridVisible"/>
@@ -156,6 +155,7 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ShowAnnotations"/>
             <menu:menuitem menu:id=".uno:ToggleSheetGrid"/>
             <menu:menu menu:id=".uno:FreezeCellsMenu">
                 <menu:menupopup>
@@ -416,6 +416,7 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ConditionalFormatMenu"/>
             <menu:menuitem menu:id=".uno:AutoFormat"/>
+            <menu:menuitem menu:id=".uno:ChooseDesign"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:FormatImageMenu">
                 <menu:menupopup>
