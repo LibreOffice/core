@@ -195,7 +195,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SotSt
             ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *pStream );
             aSeq[0].Value <<= xOut;
             aSeq[1].Name = "FilterName";
-            aSeq[1].Value <<= OUString( pExpFilter->GetName() );
+            aSeq[1].Value <<= pExpFilter->GetName();
             uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
         try
         {

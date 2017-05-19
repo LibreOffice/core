@@ -2047,7 +2047,7 @@ void SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage >& r
     aDescriptor[0].Name = "FilterName";
     aDescriptor[0].Value <<= OUString( "SVM" );
     aDescriptor[1].Name = "URL";
-    aDescriptor[1].Value <<= OUString( aFile.GetURL() );
+    aDescriptor[1].Value <<= aFile.GetURL();
     aDescriptor[2].Name = "ExportOnlyBackground";
     aDescriptor[2].Value <<= true;
 

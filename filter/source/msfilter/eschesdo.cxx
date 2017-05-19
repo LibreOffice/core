@@ -1139,7 +1139,7 @@ void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
     if( mXPropSet.is() )
     {
         // detect name first to make below test (is group) work
-        mType = OUString( mXShape->getShapeType() );
+        mType = mXShape->getShapeType();
         (void)mType.startsWith( "com.sun.star.", &mType );  // strip "com.sun.star."
         (void)mType.endsWith( "Shape", &mType );  // strip "Shape"
 
