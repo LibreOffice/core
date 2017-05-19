@@ -1114,7 +1114,7 @@ void WW8AttributeOutput::CharAutoKern( const SvxAutoKernItem& rAutoKern )
 {
     m_rWW8Export.InsUInt16( NS_sprm::sprmCHpsKern );
 
-    m_rWW8Export.InsUInt16( rAutoKern.GetValue() ? 1 : 0 );
+    m_rWW8Export.InsUInt16( rAutoKern.GetValue() ? 2 : 0 );
 }
 
 void WW8AttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
