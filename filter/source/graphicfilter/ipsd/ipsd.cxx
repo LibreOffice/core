@@ -55,7 +55,7 @@ class PSDReader {
 
 private:
 
-    SvStream& m_rPSD;           // Die einzulesende PSD-Datei
+    SvStream& m_rPSD;           // the PSD file to be read in
     PSDFileHeader*      mpFileHeader;
 
     sal_uInt32          mnXResFixed;

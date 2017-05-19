@@ -443,7 +443,7 @@ public class CellBinding extends complexlib.ComplexTestCase
     private void setCellEmpty( short col, short row ) throws com.sun.star.uno.Exception
     {
         // as long as #i29130# is not fixed, we do not set the cell to "empty", but to
-        // an invalid formular, which serves well for our purpose
+        // an invalid form, which serves well for our purpose
         XCellRangeFormula cell = UnoRuntime.queryInterface( XCellRangeFormula.class,
             m_document.getSheet( 0 ).getCellByPosition( col, row )
         );

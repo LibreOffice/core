@@ -5190,7 +5190,7 @@ void EscherEx::CloseContainer()
 void EscherEx::BeginAtom()
 {
     mnCountOfs = mpOutStrm->Tell();
-    mpOutStrm->WriteUInt32( 0 ).WriteUInt32( 0 );       // record header wird spaeter geschrieben
+    mpOutStrm->WriteUInt32( 0 ).WriteUInt32( 0 );       // record header will be written later
 }
 
 void EscherEx::EndAtom( sal_uInt16 nRecType, int nRecVersion, int nRecInstance )

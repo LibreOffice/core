@@ -35,7 +35,6 @@ class SdrPage;
 class ImplEESdrObject
 {
     css::uno::Reference< css::drawing::XShape >           mXShape;
-//  XTextRef            mXText; // TextRef des globalen Text
     css::uno::Any       mAny;
     tools::Rectangle           maRect;
     OUString            mType;
