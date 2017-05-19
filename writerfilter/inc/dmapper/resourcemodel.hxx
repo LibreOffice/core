@@ -284,7 +284,6 @@ public:
     virtual void substream(Id name,
                            writerfilter::Reference<Stream>::Pointer_t ref) = 0;
 
-
     /**
        Debugging: Receives information about current point in stream.
 
