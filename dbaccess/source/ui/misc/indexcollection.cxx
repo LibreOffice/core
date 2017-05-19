@@ -160,7 +160,7 @@ namespace dbaui
                 if (xColDescriptor.is())
                 {
                     xColDescriptor->setPropertyValue("IsAscending", css::uno::makeAny(aFieldLoop->bSortAscending));
-                    xColDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(OUString(aFieldLoop->sFieldName)));
+                    xColDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(aFieldLoop->sFieldName));
                     xAppendCols->appendByDescriptor(xColDescriptor);
                 }
             }

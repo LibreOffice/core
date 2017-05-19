@@ -2627,8 +2627,8 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef& _pEntry)
                 OSL_ENSURE(!_pEntry->isNumeric(),"Not allowed to combine group by and numeric values!");
                 m_pFunctionCell->SelectEntry(m_pFunctionCell->GetEntry(m_pFunctionCell->GetEntryCount() - 1));
             }
-            else if ( m_pFunctionCell->GetEntryPos(OUString(_pEntry->GetFunction())) != COMBOBOX_ENTRY_NOTFOUND )
-                m_pFunctionCell->SelectEntry(OUString(_pEntry->GetFunction()));
+            else if ( m_pFunctionCell->GetEntryPos(_pEntry->GetFunction()) != COMBOBOX_ENTRY_NOTFOUND )
+                m_pFunctionCell->SelectEntry(_pEntry->GetFunction());
             else
                 m_pFunctionCell->SelectEntryPos(0);
 
@@ -2644,7 +2644,7 @@ void OSelectionBrowseBox::setFunctionCell(OTableFieldDescRef& _pEntry)
             if ( !bCountRemoved && m_pFunctionCell->GetEntryCount() < 2)
                 m_pFunctionCell->InsertEntry(m_aFunctionStrings.getToken(2, ';')); // 2 -> COUNT
 
-            if(m_pFunctionCell->GetEntryPos(OUString(_pEntry->GetFunction())) != COMBOBOX_ENTRY_NOTFOUND)
+            if(m_pFunctionCell->GetEntryPos(_pEntry->GetFunction()) != COMBOBOX_ENTRY_NOTFOUND)
                 m_pFunctionCell->SelectEntry(_pEntry->GetFunction());
             else
                 m_pFunctionCell->SelectEntryPos(0);

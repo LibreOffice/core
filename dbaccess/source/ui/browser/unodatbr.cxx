@@ -1114,7 +1114,7 @@ OUString SbaTableQueryBrowser::getDataSourceAccessor( SvTreeListEntry* _pDataSou
     DBTreeListUserData* pData = static_cast< DBTreeListUserData* >( _pDataSourceEntry->GetUserData() );
     OSL_ENSURE( pData, "SbaTableQueryBrowser::getDataSourceAccessor: invalid entry data!" );
     OSL_ENSURE( pData->eType == etDatasource, "SbaTableQueryBrowser::getDataSourceAccessor: entry does not denote a data source!" );
-    return !pData->sAccessor.isEmpty() ? OUString(pData->sAccessor) : GetEntryText( _pDataSourceEntry );
+    return !pData->sAccessor.isEmpty() ? pData->sAccessor : GetEntryText( _pDataSourceEntry );
 }
 
 SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const OUString& _rDataSource, const OUString& _rCommand, sal_Int32 _nCommandType,

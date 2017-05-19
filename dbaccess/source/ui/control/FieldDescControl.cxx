@@ -1302,7 +1302,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
             else
                 pBoolDefault->SelectEntry(sDef);
 
-            pFieldDescr->SetControlDefault(makeAny(OUString(BoolStringPersistent(pBoolDefault->GetSelectEntry()))));
+            pFieldDescr->SetControlDefault(makeAny(BoolStringPersistent(pBoolDefault->GetSelectEntry())));
         }
         else if(pBoolDefault->GetEntryCount() < 3)
         {
@@ -1346,7 +1346,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if(m_pType)
     {
-        sal_Int32 nPos = pFieldType.get() ? m_pType->GetEntryPos(OUString(pFieldDescr->getTypeInfo()->aUIName)) : LISTBOX_ENTRY_NOTFOUND;
+        sal_Int32 nPos = pFieldType.get() ? m_pType->GetEntryPos(pFieldDescr->getTypeInfo()->aUIName) : LISTBOX_ENTRY_NOTFOUND;
         if(nPos == LISTBOX_ENTRY_NOTFOUND)
         {
             const OTypeInfoMap* pMap = getTypeInfo();

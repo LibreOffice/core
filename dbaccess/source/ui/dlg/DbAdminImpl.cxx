@@ -225,7 +225,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
     if (pUser && pUser->GetValue().getLength())
         aReturn.push_back(
             PropertyValue(  "user", 0,
-                            makeAny(OUString(pUser->GetValue())), PropertyState_DIRECT_VALUE));
+                            makeAny(pUser->GetValue()), PropertyState_DIRECT_VALUE));
 
     // check if the connection type requires a password
     if (hasAuthentication(*m_pItemSetHelper->getOutputSet()))
@@ -269,7 +269,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
             aRequest.HasRealm   = aRequest.HasAccount = false;
             // aRequest.Realm
             aRequest.HasUserName = pUser != nullptr;
-            aRequest.UserName    = pUser ? OUString(pUser->GetValue()) : OUString();
+            aRequest.UserName    = pUser ? pUser->GetValue() : OUString();
             aRequest.HasPassword = true;
             //aRequest.Password
             aRequest.HasAccount  = false;
@@ -675,7 +675,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _r
             {
                 if ( sUrlProp == aDirect->second )
                 {
-                    Any aValue(makeAny(OUString(getConnectionURL())));
+                    Any aValue(makeAny(getConnectionURL()));
                     //  aValue <<= OUString();
                     lcl_putProperty(_rxDest, aDirect->second,aValue);
                 }

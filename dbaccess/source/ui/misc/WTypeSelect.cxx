@@ -98,7 +98,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 
     OFieldDescription* pCurFieldDescr = getCurrentFieldDescData();
 
-    const sal_Int32 nPos = pListBox->GetEntryPos( OUString( pCurFieldDescr->GetName() ) );
+    const sal_Int32 nPos = pListBox->GetEntryPos( pCurFieldDescr->GetName() );
     pCurFieldDescr = static_cast< OFieldDescription* >( pListBox->GetEntryData( nPos ) );
     OSL_ENSURE( pCurFieldDescr, "OWizTypeSelectControl::CellModified: Columnname/type not found in the listbox!" );
     if ( !pCurFieldDescr )
@@ -133,7 +133,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
 
                 }
                 else
-                    bDoubleName =  ((pListBox->GetEntryPos(OUString(sNewName)) != LISTBOX_ENTRY_NOTFOUND)
+                    bDoubleName =  ((pListBox->GetEntryPos(sNewName) != LISTBOX_ENTRY_NOTFOUND)
                                     || ( pWiz->shouldCreatePrimaryKey()
                                         &&  pWiz->getPrimaryKeyName() == sNewName) );
 

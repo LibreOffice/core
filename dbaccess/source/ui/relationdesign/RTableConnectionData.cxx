@@ -272,7 +272,7 @@ bool ORelationTableConnectionData::Update()
 
         xKey->setPropertyValue(PROPERTY_NAME,makeAny(sKeyName));
         xKey->setPropertyValue(PROPERTY_TYPE,makeAny(KeyType::FOREIGN));
-        xKey->setPropertyValue(PROPERTY_REFERENCEDTABLE,makeAny(OUString(getReferencedTable()->GetTableName())));
+        xKey->setPropertyValue(PROPERTY_REFERENCEDTABLE,makeAny(getReferencedTable()->GetTableName()));
         xKey->setPropertyValue(PROPERTY_UPDATERULE, makeAny(GetUpdateRules()));
         xKey->setPropertyValue(PROPERTY_DELETERULE, makeAny(GetDeleteRules()));
     }
