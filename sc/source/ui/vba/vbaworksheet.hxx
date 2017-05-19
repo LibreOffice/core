@@ -22,7 +22,6 @@
 #include <comphelper/unwrapargs.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/script/XInvocation.hpp>
 #include <ooo/vba/excel/XWorksheet.hpp>
 #include <ooo/vba/excel/XComments.hpp>
 #include <ooo/vba/excel/XRange.hpp>

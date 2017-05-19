@@ -25,7 +25,6 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/script/XTypeConverter.hpp>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <connectivity/sqliterator.hxx>

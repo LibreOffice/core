@@ -39,7 +39,6 @@
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/xml/input/XRoot.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <osl/diagnose.h>

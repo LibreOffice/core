@@ -25,7 +25,6 @@
 #include <com/sun/star/i18n/Transliteration.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/script/XInvocation.hpp>
 
 #include <helpcompiler/HelpSearch.hxx>
 

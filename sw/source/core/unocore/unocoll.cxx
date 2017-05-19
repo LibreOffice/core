@@ -76,7 +76,6 @@
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
-#include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <vbahelper/vbaaccesshelper.hxx>
 #include <basic/basmgr.hxx>

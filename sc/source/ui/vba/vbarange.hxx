@@ -34,8 +34,6 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/script/XDefaultMethod.hpp>
-#include <com/sun/star/script/XDefaultProperty.hpp>
 #include <com/sun/star/sheet/FillDateMode.hpp>
 #include <com/sun/star/sheet/FillMode.hpp>
 #include <com/sun/star/sheet/FillDirection.hpp>

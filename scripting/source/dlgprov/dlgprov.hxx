@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
-#include <com/sun/star/script/XScriptEventsAttacher.hpp>
+#include <com/sun/star/script/XScriptListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>

@@ -39,7 +39,6 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 
-#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>

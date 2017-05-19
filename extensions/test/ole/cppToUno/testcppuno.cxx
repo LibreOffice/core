@@ -28,7 +28,6 @@
 #include <com/sun/star/bridge/ModelDependent.hpp>
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/script/XInvocation.hpp>
 #include <oletest/XCallback.hpp>
 #include <rtl/process.h>
 #include <cppuhelper/servicefactory.hxx>
@@ -37,7 +36,6 @@
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::script;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::ModelDependent;
 using namespace cppu;

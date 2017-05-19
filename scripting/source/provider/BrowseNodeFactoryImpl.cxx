@@ -32,6 +32,7 @@
 
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
+#include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 
 #include <tools/diagnose_ex.h>
