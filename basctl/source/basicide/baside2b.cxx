@@ -2929,7 +2929,7 @@ std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassMethods() const
         {
             for(sal_Int32 l = 0; l < aMethods.getLength(); ++l)
             {
-                aRetVect.push_back( OUString(aMethods[l]->getName()) );
+                aRetVect.push_back( aMethods[l]->getName() );
             }
         }
     }
@@ -2946,7 +2946,7 @@ std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassFields() const
         {
             for(sal_Int32 l = 0; l < aFields.getLength(); ++l)
             {
-                aRetVect.push_back( OUString(aFields[l]->getName()) );
+                aRetVect.push_back( aFields[l]->getName() );
             }
         }
     }
