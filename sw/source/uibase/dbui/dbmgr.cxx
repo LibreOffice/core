@@ -1947,7 +1947,7 @@ uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Ref
 
         uno::Reference<beans::XPropertySet> xRowProperties(xRowSet, uno::UNO_QUERY);
         xRowProperties->setPropertyValue("DataSourceName", uno::makeAny(sDataSource));
-        xRowProperties->setPropertyValue("Command", uno::makeAny(OUString(rTableOrQuery)));
+        xRowProperties->setPropertyValue("Command", uno::makeAny(rTableOrQuery));
         xRowProperties->setPropertyValue("CommandType", uno::makeAny(nCommandType));
         xRowProperties->setPropertyValue("FetchSize", uno::makeAny((sal_Int32)10));
         xRowProperties->setPropertyValue("ActiveConnection", uno::makeAny(xConnection));

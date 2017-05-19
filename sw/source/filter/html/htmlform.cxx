@@ -596,10 +596,10 @@ static void lcl_html_setFixedFontProperty(
                                     DefaultFontType::FIXED, LANGUAGE_ENGLISH_US,
                                     GetDefaultFontFlags::OnlyOne )  );
     Any aTmp;
-    aTmp <<= OUString( aFixedFont.GetFamilyName() );
+    aTmp <<= aFixedFont.GetFamilyName();
     rPropSet->setPropertyValue("FontName", aTmp );
 
-    aTmp <<= OUString( aFixedFont.GetStyleName() );
+    aTmp <<= aFixedFont.GetStyleName();
     rPropSet->setPropertyValue("FontStyleName",
                                 aTmp );
 
@@ -995,13 +995,13 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             sPropName = "FontName";
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
-                aTmp <<= OUString( pFontItem->GetFamilyName() );
+                aTmp <<= pFontItem->GetFamilyName();
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
             sPropName = "FontStyleName";
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
-                aTmp <<= OUString( pFontItem->GetStyleName() );
+                aTmp <<= pFontItem->GetStyleName();
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
             }
             sPropName = "FontFamily";
@@ -1841,7 +1841,7 @@ void SwHTMLParser::InsertInput()
         // Die URL erst nach dem Einfuegen setzen, weil sich der
         // Download der Grafik erst dann am XModel anmelden kann,
         // wenn das Control eingefuegt ist.
-        aTmp <<= OUString( URIHelper::SmartRel2Abs(INetURLObject(m_sBaseURL), sImgSrc, Link<OUString *, bool>(), false));
+        aTmp <<= URIHelper::SmartRel2Abs(INetURLObject(m_sBaseURL), sImgSrc, Link<OUString *, bool>(), false);
         xPropSet->setPropertyValue("ImageURL",
                                     aTmp );
     }

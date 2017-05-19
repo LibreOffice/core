@@ -572,7 +572,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
 
         uno::Sequence< beans::PropertyValue > aMediaDescriptor( 1 );
         aMediaDescriptor[0].Name = "URL";
-        aMediaDescriptor[0].Value <<= OUString( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
+        aMediaDescriptor[0].Value <<= aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         if ( pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() )
         {
             uno::Reference< task::XInteractionHandler > xInteraction =
@@ -721,7 +721,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
             {
                 if( bValidURL )
                     xSet->setPropertyValue("PluginURL",
-                        makeAny( OUString( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) ) );
+                        makeAny( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) );
                 if( bValidMimeType )
                     xSet->setPropertyValue("PluginMimeType",
                         makeAny( rMimeType ) );
@@ -853,8 +853,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
             if ( xSet.is() )
             {
                 xSet->setPropertyValue("FrameURL",
-                    makeAny( OUString( URIHelper::SmartRel2Abs(
-                            INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) ) ) );
+                    makeAny( URIHelper::SmartRel2Abs(
+                            INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) ) );
 
                 xSet->setPropertyValue("FrameName",
                     makeAny( rName ) );

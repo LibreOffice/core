@@ -420,8 +420,8 @@ void SwView::HyphenateDocument()
     // do not hyphenate if interactive hyphenation is active elsewhere
     if (SwEditShell::HasHyphIter())
     {
-        ScopedVclPtrInstance<MessBox>( nullptr, WB_OK, OUString( SwResId( STR_HYPH_TITLE ) ),
-                                       OUString( SwResId( STR_MULT_INTERACT_HYPH_WARN ) ) )->Execute();
+        ScopedVclPtrInstance<MessBox>( nullptr, WB_OK, SwResId( STR_HYPH_TITLE ),
+                                       SwResId( STR_MULT_INTERACT_HYPH_WARN ) )->Execute();
         return;
     }
 
@@ -495,7 +495,7 @@ bool SwView::IsValidSelectionForThesaurus() const
 
 OUString SwView::GetThesaurusLookUpText( bool bSelection ) const
 {
-    return bSelection ? OUString(m_pWrtShell->GetSelText()) : m_pWrtShell->GetCurWord();
+    return bSelection ? m_pWrtShell->GetSelText() : m_pWrtShell->GetCurWord();
 }
 
 void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString &rLookUpText, bool bSelection )

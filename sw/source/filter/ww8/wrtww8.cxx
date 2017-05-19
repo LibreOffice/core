@@ -3891,11 +3891,11 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     if ( type )
         pDataStrm->WriteUInt16( 0 );
 
-    SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffformat ), true );
-    SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffhelptext ), true );
-    SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffstattext ), true );
-    SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffentrymcr ), true );
-    SwWW8Writer::WriteString_xstz( *pDataStrm, OUString( ffexitmcr ), true );
+    SwWW8Writer::WriteString_xstz( *pDataStrm, ffformat, true );
+    SwWW8Writer::WriteString_xstz( *pDataStrm, ffhelptext, true );
+    SwWW8Writer::WriteString_xstz( *pDataStrm, ffstattext, true );
+    SwWW8Writer::WriteString_xstz( *pDataStrm, ffentrymcr, true );
+    SwWW8Writer::WriteString_xstz( *pDataStrm, ffexitmcr, true );
     if (type==2) {
         pDataStrm->WriteUInt16( 0xFFFF );
         const int items=aListItems.size();

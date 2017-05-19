@@ -226,7 +226,7 @@ static Sequence<PropertyValue> lcl_CreateProperties(
         pValues[nProp].Name = pNames[nProp];
         switch(nProp)
         {
-            case 0: pValues[nProp].Value <<= OUString(rRec.aType); break;
+            case 0: pValues[nProp].Value <<= rRec.aType; break;
             case 1:
             {
                 rMeasure.clear();

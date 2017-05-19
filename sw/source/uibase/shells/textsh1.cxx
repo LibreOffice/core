@@ -257,8 +257,8 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
 static short lcl_AskRedlineFlags(vcl::Window *pWin)
 {
     ScopedVclPtrInstance<MessBox> aQBox( pWin, 0,
-                    OUString( SwResId( STR_REDLINE_TITLE ) ),
-                    OUString( SwResId( STR_REDLINE_MSG ) ) );
+                    SwResId( STR_REDLINE_TITLE ),
+                    SwResId( STR_REDLINE_MSG ) );
     aQBox->SetImage( QueryBox::GetStandardImage() );
     const ButtonDialogFlags nBtnFlags = ButtonDialogFlags::Default |
                         ButtonDialogFlags::OK |
@@ -1422,7 +1422,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             const sal_Int16 nWordType = ::i18n::WordType::DICTIONARY_WORD;
             bool bWord = rSh.IsInWord( nWordType ) || rSh.IsStartWord( nWordType ) || rSh.IsEndWord( nWordType );
             if (bValid && bWord)
-               aText = rSh.HasSelection()? OUString(rSh.GetSelText()) : rSh.GetCurWord();
+               aText = rSh.HasSelection()? rSh.GetSelText() : rSh.GetCurWord();
 
             LanguageType nLang = rSh.GetCurLang();
             LanguageTag aLanguageTag( nLang);

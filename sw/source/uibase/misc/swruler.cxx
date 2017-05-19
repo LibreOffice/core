@@ -261,7 +261,7 @@ void SwCommentRuler::UpdateCommentHelpText()
         nTooltipResId = STR_HIDE_COMMENTS;
     else
         nTooltipResId = STR_SHOW_COMMENTS;
-    SetQuickHelpText( OUString( SwResId( nTooltipResId ) ) );
+    SetQuickHelpText( SwResId( nTooltipResId ) );
 }
 
 // TODO Make Ruler return its central rectangle instead of margins.

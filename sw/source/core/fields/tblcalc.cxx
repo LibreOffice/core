@@ -104,7 +104,7 @@ OUString SwTableField::GetCommand()
         }
     }
     return (EXTRNL_NAME == GetNameType())
-        ? OUString(SwTableFormula::GetFormula())
+        ? SwTableFormula::GetFormula()
         : OUString();
 }
 

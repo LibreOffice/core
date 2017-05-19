@@ -2304,7 +2304,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
                 OUString aNm;
                 if (xPropSetInfo->hasPropertyByName(aNm = "FontStyleName"))
                 {
-                    aTmp <<= OUString( pFontItem->GetStyleName());
+                    aTmp <<= pFontItem->GetStyleName();
                     rPropSet->setPropertyValue( aNm, aTmp );
                 }
                 if (xPropSetInfo->hasPropertyByName(aNm = "FontFamily"))
@@ -2323,7 +2323,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
                     rPropSet->setPropertyValue( aNm, aTmp );
                 }
 
-                aTmp <<= OUString( pFontItem->GetFamilyName());
+                aTmp <<= pFontItem->GetFamilyName();
                 aFont.SetFamilyName( pFontItem->GetFamilyName() );
                 aFont.SetStyleName( pFontItem->GetStyleName() );
                 aFont.SetFamily( pFontItem->GetFamily() );

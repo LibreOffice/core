@@ -257,7 +257,7 @@ OUString SwField::GetFieldName() const
     OUString sRet = SwFieldType::GetTypeStr( nTypeId );
     if (IsFixed())
     {
-        sRet += " " + OUString(SwViewShell::GetShellRes()->aFixedStr);
+        sRet += " " + SwViewShell::GetShellRes()->aFixedStr;
     }
     return sRet;
 }

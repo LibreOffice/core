@@ -330,7 +330,7 @@ bool Writer::CopyLocalFileToINet( OUString& rFileNm )
 
     OUString aSrc  = rFileNm;
     OUString aDest = aTargetUrl.GetPartBeforeLastName();
-    aDest += OUString(aFileUrl.GetName());
+    aDest += aFileUrl.GetName();
 
     SfxMedium aSrcFile( aSrc, StreamMode::READ );
     SfxMedium aDstFile( aDest, StreamMode::WRITE | StreamMode::SHARE_DENYNONE );

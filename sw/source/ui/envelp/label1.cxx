@@ -531,7 +531,7 @@ void SwLabPage::Reset(const SfxItemSet* rSet)
 
     for(std::vector<OUString>::const_iterator i = GetParentSwLabDlg()->Makes().begin(); i != GetParentSwLabDlg()->Makes().end(); ++i)
     {
-        if(m_pMakeBox->GetEntryPos(OUString(*i)) == LISTBOX_ENTRY_NOTFOUND)
+        if(m_pMakeBox->GetEntryPos(*i) == LISTBOX_ENTRY_NOTFOUND)
             m_pMakeBox->InsertEntry(*i);
     }
 

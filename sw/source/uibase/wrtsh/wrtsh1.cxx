@@ -209,7 +209,7 @@ void SwWrtShell::Insert( const OUString &rStr )
         SwRewriter aRewriter;
 
         aRewriter.AddRule(UndoArg1, GetCursorDescr());
-        aRewriter.AddRule(UndoArg2, OUString(SwResId(STR_YIELDS)));
+        aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
         {
             OUString aTmpStr;
             aTmpStr += SwResId(STR_START_QUOTE);
@@ -479,7 +479,7 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrame
                 {
                     try
                     {
-                        xSet->setPropertyValue("Formula", uno::makeAny( OUString( aMathData ) ) );
+                        xSet->setPropertyValue("Formula", uno::makeAny( aMathData ) );
                         bActivate = false;
                     }
                     catch (const uno::Exception&)

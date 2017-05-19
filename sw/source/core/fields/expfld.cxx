@@ -1072,7 +1072,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= (sal_Int16)nSeqNo;
         break;
     case FIELD_PROP_PAR1:
-        rAny <<= OUString ( SwStyleNameMapper::GetProgName(GetPar1(), SwGetPoolIdFromName::TxtColl ) );
+        rAny <<= SwStyleNameMapper::GetProgName(GetPar1(), SwGetPoolIdFromName::TxtColl );
         break;
     case FIELD_PROP_PAR2:
         {

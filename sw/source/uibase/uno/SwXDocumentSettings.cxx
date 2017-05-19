@@ -386,7 +386,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 if( !mpPrinter && !sPrinterName.isEmpty() && mpDocSh->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
                 {
                     SfxPrinter* pPrinter = mpDoc->getIDocumentDeviceAccess().getPrinter( true );
-                    if ( OUString ( pPrinter->GetName()) != sPrinterName )
+                    if ( pPrinter->GetName() != sPrinterName )
                     {
                         VclPtrInstance<SfxPrinter> pNewPrinter( pPrinter->GetOptions().Clone(), sPrinterName );
                         assert (! pNewPrinter->isDisposed() );
@@ -932,7 +932,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_PRINTER_NAME:
         {
             SfxPrinter *pPrinter = mpDoc->getIDocumentDeviceAccess().getPrinter( false );
-            rValue <<= pPrinter ? OUString ( pPrinter->GetName()) : OUString();
+            rValue <<= pPrinter ? pPrinter->GetName() : OUString();
         }
         break;
         case HANDLE_PRINTER_SETUP:

@@ -1963,7 +1963,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                     if (xInfo->supportsService("com.sun.star.form.component.CheckBox"))
                     {
 
-                        m_aRun->append(OUStringToOString(OUString(FieldString(ww::eFORMCHECKBOX)), m_rExport.m_eCurrentEncoding));
+                        m_aRun->append(OUStringToOString(FieldString(ww::eFORMCHECKBOX), m_rExport.m_eCurrentEncoding));
                         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD "{");
                         m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFTYPE "1"); // 1 = checkbox
                         // checkbox size in half points, this seems to be always 20, see WW8Export::DoCheckBox()
@@ -2019,7 +2019,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                         OUString aTmp;
                         const sal_Char* pStr;
 
-                        m_aRun->append(OUStringToOString(OUString(FieldString(ww::eFORMTEXT)), m_rExport.m_eCurrentEncoding));
+                        m_aRun->append(OUStringToOString(FieldString(ww::eFORMTEXT), m_rExport.m_eCurrentEncoding));
                         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_DATAFIELD " ");
                         for (int i = 0; i < 8; i++) aBuf.append((sal_Char)0x00);
                         xPropSet->getPropertyValue("Name") >>= aTmp;
@@ -2069,7 +2069,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Poi
                         uno::Sequence<sal_Int16> aIntSeq;
                         uno::Sequence<OUString> aStrSeq;
 
-                        m_aRun->append(OUStringToOString(OUString(FieldString(ww::eFORMDROPDOWN)), m_rExport.m_eCurrentEncoding));
+                        m_aRun->append(OUStringToOString(FieldString(ww::eFORMDROPDOWN), m_rExport.m_eCurrentEncoding));
                         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD "{");
                         m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFTYPE "2"); // 2 = list
                         m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFHASLISTBOX);
@@ -3488,10 +3488,10 @@ void RtfAttributeOutput::PostitField(const SwField* pField)
     }
 
     m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATNID " ");
-    m_aRunText->append(OUStringToOString(OUString(rPField.GetInitials()), m_rExport.m_eCurrentEncoding));
+    m_aRunText->append(OUStringToOString(rPField.GetInitials(), m_rExport.m_eCurrentEncoding));
     m_aRunText->append("}");
     m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATNAUTHOR " ");
-    m_aRunText->append(OUStringToOString(OUString(rPField.GetPar1()), m_rExport.m_eCurrentEncoding));
+    m_aRunText->append(OUStringToOString(rPField.GetPar1(), m_rExport.m_eCurrentEncoding));
     m_aRunText->append("}");
     m_aRunText->append(OOO_STRING_SVTOOLS_RTF_CHATN);
 

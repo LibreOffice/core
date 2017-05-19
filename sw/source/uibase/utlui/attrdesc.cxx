@@ -102,12 +102,12 @@ bool SwFormatCharFormat::GetPresentation
     if ( pCharFormat )
     {
         OUString aStr;
-        rText = OUString( SwResId( STR_CHARFMT ) );
+        rText = SwResId( STR_CHARFMT );
         pCharFormat->GetPresentation( ePres, eCoreUnit, ePresUnit, aStr );
         rText = rText + "(" + aStr + ")";
     }
     else
-        rText = OUString( SwResId( STR_NO_CHARFMT ) );
+        rText = SwResId( STR_NO_CHARFMT );
     return true;
 }
 
@@ -162,11 +162,11 @@ bool SwFormatDrop::GetPresentation
             rText = OUString::number( GetChars() ) + " ";
         }
         rText = rText +
-                OUString( SwResId( STR_DROP_OVER ) ) +
+                SwResId( STR_DROP_OVER ) +
                 " " +
                 OUString::number( GetLines() ) +
                 " " +
-                OUString( SwResId( STR_DROP_LINES ) );
+                SwResId( STR_DROP_LINES );
     }
     else
         rText = SwResId( STR_NO_DROP_LINES );
@@ -252,7 +252,7 @@ bool SwFormatFrameSize::GetPresentation
         }
         else
         {
-            rText = OUString( ::GetMetricText( GetHeight(), eCoreUnit, ePresUnit, pIntl ) ) +
+            rText = ::GetMetricText( GetHeight(), eCoreUnit, ePresUnit, pIntl ) +
                     " " + ::GetSvxString( ::GetMetricId( ePresUnit ) );
         }
     }

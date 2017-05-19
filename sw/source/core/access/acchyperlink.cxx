@@ -167,7 +167,7 @@ uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionObject(
     if( pTextAttr )
     {
         const SwFormatINetFormat& rINetFormat = pTextAttr->GetINetFormat();
-        retText = OUString( rINetFormat.GetValue() );
+        retText = rINetFormat.GetValue();
     }
     uno::Any aRet;
     aRet <<= retText;
@@ -194,7 +194,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
         if( pTextAttr )
         {
             const SwFormatINetFormat& rINetFormat = pTextAttr->GetINetFormat();
-            sText = OUString( rINetFormat.GetValue() );
+            sText = rINetFormat.GetValue();
             OUString sToken = "#";
             sal_Int32 nPos = sText.indexOf(sToken);
             if (nPos==0)//document link

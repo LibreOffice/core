@@ -67,7 +67,7 @@ namespace sw { namespace mark
                 // - the annotation field has an empty annotation name or
                 // - the annotation mark's name differs (on mark creation a name clash had been detected)
                 if ( pPostItField->GetName().isEmpty()
-                    || OUString( pPostItField->GetName() ) != GetName() )
+                    || pPostItField->GetName() != GetName() )
                 {
                     const_cast<SwPostItField*>(pPostItField)->SetName( GetName() );
                 }

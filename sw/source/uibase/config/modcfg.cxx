@@ -618,11 +618,11 @@ static void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nPro
     switch(nOffset)
     {
         case 0: pValues[nProp] <<= rOpt.UseCaption(); break;//Enable
-        case 1: pValues[nProp] <<= OUString(rOpt.GetCategory()); break;//Category
+        case 1: pValues[nProp] <<= rOpt.GetCategory(); break;//Category
         case 2: pValues[nProp] <<= (sal_Int32)rOpt.GetNumType(); break;//Numbering",
         case 3: pValues[nProp] <<= rOpt.GetNumSeparator(); break;//NumberingSeparator",
-        case 4: pValues[nProp] <<= OUString(rOpt.GetCaption());  break;//CaptionText",
-        case 5: pValues[nProp] <<= OUString(rOpt.GetSeparator());break;//Delimiter",
+        case 4: pValues[nProp] <<= rOpt.GetCaption();  break;//CaptionText",
+        case 5: pValues[nProp] <<= rOpt.GetSeparator();break;//Delimiter",
         case 6: pValues[nProp] <<= (sal_Int32)rOpt.GetLevel();   break;//Level",
         case 7: pValues[nProp] <<= (sal_Int32)rOpt.GetPos();     break;//Position",
         case 8: pValues[nProp] <<= (OUString&)rOpt.GetCharacterStyle(); break; //CharacterStyle

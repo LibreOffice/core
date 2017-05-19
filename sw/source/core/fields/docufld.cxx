@@ -1128,7 +1128,7 @@ OUString SwDocInfoField::GetFieldName() const
     }
     if (IsFixed())
     {
-        aStr += " " + OUString(SwViewShell::GetShellRes()->aFixedStr);
+        aStr += " " + SwViewShell::GetShellRes()->aFixedStr;
     }
     return aStr;
 }

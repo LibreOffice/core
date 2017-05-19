@@ -253,7 +253,7 @@ OUString SwGetRefField::GetExpandedTextOfReferencedTextNode() const
 {
     const SwTextNode* pReferencedTextNode( GetReferencedTextNode() );
     return pReferencedTextNode
-           ? OUString(pReferencedTextNode->GetExpandText( 0, -1, true, true, false, false ))
+           ? pReferencedTextNode->GetExpandText( 0, -1, true, true, false, false )
            : OUString();
 }
 

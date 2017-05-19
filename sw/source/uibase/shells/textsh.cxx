@@ -279,9 +279,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                         aMargin = pMarginItem->GetSize();
 
                     if ( pURLItem )
-                        xSet->setPropertyValue("FrameURL", uno::makeAny( OUString( pURLItem->GetValue() ) ) );
+                        xSet->setPropertyValue("FrameURL", uno::makeAny( pURLItem->GetValue() ) );
                     if ( pNameItem )
-                        xSet->setPropertyValue("FrameName", uno::makeAny( OUString( pNameItem->GetValue() ) ) );
+                        xSet->setPropertyValue("FrameName", uno::makeAny( pNameItem->GetValue() ) );
 
                     if ( eScroll == ScrollingMode::Auto )
                         xSet->setPropertyValue("FrameIsAutoScroll",

@@ -132,7 +132,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
                                 INetURLObject aAbs;
                                 if( pMedium )
                                     aAbs = pMedium->GetURLObject();
-                                aTmp <<=  OUString(URIHelper::SmartRel2Abs(aAbs, rHLinkItem.GetURL()));
+                                aTmp <<= URIHelper::SmartRel2Abs(aAbs, rHLinkItem.GetURL());
                                 xPropSet->setPropertyValue( sTargetURL, aTmp );
 
                                 if( !rHLinkItem.GetTargetFrame().isEmpty() )
