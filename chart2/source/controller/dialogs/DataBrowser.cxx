@@ -615,11 +615,11 @@ void DataBrowser::RenewTable()
             spHeader->SetColor( Color( nColor ));
         spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
-            OUString( DataSeriesHelper::getDataSeriesLabel(
+            DataSeriesHelper::getDataSeriesLabel(
                         aIt->m_xDataSeries,
                         (aIt->m_xChartType.is() ?
                          aIt->m_xChartType->getRoleOfSequenceForSeriesLabel() :
-                         OUString("values-y")))));
+                         OUString("values-y"))));
         // index is 1-based, as 0 is for the column that contains the row-numbers
         spHeader->SetRange( aIt->m_nStartColumn + 1, aIt->m_nEndColumn + 1 );
         spHeader->SetGetFocusHdl( aFocusLink );
@@ -638,7 +638,7 @@ OUString DataBrowser::GetColString( sal_Int32 nColumnId ) const
 {
     OSL_ASSERT( m_apDataBrowserModel.get());
     if( nColumnId > 0 )
-        return OUString( m_apDataBrowserModel->getRoleOfColumn( nColumnId - 1 ));
+        return m_apDataBrowserModel->getRoleOfColumn( nColumnId - 1 );
     return OUString();
 }
 
@@ -1377,7 +1377,7 @@ IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit*, pEdit, voi
                     Reference< container::XIndexReplace > xIndexReplace( xLabeledSeq->getLabel(), uno::UNO_QUERY );
                     if( xIndexReplace.is())
                         xIndexReplace->replaceByIndex(
-                            0, uno::Any( OUString( pEdit->GetText())));
+                            0, uno::Any( pEdit->GetText()));
                 }
             }
         }

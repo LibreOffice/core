@@ -58,8 +58,8 @@ OUString lcl_GetRoleLBEntry(
 {
     OUStringBuffer aEntry( rRole );
     aEntry.append( "\t" );
-    aEntry.append( OUString(
-        ::chart::DialogModel::ConvertRoleFromInternalToUI( rRole )) );
+    aEntry.append(
+        ::chart::DialogModel::ConvertRoleFromInternalToUI( rRole ) );
     aEntry.append( "\t" );
     aEntry.append( rRange );
 
@@ -595,7 +595,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl, Button*, void)
         if( nIndex != -1 )
         {
             aUIStr = aUIStr.replaceAt( nIndex, aReplacement.getLength(),
-                                       OUString( m_pLB_SERIES->GetEntryText( pEntry )));
+                                       m_pLB_SERIES->GetEntryText( pEntry ));
         }
 
         lcl_enableRangeChoosing( true, m_pParentDialog );
