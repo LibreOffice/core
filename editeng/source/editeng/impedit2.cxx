@@ -370,7 +370,7 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
     }
     else if ( rCEvt.GetCommand() == CommandEventId::EndExtTextInput )
     {
-        OSL_ENSURE( mpIMEInfos, "CommandEventId::EndExtTextInput => Kein Start ?" );
+        OSL_ENSURE( mpIMEInfos, "CommandEventId::EndExtTextInput => No start ?" );
         if( mpIMEInfos )
         {
             // #102812# convert quotes in IME text
@@ -1379,7 +1379,7 @@ EditPaM ImpEditEngine::CursorEndOfDoc()
     if ( !pLastPortion->IsVisible() )
     {
         pLastNode = GetPrevVisNode( pLastPortion->GetNode() );
-        OSL_ENSURE( pLastNode, "Kein sichtbarer Absatz?" );
+        OSL_ENSURE( pLastNode, "No visible paragraph?" );
         if ( !pLastNode )
             pLastNode = aEditDoc.GetObject( aEditDoc.Count()-1 );
     }

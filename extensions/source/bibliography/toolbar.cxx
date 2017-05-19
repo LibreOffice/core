@@ -487,7 +487,7 @@ IMPL_LINK_NOARG( BibToolBar, MenuHdl, ToolBox*, void)
     sal_uInt16  nId=GetCurItemId();
     if (nId == nTBC_BT_AUTOFILTER)
     {
-        EndSelection();     // vor SetDropMode (SetDropMode ruft SetItemImage)
+        EndSelection();     // before SetDropMode (SetDropMode calls SetItemImage)
 
         SetItemDown(nTBC_BT_AUTOFILTER, true);
         nId = pPopupMenu->Execute(this, GetItemRect(nTBC_BT_AUTOFILTER));

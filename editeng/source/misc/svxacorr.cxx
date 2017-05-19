@@ -720,7 +720,7 @@ bool SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
     OUString sURL( URIHelper::FindFirstURLInText( rTxt, nSttPos, nEndPos,
                                                 GetCharClass( eLang ) ));
     bool bRet = !sURL.isEmpty();
-    if( bRet )          // also Attribut setzen:
+    if( bRet )          // so, set attribute:
         rDoc.SetINetAttr( nSttPos, nEndPos, sURL );
     return bRet;
 }
