@@ -297,6 +297,17 @@ void SAL_CALL AnnotationManagerImpl::notifyEvent( const css::document::EventObje
 
         UpdateTags();
     }
+    else
+    {
+        Reference< XAnnotation > xAnnotation( aEvent.Source, uno::UNO_QUERY );
+        if ( xAnnotation.is() )
+        {
+            if ( aEvent.EventName == "OnAnnotationInsertedByUndoRedo" )
+            {
+                lcl_CommentNotification(CommentNotificationType::Add, &mrBase, xAnnotation);
+            }
+        }
+    }
 }
 
 void SAL_CALL AnnotationManagerImpl::disposing( const css::lang::EventObject& /*Source*/ )
