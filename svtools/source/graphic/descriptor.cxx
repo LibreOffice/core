@@ -307,6 +307,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
 
                             // added Svg mimetype support
                             case GfxLinkType::NativeSvg: pMimeType = MIMETYPE_SVG; break;
+                            case GfxLinkType::NativePdf: pMimeType = MIMETYPE_PDF; break;
 
                             default:
                                 pMimeType = nullptr;
