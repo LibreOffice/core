@@ -26,6 +26,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/lok.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -423,6 +424,13 @@ void UndoInsertOrRemoveAnnotation::Undo()
         else
         {
             pPage->addAnnotation( xAnnotation, mnIndex );
+            if( comphelper::LibreOfficeKit::isActive() )
+            {
+                NotifyDocumentEvent(
+                        static_cast< SdDrawDocument* >( pModel ),
+                        "OnAnnotationInsertedByUndoRedo",
+                        Reference<XInterface>( xAnnotation, UNO_QUERY ) );
+            }
         }
     }
 }
@@ -438,6 +446,13 @@ void UndoInsertOrRemoveAnnotation::Redo()
         if( mbInsert )
         {
             pPage->addAnnotation( xAnnotation, mnIndex );
+            if( comphelper::LibreOfficeKit::isActive() )
+            {
+                NotifyDocumentEvent(
+                        static_cast< SdDrawDocument* >( pModel ),
+                        "OnAnnotationInsertedByUndoRedo",
+                        Reference<XInterface>( xAnnotation, UNO_QUERY ) );
+            }
         }
         else
         {
