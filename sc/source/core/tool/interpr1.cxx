@@ -581,6 +581,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                 break;
                 case svSingleRef:
                 {
+                    FormulaConstTokenRef xRef = pStack[sp-1];
                     ScAddress aAdr;
                     PopSingleRef( aAdr );
                     if ( nGlobalError != FormulaError::NONE )
@@ -619,10 +620,21 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                                 pJumpMatrix->PutResultString(aStr, nC, nR);
                         }
                     }
+
+                    formula::ParamClass eReturnType = ScParameterClassification::GetParameterType( pCur, SAL_MAX_UINT16);
+                    if (eReturnType == ParamClass::Reference)
+                    {
+                        /* TODO: What about error handling and do we actually
+                         * need the result matrix above at all in this case? */
+                        ScComplexRefData aRef;
+                        aRef.Ref1 = aRef.Ref2 = *(xRef->GetSingleRef());
+                        pJumpMatrix->GetRefList().push_back( aRef);
+                    }
                 }
                 break;
                 case svDoubleRef:
                 {   // upper left plus offset within matrix
+                    FormulaConstTokenRef xRef = pStack[sp-1];
                     double fVal;
                     ScRange aRange;
                     PopDoubleRef( aRange );
@@ -689,6 +701,14 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                         SCSIZE nParmCols = aRange.aEnd.Col() - aRange.aStart.Col() + 1;
                         SCSIZE nParmRows = aRange.aEnd.Row() - aRange.aStart.Row() + 1;
                         lcl_AdjustJumpMatrix( pJumpMatrix, nParmCols, nParmRows );
+                    }
+
+                    formula::ParamClass eReturnType = ScParameterClassification::GetParameterType( pCur, SAL_MAX_UINT16);
+                    if (eReturnType == ParamClass::Reference)
+                    {
+                        /* TODO: What about error handling and do we actually
+                         * need the result matrix above at all in this case? */
+                        pJumpMatrix->GetRefList().push_back( *(xRef->GetDoubleRef()));
                     }
                 }
                 break;
@@ -780,17 +800,33 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
     }
     if ( !bCont )
     {   // we're done with it, throw away jump matrix, keep result
-        ScMatrix* pResMat = pJumpMatrix->GetResultMatrix();
-        pJumpMatrix = nullptr;
-        Pop();
-        PushMatrix( pResMat );
-        // Remove jump matrix from map and remember result matrix in case it
-        // could be reused in another path of the same condition.
-        if (pTokenMatrixMap)
+        formula::ParamClass eReturnType = ScParameterClassification::GetParameterType( pCur, SAL_MAX_UINT16);
+        if (eReturnType == ParamClass::Reference)
         {
-            pTokenMatrixMap->erase( pCur);
-            pTokenMatrixMap->insert( ScTokenMatrixMap::value_type( pCur,
-                        pStack[sp-1]));
+            FormulaTokenRef xRef = new ScRefListToken(true);
+            *(xRef->GetRefList()) = pJumpMatrix->GetRefList();
+            pJumpMatrix = nullptr;
+            Pop();
+            PushTokenRef( xRef);
+            if (pTokenMatrixMap)
+            {
+                pTokenMatrixMap->erase( pCur);
+                // There's no result matrix to remember in this case.
+            }
+        }
+        else
+        {
+            ScMatrix* pResMat = pJumpMatrix->GetResultMatrix();
+            pJumpMatrix = nullptr;
+            Pop();
+            PushMatrix( pResMat );
+            // Remove jump matrix from map and remember result matrix in case it
+            // could be reused in another path of the same condition.
+            if (pTokenMatrixMap)
+            {
+                pTokenMatrixMap->erase( pCur);
+                pTokenMatrixMap->insert( ScTokenMatrixMap::value_type( pCur, pStack[sp-1]));
+            }
         }
         return true;
     }
