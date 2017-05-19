@@ -244,7 +244,13 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsSplitPara(false),
         m_vTextFramesForChaining(),
         m_bParaHadField(false),
-        m_bParaAutoBefore(false)
+        m_bParaAutoBefore(false),
+        m_bHeaderLIsSet(false),
+        m_bHeaderRIsSet(false),
+        m_bHeaderFIsSet(false),
+        m_bFooterLIsSet(false),
+        m_bFooterRIsSet(false),
+        m_bFooterFIsSet(false)
 
 {
     m_aBaseUrl = rMediaDesc.getUnpackedValueOrDefault(
@@ -1654,7 +1660,9 @@ void DomainMapper_Impl::PopPageHeaderFooter()
     //header and footer always have an empty paragraph at the end
     //this has to be removed
     RemoveLastParagraph( );
-    if (!m_aTextAppendStack.empty())
+
+    //Clear both Stacks to prevent any header/footer to sneak into the Textbody
+    while (!m_aTextAppendStack.empty())
     {
         if (!m_bDiscardHeaderFooter)
         {
@@ -1664,7 +1672,7 @@ void DomainMapper_Impl::PopPageHeaderFooter()
     }
     m_bInHeaderFooterImport = false;
 
-    if (!m_aHeaderFooterStack.empty())
+    while (!m_aHeaderFooterStack.empty())
     {
         m_bTextInserted = m_aHeaderFooterStack.top().getTextInserted();
         m_aHeaderFooterStack.pop();
@@ -5445,6 +5453,7 @@ void DomainMapper_Impl::substream(Id rName,
         propSize[i] = m_aPropertyStacks[i].size();
     }
 #endif
+
     // Save "has footnote" state, which is specific to a section in the body
     // text, so state from substreams is not relevant.
     bool bHasFtn = m_bHasFtn;
@@ -5460,32 +5469,45 @@ void DomainMapper_Impl::substream(Id rName,
     getTableManager().startLevel();
 
     //import of page header/footer
+    //Ensure that only one header/footer per section is pushed
 
     switch( rName )
     {
     case NS_ooxml::LN_headerl:
-
-        PushPageHeader(SectionPropertyMap::PAGE_LEFT);
+        if (!m_bHeaderLIsSet) {
+            PushPageHeader(SectionPropertyMap::PAGE_LEFT);
+            m_bHeaderLIsSet = true;
+        }
         break;
     case NS_ooxml::LN_headerr:
-
-        PushPageHeader(SectionPropertyMap::PAGE_RIGHT);
+        if (!m_bHeaderRIsSet) {
+            PushPageHeader(SectionPropertyMap::PAGE_RIGHT);
+            m_bHeaderRIsSet = true;
+        }
         break;
     case NS_ooxml::LN_headerf:
-
-        PushPageHeader(SectionPropertyMap::PAGE_FIRST);
+        if (!m_bHeaderFIsSet) {
+            PushPageHeader(SectionPropertyMap::PAGE_FIRST);
+            m_bHeaderFIsSet = true;
+        }
         break;
     case NS_ooxml::LN_footerl:
-
-        PushPageFooter(SectionPropertyMap::PAGE_LEFT);
+        if (!m_bFooterLIsSet) {
+            PushPageFooter(SectionPropertyMap::PAGE_LEFT);
+            m_bFooterLIsSet = true;
+        }
         break;
     case NS_ooxml::LN_footerr:
-
-        PushPageFooter(SectionPropertyMap::PAGE_RIGHT);
+        if (!m_bFooterRIsSet) {
+            PushPageFooter(SectionPropertyMap::PAGE_RIGHT);
+            m_bFooterRIsSet = true;
+        }
         break;
     case NS_ooxml::LN_footerf:
-
-        PushPageFooter(SectionPropertyMap::PAGE_FIRST);
+        if (!m_bFooterFIsSet) {
+            PushPageFooter(SectionPropertyMap::PAGE_FIRST);
+            m_bFooterFIsSet = true;
+        }
         break;
     case NS_ooxml::LN_footnote:
     case NS_ooxml::LN_endnote:
@@ -5496,6 +5518,7 @@ void DomainMapper_Impl::substream(Id rName,
     break;
     }
     ref->resolve(m_rDMapper);
+
     switch( rName )
     {
     case NS_ooxml::LN_headerl:
