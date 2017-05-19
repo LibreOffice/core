@@ -32,7 +32,7 @@ using namespace utl;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 
-#define CFG_FILENAME            OUString( "Office.OptionsDialog" )
+#define CFG_FILENAME            "Office.OptionsDialog"
 #define ROOT_NODE               "OptionsDialogGroups"
 #define PAGES_NODE              "Pages"
 #define OPTIONS_NODE            "Options"
@@ -80,7 +80,7 @@ namespace
 }
 
 SvtOptionsDlgOptions_Impl::SvtOptionsDlgOptions_Impl()
-    : ConfigItem( OUString( CFG_FILENAME ) ),
+    : ConfigItem( CFG_FILENAME ),
 
     m_sPathDelimiter( "/" ),
     m_aOptionNodeList( OptionNodeList() )

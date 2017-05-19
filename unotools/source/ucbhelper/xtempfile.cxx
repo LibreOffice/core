@@ -126,7 +126,7 @@ OUString SAL_CALL OTempFileService::getUri()
         throw css::uno::RuntimeException();
     }
 
-    return OUString( mpTempFile->GetURL() );
+    return mpTempFile->GetURL();
 
 };
 OUString SAL_CALL OTempFileService::getResourceName()
@@ -138,7 +138,7 @@ OUString SAL_CALL OTempFileService::getResourceName()
         throw css::uno::RuntimeException();
 }
 
-    return OUString( mpTempFile->GetFileName() );
+    return mpTempFile->GetFileName();
 };
 
 // XInputStream
