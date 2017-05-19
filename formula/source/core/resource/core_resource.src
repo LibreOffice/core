@@ -1608,7 +1608,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES_ENGLISH_API
         < "HLOOKUP" ; SC_OPCODE_H_LOOKUP; >;
         < "MULTIRANGE" ; SC_OPCODE_MULTI_AREA; >; // legacy for range list (union)
         < "OFFSET" ; SC_OPCODE_OFFSET; >;
-        < "INDEX" ; SC_OPCODE_INDEX; >; // ?? erstes Zeichen = I ??
+        < "INDEX" ; SC_OPCODE_INDEX; >; // ?? first character = I ??
         < "AREAS" ; SC_OPCODE_AREAS; >;
         < "DOLLAR" ; SC_OPCODE_CURRENCY; >;
         < "REPLACE" ; SC_OPCODE_REPLACE; >;
@@ -2472,7 +2472,7 @@ StringArray RID_STRLIST_FUNCTION_NAMES
         < "HLOOKUP" ; SC_OPCODE_H_LOOKUP ; >;
         < "MULTIRANGE" ; SC_OPCODE_MULTI_AREA ; >; // legacy for range list (union)
         < "OFFSET" ; SC_OPCODE_OFFSET ; >;
-        < "INDEX" ; SC_OPCODE_INDEX ; >; // ?? erstes Zeichen = I ??
+        < "INDEX" ; SC_OPCODE_INDEX ; >; // ?? first character = I ??
         < "AREAS" ; SC_OPCODE_AREAS ; >;
         < "DOLLAR" ; SC_OPCODE_CURRENCY ; >;
         < "REPLACE" ; SC_OPCODE_REPLACE ; >;

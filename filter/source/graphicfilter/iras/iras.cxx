@@ -40,10 +40,10 @@ class RASReader {
 
 private:
 
-    SvStream&           m_rRAS;                 // Die einzulesende RAS-Datei
+    SvStream&           m_rRAS;                 // the RAS file to be read in
 
     bool                mbStatus;
-    sal_Int32           mnWidth, mnHeight;      // Bildausmass in Pixeln
+    sal_Int32           mnWidth, mnHeight;      // image dimensions in pixels
     sal_uInt16          mnDstBitsPerPix;
     sal_uInt16          mnDstColors;
     sal_Int32           mnDepth, mnImageDatSize, mnType;
@@ -59,7 +59,7 @@ public:
     bool                ReadRAS(Graphic & rGraphic);
 };
 
-//=================== Methoden von RASReader ==============================
+//=================== Methods of RASReader ==============================
 
 RASReader::RASReader(SvStream &rRAS)
     : m_rRAS(rRAS)
@@ -109,14 +109,14 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     BitmapPalette aPalette;
 
     bool bOk = true;
-    if ( mnDstBitsPerPix <= 8 )     // paletten bildchen
+    if ( mnDstBitsPerPix <= 8 )     // pallets pictures
     {
-        if ( mnColorMapType == RAS_COLOR_RAW_MAP )      // RAW Colormap wird geskipped
+        if ( mnColorMapType == RAS_COLOR_RAW_MAP )      // RAW color map is skipped
         {
             sal_uLong nCurPos = m_rRAS.Tell();
             bOk = checkSeek(m_rRAS, nCurPos + mnColorMapSize);
         }
-        else if ( mnColorMapType == RAS_COLOR_RGB_MAP ) // RGB koennen wir auslesen
+        else if ( mnColorMapType == RAS_COLOR_RGB_MAP ) // we can read out the RGB
         {
             mnDstColors = (sal_uInt16)( mnColorMapSize / 3 );
 
@@ -192,7 +192,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     }
 
 
-    // Bitmap-Daten einlesen
+    // read in the bitmap data
     mbStatus = ImplReadBody(pAcc.get());
 
     if ( mbStatus )

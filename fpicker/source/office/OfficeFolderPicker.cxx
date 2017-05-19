@@ -90,7 +90,7 @@ void SvtFolderPicker::prepareExecute()
         getDialog()->SetPath( m_aDisplayDirectory );
     else
     {
-        // Default-Standard-Dir setzen
+        // set the default standard dir
         INetURLObject aStdDirObj( SvtPathOptions().GetWorkPath() );
         getDialog()->SetPath( aStdDirObj.GetMainURL( INetURLObject::DecodeMechanism::NONE) );
     }

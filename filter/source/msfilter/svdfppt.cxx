@@ -1614,7 +1614,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const O
                         }
                         else
                         {
-                            OSL_FAIL("SdrPowerPointImport::Ctor(): Persist-Eintrag fehlerhaft! (SJ)");
+                            OSL_FAIL("SdrPowerPointImport::Ctor(): Persist entry is flawed! (SJ)");
                         }
                     }
                 }
@@ -4204,7 +4204,7 @@ PPTStyleSheet::PPTStyleSheet( const DffRecordHeader& rSlideHd, SvStream& rIn, Sd
             rIn.ReadUInt16(nLevelAnz);
             if (nLevelAnz > nMaxPPTLevels)
             {
-                OSL_FAIL( "PPTStyleSheet::Ppt-TextStylesheet hat mehr als 5 Ebenen! (SJ)" );
+                OSL_FAIL( "PPTStyleSheet::Ppt-TextStylesheet has more than 5 levels! (SJ)" );
                 nLevelAnz = nMaxPPTLevels;
             }
             sal_uInt16  nLev = 0;
@@ -7748,7 +7748,7 @@ void    SdrPowerPointImport::ApplyTextAnchorAttributes( PPTTextObj& rTextObj, Sf
         eTVA = SDRTEXTVERTADJUST_BLOCK;
         eTHA = SDRTEXTHORZADJUST_CENTER;
 
-        // Textverankerung lesen
+        // read text anchor
         MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
 
         switch( eTextAnchor )
@@ -7800,7 +7800,7 @@ void    SdrPowerPointImport::ApplyTextAnchorAttributes( PPTTextObj& rTextObj, Sf
         eTVA = SDRTEXTVERTADJUST_CENTER;
         eTHA = SDRTEXTHORZADJUST_BLOCK;
 
-        // Textverankerung lesen
+        // read text anchor
         MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
 
         switch( eTextAnchor )
