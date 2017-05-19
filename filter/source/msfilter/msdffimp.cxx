@@ -183,11 +183,11 @@ void Impl_OlePres::Write( SvStream & rStm )
         // Always to 1/100 mm, until Mtf-Solution found
         // Assumption (no scaling, no origin translation)
         DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleX() == Fraction( 1, 1 ),
-                    "X-Skalierung im Mtf" );
+                    "X scale in the Mtf" );
         DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleY() == Fraction( 1, 1 ),
-                    "Y-Skalierung im Mtf" );
+                    "Y scale in the Mtf" );
         DBG_ASSERT( pMtf->GetPrefMapMode().GetOrigin() == Point(),
-                    "Origin-Verschiebung im Mtf" );
+                    "Origin shift in the Mtf" );
         MapUnit nMU = pMtf->GetPrefMapMode().GetMapUnit();
         if( MapUnit::Map100thMM != nMU )
         {
@@ -5470,7 +5470,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
         if( pImpRec->nShapeId )
         {
-            // Import-Record-Liste ergaenzen
+            // amend the import record list
             if( pOrgObj )
             {
                 pImpRec->pObj = pOrgObj;

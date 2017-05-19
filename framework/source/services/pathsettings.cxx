@@ -732,7 +732,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
         aPath.sPathName = sPath;
         // replace all might existing variables with real values
         // Do it before these old paths will be compared against the
-        // new path configuration. Otherwise some striungs uses different variables ... but substitution
+        // new path configuration. Otherwise some strings uses different variables ... but substitution
         // will produce strings with same content (because some variables are redundant!)
         impl_subst(aPath, false);
     }
@@ -750,7 +750,7 @@ PathSettings::EChangeOp PathSettings::impl_updatePath(const OUString& sPath     
         std::vector<OUString> lOldVals = impl_readOldFormat(sPath);
         // replace all might existing variables with real values
         // Do it before these old paths will be compared against the
-        // new path configuration. Otherwise some striungs uses different variables ... but substitution
+        // new path configuration. Otherwise some strings uses different variables ... but substitution
         // will produce strings with same content (because some variables are redundant!)
         impl_subst(lOldVals, fa_getSubstitution(), false);
         impl_mergeOldUserPaths(aPath, lOldVals);

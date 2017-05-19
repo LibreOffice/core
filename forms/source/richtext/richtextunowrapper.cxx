@@ -43,7 +43,7 @@ namespace frm
     {
         const SvxItemPropertySet* getTextEnginePropertySet()
         {
-            // Propertymap fuer einen Outliner Text
+            // property map for an outliner text
             static const SfxItemPropertyMapEntry aTextEnginePropertyMap[] =
             {
                 SVX_UNOEDIT_CHAR_PROPERTIES,
