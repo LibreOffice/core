@@ -601,7 +601,7 @@ void XSecController::exportSignature(
     {
         pAttributeList->AddAttribute(
             "Id",
-            OUString(signatureInfo.ouSignatureId));
+            signatureInfo.ouSignatureId);
     }
 
     xDocumentHandler->startElement( "Signature", cssu::Reference< cssxs::XAttributeList > (pAttributeList));
