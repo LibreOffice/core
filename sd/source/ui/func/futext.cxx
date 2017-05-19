@@ -102,26 +102,26 @@ static const sal_uInt16 SidArray[] = {
     SID_ATTR_PARA_LINESPACE_10,       //   10034
     SID_ATTR_PARA_LINESPACE_15,       //   10035
     SID_ATTR_PARA_LINESPACE_20,       //   10036
-    SID_ATTR_PARA_ULSPACE,         //   10042
+    SID_ATTR_PARA_ULSPACE,            //   10042
     SID_ATTR_PARA_LRSPACE,            //   10043
-    SID_ATTR_TRANSFORM_POS_X, //  10088
-    SID_ATTR_TRANSFORM_POS_Y, //  10089
-    SID_ATTR_TRANSFORM_WIDTH, //  10090
-    SID_ATTR_TRANSFORM_HEIGHT,//  10091
-    SID_ATTR_TRANSFORM_ROT_X, //  10093
-    SID_ATTR_TRANSFORM_ROT_Y, //  10094
-    SID_ATTR_TRANSFORM_ANGLE, //  10095 //Added
+    SID_ATTR_TRANSFORM_POS_X,         //   10088
+    SID_ATTR_TRANSFORM_POS_Y,         //   10089
+    SID_ATTR_TRANSFORM_WIDTH,         //   10090
+    SID_ATTR_TRANSFORM_HEIGHT,        //   10091
+    SID_ATTR_TRANSFORM_ROT_X,         //   10093
+    SID_ATTR_TRANSFORM_ROT_Y,         //   10094
+    SID_ATTR_TRANSFORM_ANGLE,         //   10095 //Added
     SID_OUTLINE_UP,                   //   10150
     SID_OUTLINE_DOWN,                 //   10151
     SID_OUTLINE_LEFT,                 //   10152
     SID_OUTLINE_RIGHT,                //   10153
-    SID_ATTR_TRANSFORM_PROTECT_POS,//  10236
-    SID_ATTR_TRANSFORM_PROTECT_SIZE,// 10237 //Added
+    SID_ATTR_TRANSFORM_PROTECT_POS,   //   10236
+    SID_ATTR_TRANSFORM_PROTECT_SIZE,  //   10237 //Added
     SID_FORMTEXT_STYLE,               //   10257
     SID_SET_SUPER_SCRIPT,             //   10294
     SID_SET_SUB_SCRIPT,               //   10295
-    SID_ATTR_TRANSFORM_AUTOWIDTH,//    10310
-    SID_ATTR_TRANSFORM_AUTOHEIGHT,//   10311 //Added
+    SID_ATTR_TRANSFORM_AUTOWIDTH,     //   10310
+    SID_ATTR_TRANSFORM_AUTOHEIGHT,    //   10311 //Added
     SID_HYPERLINK_GETLINK,            //   10361
     SID_CHARMAP,                      //   10503
     SID_TEXTDIRECTION_LEFT_TO_RIGHT,  //   10907
@@ -153,7 +153,6 @@ rtl::Reference<FuPoor> FuText::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
     return xFunc;
 }
 
-/** Destruktor */
 void FuText::disposing()
 {
     if(mpView)
