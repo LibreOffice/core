@@ -679,7 +679,7 @@ namespace basegfx
             double fMiterMinimumAngle)
         {
             OSL_ENSURE(fHalfLineWidth > 0.0, "createAreaGeometryForJoin: LineWidth too small (!)");
-            OSL_ENSURE(B2DLineJoin::NONE != eJoin, "createAreaGeometryForJoin: B2DLineJoin::NONE not allowed (!)");
+            OSL_ENSURE(eJoin != B2DLineJoin::NONE, "createAreaGeometryForJoin: B2DLineJoin::NONE not allowed (!)");
 
             // LineJoin from tangent rPerpendPrev to tangent rPerpendEdge in rPoint
             B2DPolygon aEdgePolygon;
@@ -715,7 +715,7 @@ namespace basegfx
                     double fCutPos(0.0);
                     tools::findCut(aStartPoint, rTangentPrev, aEndPoint, rTangentEdge, CutFlagValue::ALL, &fCutPos);
 
-                    if(0.0 != fCutPos)
+                    if(fCutPos != 0.0)
                     {
                         const B2DPoint aCutPoint(aStartPoint + (rTangentPrev * fCutPos));
                         aEdgePolygon.append(aCutPoint);

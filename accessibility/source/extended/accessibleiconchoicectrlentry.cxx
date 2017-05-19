@@ -92,7 +92,7 @@ namespace accessibility
         if ( _rSource.Source == m_xParent )
         {
             dispose();
-            OSL_ENSURE( !m_xParent.is() && ( nullptr == m_pIconCtrl ), "" );
+            OSL_ENSURE( !m_xParent.is() && ( m_pIconCtrl == nullptr ), "" );
         }
     }
 

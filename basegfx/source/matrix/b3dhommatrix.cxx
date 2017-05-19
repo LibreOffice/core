@@ -390,7 +390,7 @@ namespace basegfx
             return false;
 
         // If determinant is zero, decomposition is not possible
-        if(0.0 == determinant())
+        if(determinant() == 0.0)
             return false;
 
         // isolate translation

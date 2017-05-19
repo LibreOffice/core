@@ -114,9 +114,9 @@ Reference< XAccessible > VCLXAccessibleTabPageWindow::getAccessibleParent(  )
             if ( xCont.is() )
             {
                 sal_uInt16 const nPagePos(m_pTabControl->GetPagePos(m_nPageId));
-                SAL_WARN_IF(TAB_PAGE_NOTFOUND == nPagePos, "accessibility",
+                SAL_WARN_IF(nPagePos == TAB_PAGE_NOTFOUND, "accessibility",
                         "getAccessibleParent(): no tab page");
-                if (TAB_PAGE_NOTFOUND != nPagePos)
+                if (nPagePos != TAB_PAGE_NOTFOUND)
                 {
                     xParent = xCont->getAccessibleChild(nPagePos);
                 }

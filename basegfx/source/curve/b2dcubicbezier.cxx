@@ -746,7 +746,7 @@ namespace basegfx
                 }
             }
 
-            if(0.0 == fPosition || 1.0 == fPosition)
+            if(fPosition == 0.0 || fPosition == 1.0)
             {
                 // if we are completely left or right, we are done
                 break;

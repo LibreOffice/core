@@ -688,7 +688,7 @@ void SAL_CALL Player::start()
     ::osl::MutexGuard aGuard(m_aMutex);
 
     // set the pipeline state to READY and run the loop
-    if( mbInitialized && nullptr != mpPlaybin )
+    if( mbInitialized && mpPlaybin != nullptr )
     {
         gst_element_set_state( mpPlaybin, GST_STATE_PLAYING );
         mbPlayPending = true;

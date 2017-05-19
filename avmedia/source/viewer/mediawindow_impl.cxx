@@ -331,7 +331,7 @@ void MediaWindowImpl::updateMediaItem( MediaItem& rItem ) const
     if( isPlaying() )
         rItem.setState( MediaState::Play );
     else
-        rItem.setState( ( 0.0 == getMediaTime() ) ? MediaState::Stop : MediaState::Pause );
+        rItem.setState( ( getMediaTime() == 0.0 ) ? MediaState::Stop : MediaState::Pause );
 
     rItem.setDuration( getDuration() );
     rItem.setTime( getMediaTime() );

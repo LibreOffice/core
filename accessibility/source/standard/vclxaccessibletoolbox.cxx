@@ -140,7 +140,7 @@ namespace
         if ( _ppImplementation )
             *_ppImplementation = pImplementation;
 
-        return nullptr != pImplementation;
+        return pImplementation != nullptr;
     }
 
     Sequence< sal_Int8 > OToolBoxWindowItem::getUnoTunnelImplementationId()
