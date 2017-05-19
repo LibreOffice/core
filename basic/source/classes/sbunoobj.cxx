@@ -4685,7 +4685,7 @@ TypeClass StructRefInfo::getTypeClass() const
 
 SbUnoStructRefObject::SbUnoStructRefObject( const OUString& aName_, const StructRefInfo& rMemberInfo ) :  SbxObject( aName_ ), maMemberInfo( rMemberInfo ), mbMemberCacheInit( false )
 {
-   SetClassName( OUString( maMemberInfo.getTypeName() ) );
+   SetClassName( maMemberInfo.getTypeName() );
 }
 
 SbUnoStructRefObject::~SbUnoStructRefObject()

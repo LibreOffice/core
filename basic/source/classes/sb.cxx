@@ -1684,7 +1684,7 @@ bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sal_In
         if ( SbiRuntime::isVBAEnabled() && ( code == ERRCODE_BASIC_COMPAT ) )
         {
             OUString aTmp = "\'" + OUString::number(SbxErrObject::getUnoErrObject()->getNumber()) +
-                            "\'\n" + OUString(!GetSbData()->aErrMsg.isEmpty() ? GetSbData()->aErrMsg : rMsg);
+                            "\'\n" + (!GetSbData()->aErrMsg.isEmpty() ? GetSbData()->aErrMsg : rMsg);
             code = (SbError)*new StringErrorInfo( code, aTmp );
         }
         else
