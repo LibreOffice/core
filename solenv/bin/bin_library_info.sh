@@ -26,15 +26,15 @@ exit 0;
 
 die()
 {
-    [ $V ] && echo "Error:" "$@"
+    [ "$V" ] && echo "Error:" "$@"
     exit -1;
 }
 
 
 get_config_sha()
 {
-    pushd ${SRCDIR?} > /dev/null
-    git hash-object ${BUILDDIR?}/config_host.mk
+    pushd "${SRCDIR?}" > /dev/null
+    git hash-object "${BUILDDIR?}"/config_host.mk
     popd > /dev/null
 }
 
@@ -42,7 +42,7 @@ get_library_gbuild_sha()
 {
     local module="$1"
 
-    pushd ${SRCDIR?} > /dev/null
+    pushd "${SRCDIR?}" > /dev/null
     if [ -d "${SRCDIR}/external/${module?}" ] ; then
         git ls-tree -d HEAD "external/${module?}" | cut -f 1 | cut -d " " -f 3
     else
