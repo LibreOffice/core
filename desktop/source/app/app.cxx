@@ -1236,10 +1236,12 @@ void restartOnMac(bool passArguments) {
 #endif
 }
 
+#if HAVE_FEATURE_UPDATE_MAR
 bool isTimeForUpdateCheck()
 {
     return true;
 }
+#endif
 
 }
 
