@@ -21,14 +21,25 @@
 
 #include "osl/time.h"
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/lok.hxx>
+#include <comphelper/string.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
+
+#include <unotools/datetime.hxx>
+#include <tools/datetime.hxx>
+
+#include <sfx2/viewsh.hxx>
+
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include "Annotation.hxx"
 #include "drawdoc.hxx"
@@ -387,6 +398,62 @@ const SdPage* getAnnotationPage(const Reference<XAnnotation>& xAnnotation)
     return nullptr;
 }
 
+
+namespace
+{
+std::string lcl_LOKGetCommentPayload(CommentNotificationType nType, Reference<XAnnotation>& rxAnnotation)
+{
+    boost::property_tree::ptree aAnnotation;
+    aAnnotation.put("action", (nType == CommentNotificationType::Add ? "Add" :
+                               (nType == CommentNotificationType::Remove ? "Remove" :
+                                (nType == CommentNotificationType::Modify ? "Modify" : "???"))));
+    aAnnotation.put("id", sd::getAnnotationId(rxAnnotation));
+    if (nType != CommentNotificationType::Remove && rxAnnotation.is())
+    {
+        aAnnotation.put("id", sd::getAnnotationId(rxAnnotation));
+        aAnnotation.put("author", rxAnnotation->getAuthor());
+        aAnnotation.put("dateTime", utl::toISO8601(rxAnnotation->getDateTime()));
+        uno::Reference<text::XText> xText(rxAnnotation->getTextRange());
+        aAnnotation.put("text", xText->getString());
+        const SdPage* pPage = sd::getAnnotationPage(rxAnnotation);
+        aAnnotation.put("parthash", pPage ? OString::number(pPage->GetHashCode()) : OString());
+    }
+
+    boost::property_tree::ptree aTree;
+    aTree.add_child("comment", aAnnotation);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+
+    return aStream.str();
+}
+} // unonymous ns
+
+void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewShell, Reference<XAnnotation>& rxAnnotation)
+{
+    // callbacks only if tiled annotations are explicitly turned off by LOK client
+    if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
+        return ;
+
+    std::string aPayload = lcl_LOKGetCommentPayload(nType, rxAnnotation);
+    pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload.c_str());
+}
+
+void LOKCommentNotifyAll(CommentNotificationType nType, Reference<XAnnotation>& rxAnnotation)
+{
+    // callbacks only if tiled annotations are explicitly turned off by LOK client
+    if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
+        return ;
+
+    std::string aPayload = lcl_LOKGetCommentPayload(nType, rxAnnotation);
+
+    const SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload.c_str());
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
+}
+
 UndoInsertOrRemoveAnnotation::UndoInsertOrRemoveAnnotation( Annotation& rAnnotation, bool bInsert )
 : SdrUndoAction( *rAnnotation.GetModel() )
 , mxAnnotation( &rAnnotation )
@@ -423,6 +490,7 @@ void UndoInsertOrRemoveAnnotation::Undo()
         else
         {
             pPage->addAnnotation( xAnnotation, mnIndex );
+            LOKCommentNotifyAll( CommentNotificationType::Add, xAnnotation );
         }
     }
 }
@@ -438,6 +506,7 @@ void UndoInsertOrRemoveAnnotation::Redo()
         if( mbInsert )
         {
             pPage->addAnnotation( xAnnotation, mnIndex );
+            LOKCommentNotifyAll( CommentNotificationType::Add, xAnnotation );
         }
         else
         {
