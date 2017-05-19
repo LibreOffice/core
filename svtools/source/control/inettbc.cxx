@@ -283,7 +283,7 @@ void SvtMatchContext_Impl::Insert( const OUString& rCompletion,
     if( !bForce )
     {
         // avoid doubles
-        if(find(aCompletions.begin(), aCompletions.end(), OUString(rCompletion)) != aCompletions.end())
+        if(find(aCompletions.begin(), aCompletions.end(), rCompletion) != aCompletions.end())
             return;
     }
 

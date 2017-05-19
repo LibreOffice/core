@@ -693,12 +693,12 @@ sal_uInt16 SvHeaderTabListBox::GetCurrColumn() const
 
 OUString SvHeaderTabListBox::GetRowDescription( sal_Int32 _nRow ) const
 {
-    return OUString( GetEntryText( _nRow ) );
+    return GetEntryText( _nRow );
 }
 
 OUString SvHeaderTabListBox::GetColumnDescription( sal_uInt16 _nColumn ) const
 {
-    return OUString( m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( _nColumn ) ) );
+    return m_pImpl->m_pHeaderBar->GetItemText( m_pImpl->m_pHeaderBar->GetItemId( _nColumn ) );
 }
 
 bool SvHeaderTabListBox::HasRowHeader() const

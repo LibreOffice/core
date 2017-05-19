@@ -313,7 +313,7 @@ OUString BrowseBox::GetRowDescription( sal_Int32 ) const
 
 OUString BrowseBox::GetColumnDescription( sal_uInt16 _nColumn ) const
 {
-    return OUString( GetColumnTitle( GetColumnId( _nColumn ) ) );
+    return GetColumnTitle( GetColumnId( _nColumn ) );
 }
 
 

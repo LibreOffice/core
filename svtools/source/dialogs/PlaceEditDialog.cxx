@@ -308,7 +308,7 @@ IMPL_LINK_NOARG( PlaceEditDialog, EditUsernameHdl, Edit&, void )
     for ( std::vector< std::shared_ptr< DetailsContainer > >::iterator it = m_aDetailsContainers.begin( );
             it != m_aDetailsContainers.end( ); ++it )
     {
-        ( *it )->setUsername( OUString( m_pEDUsername->GetText() ) );
+        ( *it )->setUsername( m_pEDUsername->GetText() );
         ( *it )->setPassword( m_pEDPassword->GetText() );
     }
 

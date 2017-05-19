@@ -154,7 +154,7 @@ namespace svt
             m_pNextPage = VclPtr<PushButton>::Create(this, WB_TABSTOP);
             m_pNextPage->SetHelpId( HID_WIZARD_NEXT );
             m_pNextPage->SetSizePixel( LogicToPixel( Size( 50, 14 ), MapUnit::MapAppFont ) );
-            m_pNextPage->SetText(OUString(SvtResId(STR_WIZDLG_NEXT)));
+            m_pNextPage->SetText(SvtResId(STR_WIZDLG_NEXT));
             m_pNextPage->Show();
             m_pNextPage->set_id("next");
 

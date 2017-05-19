@@ -1204,7 +1204,7 @@ css::uno::Any SVTXFormattedField::GetDefaultValue()
     if (pField->TreatingAsNumber())
         aReturn <<= pField->GetDefaultValue();
     else
-        aReturn <<= OUString( pField->GetDefaultText() );
+        aReturn <<= pField->GetDefaultText();
     return aReturn;
 }
 
@@ -2009,7 +2009,7 @@ css::uno::Any SVTXCurrencyField::getProperty( const OUString& PropertyName )
         {
             case BASEPROPERTY_CURRENCYSYMBOL:
             {
-                aReturn <<= OUString( pField->getCurrencySymbol() );
+                aReturn <<= pField->getCurrencySymbol();
             }
             break;
             case BASEPROPERTY_CURSYM_POSITION:

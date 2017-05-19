@@ -243,7 +243,7 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
                     if ( ( rProp.Value >>= aExtensions ) && aExtensions.getLength() > 0 )
                     {
                         const OUString* pExtensions = aExtensions.getConstArray();
-                        aExtension = OUString( pExtensions[0] );
+                        aExtension = pExtensions[0];
                         break;
                     }
                 }

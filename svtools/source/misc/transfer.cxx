@@ -757,7 +757,7 @@ bool TransferableHelper::SetINetBookmark( const INetBookmark& rBmk,
         break;
 
         case SotClipboardFormatId::STRING:
-            maAny <<= OUString( rBmk.GetURL() );
+            maAny <<= rBmk.GetURL();
             break;
 
         case SotClipboardFormatId::UNIFORMRESOURCELOCATOR:
