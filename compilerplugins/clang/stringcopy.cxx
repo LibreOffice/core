@@ -46,7 +46,7 @@ private:
     }
 };
 
-static loplugin::Plugin::Registration<Visitor> reg("stringcopy");
+static loplugin::Plugin::Registration<Visitor> reg("stringcopy", false);
 
 }
 
