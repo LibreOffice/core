@@ -345,7 +345,7 @@ OUString createDesiredName(
     if ( nPos != -1 )
       aName = aName.copy( 0, nPos );
     }
-    return OUString( aName );
+    return aName;
 }
 
 OUString createDesiredName(

@@ -95,7 +95,7 @@ OUString makeHierarchalNameSegment( const OUString & rIn  )
     }
 
     aBuffer.append( "']" );
-    return OUString( aBuffer.makeStringAndClear() );
+    return aBuffer.makeStringAndClear();
 }
 
 #define STORE_CONTENTPROPERTIES_KEY "/org.openoffice.ucb.Store/ContentProperties"

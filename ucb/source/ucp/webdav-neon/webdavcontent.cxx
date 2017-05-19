@@ -1221,7 +1221,7 @@ OUString Content::getParentURL()
     if ( nPos1 == -1 )
         return OUString();
 
-    return OUString( aURL.copy( 0, nPos + 1 ) );
+    return aURL.copy( 0, nPos + 1 );
 }
 
 
@@ -3820,7 +3820,7 @@ Content::getBaseURI( const std::unique_ptr< DAVResourceAccess > & rResAccess )
         }
     }
 
-    return OUString( rResAccess->getURL() );
+    return rResAccess->getURL();
 }
 
 // resource type is the type of the WebDAV resource
