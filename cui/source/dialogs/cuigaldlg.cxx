@@ -748,7 +748,7 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
     m_pCbbFileType->EnableDDAutoWidth( false );
     m_pLbxFound->SetDoubleClickHdl(LINK(this, TPGalleryThemeProperties, DClickFoundHdl));
     m_pLbxFound->SetSelectHdl(LINK(this, TPGalleryThemeProperties, SelectFoundHdl));
-    m_pLbxFound->InsertEntry(OUString(CuiResId(RID_SVXSTR_GALLERY_NOFILES)));
+    m_pLbxFound->InsertEntry(CuiResId(RID_SVXSTR_GALLERY_NOFILES));
     m_pLbxFound->Show();
 
     FillFilterList();
@@ -1182,7 +1182,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl, Dialog&, void)
   }
   else
   {
-      m_pLbxFound->InsertEntry( OUString( CuiResId( RID_SVXSTR_GALLERY_NOFILES ) ) );
+      m_pLbxFound->InsertEntry( CuiResId( RID_SVXSTR_GALLERY_NOFILES ) );
       m_pBtnTakeAll->Disable();
       m_pCbxPreview->Disable();
       bEntriesFound = false;

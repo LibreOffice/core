@@ -571,7 +571,7 @@ ConvertSvxConfigEntry( const SvxConfigEntry* pEntry )
     uno::Sequence< beans::PropertyValue > aPropSeq( 3 );
 
     aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
-    aPropSeq[0].Value <<= OUString( pEntry->GetCommand() );
+    aPropSeq[0].Value <<= pEntry->GetCommand();
 
     aPropSeq[1].Name = ITEM_DESCRIPTOR_TYPE;
     aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
@@ -586,7 +586,7 @@ ConvertSvxConfigEntry( const SvxConfigEntry* pEntry )
     }
     else
     {
-        aPropSeq[2].Value <<= OUString( pEntry->GetName() );
+        aPropSeq[2].Value <<= pEntry->GetName();
     }
 
     return aPropSeq;
@@ -598,7 +598,7 @@ ConvertToolbarEntry( const SvxConfigEntry* pEntry )
     uno::Sequence< beans::PropertyValue > aPropSeq( 4 );
 
     aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
-    aPropSeq[0].Value <<= OUString( pEntry->GetCommand() );
+    aPropSeq[0].Value <<= pEntry->GetCommand();
 
     aPropSeq[1].Name = ITEM_DESCRIPTOR_TYPE;
     aPropSeq[1].Value <<= css::ui::ItemType::DEFAULT;
@@ -613,7 +613,7 @@ ConvertToolbarEntry( const SvxConfigEntry* pEntry )
     }
     else
     {
-        aPropSeq[2].Value <<= OUString( pEntry->GetName() );
+        aPropSeq[2].Value <<= pEntry->GetName();
     }
 
     aPropSeq[3].Name = ITEM_DESCRIPTOR_ISVISIBLE;
@@ -5270,7 +5270,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
     {
         sal_uInt16 nId = pTbSymbol->GetItemId( n );
 
-        if ( OUString( pTbSymbol->GetItemText( nId ) ) == aURL )
+        if ( pTbSymbol->GetItemText( nId ) == aURL )
         {
             try
             {

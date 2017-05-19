@@ -247,7 +247,7 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
         RID_STR_SEARCH_WHOLE
     };
     for (unsigned short nResId : nResIds)
-        m_plbPosition->InsertEntry( OUString( CuiResId( nResId ) ) );
+        m_plbPosition->InsertEntry( CuiResId( nResId ) );
     m_plbPosition->SelectEntryPos(MATCHING_ANYWHERE);
 
     // the field listbox
@@ -438,7 +438,7 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox&, rBox, void)
     // direction -> pass on and reset the checkbox-text for StartOver
     else if (&rBox == m_pcbBackwards)
     {
-        m_pcbStartOver->SetText( OUString( CuiResId( bChecked ? RID_STR_FROM_BOTTOM : RID_STR_FROM_TOP ) ) );
+        m_pcbStartOver->SetText( CuiResId( bChecked ? RID_STR_FROM_BOTTOM : RID_STR_FROM_TOP ) );
         m_pSearchEngine->SetDirection(!bChecked);
     }
     // similarity-search or regular expression
@@ -762,7 +762,7 @@ void FmSearchDialog::LoadParams()
     // that way the data is handed on to the SearchEngine and all dependent settings are done
 
     // current field
-    sal_Int32 nInitialField = m_plbField->GetEntryPos( OUString( aParams.sSingleSearchField ) );
+    sal_Int32 nInitialField = m_plbField->GetEntryPos( aParams.sSingleSearchField );
     if (nInitialField == LISTBOX_ENTRY_NOTFOUND)
         nInitialField = 0;
     m_plbField->SelectEntryPos(nInitialField);

@@ -432,7 +432,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl, Button*, void)
         INetURLObject   aURL( aStrURL, INetProtocol::File );
         OUString        aStrName;
         if( bHandleFileName )
-            aStrName = bZeroPath? aTempStrURL : OUString(aURL.getName());
+            aStrName = bZeroPath? aTempStrURL : aURL.getName();
 
         m_pCbbPath->SetBaseURL( xFolderPicker->getDirectory() );
         OUString          aStrTmp( xFolderPicker->getDirectory() );

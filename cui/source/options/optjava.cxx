@@ -465,7 +465,7 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo const * _pInfo )
     if ( ( _pInfo->nFeatures & JFW_FEATURE_ACCESSBRIDGE ) == JFW_FEATURE_ACCESSBRIDGE )
         sEntry.append(m_sAccessibilityText);
     SvTreeListEntry* pEntry = m_pJavaList->InsertEntry(sEntry.makeStringAndClear());
-    INetURLObject aLocObj( OUString( _pInfo->sLocation ) );
+    INetURLObject aLocObj( _pInfo->sLocation );
     OUString* pLocation = new OUString( aLocObj.getFSysPath( FSysStyle::Detect ) );
     pEntry->SetUserData( pLocation );
 #else

@@ -1410,7 +1410,7 @@ bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
                         SetCategory(nCatLbSelPos );
 
                     FillFormatListBox_Impl( aEntryList );
-                    if(m_pEdComment->GetText()!=OUString(m_pLbCategory->GetEntry(1)))
+                    if(m_pEdComment->GetText()!=m_pLbCategory->GetEntry(1))
                     {
                         pNumFmtShell->SetComment4Entry(nFmtLbSelPos,
                                                     m_pEdComment->GetText());

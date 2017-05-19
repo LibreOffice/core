@@ -1227,12 +1227,12 @@ OUString FormatErrorString(
 
     if ( !type.isEmpty() )
     {
-        result += "\n\n" + OUString(CuiResId(RID_SVXSTR_ERROR_TYPE_LABEL)) + " " + type;
+        result += "\n\n" + CuiResId(RID_SVXSTR_ERROR_TYPE_LABEL) + " " + type;
     }
 
     if ( !message.isEmpty() )
     {
-        result += "\n\n" + OUString(CuiResId(RID_SVXSTR_ERROR_MESSAGE_LABEL)) + " " + message;
+        result += "\n\n" + CuiResId(RID_SVXSTR_ERROR_MESSAGE_LABEL) + " " + message;
     }
 
     return result;
@@ -1344,8 +1344,8 @@ OUString GetErrorMessage(
     }
     if ( sError.errorType == provider::ScriptFrameworkErrorType::NOTSUPPORTED )
     {
-        message = OUString(
-            CuiResId(  RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED ) );
+        message =
+            CuiResId(  RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED );
         message = ReplaceString(message, "%LANGUAGENAME", language );
 
     }
@@ -1440,7 +1440,7 @@ IMPL_STATIC_LINK( SvxScriptErrorDialog, ShowDialog, void*, p, void )
     }
     else
     {
-        message = OUString( CuiResId( RID_SVXSTR_ERROR_TITLE ) );
+        message = CuiResId( RID_SVXSTR_ERROR_TITLE );
     }
 
     ScopedVclPtrInstance<MessageDialog> pBox( nullptr, message, VclMessageType::Warning );

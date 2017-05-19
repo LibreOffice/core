@@ -209,7 +209,7 @@ IMPL_LINK( SelectPersonaDialog, SelectPersona, Button*, pButton, void )
                 // get the persona name from the setting variable to show in the progress.
                 sal_Int32 nNameIndex = m_aSelectedPersona.indexOf( ';' );
                 OUString aName = m_aSelectedPersona.copy( 0, nNameIndex );
-                OUString aProgress = OUString(CuiResId(RID_SVXSTR_SELECTEDPERSONA)) + aName;
+                OUString aProgress = CuiResId(RID_SVXSTR_SELECTEDPERSONA) + aName;
                 SetProgress( aProgress );
             }
             break;

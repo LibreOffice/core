@@ -125,7 +125,7 @@ static char const VIEWOPT_DATANAME[] = "page data";
 
 static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const OUString& rData )
 {
-    rOpt.SetUserItem( VIEWOPT_DATANAME, Any( OUString( rData ) ) );
+    rOpt.SetUserItem( VIEWOPT_DATANAME, Any( rData ) );
 }
 
 static inline OUString GetViewOptUserItem( const SvtViewOptions& rOpt )

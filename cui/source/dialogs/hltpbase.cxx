@@ -340,13 +340,13 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, Button*, void)
         SfxMacroTabPage *pMacroPage = static_cast<SfxMacroTabPage*>( aDlg->GetTabPage() );
 
         if ( pHyperlinkItem->GetMacroEvents() & HyperDialogEvent::MouseOverObject )
-            pMacroPage->AddEvent( OUString( CuiResId(RID_SVXSTR_HYPDLG_MACROACT1) ),
+            pMacroPage->AddEvent( CuiResId(RID_SVXSTR_HYPDLG_MACROACT1),
                                   SFX_EVENT_MOUSEOVER_OBJECT );
         if ( pHyperlinkItem->GetMacroEvents() & HyperDialogEvent::MouseClickObject )
-            pMacroPage->AddEvent( OUString( CuiResId(RID_SVXSTR_HYPDLG_MACROACT2) ),
+            pMacroPage->AddEvent( CuiResId(RID_SVXSTR_HYPDLG_MACROACT2),
                                   SFX_EVENT_MOUSECLICK_OBJECT);
         if ( pHyperlinkItem->GetMacroEvents() & HyperDialogEvent::MouseOutObject )
-            pMacroPage->AddEvent( OUString( CuiResId(RID_SVXSTR_HYPDLG_MACROACT3) ),
+            pMacroPage->AddEvent( CuiResId(RID_SVXSTR_HYPDLG_MACROACT3),
                                   SFX_EVENT_MOUSEOUT_OBJECT);
 
         if ( bIsInputEnabled )

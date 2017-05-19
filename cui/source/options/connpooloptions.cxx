@@ -128,11 +128,11 @@ namespace offapp
         EditBrowseBox::Init();
 
         Size aColWidth = LogicToPixel(Size(160, 0), MapUnit::MapAppFont);
-        InsertDataColumn(1, OUString(CuiResId(RID_SVXSTR_DRIVER_NAME)), aColWidth.Width());
+        InsertDataColumn(1, CuiResId(RID_SVXSTR_DRIVER_NAME), aColWidth.Width());
         aColWidth = LogicToPixel(Size(30, 0), MapUnit::MapAppFont);
-        InsertDataColumn(2, OUString(CuiResId(RID_SVXSTR_POOLED_FLAG)), aColWidth.Width());
+        InsertDataColumn(2, CuiResId(RID_SVXSTR_POOLED_FLAG), aColWidth.Width());
         aColWidth = LogicToPixel(Size(60, 0), MapUnit::MapAppFont);
-        InsertDataColumn(3, OUString(CuiResId(RID_SVXSTR_POOL_TIMEOUT)), aColWidth.Width());
+        InsertDataColumn(3, CuiResId(RID_SVXSTR_POOL_TIMEOUT), aColWidth.Width());
             // Attention: the resource of the string is local to the resource of the enclosing dialog!
     }
 

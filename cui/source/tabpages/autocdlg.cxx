@@ -1613,10 +1613,10 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(bool bFromReset,
 
         sal_Int32 i;
         for(i = 0; i < m_pAbbrevLB->GetEntryCount(); i++)
-            pArrays->aAbbrevStrings.push_back(OUString(m_pAbbrevLB->GetEntry(i)));
+            pArrays->aAbbrevStrings.push_back(m_pAbbrevLB->GetEntry(i));
 
         for(i = 0; i < m_pDoubleCapsLB->GetEntryCount(); i++)
-            pArrays->aDoubleCapsStrings.push_back(OUString(m_pDoubleCapsLB->GetEntry(i)));
+            pArrays->aDoubleCapsStrings.push_back(m_pDoubleCapsLB->GetEntry(i));
     }
     m_pDoubleCapsLB->Clear();
     m_pAbbrevLB->Clear();
