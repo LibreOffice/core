@@ -823,6 +823,8 @@ public:
     /// Table cell depth of the last finished paragraph.
     sal_Int32 m_nLastTableCellParagraphDepth;
 
+    /// IF the current section has footnotes.
+    bool m_bHasFtn;
     /// If the document has a footnote separator.
     bool m_bHasFtnSep;
 

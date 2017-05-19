@@ -35,6 +35,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <iterator>
 
 #include "blowfishcontext.hxx"
 #include "sha1context.hxx"
