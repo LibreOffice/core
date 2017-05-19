@@ -11660,6 +11660,8 @@ module com {
      [property, optional] boolean IsGroupField;
      [property, optional] ::com::sun::star::sheet::DataPilotFieldGroupInfo GroupInfo;
      [property, optional] boolean ShowEmpty;
+     [property, optional] short Function2;
+     [property, optional] sequence< short > Subtotals2;
     };
     published service DataPilotFieldGroup {
      interface ::com::sun::star::container::XNamed;
@@ -11940,6 +11942,22 @@ module com {
      interface ::com::sun::star::sheet::XFunctionDescriptions;
      interface ::com::sun::star::container::XNameAccess;
      interface ::com::sun::star::container::XEnumerationAccess;
+    };
+    published constants GeneralFunction2 {
+     const short AUTO = 1;
+     const short AVERAGE = 4;
+     const short COUNT = 3;
+     const short COUNTNUMS = 8;
+     const short MAX = 5;
+     const short MEDIAN = 13;
+     const short MIN = 6;
+     const short NONE = 0;
+     const short PRODUCT = 7;
+     const short STDEV = 9;
+     const short STDEVP = 10;
+     const short SUM = 2;
+     const short VAR = 11;
+     const short VARP = 12;
     };
     published interface XGlobalSheetSettings {
      interface ::com::sun::star::uno::XInterface;
@@ -14623,6 +14641,7 @@ module com {
      [property] ::com::sun::star::style::GraphicLocation BackGraphicLocation;
      [property, optional] boolean CollapsingBorders;
      [property, optional] sequence< ::com::sun::star::beans::PropertyValue > TableInteropGrabBag;
+     [property, optional] string TableTemplateName;
     };
     published service Paragraph {
      service ::com::sun::star::text::TextContent;
@@ -16939,9 +16958,11 @@ module com {
       const short SET_SELECT_ITEM = 5;
      };
      published constants TemplateDescription {
+      const short FILEOPEN_LINK_PLAY = 12;
       const short FILEOPEN_LINK_PREVIEW = 9;
       const short FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE = 6;
       const short FILEOPEN_PLAY = 7;
+      const short FILEOPEN_PREVIEW = 11;
       const short FILEOPEN_READONLY_VERSION = 8;
       const short FILEOPEN_SIMPLE = 0;
       const short FILESAVE_AUTOEXTENSION = 10;
