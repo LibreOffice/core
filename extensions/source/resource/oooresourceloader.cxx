@@ -70,7 +70,7 @@ namespace extensions { namespace resource
     {
         OSL_PRECOND( _resourceManager.IsAvailable( getResourceType(), _resourceId ), "StringResourceAccess::getResource: precondition not met!" );
         Any aResource;
-        aResource <<= OUString( _resourceManager.ReadString( _resourceId ) );
+        aResource <<= _resourceManager.ReadString( _resourceId );
         return aResource;
     }
 

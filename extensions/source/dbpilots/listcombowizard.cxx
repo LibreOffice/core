@@ -181,8 +181,8 @@ namespace dbp
 
                 // build the statement to set as list source
                 OUString sStatement = "SELECT " +
-                    OUString( getSettings().sListContentField ) +  ", " + OUString( getSettings().sLinkedListField ) +
-                    " FROM " + OUString( getSettings().sListContentTable );
+                    getSettings().sListContentField +  ", " + getSettings().sLinkedListField +
+                    " FROM " + getSettings().sListContentTable;
                 Sequence< OUString > aListSource { sStatement };
                 getContext().xObjectModel->setPropertyValue("ListSource", makeAny(aListSource));
             }
@@ -196,7 +196,7 @@ namespace dbp
             }
 
             // the bound field
-            getContext().xObjectModel->setPropertyValue("DataField", makeAny(OUString(getSettings().sLinkedFormField)));
+            getContext().xObjectModel->setPropertyValue("DataField", makeAny(getSettings().sLinkedFormField));
         }
         catch(const Exception&)
         {

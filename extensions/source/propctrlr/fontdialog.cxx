@@ -313,8 +313,8 @@ namespace pcr
                 const SvxFontItem& rFontItem =
                     static_cast<const SvxFontItem&>(_rSet.Get(CFID_FONT));
 
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_NAME     , makeAny(OUString(rFontItem.GetFamilyName())));
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_STYLENAME, makeAny(OUString(rFontItem.GetStyleName())));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_NAME     , makeAny(rFontItem.GetFamilyName()));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_STYLENAME, makeAny(rFontItem.GetStyleName()));
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_FAMILY   , makeAny((sal_Int16)rFontItem.GetFamily()));
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_CHARSET  , makeAny((sal_Int16)rFontItem.GetCharSet()));
             }

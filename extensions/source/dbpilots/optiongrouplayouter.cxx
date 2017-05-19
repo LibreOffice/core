@@ -119,9 +119,9 @@ namespace dbp
                 UNO_QUERY);
 
             // the label
-            xRadioModel->setPropertyValue("Label", makeAny(OUString(*aLabelIter)));
+            xRadioModel->setPropertyValue("Label", makeAny(*aLabelIter));
             // the value
-            xRadioModel->setPropertyValue("RefValue", makeAny(OUString(*aValueIter)));
+            xRadioModel->setPropertyValue("RefValue", makeAny(*aValueIter));
 
             // default selection
             if (_rSettings.sDefaultField == *aLabelIter)
@@ -129,7 +129,7 @@ namespace dbp
 
             // the connection to the database field
             if (!_rSettings.sDBField.isEmpty())
-                xRadioModel->setPropertyValue("DataField", makeAny(OUString(_rSettings.sDBField)));
+                xRadioModel->setPropertyValue("DataField", makeAny(_rSettings.sDBField));
 
             // the name for the model
             xRadioModel->setPropertyValue("Name", makeAny(sElementsName));

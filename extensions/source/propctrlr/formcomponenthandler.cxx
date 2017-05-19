@@ -523,7 +523,7 @@ namespace pcr
                 if ( !xDatabaseContext->hasByName( sControlValue ) )
                 {
                     ::svt::OFileNotation aTransformer(sControlValue);
-                    aPropertyValue <<= OUString( aTransformer.get( ::svt::OFileNotation::N_URL ) );
+                    aPropertyValue <<= aTransformer.get( ::svt::OFileNotation::N_URL );
                 }
             }
         }

@@ -812,7 +812,7 @@ namespace pcr
 
     Any SAL_CALL OComboboxControl::getValue()
     {
-        return makeAny( OUString( getTypedControlWindow()->GetText() ) );
+        return makeAny( getTypedControlWindow()->GetText() );
     }
 
 
