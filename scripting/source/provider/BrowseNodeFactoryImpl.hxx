@@ -29,7 +29,6 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
-#include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
 
 namespace browsenodefactory

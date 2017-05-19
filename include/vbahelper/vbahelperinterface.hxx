@@ -20,7 +20,6 @@
 #define INCLUDED_VBAHELPER_VBAHELPERINTERFACE_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>

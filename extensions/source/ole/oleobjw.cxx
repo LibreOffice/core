@@ -29,17 +29,7 @@
 #include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/FailReason.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
-#include <com/sun/star/script/XTypeConverter.hpp>
-#include <com/sun/star/script/FinishEngineEvent.hpp>
-#include <com/sun/star/script/InterruptReason.hpp>
-#include <com/sun/star/script/XEngineListener.hpp>
-#include <com/sun/star/script/XDebugging.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
-#include <com/sun/star/script/ContextInformation.hpp>
-#include <com/sun/star/script/FinishReason.hpp>
-#include <com/sun/star/script/XEngine.hpp>
-#include <com/sun/star/script/InterruptEngineEvent.hpp>
-#include <com/sun/star/script/XLibraryAccess.hpp>
 #include <com/sun/star/bridge/ModelDependent.hpp>
 
 #include "com/sun/star/bridge/oleautomation/NamedArgument.hpp"

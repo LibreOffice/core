@@ -64,13 +64,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <vbahelper/vbashapes.hxx>
 
-#include <com/sun/star/script/vba/VBAEventId.hpp>
-#include <com/sun/star/script/vba/XVBACompatibility.hpp>
-#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
-#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
-#include <com/sun/star/script/ModuleInfo.hpp>
-#include <com/sun/star/script/ModuleType.hpp>
-
 //zhangyun showdataform
 #include <sfx2/sfxdlg.hxx>
 #include "scabstdlg.hxx"

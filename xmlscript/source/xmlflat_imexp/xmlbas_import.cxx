@@ -26,7 +26,6 @@
 #include <xmlscript/xml_helper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <cppuhelper/implementationentry.hxx>

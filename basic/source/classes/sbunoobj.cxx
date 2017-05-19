@@ -57,7 +57,6 @@
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/XDefaultProperty.hpp>
-#include <com/sun/star/script/XDefaultMethod.hpp>
 #include <com/sun/star/script/XDirectInvocation.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>

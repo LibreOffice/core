@@ -28,7 +28,6 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
-#include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 
 #include <comphelper/stl_types.hxx>

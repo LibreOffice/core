@@ -38,7 +38,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::script;
 
 UnoDialog::UnoDialog( const Reference< XComponentContext > &rxContext, Reference< XFrame >& rxFrame ) :
     mxContext( rxContext ),

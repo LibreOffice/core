@@ -24,7 +24,6 @@
 #include <ooo/vba/excel/XVPageBreak.hpp>
 #include <ooo/vba/excel/XRange.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <vbahelper/vbahelperinterface.hxx>

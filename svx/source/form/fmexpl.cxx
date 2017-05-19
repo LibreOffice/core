@@ -54,7 +54,6 @@
 #include "fmshimp.hxx"
 #include <svx/fmpage.hxx>
 #include <com/sun/star/io/XPersistObject.hpp>
-#include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/property.hxx>

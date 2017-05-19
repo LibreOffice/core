@@ -28,7 +28,6 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
-#include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 

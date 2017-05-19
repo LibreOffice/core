@@ -22,7 +22,6 @@
 #include <exception>
 #include <memory>
 
-#include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>

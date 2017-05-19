@@ -35,7 +35,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
-#include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <osl/diagnose.h>
 
 class XMLTextStyleContext;

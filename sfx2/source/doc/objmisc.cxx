@@ -37,17 +37,6 @@
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
-#include <com/sun/star/script/XTypeConverter.hpp>
-#include <com/sun/star/script/FinishEngineEvent.hpp>
-#include <com/sun/star/script/InterruptReason.hpp>
-#include <com/sun/star/script/XEngineListener.hpp>
-#include <com/sun/star/script/XDebugging.hpp>
-#include <com/sun/star/script/XInvocation.hpp>
-#include <com/sun/star/script/ContextInformation.hpp>
-#include <com/sun/star/script/FinishReason.hpp>
-#include <com/sun/star/script/XEngine.hpp>
-#include <com/sun/star/script/InterruptEngineEvent.hpp>
-#include <com/sun/star/script/XLibraryAccess.hpp>
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/XScript.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>

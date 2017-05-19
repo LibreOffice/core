@@ -30,8 +30,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 
-#include <com/sun/star/script/XLibraryContainer.hpp>
-
 #include <memory>
 
 class Printer;

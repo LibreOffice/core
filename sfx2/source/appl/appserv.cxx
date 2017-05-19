@@ -86,7 +86,6 @@
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-#include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
