@@ -1,0 +1,28 @@
+From 62807fafce337b07ebebb2024c3462019a960fcd Mon Sep 17 00:00:00 2001
+From: Miklos Vajna <vmiklos@collabora.co.uk>
+Date: Fri, 19 May 2017 12:17:30 +0200
+Subject: [PATCH] Fix building against libxml < 2.8
+
+---
+ src/xmlsec.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/xmlsec.c b/src/xmlsec.c
+index 520557de..8bb3012c 100644
+--- a/src/xmlsec.c
++++ b/src/xmlsec.c
+@@ -46,7 +46,10 @@ xmlSecNoXxeExternalEntityLoader(const char *URL, const char *ID,
+     if (ctxt == NULL) {
+         return(NULL);
+     }
+-    if (ctxt->input_id == 1) {
++#if LIBXML_VERSION >= 20800
++    if (ctxt->input_id == 1)
++#endif
++    {
+         return xmlSecDefaultExternalEntityLoader((const char *) URL, ID, ctxt);
+     }
+     xmlSecXmlError2("xmlSecNoXxeExternalEntityLoader", NULL,
+-- 
+2.12.0
+
