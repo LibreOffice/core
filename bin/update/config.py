@@ -9,6 +9,7 @@ class Config(object):
         self.channel = None
         self.base_url = None
         self.upload_url = None
+        self.server_url = None
 
 def parse_config(config_file):
     config = configparser.ConfigParser()
@@ -21,5 +22,6 @@ def parse_config(config_file):
     data.certificate_path = updater_data['certificate-path']
     data.channel = updater_data['channel']
     data.upload_url = updater_data['upload-url']
+    data.server_url = updater_data["ServerURL"]
 
     return data

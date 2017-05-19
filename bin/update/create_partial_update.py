@@ -55,7 +55,7 @@ def handle_language(lang_entries, filedir):
 
 def download_mar_for_update_channel_and_platform(config, platform, temp_dir):
     mar = os.environ.get('MAR', 'mar')
-    base_url = "http://updater.libreofficecrash.org/update/partial-targets/1/"
+    base_url = config.server_url + "update/partial-targets/1/"
     url = base_url + platform + "/" + config.channel
     r = requests.get(url)
     if r.status_code is not 200:
