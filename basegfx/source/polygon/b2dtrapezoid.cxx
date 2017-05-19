@@ -115,7 +115,7 @@ namespace basegfx
             // data write access to StartPoint
             void setStart( const B2DPoint* pNewStart)
             {
-                OSL_ENSURE(nullptr != pNewStart, "No null pointer allowed here (!)");
+                OSL_ENSURE(pNewStart != nullptr, "No null pointer allowed here (!)");
 
                 if(mpStart != pNewStart)
                 {
@@ -129,7 +129,7 @@ namespace basegfx
             // data write access to EndPoint
             void setEnd( const B2DPoint* pNewEnd)
             {
-                OSL_ENSURE(nullptr != pNewEnd, "No null pointer allowed here (!)");
+                OSL_ENSURE(pNewEnd != nullptr, "No null pointer allowed here (!)");
 
                 if(mpEnd != pNewEnd)
                 {

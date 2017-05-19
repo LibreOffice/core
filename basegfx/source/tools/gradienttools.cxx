@@ -176,7 +176,7 @@ namespace basegfx
         aTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
 
         // prepare aspect for texture
-        const double fAspectRatio(0.0 == fTargetSizeY ? 1.0 : (fTargetSizeX / fTargetSizeY));
+        const double fAspectRatio(fTargetSizeY == 0.0 ? 1.0 : (fTargetSizeX / fTargetSizeY));
 
         return ODFGradientInfo(aTextureTransform, fAspectRatio, nSteps);
     }
@@ -253,7 +253,7 @@ namespace basegfx
         aTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
 
         // prepare aspect for texture
-        const double fAspectRatio(0.0 == fTargetSizeY ? 1.0 : (fTargetSizeX / fTargetSizeY));
+        const double fAspectRatio(fTargetSizeY == 0.0 ? 1.0 : (fTargetSizeX / fTargetSizeY));
 
         return ODFGradientInfo(aTextureTransform, fAspectRatio, nSteps);
     }

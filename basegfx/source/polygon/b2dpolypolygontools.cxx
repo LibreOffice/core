@@ -233,7 +233,7 @@ namespace basegfx
 
         void applyLineDashing(const B2DPolyPolygon& rCandidate, const std::vector<double>& rDotDashArray, B2DPolyPolygon* pLineTarget, B2DPolyPolygon* pGapTarget, double fFullDashDotLen)
         {
-            if(0.0 == fFullDashDotLen && rDotDashArray.size())
+            if(fFullDashDotLen == 0.0 && rDotDashArray.size())
             {
                 // calculate fFullDashDotLen from rDotDashArray
                 fFullDashDotLen = std::accumulate(rDotDashArray.begin(), rDotDashArray.end(), 0.0);
@@ -327,7 +327,7 @@ namespace basegfx
                 double fNewCut(0.0);
                 const double fNewDistance(getSmallestDistancePointToPolygon(aCandidate, rTestPoint, nNewEdgeIndex, fNewCut));
 
-                if(DBL_MAX == fRetval || fNewDistance < fRetval)
+                if(fRetval == DBL_MAX || fNewDistance < fRetval)
                 {
                     fRetval = fNewDistance;
                     rPolygonIndex = a;
@@ -378,7 +378,7 @@ namespace basegfx
 
         B2DPolyPolygon growInNormalDirection(const B2DPolyPolygon& rCandidate, double fValue)
         {
-            if(0.0 != fValue)
+            if(fValue != 0.0)
             {
                 B2DPolyPolygon aRetval;
 

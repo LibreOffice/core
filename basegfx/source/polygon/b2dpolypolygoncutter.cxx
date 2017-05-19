@@ -592,7 +592,7 @@ namespace basegfx
                     {
                         PN& rPN = maPNV[a];
 
-                        if(SAL_MAX_UINT32 != rPN.mnI)
+                        if(rPN.mnI != SAL_MAX_UINT32)
                         {
                             // unused node, start new part polygon
                             B2DPolygon aNewPart;
@@ -622,7 +622,7 @@ namespace basegfx
                                 nCountdown--;
                                 pPNCurr = &(maPNV[pPNCurr->mnIN]);
                             }
-                            while(pPNCurr != &rPN && SAL_MAX_UINT32 != pPNCurr->mnI);
+                            while(pPNCurr != &rPN && pPNCurr->mnI != SAL_MAX_UINT32);
 
                             // close and add
                             aNewPart.setClosed(true);

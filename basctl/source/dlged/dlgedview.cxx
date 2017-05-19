@@ -129,7 +129,7 @@ SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt
     {
         bool bExcludeInner(false);
 
-        if(nullptr != dynamic_cast< DlgEdForm* >(pRetval))
+        if(dynamic_cast< DlgEdForm* >(pRetval) != nullptr)
         {
             // from DlgEdForm::CheckHit; exclude inner for DlgEdForm
             bExcludeInner = true;

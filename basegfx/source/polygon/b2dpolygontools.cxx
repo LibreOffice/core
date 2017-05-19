@@ -199,7 +199,7 @@ namespace basegfx
                             // add curved edge and generate DistanceBound
                             double fBound(0.0);
 
-                            if(0.0 == fDistanceBound)
+                            if(fDistanceBound == 0.0)
                             {
                                 // If not set, use B2DCubicBezier functionality to guess a rough value
                                 const double fRoughLength((aBezier.getEdgeLength() + aBezier.getControlPolygonLength()) / 2.0);
@@ -269,7 +269,7 @@ namespace basegfx
                     aRetval.append(aBezier.getStartPoint());
 
                     // #i37443# prepare convenient AngleBound if none was given
-                    if(0.0 == fAngleBound)
+                    if(fAngleBound == 0.0)
                     {
 #ifdef DBG_UTIL
                         fAngleBound = fAngleBoundStartValue;
@@ -2392,7 +2392,7 @@ namespace basegfx
                         fEdgeDist = getSmallestDistancePointToEdge(aBezier.getStartPoint(), aBezier.getEndPoint(), rTestPoint, fNewCut);
                     }
 
-                    if(DBL_MAX == fRetval || fEdgeDist < fRetval)
+                    if(fRetval == DBL_MAX || fEdgeDist < fRetval)
                     {
                         fRetval = fEdgeDist;
                         rEdgeIndex = a;
@@ -2457,7 +2457,7 @@ namespace basegfx
         {
             const sal_uInt32 nPointCount(rCandidate.count());
 
-            if(nPointCount && 0.0 != rOriginal.getWidth() && 0.0 != rOriginal.getHeight())
+            if(nPointCount && rOriginal.getWidth() != 0.0 && rOriginal.getHeight() != 0.0)
             {
                 B2DPolygon aRetval;
 
@@ -2696,7 +2696,7 @@ namespace basegfx
 
         B2DPolygon growInNormalDirection(const B2DPolygon& rCandidate, double fValue)
         {
-            if(0.0 != fValue)
+            if(fValue != 0.0)
             {
                 if(rCandidate.areControlPointsUsed())
                 {
@@ -3301,7 +3301,7 @@ namespace basegfx
             B2DPoint aControlB;
 
             // first point is not allowed to be a control point
-            OSL_ENSURE(css::drawing::PolygonFlags_CONTROL != ePolygonFlag,
+            OSL_ENSURE(ePolygonFlag != css::drawing::PolygonFlags_CONTROL,
                 "UnoPolygonBezierCoordsToB2DPolygon: Start point is a control point, illegal input polygon (!)");
 
             // add first point as start point
@@ -3342,7 +3342,7 @@ namespace basegfx
 
                 // two or no control points are consumed, another one would be an error.
                 // It's also an error if only one control point was read
-                SAL_WARN_IF(css::drawing::PolygonFlags_CONTROL == ePolygonFlag || bControlA != bControlB,
+                SAL_WARN_IF(ePolygonFlag == css::drawing::PolygonFlags_CONTROL || bControlA != bControlB,
                     "basegfx", "UnoPolygonBezierCoordsToB2DPolygon: Illegal source polygon (!)");
 
                 // the previous writes used the B2DPolyPoygon -> tools::PolyPolygon converter
