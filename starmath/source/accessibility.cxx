@@ -320,7 +320,7 @@ OUString SAL_CALL SmGraphicAccessible::getAccessibleDescription()
 {
     SolarMutexGuard aGuard;
     SmDocShell *pDoc = GetDoc_Impl();
-    return pDoc ? OUString(pDoc->GetText()) : OUString();
+    return pDoc ? pDoc->GetText() : OUString();
 }
 
 OUString SAL_CALL SmGraphicAccessible::getAccessibleName()

@@ -444,7 +444,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 if(sFontName.isEmpty())
                     throw IllegalArgumentException();
 
-                if(OUString(aFormat.GetFont((*ppEntries)->mnMemberId).GetFamilyName()) != sFontName)
+                if(aFormat.GetFont((*ppEntries)->mnMemberId).GetFamilyName() != sFontName)
                 {
                     const SmFace rOld = aFormat.GetFont((*ppEntries)->mnMemberId);
 
@@ -802,7 +802,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_PRINTER_NAME:
             {
                 SfxPrinter *pPrinter = pDocSh->GetPrinter ( );
-                *pValue <<= pPrinter ? OUString ( pPrinter->GetName()) : OUString();
+                *pValue <<= pPrinter ? pPrinter->GetName() : OUString();
             }
             break;
             case HANDLE_PRINTER_SETUP:

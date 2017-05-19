@@ -655,7 +655,7 @@ void SmEditController::StateChanged(sal_uInt16 nSID, SfxItemState eState, const 
 {
     const SfxStringItem *pItem =  dynamic_cast<const SfxStringItem*>( pState);
 
-    if ((pItem != nullptr) && (rEdit.GetText() != OUString(pItem->GetValue())))
+    if ((pItem != nullptr) && (rEdit.GetText() != pItem->GetValue()))
         rEdit.SetText(pItem->GetValue());
     SfxControllerItem::StateChanged (nSID, eState, pState);
 }

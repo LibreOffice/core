@@ -683,7 +683,7 @@ void SmMathConfig::SaveFontFormatList()
         // Name
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
-        pVal->Value <<= OUString( aFntFmt.aName );
+        pVal->Value <<= aFntFmt.aName;
         pVal++;
         // CharSet
         pVal->Name  = aNodeNameDelim;

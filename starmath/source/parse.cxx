@@ -1813,7 +1813,7 @@ SmStructureNode *SmParser::DoFontSize()
     Fraction  aValue( 1L );
     if (lcl_IsNumber( m_aCurToken.aText ))
     {
-        double fTmp = OUString(m_aCurToken.aText).toDouble();
+        double fTmp = m_aCurToken.aText.toDouble();
         if (fTmp != 0.0)
         {
             aValue = fTmp;
