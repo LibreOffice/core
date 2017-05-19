@@ -58,10 +58,10 @@ sal_uInt32 SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum /*eClass*/)
 
             AddAttribute( XML_NAMESPACE_BLOCKLIST,
                           XML_ABBREVIATED_NAME,
-                          OUString(p->GetShort()));
+                          p->GetShort());
             AddAttribute( XML_NAMESPACE_BLOCKLIST,
                           XML_NAME,
-                          OUString(p->IsTextOnly() ? p->GetLong() : p->GetShort()));
+                          p->IsTextOnly() ? p->GetLong() : p->GetShort());
 
             SvXMLElementExport aBlock( *this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK, true, true);
         }

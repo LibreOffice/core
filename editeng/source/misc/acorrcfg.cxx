@@ -529,7 +529,7 @@ void SvxSwAutoCorrCfg::ImplCommit()
             // "Format/Option/ChangeToBullets/Enable"
          css::uno::Any(sal_Int32(rSwFlags.cBullet)),
             // "Format/Option/ChangeToBullets/SpecialCharacter/Char"
-         css::uno::Any(OUString(rSwFlags.aBulletFont.GetFamilyName())),
+         css::uno::Any(rSwFlags.aBulletFont.GetFamilyName()),
             // "Format/Option/ChangeToBullets/SpecialCharacter/Font"
          css::uno::Any(sal_Int32(rSwFlags.aBulletFont.GetFamilyType())),
             // "Format/Option/ChangeToBullets/SpecialCharacter/FontFamily"
@@ -573,7 +573,7 @@ void SvxSwAutoCorrCfg::ImplCommit()
          css::uno::Any(rSwFlags.bAutoCmpltKeepList), // "Completion/KeepList"
          css::uno::Any(sal_Int32(rSwFlags.cByInputBullet)),
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/Char"
-         css::uno::Any(OUString(rSwFlags.aByInputBulletFont.GetFamilyName())),
+         css::uno::Any(rSwFlags.aByInputBulletFont.GetFamilyName()),
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/Font"
          css::uno::Any(sal_Int32(rSwFlags.aByInputBulletFont.GetFamilyType())),
             // "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily"

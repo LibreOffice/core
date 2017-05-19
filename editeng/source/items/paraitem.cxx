@@ -1204,7 +1204,7 @@ bool SvxPageModelItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) co
     switch ( nMemberId )
     {
         case MID_AUTO: rVal <<= bAuto; break;
-        case MID_NAME: rVal <<= OUString( GetValue() ); break;
+        case MID_NAME: rVal <<= GetValue(); break;
         default: OSL_FAIL("Wrong MemberId!"); return false;
     }
 

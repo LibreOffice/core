@@ -758,7 +758,7 @@ namespace accessibility
             }
         }
 
-        return OUString( sStr ) + aLine;
+        return sStr + aLine;
     }
 
     OUString SAL_CALL AccessibleEditableTextPara::getAccessibleName()
