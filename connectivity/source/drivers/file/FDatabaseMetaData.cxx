@@ -281,7 +281,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                     sal_Unicode nChar = aURL.getBase()[0];
                     if( match(tableNamePattern,aURL.getBase(),'\0') && ( !bCheckEnabled || nChar < '0' || nChar > '9' ) )
                     {
-                        aRow.push_back(new ORowSetValueDecorator(OUString(aURL.getBase())));
+                        aRow.push_back(new ORowSetValueDecorator(aURL.getBase()));
                         bNewRow = true;
                     }
                     break;
