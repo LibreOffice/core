@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_69b6dc8b",
+        "filename": "filter/source/graphicfilter/itga/itga.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-05-20T11:21:29Z",
+      "side": 1,
+      "message": "I would keep it for documentation purposes. Feel free to remove though.",
+      "parentUuid": "5a3905b3_09ab9875",
+      "revId": "50b1dd973bd53a7a344595596fe5f9f19abad255",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_29b694dc",
         "filename": "filter/source/msfilter/eschesdo.hxx",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2017-05-20T09:18:07Z",
       "side": 1,
       "message": "Doesn\u0027t look like this line is even needed as it\u0027s commented out code - maybe just get rid of it entirely?",
+      "revId": "50b1dd973bd53a7a344595596fe5f9f19abad255",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_89bb0872",
+        "filename": "filter/source/msfilter/eschesdo.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-05-20T11:21:29Z",
+      "side": 1,
+      "message": "I\u0027ll remove it.",
+      "parentUuid": "5a3905b3_29b694dc",
       "revId": "50b1dd973bd53a7a344595596fe5f9f19abad255",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_c9ad1033",
+        "filename": "filter/source/msfilter/msdffimp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-05-20T11:21:29Z",
+      "side": 1,
+      "message": "I\u0027ll change it.",
+      "parentUuid": "5a3905b3_49bbe0c4",
+      "revId": "50b1dd973bd53a7a344595596fe5f9f19abad255",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_69b09cde",
         "filename": "filter/source/msfilter/msdffimp.cxx",
         "patchSetId": 3
@@ -64,6 +118,24 @@
       "writtenOn": "2017-05-20T09:18:07Z",
       "side": 1,
       "message": "perhaps make this \"y-scale in the Mtf is wrong\"",
+      "revId": "50b1dd973bd53a7a344595596fe5f9f19abad255",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e9aacc18",
+        "filename": "filter/source/msfilter/msdffimp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-05-20T11:21:29Z",
+      "side": 1,
+      "message": "I\u0027ll change it.",
+      "parentUuid": "5a3905b3_69b09cde",
       "revId": "50b1dd973bd53a7a344595596fe5f9f19abad255",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_09a8f81e",
+        "filename": "filter/source/msfilter/msdffimp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-05-20T11:21:29Z",
+      "side": 1,
+      "message": "I\u0027ll change it.",
+      "parentUuid": "5a3905b3_89b5c8ce",
+      "revId": "50b1dd973bd53a7a344595596fe5f9f19abad255",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_a9ca844d",
         "filename": "forms/source/component/EventThread.hxx",
         "patchSetId": 3
@@ -98,6 +188,24 @@
       "writtenOn": "2017-05-20T09:18:07Z",
       "side": 1,
       "message": "Is this a necessary comment?",
+      "revId": "50b1dd973bd53a7a344595596fe5f9f19abad255",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_696dfc03",
+        "filename": "forms/source/component/EventThread.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-05-20T11:21:29Z",
+      "side": 1,
+      "message": "I would keep it for documentation purposes, unless it\u0027s wrong. (E.g., I wouldn\u0027t personally know what I\u0027m staring at here.) Feel free to remove it though.",
+      "parentUuid": "5a3905b3_a9ca844d",
       "revId": "50b1dd973bd53a7a344595596fe5f9f19abad255",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
