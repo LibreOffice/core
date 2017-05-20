@@ -3461,6 +3461,9 @@ void ScInterpreter::ScMin( bool bTextAsZero )
     short nParamCount = GetByte();
     if (!MustHaveParamCountMin( nParamCount, 1))
         return;
+    const SCSIZE nMatRows = GetRefListArrayMaxSize( nParamCount);
+    ScMatrixRef xResMat;
+    size_t nRefArrayPos = std::numeric_limits<size_t>::max();
     double nMin = ::std::numeric_limits<double>::max();
     double nVal = 0.0;
     ScAddress aAdr;
@@ -3494,8 +3497,34 @@ void ScInterpreter::ScMin( bool bTextAsZero )
                 }
             }
             break;
-            case svDoubleRef :
             case svRefList :
+            {
+                const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(pStack[sp-1]);
+                if (p && p->IsArrayResult())
+                {
+                    nRefArrayPos = nRefInList;
+                    if (!xResMat)
+                    {
+                        // Create and init all elements with current value.
+                        assert(nMatRows > 0);
+                        xResMat = GetNewMat( 1, nMatRows, true);
+                        xResMat->FillDouble( nMin, 0,0, 0,nMatRows-1);
+                    }
+                    else
+                    {
+                        // Current value and values from vector are operands
+                        // for each vector position.
+                        for (SCSIZE i=0; i < nMatRows; ++i)
+                        {
+                            double fVecRes = xResMat->GetDouble(0,i);
+                            if (fVecRes > nMin)
+                                xResMat->PutDouble( nMin, 0,i);
+                        }
+                    }
+                }
+            }
+            SAL_FALLTHROUGH;
+            case svDoubleRef :
             {
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
@@ -3511,6 +3540,18 @@ void ScInterpreter::ScMin( bool bTextAsZero )
                             nMin = nVal;
                     }
                     SetError(nErr);
+                }
+                if (nRefArrayPos != std::numeric_limits<size_t>::max())
+                {
+                    // Update vector element with current value.
+                    double fVecRes = xResMat->GetDouble(0,nRefArrayPos);
+                    if (fVecRes > nMin)
+                        xResMat->PutDouble( nMin, 0,nRefArrayPos);
+
+                    // Reset.
+                    nMin = std::numeric_limits<double>::max();
+                    nVal = 0.0;
+                    nRefArrayPos = std::numeric_limits<size_t>::max();
                 }
             }
             break;
@@ -3545,10 +3586,41 @@ void ScInterpreter::ScMin( bool bTextAsZero )
                 SetError(FormulaError::IllegalParameter);
         }
     }
-    if ( nVal < nMin  )
-        PushDouble(0.0);
+
+    if (xResMat)
+    {
+        // Include value of last non-references-array type and calculate final result.
+        if (nMin < std::numeric_limits<double>::max())
+        {
+            for (SCSIZE i=0; i < nMatRows; ++i)
+            {
+                double fVecRes = xResMat->GetDouble(0,i);
+                if (fVecRes > nMin)
+                    xResMat->PutDouble( nMin, 0,i);
+            }
+        }
+        else
+        {
+            /* TODO: the awkward "no value is minimum 0.0" is likely the case
+             * if a value is numeric_limits::max. Still, that could be a valid
+             * minimum value as well, but nVal and nMin had been reset after
+             * the last svRefList.. so we may lie here. */
+            for (SCSIZE i=0; i < nMatRows; ++i)
+            {
+                double fVecRes = xResMat->GetDouble(0,i);
+                if (fVecRes == std::numeric_limits<double>::max())
+                    xResMat->PutDouble( 0.0, 0,i);
+            }
+        }
+        PushMatrix( xResMat);
+    }
     else
-        PushDouble(nMin);
+    {
+        if ( nVal < nMin  )
+            PushDouble(0.0);    // zero or only empty arguments
+        else
+            PushDouble(nMin);
+    }
 }
 
 void ScInterpreter::ScMax( bool bTextAsZero )
@@ -3556,7 +3628,10 @@ void ScInterpreter::ScMax( bool bTextAsZero )
     short nParamCount = GetByte();
     if (!MustHaveParamCountMin( nParamCount, 1))
         return;
-    double nMax = -(::std::numeric_limits<double>::max());
+    const SCSIZE nMatRows = GetRefListArrayMaxSize( nParamCount);
+    ScMatrixRef xResMat;
+    size_t nRefArrayPos = std::numeric_limits<size_t>::max();
+    double nMax = std::numeric_limits<double>::lowest();
     double nVal = 0.0;
     ScAddress aAdr;
     ScRange aRange;
@@ -3589,8 +3664,34 @@ void ScInterpreter::ScMax( bool bTextAsZero )
                 }
             }
             break;
-            case svDoubleRef :
             case svRefList :
+            {
+                const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(pStack[sp-1]);
+                if (p && p->IsArrayResult())
+                {
+                    nRefArrayPos = nRefInList;
+                    if (!xResMat)
+                    {
+                        // Create and init all elements with current value.
+                        assert(nMatRows > 0);
+                        xResMat = GetNewMat( 1, nMatRows, true);
+                        xResMat->FillDouble( nMax, 0,0, 0,nMatRows-1);
+                    }
+                    else
+                    {
+                        // Current value and values from vector are operands
+                        // for each vector position.
+                        for (SCSIZE i=0; i < nMatRows; ++i)
+                        {
+                            double fVecRes = xResMat->GetDouble(0,i);
+                            if (fVecRes < nMax)
+                                xResMat->PutDouble( nMax, 0,i);
+                        }
+                    }
+                }
+            }
+            SAL_FALLTHROUGH;
+            case svDoubleRef :
             {
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
@@ -3606,6 +3707,18 @@ void ScInterpreter::ScMax( bool bTextAsZero )
                             nMax = nVal;
                     }
                     SetError(nErr);
+                }
+                if (nRefArrayPos != std::numeric_limits<size_t>::max())
+                {
+                    // Update vector element with current value.
+                    double fVecRes = xResMat->GetDouble(0,nRefArrayPos);
+                    if (fVecRes < nMax)
+                        xResMat->PutDouble( nMax, 0,nRefArrayPos);
+
+                    // Reset.
+                    nMax = std::numeric_limits<double>::lowest();
+                    nVal = 0.0;
+                    nRefArrayPos = std::numeric_limits<size_t>::max();
                 }
             }
             break;
@@ -3640,10 +3753,41 @@ void ScInterpreter::ScMax( bool bTextAsZero )
                 SetError(FormulaError::IllegalParameter);
         }
     }
-    if ( nVal > nMax  )
-        PushDouble(0.0);
+
+    if (xResMat)
+    {
+        // Include value of last non-references-array type and calculate final result.
+        if (nMax > std::numeric_limits<double>::lowest())
+        {
+            for (SCSIZE i=0; i < nMatRows; ++i)
+            {
+                double fVecRes = xResMat->GetDouble(0,i);
+                if (fVecRes < nMax)
+                    xResMat->PutDouble( nMax, 0,i);
+            }
+        }
+        else
+        {
+            /* TODO: the awkward "no value is maximum 0.0" is likely the case
+             * if a value is numeric_limits::lowest. Still, that could be a
+             * valid maximum value as well, but nVal and nMax had been reset
+             * after the last svRefList.. so we may lie here. */
+            for (SCSIZE i=0; i < nMatRows; ++i)
+            {
+                double fVecRes = xResMat->GetDouble(0,i);
+                if (fVecRes == -std::numeric_limits<double>::max())
+                    xResMat->PutDouble( 0.0, 0,i);
+            }
+        }
+        PushMatrix( xResMat);
+    }
     else
-        PushDouble(nMax);
+    {
+        if ( nVal > nMax  )
+            PushDouble(0.0);    // zero or only empty arguments
+        else
+            PushDouble(nMax);
+    }
 }
 
 void ScInterpreter::GetStVarParams( double& rVal, double& rValCount, bool bTextAsZero )
