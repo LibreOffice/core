@@ -1379,7 +1379,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileURLFromSystemPath(
         rtl_uString *pustrSystemPath, rtl_uString **ppustrFileURL);
 
 
-/** Searche a full qualified system path or a file URL.
+/** Search a full qualified system path or a file URL.
 
     @param pustrFileName [in]
     A system dependent path, a file URL, a file or relative directory.
