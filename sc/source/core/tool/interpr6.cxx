@@ -504,7 +504,7 @@ static double lcl_IterResult( ScIterFunc eFunc, double fRes, double fMem, sal_uL
 void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
 {
     short nParamCount = GetByte();
-    SCSIZE nMatRows = GetRefListArrayMaxSize( nParamCount);
+    const SCSIZE nMatRows = GetRefListArrayMaxSize( nParamCount);
     ScMatrixRef xResMat, xResCount;
     double fRes = ( eFunc == ifPRODUCT ) ? 1.0 : 0.0;
     double fVal = 0.0;
