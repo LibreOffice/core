@@ -31,7 +31,6 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/io/XInputStreamProvider.hpp>
-#include <com/sun/star/resource/XStringResourceWithLocation.hpp>
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
