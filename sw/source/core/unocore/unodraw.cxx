@@ -1044,9 +1044,6 @@ uno::Reference< beans::XPropertySetInfo >  SwXShape::getPropertySetInfo()
 
 void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
 {
-    if (rPropertyName == "LayerID") {
-        SAL_WARN("sw.uno", "noel");
-    }
     SolarMutexGuard aGuard;
     SwFrameFormat*   pFormat = GetFrameFormat();
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName( rPropertyName );
@@ -1447,9 +1444,6 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
 
 uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
 {
-    if (rPropertyName == "LayerID") {
-        SAL_WARN("sw.uno", "noel");
-    }
     SolarMutexGuard aGuard;
     uno::Any aRet;
     SwFrameFormat*   pFormat = GetFrameFormat();
