@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_4452e714",
+        "filename": "solenv/bin/create-ids",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-20T14:17:05Z",
+      "side": 1,
+      "message": "I\u0027d /assume/ dirs was meant to remain unquoted",
+      "revId": "027d661ef7e2490f1182d3e5003ae4da4135e0ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
