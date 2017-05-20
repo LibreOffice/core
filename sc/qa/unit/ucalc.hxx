@@ -212,6 +212,7 @@ public:
     void testFuncLCM();
     void testFuncSUMSQ();
     void testFuncMDETERM();
+    void testFuncRefListArraySUBTOTAL();
     void testMatConcat();
     void testMatConcatReplication();
     void testRefR1C1WholeCol();
@@ -620,6 +621,7 @@ public:
     CPPUNIT_TEST(testFuncLCM);
     CPPUNIT_TEST(testFuncSUMSQ);
     CPPUNIT_TEST(testFuncMDETERM);
+    CPPUNIT_TEST(testFuncRefListArraySUBTOTAL);
     CPPUNIT_TEST(testMatConcat);
     CPPUNIT_TEST(testMatConcatReplication);
     CPPUNIT_TEST(testExternalRef);

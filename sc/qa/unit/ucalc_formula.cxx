@@ -7904,4 +7904,31 @@ void Test::testFuncRowsHidden()
     m_pDoc->DeleteTab(0);
 }
 
+// Test SUBTOTAL with reference lists in array context.
+void Test::testFuncRefListArraySUBTOTAL()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetValue(0,0,0,  1.0);  // A1
+    m_pDoc->SetValue(0,1,0,  2.0);  // A2
+    m_pDoc->SetValue(0,2,0,  4.0);  // A3
+    m_pDoc->SetValue(0,3,0,  8.0);  // A4
+    m_pDoc->SetValue(0,4,0, 16.0);  // A5
+    m_pDoc->SetValue(0,5,0, 32.0);  // A6
+
+    // Matrix in B7:B9, individual SUM of A2:A3, A3:A4 and A4:A5
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    m_pDoc->InsertMatrixFormula(1, 6, 1, 8, aMark, "=SUBTOTAL(9;OFFSET(A1;ROW(1:3);0;2))");
+    ScAddress aPos(1,6,0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL for A2:A3 failed",  6.0, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL for A3:A4 failed", 12.0, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL for A4:A5 failed", 24.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
