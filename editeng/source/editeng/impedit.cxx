@@ -108,7 +108,6 @@ ImpEditView::~ImpEditView()
     delete pCursor;
     delete pBackgroundColor;
     delete pPointer;
-    pDragAndDropInfo.reset();
 }
 
 void ImpEditView::SetBackgroundColor( const Color& rColor )
