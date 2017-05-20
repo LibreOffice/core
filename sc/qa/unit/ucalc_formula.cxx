@@ -7837,7 +7837,7 @@ void Test::testIntersectionOpExcel()
     // Vertical cell range covering C2.
     pGlobalNames->insert( new ScRangeData( m_pDoc, "vert", "$C$1:$C$3"));
     // Data in C2.
-    m_pDoc->SetString(2,1,0,"1");
+    m_pDoc->SetValue(2,1,0, 1.0);
 
     m_pDoc->SetGrammar(FormulaGrammar::GRAM_ENGLISH_XL_A1);
 
