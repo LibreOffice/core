@@ -168,6 +168,15 @@ class LOKitThread extends Thread {
         mContext.getDocumentOverlay().setPartPageRectangles(partPageRectangles);
     }
 
+    private void updateZoomConstraints() {
+        mLayerClient = mContext.getLayerClient();
+
+        // Set min zoom to the page width so that you cannot zoom below page width
+        // applies to all types of document; in the future spreadsheets may be singled out
+        float minZoom = mLayerClient.getViewportMetrics().getWidth()/mTileProvider.getPageWidth();
+        mLayerClient.setZoomConstraints(new ZoomConstraints(true, 0.0f, minZoom, 0.0f));
+    }
+
 
     /**
      * Resume the document with the current part
@@ -181,6 +190,7 @@ class LOKitThread extends Thread {
         mTileProvider = TileProviderFactory.create(mContext, mInvalidationHandler, filename);
 
         if (mTileProvider.isReady()) {
+            updateZoomConstraints();
             changePart(partIndex);
         } else {
             closeDocument();
@@ -209,13 +219,9 @@ class LOKitThread extends Thread {
         mInvalidationHandler = new InvalidationHandler(mContext);
         mTileProvider = TileProviderFactory.create(mContext, mInvalidationHandler, filePath);
 
-        // Set min zoom to the page width so that you cannot zoom below page width
-        // applies to all types of document; in the future spreadsheets may be singled out
-        float minZoom = mLayerClient.getViewportMetrics().getWidth()/mTileProvider.getPageWidth();
-        mLayerClient.setZoomConstraints(new ZoomConstraints(true, 0.0f, minZoom, 0.0f));
-
         if (mTileProvider.isReady()) {
             LOKitShell.showProgressSpinner(mContext);
+            updateZoomConstraints();
             refresh();
             LOKitShell.hideProgressSpinner(mContext);
         } else {
@@ -236,6 +242,7 @@ class LOKitThread extends Thread {
 
         if (mTileProvider.isReady()) {
             LOKitShell.showProgressSpinner(mContext);
+            updateZoomConstraints();
             refresh();
             LOKitShell.hideProgressSpinner(mContext);
 
@@ -332,6 +339,9 @@ class LOKitThread extends Thread {
                 break;
             case LOEvent.UPDATE_PART_PAGE_RECT:
                 updatePartPageRectangles();
+                break;
+            case LOEvent.UPDATE_ZOOM_CONSTRAINTS:
+                updateZoomConstraints();
                 break;
         }
     }
