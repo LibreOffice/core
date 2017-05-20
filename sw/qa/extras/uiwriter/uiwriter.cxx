@@ -206,7 +206,9 @@ public:
     void testTdf89720();
     void testTdf88986();
     void testTdf87922();
+#if HAVE_MORE_FONTS
     void testTdf77014();
+#endif
     void testTdf92648();
     void testTdf96515();
     void testTdf96943();
@@ -235,7 +237,9 @@ public:
     void testTdf104425();
     void testTdf104814();
     void testTdf66405();
+#if HAVE_MORE_FONTS
     void testTdf35021_tabOverMarginDemo();
+#endif
     void testTdf106701_tabOverMarginAutotab();
     void testTdf104492();
     void testTdf107025();
@@ -340,7 +344,9 @@ public:
     CPPUNIT_TEST(testTdf89720);
     CPPUNIT_TEST(testTdf88986);
     CPPUNIT_TEST(testTdf87922);
+#if HAVE_MORE_FONTS
     CPPUNIT_TEST(testTdf77014);
+#endif
     CPPUNIT_TEST(testTdf92648);
     CPPUNIT_TEST(testTdf96515);
     CPPUNIT_TEST(testTdf96943);
@@ -369,7 +375,9 @@ public:
     CPPUNIT_TEST(testTdf104425);
     CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST(testTdf66405);
+#if HAVE_MORE_FONTS
     CPPUNIT_TEST(testTdf35021_tabOverMarginDemo);
+#endif
     CPPUNIT_TEST(testTdf106701_tabOverMarginAutotab);
     CPPUNIT_TEST(testTdf104492);
     CPPUNIT_TEST(testTdf107025);
