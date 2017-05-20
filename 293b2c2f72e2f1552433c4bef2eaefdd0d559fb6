@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_6935fc44",
+        "filename": "setup_native/scripts/unpack_update.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-05-20T09:38:08Z",
+      "side": 1,
+      "message": "Is this a candidate for ./$SUBFOLDER/* ?",
+      "revId": "293b2c2f72e2f1552433c4bef2eaefdd0d559fb6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
