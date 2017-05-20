@@ -24,7 +24,6 @@
 #include <xmloff/xmluconv.hxx>
 #include "xmlEnums.hxx"
 #include "xmlHelper.hxx"
-#include <com/sun/star/report/XReportControlFormat.hpp>
 #include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

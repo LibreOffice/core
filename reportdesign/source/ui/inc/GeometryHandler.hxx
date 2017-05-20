@@ -24,12 +24,13 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/inspection/XPropertyHandler.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/report/XReportComponent.hpp>
-#include <com/sun/star/report/XFunction.hpp>
+#include <com/sun/star/report/XFunctionsSupplier.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <memory>

@@ -91,11 +91,9 @@
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 
-#include <com/sun/star/report/XGroups.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/report/XShape.hpp>
-#include <com/sun/star/report/Function.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <i18nlangtag/languagetag.hxx>

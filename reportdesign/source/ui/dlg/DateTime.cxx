@@ -29,7 +29,6 @@
 #include "RptDef.hxx"
 #include "uistrings.hrc"
 #include "ReportController.hxx"
-#include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatPreviewer.hpp>

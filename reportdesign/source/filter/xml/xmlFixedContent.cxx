@@ -23,7 +23,6 @@
 #include <xmloff/nmspmap.hxx>
 #include "xmlEnums.hxx"
 #include "xmlReportElement.hxx"
-#include <com/sun/star/report/XShape.hpp>
 #include "xmlCell.hxx"
 #include "xmlstrings.hrc"
 #include <com/sun/star/report/XFormattedField.hpp>

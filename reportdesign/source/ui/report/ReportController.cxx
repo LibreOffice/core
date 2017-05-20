@@ -54,7 +54,6 @@
 #include <com/sun/star/report/XImageControl.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/report/Function.hpp>
-#include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>

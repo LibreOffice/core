@@ -21,7 +21,6 @@
 
 #include <cppuhelper/propertysetmixin.hxx>
 #include <com/sun/star/report/XFormattedField.hpp>
-#include <com/sun/star/report/Function.hpp>
 #include "ReportControlModel.hxx"
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>

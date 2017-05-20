@@ -68,7 +68,6 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/report/GroupKeepTogether.hpp>
 #include <com/sun/star/report/ReportPrintOption.hpp>
-#include <com/sun/star/report/XFunction.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>

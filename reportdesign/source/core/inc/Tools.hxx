@@ -19,15 +19,12 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_TOOLS_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_CORE_INC_TOOLS_HXX
 
-#include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XSection.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/report/XFixedText.hpp>
-#include <com/sun/star/report/XFormattedField.hpp>
 
 
 #include "Section.hxx"

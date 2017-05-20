@@ -21,7 +21,6 @@
 
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/report/XReportDefinition.hpp>
 #include <cppuhelper/implbase.hxx>
 
 #include <memory>

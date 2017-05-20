@@ -29,7 +29,6 @@
 #include "UITools.hxx"
 #include "uistrings.hrc"
 #include "ReportController.hxx"
-#include <com/sun/star/report/XFixedText.hpp>
 #include <algorithm>
 
 namespace rptui

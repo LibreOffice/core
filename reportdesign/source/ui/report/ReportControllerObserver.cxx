@@ -27,7 +27,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <FormattedFieldBeautifier.hxx>
 
