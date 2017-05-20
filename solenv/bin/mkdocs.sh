@@ -84,6 +84,21 @@ function proc_text {
   | awk 'BEGIN { print "<p>" } { print } END { print "</p>" }'
 }
 
+function proc_text_markdown {
+  sed -re ' s/\[\[([-_a-zA-Z0-9]+)\]\]/<a href="\1.html">\1<\/a>/g' - \
+  | sed -re ' s/\[git:([^]]+)\]/<a href="http:\/\/cgit.freedesktop.org\/libreoffice\/core\/tree\/\1">\1<\/a>/g'
+}
+
+function check_cmd {
+  cmd_needed="$1"
+  error_msg="$2"
+
+  which $cmd_needed > /dev/null 2>&1 || {
+    echo "$error_msg" >&2
+    exit 1
+  }
+}
+
 function setup {
   parm=$1
   if [ -z "${!parm}" ] ; then
@@ -98,14 +113,9 @@ function setup {
 }
 
 # binaries that we need
-which doxygen > /dev/null 2>&1 || {
-    echo "You need doxygen for doc generation" >&2
-    exit 1
-}
-which dot > /dev/null 2>&1 || {
-    echo "You need the graphviz tools to create the nice inheritance graphs" >&2
-    exit 1
-}
+check_cmd doxygen "You need doxygen for doc generation"
+check_cmd dot "You need the graphviz tools to create the nice inheritance graphs"
+check_cmd markdown "You need markdown in order to convert README.md into html"
 
 # suck setup
 setup "SOLARINC"
@@ -212,7 +222,15 @@ for module_name in *; do
     if [ -f "$cur_file" ]; then
       # write index.html entry
       text="<h2><a href=\"${module_name}.html\">${module_name}</a></h2>\n"
-      text="${text}$(head -n1 $cur_file | proc_text )"
+
+      if [ ${cur_file: -3} == ".md" ]; then
+        # This is a markdown file.
+        header_text="$(head -n1 $cur_file)"
+        header_text="$(echo ${header_text} | sed -e 's/^\#*//g')"
+        text="${text}${header_text}"
+      else
+        text="${text}$(head -n1 $cur_file | proc_text)"
+      fi
       echo -e $text >> "$BASE_OUTPUT/index.html"
 
       # write detailed module content
@@ -224,13 +242,21 @@ for module_name in *; do
       fi
       text="${text} </p><p>&nbsp;</p>"
       echo -e $text >> "$BASE_OUTPUT/${module_name}.html"
-      proc_text < $cur_file >> "$BASE_OUTPUT/${module_name}.html"
+
+      if [ ${cur_file: -3} == ".md" ]; then
+        # This is a markdown file.
+        text="$(markdown $cur_file | proc_text_markdown)"
+        echo $text >> "$BASE_OUTPUT/${module_name}.html"
+      else
+        proc_text < $cur_file >> "$BASE_OUTPUT/${module_name}.html"
+      fi
       footer "$BASE_OUTPUT/${module_name}.html"
     else
       empty_modules[${#empty_modules[*]}]=$module_name
     fi
   fi
 done
+
 if [ ${#empty_modules[*]} -gt 0 ]; then
   echo -e "<p>&nbsp;</p><p>READMEs were not available for these modules:</p><ul>\n" >> "$BASE_OUTPUT/index.html"
   for module_name in "${empty_modules[@]}"; do
