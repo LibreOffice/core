@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_29ddb414",
+        "filename": "solenv/bin/bin_library_info.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-05-20T09:22:58Z",
+      "side": 1,
+      "message": "is this necessary?",
+      "revId": "260716bf3f3e8944c96615c98428be0b54620b72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
