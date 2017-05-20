@@ -85,7 +85,6 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     nExtraCursorFlags   = GetCursorFlags::NONE;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
     pCursor             = nullptr;
-    pDragAndDropInfo    = nullptr;
     bReadOnly           = false;
     bClickedInSelection = false;
     eSelectionMode      = EESelectionMode::TxtOnly;
@@ -109,7 +108,7 @@ ImpEditView::~ImpEditView()
     delete pCursor;
     delete pBackgroundColor;
     delete pPointer;
-    delete pDragAndDropInfo;
+    pDragAndDropInfo.reset();
 }
 
 void ImpEditView::SetBackgroundColor( const Color& rColor )
@@ -1765,8 +1764,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
 
     SolarMutexGuard aVclGuard;
 
-    delete pDragAndDropInfo;
-    pDragAndDropInfo = nullptr;
+    pDragAndDropInfo.reset();
 
     Point aMousePosPixel( rDGE.DragOriginX, rDGE.DragOriginY );
 
@@ -1775,7 +1773,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
 
     if ( GetEditSelection().HasRange() && bClickedInSelection )
     {
-        pDragAndDropInfo = new DragAndDropInfo();
+        pDragAndDropInfo.reset(new DragAndDropInfo());
     }
     else
     {
@@ -1786,7 +1784,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
         const SvxFieldItem* pField = GetField( aMousePos, &nPara, &nPos );
         if ( pField )
         {
-            pDragAndDropInfo = new DragAndDropInfo();
+            pDragAndDropInfo.reset(new DragAndDropInfo());
             pDragAndDropInfo->pField = pField;
             ContentNode* pNode = pEditEngine->GetEditDoc().GetObject( nPara );
             aCopySel = EditSelection( EditPaM( pNode, nPos ), EditPaM( pNode, nPos+1 ) );
@@ -1797,7 +1795,7 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
         }
         else if ( IsBulletArea( aMousePos, &nPara ) )
         {
-            pDragAndDropInfo = new DragAndDropInfo();
+            pDragAndDropInfo.reset(new DragAndDropInfo());
             pDragAndDropInfo->bOutlinerMode = true;
             EditPaM aStartPaM( pEditEngine->GetEditDoc().GetObject( nPara ), 0 );
             EditPaM aEndPaM( aStartPaM );
@@ -1929,8 +1927,7 @@ void ImpEditView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent
 
         HideDDCursor();
         ShowCursor( DoAutoScroll(), true );
-        delete pDragAndDropInfo;
-        pDragAndDropInfo = nullptr;
+        pDragAndDropInfo.reset();
         pEditEngine->GetEndDropHdl().Call(GetEditViewPtr());
     }
 }
@@ -2000,8 +1997,7 @@ void ImpEditView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE
 
         if ( !pDragAndDropInfo->bStarterOfDD )
         {
-            delete pDragAndDropInfo;
-            pDragAndDropInfo = nullptr;
+            pDragAndDropInfo.reset();
         }
 
         rDTDE.Context->dropComplete( bChanges );
@@ -2013,7 +2009,7 @@ void ImpEditView::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEv
     SolarMutexGuard aVclGuard;
 
     if ( !pDragAndDropInfo )
-        pDragAndDropInfo = new DragAndDropInfo( );
+        pDragAndDropInfo.reset(new DragAndDropInfo());
 
     pDragAndDropInfo->bHasValidData = false;
 
@@ -2043,8 +2039,7 @@ void ImpEditView::dragExit( const css::datatransfer::dnd::DropTargetEvent& )
 
     if ( pDragAndDropInfo && !pDragAndDropInfo->bStarterOfDD )
     {
-        delete pDragAndDropInfo;
-        pDragAndDropInfo = nullptr;
+        pDragAndDropInfo.reset();
     }
 }
 

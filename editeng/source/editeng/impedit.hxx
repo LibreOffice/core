@@ -238,7 +238,7 @@ private:
     VclPtr<vcl::Window>       pOutWin;
     EditView::OutWindowSet    aOutWindowSet;
     Pointer*                  pPointer;
-    DragAndDropInfo*          pDragAndDropInfo;
+    std::unique_ptr<DragAndDropInfo>  pDragAndDropInfo;
 
     css::uno::Reference< css::datatransfer::dnd::XDragSourceListener > mxDnDListener;
 
