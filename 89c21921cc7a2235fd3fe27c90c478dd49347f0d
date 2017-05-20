@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_4994c036",
+        "filename": "editeng/source/editeng/eehtml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-05-20T08:44:13Z",
+      "side": 1,
+      "message": "Doesn\u0027t this translate to something like \"country specific text\"? what does this comment actually mean?",
+      "revId": "89c21921cc7a2235fd3fe27c90c478dd49347f0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_69997c6e",
+        "filename": "editeng/source/editeng/eertfpar.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-05-20T08:44:13Z",
+      "side": 1,
+      "message": "Is this comment useful?",
+      "revId": "89c21921cc7a2235fd3fe27c90c478dd49347f0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a9a3649d",
+        "filename": "extensions/test/ole/EventListenerSample/EventListener/EvtListener.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-05-20T08:44:13Z",
+      "side": 1,
+      "message": "Is this even necessary?",
+      "revId": "89c21921cc7a2235fd3fe27c90c478dd49347f0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_899ea854",
+        "filename": "extensions/test/ole/EventListenerSample/EventListener/EvtListener.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-05-20T08:44:13Z",
+      "side": 1,
+      "message": "Is this even necessary?",
+      "revId": "89c21921cc7a2235fd3fe27c90c478dd49347f0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
