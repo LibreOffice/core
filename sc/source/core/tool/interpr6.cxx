@@ -459,6 +459,24 @@ void IterateMatrix(
     }
 }
 
+size_t ScInterpreter::GetRefListArrayMaxSize( short nParamCount )
+{
+    size_t nSize = 0;
+    if (bMatrixFormula || pCur->IsInForceArray())
+    {
+        for (short i=1; i <= nParamCount; ++i)
+        {
+            if (GetStackType(i) == svRefList)
+            {
+                const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(pStack[sp - i]);
+                if (p && p->IsArrayResult() && p->GetRefList()->size() > nSize)
+                    nSize = p->GetRefList()->size();
+            }
+        }
+    }
+    return nSize;
+}
+
 static double lcl_IterResult( ScIterFunc eFunc, double fRes, double fMem, sal_uLong nCount )
 {
     switch( eFunc )
@@ -486,21 +504,7 @@ static double lcl_IterResult( ScIterFunc eFunc, double fRes, double fMem, sal_uL
 void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
 {
     short nParamCount = GetByte();
-    SCSIZE nMatRows = 0;
-    if (bMatrixFormula || pCur->IsInForceArray())
-    {
-        // Check for arrays of references to determine the maximum size of a
-        // return column vector.
-        for (short i=1; i <= nParamCount; ++i)
-        {
-            if (GetStackType(i) == svRefList)
-            {
-                const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(pStack[sp - i]);
-                if (p && p->IsArrayResult() && p->GetRefList()->size() > nMatRows)
-                    nMatRows = p->GetRefList()->size();
-            }
-        }
-    }
+    SCSIZE nMatRows = GetRefListArrayMaxSize( nParamCount);
     ScMatrixRef xResMat, xResCount;
     double fRes = ( eFunc == ifPRODUCT ) ? 1.0 : 0.0;
     double fVal = 0.0;

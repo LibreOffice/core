@@ -568,6 +568,9 @@ void ScUnicode();
 void ScUnichar();
 void ScMin( bool bTextAsZero = false );
 void ScMax( bool bTextAsZero = false );
+/** Check for array of references to determine the maximum size of a return
+    column vector if in array context. */
+size_t GetRefListArrayMaxSize( short nParamCount );
 void IterateParameters( ScIterFunc, bool bTextAsZero = false );
 void ScSumSQ();
 void ScSum();
