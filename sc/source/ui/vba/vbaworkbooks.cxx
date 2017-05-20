@@ -33,8 +33,6 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
-#include <com/sun/star/uri/XUriReference.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>

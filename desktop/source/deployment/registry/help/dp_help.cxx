@@ -42,8 +42,6 @@
 #include <com/sun/star/deployment/ExtensionRemovedException.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
-#include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <boost/optional.hpp>
 
 using namespace ::dp_misc;

@@ -53,7 +53,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

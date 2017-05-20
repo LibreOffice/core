@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarPkgUrlReferenceFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>

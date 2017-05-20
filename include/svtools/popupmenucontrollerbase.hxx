@@ -31,8 +31,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
-#include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
