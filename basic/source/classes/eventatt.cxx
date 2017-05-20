@@ -33,8 +33,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/resource/XStringResourceSupplier.hpp>
-#include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
@@ -57,7 +55,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
-using namespace ::com::sun::star::resource;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;

@@ -25,7 +25,6 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XDialog2.hpp>
 #include <com/sun/star/awt/XSimpleTabController.hpp>
-#include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/macros.hxx>

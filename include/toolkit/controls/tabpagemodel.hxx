@@ -23,7 +23,6 @@
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/awt/tab/XTabPage.hpp>
-#include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/macros.hxx>

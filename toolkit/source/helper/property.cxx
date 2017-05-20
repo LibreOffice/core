@@ -43,7 +43,6 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <functional>
 #include <algorithm>
