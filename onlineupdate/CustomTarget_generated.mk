@@ -15,13 +15,13 @@ $(onlineupdate_INC)/primaryCert.h : \
 		$(SRCDIR)/onlineupdate/source/update/updater/gen_cert_header.py
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,,1)
 	mkdir -p $(dir $@)
-	$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/onlineupdate/source/update/updater/gen_cert_header.py "primaryCertData" /lo/users/moggi/NSSDBDir/master-daily.der > $(onlineupdate_INC)/primaryCert.h #"$(UPDATE_CONFIG)"
+	$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/onlineupdate/source/update/updater/gen_cert_header.py "primaryCertData" $(UPDATE_CONFIG) > $(onlineupdate_INC)/primaryCert.h #"$(UPDATE_CONFIG)"
 
 $(onlineupdate_INC)/secondaryCert.h : \
 		$(SRCDIR)/onlineupdate/source/update/updater/gen_cert_header.py
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,,1)
 	mkdir -p $(dir $@)
-	$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/onlineupdate/source/update/updater/gen_cert_header.py "secondaryCertData" /lo/users/moggi/NSSDBDir/master-daily.der > $(onlineupdate_INC)/secondaryCert.h #"$(UPDATE_CONFIG)"
+	$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/onlineupdate/source/update/updater/gen_cert_header.py "secondaryCertData" $(UPDATE_CONFIG) > $(onlineupdate_INC)/secondaryCert.h #"$(UPDATE_CONFIG)"
 
 $(call gb_CustomTarget_get_target,onlineupdate/generated) : \
 	$(onlineupdate_INC)/primaryCert.h \

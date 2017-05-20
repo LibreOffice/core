@@ -2,6 +2,7 @@
 
 import sys
 import binascii
+import configparser
 
 def file_byte_generator(filename):
     with open(filename, "rb") as f:
@@ -17,6 +18,8 @@ def create_header(array_name, in_filename):
 
 if __name__ == '__main__':
     if len(sys.argv) < 3:
-        print('ERROR: usage: gen_cert_header.py array_name in_filename')
+        print('ERROR: usage: gen_cert_header.py array_name update_config_file')
         sys.exit(1);
-    sys.exit(create_header(sys.argv[1], sys.argv[2]))
+    config = configparser.ConfigParser()
+    config.read(sys.argv[2])
+    sys.exit(create_header(sys.argv[1], config['Updater']['certificate-der']))
