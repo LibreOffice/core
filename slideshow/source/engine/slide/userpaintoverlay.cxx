@@ -22,7 +22,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/awt/MouseButton.hpp>
-#include <com/sun/star/presentation/XSlideShowView.hpp>
+#include <com/sun/star/awt/MouseEvent.hpp>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

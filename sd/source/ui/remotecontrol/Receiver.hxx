@@ -9,11 +9,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_REMOTECONTROL_RECEIVER_HXX
 #define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_RECEIVER_HXX
 
-#include <com/sun/star/presentation/XSlideShowListener.hpp>
-#include <com/sun/star/presentation/XSlideShowController.hpp>
-#include <com/sun/star/presentation/XPresentationSupplier.hpp>
-#include <com/sun/star/presentation/XPresentation.hpp>
-#include <com/sun/star/presentation/XPresentation2.hpp>
 #include <osl/socket.hxx>
 #include <stdlib.h>
 #include <vcl/timer.hxx>

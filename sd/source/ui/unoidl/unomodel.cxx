@@ -106,7 +106,6 @@
 #include "optsitem.hxx"
 
 #include <vcl/pdfextoutdevdata.hxx>
-#include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <svx/sdr/contact/viewobjectcontact.hxx>

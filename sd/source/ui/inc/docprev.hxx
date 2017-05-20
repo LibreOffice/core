@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_DOCPREV_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_DOCPREV_HXX
 
-#include <com/sun/star/presentation/FadeEffect.hpp>
 #include <vcl/window.hxx>
 #include <tools/gen.hxx>
 #include <tools/wintypes.hxx>

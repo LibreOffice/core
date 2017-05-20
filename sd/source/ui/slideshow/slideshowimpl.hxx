@@ -30,7 +30,6 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/awt/XActivateListener.hpp>
 #include <com/sun/star/presentation/XSlideShow.hpp>
-#include <com/sun/star/presentation/XSlideShowView.hpp>
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 #include "com/sun/star/presentation/XShapeEventListener.hpp"
@@ -42,7 +41,6 @@
 #include <com/sun/star/awt/XPaintListener.hpp>
 #include <com/sun/star/awt/XPointer.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/media/XManager.hpp>
 #include <com/sun/star/media/XPlayer.hpp>

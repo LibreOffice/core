@@ -44,9 +44,6 @@
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
-#include <com/sun/star/animations/XAnimationNode.hpp>
-#include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

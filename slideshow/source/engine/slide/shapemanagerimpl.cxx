@@ -22,7 +22,6 @@
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/presentation/XShapeEventListener.hpp>
-#include <com/sun/star/presentation/XSlideShowListener.hpp>
 
 #include "shapemanagerimpl.hxx"
 

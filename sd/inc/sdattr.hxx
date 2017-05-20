@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_INC_SDATTR_HXX
 #define INCLUDED_SD_INC_SDATTR_HXX
 
-#include <com/sun/star/presentation/FadeEffect.hpp>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>

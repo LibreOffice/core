@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <editeng/outlobj.hxx>
@@ -81,7 +80,6 @@
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>
 #include <svl/aeitem.hxx>
-#include <com/sun/star/presentation/FadeEffect.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <vcl/svapp.hxx>
@@ -90,7 +88,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::beans;
 
 namespace sd { namespace slidesorter { namespace controller {

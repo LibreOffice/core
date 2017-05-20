@@ -22,7 +22,6 @@
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -50,7 +49,6 @@
 #include <memory>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 
 using ::com::sun::star::uno::UNO_QUERY;

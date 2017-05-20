@@ -10,6 +10,8 @@
 #include <vector>
 
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/presentation/XPresentation2.hpp>
+#include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <config_version.h>

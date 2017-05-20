@@ -24,8 +24,6 @@
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 
-#include <com/sun/star/animations/XTimeContainer.hpp>
-#include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/AnimationFill.hpp>
 #include <com/sun/star/animations/AnimationRestart.hpp>
 #include <com/sun/star/presentation/TextAnimationType.hpp>

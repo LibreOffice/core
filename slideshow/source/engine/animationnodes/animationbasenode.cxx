@@ -21,7 +21,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
-#include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>

@@ -26,7 +26,6 @@
 #include <vector>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/animations/AnimationNodeType.hpp>
 
 #include <CustomAnimationEffect.hxx>
 
