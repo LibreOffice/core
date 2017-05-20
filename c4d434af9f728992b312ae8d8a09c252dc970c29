@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_c96a701a",
+        "filename": "include/filter/msfilter/countryid.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-05-20T09:52:33Z",
+      "side": 1,
+      "message": "are we sure this won\u0027t break anything?",
+      "revId": "c4d434af9f728992b312ae8d8a09c252dc970c29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e9772c00",
+        "filename": "sd/source/ui/func/futext.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-05-20T09:52:33Z",
+      "side": 1,
+      "message": "Just remove this - we know that it\u0027s a destructor...",
+      "revId": "c4d434af9f728992b312ae8d8a09c252dc970c29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
