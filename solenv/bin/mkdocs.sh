@@ -93,14 +93,15 @@ function check_cmd {
   cmds_needed="$1"
   error_msg="$2"
 
-  found=0
+  found=0; cmd=
   for cmd_needed in $cmds_needed; do
-    which $cmd_needed > /dev/null 2>&1 && found=1
+    which $cmd_needed > /dev/null 2>&1 && { found=1; cmd=$cmd_needed; }
   done
   if [ $found = 0 ]; then
       echo "$error_msg" >&2
       exit 1
   fi
+  alias "${cmds_needed%% *}"=$cmd
 }
 
 function setup {
