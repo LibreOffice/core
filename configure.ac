@@ -11299,6 +11299,9 @@ else
     if test "$enable_online_update" = "mar"; then
         AC_MSG_RESULT([yes - MAR-based online update])
         ENABLE_ONLINE_UPDATE_MAR="TRUE"
+        if test "$with_update_config" = ""; then
+            AC_MSG_ERROR([mar based online updater needs an update config specified with "with-update-config])
+        fi
         UPDATE_CONFIG="$with_update_config"
         AC_DEFINE(HAVE_FEATURE_UPDATE_MAR)
     elif test "$enable_online_update" = "yes"; then
