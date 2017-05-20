@@ -281,7 +281,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
         }
     }
 
-    /* check if initial string contains double instances of '/' */
+    /* check if initial string contains repeated '/' characters */
     nIndex = rtl_ustr_indexOfStr_WithLength( ustrSystemPath->buffer, ustrSystemPath->length, pDoubleSlash, 2 );
     if( nIndex != -1 )
     {
@@ -295,7 +295,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
         /* adapt index to pTmp */
         nIndex += pTmp->length - ustrSystemPath->length;
 
-        /* remove all occurrences of '//' */
+        /* replace repeated '/' characters with a single '/' */
         for( nSrcIndex = nIndex + 1; nSrcIndex < pTmp->length; nSrcIndex++ )
         {
             if( (pTmp->buffer[nSrcIndex] == '/') && (pTmp->buffer[nIndex] == '/') )
