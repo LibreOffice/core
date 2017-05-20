@@ -459,9 +459,49 @@ void IterateMatrix(
     }
 }
 
+static double lcl_IterResult( ScIterFunc eFunc, double fRes, double fMem, sal_uLong nCount )
+{
+    switch( eFunc )
+    {
+        case ifSUM:
+            fRes = ::rtl::math::approxAdd( fRes, fMem );
+        break;
+        case ifAVERAGE:
+            fRes = sc::div( ::rtl::math::approxAdd( fRes, fMem ), nCount);
+        break;
+        case ifCOUNT2:
+        case ifCOUNT:
+            fRes = nCount;
+        break;
+        case ifPRODUCT:
+            if ( !nCount )
+                fRes = 0.0;
+        break;
+        default:
+            ; // nothing
+    }
+    return fRes;
+}
+
 void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
 {
     short nParamCount = GetByte();
+    SCSIZE nMatRows = 0;
+    if (bMatrixFormula || pCur->IsInForceArray())
+    {
+        // Check for arrays of references to determine the maximum size of a
+        // return column vector.
+        for (short i=1; i <= nParamCount; ++i)
+        {
+            if (GetStackType(i) == svRefList)
+            {
+                const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(pStack[sp - i]);
+                if (p && p->IsArrayResult() && p->GetRefList()->size() > nMatRows)
+                    nMatRows = p->GetRefList()->size();
+            }
+        }
+    }
+    ScMatrixRef xResMat, xResCount;
     double fRes = ( eFunc == ifPRODUCT ) ? 1.0 : 0.0;
     double fVal = 0.0;
     double fMem = 0.0;  // first numeric value != 0.0
@@ -469,6 +509,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
     ScAddress aAdr;
     ScRange aRange;
     size_t nRefInList = 0;
+    size_t nRefArrayPos = std::numeric_limits<size_t>::max();
     if ( nGlobalError != FormulaError::NONE && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
          ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) ) )
         nGlobalError = FormulaError::NONE;
@@ -678,8 +719,54 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 }
             }
             break;
-            case svDoubleRef :
             case svRefList :
+            {
+                const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(pStack[sp-1]);
+                if (p && p->IsArrayResult())
+                {
+                    nRefArrayPos = nRefInList;
+                    if ((eFunc == ifSUM || eFunc == ifAVERAGE) && fMem != 0.0)
+                    {
+                        fRes = rtl::math::approxAdd( fRes, fMem);
+                        fMem = 0.0;
+                    }
+                    // The "one value to all references of an array" seems to
+                    // be what Excel does if there are other types than just
+                    // arrays of references.
+                    if (!xResMat)
+                    {
+                        // Create and init all elements with current value.
+                        assert(nMatRows > 0);
+                        xResMat = GetNewMat( 1, nMatRows, true);
+                        xResMat->FillDouble( fRes, 0,0, 0,nMatRows-1);
+                        if (eFunc != ifSUM)
+                        {
+                            xResCount = GetNewMat( 1, nMatRows, true);
+                            xResCount->FillDouble( nCount, 0,0, 0,nMatRows-1);
+                        }
+                    }
+                    else
+                    {
+                        // Current value and values from vector are operands
+                        // for each vector position.
+                        for (SCSIZE i=0; i < nMatRows; ++i)
+                        {
+                            if (xResCount)
+                                xResCount->PutDouble( xResCount->GetDouble(0,i) + nCount, 0,i);
+                            double fVecRes = xResMat->GetDouble(0,i);
+                            if (eFunc == ifPRODUCT)
+                                fVecRes *= fRes;
+                            else
+                                fVecRes += fRes;
+                            xResMat->PutDouble( fVecRes, 0,i);
+                        }
+                    }
+                    fRes = ((eFunc == ifPRODUCT) ? 1.0 : 0.0);
+                    nCount = 0;
+                }
+            }
+            SAL_FALLTHROUGH;
+            case svDoubleRef :
             {
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 if (nGlobalError == FormulaError::NoRef)
@@ -835,6 +922,27 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         SetError( nErr );
                     }
                 }
+                if (nRefArrayPos != std::numeric_limits<size_t>::max())
+                {
+                    // Update vector element with current value.
+                    if ((eFunc == ifSUM || eFunc == ifAVERAGE) && fMem != 0.0)
+                    {
+                        fRes = rtl::math::approxAdd( fRes, fMem);
+                        fMem = 0.0;
+                    }
+                    if (xResCount)
+                        xResCount->PutDouble( xResCount->GetDouble(0,nRefArrayPos) + nCount, 0,nRefArrayPos);
+                    double fVecRes = xResMat->GetDouble(0,nRefArrayPos);
+                    if (eFunc == ifPRODUCT)
+                        fVecRes *= fRes;
+                    else
+                        fVecRes += fRes;
+                    xResMat->PutDouble( fVecRes, 0,nRefArrayPos);
+                    // Reset.
+                    fRes = ((eFunc == ifPRODUCT) ? 1.0 : 0.0);
+                    nCount = 0;
+                    nRefArrayPos = std::numeric_limits<size_t>::max();
+                }
             }
             break;
             case svExternalDoubleRef:
@@ -874,21 +982,33 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 SetError(FormulaError::IllegalParameter);
         }
     }
-    switch( eFunc )
-    {
-        case ifSUM:     fRes = ::rtl::math::approxAdd( fRes, fMem ); break;
-        case ifAVERAGE: fRes = div(::rtl::math::approxAdd( fRes, fMem ), nCount); break;
-        case ifCOUNT2:
-        case ifCOUNT:   fRes  = nCount; break;
-        case ifPRODUCT: if ( !nCount ) fRes = 0.0; break;
-        default: ; // nothing
-    }
+
     // A boolean return type makes no sense on sums et al.
     // Counts are always numbers.
     if( nFuncFmtType == css::util::NumberFormat::LOGICAL || eFunc == ifCOUNT || eFunc == ifCOUNT2 )
         nFuncFmtType = css::util::NumberFormat::NUMBER;
 
-    PushDouble( fRes);
+    if (xResMat)
+    {
+        // Include value of last non-references-array type and calculate final result.
+        for (SCSIZE i=0; i < nMatRows; ++i)
+        {
+            if (xResCount)
+                nCount += xResCount->GetDouble(0,i);
+            double fVecRes = xResMat->GetDouble(0,i);
+            if (eFunc == ifPRODUCT)
+                fVecRes *= fRes;
+            else
+                fVecRes += fRes;
+            fVecRes = lcl_IterResult( eFunc, fVecRes, fMem, nCount);
+            xResMat->PutDouble( fVecRes, 0,i);
+        }
+        PushMatrix( xResMat);
+    }
+    else
+    {
+        PushDouble( lcl_IterResult( eFunc, fRes, fMem, nCount));
+    }
 }
 
 void ScInterpreter::ScSumSQ()
