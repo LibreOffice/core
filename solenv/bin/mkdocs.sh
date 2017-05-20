@@ -90,13 +90,17 @@ function proc_text_markdown {
 }
 
 function check_cmd {
-  cmd_needed="$1"
+  cmds_needed="$1"
   error_msg="$2"
 
-  which $cmd_needed > /dev/null 2>&1 || {
-    echo "$error_msg" >&2
-    exit 1
-  }
+  found=0
+  for cmd_needed in $cmds_needed; do
+    which $cmd_needed > /dev/null 2>&1 && found=1
+  done
+  if [ $found = 0 ]; then
+      echo "$error_msg" >&2
+      exit 1
+  fi
 }
 
 function setup {
@@ -115,7 +119,7 @@ function setup {
 # binaries that we need
 check_cmd doxygen "You need doxygen for doc generation"
 check_cmd dot "You need the graphviz tools to create the nice inheritance graphs"
-check_cmd markdown "You need markdown in order to convert README.md into html"
+check_cmd "markdown markdown2" "You need either markdown or markdown2 in order to convert README.md into html"
 
 # suck setup
 setup "SOLARINC"
