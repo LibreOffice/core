@@ -33,8 +33,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
-#include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vcl/svapp.hxx>

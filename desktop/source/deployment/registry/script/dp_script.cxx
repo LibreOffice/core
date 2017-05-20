@@ -32,7 +32,6 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/script/XLibraryContainer3.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <memory>
 #include "dp_scriptbackenddb.hxx"
 

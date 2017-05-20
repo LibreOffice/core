@@ -58,7 +58,6 @@
 #include <unotools/ucbhelper.hxx>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
-#include <com/sun/star/uri/XVndSunStarPkgUrlReferenceFactory.hpp>
 
 
 /*
