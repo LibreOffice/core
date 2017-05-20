@@ -3456,6 +3456,34 @@ void ScInterpreter::ScUnichar()
     }
 }
 
+bool ScInterpreter::SwitchToArrayRefList( ScMatrixRef& xResMat, SCSIZE nMatRows, double fCurrent,
+        const std::function<bool( double& fVectorResult, const double& fCurrent )>& AssignFunc )
+{
+    const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(pStack[sp-1]);
+    if (!p || !p->IsArrayResult())
+        return false;
+
+    if (!xResMat)
+    {
+        // Create and init all elements with current value.
+        assert(nMatRows > 0);
+        xResMat = GetNewMat( 1, nMatRows, true);
+        xResMat->FillDouble( fCurrent, 0,0, 0,nMatRows-1);
+    }
+    else
+    {
+        // Current value and values from vector are operands
+        // for each vector position.
+        for (SCSIZE i=0; i < nMatRows; ++i)
+        {
+            double fVecRes = xResMat->GetDouble(0,i);
+            if (AssignFunc( fVecRes, fCurrent))
+                xResMat->PutDouble( fVecRes, 0,i);
+        }
+    }
+    return true;
+}
+
 void ScInterpreter::ScMin( bool bTextAsZero )
 {
     short nParamCount = GetByte();
@@ -3499,29 +3527,17 @@ void ScInterpreter::ScMin( bool bTextAsZero )
             break;
             case svRefList :
             {
-                const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(pStack[sp-1]);
-                if (p && p->IsArrayResult())
+                auto AssignFunc = []( double& fVecRes, double fMin )
                 {
+                    if (fVecRes > fMin)
+                    {
+                        fVecRes = fMin;
+                        return true;
+                    }
+                    return false;
+                };
+                if (SwitchToArrayRefList( xResMat, nMatRows, nMin, AssignFunc))
                     nRefArrayPos = nRefInList;
-                    if (!xResMat)
-                    {
-                        // Create and init all elements with current value.
-                        assert(nMatRows > 0);
-                        xResMat = GetNewMat( 1, nMatRows, true);
-                        xResMat->FillDouble( nMin, 0,0, 0,nMatRows-1);
-                    }
-                    else
-                    {
-                        // Current value and values from vector are operands
-                        // for each vector position.
-                        for (SCSIZE i=0; i < nMatRows; ++i)
-                        {
-                            double fVecRes = xResMat->GetDouble(0,i);
-                            if (fVecRes > nMin)
-                                xResMat->PutDouble( nMin, 0,i);
-                        }
-                    }
-                }
             }
             SAL_FALLTHROUGH;
             case svDoubleRef :
@@ -3666,29 +3682,17 @@ void ScInterpreter::ScMax( bool bTextAsZero )
             break;
             case svRefList :
             {
-                const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(pStack[sp-1]);
-                if (p && p->IsArrayResult())
+                auto AssignFunc = []( double& fVecRes, double fMax )
                 {
+                    if (fVecRes < fMax)
+                    {
+                        fVecRes = fMax;
+                        return true;
+                    }
+                    return false;
+                };
+                if (SwitchToArrayRefList( xResMat, nMatRows, nMax, AssignFunc))
                     nRefArrayPos = nRefInList;
-                    if (!xResMat)
-                    {
-                        // Create and init all elements with current value.
-                        assert(nMatRows > 0);
-                        xResMat = GetNewMat( 1, nMatRows, true);
-                        xResMat->FillDouble( nMax, 0,0, 0,nMatRows-1);
-                    }
-                    else
-                    {
-                        // Current value and values from vector are operands
-                        // for each vector position.
-                        for (SCSIZE i=0; i < nMatRows; ++i)
-                        {
-                            double fVecRes = xResMat->GetDouble(0,i);
-                            if (fVecRes < nMax)
-                                xResMat->PutDouble( nMax, 0,i);
-                        }
-                    }
-                }
             }
             SAL_FALLTHROUGH;
             case svDoubleRef :
