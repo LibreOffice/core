@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_c465f7e1",
+        "filename": "sal/qa/osl/file/osl_File.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 701,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2017-05-20T14:59:31Z",
+      "side": 1,
+      "message": "oops",
+      "revId": "03401f95e757a5440886930d37cc357ac6adde65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
