@@ -39,6 +39,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <cairo.h>
 #include <ostream>
+#include <config_features.h>
 
 #include <lib/init.hxx>
 
@@ -105,7 +106,9 @@ public:
     void testRedlineCalc();
     void testPaintPartTile();
     void testWriterCommentInsertCursor();
+#if HAVE_MORE_FONTS
     void testGetFontSubset();
+#endif
     void testCommentsWriter();
     void testCommentsCalc();
     void testCommentsImpress();
@@ -145,7 +148,9 @@ public:
     CPPUNIT_TEST(testRedlineCalc);
     CPPUNIT_TEST(testPaintPartTile);
     CPPUNIT_TEST(testWriterCommentInsertCursor);
+#if HAVE_MORE_FONTS
     CPPUNIT_TEST(testGetFontSubset);
+#endif
     CPPUNIT_TEST(testCommentsWriter);
     CPPUNIT_TEST(testCommentsCalc);
     CPPUNIT_TEST(testCommentsImpress);
@@ -1828,6 +1833,7 @@ void DesktopLOKTest::testWriterCommentInsertCursor()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
+#if HAVE_MORE_FONTS
 void DesktopLOKTest::testGetFontSubset()
 {
     comphelper::LibreOfficeKit::setActive();
@@ -1851,6 +1857,7 @@ void DesktopLOKTest::testGetFontSubset()
     free(pJSON);
     comphelper::LibreOfficeKit::setActive(false);
 }
+#endif
 
 void DesktopLOKTest::testCommentsWriter()
 {
