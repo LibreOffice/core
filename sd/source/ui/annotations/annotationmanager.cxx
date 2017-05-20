@@ -406,6 +406,9 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest& rReq)
     OUString sText;
     if (pArgs)
     {
+        if (mpDoc->IsUndoEnabled())
+            mpDoc->BegUndo(SdResId(STR_ANNOTATION_UNDO_EDIT));
+
         const SfxPoolItem* pPoolItem = nullptr;
         if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_POSTIT_ID, true, &pPoolItem))
         {
@@ -417,15 +420,20 @@ void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest& rReq)
 
         if (xAnnotation.is() && !sText.isEmpty())
         {
+            CreateChangeUndo(xAnnotation);
+
             // TODO: Not allow other authors to change others' comments ?
             Reference<XText> xText(xAnnotation->getTextRange());
             xText->setString(sText);
 
             LOKCommentNotifyAll(CommentNotificationType::Modify, xAnnotation);
         }
-    }
 
-    UpdateTags(true);
+        if (mpDoc->IsUndoEnabled())
+            mpDoc->EndUndo();
+
+        UpdateTags(true);
+    }
 }
 
 void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)

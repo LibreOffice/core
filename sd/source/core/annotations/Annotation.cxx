@@ -102,10 +102,10 @@ public:
     virtual void SAL_CALL setDateTime(const util::DateTime & the_value) override;
     virtual Reference< XText > SAL_CALL getTextRange() override;
 
+    void createChangeUndo();
+
 private:
     // destructor is private and will be called indirectly by the release call    virtual ~Annotation() {}
-
-    void createChangeUndo();
 
     // override WeakComponentImplHelperBase::disposing()
     // This function is called upon disposing the component,
@@ -144,6 +144,7 @@ struct AnnotationData
     OUString m_Author;
     OUString m_Initials;
     util::DateTime m_DateTime;
+    OUString m_Text;
 
     void get( const rtl::Reference< Annotation >& xAnnotation )
     {
@@ -152,6 +153,8 @@ struct AnnotationData
         m_Author = xAnnotation->getAuthor();
         m_Initials = xAnnotation->getInitials();
         m_DateTime = xAnnotation->getDateTime();
+        Reference<XText> xText(xAnnotation->getTextRange());
+        m_Text = xText->getString();
     }
 
     void set( const rtl::Reference< Annotation >& xAnnotation )
@@ -161,6 +164,8 @@ struct AnnotationData
         xAnnotation->setAuthor(m_Author);
         xAnnotation->setInitials(m_Initials);
         xAnnotation->setDateTime(m_DateTime);
+        Reference<XText> xText(xAnnotation->getTextRange());
+        xText->setString(m_Text);
     }
 };
 
@@ -381,6 +386,13 @@ SdrUndoAction* CreateUndoInsertOrRemoveAnnotation( const Reference< XAnnotation 
     }
 }
 
+void CreateChangeUndo(const css::uno::Reference< css::office::XAnnotation >& xAnnotation)
+{
+    Annotation* pAnnotation = dynamic_cast<Annotation*>(xAnnotation.get());
+    if (pAnnotation)
+        pAnnotation->createChangeUndo();
+}
+
 sal_uInt32 getAnnotationId(const Reference<XAnnotation>& xAnnotation)
 {
     Annotation* pAnnotation = dynamic_cast<Annotation*>(xAnnotation.get());
@@ -397,7 +409,6 @@ const SdPage* getAnnotationPage(const Reference<XAnnotation>& xAnnotation)
         return pAnnotation->GetPage();
     return nullptr;
 }
-
 
 namespace
 {
@@ -526,12 +537,16 @@ void UndoAnnotation::Undo()
 {
     maRedoData.get( mxAnnotation );
     maUndoData.set( mxAnnotation );
+    Reference< XAnnotation > xAnnotation( mxAnnotation.get() );
+    LOKCommentNotifyAll( CommentNotificationType::Modify, xAnnotation );
 }
 
 void UndoAnnotation::Redo()
 {
     maUndoData.get( mxAnnotation );
     maRedoData.set( mxAnnotation );
+    Reference< XAnnotation > xAnnotation( mxAnnotation.get() );
+    LOKCommentNotifyAll( CommentNotificationType::Modify, xAnnotation );
 }
 
 } // namespace sd
