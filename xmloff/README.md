@@ -9,7 +9,7 @@ The filter consumes/produces via SAX UNO API interface (implemented in
 applications, for example [git:sw/source/filter/xml].
 
 There is a central list of all element or attribute names in
-include/xmloff/xmltoken.hxx.  The main class of the import filter
+[git:include/xmloff/xmltoken.hxx].  The main class of the import filter
 is SvXMLImport, and of the export filter SvXMLExport.
 
 The Import filter maintains a stack of contexts for each element being
