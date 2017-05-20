@@ -110,6 +110,31 @@ static oslFileError osl_win32_GetTempFileName_impl_(
     return osl_error;
 }
 
+static bool osl_win32_CreateTempFile_impl_(
+    LPCWSTR file_name, oslFileHandle* p_handle)
+{
+    DWORD  flags = FILE_ATTRIBUTE_TEMPORARY | FILE_FLAG_DELETE_ON_CLOSE;
+    HANDLE hFile;
+
+    OSL_ASSERT(p_handle);
+
+
+    hFile = CreateFileW(
+        file_name,
+        GENERIC_READ | GENERIC_WRITE,   /* read and write access to file */
+        0,                              /* share mode does not allow any other process access to file */
+        nullptr,                        /* handle returned cannot be inherited by child processes */
+        CREATE_ALWAYS,                  /* we don't want to use an existing file, MUST be a new file */
+        flags,                          /* temporary file, delete on close */
+        nullptr);
+
+    // @@@ ERROR HANDLING @@@
+    if (IsValidHandle(hFile))
+        *p_handle = osl_createFileHandleFromOSHandle(hFile, osl_File_OpenFlag_Read | osl_File_OpenFlag_Write);
+
+    return IsValidHandle(hFile);
+}
+
 static bool osl_win32_CreateFile_impl_(
     LPCWSTR file_name, bool b_delete_on_close, oslFileHandle* p_handle)
 {
@@ -146,6 +171,8 @@ static oslFileError osl_createTempFile_impl_(
 {
     oslFileError osl_error;
 
+    assert(b_delete_on_close); // you don't ever want to do this for temp files...
+
     do
     {
         osl_error = osl_win32_GetTempFileName_impl_(base_directory, tmp_name);
@@ -153,7 +180,7 @@ static oslFileError osl_createTempFile_impl_(
         /*  if file could not be opened try again */
 
         if ((osl_File_E_None != osl_error) || (nullptr == pHandle) ||
-            osl_win32_CreateFile_impl_(tmp_name, b_delete_on_close, pHandle))
+            osl_win32_CreateTempFile_impl_(tmp_name, pHandle))
             break;
 
     } while(true); // try until success
