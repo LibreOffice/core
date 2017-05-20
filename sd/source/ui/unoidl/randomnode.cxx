@@ -20,6 +20,7 @@
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/animations/AnimationFill.hpp>
+#include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/animations/AnimationRestart.hpp>
 #include <com/sun/star/animations/ParallelTimeContainer.hpp>

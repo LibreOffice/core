@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_FILTER_EPPT_PPTEXANIMATIONS_HXX
 #define INCLUDED_SD_SOURCE_FILTER_EPPT_PPTEXANIMATIONS_HXX
 
-#include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>

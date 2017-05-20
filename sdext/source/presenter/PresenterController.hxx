@@ -35,7 +35,6 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
-#include <com/sun/star/presentation/XSlideShowListener.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>

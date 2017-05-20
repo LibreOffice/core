@@ -43,8 +43,9 @@
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/animations/Timing.hpp>
+#include <com/sun/star/animations/TransitionType.hpp>
+#include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/animations/ValuePair.hpp>
-#include <com/sun/star/animations/XAnimateSet.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
@@ -58,6 +59,7 @@
 #include <com/sun/star/office/XAnnotationAccess.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
+#include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
 #include <oox/export/utils.hxx>

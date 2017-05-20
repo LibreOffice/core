@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_FILTER_PPT_PPTINANIMATIONS_HXX
 #define INCLUDED_SD_SOURCE_FILTER_PPT_PPTINANIMATIONS_HXX
 
-#include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include "pptanimations.hxx"

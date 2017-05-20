@@ -19,7 +19,6 @@
 
 #include "OutlineViewShell.hxx"
 
-#include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include "app.hrc"
@@ -65,7 +64,6 @@
 #include <memory>
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::beans;
 
 namespace sd {

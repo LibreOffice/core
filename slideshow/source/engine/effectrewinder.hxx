@@ -26,8 +26,6 @@
 #include "event.hxx"
 #include "screenupdater.hxx"
 
-#include <com/sun/star/presentation/XSlideShow.hpp>
-
 #include <functional>
 #include <memory>
 #include <vector>

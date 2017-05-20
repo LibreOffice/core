@@ -21,9 +21,6 @@
 #define INCLUDED_SD_SOURCE_FILTER_PPT_PPTANIMATIONS_HXX
 
 #include <com/sun/star/uno/Any.h>
-#include <com/sun/star/animations/TransitionType.hpp>
-#include <com/sun/star/animations/TransitionSubType.hpp>
-#include <com/sun/star/presentation/EffectPresetClass.hpp>
 
 #include <oox/ppt/pptfilterhelpers.hxx>
 

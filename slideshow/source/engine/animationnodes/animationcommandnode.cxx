@@ -19,7 +19,6 @@
 
 
 #include <com/sun/star/presentation/EffectCommands.hpp>
-#include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include "animationcommandnode.hxx"

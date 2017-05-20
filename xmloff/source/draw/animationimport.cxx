@@ -24,8 +24,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
-#include <com/sun/star/presentation/AnimationEffect.hpp>
-#include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/SequenceTimeContainer.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>

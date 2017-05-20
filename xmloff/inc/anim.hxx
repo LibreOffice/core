@@ -21,6 +21,7 @@
 #define INCLUDED_XMLOFF_INC_ANIM_HXX
 
 #include <com/sun/star/presentation/AnimationEffect.hpp>
+#include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <xmloff/xmlement.hxx>
 

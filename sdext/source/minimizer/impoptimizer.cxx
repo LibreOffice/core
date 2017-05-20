@@ -45,9 +45,7 @@
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
-#include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/presentation/XPresentation.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>

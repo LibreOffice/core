@@ -40,6 +40,9 @@
 #include <com/sun/star/office/XAnnotation.hpp>
 #include <com/sun/star/office/XAnnotationAccess.hpp>
 #include <com/sun/star/office/XAnnotationEnumeration.hpp>
+#include <com/sun/star/presentation/AnimationSpeed.hpp>
+#include <com/sun/star/presentation/XPresentationSupplier.hpp>
+#include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <tools/zcodec.hxx>

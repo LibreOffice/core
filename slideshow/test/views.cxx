@@ -33,7 +33,6 @@
 #include "unoviewcontainer.hxx"
 #include "shape.hxx"
 #include "tests.hxx"
-#include "com/sun/star/presentation/XSlideShowView.hpp"
 
 namespace target = slideshow::internal;
 using namespace ::com::sun::star;

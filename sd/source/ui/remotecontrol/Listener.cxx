@@ -8,8 +8,6 @@
  */
 
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/presentation/XPresentationSupplier.hpp>
-#include <com/sun/star/presentation/XPresentation2.hpp>
 #include <rtl/strbuf.hxx>
 #include <vcl/svapp.hxx>
 

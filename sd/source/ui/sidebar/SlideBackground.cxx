@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/ui/XDeck.hpp>
 #include <com/sun/star/ui/XPanel.hpp>
 #include "SlideBackground.hxx"

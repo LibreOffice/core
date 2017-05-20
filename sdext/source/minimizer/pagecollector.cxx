@@ -20,7 +20,6 @@
 
 #include "pagecollector.hxx"
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>

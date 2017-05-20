@@ -19,14 +19,9 @@
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
-#include <com/sun/star/presentation/AnimationEffect.hpp>
-#include <com/sun/star/presentation/PresentationRange.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/view/PaperOrientation.hpp>
-#include <com/sun/star/animations/AnimationNodeType.hpp>
-#include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>

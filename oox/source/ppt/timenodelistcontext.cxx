@@ -23,16 +23,10 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include <rtl/math.hxx>
 
-#include <com/sun/star/animations/XTimeContainer.hpp>
-#include <com/sun/star/animations/XAnimationNode.hpp>
-#include <com/sun/star/animations/XAnimateColor.hpp>
-#include <com/sun/star/animations/XAnimateSet.hpp>
-#include <com/sun/star/animations/XAnimateTransform.hpp>
 #include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
 #include <com/sun/star/animations/AnimationColorSpace.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
-#include <com/sun/star/animations/XCommand.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>

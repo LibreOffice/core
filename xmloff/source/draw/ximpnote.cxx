@@ -18,7 +18,6 @@
  */
 
 #include "ximpnote.hxx"
-#include <com/sun/star/presentation/XPresentationPage.hpp>
 
 using namespace ::com::sun::star;
 

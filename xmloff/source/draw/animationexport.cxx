@@ -19,7 +19,6 @@
 
 
 #include <com/sun/star/animations/XAnimateColor.hpp>
-#include <com/sun/star/animations/XAnimateSet.hpp>
 #include <com/sun/star/animations/XCommand.hpp>
 #include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/Event.hpp>

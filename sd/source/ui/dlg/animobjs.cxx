@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/presentation/AnimationEffect.hpp>
-#include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <svx/xoutbmp.hxx>
 #include <time.h>
 #include <svl/eitem.hxx>

@@ -29,7 +29,6 @@
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
-#include <com/sun/star/animations/AnimationValueType.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 #include <com/sun/star/animations/XAnimateSet.hpp>
@@ -38,8 +37,6 @@
 #include <com/sun/star/animations/XAnimateColor.hpp>
 #include <com/sun/star/animations/XAnimateMotion.hpp>
 #include <com/sun/star/animations/XAnimateTransform.hpp>
-#include <com/sun/star/animations/TransitionType.hpp>
-#include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/animations/ValuePair.hpp>
 #include <com/sun/star/animations/AnimationColorSpace.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>

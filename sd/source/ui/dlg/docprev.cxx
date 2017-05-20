@@ -23,7 +23,6 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
-#include <com/sun/star/presentation/FadeEffect.hpp>
 #include <fadedef.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/builder.hxx>

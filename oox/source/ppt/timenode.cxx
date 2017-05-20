@@ -29,7 +29,6 @@
 #include <com/sun/star/animations/XAnimateTransform.hpp>
 #include <com/sun/star/animations/XCommand.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
-#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>

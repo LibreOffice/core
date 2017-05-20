@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_INC_TPACTION_HXX
 
 #include <com/sun/star/presentation/ClickAction.hpp>
-#include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <svx/dlgctrl.hxx>

@@ -44,7 +44,6 @@
 #include <svx/svdoashp.hxx>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
-#include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/awt/XFont.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>

@@ -37,7 +37,6 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
-#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>

@@ -88,6 +88,8 @@
 #include "pptinanimations.hxx"
 #include "ppt97animations.hxx"
 
+#include <com/sun/star/animations/TransitionSubType.hpp>
+#include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
