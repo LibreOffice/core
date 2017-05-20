@@ -52,13 +52,13 @@ static oslFileError osl_setup_base_directory_impl_(
     else
         error = osl_getTempDirURL(&dir_url);
 
-    if (osl_File_E_None == error)
+    if (error == osl_File_E_None)
     {
         error = osl_getSystemPathFromFileURL_(dir_url, &dir, false);
         rtl_uString_release(dir_url);
     }
 
-    if (osl_File_E_None == error )
+    if (error == osl_File_E_None)
     {
         rtl_uString_assign(ppustr_base_dir, dir);
         rtl_uString_release(dir);
@@ -76,9 +76,9 @@ static oslFileError osl_setup_createTempFile_impl_(
 {
     oslFileError osl_error;
 
-    OSL_PRECOND(((nullptr != pHandle) || (nullptr != ppustrTempFileURL)), "Invalid parameter!");
+    OSL_PRECOND(((pHandle != nullptr) || (ppustrTempFileURL != nullptr)), "Invalid parameter!");
 
-    if ((nullptr == pHandle) && (nullptr == ppustrTempFileURL))
+    if ((pHandle == nullptr) && (ppustrTempFileURL == nullptr))
     {
         osl_error = osl_File_E_INVAL;
     }
@@ -87,7 +87,7 @@ static oslFileError osl_setup_createTempFile_impl_(
         osl_error = osl_setup_base_directory_impl_(
             pustrDirectoryURL, ppustr_base_dir);
 
-        *b_delete_on_close = nullptr == ppustrTempFileURL;
+        *b_delete_on_close = (ppustrTempFileURL == nullptr);
     }
 
     return osl_error;
@@ -98,11 +98,11 @@ static oslFileError osl_win32_GetTempFileName_impl_(
 {
     oslFileError osl_error = osl_File_E_None;
 
-    if (0 == GetTempFileNameW(
+    if (GetTempFileNameW(
             reinterpret_cast<LPCWSTR>(rtl_uString_getStr(base_directory)),
             L"",
             0,
-            temp_file_name))
+            temp_file_name) == 0)
     {
         osl_error = oslTranslateFileError(GetLastError());
     }
@@ -158,7 +158,7 @@ static oslFileError osl_createTempFile_impl_(
 
     } while(true); // try until success
 
-    if ((osl_File_E_None == osl_error) && !b_delete_on_close)
+    if ((osl_error == osl_File_E_None) && !b_delete_on_close)
     {
         rtl_uString* pustr = nullptr;
         rtl_uString_newFromStr(&pustr, reinterpret_cast<const sal_Unicode*>(tmp_name));
@@ -186,7 +186,7 @@ oslFileError SAL_CALL osl_createTempFile(
         &base_directory,
         &b_delete_on_close);
 
-    if (osl_File_E_None != osl_error)
+    if (osl_error != osl_File_E_None)
         return osl_error;
 
     /* allocate enough space on the stack, the file name can not be longer than MAX_PATH */
