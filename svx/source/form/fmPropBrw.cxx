@@ -45,7 +45,6 @@
 #include <com/sun/star/form/inspection/DefaultFormComponentInspectorModel.hpp>
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/inspection/ObjectInspector.hpp>
-#include <com/sun/star/inspection/ObjectInspectorModel.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/inspection/DefaultHelpProvider.hpp>
 #include <com/sun/star/util/VetoException.hpp>

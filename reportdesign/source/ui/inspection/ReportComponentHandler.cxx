@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "ReportComponentHandler.hxx"
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include "uistrings.hrc"
@@ -25,10 +26,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/syslocale.hxx>
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
-#include <com/sun/star/inspection/PropertyControlType.hpp>
-#include <com/sun/star/report/XReportDefinition.hpp>
-#include <com/sun/star/report/XSection.hpp>
-#include <com/sun/star/inspection/XNumericControl.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <tools/fldunit.hxx>

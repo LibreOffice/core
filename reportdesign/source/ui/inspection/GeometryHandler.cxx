@@ -44,14 +44,12 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
 #include <com/sun/star/inspection/StringRepresentation.hpp>
-#include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/XStringListControl.hpp>
 #include <com/sun/star/report/Function.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XSection.hpp>
-#include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>

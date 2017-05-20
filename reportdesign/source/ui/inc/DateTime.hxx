@@ -24,7 +24,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>
 #include <vcl/button.hxx>
-#include <com/sun/star/report/XReportDefinition.hpp>
+#include <com/sun/star/report/XSection.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 

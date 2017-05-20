@@ -40,7 +40,6 @@
 #include <xmloff/XMLConstantsPropertyHandler.hxx>
 #include <com/sun/star/report/ForceNewPage.hpp>
 #include <com/sun/star/report/ReportPrintOption.hpp>
-#include <com/sun/star/report/GroupOn.hpp>
 #include <com/sun/star/report/KeepTogether.hpp>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltypes.hxx>

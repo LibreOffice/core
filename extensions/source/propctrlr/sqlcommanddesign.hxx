@@ -25,7 +25,6 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 
 #include <connectivity/dbtools.hxx>
 #include <tools/link.hxx>

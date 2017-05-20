@@ -28,7 +28,6 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/ContainerEvent.hpp>
-#include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XGroup.hpp>
 #include <com/sun/star/document/XUndoManager.hpp>
