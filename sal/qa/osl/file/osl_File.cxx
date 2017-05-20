@@ -800,11 +800,24 @@ namespace osl_FileBase
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_21()
     {
-#if 0
+        /* From RFC3986, "2.2. Reserved Characters":
+
+           "The purpose of reserved characters is to provide a set of delimiting
+           characters that are distinguishable from other data within a URI.
+           URIs that differ in the replacement of a reserved character with its
+           corresponding percent-encoded octet are not equivalent.  Percent-
+           encoding a reserved character, or decoding a percent-encoded octet
+           that corresponds to a reserved character, will change how the URI is
+           interpreted by most applications.  Thus, characters in the reserved
+           set are protected from normalization and are therefore safe to be
+           used by scheme-specific and producer-specific algorithms for
+           delimiting data subcomponents within a URI."
+
+           In other words, %2F ("/") is NOT the same as /.
+        */
         OString sURL("%2F");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/"); // LLA: this is may be a BUG
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
-#endif
     }
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_22()
