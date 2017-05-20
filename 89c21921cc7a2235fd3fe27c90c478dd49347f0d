@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_c9ffd032",
+        "filename": "editeng/source/editeng/eehtml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-05-20T11:01:22Z",
+      "side": 1,
+      "message": "The original translation was done with https://gerrit.libreoffice.org/gitweb?p\u003dcore.git;a\u003dblobdiff;f\u003dediteng/source/editeng/eehtml.cxx;h\u003d3ce262f44b01583a4ec7f419738836a4d5fae1a8;hp\u003da72cca4b68013349bae7fcc39112263ac65aed85;hb\u003d65d891652fd5de4b93d9cd3dadd866b099af423b;hpb\u003debf0ce614b01de1249cfa3f0082c33c70433045f\n\nThe German string had read\n  \"landen so im Text\",\nwhich I would interpret as\n  \"(they) land so (i.e., \u0027as is\u0027 or \u0027like this\u0027) in the text\"\nwith the same level of ambiguity.\n\nSo, I\u0027m going to change it to\n  \"they land so in the text\"\nTo make it clear that \"land\" is a verb here, not a noun. I can\u0027t do anything about the ambiguity though, as I don\u0027t know the functionality.",
+      "parentUuid": "5a3905b3_4994c036",
+      "revId": "89c21921cc7a2235fd3fe27c90c478dd49347f0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_69997c6e",
         "filename": "editeng/source/editeng/eertfpar.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-05-20T08:44:13Z",
       "side": 1,
       "message": "Is this comment useful?",
+      "revId": "89c21921cc7a2235fd3fe27c90c478dd49347f0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e9fc8c40",
+        "filename": "editeng/source/editeng/eertfpar.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-05-20T11:01:22Z",
+      "side": 1,
+      "message": "I would keep it. As useless as it may seem, it might help someone. For less confusion with \"the right-hand one\", I\u0027m going to change it to \"the correct one\" though.\n\nUnless it\u0027s entirely wrong (e.g., outdated) here, of course.\n\nI any case, feel free to remove it.",
+      "parentUuid": "5a3905b3_69997c6e",
       "revId": "89c21921cc7a2235fd3fe27c90c478dd49347f0d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_09fab842",
+        "filename": "extensions/test/ole/EventListenerSample/EventListener/EvtListener.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-05-20T11:01:22Z",
+      "side": 1,
+      "message": "I would keep it - documentation is good (e.g., for beginners). Also, it marks the difference to https://gerrit.libreoffice.org/gitweb?p\u003dcore.git;a\u003dblob;f\u003dextensions/test/ole/EventListenerSample/EventListener/EventListener.cpp;h\u003d5509cd99aa674af3588b7a48ab96781167e20037;hb\u003d89c21921cc7a2235fd3fe27c90c478dd49347f0d#l19 .",
+      "parentUuid": "5a3905b3_a9a3649d",
+      "revId": "89c21921cc7a2235fd3fe27c90c478dd49347f0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_899ea854",
         "filename": "extensions/test/ole/EventListenerSample/EventListener/EvtListener.h",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2017-05-20T08:44:13Z",
       "side": 1,
       "message": "Is this even necessary?",
+      "revId": "89c21921cc7a2235fd3fe27c90c478dd49347f0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_2995b4e3",
+        "filename": "extensions/test/ole/EventListenerSample/EventListener/EvtListener.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-05-20T11:01:22Z",
+      "side": 1,
+      "message": "I would keep it - documentation is good (e.g., for beginners).",
+      "parentUuid": "5a3905b3_899ea854",
       "revId": "89c21921cc7a2235fd3fe27c90c478dd49347f0d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
