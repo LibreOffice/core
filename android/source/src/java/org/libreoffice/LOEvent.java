@@ -36,7 +36,8 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int RESUME = 15;
     public static final int LOAD_NEW = 16;
     public static final int SAVE_AS = 17;
-    public static final int UPDATE_PART_PAGE_RECT= 18;
+    public static final int UPDATE_PART_PAGE_RECT = 18;
+    public static final int UPDATE_ZOOM_CONSTRAINTS = 19;
 
     public final int mType;
     public int mPriority = 0;

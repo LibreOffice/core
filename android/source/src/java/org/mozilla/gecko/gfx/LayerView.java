@@ -25,6 +25,8 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.widget.FrameLayout;
 
+import org.libreoffice.LOEvent;
+import org.libreoffice.LOKitShell;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
 import org.mozilla.gecko.OnInterceptTouchListener;
@@ -319,6 +321,8 @@ public class LayerView extends FrameLayout {
         if (mListener != null) {
             mListener.surfaceChanged(width, height);
         }
+
+        LOKitShell.sendEvent(new LOEvent(LOEvent.UPDATE_ZOOM_CONSTRAINTS));
     }
 
     private void onDestroyed() {
