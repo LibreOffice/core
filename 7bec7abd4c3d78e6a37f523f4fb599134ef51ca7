@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_09e398a4",
+        "filename": "sysui/desktop/share/apparmor.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-05-20T10:21:21Z",
+      "side": 1,
+      "message": "this should be $PROFILESFROM/*",
+      "range": {
+        "startLine": 40,
+        "startChar": 16,
+        "endLine": 40,
+        "endChar": 29
+      },
+      "revId": "7bec7abd4c3d78e6a37f523f4fb599134ef51ca7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_29ee948b",
+        "filename": "sysui/desktop/share/apparmor.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-05-20T10:21:21Z",
+      "side": 1,
+      "message": "please note that \n for filename in *\ndoes not give the same result as\n for filename in $(ls)\n\nyou can try a bit yourself on your console\n $\u003e THISDIR\u003d$(pwd);for filename in $(ls \"$THISDIR\"); do echo \"$filename\"; done\n\n $\u003e THISDIR\u003d$(pwd);for filename in \"$THISDIR\"/*; do echo \"$filename\"; done\n\nthis commit has some similar \u0027ls\u0027 replacements:\nhttps://gerrit.libreoffice.org/gitweb?p\u003dcore.git;a\u003dcommitdiff;h\u003d55c5b27bd683a7c36f07c1be781d8baad30b4571",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 75
+      },
+      "revId": "7bec7abd4c3d78e6a37f523f4fb599134ef51ca7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_49f3e073",
+        "filename": "sysui/desktop/share/apparmor.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-05-20T10:21:21Z",
+      "side": 1,
+      "message": "this line belongs at the start of the loop",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 31
+      },
+      "revId": "7bec7abd4c3d78e6a37f523f4fb599134ef51ca7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
