@@ -611,6 +611,7 @@ namespace osl_FileBase
         void getFileURLFromSystemPath_002();
         void getFileURLFromSystemPath_003();
         void getFileURLFromSystemPath_004();
+        void getFileURLFromSystemPath_004_1();
         void getFileURLFromSystemPath_005();
 
         CPPUNIT_TEST_SUITE(SystemPath_FileURL);
@@ -641,6 +642,7 @@ namespace osl_FileBase
             CPPUNIT_TEST(getFileURLFromSystemPath_002);
             CPPUNIT_TEST(getFileURLFromSystemPath_003);
             CPPUNIT_TEST(getFileURLFromSystemPath_004);
+            CPPUNIT_TEST(getFileURLFromSystemPath_004_1);
             CPPUNIT_TEST(getFileURLFromSystemPath_005);
         CPPUNIT_TEST_SUITE_END();
 
@@ -1013,6 +1015,13 @@ namespace osl_FileBase
     void SystemPath_FileURL::getFileURLFromSystemPath_004()
     {
         OString sSysPath("//tmp//first start");
+        checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "file:///tmp/first%20start");
+        checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, "");
+    }
+
+    void SystemPath_FileURL::getFileURLFromSystemPath_004_1()
+    {
+        OString sSysPath("/tmp///first start");
         checkUNXBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_None, "file:///tmp/first%20start");
         checkWNTBehaviour_getFileURLFromSystemPath(sSysPath, osl::FileBase::E_INVAL, "");
     }
