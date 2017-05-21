@@ -123,6 +123,16 @@ void XMLSignatureHelper::AddEncapsulatedX509Certificate(const OUString& ouEncaps
     mpXSecController->addEncapsulatedX509Certificate(ouEncapsulatedX509Certificate);
 }
 
+void XMLSignatureHelper::SetGpgCertificate(sal_Int32 nSecurityId,
+                                           const OUString& ouGpgCertDigest,
+                                           const OUString& ouGpgCert)
+{
+    mpXSecController->setGpgCertificate(
+        nSecurityId,
+        ouGpgCertDigest,
+        ouGpgCert);
+}
+
 void XMLSignatureHelper::SetDateTime( sal_Int32 nSecurityId, const ::Date& rDate, const tools::Time& rTime )
 {
     css::util::DateTime stDateTime = ::DateTime(rDate, rTime).GetUNODateTime();

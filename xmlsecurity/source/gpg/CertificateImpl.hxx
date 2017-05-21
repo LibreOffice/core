@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/SecurityException.hpp>
+#include <com/sun/star/security/CertificateKind.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 
 #include <key.h>
@@ -33,6 +34,7 @@ class CertificateImpl : public cppu::WeakImplHelper< css::security::XCertificate
 {
 private:
     GpgME::Key m_pKey;
+    css::uno::Sequence< sal_Int8 > m_aBits;
 
 public:
     CertificateImpl();
@@ -77,9 +79,10 @@ public:
 
     /// @see xmlsecurity::Certificate::getSHA256Thumbprint().
     virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() override;
+    virtual css::security::CertificateKind getCertificateKind() override;
 
     // Helper methods
-    void setCertificate(GpgME::Key key);
+    void setCertificate(GpgME::Context* ctx, const GpgME::Key& key);
     const GpgME::Key* getCertificate() const;
 } ;
 

@@ -36,7 +36,7 @@ using namespace css;
 
 CertificateChooser::CertificateChooser(vcl::Window* _pParent,
                                        uno::Reference<uno::XComponentContext>& _rxCtx,
-                                       std::vector< css::uno::Reference< css::xml::crypto::XSecurityEnvironment > >& rxSecurityEnvironments)
+                                       std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > >& rxSecurityContexts)
     : ModalDialog(_pParent, "SelectCertificateDialog", "xmlsec/ui/selectcertificatedialog.ui"),
     mvUserData()
 {
@@ -61,7 +61,7 @@ CertificateChooser::CertificateChooser(vcl::Window* _pParent,
     m_pViewBtn->SetClickHdl( LINK( this, CertificateChooser, ViewButtonHdl ) );
 
     mxCtx = _rxCtx;
-    mxSecurityEnvironments = rxSecurityEnvironments;
+    mxSecurityContexts = rxSecurityContexts;
     mbInitialized = false;
 
     // disable buttons
@@ -150,8 +150,9 @@ void CertificateChooser::ImplInitialize()
     if ( mbInitialized )
         return;
 
-    for (auto &secEnvironment : mxSecurityEnvironments)
+    for (auto &secContext : mxSecurityContexts)
     {
+        auto secEnvironment = secContext->getSecurityEnvironment();
         if (!secEnvironment.is())
             continue;
 
@@ -183,6 +184,7 @@ void CertificateChooser::ImplInitialize()
         {
             std::shared_ptr<UserData> userData = std::make_shared<UserData>();
             userData->xCertificate = xCerts[ nC ];
+            userData->xSecurityContext = secContext;
             userData->xSecurityEnvironment = secEnvironment;
             mvUserData.push_back(userData);
             SvTreeListEntry* pEntry = m_pCertLB->InsertEntry( XmlSec::GetContentPart( xCerts[ nC ]->getSubjectName() )
@@ -207,6 +209,17 @@ uno::Reference< css::security::XCertificate > CertificateChooser::GetSelectedCer
 
     UserData* userData = static_cast<UserData*>(pSel->GetUserData());
     uno::Reference<security::XCertificate> xCert = userData->xCertificate;
+    return xCert;
+}
+
+uno::Reference<xml::crypto::XXMLSecurityContext> CertificateChooser::GetSelectedSecurityContext()
+{
+    SvTreeListEntry* pSel = m_pCertLB->FirstSelected();
+    if( !pSel )
+        return uno::Reference<xml::crypto::XXMLSecurityContext>();
+
+    UserData* userData = static_cast<UserData*>(pSel->GetUserData());
+    uno::Reference<xml::crypto::XXMLSecurityContext> xCert = userData->xSecurityContext;
     return xCert;
 }
 

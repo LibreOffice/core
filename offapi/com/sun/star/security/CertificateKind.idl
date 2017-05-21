@@ -1,0 +1,33 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_security_CertificateKind_idl_
+#define __com_sun_star_security_CertificateKind_idl_
+
+module com { module sun { module star { module security {
+
+/**
+ * Enum definition of a certificate kind ( X509, OpenPGP )
+ */
+enum CertificateKind
+{
+    /** X.509 format of a certificate
+     */
+    X509,
+
+    /** OpenPGP format of a certificate
+     */
+    OPENPGP
+};
+
+} ; } ; } ; } ;
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

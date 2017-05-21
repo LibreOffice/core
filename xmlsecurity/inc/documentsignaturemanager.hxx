@@ -61,7 +61,9 @@ public:
     bool isXML(const OUString& rURI);
     SignatureStreamHelper ImplOpenSignatureStream(sal_Int32 eStreamMode, bool bTempStream);
     /// Add a new signature, using xCert as a signing certificate, and rDescription as description.
-    bool add(const css::uno::Reference<css::security::XCertificate>& xCert, const OUString& rDescription, sal_Int32& nSecurityId, bool bAdESCompliant);
+    bool add(const css::uno::Reference<css::security::XCertificate>& xCert,
+             const css::uno::Reference<css::xml::crypto::XXMLSecurityContext> xSecurityContext,
+             const OUString& rDescription, sal_Int32& nSecurityId, bool bAdESCompliant);
     /// Remove signature at nPosition.
     void remove(sal_uInt16 nPosition);
     /// Read signatures from either a temp stream or the real storage.
@@ -79,6 +81,8 @@ public:
     /// Get the security environment.
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getSecurityEnvironment();
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getGpgSecurityEnvironment();
+    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> getSecurityContext();
+    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> getGpgSecurityContext();
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX

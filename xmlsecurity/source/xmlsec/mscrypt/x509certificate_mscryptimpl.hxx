@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/SecurityException.hpp>
+#include <com/sun/star/security/CertificateKind.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <certificate.hxx>
 
@@ -67,6 +68,8 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
         virtual OUString SAL_CALL getSignatureAlgorithm() override;
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getSHA1Thumbprint() override;
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getMD5Thumbprint() override;
+        virtual css::security::CertificateKind SAL_CALL getCertificateKind() override;
+
 
         virtual sal_Int32 SAL_CALL getCertificateUsage( ) override;
 

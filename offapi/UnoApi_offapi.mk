@@ -3316,6 +3316,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/security,\
 	CertificateCharacters \
 	CertificateContainerStatus \
 	CertificateException \
+	CertificateKind \
 	CertificateValidity \
 	CryptographyException \
 	DocumentSignatureInformation \

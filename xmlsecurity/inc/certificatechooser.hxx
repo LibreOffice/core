@@ -24,6 +24,8 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
+#include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
+#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sigstruct.hxx>
@@ -43,6 +45,7 @@ class HeaderBar;
 struct UserData
 {
     css::uno::Reference<css::security::XCertificate> xCertificate;
+    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> xSecurityContext;
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> xSecurityEnvironment;
 };
 
@@ -50,7 +53,7 @@ class CertificateChooser : public ModalDialog
 {
 private:
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
-    std::vector< css::uno::Reference< css::xml::crypto::XSecurityEnvironment > > mxSecurityEnvironments;
+    std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > mxSecurityContexts;
     std::vector<std::shared_ptr<UserData>> mvUserData;
 
     VclPtr<SvSimpleTable>   m_pCertLB;
@@ -72,13 +75,14 @@ private:
 public:
     CertificateChooser(vcl::Window* pParent,
                        css::uno::Reference< css::uno::XComponentContext>& rxCtx,
-                       std::vector< css::uno::Reference< css::xml::crypto::XSecurityEnvironment > >& rxSecurityEnvironments);
+                       std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > >& rxSecurityContexts);
     virtual ~CertificateChooser() override;
     virtual void dispose() override;
 
     short Execute() override;
 
     css::uno::Reference< css::security::XCertificate > GetSelectedCertificate();
+    css::uno::Reference< css::xml::crypto::XXMLSecurityContext > GetSelectedSecurityContext();
     /// Gets the description string provided when selecting the certificate.
     OUString GetDescription();
 

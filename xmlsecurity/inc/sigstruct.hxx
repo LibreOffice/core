@@ -74,6 +74,10 @@ struct SignatureInformation
     OUString ouX509IssuerName;
     OUString ouX509SerialNumber;
     OUString ouX509Certificate;
+
+    OUString ouGpgKeyID;
+    OUString ouGpgCertificate;
+
     OUString ouSignatureValue;
     css::util::DateTime stDateTime;
 
