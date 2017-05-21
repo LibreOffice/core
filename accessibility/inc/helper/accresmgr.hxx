@@ -21,6 +21,7 @@
 #define INCLUDED_ACCESSIBILITY_INC_HELPER_ACCRESMGR_HXX
 
 #include <rtl/ustring.hxx>
+#include <memory>
 
 class SimpleResMgr;
 
@@ -34,22 +35,12 @@ namespace accessibility
 
 class TkResMgr
 {
-    static SimpleResMgr* m_pImpl;
+    static std::unique_ptr<SimpleResMgr> m_pImpl;
 
 private:
     // no instantiation allowed
     TkResMgr() = delete;
     ~TkResMgr() { }
-
-    // we'll instantiate one static member of the following class,
-    // which in its dtor ensures that m_pImpl will be deleted
-    class EnsureDelete
-    {
-    public:
-        EnsureDelete() { }
-        ~EnsureDelete();
-    };
-    friend class EnsureDelete;
 
 protected:
     static void ensureImplExists();

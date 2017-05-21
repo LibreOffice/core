@@ -28,27 +28,14 @@ using namespace accessibility;
 // TkResMgr
 
 
-SimpleResMgr* TkResMgr::m_pImpl = nullptr;
-
-
-TkResMgr::EnsureDelete::~EnsureDelete()
-{
-    delete TkResMgr::m_pImpl;
-}
-
+std::unique_ptr<SimpleResMgr> TkResMgr::m_pImpl;
 
 void TkResMgr::ensureImplExists()
 {
-    if (m_pImpl)
+    if (m_pImpl.get())
         return;
 
-    m_pImpl = SimpleResMgr::Create("acc", Application::GetSettings().GetUILanguageTag() );
-
-    if (m_pImpl)
-    {
-        // now that we have a impl class, make sure it's deleted on unloading the library
-        static TkResMgr::EnsureDelete s_aDeleteTheImplClass;
-    }
+    m_pImpl.reset(SimpleResMgr::Create("acc", Application::GetSettings().GetUILanguageTag()));
 }
 
 
@@ -57,7 +44,7 @@ OUString TkResMgr::loadString( sal_uInt16 nResId )
     OUString sReturn;
 
     ensureImplExists();
-    if ( m_pImpl )
+    if ( m_pImpl.get() )
         sReturn = m_pImpl->ReadString( nResId );
 
     return sReturn;
