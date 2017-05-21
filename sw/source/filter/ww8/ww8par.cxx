@@ -2166,14 +2166,18 @@ void SwWW8ImplReader::Read_HdFtFootnoteText( const SwNodeIndex* pSttIdx,
 long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
 {
     WW8PLCFx_SubDoc* pSD = m_pPlcxMan->GetAtn();
-    if( !pSD )
+    if (!pSD)
+        return 0;
+
+    const void* pData = pSD->GetData();
+    if (!pData)
         return 0;
 
     OUString sAuthor;
     OUString sInitials;
     if( m_bVer67 )
     {
-        const WW67_ATRD* pDescri = static_cast<const WW67_ATRD*>(pSD->GetData());
+        const WW67_ATRD* pDescri = static_cast<const WW67_ATRD*>(pData);
         const OUString* pA = GetAnnotationAuthor(SVBT16ToShort(pDescri->ibst));
         if (pA)
             sAuthor = *pA;
@@ -2186,7 +2190,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     }
     else
     {
-        const WW8_ATRD* pDescri = static_cast<const WW8_ATRD*>(pSD->GetData());
+        const WW8_ATRD* pDescri = static_cast<const WW8_ATRD*>(pData);
         {
             const sal_uInt16 nLen = std::min<sal_uInt16>(SVBT16ToShort(pDescri->xstUsrInitl[0]),
                                                          SAL_N_ELEMENTS(pDescri->xstUsrInitl)-1);
