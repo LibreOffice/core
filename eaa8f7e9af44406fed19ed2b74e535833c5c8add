@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_649fe303",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 2199,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2017-05-21T17:36:12Z",
+      "side": 1,
+      "message": "please, run eslint before pushing; fix any eslint error and in case, you think that eslint is wrong suppress the error with a specific comment",
+      "revId": "eaa8f7e9af44406fed19ed2b74e535833c5c8add",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
