@@ -27,13 +27,13 @@
 #include <cppuhelper/implbase2.hxx>
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
+#include <toolkit/helper/externallock.hxx>
 
 #include <vector>
 
 class Menu;
 class VclSimpleEvent;
 class VclMenuEvent;
-class VCLExternalSolarLock;
 
 namespace utl {
 class AccessibleStateSetHelper;
@@ -46,7 +46,8 @@ typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessible,
     css::lang::XServiceInfo > OAccessibleMenuBaseComponent_BASE;
 
-class OAccessibleMenuBaseComponent : public comphelper::OAccessibleExtendedComponentHelper,
+class OAccessibleMenuBaseComponent : private BaseVCLExternalSolarLock,
+                                     public comphelper::OAccessibleExtendedComponentHelper,
                                      public OAccessibleMenuBaseComponent_BASE
 {
     friend class OAccessibleMenuItemComponent;

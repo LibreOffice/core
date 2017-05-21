@@ -25,10 +25,10 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <vcl/vclptr.hxx>
+#include <toolkit/helper/externallock.hxx>
 
 
 class TabControl;
-class VCLExternalSolarLock;
 
 namespace utl {
 class AccessibleStateSetHelper;
@@ -44,13 +44,13 @@ typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessible,
     css::lang::XServiceInfo > VCLXAccessibleTabPage_BASE;
 
-class VCLXAccessibleTabPage :   public AccessibleTextHelper_BASE,
+class VCLXAccessibleTabPage :   private BaseVCLExternalSolarLock,
+                                public AccessibleTextHelper_BASE,
                                 public VCLXAccessibleTabPage_BASE
 {
     friend class VCLXAccessibleTabControl;
 
 private:
-    VCLExternalSolarLock*   m_pExternalLock;
     VclPtr<TabControl>      m_pTabControl;
     sal_uInt16              m_nPageId;
     bool                    m_bFocused;

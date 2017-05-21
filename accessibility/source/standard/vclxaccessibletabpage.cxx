@@ -49,11 +49,10 @@ using namespace ::comphelper;
 
 
 VCLXAccessibleTabPage::VCLXAccessibleTabPage( TabControl* pTabControl, sal_uInt16 nPageId )
-    :AccessibleTextHelper_BASE( new VCLExternalSolarLock )
+    :AccessibleTextHelper_BASE( &m_aLock )
     ,m_pTabControl( pTabControl )
     ,m_nPageId( nPageId )
 {
-    m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
     m_bFocused  = IsFocused();
     m_bSelected = IsSelected();
     m_sPageText = GetPageText();
@@ -62,8 +61,6 @@ VCLXAccessibleTabPage::VCLXAccessibleTabPage( TabControl* pTabControl, sal_uInt1
 
 VCLXAccessibleTabPage::~VCLXAccessibleTabPage()
 {
-    delete m_pExternalLock;
-    m_pExternalLock = nullptr;
 }
 
 
