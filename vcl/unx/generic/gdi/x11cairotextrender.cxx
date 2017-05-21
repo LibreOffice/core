@@ -29,10 +29,22 @@ struct BOX
 {
     short x1, x2, y1, y2;
 };
+
+/*
+ * Xutil.h contains the declaration:
+ * typedef struct _XRegion *Region;
+ *
+ * this struct has to match the real _Xregion
+ * definition, don't change this is remove apparently
+ * unused fields
+ */
+
 struct _XRegion
 {
+    long size;
     long numRects;
     BOX *rects;
+    BOX extents;
 };
 
 X11CairoTextRender::X11CairoTextRender(X11SalGraphics& rParent)
