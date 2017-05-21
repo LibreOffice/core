@@ -92,12 +92,15 @@ SAL_CALL XMLSignature_GpgImpl::generate(
             throw RuntimeException() ;
     }
 
+#if 0
     //Get Keys Manager
     SecurityEnvironmentGpg* pSecEnv =
         dynamic_cast<SecurityEnvironmentGpg*>(aEnvironment.get());
     if( pSecEnv == nullptr )
         throw RuntimeException() ;
+#endif
 
+    // TODO pSecEnv is still from nss, roll our own impl there
     // TODO figure out key from pSecEnv!
     // unclear how/where that is transported in nss impl...
     setErrorRecorder();

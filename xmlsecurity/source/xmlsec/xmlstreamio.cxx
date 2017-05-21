@@ -145,7 +145,7 @@ int xmlStreamClose( void * context )
     return 0 ;
 }
 
-int xmlEnableStreamInputCallbacks()
+XSECXMLSEC_DLLPUBLIC int xmlEnableStreamInputCallbacks()
 {
 
     if( !( enableXmlStreamIO & XMLSTREAMIO_INITIALIZED ) ) {
@@ -210,7 +210,7 @@ XSECXMLSEC_DLLPUBLIC int xmlUnregisterStreamInputCallbacks()
     return 0 ;
 }
 
-void xmlDisableStreamInputCallbacks() {
+XSECXMLSEC_DLLPUBLIC void xmlDisableStreamInputCallbacks() {
     xmlUnregisterStreamInputCallbacks() ;
     enableXmlStreamIO &= ~XMLSTREAMIO_INITIALIZED ;
 }

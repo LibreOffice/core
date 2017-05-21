@@ -554,7 +554,8 @@ void DocumentSignatureHelper::writeSignedProperties(
     writeDigestMethod(xDocumentHandler);
 
     xDocumentHandler->startElement("DigestValue", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-    assert(!signatureInfo.ouCertDigest.isEmpty());
+    // TODO: this is empty for gpg signatures currently
+    //assert(!signatureInfo.ouCertDigest.isEmpty());
     xDocumentHandler->characters(signatureInfo.ouCertDigest);
     xDocumentHandler->endElement("DigestValue");
 

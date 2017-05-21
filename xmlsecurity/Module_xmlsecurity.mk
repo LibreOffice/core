@@ -19,12 +19,6 @@ $(eval $(call gb_Module_add_targets,xmlsecurity,\
 	Library_xsec_xmlsec \
 ))
 
-ifneq ($(filter-out WNT MACOSX ANDROID IOS,$(OS)),)
-$(eval $(call gb_Module_add_targets,xmlsecurity,\
-	Library_xsec_gpg \
-))
-endif
-
 $(eval $(call gb_Module_add_slowcheck_targets,xmlsecurity,\
     CppunitTest_xmlsecurity_signing \
     CppunitTest_xmlsecurity_pdfsigning \
