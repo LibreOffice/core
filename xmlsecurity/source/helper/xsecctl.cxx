@@ -124,8 +124,9 @@ void XSecController::createXSecComponent( )
 
     cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
 
+    // TODO: have two services here, one for x509, one for gpg?
     m_xXMLSignature.set(
-        xMCF->createInstanceWithContext("com.sun.star.xml.crypto.XMLSignature", mxCtx ),
+        xMCF->createInstanceWithContext("com.sun.star.xml.crypto.XMLSignature2", mxCtx ),
         cssu::UNO_QUERY );
 
     bool bSuccess = m_xXMLSignature.is();
