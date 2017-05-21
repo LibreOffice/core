@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_444f4792",
+        "filename": "basic/source/comp/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-21T19:03:23Z",
+      "side": 1,
+      "message": "I think we can use\n  aSym.equalsAsii(rTok.s)\nhere",
+      "revId": "0cdeb82122018f45f95e9d3a22e1228cb4c6803c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
