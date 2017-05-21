@@ -20,14 +20,11 @@
 
 #include <array>
 
+#include "sal/macros.h"
 #include "basiccharclass.hxx"
 #include "token.hxx"
 
 struct TokenTable { SbiToken t; const char *s; };
-
-static short nToken;                    // number of tokens
-
-static const TokenTable* pTokTable;
 
 static const TokenTable aTokTable_Basic [] = {
     { CAT,      "&" },
@@ -173,7 +170,6 @@ static const TokenTable aTokTable_Basic [] = {
     { WITHEVENTS,   "WithEvents" },
     { WRITE,    "Write" },              // also WRITE #
     { XOR,      "Xor" },
-    { NIL,      "" }
 };
 
 // #i109076
@@ -206,7 +202,6 @@ TokenLabelInfo::TokenLabelInfo()
     }
 }
 
-// the constructor detects the length of the token table
 
 SbiTokenizer::SbiTokenizer( const OUString& rSrc, StarBASIC* pb )
     : SbiScanner(rSrc, pb)
@@ -221,13 +216,6 @@ SbiTokenizer::SbiTokenizer( const OUString& rSrc, StarBASIC* pb )
     , bAs(false)
     , bErrorIsSymbol(true)
 {
-    pTokTable = aTokTable_Basic;
-    if( !nToken )
-    {
-        const TokenTable *tp;
-        for( nToken = 0, tp = pTokTable; tp->t; nToken++, tp++ )
-        {}
-    }
 }
 
 SbiTokenizer::~SbiTokenizer()
@@ -295,12 +283,11 @@ const OUString& SbiTokenizer::Symbol( SbiToken t )
     default:
         break;
     }
-    const TokenTable* tp = pTokTable;
-    for( short i = 0; i < nToken; i++, tp++ )
+    for( auto& rTok : aTokTable_Basic )
     {
-        if( tp->t == t )
+        if( rTok.t == t )
         {
-            aSym = OStringToOUString(tp->s, RTL_TEXTENCODING_ASCII_US);
+            aSym = OStringToOUString(rTok.s, RTL_TEXTENCODING_ASCII_US);
             return aSym;
         }
     }
@@ -380,12 +367,12 @@ SbiToken SbiTokenizer::Next()
             return eCurTok = SYMBOL;
         // valid token?
         short lb = 0;
-        short ub = nToken-1;
+        short ub = SAL_N_ELEMENTS(aTokTable_Basic)-1;
         short delta;
         do
         {
             delta = (ub - lb) >> 1;
-            tp = &pTokTable[ lb + delta ];
+            tp = &aTokTable_Basic[ lb + delta ];
             sal_Int32 res = aSym.compareToIgnoreAsciiCaseAscii( tp->s );
 
             if( res == 0 )
@@ -556,17 +543,10 @@ bool SbiTokenizer::MayBeLabel( bool bNeedsColon )
 
 OUString SbiTokenizer::GetKeywordCase( const OUString& sKeyword )
 {
-    if( !nToken )
+    for( auto& rTok : aTokTable_Basic )
     {
-        const TokenTable *tp;
-        for( nToken = 0, tp = pTokTable; tp->t; nToken++, tp++ )
-        {}
-    }
-    const TokenTable* tp = pTokTable;
-    for( short i = 0; i < nToken; i++, tp++ )
-    {
-        if( sKeyword.equalsIgnoreAsciiCaseAscii(tp->s) )
-            return OStringToOUString(tp->s, RTL_TEXTENCODING_ASCII_US);
+        if( sKeyword.equalsIgnoreAsciiCaseAscii(rTok.s) )
+            return OStringToOUString(rTok.s, RTL_TEXTENCODING_ASCII_US);
     }
     return OUString();
 }
