@@ -36,7 +36,6 @@
 #include <com/sun/star/xml/crypto/XXMLSignatureTemplate.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 
-// TODO: hack, remove dllpublic again...
 class XSECGPG_DLLPUBLIC XMLSignature_GpgImpl : public ::cppu::WeakImplHelper<
     css::xml::crypto::XXMLSignature ,
     css::lang::XServiceInfo >

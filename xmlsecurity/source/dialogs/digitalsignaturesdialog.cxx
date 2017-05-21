@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
+#include <com/sun/star/security/CertificateKind.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
@@ -386,15 +387,16 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
         return;
     try
     {
-        std::vector<uno::Reference<xml::crypto::XSecurityEnvironment>> xSecEnvs;
-        xSecEnvs.push_back(maSignatureManager.getSecurityEnvironment());
-        xSecEnvs.push_back(maSignatureManager.getGpgSecurityEnvironment());
+        std::vector<uno::Reference<xml::crypto::XXMLSecurityContext>> xSecContexts;
+        xSecContexts.push_back(maSignatureManager.getSecurityContext());
+        xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
 
-        ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecEnvs );
+        ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecContexts );
         if ( aChooser->Execute() == RET_OK )
         {
             sal_Int32 nSecurityId;
-            if (!maSignatureManager.add(aChooser->GetSelectedCertificate(), aChooser->GetDescription(), nSecurityId, m_bAdESCompliant))
+            if (!maSignatureManager.add(aChooser->GetSelectedCertificate(), aChooser->GetSelectedSecurityContext(),
+                                        aChooser->GetDescription(), nSecurityId, m_bAdESCompliant))
                 return;
             mbSignaturesChanged = true;
 
@@ -499,10 +501,6 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 {
     m_pSignaturesLB->Clear();
 
-    uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureManager.getSecurityEnvironment();
-
-    uno::Reference< css::security::XCertificate > xCert;
-
     size_t nInfos = maSignatureManager.maCurrentSignatureInformations.size();
     size_t nValidSigs = 0, nValidCerts = 0;
     bool bAllNewSignatures = true;
@@ -518,26 +516,9 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 aElementsToBeVerified = DocumentSignatureHelper::CreateElementList(maSignatureManager.mxStore, maSignatureManager.meSignatureMode, mode);
 
             const SignatureInformation& rInfo = maSignatureManager.maCurrentSignatureInformations[n];
-            //First we try to get the certificate which is embedded in the XML Signature
-            if (!rInfo.ouX509Certificate.isEmpty())
-                xCert = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
-            else {
-                //There must be an embedded certificate because we use it to get the
-                //issuer name. We cannot use /Signature/KeyInfo/X509Data/X509IssuerName
-                //because it could be modified by an attacker. The issuer is displayed
-                //in the digital signature dialog.
-                //Comparing the X509IssuerName with the one from the X509Certificate in order
-                //to find out if the X509IssuerName was modified does not work. See #i62684
-                SAL_WARN( "xmlsecurity.dialogs", "Could not find embedded certificate!");
-            }
+            uno::Reference< css::security::XCertificate > xCert = getCertificate(rInfo);
 
-            //In case there is no embedded certificate we try to get it from a local store
-            //Todo: This probably could be removed, see above.
-            if (!xCert.is())
-                xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xmlsecurity::numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
-
-            SAL_WARN_IF( !xCert.is(), "xmlsecurity.dialogs", "Certificate not found and can't be created!" );
-
+            // TODO - should use pgpdata from info provider?
             OUString aSubject;
             OUString aIssuer;
             OUString aDateTimeStr;
@@ -550,8 +531,8 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             {
                 //check the validity of the cert
                 try {
-                    sal_Int32 certResult = xSecEnv->verifyCertificate(xCert,
-                        Sequence<css::uno::Reference<css::security::XCertificate> >());
+                    sal_Int32 certResult = getSecurityEnvironmentForCertificate(xCert)->verifyCertificate(xCert,
+                                                                                                          Sequence<uno::Reference<security::XCertificate> >());
 
                     bCertValid = certResult == css::security::CertificateValidity::VALID;
                     if ( bCertValid )
@@ -664,6 +645,46 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     SignatureHighlightHdl( nullptr );
 }
 
+uno::Reference<security::XCertificate> DigitalSignaturesDialog::getCertificate(const SignatureInformation& rInfo)
+{
+    uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureManager.getSecurityEnvironment();
+    uno::Reference<xml::crypto::XSecurityEnvironment> xGpgSecEnv = maSignatureManager.getGpgSecurityEnvironment();
+    uno::Reference<security::XCertificate> xCert;
+
+    //First we try to get the certificate which is embedded in the XML Signature
+    if (!rInfo.ouX509Certificate.isEmpty())
+        xCert = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
+    else {
+        //There must be an embedded certificate because we use it to get the
+        //issuer name. We cannot use /Signature/KeyInfo/X509Data/X509IssuerName
+        //because it could be modified by an attacker. The issuer is displayed
+        //in the digital signature dialog.
+        //Comparing the X509IssuerName with the one from the X509Certificate in order
+        //to find out if the X509IssuerName was modified does not work. See #i62684
+        SAL_WARN( "xmlsecurity.dialogs", "Could not find embedded certificate!");
+    }
+
+    //In case there is no embedded certificate we try to get it from a local store
+    if (!xCert.is())
+        xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xmlsecurity::numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
+    if (!xCert.is())
+        xCert = xGpgSecEnv->getCertificate( rInfo.ouX509IssuerName, xmlsecurity::numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
+
+    SAL_WARN_IF( !xCert.is(), "xmlsecurity.dialogs", "Certificate not found and can't be created!" );
+
+    return xCert;
+}
+
+uno::Reference<xml::crypto::XSecurityEnvironment> DigitalSignaturesDialog::getSecurityEnvironmentForCertificate(uno::Reference<security::XCertificate> xCert)
+{
+    if (xCert->getCertificateKind() == CertificateKind_OPENPGP)
+        return maSignatureManager.getGpgSecurityEnvironment();
+    else if (xCert->getCertificateKind() == CertificateKind_X509)
+        return maSignatureManager.getSecurityEnvironment();
+
+    throw RuntimeException("Unknown certificate kind");
+}
+
 //If bUseTempStream is true then the temporary signature stream is used.
 //Otherwise the real signature stream is used.
 void DigitalSignaturesDialog::ImplGetSignatureInformations(bool bUseTempStream, bool bCacheLastSignature)
@@ -678,19 +699,12 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
     {
         sal_uInt16 nSelected = (sal_uInt16) reinterpret_cast<sal_uIntPtr>( m_pSignaturesLB->FirstSelected()->GetUserData() );
         const SignatureInformation& rInfo = maSignatureManager.maCurrentSignatureInformations[ nSelected ];
-        uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureManager.getSecurityEnvironment();
-        // Use Certificate from doc, not from key store
-        uno::Reference< css::security::XCertificate > xCert;
-        if (!rInfo.ouX509Certificate.isEmpty())
-            xCert = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
-        //fallback if no certificate is embedded, get if from store
-        if (!xCert.is())
-            xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xmlsecurity::numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
+        uno::Reference<security::XCertificate> xCert = getCertificate(rInfo);
+        uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = getSecurityEnvironmentForCertificate(xCert);
 
-        SAL_WARN_IF( !xCert.is(), "xmlsecurity.dialogs", "Error getting Certificate!" );
         if ( xCert.is() )
         {
-            ScopedVclPtrInstance<CertificateViewer> aViewer(this, maSignatureManager.getSecurityEnvironment(), xCert, false);
+            ScopedVclPtrInstance<CertificateViewer> aViewer(this, xSecEnv, xCert, false);
             aViewer->Execute();
         }
     }

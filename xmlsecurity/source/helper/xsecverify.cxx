@@ -23,12 +23,15 @@
 #include "ooxmlsecparser.hxx"
 #include "framework/signatureverifierimpl.hxx"
 #include "framework/saxeventkeeperimpl.hxx"
+#include "gpg/xmlsignature_gpgimpl.hxx"
+#include "gpg/SEInitializer.hxx"
 
 #include <com/sun/star/xml/crypto/sax/XKeyCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/ElementMarkPriority.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceResolvedBroadcaster.hpp>
 #include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
 #include <com/sun/star/xml/crypto/sax/XSignatureVerifyResultBroadcaster.hpp>
+#include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <sal/log.hxx>
@@ -103,6 +106,27 @@ void XSecController::addSignature()
 
     InternalSignatureInformation isi( nSignatureId, xReferenceResolvedListener );
     m_vInternalSignatureInformations.push_back( isi );
+}
+
+void XSecController::switchGpgSignature()
+{
+#if !defined(MACOSX) && !defined(WNT)
+    // swap signature verifier for the Gpg one
+    m_xXMLSignature.set(new XMLSignature_GpgImpl());
+    if (!m_vInternalSignatureInformations.empty())
+    {
+        SignatureVerifierImpl* pImpl=
+            dynamic_cast<SignatureVerifierImpl*>(
+                m_vInternalSignatureInformations.back().xReferenceResolvedListener.get());
+        if (pImpl)
+        {
+            css::uno::Reference<css::xml::crypto::XSEInitializer> xGpgSEInitializer(
+                new SEInitializerGpg());
+            pImpl->updateSignature(new XMLSignature_GpgImpl(),
+                                   xGpgSEInitializer->createSecurityContext(OUString()));
+        }
+    }
+#endif
 }
 
 void XSecController::addReference( const OUString& ouUri, sal_Int32 nDigestID )
@@ -244,6 +268,28 @@ void XSecController::setDigestValue( sal_Int32 nDigestID, OUString& ouDigestValu
         isi.signatureInfor.vSignatureReferenceInfors.back();
     reference.nDigestID = nDigestID;
     reference.ouDigestValue = ouDigestValue;
+}
+
+void XSecController::setGpgKeyID( OUString& ouKeyID )
+{
+    if (m_vInternalSignatureInformations.empty())
+    {
+        SAL_INFO("xmlsecurity.helper","XSecController::setGpgKeyID: no signature");
+        return;
+    }
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
+    isi.signatureInfor.ouGpgKeyID = ouKeyID;
+}
+
+void XSecController::setGpgCertificate( OUString& ouGpgCert )
+{
+    if (m_vInternalSignatureInformations.empty())
+    {
+        SAL_INFO("xmlsecurity.helper","XSecController::setGpgCertificate: no signature");
+        return;
+    }
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations.back();
+    isi.signatureInfor.ouGpgCertificate = ouGpgCert;
 }
 
 void XSecController::setDate( OUString& ouDate )

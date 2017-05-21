@@ -27,6 +27,10 @@
 #include "xmlsec/xmldocumentwrapper_xmlsecimpl.hxx"
 #include "xsec_xmlsec.hxx"
 
+#if !defined(MACOSX) && !defined(WNT)
+# include "gpg/xmlsignature_gpgimpl.hxx"
+#endif
+
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -40,7 +44,14 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL xsec_xmlsec_component_getFactory( const sal_
     Reference< XInterface > xFactory ;
 
     if( pImplName != nullptr ) {
-        if( XMLElementWrapper_XmlSecImpl_getImplementationName().equalsAscii( pImplName ) )
+#if !defined(MACOSX) && !defined(WNT)
+        if( XMLSignature_GpgImpl::impl_getImplementationName().equalsAscii( pImplName ) )
+        {
+            xFactory = XMLSignature_GpgImpl::impl_createFactory( static_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
+        }
+        else
+#endif
+            if( XMLElementWrapper_XmlSecImpl_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = cppu::createSingleComponentFactory(
                 XMLElementWrapper_XmlSecImpl_createInstance,

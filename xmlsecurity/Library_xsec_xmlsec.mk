@@ -18,6 +18,7 @@ endif
 $(eval $(call gb_Library_set_include,xsec_xmlsec,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/xmlsecurity/inc \
+	-I$(SRCDIR)/xmlsecurity/source/gpg \
 	-I$(SRCDIR)/xmlsecurity/source/xmlsec \
 	-I$(call gb_UnpackedTarball_get_dir,xmlsec/include) \
 ))
@@ -53,6 +54,11 @@ $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 	libxml2 \
 	nss3 \
 ))
+ifneq ($(filter-out WNT MACOSX ANDROID IOS,$(OS)),)
+$(eval $(call gb_Library_use_externals,xsec_xmlsec,\
+	gpgmepp \
+))
+endif
 
 $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/biginteger \
@@ -62,6 +68,7 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/serialnumberadapter \
 	xmlsecurity/source/xmlsec/xmldocumentwrapper_xmlsecimpl \
 	xmlsecurity/source/xmlsec/xmlelementwrapper_xmlsecimpl \
+	xmlsecurity/source/xmlsec/xmlsec_init \
 	xmlsecurity/source/xmlsec/xmlstreamio \
 	xmlsecurity/source/xmlsec/xsec_xmlsec \
 	xmlsecurity/source/xmlsec/nss/ciphercontext \
@@ -69,6 +76,19 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 	xmlsecurity/source/xmlsec/nss/nssinitializer \
 	xmlsecurity/source/xmlsec/nss/xsec_nss \
 ))
+
+ifneq ($(filter-out WNT MACOSX ANDROID IOS,$(OS)),)
+$(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
+	xmlsecurity/source/gpg/CertificateImpl \
+	xmlsecurity/source/gpg/CipherContext \
+	xmlsecurity/source/gpg/DigestContext \
+	xmlsecurity/source/gpg/SecurityEnvironment \
+	xmlsecurity/source/gpg/SEInitializer \
+	xmlsecurity/source/gpg/XMLEncryption \
+	xmlsecurity/source/gpg/XMLSecurityContext \
+	xmlsecurity/source/gpg/xmlsignature_gpgimpl \
+))
+endif
 
 ifeq ($(OS),WNT)
 

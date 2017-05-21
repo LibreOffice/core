@@ -292,6 +292,7 @@ private:
      * For signature verification
      */
     void addSignature();
+    void switchGpgSignature();
     void addReference(
         const OUString& ouUri,
         sal_Int32 nDigestID );
@@ -306,6 +307,8 @@ private:
     void setX509Certificate( OUString& ouX509Certificate );
     void setSignatureValue( OUString& ouSignatureValue );
     void setDigestValue( sal_Int32 nDigestID, OUString& ouDigestValue );
+    void setGpgKeyID( OUString& ouKeyID );
+    void setGpgCertificate( OUString& ouGpgCert );
 
     void setDate( OUString& ouDate );
     void setDescription(const OUString& rDescription);
@@ -381,6 +384,11 @@ public:
         const OUString& ouX509CertDigest);
 
     void addEncapsulatedX509Certificate(const OUString& rEncapsulatedX509Certificate);
+
+    void setGpgCertificate(
+        sal_Int32 nSecurityId,
+        const OUString& ouCertDigest,
+        const OUString& ouCert);
 
     void setDate(
         sal_Int32 nSecurityId,

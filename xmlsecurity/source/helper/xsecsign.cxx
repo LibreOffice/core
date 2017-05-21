@@ -239,6 +239,29 @@ void XSecController::setX509Certificate(
     }
 }
 
+void XSecController::setGpgCertificate(
+        sal_Int32 nSecurityId,
+        const OUString& ouCertDigest,
+        const OUString& ouCert)
+{
+    int index = findSignatureInfor( nSecurityId );
+
+    if ( index == -1 )
+    {
+        InternalSignatureInformation isi(nSecurityId, nullptr);
+        isi.signatureInfor.ouGpgCertificate = ouCert;
+        isi.signatureInfor.ouCertDigest = ouCertDigest;
+        m_vInternalSignatureInformations.push_back( isi );
+    }
+    else
+    {
+        SignatureInformation &si
+            = m_vInternalSignatureInformations[index].signatureInfor;
+        si.ouGpgCertificate = ouCert;
+        si.ouCertDigest = ouCertDigest;
+    }
+}
+
 void XSecController::setDate(
     sal_Int32 nSecurityId,
     const css::util::DateTime& rDateTime )

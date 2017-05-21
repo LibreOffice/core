@@ -307,6 +307,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
     rSignatureHelper.EndMission();
 
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = aSignatureManager.getSecurityEnvironment();
+    uno::Reference<xml::crypto::XSecurityEnvironment> xGpgSecEnv = aSignatureManager.getGpgSecurityEnvironment();
 
     SignatureInformations aSignInfos = rSignatureHelper.GetSignatureInformations();
     int nInfos = aSignInfos.size();
@@ -359,7 +360,11 @@ DocumentDigitalSignatures::ImplVerifySignatures(
             {
                 //We should always be able to get the certificates because it is contained in the document,
                 //unless the document is damaged so that signature xml file could not be parsed.
-                rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
+                rSigInfo.CertificateStatus =
+                    xGpgSecEnv->verifyCertificate(rSigInfo.Signer,
+                                                  Sequence<Reference<css::security::XCertificate> >());
+                // well - except for gpg signatures ...
+                //rSigInfo.CertificateStatus = css::security::CertificateValidity::INVALID;
             }
 
             rSigInfo.SignatureIsValid = ( rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
@@ -447,16 +452,16 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
 
 Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificate(OUString& rDescription)
 {
-    std::vector< Reference< css::xml::crypto::XSecurityEnvironment > > xSecEnvs;
+    std::vector< Reference< css::xml::crypto::XXMLSecurityContext > > xSecContexts;
 
     DocumentSignatureMode eMode{};
     DocumentSignatureManager aSignatureManager(mxCtx, eMode);
     if (aSignatureManager.init()) {
-        xSecEnvs.push_back(aSignatureManager.getSecurityEnvironment());
-        xSecEnvs.push_back(aSignatureManager.getGpgSecurityEnvironment());
+        xSecContexts.push_back(aSignatureManager.getSecurityContext());
+        xSecContexts.push_back(aSignatureManager.getGpgSecurityContext());
     }
 
-    ScopedVclPtrInstance< CertificateChooser > aChooser(nullptr, mxCtx, xSecEnvs);
+    ScopedVclPtrInstance< CertificateChooser > aChooser(nullptr, mxCtx, xSecContexts);
 
     if (aChooser->Execute() != RET_OK)
         return Reference< css::security::XCertificate >(nullptr);
