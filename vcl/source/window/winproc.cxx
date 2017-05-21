@@ -2533,7 +2533,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
         case SalEvent::StartReconversion:
             ImplHandleStartReconversion( pWindow );
             break;
-        break;
+
         case SalEvent::QueryCharPosition:
             ImplHandleSalQueryCharPosition( pWindow, const_cast<SalQueryCharPositionEvent *>(static_cast<SalQueryCharPositionEvent const *>(pEvent)) );
             break;
