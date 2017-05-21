@@ -217,5 +217,10 @@ class AgendaWizardDialogResources(object):
         self.resTemplateDescription = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_COMMON_START + 20)
 
-        self.RoadmapLabels = oWizardResource.getResArray(
-            AgendaWizardDialogResources.RID_AGENDAWIZARDROADMAP_START + 1 , 6)
+        self.RoadmapLabels = []
+        self.RoadmapLabels.append(oWizardResource.getResText(AgendaWizardDialogResources.RID_AGENDAWIZARDROADMAP_START + 1))
+        self.RoadmapLabels.append(oWizardResource.getResText(AgendaWizardDialogResources.RID_AGENDAWIZARDROADMAP_START + 2))
+        self.RoadmapLabels.append(oWizardResource.getResText(AgendaWizardDialogResources.RID_AGENDAWIZARDROADMAP_START + 3))
+        self.RoadmapLabels.append(oWizardResource.getResText(AgendaWizardDialogResources.RID_AGENDAWIZARDROADMAP_START + 4))
+        self.RoadmapLabels.append(oWizardResource.getResText(AgendaWizardDialogResources.RID_AGENDAWIZARDROADMAP_START + 5))
+        self.RoadmapLabels.append(oWizardResource.getResText(AgendaWizardDialogResources.RID_AGENDAWIZARDROADMAP_START + 6))

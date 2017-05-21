@@ -240,9 +240,18 @@ class LetterWizardDialogResources(object):
             oWizardResource.getResText(
                 LetterWizardDialogResources.RID_RID_COMMON_START + 20)
 
-        self.RoadmapLabels = oWizardResource.getResArray(
-            LetterWizardDialogResources.RID_LETTERWIZARDROADMAP_START + 1, 6)
-        self.SalutationLabels = oWizardResource.getResArray(
-            LetterWizardDialogResources.RID_LETTERWIZARDSALUTATION_START + 1, 3)
-        self.GreetingLabels = oWizardResource.getResArray(
-            LetterWizardDialogResources.RID_LETTERWIZARDGREETING_START + 1, 3)
+        self.RoadmapLabels = []
+        self.RoadmapLabels.append(oWizardResource.getResText(LetterWizardDialogResources.RID_LETTERWIZARDROADMAP_START + 1))
+        self.RoadmapLabels.append(oWizardResource.getResText(LetterWizardDialogResources.RID_LETTERWIZARDROADMAP_START + 2))
+        self.RoadmapLabels.append(oWizardResource.getResText(LetterWizardDialogResources.RID_LETTERWIZARDROADMAP_START + 3))
+        self.RoadmapLabels.append(oWizardResource.getResText(LetterWizardDialogResources.RID_LETTERWIZARDROADMAP_START + 4))
+        self.RoadmapLabels.append(oWizardResource.getResText(LetterWizardDialogResources.RID_LETTERWIZARDROADMAP_START + 5))
+        self.RoadmapLabels.append(oWizardResource.getResText(LetterWizardDialogResources.RID_LETTERWIZARDROADMAP_START + 6))
+        self.SalutationLabels = []
+        self.SalutationLabels.append(oWizardResource.getResText(LetterWizardDialogResources.RID_LETTERWIZARDSALUTATION_START + 1))
+        self.SalutationLabels.append(oWizardResource.getResText(LetterWizardDialogResources.RID_LETTERWIZARDSALUTATION_START + 2))
+        self.SalutationLabels.append(oWizardResource.getResText(LetterWizardDialogResources.RID_LETTERWIZARDSALUTATION_START + 3))
+        self.GreetingLabels = []
+        self.GreetingLabels.append(oWizardResource.getResText(LetterWizardDialogResources.RID_LETTERWIZARDGREETING_START + 1))
+        self.GreetingLabels.append(oWizardResource.getResText(LetterWizardDialogResources.RID_LETTERWIZARDGREETING_START + 2))
+        self.GreetingLabels.append(oWizardResource.getResText(LetterWizardDialogResources.RID_LETTERWIZARDGREETING_START + 3))
