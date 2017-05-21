@@ -699,13 +699,15 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_openFile(
     Handle to a file received by a previous call to osl_openFile().
 
     @param uHow [in]
-    Distance to move the internal position pointer (from uPos).
+    How to calculate the offset - osl_Pos_Absolut means start at the beginning of the file, osl_Pos_Current means
+    offset from the current seek position and osl_Pos_End means the offset will be negative and the position will be
+    calculated backwards from the end of the file by the offset provided.
 
     @param uPos [in]
-    Absolute position from the beginning of the file.
+    Seek offset, depending on uHow. If uHow is osl_Pos_End then the value must be negative.
 
     @retval osl_File_E_None on success
-    @retval osl_File_E_INVAL the format of the parameters was not valid
+    @retval osl_File_E_INVAL the format of the parameters was not valid (e.g. if uHow is osl_Pos_End then must be negative)
     @retval osl_File_E_OVERFLOW the resulting file offset would be a value which cannot be represented correctly for regular files
 
     @see    osl_openFile()
