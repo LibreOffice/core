@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_64e8c37d",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 3764,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2017-05-21T17:08:28Z",
+      "side": 1,
+      "message": "You need to use single quote, since in C++ the JS code is put inside a constant string (\"...\"). You should always check that LO is built successfully before pushing.",
+      "revId": "9b5ef0909191274c0ef9d1554b86651749f54b00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
