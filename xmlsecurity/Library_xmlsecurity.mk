@@ -45,12 +45,6 @@ $(eval $(call gb_Library_use_libraries,xmlsecurity,\
 	xsec_xmlsec \
 ))
 
-ifneq ($(filter-out WNT MACOSX ANDROID IOS,$(OS)),)
-$(eval $(call gb_Library_use_libraries,xmlsecurity,\
-	xsec_gpg \
-))
-endif
-
 $(eval $(call gb_Library_add_exception_objects,xmlsecurity,\
 	xmlsecurity/source/component/certificatecontainer \
 	xmlsecurity/source/component/documentdigitalsignatures \

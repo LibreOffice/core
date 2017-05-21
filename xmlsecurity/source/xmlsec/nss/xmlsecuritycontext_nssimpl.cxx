@@ -37,6 +37,7 @@ using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 XMLSecurityContext_NssImpl::XMLSecurityContext_NssImpl()
     : m_nDefaultEnvIndex(-1)
 {
+#if 0
     //Init xmlsec library
     if( xmlSecInit() < 0 ) {
         throw RuntimeException() ;
@@ -54,13 +55,16 @@ XMLSecurityContext_NssImpl::XMLSecurityContext_NssImpl()
         xmlSecShutdown() ;
         throw RuntimeException() ;
     }
+#endif
 }
 
 XMLSecurityContext_NssImpl::~XMLSecurityContext_NssImpl()
 {
+#if 0
     xmlDisableStreamInputCallbacks() ;
     xmlSecCryptoShutdown() ;
     xmlSecShutdown() ;
+#endif
 }
 
 sal_Int32 SAL_CALL XMLSecurityContext_NssImpl::addSecurityEnvironment(
