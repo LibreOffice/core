@@ -69,23 +69,8 @@ static int startsAsciiCaseInsensitive(const std::string &s1, const std::string &
  }
 
 /**
- * This 3 following structures are from fingerprint.c and textcat.c
+ * This following structure is from textcat.c
  */
-typedef struct ngram_t {
-
-    sint2 rank;
-    char str[MAXNGRAMSIZE+1];
-
-} ngram_t;
-
-typedef struct fp_t {
-
-    const char *name;
-    ngram_t *fprint;
-    uint4 size;
-
-} fp_t;
-
 typedef struct textcat_t{
 
     void **fprint;

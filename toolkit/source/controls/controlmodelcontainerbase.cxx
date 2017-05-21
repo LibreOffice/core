@@ -74,11 +74,6 @@ using namespace ::com::sun::star::util;
 using namespace toolkit;
 
 #define PROPERTY_RESOURCERESOLVER "ResourceResolver"
-struct LanguageDependentProp
-{
-    const char* pPropName;
-    sal_Int32   nPropNameLength;
-};
 
 
 namespace
