@@ -25,18 +25,6 @@
 
 #include <cairo.h>
 
-struct BOX
-{
-    short x1, x2, y1, y2;
-};
-struct _XRegion
-{
-    long size;
-    long numRects;
-    BOX *rects;
-    BOX extents;
-};
-
 X11CairoTextRender::X11CairoTextRender(X11SalGraphics& rParent)
     : mrParent(rParent)
 {
