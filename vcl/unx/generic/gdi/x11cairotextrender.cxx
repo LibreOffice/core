@@ -31,10 +31,8 @@ struct BOX
 };
 struct _XRegion
 {
-    long size;
     long numRects;
     BOX *rects;
-    BOX extents;
 };
 
 X11CairoTextRender::X11CairoTextRender(X11SalGraphics& rParent)
