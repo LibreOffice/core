@@ -25,13 +25,11 @@
 
 #include <xsecxmlsecdllapi.h>
 
-int xmlEnableStreamInputCallbacks() ;
-void xmlDisableStreamInputCallbacks() ;
-
+XSECXMLSEC_DLLPUBLIC int xmlEnableStreamInputCallbacks() ;
+XSECXMLSEC_DLLPUBLIC void xmlDisableStreamInputCallbacks() ;
 XSECXMLSEC_DLLPUBLIC int xmlRegisterStreamInputCallbacks(
     css::uno::Reference< css::xml::crypto::XUriBinding >& aUriBinding
-) ;
-
+);
 XSECXMLSEC_DLLPUBLIC int xmlUnregisterStreamInputCallbacks() ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_XMLSTREAMIO_HXX

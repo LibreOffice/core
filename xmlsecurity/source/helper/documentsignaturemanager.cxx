@@ -251,11 +251,12 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         return false;
     }
 
+    // TODO: no serial number currently on gpg keys - better/more
+    // discriminative error handling?
     OUString aCertSerial = xmlsecurity::bigIntegerToNumericString(xCert->getSerialNumber());
     if (aCertSerial.isEmpty())
     {
         SAL_WARN("xmlsecurity.helper", "Error in Certificate, problem with serial number!");
-        return false;
     }
 
     if (!mxStore.is())
@@ -292,6 +293,9 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
 
     maSignatureHelper.SetX509Certificate(nSecurityId, xCert->getIssuerName(), aCertSerial, aStrBuffer.makeStringAndClear(), aCertDigest);
 
+#if 0
+    // TODO: so this currently uses an NSS security environment,
+    // think how to do that more generically
     uno::Sequence< uno::Reference< security::XCertificate > > aCertPath = getSecurityEnvironment()->buildCertificatePath(xCert);
     const uno::Reference< security::XCertificate >* pCertPath = aCertPath.getConstArray();
     sal_Int32 nCnt = aCertPath.getLength();
@@ -301,6 +305,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         sax::Converter::encodeBase64(aStrBuffer, pCertPath[i]->getEncoded());
         maSignatureHelper.AddEncapsulatedX509Certificate(aStrBuffer.makeStringAndClear());
     }
+#endif
 
     std::vector< OUString > aElements = DocumentSignatureHelper::CreateElementList(mxStore, meSignatureMode, DocumentSignatureAlgorithm::OOo3_2);
     DocumentSignatureHelper::AppendContentTypes(mxStore, aElements);
