@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_a402ab3c",
+        "filename": "filter/source/svg/presentation_engine.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 1807,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2017-05-21T17:10:29Z",
+      "side": 0,
+      "message": "moreover eslint generates a bunch of error because it thinks that theSlideIndexPage is undefined.",
+      "revId": "eaa8f7e9af44406fed19ed2b74e535833c5c8add",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
