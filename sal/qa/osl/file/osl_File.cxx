@@ -775,8 +775,8 @@ namespace osl_FileBase
 #endif
     }
 
-    /** LLA: Test for getSystemPathFromFileURL()
-        this test is splitted into 2 different OS tests,
+    /** Test for getSystemPathFromFileURL()
+        this test is split into 2 different OS tests,
         the first function checkUNXBehaviour... runs only on Unix based Systems,
         the second only on windows based systems
         the first parameter are a file URL where we want to get the system path of,
@@ -866,7 +866,7 @@ namespace osl_FileBase
     {
 #if 0
         OString sURL("file://c:/tmp");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:/tmp"); // LLA: this is may be a BUG
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:/tmp"); // this is may be a BUG
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
 #endif
     }
@@ -880,7 +880,7 @@ namespace osl_FileBase
 
     void SystemPath_FileURL::getSystemPathFromFileURL_001_53()
     {
-// LLA: is this a legal file path?
+// is this a legal file path?
         OString sURL("file:///c|/tmp");
         checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/c|/tmp");
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "c:\\tmp");
@@ -903,7 +903,7 @@ namespace osl_FileBase
     void SystemPath_FileURL::getSystemPathFromFileURL_001_7()
     {
         OString sURL("file:///tmp/../second");
-        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp/../second"); // LLA: may be a BUG
+        checkUNXBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_None, "/tmp/../second"); // may be a BUG
         checkWNTBehaviour_getSystemPathFromFileURL(sURL, osl::FileBase::E_INVAL, "");
     }
 
@@ -1177,7 +1177,7 @@ namespace osl_FileBase
         void getTempDirURL_001()
         {
 
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getTempDirURL function: excution",
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("test for getTempDirURL function: execution",
                                      osl::FileBase::E_None, nError);
         }
 
@@ -1490,11 +1490,12 @@ namespace osl_FileStatus
 
         }
 
-        // Link is not defined in Windows, and on Linux, we can not get the directory item of the link file
-        // LLA: we have to differ to filesystems, normal filesystems support links (EXT2, ...)
-        //      castrated filesystems don't (FAT, FAT32)
-        //      Windows NT NTFS support links, but the windows api doesn't :-(
+        /** Check if is a valid linked file.
 
+            Link is not defined in Windows, and on Linux, we can not get the directory item of the linked file.
+            We have to defer to filesystems, normal filesystems support links (EXT2, ...), castrated filesystems
+            don't have links (FAT, FAT32) and Windows NT NTFS support links, but the Windows API doesn't :-(
+        */
         void isValid_003()
         {
 #if defined (UNX)
@@ -1669,7 +1670,7 @@ namespace osl_FileStatus
 
         void getFileType_007()
         {
-#if defined(__sun) // Special file is differ in Windows
+#if defined(__sun) // Special file is different in Windows
             nError1 = DirectoryItem::get(aTypeURL2, m_aSpecialItem);
             CPPUNIT_ASSERT_EQUAL(nError1, osl::FileBase::E_None);
 
@@ -2108,7 +2109,7 @@ namespace osl_FileStatus
             deleteTestFile(aTypeURL);
         }
 
-#if (defined UNX)            // Link file is not define in Windows
+#if (defined UNX)            // Link file is not defined in Windows
         void getLinkTargetURL_001()
         {
             // create a link file;
