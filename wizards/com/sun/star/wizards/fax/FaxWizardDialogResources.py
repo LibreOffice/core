@@ -153,11 +153,23 @@ class FaxWizardDialogResources(object):
         self.resTemplateDescription = oWizardResource.getResText(
             FaxWizardDialogResources.RID_RID_COMMON_START + 20)
 
-        self.RoadmapLabels = oWizardResource.getResArray(
-            FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + 1 , 5)
-        self.SalutationLabels = oWizardResource.getResArray(
-            FaxWizardDialogResources.RID_FAXWIZARDSALUTATION_START + 1 , 4)
-        self.GreetingLabels = oWizardResource.getResArray(
-            FaxWizardDialogResources.RID_FAXWIZARDGREETING_START + 1 , 4)
-        self.CommunicationLabels = oWizardResource.getResArray(
-            FaxWizardDialogResources.RID_FAXWIZARDCOMMUNICATION_START + 1 , 3)
+        self.RoadmapLabels = []
+        self.RoadmapLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + 1))
+        self.RoadmapLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + 2))
+        self.RoadmapLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + 3))
+        self.RoadmapLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + 4))
+        self.RoadmapLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + 5))
+        self.SalutationLabels = []
+        self.SalutationLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDSALUTATION_START + 1))
+        self.SalutationLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDSALUTATION_START + 2))
+        self.SalutationLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDSALUTATION_START + 3))
+        self.SalutationLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDSALUTATION_START + 4))
+        self.GreetingLabels = []
+        self.GreetingLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDGREETING_START + 1))
+        self.GreetingLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDGREETING_START + 2))
+        self.GreetingLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDGREETING_START + 3))
+        self.GreetingLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDGREETING_START + 4))
+        self.CommunicationLabels = []
+        self.CommunicationLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDCOMMUNICATION_START + 1))
+        self.CommunicationLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDCOMMUNICATION_START + 2))
+        self.CommunicationLabels.append(oWizardResource.getResText(FaxWizardDialogResources.RID_FAXWIZARDCOMMUNICATION_START + 3))

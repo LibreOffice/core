@@ -47,16 +47,6 @@ class Resource(object):
             traceback.print_exc()
             raise ValueError("Resource with ID not " + str(nID) + " not found")
 
-    def getResArray(self, nID, iCount):
-        try:
-            resArray = []
-            for i in range(iCount):
-                resArray.append(self.getResText(nID + i))
-            return resArray
-        except Exception:
-            traceback.print_exc()
-            raise ValueError("Resource with ID not" + str(nID) + " not found")
-
     @classmethod
     def showCommonResourceError(self, xMSF):
         from .SystemDialog import SystemDialog
