@@ -44,7 +44,7 @@ using namespace ::comphelper;
 
 
 OAccessibleMenuBaseComponent::OAccessibleMenuBaseComponent( Menu* pMenu )
-    :OAccessibleExtendedComponentHelper( new VCLExternalSolarLock )
+    :OAccessibleExtendedComponentHelper( &m_aLock )
     ,m_pMenu( pMenu )
     ,m_bEnabled( false )
     ,m_bFocused( false )
@@ -52,8 +52,6 @@ OAccessibleMenuBaseComponent::OAccessibleMenuBaseComponent( Menu* pMenu )
     ,m_bSelected( false )
     ,m_bChecked( false )
 {
-    m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
-
     if ( m_pMenu )
     {
         m_aAccessibleChildren.assign( m_pMenu->GetItemCount(), Reference< XAccessible >() );
@@ -66,9 +64,6 @@ OAccessibleMenuBaseComponent::~OAccessibleMenuBaseComponent()
 {
     if ( m_pMenu )
         m_pMenu->RemoveEventListener( LINK( this, OAccessibleMenuBaseComponent, MenuEventListener ) );
-
-    delete m_pExternalLock;
-    m_pExternalLock = nullptr;
 }
 
 
