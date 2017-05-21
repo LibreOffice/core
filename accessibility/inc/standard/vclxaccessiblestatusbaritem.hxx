@@ -25,9 +25,9 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <vcl/vclptr.hxx>
+#include <toolkit/helper/externallock.hxx>
 
 class StatusBar;
-class VCLExternalSolarLock;
 
 namespace utl {
 class AccessibleStateSetHelper;
@@ -43,13 +43,13 @@ typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessible,
     css::lang::XServiceInfo > VCLXAccessibleStatusBarItem_BASE;
 
-class VCLXAccessibleStatusBarItem : public AccessibleTextHelper_BASE,
+class VCLXAccessibleStatusBarItem : private BaseVCLExternalSolarLock,
+                                    public AccessibleTextHelper_BASE,
                                     public VCLXAccessibleStatusBarItem_BASE
 {
     friend class VCLXAccessibleStatusBar;
 
 private:
-    VCLExternalSolarLock*   m_pExternalLock;
     VclPtr<StatusBar>       m_pStatusBar;
     sal_uInt16              m_nItemId;
     OUString                m_sItemName;

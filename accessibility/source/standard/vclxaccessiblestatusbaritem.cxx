@@ -49,11 +49,10 @@ using namespace ::comphelper;
 
 
 VCLXAccessibleStatusBarItem::VCLXAccessibleStatusBarItem( StatusBar* pStatusBar, sal_uInt16 nItemId )
-    :AccessibleTextHelper_BASE( new VCLExternalSolarLock )
+    :AccessibleTextHelper_BASE( &m_aLock )
     ,m_pStatusBar( pStatusBar )
     ,m_nItemId( nItemId )
 {
-    m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
 
     m_sItemName = GetItemName();
     m_sItemText = GetItemText();
@@ -63,8 +62,6 @@ VCLXAccessibleStatusBarItem::VCLXAccessibleStatusBarItem( StatusBar* pStatusBar,
 
 VCLXAccessibleStatusBarItem::~VCLXAccessibleStatusBarItem()
 {
-    delete m_pExternalLock;
-    m_pExternalLock = nullptr;
 }
 
 
