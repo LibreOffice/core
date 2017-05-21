@@ -33,6 +33,12 @@ public:
     virtual void release() override;
 };
 
+class BaseVCLExternalSolarLock
+{
+protected:
+    mutable VCLExternalSolarLock m_aLock;
+};
+
 #endif // INCLUDED_TOOLKIT_HELPER_EXTERNALLOCK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -60,8 +60,7 @@ using namespace ::comphelper;
 // Ctor() and Dtor()
 
 VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_Int32 _nPos ) :
-
-    AccessibleTextHelper_BASE( new VCLExternalSolarLock ),
+    AccessibleTextHelper_BASE( &m_aLock ),
 
     m_pToolBox      ( _pToolBox ),
     m_nIndexInParent( _nPos ),
@@ -72,8 +71,6 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
     m_bIndeterminate( false )
 
 {
-    m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock( ) );
-
     OSL_ENSURE( m_pToolBox, "invalid toolbox" );
     m_nItemId = m_pToolBox->GetItemId( m_nIndexInParent );
     m_sOldName = GetText();
@@ -119,8 +116,6 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
 
 VCLXAccessibleToolBoxItem::~VCLXAccessibleToolBoxItem()
 {
-    delete m_pExternalLock;
-    m_pExternalLock = nullptr;
 }
 
 OUString VCLXAccessibleToolBoxItem::GetText()
