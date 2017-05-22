@@ -461,7 +461,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99227, "tdf99227.docx")
     if (!pXmlDoc)
         return;
 
-    assertXPath(pXmlDoc, "//w:footnote[3]/w:p/w:r[5]/w:drawing", 1);
+    assertXPath(pXmlDoc, "//w:footnote/w:p/w:r/w:drawing", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104162, "tdf104162.docx")
