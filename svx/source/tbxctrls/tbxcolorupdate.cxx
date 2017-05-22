@@ -42,7 +42,7 @@ namespace svx
         {
             case SID_ATTR_CHAR_COLOR:
             case SID_ATTR_CHAR_COLOR2:
-                Update(COL_RED);
+                Update(COL_RED_FONTCOLOR);
                 break;
             case SID_FRAME_LINECOLOR:
                 Update(COL_BLUE);
@@ -50,7 +50,7 @@ namespace svx
             case SID_ATTR_CHAR_COLOR_BACKGROUND:
             case SID_ATTR_CHAR_BACK_COLOR:
             case SID_BACKGROUND_COLOR:
-                Update(COL_YELLOW);
+                Update(COL_YELLOW_HIGHLIGHT);
                 break;
             case SID_ATTR_LINE_COLOR:
                 Update(COL_DEFAULT_SHAPE_STROKE);
