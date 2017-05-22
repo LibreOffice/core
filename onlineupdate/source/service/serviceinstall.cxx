@@ -139,7 +139,7 @@ GetVersionNumberFromPath(LPWSTR path, DWORD &A, DWORD &B,
  *
  * @param serviceHandle A handle to an opened service with
  *                      SERVICE_CHANGE_CONFIG access right
- * @param TRUE on succcess.
+ * @param TRUE on success.
 */
 BOOL
 UpdateServiceDescription(SC_HANDLE serviceHandle)
