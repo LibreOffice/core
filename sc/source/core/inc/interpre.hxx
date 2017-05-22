@@ -582,7 +582,7 @@ void ScProduct();
 void ScAverage( bool bTextAsZero = false );
 void ScCount();
 void ScCount2();
-void GetStVarParams( double& rVal, double& rValCount, bool bTextAsZero );
+void GetStVarParams( bool bTextAsZero, double(*VarResult)( double fVal, size_t nValCount ) );
 void ScVar( bool bTextAsZero = false );
 void ScVarP( bool bTextAsZero = false );
 void ScStDev( bool bTextAsZero = false );

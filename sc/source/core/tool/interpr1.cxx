@@ -3782,7 +3782,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
     }
 }
 
-void ScInterpreter::GetStVarParams( double& rVal, double& rValCount, bool bTextAsZero )
+void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double fVal, size_t nValCount ) )
 {
     short nParamCount = GetByte();
 
@@ -3790,7 +3790,6 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount, bool bTextA
     double fSum    = 0.0;
     double vSum    = 0.0;
     double fVal = 0.0;
-    rValCount = 0.0;
     ScAddress aAdr;
     ScRange aRange;
     size_t nRefInList = 0;
@@ -3895,7 +3894,6 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount, bool bTextA
     }
 
     ::std::vector<double>::size_type n = values.size();
-    rValCount = n;
     if (!n)
         SetError( FormulaError::DivisionByZero);
     if (nGlobalError == FormulaError::NONE)
@@ -3904,50 +3902,53 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount, bool bTextA
         for (::std::vector<double>::size_type i = 0; i < n; i++)
             vSum += ::rtl::math::approxSub( values[i], vMean) * ::rtl::math::approxSub( values[i], vMean);
     }
-    rVal = vSum;
+    PushDouble( VarResult( vSum, n));
 }
 
 void ScInterpreter::ScVar( bool bTextAsZero )
 {
-    double nVal;
-    double nValCount;
-    GetStVarParams( nVal, nValCount, bTextAsZero );
-
-    if (nValCount <= 1.0)
-        PushError( FormulaError::DivisionByZero );
-    else
-        PushDouble( nVal / (nValCount - 1.0));
+    auto VarResult = []( double fVal, size_t nValCount )
+    {
+        if (nValCount <= 1)
+            return CreateDoubleError( FormulaError::DivisionByZero );
+        else
+            return fVal / (nValCount - 1);
+    };
+    GetStVarParams( bTextAsZero, VarResult );
 }
 
 void ScInterpreter::ScVarP( bool bTextAsZero )
 {
-    double nVal;
-    double nValCount;
-    GetStVarParams( nVal, nValCount, bTextAsZero );
+    auto VarResult = []( double fVal, size_t nValCount )
+    {
+        return sc::div( fVal, nValCount);
+    };
+    GetStVarParams( bTextAsZero, VarResult );
 
-    PushDouble( div( nVal, nValCount));
 }
 
 void ScInterpreter::ScStDev( bool bTextAsZero )
 {
-    double nVal;
-    double nValCount;
-    GetStVarParams( nVal, nValCount, bTextAsZero );
-    if (nValCount <= 1.0)
-        PushError( FormulaError::DivisionByZero );
-    else
-        PushDouble( sqrt( nVal / (nValCount - 1.0)));
+    auto VarResult = []( double fVal, size_t nValCount )
+    {
+        if (nValCount <= 1)
+            return CreateDoubleError( FormulaError::DivisionByZero );
+        else
+            return sqrt( fVal / (nValCount - 1));
+    };
+    GetStVarParams( bTextAsZero, VarResult );
 }
 
 void ScInterpreter::ScStDevP( bool bTextAsZero )
 {
-    double nVal;
-    double nValCount;
-    GetStVarParams( nVal, nValCount, bTextAsZero );
-    if (nValCount == 0.0)
-        PushError( FormulaError::DivisionByZero );
-    else
-        PushDouble( sqrt( nVal / nValCount));
+    auto VarResult = []( double fVal, size_t nValCount )
+    {
+        if (nValCount == 0)
+            return CreateDoubleError( FormulaError::DivisionByZero );
+        else
+            return sqrt( fVal / nValCount);
+    };
+    GetStVarParams( bTextAsZero, VarResult );
 
     /* this was: PushDouble( sqrt( div( nVal, nValCount)));
      *

@@ -4089,10 +4089,11 @@ void ScInterpreter::ScAveDev()
 
 void ScInterpreter::ScDevSq()
 {
-    double nVal;
-    double nValCount;
-    GetStVarParams(nVal, nValCount, false /*bTextAsZero*/);
-    PushDouble(nVal);
+    auto VarResult = []( double fVal, size_t /*nValCount*/ )
+    {
+        return fVal;
+    };
+    GetStVarParams( false /*bTextAsZero*/, VarResult);
 }
 
 void ScInterpreter::ScProbability()
