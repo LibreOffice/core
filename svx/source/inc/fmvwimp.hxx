@@ -191,7 +191,7 @@ protected:
         // notifies this impl class that the anti-impl instance (m_pView) is going to die
 
 public:
-    // UNO connection
+    // UNO binding
 
 // css::lang::XEventListener
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;

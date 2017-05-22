@@ -219,7 +219,7 @@ public:
     FmXGridControl(const css::uno::Reference< css::uno::XComponentContext >&);
     virtual ~FmXGridControl() override;
 
-    // UNO connection
+    // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(FmXGridControl, UnoControl)
     virtual css::uno::Any  SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
