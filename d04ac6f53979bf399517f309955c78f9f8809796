@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_bf3c7630",
+        "filename": "sc/source/core/data/drwlayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-05-22T15:49:19Z",
+      "side": 1,
+      "message": "there are many unrelated style changes in this file",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 76
+      },
+      "revId": "d04ac6f53979bf399517f309955c78f9f8809796",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
