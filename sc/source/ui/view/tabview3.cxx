@@ -2294,7 +2294,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
             aEnd.Y() -= 1;
 
             // #i85232# include area below cells (could be done in GetScrPos?)
-            if ( eMode == SC_UPDATE_ALL && nRow2 >= MAXROW )
+            if ( eMode == SC_UPDATE_ALL && nRow2 >= MAXROW && !bIsTiledRendering )
                 aEnd.Y() = pGridWin[i]->GetOutputSizePixel().Height();
 
             aStart.X() -= nLayoutSign;      // include change marks
