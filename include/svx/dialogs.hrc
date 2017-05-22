@@ -34,6 +34,7 @@
 #define RID_SVXSTR_NOFILL                   (RID_SVX_START + 190)
 #define RID_SVXSTR_BY_AUTHOR                (RID_SVX_START + 842)
 #define RID_SVXSTR_TRANSPARENT              (RID_SVX_START + 843)
+#define RID_SVXSTR_DEFAULT                  (RID_SVX_START + 844)
 #define RID_SVXSTR_INVISIBLE                (RID_SVX_START + 178)
 #define RID_SVXSTR_NONE                     (RID_SVX_START + 183)
 #define RID_SVXSTR_SOLID                    (RID_SVX_START + 160)

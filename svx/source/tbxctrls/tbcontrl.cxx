@@ -1306,6 +1306,11 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
             mpButtonAutoColor->SetText(EditResId::GetString(RID_SVXSTR_AUTOMATIC));
             break;
         }
+        case SID_FM_CTL_PROPERTIES:
+        {
+            mpButtonAutoColor->SetText( SvxResId( RID_SVXSTR_DEFAULT ) );
+            break;
+        }
         default:
         {
             mpButtonAutoColor->Hide();
@@ -1414,6 +1419,10 @@ namespace
             case SID_BMPMASK_COLOR:
                 aColor = COL_TRANSPARENT;
                 sColorName = SvxResId(RID_SVXSTR_TRANSPARENT);
+                break;
+            case SID_FM_CTL_PROPERTIES:
+                aColor = COL_TRANSPARENT;
+                sColorName = SvxResId(RID_SVXSTR_DEFAULT);
                 break;
             case SID_ATTR_CHAR_COLOR:
             case SID_ATTR_CHAR_COLOR2:
