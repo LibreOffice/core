@@ -3785,10 +3785,19 @@ void ScInterpreter::ScMax( bool bTextAsZero )
 void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double fVal, size_t nValCount ) )
 {
     short nParamCount = GetByte();
+    const SCSIZE nMatRows = GetRefListArrayMaxSize( nParamCount);
+
+    struct ArrayRefListValue
+    {
+        std::vector<double> mvValues;
+        double mfSum;
+        ArrayRefListValue() : mfSum(0.0) {}
+    };
+    std::vector<ArrayRefListValue> vArrayValues;
+    size_t nRefArrayPos = std::numeric_limits<size_t>::max();
 
     std::vector<double> values;
     double fSum    = 0.0;
-    double vSum    = 0.0;
     double fVal = 0.0;
     ScAddress aAdr;
     ScRange aRange;
@@ -3826,8 +3835,59 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
                 }
             }
             break;
-            case svDoubleRef :
             case svRefList :
+            {
+                const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(pStack[sp-1]);
+                if (p && p->IsArrayResult())
+                {
+                    nRefArrayPos = nRefInList;
+                    if (vArrayValues.empty())
+                    {
+                        // Create and init all elements with current value.
+                        assert(nMatRows > 0);
+                        vArrayValues.resize(nMatRows);
+                        for (auto & it : vArrayValues)
+                        {
+                            it.mvValues = values;
+                            it.mfSum = fSum;
+                        }
+                    }
+                    else
+                    {
+                        // Current value and values from vector are operands
+                        // for each vector position.
+                        for (auto & it : vArrayValues)
+                        {
+                            it.mvValues.insert( it.mvValues.end(), values.begin(), values.end());
+                            it.mfSum += fSum;
+                        }
+                    }
+                    ArrayRefListValue& rArrayValue = vArrayValues[nRefArrayPos];
+                    FormulaError nErr = FormulaError::NONE;
+                    PopDoubleRef( aRange, nParamCount, nRefInList);
+                    ScValueIterator aValIter( pDok, aRange, mnSubTotalFlags, bTextAsZero );
+                    if (aValIter.GetFirst(fVal, nErr))
+                    {
+                        do
+                        {
+                            rArrayValue.mvValues.push_back(fVal);
+                            rArrayValue.mfSum += fVal;
+                        }
+                        while ((nErr == FormulaError::NONE) && aValIter.GetNext(fVal, nErr));
+                    }
+                    if ( nErr != FormulaError::NONE )
+                    {
+                        rArrayValue.mfSum = CreateDoubleError( nErr);
+                    }
+                    // Reset.
+                    std::vector<double>().swap(values);
+                    fSum = 0.0;
+                    nRefArrayPos = std::numeric_limits<size_t>::max();
+                    break;
+                }
+            }
+            SAL_FALLTHROUGH;
+            case svDoubleRef :
             {
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
@@ -3893,16 +3953,50 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
         }
     }
 
-    ::std::vector<double>::size_type n = values.size();
-    if (!n)
-        SetError( FormulaError::DivisionByZero);
-    if (nGlobalError == FormulaError::NONE)
+    if (!vArrayValues.empty())
     {
-        const double vMean = fSum / n;
-        for (::std::vector<double>::size_type i = 0; i < n; i++)
-            vSum += ::rtl::math::approxSub( values[i], vMean) * ::rtl::math::approxSub( values[i], vMean);
+        // Include value of last non-references-array type and calculate final result.
+        if (!values.empty())
+        {
+            for (auto & it : vArrayValues)
+            {
+                it.mvValues.insert( it.mvValues.end(), values.begin(), values.end());
+                it.mfSum += fSum;
+            }
+        }
+        ScMatrixRef xResMat = GetNewMat( 1, nMatRows, true);
+        for (SCSIZE r=0; r < nMatRows; ++r)
+        {
+            ::std::vector<double>::size_type n = vArrayValues[r].mvValues.size();
+            if (!n)
+                xResMat->PutError( FormulaError::DivisionByZero, 0, r);
+            else
+            {
+                ArrayRefListValue& rArrayValue = vArrayValues[r];
+                double vSum = 0.0;
+                const double vMean = rArrayValue.mfSum / n;
+                for (::std::vector<double>::size_type i = 0; i < n; i++)
+                    vSum += ::rtl::math::approxSub( rArrayValue.mvValues[i], vMean) *
+                        ::rtl::math::approxSub( rArrayValue.mvValues[i], vMean);
+                xResMat->PutDouble( VarResult( vSum, n), 0, r);
+            }
+        }
+        PushMatrix( xResMat);
     }
-    PushDouble( VarResult( vSum, n));
+    else
+    {
+        ::std::vector<double>::size_type n = values.size();
+        if (!n)
+            SetError( FormulaError::DivisionByZero);
+        double vSum = 0.0;
+        if (nGlobalError == FormulaError::NONE)
+        {
+            const double vMean = fSum / n;
+            for (::std::vector<double>::size_type i = 0; i < n; i++)
+                vSum += ::rtl::math::approxSub( values[i], vMean) * ::rtl::math::approxSub( values[i], vMean);
+        }
+        PushDouble( VarResult( vSum, n));
+    }
 }
 
 void ScInterpreter::ScVar( bool bTextAsZero )
