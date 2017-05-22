@@ -7955,6 +7955,15 @@ void Test::testFuncRefListArraySUBTOTAL()
     aPos.IncRow();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL MAX for A4:A5 failed", 16.0, m_pDoc->GetValue(aPos));
 
+    // Matrix in F7:F9, individual STDEV of A2:A3, A3:A4 and A4:A5
+    m_pDoc->InsertMatrixFormula(5, 6, 5, 8, aMark, "=SUBTOTAL(7;OFFSET(A1;ROW(1:3);0;2))");
+    aPos.Set(5,6,0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("SUBTOTAL STDEV for A2:A3 failed", 1.414214, m_pDoc->GetValue(aPos), 1e-6);
+    aPos.IncRow();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("SUBTOTAL STDEV for A3:A4 failed", 2.828427, m_pDoc->GetValue(aPos), 1e-6);
+    aPos.IncRow();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("SUBTOTAL STDEV for A4:A5 failed", 5.656854, m_pDoc->GetValue(aPos), 1e-6);
+
     m_pDoc->DeleteTab(0);
 }
 
