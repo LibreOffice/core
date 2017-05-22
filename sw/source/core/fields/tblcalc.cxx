@@ -45,13 +45,13 @@ SwFieldType* SwTableFieldType::Copy() const
 
 void SwTableField::CalcField( SwTableCalcPara& rCalcPara )
 {
-    if( rCalcPara.rCalc.IsCalcError() ) // stop if there is already an error set
+    if( rCalcPara.m_rCalc.IsCalcError() ) // stop if there is already an error set
         return;
 
     // create pointers from box name
-    BoxNmToPtr( rCalcPara.pTable );
+    BoxNmToPtr( rCalcPara.m_pTable );
     OUString sFormula( MakeFormula( rCalcPara ));
-    SetValue( rCalcPara.rCalc.Calculate( sFormula ).GetDouble() );
+    SetValue( rCalcPara.m_rCalc.Calculate( sFormula ).GetDouble() );
     ChgValid( !rCalcPara.IsStackOverflow() ); // is the value again valid?
 }
 

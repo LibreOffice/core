@@ -179,13 +179,13 @@ void SwTableBoxFormula::ChangeState( const SfxPoolItem* pItem )
 
 void SwTableBoxFormula::Calc( SwTableCalcPara& rCalcPara, double& rValue )
 {
-    if( !rCalcPara.rCalc.IsCalcError() )
+    if( !rCalcPara.m_rCalc.IsCalcError() )
     {
         // create pointers from box names
-        BoxNmToPtr( rCalcPara.pTable );
+        BoxNmToPtr( rCalcPara.m_pTable );
         const OUString sFormula( MakeFormula( rCalcPara ));
-        if( !rCalcPara.rCalc.IsCalcError() )
-            rValue = rCalcPara.rCalc.Calculate( sFormula ).GetDouble();
+        if( !rCalcPara.m_rCalc.IsCalcError() )
+            rValue = rCalcPara.m_rCalc.Calculate( sFormula ).GetDouble();
         else
             rValue = DBL_MAX;
         ChgValid( !rCalcPara.IsStackOverflow() ); // value is now valid again
