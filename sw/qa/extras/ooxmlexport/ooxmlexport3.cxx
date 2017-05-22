@@ -816,7 +816,7 @@ DECLARE_OOXMLEXPORT_TEST(testFootnoteParagraphTag, "testFootnote.docx")
     if (!pXmlFootnotes)
         return;
     assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]","id","2");
-    assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]/w:p/w:r/w:rPr/w:rStyle","val","Footnotereference");
+    assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]/w:p/w:r/w:footnoteRef", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testSpacingLineRule,"table_lineRule.docx")
