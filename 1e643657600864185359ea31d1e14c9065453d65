@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_bfc71644",
+        "filename": "oox/source/ppt/pptimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-22T13:46:59Z",
+      "side": 1,
+      "message": "comment wording seems a little odd? :-)\n \"only for the first time\" ?",
+      "revId": "1e643657600864185359ea31d1e14c9065453d65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
