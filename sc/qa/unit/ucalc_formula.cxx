@@ -7928,18 +7928,27 @@ void Test::testFuncRefListArraySUBTOTAL()
     aPos.IncRow();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL SUM for A4:A5 failed", 24.0, m_pDoc->GetValue(aPos));
 
-    // Matrix in C7:C9, individual MIN of A2:A3, A3:A4 and A4:A5
-    m_pDoc->InsertMatrixFormula(2, 6, 2, 8, aMark, "=SUBTOTAL(5;OFFSET(A1;ROW(1:3);0;2))");
+    // Matrix in C7:C9, individual AVERAGE of A2:A3, A3:A4 and A4:A5
+    m_pDoc->InsertMatrixFormula(2, 6, 2, 8, aMark, "=SUBTOTAL(1;OFFSET(A1;ROW(1:3);0;2))");
     aPos.Set(2,6,0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL AVERAGE for A2:A3 failed",  3.0, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL AVERAGE for A3:A4 failed",  6.0, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL AVERAGE for A4:A5 failed", 12.0, m_pDoc->GetValue(aPos));
+
+    // Matrix in D7:D9, individual MIN of A2:A3, A3:A4 and A4:A5
+    m_pDoc->InsertMatrixFormula(3, 6, 3, 8, aMark, "=SUBTOTAL(5;OFFSET(A1;ROW(1:3);0;2))");
+    aPos.Set(3,6,0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL MIN for A2:A3 failed",  2.0, m_pDoc->GetValue(aPos));
     aPos.IncRow();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL MIN for A3:A4 failed",  4.0, m_pDoc->GetValue(aPos));
     aPos.IncRow();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL MIN for A4:A5 failed",  8.0, m_pDoc->GetValue(aPos));
 
-    // Matrix in D7:D9, individual MAX of A2:A3, A3:A4 and A4:A5
-    m_pDoc->InsertMatrixFormula(3, 6, 3, 8, aMark, "=SUBTOTAL(4;OFFSET(A1;ROW(1:3);0;2))");
-    aPos.Set(3,6,0);
+    // Matrix in E7:E9, individual MAX of A2:A3, A3:A4 and A4:A5
+    m_pDoc->InsertMatrixFormula(4, 6, 4, 8, aMark, "=SUBTOTAL(4;OFFSET(A1;ROW(1:3);0;2))");
+    aPos.Set(4,6,0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL MAX for A2:A3 failed",  4.0, m_pDoc->GetValue(aPos));
     aPos.IncRow();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL MAX for A3:A4 failed",  8.0, m_pDoc->GetValue(aPos));
