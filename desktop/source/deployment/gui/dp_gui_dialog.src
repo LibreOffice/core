@@ -113,6 +113,12 @@ String RID_STR_WARNING_INSTALL_EXTENSION
     "Click 'Cancel' to stop the installation.";
 };
 
+String RID_STR_WARNING_INSTALL_EXTENSION_DISABLED
+{
+    Text [en-US] = "Extension installation is currently disabled. "
+    "Please consult your system administrator for more information.";
+};
+
 String RID_STR_WARNING_REMOVE_EXTENSION
 {
     Text [en-US] = "You are about to remove the extension '%NAME'.\n"

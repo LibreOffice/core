@@ -71,6 +71,8 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <officecfg/Office/ExtensionManager.hxx>
+
 #include <map>
 #include <memory>
 #include <vector>
@@ -419,6 +421,17 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
 bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
+
+    // Check if extension installation is disabled in the expert configurations
+    if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get())
+    {
+        ScopedVclPtrInstance<MessageDialog> aWarn(m_pVCLWindow, getResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED),
+                                                  VclMessageType::Warning, VclButtonsType::Ok);
+        aWarn->Execute();
+
+        return false;
+    }
+
     ScopedVclPtrInstance<MessageDialog> aInfo(m_pVCLWindow, getResId(RID_STR_WARNING_INSTALL_EXTENSION),
                                               VclMessageType::Warning, VclButtonsType::OkCancel);
 
@@ -510,6 +523,12 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
 #else
     m_pUpdateBtn->Hide();
 #endif
+
+    if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get())
+    {
+        m_pAddBtn->Disable();
+        m_pAddBtn->SetQuickHelpText(getResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED));
+    }
 
     m_aIdle.SetPriority(TaskPriority::LOWEST);
     m_aIdle.SetInvokeHandler( LINK( this, ExtMgrDialog, TimeOutHdl ) );
@@ -804,7 +823,16 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
     }
 
     m_pCancelBtn->Enable( bLockInterface );
-    m_pAddBtn->Enable( !bLockInterface );
+    m_pAddBtn->Enable( !bLockInterface && !officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get());
+    if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get())
+    {
+        m_pAddBtn->SetQuickHelpText(getResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED));
+    }
+    else
+    {
+        m_pAddBtn->SetQuickHelpText("");
+    }
+
     m_pUpdateBtn->Enable( !bLockInterface && m_pExtensionBox->getItemCount() );
     m_pExtensionBox->enableButtons( !bLockInterface );
 
