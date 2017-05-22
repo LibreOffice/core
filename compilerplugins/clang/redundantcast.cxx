@@ -87,6 +87,8 @@ public:
 
     bool VisitCXXConstCastExpr(CXXConstCastExpr const * expr);
 
+    bool VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * expr);
+
     bool VisitCallExpr(CallExpr const * expr);
 
     bool VisitCXXDeleteExpr(CXXDeleteExpr const * expr);
@@ -431,6 +433,66 @@ bool RedundantCast::VisitCXXConstCastExpr(CXXConstCastExpr const * expr) {
             << expr->getSubExprAsWritten()->getType()
             << expr->getTypeAsWritten() << expr->getSourceRange();
     }
+    return true;
+}
+
+bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    // A bit of a rabbit hole here,  these expressions look like
+    //   CPPUNIT_ASSERT( bool(aVec.find(p1.get()) == aVec.end()) )
+    // If I remove the bool, then another plugin wants me to change it to CPPUNIT_ASSERT_EQUAL,
+    // but that fails because CppUnit can't do "std::ostream << iterator".
+    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(expr->getLocStart()));
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/o3tl/qa/"))
+        return true;
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sfx2/qa/"))
+        return true;
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/postprocess/qa/"))
+        return true;
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sc/qa/"))
+        return true;
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/cppu/qa/"))
+        return true;
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/vcl/qa/"))
+        return true;
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/cppuhelper/qa/"))
+        return true;
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/comphelper/qa/"))
+        return true;
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/connectivity/qa/"))
+        return true;
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sal/qa/"))
+        return true;
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/salhelper/qa/"))
+        return true;
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sw/qa/"))
+        return true;
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/svl/qa/"))
+        return true;
+    // the array-of-struct initialiser here makes clang unhappy if I remove all of the "SchemeInfo" names
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/tools/source/fsys/urlobj.cxx"))
+        return true;
+    // 2 structs with compiled-generated constructors where I cannot remove the cast even though the cast is a NoOp
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/tools/source/inet/inetmime.cxx"))
+        return true;
+    // some explicit use of std::initializer_list
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/svx/source/sidebar/area/AreaPropertyPanel.cxx"))
+        return true;
+    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/svx/source/tbxctrls/fillctrl.cxx"))
+        return true;
+
+    auto const t1 = expr->getTypeAsWritten();
+    auto const t2 = compat::getSubExprAsWritten(expr)->getType();
+    if (t1 != t2)
+        return true;
+    if (!isOkToRemoveArithmeticCast(t1, t2, expr->getSubExpr()))
+        return true;
+    report(
+        DiagnosticsEngine::Warning,
+        "redundant functional cast from/to %0", expr->getExprLoc())
+        << t1 << expr->getSourceRange();
     return true;
 }
 

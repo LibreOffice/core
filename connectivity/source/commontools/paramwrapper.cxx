@@ -221,7 +221,7 @@ namespace param
                 aExceptionWrapper.Context = e.Context;
                 aExceptionWrapper.Message = e.Message;
                 aExceptionWrapper.TargetException <<= e;
-                throw WrappedTargetException( aExceptionWrapper );
+                throw aExceptionWrapper;
             }
         }
         else

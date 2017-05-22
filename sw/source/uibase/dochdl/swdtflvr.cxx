@@ -1883,7 +1883,7 @@ bool SwTransferable::PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             }
             else if( aObjDesc.maSize.Width() && aObjDesc.maSize.Height() )
             {
-                aSize = Size( aObjDesc.maSize );    //always 100TH_MM
+                aSize = aObjDesc.maSize;    //always 100TH_MM
                 MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( aObjDesc.mnViewAspect ) );
                 aSize = OutputDevice::LogicToLogic( aSize, MapUnit::Map100thMM, aUnit );
                 awt::Size aSz;

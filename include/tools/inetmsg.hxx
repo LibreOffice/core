@@ -131,7 +131,7 @@ public:
     INetMessageHeader GetHeaderField (sal_uIntPtr nIndex) const
     {
         if ( nIndex < m_aHeaderList.size() ) {
-            return INetMessageHeader( *m_aHeaderList[ nIndex ] );
+            return *m_aHeaderList[ nIndex ];
         } else {
             return INetMessageHeader();
         }

@@ -119,14 +119,14 @@ void CombTransition::renderComb( double           t,
 
     const basegfx::B2DVector aPushDirection = basegfx::B2DVector(
         enteringSizePixel * maPushDirectionUnit );
-    const basegfx::B2DPolyPolygon aClipPolygon1 = basegfx::B2DPolyPolygon(
+    const basegfx::B2DPolyPolygon aClipPolygon1 =
         createClipPolygon( maPushDirectionUnit,
                            enteringSizePixel,
-                           mnNumStripes, 0 ) );
-    const basegfx::B2DPolyPolygon aClipPolygon2 = basegfx::B2DPolyPolygon(
+                           mnNumStripes, 0 );
+    const basegfx::B2DPolyPolygon aClipPolygon2 =
         createClipPolygon( maPushDirectionUnit,
                            enteringSizePixel,
-                           mnNumStripes, 1 ) );
+                           mnNumStripes, 1 );
 
     SlideBitmapSharedPtr const & pLeavingBitmap = getLeavingBitmap(rViewEntry);
     if( pLeavingBitmap )

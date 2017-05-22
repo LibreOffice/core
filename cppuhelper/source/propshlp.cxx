@@ -228,10 +228,10 @@ Any OPropertySetHelper2::queryInterface( const css::uno::Type & rType )
  */
 css::uno::Sequence< css::uno::Type > OPropertySetHelper::getTypes()
 {
-    return css::uno::Sequence<css::uno::Type>({
+    return {
         UnoType<css::beans::XPropertySet>::get(),
         UnoType<css::beans::XMultiPropertySet>::get(),
-        UnoType<css::beans::XFastPropertySet>::get()});
+        UnoType<css::beans::XFastPropertySet>::get()};
 }
 
 // ComponentHelper
@@ -530,12 +530,12 @@ void OPropertySetHelper::setFastPropertyValue( sal_Int32 nHandle, const Any& rVa
             catch (const css::uno::RuntimeException& )             { throw;    /* allowed to leave */ }
             catch (const css::uno::Exception& e )
             {
-                // not allowed to leave this meathod
+                // not allowed to leave this method
                 css::lang::WrappedTargetException aWrap;
                 aWrap.Context = static_cast< css::beans::XPropertySet* >( this );
                 aWrap.TargetException <<= e;
 
-                throw css::lang::WrappedTargetException( aWrap );
+                throw aWrap;
             }
 
             // release guard to fire events

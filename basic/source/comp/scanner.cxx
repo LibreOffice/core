@@ -121,19 +121,19 @@ static SbxDataType GetSuffixType( sal_Unicode c )
     switch (c)
     {
     case '%':
-        return SbxDataType(SbxINTEGER);
+        return SbxINTEGER;
     case '&':
-        return SbxDataType(SbxLONG);
+        return SbxLONG;
     case '!':
-        return SbxDataType(SbxSINGLE);
+        return SbxSINGLE;
     case '#':
-        return SbxDataType(SbxDOUBLE);
+        return SbxDOUBLE;
     case '@':
-        return SbxDataType(SbxCURRENCY);
+        return SbxCURRENCY;
     case '$':
-        return SbxDataType(SbxSTRING);
+        return SbxSTRING;
     default:
-        return SbxDataType(SbxVARIANT);
+        return SbxVARIANT;
     }
 }
 

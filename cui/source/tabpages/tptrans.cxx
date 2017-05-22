@@ -133,8 +133,7 @@ void SvxTransparenceTabPage::ActivateLinear(bool bActivate)
 IMPL_LINK_NOARG(SvxTransparenceTabPage, ModifyTransparentHdl_Impl, Edit&, void)
 {
     sal_uInt16 nPos = (sal_uInt16)m_pMtrTransparent->GetValue();
-    XFillTransparenceItem aItem(nPos);
-    rXFSet.Put(XFillTransparenceItem(aItem));
+    rXFSet.Put(XFillTransparenceItem(nPos));
 
     // preview
     InvalidatePreview();

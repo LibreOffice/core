@@ -197,8 +197,7 @@ inline void Sequence< E >::realloc( sal_Int32 nSize )
 inline ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL toUnoSequence(
     const ::rtl::ByteSequence & rByteSequence )
 {
-    return ::com::sun::star::uno::Sequence< sal_Int8 >(
-        * reinterpret_cast< const ::com::sun::star::uno::Sequence< sal_Int8 > * >( &rByteSequence ) );
+    return * reinterpret_cast< const ::com::sun::star::uno::Sequence< sal_Int8 > * >( &rByteSequence );
 }
 
 }

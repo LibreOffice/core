@@ -453,8 +453,8 @@ Point FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, const Point& 
         aAbsolute = aRect.TopLeft();
     }
     else
-        aAbsolute = Point( pReference->OutputToAbsoluteScreenPixel(
-            pReference->ScreenToOutputPixel(rPos) ) );
+        aAbsolute = pReference->OutputToAbsoluteScreenPixel(
+            pReference->ScreenToOutputPixel(rPos) );
 
     return aAbsolute;
 }

@@ -1511,7 +1511,7 @@ XTYPEPROVIDER_IMPL_2( PropertySetInfo,
 // virtual
 uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
 {
-    return uno::Sequence< beans::Property >( *m_pProps );
+    return *m_pProps;
 }
 
 

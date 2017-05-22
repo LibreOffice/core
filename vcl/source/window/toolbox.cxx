@@ -4347,7 +4347,7 @@ void ToolBox::EndDocking( const tools::Rectangle& rRect, bool bFloatMode )
         if ( meAlign != meDockAlign )
             SetAlign( meDockAlign );
     }
-    if ( bFloatMode || (bool(bFloatMode) != ImplIsFloatingMode()) )
+    if ( bFloatMode || (bFloatMode != ImplIsFloatingMode()) )
         DockingWindow::EndDocking( rRect, bFloatMode );
 }
 

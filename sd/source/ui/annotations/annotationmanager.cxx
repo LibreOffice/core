@@ -200,7 +200,7 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
         Date aDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
         if (aDate==aSysDate)
             sRet = SdResId(STR_ANNOTATION_TODAY);
-        else if (aDate == Date(aSysDate-1))
+        else if (aDate == (aSysDate-1))
             sRet = SdResId(STR_ANNOTATION_YESTERDAY);
         else if (aDate.IsValidAndGregorian() )
             sRet = rLocalData.getDate(aDate);

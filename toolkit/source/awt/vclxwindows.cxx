@@ -2063,7 +2063,7 @@ void SAL_CALL VCLXListBox::listItemInserted( const ItemListEvent& i_rEvent )
     VclPtr< ListBox > pListBox = GetAs< ListBox >();
 
     ENSURE_OR_RETURN_VOID( pListBox, "VCLXListBox::listItemInserted: no ListBox?!" );
-    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition <= sal_Int32( pListBox->GetEntryCount() ) ),
+    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition <= pListBox->GetEntryCount() ),
         "VCLXListBox::listItemInserted: illegal (inconsistent) item position!" );
     pListBox->InsertEntry(
         i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : OUString(),
@@ -2077,7 +2077,7 @@ void SAL_CALL VCLXListBox::listItemRemoved( const ItemListEvent& i_rEvent )
     VclPtr< ListBox > pListBox = GetAs< ListBox >();
 
     ENSURE_OR_RETURN_VOID( pListBox, "VCLXListBox::listItemRemoved: no ListBox?!" );
-    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < sal_Int32( pListBox->GetEntryCount() ) ),
+    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < pListBox->GetEntryCount() ),
         "VCLXListBox::listItemRemoved: illegal (inconsistent) item position!" );
 
     pListBox->RemoveEntry( i_rEvent.ItemPosition );
@@ -2089,7 +2089,7 @@ void SAL_CALL VCLXListBox::listItemModified( const ItemListEvent& i_rEvent )
     VclPtr< ListBox > pListBox = GetAs< ListBox >();
 
     ENSURE_OR_RETURN_VOID( pListBox, "VCLXListBox::listItemModified: no ListBox?!" );
-    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < sal_Int32( pListBox->GetEntryCount() ) ),
+    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < pListBox->GetEntryCount() ),
         "VCLXListBox::listItemModified: illegal (inconsistent) item position!" );
 
     // VCL's ListBox does not support changing an entry's text or image, so remove and re-insert
@@ -4503,7 +4503,7 @@ void SAL_CALL VCLXComboBox::listItemInserted( const ItemListEvent& i_rEvent )
     VclPtr< ComboBox > pComboBox = GetAsDynamic< ComboBox >();
 
     ENSURE_OR_RETURN_VOID( pComboBox, "VCLXComboBox::listItemInserted: no ComboBox?!" );
-    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition <= sal_Int32( pComboBox->GetEntryCount() ) ),
+    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition <= pComboBox->GetEntryCount() ),
         "VCLXComboBox::listItemInserted: illegal (inconsistent) item position!" );
     pComboBox->InsertEntryWithImage(
         i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : OUString(),
@@ -4518,7 +4518,7 @@ void SAL_CALL VCLXComboBox::listItemRemoved( const ItemListEvent& i_rEvent )
     VclPtr< ComboBox > pComboBox = GetAsDynamic< ComboBox >();
 
     ENSURE_OR_RETURN_VOID( pComboBox, "VCLXComboBox::listItemRemoved: no ComboBox?!" );
-    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < sal_Int32( pComboBox->GetEntryCount() ) ),
+    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < pComboBox->GetEntryCount() ),
         "VCLXComboBox::listItemRemoved: illegal (inconsistent) item position!" );
 
     pComboBox->RemoveEntryAt( i_rEvent.ItemPosition );
@@ -4531,7 +4531,7 @@ void SAL_CALL VCLXComboBox::listItemModified( const ItemListEvent& i_rEvent )
     VclPtr< ComboBox > pComboBox = GetAsDynamic< ComboBox >();
 
     ENSURE_OR_RETURN_VOID( pComboBox, "VCLXComboBox::listItemModified: no ComboBox?!" );
-    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < sal_Int32( pComboBox->GetEntryCount() ) ),
+    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < pComboBox->GetEntryCount() ),
         "VCLXComboBox::listItemModified: illegal (inconsistent) item position!" );
 
     // VCL's ComboBox does not support changing an entry's text or image, so remove and re-insert

@@ -3243,7 +3243,7 @@ public:
 
     TEmptyRes operator()(char) const
     {
-        return maCOp(char{}, maOp, 0, mfVal, maString);
+        return maCOp({}, maOp, 0, mfVal, maString);
     }
 
     static bool useFunctionForEmpty()

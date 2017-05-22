@@ -265,9 +265,8 @@ ContentProviderImplHelper::getAdditionalPropertySet(
     if ( m_pImpl->m_xPropertySetRegistry.is() )
     {
         // Open/create persistent property set.
-        return uno::Reference< css::ucb::XPersistentPropertySet >(
-            m_pImpl->m_xPropertySetRegistry->openPropertySet(
-                rKey, bCreate ) );
+        return m_pImpl->m_xPropertySetRegistry->openPropertySet(
+                rKey, bCreate );
     }
 
     return uno::Reference< css::ucb::XPersistentPropertySet >();

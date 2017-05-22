@@ -146,7 +146,7 @@ sal_uInt16 SdrObjGroup::GetObjIdentifier() const
 SdrLayerID SdrObjGroup::GetLayer() const
 {
     bool b1st = true;
-    SdrLayerID nLay=SdrLayerID(SdrObject::GetLayer());
+    SdrLayerID nLay = SdrObject::GetLayer();
     SdrObjList* pOL=pSub.get();
     const size_t nObjCount = pOL->GetObjCount();
     for (size_t i=0; i<nObjCount; ++i) {

@@ -35,10 +35,10 @@ void LineBuilder::appendLineSegment(const glm::vec2& rPoint1, const glm::vec2& r
     GLuint zero = mrVertices.size();
 
     mrVertices.insert(mrVertices.end(), {
-        Vertex{rPoint1, glm::vec4{mR, mG, mB, mA}, glm::vec4{-rNormal1.x, -rNormal1.y, -aExtrusion1, mfLineWidthAndAA}},
-        Vertex{rPoint1, glm::vec4{mR, mG, mB, mA}, glm::vec4{ rNormal1.x,  rNormal1.y,  aExtrusion1, mfLineWidthAndAA}},
-        Vertex{rPoint2, glm::vec4{mR, mG, mB, mA}, glm::vec4{-rNormal2.x, -rNormal2.y, -aExtrusion2, mfLineWidthAndAA}},
-        Vertex{rPoint2, glm::vec4{mR, mG, mB, mA}, glm::vec4{ rNormal2.x,  rNormal2.y,  aExtrusion2, mfLineWidthAndAA}},
+        {rPoint1, glm::vec4{mR, mG, mB, mA}, glm::vec4{-rNormal1.x, -rNormal1.y, -aExtrusion1, mfLineWidthAndAA}},
+        {rPoint1, glm::vec4{mR, mG, mB, mA}, glm::vec4{ rNormal1.x,  rNormal1.y,  aExtrusion1, mfLineWidthAndAA}},
+        {rPoint2, glm::vec4{mR, mG, mB, mA}, glm::vec4{-rNormal2.x, -rNormal2.y, -aExtrusion2, mfLineWidthAndAA}},
+        {rPoint2, glm::vec4{mR, mG, mB, mA}, glm::vec4{ rNormal2.x,  rNormal2.y,  aExtrusion2, mfLineWidthAndAA}},
     });
 
     mrIndices.insert(mrIndices.end(), {
@@ -62,8 +62,8 @@ void LineBuilder::appendAndConnectLinePoint(const glm::vec2& rPoint, const glm::
     GLuint zero = mrVertices.size();
 
     mrVertices.insert(mrVertices.end(), {
-        Vertex{rPoint, glm::vec4{mR, mG, mB, mA}, glm::vec4{-aNormal.x, -aNormal.y, -aExtrusion, mfLineWidthAndAA}},
-        Vertex{rPoint, glm::vec4{mR, mG, mB, mA}, glm::vec4{ aNormal.x,  aNormal.y,  aExtrusion, mfLineWidthAndAA}},
+        {rPoint, glm::vec4{mR, mG, mB, mA}, glm::vec4{-aNormal.x, -aNormal.y, -aExtrusion, mfLineWidthAndAA}},
+        {rPoint, glm::vec4{mR, mG, mB, mA}, glm::vec4{ aNormal.x,  aNormal.y,  aExtrusion, mfLineWidthAndAA}},
     });
 
     if (mnInitialIndexSize == mrIndices.size())

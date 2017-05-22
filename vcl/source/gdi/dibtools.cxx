@@ -733,7 +733,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                                 aMask.GetColorAndAlphaFor32Bit( aColor, aAlpha, reinterpret_cast<sal_uInt8*>(pTmp32++) );
                                 rAcc.SetPixel(nY, nX, SanitizeColor(aColor, bForceToMonoWhileReading));
                                 pAccAlpha->SetPixelIndex(nY, nX, sal_uInt8(0xff) - aAlpha);
-                                rAlphaUsed |= bool(0xff != aAlpha);
+                                rAlphaUsed |= 0xff != aAlpha;
                             }
                         }
                     }

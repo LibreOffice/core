@@ -289,8 +289,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     if( !pAkt )
                         break;
 
-                    pAkt->nStyleNo = sal_uInt16( nStyleNo );
-
+                    pAkt->nStyleNo = nStyleNo;
                 }
                 break;
 
@@ -439,8 +438,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     if( IsCalcValue() )
                         CalcValue();
 
-                    nTokenValue = short( 100L * aLSpace.GetLineHeight()
-                                            / long( nTokenValue ) );
+                    nTokenValue = short( 100L * aLSpace.GetLineHeight() / nTokenValue );
 
                     if( nTokenValue > 200 )     // Data value for PropLnSp
                         nTokenValue = 200;      // is one BYTE !!!

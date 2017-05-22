@@ -453,7 +453,7 @@ LanguageType SvxLanguageBoxBase::GetSelectLanguage() const
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         return LanguageType( reinterpret_cast<sal_uIntPtr>(ImplGetEntryData(nPos)) );
     else
-        return LanguageType( LANGUAGE_DONTKNOW );
+        return LANGUAGE_DONTKNOW;
 }
 
 

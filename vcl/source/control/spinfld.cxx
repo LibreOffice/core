@@ -130,7 +130,7 @@ bool ImplDrawNativeSpinfield(vcl::RenderContext& rRenderContext, vcl::Window* pW
                                                    ControlState::ENABLED, rSpinbuttonValue, OUString());
 
             if (!pWin->SupportsDoubleBuffering())
-                pBorder->SetClipRegion(vcl::Region(oldRgn));
+                pBorder->SetClipRegion(oldRgn);
         }
     }
     return bNativeOK;

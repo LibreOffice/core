@@ -2553,7 +2553,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
     // handle drag related events
     if( rMessage.type == ClientMessage )
     {
-        if( Atom(rMessage.xclient.message_type) == m_nXdndStatus && Atom(rMessage.xclient.data.l[0]) == m_aDropWindow )
+        if( rMessage.xclient.message_type == m_nXdndStatus && Atom(rMessage.xclient.data.l[0]) == m_aDropWindow )
         {
             bHandled = true;
             DragSourceDragEvent dsde;
@@ -2598,7 +2598,7 @@ bool SelectionManager::handleDragEvent( XEvent& rMessage )
             aGuard.clear();
             m_xDragSourceListener->dragOver( dsde );
         }
-        else if( Atom(rMessage.xclient.message_type) == m_nXdndFinished && m_aDropWindow == Atom(rMessage.xclient.data.l[0]) )
+        else if( rMessage.xclient.message_type == m_nXdndFinished && m_aDropWindow == Atom(rMessage.xclient.data.l[0]) )
         {
             bHandled = true;
             // notify the listener

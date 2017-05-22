@@ -882,7 +882,7 @@ public:
             aBlockColor.Erase(COL_GREEN);
             BitmapEx aWhole(aBlockColor, aWholeMask);
 
-            aRenderPt = Point(r.Center());
+            aRenderPt = r.Center();
             aRenderPt.Move(nSlice+1, 0);
 
             // An offset background for alpha rendering
@@ -1013,7 +1013,7 @@ public:
                         aClipRegion.Union(aPieces[i]);
                     }
                     assert (aClipRegion.getRegionBand());
-                    rDev.SetClipRegion(vcl::Region(aClipRegion));
+                    rDev.SetClipRegion(aClipRegion);
                     rDev.SetFillColor(Color::HSBtoRGB(nHue, 75, 75));
                     nHue = (nHue + 97) % 360;
                     rDev.DrawRect(aOuter);
@@ -1064,7 +1064,7 @@ public:
                         {
                             assert (!aClipRegion.getRegionBand());
 
-                            rDev.SetClipRegion(vcl::Region(aClipRegion));
+                            rDev.SetClipRegion(aClipRegion);
                             rDev.SetFillColor(Color::HSBtoRGB(nHue, 50, 75));
                             nHue = (nHue + 97) % 360;
                             rDev.DrawRect(aOuter);

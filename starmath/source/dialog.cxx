@@ -310,9 +310,9 @@ IMPL_LINK( SmFontDialog, FontModifyHdl, Edit&, rEdit, void )
 IMPL_LINK_NOARG( SmFontDialog, AttrChangeHdl, Button*, void )
 {
     if (m_pBoldCheckBox->IsChecked())
-        maFont.SetWeight(FontWeight(WEIGHT_BOLD));
+        maFont.SetWeight(WEIGHT_BOLD);
     else
-        maFont.SetWeight(FontWeight(WEIGHT_NORMAL));
+        maFont.SetWeight(WEIGHT_NORMAL);
 
     if (m_pItalicCheckBox->IsChecked())
         maFont.SetItalic(ITALIC_NORMAL);

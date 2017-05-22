@@ -249,8 +249,7 @@ void ModulWindow::Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rec
 
 void ModulWindow::Resize()
 {
-    m_aXEditorWindow->SetPosSizePixel( Point( 0, 0 ),
-                                    Size( GetOutputSizePixel() ) );
+    m_aXEditorWindow->SetPosSizePixel( Point( 0, 0 ), GetOutputSizePixel() );
 }
 
 void ModulWindow::CheckCompileBasic()

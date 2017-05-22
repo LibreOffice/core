@@ -1402,7 +1402,7 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
             nFirst = nFirst - nDist;
         else
             nFirst = 0;
-        nDist = std::max( nDist, long( GetLineSpace() ) );
+        nDist = std::max( nDist, GetLineSpace() );
         nDist += nLineHeight;
         nDiff -= nFirst;
 

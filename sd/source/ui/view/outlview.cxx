@@ -780,8 +780,7 @@ IMPL_LINK_NOARG(OutlineView, StatusEventHdl, EditStatus&, void)
         if (aWin.GetHeight() > aText.Bottom())
             aText.Bottom() = aWin.GetHeight();
 
-        mrOutlineViewShell.InitWindows(Point(0,0), aText.GetSize(),
-                                       Point(aVis.TopLeft()));
+        mrOutlineViewShell.InitWindows(Point(0,0), aText.GetSize(), aVis.TopLeft());
         mrOutlineViewShell.UpdateScrollBars();
     }
 }

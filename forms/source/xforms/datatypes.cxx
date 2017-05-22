@@ -250,7 +250,7 @@ namespace xforms
             IllegalArgumentException aException;
             aException.Message = sErrorMessage;
             aException.Context = *this;
-            throw IllegalArgumentException( aException );
+            throw aException;
         }
 
         return true;

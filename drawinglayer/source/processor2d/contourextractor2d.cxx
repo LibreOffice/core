@@ -116,7 +116,7 @@ namespace drawinglayer
                     const primitive2d::MaskPrimitive2D& rMaskCandidate(static_cast< const primitive2d::MaskPrimitive2D& >(rCandidate));
                     basegfx::B2DPolyPolygon aMask(rMaskCandidate.getMask());
                     aMask.transform(getViewInformation2D().getObjectTransformation());
-                    maExtractedContour.push_back(basegfx::B2DPolyPolygon(aMask));
+                    maExtractedContour.push_back(aMask);
                     break;
                 }
                 case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :

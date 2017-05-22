@@ -2124,7 +2124,7 @@ void WW8AttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_
         if ( SvxFrameDirection::Vertical_RL_TB == m_rWW8Export.TrueFrameDirection( *pFrameFormat ) )
         {
             m_rWW8Export.InsUInt16( NS_sprm::sprmTTextFlow );
-            m_rWW8Export.pO->push_back( sal_uInt8(n) );        //start range
+            m_rWW8Export.pO->push_back( n );                   //start range
             m_rWW8Export.pO->push_back( sal_uInt8(n + 1) );    //end range
             m_rWW8Export.InsUInt16( 5 ); //Equals vertical writing
         }

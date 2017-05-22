@@ -572,11 +572,11 @@ AnimationNodeSharedPtr AnimationNodeFactory::createAnimationNode(
         xNode.is(),
         "AnimationNodeFactory::createAnimationNode(): invalid XAnimationNode" );
 
-    return BaseNodeSharedPtr( implCreateAnimationNode(
+    return implCreateAnimationNode(
                                   xNode,
                                   BaseContainerNodeSharedPtr(), // no parent
                                   NodeContext( rContext,
-                                               rSlideSize )));
+                                               rSlideSize ));
 }
 
 #if defined(DBG_UTIL)

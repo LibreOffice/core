@@ -207,7 +207,7 @@ void AttacherAllListener_Impl::convertToEventReturn( Any & rRet, const Type & rR
                 break;
 
             case TypeClass_FLOAT:           rRet <<= float(0);  break;
-            case TypeClass_DOUBLE:          rRet <<= double(0.0);  break;
+            case TypeClass_DOUBLE:          rRet <<= 0.0;  break;
             case TypeClass_BYTE:            rRet <<= sal_uInt8(0);      break;
             case TypeClass_SHORT:           rRet <<= sal_Int16( 0 );    break;
             case TypeClass_LONG:            rRet <<= sal_Int32( 0 );    break;

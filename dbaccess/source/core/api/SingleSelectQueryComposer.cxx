@@ -1417,7 +1417,7 @@ OUString SAL_CALL OSingleSelectQueryComposer::getQueryWithSubstitution(  )
     {
         SQLException aError;
         if ( !pStatementNode->parseNodeToExecutableStatement( sSqlStatement, m_xConnection, m_aSqlParser, &aError ) )
-            throw SQLException( aError );
+            throw aError;
     }
 
     return sSqlStatement;

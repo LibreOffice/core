@@ -1100,7 +1100,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ModuleUIConfigurationManager::get
     if ( ElementType == css::ui::UIElementType::UNKNOWN )
     {
         for ( sal_Int16 i = 0; i < css::ui::UIElementType::COUNT; i++ )
-            impl_fillSequenceWithElementTypeInfo( aUIElementInfoCollection, sal_Int16( i ) );
+            impl_fillSequenceWithElementTypeInfo( aUIElementInfoCollection, i );
     }
     else
         impl_fillSequenceWithElementTypeInfo( aUIElementInfoCollection, ElementType );

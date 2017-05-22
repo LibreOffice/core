@@ -63,7 +63,7 @@ static inline sal_Size convertTextToUnicode (
  * OStoreDirectory_Impl implementation.
  *
  *======================================================================*/
-const sal_uInt32 OStoreDirectory_Impl::m_nTypeId = sal_uInt32(0x89191107);
+const sal_uInt32 OStoreDirectory_Impl::m_nTypeId(0x89191107);
 
 /*
  * OStoreDirectory_Impl.

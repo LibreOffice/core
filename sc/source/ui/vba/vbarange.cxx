@@ -3801,7 +3801,7 @@ ScVbaRange::setColumnWidth( const uno::Any& _columnwidth )
     {
         for ( sal_Int32 index = 1; index != nLen; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::makeAny( sal_Int32(index) ), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
             xRange->setColumnWidth( _columnwidth );
         }
         return;
@@ -3965,7 +3965,7 @@ ScVbaRange::setRowHeight( const uno::Any& _rowheight)
     {
         for ( sal_Int32 index = 1; index != nLen; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::makeAny( sal_Int32(index) ), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
             xRange->setRowHeight( _rowheight );
         }
         return;
@@ -4707,7 +4707,7 @@ ScVbaRange::Autofit()
     {
         for ( sal_Int32 index = 1; index != nLen; ++index )
         {
-            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::makeAny( sal_Int32(index) ), uno::Any() ), uno::UNO_QUERY_THROW );
+            uno::Reference< excel::XRange > xRange( m_Areas->Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
             xRange->Autofit();
         }
         return;

@@ -245,7 +245,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             {
                 // values can be: LN_Value_ST_Merge_restart, LN_Value_ST_Merge_continue, in reality the second one is a 0
                 TablePropertyMapPtr pMergeProps( new TablePropertyMap );
-                pMergeProps->Insert( PROP_VERTICAL_MERGE, uno::makeAny( bool( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Merge_restart )) );
+                pMergeProps->Insert( PROP_VERTICAL_MERGE, uno::makeAny( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Merge_restart ) );
                 cellProps( pMergeProps);
             }
             break;
@@ -253,7 +253,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             {
                 // values can be: LN_Value_ST_Merge_restart, LN_Value_ST_Merge_continue, in reality the second one is a 0
                 TablePropertyMapPtr pMergeProps(new TablePropertyMap());
-                pMergeProps->Insert(PROP_HORIZONTAL_MERGE, uno::makeAny(bool(sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Merge_restart)));
+                pMergeProps->Insert(PROP_HORIZONTAL_MERGE, uno::makeAny( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Merge_restart ));
                 cellProps(pMergeProps);
             }
             break;
@@ -275,7 +275,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 // DomainMapperTableHandler::endTableGetCellProperties() can we
                 // handle the combination of the cell direction and paragraph
                 // alignment as necessary.
-                pPropMap->Insert(PROP_CELL_DIRECTION, uno::Any(sal_Int32(nIntValue)));
+                pPropMap->Insert(PROP_CELL_DIRECTION, uno::Any(nIntValue));
 
                 bool bInsertCellProps = true;
                 switch ( nIntValue )

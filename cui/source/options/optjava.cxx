@@ -650,7 +650,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
     eErr = jfw_getEnabled( &bEnabled );
     DBG_ASSERT( JFW_E_NONE == eErr,
                 "SvxJavaOptionsPage::FillItemSet(): error in jfw_getEnabled" ); (void)eErr;
-    if ( bool(bEnabled) != m_pJavaEnableCB->IsChecked() )
+    if ( bEnabled != m_pJavaEnableCB->IsChecked() )
     {
         eErr = jfw_setEnabled( m_pJavaEnableCB->IsChecked() );
         DBG_ASSERT( JFW_E_NONE == eErr,

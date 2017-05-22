@@ -53,12 +53,12 @@ namespace comphelper
 
     css::uno::Sequence<css::uno::Type> OPropertyStateHelper::getTypes()
     {
-        return css::uno::Sequence<css::uno::Type>({
+        return {
             cppu::UnoType<css::beans::XPropertySet>::get(),
             cppu::UnoType<css::beans::XMultiPropertySet>::get(),
             cppu::UnoType<css::beans::XFastPropertySet>::get(),
             cppu::UnoType<css::beans::XPropertySetOption>::get(),
-            cppu::UnoType<css::beans::XPropertyState>::get()});
+            cppu::UnoType<css::beans::XPropertyState>::get()};
     }
 
     OPropertyStateHelper::OPropertyStateHelper(

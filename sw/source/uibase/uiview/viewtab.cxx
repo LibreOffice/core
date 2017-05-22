@@ -1127,7 +1127,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 {
                     XFillColorItem aColorItem( static_cast<const XFillColorItem&>(pReqArgs->Get( XATTR_FILLCOLOR )) );
                     rMaster.SetFormatAttr( XFillStyleItem( drawing::FillStyle_SOLID ) );
-                    rMaster.SetFormatAttr( XFillColorItem( aColorItem ));
+                    rMaster.SetFormatAttr( aColorItem );
                 }
                 break;
 
@@ -1135,7 +1135,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 {
                     XFillGradientItem aGradientItem( static_cast<const XFillGradientItem&>(pReqArgs->Get( XATTR_FILLGRADIENT )) );
                     rMaster.SetFormatAttr( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
-                    rMaster.SetFormatAttr( XFillGradientItem( aGradientItem ) );
+                    rMaster.SetFormatAttr( aGradientItem );
                 }
                 break;
 
@@ -1143,7 +1143,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 {
                     XFillHatchItem aHatchItem( static_cast<const XFillHatchItem&>(pReqArgs->Get( XATTR_FILLHATCH )) );
                     rMaster.SetFormatAttr( XFillStyleItem( drawing::FillStyle_HATCH ) );
-                    rMaster.SetFormatAttr( XFillHatchItem( aHatchItem ));
+                    rMaster.SetFormatAttr( aHatchItem );
                 }
                 break;
 
@@ -1151,7 +1151,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 {
                     XFillBitmapItem aBitmapItem( static_cast<const XFillBitmapItem&>(pReqArgs->Get( XATTR_FILLBITMAP )) );
                     rMaster.SetFormatAttr( XFillStyleItem( drawing::FillStyle_BITMAP ) );
-                    rMaster.SetFormatAttr( XFillBitmapItem( aBitmapItem ));
+                    rMaster.SetFormatAttr( aBitmapItem );
                 }
                 break;
 

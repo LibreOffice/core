@@ -596,7 +596,7 @@ namespace chelp {
                     ret = true;
             }
             else
-                ret = bool( l < r );
+                ret = l < r;
 
             return ret;
         }

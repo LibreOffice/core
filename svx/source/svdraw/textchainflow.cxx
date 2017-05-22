@@ -121,7 +121,7 @@ void TextChainFlow::impUpdateCursorInfo()
     mbPossiblyCursorOut = bOverflow;
 
     if(mbPossiblyCursorOut ) {
-        maOverflowPosSel = ESelection(mpOverflChText->GetOverflowPointSel());
+        maOverflowPosSel = mpOverflChText->GetOverflowPointSel();
         ESelection aSelAtUFTime = GetTextChain()->GetPreChainingSel(GetLinkTarget());
         // Might be an invalid selection if the cursor at UF time was before
         //   the (possibly UF-induced) Overflowing point but we don't use it in that case

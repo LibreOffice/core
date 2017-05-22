@@ -194,7 +194,7 @@ void ToggleButtonToolbarController::executeControlCommand( const css::frame::Con
                 sal_Int32 nTmpPos = 0;
                 if ( rControlCommand.Arguments[i].Value >>= nTmpPos )
                 {
-                    if (( nTmpPos >= 0 ) && ( nTmpPos < sal_Int32( nSize )))
+                    if (( nTmpPos >= 0 ) && ( nTmpPos < nSize ))
                         nPos = nTmpPos;
                 }
             }

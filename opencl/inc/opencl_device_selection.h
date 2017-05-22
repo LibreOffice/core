@@ -419,7 +419,7 @@ inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_pr
     aXmlWriter.startElement("profile");
 
     aXmlWriter.startElement("version");
-    aXmlWriter.content(OString(pProfile->version));
+    aXmlWriter.content(pProfile->version);
     aXmlWriter.endElement();
 
     for (ds_device& rDevice : pProfile->devices)
@@ -439,11 +439,11 @@ inline ds_status writeProfile(const OUString& rStreamName, std::unique_ptr<ds_pr
                 aXmlWriter.endElement();
 
                 aXmlWriter.startElement("name");
-                aXmlWriter.content(OString(rDevice.sDeviceName));
+                aXmlWriter.content(rDevice.sDeviceName);
                 aXmlWriter.endElement();
 
                 aXmlWriter.startElement("driver");
-                aXmlWriter.content(OString(rDevice.sDriverVersion));
+                aXmlWriter.content(rDevice.sDriverVersion);
                 aXmlWriter.endElement();
                 break;
             default:
@@ -549,8 +549,8 @@ inline ds_status readProfile(const OUString& rStreamName, std::unique_ptr<ds_pro
                     {
                         // is DS_DEVICE_NATIVE_CPU or name + version matches?
                         if (eDeviceType == DeviceType::NativeCPU ||
-                                (sName == OString(rDevice.sDeviceName) &&
-                                 sVersion == OString(rDevice.sDriverVersion)))
+                                (sName == rDevice.sDeviceName &&
+                                 sVersion == rDevice.sDriverVersion))
                         {
                             rDevice.fTime = fTime;
                             rDevice.bErrors = bErrors;

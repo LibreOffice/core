@@ -689,7 +689,7 @@ bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
     {
         pInfo->setDescription( m_pCommentEd->GetText() );
     }
-    rSet->Put( SfxDocumentInfoItem( *pInfo ) );
+    rSet->Put( *pInfo );
     if ( pInfo != m_pInfoItem )
     {
         delete pInfo;

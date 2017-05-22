@@ -1398,7 +1398,7 @@ void PDFWriterImpl::PDFPage::appendPixelPoint( const basegfx::B2DPoint& rPoint, 
 
     appendDouble( fValue, rBuffer, nLog10Divisor );
     rBuffer.append( ' ' );
-    fValue      = double(getHeight()) - pixelToPoint(rPoint.getY());
+    fValue      = getHeight() - pixelToPoint(rPoint.getY());
     appendDouble( fValue, rBuffer, nLog10Divisor );
 }
 
@@ -11958,7 +11958,7 @@ void PDFWriterImpl::drawWallpaper( const tools::Rectangle& rRect, const Wallpape
             else
             {
                 // push the bitmap
-                const BitmapEmit& rEmit = createBitmapEmit( BitmapEx( aBitmap ), Graphic() );
+                const BitmapEmit& rEmit = createBitmapEmit( aBitmap, Graphic() );
 
                 // convert to page coordinates; this needs to be done here
                 // since the emit does not know the page anymore

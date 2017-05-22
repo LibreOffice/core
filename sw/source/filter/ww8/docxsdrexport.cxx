@@ -1069,7 +1069,7 @@ void DocxSdrExport::writeDiagramRels(const uno::Sequence< uno::Sequence< uno::An
         sFragment += sGrabBagProperyName + OUString::number(nAnchorId) + "_" + OUString::number(j) + sExtension;
 
         PropertySet aProps(xOutStream);
-        aProps.setAnyProperty(PROP_RelId, uno::makeAny(sal_Int32(sRelId.toInt32())));
+        aProps.setAnyProperty(PROP_RelId, uno::makeAny(sRelId.toInt32()));
 
         m_pImpl->m_rExport.GetFilter().addRelation(xOutStream, sType, sFragment);
 

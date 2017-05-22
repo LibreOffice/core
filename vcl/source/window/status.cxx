@@ -452,7 +452,7 @@ void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, cons
 
         long nFullWidth = (nPrgsWidth + nOffset) * (10000 / nPercentCount);
         long nPerc = (nPercent2 > 10000) ? 10000 : nPercent2;
-        ImplControlValue aValue(nFullWidth * long(nPerc) / 10000);
+        ImplControlValue aValue(nFullWidth * nPerc / 10000);
         tools::Rectangle aDrawRect(rPos, Size(nFullWidth, nPrgsHeight));
         tools::Rectangle aControlRegion(aDrawRect);
 

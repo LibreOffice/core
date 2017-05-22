@@ -56,7 +56,7 @@ public:
             rtl::OUString("  +1.E01foo"),
             '.', ',', &status, &end);
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(RTL_CONSTASCII_LENGTH("  +1.E01")), end);
+        CPPUNIT_ASSERT_EQUAL(RTL_CONSTASCII_LENGTH("  +1.E01"), end);
         CPPUNIT_ASSERT_EQUAL(10.0, res);
 
         res = rtl::math::stringToDouble(
@@ -141,13 +141,13 @@ public:
             rtl::OUString("1e"),
             '.', ',', &status, &end);
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(RTL_CONSTASCII_LENGTH("1")), end);
+        CPPUNIT_ASSERT_EQUAL(RTL_CONSTASCII_LENGTH("1"), end);
         CPPUNIT_ASSERT_EQUAL(1.0, res);
         res = rtl::math::stringToDouble(
             rtl::OUString("0e"),
             '.', ',', &status, &end);
         CPPUNIT_ASSERT_EQUAL(rtl_math_ConversionStatus_Ok, status);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(RTL_CONSTASCII_LENGTH("1")), end);
+        CPPUNIT_ASSERT_EQUAL(RTL_CONSTASCII_LENGTH("1"), end);
         CPPUNIT_ASSERT_EQUAL(0.0, res);
     }
 

@@ -918,7 +918,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthHdl_Impl, Edit&, void)
     m_pLbLineStyle->SetWidth( nVal );
 
     m_pFrameSel->SetStyleToSelection( nVal,
-        SvxBorderLineStyle( m_pLbLineStyle->GetSelectEntryStyle() ) );
+        m_pLbLineStyle->GetSelectEntryStyle() );
 }
 
 
@@ -931,7 +931,7 @@ IMPL_LINK( SvxBorderTabPage, SelStyleHdl_Impl, ListBox&, rLb, void )
                     m_pLineWidthMF->GetDecimalDigits( ),
                     m_pLineWidthMF->GetUnit(), MapUnit::MapTwip ));
         m_pFrameSel->SetStyleToSelection ( nVal,
-            SvxBorderLineStyle( m_pLbLineStyle->GetSelectEntryStyle() ) );
+            m_pLbLineStyle->GetSelectEntryStyle() );
     }
 }
 

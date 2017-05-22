@@ -13,7 +13,7 @@
 
 int main() {
     OUString s;
-    (void) OUString(s); // expected-error {{redundant copy construction from 'rtl::OUString' to 'rtl::OUString' [loplugin:stringcopy]}}
+    (void) OUString(s); // expected-error {{redundant copy construction from 'rtl::OUString' to 'rtl::OUString' [loplugin:stringcopy]}} expected-error {{redundant functional cast from/to 'rtl::OUString' [loplugin:redundantcast]}}
     using T1 = OUString;
     (void) T1(s); // expected-error {{redundant copy construction from 'rtl::OUString' to 'T1' (aka 'rtl::OUString') [loplugin:stringcopy]}}
     using T2 = OUString const;

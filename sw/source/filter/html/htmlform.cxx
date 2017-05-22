@@ -1337,11 +1337,11 @@ void SwHTMLParser::NewForm( bool bAppend )
     xFormPropSet->setPropertyValue("TargetURL",
                                     aTmp );
 
-    aTmp <<= FormSubmitMethod(nMethod);
+    aTmp <<= nMethod;
     xFormPropSet->setPropertyValue("SubmitMethod",
                                     aTmp );
 
-    aTmp <<= FormSubmitEncoding(nEncType);
+    aTmp <<= nEncType;
     xFormPropSet->setPropertyValue("SubmitEncoding", aTmp );
 
     if( !sTarget.isEmpty() )

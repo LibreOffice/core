@@ -39,7 +39,7 @@ using namespace store;
  * OStoreLockBytes implementation.
  *
  *======================================================================*/
-const sal_uInt32 OStoreLockBytes::m_nTypeId = sal_uInt32(0x94190310);
+const sal_uInt32 OStoreLockBytes::m_nTypeId(0x94190310);
 
 /*
  * OStoreLockBytes.

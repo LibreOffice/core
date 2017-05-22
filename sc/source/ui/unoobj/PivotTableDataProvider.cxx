@@ -597,7 +597,7 @@ PivotTableDataProvider::assignValuesToDataSequence(size_t nIndex)
 
     OUString sDataID = lcl_identifierForData(nIndex);
 
-    std::vector<ValueAndFormat> const & rRowOfData = m_aDataRowVector[size_t(nIndex)];
+    std::vector<ValueAndFormat> const & rRowOfData = m_aDataRowVector[nIndex];
     std::unique_ptr<PivotTableDataSequence> pSequence;
     pSequence.reset(new PivotTableDataSequence(m_pDocument, m_sPivotTableName, sDataID, rRowOfData));
     pSequence->setRole("values-y");

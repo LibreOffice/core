@@ -2409,7 +2409,7 @@ void Edit::SetEchoChar( sal_Unicode c )
 
 void Edit::SetReadOnly( bool bReadOnly )
 {
-    if ( mbReadOnly != bool(bReadOnly) )
+    if ( mbReadOnly != bReadOnly )
     {
         mbReadOnly = bReadOnly;
         if ( mpSubEdit )

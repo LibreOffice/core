@@ -301,7 +301,7 @@ void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()
     SetMapMode( MapUnit::MapPixel );
     maPageVDev->SetMapMode( MapUnit::MapPixel );
 
-    maPreviewBitmap = Bitmap(maPageVDev->GetBitmap(Point(0, 0), aVDevSize));
+    maPreviewBitmap = maPageVDev->GetBitmap(Point(0, 0), aVDevSize);
 
     maPageVDev->SetDrawMode( nOldDrawMode );
 }

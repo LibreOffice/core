@@ -238,7 +238,7 @@ void DropdownToolbarController::executeControlCommand( const css::frame::Control
                 if ( rControlCommand.Arguments[i].Value >>= nTmpPos )
                 {
                     if (( nTmpPos >= 0 ) &&
-                        ( nTmpPos < sal_Int32( m_pListBoxControl->GetEntryCount() )))
+                        ( nTmpPos < m_pListBoxControl->GetEntryCount() ))
                         nPos = nTmpPos;
                 }
             }
@@ -257,7 +257,7 @@ void DropdownToolbarController::executeControlCommand( const css::frame::Control
                 sal_Int32 nPos( -1 );
                 if ( rControlCommand.Arguments[i].Value >>= nPos )
                 {
-                    if ( 0 <= nPos && nPos < sal_Int32( m_pListBoxControl->GetEntryCount() ))
+                    if ( 0 <= nPos && nPos < m_pListBoxControl->GetEntryCount() )
                         m_pListBoxControl->RemoveEntry( nPos );
                 }
                 break;

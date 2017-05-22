@@ -948,7 +948,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
             if (nY <= aOverallAreaBRPos.Y())
                 _rOut.DrawLine( Point( nHLineX, nY ),
                                 Point( bVLines
-                                        ? std::min(long(long(aPos.X()) - 1), aOverallAreaBRPos.X())
+                                        ? std::min(long(aPos.X() - 1), aOverallAreaBRPos.X())
                                         : aOverallAreaBRPos.X(),
                                       nY ) );
             _rOut.Pop();

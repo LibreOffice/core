@@ -2475,7 +2475,7 @@ Point SwDrawVirtObj::GetSnapPoint(sal_uInt32 i) const
 
 Point SwDrawVirtObj::GetPoint(sal_uInt32 i) const
 {
-    return Point(rRefObj.GetPoint(i) + GetOffset());
+    return rRefObj.GetPoint(i) + GetOffset();
 }
 
 void SwDrawVirtObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)

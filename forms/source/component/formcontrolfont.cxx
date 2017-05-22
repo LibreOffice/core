@@ -294,7 +294,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_FONT_CHARWIDTH:
-            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, float( m_aFont.CharacterWidth ) );
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aFont.CharacterWidth );
             break;
 
         case PROPERTY_ID_FONT_KERNING:
@@ -302,7 +302,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_FONT_ORIENTATION:
-            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, float( m_aFont.Orientation ) );
+            bModified = tryPropertyValue( _rConvertedValue, _rOldValue, _rValue, m_aFont.Orientation );
             break;
 
         case PROPERTY_ID_FONT_PITCH:

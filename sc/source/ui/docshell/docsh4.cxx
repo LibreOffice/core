@@ -1632,10 +1632,9 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                     {
                         SfxItemSet&  rStyleSet = pStyleSheet->GetItemSet();
 
-                        SvxPageUsage eUsage =
-                            SvxPageUsage( static_cast<const SvxPageItem&>(
-                                            rStyleSet.Get( ATTR_PAGE )).
-                                                GetPageUsage() );
+                        SvxPageUsage eUsage = static_cast<const SvxPageItem&>(
+                                                  rStyleSet.Get( ATTR_PAGE )).
+                                                      GetPageUsage();
                         bool bShareHeader = static_cast<const SfxBoolItem&>(
                                                 static_cast<const SvxSetItem&>(rStyleSet
                                                         .Get(ATTR_PAGE_HEADERSET))
