@@ -11243,7 +11243,8 @@ test_font_map()
     then
         AC_MSG_RESULT([ok])
     else
-        AC_MSG_RESULT([unknown ($FONTFILE)])
+        AC_MSG_WARN([unknown ($FONTFILE)])
+        add_warning "unknown ($FONTFILE)"
         TEST_FONTS_MISSING=1
     fi
 }
@@ -11268,9 +11269,11 @@ else
             TEST_FONTS_MISSING=1
         else
             test_font_map 'Calibri' 'Carlito'
+            test_font_map 'DejaVuSans' 'DejaVuSans'
             if test ${TEST_FONTS_MISSING} -eq 1
             then
                 AC_MSG_WARN([Unknown font mappings - unit tests disabled.])
+                add_warning "Unknown font mappings - unit tests disabled."
             fi
         fi
     else
