@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_bf79d631",
+        "filename": "include/tools/colordata.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2017-05-22T12:51:22Z",
+      "side": 1,
+      "message": "Will be great to have a more descriptive name than just \"NEW\", so it will be obvious what\u0027s this about for whoever reads that code. (And stating inside the code that something is \"new\" has no value IMHO, as we have git for that purpose.)",
+      "revId": "22efd9982d6ec1737d74d4b8c018e8934d718642",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
