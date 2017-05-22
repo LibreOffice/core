@@ -323,7 +323,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
     }
 
     ScTokenMatrixMap::const_iterator aIter;
-    if (pTokenMatrixMap && ((aIter = pTokenMatrixMap->find( pToken)) != pTokenMatrixMap->end()))
+    if (pToken && pTokenMatrixMap && ((aIter = pTokenMatrixMap->find( pToken)) != pTokenMatrixMap->end()))
     {
         /* XXX casting const away here is ugly; ScMatrixToken (to which the
          * result of this function usually is assigned) should not be forced to
@@ -340,7 +340,7 @@ ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken
 
     pDok->FillMatrix(*pMat, nTab1, nCol1, nRow1, nCol2, nRow2);
 
-    if (pTokenMatrixMap)
+    if (pToken && pTokenMatrixMap)
         pTokenMatrixMap->insert( ScTokenMatrixMap::value_type( pToken, new ScMatrixToken( pMat)));
 
     return pMat;
@@ -461,6 +461,29 @@ ScMatrixRef ScInterpreter::GetMatrix()
         break;
     }
     return pMat;
+}
+
+ScMatrixRef ScInterpreter::GetMatrix( short & rParam, size_t & rRefInList )
+{
+    switch (GetRawStackType())
+    {
+        case svRefList:
+            {
+                ScRange aRange( ScAddress::INITIALIZE_INVALID );
+                PopDoubleRef( aRange, rParam, rRefInList);
+                if (nGlobalError != FormulaError::NONE)
+                    return nullptr;
+
+                SCCOL nCol1, nCol2;
+                SCROW nRow1, nRow2;
+                SCTAB nTab1, nTab2;
+                aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+                return CreateMatrixFromDoubleRef( nullptr, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+            }
+        break;
+        default:
+            return GetMatrix();
+    }
 }
 
 sc::RangeMatrix ScInterpreter::GetRangeMatrix()

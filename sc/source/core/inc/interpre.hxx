@@ -435,6 +435,7 @@ ScMatrixRef CreateMatrixFromDoubleRef( const formula::FormulaToken* pToken,
 inline ScTokenMatrixMap& GetTokenMatrixMap();
 static ScTokenMatrixMap* CreateTokenMatrixMap();
 ScMatrixRef GetMatrix();
+ScMatrixRef GetMatrix( short & rParam, size_t & rInRefList );
 sc::RangeMatrix GetRangeMatrix();
 
 void ScTableOp();                                       // repeated operations
