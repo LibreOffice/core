@@ -7964,6 +7964,36 @@ void Test::testFuncRefListArraySUBTOTAL()
     aPos.IncRow();
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("SUBTOTAL STDEV for A4:A5 failed", 5.656854, m_pDoc->GetValue(aPos), 1e-6);
 
+    // Matrix in G7:G9, individual AVERAGE of A2:A3, A3:A4 and A4:A5
+    // Plus two "ordinary" ranges, one before and one after.
+    m_pDoc->InsertMatrixFormula(6, 6, 6, 8, aMark, "=SUBTOTAL(1;A1:A2;OFFSET(A1;ROW(1:3);0;2);A5:A6)");
+    aPos.Set(6,6,0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL AVERAGE for A1:A2,A2:A3,A5:A6 failed",  9.5, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL AVERAGE for A1:A2,A3:A4,A5:A6 failed", 10.5, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL AVERAGE for A1:A2,A4:A5,A5:A6 failed", 12.5, m_pDoc->GetValue(aPos));
+
+    // Matrix in H7:H9, individual MAX of A2:A3, A3:A4 and A4:A5
+    // Plus two "ordinary" ranges, one before and one after.
+    m_pDoc->InsertMatrixFormula(7, 6, 7, 8, aMark, "=SUBTOTAL(4;A1:A2;OFFSET(A1;ROW(1:3);0;2);A5:A6)");
+    aPos.Set(7,6,0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL MAX for A1:A2,A2:A3,A5:A6 failed", 32.0, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL MAX for A1:A2,A3:A4,A5:A6 failed", 32.0, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("SUBTOTAL MAX for A1:A2,A4:A5,A5:A6 failed", 32.0, m_pDoc->GetValue(aPos));
+
+    // Matrix in I7:I9, individual STDEV of A2:A3, A3:A4 and A4:A5
+    // Plus two "ordinary" ranges, one before and one after.
+    m_pDoc->InsertMatrixFormula(8, 6, 8, 8, aMark, "=SUBTOTAL(7;A1:A2;OFFSET(A1;ROW(1:3);0;2);A5:A6)");
+    aPos.Set(8,6,0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("SUBTOTAL STDEV for A1:A2,A2:A3,A5:A6 failed", 12.35718, m_pDoc->GetValue(aPos), 1e-5);
+    aPos.IncRow();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("SUBTOTAL STDEV for A1:A2,A3:A4,A5:A6 failed", 11.86170, m_pDoc->GetValue(aPos), 1e-5);
+    aPos.IncRow();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("SUBTOTAL STDEV for A1:A2,A4:A5,A5:A6 failed", 11.55422, m_pDoc->GetValue(aPos), 1e-5);
+
     m_pDoc->DeleteTab(0);
 }
 
