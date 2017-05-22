@@ -596,7 +596,7 @@ void ScColumn();
 void ScRow();
 void ScSheet();
 void ScMatch();
-double IterateParametersIf( ScIterFuncIf );
+void IterateParametersIf( ScIterFuncIf );
 void ScCountIf();
 void ScSumIf();
 void ScAverageIf();

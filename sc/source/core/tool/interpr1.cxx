@@ -4967,11 +4967,14 @@ void ScInterpreter::ScCountEmptyCells()
     }
 }
 
-double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
+void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
 {
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
-        return 0;
+    {
+        PushError( nGlobalError);
+        return;
+    }
 
     SCCOL nCol3 = 0;
     SCROW nRow3 = 0;
@@ -4994,8 +4997,8 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                     PopDoubleRef( nCol3, nRow3, nTab3, nColJunk, nRowJunk, nTabJunk );
                     if ( nTabJunk != nTab3 )
                     {
-                        SetError( FormulaError::IllegalParameter);
-                        return 0;
+                        PushError( FormulaError::IllegalParameter);
+                        return;
                     }
                 }
                 break;
@@ -5012,7 +5015,10 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                     ScExternalRefCache::TokenRef pToken;
                     PopExternalSingleRef(pToken);
                     if (nGlobalError != FormulaError::NONE)
-                        return 0;
+                    {
+                        PushError( nGlobalError);
+                        return;
+                    }
 
                     if (pToken->GetType() == svDouble)
                         pSumExtraMatrix->PutDouble(pToken->GetDouble(), 0, 0);
@@ -5024,8 +5030,8 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                 PopExternalDoubleRef(pSumExtraMatrix);
                 break;
             default:
-                SetError( FormulaError::IllegalParameter);
-                return 0;
+                PushError( FormulaError::IllegalParameter);
+                return;
         }
     }
 
@@ -5039,7 +5045,10 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             {
                 ScAddress aAdr;
                 if ( !PopDoubleRefOrSingleRef( aAdr ) )
-                    return 0;
+                {
+                    PushError( nGlobalError);
+                    return;
+                }
 
                 ScRefCellValue aCell(*pDok, aAdr);
                 switch (aCell.meType)
@@ -5146,8 +5155,8 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                     pQueryMatrix = GetMatrix();
                     if (!pQueryMatrix)
                     {
-                        SetError( FormulaError::IllegalParameter);
-                        return 0;
+                        PushError( FormulaError::IllegalParameter);
+                        return;
                     }
                     nCol1 = 0;
                     nRow1 = 0;
@@ -5358,8 +5367,8 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
         }
         else
         {
-            SetError( FormulaError::IllegalParameter);
-            return 0;
+            PushError( FormulaError::IllegalParameter);
+            return;
         }
     }
 
@@ -5368,17 +5377,17 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
         case ifSUMIF:     fRes = ::rtl::math::approxAdd( fSum, fMem ); break;
         case ifAVERAGEIF: fRes = div( ::rtl::math::approxAdd( fSum, fMem ), fCount); break;
     }
-    return fRes;
+    PushDouble( fRes);
 }
 
 void ScInterpreter::ScSumIf()
 {
-    PushDouble( IterateParametersIf( ifSUMIF));
+    IterateParametersIf( ifSUMIF);
 }
 
 void ScInterpreter::ScAverageIf()
 {
-    PushDouble( IterateParametersIf( ifAVERAGEIF));
+    IterateParametersIf( ifAVERAGEIF);
 }
 
 void ScInterpreter::ScCountIf()
