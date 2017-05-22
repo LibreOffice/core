@@ -132,7 +132,7 @@ public:
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-// UNO connection
+// UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OListBoxModel, OBoundControlModel)
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
@@ -260,14 +260,14 @@ private:
                                             m_pItemBroadcaster;
 
 protected:
-    // UNO connection
+    // UNO binding
     virtual css::uno::Sequence< css::uno::Type>   _getTypes() override;
 
 public:
     explicit OListBoxControl(const css::uno::Reference< css::uno::XComponentContext>& _rxFactory);
     virtual ~OListBoxControl() override;
 
-    // UNO connection
+    // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OListBoxControl, OBoundControl)
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 

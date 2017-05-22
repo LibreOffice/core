@@ -141,7 +141,7 @@ public:
     FmXUndoEnvironment(FmFormModel& _rModel);
     virtual ~FmXUndoEnvironment() override;
 
-    // UNO connection
+    // UNO binding
     //  SMART_UNO_DECLARATION(FmXUndoEnvironment, ::cppu::OWeakObject);
     //  virtual sal_Bool queryInterface(UsrUik, css::uno::Reference< css::uno::XInterface>&);
     //  virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass>>    getIdlClasses();

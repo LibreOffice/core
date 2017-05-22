@@ -82,7 +82,7 @@ protected:
 
 public:
 
-    // UNO connection
+    // UNO binding
     DECLARE_UNO3_DEFAULTS(OComponentEventThread, OWeakObject)
     virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 

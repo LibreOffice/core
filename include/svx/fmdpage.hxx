@@ -44,7 +44,7 @@ public:
     SvxFmDrawPage( SdrPage* pPage );
     virtual ~SvxFmDrawPage() throw () override;
 
-    // UNO connection
+    // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(SvxFmDrawPage, SvxDrawPage)
 
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
