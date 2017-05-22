@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTLAYOUTMANAGER_HXX
 
 #include <IDocumentLayoutAccess.hxx>
+#include <memory>
 
 class SwDoc;
 class SwViewShell;
@@ -64,7 +65,7 @@ private:
     SwDoc& m_rDoc;
 
     SwViewShell *mpCurrentView; //< SwDoc should get a new member mpCurrentView
-    SwLayouter *mpLayouter; /**< css::frame::Controller for complex layout formatting
+    std::unique_ptr<SwLayouter> mpLayouter; /**< css::frame::Controller for complex layout formatting
                            like footnote/endnote in sections */
 };
 

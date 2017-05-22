@@ -1426,14 +1426,11 @@ DateFormatter::DateFormatter() :
 
 DateFormatter::~DateFormatter()
 {
-    delete mpCalendarWrapper;
-    mpCalendarWrapper = nullptr;
 }
 
 void DateFormatter::SetLocale( const css::lang::Locale& rLocale )
 {
-    delete mpCalendarWrapper;
-    mpCalendarWrapper = nullptr;
+    mpCalendarWrapper.reset();
     FormatterBase::SetLocale( rLocale );
 }
 
@@ -1441,7 +1438,7 @@ CalendarWrapper& DateFormatter::GetCalendarWrapper() const
 {
     if ( !mpCalendarWrapper )
     {
-        const_cast<DateFormatter*>(this)->mpCalendarWrapper = new CalendarWrapper( comphelper::getProcessComponentContext() );
+        const_cast<DateFormatter*>(this)->mpCalendarWrapper.reset( new CalendarWrapper( comphelper::getProcessComponentContext() ) );
         mpCalendarWrapper->loadDefaultCalendar( GetLocale() );
     }
 

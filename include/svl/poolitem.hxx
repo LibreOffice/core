@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <climits>
+#include <memory>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <svl/hint.hxx>
@@ -256,7 +257,7 @@ public:
 
 class SVL_DLLPUBLIC SfxSetItem: public SfxPoolItem
 {
-    SfxItemSet              *pSet;
+    std::unique_ptr<SfxItemSet>  pSet;
 
     SfxSetItem & operator=( const SfxSetItem& ) = delete;
 

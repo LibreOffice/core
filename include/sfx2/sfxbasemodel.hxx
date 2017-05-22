@@ -87,6 +87,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <svl/lstner.hxx>
 
+#include <memory>
+
 class SfxMedium;
 class   SfxPrinter;
 class   SfxViewShell;
@@ -738,7 +740,7 @@ private:
 
 private:
 
-    IMPL_SfxBaseModel_DataContainer*    m_pData ;
+    std::unique_ptr<IMPL_SfxBaseModel_DataContainer> m_pData;
     // cannot be held in m_pData, since it needs to be accessed in non-threadsafe context
     const bool                          m_bSupportEmbeddedScripts;
     const bool                          m_bSupportDocRecovery;

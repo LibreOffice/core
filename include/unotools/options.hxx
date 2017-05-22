@@ -78,6 +78,7 @@ namespace utl {
         // notify listeners; nHint is an implementation detail of the particular class deriving from ConfigurationBroadcaster
         void NotifyListeners( ConfigurationHints nHint );
         ConfigurationBroadcaster();
+        ConfigurationBroadcaster(ConfigurationBroadcaster const & );
         virtual ~ConfigurationBroadcaster();
         virtual void BlockBroadcasts( bool bBlock );
     };

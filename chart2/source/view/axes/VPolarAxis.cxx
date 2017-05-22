@@ -45,13 +45,11 @@ VPolarAxis::VPolarAxis( const AxisProperties& rAxisProperties
             , m_pPosHelper( new PolarPlottingPositionHelper() )
             , m_aIncrements()
 {
-    PlotterBase::m_pPosHelper = m_pPosHelper;
+    PlotterBase::m_pPosHelper = m_pPosHelper.get();
 }
 
 VPolarAxis::~VPolarAxis()
 {
-    delete m_pPosHelper;
-    m_pPosHelper = nullptr;
 }
 
 void VPolarAxis::setIncrements( const std::vector< ExplicitIncrementData >& rIncrements )

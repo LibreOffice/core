@@ -43,7 +43,7 @@ ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& r
 
     if( pWindow )
     {
-        mpMediaWindow = new SdrMediaWindow( pWindow, *this );
+        mpMediaWindow.reset( new SdrMediaWindow( pWindow, *this ) );
         mpMediaWindow->hide();
         executeMediaItem( rMediaItem );
     }
@@ -54,8 +54,6 @@ ViewObjectContactOfSdrMediaObj::ViewObjectContactOfSdrMediaObj( ObjectContact& r
 
 ViewObjectContactOfSdrMediaObj::~ViewObjectContactOfSdrMediaObj()
 {
-    delete mpMediaWindow;
-    mpMediaWindow = nullptr;
 }
 
 

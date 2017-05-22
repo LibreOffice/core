@@ -290,8 +290,6 @@ OUString ScCompiler::FindAddInFunction( const OUString& rUpperName, bool bLocalF
 
 ScCompiler::Convention::~Convention()
 {
-    delete [] mpCharTable;
-    mpCharTable = nullptr;
 }
 
 ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
@@ -302,7 +300,7 @@ ScCompiler::Convention::Convention( FormulaGrammar::AddressConvention eConv )
     ScCharFlags *t= new ScCharFlags [128];
 
     ScCompiler::pConventions[ meConv ] = this;
-    mpCharTable = t;
+    mpCharTable.reset( t );
 
     for (i = 0; i < 128; i++)
         t[i] = ScCharFlags::Illegal;

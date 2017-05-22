@@ -483,8 +483,6 @@ IcnGridMap_Impl::IcnGridMap_Impl(SvxIconChoiceCtrl_Impl* pView)
 
 IcnGridMap_Impl::~IcnGridMap_Impl()
 {
-    delete[] _pGridMap;
-    _pGridMap = nullptr;
 }
 
 void IcnGridMap_Impl::Expand()
@@ -503,10 +501,9 @@ void IcnGridMap_Impl::Expand()
         size_t nNewCellCount = static_cast<size_t>(nNewGridRows) * nNewGridCols;
         bool* pNewGridMap = new bool[nNewCellCount];
         size_t nOldCellCount = static_cast<size_t>(_nGridRows) * _nGridCols;
-        memcpy(pNewGridMap, _pGridMap, nOldCellCount * sizeof(bool));
+        memcpy(pNewGridMap, _pGridMap.get(), nOldCellCount * sizeof(bool));
         memset(pNewGridMap + nOldCellCount, 0, (nNewCellCount-nOldCellCount) * sizeof(bool));
-        delete[] _pGridMap;
-        _pGridMap = pNewGridMap;
+        _pGridMap.reset( pNewGridMap );
         _nGridRows = nNewGridRows;
         _nGridCols = nNewGridCols;
     }
@@ -524,8 +521,8 @@ void IcnGridMap_Impl::Create_Impl()
         _nGridCols += 50;
 
     size_t nCellCount = static_cast<size_t>(_nGridRows) * _nGridCols;
-    _pGridMap = new bool[nCellCount];
-    memset(_pGridMap, 0, nCellCount * sizeof(bool));
+    _pGridMap.reset( new bool[nCellCount] );
+    memset(_pGridMap.get(), 0, nCellCount * sizeof(bool));
 
     const size_t nCount = _pView->aEntries.size();
     for( size_t nCur=0; nCur < nCount; nCur++ )
@@ -659,8 +656,7 @@ void IcnGridMap_Impl::Clear()
 {
     if( _pGridMap )
     {
-        delete[] _pGridMap;
-        _pGridMap = nullptr;
+        _pGridMap.reset();
         _nGridRows = 0;
         _nGridCols = 0;
         _aLastOccupiedGrid.SetEmpty();
