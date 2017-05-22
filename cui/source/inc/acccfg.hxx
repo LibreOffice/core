@@ -43,6 +43,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
 #include "cfgutil.hxx"
+#include "cfg.hxx"
 
 class SfxMacroInfoItem;
 class SfxConfigGroupListBox;
@@ -162,6 +163,7 @@ private:
     void                        ResetConfig();
 
     static void                 CreateCustomItems( SvTreeListEntry* pEntry, const OUString& aCol1, const OUString& aCol2 );
+    SaveInData*                         pCurrentSaveInData;
 
 public:
                                 SfxAcceleratorConfigPage( vcl::Window *pParent, const SfxItemSet& rItemSet );
@@ -172,6 +174,40 @@ public:
     virtual void                Reset( const SfxItemSet* ) override;
 
     void                        Apply(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
+    short                       QueryReset();
+    SaveInData*                 CreateSaveInData2(
+        const css::uno::Reference <
+            css::ui::XUIConfigurationManager >&,
+        const css::uno::Reference <
+            css::ui::XUIConfigurationManager >&,
+        const OUString& aModuleId,
+        bool docConfig );
+    SaveInData*                 GetSaveInData() { return pCurrentSaveInData; }
+};
+
+class KeyboardSaveInData : public SaveInData
+{
+    friend class SfxAccCfgTabListBox_Impl;
+private:
+    OUString                                  m_aDescriptorContainer;
+    css::uno::Reference
+        < css::container::XNameAccess > m_xPersistentWindowState;
+    SvxEntries                  *mpEntries;
+    VclPtr<SfxAccCfgTabListBox_Impl>       m_pEntriesBox;
+public:
+    KeyboardSaveInData(
+        const css::uno::Reference< css::ui::XUIConfigurationManager >&,
+        const css::uno::Reference< css::ui::XUIConfigurationManager >&,
+        const OUString& aModuleId,
+        bool docConfig );
+    virtual ~KeyboardSaveInData() override;
+    void                        Reset() override;
+    std::unique_ptr<SvxConfigEntry>           pRootEntry;
+    SvxEntries*     GetEntries() override;
+    void            SetEntries( SvxEntries* ) override;
+    bool            HasSettings() override;
+    bool            HasURL( const OUString& rURL ) override;
+    bool            Apply() override;
 };
 
 #endif

@@ -69,8 +69,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/make_unique.hxx>
+#include <vcl/msgbox.hxx>
+#include <com/sun/star/ui/theWindowStateConfiguration.hpp>
 // namespaces
-
 using namespace css;
 
 static const char FOLDERNAME_UICONFIG   [] = "Configurations2";
@@ -614,6 +615,7 @@ static const sal_uInt16 KEYCODE_ARRAY[] =
 };
 
 static const sal_uInt16 KEYCODE_ARRAY_SIZE = SAL_N_ELEMENTS(KEYCODE_ARRAY);
+static const char ITEM_DESCRIPTOR_CONTAINER[]   = "ItemDescriptorContainer";
 
 // seems to be needed to layout the list box, which shows all
 // assignable shortcuts
@@ -624,6 +626,23 @@ static long AccCfgTabs[] =
     120 // Function
 };
 
+OUString replaceSaveInName1(
+    const OUString& rMessage,
+    const OUString& rSaveInName )
+{
+    OUString name;
+    OUString placeholder("%SAVE IN SELECTION%" );
+
+    sal_Int32 pos = rMessage.indexOf( placeholder );
+
+    if ( pos != -1 )
+    {
+        name = rMessage.replaceAt(
+            pos, placeholder.getLength(), rSaveInName );
+    }
+
+    return name;
+}
 
 class SfxAccCfgLBoxString_Impl : public SvLBoxString
 {
@@ -1052,16 +1071,36 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Save, Button*, void)
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, Default, Button*, void)
 {
-    uno::Reference<form::XReset> xReset(m_xAct, uno::UNO_QUERY);
-    if (xReset.is())
-        xReset->reset();
+    if (!m_xAct.is())
+        return;
+    sal_uLong nPos = SvTreeList::GetRelPos(m_pEntriesBox->FirstSelected());
+    TAccInfo* pEntry = static_cast<TAccInfo*>(m_pEntriesBox->GetEntry(nullptr, nPos)->GetUserData());
 
-    m_pEntriesBox->SetUpdateMode(false);
-    ResetConfig();
-    Init(m_xAct);
-    m_pEntriesBox->SetUpdateMode(true);
-    m_pEntriesBox->Invalidate();
-    m_pEntriesBox->Select(m_pEntriesBox->GetEntry(nullptr, 0));
+    uno::Sequence<awt::KeyEvent> lKeys = m_xAct->getAllKeyEvents();
+    sal_Int32 c2 = lKeys.getLength();
+    sal_Int32 i2 = 0;
+    sal_uInt16 nCol = m_pEntriesBox->TabCount()-1;
+
+    for (i2=0; i2<c2; ++i2)
+    {
+        const awt::KeyEvent& aAWTKey  = lKeys[i2];
+              OUString     sCommand = m_xAct->getCommandByKeyEvent(aAWTKey);
+              OUString     sLabel   = GetLabel4Command(sCommand);
+              vcl::KeyCode aKeyCode = svt::AcceleratorExecute::st_AWTKey2VCLKey(aAWTKey);
+              sal_uLong    nPos2     = MapKeyCodeToPos(aKeyCode);
+
+        if (nPos2 == TREELIST_ENTRY_NOTFOUND)
+            continue;
+
+        if(pEntry->m_aKey == aKeyCode)
+        {
+            if(pEntry->m_sCommand == sCommand)
+                return;
+
+            pEntry->m_sCommand = sCommand;
+            m_pEntriesBox->SetEntryText(sLabel, nPos2, nCol);
+        }
+    }
 }
 
 IMPL_LINK_NOARG(SfxAcceleratorConfigPage, ChangeHdl, Button*, void)
@@ -1407,6 +1446,8 @@ bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet* )
 
 void SfxAcceleratorConfigPage::Reset( const SfxItemSet* rSet )
 {
+    if(!m_bStylesInfoInitialized)
+    {
     // open accelerator configs
     // Note: It initialize some other members too, which are needed here ...
     // e.g. m_sModuleUIName!
@@ -1443,6 +1484,16 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet* rSet )
         const SfxPoolItem* pFontItem=nullptr;
         if( SfxItemState::SET == rSet->GetItemState( SID_ATTR_SPECIALCHAR, true, &pFontItem ) )
             m_pFontItem = dynamic_cast<const SfxStringItem*>( pFontItem  );
+    }
+    m_bStylesInfoInitialized = true;
+    }
+    else
+    {
+        if(QueryReset() == RET_YES)
+        {
+            GetSaveInData()->Reset();
+            InitAccCfg();
+        }
     }
 }
 
@@ -1503,5 +1554,86 @@ OUString SfxAcceleratorConfigPage::GetLabel4Command(const OUString& sCommand)
 
     return sCommand;
 }
+
+short SfxAcceleratorConfigPage::QueryReset()
+{
+    OUString msg = CUI_RES( RID_SVXSTR_CONFIRM_KEYBOARD_RESET );
+
+    OUString saveInName = m_pOfficeButton->GetText() + " " + m_pModuleButton->GetText();
+
+    OUString label = replaceSaveInName1( msg, saveInName );
+
+    ScopedVclPtrInstance< QueryBox > qbox( this, WB_YES_NO, label );
+
+    return qbox->Execute();
+}
+
+SaveInData* SfxAcceleratorConfigPage::CreateSaveInData2(
+    const uno::Reference< css::ui::XUIConfigurationManager >& xCfgMgr,
+    const uno::Reference< css::ui::XUIConfigurationManager >& xParentCfgMgr,
+    const OUString& aModuleId,
+    bool bDocConfig )
+{
+    return static_cast< SaveInData* >(
+        new KeyboardSaveInData( xCfgMgr, xParentCfgMgr, aModuleId, bDocConfig ));
+}
+
+KeyboardSaveInData::KeyboardSaveInData(
+    const uno::Reference < css::ui::XUIConfigurationManager >& xCfgMgr,
+    const uno::Reference < css::ui::XUIConfigurationManager >& xParentCfgMgr,
+    const OUString& aModuleId,
+    bool docConfig ) :
+
+    SaveInData              ( xCfgMgr, xParentCfgMgr, aModuleId, docConfig ),
+    pRootEntry              ( nullptr ),
+    m_aDescriptorContainer  ( ITEM_DESCRIPTOR_CONTAINER  )
+
+{
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference< container::XNameAccess > xPWSS = css::ui::theWindowStateConfiguration::get( xContext );
+
+    xPWSS->getByName( aModuleId ) >>= m_xPersistentWindowState;
+}
+KeyboardSaveInData::~KeyboardSaveInData()
+{
+
+}
+void KeyboardSaveInData::Reset()
+{
+    SvTreeListEntry* pEntry = m_pEntriesBox->First();
+    while (pEntry)
+    {
+        TAccInfo* pUserData = static_cast<TAccInfo*>(pEntry->GetUserData());
+        if (pUserData)
+        {
+            OUString url = pUserData->m_sCommand;
+            GetConfigManager()->removeSettings(url);
+        }
+        pEntry = m_pEntriesBox->Next(pEntry);
+    }
+    PersistChanges( GetConfigManager() );
+    pRootEntry.reset();
+}
+SvxEntries* KeyboardSaveInData::GetEntries()
+{
+
+}
+void KeyboardSaveInData::SetEntries(SvxEntries*)
+{
+
+}
+bool KeyboardSaveInData::HasSettings()
+{
+
+}
+bool KeyboardSaveInData::HasURL(const OUString& rURL)
+{
+
+}
+bool KeyboardSaveInData::Apply()
+{
+
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
