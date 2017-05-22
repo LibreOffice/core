@@ -305,7 +305,7 @@ StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper,
             m_bIsNewDoc(bIsNewDoc)
 {
     //set font height default to 10pt
-    uno::Any aVal = uno::makeAny( double(10.) );
+    uno::Any aVal = uno::makeAny( 10.0 );
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT, aVal );
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_ASIAN, aVal );
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_COMPLEX, aVal );

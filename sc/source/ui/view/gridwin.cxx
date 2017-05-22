@@ -5829,23 +5829,23 @@ void ScGridWindow::UpdateCursorOverlay()
 
             long aCursorWidth = 1 * fScaleFactor;
 
-            tools::Rectangle aLeft = tools::Rectangle(aRect);
+            tools::Rectangle aLeft = aRect;
             aLeft.Top()    -= aCursorWidth;
             aLeft.Bottom() += aCursorWidth;
             aLeft.Right()   = aLeft.Left();
             aLeft.Left()   -= aCursorWidth;
 
-            tools::Rectangle aRight = tools::Rectangle(aRect);
+            tools::Rectangle aRight = aRect;
             aRight.Top()    -= aCursorWidth;
             aRight.Bottom() += aCursorWidth;
             aRight.Left()    = aRight.Right();
             aRight.Right()  += aCursorWidth;
 
-            tools::Rectangle aTop = tools::Rectangle(aRect);
+            tools::Rectangle aTop = aRect;
             aTop.Bottom()  = aTop.Top();
             aTop.Top()    -= aCursorWidth;
 
-            tools::Rectangle aBottom = tools::Rectangle(aRect);
+            tools::Rectangle aBottom = aRect;
             aBottom.Top()     = aBottom.Bottom();
             aBottom.Bottom() += aCursorWidth;
 

@@ -493,7 +493,7 @@ void SwAuthorityFieldType::SetSortKeys(sal_uInt16 nKeyCount, SwTOXSortKey aKeys[
     m_SortKeyArr.clear();
     for(sal_uInt16 i = 0; i < nKeyCount; i++)
         if(aKeys[i].eField < AUTH_FIELD_END)
-            m_SortKeyArr.push_back(SwTOXSortKey(aKeys[i]));
+            m_SortKeyArr.push_back(aKeys[i]);
 }
 
 SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,

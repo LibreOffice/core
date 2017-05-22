@@ -276,7 +276,7 @@ void OutlineViewShell::ArrangeGUIElements ()
 
         if (!aWin.IsEmpty())            // not when opening
         {
-            InitWindows(Point(0,0), aText.GetSize(), Point(aVis.TopLeft()));
+            InitWindows(Point(0,0), aText.GetSize(), aVis.TopLeft());
             UpdateScrollBars();
         }
     }

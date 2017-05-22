@@ -1577,7 +1577,7 @@ int Desktop::Main()
                 }
                 else
                 {
-                    SAL_WARN("desktop.app", "cannot open pidfile " << pidfile.getURL() << osl::FileBase::RC(rc));
+                    SAL_WARN("desktop.app", "cannot open pidfile " << pidfile.getURL() << rc);
                 }
             }
             else

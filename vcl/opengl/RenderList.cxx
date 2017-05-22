@@ -159,10 +159,10 @@ inline void appendTrapezoid(std::vector<Vertex>& rVertices, std::vector<GLuint>&
     GLuint zero = rVertices.size();
 
     rVertices.insert(rVertices.end(), {
-        Vertex{glm::vec2{x1, y1}, glm::vec4{nR, nG, nB, nA}, glm::vec4{0.0f, 0.0f, 0.0f, 0.0f}},
-        Vertex{glm::vec2{x2, y2}, glm::vec4{nR, nG, nB, nA}, glm::vec4{0.0f, 0.0f, 0.0f, 0.0f}},
-        Vertex{glm::vec2{x3, y3}, glm::vec4{nR, nG, nB, nA}, glm::vec4{0.0f, 0.0f, 0.0f, 0.0f}},
-        Vertex{glm::vec2{x4, y4}, glm::vec4{nR, nG, nB, nA}, glm::vec4{0.0f, 0.0f, 0.0f, 0.0f}},
+        {glm::vec2{x1, y1}, glm::vec4{nR, nG, nB, nA}, glm::vec4{0.0f, 0.0f, 0.0f, 0.0f}},
+        {glm::vec2{x2, y2}, glm::vec4{nR, nG, nB, nA}, glm::vec4{0.0f, 0.0f, 0.0f, 0.0f}},
+        {glm::vec2{x3, y3}, glm::vec4{nR, nG, nB, nA}, glm::vec4{0.0f, 0.0f, 0.0f, 0.0f}},
+        {glm::vec2{x4, y4}, glm::vec4{nR, nG, nB, nA}, glm::vec4{0.0f, 0.0f, 0.0f, 0.0f}},
     });
 
     rIndices.insert(rIndices.end(), {
@@ -181,10 +181,10 @@ void appendRectangle(std::vector<Vertex>& rVertices, std::vector<GLuint>& rIndic
     GLuint zero = rVertices.size();
 
     rVertices.insert(rVertices.end(), {
-        Vertex{glm::vec2{x1, y1}, glm::vec4{nR, nG, nB, nA}, glm::vec4{0.0f, 0.0f, 0.0f, 0.0f}},
-        Vertex{glm::vec2{x2, y1}, glm::vec4{nR, nG, nB, nA}, glm::vec4{0.0f, 0.0f, 0.0f, 0.0f}},
-        Vertex{glm::vec2{x1, y2}, glm::vec4{nR, nG, nB, nA}, glm::vec4{0.0f, 0.0f, 0.0f, 0.0f}},
-        Vertex{glm::vec2{x2, y2}, glm::vec4{nR, nG, nB, nA}, glm::vec4{0.0f, 0.0f, 0.0f, 0.0f}},
+        {glm::vec2{x1, y1}, glm::vec4{nR, nG, nB, nA}, glm::vec4{0.0f, 0.0f, 0.0f, 0.0f}},
+        {glm::vec2{x2, y1}, glm::vec4{nR, nG, nB, nA}, glm::vec4{0.0f, 0.0f, 0.0f, 0.0f}},
+        {glm::vec2{x1, y2}, glm::vec4{nR, nG, nB, nA}, glm::vec4{0.0f, 0.0f, 0.0f, 0.0f}},
+        {glm::vec2{x2, y2}, glm::vec4{nR, nG, nB, nA}, glm::vec4{0.0f, 0.0f, 0.0f, 0.0f}},
     });
 
     rIndices.insert(rIndices.end(), {

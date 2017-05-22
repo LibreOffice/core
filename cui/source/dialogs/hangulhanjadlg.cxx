@@ -1003,13 +1003,13 @@ namespace svx
         aTmp <<= aActiveDics;
         aLngCfg.SetProperty( UPH_ACTIVE_CONVERSION_DICTIONARIES, aTmp );
 
-        aTmp <<= bool( m_pIgnorepostCB->IsChecked() );
+        aTmp <<= m_pIgnorepostCB->IsChecked();
         aLngCfg.SetProperty( UPH_IS_IGNORE_POST_POSITIONAL_WORD, aTmp );
 
-        aTmp <<= bool( m_pShowrecentlyfirstCB->IsChecked() );
+        aTmp <<= m_pShowrecentlyfirstCB->IsChecked();
         aLngCfg.SetProperty( UPH_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST, aTmp );
 
-        aTmp <<= bool( m_pAutoreplaceuniqueCB->IsChecked() );
+        aTmp <<= m_pAutoreplaceuniqueCB->IsChecked();
         aLngCfg.SetProperty( UPH_IS_AUTO_REPLACE_UNIQUE_ENTRIES, aTmp );
 
         EndDialog( RET_OK );

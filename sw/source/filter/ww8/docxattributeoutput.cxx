@@ -8016,16 +8016,16 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
         // otherwise - 'right' is checked if it is default and if it is non-default - all the values except for 'bottom' will be written
         // and so on.
         OStringBuffer aInset;
-        if(!aInset.isEmpty() || fDistanceBottomInch != double(0.05))
+        if(!aInset.isEmpty() || fDistanceBottomInch != 0.05)
             aInset.insert(0, "," + OString::number(fDistanceBottomInch) + "in");
 
-        if(!aInset.isEmpty() || fDistanceRightInch != double(0.1))
+        if(!aInset.isEmpty() || fDistanceRightInch != 0.1)
             aInset.insert(0, "," + OString::number(fDistanceRightInch) + "in");
 
-        if(!aInset.isEmpty() || fDistanceTopInch != double(0.05))
+        if(!aInset.isEmpty() || fDistanceTopInch != 0.05)
             aInset.insert(0, "," + OString::number(fDistanceTopInch) + "in");
 
-        if(!aInset.isEmpty() || fDistanceLeftInch != double(0.1))
+        if(!aInset.isEmpty() || fDistanceLeftInch != 0.1)
             aInset.insert(0, OString::number(fDistanceLeftInch) + "in");
 
         if (!aInset.isEmpty())

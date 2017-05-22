@@ -253,7 +253,7 @@ bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
             m_pLineDistEdit->Denormalize(m_pLineDistEdit->GetValue(FUNIT_TWIP))));
 
     // Separator style
-    rFootnoteInfo.SetLineStyle( SvxBorderLineStyle( m_pLineTypeBox->GetSelectEntryStyle() ) );
+    rFootnoteInfo.SetLineStyle( m_pLineTypeBox->GetSelectEntryStyle() );
 
     // Separator width
     long nWidth = static_cast<long>(MetricField::ConvertDoubleValue(

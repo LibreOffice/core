@@ -105,8 +105,8 @@ void ScDPFieldButton::draw()
 
         // Border lines
         mpOutDev->SetLineColor(mpStyle->GetLightColor());
-        mpOutDev->DrawLine(Point(maPos), Point(maPos.X(), maPos.Y()+maSize.Height()-1));
-        mpOutDev->DrawLine(Point(maPos), Point(maPos.X()+maSize.Width()-1, maPos.Y()));
+        mpOutDev->DrawLine(maPos, Point(maPos.X(), maPos.Y()+maSize.Height()-1));
+        mpOutDev->DrawLine(maPos, Point(maPos.X()+maSize.Width()-1, maPos.Y()));
 
         mpOutDev->SetLineColor(mpStyle->GetShadowColor());
         mpOutDev->DrawLine(Point(maPos.X(), maPos.Y()+maSize.Height()-1),

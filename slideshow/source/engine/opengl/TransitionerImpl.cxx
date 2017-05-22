@@ -1122,7 +1122,7 @@ void OGLTransitionerImpl::disposing()
     }
 #endif
 
-    if (mbRestoreSync && bool(mpContext.is())) {
+    if (mbRestoreSync && mpContext.is()) {
         // try to reestablish synchronize state
         const char* sal_synchronize = getenv("SAL_SYNCHRONIZE");
         mpContext->getOpenGLWindow().Synchronize(sal_synchronize && *sal_synchronize == '1' );

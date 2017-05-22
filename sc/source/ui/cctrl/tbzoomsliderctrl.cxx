@@ -225,7 +225,7 @@ ScZoomSliderWnd::ScZoomSliderWnd( vcl::Window* pParent,
     mpImpl->maSliderButton      = Image(BitmapEx(RID_SVXBMP_SLIDERBUTTON));
     mpImpl->maIncreaseButton    = Image(BitmapEx(RID_SVXBMP_SLIDERINCREASE));
     mpImpl->maDecreaseButton    = Image(BitmapEx(RID_SVXBMP_SLIDERDECREASE));
-    Size  aSliderSize           = LogicToPixel( Size( aLogicalSize), MapMode( MapUnit::Map10thMM ) );
+    Size  aSliderSize           = LogicToPixel( aLogicalSize, MapMode( MapUnit::Map10thMM ) );
     SetSizePixel( Size( aSliderSize.Width() * nSliderWidth-1, aSliderSize.Height() + nSliderHeight ) );
 }
 

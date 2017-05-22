@@ -614,7 +614,7 @@ void XclExpOcxControlObj::WriteSubRecs( XclExpStream& rStrm )
     sal_uInt16 nPictFmlaSize = nFirstPartSize + nCellLinkSize + nSrcRangeSize + 18;
     rStrm.StartRecord( EXC_ID_OBJPICTFMLA, nPictFmlaSize );
 
-    rStrm   << sal_uInt16( nFirstPartSize )             // size of first part
+    rStrm   << nFirstPartSize                           // size of first part
             << sal_uInt16( 5 )                          // formula size
             << sal_uInt32( 0 )                          // unknown ID
             << sal_uInt8( 0x02 ) << sal_uInt32( 0 )     // tTbl token with unknown ID

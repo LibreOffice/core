@@ -1558,7 +1558,7 @@ namespace svxform
 
                 if ( aDlg->Execute() == RET_OK )
                 {
-                    if ( aDlg->GetModifyDoc() != bool( bDocumentData ) )
+                    if ( aDlg->GetModifyDoc() != bDocumentData )
                     {
                         bDocumentData = aDlg->GetModifyDoc();
                         try

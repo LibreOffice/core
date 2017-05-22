@@ -330,7 +330,7 @@ void SheetViewSettings::finalizeImport()
     if( getSheetType() == WorksheetType::Chart )
     {
         xModel->maPaneSelMap.clear();
-        xModel->maFirstPos = xModel->maSecondPos = ScAddress( SCCOL ( 0 ), SCROW ( 0 ), SCTAB (getSheetIndex() ) );
+        xModel->maFirstPos = xModel->maSecondPos = ScAddress( SCCOL ( 0 ), SCROW ( 0 ), getSheetIndex() );
         xModel->mnViewType = XML_normal;
         xModel->mnActivePaneId = XML_topLeft;
         xModel->mnPaneState = XML_split;

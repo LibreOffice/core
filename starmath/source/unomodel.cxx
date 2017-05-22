@@ -1048,7 +1048,7 @@ void SAL_CALL SmModel::render(
                     m_pPrintUIOptions.reset(new SmPrintUIOptions);
                 m_pPrintUIOptions->processProperties( rxOptions );
 
-                pView->Impl_Print( *pOut, *m_pPrintUIOptions, tools::Rectangle( OutputRect ) );
+                pView->Impl_Print( *pOut, *m_pPrintUIOptions, OutputRect );
 
                 // release SmPrintUIOptions when everything is done.
                 // That way, when SmPrintUIOptions is needed again it will read the latest configuration settings in its c-tor.

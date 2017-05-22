@@ -600,7 +600,7 @@ void SAL_CALL TabWindow::removeTab( ::sal_Int32 ID )
         implts_SendNotification( NOTIFY_REMOVED, ID );
 
         // activate new tab if old tab was active!
-        nPos = pTabControl->GetPagePos( sal_uInt16( nCurTabId ));
+        nPos = pTabControl->GetPagePos( nCurTabId );
         if ( nPos != TAB_PAGE_NOTFOUND && nCurTabId != ID )
             activateTab( nCurTabId );
     }

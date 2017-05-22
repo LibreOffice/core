@@ -743,7 +743,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         }
                     }
                     else
-                        ErrorHandler::HandleError(ErrCode( eErr ));
+                        ErrorHandler::HandleError( eErr );
                 }
                 else
                 {
@@ -820,7 +820,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                 }
                 else
-                    ErrorHandler::HandleError(ErrCode( eErr ));
+                    ErrorHandler::HandleError( eErr );
             }
             break;
             case SID_SPELLCHECKER_CHANGED:

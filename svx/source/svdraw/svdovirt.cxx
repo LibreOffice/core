@@ -510,7 +510,7 @@ sal_uInt32 SdrVirtObj::GetPointCount() const
 
 Point SdrVirtObj::GetPoint(sal_uInt32 i) const
 {
-    return Point(rRefObj.GetPoint(i) + aAnchor);
+    return rRefObj.GetPoint(i) + aAnchor;
 }
 
 void SdrVirtObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)

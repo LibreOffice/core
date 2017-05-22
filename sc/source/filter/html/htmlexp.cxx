@@ -918,7 +918,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         sal_uLong v;
         if ( pGraphEntry )
             nC = std::max( SCCOL(pGraphEntry->aRange.aEnd.Col() - nCol + 1),
-                SCCOL(rMergeAttr.GetColMerge()) );
+                           rMergeAttr.GetColMerge() );
         else
             nC = rMergeAttr.GetColMerge();
         if ( nC > 1 )
@@ -932,7 +932,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 
         if ( pGraphEntry )
             nR = std::max( SCROW(pGraphEntry->aRange.aEnd.Row() - nRow + 1),
-                SCROW(rMergeAttr.GetRowMerge()) );
+                           rMergeAttr.GetRowMerge() );
         else
             nR = rMergeAttr.GetRowMerge();
         if ( nR > 1 )

@@ -516,7 +516,7 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
         else
             nTmpEsc = nEsc;
         Size aSize = ( this->GetFontSize() );
-        aPos.Y() -= ( ( nTmpEsc * long( aSize.Height() ) ) / 100L );
+        aPos.Y() -= ( nTmpEsc * aSize.Height() ) / 100L;
     }
     Font aOldFont( ChgPhysFont( pOut ) );
     Font aOldPrnFont( ChgPhysFont( pPrinter ) );

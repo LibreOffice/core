@@ -671,7 +671,7 @@ void SdOOXMLExportTest1::testParaMarginAndindentation()
 
     sal_Int32 nParaFirstLineIndent = 0;
     xPropSet->getPropertyValue( "ParaFirstLineIndent" ) >>= nParaFirstLineIndent;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1268), sal_Int32(nParaFirstLineIndent));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1268), nParaFirstLineIndent);
 
     xDocShRef->DoClose();
 }

@@ -39,7 +39,7 @@ namespace store
  * OStoreDataPageData.
  *
  *======================================================================*/
-#define STORE_MAGIC_DATAPAGE sal_uInt32(0x94190310)
+constexpr sal_uInt32 STORE_MAGIC_DATAPAGE(0x94190310);
 
 struct OStoreDataPageData : public store::PageData
 {
@@ -123,7 +123,7 @@ public:
  * OStoreIndirectionPageData.
  *
  *======================================================================*/
-#define STORE_MAGIC_INDIRECTPAGE sal_uInt32(0x89191107)
+constexpr sal_uInt32 STORE_MAGIC_INDIRECTPAGE(0x89191107);
 
 struct OStoreIndirectionPageData : public store::PageData
 {
