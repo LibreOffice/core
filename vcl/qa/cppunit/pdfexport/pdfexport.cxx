@@ -11,9 +11,11 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/view/XPrintable.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
@@ -38,6 +40,10 @@ class PdfExportTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
     uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
+#if HAVE_FEATURE_PDFIUM
+    FPDF_PAGE mpPdfPage = nullptr;
+    FPDF_DOCUMENT mpPdfDocument = nullptr;
+#endif
 
 public:
     virtual void setUp() override;
@@ -48,6 +54,7 @@ public:
     void testTdf106059();
     /// Tests that text highlight from Impress is not lost.
     void testTdf105461();
+    void testTdf107868();
     /// Tests that embedded video from Impress is not exported as a linked one.
     void testTdf105093();
     /// Tests export of non-PDF images.
@@ -65,6 +72,7 @@ public:
 #if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testTdf106059);
     CPPUNIT_TEST(testTdf105461);
+    CPPUNIT_TEST(testTdf107868);
     CPPUNIT_TEST(testTdf105093);
     CPPUNIT_TEST(testTdf106206);
     CPPUNIT_TEST(testTdf106693);
@@ -83,10 +91,25 @@ void PdfExportTest::setUp()
 
     mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
+
+#if HAVE_FEATURE_PDFIUM
+    FPDF_LIBRARY_CONFIG config;
+    config.version = 2;
+    config.m_pUserFontPaths = nullptr;
+    config.m_pIsolate = nullptr;
+    config.m_v8EmbedderSlot = 0;
+    FPDF_InitLibraryWithConfig(&config);
+#endif
 }
 
 void PdfExportTest::tearDown()
 {
+#if HAVE_FEATURE_PDFIUM
+    FPDF_ClosePage(mpPdfPage);
+    FPDF_CloseDocument(mpPdfDocument);
+    FPDF_DestroyLibrary();
+#endif
+
     if (mxComponent.is())
         mxComponent->dispose();
 
@@ -197,14 +220,6 @@ void PdfExportTest::testTdf106693()
 
 void PdfExportTest::testTdf105461()
 {
-    // Setup.
-    FPDF_LIBRARY_CONFIG config;
-    config.version = 2;
-    config.m_pUserFontPaths = nullptr;
-    config.m_pIsolate = nullptr;
-    config.m_v8EmbedderSlot = 0;
-    FPDF_InitLibraryWithConfig(&config);
-
     // Import the bugdoc and export as PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf105461.odp";
     mxComponent = loadFromDesktop(aURL);
@@ -221,20 +236,20 @@ void PdfExportTest::testTdf105461()
     SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
     SvMemoryStream aMemory;
     aMemory.WriteStream(aFile);
-    FPDF_DOCUMENT pPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
-    CPPUNIT_ASSERT(pPdfDocument);
+    mpPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
+    CPPUNIT_ASSERT(mpPdfDocument);
 
     // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument));
-    FPDF_PAGE pPdfPage = FPDF_LoadPage(pPdfDocument, /*page_index=*/0);
-    CPPUNIT_ASSERT(pPdfPage);
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(mpPdfDocument));
+    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
+    CPPUNIT_ASSERT(mpPdfPage);
 
     // Make sure there is a filled rectangle inside.
-    int nPageObjectCount = FPDFPage_CountObject(pPdfPage);
+    int nPageObjectCount = FPDFPage_CountObject(mpPdfPage);
     int nYellowPathCount = 0;
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(pPdfPage, i);
+        FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(mpPdfPage, i);
         if (FPDFPageObj_GetType(pPdfPageObject) != FPDF_PAGEOBJ_PATH)
             continue;
 
@@ -246,11 +261,62 @@ void PdfExportTest::testTdf105461()
 
     // This was 0, the page contained no yellow paths.
     CPPUNIT_ASSERT_EQUAL(1, nYellowPathCount);
+}
 
-    // Cleanup.
-    FPDF_ClosePage(pPdfPage);
-    FPDF_CloseDocument(pPdfDocument);
-    FPDF_DestroyLibrary();
+void PdfExportTest::testTdf107868()
+{
+    // FIXME why does this fail on macOS?
+#ifndef MACOSX
+    // Import the bugdoc and print to PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf107868.odt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    uno::Reference<view::XPrintable> xPrintable(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPrintable.is());
+    uno::Sequence<beans::PropertyValue> aOptions(comphelper::InitPropertySequence(
+    {
+        {"FileName", uno::makeAny(aTempFile.GetURL())},
+        {"Wait", uno::makeAny(true)}
+    }));
+    xPrintable->print(aOptions);
+
+    // Parse the export result with pdfium.
+    SvFileStream aFile(aTempFile.GetURL(), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    mpPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
+    if (!mpPdfDocument)
+        // Printing to PDF failed in a non-interesting way, e.g. CUPS is not
+        // running, there is no printer defined, etc.
+        return;
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(mpPdfDocument));
+    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
+    CPPUNIT_ASSERT(mpPdfPage);
+
+    // Make sure there is no filled rectangle inside.
+    int nPageObjectCount = FPDFPage_CountObject(mpPdfPage);
+    int nWhitePathCount = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(mpPdfPage, i);
+        if (FPDFPageObj_GetType(pPdfPageObject) != FPDF_PAGEOBJ_PATH)
+            continue;
+
+        unsigned int nRed = 0, nGreen = 0, nBlue = 0, nAlpha = 0;
+        FPDFPath_GetFillColor(pPdfPageObject, &nRed, &nGreen, &nBlue, &nAlpha);
+        if (RGB_COLORDATA(nRed, nGreen, nBlue) == COL_WHITE)
+            ++nWhitePathCount;
+    }
+
+    // This was 4, the page contained 4 white paths at problematic positions.
+    CPPUNIT_ASSERT_EQUAL(0, nWhitePathCount);
+#endif
 }
 
 void PdfExportTest::testTdf105093()
