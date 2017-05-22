@@ -383,7 +383,7 @@ Private Function _PropertiesList() As Variant
 								, &quot;Description&quot;, &quot;Name&quot;, &quot;ObjectType&quot;, &quot;Size&quot;, &quot;SourceField&quot;, &quot;SourceTable&quot; _
 								, &quot;TypeName&quot; _
 								)
-		Case OBJRECORDSET			
+		Case OBJRECORDSET
 			_PropertiesList = Array(&quot;DataType&quot;, &quot;DataUpdatable&quot;,  &quot;dbType&quot;, &quot;DefaultValue&quot; _
 								, &quot;Description&quot; , &quot;FieldSize&quot;, &quot;Name&quot;, &quot;ObjectType&quot; _
 								, &quot;Size&quot;, &quot;SourceTable&quot;, &quot;TypeName&quot;, &quot;Value&quot; _
