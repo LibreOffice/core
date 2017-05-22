@@ -37,11 +37,11 @@ INST_ROOT_FORMAT=${INST_ROOT_FORMAT////.}
 #Need to escape / for sed
 INST_ROOT_SED=${INST_ROOT////\\/}
 
-for filename in $PROFILESFROM
+for filename in $PROFILESFROM/*
 do
-    tourl=$INSTALLTO$INST_ROOT_FORMAT$filename
-    sed "s/INSTDIR-/$INST_ROOT_SED/g" "$PROFILESFROM""$filename" > "$tourl"
-    [[ -e $filename ]] || break
+    [[ -e $filename ]] || { echo "No profile files found in ""$PROFILESFROM"; exit 1; }
+    tourl=$INSTALLTO$INST_ROOT_FORMAT${filename##*/}
+    sed "s/INSTDIR-/$INST_ROOT_SED/g" "$filename" > "$tourl"
     echo "$tourl"
 
 done
