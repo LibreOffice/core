@@ -1690,28 +1690,30 @@ public:
 
 void ScInterpreter::ScSumProduct()
 {
-    sal_uInt8 nParamCount = GetByte();
+    short nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 1, 30 ) )
         return;
 
     ScMatrixRef pMatLast;
     ScMatrixRef pMat;
+    size_t nRefInList = 0;
 
-    pMatLast = GetMatrix();
+    pMatLast = GetMatrix( nParamCount, nRefInList);
     if (!pMatLast)
     {
         PushIllegalParameter();
         return;
     }
+    --nParamCount;
 
     SCSIZE nC, nCLast, nR, nRLast;
     pMatLast->GetDimensions(nCLast, nRLast);
     std::vector<double> aResArray;
     pMatLast->GetDoubleArray(aResArray);
 
-    for (sal_uInt16 i = 1; i < nParamCount; ++i)
+    while (nParamCount--)
     {
-        pMat = GetMatrix();
+        pMat = GetMatrix( nParamCount, nRefInList);
         if (!pMat)
         {
             PushIllegalParameter();
