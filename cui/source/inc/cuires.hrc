@@ -446,6 +446,8 @@
 
 #define RID_SVXPAGE_OPENCL                                  (RID_SVX_START + 254)
 
+#define RID_SVXSTR_CONFIRM_KEYBOARD_RESET                   (RID_SVX_START + 1117)
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
