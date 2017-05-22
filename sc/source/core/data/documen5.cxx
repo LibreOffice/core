@@ -479,7 +479,7 @@ void ScDocument::RestoreChartListener( const OUString& rName )
 void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
                                     SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+                                    SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
     if (!pDrawLayer)
         return;

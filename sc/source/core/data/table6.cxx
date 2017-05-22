@@ -334,12 +334,12 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
         if (rSearchItem.GetRowDirection())
         {
             nCol--;
-            while (!bFound && ((SCsROW)nRow >= 0))
+            while (!bFound && (nRow >= 0))
             {
                 if (bSkipFiltered)
                     SkipFilteredRows(nRow, nLastNonFilteredRow, false);
 
-                while (!bFound && ((SCsCOL)nCol >= 0))
+                while (!bFound && (nCol >= 0))
                 {
                     bFound = SearchCell(rSearchItem, nCol, nRow, rMark, rUndoStr, pUndoDoc);
                     if (!bFound)
@@ -348,7 +348,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                         do
                         {
                             nCol--;
-                            if ((SCsCOL)nCol >= 0)
+                            if (nCol >= 0)
                             {
                                 if (bSearchNotes)
                                     bIsEmpty = !aCol[nCol].HasCellNotes();
@@ -358,7 +358,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                             else
                                 bIsEmpty = true;
                         }
-                        while (((SCsCOL)nCol >= 0) && bIsEmpty);
+                        while ((nCol >= 0) && bIsEmpty);
                     }
                 }
                 if (!bFound)
@@ -371,9 +371,9 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
         else
         {
             nRow--;
-            while (!bFound && ((SCsCOL)nCol >= 0))
+            while (!bFound && (nCol >= 0))
             {
-                while (!bFound && ((SCsROW)nRow >= 0))
+                while (!bFound && (nRow >= 0))
                 {
                     if (bSkipFiltered)
                         SkipFilteredRows(nRow, nLastNonFilteredRow, false);
@@ -402,7 +402,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                     do
                     {
                         nCol--;
-                        if ((SCsCOL)nCol >= 0)
+                        if (nCol >= 0)
                         {
                             if (bSearchNotes)
                                 bIsEmpty = !aCol[nCol].HasCellNotes();
@@ -412,7 +412,7 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                         else
                             bIsEmpty = true;
                     }
-                    while (((SCsCOL)nCol >= 0) && bIsEmpty);
+                    while ((nCol >= 0) && bIsEmpty);
                 }
             }
         }
@@ -596,8 +596,8 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
                                         pDocument->GetStyleSheetPool()->Find(
                                         rSearchItem.GetSearchString(), SfxStyleFamily::Para ));
 
-    SCsCOL nCol = rCol;
-    SCsROW nRow = rRow;
+    SCCOL nCol = rCol;
+    SCROW nRow = rRow;
     bool bFound = false;
 
     bool bSelect = rSearchItem.GetSelection();
@@ -615,11 +615,11 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
         nRow += nAdd;
         do
         {
-            SCsROW nNextRow = aCol[nCol].SearchStyle( nRow, pSearchStyle, bBack, bSelect, rMark );
+            SCROW nNextRow = aCol[nCol].SearchStyle( nRow, pSearchStyle, bBack, bSelect, rMark );
             if (!ValidRow(nNextRow))
             {
                 nRow = bBack ? MAXROW : 0;
-                nCol = sal::static_int_cast<SCsCOL>( nCol + nAdd );
+                nCol = sal::static_int_cast<SCCOL>( nCol + nAdd );
             }
             else
             {
@@ -631,12 +631,12 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
     }
     else                                    // by column
     {
-        SCsCOL aColSize = aCol.size();
-        std::vector< SCsROW > nNextRows ( aColSize );
-        SCsCOL i;
+        SCCOL aColSize = aCol.size();
+        std::vector< SCROW > nNextRows ( aColSize );
+        SCCOL i;
         for (i=0; i < aColSize; ++i)
         {
-            SCsROW nSRow = nRow;
+            SCROW nSRow = nRow;
             if (bBack)
             {
                 if (i>=nCol) --nSRow;
@@ -673,8 +673,8 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
 
     if (bFound)
     {
-        rCol = (SCCOL) nCol;
-        rRow = (SCROW) nRow;
+        rCol = nCol;
+        rRow = nRow;
     }
     return bFound;
 }
@@ -719,8 +719,8 @@ bool ScTable::SearchAllStyle(
     for (SCCOL i=0; i < aCol.size(); ++i)
     {
         bool bFound = true;
-        SCsROW nRow = 0;
-        SCsROW nEndRow;
+        SCROW nRow = 0;
+        SCROW nEndRow;
         while (bFound && nRow <= MAXROW)
         {
             bFound = aCol[i].SearchStyleRange( nRow, nEndRow, pSearchStyle, bBack, bSelect, rMark );
@@ -728,7 +728,7 @@ bool ScTable::SearchAllStyle(
             {
                 if (nEndRow<nRow)
                 {
-                    SCsROW nTemp = nRow;
+                    SCROW nTemp = nRow;
                     nRow = nEndRow;
                     nEndRow = nTemp;
                 }

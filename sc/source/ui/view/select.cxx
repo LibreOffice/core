@@ -146,8 +146,8 @@ void ScViewFunctionSet::BeginDrag()
 {
     SCTAB nTab = pViewData->GetTabNo();
 
-    SCsCOL nPosX;
-    SCsROW nPosY;
+    SCCOL nPosX;
+    SCROW nPosY;
     if (pEngine)
     {
         Point aMPos = pEngine->GetMousePosPixel();
@@ -190,8 +190,8 @@ void ScViewFunctionSet::BeginDrag()
                 ScRange aMarkRange = pTransferObj->GetRange();
                 SCCOL nStartX = aMarkRange.aStart.Col();
                 SCROW nStartY = aMarkRange.aStart.Row();
-                SCCOL nHandleX = (nPosX >= (SCsCOL) nStartX) ? nPosX - nStartX : 0;
-                SCROW nHandleY = (nPosY >= (SCsROW) nStartY) ? nPosY - nStartY : 0;
+                SCCOL nHandleX = (nPosX >= nStartX) ? nPosX - nStartX : 0;
+                SCROW nHandleY = (nPosY >= nStartY) ? nPosY - nStartY : 0;
                 pTransferObj->SetDragHandlePos( nHandleX, nHandleY );
                 pTransferObj->SetSourceCursorPos( pViewData->GetCurX(), pViewData->GetCurY() );
                 pTransferObj->SetVisibleTab( nTab );
@@ -312,8 +312,8 @@ bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
     bool bLeftScroll  = ( aEffPos.X() < 0 );
     bool bTopScroll = ( aEffPos.Y() < 0 );
 
-    SCsCOL  nPosX;
-    SCsROW  nPosY;
+    SCCOL  nPosX;
+    SCROW  nPosY;
     pViewData->GetPosFromPixel( aEffPos.X(), aEffPos.Y(), GetWhich(),
                                 nPosX, nPosY, true, true );     // with Repair
 
@@ -403,7 +403,7 @@ bool ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
     return SetCursorAtCell( nPosX, nPosY, bScroll );
 }
 
-bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScroll )
+bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll )
 {
     ScTabView* pView = pViewData->GetView();
     SCTAB nTab = pViewData->GetTabNo();
@@ -435,7 +435,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScrol
     bool bRefMode = pViewShell && pViewShell->IsRefInputMode();
 
     bool bHide = !bRefMode && !pViewData->IsAnyFillMode() &&
-            ( nPosX != (SCsCOL) pViewData->GetCurX() || nPosY != (SCsROW) pViewData->GetCurY() );
+            ( nPosX != pViewData->GetCurX() || nPosY != pViewData->GetCurY() );
 
     if (bHide)
         pView->HideAllCursors();
@@ -485,8 +485,8 @@ bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScrol
         ScRange aDelRange;
         bool bOldDelMark = pViewData->GetDelMark( aDelRange );
 
-        if ( nPosX+1 >= (SCsCOL) nStartX && nPosX <= (SCsCOL) nEndX &&
-             nPosY+1 >= (SCsROW) nStartY && nPosY <= (SCsROW) nEndY &&
+        if ( nPosX+1 >= nStartX && nPosX <= nEndX &&
+             nPosY+1 >= nStartY && nPosY <= nEndY &&
              ( nPosX != nEndX || nPosY != nEndY ) )                     // minimize?
         {
             // direction (left or top)
@@ -536,8 +536,8 @@ bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScrol
                 pViewData->GetView()->UpdateShrinkOverlay();
             }
 
-            bool bNegX = ( nPosX < (SCsCOL) nStartX );
-            bool bNegY = ( nPosY < (SCsROW) nStartY );
+            bool bNegX = ( nPosX < nStartX );
+            bool bNegY = ( nPosY < nStartY );
 
             long nSizeX = 0;
             if ( bNegX )
@@ -632,8 +632,8 @@ bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScrol
     }
     else                    // regular selection
     {
-        bool bHideCur = bAnchor && ( (SCCOL)nPosX != pViewData->GetCurX() ||
-                                     (SCROW)nPosY != pViewData->GetCurY() );
+        bool bHideCur = bAnchor && ( nPosX != pViewData->GetCurX() ||
+                                     nPosY != pViewData->GetCurY() );
         if (bHideCur)
             pView->HideAllCursors();            // otherwise twice: Block and SetCursor
 
@@ -641,8 +641,8 @@ bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScrol
         {
             if (!bStarted)
             {
-                bool bMove = ( nPosX != (SCsCOL) aAnchorPos.Col() ||
-                                nPosY != (SCsROW) aAnchorPos.Row() );
+                bool bMove = ( nPosX != aAnchorPos.Col() ||
+                                nPosY != aAnchorPos.Row() );
                 if ( bMove || ( pEngine && pEngine->GetMouseEvent().IsShift() ) )
                 {
                     pView->InitBlockMode( aAnchorPos.Col(), aAnchorPos.Row(),
@@ -652,9 +652,9 @@ bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScrol
             }
             if (bStarted)
                 // If the selection is already started, don't set the cursor.
-                pView->MarkCursor( (SCCOL) nPosX, (SCROW) nPosY, nTab, false, false, true );
+                pView->MarkCursor( nPosX, nPosY, nTab, false, false, true );
             else
-                pView->SetCursor( (SCCOL) nPosX, (SCROW) nPosY );
+                pView->SetCursor( nPosX, nPosY );
         }
         else
         {
@@ -663,7 +663,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScrol
             {
                 pView->DoneBlockMode(true);
                 pView->InitBlockMode( nPosX, nPosY, nTab, true );
-                pView->MarkCursor( (SCCOL) nPosX, (SCROW) nPosY, nTab );
+                pView->MarkCursor( nPosX, nPosY, nTab );
 
                 aAnchorPos.Set( nPosX, nPosY, nTab );
                 bStarted = true;
@@ -684,13 +684,13 @@ bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScrol
                 {
                     pView->DoneBlockMode( true );
                     pView->InitBlockMode( nPosX, nPosY, nTab, true );
-                    pView->MarkCursor( (SCCOL) nPosX, (SCROW) nPosY, nTab );
+                    pView->MarkCursor( nPosX, nPosY, nTab );
                     aAnchorPos.Set( nPosX, nPosY, nTab );
                 }
 
                 bStarted = true;
             }
-            pView->SetCursor( (SCCOL) nPosX, (SCROW) nPosY );
+            pView->SetCursor( nPosX, nPosY );
         }
 
         pViewData->SetRefStart( nPosX, nPosY, nTab );
@@ -716,10 +716,10 @@ bool ScViewFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
     ScMarkData& rMark = pViewData->GetMarkData();
     if (bAnchor || !rMark.IsMultiMarked())
     {
-        SCsCOL  nPosX;
-        SCsROW  nPosY;
+        SCCOL  nPosX;
+        SCROW  nPosY;
         pViewData->GetPosFromPixel( rPointPixel.X(), rPointPixel.Y(), GetWhich(), nPosX, nPosY );
-        return pViewData->GetMarkData().IsCellMarked( (SCCOL) nPosX, (SCROW) nPosY );
+        return pViewData->GetMarkData().IsCellMarked( nPosX, nPosY );
     }
 
     return false;
@@ -876,8 +876,8 @@ bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bD
         return false;               // do not crunch with wrong positions
     }
 
-    SCsCOL  nPosX;
-    SCsROW  nPosY;
+    SCCOL  nPosX;
+    SCROW  nPosY;
     pViewData->GetPosFromPixel( rPointPixel.X(), rPointPixel.Y(), pViewData->GetActivePart(),
                                 nPosX, nPosY, false );
     if (bColumn)
@@ -923,8 +923,8 @@ bool ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bD
 
 bool ScHeaderFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
-    SCsCOL  nPosX;
-    SCsROW  nPosY;
+    SCCOL  nPosX;
+    SCROW  nPosY;
     pViewData->GetPosFromPixel( rPointPixel.X(), rPointPixel.Y(), pViewData->GetActivePart(),
                                 nPosX, nPosY, false );
 

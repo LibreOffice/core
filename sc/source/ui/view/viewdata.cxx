@@ -1711,14 +1711,14 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
 }
 
 //      Number of cells on a screen
-SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_uInt16 nScrSizeX ) const
+SCCOL ScViewData::CellsAtX( SCCOL nPosX, SCCOL nDir, ScHSplitPos eWhichX, sal_uInt16 nScrSizeX ) const
 {
     OSL_ENSURE( nDir==1 || nDir==-1, "wrong CellsAt call" );
 
     if (pView)
         const_cast<ScViewData*>(this)->aScrSize.Width()  = pView->GetGridWidth(eWhichX);
 
-    SCsCOL  nX;
+    SCCOL  nX;
     sal_uInt16  nScrPosX = 0;
     if (nScrSizeX == SC_SIZE_NONE) nScrSizeX = (sal_uInt16) aScrSize.Width();
 
@@ -1728,9 +1728,9 @@ SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_
         nX = nPosX-1;           // backwards
 
     bool bOut = false;
-    for ( ; nScrPosX<=nScrSizeX && !bOut; nX = sal::static_int_cast<SCsCOL>(nX + nDir) )
+    for ( ; nScrPosX<=nScrSizeX && !bOut; nX = sal::static_int_cast<SCCOL>(nX + nDir) )
     {
-        SCsCOL  nColNo = nX;
+        SCCOL  nColNo = nX;
         if ( nColNo < 0 || nColNo > MAXCOL )
             bOut = true;
         else
@@ -1745,7 +1745,7 @@ SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_
     }
 
     if (nDir==1)
-        nX = sal::static_int_cast<SCsCOL>( nX - nPosX );
+        nX = sal::static_int_cast<SCCOL>( nX - nPosX );
     else
         nX = (nPosX-1)-nX;
 
@@ -1753,7 +1753,7 @@ SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_
     return nX;
 }
 
-SCROW ScViewData::CellsAtY( SCsROW nPosY, SCsROW nDir, ScVSplitPos eWhichY, sal_uInt16 nScrSizeY ) const
+SCROW ScViewData::CellsAtY( SCROW nPosY, SCROW nDir, ScVSplitPos eWhichY, sal_uInt16 nScrSizeY ) const
 {
     OSL_ENSURE( nDir==1 || nDir==-1, "wrong CellsAt call" );
 
@@ -1849,7 +1849,7 @@ bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& r
 }
 
 void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
-                                        SCsCOL& rPosX, SCsROW& rPosY,
+                                        SCCOL& rPosX, SCROW& rPosY,
                                         bool bTestMerge, bool bRepair )
 {
     //  special handling of 0 is now in ScViewFunctionSet::SetCursorAtPoint
@@ -1865,8 +1865,8 @@ void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
         nClickX = aScrSize.Width() - 1 - nClickX;
     }
 
-    SCsCOL nStartPosX = GetPosX(eHWhich);
-    SCsROW nStartPosY = GetPosY(eVWhich);
+    SCCOL nStartPosX = GetPosX(eHWhich);
+    SCROW nStartPosY = GetPosY(eVWhich);
     rPosX = nStartPosX;
     rPosY = nStartPosY;
     long nScrX = 0;
@@ -1953,7 +1953,7 @@ void ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
 }
 
 void ScViewData::GetMouseQuadrant( const Point& rClickPos, ScSplitPos eWhich,
-                                        SCsCOL nPosX, SCsROW nPosY, bool& rLeft, bool& rTop )
+                                        SCCOL nPosX, SCROW nPosY, bool& rLeft, bool& rTop )
 {
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTabNo );
     long nLayoutSign = bLayoutRTL ? -1 : 1;

@@ -50,7 +50,7 @@ SCCOLROW ScOutlineEntry::GetEnd() const
     return nStart+nSize-1;
 }
 
-void ScOutlineEntry::Move( SCsCOLROW nDelta )
+void ScOutlineEntry::Move( SCCOLROW nDelta )
 {
     SCCOLROW nNewPos = nStart + nDelta;
     if (nNewPos<0)
@@ -669,7 +669,7 @@ void ScOutlineArray::InsertSpace(SCCOLROW nStartPos, SCSIZE nSize)
     while ((pEntry = aIter.GetNext()) != nullptr)
     {
         if ( pEntry->GetStart() >= nStartPos )
-            pEntry->Move(static_cast<SCsCOLROW>(nSize));
+            pEntry->Move(static_cast<SCCOLROW>(nSize));
         else
         {
             SCCOLROW nEnd = pEntry->GetEnd();
@@ -702,7 +702,7 @@ bool ScOutlineArray::DeleteSpace(SCCOLROW nStartPos, SCSIZE nSize)
         if ( nEntryEnd >= nStartPos )
         {
             if ( nEntryStart > nEndPos ) // Right
-                pEntry->Move(-(static_cast<SCsCOLROW>(nSize)));
+                pEntry->Move(-(static_cast<SCCOLROW>(nSize)));
             else if ( nEntryStart < nStartPos && nEntryEnd >= nEndPos ) // Outside
                 pEntry->SetSize( nEntrySize-nSize );
             else

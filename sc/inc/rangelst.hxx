@@ -50,9 +50,9 @@ public:
 
     bool            UpdateReference( UpdateRefMode, ScDocument*,
                                      const ScRange& rWhere,
-                                     SCsCOL nDx,
-                                     SCsROW nDy,
-                                     SCsTAB nDz
+                                     SCCOL nDx,
+                                     SCROW nDy,
+                                     SCTAB nDz
                                    );
 
     void InsertRow( SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW nRowPos, SCSIZE nSize );
@@ -116,7 +116,7 @@ public:
     void                Join( const ScRangePair&, bool bIsInList = false );
     void                UpdateReference( UpdateRefMode, ScDocument*,
                                     const ScRange& rWhere,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+                                    SCCOL nDx, SCROW nDy, SCTAB nDz );
     void                DeleteOnTab( SCTAB nTab );
     ScRangePair*        Find( const ScAddress& ) const;
     ScRangePair*        Find( const ScRange& ) const;

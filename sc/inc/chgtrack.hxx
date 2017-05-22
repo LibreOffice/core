@@ -298,7 +298,7 @@ protected:
 
     void Accept();
     virtual bool Reject(ScDocument* pDoc) = 0;
-    void RejectRestoreContents( ScChangeTrack*, SCsCOL nDx, SCsROW nDy );
+    void RejectRestoreContents( ScChangeTrack*, SCCOL nDx, SCROW nDy );
 
     // used in Reject() instead of IsRejectable()
     bool IsInternalRejectable() const;
@@ -464,10 +464,10 @@ class ScChangeActionDel : public ScChangeAction
     ScChangeActionIns*  pCutOff;        // cut insert
     short               nCutOff;        // +: start  -: end
     ScChangeActionDelMoveEntry* pLinkMove;
-    SCsCOL              nDx;
-    SCsROW              nDy;
+    SCCOL               nDx;
+    SCROW               nDy;
 
-    ScChangeActionDel( const ScRange& rRange, SCsCOL nDx, SCsROW nDy, ScChangeTrack* );
+    ScChangeActionDel( const ScRange& rRange, SCCOL nDx, SCROW nDy, ScChangeTrack* );
     virtual ~ScChangeActionDel() override;
 
     virtual void                AddContent( ScChangeActionContent* ) override;
@@ -490,7 +490,7 @@ public:
         const sal_uLong nRejectingNumber, const ScBigRange& aBigRange,
         const OUString& aUser, const DateTime& aDateTime,
         const OUString &sComment, const ScChangeActionType eType,
-        const SCsCOLROW nD, ScChangeTrack* pTrack); // only to use in the XML import
+        const SCCOLROW nD, ScChangeTrack* pTrack); // only to use in the XML import
                                             // which of nDx and nDy is set is dependent on the type
 
     // is the last in a row (or single)
@@ -505,8 +505,8 @@ public:
     // is col, belonging to a TabDelete
     bool IsTabDeleteCol() const;
 
-    SCsCOL GetDx() const { return nDx; }
-    SCsROW GetDy() const { return nDy; }
+    SCCOL GetDx() const { return nDx; }
+    SCROW GetDy() const { return nDy; }
     ScBigRange          GetOverAllRange() const;    // BigRange + (nDx, nDy)
 
     const ScChangeActionDelMoveEntry* GetFirstMoveEntry() const
@@ -706,7 +706,7 @@ class ScChangeActionContent : public ScChangeAction
                  bool bOldest, ::std::stack<ScChangeActionContent*>* pRejectActions );
 
     void PutValueToDoc(
-        const ScCellValue& rCell, const OUString& rValue, ScDocument* pDoc, SCsCOL nDx, SCsROW nDy ) const;
+        const ScCellValue& rCell, const OUString& rValue, ScDocument* pDoc, SCCOL nDx, SCROW nDy ) const;
 
 protected:
     using ScChangeAction::GetRefString;
@@ -740,9 +740,9 @@ public:
     virtual ScChangeActionLinkEntry**   GetDeletedInAddress() override;
 
     void                PutOldValueToDoc( ScDocument*,
-                            SCsCOL nDx, SCsROW nDy ) const;
+                            SCCOL nDx, SCROW nDy ) const;
     void                PutNewValueToDoc( ScDocument*,
-                            SCsCOL nDx, SCsROW nDy ) const;
+                            SCCOL nDx, SCROW nDy ) const;
 
     void SetOldValue( const ScCellValue& rCell, const ScDocument* pFromDoc, ScDocument* pToDoc, sal_uLong nFormat );
 
@@ -852,7 +852,7 @@ enum ScChangeTrackMergeState
 
 class ScChangeTrack : public utl::ConfigurationListener
 {
-    friend void ScChangeAction::RejectRestoreContents( ScChangeTrack*, SCsCOL, SCsROW );
+    friend void ScChangeAction::RejectRestoreContents( ScChangeTrack*, SCCOL, SCROW );
     friend bool ScChangeActionDel::Reject( ScDocument* pDoc );
     friend void ScChangeActionDel::DeleteCellEntries();
     friend void ScChangeActionMove::DeleteCellEntries();
@@ -941,15 +941,15 @@ class ScChangeTrack : public utl::ConfigurationListener
     void UpdateReference( ScChangeAction** ppFirstAction, ScChangeAction* pAct, bool bUndo );
     void                Append( ScChangeAction* pAppend, sal_uLong nAction );
     SC_DLLPUBLIC        void                AppendDeleteRange( const ScRange&,
-                                    ScDocument* pRefDoc, SCsTAB nDz,
+                                    ScDocument* pRefDoc, SCTAB nDz,
                                     sal_uLong nRejectingInsert );
     void                AppendOneDeleteRange( const ScRange& rOrgRange,
                             ScDocument* pRefDoc,
-                            SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
+                            SCCOL nDx, SCROW nDy, SCTAB nDz,
                             sal_uLong nRejectingInsert );
     void                LookUpContents( const ScRange& rOrgRange,
                             ScDocument* pRefDoc,
-                            SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+                            SCCOL nDx, SCROW nDy, SCTAB nDz );
     void                Remove( ScChangeAction* );
     void                MasterLinks( ScChangeAction* );
 
@@ -1037,7 +1037,7 @@ public:
     SC_DLLPUBLIC void AppendDeleteRange( const ScRange&,
                                     ScDocument* pRefDoc,
                                     sal_uLong& nStartAction, sal_uLong& nEndAction,
-                                    SCsTAB nDz = 0 );
+                                    SCTAB nDz = 0 );
                                     // nDz: multi TabDel, LookUpContent must be searched
                                     // with an offset of -nDz
 

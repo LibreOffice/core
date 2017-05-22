@@ -189,7 +189,7 @@ static bool lcl_MoveItCutBig( sal_Int32& rRef, sal_Int32 nDelta )
 ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                         SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                         SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                        SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
+                                        SCCOL nDx, SCROW nDy, SCTAB nDz,
                                         SCCOL& theCol1, SCROW& theRow1, SCTAB& theTab1,
                                         SCCOL& theCol2, SCROW& theRow2, SCTAB& theTab2 )
 {
@@ -278,11 +278,11 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
         if ( nDz && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
                     (theRow1 >= nRow1) && (theRow2 <= nRow2) )
         {
-            SCsTAB nMaxTab = pDoc->GetTableCount() - 1;
-            nMaxTab = sal::static_int_cast<SCsTAB>(nMaxTab + nDz);      // adjust to new count
+            SCTAB nMaxTab = pDoc->GetTableCount() - 1;
+            nMaxTab = sal::static_int_cast<SCTAB>(nMaxTab + nDz);      // adjust to new count
             bool bExp = (bExpand && IsExpand( theTab1, theTab2, nTab1, nDz ));
-            bCut1 = lcl_MoveStart( theTab1, nTab1, nDz, static_cast<SCTAB>(nMaxTab) );
-            bCut2 = lcl_MoveEnd( theTab2, nTab1, nDz, static_cast<SCTAB>(nMaxTab) );
+            bCut1 = lcl_MoveStart( theTab1, nTab1, nDz, nMaxTab );
+            bCut2 = lcl_MoveEnd( theTab2, nTab1, nDz, nMaxTab );
             if ( theTab2 < theTab1 )
             {
                 eRet = UR_INVALID;
@@ -330,9 +330,9 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
             }
             if ( nDz )
             {
-                SCsTAB nMaxTab = (SCsTAB) pDoc->GetTableCount() - 1;
-                bCut1 = lcl_MoveItCut( theTab1, nDz, static_cast<SCTAB>(nMaxTab) );
-                bCut2 = lcl_MoveItCut( theTab2, nDz, static_cast<SCTAB>(nMaxTab) );
+                SCTAB nMaxTab = pDoc->GetTableCount() - 1;
+                bCut1 = lcl_MoveItCut( theTab1, nDz, nMaxTab );
+                bCut2 = lcl_MoveItCut( theTab2, nDz, nMaxTab );
                 if ( bCut1 || bCut2 )
                     eRet = UR_UPDATED;
             }
@@ -467,38 +467,38 @@ void ScRefUpdate::MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
     if( rRef.Ref1.IsColRel() )
     {
         SCCOL nCol = aAbsRange.aStart.Col();
-        lcl_MoveItWrap(nCol, static_cast<SCsCOL>(0), nMaxCol);
+        lcl_MoveItWrap(nCol, static_cast<SCCOL>(0), nMaxCol);
         aAbsRange.aStart.SetCol(nCol);
     }
     if( rRef.Ref2.IsColRel() )
     {
         SCCOL nCol = aAbsRange.aEnd.Col();
-        lcl_MoveItWrap(nCol, static_cast<SCsCOL>(0), nMaxCol);
+        lcl_MoveItWrap(nCol, static_cast<SCCOL>(0), nMaxCol);
         aAbsRange.aEnd.SetCol(nCol);
     }
     if( rRef.Ref1.IsRowRel() )
     {
         SCROW nRow = aAbsRange.aStart.Row();
-        lcl_MoveItWrap(nRow, static_cast<SCsROW>(0), nMaxRow);
+        lcl_MoveItWrap(nRow, static_cast<SCROW>(0), nMaxRow);
         aAbsRange.aStart.SetRow(nRow);
     }
     if( rRef.Ref2.IsRowRel() )
     {
         SCROW nRow = aAbsRange.aEnd.Row();
-        lcl_MoveItWrap(nRow, static_cast<SCsROW>(0), nMaxRow);
+        lcl_MoveItWrap(nRow, static_cast<SCROW>(0), nMaxRow);
         aAbsRange.aEnd.SetRow(nRow);
     }
-    SCsTAB nMaxTab = (SCsTAB) pDoc->GetTableCount() - 1;
+    SCTAB nMaxTab = pDoc->GetTableCount() - 1;
     if( rRef.Ref1.IsTabRel() )
     {
         SCTAB nTab = aAbsRange.aStart.Tab();
-        lcl_MoveItWrap(nTab, static_cast<SCsTAB>(0), static_cast<SCTAB>(nMaxTab));
+        lcl_MoveItWrap(nTab, static_cast<SCTAB>(0), nMaxTab);
         aAbsRange.aStart.SetTab(nTab);
     }
     if( rRef.Ref2.IsTabRel() )
     {
         SCTAB nTab = aAbsRange.aEnd.Tab();
-        lcl_MoveItWrap(nTab, static_cast<SCsTAB>(0), static_cast<SCTAB>(nMaxTab));
+        lcl_MoveItWrap(nTab, static_cast<SCTAB>(0), nMaxTab);
         aAbsRange.aEnd.SetTab(nTab);
     }
 
@@ -506,28 +506,28 @@ void ScRefUpdate::MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
     rRef.SetRange(aAbsRange, rPos);
 }
 
-void ScRefUpdate::DoTranspose( SCsCOL& rCol, SCsROW& rRow, SCsTAB& rTab,
+void ScRefUpdate::DoTranspose( SCCOL& rCol, SCROW& rRow, SCTAB& rTab,
                         ScDocument* pDoc, const ScRange& rSource, const ScAddress& rDest )
 {
-    SCsTAB nDz = ((SCsTAB)rDest.Tab())-(SCsTAB)rSource.aStart.Tab();
+    SCTAB nDz = rDest.Tab() - rSource.aStart.Tab();
     if (nDz)
     {
-        SCsTAB nNewTab = rTab+nDz;
-        SCsTAB nCount = pDoc->GetTableCount();
-        while (nNewTab<0) nNewTab = sal::static_int_cast<SCsTAB>( nNewTab + nCount );
-        while (nNewTab>=nCount) nNewTab = sal::static_int_cast<SCsTAB>( nNewTab - nCount );
+        SCTAB nNewTab = rTab+nDz;
+        SCTAB nCount = pDoc->GetTableCount();
+        while (nNewTab<0) nNewTab = sal::static_int_cast<SCTAB>( nNewTab + nCount );
+        while (nNewTab>=nCount) nNewTab = sal::static_int_cast<SCTAB>( nNewTab - nCount );
         rTab = nNewTab;
     }
     OSL_ENSURE( rCol>=rSource.aStart.Col() && rRow>=rSource.aStart.Row(),
                 "UpdateTranspose: pos. wrong" );
 
-    SCsCOL nRelX = rCol - (SCsCOL)rSource.aStart.Col();
-    SCsROW nRelY = rRow - (SCsROW)rSource.aStart.Row();
+    SCCOL nRelX = rCol - rSource.aStart.Col();
+    SCROW nRelY = rRow - rSource.aStart.Row();
 
-    rCol = static_cast<SCsCOL>(static_cast<SCsCOLROW>(rDest.Col()) +
-            static_cast<SCsCOLROW>(nRelY));
-    rRow = static_cast<SCsROW>(static_cast<SCsCOLROW>(rDest.Row()) +
-            static_cast<SCsCOLROW>(nRelX));
+    rCol = static_cast<SCCOL>(static_cast<SCCOLROW>(rDest.Col()) +
+            static_cast<SCCOLROW>(nRelY));
+    rRow = static_cast<SCROW>(static_cast<SCCOLROW>(rDest.Row()) +
+            static_cast<SCCOLROW>(nRelX));
 }
 
 ScRefUpdateRes ScRefUpdate::UpdateTranspose(
@@ -574,12 +574,12 @@ ScRefUpdateRes ScRefUpdate::UpdateGrow(
 
     if ( bUpdateX )
     {
-        rRef.aEnd.SetCol(sal::static_int_cast<SCsCOL>(rRef.aEnd.Col() + nGrowX));
+        rRef.aEnd.SetCol(sal::static_int_cast<SCCOL>(rRef.aEnd.Col() + nGrowX));
         eRet = UR_UPDATED;
     }
     if ( bUpdateY )
     {
-        rRef.aEnd.SetRow(sal::static_int_cast<SCsROW>(rRef.aEnd.Row() + nGrowY));
+        rRef.aEnd.SetRow(sal::static_int_cast<SCROW>(rRef.aEnd.Row() + nGrowY));
         eRet = UR_UPDATED;
     }
 

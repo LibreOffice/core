@@ -244,8 +244,8 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
     bool bTimer = false;
     Point aPixel = rMEvt.GetPosPixel();
 
-    SCsCOL nDx = 0;
-    SCsROW nDy = 0;
+    SCCOL nDx = 0;
+    SCROW nDy = 0;
     if ( aPixel.X() < 0 )
         nDx = -1;
     if ( aPixel.Y() < 0 )
@@ -267,8 +267,8 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
         bTimer = true;
     }
 
-    SCsCOL  nPosX;
-    SCsROW  nPosY;
+    SCCOL  nPosX;
+    SCROW  nPosY;
     pViewData->GetPosFromPixel( aPixel.X(), aPixel.Y(), eWhich, nPosX, nPosY );
     bool    bMouseLeft;
     bool    bMouseTop;
@@ -704,8 +704,8 @@ sal_uInt16 ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
 
         long nMouseX = rMouse.X();
         long nMouseY = rMouse.Y();
-        SCsCOL nPosX;
-        SCsROW nPosY;
+        SCCOL nPosX;
+        SCROW nPosY;
         pViewData->GetPosFromPixel( nMouseX, nMouseY, eWhich, nPosX, nPosY );
         Point aTL = pViewData->GetScrPos( nPosX, nPosY, eWhich );
         Point aBR = pViewData->GetScrPos( nPosX+1, nPosY+1, eWhich );
@@ -827,8 +827,8 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
 
     bool bTimer = false;
     Point aPos = rMEvt.GetPosPixel();
-    SCsCOL nDx = 0;
-    SCsROW nDy = 0;
+    SCCOL nDx = 0;
+    SCROW nDy = 0;
     if ( aPos.X() < 0 ) nDx = -1;
     if ( aPos.Y() < 0 ) nDy = -1;
     Size aSize = GetOutputSizePixel();
@@ -875,8 +875,8 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
     // from here new
 
     // Searching for a position between the cells (before nPosX / nPosY)
-    SCsCOL nPosX;
-    SCsROW nPosY;
+    SCCOL nPosX;
+    SCROW nPosY;
     pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
     bool bLeft, bTop;
     pViewData->GetMouseQuadrant( aPos, eWhich, nPosX, nPosY, bLeft, bTop );

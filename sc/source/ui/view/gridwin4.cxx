@@ -1266,8 +1266,8 @@ void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
         aRangeList.Combine().GetVars(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
 
     // convert the coordinates to column/row
-    SCsCOL nNewPosX;
-    SCsROW nNewPosY;
+    SCCOL nNewPosX;
+    SCROW nNewPosY;
     SCTAB nTab = pViewData->GetTabNo();
     pViewData->GetPosFromPixel(nPixelX, nPixelY, eWhich, nNewPosX, nNewPosY);
 

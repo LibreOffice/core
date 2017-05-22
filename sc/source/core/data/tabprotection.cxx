@@ -114,7 +114,7 @@ public:
 
     void setEnhancedProtection( const ::std::vector< ScEnhancedProtection > & rProt );
     const ::std::vector< ScEnhancedProtection > & getEnhancedProtection() const { return maEnhancedProtection;}
-    bool updateReference( UpdateRefMode, ScDocument*, const ScRange& rWhere, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    bool updateReference( UpdateRefMode, ScDocument*, const ScRange& rWhere, SCCOL nDx, SCROW nDy, SCTAB nDz );
     bool isBlockEditable( const ScRange& rRange ) const;
     bool isSelectionEditable( const ScRangeList& rRangeList ) const;
 
@@ -351,7 +351,7 @@ void ScTableProtectionImpl::setEnhancedProtection( const ::std::vector< ScEnhanc
 }
 
 bool ScTableProtectionImpl::updateReference( UpdateRefMode eMode, ScDocument* pDoc,
-        const ScRange& rWhere, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+        const ScRange& rWhere, SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
     bool bChanged = false;
     for (::std::vector<ScEnhancedProtection>::iterator it(maEnhancedProtection.begin());
@@ -615,7 +615,7 @@ const ::std::vector< ScEnhancedProtection > & ScTableProtection::getEnhancedProt
 }
 
 bool ScTableProtection::updateReference( UpdateRefMode eMode, ScDocument* pDoc, const ScRange& rWhere,
-        SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+        SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
     return mpImpl->updateReference( eMode, pDoc, rWhere, nDx, nDy, nDz);
 }

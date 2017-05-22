@@ -1482,8 +1482,8 @@ bool ScAttrArray::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
     {
         pPattern = pData[i].pPattern;
         pItem = static_cast<const ScMergeAttr*>( &pPattern->GetItem( ATTR_MERGE ) );
-        SCsCOL  nCountX = pItem->GetColMerge();
-        SCsROW  nCountY = pItem->GetRowMerge();
+        SCCOL  nCountX = pItem->GetColMerge();
+        SCROW  nCountY = pItem->GetRowMerge();
         if (nCountX>1 || nCountY>1)
         {
             SCROW nThisRow = (i>0) ? pData[i-1].nRow+1 : 0;
@@ -1538,8 +1538,8 @@ void ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
 
         pPattern = pData[nIndex].pPattern;
         pItem = static_cast<const ScMergeAttr*>( &pPattern->GetItem( ATTR_MERGE ) );
-        SCsCOL  nCountX = pItem->GetColMerge();
-        SCsROW  nCountY = pItem->GetRowMerge();
+        SCCOL  nCountX = pItem->GetColMerge();
+        SCROW  nCountY = pItem->GetRowMerge();
         if (nCountX>1 || nCountY>1)
         {
             const ScMergeAttr* pAttr = static_cast<const ScMergeAttr*>(
@@ -1797,7 +1797,7 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
     }
 }
 
-SCsROW ScAttrArray::GetNextUnprotected( SCsROW nRow, bool bUp ) const
+SCROW ScAttrArray::GetNextUnprotected( SCROW nRow, bool bUp ) const
 {
     long nRet = nRow;
     if (ValidRow(nRow))
@@ -2554,8 +2554,8 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttr
     }
 }
 
-SCsROW ScAttrArray::SearchStyle(
-    SCsROW nRow, const ScStyleSheet* pSearchStyle, bool bUp,
+SCROW ScAttrArray::SearchStyle(
+    SCROW nRow, const ScStyleSheet* pSearchStyle, bool bUp,
     const ScMarkArray* pMarkArray) const
 {
     bool bFound = false;
@@ -2627,10 +2627,10 @@ SCsROW ScAttrArray::SearchStyle(
 }
 
 bool ScAttrArray::SearchStyleRange(
-    SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
+    SCROW& rRow, SCROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
     const ScMarkArray* pMarkArray) const
 {
-    SCsROW nStartRow = SearchStyle( rRow, pSearchStyle, bUp, pMarkArray );
+    SCROW nStartRow = SearchStyle( rRow, pSearchStyle, bUp, pMarkArray );
     if (ValidRow(nStartRow))
     {
         if ( !pData )

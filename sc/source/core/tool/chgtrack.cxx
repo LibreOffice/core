@@ -589,7 +589,7 @@ void ScChangeAction::SetRejected()
 }
 
 void ScChangeAction::RejectRestoreContents( ScChangeTrack* pTrack,
-        SCsCOL nDx, SCsROW nDy )
+        SCCOL nDx, SCROW nDy )
 {
     // Construct list of Contents
     ScChangeActionCellListEntry* pListContents = nullptr;
@@ -768,7 +768,7 @@ bool ScChangeActionIns::Reject( ScDocument* pDoc )
 
 //  ScChangeActionDel
 ScChangeActionDel::ScChangeActionDel( const ScRange& rRange,
-            SCsCOL nDxP, SCsROW nDyP, ScChangeTrack* pTrackP )
+            SCCOL nDxP, SCROW nDyP, ScChangeTrack* pTrackP )
         :
         ScChangeAction( SC_CAT_NONE, rRange ),
         pTrack( pTrackP ),
@@ -808,7 +808,7 @@ ScChangeActionDel::ScChangeActionDel(
     const sal_uLong nActionNumber, const ScChangeActionState eStateP,
     const sal_uLong nRejectingNumber, const ScBigRange& aBigRangeP,
     const OUString& aUserP, const DateTime& aDateTimeP, const OUString &sComment,
-    const ScChangeActionType eTypeP, const SCsCOLROW nD, ScChangeTrack* pTrackP) : // which of nDx and nDy is set depends on the type
+    const ScChangeActionType eTypeP, const SCCOLROW nD, ScChangeTrack* pTrackP) : // which of nDx and nDy is set depends on the type
     ScChangeAction(eTypeP, aBigRangeP, nActionNumber, nRejectingNumber, eStateP, aDateTimeP, aUserP, sComment),
     pTrack( pTrackP ),
     pFirstCell( nullptr ),
@@ -819,9 +819,9 @@ ScChangeActionDel::ScChangeActionDel(
     nDy( 0 )
 {
     if (eType == SC_CAT_DELETE_COLS)
-        nDx = static_cast<SCsCOL>(nD);
+        nDx = static_cast<SCCOL>(nD);
     else if (eType == SC_CAT_DELETE_ROWS)
-        nDy = static_cast<SCsROW>(nD);
+        nDy = static_cast<SCROW>(nD);
 }
 
 ScChangeActionDel::~ScChangeActionDel()
@@ -1802,20 +1802,20 @@ void ScChangeActionContent::GetFormulaString(
 }
 
 void ScChangeActionContent::PutOldValueToDoc( ScDocument* pDoc,
-        SCsCOL nDx, SCsROW nDy ) const
+        SCCOL nDx, SCROW nDy ) const
 {
     PutValueToDoc(maOldCell, maOldValue, pDoc, nDx, nDy);
 }
 
 void ScChangeActionContent::PutNewValueToDoc( ScDocument* pDoc,
-        SCsCOL nDx, SCsROW nDy ) const
+        SCCOL nDx, SCROW nDy ) const
 {
     PutValueToDoc(maNewCell, maNewValue, pDoc, nDx, nDy);
 }
 
 void ScChangeActionContent::PutValueToDoc(
     const ScCellValue& rCell, const OUString& rValue, ScDocument* pDoc,
-    SCsCOL nDx, SCsROW nDy ) const
+    SCCOL nDx, SCROW nDy ) const
 {
     ScAddress aPos( aBigRange.aStart.MakeAddress() );
     if ( nDx )
@@ -2468,7 +2468,7 @@ void ScChangeTrack::Append( ScChangeAction* pAppend )
 }
 
 void ScChangeTrack::AppendDeleteRange( const ScRange& rRange,
-        ScDocument* pRefDoc, sal_uLong& nStartAction, sal_uLong& nEndAction, SCsTAB nDz )
+        ScDocument* pRefDoc, sal_uLong& nStartAction, sal_uLong& nEndAction, SCTAB nDz )
 {
     nStartAction = GetActionMax() + 1;
     AppendDeleteRange( rRange, pRefDoc, nDz, 0 );
@@ -2476,7 +2476,7 @@ void ScChangeTrack::AppendDeleteRange( const ScRange& rRange,
 }
 
 void ScChangeTrack::AppendDeleteRange( const ScRange& rRange,
-        ScDocument* pRefDoc, SCsTAB nDz, sal_uLong nRejectingInsert )
+        ScDocument* pRefDoc, SCTAB nDz, sal_uLong nRejectingInsert )
 {
     SetInDeleteRange( rRange );
     StartBlockModify( SC_CTM_APPEND, GetActionMax() + 1 );
@@ -2548,7 +2548,7 @@ void ScChangeTrack::AppendDeleteRange( const ScRange& rRange,
 }
 
 void ScChangeTrack::AppendOneDeleteRange( const ScRange& rOrgRange,
-        ScDocument* pRefDoc, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
+        ScDocument* pRefDoc, SCCOL nDx, SCROW nDy, SCTAB nDz,
         sal_uLong nRejectingInsert )
 {
     ScRange aTrackRange( rOrgRange );
@@ -2582,7 +2582,7 @@ void ScChangeTrack::AppendOneDeleteRange( const ScRange& rOrgRange,
 }
 
 void ScChangeTrack::LookUpContents( const ScRange& rOrgRange,
-        ScDocument* pRefDoc, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+        ScDocument* pRefDoc, SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
     if (!pRefDoc)
         return;
@@ -4496,15 +4496,15 @@ ScChangeTrack* ScChangeTrack::Clone( ScDocument* pDocument ) const
                 {
                     const ScChangeActionDel& rDelete = dynamic_cast<const ScChangeActionDel&>(*pAction);
 
-                    SCsCOLROW nD = 0;
+                    SCCOLROW nD = 0;
                     ScChangeActionType eType = pAction->GetType();
                     if ( eType == SC_CAT_DELETE_COLS )
                     {
-                        nD = static_cast< SCsCOLROW >( rDelete.GetDx() );
+                        nD = static_cast< SCCOLROW >( rDelete.GetDx() );
                     }
                     else if ( eType == SC_CAT_DELETE_ROWS )
                     {
-                        nD = static_cast< SCsCOLROW >( rDelete.GetDy() );
+                        nD = static_cast< SCCOLROW >( rDelete.GetDy() );
                     }
 
                     pClonedAction = new ScChangeActionDel(

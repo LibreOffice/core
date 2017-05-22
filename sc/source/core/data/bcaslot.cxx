@@ -412,7 +412,7 @@ void ScBroadcastAreaSlot::DelBroadcastAreasInRange( const ScRange& rRange )
 }
 
 void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
-        const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+        const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
     if (aBroadcastAreaTbl.empty())
         return;
@@ -917,7 +917,7 @@ void ScBroadcastAreaSlotMachine::DelBroadcastAreasInRange(
 // for all affected: remove, chain, update range, insert, and maybe delete
 void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
         UpdateRefMode eUpdateRefMode,
-        const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+        const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
     // remove affected and put in chain
     SCTAB nEndTab = rRange.aEnd.Tab();

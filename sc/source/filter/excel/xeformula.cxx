@@ -458,10 +458,10 @@ private:
     XclExpCompDataRef   mxData;         /// Working data for current formula.
     XclExpCompDataVector maDataStack;   /// Stack for working data, when compiler is called recursively.
     const XclBiff       meBiff;         /// Cached BIFF version to save GetBiff() calls.
-    const SCsCOL        mnMaxAbsCol;    /// Maximum column index.
-    const SCsROW        mnMaxAbsRow;    /// Maximum row index.
-    const SCsCOL        mnMaxScCol;     /// Maximum column index in Calc itself.
-    const SCsROW        mnMaxScRow;     /// Maximum row index in Calc itself.
+    const SCCOL         mnMaxAbsCol;    /// Maximum column index.
+    const SCROW         mnMaxAbsRow;    /// Maximum row index.
+    const SCCOL         mnMaxScCol;     /// Maximum column index in Calc itself.
+    const SCROW         mnMaxScRow;     /// Maximum row index in Calc itself.
     const sal_uInt16    mnMaxColMask;   /// Mask to delete invalid bits in column fields.
     const sal_uInt32    mnMaxRowMask;   /// Mask to delete invalid bits in row fields.
 };
@@ -470,10 +470,10 @@ XclExpFmlaCompImpl::XclExpFmlaCompImpl( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     maFuncProv( rRoot ),
     meBiff( rRoot.GetBiff() ),
-    mnMaxAbsCol( static_cast< SCsCOL >( rRoot.GetXclMaxPos().Col() ) ),
-    mnMaxAbsRow( static_cast< SCsROW >( rRoot.GetXclMaxPos().Row() ) ),
-    mnMaxScCol( static_cast< SCsCOL >( rRoot.GetScMaxPos().Col() ) ),
-    mnMaxScRow( static_cast< SCsROW >( rRoot.GetScMaxPos().Row() ) ),
+    mnMaxAbsCol( rRoot.GetXclMaxPos().Col() ),
+    mnMaxAbsRow( rRoot.GetXclMaxPos().Row() ),
+    mnMaxScCol( rRoot.GetScMaxPos().Col() ),
+    mnMaxScRow( rRoot.GetScMaxPos().Row() ),
     mnMaxColMask( static_cast< sal_uInt16 >( rRoot.GetXclMaxPos().Col() ) ),
     mnMaxRowMask( static_cast< sal_uInt32 >( rRoot.GetXclMaxPos().Row() ) )
 {

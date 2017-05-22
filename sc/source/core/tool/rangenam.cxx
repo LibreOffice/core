@@ -217,9 +217,9 @@ void ScRangeData::GuessPosition()
 
     OSL_ENSURE(aPos == ScAddress(), "position will go lost now");
 
-    SCsCOL nMinCol = 0;
-    SCsROW nMinRow = 0;
-    SCsTAB nMinTab = 0;
+    SCCOL nMinCol = 0;
+    SCROW nMinRow = 0;
+    SCTAB nMinTab = 0;
 
     formula::FormulaToken* t;
     pCode->Reset();
