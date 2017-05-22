@@ -1687,8 +1687,8 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         // No selection -> but we have a start point (top left corner of the
         // current view), start searching from there, not from the current
         // cursor position.
-        SCsCOL nPosX;
-        SCsROW nPosY;
+        SCCOL nPosX;
+        SCROW nPosY;
 
         int nPixelX = pSearchItem->GetStartPointX() * GetViewData().GetPPTX();
         int nPixelY = pSearchItem->GetStartPointY() * GetViewData().GetPPTY();

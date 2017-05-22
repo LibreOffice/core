@@ -1136,7 +1136,7 @@ formula::FormulaToken* getSingleRefToken(ScDocument& rDoc, const ScAddress& rPos
     return pToken;
 }
 
-bool checkRelativeRefToken(ScDocument& rDoc, const ScAddress& rPos, SCsCOL nRelCol, SCsROW nRelRow)
+bool checkRelativeRefToken(ScDocument& rDoc, const ScAddress& rPos, SCCOL nRelCol, SCROW nRelRow)
 {
     formula::FormulaToken* pToken = getSingleRefToken(rDoc, rPos);
     if (!pToken)

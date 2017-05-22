@@ -1069,7 +1069,7 @@ void ScExternalRefCache::getAllTableNames(sal_uInt16 nFileId, vector<OUString>& 
         rTabNames.push_back(itr->maRealName);
 }
 
-SCsTAB ScExternalRefCache::getTabSpan( sal_uInt16 nFileId, const OUString& rStartTabName, const OUString& rEndTabName ) const
+SCTAB ScExternalRefCache::getTabSpan( sal_uInt16 nFileId, const OUString& rStartTabName, const OUString& rEndTabName ) const
 {
     DocItem* pDoc = getDocItem(nFileId);
     if (!pDoc)
@@ -1090,7 +1090,7 @@ SCsTAB ScExternalRefCache::getTabSpan( sal_uInt16 nFileId, const OUString& rStar
 
     size_t nStartDist = ::std::distance( itrBeg, itrStartTab);
     size_t nEndDist = ::std::distance( itrBeg, itrEndTab);
-    return nStartDist <= nEndDist ? static_cast<SCsTAB>(nEndDist - nStartDist + 1) : -static_cast<SCsTAB>(nStartDist - nEndDist + 1);
+    return nStartDist <= nEndDist ? static_cast<SCTAB>(nEndDist - nStartDist + 1) : -static_cast<SCTAB>(nStartDist - nEndDist + 1);
 }
 
 void ScExternalRefCache::getAllNumberFormats(vector<sal_uInt32>& rNumFmts) const
@@ -1721,7 +1721,7 @@ void ScExternalRefManager::getAllCachedTableNames(sal_uInt16 nFileId, vector<OUS
     maRefCache.getAllTableNames(nFileId, rTabNames);
 }
 
-SCsTAB ScExternalRefManager::getCachedTabSpan( sal_uInt16 nFileId, const OUString& rStartTabName, const OUString& rEndTabName ) const
+SCTAB ScExternalRefManager::getCachedTabSpan( sal_uInt16 nFileId, const OUString& rStartTabName, const OUString& rEndTabName ) const
 {
     return maRefCache.getTabSpan( nFileId, rStartTabName, rEndTabName);
 }

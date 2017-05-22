@@ -81,8 +81,8 @@ void FuPoor::ForceScroll(const Point& aPixPos)
     aScrollTimer.Stop();
 
     Size aSize = pWindow->GetSizePixel();
-    SCsCOL dx = 0;
-    SCsROW dy = 0;
+    SCCOL dx = 0;
+    SCROW dy = 0;
 
     if ( aPixPos.X() <= 0              ) dx = -1;
     if ( aPixPos.X() >= aSize.Width()  ) dx =  1;

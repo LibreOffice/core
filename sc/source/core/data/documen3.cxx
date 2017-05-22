@@ -1295,7 +1295,7 @@ bool ScDocument::SearchAndReplace(
             nRow = rRow;
             if (rSearchItem.GetBackward())
             {
-                for (nTab = rTab; ((SCsTAB)nTab >= 0) && !bFound; nTab--)
+                for (nTab = rTab; (nTab >= 0) && !bFound; nTab--)
                     if (maTabs[nTab])
                     {
                         if (rMark.GetTableSelect(nTab))

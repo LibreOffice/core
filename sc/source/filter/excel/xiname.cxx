@@ -153,7 +153,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     }
     else if( bBuiltIn )
     {
-        SCsTAB const nLocalTab = (mnXclTab == EXC_NAME_GLOBAL) ? SCTAB_MAX : (mnXclTab - 1);
+        SCTAB const nLocalTab = (mnXclTab == EXC_NAME_GLOBAL) ? SCTAB_MAX : (mnXclTab - 1);
 
         // --- print ranges or title ranges ---
         rStrm.PushPosition();

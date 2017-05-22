@@ -5143,8 +5143,8 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             rParam.nCol1  = nCol1;
             rParam.nCol2  = nCol2;
             rEntry.nField = nCol1;
-            SCsCOL nColDiff = nCol3 - nCol1;
-            SCsROW nRowDiff = nRow3 - nRow1;
+            SCCOL nColDiff = nCol3 - nCol1;
+            SCROW nRowDiff = nRow3 - nRow1;
             if (pQueryMatrix)
             {
                 // Never case-sensitive.
@@ -5672,8 +5672,8 @@ void ScInterpreter::IterateParametersIfs( sc::ParamIfsResult& rRes )
         rParam.nCol1  = nCol1;
         rParam.nCol2  = nCol2;
         rEntry.nField = nCol1;
-        SCsCOL nColDiff = -nCol1;
-        SCsROW nRowDiff = -nRow1;
+        SCCOL nColDiff = -nCol1;
+        SCROW nRowDiff = -nRow1;
         if (pQueryMatrix)
         {
             // Never case-sensitive.

@@ -299,9 +299,9 @@ void Test::testMultiMark( const MultiMarkTestData& rMarksData )
 
         for ( const auto& rRange : rAreaTestData.aNextMarked )
         {
-            SCsROW nNextRow1 = aMark.GetNextMarked( rRange.aStart.Col(), rRange.aStart.Row(), !static_cast<bool>(rRange.aEnd.Col()) );
+            SCROW nNextRow1 = aMark.GetNextMarked( rRange.aStart.Col(), rRange.aStart.Row(), !static_cast<bool>(rRange.aEnd.Col()) );
             CPPUNIT_ASSERT_EQUAL( rRange.aEnd.Row(), nNextRow1 );
-            SCsROW nNextRow2 = aMultiSel.GetNextMarked( rRange.aStart.Col(), rRange.aStart.Row(), !static_cast<bool>(rRange.aEnd.Col()) );
+            SCROW nNextRow2 = aMultiSel.GetNextMarked( rRange.aStart.Col(), rRange.aStart.Row(), !static_cast<bool>(rRange.aEnd.Col()) );
             CPPUNIT_ASSERT_EQUAL( rRange.aEnd.Row(), nNextRow2 );
         }
 

@@ -70,7 +70,7 @@ public:
     virtual void    DeselectAtPoint( const Point& rPointPixel ) override;
     virtual void    DeselectAll() override;
 
-    bool            SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScroll );
+    bool            SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll );
 };
 
 class ScHeaderFunctionSet : public FunctionSet          // Column / row headers

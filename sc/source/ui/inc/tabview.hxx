@@ -228,11 +228,11 @@ private:
     static void     SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, bool bLayoutRTL );
     static long     GetScrollBarPos( ScrollBar& rScroll );
 
-    void            GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
-                                           SCsCOL& rAreaX, SCsROW& rAreaY, ScFollowMode& rMode);
+    void            GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
+                                           SCCOL& rAreaX, SCROW& rAreaY, ScFollowMode& rMode);
 
-    void            SkipCursorHorizontal(SCsCOL& rCurX, SCsROW& rCurY, SCsCOL nOldX, SCsROW nMovX);
-    void            SkipCursorVertical(SCsCOL& rCurX, SCsROW& rCurY, SCsROW nOldY, SCsROW nMovY);
+    void            SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SCROW nMovX);
+    void            SkipCursorVertical(SCCOL& rCurX, SCROW& rCurY, SCROW nOldY, SCROW nMovY);
 
     /**
      *
@@ -397,7 +397,7 @@ public:
     void            HideAllCursors();
     void            ShowAllCursors();
 
-    void            AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
+    void            AlignToCursor( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
                                     const ScSplitPos* pWhich = nullptr );
 
     SvxZoomType     GetZoomType() const;
@@ -413,18 +413,18 @@ public:
                     //  MoveCursorArea      - Data block
                     //  MoveCursorEnd       - top left / user range
 
-    SC_DLLPUBLIC void MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
+    SC_DLLPUBLIC void MoveCursorAbs( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
                                      bool bShift, bool bControl,
                                      bool bKeepOld = false, bool bKeepSel = false );
-    void            MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
+    void            MoveCursorRel( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
                                    bool bShift, bool bKeepSel = false );
-    void            MoveCursorPage( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
+    void            MoveCursorPage( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
                                     bool bShift, bool bKeepSel = false );
-    void            MoveCursorArea( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
+    void            MoveCursorArea( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
                                     bool bShift, bool bKeepSel = false );
-    void            MoveCursorEnd( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
+    void            MoveCursorEnd( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
                                    bool bShift, bool bKeepSel = false );
-    void            MoveCursorScreen( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, bool bShift );
+    void            MoveCursorScreen( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode, bool bShift );
 
     void            MoveCursorEnter( bool bShift );     // Shift for direction (select nothing)
 
@@ -432,7 +432,7 @@ public:
 
     void            FindNextUnprot( bool bShift, bool bInSelection );
 
-    void            GetPageMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, SCsCOL& rPageX, SCsROW& rPageY);
+    void            GetPageMoveEndPosition(SCCOL nMovX, SCROW nMovY, SCCOL& rPageX, SCROW& rPageY);
 
     SC_DLLPUBLIC void SetTabNo( SCTAB nTab, bool bNew = false, bool bExtendSelection = false, bool bSameTabButMoved = false );
     void            SelectNextTab( short nDir, bool bExtendSelection );
@@ -521,9 +521,9 @@ public:
 
     bool            IsBlockMode() const;
 
-    void            ExpandBlock(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode);
-    void            ExpandBlockPage(SCsCOL nMovX, SCsROW nMovY);
-    void            ExpandBlockArea(SCsCOL nMovX, SCsROW nMovY);
+    void            ExpandBlock(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode);
+    void            ExpandBlockPage(SCCOL nMovX, SCROW nMovY);
+    void            ExpandBlockArea(SCCOL nMovX, SCROW nMovY);
 
     void            MarkColumns();
     void            MarkRows();

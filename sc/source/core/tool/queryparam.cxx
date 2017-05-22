@@ -392,9 +392,9 @@ void ScQueryParam::MoveToDest()
 {
     if (!bInplace)
     {
-        SCsCOL nDifX = ((SCsCOL) nDestCol) - ((SCsCOL) nCol1);
-        SCsROW nDifY = ((SCsROW) nDestRow) - ((SCsROW) nRow1);
-        SCsTAB nDifZ = ((SCsTAB) nDestTab) - ((SCsTAB) nTab);
+        SCCOL nDifX = nDestCol - nCol1;
+        SCROW nDifY = nDestRow - nRow1;
+        SCTAB nDifZ = nDestTab - nTab;
 
         nCol1 = sal::static_int_cast<SCCOL>( nCol1 + nDifX );
         nRow1 = sal::static_int_cast<SCROW>( nRow1 + nDifY );

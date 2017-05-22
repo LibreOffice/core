@@ -1095,8 +1095,8 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
     uno::Reference< uno::XInterface > xTarget;
     if (GetViewShell())
     {
-        SCsCOL nX;
-        SCsROW nY;
+        SCCOL nX;
+        SCROW nY;
         ScViewData& rData = GetViewShell()->GetViewData();
         ScSplitPos eSplitMode = rData.GetActivePart();
         SCTAB nTab(rData.GetTabNo());
@@ -1590,8 +1590,8 @@ sal_Int32 SAL_CALL ScTabViewObj::getSplitColumn()
             if ( rViewData.GetVSplitMode() != SC_SPLIT_NONE )
                 ePos = SC_SPLIT_TOPLEFT;
 
-            SCsCOL nCol;
-            SCsROW nRow;
+            SCCOL nCol;
+            SCROW nRow;
             rViewData.GetPosFromPixel( nSplit, 0, ePos, nCol, nRow, false );
             if ( nCol > 0 )
                 return nCol;
@@ -1612,8 +1612,8 @@ sal_Int32 SAL_CALL ScTabViewObj::getSplitRow()
             long nSplit = rViewData.GetVSplitPos();
 
             ScSplitPos ePos = SC_SPLIT_TOPLEFT;     // split vertically
-            SCsCOL nCol;
-            SCsROW nRow;
+            SCCOL nCol;
+            SCROW nRow;
             rViewData.GetPosFromPixel( 0, nSplit, ePos, nCol, nRow, false );
             if ( nRow > 0 )
                 return nRow;

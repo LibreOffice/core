@@ -1305,7 +1305,7 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
             // of the bottommost group.
             EndListeningIntersectedGroups(aEndListenCxt, aShiftedRange, &aGroupPos);
 
-            UpdateBroadcastAreas(URM_INSDEL, aShiftedRange, 0, static_cast<SCsROW>(nSize), 0);
+            UpdateBroadcastAreas(URM_INSDEL, aShiftedRange, 0, static_cast<SCROW>(nSize), 0);
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
@@ -1338,7 +1338,7 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
             if (maTabs[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
                 maTabs[i]->UpdateDrawRef( URM_INSDEL,
                             nStartCol, nStartRow, nStartTab, nEndCol, MAXROW, nEndTab,
-                            0, static_cast<SCsROW>(nSize), 0 );
+                            0, static_cast<SCROW>(nSize), 0 );
 
         if ( pChangeTrack && pChangeTrack->IsInDeleteUndo() )
         {   // A new Listening is needed when references to deleted ranges are restored,
@@ -1405,7 +1405,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
                 ScAddress( nEndCol, nStartRow+nSize-1, nTabRangeEnd ) ) );
             UpdateBroadcastAreas( URM_INSDEL, ScRange(
                 ScAddress( nStartCol, nStartRow+nSize, nTabRangeStart ),
-                ScAddress( nEndCol, MAXROW, nTabRangeEnd )), 0, -(static_cast<SCsROW>(nSize)), 0 );
+                ScAddress( nEndCol, MAXROW, nTabRangeEnd )), 0, -(static_cast<SCROW>(nSize)), 0 );
         }
         else
             DelBroadcastAreasInRange( ScRange(
@@ -1524,7 +1524,7 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
         {
             UpdateBroadcastAreas( URM_INSDEL, ScRange(
                 ScAddress( nStartCol, nStartRow, nTabRangeStart ),
-                ScAddress( MAXCOL, nEndRow, nTabRangeEnd )), static_cast<SCsCOL>(nSize), 0, 0 );
+                ScAddress( MAXCOL, nEndRow, nTabRangeEnd )), static_cast<SCCOL>(nSize), 0, 0 );
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
@@ -1605,7 +1605,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
                 ScAddress( sal::static_int_cast<SCCOL>(nStartCol+nSize-1), nEndRow, nTabRangeEnd ) ) );
             UpdateBroadcastAreas( URM_INSDEL, ScRange(
                 ScAddress( sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nTabRangeStart ),
-                ScAddress( MAXCOL, nEndRow, nTabRangeEnd )), -static_cast<SCsCOL>(nSize), 0, 0 );
+                ScAddress( MAXCOL, nEndRow, nTabRangeEnd )), -static_cast<SCCOL>(nSize), 0, 0 );
         }
         else
             DelBroadcastAreasInRange( ScRange(
@@ -2571,7 +2571,7 @@ bool ScDocument::InitColumnBlockPosition( sc::ColumnBlockPosition& rBlockPos, SC
 
 void ScDocument::CopyBlockFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    const ScMarkData& rMark, SCsCOL nDx, SCsROW nDy )
+    const ScMarkData& rMark, SCCOL nDx, SCROW nDy )
 {
     TableContainer& rClipTabs = rCxt.getClipDoc()->maTabs;
     SCTAB nTabEnd = rCxt.getTabEnd();
@@ -2617,7 +2617,7 @@ void ScDocument::CopyBlockFromClip(
             if (maTabs[i] && rMark.GetTableSelect(i) )
             {
                 while (!rClipTabs[nClipTab]) nClipTab = (nClipTab+1) % (static_cast<SCTAB>(rClipTabs.size()));
-                SCsTAB nDz = ((SCsTAB)i) - nClipTab;
+                SCTAB nDz = i - nClipTab;
 
                 //  ranges of consecutive selected tables (in clipboard and dest. doc)
                 //  must be handled in one UpdateReference call
@@ -2673,7 +2673,7 @@ void ScDocument::CopyBlockFromClip(
 
 void ScDocument::CopyNonFilteredFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    const ScMarkData& rMark, SCsCOL nDx, SCROW & rClipStartRow )
+    const ScMarkData& rMark, SCCOL nDx, SCROW & rClipStartRow )
 {
     //  call CopyBlockFromClip for ranges of consecutive non-filtered rows
     //  nCol1/nRow1 etc. is in target doc
@@ -2707,7 +2707,7 @@ void ScDocument::CopyNonFilteredFromClip(
             if (nFollow > nRow2 - nDestRow)
                 nFollow = nRow2 - nDestRow;
 
-            SCsROW nNewDy = ((SCsROW)nDestRow) - nSourceRow;
+            SCROW nNewDy = nDestRow - nSourceRow;
             CopyBlockFromClip(
                 rCxt, nCol1, nDestRow, nCol2, nDestRow + nFollow, rMark, nDx, nNewDy);
 
@@ -2886,8 +2886,8 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             do
             {
                 nClipStartRow = nSaveClipStartRow;
-                SCsCOL nDx = ((SCsCOL)nC1) - nClipStartCol;
-                SCsROW nDy = ((SCsROW)nR1) - nClipStartRow;
+                SCCOL nDx = nC1 - nClipStartCol;
+                SCROW nDy = nR1 - nClipStartRow;
                 if ( bIncludeFiltered )
                 {
                     CopyBlockFromClip(
@@ -3010,8 +3010,8 @@ void ScDocument::CopyMultiRangeFromClip(
         ScRange* p = rClipParam.maRanges[i];
 
         SCROW nRowCount = p->aEnd.Row() - p->aStart.Row() + 1;
-        SCsCOL nDx = static_cast<SCsCOL>(nCol1 - p->aStart.Col());
-        SCsROW nDy = static_cast<SCsROW>(nRow1 - p->aStart.Row());
+        SCCOL nDx = static_cast<SCCOL>(nCol1 - p->aStart.Col());
+        SCROW nDy = static_cast<SCROW>(nRow1 - p->aStart.Row());
         SCCOL nCol2 = nCol1 + p->aEnd.Col() - p->aStart.Col();
         SCROW nEndRow = nRow1 + nRowCount - 1;
 
@@ -5970,7 +5970,7 @@ void ScDocument::FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, ScMoveDirect
         maTabs[nTab]->FindAreaPos( rCol, rRow, eDirection );
 }
 
-void ScDocument::GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX, SCsROW nMovY,
+void ScDocument::GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCCOL nMovX, SCROW nMovY,
                                 bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const
 {
     OSL_ENSURE( !nMovX || !nMovY, "GetNextPos: only X or Y" );

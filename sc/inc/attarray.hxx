@@ -145,15 +145,15 @@ public:
     void    ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement );
 
             /// Including current, may return -1
-    SCsROW  GetNextUnprotected( SCsROW nRow, bool bUp ) const;
+    SCROW  GetNextUnprotected( SCROW nRow, bool bUp ) const;
 
             /// May return -1 if not found
-    SCsROW SearchStyle(
-        SCsROW nRow, const ScStyleSheet* pSearchStyle, bool bUp,
+    SCROW SearchStyle(
+        SCROW nRow, const ScStyleSheet* pSearchStyle, bool bUp,
         const ScMarkArray* pMarkArray = nullptr) const;
 
     bool SearchStyleRange(
-        SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
+        SCROW& rRow, SCROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
         const ScMarkArray* pMarkArray = nullptr) const;
 
     bool    ApplyFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags );
