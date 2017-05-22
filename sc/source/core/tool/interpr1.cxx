@@ -3457,7 +3457,7 @@ void ScInterpreter::ScUnichar()
 }
 
 bool ScInterpreter::SwitchToArrayRefList( ScMatrixRef& xResMat, SCSIZE nMatRows, double fCurrent,
-        const std::function<bool( double& fVectorResult, const double& fCurrent )>& AssignFunc )
+        const std::function<void( SCSIZE i, double fCurrent )>& MatOpFunc )
 {
     const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(pStack[sp-1]);
     if (!p || !p->IsArrayResult())
@@ -3476,9 +3476,7 @@ bool ScInterpreter::SwitchToArrayRefList( ScMatrixRef& xResMat, SCSIZE nMatRows,
         // for each vector position.
         for (SCSIZE i=0; i < nMatRows; ++i)
         {
-            double fVecRes = xResMat->GetDouble(0,i);
-            if (AssignFunc( fVecRes, fCurrent))
-                xResMat->PutDouble( fVecRes, 0,i);
+            MatOpFunc( i, fCurrent);
         }
     }
     return true;
@@ -3489,10 +3487,18 @@ void ScInterpreter::ScMin( bool bTextAsZero )
     short nParamCount = GetByte();
     if (!MustHaveParamCountMin( nParamCount, 1))
         return;
-    const SCSIZE nMatRows = GetRefListArrayMaxSize( nParamCount);
+
     ScMatrixRef xResMat;
-    size_t nRefArrayPos = std::numeric_limits<size_t>::max();
     double nMin = ::std::numeric_limits<double>::max();
+    auto MatOpFunc = [&xResMat]( SCSIZE i, double fCurMin )
+    {
+        double fVecRes = xResMat->GetDouble(0,i);
+        if (fVecRes > fCurMin)
+            xResMat->PutDouble( fCurMin, 0,i);
+    };
+    const SCSIZE nMatRows = GetRefListArrayMaxSize( nParamCount);
+    size_t nRefArrayPos = std::numeric_limits<size_t>::max();
+
     double nVal = 0.0;
     ScAddress aAdr;
     ScRange aRange;
@@ -3527,16 +3533,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
             break;
             case svRefList :
             {
-                auto AssignFunc = []( double& fVecRes, double fMin )
-                {
-                    if (fVecRes > fMin)
-                    {
-                        fVecRes = fMin;
-                        return true;
-                    }
-                    return false;
-                };
-                if (SwitchToArrayRefList( xResMat, nMatRows, nMin, AssignFunc))
+                if (SwitchToArrayRefList( xResMat, nMatRows, nMin, MatOpFunc))
                     nRefArrayPos = nRefInList;
             }
             SAL_FALLTHROUGH;
@@ -3560,9 +3557,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
                 if (nRefArrayPos != std::numeric_limits<size_t>::max())
                 {
                     // Update vector element with current value.
-                    double fVecRes = xResMat->GetDouble(0,nRefArrayPos);
-                    if (fVecRes > nMin)
-                        xResMat->PutDouble( nMin, 0,nRefArrayPos);
+                    MatOpFunc( nRefArrayPos, nMin);
 
                     // Reset.
                     nMin = std::numeric_limits<double>::max();
@@ -3610,9 +3605,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
         {
             for (SCSIZE i=0; i < nMatRows; ++i)
             {
-                double fVecRes = xResMat->GetDouble(0,i);
-                if (fVecRes > nMin)
-                    xResMat->PutDouble( nMin, 0,i);
+                MatOpFunc( i, nMin);
             }
         }
         else
@@ -3644,10 +3637,18 @@ void ScInterpreter::ScMax( bool bTextAsZero )
     short nParamCount = GetByte();
     if (!MustHaveParamCountMin( nParamCount, 1))
         return;
-    const SCSIZE nMatRows = GetRefListArrayMaxSize( nParamCount);
+
     ScMatrixRef xResMat;
-    size_t nRefArrayPos = std::numeric_limits<size_t>::max();
     double nMax = std::numeric_limits<double>::lowest();
+    auto MatOpFunc = [&xResMat]( SCSIZE i, double fCurMax )
+    {
+        double fVecRes = xResMat->GetDouble(0,i);
+        if (fVecRes < fCurMax)
+            xResMat->PutDouble( fCurMax, 0,i);
+    };
+    const SCSIZE nMatRows = GetRefListArrayMaxSize( nParamCount);
+    size_t nRefArrayPos = std::numeric_limits<size_t>::max();
+
     double nVal = 0.0;
     ScAddress aAdr;
     ScRange aRange;
@@ -3682,16 +3683,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
             break;
             case svRefList :
             {
-                auto AssignFunc = []( double& fVecRes, double fMax )
-                {
-                    if (fVecRes < fMax)
-                    {
-                        fVecRes = fMax;
-                        return true;
-                    }
-                    return false;
-                };
-                if (SwitchToArrayRefList( xResMat, nMatRows, nMax, AssignFunc))
+                if (SwitchToArrayRefList( xResMat, nMatRows, nMax, MatOpFunc))
                     nRefArrayPos = nRefInList;
             }
             SAL_FALLTHROUGH;
@@ -3715,9 +3707,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
                 if (nRefArrayPos != std::numeric_limits<size_t>::max())
                 {
                     // Update vector element with current value.
-                    double fVecRes = xResMat->GetDouble(0,nRefArrayPos);
-                    if (fVecRes < nMax)
-                        xResMat->PutDouble( nMax, 0,nRefArrayPos);
+                    MatOpFunc( nRefArrayPos, nMax);
 
                     // Reset.
                     nMax = std::numeric_limits<double>::lowest();
@@ -3765,9 +3755,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
         {
             for (SCSIZE i=0; i < nMatRows; ++i)
             {
-                double fVecRes = xResMat->GetDouble(0,i);
-                if (fVecRes < nMax)
-                    xResMat->PutDouble( nMax, 0,i);
+                MatOpFunc( i, nMax);
             }
         }
         else
