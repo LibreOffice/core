@@ -997,14 +997,13 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
         // Include value of last non-references-array type and calculate final result.
         for (SCSIZE i=0; i < nMatRows; ++i)
         {
-            if (xResCount)
-                nCount += xResCount->GetDouble(0,i);
+            sal_uLong nVecCount = (xResCount ? nCount + xResCount->GetDouble(0,i) : nCount);
             double fVecRes = xResMat->GetDouble(0,i);
             if (eFunc == ifPRODUCT)
                 fVecRes *= fRes;
             else
                 fVecRes += fRes;
-            fVecRes = lcl_IterResult( eFunc, fVecRes, fMem, nCount);
+            fVecRes = lcl_IterResult( eFunc, fVecRes, fMem, nVecCount);
             xResMat->PutDouble( fVecRes, 0,i);
         }
         PushMatrix( xResMat);
