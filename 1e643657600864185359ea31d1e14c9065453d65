@@ -16,6 +16,24 @@
       "revId": "1e643657600864185359ea31d1e14c9065453d65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_ffd8be1f",
+        "filename": "oox/source/ppt/pptimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-05-22T14:09:59Z",
+      "side": 1,
+      "message": "// importRelations() is cheap, it will do an actual import for the first time only.\n\nIs this order better?",
+      "parentUuid": "5a3905b3_bfc71644",
+      "revId": "1e643657600864185359ea31d1e14c9065453d65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
