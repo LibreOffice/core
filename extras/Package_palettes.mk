@@ -12,6 +12,7 @@ $(eval $(call gb_Package_Package,extras_palettes,$(SRCDIR)/extras/source/palette
 $(eval $(call gb_Package_add_files,extras_palettes,$(LIBO_SHARE_FOLDER)/palette,\
 	arrowhd.soe \
 	breeze.soc \
+	chart-palettes.soc \
 	classic.sog \
 	freecolour-hlc.soc \
 	hatching.soh \
