@@ -46,6 +46,7 @@ constexpr ColorData RGB_COLORDATA(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b) {
 #define COL_GREEN                   RGB_COLORDATA( 0x00, 0x80, 0x00 )
 #define COL_CYAN                    RGB_COLORDATA( 0x00, 0x80, 0x80 )
 #define COL_RED                     RGB_COLORDATA( 0x80, 0x00, 0x00 )
+#define COL_RED_FONTCOLOR           RGB_COLORDATA( 0xCE, 0x18, 0x1E )
 #define COL_MAGENTA                 RGB_COLORDATA( 0x80, 0x00, 0x80 )
 #define COL_BROWN                   RGB_COLORDATA( 0x80, 0x80, 0x00 )
 #define COL_GRAY                    RGB_COLORDATA( 0x80, 0x80, 0x80 )
@@ -59,6 +60,7 @@ constexpr ColorData RGB_COLORDATA(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b) {
 #define COL_LIGHTMAGENTA            RGB_COLORDATA( 0xFF, 0x00, 0xFF )
 #define COL_LIGHTGRAYBLUE           RGB_COLORDATA( 0xE0, 0xE0, 0xFF )
 #define COL_YELLOW                  RGB_COLORDATA( 0xFF, 0xFF, 0x00 )
+#define COL_YELLOW_HIGHLIGHT        RGB_COLORDATA( 0xFF, 0xF2, 0x00 )
 #define COL_WHITE                   RGB_COLORDATA( 0xFF, 0xFF, 0xFF )
 #define COL_TRANSPARENT             TRGB_COLORDATA( 0xFF, 0xFF, 0xFF, 0xFF )
 #define COL_AUTO                    (ColorData)0xFFFFFFFF
