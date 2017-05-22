@@ -419,7 +419,7 @@ void SwFlyFreeFrame::CheckClip( const SwFormatFrameSize &rSz )
             // otherwise we'll end up with unwanted side-effects/oscillations
             const long nPrtHeightDiff = Frame().Height() - Prt().Height();
             const long nPrtWidthDiff  = Frame().Width()  - Prt().Width();
-            maUnclippedFrame = SwRect( Frame() );
+            maUnclippedFrame = Frame();
             Frame().Height( aFrameRect.Height() );
             Frame().Width ( std::max( long(MINLAY), aFrameRect.Width() ) );
             if ( Lower() && Lower()->IsColumnFrame() )

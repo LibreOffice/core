@@ -2127,7 +2127,7 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl, ListBox&, void)
     VclPtr<SvxLineWindow_Impl> xThis(this);
 
     SvxLineItem     aLineItem( SID_FRAME_LINESTYLE );
-    SvxBorderLineStyle  nStyle = SvxBorderLineStyle( m_aLineStyleLb->GetSelectEntryStyle() );
+    SvxBorderLineStyle  nStyle = m_aLineStyleLb->GetSelectEntryStyle();
 
     if ( m_aLineStyleLb->GetSelectEntryPos( ) > 0 )
     {

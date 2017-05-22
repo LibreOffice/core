@@ -75,7 +75,7 @@ namespace
         }
         buf.append( inXML.copy( start ) );
 
-        return OString( buf.makeStringAndClear() );
+        return buf.makeStringAndClear();
     }
 }
 

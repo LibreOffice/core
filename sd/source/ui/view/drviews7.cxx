@@ -1741,7 +1741,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                 {
                     XFillColorItem aColorItem( static_cast<const XFillColorItem&>(pArgs->Get( XATTR_FILLCOLOR )) );
                     rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_SOLID ) );
-                    rPageProperties.PutItem( XFillColorItem( aColorItem ));
+                    rPageProperties.PutItem( aColorItem );
                 }
                 break;
 
@@ -1763,7 +1763,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                 {
                     XFillHatchItem aHatchItem( static_cast<const XFillHatchItem&>(pArgs->Get( XATTR_FILLHATCH )) );
                     rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_HATCH ) );
-                    rPageProperties.PutItem( XFillHatchItem( aHatchItem ));
+                    rPageProperties.PutItem( aHatchItem );
                 }
                 break;
 
@@ -1771,7 +1771,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                 {
                     XFillBitmapItem aBitmapItem( static_cast<const XFillBitmapItem&>(pArgs->Get( XATTR_FILLBITMAP )) );
                     rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_BITMAP ) );
-                    rPageProperties.PutItem( XFillBitmapItem( aBitmapItem ));
+                    rPageProperties.PutItem( aBitmapItem );
                 }
                 break;
 

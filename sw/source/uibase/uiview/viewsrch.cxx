@@ -846,7 +846,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
             !m_pSrchItem->GetPattern(),
             rOptions.eStart,
             rOptions.eEnd,
-            FindRanges(eRanges),
+            eRanges,
             !m_pSrchItem->GetSearchString().isEmpty() ? &aSearchOpt : nullptr,
             pReplSet );
     }
@@ -857,7 +857,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
         nFound = m_pWrtShell->SearchTempl( m_pSrchItem->GetSearchString(),
             rOptions.eStart,
             rOptions.eEnd,
-            FindRanges(eRanges),
+            eRanges,
             bDoReplace ? &sRplStr : nullptr );
     }
     else
@@ -866,7 +866,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
         nFound = m_pWrtShell->SearchPattern(aSearchOpt, m_pSrchItem->GetNotes(),
                                           rOptions.eStart,
                                           rOptions.eEnd,
-                                          FindRanges(eRanges),
+                                          eRanges,
                                           bDoReplace );
     }
     m_pWrtShell->EndSelect();

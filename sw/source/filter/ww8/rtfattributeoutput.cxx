@@ -1719,9 +1719,9 @@ void lcl_TextFrameShadow(std::vector< std::pair<OString, OString> >& rFlyPropert
         break;
     }
     if (!aOffsetX.isEmpty())
-        rFlyProperties.push_back(std::make_pair<OString, OString>("shadowOffsetX", OString(aOffsetX)));
+        rFlyProperties.emplace_back( "shadowOffsetX", aOffsetX );
     if (!aOffsetY.isEmpty())
-        rFlyProperties.push_back(std::make_pair<OString, OString>("shadowOffsetY", OString(aOffsetY)));
+        rFlyProperties.emplace_back( "shadowOffsetY", aOffsetY );
 }
 
 void lcl_TextFrameRelativeSize(std::vector< std::pair<OString, OString> >& rFlyProperties, const SwFrameFormat& rFrameFormat)

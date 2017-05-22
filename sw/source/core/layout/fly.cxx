@@ -745,7 +745,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 aOld.Top( std::max( aOld.Top() - long(rUL.GetUpper()), 0L ) );
                 aOld.SSize().Height()+= rUL.GetLower();
                 const SvxLRSpaceItem &rLR = static_cast<const SwFormatChg*>(pOld)->pChangedFormat->GetLRSpace();
-                aOld.Left  ( std::max( aOld.Left() - long(rLR.GetLeft()), 0L ) );
+                aOld.Left  ( std::max( aOld.Left() - rLR.GetLeft(), 0L ) );
                 aOld.SSize().Width() += rLR.GetRight();
                 aNew.Union( aOld );
                 NotifyBackground( FindPageFrame(), aNew, PREP_CLEAR );
@@ -850,7 +850,7 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 else
                 {
                     const SvxLRSpaceItem &rLR = *static_cast<const SvxLRSpaceItem*>(pNew);
-                    aOld.Left  ( std::max( aOld.Left() - long(rLR.GetLeft()), 0L ) );
+                    aOld.Left  ( std::max( aOld.Left() - rLR.GetLeft(), 0L ) );
                     aOld.SSize().Width() += rLR.GetRight();
                 }
             }

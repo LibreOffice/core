@@ -606,7 +606,7 @@ sal_Unicode const * scanParameters(sal_Unicode const * pBegin,
         }
 
         bool bPresent = std::any_of(aList.begin(), aList.end(),
-                                    Parameter::IsSameSection({aAttribute, nSection}));
+                                    Parameter::IsSameSection{aAttribute, nSection});
         if (bPresent)
             break;
 

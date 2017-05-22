@@ -478,8 +478,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl, Edit&, void)
 
     m_rXFSet.Put( XFillColorItem( OUString(), m_pLbShadowColor->GetSelectEntryColor() ) );
     sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
-    XFillTransparenceItem aItem( nVal );
-    m_rXFSet.Put( XFillTransparenceItem( aItem ) );
+    m_rXFSet.Put( XFillTransparenceItem( nVal ) );
 
     // shadow removal
     sal_Int32 nX = 0L, nY = 0L;

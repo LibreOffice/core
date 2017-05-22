@@ -53,7 +53,7 @@ DocumentToGraphicRenderer::~DocumentToGraphicRenderer()
 Size DocumentToGraphicRenderer::getDocumentSizeInPixels(sal_Int32 aCurrentPage)
 {
     Size aSize100mm = getDocumentSizeIn100mm(aCurrentPage);
-    return Size( Application::GetDefaultDevice()->LogicToPixel( aSize100mm, MapUnit::Map100thMM ) );
+    return Application::GetDefaultDevice()->LogicToPixel( aSize100mm, MapUnit::Map100thMM );
 }
 
 Size DocumentToGraphicRenderer::getDocumentSizeIn100mm(sal_Int32 aCurrentPage)

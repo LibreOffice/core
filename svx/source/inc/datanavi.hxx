@@ -599,7 +599,7 @@ namespace svxform
         OUString         GetName() const { return m_pNameED->GetText(); }
         void             SetName( const OUString& _rName ) { m_pNameED->SetText( _rName );}
 
-        bool             GetModifyDoc() const { return bool( m_pModifyCB->IsChecked() ); }
+        bool             GetModifyDoc() const { return m_pModifyCB->IsChecked(); }
         void             SetModifyDoc( const bool bModify ) { m_pModifyCB->Check( bModify ); }
     };
 

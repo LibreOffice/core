@@ -162,7 +162,7 @@ constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16
 #define LANGUAGE_BOSNIAN_LATIN_LSO                      LanguageType(0x681A)
 #define LANGUAGE_BOSNIAN_LSO                            LanguageType(0x781A)
 #define LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA       LanguageType(0x141A)
-#define LANGUAGE_BOSNIAN_BOSNIA_HERZEGOVINA     LanguageType(LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA)   /* TODO: remove, only for langtab.src & localize.sdf compatibility */
+#define LANGUAGE_BOSNIAN_BOSNIA_HERZEGOVINA             LANGUAGE_BOSNIAN_LATIN_BOSNIA_HERZEGOVINA   /* TODO: remove, only for langtab.src & localize.sdf compatibility */
 #define LANGUAGE_BRETON_FRANCE              LanguageType(0x047E)  /* obsoletes LANGUAGE_USER_BRETON 0x0629 */
 #define LANGUAGE_BULGARIAN                  LanguageType(0x0402)
 #define LANGUAGE_BURMESE                    LanguageType(0x0455)
@@ -178,7 +178,7 @@ constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16
 #define LANGUAGE_CHINESE_TRADITIONAL        LanguageType(0x0404)
 #define LANGUAGE_CHINESE_SIMPLIFIED_LEGACY  LanguageType(0x0004)  /* MS-.NET 'zh-CHS', primary only! but maps to 'zh-CN' */
 #define LANGUAGE_CHINESE_TRADITIONAL_LSO    LanguageType(0x7C04)  /* MS-.NET 'zh-CHT' but maps to 'zh-Hant' */
-#define LANGUAGE_CHINESE                    LanguageType(LANGUAGE_CHINESE_SIMPLIFIED)     /* most code uses LANGUAGE_CHINESE */
+#define LANGUAGE_CHINESE                    LANGUAGE_CHINESE_SIMPLIFIED     /* most code uses LANGUAGE_CHINESE */
 #define LANGUAGE_CORSICAN_FRANCE            LanguageType(0x0483)
 #define LANGUAGE_CROATIAN                   LanguageType(0x041A)
 #define LANGUAGE_CROATIAN_BOSNIA_HERZEGOVINA LanguageType(0x101A)
@@ -337,7 +337,7 @@ constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16
 #define LANGUAGE_RUSSIAN                    LanguageType(0x0419)
 #define LANGUAGE_RUSSIAN_MOLDOVA            LanguageType(0x0819)
 #define LANGUAGE_SAMI_NORTHERN_NORWAY       LanguageType(0x043B)
-#define LANGUAGE_SAMI_LAPPISH               LanguageType(LANGUAGE_SAMI_NORTHERN_NORWAY)   /* the old MS definition */
+#define LANGUAGE_SAMI_LAPPISH               LANGUAGE_SAMI_NORTHERN_NORWAY   /* the old MS definition */
 #define LANGUAGE_SAMI_INARI                 LanguageType(0x243B)
 #define LANGUAGE_SAMI_INARI_LSO             LanguageType(0x703B)
 #define LANGUAGE_SAMI_LULE_LSO              LanguageType(0x7C3B)
@@ -352,7 +352,7 @@ constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16
 #define LANGUAGE_SAMI_SOUTHERN_SWEDEN       LanguageType(0x1C3B)
 #define LANGUAGE_SANSKRIT                   LanguageType(0x044F)
 #define LANGUAGE_SEPEDI                     LanguageType(0x046C)
-#define LANGUAGE_NORTHERNSOTHO              LanguageType(LANGUAGE_SEPEDI) /* just an alias for the already existing localization */
+#define LANGUAGE_NORTHERNSOTHO              LANGUAGE_SEPEDI /* just an alias for the already existing localization */
 #define LANGUAGE_SERBIAN_CYRILLIC_LSO       LanguageType(0x6C1A)
 #define LANGUAGE_SERBIAN_CYRILLIC_SAM       LanguageType(0x0C1A)  /* Serbia and Montenegro (former) */
 #define LANGUAGE_SERBIAN_CYRILLIC_BOSNIA_HERZEGOVINA    LanguageType(0x1C1A)
@@ -375,7 +375,7 @@ constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16
 #define LANGUAGE_UPPER_SORBIAN_GERMANY      LanguageType(0x042E)  /* obsoletes LANGUAGE_USER_UPPER_SORBIAN 0x0623 */
 #define LANGUAGE_LOWER_SORBIAN_GERMANY      LanguageType(0x082E)  /* obsoletes LANGUAGE_USER_LOWER_SORBIAN 0x0624. NOTE: the primary ID is identical to Upper Sorbian, which is not quite correct because they're distinct languages */
 #define LANGUAGE_LOWER_SORBIAN_LSO          LanguageType(0x7C2E)
-#define LANGUAGE_SORBIAN                    LanguageType(LANGUAGE_USER_UPPER_SORBIAN) /* a strange MS definition */
+#define LANGUAGE_SORBIAN                    LANGUAGE_USER_UPPER_SORBIAN /* a strange MS definition */
 #define LANGUAGE_SPANISH_DATED              LanguageType(0x040A)  /* old collation, not supported, see #i94435# */
 #define LANGUAGE_SPANISH_ARGENTINA          LanguageType(0x2C0A)
 #define LANGUAGE_SPANISH_BOLIVIA            LanguageType(0x400A)
@@ -399,7 +399,7 @@ constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16
 #define LANGUAGE_SPANISH_UNITED_STATES      LanguageType(0x540A)
 #define LANGUAGE_SPANISH_URUGUAY            LanguageType(0x380A)
 #define LANGUAGE_SPANISH_VENEZUELA          LanguageType(0x200A)
-#define LANGUAGE_SPANISH                    LanguageType(LANGUAGE_SPANISH_MODERN)     /* modern collation, see #i94435# */
+#define LANGUAGE_SPANISH                    LANGUAGE_SPANISH_MODERN     /* modern collation, see #i94435# */
 #define LANGUAGE_SWAHILI                    LanguageType(0x0441)  /* Kenya */
 #define LANGUAGE_SWEDISH                    LanguageType(0x041D)
 #define LANGUAGE_SWEDISH_FINLAND            LanguageType(0x081D)
@@ -520,27 +520,27 @@ constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16
  * mapping ISO back to LANGID will return the new value.
  */
 #define LANGUAGE_OBSOLETE_USER_LATIN        LanguageType(0x0610)
-#define LANGUAGE_USER_LATIN                 LanguageType(LANGUAGE_LATIN_LSO)
+#define LANGUAGE_USER_LATIN                 LANGUAGE_LATIN_LSO
 #define LANGUAGE_USER_LATIN_VATICAN         LanguageType(0x8076)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_LATIN_LSO)) */
 #define LANGUAGE_USER_ESPERANTO             LanguageType(0x0611)  /* no locale possible */
 #define LANGUAGE_USER_INTERLINGUA           LanguageType(0x0612)  /* no locale, but conventions */
 #define LANGUAGE_OBSOLETE_USER_MAORI        LanguageType(0x0620)
-#define LANGUAGE_USER_MAORI                 LanguageType(LANGUAGE_MAORI_NEW_ZEALAND)
+#define LANGUAGE_USER_MAORI                 LANGUAGE_MAORI_NEW_ZEALAND
 #define LANGUAGE_OBSOLETE_USER_KINYARWANDA  LanguageType(0x0621)
-#define LANGUAGE_USER_KINYARWANDA           LanguageType(LANGUAGE_KINYARWANDA_RWANDA)
+#define LANGUAGE_USER_KINYARWANDA           LANGUAGE_KINYARWANDA_RWANDA
 /* was reserved for Northern Sotho but never used: 0x0622 */  /* obsoleted by LANGUAGE_SEPEDI */
 #define LANGUAGE_OBSOLETE_USER_UPPER_SORBIAN LanguageType(0x0623)
-#define LANGUAGE_USER_UPPER_SORBIAN         LanguageType(LANGUAGE_UPPER_SORBIAN_GERMANY)
+#define LANGUAGE_USER_UPPER_SORBIAN         LANGUAGE_UPPER_SORBIAN_GERMANY
 #define LANGUAGE_OBSOLETE_USER_LOWER_SORBIAN LanguageType(0x0624)
-#define LANGUAGE_USER_LOWER_SORBIAN         LanguageType(LANGUAGE_LOWER_SORBIAN_GERMANY)
+#define LANGUAGE_USER_LOWER_SORBIAN         LANGUAGE_LOWER_SORBIAN_GERMANY
 #define LANGUAGE_OBSOLETE_USER_OCCITAN      LanguageType(0x0625)
-#define LANGUAGE_USER_OCCITAN               LanguageType(LANGUAGE_OCCITAN_FRANCE) /* reserved to languedocian */
+#define LANGUAGE_USER_OCCITAN               LANGUAGE_OCCITAN_FRANCE /* reserved to languedocian */
 
 #define LANGUAGE_USER_KOREAN_NORTH          LanguageType(0x8012)  /* North Korean as opposed to South Korean, makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_KOREAN)) */
 #define LANGUAGE_USER_KURDISH_TURKEY        LanguageType(0x0626)  /* sublang 0x01, Latin script */
 #define LANGUAGE_USER_KURDISH_SYRIA         LanguageType(0x0A26)  /* sublang 0x02, Latin script */
 #define LANGUAGE_OBSOLETE_USER_KURDISH_IRAQ LanguageType(0x0E26)  /* sublang 0x03, Arabic script */
-#define LANGUAGE_USER_KURDISH_IRAQ          LanguageType(LANGUAGE_KURDISH_ARABIC_IRAQ)
+#define LANGUAGE_USER_KURDISH_IRAQ          LANGUAGE_KURDISH_ARABIC_IRAQ
 #define LANGUAGE_USER_KURDISH_IRAN          LanguageType(0x1226)  /* sublang 0x04, Arabic script */
 #define LANGUAGE_USER_KURDISH_SOUTHERN_IRAQ LanguageType(0x8092)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_KURDISH_ARABIC_LSO)) */
 #define LANGUAGE_USER_KURDISH_SOUTHERN_IRAN LanguageType(0x8492)  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_KURDISH_ARABIC_LSO)) */
@@ -549,18 +549,18 @@ constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16
 #define LANGUAGE_USER_DZONGKHA_MAP_LONLY    LanguageType(0xF851)  /* to map "dz" only, because of the MS error, and preserve CTL information, sub 0x3e */
 #define LANGUAGE_USER_SWAHILI_TANZANIA      LanguageType(0x8041)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_SWAHILI)) */
 #define LANGUAGE_OBSOLETE_USER_BRETON       LanguageType(0x0629)
-#define LANGUAGE_USER_BRETON                LanguageType(LANGUAGE_BRETON_FRANCE)
+#define LANGUAGE_USER_BRETON                LANGUAGE_BRETON_FRANCE
 #define LANGUAGE_OBSOLETE_USER_KALAALLISUT  LanguageType(0x062A)
-#define LANGUAGE_USER_KALAALLISUT           LanguageType(LANGUAGE_KALAALLISUT_GREENLAND)
+#define LANGUAGE_USER_KALAALLISUT           LANGUAGE_KALAALLISUT_GREENLAND
 #define LANGUAGE_USER_SWAZI                 LanguageType(0x062B)
 #define LANGUAGE_USER_NDEBELE_SOUTH         LanguageType(0x062C)
 #define LANGUAGE_OBSOLETE_USER_TSWANA_BOTSWANA LanguageType(0x8032)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_TSWANA)) */
-#define LANGUAGE_USER_TSWANA_BOTSWANA       LanguageType(LANGUAGE_TSWANA_BOTSWANA)
+#define LANGUAGE_USER_TSWANA_BOTSWANA       LANGUAGE_TSWANA_BOTSWANA
 #define LANGUAGE_USER_MOORE                 LanguageType(0x062D)
 #define LANGUAGE_USER_BAMBARA               LanguageType(0x062E)
 #define LANGUAGE_USER_AKAN                  LanguageType(0x062F)
 #define LANGUAGE_OBSOLETE_USER_LUXEMBOURGISH LanguageType(0x0630)
-#define LANGUAGE_USER_LUXEMBOURGISH         LanguageType(LANGUAGE_LUXEMBOURGISH_LUXEMBOURG)
+#define LANGUAGE_USER_LUXEMBOURGISH         LANGUAGE_LUXEMBOURGISH_LUXEMBOURG
 #define LANGUAGE_USER_FRIULIAN              LanguageType(0x0631)
 #define LANGUAGE_USER_FIJIAN                LanguageType(0x0632)
 #define LANGUAGE_USER_AFRIKAANS_NAMIBIA     LanguageType(0x8036)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_AFRIKAANS)) */
@@ -571,7 +571,7 @@ constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16
 #define LANGUAGE_USER_GASCON                LanguageType(0x0636)  /* Gascon France */
 #define LANGUAGE_USER_GERMAN_BELGIUM        LanguageType(0x8007)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_GERMAN)) */
 #define LANGUAGE_OBSOLETE_USER_CATALAN_VALENCIAN    LanguageType(0x8003)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_CATALAN)) */
-#define LANGUAGE_USER_CATALAN_VALENCIAN     LanguageType(LANGUAGE_CATALAN_VALENCIAN)
+#define LANGUAGE_USER_CATALAN_VALENCIAN     LANGUAGE_CATALAN_VALENCIAN
 #define LANGUAGE_USER_HAUSA_GHANA           LanguageType(0x8068)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_HAUSA_NIGERIA)) */
 #define LANGUAGE_USER_EWE_GHANA             LanguageType(0x0637)
 #define LANGUAGE_USER_ENGLISH_GHANA         LanguageType(0x8409)  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_ENGLISH_US)) */
@@ -584,18 +584,18 @@ constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16
 #define LANGUAGE_USER_NYANJA                LanguageType(0x063E)
 #define LANGUAGE_USER_KASHUBIAN             LanguageType(0x063F)
 #define LANGUAGE_OBSOLETE_USER_SPANISH_CUBA LanguageType(0x800A)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_SPANISH)) */
-#define LANGUAGE_USER_SPANISH_CUBA          LanguageType(LANGUAGE_SPANISH_CUBA)
+#define LANGUAGE_USER_SPANISH_CUBA          LANGUAGE_SPANISH_CUBA
 #define LANGUAGE_USER_TETUN                 LanguageType(0x0640)
 #define LANGUAGE_USER_QUECHUA_NORTH_BOLIVIA LanguageType(0x0641)
 #define LANGUAGE_USER_QUECHUA_SOUTH_BOLIVIA LanguageType(0x0642)
 #define LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_SERBIA      LanguageType(0x8C1A)  /* makeLangID( 0x20+0x03, getPrimaryLanguage( LANGUAGE_SERBIAN_CYRILLIC_LSO)) */
-#define LANGUAGE_USER_SERBIAN_CYRILLIC_SERBIA               LanguageType(LANGUAGE_SERBIAN_CYRILLIC_SERBIA)
+#define LANGUAGE_USER_SERBIAN_CYRILLIC_SERBIA               LANGUAGE_SERBIAN_CYRILLIC_SERBIA
 #define LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_SERBIA         LanguageType(0x881A)  /* makeLangID( 0x20+0x02, getPrimaryLanguage( LANGUAGE_SERBIAN_LATIN_LSO)) */
-#define LANGUAGE_USER_SERBIAN_LATIN_SERBIA                  LanguageType(LANGUAGE_SERBIAN_LATIN_SERBIA)
+#define LANGUAGE_USER_SERBIAN_LATIN_SERBIA                  LANGUAGE_SERBIAN_LATIN_SERBIA
 #define LANGUAGE_OBSOLETE_USER_SERBIAN_CYRILLIC_MONTENEGRO  LanguageType(0xCC1A)  /* makeLangID( 0x20+0x13, getPrimaryLanguage( LANGUAGE_SERBIAN_CYRILLIC_LSO)) */
-#define LANGUAGE_USER_SERBIAN_CYRILLIC_MONTENEGRO           LanguageType(LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO)
+#define LANGUAGE_USER_SERBIAN_CYRILLIC_MONTENEGRO           LANGUAGE_SERBIAN_CYRILLIC_MONTENEGRO
 #define LANGUAGE_OBSOLETE_USER_SERBIAN_LATIN_MONTENEGRO     LanguageType(0xC81A)  /* makeLangID( 0x20+0x12, getPrimaryLanguage( LANGUAGE_SERBIAN_LATIN_LSO)) */
-#define LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO              LanguageType(LANGUAGE_SERBIAN_LATIN_MONTENEGRO)
+#define LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO              LANGUAGE_SERBIAN_LATIN_MONTENEGRO
 #define LANGUAGE_USER_SAMI_KILDIN_RUSSIA    LanguageType(0x803B)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_SAMI_NORTHERN_NORWAY)) */
 #define LANGUAGE_USER_BODO_INDIA            LanguageType(0x0643)
 #define LANGUAGE_USER_DOGRI_INDIA           LanguageType(0x0644)
@@ -620,7 +620,7 @@ constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16
 #define LANGUAGE_USER_BUSHI                 LanguageType(0x064D)
 #define LANGUAGE_USER_TAHITIAN              LanguageType(0x064E)
 #define LANGUAGE_OBSOLETE_USER_MALAGASY_PLATEAU LanguageType(0x064F)
-#define LANGUAGE_USER_MALAGASY_PLATEAU      LanguageType(LANGUAGE_MALAGASY_PLATEAU)
+#define LANGUAGE_USER_MALAGASY_PLATEAU      LANGUAGE_MALAGASY_PLATEAU
 #define LANGUAGE_USER_PAPIAMENTU_ARUBA      LanguageType(0x8079)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_PAPIAMENTU)) */
 #define LANGUAGE_USER_SARDINIAN_CAMPIDANESE LanguageType(0x0650)
 #define LANGUAGE_USER_SARDINIAN_GALLURESE   LanguageType(0x0651)
@@ -634,7 +634,7 @@ constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16
 #define LANGUAGE_USER_LIMBU                 LanguageType(0x0657)
 #define LANGUAGE_USER_LOJBAN                LanguageType(0x0658)  /* no locale */
 #define LANGUAGE_OBSOLETE_USER_KABYLE       LanguageType(0x0659)
-#define LANGUAGE_USER_KABYLE                LanguageType(LANGUAGE_TAMAZIGHT_LATIN_ALGERIA)
+#define LANGUAGE_USER_KABYLE                LANGUAGE_TAMAZIGHT_LATIN_ALGERIA
 #define LANGUAGE_USER_HAITIAN               LanguageType(0x065A)
 #define LANGUAGE_USER_BEEMBE                LanguageType(0x065B)
 #define LANGUAGE_USER_BEKWEL                LanguageType(0x065C)

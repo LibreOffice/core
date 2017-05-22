@@ -511,7 +511,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                         break;
                     case 0x2000: // curveto
                         aSegment.Command = drawing::EnhancedCustomShapeSegmentCommand::CURVETO;
-                        aSegment.Count = sal_Int32(nPoints);
+                        aSegment.Count = nPoints;
                         aSegments.push_back(aSegment);
                         break;
                     case 0xb300: // arcto

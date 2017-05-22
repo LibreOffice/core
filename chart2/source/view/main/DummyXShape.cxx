@@ -796,7 +796,7 @@ DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
         pDevice->DrawText(Point(0, 0), rText);
         bmpWidth = aRect.Right() - aRect.Left();
         bmpHeight = aRect.Bottom() - aRect.Top();
-        maBitmap = BitmapEx(pDevice->GetBitmapEx(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
+        maBitmap = pDevice->GetBitmapEx(aRect.TopLeft(), Size(bmpWidth, bmpHeight));
         rCache.insertBitmap(aKey, maBitmap);
     }
 

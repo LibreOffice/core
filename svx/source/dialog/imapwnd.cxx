@@ -313,7 +313,7 @@ void IMapWindow::SdrObjCreated( const SdrObject& rObj )
             tools::Polygon aPoly(pPathObj->GetPathPoly().getB2DPolygon(0L));
             delete pPathObj;
 
-            IMapPolygonObject* pObj = new IMapPolygonObject( tools::Polygon(aPoly), "", "", "", "", "", true, false );
+            IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, "", "", "", "", "", true, false );
             pObj->SetExtraEllipse( aPoly.GetBoundRect() );
             pCircObj->AppendUserData( new IMapUserData( IMapObjectPtr(pObj) ) );
         }

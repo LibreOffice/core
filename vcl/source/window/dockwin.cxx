@@ -154,7 +154,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin, DockingHdl, void*, void)
         ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) &&
         !(aState.mnState & KEY_MOD1) )  // i43499 CTRL disables docking now
     {
-        maDockPos = Point( mpDockWin->GetParent()->AbsoluteScreenToOutputPixel( OutputToAbsoluteScreenPixel( Point() ) ) );
+        maDockPos = mpDockWin->GetParent()->AbsoluteScreenToOutputPixel( OutputToAbsoluteScreenPixel( Point() ) );
         maDockPos = mpDockWin->GetParent()->OutputToScreenPixel( maDockPos );  // sfx expects screen coordinates
 
         if( ! mpDockWin->IsDocking() )
@@ -591,7 +591,7 @@ void DockingWindow::EndDocking( const tools::Rectangle& rRect, bool bFloatMode )
     if ( !IsDockingCanceled() )
     {
         bool bShow = false;
-        if ( bool(bFloatMode) != IsFloatingMode() )
+        if ( bFloatMode != IsFloatingMode() )
         {
             Show( false, ShowFlags::NoFocusChange );
             SetFloatingMode( bFloatMode );

@@ -688,8 +688,8 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
                     aCropDlgAttr.Put( SvxBrushItem( pObj->GetGraphic(), GPOS_MM, SID_ATTR_GRAF_GRAPHIC ) );
                     aCropDlgAttr.Put( SvxSizeItem( SID_ATTR_PAGE_SIZE,
-                                                Size( OutputDevice::LogicToLogic(
-                                                        Size( 200000, 200000 ), aMap100, aMapTwip ) ) ) );
+                                                OutputDevice::LogicToLogic(
+                                                        Size( 200000, 200000 ), aMap100, aMapTwip ) ) );
                     aCropDlgAttr.Put( SvxSizeItem( SID_ATTR_GRAF_FRMSIZE, OutputDevice::LogicToLogic(
                                                 pObj->GetLogicRect().GetSize(), aMap100, aMapTwip ) ) );
 

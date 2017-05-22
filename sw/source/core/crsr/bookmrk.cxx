@@ -323,7 +323,7 @@ namespace sw { namespace mark
     {
         SwDoc *const pDoc( GetMarkPos().GetDoc() );
         assert(pDoc);
-        return !pDoc->IsInHeaderFooter( SwNodeIndex(GetMarkPos().nNode) );
+        return !pDoc->IsInHeaderFooter( GetMarkPos().nNode );
     }
 
     uno::Reference< rdf::XMetadatable > Bookmark::MakeUnoObject()

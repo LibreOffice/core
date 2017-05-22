@@ -308,7 +308,7 @@ namespace connectivity
 
         inline bool OOperand::isValid() const
         {
-            return getValue().getDouble() != double(0.0);
+            return getValue().getDouble() != 0.0;
         }
 
         // Operator
