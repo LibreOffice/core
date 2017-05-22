@@ -1816,8 +1816,9 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
 
         if( nSize > 1 )
         {
+            aPolyPoint = rPoly[ 0 ];
             aPathData += "M "
-                        + OUString::number( ( aPolyPoint = rPoly[ 0 ] ).X() )
+                        + OUString::number( aPolyPoint.X() )
                         + aComma
                         + OUString::number( aPolyPoint.Y() );
 
@@ -1838,7 +1839,9 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
                     {
                         if ( j )
                             aPathData += aBlank;
-                        aPathData += OUString::number( ( aPolyPoint = rPoly[ n++ ] ).X() )
+
+                        aPolyPoint = rPoly[ n++ ];
+                        aPathData += OUString::number( aPolyPoint.X() )
                                     + aComma
                                     + OUString::number( aPolyPoint.Y() );
                     }
@@ -1850,7 +1853,9 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
                         nCurrentMode = 'L';
                         aPathData += "L ";
                     }
-                    aPathData += OUString::number( ( aPolyPoint = rPoly[ n++ ] ).X() )
+
+                    aPolyPoint = rPoly[ n++ ];
+                    aPathData += OUString::number( aPolyPoint.X() )
                                 + aComma
                                 + OUString::number( aPolyPoint.Y() );
                 }
