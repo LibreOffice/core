@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTLISTITEMSMANAGER_HXX
 
 #include <IDocumentListItems.hxx>
+#include <memory>
 #include <set>
 
 namespace sw
@@ -56,7 +57,7 @@ private:
     DocumentListItemsManager(DocumentListItemsManager const&) = delete;
     DocumentListItemsManager& operator=(DocumentListItemsManager const&) = delete;
 
-    tImplSortedNodeNumList* mpListItemsList;
+    std::unique_ptr<tImplSortedNodeNumList> mpListItemsList;
 };
 
 }

@@ -959,7 +959,7 @@ public:
 
 protected:
     SwWW8Writer        *m_pWriter;      ///< Pointer to the writer
-    WW8AttributeOutput *m_pAttrOutput;  ///< Converting attributes to stream data
+    std::unique_ptr<WW8AttributeOutput> m_pAttrOutput;  ///< Converting attributes to stream data
 
 private:
     tools::SvRef<SotStorage>       xEscherStg;      /// memory leak #i120098#, to hold the reference to unnamed SotStorage obj

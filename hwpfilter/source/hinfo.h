@@ -24,6 +24,7 @@
 #include "string.h"
 
 #include <vector>
+#include <memory>
 
 #define CHAIN_MAX_PATH  40
 #define ANNOTATION_LEN  24
@@ -201,7 +202,7 @@ class DLLEXPORT HWPInfo
  * Summary of document
  */
         HWPSummary    summary;
-        unsigned char *info_block;
+        std::unique_ptr<unsigned char[]> info_block;
 
         HWPInfo(void);
         ~HWPInfo(void);

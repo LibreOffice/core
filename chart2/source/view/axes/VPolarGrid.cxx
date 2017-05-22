@@ -43,13 +43,11 @@ VPolarGrid::VPolarGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
             , m_pPosHelper( new PolarPlottingPositionHelper() )
             , m_aIncrements()
 {
-    PlotterBase::m_pPosHelper = m_pPosHelper;
+    PlotterBase::m_pPosHelper = m_pPosHelper.get();
 }
 
 VPolarGrid::~VPolarGrid()
 {
-    delete m_pPosHelper;
-    m_pPosHelper = nullptr;
 }
 
 void VPolarGrid::setIncrements( const std::vector< ExplicitIncrementData >& rIncrements )
@@ -207,7 +205,7 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
 
             drawing::PointSequenceSequence aPoints(1);
             VPolarGrid::createLinePointSequence_ForAngleAxis( aPoints, rAngleTickInfos
-                , rAngleIncrement, rAngleScale, m_pPosHelper, fLogicRadius, fLogicZ );
+                , rAngleIncrement, rAngleScale, m_pPosHelper.get(), fLogicRadius, fLogicZ );
             if(aPoints[0].getLength())
                 appendPointSequence( aAllPoints, aPoints );
         }

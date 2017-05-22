@@ -32,6 +32,13 @@ ConfigurationBroadcaster::ConfigurationBroadcaster()
 {
 }
 
+ConfigurationBroadcaster::ConfigurationBroadcaster(ConfigurationBroadcaster const & rSource)
+: mpList( rSource.mpList ? new IMPL_ConfigurationListenerList(*rSource.mpList) : nullptr )
+, m_nBroadcastBlocked( rSource.m_nBroadcastBlocked )
+, m_nBlockedHint( rSource.m_nBlockedHint )
+{
+}
+
 ConfigurationBroadcaster::~ConfigurationBroadcaster()
 {
 }

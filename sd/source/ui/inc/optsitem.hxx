@@ -27,6 +27,7 @@
 #include <svx/optgrid.hxx>
 #include <svx/dlgutil.hxx>
 #include "sddllapi.h"
+#include <memory>
 
 class SdOptions;
 
@@ -65,7 +66,8 @@ friend class SdOptionsItem;
 private:
 
     OUString                maSubTree;
-    SdOptionsItem*          mpCfgItem;
+    std::unique_ptr<SdOptionsItem>
+                            mpCfgItem;
     sal_uInt16              mnConfigId;
     bool                    mbInit          : 1;
     bool                    mbEnableModify  : 1;
@@ -87,7 +89,10 @@ protected:
 public:
 
                             SdOptionsGeneric( sal_uInt16 nConfigId, const OUString& rSubTree );
+                            SdOptionsGeneric( SdOptionsGeneric const & );
                             virtual ~SdOptionsGeneric();
+
+    SdOptionsGeneric&       operator=( SdOptionsGeneric const & );
 
     sal_uInt16              GetConfigId() const { return mnConfigId; }
 

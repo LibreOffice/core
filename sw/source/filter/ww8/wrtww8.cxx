@@ -3596,8 +3596,6 @@ WW8Export::WW8Export( SwWW8Writer *pWriter,
 
 WW8Export::~WW8Export()
 {
-    delete m_pAttrOutput;
-    m_pAttrOutput = nullptr;
 }
 
 AttributeOutputBase& WW8Export::AttrOutput() const

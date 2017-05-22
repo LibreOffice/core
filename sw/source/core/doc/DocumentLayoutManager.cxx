@@ -90,17 +90,17 @@ bool DocumentLayoutManager::HasLayout() const
 
 SwLayouter* DocumentLayoutManager::GetLayouter()
 {
-    return mpLayouter;
+    return mpLayouter.get();
 }
 
 const SwLayouter* DocumentLayoutManager::GetLayouter() const
 {
-    return mpLayouter;
+    return mpLayouter.get();
 }
 
 void DocumentLayoutManager::SetLayouter( SwLayouter* pNew )
 {
-    mpLayouter = pNew;
+    mpLayouter.reset( pNew );
 }
 
 /** Create a new format whose settings fit to the Request by default.
@@ -508,8 +508,6 @@ void DocumentLayoutManager::ClearSwLayouterEntries()
 
 DocumentLayoutManager::~DocumentLayoutManager()
 {
-    delete mpLayouter;
-    mpLayouter = nullptr;
 }
 
 }

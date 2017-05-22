@@ -269,7 +269,7 @@ public:
 class VCL_DLLPUBLIC DateFormatter : public FormatterBase
 {
 private:
-    CalendarWrapper*        mpCalendarWrapper;
+    std::unique_ptr<CalendarWrapper> mpCalendarWrapper;
     Date                    maFieldDate;
     Date                    maLastDate;
     Date                    maMin;

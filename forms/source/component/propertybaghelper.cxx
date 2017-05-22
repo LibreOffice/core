@@ -80,8 +80,6 @@ namespace frm
 
     PropertyBagHelper::~PropertyBagHelper()
     {
-        delete m_pPropertyArrayHelper;
-        m_pPropertyArrayHelper = nullptr;
     }
 
 
@@ -100,8 +98,7 @@ namespace frm
 
     void PropertyBagHelper::impl_nts_invalidatePropertySetInfo()
     {
-        delete m_pPropertyArrayHelper;
-        m_pPropertyArrayHelper = nullptr;
+        m_pPropertyArrayHelper.reset();
     }
 
 
@@ -146,11 +143,11 @@ namespace frm
 
     ::comphelper::OPropertyArrayAggregationHelper& PropertyBagHelper::impl_ts_getArrayHelper() const
     {
-        OPropertyArrayAggregationHelper* p = m_pPropertyArrayHelper;
+        OPropertyArrayAggregationHelper* p = m_pPropertyArrayHelper.get();
         if ( !p )
         {
             ::osl::MutexGuard aGuard( m_rContext.getMutex() );
-            p = m_pPropertyArrayHelper;
+            p = m_pPropertyArrayHelper.get();
             if ( !p )
             {
                 // our own fixed and our aggregate's properties
@@ -167,7 +164,7 @@ namespace frm
 
                 p = new OPropertyArrayAggregationHelper( aOwnProps, aAggregateProps, &lcl_getPropertyInfos(), NEW_HANDLE_BASE );
                 OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-                const_cast< PropertyBagHelper* >( this )->m_pPropertyArrayHelper = p;
+                const_cast< PropertyBagHelper* >( this )->m_pPropertyArrayHelper.reset( p );
             }
         } // if ( !p )
         else

@@ -52,13 +52,11 @@ VCLXAccessibleHeaderBarItem::VCLXAccessibleHeaderBarItem( HeaderBar*    pHeadBar
     ,m_nIndexInParent(_nIndexInParent + 1)
 
 {
-    m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
 }
 
 VCLXAccessibleHeaderBarItem::~VCLXAccessibleHeaderBarItem()
 {
-    delete m_pExternalLock;
-    m_pExternalLock = nullptr;
+    delete static_cast< VCLExternalSolarLock* >( getExternalLock() );
 }
 
 void VCLXAccessibleHeaderBarItem::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )

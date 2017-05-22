@@ -500,10 +500,6 @@ SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
 //  destructor
 SfxBaseModel::~SfxBaseModel()
 {
-    //In SvxDrawingLayerImport when !xTargetDocument the fallback SvxUnoDrawingModel created there
-    //never gets disposed called on it, so m_pData leaks.
-    delete m_pData;
-    m_pData = nullptr;
 }
 
 //  XInterface
@@ -760,12 +756,10 @@ void SAL_CALL SfxBaseModel::dispose()
     m_pData->m_xCurrent.clear();
     m_pData->m_seqControllers.clear();
 
-    // m_pData member must be set to zero before 0delete is called to
+    // m_pData member must be set to zero before delete is called to
     // force disposed exception whenever someone tries to access our
     // instance while in the dtor.
-    IMPL_SfxBaseModel_DataContainer* pData = m_pData;
-    m_pData = nullptr;
-    delete pData;
+    m_pData.reset();
 }
 
 
@@ -1471,7 +1465,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
 
     if ( m_pData->m_pObjectShell.is() )
     {
-        SfxSaveGuard aSaveGuard(this, m_pData);
+        SfxSaveGuard aSaveGuard(this, m_pData.get());
 
         bool bCheckIn = false;
         for ( sal_Int32 nInd = 0; nInd < aSeqArgs.getLength(); nInd++ )
@@ -1592,7 +1586,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUString&                   rURL
 
     if ( m_pData->m_pObjectShell.is() )
     {
-        SfxSaveGuard aSaveGuard(this, m_pData);
+        SfxSaveGuard aSaveGuard(this, m_pData.get());
 
         impl_store( rURL, rArgs, false );
 
@@ -1631,7 +1625,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   OUString&                   rURL
 
     if ( m_pData->m_pObjectShell.is() )
     {
-        SfxSaveGuard aSaveGuard(this, m_pData);
+        SfxSaveGuard aSaveGuard(this, m_pData.get());
         try {
             impl_store(rURL, rArgs, true);
         }
@@ -1656,7 +1650,7 @@ void SAL_CALL SfxBaseModel::storeToRecoveryFile( const OUString& i_TargetLocatio
     SfxModelGuard aGuard( *this );
 
     // delegate
-    SfxSaveGuard aSaveGuard( this, m_pData );
+    SfxSaveGuard aSaveGuard( this, m_pData.get() );
     impl_store( i_TargetLocation, i_MediaDescriptor, true );
 
     // no need for subsequent calls to storeToRecoveryFile, unless we're modified, again
@@ -3750,7 +3744,7 @@ bool SfxBaseModel::impl_getPrintHelper()
     aValues[0] <<= Reference < frame::XModel > (static_cast< frame::XModel* >(this), UNO_QUERY );
     xInit->initialize( aValues );
     Reference < view::XPrintJobBroadcaster > xBrd( m_pData->m_xPrintable, UNO_QUERY );
-    xBrd->addPrintJobListener( new SfxPrintHelperListener_Impl( m_pData ) );
+    xBrd->addPrintJobListener( new SfxPrintHelperListener_Impl( m_pData.get() ) );
     return true;
 }
 

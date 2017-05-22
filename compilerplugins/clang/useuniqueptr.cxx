@@ -44,30 +44,32 @@ bool UseUniquePtr::VisitCXXDestructorDecl(const CXXDestructorDecl* destructorDec
     if (isInUnoIncludeFile(destructorDecl))
         return true;
 
-    if (destructorDecl->getBody() == nullptr)
+    const CompoundStmt* compoundStmt = dyn_cast_or_null< CompoundStmt >( destructorDecl->getBody() );
+    if (!compoundStmt)
         return true;
-    const CompoundStmt* compoundStmt = dyn_cast< CompoundStmt >( destructorDecl->getBody() );
-    if (compoundStmt == nullptr) {
-        return true;
-    }
 
-    const CXXDeleteExpr* deleteExpr;
+    const CXXDeleteExpr* deleteExpr = nullptr;
     if (compoundStmt->size() == 1) {
         deleteExpr = dyn_cast<CXXDeleteExpr>(compoundStmt->body_front());
     }
     else if (compoundStmt->size() == 2) {
         // ignore SAL_INFO type stuff
-        // TODO should probably be a little more specific here
-        if (!isa<DoStmt>(compoundStmt->body_front())) {
-            return true;
+        // @TODO should probably be a little more specific here
+        if (isa<DoStmt>(compoundStmt->body_front())) {
+            deleteExpr = dyn_cast<CXXDeleteExpr>(compoundStmt->body_back());
         }
-        deleteExpr = dyn_cast<CXXDeleteExpr>(compoundStmt->body_back());
+        // look for the following pattern:
+        // delete m_pbar;
+        // m_pbar = nullptr;
+        else if (auto binaryOp = dyn_cast<BinaryOperator>(compoundStmt->body_back())) {
+            if (binaryOp->getOpcode() == BO_Assign)
+                deleteExpr = dyn_cast<CXXDeleteExpr>(compoundStmt->body_front());
+        }
     } else {
         return true;
     }
-    if (deleteExpr == nullptr) {
+    if (deleteExpr == nullptr)
         return true;
-    }
 
     const ImplicitCastExpr* pCastExpr = dyn_cast<ImplicitCastExpr>(deleteExpr->getArgument());
     if (!pCastExpr)

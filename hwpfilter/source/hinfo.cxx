@@ -66,8 +66,6 @@ HWPInfo::HWPInfo()
 
 HWPInfo::~HWPInfo()
 {
-    delete[] info_block;
-    info_block = nullptr;
 }
 
 
@@ -163,9 +161,9 @@ void HWPInfo::Read(HWPFile & hwpf)
         return;
     if (info_block_len > 0)
     {
-        info_block = new unsigned char[info_block_len + 1];
+        info_block.reset( new unsigned char[info_block_len + 1] );
 
-        if (!HWPReadInfoBlock(info_block, info_block_len, hwpf))
+        if (!HWPReadInfoBlock(info_block.get(), info_block_len, hwpf))
             return;
     }
 

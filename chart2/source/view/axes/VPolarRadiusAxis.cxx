@@ -48,8 +48,6 @@ VPolarRadiusAxis::VPolarRadiusAxis( const AxisProperties& rAxisProperties
 
 VPolarRadiusAxis::~VPolarRadiusAxis()
 {
-    delete m_pPosHelper;
-    m_pPosHelper = nullptr;
 }
 
 void VPolarRadiusAxis::setTransformationSceneToScreen( const drawing::HomogenMatrix& rMatrix)
