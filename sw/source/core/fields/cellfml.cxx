@@ -75,10 +75,10 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
 {
     double nRet = 0;
 
-    if( rCalcPara.rCalc.IsCalcError() )
+    if( rCalcPara.m_rCalc.IsCalcError() )
         return nRet;            // stop if there is already an error set
 
-    rCalcPara.rCalc.SetCalcError( SwCalcError::Syntax );    // default: error
+    rCalcPara.m_rCalc.SetCalcError( SwCalcError::Syntax );    // default: error
 
     // no content box?
     if( !m_pStartNode  )
@@ -91,13 +91,13 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
 
     // Does it create a recursion?
     SwTableBox* pBox = const_cast<SwTableBox*>(this);
-    if( rCalcPara.pBoxStack->find( pBox ) != rCalcPara.pBoxStack->end() )
+    if( rCalcPara.m_pBoxStack->find( pBox ) != rCalcPara.m_pBoxStack->end() )
         return nRet;            // already on the stack: error
 
     // re-start with this box
     rCalcPara.SetLastTableBox( this );
 
-    rCalcPara.pBoxStack->insert( pBox );      // add
+    rCalcPara.m_pBoxStack->insert( pBox );      // add
     do {        // Middle-Check-Loop, so that we can jump from here. Used so that the box pointer
                 // will be removed from stack at the end.
         SwDoc* pDoc = GetFrameFormat()->GetDoc();
@@ -106,12 +106,12 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
         if( SfxItemState::SET == GetFrameFormat()->GetItemState(
                                 RES_BOXATR_FORMULA, false, &pItem ) )
         {
-            rCalcPara.rCalc.SetCalcError( SwCalcError::NONE ); // reset status
+            rCalcPara.m_rCalc.SetCalcError( SwCalcError::NONE ); // reset status
             if( !static_cast<const SwTableBoxFormula*>(pItem)->IsValid() )
             {
                 // calculate
-                const SwTable* pTmp = rCalcPara.pTable;
-                rCalcPara.pTable = &pBox->GetSttNd()->FindTableNode()->GetTable();
+                const SwTable* pTmp = rCalcPara.m_pTable;
+                rCalcPara.m_pTable = &pBox->GetSttNd()->FindTableNode()->GetTable();
                 const_cast<SwTableBoxFormula*>(static_cast<const SwTableBoxFormula*>(pItem))->Calc( rCalcPara, nRet );
 
                 if( !rCalcPara.IsStackOverflow() )
@@ -124,7 +124,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
                         aTmp.Put( SwTableBoxNumFormat( 0 ));
                     pFormat->SetFormatAttr( aTmp );
                 }
-                rCalcPara.pTable = pTmp;
+                rCalcPara.m_pTable = pTmp;
             }
             else
                 nRet = GetFrameFormat()->GetTableBoxValue().GetValue();
@@ -133,7 +133,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
         else if( SfxItemState::SET == pBox->GetFrameFormat()->GetItemState(
                                 RES_BOXATR_VALUE, false, &pItem ) )
         {
-            rCalcPara.rCalc.SetCalcError( SwCalcError::NONE ); // reset status
+            rCalcPara.m_rCalc.SetCalcError( SwCalcError::NONE ); // reset status
             nRet = static_cast<const SwTableBoxValue*>(pItem)->GetValue();
             break;
         }
@@ -157,7 +157,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
         }
         if ( pTextField != nullptr )
         {
-            rCalcPara.rCalc.SetCalcError( SwCalcError::NONE ); // reset status
+            rCalcPara.m_rCalc.SetCalcError( SwCalcError::NONE ); // reset status
 
             const SwField* pField = pTextField->GetFormatField().GetField();
             switch ( pField->GetTyp()->Which() )
@@ -174,10 +174,10 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
                     if( !pTableField->IsValid() )
                     {
                         // use the right table!
-                        const SwTable* pTmp = rCalcPara.pTable;
-                        rCalcPara.pTable = &pTextNd->FindTableNode()->GetTable();
+                        const SwTable* pTmp = rCalcPara.m_pTable;
+                        rCalcPara.m_pTable = &pTextNd->FindTableNode()->GetTable();
                         pTableField->CalcField( rCalcPara );
-                        rCalcPara.pTable = pTmp;
+                        rCalcPara.m_pTable = pTmp;
                     }
                     nRet = pTableField->GetValue();
                 }
@@ -193,7 +193,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
                 break;
 
             default:
-                nRet = rCalcPara.rCalc.Calculate( pField->ExpandField(true) ).GetDouble();
+                nRet = rCalcPara.m_rCalc.Calculate( pField->ExpandField(true) ).GetDouble();
             }
         }
         else if ( nSttPos < sText.getLength()
@@ -204,12 +204,12 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
                     pTextNd->GetTextAttrAt( nSttPos, RES_TXTATR_INPUTFIELD ) );
             if ( pTextInputField == nullptr )
                 break;
-            nRet = rCalcPara.rCalc.Calculate( pTextInputField->GetFieldContent() ).GetDouble();
+            nRet = rCalcPara.m_rCalc.Calculate( pTextInputField->GetFieldContent() ).GetDouble();
         }
         else if ( Char != CH_TXTATR_BREAKWORD )
         {
             // result is 0 but no error!
-            rCalcPara.rCalc.SetCalcError( SwCalcError::NONE ); // reset status
+            rCalcPara.m_rCalc.SetCalcError( SwCalcError::NONE ); // reset status
 
             double aNum = 0.0;
             sText = bOK ? sText.copy( nSttPos ) : OUString();
@@ -237,13 +237,13 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
 
     if( !rCalcPara.IsStackOverflow() )
     {
-        rCalcPara.pBoxStack->erase( pBox );      // remove from stack
+        rCalcPara.m_pBoxStack->erase( pBox );      // remove from stack
         rCalcPara.DecStackCnt();
     }
 
     //JP 12.01.99: error detection, Bug 60794
     if( DBL_MAX == nRet )
-        rCalcPara.rCalc.SetCalcError( SwCalcError::Syntax ); // set error
+        rCalcPara.m_rCalc.SetCalcError( SwCalcError::Syntax ); // set error
 
     return nRet;
 }
@@ -251,9 +251,9 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
 // structure needed for calculation of tables
 
 SwTableCalcPara::SwTableCalcPara( SwCalc& rCalculator, const SwTable& rTable )
-    : pLastTableBox( nullptr ), nStackCnt( 0 ), nMaxSize( cMAXSTACKSIZE ),
-    pBoxStack( new SwTableSortBoxes ),
-    rCalc( rCalculator ), pTable( &rTable )
+    : m_pLastTableBox( nullptr ), m_nStackCount( 0 ), m_nMaxSize( cMAXSTACKSIZE ),
+    m_pBoxStack( new SwTableSortBoxes ),
+    m_rCalc( rCalculator ), m_pTable( &rTable )
 {
 }
 
@@ -264,38 +264,38 @@ SwTableCalcPara::~SwTableCalcPara()
 bool SwTableCalcPara::CalcWithStackOverflow()
 {
     // If a stack overflow was detected, redo with last box.
-    sal_uInt16 nSaveMaxSize = nMaxSize;
+    sal_uInt16 nSaveMaxSize = m_nMaxSize;
 
-    nMaxSize = cMAXSTACKSIZE - 5;
+    m_nMaxSize = cMAXSTACKSIZE - 5;
     sal_uInt16 nCnt = 0;
     SwTableBoxes aStackOverflows;
     do {
-        SwTableBox* pBox = const_cast<SwTableBox*>(pLastTableBox);
-        nStackCnt = 0;
-        rCalc.SetCalcError( SwCalcError::NONE );
+        SwTableBox* pBox = const_cast<SwTableBox*>(m_pLastTableBox);
+        m_nStackCount = 0;
+        m_rCalc.SetCalcError( SwCalcError::NONE );
         aStackOverflows.insert( aStackOverflows.begin() + nCnt++, pBox );
 
-        pBoxStack->erase( pBox );
+        m_pBoxStack->erase( pBox );
         pBox->GetValue( *this );
     } while( IsStackOverflow() );
 
-    nMaxSize = cMAXSTACKSIZE - 3; // decrease at least one level
+    m_nMaxSize = cMAXSTACKSIZE - 3; // decrease at least one level
 
     // if recursion was detected
-    nStackCnt = 0;
-    rCalc.SetCalcError( SwCalcError::NONE );
-    pBoxStack->clear();
+    m_nStackCount = 0;
+    m_rCalc.SetCalcError( SwCalcError::NONE );
+    m_pBoxStack->clear();
 
-    while( !rCalc.IsCalcError() && nCnt )
+    while( !m_rCalc.IsCalcError() && nCnt )
     {
         aStackOverflows[ --nCnt ]->GetValue( *this );
         if( IsStackOverflow() && !CalcWithStackOverflow() )
             break;
     }
 
-    nMaxSize = nSaveMaxSize;
+    m_nMaxSize = nSaveMaxSize;
     aStackOverflows.clear();
-    return !rCalc.IsCalcError();
+    return !m_rCalc.IsCalcError();
 }
 
 SwTableFormula::SwTableFormula( const OUString& rFormula )
@@ -313,7 +313,7 @@ void SwTableFormula::MakeFormula_( const SwTable& rTable, OUString& rNewStr,
                     OUString& rFirstBox, OUString* pLastBox, void* pPara ) const
 {
     SwTableCalcPara* pCalcPara = static_cast<SwTableCalcPara*>(pPara);
-    if( pCalcPara->rCalc.IsCalcError() )        // stop if there is already an error set
+    if( pCalcPara->m_rCalc.IsCalcError() )        // stop if there is already an error set
         return;
 
     SwTableBox *pEndBox = nullptr;
@@ -345,7 +345,7 @@ void SwTableFormula::MakeFormula_( const SwTable& rTable, OUString& rNewStr,
         rNewStr += "(";
         bool bDelim = false;
         for (size_t n = 0; n < aBoxes.size() &&
-                           !pCalcPara->rCalc.IsCalcError(); ++n)
+                           !pCalcPara->m_rCalc.IsCalcError(); ++n)
         {
             const SwTableBox* pTableBox = aBoxes[n];
             if ( pTableBox->getRowSpan() >= 1 )
@@ -353,7 +353,7 @@ void SwTableFormula::MakeFormula_( const SwTable& rTable, OUString& rNewStr,
                 if( bDelim )
                     rNewStr += OUStringLiteral1(cListDelim);
                 bDelim = true;
-                rNewStr += pCalcPara->rCalc.GetStrResult(
+                rNewStr += pCalcPara->m_rCalc.GetStrResult(
                             pTableBox->GetValue( *pCalcPara ) );
             }
         }
@@ -366,13 +366,13 @@ void SwTableFormula::MakeFormula_( const SwTable& rTable, OUString& rNewStr,
         if ( pSttBox->getRowSpan() >= 1 )
         {
             rNewStr += "(";
-            rNewStr += pCalcPara->rCalc.GetStrResult(
+            rNewStr += pCalcPara->m_rCalc.GetStrResult(
                             pSttBox->GetValue( *pCalcPara ) );
             rNewStr += ")";
         }
     }
     else
-        pCalcPara->rCalc.SetCalcError( SwCalcError::Syntax );   // set error
+        pCalcPara->m_rCalc.SetCalcError( SwCalcError::Syntax );   // set error
     rNewStr += " ";
 }
 

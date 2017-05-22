@@ -34,22 +34,22 @@ class SwDoc;
 
 class SwTableCalcPara
 {
-    const SwTableBox* pLastTableBox;
-    sal_uInt16 nStackCnt, nMaxSize;
+    const SwTableBox* m_pLastTableBox;
+    sal_uInt16 m_nStackCount, m_nMaxSize;
 
 public:
-    std::unique_ptr<SwTableSortBoxes> pBoxStack;  ///< stack for recognizing recursion
-    SwCalc& rCalc;              ///< current Calculator
-    const SwTable* pTable;        ///< current table
+    std::unique_ptr<SwTableSortBoxes> m_pBoxStack;  ///< stack for recognizing recursion
+    SwCalc& m_rCalc;              ///< current Calculator
+    const SwTable* m_pTable;        ///< current table
 
     SwTableCalcPara( SwCalc& rCalculator, const SwTable& rTable );
     ~SwTableCalcPara();
 
     bool CalcWithStackOverflow();
-    bool IsStackOverflow() const        { return nMaxSize == nStackCnt; }
-    bool IncStackCnt()                  { return nMaxSize == ++nStackCnt; }
-    void DecStackCnt()                  { if( nStackCnt ) --nStackCnt; }
-    void SetLastTableBox( const SwTableBox* pBox )    { pLastTableBox = pBox; }
+    bool IsStackOverflow() const        { return m_nMaxSize == m_nStackCount; }
+    bool IncStackCnt()                  { return m_nMaxSize == ++m_nStackCount; }
+    void DecStackCnt()                  { if( m_nStackCount ) --m_nStackCount; }
+    void SetLastTableBox( const SwTableBox* pBox )    { m_pLastTableBox = pBox; }
 };
 
 class SwTableFormula
@@ -101,7 +101,7 @@ protected:
     OUString MakeFormula( SwTableCalcPara& rCalcPara ) const
     {
         return ScanString( &SwTableFormula::MakeFormula_,
-                            *rCalcPara.pTable, &rCalcPara );
+                            *rCalcPara.m_pTable, &rCalcPara );
     }
 
     static sal_uInt16 GetLnPosInTable( const SwTable& rTable, const SwTableBox* pBox );
