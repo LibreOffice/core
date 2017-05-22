@@ -30,6 +30,11 @@ String RID_SVXSTR_TRANSPARENT
     Text [ en-US ] = "Transparent";
 };
 
+String RID_SVXSTR_DEFAULT
+{
+    Text [ en-US ] = "Default";
+};
+
 String RID_SVXSTR_FRAME
 {
     Text [ en-US ] = "Borders" ;

@@ -643,47 +643,27 @@ namespace pcr
 
     #define LB_DEFAULT_COUNT 20
 
-    OUString MakeHexStr(sal_uInt32 nVal, sal_Int32 nLength)
-    {
-        OUStringBuffer aStr;
-        while (nVal>0)
-        {
-            char c = char(nVal & 0x000F);
-            nVal >>= 4;
-            if (c<=9) c += '0';
-            else c += 'A' - 10;
-            aStr.insert(0, c);
-        }
-        while (aStr.getLength() < nLength) aStr.insert(0, '0');
-        return aStr.makeStringAndClear();
-    }
-
     OColorControl::OColorControl(vcl::Window* pParent, WinBits nWinStyle)
         : OColorControl_Base(PropertyControlType::ColorListBox, pParent, nWinStyle)
     {
+        getTypedControlWindow()->SetSlotId(SID_FM_CTL_PROPERTIES);
     }
 
     void SAL_CALL OColorControl::setValue( const Any& _rValue )
     {
-        if ( _rValue.hasValue() )
-        {
-            css::util::Color nColor = COL_TRANSPARENT;
+        css::util::Color nColor = COL_TRANSPARENT;
+        if (_rValue.hasValue())
             _rValue >>= nColor;
-            ::Color aRgbCol((ColorData)nColor);
-           getTypedControlWindow()->SelectEntry(std::make_pair(aRgbCol, MakeHexStr(nColor, 8)));
-        }
-        else
-            getTypedControlWindow()->SetNoSelection();
+        getTypedControlWindow()->SelectEntry(::Color((ColorData)nColor));
     }
 
     Any SAL_CALL OColorControl::getValue()
     {
         Any aPropValue;
-        if (!getTypedControlWindow()->IsNoSelection())
-        {
-            ::Color aRgbCol = getTypedControlWindow()->GetSelectEntryColor();
-            aPropValue <<= (css::util::Color)aRgbCol.GetColor();
-        }
+        ::Color aRgbCol = getTypedControlWindow()->GetSelectEntryColor();
+        if (aRgbCol == COL_TRANSPARENT)
+            return aPropValue;
+        aPropValue <<= (css::util::Color)aRgbCol.GetColor();
         return aPropValue;
     }
 
