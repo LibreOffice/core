@@ -261,7 +261,6 @@ SAL_CALL XMLSignature_GpgImpl::validate(
 
         //Get Keys Manager
         Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY_THROW ) ;
-#if 0
         SecurityEnvironment_NssImpl* pSecEnv =
             reinterpret_cast<SecurityEnvironment_NssImpl*>(
                 sal::static_int_cast<sal_uIntPtr>(
@@ -314,7 +313,6 @@ SAL_CALL XMLSignature_GpgImpl::validate(
         }
         xmlSecDSigCtxDestroy( pDsigCtx ) ;
         SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
-#endif
     }
 
 
