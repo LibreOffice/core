@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_ff551e1d",
+        "filename": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3557,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-05-22T20:36:00Z",
+      "side": 1,
+      "message": "please read carefully the surrounding comments, this one has Denkmalschutz :)",
+      "revId": "8c74b6b41d7c2a9c228c94f5f64c50076fe4917b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
