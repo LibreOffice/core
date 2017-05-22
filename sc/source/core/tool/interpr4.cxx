@@ -1491,11 +1491,14 @@ bool ScInterpreter::ConvertMatrixParameters()
                 {
                     formula::ParamClass eType = ScParameterClassification::GetParameterType( pCur, nParams - i);
                     if ( eType != formula::ParamClass::Reference &&
-                            eType != formula::ParamClass::ReferenceOrForceArray)
+                            eType != formula::ParamClass::ReferenceOrForceArray &&
+                            eType != formula::ParamClass::ForceArray)
                     {
                         // can't convert to matrix
                         SetError( FormulaError::NoValue);
                     }
+                    // else: the consuming function has to decide if and how to
+                    // handle a reference list argument in array context.
                 }
                 break;
                 default:
