@@ -19,6 +19,8 @@ std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec);
 #include <osl/file.hxx>
 #include <osl/process.h>
 
+#include <config_test.h>
+
 std::ostream& operator<<(std::ostream& rStream, const std::vector<long>& rVec)
 {
     rStream << "{ ";
@@ -41,13 +43,16 @@ public:
 #endif
 
     CPPUNIT_TEST_SUITE(VclComplexTextTest);
+#if !TEST_FONTS_MISSING
     CPPUNIT_TEST(testArabic);
+#endif
 #if defined(_WIN32)
     CPPUNIT_TEST(testTdf95650);
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
 
+#if !TEST_FONTS_MISSING
 void VclComplexTextTest::testArabic()
 {
     const unsigned char pOneTwoThreeUTF8[] = {
@@ -121,6 +126,7 @@ void VclComplexTextTest::testArabic()
     (void)aRect; (void)aRectRot;
 #endif
 }
+#endif
 
 #if defined(_WIN32)
 void VclComplexTextTest::testTdf95650()
