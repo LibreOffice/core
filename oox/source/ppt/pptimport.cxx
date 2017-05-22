@@ -86,6 +86,30 @@ PowerPointImport::~PowerPointImport()
 {
 }
 
+/// Visits the relations from pRelations which are of type rType.
+static void visitRelations(PowerPointImport& rImport, core::RelationsRef pRelations, const OUString& rType, std::vector<OUString>& rImageFragments)
+{
+    if (core::RelationsRef pRelationsOfType = pRelations->getRelationsFromTypeFromOfficeDoc(rType))
+    {
+        for (const auto& rRelation : *pRelationsOfType)
+        {
+            OUString aFragment = pRelationsOfType->getFragmentPathFromRelation(rRelation.second);
+            if (core::RelationsRef pFragmentRelations = rImport.importRelations(aFragment))
+            {
+                // See if the fragment has images.
+                if (core::RelationsRef pImages = pFragmentRelations->getRelationsFromTypeFromOfficeDoc("image"))
+                {
+                    for (const auto& rImage : *pImages)
+                        rImageFragments.push_back(pImages->getFragmentPathFromRelation(rImage.second));
+                }
+
+                // See if the fragment has a slide layout, and recurse.
+                visitRelations(rImport, pFragmentRelations, "slideLayout", rImageFragments);
+            }
+        }
+    }
+}
+
 bool PowerPointImport::importDocument()
 {
     /*  to activate the PPTX dumper, define the environment variable
@@ -98,6 +122,23 @@ bool PowerPointImport::importDocument()
     OUString aFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "officeDocument" );
     FragmentHandlerRef xPresentationFragmentHandler( new PresentationFragmentHandler( *this, aFragmentPath ) );
     maTableStyleListPath = xPresentationFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( "tableStyles" );
+
+    // importRelations() is cheap, it will do an actual import for the first time only.
+    if (core::RelationsRef pFragmentRelations = importRelations(aFragmentPath))
+    {
+        std::vector<OUString> aImageFragments;
+        visitRelations(*this, pFragmentRelations, "slide", aImageFragments);
+        visitRelations(*this, pFragmentRelations, "slideMaster", aImageFragments);
+
+        for (const auto& rImage : aImageFragments)
+        {
+            // Safe subset: e.g. WMF may have an external header from the
+            // referencing fragment.
+            if (rImage.endsWith(".jpg") || rImage.endsWith(".jpeg"))
+                getGraphicHelper().importEmbeddedGraphic(rImage);
+        }
+    }
+
     bool bRet = importFragment(xPresentationFragmentHandler);
 
     if (mbMissingExtDrawing)
