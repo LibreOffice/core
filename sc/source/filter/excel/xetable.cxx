@@ -890,8 +890,8 @@ XclExpFormulaCell::XclExpFormulaCell(
                 OSL_ENSURE( nMatWidth && nMatHeight, "XclExpFormulaCell::XclExpFormulaCell - empty matrix" );
                 ScRange aMatScRange( aScPos );
                 ScAddress& rMatEnd = aMatScRange.aEnd;
-                rMatEnd.IncCol( static_cast< SCsCOL >( nMatWidth - 1 ) );
-                rMatEnd.IncRow( static_cast< SCsROW >( nMatHeight - 1 ) );
+                rMatEnd.IncCol( static_cast< SCCOL >( nMatWidth - 1 ) );
+                rMatEnd.IncRow( static_cast< SCROW >( nMatHeight - 1 ) );
                 // reduce to valid range (range keeps valid, because start position IS valid)
                 rRoot.GetAddressConverter().ValidateRange( aMatScRange, true );
                 // create the ARRAY record
@@ -974,8 +974,8 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
                 OSL_ENSURE( nMatWidth && nMatHeight, "XclExpFormulaCell::XclExpFormulaCell - empty matrix" );
                 ScRange aMatScRange( aScPos );
                 ScAddress& rMatEnd = aMatScRange.aEnd;
-                rMatEnd.IncCol( static_cast< SCsCOL >( nMatWidth - 1 ) );
-                rMatEnd.IncRow( static_cast< SCsROW >( nMatHeight - 1 ) );
+                rMatEnd.IncCol( static_cast< SCCOL >( nMatWidth - 1 ) );
+                rMatEnd.IncRow( static_cast< SCROW >( nMatHeight - 1 ) );
                 // reduce to valid range (range keeps valid, because start position IS valid
                 rStrm.GetRoot().GetAddressConverter().ValidateRange( aMatScRange, true );
 

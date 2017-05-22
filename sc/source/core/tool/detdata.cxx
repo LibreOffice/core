@@ -44,7 +44,7 @@ void ScDetOpList::DeleteOnTab( SCTAB nTab )
 }
 
 void ScDetOpList::UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+                                const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
     for (ScDetOpDataVector::iterator it = aDetOpDataVector.begin(); it != aDetOpDataVector.end(); ++it )
     {

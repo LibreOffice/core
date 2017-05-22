@@ -1637,7 +1637,7 @@ short ScTable::Compare( ScSortInfoArray* pArray, SCCOLROW nIndex1, SCCOLROW nInd
     return nRes;
 }
 
-void ScTable::QuickSort( ScSortInfoArray* pArray, SCsCOLROW nLo, SCsCOLROW nHi )
+void ScTable::QuickSort( ScSortInfoArray* pArray, SCCOLROW nLo, SCCOLROW nHi )
 {
     if ((nHi - nLo) == 1)
     {
@@ -1646,8 +1646,8 @@ void ScTable::QuickSort( ScSortInfoArray* pArray, SCsCOLROW nLo, SCsCOLROW nHi )
     }
     else
     {
-        SCsCOLROW ni = nLo;
-        SCsCOLROW nj = nHi;
+        SCCOLROW ni = nLo;
+        SCCOLROW nj = nHi;
         do
         {
             while ((ni <= nHi) && (Compare(pArray, ni, nLo)) < 0)

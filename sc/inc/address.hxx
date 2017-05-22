@@ -283,15 +283,15 @@ public:
 
     inline void PutInOrder( ScAddress& rAddress );
 
-    void IncRow( SCsROW nDelta = 1 )
+    void IncRow( SCROW nDelta = 1 )
     {
         nRow = sal::static_int_cast<SCROW>(nRow + nDelta);
     }
-    void IncCol( SCsCOL nDelta = 1 )
+    void IncCol( SCCOL nDelta = 1 )
     {
         nCol = sal::static_int_cast<SCCOL>(nCol + nDelta);
     }
-    void IncTab( SCsTAB nDelta = 1 )
+    void IncTab( SCTAB nDelta = 1 )
     {
         nTab = sal::static_int_cast<SCTAB>(nTab + nDelta);
     }
@@ -332,7 +332,7 @@ public:
         @param  pDocument
                 The document for the maximum defined sheet number.
      */
-    SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool Move( SCsCOL nDeltaX, SCsROW nDeltaY, SCsTAB nDeltaZ,
+    SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool Move( SCCOL nDeltaX, SCROW nDeltaY, SCTAB nDeltaZ,
             ScAddress& rErrorPos, ScDocument* pDocument = nullptr );
 
     inline bool operator==( const ScAddress& rAddress ) const;
@@ -595,11 +595,11 @@ public:
         @param  pDocument
                 The document for the maximum defined sheet number.
      */
-    SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool Move( SCsCOL aDeltaX, SCsROW aDeltaY, SCsTAB aDeltaZ,
+    SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool Move( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
             ScRange& rErrorRange, ScDocument* pDocument = nullptr );
 
     /** Same as Move() but with sticky end col/row anchors. */
-    SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool MoveSticky( SCsCOL aDeltaX, SCsROW aDeltaY, SCsTAB aDeltaZ,
+    SC_DLLPUBLIC SAL_WARN_UNUSED_RESULT bool MoveSticky( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
             ScRange& rErrorRange );
 
     SC_DLLPUBLIC void ExtendTo( const ScRange& rRange );
@@ -615,12 +615,12 @@ public:
     /** Increment or decrement end column unless sticky or until it becomes
         sticky. Checks if the range encompasses at least two columns so should
         be called before adjusting the start column. */
-    void IncEndColSticky( SCsCOL nDelta );
+    void IncEndColSticky( SCCOL nDelta );
 
     /** Increment or decrement end row unless sticky or until it becomes
         sticky. Checks if the range encompasses at least two rows so should
         be called before adjusting the start row. */
-    void IncEndRowSticky( SCsROW nDelta );
+    void IncEndRowSticky( SCROW nDelta );
 
     inline bool operator==( const ScRange& rRange ) const;
     inline bool operator!=( const ScRange& rRange ) const;

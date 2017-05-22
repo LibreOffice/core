@@ -50,20 +50,20 @@ class ScUpdateRefHint : public SfxHint
 {
     UpdateRefMode   eUpdateRefMode;
     ScRange         aRange;
-    SCsCOL          nDx;
-    SCsROW          nDy;
-    SCsTAB          nDz;
+    SCCOL           nDx;
+    SCROW           nDy;
+    SCTAB           nDz;
 
 public:
                     ScUpdateRefHint( UpdateRefMode eMode, const ScRange& rR,
-                                        SCsCOL nX, SCsROW nY, SCsTAB nZ );
+                                        SCCOL nX, SCROW nY, SCTAB nZ );
                     virtual ~ScUpdateRefHint() override;
 
     UpdateRefMode   GetMode() const         { return eUpdateRefMode; }
     const ScRange&  GetRange() const        { return aRange; }
-    SCsCOL          GetDx() const           { return nDx; }
-    SCsROW          GetDy() const           { return nDy; }
-    SCsTAB          GetDz() const           { return nDz; }
+    SCCOL           GetDx() const           { return nDx; }
+    SCROW           GetDy() const           { return nDy; }
+    SCTAB           GetDz() const           { return nDz; }
 };
 
 //! move ScLinkRefreshedHint to a different file?

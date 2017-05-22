@@ -35,7 +35,7 @@ ScPaintHint::~ScPaintHint()
 // ScUpdateRefHint - update references
 
 ScUpdateRefHint::ScUpdateRefHint( UpdateRefMode eMode, const ScRange& rR,
-                                    SCsCOL nX, SCsROW nY, SCsTAB nZ ) :
+                                    SCCOL nX, SCROW nY, SCTAB nZ ) :
     eUpdateRefMode( eMode ),
     aRange( rR ),
     nDx( nX ),

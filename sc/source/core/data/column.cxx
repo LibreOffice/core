@@ -114,7 +114,7 @@ void ScColumn::Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, bool bEmptyA
         pAttrArray = new ScAttrArray( nCol, nTab, pDocument, &pDocument->maTabs[nTab]->aDefaultColAttrArray );
 }
 
-SCsROW ScColumn::GetNextUnprotected( SCROW nRow, bool bUp ) const
+SCROW ScColumn::GetNextUnprotected( SCROW nRow, bool bUp ) const
 {
     return pAttrArray->GetNextUnprotected(nRow, bUp);
 }
@@ -424,7 +424,7 @@ sal_uInt32 ScColumn::GetNumberFormat( SCROW nRow ) const
     return pAttrArray->GetPattern( nRow )->GetNumberFormat( pDocument->GetFormatTable() );
 }
 
-SCsROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray )
+SCROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray )
 {
     SCROW nTop = 0;
     SCROW nBottom = 0;
@@ -3488,8 +3488,8 @@ bool ScColumn::HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst)
     return true;
 }
 
-SCsROW ScColumn::SearchStyle(
-    SCsROW nRow, const ScStyleSheet* pSearchStyle, bool bUp, bool bInSelection,
+SCROW ScColumn::SearchStyle(
+    SCROW nRow, const ScStyleSheet* pSearchStyle, bool bUp, bool bInSelection,
     const ScMarkData& rMark) const
 {
     if (bInSelection)
@@ -3507,7 +3507,7 @@ SCsROW ScColumn::SearchStyle(
 }
 
 bool ScColumn::SearchStyleRange(
-    SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
+    SCROW& rRow, SCROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
     bool bInSelection, const ScMarkData& rMark) const
 {
     if (bInSelection)

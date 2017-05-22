@@ -263,7 +263,7 @@ static bool lcl_ScRange_External_TabSpan(
         return true;
     }
 
-    SCsTAB nSpan = pRefMgr->getCachedTabSpan( nFileId, rStartTabName, rEndTabName);
+    SCTAB nSpan = pRefMgr->getCachedTabSpan( nFileId, rStartTabName, rEndTabName);
     if (nSpan == -1)
         rFlags &= ~ScRefFlags(ScRefFlags::TAB_VALID | ScRefFlags::TAB2_VALID);
     else if (nSpan == 0)
@@ -2299,9 +2299,9 @@ OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
     return r.makeStringAndClear();
 }
 
-bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScAddress& rErrorPos, ScDocument* pDoc )
+bool ScAddress::Move( SCCOL dx, SCROW dy, SCTAB dz, ScAddress& rErrorPos, ScDocument* pDoc )
 {
-    SCsTAB nMaxTab = pDoc ? pDoc->GetTableCount() : MAXTAB;
+    SCTAB nMaxTab = pDoc ? pDoc->GetTableCount() : MAXTAB;
     dx = Col() + dx;
     dy = Row() + dy;
     dz = Tab() + dz;
@@ -2345,7 +2345,7 @@ bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScAddress& rErrorPos, ScD
     return bValid;
 }
 
-bool ScRange::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScRange& rErrorRange, ScDocument* pDoc )
+bool ScRange::Move( SCCOL dx, SCROW dy, SCTAB dz, ScRange& rErrorRange, ScDocument* pDoc )
 {
     if (dy && aStart.Row() == 0 && aEnd.Row() == MAXROW)
         dy = 0;     // Entire column not to be moved.
@@ -2356,7 +2356,7 @@ bool ScRange::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScRange& rErrorRange, ScDoc
     return b;
 }
 
-bool ScRange::MoveSticky( SCsCOL dx, SCsROW dy, SCsTAB dz, ScRange& rErrorRange )
+bool ScRange::MoveSticky( SCCOL dx, SCROW dy, SCTAB dz, ScRange& rErrorRange )
 {
     bool bColRange = (aStart.Col() < aEnd.Col());
     bool bRowRange = (aStart.Row() < aEnd.Row());
@@ -2385,7 +2385,7 @@ bool ScRange::MoveSticky( SCsCOL dx, SCsROW dy, SCsTAB dz, ScRange& rErrorRange 
     return b1 && b2;
 }
 
-void ScRange::IncEndColSticky( SCsCOL nDelta )
+void ScRange::IncEndColSticky( SCCOL nDelta )
 {
     SCCOL nCol = aEnd.Col();
     if (aStart.Col() >= nCol)
@@ -2405,7 +2405,7 @@ void ScRange::IncEndColSticky( SCsCOL nDelta )
         aEnd.IncCol( nDelta);   // was greater than MAXCOL, caller should know..
 }
 
-void ScRange::IncEndRowSticky( SCsROW nDelta )
+void ScRange::IncEndRowSticky( SCROW nDelta )
 {
     SCROW nRow = aEnd.Row();
     if (aStart.Row() >= nRow)

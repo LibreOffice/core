@@ -2335,7 +2335,7 @@ void Sc10Import::LoadObjects()
                 nStartX += (long) ( GraphHeader.x / nPPTX * HMM_PER_TWIPS );
                 long nSizeX = (long) ( GraphHeader.w / nPPTX * HMM_PER_TWIPS );
                 long nStartY = pDoc->GetRowHeight( 0,
-                        SanitizeRow(static_cast<SCsROW>(GraphHeader.CarretY) - 1),
+                        SanitizeRow(static_cast<SCROW>(GraphHeader.CarretY) - 1),
                         SanitizeTab(static_cast<SCTAB>(GraphHeader.CarretZ)));
                 nStartY = (long) ( nStartY * HMM_PER_TWIPS );
                 nStartY += (long) ( GraphHeader.y / nPPTY * HMM_PER_TWIPS );

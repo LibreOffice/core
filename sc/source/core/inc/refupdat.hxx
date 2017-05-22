@@ -47,7 +47,7 @@ public:
         ( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                             SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                            SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
+                            SCCOL nDx, SCROW nDy, SCTAB nDz,
                             SCCOL& theCol1, SCROW& theRow1, SCTAB& theTab1,
                             SCCOL& theCol2, SCROW& theRow2, SCTAB& theTab2 );
 
@@ -62,7 +62,7 @@ public:
     static ScRefUpdateRes UpdateTranspose(
         ScDocument* pDoc, const ScRange& rSource, const ScAddress& rDest, ScRange& rRef );
 
-    static void DoTranspose( SCsCOL& rCol, SCsROW& rRow, SCsTAB& rTab, ScDocument* pDoc,
+    static void DoTranspose( SCCOL& rCol, SCROW& rRow, SCTAB& rTab, ScDocument* pDoc,
                                 const ScRange& rSource, const ScAddress& rDest );
 
     static ScRefUpdateRes UpdateGrow(

@@ -173,13 +173,13 @@ bool ScMultiSel::HasEqualRowsMarked( SCCOL nCol1, SCCOL nCol2 ) const
     return true;
 }
 
-SCsROW ScMultiSel::GetNextMarked( SCCOL nCol, SCsROW nRow, bool bUp ) const
+SCROW ScMultiSel::GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const
 {
     MapType::const_iterator aIter = aMultiSelContainer.find( nCol );
     if ( aIter == aMultiSelContainer.end() )
         return aRowSel.GetNextMarked( nRow, bUp );
 
-    SCsROW nRow1, nRow2;
+    SCROW nRow1, nRow2;
     nRow1 = aRowSel.GetNextMarked( nRow, bUp );
     nRow2 = aIter->second.GetNextMarked( nRow, bUp );
     if ( nRow1 == nRow2 )

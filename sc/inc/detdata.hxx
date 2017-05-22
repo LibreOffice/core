@@ -68,7 +68,7 @@ public:
 
     void    DeleteOnTab( SCTAB nTab );
     void    UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
-                                const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+                                const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz );
 
     bool        operator==( const ScDetOpList& r ) const;       // for ref-undo
 

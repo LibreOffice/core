@@ -209,7 +209,7 @@ public:
     bool                GetMembers( sal_Int32 nDim, sal_Int32 nHier, ::std::vector<ScDPLabelData::Member>& rMembers );
 
     void                UpdateReference( UpdateRefMode eUpdateRefMode,
-                                         const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+                                         const ScRange& r, SCCOL nDx, SCROW nDy, SCTAB nDz );
     bool                RefsEqual( const ScDPObject& r ) const;
     void                WriteRefsTo( ScDPObject& r ) const;
 
@@ -279,7 +279,7 @@ public:
         SC_DLLPUBLIC size_t size() const;
 
         void updateReference(
-            UpdateRefMode eMode, const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
+            UpdateRefMode eMode, const ScRange& r, SCCOL nDx, SCROW nDy, SCTAB nDz);
 
         SC_DLLPUBLIC ScDPCache* getExistingCache(const ScRange& rRange);
         SC_DLLPUBLIC const ScDPCache* getExistingCache(const ScRange& rRange) const;
@@ -375,7 +375,7 @@ public:
 
     void DeleteOnTab( SCTAB nTab );
     void UpdateReference( UpdateRefMode eUpdateRefMode,
-                          const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+                          const ScRange& r, SCCOL nDx, SCROW nDy, SCTAB nDz );
     void CopyToTab( SCTAB nOld, SCTAB nNew );
     bool RefsEqual( const ScDPCollection& r ) const;
     void WriteRefsTo( ScDPCollection& r ) const;

@@ -67,23 +67,23 @@ bool FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
                 Point aLineStart = pObject->GetPoint(0);
                 Point aLineEnd   = pObject->GetPoint(1);
                 Point aPixel = pWindow->LogicToPixel( aLineStart );
-                SCsCOL nStartCol;
-                SCsROW nStartRow;
+                SCCOL nStartCol;
+                SCROW nStartRow;
                 rViewData.GetPosFromPixel( aPixel.X(), aPixel.Y(), ePos, nStartCol, nStartRow );
                 aPixel = pWindow->LogicToPixel( aLineEnd );
-                SCsCOL nEndCol;
-                SCsROW nEndRow;
+                SCCOL nEndCol;
+                SCROW nEndRow;
                 rViewData.GetPosFromPixel( aPixel.X(), aPixel.Y(), ePos, nEndCol, nEndRow );
-                SCsCOL nCurX = (SCsCOL) rViewData.GetCurX();
-                SCsROW nCurY = (SCsROW) rViewData.GetCurY();
+                SCCOL nCurX = rViewData.GetCurX();
+                SCROW nCurY = rViewData.GetCurY();
                 bool bStart = ( Diff( rPos,aLineStart ) > Diff( rPos,aLineEnd ) );
                 if ( nCurX == nStartCol && nCurY == nStartRow )
                     bStart = false;
                 else if ( nCurX == nEndCol && nCurY == nEndRow )
                     bStart = true;
 
-                SCsCOL nDifX;
-                SCsROW nDifY;
+                SCCOL nDifX;
+                SCROW nDifY;
                 if ( bStart )
                 {
                     nDifX = nStartCol - nCurX;

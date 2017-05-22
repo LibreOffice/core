@@ -1402,7 +1402,7 @@ void XclImpPivotTable::Convert()
     ScRange aOutRange( maOutScRange );
     if( !maPageFields.empty() )
     {
-        SCsROW nDecRows = ::std::min< SCsROW >( aOutRange.aStart.Row(), maPageFields.size() + 1 );
+        SCROW nDecRows = ::std::min< SCROW >( aOutRange.aStart.Row(), maPageFields.size() + 1 );
         aOutRange.aStart.IncRow( -nDecRows );
     }
 

@@ -156,8 +156,8 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     ScDPObject*             pDragDPObj; //! name?
 
     sal_uInt16              nRFIndex;
-    SCsCOL                  nRFAddX;
-    SCsROW                  nRFAddY;
+    SCCOL                   nRFAddX;
+    SCROW                   nRFAddY;
 
     sal_uInt16              nPagebreakMouse;        // Page break mode, Drag
     SCCOLROW                nPagebreakBreak;
@@ -268,7 +268,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     bool IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCROW nRow );
 
     bool            HitRangeFinder( const Point& rMouse, RfCorner& rCorner, sal_uInt16* pIndex,
-                                    SCsCOL* pAddX, SCsROW* pAddY );
+                                    SCCOL* pAddX, SCROW* pAddY );
 
     sal_uInt16      HitPageBreak( const Point& rMouse, ScRange* pSource,
                                   SCCOLROW* pBreak, SCCOLROW* pPrev );
@@ -279,11 +279,11 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
         rTextStartPosX returns the column where the text that overflows
         starts.
     */
-    bool            IsCellCoveredByText(SCsCOL nPosX, SCsROW nPosY, SCTAB nTab, SCsCOL &rTextStartPosX);
+    bool            IsCellCoveredByText(SCCOL nPosX, SCROW nPosY, SCTAB nTab, SCCOL &rTextStartPosX);
 
     void            PasteSelection( const Point& rPosPixel );
 
-    void            SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, SCsROW nCellY );
+    void            SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, SCROW nCellY );
 
     void            GetSelectionRects( ::std::vector< tools::Rectangle >& rPixelRects );
 
@@ -386,7 +386,7 @@ public:
 
     void            UpdateListValPos( bool bVisible, const ScAddress& rPos );
 
-    bool            ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard );
+    bool            ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard );
     void            HideNoteMarker();
 
     /// MapMode for the drawinglayer objects.

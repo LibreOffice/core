@@ -1081,7 +1081,7 @@ void ScDocument::DeleteAreaLinksOnTab( SCTAB nTab )
 }
 
 void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
-                             const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+                             const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
     sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(false);
     if (!pMgr)

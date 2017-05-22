@@ -519,7 +519,7 @@ inline bool IsInBlock( const ScAddress& rPos, SCCOL nCol1,SCROW nRow1, SCCOL nCo
 }
 
 void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
-                                SCsCOL nDx,SCsROW nDy, bool bUpdateNoteCaptionPos )
+                                SCCOL nDx,SCROW nDy, bool bUpdateNoteCaptionPos )
 {
     SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
     OSL_ENSURE(pPage,"Page not found");
@@ -1138,7 +1138,7 @@ SdrUndoGroup* ScDrawLayer::GetCalcUndo()
 }
 
 void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
-                            SCsCOL nDx,SCsROW nDy, bool bInsDel, bool bUpdateNoteCaptionPos )
+                            SCCOL nDx,SCROW nDy, bool bInsDel, bool bUpdateNoteCaptionPos )
 {
     OSL_ENSURE( pDoc, "ScDrawLayer::MoveArea without document" );
     if ( !pDoc )
@@ -1156,11 +1156,11 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
     Point aMove;
 
     if (nDx > 0)
-        for (SCsCOL s=0; s<nDx; s++)
-            aMove.X() += pDoc->GetColWidth(s+(SCsCOL)nCol1,nTab);
+        for (SCCOL s=0; s<nDx; s++)
+            aMove.X() += pDoc->GetColWidth(s+nCol1,nTab);
     else
-        for (SCsCOL s=-1; s>=nDx; s--)
-            aMove.X() -= pDoc->GetColWidth(s+(SCsCOL)nCol1,nTab);
+        for (SCCOL s=-1; s>=nDx; s--)
+            aMove.X() -= pDoc->GetColWidth(s+nCol1,nTab);
     if (nDy > 0)
         aMove.Y() += pDoc->GetRowHeight( nRow1, nRow1+nDy-1, nTab);
     else
@@ -1442,9 +1442,9 @@ static bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const S
             ScRange* pRange = rRanges[ i ];
             if ( rSourceRange.In( *pRange ) )
             {
-                SCsCOL nDiffX = rDestPos.Col() - (SCsCOL)rSourceRange.aStart.Col();
-                SCsROW nDiffY = rDestPos.Row() - (SCsROW)rSourceRange.aStart.Row();
-                SCsTAB nDiffZ = rDestPos.Tab() - (SCsTAB)rSourceRange.aStart.Tab();
+                SCCOL nDiffX = rDestPos.Col() - rSourceRange.aStart.Col();
+                SCROW nDiffY = rDestPos.Row() - rSourceRange.aStart.Row();
+                SCTAB nDiffZ = rDestPos.Tab() - rSourceRange.aStart.Tab();
                 if (!pRange->Move( nDiffX, nDiffY, nDiffZ, aErrorRange))
                 {
                     assert(!"can't move range");

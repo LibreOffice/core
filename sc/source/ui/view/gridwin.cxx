@@ -1351,12 +1351,12 @@ void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
     nNestedButtonState = ScNestedButtonState::NONE;
 }
 
-bool ScGridWindow::IsCellCoveredByText(SCsCOL nPosX, SCsROW nPosY, SCTAB nTab, SCsCOL &rTextStartPosX)
+bool ScGridWindow::IsCellCoveredByText(SCCOL nPosX, SCROW nPosY, SCTAB nTab, SCCOL &rTextStartPosX)
 {
     ScDocument* pDoc = pViewData->GetDocument();
 
     // find the first non-empty cell (this, or to the left)
-    SCsCOL nNonEmptyX = nPosX;
+    SCCOL nNonEmptyX = nPosX;
     for (; nNonEmptyX >= 0; --nNonEmptyX)
     {
         ScRefCellValue aCell(*pDoc, ScAddress(nNonEmptyX, nPosY, nTab));
@@ -1401,8 +1401,8 @@ bool ScGridWindow::IsCellCoveredByText(SCsCOL nPosX, SCsROW nPosY, SCTAB nTab, S
     if (aRect.IsEmpty())
         return false;
 
-    SCsCOL nTextEndX;
-    SCsROW nTextEndY;
+    SCCOL nTextEndX;
+    SCROW nTextEndY;
 
     // test the rightmost position of the text bounding box
     long nMiddle = (aRect.Top() + aRect.Bottom()) / 2;
@@ -1468,8 +1468,8 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     if (bIsTiledRendering)
     {
         Point aPos(rMEvt.GetPosPixel());
-        SCsCOL nPosX, nNonEmptyX(0);
-        SCsROW nPosY;
+        SCCOL nPosX, nNonEmptyX(0);
+        SCROW nPosY;
         SCTAB nTab = pViewData->GetTabNo();
         pViewData->GetPosFromPixel(aPos.X(), aPos.Y(), eWhich, nPosX, nPosY);
 
@@ -1524,8 +1524,8 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         if ( rMEvt.IsLeft() && !rMEvt.GetModifier() )
         {
             Point   aPos = rMEvt.GetPosPixel();
-            SCsCOL  nPosX;
-            SCsROW  nPosY;
+            SCCOL  nPosX;
+            SCROW  nPosY;
             pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
 
             SfxInt16Item aPosXItem( SID_RANGE_COL, nPosX );
@@ -1556,8 +1556,8 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     if (bEditMode && (pViewData->GetRefTabNo() == pViewData->GetTabNo()))
     {
         Point   aPos = rMEvt.GetPosPixel();
-        SCsCOL  nPosX;
-        SCsROW  nPosY;
+        SCCOL  nPosX;
+        SCROW  nPosY;
         pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
 
         EditView*   pEditView;
@@ -1567,8 +1567,8 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         SCCOL nEndCol = pViewData->GetEditEndCol();
         SCROW nEndRow = pViewData->GetEditEndRow();
 
-        if ( nPosX >= (SCsCOL) nEditCol && nPosX <= (SCsCOL) nEndCol &&
-             nPosY >= (SCsROW) nEditRow && nPosY <= (SCsROW) nEndRow )
+        if ( nPosX >= nEditCol && nPosX <= nEndCol &&
+             nPosY >= nEditRow && nPosY <= nEndRow )
         {
             // when clicking in the table EditView, always reset the focus
             if (bFormulaMode)   // otherwise this has already happen above
@@ -1645,8 +1645,8 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     }
 
     Point aPos = rMEvt.GetPosPixel();
-    SCsCOL nPosX;
-    SCsROW nPosY;
+    SCCOL nPosX;
+    SCROW nPosY;
     pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
     SCTAB nTab = pViewData->GetTabNo();
 
@@ -1664,8 +1664,8 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
 
     if ( !bDouble && !bFormulaMode && rMEvt.IsLeft() )
     {
-        SCsCOL nRealPosX;
-        SCsROW nRealPosY;
+        SCCOL nRealPosX;
+        SCROW nRealPosY;
         pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nRealPosX, nRealPosY, false );//the real row/col
         const ScMergeFlagAttr* pRealPosAttr = static_cast<const ScMergeFlagAttr*>(
                                     pDoc->GetAttr( nRealPosX, nRealPosY, nTab, ATTR_MERGE_FLAG ));
@@ -2015,8 +2015,8 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         //  data pilot table
         Point aPos = rMEvt.GetPosPixel();
-        SCsCOL nPosX;
-        SCsROW nPosY;
+        SCCOL nPosX;
+        SCROW nPosY;
         SCTAB nTab = pViewData->GetTabNo();
         pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
         ScDPObject* pDPObj  = pDoc->GetDPAtCursor( nPosX, nPosY, nTab );
@@ -2169,8 +2169,8 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             if( xVbaEvents.is() ) try
             {
                 Point aPos = rMEvt.GetPosPixel();
-                SCsCOL nPosX;
-                SCsROW nPosY;
+                SCCOL nPosX;
+                SCROW nPosY;
                 SCTAB nTab = pViewData->GetTabNo();
                 pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
                 OUString sURL;
@@ -2341,8 +2341,8 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
     if ( bEditMode && (pViewData->GetRefTabNo() == pViewData->GetTabNo()) )
     {
         Point   aPos = rMEvt.GetPosPixel();
-        SCsCOL  nPosX;
-        SCsROW  nPosY;
+        SCCOL  nPosX;
+        SCROW  nPosY;
         pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
 
         EditView*   pEditView;
@@ -2352,8 +2352,8 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         SCCOL nEndCol = pViewData->GetEditEndCol();
         SCROW nEndRow = pViewData->GetEditEndRow();
 
-        if ( nPosX >= (SCsCOL) nEditCol && nPosX <= (SCsCOL) nEndCol &&
-             nPosY >= (SCsROW) nEditRow && nPosY <= (SCsROW) nEndRow )
+        if ( nPosX >= nEditCol && nPosX <= nEndCol &&
+             nPosY >= nEditRow && nPosY <= nEndRow )
         {
             //  Field can only be URL field
             bool bAlt = rMEvt.IsMod2();
@@ -2754,8 +2754,8 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
         Point aPosPixel = rCEvt.GetMousePosPixel();
         Point aMenuPos = aPosPixel;
 
-        SCsCOL nCellX = -1;
-        SCsROW nCellY = -1;
+        SCCOL nCellX = -1;
+        SCROW nCellY = -1;
         pViewData->GetPosFromPixel(aPosPixel.X(), aPosPixel.Y(), eWhich, nCellX, nCellY);
 
         bool bSpellError = false;
@@ -2908,7 +2908,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
-void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, SCsROW nCellY )
+void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, SCROW nCellY )
 {
     //  #i18735# if the click was outside of the current selection,
     //  the cursor is moved or an object at the click position selected.
@@ -2927,8 +2927,8 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, 
         SCCOL nEditEndCol = pViewData->GetEditEndCol();
         SCROW nEditEndRow = pViewData->GetEditEndRow();
 
-        if ( nCellX >= (SCsCOL) nEditStartCol && nCellX <= (SCsCOL) nEditEndCol &&
-             nCellY >= (SCsROW) nEditStartRow && nCellY <= (SCsROW) nEditEndRow )
+        if ( nCellX >= nEditStartCol && nCellX <= nEditEndCol &&
+             nCellY >= nEditStartRow && nCellY <= nEditEndRow )
         {
             //  handle selection within the EditView
 
@@ -3238,8 +3238,8 @@ void ScGridWindow::UpdateInputContext()
 
 bool ScGridWindow::DropScroll( const Point& rMousePos )
 {
-    SCsCOL nDx = 0;
-    SCsROW nDy = 0;
+    SCCOL nDx = 0;
+    SCROW nDy = 0;
     Size aSize = GetOutputSizePixel();
 
     if (aSize.Width() > SCROLL_SENSITIVE * 3)
@@ -3369,8 +3369,8 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
             return bOk ? rEvt.mnAction : 0;                     // don't draw selection frame
         }
 
-        SCsCOL  nPosX;
-        SCsROW  nPosY;
+        SCCOL  nPosX;
+        SCROW  nPosY;
         pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
 
         ScRange aSourceRange = rData.pCellTransfer->GetRange();
@@ -3384,11 +3384,11 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
         if ( rEvt.mnAction != DND_ACTION_MOVE )
             nSizeY = rData.pCellTransfer->GetNonFilteredRows();     // copy/link: no filtered rows
 
-        SCsCOL nNewDragX = nPosX - rData.pCellTransfer->GetDragHandleX();
+        SCCOL nNewDragX = nPosX - rData.pCellTransfer->GetDragHandleX();
         if (nNewDragX<0) nNewDragX=0;
         if (nNewDragX+(nSizeX-1) > MAXCOL)
             nNewDragX = MAXCOL-(nSizeX-1);
-        SCsROW nNewDragY = nPosY - rData.pCellTransfer->GetDragHandleY();
+        SCROW nNewDragY = nPosY - rData.pCellTransfer->GetDragHandleY();
         if (nNewDragY<0) nNewDragY=0;
         if (nNewDragY+(nSizeY-1) > MAXROW)
             nNewDragY = MAXROW-(nSizeY-1);
@@ -3515,7 +3515,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
             }
         }
 
-        if ( nNewDragX != (SCsCOL) nDragStartX || nNewDragY != (SCsROW) nDragStartY ||
+        if ( nNewDragX != nDragStartX || nNewDragY != nDragStartY ||
              nDragStartX+nSizeX-1 != nDragEndX || nDragStartY+nSizeY-1 != nDragEndY ||
              !bDragRect || eDragInsertMode != meDragInsertMode )
         {
@@ -3679,8 +3679,8 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                     // can already be rejected here.
 
                     Point aPos = rEvt.maPosPixel;
-                    SCsCOL nPosX;
-                    SCsROW nPosY;
+                    SCCOL nPosX;
+                    SCROW nPosY;
                     pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
                     SCTAB nTab = pViewData->GetTabNo();
                     ScDocument* pDoc = pViewData->GetDocument();
@@ -3937,8 +3937,8 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 OUString aUndo = ScGlobal::GetRscString( bIsMove ? STR_UNDO_MOVE : STR_UNDO_COPY );
                 pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo, 0, pViewData->GetViewShell()->GetViewShellId() );
 
-                SCsCOL nCorrectCursorPosCol = 0;
-                SCsROW nCorrectCursorPosRow = 0;
+                SCCOL nCorrectCursorPosCol = 0;
+                SCROW nCorrectCursorPosRow = 0;
 
                 bDone = true;
                 if ( meDragInsertMode != INS_NONE )
@@ -4217,8 +4217,8 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
                                         rData.aLinkTable );
             else if ( !rData.aLinkArea.isEmpty() )
             {
-                SCsCOL  nPosX;
-                SCsROW  nPosY;
+                SCCOL  nPosX;
+                SCROW  nPosY;
                 pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
                 pView->MoveCursorAbs( nPosX, nPosY, SC_FOLLOW_NONE, false, false );
 
@@ -4257,8 +4257,8 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
         return rEvt.mnAction;
     }
 
-    SCsCOL  nPosX;
-    SCsROW  nPosY;
+    SCCOL  nPosX;
+    SCROW  nPosY;
     pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
 
     if (!rData.aJumpTarget.isEmpty())
@@ -4307,8 +4307,8 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
 {
     Point aLogicPos = PixelToLogic( rPosPixel );
 
-    SCsCOL  nPosX;
-    SCsROW  nPosY;
+    SCCOL  nPosX;
+    SCROW  nPosY;
     pViewData->GetPosFromPixel( rPosPixel.X(), rPosPixel.Y(), eWhich, nPosX, nPosY );
 
     // If the mouse down was inside a visible note window, ignore it and
@@ -4586,7 +4586,7 @@ void ScGridWindow::LoseFocus()
 }
 
 bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
-                                sal_uInt16* pIndex, SCsCOL* pAddX, SCsROW* pAddY)
+                                sal_uInt16* pIndex, SCCOL* pAddX, SCROW* pAddY)
 {
     bool bFound = false;
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( pViewData->GetViewShell() );
@@ -4601,8 +4601,8 @@ bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
             bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
             long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-            SCsCOL nPosX;
-            SCsROW nPosY;
+            SCCOL nPosX;
+            SCROW nPosY;
             pViewData->GetPosFromPixel( rMouse.X(), rMouse.Y(), eWhich, nPosX, nPosY );
             //  merged (single/Range) ???
             ScAddress aAddr( nPosX, nPosY, nTab );
@@ -4842,8 +4842,8 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
 
     bool bTimer = false;
     Point aPos = rMEvt.GetPosPixel();
-    SCsCOL nDx = 0;
-    SCsROW nDy = 0;
+    SCCOL nDx = 0;
+    SCROW nDy = 0;
     if ( aPos.X() < 0 ) nDx = -1;
     if ( aPos.Y() < 0 ) nDy = -1;
     Size aSize = GetOutputSizePixel();
@@ -4883,8 +4883,8 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
 
     // Move
 
-    SCsCOL  nPosX;
-    SCsROW  nPosY;
+    SCCOL  nPosX;
+    SCROW  nPosY;
     pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
 
     ScRange aOld = rData.aRef;
@@ -4894,20 +4894,20 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
         switch (aRFSelectedCorned)
         {
             case LEFT_UP:
-                aNew.aStart.SetCol((SCCOL)nPosX);
-                aNew.aStart.SetRow((SCROW)nPosY);
+                aNew.aStart.SetCol(nPosX);
+                aNew.aStart.SetRow(nPosY);
                 break;
             case LEFT_DOWN:
-                aNew.aStart.SetCol((SCCOL)nPosX);
-                aNew.aEnd.SetRow((SCROW)nPosY);
+                aNew.aStart.SetCol(nPosX);
+                aNew.aEnd.SetRow(nPosY);
                 break;
             case RIGHT_UP:
-                aNew.aEnd.SetCol((SCCOL)nPosX);
-                aNew.aStart.SetRow((SCROW)nPosY);
+                aNew.aEnd.SetCol(nPosX);
+                aNew.aStart.SetRow(nPosY);
                 break;
             case RIGHT_DOWN:
-                aNew.aEnd.SetCol((SCCOL)nPosX);
-                aNew.aEnd.SetRow((SCROW)nPosY);
+                aNew.aEnd.SetCol(nPosX);
+                aNew.aEnd.SetRow(nPosY);
                 break;
             default:
                 break;
@@ -5044,8 +5044,8 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
         return extractURLInfo(pView->GetFieldUnderMousePointer(), pName, pUrl, pTarget);
 
     //! Pass on nPosX/Y?
-    SCsCOL nPosX;
-    SCsROW nPosY;
+    SCCOL nPosX;
+    SCROW nPosY;
     pViewData->GetPosFromPixel( rPos.X(), rPos.Y(), eWhich, nPosX, nPosY );
 
     SCTAB nTab = pViewData->GetTabNo();

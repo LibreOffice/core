@@ -242,7 +242,7 @@ public:
     void initializeDoc(sal_uInt16 nFileId, const ::std::vector<OUString>& rTabNames, const OUString& rBaseName);
     OUString getTableName(sal_uInt16 nFileId, size_t nCacheId) const;
     void getAllTableNames(sal_uInt16 nFileId, ::std::vector<OUString>& rTabNames) const;
-    SCsTAB getTabSpan( sal_uInt16 nFileId, const OUString& rStartTabName, const OUString& rEndTabName ) const;
+    SCTAB getTabSpan( sal_uInt16 nFileId, const OUString& rStartTabName, const OUString& rEndTabName ) const;
     void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
 
     /**
@@ -504,7 +504,7 @@ public:
      *        -1 if nFileId or rStartTabName not found
      *         0 if rEndTabName not found
      */
-    SCsTAB getCachedTabSpan(
+    SCTAB getCachedTabSpan(
         sal_uInt16 nFileId, const OUString& rStartTabName, const OUString& rEndTabName) const;
 
     /**

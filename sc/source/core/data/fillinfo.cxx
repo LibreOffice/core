@@ -48,10 +48,10 @@
 
 // Similar as in output.cxx
 
-static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
+static void lcl_GetMergeRange( SCCOL nX, SCROW nY, SCSIZE nArrY,
                             ScDocument* pDoc, RowInfo* pRowInfo,
                             SCCOL nX1, SCROW nY1, SCCOL /* nX2 */, SCROW /* nY2 */, SCTAB nTab,
-                            SCsCOL& rStartX, SCsROW& rStartY, SCsCOL& rEndX, SCsROW& rEndY )
+                            SCCOL& rStartX, SCROW& rStartY, SCCOL& rEndX, SCROW& rEndY )
 {
     CellInfo* pInfo = &pRowInfo[nArrY].pCellInfo[nX+1];
 
@@ -65,7 +65,7 @@ static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
     while (bHOver)              // nY constant
     {
         --rStartX;
-        if (rStartX >= (SCsCOL) nX1 && !pDoc->ColHidden(rStartX, nTab, nullptr, &nLastCol))
+        if (rStartX >= nX1 && !pDoc->ColHidden(rStartX, nTab, nullptr, &nLastCol))
         {
             bHOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bHOverlapped;
             bVOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bVOverlapped;
@@ -86,10 +86,10 @@ static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
         if (nArrY>0)
             --nArrY;                        // local copy !
 
-        if (rStartX >= (SCsCOL) nX1 && rStartY >= (SCsROW) nY1 &&
+        if (rStartX >= nX1 && rStartY >= nY1 &&
             !pDoc->ColHidden(rStartX, nTab, nullptr, &nLastCol) &&
             !pDoc->RowHidden(rStartY, nTab, nullptr, &nLastRow) &&
-            (SCsROW) pRowInfo[nArrY].nRowNo == rStartY)
+            pRowInfo[nArrY].nRowNo == rStartY)
         {
             bVOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bVOverlapped;
         }
@@ -102,10 +102,10 @@ static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
     }
 
     const ScMergeAttr* pMerge;
-    if (rStartX >= (SCsCOL) nX1 && rStartY >= (SCsROW) nY1 &&
+    if (rStartX >= nX1 && rStartY >= nY1 &&
         !pDoc->ColHidden(rStartX, nTab, nullptr, &nLastCol) &&
         !pDoc->RowHidden(rStartY, nTab, nullptr, &nLastRow) &&
-        (SCsROW) pRowInfo[nArrY].nRowNo == rStartY)
+        pRowInfo[nArrY].nRowNo == rStartY)
     {
         pMerge = static_cast<const ScMergeAttr*>( &pRowInfo[nArrY].pCellInfo[rStartX+1].pPatternAttr->
                                         GetItem(ATTR_MERGE));
@@ -204,11 +204,11 @@ void initRowInfo(ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow,
 {
     sal_uInt16 nDocHeight = ScGlobal::nStdRowHeight;
     SCROW nDocHeightEndRow = -1;
-    for (SCsROW nSignedY=((SCsROW)nRow1)-1; nSignedY<=(SCsROW)rYExtra; nSignedY++)
+    for (SCROW nSignedY=nRow1-1; nSignedY<=rYExtra; nSignedY++)
     {
         SCROW nY;
         if (nSignedY >= 0)
-            nY = (SCROW) nSignedY;
+            nY = nSignedY;
         else
             nY = MAXROW+1;          // invalid
 
@@ -247,7 +247,7 @@ void initRowInfo(ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow,
             }
         }
         else
-            if (nSignedY==(SCsROW) rYExtra)                 // hidden additional line?
+            if (nSignedY == rYExtra)                 // hidden additional line?
                 ++rYExtra;
     }
 }
@@ -759,19 +759,19 @@ void ScDocument::FillInfo(
         for (nArrRow=0; nArrRow<nArrCount; nArrRow++)
         {
             RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
-            SCsROW nSignedY = nArrRow ? pThisRowInfo->nRowNo : ((SCsROW)nRow1)-1;
+            SCROW nSignedY = nArrRow ? pThisRowInfo->nRowNo : nRow1-1;
 
             for (SCCOL nArrCol=nCol1; nArrCol<=nCol2+2; nArrCol++)                  // 1 more left and right
             {
-                SCsCOL nSignedX = ((SCsCOL) nArrCol) - 1;
+                SCCOL nSignedX = nArrCol - 1;
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrCol];
 
                 if (pInfo->bMerged || pInfo->bHOverlapped || pInfo->bVOverlapped)
                 {
-                    SCsCOL nStartX;
-                    SCsROW nStartY;
-                    SCsCOL nEndX;
-                    SCsROW nEndY;
+                    SCCOL nStartX;
+                    SCROW nStartY;
+                    SCCOL nEndX;
+                    SCROW nEndY;
                     lcl_GetMergeRange( nSignedX,nSignedY, nArrRow, this,pRowInfo, nCol1,nRow1,nCol2,nRow2,nTab,
                                         nStartX,nStartY, nEndX,nEndY );
                     const ScPatternAttr* pStartPattern = GetPattern( nStartX,nStartY,nTab );
@@ -799,10 +799,10 @@ void ScDocument::FillInfo(
 
                     bool bCellMarked = false;
                     if (bPaintMarks)
-                        bCellMarked = ( nStartX >= (SCsCOL) nBlockStartX
-                                    && nStartX <= (SCsCOL) nBlockEndX
-                                    && nStartY >= (SCsROW) nBlockStartY
-                                    && nStartY <= (SCsROW) nBlockEndY );
+                        bCellMarked = ( nStartX >= nBlockStartX
+                                    && nStartX <= nBlockEndX
+                                    && nStartY >= nBlockStartY
+                                    && nStartY <= nBlockEndY );
                     if (pMarkData && pMarkData->IsMultiMarked() && !bCellMarked)
                     {
                         ScMarkArray aThisMarkArr(pMarkData->GetMarkArray( nStartX ));
@@ -836,8 +836,8 @@ void ScDocument::FillInfo(
                 {
                     //  or test on != eLoc
 
-                    SCsCOL nDxPos = 1;
-                    SCsCOL nDxNeg = -1;
+                    SCCOL nDxPos = 1;
+                    SCCOL nDxNeg = -1;
 
                     while ( nArrCol+nDxPos < nCol2+2 && pRowInfo[0].pCellInfo[nArrCol+nDxPos].nWidth == 0 )
                         ++nDxPos;
@@ -1009,17 +1009,17 @@ void ScDocument::FillInfo(
                 SCROW nCurrDocRow = static_cast< SCROW >( (nCellInfoY > 0) ? rThisRowInfo.nRowNo : (nRow1 - 1) );
 
                 // find entire merged range in document, returns signed document coordinates
-                SCsCOL nFirstRealDocColS, nLastRealDocColS;
-                SCsROW nFirstRealDocRowS, nLastRealDocRowS;
-                lcl_GetMergeRange( static_cast< SCsCOL >( nCurrDocCol ), static_cast< SCsROW >( nCurrDocRow ),
+                SCCOL nFirstRealDocColS, nLastRealDocColS;
+                SCROW nFirstRealDocRowS, nLastRealDocRowS;
+                lcl_GetMergeRange( nCurrDocCol, nCurrDocRow,
                     nCellInfoY, this, pRowInfo, nCol1,nRow1,nCol2,nRow2,nTab,
                     nFirstRealDocColS, nFirstRealDocRowS, nLastRealDocColS, nLastRealDocRowS );
 
                 // *complete* merged range in document coordinates
-                SCCOL nFirstRealDocCol = static_cast< SCCOL >( nFirstRealDocColS );
-                SCROW nFirstRealDocRow = static_cast< SCROW >( nFirstRealDocRowS );
-                SCCOL nLastRealDocCol  = static_cast< SCCOL >( nLastRealDocColS );
-                SCROW nLastRealDocRow  = static_cast< SCROW >( nLastRealDocRowS );
+                SCCOL nFirstRealDocCol = nFirstRealDocColS;
+                SCROW nFirstRealDocRow = nFirstRealDocRowS;
+                SCCOL nLastRealDocCol  = nLastRealDocColS;
+                SCROW nLastRealDocRow  = nLastRealDocRowS;
 
                 // first visible column (nX1-1 is first processed document column)
                 SCCOL nFirstDocCol = (nCol1 > 0) ? ::std::max< SCCOL >( nFirstRealDocCol, nCol1 - 1 ) : nFirstRealDocCol;

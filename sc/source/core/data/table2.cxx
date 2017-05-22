@@ -575,7 +575,7 @@ void ScTable::CopyCellToDocument(SCCOL nSrcCol, SCROW nSrcRow, SCCOL nDestCol, S
 }
 
 void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        SCsCOL nDx, SCsROW nDy, ScTable* pTable)
+        SCCOL nDx, SCROW nDy, ScTable* pTable)
 {
     ScRange aOldRange( nCol1 - nDx, nRow1 - nDy, pTable->nTab, nCol2 - nDx, nRow2 - nDy, pTable->nTab);
     ScRange aNewRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
@@ -647,7 +647,7 @@ bool ScTable::InitColumnBlockPosition( sc::ColumnBlockPosition& rBlockPos, SCCOL
 
 void ScTable::CopyFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    SCsCOL nDx, SCsROW nDy, ScTable* pTable )
+    SCCOL nDx, SCROW nDy, ScTable* pTable )
 {
     if (nCol2 > aCol.size() - 1)
         nCol2 = aCol.size() - 1;
@@ -901,11 +901,11 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     const ScMergeAttr& rOldMerge = static_cast<const ScMergeAttr&>(rSet.Get(ATTR_MERGE));
                     if (rOldMerge.IsMerged())
                         rNewSet.Put( ScMergeAttr( std::min(
-                                        static_cast<SCsCOL>(rOldMerge.GetRowMerge()),
-                                        static_cast<SCsCOL>(MAXCOL+1 - (nAttrRow2-nRow1))),
+                                        static_cast<SCCOL>(rOldMerge.GetRowMerge()),
+                                        static_cast<SCCOL>(MAXCOL+1 - (nAttrRow2-nRow1))),
                                     std::min(
-                                        static_cast<SCsROW>(rOldMerge.GetColMerge()),
-                                        static_cast<SCsROW>(MAXROW+1 - (nCol-nCol1)))));
+                                        static_cast<SCROW>(rOldMerge.GetColMerge()),
+                                        static_cast<SCROW>(MAXROW+1 - (nCol-nCol1)))));
                     const ScMergeFlagAttr& rOldFlag = static_cast<const ScMergeFlagAttr&>(rSet.Get(ATTR_MERGE_FLAG));
                     if (rOldFlag.IsOverlapped())
                     {
