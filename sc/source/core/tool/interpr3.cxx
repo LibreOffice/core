@@ -4091,7 +4091,7 @@ void ScInterpreter::ScDevSq()
 {
     double nVal;
     double nValCount;
-    GetStVarParams(nVal, nValCount);
+    GetStVarParams(nVal, nValCount, false /*bTextAsZero*/);
     PushDouble(nVal);
 }
 
