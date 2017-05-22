@@ -345,7 +345,7 @@ void ImplObjectHierarchy::createAxesTree(
             {
                 //main grid
                 rContainer.push_back(
-                    ObjectIdentifier( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel ) ) ) );
+                    ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel ) ) );
             }
 
             Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
@@ -357,7 +357,7 @@ void ImplObjectHierarchy::createAxesTree(
                 {
                     //sub grid
                     rContainer.push_back(
-                        ObjectIdentifier( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel, nSubGrid ) ) ) );
+                        ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel, nSubGrid ) ) );
                 }
             }
         }

@@ -1466,7 +1466,7 @@ struct ShapeWritingVisitor
                                    xUnoAttrs,
                                    xElem,
                                    sStyleId,
-                                   basegfx::B2DPolyPolygon(aPoly));
+                                   aPoly);
                 }
 
                 break;

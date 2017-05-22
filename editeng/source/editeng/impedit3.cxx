@@ -3588,7 +3588,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                             short _nEsc = aTmpFont.GetEscapement();
                                             if( _nEsc )
                                             {
-                                                long nShift = ((_nEsc*long(aTmpFont.GetFontSize().Height()))/ 100L);
+                                                long nShift = (_nEsc * aTmpFont.GetFontSize().Height()) / 100L;
                                                 if( !IsVertical() )
                                                     aRedLineTmpPos.Y() -= nShift;
                                                 else
@@ -4357,7 +4357,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_Int32 nPara, 
     {
         // Bidi checking necessary
         // Don't use BIDI_STRONG, VCL must do some checks.
-        nLayoutMode &= ~ComplexTextLayoutFlags( ComplexTextLayoutFlags::BiDiStrong );
+        nLayoutMode &= ~ComplexTextLayoutFlags::BiDiStrong;
 
         if ( bR2L )
             nLayoutMode |= ComplexTextLayoutFlags::BiDiRtl|ComplexTextLayoutFlags::TextOriginLeft;

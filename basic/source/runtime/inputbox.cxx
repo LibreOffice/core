@@ -91,9 +91,9 @@ void SvRTLInputBox::InitButtons( const Size& rDlgSize )
     aOk->SetSizePixel( LogicToPixel( Size( 45, 15) ));
     aCancel->SetSizePixel( LogicToPixel( Size( 45, 15) ));
     Point aPos( rDlgSize.Width()-45-10, 5 );
-    aOk->SetPosPixel( LogicToPixel( Point(aPos) ));
+    aOk->SetPosPixel( LogicToPixel( aPos ));
     aPos.Y() += 16;
-    aCancel->SetPosPixel( LogicToPixel( Point(aPos) ));
+    aCancel->SetPosPixel( LogicToPixel( aPos ));
     aOk->SetClickHdl(LINK(this,SvRTLInputBox, OkHdl));
     aCancel->SetClickHdl(LINK(this,SvRTLInputBox,CancelHdl));
 }

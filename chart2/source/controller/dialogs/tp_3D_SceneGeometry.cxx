@@ -182,9 +182,9 @@ void ThreeD_SceneGeometry_TabPage::applyAnglesToModel()
     if( !m_pMFZRotation->IsEmptyFieldValue() )
         m_nZRotation = m_pMFZRotation->GetValue();
 
-    fXAngle = double(m_nXRotation)/double(pow(10.0,m_pMFXRotation->GetDecimalDigits()));
-    fYAngle = double(-1.0*m_nYRotation)/double(pow(10.0,m_pMFYRotation->GetDecimalDigits()));
-    fZAngle = double(-1.0*m_nZRotation)/double(pow(10.0,m_pMFZRotation->GetDecimalDigits()));
+    fXAngle = double(m_nXRotation)/pow(10.0,m_pMFXRotation->GetDecimalDigits());
+    fYAngle = double(-1.0*m_nYRotation)/pow(10.0,m_pMFYRotation->GetDecimalDigits());
+    fZAngle = double(-1.0*m_nZRotation)/pow(10.0,m_pMFZRotation->GetDecimalDigits());
 
     fXAngle = basegfx::deg2rad(fXAngle);
     fYAngle = basegfx::deg2rad(fYAngle);

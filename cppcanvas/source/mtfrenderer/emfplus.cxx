@@ -315,7 +315,7 @@ namespace cppcanvas
 
                 rState.fillColor = COLOR(brushIndexOrColor);
 
-                pPolyAction = ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon, rParms.mrCanvas, rState ) );
+                pPolyAction = internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon, rParms.mrCanvas, rState );
 
             } else {
                 rState.isFillColorSet = true;
@@ -369,7 +369,7 @@ namespace cppcanvas
                         fillColor = brush->secondColor;
                     }
                     rState.fillColor = vcl::unotools::colorToDoubleSequence(fillColor, rCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
-                    pPolyAction = ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon, rParms.mrCanvas, rState ) );
+                    pPolyAction = internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon, rParms.mrCanvas, rState );
                 }
                 else if (brush->type == BrushTypeTextureFill)
                 {
@@ -532,11 +532,10 @@ namespace cppcanvas
                             aTextureTransformation );
 
                     if( aTexture.Gradient.is() )
-                        pPolyAction =
-                            ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon,
+                        pPolyAction = internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon,
                                         rParms.mrCanvas,
                                         rState,
-                                        aTexture ) );
+                                        aTexture );
                 }
             }
 

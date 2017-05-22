@@ -1020,7 +1020,7 @@ void ScNavigatorDlg::CheckDataArea()
             || nCurRow <  pMarkArea->nRowStart+1
             || nCurRow >  pMarkArea->nRowEnd+1 )
         {
-            aTbxCmd->SetItemState(nDataId, TriState(TRISTATE_TRUE));
+            aTbxCmd->SetItemState(nDataId, TRISTATE_TRUE);
             aTbxCmd->TriggerItem(nDataId);
         }
     }

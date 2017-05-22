@@ -216,7 +216,7 @@ WrappedConstantErrorLowProperty::WrappedConstantErrorLowProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< double >( "ConstantErrorLow"
-            , uno::Any( double(0.0) ), spChart2ModelContact, ePropertyType  )
+            , uno::Any( 0.0 ), spChart2ModelContact, ePropertyType  )
 {
 }
 
@@ -266,7 +266,7 @@ WrappedConstantErrorHighProperty::WrappedConstantErrorHighProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< double >( "ConstantErrorHigh"
-            , uno::Any( double(0.0) ), spChart2ModelContact, ePropertyType  )
+            , uno::Any( 0.0 ), spChart2ModelContact, ePropertyType  )
 {
 }
 
@@ -450,7 +450,7 @@ WrappedPercentageErrorProperty::WrappedPercentageErrorProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< double >( "PercentageError"
-            , uno::Any( double(0.0) ), spChart2ModelContact, ePropertyType  )
+            , uno::Any( 0.0 ), spChart2ModelContact, ePropertyType  )
 {
 }
 
@@ -500,7 +500,7 @@ WrappedErrorMarginProperty::WrappedErrorMarginProperty(
     std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< double >( "ErrorMargin"
-            , uno::Any( double(0.0) ), spChart2ModelContact, ePropertyType  )
+            , uno::Any( 0.0 ), spChart2ModelContact, ePropertyType  )
 {
 }
 

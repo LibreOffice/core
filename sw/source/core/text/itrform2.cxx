@@ -1774,7 +1774,7 @@ void SwTextFormatter::CalcRealHeight( bool bNewLine )
                 break;
                 case SvxLineSpaceRule::Min:
                 {
-                    if( nLineHeight < sal_uInt16( pSpace->GetLineHeight() ) )
+                    if( nLineHeight < pSpace->GetLineHeight() )
                         nLineHeight = pSpace->GetLineHeight();
                     break;
                 }

@@ -1077,7 +1077,7 @@ void DocxExport::WriteGlossary()
         gId = gId.copy(3); //"rId" only save the numeric value
 
         PropertySet aProps(xOutputStream);
-        aProps.setAnyProperty( PROP_RelId, uno::makeAny( sal_Int32( gId.toInt32() )));
+        aProps.setAnyProperty( PROP_RelId, uno::makeAny( gId.toInt32() ));
         m_pFilter->addRelation( xOutputStream, gType, gTarget);
         uno::Reference< xml::sax::XSAXSerializable > gserializer( xDom, uno::UNO_QUERY );
         writer->setOutputStream(GetFilter().openFragmentStream( "word/glossary/" + gTarget, contentType ) );

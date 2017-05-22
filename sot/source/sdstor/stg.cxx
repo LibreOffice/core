@@ -166,7 +166,7 @@ StorageStream::StorageStream( StgIo* p, StgDirEntry* q, StreamMode m )
         }
     }
     else
-        m &= ~StreamMode(StreamMode::READWRITE);
+        m &= ~StreamMode::READWRITE;
     m_nMode = m;
 }
 
@@ -478,7 +478,7 @@ Storage::Storage( StgIo* p, StgDirEntry* q, StreamMode m )
     if( q )
         q->m_aEntry.GetName( aName );
     else
-        m &= ~StreamMode(StreamMode::READWRITE);
+        m &= ~StreamMode::READWRITE;
     m_nMode   = m;
     if( q && q->m_nRefCnt == 1 )
         q->m_nMode = m;

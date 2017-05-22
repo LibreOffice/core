@@ -1985,7 +1985,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     }
 
     if ( rInf.GetKern() && nLn )
-        aTextSize.Width() += ( nLn - 1 ) * long( rInf.GetKern() );
+        aTextSize.Width() += ( nLn - 1 ) * rInf.GetKern();
 
     OSL_ENSURE( !rInf.GetShell() ||
             ( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExternalLeading() ),

@@ -329,7 +329,7 @@ void OResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
         buf.appendAscii( "Column index out of range (expected 1 to " );
         buf.append( sal_Int32( meta->getColumnCount() ) );
         buf.appendAscii( ", got " );
-        buf.append( sal_Int32( columnIndex ) );
+        buf.append( columnIndex );
         buf.append( '.' );
         throw SQLException( buf.makeStringAndClear(), *this, rtl::OUString(), 1, Any() );
     }

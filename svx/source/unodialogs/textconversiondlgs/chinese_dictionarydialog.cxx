@@ -572,7 +572,7 @@ void ChineseDictionaryDialog::dispose()
 
 void ChineseDictionaryDialog::setDirectionAndTextConversionOptions( bool bDirectionToSimplified, sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ )
 {
-    if( bDirectionToSimplified == bool(m_pRB_To_Simplified->IsChecked())
+    if( bDirectionToSimplified == m_pRB_To_Simplified->IsChecked()
         && nTextConversionOptions == m_nTextConversionOptions )
         return;
 

@@ -418,7 +418,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "line", OUString::number(nIntValue));
                 //now set the value depending on the Mode
                 if( aSpacing.Mode == style::LineSpacingMode::PROP )
-                    aSpacing.Height = sal_Int16(sal_Int32(nIntValue) * 100 / nSingleLineSpacing );
+                    aSpacing.Height = sal_Int16(nIntValue * 100 / nSingleLineSpacing );
                 else
                     aSpacing.Height = sal_Int16(ConversionHelper::convertTwipToMM100( nIntValue ));
 

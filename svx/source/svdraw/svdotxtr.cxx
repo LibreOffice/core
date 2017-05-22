@@ -442,7 +442,7 @@ SdrObject* SdrTextObj::ImpConvertMakeObj(const basegfx::B2DPolyPolygon& rPolyPol
     }
 
     pPathObj->ImpSetAnchorPos(aAnchor);
-    pPathObj->NbcSetLayer(SdrLayerID(GetLayer()));
+    pPathObj->NbcSetLayer(GetLayer());
 
     if(pModel)
     {

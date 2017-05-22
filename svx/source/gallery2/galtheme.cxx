@@ -1085,7 +1085,7 @@ bool GalleryTheme::GetURL( sal_uIntPtr nPos, INetURLObject& rURL )
 
     if( pObject )
     {
-        rURL = INetURLObject( ImplGetURL( pObject ) );
+        rURL = ImplGetURL( pObject );
         bRet = true;
     }
 

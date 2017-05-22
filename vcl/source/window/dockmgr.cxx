@@ -187,7 +187,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl, void*, void)
         !(aState.mnState & KEY_MOD1) && // i43499 CTRL disables docking now
         bRealMove )
     {
-        maDockPos = Point( pDockingArea->OutputToScreenPixel( pDockingArea->AbsoluteScreenToOutputPixel( OutputToAbsoluteScreenPixel( Point() ) ) ) );
+        maDockPos = pDockingArea->OutputToScreenPixel( pDockingArea->AbsoluteScreenToOutputPixel( OutputToAbsoluteScreenPixel( Point() ) ) );
         maDockRect = tools::Rectangle( maDockPos, mpDockWin->GetSizePixel() );
 
         // mouse pos in screen pixels
@@ -726,7 +726,7 @@ bool ImplDockingWindowWrapper::ImplStartDocking( const Point& rPos )
 
     // mouse pos in screen pixels
     Point aMousePos = pDockingArea->OutputToScreenPixel( aState.maPos );
-    Point aDockPos = Point( pDockingArea->AbsoluteScreenToOutputPixel( GetWindow()->OutputToAbsoluteScreenPixel( GetWindow()->GetPosPixel() ) ) );
+    Point aDockPos = pDockingArea->AbsoluteScreenToOutputPixel( GetWindow()->OutputToAbsoluteScreenPixel( GetWindow()->GetPosPixel() ) );
     tools::Rectangle aDockRect( aDockPos, GetWindow()->GetSizePixel() );
     StartDocking( aMousePos, aDockRect );
 

@@ -65,7 +65,7 @@ void ScDBFunc::GotoDBArea( const OUString& rDBName )
         pData->GetArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
         SetTabNo( nTab );
 
-        MoveCursorAbs( nStartCol, nStartRow, ScFollowMode( SC_FOLLOW_JUMP ),
+        MoveCursorAbs( nStartCol, nStartRow, SC_FOLLOW_JUMP,
                        false, false );  // bShift,bControl
         DoneBlockMode();
         InitBlockMode( nStartCol, nStartRow, nTab );

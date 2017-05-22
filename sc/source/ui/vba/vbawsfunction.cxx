@@ -58,9 +58,9 @@ void lclConvertBooleanToDouble( uno::Any& rAny )
     if ( rAny >>= bValue )
     {
         if ( bValue )
-           rAny <<= double( 1.0 );
+           rAny <<= 1.0;
         else
-           rAny <<= double( 0.0 );
+           rAny <<= 0.0;
     }
 }
 

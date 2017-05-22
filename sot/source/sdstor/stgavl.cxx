@@ -221,7 +221,7 @@ StgAvlNode* StgAvlNode::Rem( StgAvlNode** p, StgAvlNode* pDel, bool bPtrs )
     if( p && *p && pDel )
     {
         StgAvlNode* pCur = *p;
-        short nRes = bPtrs ? short( pCur == pDel ) : short(pCur->Compare( pDel ));
+        short nRes = bPtrs ? short( pCur == pDel ) : pCur->Compare( pDel );
         if( !nRes )
         {
             // Element found: remove

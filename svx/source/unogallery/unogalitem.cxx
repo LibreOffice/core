@@ -261,7 +261,7 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
         {
             case UNOGALLERY_GALLERYITEMTYPE:
             {
-                *pValue <<= sal_Int8( getType() );
+                *pValue <<= getType();
             }
             break;
 

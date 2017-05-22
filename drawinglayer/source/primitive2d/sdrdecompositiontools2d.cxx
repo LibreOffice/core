@@ -85,7 +85,7 @@ namespace drawinglayer
             if(bFilled)
             {
                 xReference = new PolyPolygonColorPrimitive2D(
-                    basegfx::B2DPolyPolygon(aScaledOutline),
+                    aScaledOutline,
                     basegfx::BColor(0.0, 0.0, 0.0));
             }
             else

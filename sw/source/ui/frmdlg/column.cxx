@@ -733,7 +733,7 @@ IMPL_LINK_NOARG( SwColumnPage, UpdateColMgr, Edit&, void )
         else
         {
             m_pColMgr->SetLineWidthAndColor(
-                    SvxBorderLineStyle( m_pLineTypeDLB->GetSelectEntryStyle( ) ),
+                    m_pLineTypeDLB->GetSelectEntryStyle(),
                     nLineWidth,
                     m_pLineColorDLB->GetSelectEntryColor() );
             m_pColMgr->SetAdjust( SwColLineAdj(

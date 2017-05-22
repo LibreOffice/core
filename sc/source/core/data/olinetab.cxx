@@ -253,7 +253,7 @@ bool ScOutlineArray::Insert(
                         rSizeChanged = false; // No more room
                         return false;
                     }
-                    aCollections[nMoveLevel+1].insert(ScOutlineEntry(*pEntry));
+                    aCollections[nMoveLevel+1].insert(*pEntry);
                     size_t nPos = std::distance(rColl.begin(), it);
                     rColl.erase(it);
                     it = rColl.begin();
@@ -390,7 +390,7 @@ void ScOutlineArray::PromoteSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nSt
             SCCOLROW nEnd   = pEntry->GetEnd();
             if (nStart >= nStartPos && nEnd <= nEndPos)
             {
-                aCollections[nLevel-1].insert(ScOutlineEntry(*pEntry));
+                aCollections[nLevel-1].insert(*pEntry);
 
                 // Re-calc iterator positions after the tree gets invalidated
                 size_t nPos = std::distance(rColl.begin(), it);
@@ -413,7 +413,7 @@ void ScOutlineArray::PromoteSub(SCCOLROW nStartPos, SCCOLROW nEndPos, size_t nSt
             SCCOLROW nEnd   = pEntry->GetEnd();
             if (nStart >= nStartPos && nEnd <= nEndPos)
             {
-                aCollections[nLevel-1].insert(ScOutlineEntry(*pEntry));
+                aCollections[nLevel-1].insert(*pEntry);
 
                 // Re-calc iterator positions after the tree gets invalidated
                 size_t nPos = std::distance(rColl.begin(), it);

@@ -1657,9 +1657,8 @@ void SvxLineTabPage::ChangeEndHdl_Impl( void * p )
 IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl, Edit&, void)
 {
     sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
-    XLineTransparenceItem aItem( nVal );
 
-    m_rXLSet.Put( XLineTransparenceItem( aItem ) );
+    m_rXLSet.Put( XLineTransparenceItem( nVal ) );
 
     FillXLSet_Impl();
 
