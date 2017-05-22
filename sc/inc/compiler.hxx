@@ -33,6 +33,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/sheet/ExternalLinkInfo.hpp>
 #include <vector>
+#include <memory>
 
 #include <formula/FormulaCompiler.hxx>
 #include <o3tl/typed_flags_set.hxx>
@@ -244,7 +245,7 @@ public:
         virtual ScCharFlags getCharTableFlags( sal_Unicode c, sal_Unicode cLast ) const = 0;
 
     protected:
-        const ScCharFlags* mpCharTable;
+        std::unique_ptr<ScCharFlags[]> mpCharTable;
     };
     friend struct Convention;
 

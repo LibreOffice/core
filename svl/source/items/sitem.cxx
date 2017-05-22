@@ -46,7 +46,6 @@ SfxSetItem::SfxSetItem( const SfxSetItem& rCopy, SfxItemPool *pPool ) :
 
 SfxSetItem::~SfxSetItem()
 {
-    delete pSet; pSet = nullptr;
 }
 
 

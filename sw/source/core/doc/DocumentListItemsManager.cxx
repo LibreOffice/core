@@ -94,9 +94,6 @@ void DocumentListItemsManager::getNumItems( tSortedNodeNumList& orNodeNumList ) 
 
 DocumentListItemsManager::~DocumentListItemsManager()
 {
-// #i83479#
-delete mpListItemsList;
-mpListItemsList = nullptr;
 }
 
 

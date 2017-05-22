@@ -23,6 +23,7 @@
 #include "Tickmarks.hxx"
 #include "VLineProperties.hxx"
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <memory>
 
 namespace chart
 {
@@ -54,7 +55,7 @@ public:
 private: //member
     css::uno::Sequence<
         css::uno::Reference< css::beans::XPropertySet > > m_aGridPropertiesList;//main grid, subgrid, subsubgrid etc
-    PolarPlottingPositionHelper* m_pPosHelper;
+    std::unique_ptr<PolarPlottingPositionHelper> m_pPosHelper;
     std::vector< ExplicitIncrementData >   m_aIncrements;
 
     void getAllTickInfos( sal_Int32 nDimensionIndex, TickInfoArraysType& rAllTickInfos ) const;

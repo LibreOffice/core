@@ -536,7 +536,7 @@ class IcnGridMap_Impl
 {
     tools::Rectangle               _aLastOccupiedGrid;
     SvxIconChoiceCtrl_Impl* _pView;
-    bool    *               _pGridMap;
+    std::unique_ptr<bool[]> _pGridMap;
     sal_uInt16              _nGridCols, _nGridRows;
 
     void                Expand();

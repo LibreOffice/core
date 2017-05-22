@@ -86,6 +86,21 @@ SdOptionsGeneric::SdOptionsGeneric(sal_uInt16 nConfigId, const OUString& rSubTre
 {
 }
 
+SdOptionsGeneric::SdOptionsGeneric(SdOptionsGeneric const & rSource)
+{
+    operator=(rSource);
+}
+
+SdOptionsGeneric& SdOptionsGeneric::operator=(SdOptionsGeneric const & rSource)
+{
+    maSubTree = rSource.maSubTree;
+    mpCfgItem.reset(rSource.mpCfgItem ? new SdOptionsItem(*rSource.mpCfgItem) : nullptr );
+    mnConfigId = rSource.mnConfigId;
+    mbInit = rSource.mbInit;
+    mbEnableModify = rSource.mbEnableModify;
+    return *this;
+}
+
 void SdOptionsGeneric::Init() const
 {
     if( !mbInit )
@@ -93,7 +108,7 @@ void SdOptionsGeneric::Init() const
         SdOptionsGeneric* pThis = const_cast<SdOptionsGeneric*>(this);
 
         if( !mpCfgItem )
-            pThis->mpCfgItem = new SdOptionsItem( *this, maSubTree );
+            pThis->mpCfgItem.reset( new SdOptionsItem( *this, maSubTree ) );
 
         const Sequence< OUString >  aNames( GetPropertyNames() );
         const Sequence< Any >       aValues = mpCfgItem->GetProperties( aNames );
@@ -113,8 +128,6 @@ void SdOptionsGeneric::Init() const
 
 SdOptionsGeneric::~SdOptionsGeneric()
 {
-    delete mpCfgItem;
-    mpCfgItem = nullptr;
 }
 
 void SdOptionsGeneric::Commit( SdOptionsItem& rCfgItem ) const

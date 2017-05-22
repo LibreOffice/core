@@ -20,6 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_VIEW_AXES_VPOLARAXIS_HXX
 
 #include "VAxisBase.hxx"
+#include <memory>
 
 namespace chart
 {
@@ -45,7 +46,7 @@ protected:
            , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount );
 
 protected: //member
-    PolarPlottingPositionHelper* m_pPosHelper;
+    std::unique_ptr<PolarPlottingPositionHelper> m_pPosHelper;
     std::vector< ExplicitIncrementData >   m_aIncrements;
 };
 
