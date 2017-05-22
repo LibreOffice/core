@@ -5444,6 +5444,10 @@ void ScInterpreter::ScCountIf()
         }
         double fCount = 0.0;
         short nParam = 1;
+        const SCSIZE nMatRows = GetRefListArrayMaxSize( nParam);
+        // There's either one RefList and nothing else, or none.
+        ScMatrixRef xResMat = (nMatRows ? GetNewMat( 1, nMatRows) : nullptr);
+        SCSIZE nRefListArrayPos = 0;
         size_t nRefInList = 0;
         while (nParam-- > 0)
         {
@@ -5456,8 +5460,10 @@ void ScInterpreter::ScCountIf()
             ScMatrixRef pQueryMatrix;
             switch ( GetStackType() )
             {
-                case svDoubleRef :
                 case svRefList :
+                    nRefListArrayPos = nRefInList;
+                    SAL_FALLTHROUGH;
+                case svDoubleRef :
                     {
                         ScRange aRange;
                         PopDoubleRef( aRange, nParam, nRefInList);
@@ -5566,8 +5572,16 @@ void ScInterpreter::ScCountIf()
                 PushIllegalParameter();
                 return;
             }
+            if (xResMat)
+            {
+                xResMat->PutDouble( fCount, 0, nRefListArrayPos);
+                fCount = 0.0;
+            }
         }
-        PushDouble(fCount);
+        if (xResMat)
+            PushMatrix( xResMat);
+        else
+            PushDouble(fCount);
     }
 }
 
