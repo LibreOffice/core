@@ -482,12 +482,12 @@ public:
     bool        IsStyleSheetUsed( const ScStyleSheet& rStyle ) const;
 
                 /// May return -1 if not found
-    SCsROW SearchStyle(
-        SCsROW nRow, const ScStyleSheet* pSearchStyle, bool bUp, bool bInSelection,
+    SCROW SearchStyle(
+        SCROW nRow, const ScStyleSheet* pSearchStyle, bool bUp, bool bInSelection,
         const ScMarkData& rMark) const;
 
     bool SearchStyleRange(
-        SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
+        SCROW& rRow, SCROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
         bool bInSelection, const ScMarkData& rMark) const;
 
     bool        ApplyFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags );
@@ -496,7 +496,7 @@ public:
 
     void        RemoveProtected( SCROW nStartRow, SCROW nEndRow );
 
-    SCsROW      ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray );
+    SCROW       ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray );
     void DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast );
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
@@ -516,7 +516,7 @@ public:
         sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, sal_uInt16 nMinHeight, SCROW nMinStart );
 
                 /// Including current, may return -1
-    SCsROW      GetNextUnprotected( SCROW nRow, bool bUp ) const;
+    SCROW      GetNextUnprotected( SCROW nRow, bool bUp ) const;
 
     void GetFilterEntries(
         sc::ColumnBlockConstPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow,

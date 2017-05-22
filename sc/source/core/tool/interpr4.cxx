@@ -3636,12 +3636,12 @@ void ScInterpreter::ScColRowNameAuto()
         return;
     }
 
-    SCsCOL nStartCol;
-    SCsROW nStartRow;
+    SCCOL nStartCol;
+    SCROW nStartRow;
 
     // maybe remember limit by using defined ColRowNameRange
-    SCsCOL nCol2 = aAbs.aEnd.Col();
-    SCsROW nRow2 = aAbs.aEnd.Row();
+    SCCOL nCol2 = aAbs.aEnd.Col();
+    SCROW nRow2 = aAbs.aEnd.Row();
     // DataArea of the first cell
     nStartCol = aAbs.aStart.Col();
     nStartRow = aAbs.aStart.Row();

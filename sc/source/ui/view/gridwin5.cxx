@@ -54,7 +54,7 @@
 #include "global.hxx"
 #include "globstr.hrc"
 
-bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, bool bKeyboard )
+bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
 {
     bool bDone = false;
 
@@ -264,8 +264,8 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
     if ( bHelpEnabled && !bDrawTextEdit )
     {
         Point       aPosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
-        SCsCOL nPosX;
-        SCsROW nPosY;
+        SCCOL nPosX;
+        SCROW nPosY;
         pViewData->GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
 
         if ( ShowNoteMarker( nPosX, nPosY, false ) )
@@ -393,8 +393,8 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                 }
 
                 ScDocument* pDoc = pViewData->GetDocument();
-                SCsCOL nPosX;
-                SCsROW nPosY;
+                SCCOL nPosX;
+                SCROW nPosY;
                 SCTAB       nTab = pViewData->GetTabNo();
                 pViewData->GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
                 const ScPatternAttr* pPattern = pDoc->GetPattern( nPosX, nPosY, nTab );

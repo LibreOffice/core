@@ -2733,8 +2733,8 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
                 }
             }
             // here we are, healthy and clean, somewhere in between
-            SCsCOL dC = aPos.Col() - aOrg.Col();
-            SCsROW dR = aPos.Row() - aOrg.Row();
+            SCCOL dC = aPos.Col() - aOrg.Col();
+            SCROW dR = aPos.Row() - aOrg.Row();
             sc::MatrixEdge nEdges = sc::MatrixEdge::Nothing;
             if ( dC >= 0 && dR >= 0 && dC < nC && dR < nR )
             {
@@ -3615,9 +3615,9 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     if ( aDestRange.In( aOldPos ) )
     {
         // Count back Positions
-        SCsCOL nRelPosX = aOldPos.Col();
-        SCsROW nRelPosY = aOldPos.Row();
-        SCsTAB nRelPosZ = aOldPos.Tab();
+        SCCOL nRelPosX = aOldPos.Col();
+        SCROW nRelPosY = aOldPos.Row();
+        SCTAB nRelPosZ = aOldPos.Tab();
         ScRefUpdate::DoTranspose( nRelPosX, nRelPosY, nRelPosZ, pDocument, aDestRange, rSource.aStart );
         aOldPos.Set( nRelPosX, nRelPosY, nRelPosZ );
         bPosChanged = true;

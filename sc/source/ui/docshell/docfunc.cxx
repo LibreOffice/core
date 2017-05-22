@@ -2046,12 +2046,12 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                     case INS_CELLSDOWN:
                     case INS_INSROWS_BEFORE:
                     case INS_INSROWS_AFTER:
-                        aRange.aEnd.IncRow(static_cast<SCsCOL>(nEndRow-nStartRow+1));
+                        aRange.aEnd.IncRow(static_cast<SCCOL>(nEndRow-nStartRow+1));
                         break;
                     case INS_CELLSRIGHT:
                     case INS_INSCOLS_BEFORE:
                     case INS_INSCOLS_AFTER:
-                        aRange.aEnd.IncCol(static_cast<SCsCOL>(nEndCol-nStartCol+1));
+                        aRange.aEnd.IncCol(static_cast<SCCOL>(nEndCol-nStartCol+1));
                         break;
                     default:
                         break;
@@ -2581,11 +2581,11 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         {
             case DEL_CELLSUP:
             case DEL_DELROWS:
-                aRange.aEnd.SetRow(static_cast<SCsCOL>( aRange.aEnd.Row()-nDecreaseRowCount));
+                aRange.aEnd.SetRow(static_cast<SCCOL>( aRange.aEnd.Row()-nDecreaseRowCount));
                 break;
             case DEL_CELLSLEFT:
             case DEL_DELCOLS:
-                aRange.aEnd.SetCol(static_cast<SCsCOL>( aRange.aEnd.Col()-nDecreaseColCount));
+                aRange.aEnd.SetCol(static_cast<SCCOL>( aRange.aEnd.Col()-nDecreaseColCount));
                 break;
             default:
                 break;

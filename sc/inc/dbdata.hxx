@@ -211,7 +211,7 @@ public:
     void    UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                         SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                         SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                        SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
+                        SCCOL nDx, SCROW nDy, SCTAB nDz);
 
     void ExtendDataArea(ScDocument* pDoc);
     void CalcSaveFilteredCount(SCSIZE nNonFilteredRowCount);
@@ -324,7 +324,7 @@ public:
     void    UpdateReference(UpdateRefMode eUpdateRefMode,
                                 SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
+                                SCCOL nDx, SCROW nDy, SCTAB nDz);
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
     void            SetRefreshHandler( const Link<Timer *, void>& rLink )

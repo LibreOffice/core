@@ -50,7 +50,7 @@ public:
     virtual ConvErr     Convert( const ScTokenArray*&, XclImpStream& rStrm, std::size_t nFormulaLen,
                                  bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula ) override;
 
-    virtual ConvErr     Convert( ScRangeListTabs&, XclImpStream& rStrm, std::size_t nFormulaLen, SCsTAB nTab, const FORMULA_TYPE eFT = FT_CellFormula ) override;
+    virtual ConvErr     Convert( ScRangeListTabs&, XclImpStream& rStrm, std::size_t nFormulaLen, SCTAB nTab, const FORMULA_TYPE eFT = FT_CellFormula ) override;
 
     virtual void        ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, std::size_t nFormulaLen,
                                            const OUString& rUrl, const ::std::vector<OUString>& rTabNames );
@@ -123,7 +123,7 @@ public:
 
     virtual ConvErr     Convert( const ScTokenArray*& rpTokArray, XclImpStream& rStrm, std::size_t nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula ) override;
 
-    virtual ConvErr     Convert( ScRangeListTabs&, XclImpStream& rStrm, std::size_t nFormulaLen, SCsTAB nTab, const FORMULA_TYPE eFT = FT_CellFormula ) override;
+    virtual ConvErr     Convert( ScRangeListTabs&, XclImpStream& rStrm, std::size_t nFormulaLen, SCTAB nTab, const FORMULA_TYPE eFT = FT_CellFormula ) override;
 
     virtual void        ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, std::size_t nFormulaLen,
                                            const OUString& rUrl, const ::std::vector<OUString>& rTabNames ) override;

@@ -312,12 +312,12 @@ void ScMarkArray::CopyMarksTo( ScMarkArray& rDestMarkArray ) const
     rDestMarkArray.nCount = rDestMarkArray.nLimit = nCount;
 }
 
-SCsROW ScMarkArray::GetNextMarked( SCsROW nRow, bool bUp ) const
+SCROW ScMarkArray::GetNextMarked( SCROW nRow, bool bUp ) const
 {
     if (!pData)
         const_cast<ScMarkArray*>(this)->Reset();   // create pData for further processing
 
-    SCsROW nRet = nRow;
+    SCROW nRet = nRow;
     if (ValidRow(nRow))
     {
         SCSIZE nIndex;

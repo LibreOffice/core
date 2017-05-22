@@ -1079,7 +1079,7 @@ SCSIZE ScTable::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
     else if (eDir == DIR_RIGHT)
     {
         nCol = nEndCol;
-        while (((SCsCOL)nCol >= (SCsCOL)nStartCol) &&
+        while ((nCol >= nStartCol) &&
                  aCol[nCol].IsEmptyBlock(nStartRow, nEndRow))
         {
             nCount++;
@@ -1298,18 +1298,18 @@ bool ScTable::ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
     return true;
 }
 
-void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
+void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
                                 bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const
 {
     if (bUnprotected && !IsProtected())     // Is sheet really protected?
         bUnprotected = false;
 
     sal_uInt16 nWrap = 0;
-    SCsCOL nCol = rCol;
-    SCsROW nRow = rRow;
+    SCCOL nCol = rCol;
+    SCROW nRow = rRow;
 
-    nCol = sal::static_int_cast<SCsCOL>( nCol + nMovX );
-    nRow = sal::static_int_cast<SCsROW>( nRow + nMovY );
+    nCol = sal::static_int_cast<SCCOL>( nCol + nMovX );
+    nRow = sal::static_int_cast<SCROW>( nRow + nMovY );
 
     OSL_ENSURE( !nMovY || !bUnprotected,
                 "GetNextPos with bUnprotected horizontal not implemented" );
@@ -1328,9 +1328,9 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
 
         while ( nRow < 0 || nRow > MAXROW )
         {
-            nCol = sal::static_int_cast<SCsCOL>( nCol + static_cast<SCsCOL>(nMovY) );
+            nCol = sal::static_int_cast<SCCOL>( nCol + static_cast<SCCOL>(nMovY) );
             while ( ValidCol(nCol) && ColHidden(nCol) )
-                nCol = sal::static_int_cast<SCsCOL>( nCol + static_cast<SCsCOL>(nMovY) );   //  skip hidden rows (see above)
+                nCol = sal::static_int_cast<SCCOL>( nCol + static_cast<SCCOL>(nMovY) );   //  skip hidden rows (see above)
             if (nCol < 0)
             {
                 nCol = MAXCOL;
@@ -1378,7 +1378,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
 
         if ( !ValidNextPos(nCol, nRow, rMark, bMarked, bUnprotected) )
         {
-            std::unique_ptr<SCsROW[]> pNextRows(new SCsROW[MAXCOL+1]);
+            std::unique_ptr<SCROW[]> pNextRows(new SCROW[MAXCOL+1]);
             SCCOL i;
 
             if ( nMovX > 0 )                            //  forward
@@ -1387,14 +1387,14 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
                     pNextRows[i] = (i<nCol) ? (nRow+1) : nRow;
                 do
                 {
-                    SCsROW nNextRow = pNextRows[nCol] + 1;
+                    SCROW nNextRow = pNextRows[nCol] + 1;
                     if ( bMarked )
                         nNextRow = rMark.GetNextMarked( nCol, nNextRow, false );
                     if ( bUnprotected )
                         nNextRow = aCol[nCol].GetNextUnprotected( nNextRow, false );
                     pNextRows[nCol] = nNextRow;
 
-                    SCsROW nMinRow = MAXROW+1;
+                    SCROW nMinRow = MAXROW+1;
                     for (i=0; i<=MAXCOL; i++)
                         if (pNextRows[i] < nMinRow)     // when two equal on the left
                         {
@@ -1420,14 +1420,14 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
                     pNextRows[i] = (i>nCol) ? (nRow-1) : nRow;
                 do
                 {
-                    SCsROW nNextRow = pNextRows[nCol] - 1;
+                    SCROW nNextRow = pNextRows[nCol] - 1;
                     if ( bMarked )
                         nNextRow = rMark.GetNextMarked( nCol, nNextRow, true );
                     if ( bUnprotected )
                         nNextRow = aCol[nCol].GetNextUnprotected( nNextRow, true );
                     pNextRows[nCol] = nNextRow;
 
-                    SCsROW nMaxRow = -1;
+                    SCROW nMaxRow = -1;
                     for (i=0; i<=MAXCOL; i++)
                         if (pNextRows[i] >= nMaxRow)    // when two equal on the right
                         {
@@ -1469,7 +1469,7 @@ bool ScTable::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMa
         ScMarkArray aArray( rMark.GetMarkArray( rCol ) );
         while ( rRow <= MAXROW )
         {
-            SCROW nStart = (SCROW) aArray.GetNextMarked( (SCsROW) rRow, false );
+            SCROW nStart = aArray.GetNextMarked( rRow, false );
             if ( nStart <= MAXROW )
             {
                 SCROW nEnd = aArray.GetMarkEnd( nStart, false );
@@ -1512,7 +1512,7 @@ bool ScTable::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMa
 
 void ScTable::UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bUpdateNoteCaptionPos )
+                                    SCCOL nDx, SCROW nDy, SCTAB nDz, bool bUpdateNoteCaptionPos )
 {
     if ( nTab >= nTab1 && nTab <= nTab2 && nDz == 0 )       // only within the table
     {

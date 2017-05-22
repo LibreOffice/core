@@ -771,7 +771,7 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
 
             sc::RefUpdateMoveTabContext aCxt( *this, nOldPos, nNewPos);
 
-            SCsTAB nDz = ((SCsTAB)nNewPos) - (SCsTAB)nOldPos;
+            SCTAB nDz = nNewPos - nOldPos;
             ScRange aSourceRange( 0,0,nOldPos, MAXCOL,MAXROW,nOldPos );
             if (pRangeName)
                 pRangeName->UpdateMoveTab(aCxt);

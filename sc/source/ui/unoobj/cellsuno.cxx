@@ -5377,7 +5377,7 @@ void SAL_CALL ScCellRangeObj::fillAuto( sheet::FillDirection nFillDirection,
     if ( pDocSh && nSourceCount )
     {
         ScRange aSourceRange(aRange);
-        SCsCOLROW nCount = 0;                   // "Dest-Count"
+        SCCOLROW nCount = 0;                   // "Dest-Count"
         FillDir eDir = FILL_TO_BOTTOM;
         bool bError = false;
         switch (nFillDirection)

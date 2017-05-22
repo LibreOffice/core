@@ -954,7 +954,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
 // stream seeks to first byte after <nFormulaLen>
 ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std::size_t nFormulaLen,
-                              SCsTAB nTab, const FORMULA_TYPE eFT )
+                              SCTAB nTab, const FORMULA_TYPE eFT )
 {
     sal_uInt8                   nOp, nLen;
     bool                    bError = false;

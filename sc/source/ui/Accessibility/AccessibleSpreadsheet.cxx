@@ -431,8 +431,8 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 mbDelIns = true;
 
                 sal_Int16 nId(0);
-                SCsCOL nX(rRef.GetDx());
-                SCsROW nY(rRef.GetDy());
+                SCCOL nX(rRef.GetDx());
+                SCROW nY(rRef.GetDy());
                 ScRange aRange(rRef.GetRange());
                 if ((nX < 0) || (nY < 0))
                 {
@@ -973,8 +973,8 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAtP
         IsObjectValid();
         if (mpViewShell)
         {
-            SCsCOL nX;
-            SCsROW nY;
+            SCCOL nX;
+            SCROW nY;
             mpViewShell->GetViewData().GetPosFromPixel( rPoint.X, rPoint.Y, meSplitPos, nX, nY);
             try {
                 xAccessible = getAccessibleCellAt(nY, nX);
@@ -1412,8 +1412,8 @@ tools::Rectangle ScAccessibleSpreadsheet::GetVisCells(const tools::Rectangle& rV
 {
     if (mpViewShell)
     {
-        SCsCOL nStartX, nEndX;
-        SCsROW nStartY, nEndY;
+        SCCOL nStartX, nEndX;
+        SCROW nStartY, nEndY;
 
         mpViewShell->GetViewData().GetPosFromPixel( 1, 1, meSplitPos, nStartX, nStartY);
         mpViewShell->GetViewData().GetPosFromPixel( rVisArea.GetWidth(), rVisArea.GetHeight(), meSplitPos, nEndX, nEndY);

@@ -64,7 +64,7 @@ bool isCellQualified(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, bool 
 }
 
 void moveCursorByProtRule(
-    SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY, SCTAB nTab, ScDocument* pDoc)
+    SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY, SCTAB nTab, ScDocument* pDoc)
 {
     bool bSelectLocked = true;
     bool bSelectUnlocked = true;
@@ -186,7 +186,7 @@ bool checkBoundary(SCCOL& rCol, SCROW& rRow)
 }
 
 void moveCursorByMergedCell(
-    SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY, SCTAB nTab,
+    SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY, SCTAB nTab,
     ScDocument* pDoc, const ScViewData& rViewData)
 {
     SCCOL nOrigX = rViewData.GetCurX();
@@ -205,8 +205,8 @@ void moveCursorByMergedCell(
         pDoc->GetAttr(nOrigX, nOrigY, nTab, ATTR_MERGE));
 
     bool bOriginMerged = false;
-    SCsCOL nColSpan = 1;
-    SCsROW nRowSpan = 1;
+    SCCOL nColSpan = 1;
+    SCROW nRowSpan = 1;
     if (pMergeAttr && pMergeAttr->IsMerged())
     {
         nColSpan = pMergeAttr->GetColMerge();
@@ -497,10 +497,10 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         {
             // Expand selection area accordingly when the current selection ends
             // with a merged cell.
-            SCsCOL nCurXOffset = 0;
-            SCsCOL nBlockStartXOffset = 0;
-            SCsROW nCurYOffset = 0;
-            SCsROW nBlockStartYOffset = 0;
+            SCCOL nCurXOffset = 0;
+            SCCOL nBlockStartXOffset = 0;
+            SCROW nCurYOffset = 0;
+            SCROW nBlockStartYOffset = 0;
             bool bBlockStartMerged = false;
             const ScMergeAttr* pMergeAttr = nullptr;
             ScDocument* pDocument = aViewData.GetDocument();
@@ -516,8 +516,8 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                 pDocument->GetAttr( nBlockStartXOrig, nBlockStartYOrig, nTab, ATTR_MERGE ) );
             if ( pMergeAttr->IsMerged() )
             {
-                SCsCOL nColSpan = pMergeAttr->GetColMerge();
-                SCsROW nRowSpan = pMergeAttr->GetRowMerge();
+                SCCOL nColSpan = pMergeAttr->GetColMerge();
+                SCROW nRowSpan = pMergeAttr->GetRowMerge();
 
                 if ( !( nCurX >= nBlockStartXOrig + nColSpan - 1 && nCurY >= nBlockStartYOrig + nRowSpan - 1 ) )
                 {
@@ -542,19 +542,19 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                 pDocument->GetAttr( nCurX, nCurY, nTab, ATTR_MERGE ) );
             if ( pMergeAttr->IsMerged() )
             {
-                SCsCOL nColSpan = pMergeAttr->GetColMerge();
-                SCsROW nRowSpan = pMergeAttr->GetRowMerge();
+                SCCOL nColSpan = pMergeAttr->GetColMerge();
+                SCROW nRowSpan = pMergeAttr->GetRowMerge();
 
                 if ( !( nBlockStartX >= nCurX + nColSpan - 1 && nBlockStartY >= nCurY + nRowSpan - 1 ) )
                 {
                     if ( nBlockStartX <= nCurX + nColSpan - 1 )
                     {
-                        SCsCOL nCurXOffsetTemp = (nCurX < nCurX + nColSpan - 1) ? nColSpan - 1 : 0;
+                        SCCOL nCurXOffsetTemp = (nCurX < nCurX + nColSpan - 1) ? nColSpan - 1 : 0;
                         nCurXOffset = nCurXOffset > nCurXOffsetTemp ? nCurXOffset : nCurXOffsetTemp;
                     }
                     if ( nBlockStartY <= nCurY + nRowSpan - 1 )
                     {
-                        SCsROW nCurYOffsetTemp = (nCurY < nCurY + nRowSpan - 1) ? nRowSpan - 1 : 0;
+                        SCROW nCurYOffsetTemp = (nCurY < nCurY + nRowSpan - 1) ? nRowSpan - 1 : 0;
                         nCurYOffset = nCurYOffset > nCurYOffsetTemp ? nCurYOffset : nCurYOffsetTemp;
                     }
                     if ( !( nBlockStartX <= nCurX && nBlockStartY <= nCurY ) &&
@@ -603,7 +603,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         aHdrFunc.SetAnchorFlag( false );
 }
 
-void ScTabView::GetPageMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, SCsCOL& rPageX, SCsROW& rPageY)
+void ScTabView::GetPageMoveEndPosition(SCCOL nMovX, SCROW nMovY, SCCOL& rPageX, SCROW& rPageY)
 {
     SCCOL nCurX;
     SCROW nCurY;
@@ -634,17 +634,17 @@ void ScTabView::GetPageMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, SCsCOL& rPage
         nScrSizeY = ScViewData::ToPixel( aViewData.GetPageUpDownOffset(), aViewData.GetPPTX() );
     }
 
-    SCsCOL nPageX;
-    SCsROW nPageY;
+    SCCOL nPageX;
+    SCROW nPageY;
     if (nMovX >= 0)
-        nPageX = ((SCsCOL) aViewData.CellsAtX( nCurX, 1, eWhichX )) * nMovX;
+        nPageX = aViewData.CellsAtX( nCurX, 1, eWhichX ) * nMovX;
     else
-        nPageX = ((SCsCOL) aViewData.CellsAtX( nCurX, -1, eWhichX )) * nMovX;
+        nPageX = aViewData.CellsAtX( nCurX, -1, eWhichX ) * nMovX;
 
     if (nMovY >= 0)
-        nPageY = ((SCsROW) aViewData.CellsAtY( nCurY, 1, eWhichY, nScrSizeY )) * nMovY;
+        nPageY = aViewData.CellsAtY( nCurY, 1, eWhichY, nScrSizeY ) * nMovY;
     else
-        nPageY = ((SCsROW) aViewData.CellsAtY( nCurY, -1, eWhichY, nScrSizeY )) * nMovY;
+        nPageY = aViewData.CellsAtY( nCurY, -1, eWhichY, nScrSizeY ) * nMovY;
 
     if (nMovX != 0 && nPageX == 0) nPageX = (nMovX>0) ? 1 : -1;
     if (nMovY != 0 && nPageY == 0) nPageY = (nMovY>0) ? 1 : -1;
@@ -653,8 +653,8 @@ void ScTabView::GetPageMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, SCsCOL& rPage
     rPageY = nPageY;
 }
 
-void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
-                                       SCsCOL& rAreaX, SCsROW& rAreaY, ScFollowMode& rMode)
+void ScTabView::GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
+                                       SCCOL& rAreaX, SCROW& rAreaY, ScFollowMode& rMode)
 {
     SCCOL nNewX = -1;
     SCROW nNewY = -1;
@@ -691,7 +691,7 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
     SCCOL nVirtualX = bLegacyCellSelection ? nNewX : nCurX;
     SCROW nVirtualY = bLegacyCellSelection ? nNewY : nCurY;
 
-    SCsCOLROW i;
+    SCCOLROW i;
     if ( nMovX > 0 )
         for ( i=0; i<nMovX; i++ )
             pDoc->FindAreaPos( nNewX, nVirtualY, nTab,  SC_MOVE_RIGHT );
@@ -731,7 +731,7 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
     rMode = eMode;
 }
 
-void ScTabView::SkipCursorHorizontal(SCsCOL& rCurX, SCsROW& rCurY, SCsCOL nOldX, SCsROW nMovX)
+void ScTabView::SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SCROW nMovX)
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
@@ -790,7 +790,7 @@ void ScTabView::SkipCursorHorizontal(SCsCOL& rCurX, SCsROW& rCurY, SCsCOL nOldX,
     }
 }
 
-void ScTabView::SkipCursorVertical(SCsCOL& rCurX, SCsROW& rCurY, SCsROW nOldY, SCsROW nMovY)
+void ScTabView::SkipCursorVertical(SCCOL& rCurX, SCROW& rCurY, SCROW nOldY, SCROW nMovY)
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
@@ -850,7 +850,7 @@ void ScTabView::SkipCursorVertical(SCsCOL& rCurX, SCsROW& rCurY, SCsROW nOldY, S
     }
 }
 
-void ScTabView::ExpandBlock(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode)
+void ScTabView::ExpandBlock(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode)
 {
     if (!nMovX && !nMovY)
         // Nothing to do.  Bail out.
@@ -956,26 +956,26 @@ void ScTabView::ExpandBlock(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode)
         ScSplitPos eActive = aViewData.GetActivePart();
         bool bRowSelected = (nBlockStartX == 0 && nBlockEndX == MAXCOL);
         bool bColSelected = (nBlockStartY == 0 && nBlockEndY == MAXROW);
-        SCsCOL nAlignX = bRowSelected ? aViewData.GetPosX(WhichH(eActive)) : nBlockEndX;
-        SCsROW nAlignY = bColSelected ? aViewData.GetPosY(WhichV(eActive)) : nBlockEndY;
+        SCCOL nAlignX = bRowSelected ? aViewData.GetPosX(WhichH(eActive)) : nBlockEndX;
+        SCROW nAlignY = bColSelected ? aViewData.GetPosY(WhichV(eActive)) : nBlockEndY;
         AlignToCursor(nAlignX, nAlignY, eMode);
 
         SelectionChanged();
     }
 }
 
-void ScTabView::ExpandBlockPage(SCsCOL nMovX, SCsROW nMovY)
+void ScTabView::ExpandBlockPage(SCCOL nMovX, SCROW nMovY)
 {
-    SCsCOL nPageX;
-    SCsROW nPageY;
+    SCCOL nPageX;
+    SCROW nPageY;
     GetPageMoveEndPosition(nMovX, nMovY, nPageX, nPageY);
     ExpandBlock(nPageX, nPageY, SC_FOLLOW_FIX);
 }
 
-void ScTabView::ExpandBlockArea(SCsCOL nMovX, SCsROW nMovY)
+void ScTabView::ExpandBlockArea(SCCOL nMovX, SCROW nMovY)
 {
-    SCsCOL nAreaX;
-    SCsROW nAreaY;
+    SCCOL nAreaX;
+    SCROW nAreaY;
     ScFollowMode eMode;
     GetAreaMoveEndPosition(nMovX, nMovY, SC_FOLLOW_JUMP, nAreaX, nAreaY, eMode);
     ExpandBlock(nAreaX, nAreaY, eMode);

@@ -857,8 +857,8 @@ namespace {
 
 void lclAddDoubleRefData(
         ScTokenArray& orArray, const FormulaToken& rToken,
-        SCsTAB nScTab1, SCsCOL nScCol1, SCsROW nScRow1,
-        SCsTAB nScTab2, SCsCOL nScCol2, SCsROW nScRow2 )
+        SCTAB nScTab1, SCCOL nScCol1, SCROW nScRow1,
+        SCTAB nScTab2, SCCOL nScCol2, SCROW nScRow2 )
 {
     ScComplexRefData aComplexRef;
     aComplexRef.InitRange(ScRange(nScCol1,nScRow1,nScTab1,nScCol2,nScRow2,nScTab2));
@@ -925,7 +925,7 @@ sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > c
                 const ScComplexRefData& rComplexRef = *pToken->GetDoubleRef();
                 ScAddress aAbs1 = rComplexRef.Ref1.toAbs(ScAddress());
                 ScAddress aAbs2 = rComplexRef.Ref2.toAbs(ScAddress());
-                for (SCsTAB nScTab = aAbs1.Tab(); nScTab <= aAbs2.Tab(); ++nScTab)
+                for (SCTAB nScTab = aAbs1.Tab(); nScTab <= aAbs2.Tab(); ++nScTab)
                 {
                     // split 2-dimensional ranges into single columns
                     if (bSplitToColumns && (aAbs1.Col() < aAbs2.Col()) && (aAbs1.Row() < aAbs2.Row()))

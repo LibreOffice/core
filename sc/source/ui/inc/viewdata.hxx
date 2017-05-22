@@ -388,10 +388,10 @@ public:
                     // TRUE: Cell is merged
     bool            GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& rSizeYPix ) const;
     void            GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
-                                        SCsCOL& rPosX, SCsROW& rPosY,
+                                        SCCOL& rPosX, SCROW& rPosY,
                                         bool bTestMerge = true, bool bRepair = false );
     void            GetMouseQuadrant( const Point& rClickPos, ScSplitPos eWhich,
-                                        SCsCOL nPosX, SCsROW nPosY, bool& rLeft, bool& rTop );
+                                        SCCOL nPosX, SCROW nPosY, bool& rLeft, bool& rTop );
 
     bool            IsRefMode() const                       { return bIsRefMode; }
     ScRefType       GetRefType() const                      { return eRefType; }
@@ -484,8 +484,8 @@ public:
     Point           GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScHSplitPos eWhich ) const;
     Point           GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScVSplitPos eWhich ) const;
 
-    SCCOL           CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_uInt16 nScrSizeY = SC_SIZE_NONE ) const;
-    SCROW           CellsAtY( SCsROW nPosY, SCsROW nDir, ScVSplitPos eWhichY, sal_uInt16 nScrSizeX = SC_SIZE_NONE ) const;
+    SCCOL           CellsAtX( SCCOL nPosX, SCCOL nDir, ScHSplitPos eWhichX, sal_uInt16 nScrSizeY = SC_SIZE_NONE ) const;
+    SCROW           CellsAtY( SCROW nPosY, SCROW nDir, ScVSplitPos eWhichY, sal_uInt16 nScrSizeX = SC_SIZE_NONE ) const;
 
     SCCOL           VisibleCellsX( ScHSplitPos eWhichX ) const;     // Completely visible cell
     SCROW           VisibleCellsY( ScVSplitPos eWhichY ) const;

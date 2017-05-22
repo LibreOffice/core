@@ -504,7 +504,7 @@ bool ScMarkData::IsAllMarked( const ScRange& rRange ) const
     return bOk;
 }
 
-SCsROW ScMarkData::GetNextMarked( SCCOL nCol, SCsROW nRow, bool bUp ) const
+SCROW ScMarkData::GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const
 {
     if ( !bMultiMarked )
         return nRow;

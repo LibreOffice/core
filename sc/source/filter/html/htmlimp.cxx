@@ -157,7 +157,7 @@ void ScHTMLImport::WriteToDocument(
     // create ranges for HTML tables
      // 1 - entire document
     ScRange aNewRange( maRange.aStart );
-    aNewRange.aEnd.IncCol( static_cast<SCsCOL>(pGlobTable->GetDocSize( tdCol )) - 1 );
+    aNewRange.aEnd.IncCol( static_cast<SCCOL>(pGlobTable->GetDocSize( tdCol )) - 1 );
     aNewRange.aEnd.IncRow( pGlobTable->GetDocSize( tdRow ) - 1 );
     InsertRangeName( mpDoc, ScfTools::GetHTMLDocName(), aNewRange );
 
@@ -165,9 +165,9 @@ void ScHTMLImport::WriteToDocument(
     InsertRangeName( mpDoc, ScfTools::GetHTMLTablesName(), ScRange( maRange.aStart ) );
 
     // 3 - single tables
-    SCsCOL nColDiff = (SCsCOL)maRange.aStart.Col();
-    SCsROW nRowDiff = (SCsROW)maRange.aStart.Row();
-    SCsTAB nTabDiff = (SCsTAB)maRange.aStart.Tab();
+    SCCOL nColDiff = maRange.aStart.Col();
+    SCROW nRowDiff = maRange.aStart.Row();
+    SCTAB nTabDiff = maRange.aStart.Tab();
 
     ScHTMLTable* pTable = nullptr;
     ScHTMLTableId nTableId = SC_HTML_GLOBAL_TABLE;

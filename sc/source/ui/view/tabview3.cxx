@@ -83,9 +83,9 @@ ScRange lcl_getSubRangeByIndex( const ScRange& rRange, sal_Int32 nIndex )
     {
         // row by row from first to last sheet
         sal_Int32 nArea = nWidth * nHeight;
-        aResult.IncCol( static_cast< SCsCOL >( nIndex % nWidth ) );
-        aResult.IncRow( static_cast< SCsROW >( (nIndex % nArea) / nWidth ) );
-        aResult.IncTab( static_cast< SCsTAB >( nIndex / nArea ) );
+        aResult.IncCol( static_cast< SCCOL >( nIndex % nWidth ) );
+        aResult.IncRow( static_cast< SCROW >( (nIndex % nArea) / nWidth ) );
+        aResult.IncTab( static_cast< SCTAB >( nIndex / nArea ) );
         if( !rRange.In( aResult ) )
             aResult = rRange.aStart;
     }
@@ -842,7 +842,7 @@ static vcl::Window* lcl_GetCareWin(SfxViewFrame* pViewFrm)
 
     // adjust screen with respect to cursor position
 
-void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
+void ScTabView::AlignToCursor( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
                                 const ScSplitPos* pWhich )
 {
     // now switch active part here
@@ -852,12 +852,12 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
     ScVSplitPos eActiveY = WhichV(eActive);
     bool bHFix = (aViewData.GetHSplitMode() == SC_SPLIT_FIX);
     bool bVFix = (aViewData.GetVSplitMode() == SC_SPLIT_FIX);
-    if (bHFix && eActiveX == SC_SPLIT_LEFT && nCurX >= (SCsCOL)aViewData.GetFixPosX())
+    if (bHFix && eActiveX == SC_SPLIT_LEFT && nCurX >= aViewData.GetFixPosX())
     {
         ActivatePart( (eActiveY==SC_SPLIT_TOP) ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT );
         eActiveX = SC_SPLIT_RIGHT;
     }
-    if (bVFix && eActiveY == SC_SPLIT_TOP && nCurY >= (SCsROW)aViewData.GetFixPosY())
+    if (bVFix && eActiveY == SC_SPLIT_TOP && nCurY >= aViewData.GetFixPosY())
     {
         ActivatePart( (eActiveX==SC_SPLIT_LEFT) ? SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT );
         eActiveY = SC_SPLIT_BOTTOM;
@@ -875,15 +875,15 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
         ScHSplitPos eAlignX = WhichH(eAlign);
         ScVSplitPos eAlignY = WhichV(eAlign);
 
-        SCsCOL nDeltaX = (SCsCOL) aViewData.GetPosX(eAlignX);
-        SCsROW nDeltaY = (SCsROW) aViewData.GetPosY(eAlignY);
-        SCsCOL nSizeX = (SCsCOL) aViewData.VisibleCellsX(eAlignX);
-        SCsROW nSizeY = (SCsROW) aViewData.VisibleCellsY(eAlignY);
+        SCCOL nDeltaX = aViewData.GetPosX(eAlignX);
+        SCROW nDeltaY = aViewData.GetPosY(eAlignY);
+        SCCOL nSizeX = aViewData.VisibleCellsX(eAlignX);
+        SCROW nSizeY = aViewData.VisibleCellsY(eAlignY);
 
         long nCellSizeX;
         long nCellSizeY;
         if ( nCurX >= 0 && nCurY >= 0 )
-            aViewData.GetMergeSizePixel( (SCCOL)nCurX, (SCROW)nCurY, nCellSizeX, nCellSizeY );
+            aViewData.GetMergeSizePixel( nCurX, nCurY, nCellSizeX, nCellSizeY );
         else
             nCellSizeX = nCellSizeY = 0;
         Size aScrSize = aViewData.GetScrSize();
@@ -939,12 +939,12 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                     if ( nBotSpace > 0 && nBotSpace > nTopSpace )
                     {
                         long nDlgBot = aDlgPixel.Bottom();
-                        SCsCOL nWPosX;
-                        SCsROW nWPosY;
+                        SCCOL nWPosX;
+                        SCROW nWPosY;
                         aViewData.GetPosFromPixel( 0,nDlgBot, eAlign, nWPosX, nWPosY );
                         ++nWPosY;   // below the last affected cell
 
-                        SCsROW nDiff = nWPosY - nDeltaY;
+                        SCROW nDiff = nWPosY - nDeltaY;
                         if ( nCurY >= nDiff )           // position can not be negative
                         {
                             nSpaceY = nDlgBot + ( nBotSpace - nCellSizeY ) / 2;
@@ -961,8 +961,8 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
             }
         }
 
-        SCsCOL nNewDeltaX = nDeltaX;
-        SCsROW nNewDeltaY = nDeltaY;
+        SCCOL nNewDeltaX = nDeltaX;
+        SCROW nNewDeltaY = nDeltaY;
         bool bDoLine = false;
 
         switch (eMode)
@@ -970,17 +970,17 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
             case SC_FOLLOW_JUMP:
                 if ( nCurX < nDeltaX || nCurX >= nDeltaX+nSizeX )
                 {
-                    nNewDeltaX = nCurX - static_cast<SCsCOL>(aViewData.CellsAtX( nCurX, -1, eAlignX, static_cast<sal_uInt16>(nSpaceX) ));
+                    nNewDeltaX = nCurX - aViewData.CellsAtX( nCurX, -1, eAlignX, static_cast<sal_uInt16>(nSpaceX) );
                     if (nNewDeltaX < 0)
                         nNewDeltaX = 0;
-                    nSizeX = (SCsCOL) aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
+                    nSizeX = aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
                 }
                 if ( nCurY < nDeltaY || nCurY >= nDeltaY+nSizeY || bForceNew )
                 {
-                    nNewDeltaY = nCurY - static_cast<SCsROW>(aViewData.CellsAtY( nCurY, -1, eAlignY, static_cast<sal_uInt16>(nSpaceY) ));
+                    nNewDeltaY = nCurY - aViewData.CellsAtY( nCurY, -1, eAlignY, static_cast<sal_uInt16>(nSpaceY) );
                     if (nNewDeltaY < 0)
                         nNewDeltaY = 0;
-                    nSizeY = (SCsROW) aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
+                    nSizeY = aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
                 }
                 bDoLine = true;
                 break;
@@ -995,14 +995,14 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                     nNewDeltaX = nDeltaX + nCurX - aViewData.GetCurX();
                     if (nNewDeltaX < 0)
                         nNewDeltaX = 0;
-                    nSizeX = (SCsCOL) aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
+                    nSizeX = aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
                 }
                 if ( nCurY < nDeltaY || nCurY >= nDeltaY+nSizeY )
                 {
                     nNewDeltaY = nDeltaY + nCurY - aViewData.GetCurY();
                     if (nNewDeltaY < 0)
                         nNewDeltaY = 0;
-                    nSizeY = (SCsROW) aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
+                    nSizeY = aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
                 }
 
                 //  like old version of SC_FOLLOW_JUMP:
@@ -1012,14 +1012,14 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                     nNewDeltaX = nCurX - (nSizeX / 2);
                     if (nNewDeltaX < 0)
                         nNewDeltaX = 0;
-                    nSizeX = (SCsCOL) aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
+                    nSizeX = aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
                 }
                 if ( nCurY < nNewDeltaY || nCurY >= nNewDeltaY+nSizeY )
                 {
                     nNewDeltaY = nCurY - (nSizeY / 2);
                     if (nNewDeltaY < 0)
                         nNewDeltaY = 0;
-                    nSizeY = (SCsROW) aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
+                    nSizeY = aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
                 }
 
                 bDoLine = true;
@@ -1041,7 +1041,7 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                 SCTAB nTab = aViewData.GetTabNo();
                 while ( nNewDeltaX < MAXCOL && !pDoc->GetColWidth( nNewDeltaX, nTab ) )
                     ++nNewDeltaX;
-                nSizeX = (SCsCOL) aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
+                nSizeX = aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
             }
             while ( nCurY >= nNewDeltaY+nSizeY )
             {
@@ -1050,7 +1050,7 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                 SCTAB nTab = aViewData.GetTabNo();
                 while ( nNewDeltaY < MAXROW && !pDoc->GetRowHeight( nNewDeltaY, nTab ) )
                     ++nNewDeltaY;
-                nSizeY = (SCsROW) aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
+                nSizeY = aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
             }
             if ( nCurX < nNewDeltaX )
                 nNewDeltaX = nCurX;
@@ -1059,14 +1059,14 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
         }
 
         if ( nNewDeltaX != nDeltaX )
-            nSizeX = (SCsCOL) aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
+            nSizeX = aViewData.CellsAtX( nNewDeltaX, 1, eAlignX );
         if (nNewDeltaX+nSizeX-1 > MAXCOL)
             nNewDeltaX = MAXCOL-nSizeX+1;
         if (nNewDeltaX < 0)
             nNewDeltaX = 0;
 
         if ( nNewDeltaY != nDeltaY )
-            nSizeY = (SCsROW) aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
+            nSizeY = aViewData.CellsAtY( nNewDeltaY, 1, eAlignY );
         if (nNewDeltaY+nSizeY-1 > MAXROW)
             nNewDeltaY = MAXROW-nSizeY+1;
         if (nNewDeltaY < 0)
@@ -1081,13 +1081,13 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
     // switch active part again
 
     if (bHFix)
-        if (eActiveX == SC_SPLIT_RIGHT && nCurX < (SCsCOL)aViewData.GetFixPosX())
+        if (eActiveX == SC_SPLIT_RIGHT && nCurX < aViewData.GetFixPosX())
         {
             ActivatePart( (eActiveY==SC_SPLIT_TOP) ? SC_SPLIT_TOPLEFT : SC_SPLIT_BOTTOMLEFT );
             eActiveX = SC_SPLIT_LEFT;
         }
     if (bVFix)
-        if (eActiveY == SC_SPLIT_BOTTOM && nCurY < (SCsROW)aViewData.GetFixPosY())
+        if (eActiveY == SC_SPLIT_BOTTOM && nCurY < aViewData.GetFixPosY())
         {
             ActivatePart( (eActiveX==SC_SPLIT_LEFT) ? SC_SPLIT_TOPLEFT : SC_SPLIT_TOPRIGHT );
         }
@@ -1115,7 +1115,7 @@ bool ScTabView::SelMouseButtonDown( const MouseEvent& rMEvt )
 
     //  MoveCursor - with adjustment of the view section
 
-void ScTabView::MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
+void ScTabView::MoveCursorAbs( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
                                bool bShift, bool bControl, bool bKeepOld, bool bKeepSel )
 {
     if (!bKeepOld)
@@ -1189,7 +1189,7 @@ void ScTabView::MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
     TestHintWindow();
 }
 
-void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
+void ScTabView::MoveCursorRel( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
                                bool bShift, bool bKeepSel )
 {
     ScDocument* pDoc = aViewData.GetDocument();
@@ -1206,23 +1206,23 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
     if ( bSkipProtected && bSkipUnprotected )
         return;
 
-    SCsCOL nOldX;
-    SCsROW nOldY;
-    SCsCOL nCurX;
-    SCsROW nCurY;
+    SCCOL nOldX;
+    SCROW nOldY;
+    SCCOL nCurX;
+    SCROW nCurY;
     if ( aViewData.IsRefMode() )
     {
-        nOldX = (SCsCOL) aViewData.GetRefEndX();
-        nOldY = (SCsROW) aViewData.GetRefEndY();
+        nOldX = aViewData.GetRefEndX();
+        nOldY = aViewData.GetRefEndY();
         nCurX = nOldX + nMovX;
         nCurY = nOldY + nMovY;
     }
     else
     {
-        nOldX = (SCsCOL) aViewData.GetCurX();
-        nOldY = (SCsROW) aViewData.GetCurY();
-        nCurX = (nMovX != 0) ? nOldX+nMovX : (SCsCOL) aViewData.GetOldCurX();
-        nCurY = (nMovY != 0) ? nOldY+nMovY : (SCsROW) aViewData.GetOldCurY();
+        nOldX = aViewData.GetCurX();
+        nOldY = aViewData.GetCurY();
+        nCurX = (nMovX != 0) ? nOldX+nMovX : aViewData.GetOldCurX();
+        nCurY = (nMovY != 0) ? nOldY+nMovY : aViewData.GetOldCurY();
     }
 
     if (nMovX < 0 && nOldX == 0)
@@ -1247,23 +1247,23 @@ void ScTabView::MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
     MoveCursorAbs( nCurX, nCurY, eMode, bShift, false, true, bKeepSel );
 }
 
-void ScTabView::MoveCursorPage( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, bool bShift, bool bKeepSel )
+void ScTabView::MoveCursorPage( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode, bool bShift, bool bKeepSel )
 {
-    SCsCOL nPageX;
-    SCsROW nPageY;
+    SCCOL nPageX;
+    SCROW nPageY;
     GetPageMoveEndPosition(nMovX, nMovY, nPageX, nPageY);
     MoveCursorRel( nPageX, nPageY, eMode, bShift, bKeepSel );
 }
 
-void ScTabView::MoveCursorArea( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, bool bShift, bool bKeepSel )
+void ScTabView::MoveCursorArea( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode, bool bShift, bool bKeepSel )
 {
-    SCsCOL nNewX;
-    SCsROW nNewY;
+    SCCOL nNewX;
+    SCROW nNewY;
     GetAreaMoveEndPosition(nMovX, nMovY, eMode, nNewX, nNewY, eMode);
     MoveCursorRel(nNewX, nNewY, eMode, bShift, bKeepSel);
 }
 
-void ScTabView::MoveCursorEnd( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, bool bShift, bool bKeepSel )
+void ScTabView::MoveCursorEnd( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode, bool bShift, bool bKeepSel )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
@@ -1290,10 +1290,10 @@ void ScTabView::MoveCursorEnd( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, b
         nNewY=nUsedY;
 
     aViewData.ResetOldCursor();
-    MoveCursorRel( ((SCsCOL)nNewX)-(SCsCOL)nCurX, ((SCsROW)nNewY)-(SCsROW)nCurY, eMode, bShift, bKeepSel );
+    MoveCursorRel( nNewX-nCurX, nNewY-nCurY, eMode, bShift, bKeepSel );
 }
 
-void ScTabView::MoveCursorScreen( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, bool bShift )
+void ScTabView::MoveCursorScreen( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode, bool bShift )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
@@ -1339,8 +1339,8 @@ void ScTabView::MoveCursorEnter( bool bShift )          // bShift -> up/down
         return;
     }
 
-    SCsCOL nMoveX = 0;
-    SCsROW nMoveY = 0;
+    SCCOL nMoveX = 0;
+    SCROW nMoveY = 0;
     switch ((ScDirection)rOpt.GetMoveDir())
     {
         case DIR_BOTTOM:
@@ -1370,7 +1370,7 @@ void ScTabView::MoveCursorEnter( bool bShift )          // bShift -> up/down
         ScDocument* pDoc = aViewData.GetDocument();
         pDoc->GetNextPos( nNewX,nNewY, nTab, nMoveX,nMoveY, true, false, rMark );
 
-        MoveCursorRel( ((SCsCOL)nNewX)-(SCsCOL)nCurX, ((SCsROW)nNewY)-(SCsROW)nCurY,
+        MoveCursorRel( nNewX-nCurX, nNewY-nCurY,
                             SC_FOLLOW_LINE, false, true );
 
         //  update input line even if cursor was not moved
@@ -1388,7 +1388,7 @@ void ScTabView::MoveCursorEnter( bool bShift )          // bShift -> up/down
                 SCCOL nCurX;
                 SCROW nCurY;
                 aViewData.GetMoveCursor( nCurX,nCurY );
-                nMoveX = ((SCsCOL)nTabCol)-(SCsCOL)nCurX;
+                nMoveX = nTabCol-nCurX;
             }
         }
 
@@ -1409,8 +1409,8 @@ bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
     sal_uInt16 nCode = rKCode.GetCode();
 
     // CURSOR keys
-    SCsCOL nDX = 0;
-    SCsROW nDY = 0;
+    SCCOL nDX = 0;
+    SCROW nDY = 0;
     switch( nCode )
     {
         case KEY_LEFT:  nDX = -1;   break;
@@ -1439,7 +1439,7 @@ bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
         nDX = (nCode == KEY_PAGEUP) ? -1 : 1;
         switch( eModifier )
         {
-            case MOD_NONE:  MoveCursorPage( 0, static_cast<SCsCOLROW>(nDX), SC_FOLLOW_FIX, bSel );  break;
+            case MOD_NONE:  MoveCursorPage( 0, static_cast<SCCOLROW>(nDX), SC_FOLLOW_FIX, bSel );  break;
             case MOD_ALT:   MoveCursorPage( nDX, 0, SC_FOLLOW_FIX, bSel );  break;
             case MOD_CTRL:  SelectNextTab( nDX, false );                    break;
             default:
@@ -1458,7 +1458,7 @@ bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
         switch( eModifier )
         {
             case MOD_NONE:  MoveCursorEnd( nDX, 0, eMode, bSel );   break;
-            case MOD_CTRL:  MoveCursorEnd( nDX, static_cast<SCsCOLROW>(nDX), eMode, bSel ); break;
+            case MOD_CTRL:  MoveCursorEnd( nDX, static_cast<SCCOLROW>(nDX), eMode, bSel ); break;
             default:
             {
                 // added to avoid warnings
@@ -1492,8 +1492,7 @@ void ScTabView::FindNextUnprot( bool bShift, bool bInSelection )
     if ( nTabCol == SC_TABSTART_NONE )
         nTabCol = nCurX;                    // back to this column after Enter
 
-    MoveCursorRel( ((SCsCOL)nNewX)-(SCsCOL)nCurX, ((SCsROW)nNewY)-(SCsROW)nCurY,
-                   SC_FOLLOW_LINE, false, true );
+    MoveCursorRel( nNewX-nCurX, nNewY-nCurY, SC_FOLLOW_LINE, false, true );
 
     // TabCol is reset in MoveCursorRel...
     aViewData.SetTabStartCol( nTabCol );

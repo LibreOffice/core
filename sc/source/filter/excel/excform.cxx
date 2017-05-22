@@ -553,7 +553,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             {
                 sal_uInt16 nUINT16 = aIn.ReaduInt16();
                 sal_uInt8 nByte = aIn.ReaduInt8();
-                aSRD.SetAbsCol(static_cast<SCsCOL>(nByte));
+                aSRD.SetAbsCol(static_cast<SCCOL>(nByte));
                 aSRD.SetAbsRow(nUINT16 & 0x3FFF);
                 aSRD.SetRelTab(0);
                 aSRD.SetFlag3D( bRangeName );
@@ -898,7 +898,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
 
 // stream seeks to first byte after <nFormulaLen>
 ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std::size_t nFormulaLen,
-                            SCsTAB nTab, const FORMULA_TYPE eFT )
+                            SCTAB nTab, const FORMULA_TYPE eFT )
 {
     RootData&       rR = GetOldRoot();
     sal_uInt8           nOp, nLen;
@@ -1058,7 +1058,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
             {
                 sal_uInt16 nUINT16 = aIn.ReaduInt16();
                 sal_uInt8 nByte = aIn.ReaduInt8();
-                aSRD.SetAbsCol(static_cast<SCsCOL>(nByte));
+                aSRD.SetAbsCol(static_cast<SCCOL>(nByte));
                 aSRD.SetAbsRow(nUINT16 & 0x3FFF);
                 aSRD.SetRelTab(0);
                 aSRD.SetFlag3D( bRangeName );
