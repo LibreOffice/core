@@ -276,20 +276,17 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
             if ( pObj && !mpDrawView->IsTextEdit() )
             {
-                SdrGrafObj* pNewObj = pObj->Clone();
+                std::unique_ptr<SdrGrafObj> xNewObj(pObj->Clone());
                 bool bCont = true;
 
-                if( pNewObj->IsLinkedGraphic() )
+                if (xNewObj->IsLinkedGraphic())
                 {
                     ScopedVclPtrInstance< MessageDialog > aQueryBox( static_cast<vcl::Window*>(GetActiveWindow()),"QueryUnlinkImageDialog","modules/sdraw/ui/queryunlinkimagedialog.ui");
 
                     if (RET_YES == aQueryBox->Execute())
-                        pNewObj->ReleaseGraphicLink();
+                        xNewObj->ReleaseGraphicLink();
                     else
-                    {
-                        delete pNewObj;
                         bCont = false;
-                    }
                 }
 
                 SfxChildWindow* pWnd = GetViewFrame()->GetChildWindow(
@@ -298,21 +295,21 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
                 assert(pBmpMask);
                 if (bCont && pBmpMask)
                 {
-                    const Graphic&  rOldGraphic = pNewObj->GetGraphic();
+                    const Graphic&  rOldGraphic = xNewObj->GetGraphic();
                     const Graphic   aNewGraphic(pBmpMask->Mask(rOldGraphic));
 
                     if( aNewGraphic != rOldGraphic )
                     {
                         SdrPageView* pPV = mpDrawView->GetSdrPageView();
 
-                        pNewObj->SetEmptyPresObj( false );
-                        pNewObj->SetGraphic(pBmpMask->Mask(pNewObj->GetGraphic()));
+                        xNewObj->SetEmptyPresObj(false);
+                        xNewObj->SetGraphic(pBmpMask->Mask(xNewObj->GetGraphic()));
 
                         OUString aStr( mpDrawView->GetDescriptionOfMarkedObjects() );
                         aStr += " " + SD_RESSTR(STR_EYEDROPPER);
 
                         mpDrawView->BegUndo( aStr );
-                        mpDrawView->ReplaceObjectAtView( pObj, *pPV, pNewObj );
+                        mpDrawView->ReplaceObjectAtView(pObj, *pPV, xNewObj.release());
                         mpDrawView->EndUndo();
                     }
                 }
