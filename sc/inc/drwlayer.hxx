@@ -102,7 +102,7 @@ private:
 
 private:
     void            MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
-                                SCsCOL nDx,SCsROW nDy, bool bUpdateNoteCaptionPos );
+                                SCCOL nDx,SCROW nDy, bool bUpdateNoteCaptionPos );
 
     void            RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegativePage, bool bUpdateNoteCaptionPos );
     void            ResizeLastRectFromAnchor( SdrObject* pObj, ScDrawObjData& rData, bool bUseLogicRect, bool bNegativePage, bool bCanResize, bool bHiddenAsZero = true );
@@ -140,7 +140,7 @@ public:
     void            AddCalcUndo( SdrUndoAction* pUndo );
 
     void            MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
-                                SCsCOL nDx,SCsROW nDy, bool bInsDel, bool bUpdateNoteCaptionPos );
+                                SCCOL nDx,SCROW nDy, bool bInsDel, bool bUpdateNoteCaptionPos );
 
     bool            HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow );
 

@@ -371,9 +371,9 @@ bool ScRangeList::UpdateReference(
     UpdateRefMode eUpdateRefMode,
     ScDocument* pDoc,
     const ScRange& rWhere,
-    SCsCOL nDx,
-    SCsROW nDy,
-    SCsTAB nDz
+    SCCOL nDx,
+    SCROW nDy,
+    SCTAB nDz
 )
 {
     if (maRanges.empty())
@@ -1269,7 +1269,7 @@ size_t ScRangePairList::size() const
 
 void ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
                                     ScDocument* pDoc, const ScRange& rWhere,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+                                    SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
     if ( !maPairs.empty() )
     {

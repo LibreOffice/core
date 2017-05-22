@@ -42,7 +42,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     ScTabViewShell* pTabViewShell   = pData->GetViewShell();
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
     sal_uInt16              nSlotId  = rReq.GetSlot();
-    SCsCOLROW           nRepeat = 1;
+    SCCOLROW            nRepeat = 1;
     bool                bSel = false;
     bool                bKeep = false;
 
@@ -50,7 +50,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     {
         const   SfxPoolItem* pItem;
         if (pReqArgs->HasItem(FN_PARAM_1, &pItem))
-            nRepeat = static_cast<SCsCOLROW>(static_cast<const SfxInt16Item*>(pItem)->GetValue());
+            nRepeat = static_cast<SCCOLROW>(static_cast<const SfxInt16Item*>(pItem)->GetValue());
         if (pReqArgs->HasItem(FN_PARAM_2, &pItem))
             bSel = static_cast<const SfxBoolItem*>(pItem)->GetValue();
     }
@@ -109,7 +109,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
         return;
     }
 
-    SCsCOLROW nRTLSign = 1;
+    SCCOLROW nRTLSign = 1;
     if ( pData->GetDocument()->IsLayoutRTL( pData->GetTabNo() ) )
     {
         //! evaluate cursor movement option?
@@ -160,31 +160,31 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
 
         case SID_CURSORLEFT:
             if (bScrollLock)
-                pTabViewShell->ScrollX( static_cast<SCsCOL>(-nRepeat * nRTLSign), SC_SPLIT_LEFT);
+                pTabViewShell->ScrollX( static_cast<SCCOL>(-nRepeat * nRTLSign), SC_SPLIT_LEFT);
             else
-                pTabViewShell->MoveCursorRel( static_cast<SCsCOL>(-nRepeat * nRTLSign), 0, SC_FOLLOW_LINE, bSel, bKeep );
+                pTabViewShell->MoveCursorRel( static_cast<SCCOL>(-nRepeat * nRTLSign), 0, SC_FOLLOW_LINE, bSel, bKeep );
             break;
 
         case SID_CURSORBLKLEFT:
-            pTabViewShell->MoveCursorArea( static_cast<SCsCOL>(-nRepeat * nRTLSign), 0, SC_FOLLOW_JUMP, bSel, bKeep );
+            pTabViewShell->MoveCursorArea( static_cast<SCCOL>(-nRepeat * nRTLSign), 0, SC_FOLLOW_JUMP, bSel, bKeep );
             break;
 
         case SID_CURSORRIGHT:
             if (bScrollLock)
-                pTabViewShell->ScrollX( static_cast<SCsCOL>(nRepeat * nRTLSign), SC_SPLIT_LEFT);
+                pTabViewShell->ScrollX( static_cast<SCCOL>(nRepeat * nRTLSign), SC_SPLIT_LEFT);
             else
-                pTabViewShell->MoveCursorRel( static_cast<SCsCOL>(nRepeat * nRTLSign), 0, SC_FOLLOW_LINE, bSel, bKeep );
+                pTabViewShell->MoveCursorRel( static_cast<SCCOL>(nRepeat * nRTLSign), 0, SC_FOLLOW_LINE, bSel, bKeep );
             break;
 
         case SID_CURSORBLKRIGHT:
-            pTabViewShell->MoveCursorArea( static_cast<SCsCOL>(nRepeat * nRTLSign), 0, SC_FOLLOW_JUMP, bSel, bKeep );
+            pTabViewShell->MoveCursorArea( static_cast<SCCOL>(nRepeat * nRTLSign), 0, SC_FOLLOW_JUMP, bSel, bKeep );
             break;
 
         case SID_CURSORPAGEDOWN:
             if (bScrollLock)
             {
-                SCsCOL nPageX;
-                SCsROW nPageY;
+                SCCOL nPageX;
+                SCROW nPageY;
                 pTabViewShell->GetPageMoveEndPosition( 0, nRepeat, nPageX, nPageY);
                 pTabViewShell->ScrollY( nPageY, SC_SPLIT_BOTTOM);
             }
@@ -195,8 +195,8 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
         case SID_CURSORPAGEUP:
             if (bScrollLock)
             {
-                SCsCOL nPageX;
-                SCsROW nPageY;
+                SCCOL nPageX;
+                SCROW nPageY;
                 pTabViewShell->GetPageMoveEndPosition( 0, nRepeat, nPageX, nPageY);
                 pTabViewShell->ScrollY( -nPageY, SC_SPLIT_BOTTOM);
             }
@@ -207,25 +207,25 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
         case SID_CURSORPAGERIGHT_: //XXX !!!
             if (bScrollLock)
             {
-                SCsCOL nPageX;
-                SCsROW nPageY;
-                pTabViewShell->GetPageMoveEndPosition( static_cast<SCsCOL>(nRepeat), 0, nPageX, nPageY);
+                SCCOL nPageX;
+                SCROW nPageY;
+                pTabViewShell->GetPageMoveEndPosition( static_cast<SCCOL>(nRepeat), 0, nPageX, nPageY);
                 pTabViewShell->ScrollX( nPageX, SC_SPLIT_LEFT);
             }
             else
-                pTabViewShell->MoveCursorPage( static_cast<SCsCOL>(nRepeat), 0, SC_FOLLOW_FIX, bSel, bKeep );
+                pTabViewShell->MoveCursorPage( static_cast<SCCOL>(nRepeat), 0, SC_FOLLOW_FIX, bSel, bKeep );
             break;
 
         case SID_CURSORPAGELEFT_: //XXX !!!
             if (bScrollLock)
             {
-                SCsCOL nPageX;
-                SCsROW nPageY;
-                pTabViewShell->GetPageMoveEndPosition( static_cast<SCsCOL>(nRepeat), 0, nPageX, nPageY);
+                SCCOL nPageX;
+                SCROW nPageY;
+                pTabViewShell->GetPageMoveEndPosition( static_cast<SCCOL>(nRepeat), 0, nPageX, nPageY);
                 pTabViewShell->ScrollX( -nPageX, SC_SPLIT_LEFT);
             }
             else
-                pTabViewShell->MoveCursorPage( static_cast<SCsCOL>(-nRepeat), 0, SC_FOLLOW_FIX, bSel, bKeep );
+                pTabViewShell->MoveCursorPage( static_cast<SCCOL>(-nRepeat), 0, SC_FOLLOW_FIX, bSel, bKeep );
             break;
 
         default:
@@ -256,19 +256,19 @@ void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
         pViewShell->ExecuteInputDirect();
     }
 
-    SCsCOLROW nRepeat = 1;
+    SCCOLROW nRepeat = 1;
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     // get repetition
     if ( pReqArgs != nullptr )
     {
         const SfxPoolItem* pItem;
         if (pReqArgs->HasItem(FN_PARAM_1, &pItem))
-            nRepeat = static_cast<SCsCOLROW>(static_cast<const SfxInt16Item*>(pItem)->GetValue());
+            nRepeat = static_cast<SCCOLROW>(static_cast<const SfxInt16Item*>(pItem)->GetValue());
     }
 
-    SCsROW nMovY = nRepeat;
+    SCROW nMovY = nRepeat;
     // Horizontal direction depends on whether or not the UI language is RTL.
-    SCsCOL nMovX = nRepeat;
+    SCCOL nMovX = nRepeat;
     if (GetViewData()->GetDocument()->IsLayoutRTL(GetViewData()->GetTabNo()))
     {
         // mirror horizontal movement for right-to-left mode.

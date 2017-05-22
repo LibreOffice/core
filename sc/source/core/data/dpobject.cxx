@@ -1060,7 +1060,7 @@ bool ScDPObject::GetMembers( sal_Int32 nDim, sal_Int32 nHier, vector<ScDPLabelDa
 }
 
 void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                     const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+                                     const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
     // Output area
 
@@ -1102,8 +1102,8 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
                 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         if ( eRes != UR_NOTHING )
         {
-            SCsCOL nDiffX = nCol1 - pSheetDesc->GetSourceRange().aStart.Col();
-            SCsROW nDiffY = nRow1 - pSheetDesc->GetSourceRange().aStart.Row();
+            SCCOL nDiffX = nCol1 - pSheetDesc->GetSourceRange().aStart.Col();
+            SCROW nDiffY = nRow1 - pSheetDesc->GetSourceRange().aStart.Row();
 
             ScQueryParam aParam = pSheetDesc->GetQueryParam();
             aParam.nCol1 = sal::static_int_cast<SCCOL>( aParam.nCol1 + nDiffX );
@@ -2146,10 +2146,10 @@ namespace {
 
 class FindByColumn : public std::unary_function<ScPivotField, bool>
 {
-    SCsCOL mnCol;
+    SCCOL mnCol;
     PivotFunc mnMask;
 public:
-    FindByColumn(SCsCOL nCol, PivotFunc nMask) : mnCol(nCol), mnMask(nMask) {}
+    FindByColumn(SCCOL nCol, PivotFunc nMask) : mnCol(nCol), mnMask(nMask) {}
     bool operator() (const ScPivotField& r) const
     {
         return r.nCol == mnCol && r.nFuncMask == mnMask;
@@ -2231,11 +2231,11 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
             {
                 // this dimension is cloned.
 
-                SCsCOL nCompCol; // ID of the original dimension.
+                SCCOL nCompCol; // ID of the original dimension.
                 if ( bDataLayout )
                     nCompCol = PIVOT_DATA_FIELD;
                 else
-                    nCompCol = static_cast<SCsCOL>(nDupSource);     //TODO: seek source column from name
+                    nCompCol = static_cast<SCCOL>(nDupSource);     //TODO: seek source column from name
 
                 ScPivotFieldVector::iterator it = std::find_if(aFields.begin(), aFields.end(), FindByColumn(nCompCol, nMask));
                 if (it != aFields.end())
@@ -3039,7 +3039,7 @@ size_t ScDPCollection::SheetCaches::size() const
 }
 
 void ScDPCollection::SheetCaches::updateReference(
-    UpdateRefMode eMode, const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz)
+    UpdateRefMode eMode, const ScRange& r, SCCOL nDx, SCROW nDy, SCTAB nDz)
 {
     if (maRanges.empty())
         // No caches.
@@ -3627,7 +3627,7 @@ void ScDPCollection::DeleteOnTab( SCTAB nTab )
 }
 
 void ScDPCollection::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                         const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+                                         const ScRange& r, SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
     TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
     for (; itr != itrEnd; ++itr)

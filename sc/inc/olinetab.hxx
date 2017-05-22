@@ -54,7 +54,7 @@ public:
      */
     SC_DLLPUBLIC bool IsVisible() const { return bVisible;}
 
-    void                    Move( SCsCOLROW nDelta );
+    void                    Move( SCCOLROW nDelta );
     void                    SetSize( SCSIZE nNewSize );
     void                    SetPosSize( SCCOLROW nNewPos, SCSIZE nNewSize );
     void                    SetHidden( bool bNewHidden );

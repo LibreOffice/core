@@ -614,7 +614,7 @@ void ScDocument::StartAllListeners()
 }
 
 void ScDocument::UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
-        const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz
+        const ScRange& rRange, SCCOL nDx, SCROW nDy, SCTAB nDz
     )
 {
     bool bExpandRefsOld = IsExpandRefs();

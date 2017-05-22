@@ -105,7 +105,7 @@ public:
 
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, XclImpStream& rStrm, std::size_t nFormulaLen,
                                  bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
-    virtual ConvErr     Convert( ScRangeListTabs&, XclImpStream& rStrm, std::size_t nFormulaLen, SCsTAB nTab,
+    virtual ConvErr     Convert( ScRangeListTabs&, XclImpStream& rStrm, std::size_t nFormulaLen, SCTAB nTab,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
 };
 

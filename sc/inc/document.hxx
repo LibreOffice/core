@@ -945,7 +945,7 @@ public:
     void              UpdateChartRef( UpdateRefMode eUpdateRefMode,
                                     SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+                                    SCCOL nDx, SCROW nDy, SCTAB nDz );
                     //! only assigns the new RangeList, no ChartListener or the like
     void            SetChartRangeList( const OUString& rChartName,
                                        const ScRangeListRef& rNewRangeListRef );
@@ -1328,7 +1328,7 @@ public:
                                                       ScDirection eDir );
 
     void               FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, ScMoveDirection eDirection ) const;
-    SC_DLLPUBLIC void  GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX, SCsROW nMovY,
+    SC_DLLPUBLIC void  GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCCOL nMovX, SCROW nMovY,
                                    bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const;
 
     bool               GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, SCTAB nTab,
@@ -1442,10 +1442,10 @@ public:
                              SCCOL nCol2, SCROW nRow2 );
     void CopyBlockFromClip( sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1,
                             SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
-                            SCsCOL nDx, SCsROW nDy );
+                            SCCOL nDx, SCROW nDy );
     void CopyNonFilteredFromClip( sc::CopyFromClipContext& rCxt, SCCOL nCol1,
                                   SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                  const ScMarkData& rMark, SCsCOL nDx, SCROW & rClipStartRow );
+                                  const ScMarkData& rMark, SCCOL nDx, SCROW & rClipStartRow );
 
     void StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
                                  SCCOL nCol2, SCROW nRow2,
@@ -2058,7 +2058,7 @@ public:
     void                DelBroadcastAreasInRange( const ScRange& rRange );
     void                UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
                                             const ScRange& rRange,
-                                            SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+                                            SCCOL nDx, SCROW nDy, SCTAB nDz );
 
     void                StartListeningCell( const ScAddress& rAddress,
                                             SvtListener* pListener );
@@ -2337,7 +2337,7 @@ private:
 
     void    DeleteAreaLinksOnTab( SCTAB nTab );
     void    UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
-                             const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+                             const ScRange& r, SCCOL nDx, SCROW nDy, SCTAB nDz );
 
     void    CopyRangeNamesToClip(ScDocument* pClipDoc, const ScRange& rClipRange, const ScMarkData* pMarks);
 

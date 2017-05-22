@@ -668,7 +668,7 @@ static OUString lcl_makeExternalNameStr(const OUString& rFile, const OUString& r
 static bool lcl_getLastTabName( OUString& rTabName2, const OUString& rTabName1,
                                 const vector<OUString>& rTabNames, const ScRange& rRef )
 {
-    SCsTAB nTabSpan = rRef.aEnd.Tab() - rRef.aStart.Tab();
+    SCTAB nTabSpan = rRef.aEnd.Tab() - rRef.aStart.Tab();
     if (nTabSpan > 0)
     {
         size_t nCount = rTabNames.size();

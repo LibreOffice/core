@@ -571,7 +571,7 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
 void ScDBData::UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                 SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz)
+                                SCCOL nDx, SCROW nDy, SCTAB nDz)
 {
     SCCOL theCol1;
     SCROW theRow1;
@@ -957,15 +957,15 @@ class UpdateRefFunc : public unary_function<std::unique_ptr<ScDBData>, void>
     SCCOL mnCol2;
     SCROW mnRow2;
     SCTAB mnTab2;
-    SCsCOL mnDx;
-    SCsROW mnDy;
-    SCsTAB mnDz;
+    SCCOL mnDx;
+    SCROW mnDy;
+    SCTAB mnDz;
 
 public:
     UpdateRefFunc(ScDocument* pDoc, UpdateRefMode eMode,
                     SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz) :
+                    SCCOL nDx, SCROW nDy, SCTAB nDz) :
         mpDoc(pDoc), meMode(eMode),
         mnCol1(nCol1), mnRow1(nRow1), mnTab1(nTab1),
         mnCol2(nCol2), mnRow2(nRow2), mnTab2(nTab2),
@@ -1430,7 +1430,7 @@ void ScDBCollection::DeleteOnTab( SCTAB nTab )
 void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
                                 SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+                                SCCOL nDx, SCROW nDy, SCTAB nDz )
 {
     ScDBData* pData = pDoc->GetAnonymousDBData(nTab1);
     if (pData)

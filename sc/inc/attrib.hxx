@@ -54,11 +54,11 @@ bool SC_DLLPUBLIC ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::
 
 class SC_DLLPUBLIC ScMergeAttr: public SfxPoolItem
 {
-    SCsCOL      nColMerge;
-    SCsROW      nRowMerge;
+    SCCOL       nColMerge;
+    SCROW       nRowMerge;
 public:
                 ScMergeAttr();
-                ScMergeAttr( SCsCOL nCol, SCsROW nRow );
+                ScMergeAttr( SCCOL nCol, SCROW nRow );
                 ScMergeAttr( const ScMergeAttr& );
                 virtual ~ScMergeAttr() override;
 
@@ -66,8 +66,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const override;
 
-            SCsCOL          GetColMerge() const {return nColMerge; }
-            SCsROW          GetRowMerge() const {return nRowMerge; }
+            SCCOL          GetColMerge() const {return nColMerge; }
+            SCROW          GetRowMerge() const {return nRowMerge; }
 
             bool            IsMerged() const { return nColMerge>1 || nRowMerge>1; }
 

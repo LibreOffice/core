@@ -2272,8 +2272,8 @@ void ScHTMLTable::GetDocRange( ScRange& rRange ) const
 {
     rRange.aStart = rRange.aEnd = maDocBasePos.MakeAddr();
     ScAddress aErrorPos( ScAddress::UNINITIALIZED );
-    if (!rRange.aEnd.Move( static_cast< SCsCOL >( GetDocSize( tdCol ) ) - 1,
-                static_cast< SCsROW >( GetDocSize( tdRow ) ) - 1, 0, aErrorPos))
+    if (!rRange.aEnd.Move( static_cast< SCCOL >( GetDocSize( tdCol ) ) - 1,
+                static_cast< SCROW >( GetDocSize( tdRow ) ) - 1, 0, aErrorPos))
     {
         assert(!"can't move");
     }
@@ -2595,7 +2595,7 @@ void ScHTMLTable::SetDocSize( ScHTMLOrient eOrient, SCCOLROW nCellPos, SCCOLROW 
         rSizes.push_back( rSizes.empty() ? 1 : (rSizes.back() + 1) );
     // update size of passed position and all following
     // #i109987# only grow, don't shrink - use the largest needed size
-    SCsCOLROW nDiff = nSize - ((nIndex == 0) ? rSizes.front() : (rSizes[ nIndex ] - rSizes[ nIndex - 1 ]));
+    SCCOLROW nDiff = nSize - ((nIndex == 0) ? rSizes.front() : (rSizes[ nIndex ] - rSizes[ nIndex - 1 ]));
     if( nDiff > 0 )
         for( ScSizeVec::iterator aIt = rSizes.begin() + nIndex, aEnd = rSizes.end(); aIt != aEnd; ++aIt )
             *aIt += nDiff;

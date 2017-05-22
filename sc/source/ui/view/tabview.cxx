@@ -1167,7 +1167,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll, void )
 void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
 {
     SCCOL nOldX = aViewData.GetPosX(eWhich);
-    SCsCOL nNewX = static_cast<SCsCOL>(nOldX) + static_cast<SCsCOL>(nDeltaX);
+    SCCOL nNewX = nOldX + static_cast<SCCOL>(nDeltaX);
     if ( nNewX < 0 )
     {
         nDeltaX -= nNewX;
@@ -1179,34 +1179,34 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
         nNewX = MAXCOL;
     }
 
-    SCsCOL nDir = ( nDeltaX > 0 ) ? 1 : -1;
+    SCCOL nDir = ( nDeltaX > 0 ) ? 1 : -1;
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
     while ( pDoc->ColHidden(nNewX, nTab) &&
             nNewX+nDir >= 0 && nNewX+nDir <= MAXCOL )
-        nNewX = sal::static_int_cast<SCsCOL>( nNewX + nDir );
+        nNewX = sal::static_int_cast<SCCOL>( nNewX + nDir );
 
     // freeze
 
     if (aViewData.GetHSplitMode() == SC_SPLIT_FIX)
     {
         if (eWhich == SC_SPLIT_LEFT)
-            nNewX = static_cast<SCsCOL>(nOldX);          // always keep the left part
+            nNewX = nOldX;          // always keep the left part
         else
         {
-            SCsCOL nFixX = static_cast<SCsCOL>(aViewData.GetFixPosX());
+            SCCOL nFixX = aViewData.GetFixPosX();
             if (nNewX < nFixX)
                 nNewX = nFixX;
         }
     }
-    if (nNewX == static_cast<SCsCOL>(nOldX))
+    if (nNewX == nOldX)
         return;
 
     HideAllCursors();
 
     if ( nNewX >= 0 && nNewX <= MAXCOL && nDeltaX )
     {
-        SCCOL nTrackX = std::max( nOldX, static_cast<SCCOL>(nNewX) );
+        SCCOL nTrackX = std::max( nOldX, nNewX );
 
         // with VCL Update() affects all windows at the moment, that is why
         // calling Update after scrolling of the GridWindow would possibly
@@ -1216,7 +1216,7 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
             pColBar[eWhich]->Update();
 
         long nOldPos = aViewData.GetScrPos( nTrackX, 0, eWhich ).X();
-        aViewData.SetPosX( eWhich, static_cast<SCCOL>(nNewX) );
+        aViewData.SetPosX( eWhich, nNewX );
         long nDiff = aViewData.GetScrPos( nTrackX, 0, eWhich ).X() - nOldPos;
 
         if ( eWhich==SC_SPLIT_LEFT )
@@ -1250,7 +1250,7 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, bool bUpdBars )
 void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars )
 {
     SCROW nOldY = aViewData.GetPosY(eWhich);
-    SCsROW nNewY = static_cast<SCsROW>(nOldY) + static_cast<SCsROW>(nDeltaY);
+    SCROW nNewY = nOldY + static_cast<SCROW>(nDeltaY);
     if ( nNewY < 0 )
     {
         nDeltaY -= nNewY;
@@ -1262,7 +1262,7 @@ void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars )
         nNewY = MAXROW;
     }
 
-    SCsROW nDir = ( nDeltaY > 0 ) ? 1 : -1;
+    SCROW nDir = ( nDeltaY > 0 ) ? 1 : -1;
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
     while ( pDoc->RowHidden(nNewY, nTab) &&
@@ -1274,33 +1274,33 @@ void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, bool bUpdBars )
     if (aViewData.GetVSplitMode() == SC_SPLIT_FIX)
     {
         if (eWhich == SC_SPLIT_TOP)
-            nNewY = static_cast<SCsROW>(nOldY);                 // always keep the upper part
+            nNewY = nOldY;                 // always keep the upper part
         else
         {
-            SCsROW nFixY = static_cast<SCsROW>(aViewData.GetFixPosY());
+            SCROW nFixY = aViewData.GetFixPosY();
             if (nNewY < nFixY)
                 nNewY = nFixY;
         }
     }
-    if (nNewY == static_cast<SCsROW>(nOldY))
+    if (nNewY == nOldY)
         return;
 
     HideAllCursors();
 
     if ( nNewY >= 0 && nNewY <= MAXROW && nDeltaY )
     {
-        SCROW nTrackY = std::max( nOldY, static_cast<SCROW>(nNewY) );
+        SCROW nTrackY = std::max( nOldY, nNewY );
 
         // adjust row headers before the actual scrolling, so it does not get painted twice
         // PosY may then also not be set yet, pass on new value
-        SCROW nUNew = static_cast<SCROW>(nNewY);
+        SCROW nUNew = nNewY;
         UpdateHeaderWidth( &eWhich, &nUNew );               // adjust row headers
 
         if (pRowBar[eWhich])
             pRowBar[eWhich]->Update();
 
         long nOldPos = aViewData.GetScrPos( 0, nTrackY, eWhich ).Y();
-        aViewData.SetPosY( eWhich, static_cast<SCROW>(nNewY) );
+        aViewData.SetPosY( eWhich, nNewY );
         long nDiff = aViewData.GetScrPos( 0, nTrackY, eWhich ).Y() - nOldPos;
 
         if ( eWhich==SC_SPLIT_TOP )
@@ -1942,8 +1942,8 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMetod)
         aViewData.GetDocShell()->SetDocumentModified();
 
         Point aSplit;
-        SCsCOL nPosX = 1;
-        SCsROW nPosY = 1;
+        SCCOL nPosX = 1;
+        SCROW nPosY = 1;
         if (eOldV != SC_SPLIT_NONE || eOldH != SC_SPLIT_NONE)
         {
             if ( eOldV != SC_SPLIT_NONE && (eSplitMetod == SC_SPLIT_METHOD_FIRST_ROW || eSplitMetod == SC_SPLIT_METHOD_CURSOR))
@@ -1984,17 +1984,17 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMetod)
                 break;
                 case SC_SPLIT_METHOD_CURSOR:
                 {
-                    nPosX = static_cast<SCsCOL>( aViewData.GetCurX());
-                    nPosY = static_cast<SCsROW>( aViewData.GetCurY());
+                    nPosX = aViewData.GetCurX();
+                    nPosY = aViewData.GetCurY();
                 }
                 break;
             }
         }
 
         SCROW nTopPos = aViewData.GetPosY(SC_SPLIT_BOTTOM);
-        SCROW nBottomPos = static_cast<SCROW>(nPosY);
+        SCROW nBottomPos = nPosY;
         SCCOL nLeftPos = aViewData.GetPosX(SC_SPLIT_LEFT);
-        SCCOL nRightPos = static_cast<SCCOL>(nPosX);
+        SCCOL nRightPos = nPosX;
 
         if (eSplitMetod == SC_SPLIT_METHOD_FIRST_ROW || eSplitMetod == SC_SPLIT_METHOD_CURSOR)
         {
@@ -2004,7 +2004,7 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMetod)
                  if (aViewData.GetPosY(SC_SPLIT_BOTTOM) > nBottomPos)
                      nBottomPos = aViewData.GetPosY(SC_SPLIT_BOTTOM);
              }
-             aSplit = aViewData.GetScrPos( static_cast<SCCOL>(nPosX), static_cast<SCROW>(nPosY), ePos, true );
+             aSplit = aViewData.GetScrPos( nPosX, nPosY, ePos, true );
              if (aSplit.Y() > 0)
              {
                  aViewData.SetVSplitMode( SC_SPLIT_FIX );
@@ -2025,7 +2025,7 @@ void ScTabView::FreezeSplitters( bool bFreeze, SplitMethod eSplitMetod)
                 if (aViewData.GetPosX(SC_SPLIT_RIGHT) > nRightPos)
                     nRightPos = aViewData.GetPosX(SC_SPLIT_RIGHT);
             }
-            aSplit = aViewData.GetScrPos( static_cast<SCCOL>(nPosX), static_cast<SCROW>(nPosY), ePos, true );
+            aSplit = aViewData.GetScrPos( nPosX, nPosY, ePos, true );
             if (nPosX > aViewData.GetPosX(SC_SPLIT_LEFT))       // (aSplit.X() > 0) doesn't work for RTL
             {
                 long nSplitPos = aSplit.X() + aWinStart.X();

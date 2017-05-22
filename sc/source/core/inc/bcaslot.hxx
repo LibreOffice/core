@@ -216,7 +216,7 @@ public:
     void                DelBroadcastAreasInRange( const ScRange& rRange );
     void                UpdateRemove( UpdateRefMode eUpdateRefMode,
                                         const ScRange& rRange,
-                                        SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+                                        SCCOL nDx, SCROW nDy, SCTAB nDz );
     void                UpdateRemoveArea( ScBroadcastArea* pArea );
     void                UpdateInsert( ScBroadcastArea* pArea );
 
@@ -316,7 +316,7 @@ public:
     void                DelBroadcastAreasInRange( const ScRange& rRange );
     void                UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
                                             const ScRange& rRange,
-                                            SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+                                            SCCOL nDx, SCROW nDy, SCTAB nDz );
     void                EnterBulkBroadcast();
     void                LeaveBulkBroadcast( SfxHintId nHintId );
     bool                InsertBulkArea( const ScBroadcastArea* p );

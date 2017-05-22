@@ -1180,7 +1180,7 @@ bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRange& rNe
         // New output range intersteps with the source data. Move it up to
         // where the old range is and see if that works.
         ScRange aOldRange = rDPObj.GetOutRange();
-        SCsROW nDiff = aOldRange.aStart.Row() - rNewOut.aStart.Row();
+        SCROW nDiff = aOldRange.aStart.Row() - rNewOut.aStart.Row();
         rNewOut.aStart.SetRow(aOldRange.aStart.Row());
         rNewOut.aEnd.IncRow(nDiff);
         if (!ValidRow(rNewOut.aStart.Row()) || !ValidRow(rNewOut.aEnd.Row()))

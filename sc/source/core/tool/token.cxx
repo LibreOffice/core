@@ -89,9 +89,9 @@ namespace
             rRef.SetAbsRow(static_cast<SCROW>(rAPI.Row));
 
         if (rRef.IsTabRel())
-            rRef.SetRelTab(static_cast<SCsTAB>(rAPI.RelativeSheet));
+            rRef.SetRelTab(static_cast<SCTAB>(rAPI.RelativeSheet));
         else
-            rRef.SetAbsTab(static_cast<SCsTAB>(rAPI.Sheet));
+            rRef.SetAbsTab(static_cast<SCTAB>(rAPI.Sheet));
     }
 
     void lcl_ExternalRefToCalc( ScSingleRefData& rRef, const sheet::SingleReference& rAPI )
@@ -2339,9 +2339,9 @@ bool SkipReference(formula::FormulaToken* pToken, const ScAddress& rPos, const S
 
 void AdjustSingleRefData( ScSingleRefData& rRef, const ScAddress& rOldPos, const ScAddress& rNewPos)
 {
-    SCsCOL nCols = rNewPos.Col() - rOldPos.Col();
-    SCsROW nRows = rNewPos.Row() - rOldPos.Row();
-    SCsTAB nTabs = rNewPos.Tab() - rOldPos.Tab();
+    SCCOL nCols = rNewPos.Col() - rOldPos.Col();
+    SCROW nRows = rNewPos.Row() - rOldPos.Row();
+    SCTAB nTabs = rNewPos.Tab() - rOldPos.Tab();
 
     if (!rRef.IsColRel())
         rRef.IncCol(nCols);

@@ -134,7 +134,7 @@ public:
     bool        IsAllMarked( const ScRange& rRange ) const;     // Multi
 
                 /// May return -1
-    SCsROW      GetNextMarked( SCCOL nCol, SCsROW nRow, bool bUp ) const;
+    SCROW       GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const;
     bool        HasMultiMarks( SCCOL nCol ) const;
     bool        HasAnyMultiMarks() const;
 

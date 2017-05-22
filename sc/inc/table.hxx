@@ -473,7 +473,7 @@ public:
 
     void CopyFromClip(
         sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        SCsCOL nDx, SCsROW nDy, ScTable* pTable );
+        SCCOL nDx, SCROW nDy, ScTable* pTable );
 
     void StartListeningFormulaCells(
         sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt,
@@ -495,7 +495,7 @@ public:
         InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab );
 
     void        CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            SCsCOL nDx, SCsROW nDy, ScTable* pTable);
+                            SCCOL nDx, SCROW nDy, ScTable* pTable);
     void        TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 ScTable* pTransClip, InsertDeleteFlags nFlags, bool bAsLink );
 
@@ -550,7 +550,7 @@ public:
                                         SCCOL nEndCol, SCROW nEndRow, ScDirection eDir ) const;
 
     void        FindAreaPos( SCCOL& rCol, SCROW& rRow, ScMoveDirection eDirection ) const;
-    void        GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
+    void        GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
                                 bool bMarked, bool bUnprotected, const ScMarkData& rMark ) const;
 
     void        LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow ) const;
@@ -598,7 +598,7 @@ public:
 
     void        UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz, bool bUpdateNoteCaptionPos = true );
+                                    SCCOL nDx, SCROW nDy, SCTAB nDz, bool bUpdateNoteCaptionPos = true );
 
     void        UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
                                     ScDocument* pUndoDoc );
@@ -1098,7 +1098,7 @@ private:
     ScSortInfoArray* CreateSortInfoArray(
         const ScSortParam& rSortParam, SCCOLROW nInd1, SCCOLROW nInd2,
         bool bKeepQuery, bool bUpdateRefs );
-    void        QuickSort( ScSortInfoArray*, SCsCOLROW nLo, SCsCOLROW nHi);
+    void        QuickSort( ScSortInfoArray*, SCCOLROW nLo, SCCOLROW nHi);
     void SortReorderByColumn( ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2, bool bPattern, ScProgress* pProgress );
 
     void SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress );

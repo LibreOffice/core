@@ -98,7 +98,7 @@ ScMergeAttr::ScMergeAttr():
     nRowMerge(0)
 {}
 
-ScMergeAttr::ScMergeAttr( SCsCOL nCol, SCsROW nRow):
+ScMergeAttr::ScMergeAttr( SCCOL nCol, SCROW nRow):
     SfxPoolItem(ATTR_MERGE),
     nColMerge(nCol),
     nRowMerge(nRow)
