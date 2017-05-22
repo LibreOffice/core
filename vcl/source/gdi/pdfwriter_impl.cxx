@@ -8715,7 +8715,10 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         }
     }
 
-    if (m_aCurrentPDFState.m_aFont.GetFillColor() != Color(COL_TRANSPARENT))
+    // Avoid fill color when map mode is in pixels, the below code assumes
+    // logic map mode.
+    bool bPixel = m_aCurrentPDFState.m_aMapMode.GetMapUnit() == MapUnit::MapPixel;
+    if (m_aCurrentPDFState.m_aFont.GetFillColor() != Color(COL_TRANSPARENT) && !bPixel)
     {
         // PDF doesn't have a text fill color, so draw a rectangle before
         // drawing the actual text.
