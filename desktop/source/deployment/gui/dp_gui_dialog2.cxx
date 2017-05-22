@@ -71,6 +71,8 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <officecfg/Office/ExtensionManager.hxx>
+
 #include <map>
 #include <memory>
 #include <vector>
@@ -261,7 +263,10 @@ MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long 
             else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
                 aPopup->InsertItem( CMD_ENABLE, DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
         }
-        aPopup->InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
+        if (!officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get())
+        {
+            aPopup->InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
+        }
     }
 
     if ( !GetEntryData( nPos )->m_sLicenseText.isEmpty() )
@@ -419,6 +424,17 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
 bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
+
+    // Check if extension installation is disabled in the expert configurations
+    if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get())
+    {
+        ScopedVclPtrInstance<MessageDialog> aWarn(m_pVCLWindow, getResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED),
+                                                  VclMessageType::Warning, VclButtonsType::Ok);
+        aWarn->Execute();
+
+        return false;
+    }
+
     ScopedVclPtrInstance<MessageDialog> aInfo(m_pVCLWindow, getResId(RID_STR_WARNING_INSTALL_EXTENSION),
                                               VclMessageType::Warning, VclButtonsType::OkCancel);
 
@@ -510,6 +526,17 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
 #else
     m_pUpdateBtn->Hide();
 #endif
+
+    if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get())
+    {
+        m_pAddBtn->Disable();
+        m_pAddBtn->SetQuickHelpText(getResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED));
+    }
+    if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get())
+    {
+        m_pRemoveBtn->Disable();
+        m_pRemoveBtn->SetQuickHelpText(getResId(RID_STR_WARNING_REMOVE_EXTENSION_DISABLED));
+    }
 
     m_aIdle.SetPriority(TaskPriority::LOWEST);
     m_aIdle.SetInvokeHandler( LINK( this, ExtMgrDialog, TimeOutHdl ) );
@@ -739,7 +766,16 @@ void ExtMgrDialog::enableOptionsButton( bool bEnable )
 
 void ExtMgrDialog::enableRemoveButton( bool bEnable )
 {
-    m_pRemoveBtn->Enable( bEnable );
+    m_pRemoveBtn->Enable( bEnable && !officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get());
+
+    if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get())
+    {
+        m_pRemoveBtn->SetQuickHelpText(getResId(RID_STR_WARNING_REMOVE_EXTENSION_DISABLED));
+    }
+    else
+    {
+        m_pRemoveBtn->SetQuickHelpText("");
+    }
 }
 
 void ExtMgrDialog::enableEnableButton( bool bEnable )
@@ -804,7 +840,16 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
     }
 
     m_pCancelBtn->Enable( bLockInterface );
-    m_pAddBtn->Enable( !bLockInterface );
+    m_pAddBtn->Enable( !bLockInterface && !officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get());
+    if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get())
+    {
+        m_pAddBtn->SetQuickHelpText(getResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED));
+    }
+    else
+    {
+        m_pAddBtn->SetQuickHelpText("");
+    }
+
     m_pUpdateBtn->Enable( !bLockInterface && m_pExtensionBox->getItemCount() );
     m_pExtensionBox->enableButtons( !bLockInterface );
 
