@@ -5713,7 +5713,7 @@ void ScInterpreter::ScSumIfs()
 
     if (nParamCount < 3 || (nParamCount % 2 != 1))
     {
-        SetError( FormulaError::ParameterExpected);
+        PushError( FormulaError::ParameterExpected);
         return;
     }
 
@@ -5728,7 +5728,7 @@ void ScInterpreter::ScAverageIfs()
 
     if (nParamCount < 3 || (nParamCount % 2 != 1))
     {
-        SetError( FormulaError::ParameterExpected);
+        PushError( FormulaError::ParameterExpected);
         return;
     }
 
@@ -5743,7 +5743,7 @@ void ScInterpreter::ScCountIfs()
 
     if (nParamCount < 2 || (nParamCount % 2 != 0))
     {
-        SetError( FormulaError::ParameterExpected);
+        PushError( FormulaError::ParameterExpected);
         return;
     }
 
@@ -5758,7 +5758,7 @@ void ScInterpreter::ScMinIfs_MS()
 
     if (nParamCount < 3 || (nParamCount % 2 != 1))
     {
-        SetError( FormulaError::ParameterExpected);
+        PushError( FormulaError::ParameterExpected);
         return;
     }
 
@@ -5774,7 +5774,7 @@ void ScInterpreter::ScMaxIfs_MS()
 
     if (nParamCount < 3 || (nParamCount % 2 != 1))
     {
-        SetError( FormulaError::ParameterExpected);
+        PushError( FormulaError::ParameterExpected);
         return;
     }
 
