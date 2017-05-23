@@ -34,6 +34,24 @@
       "revId": "0745f6781bf700022acf176d998c7dc929ce7453",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_dfe22103",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1452,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-23T07:58:50Z",
+      "side": 1,
+      "message": "nah,just a suggestion. I think sometimes it\u0027s done because it\u0027s more efficient - no need to create a new object just to do a search",
+      "parentUuid": "5a3905b3_9f3c1995",
+      "revId": "0745f6781bf700022acf176d998c7dc929ce7453",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
