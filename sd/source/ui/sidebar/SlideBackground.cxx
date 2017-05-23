@@ -468,6 +468,14 @@ void SlideBackground::updateMasterSlideSelection()
         SdPage* pMasterPage = static_cast<SdPage*>(&rMasterPage);
         mpMasterSlide->SelectEntry(pMasterPage->GetName());
     }
+    else
+    {
+        mpEditMaster->Hide();
+        mpCloseMaster->Show();
+        mpMasterSlide->Disable();
+        mpDspMasterBackground->Disable();
+        mpDspMasterObjects->Disable();
+    }
 }
 
 void SlideBackground::dispose()
@@ -878,6 +886,7 @@ IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, ListBox&, void)
     }
 }
 
+
 IMPL_LINK_NOARG(SlideBackground, AssignMasterPage, ListBox&, void)
 {
     ::sd::DrawDocShell* pDocSh = dynamic_cast<::sd::DrawDocShell*>( SfxObjectShell::Current() );
@@ -899,6 +908,11 @@ IMPL_LINK_NOARG(SlideBackground, AssignMasterPage, ListBox&, void)
 
 IMPL_LINK_NOARG(SlideBackground, CloseMasterHdl, Button*, void)
 {
+	mpCloseMaster->Hide();
+	mpEditMaster->Show();
+    mpMasterSlide->Enable();
+    mpDspMasterBackground->Enable();
+    mpDspMasterObjects->Enable();
     GetBindings()->GetDispatcher()->Execute( SID_CLOSE_MASTER_VIEW, SfxCallMode::RECORD );
 }
 
