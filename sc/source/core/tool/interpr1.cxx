@@ -5790,87 +5790,87 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                 PushError ( FormulaError::IllegalArgument);
                 return;
             }
-        }
 
-        // recalculate matrix values
-        if (nGlobalError != FormulaError::NONE)
-        {
-            PushError( nGlobalError);
-            return;
-        }
-
-        // initialize temporary result matrix
-        if (aResArray.empty())
-        {
-            nColSize = nCol2 - nCol1 + 1;
-            nRowSize = nRow2 - nRow1 + 1;
-            aResArray.resize(nColSize*nRowSize, 0);
-        }
-
-        ScQueryParam rParam;
-        rParam.nRow1       = nRow1;
-        rParam.nRow2       = nRow2;
-
-        ScQueryEntry& rEntry = rParam.GetEntry(0);
-        ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-        rEntry.bDoQuery = true;
-        if (!bIsString)
-        {
-            rItem.meType = ScQueryEntry::ByValue;
-            rItem.mfVal = fVal;
-            rEntry.eOp = SC_EQUAL;
-        }
-        else
-        {
-            rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0, pFormatter);
-            if (rItem.meType == ScQueryEntry::ByString)
-                rParam.eSearchType = DetectSearchType(rItem.maString.getString(), pDok);
-        }
-        ScAddress aAdr;
-        aAdr.SetTab( nTab1 );
-        rParam.nCol1  = nCol1;
-        rParam.nCol2  = nCol2;
-        rEntry.nField = nCol1;
-        SCCOL nColDiff = -nCol1;
-        SCROW nRowDiff = -nRow1;
-        if (pQueryMatrix)
-        {
-            // Never case-sensitive.
-            sc::CompareOptions aOptions( pDok, rEntry, rParam.eSearchType);
-            ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
-            if (nGlobalError != FormulaError::NONE || !pResultMatrix)
+            // recalculate matrix values
+            if (nGlobalError != FormulaError::NONE)
             {
-                PushError( FormulaError::IllegalParameter);
+                PushError( nGlobalError);
                 return;
             }
 
-            // result matrix is filled with boolean values.
-            std::vector<double> aResValues;
-            pResultMatrix->GetDoubleArray(aResValues);
-            if (aResArray.size() != aResValues.size())
+            // initialize temporary result matrix
+            if (aResArray.empty())
             {
-                PushError( FormulaError::IllegalParameter);
-                return;
+                nColSize = nCol2 - nCol1 + 1;
+                nRowSize = nRow2 - nRow1 + 1;
+                aResArray.resize(nColSize*nRowSize, 0);
             }
 
-            std::vector<sal_uInt8>::iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
-            std::vector<double>::const_iterator itThisRes = aResValues.begin();
-            for (; itRes != itResEnd; ++itRes, ++itThisRes)
-                *itRes += *itThisRes;
-        }
-        else
-        {
-            ScQueryCellIterator aCellIter(pDok, nTab1, rParam, false);
-            // Increment Entry.nField in iterator when switching to next column.
-            aCellIter.SetAdvanceQueryParamEntryField( true );
-            if ( aCellIter.GetFirst() )
+            ScQueryParam rParam;
+            rParam.nRow1       = nRow1;
+            rParam.nRow2       = nRow2;
+
+            ScQueryEntry& rEntry = rParam.GetEntry(0);
+            ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+            rEntry.bDoQuery = true;
+            if (!bIsString)
             {
-                do
+                rItem.meType = ScQueryEntry::ByValue;
+                rItem.mfVal = fVal;
+                rEntry.eOp = SC_EQUAL;
+            }
+            else
+            {
+                rParam.FillInExcelSyntax(pDok->GetSharedStringPool(), aString.getString(), 0, pFormatter);
+                if (rItem.meType == ScQueryEntry::ByString)
+                    rParam.eSearchType = DetectSearchType(rItem.maString.getString(), pDok);
+            }
+            ScAddress aAdr;
+            aAdr.SetTab( nTab1 );
+            rParam.nCol1  = nCol1;
+            rParam.nCol2  = nCol2;
+            rEntry.nField = nCol1;
+            SCCOL nColDiff = -nCol1;
+            SCROW nRowDiff = -nRow1;
+            if (pQueryMatrix)
+            {
+                // Never case-sensitive.
+                sc::CompareOptions aOptions( pDok, rEntry, rParam.eSearchType);
+                ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
+                if (nGlobalError != FormulaError::NONE || !pResultMatrix)
                 {
-                    size_t nC = aCellIter.GetCol() + nColDiff;
-                    size_t nR = aCellIter.GetRow() + nRowDiff;
-                    ++aResArray[nC*nRowSize+nR];
-                } while ( aCellIter.GetNext() );
+                    PushError( FormulaError::IllegalParameter);
+                    return;
+                }
+
+                // result matrix is filled with boolean values.
+                std::vector<double> aResValues;
+                pResultMatrix->GetDoubleArray(aResValues);
+                if (aResArray.size() != aResValues.size())
+                {
+                    PushError( FormulaError::IllegalParameter);
+                    return;
+                }
+
+                std::vector<sal_uInt8>::iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
+                std::vector<double>::const_iterator itThisRes = aResValues.begin();
+                for (; itRes != itResEnd; ++itRes, ++itThisRes)
+                    *itRes += *itThisRes;
+            }
+            else
+            {
+                ScQueryCellIterator aCellIter(pDok, nTab1, rParam, false);
+                // Increment Entry.nField in iterator when switching to next column.
+                aCellIter.SetAdvanceQueryParamEntryField( true );
+                if ( aCellIter.GetFirst() )
+                {
+                    do
+                    {
+                        size_t nC = aCellIter.GetCol() + nColDiff;
+                        size_t nR = aCellIter.GetRow() + nRowDiff;
+                        ++aResArray[nC*nRowSize+nR];
+                    } while ( aCellIter.GetNext() );
+                }
             }
         }
         nParamCount -= 2;
