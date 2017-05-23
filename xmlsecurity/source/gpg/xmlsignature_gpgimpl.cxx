@@ -113,6 +113,10 @@ SAL_CALL XMLSignature_GpgImpl::generate(
         return aTemplate;
     }
 
+    // set intended operation to sign - several asserts inside libxmlsec
+    // wanting that for digest / transforms
+    pDsigCtx->operation  = xmlSecTransformOperationSign;
+
     // Calculate digest for all references
     xmlNodePtr cur = xmlSecGetNextElementNode(pNode->children);
     if( cur != nullptr )
@@ -154,9 +158,12 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     // get me a digestible buffer from the signature template!
     // -------------------------------------------------------
 
-    // run the transformations
+    // run the transformations over SignedInfo element (first child of
+    // pNode)
     xmlSecNodeSetPtr nodeset = nullptr;
-    nodeset = xmlSecNodeSetGetChildren(pNode->doc, pNode, 1, 0);
+    cur = xmlSecGetNextElementNode(pNode->children);
+    // TODO assert that...
+    nodeset = xmlSecNodeSetGetChildren(pNode->doc, cur, 1, 0);
     if(nodeset == nullptr)
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
@@ -183,8 +190,10 @@ SAL_CALL XMLSignature_GpgImpl::generate(
         xmlSecBufferGetSize(pDsigCtx->transformCtx.result), false);
     GpgME::Data data_out;
 
+    SAL_INFO("xmlsecurity.xmlsec.gpg", "Generating signature for: " << xmlSecBufferGetData(pDsigCtx->transformCtx.result));
+
     GpgME::SigningResult sign_res=ctx->sign(data_in, data_out,
-                                            GpgME::Clearsigned);
+                                            GpgME::Detached);
     // TODO: needs some error handling
     data_out.seek(0,SEEK_SET);
     int len=0, curr=0; char buf;
@@ -202,7 +211,10 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     cur = xmlSecGetNextElementNode(pNode->children);
     cur = xmlSecGetNextElementNode(cur->next);
 
+    // TODO some assert would be good...
     xmlNodeSetContentLen(cur, &buf2[0], len);
+
+    aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
 
     // done
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
