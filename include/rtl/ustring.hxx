@@ -519,13 +519,21 @@ public:
       Append a string to this string.
 
       @param    str         a OUString.
+
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
     */
     OUString & operator+=( const OUString & str )
 #if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_REF_QUALIFIER
         &
 #endif
     {
-        rtl_uString_newConcat( &pData, pData, str.pData );
+        rtl_uString* pNewData = NULL;
+        rtl_uString_newConcat( &pNewData, pData, str.pData );
+        if (pNewData == NULL) {
+            throw std::bad_alloc();
+        }
+        rtl_uString_assign(&pData, pNewData);
+        rtl_uString_release(pNewData);
         return *this;
     }
 #if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_REF_QUALIFIER

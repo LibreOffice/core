@@ -1507,11 +1507,13 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newConcat )( IMPL_RTL_STRINGDATA** ppThis,
     {
         IMPL_RTL_STRINGDATA* pTempStr = IMPL_RTL_STRINGNAME( ImplAlloc )( pLeft->length + pRight->length );
         OSL_ASSERT(pTempStr != nullptr);
-        rtl_str_ImplCopy( pTempStr->buffer, pLeft->buffer, pLeft->length );
-        rtl_str_ImplCopy( pTempStr->buffer+pLeft->length, pRight->buffer, pRight->length );
         *ppThis = pTempStr;
+        if (*ppThis != nullptr) {
+            rtl_str_ImplCopy( pTempStr->buffer, pLeft->buffer, pLeft->length );
+            rtl_str_ImplCopy( pTempStr->buffer+pLeft->length, pRight->buffer, pRight->length );
 
-        RTL_LOG_STRING_NEW( *ppThis );
+            RTL_LOG_STRING_NEW( *ppThis );
+        }
     }
 
     /* must be done last, if left or right == *ppThis */
