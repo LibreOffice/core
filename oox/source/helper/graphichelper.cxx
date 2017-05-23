@@ -37,6 +37,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/gen.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/sequence.hxx>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/token/properties.hxx"
@@ -68,7 +69,7 @@ GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, c
 {
     OSL_ENSURE( mxContext.is(), "GraphicHelper::GraphicHelper - missing component context" );
     if( mxContext.is() )
-        mxGraphicProvider.set( graphic::GraphicProvider::create( mxContext ) );
+        mxGraphicProvider.set( graphic::GraphicProvider::create( mxContext ), uno::UNO_QUERY );
 
     //! TODO: get colors from system
     maSystemPalette[ XML_3dDkShadow ]               = 0x716F64;
@@ -266,28 +267,24 @@ Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStrea
 
 std::vector< uno::Reference<graphic::XGraphic> > GraphicHelper::importGraphics(const std::vector< uno::Reference<io::XInputStream> >& rStreams) const
 {
-    std::vector< uno::Reference<graphic::XGraphic> > aRet;
+    std::vector< uno::Sequence<beans::PropertyValue> > aArgsVec;
 
     for (const auto& rStream : rStreams)
     {
-        uno::Reference<graphic::XGraphic> xGraphic;
-        if (rStream.is() && mxGraphicProvider.is())
+        if (rStream.is())
         {
-            try
+            uno::Sequence<beans::PropertyValue > aArgs = comphelper::InitPropertySequence(
             {
-                uno::Sequence<beans::PropertyValue > aArgs = comphelper::InitPropertySequence(
-                {
-                    {"InputStream", uno::makeAny(rStream)}
-                });
-                xGraphic = mxGraphicProvider->queryGraphic(aArgs);
-            }
-            catch( const uno::Exception& rException)
-            {
-                SAL_WARN("oox", "GraphicHelper::importGraphic: queryGraphics() failed: " << rException.Message);
-            }
+                {"InputStream", uno::makeAny(rStream)}
+            });
+            aArgsVec.push_back(aArgs);
         }
-        aRet.push_back(xGraphic);
     }
+
+    std::vector< uno::Reference<graphic::XGraphic> > aRet;
+
+    if (mxGraphicProvider.is())
+        aRet = comphelper::sequenceToContainer< std::vector< uno::Reference<graphic::XGraphic> > >(mxGraphicProvider->queryGraphics(comphelper::containerToSequence(aArgsVec)));
 
     return aRet;
 }
