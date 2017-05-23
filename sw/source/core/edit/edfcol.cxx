@@ -294,6 +294,7 @@ SfxWatermarkItem SwEditShell::GetWatermark()
             sal_uInt32 nColor;
             sal_Int16 nTransparency;
             OUString aFont;
+            drawing::HomogenMatrix3 aMatrix;
 
             aItem.SetText(xTextRange->getString());
 
@@ -301,7 +302,14 @@ SfxWatermarkItem SwEditShell::GetWatermark()
                 aItem.SetFont(aFont);
             if (xPropertySet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= nColor)
                 aItem.SetColor(nColor);
-            // TODO: aItem.SetAngle(nAngle);
+            if (xPropertySet->getPropertyValue("Transformation") >>= aMatrix)
+            {
+                double y = aMatrix.Line2.Column1;
+                double x = aMatrix.Line1.Column1;
+                double nRad = atan2(y, x) * -1;
+                double nDeg = nRad * 180.0 / F_PI;
+                aItem.SetAngle(nDeg);
+            }
             if (xPropertySet->getPropertyValue(UNO_NAME_FILL_TRANSPARENCE) >>= nTransparency)
                 aItem.SetTransparency(nTransparency);
 
@@ -347,21 +355,28 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
         bool bDeleteWatermark = rWatermark.GetText().isEmpty();
         if (xWatermark.is())
         {
+            drawing::HomogenMatrix3 aMatrix;
             sal_uInt32 nColor = 0xc0c0c0;
             sal_Int16 nTransparency = 50;
+            sal_Int16 nAngle = 45;
             OUString aFont = "";
 
             uno::Reference<beans::XPropertySet> xPropertySet(xWatermark, uno::UNO_QUERY);
             xPropertySet->getPropertyValue(UNO_NAME_CHAR_FONT_NAME) >>= aFont;
             xPropertySet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= nColor;
-            // TODO: Angle
             xPropertySet->getPropertyValue(UNO_NAME_FILL_TRANSPARENCE) >>= nTransparency;
+            xPropertySet->getPropertyValue("Transformation") >>= aMatrix;
+            double y = aMatrix.Line2.Column1;
+            double x = aMatrix.Line1.Column1;
+            double nRad = atan2(y, x) * -1;
+            nAngle = nRad * 180.0 / F_PI;
 
             // If the header already contains a watermark, see if it its text is up to date.
             uno::Reference<text::XTextRange> xTextRange(xWatermark, uno::UNO_QUERY);
             if (xTextRange->getString() != rWatermark.GetText()
                 || aFont != rWatermark.GetFont()
                 || nColor != rWatermark.GetColor()
+                || nAngle != rWatermark.GetAngle()
                 || nTransparency != rWatermark.GetTransparency()
                 || bDeleteWatermark)
             {
