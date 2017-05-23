@@ -67,6 +67,7 @@ class CompileFormulaContext;
 struct SetFormulaDirtyContext;
 class RefMovedHint;
 enum class MatrixEdge;
+class ColumnIterator;
 
 }
 
@@ -665,6 +666,10 @@ public:
 
     void SwapNonEmpty(
         sc::TableValues& rValues, sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt );
+
+    std::unique_ptr<sc::ColumnIterator> GetColumnIterator( SCROW nRow1, SCROW nRow2 ) const;
+
+    void EnsureFormulaCellResults( SCROW nRow1, SCROW nRow2 );
 
 #if DUMP_COLUMN_STORAGE
     void DumpColumnStorage() const;

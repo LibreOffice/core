@@ -298,6 +298,16 @@ public:
     bool            IsValueNoError() const;
     double          GetValue();
     svl::SharedString GetString();
+
+    /**
+     * Get a numeric value without potentially triggering re-calculation.
+     */
+    double GetRawValue() const;
+
+    /**
+     * Get a string value without potentially triggering re-calculation.
+     */
+    svl::SharedString GetRawString() const;
     const ScMatrix* GetMatrix();
     bool            GetMatrixOrigin( ScAddress& rPos ) const;
     void            GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows );

@@ -13,6 +13,10 @@
 #include "mtvelements.hxx"
 #include "mtvfunctions.hxx"
 
+#include <functional>
+
+class ScFormulaCell;
+
 namespace sc {
 
 template<typename Func>
@@ -31,6 +35,14 @@ ProcessFormula(
     return ProcessElements1<
         CellStoreType, formula_block, FuncElem, FuncElseNoOp<size_t> >(it, rStore, nRow1, nRow2, rFuncElem, aElse);
 }
+
+/**
+ * Process formula cells found within specified row range. This function
+ * allows modifications of the states of the formula function objects.
+ */
+CellStoreType::iterator ProcessFormula(
+    const CellStoreType::iterator& it, CellStoreType& rStore, SCROW nRow1, SCROW nRow2,
+    std::function<void(size_t,ScFormulaCell*)> aFuncElem );
 
 template<typename FuncElem, typename FuncElse>
 typename CellStoreType::iterator
