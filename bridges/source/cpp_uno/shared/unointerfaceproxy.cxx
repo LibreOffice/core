@@ -51,8 +51,8 @@ void freeUnoInterfaceProxy(uno_ExtEnvironment * pEnv, void * pProxy)
 
 void acquireProxy(uno_Interface * pUnoI)
 {
-    if (1 == osl_atomic_increment(
-            & static_cast< UnoInterfaceProxy * >( pUnoI )->nRef ))
+    if (osl_atomic_increment(
+            & static_cast< UnoInterfaceProxy * >( pUnoI )->nRef ) == 1)
     {
         // rebirth of proxy zombie
         // register at uno env

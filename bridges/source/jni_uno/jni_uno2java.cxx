@@ -81,7 +81,7 @@ void Bridge::handle_java_exc(
         jstring_to_oustring( jni, static_cast<jstring>(jo_class_name.get()) ) );
 
     ::com::sun::star::uno::TypeDescription td( exc_name.pData );
-    if (!td.is() || (typelib_TypeClass_EXCEPTION != td.get()->eTypeClass))
+    if (!td.is() || (td.get()->eTypeClass != typelib_TypeClass_EXCEPTION))
     {
         // call toString()
         JLocalAutoRef jo_descr(
@@ -438,7 +438,7 @@ inline UNO_proxy::UNO_proxy(
 
 inline void UNO_proxy::acquire() const
 {
-    if (1 == osl_atomic_increment( &m_ref ))
+    if (osl_atomic_increment( &m_ref ) == 1)
     {
         // rebirth of proxy zombie
         void * that = const_cast< UNO_proxy * >( this );
@@ -454,7 +454,7 @@ inline void UNO_proxy::acquire() const
 
 inline void UNO_proxy::release() const
 {
-    if (0 == osl_atomic_decrement( &m_ref ))
+    if (osl_atomic_decrement( &m_ref ) == 0)
     {
         // revoke from uno env on last release
         (*m_bridge->m_uno_env->revokeInterface)(
@@ -475,7 +475,7 @@ uno_Interface * Bridge::map_to_uno(
         m_uno_env, reinterpret_cast<void **>(&pUnoI),
         oid.pData, reinterpret_cast<typelib_InterfaceTypeDescription *>(info->m_td.get()) );
 
-    if (nullptr == pUnoI) // no existing interface, register new proxy
+    if (pUnoI == nullptr) // no existing interface, register new proxy
     {
         // refcount initially 1
         pUnoI = new UNO_proxy(
@@ -590,7 +590,7 @@ void SAL_CALL UNO_proxy_dispatch(
             }
             typelib_InterfaceTypeDescription * iface_td = attrib_td->pInterface;
 
-            if (nullptr == uno_ret) // is setter method
+            if (uno_ret == nullptr) // is setter method
             {
                 typelib_MethodParameter param;
                 param.pTypeRef = attrib_td->pAttributeTypeRef;
@@ -640,8 +640,8 @@ void SAL_CALL UNO_proxy_dispatch(
                 TypeDescr demanded_td(
                     *static_cast< typelib_TypeDescriptionReference ** >(
                         uno_args[ 0 ] ) );
-                if (typelib_TypeClass_INTERFACE !=
-                      demanded_td.get()->eTypeClass)
+                if (demanded_td.get()->eTypeClass !=
+                      typelib_TypeClass_INTERFACE)
                 {
                     throw BridgeRuntimeError(
                         "queryInterface() call demands an INTERFACE type!" );
@@ -653,7 +653,7 @@ void SAL_CALL UNO_proxy_dispatch(
                     reinterpret_cast<void **>(&pInterface), that->m_oid.pData,
                     reinterpret_cast<typelib_InterfaceTypeDescription *>(demanded_td.get()) );
 
-                if (nullptr == pInterface)
+                if (pInterface == nullptr)
                 {
                     JNI_info const * jni_info = bridge->getJniInfo();
                     JNI_guarded_context jni(
@@ -762,8 +762,8 @@ void SAL_CALL UNO_proxy_dispatch(
     {
         OUStringBuffer buf( 128 );
         buf.append( "[jni_uno bridge error] UNO calling Java method " );
-        if (typelib_TypeClass_INTERFACE_METHOD == member_td->eTypeClass ||
-            typelib_TypeClass_INTERFACE_ATTRIBUTE == member_td->eTypeClass)
+        if (member_td->eTypeClass == typelib_TypeClass_INTERFACE_METHOD ||
+            member_td->eTypeClass == typelib_TypeClass_INTERFACE_ATTRIBUTE)
         {
             buf.append( OUString::unacquired(
                             &reinterpret_cast<
