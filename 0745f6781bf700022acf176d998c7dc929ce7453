@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_3fbfa5fc",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1452,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-23T06:51:08Z",
+      "side": 1,
+      "message": "or you could declare the map using a custom comparator, e.g.\n see IgnoreCaseCompare in the sc/ module",
+      "revId": "0745f6781bf700022acf176d998c7dc929ce7453",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
