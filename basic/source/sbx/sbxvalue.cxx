@@ -875,14 +875,19 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                 // #30576: To begin with test, if the conversion worked
                 if( aL.pOUString != nullptr && aR.pOUString != nullptr )
                 {
-                    *aL.pOUString += *aR.pOUString;
+                    // tdf#108039: catch possible bad_alloc
+                    try {
+                        *aL.pOUString += *aR.pOUString;
+                    }
+                    catch (const std::bad_alloc&) {
+                        SetError(ERRCODE_SBX_OVERFLOW);
+                    }
                 }
                 // Not even Left OK?
                 else if( aL.pOUString == nullptr )
                 {
                     aL.pOUString = new OUString();
                 }
-                Put( aL );
             }
             else
                 SetError( ERRCODE_SBX_CONVERSION );
