@@ -123,6 +123,7 @@ public:
 
     void testFormulaReferenceXLS();
     void testSheetProtectionXLSX();
+    void testSheetProtectionXLSB();
 
     void testCellBordersXLS();
     void testCellBordersXLSX();
@@ -223,6 +224,7 @@ public:
 
     CPPUNIT_TEST(testFormulaReferenceXLS);
     CPPUNIT_TEST(testSheetProtectionXLSX);
+    CPPUNIT_TEST(testSheetProtectionXLSB);
     CPPUNIT_TEST(testCellBordersXLS);
     CPPUNIT_TEST(testCellBordersXLSX);
     CPPUNIT_TEST(testBordersExchangeXLSX);
@@ -1912,19 +1914,32 @@ void ScExportTest::testSheetProtectionXLSX()
     ScDocument& rDoc = xDocSh->GetDocument();
     const ScTableProtection* pTabProtect = rDoc.GetTabProtection(0);
     CPPUNIT_ASSERT(pTabProtect);
-    if ( pTabProtect )
+    Sequence<sal_Int8> aHash = pTabProtect->getPasswordHash(PASSHASH_XL);
+    // check has
+    if (aHash.getLength() >= 2)
     {
-        Sequence<sal_Int8> aHash = pTabProtect->getPasswordHash(PASSHASH_XL);
-        // check has
-        if (aHash.getLength() >= 2)
-        {
-            CPPUNIT_ASSERT_EQUAL(sal_uInt8(204), (sal_uInt8)aHash[0]);
-            CPPUNIT_ASSERT_EQUAL(sal_uInt8(61), (sal_uInt8)aHash[1]);
-        }
-        // we could flesh out this check I guess
-        CPPUNIT_ASSERT ( !pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) );
-        CPPUNIT_ASSERT ( !pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) );
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(204), (sal_uInt8)aHash[0]);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(61), (sal_uInt8)aHash[1]);
     }
+    // we could flesh out this check I guess
+    CPPUNIT_ASSERT ( !pTabProtect->isOptionEnabled( ScTableProtection::OBJECTS ) );
+    CPPUNIT_ASSERT ( !pTabProtect->isOptionEnabled( ScTableProtection::SCENARIOS ) );
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testSheetProtectionXLSB()
+{
+    ScDocShellRef xShell = loadDoc("tdf108017_calcProtection.", FORMAT_XLSB);
+    CPPUNIT_ASSERT(xShell.Is());
+
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    const ScTableProtection* pTabProtect = rDoc.GetTabProtection(0);
+    CPPUNIT_ASSERT(pTabProtect);
+    CPPUNIT_ASSERT(pTabProtect->isOptionEnabled( ScTableProtection::SELECT_UNLOCKED_CELLS ));
+    CPPUNIT_ASSERT(!pTabProtect->isOptionEnabled( ScTableProtection::SELECT_LOCKED_CELLS ));
     xDocSh->DoClose();
 }
 
