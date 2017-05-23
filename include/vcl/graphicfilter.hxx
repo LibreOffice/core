@@ -283,6 +283,11 @@ public:
                                    sal_uInt16 * pDeterminedFormat = nullptr, GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
                                    WMF_EXTERNALHEADER *pExtHeader = nullptr );
 
+    /// Imports multiple graphics.
+    ///
+    /// The resulting graphic is added to rGraphics on success, nullptr is added on failure.
+    void ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGraphics, const std::vector< std::shared_ptr<SvStream> >& rStreams);
+
     sal_uInt16          ImportGraphic( Graphic& rGraphic, const OUString& rPath,
                                    SvStream& rStream,
                                    sal_uInt16 nFormat,

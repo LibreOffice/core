@@ -1316,6 +1316,23 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
     return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, nullptr, pExtHeader );
 }
 
+void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGraphics, const std::vector< std::shared_ptr<SvStream> >& rStreams)
+{
+    for (const auto& pStream : rStreams)
+    {
+        Graphic* pGraphic = nullptr;
+
+        if (pStream)
+        {
+            auto pG = o3tl::make_unique<Graphic>();
+            if (ImportGraphic(*pG, "", *pStream) == GRFILTER_OK)
+                pGraphic = pG.release();
+        }
+
+        rGraphics.push_back(std::shared_ptr<Graphic>(pGraphic));
+    }
+}
+
 sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                      css::uno::Sequence< css::beans::PropertyValue >* pFilterData,

@@ -438,11 +438,49 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 
 uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL GraphicProvider::queryGraphics(const uno::Sequence< uno::Sequence<beans::PropertyValue> >& rMediaPropertiesSeq)
 {
-    std::vector< uno::Reference<graphic::XGraphic> > aRet;
+    SolarMutexGuard aGuard;
 
+    // Turn properties into streams.
+    std::vector< std::shared_ptr<SvStream> > aStreams;
     for (const auto& rMediaProperties : rMediaPropertiesSeq)
     {
-        aRet.push_back(queryGraphic(rMediaProperties));
+        SvStream* pStream = nullptr;
+        uno::Reference<io::XInputStream> xStream;
+
+        for (sal_Int32 i = 0; rMediaProperties.getLength(); ++i)
+        {
+            if (rMediaProperties[i].Name == "InputStream")
+            {
+                rMediaProperties[i].Value >>= xStream;
+                if (xStream.is())
+                    pStream = utl::UcbStreamHelper::CreateStream(xStream);
+                break;
+            }
+        }
+
+        aStreams.push_back(std::shared_ptr<SvStream>(pStream));
+
+    }
+
+    // Import: streams to graphics.
+    std::vector< std::shared_ptr<Graphic> > aGraphics;
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+    rFilter.ImportGraphics(aGraphics, aStreams);
+
+    // Returning: graphics to UNO objects.
+    std::vector< uno::Reference<graphic::XGraphic> > aRet;
+    for (const auto& pGraphic : aGraphics)
+    {
+        uno::Reference<graphic::XGraphic> xGraphic;
+
+        if (pGraphic)
+        {
+            auto pUnoGraphic = new unographic::Graphic();
+            pUnoGraphic->init(*pGraphic);
+            xGraphic = pUnoGraphic;
+        }
+
+        aRet.push_back(xGraphic);
     }
 
     return comphelper::containerToSequence(aRet);
