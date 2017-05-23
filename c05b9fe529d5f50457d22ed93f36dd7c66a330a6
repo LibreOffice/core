@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_1f8749b6",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1950,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-05-23T13:07:41Z",
+      "side": 1,
+      "message": "The if (pTabProtect) is not necessary after a CPPUNIT_ASSERT(pTabProtect) and actually even without it we would like to fail fast if the code is not working correctly.",
+      "revId": "c05b9fe529d5f50457d22ed93f36dd7c66a330a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
