@@ -122,7 +122,7 @@ void VPolarCoordinateSystem::initVAxisInList()
             VPolarAxis* pVPolarAxis = dynamic_cast< VPolarAxis* >( pVAxis );
             if( pVPolarAxis )
                 pVPolarAxis->setIncrements( this->getExplicitIncrements( nDimensionIndex, nAxisIndex ) );
-            if(2==nDimensionCount)
+            if(nDimensionCount==2)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
             pVAxis->setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex ), bSwapXAndY );
         }
@@ -150,7 +150,7 @@ void VPolarCoordinateSystem::updateScalesAndIncrementsOnAxes()
             VPolarAxis* pVPolarAxis = dynamic_cast< VPolarAxis* >( pVAxis );
             if( pVPolarAxis )
                 pVPolarAxis->setIncrements( this->getExplicitIncrements( nDimensionIndex, nAxisIndex ) );
-            if(2==nDimensionCount)
+            if(nDimensionCount==2)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
             pVAxis->setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex ), bSwapXAndY );
         }
@@ -177,7 +177,7 @@ void VPolarCoordinateSystem::createGridShapes()
         aGrid.setIncrements( this->getExplicitIncrements( nDimensionIndex, nAxisIndex ) );
         aGrid.initPlotter(m_xLogicTargetForGrids,m_xFinalTarget,m_xShapeFactory
             , this->createCIDForGrid( xAxis, nDimensionIndex, nAxisIndex ) );
-        if(2==nDimensionCount)
+        if(nDimensionCount==2)
             aGrid.setTransformationSceneToScreen( m_aMatrixSceneToScreen );
         aGrid.setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex), bSwapXAndY );
         aGrid.createShapes();

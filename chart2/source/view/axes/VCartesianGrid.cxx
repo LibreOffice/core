@@ -96,29 +96,29 @@ GridLinePoints::GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_In
     //P1: point on both walls
     //P2: point on 'left' wall not on 'back' wall
 
-    P0[0]=P1[0]=P2[0]= (CuboidPlanePosition_Left == eLeftWallPos || bSwapXY) ? MinX : MaxX;
-    P0[1]=P1[1]=P2[1]= (CuboidPlanePosition_Left == eLeftWallPos || !bSwapXY) ? MinY : MaxY;
-    P0[2]=P1[2]=P2[2]= (CuboidPlanePosition_Back == eBackWallPos) ? MinZ : MaxZ;
+    P0[0]=P1[0]=P2[0]= (eLeftWallPos == CuboidPlanePosition_Left || bSwapXY) ? MinX : MaxX;
+    P0[1]=P1[1]=P2[1]= (eLeftWallPos == CuboidPlanePosition_Left || !bSwapXY) ? MinY : MaxY;
+    P0[2]=P1[2]=P2[2]= (eBackWallPos == CuboidPlanePosition_Back) ? MinZ : MaxZ;
 
     if(m_nDimensionIndex==0)
     {
-        P0[1]= (CuboidPlanePosition_Left == eLeftWallPos || !bSwapXY) ? MaxY : MinY;
-        P2[2]= (CuboidPlanePosition_Back == eBackWallPos) ? MaxZ : MinZ;
-        if( CuboidPlanePosition_Bottom != eBottomPos && !bSwapXY )
+        P0[1]= (eLeftWallPos == CuboidPlanePosition_Left || !bSwapXY) ? MaxY : MinY;
+        P2[2]= (eBackWallPos == CuboidPlanePosition_Back) ? MaxZ : MinZ;
+        if( eBottomPos != CuboidPlanePosition_Bottom && !bSwapXY )
             P2=P1;
     }
     else if(m_nDimensionIndex==1)
     {
-        P0[0]= (CuboidPlanePosition_Left == eLeftWallPos || bSwapXY) ? MaxX : MinX;
-        P2[2]= (CuboidPlanePosition_Back == eBackWallPos) ? MaxZ : MinZ;
-        if( CuboidPlanePosition_Bottom != eBottomPos && bSwapXY )
+        P0[0]= (eLeftWallPos == CuboidPlanePosition_Left || bSwapXY) ? MaxX : MinX;
+        P2[2]= (eBackWallPos == CuboidPlanePosition_Back) ? MaxZ : MinZ;
+        if( eBottomPos != CuboidPlanePosition_Bottom && bSwapXY )
             P2=P1;
     }
     else if(m_nDimensionIndex==2)
     {
-        P0[0]= (CuboidPlanePosition_Left == eLeftWallPos || bSwapXY) ? MaxX : MinX;
-        P2[1]= (CuboidPlanePosition_Left == eLeftWallPos || !bSwapXY) ? MaxY : MinY;
-        if( CuboidPlanePosition_Bottom != eBottomPos )
+        P0[0]= (eLeftWallPos == CuboidPlanePosition_Left || bSwapXY) ? MaxX : MinX;
+        P2[1]= (eLeftWallPos == CuboidPlanePosition_Left || !bSwapXY) ? MaxY : MinY;
+        if( eBottomPos != CuboidPlanePosition_Bottom )
         {
             if( !bSwapXY )
                 P0=P1;
@@ -239,7 +239,7 @@ void VCartesianGrid::createShapes()
                 xTarget.set( xGroupShape_Shapes );
         }
 
-        if(2==m_nDimension)
+        if(m_nDimension==2)
         {
 
             GridLinePoints aGridLinePoints( m_pPosHelper, m_nDimensionIndex );

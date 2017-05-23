@@ -291,7 +291,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const 
             uno::Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
             chart2::StackingDirection eStacking = chart2::StackingDirection_NO_STACKING;
             xSeriesProp->getPropertyValue( "StackingDirection" ) >>= eStacking;
-            bStacked = (chart2::StackingDirection_Y_STACKING == eStacking);
+            bStacked = (eStacking == chart2::StackingDirection_Y_STACKING);
         }
 
         aRet.realloc( bStacked ? 3 : 6 );
@@ -523,11 +523,11 @@ sal_Int32 ChartTypeHelper::getAxisType( const uno::Reference<
         return AxisType::CATEGORY;
 
     OUString aChartTypeName = xChartType->getChartType();
-    if(2==nDimensionIndex)//z-axis
+    if(nDimensionIndex==2)//z-axis
         return AxisType::SERIES;
-    if(1==nDimensionIndex)//y-axis
+    if(nDimensionIndex==1)//y-axis
         return AxisType::REALNUMBER;
-    if(0==nDimensionIndex)//x-axis
+    if(nDimensionIndex==0)//x-axis
     {
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER)
          || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
@@ -574,7 +574,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
     bool bFound=false;
     bool bAmbiguous=false;
     StackMode eStackMode = DiagramHelper::getStackModeFromChartType( xChartType, bFound, bAmbiguous, nullptr );
-    bool bStacked = bFound && (StackMode::YStacked == eStackMode);
+    bool bStacked = bFound && (eStackMode == StackMode::YStacked);
 
     OUString aChartTypeName = xChartType->getChartType();
     if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||

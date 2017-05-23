@@ -1274,7 +1274,7 @@ void OpenGL3DRenderer::Init3DUniformBlock()
     GLuint a3DLightBlockIndex = glGetUniformBlockIndex(maResources.m_3DProID, "GlobalLights");
     GLuint a3DMaterialBlockIndex = glGetUniformBlockIndex(maResources.m_3DProID, "GlobalMaterialParameters");
 
-    if ((GL_INVALID_INDEX == a3DLightBlockIndex) || (GL_INVALID_INDEX == a3DMaterialBlockIndex))
+    if ((a3DLightBlockIndex == GL_INVALID_INDEX) || (a3DMaterialBlockIndex == GL_INVALID_INDEX))
     {
         return;
     }
@@ -1310,7 +1310,7 @@ void OpenGL3DRenderer::InitBatch3DUniformBlock()
     GLuint a3DLightBlockIndex = glGetUniformBlockIndex(maResources.m_3DBatchProID, "GlobalLights");
     GLuint a3DMaterialBlockIndex = glGetUniformBlockIndex(maResources.m_3DBatchProID, "GlobalMaterialParameters");
 
-    if ((GL_INVALID_INDEX == a3DLightBlockIndex) || (GL_INVALID_INDEX == a3DMaterialBlockIndex))
+    if ((a3DLightBlockIndex == GL_INVALID_INDEX) || (a3DMaterialBlockIndex == GL_INVALID_INDEX))
     {
         return;
     }

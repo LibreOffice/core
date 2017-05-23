@@ -214,7 +214,7 @@ bool SelectorListBox::EventNotify( NotifyEvent& rNEvt )
             case KEY_RETURN:
             case KEY_TAB:
             {
-                if ( KEY_TAB == nCode )
+                if ( nCode == KEY_TAB )
                     m_bReleaseFocus = false;
                 else
                     bHandled = true;
@@ -228,7 +228,7 @@ bool SelectorListBox::EventNotify( NotifyEvent& rNEvt )
                 break;
         }
     }
-    else if ( MouseNotifyEvent::LOSEFOCUS == rNEvt.GetType() )
+    else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
     {
         if ( !HasFocus() )
             SelectEntryPos( GetSavedValue() );

@@ -80,7 +80,7 @@ double SAL_CALL DateScaling::doScaling( double value )
                 fResult += fDayOfMonth/fDaysInMonth;
                 if(m_bShifted)
                 {
-                    if( YEAR==m_nTimeUnit )
+                    if( m_nTimeUnit==YEAR )
                         fResult += 0.5*lcl_fNumberOfMonths;
                     else
                         fResult += 0.5;
@@ -147,7 +147,7 @@ double SAL_CALL InverseDateScaling::doScaling( double value )
                 //Date aDate(m_aNullDate);
                 if(m_bShifted)
                 {
-                    if( YEAR==m_nTimeUnit )
+                    if( m_nTimeUnit==YEAR )
                         value -= 0.5*lcl_fNumberOfMonths;
                     else
                         value -= 0.5;

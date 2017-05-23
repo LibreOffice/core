@@ -1293,7 +1293,7 @@ void ThreeDHelper::setDefaultIllumination( const uno::Reference< beans::XPropert
         ASSERT_EXCEPTION( ex );
     }
 
-    ThreeDLookScheme aScheme = (drawing::ShadeMode_FLAT==aShadeMode) ? ThreeDLookScheme_Simple : ThreeDLookScheme_Realistic;
+    ThreeDLookScheme aScheme = (aShadeMode==drawing::ShadeMode_FLAT) ? ThreeDLookScheme_Simple : ThreeDLookScheme_Realistic;
     lcl_setLightsForScheme( xSceneProperties, aScheme );
 }
 

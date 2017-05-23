@@ -227,7 +227,7 @@ double WrappedConstantErrorLowProperty::getValueFromSeries( const Reference< bea
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
     if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
-        if( css::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
+        if( lcl_getErrorBarStyle( xErrorBarProperties ) == css::chart::ErrorBarStyle::ABSOLUTE )
             xErrorBarProperties->getPropertyValue( "NegativeError" ) >>= aRet;
         else
             m_aOuterValue >>= aRet;
@@ -241,7 +241,7 @@ void WrappedConstantErrorLowProperty::setValueToSeries( const Reference< beans::
     if( xErrorBarProperties.is() )
     {
         m_aOuterValue <<= aNewValue;
-        if( css::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
+        if( lcl_getErrorBarStyle( xErrorBarProperties ) == css::chart::ErrorBarStyle::ABSOLUTE )
         {
             xErrorBarProperties->setPropertyValue( "NegativeError", m_aOuterValue );
         }
@@ -277,7 +277,7 @@ double WrappedConstantErrorHighProperty::getValueFromSeries( const Reference< be
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
     if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
-        if( css::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
+        if( lcl_getErrorBarStyle( xErrorBarProperties ) == css::chart::ErrorBarStyle::ABSOLUTE )
             xErrorBarProperties->getPropertyValue( "PositiveError" ) >>= aRet;
         else
             m_aOuterValue >>= aRet;
@@ -291,7 +291,7 @@ void WrappedConstantErrorHighProperty::setValueToSeries( const Reference< beans:
     if( xErrorBarProperties.is() )
     {
         m_aOuterValue <<= aNewValue;
-        if( css::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
+        if( lcl_getErrorBarStyle( xErrorBarProperties ) == css::chart::ErrorBarStyle::ABSOLUTE )
         {
             xErrorBarProperties->setPropertyValue( "PositiveError" , m_aOuterValue );
         }
@@ -461,7 +461,7 @@ double WrappedPercentageErrorProperty::getValueFromSeries( const Reference< bean
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
     if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
-        if( css::chart::ErrorBarStyle::RELATIVE == lcl_getErrorBarStyle( xErrorBarProperties ) )
+        if( lcl_getErrorBarStyle( xErrorBarProperties ) == css::chart::ErrorBarStyle::RELATIVE )
             xErrorBarProperties->getPropertyValue( "PositiveError" ) >>= aRet;
         else
             m_aOuterValue >>= aRet;
@@ -474,7 +474,7 @@ void WrappedPercentageErrorProperty::setValueToSeries( const Reference< beans::X
     if( xErrorBarProperties.is() )
     {
         m_aOuterValue <<= aNewValue;
-        if( css::chart::ErrorBarStyle::RELATIVE == lcl_getErrorBarStyle( xErrorBarProperties ) )
+        if( lcl_getErrorBarStyle( xErrorBarProperties ) == css::chart::ErrorBarStyle::RELATIVE )
         {
             xErrorBarProperties->setPropertyValue( "PositiveError" , m_aOuterValue );
             xErrorBarProperties->setPropertyValue( "NegativeError" , m_aOuterValue );
@@ -511,7 +511,7 @@ double WrappedErrorMarginProperty::getValueFromSeries( const Reference< beans::X
     uno::Reference< beans::XPropertySet > xErrorBarProperties;
     if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue( CHART_UNONAME_ERRORBAR_Y ) >>= xErrorBarProperties ) && xErrorBarProperties.is())
     {
-        if( css::chart::ErrorBarStyle::ERROR_MARGIN == lcl_getErrorBarStyle( xErrorBarProperties ) )
+        if( lcl_getErrorBarStyle( xErrorBarProperties ) == css::chart::ErrorBarStyle::ERROR_MARGIN )
             xErrorBarProperties->getPropertyValue( "PositiveError" ) >>= aRet;
         else
             m_aOuterValue >>= aRet;
@@ -524,7 +524,7 @@ void WrappedErrorMarginProperty::setValueToSeries( const Reference< beans::XProp
     if( xErrorBarProperties.is() )
     {
         m_aOuterValue <<= aNewValue;
-        if( css::chart::ErrorBarStyle::ERROR_MARGIN == lcl_getErrorBarStyle( xErrorBarProperties ) )
+        if( lcl_getErrorBarStyle( xErrorBarProperties ) == css::chart::ErrorBarStyle::ERROR_MARGIN )
         {
             xErrorBarProperties->setPropertyValue( "PositiveError" , m_aOuterValue );
             xErrorBarProperties->setPropertyValue( "NegativeError" , m_aOuterValue );

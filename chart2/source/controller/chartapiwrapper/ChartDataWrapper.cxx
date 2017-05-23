@@ -547,7 +547,7 @@ double SAL_CALL ChartDataWrapper::getNotANumber()
 
 sal_Bool SAL_CALL ChartDataWrapper::isNotANumber( double nNumber )
 {
-    return DBL_MIN == nNumber
+    return nNumber == DBL_MIN
         || ::rtl::math::isNan( nNumber )
         || ::rtl::math::isInf( nNumber );
 }

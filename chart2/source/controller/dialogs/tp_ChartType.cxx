@@ -96,9 +96,9 @@ void Dim3DLookResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 {
     rParameter.b3DLook = m_pCB_3DLook->IsChecked();
     const sal_Int32 nPos = m_pLB_Scheme->GetSelectEntryPos();
-    if( POS_3DSCHEME_SIMPLE == nPos )
+    if( nPos == POS_3DSCHEME_SIMPLE )
         rParameter.eThreeDLookScheme = ThreeDLookScheme_Simple;
-    else if( POS_3DSCHEME_REALISTIC == nPos )
+    else if( nPos == POS_3DSCHEME_REALISTIC )
         rParameter.eThreeDLookScheme = ThreeDLookScheme_Realistic;
     else
         rParameter.eThreeDLookScheme = ThreeDLookScheme_Unknown;
@@ -370,16 +370,16 @@ void SplinePropertiesDialog::fillControls( const ChartTypeParameter& rParameter 
     m_pMF_SplineResolution->SetValue( rParameter.nCurveResolution );
 
     //dis/enabling
-    m_pFT_SplineOrder->Enable(B_SPLINE_POS == m_pLB_Spline_Type->GetSelectEntryPos());
-    m_pMF_SplineOrder->Enable(B_SPLINE_POS == m_pLB_Spline_Type->GetSelectEntryPos());
+    m_pFT_SplineOrder->Enable(m_pLB_Spline_Type->GetSelectEntryPos() == B_SPLINE_POS);
+    m_pMF_SplineOrder->Enable(m_pLB_Spline_Type->GetSelectEntryPos() == B_SPLINE_POS);
 }
 void SplinePropertiesDialog::fillParameter( ChartTypeParameter& rParameter, bool bSmoothLines )
 {
     if(!bSmoothLines)
         rParameter.eCurveStyle=CurveStyle_LINES;
-    else if(CUBIC_SPLINE_POS == m_pLB_Spline_Type->GetSelectEntryPos())
+    else if(m_pLB_Spline_Type->GetSelectEntryPos() == CUBIC_SPLINE_POS)
         rParameter.eCurveStyle=CurveStyle_CUBIC_SPLINES;
-    else if(B_SPLINE_POS == m_pLB_Spline_Type->GetSelectEntryPos())
+    else if(m_pLB_Spline_Type->GetSelectEntryPos() == B_SPLINE_POS)
         rParameter.eCurveStyle=CurveStyle_B_SPLINES;
 
     rParameter.nCurveResolution = static_cast< sal_Int32 >( m_pMF_SplineResolution->GetValue());
@@ -387,8 +387,8 @@ void SplinePropertiesDialog::fillParameter( ChartTypeParameter& rParameter, bool
 }
 IMPL_LINK_NOARG(SplinePropertiesDialog, SplineTypeListBoxHdl, ListBox&, void)
 {
-    m_pFT_SplineOrder->Enable(B_SPLINE_POS == m_pLB_Spline_Type->GetSelectEntryPos());
-    m_pMF_SplineOrder->Enable(B_SPLINE_POS == m_pLB_Spline_Type->GetSelectEntryPos());
+    m_pFT_SplineOrder->Enable(m_pLB_Spline_Type->GetSelectEntryPos() == B_SPLINE_POS);
+    m_pMF_SplineOrder->Enable(m_pLB_Spline_Type->GetSelectEntryPos() == B_SPLINE_POS);
 }
 
 class SteppedPropertiesDialog : public ModalDialog
@@ -577,11 +577,11 @@ IMPL_LINK_NOARG(SplineResourceGroup, SplineDetailsDialogHdl, Button*, void)
 {
 
     ChartTypeParameter aOldParameter;
-    getSplinePropertiesDialog().fillParameter( aOldParameter, POS_LINETYPE_SMOOTH == m_pLB_LineType->GetSelectEntryPos() );
+    getSplinePropertiesDialog().fillParameter( aOldParameter, m_pLB_LineType->GetSelectEntryPos() == POS_LINETYPE_SMOOTH );
 
     const sal_Int32 iOldLineTypePos = m_pLB_LineType->GetSelectEntryPos();
     m_pLB_LineType->SelectEntryPos(POS_LINETYPE_SMOOTH);
-    if( RET_OK == getSplinePropertiesDialog().Execute() )
+    if( getSplinePropertiesDialog().Execute() == RET_OK )
     {
         if( m_pChangeListener )
             m_pChangeListener->stateChanged(this);
@@ -597,11 +597,11 @@ IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl, Button*, void)
 {
 
     ChartTypeParameter aOldParameter;
-    getSteppedPropertiesDialog().fillParameter( aOldParameter, POS_LINETYPE_STEPPED == m_pLB_LineType->GetSelectEntryPos() );
+    getSteppedPropertiesDialog().fillParameter( aOldParameter, m_pLB_LineType->GetSelectEntryPos() == POS_LINETYPE_STEPPED );
 
     const sal_Int32 iOldLineTypePos = m_pLB_LineType->GetSelectEntryPos();
     m_pLB_LineType->SelectEntryPos(POS_LINETYPE_STEPPED);
-    if( RET_OK == getSteppedPropertiesDialog().Execute() )
+    if( getSteppedPropertiesDialog().Execute() == RET_OK )
     {
         if( m_pChangeListener )
             m_pChangeListener->stateChanged(this);

@@ -33,7 +33,7 @@ VPolarAxis* VPolarAxis::createAxis( const AxisProperties& rAxisProperties
            , const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier
            , sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount )
 {
-    if( 0==nDimensionIndex )
+    if( nDimensionIndex==0 )
         return new VPolarAngleAxis( rAxisProperties, xNumberFormatsSupplier, nDimensionCount );
     return new VPolarRadiusAxis( rAxisProperties, xNumberFormatsSupplier, nDimensionCount );
 }
@@ -59,7 +59,7 @@ void VPolarAxis::setIncrements( const std::vector< ExplicitIncrementData >& rInc
 
 bool VPolarAxis::isAnythingToDraw()
 {
-    return ( 2==m_nDimension && VAxisBase::isAnythingToDraw() );
+    return ( m_nDimension==2 && VAxisBase::isAnythingToDraw() );
 }
 
 } //namespace chart

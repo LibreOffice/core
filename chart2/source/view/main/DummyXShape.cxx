@@ -571,7 +571,7 @@ void DummyLine2D::render()
     {
         uno::Any cow = itr->second;
         drawing::LineStyle nStyle = cow.get<drawing::LineStyle>();
-        if (drawing::LineStyle_NONE == nStyle)
+        if (nStyle == drawing::LineStyle_NONE)
         {
             // nothing to render
             return;
@@ -687,7 +687,7 @@ void DummyRectangle::render()
     {
         uno::Any cow = itr->second;
         drawing::LineStyle nStyle = cow.get<drawing::LineStyle>();
-        if (drawing::LineStyle_NONE == nStyle)
+        if (nStyle == drawing::LineStyle_NONE)
         {
             bBorder = false;
         }

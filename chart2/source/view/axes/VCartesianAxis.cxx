@@ -236,9 +236,9 @@ TickInfo* LabelIterator::firstInfo()
         pTickInfo = m_aPureTickIter.nextInfo();
     if(!pTickInfo)
         return nullptr;
-    if( (STAGGER_EVEN==m_eAxisLabelStaggering && m_bInnerLine)
+    if( (m_eAxisLabelStaggering==STAGGER_EVEN && m_bInnerLine)
         ||
-        (STAGGER_ODD==m_eAxisLabelStaggering && !m_bInnerLine)
+        (m_eAxisLabelStaggering==STAGGER_ODD && !m_bInnerLine)
         )
     {
         //skip first label
@@ -259,8 +259,8 @@ TickInfo* LabelIterator::nextInfo()
         pTickInfo = m_aPureTickIter.nextInfo();
     while( pTickInfo && !pTickInfo->xTextShape.is() );
 
-    if(  STAGGER_EVEN==m_eAxisLabelStaggering
-      || STAGGER_ODD==m_eAxisLabelStaggering )
+    if(  m_eAxisLabelStaggering==STAGGER_EVEN
+      || m_eAxisLabelStaggering==STAGGER_ODD )
     {
         //skip one label
         do
@@ -1016,15 +1016,15 @@ double VCartesianAxis::getAxisIntersectionValue() const
     double fMin = (m_nDimensionIndex==1) ? m_pPosHelper->getLogicMinX() : m_pPosHelper->getLogicMinY();
     double fMax = (m_nDimensionIndex==1) ? m_pPosHelper->getLogicMaxX() : m_pPosHelper->getLogicMaxY();
 
-    return (css::chart::ChartAxisPosition_END == m_aAxisProperties.m_eCrossoverType) ? fMax : fMin;
+    return (m_aAxisProperties.m_eCrossoverType == css::chart::ChartAxisPosition_END) ? fMax : fMin;
 }
 
 double VCartesianAxis::getLabelLineIntersectionValue() const
 {
-    if (css::chart::ChartAxisLabelPosition_OUTSIDE_START == m_aAxisProperties.m_eLabelPos)
+    if (m_aAxisProperties.m_eLabelPos == css::chart::ChartAxisLabelPosition_OUTSIDE_START)
         return (m_nDimensionIndex==1) ? m_pPosHelper->getLogicMinX() : m_pPosHelper->getLogicMinY();
 
-    if (css::chart::ChartAxisLabelPosition_OUTSIDE_END == m_aAxisProperties.m_eLabelPos)
+    if (m_aAxisProperties.m_eLabelPos == css::chart::ChartAxisLabelPosition_OUTSIDE_END)
         return (m_nDimensionIndex==1) ? m_pPosHelper->getLogicMaxX() : m_pPosHelper->getLogicMaxY();
 
     return getAxisIntersectionValue();
@@ -1055,7 +1055,7 @@ B2DVector VCartesianAxis::getScreenPosition( double fLogicX, double fLogicY, dou
     if( m_pPosHelper )
     {
         drawing::Position3D aScenePos = m_pPosHelper->transformLogicToScene( fLogicX, fLogicY, fLogicZ, true );
-        if(3==m_nDimension)
+        if(m_nDimension==3)
         {
             if( m_xLogicTarget.is() && m_pPosHelper && m_pShapeFactory )
             {
@@ -1126,9 +1126,9 @@ void VCartesianAxis::get2DAxisMainLine(
     double fXOther = fMaxX;
     int nDifferentValue = !m_pPosHelper->isMathematicalOrientationX() ? -1 : 1;
     if( !m_pPosHelper->isSwapXAndY() )
-        nDifferentValue *= (CuboidPlanePosition_Left != m_eLeftWallPos) ? -1 : 1;
+        nDifferentValue *= (m_eLeftWallPos != CuboidPlanePosition_Left) ? -1 : 1;
     else
-        nDifferentValue *= (CuboidPlanePosition_Bottom != m_eBottomPos) ? -1 : 1;
+        nDifferentValue *= (m_eBottomPos != CuboidPlanePosition_Bottom) ? -1 : 1;
     if( nDifferentValue<0 )
     {
         fXOnXPlane = fMaxX;
@@ -1139,9 +1139,9 @@ void VCartesianAxis::get2DAxisMainLine(
     double fYOther = fMaxY;
     nDifferentValue = !m_pPosHelper->isMathematicalOrientationY() ? -1 : 1;
     if( !m_pPosHelper->isSwapXAndY() )
-        nDifferentValue *= (CuboidPlanePosition_Bottom != m_eBottomPos) ? -1 : 1;
+        nDifferentValue *= (m_eBottomPos != CuboidPlanePosition_Bottom) ? -1 : 1;
     else
-        nDifferentValue *= (CuboidPlanePosition_Left != m_eLeftWallPos) ? -1 : 1;
+        nDifferentValue *= (m_eLeftWallPos != CuboidPlanePosition_Left) ? -1 : 1;
     if( nDifferentValue<0 )
     {
         fYOnYPlane = fMaxY;
@@ -1151,7 +1151,7 @@ void VCartesianAxis::get2DAxisMainLine(
     double fZOnZPlane = fMaxZ;
     double fZOther = fMinZ;
     nDifferentValue = !m_pPosHelper->isMathematicalOrientationZ() ? -1 : 1;
-    nDifferentValue *= (CuboidPlanePosition_Back != m_eBackWallPos) ? -1 : 1;
+    nDifferentValue *= (m_eBackWallPos != CuboidPlanePosition_Back) ? -1 : 1;
     if( nDifferentValue<0 )
     {
         fZOnZPlane = fMinZ;
@@ -1165,7 +1165,7 @@ void VCartesianAxis::get2DAxisMainLine(
     double fYEnd;
     double fZEnd = fZStart;
 
-    if( 0==m_nDimensionIndex ) //x-axis
+    if( m_nDimensionIndex==0 ) //x-axis
     {
         if( fCrossesOtherAxis < fMinY )
             fCrossesOtherAxis = fMinY;
@@ -1175,7 +1175,7 @@ void VCartesianAxis::get2DAxisMainLine(
         fYStart = fYEnd = fCrossesOtherAxis;
         fXEnd=m_pPosHelper->getLogicMaxX();
 
-        if(3==m_nDimension)
+        if(m_nDimension==3)
         {
             if( AxisHelper::isAxisPositioningEnabled() )
             {
@@ -1219,7 +1219,7 @@ void VCartesianAxis::get2DAxisMainLine(
             }
         }//end 3D x axis
     }
-    else if( 1==m_nDimensionIndex ) //y-axis
+    else if( m_nDimensionIndex==1 ) //y-axis
     {
         if( fCrossesOtherAxis < fMinX )
             fCrossesOtherAxis = fMinX;
@@ -1229,7 +1229,7 @@ void VCartesianAxis::get2DAxisMainLine(
         fXStart = fXEnd = fCrossesOtherAxis;
         fYEnd=m_pPosHelper->getLogicMaxY();
 
-        if(3==m_nDimension)
+        if(m_nDimension==3)
         {
             if( AxisHelper::isAxisPositioningEnabled() )
             {
@@ -1318,7 +1318,7 @@ void VCartesianAxis::get2DAxisMainLine(
                 fYStart = fYEnd = m_pPosHelper->isMathematicalOrientationY() ? m_pPosHelper->getLogicMaxY() : m_pPosHelper->getLogicMinY();
             }
 
-            if(3==m_nDimension)
+            if(m_nDimension==3)
             {
                 rStart = getScreenPosition( fXStart, fYStart, fZStart );
                 rEnd = getScreenPosition( fXEnd, fYEnd, fZEnd );
@@ -1363,15 +1363,15 @@ void VCartesianAxis::get2DAxisMainLine(
     rStart = getScreenPosition( fXStart, fYStart, fZStart );
     rEnd = getScreenPosition( fXEnd, fYEnd, fZEnd );
 
-    if(3==m_nDimension && !AxisHelper::isAxisPositioningEnabled() )
+    if(m_nDimension==3 && !AxisHelper::isAxisPositioningEnabled() )
         rAlignment.mfInnerTickDirection = rAlignment.mfLabelDirection;//to behave like before
 
-    if(3==m_nDimension && AxisHelper::isAxisPositioningEnabled() )
+    if(m_nDimension==3 && AxisHelper::isAxisPositioningEnabled() )
     {
         double fDeltaX = rEnd.getX() - rStart.getX();
         double fDeltaY = rEnd.getY() - rStart.getY();
 
-        if( 2==m_nDimensionIndex )
+        if( m_nDimensionIndex==2 )
         {
             if( m_eLeftWallPos != CuboidPlanePosition_Left )
             {
@@ -1758,7 +1758,7 @@ void VCartesianAxis::createShapes()
         return;
 
     //create line shapes
-    if(2==m_nDimension)
+    if(m_nDimension==2)
     {
         //create extra long ticks to separate complex categories (create them only there where the labels are)
         if( isComplexCategoryAxis() )

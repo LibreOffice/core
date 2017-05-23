@@ -235,7 +235,7 @@ void VPolarGrid::createShapes()
     VCartesianGrid::fillLinePropertiesFromGridModel( aLinePropertiesList, m_aGridPropertiesList );
 
     //create tick mark line shapes
-    if(2==m_nDimension)
+    if(m_nDimension==2)
     {
         if(m_nDimensionIndex==1)
             this->create2DRadiusGrid( m_xLogicTarget, aRadiusTickInfos, aAngleTickInfos, aLinePropertiesList );

@@ -241,7 +241,7 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
         if( AxisHelper::isAxisPositioningEnabled() )
         {
             xAxisProp->getPropertyValue("CrossoverPosition") >>= m_eCrossoverType;
-            if( css::chart::ChartAxisPosition_VALUE == m_eCrossoverType )
+            if( m_eCrossoverType == css::chart::ChartAxisPosition_VALUE )
             {
                 double fValue = 0.0;
                 xAxisProp->getPropertyValue("CrossoverValue") >>= fValue;
@@ -250,7 +250,7 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
                     fValue = ::rtl::math::round(fValue);
                 m_pfMainLinePositionAtOtherAxis.reset(fValue);
             }
-            else if( css::chart::ChartAxisPosition_ZERO == m_eCrossoverType )
+            else if( m_eCrossoverType == css::chart::ChartAxisPosition_ZERO )
                 m_pfMainLinePositionAtOtherAxis.reset(0.0);
 
             xAxisProp->getPropertyValue("LabelPosition") >>= m_eLabelPos;
@@ -292,18 +292,18 @@ void AxisProperties::init( bool bCartesian )
                 && m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )
             m_bComplexCategories = true;
 
-        if( css::chart::ChartAxisPosition_END == m_eCrossoverType )
+        if( m_eCrossoverType == css::chart::ChartAxisPosition_END )
             maLabelAlignment.mfInnerTickDirection = m_bCrossingAxisHasReverseDirection ? 1.0 : -1.0;
         else
             maLabelAlignment.mfInnerTickDirection = m_bCrossingAxisHasReverseDirection ? -1.0 : 1.0;
 
-        if( css::chart::ChartAxisLabelPosition_NEAR_AXIS == m_eLabelPos )
+        if( m_eLabelPos == css::chart::ChartAxisLabelPosition_NEAR_AXIS )
             maLabelAlignment.mfLabelDirection = maLabelAlignment.mfInnerTickDirection;
-        else if( css::chart::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE == m_eLabelPos )
+        else if( m_eLabelPos == css::chart::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE )
             maLabelAlignment.mfLabelDirection = -maLabelAlignment.mfInnerTickDirection;
-        else if( css::chart::ChartAxisLabelPosition_OUTSIDE_START == m_eLabelPos )
+        else if( m_eLabelPos == css::chart::ChartAxisLabelPosition_OUTSIDE_START )
             maLabelAlignment.mfLabelDirection = m_bCrossingAxisHasReverseDirection ? -1 : 1;
-        else if( css::chart::ChartAxisLabelPosition_OUTSIDE_END == m_eLabelPos )
+        else if( m_eLabelPos == css::chart::ChartAxisLabelPosition_OUTSIDE_END )
             maLabelAlignment.mfLabelDirection = m_bCrossingAxisHasReverseDirection ? 1 : -1;
 
         if( m_nDimensionIndex==2 )
@@ -415,7 +415,7 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
 
 bool AxisLabelProperties::isStaggered() const
 {
-    return ( STAGGER_ODD == eStaggering || STAGGER_EVEN == eStaggering );
+    return ( eStaggering == STAGGER_ODD || eStaggering == STAGGER_EVEN );
 }
 
 void AxisLabelProperties::autoRotate45()

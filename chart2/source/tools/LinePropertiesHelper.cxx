@@ -111,7 +111,7 @@ bool LinePropertiesHelper::IsLineVisible( const css::uno::Reference<
             {
                 sal_Int16 nLineTransparence=0;
                 xLineProperties->getPropertyValue( "LineTransparence" ) >>= nLineTransparence;
-                if(100!=nLineTransparence)
+                if(nLineTransparence!=100)
                 {
                     bRet = true;
                 }
@@ -139,7 +139,7 @@ void LinePropertiesHelper::SetLineVisible( const css::uno::Reference<
 
             sal_Int16 nLineTransparence=0;
             xLineProperties->getPropertyValue( "LineTransparence" ) >>= nLineTransparence;
-            if(100==nLineTransparence)
+            if(nLineTransparence==100)
                 xLineProperties->setPropertyValue( "LineTransparence", uno::Any( sal_Int16(0) ) );
         }
     }

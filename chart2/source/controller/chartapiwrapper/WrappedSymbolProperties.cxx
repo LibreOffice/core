@@ -252,7 +252,7 @@ Any WrappedSymbolTypeProperty::getPropertyValue( const Reference< beans::XProper
             }
             else
             {
-                if( css::chart::ChartSymbolType::NONE == aValue )
+                if( aValue == css::chart::ChartSymbolType::NONE )
                     m_aOuterValue <<= css::chart::ChartSymbolType::NONE;
                 else
                     m_aOuterValue <<= css::chart::ChartSymbolType::AUTO;
@@ -456,7 +456,7 @@ beans::PropertyState WrappedSymbolSizeProperty::getPropertyState( const Referenc
         Reference< beans::XPropertySet > xSeriesPropertySet( xInnerPropertyState, uno::UNO_QUERY );
         if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue("Symbol") >>= aSymbol ))
         {
-            if(  chart2::SymbolStyle_NONE != aSymbol.Style )
+            if(  aSymbol.Style != chart2::SymbolStyle_NONE )
                 return beans::PropertyState_DIRECT_VALUE;
         }
     }

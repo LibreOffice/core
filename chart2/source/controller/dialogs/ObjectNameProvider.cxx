@@ -467,24 +467,24 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
 {
     OUString aRet;
     ObjectType eObjectType( ObjectIdentifier::getObjectType(rObjectCID) );
-    if( OBJECTTYPE_AXIS == eObjectType )
+    if( eObjectType == OBJECTTYPE_AXIS )
     {
         aRet=ObjectNameProvider::getAxisName( rObjectCID, xChartModel );
     }
-    else if( OBJECTTYPE_GRID == eObjectType
-        || OBJECTTYPE_SUBGRID == eObjectType )
+    else if( eObjectType == OBJECTTYPE_GRID
+        || eObjectType == OBJECTTYPE_SUBGRID )
     {
         aRet=ObjectNameProvider::getGridName( rObjectCID, xChartModel );
     }
-    else if( OBJECTTYPE_TITLE == eObjectType )
+    else if( eObjectType == OBJECTTYPE_TITLE )
     {
         aRet=ObjectNameProvider::getTitleName( rObjectCID, xChartModel );
     }
-    else if( OBJECTTYPE_DATA_SERIES == eObjectType )
+    else if( eObjectType == OBJECTTYPE_DATA_SERIES )
     {
         aRet = lcl_getFullSeriesName( rObjectCID, xChartModel );
     }
-    else if( OBJECTTYPE_DATA_POINT == eObjectType )
+    else if( eObjectType == OBJECTTYPE_DATA_POINT )
     {
         if( bVerbose )
         {
@@ -543,7 +543,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                 aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), lcl_getDataSeriesName( rObjectCID, xChartModel ) );
         }
     }
-    else if( OBJECTTYPE_DATA_CURVE == eObjectType )
+    else if( eObjectType == OBJECTTYPE_DATA_CURVE )
     {
         if( bVerbose )
         {
@@ -649,7 +649,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
             }
         }
     }
-    else if( OBJECTTYPE_DATA_AVERAGE_LINE == eObjectType )
+    else if( eObjectType == OBJECTTYPE_DATA_AVERAGE_LINE )
     {
         if( bVerbose )
         {
@@ -721,7 +721,7 @@ OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID,
     ObjectType eObjectType( ObjectIdentifier::getObjectType(rObjectCID) );
     Reference< frame::XModel > xChartModel( xChartDocument, uno::UNO_QUERY );
 
-    if( OBJECTTYPE_DATA_POINT == eObjectType )
+    if( eObjectType == OBJECTTYPE_DATA_POINT )
     {
         aRet = SchResId( STR_STATUS_DATAPOINT_MARKED );
 
@@ -755,7 +755,7 @@ OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID,
     else
     {
         // use the verbose text including the formula for trend lines
-        const bool bVerbose( OBJECTTYPE_DATA_CURVE == eObjectType || OBJECTTYPE_DATA_AVERAGE_LINE == eObjectType );
+        const bool bVerbose( eObjectType == OBJECTTYPE_DATA_CURVE || eObjectType == OBJECTTYPE_DATA_AVERAGE_LINE );
         const OUString aHelpText( getHelpText( rObjectCID, xChartModel, bVerbose ));
         if( !aHelpText.isEmpty())
         {

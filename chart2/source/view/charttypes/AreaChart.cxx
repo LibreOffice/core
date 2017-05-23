@@ -258,7 +258,7 @@ bool AreaChart::create_stepped_line( drawing::PolyPolygonShape3D aStartPoly, cha
 
         sal_uInt32 nMaxIndexPoints = aStartPoly.SequenceX[nOuter].getLength()-1; // is >1
         sal_uInt32 nNewIndexPoints = 0;
-        if ( CurveStyle_STEP_START==eCurveStyle || CurveStyle_STEP_END==eCurveStyle)
+        if ( eCurveStyle==CurveStyle_STEP_START || eCurveStyle==CurveStyle_STEP_END)
             nNewIndexPoints = nMaxIndexPoints * 2 + 1;
         else
             nNewIndexPoints = nMaxIndexPoints * 3 + 1;
@@ -373,24 +373,24 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShapeBackChild(pSeries, m_xSeriesTarget);
 
     drawing::PolyPolygonShape3D aPoly;
-    if(CurveStyle_CUBIC_SPLINES==m_eCurveStyle)
+    if(m_eCurveStyle==CurveStyle_CUBIC_SPLINES)
     {
         drawing::PolyPolygonShape3D aSplinePoly;
         SplineCalculater::CalculateCubicSplines( *pSeriesPoly, aSplinePoly, m_nCurveResolution );
         lcl_removeDuplicatePoints( aSplinePoly, *pPosHelper );
         Clipping::clipPolygonAtRectangle( aSplinePoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
     }
-    else if(CurveStyle_B_SPLINES==m_eCurveStyle)
+    else if(m_eCurveStyle==CurveStyle_B_SPLINES)
     {
         drawing::PolyPolygonShape3D aSplinePoly;
         SplineCalculater::CalculateBSplines( *pSeriesPoly, aSplinePoly, m_nCurveResolution, m_nSplineOrder );
         lcl_removeDuplicatePoints( aSplinePoly, *pPosHelper );
         Clipping::clipPolygonAtRectangle( aSplinePoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
     }
-    else if (CurveStyle_STEP_START==m_eCurveStyle ||
-             CurveStyle_STEP_END==m_eCurveStyle ||
-             CurveStyle_STEP_CENTER_Y==m_eCurveStyle ||
-             CurveStyle_STEP_CENTER_X==m_eCurveStyle
+    else if (m_eCurveStyle==CurveStyle_STEP_START ||
+             m_eCurveStyle==CurveStyle_STEP_END ||
+             m_eCurveStyle==CurveStyle_STEP_CENTER_Y ||
+             m_eCurveStyle==CurveStyle_STEP_CENTER_X
             )
     {
         if (!create_stepped_line(*pSeriesPoly, m_eCurveStyle, pPosHelper, aPoly))
@@ -400,7 +400,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     }
     else
     { // default to creating a straight line
-        SAL_WARN_IF(CurveStyle_LINES != m_eCurveStyle, "chart2.areachart", "Unknown curve style");
+        SAL_WARN_IF(m_eCurveStyle != CurveStyle_LINES, "chart2.areachart", "Unknown curve style");
         Clipping::clipPolygonAtRectangle( *pSeriesPoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
     }
 
@@ -965,7 +965,7 @@ void AreaChart::createShapes()
                             awt::Point aScreenPosition2D;//get the screen position for the labels
                             sal_Int32 nOffset = 100; //todo maybe calculate this font height dependent
                             {
-                                if(LABEL_ALIGN_CENTER==eAlignment || m_nDimension == 3 )
+                                if(eAlignment==LABEL_ALIGN_CENTER || m_nDimension == 3 )
                                     nOffset = 0;
                                 aScreenPosition2D = awt::Point( LabelPositionHelper(m_nDimension,m_xLogicTarget,m_pShapeFactory)
                                         .transformSceneToScreenPosition( aScenePosition3D ) );

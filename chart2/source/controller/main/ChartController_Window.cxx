@@ -575,7 +575,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
         }
     }
 
-    if ( MOUSE_LEFT == rMEvt.GetButtons() )
+    if ( rMEvt.GetButtons() == MOUSE_LEFT )
     {
         pChartWindow->GrabFocus();
         pChartWindow->CaptureMouse();
@@ -671,7 +671,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
 
         //change selection to 3D scene if rotate mode
         SdrDragMode eDragMode = pDrawViewWrapper->GetDragMode();
-        if( SdrDragMode::Rotate==eDragMode )
+        if( eDragMode==SdrDragMode::Rotate )
         {
             E3dScene* pScene = SelectionHelper::getSceneToRotate( pDrawViewWrapper->getNamedSdrObject( m_aSelection.getSelectedCID() ) );
             if( pScene )
@@ -874,7 +874,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                 bool bIsRotateable = m_aSelection.isRotateableObjectSelected( getModel() );
 
                 //toggle between move and rotate
-                if( bIsRotateable && bClickedTwiceOnDragableObject && SdrDragMode::Move==m_eDragMode )
+                if( bIsRotateable && bClickedTwiceOnDragableObject && m_eDragMode==SdrDragMode::Move )
                     m_eDragMode=SdrDragMode::Rotate;
                 else
                     m_eDragMode=SdrDragMode::Move;
@@ -917,7 +917,7 @@ void ChartController::execute_DoubleClick( const Point* pMousePixel )
         if ( !aCID.isEmpty() )
         {
             ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
-            if ( OBJECTTYPE_TITLE == eObjectType )
+            if ( eObjectType == OBJECTTYPE_TITLE )
             {
                 bEditText = true;
             }
@@ -1007,9 +1007,9 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
                 //some commands for dataseries and points:
 
-                if( OBJECTTYPE_DATA_SERIES == eObjectType || OBJECTTYPE_DATA_POINT == eObjectType )
+                if( eObjectType == OBJECTTYPE_DATA_SERIES || eObjectType == OBJECTTYPE_DATA_POINT )
                 {
-                    bool bIsPoint = ( OBJECTTYPE_DATA_POINT == eObjectType );
+                    bool bIsPoint = ( eObjectType == OBJECTTYPE_DATA_POINT );
                     uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() );
                     uno::Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
                     Reference< chart2::XRegressionCurve > xTrendline( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xCurveCnt ) );
@@ -1146,7 +1146,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     }
                     ++nUniqueId;
                 }
-                else if( OBJECTTYPE_DATA_CURVE == eObjectType )
+                else if( eObjectType == OBJECTTYPE_DATA_CURVE )
                 {
                     lcl_insertMenuCommand( xPopupMenu,  nUniqueId++, ".uno:DeleteTrendline" );
                     lcl_insertMenuCommand( xPopupMenu,  nUniqueId++, ".uno:FormatTrendlineEquation" );
@@ -1156,7 +1156,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     lcl_insertMenuCommand( xPopupMenu,  nUniqueId++, ".uno:DeleteTrendlineEquation" );
                     lcl_insertMenuCommand( xPopupMenu,  nUniqueId++, ".uno:DeleteR2Value" );
                 }
-                else if( OBJECTTYPE_DATA_CURVE_EQUATION == eObjectType )
+                else if( eObjectType == OBJECTTYPE_DATA_CURVE_EQUATION )
                 {
                     lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertR2Value" );
                     lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:DeleteR2Value" );
@@ -1164,7 +1164,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
                 //some commands for axes: and grids
 
-                else if( OBJECTTYPE_AXIS  == eObjectType || OBJECTTYPE_GRID == eObjectType || OBJECTTYPE_SUBGRID == eObjectType )
+                else if( eObjectType  == OBJECTTYPE_AXIS || eObjectType == OBJECTTYPE_GRID || eObjectType == OBJECTTYPE_SUBGRID )
                 {
                     Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getModel() );
                     if( xAxis.is() && xDiagram.is() )
@@ -1182,20 +1182,20 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                         if( xTitled.is())
                             bHasTitle = !TitleHelper::getCompleteString( xTitled->getTitleObject() ).isEmpty();
 
-                        if( OBJECTTYPE_AXIS  != eObjectType && bIsAxisVisible )
+                        if( eObjectType  != OBJECTTYPE_AXIS && bIsAxisVisible )
                             lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatAxis" );
-                        if( OBJECTTYPE_GRID != eObjectType && bIsMajorGridVisible && !bIsSecondaryAxis )
+                        if( eObjectType != OBJECTTYPE_GRID && bIsMajorGridVisible && !bIsSecondaryAxis )
                             lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatMajorGrid" );
-                        if( OBJECTTYPE_SUBGRID != eObjectType && bIsMinorGridVisible && !bIsSecondaryAxis )
+                        if( eObjectType != OBJECTTYPE_SUBGRID && bIsMinorGridVisible && !bIsSecondaryAxis )
                             lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatMinorGrid" );
 
                         xPopupMenu->insertSeparator( -1 );
 
-                        if( OBJECTTYPE_AXIS  != eObjectType && !bIsAxisVisible )
+                        if( eObjectType  != OBJECTTYPE_AXIS && !bIsAxisVisible )
                             lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertAxis" );
-                        if( OBJECTTYPE_GRID != eObjectType && !bIsMajorGridVisible && !bIsSecondaryAxis )
+                        if( eObjectType != OBJECTTYPE_GRID && !bIsMajorGridVisible && !bIsSecondaryAxis )
                             lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertMajorGrid" );
-                        if( OBJECTTYPE_SUBGRID != eObjectType && !bIsMinorGridVisible && !bIsSecondaryAxis )
+                        if( eObjectType != OBJECTTYPE_SUBGRID && !bIsMinorGridVisible && !bIsSecondaryAxis )
                             lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertMinorGrid" );
                         if( !bHasTitle )
                             lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertAxisTitle" );
@@ -1209,19 +1209,19 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     }
                 }
 
-                if( OBJECTTYPE_DATA_STOCK_LOSS == eObjectType )
+                if( eObjectType == OBJECTTYPE_DATA_STOCK_LOSS )
                     lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatStockGain" );
-                else if( OBJECTTYPE_DATA_STOCK_GAIN == eObjectType )
+                else if( eObjectType == OBJECTTYPE_DATA_STOCK_GAIN )
                     lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatStockLoss" );
 
                 lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:TransformDialog" );
 
-                if( OBJECTTYPE_PAGE == eObjectType || OBJECTTYPE_DIAGRAM == eObjectType
-                    || OBJECTTYPE_DIAGRAM_WALL == eObjectType
-                    || OBJECTTYPE_DIAGRAM_FLOOR == eObjectType
-                    || OBJECTTYPE_UNKNOWN == eObjectType )
+                if( eObjectType == OBJECTTYPE_PAGE || eObjectType == OBJECTTYPE_DIAGRAM
+                    || eObjectType == OBJECTTYPE_DIAGRAM_WALL
+                    || eObjectType == OBJECTTYPE_DIAGRAM_FLOOR
+                    || eObjectType == OBJECTTYPE_UNKNOWN )
                 {
-                    if( OBJECTTYPE_UNKNOWN != eObjectType )
+                    if( eObjectType != OBJECTTYPE_UNKNOWN )
                         xPopupMenu->insertSeparator( -1 );
                     bool bHasLegend = LegendHelper::hasLegend( xDiagram );
                     lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:InsertTitles" );
@@ -1506,7 +1506,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
     if( ! bReturn &&
         nCode == KEY_F2 )
     {
-        if( OBJECTTYPE_TITLE == eObjectType )
+        if( eObjectType == OBJECTTYPE_TITLE )
         {
             executeDispatch_EditText();
             bReturn = true;

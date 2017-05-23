@@ -151,7 +151,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             {
                 fY = bReverse ? fScaledLowerYValue : fScaledUpperYValue;
                 rAlignment = LABEL_ALIGN_TOP;
-                if(3==m_nDimension)
+                if(m_nDimension==3)
                     fDepth = bReverse ? fabs(fScaledLowerBarDepth) : fabs(fScaledUpperBarDepth);
             }
             else
@@ -168,7 +168,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             {
                 fY = bReverse ? fScaledUpperYValue : fScaledLowerYValue;
                 rAlignment = LABEL_ALIGN_BOTTOM;
-                if(3==m_nDimension)
+                if(m_nDimension==3)
                     fDepth = bReverse ? fabs(fScaledUpperBarDepth) : fabs(fScaledLowerBarDepth);
             }
             else
@@ -185,7 +185,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             {
                 fY = bReverse ? fScaledUpperYValue : fScaledLowerYValue;
                 rAlignment = LABEL_ALIGN_LEFT;
-                if(3==m_nDimension)
+                if(m_nDimension==3)
                     fDepth = bReverse ? fabs(fScaledUpperBarDepth) : fabs(fScaledLowerBarDepth);
             }
             else
@@ -202,7 +202,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             {
                 fY = bReverse ? fScaledLowerYValue : fScaledUpperYValue;
                 rAlignment = LABEL_ALIGN_RIGHT;
-                if(3==m_nDimension)
+                if(m_nDimension==3)
                     fDepth = bReverse ? fabs(fScaledLowerBarDepth) : fabs(fScaledUpperBarDepth);
             }
             else
@@ -220,7 +220,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             rAlignment = bNormalOutside ? LABEL_ALIGN_RIGHT : LABEL_ALIGN_LEFT;
         else
             rAlignment = bNormalOutside ? LABEL_ALIGN_TOP : LABEL_ALIGN_BOTTOM;
-        if(3==m_nDimension)
+        if(m_nDimension==3)
             fDepth = (fBaseValue < fScaledUpperYValue) ? fabs(fScaledUpperBarDepth) : fabs(fScaledLowerBarDepth);
         }
         break;
@@ -231,7 +231,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             rAlignment = bNormalOutside ? LABEL_ALIGN_LEFT : LABEL_ALIGN_RIGHT;
         else
             rAlignment = bNormalOutside ? LABEL_ALIGN_BOTTOM : LABEL_ALIGN_TOP;
-        if(3==m_nDimension)
+        if(m_nDimension==3)
             fDepth = (fBaseValue < fScaledUpperYValue) ? fabs(fScaledUpperBarDepth) : fabs(fScaledLowerBarDepth);
         }
         break;
@@ -242,14 +242,14 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
             rAlignment = bNormalOutside ? LABEL_ALIGN_RIGHT : LABEL_ALIGN_LEFT;
         else
             rAlignment = bNormalOutside ? LABEL_ALIGN_TOP : LABEL_ALIGN_BOTTOM;
-        if(3==m_nDimension)
+        if(m_nDimension==3)
             fDepth = (fBaseValue < fScaledUpperYValue) ? fabs(fScaledLowerBarDepth) : fabs(fScaledUpperBarDepth);
         }
         break;
     case css::chart::DataLabelPlacement::CENTER:
         fY -= (fScaledUpperYValue-fScaledLowerYValue)/2.0;
         rAlignment = LABEL_ALIGN_CENTER;
-        if(3==m_nDimension)
+        if(m_nDimension==3)
             fDepth = fabs(fScaledUpperBarDepth-fScaledLowerBarDepth)/2.0;
         break;
     default:
@@ -257,7 +257,7 @@ awt::Point BarChart::getLabelScreenPositionAndAlignment(
 
         break;
     }
-    if(3==m_nDimension)
+    if(m_nDimension==3)
         fZ -= fDepth/2.0;
 
     drawing::Position3D aScenePosition3D( pPosHelper->
@@ -843,7 +843,7 @@ void BarChart::createShapes()
                                 eAlignment, nLabelPlacement, fLogicX, fLowerYValue, fUpperYValue, fLogicZ,
                                 fLowerBarDepth, fUpperBarDepth, fBaseValue, pPosHelper);
                             sal_Int32 nOffset = 0;
-                            if(LABEL_ALIGN_CENTER!=eAlignment)
+                            if(eAlignment!=LABEL_ALIGN_CENTER)
                             {
                                 nOffset = 100;//add some spacing //@todo maybe get more intelligent values
                                 if( m_nDimension == 3 )

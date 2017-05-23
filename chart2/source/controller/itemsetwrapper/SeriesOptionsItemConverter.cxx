@@ -206,11 +206,11 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
         {
             if( m_bSupportingOverlapAndGapWidthProperties )
             {
-                sal_Int32& rBarPosition = ( SCHATTR_BAR_OVERLAP == nWhichId ) ? m_nBarOverlap : m_nGapWidth;
+                sal_Int32& rBarPosition = ( nWhichId == SCHATTR_BAR_OVERLAP ) ? m_nBarOverlap : m_nGapWidth;
                 rBarPosition = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
 
                 OUString aPropName("GapwidthSequence" );
-                if( SCHATTR_BAR_OVERLAP == nWhichId )
+                if( nWhichId == SCHATTR_BAR_OVERLAP )
                     aPropName = "OverlapSequence";
 
                 uno::Reference< XDataSeries > xDataSeries( GetPropertySet(), uno::UNO_QUERY );

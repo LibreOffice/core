@@ -150,7 +150,7 @@ TickFactory2D::TickFactory2D(
           , m_fOffset_LogicToScreen(0.0)
 {
     double fWidthY = m_fScaledVisibleMax - m_fScaledVisibleMin;
-    if (chart2::AxisOrientation_MATHEMATICAL == m_rScale.Orientation)
+    if (m_rScale.Orientation == chart2::AxisOrientation_MATHEMATICAL)
     {
         m_fStretch_LogicToScreen = 1.0/fWidthY;
         m_fOffset_LogicToScreen = -m_fScaledVisibleMin;
@@ -233,8 +233,8 @@ void TickFactory2D::addPointSequenceForTickLine( drawing::PointSequenceSequence&
 B2DVector TickFactory2D::getDistanceAxisTickToText( const AxisProperties& rAxisProperties, bool bIncludeFarAwayDistanceIfSo, bool bIncludeSpaceBetweenTickAndText ) const
 {
     bool bFarAwayLabels = false;
-    if( css::chart::ChartAxisLabelPosition_OUTSIDE_START == rAxisProperties.m_eLabelPos
-        || css::chart::ChartAxisLabelPosition_OUTSIDE_END == rAxisProperties.m_eLabelPos )
+    if( rAxisProperties.m_eLabelPos == css::chart::ChartAxisLabelPosition_OUTSIDE_START
+        || rAxisProperties.m_eLabelPos == css::chart::ChartAxisLabelPosition_OUTSIDE_END )
         bFarAwayLabels = true;
 
     double fInnerDirectionSign = rAxisProperties.maLabelAlignment.mfInnerTickDirection;

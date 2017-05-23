@@ -379,7 +379,7 @@ Reference< XAxis > AxisHelper::createAxis(
                 {
                     css::chart::ChartAxisPosition eMainAxisPos( css::chart::ChartAxisPosition_ZERO );
                     xMainProp->getPropertyValue("CrossoverPosition") >>= eMainAxisPos;
-                    if( css::chart::ChartAxisPosition_END == eMainAxisPos )
+                    if( eMainAxisPos == css::chart::ChartAxisPosition_END )
                         eNewAxisPos = css::chart::ChartAxisPosition_START;
                 }
             }
@@ -636,7 +636,7 @@ Reference< XAxis > AxisHelper::getCrossingMainAxis( const Reference< XAxis >& xA
     sal_Int32 nDimensionIndex = 0;
     sal_Int32 nAxisIndex = 0;
     AxisHelper::getIndicesForAxis( xAxis, xCooSys, nDimensionIndex, nAxisIndex );
-    if( 2==nDimensionIndex )
+    if( nDimensionIndex==2 )
     {
         nDimensionIndex=1;
         bool bSwapXY = false;
@@ -644,7 +644,7 @@ Reference< XAxis > AxisHelper::getCrossingMainAxis( const Reference< XAxis >& xA
         if( xCooSysProp.is() && (xCooSysProp->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXY) && bSwapXY )
             nDimensionIndex=0;
     }
-    else if( 1==nDimensionIndex )
+    else if( nDimensionIndex==1 )
         nDimensionIndex=0;
     else
         nDimensionIndex=1;

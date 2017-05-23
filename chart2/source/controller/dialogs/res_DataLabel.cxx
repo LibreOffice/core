@@ -208,7 +208,7 @@ IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, Button *, pButton, void )
     ScopedVclPtrInstance< NumberFormatDialog > aDlg(m_pWindow, aNumberSet);
     if( bPercent )
         aDlg->SetText( m_pFT_NumberFormatForPercent->GetText());
-    if( RET_OK == aDlg->Execute() )
+    if( aDlg->Execute() == RET_OK )
     {
         const SfxItemSet* pResult = aDlg->GetOutputItemSet();
         if( pResult )

@@ -639,12 +639,12 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
         long nNumer = 1;
         long nIntervalDays =  nDayCount / nMaxMainIncrementCount;
         double nDaysPerInterval = 1.0;
-        if( nIntervalDays>365 || YEAR==rExplicitScale.TimeResolution )
+        if( nIntervalDays>365 || rExplicitScale.TimeResolution==YEAR )
         {
             rExplicitIncrement.MajorTimeInterval.TimeUnit = YEAR;
             nDaysPerInterval = 365.0;//todo: maybe different for other calendars... get localized calendar according to set number format at axis ...
         }
-        else if( nIntervalDays>31 || MONTH==rExplicitScale.TimeResolution )
+        else if( nIntervalDays>31 || rExplicitScale.TimeResolution==MONTH )
         {
             rExplicitIncrement.MajorTimeInterval.TimeUnit = MONTH;
             nDaysPerInterval = 31.0;//todo: maybe different for other calendars... get localized calendar according to set number format at axis ...

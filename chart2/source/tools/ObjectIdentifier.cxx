@@ -902,8 +902,8 @@ bool ObjectIdentifier::areSiblings( const OUString& rCID1, const OUString& rCID2
         //legend entries are special:
         if(!bRet)
         {
-            if( OBJECTTYPE_LEGEND_ENTRY == getObjectType(rCID1)
-                && OBJECTTYPE_LEGEND_ENTRY == getObjectType(rCID2) )
+            if( getObjectType(rCID1) == OBJECTTYPE_LEGEND_ENTRY
+                && getObjectType(rCID2) == OBJECTTYPE_LEGEND_ENTRY )
                 bRet = true;
         }
     }

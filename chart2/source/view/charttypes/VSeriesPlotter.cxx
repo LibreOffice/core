@@ -418,13 +418,13 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
     try
     {
         awt::Point aScreenPosition2D(rScreenPosition2D);
-        if(LABEL_ALIGN_LEFT==eAlignment)
+        if(eAlignment==LABEL_ALIGN_LEFT)
             aScreenPosition2D.X -= nOffset;
-        else if(LABEL_ALIGN_RIGHT==eAlignment)
+        else if(eAlignment==LABEL_ALIGN_RIGHT)
             aScreenPosition2D.X += nOffset;
-        else if(LABEL_ALIGN_TOP==eAlignment)
+        else if(eAlignment==LABEL_ALIGN_TOP)
             aScreenPosition2D.Y -= nOffset;
-        else if(LABEL_ALIGN_BOTTOM==eAlignment)
+        else if(eAlignment==LABEL_ALIGN_BOTTOM)
             aScreenPosition2D.Y += nOffset;
 
         uno::Reference< drawing::XShapes > xTarget_ =
@@ -660,21 +660,21 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 nLineCountForSymbolsize = 1;
             aSymbolPosition.Y += ((aTextSize.Height/nLineCountForSymbolsize)/4);
 
-            if(LABEL_ALIGN_LEFT==eAlignment
-                || LABEL_ALIGN_LEFT_TOP==eAlignment
-                || LABEL_ALIGN_LEFT_BOTTOM==eAlignment)
+            if(eAlignment==LABEL_ALIGN_LEFT
+                || eAlignment==LABEL_ALIGN_LEFT_TOP
+                || eAlignment==LABEL_ALIGN_LEFT_BOTTOM)
             {
                 aSymbolPosition.X -= nXDiff;
             }
-            else if(LABEL_ALIGN_RIGHT==eAlignment
-                || LABEL_ALIGN_RIGHT_TOP==eAlignment
-                || LABEL_ALIGN_RIGHT_BOTTOM==eAlignment )
+            else if(eAlignment==LABEL_ALIGN_RIGHT
+                || eAlignment==LABEL_ALIGN_RIGHT_TOP
+                || eAlignment==LABEL_ALIGN_RIGHT_BOTTOM )
             {
                 aNewTextPos.X += nXDiff;
             }
-            else if(LABEL_ALIGN_TOP==eAlignment
-                || LABEL_ALIGN_BOTTOM==eAlignment
-                || LABEL_ALIGN_CENTER==eAlignment )
+            else if(eAlignment==LABEL_ALIGN_TOP
+                || eAlignment==LABEL_ALIGN_BOTTOM
+                || eAlignment==LABEL_ALIGN_CENTER )
             {
                 aSymbolPosition.X -= nXDiff/2;
                 aNewTextPos.X += nXDiff/2;
@@ -1387,17 +1387,17 @@ long VSeriesPlotter::calculateTimeResolutionOnXAxis()
             for(;aIt!=aEnd;++aIt)
             {
                 Date aCurrent(aNullDate); aCurrent+=static_cast<long>(rtl::math::approxFloor(*aIt));
-                if( css::chart::TimeUnit::YEAR == nRet )
+                if( nRet == css::chart::TimeUnit::YEAR )
                 {
                     if( DateHelper::IsInSameYear( aPrevious, aCurrent ) )
                         nRet = css::chart::TimeUnit::MONTH;
                 }
-                if( css::chart::TimeUnit::MONTH == nRet )
+                if( nRet == css::chart::TimeUnit::MONTH )
                 {
                     if( DateHelper::IsInSameMonth( aPrevious, aCurrent ) )
                         nRet = css::chart::TimeUnit::DAY;
                 }
-                if( css::chart::TimeUnit::DAY == nRet )
+                if( nRet == css::chart::TimeUnit::DAY )
                     break;
                 aPrevious=aCurrent;
             }
@@ -1491,7 +1491,7 @@ double VSeriesPlotter::getMinimumZ()
 }
 double VSeriesPlotter::getMaximumZ()
 {
-    if( 3!=m_nDimension || !m_aZSlots.size() )
+    if( m_nDimension!=3 || !m_aZSlots.size() )
         return getMinimumZ()+1;
     return m_aZSlots.size();
 }

@@ -142,9 +142,9 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScale
         double fWidthY = MaxY - MinY;
         double fWidthZ = MaxZ - MinZ;
 
-        double fScaleDirectionX = AxisOrientation_MATHEMATICAL==nXAxisOrientation ? 1.0 : -1.0;
-        double fScaleDirectionY = AxisOrientation_MATHEMATICAL==nYAxisOrientation ? 1.0 : -1.0;
-        double fScaleDirectionZ = AxisOrientation_MATHEMATICAL==nZAxisOrientation ? -1.0 : 1.0;
+        double fScaleDirectionX = nXAxisOrientation==AxisOrientation_MATHEMATICAL ? 1.0 : -1.0;
+        double fScaleDirectionY = nYAxisOrientation==AxisOrientation_MATHEMATICAL ? 1.0 : -1.0;
+        double fScaleDirectionZ = nZAxisOrientation==AxisOrientation_MATHEMATICAL ? -1.0 : 1.0;
 
         double fScaleX = fScaleDirectionX*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthX;
         double fScaleY = fScaleDirectionY*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthY;
@@ -152,15 +152,15 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScale
 
         aMatrix.scale(fScaleX, fScaleY, fScaleZ);
 
-        if( AxisOrientation_MATHEMATICAL==nXAxisOrientation )
+        if( nXAxisOrientation==AxisOrientation_MATHEMATICAL )
             aMatrix.translate(-MinX*fScaleX, 0.0, 0.0);
         else
             aMatrix.translate(-MaxX*fScaleX, 0.0, 0.0);
-        if( AxisOrientation_MATHEMATICAL==nYAxisOrientation )
+        if( nYAxisOrientation==AxisOrientation_MATHEMATICAL )
             aMatrix.translate(0.0, -MinY*fScaleY, 0.0);
         else
             aMatrix.translate(0.0, -MaxY*fScaleY, 0.0);
-        if( AxisOrientation_MATHEMATICAL==nZAxisOrientation )
+        if( nZAxisOrientation==AxisOrientation_MATHEMATICAL )
             aMatrix.translate(0.0, 0.0, -MaxZ*fScaleZ);//z direction in draw is reverse mathematical direction
         else
             aMatrix.translate(0.0, 0.0, -MinZ*fScaleZ);
@@ -206,7 +206,7 @@ awt::Point PlottingPositionHelper::transformSceneToScreenPosition( const drawing
     awt::Point aScreenPoint( static_cast<sal_Int32>(rScenePosition3D.PositionX), static_cast<sal_Int32>(rScenePosition3D.PositionY) );
 
     //transformation from scene to screen (only necessary for 3D):
-    if(3==nDimensionCount)
+    if(nDimensionCount==3)
     {
         //create 3D anchor shape
         tPropertyNameMap aDummyPropertyNameMap;
@@ -366,14 +366,14 @@ void PolarPlottingPositionHelper::setScales( const std::vector< ExplicitScaleDat
     double fTranslateLogicZ;
     double fScaleLogicZ;
     {
-        double fScaleDirectionZ = AxisOrientation_MATHEMATICAL==m_aScales[2].Orientation ? 1.0 : -1.0;
+        double fScaleDirectionZ = m_aScales[2].Orientation==AxisOrientation_MATHEMATICAL ? 1.0 : -1.0;
         double MinZ = getLogicMinZ();
         double MaxZ = getLogicMaxZ();
         doLogicScaling( nullptr, nullptr, &MinZ );
         doLogicScaling( nullptr, nullptr, &MaxZ );
         double fWidthZ = MaxZ - MinZ;
 
-        if( AxisOrientation_MATHEMATICAL==m_aScales[2].Orientation )
+        if( m_aScales[2].Orientation==AxisOrientation_MATHEMATICAL )
             fTranslateLogicZ=MinZ;
         else
             fTranslateLogicZ=MaxZ;
@@ -405,7 +405,7 @@ uno::Reference< XTransformation > PolarPlottingPositionHelper::getTransformation
 double PolarPlottingPositionHelper::getWidthAngleDegree( double& fStartLogicValueOnAngleAxis, double& fEndLogicValueOnAngleAxis ) const
 {
     const ExplicitScaleData& rAngleScale = m_bSwapXAndY ? m_aScales[1] : m_aScales[0];
-    if( AxisOrientation_MATHEMATICAL != rAngleScale.Orientation )
+    if( rAngleScale.Orientation != AxisOrientation_MATHEMATICAL )
     {
         double fHelp = fEndLogicValueOnAngleAxis;
         fEndLogicValueOnAngleAxis = fStartLogicValueOnAngleAxis;
@@ -439,7 +439,7 @@ double PolarPlottingPositionHelper::transformToAngleDegree( double fLogicValueOn
     double fAxisAngleScaleDirection = 1.0;
     {
         const ExplicitScaleData& rScale = m_bSwapXAndY ? m_aScales[1] : m_aScales[0];
-        if(AxisOrientation_MATHEMATICAL != rScale.Orientation)
+        if(rScale.Orientation != AxisOrientation_MATHEMATICAL)
             fAxisAngleScaleDirection *= -1.0;
     }
 
@@ -566,7 +566,7 @@ double PolarPlottingPositionHelper::transformToRadius( double fLogicValueOnRadiu
 
         bool bMinIsInnerRadius = true;
         const ExplicitScaleData& rScale = m_bSwapXAndY ? m_aScales[0] : m_aScales[1];
-        if(AxisOrientation_MATHEMATICAL != rScale.Orientation)
+        if(rScale.Orientation != AxisOrientation_MATHEMATICAL)
             bMinIsInnerRadius = false;
 
         double fInnerScaledLogicRadius=0.0;
@@ -638,7 +638,7 @@ drawing::Position3D PolarPlottingPositionHelper::transformAngleRadiusToScene( do
 double PolarPlottingPositionHelper::getOuterLogicRadius() const
 {
     const ExplicitScaleData& rScale = m_bSwapXAndY ? m_aScales[0] : m_aScales[1];
-    if( AxisOrientation_MATHEMATICAL==rScale.Orientation )
+    if( rScale.Orientation==AxisOrientation_MATHEMATICAL )
         return rScale.Maximum;
     else
         return rScale.Minimum;
