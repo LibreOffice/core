@@ -71,12 +71,12 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         bcolumnnameislimited = (imaxcolumnchars > 0) && (imaxcolumnchars < 16);
         addFieldSelectionListener(this);
         short pretabindex = (short) (50);
-        String sExplanation = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 14);
-        String sCategories = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 15);
-        String sBusiness = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 16);
-        String sPrivate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 17);
-        String sTableNames = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 18);
-        smytable = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 44);
+        String sExplanation = CurUnoDialog.m_oResource.getResText("RID_TABLE_14");
+        String sCategories = CurUnoDialog.m_oResource.getResText("RID_TABLE_15");
+        String sBusiness = CurUnoDialog.m_oResource.getResText("RID_TABLE_16");
+        String sPrivate = CurUnoDialog.m_oResource.getResText("RID_TABLE_17");
+        String sTableNames = CurUnoDialog.m_oResource.getResText("RID_TABLE_18");
+        smytable = CurUnoDialog.m_oResource.getResText("RID_TABLE_44");
         Integer IMAINSTEP = Integer.valueOf(TableWizard.SOMAINPAGE);
         oCGCategory = new CGCategory(CurUnoDialog.xMSF);
         oCGTable = new CGTable(CurUnoDialog.xMSF);

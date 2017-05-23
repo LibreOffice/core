@@ -79,8 +79,8 @@ public class TimeStampControl extends DatabaseControl
     {
         super(_oGridControl, _curfieldcolumn);
         oResource = _oResource;
-        String sDateAppendix = oResource.getResText(UIConsts.RID_FORM + 88);
-        String sTimeAppendix = oResource.getResText(UIConsts.RID_FORM + 89);
+        String sDateAppendix = oResource.getResText("RID_FORM_88");
+        String sTimeAppendix = oResource.getResText("RID_FORM_89");
         oDateControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.DATE, _curfieldcolumn.getFieldTitle() + PropertyNames.SPACE + sDateAppendix);
         oTimeControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.TIME, _curfieldcolumn.getFieldTitle() + PropertyNames.SPACE + sTimeAppendix);
     }

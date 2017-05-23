@@ -65,12 +65,12 @@ public class ReportLayouter
             this.CurUnoDialog = _CurUnoDialog;
             this.CurReportDocument = _CurReportDocument;
             //TODO the constructor for the OfficePathRetriever is redundant and should be instantiated elsewhere
-            String slblDataStructure = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 15);
-            String slblPageLayout = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 16);
+            String slblDataStructure = CurUnoDialog.m_oResource.getResText("RID_REPORT_15");
+            String slblPageLayout = CurUnoDialog.m_oResource.getResText("RID_REPORT_16");
 
-            String sOrientationHeader = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 22);
-            String sOrientVertical = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 23);
-            String sOrientHorizontal = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 24);
+            String sOrientationHeader = CurUnoDialog.m_oResource.getResText("RID_REPORT_22");
+            String sOrientVertical = CurUnoDialog.m_oResource.getResText("RID_REPORT_23");
+            String sOrientHorizontal = CurUnoDialog.m_oResource.getResText("RID_REPORT_24");
 
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblContent",
                     new String[]
@@ -336,31 +336,31 @@ public class ReportLayouter
                 String text = item.getString().trim().toLowerCase();
                 if (text.equals("#titleconst#"))
                 {
-                    teTitleconst = new PlaceholderTextElement(item, CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 86), PropertyNames.EMPTY_STRING, m_xMSF);
+                    teTitleconst = new PlaceholderTextElement(item, CurUnoDialog.m_oResource.getResText("RID_REPORT_86"), PropertyNames.EMPTY_STRING, m_xMSF);
                     trTitleconst = item;
                     constRangeList.remove(i--);
-                    writeTitle(teTitleconst, trTitleconst, CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 86));
+                    writeTitle(teTitleconst, trTitleconst, CurUnoDialog.m_oResource.getResText("RID_REPORT_86"));
                 }
                 else if (text.equals("#authorconst#"))
                 {
-                    teAuthorconst = new PlaceholderTextElement(item, CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 87), PropertyNames.EMPTY_STRING, m_xMSF);
+                    teAuthorconst = new PlaceholderTextElement(item, CurUnoDialog.m_oResource.getResText("RID_REPORT_87"), PropertyNames.EMPTY_STRING, m_xMSF);
                     trAuthorconst = item;
                     constRangeList.remove(i--);
-                    writeTitle(teAuthorconst, trAuthorconst, CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 87));
+                    writeTitle(teAuthorconst, trAuthorconst, CurUnoDialog.m_oResource.getResText("RID_REPORT_87"));
                 }
                 else if (text.equals("#dateconst#"))
                 {
-                    teDateconst = new PlaceholderTextElement(item, CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 88), PropertyNames.EMPTY_STRING, m_xMSF);
+                    teDateconst = new PlaceholderTextElement(item, CurUnoDialog.m_oResource.getResText("RID_REPORT_88"), PropertyNames.EMPTY_STRING, m_xMSF);
                     trDateconst = item;
                     constRangeList.remove(i--);
-                    writeTitle(teDateconst, trDateconst, CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 88));
+                    writeTitle(teDateconst, trDateconst, CurUnoDialog.m_oResource.getResText("RID_REPORT_88"));
                 }
                 else if (text.equals("#pageconst#"))
                 {
-                    tePageconst = new PlaceholderTextElement(item, CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 93), PropertyNames.EMPTY_STRING, m_xMSF);
+                    tePageconst = new PlaceholderTextElement(item, CurUnoDialog.m_oResource.getResText("RID_REPORT_93"), PropertyNames.EMPTY_STRING, m_xMSF);
                     trPageconst = item;
                     constRangeList.remove(i--);
-                    writeTitle(tePageconst, trPageconst, CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 93));
+                    writeTitle(tePageconst, trPageconst, CurUnoDialog.m_oResource.getResText("RID_REPORT_93"));
                 }
             }
     }

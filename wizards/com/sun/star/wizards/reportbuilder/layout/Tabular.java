@@ -41,7 +41,7 @@ public class Tabular extends ReportBuilderLayouter
 
     public String getLocalizedName()
     {
-        return getResource().getResText(UIConsts.RID_REPORT + 80);
+        return getResource().getResText("RID_REPORT_80");
     }
 
     @Override

@@ -137,7 +137,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
     {
         if (sQueryPrefix == null)
         {
-            sQueryPrefix = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 22);
+            sQueryPrefix = CurUnoDialog.m_oResource.getResText("RID_QUERY_22");
         }
         return sQueryPrefix;
     }
@@ -165,7 +165,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
     {
         if (sTablePrefix == null)
         {
-            sTablePrefix = CurUnoDialog.m_oResource.getResText(UIConsts.RID_QUERY + 21);
+            sTablePrefix = CurUnoDialog.m_oResource.getResText("RID_QUERY_21");
         }
         return sTablePrefix;
     }

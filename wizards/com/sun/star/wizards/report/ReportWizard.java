@@ -81,7 +81,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
     public ReportWizard(XMultiServiceFactory i_serviceFactory, final PropertyValue[] i_wizardContext)
     {
         super(i_serviceFactory, 34320, i_wizardContext);
-        super.addResourceHandler("dbw");
+        super.addResourceHandler();
         if (getReportResources(false))
         {
             Helper.setUnoPropertyValues(xDialogModel,
@@ -355,15 +355,15 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
 
     private void insertQueryRelatedSteps()
     {
-        setRMItemLabels(m_oResource, UIConsts.RID_QUERY + 80);
+        setRMItemLabels(m_oResource);
         addRoadmap();
         int i = 0;
-        i = insertRoadmapItem(0, true, m_oResource.getResText(UIConsts.RID_QUERY + 80), SOMAINPAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_REPORT + 68), SOTITLEPAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_REPORT + 11), SOGROUPPAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_REPORT + 12), SOSORTPAGE);       // Orderby is always supported
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_REPORT + 13), SOTEMPLATEPAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_REPORT + 14), SOSTOREPAGE);
+        i = insertRoadmapItem(0, true, m_oResource.getResText("RID_QUERY_80"), SOMAINPAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText("RID_REPORT_68"), SOTITLEPAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText("RID_REPORT_11"), SOGROUPPAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText("RID_REPORT_12"), SOSORTPAGE);       // Orderby is always supported
+        i = insertRoadmapItem(i, false, m_oResource.getResText("RID_REPORT_13"), SOTEMPLATEPAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText("RID_REPORT_14"), SOSTOREPAGE);
         setRoadmapInteractive(true);
         setRoadmapComplete(true);
         setCurrentRoadmapItemID((short) 1);
@@ -472,7 +472,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
             String sMessage = e.getMessage();
             if (sMessage.equals("default.otr"))
             {
-                sMessage = m_oResource.getResText(UIConsts.RID_REPORT + 92);
+                sMessage = m_oResource.getResText("RID_REPORT_92");
             }
             // show a dialog with the error message
             SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMessage);
@@ -525,22 +525,22 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
 
     private boolean getReportResources(boolean bgetProgressResourcesOnly)
     {
-        sMsgWizardName = super.m_oResource.getResText(UIConsts.RID_REPORT);
+        sMsgWizardName = super.m_oResource.getResText("RID_REPORT_0");
         if (!bgetProgressResourcesOnly)
         {
-            sShowBinaryFields = m_oResource.getResText(UIConsts.RID_REPORT + 60);
-            slblTables = m_oResource.getResText(UIConsts.RID_FORM + 6);
-            slblFields = m_oResource.getResText(UIConsts.RID_FORM + 12);
-            slblSelFields = m_oResource.getResText(UIConsts.RID_REPORT + 9);
-            WizardHeaderText[0] = m_oResource.getResText(UIConsts.RID_REPORT + 28);
-            WizardHeaderText[1] = m_oResource.getResText(UIConsts.RID_REPORT + 69);
-            WizardHeaderText[2] = m_oResource.getResText(UIConsts.RID_REPORT + 29);
-            WizardHeaderText[3] = m_oResource.getResText(UIConsts.RID_REPORT + 30);
-            WizardHeaderText[4] = m_oResource.getResText(UIConsts.RID_REPORT + 31);
-            WizardHeaderText[5] = m_oResource.getResText(UIConsts.RID_REPORT + 32);
+            sShowBinaryFields = m_oResource.getResText("RID_REPORT_60");
+            slblTables = m_oResource.getResText("RID_FORM_6");
+            slblFields = m_oResource.getResText("RID_FORM_12");
+            slblSelFields = m_oResource.getResText("RID_REPORT_9");
+            WizardHeaderText[0] = m_oResource.getResText("RID_REPORT_28");
+            WizardHeaderText[1] = m_oResource.getResText("RID_REPORT_69");
+            WizardHeaderText[2] = m_oResource.getResText("RID_REPORT_29");
+            WizardHeaderText[3] = m_oResource.getResText("RID_REPORT_30");
+            WizardHeaderText[4] = m_oResource.getResText("RID_REPORT_31");
+            WizardHeaderText[5] = m_oResource.getResText("RID_REPORT_32");
         }
-        slblColumnTitles = m_oResource.getResText(UIConsts.RID_REPORT + 70);
-        slblColumnNames = m_oResource.getResText(UIConsts.RID_REPORT + 71);
+        slblColumnTitles = m_oResource.getResText("RID_REPORT_70");
+        slblColumnNames = m_oResource.getResText("RID_REPORT_71");
         return true;
     }
 
@@ -549,7 +549,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         String sBlindTextNote = PropertyNames.EMPTY_STRING;
         if (_aDocument instanceof ReportTextImplementation)
         {
-            sBlindTextNote = _oResource.getResText(UIConsts.RID_REPORT + 75);
+            sBlindTextNote = _oResource.getResText("RID_REPORT_75");
             sBlindTextNote = JavaTools.replaceSubString(sBlindTextNote, String.valueOf((char) 13), "<BR>");
         }
         return sBlindTextNote;

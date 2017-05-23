@@ -43,7 +43,7 @@ public abstract class DBLimitedFieldSelection
         this.CurUnoDialog = _CurUnoDialog;
         FirstHelpIndex = _FirstHelpIndex;
         curtabindex = (short) (iStep * 100);
-        sNoField = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 8);
+        sNoField = CurUnoDialog.m_oResource.getResText("RID_REPORT_8");
         IStep = Integer.valueOf(iStep);
         iCurPosY = iCompPosY;
         for (int i = 0; i < rowcount; i++)

@@ -38,7 +38,7 @@ public class ColumnarSingleColumn extends ReportBuilderLayouter
 
     public String getLocalizedName()
     {
-        return getResource().getResText(UIConsts.RID_REPORT + 81);
+        return getResource().getResText("RID_REPORT_81");
     }
 
     @Override

@@ -636,7 +636,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
             if( LayoutFiles[0][i] == null) { break;}
             if( LayoutFiles[0][i].equals("default") )
             {
-                LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 100);
+                LayoutFiles[0][i] = m_resource.getResText("RID_REPORT_100");
             }
         }
     }

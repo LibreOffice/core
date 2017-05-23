@@ -598,7 +598,7 @@ public class FormControlArranger
             {
                 if (nFieldType == DataType.TIMESTAMP)
                 {
-                    DBControlList[i] = new TimeStampControl(new Resource(xMSF, "dbw"), oFormHandler, xFormName, sFieldName, aPoint);
+                    DBControlList[i] = new TimeStampControl(new Resource(xMSF), oFormHandler, xFormName, sFieldName, aPoint);
                 }
                 else
                 {

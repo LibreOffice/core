@@ -41,12 +41,12 @@ public class DataEntrySetter
     {
         short curtabindex = (short) (FormWizard.SODATA_PAGE * 100);
         Integer IDataStep = Integer.valueOf(FormWizard.SODATA_PAGE);
-        String sNewDataOnly = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 44);
-        String sDisplayAllData = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 46);
-        String sNoModification = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 47); // AllowUpdates
-        String sNoDeletion = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 48);     // AllowDeletes
-        String sNoAddition = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 49);     // AllowInserts
-        String sdontdisplayExistingData = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 45);
+        String sNewDataOnly = CurUnoDialog.m_oResource.getResText("RID_FORM_44");
+        String sDisplayAllData = CurUnoDialog.m_oResource.getResText("RID_FORM_46");
+        String sNoModification = CurUnoDialog.m_oResource.getResText("RID_FORM_47"); // AllowUpdates
+        String sNoDeletion = CurUnoDialog.m_oResource.getResText("RID_FORM_48");     // AllowDeletes
+        String sNoAddition = CurUnoDialog.m_oResource.getResText("RID_FORM_49");     // AllowInserts
+        String sdontdisplayExistingData = CurUnoDialog.m_oResource.getResText("RID_FORM_45");
 
         CurUnoDialog.insertRadioButton("optNewDataOnly", new XItemListenerAdapter() {
                     @Override

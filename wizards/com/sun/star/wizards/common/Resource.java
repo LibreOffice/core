@@ -18,76 +18,44 @@
 
 package com.sun.star.wizards.common;
 
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.container.XNameAccess;
+import com.sun.star.beans.PropertyState;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.configuration.theDefaultProvider;
+import com.sun.star.lang.Locale;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.resource.StringResourceWithLocation;
+import com.sun.star.resource.XStringResourceWithLocation;
+import com.sun.star.util.XMacroExpander;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 
-public class Resource
+public final class Resource
 {
+    private XStringResourceWithLocation m_xStrResource;
 
-    private XIndexAccess xStringIndexAccess;
-
-    /** Creates a new instance of Resource
+    /**
+     * <p>Load the resource bundle that contains the resource {@code String}
+     * values.</p>
      */
-    public Resource(XMultiServiceFactory _xMSF, String _Module)
-    {
-        try
-        {
-            Object[] aArgs = new Object[] { _Module };
-            XInterface xResource = (XInterface) _xMSF.createInstanceWithArguments(
-                "org.libreoffice.resource.ResourceIndexAccess",
-                aArgs);
-            if (xResource == null)
-                throw new Exception("could not initialize ResourceIndexAccess");
-            XNameAccess xNameAccess = UnoRuntime.queryInterface(
-                XNameAccess.class,
-                xResource);
-            if (xNameAccess == null)
-                throw new Exception("ResourceIndexAccess is no XNameAccess");
-            this.xStringIndexAccess = UnoRuntime.queryInterface(
-                XIndexAccess.class,
-                xNameAccess.getByName("String"));
-            if(this.xStringIndexAccess == null)
-                throw new Exception("could not initialize xStringIndexAccess");
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace();
-            showCommonResourceError(_xMSF);
-        }
+    public Resource(XMultiServiceFactory xMSF) {
+        XComponentContext xContext = Helper.getComponentContext(xMSF);
+        XMacroExpander xExpander = Helper.getMacroExpander(xMSF);
+        String sPath = xExpander.expandMacros("$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/wizards/");
+        Locale locale = Configuration.getUILocale(xMSF);
+        m_xStrResource = StringResourceWithLocation.create(xContext, sPath, true, locale, "resources", "", null);
     }
 
-    public String getResText(int nID)
-    {
-        try
-        {
-            return (String)this.xStringIndexAccess.getByIndex(nID);
-        }
-        catch (Exception exception)
-        {
-            throw new java.lang.IllegalArgumentException("Resource with ID not " + nID + "not found", exception);
-        }
-    }
-
-
-
-    public String[] getResArray(int nID, int iCount)
-    {
-        try
-        {
-            String[] ResArray = new String[iCount];
-            for (int i = 0; i < iCount; i++)
-            {
-                ResArray[i] = getResText(nID + i);
-            }
-            return ResArray;
-        }
-        catch (Exception exception)
-        {
-            throw new java.lang.IllegalArgumentException("Resource with ID not" + nID + "not found", exception);
-        }
+    /**
+     * This method returns the corresponding {@code String} given the key.
+     *
+     * @param   key      Key string for getting the message {@code String}.
+     * @return  Message  {@code String} corresponding to the key.
+     */
+    public String getResText(String key) {
+        return m_xStrResource.resolveString(key);
     }
 
     public static void showCommonResourceError(XMultiServiceFactory xMSF)

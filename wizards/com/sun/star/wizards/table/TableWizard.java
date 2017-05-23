@@ -62,8 +62,8 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     public TableWizard( XMultiServiceFactory xMSF, PropertyValue[] i_wizardContext )
     {
         super( xMSF, 41200, i_wizardContext );
-        super.addResourceHandler("dbw");
-        String sTitle = m_oResource.getResText(UIConsts.RID_TABLE + 1);
+        super.addResourceHandler();
+        String sTitle = m_oResource.getResText("RID_TABLE_1");
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
@@ -78,7 +78,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         //TODO if reportResources cannot be gotten dispose officedocument
         if (getTableResources())
         {
-            setRightPaneHeaders(m_oResource, UIConsts.RID_TABLE + 8, 4);
+            setRightPaneHeaders(m_oResource, "RID_TABLE_", 8, 4);
         }
     }
 
@@ -324,13 +324,13 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     {
         addRoadmap();
         int i = 0;
-        i = insertRoadmapItem(0, true, m_oResource.getResText(UIConsts.RID_TABLE + 2), SOMAINPAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_TABLE + 3), SOFIELDSFORMATPAGE);
+        i = insertRoadmapItem(0, true, m_oResource.getResText("RID_TABLE_2"), SOMAINPAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText("RID_TABLE_3"), SOFIELDSFORMATPAGE);
         if (this.curTableDescriptor.supportsPrimaryKeys())
         {
-            i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_TABLE + 4), SOPRIMARYKEYPAGE);
+            i = insertRoadmapItem(i, false, m_oResource.getResText("RID_TABLE_4"), SOPRIMARYKEYPAGE);
         }
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_TABLE + 5), SOFINALPAGE);        // Orderby is always supported
+        i = insertRoadmapItem(i, false, m_oResource.getResText("RID_TABLE_5"), SOFINALPAGE);        // Orderby is always supported
         setRoadmapInteractive(true);
         setRoadmapComplete(true);
         setCurrentRoadmapItemID((short) 1);
@@ -366,12 +366,12 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
 
     private boolean getTableResources()
     {
-        super.m_oResource.getResText(UIConsts.RID_TABLE + 1);
-        slblFields = m_oResource.getResText(UIConsts.RID_TABLE + 19);
-        slblSelFields = m_oResource.getResText(UIConsts.RID_TABLE + 25);
-        serrToManyFields = m_oResource.getResText(UIConsts.RID_TABLE + 47);
-        serrTableNameexists = m_oResource.getResText(UIConsts.RID_TABLE + 48);
-        sMsgColumnAlreadyExists = m_oResource.getResText(UIConsts.RID_TABLE + 51);
+        super.m_oResource.getResText("RID_TABLE_1");
+        slblFields = m_oResource.getResText("RID_TABLE_19");
+        slblSelFields = m_oResource.getResText("RID_TABLE_25");
+        serrToManyFields = m_oResource.getResText("RID_TABLE_47");
+        serrTableNameexists = m_oResource.getResText("RID_TABLE_48");
+        sMsgColumnAlreadyExists = m_oResource.getResText("RID_TABLE_51");
         return true;
     }
 

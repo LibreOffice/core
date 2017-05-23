@@ -26,8 +26,6 @@ import com.sun.star.wizards.db.FieldColumn;
 import com.sun.star.wizards.db.QueryMetaData;
 import com.sun.star.wizards.ui.FilterComponent;
 
-import static com.sun.star.wizards.ui.UIConsts.RID_QUERY;
-
 public class QuerySummary extends QueryMetaData
 {
 
@@ -42,9 +40,9 @@ public class QuerySummary extends QueryMetaData
     {
         super(_xMSF);
         this.oResource = _oResource;
-        sAnd = oResource.getResText(RID_QUERY + 38);
-        sOr = oResource.getResText(RID_QUERY + 39);
-        sSeparator = oResource.getResText(RID_QUERY + 91);
+        sAnd = oResource.getResText("RID_QUERY_38");
+        sOr = oResource.getResText("RID_QUERY_39");
+        sSeparator = oResource.getResText("RID_QUERY_91");
         sReturnChar = String.valueOf((char) 13) + String.valueOf((char) 13);
     }
 
@@ -59,15 +57,15 @@ public class QuerySummary extends QueryMetaData
             String sGroupByFraction = PropertyNames.EMPTY_STRING;
             String sHavingFraction = PropertyNames.EMPTY_STRING;
             sFieldNamesFraction = combineFieldNameFraction() + sReturnChar;
-            sSortingFraction = combinePartString(RID_QUERY + 51, getSortFieldNames(), RID_QUERY + 52, RID_QUERY + 93, new String[]
+            sSortingFraction = combinePartString("RID_QUERY_51", getSortFieldNames(), "RID_QUERY_52", "RID_QUERY_93", new String[]
                     {
                         "<FIELDNAME>", "<SORTMODE>"
                     }) + sReturnChar;
-            sFilterFraction = combineFilterNameFraction(this.getFilterConditions(), RID_QUERY + 53, RID_QUERY + 54) + sReturnChar;
+            sFilterFraction = combineFilterNameFraction(this.getFilterConditions(), "RID_QUERY_53", "RID_QUERY_54") + sReturnChar;
             if (xDBMetaData.supportsGroupBy())
             {
-                sGroupByFraction = combinePartString(RID_QUERY + 57, GroupFieldNames, RID_QUERY + 58) + sReturnChar;
-                sHavingFraction = combineFilterNameFraction(getGroupByFilterConditions(), RID_QUERY + 59, RID_QUERY + 60);
+                sGroupByFraction = combinePartString("RID_QUERY_57", GroupFieldNames, "RID_QUERY_58") + sReturnChar;
+                sHavingFraction = combineFilterNameFraction(getGroupByFilterConditions(), "RID_QUERY_59", "RID_QUERY_60");
             }
             // TODO: remove the last return from the string
             sSummary = sFieldNamesFraction + sSortingFraction + sFilterFraction + sAggregateFraction + sGroupByFraction + sHavingFraction;
@@ -84,13 +82,13 @@ public class QuerySummary extends QueryMetaData
         return sSummary;
     }
 
-    private String combineFilterNameFraction(PropertyValue[][] _filterconditions, int _InitResID, int _AlternativeResID)
+    private String combineFilterNameFraction(PropertyValue[][] _filterconditions, String _InitResID, String _AlternativeResID)
     {
         if (_filterconditions != null && _filterconditions.length > 0)
         {
             String sconditions = PropertyNames.EMPTY_STRING;
             String sStart = oResource.getResText(_InitResID);
-            String BaseString = oResource.getResText(RID_QUERY + 96);
+            String BaseString = oResource.getResText("RID_QUERY_96");
             if (_filterconditions.length == 1)
             {
                 PropertyValue[] curfilterconditions = _filterconditions[0];
@@ -117,8 +115,8 @@ public class QuerySummary extends QueryMetaData
     private String combineFieldNameFraction()
     {
         String CurString = PropertyNames.EMPTY_STRING;
-        String sReturn = oResource.getResText(RID_QUERY + 50);
-        String BaseString = oResource.getResText(RID_QUERY + 92);
+        String sReturn = oResource.getResText("RID_QUERY_50");
+        String BaseString = oResource.getResText("RID_QUERY_92");
         for (int i = 0; i < FieldColumns.length; i++)
         {
             CurString = BaseString;
@@ -149,7 +147,7 @@ public class QuerySummary extends QueryMetaData
     }
     // TODO: How can you merge the following two methods to a single one in a smarter way??
 
-    private String combinePartString(int _InitResID, String[] _FieldNames, int _AlternativeResID)
+    private String combinePartString(String _InitResID, String[] _FieldNames, String _AlternativeResID)
     {
         if (_FieldNames != null && _FieldNames.length > 0)
         {
@@ -158,7 +156,7 @@ public class QuerySummary extends QueryMetaData
         return oResource.getResText(_AlternativeResID);
     }
 
-    private String ArrayFieldsToString(int _InitResID, String[] _FieldNames)
+    private String ArrayFieldsToString(String _InitResID, String[] _FieldNames)
     {
         StringBuilder sReturn = new StringBuilder(oResource.getResText(_InitResID));
         int FieldCount = _FieldNames.length;
@@ -173,7 +171,7 @@ public class QuerySummary extends QueryMetaData
         return sReturn.toString();
     }
 
-    private String combinePartString(int _InitResID, String[][] _FieldNames, int _AlternativeResID, int _BaseStringID, String[] _ReplaceTags)
+    private String combinePartString(String _InitResID, String[][] _FieldNames, String _AlternativeResID, String _BaseStringID, String[] _ReplaceTags)
     {
         if (_FieldNames != null && _FieldNames.length > 0)
         {
@@ -182,7 +180,7 @@ public class QuerySummary extends QueryMetaData
         return oResource.getResText(_AlternativeResID);
     }
 
-    private String ArrayFieldsToString(int _InitResID, String[][] _FieldNames, int _BaseStringID, String[] _ReplaceTags)
+    private String ArrayFieldsToString(String _InitResID, String[][] _FieldNames, String _BaseStringID, String[] _ReplaceTags)
     {
         String CurString = PropertyNames.EMPTY_STRING;
         StringBuilder sReturn = new StringBuilder(oResource.getResText(_InitResID));

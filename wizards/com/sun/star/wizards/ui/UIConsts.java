@@ -20,13 +20,6 @@ package com.sun.star.wizards.ui;
 
 public interface UIConsts
 {
-
-    int RID_COMMON = 500;
-    int RID_DB_COMMON = 1000;
-    int RID_FORM = 2200;
-    int RID_QUERY = 2300;
-    int RID_REPORT = 2400;
-    int RID_TABLE = 2600;
     Integer INVISIBLESTEP = 99;
     String INFOIMAGEURL = "private:graphicrepository/dbaccess/res/exinfo.png";
     /**
