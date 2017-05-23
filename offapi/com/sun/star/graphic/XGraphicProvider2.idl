@@ -1,0 +1,47 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef com_sun_star_graphic_XGraphicProvider2_idl
+#define com_sun_star_graphic_XGraphicProvider2_idl
+
+#include <com/sun/star/graphic/XGraphicProvider.idl>
+
+module com { module sun { module star { module graphic
+{
+
+/** This interface allows operations on multiple graphics with one method
+    call.
+  */
+interface XGraphicProvider2 : XGraphicProvider
+{
+    /** Calling this method returns XGraphic interfaces
+        that hold loaded graphics.
+
+        @param MediaPropertiesSeq
+            A sequence of sequence of property values to describe the location
+            of the graphics.
+
+        @returns
+            The XGraphic interfaces
+
+        @see XGraphicProvider::queryGraphic
+
+        @since LibreOffice 5.5
+    */
+    sequence< XGraphic > queryGraphics([in] sequence< com::sun::star::beans::PropertyValues> MediaPropertiesSeq)
+        raises( com::sun::star::io::IOException,
+                com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::WrappedTargetException );
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
