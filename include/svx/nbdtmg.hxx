@@ -122,6 +122,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         const SfxItemSet*   pSet;
         MapUnit         eCoreUnit;
         // store the attributes passed from pSet
+        OUString        aBulletCharFmtName;
         OUString        aNumCharFmtName;
         NBOTypeMgrBase(const NBOTypeMgrBase&) = delete;
 
@@ -129,7 +130,6 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         NBOTypeMgrBase()
             : pSet(nullptr)
             , eCoreUnit(MapUnit::MapTwip)
-            , aNumCharFmtName(OUString())
             , bIsLoading(false)
         {}
         virtual ~NBOTypeMgrBase() {}
@@ -143,7 +143,8 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         // store the attributes passed from pSet
         void SetItems(const SfxItemSet* pArg);
     protected:
-        const OUString& GetBulCharFmtName() { return aNumCharFmtName;}
+        const OUString& GetBulletCharFmtName() { return aBulletCharFmtName;}
+        const OUString& GetNumCharFmtName() { return aNumCharFmtName;}
         MapUnit GetMapUnit() { return eCoreUnit;}
     protected:
         bool    bIsLoading;
