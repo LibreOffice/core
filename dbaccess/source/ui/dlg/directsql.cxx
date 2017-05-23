@@ -86,13 +86,13 @@ namespace dbaui
             ::osl::MutexGuard aGuard(m_aMutex);
             stopAllComponentListening();
         }
-        m_pSQL.clear();
-        m_pExecute.clear();
-        m_pSQLHistory.clear();
-        m_pStatus.clear();
-        m_pShowOutput.clear();
-        m_pOutput.clear();
-        m_pClose.clear();
+        m_pSQL.disposeAndClear();
+        m_pExecute.disposeAndClear();
+        m_pSQLHistory.disposeAndClear();
+        m_pStatus.disposeAndClear();
+        m_pShowOutput.disposeAndClear();
+        m_pOutput.disposeAndClear();
+        m_pClose.disposeAndClear();
         ModalDialog::dispose();
     }
 
