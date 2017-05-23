@@ -23,8 +23,6 @@ SwWatermarkDialog::SwWatermarkDialog( vcl::Window* pParent, SfxBindings& rBindin
 : ModelessDialog( pParent, "WatermarkDialog", "modules/swriter/ui/watermarkdialog.ui" )
 , m_rBindings( rBindings )
 {
-    get( m_pTextGrid, "TextGrid" );
-    get( m_pEnableWatermarkCB, "EnableWatermarkCB" );
     get( m_pTextInput, "TextInput" );
     get( m_pOKButton, "ok" );
     get( m_pFont, "FontBox" );
@@ -47,8 +45,6 @@ void SwWatermarkDialog::dispose()
     m_pAngle.clear();
     m_pTransparency.clear();
     m_pColor.clear();
-    m_pTextGrid.clear();
-    m_pEnableWatermarkCB.clear();
     m_pTextInput.clear();
     m_pOKButton.clear();
 
@@ -70,7 +66,6 @@ void SwWatermarkDialog::InitFields()
 
     m_pFont->Fill( pFontList );
 
-    m_pEnableWatermarkCB->SetClickHdl( LINK( this, SwWatermarkDialog, CheckBoxHdl ) );
     m_pOKButton->SetClickHdl( LINK( this, SwWatermarkDialog, OKButtonHdl ) );
 
     // Get watermark properties
@@ -81,7 +76,6 @@ void SwWatermarkDialog::InitFields()
     {
         const SfxWatermarkItem* pWatermark = static_cast<const SfxWatermarkItem*>( pItem );
         OUString sText = pWatermark->GetText();
-        m_pEnableWatermarkCB->Check( !sText.isEmpty() );
         m_pTextInput->SetText( sText );
         m_pFont->SelectEntryPos( m_pFont->GetEntryPos( pWatermark->GetFont() ) );
         m_pAngle->SetValue( pWatermark->GetAngle() );
@@ -90,24 +84,9 @@ void SwWatermarkDialog::InitFields()
     }
 }
 
-void SwWatermarkDialog::Update()
-{
-    if( m_pEnableWatermarkCB->IsChecked() )
-        m_pTextGrid->Enable();
-    else
-        m_pTextGrid->Disable();
-}
-
-IMPL_LINK_NOARG( SwWatermarkDialog, CheckBoxHdl, Button*, void )
-{
-    Update();
-}
-
 IMPL_LINK_NOARG( SwWatermarkDialog, OKButtonHdl, Button*, void )
 {
-    OUString sText = "";
-    if( m_pEnableWatermarkCB->IsChecked() )
-        sText = m_pTextInput->GetText();
+    OUString sText = m_pTextInput->GetText();
 
     css::uno::Sequence<css::beans::PropertyValue> aPropertyValues( comphelper::InitPropertySequence(
     {
