@@ -3419,10 +3419,17 @@ void ScExportTest::testTextUnderlineColorXLSX()
 
     xmlDocPtr pDoc = XPathHelper::parseExport(*xDocSh, m_xSFactory, "xl/drawings/drawing1.xml", FORMAT_XLSX);
     CPPUNIT_ASSERT(pDoc);
-    OUString color = getXPath(pDoc,
-            "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFill/a:solidFill/a:srgbClr", "val");
-    // make sure that the underline color is RED
-    CPPUNIT_ASSERT_EQUAL(OUString("ff0000"), color);
+    // Make sure the underline type is double line
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr", "u", "dbl");
+    // Make sure that the underline color is RED
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFill/a:solidFill/a:srgbClr", "val", "ff0000");
+
+    // Make sure the underline type is drawn with heavy line
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr", "u", "heavy");
+    // tdf#104219 Make sure that uFill is not existing. It mean that color is automatic.
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFill", 0);
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:solidFill/a:srgbClr", 0);
+
 }
 
 void ScExportTest::testSheetRunParagraphPropertyXLSX()
