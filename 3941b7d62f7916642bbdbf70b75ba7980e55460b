@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_3f59655b",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1001592
+      },
+      "writtenOn": "2017-05-23T14:19:49Z",
+      "side": 1,
+      "message": "Probably does not, but it\u0027s detected later and error is generated",
+      "parentUuid": "5a3905b3_7a26b217",
+      "revId": "3941b7d62f7916642bbdbf70b75ba7980e55460b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_fa11c2b0",
         "filename": "basic/source/comp/scanner.cxx",
         "patchSetId": 5
@@ -93,6 +111,30 @@
       "writtenOn": "2017-05-03T13:58:24Z",
       "side": 1,
       "message": "This should yield SbxDATE instead.",
+      "range": {
+        "startLine": 555,
+        "startChar": 0,
+        "endLine": 555,
+        "endChar": 50
+      },
+      "revId": "3941b7d62f7916642bbdbf70b75ba7980e55460b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_bf3b95ea",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1001592
+      },
+      "writtenOn": "2017-05-23T14:19:49Z",
+      "side": 1,
+      "message": "When SbxDATE is returned, date must be passed in aSym and later is converted using user\u0027s locale.\nI think it\u0027s better to pass it as double because it\u0027s locale-independent.",
+      "parentUuid": "5a3905b3_5a11f6ab",
       "range": {
         "startLine": 555,
         "startChar": 0,
