@@ -7994,6 +7994,18 @@ void Test::testFuncRefListArraySUBTOTAL()
     aPos.IncRow();
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("SUBTOTAL STDEV for A1:A2,A4:A5,A5:A6 failed", 11.55422, m_pDoc->GetValue(aPos), 1e-5);
 
+    // Empty two cells such that they affect two ranges.
+    m_pDoc->SetString(0,1,0, "");   // A2
+    m_pDoc->SetString(0,2,0, "");   // A3
+    // Matrix in J7:J9, individual COUNTBLANK of A2:A3, A3:A4 and A4:A5
+    m_pDoc->InsertMatrixFormula(9, 6, 9, 8, aMark, "=COUNTBLANK(OFFSET(A1;ROW(1:3);0;2))");
+    aPos.Set(9,6,0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("COUNTBLANK for A1:A2,A2:A3,A5:A6 failed", 2.0, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("COUNTBLANK for A1:A2,A3:A4,A5:A6 failed", 1.0, m_pDoc->GetValue(aPos));
+    aPos.IncRow();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("COUNTBLANK for A1:A2,A4:A5,A5:A6 failed", 0.0, m_pDoc->GetValue(aPos));
+
     m_pDoc->DeleteTab(0);
 }
 
