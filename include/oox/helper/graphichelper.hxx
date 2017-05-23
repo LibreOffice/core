@@ -31,6 +31,7 @@
 #include <oox/helper/storagebase.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <com/sun/star/graphic/XGraphicProvider2.hpp>
 
 struct WMF_EXTERNALHEADER;
 
@@ -161,7 +162,7 @@ private:
     typedef ::std::map< OUString, css::uno::Reference< css::graphic::XGraphic > > EmbeddedGraphicMap;
 
     css::uno::Reference< css::uno::XComponentContext > mxContext;
-    css::uno::Reference< css::graphic::XGraphicProvider > mxGraphicProvider;
+    css::uno::Reference< css::graphic::XGraphicProvider2 > mxGraphicProvider;
     css::uno::Reference< css::awt::XUnitConversion > mxUnitConversion;
     css::awt::DeviceInfo maDeviceInfo; ///< Current output device info.
     SystemPalette       maSystemPalette;            ///< Maps system colors (XML tokens) to RGB color values.

@@ -34,7 +34,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/graphic/XGraphicProvider2.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
@@ -48,6 +48,7 @@
 #include <rtl/ref.hxx>
 #include <svtools/grfmgr.hxx>
 #include <vcl/dibtools.hxx>
+#include <comphelper/sequence.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -56,7 +57,7 @@ namespace {
 
 #define UNO_NAME_GRAPHOBJ_URLPREFIX                             "vnd.sun.star.GraphicObject:"
 
-class GraphicProvider : public ::cppu::WeakImplHelper< css::graphic::XGraphicProvider,
+class GraphicProvider : public ::cppu::WeakImplHelper< css::graphic::XGraphicProvider2,
                                                         css::lang::XServiceInfo >
 {
 public:
@@ -78,6 +79,9 @@ protected:
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL queryGraphicDescriptor( const css::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) override;
     virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL queryGraphic( const css::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) override;
     virtual void SAL_CALL storeGraphic( const css::uno::Reference< css::graphic::XGraphic >& Graphic, const css::uno::Sequence< css::beans::PropertyValue >& MediaProperties ) override;
+
+    // XGraphicProvider2
+    uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL queryGraphics(const uno::Sequence< uno::Sequence<beans::PropertyValue> >& MediaPropertiesSeq ) override;
 
 private:
 
@@ -430,6 +434,18 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     }
 
     return xRet;
+}
+
+uno::Sequence< uno::Reference<graphic::XGraphic> > SAL_CALL GraphicProvider::queryGraphics(const uno::Sequence< uno::Sequence<beans::PropertyValue> >& rMediaPropertiesSeq)
+{
+    std::vector< uno::Reference<graphic::XGraphic> > aRet;
+
+    for (const auto& rMediaProperties : rMediaPropertiesSeq)
+    {
+        aRet.push_back(queryGraphic(rMediaProperties));
+    }
+
+    return comphelper::containerToSequence(aRet);
 }
 
 void ImplCalculateCropRect( ::Graphic& rGraphic, const text::GraphicCrop& rGraphicCropLogic, tools::Rectangle& rGraphicCropPixel )
