@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_5fe391a3",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 888,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-05-23T12:41:07Z",
+      "side": 1,
+      "message": "nitpick: no need of extra line here",
+      "range": {
+        "startLine": 888,
+        "startChar": 0,
+        "endLine": 888,
+        "endChar": 0
+      },
+      "revId": "390d4a2fe28bebaaf46b9c420d6d02b5624c7b14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_7fee8d8c",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-05-23T12:41:07Z",
+      "side": 1,
+      "message": "indent pb here",
+      "range": {
+        "startLine": 911,
+        "startChar": 0,
+        "endLine": 912,
+        "endChar": 22
+      },
+      "revId": "390d4a2fe28bebaaf46b9c420d6d02b5624c7b14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
