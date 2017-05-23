@@ -4924,6 +4924,9 @@ void ScInterpreter::ScCountEmptyCells()
 {
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
+        const SCSIZE nMatRows = GetRefListArrayMaxSize(1);
+        // There's either one RefList and nothing else, or none.
+        ScMatrixRef xResMat = (nMatRows ? GetNewMat( 1, nMatRows) : nullptr);
         sal_uLong nMaxCount = 0, nCount = 0;
         switch (GetStackType())
         {
@@ -4937,14 +4940,16 @@ void ScInterpreter::ScCountEmptyCells()
                     nCount = 1;
             }
             break;
-            case svDoubleRef :
             case svRefList :
+            case svDoubleRef :
             {
                 ScRange aRange;
                 short nParam = 1;
+                SCSIZE nRefListArrayPos = 0;
                 size_t nRefInList = 0;
                 while (nParam-- > 0)
                 {
+                    nRefListArrayPos = nRefInList;
                     PopDoubleRef( aRange, nParam, nRefInList);
                     nMaxCount +=
                         static_cast<sal_uLong>(aRange.aEnd.Row() - aRange.aStart.Row() + 1) *
@@ -4958,12 +4963,20 @@ void ScInterpreter::ScCountEmptyCells()
                         if (!isCellContentEmpty(rCell))
                             ++nCount;
                     }
+                    if (xResMat)
+                    {
+                        xResMat->PutDouble( nMaxCount - nCount, 0, nRefListArrayPos);
+                        nMaxCount = nCount = 0;
+                    }
                 }
             }
             break;
             default : SetError(FormulaError::IllegalParameter); break;
         }
-        PushDouble(nMaxCount - nCount);
+        if (xResMat)
+            PushMatrix( xResMat);
+        else
+            PushDouble(nMaxCount - nCount);
     }
 }
 
