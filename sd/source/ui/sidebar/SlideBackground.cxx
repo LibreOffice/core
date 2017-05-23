@@ -174,6 +174,34 @@ void SlideBackground::Initialize()
         }
     }
 
+    // vcl::EnumContext aImpressOtherContext(vcl::EnumContext::Application_Impress,
+    //                                  vcl::EnumContext::Context_DrawPage);
+    // vcl::EnumContext aImpressMasterContext(vcl::EnumContext::Application_Impress,
+    //                                        vcl::EnumContext::Context_MasterPage);
+    // if ( maContext == aImpressOtherContext || maContext == aImpressMasterContext )
+    // {
+    //     maApplication = vcl::EnumContext::Application_Impress;
+    // }
+
+    DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
+    EditMode eMode = pDrawViewShell->GetEditMode();
+    if ( eMode == EditMode::MasterPage )
+    {
+        mpCloseMaster->Show();
+        mpEditMaster->Hide();
+        mpMasterSlide->Disable();
+        mpDspMasterBackground->Disable();
+        mpDspMasterObjects->Disable();
+    }
+    else
+    {
+        mpCloseMaster->Hide();
+        mpEditMaster->Show();
+        mpMasterSlide->Enable();
+        mpDspMasterBackground->Enable();
+        mpDspMasterObjects->Enable();
+    }
+
     mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(NONE));
 
     mpDspMasterBackground->SetClickHdl(LINK(this, SlideBackground, DspBackground));
@@ -314,6 +342,7 @@ void SlideBackground::addListener()
         EventMultiplexerEventId::EditViewSelection |
         EventMultiplexerEventId::EndTextEdit |
         EventMultiplexerEventId::ViewAdded);
+
 }
 
 void SlideBackground::removeListener()
@@ -325,6 +354,18 @@ void SlideBackground::removeListener()
 IMPL_LINK(SlideBackground, EventMultiplexerListener,
                 tools::EventMultiplexerEvent&, rEvent, void)
 {
+    vcl::EnumContext aDrawOtherContext(vcl::EnumContext::Application_Draw,
+                                  vcl::EnumContext::Context_DrawPage);
+    vcl::EnumContext aDrawMasterContext(vcl::EnumContext::Application_Draw,
+                                  vcl::EnumContext::Context_MasterPage);
+    vcl::EnumContext aImpressOtherContext(vcl::EnumContext::Application_Impress,
+                                     vcl::EnumContext::Context_DrawPage);
+    vcl::EnumContext aImpressMasterContext(vcl::EnumContext::Application_Impress,
+                                           vcl::EnumContext::Context_MasterPage);
+    if ( maContext == aImpressOtherContext || maContext == aImpressMasterContext )
+    {
+        maApplication = vcl::EnumContext::Application_Impress;
+    }
     switch (rEvent.meEventId)
     {
         // add more events as per requirement
@@ -400,14 +441,6 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
         {
             if(!mbTitle)
             {
-                vcl::EnumContext aDrawOtherContext(vcl::EnumContext::Application_Draw,
-                                              vcl::EnumContext::Context_DrawPage);
-                vcl::EnumContext aDrawMasterContext(vcl::EnumContext::Application_Draw,
-                                              vcl::EnumContext::Context_MasterPage);
-                vcl::EnumContext aImpressOtherContext(vcl::EnumContext::Application_Impress,
-                                                 vcl::EnumContext::Context_DrawPage);
-                vcl::EnumContext aImpressMasterContext(vcl::EnumContext::Application_Impress,
-                                                       vcl::EnumContext::Context_MasterPage);
                 if(maContext == aDrawOtherContext || maContext == aDrawMasterContext)
                 {
                     mpMasterLabel->SetText(SD_RESSTR(STR_MASTERPAGE_NAME));
