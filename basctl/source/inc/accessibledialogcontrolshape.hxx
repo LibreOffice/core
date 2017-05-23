@@ -27,7 +27,6 @@
 #include <vcl/vclptr.hxx>
 
 namespace vcl { class Window; }
-class VCLExternalSolarLock;
 
 namespace utl {
     class AccessibleStateSetHelper;
@@ -53,7 +52,6 @@ class AccessibleDialogControlShape :    public comphelper::OAccessibleExtendedCo
     friend class AccessibleDialogWindow;
 
 private:
-    VCLExternalSolarLock*   m_pExternalLock;
     VclPtr<DialogWindow>    m_pDialogWindow;
     DlgEdObj*               m_pDlgEdObj;
     bool                    m_bFocused;

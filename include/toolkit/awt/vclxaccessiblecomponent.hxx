@@ -50,8 +50,6 @@ class AccessibleStateSetHelper;
 typedef ::cppu::ImplHelper1<
     css::lang::XServiceInfo > VCLXAccessibleComponent_BASE;
 
-class VCLExternalSolarLock;
-
 class TOOLKIT_DLLPUBLIC VCLXAccessibleComponent
         :public comphelper::OAccessibleExtendedComponentHelper
         ,public ::comphelper::OAccessibleImplementationAccess
@@ -60,8 +58,6 @@ class TOOLKIT_DLLPUBLIC VCLXAccessibleComponent
 private:
     rtl::Reference<VCLXWindow>      m_xVCLXWindow;
     VclPtr<vcl::Window>             m_xEventSource;
-
-    VCLExternalSolarLock*           m_pSolarLock;
 
     DECL_LINK( WindowEventListener, VclWindowEvent&, void );
     DECL_LINK( WindowChildEventListener, VclWindowEvent&, void );

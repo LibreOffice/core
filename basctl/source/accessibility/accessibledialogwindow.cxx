@@ -105,8 +105,6 @@ AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWin
     , m_pDlgEditor(nullptr)
     , m_pDlgEdModel(nullptr)
 {
-    m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
-
     if ( m_pDialogWindow )
     {
         SdrPage& rPage = m_pDialogWindow->GetPage();
@@ -143,8 +141,7 @@ AccessibleDialogWindow::~AccessibleDialogWindow()
     if ( m_pDlgEdModel )
         EndListening( *m_pDlgEdModel );
 
-    delete m_pExternalLock;
-    m_pExternalLock = nullptr;
+    delete getExternalLock();
 }
 
 
