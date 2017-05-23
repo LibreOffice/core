@@ -147,12 +147,14 @@ void NBOTypeMgrBase::SetItems(const SfxItemSet* pArg) {
     if ( pSet )
     {
         SfxAllItemSet aSet(*pSet);
-        const SfxStringItem* pBulletCharFmt = aSet.GetItem<SfxStringItem>(SID_BULLET_CHAR_FMT, false);
 
-        if ( pBulletCharFmt )
-        {
-            aNumCharFmtName =  pBulletCharFmt->GetValue();
-        }
+        const SfxStringItem* pBulletCharFmt = aSet.GetItem<SfxStringItem>(SID_BULLET_CHAR_FMT, false);
+        if (pBulletCharFmt)
+            aBulletCharFmtName = pBulletCharFmt->GetValue();
+
+        const SfxStringItem* pNumCharFmt = aSet.GetItem<SfxStringItem>(SID_NUM_CHAR_FMT, false);
+        if (pNumCharFmt)
+            aNumCharFmtName = pNumCharFmt->GetValue();
 
         const SfxPoolItem* pItem;
         SfxItemState eState = pSet->GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem);
@@ -380,7 +382,7 @@ void BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
     const vcl::Font& rActBulletFont = pActualBullets[nIndex]->aFont;
 
     sal_uInt16 nMask = 1;
-    OUString sBulletCharFormatName = GetBulCharFmtName();
+    OUString sBulletCharFormatName = GetBulletCharFmtName();
     for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
     {
         if(mLevel & nMask)
@@ -557,7 +559,7 @@ void NumberingTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uIn
     SvxNumType eNewType = _pSet->pNumSetting->nNumberType;
 
     sal_uInt16 nMask = 1;
-    OUString sNumCharFmtName = GetBulCharFmtName();
+    OUString sNumCharFmtName = GetNumCharFmtName();
     for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
     {
         if(mLevel & nMask)
@@ -824,7 +826,6 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
     NumSettingsArr_Impl *pNumSettingsArr=pItemArr->pNumSettingsArr;
 
     NumSettings_Impl* pLevelSettings = nullptr;
-    OUString sBulletCharFormatName = GetBulCharFmtName();
     for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
     {
         if(pNumSettingsArr->size() > i)
@@ -886,7 +887,7 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
             }
 
             aFmt.SetBulletChar(cChar);
-            aFmt.SetCharFormatName( sBulletCharFormatName );
+            aFmt.SetCharFormatName( GetBulletCharFmtName() );
             if (isResetSize) aFmt.SetBulletRelSize(45);
         }else if ((aFmt.GetNumberingType()&(~LINK_TOKEN)) == SVX_NUM_BITMAP ) {
             if (pLevelSettings->pBrushItem) {
@@ -905,7 +906,7 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
         } else
         {
             aFmt.SetIncludeUpperLevels(sal::static_int_cast< sal_uInt8 >(0 != nUpperLevelOrChar ? aNum.GetLevelCount() : 0));
-            aFmt.SetCharFormatName(sBulletCharFormatName);
+            aFmt.SetCharFormatName(GetNumCharFmtName());
                 if (isResetSize) aFmt.SetBulletRelSize(100);
         }
         if(pNumSettingsArr->size() > i) {

@@ -31,9 +31,11 @@
 #include "view.hxx"
 #include "viewopt.hxx"
 #include "wdocsh.hxx"
+#include "poolfmt.hxx"
 #include "textsh.hxx"
 #include "uiitems.hxx"
 #include "swabstdlg.hxx"
+#include "SwStyleNameMapper.hxx"
 #include <globals.hrc>
 #include <sfx2/tabdlg.hxx>
 #include <svx/nbdtmg.hxx>
@@ -278,9 +280,16 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
                     SvxNumRule aNewSvxNumRule = pNumRuleAtCurrentSelection != nullptr
                                                     ? pNumRuleAtCurrentSelection->MakeSvxNumRule()
                                                     : aNewNumRule.MakeSvxNumRule();
-                    // set unit attribute to NB Manager
-                    SfxItemSet aSet( GetPool(), SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL, 0 );
-                    aSet.Put( SvxNumBulletItem( aNewSvxNumRule ) );
+
+                    OUString aNumCharFormat, aBulletCharFormat;
+                    SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, aNumCharFormat );
+                    SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, aBulletCharFormat );
+
+                    SfxAllItemSet aSet( GetPool() );
+                    aSet.Put( SfxStringItem( SID_NUM_CHAR_FMT, aNumCharFormat ) );
+                    aSet.Put( SfxStringItem( SID_BULLET_CHAR_FMT, aBulletCharFormat ) );
+                    aSet.Put( SvxNumBulletItem( aNewSvxNumRule, SID_ATTR_NUMBERING_RULE ) );
+
                     pNBOTypeMgr->SetItems( &aSet );
                     pNBOTypeMgr->ApplyNumRule( aNewSvxNumRule, nChoosenItemIdx - 1, nActNumLvl );
 
