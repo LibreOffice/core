@@ -28,7 +28,7 @@ public class NoValidPathException extends Exception
         // TODO: NEVER open a dialog in an exception
         if (xMSF != null)
         {
-            SystemDialog.showErrorBox(xMSF, "dbw", 521); // OfficePathnotavailable
+            SystemDialog.showErrorBox(xMSF, "RID_COMMON_21"); // OfficePathnotavailable
         }
     }
 
@@ -38,7 +38,7 @@ public class NoValidPathException extends Exception
         // TODO: NEVER open a dialog in an exception
         if (xMSF != null)
         {
-            SystemDialog.showErrorBox(xMSF, "dbw", 521); // OfficePathnotavailable
+            SystemDialog.showErrorBox(xMSF, "RID_COMMON_21"); // OfficePathnotavailable
         }
     }
 }

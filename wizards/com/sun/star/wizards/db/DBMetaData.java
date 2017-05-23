@@ -131,7 +131,6 @@ public class DBMetaData
     private int iMaxTableNameLength = -1;
     private boolean bPasswordIsRequired;
     private static final int NOLIMIT = 9999999;
-    protected static final int RID_DB_COMMON = 1000;
     private static final int INVALID = 9999999;
     public TypeInspector oTypeInspector;
     private NumberFormatter oNumberFormatter = null;
@@ -598,7 +597,7 @@ public class DBMetaData
 
     private boolean getConnection(XDataSource _dataSource)
     {
-        Resource oResource = new Resource(xMSF, "dbw");
+        Resource oResource = new Resource(xMSF);
         try
         {
             int iMsg = 0;
@@ -632,7 +631,7 @@ public class DBMetaData
                     catch (Exception exception)
                     {
                         // Note:  WindowAttributes from toolkit/source/awt/vclxtoolkit.cxx
-                        String sMsgNoConnection = oResource.getResText(RID_DB_COMMON + 14);
+                        String sMsgNoConnection = oResource.getResText("RID_DB_COMMON_14");
                         iMsg = showMessageBox("QueryBox", VclWindowPeerAttribute.RETRY_CANCEL, sMsgNoConnection);
                         bExitLoop = iMsg == 0;
                         bgetConnection = false;
@@ -642,7 +641,7 @@ public class DBMetaData
             }
             if (!bgetConnection)
             {
-                String sMsgConnectionImpossible = oResource.getResText(RID_DB_COMMON + 35);
+                String sMsgConnectionImpossible = oResource.getResText("RID_DB_COMMON_35");
                 showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sMsgConnectionImpossible);
             }
             else
@@ -655,7 +654,7 @@ public class DBMetaData
         }
         catch (Exception e)
         {
-            String sMsgConnectionImpossible = oResource.getResText(RID_DB_COMMON + 35);
+            String sMsgConnectionImpossible = oResource.getResText("RID_DB_COMMON_35");
             showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sMsgConnectionImpossible);
             Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
             return false;

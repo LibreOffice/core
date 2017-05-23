@@ -43,10 +43,10 @@ public class Finalizer
         this.CurUnoDialog = _CurUnoDialog;
         short curtabindex = (short) (FormWizard.SOSTORE_PAGE * 100);
 
-        String slblFormName = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 50);
-        String slblProceed = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 51);
-        String sWorkWithForm = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 52);
-        String sModifyForm = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 53);
+        String slblFormName = CurUnoDialog.m_oResource.getResText("RID_FORM_50");
+        String slblProceed = CurUnoDialog.m_oResource.getResText("RID_FORM_51");
+        String sWorkWithForm = CurUnoDialog.m_oResource.getResText("RID_FORM_52");
+        String sModifyForm = CurUnoDialog.m_oResource.getResText("RID_FORM_53");
         CurUnoDialog.insertLabel("lblFormName",
                 new String[]
                 {

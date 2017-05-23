@@ -52,12 +52,12 @@ public class Finalizer
         String reslblHowGoOn;
         this.m_queryWizard = i_queryWizard;
         this.CurDBMetaData = _CurDBMetaData;
-        reslblQueryTitle = m_queryWizard.m_oResource.getResText(UIConsts.RID_QUERY + 5);
-        resoptDisplayQuery = m_queryWizard.m_oResource.getResText(UIConsts.RID_QUERY + 6);
-        resoptModifyQuery = m_queryWizard.m_oResource.getResText(UIConsts.RID_QUERY + 7);
-        resflnSummary = m_queryWizard.m_oResource.getResText(UIConsts.RID_QUERY + 87);
-        reslblHowGoOn = m_queryWizard.m_oResource.getResText(UIConsts.RID_QUERY + 8);
-        resQuery = m_queryWizard.m_oResource.getResText(UIConsts.RID_QUERY + 1);
+        reslblQueryTitle = m_queryWizard.m_oResource.getResText("RID_QUERY_5");
+        resoptDisplayQuery = m_queryWizard.m_oResource.getResText("RID_QUERY_6");
+        resoptModifyQuery = m_queryWizard.m_oResource.getResText("RID_QUERY_7");
+        resflnSummary = m_queryWizard.m_oResource.getResText("RID_QUERY_87");
+        reslblHowGoOn = m_queryWizard.m_oResource.getResText("RID_QUERY_8");
+        resQuery = m_queryWizard.m_oResource.getResText("RID_QUERY_1");
         int curHelpIndex = 40955;
 
         m_queryWizard.insertLabel("lblQueryTitle", new String[]

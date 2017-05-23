@@ -41,7 +41,7 @@ public class FieldLinker extends DBLimitedFieldSelection
     private XListBox[] lstMasterFields;
     private int[] SOLINKLST = null;
     private String[] sSlaveListHeader;
-    private String[] sMasterListHeader; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
+    private String[] sMasterListHeader; //CurUnoDialog.m_oResource.getResText("RID_FORM_40");
 
     public FieldLinker(WizardDialog _CurUnoDialog, int iStep, int iCompPosY, int _firsthelpid)
     {
@@ -63,8 +63,16 @@ public class FieldLinker extends DBLimitedFieldSelection
                 int SOSECLINKLST = 1;
                 int SOTHIRDLINKLST = 2;
                 int SOFOURTHLINKLST = 3;
-                sSlaveListHeader = CurUnoDialog.m_oResource.getResArray(UIConsts.RID_FORM + 20, 4); //new String[rowcount];PropertyNames.EMPTY_STRING; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
-                sMasterListHeader = CurUnoDialog.m_oResource.getResArray(UIConsts.RID_FORM + 24, 4);// new String[rowcount];PropertyNames.EMPTY_STRING; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
+                sSlaveListHeader = new String[4]; //new String[rowcount];PropertyNames.EMPTY_STRING; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
+                sSlaveListHeader[0] = CurUnoDialog.m_oResource.getResText("RID_FORM_20");
+                sSlaveListHeader[1] = CurUnoDialog.m_oResource.getResText("RID_FORM_21");
+                sSlaveListHeader[2] = CurUnoDialog.m_oResource.getResText("RID_FORM_22");
+                sSlaveListHeader[3] = CurUnoDialog.m_oResource.getResText("RID_FORM_23");
+                sMasterListHeader = new String[4]; // new String[rowcount];PropertyNames.EMPTY_STRING; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
+                sMasterListHeader[0] = CurUnoDialog.m_oResource.getResText("RID_FORM_24");
+                sMasterListHeader[1] = CurUnoDialog.m_oResource.getResText("RID_FORM_25");
+                sMasterListHeader[2] = CurUnoDialog.m_oResource.getResText("RID_FORM_26");
+                sMasterListHeader[3] = CurUnoDialog.m_oResource.getResText("RID_FORM_27");
                 SOLINKLST = new int[]
                         {
                                 SOFIRSTLINKLST, SOSECLINKLST, SOTHIRDLINKLST, SOFOURTHLINKLST
@@ -264,7 +272,7 @@ public class FieldLinker extends DBLimitedFieldSelection
         int iduplicate = JavaTools.getDuplicateFieldIndex(LinkFieldNames);
         if (iduplicate != -1)
         {
-            String sLinkFieldsAreDuplicate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 19);
+            String sLinkFieldsAreDuplicate = CurUnoDialog.m_oResource.getResText("RID_FORM_19");
             String sLocLinkFieldsAreDuplicate = JavaTools.replaceSubString(sLinkFieldsAreDuplicate, LinkFieldNames[0][iduplicate], "<FIELDNAME1>");
             sLocLinkFieldsAreDuplicate = JavaTools.replaceSubString(sLocLinkFieldsAreDuplicate, LinkFieldNames[1][iduplicate], "<FIELDNAME2>");
             CurUnoDialog.setCurrentStep(FormWizard.SOFIELDLINKER_PAGE);

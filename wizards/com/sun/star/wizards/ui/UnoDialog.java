@@ -761,9 +761,9 @@ public class UnoDialog
         }
     }
 
-    public void addResourceHandler(String _Module)
+    public void addResourceHandler()
     {
-        m_oResource = new Resource(xMSF, _Module);
+        m_oResource = new Resource(xMSF);
     }
 
     public static short setInitialTabindex(int _istep)

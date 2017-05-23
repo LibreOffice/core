@@ -71,8 +71,8 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     {
         super(xMSF);
         hid = hid_;
-        oWizardResource = new Resource(xMSF, "dbw");
-        oWizardResource.getResText(UIConsts.RID_DB_COMMON + 33);
+        oWizardResource = new Resource(xMSF);
+        oWizardResource.getResText("RID_DB_COMMON_33");
     }
 
     @Override
@@ -220,7 +220,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                 }
             });
 
-            Helper.setUnoPropertyValue(oRoadmap, "Text", oWizardResource.getResText(UIConsts.RID_COMMON + 16));
+            Helper.setUnoPropertyValue(oRoadmap, "Text", oWizardResource.getResText("RID_COMMON_16"));
         }
         catch (java.lang.Exception jexception)
         {
@@ -228,9 +228,12 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
     }
 
-    public void setRMItemLabels(Resource _oResource, int StartResID)
+    public void setRMItemLabels(Resource _oResource)
     {
-        sRMItemLabels = _oResource.getResArray(StartResID, nMaxStep);
+        sRMItemLabels = new String[nMaxStep];
+        for (int i = 0; i < nMaxStep; ++i) {
+            sRMItemLabels[i] = _oResource.getResText("RID_QUERY_" + String.valueOf(i + 80));
+        }
     }
 
     public int insertRoadmapItem(int _Index, boolean _bEnabled, int _LabelID, int _CurItemID)
@@ -383,7 +386,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     },
                     new Object[]
                     {
-                        true, IButtonHeight, oWizardResource.getResText(UIConsts.RID_COMMON + 15), Integer.valueOf(iHelpPosX), Integer.valueOf(iBtnPosY), Short.valueOf((short) PushButtonType.HELP_value), ICurStep, Short.valueOf(curtabindex++), IButtonWidth
+                        true, IButtonHeight, oWizardResource.getResText("RID_COMMON_15"), Integer.valueOf(iHelpPosX), Integer.valueOf(iBtnPosY), Short.valueOf((short) PushButtonType.HELP_value), ICurStep, Short.valueOf(curtabindex++), IButtonWidth
                     });
             insertButton("btnWizardBack", new XActionListenerAdapter() {
                         @Override
@@ -393,7 +396,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     }, propNames,
                     new Object[]
                     {
-                        false, IButtonHeight, HelpIds.getHelpIdString(hid + 2), oWizardResource.getResText(UIConsts.RID_COMMON + 13), Integer.valueOf(iBackPosX), Integer.valueOf(iBtnPosY), Short.valueOf((short) PushButtonType.STANDARD_value), ICurStep, Short.valueOf(curtabindex++), IButtonWidth
+                        false, IButtonHeight, HelpIds.getHelpIdString(hid + 2), oWizardResource.getResText("RID_COMMON_13"), Integer.valueOf(iBackPosX), Integer.valueOf(iBtnPosY), Short.valueOf((short) PushButtonType.STANDARD_value), ICurStep, Short.valueOf(curtabindex++), IButtonWidth
                     });
 
             insertButton("btnWizardNext", new XActionListenerAdapter() {
@@ -404,7 +407,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     }, propNames,
                     new Object[]
                     {
-                        true, IButtonHeight, HelpIds.getHelpIdString(hid + 3), oWizardResource.getResText(UIConsts.RID_COMMON + 14), Integer.valueOf(iNextPosX), Integer.valueOf(iBtnPosY), Short.valueOf((short) PushButtonType.STANDARD_value), ICurStep, Short.valueOf(curtabindex++), IButtonWidth
+                        true, IButtonHeight, HelpIds.getHelpIdString(hid + 3), oWizardResource.getResText("RID_COMMON_14"), Integer.valueOf(iNextPosX), Integer.valueOf(iBtnPosY), Short.valueOf((short) PushButtonType.STANDARD_value), ICurStep, Short.valueOf(curtabindex++), IButtonWidth
                     });
 
             insertButton("btnWizardFinish", new XActionListenerAdapter() {
@@ -415,7 +418,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     }, propNames,
                     new Object[]
                     {
-                        true, IButtonHeight, HelpIds.getHelpIdString(hid + 4), oWizardResource.getResText(UIConsts.RID_COMMON + 12), Integer.valueOf(iFinishPosX), Integer.valueOf(iBtnPosY), Short.valueOf((short) PushButtonType.STANDARD_value), ICurStep, Short.valueOf(curtabindex++), IButtonWidth
+                        true, IButtonHeight, HelpIds.getHelpIdString(hid + 4), oWizardResource.getResText("RID_COMMON_12"), Integer.valueOf(iFinishPosX), Integer.valueOf(iBtnPosY), Short.valueOf((short) PushButtonType.STANDARD_value), ICurStep, Short.valueOf(curtabindex++), IButtonWidth
                     });
 
             insertButton("btnWizardCancel", new XActionListenerAdapter() {
@@ -426,7 +429,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     }, propNames,
                     new Object[]
                     {
-                        true, IButtonHeight, HelpIds.getHelpIdString(hid + 5), oWizardResource.getResText(UIConsts.RID_COMMON + 11), Integer.valueOf(iCancelPosX), Integer.valueOf(iBtnPosY), Short.valueOf((short) PushButtonType.STANDARD_value), ICurStep, Short.valueOf(curtabindex++), IButtonWidth
+                        true, IButtonHeight, HelpIds.getHelpIdString(hid + 5), oWizardResource.getResText("RID_COMMON_11"), Integer.valueOf(iCancelPosX), Integer.valueOf(iBtnPosY), Short.valueOf((short) PushButtonType.STANDARD_value), ICurStep, Short.valueOf(curtabindex++), IButtonWidth
                     });
 
             setControlProperty("btnWizardNext", "DefaultButton", Boolean.TRUE);
@@ -602,9 +605,12 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         changeToStep(nNewStep);
     }
 
-    public void setRightPaneHeaders(Resource _oResource, int StartResID, int _nMaxStep)
+    public void setRightPaneHeaders(Resource _oResource, String ResNameBase, int StartResID, int _nMaxStep)
     {
-        String[] sRightPaneHeaders = _oResource.getResArray(StartResID, _nMaxStep);
+        String[] sRightPaneHeaders = new String[_nMaxStep];
+        for (int i = 0; i < nMaxStep; ++i) {
+            sRightPaneHeaders[i] = _oResource.getResText(ResNameBase + String.valueOf(i + StartResID));
+        }
         setRightPaneHeaders(sRightPaneHeaders);
     }
 

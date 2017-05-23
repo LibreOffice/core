@@ -29,11 +29,11 @@ import com.sun.star.awt.XMessageBox;
 public class SystemDialog
 {
 
-    public static int showErrorBox(XMultiServiceFactory xMSF, String ResPrefix, int ResID, String AddTag, String AddString)
+    public static int showErrorBox(XMultiServiceFactory xMSF, String ResID, String AddTag, String AddString)
     {
         Resource oResource;
         String ProductName = Configuration.getProductName(xMSF);
-        oResource = new Resource(xMSF, ResPrefix);
+        oResource = new Resource(xMSF);
         String sErrorMessage = oResource.getResText(ResID);
         sErrorMessage = JavaTools.replaceSubString(sErrorMessage, ProductName, "%PRODUCTNAME");
         sErrorMessage = JavaTools.replaceSubString(sErrorMessage, String.valueOf((char) 13), "<BR>");
@@ -41,11 +41,11 @@ public class SystemDialog
         return SystemDialog.showMessageBox(xMSF, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sErrorMessage);
     }
 
-    public static int showErrorBox(XMultiServiceFactory xMSF, String ResPrefix, int ResID)
+    public static int showErrorBox(XMultiServiceFactory xMSF, String ResID)
     {
         Resource oResource;
         String ProductName = Configuration.getProductName(xMSF);
-        oResource = new Resource(xMSF, ResPrefix);
+        oResource = new Resource(xMSF);
         String sErrorMessage = oResource.getResText(ResID);
         sErrorMessage = JavaTools.replaceSubString(sErrorMessage, ProductName, "%PRODUCTNAME");
         sErrorMessage = JavaTools.replaceSubString(sErrorMessage, String.valueOf((char) 13), "<BR>");

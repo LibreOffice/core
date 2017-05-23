@@ -71,7 +71,7 @@ public class QueryWizard extends DatabaseObjectWizard
     public QueryWizard(XMultiServiceFactory xMSF, PropertyValue[] i_wizardContext)
     {
         super(xMSF, 40970, i_wizardContext);
-        addResourceHandler("dbw");
+        addResourceHandler();
         m_DBMetaData = new QuerySummary(xMSF, m_oResource);
     }
 
@@ -91,14 +91,14 @@ public class QueryWizard extends DatabaseObjectWizard
         {
             if (m_DBMetaData.getConnection(m_wizardContext))
             {
-                reslblFields = m_oResource.getResText(UIConsts.RID_QUERY + 4);
-                reslblFieldHeader = m_oResource.getResText(UIConsts.RID_QUERY + 19); //Fielnames in  AliasComponent
-                reslblAliasHeader = m_oResource.getResText(UIConsts.RID_QUERY + 20); //Fieldtitles header in  AliasComponent
-                reslblSelFields = m_oResource.getResText(UIConsts.RID_QUERY + 50);
-                reslblTables = m_oResource.getResText(UIConsts.RID_QUERY + 3);
-                reslblGroupBy = m_oResource.getResText(UIConsts.RID_QUERY + 18);
-                String resQueryWizard = m_oResource.getResText(UIConsts.RID_QUERY + 2);
-                resmsgNonNumericAsGroupBy = m_oResource.getResText(UIConsts.RID_QUERY + 88);
+                reslblFields = m_oResource.getResText("RID_QUERY_4");
+                reslblFieldHeader = m_oResource.getResText("RID_QUERY_19"); //Fielnames in  AliasComponent
+                reslblAliasHeader = m_oResource.getResText("RID_QUERY_20"); //Fieldtitles header in  AliasComponent
+                reslblSelFields = m_oResource.getResText("RID_QUERY_50");
+                reslblTables = m_oResource.getResText("RID_QUERY_3");
+                reslblGroupBy = m_oResource.getResText("RID_QUERY_18");
+                String resQueryWizard = m_oResource.getResText("RID_QUERY_2");
+                resmsgNonNumericAsGroupBy = m_oResource.getResText("RID_QUERY_88");
                 Helper.setUnoPropertyValues(xDialogModel, new String[]
                         {
                             PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_MOVEABLE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_TITLE, PropertyNames.PROPERTY_WIDTH
@@ -108,7 +108,7 @@ public class QueryWizard extends DatabaseObjectWizard
                             210, Boolean.TRUE, "DialogQuery", 102, 41, 1, Short.valueOf((short) 0), resQueryWizard, 310
                         });
                 drawNaviBar();
-                setRightPaneHeaders(m_oResource, UIConsts.RID_QUERY + 70, 8);
+                setRightPaneHeaders(m_oResource, "RID_QUERY_", 70, 8);
                 this.setMaxStep(8);
                 buildSteps();
                 this.m_DBCommandFieldSelectio.preselectCommand(m_wizardContext, false);
@@ -192,7 +192,7 @@ public class QueryWizard extends DatabaseObjectWizard
     {
         try
         {
-            setRMItemLabels(m_oResource, UIConsts.RID_QUERY + 80);
+            setRMItemLabels(m_oResource);
             addRoadmap();
             int i = 0;
             i = insertRoadmapItem(0, true, SOFIELDSELECTION_PAGE - 1, SOFIELDSELECTION_PAGE);

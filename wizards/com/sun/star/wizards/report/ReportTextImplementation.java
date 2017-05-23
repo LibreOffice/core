@@ -131,11 +131,11 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
 
     private void initialResources()
     {
-        sReportFormNotExisting = m_resource.getResText(UIConsts.RID_REPORT + 64);
-        sMsgQueryCreationImpossible = m_resource.getResText(UIConsts.RID_REPORT + 65);
-        m_resource.getResText(UIConsts.RID_REPORT + 66);
-        sMsgEndAutopilot = m_resource.getResText(UIConsts.RID_DB_COMMON + 33);
-        m_resource.getResText(UIConsts.RID_DB_COMMON + 14);
+        sReportFormNotExisting = m_resource.getResText("RID_REPORT_64");
+        sMsgQueryCreationImpossible = m_resource.getResText("RID_REPORT_65");
+        m_resource.getResText("RID_REPORT_66");
+        sMsgEndAutopilot = m_resource.getResText("RID_DB_COMMON_33");
+        m_resource.getResText("RID_DB_COMMON_14");
     }
 
     private void addTextSectionCopies()
@@ -707,79 +707,79 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         {
           if( ContentFiles[0][i].equals("Align Left - Border") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 94);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_94");
           }
           else if( ContentFiles[0][i].equals("Align Left - Compact") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 95);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_95");
           }
           else if( ContentFiles[0][i].equals("Align Left - Elegant") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 96);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_96");
           }
           else if( ContentFiles[0][i].equals("Align Left - Highlighted") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 97);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_97");
           }
           else if( ContentFiles[0][i].equals("Align Left - Modern") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 98);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_98");
           }
           else if( ContentFiles[0][i].equals("Align Left - Red & Blue") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 99);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_99");
           }
           else if( ContentFiles[0][i].equals("Default") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 100);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_100");
           }
           else if( ContentFiles[0][i].equals("Outline - Borders") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 101);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_101");
           }
           else if( ContentFiles[0][i].equals("Outline - Compact") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 102);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_102");
           }
           else if( ContentFiles[0][i].equals("Outline - Elegant") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 103);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_103");
           }
           else if( ContentFiles[0][i].equals("Outline - Highlighted") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 104);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_104");
           }
           else if( ContentFiles[0][i].equals("Outline - Modern") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 105);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_105");
           }
           else if( ContentFiles[0][i].equals("Outline - Red & Blue") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 106);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_106");
           }
           else if( ContentFiles[0][i].equals("Outline, indented - Borders") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 107);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_107");
           }
           else if( ContentFiles[0][i].equals("Outline, indented - Compact") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 108);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_108");
           }
           else if( ContentFiles[0][i].equals("Outline, indented - Elegant") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 109);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_109");
           }
           else if( ContentFiles[0][i].equals("Outline, indented - Highlighted") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 110);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_110");
           }
           else if( ContentFiles[0][i].equals("Outline, indented - Modern") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 111);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_111");
           }
           else if( ContentFiles[0][i].equals("Outline, indented - Red & Blue") )
           {
-            ContentFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 112);
+            ContentFiles[0][i] = m_resource.getResText("RID_REPORT_112");
           }
         }
     }
@@ -790,43 +790,43 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         {
           if( LayoutFiles[0][i].equals("Bubbles") )
           {
-            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 113);
+            LayoutFiles[0][i] = m_resource.getResText("RID_REPORT_113");
           }
           else if( LayoutFiles[0][i].equals("Cinema") )
           {
-            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 114);
+            LayoutFiles[0][i] = m_resource.getResText("RID_REPORT_114");
           }
           else if( LayoutFiles[0][i].equals("Controlling") )
           {
-            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 115);
+            LayoutFiles[0][i] = m_resource.getResText("RID_REPORT_115");
           }
           else if( LayoutFiles[0][i].equals("Default") )
           {
-            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 116);
+            LayoutFiles[0][i] = m_resource.getResText("RID_REPORT_116");
           }
           else if( LayoutFiles[0][i].equals("Drafting") )
           {
-            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 117);
+            LayoutFiles[0][i] = m_resource.getResText("RID_REPORT_117");
           }
           else if( LayoutFiles[0][i].equals("Finances") )
           {
-            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 118);
+            LayoutFiles[0][i] = m_resource.getResText("RID_REPORT_118");
           }
           else if( LayoutFiles[0][i].equals("Flipchart") )
           {
-            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 119);
+            LayoutFiles[0][i] = m_resource.getResText("RID_REPORT_119");
           }
           else if( LayoutFiles[0][i].equals("Formal with Company Logo") )
           {
-            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 120);
+            LayoutFiles[0][i] = m_resource.getResText("RID_REPORT_120");
           }
           else if( LayoutFiles[0][i].equals("Generic") )
           {
-            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 121);
+            LayoutFiles[0][i] = m_resource.getResText("RID_REPORT_121");
           }
           else if( LayoutFiles[0][i].equals("Worldmap") )
           {
-            LayoutFiles[0][i] = m_resource.getResText(UIConsts.RID_REPORT + 122);
+            LayoutFiles[0][i] = m_resource.getResText("RID_REPORT_122");
           }
         }
     }

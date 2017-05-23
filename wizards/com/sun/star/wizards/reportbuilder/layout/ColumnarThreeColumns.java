@@ -38,7 +38,7 @@ public class ColumnarThreeColumns extends ColumnarTwoColumns
     @Override
     public String getLocalizedName()
     {
-        return getResource().getResText(UIConsts.RID_REPORT + 83);
+        return getResource().getResText("RID_REPORT_83");
     }
 
     @Override

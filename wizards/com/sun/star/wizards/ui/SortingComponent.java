@@ -129,20 +129,20 @@ public class SortingComponent
 
     private boolean getResources()
     {
-        sSortHeader[0] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 20);
-        sSortHeader[1] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 21);
-        sSortHeader[2] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 51);
-        sSortHeader[3] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 52);
-        sSortAscend[0] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 36);
-        sSortAscend[1] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 53);
-        sSortAscend[2] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 54);
-        sSortAscend[3] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 55);
-        sSortDescend[0] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 37);
-        sSortDescend[1] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 56);
-        sSortDescend[2] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 57);
-        sSortDescend[3] = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 58);
-        sSortCriteriaisduplicate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 74);
-        sNoSorting = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 8);
+        sSortHeader[0] = CurUnoDialog.m_oResource.getResText("RID_REPORT_20");
+        sSortHeader[1] = CurUnoDialog.m_oResource.getResText("RID_REPORT_21");
+        sSortHeader[2] = CurUnoDialog.m_oResource.getResText("RID_REPORT_51");
+        sSortHeader[3] = CurUnoDialog.m_oResource.getResText("RID_REPORT_52");
+        sSortAscend[0] = CurUnoDialog.m_oResource.getResText("RID_REPORT_36");
+        sSortAscend[1] = CurUnoDialog.m_oResource.getResText("RID_REPORT_53");
+        sSortAscend[2] = CurUnoDialog.m_oResource.getResText("RID_REPORT_54");
+        sSortAscend[3] = CurUnoDialog.m_oResource.getResText("RID_REPORT_55");
+        sSortDescend[0] = CurUnoDialog.m_oResource.getResText("RID_REPORT_37");
+        sSortDescend[1] = CurUnoDialog.m_oResource.getResText("RID_REPORT_56");
+        sSortDescend[2] = CurUnoDialog.m_oResource.getResText("RID_REPORT_57");
+        sSortDescend[3] = CurUnoDialog.m_oResource.getResText("RID_REPORT_58");
+        sSortCriteriaisduplicate = CurUnoDialog.m_oResource.getResText("RID_REPORT_74");
+        sNoSorting = CurUnoDialog.m_oResource.getResText("RID_REPORT_8");
         return true;
     }
 

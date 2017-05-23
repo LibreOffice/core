@@ -40,7 +40,7 @@ public class InBlocksLabelsAbove extends ColumnarTwoColumns
     @Override
     public String getLocalizedName()
     {
-        return getResource().getResText(UIConsts.RID_REPORT + 85);
+        return getResource().getResText("RID_REPORT_85");
     }
 
     @Override

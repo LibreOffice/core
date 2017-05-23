@@ -120,6 +120,11 @@ public abstract class Configuration
         return getLocale(xMSF, "org.openoffice.Setup/L10N/", "ooSetupSystemLocale");
     }
 
+    public static Locale getUILocale(XMultiServiceFactory xMSF)
+    {
+        return getLocale(xMSF, "org.openoffice.Setup/L10N/", "ooLocale");
+    }
+
     public static String[] getNodeDisplayNames(XNameAccess _xNameAccessNode)
     {
         return getNodeChildNames(_xNameAccessNode, PropertyNames.PROPERTY_NAME);

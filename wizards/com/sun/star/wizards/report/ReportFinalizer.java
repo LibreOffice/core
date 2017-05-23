@@ -47,13 +47,13 @@ public class ReportFinalizer
         this.CurReportDocument = _CurReportDocument;
         short curtabindex = (short) (ReportWizard.SOSTOREPAGE * 100);
 
-        String sSaveAsTemplate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 40);
-        String sUseTemplate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 41);
-        String sEditTemplate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 42);
-        String sSaveAsDocument = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 43);
-        String sReportTitle = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 33);
-        String slblHowProceed = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 78);
-        String slblChooseReportKind = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 79);
+        String sSaveAsTemplate = CurUnoDialog.m_oResource.getResText("RID_REPORT_40");
+        String sUseTemplate = CurUnoDialog.m_oResource.getResText("RID_REPORT_41");
+        String sEditTemplate = CurUnoDialog.m_oResource.getResText("RID_REPORT_42");
+        String sSaveAsDocument = CurUnoDialog.m_oResource.getResText("RID_REPORT_43");
+        String sReportTitle = CurUnoDialog.m_oResource.getResText("RID_REPORT_33");
+        String slblHowProceed = CurUnoDialog.m_oResource.getResText("RID_REPORT_78");
+        String slblChooseReportKind = CurUnoDialog.m_oResource.getResText("RID_REPORT_79");
 
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblTitle",
                 new String[]
@@ -250,7 +250,7 @@ public class ReportFinalizer
                 return false;
             }
         }
-        String sMsgReportDocumentNameDuplicate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 76);
+        String sMsgReportDocumentNameDuplicate = CurUnoDialog.m_oResource.getResText("RID_REPORT_76");
         String sShowMsgReportNameisDuplicate = JavaTools.replaceSubString(sMsgReportDocumentNameDuplicate, StoreName, "%REPORTNAME");
         /* int iMsg = */ CurUnoDialog.showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sShowMsgReportNameisDuplicate);
         CurUnoDialog.enableFinishButton(false);

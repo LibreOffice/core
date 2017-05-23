@@ -67,7 +67,7 @@ public class FormWizard extends DatabaseObjectWizard
     public FormWizard(XMultiServiceFactory i_servicFactory, final PropertyValue[] i_wizardContext)
     {
         super(i_servicFactory, 34400, i_wizardContext);
-        super.addResourceHandler("dbw");
+        super.addResourceHandler();
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
@@ -75,11 +75,11 @@ public class FormWizard extends DatabaseObjectWizard
                 },
                 new Object[]
                 {
-                    210, Boolean.TRUE, "DialogForm", 102, 41, 1, Short.valueOf((short) 0), m_oResource.getResText(UIConsts.RID_FORM), 310
+                    210, Boolean.TRUE, "DialogForm", 102, 41, 1, Short.valueOf((short) 0), m_oResource.getResText("RID_FORM_0"), 310
                 });
         drawNaviBar();
         getFormResources();
-        setRightPaneHeaders(m_oResource, UIConsts.RID_FORM + 90, 8);
+        setRightPaneHeaders(m_oResource, "RID_FORM_", 90, 8);
     }
 
     public static void main(String i_args[])
@@ -316,14 +316,14 @@ public class FormWizard extends DatabaseObjectWizard
     {
         addRoadmap();
         int i = 0;
-        i = insertRoadmapItem(0, true, m_oResource.getResText(UIConsts.RID_FORM + 80), SOMAIN_PAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 81), SOSUBFORM_PAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 82), SOSUBFORMFIELDS_PAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 83), SOFIELDLINKER_PAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 84), SOCONTROL_PAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 85), SODATA_PAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 86), SOSTYLE_PAGE);
-        i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_FORM + 87), SOSTORE_PAGE);
+        i = insertRoadmapItem(0, true, m_oResource.getResText("RID_FORM_80"), SOMAIN_PAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText("RID_FORM_81"), SOSUBFORM_PAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText("RID_FORM_82"), SOSUBFORMFIELDS_PAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText("RID_FORM_83"), SOFIELDLINKER_PAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText("RID_FORM_84"), SOCONTROL_PAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText("RID_FORM_85"), SODATA_PAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText("RID_FORM_86"), SOSTYLE_PAGE);
+        i = insertRoadmapItem(i, false, m_oResource.getResText("RID_FORM_87"), SOSTORE_PAGE);
         setRoadmapInteractive(true);
         setRoadmapComplete(true);
         setCurrentRoadmapItemID((short) 1);
@@ -367,11 +367,11 @@ public class FormWizard extends DatabaseObjectWizard
 
     private void getFormResources()
     {
-        sShowBinaryFields = m_oResource.getResText(UIConsts.RID_FORM + 2);
-        slblTables = m_oResource.getResText(UIConsts.RID_FORM + 6);
-        slblFields = m_oResource.getResText(UIConsts.RID_FORM + 12);
-        slblSelFields = m_oResource.getResText(UIConsts.RID_FORM + 1);
-        serrFormNameexists = m_oResource.getResText(UIConsts.RID_FORM + 98);
+        sShowBinaryFields = m_oResource.getResText("RID_FORM_2");
+        slblTables = m_oResource.getResText("RID_FORM_6");
+        slblFields = m_oResource.getResText("RID_FORM_12");
+        slblSelFields = m_oResource.getResText("RID_FORM_1");
+        serrFormNameexists = m_oResource.getResText("RID_FORM_98");
     }
 
     private class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener

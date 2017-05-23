@@ -38,8 +38,8 @@ public class GroupFieldHandler extends FieldSelection
     public GroupFieldHandler(IReportDocument _CurReportDocument, WizardDialog _CurUnoDialog)
     {
         super(_CurUnoDialog, ReportWizard.SOGROUPPAGE, 95, 27, 210, 127,
-                _CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 19),
-                _CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 50), 34340, false);
+                _CurUnoDialog.m_oResource.getResText("RID_REPORT_19"),
+                _CurUnoDialog.m_oResource.getResText("RID_REPORT_50"), 34340, false);
 
         try
         {

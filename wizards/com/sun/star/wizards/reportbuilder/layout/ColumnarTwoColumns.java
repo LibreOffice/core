@@ -38,7 +38,7 @@ public class ColumnarTwoColumns extends ReportBuilderLayouter
 
     public String getLocalizedName()
     {
-        return getResource().getResText(UIConsts.RID_REPORT + 82);
+        return getResource().getResText("RID_REPORT_82");
     }
 
     @Override

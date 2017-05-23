@@ -100,7 +100,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         long lDateCorrection = oNumberFormatter.getNullDateCorrection();
         oNumberFormatter.setBooleanReportDisplayNumberFormat();
         oNumberFormatter.setNullDateCorrection(lDateCorrection);
-        sMsgCommonReportError = oResource.getResText(UIConsts.RID_REPORT + 72);
+        sMsgCommonReportError = oResource.getResText("RID_REPORT_72");
         sMsgCommonReportError = JavaTools.replaceSubString(sMsgCommonReportError, String.valueOf((char) 13), "<BR>");
         bIsCurLandscape = true;
         getReportPageStyles();

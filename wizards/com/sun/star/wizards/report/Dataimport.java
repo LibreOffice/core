@@ -42,12 +42,12 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
     public Dataimport(XMultiServiceFactory _xMSF)
     {
         super(_xMSF);
-        super.addResourceHandler("dbw");
-        sProgressDBConnection = m_oResource.getResText(UIConsts.RID_DB_COMMON + 34);
-        sProgressDataImport = m_oResource.getResText(UIConsts.RID_REPORT + 67);
-        sProgressTitle = m_oResource.getResText(UIConsts.RID_REPORT + 62);
-        m_oResource.getResText(UIConsts.RID_REPORT + 63);
-        sStop = m_oResource.getResText(UIConsts.RID_DB_COMMON + 21);
+        super.addResourceHandler();
+        sProgressDBConnection = m_oResource.getResText("RID_DB_COMMON_34");
+        sProgressDataImport = m_oResource.getResText("RID_REPORT_67");
+        sProgressTitle = m_oResource.getResText("RID_REPORT_62");
+        m_oResource.getResText("RID_REPORT_63");
+        sStop = m_oResource.getResText("RID_DB_COMMON_21");
 
     }
 
