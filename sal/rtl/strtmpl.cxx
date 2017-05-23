@@ -1157,6 +1157,9 @@ static IMPL_RTL_STRINGDATA* IMPL_RTL_STRINGNAME( ImplAlloc )( sal_Int32 nLen )
         pData->length = nLen;
         pData->buffer[nLen] = 0;
     }
+    else {
+        throw std::bad_alloc();
+    }
     return pData;
 }
 
