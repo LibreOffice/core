@@ -481,7 +481,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         TYPELIB_DANGER_GET( &pTD, type->ppMembers[ nPos ] );
         assert(pTD);
 
-        if ( typelib_TypeClass_INTERFACE_ATTRIBUTE == pTD->eTypeClass )
+        if ( pTD->eTypeClass == typelib_TypeClass_INTERFACE_ATTRIBUTE )
         {
             typelib_InterfaceAttributeTypeDescription *pAttrTD =
                 reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>( pTD );
@@ -498,7 +498,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 code = codeSnippet( code, nFunctionOffset++, nVtableOffset, false );
             }
         }
-        else if ( typelib_TypeClass_INTERFACE_METHOD == pTD->eTypeClass )
+        else if ( pTD->eTypeClass == typelib_TypeClass_INTERFACE_METHOD )
         {
             typelib_InterfaceMethodTypeDescription *pMethodTD =
                 reinterpret_cast<typelib_InterfaceMethodTypeDescription *>( pTD );

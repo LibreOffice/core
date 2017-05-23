@@ -70,7 +70,7 @@ JNI_interface_type_info::JNI_interface_type_info(
     JNI_context const & jni, typelib_TypeDescription * td_ )
     : JNI_type_info( jni, td_ )
 {
-    assert( typelib_TypeClass_INTERFACE == m_td.get()->eTypeClass );
+    assert( m_td.get()->eTypeClass == typelib_TypeClass_INTERFACE );
 
     OUString const & uno_name = OUString::unacquired( &m_td.get()->pTypeName );
     JNI_info const * jni_info = jni.get_info();
@@ -115,8 +115,8 @@ JNI_interface_type_info::JNI_interface_type_info(
 
                 OStringBuffer sig_buf( 64 );
 
-                if (typelib_TypeClass_INTERFACE_METHOD ==
-                      member_td.get()->eTypeClass) // method
+                if (member_td.get()->eTypeClass ==
+                      typelib_TypeClass_INTERFACE_METHOD) // method
                 {
                     typelib_InterfaceMethodTypeDescription * method_td =
                         reinterpret_cast<
@@ -145,14 +145,14 @@ JNI_interface_type_info::JNI_interface_type_info(
                         static_cast<jclass>(jo_class.get()), method_name.getStr(),
                         method_signature.getStr() );
                     jni.ensure_no_exception();
-                    assert( nullptr != m_methods[ nMethodIndex ] );
+                    assert( m_methods[ nMethodIndex ] != nullptr );
                     ++nMethodIndex;
                 }
                 else // attribute
                 {
                     assert(
-                        typelib_TypeClass_INTERFACE_ATTRIBUTE ==
-                          member_td.get()->eTypeClass );
+                        member_td.get()->eTypeClass ==
+                          typelib_TypeClass_INTERFACE_ATTRIBUTE );
                     typelib_InterfaceAttributeTypeDescription * attribute_td =
                         reinterpret_cast<
                           typelib_InterfaceAttributeTypeDescription * >(
@@ -183,7 +183,7 @@ JNI_interface_type_info::JNI_interface_type_info(
                         static_cast<jclass>(jo_class.get()), method_name.getStr(),
                         method_signature.getStr() );
                     jni.ensure_no_exception();
-                    assert( nullptr != m_methods[ nMethodIndex ] );
+                    assert( m_methods[ nMethodIndex ] != nullptr );
                     ++nMethodIndex;
                     if (! attribute_td->bReadOnly)
                     {
@@ -203,7 +203,7 @@ JNI_interface_type_info::JNI_interface_type_info(
                             static_cast<jclass>(jo_class.get()), method_name.getStr(),
                             method_signature.getStr() );
                         jni.ensure_no_exception();
-                        assert( nullptr != m_methods[ nMethodIndex ] );
+                        assert( m_methods[ nMethodIndex ] != nullptr );
                         ++nMethodIndex;
                     }
                 }
@@ -235,8 +235,8 @@ JNI_compound_type_info::JNI_compound_type_info(
       m_exc_ctor( nullptr ),
       m_fields( nullptr )
 {
-    assert( typelib_TypeClass_STRUCT == m_td.get()->eTypeClass ||
-                typelib_TypeClass_EXCEPTION == m_td.get()->eTypeClass );
+    assert( m_td.get()->eTypeClass == typelib_TypeClass_STRUCT ||
+                m_td.get()->eTypeClass == typelib_TypeClass_EXCEPTION );
     typelib_CompoundTypeDescription * td =
         reinterpret_cast< typelib_CompoundTypeDescription * >( m_td.get() );
 
@@ -260,13 +260,13 @@ JNI_compound_type_info::JNI_compound_type_info(
 
     JNI_info const * jni_info = jni.get_info();
 
-    if (typelib_TypeClass_EXCEPTION == m_td.get()->eTypeClass)
+    if (m_td.get()->eTypeClass == typelib_TypeClass_EXCEPTION)
     {
         // retrieve exc ctor( msg )
         m_exc_ctor = jni->GetMethodID(
             static_cast<jclass>(jo_class.get()), "<init>", "(Ljava/lang/String;)V" );
         jni.ensure_no_exception();
-        assert( nullptr != m_exc_ctor );
+        assert( m_exc_ctor != nullptr );
     }
 
     // retrieve info for base type
@@ -277,7 +277,7 @@ JNI_compound_type_info::JNI_compound_type_info(
         ? nullptr
         : reinterpret_cast< typelib_TypeDescription * >(
             td->pBaseTypeDescription );
-    m_base = (nullptr == base_td ? nullptr : jni_info->get_type_info( jni, base_td ));
+    m_base = (base_td == nullptr ? nullptr : jni_info->get_type_info( jni, base_td ));
 
     try
     {
@@ -295,7 +295,7 @@ JNI_compound_type_info::JNI_compound_type_info(
             m_fields[ 1 ] = jni->GetFieldID(
                 static_cast<jclass>(jo_class.get()), "Context", "Ljava/lang/Object;" );
             jni.ensure_no_exception();
-            assert( nullptr != m_fields[ 1 ] );
+            assert( m_fields[ 1 ] != nullptr );
         }
         else
         {
@@ -328,7 +328,7 @@ JNI_compound_type_info::JNI_compound_type_info(
                     static_cast<jclass>(jo_class.get()), member_name.getStr(),
                     sig.getStr() );
                 jni.ensure_no_exception();
-                assert( nullptr != m_fields[ nPos ] );
+                assert( m_fields[ nPos ] != nullptr );
             }
         }
     }
@@ -372,7 +372,7 @@ JNI_type_info const * JNI_info::create_type_info(
     JNI_type_info * info;
     ClearableMutexGuard guard( m_mutex );
     JNI_type_info_holder & holder = m_type_map[ uno_name ];
-    if (nullptr == holder.m_info) // new insertion
+    if (holder.m_info == nullptr) // new insertion
     {
         holder.m_info = new_info;
         guard.clear();
@@ -539,162 +539,162 @@ JNI_info::JNI_info(
     m_method_Object_toString = jni->GetMethodID(
         static_cast<jclass>(jo_Object.get()), "toString", "()Ljava/lang/String;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_Object_toString );
+    assert( m_method_Object_toString != nullptr );
     // method Class.getName()
     m_method_Class_getName = jni->GetMethodID(
         static_cast<jclass>(jo_Class.get()), "getName", "()Ljava/lang/String;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_Class_getName );
+    assert( m_method_Class_getName != nullptr );
 
     // method Throwable.getMessage()
     m_method_Throwable_getMessage = jni->GetMethodID(
         static_cast<jclass>(jo_Throwable.get()), "getMessage", "()Ljava/lang/String;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_Throwable_getMessage );
+    assert( m_method_Throwable_getMessage != nullptr );
 
     // method Character.charValue()
     m_method_Character_charValue = jni->GetMethodID(
         static_cast<jclass>(jo_Character.get()), "charValue", "()C" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_Character_charValue );
+    assert( m_method_Character_charValue != nullptr );
     // method Boolean.booleanValue()
     m_method_Boolean_booleanValue = jni->GetMethodID(
         static_cast<jclass>(jo_Boolean.get()), "booleanValue", "()Z" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_Boolean_booleanValue );
+    assert( m_method_Boolean_booleanValue != nullptr );
     // method Byte.byteValue()
     m_method_Byte_byteValue = jni->GetMethodID(
         static_cast<jclass>(jo_Byte.get()), "byteValue", "()B" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_Byte_byteValue );
+    assert( m_method_Byte_byteValue != nullptr );
     // method Short.shortValue()
     m_method_Short_shortValue = jni->GetMethodID(
         static_cast<jclass>(jo_Short.get()), "shortValue", "()S" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_Short_shortValue );
+    assert( m_method_Short_shortValue != nullptr );
     // method Integer.intValue()
     m_method_Integer_intValue = jni->GetMethodID(
         static_cast<jclass>(jo_Integer.get()), "intValue", "()I" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_Integer_intValue );
+    assert( m_method_Integer_intValue != nullptr );
     // method Long.longValue()
     m_method_Long_longValue = jni->GetMethodID(
         static_cast<jclass>(jo_Long.get()), "longValue", "()J" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_Long_longValue );
+    assert( m_method_Long_longValue != nullptr );
     // method Float.floatValue()
     m_method_Float_floatValue = jni->GetMethodID(
         static_cast<jclass>(jo_Float.get()), "floatValue", "()F" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_Float_floatValue );
+    assert( m_method_Float_floatValue != nullptr );
     // method Double.doubleValue()
     m_method_Double_doubleValue = jni->GetMethodID(
         static_cast<jclass>(jo_Double.get()), "doubleValue", "()D" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_Double_doubleValue );
+    assert( m_method_Double_doubleValue != nullptr );
 
     // ctor Character( char )
     m_ctor_Character_with_char = jni->GetMethodID(
         static_cast<jclass>(jo_Character.get()), "<init>", "(C)V" );
     jni.ensure_no_exception();
-    assert( nullptr != m_ctor_Character_with_char );
+    assert( m_ctor_Character_with_char != nullptr );
     // ctor Boolean( boolean )
     m_ctor_Boolean_with_boolean = jni->GetMethodID(
         static_cast<jclass>(jo_Boolean.get()), "<init>", "(Z)V" );
     jni.ensure_no_exception();
-    assert( nullptr != m_ctor_Boolean_with_boolean );
+    assert( m_ctor_Boolean_with_boolean != nullptr );
     // ctor Byte( byte )
     m_ctor_Byte_with_byte = jni->GetMethodID(
         static_cast<jclass>(jo_Byte.get()), "<init>", "(B)V" );
     jni.ensure_no_exception();
-    assert( nullptr != m_ctor_Byte_with_byte );
+    assert( m_ctor_Byte_with_byte != nullptr );
     // ctor Short( short )
     m_ctor_Short_with_short = jni->GetMethodID(
         static_cast<jclass>(jo_Short.get()), "<init>", "(S)V" );
     jni.ensure_no_exception();
-    assert( nullptr != m_ctor_Short_with_short );
+    assert( m_ctor_Short_with_short != nullptr );
     // ctor Integer( int )
     m_ctor_Integer_with_int = jni->GetMethodID(
         static_cast<jclass>(jo_Integer.get()), "<init>", "(I)V" );
     jni.ensure_no_exception();
-    assert( nullptr != m_ctor_Integer_with_int );
+    assert( m_ctor_Integer_with_int != nullptr );
     // ctor Long( long )
     m_ctor_Long_with_long = jni->GetMethodID(
         static_cast<jclass>(jo_Long.get()), "<init>", "(J)V" );
     jni.ensure_no_exception();
-    assert( nullptr != m_ctor_Long_with_long );
+    assert( m_ctor_Long_with_long != nullptr );
     // ctor Float( float )
     m_ctor_Float_with_float = jni->GetMethodID(
         static_cast<jclass>(jo_Float.get()), "<init>", "(F)V" );
     jni.ensure_no_exception();
-    assert( nullptr != m_ctor_Float_with_float );
+    assert( m_ctor_Float_with_float != nullptr );
     // ctor Double( double )
     m_ctor_Double_with_double = jni->GetMethodID(
         static_cast<jclass>(jo_Double.get()), "<init>", "(D)V" );
     jni.ensure_no_exception();
-    assert( nullptr != m_ctor_Double_with_double );
+    assert( m_ctor_Double_with_double != nullptr );
 
     // static method UnoRuntime.generateOid()
     m_method_UnoRuntime_generateOid = jni->GetStaticMethodID(
         static_cast<jclass>(jo_UnoRuntime.get()),
         "generateOid", "(Ljava/lang/Object;)Ljava/lang/String;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_UnoRuntime_generateOid );
+    assert( m_method_UnoRuntime_generateOid != nullptr );
     // static method UnoRuntime.queryInterface()
     m_method_UnoRuntime_queryInterface = jni->GetStaticMethodID(
         static_cast<jclass>(jo_UnoRuntime.get()),
         "queryInterface",
         "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)Ljava/lang/Object;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_UnoRuntime_queryInterface );
+    assert( m_method_UnoRuntime_queryInterface != nullptr );
 
     // field Enum.m_value
     m_field_Enum_m_value = jni->GetFieldID(
         static_cast<jclass>(jo_Enum.get()), "m_value", "I" );
     jni.ensure_no_exception();
-    assert( nullptr != m_field_Enum_m_value );
+    assert( m_field_Enum_m_value != nullptr );
 
     // static method TypeClass.fromInt()
     m_method_TypeClass_fromInt = jni->GetStaticMethodID(
         static_cast<jclass>(jo_TypeClass.get()),
         "fromInt", "(I)Lcom/sun/star/uno/TypeClass;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_TypeClass_fromInt );
+    assert( m_method_TypeClass_fromInt != nullptr );
 
     // ctor Type( Class )
     m_ctor_Type_with_Class = jni->GetMethodID(
         static_cast<jclass>(jo_Type.get()), "<init>", "(Ljava/lang/Class;)V" );
     jni.ensure_no_exception();
-    assert( nullptr != m_ctor_Type_with_Class );
+    assert( m_ctor_Type_with_Class != nullptr );
     // ctor Type( String, TypeClass )
     m_ctor_Type_with_Name_TypeClass = jni->GetMethodID(
         static_cast<jclass>(jo_Type.get()),
         "<init>", "(Ljava/lang/String;Lcom/sun/star/uno/TypeClass;)V" );
     jni.ensure_no_exception();
-    assert( nullptr != m_ctor_Type_with_Name_TypeClass );
+    assert( m_ctor_Type_with_Name_TypeClass != nullptr );
     // field Type._typeName
     m_field_Type_typeName = jni->GetFieldID(
         static_cast<jclass>(jo_Type.get()), "_typeName", "Ljava/lang/String;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_field_Type_typeName );
+    assert( m_field_Type_typeName != nullptr );
 
     // ctor Any( Type, Object )
     m_ctor_Any_with_Type_Object = jni->GetMethodID(
         static_cast<jclass>(jo_Any.get()),
         "<init>", "(Lcom/sun/star/uno/Type;Ljava/lang/Object;)V" );
     jni.ensure_no_exception();
-    assert( nullptr != m_ctor_Any_with_Type_Object );
+    assert( m_ctor_Any_with_Type_Object != nullptr );
 
     // field Any._type
     m_field_Any_type = jni->GetFieldID(
         static_cast<jclass>(jo_Any.get()), "_type", "Lcom/sun/star/uno/Type;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_field_Any_type );
+    assert( m_field_Any_type != nullptr );
     // field Any._object
     m_field_Any_object = jni->GetFieldID(
         static_cast<jclass>(jo_Any.get()), "_object", "Ljava/lang/Object;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_field_Any_object );
+    assert( m_field_Any_object != nullptr );
 
     // method IEnvironment.getRegisteredInterface()
     m_method_IEnvironment_getRegisteredInterface = jni->GetMethodID(
@@ -702,21 +702,21 @@ JNI_info::JNI_info(
         "getRegisteredInterface",
         "(Ljava/lang/String;Lcom/sun/star/uno/Type;)Ljava/lang/Object;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_IEnvironment_getRegisteredInterface );
+    assert( m_method_IEnvironment_getRegisteredInterface != nullptr );
     // method IEnvironment.registerInterface()
     m_method_IEnvironment_registerInterface = jni->GetMethodID(
         static_cast<jclass>(jo_IEnvironment.get()), "registerInterface",
         "(Ljava/lang/Object;[Ljava/lang/String;Lcom/sun/star/uno/Type;)"
         "Ljava/lang/Object;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_IEnvironment_registerInterface );
+    assert( m_method_IEnvironment_registerInterface != nullptr );
 
     // static method JNI_proxy.get_proxy_ctor()
     m_method_JNI_proxy_get_proxy_ctor = jni->GetStaticMethodID(
         static_cast<jclass>(jo_JNI_proxy.get()), "get_proxy_ctor",
         "(Ljava/lang/Class;)Ljava/lang/reflect/Constructor;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_JNI_proxy_get_proxy_ctor );
+    assert( m_method_JNI_proxy_get_proxy_ctor != nullptr );
     // static method JNI_proxy.create()
     m_method_JNI_proxy_create = jni->GetStaticMethodID(
         static_cast<jclass>(jo_JNI_proxy.get()), "create",
@@ -724,38 +724,38 @@ JNI_info::JNI_info(
         "/String;Ljava/lang/reflect/Constructor;"
         "Lcom/sun/star/lib/util/AsynchronousFinalizer;)Ljava/lang/Object;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_JNI_proxy_create );
+    assert( m_method_JNI_proxy_create != nullptr );
     // field JNI_proxy.m_receiver_handle
     m_field_JNI_proxy_m_receiver_handle = jni->GetFieldID(
         static_cast<jclass>(jo_JNI_proxy.get()), "m_receiver_handle", "J" );
     jni.ensure_no_exception();
-    assert( nullptr != m_field_JNI_proxy_m_receiver_handle );
+    assert( m_field_JNI_proxy_m_receiver_handle != nullptr );
     // field JNI_proxy.m_td_handle
     m_field_JNI_proxy_m_td_handle = jni->GetFieldID(
         static_cast<jclass>(jo_JNI_proxy.get()), "m_td_handle", "J" );
     jni.ensure_no_exception();
-    assert( nullptr != m_field_JNI_proxy_m_td_handle );
+    assert( m_field_JNI_proxy_m_td_handle != nullptr );
     // field JNI_proxy.m_type
     m_field_JNI_proxy_m_type = jni->GetFieldID(
         static_cast<jclass>(jo_JNI_proxy.get()), "m_type", "Lcom/sun/star/uno/Type;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_field_JNI_proxy_m_type );
+    assert( m_field_JNI_proxy_m_type != nullptr );
     // field JNI_proxy.m_oid
     m_field_JNI_proxy_m_oid = jni->GetFieldID(
         static_cast<jclass>(jo_JNI_proxy.get()), "m_oid", "Ljava/lang/String;" );
     jni.ensure_no_exception();
-    assert( nullptr != m_field_JNI_proxy_m_oid );
+    assert( m_field_JNI_proxy_m_oid != nullptr );
 
     // ctor AsynchronousFinalizer
     m_ctor_AsynchronousFinalizer = jni->GetMethodID(
         static_cast<jclass>(jo_AsynchronousFinalizer.get()), "<init>", "()V" );
     jni.ensure_no_exception();
-    assert( nullptr != m_ctor_AsynchronousFinalizer );
+    assert( m_ctor_AsynchronousFinalizer != nullptr );
     // method AsynchronousFinalizer.drain()
     m_method_AsynchronousFinalizer_drain = jni->GetMethodID(
         static_cast<jclass>(jo_AsynchronousFinalizer.get()), "drain", "()V" );
     jni.ensure_no_exception();
-    assert( nullptr != m_method_AsynchronousFinalizer_drain );
+    assert( m_method_AsynchronousFinalizer_drain != nullptr );
 
     // get java env
     OUString java_env_type_name( UNO_LB_JAVA );
@@ -769,7 +769,7 @@ JNI_info::JNI_info(
         "(Ljava/lang/String;Ljava/lang/Object;)"
         "Lcom/sun/star/uno/IEnvironment;" );
     jni.ensure_no_exception();
-    assert( nullptr != method_getEnvironment );
+    assert( method_getEnvironment != nullptr );
     JLocalAutoRef jo_java_env(
         jni, jni->CallStaticObjectMethodA(
             static_cast<jclass>(jo_UnoRuntime.get()), method_getEnvironment, args ) );
@@ -778,7 +778,7 @@ JNI_info::JNI_info(
     jfieldID field_Any_VOID = jni->GetStaticFieldID(
         static_cast<jclass>(jo_Any.get()), "VOID", "Lcom/sun/star/uno/Any;" );
     jni.ensure_no_exception();
-    assert( nullptr != field_Any_VOID );
+    assert( field_Any_VOID != nullptr );
     JLocalAutoRef jo_Any_VOID(
         jni, jni->GetStaticObjectField(
             static_cast<jclass>(jo_Any.get()), field_Any_VOID ) );
@@ -786,7 +786,7 @@ JNI_info::JNI_info(
     jfieldID field_Type_UNSIGNED_SHORT = jni->GetStaticFieldID(
         static_cast<jclass>(jo_Type.get()), "UNSIGNED_SHORT", "Lcom/sun/star/uno/Type;" );
     jni.ensure_no_exception();
-    assert( nullptr != field_Type_UNSIGNED_SHORT );
+    assert( field_Type_UNSIGNED_SHORT != nullptr );
     JLocalAutoRef jo_Type_UNSIGNED_SHORT(
         jni, jni->GetStaticObjectField(
             static_cast<jclass>(jo_Type.get()), field_Type_UNSIGNED_SHORT ) );
@@ -794,7 +794,7 @@ JNI_info::JNI_info(
     jfieldID field_Type_UNSIGNED_LONG = jni->GetStaticFieldID(
         static_cast<jclass>(jo_Type.get()), "UNSIGNED_LONG", "Lcom/sun/star/uno/Type;" );
     jni.ensure_no_exception();
-    assert( nullptr != field_Type_UNSIGNED_LONG );
+    assert( field_Type_UNSIGNED_LONG != nullptr );
     JLocalAutoRef jo_Type_UNSIGNED_LONG(
         jni, jni->GetStaticObjectField(
             static_cast<jclass>(jo_Type.get()), field_Type_UNSIGNED_LONG ) );
@@ -802,7 +802,7 @@ JNI_info::JNI_info(
     jfieldID field_Type_UNSIGNED_HYPER = jni->GetStaticFieldID(
         static_cast<jclass>(jo_Type.get()), "UNSIGNED_HYPER", "Lcom/sun/star/uno/Type;" );
     jni.ensure_no_exception();
-    assert( nullptr != field_Type_UNSIGNED_HYPER );
+    assert( field_Type_UNSIGNED_HYPER != nullptr );
     JLocalAutoRef jo_Type_UNSIGNED_HYPER(
         jni, jni->GetStaticObjectField(
             static_cast<jclass>(jo_Type.get()), field_Type_UNSIGNED_HYPER ) );
@@ -878,7 +878,7 @@ void JNI_info::destruct( JNIEnv * jni_env )
     {
         i.second.m_info->destroy( jni_env );
     }
-    if (nullptr != m_XInterface_type_info)
+    if (m_XInterface_type_info != nullptr)
     {
         const_cast< JNI_interface_type_info * >(
             m_XInterface_type_info )->destroy( jni_env );
@@ -937,13 +937,13 @@ JNI_info const * JNI_info::get_jni_info(
         jni->GetStaticFieldID(
             static_cast<jclass>(jo_JNI_info_holder.get()), "s_jni_info_handle", "J" );
     jni.ensure_no_exception();
-    assert( nullptr != field_s_jni_info_handle );
+    assert( field_s_jni_info_handle != nullptr );
 
     JNI_info const * jni_info =
         reinterpret_cast< JNI_info const * >(
             jni->GetStaticLongField(
                 static_cast<jclass>(jo_JNI_info_holder.get()), field_s_jni_info_handle ) );
-    if (nullptr == jni_info) // un-initialized?
+    if (jni_info == nullptr) // un-initialized?
     {
         JNI_info * new_info = new JNI_info(
             jni_env, static_cast< jobject >(uno_vm->getClassLoader()), jo_class,
@@ -955,7 +955,7 @@ JNI_info const * JNI_info::get_jni_info(
                 jni->GetStaticLongField(
                     static_cast<jclass>(jo_JNI_info_holder.get()),
                     field_s_jni_info_handle ) );
-        if (nullptr == jni_info) // still un-initialized?
+        if (jni_info == nullptr) // still un-initialized?
         {
             jni->SetStaticLongField(
                 static_cast<jclass>(jo_JNI_info_holder.get()), field_s_jni_info_handle,

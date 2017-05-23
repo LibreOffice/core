@@ -38,7 +38,7 @@ jobject Bridge::map_to_java(
     // get oid
     rtl_uString * pOid = nullptr;
     (*m_uno_env->getObjectIdentifier)( m_uno_env, &pOid, pUnoI );
-    assert( nullptr != pOid );
+    assert( pOid != nullptr );
     OUString oid( pOid, SAL_NO_ACQUIRE );
 
     // opt getRegisteredInterface()
@@ -51,7 +51,7 @@ jobject Bridge::map_to_java(
         getJniInfo()->m_method_IEnvironment_getRegisteredInterface, args );
     jni.ensure_no_exception();
 
-    if (nullptr == jo_iface) // no registered iface
+    if (jo_iface == nullptr) // no registered iface
     {
         // register uno interface
         (*m_uno_env->registerInterface)(
@@ -82,14 +82,14 @@ jobject Bridge::map_to_java(
         jni.ensure_no_exception();
     }
 
-    assert( nullptr != jo_iface );
+    assert( jo_iface != nullptr );
     return jo_iface;
 }
 
 
 void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
 {
-    if (typelib_TypeClass_EXCEPTION == uno_exc->pType->eTypeClass)
+    if (uno_exc->pType->eTypeClass == typelib_TypeClass_EXCEPTION)
     {
 #if OSL_DEBUG_LEVEL > 0
         // append java stack trace to Message member
@@ -119,7 +119,7 @@ void Bridge::handle_uno_exc( JNI_context const & jni, uno_Any * uno_exc ) const
 
         JLocalAutoRef jo_exc( jni, java_exc.l );
         jint res = jni->Throw( static_cast<jthrowable>(jo_exc.get()) );
-        if (0 != res)
+        if (res != 0)
         {
             // call toString()
             JLocalAutoRef jo_descr(
@@ -186,15 +186,15 @@ jobject Bridge::call_uno(
     largest * uno_args_mem = reinterpret_cast<largest *>
         (mem + (nParams * sizeof (void *)) + return_size);
 
-    assert( (0 == nParams) || (nParams == jni->GetArrayLength( jo_args )) );
+    assert( (nParams == 0) || (nParams == jni->GetArrayLength( jo_args )) );
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
         typelib_MethodParameter const & param = pParams[ nPos ];
         typelib_TypeDescriptionReference * type = param.pTypeRef;
 
         uno_args[ nPos ] = &uno_args_mem[ nPos ];
-        if (typelib_TypeClass_STRUCT == type->eTypeClass ||
-            typelib_TypeClass_EXCEPTION == type->eTypeClass)
+        if (type->eTypeClass == typelib_TypeClass_STRUCT ||
+            type->eTypeClass == typelib_TypeClass_EXCEPTION)
         {
             TypeDescr td( type );
             if (sal::static_int_cast< sal_uInt32 >(td.get()->nSize)
@@ -238,7 +238,7 @@ jobject Bridge::call_uno(
     // call binary uno
     (*pUnoI->pDispatcher)( pUnoI, member_td, uno_ret, uno_args, &uno_exc );
 
-    if (nullptr == uno_exc)
+    if (uno_exc == nullptr)
     {
         // convert out args; destruct uno args
         for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
@@ -273,13 +273,13 @@ jobject Bridge::call_uno(
                 }
             }
             if (typelib_TypeClass_DOUBLE < type->eTypeClass &&
-                typelib_TypeClass_ENUM != type->eTypeClass) // opt
+                type->eTypeClass != typelib_TypeClass_ENUM) // opt
             {
                 uno_type_destructData( uno_args[ nPos ], type, nullptr );
             }
         }
 
-        if (typelib_TypeClass_VOID != return_type->eTypeClass)
+        if (return_type->eTypeClass != typelib_TypeClass_VOID)
         {
             // convert uno return value
             jvalue java_ret;
@@ -296,7 +296,7 @@ jobject Bridge::call_uno(
                 throw;
             }
             if (typelib_TypeClass_DOUBLE < return_type->eTypeClass &&
-                typelib_TypeClass_ENUM != return_type->eTypeClass) // opt
+                return_type->eTypeClass != typelib_TypeClass_ENUM) // opt
             {
                 uno_type_destructData( uno_ret, return_type, nullptr );
             }
@@ -381,7 +381,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
                 jstring_to_oustring( jni, static_cast<jstring>(jo_type_name.get()) ) );
             JNI_type_info const * info =
                 jni_info->get_type_info( jni, type_name );
-            if (typelib_TypeClass_INTERFACE != info->m_td.get()->eTypeClass)
+            if (info->m_td.get()->eTypeClass != typelib_TypeClass_INTERFACE)
             {
                 throw BridgeRuntimeError(
                     "queryInterface() call demands an INTERFACE type!" );
@@ -403,14 +403,14 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
             (*pUnoI->pDispatcher)(
                 pUnoI, jni_info->m_XInterface_queryInterface_td.get(),
                 &uno_ret, uno_args, &uno_exc );
-            if (nullptr == uno_exc)
+            if (uno_exc == nullptr)
             {
                 jobject jo_ret = nullptr;
-                if (typelib_TypeClass_INTERFACE == uno_ret.pType->eTypeClass)
+                if (uno_ret.pType->eTypeClass == typelib_TypeClass_INTERFACE)
                 {
                     uno_Interface * pUnoRet =
                         static_cast<uno_Interface *>(uno_ret.pReserved);
-                    if (nullptr != pUnoRet)
+                    if (pUnoRet != nullptr)
                     {
                         try
                         {
@@ -462,7 +462,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
             assert(offset < type_name.getLength());
             assert(type_name[offset - 1] == ':' );
             sal_Int32 remainder = type_name.getLength() - offset;
-            if (typelib_TypeClass_INTERFACE_METHOD == member_type->eTypeClass)
+            if (member_type->eTypeClass == typelib_TypeClass_INTERFACE_METHOD)
             {
                 if ((method_name.getLength() == remainder
                      || (method_name.getLength() < remainder
@@ -484,8 +484,8 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
             else // attribute
             {
                 assert(
-                    typelib_TypeClass_INTERFACE_ATTRIBUTE ==
-                      member_type->eTypeClass );
+                    member_type->eTypeClass ==
+                      typelib_TypeClass_INTERFACE_ATTRIBUTE );
 
                 if (method_name.getLength() >= 3
                     && (method_name.getLength() - 3 == remainder
@@ -499,7 +499,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
                         method_name.getStr() + 3,
                         method_name.getLength() - 3) == 0)
                 {
-                    if ('g' == method_name[ 0 ])
+                    if (method_name[ 0 ] == 'g')
                     {
                         TypeDescr member_td( member_type );
                         typelib_InterfaceAttributeTypeDescription * attr_td =
@@ -512,7 +512,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
                             0, nullptr,
                             jo_args );
                     }
-                    else if ('s' == method_name[ 0 ])
+                    else if (method_name[ 0 ] == 's')
                     {
                         TypeDescr member_td( member_type );
                         typelib_InterfaceAttributeTypeDescription * attr_td =
