@@ -519,6 +519,8 @@ public:
       Append a string to this string.
 
       @param    str         a OUString.
+
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
     */
     OUString & operator+=( const OUString & str )
 #if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_REF_QUALIFIER
@@ -526,6 +528,9 @@ public:
 #endif
     {
         rtl_uString_newConcat( &pData, pData, str.pData );
+        if (pData == NULL) {
+            throw std::bad_alloc();
+        }
         return *this;
     }
 #if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_REF_QUALIFIER
