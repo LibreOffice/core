@@ -1127,4 +1127,9 @@ String STR_OBJECTS_TREE
     Text [ en-US ] = "Page Tree";
 };
 
+String STR_OVERWRITE_WARNING
+{
+    Text [ en-US  ] = "The local target directory '%FILENAME' is not empty. Some files might be overwritten. Do you want to continue?";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

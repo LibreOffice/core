@@ -3097,25 +3097,13 @@ bool HtmlExport::checkForExistingFiles()
 
         if( bFound )
         {
-            ResMgr *pResMgr = ResMgr::CreateResMgr( "dbw" );
-            if( pResMgr )
-            {
-                ResId aResId( 4077, *pResMgr );
-                OUString aMsg( aResId );
-
-                OUString aSystemPath;
-                osl::FileBase::getSystemPathFromFileURL( maExportPath, aSystemPath );
-                aMsg = aMsg.replaceFirst( "%FILENAME", aSystemPath );
-                ScopedVclPtrInstance< WarningBox > aWarning( nullptr, WB_YES_NO | WB_DEF_YES, aMsg );
-                aWarning->SetImage( WarningBox::GetStandardImage() );
-                bFound = ( RET_NO == aWarning->Execute() );
-
-                delete pResMgr;
-            }
-            else
-            {
-                bFound = false;
-            }
+            OUString aSystemPath;
+            osl::FileBase::getSystemPathFromFileURL( maExportPath, aSystemPath );
+            OUString aMsg(SdResId(STR_OVERWRITE_WARNING));
+            aMsg = aMsg.replaceFirst( "%FILENAME", aSystemPath );
+            ScopedVclPtrInstance< WarningBox > aWarning( nullptr, WB_YES_NO | WB_DEF_YES, aMsg );
+            aWarning->SetImage( WarningBox::GetStandardImage() );
+            bFound = ( RET_NO == aWarning->Execute() );
         }
     }
     catch( Exception& )
