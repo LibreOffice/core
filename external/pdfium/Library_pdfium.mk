@@ -22,6 +22,7 @@ $(eval $(call gb_Library_set_include,pdfium,\
 $(eval $(call gb_Library_add_defs,pdfium,\
     -DPDFIUM_DLLIMPLEMENTATION \
     -DUSE_SYSTEM_LIBJPEG \
+    -DUSE_SYSTEM_ZLIB \
     -DUNICODE \
 ))
 
@@ -284,7 +285,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfdoc/cpvt_wordinfo \
     UnpackedTarball/pdfium/core/fpdfdoc/csection \
     UnpackedTarball/pdfium/core/fpdfdoc/ctypeset \
-    UnpackedTarball/pdfium/core/fpdfdoc/doc_tagged \
+    UnpackedTarball/pdfium/core/fpdfdoc/cpdf_structelement \
+    UnpackedTarball/pdfium/core/fpdfdoc/cpdf_structtree \
 ))
 
 # fpdftext
@@ -328,22 +330,27 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/cfx_blockbuffer \
     UnpackedTarball/pdfium/core/fxcrt/cfx_bytestring \
+    UnpackedTarball/pdfium/core/fxcrt/cfx_crtfileaccess \
+    UnpackedTarball/pdfium/core/fxcrt/cfx_memorystream \
+    UnpackedTarball/pdfium/core/fxcrt/cfx_seekablestreamproxy \
     UnpackedTarball/pdfium/core/fxcrt/cfx_widestring \
     UnpackedTarball/pdfium/core/fxcrt/fx_basic_buffer \
-    UnpackedTarball/pdfium/core/fxcrt/fx_basic_coords \
     UnpackedTarball/pdfium/core/fxcrt/fx_basic_gcc \
-    UnpackedTarball/pdfium/core/fxcrt/fx_basic_memmgr \
     UnpackedTarball/pdfium/core/fxcrt/fx_basic_utf \
     UnpackedTarball/pdfium/core/fxcrt/fx_basic_util \
     UnpackedTarball/pdfium/core/fxcrt/fx_bidi \
+    UnpackedTarball/pdfium/core/fxcrt/fx_coordinates \
     UnpackedTarball/pdfium/core/fxcrt/fx_extension \
+    UnpackedTarball/pdfium/core/fxcrt/fx_memory \
+    UnpackedTarball/pdfium/core/fxcrt/fx_stream \
+    UnpackedTarball/pdfium/core/fxcrt/fx_system \
     UnpackedTarball/pdfium/core/fxcrt/fx_ucddata \
     UnpackedTarball/pdfium/core/fxcrt/fx_unicode \
     UnpackedTarball/pdfium/core/fxcrt/fxcrt_posix \
-    UnpackedTarball/pdfium/core/fxcrt/fxcrt_stream \
     UnpackedTarball/pdfium/core/fxcrt/fxcrt_windows \
     UnpackedTarball/pdfium/core/fxcrt/xml/cxml_attritem \
     UnpackedTarball/pdfium/core/fxcrt/xml/cxml_attrmap \
+    UnpackedTarball/pdfium/core/fxcrt/xml/cxml_databufacc \
     UnpackedTarball/pdfium/core/fxcrt/xml/cxml_element \
     UnpackedTarball/pdfium/core/fxcrt/xml/cxml_parser \
 ))
