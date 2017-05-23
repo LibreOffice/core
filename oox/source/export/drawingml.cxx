@@ -1424,10 +1424,13 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
     if( CGETAD( CharUnderlineColor ) )
     {
         sal_uInt32 color = *o3tl::doAccess<sal_uInt32>(mAny);
-
-        mpFS->startElementNS( XML_a, XML_uFill,FSEND);
-        WriteSolidFill( color );
-        mpFS->endElementNS( XML_a, XML_uFill );
+        // if color is automatic, then we shouldn't write information about color
+        if( color != COL_AUTO )
+        {
+            mpFS->startElementNS( XML_a, XML_uFill, FSEND);
+            WriteSolidFill( color );
+            mpFS->endElementNS( XML_a, XML_uFill );
+        }
     }
 
     if( GETA( CharFontName ) )
