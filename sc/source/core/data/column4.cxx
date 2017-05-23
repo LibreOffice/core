@@ -14,6 +14,7 @@
 #include <document.hxx>
 #include <cellvalues.hxx>
 #include <columnspanset.hxx>
+#include <columniterator.hxx>
 #include <listenercontext.hxx>
 #include <tokenstringcontext.hxx>
 #include <mtvcellfunc.hxx>
@@ -30,6 +31,7 @@
 #include <sharedformula.hxx>
 
 #include <svl/sharedstringpool.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <vector>
 #include <cassert>
@@ -1575,6 +1577,30 @@ void ScColumn::SetNeedsListeningGroup( SCROW nRow )
     ScFormulaCell** ppEnd = pp + xGroup->mnLength;
     for (; pp != ppEnd; ++pp)
         (*pp)->SetNeedsListening(true);
+}
+
+std::unique_ptr<sc::ColumnIterator> ScColumn::GetColumnIterator( SCROW nRow1, SCROW nRow2 ) const
+{
+    if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
+        return std::unique_ptr<sc::ColumnIterator>();
+
+    return o3tl::make_unique<sc::ColumnIterator>(maCells, nRow1, nRow2);
+}
+
+void ScColumn::EnsureFormulaCellResults( SCROW nRow1, SCROW nRow2 )
+{
+    if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
+        return;
+
+    if (!HasFormulaCell(nRow1, nRow2))
+        return;
+
+    sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2,
+        []( size_t /*nRow*/, ScFormulaCell* pCell )
+        {
+            pCell->MaybeInterpret();
+        }
+    );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2597,15 +2597,25 @@ bool ScFormulaCell::IsValueNoError() const
 double ScFormulaCell::GetValue()
 {
     MaybeInterpret();
+    return GetRawValue();
+}
+
+svl::SharedString ScFormulaCell::GetString()
+{
+    MaybeInterpret();
+    return GetRawString();
+}
+
+double ScFormulaCell::GetRawValue() const
+{
     if ((pCode->GetCodeError() == FormulaError::NONE) &&
             aResult.GetResultError() == FormulaError::NONE)
         return aResult.GetDouble();
     return 0.0;
 }
 
-svl::SharedString ScFormulaCell::GetString()
+svl::SharedString ScFormulaCell::GetRawString() const
 {
-    MaybeInterpret();
     if ((pCode->GetCodeError() == FormulaError::NONE) &&
             aResult.GetResultError() == FormulaError::NONE)
         return aResult.GetString();

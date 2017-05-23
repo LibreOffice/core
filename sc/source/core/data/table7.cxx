@@ -17,6 +17,7 @@
 #include <cellvalues.hxx>
 #include "olinetab.hxx"
 #include <tabprotection.hxx>
+#include <columniterator.hxx>
 
 bool ScTable::IsMerged( SCCOL nCol, SCROW nRow ) const
 {
@@ -390,6 +391,23 @@ bool ScTable::IsEditActionAllowed(
     }
 
     return false;
+}
+
+std::unique_ptr<sc::ColumnIterator> ScTable::GetColumnIterator( SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const
+{
+    if (!ValidCol(nCol) || nCol >= aCol.size())
+        return std::unique_ptr<sc::ColumnIterator>();
+
+    return aCol[nCol].GetColumnIterator(nRow1, nRow2);
+}
+
+void ScTable::EnsureFormulaCellResults( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    if (nCol2 < nCol1 || !ValidCol(nCol1) || !ValidCol(nCol2))
+        return;
+
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        aCol[nCol].EnsureFormulaCellResults(nRow1, nRow2);
 }
 
 void ScTable::finalizeOutlineImport()

@@ -132,18 +132,37 @@ struct SC_DLLPUBLIC ScRefCellValue
 
     bool hasNumeric() const;
 
+    bool hasError() const;
+
     double getValue();
 
-    /** Retrieve string value.
+    /**
+     * Retrieve a numeric value without modifying the states of any objects in
+     * the referenced document store.
+     */
+    double getRawValue() const;
 
-        @param  pDoc
-                Needed to resolve EditCells' field contents, obtain a
-                ScFieldEditEngine from that document. May be NULL if there is
-                no ScDocument in the calling context but then the document
-                specific fields can not be resolved. See
-                ScEditUtil::GetString().
+    /**
+     *  Retrieve string value.
+     *
+     *  Note that this method is NOT thread-safe.
+     *
+     *  @param  pDoc
+     *          Needed to resolve EditCells' field contents, obtain a
+     *          ScFieldEditEngine from that document. May be NULL if there is
+     *          no ScDocument in the calling context but then the document
+     *          specific fields can not be resolved. See
+     *          ScEditUtil::GetString().
      */
     OUString getString( const ScDocument* pDoc );
+
+    /**
+     * Retrieve a string value without modifying the states of any objects in
+     * the referenced document store.
+     *
+     * This method is thread-safe.
+     */
+    OUString getRawString( const ScDocument* pDoc ) const;
 
     bool isEmpty() const;
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
 #include "dpcache.hxx"
 
 #include "document.hxx"
@@ -30,6 +29,8 @@
 #include "dpitemdata.hxx"
 #include "dputil.hxx"
 #include "dpnumgroupinfo.hxx"
+#include <columniterator.hxx>
+#include <cellvalue.hxx>
 
 #include <rtl/math.hxx>
 #include <unotools/textsearch.hxx>
@@ -105,9 +106,10 @@ private:
     ScDocument* mpDoc;
 };
 
-OUString createLabelString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
+OUString createLabelString( const ScDocument* pDoc, SCCOL nCol, const ScRefCellValue& rCell )
 {
-    OUString aDocStr = pDoc->GetString(nCol, nRow, nTab);
+    OUString aDocStr = rCell.getRawString(pDoc);
+
     if (aDocStr.isEmpty())
     {
         // Replace an empty label string with column name.
@@ -123,25 +125,24 @@ OUString createLabelString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)
 }
 
 void initFromCell(
-    ScDPCache& rCache, ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
+    ScDPCache& rCache, ScDocument* pDoc, const ScAddress& rPos,
+    const ScRefCellValue& rCell,
     ScDPItemData& rData, sal_uInt32& rNumFormat)
 {
-    OUString aDocStr = pDoc->GetString(nCol, nRow, nTab);
+    OUString aDocStr = rCell.getRawString(pDoc);
     rNumFormat = 0;
 
-    ScAddress aPos(nCol, nRow, nTab);
-
-    if (pDoc->GetErrCode(aPos) != FormulaError::NONE)
+    if (rCell.hasError())
     {
         rData.SetErrorString(rCache.InternString(aDocStr));
     }
-    else if (pDoc->HasValueData(nCol, nRow, nTab))
+    else if (rCell.hasNumeric())
     {
-        double fVal = pDoc->GetValue(aPos);
-        rNumFormat = pDoc->GetNumberFormat(aPos);
+        double fVal = rCell.getRawValue();
+        rNumFormat = pDoc->GetNumberFormat(rPos);
         rData.SetValue(fVal);
     }
-    else if (pDoc->HasData(nCol, nRow, nTab))
+    else if (!rCell.isEmpty())
     {
         rData.SetString(rCache.InternString(aDocStr));
     }
@@ -322,21 +323,33 @@ void ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 
     maLabelNames.reserve(mnColumnCount+1);
 
+    // Ensure that none of the formula cells in the data range are dirty.
+    pDoc->EnsureFormulaCellResults(rRange);
+
     ScDPItemData aData;
     for (sal_uInt16 nCol = nStartCol; nCol <= nEndCol; ++nCol)
     {
-        AddLabel(createLabelString(pDoc, nCol, nStartRow, nDocTab));
+        std::unique_ptr<sc::ColumnIterator> pIter =
+            pDoc->GetColumnIterator(nDocTab, nCol, nStartRow, nEndRow);
+        assert(pIter);
+        assert(pIter->hasCell());
+
+        AddLabel(createLabelString(pDoc, nCol, pIter->getCell()));
+        pIter->next();
+
         Field& rField = *maFields[nCol-nStartCol].get();
         std::vector<Bucket> aBuckets;
         aBuckets.reserve(nEndRow-nStartRow); // skip the topmost label cell.
 
         // Push back all original values.
-        SCROW nOffset = nStartRow + 1;
-        for (SCROW i = 0, n = nEndRow-nStartRow; i < n; ++i)
+        for (SCROW i = 0, n = nEndRow-nStartRow; i < n; ++i, pIter->next())
         {
-            SCROW nRow = i + nOffset;
+            assert(pIter->hasCell());
+
             sal_uInt32 nNumFormat = 0;
-            initFromCell(*this, pDoc, nCol, nRow, nDocTab, aData, nNumFormat);
+            ScAddress aPos(nCol, pIter->getRow(), nDocTab);
+            initFromCell(*this, pDoc, aPos, pIter->getCell(), aData, nNumFormat);
+
             aBuckets.push_back(Bucket(aData, i));
 
             if (!aData.IsEmpty())
