@@ -36,6 +36,7 @@
 #include <vcl/wmf.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/gen.hxx>
+#include <comphelper/propertysequence.hxx>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/token/properties.hxx"
@@ -261,6 +262,34 @@ Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStrea
     {
     }
     return xGraphic;
+}
+
+std::vector< uno::Reference<graphic::XGraphic> > GraphicHelper::importGraphics(const std::vector< uno::Reference<io::XInputStream> >& rStreams) const
+{
+    std::vector< uno::Reference<graphic::XGraphic> > aRet;
+
+    for (const auto& rStream : rStreams)
+    {
+        uno::Reference<graphic::XGraphic> xGraphic;
+        if (rStream.is() && mxGraphicProvider.is())
+        {
+            try
+            {
+                uno::Sequence<beans::PropertyValue > aArgs = comphelper::InitPropertySequence(
+                {
+                    {"InputStream", uno::makeAny(rStream)}
+                });
+                xGraphic = mxGraphicProvider->queryGraphic(aArgs);
+            }
+            catch( const uno::Exception& rException)
+            {
+                SAL_WARN("oox", "GraphicHelper::importGraphic: queryGraphics() failed: " << rException.Message);
+            }
+        }
+        aRet.push_back(xGraphic);
+    }
+
+    return aRet;
 }
 
 Reference< XGraphic > GraphicHelper::importGraphic( const StreamDataSequence& rGraphicData ) const

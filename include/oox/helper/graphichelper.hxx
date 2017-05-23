@@ -114,6 +114,10 @@ public:
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm,
                             const WMF_EXTERNALHEADER* pExtHeader = nullptr ) const;
 
+    /** Imports graphics from the passed input streams. */
+    std::vector< css::uno::Reference<css::graphic::XGraphic> >
+                        importGraphics(const std::vector< css::uno::Reference<css::io::XInputStream> >& rStreams) const;
+
     /** Imports a graphic from the passed binary memory block. */
     css::uno::Reference< css::graphic::XGraphic >
                         importGraphic( const StreamDataSequence& rGraphicData ) const;
