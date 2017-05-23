@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_620192ae",
+        "filename": "sfx2/source/doc/watermarkitem.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2017-05-23T22:37:05Z",
+      "side": 1,
+      "message": "The Any type doesn\u0027t hold several values, it just overwrites its value with the last one. If you need to transport several values (and don\u0027t want to introduce a UNO enum), you can use a simple Sequence\u003cPropertyValue\u003e (like in e.g. SvxSmartTagItem::QueryValue). On the other hand if you\u0027re not going to actually use it for UNO-based status updates (e.g. in a special toolbar control), you can just leave both QueryValue and PutValue methods empty.",
+      "revId": "48906a5e899e517af76e04afb5659232b336e206",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
