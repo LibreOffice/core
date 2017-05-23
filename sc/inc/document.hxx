@@ -85,6 +85,7 @@ class FormulaGroupAreaListener;
 class ColumnSet;
 class UpdatedRangeNames;
 class TableColumnBlockPositionSet;
+class ColumnIterator;
 
 }
 
@@ -2281,9 +2282,21 @@ public:
      */
     void PrepareFormulaCalc();
 
+    /**
+     * Make sure all of the formula cells in the specified range have been
+     * fully calculated.  This method only re-calculates those formula cells
+     * that have been flagged dirty.
+     *
+     * @param rRange range in which to potentially calculate the formula
+     *               cells.
+     */
+    void EnsureFormulaCellResults( const ScRange& rRange );
+
     SvtBroadcaster*         GetBroadcaster( const ScAddress& rPos );
     const SvtBroadcaster*   GetBroadcaster( const ScAddress& rPos ) const;
     void                    DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, const ScAddress& rTopPos, SCROW nLength );
+
+    std::unique_ptr<sc::ColumnIterator> GetColumnIterator( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
 
 #if DUMP_COLUMN_STORAGE
     SC_DLLPUBLIC void DumpColumnStorage( SCTAB nTab, SCCOL nCol ) const;

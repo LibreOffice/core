@@ -49,6 +49,35 @@ private:
     void checkEndRow();
 };
 
+namespace sc {
+
+/**
+ * This iterator lets you iterate over cells over specified range in a
+ * single column.  It does not modify the state of the cells, and therefore
+ * is thread safe.
+ */
+class ColumnIterator
+{
+    CellStoreType::const_position_type maPos;
+    CellStoreType::const_position_type maPosEnd;
+
+public:
+    ColumnIterator( const CellStoreType& rCells, SCROW nRow1, SCROW nRow2 );
+    ~ColumnIterator();
+
+    void next();
+
+    SCROW getRow() const;
+
+    bool hasCell() const;
+
+    mdds::mtv::element_t getType() const;
+
+    ScRefCellValue getCell() const;
+};
+
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

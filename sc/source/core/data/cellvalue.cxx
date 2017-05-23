@@ -17,6 +17,7 @@
 #include "editutil.hxx"
 #include "tokenarray.hxx"
 #include <formula/token.hxx>
+#include <formula/errorcodes.hxx>
 #include <svl/sharedstring.hxx>
 
 namespace {
@@ -172,6 +173,27 @@ OUString getStringImpl( const CellT& rCell, const ScDocument* pDoc )
         break;
         case CELLTYPE_FORMULA:
             return rCell.mpFormula->GetString().getString();
+        default:
+            ;
+    }
+    return EMPTY_OUSTRING;
+}
+
+template<typename CellT>
+OUString getRawStringImpl( const CellT& rCell, const ScDocument* pDoc )
+{
+    switch (rCell.meType)
+    {
+        case CELLTYPE_VALUE:
+            return OUString::number(rCell.mfValue);
+        case CELLTYPE_STRING:
+            return rCell.mpString->getString();
+        case CELLTYPE_EDIT:
+            if (rCell.mpEditText)
+                return ScEditUtil::GetString(*rCell.mpEditText, pDoc);
+        break;
+        case CELLTYPE_FORMULA:
+            return rCell.mpFormula->GetRawString().getString();
         default:
             ;
     }
@@ -544,6 +566,11 @@ bool ScRefCellValue::hasNumeric() const
     return hasNumericImpl(meType, mpFormula);
 }
 
+bool ScRefCellValue::hasError() const
+{
+    return meType == CELLTYPE_FORMULA && mpFormula->GetErrCode() != FormulaError::NONE;
+}
+
 double ScRefCellValue::getValue()
 {
     switch (meType)
@@ -558,9 +585,28 @@ double ScRefCellValue::getValue()
     return 0.0;
 }
 
+double ScRefCellValue::getRawValue() const
+{
+    switch (meType)
+    {
+        case CELLTYPE_VALUE:
+            return mfValue;
+        case CELLTYPE_FORMULA:
+            return mpFormula->GetRawValue();
+        default:
+            ;
+    }
+    return 0.0;
+}
+
 OUString ScRefCellValue::getString( const ScDocument* pDoc )
 {
     return getStringImpl(*this, pDoc);
+}
+
+OUString ScRefCellValue::getRawString( const ScDocument* pDoc ) const
+{
+    return getRawStringImpl(*this, pDoc);
 }
 
 bool ScRefCellValue::isEmpty() const

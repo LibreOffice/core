@@ -157,6 +157,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/markarr \
     sc/source/core/data/markdata \
     sc/source/core/data/markmulti \
+    sc/source/core/data/mtvcellfunc \
     sc/source/core/data/mtvelements \
     sc/source/core/data/olinetab \
     sc/source/core/data/pagepar \

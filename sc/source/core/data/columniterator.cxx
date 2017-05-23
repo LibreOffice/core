@@ -168,4 +168,41 @@ void ScColumnTextWidthIterator::checkEndRow()
     miBlockCur = miBlockEnd;
 }
 
+namespace sc {
+
+ColumnIterator::ColumnIterator( const CellStoreType& rCells, SCROW nRow1, SCROW nRow2 ) :
+    maPos(rCells.position(nRow1)),
+    maPosEnd(rCells.position(maPos.first, nRow2+1))
+{
+}
+
+ColumnIterator::~ColumnIterator() {}
+
+void ColumnIterator::next()
+{
+    maPos = CellStoreType::next_position(maPos);
+}
+
+SCROW ColumnIterator::getRow() const
+{
+    return CellStoreType::logical_position(maPos);
+}
+
+bool ColumnIterator::hasCell() const
+{
+    return maPos != maPosEnd;
+}
+
+mdds::mtv::element_t ColumnIterator::getType() const
+{
+    return maPos.first->type;
+}
+
+ScRefCellValue ColumnIterator::getCell() const
+{
+    return toRefCell(maPos.first, maPos.second);
+}
+
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

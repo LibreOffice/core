@@ -21,6 +21,7 @@
 #include <bcaslot.hxx>
 #include <cellvalues.hxx>
 #include <docpool.hxx>
+#include <columniterator.hxx>
 
 #include "dociter.hxx"
 #include "patattr.hxx"
@@ -902,6 +903,28 @@ bool ScDocument::IsEditActionAllowed(
     }
 
     return true;
+}
+
+std::unique_ptr<sc::ColumnIterator> ScDocument::GetColumnIterator( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return std::unique_ptr<sc::ColumnIterator>();
+
+    return pTab->GetColumnIterator(nCol, nRow1, nRow2);
+}
+
+void ScDocument::EnsureFormulaCellResults( const ScRange& rRange )
+{
+    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
+    {
+        ScTable* pTab = FetchTable(nTab);
+        if (!pTab)
+            continue;
+
+        pTab->EnsureFormulaCellResults(
+            rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
