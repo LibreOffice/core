@@ -108,6 +108,10 @@ DECLARE_OOXMLEXPORT_TEST(testTextWatermark, "textWatermark.docx")
        return;
 
     assertXPath(pXmlHeader1, "/w:hdr[1]/w:p[1]/w:r[1]/w:pict[1]/v:shape[1]","id","PowerPlusWaterMarkObject93701316");
+
+    //The second problem was that Word uses also "o:spid"
+    const OUString& sSpid = getXPath(pXmlHeader1, "/w:hdr[1]/w:p[1]/w:r[1]/w:pict[1]/v:shape[1]","spid");
+    CPPUNIT_ASSERT(!sSpid.isEmpty());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPictureWatermark, "pictureWatermark.docx")

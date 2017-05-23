@@ -275,11 +275,18 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, ShapeType& r
     mrTypeModel.maShapeId = rAttribs.getXString( bHasOspid ? O_TOKEN( spid ) : XML_id, OUString() );
     mrTypeModel.maLegacyId = rAttribs.getString( XML_id, OUString() );
     OSL_ENSURE( !mrTypeModel.maShapeId.isEmpty(), "ShapeTypeContext::ShapeTypeContext - missing shape identifier" );
-    // if the o:spid attribute exists, the id attribute contains the user-defined shape name
-    if( bHasOspid )
-        mrTypeModel.maShapeName = rAttribs.getXString( XML_id, OUString() );
     // builtin shape type identifier
     mrTypeModel.moShapeType = rAttribs.getInteger( O_TOKEN( spt ) );
+    // if the o:spid attribute exists, the id attribute contains the user-defined shape name
+    if( bHasOspid )
+    {
+        mrTypeModel.maShapeName = rAttribs.getXString( XML_id, OUString() );
+        // get ShapeType and ShapeId from name for compatibility
+        mrTypeModel.maShapeId = mrTypeModel.maShapeName;
+        static const OUString sShapeTypePrefix = "shapetype_";
+        if( mrTypeModel.maShapeName.startsWith( sShapeTypePrefix ) )
+            mrTypeModel.moShapeType = mrTypeModel.maShapeName.copy(sShapeTypePrefix.getLength()).toInt32();
+    }
 
     // coordinate system position/size, CSS style
     mrTypeModel.moCoordPos = lclDecodeInt32Pair( rAttribs, XML_coordorigin );

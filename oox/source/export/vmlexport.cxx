@@ -190,8 +190,10 @@ void VMLExport::AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uIn
     }
     else
     {
-        // A watermark object - store the optional shape ID also ('o:spid')
+        // A watermark object - store the optional shape ID
         m_pShapeAttrList->add( XML_id, OUStringToOString(m_pSdrObject->GetName(), RTL_TEXTENCODING_UTF8) );
+        // also ('o:spid')
+        m_pShapeAttrList->addNS( XML_o, XML_spid, ShapeIdString( nShapeId ) );
     }
 }
 
