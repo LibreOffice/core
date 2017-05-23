@@ -1101,7 +1101,7 @@ namespace cairocanvas
 
         cairo_t* pCairo = mpCairo.get();
 
-        if(bNoLineJoin && Stroke == aOperation)
+        if(bNoLineJoin && aOperation == Stroke)
         {
             // emulate rendering::PathJoinType::NONE by painting single edges
             for(sal_uInt32 a(0); a < rPolyPoly.count(); a++)

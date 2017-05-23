@@ -98,10 +98,10 @@ bool lcl_NumberFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxItemSe
     bool bChanged = false;
     if( !xPropertySet.is() )
         return bChanged;
-    OUString aPropertyName = (SID_ATTR_NUMBERFORMAT_VALUE==nWhichId) ? OUString(CHART_UNONAME_NUMFMT) : OUString( "PercentageNumberFormat" );
-    sal_uInt16 nSourceWhich = (SID_ATTR_NUMBERFORMAT_VALUE==nWhichId) ? SID_ATTR_NUMBERFORMAT_SOURCE : SCHATTR_PERCENT_NUMBERFORMAT_SOURCE;
+    OUString aPropertyName = (nWhichId==SID_ATTR_NUMBERFORMAT_VALUE) ? OUString(CHART_UNONAME_NUMFMT) : OUString( "PercentageNumberFormat" );
+    sal_uInt16 nSourceWhich = (nWhichId==SID_ATTR_NUMBERFORMAT_VALUE) ? SID_ATTR_NUMBERFORMAT_SOURCE : SCHATTR_PERCENT_NUMBERFORMAT_SOURCE;
 
-    if( SfxItemState::SET != rItemSet.GetItemState( nSourceWhich ) )
+    if( rItemSet.GetItemState( nSourceWhich ) != SfxItemState::SET )
         return bChanged;
 
     uno::Any aValue;
@@ -145,10 +145,10 @@ bool lcl_UseSourceFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxIte
     bool bChanged = false;
     if( !xPropertySet.is() )
         return bChanged;
-    OUString aPropertyName = (SID_ATTR_NUMBERFORMAT_SOURCE==nWhichId) ? OUString(CHART_UNONAME_NUMFMT) : OUString( "PercentageNumberFormat" );
-    sal_uInt16 nFormatWhich = (SID_ATTR_NUMBERFORMAT_SOURCE==nWhichId) ? SID_ATTR_NUMBERFORMAT_VALUE : SCHATTR_PERCENT_NUMBERFORMAT_VALUE;
+    OUString aPropertyName = (nWhichId==SID_ATTR_NUMBERFORMAT_SOURCE) ? OUString(CHART_UNONAME_NUMFMT) : OUString( "PercentageNumberFormat" );
+    sal_uInt16 nFormatWhich = (nWhichId==SID_ATTR_NUMBERFORMAT_SOURCE) ? SID_ATTR_NUMBERFORMAT_VALUE : SCHATTR_PERCENT_NUMBERFORMAT_VALUE;
 
-    if( SfxItemState::SET != rItemSet.GetItemState( nWhichId ) )
+    if( rItemSet.GetItemState( nWhichId ) != SfxItemState::SET )
         return bChanged;
 
     uno::Any aNewValue;
@@ -232,7 +232,7 @@ DataPointItemConverter::DataPointItemConverter(
     bool bSwapXAndY = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
     m_aAvailableLabelPlacements = ChartTypeHelper::getSupportedLabelPlacements( xChartType, DiagramHelper::getDimension( xDiagram ), bSwapXAndY, xSeries );
 
-    m_bForbidPercentValue = AxisType::CATEGORY != ChartTypeHelper::getAxisType( xChartType, 0 );
+    m_bForbidPercentValue = ChartTypeHelper::getAxisType( xChartType, 0 ) != AxisType::CATEGORY;
 }
 
 DataPointItemConverter::~DataPointItemConverter()
@@ -304,9 +304,9 @@ bool DataPointItemConverter::ApplySpecialItem(
             chart2::DataPointLabel aLabel;
             if( aOldValue >>= aLabel )
             {
-                sal_Bool& rValue = (SCHATTR_DATADESCR_SHOW_NUMBER==nWhichId) ? aLabel.ShowNumber : (
-                    (SCHATTR_DATADESCR_SHOW_PERCENTAGE==nWhichId) ? aLabel.ShowNumberInPercent : (
-                    (SCHATTR_DATADESCR_SHOW_CATEGORY==nWhichId) ? aLabel.ShowCategoryName : aLabel.ShowLegendSymbol ));
+                sal_Bool& rValue = (nWhichId==SCHATTR_DATADESCR_SHOW_NUMBER) ? aLabel.ShowNumber : (
+                    (nWhichId==SCHATTR_DATADESCR_SHOW_PERCENTAGE) ? aLabel.ShowNumberInPercent : (
+                    (nWhichId==SCHATTR_DATADESCR_SHOW_CATEGORY) ? aLabel.ShowCategoryName : aLabel.ShowLegendSymbol ));
                 bool bOldValue = rValue;
                 rValue = rItem.GetValue();
                 if( m_bOverwriteLabelsForAttributedDataPointsAlso )
@@ -558,9 +558,9 @@ void DataPointItemConverter::FillSpecialItem(
             chart2::DataPointLabel aLabel;
             if (GetPropertySet()->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel)
             {
-                bool bValue = (SCHATTR_DATADESCR_SHOW_NUMBER==nWhichId) ? aLabel.ShowNumber : (
-                    (SCHATTR_DATADESCR_SHOW_PERCENTAGE==nWhichId) ? aLabel.ShowNumberInPercent : (
-                    (SCHATTR_DATADESCR_SHOW_CATEGORY==nWhichId) ? aLabel.ShowCategoryName : aLabel.ShowLegendSymbol ));
+                bool bValue = (nWhichId==SCHATTR_DATADESCR_SHOW_NUMBER) ? aLabel.ShowNumber : (
+                    (nWhichId==SCHATTR_DATADESCR_SHOW_PERCENTAGE) ? aLabel.ShowNumberInPercent : (
+                    (nWhichId==SCHATTR_DATADESCR_SHOW_CATEGORY) ? aLabel.ShowCategoryName : aLabel.ShowLegendSymbol ));
 
                 rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
 

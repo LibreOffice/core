@@ -168,9 +168,9 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
     const chart2::IncrementData& rIncrement( rScale.IncrementData );
     const uno::Sequence< chart2::SubIncrement >& rSubIncrements( rScale.IncrementData.SubIncrements );
     const TimeIncrement& rTimeIncrement( rScale.TimeIncrement );
-    bool bDateAxis = (chart2::AxisType::DATE == rScale.AxisType);
+    bool bDateAxis = (rScale.AxisType == chart2::AxisType::DATE);
     if( m_pExplicitScale )
-        bDateAxis = (chart2::AxisType::DATE == m_pExplicitScale->AxisType);
+        bDateAxis = (m_pExplicitScale->AxisType == chart2::AxisType::DATE);
 
     switch( nWhichId )
     {
@@ -214,7 +214,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             break;
 
         case SCHATTR_AXIS_REVERSE:
-                rOutItemSet.Put( SfxBoolItem( nWhichId, (AxisOrientation_REVERSE == rScale.Orientation) ));
+                rOutItemSet.Put( SfxBoolItem( nWhichId, (rScale.Orientation == AxisOrientation_REVERSE) ));
             break;
 
         // Increment
@@ -445,7 +445,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 bool lcl_isDateAxis( const SfxItemSet & rItemSet )
 {
     sal_Int32 nAxisType = static_cast< const SfxInt32Item & >( rItemSet.Get( SCHATTR_AXISTYPE )).GetValue();//css::chart2::AxisType
-    return (chart2::AxisType::DATE == nAxisType);
+    return (nAxisType == chart2::AxisType::DATE);
 }
 
 bool lcl_isAutoMajor( const SfxItemSet & rItemSet )
@@ -552,7 +552,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_AXIS_REVERSE:
         {
-            bool bWasReverse = ( AxisOrientation_REVERSE == aScale.Orientation );
+            bool bWasReverse = ( aScale.Orientation == AxisOrientation_REVERSE );
             bool bNewReverse = (static_cast< const SfxBoolItem & >(
                      rItemSet.Get( nWhichId )).GetValue() );
             if( bWasReverse != bNewReverse )

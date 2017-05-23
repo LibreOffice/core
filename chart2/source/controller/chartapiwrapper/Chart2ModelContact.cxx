@@ -197,7 +197,7 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingAxes() const
     awt::Rectangle aRect(0,0,0,0);
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartModel ) );
 
-    if( DiagramPositioningMode_INCLUDING == DiagramHelper::getDiagramPositioningMode( xDiagram ) )
+    if( DiagramHelper::getDiagramPositioningMode( xDiagram ) == DiagramPositioningMode_INCLUDING )
         aRect = DiagramHelper::getDiagramRectangleFromModel(m_xChartModel);
     else
     {
@@ -213,7 +213,7 @@ awt::Rectangle Chart2ModelContact::GetDiagramRectangleExcludingAxes() const
     awt::Rectangle aRect(0,0,0,0);
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartModel ) );
 
-    if( DiagramPositioningMode_EXCLUDING == DiagramHelper::getDiagramPositioningMode( xDiagram ) )
+    if( DiagramHelper::getDiagramPositioningMode( xDiagram ) == DiagramPositioningMode_EXCLUDING )
         aRect = DiagramHelper::getDiagramRectangleFromModel(m_xChartModel);
     else
     {

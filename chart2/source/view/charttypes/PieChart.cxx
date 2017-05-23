@@ -301,9 +301,9 @@ void PieChart::createTextLabelShape(
     LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
     sal_Int32 nScreenValueOffsetInRadiusDirection = 0 ;
     if( nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE )
-        nScreenValueOffsetInRadiusDirection = (3!=m_nDimension) ? 150 : 0;//todo maybe calculate this font height dependent
+        nScreenValueOffsetInRadiusDirection = (m_nDimension!=3) ? 150 : 0;//todo maybe calculate this font height dependent
     else if( nLabelPlacement == css::chart::DataLabelPlacement::INSIDE )
-        nScreenValueOffsetInRadiusDirection = (3!=m_nDimension) ? -150 : 0;//todo maybe calculate this font height dependent
+        nScreenValueOffsetInRadiusDirection = (m_nDimension!=3) ? -150 : 0;//todo maybe calculate this font height dependent
 
     ///the scene position of the label anchor point is calculated (see notes for
     ///`PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCircleValues`),

@@ -118,8 +118,8 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
     uno::Reference< XChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
 
-    bool bHasSeriesProperties = (OBJECTTYPE_DATA_SERIES==m_eObjectType);
-    bool bHasDataPointproperties = (OBJECTTYPE_DATA_POINT==m_eObjectType);
+    bool bHasSeriesProperties = (m_eObjectType==OBJECTTYPE_DATA_SERIES);
+    bool bHasDataPointproperties = (m_eObjectType==OBJECTTYPE_DATA_POINT);
 
     if( bHasSeriesProperties || bHasDataPointproperties )
     {
@@ -145,7 +145,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
         m_eObjectType == OBJECTTYPE_DATA_ERRORS_Z)
         m_bHasStatisticProperties = true;
 
-    if( OBJECTTYPE_AXIS == m_eObjectType )
+    if( m_eObjectType == OBJECTTYPE_AXIS )
     {
         //show scale properties only for a single axis not for multiselection
         m_bHasScaleProperties = !m_bAffectsMultipleObjects;
@@ -157,9 +157,9 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
             {
                 //no scale page for series axis
                 ScaleData aData( xAxis->getScaleData() );
-                if( chart2::AxisType::SERIES == aData.AxisType )
+                if( aData.AxisType == chart2::AxisType::SERIES )
                     m_bHasScaleProperties = false;
-                if( chart2::AxisType::SERIES != aData.AxisType )
+                if( aData.AxisType != chart2::AxisType::SERIES )
                     m_bHasNumberProperties = true;
 
                 sal_Int32 nCooSysIndex=0;
@@ -172,7 +172,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                     m_bSupportingAxisPositioning = ChartTypeHelper::isSupportingAxisPositioning( xChartType, nDimensionCount, nDimensionIndex );
 
                     //show axis origin only for secondary y axis
-                    if( 1==nDimensionIndex && 1==nAxisIndex && ChartTypeHelper::isSupportingBaseValue( xChartType ) )
+                    if( nDimensionIndex==1 && nAxisIndex==1 && ChartTypeHelper::isSupportingBaseValue( xChartType ) )
                         m_bShowAxisOrigin = true;
                 }
 
@@ -182,7 +182,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                 if( xCrossingMainAxis.is() )
                 {
                     ScaleData aScale( xCrossingMainAxis->getScaleData() );
-                    m_bIsCrossingAxisIsCategoryAxis = ( chart2::AxisType::CATEGORY == aScale.AxisType  );
+                    m_bIsCrossingAxisIsCategoryAxis = ( aScale.AxisType == chart2::AxisType::CATEGORY  );
                     if( m_bIsCrossingAxisIsCategoryAxis )
                     {
                         ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
@@ -208,7 +208,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
         m_bCanAxisLabelsBeStaggered = nDimensionCount==2;
     }
 
-    if( OBJECTTYPE_DATA_CURVE == m_eObjectType )
+    if( m_eObjectType == OBJECTTYPE_DATA_CURVE )
     {
         uno::Reference< data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
         Sequence< Reference< data::XLabeledDataSequence > > aDataSeqs( xSource->getDataSequences());
@@ -266,15 +266,15 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
 
      //create gui name for this object
     {
-        if( !m_bAffectsMultipleObjects && OBJECTTYPE_AXIS == m_eObjectType )
+        if( !m_bAffectsMultipleObjects && m_eObjectType == OBJECTTYPE_AXIS )
         {
             m_aLocalizedName = ObjectNameProvider::getAxisName( m_aObjectCID, xChartModel );
         }
-        else if( !m_bAffectsMultipleObjects && ( OBJECTTYPE_GRID == m_eObjectType || OBJECTTYPE_SUBGRID == m_eObjectType ) )
+        else if( !m_bAffectsMultipleObjects && ( m_eObjectType == OBJECTTYPE_GRID || m_eObjectType == OBJECTTYPE_SUBGRID ) )
         {
             m_aLocalizedName = ObjectNameProvider::getGridName( m_aObjectCID, xChartModel );
         }
-        else if( !m_bAffectsMultipleObjects && OBJECTTYPE_TITLE == m_eObjectType )
+        else if( !m_bAffectsMultipleObjects && m_eObjectType == OBJECTTYPE_TITLE )
         {
             m_aLocalizedName = ObjectNameProvider::getTitleName( m_aObjectCID, xChartModel );
         }

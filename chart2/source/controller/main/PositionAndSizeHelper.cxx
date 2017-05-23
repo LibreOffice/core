@@ -46,7 +46,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     tools::Rectangle aObjectRect( Point(rNewPositionAndSize.X,rNewPositionAndSize.Y), Size(rNewPositionAndSize.Width,rNewPositionAndSize.Height) );
     tools::Rectangle aPageRect( Point(rPageRectangle.X,rPageRectangle.Y), Size(rPageRectangle.Width,rPageRectangle.Height) );
 
-    if( OBJECTTYPE_TITLE==eObjectType )
+    if( eObjectType==OBJECTTYPE_TITLE )
     {
         //@todo decide whether x is primary or secondary
         chart2::RelativePosition aRelativePosition;
@@ -57,7 +57,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         aRelativePosition.Secondary = (double(aPos.Y())+double(aObjectRect.getHeight())/2.0)/double(aPageRect.getHeight());
         xObjectProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
     }
-    else if( OBJECTTYPE_DATA_CURVE_EQUATION==eObjectType )
+    else if( eObjectType==OBJECTTYPE_DATA_CURVE_EQUATION )
     {
         //@todo decide whether x is primary or secondary
         chart2::RelativePosition aRelativePosition;
@@ -68,7 +68,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         aRelativePosition.Secondary = double(aPos.Y())/double(aPageRect.getHeight());
         xObjectProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
     }
-    else if(OBJECTTYPE_LEGEND==eObjectType)
+    else if(eObjectType==OBJECTTYPE_LEGEND)
     {
         xObjectProp->setPropertyValue( "AnchorPosition", uno::Any(LegendPosition(LegendPosition_CUSTOM)));
         xObjectProp->setPropertyValue( "Expansion", uno::Any(css::chart::ChartLegendExpansion_CUSTOM));
@@ -98,7 +98,7 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
 
         xObjectProp->setPropertyValue( "RelativeSize", uno::Any(aRelativeSize) );
     }
-    else if(OBJECTTYPE_DIAGRAM==eObjectType || OBJECTTYPE_DIAGRAM_WALL==eObjectType || OBJECTTYPE_DIAGRAM_FLOOR==eObjectType)
+    else if(eObjectType==OBJECTTYPE_DIAGRAM || eObjectType==OBJECTTYPE_DIAGRAM_WALL || eObjectType==OBJECTTYPE_DIAGRAM_FLOOR)
     {
         //@todo decide whether x is primary or secondary
 
@@ -136,7 +136,7 @@ bool PositionAndSizeHelper::moveObject( const OUString& rObjectCID
 
     uno::Reference< beans::XPropertySet > xObjectProp = ObjectIdentifier::getObjectPropertySet( rObjectCID, xChartModel );
     ObjectType eObjectType( ObjectIdentifier::getObjectType( rObjectCID ) );
-    if(OBJECTTYPE_DIAGRAM==eObjectType || OBJECTTYPE_DIAGRAM_WALL==eObjectType || OBJECTTYPE_DIAGRAM_FLOOR==eObjectType)
+    if(eObjectType==OBJECTTYPE_DIAGRAM || eObjectType==OBJECTTYPE_DIAGRAM_WALL || eObjectType==OBJECTTYPE_DIAGRAM_FLOOR)
     {
         xObjectProp.set( ObjectIdentifier::getDiagramForCID( rObjectCID, xChartModel ), uno::UNO_QUERY );
         if(!xObjectProp.is())

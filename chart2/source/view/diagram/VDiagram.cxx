@@ -503,16 +503,16 @@ void VDiagram::createShapes_3d()
 
         //add left wall
         {
-            short nRotatedTexture = ( CuboidPlanePosition_Front==eBackWallPos ) ? 3 : 1;
+            short nRotatedTexture = ( eBackWallPos==CuboidPlanePosition_Front ) ? 3 : 1;
             double xPos = 0.0;
-            if( CuboidPlanePosition_Right==eLeftWallPos )
+            if( eLeftWallPos==CuboidPlanePosition_Right )
                 xPos = FIXED_SIZE_FOR_3D_CHART_VOLUME;
             Stripe aStripe( drawing::Position3D(xPos,FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
                 , drawing::Direction3D(0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME)
                 , drawing::Direction3D(0,-FIXED_SIZE_FOR_3D_CHART_VOLUME,0) );
-            if( CuboidPlanePosition_Right==eLeftWallPos )
+            if( eLeftWallPos==CuboidPlanePosition_Right )
             {
-                nRotatedTexture = ( CuboidPlanePosition_Front==eBackWallPos ) ? 2 : 0;
+                nRotatedTexture = ( eBackWallPos==CuboidPlanePosition_Front ) ? 2 : 0;
                 aStripe = Stripe( drawing::Position3D(xPos,FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
                     , drawing::Direction3D(0,-FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
                     , drawing::Direction3D(0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME) );
@@ -533,12 +533,12 @@ void VDiagram::createShapes_3d()
         {
             short nRotatedTexture = 0;
             double zPos = 0.0;
-            if( CuboidPlanePosition_Front==eBackWallPos )
+            if( eBackWallPos==CuboidPlanePosition_Front )
                     zPos = FIXED_SIZE_FOR_3D_CHART_VOLUME;
             Stripe aStripe( drawing::Position3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,zPos)
                 , drawing::Direction3D(0,-FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
                 , drawing::Direction3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0) );
-            if( CuboidPlanePosition_Front==eBackWallPos )
+            if( eBackWallPos==CuboidPlanePosition_Front )
             {
                 aStripe = Stripe( drawing::Position3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,zPos)
                 , drawing::Direction3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0)
@@ -626,7 +626,7 @@ void VDiagram::createShapes_3d()
                 , xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided );
 
         CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
-        if( !bAddFloorAndWall || (CuboidPlanePosition_Bottom!=eBottomPos) )
+        if( !bAddFloorAndWall || (eBottomPos!=CuboidPlanePosition_Bottom) )
         {
             //we always need this object as dummy object for correct scene dimensions
             //but it should not be visible in this case:

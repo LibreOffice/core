@@ -118,7 +118,7 @@ bool AxisPositionsTabPage::FillItemSet(SfxItemSet* rOutAttrs)
     // axis line
     sal_Int32 nPos = m_pLB_CrossesAt->GetSelectEntryPos();
     rOutAttrs->Put( SfxInt32Item( SCHATTR_AXIS_POSITION, nPos+1 ));
-    if( 2==nPos )
+    if( nPos==2 )
     {
         double fCrossover = m_pED_CrossesAt->GetValue();
         if( m_bCrossingAxisIsCategoryAxis )
@@ -316,12 +316,12 @@ void AxisPositionsTabPage::SupportAxisPositioning( bool bSupportAxisPositioning 
 IMPL_LINK_NOARG(AxisPositionsTabPage, CrossesAtSelectHdl, ListBox&, void)
 {
     sal_Int32 nPos = m_pLB_CrossesAt->GetSelectEntryPos();
-    m_pED_CrossesAt->Show( (2==nPos) && !m_bCrossingAxisIsCategoryAxis );
-    m_pED_CrossesAtCategory->Show( (2==nPos) && m_bCrossingAxisIsCategoryAxis );
+    m_pED_CrossesAt->Show( (nPos==2) && !m_bCrossingAxisIsCategoryAxis );
+    m_pED_CrossesAtCategory->Show( (nPos==2) && m_bCrossingAxisIsCategoryAxis );
 
     if( m_pED_CrossesAt->GetText().isEmpty() )
         m_pED_CrossesAt->SetValue(0.0);
-    if( 0 == m_pED_CrossesAtCategory->GetSelectEntryCount() )
+    if( m_pED_CrossesAtCategory->GetSelectEntryCount() == 0 )
         m_pED_CrossesAtCategory->SelectEntryPos(0);
 
     PlaceLabelsSelectHdl( *m_pLB_PlaceLabels );

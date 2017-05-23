@@ -73,7 +73,7 @@ uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDa
 
                     xProp->getPropertyValue( "DataRowSource" ) >>= aDataRowSource;
 
-                    bDefaultDataInColumns = (css::chart::ChartDataRowSource_COLUMNS == aDataRowSource);
+                    bDefaultDataInColumns = (aDataRowSource == css::chart::ChartDataRowSource_COLUMNS);
                 }
             }
         }

@@ -107,24 +107,24 @@ void RangeHighlighter::determineRanges()
                     ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
                     sal_Int32 nIndex = ObjectIdentifier::getIndexFromParticleOrCID( aCID );
                     Reference< chart2::XDataSeries > xDataSeries( ObjectIdentifier::getDataSeriesForCID( aCID, xChartModel ) );
-                    if( OBJECTTYPE_LEGEND_ENTRY == eObjectType )
+                    if( eObjectType == OBJECTTYPE_LEGEND_ENTRY )
                     {
                         OUString aParentParticel( ObjectIdentifier::getFullParentParticle( aCID ) );
                         ObjectType eParentObjectType = ObjectIdentifier::getObjectType( aParentParticel );
                         eObjectType = eParentObjectType;
-                        if( OBJECTTYPE_DATA_POINT == eObjectType )
+                        if( eObjectType == OBJECTTYPE_DATA_POINT )
                             nIndex = ObjectIdentifier::getIndexFromParticleOrCID( aParentParticel );
                     }
 
-                    if( OBJECTTYPE_DATA_POINT == eObjectType || OBJECTTYPE_DATA_LABEL == eObjectType )
+                    if( eObjectType == OBJECTTYPE_DATA_POINT || eObjectType == OBJECTTYPE_DATA_LABEL )
                     {
                         // Data Point
                         fillRangesForDataPoint( xDataSeries, nIndex );
                         return;
                     }
-                    else if( OBJECTTYPE_DATA_ERRORS_X == eObjectType ||
-                             OBJECTTYPE_DATA_ERRORS_Y == eObjectType ||
-                             OBJECTTYPE_DATA_ERRORS_Z == eObjectType )
+                    else if( eObjectType == OBJECTTYPE_DATA_ERRORS_X ||
+                             eObjectType == OBJECTTYPE_DATA_ERRORS_Y ||
+                             eObjectType == OBJECTTYPE_DATA_ERRORS_Z )
                     {
                         // select error bar ranges, or data series, if the style is
                         // not set to FROM_DATA
@@ -137,7 +137,7 @@ void RangeHighlighter::determineRanges()
                         fillRangesForDataSeries( xDataSeries );
                         return;
                     }
-                    else if( OBJECTTYPE_AXIS == eObjectType )
+                    else if( eObjectType == OBJECTTYPE_AXIS )
                     {
                         // Axis (Categories)
                         Reference< chart2::XAxis > xAxis( ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ), uno::UNO_QUERY );
@@ -147,10 +147,10 @@ void RangeHighlighter::determineRanges()
                             return;
                         }
                     }
-                    else if( OBJECTTYPE_PAGE == eObjectType
-                             || OBJECTTYPE_DIAGRAM == eObjectType
-                             || OBJECTTYPE_DIAGRAM_WALL == eObjectType
-                             || OBJECTTYPE_DIAGRAM_FLOOR == eObjectType
+                    else if( eObjectType == OBJECTTYPE_PAGE
+                             || eObjectType == OBJECTTYPE_DIAGRAM
+                             || eObjectType == OBJECTTYPE_DIAGRAM_WALL
+                             || eObjectType == OBJECTTYPE_DIAGRAM_FLOOR
                         )
                     {
                         // Diagram

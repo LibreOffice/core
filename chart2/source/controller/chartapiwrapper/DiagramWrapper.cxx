@@ -870,13 +870,13 @@ Reference< XAxis > SAL_CALL DiagramWrapper::getAxis( sal_Int32 nDimensionIndex )
             m_xXAxis = new AxisWrapper( AxisWrapper::X_AXIS, m_spChart2ModelContact );
         xAxis = m_xXAxis;
     }
-    else if(1==nDimensionIndex)
+    else if(nDimensionIndex==1)
     {
         if( !m_xYAxis.is() )
             m_xYAxis = new AxisWrapper( AxisWrapper::Y_AXIS, m_spChart2ModelContact );
         xAxis = m_xYAxis;
     }
-    else if(2==nDimensionIndex)
+    else if(nDimensionIndex==2)
     {
         if( !m_xZAxis.is() )
             m_xZAxis = new AxisWrapper( AxisWrapper::Z_AXIS, m_spChart2ModelContact );
@@ -894,7 +894,7 @@ Reference< XAxis > SAL_CALL DiagramWrapper::getSecondaryAxis( sal_Int32 nDimensi
             m_xSecondXAxis = new AxisWrapper( AxisWrapper::SECOND_X_AXIS, m_spChart2ModelContact );
         xAxis = m_xSecondXAxis;
     }
-    else if(1==nDimensionIndex)
+    else if(nDimensionIndex==1)
     {
         if( !m_xSecondYAxis.is() )
             m_xSecondYAxis = new AxisWrapper( AxisWrapper::SECOND_Y_AXIS, m_spChart2ModelContact );

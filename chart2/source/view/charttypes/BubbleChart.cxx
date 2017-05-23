@@ -372,7 +372,7 @@ void BubbleChart::createShapes()
                             awt::Point aScreenPosition2D( LabelPositionHelper(m_nDimension,m_xLogicTarget,m_pShapeFactory)
                                 .transformSceneToScreenPosition( aScenePosition3D ) );
                             sal_Int32 nOffset = 0;
-                            if(LABEL_ALIGN_CENTER!=eAlignment)
+                            if(eAlignment!=LABEL_ALIGN_CENTER)
                                 nOffset = 100;//add some spacing //@todo maybe get more intelligent values
                             createDataLabel( xTextTarget, **aSeriesIter, nIndex
                                             , fBubbleSize, fBubbleSize, aScreenPosition2D, eAlignment, nOffset );

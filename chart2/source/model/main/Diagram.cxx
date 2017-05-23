@@ -648,21 +648,21 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL Diagram::getPropertySetInfo()
 void SAL_CALL Diagram::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue )
 {
     //special treatment for some 3D properties
-    if( PROP_DIAGRAM_PERSPECTIVE == nHandle )
+    if( nHandle == PROP_DIAGRAM_PERSPECTIVE )
     {
         sal_Int32 fPerspective = 20;
         if( rValue >>=fPerspective )
             ThreeDHelper::setCameraDistance( this, ThreeDHelper::PerspectiveToCameraDistance( fPerspective ) );
     }
-    else if( PROP_DIAGRAM_ROTATION_HORIZONTAL == nHandle
-        || PROP_DIAGRAM_ROTATION_VERTICAL == nHandle )
+    else if( nHandle == PROP_DIAGRAM_ROTATION_HORIZONTAL
+        || nHandle == PROP_DIAGRAM_ROTATION_VERTICAL )
     {
         sal_Int32 nNewAngleDegree = 0;
         if( rValue >>=nNewAngleDegree )
         {
             sal_Int32 nHorizontal, nVertical;
             ThreeDHelper::getRotationFromDiagram( this, nHorizontal, nVertical );
-            if( PROP_DIAGRAM_ROTATION_HORIZONTAL == nHandle )
+            if( nHandle == PROP_DIAGRAM_ROTATION_HORIZONTAL )
                 nHorizontal = nNewAngleDegree;
             else
                 nVertical = nNewAngleDegree;
@@ -682,13 +682,13 @@ void SAL_CALL Diagram::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) co
             ThreeDHelper::getCameraDistance( const_cast< Diagram* >( this ) ) ) );
         rValue <<= nPerspective;
     }
-    else if( PROP_DIAGRAM_ROTATION_HORIZONTAL == nHandle
-        || PROP_DIAGRAM_ROTATION_VERTICAL == nHandle )
+    else if( nHandle == PROP_DIAGRAM_ROTATION_HORIZONTAL
+        || nHandle == PROP_DIAGRAM_ROTATION_VERTICAL )
     {
         sal_Int32 nHorizontal, nVertical;
         ThreeDHelper::getRotationFromDiagram( const_cast< Diagram* >( this ), nHorizontal, nVertical );
         sal_Int32 nAngleDegree = 0;
-        if( PROP_DIAGRAM_ROTATION_HORIZONTAL == nHandle )
+        if( nHandle == PROP_DIAGRAM_ROTATION_HORIZONTAL )
             nAngleDegree = nHorizontal;
         else
             nAngleDegree = nVertical;

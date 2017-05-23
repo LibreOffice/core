@@ -519,7 +519,7 @@ SdrObject* DrawCommandDispatch::createDefaultObject( const sal_uInt16 nID )
                         {
                             if ( dynamic_cast<const SdrCaptionObj*>( pObj) !=  nullptr )
                             {
-                                bool bIsVertical( COMMAND_ID_DRAW_CAPTION_VERTICAL == nID );
+                                bool bIsVertical( nID == COMMAND_ID_DRAW_CAPTION_VERTICAL );
                                 SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
                                 if ( pTextObj )
                                 {

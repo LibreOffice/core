@@ -66,7 +66,7 @@ bool VLineProperties::isLineVisible() const
     {
         sal_Int16 nLineTransparence=0;
         this->Transparence >>= nLineTransparence;
-        if(100!=nLineTransparence)
+        if(nLineTransparence!=100)
         {
             bRet = true;
         }

@@ -83,7 +83,7 @@ void VCartesianCoordinateSystem::createGridShapes()
 
         aGrid.initPlotter(m_xLogicTargetForGrids,m_xFinalTarget,m_xShapeFactory
             , this->createCIDForGrid( xAxis,nDimensionIndex,nAxisIndex ) );
-        if(2==nDimensionCount)
+        if(nDimensionCount==2)
             aGrid.setTransformationSceneToScreen( m_aMatrixSceneToScreen );
         aGrid.setScales( this->getExplicitScales(nDimensionIndex,nAxisIndex), bSwapXAndY );
         aGrid.createShapes();
@@ -130,7 +130,7 @@ void VCartesianCoordinateSystem::createVAxisList(
             if( xCrossingMainAxis.is() )
             {
                 ScaleData aCrossingScale( xCrossingMainAxis->getScaleData() );
-                aAxisProperties.m_bCrossingAxisHasReverseDirection = (AxisOrientation_REVERSE==aCrossingScale.Orientation);
+                aAxisProperties.m_bCrossingAxisHasReverseDirection = (aCrossingScale.Orientation==AxisOrientation_REVERSE);
 
                 if( aCrossingScale.AxisType == AxisType::CATEGORY )
                     aAxisProperties.m_bCrossingAxisIsCategoryAxes = true;
@@ -178,7 +178,7 @@ void VCartesianCoordinateSystem::initVAxisInList()
             pVAxis->setExplicitScaleAndIncrement( this->getExplicitScale( nDimensionIndex, nAxisIndex ), this->getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
             pVAxis->initPlotter(m_xLogicTargetForAxes,m_xFinalTarget,m_xShapeFactory
                 , this->createCIDForAxis( getAxisByDimension( nDimensionIndex, nAxisIndex ), nDimensionIndex, nAxisIndex ) );
-            if(2==nDimensionCount)
+            if(nDimensionCount==2)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
             pVAxis->setScales( this->getExplicitScales(nDimensionIndex,nAxisIndex), bSwapXAndY );
         }
@@ -203,7 +203,7 @@ void VCartesianCoordinateSystem::updateScalesAndIncrementsOnAxes()
             sal_Int32 nDimensionIndex = aIt->first.first;
             sal_Int32 nAxisIndex = aIt->first.second;
             pVAxis->setExplicitScaleAndIncrement( this->getExplicitScale( nDimensionIndex, nAxisIndex ), this->getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
-            if(2==nDimensionCount)
+            if(nDimensionCount==2)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
             pVAxis->setScales( this->getExplicitScales(nDimensionIndex,nAxisIndex), bSwapXAndY );
         }

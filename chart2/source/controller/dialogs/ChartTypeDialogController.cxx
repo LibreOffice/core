@@ -679,7 +679,7 @@ void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const C
     {
         case CurveStyle_CUBIC_SPLINES:
         case CurveStyle_B_SPLINES:
-            if( GlobalStackMode_NONE == rParameter.eStackMode || GlobalStackMode_STACK_Z == rParameter.eStackMode )
+            if( rParameter.eStackMode == GlobalStackMode_NONE || rParameter.eStackMode == GlobalStackMode_STACK_Z )
             {
                 rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_POINTS_XCATEGORY)));
                 rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_LINE_P_XCATEGORY_SMOOTH)));
@@ -698,7 +698,7 @@ void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const C
         case CurveStyle_STEP_END:
         case CurveStyle_STEP_CENTER_X:
         case CurveStyle_STEP_CENTER_Y:
-            if( GlobalStackMode_NONE == rParameter.eStackMode || GlobalStackMode_STACK_Z == rParameter.eStackMode )
+            if( rParameter.eStackMode == GlobalStackMode_NONE || rParameter.eStackMode == GlobalStackMode_STACK_Z )
             {
                 rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_POINTS_XCATEGORY)));
                 rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_LINE_P_XCATEGORY_STEPPED)));
@@ -715,7 +715,7 @@ void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const C
             break;
         default: // includes CurveStyle_LINES
             //direct lines
-            if( GlobalStackMode_NONE == rParameter.eStackMode || GlobalStackMode_STACK_Z == rParameter.eStackMode )
+            if( rParameter.eStackMode == GlobalStackMode_NONE || rParameter.eStackMode == GlobalStackMode_STACK_Z )
             {
                 rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_POINTS_XCATEGORY)));
                 rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_LINE_P_XCATEGORY)));
@@ -1025,7 +1025,7 @@ void NetChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Ch
 {
     rSubTypeList.Clear();
 
-    if( GlobalStackMode_NONE == rParameter.eStackMode )
+    if( rParameter.eStackMode == GlobalStackMode_NONE )
     {
         rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_NET_SYMB)));
         rSubTypeList.InsertItem(2, Image(BitmapEx(BMP_NET_LINESYMB)));

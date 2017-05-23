@@ -664,7 +664,7 @@ void NetChart::createShapes()
                             }
                             else
                             {
-                                if(LABEL_ALIGN_CENTER==eAlignment )
+                                if(eAlignment==LABEL_ALIGN_CENTER )
                                     nOffset = 0;
                                 aScreenPosition2D = awt::Point( LabelPositionHelper(m_nDimension,m_xLogicTarget,m_pShapeFactory)
                                     .transformSceneToScreenPosition( aScenePosition3D ) );

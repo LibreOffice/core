@@ -57,9 +57,9 @@ void LabelPositionHelper::changeTextAdjustment( tAnySequence& rPropValues, const
     //HorizontalAdjustment
     {
         drawing::TextHorizontalAdjust eHorizontalAdjust = drawing::TextHorizontalAdjust_CENTER;
-        if( LABEL_ALIGN_RIGHT==eAlignment || LABEL_ALIGN_RIGHT_TOP==eAlignment || LABEL_ALIGN_RIGHT_BOTTOM==eAlignment )
+        if( eAlignment==LABEL_ALIGN_RIGHT || eAlignment==LABEL_ALIGN_RIGHT_TOP || eAlignment==LABEL_ALIGN_RIGHT_BOTTOM )
             eHorizontalAdjust = drawing::TextHorizontalAdjust_LEFT;
-        else if( LABEL_ALIGN_LEFT==eAlignment || LABEL_ALIGN_LEFT_TOP==eAlignment || LABEL_ALIGN_LEFT_BOTTOM==eAlignment )
+        else if( eAlignment==LABEL_ALIGN_LEFT || eAlignment==LABEL_ALIGN_LEFT_TOP || eAlignment==LABEL_ALIGN_LEFT_BOTTOM )
             eHorizontalAdjust = drawing::TextHorizontalAdjust_RIGHT;
         uno::Any* pHorizontalAdjustAny = PropertyMapper::getValuePointer(rPropValues,rPropNames,"TextHorizontalAdjust");
         if(pHorizontalAdjustAny)
@@ -69,9 +69,9 @@ void LabelPositionHelper::changeTextAdjustment( tAnySequence& rPropValues, const
     //VerticalAdjustment
     {
         drawing::TextVerticalAdjust eVerticalAdjust = drawing::TextVerticalAdjust_CENTER;
-        if( LABEL_ALIGN_TOP==eAlignment || LABEL_ALIGN_RIGHT_TOP==eAlignment || LABEL_ALIGN_LEFT_TOP==eAlignment )
+        if( eAlignment==LABEL_ALIGN_TOP || eAlignment==LABEL_ALIGN_RIGHT_TOP || eAlignment==LABEL_ALIGN_LEFT_TOP )
             eVerticalAdjust = drawing::TextVerticalAdjust_BOTTOM;
-        else if( LABEL_ALIGN_BOTTOM==eAlignment || LABEL_ALIGN_RIGHT_BOTTOM==eAlignment || LABEL_ALIGN_LEFT_BOTTOM==eAlignment )
+        else if( eAlignment==LABEL_ALIGN_BOTTOM || eAlignment==LABEL_ALIGN_RIGHT_BOTTOM || eAlignment==LABEL_ALIGN_LEFT_BOTTOM )
             eVerticalAdjust = drawing::TextVerticalAdjust_TOP;
         uno::Any* pVerticalAdjustAny = PropertyMapper::getValuePointer(rPropValues,rPropNames,"TextVerticalAdjust");
         if(pVerticalAdjustAny)

@@ -166,10 +166,10 @@ IMPL_STATIC_LINK(
 
 void ScaleTabPage::EnableControls()
 {
-    bool bValueAxis = chart2::AxisType::REALNUMBER == m_nAxisType
-                   || chart2::AxisType::PERCENT == m_nAxisType
-                   || chart2::AxisType::DATE == m_nAxisType;
-    bool bDateAxis = chart2::AxisType::DATE == m_nAxisType;
+    bool bValueAxis = m_nAxisType == chart2::AxisType::REALNUMBER
+                   || m_nAxisType == chart2::AxisType::PERCENT
+                   || m_nAxisType == chart2::AxisType::DATE;
+    bool bDateAxis = m_nAxisType == chart2::AxisType::DATE;
 
     m_pBxType->Show(m_bAllowDateAxis);
 
@@ -259,7 +259,7 @@ IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl, ListBox&, void)
         m_nAxisType = chart2::AxisType::DATE;
     else
         m_nAxisType = chart2::AxisType::CATEGORY;
-    if( chart2::AxisType::DATE == m_nAxisType )
+    if( m_nAxisType == chart2::AxisType::DATE )
         m_pCbxLogarithm->Check(false);
     EnableControls();
     SetNumFormat();
@@ -276,7 +276,7 @@ bool ScaleTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 
     rOutAttrs->Put(SfxInt32Item(SCHATTR_AXISTYPE, m_nAxisType));
     if(m_bAllowDateAxis)
-        rOutAttrs->Put(SfxBoolItem(SCHATTR_AXIS_AUTO_DATEAXIS, TYPE_AUTO==m_pLB_AxisType->GetSelectEntryPos()));
+        rOutAttrs->Put(SfxBoolItem(SCHATTR_AXIS_AUTO_DATEAXIS, m_pLB_AxisType->GetSelectEntryPos()==TYPE_AUTO));
 
     bool bAutoScale = false;
     if( m_nAxisType==chart2::AxisType::CATEGORY )
@@ -419,7 +419,7 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
         return DeactivateRC::LeavePage;
     }
 
-    bool bDateAxis = chart2::AxisType::DATE == m_nAxisType;
+    bool bDateAxis = m_nAxisType == chart2::AxisType::DATE;
 
     sal_uInt32 nMinMaxOriginFmt = m_pFmtFldMax->GetFormatKey();
     if (pNumFormatter->GetType(nMinMaxOriginFmt) == css::util::NumberFormat::TEXT)
@@ -442,7 +442,7 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     m_nMainTimeUnit = m_pLB_MainTimeUnit->GetSelectEntryPos();
     m_nHelpTimeUnit = m_pLB_HelpTimeUnit->GetSelectEntryPos();
 
-    if( chart2::AxisType::REALNUMBER != m_nAxisType )
+    if( m_nAxisType != chart2::AxisType::REALNUMBER )
         m_pCbxLogarithm->Show( false );
 
     //check which entries need user action
@@ -584,7 +584,7 @@ void ScaleTabPage::SetNumFormat()
                     nFmt = pNumFormatter->GetStandardFormat( css::util::NumberFormat::TIME );
             }
 
-            if( chart2::AxisType::DATE == m_nAxisType && ( eType != css::util::NumberFormat::DATE && eType != css::util::NumberFormat::DATETIME) )
+            if( m_nAxisType == chart2::AxisType::DATE && ( eType != css::util::NumberFormat::DATE && eType != css::util::NumberFormat::DATETIME) )
             {
                 const SvNumberformat* pFormat = pNumFormatter->GetEntry( nFmt );
                 if( pFormat )

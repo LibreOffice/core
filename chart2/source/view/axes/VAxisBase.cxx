@@ -58,7 +58,7 @@ void VAxisBase::initAxisLabelProperties( const css::awt::Size& rFontReferenceSiz
     if( !m_aAxisProperties.m_bDisplayLabels )
         return;
 
-    if( AxisType::SERIES==m_aAxisProperties.m_nAxisType )
+    if( m_aAxisProperties.m_nAxisType==AxisType::SERIES )
     {
         if( m_aAxisProperties.m_xAxisTextProvider.is() )
             m_aTextLabels = m_aAxisProperties.m_xAxisTextProvider->getTextualData();
@@ -71,7 +71,7 @@ void VAxisBase::initAxisLabelProperties( const css::awt::Size& rFontReferenceSiz
             return;
         }
     }
-    else if( AxisType::CATEGORY==m_aAxisProperties.m_nAxisType )
+    else if( m_aAxisProperties.m_nAxisType==AxisType::CATEGORY )
     {
         if( m_aAxisProperties.m_pExplicitCategoriesProvider )
             m_aTextLabels = m_aAxisProperties.m_pExplicitCategoriesProvider->getSimpleCategories();
@@ -81,13 +81,13 @@ void VAxisBase::initAxisLabelProperties( const css::awt::Size& rFontReferenceSiz
 
     m_aAxisLabelProperties.nNumberFormatKey = m_aAxisProperties.m_nNumberFormatKey;
     m_aAxisLabelProperties.init(m_aAxisProperties.m_xAxisModel);
-    if( m_aAxisProperties.m_bComplexCategories && AxisType::CATEGORY == m_aAxisProperties.m_nAxisType )
+    if( m_aAxisProperties.m_bComplexCategories && m_aAxisProperties.m_nAxisType == AxisType::CATEGORY )
         m_aAxisLabelProperties.eStaggering = SIDE_BY_SIDE;
 }
 
 bool VAxisBase::isDateAxis() const
 {
-    return AxisType::DATE == m_aScale.AxisType;
+    return m_aScale.AxisType == AxisType::DATE;
 }
 bool VAxisBase::isComplexCategoryAxis() const
 {

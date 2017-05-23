@@ -622,10 +622,10 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
 
     OUString aName( lcl_getObjectName( pObj ) );
     ObjectType eObjectType( ObjectIdentifier::getObjectType( aName ) );
-    if( OBJECTTYPE_DATA_POINT == eObjectType
-        || OBJECTTYPE_DATA_LABEL == eObjectType
-        || OBJECTTYPE_LEGEND_ENTRY == eObjectType
-        || OBJECTTYPE_AXIS_UNITLABEL == eObjectType )
+    if( eObjectType == OBJECTTYPE_DATA_POINT
+        || eObjectType == OBJECTTYPE_DATA_LABEL
+        || eObjectType == OBJECTTYPE_LEGEND_ENTRY
+        || eObjectType == OBJECTTYPE_AXIS_UNITLABEL )
     {
         return false;
     }
@@ -635,7 +635,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
     while (aIterator.IsMore())
     {
         SdrObject* pSubObj = aIterator.Next();
-        if( OBJECTTYPE_DATA_SERIES == eObjectType )
+        if( eObjectType == OBJECTTYPE_DATA_SERIES )
         {
             OUString aSubName( lcl_getObjectName( pSubObj ) );
             ObjectType eSubObjectType( ObjectIdentifier::getObjectType( aSubName ) );

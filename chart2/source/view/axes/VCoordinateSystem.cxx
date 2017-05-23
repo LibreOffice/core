@@ -142,7 +142,7 @@ void VCoordinateSystem::setTransformationSceneToScreen(
         VAxisBase* pVAxis = aIt->second.get();
         if( pVAxis )
         {
-            if(2==pVAxis->getDimensionCount())
+            if(pVAxis->getDimensionCount()==2)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
         }
     }
@@ -182,7 +182,7 @@ uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
         std::swap(nXResolution,nYResolution);
 
     //2D
-    if( 2 == aResolution.getLength() )
+    if( aResolution.getLength() == 2 )
     {
         aResolution[0]=nXResolution;
         aResolution[1]=nYResolution;
@@ -373,20 +373,20 @@ void VCoordinateSystem::prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAuto
     double fMax = 0.0;
     ::rtl::math::setInf(&fMin, false);
     ::rtl::math::setInf(&fMax, true);
-    if( 0 == nDimIndex )
+    if( nDimIndex == 0 )
     {
         // x dimension
         fMin = m_aMergedMinMaxSupplier.getMinimumX();
         fMax = m_aMergedMinMaxSupplier.getMaximumX();
     }
-    else if( 1 == nDimIndex )
+    else if( nDimIndex == 1 )
     {
         // y dimension
         ExplicitScaleData aScale = getExplicitScale( 0, 0 );
         fMin = m_aMergedMinMaxSupplier.getMinimumYInRange(aScale.Minimum,aScale.Maximum, nAxisIndex);
         fMax = m_aMergedMinMaxSupplier.getMaximumYInRange(aScale.Minimum,aScale.Maximum, nAxisIndex);
     }
-    else if( 2 == nDimIndex )
+    else if( nDimIndex == 2 )
     {
         // z dimension
         fMin = m_aMergedMinMaxSupplier.getMinimumZ();
@@ -457,7 +457,7 @@ void VCoordinateSystem::createMaximumAxesLabels()
         VAxisBase* pVAxis = aIt->second.get();
         if( pVAxis )
         {
-            if(2==pVAxis->getDimensionCount())
+            if(pVAxis->getDimensionCount()==2)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
             pVAxis->createMaximumLabels();
         }
@@ -472,7 +472,7 @@ void VCoordinateSystem::createAxesLabels()
         VAxisBase* pVAxis = aIt->second.get();
         if( pVAxis )
         {
-            if(2==pVAxis->getDimensionCount())
+            if(pVAxis->getDimensionCount()==2)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
             pVAxis->createLabels();
         }
@@ -488,7 +488,7 @@ void VCoordinateSystem::updatePositions()
         VAxisBase* pVAxis = aIt->second.get();
         if( pVAxis )
         {
-            if(2==pVAxis->getDimensionCount())
+            if(pVAxis->getDimensionCount()==2)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
             pVAxis->updatePositions();
         }
@@ -504,7 +504,7 @@ void VCoordinateSystem::createAxesShapes()
         VAxisBase* pVAxis = aIt->second.get();
         if( pVAxis )
         {
-            if(2==pVAxis->getDimensionCount())
+            if(pVAxis->getDimensionCount()==2)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
 
             tFullAxisIndex aFullAxisIndex = aIt->first;
@@ -512,13 +512,13 @@ void VCoordinateSystem::createAxesShapes()
             {
                 if( aFullAxisIndex.first == 0 )
                 {
-                    if( AxisType::CATEGORY!=m_aExplicitScales[1].AxisType )
+                    if( m_aExplicitScales[1].AxisType!=AxisType::CATEGORY )
                         pVAxis->setExtraLinePositionAtOtherAxis(
                             m_aExplicitScales[1].Origin );
                 }
                 else if( aFullAxisIndex.first == 1 )
                 {
-                    if( AxisType::CATEGORY!=m_aExplicitScales[0].AxisType )
+                    if( m_aExplicitScales[0].AxisType!=AxisType::CATEGORY )
                         pVAxis->setExtraLinePositionAtOtherAxis(
                             m_aExplicitScales[0].Origin );
                 }

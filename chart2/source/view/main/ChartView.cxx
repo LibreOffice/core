@@ -514,7 +514,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
         for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
         {
             uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
-            if(3 == nDimensionCount && xChartType->getChartType().equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE))
+            if(nDimensionCount == 3 && xChartType->getChartType().equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE))
             {
                 uno::Reference< beans::XPropertySet > xPropertySet( xChartType, uno::UNO_QUERY );
                 if (xPropertySet.is())
@@ -534,7 +534,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             if(nT==0)
                 m_bChartTypeUsesShiftedCategoryPositionPerDefault = ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault( xChartType );
 
-            bool bExcludingPositioning = DiagramPositioningMode_EXCLUDING == DiagramHelper::getDiagramPositioningMode( xDiagram );
+            bool bExcludingPositioning = DiagramHelper::getDiagramPositioningMode( xDiagram ) == DiagramPositioningMode_EXCLUDING;
             VSeriesPlotter* pPlotter = VSeriesPlotter::createSeriesPlotter( xChartType, nDimensionCount, bExcludingPositioning );
             if( !pPlotter )
                 continue;
@@ -965,17 +965,17 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
                 if( xCrossingMainAxis.is() )
                 {
                     xCrossingMainAxis->getPropertyValue("CrossoverPosition") >>= eCrossingMainAxisPos;
-                    if( css::chart::ChartAxisPosition_VALUE == eCrossingMainAxisPos )
+                    if( eCrossingMainAxisPos == css::chart::ChartAxisPosition_VALUE )
                     {
                         double fValue = 0.0;
                         xCrossingMainAxis->getPropertyValue("CrossoverValue") >>= fValue;
                         aExplicitScale.Origin = fValue;
                     }
-                    else if( css::chart::ChartAxisPosition_ZERO == eCrossingMainAxisPos )
+                    else if( eCrossingMainAxisPos == css::chart::ChartAxisPosition_ZERO )
                         aExplicitScale.Origin = 0.0;
-                    else  if( css::chart::ChartAxisPosition_START == eCrossingMainAxisPos )
+                    else  if( eCrossingMainAxisPos == css::chart::ChartAxisPosition_START )
                         aExplicitScale.Origin = aExplicitScale.Minimum;
-                    else  if( css::chart::ChartAxisPosition_END == eCrossingMainAxisPos )
+                    else  if( eCrossingMainAxisPos == css::chart::ChartAxisPosition_END )
                         aExplicitScale.Origin = aExplicitScale.Maximum;
                 }
 
@@ -1376,8 +1376,8 @@ sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlav
 // ____ XUnoTunnel ___
 ::sal_Int64 SAL_CALL ChartView::getSomething( const uno::Sequence< ::sal_Int8 >& aIdentifier )
 {
-    if( aIdentifier.getLength() == 16 && 0 == memcmp( ExplicitValueProvider::getUnoTunnelId().getConstArray(),
-                                                         aIdentifier.getConstArray(), 16 ) )
+    if( aIdentifier.getLength() == 16 && memcmp( ExplicitValueProvider::getUnoTunnelId().getConstArray(),
+                                                         aIdentifier.getConstArray(), 16 ) == 0 )
     {
         ExplicitValueProvider* pProvider = this;
         return reinterpret_cast<sal_Int64>(pProvider);
@@ -1593,7 +1593,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     for( nC=0; nC < rVCooSysList.size(); nC++)
     {
         VCoordinateSystem* pVCooSys = rVCooSysList[nC];
-        if(3==nDimensionCount)
+        if(nDimensionCount==3)
         {
             uno::Reference<beans::XPropertySet> xSceneProperties( xDiagram, uno::UNO_QUERY );
             CuboidPlanePosition eLeftWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( xSceneProperties ) );
@@ -1726,7 +1726,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         pSeriesPlotter->initPlotter( xSeriesTarget,xTextTargetShapes,m_xShapeFactory,aCID );
         pSeriesPlotter->setPageReferenceSize( rPageSize );
         VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( rVCooSysList, pSeriesPlotter );
-        if(2==nDimensionCount)
+        if(nDimensionCount==2)
             pSeriesPlotter->setTransformationSceneToScreen( pVCooSys->getTransformationSceneToScreen() );
         //better performance for big data
         {
@@ -1771,7 +1771,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         for( std::unique_ptr<VSeriesPlotter>& aPlotter : rSeriesPlotterList )
         {
             VCoordinateSystem* pVCooSys = lcl_getCooSysForPlotter( rVCooSysList, aPlotter.get() );
-            if(2==nDimensionCount)
+            if(nDimensionCount==2)
                 aPlotter->setTransformationSceneToScreen( pVCooSys->getTransformationSceneToScreen() );
             aPlotter->createShapes();
             m_bPointsWereSkipped = m_bPointsWereSkipped || aPlotter->PointsWereSkipped();

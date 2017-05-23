@@ -1264,8 +1264,8 @@ Reference< util::XNumberFormatsSupplier > const & ChartModel::getNumberFormatsSu
 // ____ XUnoTunnel ___
 ::sal_Int64 SAL_CALL ChartModel::getSomething( const Sequence< ::sal_Int8 >& aIdentifier )
 {
-    if( aIdentifier.getLength() == 16 && 0 == memcmp( SvNumberFormatsSupplierObj::getUnoTunnelId().getConstArray(),
-                                                         aIdentifier.getConstArray(), 16 ) )
+    if( aIdentifier.getLength() == 16 && memcmp( SvNumberFormatsSupplierObj::getUnoTunnelId().getConstArray(),
+                                                         aIdentifier.getConstArray(), 16 ) == 0 )
     {
         Reference< lang::XUnoTunnel > xTunnel( getNumberFormatsSupplier(), uno::UNO_QUERY );
         if( xTunnel.is() )

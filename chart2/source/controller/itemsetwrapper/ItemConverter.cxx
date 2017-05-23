@@ -230,7 +230,7 @@ void ItemConverter::InvalidateUnequalItems( SfxItemSet  &rDestSet, const SfxItem
         {
             if (rSourceSet.Get(nWhich) != rDestSet.Get(nWhich))
             {
-                if( SID_CHAR_DLG_PREVIEW_STRING != nWhich )
+                if( nWhich != SID_CHAR_DLG_PREVIEW_STRING )
                 {
                     rDestSet.InvalidateItem(nWhich);
                 }

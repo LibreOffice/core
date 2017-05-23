@@ -267,19 +267,19 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
             sal_Int32 nType = 0;
             if( (rOuterValue >>= nType) )
             {
-                if( css::chart::ChartAxisType::AUTOMATIC == nType )
+                if( nType == css::chart::ChartAxisType::AUTOMATIC )
                 {
                     aScaleData.AutoDateAxis = true;
                     if( aScaleData.AxisType == AxisType::DATE )
                         aScaleData.AxisType = AxisType::CATEGORY;
                 }
-                else if( css::chart::ChartAxisType::CATEGORY == nType )
+                else if( nType == css::chart::ChartAxisType::CATEGORY )
                 {
                     aScaleData.AutoDateAxis = false;
                     if( aScaleData.AxisType == AxisType::DATE )
                         aScaleData.AxisType = AxisType::CATEGORY;
                 }
-                else if( css::chart::ChartAxisType::DATE == nType )
+                else if( nType == css::chart::ChartAxisType::DATE )
                 {
                     if( aScaleData.AxisType == AxisType::CATEGORY )
                         aScaleData.AxisType = AxisType::DATE;
@@ -321,7 +321,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
         {
             if( rOuterValue >>= bBool )
             {
-                bool bWasReverse = ( AxisOrientation_REVERSE == aScaleData.Orientation );
+                bool bWasReverse = ( aScaleData.Orientation == AxisOrientation_REVERSE );
                 if( (!bBool) != (!bWasReverse) ) // safe comparison between sal_Bool and bool
                 {
                     aScaleData.Orientation = bBool ? AxisOrientation_REVERSE : AxisOrientation_MATHEMATICAL;
@@ -566,7 +566,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
         }
         case SCALE_PROP_REVERSEDIRECTION:
         {
-            aRet <<= AxisOrientation_REVERSE == aScaleData.Orientation;
+            aRet <<= aScaleData.Orientation == AxisOrientation_REVERSE;
             break;
         }
         default:

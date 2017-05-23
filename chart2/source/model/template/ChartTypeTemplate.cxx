@@ -441,7 +441,7 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
         Sequence< Reference< chart2::XAxis > > aAxisSeq( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
         for( sal_Int32 i=0; i<aAxisSeq.getLength(); ++i )
         {
-            if( 1== AxisHelper::getDimensionIndexOfAxis( aAxisSeq[i], xDiagram ) )
+            if( AxisHelper::getDimensionIndexOfAxis( aAxisSeq[i], xDiagram )== 1 )
             {
                 Reference< beans::XPropertySet > xAxisProp( aAxisSeq[i], uno::UNO_QUERY );
                 if( xAxisProp.is())

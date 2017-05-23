@@ -78,7 +78,7 @@ wrapper::ItemConverter* createItemConverter(
 
     //get type of selected object
     ObjectType eObjectType = ObjectIdentifier::getObjectType( aObjectCID );
-    if( OBJECTTYPE_UNKNOWN==eObjectType )
+    if( eObjectType==OBJECTTYPE_UNKNOWN )
     {
         OSL_FAIL("unknown ObjectType");
         return nullptr;
@@ -681,14 +681,14 @@ OUString lcl_getFormatCIDforSelectedCID( const OUString& rSelectedCID )
     ObjectType eObjectType = ObjectIdentifier::getObjectType( aFormatCID );
 
     // some legend entries are handled as if they were data series
-    if( OBJECTTYPE_LEGEND_ENTRY==eObjectType )
+    if( eObjectType==OBJECTTYPE_LEGEND_ENTRY )
     {
         OUString aParentParticle( ObjectIdentifier::getFullParentParticle( rSelectedCID ) );
         aFormatCID  = ObjectIdentifier::createClassifiedIdentifierForParticle( aParentParticle );
     }
 
     // treat diagram as wall
-    if( OBJECTTYPE_DIAGRAM==eObjectType )
+    if( eObjectType==OBJECTTYPE_DIAGRAM )
         aFormatCID  = ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() );
 
     return aFormatCID;
@@ -723,11 +723,11 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
     {
         //get type of object
         ObjectType eObjectType = ObjectIdentifier::getObjectType( rObjectCID );
-        if( OBJECTTYPE_UNKNOWN==eObjectType )
+        if( eObjectType==OBJECTTYPE_UNKNOWN )
         {
             return bRet;
         }
-        if( OBJECTTYPE_DIAGRAM_WALL==eObjectType || OBJECTTYPE_DIAGRAM_FLOOR==eObjectType )
+        if( eObjectType==OBJECTTYPE_DIAGRAM_WALL || eObjectType==OBJECTTYPE_DIAGRAM_FLOOR )
         {
             if( !DiagramHelper::isSupportingFloorAndWall( ChartModelHelper::findDiagram( getModel() ) ) )
                 return bRet;
