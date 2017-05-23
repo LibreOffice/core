@@ -120,20 +120,22 @@ struct ScShapeDataLess
     }
     static void ConvertLayerId(sal_Int16& rLayerID) // changes the number of the LayerId so it the accessibility order
     {
-        switch (rLayerID)
+        // note: MSVC 2017 ICE's if this is written as "switch" so use "if"
+        if (sal_uInt8(SC_LAYER_FRONT) == rLayerID)
         {
-        case sal_uInt8(SC_LAYER_FRONT):
             rLayerID = 1;
-            break;
-        case sal_uInt8(SC_LAYER_BACK):
+        }
+        else if (sal_uInt8(SC_LAYER_BACK) == rLayerID)
+        {
             rLayerID = 0;
-            break;
-        case sal_uInt8(SC_LAYER_INTERN):
+        }
+        else if (sal_uInt8(SC_LAYER_INTERN) == rLayerID)
+        {
             rLayerID = 2;
-            break;
-        case sal_uInt8(SC_LAYER_CONTROLS):
+        }
+        else if (sal_uInt8(SC_LAYER_CONTROLS) == rLayerID)
+        {
             rLayerID = 3;
-            break;
         }
     }
     bool LessThanSheet(const ScAccessibleShapeData* pData) const
