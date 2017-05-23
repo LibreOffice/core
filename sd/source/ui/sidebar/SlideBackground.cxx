@@ -108,6 +108,10 @@ SlideBackground::SlideBackground(
     mbEditModeChangePending(false),
     mxFrame(rxFrame),
     maContext(),
+    maDrawOtherContext(vcl::EnumContext::Application::Draw, vcl::EnumContext::Context::DrawPage),
+    maDrawMasterContext(vcl::EnumContext::Application::Draw, vcl::EnumContext::Context::MasterPage),
+    maImpressOtherContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::DrawPage),
+    maImpressMasterContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::MasterPage),
     maApplication(vcl::EnumContext::Application::NONE),
     mbTitle(false),
     mpBindings(pBindings)
@@ -146,7 +150,6 @@ void SlideBackground::Initialize()
     mpPaperSizeBox->FillPaperSizeEntries( PaperSizeApp::Draw );
     mpPaperSizeBox->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
     mpPaperOrientation->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
-    mpCloseMaster->Hide();
     mpCloseMaster->SetClickHdl(LINK(this, SlideBackground, CloseMasterHdl));
     meUnit = maPaperSizeController.GetCoreMetric();
 
@@ -171,6 +174,25 @@ void SlideBackground::Initialize()
             aLayoutName = aLayoutName.copy(0,aLayoutName.indexOf(SD_LT_SEPARATOR));
             mpMasterSlide->SelectEntry(aLayoutName);
         }
+
+        DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
+        EditMode eMode = pDrawViewShell->GetEditMode();
+        if ( eMode == EditMode::MasterPage )
+        {
+            mpCloseMaster->Show();
+            mpEditMaster->Hide();
+            mpMasterSlide->Disable();
+            mpDspMasterBackground->Disable();
+            mpDspMasterObjects->Disable();
+        }
+        else
+        {
+            mpCloseMaster->Hide();
+            mpEditMaster->Show();
+            mpMasterSlide->Enable();
+            mpDspMasterBackground->Enable();
+            mpDspMasterObjects->Enable();
+        }
     }
 
     mpFillStyle->SelectEntryPos(static_cast< sal_Int32 >(NONE));
@@ -187,6 +209,14 @@ void SlideBackground::HandleContextChange(
     if (maContext == rContext)
         return;
     maContext = rContext;
+    if ( maContext == maImpressOtherContext || maContext == maImpressMasterContext )
+    {
+        maApplication = vcl::EnumContext::Application::Impress;
+    }
+    else if ( maContext == maDrawOtherContext || maContext == maDrawMasterContext )
+    {
+        maApplication = vcl::EnumContext::Application::Draw;
+    }
 }
 
 void SlideBackground::Update()
@@ -390,32 +420,22 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
         {
             if(!mbTitle)
             {
-                vcl::EnumContext aDrawOtherContext(vcl::EnumContext::Application::Draw,
-                                              vcl::EnumContext::Context::DrawPage);
-                vcl::EnumContext aDrawMasterContext(vcl::EnumContext::Application::Draw,
-                                              vcl::EnumContext::Context::MasterPage);
-                vcl::EnumContext aImpressOtherContext(vcl::EnumContext::Application::Impress,
-                                                 vcl::EnumContext::Context::DrawPage);
-                vcl::EnumContext aImpressMasterContext(vcl::EnumContext::Application::Impress,
-                                                       vcl::EnumContext::Context::MasterPage);
-                if(maContext == aDrawOtherContext || maContext == aDrawMasterContext)
+                if(maContext == maDrawOtherContext || maContext == maDrawMasterContext)
                 {
                     mpMasterLabel->SetText(SdResId(STR_MASTERPAGE_NAME));
-                    maApplication = vcl::EnumContext::Application::Draw;
                     mpCloseMaster->Hide();
                     mpEditMaster->Hide();
-                    if( maContext == aDrawMasterContext)
+                    if( maContext == maDrawMasterContext)
                         SetPanelTitle(SdResId(STR_MASTERPAGE_NAME));
                     else
                         SetPanelTitle(SdResId(STR_PAGE_NAME));
                 }
-                else if ( maContext == aImpressOtherContext || maContext == aImpressMasterContext )
+                else if ( maContext == maImpressOtherContext || maContext == maImpressMasterContext )
                 {
                     mpMasterLabel->SetText(SdResId(STR_MASTERSLIDE_NAME));
-                    maApplication = vcl::EnumContext::Application::Impress;
                     mpCloseMaster->Hide();
                     mpEditMaster->Show();
-                    if( maContext == aImpressMasterContext )
+                    if( maContext == maImpressMasterContext )
                         SetPanelTitle(SdResId(STR_MASTERSLIDE_NAME));
                     else
                         SetPanelTitle(SdResId(STR_SLIDE_NAME));
