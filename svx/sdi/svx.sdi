@@ -6325,6 +6325,25 @@ SfxBoolItem Pie_Unfilled SID_DRAW_PIE_NOFILL
 ]
 
 
+SfxVoidItem PolyFormen SID_POLY_FORMEN
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_MODIFY;
+]
+
+
 SfxBoolItem Polygon_Diagonal SID_DRAW_XPOLYGON
 
 [

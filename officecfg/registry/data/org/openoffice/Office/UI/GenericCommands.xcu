@@ -6032,6 +6032,11 @@
           <value xml:lang="en-US">Alig~n</value>
         </prop>
       </node>
+      <node oor:name=".uno:PolyFormen" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Shapes</value>
+        </prop>
+      </node>
       <node oor:name=".uno:Scan" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Scan</value>
