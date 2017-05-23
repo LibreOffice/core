@@ -16,6 +16,24 @@
       "revId": "0745f6781bf700022acf176d998c7dc929ce7453",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_9f3c1995",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1452,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-05-23T07:35:06Z",
+      "side": 1,
+      "message": "My first reaction is \"Yuck, that\u0027s unreadable\".  I don\u0027t think it is necessary in this case since this is only used in one function/one file and not likely to have its use extended. I agree that in multiple functions a custom comparator would be highly desirable to prevent mis-use.\n\nBut I tried it and I guess it isn\u0027t so bad.  So for the sake of \"good practice even if not necessary\" I could change it.",
+      "parentUuid": "5a3905b3_3fbfa5fc",
+      "revId": "0745f6781bf700022acf176d998c7dc929ce7453",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
