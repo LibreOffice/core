@@ -112,12 +112,10 @@ public:
 
     void SAL_CALL release() throw () override { OWeakObject::release(); }
 
-    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
-        throw (css::uno::RuntimeException, std::exception) override
+    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
     { return WeakImplHelper_getTypes(cd::get()); }
 
-    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
-        throw (css::uno::RuntimeException, std::exception) override
+    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
     { return css::uno::Sequence<sal_Int8>(); }
 };
 

@@ -2707,6 +2707,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/graphic,\
 	XGraphic \
 	XGraphicObject \
 	XGraphicProvider \
+	XGraphicProvider2 \
 	XGraphicRasterizer \
 	XGraphicRenderer \
 	XGraphicTransformer \
