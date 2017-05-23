@@ -28,6 +28,9 @@
 #include "sbxconv.hxx"
 #include "runtime.hxx"
 
+#ifndef _WIN32
+#include <signal.h>
+#endif
 
 ///////////////////////////// constructors
 
@@ -823,6 +826,53 @@ bool SbxValue::Convert( SbxDataType eTo )
     else
         return false;
 }
+
+namespace {
+#ifdef _WIN32
+int filter(unsigned int code) {
+    if (code == EXCEPTION_ACCESS_VIOLATION) {
+        return EXCEPTION_EXECUTE_HANDLER;
+    }
+    else {
+        return EXCEPTION_CONTINUE_SEARCH;
+    };
+}
+#endif
+
+// Adding strings may cause bad allocation in IMPL_RTL_STRINGNAME( newConcat ) (see sal/rtl/strtmpl.cxx)
+// and access nullptr after that (e.g. if memory is insufficient, or trying to make string longer than 2G chars),
+// which generates SIGSEGV or HW exception that isn't caught by c++ try block.
+// In MSVC, it's impossible to use structured exception handling in the same function where stack-allocated
+// objects are deleted. So use a dedicated function to handle that.
+void strAddSafe(OUString& rL, const OUString& rR)
+{
+#ifdef _WIN32
+    __try {
+#else
+    struct SignalHandlerGuard {
+        SignalHandlerGuard() : m_pPrevHandler (signal(SIGSEGV, SignalHandler)) {}
+        ~SignalHandlerGuard() { signal(SIGSEGV, m_pPrevHandler); }
+
+        typedef void(*SignalHandlerPointer)(int);
+        SignalHandlerPointer m_pPrevHandler;
+        static void SignalHandler(int /*signal*/)
+        {
+            SbxValue::SetError(ERRCODE_SBX_OVERFLOW);
+        }
+    };
+    SignalHandlerGuard aGuard;
+#endif
+        rL += rR;
+#ifdef _WIN32
+    }
+    __except (filter(GetExceptionCode()))
+    {
+        SbxValue::SetError(ERRCODE_SBX_OVERFLOW);
+    }
+#endif
+}
+}
+
 ////////////////////////////////// Calculating
 
 bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
@@ -875,7 +925,8 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                 // #30576: To begin with test, if the conversion worked
                 if( aL.pOUString != nullptr && aR.pOUString != nullptr )
                 {
-                    *aL.pOUString += *aR.pOUString;
+                    // tdf#108039: catch possible HW exceptions in dedicated function
+                    strAddSafe(*aL.pOUString, *aR.pOUString);
                 }
                 // Not even Left OK?
                 else if( aL.pOUString == nullptr )
