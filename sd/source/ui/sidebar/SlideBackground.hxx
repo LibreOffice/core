@@ -113,6 +113,10 @@ private:
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
     vcl::EnumContext maContext;
+    vcl::EnumContext maDrawOtherContext;
+    vcl::EnumContext maDrawMasterContext;
+    vcl::EnumContext maImpressOtherContext;
+    vcl::EnumContext maImpressMasterContext;
     vcl::EnumContext::Application maApplication;
     bool         mbTitle;
     SfxBindings* mpBindings;
