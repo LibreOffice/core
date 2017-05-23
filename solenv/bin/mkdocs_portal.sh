@@ -95,6 +95,7 @@ header "LibreOffice Modules" " " "$BASE_OUTPUT/index.html"
 
 for module_name in *; do
     if [ -d $module_name ]; then
+        cur_file=
         if [ -f $module_name/readme.txt ] ; then
             cur_file="$module_name/readme.txt"
         elif [ -f $module_name/README ] ; then
