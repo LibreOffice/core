@@ -67,9 +67,9 @@ void SAL_CALL Mapping_map_to_uno(
     assert(ppUnoI != nullptr);
     assert(td != nullptr);
 
-    if (nullptr == javaI)
+    if (javaI == nullptr)
     {
-        if (nullptr != *ppUnoI)
+        if (*ppUnoI != nullptr)
         {
             uno_Interface * p = *ppUnoI;
             (*p->release)( p );
@@ -93,7 +93,7 @@ void SAL_CALL Mapping_map_to_uno(
                     bridge->getJniInfo()->get_type_info(
                         jni, &td->aBase ) );
             uno_Interface * pUnoI = bridge->map_to_uno( jni, javaI, info );
-            if (nullptr != *ppUnoI)
+            if (*ppUnoI != nullptr)
             {
                 uno_Interface * p = *ppUnoI;
                 (*p->release)( p );
@@ -128,9 +128,9 @@ void SAL_CALL Mapping_map_to_java(
 
     try
     {
-        if (nullptr == pUnoI)
+        if (pUnoI == nullptr)
         {
-            if (nullptr != *ppJavaI)
+            if (*ppJavaI != nullptr)
             {
                 Bridge const * bridge =
                     static_cast< Mapping const * >( mapping )->m_bridge;
@@ -158,7 +158,7 @@ void SAL_CALL Mapping_map_to_java(
                     bridge->getJniInfo()->get_type_info(
                         jni, &td->aBase ) );
             jobject jlocal = bridge->map_to_java( jni, pUnoI, info );
-            if (nullptr != *ppJavaI)
+            if (*ppJavaI != nullptr)
                 jni->DeleteGlobalRef( *ppJavaI );
             *ppJavaI = jni->NewGlobalRef( jlocal );
             jni->DeleteLocalRef( jlocal );
@@ -194,7 +194,7 @@ namespace jni_uno
 
 void Bridge::acquire() const
 {
-    if (1 == osl_atomic_increment( &m_ref ))
+    if (osl_atomic_increment( &m_ref ) == 1)
     {
         if (m_registered_java2uno)
         {
@@ -384,7 +384,7 @@ OUString JNI_context::get_stack_trace( jobject jo_exc ) const
         jmethodID method = m_env->GetStaticMethodID(
             static_cast<jclass>(jo_JNI_proxy.get()), "get_stack_trace",
             "(Ljava/lang/Throwable;)Ljava/lang/String;" );
-        if (assert_no_exception() && (nullptr != method))
+        if (assert_no_exception() && (method != nullptr))
         {
             jvalue arg;
             arg.l = jo_exc;
@@ -517,7 +517,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     assert(ppMapping != nullptr);
     assert(pFrom != nullptr);
     assert(pTo != nullptr);
-    if (nullptr != *ppMapping)
+    if (*ppMapping != nullptr)
     {
         (*(*ppMapping)->release)( *ppMapping );
         *ppMapping = nullptr;

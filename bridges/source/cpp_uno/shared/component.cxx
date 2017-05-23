@@ -201,11 +201,11 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
         OUString from_envTypeName(cppu::EnvDcp::getTypeName(pFrom->pTypeName));
         OUString to_envTypeName(cppu::EnvDcp::getTypeName(pTo->pTypeName));
 
-        if (0 == rtl_ustr_ascii_compare(
+        if (rtl_ustr_ascii_compare(
                 from_envTypeName.pData->buffer,
-                CPPU_CURRENT_LANGUAGE_BINDING_NAME ) &&
-            0 == rtl_ustr_ascii_compare(
-                to_envTypeName.pData->buffer, UNO_LB_UNO ))
+                CPPU_CURRENT_LANGUAGE_BINDING_NAME ) == 0 &&
+            rtl_ustr_ascii_compare(
+                to_envTypeName.pData->buffer, UNO_LB_UNO ) == 0)
         {
             // ref count initially 1
             pMapping = bridges::cpp_uno::shared::Bridge::createMapping(
@@ -215,11 +215,11 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
                 &pFrom->pExtEnv->aBase,
                 &pTo->pExtEnv->aBase, nullptr );
         }
-        else if (0 == rtl_ustr_ascii_compare(
+        else if (rtl_ustr_ascii_compare(
                      to_envTypeName.pData->buffer,
-                     CPPU_CURRENT_LANGUAGE_BINDING_NAME ) &&
-                 0 == rtl_ustr_ascii_compare(
-                     from_envTypeName.pData->buffer, UNO_LB_UNO ))
+                     CPPU_CURRENT_LANGUAGE_BINDING_NAME ) == 0 &&
+                 rtl_ustr_ascii_compare(
+                     from_envTypeName.pData->buffer, UNO_LB_UNO ) == 0)
         {
             // ref count initially 1
             pMapping = bridges::cpp_uno::shared::Bridge::createMapping(

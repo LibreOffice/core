@@ -50,10 +50,10 @@ static OUString toUNOname( char const * p )
     // example: N3com3sun4star4lang24IllegalArgumentExceptionE
 
     OUStringBuffer buf( 64 );
-    assert( 'N' == *p );
+    assert( *p == 'N' );
     ++p; // skip N
 
-    while ('E' != *p)
+    while (*p != 'E')
     {
         // read chars count
         long n = (*p++ - '0');
@@ -64,7 +64,7 @@ static OUString toUNOname( char const * p )
         }
         buf.appendAscii( p, n );
         p += n;
-        if ('E' != *p)
+        if (*p != 'E')
             buf.append( '.' );
     }
 
@@ -156,7 +156,7 @@ void fillUnoException( __cxxabiv1::__cxa_exception * header, uno_Any * pUnoExc, 
     fprintf( stderr, "> c++ exception occurred: %s\n", cstr_unoName.getStr() );
 #endif
     typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
-    if (nullptr == pExcTypeDescr)
+    if (pExcTypeDescr == nullptr)
     {
         RuntimeException aRE( "exception type not found: " + unoName );
         Type const & rType = cppu::UnoType<decltype(aRE)>::get();

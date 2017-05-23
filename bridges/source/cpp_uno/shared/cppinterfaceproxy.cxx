@@ -120,7 +120,7 @@ com::sun::star::uno::XInterface * CppInterfaceProxy::create(
 
 void CppInterfaceProxy::acquireProxy()
 {
-    if (1 == osl_atomic_increment( &nRef ))
+    if (osl_atomic_increment( &nRef ) == 1)
     {
         // rebirth of proxy zombie
         // register at cpp env

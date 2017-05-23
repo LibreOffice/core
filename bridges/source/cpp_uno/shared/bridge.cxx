@@ -151,7 +151,7 @@ uno_Mapping * Bridge::createMapping(
 
 void Bridge::acquire()
 {
-    if (1 == osl_atomic_increment( &nRef ))
+    if (osl_atomic_increment( &nRef ) == 1)
     {
         if (bExportCpp2Uno)
         {
