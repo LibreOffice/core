@@ -1325,7 +1325,74 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
         if (pStream)
         {
             auto pG = o3tl::make_unique<Graphic>();
-            if (ImportGraphic(*pG, "", *pStream) == GRFILTER_OK)
+            sal_uInt16 nStatus = GRFILTER_OK;
+
+            // Detect the format.
+            ResetLastError();
+            sal_uLong nStreamBegin = pStream->Tell();
+            sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
+            nStatus = ImpTestOrFindFormat(OUString(), *pStream, nFormat);
+            pStream->Seek(nStreamBegin);
+
+            // Import the graphic.
+            if (nStatus == GRFILTER_OK && !pStream->GetError())
+            {
+                OUString aFilterName = pConfig->GetImportFilterName(nFormat);
+                GfxLinkType eLinkType = GfxLinkType::NONE;
+
+                if (aFilterName.equalsIgnoreAsciiCase(IMP_JPEG))
+                {
+                    GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::SetLogsizeForJpeg;
+
+                    sal_uInt64 nPosition = pStream->Tell();
+                    if (!ImportJPEG( *pStream, *pG, nImportFlags | GraphicFilterImportFlags::OnlyCreateBitmap, nullptr))
+                        nStatus = GRFILTER_FILTERERROR;
+                    else
+                    {
+                        Bitmap& rBitmap = const_cast<Bitmap&>(pG->GetBitmapExRef().GetBitmapRef());
+                        Bitmap::ScopedWriteAccess pWriteAccess(rBitmap);
+                        pStream->Seek(nPosition);
+                        if (!ImportJPEG(*pStream, *pG, nImportFlags | GraphicFilterImportFlags::UseExistingBitmap, &pWriteAccess))
+                            nStatus = GRFILTER_FILTERERROR;
+                        else
+                            eLinkType = GfxLinkType::NativeJpg;
+                    }
+                }
+                else
+                    nStatus = GRFILTER_FILTERERROR;
+
+                if (nStatus == GRFILTER_OK && (eLinkType != GfxLinkType::NONE) && !pG->GetContext())
+                {
+                    std::unique_ptr<sal_uInt8[]> pGraphicContent;
+
+                    const sal_uLong nStreamEnd = pStream->Tell();
+                    sal_Int32 nGraphicContentSize = nStreamEnd - nStreamBegin;
+
+                    if (nGraphicContentSize > 0)
+                    {
+                        try
+                        {
+                            pGraphicContent =  std::unique_ptr<sal_uInt8[]>(new sal_uInt8[nGraphicContentSize]);
+                        }
+                        catch (const std::bad_alloc&)
+                        {
+                            nStatus = GRFILTER_TOOBIG;
+                        }
+
+                        if (nStatus == GRFILTER_OK)
+                        {
+                            pStream->Seek(nStreamBegin);
+                            pStream->ReadBytes(pGraphicContent.get(), nGraphicContentSize);
+                        }
+                    }
+
+                    if (nStatus == GRFILTER_OK)
+                        pG->SetLink(GfxLink(std::move(pGraphicContent), nGraphicContentSize, eLinkType));
+                }
+            }
+
+            // If import went fine, store the graphic.
+            if (nStatus == GRFILTER_OK)
                 pGraphic = pG.release();
         }
 
