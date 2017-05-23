@@ -105,6 +105,7 @@
 #include <comphelper/configurationhelper.hxx>
 #include <editeng/unolingu.hxx>
 #include <config_features.h>
+#include <sfx2/watermarkitem.hxx>
 
 static const char* const DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
 
@@ -126,6 +127,7 @@ public:
     void testDOCXAutoTextMultiple();
     void testDOTMAutoText();
     void testDOCXAutoTextGallery();
+    void testWatermarkDOCX();
     void testTdf67238();
     void testFdo75110();
     void testFdo75898();
@@ -261,6 +263,7 @@ public:
     CPPUNIT_TEST(testDOCXAutoTextMultiple);
     CPPUNIT_TEST(testDOTMAutoText);
     CPPUNIT_TEST(testDOCXAutoTextGallery);
+    CPPUNIT_TEST(testWatermarkDOCX);
     CPPUNIT_TEST(testTdf67238);
     CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST(testFdo75898);
@@ -848,6 +851,26 @@ void SwUiWriterTest::testDOCXAutoTextGallery()
 
     // check entry name (if not contains gallery type)
     CPPUNIT_ASSERT_EQUAL(OUString("Multiple"), pGlossary->GetLongName(0));
+}
+
+void SwUiWriterTest::testWatermarkDOCX()
+{
+    SwDoc* const pDoc = createDoc("watermark.docx");
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    const SfxPoolItem* pItem;
+    SfxItemState eState = pDocShell->GetViewShell()->GetViewFrame()->GetDispatcher()->QueryState(SID_WATERMARK, pItem);
+
+    CPPUNIT_ASSERT(eState >= SfxItemState::DEFAULT);
+    CPPUNIT_ASSERT(pItem);
+    CPPUNIT_ASSERT_EQUAL((unsigned short)SID_WATERMARK, pItem->Which());
+
+    const SfxWatermarkItem* pWatermark = static_cast<const SfxWatermarkItem*>(pItem);
+    CPPUNIT_ASSERT_EQUAL(OUString("CustomWatermark"), pWatermark->GetText());
+    //TODO: VML import textpath style
+    //CPPUNIT_ASSERT_EQUAL(OUString("DejaVu Sans Light"), pWatermark->GetFont());
+    CPPUNIT_ASSERT_EQUAL((sal_Int16)45, pWatermark->GetAngle());
+    CPPUNIT_ASSERT_EQUAL((sal_uInt32)0x548dd4, pWatermark->GetColor());
+    CPPUNIT_ASSERT_EQUAL((sal_Int16)50, pWatermark->GetTransparency());
 }
 
 void SwUiWriterTest::testFdo74981()
