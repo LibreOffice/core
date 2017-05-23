@@ -45,7 +45,7 @@ namespace o3tl {
     template<> struct typed_flags<TableChgWidthHeightType> : is_typed_flags<TableChgWidthHeightType, 0xc00f> {};
 }
 constexpr TableChgWidthHeightType extractPosition(TableChgWidthHeightType e) {
-    return static_cast<TableChgWidthHeightType>(static_cast<int>(e) & 0xf);
+    return static_cast<TableChgWidthHeightType>(static_cast<sal_uInt16>(e) & 0xf);
 }
 
 enum class TableChgMode
