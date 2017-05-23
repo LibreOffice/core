@@ -36,6 +36,7 @@
 #include <vcl/wmf.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/gen.hxx>
+#include <comphelper/propertysequence.hxx>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/token/properties.hxx"
@@ -263,6 +264,34 @@ Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStrea
     return xGraphic;
 }
 
+std::vector< uno::Reference<graphic::XGraphic> > GraphicHelper::importGraphics(const std::vector< uno::Reference<io::XInputStream> >& rStreams) const
+{
+    std::vector< uno::Reference<graphic::XGraphic> > aRet;
+
+    for (const auto& rStream : rStreams)
+    {
+        uno::Reference<graphic::XGraphic> xGraphic;
+        if (rStream.is() && mxGraphicProvider.is())
+        {
+            try
+            {
+                uno::Sequence<beans::PropertyValue > aArgs = comphelper::InitPropertySequence(
+                {
+                    {"InputStream", uno::makeAny(rStream)}
+                });
+                xGraphic = mxGraphicProvider->queryGraphic(aArgs);
+            }
+            catch( const uno::Exception& rException)
+            {
+                SAL_WARN("oox", "GraphicHelper::importGraphic: queryGraphics() failed: " << rException.Message);
+            }
+        }
+        aRet.push_back(xGraphic);
+    }
+
+    return aRet;
+}
+
 Reference< XGraphic > GraphicHelper::importGraphic( const StreamDataSequence& rGraphicData ) const
 {
     Reference< XGraphic > xGraphic;
@@ -278,8 +307,9 @@ void GraphicHelper::importEmbeddedGraphics(const std::vector<OUString>& rStreamN
 {
     // Don't actually return anything, just fill maEmbeddedGraphics.
 
-    // Input stream -> stream name map.
-    std::map< uno::Reference<io::XInputStream>, OUString > aStreamNames;
+    // Stream names and streams to be imported.
+    std::vector<OUString> aMissingStreamNames;
+    std::vector< uno::Reference<io::XInputStream> > aMissingStreams;
 
     for (const auto& rStreamName : rStreamNames)
     {
@@ -291,14 +321,19 @@ void GraphicHelper::importEmbeddedGraphics(const std::vector<OUString>& rStreamN
 
         EmbeddedGraphicMap::const_iterator aIt = maEmbeddedGraphics.find(rStreamName);
         if (aIt == maEmbeddedGraphics.end())
-            aStreamNames[mxStorage->openInputStream(rStreamName)] = rStreamName;
+        {
+            aMissingStreamNames.push_back(rStreamName);
+            aMissingStreams.push_back(mxStorage->openInputStream(rStreamName));
+        }
     }
 
-    for (const auto& rStream : aStreamNames)
+    std::vector< uno::Reference<graphic::XGraphic> > aGraphics = importGraphics(aMissingStreams);
+
+    assert(aGraphics.size() == aMissingStreamNames.size());
+    for (size_t i = 0; i < aGraphics.size(); ++i)
     {
-        uno::Reference<graphic::XGraphic> xGraphic = importGraphic(rStream.first);
-        if (xGraphic.is())
-            maEmbeddedGraphics[rStream.second] = xGraphic;
+        if (aGraphics[i].is())
+            maEmbeddedGraphics[aMissingStreamNames[i]] = aGraphics[i];
     }
 }
 
