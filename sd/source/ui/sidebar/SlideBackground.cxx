@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/ui/XDeck.hpp>
 #include <com/sun/star/ui/XPanel.hpp>
 #include "SlideBackground.hxx"
@@ -30,13 +29,11 @@
 #include "drawdoc.hxx"
 #include "filedlg.hxx"
 #include "strings.hrc"
-#include "drawdoc.hxx"
 #include "DocumentHelper.hxx"
 #include "MasterPagesSelector.hxx"
 #include "DrawViewShell.hxx"
 #include "DrawController.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "sdresid.hxx"
 #include <svtools/controldims.hrc>
 #include <svx/colorbox.hxx>
 #include <svx/gallery.hxx>
@@ -111,13 +108,20 @@ SlideBackground::SlideBackground(
     mbEditModeChangePending(false),
     mxFrame(rxFrame),
     maContext(),
-    maApplication(vcl::EnumContext::Application_None),
+    maDrawOtherContext(vcl::EnumContext::Application::Draw, vcl::EnumContext::Context::DrawPage),
+    maDrawMasterContext(vcl::EnumContext::Application::Draw, vcl::EnumContext::Context::MasterPage),
+    maImpressOtherContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::DrawPage),
+    maImpressMasterContext(vcl::EnumContext::Application::Impress, vcl::EnumContext::Context::MasterPage),
+    maApplication(vcl::EnumContext::Application::NONE),
     mbTitle(false),
     mpBindings(pBindings)
 {
     get(mpPaperSizeBox,"paperformat");
     get(mpPaperOrientation, "orientation");
     get(mpMasterSlide, "masterslide");
+    //let the listbox shrink to any size so the sidebar isn't forced to grow to
+    //the size of the longest master slide name in the document
+    mpMasterSlide->set_width_request(0);
     get(mpFillAttr, "fillattr1");
     get(mpFillGrad, "fillattr2");
     get(mpFillStyle, "fillstyle");
@@ -138,7 +142,7 @@ SlideBackground::~SlideBackground()
 
 bool SlideBackground::IsImpress()
 {
-    return ( maApplication == vcl::EnumContext::Application_Impress );
+    return ( maApplication == vcl::EnumContext::Application::Impress );
 }
 
 void SlideBackground::Initialize()
@@ -146,7 +150,6 @@ void SlideBackground::Initialize()
     mpPaperSizeBox->FillPaperSizeEntries( PaperSizeApp::Draw );
     mpPaperSizeBox->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
     mpPaperOrientation->SetSelectHdl(LINK(this,SlideBackground,PaperSizeModifyHdl));
-    mpCloseMaster->Hide();
     mpCloseMaster->SetClickHdl(LINK(this, SlideBackground, CloseMasterHdl));
     meUnit = maPaperSizeController.GetCoreMetric();
 
@@ -164,13 +167,31 @@ void SlideBackground::Initialize()
 
         if ( pFrameView->GetViewShEditMode() ==  EditMode::Page )
         {
-            DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
-            SdPage* mpPage = pDrawViewShell->getCurrentPage();
+            SdPage* mpPage = pMainViewShell->getCurrentPage();
             populateMasterSlideDropdown();
 
             OUString aLayoutName( mpPage->GetLayoutName() );
             aLayoutName = aLayoutName.copy(0,aLayoutName.indexOf(SD_LT_SEPARATOR));
             mpMasterSlide->SelectEntry(aLayoutName);
+        }
+
+        DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
+        EditMode eMode = pDrawViewShell->GetEditMode();
+        if ( eMode == EditMode::MasterPage )
+        {
+            mpCloseMaster->Show();
+            mpEditMaster->Hide();
+            mpMasterSlide->Disable();
+            mpDspMasterBackground->Disable();
+            mpDspMasterObjects->Disable();
+        }
+        else
+        {
+            mpCloseMaster->Hide();
+            mpEditMaster->Show();
+            mpMasterSlide->Enable();
+            mpDspMasterBackground->Enable();
+            mpDspMasterObjects->Enable();
         }
     }
 
@@ -188,6 +209,14 @@ void SlideBackground::HandleContextChange(
     if (maContext == rContext)
         return;
     maContext = rContext;
+    if ( maContext == maImpressOtherContext || maContext == maImpressMasterContext )
+    {
+        maApplication = vcl::EnumContext::Application::Impress;
+    }
+    else if ( maContext == maDrawOtherContext || maContext == maDrawMasterContext )
+    {
+        maApplication = vcl::EnumContext::Application::Draw;
+    }
 }
 
 void SlideBackground::Update()
@@ -295,7 +324,7 @@ void SlideBackground::SetPanelTitle( const OUString& rTitle )
         return;
 
     Reference<ui::XPanel> xPanel ( xPanels->getByName("SlideBackgroundPanel"), uno::UNO_QUERY);
-    if ( !xPanels.is() )
+    if ( !xPanel.is() )
         return;
 
     xPanel->setTitle( rTitle );
@@ -304,16 +333,7 @@ void SlideBackground::SetPanelTitle( const OUString& rTitle )
 void SlideBackground::addListener()
 {
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this, SlideBackground, EventMultiplexerListener) );
-    mrBase.GetEventMultiplexer()->AddEventListener (
-        aLink,
-        EventMultiplexerEventId::CurrentPageChanged |
-        EventMultiplexerEventId::MainViewAdded |
-        EventMultiplexerEventId::ShapeChanged |
-        EventMultiplexerEventId::EditModeNormal |
-        EventMultiplexerEventId::EditModeMaster |
-        EventMultiplexerEventId::EditViewSelection |
-        EventMultiplexerEventId::EndTextEdit |
-        EventMultiplexerEventId::ViewAdded);
+    mrBase.GetEventMultiplexer()->AddEventListener( aLink );
 }
 
 void SlideBackground::removeListener()
@@ -352,12 +372,12 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                     {
                         if( IsImpress() )
                         {
-                            SetPanelTitle(SD_RESSTR(STR_MASTERSLIDE_NAME));
+                            SetPanelTitle(SdResId(STR_MASTERSLIDE_NAME));
                             mpEditMaster->Hide();
                             mpCloseMaster->Show();
                         }
                         else
-                            SetPanelTitle(SD_RESSTR(STR_MASTERPAGE_NAME));
+                            SetPanelTitle(SdResId(STR_MASTERPAGE_NAME));
                         mpMasterSlide->Disable();
                         mpDspMasterBackground->Disable();
                         mpDspMasterObjects->Disable();
@@ -366,12 +386,12 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
                     {
                         if( IsImpress() )
                         {
-                            SetPanelTitle(SD_RESSTR(STR_SLIDE_NAME));
+                            SetPanelTitle(SdResId(STR_SLIDE_NAME));
                             mpCloseMaster->Hide();
                             mpEditMaster->Show();
                         }
                         else
-                            SetPanelTitle(SD_RESSTR(STR_PAGE_NAME));
+                            SetPanelTitle(SdResId(STR_PAGE_NAME));
                         mpMasterSlide->Enable();
                         mpDspMasterBackground->Enable();
                         mpDspMasterObjects->Enable();
@@ -383,7 +403,7 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
         break;
         case EventMultiplexerEventId::CurrentPageChanged:
         {
-            static sal_uInt16 SidArray[] = {
+            static const sal_uInt16 SidArray[] = {
                 SID_ATTR_PAGE_COLOR,
                 SID_ATTR_PAGE_GRADIENT,
                 SID_ATTR_PAGE_HATCH,
@@ -400,35 +420,25 @@ IMPL_LINK(SlideBackground, EventMultiplexerListener,
         {
             if(!mbTitle)
             {
-                vcl::EnumContext aDrawOtherContext(vcl::EnumContext::Application_Draw,
-                                              vcl::EnumContext::Context_DrawPage);
-                vcl::EnumContext aDrawMasterContext(vcl::EnumContext::Application_Draw,
-                                              vcl::EnumContext::Context_MasterPage);
-                vcl::EnumContext aImpressOtherContext(vcl::EnumContext::Application_Impress,
-                                                 vcl::EnumContext::Context_DrawPage);
-                vcl::EnumContext aImpressMasterContext(vcl::EnumContext::Application_Impress,
-                                                       vcl::EnumContext::Context_MasterPage);
-                if(maContext == aDrawOtherContext || maContext == aDrawMasterContext)
+                if(maContext == maDrawOtherContext || maContext == maDrawMasterContext)
                 {
-                    mpMasterLabel->SetText(SD_RESSTR(STR_MASTERPAGE_NAME));
-                    maApplication = vcl::EnumContext::Application_Draw;
+                    mpMasterLabel->SetText(SdResId(STR_MASTERPAGE_NAME));
                     mpCloseMaster->Hide();
                     mpEditMaster->Hide();
-                    if( maContext == aDrawMasterContext)
-                        SetPanelTitle(SD_RESSTR(STR_MASTERPAGE_NAME));
+                    if( maContext == maDrawMasterContext)
+                        SetPanelTitle(SdResId(STR_MASTERPAGE_NAME));
                     else
-                        SetPanelTitle(SD_RESSTR(STR_PAGE_NAME));
+                        SetPanelTitle(SdResId(STR_PAGE_NAME));
                 }
-                else if ( maContext == aImpressOtherContext || maContext == aImpressMasterContext )
+                else if ( maContext == maImpressOtherContext || maContext == maImpressMasterContext )
                 {
-                    mpMasterLabel->SetText(SD_RESSTR(STR_MASTERSLIDE_NAME));
-                    maApplication = vcl::EnumContext::Application_Impress;
+                    mpMasterLabel->SetText(SdResId(STR_MASTERSLIDE_NAME));
                     mpCloseMaster->Hide();
                     mpEditMaster->Show();
-                    if( maContext == aImpressMasterContext )
-                        SetPanelTitle(SD_RESSTR(STR_MASTERSLIDE_NAME));
+                    if( maContext == maImpressMasterContext )
+                        SetPanelTitle(SdResId(STR_MASTERSLIDE_NAME));
                     else
-                        SetPanelTitle(SD_RESSTR(STR_SLIDE_NAME));
+                        SetPanelTitle(SdResId(STR_SLIDE_NAME));
                 }
                 mbTitle = true;
             }
@@ -728,7 +738,6 @@ void SlideBackground::NotifyItemUpdate(
                 mpDspMasterObjects->Check(pBoolItem->GetValue());
         }
         break;
-
         case SID_SELECT_BACKGROUND:
         {
             if(eState >= SfxItemState::DEFAULT)
@@ -795,14 +804,19 @@ IMPL_LINK_NOARG(SlideBackground, FillStyleModifyHdl, ListBox&, void)
 IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
 {
     Paper ePaper =  mpPaperSizeBox->GetSelection();
-    Size  aSize(SvxPaperInfo::GetPaperSize(ePaper, (MapUnit)(meUnit)));
+    Size  aSize(SvxPaperInfo::GetPaperSize(ePaper, meUnit));
 
     if(mpPaperOrientation->GetSelectEntryPos() == 0)
         Swap(aSize);
 
     mpPageItem->SetLandscape(mpPaperOrientation->GetSelectEntryPos() == 0);
     SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, aSize);
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem, mpPageItem.get() });
+    // Page/slide properties dialog (FuPage::ExecuteDialog and ::ApplyItemSet) misuses
+    // SID_ATTR_PAGE_EXT1 to distinguish between Impress and Draw, as for whether to fit
+    // objects to paper size. Until that is handled somehow better, we do the same here
+    SfxBoolItem aFitObjs(SID_ATTR_PAGE_EXT1, IsImpress());
+
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem, mpPageItem.get(), &aFitObjs});
 }
 
 IMPL_LINK_NOARG(SlideBackground, FillColorHdl, SvxColorListBox&, void)
@@ -822,7 +836,9 @@ IMPL_LINK_NOARG(SlideBackground, FillColorHdl, SvxColorListBox&, void)
             aGradient.SetStartColor(mpFillLB->GetSelectEntryColor());
             aGradient.SetEndColor(mpFillGrad->GetSelectEntryColor());
 
-            XFillGradientItem aItem(aGradient);
+            // the name doesn't really matter, it'll be converted to unique one eventually,
+            // but it has to be non-empty
+            XFillGradientItem aItem("gradient", aGradient);
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::RECORD, { &aItem });
         }
         break;
@@ -856,13 +872,13 @@ IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, ListBox&, void)
             sal_Int16 nPos = mpFillAttr->GetSelectEntryPos();
             GraphicObject aBitmap;
             OUString aName;
-            if(nPos == static_cast< sal_Int32 >(BITMAP))
+            if( nFillPos == BITMAP )
             {
                 SvxBitmapListItem aBitmapListItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
                 aBitmap = aBitmapListItem.GetBitmapList()->GetBitmap(nPos)->GetGraphicObject();
                 aName = aBitmapListItem.GetBitmapList()->GetBitmap(nPos)->GetName();
             }
-            else if(nPos == static_cast< sal_Int32 >(PATTERN))
+            else if( nFillPos == PATTERN )
             {
                 SvxPatternListItem aPatternListItem(*static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
                 aBitmap = aPatternListItem.GetPatternList()->GetBitmap(nPos)->GetGraphicObject();

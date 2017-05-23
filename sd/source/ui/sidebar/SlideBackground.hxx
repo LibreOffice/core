@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_SIDEBAR_SLIDEBACKGROUND_HXX
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_SLIDEBACKGROUND_HXX
 
+#include <memory>
 #include <vcl/ctrl.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
@@ -113,6 +114,10 @@ private:
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
     vcl::EnumContext maContext;
+    vcl::EnumContext maDrawOtherContext;
+    vcl::EnumContext maDrawMasterContext;
+    vcl::EnumContext maImpressOtherContext;
+    vcl::EnumContext maImpressMasterContext;
     vcl::EnumContext::Application maApplication;
     bool         mbTitle;
     SfxBindings* mpBindings;
