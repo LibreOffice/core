@@ -1409,24 +1409,30 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
         sal_uInt32 color = *o3tl::doAccess<sal_uInt32>(mAny);
         SAL_INFO("oox.shape", "run color: " << color << " auto: " << COL_AUTO);
 
-        if( color == COL_AUTO )  // nCharColor depends to the background color
+        // tdf#104219 In LibreOffice and MS Office, there are two types of colors:
+        // Automatic and Fixed. OOXML is setting automatic color, by not providing color.
+        if( color != COL_AUTO )
         {
-            color = mbIsBackgroundDark ? 0xffffff : 0x000000;
+            color &= 0xffffff;
+            // TODO: special handle embossed/engraved
+            WriteSolidFill( color );
         }
-        color &= 0xffffff;
-
-        // TODO: special handle embossed/engraved
-
-        WriteSolidFill( color );
     }
 
-    if( CGETAD( CharUnderlineColor ) )
+    if( ( underline != nullptr ) && CGETAD( CharUnderlineColor ) )
     {
         sal_uInt32 color = *o3tl::doAccess<sal_uInt32>(mAny);
-
-        mpFS->startElementNS( XML_a, XML_uFill,FSEND);
-        WriteSolidFill( color );
-        mpFS->endElementNS( XML_a, XML_uFill );
+        // if color is automatic, then we shouldn't write information about color but to take color from character
+        if( color != COL_AUTO )
+        {
+            mpFS->startElementNS( XML_a, XML_uFill, FSEND);
+            WriteSolidFill( color );
+            mpFS->endElementNS( XML_a, XML_uFill );
+        }
+        else
+        {
+            mpFS->singleElementNS( XML_a, XML_uFillTx, FSEND );
+        }
     }
 
     if( GETA( CharFontName ) )
