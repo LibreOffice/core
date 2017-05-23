@@ -115,7 +115,7 @@ bool lcl_hasField(const uno::Reference<text::XText>& xText, const OUString& rSer
 }
 
 /// Search for a frame named rShapeName of type rServiceName in xText.
-uno::Reference<drawing::XShape> lcl_getWatermark(const uno::Reference<text::XText>& xText, const OUString& rServiceName, const OUString& rShapeName)
+uno::Reference<drawing::XShape> lcl_getWatermark(const uno::Reference<text::XText>& xText, const OUString& rServiceName, OUString& rShapeName)
 {
     uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(xText, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();
@@ -144,8 +144,11 @@ uno::Reference<drawing::XShape> lcl_getWatermark(const uno::Reference<text::XTex
                 continue;
 
             uno::Reference<container::XNamed> xNamed(xWatermark, uno::UNO_QUERY);
-            if (xNamed->getName() != rShapeName)
+
+            if (!xNamed->getName().startsWith("PowerPlusWaterMarkObject"))
                 continue;
+
+            rShapeName = xNamed->getName();
 
             uno::Reference<drawing::XShape> xShape(xWatermark, uno::UNO_QUERY);
             return xShape;
@@ -283,7 +286,7 @@ SfxWatermarkItem SwEditShell::GetWatermark()
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
 
         OUString aShapeServiceName = "com.sun.star.drawing.CustomShape";
-        static const OUString sWatermark = SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCWATERMARK();
+        OUString sWatermark = "";
         uno::Reference<drawing::XShape> xWatermark = lcl_getWatermark(xHeaderText, aShapeServiceName, sWatermark);
 
         if (xWatermark.is())
@@ -349,7 +352,7 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
 
         OUString aShapeServiceName = "com.sun.star.drawing.CustomShape";
-        static const OUString sWatermark = SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCWATERMARK();
+        OUString sWatermark = "PowerPlusWaterMarkObject";
         uno::Reference<drawing::XShape> xWatermark = lcl_getWatermark(xHeaderText, aShapeServiceName, sWatermark);
 
         bool bDeleteWatermark = rWatermark.GetText().isEmpty();
@@ -490,7 +493,7 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
             xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(comphelper::containerToSequence(aGeomPropVec)));
 
             uno::Reference<container::XNamed> xNamed(xShape, uno::UNO_QUERY);
-            xNamed->setName(SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY() + SfxClassificationHelper::PROP_DOCWATERMARK());
+            xNamed->setName(sWatermark);
             xLockable->removeActionLock();
         }
     }
