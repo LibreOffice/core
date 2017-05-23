@@ -78,6 +78,7 @@ class CompileFormulaContext;
 struct SetFormulaDirtyContext;
 class RefMovedHint;
 struct ReorderParam;
+class ColumnIterator;
 
 }
 
@@ -991,6 +992,10 @@ public:
 
     void TransferCellValuesTo( SCCOL nCol, SCROW nRow, size_t nLen, sc::CellValues& rDest );
     void CopyCellValuesFrom( SCCOL nCol, SCROW nRow, const sc::CellValues& rSrc );
+
+    std::unique_ptr<sc::ColumnIterator> GetColumnIterator( SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
+
+    void EnsureFormulaCellResults( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
     void ConvertFormulaToValue(
         sc::EndListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
