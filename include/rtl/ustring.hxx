@@ -187,11 +187,16 @@ public:
       New string from a single Unicode character.
 
       @param    value       a Unicode character.
+
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
     */
     explicit OUString( sal_Unicode value )
         : pData (NULL)
     {
         rtl_uString_newFromStr_WithLength( &pData, &value, 1 );
+        if (pData == nullptr) {
+            throw std::bad_alloc();
+        }
     }
 
 #if defined LIBO_INTERNAL_ONLY && !defined RTL_STRING_UNITTEST_CONCAT
@@ -209,11 +214,16 @@ public:
       New string from a Unicode character buffer array.
 
       @param    value       a NULL-terminated Unicode character array.
+
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
     */
     OUString( const sal_Unicode * value )
     {
         pData = NULL;
         rtl_uString_newFromStr( &pData, value );
+        if (pData == nullptr) {
+            throw std::bad_alloc();
+        }
     }
 
     /**
@@ -223,11 +233,16 @@ public:
       @param    length      the number of character which should be copied.
                             The character array length must be greater than
                             or equal to this value.
+
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
     */
     OUString( const sal_Unicode * value, sal_Int32 length )
     {
         pData = NULL;
         rtl_uString_newFromStr_WithLength( &pData, value, length );
+        if (pData == nullptr) {
+            throw std::bad_alloc();
+        }
     }
 
     /**
@@ -242,6 +257,8 @@ public:
       Use the overload that explicitly accepts length.
 
       @param    literal         the 8-bit ASCII string literal
+
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
 
       @since LibreOffice 3.6
     */
@@ -282,6 +299,9 @@ public:
                 libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
                     literal),
                 libreoffice_internal::ConstCharArrayDetector<T>::length);
+        }
+        if (pData == nullptr) {
+            throw std::bad_alloc();
         }
     }
 #endif
@@ -467,6 +487,8 @@ public:
 
       @param    literal         the 8-bit ASCII string literal
 
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
+
       @since LibreOffice 3.6
     */
     template< typename T >
@@ -501,6 +523,9 @@ public:
                     literal),
                 libreoffice_internal::ConstCharArrayDetector<T>::length);
         }
+        if (pData == nullptr) {
+            throw std::bad_alloc();
+        }
         return *this;
     }
 
@@ -519,6 +544,8 @@ public:
       Append a string to this string.
 
       @param    str         a OUString.
+
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
     */
     OUString & operator+=( const OUString & str )
 #if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_REF_QUALIFIER
@@ -526,6 +553,9 @@ public:
 #endif
     {
         rtl_uString_newConcat( &pData, pData, str.pData );
+        if (pData == nullptr) {
+            throw std::bad_alloc();
+        }
         return *this;
     }
 #if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_REF_QUALIFIER
@@ -2231,11 +2261,16 @@ public:
                       of this string.
       @return   a string that represents the concatenation of this string
                 followed by the string argument.
+
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
     */
     SAL_WARN_UNUSED_RESULT OUString concat( const OUString & str ) const
     {
         rtl_uString* pNew = NULL;
         rtl_uString_newConcat( &pNew, pData, str.pData );
+        if (pNew == nullptr) {
+            throw std::bad_alloc();
+        }
         return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
@@ -2258,11 +2293,16 @@ public:
                       less than or equal to the length of the string minus index.
       @param  newStr  the new substring.
       @return the new string.
+
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
     */
     SAL_WARN_UNUSED_RESULT OUString replaceAt( sal_Int32 index, sal_Int32 count, const OUString& newStr ) const
     {
         rtl_uString* pNew = NULL;
         rtl_uString_newReplaceStrAt( &pNew, pData, index, count, newStr.pData );
+        if (pNew == nullptr) {
+            throw std::bad_alloc();
+        }
         return OUString( pNew, SAL_NO_ACQUIRE );
     }
 
@@ -3340,6 +3380,7 @@ public:
       @param    i           an integer value
       @param    radix       the radix (between 2 and 36)
       @return   a string with the string representation of the argument.
+      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
       @since LibreOffice 4.1
     */
     static OUString number( int i, sal_Int16 radix = 10 )
@@ -3347,6 +3388,9 @@ public:
         sal_Unicode aBuf[RTL_USTR_MAX_VALUEOFINT32];
         rtl_uString* pNewData = NULL;
         rtl_uString_newFromStr_WithLength( &pNewData, aBuf, rtl_ustr_valueOfInt32( aBuf, i, radix ) );
+        if (pNewData == nullptr) {
+            throw std::bad_alloc();
+        }
         return OUString( pNewData, SAL_NO_ACQUIRE );
     }
     /// @overload
