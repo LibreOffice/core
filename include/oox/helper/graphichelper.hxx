@@ -124,6 +124,9 @@ public:
                             const OUString& rStreamName,
                             const WMF_EXTERNALHEADER* pExtHeader = nullptr ) const;
 
+    /** Imports graphics from the storage with the passed stream names. */
+    void importEmbeddedGraphics(const std::vector<OUString>& rStreamNames) const;
+
     /** Creates a persistent graphic object from the passed graphic.
         @return  The URL of the created and internally cached graphic object. */
     OUString     createGraphicObject(

@@ -274,6 +274,34 @@ Reference< XGraphic > GraphicHelper::importGraphic( const StreamDataSequence& rG
     return xGraphic;
 }
 
+void GraphicHelper::importEmbeddedGraphics(const std::vector<OUString>& rStreamNames) const
+{
+    // Don't actually return anything, just fill maEmbeddedGraphics.
+
+    // Input stream -> stream name map.
+    std::map< uno::Reference<io::XInputStream>, OUString > aStreamNames;
+
+    for (const auto& rStreamName : rStreamNames)
+    {
+        if(rStreamName.isEmpty())
+        {
+            SAL_WARN("oox", "GraphicHelper::importEmbeddedGraphics - empty stream name");
+            continue;
+        }
+
+        EmbeddedGraphicMap::const_iterator aIt = maEmbeddedGraphics.find(rStreamName);
+        if (aIt == maEmbeddedGraphics.end())
+            aStreamNames[mxStorage->openInputStream(rStreamName)] = rStreamName;
+    }
+
+    for (const auto& rStream : aStreamNames)
+    {
+        uno::Reference<graphic::XGraphic> xGraphic = importGraphic(rStream.first);
+        if (xGraphic.is())
+            maEmbeddedGraphics[rStream.second] = xGraphic;
+    }
+}
+
 Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStreamName, const WMF_EXTERNALHEADER* pExtHeader ) const
 {
     Reference< XGraphic > xGraphic;

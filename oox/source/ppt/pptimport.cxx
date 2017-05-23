@@ -100,7 +100,13 @@ static void visitRelations(PowerPointImport& rImport, core::RelationsRef pRelati
                 if (core::RelationsRef pImages = pFragmentRelations->getRelationsFromTypeFromOfficeDoc("image"))
                 {
                     for (const auto& rImage : *pImages)
-                        rImageFragments.push_back(pImages->getFragmentPathFromRelation(rImage.second));
+                    {
+                        OUString aPath = pImages->getFragmentPathFromRelation(rImage.second);
+                        // Safe subset: e.g. WMF may have an external header from the
+                        // referencing fragment.
+                        if (aPath.endsWith(".jpg") || aPath.endsWith(".jpeg"))
+                            rImageFragments.push_back(aPath);
+                    }
                 }
 
                 // See if the fragment has a slide layout, and recurse.
@@ -130,13 +136,7 @@ bool PowerPointImport::importDocument()
         visitRelations(*this, pFragmentRelations, "slide", aImageFragments);
         visitRelations(*this, pFragmentRelations, "slideMaster", aImageFragments);
 
-        for (const auto& rImage : aImageFragments)
-        {
-            // Safe subset: e.g. WMF may have an external header from the
-            // referencing fragment.
-            if (rImage.endsWith(".jpg") || rImage.endsWith(".jpeg"))
-                getGraphicHelper().importEmbeddedGraphic(rImage);
-        }
+        getGraphicHelper().importEmbeddedGraphics(aImageFragments);
     }
 
     bool bRet = importFragment(xPresentationFragmentHandler);
