@@ -23,16 +23,12 @@ public:
     virtual void dispose() override;
 
     void InitFields();
-    void Update();
 
 private:
-    DECL_LINK( CheckBoxHdl, Button*, void );
     DECL_LINK( OKButtonHdl, Button*, void );
 
     SfxBindings& m_rBindings;
 
-    VclPtr<VclGrid> m_pTextGrid;
-    VclPtr<CheckBox> m_pEnableWatermarkCB;
     VclPtr<Edit> m_pTextInput;
     VclPtr<PushButton> m_pOKButton;
     VclPtr<FontNameBox> m_pFont;
