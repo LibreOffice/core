@@ -4971,10 +4971,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
 {
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
-    {
-        PushError( nGlobalError);
         return;
-    }
 
     SCCOL nCol3 = 0;
     SCROW nRow3 = 0;
