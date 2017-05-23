@@ -5624,11 +5624,12 @@ void ScInterpreter::ScCountIf()
     }
 }
 
-void ScInterpreter::IterateParametersIfs( sc::ParamIfsResult& rRes )
+void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIfsResult& rRes ) )
 {
     sal_uInt8 nParamCount = GetByte();
     sal_uInt8 nQueryCount = nParamCount / 2;
 
+    sc::ParamIfsResult aRes;
     std::vector<sal_uInt8> aResArray;
     size_t nRowSize = 0;
     size_t nColSize = 0;
@@ -5651,7 +5652,10 @@ void ScInterpreter::IterateParametersIfs( sc::ParamIfsResult& rRes )
                 {
                     ScAddress aAdr;
                     if ( !PopDoubleRefOrSingleRef( aAdr ) )
+                    {
+                        PushError( nGlobalError);
                         return;
+                    }
 
                     ScRefCellValue aCell(*pDok, aAdr);
                     switch (aCell.meType)
@@ -5713,7 +5717,10 @@ void ScInterpreter::IterateParametersIfs( sc::ParamIfsResult& rRes )
         }
 
         if (nGlobalError != FormulaError::NONE)
+        {
+            PushError( nGlobalError);
             return;   // and bail out, no need to evaluate other arguments
+        }
 
         // take range
         nParam = 1;
@@ -5750,7 +5757,7 @@ void ScInterpreter::IterateParametersIfs( sc::ParamIfsResult& rRes )
                     pQueryMatrix = PopMatrix();
                     if (!pQueryMatrix)
                     {
-                        SetError( FormulaError::IllegalParameter);
+                        PushError( FormulaError::IllegalParameter);
                         return;
                     }
                     nCol1 = 0;
@@ -5764,12 +5771,12 @@ void ScInterpreter::IterateParametersIfs( sc::ParamIfsResult& rRes )
                 }
                 break;
             default:
-                SetError( FormulaError::IllegalParameter);
+                PushError( FormulaError::IllegalParameter);
                 return;
         }
         if ( nTab1 != nTab2 )
         {
-            SetError( FormulaError::IllegalArgument);
+            PushError( FormulaError::IllegalArgument);
             return;
         }
 
@@ -5780,13 +5787,16 @@ void ScInterpreter::IterateParametersIfs( sc::ParamIfsResult& rRes )
             nDimensionRows = nRow2 - nRow1 + 1;
         if ((nDimensionCols != (nCol2 - nCol1 + 1)) || (nDimensionRows != (nRow2 - nRow1 + 1)))
         {
-            SetError ( FormulaError::IllegalArgument);
+            PushError ( FormulaError::IllegalArgument);
             return;
         }
 
         // recalculate matrix values
         if (nGlobalError != FormulaError::NONE)
+        {
+            PushError( nGlobalError);
             return;
+        }
 
         // initialize temporary result matrix
         if (aResArray.empty())
@@ -5829,7 +5839,7 @@ void ScInterpreter::IterateParametersIfs( sc::ParamIfsResult& rRes )
             ScMatrixRef pResultMatrix = QueryMat( pQueryMatrix, aOptions);
             if (nGlobalError != FormulaError::NONE || !pResultMatrix)
             {
-                SetError( FormulaError::IllegalParameter);
+                PushError( FormulaError::IllegalParameter);
                 return;
             }
 
@@ -5838,7 +5848,7 @@ void ScInterpreter::IterateParametersIfs( sc::ParamIfsResult& rRes )
             pResultMatrix->GetDoubleArray(aResValues);
             if (aResArray.size() != aResValues.size())
             {
-                SetError( FormulaError::IllegalParameter);
+                PushError( FormulaError::IllegalParameter);
                 return;
             }
 
@@ -5866,7 +5876,10 @@ void ScInterpreter::IterateParametersIfs( sc::ParamIfsResult& rRes )
     }
 
     if (nGlobalError != FormulaError::NONE)
+    {
+        PushError( nGlobalError);
         return;   // bail out
+    }
 
     // main range - only for AVERAGEIFS, SUMIFS, MINIFS and MAXIFS
     if (nParamCount == 1)
@@ -5906,7 +5919,7 @@ void ScInterpreter::IterateParametersIfs( sc::ParamIfsResult& rRes )
                     pMainMatrix = PopMatrix();
                     if (!pMainMatrix)
                     {
-                        SetError( FormulaError::IllegalParameter);
+                        PushError( FormulaError::IllegalParameter);
                         return;
                     }
                     nMainCol1 = 0;
@@ -5920,24 +5933,27 @@ void ScInterpreter::IterateParametersIfs( sc::ParamIfsResult& rRes )
                 }
                 break;
             default:
-                SetError( FormulaError::IllegalParameter);
+                PushError( FormulaError::IllegalParameter);
                 return;
         }
         if ( nMainTab1 != nMainTab2 )
         {
-            SetError( FormulaError::IllegalArgument);
+            PushError( FormulaError::IllegalArgument);
             return;
         }
 
         // All reference ranges must be of same dimension and size.
         if ((nDimensionCols != (nMainCol2 - nMainCol1 + 1)) || (nDimensionRows != (nMainRow2 - nMainRow1 + 1)))
         {
-            SetError ( FormulaError::IllegalArgument);
+            PushError ( FormulaError::IllegalArgument);
             return;
         }
 
         if (nGlobalError != FormulaError::NONE)
+        {
+            PushError( nGlobalError);
             return;   // bail out
+        }
 
         // end-result calculation
         ScAddress aAdr;
@@ -5948,7 +5964,7 @@ void ScInterpreter::IterateParametersIfs( sc::ParamIfsResult& rRes )
             pMainMatrix->GetDoubleArray(aMainValues, false); // Map empty values to NaN's.
             if (aResArray.size() != aMainValues.size())
             {
-                SetError( FormulaError::IllegalArgument);
+                PushError( FormulaError::IllegalArgument);
                 return;
             }
 
@@ -5963,18 +5979,18 @@ void ScInterpreter::IterateParametersIfs( sc::ParamIfsResult& rRes )
                 if (GetDoubleErrorValue(fVal) == FormulaError::ElementNaN)
                     continue;
 
-                ++rRes.mfCount;
+                ++aRes.mfCount;
                 if (bNull && fVal != 0.0)
                 {
                     bNull = false;
-                    rRes.mfMem = fVal;
+                    aRes.mfMem = fVal;
                 }
                 else
-                    rRes.mfSum += fVal;
-                if ( rRes.mfMin > fVal )
-                    rRes.mfMin = fVal;
-                if ( rRes.mfMax < fVal )
-                    rRes.mfMax = fVal;
+                    aRes.mfSum += fVal;
+                if ( aRes.mfMin > fVal )
+                    aRes.mfMin = fVal;
+                if ( aRes.mfMax < fVal )
+                    aRes.mfMax = fVal;
             }
         }
         else
@@ -5992,18 +6008,18 @@ void ScInterpreter::IterateParametersIfs( sc::ParamIfsResult& rRes )
                         if (aCell.hasNumeric())
                         {
                             fVal = GetCellValue(aAdr, aCell);
-                            ++rRes.mfCount;
+                            ++aRes.mfCount;
                             if ( bNull && fVal != 0.0 )
                             {
                                 bNull = false;
-                                rRes.mfMem = fVal;
+                                aRes.mfMem = fVal;
                             }
                             else
-                                rRes.mfSum += fVal;
-                            if ( rRes.mfMin > fVal )
-                                rRes.mfMin = fVal;
-                            if ( rRes.mfMax < fVal )
-                                rRes.mfMax = fVal;
+                                aRes.mfSum += fVal;
+                            if ( aRes.mfMin > fVal )
+                                aRes.mfMin = fVal;
+                            if ( aRes.mfMax < fVal )
+                                aRes.mfMax = fVal;
                         }
                     }
                 }
@@ -6015,8 +6031,9 @@ void ScInterpreter::IterateParametersIfs( sc::ParamIfsResult& rRes )
         std::vector<sal_uInt8>::const_iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
         for (; itRes != itResEnd; ++itRes)
             if (*itRes == nQueryCount)
-                ++rRes.mfCount;
+                ++aRes.mfCount;
     }
+    PushDouble( ResultFunc( aRes));
 }
 
 void ScInterpreter::ScSumIfs()
@@ -6029,9 +6046,11 @@ void ScInterpreter::ScSumIfs()
         return;
     }
 
-    sc::ParamIfsResult aRes;
-    IterateParametersIfs(aRes);
-    PushDouble(rtl::math::approxAdd(aRes.mfSum, aRes.mfMem));
+    auto ResultFunc = []( const sc::ParamIfsResult& rRes )
+    {
+        return rtl::math::approxAdd(rRes.mfSum, rRes.mfMem);
+    };
+    IterateParametersIfs(ResultFunc);
 }
 
 void ScInterpreter::ScAverageIfs()
@@ -6044,9 +6063,11 @@ void ScInterpreter::ScAverageIfs()
         return;
     }
 
-    sc::ParamIfsResult aRes;
-    IterateParametersIfs(aRes);
-    PushDouble(div(rtl::math::approxAdd(aRes.mfSum, aRes.mfMem), aRes.mfCount));
+    auto ResultFunc = []( const sc::ParamIfsResult& rRes )
+    {
+        return sc::div( rtl::math::approxAdd( rRes.mfSum, rRes.mfMem), rRes.mfCount);
+    };
+    IterateParametersIfs(ResultFunc);
 }
 
 void ScInterpreter::ScCountIfs()
@@ -6059,9 +6080,11 @@ void ScInterpreter::ScCountIfs()
         return;
     }
 
-    sc::ParamIfsResult aRes;
-    IterateParametersIfs(aRes);
-    PushDouble(aRes.mfCount);
+    auto ResultFunc = []( const sc::ParamIfsResult& rRes )
+    {
+        return rRes.mfCount;
+    };
+    IterateParametersIfs(ResultFunc);
 }
 
 void ScInterpreter::ScMinIfs_MS()
@@ -6074,9 +6097,11 @@ void ScInterpreter::ScMinIfs_MS()
         return;
     }
 
-    sc::ParamIfsResult aRes;
-    IterateParametersIfs(aRes);
-    PushDouble((aRes.mfMin < std::numeric_limits<double>::max()) ? aRes.mfMin : 0.0);
+    auto ResultFunc = []( const sc::ParamIfsResult& rRes )
+    {
+        return (rRes.mfMin < std::numeric_limits<double>::max()) ? rRes.mfMin : 0.0;
+    };
+    IterateParametersIfs(ResultFunc);
 }
 
 
@@ -6090,9 +6115,11 @@ void ScInterpreter::ScMaxIfs_MS()
         return;
     }
 
-    sc::ParamIfsResult aRes;
-    IterateParametersIfs(aRes);
-    PushDouble((aRes.mfMax > std::numeric_limits<double>::lowest()) ? aRes.mfMax : 0.0);
+    auto ResultFunc = []( const sc::ParamIfsResult& rRes )
+    {
+        return (rRes.mfMax > std::numeric_limits<double>::lowest()) ? rRes.mfMax : 0.0;
+    };
+    IterateParametersIfs(ResultFunc);
 }
 
 void ScInterpreter::ScLookup()

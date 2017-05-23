@@ -600,7 +600,7 @@ void IterateParametersIf( ScIterFuncIf );
 void ScCountIf();
 void ScSumIf();
 void ScAverageIf();
-void IterateParametersIfs( sc::ParamIfsResult& rRes );
+void IterateParametersIfs( double(*ResultFunc)( const sc::ParamIfsResult& rRes ) );
 void ScSumIfs();
 void ScAverageIfs();
 void ScCountIfs();
