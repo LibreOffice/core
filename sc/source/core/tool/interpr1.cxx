@@ -5115,6 +5115,10 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
     double fCount = 0.0;
     bool bNull = true;
     short nParam = 1;
+    const SCSIZE nMatRows = GetRefListArrayMaxSize( nParam);
+    // There's either one RefList and nothing else, or none.
+    ScMatrixRef xResMat = (nMatRows ? GetNewMat( 1, nMatRows) : nullptr);
+    SCSIZE nRefListArrayPos = 0;
     size_t nRefInList = 0;
     while (nParam-- > 0)
     {
@@ -5130,10 +5134,12 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             case svRefList :
                 if (bSumExtraRange)
                 {
+                    /* TODO: this could resolve if all refs are of the same size */
                     SetError( FormulaError::IllegalParameter);
                 }
                 else
                 {
+                    nRefListArrayPos = nRefInList;
                     ScRange aRange;
                     PopDoubleRef( aRange, nParam, nRefInList);
                     aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
@@ -5370,14 +5376,28 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             PushError( FormulaError::IllegalParameter);
             return;
         }
-    }
 
-    switch( eFunc )
-    {
-        case ifSUMIF:     fRes = ::rtl::math::approxAdd( fSum, fMem ); break;
-        case ifAVERAGEIF: fRes = div( ::rtl::math::approxAdd( fSum, fMem ), fCount); break;
+        switch( eFunc )
+        {
+            case ifSUMIF:     fRes = ::rtl::math::approxAdd( fSum, fMem ); break;
+            case ifAVERAGEIF: fRes = div( ::rtl::math::approxAdd( fSum, fMem ), fCount); break;
+        }
+        if (xResMat)
+        {
+            if (nGlobalError == FormulaError::NONE)
+                xResMat->PutDouble( fRes, 0, nRefListArrayPos);
+            else
+            {
+                xResMat->PutError( nGlobalError, 0, nRefListArrayPos);
+                nGlobalError = FormulaError::NONE;
+            }
+            fRes = fSum = fMem = fCount = 0.0;
+        }
     }
-    PushDouble( fRes);
+    if (xResMat)
+        PushMatrix( xResMat);
+    else
+        PushDouble( fRes);
 }
 
 void ScInterpreter::ScSumIf()
