@@ -28,7 +28,6 @@
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
 
-class VCLExternalSolarLock;
 class VclSimpleEvent;
 class VclWindowEvent;
 
@@ -77,7 +76,6 @@ private:
     typedef std::vector< ChildDescriptor > AccessibleChildren;
 
     AccessibleChildren             m_aAccessibleChildren;
-    VCLExternalSolarLock*          m_pExternalLock;
     VclPtr<basctl::DialogWindow>   m_pDialogWindow;
     DlgEditor*                     m_pDlgEditor;
     DlgEdModel*                    m_pDlgEdModel;

@@ -56,7 +56,7 @@ VCLXAccessibleHeaderBarItem::VCLXAccessibleHeaderBarItem( HeaderBar*    pHeadBar
 
 VCLXAccessibleHeaderBarItem::~VCLXAccessibleHeaderBarItem()
 {
-    delete static_cast< VCLExternalSolarLock* >( getExternalLock() );
+    delete getExternalLock();
 }
 
 void VCLXAccessibleHeaderBarItem::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )

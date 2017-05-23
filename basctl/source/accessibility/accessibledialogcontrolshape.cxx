@@ -55,8 +55,6 @@ AccessibleDialogControlShape::AccessibleDialogControlShape (DialogWindow* pDialo
     ,m_pDialogWindow( pDialogWindow )
     ,m_pDlgEdObj( pDlgEdObj )
 {
-    m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
-
     if ( m_pDlgEdObj )
         m_xControlModel.set( m_pDlgEdObj->GetUnoControlModel(), UNO_QUERY );
 
@@ -74,8 +72,7 @@ AccessibleDialogControlShape::~AccessibleDialogControlShape()
     if ( m_xControlModel.is() )
         m_xControlModel->removePropertyChangeListener( OUString(), static_cast< beans::XPropertyChangeListener* >( this ) );
 
-    delete m_pExternalLock;
-    m_pExternalLock = nullptr;
+    delete getExternalLock();
 }
 
 

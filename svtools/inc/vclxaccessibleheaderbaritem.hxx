@@ -30,7 +30,6 @@
 #include <vector>
 
 class HeaderBar;
-class VCLExternalSolarLock;
 class VclSimpleEvent;
 class VclWindowEvent;
 

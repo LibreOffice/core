@@ -49,8 +49,6 @@ VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXWindow )
 {
     m_xVCLXWindow = pVCLXWindow;
 
-    m_pSolarLock = static_cast< VCLExternalSolarLock* >( getExternalLock( ) );
-
     DBG_ASSERT( pVCLXWindow->GetWindow(), "VCLXAccessibleComponent - no window!" );
     m_xEventSource = pVCLXWindow->GetWindow();
     if ( m_xEventSource )
@@ -83,8 +81,7 @@ VCLXAccessibleComponent::~VCLXAccessibleComponent()
     ensureDisposed();
     DisconnectEvents();
 
-    delete m_pSolarLock;
-    m_pSolarLock = nullptr;
+    delete getExternalLock();
     // This is not completely safe. If we assume that the base class dtor calls some method which
     // uses this lock, the we crash. However, as the base class' dtor does not have a chance to call _out_
     // virtual methods, this is no problem as long as the base class is safe, i.e. does not use the external
