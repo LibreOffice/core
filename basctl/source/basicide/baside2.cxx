@@ -23,6 +23,7 @@
 #include "iderdll.hxx"
 #include "moduldlg.hxx"
 #include "docsignature.hxx"
+#include "officecfg/Office/BasicIDE.hxx"
 
 #include "helpid.hrc"
 #include <basidesh.hrc>
@@ -171,10 +172,6 @@ void lcl_ConvertTabsToSpaces( OUString& rLine )
         rLine = aResult.makeStringAndClear();
     }
 }
-
-// until we have some configuration lets just keep
-// persist this value for the process lifetime
-bool bSourceLinesEnabled = false;
 
 } // namespace
 
@@ -985,8 +982,12 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
         case SID_SHOWLINES:
         {
             const SfxBoolItem* pItem = rReq.GetArg<SfxBoolItem>(rReq.GetSlot());
-            bSourceLinesEnabled = pItem && pItem->GetValue();
-            m_aXEditorWindow->SetLineNumberDisplay(bSourceLinesEnabled);
+            bool bLineNumbers = pItem && pItem->GetValue();
+            m_aXEditorWindow->SetLineNumberDisplay(bLineNumbers);
+
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+            officecfg::Office::BasicIDE::EditorSettings::LineNumbering::set(bLineNumbers, batch);
+            batch->commit();
         }
         break;
         case SID_BASICIDE_DELETECURRENT:
@@ -1121,7 +1122,8 @@ void ModulWindow::GetState( SfxItemSet &rSet )
             break;
             case SID_SHOWLINES:
             {
-                rSet.Put(SfxBoolItem(nWh, bSourceLinesEnabled));
+                bool bLineNumbers = ::officecfg::Office::BasicIDE::EditorSettings::LineNumbering::get();
+                rSet.Put(SfxBoolItem(nWh, bLineNumbers));
                 break;
             }
             case SID_SELECTALL:
@@ -1188,7 +1190,8 @@ void ModulWindow::AssertValidEditEngine()
 
 void ModulWindow::Activating ()
 {
-    m_aXEditorWindow->SetLineNumberDisplay(bSourceLinesEnabled);
+    bool bLineNumbers = ::officecfg::Office::BasicIDE::EditorSettings::LineNumbering::get();
+    m_aXEditorWindow->SetLineNumberDisplay(bLineNumbers);
     Show();
 }
 
@@ -1370,7 +1373,8 @@ bool ModulWindow::IsPasteAllowed()
 
 void ModulWindow::OnNewDocument ()
 {
-    m_aXEditorWindow->SetLineNumberDisplay(bSourceLinesEnabled);
+    bool bLineNumbers = ::officecfg::Office::BasicIDE::EditorSettings::LineNumbering::get();
+    m_aXEditorWindow->SetLineNumberDisplay(bLineNumbers);
 }
 
 char const* ModulWindow::GetHid () const
@@ -1565,7 +1569,6 @@ void ModulWindowLayout::SyntaxColors::NewConfig (bool bFirst)
     if (bChanged && !bFirst && pEditor)
         pEditor->UpdateSyntaxHighlighting();
 }
-
 
 } // namespace basctl
 
