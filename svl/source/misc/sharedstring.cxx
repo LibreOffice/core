@@ -15,7 +15,7 @@ SharedString SharedString::getEmptyString()
 {
     // unicode string array for empty string is globally shared in OUString.
     // Let's take advantage of that.
-    rtl_uString* pData = nullptr;
+    static rtl_uString* pData = nullptr;
     rtl_uString_new(&pData);
     return SharedString(pData, pData);
 }
