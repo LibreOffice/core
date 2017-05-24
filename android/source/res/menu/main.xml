@@ -42,6 +42,11 @@
             android:orderInCategory="100" />
     </group>
 
+    <item android:id="@+id/action_presentation"
+        android:title="@string/action_presentation"
+        android:orderInCategory="100"
+        android:enabled="false" />
+
     <item android:id="@+id/action_parts"
           android:title="@string/action_parts"
           android:orderInCategory="100" />
