@@ -489,7 +489,8 @@ SvXMLExport::SvXMLExport(
     const OUString &rFileName,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
     const Reference< XModel >& rModel,
-    FieldUnit const eDefaultFieldUnit)
+    FieldUnit const eDefaultFieldUnit,
+    SvXMLExportFlags nExportFlag)
 :   mpImpl( new SvXMLExport_Impl ),
     m_xContext(xContext), m_implementationName(implementationName),
     mxModel( rModel ),
@@ -508,7 +509,7 @@ SvXMLExport::SvXMLExport(
     mpImageMapExport( nullptr ),
     mpXMLErrors( nullptr ),
     meClass( XML_TOKEN_INVALID ),
-    mnExportFlags( SvXMLExportFlags::NONE ),
+    mnExportFlags( nExportFlag ),
     mnErrorFlags( SvXMLErrorFlags::NO ),
     msWS( GetXMLToken(XML_WS) ),
     mbSaveLinkedSections(true)
