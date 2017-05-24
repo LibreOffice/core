@@ -58,6 +58,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private static final String DEFAULT_DOC_PATH = "/assets/example.odt";
     private static final String ENABLE_EXPERIMENTAL_PREFS_KEY = "ENABLE_EXPERIMENTAL";
     private static final String ASSETS_EXTRACTED_PREFS_KEY = "ASSETS_EXTRACTED";
+    public static final String PRESENTATION_CACHE_PATH = "PRESENTATION_CACHE_PATH";
 
     //TODO "public static" is a temporary workaround
     public static LOKitThread loKitThread;
@@ -740,6 +741,19 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             Snackbar.make(mDrawerLayout, getString(R.string.create_new_file_success) + mInputFile.getName(), Snackbar.LENGTH_LONG).show();
         else
             Snackbar.make(mDrawerLayout, getString(R.string.create_new_file_error) + mInputFile.getName(), Snackbar.LENGTH_LONG).show();    }
+
+    public void preparePresentation() {
+        if (getExternalCacheDir() != null) {
+            String tempPath = getExternalCacheDir().getAbsolutePath() + "/temp_slide_show.svg";
+            LOKitShell.sendSaveAsEvent(tempPath, "svg");
+        }
+    }
+
+    public void startPresentation(String tempPath) {
+        Intent intent = new Intent(this, PresentationActivity.class);
+        intent.putExtra(PRESENTATION_CACHE_PATH, tempPath);
+        startActivity(intent);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

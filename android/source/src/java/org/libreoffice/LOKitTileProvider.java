@@ -101,6 +101,10 @@ class LOKitTileProvider implements TileProvider {
         Log.i(LOGTAG, "Document parts: " + parts);
         mContext.getDocumentPartView().clear();
 
+        if (mDocument.getDocumentType() == Document.DOCTYPE_PRESENTATION) {
+            mContext.getToolbarController().disableMenuItem(R.id.action_presentation, false);
+        }
+
         // Writer documents always have one part, so hide the navigation drawer.
         if (mDocument.getDocumentType() != Document.DOCTYPE_TEXT) {
             for (int i = 0; i < parts; i++) {
@@ -134,26 +138,44 @@ class LOKitTileProvider implements TileProvider {
 
     @Override
     public void saveDocumentAs(String filePath, String format) {
-        String newFilePath = "file://" + filePath;
+        final String newFilePath = "file://" + filePath;
         Log.d("saveFilePathURL", newFilePath);
+        LOKitShell.showProgressSpinner(mContext);
         mDocument.saveAs(newFilePath, format, "");
         if (!mOffice.getError().isEmpty()){
             Log.e("Save Error", mOffice.getError());
-            LOKitShell.getMainHandler().post(new Runnable() {
-                @Override
-                public void run() {
-                    // There was some error
-                    mContext.showSaveStatusMessage(true);
-                }
-            });
-        }
-        LOKitShell.getMainHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                // There was no error
-                mContext.showSaveStatusMessage(false);
+            if (format.equals("svg")) {
+                // error in creating temp slideshow svg file
+                Log.d(LOGTAG, "Error in creating temp slideshow svg file");
+            } else {
+                LOKitShell.getMainHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // There was some error
+                        mContext.showSaveStatusMessage(true);
+                    }
+                });
             }
-        });
+        } else {
+            if (format.equals("svg")) {
+                // successfully created temp slideshow svg file
+                LOKitShell.getMainHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mContext.startPresentation(newFilePath);
+                    }
+                });
+            } else {
+                LOKitShell.getMainHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // There was no error
+                        mContext.showSaveStatusMessage(false);
+                    }
+                });
+            }
+        }
+        LOKitShell.hideProgressSpinner(mContext);
     }
 
     private void setupDocumentFonts() {
