@@ -566,6 +566,7 @@ IMPL_LINK_NOARG( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
                 xMMConfig->SetTargetView(nullptr);
 
                 // destroy wizard asynchronously
+                m_pWizardToDestroyInCallback = m_pWizard;
                 Application::PostUserEvent(
                     LINK( this, SwMailMergeWizardExecutor, CloseFrameHdl ), m_pWizard );
 
@@ -659,6 +660,7 @@ IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CloseFrameHdl, void*, void)
         m_pView2Close->GetViewFrame()->DoClose();
         m_pView2Close = nullptr;
     }
+    m_pWizardToDestroyInCallback.disposeAndClear();
 }
 } // namespace
 
