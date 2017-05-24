@@ -277,7 +277,7 @@ SfxWatermarkItem SwEditShell::GetWatermark()
         bool bHeaderIsOn = false;
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_IS_ON) >>= bHeaderIsOn;
         if (!bHeaderIsOn)
-            xPageStyle->setPropertyValue(UNO_NAME_HEADER_IS_ON, uno::makeAny(true));
+            return SfxWatermarkItem();
 
         uno::Reference<text::XText> xHeaderText;
         xPageStyle->getPropertyValue(UNO_NAME_HEADER_TEXT) >>= xHeaderText;
