@@ -63,5 +63,16 @@
             <value>false</value>
         </prop>
     </group>
+    <group oor:name="EditorSettings">
+        <info>
+            <desc>Contains user configuration.</desc>
+        </info>
+        <prop oor:name="LineNumbering" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+                <desc>Sets the line numbering on/off. Default is true.</desc>
+            </info>
+            <value>true</value>
+        </prop>
+    </group>
     </component>
 </oor:component-schema>
