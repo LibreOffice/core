@@ -130,5 +130,6 @@
     <!-- Create New Document Dialog Strings -->
     <string name="create_new_document_title">Enter file name</string>
     <string name="action_create">CREATE</string>
+    <string name="action_presentation">Slide show</string>
 
 </resources>

@@ -123,6 +123,12 @@
             android:windowSoftInputMode="stateHidden">
         </activity>
 
+        <activity android:name=".PresentationActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LibreOfficeMainActivity" />
+        </activity>
+
     </application>
 
 </manifest>
