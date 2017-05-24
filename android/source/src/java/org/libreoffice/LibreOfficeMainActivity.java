@@ -2,6 +2,8 @@ package org.libreoffice;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,12 +12,14 @@ import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.RectF;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -79,6 +83,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
     private File mInputFile;
     private DocumentOverlay mDocumentOverlay;
     private File mTempFile = null;
+    private File mTempSlideShowFile = null;
     private String newDocumentType = null;
 
     BottomSheetBehavior bottomToolbarSheetBehavior;
@@ -406,6 +411,10 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             if (mTempFile != null) {
                 // noinspection ResultOfMethodCallIgnored
                 mTempFile.delete();
+            }
+            if (mTempSlideShowFile.exists()) {
+                // noinspection ResultOfMethodCallIgnored
+                mTempSlideShowFile.delete();
             }
         }
     }
@@ -749,6 +758,36 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
             Snackbar.make(mDrawerLayout, getString(R.string.create_new_file_success) + mInputFile.getName(), Snackbar.LENGTH_LONG).show();
         else
             Snackbar.make(mDrawerLayout, getString(R.string.create_new_file_error) + mInputFile.getName(), Snackbar.LENGTH_LONG).show();    }
+
+    public void preparePresentation() {
+        if (getExternalCacheDir() != null) {
+            String tempPath = getExternalCacheDir().getPath() + "/" + mInputFile.getName() + ".svg";
+            mTempSlideShowFile = new File(tempPath);
+            if (mTempSlideShowFile.exists() && !isDocumentChanged) {
+                startPresentation("file://" + tempPath);
+            } else {
+                LOKitShell.sendSaveAsEvent(tempPath, "svg");
+            }
+        }
+    }
+
+    public void startPresentation(String tempPath) {
+        // pre-KitKat android doesn't have chrome-based WebView, which is needed to show svg slideshow
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Intent intent = new Intent(this, PresentationActivity.class);
+            intent.setData(Uri.parse(tempPath));
+            startActivity(intent);
+        } else {
+            // copy the svg file path to clipboard for the user to paste in a browser
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("temp svg file path", tempPath);
+            clipboard.setPrimaryClip(clip);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.alert_copy_svg_slide_show_to_clipboard)
+                    .setPositiveButton(R.string.alert_copy_svg_slide_show_to_clipboard_dismiss, null).show();
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
