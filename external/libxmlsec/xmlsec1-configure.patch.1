@@ -15,38 +15,6 @@ Conflicts:
  win32/Makefile.msvc |  2 +-
  4 files changed, 44 insertions(+), 16 deletions(-)
 
-diff --git a/Makefile.am b/Makefile.am
-index 82e26656..dac213ad 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -3,10 +3,10 @@ NULL =
- SAFE_VERSION	= @XMLSEC_VERSION_SAFE@
- SUBDIRS 	    = include src
- if XMLSEC_APPS
--SUBDIRS += apps
-+SUBDIRS += 
- endif
- if XMLSEC_DOCS
--SUBDIRS += man docs
-+SUBDIRS += 
- endif
- TEST_APP 	    = apps/xmlsec1$(EXEEXT)
- DEFAULT_CRYPTO	= @XMLSEC_DEFAULT_CRYPTO@
-diff --git a/Makefile.in b/Makefile.in
-index ef0aed99..73f9db9c 100644
---- a/Makefile.in
-+++ b/Makefile.in
-@@ -89,8 +89,8 @@ PRE_UNINSTALL = :
- POST_UNINSTALL = :
- build_triplet = @build@
- host_triplet = @host@
--@XMLSEC_APPS_TRUE@am__append_1 = apps
--@XMLSEC_DOCS_TRUE@am__append_2 = man docs
-+@XMLSEC_APPS_TRUE@am__append_1 = 
-+@XMLSEC_DOCS_TRUE@am__append_2 = 
- subdir = .
- ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
- am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
 diff --git a/configure.ac b/configure.ac
 index c100f92e..6e5c387b 100644
 --- a/configure.ac

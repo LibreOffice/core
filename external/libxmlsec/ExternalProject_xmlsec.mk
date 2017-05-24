@@ -38,7 +38,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 		$(if $(filter AIX,$(OS)),ACLOCAL="aclocal -I /opt/freeware/share/aclocal") \
 		autoreconf \
 		&& ./configure \
-			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls \
+			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls --disable-apps --disable-docs \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CFLAGS="$(CFLAGS) $(if $(debug),$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS)) $(gb_VISIBILITY_FLAGS)" \
 			$(if $(or $(filter-out ANDROID,$(OS)),$(DISABLE_OPENSSL)),--without-openssl,--with-openssl=$(call gb_UnpackedTarball_get_dir,openssl)) \
