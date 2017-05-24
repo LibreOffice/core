@@ -5270,7 +5270,8 @@ ScVbaRange::setStyle( const uno::Any& _style ) throw (uno::RuntimeException, std
     uno::Reference< beans::XPropertySet > xProps( mxRange, uno::UNO_QUERY_THROW );
     uno::Reference< excel::XStyle > xStyle;
     _style >>= xStyle;
-    xProps->setPropertyValue( CELLSTYLE, uno::makeAny( xStyle->getName() ) );
+    if ( xProps.is() && xStyle.is() )
+        xProps->setPropertyValue( CELLSTYLE, uno::makeAny( xStyle->getName() ) );
 }
 
 uno::Reference< excel::XRange >
