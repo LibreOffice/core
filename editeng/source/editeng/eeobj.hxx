@@ -30,6 +30,7 @@ class EditDataObject :  public ::cppu::WeakImplHelper<css::datatransfer::XTransf
 private:
     SvMemoryStream  maBinData;
     SvMemoryStream  maRTFData;
+    SvMemoryStream  maODFData;
     OUString        maText;
 
     OUString        maOfficeBookmark;
@@ -40,6 +41,7 @@ public:
 
     SvMemoryStream& GetStream() { return maBinData; }
     SvMemoryStream& GetRTFStream() { return maRTFData; }
+    SvMemoryStream& GetODFStream() { return maODFData; }
     OUString&       GetString() { return maText; }
     OUString&       GetURL()    { return maOfficeBookmark; }
 
