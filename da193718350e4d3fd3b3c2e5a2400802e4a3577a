@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_4563c0dc",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-24T16:04:34Z",
+      "side": 1,
+      "message": "Just a question: is this to recognize also Date+Time, or only Date? As is, a bit-wise and with DATE also accepts DATETIME.",
+      "revId": "da193718350e4d3fd3b3c2e5a2400802e4a3577a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
