@@ -130,5 +130,9 @@
     <!-- Create New Document Dialog Strings -->
     <string name="create_new_document_title">Enter file name</string>
     <string name="action_create">CREATE</string>
+    <string name="action_presentation">Slide show</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Your Android device doesn\'t support in-app svg slideshow. We copied the slideshow link to clipboard. Please press home button, open a modern web browser, paste in the address bar, and go.</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">OK</string>
+    <string name="slideshow_action_back">Back</string>
 
 </resources>
