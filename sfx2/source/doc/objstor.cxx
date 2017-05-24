@@ -830,7 +830,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         if ( !( pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT ) &&
               ( !pMedium->GetFilter() || pMedium->GetFilter()->UsesStorage() )
             )
-            FinishedLoading( SfxLoadedFlags::MAINDOCUMENT );
+            FinishedLoading();
 
         if( IsOwnStorageFormat(*pMed) && pMed->GetFilter() )
         {

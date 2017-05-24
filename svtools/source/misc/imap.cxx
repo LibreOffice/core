@@ -833,14 +833,14 @@ void ImageMap::Scale( const Fraction& rFracX, const Fraction& rFracY )
 |*
 \******************************************************************************/
 
-void ImageMap::ImpWriteImageMap( SvStream& rOStm, const OUString& rBaseURL ) const
+void ImageMap::ImpWriteImageMap( SvStream& rOStm ) const
 {
     size_t      nCount = maList.size();
 
     for ( size_t i = 0; i < nCount; i++ )
     {
         IMapObject* pObj = maList[ i ];
-        pObj->Write( rOStm, rBaseURL );
+        pObj->Write( rOStm, "" );
     }
 }
 
@@ -851,7 +851,7 @@ void ImageMap::ImpWriteImageMap( SvStream& rOStm, const OUString& rBaseURL ) con
 |*
 \******************************************************************************/
 
-void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount, const OUString& rBaseURL )
+void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount )
 {
     const size_t nMinRecordSize = 12; //circle, three 32bit numbers
     const size_t nMaxRecords = rIStm.remainingSize() / nMinRecordSize;
@@ -876,7 +876,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount, const OUString& 
             case IMAP_OBJ_RECTANGLE:
             {
                 IMapRectangleObject* pObj = new IMapRectangleObject;
-                pObj->Read( rIStm, rBaseURL );
+                pObj->Read( rIStm, "" );
                 maList.push_back( pObj );
             }
             break;
@@ -884,7 +884,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount, const OUString& 
             case IMAP_OBJ_CIRCLE:
             {
                 IMapCircleObject* pObj = new IMapCircleObject;
-                pObj->Read( rIStm, rBaseURL );
+                pObj->Read( rIStm, "" );
                 maList.push_back( pObj );
             }
             break;
@@ -892,7 +892,7 @@ void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount, const OUString& 
             case IMAP_OBJ_POLYGON:
             {
                 IMapPolygonObject* pObj = new IMapPolygonObject;
-                pObj->Read( rIStm, rBaseURL );
+                pObj->Read( rIStm, "" );
                 maList.push_back( pObj );
             }
             break;
@@ -934,7 +934,7 @@ void ImageMap::Write( SvStream& rOStm ) const
 
     delete pCompat;
 
-    ImpWriteImageMap( rOStm, OUString() );
+    ImpWriteImageMap( rOStm );
 
     rOStm.SetEndian( nOldFormat );
 }
@@ -975,7 +975,7 @@ void ImageMap::Read( SvStream& rIStm )
         // here one can read in newer versions
 
         delete pCompat;
-        ImpReadImageMap( rIStm, nCount, OUString() );
+        ImpReadImageMap( rIStm, nCount );
 
     }
     else

@@ -154,14 +154,14 @@ OString PrintFontManager::getDirectory( int nAtom ) const
     return it != m_aAtomToDir.end() ? it->second : OString();
 }
 
-int PrintFontManager::getDirectoryAtom( const OString& rDirectory, bool bCreate )
+int PrintFontManager::getDirectoryAtom( const OString& rDirectory )
 {
     int nAtom = 0;
     std::unordered_map< OString, int, OStringHash >::const_iterator it
           ( m_aDirToAtom.find( rDirectory ) );
     if( it != m_aDirToAtom.end() )
         nAtom = it->second;
-    else if( bCreate )
+    else
     {
         nAtom = m_nNextDirAtom++;
         m_aDirToAtom[ rDirectory ] = nAtom;
@@ -178,7 +178,7 @@ std::vector<fontID> PrintFontManager::addFontFile( const OString& rFileName )
     OString aDir( OUStringToOString(
         INetURLObject::decode( aPath.GetPath(), INetURLObject::DecodeMechanism::WithCharset, aEncoding ), aEncoding ) );
 
-    int nDirID = getDirectoryAtom( aDir, true );
+    int nDirID = getDirectoryAtom( aDir );
     std::vector<fontID> aFontIds = findFontFileIDs( nDirID, aName );
     if( aFontIds.empty() )
     {

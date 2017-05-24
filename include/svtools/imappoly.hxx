@@ -66,8 +66,8 @@ public:
     bool                IsEqual( const IMapPolygonObject& rEqObj );
 
     // Im-/Export
-    void                WriteCERN( SvStream& rOStm, const OUString& rBaseURL  ) const;
-    void                WriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) const;
+    void                WriteCERN( SvStream& rOStm ) const;
+    void                WriteNCSA( SvStream& rOStm ) const;
 };
 
 #endif

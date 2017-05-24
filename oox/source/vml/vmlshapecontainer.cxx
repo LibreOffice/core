@@ -77,29 +77,27 @@ void ShapeContainer::finalizeFragmentImport()
     maShapes.forEachMem( &ShapeBase::finalizeFragmentImport );
 }
 
-const ShapeType* ShapeContainer::getShapeTypeById( const OUString& rShapeId, bool bDeep ) const
+const ShapeType* ShapeContainer::getShapeTypeById( const OUString& rShapeId ) const
 {
     // search in own shape template list
     if( const ShapeType* pType = maTypesById.get( rShapeId ).get() )
         return pType;
     // search deep in child shapes
-    if( bDeep )
-        for( ShapeVector::const_iterator aVIt = maShapes.begin(), aVEnd = maShapes.end(); aVIt != aVEnd; ++aVIt )
-            if( const ShapeType* pType = (*aVIt)->getChildTypeById( rShapeId ) )
-                return pType;
+    for( ShapeVector::const_iterator aVIt = maShapes.begin(), aVEnd = maShapes.end(); aVIt != aVEnd; ++aVIt )
+        if( const ShapeType* pType = (*aVIt)->getChildTypeById( rShapeId ) )
+            return pType;
    return nullptr;
 }
 
-const ShapeBase* ShapeContainer::getShapeById( const OUString& rShapeId, bool bDeep ) const
+const ShapeBase* ShapeContainer::getShapeById( const OUString& rShapeId ) const
 {
     // search in own shape list
     if( const ShapeBase* pShape = maShapesById.get( rShapeId ).get() )
         return pShape;
     // search deep in child shapes
-    if( bDeep )
-        for( ShapeVector::const_iterator aVIt = maShapes.begin(), aVEnd = maShapes.end(); aVIt != aVEnd; ++aVIt )
-            if( const ShapeBase* pShape = (*aVIt)->getChildById( rShapeId ) )
-                return pShape;
+    for( ShapeVector::const_iterator aVIt = maShapes.begin(), aVEnd = maShapes.end(); aVIt != aVEnd; ++aVIt )
+        if( const ShapeBase* pShape = (*aVIt)->getChildById( rShapeId ) )
+            return pShape;
    return nullptr;
 }
 

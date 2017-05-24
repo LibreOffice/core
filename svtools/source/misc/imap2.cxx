@@ -69,52 +69,52 @@ void IMapObject::AppendNCSAURL(OStringBuffer& rBuf, const OUString& rBaseURL) co
     rBuf.append(' ');
 }
 
-void IMapRectangleObject::WriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const
+void IMapRectangleObject::WriteCERN( SvStream& rOStm ) const
 {
     OStringBuffer aStrBuf("rectangle ");
 
     AppendCERNCoords(aStrBuf, aRect.TopLeft());
     AppendCERNCoords(aStrBuf, aRect.BottomRight());
-    AppendCERNURL(aStrBuf, rBaseURL);
+    AppendCERNURL(aStrBuf, "");
 
     rOStm.WriteLine(aStrBuf.makeStringAndClear());
 }
 
-void IMapRectangleObject::WriteNCSA( SvStream& rOStm, const OUString& rBaseURL ) const
+void IMapRectangleObject::WriteNCSA( SvStream& rOStm ) const
 {
     OStringBuffer aStrBuf("rect ");
 
-    AppendNCSAURL(aStrBuf, rBaseURL);
+    AppendNCSAURL(aStrBuf, "");
     AppendNCSACoords(aStrBuf, aRect.TopLeft());
     AppendNCSACoords(aStrBuf, aRect.BottomRight());
 
     rOStm.WriteLine(aStrBuf.makeStringAndClear());
 }
 
-void IMapCircleObject::WriteCERN( SvStream& rOStm, const OUString& rBaseURL ) const
+void IMapCircleObject::WriteCERN( SvStream& rOStm ) const
 {
     OStringBuffer aStrBuf("circle ");
 
     AppendCERNCoords(aStrBuf, aCenter);
     aStrBuf.append(nRadius);
     aStrBuf.append(' ');
-    AppendCERNURL(aStrBuf, rBaseURL);
+    AppendCERNURL(aStrBuf, "");
 
     rOStm.WriteLine(aStrBuf.makeStringAndClear());
 }
 
-void IMapCircleObject::WriteNCSA( SvStream& rOStm, const OUString& rBaseURL ) const
+void IMapCircleObject::WriteNCSA( SvStream& rOStm ) const
 {
     OStringBuffer aStrBuf("circle ");
 
-    AppendNCSAURL(aStrBuf, rBaseURL);
+    AppendNCSAURL(aStrBuf, "");
     AppendNCSACoords(aStrBuf, aCenter);
     AppendNCSACoords(aStrBuf, aCenter + Point(nRadius, 0));
 
     rOStm.WriteLine(aStrBuf.makeStringAndClear());
 }
 
-void IMapPolygonObject::WriteCERN( SvStream& rOStm, const OUString& rBaseURL  ) const
+void IMapPolygonObject::WriteCERN( SvStream& rOStm  ) const
 {
     OStringBuffer aStrBuf("polygon ");
     const sal_uInt16 nCount = aPoly.GetSize();
@@ -122,17 +122,17 @@ void IMapPolygonObject::WriteCERN( SvStream& rOStm, const OUString& rBaseURL  ) 
     for (sal_uInt16 i = 0; i < nCount; ++i)
         AppendCERNCoords(aStrBuf, aPoly[i]);
 
-    AppendCERNURL(aStrBuf, rBaseURL);
+    AppendCERNURL(aStrBuf, "");
 
     rOStm.WriteLine(aStrBuf.makeStringAndClear());
 }
 
-void IMapPolygonObject::WriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) const
+void IMapPolygonObject::WriteNCSA( SvStream& rOStm  ) const
 {
     OStringBuffer aStrBuf("poly ");
     const sal_uInt16 nCount = std::min( aPoly.GetSize(), (sal_uInt16) 100 );
 
-    AppendNCSAURL(aStrBuf, rBaseURL);
+    AppendNCSAURL(aStrBuf, "");
 
     for (sal_uInt16 i = 0; i < nCount; ++i)
         AppendNCSACoords(aStrBuf, aPoly[i]);
@@ -164,15 +164,15 @@ void ImageMap::ImpWriteCERN( SvStream& rOStm ) const
         switch( pObj->GetType() )
         {
             case IMAP_OBJ_RECTANGLE:
-                static_cast<IMapRectangleObject*>( pObj )->WriteCERN( rOStm, OUString() );
+                static_cast<IMapRectangleObject*>( pObj )->WriteCERN( rOStm );
             break;
 
             case IMAP_OBJ_CIRCLE:
-                static_cast<IMapCircleObject*>( pObj )->WriteCERN( rOStm, OUString() );
+                static_cast<IMapCircleObject*>( pObj )->WriteCERN( rOStm );
             break;
 
             case IMAP_OBJ_POLYGON:
-                static_cast<IMapPolygonObject*>( pObj )->WriteCERN( rOStm, OUString() );
+                static_cast<IMapPolygonObject*>( pObj )->WriteCERN( rOStm );
             break;
 
             default:
@@ -192,15 +192,15 @@ void ImageMap::ImpWriteNCSA( SvStream& rOStm  ) const
         switch( pObj->GetType() )
         {
             case IMAP_OBJ_RECTANGLE:
-                static_cast<IMapRectangleObject*>( pObj )->WriteNCSA( rOStm, OUString() );
+                static_cast<IMapRectangleObject*>( pObj )->WriteNCSA( rOStm );
             break;
 
             case IMAP_OBJ_CIRCLE:
-                static_cast<IMapCircleObject*>( pObj )->WriteNCSA( rOStm, OUString() );
+                static_cast<IMapCircleObject*>( pObj )->WriteNCSA( rOStm );
             break;
 
             case IMAP_OBJ_POLYGON:
-                static_cast<IMapPolygonObject*>( pObj )->WriteNCSA( rOStm, OUString() );
+                static_cast<IMapPolygonObject*>( pObj )->WriteNCSA( rOStm );
             break;
 
             default:
@@ -239,12 +239,12 @@ sal_uLong ImageMap::ImpReadCERN( SvStream& rIStm )
 
     OString aStr;
     while ( rIStm.ReadLine( aStr ) )
-        ImpReadCERNLine( aStr, OUString() );
+        ImpReadCERNLine( aStr );
 
     return IMAP_ERR_OK;
 }
 
-void ImageMap::ImpReadCERNLine( const OString& rLine, const OUString& rBaseURL  )
+void ImageMap::ImpReadCERNLine( const OString& rLine  )
 {
     OString aStr = comphelper::string::stripStart(rLine, ' ');
     aStr = comphelper::string::stripStart(aStr, '\t');
@@ -269,7 +269,7 @@ void ImageMap::ImpReadCERNLine( const OString& rLine, const OUString& rBaseURL  
         {
             const Point     aTopLeft( ImpReadCERNCoords( &pStr ) );
             const Point     aBottomRight( ImpReadCERNCoords( &pStr ) );
-            const OUString  aURL( ImpReadCERNURL( &pStr, rBaseURL ) );
+            const OUString  aURL( ImpReadCERNURL( &pStr, "" ) );
             const tools::Rectangle aRect( aTopLeft, aBottomRight );
 
             IMapRectangleObject* pObj = new IMapRectangleObject( aRect, aURL, OUString(), OUString(), OUString(), OUString() );
@@ -279,7 +279,7 @@ void ImageMap::ImpReadCERNLine( const OString& rLine, const OUString& rBaseURL  
         {
             const Point     aCenter( ImpReadCERNCoords( &pStr ) );
             const long      nRadius = ImpReadCERNRadius( &pStr );
-            const OUString  aURL( ImpReadCERNURL( &pStr, rBaseURL ) );
+            const OUString  aURL( ImpReadCERNURL( &pStr, "" ) );
 
             IMapCircleObject* pObj = new IMapCircleObject( aCenter, nRadius, aURL, OUString(), OUString(), OUString(), OUString() );
             maList.push_back( pObj );
@@ -293,7 +293,7 @@ void ImageMap::ImpReadCERNLine( const OString& rLine, const OUString& rBaseURL  
             for ( sal_uInt16 i = 0; i < nCount; i++ )
                 aPoly[ i ] = ImpReadCERNCoords( &pStr );
 
-            aURL = ImpReadCERNURL( &pStr, rBaseURL );
+            aURL = ImpReadCERNURL( &pStr, "" );
 
             IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, OUString(), OUString(), OUString(), OUString() );
             maList.push_back( pObj );
@@ -380,12 +380,12 @@ sal_uLong ImageMap::ImpReadNCSA( SvStream& rIStm )
 
     OString aStr;
     while ( rIStm.ReadLine( aStr ) )
-        ImpReadNCSALine( aStr, OUString() );
+        ImpReadNCSALine( aStr );
 
     return IMAP_ERR_OK;
 }
 
-void ImageMap::ImpReadNCSALine( const OString& rLine, const OUString& rBaseURL )
+void ImageMap::ImpReadNCSALine( const OString& rLine )
 {
     OString aStr = comphelper::string::stripStart(rLine, ' ');
     aStr = comphelper::string::stripStart(aStr, '\t');
@@ -408,7 +408,7 @@ void ImageMap::ImpReadNCSALine( const OString& rLine, const OUString& rBaseURL )
     {
         if ( aToken == "rect" )
         {
-            const OUString  aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
+            const OUString  aURL( ImpReadNCSAURL( &pStr, "" ) );
             const Point     aTopLeft( ImpReadNCSACoords( &pStr ) );
             const Point     aBottomRight( ImpReadNCSACoords( &pStr ) );
             const tools::Rectangle aRect( aTopLeft, aBottomRight );
@@ -418,7 +418,7 @@ void ImageMap::ImpReadNCSALine( const OString& rLine, const OUString& rBaseURL )
         }
         else if ( aToken == "circle" )
         {
-            const OUString  aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
+            const OUString  aURL( ImpReadNCSAURL( &pStr, "" ) );
             const Point     aCenter( ImpReadNCSACoords( &pStr ) );
             const Point     aDX( aCenter - ImpReadNCSACoords( &pStr ) );
             long            nRadius = (long) sqrt( (double) aDX.X() * aDX.X() +
@@ -431,7 +431,7 @@ void ImageMap::ImpReadNCSALine( const OString& rLine, const OUString& rBaseURL )
         {
             const sal_uInt16 nCount = comphelper::string::getTokenCount(aStr,
                 ',') - 1;
-            const OUString aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
+            const OUString aURL( ImpReadNCSAURL( &pStr, "" ) );
             tools::Polygon aPoly( nCount );
 
             for ( sal_uInt16 i = 0; i < nCount; i++ )

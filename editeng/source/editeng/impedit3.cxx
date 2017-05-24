@@ -830,7 +830,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 if ( IsFixedCellHeight() )
                     nTextLineHeight = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() );
                 else
-                    nTextLineHeight = aTmpFont.GetPhysTxtSize( GetRefDevice(), OUString() ).Height();
+                    nTextLineHeight = aTmpFont.GetPhysTxtSize( GetRefDevice() ).Height();
                 // Metrics can be greater
                 FormatterFontMetric aTempFormatterMetrics;
                 RecalcFormatterFontMetrics( aTempFormatterMetrics, aTmpFont );
@@ -1339,7 +1339,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             if ( IsFixedCellHeight() )
                 aTextSize.Height() = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() );
             else
-                aTextSize.Height() = aTmpFont.GetPhysTxtSize( pRefDev, OUString() ).Height();
+                aTextSize.Height() = aTmpFont.GetPhysTxtSize( pRefDev ).Height();
             pLine->SetHeight( (sal_uInt16)aTextSize.Height() );
         }
 
@@ -1669,7 +1669,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion )
     aTmpFont.SetPhysFont( pRefDev );
 
     TextPortion* pDummyPortion = new TextPortion( 0 );
-    pDummyPortion->GetSize() = aTmpFont.GetPhysTxtSize( pRefDev, OUString() );
+    pDummyPortion->GetSize() = aTmpFont.GetPhysTxtSize( pRefDev );
     if ( IsFixedCellHeight() )
         pDummyPortion->GetSize().Height() = ImplCalculateFontIndependentLineSpacing( aTmpFont.GetFontHeight() );
     pParaPortion->GetTextPortions().Append(pDummyPortion);

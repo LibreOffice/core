@@ -399,14 +399,14 @@ bool OpenGLTexture::GetTextureRect(const SalTwoRect& rPosAry, bool bInverted, GL
 }
 
 template <>
-void OpenGLTexture::FillCoords<GL_TRIANGLE_FAN>(std::vector<GLfloat>& rCoords, const SalTwoRect& rPosAry, bool bInverted) const
+void OpenGLTexture::FillCoords<GL_TRIANGLE_FAN>(std::vector<GLfloat>& rCoords, const SalTwoRect& rPosAry) const
 {
     GLfloat x1 = 0.0f;
     GLfloat x2 = 0.0f;
     GLfloat y1 = 0.0f;
     GLfloat y2 = 0.0f;
 
-    GetTextureRect(rPosAry, bInverted, x1, x2, y1, y2);
+    GetTextureRect(rPosAry, false/*bInverted*/, x1, x2, y1, y2);
 
     rCoords.insert(rCoords.end(), {
         x1, y2, x1, y1,
@@ -415,14 +415,14 @@ void OpenGLTexture::FillCoords<GL_TRIANGLE_FAN>(std::vector<GLfloat>& rCoords, c
 }
 
 template <>
-void OpenGLTexture::FillCoords<GL_TRIANGLES>(std::vector<GLfloat>& rCoords, const SalTwoRect& rPosAry, bool bInverted) const
+void OpenGLTexture::FillCoords<GL_TRIANGLES>(std::vector<GLfloat>& rCoords, const SalTwoRect& rPosAry) const
 {
     GLfloat x1 = 0.0f;
     GLfloat x2 = 0.0f;
     GLfloat y1 = 0.0f;
     GLfloat y2 = 0.0f;
 
-    GetTextureRect(rPosAry, bInverted, x1, x2, y1, y2);
+    GetTextureRect(rPosAry, false/*bInverted*/, x1, x2, y1, y2);
 
     rCoords.insert(rCoords.end(), {
         x1, y1, x2, y1, x1, y2,

@@ -62,8 +62,8 @@ public:
     bool                IsEqual( const IMapCircleObject& rEqObj );
 
     // import/export
-    void                WriteCERN( SvStream& rOStm, const OUString& rBaseURL  ) const;
-    void                WriteNCSA( SvStream& rOStm, const OUString& rBaseURL  ) const;
+    void                WriteCERN( SvStream& rOStm ) const;
+    void                WriteNCSA( SvStream& rOStm ) const;
 };
 
 #endif

@@ -1293,7 +1293,7 @@ OUString Shape::finalizeServiceName( XmlFilterBase& rFilter, const OUString& rSe
             OUString aGraphicPath;
             if( !mxOleObjectInfo->maShapeId.isEmpty() )
                 if( ::oox::vml::Drawing* pVmlDrawing = rFilter.getVmlDrawing() )
-                    if( const ::oox::vml::ShapeBase* pVmlShape = pVmlDrawing->getShapes().getShapeById( mxOleObjectInfo->maShapeId, true ) )
+                    if( const ::oox::vml::ShapeBase* pVmlShape = pVmlDrawing->getShapes().getShapeById( mxOleObjectInfo->maShapeId ) )
                         aGraphicPath = pVmlShape->getGraphicPath();
 
             // import and store the graphic

@@ -323,8 +323,6 @@ public:
 
     bool IsInEditMode() const { return mbInEditMode; }
 
-    // via eCharSet the character set of a file can be passed. For
-    // RTL_TEXTENCODING_DONTKNOW the platform's character set is used.
     // Currently ASCII and RTF are supported and the differentiation is done
     // internally.
     // rFilterName has no meaning and must be empty
@@ -334,7 +332,7 @@ public:
     // object (without linking.)
     // TextLinks can't be edited (if needed later could be ReadOnly).
     // Setting attributes can only be done on the text frame.
-    void SetTextLink(const OUString& rFileName, const OUString& rFilterName, rtl_TextEncoding eCharSet);
+    void SetTextLink(const OUString& rFileName, const OUString& rFilterName);
     void ReleaseTextLink();
     bool IsLinkedText() const { return pPlusData!=nullptr && GetLinkUserData()!=nullptr; }
     bool ReloadLinkedText(bool bForceLoad);

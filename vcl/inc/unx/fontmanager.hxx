@@ -190,7 +190,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     void fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo ) const;
 
     OString getDirectory( int nAtom ) const;
-    int getDirectoryAtom( const OString& rDirectory, bool bCreate = false );
+    int getDirectoryAtom( const OString& rDirectory );
 
     /* try to initialize fonts from libfontconfig
 
