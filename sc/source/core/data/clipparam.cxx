@@ -23,14 +23,16 @@
 ScClipParam::ScClipParam() :
     meDirection(Unspecified),
     mbCutMode(false),
-    mnSourceDocID(0)
+    mnSourceDocID(0),
+    mpSourceView(nullptr)
 {
 }
 
 ScClipParam::ScClipParam(const ScRange& rRange, bool bCutMode) :
     meDirection(Unspecified),
     mbCutMode(bCutMode),
-    mnSourceDocID(0)
+    mnSourceDocID(0),
+    mpSourceView(nullptr)
 {
     maRanges.Append(rRange);
 }
