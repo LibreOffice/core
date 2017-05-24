@@ -43,13 +43,6 @@ EditDataObject::~EditDataObject()
 {
 }
 
-// uno::XInterface
-uno::Any EditDataObject::queryInterface( const uno::Type & rType )
-{
-    uno::Any aRet = ::cppu::queryInterface( rType, (static_cast< datatransfer::XTransferable* >(this)) );
-    return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
-}
-
 // datatransfer::XTransferable
 uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavor )
 {

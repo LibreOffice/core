@@ -281,7 +281,16 @@ public:
         const OUString& rFileName,
         const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
         const css::uno::Reference< css::frame::XModel > &,
-        FieldUnit const eDefaultFieldUnit );
+        FieldUnit const eDefaultFieldUnit);
+
+    SvXMLExport(
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        OUString const & implementationName,
+        const OUString& rFileName,
+        const css::uno::Reference< css::xml::sax::XDocumentHandler > & rHandler,
+        const css::uno::Reference< css::frame::XModel > &,
+        FieldUnit const eDefaultFieldUnit,
+        SvXMLExportFlags nExportFlag );
 
     virtual ~SvXMLExport() override;
 
