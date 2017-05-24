@@ -3473,6 +3473,12 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     WriteRTF( pDataObj->GetRTFStream(), aSelection );
     pDataObj->GetRTFStream().Seek( 0 );
 
+    WriteXML( pDataObj->GetODFStream(), aSelection );
+    pDataObj->GetODFStream().Seek( 0 );
+    //dump the ODFStream to a XML file
+
+    //dumping ends
+
     if ( ( aSelection.Min().GetNode() == aSelection.Max().GetNode() )
             && ( aSelection.Max().GetIndex() == (aSelection.Min().GetIndex()+1) ) )
     {
