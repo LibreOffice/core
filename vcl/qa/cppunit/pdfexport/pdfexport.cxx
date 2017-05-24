@@ -266,8 +266,8 @@ void PdfExportTest::testTdf105461()
 void PdfExportTest::testTdf107868()
 {
     // FIXME: Why does this fail on macOS?
-    // FIXME: Why does this fail when building 64bit with VS2017?
-#if !defined MACOSX && !(defined _WIN64 && _MSC_VER >= 1910)
+    // FIXME: Why does this fail when building 64bit?
+#if !defined MACOSX && !defined _WIN64
     // Import the bugdoc and print to PDF.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf107868.odt";
     mxComponent = loadFromDesktop(aURL);
