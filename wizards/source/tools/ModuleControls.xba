@@ -335,17 +335,17 @@ Dim lblNo as String
 Dim lblYesToAll as String
 Dim lblCancel as String
 Dim OverwriteModel as Object
-	If InitResources(GetProductName(), &quot;dbw&quot;) Then
-		QueryString = GetResText(507)
+	If InitResources(GetProductName()) Then
+		QueryString = GetResText(&quot;RID_COMMON_7&quot;)
 		QueryString = ReplaceString(QueryString, ConvertFromUrl(FilePath), &quot;&lt;PATH&gt;&quot;)
 		If Len(QueryString) &gt; 190 Then
 			QueryString = DeleteStr(QueryString, &quot;.&lt;BR&gt;&quot;)
 		End If
 		QueryString = ReplaceString(QueryString, chr(13), &quot;&lt;BR&gt;&quot;)
-		lblYes = GetResText(508)
-		lblYesToAll = GetResText(509)
-		lblNo = GetResText(510)
-		lblCancel = GetResText(511)
+		lblYes = GetResText(&quot;RID_COMMON_8&quot;)
+		lblYesToAll = GetResText(&quot;RID_COMMON_9&quot;)
+		lblNo = GetResText(&quot;RID_COMMON_10&quot;)
+		lblCancel = GetResText(&quot;RID_COMMON_11&quot;)
 		DlgOverwrite = LoadDialog(&quot;Tools&quot;, &quot;DlgOverwriteAll&quot;)
 		DlgOverwrite.Title = sTitle
 		OverwriteModel = DlgOverwrite.Model

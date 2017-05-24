@@ -1073,14 +1073,12 @@ $(eval $(call gb_Helper_register_resources,\
 	dkt \
 	editeng \
 	eps \
-	eur \
 	for \
 	forui \
 	$(call gb_Helper_optional,DESKTOP,fps_office) \
 	frm \
 	fwe \
 	gal \
-	imp \
 	ofa \
 	$(call gb_Helper_optional,DBCONNECTIVITY,pcr) \
 	pdffilter \
@@ -1101,7 +1099,6 @@ $(eval $(call gb_Helper_register_resources,\
 	svx \
 	sw \
 	t602filter \
-	tpl \
 	upd \
 	uui \
 	vcl \

@@ -45,7 +45,7 @@ Dim i As Integer
 Dim oFactoryKey as Object
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	BasicLibraries.LoadLibrary(&quot;ImportWizard&quot;)
-	If InitResources(&quot;Euro Converter&quot;, &quot;eur&quot;) Then
+	If InitResources(&quot;Euro Converter&quot;) Then
 		oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 		oLocale = GetStarOfficeLocale()
 		InitializeConverter(oLocale, 2)

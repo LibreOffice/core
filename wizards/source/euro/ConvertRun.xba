@@ -23,7 +23,7 @@ Public oPreSelRange as Object
 
 Sub Main()
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
-	If InitResources(&quot;Euro Converter&quot;, &quot;eur&quot;) Then
+	If InitResources(&quot;Euro Converter&quot;) Then
 		bDoUnProtect = False
 		bPreSelected = True
 		oDocument = ThisComponent

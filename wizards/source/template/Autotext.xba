@@ -41,9 +41,9 @@ Sub Main()
 	On Local Error Goto GENERALERROR
 	&apos; Initialization...
     BasicLibraries.LoadLibrary(&quot;Tools&quot;)
-	If InitResources(&quot;&apos;Template&apos;&quot;, &quot;tpl&quot;) Then
-		sGeneralError = GetResText(1302)
-		sTextFieldNotDefined = GetResText(1400)
+	If InitResources(&quot;&apos;Template&apos;&quot;) Then
+		sGeneralError = GetResText(&quot;CorrespondenceMsgError&quot;)
+		sTextFieldNotDefined = GetResText(&quot;TextField&quot;)
 	End If
 
 	UserfieldDatatype(0) = &quot;COMPANY&quot;

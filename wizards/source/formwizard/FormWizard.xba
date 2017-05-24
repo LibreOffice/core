@@ -99,7 +99,7 @@ Dim LocList() as String
 	bEnableBinaryOptionGroup = False
 	bDisposeDoc = True
 	MaxIndex = -1
-	If Not InitResources(&quot;Formwizard&quot;,&quot;dbw&quot;) Then
+	If Not InitResources(&quot;Formwizard&quot;) Then
 		Exit Sub
 	End If
 	oDBContext = CreateUnoService(&quot;com.sun.star.sdb.DatabaseContext&quot;)

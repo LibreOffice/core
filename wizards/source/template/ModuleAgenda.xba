@@ -45,14 +45,14 @@ End Sub
 
 
 Sub LoadLanguageAgenda()
-	If InitResources(&quot;&apos;Template&apos;&quot;, &quot;tpl&quot;) Then
-		DlgAgenda_gMyName = GetResText(1200)
-		DialogModel.CmdCancel.Label = GetResText(1102)
-		DialogModel.CmdAgdGoon.Label = GetResText(1103)
-&apos;		DlgAgenda_gMsgNoCancel$ = GetResText(1201)
-		DialogModel.FrmAgenda.Label = GetResText(1202)
-		DialogModel.OptAgenda1.Label = GetResText(1203)
-		DialogModel.OptAgenda2.Label = GetResText(1204)
+	If InitResources(&quot;&apos;Template&apos;&quot;) Then
+		DlgAgenda_gMyName = GetResText(&quot;AgendaDlgName&quot;)
+		DialogModel.CmdCancel.Label = GetResText(&quot;STYLES_2&quot;)
+		DialogModel.CmdAgdGoon.Label = GetResText(&quot;STYLES_3&quot;)
+&apos;		DlgAgenda_gMsgNoCancel$ = GetResText(&quot;AgendaDlgNoCancel&quot;)
+		DialogModel.FrmAgenda.Label = GetResText(&quot;AgendaDlgFrame&quot;)
+		DialogModel.OptAgenda1.Label = GetResText(&quot;AgendaDlgButton1&quot;)
+		DialogModel.OptAgenda2.Label = GetResText(&quot;AgendaDlgButton2&quot;)
 &apos;		DialogModel.OptAgenda1.State = 1
 	End If
 End Sub

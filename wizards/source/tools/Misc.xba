@@ -276,9 +276,9 @@ Dim oLocResSrv as Object
 	If bResObjectexists Then
 		oLocResSrv = oResSrv
 	End If
-	If InitResources(&quot;Tools&quot;, &quot;com&quot;) Then
+	If InitResources(&quot;Tools&quot;) Then
 		ProductName = GetProductName()
-		sError = GetResText(1006)
+		sError = GetResText(&quot;RID_COMMON_6&quot;)
 		sError = ReplaceString(sError, ProductName, &quot;%PRODUCTNAME&quot;)
 		sError = ReplaceString(sError, chr(13), &quot;&lt;BR&gt;&quot;)
 		MsgBox(sError, 16, ProductName)
@@ -290,42 +290,50 @@ Dim oLocResSrv as Object
 End Sub
 
 
-Function InitResources(Description, ShortDescription as String) as boolean
+Function InitResources(Description) as boolean
 Dim xResource as Object
-Dim aArgs(0) as String
+Dim sOfficeDir as String
+Dim aArgs(5) as Any
 	On Error Goto ErrorOcurred
-	aArgs(0) = ShortDescription
-	oConfigProvider = createUnoService(&quot;com.sun.star.configuration.ConfigurationProvider&quot;)
-	xResource = getProcessServiceManager().createInstanceWithArguments( &quot;org.libreoffice.resource.ResourceIndexAccess&quot;, aArgs() )
-	If (IsNull(xResource)) then
+	sOfficeDir = &quot;$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/wizards/&quot;
+	sOfficeDir = GetDefaultContext.getByName(&quot;/singletons/com.sun.star.util.theMacroExpander&quot;).ExpandMacros(sOfficeDir)
+	aArgs(0) = sOfficeDir
+	aArgs(1) = true
+	aArgs(2) = GetStarOfficeLocale()
+	aArgs(3) = &quot;resources&quot;
+	aArgs(4) = &quot;&quot;
+	aArgs(5) = NULL
+	oResSrv = getProcessServiceManager().createInstanceWithArguments( &quot;com.sun.star.resource.StringResourceWithLocation&quot;, aArgs() )
+	If (IsNull(oResSrv)) then
 		InitResources = FALSE
 		MsgBox(&quot;could not initialize ResourceIndexAccess&quot;)
 	Else
 		InitResources = TRUE
-		oResSrv = xResource.getByName( &quot;String&quot; )
 	End If
 	Exit Function
 ErrorOcurred:
 	Dim nSolarVer
 	InitResources = FALSE
 	nSolarVer = GetSolarVersion()
-	MsgBox(&quot;Resource file missing (&quot; &amp; ShortDescription  &amp; trim(str(nSolarVer)) + &quot;*.res)&quot;, 16, GetProductName())
+	MsgBox(&quot;Resource file missing&quot;, 16, GetProductName())
 	Resume CLERROR
 	CLERROR:
 End Function
 
 
-Function GetResText( nID as integer ) As string
+Function GetResText( sID as String ) As string
+Dim sString as String
 	On Error Goto ErrorOcurred
 	If Not IsNull(oResSrv) Then
-		GetResText = oResSrv.getByIndex( nID )
+		sString = oResSrv.resolveString(sID)
+		GetResText = ReplaceString(sString, GetProductname(), &quot;%PRODUCTNAME&quot;)
 	Else
 		GetResText = &quot;&quot;
 	End If
 	Exit Function
 ErrorOcurred:
 	GetResText = &quot;&quot;
-	MsgBox(&quot;Resource with ID =&quot; + str( nID ) + &quot; not found!&quot;, 16, GetProductName())
+	MsgBox(&quot;Resource with ID =&quot; + sID + &quot; not found!&quot;, 16, GetProductName())
 	Resume CLERROR
 	CLERROR:
 End Function
@@ -775,18 +783,18 @@ Dim ErrMsg as String
 	oDocument = StarDesktop.LoadComponentFromURL(sUrl,&quot;_default&quot;,0, NoArgs())
 NOMODULEINSTALLED:
 	If (Err &lt;&gt; 0) OR IsNull(oDocument) Then
-		If InitResources(&quot;&quot;, &quot;com&quot;) Then
+		If InitResources(&quot;&quot;) Then
 			Select Case sType
 				Case &quot;swriter&quot;
-					ErrMsg = GetResText(1001)
+					ErrMsg = GetResText(&quot;RID_COMMON_1&quot;)
 				Case &quot;scalc&quot;
-					ErrMsg = GetResText(1002)
+					ErrMsg = GetResText(&quot;RID_COMMON_2&quot;)
 				Case &quot;simpress&quot;
-					ErrMsg = GetResText(1003)
+					ErrMsg = GetResText(&quot;RID_COMMON_3&quot;)
 				Case &quot;sdraw&quot;
-					ErrMsg = GetResText(1004)
+					ErrMsg = GetResText(&quot;RID_COMMON_4&quot;)
 				Case &quot;smath&quot;
-					ErrMsg = GetResText(1005)
+					ErrMsg = GetResText(&quot;RID_COMMON_5&quot;)
 				Case Else
 					ErrMsg = &quot;Invalid Document Type!&quot;
 			End Select

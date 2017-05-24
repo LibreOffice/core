@@ -19,9 +19,6 @@
 -->
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Samples" script:language="StarBasic">Option Explicit
 
-Const STYLES = 1100
-Const STYLENAME_DEF = 1120
-Const STYLENAME = 1150
 Const NumStyles = 18
 Const aTempFileName = &quot;Berend_Ilko_Tom_Stella_Volker.stc&quot;
 Dim oUcbObject as Object
@@ -36,7 +33,6 @@ Public aTempURL as String
 
 Public Files(100) as String
 
-
 &apos;--------------------------------------------------------------------------------------
 &apos;Calc Style Section starts here
 
@@ -49,8 +45,9 @@ Dim LocalizedStyleNames(NumStyles,2) As String
 Dim LocalizedStyleName As String
 Dim t as Integer
 Dim MaxIndex as Integer
+Dim StyleNameDef As Variant
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
-	If InitResources(&quot;&apos;Template&apos;&quot;, &quot;tpl&quot;) then
+	If InitResources(&quot;&apos;Template&apos;&quot;) then
 	oDocument = ThisComponent
 		If oDocument.SupportsService(&quot;com.sun.star.sheet.SpreadsheetDocument&quot;) Then
 			ToggleWindow(False)
@@ -62,12 +59,13 @@ Dim MaxIndex as Integer
 			TemplateDir = GetPathSettings(&quot;Template&quot;, False, 0)
 			StylesDir = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/styles/&quot;)
 			sQueryPath = GetOfficeSubPath(&quot;Template&quot;, &quot;../wizard/bitmap/&quot;)
-			DialogModel.Title = GetResText(STYLES)
-			DialogModel.cmdCancel.Label = GetResText(STYLES+2)
-			DialogModel.cmdOk.Label = GetResText(STYLES+3)
+			DialogModel.Title = GetResText(&quot;STYLES_0&quot;)
+			DialogModel.cmdCancel.Label = GetResText(&quot;STYLES_2&quot;)
+			DialogModel.cmdOk.Label = GetResText(&quot;STYLES_3&quot;)
+			StyleNameDef = Array("(Standard)", "Autumn Leaves", "Be", "Black and White", "Blackberry Bush", "Blue Jeans", "Fifties Diner", "Glacier", "Green Grapes", "Marine", "Millennium", "Nature", "Neon", "Night", "PC Nostalgia", "Pastel", "Pool Party", "Pumpkin")
 			For t = 0 to NumStyles - 1
-				LocalizedStyleNames(t,0) = GetResText(STYLENAME_DEF+t)
-				LocalizedStyleNames(t,1) = GetResText(STYLENAME+t)
+				LocalizedStyleNames(t,0) = StyleNameDef(t)
+				LocalizedStyleNames(t,1) = GetResText(&quot;STYLENAME_&quot; &amp; Trim(Str(t)))
 			Next t
 			Stylenames() = ReadDirectories(StylesDir, False, False, True,)
 			MaxIndex = Ubound(Stylenames())
@@ -129,7 +127,7 @@ Sub SaveCurrentStyles(oDocument as Object)
 	Exit Sub
 
 ErrorOcurred:
-	MsgBox(GetResText( STYLES+1 ), 16, GetResText( STYLES ))
+	MsgBox(GetResText(&quot;STYLES_1&quot;), 16, GetResText(&quot;STYLES_0&quot;))
 	On Local Error Goto 0
 End Sub
 

@@ -37,7 +37,6 @@ Public SOWorkPath As String
 Public SOTemplatePath as String
 Public bCancelTask As Boolean
 Public bDoKeepApplValues as Boolean
-Public iApplSection as Integer
 Public oUcb as Object
 Public PathSeparator as String
 
@@ -311,14 +310,17 @@ End Sub
 
 
 Sub	SetupMSConfiguration()
-	iApplSection = 0
 	Wizardmode = SBMICROSOFTMODE
 	MaxApplCount = 3
 	ApplCount = 3
 	&apos; chkTemplatePath-Captions
-	GetApplResourceArray(1009 + iApplSection, ApplCount, sTemplateCheckBox())
+	sTemplateCheckBox(0) = GetResText(&quot;MSTemplateCheckbox_1_&quot;)
+	sTemplateCheckBox(1) = GetResText(&quot;MSTemplateCheckbox_2_&quot;)
+	sTemplateCheckBox(2) = GetResText(&quot;MSTemplateCheckbox_3_&quot;)
 	&apos; DocumentCheckbox- Captions
-	GetApplResourceArray(1009 + iApplSection + ApplCount, ApplCount, sDocumentCheckBox())
+	sDocumentCheckBox(0) = GetResText(&quot;MSDocumentCheckbox_1_&quot;)
+	sDocumentCheckBox(1) = GetResText(&quot;MSDocumentCheckbox_2_&quot;)
+	sDocumentCheckBox(2) = GetResText(&quot;MSDocumentCheckbox_3_&quot;)
 
 	sKeyName(0) = &quot;Software\Microsoft\Office\8.0\Word\Options&quot;
 	sKeyName(1) = &quot;Software\Microsoft\Office\8.0\Excel\Microsoft Excel&quot;
@@ -400,10 +402,10 @@ Dim sShowPath as String
 Dim oLocUcb as Object
 	oLocUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	If bGetResources Then
-		If InitResources(&quot;ImportWizard&quot;,&quot;imp&quot;) then
- 			sNoDirCreation = GetResText(1050)
-			sMsgDirNotThere = GetResText(1051)
-			sQueryForNewCreation = GetResText(1052)
+		If InitResources(&quot;ImportWizard&quot;) then
+			sNoDirCreation = GetResText(&quot;NoDirCreation&quot;)
+			sMsgDirNotThere = GetResText(&quot;MsgDirNotThere&quot;)
+			sQueryForNewCreation = GetResText(&quot;QueryfornewCreation&quot;)
 		Else
 			CheckTextBoxPath() = False
 			Exit Function
