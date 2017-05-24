@@ -115,7 +115,10 @@ SAL_CALL XMLSignature_GpgImpl::generate(
 
     // set intended operation to sign - several asserts inside libxmlsec
     // wanting that for digest / transforms
-    pDsigCtx->operation  = xmlSecTransformOperationSign;
+    pDsigCtx->operation = xmlSecTransformOperationSign;
+
+    // we default to SHA512 for all digests - nss crypto does not have it...
+    //pDsigCtx->defDigestMethodId = xmlSecTransformSha512Id;
 
     // Calculate digest for all references
     xmlNodePtr cur = xmlSecGetNextElementNode(pNode->children);
@@ -233,11 +236,8 @@ SAL_CALL XMLSignature_GpgImpl::validate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
 ) {
-    xmlSecKeysMngrPtr pMngr = nullptr ;
     xmlSecDSigCtxPtr pDsigCtx = nullptr ;
     xmlNodePtr pNode = nullptr ;
-    //sal_Bool valid ;
-    (void)pMngr; (void)pDsigCtx; (void)pNode;
 
     if( !aTemplate.is() )
         throw RuntimeException() ;
@@ -274,72 +274,141 @@ SAL_CALL XMLSignature_GpgImpl::validate(
     {
         Reference< XSecurityEnvironment > aEnvironment = aSecurityCtx->getSecurityEnvironmentByIndex(i);
 
-        //Get Keys Manager
-        Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY_THROW ) ;
 #if 0
-        SecurityEnvironment_NssImpl* pSecEnv =
-            reinterpret_cast<SecurityEnvironment_NssImpl*>(
-                sal::static_int_cast<sal_uIntPtr>(
-                    xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() )));
+        //Get Keys Manager
+        SecurityEnvironmentGpg* pSecEnv =
+            dynamic_cast<SecurityEnvironmentGpg*>(aEnvironment.get());
         if( pSecEnv == nullptr )
             throw RuntimeException() ;
+#endif
 
-        pMngr = pSecEnv->createKeysManager();
-        if( !pMngr ) {
-            throw RuntimeException() ;
-        }
+        // TODO pSecEnv is still from nss, roll our own impl there
+        // TODO figure out key from pSecEnv!
+        // unclear how/where that is transported in nss impl...
 
         //Create Signature context
-        pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
+        pDsigCtx = xmlSecDSigCtxCreate( nullptr ) ;
         if( pDsigCtx == nullptr )
         {
-            SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
-            //throw XMLSignatureException() ;
             clearErrorRecorder();
             return aTemplate;
         }
 
-        //Verify signature
-        int rs = xmlSecDSigCtxVerify( pDsigCtx , pNode );
+        // set intended operation to verify - several asserts inside libxmlsec
+        // wanting that for digest / transforms
+        pDsigCtx->operation = xmlSecTransformOperationVerify;
 
-        // Also verify manifest: this is empty for ODF, but contains everything (except signature metadata) for OOXML.
-        xmlSecSize nReferenceCount = xmlSecPtrListGetSize(&pDsigCtx->manifestReferences);
-        // Require that all manifest references are also good.
-        xmlSecSize nReferenceGood = 0;
-        for (xmlSecSize nReference = 0; nReference < nReferenceCount; ++nReference)
+        // reset status - to be set later
+        pDsigCtx->status = xmlSecDSigStatusUnknown;
+
+        // get me a digestible buffer from the SignatureInfo node!
+        // -------------------------------------------------------
+
+        // run the transformations - first child node is required to
+        // be SignatureInfo
+        xmlSecNodeSetPtr nodeset = nullptr;
+        xmlNodePtr cur = xmlSecGetNextElementNode(pNode->children);
+        // TODO assert that...
+        nodeset = xmlSecNodeSetGetChildren(pNode->doc, cur, 1, 0);
+        if(nodeset == nullptr)
+            throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+
+        // TODO assert we really have the SignatureInfo here?
+        if( xmlSecTransformCtxXmlExecute(&(pDsigCtx->transformCtx), nodeset) < 0 )
+            throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+
+        // Validate the template via gpgme
+        GpgME::initializeLibrary();
+        if( GpgME::checkEngine(GpgME::OpenPGP) )
+            throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+
+        GpgME::Context* ctx = GpgME::Context::createForProtocol(GpgME::OpenPGP);
+        if( ctx == nullptr )
+            throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+
+        // good, ctx is setup now, let's validate the lot
+        GpgME::Data data_text(
+            reinterpret_cast<char*>(xmlSecBufferGetData(pDsigCtx->transformCtx.result)),
+            xmlSecBufferGetSize(pDsigCtx->transformCtx.result), false);
+
+        SAL_INFO("xmlsecurity.xmlsec.gpg", "Validating SignatureInfo: " << xmlSecBufferGetData(pDsigCtx->transformCtx.result));
+
+        // walk xml tree to sign value node - go to children, first is
+        // SignedInfo, 2nd is signaturevalue
+        cur = xmlSecGetNextElementNode(pNode->children);
+        cur = xmlSecGetNextElementNode(cur->next);
+
+        // TODO some assert would be good that cur is actually SignatureValue
+        xmlChar* pSignatureValue=xmlNodeGetContent(cur);
+        GpgME::Data data_signature(
+            reinterpret_cast<char*>(pSignatureValue),
+            xmlStrlen(pSignatureValue), false);
+
+        GpgME::VerificationResult verify_res=ctx->verifyDetachedSignature(
+            data_signature, data_text);
+
+        xmlFree(pSignatureValue);
+
+        // TODO: needs some more error handling, needs checking _all_ signatures
+        if( verify_res.isNull() ||
+            verify_res.numSignatures() == 0 ||
+            verify_res.signature(0).validity() < GpgME::Signature::Full )
         {
-            xmlSecDSigReferenceCtxPtr pReference = static_cast<xmlSecDSigReferenceCtxPtr>(xmlSecPtrListGetItem(&pDsigCtx->manifestReferences, nReference));
-            if (pReference)
+            clearErrorRecorder();
+            return aTemplate;
+        }
+
+        // now verify digest for all references
+        cur = xmlSecGetNextElementNode(pNode->children);
+        if( cur != nullptr )
+            cur = xmlSecGetNextElementNode(cur->children);
+        while( cur != nullptr )
+        {
+            // some of those children I suppose should be reference elements
+            if( xmlSecCheckNodeName(cur, xmlSecNodeReference, xmlSecDSigNs) )
             {
-                if (pReference->status == xmlSecDSigStatusSucceeded)
-                    ++nReferenceGood;
+                xmlSecDSigReferenceCtxPtr pDsigRefCtx =
+                    xmlSecDSigReferenceCtxCreate(pDsigCtx,
+                                                 xmlSecDSigReferenceOriginSignedInfo);
+                if(pDsigRefCtx == nullptr)
+                    throw RuntimeException();
+
+                // add this one to the list
+                if( xmlSecPtrListAdd(&(pDsigCtx->signedInfoReferences),
+                                     pDsigRefCtx) < 0 )
+                {
+                    // TODO resource handling
+                    xmlSecDSigReferenceCtxDestroy(pDsigRefCtx);
+                    throw RuntimeException();
+                }
+
+                if( xmlSecDSigReferenceCtxProcessNode(pDsigRefCtx, cur) < 0 )
+                    throw RuntimeException();
+
+                // final check - all good?
+                if(pDsigRefCtx->status != xmlSecDSigStatusSucceeded)
+                {
+                    pDsigCtx->status = xmlSecDSigStatusInvalid;
+                    return aTemplate; // TODO - harder error?
+                }
             }
+
+            cur = xmlSecGetNextElementNode(cur->next);
         }
 
-        if (rs == 0 && pDsigCtx->status == xmlSecDSigStatusSucceeded && nReferenceCount == nReferenceGood)
-        {
-            aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
-            xmlSecDSigCtxDestroy( pDsigCtx ) ;
-            SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
-            break;
-        }
-        else
-        {
-            aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_UNKNOWN);
-        }
+        // TODO - also verify manifest (only relevant for ooxml)?
+        aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
+
+        // done
         xmlSecDSigCtxDestroy( pDsigCtx ) ;
-        SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
-#endif
     }
-
 
     //Unregistered the stream/URI binding
     if( xUriBinding.is() )
         xmlUnregisterStreamInputCallbacks() ;
 
-    //return valid ;
     clearErrorRecorder();
-    return aTemplate;
+    return aTemplate ;
 }
 
 /* XServiceInfo */
