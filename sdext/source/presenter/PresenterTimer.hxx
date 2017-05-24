@@ -57,6 +57,7 @@ public:
         nIntervall ns long until CancelTask is called.
     */
     static sal_Int32 ScheduleRepeatedTask (
+        const css::uno::Reference<css::uno::XComponentContext>& xContext,
         const Task& rTask,
         const sal_Int64 nFirst,
         const sal_Int64 nIntervall);
@@ -108,6 +109,7 @@ private:
     sal_Int32 mnTimerTaskId;
     bool mbIsCallbackPending;
     css::uno::Reference<css::awt::XRequestCallback> mxRequestCallback;
+    const css::uno::Reference<css::uno::XComponentContext> m_xContext;
 
     PresenterClockTimer (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext);
