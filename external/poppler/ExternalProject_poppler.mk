@@ -28,7 +28,7 @@ $(call gb_ExternalProject_get_state_target,poppler,build) :
 			--disable-shared \
 			--enable-xpdf-headers \
 			--disable-poppler-cpp \
-			--disable-libopenjpeg \
+			--enable-libopenjpeg=none \
 			--disable-libtiff \
 			--enable-libjpeg \
 			--disable-libpng \
