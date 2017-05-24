@@ -60,6 +60,9 @@ public:
 
     virtual void SAL_CALL disposing() override;
 
+    css::uno::Reference<css::uno::XComponentContext> const&
+        GetComponentContext() { return mxComponentContext; }
+
     void SetVisible (const bool bIsVisible);
 
     /** Set the bounding box of the scroll bar.
