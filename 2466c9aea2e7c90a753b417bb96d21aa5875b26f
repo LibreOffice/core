@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_a552a411",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-24T15:26:32Z",
+      "side": 1,
+      "message": "This condition should not include the DEFINED bit, doing so any user defined number format detected would be taken as date. Test only for DATE instead.\n\nHint: SvNumberFormatter::GetType() never includes the DEFINED bit (only SvNumberformat::GetType() does) so it would actually work here, but the logic is flawed.",
+      "range": {
+        "startLine": 570,
+        "startChar": 61,
+        "endLine": 570,
+        "endChar": 96
+      },
+      "revId": "2466c9aea2e7c90a753b417bb96d21aa5875b26f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
