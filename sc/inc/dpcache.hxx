@@ -42,9 +42,9 @@ struct ScDPNumGroupInfo;
  */
 class SC_DLLPUBLIC ScDPCache
 {
-    typedef std::unordered_set<OUString, OUStringHash> StringSetType;
-
 public:
+    typedef std::unordered_set<OUString, OUStringHash> StringSetType;
+    typedef mdds::flat_segment_tree<SCROW, bool> EmptyRowsType;
     typedef std::vector<ScDPItemData> ScDPItemDataVec;
     typedef std::set<ScDPObject*> ScDPObjectSet;
     typedef std::vector<SCROW> IndexArrayType;
@@ -117,17 +117,17 @@ private:
 
     FieldsType maFields;
     GroupFieldsType maGroupFields;
-    StringSetType maStringPool;
+    std::vector<StringSetType> maStringPools; // one for each field.
 
     std::vector<OUString> maLabelNames; // Stores dimension names and the data layout dimension name at position 0.
-    mdds::flat_segment_tree<SCROW, bool> maEmptyRows;
+    EmptyRowsType maEmptyRows;
     SCROW mnDataSize;
     SCROW mnRowCount;
 
     bool mbDisposing;
 
 public:
-    rtl_uString* InternString( const OUString& rStr );
+    rtl_uString* InternString( size_t nDim, const OUString& rStr );
     void AddReference(ScDPObject* pObj) const;
     void RemoveReference(ScDPObject* pObj) const;
     const ScDPObjectSet& GetAllReferences() const;
