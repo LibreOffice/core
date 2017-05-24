@@ -365,7 +365,7 @@ bool RenderList::addDrawTextureWithMaskColor(OpenGLTexture& rTexture, SalColor n
     RenderTextureParameters& rTextureParameter = maRenderEntries.back().maTextureParametersMap[nTextureId];
     rTextureParameter.maTexture = rTexture;
 
-    rTexture.FillCoords<GL_TRIANGLES>(rTextureParameter.maTextureCoords, r2Rect, false);
+    rTexture.FillCoords<GL_TRIANGLES>(rTextureParameter.maTextureCoords, r2Rect);
 
     vcl::vertex::addRectangle<GL_TRIANGLES>(rTextureParameter.maVertices, fX1, fY1, fX2, fY2);
     vcl::vertex::addQuadColors<GL_TRIANGLES>(rTextureParameter.maColors, nColor, 0.0f);

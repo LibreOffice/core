@@ -377,20 +377,17 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
     return aTxtSize;
 }
 
-Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt )
+Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut )
 {
     if ( !IsCaseMap() && !IsKern() )
-        return Size( pOut->GetTextWidth( rTxt ), pOut->GetTextHeight() );
+        return Size( pOut->GetTextWidth( "" ), pOut->GetTextHeight() );
 
     Size aTxtSize;
     aTxtSize.setHeight( pOut->GetTextHeight() );
     if ( !IsCaseMap() )
-        aTxtSize.setWidth( pOut->GetTextWidth( rTxt ) );
+        aTxtSize.setWidth( pOut->GetTextWidth( "" ) );
     else
-        aTxtSize.setWidth( pOut->GetTextWidth( CalcCaseMap( rTxt ) ) );
-
-    if( IsKern() && ( rTxt.getLength() > 1 ) )
-        aTxtSize.Width() += ( ( rTxt.getLength()-1 ) * long( nKern ) );
+        aTxtSize.setWidth( pOut->GetTextWidth( CalcCaseMap( "" ) ) );
 
     return aTxtSize;
 }

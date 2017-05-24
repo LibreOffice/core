@@ -39,8 +39,8 @@ private:
     OUString                     aName;
 
     // binary saving/loading
-    void                ImpWriteImageMap( SvStream& rOStm, const OUString& ) const ;
-    void                ImpReadImageMap( SvStream& rIStm, size_t nCount, const OUString& );
+    void                ImpWriteImageMap( SvStream& rOStm ) const ;
+    void                ImpReadImageMap( SvStream& rIStm, size_t nCount );
 
     // Import/Export
     void                ImpWriteCERN( SvStream& rOStm ) const;
@@ -48,12 +48,12 @@ private:
     sal_uLong           ImpReadCERN( SvStream& rOStm );
     sal_uLong           ImpReadNCSA( SvStream& rOStm );
 
-    void                ImpReadCERNLine( const OString& rLine, const OUString& rBaseURL );
+    void                ImpReadCERNLine( const OString& rLine );
     static Point        ImpReadCERNCoords( const char** ppStr );
     static long         ImpReadCERNRadius( const char** ppStr );
     static OUString     ImpReadCERNURL( const char** ppStr, const OUString& rBaseURL );
 
-    void                ImpReadNCSALine( const OString& rLine, const OUString& rBaseURL );
+    void                ImpReadNCSALine( const OString& rLine );
     static OUString     ImpReadNCSAURL( const char** ppStr, const OUString& rBaseURL );
     static Point        ImpReadNCSACoords( const char** ppStr );
 

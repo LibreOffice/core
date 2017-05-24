@@ -552,7 +552,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
 
             o_rVisitedPaths[aDir] = 1;
 
-            int nDirID = getDirectoryAtom( aDir, true );
+            int nDirID = getDirectoryAtom( aDir );
 #if OSL_DEBUG_LEVEL > 2
             fprintf( stderr, "file %s not cached\n", aBase.getStr() );
 #endif
@@ -1012,7 +1012,7 @@ void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
             {
                 OString aDir, aBase, aOrgPath( reinterpret_cast<char*>(file) );
                 splitPath( aOrgPath, aDir, aBase );
-                int nDirID = getDirectoryAtom( aDir, true );
+                int nDirID = getDirectoryAtom( aDir );
                 fontID aFont = findFontFileID( nDirID, aBase, nCollectionEntry );
                 if( aFont > 0 )
                 {
@@ -1252,7 +1252,7 @@ void PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const css::lang::Loc
             {
                 OString aDir, aBase, aOrgPath( reinterpret_cast<char*>(file) );
                 splitPath( aOrgPath, aDir, aBase );
-                int nDirID = getDirectoryAtom( aDir, true );
+                int nDirID = getDirectoryAtom( aDir );
                 fontID aFont = findFontFileID( nDirID, aBase, nCollectionEntry );
                 if( aFont > 0 )
                     getFontFastInfo( aFont, rInfo );

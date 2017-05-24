@@ -38,9 +38,8 @@ struct XMLNumberFormat
     sal_Int16  nType;
     bool       bIsStandard : 1;
 
-    XMLNumberFormat(const OUString& sTempCurrency, sal_Int32 nTempFormat)
-        : sCurrency(sTempCurrency)
-        , nNumberFormat(nTempFormat)
+    XMLNumberFormat(sal_Int32 nTempFormat)
+        : nNumberFormat(nTempFormat)
         , nType(0)
         , bIsStandard(false)
     {

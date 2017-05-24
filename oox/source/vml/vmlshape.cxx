@@ -282,7 +282,7 @@ void ShapeBase::finalizeFragmentImport()
         OUString aType = maShapeModel.maType;
         if (aType[ 0 ] == '#')
             aType = aType.copy(1);
-        if( const ShapeType* pShapeType = mrDrawing.getShapes().getShapeTypeById( aType, true ) )
+        if( const ShapeType* pShapeType = mrDrawing.getShapes().getShapeTypeById( aType ) )
             maTypeModel.assignUsed( pShapeType->getTypeModel() );
     }
 }
@@ -1232,12 +1232,12 @@ void GroupShape::finalizeFragmentImport()
 
 const ShapeType* GroupShape::getChildTypeById( const OUString& rShapeId ) const
 {
-    return mxChildren->getShapeTypeById( rShapeId, true );
+    return mxChildren->getShapeTypeById( rShapeId );
 }
 
 const ShapeBase* GroupShape::getChildById( const OUString& rShapeId ) const
 {
-    return mxChildren->getShapeById( rShapeId, true );
+    return mxChildren->getShapeById( rShapeId );
 }
 
 Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const

@@ -73,11 +73,11 @@ public:
     bool         empty() const { return maShapes.empty(); }
 
     /** Returns the shape template with the passed identifier.
-        @param bDeep  True = searches in all group shapes too. */
-    const ShapeType*    getShapeTypeById( const OUString& rShapeId, bool bDeep ) const;
+        Searches in all group shapes too. */
+    const ShapeType*    getShapeTypeById( const OUString& rShapeId ) const;
     /** Returns the shape with the passed identifier.
-        @param bDeep  True = searches in all group shapes too. */
-    const ShapeBase*    getShapeById( const OUString& rShapeId, bool bDeep ) const;
+        Searches in all group shapes too. */
+    const ShapeBase*    getShapeById( const OUString& rShapeId ) const;
 
     /** Searches for a shape by using the passed functor that takes a constant
         reference of a ShapeBase object. */

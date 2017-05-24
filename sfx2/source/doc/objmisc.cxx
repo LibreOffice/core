@@ -1045,7 +1045,7 @@ void SfxObjectShell::InitOwnModel_Impl()
     }
 }
 
-void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
+void SfxObjectShell::FinishedLoading()
 {
     std::shared_ptr<const SfxFilter> pFlt = pMedium->GetFilter();
     if( pFlt )
@@ -1055,7 +1055,7 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
 
     bool bSetModifiedTRUE = false;
     const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(pMedium->GetItemSet(), SID_DOC_SALVAGE, false);
-    if( ( nFlags & SfxLoadedFlags::MAINDOCUMENT ) && !(pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT )
+    if( !(pImpl->nLoadedFlags & SfxLoadedFlags::MAINDOCUMENT )
         && !(pImpl->nFlagsInProgress & SfxLoadedFlags::MAINDOCUMENT ))
     {
         pImpl->nFlagsInProgress |= SfxLoadedFlags::MAINDOCUMENT;
@@ -1083,23 +1083,7 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
         pImpl->nFlagsInProgress &= ~SfxLoadedFlags::MAINDOCUMENT;
     }
 
-    if( ( nFlags & SfxLoadedFlags::IMAGES ) && !(pImpl->nLoadedFlags & SfxLoadedFlags::IMAGES )
-        && !(pImpl->nFlagsInProgress & SfxLoadedFlags::IMAGES ))
-    {
-        pImpl->nFlagsInProgress |= SfxLoadedFlags::IMAGES;
-        uno::Reference<document::XDocumentProperties> xDocProps(
-            getDocProperties());
-        const OUString url(xDocProps->getAutoloadURL());
-        sal_Int32 delay(xDocProps->getAutoloadSecs());
-        SetAutoLoad( INetURLObject(url), delay * 1000,
-                     (delay > 0) || !url.isEmpty() );
-        if( !bSetModifiedTRUE && IsEnableSetModified() )
-            SetModified( false );
-        Invalidate( SID_SAVEASDOC );
-        pImpl->nFlagsInProgress &= ~SfxLoadedFlags::IMAGES;
-    }
-
-    pImpl->nLoadedFlags |= nFlags;
+    pImpl->nLoadedFlags |= SfxLoadedFlags::MAINDOCUMENT;
 
     if ( pImpl->nFlagsInProgress == SfxLoadedFlags::NONE )
     {

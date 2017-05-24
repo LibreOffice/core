@@ -43,6 +43,7 @@ constructor_regex = re.compile("^\w+\(\)$")
 tmp1list = list()
 tmp2list = list()
 tmp3list = list()
+tmp4list = list()
 for callInfo, callValues in callDict.iteritems():
     nameAndParams = callInfo[1]
     if len(callValues) != 1:
@@ -81,6 +82,8 @@ for callInfo, callValues in callDict.iteritems():
         if callInfo[2] == "###0" and callValue == "InitAggregate()": continue
         if callValue == "shared_from_this()": continue
         tmp3list.append((sourceLoc, functionSig, callInfo[3] + " " + callInfo[2], callValue))
+    else:
+        tmp4list.append((sourceLoc, functionSig, callInfo[3] + " " + callInfo[2], callValue))
 
 
 # sort results by filename:lineno
@@ -90,22 +93,29 @@ def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
 tmp1list.sort(key=lambda v: natural_sort_key(v[0]))
 tmp2list.sort(key=lambda v: natural_sort_key(v[0]))
 tmp3list.sort(key=lambda v: natural_sort_key(v[0]))
+tmp4list.sort(key=lambda v: natural_sort_key(v[0]))
 
 # print out the results
-with open("loplugin.constantparam.report-booleans", "wt") as f:
+with open("compilerplugins/clang/constantparam.booleans.results", "wt") as f:
     for v in tmp1list:
         f.write(v[0] + "\n")
         f.write("    " + v[1] + "\n")
         f.write("    " + v[2] + "\n")
         f.write("    " + v[3] + "\n")
-with open("loplugin.constantparam.report-numbers", "wt") as f:
+with open("compilerplugins/clang/constantparam.numbers.results", "wt") as f:
     for v in tmp2list:
         f.write(v[0] + "\n")
         f.write("    " + v[1] + "\n")
         f.write("    " + v[2] + "\n")
         f.write("    " + v[3] + "\n")
-with open("loplugin.constantparam.report-constructors", "wt") as f:
+with open("compilerplugins/clang/constantparam.constructors.results", "wt") as f:
     for v in tmp3list:
+        f.write(v[0] + "\n")
+        f.write("    " + v[1] + "\n")
+        f.write("    " + v[2] + "\n")
+        f.write("    " + v[3] + "\n")
+with open("compilerplugins/clang/constantparam.others.results", "wt") as f:
+    for v in tmp4list:
         f.write(v[0] + "\n")
         f.write("    " + v[1] + "\n")
         f.write("    " + v[2] + "\n")
@@ -170,7 +180,7 @@ for callInfo, callValues in callDict.iteritems():
 tmp2list.sort(key=lambda v: natural_sort_key(v[0]))
 
 # print out the results
-with open("loplugin.constantparam.report-bitmask-params", "wt") as f:
+with open("compilerplugins/clang/constantparam.bitmask.results", "wt") as f:
     for v in tmp2list:
         f.write(v[0] + "\n")
         f.write("    " + v[1] + "\n")

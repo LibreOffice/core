@@ -87,7 +87,7 @@ public:
     Size GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
                          const sal_Int32 nIdx, const sal_Int32 nLen ) const;
 
-    Size GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt );
+    Size GetPhysTxtSize( const OutputDevice *pOut );
 
     Size GetTextSize( const OutputDevice *pOut, const OUString &rTxt,
                       const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32 ) const;

@@ -458,7 +458,7 @@ public:
 
     // Transfer IFace
     bool                        IsAbortingImport() const;
-    void                        FinishedLoading( SfxLoadedFlags nWhich = SfxLoadedFlags::ALL );
+    void                        FinishedLoading();
 
     virtual void                SetFormatSpecificCompatibilityOptions( const OUString& /*rFilterTypeName*/ ) { /* Do not do anything here; Derived classes must overload to do actual work */ };
 

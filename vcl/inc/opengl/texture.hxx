@@ -121,15 +121,15 @@ public:
     bool            operator!=( const OpenGLTexture& rTexture ) const;
 
     template<GLenum type>
-    void FillCoords(std::vector<GLfloat>& aCoordVector, const SalTwoRect& rPosAry, bool bInverted) const;
+    void FillCoords(std::vector<GLfloat>& aCoordVector, const SalTwoRect& rPosAry) const;
 };
 
 template<> void OpenGLTexture::FillCoords<GL_TRIANGLES>(
-    std::vector<GLfloat>& aCoord, const SalTwoRect& rPosAry, bool bInverted)
+    std::vector<GLfloat>& aCoord, const SalTwoRect& rPosAry)
     const;
 
 template<> void OpenGLTexture::FillCoords<GL_TRIANGLE_FAN>(
-    std::vector<GLfloat>& aCoord, const SalTwoRect& rPosAry, bool bInverted)
+    std::vector<GLfloat>& aCoord, const SalTwoRect& rPosAry)
     const;
 
 #endif // INCLUDED_VCL_INC_OPENGL_TEXTURE_H
