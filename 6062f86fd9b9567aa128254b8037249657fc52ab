@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_a21d3a75",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2748,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-05-24T13:43:04Z",
+      "side": 1,
+      "message": "There is no problem with ranges. It comes true for each scenerio. To check: \n\n                for (size_t i \u003d0; i\u003c rRangeList.size(); i++)                                                                                                                                         \n                {\n                    SCROW r1,r2; SCCOL c1,c2; SCTAB t1,t2;\n                    rRangeList[i]-\u003eGetVars(c1,r1,t1,c2,r2,t2);\n                    SAL_DEBUG(r1);\n                    SAL_DEBUG(c1);\n                    SAL_DEBUG(t1);\n                    SAL_DEBUG(r2);\n                    SAL_DEBUG(c2);\n                    SAL_DEBUG(t2);\n                    SAL_DEBUG(\"*************\");\n                }",
+      "range": {
+        "startLine": 2748,
+        "startChar": 16,
+        "endLine": 2748,
+        "endChar": 79
+      },
+      "revId": "6062f86fd9b9567aa128254b8037249657fc52ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c2124662",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2749,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-05-24T13:43:04Z",
+      "side": 1,
+      "message": "Bu i can\u0027t understand marking process. After that there is no selected cells on tabs but when i click the another cell selection done(unprotected cells). What should i do to fix it :/",
+      "range": {
+        "startLine": 2749,
+        "startChar": 16,
+        "endLine": 2749,
+        "endChar": 58
+      },
+      "revId": "6062f86fd9b9567aa128254b8037249657fc52ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
