@@ -34,6 +34,24 @@
       "revId": "da193718350e4d3fd3b3c2e5a2400802e4a3577a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a5870460",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-24T16:55:42Z",
+      "side": 1,
+      "message": "Ok, should still work with ISO 8601 and \u0027T\u0027 separator then, e.g. 1999-11-23T12:34:56",
+      "parentUuid": "5a3905b3_e5aaecd3",
+      "revId": "da193718350e4d3fd3b3c2e5a2400802e4a3577a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
