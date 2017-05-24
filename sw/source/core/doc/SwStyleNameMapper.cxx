@@ -307,10 +307,10 @@ const struct SwTableEntry PageDescProgNameTable [] =
 const struct SwTableEntry NumRuleProgNameTable [] =
 {
     ENTRY( "Numbering 1" ), // STR_POOLNUMRULE_PRGM_NUM1
-    ENTRY( "Numbering 2" ),
-    ENTRY( "Numbering 3" ),
-    ENTRY( "Numbering 4" ),
-    ENTRY( "Numbering 5" ),
+    ENTRY( "Numbering A" ),
+    ENTRY( "Numbering a" ),
+    ENTRY( "Numbering I" ),
+    ENTRY( "Numbering i" ),
     ENTRY( "List 1" ),
     ENTRY( "List 2" ),
     ENTRY( "List 3" ),

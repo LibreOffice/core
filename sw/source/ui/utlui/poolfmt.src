@@ -696,19 +696,19 @@ String STR_POOLNUMRULE_NUM1
 };
 String STR_POOLNUMRULE_NUM2
 {
-    Text [ en-US ] = "Numbering 2" ;
+    Text [ en-US ] = "Numbering A" ;
 };
 String STR_POOLNUMRULE_NUM3
 {
-    Text [ en-US ] = "Numbering 3" ;
+    Text [ en-US ] = "Numbering a" ;
 };
 String STR_POOLNUMRULE_NUM4
 {
-    Text [ en-US ] = "Numbering 4" ;
+    Text [ en-US ] = "Numbering I" ;
 };
 String STR_POOLNUMRULE_NUM5
 {
-    Text [ en-US ] = "Numbering 5" ;
+    Text [ en-US ] = "Numbering i" ;
 };
 String STR_POOLNUMRULE_BUL1
 {
