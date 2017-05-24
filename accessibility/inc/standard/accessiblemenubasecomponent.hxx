@@ -54,9 +54,6 @@ class OAccessibleMenuBaseComponent : private BaseVCLExternalSolarLock,
     friend class VCLXAccessibleMenuItem;
     friend class VCLXAccessibleMenu;
 
-private:
-    VCLExternalSolarLock*   m_pExternalLock;
-
 protected:
     typedef std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
 

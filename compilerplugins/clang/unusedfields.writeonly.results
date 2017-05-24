@@ -454,39 +454,39 @@ hwpfilter/source/hbox.h:884
     TocMark kind hchar
 hwpfilter/source/hbox.h:902
     IndexMark pgno unsigned short
-hwpfilter/source/hinfo.h:72
-    PaperBackInfo luminance int
 hwpfilter/source/hinfo.h:73
-    PaperBackInfo contrast int
+    PaperBackInfo luminance int
 hwpfilter/source/hinfo.h:74
+    PaperBackInfo contrast int
+hwpfilter/source/hinfo.h:75
     PaperBackInfo effect char
-hwpfilter/source/hinfo.h:108
-    DocChainInfo chain_page_no unsigned char
 hwpfilter/source/hinfo.h:109
+    DocChainInfo chain_page_no unsigned char
+hwpfilter/source/hinfo.h:110
     DocChainInfo chain_footnote_no unsigned char
-hwpfilter/source/hinfo.h:154
+hwpfilter/source/hinfo.h:155
     HWPInfo cur_col short
-hwpfilter/source/hinfo.h:158
+hwpfilter/source/hinfo.h:159
     HWPInfo cur_row short
-hwpfilter/source/hinfo.h:168
+hwpfilter/source/hinfo.h:169
     HWPInfo readonly short
-hwpfilter/source/hinfo.h:173
+hwpfilter/source/hinfo.h:174
     HWPInfo chain_info struct DocChainInfo
-hwpfilter/source/hinfo.h:182
+hwpfilter/source/hinfo.h:183
     HWPInfo countfn short
-hwpfilter/source/hinfo.h:185
+hwpfilter/source/hinfo.h:186
     HWPInfo fnchar unsigned char
-hwpfilter/source/hinfo.h:194
-    HWPInfo empty_line_hide unsigned char
 hwpfilter/source/hinfo.h:195
+    HWPInfo empty_line_hide unsigned char
+hwpfilter/source/hinfo.h:196
     HWPInfo table_move unsigned char
-hwpfilter/source/hinfo.h:197
+hwpfilter/source/hinfo.h:198
     HWPInfo reserved3 unsigned char
-hwpfilter/source/hinfo.h:233
+hwpfilter/source/hinfo.h:234
     CharShape reserved unsigned char [4]
-hwpfilter/source/hinfo.h:277
+hwpfilter/source/hinfo.h:278
     ParaShape condense unsigned char
-hwpfilter/source/hinfo.h:283
+hwpfilter/source/hinfo.h:284
     ParaShape outline_continue unsigned char
 hwpfilter/source/hpara.h:61
     LineInfo pos unsigned short
@@ -688,19 +688,9 @@ include/xmloff/maptype.hxx:88
     XMLPropertyMapEntry mnContextId sal_Int16
 include/xmloff/maptype.hxx:89
     XMLPropertyMapEntry mnEarliestODFVersionForExport class SvtSaveOptions::ODFDefaultVersion
-lingucomponent/source/languageguessing/simpleguesser.cxx:76
-    ngram_t rank sint2
-lingucomponent/source/languageguessing/simpleguesser.cxx:77
-    ngram_t str char [21]
-lingucomponent/source/languageguessing/simpleguesser.cxx:83
-    fp_t name const char *
-lingucomponent/source/languageguessing/simpleguesser.cxx:84
-    fp_t fprint ngram_t *
-lingucomponent/source/languageguessing/simpleguesser.cxx:85
-    fp_t size uint4
-lingucomponent/source/languageguessing/simpleguesser.cxx:94
+lingucomponent/source/languageguessing/simpleguesser.cxx:79
     textcat_t maxsize uint4
-lingucomponent/source/languageguessing/simpleguesser.cxx:96
+lingucomponent/source/languageguessing/simpleguesser.cxx:81
     textcat_t output char [1024]
 lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char [2]
@@ -1078,11 +1068,11 @@ sal/osl/unx/thread.cxx:97
     osl_thread_priority_st m_Lowest int
 sal/osl/unx/thread.cxx:115
     osl_thread_global_st m_priority struct osl_thread_priority_st
-sc/inc/compiler.hxx:258
-    ScCompiler::AddInMap pODFF const char *
 sc/inc/compiler.hxx:259
+    ScCompiler::AddInMap pODFF const char *
+sc/inc/compiler.hxx:260
     ScCompiler::AddInMap pEnglish const char *
-sc/inc/compiler.hxx:261
+sc/inc/compiler.hxx:262
     ScCompiler::AddInMap pUpper const char *
 sc/inc/formulalogger.hxx:42
     sc::FormulaLogger maMessages std::vector<OUString>
@@ -1092,7 +1082,7 @@ sc/source/core/data/document.cxx:1256
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1257
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk class ScBulkBroadcast
-sc/source/core/data/formulacell.cxx:1778
+sc/source/core/data/formulacell.cxx:1771
     StackCleaner pInt class ScInterpreter *
 sc/source/filter/excel/xltoolbar.hxx:23
     TBCCmd cmdID sal_uInt16
@@ -1213,14 +1203,14 @@ starmath/inc/view.hxx:163
 starmath/inc/view.hxx:224
     SmViewShell maGraphicController class SmGraphicController
 svtools/source/svhtml/htmlkywd.cxx:558
-    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo2/svtools/source/svhtml/htmlkywd.cxx:558:5)
+    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /home/noel/libo3/svtools/source/svhtml/htmlkywd.cxx:558:5)
 svtools/source/svhtml/htmlkywd.cxx:560
     HTML_OptionEntry::(anonymous) sToken const sal_Char *
 svtools/source/svhtml/htmlkywd.cxx:561
     HTML_OptionEntry::(anonymous) pUToken const class rtl::OUString *
 svtools/source/uno/treecontrolpeer.cxx:69
     LockGuard mrLock sal_Int32 &
-svx/source/dialog/contimp.hxx:59
+svx/source/dialog/contimp.hxx:57
     SvxSuperContourDlg aContourItem class SvxContourDlgItem
 svx/source/sidebar/line/LinePropertyPanel.hxx:97
     svx::sidebar::LinePropertyPanel maStyleControl sfx2::sidebar::ControllerItem
@@ -1246,7 +1236,7 @@ sw/inc/doc.hxx:328
     SwDoc mxForbiddenCharsTable rtl::Reference<SvxForbiddenCharactersTable>
 sw/inc/shellio.hxx:147
     SwReader aFileName class rtl::OUString
-sw/qa/extras/uiwriter/uiwriter.cxx:3759
+sw/qa/extras/uiwriter/uiwriter.cxx:3767
     PortionItem msText class rtl::OUString
 sw/source/core/crsr/crbm.cxx:64
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
@@ -1322,10 +1312,6 @@ vcl/unx/generic/dtrans/X11_dndcontext.hxx:56
     x11::DropTargetDragContext m_xManagerRef css::uno::Reference<XInterface>
 vcl/unx/generic/dtrans/X11_dndcontext.hxx:71
     x11::DragSourceContext m_xManagerRef css::uno::Reference<XInterface>
-vcl/unx/generic/gdi/x11cairotextrender.cxx:34
-    _XRegion size long
-vcl/unx/generic/gdi/x11cairotextrender.cxx:37
-    _XRegion extents struct BOX
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link AtkHyperlink
 vcl/unx/gtk/a11y/atkwrapper.hxx:45
