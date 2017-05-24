@@ -126,6 +126,12 @@ String RID_STR_WARNING_REMOVE_EXTENSION
     "Click 'Cancel' to stop removing the extension.";
 };
 
+String RID_STR_WARNING_REMOVE_EXTENSION_DISABLED
+{
+    Text [en-US] = "Extension removal is currently disabled. "
+    "Please consult your system administrator for more information.";
+};
+
 String RID_STR_WARNING_REMOVE_SHARED_EXTENSION
 {
     Text [en-US] = "Make sure that no further users are working with the same "

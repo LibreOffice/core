@@ -529,6 +529,11 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
         m_pAddBtn->Disable();
         m_pAddBtn->SetQuickHelpText(getResId(RID_STR_WARNING_INSTALL_EXTENSION_DISABLED));
     }
+    if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get())
+    {
+        m_pRemoveBtn->Disable();
+        m_pRemoveBtn->SetQuickHelpText(getResId(RID_STR_WARNING_REMOVE_EXTENSION_DISABLED));
+    }
 
     m_aIdle.SetPriority(TaskPriority::LOWEST);
     m_aIdle.SetInvokeHandler( LINK( this, ExtMgrDialog, TimeOutHdl ) );
@@ -758,7 +763,16 @@ void ExtMgrDialog::enableOptionsButton( bool bEnable )
 
 void ExtMgrDialog::enableRemoveButton( bool bEnable )
 {
-    m_pRemoveBtn->Enable( bEnable );
+    m_pRemoveBtn->Enable( bEnable && !officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get());
+
+    if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get())
+    {
+        m_pRemoveBtn->SetQuickHelpText(getResId(RID_STR_WARNING_REMOVE_EXTENSION_DISABLED));
+    }
+    else
+    {
+        m_pRemoveBtn->SetQuickHelpText("");
+    }
 }
 
 void ExtMgrDialog::enableEnableButton( bool bEnable )
