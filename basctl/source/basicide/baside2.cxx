@@ -174,7 +174,7 @@ void lcl_ConvertTabsToSpaces( OUString& rLine )
 
 // until we have some configuration lets just keep
 // persist this value for the process lifetime
-bool bSourceLinesEnabled = false;
+bool bSourceLinesEnabled = true;
 
 } // namespace
 
