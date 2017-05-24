@@ -246,7 +246,7 @@ public:
 
     const rtl::Reference<FuPoor>& GetOldFunction() const { return mxOldFunction; }
     bool HasOldFunction() const { return mxOldFunction.is(); }
-    const rtl::Reference<FuPoor>& GetCurrentFunction() const { return mxCurrentFunction; }
+    rtl::Reference<FuPoor> GetCurrentFunction() const { return mxCurrentFunction; }
     bool HasCurrentFunction( sal_uInt16 nSID ) { return mxCurrentFunction.is() && (mxCurrentFunction->GetSlotID() == nSID ); }
     bool HasCurrentFunction() { return mxCurrentFunction.is(); }
 
