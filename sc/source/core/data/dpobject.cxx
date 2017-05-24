@@ -247,7 +247,9 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
             case sdbc::DataType::VARBINARY:
             case sdbc::DataType::LONGVARBINARY:
             default:
-                rData.SetStringInterned(mrCache.InternString(mxRow->getString(nCol+1)));
+                // nCol is 0-based, and the left-most column always has nCol == 0.
+                rData.SetStringInterned(
+                    mrCache.InternString(nCol, mxRow->getString(nCol+1)));
         }
     }
     catch (uno::Exception&)
