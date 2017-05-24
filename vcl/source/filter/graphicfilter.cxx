@@ -23,6 +23,7 @@
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/threadpool.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/fract.hxx>
@@ -1336,10 +1337,44 @@ struct GraphicImportContext
     GraphicFilterImportFlags m_nImportFlags = GraphicFilterImportFlags::NONE;
 };
 
+/// Graphic import worker that gets executed on a thread.
+class GraphicImportTask : public comphelper::ThreadTask
+{
+    GraphicImportContext& m_rContext;
+public:
+    GraphicImportTask(const std::shared_ptr<comphelper::ThreadTaskTag>& pTag, GraphicImportContext& rContext);
+    void doWork() override;
+    /// Shared code between threaded and non-threaded version.
+    static void doImport(GraphicImportContext& rContext);
+};
+
+GraphicImportTask::GraphicImportTask(const std::shared_ptr<comphelper::ThreadTaskTag>& pTag, GraphicImportContext& rContext)
+    : comphelper::ThreadTask(pTag),
+      m_rContext(rContext)
+{
+}
+
+void GraphicImportTask::doWork()
+{
+    GraphicImportTask::doImport(m_rContext);
+}
+
+void GraphicImportTask::doImport(GraphicImportContext& rContext)
+{
+    if (!ImportJPEG(*rContext.m_pStream, *rContext.m_pGraphic, rContext.m_nImportFlags | GraphicFilterImportFlags::UseExistingBitmap, rContext.m_pAccess.get()))
+        rContext.m_nStatus = GRFILTER_FILTERERROR;
+    else
+        rContext.m_eLinkType = GfxLinkType::NativeJpg;
+}
+
 void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGraphics, const std::vector< std::shared_ptr<SvStream> >& rStreams)
 {
+    static bool bThreads = !getenv("VCL_NO_THREAD_IMPORT");
     std::vector<GraphicImportContext> aContexts;
     aContexts.reserve(rStreams.size());
+    comphelper::ThreadPool& rSharedPool = comphelper::ThreadPool::getSharedOptimalPool();
+    std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
+
     for (const auto& pStream : rStreams)
     {
         aContexts.push_back(GraphicImportContext());
@@ -1374,10 +1409,10 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
                         Bitmap& rBitmap = const_cast<Bitmap&>(rContext.m_pGraphic->GetBitmapExRef().GetBitmapRef());
                         rContext.m_pAccess = o3tl::make_unique<Bitmap::ScopedWriteAccess>(rBitmap);
                         pStream->Seek(rContext.m_nStreamBegin);
-                        if (!ImportJPEG(*pStream, *rContext.m_pGraphic, rContext.m_nImportFlags | GraphicFilterImportFlags::UseExistingBitmap, rContext.m_pAccess.get()))
-                            rContext.m_nStatus = GRFILTER_FILTERERROR;
+                        if (bThreads)
+                            rSharedPool.pushTask(new GraphicImportTask(pTag, rContext));
                         else
-                            rContext.m_eLinkType = GfxLinkType::NativeJpg;
+                            GraphicImportTask::doImport(rContext);
                     }
                 }
                 else
@@ -1385,6 +1420,8 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
             }
         }
     }
+
+    rSharedPool.waitUntilDone(pTag);
 
     // Process data after import.
     for (auto& rContext : aContexts)
