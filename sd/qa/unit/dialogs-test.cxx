@@ -477,7 +477,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             pRetval = getSdAbstractDialogFactory()->CreateSdPresLayoutTemplateDlg(
                 getDocShell(),
                 Application::GetDefDialogParent(),
-                SdResId(TAB_PRES_LAYOUT_TEMPLATE),
+                TAB_PRES_LAYOUT_TEMPLATE,
                 *pStyleSheet,
                 PO_TITLE,
                 pStyleSheetPool);
