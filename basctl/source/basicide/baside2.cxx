@@ -23,6 +23,7 @@
 #include "iderdll.hxx"
 #include "moduldlg.hxx"
 #include "docsignature.hxx"
+#include "officecfg/Office/BasicIDE.hxx"
 
 #include "helpid.hrc"
 #include <basidesh.hrc>
@@ -172,9 +173,8 @@ void lcl_ConvertTabsToSpaces( OUString& rLine )
     }
 }
 
-// until we have some configuration lets just keep
-// persist this value for the process lifetime
-bool bSourceLinesEnabled = false;
+// get value from setting
+bool bSourceLinesEnabled = ::officecfg::Office::BasicIDE::EditorSettings::LineNumbering::get();
 
 } // namespace
 
@@ -987,6 +987,10 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
             const SfxBoolItem* pItem = rReq.GetArg<SfxBoolItem>(rReq.GetSlot());
             bSourceLinesEnabled = pItem && pItem->GetValue();
             m_aXEditorWindow->SetLineNumberDisplay(bSourceLinesEnabled);
+
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+            officecfg::Office::BasicIDE::EditorSettings::LineNumbering::set(bSourceLinesEnabled, batch);
+            batch->commit();
         }
         break;
         case SID_BASICIDE_DELETECURRENT:
@@ -1565,7 +1569,6 @@ void ModulWindowLayout::SyntaxColors::NewConfig (bool bFirst)
     if (bChanged && !bFirst && pEditor)
         pEditor->UpdateSyntaxHighlighting();
 }
-
 
 } // namespace basctl
 
