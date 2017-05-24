@@ -70,6 +70,9 @@
 #include <algorithm>
 #include <memory>
 
+#include <iostream>
+#include <fstream>
+
 using namespace ::com::sun::star;
 
 static sal_uInt16 lcl_CalcExtraSpace( ParaPortion*, const SvxLineSpacingItem& rLSItem )
@@ -3472,6 +3475,19 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
 
     WriteRTF( pDataObj->GetRTFStream(), aSelection );
     pDataObj->GetRTFStream().Seek( 0 );
+
+    WriteXML( pDataObj->GetODFStream(), aSelection );
+    pDataObj->GetODFStream().Seek( 0 );
+
+    //Dumping the ODFStream to a XML file for testing purpose
+    /*
+    std::filebuf afilebuf;
+    afilebuf.open ("gsoc17_clipboard_test.xml",std::ios::out);
+    std::ostream os(&afilebuf);
+    os.write((const char*)(pDataObj->GetODFStream().GetBuffer()), pDataObj->GetODFStream().remainingSize());
+    afilebuf.close();
+    */
+    //dumping ends
 
     if ( ( aSelection.Min().GetNode() == aSelection.Max().GetNode() )
             && ( aSelection.Max().GetIndex() == (aSelection.Min().GetIndex()+1) ) )
