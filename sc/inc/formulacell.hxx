@@ -107,7 +107,7 @@ enum class ScMatrixMode : sal_uInt8 {
 class SC_DLLPUBLIC ScFormulaCell : public SvtListener
 {
 private:
-    ScFormulaCellGroupRef mxGroup;       // re-factoring hack - group of formulae we're part of.
+    ScFormulaCellGroupRef mxGroup;       // Group of formulae we're part of
     ScFormulaResult aResult;
     formula::FormulaGrammar::Grammar  eTempGrammar;   // used between string (creation) and (re)compilation
     ScTokenArray*   pCode;              // The (new) token array
