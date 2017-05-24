@@ -521,6 +521,45 @@ SvXMLExport::SvXMLExport(
         mpNumExport = new SvXMLNumFmtExport(*this, mxNumberFormatsSupplier);
 }
 
+SvXMLExport::SvXMLExport(
+    const css::uno::Reference< css::uno::XComponentContext >& xContext,
+    OUString const & implementationName,
+    const OUString &rFileName,
+    const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
+    const Reference< XModel >& rModel,
+    FieldUnit const eDefaultFieldUnit,
+    SvXMLExportFlags nExportFlag)
+:   mpImpl( new SvXMLExport_Impl ),
+    m_xContext(xContext), m_implementationName(implementationName),
+    mxModel( rModel ),
+    mxHandler( rHandler ),
+    mxExtHandler( rHandler, uno::UNO_QUERY ),
+    mxNumberFormatsSupplier (rModel, uno::UNO_QUERY),
+    mxAttrList( new SvXMLAttributeList ),
+    msOrigFileName( rFileName ),
+    mpNamespaceMap( new SvXMLNamespaceMap ),
+    maUnitConv( xContext,
+                util::MeasureUnit::MM_100TH,
+                SvXMLUnitConverter::GetMeasureUnit(eDefaultFieldUnit) ),
+    mpNumExport(nullptr),
+    mpProgressBarHelper( nullptr ),
+    mpEventExport( nullptr ),
+    mpImageMapExport( nullptr ),
+    mpXMLErrors( nullptr ),
+    meClass( XML_TOKEN_INVALID ),
+    mnExportFlags( nExportFlag ),
+    mnErrorFlags( SvXMLErrorFlags::NO ),
+    msWS( GetXMLToken(XML_WS) ),
+    mbSaveLinkedSections(true)
+{
+    SAL_WARN_IF(!xContext.is(), "xmloff.core", "got no service manager" );
+    mpImpl->SetSchemeOf( msOrigFileName );
+    InitCtor_();
+
+    if (mxNumberFormatsSupplier.is())
+        mpNumExport = new SvXMLNumFmtExport(*this, mxNumberFormatsSupplier);
+}
+
 SvXMLExport::~SvXMLExport()
 {
     delete mpXMLErrors;
