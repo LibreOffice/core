@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_42301602",
+        "filename": "sc/source/core/data/column4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-05-24T13:38:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3905b3_170100af",
+      "range": {
+        "startLine": 775,
+        "startChar": 61,
+        "endLine": 775,
+        "endChar": 71
+      },
+      "revId": "a2d1e253b1f0a0264530252a432aa2d6ecdae9b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_b7f90ccb",
         "filename": "sc/source/core/data/column4.cxx",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-05-10T17:52:02Z",
       "side": 1,
       "message": "Instead of ScRangeList::Append() use ScRangeList::Join(), otherwise this may end up with one Giga entries in the worst case for all cells. Join() tries to combine adjacent ranges with an identical edge into one.",
+      "range": {
+        "startLine": 776,
+        "startChar": 23,
+        "endLine": 776,
+        "endChar": 29
+      },
+      "revId": "a2d1e253b1f0a0264530252a432aa2d6ecdae9b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_622d12a7",
+        "filename": "sc/source/core/data/column4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 776,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-05-24T13:38:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3905b3_b7f90ccb",
       "range": {
         "startLine": 776,
         "startChar": 23,
