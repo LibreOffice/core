@@ -605,6 +605,29 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
             bDisable = true;
     }
 
+    // This is only a workaround, we don't want that text content copied
+    // in one view is pasted in a different view.
+    // This part of the patch takes care to disable the "Paste" entry
+    // in the context menu.
+    // TODO: implement a solution providing one clipboard per view
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard(nullptr);
+        if (pOwnClip)
+        {
+            ScDocument* pClipDoc = pOwnClip->GetDocument();
+            if (pClipDoc)
+            {
+                ScTabViewShell* pThisView = GetViewData()->GetViewShell();
+                ScTabViewShell* pSourceView = dynamic_cast<ScTabViewShell*>(pClipDoc->GetClipParam().getSourceView());
+                if (pThisView && pSourceView && pThisView != pSourceView)
+                {
+                    bDisable = true;
+                }
+            }
+        }
+    }
+
     if (bDisable)
     {
         rSet.DisableItem( SID_PASTE );
