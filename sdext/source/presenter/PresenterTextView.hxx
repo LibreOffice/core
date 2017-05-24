@@ -41,6 +41,7 @@ class PresenterTextCaret
 {
 public:
     PresenterTextCaret (
+        css::uno::Reference<css::uno::XComponentContext> const& xContext,
         const ::std::function<css::awt::Rectangle (const sal_Int32,const sal_Int32)>&
             rCharacterBoundsAccess,
         const ::std::function<void (const css::awt::Rectangle&)>&
@@ -69,6 +70,7 @@ public:
     const css::awt::Rectangle& GetBounds() const;
 
 private:
+    css::uno::Reference<css::uno::XComponentContext> const& m_xContext;
     sal_Int32 mnParagraphIndex;
     sal_Int32 mnCharacterIndex;
     sal_Int32 mnCaretBlinkTaskId;

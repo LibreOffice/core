@@ -18,10 +18,15 @@
  */
 
 #include "PresenterTimer.hxx"
+
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
+
 #include <osl/doublecheckedlocking.h>
 #include <osl/thread.hxx>
+#include <osl/conditn.hxx>
 
 #include <algorithm>
 #include <iterator>
@@ -70,7 +75,8 @@ class TimerScheduler
       public ::osl::Thread
 {
 public:
-    static std::shared_ptr<TimerScheduler> Instance();
+    static std::shared_ptr<TimerScheduler> Instance(
+        uno::Reference<uno::XComponentContext> const& xContext);
     static SharedTimerTask CreateTimerTask (
         const PresenterTimer::Task& rTask,
         const TimeValue& rDueTime,
@@ -89,6 +95,9 @@ public:
     static sal_Int64 ConvertFromTimeValue (
         const TimeValue& rTimeValue);
 
+    static void NotifyTermination();
+    static bool HasInstance() { return mpInstance != nullptr; }
+
 private:
     static std::shared_ptr<TimerScheduler> mpInstance;
     static ::osl::Mutex maInstanceMutex;
@@ -100,8 +109,10 @@ private:
     TaskContainer maScheduledTasks;
     ::osl::Mutex maCurrentTaskMutex;
     SharedTimerTask mpCurrentTask;
+    ::osl::Condition m_Shutdown;
 
-    TimerScheduler();
+    TimerScheduler(
+        uno::Reference<uno::XComponentContext> const& xContext);
     virtual ~TimerScheduler() override;
     class Deleter {public: void operator () (TimerScheduler* pScheduler) { delete pScheduler; } };
     friend class Deleter;
@@ -110,15 +121,39 @@ private:
     virtual void SAL_CALL onTerminated() override { mpLateDestroy.reset(); }
 };
 
+class TerminateListener
+    : public ::cppu::WeakImplHelper<frame::XTerminateListener>
+{
+    virtual ~TerminateListener() override
+    {
+        assert(!TimerScheduler::HasInstance());
+    }
+
+    virtual void SAL_CALL disposing(lang::EventObject const&) override
+    {
+    }
+
+    virtual void SAL_CALL queryTermination(lang::EventObject const&) override
+    {
+    }
+
+    virtual void SAL_CALL notifyTermination(lang::EventObject const&) override
+    {
+        TimerScheduler::NotifyTermination();
+    }
+};
+
 } // end of anonymous namespace
 
 //===== PresenterTimer ========================================================
 
 sal_Int32 PresenterTimer::ScheduleRepeatedTask (
+    const uno::Reference<uno::XComponentContext>& xContext,
     const Task& rTask,
     const sal_Int64 nDelay,
     const sal_Int64 nInterval)
 {
+    assert(xContext.is());
     TimeValue aCurrentTime;
     if (TimerScheduler::GetCurrentTime(aCurrentTime))
     {
@@ -127,7 +162,7 @@ sal_Int32 PresenterTimer::ScheduleRepeatedTask (
             aDueTime,
             TimerScheduler::ConvertFromTimeValue (aCurrentTime) + nDelay);
         SharedTimerTask pTask (TimerScheduler::CreateTimerTask(rTask, aDueTime, nInterval));
-        TimerScheduler::Instance()->ScheduleTask(pTask);
+        TimerScheduler::Instance(xContext)->ScheduleTask(pTask);
         return pTask->mnTaskId;
     }
 
@@ -136,7 +171,11 @@ sal_Int32 PresenterTimer::ScheduleRepeatedTask (
 
 void PresenterTimer::CancelTask (const sal_Int32 nTaskId)
 {
-    return TimerScheduler::Instance()->CancelTask(nTaskId);
+    auto const pInstance(TimerScheduler::Instance(nullptr));
+    if (pInstance)
+    {
+        pInstance->CancelTask(nTaskId);
+    }
 }
 
 //===== TimerScheduler ========================================================
@@ -145,23 +184,33 @@ std::shared_ptr<TimerScheduler> TimerScheduler::mpInstance;
 ::osl::Mutex TimerScheduler::maInstanceMutex;
 sal_Int32 TimerScheduler::mnTaskId = PresenterTimer::NotAValidTaskId;
 
-std::shared_ptr<TimerScheduler> TimerScheduler::Instance()
+std::shared_ptr<TimerScheduler> TimerScheduler::Instance(
+    uno::Reference<uno::XComponentContext> const& xContext)
 {
     ::osl::MutexGuard aGuard (maInstanceMutex);
     if (mpInstance.get() == nullptr)
     {
-        mpInstance.reset(new TimerScheduler(), TimerScheduler::Deleter());
+        if (!xContext.is())
+            return nullptr;
+        mpInstance.reset(new TimerScheduler(xContext), TimerScheduler::Deleter());
         mpInstance->create();
     }
     return mpInstance;
 }
 
-TimerScheduler::TimerScheduler()
+TimerScheduler::TimerScheduler(
+        uno::Reference<uno::XComponentContext> const& xContext)
     : maTaskContainerMutex(),
       maScheduledTasks(),
       maCurrentTaskMutex(),
       mpCurrentTask()
 {
+    uno::Reference<frame::XDesktop> const xDesktop(
+            frame::Desktop::create(xContext));
+    uno::Reference<frame::XTerminateListener> const xListener(
+            new TerminateListener);
+    // assuming the desktop can take ownership
+    xDesktop->addTerminateListener(xListener);
 }
 
 TimerScheduler::~TimerScheduler()
@@ -221,6 +270,33 @@ void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
     // Let the main-loop cleanup in its own time
 }
 
+void TimerScheduler::NotifyTermination()
+{
+    std::shared_ptr<TimerScheduler> const pInstance(TimerScheduler::mpInstance);
+    if (!pInstance)
+    {
+        return;
+    }
+
+    {
+        ::osl::MutexGuard aGuard(pInstance->maTaskContainerMutex);
+        pInstance->maScheduledTasks.clear();
+    }
+
+    {
+        ::osl::MutexGuard aGuard(pInstance->maCurrentTaskMutex);
+        if (pInstance->mpCurrentTask)
+        {
+            pInstance->mpCurrentTask->mbIsCanceled = true;
+        }
+    }
+
+    pInstance->m_Shutdown.set();
+
+    // rhbz#1425304 join thread before shutdown
+    pInstance->join();
+}
+
 void SAL_CALL TimerScheduler::run()
 {
     osl_setThreadName("sdext::presenter::TimerScheduler");
@@ -268,7 +344,8 @@ void SAL_CALL TimerScheduler::run()
             // Wait until the first task becomes due.
             TimeValue aTimeValue;
             ConvertToTimeValue(aTimeValue, nDifference);
-            wait(aTimeValue);
+            // wait on condition variable, so the thread can be stopped
+            m_Shutdown.wait(&aTimeValue);
         }
         else
         {
@@ -380,7 +457,9 @@ PresenterClockTimer::PresenterClockTimer (const Reference<XComponentContext>& rx
       mnTimerTaskId(PresenterTimer::NotAValidTaskId),
       mbIsCallbackPending(false),
       mxRequestCallback()
+    , m_xContext(rxContext)
 {
+    assert(m_xContext.is());
     Reference<lang::XMultiComponentFactory> xFactory (
         rxContext->getServiceManager(), UNO_QUERY);
     if (xFactory.is())
@@ -415,6 +494,7 @@ void PresenterClockTimer::AddListener (const SharedListener& rListener)
     if (mnTimerTaskId==PresenterTimer::NotAValidTaskId)
     {
         mnTimerTaskId = PresenterTimer::ScheduleRepeatedTask(
+            m_xContext,
             [this] (TimeValue const& rTime) { return this->CheckCurrentTime(rTime); },
             0,
             250000000 /*ns*/);

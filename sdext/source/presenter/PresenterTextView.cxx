@@ -73,6 +73,7 @@ PresenterTextView::PresenterTextView (
       mpFont(),
       maParagraphs(),
       mpCaret(new PresenterTextCaret(
+          rxContext,
           [this] (sal_Int32 const nParagraphIndex, sal_Int32 const nCharacterIndex)
               { return this->GetCaretBounds(nParagraphIndex, nCharacterIndex); },
           rInvalidator)),
@@ -1068,9 +1069,11 @@ void PresenterTextParagraph::SetupCellArray (
 //===== PresenterTextCaret ================================================----
 
 PresenterTextCaret::PresenterTextCaret (
+        uno::Reference<uno::XComponentContext> const& xContext,
     const ::std::function<css::awt::Rectangle (const sal_Int32,const sal_Int32)>& rCharacterBoundsAccess,
     const ::std::function<void (const css::awt::Rectangle&)>& rInvalidator)
-    : mnParagraphIndex(-1),
+    : m_xContext(xContext)
+    , mnParagraphIndex(-1),
       mnCharacterIndex(-1),
       mnCaretBlinkTaskId(0),
       mbIsCaretVisible(false),
@@ -1091,6 +1094,7 @@ void PresenterTextCaret::ShowCaret()
     if (mnCaretBlinkTaskId == 0)
     {
         mnCaretBlinkTaskId = PresenterTimer::ScheduleRepeatedTask (
+            m_xContext,
             [this] (TimeValue const&) { return this->InvertCaret(); },
             CaretBlinkInterval,
             CaretBlinkInterval);
