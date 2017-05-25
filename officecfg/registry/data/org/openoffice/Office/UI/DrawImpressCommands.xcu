@@ -383,6 +383,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:CustomScaleDialog" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Open Custom Scale Dialog </value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SlideChangeWindow" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Slide Transition</value>
