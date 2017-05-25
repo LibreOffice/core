@@ -46,6 +46,7 @@
 #include "masterlayoutdlg.hxx"
 #include "headerfooterdlg.hxx"
 #include "PhotoAlbumDialog.hxx"
+#include "CustomScaleDialog.hxx"
 
 IMPL_ABSTDLG_BASE(SdVclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractCopyDlg_Impl);
@@ -447,6 +448,11 @@ VclPtr<AbstractHeaderFooterDialog> SdAbstractDialogFactory_Impl::CreateHeaderFoo
 VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateSdPhotoAlbumDialog( vcl::Window* pParent, SdDrawDocument* pDoc )
 {
     return VclPtr<SdVclAbstractDialog_Impl>::Create( VclPtr<::sd::SdPhotoAlbumDialog>::Create( pParent, pDoc ) );
+}
+
+VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateSdCustomScaleDialog( vcl::Window* pParent , sal_uInt16 nSx, sal_uInt16 nSy)
+{
+    return VclPtr<SdVclAbstractDialog_Impl>::Create( VclPtr<::sd::SdCustomScaleDialog>::Create( pParent , nSx, nSy) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
