@@ -691,6 +691,19 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark.docx")
     CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_NONE, getProperty<drawing::LineStyle>(xShape, "LineStyle"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testWatermarkFont, "watermark-font.docx")
+{
+    uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("TestFont"), xShape->getString());
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+    OUString aFont;
+
+    // Check font family
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue("CharFontName") >>= aFont);
+    CPPUNIT_ASSERT_EQUAL(OUString("DejaVu Serif"), aFont);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFdo43093, "fdo43093.docx")
 {
     // The problem was that the alignment are not exchange when the paragraph are RTL.
