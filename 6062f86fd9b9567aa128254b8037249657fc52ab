@@ -69,6 +69,30 @@
       "revId": "6062f86fd9b9567aa128254b8037249657fc52ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_05f9b880",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2749,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-05-25T09:31:03Z",
+      "side": 1,
+      "message": "It works thanks!",
+      "parentUuid": "5a3905b3_85e9281d",
+      "range": {
+        "startLine": 2749,
+        "startChar": 16,
+        "endLine": 2749,
+        "endChar": 58
+      },
+      "revId": "6062f86fd9b9567aa128254b8037249657fc52ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
