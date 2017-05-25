@@ -258,6 +258,8 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ImportFromFile"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:CustomScaleDialog"/>
+            <menu:menuseparator/>
             <menu:menu menu:id=".uno:InsertFormMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:Edit"/>
