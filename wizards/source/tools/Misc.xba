@@ -732,14 +732,6 @@ Function IsFatOffice() As Boolean
 End Function
 
 
-Function GetLocale(sLanguage as String, sCountry as String)
-Dim oLocale as New com.sun.star.lang.Locale
-	oLocale.Language = sLanguage
-	oLocale.Country = sCountry
-	GetLocale = oLocale
-End Function
-
-
 Sub ToggleDesignMode(oDocument as Object)
 Dim aSwitchMode as new com.sun.star.util.URL
 	aSwitchMode.Complete = &quot;.uno:SwitchControlDesignMode&quot;
