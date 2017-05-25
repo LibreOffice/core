@@ -1115,13 +1115,19 @@ void OTableController::alterColumns()
                     OSL_FAIL("OTableController::alterColumns: invalid column (2)!");
                 }
             }
-            catch(const SQLException&)
+            catch(const SQLException& e)
             { // we couldn't alter the column so we have to add new columns
                 bReload = true;
                 if(xDrop.is() && xAppend.is())
                 {
-                    OUString aMessage(ModuleRes(STR_TABLEDESIGN_ALTER_ERROR));
-                    aMessage = aMessage.replaceFirst("$column$",pField->GetName());
+                    OUString aMessage;
+                    if (e.Message.isEmpty())
+                    {
+                        aMessage = ModuleRes(STR_TABLEDESIGN_ALTER_ERROR);
+                        aMessage = aMessage.replaceFirst("$column$",pField->GetName());
+                    }
+                    else
+                        aMessage = e.Message;
                     ScopedVclPtrInstance< OSQLWarningBox > aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES );
                     if ( aMsg->Execute() != RET_YES )
                     {
