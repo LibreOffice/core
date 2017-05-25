@@ -24,6 +24,7 @@
 #include "Util.hxx"
 
 #include <comphelper/sequence.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
@@ -119,7 +120,11 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
                             1,
                             nullptr);
     if (aErr)
+    {
         SAL_WARN("connectivity.firebird", "isc_dsql_execute failed");
+        OUString error = firebird::StatusVectorToString(m_statusVector, sql);
+        throw SQLException(error, comphelper::getProcessComponentContext(), OUString(), 0, Any());
+    }
 
     m_xResultSet = new OResultSet(m_pConnection.get(),
                                   m_aMutex,
