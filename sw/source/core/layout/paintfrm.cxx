@@ -1919,7 +1919,12 @@ bool DrawFillAttributes(
                     tools::PolyPolygon tempRegion;
                     for (size_t i = 0; i < rPaintRegion.size(); ++i)
                     {
-                        tempRegion.Insert( tools::Polygon(rPaintRegion[i].SVRect()));
+                        // Don't use SwRect::SvRect() here, as the clip
+                        // rectangle is supposed to cover everything outside
+                        // the flys, so the Width() - 1 isn't correct.
+                        const SwRect& rRect = rPaintRegion[i];
+                        tools::Rectangle aRectangle(rRect.Pos().getX(), rRect.Pos().getY(), rRect.Pos().getX() + rRect.SSize().getWidth(), rRect.Pos().getY() + rRect.SSize().getHeight());
+                        tempRegion.Insert(tools::Polygon(aRectangle));
                     }
                     basegfx::B2DPolyPolygon const maskRegion( tempRegion.getB2DPolyPolygon());
 
