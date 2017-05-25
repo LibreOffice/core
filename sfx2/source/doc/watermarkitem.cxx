@@ -9,6 +9,7 @@
 
 #include <sfx2/watermarkitem.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <comphelper/propertysequence.hxx>
 
 SfxWatermarkItem::SfxWatermarkItem()
 : SfxPoolItem( SID_WATERMARK )
@@ -52,26 +53,36 @@ SfxPoolItem* SfxWatermarkItem::Clone( SfxItemPool *) const
 
 bool SfxWatermarkItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
-    rVal <<= m_aText;
-    rVal <<= m_aFont;
-    rVal <<= m_nAngle;
-    rVal <<= m_nTransparency;
-    rVal <<= m_nColor;
+    rVal <<= comphelper::InitPropertySequence( {
+        { "Text", css::uno::makeAny( m_aText ) },
+        { "Font", css::uno::makeAny( m_aFont ) },
+        { "Angle", css::uno::makeAny( m_nAngle ) },
+        { "Transparency", css::uno::makeAny( m_nTransparency ) },
+        { "Color", css::uno::makeAny( m_nColor ) },
+    } );
 
     return true;
 }
 
 bool SfxWatermarkItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
-    OUString aText;
+    css::uno::Sequence<css::beans::PropertyValue> aSequence;
 
-    if ( rVal >>= aText )
+    if ( rVal >>= aSequence )
     {
-        m_aText = aText;
-        rVal >>= m_aFont;
-        rVal >>= m_nAngle;
-        rVal >>= m_nTransparency;
-        rVal >>= m_nColor;
+        for(const auto& aEntry : aSequence)
+        {
+            if(aEntry.Name == "Text")
+                aEntry.Value >>= m_aText;
+            if(aEntry.Name == "Font")
+                aEntry.Value >>= m_aFont;
+            if(aEntry.Name == "Angle")
+                aEntry.Value >>= m_nAngle;
+            if(aEntry.Name == "Transparency")
+                aEntry.Value >>= m_nTransparency;
+            if(aEntry.Name == "Color")
+                aEntry.Value >>= m_nColor;
+        }
         return true;
     }
 
