@@ -53,7 +53,7 @@ OutputDevice* PDFWriter::GetReferenceDevice()
     return xImplementation->getReferenceDevice();
 }
 
-void PDFWriter::NewPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, Orientation eOrientation )
+void PDFWriter::NewPage( double nPageWidth, double nPageHeight, Orientation eOrientation )
 {
     xImplementation->newPage( nPageWidth, nPageHeight, eOrientation );
 }
