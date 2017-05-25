@@ -882,6 +882,28 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
         }
         rPropMap.setAnyProperty(PROP_CustomShapeGeometry, uno::makeAny(aGeomPropSeq));
     }
+    if (moStyle.has())
+    {
+        OUString aStyle = moStyle.get(OUString());
+
+        sal_Int32 nIndex = 0;
+        while( nIndex >= 0 )
+        {
+            OUString aName, aValue;
+            if (ConversionHelper::separatePair(aName, aValue, aStyle.getToken(0, ';', nIndex), ':'))
+            {
+                if (aName == "font-family")
+                {
+                    // remove " (first, and last character)
+                    if (aValue.getLength() > 2)
+                        aValue = aValue.copy(1, aValue.getLength() - 2);
+
+                    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+                    xPropertySet->setPropertyValue("CharFontName", uno::makeAny(aValue));
+                }
+            }
+        }
+    }
 }
 
 } // namespace vml

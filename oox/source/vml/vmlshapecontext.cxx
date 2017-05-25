@@ -383,6 +383,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
         break;
         case VML_TOKEN( textpath ):
             mrTypeModel.maTextpathModel.moString.assignIfUsed(rAttribs.getString(XML_string));
+            mrTypeModel.maTextpathModel.moStyle.assignIfUsed(rAttribs.getString(XML_style));
         break;
     }
     return nullptr;
