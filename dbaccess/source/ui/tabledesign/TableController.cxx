@@ -1117,12 +1117,13 @@ void OTableController::alterColumns()
             }
             catch(const SQLException&)
             { // we couldn't alter the column so we have to add new columns
+                SQLExceptionInfo aError( ::cppu::getCaughtException() );
                 bReload = true;
                 if(xDrop.is() && xAppend.is())
                 {
                     OUString aMessage(ModuleRes(STR_TABLEDESIGN_ALTER_ERROR));
                     aMessage = aMessage.replaceFirst("$column$",pField->GetName());
-                    ScopedVclPtrInstance< OSQLWarningBox > aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES );
+                    ScopedVclPtrInstance< OSQLWarningBox > aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES, &aError);
                     if ( aMsg->Execute() != RET_YES )
                     {
                         Reference<XPropertySet> xNewColumn(xIdxColumns->getByIndex(nPos),UNO_QUERY_THROW);
