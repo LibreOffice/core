@@ -246,6 +246,8 @@ public:
                                                                   SdDrawDocument* pDoc,
                                                                   SdPage* pCurrentPage ) override;
 
+    virtual VclPtr<VclAbstractDialog>          CreateSdCustomScaleDialog( vcl::Window* pWindow, sal_uInt16 scaleX, sal_uInt16 scaleY);
+
     // For TabPage
     virtual CreateTabPage               GetSdOptionsContentsTabPageCreatorFunc() override;
     virtual CreateTabPage               GetSdPrintOptionsTabPageCreatorFunc() override;
