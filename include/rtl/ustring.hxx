@@ -662,7 +662,7 @@ public:
 
       @return   a pointer to the Unicode characters buffer for this object.
     */
-    const sal_Unicode * getStr() const { return pData->buffer; }
+    const sal_Unicode * getStr() const SAL_RETURNS_NONNULL { return pData->buffer; }
 
     /**
       Access to individual characters.

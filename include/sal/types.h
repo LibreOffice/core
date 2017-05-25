@@ -687,6 +687,22 @@ inline char16_t const * SAL_U(wchar_t const * p)
 /// @endcond
 #endif
 
+
+/** Indicate where function/methods that return a pointer always
+    return a non-nullptr value.
+
+    Note that MSVC supports this feature via it's SAL _Ret_notnull_
+    annotation, but since it's in a completely different place on
+    the function declaration, it's a little hard to support both.
+
+    @since LibreOffice 5.5
+*/
+#if (defined __GNUC__ && __GNUC__ > 4) || defined __clang__
+#define SAL_RETURNS_NONNULL  __attribute__((returns_nonnull))
+#else
+#define SAL_RETURNS_NONNULL
+#endif
+
 #endif // INCLUDED_SAL_TYPES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

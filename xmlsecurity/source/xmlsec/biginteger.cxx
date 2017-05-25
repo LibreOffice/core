@@ -29,53 +29,48 @@ namespace xmlsecurity
 {
 Sequence< sal_Int8 > numericStringToBigInteger ( const OUString& numeral )
 {
-    if( numeral.getStr() != nullptr )
-    {
-        xmlChar* chNumeral ;
-        const xmlSecByte* bnInteger ;
-        xmlSecSize length ;
-        xmlSecBn bn ;
+    xmlChar* chNumeral ;
+    const xmlSecByte* bnInteger ;
+    xmlSecSize length ;
+    xmlSecBn bn ;
 
-        OString onumeral = OUStringToOString( numeral , RTL_TEXTENCODING_ASCII_US ) ;
+    OString onumeral = OUStringToOString( numeral , RTL_TEXTENCODING_ASCII_US ) ;
 
-        chNumeral = xmlStrndup( reinterpret_cast<const xmlChar*>(onumeral.getStr()), ( int )onumeral.getLength() ) ;
+    chNumeral = xmlStrndup( reinterpret_cast<const xmlChar*>(onumeral.getStr()), ( int )onumeral.getLength() ) ;
 
-        if( xmlSecBnInitialize( &bn, 0 ) < 0 ) {
-            xmlFree( chNumeral ) ;
-            return Sequence< sal_Int8 >();
-        }
-
-        if( xmlSecBnFromDecString( &bn, chNumeral ) < 0 ) {
-            xmlFree( chNumeral ) ;
-            xmlSecBnFinalize( &bn ) ;
-            return Sequence< sal_Int8 >();
-        }
-
+    if( xmlSecBnInitialize( &bn, 0 ) < 0 ) {
         xmlFree( chNumeral ) ;
-
-        length = xmlSecBnGetSize( &bn ) ;
-        if( length <= 0 ) {
-            xmlSecBnFinalize( &bn ) ;
-            return Sequence< sal_Int8 >();
-        }
-
-        bnInteger = xmlSecBnGetData( &bn ) ;
-        if( bnInteger == nullptr ) {
-            xmlSecBnFinalize( &bn ) ;
-            return Sequence< sal_Int8 >();
-        }
-
-        Sequence< sal_Int8 > integer( length ) ;
-        for( xmlSecSize i = 0 ; i < length ; i ++ )
-        {
-            integer[i] = *( bnInteger + i ) ;
-        }
-
-        xmlSecBnFinalize( &bn ) ;
-        return integer ;
+        return Sequence< sal_Int8 >();
     }
 
-    return Sequence< sal_Int8 >();
+    if( xmlSecBnFromDecString( &bn, chNumeral ) < 0 ) {
+        xmlFree( chNumeral ) ;
+        xmlSecBnFinalize( &bn ) ;
+        return Sequence< sal_Int8 >();
+    }
+
+    xmlFree( chNumeral ) ;
+
+    length = xmlSecBnGetSize( &bn ) ;
+    if( length <= 0 ) {
+        xmlSecBnFinalize( &bn ) ;
+        return Sequence< sal_Int8 >();
+    }
+
+    bnInteger = xmlSecBnGetData( &bn ) ;
+    if( bnInteger == nullptr ) {
+        xmlSecBnFinalize( &bn ) ;
+        return Sequence< sal_Int8 >();
+    }
+
+    Sequence< sal_Int8 > integer( length ) ;
+    for( xmlSecSize i = 0 ; i < length ; i ++ )
+    {
+        integer[i] = *( bnInteger + i ) ;
+    }
+
+    xmlSecBnFinalize( &bn ) ;
+    return integer ;
 }
 
 OUString bigIntegerToNumericString ( const Sequence< sal_Int8 >& integer )
