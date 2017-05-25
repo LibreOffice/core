@@ -48,7 +48,6 @@ Dim sDateAppendix as String
 Public sGoOn as String
 Public sReady as String
 Public sMsgNoConnection as String
-Public sWriterFilterName as String		
 Public XPixelFactor as Long		
 Public YPixelFactor as Long
 Public sSelectDatasource as String
@@ -154,7 +153,6 @@ Dim slblFields as String
 &apos;
 &apos;		.cmdArrange5.ImageURL = FormPath &amp; &quot;Arrange_5&quot; &amp; FNameAddOn &amp; &quot;.gif&quot;
 &apos;		.cmdArrange5.HelpText = GetResText(RID_FORM + 39)
-		sWriterFilterName = GetResText(RID_FORM + 70)
 	End With
 	DlgFormDB.GetControl(&quot;cmdMoveSelected&quot;).getPeer().setProperty(&quot;AccessibleName&quot;, GetResText(RID_COMMON + 39))
 	DlgFormDB.GetControl(&quot;cmdRemoveSelected&quot;).getPeer().setProperty(&quot;AccessibleName&quot;, GetResText(RID_COMMON + 40))
