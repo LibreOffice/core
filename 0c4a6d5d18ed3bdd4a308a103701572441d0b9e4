@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_c857c500",
+        "filename": "sc/source/core/data/column4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-25T16:53:08Z",
+      "side": 1,
+      "message": "In the specific case of nStartRow\u003d0, nEndRow\u003dMAXROW it doesn\u0027t matter, but if this was called with other rows then the pattern could have nTmpStartRow\u003cnStartRow or nTmpEndRow\u003enEndRow, for which the excess rows should not be included in the resulting range list.",
+      "revId": "0c4a6d5d18ed3bdd4a308a103701572441d0b9e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e85c8127",
+        "filename": "sc/source/core/data/column4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 786,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-25T16:53:08Z",
+      "side": 1,
+      "message": "Similar here, it could be nTmpEndRow\u003enEndRow and then should be limited to nEndRow.",
+      "revId": "0c4a6d5d18ed3bdd4a308a103701572441d0b9e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
