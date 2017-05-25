@@ -545,12 +545,19 @@ Const cstMaxBinlength = 2 * 65535
 						If Utils._hasUNOProperty(Column, &quot;Scale&quot;) Then
 							If Column.Scale &gt; 0 Then
 								vValue = Column.getDouble()
-							Else		&apos;	CLng checks local decimal point, getString does not !
+							Else	&apos;	Try Long otherwise Double (CDec not implemented anymore in LO ?!?)
+								On Local Error Resume Next	&apos;	Avoid overflow error
+								&apos;	CLng checks local decimal point, getString does not !
 								sValue = Join(Split(Column.getString(), &quot;.&quot;), Utils._DecimalPoint())
-								vValue = CLng(sValue)		&apos;	CDec disappeared from LO ?!?
+								vValue = CLng(sValue)
+								If Err &lt;&gt; 0 Then
+									vValue = CDbl(sValue)
+									Err.Clear
+									On Local Error Goto Error_Function
+								End If
 							End If
 						Else
-							vValue = CDec(Column.getString())
+							vValue = CDbl(Column.getString())
 						End If
 					Case .CHAR				:	vValue = Column.getString()
 					Case .VARCHAR			:	vValue = Column.getString()				&apos;	vbString
