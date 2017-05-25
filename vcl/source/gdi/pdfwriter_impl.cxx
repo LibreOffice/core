@@ -11965,12 +11965,13 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
                 getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
                 m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
 
-                aLine.append( "q " );
-                if( rNewState.m_aClipRegion.count() )
+                aLine.append("q ");
+                if ( rNewState.m_aClipRegion.count() )
+                {
                     m_aPages.back().appendPolyPolygon( rNewState.m_aClipRegion, aLine );
-                else
-                    aLine.append( "0 0 m h " ); // NULL clip, i.e. nothing visible
-                aLine.append( "W* n\n" );
+                    aLine.append( "W* n\n" );
+                }
+
                 rNewState.m_aMapMode = aNewMapMode;
                 getReferenceDevice()->SetMapMode( rNewState.m_aMapMode );
                 m_aCurrentPDFState.m_aMapMode = rNewState.m_aMapMode;
