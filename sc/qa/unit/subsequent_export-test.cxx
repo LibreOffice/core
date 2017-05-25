@@ -43,6 +43,7 @@
 #include <dpobject.hxx>
 #include <dpsave.hxx>
 #include <dputil.hxx>
+#include "validat.hxx"
 
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
@@ -94,6 +95,7 @@ public:
     void testPasswordExportODS();
     void testConditionalFormatExportODS();
     void testConditionalFormatExportXLSX();
+    void testTdf99856_dataValidationTest();
     void testColorScaleExportODS();
     void testColorScaleExportXLSX();
     void testDataBarExportODS();
@@ -201,6 +203,7 @@ public:
     CPPUNIT_TEST(testPasswordExportODS);
     CPPUNIT_TEST(testConditionalFormatExportODS);
     CPPUNIT_TEST(testConditionalFormatExportXLSX);
+    CPPUNIT_TEST(testTdf99856_dataValidationTest);
     CPPUNIT_TEST(testColorScaleExportODS);
     CPPUNIT_TEST(testColorScaleExportXLSX);
     CPPUNIT_TEST(testDataBarExportODS);
@@ -447,6 +450,27 @@ void ScExportTest::testConditionalFormatExportXLSX()
         createCSVPath( aCSVFile, aCSVPath );
         testCondFile(aCSVPath, &rDoc, 1);
     }
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf99856_dataValidationTest()
+{
+    ScDocShellRef xShell = loadDoc("tdf99856_dataValidationTest.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load doc", xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload( xShell.get(), FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to reload doc", xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    const ScValidationData* pData = rDoc.GetValidationEntry(2);
+    CPPUNIT_ASSERT(pData);
+
+    // Excel can't open corrupt file if the list is longer than 255 characters
+    std::vector<ScTypedStrData> aList;
+    pData->FillSelectionList(aList, ScAddress(0, 1, 1));
+    CPPUNIT_ASSERT_EQUAL(size_t(18), aList.size());
+    CPPUNIT_ASSERT_EQUAL(OUString("18 Missi"), aList[17].GetString());
 
     xDocSh->DoClose();
 }

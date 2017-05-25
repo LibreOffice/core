@@ -1671,6 +1671,16 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                     }
                     ::set_flag( mnFlags, EXC_DV_STRINGLIST );
 
+                    // maximum length allowed in Excel is 255 characters, and don't end with an empty token
+                    sal_uInt32 nLen = sFormulaBuf.getLength();
+                    if( nLen > 256 )  // 255 + beginning quote mark
+                    {
+                        nLen = 255;
+                        if( sFormulaBuf[nLen - 1] == ',' )
+                            --nLen;
+                        sFormulaBuf = sFormulaBuf.copy(0, nLen);
+                    }
+
                     sFormulaBuf.append( '"' );
                     msFormula1 = sFormulaBuf.makeStringAndClear();
                 }
