@@ -56,7 +56,7 @@ public:
     /// Append all contained buffers and clear the argument.
     void appendAndClear(RtfStringBuffer& rBuf);
 private:
-    typedef std::vector<RtfStringBufferValue> Values_t;
+    using Values_t = std::vector<RtfStringBufferValue>;
     Values_t m_aValues;
 };
 

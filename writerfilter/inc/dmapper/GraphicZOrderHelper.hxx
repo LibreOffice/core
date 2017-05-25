@@ -22,7 +22,7 @@ public:
     void addItem(css::uno::Reference<css::beans::XPropertySet> const& props, sal_Int32 relativeHeight);
     sal_Int32 findZOrder(sal_Int32 relativeHeight, bool bOldStyle = false);
 private:
-    typedef std::map< sal_Int32, css::uno::Reference<css::beans::XPropertySet> > Items;
+    using Items = std::map< sal_Int32, css::uno::Reference<css::beans::XPropertySet> >;
     Items items;
 };
 

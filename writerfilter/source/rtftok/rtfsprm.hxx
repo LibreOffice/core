@@ -22,7 +22,7 @@ namespace writerfilter
 namespace rtftok
 {
 
-typedef std::vector< std::pair<Id, RTFValue::Pointer_t> > RTFSprmsImplBase;
+using RTFSprmsImplBase = std::vector< std::pair<Id, RTFValue::Pointer_t> >;
 
 /// The payload of RTFSprms which is only copied on write.
 class RTFSprmsImpl : public RTFSprmsImplBase
@@ -53,10 +53,10 @@ enum class RTFOverwrite
 class RTFSprms
 {
 public:
-    typedef ::std::shared_ptr<RTFSprms> Pointer_t;
-    typedef std::pair<Id, RTFValue::Pointer_t> Entry_t;
-    typedef std::vector<Entry_t>::iterator Iterator_t;
-    typedef std::vector<Entry_t>::reverse_iterator ReverseIterator_t;
+    using Pointer_t = std::shared_ptr<RTFSprms>;
+    using Entry_t = std::pair<Id, RTFValue::Pointer_t>;
+    using Iterator_t = std::vector<Entry_t>::iterator;
+    using ReverseIterator_t = std::vector<Entry_t>::reverse_iterator;
     RTFSprms();
     RTFSprms(const RTFSprms& rSprms);
     ~RTFSprms();

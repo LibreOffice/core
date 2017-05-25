@@ -26,7 +26,7 @@
 class RtfAttributeOutput;
 class RtfExportFilter;
 class RtfSdrExport;
-typedef std::map<sal_uInt16,Color> RtfColorTable;
+using RtfColorTable = std::map<sal_uInt16, Color>;
 class SwNode;
 class SwTextNode;
 class SwGrfNode;
