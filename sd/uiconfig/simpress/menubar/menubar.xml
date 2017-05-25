@@ -257,7 +257,6 @@
             <menu:menuitem menu:id=".uno:HeaderAndFooter"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ImportFromFile"/>
-            <menu:menuseparator/>
             <menu:menu menu:id=".uno:InsertFormMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:Edit"/>

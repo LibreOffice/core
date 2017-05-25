@@ -46,6 +46,7 @@
 #include "masterlayoutdlg.hxx"
 #include "headerfooterdlg.hxx"
 #include "PhotoAlbumDialog.hxx"
+#include "CustomScaleDialog.hxx"
 
 IMPL_ABSTDLG_BASE(SdVclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractCopyDlg_Impl);
