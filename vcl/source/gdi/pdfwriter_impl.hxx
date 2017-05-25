@@ -135,8 +135,8 @@ public:
     struct PDFPage
     {
         PDFWriterImpl*              m_pWriter;
-        sal_Int32                   m_nPageWidth;           // in inch/72
-        sal_Int32                   m_nPageHeight;          // in inch/72
+        double                      m_nPageWidth;           // in inch/72
+        double                      m_nPageHeight;          // in inch/72
         PDFWriter::Orientation      m_eOrientation;
         sal_Int32                   m_nPageObject;
         sal_Int32                   m_nPageIndex;
@@ -150,7 +150,7 @@ public:
         sal_uInt32                  m_nDuration;
         bool                        m_bHasWidgets;
 
-        PDFPage( PDFWriterImpl* pWriter, sal_Int32 nPageWidth, sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation );
+        PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation );
         ~PDFPage();
 
         void beginStream();
@@ -191,7 +191,7 @@ public:
         // appends a horizontal waveline with vertical offset (helper for drawWaveLine)
         void appendWaveLine( sal_Int32 nLength, sal_Int32 nYOffset, sal_Int32 nDelta, OStringBuffer& rBuffer ) const;
 
-        sal_Int32 getHeight() const { return m_nPageHeight ? m_nPageHeight : m_pWriter->m_nInheritedPageHeight; }
+        double getHeight() const { return m_nPageHeight ? m_nPageHeight : m_pWriter->m_nInheritedPageHeight; }
     };
 
     friend struct PDFPage;
@@ -1079,7 +1079,7 @@ public:
     OutputDevice* getReferenceDevice();
 
     /* document structure */
-    void newPage( sal_Int32 nPageWidth , sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation );
+    void newPage( double nPageWidth , double nPageHeight, PDFWriter::Orientation eOrientation );
     bool emit();
     const std::set< PDFWriter::ErrorCode > & getErrors() const { return m_aErrors;}
     void insertError( PDFWriter::ErrorCode eErr ) { m_aErrors.insert( eErr ); }
