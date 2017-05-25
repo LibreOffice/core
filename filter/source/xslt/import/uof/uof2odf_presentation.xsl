@@ -1749,7 +1749,7 @@
 		<anim:animateTransform smil:fill="hold" anim:sub-item="text" presentation:additive="base" svg:type="scale">
 			<xsl:attribute name="smil:dur"><xsl:call-template name="演速度"/></xsl:attribute>
 			<xsl:attribute name="smil:targetElement"><xsl:value-of select="ancestor::演:序列/@演:动画对象"/></xsl:attribute>
-			<xsl:attribute name="smil:to"><xsl:choose><xsl:when test="@演:预定义尺寸='tiny' ">0.25,1</xsl:when><xsl:when test="@演:预定义尺寸='smaller' ">0.5,1</xsl:when><xsl:when test="@演:预定义尺寸='larger' ">1.5,1</xsl:when><xsl:when test="@演:预定义尺寸='huge' ">4,1</xsl:when><xsl:when test="@演:自定义尺寸"><xsl:value-of select="@演:自定义尺寸"/></xsl:when><xsl:otherwise>0.5,1</xsl:otherwise></xsl:choose></xsl:attribute>
+			<xsl:attribute name="smil:to"><xsl:choose><xsl:when test="@演:预定义尺寸='tiny' ">0.0,0.0</xsl:when><xsl:when test="@演:预定义尺寸='smaller' ">0.5,1</xsl:when><xsl:when test="@演:预定义尺寸='larger' ">1.5,1</xsl:when><xsl:when test="@演:预定义尺寸='huge' ">4,1</xsl:when><xsl:when test="@演:自定义尺寸"><xsl:value-of select="@演:自定义尺寸"/></xsl:when><xsl:otherwise>0.5,1</xsl:otherwise></xsl:choose></xsl:attribute>
 		</anim:animateTransform>
 	</xsl:template>
 	<xsl:template match="演:盒状" mode="exit">

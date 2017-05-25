@@ -2899,6 +2899,19 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+       case SID_CUSTOM_SCALE_DIALOG:
+       {
+           SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+
+           if(pFact) {
+               ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateSdCustomScaleDialog(GetActiveWindow(), 0, 0));
+               pDlg->Execute();
+           }
+           Cancel();
+           rReq.Ignore();
+       }
+       break;
+
        case SID_PHOTOALBUM:
        {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();

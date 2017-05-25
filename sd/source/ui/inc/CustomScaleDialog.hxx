@@ -16,13 +16,40 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SD_INC_SDCOMMANDS_H
-#define INCLUDED_SD_INC_SDCOMMANDS_H
 
-#define CMD_SID_HANDOUT_MASTER_MODE                 ".uno:HandoutMode"
-#define CMD_SID_NOTES_MODE                          ".uno:NotesMode"
-#define CMD_SID_CUSTOM_SCALE_DIALOG                 ".uno:CustomScaleDialog"
+#ifndef _SD_CUSTOMSCALEDIALOG_HXX
+#define _SD_CUSTOMSCALEDIALOG_HXX
+
+#include <sddllapi.h>
+
+#include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/field.hxx>
+#include <vcl/msgbox.hxx>
+
+namespace sd {
+
+class SD_DLLPUBLIC SdCustomScaleDialog : public ModalDialog {
+    VclPtr<PushButton> pOk_btn;
+    VclPtr<PushButton> pCancel_btn;
+    VclPtr<NumericField> m_pHorizontalScale;
+    VclPtr<NumericField> m_pVerticalScale;
+    VclPtr<CheckBox>     m_CBUniformScale;
+
+    DECL_LINK(OkHdl, Button*, void);
+    DECL_LINK(CancelHdl, Button*, void);
+    DECL_LINK(UniformHdl, CheckBox*, void);
+public:
+    SdCustomScaleDialog(Window *pWindow, sal_uInt16 scaleX, sal_uInt16 scaleY);
+    ~SdCustomScaleDialog();
+
+    bool IsScaledUniformly() const;
+    sal_uInt16 getHorizontalScale() const;
+    sal_uInt16 getVerticalScale() const;
+    virtual void dispose() override;
+};
+
+} // end of namespace sd
 
 #endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
