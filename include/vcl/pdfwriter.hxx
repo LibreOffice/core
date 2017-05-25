@@ -689,7 +689,7 @@ The following structure describes the permissions used in PDF security
         Colors and other state information MUST
         be set again or are undefined.
     */
-    void NewPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, Orientation eOrientation = Orientation::Inherit );
+    void NewPage( double nPageWidth, double nPageHeight, Orientation eOrientation = Orientation::Inherit );
     /** Play a metafile like an outputdevice would do
     */
     struct PlayMetafileContext

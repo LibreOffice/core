@@ -1126,7 +1126,7 @@ void PDFWriterImpl::ResourceDict::append( OStringBuffer& rBuf, sal_Int32 nFontDi
     rBuf.append( "]\n>>\n" );
 };
 
-PDFWriterImpl::PDFPage::PDFPage( PDFWriterImpl* pWriter, sal_Int32 nPageWidth, sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation )
+PDFWriterImpl::PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation )
         :
         m_pWriter( pWriter ),
         m_nPageWidth( nPageWidth ),
@@ -2258,7 +2258,7 @@ LogicalFontInstance* PdfBuiltinFontFace::CreateFontInstance( FontSelectPattern& 
 }
 
 
-void PDFWriterImpl::newPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation )
+void PDFWriterImpl::newPage( double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation )
 {
     endPage();
     m_nCurrentPage = m_aPages.size();
