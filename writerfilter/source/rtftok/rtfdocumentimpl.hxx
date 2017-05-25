@@ -96,9 +96,8 @@ enum class RTFFieldStatus
 };
 
 /// A buffer storing dmapper calls.
-typedef std::tuple<RTFBufferTypes, RTFValue::Pointer_t,
-        std::shared_ptr<TableRowBuffer> > Buf_t;
-typedef std::deque< Buf_t > RTFBuffer_t;
+using Buf_t = std::tuple< RTFBufferTypes, RTFValue::Pointer_t, std::shared_ptr<TableRowBuffer> >;
+using RTFBuffer_t = std::deque<Buf_t>;
 
 /// holds one nested table row
 struct TableRowBuffer
@@ -377,7 +376,7 @@ class RTFDocumentImpl
     : public RTFDocument, public RTFListener
 {
 public:
-    typedef ::std::shared_ptr<RTFDocumentImpl> Pointer_t;
+    using Pointer_t = std::shared_ptr<RTFDocumentImpl>;
     RTFDocumentImpl(css::uno::Reference<css::uno::XComponentContext> const& xContext,
                     css::uno::Reference<css::io::XInputStream> const& xInputStream,
                     css::uno::Reference<css::lang::XComponent> const& xDstDoc,

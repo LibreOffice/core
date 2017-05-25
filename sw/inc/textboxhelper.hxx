@@ -45,9 +45,9 @@ class SW_DLLPUBLIC SwTextBoxHelper
 {
 public:
     /// Maps a draw format to a fly format.
-    typedef std::map<const SwFrameFormat*, const SwFrameFormat*> SavedLink;
+    using SavedLink = std::map<const SwFrameFormat*, const SwFrameFormat*>;
     /// Maps a draw format to content.
-    typedef std::map<const SwFrameFormat*, SwFormatContent> SavedContent;
+    using SavedContent = std::map<const SwFrameFormat*, SwFormatContent>;
     /// Create a TextBox for a shape.
     static void create(SwFrameFormat* pShape);
     /// Destroy a TextBox for a shape.

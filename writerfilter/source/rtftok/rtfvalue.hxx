@@ -26,7 +26,7 @@ class RTFValue
     : public Value
 {
 public:
-    typedef std::shared_ptr<RTFValue> Pointer_t;
+    using Pointer_t = std::shared_ptr<RTFValue>;
     RTFValue(int nValue, OUString sValue, RTFSprms rAttributes, RTFSprms rSprms,
              css::uno::Reference<css::drawing::XShape> xShape,
              css::uno::Reference<css::io::XInputStream> xStream,
