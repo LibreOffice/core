@@ -1009,12 +1009,14 @@ void PDFExport::showErrors( const std::set< vcl::PDFWriter::ErrorCode >& rErrors
 
 bool PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& rPDFExtOutDevData, const GDIMetaFile& rMtf )
 {
-    const Size      aSizePDF( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MapUnit::MapPoint ) );
+    basegfx::B2DPolygon aSize(tools::Polygon(tools::Rectangle(Point(0, 0), rMtf.GetPrefSize())).getB2DPolygon());
+    basegfx::B2DPolygon aSizePDF(OutputDevice::LogicToLogic(aSize, rMtf.GetPrefMapMode(), MapUnit::MapPoint));
+    basegfx::B2DRange aRangePDF(aSizePDF.getB2DRange());
     Point           aOrigin;
     tools::Rectangle       aPageRect( aOrigin, rMtf.GetPrefSize() );
     bool        bRet = true;
 
-    rWriter.NewPage( aSizePDF.Width(), aSizePDF.Height() );
+    rWriter.NewPage( aRangePDF.getWidth(), aRangePDF.getHeight() );
     rWriter.SetMapMode( rMtf.GetPrefMapMode() );
 
     vcl::PDFWriter::PlayMetafileContext aCtx;
@@ -1042,7 +1044,7 @@ bool PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
     rPDFExtOutDevData.ResetSyncData();
 
     if (!msWatermark.isEmpty())
-        ImplWriteWatermark( rWriter, aSizePDF );
+        ImplWriteWatermark( rWriter, Size(aRangePDF.getWidth(), aRangePDF.getHeight()) );
 
     return bRet;
 }
