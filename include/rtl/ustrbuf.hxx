@@ -474,7 +474,7 @@ public:
     /**
         Return a null terminated unicode character array.
      */
-    const sal_Unicode*  getStr() const { return pData->buffer; }
+    const sal_Unicode*  getStr() const SAL_RETURNS_NONNULL { return pData->buffer; }
 
     /**
       Access to individual characters.

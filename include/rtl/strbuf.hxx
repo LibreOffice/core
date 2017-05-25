@@ -441,7 +441,7 @@ public:
     /**
         Return a null terminated character array.
      */
-    const sal_Char* getStr() const { return pData->buffer; }
+    const sal_Char* getStr() const SAL_RETURNS_NONNULL { return pData->buffer; }
 
     /**
       Access to individual characters.
