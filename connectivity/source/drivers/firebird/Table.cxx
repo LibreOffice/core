@@ -132,10 +132,10 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     bool bDefaultChanged = xColumn->getPropertyValue("DefaultValue")
                                      != rDescriptor->getPropertyValue("DefaultValue");
 
+    OUString sNewTableName;
     // TODO: quote identifiers as needed.
     if (bNameChanged)
     {
-        OUString sNewTableName;
         rDescriptor->getPropertyValue("Name") >>= sNewTableName;
         OUString sSql(getAlterTableColumn(rColName)
                                             + " TO \"" + sNewTableName + "\"");
@@ -148,7 +148,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
         // If bPrecisionChanged this will only succeed if we have increased the
         // precision, otherwise an exception is thrown -- however the base
         // gui then offers to delete and recreate the column.
-        OUString sSql(getAlterTableColumn(rColName) + "TYPE " +
+        OUString sSql(getAlterTableColumn(bNameChanged?sNewTableName:rColName) + "TYPE " +
                 ::dbtools::createStandardTypePart(rDescriptor, getConnection()));
         getConnection()->createStatement()->execute(sSql);
         // TODO: could cause errors e.g. if incompatible types, deal with them here as appropriate.
@@ -169,7 +169,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
             if (nNullabble == ColumnValue::NULLABLE)
             {
                 sSql = "UPDATE RDB$RELATION_FIELDS SET RDB$NULL_FLAG = NULL "
-                       "WHERE RDB$FIELD_NAME = '" + rColName + "' "
+                       "WHERE RDB$FIELD_NAME = '" + (bNameChanged?sNewTableName:rColName) + "' "
                        "AND RDB$RELATION_NAME = '" + getName() + "'";
             }
             else if (nNullabble == ColumnValue::NO_NULLS)
@@ -177,12 +177,12 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
                 // And if we are making NOT NULL then we have to make sure we have
                 // no nulls left in the column.
                 OUString sFillNulls("UPDATE \"" + getName() + "\" SET \""
-                                    + rColName + "\" = 0 "
-                                    "WHERE \"" + rColName + "\" IS NULL");
+                                    + (bNameChanged?sNewTableName:rColName) + "\" = 0 "
+                                    "WHERE \"" + (bNameChanged?sNewTableName:rColName) + "\" IS NULL");
                 getConnection()->createStatement()->execute(sFillNulls);
 
                 sSql = "UPDATE RDB$RELATION_FIELDS SET RDB$NULL_FLAG = 1 "
-                       "WHERE RDB$FIELD_NAME = '" + rColName + "' "
+                       "WHERE RDB$FIELD_NAME = '" + (bNameChanged?sNewTableName:rColName) + "' "
                        "AND RDB$RELATION_NAME = '" + getName() + "'";
             }
             getConnection()->createStatement()->execute(sSql);
@@ -210,9 +210,9 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
 
         OUString sSql;
         if (sNewDefault.isEmpty())
-            sSql = getAlterTableColumn(rColName) + "DROP DEFAULT";
+            sSql = getAlterTableColumn(bNameChanged?sNewTableName:rColName) + "DROP DEFAULT";
         else
-            sSql = getAlterTableColumn(rColName) + "SET DEFAULT " + sNewDefault;
+            sSql = getAlterTableColumn(bNameChanged?sNewTableName:rColName) + "SET DEFAULT " + sNewDefault;
 
         getConnection()->createStatement()->execute(sSql);
     }
