@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_e82ba12e",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-25T20:47:13Z",
+      "side": 1,
+      "message": "This is slightly inconsistent, lcl_GetUnit which is retrieving page Size?\nBut given that your m_eUnit member variable is likely redundant, you can drop it completely",
+      "revId": "6ba06051ce3f7c36afd4db4ed46be0cf98e39352",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a8d8b954",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-25T20:47:13Z",
+      "side": 1,
+      "message": "It\u0027d be the best to fold this whole block into NotifyItemUpdate method. Page size as well as margins can change in the lifetime of this panel (e.g. when user edits attributes of the page from Page format dialog) so we\u0027d better respond to that and update member variables accordingly when that happens",
+      "revId": "6ba06051ce3f7c36afd4db4ed46be0cf98e39352",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_0821cd4d",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-25T20:47:13Z",
+      "side": 1,
+      "message": "What exactly is this field for?",
+      "revId": "6ba06051ce3f7c36afd4db4ed46be0cf98e39352",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e81481f6",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-25T20:47:13Z",
+      "side": 1,
+      "message": "TWIP as an unit looks fishy, it\u0027s used almost exclusively in Writer\nIn fact, this whole block looks fishy",
+      "revId": "6ba06051ce3f7c36afd4db4ed46be0cf98e39352",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_28f769d4",
+        "filename": "sd/source/ui/sidebar/SlideBackground.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-25T20:47:13Z",
+      "side": 1,
+      "message": "There\u0027s already a variable called meUnit a few lines below so I guess you don\u0027t need this one",
+      "revId": "6ba06051ce3f7c36afd4db4ed46be0cf98e39352",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
