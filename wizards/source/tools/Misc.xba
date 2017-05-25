@@ -101,6 +101,9 @@ Dim oMasterKey
 	If Ubound(sLocaleList()) &gt; 0 Then
 		aLocLocale.Country = sLocaleList(1)
 	End If
+	If Ubound(sLocaleList()) &gt; 1 Then
+		aLocLocale.Variant = sLocaleList(2)
+	End If
 	GetStarOfficeLocale() = aLocLocale
 End Function
 
