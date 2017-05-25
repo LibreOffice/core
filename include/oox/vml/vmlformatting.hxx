@@ -241,6 +241,7 @@ struct OOX_DLLPUBLIC ShadowModel
 struct OOX_DLLPUBLIC TextpathModel
 {
     OptValue<OUString> moString;                  ///< Specifies the string of the textpath.
+    OptValue<OUString> moStyle;                   ///< Specifies the style of the textpath.
 
     TextpathModel();
 
