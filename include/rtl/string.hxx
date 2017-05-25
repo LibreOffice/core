@@ -432,7 +432,7 @@ public:
       @return a pointer to a null-terminated byte string representing the
       characters of this string object.
     */
-    const sal_Char * getStr() const { return pData->buffer; }
+    const sal_Char * getStr() const SAL_RETURNS_NONNULL { return pData->buffer; }
 
     /**
       Access to individual characters.
