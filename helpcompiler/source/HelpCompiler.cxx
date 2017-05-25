@@ -417,7 +417,7 @@ void myparser::traverse( xmlNodePtr parentNode )
             {
                 //TODO: make these asserts and flush out all our broken help ids
                 SAL_WARN_IF(hidstr.empty(), "helpcompiler", "hid='' for text:" << text);
-                SAL_WARN_IF(!hidstr.empty() && extendedHelpText.empty(), "helpcompiler", "hid='.' with no hid bookmark branches for text:" << text);
+                SAL_WARN_IF(!hidstr.empty() && extendedHelpText.empty(), "helpcompiler", "hid='.' with no hid bookmark branches in file: " << fileName + " for text: " << text);
                 HashSet::const_iterator aEnd = extendedHelpText.end();
                 for (HashSet::const_iterator iter = extendedHelpText.begin(); iter != aEnd; ++iter)
                 {
