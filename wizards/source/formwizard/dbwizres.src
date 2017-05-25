@@ -186,6 +186,36 @@ String RID_DB_COMMON_START + 6
     Text [ en-US] = "An error occurred while running the wizard. The wizard will be terminated.";
 };
 
+String RID_DB_COMMON_START + 8
+{
+    Text [ en-US] = "No database has been installed. At least one database is required before the wizard for forms can be started.";
+};
+
+String RID_DB_COMMON_START + 9
+{
+    Text [ en-US] = "The database does not contain any tables.";
+};
+
+String RID_DB_COMMON_START + 10
+{
+    Text [ en-US] = "This title already exists in the database. Please enter another name.";
+};
+
+String RID_DB_COMMON_START + 11
+{
+    Text [ en-US] = "The title must not contain any spaces or special characters.";
+};
+
+String RID_DB_COMMON_START + 12
+{
+    Text [ en-US] = "The database service (com.sun.data.DatabaseEngine) could not be instantiated.";
+};
+
+String RID_DB_COMMON_START + 13
+{
+    Text[ en-US ] = "The selected table or query could not be opened.";
+};
+
 String RID_DB_COMMON_START + 14
 {
     Text [ en-US ] = "No connection to the database could be established.";
