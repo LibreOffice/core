@@ -130,8 +130,6 @@ Sub LoadLanguage()
 			.lblTemplateExport.Label = sExportLabel
 			.chkLogfile.Label = GetResText(2032)
 			.chkLogfile.Helptext = GetResText(2033)
-			Dim Blabla as String
-			blabla = GetResText(1072)
 			.cmdShowLogFile.Label = GetResText(2035)
 		End With
 		ModuleList(0) = &quot;com.sun.star.text.TextDocument&quot;
