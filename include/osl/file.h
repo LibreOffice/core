@@ -81,9 +81,7 @@ seconds (!!!).
 
 */
 
-
 /* Error codes according to errno */
-
 typedef enum {
     osl_File_E_None,            /*!< on success                                                  */
     osl_File_E_PERM,            /*!< operation not permitted                                     */
@@ -139,7 +137,6 @@ typedef enum {
 typedef void *oslDirectory;
 typedef void *oslDirectoryItem;
 
-
 /** Open a directory for enumerating its contents.
 
     @param  pustrDirectoryURL [in]
@@ -163,10 +160,8 @@ typedef void *oslDirectoryItem;
     @see osl_getNextDirectoryItem()
     @see osl_closeDirectory()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_openDirectory(
         rtl_uString *pustrDirectoryURL, oslDirectory *pDirectory);
-
 
 /** Retrieve the next item of a previously opened directory.
 
@@ -197,13 +192,11 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_openDirectory(
     @see osl_getDirectoryItem()
     @see osl_getFileStatus()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getNextDirectoryItem(
     oslDirectory Directory,
     oslDirectoryItem *pItem,
     sal_uInt32   uHint
     );
-
 
 /** Release a directory handle.
 
@@ -218,10 +211,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getNextDirectoryItem(
 
     @see osl_openDirectory()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_closeDirectory(
         oslDirectory Directory);
-
 
 /** Retrieve a single directory item.
 
@@ -257,12 +248,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_closeDirectory(
     @see osl_getFileStatus()
     @see osl_getNextDirectoryItem()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getDirectoryItem(
     rtl_uString *pustrFileURL,
     oslDirectoryItem *pItem
     );
-
 
 /** Increase the refcount of a directory item handle.
 
@@ -279,7 +268,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getDirectoryItem(
     @see osl_getNextDirectoryItem()
     @see osl_releaseDirectoryItem()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_acquireDirectoryItem(
         oslDirectoryItem Item );
 
@@ -301,7 +289,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_acquireDirectoryItem(
     @see osl_getNextDirectoryItem()
     @see osl_acquireDirectoryItem()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_releaseDirectoryItem(
         oslDirectoryItem Item );
 
@@ -323,13 +310,11 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_releaseDirectoryItem(
 
     @since LibreOffice 3.6
 */
-
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_identicalDirectoryItem(
                                         oslDirectoryItem pItemA,
                                         oslDirectoryItem pItemB );
 
 /* File types */
-
 typedef enum {
     osl_File_Type_Directory,
     osl_File_Type_Volume,
@@ -369,16 +354,12 @@ typedef enum {
 #define osl_FileStatus_Mask_All                 0x7FFFFFFF
 #define osl_FileStatus_Mask_Validate            0x80000000
 
-
-typedef
-
 /** Structure containing information about files and directories
 
     @see    osl_getFileStatus()
     @see    oslFileType
 */
-
-struct _oslFileStatus {
+typedef struct _oslFileStatus {
 /** Must be initialized with the size in bytes of the structure before passing it to any function */
     sal_uInt32      uStructSize;
 /** Determines which members of the structure contain valid data */
@@ -408,7 +389,6 @@ struct _oslFileStatus {
     and released after usage. */
     rtl_uString *ustrLinkTargetURL;
 } oslFileStatus;
-
 
 /** Retrieve information about a single file or directory.
 
@@ -447,10 +427,8 @@ struct _oslFileStatus {
     @see osl_getNextDirectoryItem()
     @see oslFileStatus
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileStatus(
         oslDirectoryItem Item, oslFileStatus *pStatus, sal_uInt32 uFieldMask );
-
 
 typedef void *oslVolumeDeviceHandle;
 
@@ -471,7 +449,6 @@ typedef void *oslVolumeDeviceHandle;
     @see osl_acquireVolumeDeviceHandle()
     @see osl_getVolumeInformation()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_releaseVolumeDeviceHandle(
         oslVolumeDeviceHandle Handle );
 
@@ -492,10 +469,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_releaseVolumeDeviceHandle(
 
     @see osl_getVolumeInformation()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_acquireVolumeDeviceHandle(
         oslVolumeDeviceHandle Handle );
-
 
 /** Get the full qualified URL where a device is mounted to.
 
@@ -521,7 +496,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_acquireVolumeDeviceHandle(
 
     @see    osl_getVolumeInformation()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getVolumeDeviceMountPath(
         oslVolumeDeviceHandle Handle, rtl_uString **ppustrDirectoryURL);
 
@@ -549,15 +523,13 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getVolumeDeviceMountPath(
 #define osl_VolumeInfo_Mask_DeviceHandle           0x00000080L
 #define osl_VolumeInfo_Mask_FileSystemCaseHandling 0x00000100L
 
-typedef
-
 /** Structure containing information about volumes
 
     @see    osl_getVolumeInformation()
     @see    oslFileType
 */
 
-struct _oslVolumeInfo {
+typedef struct _oslVolumeInfo {
 /** Must be initialized with the size in bytes of the structure before passing it to any function */
     sal_uInt32      uStructSize;
 /** Determines which members of the structure contain valid data */
@@ -580,7 +552,6 @@ struct _oslVolumeInfo {
 /** Pointer to handle the receives underlying device. Handle should be set to zero before calling osl_getVolumeInformation*/
     oslVolumeDeviceHandle   *pDeviceHandle;
 } oslVolumeInfo;
-
 
 /** Retrieve information about a volume.
 
@@ -616,7 +587,6 @@ struct _oslVolumeInfo {
     @see    osl_getFileStatus()
     @see    oslVolumeInfo
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getVolumeInformation(
     rtl_uString *pustrDirectoryURL,
     oslVolumeInfo *pInfo,
@@ -685,7 +655,6 @@ typedef void *oslFileHandle;
     @see osl_setFileSize()
     @see osl_getFileSize()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_openFile(
         rtl_uString *pustrFileURL, oslFileHandle *pHandle, sal_uInt32 uFlags );
 
@@ -713,10 +682,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_openFile(
     @see    osl_openFile()
     @see    osl_getFilePos()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFilePos(
         oslFileHandle Handle, sal_uInt32 uHow, sal_Int64 uPos ) SAL_WARN_UNUSED_RESULT;
-
 
 /** Retrieve the current position of the internal pointer of an open file.
 
@@ -735,10 +702,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFilePos(
     @see osl_readFile()
     @see osl_writeFile()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFilePos(
         oslFileHandle Handle, sal_uInt64 *pPos );
-
 
 /** Set the file size of an open file.
 
@@ -760,10 +725,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFilePos(
     @see osl_getFileStatus()
     @see osl_getFileSize()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFileSize(
         oslFileHandle Handle, sal_uInt64 uSize );
-
 
 /** Get the file size of an open file.
 
@@ -784,10 +747,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFileSize(
     @see osl_setFilePos()
     @see osl_getFileStatus()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
         oslFileHandle Handle, sal_uInt64 *pSize );
-
 
 /** Map flags.
 
@@ -800,7 +761,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
     start paging in the data).
 
     @since UDK 3.2.12
- */
+*/
 #define osl_File_MapFlag_WillNeed ((sal_uInt32)(0x2))
 
 /** Map a shared file into memory.
@@ -815,7 +776,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
     returned.
 
     @since UDK 3.2.10
- */
+*/
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_mapFile (
   oslFileHandle Handle,
   void**        ppAddr,
@@ -839,7 +800,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_mapFile (
     .apk archive. So this function is not present on Android.
 
     @since UDK 3.2.10
- */
+*/
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_unmapFile (
   void*      pAddr,
   sal_uInt64 uLength
@@ -857,13 +818,12 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_unmapFile (
     stays mapped.
 
     @since UDK 3.6
- */
+*/
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_unmapMappedFile (
   oslFileHandle Handle,
   void*      pAddr,
   sal_uInt64 uLength
 );
-
 
 /** Read a number of bytes from a file.
 
@@ -898,10 +858,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_unmapMappedFile (
     @see osl_readLine()
     @see osl_setFilePos()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_readFile(
         oslFileHandle Handle, void *pBuffer, sal_uInt64 uBytesRequested, sal_uInt64 *pBytesRead );
-
 
 /** Test if the end of a file is reached.
 
@@ -926,10 +884,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_readFile(
     @see osl_readLine()
     @see osl_setFilePos()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_isEndOfFile(
         oslFileHandle Handle, sal_Bool *pIsEOF );
-
 
 /** Write a number of bytes to a file.
 
@@ -966,7 +922,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_isEndOfFile(
     @see osl_readFile()
     @see osl_setFilePos()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_writeFile(
         oslFileHandle Handle, const void *pBuffer, sal_uInt64 uBytesToWrite, sal_uInt64 *pBytesWritten );
 
@@ -974,6 +929,31 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_writeFile(
 
     The current position of the internal file pointer may or may not be changed.
 
+    @param Handle [in]
+    Handle to a file received by a previous call to osl_openFile().
+
+    @param uOffset [in]
+    Offset position from start of file where read starts
+
+    @param pBuffer [out]
+    Points to a buffer which receives data. The buffer must be large enough
+    to hold uBytesRequested bytes.
+
+    @param uBytesRequested [in]
+    Number of bytes which should be retrieved.
+
+    @param pBytesRead [out]
+    On success the number of bytes which have actually been retrieved.
+
+    @retval osl_File_E_None on success
+    @retval osl_File_E_INVAL the format of the parameters was not valid
+    @retval osl_File_E_INTR function call was interrupted
+    @retval osl_File_E_IO on I/O errors
+    @retval osl_File_E_ISDIR is a directory
+    @retval osl_File_E_BADF bad file
+    @retval osl_File_E_FAULT bad address
+    @retval osl_File_E_AGAIN operation would block
+    @retval osl_File_E_NOLINK link has been severed
     @since UDK 3.2.10
  */
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_readFileAt(
@@ -984,13 +964,40 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_readFileAt(
   sal_uInt64*   pBytesRead
 );
 
-
 /** Write a number of bytes to a specified offset in a file.
 
     The current position of the internal file pointer may or may not be changed.
 
+    @param Handle [in]
+    Handle to a file received by a previous call to osl_openFile().
+
+    @param uOffset [in]
+    Position of file to write into.
+
+    @param pBuffer [in]
+    Points to a buffer which contains the data.
+
+    @param uBytesToWrite [in]
+    Number of bytes which should be written.
+
+    @param pBytesWritten [out]
+    On success the number of bytes which have actually been written.
+
+    @retval osl_File_E_None on success
+    @retval osl_File_E_INVAL the format of the parameters was not valid
+    @retval osl_File_E_FBIG file too large
+    @retval osl_File_E_DQUOT quota exceeded
+    @retval osl_File_E_AGAIN operation would block
+    @retval osl_File_E_BADF bad file
+    @retval osl_File_E_FAULT bad address
+    @retval osl_File_E_INTR function call was interrupted
+    @retval osl_File_E_IO on I/O errosr
+    @retval osl_File_E_NOLCK no record locks available
+    @retval osl_File_E_NOLINK link has been severed
+    @retval osl_File_E_NOSPC no space left on device
+    @retval osl_File_E_NXIO no such device or address
     @since UDK 3.2.10
- */
+*/
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_writeFileAt(
   oslFileHandle Handle,
   sal_uInt64    uOffset,
@@ -998,7 +1005,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_writeFileAt(
   sal_uInt64    uBytesToWrite,
   sal_uInt64*   pBytesWritten
 );
-
 
 /** Read a line from a file.
 
@@ -1025,7 +1031,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_writeFileAt(
     @see osl_writeFile()
     @see osl_setFilePos()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_readLine(
         oslFileHandle Handle, sal_Sequence** ppSequence );
 
@@ -1067,9 +1072,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_syncFile( oslFileHandle Handle );
 
     @see osl_openFile()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_closeFile( oslFileHandle Handle );
-
 
 /** Create a directory.
 
@@ -1096,7 +1099,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_closeFile( oslFileHandle Handle );
 
     @see osl_removeDirectory()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_createDirectory( rtl_uString* pustrDirectoryURL );
 
 /** Create a directory, passing flags.
@@ -1141,7 +1143,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_createDirectoryWithFlags(
 
     @see osl_createDirectory()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_removeDirectory( rtl_uString* pustrDirectoryURL );
 
 /** Function pointer representing a function that will be called by osl_createDirectoryPath
@@ -1165,7 +1166,8 @@ typedef void (SAL_CALL *oslDirectoryCreationCallbackFunc)(void* pData, rtl_uStri
 
     The osl_createDirectoryPath function creates a specified directory path.
     All nonexisting sub directories will be created.
-    <strong>PLEASE NOTE:</strong> You cannot rely on getting the error code
+
+    @attention PLEASE NOTE You cannot rely on getting the error code
     osl_File_E_EXIST for existing directories. Programming against this error
     code is in general a strong indication of a wrong usage of osl_createDirectoryPath.
 
@@ -1234,10 +1236,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_createDirectoryPath(
 
     @see osl_openFile()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_removeFile(
         rtl_uString* pustrFileURL );
-
 
 /** Copy a file to a new destination.
 
@@ -1265,10 +1265,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_removeFile(
     @see    osl_moveFile()
     @see    osl_removeFile()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_copyFile(
         rtl_uString* pustrSourceFileURL, rtl_uString *pustrDestFileURL );
-
 
 /** Move a file or directory to a new destination or renames it.
 
@@ -1294,10 +1292,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_copyFile(
 
     @see osl_copyFile()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_moveFile(
         rtl_uString* pustrSourceFileURL, rtl_uString *pustrDestFileURL );
-
 
 /** Determine a valid unused canonical name for a requested name.
 
@@ -1318,10 +1314,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_moveFile(
 
     @see osl_getFileStatus()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getCanonicalName(
         rtl_uString *pustrRequestedURL, rtl_uString **ppustrValidURL);
-
 
 /** Convert a path relative to a given directory into an full qualified file URL.
 
@@ -1356,12 +1350,10 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getCanonicalName(
 
     @see    osl_getFileStatus()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getAbsoluteFileURL(
     rtl_uString* pustrBaseDirectoryURL,
     rtl_uString *pustrRelativeFileURL,
     rtl_uString **ppustrAbsoluteFileURL );
-
 
 /** Convert a system dependent path into a file URL.
 
@@ -1376,10 +1368,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getAbsoluteFileURL(
 
     @see osl_getSystemPathFromFileURL()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileURLFromSystemPath(
         rtl_uString *pustrSystemPath, rtl_uString **ppustrFileURL);
-
 
 /** Search a full qualified system path or a file URL.
 
@@ -1407,10 +1397,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileURLFromSystemPath(
     @see osl_getFileURLFromSystemPath()
     @see osl_getSystemPathFromFileURL()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_searchFileURL(
         rtl_uString *pustrFileName, rtl_uString *pustrSearchPath, rtl_uString **ppustrFileURL );
-
 
 /** Convert a file URL into a system dependent path.
 
@@ -1425,10 +1413,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_searchFileURL(
 
     @see osl_getFileURLFromSystemPath()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getSystemPathFromFileURL(
         rtl_uString *pustrFileURL, rtl_uString **ppustrSystemPath);
-
 
 /** Function pointer representing the function called back from osl_abbreviateSystemPath
 
@@ -1441,9 +1427,7 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getSystemPathFromFileURL(
 
     @see osl_abbreviateSystemPath()
 */
-
 typedef sal_uInt32 (SAL_CALL *oslCalcTextWidthFunc)( rtl_uString *ustrText );
-
 
 /** Abbreviate a system notation path.
 
@@ -1464,13 +1448,11 @@ typedef sal_uInt32 (SAL_CALL *oslCalcTextWidthFunc)( rtl_uString *ustrText );
 
     @see    oslCalcTextWidthFunc
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_abbreviateSystemPath(
     rtl_uString *ustrSystemPath,
     rtl_uString **pustrCompacted,
     sal_uInt32 uMaxWidth,
     oslCalcTextWidthFunc pCalcWidth );
-
 
 /** Set file attributes.
 
@@ -1485,10 +1467,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_abbreviateSystemPath(
 
     @see osl_getFileStatus()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFileAttributes(
         rtl_uString *pustrFileURL, sal_uInt64 uAttributes );
-
 
 /** Set the file time.
 
@@ -1510,13 +1490,11 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFileAttributes(
 
     @see osl_getFileStatus()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFileTime(
     rtl_uString *pustrFileURL,
     const TimeValue *aCreationTime,
     const TimeValue *aLastAccessTime,
     const TimeValue *aLastWriteTime);
-
 
 /** Retrieves the file URL of the system's temporary directory path
 
@@ -1526,10 +1504,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_setFileTime(
     @retval osl_File_E_None on success
     @retval osl_File_E_NOENT no such file or directory not found
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_getTempDirURL(
         rtl_uString **pustrTempDirURL );
-
 
 /** Creates a temporary file in the directory provided by the caller or the
     directory returned by osl_getTempDirURL.
@@ -1580,7 +1556,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getTempDirURL(
 
     @see    osl_getTempDirURL()
 */
-
 SAL_DLLPUBLIC oslFileError SAL_CALL osl_createTempFile(
     rtl_uString*   pustrDirectoryURL,
     oslFileHandle* pHandle,
@@ -1591,6 +1566,5 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_createTempFile(
 #endif
 
 #endif // INCLUDED_OSL_FILE_H
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
