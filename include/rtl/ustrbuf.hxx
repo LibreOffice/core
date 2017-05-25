@@ -474,7 +474,7 @@ public:
     /**
         Return a null terminated unicode character array.
      */
-    const sal_Unicode*  getStr() const { return pData->buffer; }
+    const sal_Unicode*  getStr() const SAL_RETURNS_NONNULL { return pData->buffer; }
 
     /**
       Access to individual characters.
@@ -885,7 +885,7 @@ public:
 
        @since LibreOffice 4.4
     */
-    sal_Unicode * appendUninitialized(sal_Int32 length) {
+    sal_Unicode * appendUninitialized(sal_Int32 length) SAL_RETURNS_NONNULL {
         sal_Int32 n = getLength();
         rtl_uStringbuffer_insert(&pData, &nCapacity, n, NULL, length);
         return pData->buffer + n;

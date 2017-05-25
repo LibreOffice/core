@@ -441,7 +441,7 @@ public:
     /**
         Return a null terminated character array.
      */
-    const sal_Char* getStr() const { return pData->buffer; }
+    const sal_Char* getStr() const SAL_RETURNS_NONNULL { return pData->buffer; }
 
     /**
       Access to individual characters.
@@ -709,7 +709,7 @@ public:
 
        @since LibreOffice 4.4
     */
-    char * appendUninitialized(sal_Int32 length) {
+    char * appendUninitialized(sal_Int32 length) SAL_RETURNS_NONNULL {
         sal_Int32 n = getLength();
         rtl_stringbuffer_insert(&pData, &nCapacity, n, NULL, length);
         return pData->buffer + n;
