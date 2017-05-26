@@ -66,6 +66,7 @@
                       <item translatable="yes">Expand word space on lines with manual line breaks in justified paragraphs</item>
                       <item translatable="yes">Protect form</item>
                       <item translatable="yes">MS Word-compatible trailing blanks</item>
+                      <item translatable="yes">Use LibreOffice 4.3 anchoring paint order (in current document)</item>
                       <item translatable="yes">&lt;User settings&gt;</item>
                     </items>
                   </object>

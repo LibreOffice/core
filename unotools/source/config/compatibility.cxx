@@ -61,6 +61,7 @@ SvtCompatibilityEntry::SvtCompatibilityEntry()
     setValue<bool>( Index::ExpandWordSpace, true );
     setValue<bool>( Index::ProtectForm, false );
     setValue<bool>( Index::MsWordTrailingBlanks, false );
+    setValue<bool>( Index::SubtractFlysAnchoredAtFlys, false );
 
     setDefaultEntry( false );
 }
@@ -90,7 +91,8 @@ OUString SvtCompatibilityEntry::getName( const Index rIdx )
         "ConsiderWrappingStyle",
         "ExpandWordSpace",
         "ProtectForm",
-        "MsWordCompTrailingBlanks"
+        "MsWordCompTrailingBlanks",
+        "SubtractFlysAnchoredAtFlys"
     };
 
     /* Size of sPropertyName array not equal size of the SvtCompatibilityEntry::Index enum class */
