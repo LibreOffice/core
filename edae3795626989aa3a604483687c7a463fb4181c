@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_48f3d59e",
+        "filename": "connectivity/source/drivers/firebird/Statement.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-05-26T07:09:14Z",
+      "side": 1,
+      "message": "Doesn\u0027t this call to \"evaluateStatusVector\" throw SQLException when there is an error? This would make the changes to this file not necessary.",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 53
+      },
+      "revId": "edae3795626989aa3a604483687c7a463fb4181c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a830b957",
+        "filename": "dbaccess/source/ui/tabledesign/TableController.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-05-26T07:09:14Z",
+      "side": 1,
+      "message": "The documentation of that function (in include/cppuhelper/exc_hlp.hxx) says \"only as first statement in a catch block!\"\n\nbut I see that you use it exactly the same way as already used in that very same file, around line 1061. Asking an expert about that, because now I\u0027m unsure.",
+      "range": {
+        "startLine": 1125,
+        "startChar": 45,
+        "endLine": 1125,
+        "endChar": 73
+      },
+      "revId": "edae3795626989aa3a604483687c7a463fb4181c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
