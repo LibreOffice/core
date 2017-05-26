@@ -408,9 +408,9 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     FN_SURROUND,            FN_HORI_ORIENT,                         // [21303
                     FN_SET_FRM_NAME,        FN_KEEP_ASPECT_RATIO,                   // [21306
                     FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,                    // [21318
+                    FN_UNO_DESCRIPTION,     FN_UNO_DESCRIPTION,                     // [21320
                     FN_OLE_IS_MATH,         FN_MATH_BASELINE_ALIGNMENT,             // [22314
                     FN_PARAM_CHAIN_PREVIOUS, FN_PARAM_CHAIN_NEXT,                   // [22420
-
                     0);
 
                 // create needed items for XPropertyList entries from the DrawModel so that
@@ -423,6 +423,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     aSet.Put( SfxBoolItem(FN_KEEP_ASPECT_RATIO, pVOpt->IsKeepRatio()) );
                 aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
                 aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
+                aSet.Put(SfxStringItem(FN_UNO_DESCRIPTION, rSh.GetObjDescription()));
                 if( nSel & SelectionType::Ole )
                 {
                     // #i73249#
@@ -498,6 +499,9 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             // #i73249#
                             rSh.SetObjTitle(static_cast<const SfxStringItem*>(pItem)->GetValue());
                         }
+                        if (SfxItemState::SET == pOutSet->GetItemState(FN_UNO_DESCRIPTION, true, &pItem))
+                            rSh.SetObjDescription(static_cast<const SfxStringItem*>(pItem)->GetValue());
+
                         // Template AutoUpdate
                         SwFrameFormat* pFormat = rSh.GetSelectedFrameFormat();
                         if(pFormat && pFormat->IsAutoUpdateFormat())
