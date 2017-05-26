@@ -1774,8 +1774,8 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos, ScTokenArr
         mbRewind( false )
 {
     SetGrammar( ((eGrammar == formula::FormulaGrammar::GRAM_UNSPECIFIED) ?
-                (pDocument ? pDocument->GetGrammar() : formula::FormulaGrammar::GRAM_DEFAULT) :
-                eGrammar));
+                pDocument->GetGrammar() :
+                eGrammar) );
     nMaxTab = pDoc->GetTableCount() - 1;
 }
 
