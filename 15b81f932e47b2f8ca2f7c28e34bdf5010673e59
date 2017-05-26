@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_93bfb2cf",
+        "filename": "comphelper/source/misc/syntaxhighlight.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-05-26T16:30:18Z",
+      "side": 1,
+      "message": "Since \u0026\u0026 has a greater priority than || (see http://en.cppreference.com/w/cpp/language/operator_precedence), shouldn\u0027t it be:\nif ( ((c\u003d\u003d\u0027:\u0027) || (c\u003d\u003d\u0027?\u0027)) \u0026\u0026 (aLanguage \u003d\u003d HighlighterLanguage::SQL))\n?",
+      "range": {
+        "startLine": 398,
+        "startChar": 34,
+        "endLine": 398,
+        "endChar": 76
+      },
+      "revId": "15b81f932e47b2f8ca2f7c28e34bdf5010673e59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
