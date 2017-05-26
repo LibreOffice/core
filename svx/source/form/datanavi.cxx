@@ -736,7 +736,7 @@ namespace svxform
                                 SAL_WARN( "svx.form", "XFormsPage::DoToolboxAction(): exception caught" );
                             }
                         }
-                        else
+                        else if (pNode)
                         {
                             try
                             {
