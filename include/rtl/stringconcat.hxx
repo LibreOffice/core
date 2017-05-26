@@ -55,9 +55,9 @@ struct ToStringHelper
     /// Return length of the string representation of the given object (if not known exactly, it needs to be the maximum).
     static int length( const T& );
     /// Add 8-bit representation of the given object to the given buffer and return position right after the added data.
-    static char* addData( char* buffer, const T& );
+    static char* addData( char* buffer, const T& ) SAL_RETURNS_NONNULL;
     /// Add Unicode representation of the given object to the given buffer and return position right after the added data.
-    static sal_Unicode* addData( sal_Unicode* buffer, const T& );
+    static sal_Unicode* addData( sal_Unicode* buffer, const T& ) SAL_RETURNS_NONNULL;
     /// If true, T can be used in concatenation resulting in OString.
     static const bool allowOStringConcat = false;
     /// If true, T can be used in concatenation resulting in OUString.
@@ -175,7 +175,7 @@ struct OStringConcat
     public:
         OStringConcat( const T1& left_, const T2& right_ ) : left( left_ ), right( right_ ) {}
         int length() const { return ToStringHelper< T1 >::length( left ) + ToStringHelper< T2 >::length( right ); }
-        char* addData( char* buffer ) const { return ToStringHelper< T2 >::addData( ToStringHelper< T1 >::addData( buffer, left ), right ); }
+        char* addData( char* buffer ) const SAL_RETURNS_NONNULL { return ToStringHelper< T2 >::addData( ToStringHelper< T1 >::addData( buffer, left ), right ); }
         // NOTE here could be functions that would forward to the "real" temporary OString. Note however that e.g. getStr()
         // is not so simple, as the OString temporary must live long enough (i.e. can't be created here in a function, a wrapper
         // temporary object containing it must be returned instead).
@@ -196,7 +196,7 @@ struct OUStringConcat
     public:
         OUStringConcat( const T1& left_, const T2& right_ ) : left( left_ ), right( right_ ) {}
         int length() const { return ToStringHelper< T1 >::length( left ) + ToStringHelper< T2 >::length( right ); }
-        sal_Unicode* addData( sal_Unicode* buffer ) const { return ToStringHelper< T2 >::addData( ToStringHelper< T1 >::addData( buffer, left ), right ); }
+        sal_Unicode* addData( sal_Unicode* buffer ) const SAL_RETURNS_NONNULL { return ToStringHelper< T2 >::addData( ToStringHelper< T1 >::addData( buffer, left ), right ); }
     private:
         const T1& left;
         const T2& right;
@@ -206,7 +206,7 @@ template< typename T1, typename T2 >
 struct ToStringHelper< OStringConcat< T1, T2 > >
     {
     static int length( const OStringConcat< T1, T2 >& c ) { return c.length(); }
-    static char* addData( char* buffer, const OStringConcat< T1, T2 >& c ) { return c.addData( buffer ); }
+    static char* addData( char* buffer, const OStringConcat< T1, T2 >& c ) SAL_RETURNS_NONNULL { return c.addData( buffer ); }
     static const bool allowOStringConcat = ToStringHelper< T1 >::allowOStringConcat && ToStringHelper< T2 >::allowOStringConcat;
     static const bool allowOUStringConcat = false;
     };
@@ -215,7 +215,7 @@ template< typename T1, typename T2 >
 struct ToStringHelper< OUStringConcat< T1, T2 > >
     {
     static int length( const OUStringConcat< T1, T2 >& c ) { return c.length(); }
-    static sal_Unicode* addData( sal_Unicode* buffer, const OUStringConcat< T1, T2 >& c ) { return c.addData( buffer ); }
+    static sal_Unicode* addData( sal_Unicode* buffer, const OUStringConcat< T1, T2 >& c ) SAL_RETURNS_NONNULL { return c.addData( buffer ); }
     static const bool allowOStringConcat = false;
     static const bool allowOUStringConcat = ToStringHelper< T1 >::allowOUStringConcat && ToStringHelper< T2 >::allowOUStringConcat;
     };
