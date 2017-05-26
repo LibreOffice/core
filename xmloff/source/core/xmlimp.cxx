@@ -2186,7 +2186,7 @@ void SAL_CALL SvXMLLegacyToFastDocHandler::startElement( const OUString& rName,
             Sequence< sal_Int8 > aAttrSeq( reinterpret_cast<sal_Int8 const *>(
                                     OUStringToOString( aLocalAttrName, RTL_TEXTENCODING_UTF8 ).getStr()), aLocalAttrName.getLength() );
             sal_Int32 nAttr = NAMESPACE_TOKEN( nAttrPrefix ) | SvXMLImport::xTokenHandler->getTokenFromUTF8( aAttrSeq ) ;
-            mxFastAttributes->add( nAttr, OUStringToOString( rAttrValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+            mxFastAttributes->add( nAttr, rAttrValue );
         }
     }
     mrImport->startFastElement( mnElement, mxFastAttributes.get() );

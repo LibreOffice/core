@@ -1957,7 +1957,7 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
 
         boost::optional<sal_Int32> aSubElementId = lclGetElementIdForName(aAttributes[j].Name);
         if(aSubElementId)
-            pAttributes->add(*aSubElementId, aValue.getStr());
+            pAttributes->add(*aSubElementId, aValue);
     }
 
     XFastAttributeListRef xAttributesList( pAttributes );
@@ -2342,7 +2342,7 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
                         oox::getRelationship(Relationship::HYPERLINK),
                         sUrl, true ), RTL_TEXTENCODING_UTF8 );
 
-            m_pHyperlinkAttrList->add( FSNS( XML_r, XML_id), sId.getStr());
+            m_pHyperlinkAttrList->add( FSNS( XML_r, XML_id), sId );
         }
         else
         {
@@ -2368,14 +2368,12 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
                     }
                 }
             }
-            m_pHyperlinkAttrList->add( FSNS( XML_w, XML_anchor ),
-                    OUStringToOString( sMark, RTL_TEXTENCODING_UTF8 ).getStr( ) );
+            m_pHyperlinkAttrList->add( FSNS( XML_w, XML_anchor ), sMark );
         }
 
         if ( !rTarget.isEmpty() )
         {
-            OString soTarget = OUStringToOString( rTarget, RTL_TEXTENCODING_UTF8 );
-            m_pHyperlinkAttrList->add(FSNS( XML_w, XML_tgtFrame ), soTarget.getStr());
+            m_pHyperlinkAttrList->add(FSNS( XML_w, XML_tgtFrame ), rTarget);
         }
     }
 
@@ -3389,22 +3387,22 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                 if (aTablePosition[i].Name == "vertAnchor" && !aTablePosition[i].Value.get<OUString>().isEmpty())
                 {
                     OString strTemp = OUStringToOString(aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
-                    attrListTablePos->add( FSNS( XML_w, XML_vertAnchor ), strTemp.getStr() );
+                    attrListTablePos->add( FSNS( XML_w, XML_vertAnchor ), strTemp );
                 }
                 else if (aTablePosition[i].Name == "tblpYSpec" && !aTablePosition[i].Value.get<OUString>().isEmpty())
                 {
                     OString strTemp = OUStringToOString(aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
-                    attrListTablePos->add( FSNS( XML_w, XML_tblpYSpec ), strTemp.getStr() );
+                    attrListTablePos->add( FSNS( XML_w, XML_tblpYSpec ), strTemp );
                 }
                 else if (aTablePosition[i].Name == "horzAnchor" && !aTablePosition[i].Value.get<OUString>().isEmpty())
                 {
                     OString strTemp = OUStringToOString(aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
-                    attrListTablePos->add( FSNS( XML_w, XML_horzAnchor ), strTemp.getStr() );
+                    attrListTablePos->add( FSNS( XML_w, XML_horzAnchor ), strTemp );
                 }
                 else if (aTablePosition[i].Name == "tblpXSpec" && !aTablePosition[i].Value.get<OUString>().isEmpty())
                 {
                     OString strTemp = OUStringToOString(aTablePosition[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8);
-                    attrListTablePos->add( FSNS( XML_w, XML_tblpXSpec ), strTemp.getStr() );
+                    attrListTablePos->add( FSNS( XML_w, XML_tblpXSpec ), strTemp );
                 }
                 else if (aTablePosition[i].Name == "bottomFromText")
                 {
@@ -3908,7 +3906,7 @@ void DocxAttributeOutput::LatentStyles()
     for (sal_Int32 i = 0; i < aLatentStyles.getLength(); ++i)
     {
         if (sal_Int32 nToken = DocxStringGetToken(aDefaultTokens, aLatentStyles[i].Name))
-            pAttributeList->add(FSNS(XML_w, nToken), OUStringToOString(aLatentStyles[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
+            pAttributeList->add(FSNS(XML_w, nToken), aLatentStyles[i].Value.get<OUString>());
         else if (aLatentStyles[i].Name == "lsdExceptions")
             aLatentStyles[i].Value >>= aLsdExceptions;
     }
@@ -3926,7 +3924,7 @@ void DocxAttributeOutput::LatentStyles()
         aLsdExceptions[i].Value >>= aAttributes;
         for (sal_Int32 j = 0; j < aAttributes.getLength(); ++j)
             if (sal_Int32 nToken = DocxStringGetToken(aExceptionTokens, aAttributes[j].Name))
-                pAttributeList->add(FSNS(XML_w, nToken), OUStringToOString(aAttributes[j].Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
+                pAttributeList->add(FSNS(XML_w, nToken), aAttributes[j].Value.get<OUString>());
 
         xAttributeList = pAttributeList;
         m_pSerializer->singleElementNS(XML_w, XML_lsdException, xAttributeList);
@@ -4336,11 +4334,11 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
 
     // picture description (used for pic:cNvPr later too)
     ::sax_fastparser::FastAttributeList* docPrattrList = FastSerializerHelper::createAttrList();
-    docPrattrList->add( XML_id, OString::number( m_anchorId++).getStr());
-    docPrattrList->add( XML_name, OUStringToOString( pFrameFormat->GetName(), RTL_TEXTENCODING_UTF8 ) );
-    docPrattrList->add( XML_descr, OUStringToOString( pGrfNode ? pGrfNode->GetDescription() : pOLEFrameFormat->GetObjDescription(), RTL_TEXTENCODING_UTF8 ).getStr());
+    docPrattrList->add( XML_id, OString::number( m_anchorId++));
+    docPrattrList->add( XML_name, pFrameFormat->GetName() );
+    docPrattrList->add( XML_descr, pGrfNode ? pGrfNode->GetDescription() : pOLEFrameFormat->GetObjDescription());
     if( GetExport().GetFilter().getVersion( ) != oox::core::ECMA_DIALECT )
-        docPrattrList->add( XML_title, OUStringToOString( pGrfNode ? pGrfNode->GetTitle() : pOLEFrameFormat->GetObjTitle(), RTL_TEXTENCODING_UTF8 ).getStr());
+        docPrattrList->add( XML_title, pGrfNode ? pGrfNode->GetTitle() : pOLEFrameFormat->GetObjTitle());
     XFastAttributeListRef docPrAttrListRef( docPrattrList );
     m_pSerializer->startElementNS( XML_wp, XML_docPr, docPrAttrListRef );
     // TODO hyperlink
@@ -5351,7 +5349,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         case STYLE_TYPE_LIST: pType = "numbering"; break;
     }
     pStyleAttributeList->add(FSNS( XML_w, XML_type ), pType);
-    pStyleAttributeList->add(FSNS( XML_w, XML_styleId ), m_rExport.m_pStyles->GetStyleId(nId).getStr());
+    pStyleAttributeList->add(FSNS( XML_w, XML_styleId ), m_rExport.m_pStyles->GetStyleId(nId));
     if (bDefault)
         pStyleAttributeList->add(FSNS(XML_w, XML_default), "1");
     if (bCustomStyle)
@@ -5651,12 +5649,12 @@ void DocxAttributeOutput::SectionFormProtection( bool bProtected )
 void DocxAttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLineNumberInfo& rLnNumInfo )
 {
     FastAttributeList* pAttr = FastSerializerHelper::createAttrList();
-    pAttr->add( FSNS( XML_w, XML_countBy ), OString::number(rLnNumInfo.GetCountBy()).getStr());
+    pAttr->add( FSNS( XML_w, XML_countBy ), OString::number(rLnNumInfo.GetCountBy()));
     pAttr->add( FSNS( XML_w, XML_restart ), rLnNumInfo.IsRestartEachPage() ? "newPage" : "continuous" );
     if( rLnNumInfo.GetPosFromLeft())
-        pAttr->add( FSNS( XML_w, XML_distance ), OString::number(rLnNumInfo.GetPosFromLeft()).getStr());
+        pAttr->add( FSNS( XML_w, XML_distance ), OString::number(rLnNumInfo.GetPosFromLeft()));
     if( nRestartNo )
-        pAttr->add( FSNS( XML_w, XML_start ), OString::number( nRestartNo).getStr());
+        pAttr->add( FSNS( XML_w, XML_start ), OString::number( nRestartNo));
     XFastAttributeListRef xAttrs( pAttr );
     m_pSerializer->singleElementNS( XML_w, XML_lnNumType, xAttrs );
 }
@@ -5851,7 +5849,7 @@ void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, const ::boo
     // nNumType corresponds to w:fmt. See WW8Export::GetNumId() for more precisions
     OString aFormat( impl_NumberingType( nNumType ) );
     if ( !aFormat.isEmpty() )
-        pAttr->add( FSNS( XML_w, XML_fmt ), aFormat.getStr() );
+        pAttr->add( FSNS( XML_w, XML_fmt ), aFormat );
 
     XFastAttributeListRef xAttrs( pAttr );
     m_pSerializer->singleElementNS( XML_w, XML_pgNumType, xAttrs );
@@ -5928,7 +5926,7 @@ void DocxAttributeOutput::FontCharset( sal_uInt8 nCharSet, rtl_TextEncoding nEnc
     OString aCharSet( OString::number( nCharSet, 16 ) );
     if ( aCharSet.getLength() == 1 )
         aCharSet = OString( "0" ) + aCharSet;
-    pAttr->add( FSNS( XML_w, XML_val ), aCharSet.getStr());
+    pAttr->add( FSNS( XML_w, XML_val ), aCharSet);
 
     if( GetExport().GetFilter().getVersion( ) != oox::core::ECMA_DIALECT )
     {
@@ -7853,14 +7851,14 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
         if( !m_pBackgroundAttrList.is() )
         {
             m_pBackgroundAttrList = FastSerializerHelper::createAttrList();
-            m_pBackgroundAttrList->add( FSNS( XML_w, XML_fill ), sColor.getStr() );
+            m_pBackgroundAttrList->add( FSNS( XML_w, XML_fill ), sColor );
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_val ), "clear" );
         }
         else if ( sOriginalFill != sColor )
         {
             // fill was modified during edition, theme fill attribute must be dropped
             m_pBackgroundAttrList = FastSerializerHelper::createAttrList();
-            m_pBackgroundAttrList->add( FSNS( XML_w, XML_fill ), sColor.getStr() );
+            m_pBackgroundAttrList->add( FSNS( XML_w, XML_fill ), sColor );
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_val ), "clear" );
         }
         m_sOriginalBackgroundColor.clear();
@@ -8083,15 +8081,13 @@ void DocxAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFormatCo
     // Get the columns attributes
     FastAttributeList *pColsAttrList = FastSerializerHelper::createAttrList();
 
-    pColsAttrList->add( FSNS( XML_w, XML_num ),
-            OString::number( nCols ). getStr( ) );
+    pColsAttrList->add( FSNS( XML_w, XML_num ), OString::number( nCols ) );
 
     const char* pEquals = "false";
     if ( bEven )
     {
         sal_uInt16 nWidth = rCol.GetGutterWidth( true );
-        pColsAttrList->add( FSNS( XML_w, XML_space ),
-               OString::number( nWidth ).getStr( ) );
+        pColsAttrList->add( FSNS( XML_w, XML_space ), OString::number( nWidth ) );
 
         pEquals = "true";
     }
@@ -8113,14 +8109,12 @@ void DocxAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFormatCo
         {
             FastAttributeList *pColAttrList = FastSerializerHelper::createAttrList();
             sal_uInt16 nWidth = rCol.CalcPrtColWidth( n, ( sal_uInt16 ) nPageSize );
-            pColAttrList->add( FSNS( XML_w, XML_w ),
-                    OString::number( nWidth ).getStr( ) );
+            pColAttrList->add( FSNS( XML_w, XML_w ), OString::number( nWidth ) );
 
             if ( n + 1 != nCols )
             {
                 sal_uInt16 nSpacing = rColumns[n].GetRight( ) + rColumns[n + 1].GetLeft( );
-                pColAttrList->add( FSNS( XML_w, XML_space ),
-                    OString::number( nSpacing ).getStr( ) );
+                pColAttrList->add( FSNS( XML_w, XML_space ), OString::number( nSpacing ) );
             }
 
             m_pSerializer->singleElementNS( XML_w, XML_col, pColAttrList );
@@ -8156,14 +8150,14 @@ void DocxAttributeOutput::FormatTextGrid( const SwTextGridItem& rGrid )
                 sGridType = OString( "linesAndChars" );
             break;
     }
-    pGridAttrList->add( FSNS( XML_w, XML_type ), sGridType.getStr( ) );
+    pGridAttrList->add( FSNS( XML_w, XML_type ), sGridType );
 
     sal_uInt16 nHeight = rGrid.GetBaseHeight() + rGrid.GetRubyHeight();
     pGridAttrList->add( FSNS( XML_w, XML_linePitch ),
-            OString::number( nHeight ).getStr( ) );
+            OString::number( nHeight ) );
 
     pGridAttrList->add( FSNS( XML_w, XML_charSpace ),
-            OString::number( GridCharacterPitch( rGrid ) ).getStr( ) );
+            OString::number( GridCharacterPitch( rGrid ) ) );
 
     m_pSerializer->singleElementNS( XML_w, XML_docGrid, pGridAttrList );
 }

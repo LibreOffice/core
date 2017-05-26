@@ -133,14 +133,14 @@ sal_uInt32 VMLExport::EnterGroup( const OUString& rShapeName, const tools::Recta
     pAttrList->add( XML_id, ShapeIdString( nShapeId ) );
 
     if ( rShapeName.getLength() )
-        pAttrList->add( XML_alt, OUStringToOString( rShapeName, RTL_TEXTENCODING_UTF8 ) );
+        pAttrList->add( XML_alt, rShapeName );
 
     bool rbAbsolutePos = true;
     //editAs
     OUString rEditAs = EscherEx::GetEditAs();
     if (!rEditAs.isEmpty())
     {
-        pAttrList->add(XML_editas, OUStringToOString( rEditAs, RTL_TEXTENCODING_UTF8 ));
+        pAttrList->add(XML_editas, rEditAs);
         rbAbsolutePos = false;
     }
 
@@ -191,7 +191,7 @@ void VMLExport::AddShape( sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uIn
     else
     {
         // A watermark object - store the optional shape ID
-        m_pShapeAttrList->add( XML_id, OUStringToOString(m_pSdrObject->GetName(), RTL_TEXTENCODING_UTF8) );
+        m_pShapeAttrList->add( XML_id, m_pSdrObject->GetName() );
         // also ('o:spid')
         m_pShapeAttrList->addNS( XML_o, XML_spid, ShapeIdString( nShapeId ) );
     }
@@ -314,7 +314,7 @@ static void impl_AddInt( sax_fastparser::FastAttributeList *pAttrList, sal_Int32
     if ( !pAttrList )
         return;
 
-    pAttrList->add( nElement, OString::number( nValue ).getStr() );
+    pAttrList->add( nElement, OString::number( nValue ) );
 }
 
 inline sal_uInt16 impl_GetUInt16( const sal_uInt8* &pVal )
@@ -592,7 +592,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                             aImageId = m_pTextExport->GetDrawingML().WriteImage( aGraphic );
                             m_pTextExport->CacheRelId(nChecksum, aImageId);
                         }
-                        pAttrList->add(FSNS(XML_r, XML_id), OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
+                        pAttrList->add(FSNS(XML_r, XML_id), aImageId);
                         imageData = true;
                     }
 
@@ -802,7 +802,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         sax_fastparser::FastAttributeList* pAttrList = FastSerializerHelper::createAttrList();
                         pAttrList->add(XML_on, "t");
                         pAttrList->add(XML_fitshape, "t");
-                        pAttrList->add(XML_string, OUStringToOString(aTextPathString, RTL_TEXTENCODING_UTF8));
+                        pAttrList->add(XML_string, aTextPathString);
                         EscherPropSortStruct aFont;
                         OUString aStyle;
                         if (rProps.GetOpt(ESCHER_Prop_gtextFont, aFont))
@@ -820,7 +820,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                             aStyle += ";font-size:" + aSize + "pt";
                         }
                         if (!aStyle.isEmpty())
-                            pAttrList->add(XML_style, OUStringToOString(aStyle, RTL_TEXTENCODING_UTF8));
+                            pAttrList->add(XML_style, aStyle);
                         m_pSerializer->singleElementNS(XML_v, XML_textpath, XFastAttributeListRef(pAttrList));
                     }
 
@@ -850,7 +850,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                     OUString idStr = SvxMSDffManager::MSDFFReadZString(aStream, it->nPropSize, true);
                     aStream.Seek(0);
                     if (!IsWaterMarkShape(m_pSdrObject->GetName()))
-                         m_pShapeAttrList->add(XML_ID, OUStringToOString(idStr, RTL_TEXTENCODING_UTF8).getStr());
+                         m_pShapeAttrList->add(XML_ID, idStr);
 
                     bAlreadyWritten[ESCHER_Prop_wzName] = true;
                 }

@@ -2897,97 +2897,97 @@ void DrawingML::WriteShapeEffect( const OUString& sName, const Sequence< Propert
                 {
                     OUString sVal;
                     aOuterShdwProps[j].Value >>= sVal;
-                    aOuterShdwAttrList->add( XML_algn, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    aOuterShdwAttrList->add( XML_algn, sVal );
                 }
                 else if( aOuterShdwProps[j].Name == "blurRad" )
                 {
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_blurRad, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_blurRad, OString::number( nVal ) );
                 }
                 else if( aOuterShdwProps[j].Name == "dir" )
                 {
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_dir, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_dir, OString::number( nVal ) );
                 }
                 else if( aOuterShdwProps[j].Name == "dist" )
                 {
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_dist, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_dist, OString::number( nVal ) );
                 }
                 else if( aOuterShdwProps[j].Name == "kx" )
                 {
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_kx, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_kx, OString::number( nVal ) );
                 }
                 else if( aOuterShdwProps[j].Name == "ky" )
                 {
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_ky, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_ky, OString::number( nVal ) );
                 }
                 else if( aOuterShdwProps[j].Name == "rotWithShape" )
                 {
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_rotWithShape, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_rotWithShape, OString::number( nVal ) );
                 }
                 else if( aOuterShdwProps[j].Name == "sx" )
                 {
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_sx, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_sx, OString::number( nVal ) );
                 }
                 else if( aOuterShdwProps[j].Name == "sy" )
                 {
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_sy, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_sy, OString::number( nVal ) );
                 }
                 else if( aOuterShdwProps[j].Name == "rad" )
                 {
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_rad, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_rad, OString::number( nVal ) );
                 }
                 else if( aOuterShdwProps[j].Name == "endA" )
                 {
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_endA, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_endA, OString::number( nVal ) );
                 }
                 else if( aOuterShdwProps[j].Name == "endPos" )
                 {
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_endPos, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_endPos, OString::number( nVal ) );
                 }
                 else if( aOuterShdwProps[j].Name == "fadeDir" )
                 {
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_fadeDir, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_fadeDir, OString::number( nVal ) );
                 }
                 else if( aOuterShdwProps[j].Name == "stA" )
                 {
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_stA, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_stA, OString::number( nVal ) );
                 }
                 else if( aOuterShdwProps[j].Name == "stPos" )
                 {
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_stPos, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_stPos, OString::number( nVal ) );
                 }
                 else if( aOuterShdwProps[j].Name == "grow" )
                 {
                     sal_Int32 nVal = 0;
                     aOuterShdwProps[j].Value >>= nVal;
-                    aOuterShdwAttrList->add( XML_grow, OString::number( nVal ).getStr() );
+                    aOuterShdwAttrList->add( XML_grow, OString::number( nVal ) );
                 }
             }
         }
@@ -3128,19 +3128,19 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
         {
             OUString sVal;
             aEffectProps[i].Value >>= sVal;
-            aCameraAttrList->add( XML_prst, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+            aCameraAttrList->add( XML_prst, sVal );
         }
         else if( aEffectProps[i].Name == "fov" )
         {
             float fVal = 0;
             aEffectProps[i].Value >>= fVal;
-            aCameraAttrList->add( XML_fov, OString::number( fVal * 60000 ).getStr() );
+            aCameraAttrList->add( XML_fov, OString::number( fVal * 60000 ) );
         }
         else if( aEffectProps[i].Name == "zoom" )
         {
             float fVal = 1;
             aEffectProps[i].Value >>= fVal;
-            aCameraAttrList->add( XML_zoom, OString::number( fVal * 100000 ).getStr() );
+            aCameraAttrList->add( XML_zoom, OString::number( fVal * 100000 ) );
         }
         else if( aEffectProps[i].Name == "rotLat" ||
                 aEffectProps[i].Name == "rotLon" ||
@@ -3154,7 +3154,7 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
                 nToken = XML_lon;
             else if( aEffectProps[i].Name == "rotRev" )
                 nToken = XML_rev;
-            aCameraRotationAttrList->add( nToken, OString::number( nVal ).getStr() );
+            aCameraRotationAttrList->add( nToken, OString::number( nVal ) );
             bCameraRotationPresent = true;
         }
     }
@@ -3175,7 +3175,7 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
                 nToken = XML_rig;
             else if( aLightRigProps[i].Name == "dir" )
                 nToken = XML_dir;
-            aLightRigAttrList->add( nToken, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+            aLightRigAttrList->add( nToken, sVal );
         }
         else if( aLightRigProps[i].Name == "rotLat" ||
                 aLightRigProps[i].Name == "rotLon" ||
@@ -3189,7 +3189,7 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
                 nToken = XML_lon;
             else if( aLightRigProps[i].Name == "rotRev" )
                 nToken = XML_rev;
-            aLightRigRotationAttrList->add( nToken, OString::number( nVal ).getStr() );
+            aLightRigRotationAttrList->add( nToken, OString::number( nVal ) );
             bLightRigRotationPresent = true;
         }
     }
@@ -3250,13 +3250,13 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
                 nToken = XML_contourW;
             else if( aShape3DProps[i].Name == "z" )
                 nToken = XML_z;
-            aShape3DAttrList->add( nToken, OString::number( nVal ).getStr() );
+            aShape3DAttrList->add( nToken, OString::number( nVal ) );
         }
         else if( aShape3DProps[i].Name == "prstMaterial" )
         {
             OUString sVal;
             aShape3DProps[i].Value >>= sVal;
-            aShape3DAttrList->add( XML_prstMaterial, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+            aShape3DAttrList->add( XML_prstMaterial, sVal );
         }
         else if( aShape3DProps[i].Name == "extrusionClr" )
         {
@@ -3294,13 +3294,13 @@ void DrawingML::WriteShape3DEffects( const Reference< XPropertySet >& xPropSet )
                         nToken = XML_w;
                     else if( aBevelProps[j].Name == "h" )
                         nToken = XML_h;
-                    aBevelAttrList->add( nToken, OString::number( nVal ).getStr() );
+                    aBevelAttrList->add( nToken, OString::number( nVal ) );
                 }
                 else  if( aBevelProps[j].Name == "prst" )
                 {
                     OUString sVal;
                     aBevelProps[j].Value >>= sVal;
-                    aBevelAttrList->add( XML_prst, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ).getStr() );
+                    aBevelAttrList->add( XML_prst, sVal );
                 }
             }
 
@@ -3403,7 +3403,7 @@ void DrawingML::WriteArtisticEffect( const Reference< XPropertySet >& rXPropSet 
         {
             sal_Int32 nVal = 0;
             aAttrs[i].Value >>= nVal;
-            aAttrList->add( nToken, OString::number( nVal ).getStr() );
+            aAttrList->add( nToken, OString::number( nVal ) );
         }
         else if( aAttrs[i].Name == "OriginalGraphic" )
         {

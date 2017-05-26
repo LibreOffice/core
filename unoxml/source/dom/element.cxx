@@ -127,9 +127,7 @@ namespace DOM
                 nAttributeToken = getToken( i_rContext, reinterpret_cast<char const *>(pName) );
 
             if( nAttributeToken != FastToken::DONTKNOW )
-                i_rContext.mxAttribList->add( nAttributeToken,
-                                              OUStringToOString(pNode->getNodeValue(),
-                                                                RTL_TEXTENCODING_UTF8));
+                i_rContext.mxAttribList->add( nAttributeToken, pNode->getNodeValue());
         }
 
         const xmlChar* pPrefix = m_aNodePtr->ns ? m_aNodePtr->ns->prefix : reinterpret_cast<const xmlChar*>("");

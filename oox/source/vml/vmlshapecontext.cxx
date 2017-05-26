@@ -134,6 +134,17 @@ bool lclDecodeVmlxBool( const OUString& rValue, bool bDefaultForEmpty )
     return (nToken == XML_t) || (nToken == XML_True);
 }
 
+/** Some dodgy files contain embedded NUL characters, which are technically illegal,
+   and can cause trouble when exported to other formats. */
+OUString escapeNuls( const OUString& rValue )
+{
+    return rValue.replace(0, '?');
+}
+OptValue<OUString> escapeNuls( const OptValue<OUString>& rValue )
+{
+    return !rValue.has() ? rValue : OptValue<OUString>(rValue.get().replace(0, '?'));
+}
+
 } // namespace
 
 ShapeLayoutContext::ShapeLayoutContext( ContextHandler2Helper& rParent, Drawing& rDrawing ) :
@@ -272,15 +283,15 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, ShapeType& r
 {
     // shape identifier and shape name
     bool bHasOspid = rAttribs.hasAttribute( O_TOKEN( spid ) );
-    mrTypeModel.maShapeId = rAttribs.getXString( bHasOspid ? O_TOKEN( spid ) : XML_id, OUString() );
-    mrTypeModel.maLegacyId = rAttribs.getString( XML_id, OUString() );
+    mrTypeModel.maShapeId = escapeNuls(rAttribs.getXString( bHasOspid ? O_TOKEN( spid ) : XML_id, OUString() ));
+    mrTypeModel.maLegacyId = escapeNuls(rAttribs.getString( XML_id, OUString() ));
     OSL_ENSURE( !mrTypeModel.maShapeId.isEmpty(), "ShapeTypeContext::ShapeTypeContext - missing shape identifier" );
     // builtin shape type identifier
     mrTypeModel.moShapeType = rAttribs.getInteger( O_TOKEN( spt ) );
     // if the o:spid attribute exists, the id attribute contains the user-defined shape name
     if( bHasOspid )
     {
-        mrTypeModel.maShapeName = rAttribs.getXString( XML_id, OUString() );
+        mrTypeModel.maShapeName = escapeNuls(rAttribs.getXString( XML_id, OUString() ));
         // get ShapeType and ShapeId from name for compatibility
         mrTypeModel.maShapeId = mrTypeModel.maShapeName;
         static const OUString sShapeTypePrefix = "shapetype_";
@@ -371,7 +382,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
         case NMSP_vmlWord | XML_wrap:
             mrTypeModel.moWrapAnchorX = rAttribs.getString(XML_anchorx);
             mrTypeModel.moWrapAnchorY = rAttribs.getString(XML_anchory);
-            mrTypeModel.moWrapType = rAttribs.getString(XML_type);
+            mrTypeModel.moWrapType = escapeNuls(rAttribs.getString(XML_type));
             mrTypeModel.moWrapSide = rAttribs.getString(XML_side);
         break;
         case VML_TOKEN( shadow ):
@@ -445,7 +456,7 @@ ShapeContext::ShapeContext( ContextHandler2Helper& rParent, ShapeBase& rShape, c
     mrShapeModel( rShape.getShapeModel() )
 {
     // collect shape specific attributes
-    mrShapeModel.maType = rAttribs.getXString( XML_type, OUString() );
+    mrShapeModel.maType = escapeNuls(rAttribs.getXString( XML_type, OUString() ));
     // polyline path
     setPoints( rAttribs.getString( XML_points, OUString() ) );
     // line start and end positions
@@ -480,7 +491,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
             // and is there because of the lines above which change it to TextFrame
             dynamic_cast< SimpleShape& >( mrShape ).setService(
                     "com.sun.star.drawing.RectangleShape");
-            mrShapeModel.maLegacyDiagramPath = getFragmentPathFromRelId(rAttribs.getString(XML_id, OUString()));
+            mrShapeModel.maLegacyDiagramPath = getFragmentPathFromRelId( escapeNuls(rAttribs.getString(XML_id, OUString())) );
             break;
     }
     // handle remaining stuff in base class

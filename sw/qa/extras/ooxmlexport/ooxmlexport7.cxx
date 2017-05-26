@@ -897,8 +897,8 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79591, "fdo79591.docx")
     if (!pXmlDoc)
       return;
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr", "name", "");
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape", "ID", "");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr", "name", "?t0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape", "ID", "?t0");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testBnc884615, "bnc884615.docx")
