@@ -1533,7 +1533,7 @@ static void lcl_ExtendLeftAndRight( SwRect&                _rRect,
 }
 
 static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
-   const SwRect &rRect, SwRegionRects &rRegion, SwPaintProperties & rProperties)
+   const SwRect &rRect, SwRegionRects &rRegion, basegfx::tools::B2DClipState& rClipState, SwPaintProperties & rProperties)
 {
     const SwSortedObjs& rObjs = *pPage->GetSortedObjs();
     const SwFlyFrame* pSelfFly = pFrame->IsInFly() ? pFrame->FindFlyFrame() : gProp.pSRetoucheFly2;
@@ -1666,6 +1666,7 @@ static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
                 const SwBorderAttrs &rAttrs = *aAccess.Get();
                 ::lcl_CalcBorderRect( aRect, pFly, rAttrs, true, rProperties );
                 rRegion -= aRect;
+                rClipState.subtractRange(basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom()));
                 continue;
             }
             else
@@ -1683,12 +1684,14 @@ static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
             const SwBorderAttrs &rAttrs = *aAccess.Get();
             ::lcl_CalcBorderRect( aRect, pFly, rAttrs, true, rProperties );
             rRegion -= aRect;
+            rClipState.subtractRange(basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom()));
         }
         else
         {
             SwRect aRect( pFly->Prt() );
             aRect += pFly->Frame().Pos();
             rRegion -= aRect;
+            rClipState.subtractRange(basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom()));
         }
     }
     if (gProp.pSRetoucheFly == gProp.pSRetoucheFly2)
@@ -1854,6 +1857,7 @@ bool DrawFillAttributes(
     const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
     const SwRect& rOriginalLayoutRect,
     const SwRegionRects& rPaintRegion,
+    const basegfx::tools::B2DClipState& rClipState,
     vcl::RenderContext& rOut)
 {
     if(rFillAttributes.get() && rFillAttributes->isUsed())
@@ -1916,18 +1920,7 @@ bool DrawFillAttributes(
                 // tdf#86578 the awful lcl_SubtractFlys hack
                 if (rPaintRegion.size() > 1 || rPaintRegion[0] != rPaintRegion.GetOrigin())
                 {
-                    tools::PolyPolygon tempRegion;
-                    for (size_t i = 0; i < rPaintRegion.size(); ++i)
-                    {
-                        // Don't use SwRect::SvRect() here, as the clip
-                        // rectangle is supposed to cover everything outside
-                        // the flys, so the Width() - 1 isn't correct.
-                        const SwRect& rRect = rPaintRegion[i];
-                        tools::Rectangle aRectangle(rRect.Pos().getX(), rRect.Pos().getY(), rRect.Pos().getX() + rRect.SSize().getWidth(), rRect.Pos().getY() + rRect.SSize().getHeight());
-                        tempRegion.Insert(tools::Polygon(aRectangle));
-                    }
-                    basegfx::B2DPolyPolygon const maskRegion( tempRegion.getB2DPolyPolygon());
-
+                    basegfx::B2DPolyPolygon const maskRegion(rClipState.getClipPoly());
                     primitives.resize(1);
                     primitives[0] = new drawinglayer::primitive2d::MaskPrimitive2D(
                             maskRegion, rSequence);
@@ -4681,7 +4674,8 @@ void SwFrame::PaintBorderLine( const SwRect& rRect,
         pPage->GetFormat()->GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::SUBTRACT_FLYS))
     {
         SwRegionRects aRegion( aOut, 4 );
-        ::lcl_SubtractFlys( this, pPage, aOut, aRegion, gProp );
+        basegfx::tools::B2DClipState aClipState;
+        ::lcl_SubtractFlys( this, pPage, aOut, aRegion, aClipState, gProp );
         for ( size_t i = 0; i < aRegion.size(); ++i )
             gProp.pSLines->AddLineRect( aRegion[i], pColor, nStyle, pTab, nSubCol, gProp );
     }
@@ -6588,10 +6582,12 @@ void SwFrame::PaintBackground( const SwRect &rRect, const SwPageFrame *pPage,
                 }
 
                 SwRegionRects aRegion( aRect );
+                basegfx::B2DPolygon aB2DPolygon{tools::Polygon(aRect.SVRect()).getB2DPolygon()};
+                basegfx::tools::B2DClipState aClipState{basegfx::B2DPolyPolygon(aB2DPolygon)};
                 if (pPage->GetSortedObjs() &&
                     pSh->GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::SUBTRACT_FLYS))
                 {
-                    ::lcl_SubtractFlys( this, pPage, aRect, aRegion, gProp );
+                    ::lcl_SubtractFlys( this, pPage, aRect, aRegion, aClipState, gProp );
                 }
 
                 // OD 06.08.2002 #99657# - determine, if background transparency
@@ -6608,7 +6604,7 @@ void SwFrame::PaintBackground( const SwRect &rRect, const SwPageFrame *pPage,
                     if(aFillAttributes->isUsed())
                     {
                         // check if really something is painted
-                        bDone = DrawFillAttributes(aFillAttributes, aOrigBackRect, aRegion, *pOut);
+                        bDone = DrawFillAttributes(aFillAttributes, aOrigBackRect, aRegion, aClipState, *pOut);
                     }
 
                     if(!bDone)
