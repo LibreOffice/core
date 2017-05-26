@@ -1526,7 +1526,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                         stdout, "%lu = %ld\n",
                         sal::static_int_cast< unsigned long >(i),
                         sal::static_int_cast< long >(longValue));
-                    offset += 4; // 4 Bytes fuer sal_Int32
+                    offset += 4; // 4 Bytes for sal_Int32
                 }
             }
             break;
@@ -1551,7 +1551,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 {
                     readUINT32(pBuffer+offset, sLen);
 
-                    offset += 4; // 4 Bytes (sal_uInt32) fuer die Groesse des strings in Bytes
+                    offset += 4; // 4 bytes (sal_uInt32) for the string size
 
                     sal_Char *pValue = static_cast<sal_Char*>(rtl_allocateMemory(sLen));
                     readUtf8(pBuffer+offset, pValue, sLen);
@@ -1589,7 +1589,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 {
                     readUINT32(pBuffer+offset, sLen);
 
-                    offset += 4; // 4 Bytes (sal_uInt32) fuer die Groesse des strings in Bytes
+                    offset += 4; // 4 bytes (sal_uInt32) for the string size
 
                     sal_Unicode *pValue = static_cast<sal_Unicode*>(rtl_allocateMemory((sLen / 2) * sizeof(sal_Unicode)));
                     readString(pBuffer+offset, pValue, sLen);
