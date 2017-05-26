@@ -428,7 +428,7 @@ ORegistry::ORegistry()
     : m_refCount(1)
     , m_readOnly(false)
     , m_isOpen(false)
-    , ROOT( "/" )
+    , ROOT("/")
 {
 }
 
@@ -495,7 +495,7 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
         OStoreDirectory rStoreDir;
         storeError _err = rStoreDir.create(rRegFile, OUString(), OUString(), sAccessMode);
 
-        if ( _err == store_E_None )
+        if (_err == store_E_None)
         {
             m_file = rRegFile;
             m_name = regName;
@@ -546,10 +546,10 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
             pReg.reset();
 
             OUString systemName;
-            if ( FileBase::getSystemPathFromFileURL(regName, systemName) != FileBase::E_None )
+            if (FileBase::getSystemPathFromFileURL(regName, systemName) != FileBase::E_None)
                 systemName = regName;
 
-            OString name( OUStringToOString(systemName, osl_getThreadTextEncoding()) );
+            OString name(OUStringToOString(systemName, osl_getThreadTextEncoding()));
             if (unlink(name.getStr()) != 0)
             {
                 return RegError::DESTROY_REGISTRY_FAILED;
@@ -574,10 +574,10 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
             if (!m_name.isEmpty())
             {
                 OUString systemName;
-                if ( FileBase::getSystemPathFromFileURL(m_name, systemName) != FileBase::E_None )
+                if (FileBase::getSystemPathFromFileURL(m_name, systemName) != FileBase::E_None)
                     systemName = m_name;
 
-                OString name( OUStringToOString(systemName, osl_getThreadTextEncoding()) );
+                OString name(OUStringToOString(systemName, osl_getThreadTextEncoding()));
                 if (unlink(name.getStr()) != 0)
                 {
                     return RegError::DESTROY_REGISTRY_FAILED;
@@ -635,7 +635,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
 
     *phNewKey = nullptr;
 
-    if ( keyName.isEmpty() )
+    if (keyName.isEmpty())
         return RegError::INVALID_KEYNAME;
 
     REG_GUARD(m_mutex);
@@ -664,7 +664,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
     sal_Int32 nIndex = 0;
     do
     {
-        token = sFullKeyName.getToken( 0, '/', nIndex );
+        token = sFullKeyName.getToken(0, '/', nIndex);
         if (!token.isEmpty())
         {
             if (rStoreDir.create(pKey->getStoreFile(), sFullPath.getStr(), token, storeAccessMode::Create))
@@ -675,7 +675,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
             sFullPath.append(token);
             sFullPath.append('/');
         }
-    } while( nIndex != -1 );
+    } while(nIndex != -1);
 
 
     pKey = new ORegKey(sFullKeyName, this);
@@ -695,7 +695,7 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
 
     *phOpenKey = nullptr;
 
-    if ( keyName.isEmpty() )
+    if (keyName.isEmpty())
     {
         return RegError::INVALID_KEYNAME;
     }
@@ -772,7 +772,7 @@ RegError ORegistry::closeKey(RegKeyHandle hKey)
 RegError ORegistry::deleteKey(RegKeyHandle hKey, const OUString& keyName)
 {
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
-    if ( keyName.isEmpty() )
+    if (keyName.isEmpty())
         return RegError::INVALID_KEYNAME;
 
     REG_GUARD(m_mutex);
@@ -788,7 +788,7 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
 {
     RegError _ret = RegError::NO_ERROR;
 
-    if ( keyName.isEmpty() )
+    if (keyName.isEmpty())
     {
         return RegError::INVALID_KEYNAME;
     }
@@ -798,7 +798,7 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
     OUString     sRelativKey;
     sal_Int32    lastIndex = keyName.lastIndexOf('/');
 
-    if ( lastIndex >= 0 )
+    if (lastIndex >= 0)
     {
         sRelativKey += keyName.copy(lastIndex + 1);
 
@@ -836,7 +836,7 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
     tmpName += ROOT;
 
     OStoreFile sFile(pKey->getStoreFile());
-    if ( sFile.isValid() && sFile.remove(sFullPath, tmpName) )
+    if (sFile.isValid() && sFile.remove(sFullPath, tmpName))
     {
         return RegError::DELETE_KEY_FAILED;
     }
@@ -858,7 +858,7 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
     OStoreDirectory             rStoreDir(pKey->getStoreDir());
     storeError                  _err = rStoreDir.first(iter);
 
-    while ( _err == store_E_None )
+    while (_err == store_E_None)
     {
         OUString const keyName = iter.m_pszName;
 
@@ -875,7 +875,7 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
             if (sFullPath.getLength() > 1)
                 sFullPath += ROOT;
 
-            if ( ((OStoreFile&)pKey->getStoreFile()).remove(sFullPath, keyName) )
+            if (((OStoreFile&)pKey->getStoreFile()).remove(sFullPath, keyName))
             {
                 return RegError::DELETE_VALUE_FAILED;
             }
@@ -908,11 +908,11 @@ RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
     OStoreDirectory             rStoreDir(pRootKey->getStoreDir());
     storeError                  _err = rStoreDir.first(iter);
 
-    while ( _err == store_E_None )
+    while (_err == store_E_None)
     {
         OUString const keyName = iter.m_pszName;
 
-        if ( iter.m_nAttrib & STORE_ATTRIB_ISDIR )
+        if (iter.m_nAttrib & STORE_ATTRIB_ISDIR)
         {
             _ret = loadAndSaveKeys(pKey, pRootKey, keyName, 0, bWarnings, bReport);
         }
@@ -1081,7 +1081,7 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
     RegValueType    valueType;
     sal_uInt32      valueSize;
     sal_uInt32      rwBytes;
-    OString         targetPath( OUStringToOString(sTargetPath, RTL_TEXTENCODING_UTF8) );
+    OString         targetPath(OUStringToOString(sTargetPath, RTL_TEXTENCODING_UTF8));
 
     if (!rValue.readAt(0, pBuffer, VALUE_HEADERSIZE, rwBytes) &&
         (rwBytes == VALUE_HEADERSIZE))
@@ -1306,7 +1306,7 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
     OStoreDirectory             rTmpStoreDir(pTmpKey->getStoreDir());
     storeError                  _err = rTmpStoreDir.first(iter);
 
-    while ( _err == store_E_None)
+    while (_err == store_E_None)
     {
         OUString const sName = iter.m_pszName;
 
@@ -1353,11 +1353,11 @@ RegError ORegistry::dumpRegistry(RegKeyHandle hKey) const
     OStoreDirectory             rStoreDir(pKey->getStoreDir());
     storeError                  _err = rStoreDir.first(iter);
 
-    OString regName( OUStringToOString( getName(), osl_getThreadTextEncoding() ) );
-    OString keyName( OUStringToOString( pKey->getName(), RTL_TEXTENCODING_UTF8 ) );
+    OString regName(OUStringToOString(getName(), osl_getThreadTextEncoding()));
+    OString keyName(OUStringToOString(pKey->getName(), RTL_TEXTENCODING_UTF8));
     fprintf(stdout, "Registry \"%s\":\n\n%s\n", regName.getStr(), keyName.getStr());
 
-    while ( _err == store_E_None )
+    while (_err == store_E_None)
     {
         sName = iter.m_pszName;
 
@@ -1655,11 +1655,11 @@ RegError ORegistry::dumpKey(const OUString& sPath, const OUString& sName, sal_In
 
     _err = rStoreDir.first(iter);
 
-    while ( _err == store_E_None)
+    while (_err == store_E_None)
     {
         sSubName = iter.m_pszName;
 
-        if ( iter.m_nAttrib & STORE_ATTRIB_ISDIR )
+        if (iter.m_nAttrib & STORE_ATTRIB_ISDIR)
         {
             _ret = dumpKey(sSubPath, sSubName, nSpace+2);
         } else
