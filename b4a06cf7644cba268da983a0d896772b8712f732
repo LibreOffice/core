@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_08554d4f",
+        "filename": "sw/source/core/table/swtable.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2057,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-05-26T08:31:39Z",
+      "side": 1,
+      "message": "Why do this (instead of nEndPos - 1 like in rev.3) when line 2053 does that? This only makes confusion IMO",
+      "range": {
+        "startLine": 2057,
+        "startChar": 71,
+        "endLine": 2057,
+        "endChar": 80
+      },
+      "revId": "b4a06cf7644cba268da983a0d896772b8712f732",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
