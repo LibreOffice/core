@@ -392,7 +392,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
 
     // Operator?
     // only for BASIC '\'' should be a comment, otherwise it is a normal string and handled there
-    else if ( testCharFlags( c, CharFlags::Operator ) || ( (c == '\'') && (aLanguage==HighlighterLanguage::Basic)) )
+    else if ( testCharFlags( c, CharFlags::Operator ) && (aLanguage != HighlighterLanguage::Basic))
     {
         // parameters for SQL view
         if ( (c==':') || (c=='?'))
@@ -426,45 +426,39 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                 reType = TokenType::Comment;
             }
         }
-       else if (c=='/')
-       {
-           sal_Unicode cPeekNext = *pos;
-           if (cPeekNext=='/')
-           {
-               // Remove all characters until end of line or EOF
-               while( cPeekNext != 0 && !testCharFlags( cPeekNext, CharFlags::EOL ) )
-               {
-                   ++pos;
-                   cPeekNext = *pos;
-               }
-               reType = TokenType::Comment;
-           }
-       }
-        else
+        else if (c=='/')
         {
-            // Comment?
-            if ( c == '\'' )
+            sal_Unicode cPeekNext = *pos;
+            if (cPeekNext=='/')
             {
-                // Skip all characters until end of input or end of line:
-                for (;;) {
-                    c = *pos;
-                    if (c == 0 || testCharFlags(c, CharFlags::EOL)) {
-                        break;
-                    }
+                // Remove all characters until end of line or EOF
+                while( cPeekNext != 0 && !testCharFlags( cPeekNext, CharFlags::EOL ) )
+                {
                     ++pos;
+                    cPeekNext = *pos;
                 }
-
                 reType = TokenType::Comment;
             }
-
-            // The real operator; can be easily used since not the actual
-            // operator (e.g. +=) is concerned, but the fact that it is one
-            if( reType != TokenType::Comment )
-            {
-                reType = TokenType::Operator;
-            }
-
         }
+        if( reType != TokenType::Comment )
+        {
+            reType = TokenType::Operator;
+        }
+
+    }
+    // CApostrophe is Basic omment
+    else if ( c == '\'' && (aLanguage == HighlighterLanguage::Basic))
+    {
+        // Skip all characters until end of input or end of line:
+        for (;;) {
+            c = *pos;
+            if (c == 0 || testCharFlags(c, CharFlags::EOL)) {
+                break;
+            }
+            ++pos;
+        }
+
+        reType = TokenType::Comment;
     }
 
     // Object separator? Must be handled before Number
