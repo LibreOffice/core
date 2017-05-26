@@ -69,6 +69,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ITiledRenderable.hxx>
+#include <vcl/IDialogRenderable.hxx>
 #include <com/sun/star/tiledrendering/XTiledRenderable.hpp>
 
 #include <unobaseclass.hxx>
@@ -130,6 +131,7 @@ class SW_DLLPUBLIC SwXTextDocument : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
     public SfxBaseModel,
     public vcl::ITiledRenderable,
+    public vcl::IDialogRenderable,
     public css::tiledrendering::XTiledRenderable
 {
 private:
@@ -449,6 +451,15 @@ public:
     OUString getRulerState() override;
     /// @see vcl::ITiledRenderable::getPostIts().
     OUString getPostIts() override;
+
+    vcl::DialogID findDialog() override;
+    void paintDialog(vcl::DialogID rDialogID, VirtualDevice &rDevice, int nWidth, int nHeight) override;
+    void postDialogMouseEvent(vcl::DialogID rDialogID, int nType,
+                             int nCharCode, int nKeyCode) override;
+
+    void postDialogKeyEvent(vcl::DialogID rDialogID, int nType, int nX, int nY,
+                            int nCount, int nButtons, int nModifier) override;
+
     // css::tiledrendering::XTiledRenderable
     virtual void SAL_CALL paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) throw (::css::uno::RuntimeException, std::exception) override;
 
