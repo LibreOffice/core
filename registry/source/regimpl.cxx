@@ -21,6 +21,7 @@
 #include "regimpl.hxx"
 
 #include <memory>
+#include <climits>
 #include <string.h>
 #include <stdio.h>
 
@@ -983,6 +984,7 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
             if (_ret != RegError::NO_ERROR)
             {
                 if (_ret == RegError::MERGE_ERROR ||
+                    _ret == RegError::PARTIAL_MERGE ||
                     (_ret == RegError::MERGE_CONFLICT && bWarnings))
                 {
                     rtl_freeMemory(pBuffer);
@@ -1071,10 +1073,10 @@ RegError ORegistry::checkBlop(OStoreStream& rValue,
                     if (reader.getFieldCount() > 0 &&
                         reader2.getFieldCount() > 0)
                     {
-                        mergeModuleValue(rValue, reader, reader2);
+                        RegError eErr=mergeModuleValue(rValue, reader, reader2);
 
                         rtl_freeMemory(pBuffer);
-                        return RegError::NO_ERROR;
+                        return eErr;
                     } else
                     if (reader2.getFieldCount() > 0)
                     {
@@ -1170,9 +1172,18 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
                                reader.getFieldAccess(i),
                                reader.getFieldConstValue(i));
             index++;
+            assert(index <= USHRT_MAX);
         }
+
+        bool bPartialMerge = false;
         for (sal_uInt32 i=0 ; i < reader2.getFieldCount(); i++)
         {
+            if (index == USHRT_MAX)
+            {
+                bPartialMerge = true;
+                break;
+            }
+
             if (nameSet.find(reader2.getFieldName(i)) == nameSet.end())
             {
                 writer.setFieldData(index,
@@ -1210,6 +1221,11 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
         }
 
         rtl_freeMemory(pBuffer);
+
+        if (bPartialMerge)
+        {
+            return RegError::PARTIAL_MERGE;
+        }
     }
     return RegError::NO_ERROR;
 }
