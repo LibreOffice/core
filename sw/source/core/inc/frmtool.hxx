@@ -27,6 +27,7 @@
 #include <editeng/lrspitem.hxx>
 #include <swfont.hxx>
 #include <flyfrm.hxx>
+#include <basegfx/tools/b2dclipstate.hxx>
 
 class SwPageFrame;
 class SwFlyFrame;
@@ -68,6 +69,7 @@ bool DrawFillAttributes(
     const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
     const SwRect& rOriginalLayoutRect,
     const SwRegionRects& rPaintRegion,
+    const basegfx::tools::B2DClipState& rClipState,
     OutputDevice& rOut);
 
 void paintGraphicUsingPrimitivesHelper(
