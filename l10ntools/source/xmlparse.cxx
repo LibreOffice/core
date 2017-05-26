@@ -158,7 +158,7 @@ void XMLFile::Write( OString const &aFilename )
     if (!s.is_open())
     {
         std::cerr
-            << "Error: helpex cannot create file " << aFilename.getStr()
+            << "Error: helpex cannot create file " << aFilename
             << '\n';
         std::exit(EXIT_FAILURE);
     }
@@ -184,16 +184,16 @@ bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
             {
                 XMLElement *pElement = static_cast<XMLElement*>(pCur);
                 rStream  << "<";
-                rStream << pElement->GetName().getStr();
+                rStream << pElement->GetName();
                 if ( pElement->GetAttributeList())
                     for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ )
                     {
                         rStream << " ";
                         OString sData( (*pElement->GetAttributeList())[ j ]->GetName() );
-                        rStream << XMLUtil::QuotHTML( sData ).getStr();
+                        rStream << XMLUtil::QuotHTML( sData );
                         rStream << "=\"";
                         sData = (*pElement->GetAttributeList())[ j ]->GetValue();
-                        rStream << XMLUtil::QuotHTML( sData ).getStr();
+                        rStream << XMLUtil::QuotHTML( sData );
                         rStream << "\"";
                     }
                 if ( !pElement->GetChildList())
@@ -204,7 +204,7 @@ bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
                     for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
                         Write( rStream, (*pElement->GetChildList())[ k ] );
                     rStream << "</";
-                    rStream << pElement->GetName().getStr();
+                    rStream << pElement->GetName();
                     rStream << ">";
                 }
             }
@@ -212,21 +212,21 @@ bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
             case XMLNodeType::DATA:
             {
                 OString sData( static_cast<const XMLData*>(pCur)->GetData());
-                rStream << XMLUtil::QuotHTML( sData ).getStr();
+                rStream << XMLUtil::QuotHTML( sData );
             }
             break;
             case XMLNodeType::COMMENT:
             {
                 const XMLComment *pComment = static_cast<const XMLComment*>(pCur);
                 rStream << "<!--";
-                rStream <<  pComment->GetComment().getStr();
+                rStream <<  pComment->GetComment();
                 rStream << "-->";
             }
             break;
             case XMLNodeType::DEFAULT:
             {
                 const XMLDefault *pDefault = static_cast<const XMLDefault*>(pCur);
-                rStream <<  pDefault->GetDefault().getStr();
+                rStream <<  pDefault->GetDefault();
             }
             break;
         }

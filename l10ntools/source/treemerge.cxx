@@ -130,7 +130,7 @@ namespace
             {
                 std::cerr
                     << "Treex error: Cannot find title in "
-                    << sXhpPath.getStr() << std::endl;
+                    << sXhpPath << std::endl;
                 return nullptr;
             }
             xmlFree( pXhpFile );
@@ -208,7 +208,7 @@ TreeParser::TreeParser(
     if ( !m_pSource ) {
         std::cerr
             << "Treex error: Cannot open source file: "
-            << rInputFile.getStr() << std::endl;
+            << rInputFile << std::endl;
         return;
     }
     if( !m_pSource->name )
@@ -231,7 +231,7 @@ void TreeParser::Extract( const OString& rPOFile )
     {
         std::cerr
             << "Treex error: Cannot open po file for extract: "
-            << rPOFile.getStr() << std::endl;
+            << rPOFile << std::endl;
         return;
     }
 
@@ -264,8 +264,8 @@ void TreeParser::Merge(
             std::cerr
                 << ("Treex error: given language conflicts with language of"
                     " Mergedata file: ")
-                << m_sLang.getStr() << " - "
-                << vLanguages[0].getStr() << std::endl;
+                << m_sLang << " - "
+                << vLanguages[0] << std::endl;
             delete pMergeDataFile;
             return;
         }

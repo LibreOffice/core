@@ -402,7 +402,7 @@ namespace XSLT
                 catch( const Exception& exc)
                     {
                         // something went wrong
-                        OSL_FAIL(OUStringToOString(exc.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+                        SAL_WARN("filter.xslt", exc.Message);
                         return false;
                     }
             }

@@ -820,7 +820,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
     }
 
     {
-        SAL_INFO( "filter.config", "" << sRtlLog.getStr());
+        SAL_INFO( "filter.config", "" << sRtlLog);
         *pConfig = impl_createConfigAccess(sPath    ,
                                            false,   // bReadOnly
                                            true );  // bLocalesMode
@@ -878,15 +878,10 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(const OUString& sDirectKey)
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
-    #if OSL_DEBUG_LEVEL > 0
     catch(const css::uno::Exception& ex)
-    #else
-    catch(const css::uno::Exception&)
-    #endif
         {
-            #if OSL_DEBUG_LEVEL > 0
-            OSL_FAIL(OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
-            #endif
+            (void)ex;
+            SAL_WARN( "filter.config", ex.Message);
             aValue.clear();
         }
 
@@ -1537,10 +1532,8 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
             return;
         OUString sName = rItem.getUnpackedValueOrDefault(PROPNAME_NAME, OUString());
 
-        OUString sMsg("Fallback scenario for filter or type '" + sName + "' and locale '" +
-                      sActLocale + "' failed. Please check your filter configuration.");
-
-        OSL_FAIL(FILTER_CONFIG_TO_ASCII_(sMsg));
+        SAL_WARN("filter.config", "Fallback scenario for filter or type '" << sName << "' and locale '" <<
+                      sActLocale << "' failed. Please check your filter configuration.");
 #endif
         return;
     }

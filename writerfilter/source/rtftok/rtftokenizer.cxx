@@ -282,7 +282,7 @@ RTFError RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nPara
             Strm().SeekRel(nParam);
         return RTFError::OK;
     }
-    SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": keyword '\\" << rKeyword.getStr() <<
+    SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": keyword '\\" << rKeyword <<
              "' with param? " << (bParam ? 1 : 0) <<" param val: '" << (bParam ? nParam : 0) << "'");
     RTFSymbol aSymbol;
     aSymbol.sKeyword = rKeyword.getStr();
@@ -290,7 +290,7 @@ RTFError RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nPara
     int i = low - s_aRTFControlWords.begin();
     if (low == s_aRTFControlWords.end() || aSymbol < *low)
     {
-        SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": unknown keyword '\\" << rKeyword.getStr() << "'");
+        SAL_INFO("writerfilter.rtf", OSL_THIS_FUNC << ": unknown keyword '\\" << rKeyword << "'");
         RTFSkipDestination aSkip(m_rImport);
         aSkip.setParsed(false);
         return RTFError::OK;

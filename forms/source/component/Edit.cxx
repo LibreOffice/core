@@ -447,19 +447,10 @@ namespace
                 }
                 catch(const IllegalArgumentException& e)
                 {
-#if OSL_DEBUG_LEVEL > 0
-                    OString sMessage( "could not transfer the property named '" );
-                    sMessage += OString( pSourceProps->Name.getStr(), pSourceProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US );
-                    sMessage += OString( "'." );
-                    if ( !e.Message.isEmpty() )
-                    {
-                        sMessage += OString( "\n\nMessage:\n" );
-                        sMessage += OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
-                    }
-                    OSL_FAIL( sMessage.getStr() );
-#else
                     (void)e;
-#endif
+                    SAL_WARN( "forms.component", "could not transfer the property named '"
+                                << pSourceProps->Name
+                                << "'. " << e.Message );
                 }
 
                 ++pSourceProps;

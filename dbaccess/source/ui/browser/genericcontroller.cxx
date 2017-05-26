@@ -545,10 +545,9 @@ void OGenericUnoController::InvalidateFeature_Impl()
 #if OSL_DEBUG_LEVEL > 0
             if ( m_aSupportedFeatures.end() == aFeaturePos )
             {
-                OString sMessage( "OGenericUnoController::InvalidateFeature_Impl: feature id " );
-                sMessage += OString::number( aNextFeature.nId );
-                sMessage += OString( " has been invalidated, but is not supported!" );
-                SAL_WARN("dbaccess.ui", sMessage.getStr() );
+                SAL_WARN( "dbaccess.ui", "OGenericUnoController::InvalidateFeature_Impl: feature id "
+                            << aNextFeature.nId
+                            << " has been invalidated, but is not supported!" );
             }
 #endif
             if ( m_aSupportedFeatures.end() != aFeaturePos )

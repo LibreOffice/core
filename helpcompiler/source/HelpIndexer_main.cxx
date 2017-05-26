@@ -79,7 +79,7 @@ int main(int argc, char **argv)
             sDir, sDir);
 
         if (!indexer.indexDocuments()) {
-            std::cerr << OUStringToOString(indexer.getErrorMessage(), osl_getThreadTextEncoding()).getStr()  << std::endl;
+            std::cerr << indexer.getErrorMessage() << std::endl;
             return 2;
         }
         return 0;

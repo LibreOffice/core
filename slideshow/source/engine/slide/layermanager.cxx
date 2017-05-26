@@ -624,10 +624,7 @@ namespace slideshow
                 {
                     // TODO(E1): Might be superfluous. Nowadays,
                     // addViewLayer swallows all errors, anyway.
-                    OSL_FAIL( OUStringToOString(
-                                    comphelper::anyToString( cppu::getCaughtException() ),
-                                    RTL_TEXTENCODING_UTF8 ).getStr() );
-
+                    SAL_WARN( "slideshow", comphelper::anyToString( cppu::getCaughtException() ) );
                     // at least one shape could not be rendered
                     bRet = false;
                 }

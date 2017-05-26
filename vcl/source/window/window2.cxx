@@ -1463,7 +1463,7 @@ bool Window::set_font_attribute(const OString &rKey, const OUString &rValue)
     }
     else
     {
-        SAL_INFO("vcl.layout", "unhandled font attribute: " << rKey.getStr());
+        SAL_INFO("vcl.layout", "unhandled font attribute: " << rKey);
         return false;
     }
     return true;
@@ -1605,7 +1605,7 @@ bool Window::set_property(const OString &rKey, const OUString &rValue)
     }
     else
     {
-        SAL_INFO("vcl.layout", "unhandled property: " << rKey.getStr());
+        SAL_INFO("vcl.layout", "unhandled property: " << rKey);
         return false;
     }
     return true;

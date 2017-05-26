@@ -180,7 +180,7 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl, Button*, void)
     }
     catch (const uno::Exception& e)
     {
-        OSL_FAIL(OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
+        SAL_WARN("sw", e.Message);
         ScopedVclPtrInstance<MessageDialog>(this, e.Message)->Execute();
     }
 }

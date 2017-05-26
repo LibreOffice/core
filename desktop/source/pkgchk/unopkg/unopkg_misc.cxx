@@ -84,8 +84,7 @@ OptionInfo const * getOptionInfo(
             }
         }
     }
-    OSL_FAIL( OUStringToOString(
-                    opt, osl_getThreadTextEncoding() ).getStr() );
+    SAL_WARN( "desktop", opt );
     return nullptr;
 }
 

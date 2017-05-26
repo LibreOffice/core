@@ -98,7 +98,7 @@ void ImagePreparer::sendPreview( sal_uInt32 aSlideNumber )
 
     aBuffer.append( "slide_preview\n" );
 
-    aBuffer.append( OString::number( aSlideNumber ).getStr() );
+    aBuffer.append( (sal_Int32)aSlideNumber );
     aBuffer.append( "\n" );
 
     aBuffer.append( aEncodedShortString.getStr() );
@@ -175,12 +175,6 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
     if ( aNotes.isEmpty() )
         return;
 
-//     OUStringBuffer aStrBuffer;
-//     ::sax::Converter::encodeBase64( aStrBuffer, aTemp );
-
-//     OString aNotes = OUStringToOString(
-//         aStrBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
-
     if ( !xController->isRunning() )
         return;
 
@@ -189,7 +183,7 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
 
     aBuffer.append( "slide_notes\n" );
 
-    aBuffer.append( OString::number( aSlideNumber ).getStr() );
+    aBuffer.append( (sal_Int32) aSlideNumber );
     aBuffer.append( "\n" );
 
     aBuffer.append( "<html><body>" );

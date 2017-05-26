@@ -631,7 +631,7 @@ OString SessionManagerClient::getPreviousSessionID()
         }
     }
 
-    SAL_INFO("vcl.sm.debug", "  previous ID = " << aPrevId.getStr());
+    SAL_INFO("vcl.sm.debug", "  previous ID = " << aPrevId);
     return aPrevId;
 }
 

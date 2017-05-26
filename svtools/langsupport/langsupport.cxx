@@ -55,8 +55,7 @@ SAL_IMPLEMENT_MAIN()
 
                 OUString sTag( LanguageTag::convertToBcp47( eLang));
 
-                std::cout << OUStringToOString(sTag, osl_getThreadTextEncoding()).getStr()
-                    << std::endl;
+                std::cout << sTag << std::endl;
             }
         }
 

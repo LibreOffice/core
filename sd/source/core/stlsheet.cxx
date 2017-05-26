@@ -712,10 +712,8 @@ void SAL_CALL SdStyleSheet::release(  ) throw ()
         }
         catch (RuntimeException const& exc)
         { // don't break throw ()
-            OSL_FAIL(
-                OUStringToOString(
-                    exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-            static_cast<void>(exc);
+            (void)exc;
+            SAL_WARN( "sd", exc.Message );
         }
         OSL_ASSERT( mrBHelper.bDisposed );
         SdStyleSheetBase::release();

@@ -47,7 +47,7 @@ namespace
         }
         catch (const PoIfstream::Exception&)
         {
-            SAL_WARN("l10ntools", rFileName.getStr() << " contains invalid entry");
+            SAL_WARN("l10ntools", rFileName << " contains invalid entry");
             return false;
         }
         return true;
@@ -222,7 +222,7 @@ MergeDataFile::MergeDataFile(
     std::ifstream aInputStream( rFileName.getStr() );
     if ( !aInputStream.is_open() )
     {
-        SAL_WARN("l10ntools", "Can't open po path container file for " << rFileName.getStr());
+        SAL_WARN("l10ntools", "Can't open po path container file for " << rFileName);
         return;
     }
     std::string sPoFile;
@@ -239,7 +239,7 @@ MergeDataFile::MergeDataFile(
         aPoInput.open( sPoFileName );
         if ( !aPoInput.isOpen() )
         {
-            SAL_WARN("l10ntools", "Can't open file: " << sPoFileName.getStr());
+            SAL_WARN("l10ntools", "Can't open file: " << sPoFileName);
             return;
         }
 

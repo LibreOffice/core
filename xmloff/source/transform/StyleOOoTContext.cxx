@@ -317,22 +317,13 @@ XMLTypedPropertiesOOoTContext_Impl
                 XML_PROP_TYPE_END==m_aPropTypes[1] ||
                 (i<MAX_PROP_TYPES && XML_PROP_TYPE_END!=m_aPropTypes[i]) ) )
     {
-        OString aTmp("Didn't find property: ");
-        const OUString& rPrefix =
-            GetTransformer().GetNamespaceMap().GetPrefixByKey( nPrefix );
-        aTmp += OString( rPrefix.getStr(), rPrefix.getLength(),
-                                RTL_TEXTENCODING_ASCII_US );
-        aTmp += OString( ':' );
-        aTmp += OString( rLocalName.getStr(), rLocalName.getLength(),
-                                RTL_TEXTENCODING_ASCII_US );
-        aTmp += OString(", assuming <style:");
-        const OUString& rName =
-            ::xmloff::token::GetXMLToken( aPropTokens[m_aPropTypes[0]] );
-        aTmp += OString( rName.getStr(), rName.getLength(),
-                                RTL_TEXTENCODING_ASCII_US );
-        aTmp += OString( '>' );
-
-        OSL_FAIL(aTmp.getStr());
+        SAL_WARN("xmloff", "Didn't find property: "
+                << GetTransformer().GetNamespaceMap().GetPrefixByKey( nPrefix )
+                << ":"
+                << rLocalName
+                << ", assuming <style:"
+                << ::xmloff::token::GetXMLToken( aPropTokens[m_aPropTypes[0]] )
+                << ">" );
     }
 #endif
 

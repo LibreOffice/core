@@ -37,11 +37,6 @@ struct CheckFailed {
     OUString message;
 };
 
-::std::ostream& operator<< (::std::ostream& os, const OUString& str)
-{
-    return os << OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
-}
-
 template< typename T > void checkEqual(T const & value, T const & argument) {
     if (argument != value) {
         std::ostringstream s;

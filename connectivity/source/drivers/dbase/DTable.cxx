@@ -1253,7 +1253,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
                 throwInvalidColumnType( STR_INVALID_COLUMN_NAME_LENGTH, aName );
             }
 
-            (*m_pFileStream).WriteCharPtr( aCol.getStr() );
+            m_pFileStream->WriteCharPtr( aCol.getStr() );
             m_pFileStream->WriteBytes(aBuffer, 11 - aCol.getLength());
 
             sal_Int32 nPrecision = 0;
@@ -2091,7 +2091,7 @@ bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr
             const char cEOF = (char) DBF_EOL;
             nSize++;
             m_pMemoStream->WriteBytes(aStr.getStr(), aStr.getLength());
-            (*m_pMemoStream).WriteChar( cEOF ).WriteChar( cEOF );
+            m_pMemoStream->WriteChar( cEOF ).WriteChar( cEOF );
         } break;
         case MemoFoxPro:
         case MemodBaseIV: // dBase IV-Memofeld with length

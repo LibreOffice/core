@@ -843,10 +843,8 @@ void BackendImpl::PackageImpl::processPackage_(
                         }
                         catch (const Exception &)
                         {
-                            OSL_FAIL( OUStringToOString(
-                                            ::comphelper::anyToString(
-                                                ::cppu::getCaughtException() ),
-                                            RTL_TEXTENCODING_UTF8 ).getStr() );
+                            SAL_WARN( "desktop", ::comphelper::anyToString(
+                                                ::cppu::getCaughtException() ) );
                             // ignore any errors of rollback
                         }
                     }
@@ -934,7 +932,7 @@ OUString BackendImpl::PackageImpl::getDescription()
         }
         catch ( const css::deployment::DeploymentException& )
         {
-            OSL_FAIL( OUStringToOString( ::comphelper::anyToString( ::cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_WARN( "desktop", ::comphelper::anyToString( ::cppu::getCaughtException() ) );
         }
     }
 
@@ -1058,15 +1056,12 @@ void BackendImpl::PackageImpl::exportTo(
         }
         // xxx todo: think about exception specs:
         catch (const deployment::DeploymentException &) {
-            OSL_FAIL( OUStringToOString(
-                            ::comphelper::anyToString(
-                                ::cppu::getCaughtException() ),
-                            RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_WARN( "desktop", ::comphelper::anyToString(
+                                ::cppu::getCaughtException() ) );
         }
         catch (const lang::IllegalArgumentException & exc) {
             (void) exc;
-            OSL_FAIL( OUStringToOString(
-                            exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_WARN( "desktop", exc.Message );
         }
 
         std::vector< Sequence<beans::PropertyValue> > manifest;

@@ -439,16 +439,11 @@ namespace svx
                 sSlotUnoName = ".uno:";
                 sSlotUnoName += OUString::createFromAscii( pAsciiUnoName );
             }
-#if OSL_DEBUG_LEVEL > 0
             else
             {
-                OString sMessage( "lcl_getUnoSlotName: invalid slot id, or invalid slot, or no UNO name!\n" );
-                sMessage += "(slot id: ";
-                sMessage += OString::number( _nSlotId );
-                sMessage += ")";
-                OSL_FAIL( sMessage.getStr() );
+                SAL_WARN( "svx", "lcl_getUnoSlotName: invalid slot id, or invalid slot, or no UNO name! "
+                        "(slot id: " << _nSlotId << ")");
             }
-#endif
             return sSlotUnoName;
         }
 
@@ -720,17 +715,13 @@ namespace svx
                 #if OSL_DEBUG_LEVEL > 0
                     else
                     {
-                        OString sError( "FmTextControShell::executeAttributeDialog: Could not handle the following item:" );
-                        sError += "\n  SlotID: "; sError += OString::number( nSlotForItemSet );
-                        sError += "\n  WhichID: "; sError += OString::number( nWhich );
-                        sError += "\n  UNO name: ";
-
                         OUString sUnoSlotName = lcl_getUnoSlotName( *SfxGetpApp(), nSlotForItemSet );
-                        if ( !sUnoSlotName.isEmpty() )
-                            sError += OString( sUnoSlotName.getStr(), sUnoSlotName.getLength(), RTL_TEXTENCODING_ASCII_US );
-                        else
-                            sError += "unknown (no SfxSlot)";
-                        OSL_FAIL( sError.getStr() );
+                        if ( sUnoSlotName.isEmpty() )
+                            sUnoSlotName = "unknown (no SfxSlot)";
+                        SAL_WARN( "svx", "FmTextControShell::executeAttributeDialog: Could not handle the following item:"
+                                "\n  SlotID: " << nSlotForItemSet
+                                << "\n  WhichID: " << nWhich
+                                << "\n  UNO name: " << sUnoSlotName );
                     }
                 #endif
                 }

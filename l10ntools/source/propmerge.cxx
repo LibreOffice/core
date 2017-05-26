@@ -113,7 +113,7 @@ PropParser::PropParser(
     {
         std::cerr
             << "Propex error: Cannot open source file: "
-            << m_sSource.getStr() << std::endl;
+            << m_sSource << std::endl;
         return;
     }
     m_bIsInitialized = true;
@@ -132,7 +132,7 @@ void PropParser::Extract( const OString& rPOFile )
     {
         std::cerr
             << "Propex error: Cannot open pofile for extract: "
-            << rPOFile.getStr() << std::endl;
+            << rPOFile << std::endl;
         return;
     }
 
@@ -163,7 +163,7 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
     if( !aDestination.is_open() ) {
         std::cerr
             << "Propex error: Cannot open source file for merge: "
-            << rDestinationFile.getStr() << std::endl;
+            << rDestinationFile << std::endl;
         return;
     }
 
@@ -178,8 +178,8 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
             std::cerr
                 << ("Propex error: given language conflicts with language of"
                     " Mergedata file: ")
-                << m_sLang.getStr() << " - "
-                << vLanguages[0].getStr() << std::endl;
+                << m_sLang << " - "
+                << vLanguages[0] << std::endl;
             return;
         }
     }
@@ -210,18 +210,18 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
             }
             if( !sNewText.isEmpty() )
             {
-                aDestination << OString(sID + "=").getStr();
+                aDestination << OString(sID + "=");
                 lcl_PrintJavaStyle( sNewText, aDestination );
                 aDestination << std::endl;
             }
             else
             {
-                aDestination << sLine.getStr() << std::endl;
+                aDestination << sLine << std::endl;
             }
         }
         else
         {
-            aDestination << sLine.getStr() << std::endl;
+            aDestination << sLine << std::endl;
         }
     }
     aDestination.close();

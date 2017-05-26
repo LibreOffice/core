@@ -400,9 +400,7 @@ namespace svgio
                     default:
                     {
                         /// invalid token, ignore
-#ifdef DBG_UTIL
-                        myAssert( "Unknown Base SvgToken <" + aName + "> (!)" );
-#endif
+                        SAL_WARN( "svgio", "Unknown Base SvgToken <" + aName + "> (!)" );
                         break;
                     }
                 }

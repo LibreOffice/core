@@ -30,10 +30,6 @@ namespace svgio
 {
     namespace svgreader
     {
-#ifdef DBG_UTIL
-        // error helper
-        void myAssert(const OUString& rMessage);
-#endif
 
 // recommended value for this device dependent unit, see CSS2 section 4.3.2 Lengths
 #define F_SVG_PIXEL_PER_INCH  96.0

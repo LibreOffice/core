@@ -250,7 +250,7 @@ bool nsscrypto_initialize( const css::uno::Reference< css::uno::XComponentContex
 #else
     (void) rxContext;
 #endif
-    SAL_INFO("xmlsecurity.xmlsec",  "Using profile: " << sCertDir.getStr() );
+    SAL_INFO("xmlsecurity.xmlsec",  "Using profile: " << sCertDir );
 
     PR_Init( PR_USER_THREAD, PR_PRIORITY_NORMAL, 1 ) ;
 

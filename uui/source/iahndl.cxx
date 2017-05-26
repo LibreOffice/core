@@ -295,13 +295,7 @@ namespace
         const typelib_TypeDescription* pTypeDesc = aTypeDesc.get();
         if ( !pTypeDesc || !pTypeDesc->pWeakRef )
         {
-#if OSL_DEBUG_LEVEL > 0
-            OStringBuffer aMessage;
-            aMessage.append( "no type found for '" );
-            aMessage.append( OUStringToOString( i_rTypeName, RTL_TEXTENCODING_UTF8 ) );
-            aMessage.append( "'" );
-            OSL_FAIL( aMessage.makeStringAndClear().getStr() );
-#endif
+            SAL_WARN( "uui","no type found for '" << i_rTypeName << "'" );
             return false;
         }
         const css::uno::Type aType( pTypeDesc->pWeakRef );

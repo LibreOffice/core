@@ -971,7 +971,7 @@ void ToolBarManager::InitImageManager()
 void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContainer )
 {
     OString aTbxName = OUStringToOString( m_aResourceName, RTL_TEXTENCODING_ASCII_US );
-    SAL_INFO( "fwk.uielement", "framework (cd100003) ::ToolBarManager::FillToolbar " << aTbxName.getStr() );
+    SAL_INFO( "fwk.uielement", "framework (cd100003) ::ToolBarManager::FillToolbar " << aTbxName );
 
     SolarMutexGuard g;
 

@@ -257,17 +257,12 @@ void PackageRegistryImpl::insertBackend(
 #if OSL_DEBUG_LEVEL > 0
         else
         {
-            OUStringBuffer buf;
-            buf.append( "more than one PackageRegistryBackend for media-type=\"" );
-            buf.append( mediaType );
-            buf.append( "\" => " );
-            buf.append( Reference<lang::XServiceInfo>(
-                            xBackend, UNO_QUERY_THROW )->
-                        getImplementationName() );
-            buf.append( "\"!" );
-            OSL_FAIL( OUStringToOString(
-                            buf.makeStringAndClear(),
-                            RTL_TEXTENCODING_UTF8).getStr() );
+            SAL_WARN( "desktop", "more than one PackageRegistryBackend for media-type=\""
+                    << mediaType
+                    << "\" => "
+                    <<  Reference<lang::XServiceInfo>(
+                            xBackend, UNO_QUERY_THROW )->getImplementationName()
+                    << "\"!" );
         }
 #endif
     }

@@ -2956,7 +2956,7 @@ void RtfAttributeOutput::FormatLRSpace(const SvxLRSpaceItem& rLRSpace)
                 m_aSectionBreaks.append((sal_Int32)rLRSpace.GetRight());
             }
             if (!m_bBufferSectionBreaks)
-                m_rExport.Strm().                    WriteCharPtr(m_aSectionBreaks.makeStringAndClear().getStr());
+                m_rExport.Strm().WriteCharPtr(m_aSectionBreaks.makeStringAndClear().getStr());
         }
         else
         {
@@ -3014,7 +3014,7 @@ void RtfAttributeOutput::FormatULSpace(const SvxULSpaceItem& rULSpace)
                 m_aSectionBreaks.append((sal_Int32)aDistances.dyaHdrBottom);
             }
             if (!m_bBufferSectionBreaks)
-                m_rExport.Strm().                    WriteCharPtr(m_aSectionBreaks.makeStringAndClear().getStr());
+                m_rExport.Strm().WriteCharPtr(m_aSectionBreaks.makeStringAndClear().getStr());
         }
         else
         {

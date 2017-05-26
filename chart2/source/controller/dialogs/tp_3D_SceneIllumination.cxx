@@ -140,9 +140,8 @@ namespace
             }
             catch( const uno::Exception & ex )
             {
-                (void)(ex); // no warning in non-debug builds
-                OSL_FAIL( OUStringToOString("Property Exception caught. Message: " +
-                                            ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+                (void)ex; // no warning in non-debug builds
+                SAL_WARN( "chart2", "Property Exception caught. Message: " << ex.Message);
             }
         }
         return aResult;
@@ -168,9 +167,8 @@ namespace
             }
             catch( const uno::Exception & ex )
             {
-                (void)(ex); // no warning in non-debug builds
-                OSL_FAIL( OUStringToOString("Property Exception caught. Message: " +
-                                            ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+                (void)ex; // no warning in non-debug builds
+                SAL_WARN( "chart2", "Property Exception caught. Message: " << ex.Message);
             }
         }
     }
@@ -185,9 +183,8 @@ namespace
         }
         catch( const uno::Exception & ex )
         {
-            (void)(ex); // no warning in non-debug builds
-            OSL_FAIL( OUStringToOString("Property Exception caught. Message: " +
-                                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+            (void)ex; // no warning in non-debug builds
+            SAL_WARN( "chart2", "Property Exception caught. Message: " << ex.Message);
         }
         return Color( nResult );
     }
@@ -204,8 +201,7 @@ namespace
         catch( const uno::Exception & ex )
         {
             (void)(ex); // no warning in non-debug builds
-            OSL_FAIL( OUStringToOString( "Property Exception caught. Message: " +
-                                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+            SAL_WARN( "chart2", "Property Exception caught. Message: " << ex.Message);
         }
     }
 }

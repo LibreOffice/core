@@ -96,13 +96,13 @@ OString createFileNameFromType( const OString& destination,
     if (bWithPoint)
         fileNameBuf.append('.');
     else
-        fileNameBuf.append(destination.getStr(), destination.getLength());
+        fileNameBuf.append(destination);
 
     if (bWithSeparator)
         fileNameBuf.append("/");
 
-    fileNameBuf.append(type.getStr(), type.getLength());
-    fileNameBuf.append(postfix.getStr(), postfix.getLength());
+    fileNameBuf.append(type);
+    fileNameBuf.append(postfix);
 
     OString fileName(fileNameBuf.makeStringAndClear());
 
@@ -120,7 +120,7 @@ OString createFileNameFromType( const OString& destination,
     sal_Int32 nIndex = 0;
     do
     {
-        buffer.append(fileName.getToken(0, token, nIndex).getStr());
+        buffer.append(fileName.getToken(0, token, nIndex));
         if( nIndex == -1 )
             break;
 

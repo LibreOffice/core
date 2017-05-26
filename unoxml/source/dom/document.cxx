@@ -487,7 +487,7 @@ namespace DOM
         xmlChar const*const pData =
             reinterpret_cast<xmlChar const*>(oData.getStr());
         xmlNodePtr const pText =
-            xmlNewCDataBlock(m_aDocPtr, pData, strlen(oData.getStr()));
+            xmlNewCDataBlock(m_aDocPtr, pData, oData.getLength());
         Reference< XCDATASection > const xRet(
             static_cast< XNode* >(GetCNode(pText).get()),
             UNO_QUERY_THROW);

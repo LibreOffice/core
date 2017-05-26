@@ -203,9 +203,7 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
     catch (const ucb::IllegalIdentifierException & exc)
     {
         (void) exc; // unused
-        OSL_FAIL(
-            OUStringToOString(
-                exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_WARN( "ucb", exc.Message );
         return -1;
     }
 }

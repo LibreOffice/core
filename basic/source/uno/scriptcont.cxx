@@ -652,12 +652,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
             {
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
-                    #if OSL_DEBUG_LEVEL > 0
-                    OString aMessage = "invalid library element '" +
-                                        OUStringToOString( aElementName, osl_getThreadTextEncoding() ) +
-                                        "'.";
-                    OSL_FAIL( aMessage.getStr());
-                    #endif
+                    SAL_WARN( "basic", "invalid library element '" << aElementName << "'.");
                     continue;
                 }
 
@@ -734,12 +729,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
 
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
-                    #if OSL_DEBUG_LEVEL > 0
-                    OString aMessage = "invalid library element '" +
-                                       OUStringToOString( aElementName, osl_getThreadTextEncoding() ) +
-                                       "'.";
-                    OSL_FAIL( aMessage.getStr());
-                    #endif
+                    SAL_WARN( "basic", "invalid library element '" << aElementName << "'.");
                     continue;
                 }
 

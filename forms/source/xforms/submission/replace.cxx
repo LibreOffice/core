@@ -101,9 +101,7 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
             return CSubmission::SUCCESS;
         }
     } catch (const Exception& e) {
-            OString aMsg = "Exception during replace:\n"
-                         + OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
-        OSL_FAIL(aMsg.getStr());
+        SAL_WARN( "forms.xforms", "Exception during replace: " << e.Message);
     }
     return CSubmission::UNKNOWN_ERROR;
 }
