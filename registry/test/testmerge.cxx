@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <climits>
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
@@ -40,6 +40,31 @@ sal_Int32 lValue4   = 333111333;
 sal_Char* sValue    = (sal_Char*)"string Value";
 OUString wValue("unicode Value");
 
+
+void test_generateOverflowMerge()
+{
+    Registry *myRegistry = new Registry();
+    RegistryKey rootKey;
+
+    REG_ENSURE(!myRegistry->create(OUString("merge_overflow.rdb")), "testGenerateOverflowMerge error 1");
+    REG_ENSURE(!myRegistry->openRootKey(rootKey), "testGenerateOverflowMerge error 2");
+
+    for (sal_uInt32 i=0; i <= USHRT_MAX; i++)
+    {
+        RegistryKey aKey;
+        REG_ENSURE(!rootKey.createKey(OUString("MergeKey") + i, aKey), "testGenerateOverflowMerge error inserting valid key");
+        REG_ENSURE(!aKey.setValue(OUString(), RegValueType::LONG, &lValue1, sizeof(sal_Int32)), "testGenerateOverflowMerge error writing key value");
+        REG_ENSURE(!aKey.closeKey(), "testGenerateOverlowMerge error closing key value");
+    }
+
+    RegistryKey aOverflowKey;
+    REG_ENSURE(rootKey.createKey(OUString("MergeKeyOverflow"), aOverflowKey), "testGenerateOverflowMerge this createKey() should not have succeeded as capacity full");
+
+    delete myRegistry;
+
+    cout << "test_generateOverflowMerge() Ok!\n";
+    return;
+}
 
 void test_generateMerge1()
 {

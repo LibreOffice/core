@@ -129,6 +129,8 @@ enum class SAL_DLLPUBLIC_RTTI RegError
         the value of a key already exists and the merge process will replace it.
     */
     MERGE_CONFLICT,
+    /// only able to merge part of the key, probably because there were too many keys.
+    PARTIAL_MERGE,
 };
 
 /// specify the calling convention for the registry API
