@@ -425,8 +425,12 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
             OutputDevice* pOut = Application::GetDefaultDevice();
             vcl::Font aFont(pOut->GetFont());
             aFont.SetFamilyName(sFont);
-            fRatio = aFont.GetFontSize().Height();
-            fRatio /= pOut->GetTextWidth(rWatermark.GetText());
+            auto nTextWidth = pOut->GetTextWidth(rWatermark.GetText());
+            if (nTextWidth)
+            {
+                fRatio = aFont.GetFontSize().Height();
+                fRatio /= nTextWidth;
+            }
 
             // Calc the size.
             sal_Int32 nWidth = 0;
