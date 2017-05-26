@@ -138,7 +138,7 @@ void XSheetOutline::testShowLevel()
 
     aSheetOutline->showLevel(2, table::TableOrientation_COLUMNS);
 
-    std::cout << " verifiy showLevel col apres" << OUStringToOString(getVisibleAdress(aSheet, "OutlineSheet.A1:Z30"), RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << " verifiy showLevel col apres" << getVisibleAdress(aSheet, "OutlineSheet.A1:Z30") << std::endl;
 
     // verify that level 2 and level 1 are shown --> column 0..3 & column 22..26
     // level 3 & 4 are hidden --> column 4..19

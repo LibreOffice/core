@@ -179,11 +179,8 @@ namespace svt
             }
             else
             {
-                OSL_FAIL(
-                    OString(
-                        "AssigmentTransientData::AssigmentTransientData: unknown programmatic name ("
-                        + OString(pFields->ProgrammaticName.getStr(), pFields->ProgrammaticName.getLength(), RTL_TEXTENCODING_ASCII_US)
-                        + ")!").getStr());
+                SAL_WARN( "svtools", "AssigmentTransientData::AssigmentTransientData: unknown programmatic name: "
+                          << pFields->ProgrammaticName );
             }
         }
     }

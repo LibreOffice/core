@@ -186,13 +186,9 @@ namespace logging
         #if OSL_DEBUG_LEVEL > 0
             if ( m_eFileValidity == eInvalid )
             {
-                OStringBuffer sMessage;
-                sMessage.append( "FileHandler::impl_prepareFile_nothrow: could not open the designated log file:" );
-                sMessage.append( "\nURL: " );
-                sMessage.append( OString( m_sFileURL.getStr(), m_sFileURL.getLength(), osl_getThreadTextEncoding() ) );
-                sMessage.append( "\nerror code: " );
-                sMessage.append( (sal_Int32)res );
-                OSL_FAIL( sMessage.makeStringAndClear().getStr() );
+                SAL_WARN( "extensions.logging", "FileHandler::impl_prepareFile_nothrow: could not open the designated log file:"
+                            "\nURL: " << m_sFileURL
+                            << "\nerror code: " << (sal_Int32)res );
             }
         #endif
             if ( m_eFileValidity == eValid )

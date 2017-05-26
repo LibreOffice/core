@@ -85,8 +85,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             OString sysFileName( convertToAbsoluteSystemPath(*i) );
 
             if ( !options.quiet() )
-                fprintf(stdout, "Compiling: %s\n",
-                    (*i).getStr());
+                fprintf(stdout, "Compiling: %s\n", (*i).getStr());
             nErrors = compileFile(&sysFileName);
 
             if ( idlc()->getWarningCount() && !options.quiet() )

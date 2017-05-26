@@ -216,9 +216,8 @@ void ChartController::TheModel::tryTermination()
     }
     catch(const uno::Exception& ex)
     {
-        (void)(ex); // no warning in non-debug builds
-        OSL_FAIL( OString( OString("Termination of model failed: ")
-            + OUStringToOString( ex.Message, RTL_TEXTENCODING_ASCII_US ) ).getStr() );
+        (void)ex; // no warning in non-debug builds
+        SAL_WARN( "chart2", "Termination of model failed: " << ex.Message );
     }
 }
 

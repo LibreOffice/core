@@ -740,8 +740,7 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
             xFilePicker->appendFilter( iPos->first, iPos->second );
         }
         catch (const lang::IllegalArgumentException & exc) {
-            OSL_FAIL( OUStringToOString(
-                            exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_WARN( "desktop", exc.Message );
             (void) exc;
         }
     }
@@ -1389,7 +1388,7 @@ bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage
     catch ( const uno::RuntimeException & ) { throw; }
     catch (const uno::Exception & exc) {
         (void) exc;
-        OSL_FAIL( OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_WARN( "desktop", exc.Message );
         bRegistered = false;
     }
 

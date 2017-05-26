@@ -113,12 +113,8 @@ namespace
         }
         catch(Exception&)
         {
-    #if OSL_DEBUG_LEVEL > 0
-            OString sMessage("ODbAdminDialog::implTranslateProperty: could not set the property ");
-            sMessage += OString(_rName.getStr(), _rName.getLength(), RTL_TEXTENCODING_ASCII_US);
-            sMessage += OString("!");
-            OSL_FAIL(sMessage.getStr());
-    #endif
+            SAL_WARN("dbaccess", "ODbAdminDialog::implTranslateProperty: could not set the property "
+                    << _rName);
         }
 
     }
@@ -577,12 +573,8 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
             }
             catch(Exception&)
             {
-#if OSL_DEBUG_LEVEL > 0
-                OString aMessage("ODbDataSourceAdministrationHelper::translateProperties: could not extract the property ");
-                aMessage += OString(aDirect->second.getStr(), aDirect->second.getLength(), RTL_TEXTENCODING_ASCII_US);
-                aMessage += OString("!");
-                OSL_FAIL(aMessage.getStr());
-#endif
+                SAL_WARN("dbaccess", "ODbDataSourceAdministrationHelper::translateProperties: could not extract the property "
+                        << aDirect->second);
             }
             // transfer it into an item
             implTranslateProperty(_rDest, aDirect->first, aValue);
@@ -917,11 +909,8 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 _rSet.Put(SfxStringItem(_nId, sValue));
             }
             else {
-                OSL_FAIL(
-                    OString(
-                        "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value ("
-                        + translatePropertyId(_nId)
-                        + " should be no string)!").getStr());
+                SAL_WARN( "dbaccess", "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value ("
+                        << translatePropertyId(_nId) << " should be no string)!");
             }
             break;
 
@@ -946,11 +935,9 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 _rSet.Put( aItem );
             }
             else {
-                OSL_FAIL(
-                    OString(
-                        "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value ("
-                        + translatePropertyId(_nId)
-                        + " should be no boolean)!").getStr());
+                SAL_WARN( "dbaccess", "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value ("
+                        << translatePropertyId(_nId)
+                        << " should be no boolean)!");
             }
             break;
 
@@ -962,11 +949,9 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 _rSet.Put( SfxInt32Item( _nId, nValue ) );
             }
             else {
-                OSL_FAIL(
-                    OString(
-                        "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value ("
-                        + translatePropertyId(_nId)
-                        + " should be no int)!").getStr());
+                SAL_WARN( "dbaccess", "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value ("
+                        << translatePropertyId(_nId)
+                        << " should be no int)!");
             }
             break;
 
@@ -994,11 +979,9 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 }
             }
             else {
-                OSL_FAIL(
-                    OString(
-                        "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value ("
-                        + translatePropertyId(_nId)
-                        + " should be no string sequence)!").getStr());
+                SAL_WARN( "dbaccess", "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value ("
+                        << translatePropertyId(_nId)
+                        << " should be no string sequence)!");
             }
             break;
 

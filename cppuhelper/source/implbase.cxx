@@ -77,10 +77,8 @@ void WeakComponentImplHelperBase::release()
                 dispose();
             }
             catch (RuntimeException const& exc) { // don't break throw ()
-                OSL_FAIL(
-                    OUStringToOString(
-                        exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-                static_cast<void>(exc);
+                (void)exc;
+                SAL_WARN( "cppuhelper", exc.Message );
             }
             OSL_ASSERT( rBHelper.bDisposed );
         }
@@ -204,10 +202,8 @@ void WeakAggComponentImplHelperBase::release()
                 dispose();
             }
             catch (RuntimeException const& exc) { // don't break throw ()
-                OSL_FAIL(
-                    OUStringToOString(
-                        exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-                static_cast<void>(exc);
+                (void)exc;
+                SAL_WARN( "cppuhelper", exc.Message );
             }
             OSL_ASSERT( rBHelper.bDisposed );
         }

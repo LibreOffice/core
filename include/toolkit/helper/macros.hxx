@@ -126,9 +126,7 @@ void ClassName::disposing( const css::lang::EventObject& ) \
 
 #if OSL_DEBUG_LEVEL > 0
     #define DISPLAY_EXCEPTION( ClassName, MethodName, e )    \
-        OString sMessage( #ClassName "::" #MethodName ": caught an exception!\n" ); \
-        sMessage += OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US ); \
-        OSL_FAIL( sMessage.getStr() );
+        SAL_WARN( "toolkit", #ClassName "::" #MethodName ": caught an exception! " << e.Message);
 #else
     #define DISPLAY_EXCEPTION( ClassName, MethodName, e ) (void)e;
 #endif

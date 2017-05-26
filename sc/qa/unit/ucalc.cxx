@@ -864,7 +864,7 @@ bool checkHorizontalIterator(ScDocument* pDoc, const char* pData[][Size], size_t
         if (OUString::createFromAscii(pChecks[i].pVal) != pCell->getString(pDoc))
         {
             cerr << "String mismatch " << pChecks[i].pVal << " vs. " <<
-                OUStringToOString(pCell->getString(pDoc), RTL_TEXTENCODING_UTF8).getStr() << endl;
+                pCell->getString(pDoc) << endl;
             return false;
         }
     }

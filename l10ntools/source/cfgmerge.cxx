@@ -456,7 +456,7 @@ void CfgMerge::WorkOnText(OString &, const OString& rLangIndex)
 
 void CfgMerge::Output(const OString& rOutput)
 {
-    pOutputStream << rOutput.getStr();
+    pOutputStream << rOutput;
 }
 
 void CfgMerge::WorkOnResourceEnd()

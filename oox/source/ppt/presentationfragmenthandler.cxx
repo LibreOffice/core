@@ -363,12 +363,8 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( OString("oox::ppt::PresentationFragmentHandler::EndDocument(), "
-                    "exception caught: " +
-            OUStringToOString(
-                comphelper::anyToString( cppu::getCaughtException() ),
-                RTL_TEXTENCODING_UTF8 )).getStr() );
-
+        SAL_WARN( "oox", "oox::ppt::PresentationFragmentHandler::EndDocument(), "
+                  "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ) );
     }
 }
 
@@ -421,11 +417,8 @@ void PresentationFragmentHandler::finalizeImport()
         }
         catch( uno::Exception& )
         {
-            OSL_FAIL( OString("oox::ppt::PresentationFragmentHandler::finalizeImport(), "
-                        "exception caught: " +
-                OUStringToOString(
-                    comphelper::anyToString( cppu::getCaughtException() ),
-                    RTL_TEXTENCODING_UTF8 )).getStr() );
+            SAL_WARN( "oox", "oox::ppt::PresentationFragmentHandler::finalizeImport(), "
+                        "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ) );
         }
         // todo error handling;
         if ( rxStatusIndicator.is() )

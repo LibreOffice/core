@@ -193,6 +193,7 @@ certain functionality.
 @li @c extensions.config
 @li @c extensions.dbpilots
 @li @c extensions.evoab
+@li @c extensions.logging
 @li @c extensions.olebridge - OLE automation bridge
 @li @c extensions.plugin
 @li @c extensions.propctrlr
@@ -234,6 +235,7 @@ certain functionality.
 @li @c forms.misc
 @li @c forms.richtext
 @li @c forms.runtime
+@li @c forms.xforms
 
 @section formula
 
@@ -562,6 +564,7 @@ certain functionality.
 @li @c drawinglayer
 @li @c dtrans
 @li @c helpcompiler
+@li @c idl
 @li @c javaunohelper
 @li @c jvmaccess
 @li @c lingucomponent
@@ -581,6 +584,7 @@ certain functionality.
 @li @c stoc
 @li @c store
 @li @c svg
+@li @c svgio
 @li @c test
 @li @c ucbhelper
 @li @c unodevtools

@@ -110,9 +110,8 @@ namespace DOM
             xTarget->addEventListener("DOMSubtreeModified",
                     m_xEventListener, capture);
         } catch (const Exception &e){
-            OString aMsg("Exception caught while registering NodeList as listener:\n");
-            aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-            OSL_FAIL(aMsg.getStr());
+            SAL_WARN( "unoxml", "Exception caught while registering NodeList as listener: "
+                << e.Message);
         }
     }
 

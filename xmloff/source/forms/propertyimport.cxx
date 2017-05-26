@@ -338,14 +338,8 @@ bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const OUStr
     }
     if (!token::IsXMLToken(_rLocalName, token::XML_TYPE))  // xlink:type is valid but ignored for <form:form>
     {
-#if OSL_DEBUG_LEVEL > 0
-        OString sMessage( "OPropertyImport::handleAttribute: Can't handle the following:\n" );
-        sMessage += OString( "  Attribute name: " );
-        sMessage += OString( _rLocalName.getStr(), _rLocalName.getLength(), osl_getThreadTextEncoding() );
-        sMessage += OString( "\n  value: " );
-        sMessage += OString( _rValue.getStr(), _rValue.getLength(), osl_getThreadTextEncoding() );
-        OSL_FAIL( sMessage.getStr() );
-#endif
+        SAL_WARN( "xmloff", "OPropertyImport::handleAttribute: Can't handle the following:\n"
+                    "  Attribute name: " << _rLocalName << "\n  value: " << _rValue );
         return false;
     }
     return true;

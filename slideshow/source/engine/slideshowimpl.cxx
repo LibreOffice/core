@@ -1037,8 +1037,7 @@ public:
         }
         else
         {
-            OSL_FAIL( OUStringToOString(
-                            rProperty.Name, RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_WARN( "slideshow", rProperty.Name );
         }
     }
 private:
@@ -2088,9 +2087,7 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_FAIL( OUStringToOString(
-                                    comphelper::anyToString( cppu::getCaughtException() ),
-                                    RTL_TEXTENCODING_UTF8 ).getStr() );
+                    SAL_WARN( "slideshow", comphelper::anyToString( cppu::getCaughtException() ) );
                 }
             }
 

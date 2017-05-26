@@ -1125,10 +1125,8 @@ namespace pcr
             if ( _rDescriptor.DisplayName.isEmpty() )
             {
             #ifdef DBG_UTIL
-                OString sMessage( "OPropertyBrowserController::describePropertyLine: handler did not provide a display name for '" );
-                sMessage += OString( _rProperty.Name.getStr(), _rProperty.Name.getLength(), RTL_TEXTENCODING_ASCII_US );
-                sMessage += OString( "'!" );
-                DBG_ASSERT( !_rDescriptor.DisplayName.isEmpty(), sMessage.getStr() );
+                SAL_WARN( "extensions.propctrlr", "OPropertyBrowserController::describePropertyLine: handler did not provide a display name for '"
+                        <<_rProperty.Name << "'!" );
             #endif
                 _rDescriptor.DisplayName = _rProperty.Name;
             }
@@ -1203,15 +1201,9 @@ namespace pcr
 
                 bool bIsActuatingProperty = impl_isActuatingProperty_nothrow( property->second.Name );
 
-            #if OSL_DEBUG_LEVEL > 0
-                if ( aDescriptor.Category.isEmpty() )
-                {
-                    OString sMessage( "OPropertyBrowserController::UpdateUI: empty category provided for property '" );
-                    sMessage += OString( property->second.Name.getStr(), property->second.Name.getLength(), osl_getThreadTextEncoding() );
-                    sMessage += "'!";
-                    OSL_FAIL( sMessage.getStr() );
-                }
-            #endif
+                SAL_WARN_IF( aDescriptor.Category.isEmpty(), "extensions.propctrlr",
+                        "OPropertyBrowserController::UpdateUI: empty category provided for property '"
+                        << property->second.Name << "'!");
                 // finally insert this property control
                 sal_uInt16 nTargetPageId = impl_getPageIdForCategory_nothrow( aDescriptor.Category );
                 if ( nTargetPageId == (sal_uInt16)-1 )

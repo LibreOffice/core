@@ -206,7 +206,7 @@ void X11OpenGLDeviceInfo::GetData()
         }
     }
 
-    if (!strcmp(textureFromPixmap.getStr(), "TRUE"))
+    if (textureFromPixmap != "TRUE")
         mbHasTextureFromPixmap = true;
 
     // only useful for Linux kernel version check for FGLRX driver.

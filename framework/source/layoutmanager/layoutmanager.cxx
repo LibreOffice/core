@@ -1614,7 +1614,7 @@ sal_Bool SAL_CALL LayoutManager::requestElement( const OUString& rResourceURL )
     SolarMutexClearableGuard aWriteLock;
 
     OString aResName = OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
-    SAL_INFO( "fwk", "framework (cd100003) Element " << aResName.getStr() << " requested." );
+    SAL_INFO( "fwk", "framework (cd100003) Element " << aResName << " requested." );
 
     if (( aElementType.equalsIgnoreAsciiCase("statusbar") &&
           aElementName.equalsIgnoreAsciiCase("statusbar") ) ||
@@ -1742,7 +1742,7 @@ sal_Bool SAL_CALL LayoutManager::showElement( const OUString& aName )
     parseResourceURL( aName, aElementType, aElementName );
 
     OString aResName = OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
-    SAL_INFO( "fwk", "framework (cd100003) Element " << aResName.getStr() );
+    SAL_INFO( "fwk", "framework (cd100003) Element " << aResName );
 
     if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
          aElementName.equalsIgnoreAsciiCase("menubar") )
@@ -1817,7 +1817,7 @@ sal_Bool SAL_CALL LayoutManager::hideElement( const OUString& aName )
 
     parseResourceURL( aName, aElementType, aElementName );
     OString aResName = OUStringToOString( aElementName, RTL_TEXTENCODING_ASCII_US );
-    SAL_INFO( "fwk", "framework (cd100003) Element " << aResName.getStr() );
+    SAL_INFO( "fwk", "framework (cd100003) Element " << aResName );
 
     if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
          aElementName.equalsIgnoreAsciiCase("menubar") )

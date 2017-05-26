@@ -766,7 +766,7 @@ bool Dialog::ImplStartExecuteModal()
     case Application::DialogCancelMode::Silent:
         SAL_INFO(
             "vcl",
-            "Dialog \"" << ImplGetDialogText(this).getStr()
+            "Dialog \"" << ImplGetDialogText(this)
                 << "\"cancelled in silent mode");
         return false;
     default: // default cannot happen

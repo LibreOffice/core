@@ -132,11 +132,8 @@ namespace migration
                 ::osl::FileBase::RC aResult = ::osl::File::copy( *aI, sTargetName );
                 if ( aResult != ::osl::FileBase::E_None )
                 {
-                    OString aMsg = "BasicMigration::copyFiles: cannot copy "
-                                 + OUStringToOString( *aI, RTL_TEXTENCODING_UTF8 )
-                                 + " to "
-                                 + OUStringToOString( sTargetName, RTL_TEXTENCODING_UTF8 );
-                    OSL_FAIL( aMsg.getStr() );
+                    SAL_WARN( "desktop", "BasicMigration::copyFiles: cannot copy "
+                                << *aI << " to " << sTargetName );
                 }
                 ++aI;
             }

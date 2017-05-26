@@ -144,13 +144,8 @@ namespace pcr
         }
         catch( const Exception& )
         {
-#if OSL_DEBUG_LEVEL > 0
-            OString sMessage( "EFormsPropertyHandler::getPropertyValue: caught an exception!" );
-            sMessage += "\n(have been asked for the \"";
-            sMessage += OString( _rPropertyName.getStr(), _rPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
-            sMessage += "\" property.)";
-            OSL_FAIL( sMessage.getStr() );
-#endif
+            SAL_WARN( "extensions.propctrlr", "EFormsPropertyHandler::getPropertyValue: caught an exception!"
+                "\n(have been asked for the \"" <<_rPropertyName << "\" property.)");
         }
         return aReturn;
     }

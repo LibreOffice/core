@@ -446,10 +446,8 @@ namespace svt
             }
             else
             {
-                OSL_FAIL(
-                    OString(
-                        "OCommonPicker::initialize: unknown argument type at position "
-                        + OString::number(pArguments - _rArguments.getConstArray())).getStr());
+                SAL_WARN( "fpicker", "OCommonPicker::initialize: unknown argument type at position "
+                    << (pArguments - _rArguments.getConstArray()));
                 continue;
             }
 
