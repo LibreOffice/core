@@ -75,7 +75,7 @@ public:
 
     RegError    loadKey(RegKeyHandle hKey,
                         const OUString& regFileName,
-                        bool bWarings,
+                        bool bWarnings,
                         bool bReport);
 
     RegError    dumpRegistry(RegKeyHandle hKey) const;
