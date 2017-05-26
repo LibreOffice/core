@@ -234,7 +234,8 @@ bool OpenGLContext::init( vcl::Window* pParent )
     mpWindow = pParent ? pParent : m_xWindow.get();
     if(m_xWindow)
         m_xWindow->setPosSizePixel(0,0,0,0);
-    m_pChildWindow = nullptr;
+    //tdf#108069 we may be initted twice, so dispose earlier effort
+    m_pChildWindow.disposeAndClear();
     initWindow();
     return ImplInit();
 }
