@@ -637,6 +637,8 @@ SdrObject* SdrObject::GetUpGroup() const
 
 void SdrObject::SetName(const OUString& rStr)
 {
+    assert(rStr.indexOf(0) == -1 && "may not contain NULs");
+
     if (!rStr.isEmpty() && !pPlusData)
     {
         ImpForcePlusData();
