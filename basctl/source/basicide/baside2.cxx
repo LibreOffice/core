@@ -669,6 +669,7 @@ BasicDebugFlags ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
 void ModulWindow::BasicAddWatch()
 {
     AssertValidEditEngine();
+    bool bAdd = true;
     if ( !GetEditView()->HasSelection() )
     {
         TextPaM aWordStart;
@@ -679,11 +680,15 @@ void ModulWindow::BasicAddWatch()
             aSel.GetEnd().GetIndex() += aWord.getLength();
             GetEditView()->SetSelection( aSel );
         }
+        else
+            bAdd = false;
     }
-
-    TextSelection aSel = GetEditView()->GetSelection();
-    if ( aSel.GetStart().GetPara() == aSel.GetEnd().GetPara() ) // single line selection
-        m_rLayout.BasicAddWatch(GetEditView()->GetSelected());
+    if ( bAdd )
+    {
+        TextSelection aSel = GetEditView()->GetSelection();
+        if ( aSel.GetStart().GetPara() == aSel.GetEnd().GetPara() ) // single line selection
+            m_rLayout.BasicAddWatch(GetEditView()->GetSelected());
+    }
 }
 
 
