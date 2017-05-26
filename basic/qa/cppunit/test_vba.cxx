@@ -111,6 +111,10 @@ void VBATest::testMiscVBAFunctions()
         "oct.vb",
         "nper.vb",
         "npv.vb",
+        "pmt.vb",
+        "ppmt.vb",
+        "pv.vb",
+        "qbcolor.vb",
 #ifndef WIN32 // missing 64bit Currency marshalling.
         "win32compat.vb", // windows compatibility hooks.
 #endif
