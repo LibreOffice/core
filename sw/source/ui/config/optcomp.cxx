@@ -114,7 +114,8 @@ sal_uLong convertBools2Ulong_Impl
     bool _bConsiderWrappingStyle,
     bool _bExpandWordSpace,
     bool _bProtectForm,
-    bool _bMsWordCompTrailingBlanks
+    bool _bMsWordCompTrailingBlanks,
+    bool bSubtractFlysAnchoredAtFlys
 )
 {
     sal_uLong nRet = 0;
@@ -157,6 +158,9 @@ sal_uLong convertBools2Ulong_Impl
         nRet |= nSetBit;
     nSetBit = nSetBit << 1;
     if ( _bMsWordCompTrailingBlanks )
+        nRet |= nSetBit;
+    nSetBit = nSetBit << 1;
+    if (bSubtractFlysAnchoredAtFlys)
         nRet |= nSetBit;
 
     return nRet;
@@ -241,7 +245,8 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::ConsiderWrappingStyle ),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::ExpandWordSpace ),
             aEntry.getValue<bool>( SvtCompatibilityEntry::Index::ProtectForm ),
-            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::MsWordTrailingBlanks ) );
+            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::MsWordTrailingBlanks ),
+            aEntry.getValue<bool>( SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys ) );
         m_pFormattingLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)nOptions) );
     }
 
@@ -313,7 +318,8 @@ sal_uLong SwCompatibilityOptPage::GetDocumentOptions() const
             rIDocumentSettingAccess.get( DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION ),
             !rIDocumentSettingAccess.get( DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK ),
             rIDocumentSettingAccess.get( DocumentSettingId::PROTECT_FORM ),
-            rIDocumentSettingAccess.get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS ) );
+            rIDocumentSettingAccess.get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS ),
+            rIDocumentSettingAccess.get( DocumentSettingId::SUBTRACT_FLYS ) );
     }
     return nRet;
 }
@@ -399,6 +405,10 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 
                     case SvtCompatibilityEntry::Index::MsWordTrailingBlanks:
                         m_pWrtShell->SetMsWordCompTrailingBlanks( bChecked );
+                        break;
+
+                    case SvtCompatibilityEntry::Index::SubtractFlysAnchoredAtFlys:
+                        m_pWrtShell->SetSubtractFlysAnchoredAtFlys(bChecked);
                         break;
 
                     default:

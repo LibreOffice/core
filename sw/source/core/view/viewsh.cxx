@@ -917,6 +917,12 @@ void SwViewShell::SetMsWordCompTrailingBlanks( bool _bMsWordCompTrailingBlanks )
     }
 }
 
+void SwViewShell::SetSubtractFlysAnchoredAtFlys(bool bSubtractFlysAnchoredAtFlys)
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    rIDSA.set(DocumentSettingId::SUBTRACT_FLYS, bSubtractFlysAnchoredAtFlys);
+}
+
 void SwViewShell::Reformat()
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );

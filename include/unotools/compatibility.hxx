@@ -59,6 +59,7 @@ class UNOTOOLS_DLLPUBLIC SvtCompatibilityEntry
             ExpandWordSpace,
             ProtectForm,
             MsWordTrailingBlanks,
+            SubtractFlysAnchoredAtFlys,
 
             /* Should be at the end. Do not remove it. */
             INVALID

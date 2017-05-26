@@ -116,6 +116,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="SubtractFlysAnchoredAtFlys" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Use LibreOffice 4.3 anchoring paint order</desc>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
   </templates>
   <component>
