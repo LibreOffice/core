@@ -286,6 +286,7 @@ bool includeProject(const OString& rProject) {
         "uui",
         "vcl",
         "wizards",
+        "writerperfect",
         "xmlsecurity" };
     for (size_t i = 0; i != SAL_N_ELEMENTS(projects); ++i) {
         if (rProject == projects[i]) {
