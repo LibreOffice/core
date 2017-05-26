@@ -3635,6 +3635,28 @@ void SAL_CALL SwXTextDocument::paintTile( const ::css::uno::Any& Parent, ::sal_I
     #endif
 }
 
+vcl::DialogID SwXTextDocument::findDialog()
+{
+    return vcl::DialogID(0);
+}
+
+void SwXTextDocument::paintDialog(vcl::DialogID /*rDialogID*/, VirtualDevice& /*rDevice*/, int /*nWidth*/, int /*nHeight*/)
+{
+    //SwViewShell* pViewShell = pDocShell->GetWrtShell();
+
+    //SwSpellDialogChildWindow::CreateImpl(nullptr, SwSpellDialogChildWindow::GetChildWindowId(),
+    //                                     pViewShell->GetBindings(), );
+}
+
+void SwXTextDocument::postDialogMouseEvent(vcl::DialogID /*rDialogID*/, int /*nType*/, int /*nCharCode*/, int /*nKeyCode*/)
+{
+}
+
+void SwXTextDocument::postDialogKeyEvent(vcl::DialogID /*rDialogID*/, int /*nType*/, int /*nX*/, int /*nY*/,
+                                         int /*nCount*/, int /*nButtons*/, int /*nModifier*/)
+{
+}
+
 void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()
 {
     return SwXTextDocumentBaseClass::operator new(t);

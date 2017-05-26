@@ -84,6 +84,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/ITiledRenderable.hxx>
+#include <vcl/IDialogRenderable.hxx>
 #include <unicode/uchar.h>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -590,6 +591,8 @@ static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                           int* pFontHeight);
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart);
 
+static void doc_paintDialog(LibreOfficeKitDocument* pThis, unsigned char* pBuffer, int nWidth, int nHeight);
+
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
 {
@@ -635,6 +638,8 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
 
         m_pDocumentClass->renderFont = doc_renderFont;
         m_pDocumentClass->getPartHash = doc_getPartHash;
+
+        m_pDocumentClass->paintDialog = doc_paintDialog;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -1151,6 +1156,12 @@ ITiledRenderable* getTiledRenderable(LibreOfficeKitDocument* pThis)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
     return dynamic_cast<ITiledRenderable*>(pDocument->mxComponent.get());
+}
+
+IDialogRenderable* getDialogRenderable(LibreOfficeKitDocument* pThis)
+{
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    return dynamic_cast<IDialogRenderable*>(pDocument->mxComponent.get());
 }
 
 } // anonymous namespace
@@ -2999,6 +3010,22 @@ unsigned char* doc_renderFont(SAL_UNUSED_PARAMETER LibreOfficeKitDocument* /*pTh
         }
     }
     return nullptr;
+}
+
+static void doc_paintDialog(LibreOfficeKitDocument* pThis, unsigned char* pBuffer, int nWidth, int nHeight)
+{
+    SolarMutexGuard aGuard;
+
+    IDialogRenderable* pDialogRenderable = getDialogRenderable(pThis);
+
+    ScopedVclPtrInstance<VirtualDevice> pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT);
+    pDevice->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
+
+    pDevice->SetOutputSizePixelScaleOffsetAndBuffer(Size(nWidth, nHeight), Fraction(1.0), Point(), pBuffer);
+
+    vcl::DialogID aDialogID(pDialogRenderable->findDialog());
+
+    pDialogRenderable->paintDialog(aDialogID, *pDevice.get(), nWidth, nHeight);
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)
