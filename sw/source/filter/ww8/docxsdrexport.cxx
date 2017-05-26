@@ -361,13 +361,13 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
         // The type of dist* attributes is unsigned, so make sure no negative value is written.
         sal_Int64 nDistT = std::max(static_cast<sal_Int64>(0), TwipsToEMU(aULSpaceItem.GetUpper()) - nTopExt);
-        attrList->add(XML_distT, OString::number(nDistT).getStr());
+        attrList->add(XML_distT, OString::number(nDistT));
         sal_Int64 nDistB = std::max(static_cast<sal_Int64>(0), TwipsToEMU(aULSpaceItem.GetLower()) - nBottomExt);
-        attrList->add(XML_distB, OString::number(nDistB).getStr());
+        attrList->add(XML_distB, OString::number(nDistB));
         sal_Int64 nDistL = std::max(static_cast<sal_Int64>(0), TwipsToEMU(aLRSpaceItem.GetLeft()) - nLeftExt);
-        attrList->add(XML_distL, OString::number(nDistL).getStr());
+        attrList->add(XML_distL, OString::number(nDistL));
         sal_Int64 nDistR = std::max(static_cast<sal_Int64>(0), TwipsToEMU(aLRSpaceItem.GetRight()) - nRightExt);
-        attrList->add(XML_distR, OString::number(nDistR).getStr());
+        attrList->add(XML_distR, OString::number(nDistR));
         attrList->add(XML_simplePos, "0");
         attrList->add(XML_locked, "0");
         attrList->add(XML_layoutInCell, "1");
@@ -558,10 +558,10 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     else
     {
         sax_fastparser::FastAttributeList* aAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
-        aAttrList->add(XML_distT, OString::number(TwipsToEMU(aULSpaceItem.GetUpper())).getStr());
-        aAttrList->add(XML_distB, OString::number(TwipsToEMU(aULSpaceItem.GetLower())).getStr());
-        aAttrList->add(XML_distL, OString::number(TwipsToEMU(aLRSpaceItem.GetLeft())).getStr());
-        aAttrList->add(XML_distR, OString::number(TwipsToEMU(aLRSpaceItem.GetRight())).getStr());
+        aAttrList->add(XML_distT, OString::number(TwipsToEMU(aULSpaceItem.GetUpper())));
+        aAttrList->add(XML_distB, OString::number(TwipsToEMU(aULSpaceItem.GetLower())));
+        aAttrList->add(XML_distL, OString::number(TwipsToEMU(aLRSpaceItem.GetLeft())));
+        aAttrList->add(XML_distR, OString::number(TwipsToEMU(aLRSpaceItem.GetRight())));
         const SdrObject* pObj = pFrameFormat->FindRealSdrObject();
         if (pObj != nullptr)
         {
@@ -819,12 +819,12 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
     startDMLAnchorInline(pFrameFormat, aSize);
 
     sax_fastparser::FastAttributeList* pDocPrAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
-    pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
-    pDocPrAttrList->add(XML_name, OUStringToOString(pSdrObject->GetName(), RTL_TEXTENCODING_UTF8).getStr());
+    pDocPrAttrList->add(XML_id, OString::number(nAnchorId));
+    pDocPrAttrList->add(XML_name, pSdrObject->GetName());
     if (!pSdrObject->GetTitle().isEmpty())
-        pDocPrAttrList->add(XML_title, OUStringToOString(pSdrObject->GetTitle(), RTL_TEXTENCODING_UTF8));
+        pDocPrAttrList->add(XML_title, pSdrObject->GetTitle());
     if (!pSdrObject->GetDescription().isEmpty())
-        pDocPrAttrList->add(XML_descr, OUStringToOString(pSdrObject->GetDescription(), RTL_TEXTENCODING_UTF8));
+        pDocPrAttrList->add(XML_descr, pSdrObject->GetDescription());
     sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
     pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
 
@@ -1153,9 +1153,9 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
 
     // generate an unique id
     sax_fastparser::FastAttributeList* pDocPrAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
-    pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
-    OUString sName = "Diagram" + OUString::number(nAnchorId);
-    pDocPrAttrList->add(XML_name, OUStringToOString(sName, RTL_TEXTENCODING_UTF8).getStr());
+    pDocPrAttrList->add(XML_id, OString::number(nAnchorId));
+    OString sName = "Diagram" + OString::number(nAnchorId);
+    pDocPrAttrList->add(XML_name, sName);
     sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
     pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
 
@@ -1398,8 +1398,8 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
         startDMLAnchorInline(&rFrameFormat, aSize);
 
         sax_fastparser::FastAttributeList* pDocPrAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
-        pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
-        pDocPrAttrList->add(XML_name, OUStringToOString(rFrameFormat.GetName(), RTL_TEXTENCODING_UTF8).getStr());
+        pDocPrAttrList->add(XML_id, OString::number(nAnchorId));
+        pDocPrAttrList->add(XML_name, rFrameFormat.GetName());
         sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
         pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
 

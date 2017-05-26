@@ -88,18 +88,18 @@ void XclExpSetup::SaveXml( XclExpXmlStream& rStrm )
     if( rStrm.getVersion() != oox::core::ISOIEC_29500_2008 ||
         mrData.mnStrictPaperSize != EXC_PAPERSIZE_USER )
     {
-        pAttrList->add( XML_paperSize,           OString::number(  mrData.mnPaperSize ).getStr() );
+        pAttrList->add( XML_paperSize,           OString::number(  mrData.mnPaperSize ) );
     }
     else
     {
-        pAttrList->add( XML_paperWidth,          OString::number(  mrData.mnPaperWidth ).concat(OString("mm")).getStr() );
-        pAttrList->add( XML_paperHeight,         OString::number(  mrData.mnPaperHeight ).concat(OString("mm")).getStr() );
+        pAttrList->add( XML_paperWidth,          OString::number(  mrData.mnPaperWidth ).concat(OString("mm")) );
+        pAttrList->add( XML_paperHeight,         OString::number(  mrData.mnPaperHeight ).concat(OString("mm")) );
         // pAttrList->add( XML_paperUnits,          "mm" );
     }
-    pAttrList->add( XML_scale,              OString::number(  mrData.mnScaling ).getStr() );
-    pAttrList->add( XML_firstPageNumber,    OString::number(  mrData.mnStartPage ).getStr() );
-    pAttrList->add( XML_fitToWidth,         OString::number(  mrData.mnFitToWidth ).getStr() );
-    pAttrList->add( XML_fitToHeight,        OString::number(  mrData.mnFitToHeight ).getStr() );
+    pAttrList->add( XML_scale,              OString::number(  mrData.mnScaling ) );
+    pAttrList->add( XML_firstPageNumber,    OString::number(  mrData.mnStartPage ) );
+    pAttrList->add( XML_fitToWidth,         OString::number(  mrData.mnFitToWidth ) );
+    pAttrList->add( XML_fitToHeight,        OString::number(  mrData.mnFitToHeight ) );
     pAttrList->add( XML_pageOrder,          mrData.mbPrintInRows ? "overThenDown" : "downThenOver" );
     pAttrList->add( XML_orientation,        mrData.mbPortrait ? "portrait" : "landscape" );   // OOXTODO: "default"?
     // tdf#48767 if XML_usePrinterDefaults field is exist, then XML_orientation is always "portrait" in MS Excel
@@ -111,9 +111,9 @@ void XclExpSetup::SaveXml( XclExpXmlStream& rStrm )
     pAttrList->add( XML_cellComments,       mrData.mbPrintNotes ? "atEnd" : "none" );         // OOXTODO: "asDisplayed"?
     pAttrList->add( XML_useFirstPageNumber, XclXmlUtils::ToPsz( mrData.mbManualStart ) );
     // OOXTODO: XML_errors, // == displayed|blank|dash|NA
-    pAttrList->add( XML_horizontalDpi,      OString::number(  mrData.mnHorPrintRes ).getStr() );
-    pAttrList->add( XML_verticalDpi,        OString::number(  mrData.mnVerPrintRes ).getStr() );
-    pAttrList->add( XML_copies,             OString::number(  mrData.mnCopies ).getStr() );
+    pAttrList->add( XML_horizontalDpi,      OString::number(  mrData.mnHorPrintRes ) );
+    pAttrList->add( XML_verticalDpi,        OString::number(  mrData.mnVerPrintRes ) );
+    pAttrList->add( XML_copies,             OString::number(  mrData.mnCopies ) );
     // OOXTODO: devMode settings part RelationshipId: FSNS( XML_r, XML_id ),
 
     css::uno::Reference< css::xml::sax::XFastAttributeList > aAttrs(pAttrList);
