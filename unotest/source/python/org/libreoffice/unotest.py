@@ -43,6 +43,18 @@ except ImportError:
 def mkPropertyValue(name, value):
     return uno.createUnoStruct("com.sun.star.beans.PropertyValue", name, 0, value, 0)
 
+def mkPropertyValues(**kwargs):
+    '''mkPropertyValues(Name=Value, Name=Value,...) -> (PropertyValue, PropertyValue,...)
+    ex. : mkPropertyValues(Hidden=True, ReadOnly=False)'''
+    from com.sun.star.beans import PropertyValue
+    return tuple(PropertyValue(k,0,kwargs[k],0) for k in kwargs)
+
+def fileUrlToSystemPath(url):
+    return pyuno.fileUrlToSystemPath(url)
+
+def systemPathToFileUrl(systemPath):
+    return pyuno.systemPathToFileUrl(systemPath)
+
 ### UNO utilities ###
 
 class OfficeConnection(object):
