@@ -133,6 +133,18 @@ struct PagePropertySet
     sal_Int32          nPageNumberingType;
     bool               bIsDateTimeFieldFixed;
     sal_Int32          nDateTimeFormat;
+    PagePropertySet()
+        : bIsBackgroundVisible(false)
+        , bAreBackgroundObjectsVisible(false)
+        , bIsPageNumberFieldVisible(false)
+        , bIsDateTimeFieldVisible(false)
+        , bIsFooterFieldVisible(false)
+        , bIsHeaderFieldVisible(false)
+        , nPageNumberingType(0)
+        , bIsDateTimeFieldFixed(false)
+        , nDateTimeFormat(0)
+    {
+    }
 };
 
 struct HashReferenceXInterface
