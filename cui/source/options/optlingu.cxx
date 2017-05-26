@@ -40,10 +40,6 @@
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <com/sun/star/lang/XServiceDisplayName.hpp>
-#include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
-#include <com/sun/star/linguistic2/DictionaryListEvent.hpp>
-#include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
-#include <com/sun/star/linguistic2/XDictionaryList.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <unotools/extendedsecurityoptions.hxx>

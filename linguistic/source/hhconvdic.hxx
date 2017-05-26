@@ -20,7 +20,6 @@
 #ifndef INCLUDED_LINGUISTIC_SOURCE_HHCONVDIC_HXX
 #define INCLUDED_LINGUISTIC_SOURCE_HHCONVDIC_HXX
 
-#include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/interfacecontainer.h>

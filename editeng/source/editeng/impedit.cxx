@@ -29,11 +29,6 @@
 #include <editeng/outliner.hxx>
 #include <tools/poly.hxx>
 #include <editeng/unolingu.hxx>
-#include <com/sun/star/linguistic2/XDictionaryEntry.hpp>
-#include <com/sun/star/linguistic2/DictionaryType.hpp>
-#include <com/sun/star/linguistic2/DictionaryEvent.hpp>
-#include <com/sun/star/linguistic2/XDictionaryEventListener.hpp>
-#include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>

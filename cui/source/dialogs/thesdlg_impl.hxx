@@ -36,9 +36,6 @@
 #include <vcl/timer.hxx>
 #include <vcl/wrkwin.hxx>
 
-#include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/linguistic2/XMeaning.hpp>
-
 #include <stack>
 #include <map>
 #include <algorithm>

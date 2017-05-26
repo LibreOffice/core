@@ -50,7 +50,6 @@
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/linguistic2/XMeaning.hpp>
-#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 
 using namespace ::com::sun::star;
 

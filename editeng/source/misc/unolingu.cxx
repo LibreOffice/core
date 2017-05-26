@@ -27,7 +27,6 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <com/sun/star/linguistic2/DictionaryList.hpp>
-#include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/LinguProperties.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>

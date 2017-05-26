@@ -20,7 +20,6 @@
 #ifndef INCLUDED_LINGUISTIC_SOURCE_CONVDICXML_HXX
 #define INCLUDED_LINGUISTIC_SOURCE_CONVDICXML_HXX
 
-#include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
