@@ -1532,6 +1532,21 @@ static void lcl_ExtendLeftAndRight( SwRect&                _rRect,
     }
 }
 
+/// Returns a range suitable for subtraction when lcl_SubtractFlys() is used.
+/// Otherwise DrawFillAttributes() expands the clip path itself.
+static basegfx::B2DRange lcl_ShrinkFly(const SwRect& rRect)
+{
+    static MapMode aMapMode(MapUnit::MapTwip);
+    static const Size aSingleUnit = Application::GetDefaultDevice()->PixelToLogic(Size(1, 1), aMapMode);
+
+    double x1 = rRect.Left() + aSingleUnit.getWidth();
+    double y1 = rRect.Top() + aSingleUnit.getHeight();
+    double x2 = rRect.Right() - aSingleUnit.getWidth();
+    double y2 = rRect.Bottom() - aSingleUnit.getHeight();
+
+    return basegfx::B2DRange(x1, y1, x2, y2);
+}
+
 static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
    const SwRect &rRect, SwRegionRects &rRegion, basegfx::tools::B2DClipState& rClipState, SwPaintProperties & rProperties)
 {
@@ -1666,7 +1681,7 @@ static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
                 const SwBorderAttrs &rAttrs = *aAccess.Get();
                 ::lcl_CalcBorderRect( aRect, pFly, rAttrs, true, rProperties );
                 rRegion -= aRect;
-                rClipState.subtractRange(basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom()));
+                rClipState.subtractRange(lcl_ShrinkFly(aRect));
                 continue;
             }
             else
@@ -1684,14 +1699,14 @@ static void lcl_SubtractFlys( const SwFrame *pFrame, const SwPageFrame *pPage,
             const SwBorderAttrs &rAttrs = *aAccess.Get();
             ::lcl_CalcBorderRect( aRect, pFly, rAttrs, true, rProperties );
             rRegion -= aRect;
-            rClipState.subtractRange(basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom()));
+            rClipState.subtractRange(lcl_ShrinkFly(aRect));
         }
         else
         {
             SwRect aRect( pFly->Prt() );
             aRect += pFly->Frame().Pos();
             rRegion -= aRect;
-            rClipState.subtractRange(basegfx::B2DRange(aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom()));
+            rClipState.subtractRange(lcl_ShrinkFly(aRect));
         }
     }
     if (gProp.pSRetoucheFly == gProp.pSRetoucheFly2)
