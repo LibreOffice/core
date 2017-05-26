@@ -214,7 +214,7 @@ void PDFSigningTest::testPDFAdd2()
 
     // Sign again.
     aInURL = aTargetDir + "add.pdf";
-    aOutURL = aTargetDir + "add2.pdf";
+    aOutURL = aTargetDir + "add.pdf";
     // This failed with "second range end is not the end of the file" for the
     // first signature.
     if (bHadCertificates)
@@ -337,7 +337,7 @@ void PDFSigningTest::testPDF16Add()
 
     // Sign again.
     aInURL = aTargetDir + "add.pdf";
-    aOutURL = aTargetDir + "add2.pdf";
+    aOutURL = aTargetDir + "add.pdf";
     // This failed as non-compressed AcroForm wasn't handled.
     if (bHadCertificates)
         sign(aInURL, aOutURL, 2);

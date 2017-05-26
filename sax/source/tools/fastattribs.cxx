@@ -102,6 +102,11 @@ void FastAttributeList::add( sal_Int32 nToken, const OString& rValue )
     add( nToken, rValue.getStr(), rValue.getLength() );
 }
 
+void FastAttributeList::add( sal_Int32 nToken, const OUString& rValue )
+{
+    add( nToken, OUStringToOString(rValue, RTL_TEXTENCODING_UTF8) );
+}
+
 void FastAttributeList::addNS( sal_Int32 nNamespaceToken, sal_Int32 nToken, const OString& rValue )
 {
     sal_Int32 nCombinedToken = (nNamespaceToken << 16) | nToken;
