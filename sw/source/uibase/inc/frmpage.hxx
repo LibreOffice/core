@@ -278,6 +278,8 @@ class SwFrameAddPage : public SfxTabPage
     VclPtr<Edit>         m_pNameED;
     VclPtr<FixedText>    m_pAltNameFT;
     VclPtr<Edit>         m_pAltNameED;
+    VclPtr<FixedText>    m_pDescriptionFT;
+    VclPtr<Edit>         m_pDescriptionED;
     VclPtr<FixedText>    m_pPrevFT;
     VclPtr<ListBox>      m_pPrevLB;
     VclPtr<FixedText>    m_pNextFT;
