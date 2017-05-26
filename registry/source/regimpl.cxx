@@ -1172,7 +1172,7 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
                                reader.getFieldAccess(i),
                                reader.getFieldConstValue(i));
             index++;
-            assert(index > USHRT_MAX);
+            assert(index <= USHRT_MAX);
         }
 
         bool bPartialMerge = false;
