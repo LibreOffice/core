@@ -1086,7 +1086,14 @@ PresenterTextCaret::PresenterTextCaret (
 
 PresenterTextCaret::~PresenterTextCaret()
 {
-    HideCaret();
+    try
+    {
+        HideCaret();
+    }
+    catch (uno::Exception const&)
+    {
+        SAL_WARN("sdext.presenter", "unexpected exception in ~PresenterTextCaret");
+    }
 }
 
 void PresenterTextCaret::ShowCaret()
