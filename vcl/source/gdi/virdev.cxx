@@ -23,17 +23,7 @@
 #include "outdev.h"
 #include "PhysicalFontCollection.hxx"
 #include "svdata.hxx"
-
 #include <vcl/ITiledRenderable.hxx>
-
-namespace vcl
-{
-
-ITiledRenderable::~ITiledRenderable()
-{
-}
-
-}
 
 using namespace ::com::sun::star::uno;
 
