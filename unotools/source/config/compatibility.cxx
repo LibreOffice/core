@@ -57,8 +57,9 @@ using namespace ::com::sun::star::beans;
 #define PROPERTYNAME_CONSIDERWRAPSTYLE  COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE
 #define PROPERTYNAME_EXPANDWORDSPACE    COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE
 #define PROPERTYNAME_PROTECTFORM        COMPATIBILITY_PROPERTYNAME_PROTECTFORM
+#define PROPERTYNAME_SUBTRACT_FLYS_ANCHORED_AT_FLYS COMPATIBILITY_PROPERTYNAME_SUBTRACT_FLYS_ANCHORED_AT_FLYS
 
-#define PROPERTYCOUNT                   14
+#define PROPERTYCOUNT                   15
 
 #define OFFSET_NAME                     0
 #define OFFSET_MODULE                   1
@@ -74,6 +75,7 @@ using namespace ::com::sun::star::beans;
 #define OFFSET_CONSIDERWRAPPINGSTYLE    11
 #define OFFSET_EXPANDWORDSPACE          12
 #define OFFSET_PROTECTFORM              13
+#define OFFSET_SUBTRACT_FLYS_ANCHORED_AT_FLYS 14
 
 //  private declarations!
 
@@ -89,7 +91,7 @@ struct SvtCompatibilityEntry
             bNoExtLeading( false ), bUseLineSpacing( false ),
             bAddTableSpacing( false ), bUseObjPos( false ),
             bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ),
-            bExpandWordSpace( true ), bProtectForm( false ) {}
+            bExpandWordSpace( true ), bProtectForm( false ), bSubtractFlysAnchoredAtFlys(false) {}
         SvtCompatibilityEntry(
             const OUString& _rName, const OUString& _rNewModule ) :
                 sName( _rName ), sModule( _rNewModule ),
@@ -98,7 +100,7 @@ struct SvtCompatibilityEntry
                 bNoExtLeading( false ), bUseLineSpacing( false ),
                 bAddTableSpacing( false ), bUseObjPos( false ),
                 bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ),
-                bExpandWordSpace( true ), bProtectForm( false ) {}
+                bExpandWordSpace( true ), bProtectForm( false ), bSubtractFlysAnchoredAtFlys(false) {}
 
         inline void     SetUsePrtMetrics( bool _bSet ) { bUsePrtMetrics = _bSet; }
         inline void     SetAddSpacing( bool _bSet ) { bAddSpacing = _bSet; }
@@ -112,6 +114,7 @@ struct SvtCompatibilityEntry
         inline void     SetConsiderWrappingStyle( bool _bSet ) { bConsiderWrappingStyle = _bSet; }
         inline void     SetExpandWordSpace( bool _bSet ) { bExpandWordSpace = _bSet; }
         inline void     SetProtectForm( bool _bSet ) { bProtectForm = _bSet; }
+        inline void     SetSubtractFlysAnchoredAtFlys( bool _bSet ) { bSubtractFlysAnchoredAtFlys = _bSet; }
 
     public:
         OUString    sName;
@@ -128,6 +131,7 @@ struct SvtCompatibilityEntry
         bool        bConsiderWrappingStyle;
         bool        bExpandWordSpace;
         bool        bProtectForm;
+        bool bSubtractFlysAnchoredAtFlys;
 };
 
 /*-****************************************************************************************************************
@@ -261,7 +265,8 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
                                                             bool _bUseOurTextWrapping,
                                                             bool _bConsiderWrappingStyle,
                                                             bool _bExpandWordSpace,
-                                                            bool _bProtectForm );
+                                                            bool _bProtectForm,
+                                                            bool _bSubtractFlysAnchoredAtFlys );
 
         inline bool IsUsePrtDevice() const { return m_aDefOptions.bUsePrtMetrics; }
         inline bool IsAddSpacing() const { return m_aDefOptions.bAddSpacing; }
@@ -437,6 +442,7 @@ void SvtCompatibilityOptions_Impl::ImplCommit()
         lPropertyValues[ OFFSET_CONSIDERWRAPPINGSTYLE - 1   ].Name = sNode + PROPERTYNAME_CONSIDERWRAPSTYLE;
         lPropertyValues[ OFFSET_EXPANDWORDSPACE - 1         ].Name = sNode + PROPERTYNAME_EXPANDWORDSPACE;
         lPropertyValues[ OFFSET_PROTECTFORM - 1             ].Name = sNode + PROPERTYNAME_PROTECTFORM;
+        lPropertyValues[ OFFSET_SUBTRACT_FLYS_ANCHORED_AT_FLYS - 1 ].Name = sNode + PROPERTYNAME_SUBTRACT_FLYS_ANCHORED_AT_FLYS;
 
         lPropertyValues[ OFFSET_MODULE - 1                  ].Value <<= aItem.sModule;
         lPropertyValues[ OFFSET_USEPRTMETRICS - 1           ].Value <<= aItem.bUsePrtMetrics;
@@ -451,6 +457,7 @@ void SvtCompatibilityOptions_Impl::ImplCommit()
         lPropertyValues[ OFFSET_CONSIDERWRAPPINGSTYLE - 1   ].Value <<= aItem.bConsiderWrappingStyle;
         lPropertyValues[ OFFSET_EXPANDWORDSPACE - 1         ].Value <<= aItem.bExpandWordSpace;
         lPropertyValues[ OFFSET_PROTECTFORM - 1             ].Value <<= aItem.bProtectForm;
+        lPropertyValues[ OFFSET_SUBTRACT_FLYS_ANCHORED_AT_FLYS - 1 ].Value <<= aItem.bSubtractFlysAnchoredAtFlys;
 
         SetSetProperties( SETNODE_ALLFILEFORMATS, lPropertyValues );
     }
@@ -488,7 +495,8 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const OUString& _sName,
                                                 bool _bUseOurTextWrapping,
                                                 bool _bConsiderWrappingStyle,
                                                 bool _bExpandWordSpace,
-                                                bool _bProtectForm )
+                                                bool _bProtectForm,
+                                                bool _bSubtractFlysAnchoredAtFlys )
 {
     SvtCompatibilityEntry aItem( _sName, _sModule );
     aItem.SetUsePrtMetrics( _bUsePrtMetrics );
@@ -503,6 +511,7 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const OUString& _sName,
     aItem.SetConsiderWrappingStyle( _bConsiderWrappingStyle );
     aItem.SetExpandWordSpace( _bExpandWordSpace );
     aItem.SetProtectForm( _bProtectForm );
+    aItem.SetSubtractFlysAnchoredAtFlys( _bSubtractFlysAnchoredAtFlys );
     m_aOptions.AppendEntry( aItem );
 
     // default item reset?
@@ -631,14 +640,15 @@ void SvtCompatibilityOptions::AppendItem( const OUString& sName,
                                           bool bUseOurTextWrapping,
                                           bool bConsiderWrappingStyle,
                                           bool bExpandWordSpace,
-                                          bool bProtectForm )
+                                          bool bProtectForm,
+                                          bool bSubtractFlysAnchoredAtFlys )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pImpl->AppendItem(
         sName, sModule, bUsePrtMetrics, bAddSpacing,
         bAddSpacingAtPages, bUseOurTabStops, bNoExtLeading,
         bUseLineSpacing, bAddTableSpacing, bUseObjPos,
-        bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace, bProtectForm );
+        bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace, bProtectForm, bSubtractFlysAnchoredAtFlys );
 }
 
 bool SvtCompatibilityOptions::IsUsePrtDevice() const

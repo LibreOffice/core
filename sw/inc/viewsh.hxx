@@ -416,6 +416,8 @@ public:
 
     void SetProtectForm( bool _bProtectForm );
 
+    void SetSubtractFlysAnchoredAtFlys(bool bSubtractFlysAnchoredAtFlys);
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.
