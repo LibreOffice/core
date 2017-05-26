@@ -275,10 +275,10 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             case SID_STYLE_EDIT:
                 break;
             case SID_WATERMARK:
+                if (pSh)
                 {
                     SfxWatermarkItem aItem = pSh->GetWatermark();
-                    if( pSh )
-                        rSet.Put(aItem);
+                    rSet.Put(aItem);
                 }
                 break;
             default:
