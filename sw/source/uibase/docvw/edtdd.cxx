@@ -85,11 +85,17 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
             //We are not selecting and aren't at a selection
             bStart = true;
         else if ( !g_bFrameDrag && rSh.IsSelFrameMode() &&
-                    rSh.IsInsideSelectedObj( aDocPos ) )
+                    rSh.IsInsideSelectedObj( aDocPos ) &&
+                    nullptr == m_pAnchorMarker)
         {
             //We are not dragging internally and are not at an
             //object (frame, draw object)
 
+            // #i106131# *and* AnchorDrag is *not* active: When active,
+            // entering global drag mode will destroy the AnchorHdl but
+            // keep the now invalid ptr in place, next access will crash.
+            // It is indeed wrong to enter drag mode when AnchorDrag is
+            // already active
             bStart = true;
         }
         else if( !g_bFrameDrag && m_rView.GetDocShell()->IsReadOnly() &&
