@@ -244,6 +244,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 FN_SET_FRM_NAME,FN_KEEP_ASPECT_RATIO,                           // [21306
                 FN_SET_FRM_ALT_NAME,FN_SET_FRM_ALT_NAME,                        // [21318
                 SID_REFERER,            SID_REFERER,
+                FN_UNO_DESCRIPTION, FN_UNO_DESCRIPTION,                         // [21320
                 0);
 
             // create needed items for XPropertyList entries from the DrawModel so that
@@ -267,6 +268,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put( aFrameSize );
 
             aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
+            aSet.Put(SfxStringItem(FN_UNO_DESCRIPTION, rSh.GetObjDescription()));
             if ( nSlot == FN_FORMAT_GRAFIC_DLG )
             {
                 // #i73249#
@@ -454,6 +456,10 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     // #i73249#
                     rSh.SetObjTitle( static_cast<const SfxStringItem*>(pItem)->GetValue() );
                 }
+
+                if ( SfxItemState::SET == pSet->GetItemState(
+                                        FN_UNO_DESCRIPTION, true, &pItem ))
+                    rSh.SetObjDescription( static_cast<const SfxStringItem*>(pItem)->GetValue() );
 
                 SfxItemSet aGrfSet( rSh.GetAttrPool(), RES_GRFATR_BEGIN,
                                                        RES_GRFATR_END-1 );

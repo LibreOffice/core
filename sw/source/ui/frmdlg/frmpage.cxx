@@ -382,6 +382,7 @@ const sal_uInt16 SwFrameAddPage::aAddPgRg[] = {
     RES_PRINT,              RES_PRINT,
     FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
     FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,
+    FN_UNO_DESCRIPTION,     FN_UNO_DESCRIPTION,
     0
 };
 
@@ -2875,6 +2876,8 @@ SwFrameAddPage::SwFrameAddPage(vcl::Window *pParent, const SfxItemSet &rSet)
     get(m_pPrevLB,"prev");
     get(m_pNextFT,"next_label");
     get(m_pNextLB,"next");
+    get(m_pDescriptionFT, "description_label");
+    get(m_pDescriptionED, "description");
 
     get(m_pProtectFrame,"protect");
     get(m_pProtectContentCB,"protectcontent");
@@ -2890,6 +2893,7 @@ SwFrameAddPage::SwFrameAddPage(vcl::Window *pParent, const SfxItemSet &rSet)
     get(m_pTextFlowFT,"textflow_label");
     get(m_pTextFlowLB,"textflow");
 
+    m_pDescriptionED->set_height_request(m_pDescriptionED->get_preferred_size().Height());
 }
 
 SwFrameAddPage::~SwFrameAddPage()
@@ -2919,6 +2923,8 @@ void SwFrameAddPage::dispose()
     m_pPrintFrameCB.clear();
     m_pTextFlowFT.clear();
     m_pTextFlowLB.clear();
+    m_pDescriptionFT.clear();
+    m_pDescriptionED.clear();
     SfxTabPage::dispose();
 }
 
@@ -2953,6 +2959,12 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
     {
         m_pAltNameED->SetText(static_cast<const SfxStringItem*>(pItem)->GetValue());
         m_pAltNameED->SaveValue();
+    }
+
+    if(SfxItemState::SET == rSet->GetItemState(FN_UNO_DESCRIPTION, false, &pItem))
+    {
+        m_pDescriptionED->SetText(static_cast<const SfxStringItem*>(pItem)->GetValue());
+        m_pDescriptionED->SaveValue();
     }
 
     if(!m_bFormat)
@@ -3120,6 +3132,8 @@ bool SwFrameAddPage::FillItemSet(SfxItemSet *rSet)
         bRet |= nullptr != rSet->Put(SfxStringItem(FN_SET_FRM_NAME, m_pNameED->GetText()));
     if (m_pAltNameED->IsValueChangedFromSaved())
         bRet |= nullptr != rSet->Put(SfxStringItem(FN_SET_FRM_ALT_NAME, m_pAltNameED->GetText()));
+    if (m_pDescriptionED->IsValueChangedFromSaved())
+        bRet |= nullptr != rSet->Put(SfxStringItem(FN_UNO_DESCRIPTION, m_pDescriptionED->GetText()));
 
     const SfxPoolItem* pOldItem;
     SvxProtectItem aProt ( static_cast<const SvxProtectItem& >(GetItemSet().Get(RES_PROTECT)) );
