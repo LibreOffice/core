@@ -418,6 +418,8 @@ public:
 
     void SetMsWordCompTrailingBlanks( bool _bMsWordCompTrailingBlanks );
 
+    void SetSubtractFlysAnchoredAtFlys(bool bSubtractFlysAnchoredAtFlys);
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.
