@@ -88,7 +88,7 @@ void FastAttributeList::add( sal_Int32 nToken, const sal_Char* pValue, size_t nV
         mnChunkLength = maAttributeValues.back();
         mpChunk = static_cast<sal_Char *>(realloc( mpChunk, mnChunkLength ));
     }
-    strncpy(mpChunk + nWritePosition, pValue, nValueLength);
+    memcpy(mpChunk + nWritePosition, pValue, nValueLength);
     mpChunk[nWritePosition + nValueLength] = '\0';
 }
 
@@ -100,6 +100,11 @@ void FastAttributeList::add( sal_Int32 nToken, const sal_Char* pValue )
 void FastAttributeList::add( sal_Int32 nToken, const OString& rValue )
 {
     add( nToken, rValue.getStr(), rValue.getLength() );
+}
+
+void FastAttributeList::add( sal_Int32 nToken, const OUString& rValue )
+{
+    add( nToken, OUStringToOString(rValue, RTL_TEXTENCODING_UTF8) );
 }
 
 void FastAttributeList::addNS( sal_Int32 nNamespaceToken, sal_Int32 nToken, const OString& rValue )
