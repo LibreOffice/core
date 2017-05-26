@@ -687,14 +687,11 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
 #if OSL_DEBUG_LEVEL > 0
             else
             {
-                OString sMessage( "UnoControlModel::write: don't know how to handle a property of type '" );
-                OUString sTypeName( rType.getTypeName() );
-                sMessage += OString( sTypeName.getStr(), sTypeName.getLength(), RTL_TEXTENCODING_ASCII_US );
-                sMessage += "'.\n(Currently handling property '";
-                const OUString& sPropertyName( GetPropertyName( *it ) );
-                sMessage += OString( sPropertyName.getStr(), sPropertyName.getLength(), osl_getThreadTextEncoding() );
-                sMessage += "'.)";
-                OSL_FAIL( sMessage.getStr() );
+                SAL_WARN( "toolkit", "UnoControlModel::write: don't know how to handle a property of type '"
+                          << rType.getTypeName()
+                          << "'.\n(Currently handling property '"
+                          << GetPropertyName( *it )
+                          << "'.)");
             }
 #endif
         }
@@ -899,14 +896,11 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
                 }
                 else
                 {
-                    OString sMessage( "UnoControlModel::read: don't know how to handle a property of type '" );
-                    OUString sTypeName( pType->getTypeName() );
-                    sMessage += OString( sTypeName.getStr(), sTypeName.getLength(), RTL_TEXTENCODING_ASCII_US );
-                    sMessage += "'.\n(Currently handling property '";
-                    const OUString& sPropertyName( GetPropertyName( nPropId ) );
-                    sMessage += OString( sPropertyName.getStr(), sPropertyName.getLength(), osl_getThreadTextEncoding() );
-                    sMessage += "'.)";
-                    OSL_FAIL( sMessage.getStr() );
+                    SAL_WARN( "toolkit", "UnoControlModel::read: don't know how to handle a property of type '"
+                                << pType->getTypeName()
+                                << "'.\n(Currently handling property '"
+                                << GetPropertyName( nPropId )
+                                << "'.)");
                 }
             }
             else

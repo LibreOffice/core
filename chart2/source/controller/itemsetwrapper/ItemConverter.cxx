@@ -123,12 +123,7 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                     catch( const beans::UnknownPropertyException &ex )
                     {
                         delete pItem;
-                        (void)ex;
-                        OSL_FAIL(
-                                    OUStringToOString(
-                                        ex.Message +
-                                        " - unknown Property: " + aProperty.first,
-                                        RTL_TEXTENCODING_ASCII_US ).getStr());
+                        SAL_WARN( "chart2", ex.Message << " - unknown Property: " << aProperty.first);
                     }
                     catch( const uno::Exception &ex )
                     {
@@ -193,17 +188,12 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                 catch( const beans::UnknownPropertyException &ex )
                 {
                     (void)ex;
-                    OSL_FAIL(
-                                OUStringToOString(
-                                    ex.Message +
-                                    " - unknown Property: " + aProperty.first,
-                                    RTL_TEXTENCODING_ASCII_US).getStr());
+                    SAL_WARN( "chart2", ex.Message << " - unknown Property: " << aProperty.first);
                 }
                 catch( const uno::Exception &ex )
                 {
                     (void)ex;
-                    OSL_FAIL( OUStringToOString(
-                                    ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+                    SAL_WARN( "chart2", ex.Message );
                 }
             }
             else

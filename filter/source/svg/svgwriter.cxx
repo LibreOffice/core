@@ -2836,7 +2836,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             catch( ... )
             {
                 const MetaCommentAction* pA = static_cast<const MetaCommentAction*>(pAction);
-                OSL_FAIL( pA->GetComment().getStr() );
+                SAL_WARN( "filter.svg", pA->GetComment() );
             }
 
         }

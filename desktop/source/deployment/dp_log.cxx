@@ -79,8 +79,7 @@ void ProgressLogImpl::disposing()
     }
     catch (const Exception & exc) {
         (void) exc;
-        OSL_FAIL( OUStringToOString(
-                        exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_WARN( "desktop", exc.Message );
     }
 }
 
@@ -139,8 +138,7 @@ void ProgressLogImpl::log_write( OString const & text )
     }
     catch (const io::IOException & exc) {
         (void) exc;
-        OSL_FAIL( OUStringToOString(
-                        exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_WARN( "desktop", exc.Message );
     }
 }
 

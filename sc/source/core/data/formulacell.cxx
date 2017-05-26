@@ -2759,26 +2759,17 @@ sc::MatrixEdge ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
                 if ( nEdges == sc::MatrixEdge::Nothing )
                     nEdges = sc::MatrixEdge::Inside;
             }
-#if OSL_DEBUG_LEVEL > 0
             else
             {
-                OStringBuffer aMsg( "broken Matrix, Pos: " );
-                OUString aTmp(aPos.Format(ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID, pDocument));
-                aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8 ));
-                aMsg.append(", MatOrg: ");
-                aTmp = aOrg.Format(ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID, pDocument);
-                aMsg.append(OUStringToOString(aTmp, RTL_TEXTENCODING_UTF8 ));
-                aMsg.append(", MatCols: ");
-                aMsg.append(static_cast<sal_Int32>( nC ));
-                aMsg.append(", MatRows: ");
-                aMsg.append(static_cast<sal_Int32>( nR ));
-                aMsg.append(", DiffCols: ");
-                aMsg.append(static_cast<sal_Int32>( dC ));
-                aMsg.append(", DiffRows: ");
-                aMsg.append(static_cast<sal_Int32>( dR ));
-                OSL_FAIL( aMsg.makeStringAndClear().getStr());
+                SAL_WARN( "sc", "broken Matrix, Pos: "
+                    << aPos.Format(ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID, pDocument)
+                    << ", MatOrg: "
+                    << aOrg.Format(ScRefFlags::COL_VALID | ScRefFlags::ROW_VALID, pDocument)
+                    << ", MatCols: " << static_cast<sal_Int32>( nC )
+                    << ", MatRows: " << static_cast<sal_Int32>( nR )
+                    << ", DiffCols: " << static_cast<sal_Int32>( dC )
+                    << ", DiffRows: " << static_cast<sal_Int32>( dR ));
             }
-#endif
             return nEdges;
         }
         default:

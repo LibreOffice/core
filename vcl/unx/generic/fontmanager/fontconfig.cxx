@@ -276,7 +276,7 @@ namespace
         for( std::vector<lang_and_element>::const_iterator aIter = elements.begin(); aIter != aEnd; ++aIter )
         {
             const char *pLang = reinterpret_cast<const char*>(aIter->first);
-            if( rtl_str_compare( pLang, sFullMatch.getStr() ) == 0)
+            if( sFullMatch == pLang)
             {
                 // both language and country match
                 candidate = aIter->second;
@@ -288,7 +288,7 @@ namespace
                 // override candidate only if there is a full match
                 continue;
             }
-            else if( rtl_str_compare( pLang, sLangMatch.getStr()) == 0)
+            else if( sLangMatch == pLang)
             {
                 // just the language matches
                 candidate = aIter->second;

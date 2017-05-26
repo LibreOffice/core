@@ -493,7 +493,7 @@ void printMethods(std::ostream & o,
                 }
             } else {
                 o << "\n" << indentation << "{\n" << indentation
-                  << "    return " << delegate.getStr() << "get" << i->name
+                  << "    return " << delegate << "get" << i->name
                   << "();\n" << indentation << "}\n\n";
             }
         } else {
@@ -516,7 +516,7 @@ void printMethods(std::ostream & o,
                     }
                 } else {
                     o << "\n" << indentation << "{\n" << indentation
-                      << "    " << delegate.getStr() << "set" << i->name
+                      << "    " << delegate << "set" << i->name
                       << "(the_value);\n" << indentation << "}\n\n";
                 }
             } else {
@@ -559,7 +559,7 @@ void printMethods(std::ostream & o,
                 if (i->returnType != "void") {
                     o << "return ";
                 }
-                o << delegate.getStr() << i->name << '(';
+                o << delegate << i->name << '(';
                 printMethodParameters(
                     o, options, manager, i->parameters, false);
                 o << ");\n" << indentation << "}\n\n";

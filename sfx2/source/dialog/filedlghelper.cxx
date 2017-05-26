@@ -1626,9 +1626,7 @@ void FileDialogHelper_Impl::verifyPath()
     }
     struct stat aFileStat;
     if (stat(sysPathC.getStr(), &aFileStat) == -1) {
-        SAL_WARN(
-            "sfx.dialog",
-            "stat(" << sysPathC.getStr() << ") failed with errno " << errno);
+        SAL_WARN( "sfx.dialog", "stat(" << sysPathC << ") failed with errno " << errno);
         return;
     }
     if ((aFileStat.st_mode & (S_IRWXO | S_IRWXG | S_IRWXU)) == S_IRUSR) {

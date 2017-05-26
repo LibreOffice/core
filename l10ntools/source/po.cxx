@@ -129,19 +129,19 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
     if ( !m_sExtractCom.isEmpty() )
         rOFStream
             << "#. "
-            << m_sExtractCom.replaceAll("\n","\n#. ").getStr() << std::endl;
+            << m_sExtractCom.replaceAll("\n","\n#. ") << std::endl;
     if ( !m_sReference.isEmpty() )
-        rOFStream << "#: " << m_sReference.getStr() << std::endl;
+        rOFStream << "#: " << m_sReference << std::endl;
     if ( m_bFuzzy )
         rOFStream << "#, fuzzy" << std::endl;
     if ( !m_sMsgCtxt.isEmpty() )
         rOFStream << "msgctxt "
-                  << lcl_GenMsgString(m_sReference+"\n"+m_sMsgCtxt).getStr()
+                  << lcl_GenMsgString(m_sReference+"\n"+m_sMsgCtxt)
                   << std::endl;
     rOFStream << "msgid "
-              << lcl_GenMsgString(m_sMsgId).getStr() << std::endl;
+              << lcl_GenMsgString(m_sMsgId) << std::endl;
     rOFStream << "msgstr "
-              << lcl_GenMsgString(m_sMsgStr).getStr() << std::endl;
+              << lcl_GenMsgString(m_sMsgStr) << std::endl;
 }
 
 void GenPoEntry::readFromFile(std::ifstream& rIFStream)

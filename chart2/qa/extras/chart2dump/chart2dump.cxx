@@ -163,8 +163,8 @@ protected:
     {
         assert(m_bDumpMode);
         assert(m_aDumpFile.is_open());
-        m_aDumpFile << "// " << OUStringToOString(sCheck, RTL_TEXTENCODING_UTF8).getStr() << "\n";   // Add check string to make dump file readable
-        m_aDumpFile << OUStringToOString(sActualValue.trim(), RTL_TEXTENCODING_UTF8).getStr() << "\n";      // Write out the checked value, will be used as reference later
+        m_aDumpFile << "// " << sCheck << "\n";   // Add check string to make dump file readable
+        m_aDumpFile << sActualValue.trim() << "\n";      // Write out the checked value, will be used as reference later
     }
 
     void readNote(const OUString& sNote)
@@ -183,7 +183,7 @@ protected:
     {
         assert(m_bDumpMode);
         assert(m_aDumpFile.is_open());
-        m_aDumpFile << "/// " << OUStringToOString(sNote, RTL_TEXTENCODING_UTF8).getStr() << "\n";
+        m_aDumpFile << "/// " << sNote << "\n";
     }
 
     double readExpectedDouble(const OUString& sCheck)

@@ -346,8 +346,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
         }
         if( !aTok.isEmpty() )
         {
-            long nVal;
-            sscanf( aTok.getStr(), "%li", &nVal );
+            sal_Int64 nVal = aTok.toInt64();
             switch ( nInitFile )
             {
                 case 1: InsertFrame( sal_uInt16( nVal ) );    // add FrameId

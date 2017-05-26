@@ -92,12 +92,8 @@ void OComponentHelper::release() throw()
                 catch (css::uno::RuntimeException & exc)
                 {
                     // release should not throw exceptions
-#if OSL_DEBUG_LEVEL > 0
-                    OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-                    OSL_FAIL( msg.getStr() );
-#else
                     (void) exc; // avoid warning about unused variable
-#endif
+                    SAL_WARN( "cppuhelper", exc.Message );
                 }
 
                 // only the alive ref holds the object

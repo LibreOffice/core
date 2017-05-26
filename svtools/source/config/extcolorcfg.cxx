@@ -105,12 +105,9 @@ public:
                 return aFind2->second;
         }
 #if OSL_DEBUG_LEVEL > 0
-        OStringBuffer aMessage( "Could find the required config:\n" );
-        aMessage.append( "component: " );
-        aMessage.append( OUStringToOString( _sComponentName, RTL_TEXTENCODING_UTF8 ) );
-        aMessage.append( "\nname: " );
-        aMessage.append( OUStringToOString( _sName, RTL_TEXTENCODING_UTF8 ) );
-        OSL_FAIL( aMessage.makeStringAndClear().getStr() );
+        SAL_WARN( "svtools", "Could find the required config:\n"
+                  "component: " << _sComponentName
+                  << "\nname: " << _sName );
 #endif
         return ExtendedColorConfigValue();
     }

@@ -457,11 +457,7 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
         catch(Exception& e)
         {
             (void) e;
-            OSL_FAIL(
-                OUStringToOString(
-                    "exception in FilterFactory access: " + e.Message,
-                    RTL_TEXTENCODING_UTF8).
-                getStr());
+            SAL_WARN( "cui.options", "exception in FilterFactory access: " << e.Message );
         }
 
         pImpl->bInitialized = true;

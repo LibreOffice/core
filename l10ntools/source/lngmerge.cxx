@@ -92,7 +92,7 @@ bool LngParser::CreatePO( const OString &rPOFile )
 {
     PoOfstream aPOStream( rPOFile, PoOfstream::APP );
     if (!aPOStream.isOpen()) {
-        std::cerr << "Ulfex error: Can't open po file:" << rPOFile.getStr() << "\n";
+        std::cerr << "Ulfex error: Can't open po file:" << rPOFile << "\n";
     }
 
     size_t nPos  = 0;
@@ -309,7 +309,7 @@ bool LngParser::Merge(
     }
 
     for ( size_t i = 0; i < pLines->size(); ++i )
-        aDestination << (*pLines)[i]->getStr() << '\n';
+        aDestination << *(*pLines)[i] << '\n';
 
     aDestination.close();
     return true;

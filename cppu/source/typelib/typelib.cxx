@@ -530,9 +530,7 @@ bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
         }
         else
         {
-            OString aStr(
-                rtl::OUStringToOString( (*ppTypeDescr)->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-            SAL_INFO( "cppu.typelib", "type cannot be completed: " <<  aStr.getStr() );
+            SAL_INFO( "cppu.typelib", "type cannot be completed: " <<  (*ppTypeDescr)->pTypeName );
             return false;
         }
     }

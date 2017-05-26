@@ -544,7 +544,6 @@ static void appendName( const OUString& rStr, OStringBuffer& rBuffer )
 // FIXME i59651 add a check for max length of 127 chars? Per PDF spec 1.4, appendix C.1
 // I guess than when reading the #xx sequence it will count for a single character.
     OString aStr( OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 ) );
-    const sal_Char* pStr = aStr.getStr();
     int nLen = aStr.getLength();
     for( int i = 0; i < nLen; i++ )
     {
@@ -555,17 +554,17 @@ static void appendName( const OUString& rStr, OStringBuffer& rBuffer )
          *  but has a narrower acceptance rate we only pass
          *  alphanumerics and '-' literally.
          */
-        if( (pStr[i] >= 'A' && pStr[i] <= 'Z' ) ||
-            (pStr[i] >= 'a' && pStr[i] <= 'z' ) ||
-            (pStr[i] >= '0' && pStr[i] <= '9' ) ||
-            pStr[i] == '-' )
+        if( (aStr[i] >= 'A' && aStr[i] <= 'Z' ) ||
+            (aStr[i] >= 'a' && aStr[i] <= 'z' ) ||
+            (aStr[i] >= '0' && aStr[i] <= '9' ) ||
+            aStr[i] == '-' )
         {
-            rBuffer.append( pStr[i] );
+            rBuffer.append( aStr[i] );
         }
         else
         {
             rBuffer.append( '#' );
-            appendHex( (sal_Int8)pStr[i], rBuffer );
+            appendHex( (sal_Int8)aStr[i], rBuffer );
         }
     }
 }
@@ -696,7 +695,6 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
     */
     const OUString& rName = (m_aContext.Version > PDFWriter::PDFVersion::PDF_1_2) ? i_rControl.Name : i_rControl.Text;
     OString aStr( OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ) );
-    const sal_Char* pStr = aStr.getStr();
     int nLen = aStr.getLength();
 
     OStringBuffer aBuffer( rName.getLength()+64 );
@@ -706,12 +704,12 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
          *  outside the interval [32(=ASCII' ');126(=ASCII'~')]
          *  should be escaped hexadecimal
          */
-        if( (pStr[i] >= 32 && pStr[i] <= 126 ) )
-            aBuffer.append( pStr[i] );
+        if( (aStr[i] >= 32 && aStr[i] <= 126 ) )
+            aBuffer.append( aStr[i] );
         else
         {
             aBuffer.append( '#' );
-            appendHex( (sal_Int8)pStr[i], aBuffer );
+            appendHex( (sal_Int8)aStr[i], aBuffer );
         }
     }
 
@@ -6463,7 +6461,7 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     if (!cms_msg)
         return false;
 
-    char *pass(strdup(OUStringToOString( rContext.m_aSignPassword, RTL_TEXTENCODING_UTF8 ).getStr()));
+    OString pass(OUStringToOString( rContext.m_aSignPassword, RTL_TEXTENCODING_UTF8 ));
 
     TimeStampReq src;
     OStringBuffer response_buffer;
@@ -6487,7 +6485,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         NSSCMSMessage *ts_cms_msg = CreateCMSMessage(&now, &ts_cms_sd, &ts_cms_signer, cert, &digest);
         if (!ts_cms_msg)
         {
-            free(pass);
             return false;
         }
 
@@ -6496,12 +6493,12 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         ts_cms_output.len = 0;
         PLArenaPool *ts_arena = PORT_NewArena(10000);
         NSSCMSEncoderContext *ts_cms_ecx;
-        ts_cms_ecx = NSS_CMSEncoder_Start(ts_cms_msg, nullptr, nullptr, &ts_cms_output, ts_arena, PDFSigningPKCS7PasswordCallback, pass, nullptr, nullptr, nullptr, nullptr);
+        ts_cms_ecx = NSS_CMSEncoder_Start(ts_cms_msg, nullptr, nullptr, &ts_cms_output, ts_arena, PDFSigningPKCS7PasswordCallback,
+                                          const_cast<sal_Char*>(pass.getStr()), nullptr, nullptr, nullptr, nullptr);
 
         if (NSS_CMSEncoder_Finish(ts_cms_ecx) != SECSuccess)
         {
             SAL_WARN("vcl.pdfwriter", "NSS_CMSEncoder_Finish failed");
-            free(pass);
             return false;
         }
 
@@ -6521,7 +6518,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         if (!ts_hc.get())
         {
             SAL_WARN("vcl.pdfwriter", "HASH_Create failed");
-            free(pass);
             return false;
         }
 
@@ -6571,14 +6567,12 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         if (timestamp_request == nullptr)
         {
             SAL_WARN("vcl.pdfwriter", "SEC_ASN1EncodeItem failed");
-            free(pass);
             return false;
         }
 
         if (timestamp_request->data == nullptr)
         {
             SAL_WARN("vcl.pdfwriter", "SEC_ASN1EncodeItem succeeded but got NULL data");
-            free(pass);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
         }
@@ -6602,7 +6596,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         if (!curl)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_init failed");
-            free(pass);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
         }
@@ -6612,7 +6605,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         if ((rc = curl_easy_setopt(curl, CURLOPT_URL, OUStringToOString(rContext.m_aSignTSA, RTL_TEXTENCODING_UTF8).getStr())) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_URL) failed: " << curl_easy_strerror(rc));
-            free(pass);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6624,7 +6616,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         if ((rc = curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_HTTPHEADER) failed: " << curl_easy_strerror(rc));
-            free(pass);
             curl_slist_free_all(slist);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
@@ -6635,7 +6626,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
             (rc = curl_easy_setopt(curl, CURLOPT_POSTFIELDS, timestamp_request->data)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_POSTFIELDSIZE or CURLOPT_POSTFIELDS) failed: " << curl_easy_strerror(rc));
-            free(pass);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6645,7 +6635,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
             (rc = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, AppendToBuffer)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_WRITEDATA or CURLOPT_WRITEFUNCTION) failed: " << curl_easy_strerror(rc));
-            free(pass);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6654,7 +6643,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         if ((rc = curl_easy_setopt(curl, CURLOPT_POST, 1)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_POST) failed: " << curl_easy_strerror(rc));
-            free(pass);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6664,7 +6652,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         if ((rc = curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, error_buffer)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_ERRORBUFFER) failed: " << curl_easy_strerror(rc));
-            free(pass);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6675,7 +6662,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
             (rc = curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_TIMEOUT or CURLOPT_CONNECTTIMEOUT) failed: " << curl_easy_strerror(rc));
-            free(pass);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6684,7 +6670,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         if (curl_easy_perform(curl) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_perform failed: " << error_buffer);
-            free(pass);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6713,7 +6698,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         if (SEC_ASN1DecodeItem(nullptr, &response, TimeStampResp_Template, &response_item) != SECSuccess)
         {
             SAL_WARN("vcl.pdfwriter", "SEC_ASN1DecodeItem failed");
-            free(pass);
             return false;
         }
 
@@ -6723,7 +6707,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
             (response.status.status.data[0] != 0 && response.status.status.data[0] != 1))
         {
             SAL_WARN("vcl.pdfwriter", "Timestamp request was not granted");
-            free(pass);
             return false;
         }
 
@@ -6746,7 +6729,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         if (my_SEC_StringToOID(&typetag.oid, "1.2.840.113549.1.9.16.2.14", 0) != SECSuccess)
         {
             SAL_WARN("vcl.pdfwriter", "SEC_StringToOID failed");
-            free(pass);
             return false;
         }
         typetag.offset = SEC_OID_UNKNOWN; // ???
@@ -6767,7 +6749,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         if (my_NSS_CMSSignerInfo_AddUnauthAttr(cms_signer, &timestamp) != SECSuccess)
         {
             SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_AddUnauthAttr failed");
-            free(pass);
             return false;
         }
     }
@@ -6786,7 +6767,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     if (!aCertHashContext.get())
     {
         SAL_WARN("vcl.pdfwriter", "HASH_Create() failed");
-        free(pass);
         return false;
     }
     HASH_Begin(aCertHashContext.get());
@@ -6811,7 +6791,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     if (!pEncodedCertificate)
     {
         SAL_WARN("vcl.pdfwriter", "SEC_ASN1EncodeItem() failed");
-        free(pass);
         return false;
     }
 
@@ -6836,7 +6815,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     if (my_SEC_StringToOID(&aOidData.oid, "1.2.840.113549.1.9.16.2.47", 0) != SECSuccess)
     {
         SAL_WARN("vcl.pdfwriter", "my_SEC_StringToOID() failed");
-        free(pass);
         return false;
     }
     aOidData.offset = SEC_OID_UNKNOWN;
@@ -6850,7 +6828,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     if (my_NSS_CMSSignerInfo_AddAuthAttr(cms_signer, &aAttribute) != SECSuccess)
     {
         SAL_WARN("vcl.pdfwriter", "my_NSS_CMSSignerInfo_AddAuthAttr() failed");
-        free(pass);
         return false;
     }
 
@@ -6865,23 +6842,20 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     // with, the software itself pops up a dialog asking for the PIN (password). But I am not going
     // to test it and risk locking up my token...
 
-    cms_ecx = NSS_CMSEncoder_Start(cms_msg, nullptr, nullptr, &cms_output, arena, PDFSigningPKCS7PasswordCallback, pass, nullptr, nullptr, nullptr, nullptr);
+    cms_ecx = NSS_CMSEncoder_Start(cms_msg, nullptr, nullptr, &cms_output, arena, PDFSigningPKCS7PasswordCallback,
+                                   const_cast<sal_Char*>(pass.getStr()), nullptr, nullptr, nullptr, nullptr);
 
     if (!cms_ecx)
     {
         SAL_WARN("vcl.pdfwriter", "NSS_CMSEncoder_Start failed");
-        free(pass);
         return false;
     }
 
     if (NSS_CMSEncoder_Finish(cms_ecx) != SECSuccess)
     {
         SAL_WARN("vcl.pdfwriter", "NSS_CMSEncoder_Finish failed");
-        free(pass);
         return false;
     }
-
-    free(pass);
 
 #ifdef DBG_UTIL
     {

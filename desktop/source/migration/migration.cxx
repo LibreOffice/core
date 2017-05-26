@@ -207,9 +207,7 @@ void Migration::migrateSettingsIfNecessary()
     try {
         bResult = aImpl.doMigration();
     } catch (const Exception& e) {
-        OString aMsg = "doMigration() exception: "
-                     + OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-        OSL_FAIL(aMsg.getStr());
+        SAL_WARN( "desktop", "doMigration() exception: " << e.Message);
     }
     OSL_ENSURE(bResult, "Migration has not been successful");
     (void)bResult;
@@ -844,11 +842,7 @@ void MigrationImpl::copyFiles()
             _checkAndCreateDirectory(aURL);
             FileBase::RC copyResult = File::copy(*i_file, destName);
             if (copyResult != FileBase::E_None) {
-                OString msg = "Cannot copy "
-                            + OUStringToOString(*i_file, RTL_TEXTENCODING_UTF8)
-                            + " to "
-                            + OUStringToOString(destName, RTL_TEXTENCODING_UTF8);
-                OSL_FAIL(msg.getStr());
+                SAL_WARN( "desktop", "Cannot copy " << *i_file <<  " to " << destName);
             }
             ++i_file;
         }
@@ -894,16 +888,12 @@ void MigrationImpl::runServices()
 
 
             } catch (const Exception& e) {
-                OString aMsg = "Execution of migration service failed (Exception caught).\nService: "
-                             + OUStringToOString(i_mig->service, RTL_TEXTENCODING_ASCII_US)
-                             + "\nMessage: "
-                             + OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-                OSL_FAIL(aMsg.getStr());
+                SAL_WARN( "desktop", "Execution of migration service failed (Exception caught).\nService: "
+                            << i_mig->service
+                            << "\nMessage: " << e.Message);
             } catch (...) {
-                OString aMsg = "Execution of migration service failed (Exception caught).\nService: "
-                             + OUStringToOString(i_mig->service, RTL_TEXTENCODING_ASCII_US)
-                             + "\nNo message available";
-                OSL_FAIL(aMsg.getStr());
+                SAL_WARN( "desktop", "Execution of migration service failed (Exception caught).\nService: "
+                            << i_mig->service << "\nNo message available");
             }
 
         }

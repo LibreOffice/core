@@ -29,16 +29,6 @@ namespace svgio
 {
     namespace svgreader
     {
-#ifdef DBG_UTIL
-        void myAssert(const OUString& rMessage)
-        {
-            OString aMessage2;
-
-            rMessage.convertToString(&aMessage2, osl_getThreadTextEncoding(), RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR|RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR);
-            OSL_ENSURE(false, aMessage2.getStr());
-        }
-#endif
-
         // common non-token strings
         const OUString commonStrings::aStrUserSpaceOnUse("userSpaceOnUse");
         const OUString commonStrings::aStrObjectBoundingBox("objectBoundingBox");
@@ -191,9 +181,7 @@ namespace svgio
                     }
                     case Unit_none:
                     {
-#ifdef DBG_UTIL
-                        myAssert("Design error, this case should have been handled in the caller");
-#endif
+                        SAL_WARN("svgio", "Design error, this case should have been handled in the caller");
                         return mfNumber;
                     }
                     default:
@@ -237,9 +225,7 @@ namespace svgio
 
                         if ( aViewPort.isEmpty() )
                         {
-#ifdef DBG_UTIL
-                            myAssert("Design error, this case should have been handled in the caller");
-#endif
+                            SAL_WARN("svgio", "Design error, this case should have been handled in the caller");
                             // no viewPort, assume a normal page size (A4)
                             aViewPort = basegfx::B2DRange(
                                 0.0,

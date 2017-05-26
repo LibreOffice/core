@@ -1223,11 +1223,6 @@ sal_Int32 ScDPCache::GetGroupType(long nDim) const
 
 namespace {
 
-std::ostream& operator<< (::std::ostream& os, const OUString& str)
-{
-    return os << OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
-}
-
 void dumpItems(const ScDPCache& rCache, long nDim, const ScDPCache::ScDPItemDataVec& rItems, size_t nOffset)
 {
     for (size_t i = 0; i < rItems.size(); ++i)

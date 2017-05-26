@@ -868,16 +868,9 @@ namespace pcr
             }
             else
             {
-    #ifdef DBG_UTIL
-                if ( !_rLine.xHandler.is() )
-                {
-                    OString sMessage( "OBrowserListBox::impl_setControlAsPropertyValue: no handler -> no conversion (property: '" );
-                    OUString sPropertyName( _rLine.pLine->GetEntryName() );
-                    sMessage += OString( sPropertyName.getStr(), sPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
-                    sMessage += OString( "')!" );
-                    OSL_FAIL( sMessage.getStr() );
-                }
-    #endif
+                SAL_WARN_IF( !_rLine.xHandler.is(), "extensions.propctrlr",
+                        "OBrowserListBox::impl_setControlAsPropertyValue: no handler -> no conversion (property: '"
+                        << _rLine.pLine->GetEntryName() << "')!" );
                 if ( _rLine.xHandler.is() )
                 {
                     Any aControlValue = _rLine.xHandler->convertToControlValue(
@@ -899,16 +892,9 @@ namespace pcr
         Any aPropertyValue;
         try
         {
-        #ifdef DBG_UTIL
-            if ( !_rLine.xHandler.is() )
-            {
-                OString sMessage( "OBrowserListBox::impl_getControlAsPropertyValue: no handler -> no conversion (property: '" );
-                OUString sPropertyName( _rLine.pLine->GetEntryName() );
-                sMessage += OString( sPropertyName.getStr(), sPropertyName.getLength(), RTL_TEXTENCODING_ASCII_US );
-                sMessage += OString( "')!" );
-                OSL_FAIL( sMessage.getStr() );
-            }
-        #endif
+            SAL_WARN_IF( !_rLine.xHandler.is(), "extensions.propctrlr",
+                    "OBrowserListBox::impl_getControlAsPropertyValue: no handler -> no conversion (property: '"
+                    << _rLine.pLine->GetEntryName() << "')!" );
             if ( _rLine.xHandler.is() )
                 aPropertyValue = _rLine.xHandler->convertToPropertyValue( _rLine.pLine->GetEntryName(), xControl->getValue() );
             else

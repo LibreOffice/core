@@ -91,9 +91,9 @@ bool handleArguments(
 void writeUsage(const OString& rName, const OString& rFileType)
 {
     std::cout
-        << " Syntax: " << rName.getStr()
+        << " Syntax: " << rName
         << " -i FileIn -o FileOut [-m DataBase] [-l Lang] [-b]\n"
-           " FileIn:   Source files (" << rFileType.getStr() << ")\n"
+           " FileIn:   Source files (" << rFileType << ")\n"
            " FileOut:  Destination file (*.*)\n"
            " DataBase: Mergedata (*.po)\n"
            " Lang: Restrict the handled language; one element of\n"

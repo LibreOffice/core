@@ -51,10 +51,9 @@ static bool checkOutputPath(const OString& completeName)
 
     sal_Int32 nIndex = 0;
     OString token(sysPathName.getToken(0, SEPARATOR, nIndex));
-    const sal_Char* p = token.getStr();
-    if (strcmp(p, "..") == 0
-        || *(p+1) == ':'
-        || strcmp(p, ".") == 0)
+    if (token.startsWith("..")
+        || (token.getLength() >= 2 && token[1] == ':')
+        || token.startsWith("."))
     {
         buffer.append(token);
         buffer.append(SEPARATOR);

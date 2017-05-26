@@ -255,7 +255,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
                 pSource->SetAccessibleRelationMemberOf(pTarget);
             else
             {
-                SAL_INFO("vcl.layout", "unhandled a11y relation :" << rType.getStr());
+                SAL_INFO("vcl.layout", "unhandled a11y relation :" << rType);
             }
         }
     }
@@ -496,8 +496,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     m_pParserState.reset();
 
     SAL_WARN_IF(!m_sID.isEmpty() && (!m_bToplevelParentFound && !get_by_name(m_sID)), "vcl.layout",
-        "Requested top level widget \"" << m_sID.getStr() <<
-        "\" not found in " << sUIFile);
+        "Requested top level widget \"" << m_sID << "\" not found in " << sUIFile);
 
 #if defined SAL_LOG_WARN
     if (m_bToplevelParentFound && m_pParent->IsDialog())
@@ -1454,7 +1453,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         if (sPattern.isEmpty())
         {
             connectNumericFormatterAdjustment(id, sAdjustment);
-            SAL_INFO("vcl.layout", "making numeric field for " << name.getStr() << " " << sUnit.getStr());
+            SAL_INFO("vcl.layout", "making numeric field for " << name << " " << sUnit);
             xWindow = VclPtr<NumericField>::Create(pParent, nBits);
         }
         else
@@ -1462,20 +1461,20 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             if (sPattern == "hh:mm")
             {
                 connectTimeFormatterAdjustment(id, sAdjustment);
-                SAL_INFO("vcl.layout", "making time field for " << name.getStr() << " " << sUnit.getStr());
+                SAL_INFO("vcl.layout", "making time field for " << name << " " << sUnit.getStr());
                 xWindow = VclPtr<TimeField>::Create(pParent, nBits);
             }
             else if (sPattern == "yy:mm:dd")
             {
                 connectDateFormatterAdjustment(id, sAdjustment);
-                SAL_INFO("vcl.layout", "making date field for " << name.getStr() << " " << sUnit.getStr());
+                SAL_INFO("vcl.layout", "making date field for " << name << " " << sUnit.getStr());
                 xWindow = VclPtr<DateField>::Create(pParent, nBits);
             }
             else
             {
                 connectNumericFormatterAdjustment(id, sAdjustment);
                 FieldUnit eUnit = detectMetricUnit(sUnit);
-                SAL_INFO("vcl.layout", "making metric field for " << name.getStr() << " " << sUnit.getStr());
+                SAL_INFO("vcl.layout", "making metric field for " << name << " " << sUnit.getStr());
                 VclPtrInstance<MetricField> xField(pParent, nBits);
                 xField->SetUnit(eUnit);
                 if (eUnit == FUNIT_CUSTOM)
@@ -1504,9 +1503,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             connectNumericFormatterAdjustment(id, sAdjustment);
             OUString sUnit = extractUnit(sPattern);
             FieldUnit eUnit = detectMetricUnit(sUnit);
-            SAL_WARN("vcl.layout", "making metric box for type: " << name.getStr()
-                << " unit: " << sUnit.getStr()
-                << " name: " << id.getStr()
+            SAL_WARN("vcl.layout", "making metric box for type: " << name
+                << " unit: " << sUnit
+                << " name: " << id
                 << " use a VclComboBoxNumeric instead");
             VclPtrInstance<MetricBox> xBox(pParent, nBits);
             xBox->EnableAutoSize(true);
@@ -1547,7 +1546,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             connectNumericFormatterAdjustment(id, sAdjustment);
             OUString sUnit = extractUnit(sPattern);
             FieldUnit eUnit = detectMetricUnit(sUnit);
-            SAL_INFO("vcl.layout", "making metric box for " << name.getStr() << " " << sUnit.getStr());
+            SAL_INFO("vcl.layout", "making metric box for " << name << " " << sUnit);
             VclPtrInstance<MetricBox> xBox(pParent, nBits);
             xBox->EnableAutoSize(true);
             xBox->SetUnit(eUnit);
@@ -1558,7 +1557,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         }
         else
         {
-            SAL_INFO("vcl.layout", "making numeric box for " << name.getStr());
+            SAL_INFO("vcl.layout", "making numeric box for " << name);
             connectNumericFormatterAdjustment(id, sAdjustment);
             VclPtrInstance<NumericBox> xBox(pParent, nBits);
             if (bDropdown)
@@ -1809,16 +1808,16 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             }
         }
     }
-    SAL_WARN_IF(!xWindow, "vcl.layout", "probably need to implement " << name.getStr() << " or add a make" << name.getStr() << " function");
+    SAL_WARN_IF(!xWindow, "vcl.layout", "probably need to implement " << name << " or add a make" << name << " function");
     if (xWindow)
     {
         xWindow->SetHelpId(m_sHelpRoot + id);
-        SAL_INFO("vcl.layout", "for " << name.getStr() <<
+        SAL_INFO("vcl.layout", "for " << name <<
             ", created " << xWindow.get() << " child of " <<
             pParent << "(" << xWindow->mpWindowImpl->mpParent.get() << "/" <<
             xWindow->mpWindowImpl->mpRealParent.get() << "/" <<
             xWindow->mpWindowImpl->mpBorderWindow.get() << ") with helpid " <<
-            xWindow->GetHelpId().getStr());
+            xWindow->GetHelpId());
         m_aChildren.push_back(WinAndId(id, xWindow, bVertical));
     }
     return xWindow;
@@ -1885,8 +1884,7 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OString
         {
             pCurrentChild->SetHelpId(m_sHelpRoot + m_sID);
             SAL_INFO("vcl.layout", "for toplevel dialog " << this << " " <<
-                rID.getStr() << ", set helpid " <<
-                pCurrentChild->GetHelpId().getStr());
+                rID << ", set helpid " << pCurrentChild->GetHelpId());
         }
         m_bToplevelParentFound = true;
     }
@@ -2418,7 +2416,7 @@ void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, const OString &rI
         if (pWindow && rKey.match("AtkObject::"))
             pWindow->set_property(rKey.copy(RTL_CONSTASCII_LENGTH("AtkObject::")), rValue);
         else
-            SAL_WARN("vcl.layout", "unhandled atk prop: " << rKey.getStr());
+            SAL_WARN("vcl.layout", "unhandled atk prop: " << rKey);
     }
 }
 
@@ -2772,7 +2770,7 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const
         pParent->InsertSeparator(rID);
     }
 
-    SAL_WARN_IF(nOldCount == pParent->GetItemCount(), "vcl.layout", "probably need to implement " << rClass.getStr());
+    SAL_WARN_IF(nOldCount == pParent->GetItemCount(), "vcl.layout", "probably need to implement " << rClass);
 
     if (nOldCount != pParent->GetItemCount())
     {
@@ -2792,7 +2790,7 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const
             else if (rKey == "has-default" && toBool(rValue))
                 pParent->SetSelectedEntry(nNewId);
             else
-                SAL_INFO("vcl.layout", "unhandled property: " << rKey.getStr());
+                SAL_INFO("vcl.layout", "unhandled property: " << rKey);
         }
 
         for (accelmap::iterator aI = rAccels.begin(), aEnd = rAccels.end(); aI != aEnd; ++aI)
@@ -2803,7 +2801,7 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const
             if (rSignal == "activate")
                 pParent->SetAccelKey(nNewId, makeKeyCode(rValue));
             else
-                SAL_INFO("vcl.layout", "unhandled accelerator for: " << rSignal.getStr());
+                SAL_INFO("vcl.layout", "unhandled accelerator for: " << rSignal);
         }
     }
 
@@ -3107,7 +3105,7 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
             }
             else
             {
-                SAL_WARN("vcl.layout", "unknown packing: " << sKey.getStr());
+                SAL_WARN("vcl.layout", "unknown packing: " << sKey);
             }
         }
     }
@@ -3151,7 +3149,7 @@ std::vector<vcl::EnumContext::Context> VclBuilder::handleStyle(xmlreader::XmlRea
                 }
                 else
                 {
-                    SAL_WARN("vcl.layout", "unknown class: " << classStyle.getStr());
+                    SAL_WARN("vcl.layout", "unknown class: " << classStyle);
                 }
             }
         }
@@ -3510,7 +3508,7 @@ void VclBuilder::mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rA
         }
         else
         {
-            SAL_INFO("vcl.layout", "unhandled property :" << rKey.getStr());
+            SAL_INFO("vcl.layout", "unhandled property :" << rKey);
         }
     }
 }
@@ -3541,7 +3539,7 @@ void VclBuilder::mungeAdjustment(TimeField &rTarget, const Adjustment &rAdjustme
         }
         else
         {
-            SAL_INFO("vcl.layout", "unhandled property :" << rKey.getStr());
+            SAL_INFO("vcl.layout", "unhandled property :" << rKey);
         }
     }
 }
@@ -3572,7 +3570,7 @@ void VclBuilder::mungeAdjustment(DateField &rTarget, const Adjustment &rAdjustme
         }
         else
         {
-            SAL_INFO("vcl.layout", "unhandled property :" << rKey.getStr());
+            SAL_INFO("vcl.layout", "unhandled property :" << rKey);
         }
     }
 }
@@ -3596,7 +3594,7 @@ void VclBuilder::mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustme
             rTarget.SetPageSize(rValue.toInt32());
         else
         {
-            SAL_INFO("vcl.layout", "unhandled property :" << rKey.getStr());
+            SAL_INFO("vcl.layout", "unhandled property :" << rKey);
         }
     }
 }
@@ -3620,7 +3618,7 @@ void VclBuilder::mungeAdjustment(Slider& rTarget, const Adjustment& rAdjustment)
             rTarget.SetPageSize(rValue.toInt32());
         else
         {
-            SAL_INFO("vcl.layout", "unhandled property :" << rKey.getStr());
+            SAL_INFO("vcl.layout", "unhandled property :" << rKey);
         }
     }
 }
@@ -3636,7 +3634,7 @@ void VclBuilder::mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rT
             rTarget.SetText(rValue);
         else
         {
-            SAL_INFO("vcl.layout", "unhandled property :" << rKey.getStr());
+            SAL_INFO("vcl.layout", "unhandled property :" << rKey);
         }
     }
 }

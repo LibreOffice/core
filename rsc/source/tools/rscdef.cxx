@@ -169,8 +169,7 @@ RscDefine * RscDefine::Search( const char * pSearch ) const
 
 COMPARE RscDefine::Compare( const NameNode * pSearch ) const
 {
-    int nCmp = strcmp( m_aName.getStr(),
-                       static_cast<const RscDefine *>(pSearch)->m_aName.getStr() );
+    int nCmp = m_aName.compareTo( static_cast<const RscDefine *>(pSearch)->m_aName );
     if( nCmp < 0 )
         return LESS;
     else if( nCmp > 0 )
@@ -182,7 +181,7 @@ COMPARE RscDefine::Compare( const NameNode * pSearch ) const
 // pSearch is a pointer to const char *
 COMPARE RscDefine::Compare( const void * pSearch ) const
 {
-    int nCmp = strcmp( m_aName.getStr(), static_cast<const char *>(pSearch) );
+    int nCmp = m_aName.compareTo( static_cast<const char *>(pSearch) );
 
     if( nCmp < 0 )
         return LESS;

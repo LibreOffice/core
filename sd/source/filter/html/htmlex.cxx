@@ -3060,8 +3060,8 @@ bool HtmlExport::checkFileExists( Reference< css::ucb::XSimpleFileAccess3 >& xFi
     }
     catch( css::uno::Exception& )
     {
-        OSL_FAIL(OString(OString("sd::HtmlExport::checkFileExists(), exception caught: ") +
-             OUStringToOString( comphelper::anyToString( cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 )).getStr() );
+        SAL_WARN( "sd", "sd::HtmlExport::checkFileExists(), exception caught: "
+                    << comphelper::anyToString( cppu::getCaughtException() ) );
     }
 
     return false;
@@ -3108,8 +3108,8 @@ bool HtmlExport::checkForExistingFiles()
     }
     catch( Exception& )
     {
-        OSL_FAIL(OString(OString("sd::HtmlExport::checkForExistingFiles(), exception caught: ") +
-             OUStringToOString( comphelper::anyToString( cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 )).getStr() );
+        SAL_WARN( "sd", "sd::HtmlExport::checkForExistingFiles(), exception caught: "
+                    << comphelper::anyToString( cppu::getCaughtException() ) );
         bFound = false;
     }
 

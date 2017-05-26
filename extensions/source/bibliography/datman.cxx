@@ -180,13 +180,8 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
             }
             catch (const Exception& e)
             {
-#ifdef DBG_UTIL
-                OUString sMsg( "::getColumns : catched an exception (" + e.Message + ") ..." );
-
-                OSL_FAIL(OUStringToOString(sMsg, RTL_TEXTENCODING_ASCII_US ).getStr());
-#else
                 (void)e;
-#endif
+                SAL_WARN( "extensions.biblio", "::getColumns : catched an exception. " << e.Message);
             }
 
         }

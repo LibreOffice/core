@@ -249,11 +249,8 @@ void SlideFragmentHandler::finalizeImport()
     }
     catch( uno::Exception& )
     {
-        OSL_FAIL( OString("oox::ppt::SlideFragmentHandler::EndElement(), "
-                    "exception caught: " +
-            OUStringToOString(
-                comphelper::anyToString( cppu::getCaughtException() ),
-                RTL_TEXTENCODING_UTF8 )).getStr());
+        SAL_WARN( "oox", "oox::ppt::SlideFragmentHandler::EndElement(), "
+                    "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ) );
     }
 }
 
