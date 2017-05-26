@@ -1675,7 +1675,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                     sal_uInt32 nLen = sFormulaBuf.getLength();
                     if( nLen > 256 )  // 255 + beginning quote mark
                     {
-                        nLen = 255;
+                        nLen = 256;
                         if( sFormulaBuf[nLen - 1] == ',' )
                             --nLen;
                         sFormulaBuf = sFormulaBuf.copy(0, nLen);

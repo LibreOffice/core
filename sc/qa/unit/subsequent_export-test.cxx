@@ -470,7 +470,7 @@ void ScExportTest::testTdf99856_dataValidationTest()
     std::vector<ScTypedStrData> aList;
     pData->FillSelectionList(aList, ScAddress(0, 1, 1));
     CPPUNIT_ASSERT_EQUAL(size_t(18), aList.size());
-    CPPUNIT_ASSERT_EQUAL(OUString("18 Missi"), aList[17].GetString());
+    CPPUNIT_ASSERT_EQUAL(OUString("18 Missis"), aList[17].GetString());
 
     xDocSh->DoClose();
 }
