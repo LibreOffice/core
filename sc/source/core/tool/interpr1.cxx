@@ -3794,7 +3794,6 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
         ArrayRefListValue() : mfSum(0.0) {}
     };
     std::vector<ArrayRefListValue> vArrayValues;
-    size_t nRefArrayPos = std::numeric_limits<size_t>::max();
 
     std::vector<double> values;
     double fSum    = 0.0;
@@ -3840,7 +3839,7 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
                 const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(pStack[sp-1]);
                 if (p && p->IsArrayResult())
                 {
-                    nRefArrayPos = nRefInList;
+                    size_t nRefArrayPos = nRefInList;
                     if (vArrayValues.empty())
                     {
                         // Create and init all elements with current value.
@@ -3882,7 +3881,6 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
                     // Reset.
                     std::vector<double>().swap(values);
                     fSum = 0.0;
-                    nRefArrayPos = std::numeric_limits<size_t>::max();
                     break;
                 }
             }
