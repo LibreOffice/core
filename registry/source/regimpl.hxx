@@ -137,13 +137,13 @@ private:
 
     typedef std::unordered_map< OUString, ORegKey*, OUStringHash > KeyMap;
 
-    sal_uInt32      m_refCount;
+    sal_uInt32          m_refCount;
     osl::Mutex          m_mutex;
-    bool            m_readOnly;
-    bool            m_isOpen;
-    OUString       m_name;
+    bool                m_readOnly;
+    bool                m_isOpen;
+    OUString            m_name;
     store::OStoreFile   m_file;
-    KeyMap          m_openKeyTable;
+    KeyMap              m_openKeyTable;
 
     const OUString ROOT;
 };
