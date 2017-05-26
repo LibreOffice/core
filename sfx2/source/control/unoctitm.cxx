@@ -111,7 +111,7 @@ const char* URLTypeNames[URLType_COUNT] =
     "double"
 };
 
-static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent);
+static void InterceptLOKStateChangeEvent( const SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem* pState );
 
 void SfxStatusDispatcher::ReleaseAll()
 {
@@ -954,7 +954,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 
         if (pDispatcher && pDispatcher->GetFrame())
         {
-            InterceptLOKStateChangeEvent(pDispatcher->GetFrame(), aEvent);
+            InterceptLOKStateChangeEvent(pDispatcher->GetFrame(), aEvent, pState);
         }
 
         Sequence< OUString > seqNames = pDispatch->GetListeners().getContainedTypes();
@@ -972,7 +972,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     StateChanged( nSID, eState, pState, nullptr );
 }
 
-static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent)
+static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const css::frame::FeatureStateEvent& aEvent, const SfxPoolItem* pState)
 {
     if (!comphelper::LibreOfficeKit::isActive())
         return;
@@ -1038,8 +1038,19 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
         aBuffer.append(nColor);
     }
     else if (aEvent.FeatureURL.Path == "Undo" ||
-             aEvent.FeatureURL.Path == "Redo" ||
-             aEvent.FeatureURL.Path == "Cut" ||
+             aEvent.FeatureURL.Path == "Redo")
+    {
+        const SfxUInt32Item* pUndoConflict = dynamic_cast< const SfxUInt32Item * >( pState );
+        if ( pUndoConflict && pUndoConflict->GetValue() > 0 )
+        {
+            aBuffer.append(OUString("disabled"));
+        }
+        else
+        {
+            aBuffer.append(aEvent.IsEnabled ? OUString("enabled") : OUString("disabled"));
+        }
+    }
+    else if (aEvent.FeatureURL.Path == "Cut" ||
              aEvent.FeatureURL.Path == "Copy" ||
              aEvent.FeatureURL.Path == "Paste" ||
              aEvent.FeatureURL.Path == "SelectAll" ||
