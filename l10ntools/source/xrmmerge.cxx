@@ -443,7 +443,7 @@ void XRMResMerge::WorkOnDesc(
                     sal_Int32 i = sOutputFile.lastIndexOf('/');
                     if (i == -1) {
                         std::cerr
-                            << "Error: output file " << sOutputFile.getStr()
+                            << "Error: output file " << sOutputFile
                             << " does not contain any /\n";
                         throw false; //TODO
                     }
@@ -451,12 +451,12 @@ void XRMResMerge::WorkOnDesc(
                         sOutputFile.copy(0, i + 1) + sLocDescFilename);
                     ofstream file(sOutputDescFile.getStr());
                     if (file.is_open()) {
-                        file << sText.getStr();
+                        file << sText;
                         file.close();
                     } else {
                         std::cerr
                             << "Error: cannot write "
-                            << sOutputDescFile.getStr() << '\n';
+                            << sOutputDescFile << '\n';
                         throw false; //TODO
                     }
                 }
@@ -481,7 +481,7 @@ void XRMResMerge::WorkOnText(
 void XRMResMerge::Output( const OString& rOutput )
 {
     if (!rOutput.isEmpty())
-        pOutputStream << rOutput.getStr();
+        pOutputStream << rOutput;
 }
 
 void XRMResMerge::EndOfText(

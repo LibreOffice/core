@@ -168,10 +168,9 @@ OUString SAL_CALL StringRepresentation::convertToControlValue(const uno::Any & P
 #ifdef DBG_UTIL
         if ( sReturn.isEmpty() && PropertyValue.hasValue() )
         {
-            OString sMessage( "StringRepresentation::convertPropertyValueToStringRepresentation: cannot convert values of type '" );
-            sMessage += OString( PropertyValue.getValueType().getTypeName().getStr(), PropertyValue.getValueType().getTypeName().getLength(), RTL_TEXTENCODING_ASCII_US );
-            sMessage += OString( "'!" );
-            OSL_FAIL( sMessage.getStr() );
+            SAL_WARN( "extensions.propctrlr", "StringRepresentation::convertPropertyValueToStringRepresentation: cannot convert values of type '"
+                        << PropertyValue.getValueType().getTypeName()
+                        << "'!" );
         }
 #endif
     }
@@ -213,10 +212,8 @@ uno::Any SAL_CALL StringRepresentation::convertToPropertyValue(const OUString & 
         // could not convert ...
         if ( !bCanConvert && !ControlValue.isEmpty() )
         {
-            OString sMessage( "StringRepresentation::convertStringRepresentationToPropertyValue: cannot convert into values of type '" );
-            sMessage += OString( ControlValueType.getTypeName().getStr(), ControlValueType.getTypeName().getLength(), RTL_TEXTENCODING_ASCII_US );
-            sMessage += OString( "'!" );
-            OSL_FAIL( sMessage.getStr() );
+            SAL_WARN( "extensions.propctrlr", "StringRepresentation::convertStringRepresentationToPropertyValue: cannot convert into values of type '"
+            << ControlValueType.getTypeName() << "'!" );
         }
     #endif
     }

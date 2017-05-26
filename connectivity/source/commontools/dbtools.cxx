@@ -976,14 +976,10 @@ try
                 {
                     xNewProps->setPropertyValue(pResult->Name, xOldProps->getPropertyValue(pResult->Name));
                 }
-                catch(IllegalArgumentException&)
+                catch(IllegalArgumentException const & exc)
                 {
-#ifdef DBG_UTIL
-                    OUString sMessage = "TransferFormComponentProperties : could not transfer the value for property \"" +
-                        pResult->Name +
-                        "\"";
-                    OSL_FAIL(OUStringToOString(sMessage, RTL_TEXTENCODING_ASCII_US).getStr());
-#endif
+                    SAL_WARN( "connectivity.commontools", "TransferFormComponentProperties : could not transfer the value for property \""
+                                << pResult->Name << "\" " << exc.Message);
                 }
             }
         }

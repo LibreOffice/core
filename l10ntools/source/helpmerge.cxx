@@ -231,7 +231,7 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
             // important for indentation of Basic code examples
             sal_Int32 nPreSpaces = 0;
             sal_Int32 nLen = sSourceText.getLength();
-            while ( (nPreSpaces < nLen) && (*(sSourceText.getStr()+nPreSpaces) == ' ') )
+            while ( (nPreSpaces < nLen) && (sSourceText[nPreSpaces] == ' ') )
                 nPreSpaces++;
             if( sCur == "qtz" )
             {
@@ -264,8 +264,8 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResDa
             {
                 SAL_WARN(
                     "l10ntools",
-                    "Can't find GID=" << pResData->sGId.getStr() << " LID="
-                        << pResData->sId.getStr() << " TYP=" << pResData->sResTyp.getStr());
+                    "Can't find GID=" << pResData->sGId << " LID="
+                        << pResData->sId << " TYP=" << pResData->sResTyp);
             }
             pXMLElement->ChangeLanguageTag(sCur);
         }

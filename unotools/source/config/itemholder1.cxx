@@ -64,11 +64,7 @@ ItemHolder1::ItemHolder1()
         if(bMessage)
         {
             bMessage = false;
-            OString sMsg("CreateInstance with arguments exception: ");
-            sMsg += OString(rEx.Message.getStr(),
-                        rEx.Message.getLength(),
-                        RTL_TEXTENCODING_ASCII_US);
-            OSL_FAIL(sMsg.getStr());
+            SAL_WARN( "unotools", "CreateInstance with arguments exception: " <<  rEx.Message);
         }
     }
 #else

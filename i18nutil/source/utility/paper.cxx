@@ -271,8 +271,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
                 if (ePaper == PAPER_USER)
                 {
-                    bHalve = !rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
-                        aPaper.getStr(), aPaper.getLength(),  "half", 4, 4);
+                    bHalve = !aPaper.startsWith("half");
                     if (bHalve)
                         aPaper = aPaper.copy(4);
                     ePaper = PaperInfo::fromPSName(aPaper);

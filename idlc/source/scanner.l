@@ -439,7 +439,7 @@ published       return IDL_PUBLISHED;
 				if ( (nIndex = docu.indexOf("/*")) >= 0 || (nIndex = docu.indexOf("///")) >= 0 )
 				{
                     if ( 0 != nIndex &&
-                         (docu.getStr()[nIndex - 1] != '"' && docu.getStr()[nIndex - 1] != ':') )
+                         (docu[nIndex - 1] != '"' && docu[nIndex - 1] != ':') )
                         ErrorHandler::syntaxError(PS_NoState, idlc()->getLineNumber(),
                                                      "nested documentation strings are not allowed!");
 				}
@@ -456,7 +456,7 @@ published       return IDL_PUBLISHED;
 				if ( docu.indexOf("/*") >= 0 || docu.indexOf("//") >= 0 )
 				{
                     if ( 0 != nIndex &&
-                         (docu.getStr()[nIndex - 1] != '"' && docu.getStr()[nIndex - 1] != ':') )
+                         (docu[nIndex - 1] != '"' && docu[nIndex - 1] != ':') )
                         ErrorHandler::syntaxError(PS_NoState, idlc()->getLineNumber(),
                                                      "nested documentation strings are not allowed!");
 				}

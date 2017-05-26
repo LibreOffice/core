@@ -90,16 +90,9 @@ namespace frm
         (void)_rArguments;
 
         OSL_ENSURE( _rURL.Complete == getFeatureURL().Complete, "OAttributeDispatcher::dispatch: invalid URL!" );
-#if OSL_DEBUG_LEVEL > 0
-        if ( _rArguments.getLength() )
-        {
-            OString sMessage( "OAttributeDispatcher::dispatch: found arguments, but can't handle arguments at all" );
-            sMessage += "\n (URL: ";
-            sMessage += OString( _rURL.Complete.getStr(), _rURL.Complete.getLength(), RTL_TEXTENCODING_ASCII_US );
-            sMessage += ")";
-            OSL_FAIL( sMessage.getStr() );
-        }
-#endif
+        SAL_WARN_IF( _rArguments.getLength(), "forms.richtext",
+                "OAttributeDispatcher::dispatch: found arguments, but can't handle arguments at all"
+                " (URL: " << _rURL.Complete << ")");
 
         if ( m_pMasterDispatcher )
             m_pMasterDispatcher->executeAttribute( m_nAttributeId, nullptr );

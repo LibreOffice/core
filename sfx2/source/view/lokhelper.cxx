@@ -146,12 +146,14 @@ void SfxLokHelper::notifyOtherViews(SfxViewShell* pThisView, int nType, const OS
 
 void SfxLokHelper::notifyInvalidation(SfxViewShell* pThisView, const OString& rPayload)
 {
-    std::stringstream ss;
-    ss << rPayload.getStr();
+    OStringBuffer aBuf;
+    aBuf.append(rPayload);
     if (comphelper::LibreOfficeKit::isPartInInvalidation())
-        ss << ", " << pThisView->getPart();
-    OString aPayload = ss.str().c_str();
-    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aPayload.getStr());
+    {
+        aBuf.append(", ");
+        aBuf.append((sal_Int32) pThisView->getPart());
+    }
+    pThisView->libreOfficeKitViewCallback(LOK_CALLBACK_INVALIDATE_TILES, aBuf.makeStringAndClear().getStr());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

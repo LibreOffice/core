@@ -50,12 +50,12 @@ using namespace com::sun::star::ucb;
 
 static OUString createIndex(const vector< OUString >& lines)
 {
-    OString aResult;
+    OUString aResult;
 
     for( size_t i = 0; i < lines.size(); i++ )
     {
         if( i )
-            aResult += OString( "__" );
+            aResult += "__";
         OString line = OUStringToOString( lines[i], RTL_TEXTENCODING_UTF8 );
         const sal_Char* pLine = line.getStr();
 
@@ -63,19 +63,19 @@ static OUString createIndex(const vector< OUString >& lines)
         {
             if (rtl::isAsciiAlphanumeric(static_cast<unsigned char>(*pLine)))
             {
-                aResult += OString( *pLine );
+                aResult += OUStringLiteral1(*pLine);
             }
             else
             {
-                aResult += OString("_");
-                aResult += OString::number(  *pLine, 16 );
+                aResult += "_";
+                aResult += OUString::number(  *pLine, 16 );
             }
 
             pLine++;
         }
     }
 
-    return OUString::createFromAscii( aResult.getStr() );
+    return aResult;
 }
 
 

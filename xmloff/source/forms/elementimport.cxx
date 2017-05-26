@@ -329,12 +329,8 @@ namespace xmloff
                 {
                     if ( !xDynamicProperties.is() )
                     {
-                    #if OSL_DEBUG_LEVEL > 0
-                        OString aMessage( "OElementImport::implApplyGenericProperties: encountered an unknown property (" );
-                        aMessage += OUStringToOString( aPropValues->Name, RTL_TEXTENCODING_ASCII_US );
-                        aMessage += "), but component is no PropertyBag!";
-                        OSL_FAIL( aMessage.getStr() );
-                    #endif
+                        SAL_WARN( "xmloff", "OElementImport::implApplyGenericProperties: encountered an unknown property ("
+                                    << aPropValues->Name << "), but component is no PropertyBag!");
                         continue;
                     }
 

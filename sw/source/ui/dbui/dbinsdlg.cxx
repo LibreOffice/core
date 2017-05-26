@@ -1174,7 +1174,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 }
                 catch (const Exception& rExcept)
                 {
-                    OSL_FAIL(OUStringToOString(rExcept.Message, osl_getThreadTextEncoding()).getStr());
+                    SAL_WARN("sw", rExcept.Message);
                     (void)rExcept;
                 }
             }

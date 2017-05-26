@@ -127,8 +127,7 @@ CommandEnvironmentImpl::~CommandEnvironmentImpl()
     }
     catch (const RuntimeException & exc) {
         (void) exc;
-        OSL_FAIL( OUStringToOString(
-                        exc.Message, osl_getThreadTextEncoding() ).getStr() );
+        SAL_WARN( "desktop", exc.Message );
     }
 }
 

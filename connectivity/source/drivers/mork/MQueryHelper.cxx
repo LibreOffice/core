@@ -271,7 +271,7 @@ std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpressi
             MQueryExpressionString* evStr = static_cast<MQueryExpressionString*> (*evIter);
             // Set the 'name' property of the boolString.
             OString attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToUTF8Alias( evStr->getName() );
-            SAL_INFO("connectivity.mork", "Name = " << attrName.getStr());
+            SAL_INFO("connectivity.mork", "Name = " << attrName);
             bool bRequiresValue = true;
             OUString currentValue = entry->getValue(attrName);
             if (evStr->getCond() == MQueryOp::Exists || evStr->getCond() == MQueryOp::DoesNotExist)

@@ -202,7 +202,7 @@ namespace DOM
             return nread;
         } catch (const css::uno::Exception& ex) {
             (void) ex;
-            OSL_FAIL(OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
+            SAL_WARN( "unoxml", ex.Message);
             return -1;
         }
     }
@@ -222,7 +222,7 @@ namespace DOM
             return 0;
         } catch (const css::uno::Exception& ex) {
             (void) ex;
-            OSL_FAIL(OUStringToOString(ex.Message, RTL_TEXTENCODING_UTF8).getStr());
+            SAL_WARN( "unoxml", ex.Message);
             return -1;
         }
     }

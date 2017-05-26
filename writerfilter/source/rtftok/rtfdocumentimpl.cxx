@@ -764,10 +764,9 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
 
         // Feed the destination text to a stream.
         OString aStr = OUStringToOString(m_aStates.top().aDestinationText.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
-        const char* str = aStr.getStr();
         for (int i = 0; i < aStr.getLength(); ++i)
         {
-            char ch = str[i];
+            char ch = aStr[i];
             if (ch != 0x0d && ch != 0x0a && ch != 0x20)
             {
                 b = b << 4;
@@ -2184,11 +2183,10 @@ RTFError RTFDocumentImpl::popState()
         OString aStr = OUStringToOString(m_aStates.top().pDestinationText->makeStringAndClear(), aState.nCurrentEncoding);
         // decode hex dump
         OStringBuffer aBuf;
-        const char* str = aStr.getStr();
         int b = 0, count = 2;
         for (int i = 0; i < aStr.getLength(); ++i)
         {
-            char ch = str[i];
+            char ch = aStr[i];
             if (ch != 0x0d && ch != 0x0a)
             {
                 b = b << 4;
@@ -3093,10 +3091,9 @@ RTFError RTFDocumentImpl::handleEmbeddedObject()
 
     // Feed the destination text to a stream.
     OString aStr = OUStringToOString(m_aStates.top().pDestinationText->makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
-    const char* str = aStr.getStr();
     for (int i = 0; i < aStr.getLength(); ++i)
     {
-        char ch = str[i];
+        char ch = aStr[i];
         if (ch != 0x0d && ch != 0x0a)
         {
             b = b << 4;

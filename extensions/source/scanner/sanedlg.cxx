@@ -689,9 +689,7 @@ IMPL_LINK( SaneDlg, SelectHdl, ListBox&, rListBox, void )
     {
         if( &rListBox == mpQuantumRangeBox )
         {
-            OString aValue(OUStringToOString(mpQuantumRangeBox->GetSelectEntry(),
-                osl_getThreadTextEncoding()));
-            double fValue = atof(aValue.getStr());
+            double fValue = mpQuantumRangeBox->GetSelectEntry().toDouble();
             mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
         }
         else if( &rListBox == mpStringRangeBox )
@@ -809,10 +807,7 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit&, rEdit, void )
         }
         else if( &rEdit == mpNumericEdit )
         {
-            double fValue;
-            OString aContents(OUStringToOString(mpNumericEdit->GetText(),
-                osl_getThreadTextEncoding()));
-            fValue = atof(aContents.getStr());
+            double fValue = mpNumericEdit->GetText().toDouble();
             if( mfMin != mfMax && ( fValue < mfMin || fValue > mfMax ) )
             {
                 char pBuf[256];

@@ -193,11 +193,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
     catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_FAIL( OUStringToOString(
-                        "Exception caught. Type: " +
-                        OUString::createFromAscii( typeid( ex ).name()) +
-                        ", Message: " +
-                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+        SAL_WARN( "oox", "Exception caught. " << ex.Message);
     }
 
     return xResult;
@@ -303,11 +299,7 @@ bool lcl_isSeriesAttachedToFirstAxis(
     catch( const uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_FAIL( OUStringToOString(
-                        "Exception caught. Type: " +
-                        OUString::createFromAscii( typeid( ex ).name()) +
-                        ", Message: " +
-                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+        SAL_WARN( "oox", "Exception caught. " << ex.Message);
     }
 
     return bResult;
@@ -649,11 +641,7 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
         catch( const uno::Exception & ex )
         {
             (void)ex; // avoid warning for pro build
-            OSL_FAIL( OUStringToOString(
-                            "Exception caught. Type: " +
-                            OUString::createFromAscii( typeid( ex ).name()) +
-                            ", Message: " +
-                            ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+            SAL_WARN( "oox", "Exception caught. " << ex.Message);
         }
 }
 
