@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_e811e1ad",
+        "filename": "oox/source/vml/vmlformatting.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-05-26T07:36:34Z",
+      "side": 1,
+      "message": "Sounds like you reinvent ConversionHelper::separatePair() here. Is that intentional? See e.g. oox::vml::ShapeTypeContext::setStyle() how that can be used to get key-value pairs from a CSS-like style string.",
+      "revId": "972919db0a74ca26d60073da0754a31cb132e923",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
