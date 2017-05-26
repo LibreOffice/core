@@ -57,12 +57,16 @@ void SwWatermarkDialog::InitFields()
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pFontItem;
     const FontList* pFontList = nullptr;
+    std::unique_ptr<FontList> xFontList;
 
     if ( pDocSh && ( ( pFontItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST ) ) != nullptr ) )
         pFontList = static_cast<const SvxFontListItem*>( pFontItem )->GetFontList();
 
-    if(!pFontList)
-        pFontList = new FontList(Application::GetDefaultDevice(), nullptr);
+    if (!pFontList)
+    {
+        xFontList.reset(new FontList(Application::GetDefaultDevice(), nullptr));
+        pFontList = xFontList.get();
+    }
 
     m_pFont->Fill( pFontList );
 
