@@ -89,6 +89,7 @@ public:
     void testPaintCallbacks();
     void testUndoRepairResult();
     void testRedoRepairResult();
+    void testDisableUndoRepair();
 
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
@@ -134,6 +135,7 @@ public:
     CPPUNIT_TEST(testPaintCallbacks);
     CPPUNIT_TEST(testUndoRepairResult);
     CPPUNIT_TEST(testRedoRepairResult);
+    CPPUNIT_TEST(testDisableUndoRepair);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1718,6 +1720,82 @@ void SwTiledRenderingTest::testRedoRepairResult()
     comphelper::dispatchCommand(".uno:Redo", {}, xListener);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SwUndoId::CONFLICT), pResult2->m_nDocRepair);
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testDisableUndoRepair()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    // Create two views.
+    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    ViewCallback aView1;
+    SwView* pView1 = dynamic_cast<SwView*>(SfxViewShell::Current());
+    int nView1 = SfxLokHelper::getView();
+    SfxLokHelper::createView();
+    ViewCallback aView2;
+    SwView* pView2 = dynamic_cast<SwView*>(SfxViewShell::Current());
+    int nView2 = SfxLokHelper::getView();
+
+    {
+        SfxItemSet aItemSet1(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), SID_UNDO, SID_UNDO);
+        SfxItemSet aItemSet2(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), SID_UNDO, SID_UNDO);
+        pView1->GetState(aItemSet1);
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, aItemSet1.GetItemState(SID_UNDO));
+        pView2->GetState(aItemSet2);
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, aItemSet2.GetItemState(SID_UNDO));
+    }
+
+    auto fnCheckStates = [pXTextDocument, pView1, pView2]()
+    {
+        SfxItemSet aItemSet1(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), SID_UNDO, SID_UNDO);
+        SfxItemSet aItemSet2(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), SID_UNDO, SID_UNDO);
+        // first view, undo enabled
+        pView1->GetState(aItemSet1);
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet1.GetItemState(SID_UNDO));
+        CPPUNIT_ASSERT(!dynamic_cast< const SfxUInt32Item * >(aItemSet1.GetItem(SID_UNDO)));
+        // second view, undo conflict
+        pView2->GetState(aItemSet2);
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet2.GetItemState(SID_UNDO));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item * >(aItemSet2.GetItem(SID_UNDO)));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SwUndoId::CONFLICT), dynamic_cast< const SfxUInt32Item * >(aItemSet2.GetItem(SID_UNDO))->GetValue());
+    };
+
+    // Insert a character in the first view.
+    SfxLokHelper::setView(nView1);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'k', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'k', 0);
+    Scheduler::ProcessEventsToIdle();
+    fnCheckStates();
+
+    // Insert a character in the second view.
+    SfxLokHelper::setView(nView2);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'u', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'u', 0);
+    Scheduler::ProcessEventsToIdle();
+    {
+        SfxItemSet aItemSet1(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), SID_UNDO, SID_UNDO);
+        SfxItemSet aItemSet2(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), SID_UNDO, SID_UNDO);
+        // second view, undo enabled
+        pView2->GetState(aItemSet2);
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet2.GetItemState(SID_UNDO));
+        CPPUNIT_ASSERT(!dynamic_cast< const SfxUInt32Item * >(aItemSet2.GetItem(SID_UNDO)));
+        // first view, undo conflict
+        pView1->GetState(aItemSet1);
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet1.GetItemState(SID_UNDO));
+        CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item * >(aItemSet1.GetItem(SID_UNDO)));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SwUndoId::CONFLICT), dynamic_cast< const SfxUInt32Item * >(aItemSet1.GetItem(SID_UNDO))->GetValue());
+    }
+
+    // Insert a character in the first view.
+    SfxLokHelper::setView(nView1);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'l', 0);
+    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'l', 0);
+    Scheduler::ProcessEventsToIdle();
+    fnCheckStates();
 
     mxComponent->dispose();
     mxComponent.clear();
