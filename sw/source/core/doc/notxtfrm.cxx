@@ -186,7 +186,8 @@ static void lcl_ClearArea( const SwFrame &rFrame,
         if ( rFrame.GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigRect, false ) )
         {
             SwRegionRects const region(rPtArea);
-            const bool bDone(::DrawFillAttributes(aFillAttributes, aOrigRect, region, rOut));
+            basegfx::tools::B2DClipState aClipState;
+            const bool bDone(::DrawFillAttributes(aFillAttributes, aOrigRect, region, aClipState, rOut));
 
             if(!bDone)
             {
