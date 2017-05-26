@@ -329,6 +329,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/IconThemeInfo \
     vcl/source/app/IconThemeScanner \
     vcl/source/app/IconThemeSelector \
+    vcl/source/app/ITiledRenderable \
     vcl/source/app/sound \
     vcl/source/app/stdtext \
     vcl/source/app/svapp \
