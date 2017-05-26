@@ -73,10 +73,7 @@ Name
 {
 #ifdef DEBUG_WRITERFILTER
     clog << this << ":start unknown element:"
-         << OUStringToOString(Namespace, RTL_TEXTENCODING_ASCII_US).getStr()
-         << ":"
-         << OUStringToOString(Name, RTL_TEXTENCODING_ASCII_US).getStr()
-         << endl;
+         << Namespace  << ":" << Name << endl;
 #endif
 }
 
@@ -106,9 +103,7 @@ Name
 {
 #ifdef DEBUG_WRITERFILTER
     clog << this << ":end unknown element:"
-         << OUStringToOString(Namespace, RTL_TEXTENCODING_ASCII_US).getStr()
-         << ":"
-         << OUStringToOString(Name, RTL_TEXTENCODING_ASCII_US).getStr()
+         << Namespace << ":" << Name
          << endl;
 #endif
 }
@@ -158,9 +153,7 @@ Name
 {
 #ifdef DEBUG_WRITERFILTER
     clog << this << ":createUnknownChildContext:"
-         << OUStringToOString(Namespace, RTL_TEXTENCODING_ASCII_US).getStr()
-         << ":"
-         << OUStringToOString(Name, RTL_TEXTENCODING_ASCII_US).getStr()
+         << Namespace << ":"<< Name
          << endl;
 #endif
 

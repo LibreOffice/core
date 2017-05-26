@@ -243,10 +243,8 @@ void OWeakObject::disposeWeakConnectionPoint()
             p->dispose();
         }
         catch (RuntimeException const& exc) {
-            OSL_FAIL(
-                OUStringToOString(
-                    exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-            static_cast<void>(exc);
+            (void)exc;
+            SAL_WARN( "cppuhelper", exc.Message );
         }
         p->release();
     }

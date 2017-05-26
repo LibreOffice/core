@@ -353,7 +353,7 @@ struct RectangleAndPart
     OString toString() const
     {
         std::stringstream ss;
-        ss << m_aRectangle.toString().getStr();
+        ss << m_aRectangle.toString();
         if (m_nPart >= -1)
             ss << ", " << m_nPart;
         return ss.str().c_str();

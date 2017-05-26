@@ -102,8 +102,7 @@ bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
 {
     if ( !rAttr.GetRef() && dynamic_cast<const SvMetaSlot *>(&rAttr) )
     {
-        OSL_FAIL( "Neuer Slot : " );
-        OSL_FAIL( rAttr.GetSlotId().getString().getStr() );
+        SAL_WARN( "idl", "Neuer Slot : " << rAttr.GetSlotId().getString() );
     }
 
     for( sal_uLong n = 0; n < aAttrList.size(); n++ )

@@ -783,7 +783,7 @@ IMPL_STATIC_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl, Button*, void)
     }
     catch (const Exception& e)
     {
-        OSL_FAIL(OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
+        SAL_WARN( "cui.options", e.Message);
         (void)e;
     }
 }

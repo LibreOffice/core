@@ -183,7 +183,7 @@ void SwMacrosTest::testVba()
         SfxObjectShell::CallXScript(xComponent, sUrl, aParams, aRet, aOutParamIndex,aOutParam);
         OUString aStringRes;
         aRet >>= aStringRes;
-        std::cout << "value of Ret " << OUStringToOString( aStringRes, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
+        std::cout << "value of Ret " << aStringRes << std::endl;
         //CPPUNIT_ASSERT_MESSAGE( "script reported failure",aStringRes == "OK" );
         pFoundShell->DoClose();
     }

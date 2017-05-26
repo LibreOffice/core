@@ -1161,19 +1161,21 @@ OUString SwCursorShell::getPageRectangles()
 {
     CurrShell aCurr(this);
     SwRootFrame* pLayout = GetLayout();
-    std::vector<OString> v;
+    OUStringBuffer aBuf;
     for (const SwFrame* pFrame = pLayout->GetLower(); pFrame; pFrame = pFrame->GetNext())
     {
-        std::vector<OString> aRectangle
-        {
-            OString::number(pFrame->Frame().Left()),
-            OString::number(pFrame->Frame().Top()),
-            OString::number(pFrame->Frame().Width()),
-            OString::number(pFrame->Frame().Height())
-        };
-        v.push_back(comphelper::string::join(", ", aRectangle));
+        aBuf.append(pFrame->Frame().Left());
+        aBuf.append(", ");
+        aBuf.append(pFrame->Frame().Top());
+        aBuf.append(", ");
+        aBuf.append(pFrame->Frame().Width());
+        aBuf.append(", ");
+        aBuf.append(pFrame->Frame().Height());
+        aBuf.append("; ");
     }
-    return OUString::fromUtf8(comphelper::string::join("; ", v).getStr());
+    if (!aBuf.isEmpty())
+        aBuf.setLength( aBuf.getLength() - 2); // remove the last "; "
+    return aBuf.makeStringAndClear();
 }
 
 void SwCursorShell::NotifyCursor(SfxViewShell* pOtherShell) const

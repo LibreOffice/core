@@ -94,8 +94,7 @@ void SAL_CALL ODFSerializer::endElement( const OUString& aName )
 
 void SAL_CALL ODFSerializer::characters( const OUString& aChars )
 {
-    const OString aStr = OUStringToOString(aChars,
-                                                     RTL_TEXTENCODING_UTF8);
+    const OString aStr = OUStringToOString(aChars, RTL_TEXTENCODING_UTF8);
     const sal_Int32 nLen( aStr.getLength() );
     m_aBuf.realloc( nLen );
     const sal_Char* pStr = aStr.getStr();

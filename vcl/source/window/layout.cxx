@@ -2153,7 +2153,7 @@ bool VclSizeGroup::set_property(const OString &rKey, const OUString &rValue)
     }
     else
     {
-        SAL_INFO("vcl.layout", "unhandled property: " << rKey.getStr());
+        SAL_INFO("vcl.layout", "unhandled property: " << rKey);
         return false;
     }
     return true;

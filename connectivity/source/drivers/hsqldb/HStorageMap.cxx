@@ -311,16 +311,10 @@ namespace connectivity
                         }
                         catch(const Exception& e)
                         {
-#if OSL_DEBUG_LEVEL > 0
-                            OString sMessage( "[HSQLDB-SDBC] caught an exception while opening a stream\n" );
-                            sMessage += "Name: ";
-                            sMessage += OString( sName.getStr(), sName.getLength(), osl_getThreadTextEncoding() );
-                            sMessage += "\nMode: 0x";
-                            if ( _nMode < 16 )
-                                sMessage += "0";
-                            sMessage += OString::number( _nMode, 16 ).toAsciiUpperCase();
-                            OSL_FAIL( sMessage.getStr() );
-#endif
+                            SAL_WARN( "connectivity.hsqldb", "[HSQLDB-SDBC] caught an exception while opening a stream\n"
+                                "Name: " << sName
+                                << "\nMode: 0x" <<  ( _nMode < 16 ? "0" : "")
+                                << std::hex << _nMode );
                             StorageContainer::throwJavaException(e,env);
                         }
                     }

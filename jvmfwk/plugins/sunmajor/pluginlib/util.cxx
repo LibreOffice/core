@@ -537,7 +537,7 @@ bool getJavaProps(const OUString & exePath,
     //process error stream data
     stderrReader->join();
     JFW_TRACE2("Java wrote to stderr:\" "
-               << stderrReader->getData().getStr() << " \"");
+               << stderrReader->getData() << " \"");
 
     TimeValue waitMax= {5 ,0};
     procErr = osl_joinProcessWithTimeout(javaProcess, &waitMax);

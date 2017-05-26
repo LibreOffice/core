@@ -28,7 +28,7 @@ void XCellRangesQuery::testQueryColumnDifference()
     uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryColumnDifferences(table::CellAddress(0, 1, 1));
     OUString aResult = xRanges->getRangeAddressesAsString();
-    std::cout << "testQueryColumnDifference: Result: " << OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << "testQueryColumnDifference: Result: " << aResult << std::endl;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryColumnDifference", aResult, aExpected);
 }
 
@@ -38,7 +38,7 @@ void XCellRangesQuery::testQueryContentDifference()
     uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryContentCells(sheet::CellFlags::VALUE);
     OUString aResult = xRanges->getRangeAddressesAsString();
-    std::cout << "testQueryContentDifference: Result: " << OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << "testQueryContentDifference: Result: " << aResult << std::endl;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryContentDifference", aResult, aExpected);
 }
 
@@ -48,7 +48,7 @@ void XCellRangesQuery::testQueryEmptyCells()
     uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryEmptyCells();
     OUString aResult = xRanges->getRangeAddressesAsString();
-    std::cout << "testQueryEmptyCells: Result: " << OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << "testQueryEmptyCells: Result: " << aResult << std::endl;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryEmptyCells", aResult, aExpected);
 }
 
@@ -58,7 +58,7 @@ void XCellRangesQuery::testQueryFormulaCells()
     uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryFormulaCells(sheet::CellFlags::FORMULA);
     OUString aResult = xRanges->getRangeAddressesAsString();
-    std::cout << "testQueryFormulaCells: Result: " << OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << "testQueryFormulaCells: Result: " << aResult << std::endl;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryFormulaCells", aResult, aExpected);
 }
 
@@ -68,7 +68,7 @@ void XCellRangesQuery::testQueryIntersection()
     uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryIntersection(table::CellRangeAddress(0,3,3,7,7));
     OUString aResult = xRanges->getRangeAddressesAsString();
-    std::cout << "testQueryIntersection: Result: " << OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << "testQueryIntersection: Result: " << aResult << std::endl;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryIntersection", aResult, aExpected);
 }
 
@@ -78,7 +78,7 @@ void XCellRangesQuery::testQueryRowDifference()
     uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryRowDifferences(table::CellAddress(0,1,1));
     OUString aResult = xRanges->getRangeAddressesAsString();
-    std::cout << "testQueryRowDifference: Result: " << OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << "testQueryRowDifference: Result: " << aResult << std::endl;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryRowDifference", aResult, aExpected);
 }
 
@@ -88,7 +88,7 @@ void XCellRangesQuery::testQueryVisibleCells()
     uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryVisibleCells();
     OUString aResult = xRanges->getRangeAddressesAsString();
-    std::cout << "testQueryVisibleCells: Result: " << OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
+    std::cout << "testQueryVisibleCells: Result: " << aResult << std::endl;
     CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryVisibleCells", aResult, aExpected);
 }
 

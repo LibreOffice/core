@@ -134,10 +134,7 @@ bool LogBridge::v_isValid(rtl::OUString * pReason)
         switch(_pTypeRef->eTypeClass)
         {
             case typelib_TypeClass_STRING:
-                {
-                    const ::rtl::OString sValue( ::rtl::OUStringToOString(*static_cast< ::rtl::OUString*>(pArg),osl_getThreadTextEncoding()));
-                    SAL_INFO("cppu.log", "" << sValue.getStr());
-                }
+                SAL_INFO("cppu.log", "" << *static_cast< ::rtl::OUString*>(pArg));
                 break;
             case typelib_TypeClass_BOOLEAN:
                SAL_INFO("cppu.log", "" << *static_cast<sal_Bool*>(pArg));
@@ -168,10 +165,7 @@ bool LogBridge::v_isValid(rtl::OUString * pReason)
                SAL_INFO("cppu.log", "" << *static_cast<double*>(pArg));
                 break;
             case typelib_TypeClass_TYPE:
-                {
-                    const ::rtl::OString sValue( ::rtl::OUStringToOString(static_cast<css::uno::Type*>(pArg)->getTypeName(),osl_getThreadTextEncoding()));
-                   SAL_INFO("cppu.log", "" << sValue.getStr());
-                }
+                SAL_INFO("cppu.log", "" << static_cast<css::uno::Type*>(pArg)->getTypeName());
                 break;
             case typelib_TypeClass_ANY:
                 if ( static_cast<uno_Any*>(pArg)->pData )
@@ -183,10 +177,7 @@ bool LogBridge::v_isValid(rtl::OUString * pReason)
                SAL_INFO("cppu.log", "exception");
                 break;
             case typelib_TypeClass_INTERFACE:
-                {
-                    const ::rtl::OString sValue( ::rtl::OUStringToOString(_pTypeRef->pTypeName,osl_getThreadTextEncoding()));
-                   SAL_INFO("cppu.log", "" << sValue.getStr() << "0x" << std::hex << pArg);
-                }
+                SAL_INFO("cppu.log", "" << _pTypeRef->pTypeName << "0x" << std::hex << pArg);
                 break;
             case typelib_TypeClass_VOID:
                SAL_INFO("cppu.log", "void");
@@ -215,7 +206,7 @@ void LogProbe(
         sTemp = ::rtl::OUStringToOString(pMemberType->pTypeName,RTL_TEXTENCODING_ASCII_US);
     if ( pre  )
     {
-        SAL_INFO("cppu.log", "{ LogBridge () " << sTemp.getStr() );
+        SAL_INFO("cppu.log", "{ LogBridge () " << sTemp );
         if ( nParams )
         {
            SAL_INFO("cppu.log", "\n| : ( LogBridge ");
@@ -232,14 +223,13 @@ void LogProbe(
     }
     else if ( !pre )
     {
-        SAL_INFO("cppu.log", "} LogBridge () " << sTemp.getStr());
+        SAL_INFO("cppu.log", "} LogBridge () " << sTemp);
         if ( ppException && *ppException )
         {
             SAL_INFO("cppu.log", " exception occurred : ");
             typelib_TypeDescription * pElementTypeDescr = nullptr;
             TYPELIB_DANGER_GET( &pElementTypeDescr, (*ppException)->pType );
-            const ::rtl::OString sValue( ::rtl::OUStringToOString(pElementTypeDescr->pTypeName,osl_getThreadTextEncoding()));
-           SAL_INFO("cppu.log", "" << sValue.getStr());
+            SAL_INFO("cppu.log", "" << pElementTypeDescr->pTypeName);
             TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         }
         else if ( pReturnTypeRef )

@@ -149,7 +149,7 @@ void xdictionary::initDictionaryData(const sal_Char *pLang)
     osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
     for(datacache & i : aLoadedCache)
     {
-        if( !strcmp( pLang, i.maLang.getStr() ) )
+        if( i.maLang != pLang )
         {
             data = i.maData;
             return;

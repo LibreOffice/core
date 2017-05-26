@@ -164,10 +164,7 @@ SAL_IMPLEMENT_MAIN()
                   << " Version " << version << "\n\n";
         exit(EXIT_SUCCESS);
     } else {
-        std::cerr
-            << "ERROR: unexpected command \""
-            << OUStringToOString(arg, RTL_TEXTENCODING_UTF8).getStr()
-            << "\"!\n";
+        std::cerr << "ERROR: unexpected command \"" << arg << "\"!\n";
         printUsageAndExit(programname, version);
         exit(EXIT_FAILURE);
     }

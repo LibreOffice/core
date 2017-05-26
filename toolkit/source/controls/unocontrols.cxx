@@ -2934,9 +2934,7 @@ void UnoListBoxControl::itemStateChanged( const awt::ItemEvent& rEvent )
 #if OSL_DEBUG_LEVEL == 0
             (void) e; // suppress warning
 #else
-            OString sMessage( "UnoListBoxControl::itemStateChanged: caught an exception:\n" );
-            sMessage += OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
-            OSL_FAIL( sMessage.getStr() );
+            SAL_WARN( "toolkit", "UnoListBoxControl::itemStateChanged: caught an exception: " << e.Message);
 #endif
         }
     }
@@ -3276,9 +3274,7 @@ void UnoComboBoxControl::itemStateChanged( const awt::ItemEvent& rEvent )
 #if OSL_DEBUG_LEVEL == 0
             (void) e; // suppress warning
 #else
-            OString sMessage( "UnoComboBoxControl::itemStateChanged: caught an exception:\n" );
-            sMessage += OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
-            OSL_FAIL( sMessage.getStr() );
+            SAL_WARN( "toolkit", "UnoComboBoxControl::itemStateChanged: caught an exception: " << e.Message);
 #endif
         }
     }

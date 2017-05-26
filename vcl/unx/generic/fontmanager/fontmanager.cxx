@@ -604,7 +604,7 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
         if( aInfo.usubfamily )
             pFont->m_aStyleName = OUString( aInfo.usubfamily );
 
-        SAL_WARN_IF( !aInfo.psname, "vcl", "No PostScript name in font:" << aFile.getStr() );
+        SAL_WARN_IF( !aInfo.psname, "vcl", "No PostScript name in font:" << aFile );
 
         pFont->m_aPSName = aInfo.psname ?
             OUString(aInfo.psname, rtl_str_getLength(aInfo.psname), aEncoding) :
@@ -697,7 +697,7 @@ bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const
         bSuccess = true;
     }
     else
-        SAL_WARN("vcl", "Could not OpenTTFont \"" << aFile.getStr() << "\"");
+        SAL_WARN("vcl", "Could not OpenTTFont \"" << aFile << "\"");
 
     return bSuccess;
 }

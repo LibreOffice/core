@@ -147,17 +147,11 @@ namespace comphelper {
         catch ( const Exception& )
         {
             css::uno::Any caught( ::cppu::getCaughtException() );
-            OString sMessage( "caught an exception!" );
-            sMessage += "\ntype   : ";
-            sMessage += OString( caught.getValueTypeName().getStr(), caught.getValueTypeName().getLength(), osl_getThreadTextEncoding() );
-            sMessage += "\nmessage: ";
             css::uno::Exception exception;
             caught >>= exception;
-            sMessage += OString( exception.Message.getStr(), exception.Message.getLength(), osl_getThreadTextEncoding() );
-            sMessage += "\nin function:\n";
-            sMessage += OSL_THIS_FUNC;
-            sMessage += "\n";
-            OSL_FAIL( sMessage.getStr() );
+            SAL_WARN( "comphelper", "caught an exception!\ntype   : " << caught.getValueTypeName()
+                                    << "\nmessage: " << exception.Message
+                                    << "\nin function:\n" << OSL_THIS_FUNC);
         }
 
         return sTitle;

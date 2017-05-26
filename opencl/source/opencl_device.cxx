@@ -475,7 +475,7 @@ int matchDevice(std::unique_ptr<ds_profile>& profile, char* deviceName)
     int deviceMatch = -1;
     for (unsigned int d = 0; d < profile->devices.size() - 1; d++)
     {
-        if ((std::string(profile->devices[d].sDeviceName.getStr())).find(deviceName) != std::string::npos)
+        if (profile->devices[d].sDeviceName.indexOf(deviceName) != -1)
             deviceMatch = d;
     }
     if (std::string("NATIVE_CPU").find(deviceName) != std::string::npos)

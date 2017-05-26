@@ -166,10 +166,7 @@ void XMLErrors::AddRecord(
         sMessage.append( "\n" );
     }
 
-    // convert to byte string and signal the error
-    OString aError(OUStringToOString(sMessage.makeStringAndClear(),
-        RTL_TEXTENCODING_ASCII_US));
-    OSL_FAIL( aError.getStr() );
+    SAL_WARN( "xmloff", sMessage.makeStringAndClear() );
 #endif
 }
 

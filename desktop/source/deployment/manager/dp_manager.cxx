@@ -583,8 +583,7 @@ OUString PackageManagerImpl::detectMediaType(
             if (throw_exc)
                 throw;
             (void) exc;
-            OSL_FAIL( OUStringToOString(
-                            exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_WARN( "desktop", exc.Message );
         }
     }
     return mediaType;
@@ -1028,14 +1027,12 @@ PackageManagerImpl::getDeployedPackages_(
         catch (const lang::IllegalArgumentException & exc) {
             // ignore
             (void) exc; // avoid warnings
-            OSL_FAIL( OUStringToOString(
-                            exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_WARN( "desktop", exc.Message );
         }
         catch (const deployment::DeploymentException& exc) {
             // ignore
             (void) exc; // avoid warnings
-            OSL_FAIL( OUStringToOString(
-                            exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+            SAL_WARN( "desktop", exc.Message );
         }
     }
     return comphelper::containerToSequence(packages);

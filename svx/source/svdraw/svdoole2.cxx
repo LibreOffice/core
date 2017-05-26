@@ -836,14 +836,10 @@ bool SdrOle2Obj::UpdateLinkURL_Impl()
                         if ( nCurState != embed::EmbedStates::LOADED )
                             mpImpl->mxObjRef->changeState(nCurState);
                     }
-                    catch( css::uno::Exception& )
+                    catch( css::uno::Exception const & )
                     {
-                        OSL_FAIL(
-                            OString(OString("SdrOle2Obj::UpdateLinkURL_Impl(), "
-                                    "exception caught: ") +
-                            OUStringToOString(
-                                comphelper::anyToString( cppu::getCaughtException() ),
-                                RTL_TEXTENCODING_UTF8 )).getStr() );
+                        SAL_WARN( "svx", "SdrOle2Obj::UpdateLinkURL_Impl(), exception caught: "
+                                << comphelper::anyToString( cppu::getCaughtException() ) );
                     }
                 }
 
@@ -878,12 +874,8 @@ void SdrOle2Obj::BreakFileLink_Impl()
             }
             catch( css::uno::Exception& )
             {
-                OSL_FAIL(
-                    OString(OString("SdrOle2Obj::BreakFileLink_Impl(), "
-                            "exception caught: ") +
-                    OUStringToOString(
-                        comphelper::anyToString( cppu::getCaughtException() ),
-                        RTL_TEXTENCODING_UTF8 )).getStr() );
+                SAL_WARN( "svx", "SdrOle2Obj::BreakFileLink_Impl(), exception caught: "
+                        << comphelper::anyToString( cppu::getCaughtException() ) );
             }
         }
     }
@@ -1003,12 +995,8 @@ void SdrOle2Obj::Connect_Impl()
         }
         catch( css::uno::Exception& )
         {
-            OSL_FAIL(
-                OString(OString("SdrOle2Obj::Connect_Impl(), "
-                        "exception caught: ") +
-                OUStringToOString(
-                    comphelper::anyToString( cppu::getCaughtException() ),
-                    RTL_TEXTENCODING_UTF8 )).getStr() );
+            SAL_WARN( "svx", "SdrOle2Obj::Connect_Impl(), exception caught: "
+                    << comphelper::anyToString( cppu::getCaughtException() ) );
         }
     }
 
@@ -1087,12 +1075,8 @@ void SdrOle2Obj::RemoveListeners_Impl()
         }
         catch( css::uno::Exception& )
         {
-            OSL_FAIL(
-                OString(OString("SdrOle2Obj::RemoveListeners_Impl(), "
-                        "exception caught: ") +
-                OUStringToOString(
-                    comphelper::anyToString( cppu::getCaughtException() ),
-                    RTL_TEXTENCODING_UTF8 )).getStr() );
+            SAL_WARN( "svx",  "SdrOle2Obj::RemoveListeners_Impl(), exception caught: "
+                    << comphelper::anyToString( cppu::getCaughtException() ) );
         }
     }
 }
@@ -1169,12 +1153,8 @@ void SdrOle2Obj::Disconnect_Impl()
     }
     catch( css::uno::Exception& )
     {
-        OSL_FAIL(
-            OString(OString("SdrOle2Obj::Disconnect_Impl(), "
-                    "exception caught: ") +
-            OUStringToOString(
-                comphelper::anyToString( cppu::getCaughtException() ),
-                RTL_TEXTENCODING_UTF8 )).getStr() );
+        SAL_WARN( "svx", "SdrOle2Obj::Disconnect_Impl(), exception caught: "
+                    << comphelper::anyToString( cppu::getCaughtException() ) );
     }
 
     mpImpl->mbConnected = false;
@@ -1300,12 +1280,8 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
         }
         catch( css::uno::Exception& )
         {
-            OSL_FAIL(
-                OString(OString("SdrOle2Obj::SetModel(), "
-                        "exception caught: ") +
-                OUStringToOString(
-                    comphelper::anyToString( cppu::getCaughtException() ),
-                    RTL_TEXTENCODING_UTF8 )).getStr() );
+            SAL_WARN( "svx",  "SdrOle2Obj::SetModel(), exception caught: "
+                    << comphelper::anyToString( cppu::getCaughtException() ) );
         }
     }
 
@@ -1813,12 +1789,8 @@ bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xObj, s
         }
         catch( css::uno::Exception& )
         {
-            OSL_FAIL(
-                OString(OString("SdrOle2Obj::Unload=(), "
-                        "exception caught: ") +
-                OUStringToOString(
-                    comphelper::anyToString( cppu::getCaughtException() ),
-                    RTL_TEXTENCODING_UTF8 )).getStr() );
+            SAL_WARN( "svx", "SdrOle2Obj::Unload=(), exception caught: "
+                    << comphelper::anyToString( cppu::getCaughtException() ) );
         }
     }
 

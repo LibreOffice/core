@@ -94,7 +94,7 @@ void handleCommand(
     const OString cmd = buf.makeStringAndClear();
     if (system(cmd.getStr()) != 0)
     {
-        cerr << "Error: Failed to execute " << cmd.getStr() << '\n';
+        cerr << "Error: Failed to execute " << cmd << '\n';
         throw false; //TODO
     }
 }
@@ -116,7 +116,7 @@ void InitPoFile(
                 << ("Error: Cannot convert pathname to URL in " __FILE__
                     ", in line ")
                 << __LINE__ << "\n       outDir: "
-                << OUStringToOString(outDir, RTL_TEXTENCODING_ASCII_US).getStr()
+                << outDir
                 << "\n";
             throw false; //TODO
         }
@@ -130,7 +130,7 @@ void InitPoFile(
     {
         cerr
             << "Error: Cannot open po file "
-            << rOutPath.getStr() << "\n";
+            << rOutPath << "\n";
         throw false; //TODO
     }
 
@@ -231,7 +231,7 @@ void handleFilesOfDir(
             {
                 cerr
                     << "Error: Cannot remove entryless pot file: "
-                    << sPotFile.getStr() << "\n";
+                    << sPotFile << "\n";
                     throw false; //TODO
             }
         }
@@ -395,7 +395,7 @@ void handleDirectory(
             << ("Error: Cannot convert pathname to URL in " __FILE__
                 ", in line ")
             << __LINE__ << "\n"
-            << OUStringToOString(sPoPath, RTL_TEXTENCODING_UTF8).getStr()
+            << sPoPath
             << "\n";
         throw false; //TODO
     }
@@ -423,7 +423,7 @@ void handleProjects(char * sSourceRoot, char const * sDestRoot)
             << ("Error: Cannot convert pathname to URL in " __FILE__
                 ", in line ")
             << __LINE__ << "\n       root16: "
-            << OUStringToOString(root16, RTL_TEXTENCODING_ASCII_US).getStr()
+            << root16
             << "\n";
         throw false; //TODO
     }

@@ -244,12 +244,8 @@ void DrawViewShell::SelectionHasChanged()
     }
     catch( css::uno::Exception& )
     {
-        OSL_FAIL(
-            OString(OString("sd::DrawViewShell::SelectionHasChanged(), "
-                    "exception caught: ") +
-            OUStringToOString(
-                comphelper::anyToString( cppu::getCaughtException() ),
-                RTL_TEXTENCODING_UTF8 )).getStr() );
+        SAL_WARN( "sd", "sd::DrawViewShell::SelectionHasChanged(), exception caught: "
+                << comphelper::anyToString( cppu::getCaughtException() ) );
     }
 
     if( HasCurrentFunction() )

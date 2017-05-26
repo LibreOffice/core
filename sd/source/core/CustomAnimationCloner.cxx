@@ -121,13 +121,8 @@ namespace sd
         }
         catch( Exception& )
         {
-            OSL_FAIL(
-                OString(OString("sd::CustomAnimationClonerImpl::Clone(), "
-                        "exception caught: ") +
-                OUStringToOString(
-                    comphelper::anyToString( cppu::getCaughtException() ),
-                    RTL_TEXTENCODING_UTF8 )).getStr() );
-
+            SAL_WARN( "sd", "sd::CustomAnimationClonerImpl::Clone(), "
+                      "exception caught: " <<  comphelper::anyToString( cppu::getCaughtException() ) );
             Reference< XAnimationNode > xEmpty;
             return xEmpty;
         }
@@ -205,12 +200,9 @@ namespace sd
         }
         catch( Exception& )
         {
-            OSL_FAIL(
-                OString(OString("sd::CustomAnimationClonerImpl::transformNode(), "
-                        "exception caught: ") +
-                OUStringToOString(
-                    comphelper::anyToString( cppu::getCaughtException() ),
-                    RTL_TEXTENCODING_UTF8 )).getStr() );
+            SAL_WARN( "sd", "sd::CustomAnimationClonerImpl::transformNode(), "
+                      "exception caught: "
+                      << comphelper::anyToString( cppu::getCaughtException() ) );
         }
     }
 
@@ -279,12 +271,9 @@ namespace sd
         }
         catch( Exception& )
         {
-            OSL_FAIL(
-                OString(OString("sd::CustomAnimationClonerImpl::transformValue(), "
-                        "exception caught: ") +
-                OUStringToOString(
-                    comphelper::anyToString( cppu::getCaughtException() ),
-                    RTL_TEXTENCODING_UTF8 )).getStr() );
+            SAL_WARN( "sd", "sd::CustomAnimationClonerImpl::transformValue(), "
+                      "exception caught: "
+                      << comphelper::anyToString( cppu::getCaughtException() ) );
         }
 
         return rValue;

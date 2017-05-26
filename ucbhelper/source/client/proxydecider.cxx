@@ -158,8 +158,7 @@ private:
 bool WildCard::Matches( const OUString& rString ) const
 {
     OString aString
-        = OUStringToOString(
-                    rString, RTL_TEXTENCODING_UTF8 ).toAsciiLowerCase();
+        = OUStringToOString( rString, RTL_TEXTENCODING_UTF8 ).toAsciiLowerCase();
     const char * pStr  = aString.getStr();
     const char * pWild = m_aWildString.getStr();
 

@@ -84,30 +84,26 @@ uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassIDRepresentat
     if ( nLength == 36 )
     {
         OString aCharClassID = OUStringToOString( aClassID, RTL_TEXTENCODING_ASCII_US );
-        const sal_Char* pString = aCharClassID.getStr();
-        if ( pString )
+        uno::Sequence< sal_Int8 > aResult( 16 );
+
+        sal_Int32 nStrPointer = 0;
+        sal_Int32 nSeqInd = 0;
+        while( nSeqInd < 16 && nStrPointer + 1 < nLength )
         {
-            uno::Sequence< sal_Int8 > aResult( 16 );
+            sal_uInt8 nDigit1 = GetDigit_Impl( aCharClassID[nStrPointer++] );
+            sal_uInt8 nDigit2 = GetDigit_Impl( aCharClassID[nStrPointer++] );
 
-            sal_Int32 nStrPointer = 0;
-            sal_Int32 nSeqInd = 0;
-            while( nSeqInd < 16 && nStrPointer + 1 < nLength )
-            {
-                sal_uInt8 nDigit1 = GetDigit_Impl( pString[nStrPointer++] );
-                sal_uInt8 nDigit2 = GetDigit_Impl( pString[nStrPointer++] );
+            if ( nDigit1 > 15 || nDigit2 > 15 )
+                break;
 
-                if ( nDigit1 > 15 || nDigit2 > 15 )
-                    break;
+            aResult[nSeqInd++] = (sal_Int8)( nDigit1 * 16 + nDigit2 );
 
-                aResult[nSeqInd++] = (sal_Int8)( nDigit1 * 16 + nDigit2 );
-
-                if ( nStrPointer < nLength && pString[nStrPointer] == '-' )
-                    nStrPointer++;
-            }
-
-            if ( nSeqInd == 16 && nStrPointer == nLength )
-                return aResult;
+            if ( nStrPointer < nLength && aCharClassID[nStrPointer] == '-' )
+                nStrPointer++;
         }
+
+        if ( nSeqInd == 16 && nStrPointer == nLength )
+            return aResult;
     }
 
     return uno::Sequence< sal_Int8 >();

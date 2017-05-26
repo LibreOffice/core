@@ -973,12 +973,7 @@ sal_uLong Sc10Import::Import()
     if (!nError) { ImportNameCollection();      pPrgrsBar->Progress(); }
     pDoc->SetViewOptions( aSc30ViewOpt );
 
-#if OSL_DEBUG_LEVEL > 0
-    if (nError)
-    {
-        OSL_FAIL( OString::number(nError).getStr());
-    }
-#endif
+    SAL_WARN_IF( nError, "sc", nError);
 
     delete pPrgrsBar;
 #if OSL_DEBUG_LEVEL > 0

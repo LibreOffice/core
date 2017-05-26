@@ -138,15 +138,11 @@ void XMLEventExport::Export( Reference<XNameAccess> & rAccess,
             // now export the current event
             ExportEvent( aValues, rXmlName, bWhitespace, bStarted );
         }
-#ifdef DBG_UTIL
         else
         {
             // don't proceed further
-            OString aStr("Unknown event name:" );
-            aStr += OUStringToOString( aNames[i], RTL_TEXTENCODING_UTF8 );
-            OSL_FAIL( aStr.getStr() );
+            SAL_WARN("xmloff", "Unknown event name:" << aNames[i] );
         }
-#endif
     }
 
     // close <script:events> element (if it was opened before)
@@ -187,15 +183,11 @@ void XMLEventExport::ExportSingleEvent(
             EndElement(bUseWhitespace);
         }
     }
-#ifdef DBG_UTIL
     else
     {
         // don't proceed further
-        OString aStr("Unknown event name:" );
-        aStr += OUStringToOString( rApiEventName, RTL_TEXTENCODING_UTF8 );
-        OSL_FAIL( aStr.getStr() );
+        SAL_WARN("xmloff", "Unknown event name:" << rApiEventName );
     }
-#endif
 }
 
 

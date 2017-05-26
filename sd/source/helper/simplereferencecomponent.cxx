@@ -52,16 +52,10 @@ void SimpleReferenceComponent::release()
         {
             Dispose();
         }
-        catch (RuntimeException &
-#if OSL_DEBUG_LEVEL > 0
-            exc
-#endif
-            ) // don't break throw ()
+        catch (RuntimeException & exc ) // don't break throw ()
         {
-#if OSL_DEBUG_LEVEL > 0
-            OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_FAIL( msg.getStr() );
-#endif
+            (void)exc;
+            SAL_WARN( "sd", exc.Message );
         }
     }
 

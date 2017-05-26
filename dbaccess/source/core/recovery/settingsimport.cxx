@@ -101,12 +101,9 @@ namespace dbaccess
         if ( sLocalName == "config-item-set" )
             return new ConfigItemSetImport( m_rSettings );
 
-#if OSL_DEBUG_LEVEL > 0
-        OString sMessage = "unknown (or unsupported at this place) element name '"
-                         + OUStringToOString( i_rElementName, RTL_TEXTENCODING_UTF8 )
-                         + "', ignoring";
-        OSL_FAIL( sMessage.getStr() );
-#endif
+        SAL_WARN( "dbaccess", "unknown (or unsupported at this place) element name '"
+                    << i_rElementName
+                    << "', ignoring");
         return new IgnoringSettingsImport;
     }
 
@@ -177,15 +174,11 @@ namespace dbaccess
         {
             o_rValue <<= sValue;
         }
-#if OSL_DEBUG_LEVEL > 0
         else
         {
-            OString sMessage( "ConfigItemImport::getItemValue: unsupported item type '" );
-            sMessage += OUStringToOString( rItemType, RTL_TEXTENCODING_UTF8 );
-            sMessage += "', ignoring";
-            OSL_FAIL( sMessage.getStr() );
+            SAL_WARN( "dbaccess", "ConfigItemImport::getItemValue: unsupported item type '"
+                    << rItemType << "', ignoring");
         }
-#endif
     }
 
     // ConfigItemSetImport
@@ -210,12 +203,8 @@ namespace dbaccess
         if ( sLocalName == "config-item" )
             return new ConfigItemImport( m_aChildSettings );
 
-#if OSL_DEBUG_LEVEL > 0
-        OString sMessage( "unknown element name '" );
-        sMessage += OUStringToOString( i_rElementName, RTL_TEXTENCODING_UTF8 );
-        sMessage += "', ignoring";
-        OSL_FAIL( sMessage.getStr() );
-#endif
+        SAL_WARN( "dbaccess", "unknown element name '"
+                    << i_rElementName << "', ignoring");
         return new IgnoringSettingsImport;
     }
 

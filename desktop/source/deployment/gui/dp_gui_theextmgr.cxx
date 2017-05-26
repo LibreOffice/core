@@ -345,7 +345,7 @@ PackageState TheExtensionManager::getPackageState( const uno::Reference< deploym
     }
     catch (const uno::Exception & exc) {
         (void) exc;
-        OSL_FAIL( OUStringToOString( exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_WARN( "desktop", exc.Message );
         return NOT_AVAILABLE;
     }
 }

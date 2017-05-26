@@ -479,7 +479,7 @@ OUString SvXMLGraphicHelper::ImplGetGraphicMimeType( const OUString& rFileName )
             RTL_TEXTENCODING_ASCII_US));
 
         for( long i = 0, nCount = SAL_N_ELEMENTS(aMapper); ( i < nCount ) && aMimeType.isEmpty(); ++i )
-            if( strcmp(aExt.getStr(), aMapper[ i ].pExt) == 0 )
+            if( aExt == aMapper[ i ].pExt )
                 aMimeType = OUString( aMapper[ i ].pMimeType, strlen( aMapper[ i ].pMimeType ), RTL_TEXTENCODING_ASCII_US );
     }
 
