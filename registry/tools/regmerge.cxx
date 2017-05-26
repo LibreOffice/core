@@ -140,6 +140,12 @@ int __cdecl main( int argc, char * argv[] )
                     if (options.isVerbose())
                         fprintf(stderr, "merging registry \"%s\" under key \"%s\" in registry \"%s\".\n",
                                 args[i].c_str(), args[1].c_str(), args[0].c_str());
+                } else
+                if (_ret == RegError::PARTIAL_MERGE)
+                {
+                    if (options.isVerbose())
+                        fprintf(stderr, "partially merged registry \"%s\" under key \"%s\" in registry \"%s\".\n",
+                                args[i].c_str(), args[1].c_str(), args[0].c_str());
                 }
                 else
                 {
