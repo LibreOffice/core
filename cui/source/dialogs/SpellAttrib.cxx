@@ -19,7 +19,7 @@
 
 #include <SpellAttrib.hxx>
 #include <vcl/font.hxx>
-#include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
+
 using namespace svx;
 using namespace com::sun::star::linguistic2;
 using namespace com::sun::star::uno;

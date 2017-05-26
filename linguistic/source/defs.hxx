@@ -21,7 +21,6 @@
 #define INCLUDED_LINGUISTIC_SOURCE_DEFS_HXX
 
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
-#include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 

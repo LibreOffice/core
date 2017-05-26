@@ -30,9 +30,6 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
-#include <com/sun/star/linguistic2/XConversionDictionary.hpp>
-#include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
-#include <com/sun/star/linguistic2/XConversionPropertyType.hpp>
 #include <com/sun/star/linguistic2/ConversionPropertyType.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/lang/Locale.hpp>

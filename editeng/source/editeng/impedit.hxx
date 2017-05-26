@@ -43,8 +43,6 @@
 #include <svl/ondemand.hxx>
 #include <svl/languageoptions.hxx>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
-#include <com/sun/star/linguistic2/SpellFailure.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/lang/Locale.hpp>

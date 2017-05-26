@@ -23,7 +23,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <i18nlangtag/lang.h>

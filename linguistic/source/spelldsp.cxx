@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/SpellFailure.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>

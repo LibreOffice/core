@@ -25,7 +25,6 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/linguistic2/XConversionDictionary.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>

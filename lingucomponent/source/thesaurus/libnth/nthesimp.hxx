@@ -33,9 +33,6 @@
 #include <com/sun/star/linguistic2/XMeaning.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
-
 #include <unotools/charclass.hxx>
 
 #include <lingutil.hxx>

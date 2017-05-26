@@ -34,7 +34,6 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
-#include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 
 #include <map>
 #include <memory>
