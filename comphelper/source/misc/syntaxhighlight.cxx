@@ -395,7 +395,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
     else if ( testCharFlags( c, CharFlags::Operator ) || ( (c == '\'') && (aLanguage==HighlighterLanguage::Basic)) )
     {
         // parameters for SQL view
-        if ( (c==':') || (c=='?'))
+        if (((c==':') || (c=='?')) && (aLanguage == HighlighterLanguage::SQL))
         {
             if (c!='?')
             {
@@ -412,7 +412,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
             }
             reType = TokenType::Parameter;
         }
-        else if (c=='-')
+        else if ((c=='-') && (aLanguage == HighlighterLanguage::SQL))
         {
             sal_Unicode cPeekNext = *pos;
             if (cPeekNext=='-')
@@ -426,24 +426,24 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                 reType = TokenType::Comment;
             }
         }
-       else if (c=='/')
-       {
-           sal_Unicode cPeekNext = *pos;
-           if (cPeekNext=='/')
-           {
-               // Remove all characters until end of line or EOF
-               while( cPeekNext != 0 && !testCharFlags( cPeekNext, CharFlags::EOL ) )
-               {
-                   ++pos;
-                   cPeekNext = *pos;
-               }
-               reType = TokenType::Comment;
-           }
-       }
+        else if ((c=='/') && (aLanguage == HighlighterLanguage::SQL))
+        {
+            sal_Unicode cPeekNext = *pos;
+            if (cPeekNext=='/')
+            {
+                // Remove all characters until end of line or EOF
+                while( cPeekNext != 0 && !testCharFlags( cPeekNext, CharFlags::EOL ) )
+                {
+                    ++pos;
+                    cPeekNext = *pos;
+                }
+                reType = TokenType::Comment;
+            }
+        }
         else
         {
-            // Comment?
-            if ( c == '\'' )
+            // Apostrophe is Basic comment
+            if (( c == '\'') && (aLanguage == HighlighterLanguage::Basic))
             {
                 // Skip all characters until end of input or end of line:
                 for (;;) {
