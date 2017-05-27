@@ -214,15 +214,18 @@ void SwView_Impl::AddClipboardListener()
 void SwView_Impl::Invalidate()
 {
     GetUNOObject_Impl()->Invalidate();
-    Reference< XUnoTunnel > xTunnel(xTransferable.get(), UNO_QUERY);
-    if(xTunnel.is())
-
+    for (const auto& xTransferable: mxTransferables)
     {
-        SwTransferable* pTransferable = reinterpret_cast< SwTransferable * >(
-                sal::static_int_cast< sal_IntPtr >(
-                xTunnel->getSomething(SwTransferable::getUnoTunnelId())));
-        if(pTransferable)
-            pTransferable->Invalidate();
+        Reference< XUnoTunnel > xTunnel(xTransferable.get(), UNO_QUERY);
+        if(xTunnel.is())
+
+        {
+            SwTransferable* pTransferable = reinterpret_cast< SwTransferable * >(
+                    sal::static_int_cast< sal_IntPtr >(
+                    xTunnel->getSomething(SwTransferable::getUnoTunnelId())));
+            if(pTransferable)
+                pTransferable->Invalidate();
+        }
     }
 }
 
@@ -231,7 +234,7 @@ void SwView_Impl::AddTransferable(SwTransferable& rTransferable)
     //prevent removing of the non-referenced SwTransferable
     rTransferable.m_refCount++;
     {
-        xTransferable = Reference<XUnoTunnel> (&rTransferable);
+        mxTransferables.push_back(uno::WeakReference<lang::XUnoTunnel>(uno::Reference<lang::XUnoTunnel>(&rTransferable)));
     }
     rTransferable.m_refCount--;
 }
