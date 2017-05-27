@@ -57,6 +57,7 @@ struct ScQueryParamBase
     SC_DLLPUBLIC ScQueryEntry& GetEntry(SCSIZE n);
     SC_DLLPUBLIC ScQueryEntry& AppendEntry();
     ScQueryEntry* FindEntryByField(SCCOLROW nField, bool bNew);
+    std::vector<ScQueryEntry*> FindAllEntriesByField(SCCOLROW nField);
     SC_DLLPUBLIC void RemoveEntryByField(SCCOLROW nField);
     void Resize(size_t nNew);
     void FillInExcelSyntax( svl::SharedStringPool& rPool, const OUString& aCellStr, SCSIZE nIndex,
