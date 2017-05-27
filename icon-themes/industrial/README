@@ -23,7 +23,6 @@ cmd/lc_backgroundpatterncontroller.png
 cmd/lc_basicstepinto.png
 cmd/lc_basicstepout.png
 cmd/lc_basicstepover.png
-cmd/lc_basicstop.png
 cmd/lc_bezier_unfilled.png
 cmd/lc_bezierclose.png
 cmd/lc_bezierconvert.png
@@ -398,7 +397,6 @@ cmd/sc_backward.png
 cmd/sc_basicstepinto.png
 cmd/sc_basicstepout.png
 cmd/sc_basicstepover.png
-cmd/sc_basicstop.png
 cmd/sc_beforeobject.png
 cmd/sc_behindobject.png
 cmd/sc_bezier_unfilled.png
@@ -758,14 +756,8 @@ cmd/sc_wrapoff.png
 cmd/sc_wrapon.png
 cmd/sc_wrapright.png
 cmd/sc_wrapthrough.png
-cmd/sc_zoom100percent.png
-cmd/sc_zoomin.png
-cmd/sc_zoomminus.png
 cmd/sc_zoomnext.png
 cmd/sc_zoomobjects.png
-cmd/sc_zoomoptimal.png
-cmd/sc_zoomout.png
 cmd/sc_zoompage.png
 cmd/sc_zoompagewidth.png
-cmd/sc_zoomplus.png
 cmd/sc_zoomprevious.png
