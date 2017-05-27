@@ -44,6 +44,7 @@
 #include <ZipFile.hxx>
 #include <ZipEnumeration.hxx>
 #include <XUnbufferedStream.hxx>
+#include <XBufferedThreadedStream.hxx>
 #include <PackageConstants.hxx>
 #include <EncryptedDataHeader.hxx>
 #include <EncryptionData.hxx>
@@ -625,7 +626,14 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
     if (!mbUseBufferedStream)
         return xSrcStream;
 
-    uno::Reference<io::XInputStream> xBufStream(new XBufferedStream(xSrcStream));
+    uno::Reference<io::XInputStream> xBufStream;
+    static const sal_Int32 nThreadingThreshold = 10000;
+
+    if( xSrcStream->available() > nThreadingThreshold )
+        xBufStream = new XBufferedThreadedStream(xSrcStream);
+    else
+        xBufStream = new XBufferedStream(xSrcStream);
+
     return xBufStream;
 }
 
