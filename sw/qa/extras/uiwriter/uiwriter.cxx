@@ -89,6 +89,7 @@
 #include <drawfont.hxx>
 #include <txtfrm.hxx>
 #include <hyp.hxx>
+#include <swdtflvr.hxx>
 #include <editeng/svxenum.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/classificationhelper.hxx>
@@ -221,6 +222,7 @@ public:
     void testTdf104425();
     void testTdf104814();
     void testTdf105417();
+    void testTdf107976();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -336,6 +338,7 @@ public:
     CPPUNIT_TEST(testTdf104425);
     CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST(testTdf105417);
+    CPPUNIT_TEST(testTdf107976);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4257,6 +4260,21 @@ void SwUiWriterTest::testTdf105417()
     // This never returned, it kept trying to hyphenate the last word
     // (greenbacks) again and again.
     aWrap.SpellDocument();
+}
+
+void SwUiWriterTest::testTdf107976()
+{
+    // Create a document and create two transferables.
+    SwDoc* pDoc = createDoc();
+    SwWrtShell& rShell = *pDoc->GetDocShell()->GetWrtShell();
+    rtl::Reference<SwTransferable> pTransferable(new SwTransferable(rShell));
+    rtl::Reference<SwTransferable> pTransferable2(new SwTransferable(rShell));
+    // Now close the document.
+    mxComponent->dispose();
+    mxComponent.clear();
+    // This failed: the first shell had a pointer to the deleted shell.
+    CPPUNIT_ASSERT(!pTransferable->GetShell());
+    CPPUNIT_ASSERT(!pTransferable2->GetShell());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
