@@ -42,6 +42,12 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
+namespace
+{
+    constexpr sal_Int32 MAX_TEXT_LENGTH = 8191;
+
+} // anonymous namespace
+
 ODatabaseMetaData::ODatabaseMetaData(Connection* _pCon)
 : m_pConnection(_pCon)
 {
@@ -162,7 +168,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxRowSize()
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCharLiteralLength()
 {
-    return 32767;
+    return MAX_TEXT_LENGTH;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnNameLength()
@@ -1258,7 +1264,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         }
         else if (aType == SQL_VARYING)
         {
-            aCurrentRow[16] = new ORowSetValueDecorator(sal_Int32(32767));
+            aCurrentRow[16] = new ORowSetValueDecorator(sal_Int32(MAX_TEXT_LENGTH));
         }
         else
         {

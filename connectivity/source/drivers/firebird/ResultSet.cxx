@@ -112,6 +112,69 @@ OResultSet::~OResultSet()
 {
 }
 
+OUString OResultSet::getCharacterSet(const sal_Int32 nColumnIndex)
+{
+    auto xCharsetIt = m_xCharSets.find(nColumnIndex);
+
+    if(xCharsetIt != m_xCharSets.end())
+    {
+        return xCharsetIt->second;
+    }
+    else
+    {
+        // column charset not found in cahce
+        uno::Reference< XResultSetMetaData > xMeta = getMetaData();
+
+        sal_Int32 aType = xMeta->getColumnType(nColumnIndex);
+
+        if(aType != DataType::CHAR
+                && aType != DataType::VARCHAR
+                && aType != DataType::CLOB)
+        {
+            SAL_WARN("connectivity.firebird","OResultSet::getCharacterSet() used for non textual data type");
+            return OUString();
+        }
+
+        OUString sColumnName = xMeta->getColumnName(nColumnIndex);
+
+        // system tables
+        if(sColumnName.startsWith("RDB$"))
+        {
+            return OUString("NONE");
+        }
+
+        // query character set of column from system tables
+        OUString sSql(
+                "Select "
+                "charset.RDB$CHARACTER_SET_NAME "
+                "from RDB$CHARACTER_SETS charset "
+                "inner join RDB$FIELDS AS field ON charset.RDB$CHARACTER_SET_ID = field.RDB$CHARACTER_SET_ID "
+                "inner join RDB$RELATION_FIELDS AS relation ON field.RDB$FIELD_NAME = relation.RDB$FIELD_SOURCE "
+                "where relation.RDB$FIELD_NAME = '"+ escapeWith(sColumnName, '\'', '\'') +"'" );
+
+        Reference<XStatement> xStmt = m_pConnection->createStatement();
+
+        Reference<XResultSet> xRes =
+                xStmt->executeQuery(sSql);
+        Reference<XRow> xRow ( xRes, UNO_QUERY);
+        if(xRes->next())
+        {
+            OUString sResult = xRow->getString(1);
+
+            // update cache
+            m_xCharSets[nColumnIndex] = sResult;
+
+            return sResult;
+        }
+        SAL_WARN("connectivity.firebird","Column '"
+                << sColumnName
+                << "' not found in database");
+    }
+
+    assert(false);
+    return OUString();
+}
+
 // ---- XResultSet -- Row retrieval methods ------------------------------------
 sal_Int32 SAL_CALL OResultSet::getRow()
 {
@@ -569,20 +632,46 @@ OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
     // &~1 to remove the "can contain NULL" indicator
     int aSqlType = m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1;
     int aSqlSubType = m_pSqlda->sqlvar[nColumnIndex-1].sqlsubtype;
+    const OUString sCharset = getCharacterSet(nColumnIndex);
+
     if (aSqlType == SQL_TEXT )
     {
-        return OUString(m_pSqlda->sqlvar[nColumnIndex-1].sqldata,
-                        m_pSqlda->sqlvar[nColumnIndex-1].sqllen,
-                        RTL_TEXTENCODING_UTF8);
+        OUString sResult(m_pSqlda->sqlvar[nColumnIndex-1].sqldata,
+                m_pSqlda->sqlvar[nColumnIndex-1].sqllen,
+                RTL_TEXTENCODING_UTF8);
+
+        sal_uInt16 aMaxLength = m_pSqlda->sqlvar[nColumnIndex-1].sqllen;
+
+        // UTF-8 uses up to 4 bytes
+        if(sCharset == "UTF8")
+            aMaxLength /= 4;
+
+        // crop string if needed
+        if(sResult.getLength() > aMaxLength)
+            sResult = sResult.copy(0, aMaxLength);
+
+        return sResult;
     }
     else if (aSqlType == SQL_VARYING)
     {
         // First 2 bytes are a short containing the length of the string
-        // No idea if sqllen is still valid here?
         sal_uInt16 aLength = *(reinterpret_cast<sal_uInt16*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata));
-        return OUString(m_pSqlda->sqlvar[nColumnIndex-1].sqldata + 2,
-                        aLength,
-                        RTL_TEXTENCODING_UTF8);
+
+        OUString sResult(m_pSqlda->sqlvar[nColumnIndex-1].sqldata + 2,
+                aLength,
+                RTL_TEXTENCODING_UTF8);
+
+        sal_uInt16 aMaxLength = m_pSqlda->sqlvar[nColumnIndex-1].sqllen;
+
+        // UTF-8 uses up to 4 bytes
+        if(sCharset == "UTF8")
+            aMaxLength /= 4;
+
+        // crop string if needed
+        if(sResult.getLength() > aMaxLength)
+            sResult = sResult.copy(0, aMaxLength);
+
+        return sResult;
     }
     else if ((aSqlType == SQL_SHORT || aSqlType == SQL_LONG ||
               aSqlType == SQL_DOUBLE || aSqlType == SQL_INT64)
