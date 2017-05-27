@@ -31,6 +31,7 @@ $(eval $(call gb_Library_use_libraries,package2,\
 	sal \
 	sax \
 	ucbhelper \
+	salhelper \
 ))
 
 $(eval $(call gb_Library_use_externals,package2,\
@@ -51,6 +52,7 @@ $(eval $(call gb_Library_add_exception_objects,package2,\
 	package/source/zipapi/Deflater \
 	package/source/zipapi/Inflater \
 	package/source/zipapi/sha1context \
+	package/source/zipapi/XBufferedThreadedStream \
 	package/source/zipapi/XUnbufferedStream \
 	package/source/zipapi/ZipEnumeration \
 	package/source/zipapi/ZipFile \
