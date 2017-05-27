@@ -67,7 +67,7 @@ def download_mar_for_update_channel_and_platform(config, platform, temp_dir):
     downloaded_updates = {}
     for update_file in update_files:
         build = update_file["build"]
-        filedir = temp_dir + build
+        filedir = os.path.join(temp_dir, build)
 
         mkdir_p(filedir)
 
