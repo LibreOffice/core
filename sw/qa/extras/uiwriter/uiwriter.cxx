@@ -94,6 +94,7 @@
 #include <txttypes.hxx>
 #include <SwPortionHandler.hxx>
 #include <hyp.hxx>
+#include <swdtflvr.hxx>
 #include <editeng/svxenum.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/classificationhelper.hxx>
@@ -251,6 +252,7 @@ public:
     void testTdf106736();
     void testMsWordCompTrailingBlanks();
     void testCreateDocxAnnotation();
+    void testTdf107976();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -390,6 +392,7 @@ public:
     CPPUNIT_TEST(testTdf106736);
     CPPUNIT_TEST(testMsWordCompTrailingBlanks);
     CPPUNIT_TEST(testCreateDocxAnnotation);
+    CPPUNIT_TEST(testTdf107976);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4923,6 +4926,21 @@ void SwUiWriterTest::testCreateDocxAnnotation()
 #endif
         ;
     CPPUNIT_ASSERT_EQUAL(aResultText, xField->getPropertyValue("Content").get<OUString>());
+}
+
+void SwUiWriterTest::testTdf107976()
+{
+    // Create a document and create two transferables.
+    SwDoc* pDoc = createDoc();
+    SwWrtShell& rShell = *pDoc->GetDocShell()->GetWrtShell();
+    rtl::Reference<SwTransferable> pTransferable(new SwTransferable(rShell));
+    rtl::Reference<SwTransferable> pTransferable2(new SwTransferable(rShell));
+    // Now close the document.
+    mxComponent->dispose();
+    mxComponent.clear();
+    // This failed: the first shell had a pointer to the deleted shell.
+    CPPUNIT_ASSERT(!pTransferable->GetShell());
+    CPPUNIT_ASSERT(!pTransferable2->GetShell());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

@@ -88,7 +88,7 @@ class SwView_Impl
 {
     css::uno::Reference< css::frame::XDispatchProviderInterceptor >   xDisProvInterceptor;
     css::uno::Reference< css::view::XSelectionSupplier >              mxXTextView;       // UNO object
-    css::uno::WeakReference< css::lang::XUnoTunnel >                  xTransferable;
+    std::vector< css::uno::WeakReference< css::lang::XUnoTunnel > > mxTransferables;
 
     // temporary document for printing text of selection / multi selection
     // in PDF export.
