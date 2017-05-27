@@ -290,7 +290,6 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
                 throw ZipIOException("The stream seems to be broken!" );
         }
     }
-
     return nTotal;
 }
 
