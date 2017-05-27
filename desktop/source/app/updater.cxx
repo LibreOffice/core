@@ -598,6 +598,11 @@ void download_file(const OUString& rURL, size_t nFileSize, const OUString& rHash
 void update_checker()
 {
     OUString aDownloadCheckBaseURL = officecfg::Office::Update::Update::URL::get();
+    static const char* pDownloadCheckBaseURLEnv = std::getenv("LIBO_UPDATER_URL");
+    if (pDownloadCheckBaseURLEnv)
+    {
+        aDownloadCheckBaseURL = OUString::createFromAscii(pDownloadCheckBaseURLEnv);
+    }
 
     OUString aProductName = utl::ConfigManager::getProductName();
     OUString aBuildID("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
@@ -605,6 +610,11 @@ void update_checker()
     OUString aBuildTarget = "${_OS}_${_ARCH}";
     rtl::Bootstrap::expandMacros(aBuildTarget);
     OUString aChannel = officecfg::Office::Update::Update::UpdateChannel::get();
+    static const char* pUpdateChannelEnv = std::getenv("LIBO_UPDATER_CHANNEL");
+    if (pUpdateChannelEnv)
+    {
+        aChannel = OUString::createFromAscii(pUpdateChannelEnv);
+    }
 
     OUString aDownloadCheckURL = aDownloadCheckBaseURL + "update/check/1/" + aProductName +
         "/" + aBuildID + "/" + aBuildTarget + "/" + aChannel;
