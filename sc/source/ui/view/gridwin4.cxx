@@ -758,7 +758,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     {
         // Tiled offset nScrX, nScrY
         MapMode aMap( MapUnit::MapPixel );
-        aMap.SetOrigin(Point(nScrX, nScrY));
+        Point aOrigin = aOriginalMode.GetOrigin();
+        aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
+        aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
+        aMap.SetOrigin(aOrigin);
         pContentDev->SetMapMode(aMap);
     }
     else
