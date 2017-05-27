@@ -97,6 +97,11 @@ namespace connectivity
             const sal_Int32                             m_fieldCount;
             ISC_STATUS_ARRAY                            m_statusVector;
 
+            // cache for character sets of columns
+            std::map<sal_Int32,OUString>                m_xCharSets;
+
+            OUString getCharacterSet(const sal_Int32 nColumnIndex);
+
             bool isNull(const sal_Int32 nColumnIndex);
 
             template <typename T> OUString makeNumericString(
