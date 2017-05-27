@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_6ee9791a",
+        "filename": "connectivity/source/drivers/firebird/DatabaseMetaData.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-27T17:00:15Z",
+      "side": 1,
+      "message": "this could probably do with being pulled into a #define or constexpr CONSTANT, since it is referenced in 2 places",
+      "revId": "ed0788b479dcf277fdc0d5b8918e34eb8a1895bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
