@@ -143,6 +143,23 @@ ScQueryEntry* ScQueryParamBase::FindEntryByField(SCCOLROW nField, bool bNew)
     return &AppendEntry();
 }
 
+std::vector<ScQueryEntry*> ScQueryParamBase::FindAllEntriesByField(SCCOLROW nField)
+{
+    std::vector<ScQueryEntry*> aEntries;
+
+    EntriesType::iterator itr = std::find_if(
+        m_Entries.begin(), m_Entries.end(), FindByField(nField));
+
+    while (itr != m_Entries.end())
+    {
+        aEntries.push_back((*itr).get());
+        itr = std::find_if(
+            itr + 1, m_Entries.end(), FindByField(nField));
+    }
+
+    return aEntries;
+}
+
 void ScQueryParamBase::RemoveEntryByField(SCCOLROW nField)
 {
     EntriesType::iterator itr = std::find_if(

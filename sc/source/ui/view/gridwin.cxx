@@ -702,11 +702,11 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     ScQueryParam aParam;
     pDBData->GetQueryParam(aParam);
-    ScQueryEntry* pEntry = aParam.FindEntryByField(nCol, false);
+    std::vector<ScQueryEntry*> aEntries = aParam.FindAllEntriesByField(nCol);
     std::unordered_set<OUString, OUStringHash> aSelected;
-    if (pEntry && pEntry->bDoQuery)
+    for (ScQueryEntry* pEntry : aEntries)
     {
-        if (pEntry->eOp == SC_EQUAL)
+        if (pEntry && pEntry->bDoQuery && pEntry->eOp == SC_EQUAL)
         {
             ScQueryEntry::QueryItemsType& rItems = pEntry->GetQueryItems();
             std::for_each(rItems.begin(), rItems.end(), AddSelectedItemString(aSelected));
