@@ -571,18 +571,37 @@ OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
     int aSqlSubType = m_pSqlda->sqlvar[nColumnIndex-1].sqlsubtype;
     if (aSqlType == SQL_TEXT )
     {
-        return OUString(m_pSqlda->sqlvar[nColumnIndex-1].sqldata,
-                        m_pSqlda->sqlvar[nColumnIndex-1].sqllen,
-                        RTL_TEXTENCODING_UTF8);
+        OUString sResult(m_pSqlda->sqlvar[nColumnIndex-1].sqldata,
+                m_pSqlda->sqlvar[nColumnIndex-1].sqllen,
+                RTL_TEXTENCODING_UTF8);
+
+        // UTF-8 uses up to 4 bytes
+        sal_uInt16 aMaxLength = m_pSqlda->sqlvar[nColumnIndex-1].sqllen / 4;
+
+        // crop string if needed
+        if(sResult.getLength() > aMaxLength)
+            sResult = sResult.copy(0, aMaxLength);
+
+        return sResult;
     }
     else if (aSqlType == SQL_VARYING)
     {
         // First 2 bytes are a short containing the length of the string
-        // No idea if sqllen is still valid here?
         sal_uInt16 aLength = *(reinterpret_cast<sal_uInt16*>(m_pSqlda->sqlvar[nColumnIndex-1].sqldata));
-        return OUString(m_pSqlda->sqlvar[nColumnIndex-1].sqldata + 2,
-                        aLength,
-                        RTL_TEXTENCODING_UTF8);
+
+        OUString sResult(m_pSqlda->sqlvar[nColumnIndex-1].sqldata + 2,
+                aLength,
+                RTL_TEXTENCODING_UTF8);
+
+        // TODO check character encoding type and handle length dynamically
+        // UTF-8 uses up to 4 bytes for a character
+        sal_uInt16 aMaxLength = m_pSqlda->sqlvar[nColumnIndex-1].sqllen / 4;
+
+        // crop string if needed
+        if(sResult.getLength() > aMaxLength)
+            sResult = sResult.copy(0, aMaxLength);
+
+        return sResult;
     }
     else if ((aSqlType == SQL_SHORT || aSqlType == SQL_LONG ||
               aSqlType == SQL_DOUBLE || aSqlType == SQL_INT64)

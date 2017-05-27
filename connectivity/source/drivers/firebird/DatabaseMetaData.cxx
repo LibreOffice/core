@@ -162,7 +162,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxRowSize()
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxCharLiteralLength()
 {
-    return 32767;
+    return 8191;
 }
 
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnNameLength()
@@ -1258,7 +1258,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
         }
         else if (aType == SQL_VARYING)
         {
-            aCurrentRow[16] = new ORowSetValueDecorator(sal_Int32(32767));
+            aCurrentRow[16] = new ORowSetValueDecorator(sal_Int32(8191));
         }
         else
         {
