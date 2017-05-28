@@ -185,6 +185,9 @@ do
 
   if [ -d "include/$PROJECT" ]; then
       PROJECT_INCLUDE="$PROJECT_INCLUDE include/$PROJECT"
+      if [ "$PROJECT" = "sal" ]; then
+          PROJECT_INCLUDE="$PROJECT_INCLUDE include/osl include/rtl"
+      fi
   fi
 
   DOXYGEN_INPUT=`printf "%s" "$PROJECT/source $PROJECT_INCLUDE"`
