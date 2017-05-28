@@ -567,8 +567,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
                         OUString aXName ("x"), aYName ("f(x)");
                         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
                         const OUString& aNumDecimalSep = rLocaleDataWrapper.getNumDecimalSep();
-                        assert(aNumDecimalSep.getLength() > 0);
-                        sal_Unicode cDecSeparator = aNumDecimalSep.getStr()[0];
+                        sal_Unicode cDecSeparator = aNumDecimalSep[0];
 
                         uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
                         if ( xProperties.is())
@@ -668,8 +667,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
 
                         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
                         const OUString& aNumDecimalSep = rLocaleDataWrapper.getNumDecimalSep();
-                        assert(aNumDecimalSep.getLength() > 0);
-                        sal_Unicode cDecSeparator = aNumDecimalSep.getStr()[0];
+                        sal_Unicode cDecSeparator = aNumDecimalSep[0];
 
                         OUString aWildcard( "%AVERAGE_VALUE" );
                         sal_Int32 nIndex = aRet.indexOf( aWildcard );

@@ -33,12 +33,9 @@ namespace rptui
 {
     OUString HelpIdUrl::getHelpURL( const OString& sHelpId )
     {
-        OUStringBuffer aBuffer;
         OUString aTmp( OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8) );
         DBG_ASSERT( INetURLObject( aTmp ).GetProtocol() == INetProtocol::NotValid, "Wrong HelpId!" );
-        aBuffer.append( INET_HID_SCHEME );
-        aBuffer.append( aTmp.getStr() );
-        return aBuffer.makeStringAndClear();
+        return INET_HID_SCHEME + aTmp;
     }
 
     using namespace com::sun::star::uno;

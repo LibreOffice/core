@@ -277,7 +277,7 @@ void lcl_SwapQuotesInField(OUString &rFmt)
 {
     //Swap unescaped " and ' with ' and "
     sal_Int32 nLen = rFmt.getLength();
-    OUStringBuffer aBuffer( rFmt.getStr() );
+    OUStringBuffer aBuffer( rFmt );
     const sal_Unicode* pFmt = rFmt.getStr();
     for (sal_Int32 nI = 0; nI < nLen; ++nI)
     {

@@ -78,24 +78,22 @@ bool fillContinuation(
         {
             if (xSupplyAuthentication->canSetUserName())
                 xSupplyAuthentication->
-                    setUserName(aRec.UserList[0].UserName.getStr());
+                    setUserName(aRec.UserList[0].UserName);
 
             if (xSupplyAuthentication->canSetPassword())
                 xSupplyAuthentication->
-                    setPassword(aRec.UserList[0].Passwords[0].getStr());
+                    setPassword(aRec.UserList[0].Passwords[0]);
             if (aRec.UserList[0].Passwords.getLength() > 1)
             {
                 if (rRequest.HasRealm)
                 {
                     if (xSupplyAuthentication->canSetRealm())
                         xSupplyAuthentication->
-                            setRealm(aRec.UserList[0].Passwords[1].
-                                getStr());
+                            setRealm(aRec.UserList[0].Passwords[1]);
                 }
                 else if (xSupplyAuthentication->canSetAccount())
                     xSupplyAuthentication->
-                        setAccount(aRec.UserList[0].Passwords[1].
-                            getStr());
+                        setAccount(aRec.UserList[0].Passwords[1]);
             }
 
             if ( xSupplyAuthentication2.is() && bCanUseSystemCredentials )

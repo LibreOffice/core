@@ -1867,8 +1867,8 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
             case DataType::VARCHAR:
             case DataType::LONGVARCHAR:
                 {
-                    OUString sVal(m_aValue.m_pString);
-                    aSeq = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(sVal.getStr()),sizeof(sal_Unicode)*sVal.getLength());
+                    aSeq = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(m_aValue.m_pString->buffer),
+                                              sizeof(sal_Unicode) * m_aValue.m_pString->length);
                 }
                 break;
             case DataType::BINARY:

@@ -1042,7 +1042,7 @@ bool ODbaseTable::CreateImpl()
         if ( aIdent.lastIndexOf('/') != (aIdent.getLength()-1) )
             aIdent += "/";
         aIdent += m_Name;
-        aName = aIdent.getStr();
+        aName = aIdent;
     }
     aURL.SetURL(aName);
 

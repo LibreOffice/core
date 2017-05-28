@@ -624,10 +624,9 @@ static bool ImplKillLeading( OUString& rName, const char* const* ppStr )
 
     // special case for Baekmuk
     // TODO: allow non-ASCII KillLeading list
-    const sal_Unicode* pNameStr = rName.getStr();
-    if( (pNameStr[0]==0xBC31) && (pNameStr[1]==0xBC35) )
+    if( (rName[0]==0xBC31) && (rName[1]==0xBC35) )
     {
-        sal_Int32 nLen = (pNameStr[2]==0x0020) ? 3 : 2;
+        sal_Int32 nLen = (rName[2]==0x0020) ? 3 : 2;
         rName = rName.copy(nLen);
         return true;
     }

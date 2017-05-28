@@ -2142,8 +2142,7 @@ sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
     sal_Int32 nIndex = rRef.lastIndexOf( '^' );
     if( nIndex > 0 && nIndex  == ( nLen - 2 ) )
     {
-        const sal_Unicode*  p = aStr.getStr();
-        aStr = OUString( p, nLen - 2 ) + OUStringLiteral1( p[ nLen - 1 ] );
+        aStr = aStr.copy( nLen - 2 ) + OUStringLiteral1( aStr[ nLen - 1 ] );
     }
     if( aName.equals( aStr ) )
         return 0;
