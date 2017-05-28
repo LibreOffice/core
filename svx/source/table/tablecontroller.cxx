@@ -2680,20 +2680,6 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
             aAttr.ClearItem( SDRATTR_TABLE_BORDER_INNER );
         }
 
-        const sal_uInt16* pRanges = rFormatSet.GetRanges();
-        bool bTextOnly = true;
-
-        while( *pRanges )
-        {
-            if( (*pRanges != EE_PARA_START) && (*pRanges != EE_CHAR_START) )
-            {
-                bTextOnly = true;
-                break;
-            }
-            pRanges += 2;
-        }
-
-        const bool bReplaceAll = false;
         for( sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++ )
         {
             for( sal_Int32 nCol = aStart.mnCol; nCol <= aEnd.mnCol; nCol++ )
@@ -2701,11 +2687,8 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
                 CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
                 if( xCell.is() )
                 {
-                    if( bUndo )
+                    if (bUndo)
                         xCell->AddUndo();
-                    if( !bTextOnly )
-                        xCell->SetMergedItemSetAndBroadcast(aAttr, bReplaceAll);
-
                     SdrText* pText = static_cast< SdrText* >( xCell.get() );
                     SdrObjEditView::ApplyFormatPaintBrushToText( rFormatSet, *pTableObj, pText, bNoCharacterFormats, bNoParagraphFormats );
                 }
