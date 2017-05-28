@@ -166,7 +166,7 @@ void deleteAllLinkReferences(const Reference < XSimpleRegistry >& xReg,
 
                 xReg->getRootKey()->deleteLink(aLinkName);
 
-                sEnd = rtl_ustr_lastIndexOfChar( aLinkName.getStr(), '/' );
+                sEnd = aLinkName.lastIndexOf( '/' );
 
                 aLinkParent = aLinkName.copy(0, sEnd);
 
@@ -180,7 +180,7 @@ void deleteAllLinkReferences(const Reference < XSimpleRegistry >& xReg,
 
                         xReg->getRootKey()->deleteKey(aLinkParent);
 
-                        sEnd = rtl_ustr_lastIndexOfChar( aLinkName.getStr(), '/' );
+                        sEnd = aLinkName.lastIndexOf( '/' );
 
                         aLinkParent = aLinkName.copy(0, sEnd);
                     } else
@@ -685,7 +685,7 @@ void deleteAllImplementations(   const Reference < XSimpleRegistry >& xReg,
                 {
                     hasLocationUrl = true;
 
-                    OUString implName(xImplKey->getKeyName().getStr() + 1);
+                    OUString implName(xImplKey->getKeyName().copy(1));
                     sal_Int32 firstDot = implName.indexOf('/');
 
                     if (firstDot >= 0)
@@ -1054,7 +1054,7 @@ void prepareRegistry(
             Sequence< Reference < XRegistryKey > > serviceKeys = xKey->openKeys();
             const Reference < XRegistryKey > * pServiceKeys = serviceKeys.getConstArray();
 
-            OUString implName = OUString(xImplKey->getKeyName().getStr() + 1);
+            OUString implName = xImplKey->getKeyName().copy(1);
             sal_Int32 firstDot = implName.indexOf('/');
 
             if (firstDot >= 0)
@@ -1147,7 +1147,7 @@ void findImplementations(    const Reference < XRegistryKey > & xSource,
         {
             isImplKey = true;
 
-            OUString implName = OUString(xSource->getKeyName().getStr() + 1).replace('/', '.').getStr();
+            OUString implName = xSource->getKeyName().copy(1).replace('/', '.');
             sal_Int32 firstDot = implName.indexOf('.');
 
             if (firstDot >= 0)

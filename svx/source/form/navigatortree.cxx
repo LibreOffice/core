@@ -1432,8 +1432,7 @@ namespace svxform
             aNewName = aBaseName;
             if( i>0 )
             {
-                aNewName += " ";
-                aNewName += OUString::number(i).getStr();
+                aNewName += " " + OUString::number(i);
             }
 
             if( GetNavModel()->FindData(aNewName, pFormParentData,false) == nullptr )

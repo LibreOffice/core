@@ -766,11 +766,8 @@ bool SwAccessibleParagraph::GetSentenceBoundary(
     sal_Int32 nPos )
 {
     const sal_Unicode* pStr = rText.getStr();
-    if (pStr)
-    {
-        while( nPos < rText.getLength() && pStr[nPos] == u' ' )
-            nPos++;
-    }
+    while( nPos < rText.getLength() && pStr[nPos] == u' ' )
+        nPos++;
 
     GetPortionData().GetSentenceBoundary( rBound, nPos );
     return true;

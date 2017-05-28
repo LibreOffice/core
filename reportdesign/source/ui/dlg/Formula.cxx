@@ -218,7 +218,7 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
         SvtViewOptions aDlgOpt( EViewType::Window, HID_RPT_FIELD_SEL_WIN );
         if ( aDlgOpt.Exists() )
         {
-            m_pAddField->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
+            m_pAddField->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
 
         }
 

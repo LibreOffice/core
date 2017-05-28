@@ -175,8 +175,8 @@ rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
 
 OUString getDirFromFile(const OUString& usFilePath)
 {
-    sal_Int32 index= usFilePath.lastIndexOf('/');
-    return OUString(usFilePath.getStr(), index);
+    sal_Int32 index = usFilePath.lastIndexOf('/');
+    return usFilePath.copy(0, index);
 }
 
 OUString getLibraryLocation()

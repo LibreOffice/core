@@ -459,7 +459,6 @@ OUString removeAny(OUString const& rIn,
 OUString setToken(const OUString& rIn, sal_Int32 nToken, sal_Unicode cTok,
     const OUString& rNewToken)
 {
-    const sal_Unicode* pStr = rIn.getStr();
     sal_Int32 nLen = rIn.getLength();
     sal_Int32 nTok = 0;
     sal_Int32 nFirstChar = 0;
@@ -469,7 +468,7 @@ OUString setToken(const OUString& rIn, sal_Int32 nToken, sal_Unicode cTok,
     while ( i < nLen )
     {
         // Increase token count if match
-        if (*pStr == cTok)
+        if (rIn[i] == cTok)
         {
             ++nTok;
 
@@ -479,7 +478,6 @@ OUString setToken(const OUString& rIn, sal_Int32 nToken, sal_Unicode cTok,
                 break;
         }
 
-        ++pStr;
         ++i;
     }
 

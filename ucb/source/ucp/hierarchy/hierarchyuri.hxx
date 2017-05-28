@@ -66,8 +66,7 @@ public:
 inline bool HierarchyUri::isRootFolder() const
 {
     init();
-    return ( ( m_aPath.getLength() == 1 ) &&
-             ( m_aPath.getStr()[ 0 ] == u'/' ) );
+    return m_aPath == "/";
 }
 }
 

@@ -165,7 +165,7 @@ bool SvxHyperlinkItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId 
         case MID_HLINK_URL:
             if(!(rVal >>= aStr))
                 return false;
-            sURL = aStr.getStr();
+            sURL = aStr;
         break;
         case MID_HLINK_TARGET:
             if(!(rVal >>= aStr))

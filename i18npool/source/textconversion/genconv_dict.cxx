@@ -101,19 +101,18 @@ void make_hhc_char(FILE *sfp, FILE *cfp)
         // input file is in UTF-8 encoding (Hangul:Hanja)
         // don't convert last new line character to Ostr.
         OUString Ostr(Cstr, strlen(Cstr) - 1, RTL_TEXTENCODING_UTF8);
-        const sal_Unicode *Ustr = Ostr.getStr();
         sal_Int32  len = Ostr.getLength();
 
-        Hangul2HanjaData[count][0] = Ustr[0];
+        Hangul2HanjaData[count][0] = Ostr[0];
         Hangul2HanjaData[count][1] = sal::static_int_cast<sal_uInt16>( address );
         Hangul2HanjaData[count][2] = sal::static_int_cast<sal_uInt16>( len - 2 );
         count++;
 
         for (i = 2; i < len; i++) {
-            Hanja2HangulData[Ustr[i]] = Ustr[0];
+            Hanja2HangulData[Ostr[i]] = Ostr[0];
             if (address++ % 16 == 0)
                 fprintf(cfp, "\n\t");
-            fprintf(cfp, "0x%04x, ", Ustr[i]);
+            fprintf(cfp, "0x%04x, ", Ostr[i]);
         }
     }
     fprintf(cfp, "\n};\n");
@@ -189,17 +188,16 @@ void make_stc_char(FILE *sfp, FILE *cfp)
         // input file is in UTF-8 encoding (SChinese:TChinese)
         // don't convert last new line character to Ostr.
         OUString Ostr(Cstr, strlen(Cstr) - 1, RTL_TEXTENCODING_UTF8);
-        const sal_Unicode *Ustr = Ostr.getStr();
         sal_Int32  len = Ostr.getLength();
-        if (Ustr[1] == 'v')
-            SChinese2VChineseData[Ustr[0]] = Ustr[2];
+        if (Ostr[1] == 'v')
+            SChinese2VChineseData[Ostr[0]] = Ostr[2];
         else {
-            SChinese2TChineseData[Ustr[0]] = Ustr[2];
-            if (SChinese2VChineseData[Ustr[0]] == 0)
-                SChinese2VChineseData[Ustr[0]] = Ustr[2];
+            SChinese2TChineseData[Ostr[0]] = Ostr[2];
+            if (SChinese2VChineseData[Ostr[0]] == 0)
+                SChinese2VChineseData[Ostr[0]] = Ostr[2];
         }
         for (i = 2; i < len; i++)
-            TChinese2SChineseData[Ustr[i]] = Ustr[0];
+            TChinese2SChineseData[Ostr[i]] = Ostr[0];
     }
 
     fprintf(cfp, "\nstatic const sal_uInt16 STC_CharIndex_S2T[] = {");

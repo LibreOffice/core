@@ -212,7 +212,7 @@ OUString getLibDir()
             if( Module::getUrlFromAddress(
                     reinterpret_cast< oslGenericFunction >(getLibDir), libDir ) )
             {
-                libDir = OUString( libDir.getStr(), libDir.lastIndexOf('/' ) );
+                libDir = libDir.copy( 0, libDir.lastIndexOf('/') );
                 OUString name ( "PYUNOLIBDIR" );
                 rtl_bootstrap_set( name.pData, libDir.pData );
             }

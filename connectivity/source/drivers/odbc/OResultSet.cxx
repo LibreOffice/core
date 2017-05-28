@@ -481,8 +481,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex )
         break;
     default:
     {
-        OUString sRet;
-        sRet = m_aRow[columnIndex].getString();
+        OUString const & sRet = m_aRow[columnIndex].getString();
         nRet = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(sRet.getStr()),sizeof(sal_Unicode)*sRet.getLength());
     }
     }
@@ -501,7 +500,7 @@ Sequence< sal_Int8 > OResultSet::impl_getBytes( sal_Int32 columnIndex )
     case SQL_CHAR:
     case SQL_LONGVARCHAR:
     {
-        OUString aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nColumnType,m_bWasNull,**this,m_nTextEncoding);
+        OUString const & aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nColumnType,m_bWasNull,**this,m_nTextEncoding);
         return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),sizeof(sal_Unicode)*aRet.getLength());
     }
     default:
@@ -1787,8 +1786,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
                     break;
                 case SQL_WLONGVARCHAR:
                 {
-                    OUString sRet;
-                    sRet = m_aRow[nColumnIndex].getString();
+                    OUString const & sRet = m_aRow[nColumnIndex].getString();
                     N3SQLPutData (m_aStatementHandle, static_cast<SQLPOINTER>(const_cast<sal_Unicode *>(sRet.getStr())), sizeof(sal_Unicode)*sRet.getLength());
                     break;
                 }

@@ -350,7 +350,7 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
 
     if(!msString.isEmpty())
     {
-        const OUString aStr(msString.getStr(), (sal_uInt16)msString.getLength());
+        const OUString aStr = msString;
         const sal_Int32 nLen(aStr.getLength());
 
         const OUString aString_rotate( "rotate" );
@@ -762,7 +762,7 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
 
     if(!msString.isEmpty())
     {
-        const OUString aStr(msString.getStr(), (sal_uInt16)msString.getLength());
+        const OUString aStr = msString;
         const sal_Int32 nLen(aStr.getLength());
 
         const OUString aString_rotatex( "rotatex" );
@@ -1023,7 +1023,7 @@ SdXMLImExViewBox::SdXMLImExViewBox(const OUString& rNew, const SvXMLUnitConverte
 {
     if(!msString.isEmpty())
     {
-        const OUString aStr(msString.getStr(), (sal_uInt16)msString.getLength());
+        const OUString aStr = msString;
         const sal_Int32 nLen(aStr.getLength());
         sal_Int32 nPos(0);
 

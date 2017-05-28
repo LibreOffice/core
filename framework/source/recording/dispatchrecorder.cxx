@@ -357,13 +357,13 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const OUString& aURL,
     if(bAsComment)
         aScriptBuffer.append(REM_AS_COMMENT);
     aScriptBuffer.append("dispatcher.executeDispatch(document, \"");
-    aScriptBuffer.append     (aURL);
+    aScriptBuffer.append(aURL);
     aScriptBuffer.append("\", \"\", 0, ");
     if(nValidArgs<1)
         aScriptBuffer.append("Array()");
     else
     {
-        aScriptBuffer.append( sArrayName.getStr() );
+        aScriptBuffer.append( sArrayName );
         aScriptBuffer.append("()");
     }
     aScriptBuffer.append(")\n\n");

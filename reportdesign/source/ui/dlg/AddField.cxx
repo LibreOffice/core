@@ -357,7 +357,7 @@ void OAddFieldWindow::Update()
             lcl_addToList( *m_pListBox, aParamNames );
 
             // set title
-            aTitle += " " + OUString( m_aCommandName.getStr() );
+            aTitle += " " + m_aCommandName;
             SetText( aTitle );
             if ( !m_aCommandName.isEmpty() )
             {

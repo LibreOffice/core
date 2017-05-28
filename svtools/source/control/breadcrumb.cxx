@@ -141,7 +141,7 @@ void Breadcrumb::SetURL( const OUString& rURL )
             appendField();
 
         unsigned int nEnd = sPath.indexOf( '/', nPos + 1 );
-        OUString sLabel = OUString( sPath.getStr() + nPos + 1, nEnd - nPos - 1 );
+        OUString sLabel = sPath.copy( nPos + 1, nEnd - nPos - 1 );
 
         if( m_eMode == SvtBreadcrumbMode::ALL_VISITED )
         {
@@ -150,7 +150,7 @@ void Breadcrumb::SetURL( const OUString& rURL )
         }
 
         m_aLinks[i]->SetText( sLabel );
-        m_aLinks[i]->SetURL( sRootPath + OUString( sPath.getStr(), nEnd ) );
+        m_aLinks[i]->SetURL( sRootPath + sPath.copy( 0, nEnd ) );
         m_aLinks[i]->Hide();
         m_aLinks[i]->Enable();
 

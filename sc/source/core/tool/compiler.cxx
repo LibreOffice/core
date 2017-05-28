@@ -4043,7 +4043,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
                     OUString aOld( aRef[j] );
                     OUString aStr2;
                     const sal_Unicode* p = aRef[j].getStr();
-                    while ( *p && CharClass::isAsciiNumeric( OUString(*p) ) )
+                    while ( *p && rtl::isAsciiDigit( *p ) )
                         aStr2 += OUStringLiteral1(*p++);
                     aRef[j] = OUString( p );
                     aRef[j] += aStr2;

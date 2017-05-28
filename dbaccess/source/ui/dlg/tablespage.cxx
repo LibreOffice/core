@@ -165,7 +165,7 @@ namespace dbaui
             if (xMeta.is())
                 qualifiedNameComponents(xMeta, pIncludeTable->getStr(), sCatalog, sSchema, sName,::dbtools::EComposeRule::InDataManipulation);
             else
-                sName = pIncludeTable->getStr();
+                sName = *pIncludeTable;
 
             bool bAllTables = (1 == sName.getLength()) && ('%' == sName[0]);
             bool bAllSchemas = (1 == sSchema.getLength()) && ('%' == sSchema[0]);

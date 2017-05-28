@@ -297,7 +297,7 @@ OUString SAL_CALL OConnection::nativeSQL( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    OString aSql(OUStringToOString(sql.getStr(),getTextEncoding()));
+    OString aSql(OUStringToOString(sql,getTextEncoding()));
     char pOut[2048];
     SQLINTEGER nOutLen;
     OTools::ThrowException(this,N3SQLNativeSql(m_aConnectionHandle,reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(aSql.getStr())),aSql.getLength(),reinterpret_cast<SDB_ODBC_CHAR*>(pOut),sizeof pOut - 1,&nOutLen),m_aConnectionHandle,SQL_HANDLE_DBC,*this);
@@ -391,7 +391,7 @@ void SAL_CALL OConnection::setCatalog( const OUString& catalog )
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
 
-    OString aCat(OUStringToOString(catalog.getStr(),getTextEncoding()));
+    OString aCat(OUStringToOString(catalog,getTextEncoding()));
     OTools::ThrowException(this,
         N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_CURRENT_CATALOG,const_cast<char *>(aCat.getStr()),SQL_NTS),
         m_aConnectionHandle,SQL_HANDLE_DBC,*this);

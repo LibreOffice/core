@@ -175,8 +175,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
         {
             const OUString &rTarget = aP->second;
             vcl::Window *pTarget = get<vcl::Window>(rTarget.toUtf8());
-            SAL_WARN_IF(!pTarget, "vcl", "missing member of a11y relation: "
-                << rTarget.getStr());
+            SAL_WARN_IF(!pTarget, "vcl", "missing member of a11y relation: " << rTarget);
             if (!pTarget)
                 continue;
             const OString &rType = aP->first;

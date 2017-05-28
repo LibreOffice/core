@@ -3111,12 +3111,7 @@ void flushParagraph(
     {
         const editeng::Section& rSec = *it;
 
-        const sal_Unicode* pBeg = rParaText.getStr();
-        std::advance(pBeg, rSec.mnStart);
-        const sal_Unicode* pEnd = pBeg;
-        std::advance(pEnd, rSec.mnEnd-rSec.mnStart);
-
-        OUString aContent(pBeg, pEnd-pBeg);
+        OUString aContent(rParaText.copy(rSec.mnStart, rSec.mnEnd - rSec.mnStart));
 
         std::vector<XMLPropertyState> aPropStates;
         const SvxFieldData* pField = toXMLPropertyStates(aPropStates, rSec.maAttributes, xMapper, rAttrMap);
