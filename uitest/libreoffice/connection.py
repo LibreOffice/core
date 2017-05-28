@@ -5,12 +5,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-import os
 import subprocess
-import sys
 import time
 import uuid
-import datetime
 
 try:
     import pyuno
