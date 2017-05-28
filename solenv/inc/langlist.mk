@@ -55,6 +55,7 @@ gl \
 gu \
 gug \
 he \
+hsb \
 hi \
 hr \
 hu \

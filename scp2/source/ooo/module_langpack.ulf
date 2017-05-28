@@ -100,6 +100,12 @@ en-US = "Dutch"
 [STR_DESC_MODULE_LANGPACK_NL]
 en-US = "Installs the Dutch user interface"
 
+[STR_NAME_MODULE_LANGPACK_HSB]
+en-US = "Upper Sorbian"
+
+[STR_DESC_MODULE_LANGPACK_HSB]
+en-US = "Installs the Upper Sorbian user interface"
+
 [STR_NAME_MODULE_LANGPACK_HU]
 en-US = "Hungarian"
 
