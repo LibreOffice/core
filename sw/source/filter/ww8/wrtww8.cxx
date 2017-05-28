@@ -118,6 +118,7 @@
 #include "numrule.hxx"
 #include "fmtclds.hxx"
 #include "rdfhelper.hxx"
+#include "fmtclbl.hxx"
 
 using namespace css;
 using namespace sw::util;
@@ -2709,7 +2710,9 @@ void MSWordExportBase::WriteText()
                     const SwFrameFormat* pPgFormat = rSect.GetFormat();
                     const SwFormatCol& rCol = pPgFormat->GetCol();
                     sal_uInt16 nColumnCount = rCol.GetNumCols();
-                    if(nColumnCount > 1)
+                    const SwFormatNoBalancedColumns& rNoBalanced = pPgFormat->GetBalancedColumns();
+                    // Prevent the additional section break only for non-balanced columns.
+                    if (nColumnCount > 1 && rNoBalanced.GetValue())
                     {
                         bNeedExportBreakHere = false;
                     }
