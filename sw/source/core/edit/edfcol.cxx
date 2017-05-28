@@ -124,6 +124,9 @@ uno::Reference<drawing::XShape> lcl_getWatermark(const uno::Reference<text::XTex
     while (xParagraphs->hasMoreElements())
     {
         uno::Reference<container::XEnumerationAccess> xTextPortionEnumerationAccess(xParagraphs->nextElement(), uno::UNO_QUERY);
+        if (!xTextPortionEnumerationAccess.is())
+            continue;
+
         uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
         while (xTextPortions->hasMoreElements())
         {
