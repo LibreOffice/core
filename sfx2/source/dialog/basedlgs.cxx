@@ -130,7 +130,7 @@ void SfxModalDialog::GetDialogData_Impl()
     if ( aDlgOpt.Exists() )
     {
         // load settings
-        SetWindowState( OUStringToOString( aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US ) );
+        SetWindowState( OUStringToOString( aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US ) );
         Any aUserItem = aDlgOpt.GetUserItem( USERITEM_NAME );
         OUString aTemp;
         if ( aUserItem >>= aTemp )

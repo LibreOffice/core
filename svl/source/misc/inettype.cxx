@@ -749,7 +749,7 @@ bool INetContentTypes::parse(
     OUString t;
     OUString s;
     INetContentTypeParameterList p;
-    if (INetMIME::scanContentType(b, e, &t, &s, pParameters == nullptr ? nullptr : &p) == e) {
+    if (INetMIME::scanContentType(rMediaType, &t, &s, pParameters == nullptr ? nullptr : &p) == e) {
         rType = t;
         rSubType = s;
         if (pParameters != nullptr) {

@@ -2068,7 +2068,7 @@ namespace accessibility
                 if( nIndex <= aBoundary.endPos )
                 {
                     nextWord =  aBoundary.endPos;
-                    if( sText.getStr()[nextWord] == u' ' ) nextWord++;
+                    if( sText[nextWord] == u' ' ) nextWord++;
                     bWord = implGetWordBoundary( aBoundary, nextWord );
                 }
 

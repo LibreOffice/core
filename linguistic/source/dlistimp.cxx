@@ -321,7 +321,7 @@ void DicList::SearchForDictionaries(
         size_t nCount = rDicList.size();
         for(j = 0;  j < nCount;  j++)
         {
-            aTmp2 = rDicList[j]->getName().getStr();
+            aTmp2 = rDicList[j]->getName();
             aTmp2 = ToLower( aTmp2, nSystemLanguage );
             if(aTmp1 == aTmp2)
                 break;

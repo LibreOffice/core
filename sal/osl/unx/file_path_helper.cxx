@@ -114,11 +114,11 @@ void SAL_CALL osl_systemPathGetFileNameOrLastDirectoryPart(
 
     rtl::OUString last_part;
 
-    if (path.getLength() > 1 || (path.getLength() == 1 && *path.getStr() != FPH_CHAR_PATH_SEPARATOR))
+    if (path.getLength() > 1 || (path.getLength() == 1 && path[0] != FPH_CHAR_PATH_SEPARATOR))
     {
         sal_Int32 idx_ps = path.lastIndexOf(FPH_CHAR_PATH_SEPARATOR);
         idx_ps++; // always right to increment by one even if idx_ps == -1!
-        last_part = rtl::OUString(path.getStr() + idx_ps);
+        last_part = path.copy(idx_ps);
     }
     rtl_uString_assign(ppustrFileNameOrLastDirPart, last_part.pData);
 }

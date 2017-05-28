@@ -791,13 +791,15 @@ inline bool SaxWriterHelper::comment(const OUString& rComment)
     return bRet;
 }
 
-inline sal_Int32 calcXMLByteLength( const sal_Unicode *pStr, sal_Int32 nStrLen,
+inline sal_Int32 calcXMLByteLength( const OUString& rStr,
                                     bool bDoNormalization,
                                     bool bNormalizeWhitespace )
 {
     sal_Int32 nOutputLength = 0;
     sal_uInt32 nSurrogate = 0;
 
+    const sal_Unicode *pStr = rStr.getStr();
+    sal_Int32 nStrLen = rStr.getLength();
     for( sal_Int32 i = 0 ; i < nStrLen ; i++ )
     {
         sal_uInt16 c = pStr[i];
@@ -1075,21 +1077,20 @@ void SAXWriter::startElement(const OUString& aName, const Reference< XAttributeL
         sal_Int32 nAttribCount = xAttribs.is() ? xAttribs->getLength() : 0;
 
         nLength ++; // "<"
-        nLength += calcXMLByteLength( aName.getStr() , aName.getLength(),
-                                  false, false ); // the tag name
+        nLength += calcXMLByteLength( aName, false, false ); // the tag name
 
         sal_Int16 n;
         for( n = 0 ; n < static_cast<sal_Int16>(nAttribCount) ; n ++ ) {
             nLength ++; // " "
             OUString tmp =  xAttribs->getNameByIndex( n );
 
-            nLength += calcXMLByteLength( tmp.getStr() , tmp.getLength() , false, false );
+            nLength += calcXMLByteLength( tmp, false, false );
 
             nLength += 2; // ="
 
             tmp = xAttribs->getValueByIndex( n );
 
-            nLength += calcXMLByteLength( tmp.getStr(), tmp.getLength(), true, true );
+            nLength += calcXMLByteLength( tmp, true, true );
 
             nLength += 1; // "
         }
@@ -1149,7 +1150,7 @@ void SAXWriter::endElement(const OUString& aName)
         // only ascii chars allowed
         sal_Int32 nLength(0);
         if (m_bAllowLineBreak)
-            nLength = 3 + calcXMLByteLength( aName.getStr(), aName.getLength(), false, false );
+            nLength = 3 + calcXMLByteLength( aName, false, false );
         sal_Int32 nPrefix = getIndentPrefixLength( nLength );
 
         if( nPrefix >= 0 )
@@ -1191,8 +1192,7 @@ void SAXWriter::characters(const OUString& aChars)
             {
                 sal_Int32 nFirstLineBreakOccurrence = getFirstLineBreak( aChars );
 
-                nLength = calcXMLByteLength( aChars.getStr(), aChars.getLength(),
-                                               ! m_bIsCDATA , false );
+                nLength = calcXMLByteLength( aChars, ! m_bIsCDATA , false );
                 nIndentPrefix = getIndentPrefixLength(
                     nFirstLineBreakOccurrence >= 0 ? nFirstLineBreakOccurrence : nLength );
             }
@@ -1240,11 +1240,11 @@ void SAXWriter::processingInstruction(const OUString& aTarget, const OUString& a
     if (m_bAllowLineBreak)
     {
         nLength = 2;  // "<?"
-        nLength += calcXMLByteLength( aTarget.getStr(), aTarget.getLength(), false, false );
+        nLength += calcXMLByteLength( aTarget, false, false );
 
         nLength += 1;  // " "
 
-        nLength += calcXMLByteLength( aData.getStr(), aData.getLength(), false, false );
+        nLength += calcXMLByteLength( aData, false, false );
 
         nLength += 2; // "?>"
     }
@@ -1314,7 +1314,7 @@ void SAXWriter::comment(const OUString& sComment)
     if (m_bAllowLineBreak)
     {
         nLength = 4; // "<!--"
-        nLength += calcXMLByteLength( sComment.getStr(), sComment.getLength(), false, false);
+        nLength += calcXMLByteLength( sComment, false, false);
 
         nLength += 3;
     }
@@ -1358,7 +1358,7 @@ void SAXWriter::unknown(const OUString& sString)
 
     sal_Int32 nLength(0);
     if (m_bAllowLineBreak)
-        nLength = calcXMLByteLength( sString.getStr(), sString.getLength(), false, false );
+        nLength = calcXMLByteLength( sString, false, false );
 
     sal_Int32 nPrefix = getIndentPrefixLength( nLength );
     if( nPrefix >= 0 )

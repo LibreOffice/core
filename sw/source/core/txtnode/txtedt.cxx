@@ -1063,7 +1063,7 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
                         // selection accordingly.
                         const sal_Unicode* pChar = rWord.getStr();
                         sal_Int32 nLeft = 0;
-                        while (pChar && *pChar++ == CH_TXTATR_INWORD)
+                        while (*pChar++ == CH_TXTATR_INWORD)
                             ++nLeft;
                         pChar = rWord.getLength() ? rWord.getStr() + rWord.getLength() - 1 : nullptr;
                         sal_Int32 nRight = 0;

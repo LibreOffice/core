@@ -172,7 +172,7 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
     if (xSet.is())
     {
         if (::comphelper::hasProperty(FM_PROP_HELPTEXT, xSet))
-            aHelpText = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_HELPTEXT)).getStr();
+            aHelpText = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_HELPTEXT));
 
         if (aHelpText.isEmpty() && ::comphelper::hasProperty(FM_PROP_TARGET_URL, xSet))
         {

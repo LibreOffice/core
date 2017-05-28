@@ -842,7 +842,7 @@ Any ODbDataSourceAdministrationHelper::implTranslateProperty(const SfxPoolItem* 
 
     if ( pStringItem )
     {
-        aValue <<= OUString( pStringItem->GetValue().getStr() );
+        aValue <<= pStringItem->GetValue();
     }
     else if ( pBoolItem )
     {

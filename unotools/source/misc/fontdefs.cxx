@@ -479,7 +479,7 @@ OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
         }
     }
 
-    return OUString( rTokenStr.getStr() + nTokenStart, nTokenLen );
+    return rTokenStr.copy( nTokenStart, nTokenLen );
 }
 
 static bool ImplIsFontToken( const OUString& rName, const OUString& rToken )
