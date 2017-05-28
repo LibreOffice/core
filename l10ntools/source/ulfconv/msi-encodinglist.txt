@@ -70,6 +70,7 @@ hi       0  1081
 hr       0  1050   # Croatian
 ht       0  1626   # Haitian
 hu       0  1038
+hsb      0  1070   # Upper Sorbian
 hy       0  1067   # Armenian
 id       0  1057   # Indonesian
 is       0  1039   # Icelandic
