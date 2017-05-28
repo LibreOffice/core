@@ -518,7 +518,7 @@ bool TVChildTarget::SearchAndInsert(TVDom* p, TVDom* tvDom)
 Any SAL_CALL
 TVChildTarget::getByName( const OUString& aName )
 {
-    OUString num( aName.getStr()+2,aName.getLength()-4 );
+    OUString num( aName.copy( 2, aName.getLength()-4 ) );
     sal_Int32 idx = num.toInt32() - 1;
     if( idx < 0 || Elements.size() <= sal_uInt32( idx ) )
         throw NoSuchElementException();
@@ -540,7 +540,7 @@ TVChildTarget::getElementNames( )
 sal_Bool SAL_CALL
 TVChildTarget::hasByName( const OUString& aName )
 {
-    OUString num( aName.getStr()+2,aName.getLength()-4 );
+    OUString num( aName.copy( 2, aName.getLength()-4 ) );
     sal_Int32 idx = num.toInt32() - 1;
     if( idx < 0 || Elements.size() <= sal_uInt32( idx ) )
         return false;
@@ -557,7 +557,7 @@ TVChildTarget::getByHierarchicalName( const OUString& aName )
 
     if( ( idx = aName.indexOf( '/' ) ) != -1 )
     {
-        OUString num( aName.getStr()+2,idx-4 );
+        OUString num( aName.copy( 2, idx-4 ) );
         sal_Int32 pref = num.toInt32() - 1;
 
         if( pref < 0 || Elements.size() <= sal_uInt32( pref ) )
@@ -576,7 +576,7 @@ TVChildTarget::hasByHierarchicalName( const OUString& aName )
 
     if( ( idx = aName.indexOf( '/' ) ) != -1 )
     {
-        OUString num( aName.getStr()+2,idx-4 );
+        OUString num( aName.copy( 2, idx-4 ) );
         sal_Int32 pref = num.toInt32() - 1;
         if( pref < 0 || Elements.size() <= sal_uInt32( pref ) )
             return false;

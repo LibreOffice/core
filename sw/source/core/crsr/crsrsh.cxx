@@ -3488,7 +3488,7 @@ void SwCursorShell::GetSmartTagRect( const Point& rPt, SwRect& rSelectRect )
             // modify the selection accordingly.
             const sal_Unicode* pChar = aText.getStr();
             sal_Int32 nLeft = 0;
-            while (pChar && *pChar++ == CH_TXTATR_INWORD)
+            while (*pChar++ == CH_TXTATR_INWORD)
                 ++nLeft;
             pChar = aText.getLength() ? aText.getStr() + aText.getLength() - 1 : nullptr;
             sal_Int32 nRight = 0;

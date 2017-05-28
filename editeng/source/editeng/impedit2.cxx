@@ -947,13 +947,11 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
     {
         OUString aLine = aPaM.GetNode()->GetString().copy(rLine.GetStart(), rLine.GetEnd() - rLine.GetStart());
 
-        const sal_Unicode* pLineString = aLine.getStr();
-
         UErrorCode nError = U_ZERO_ERROR;
         UBiDi* pBidi = ubidi_openSized( aLine.getLength(), 0, &nError );
 
         const UBiDiLevel  nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
-        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), aLine.getLength(), nBidiLevel, nullptr, &nError );
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aLine.getStr()), aLine.getLength(), nBidiLevel, nullptr, &nError );
 
         sal_Int32 nVisPos = bStart ? 0 : aLine.getLength()-1;
         const sal_Int32 nLogPos = ubidi_getLogicalIndex( pBidi, nVisPos, &nError );
@@ -1068,13 +1066,11 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
         OUString aLine = aPaM.GetNode()->GetString().copy(rLine.GetStart(), rLine.GetEnd() - rLine.GetStart());
         const sal_Int32 nPosInLine = aPaM.GetIndex() - rLine.GetStart();
 
-        const sal_Unicode* pLineString = aLine.getStr();
-
         UErrorCode nError = U_ZERO_ERROR;
         UBiDi* pBidi = ubidi_openSized( aLine.getLength(), 0, &nError );
 
         const UBiDiLevel  nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
-        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), aLine.getLength(), nBidiLevel, nullptr, &nError );
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aLine.getStr()), aLine.getLength(), nBidiLevel, nullptr, &nError );
 
         if ( !pEditView->IsInsertMode() )
         {
@@ -1919,9 +1915,7 @@ void ImpEditEngine::InitWritingDirections( sal_Int32 nPara )
     const UBiDiLevel nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
     if ( ( bCTL || ( nBidiLevel == 1 /*RTL*/ ) ) && pParaPortion->GetNode()->Len() )
     {
-
         OUString aText = pParaPortion->GetNode()->GetString();
-
 
         // Bidi functions from icu 2.0
 

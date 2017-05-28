@@ -53,7 +53,7 @@ namespace pcr
         INetURLObject aHID( aTmp );
         if ( aHID.GetProtocol() == INetProtocol::NotValid )
             aBuffer.append( INET_HID_SCHEME );
-        aBuffer.append( aTmp.getStr() );
+        aBuffer.append( aTmp );
         return aBuffer.makeStringAndClear();
     }
 

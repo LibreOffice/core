@@ -700,9 +700,8 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
     {
         aActivatorUrl = xActivatorKey->getAsciiValue();
 
-        OUString tmpActivator(aActivatorUrl.getStr());
         sal_Int32 nIndex = 0;
-        aActivatorName = tmpActivator.getToken(0, ':', nIndex );
+        aActivatorName = aActivatorUrl.getToken(0, ':', nIndex );
 
         Reference<XRegistryKey > xLocationKey = xImplementationKey->openKey(
             "/UNO/LOCATION" );
