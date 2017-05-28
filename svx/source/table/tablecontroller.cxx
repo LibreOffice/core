@@ -2669,16 +2669,7 @@ bool SvxTableController::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNo
         CellPos aStart, aEnd;
         getSelectedCells( aStart, aEnd );
 
-        SfxItemSet aAttr(*rFormatSet.GetPool(), rFormatSet.GetRanges());
-        aAttr.Put(rFormatSet);
-
         const bool bFrame = (rFormatSet.GetItemState( SDRATTR_TABLE_BORDER ) == SfxItemState::SET) || (rFormatSet.GetItemState( SDRATTR_TABLE_BORDER_INNER ) == SfxItemState::SET);
-
-        if( bFrame )
-        {
-            aAttr.ClearItem( SDRATTR_TABLE_BORDER );
-            aAttr.ClearItem( SDRATTR_TABLE_BORDER_INNER );
-        }
 
         for( sal_Int32 nRow = aStart.mnRow; nRow <= aEnd.mnRow; nRow++ )
         {
