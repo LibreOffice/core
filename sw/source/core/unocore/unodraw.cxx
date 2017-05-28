@@ -1142,9 +1142,10 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                                 SwTextAttr * const pHint =
                                     pTextNode->GetTextAttrForCharAt(
                                         nIdx, RES_TXTATR_FLYCNT );
-                                SAL_WARN_IF( !pHint || pHint->Which() != RES_TXTATR_FLYCNT,
+                                assert(pHint && "Missing Hint.");
+                                SAL_WARN_IF( pHint->Which() != RES_TXTATR_FLYCNT,
                                             "sw.uno", "Missing FlyInCnt-Hint." );
-                                SAL_WARN_IF( !pHint || pHint->GetFlyCnt().GetFrameFormat() != pFormat,
+                                SAL_WARN_IF( pHint->GetFlyCnt().GetFrameFormat() != pFormat,
                                             "sw.uno", "Wrong TextFlyCnt-Hint." );
                                 const_cast<SwFormatFlyCnt&>(pHint->GetFlyCnt())
                                     .SetFlyFormat();
