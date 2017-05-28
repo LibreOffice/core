@@ -27,7 +27,7 @@ namespace NS_sprm
 const sal_uInt16 LN_PContextualSpacing = 0x246d;
 const sal_uInt16 LN_PIstdPermute = 0xc601;
 const sal_uInt16 LN_PTabProps = 0x646b;
-const sal_uInt16 LN_TFCantSplit90 = 0x3466;
+const sal_uInt16 LN_TFCantSplit90 = 0x3403;
 const sal_uInt16 LN_TCantSplit = 0x3644;
 const sal_uInt16 LN_PIncLvl = 0x2602;
 const sal_uInt16 LN_PJcExtra = 0x2461;
@@ -245,7 +245,7 @@ const sal_uInt16 LN_TJc = 0x548A;
 const sal_uInt16 LN_TJc90 = 0x5400;
 const sal_uInt16 LN_TDxaLeft = 0x9601;
 const sal_uInt16 LN_TDxaGapHalf = 0x9602;
-const sal_uInt16 LN_TFCantSplit = 0x3403;
+const sal_uInt16 LN_TFCantSplit = 0x3466;
 const sal_uInt16 LN_TTableHeader = 0x3404;
 const sal_uInt16 LN_TTableBorders80 = 0xd605;
 const sal_uInt16 LN_TDefTable10 = 0xd606;
