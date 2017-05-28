@@ -3773,9 +3773,7 @@ RTLFUNC(Shell)
 
         // #72471 work parameter(s) up
         std::list<OUString>::const_iterator iter = aTokenList.begin();
-        const OUString& rStr = *iter;
-        OUString aOUStrProg( rStr.getStr(), rStr.getLength() );
-        OUString aOUStrProgURL = getFullPath( aOUStrProg );
+        OUString aOUStrProgURL = getFullPath( *iter );
 
         ++iter;
 
@@ -3787,9 +3785,8 @@ RTLFUNC(Shell)
             for(int iList = 0; iter != aTokenList.end(); ++iList, ++iter)
             {
                 const OUString& rParamStr = (*iter);
-                const OUString aTempStr( rParamStr.getStr(), rParamStr.getLength());
                 pParamList[iList] = nullptr;
-                rtl_uString_assign(&(pParamList[iList]), aTempStr.pData);
+                rtl_uString_assign(&(pParamList[iList]), rParamStr.pData);
             }
         }
 

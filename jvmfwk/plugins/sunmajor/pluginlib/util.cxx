@@ -778,7 +778,7 @@ void addJREInfoFromBinPath(
             else
             {
                 // jre/bin/jre -> jre/bin
-                OUString sMapPath(i->getStr(), index);
+                OUString sMapPath = i->copy(index);
                 index = sBinPath.lastIndexOf(sMapPath);
                 if (index != -1
                     && (index + sMapPath.getLength() == sBinPath.getLength())

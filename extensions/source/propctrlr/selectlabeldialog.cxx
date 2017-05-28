@@ -187,7 +187,7 @@ namespace pcr
             if (!::comphelper::hasProperty(PROPERTY_NAME, xAsSet))
                 // we need at least a name for displaying ...
                 continue;
-            sName = ::comphelper::getString(xAsSet->getPropertyValue(PROPERTY_NAME)).getStr();
+            sName = ::comphelper::getString(xAsSet->getPropertyValue(PROPERTY_NAME));
 
             // we need to check if the control model supports the required service
             Reference< XServiceInfo >  xInfo(xAsSet, UNO_QUERY);

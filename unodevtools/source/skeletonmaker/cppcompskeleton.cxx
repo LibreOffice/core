@@ -61,7 +61,7 @@ void generateIncludes(std::ostream & o,
     while (iter != interfaces.end())
     {
         o << "#include \""
-          << ((*iter).replace('.', '/').getStr())
+          << (*iter).replace('.', '/')
           << ".hpp\"\n";
         ++iter;
     }
