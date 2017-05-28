@@ -197,7 +197,7 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
     m_aTBPreview->SetOutStyle(TOOLBOX_STYLE_FLAT);
     m_aTBPreview->InsertItem(SID_DB_APP_DISABLE_PREVIEW,
                              vcl::CommandInfoProvider::GetLabelForCommand(".uno:DBDisablePreview", "com.sun.star.sdb.OfficeDatabaseDocument"),
-                             ToolBoxItemBits::LEFT|ToolBoxItemBits::DROPDOWN|ToolBoxItemBits::AUTOSIZE|ToolBoxItemBits::RADIOCHECK);
+                             ToolBoxItemBits::LEFT|ToolBoxItemBits::DROPDOWNONLY|ToolBoxItemBits::AUTOSIZE|ToolBoxItemBits::RADIOCHECK);
     m_aTBPreview->SetHelpId(HID_APP_VIEW_PREVIEW_CB);
     m_aTBPreview->SetDropdownClickHdl( LINK( this, OAppDetailPageHelper, OnDropdownClickHdl ) );
     m_aTBPreview->Enable();
