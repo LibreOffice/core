@@ -363,7 +363,7 @@ void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
 
     // end work-around for #i32420#
 
-    Config config(tmpfile_url.getStr());
+    Config config(tmpfile_url);
     size_t grpcnt = config.GetGroupCount();
     for (size_t i = 0; i < grpcnt; i++)
         add_group_entries(config, config.GetGroupName(sal::static_int_cast<sal_uInt16>(i)), Substitutor);

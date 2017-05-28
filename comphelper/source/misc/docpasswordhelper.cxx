@@ -181,13 +181,12 @@ sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
         sal_uInt16 nHighResult = pInitialCode[nLen - 1];
         sal_uInt16 nLowResult = 0;
 
-        const sal_Unicode* pStr = aUString.getStr();
         for ( sal_uInt32 nInd = 0; nInd < nLen; nInd++ )
         {
             // NO Encoding during conversion!
             // The specification says that the low byte should be used in case it is not NULL
-            char nHighChar = (char)( pStr[nInd] >> 8 );
-            char nLowChar = (char)( pStr[nInd] & 0xFF );
+            char nHighChar = (char)( aUString[nInd] >> 8 );
+            char nLowChar = (char)( aUString[nInd] & 0xFF );
             char nChar = nLowChar ? nLowChar : nHighChar;
 
             for ( int nMatrixInd = 0; nMatrixInd < 7; ++nMatrixInd )
