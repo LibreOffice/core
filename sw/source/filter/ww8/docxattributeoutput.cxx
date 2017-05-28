@@ -117,6 +117,7 @@
 #include <fmtautofmt.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
+#include <fmtclbl.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -5495,9 +5496,24 @@ void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectio
                 SwNodeIndex aCurrentNode(m_rExport.m_pCurPam->GetNode());
                 SwNodeIndex aLastNode(m_rExport.m_pDoc->GetNodes().GetEndOfContent(), -1);
 
+                // Need to still emit an empty section at the end of the
+                // document in case balanced columns are wanted, since the last
+                // section in Word is always balanced.
+                sal_uInt16 nColumns = 1;
+                bool bBalance = false;
+                if (const SwSectionFormat* pFormat = pSectionInfo->pSectionFormat)
+                {
+                    if (pFormat != reinterpret_cast<SwSectionFormat*>(sal_IntPtr(-1)))
+                    {
+                        nColumns = pFormat->GetCol().GetNumCols();
+                        const SwFormatNoBalancedColumns& rNoBalanced = pFormat->GetBalancedColumns();
+                        bBalance = !rNoBalanced.GetValue();
+                    }
+                }
+
                 // don't add section properties if this will be the first
                 // paragraph in the document
-                if ( !m_bParagraphOpened && !m_bIsFirstParagraph && aCurrentNode != aLastNode)
+                if ( !m_bParagraphOpened && !m_bIsFirstParagraph && (aCurrentNode != aLastNode || (nColumns > 1 && bBalance)))
                 {
                     // Create a dummy paragraph if needed
                     m_pSerializer->startElementNS( XML_w, XML_p, FSEND );

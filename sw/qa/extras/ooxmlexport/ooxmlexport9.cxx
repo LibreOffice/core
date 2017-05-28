@@ -498,6 +498,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107889, "tdf107889.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf107837, "tdf107837.odt")
+{
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+    // This was true, a balanced section from ODF turned into a non-balanced one after OOXML roundtrip.
+    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTextSections->getByIndex(0), "DontBalanceTextColumns"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
