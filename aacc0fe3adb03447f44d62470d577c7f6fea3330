@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_4ea83d20",
+        "filename": "connectivity/source/drivers/firebird/ResultSet.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-05-28T16:06:44Z",
+      "side": 1,
+      "message": "This crops by number of UTF16 code units, so is still not 100% correct. But that is not blocking for me, since the confusion is so widespread that it is usually not perceived as bug.",
+      "revId": "aacc0fe3adb03447f44d62470d577c7f6fea3330",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
