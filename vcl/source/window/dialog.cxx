@@ -415,7 +415,7 @@ void Dialog::ImplInit( vcl::Window* pParent, WinBits nStyle, InitFlag eFlag )
         {
             mpWindowImpl->mbFrame         = true;
             mpWindowImpl->mbOverlapWin    = true;
-            SystemWindow::ImplInit( pParent, (nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE)) | WB_CLOSEABLE, nullptr );
+            SystemWindow::ImplInit( pParent, (nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_STANDALONE)) | WB_CLOSEABLE, nullptr );
             // Now set all style bits
             mpWindowImpl->mnStyle = nStyle;
         }
