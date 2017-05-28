@@ -2066,7 +2066,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
                             if (bUseCol)
                             {
                                 aRplc = "%COLUMNLETTER";
-                                aNew = OUString(aCellName.getStr(), pBuf - aCellName.getStr());
+                                aNew = aCellName.copy(0, pBuf - aCellName.getStr());
                             }
                             else
                             {

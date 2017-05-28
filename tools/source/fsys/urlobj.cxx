@@ -597,7 +597,7 @@ std::unique_ptr<SvMemoryStream> INetURLObject::getData()
     }
 
     OUString sURLPath = GetURLPath( DecodeMechanism::WithCharset, RTL_TEXTENCODING_ISO_8859_1 );
-    sal_Unicode const * pSkippedMediatype = INetMIME::scanContentType( sURLPath.getStr(), sURLPath.getStr() + sURLPath.getLength() );
+    sal_Unicode const * pSkippedMediatype = INetMIME::scanContentType( sURLPath );
     sal_Int32 nCharactersSkipped = pSkippedMediatype == nullptr
         ? 0 : pSkippedMediatype-sURLPath.getStr();
     if (sURLPath.match(",", nCharactersSkipped))

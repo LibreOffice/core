@@ -535,9 +535,8 @@ SvXMLImportContext* OListPropertyContext::CreateChildContext( sal_uInt16 _nPrefi
     }
     else
     {
-        OSL_FAIL( OStringBuffer("OListPropertyContext::CreateChildContext: unknown child element (\"").
-            append(OUStringToOString(_rLocalName.getStr(), RTL_TEXTENCODING_ASCII_US)).
-            append("\")!").getStr() );
+        SAL_WARN( "xmloff", "OListPropertyContext::CreateChildContext: unknown child element (\""
+                    << _rLocalName << "\")!" );
         return new SvXMLImportContext( GetImport(), _nPrefix, _rLocalName );
     }
 }

@@ -545,7 +545,7 @@ void SfxTabDialog::Start_Impl()
     SvtViewOptions aDlgOpt(EViewType::TabDialog, OStringToOUString(GetHelpId(),RTL_TEXTENCODING_UTF8));
     if ( aDlgOpt.Exists() )
     {
-        SetWindowState(OUStringToOString(aDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
+        SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
 
         // initial TabPage from Program/Help/config
         nActPage = (sal_uInt16)aDlgOpt.GetPageID();

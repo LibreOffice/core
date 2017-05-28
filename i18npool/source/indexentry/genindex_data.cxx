@@ -119,7 +119,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     fprintf(fp, "\n};\n\n");
 
     sal_Int32 len=result.getLength();
-    const sal_Unicode *ustr=result.getStr();
     fprintf(fp, "\nstatic const sal_uInt16 idx2[] = {");
     for (i = k = 0; i <= max_index; i++) {
         if (index[i] != 0xFFFF) {
@@ -129,7 +128,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 fprintf(
                     fp, "0x%04lx, ",
                     sal::static_int_cast< unsigned long >(
-                        ad == -1 ? 0 : max == 2 ? ustr[ad] : ad));
+                        ad == -1 ? 0 : max == 2 ? result[ad] : ad));
             }
             fprintf(fp, "\n\t");
         }
@@ -142,7 +141,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         fprintf(fp, "\nstatic const sal_uInt16 idx3[] = {");
         for (i = k = 0; i < len;  i++) {
             if (k++ % 16 == 0) fprintf(fp, "\n\t");
-            fprintf(fp, "0x%04x, ", (sep.toChar() == ustr[i]) ? 0 : ustr[i]);
+            fprintf(fp, "0x%04x, ", (sep.toChar() == result[i]) ? 0 : result[i]);
         }
         fprintf(fp, "\n};\n\n");
     }

@@ -724,11 +724,10 @@ void FmSearchEngine::Init(const OUString& sVisibleFields)
 
 
         OUString sCurrentField;
-        OUString sVis(sVisibleFields.getStr());
         sal_Int32 nIndex = 0;
         do
         {
-            sCurrentField = sVis.getToken(0, ';' , nIndex);
+            sCurrentField = sVisibleFields.getToken(0, ';' , nIndex);
 
             // search in the field collection
             sal_Int32 nFoundIndex = -1;

@@ -411,7 +411,7 @@ namespace
                     if (nTokens)
                         aListener = aListener.getToken(nTokens - 1, '.');
 
-                    if (aListener == pCurrent->ListenerType.getStr())
+                    if (aListener == pCurrent->ListenerType)
                         // the current ScriptEventDescriptor doesn't match the current listeners class
                         continue;
 
@@ -1513,8 +1513,8 @@ void FmXFormShell::ExecuteSearch()
                 Reference< XTextComponent> xText(xActiveControl, UNO_QUERY);
                 if (xText.is())
                 {
-                    strActiveField = getLabelName(xProperties).getStr();
-                    strInitialText = xText->getText().getStr();
+                    strActiveField = getLabelName(xProperties);
+                    strInitialText = xText->getText();
                 }
             }
         }
@@ -1537,7 +1537,7 @@ void FmXFormShell::ExecuteSearch()
                 if(xColumns.is())
                     xColumns->getByIndex(nModelCol) >>= xCurrentCol;
                 if (xCurrentCol.is())
-                    strActiveField = ::comphelper::getString(xCurrentCol->getPropertyValue(FM_PROP_LABEL)).getStr();
+                    strActiveField = ::comphelper::getString(xCurrentCol->getPropertyValue(FM_PROP_LABEL));
 
                 // the text fo the current column
                 Reference< XIndexAccess> xColControls(xGridPeer, UNO_QUERY);
@@ -1545,7 +1545,7 @@ void FmXFormShell::ExecuteSearch()
                 xColControls->getByIndex(nViewCol) >>= xCurControl;
                 OUString sInitialText;
                 if (IsSearchableControl(xCurControl, &sInitialText))
-                    strInitialText = sInitialText.getStr();
+                    strInitialText = sInitialText;
             }
         }
     }
@@ -2417,10 +2417,10 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext&, rfmscContextIn
                         // the cursor has a field matching the control source ?
                         if (xValidFormFields->hasByName(aName))
                         {
-                            strFieldList = strFieldList + OUString(aName.getStr()) + ";";
+                            strFieldList = strFieldList + aName + ";";
 
                             sFieldDisplayNames = sFieldDisplayNames +
-                                    OUString(::comphelper::getString(xCurrentColModel->getPropertyValue(FM_PROP_LABEL)).getStr()) +
+                                    ::comphelper::getString(xCurrentColModel->getPropertyValue(FM_PROP_LABEL)) +
                                     ";";
 
                             rfmscContextInfo.arrFields.push_back(xCurrentColumn);
@@ -2447,11 +2447,11 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext&, rfmscContextIn
                     if (IsSearchableControl(xControl))
                     {
                         // all tests passed -> take along in the list
-                        strFieldList = strFieldList + OUString(sControlSource.getStr()) + ";";
+                        strFieldList = strFieldList + sControlSource + ";";
 
                         // the label which should appear for the control :
                         sFieldDisplayNames = sFieldDisplayNames +
-                                OUString(getLabelName(Reference< XPropertySet>(xControlModel, UNO_QUERY)).getStr()) +
+                                getLabelName(Reference< XPropertySet>(xControlModel, UNO_QUERY)) +
                                 ";";
 
                         // mark the SdrObject (accelerates the treatment in OnFoundData)

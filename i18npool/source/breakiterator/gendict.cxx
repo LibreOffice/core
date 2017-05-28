@@ -121,7 +121,6 @@ static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sa
         // input file is in UTF-8 encoding
         // don't convert last new line character to Ostr.
         OUString Ostr(str, strlen(str) - 1, RTL_TEXTENCODING_UTF8);
-        const sal_Unicode *u = Ostr.getStr();
 
         const sal_Int32 len = Ostr.getLength();
 
@@ -130,24 +129,24 @@ static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sa
         if (len == i)
             continue;   // skip one character word
 
-        if (u[0] != current) {
-            OSL_ENSURE( (u[0] > current), "Dictionary file should be sorted");
-            current = u[0];
+        if (Ostr[0] != current) {
+            OSL_ENSURE( (Ostr[0] > current), "Dictionary file should be sorted");
+            current = Ostr[0];
             charArray[current] = lenArray.size();
         }
 
         lenArray.push_back(lenArrayCurr);
 
-        set_exists(u[0]);
+        set_exists(Ostr[0]);
         // first character is stored in charArray, so start from second
         for (i = 1; i < len; i++, lenArrayCurr++) {
-            set_exists(u[i]);
+            set_exists(Ostr[i]);
 #ifndef DICT_JA_ZH_IN_DATAFILE
-            fprintf(source_fp, "0x%04x, ", u[i]);
+            fprintf(source_fp, "0x%04x, ", Ostr[i]);
             if ((lenArrayCurr & 0x0f) == 0x0f)
                 fputs("\n\t", source_fp);
 #else
-            fwrite(&u[i], sizeof(u[i]), 1, source_fp);
+            fwrite(&Ostr[i], sizeof(Ostr[i]), 1, source_fp);
 #endif
         }
     }

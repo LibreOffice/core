@@ -216,11 +216,7 @@ namespace pcr
 
         OUString lcl_getEventPropertyName( const OUString& _rListenerClassName, const OUString& _rMethodName )
         {
-            OUStringBuffer aPropertyName;
-            aPropertyName.append( _rListenerClassName );
-            aPropertyName.append( ';' );
-            aPropertyName.append( _rMethodName.getStr() );
-            return aPropertyName.makeStringAndClear();
+            return _rListenerClassName + OUStringLiteral1(';') + _rMethodName;
         }
 
         ScriptEventDescriptor lcl_getAssignedScriptEvent( const EventDescription& _rEvent, const std::vector< ScriptEventDescriptor >& _rAllAssignedMacros )

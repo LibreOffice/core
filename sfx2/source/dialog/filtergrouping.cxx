@@ -415,14 +415,13 @@ namespace sfx2
             sal_Int32 nExistentPos = _rToBeExtended.indexOf( _rWC );
             if  ( -1 < nExistentPos )
             {   // found this wildcard (already part of _rToBeExtended)
-                const sal_Unicode* pBuffer = _rToBeExtended.getStr();
                 if  (   ( 0 == nExistentPos )
-                    ||  ( s_cWildcardSeparator == pBuffer[ nExistentPos - 1 ] )
+                    ||  ( s_cWildcardSeparator == _rToBeExtended[ nExistentPos - 1 ] )
                     )
                 {   // the wildcard really starts at this position (it starts at pos 0 or the previous character is a separator
                     sal_Int32 nExistentWCEnd = nExistentPos + _rWC.getLength();
                     if  (   ( _rToBeExtended.getLength() == nExistentWCEnd )
-                        ||  ( s_cWildcardSeparator == pBuffer[ nExistentWCEnd ] )
+                        ||  ( s_cWildcardSeparator == _rToBeExtended[ nExistentWCEnd ] )
                         )
                     {   // it's really the complete wildcard we found
                         // (not something like _rWC being "*.t" and _rToBeExtended containing "*.txt")

@@ -607,7 +607,6 @@ KeywordInfo::KeywordElement::KeywordElement( Databases const *pDatabases,
 
 void KeywordInfo::KeywordElement::init( Databases const *pDatabases,helpdatafileproxy::Hdf* pHdf,const OUString& ids )
 {
-    const sal_Unicode* idstr = ids.getStr();
     std::vector< OUString > id,anchor;
     int idx = -1,k;
     while( ( idx = ids.indexOf( ';',k = ++idx ) ) != -1 )
@@ -616,12 +615,12 @@ void KeywordInfo::KeywordElement::init( Databases const *pDatabases,helpdatafile
         if( h < idx )
         {
             // found an anchor
-            id.push_back( OUString( &idstr[k],h-k ) );
-            anchor.push_back( OUString( &idstr[h+1],idx-h-1 ) );
+            id.push_back( ids.copy( k, h-k ) );
+            anchor.push_back( ids.copy( h+1, idx-h-1 ) );
         }
         else
         {
-            id.push_back( OUString( &idstr[k],idx-k ) );
+            id.push_back( ids.copy( k, idx-k ) );
             anchor.push_back( OUString() );
         }
     }

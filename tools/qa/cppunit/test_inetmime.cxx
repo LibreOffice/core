@@ -64,14 +64,14 @@ namespace
             OUString input
                 = "TEST/subTST; parm1=Value1; Parm2=\"unpacked value; %20\"";
             // Just scan input for valid string:
-            auto end = INetMIME::scanContentType(input.getStr(), input.getStr()+input.getLength());
+            auto end = INetMIME::scanContentType(input);
             CPPUNIT_ASSERT(end != nullptr);
             CPPUNIT_ASSERT_EQUAL(OUString(), OUString(end));
             // Scan input and parse type, subType and parameters:
             OUString type;
             OUString subType;
             INetContentTypeParameterList parameters;
-            end = INetMIME::scanContentType(input.getStr(), input.getStr() + input.getLength(),
+            end = INetMIME::scanContentType(input,
                                             &type, &subType, &parameters);
             CPPUNIT_ASSERT(end != nullptr);
             CPPUNIT_ASSERT_EQUAL(OUString(), OUString(end));
@@ -104,14 +104,14 @@ namespace
                   "Parm1*1*=of%2010;\t"
                   "parm1*2*=%20%3d%200.5";
             // Just scan input for valid string:
-            auto end = INetMIME::scanContentType(input.getStr(), input.getStr()+input.getLength());
+            auto end = INetMIME::scanContentType(input);
             CPPUNIT_ASSERT(end != nullptr);
             CPPUNIT_ASSERT_EQUAL(OUString(), OUString(end));
             // Scan input and parse type, subType and parameters:
             OUString type;
             OUString subType;
             INetContentTypeParameterList parameters;
-            end = INetMIME::scanContentType(input.getStr(), input.getStr() + input.getLength(),
+            end = INetMIME::scanContentType(input,
                                             &type, &subType, &parameters);
             CPPUNIT_ASSERT(end != nullptr);
             CPPUNIT_ASSERT_EQUAL(OUString(), OUString(end));
@@ -134,11 +134,11 @@ namespace
                     "parm1*1*=2";               // this parameter is a duplicate,
                                                 // the scan should end before this parameter
             // Just scan input for valid string:
-            end = INetMIME::scanContentType(input.getStr(), input.getStr()+input.getLength());
+            end = INetMIME::scanContentType(input);
             CPPUNIT_ASSERT(end != nullptr);
             CPPUNIT_ASSERT_EQUAL(OUString(";parm1*1*=2"), OUString(end)); // the invalid end of input
             // Scan input and parse type, subType and parameters:
-            end = INetMIME::scanContentType(input.getStr(), input.getStr() + input.getLength(),
+            end = INetMIME::scanContentType(input,
                                             &type, &subType, &parameters);
             CPPUNIT_ASSERT(end != nullptr);
             CPPUNIT_ASSERT_EQUAL(OUString(";parm1*1*=2"), OUString(end)); // the invalid end of input

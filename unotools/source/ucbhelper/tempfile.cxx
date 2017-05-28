@@ -246,7 +246,7 @@ OUString lcl_createName(
         sal_Int32 nOffset = rLeadingChars.lastIndexOf("/");
         if (-1 != nOffset)
         {
-            OUString aDirName = aName + OUString( rLeadingChars.getStr(), nOffset );
+            OUString aDirName = aName + rLeadingChars.copy( 0, nOffset );
             TempDirCreatedObserver observer;
             FileBase::RC err = Directory::createPath( aDirName, &observer );
             if ( err != FileBase::E_None && err != FileBase::E_EXIST )

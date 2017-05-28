@@ -396,7 +396,7 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries const & rDataSeries
         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
         const OUString& aNumDecimalSep = rLocaleDataWrapper.getNumDecimalSep();
         assert(aNumDecimalSep.getLength() > 0);
-        sal_Unicode cDecSeparator = aNumDecimalSep.getStr()[0];
+        sal_Unicode cDecSeparator = aNumDecimalSep[0];
         aNumber = ::rtl::math::doubleToUString( fValue, rtl_math_StringFormat_G /*rtl_math_StringFormat*/
             , 3/*DecPlaces*/ , cDecSeparator );
     }
@@ -1286,8 +1286,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
                 {
                     const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
                     const OUString& aNumDecimalSep = rLocaleDataWrapper.getNumDecimalSep();
-                    assert(aNumDecimalSep.getLength() > 0);
-                    sal_Unicode aDecimalSep = aNumDecimalSep.getStr()[0];
+                    sal_Unicode aDecimalSep = aNumDecimalSep[0];
                     aFormula.append( ::rtl::math::doubleToUString(
                                         fR*fR, rtl_math_StringFormat_G, 4, aDecimalSep, true ));
                 }

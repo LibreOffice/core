@@ -516,7 +516,7 @@ void SwView::InsertThesaurusSynonym( const OUString &rSynonmText, const OUString
         // the selection accordingly.
         const sal_Unicode* pChar = rLookUpText.getStr();
         sal_Int32 nLeft = 0;
-        while (pChar && *pChar++ == CH_TXTATR_INWORD)
+        while (*pChar++ == CH_TXTATR_INWORD)
             ++nLeft;
         pChar = rLookUpText.getLength() ? rLookUpText.getStr() + rLookUpText.getLength() - 1 : nullptr;
         sal_Int32 nRight = 0;

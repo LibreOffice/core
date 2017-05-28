@@ -1201,7 +1201,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property const * pUn
             {
                 Reference< XInterface > xRef;
                 OUString aClassName = xIdlTargetClass->getName();
-                Type aClassType( xIdlTargetClass->getTypeClass(), aClassName.getStr() );
+                Type aClassType( xIdlTargetClass->getTypeClass(), aClassName );
                 aRetVal.setValue( &xRef, aClassType );
             }
             else
@@ -1271,7 +1271,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property const * pUn
                 if( xIdlClass.is() )
                 {
                     OUString aClassName = xIdlClass->getName();
-                    Type aType( xIdlClass->getTypeClass(), aClassName.getStr() );
+                    Type aType( xIdlClass->getTypeClass(), aClassName );
                     aRetVal <<= aType;
                 }
             }
@@ -1550,7 +1550,7 @@ OUString Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Referenc
         aRetStr.append( "    " );
     aRetStr.append( xClass->getName() );
     OUString aClassName = xClass->getName();
-    Type aClassType( xClass->getTypeClass(), aClassName.getStr() );
+    Type aClassType( xClass->getTypeClass(), aClassName );
 
     // checking if the interface is really supported
     if( !x->queryInterface( aClassType ).hasValue() )
@@ -3076,7 +3076,7 @@ void RTL_Impl_HasInterfaces( SbxArray& rPar )
         }
         // check if the interface will be supported
         OUString aClassName = xClass->getName();
-        Type aClassType( xClass->getTypeClass(), aClassName.getStr() );
+        Type aClassType( xClass->getTypeClass(), aClassName );
         if( !(*x)->queryInterface( aClassType ).hasValue() )
         {
             return;
@@ -4053,7 +4053,7 @@ void SbRtl_CreateUnoListener(StarBASIC * pBasic, SbxArray & rPar, bool)
         return;
 
     OUString aClassName = xClass->getName();
-    Type aClassType( xClass->getTypeClass(), aClassName.getStr() );
+    Type aClassType( xClass->getTypeClass(), aClassName );
     aTmp = xLst->queryInterface( aClassType );
     if( !aTmp.hasValue() )
         return;

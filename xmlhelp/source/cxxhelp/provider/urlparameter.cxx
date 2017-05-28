@@ -414,7 +414,7 @@ bool URLParameter::module()
 {
     sal_Int32 idx = 0,length = m_aExpr.getLength();
 
-    while( idx < length && rtl::isAsciiAlphanumeric( (m_aExpr.getStr())[idx] ) )
+    while( idx < length && rtl::isAsciiAlphanumeric( m_aExpr[idx] ) )
         ++idx;
 
     if( idx != 0 )
@@ -434,10 +434,10 @@ bool URLParameter::name( bool modulePresent )
 
     sal_Int32 length = m_aExpr.getLength();
 
-    if( length != 0 && (m_aExpr.getStr())[0] == '/' )
+    if( length != 0 && m_aExpr[0] == '/' )
     {
         sal_Int32 idx = 1;
-        while( idx < length && (m_aExpr.getStr())[idx] != '?' )
+        while( idx < length && m_aExpr[idx] != '?' )
             ++idx;
 
         if( idx != 1 && ! modulePresent )
@@ -459,7 +459,7 @@ bool URLParameter::query()
 
     if( m_aExpr.isEmpty() )
         return true;
-    else if( (m_aExpr.getStr())[0] == '?' )
+    else if( m_aExpr[0] == '?' )
         query_ = m_aExpr.copy( 1 ).trim();
     else
         return false;

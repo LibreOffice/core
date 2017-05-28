@@ -2030,7 +2030,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     sal_uInt8* pTmp = pBuf;
                     for ( sal_Int32 i = 0; i < aControlName.getLength(); i++ )
                     {
-                        sal_Unicode nUnicode = *(aControlName.getStr() + i);
+                        sal_Unicode nUnicode = aControlName[i];
                         *pTmp++ = (sal_uInt8)nUnicode;
                         *pTmp++ = (sal_uInt8)( nUnicode >> 8 );
                     }

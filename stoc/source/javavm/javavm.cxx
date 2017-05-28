@@ -756,7 +756,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                 //An unexpected error occurred
                 throw css::uno::RuntimeException(
                     "[JavaVirtualMachine]:An unexpected error occurred"
-                    " while searching for a Java!", nullptr);
+                    " while searching for a Java, " + OUString::number(errFind), nullptr);
             }
         }
         case JFW_E_INVALID_SETTINGS:
