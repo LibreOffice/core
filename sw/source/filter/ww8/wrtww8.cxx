@@ -2145,9 +2145,9 @@ void WW8AttributeOutput::TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
     const SwFormatRowSplit& rSplittable = pLineFormat->GetRowSplit();
     sal_uInt8 nCantSplit = (!rSplittable.GetValue()) ? 1 : 0;
-    m_rWW8Export.InsUInt16( NS_sprm::sprmTFCantSplit90 );
+    m_rWW8Export.InsUInt16( NS_sprm::sprmTFCantSplit );
     m_rWW8Export.pO->push_back( nCantSplit );
-    m_rWW8Export.InsUInt16( NS_sprm::sprmTFCantSplit ); // also write fCantSplit90
+    m_rWW8Export.InsUInt16( NS_sprm::sprmTFCantSplit90 ); // also write fCantSplit90
     m_rWW8Export.pO->push_back( nCantSplit );
 }
 
