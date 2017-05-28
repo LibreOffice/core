@@ -1730,7 +1730,7 @@ wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
                     return sprmTTextFlow;
                 case NS_sprm::sprmTTableHeader:
                     return sprmTTableHeader;
-                case NS_sprm::sprmTFCantSplit90:
+                case NS_sprm::sprmTFCantSplit:
                     return sprmTFCantSplit;
                 case NS_sprm::sprmTJc90:
                     return sprmTJc;

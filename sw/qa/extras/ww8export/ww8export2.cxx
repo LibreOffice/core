@@ -11,7 +11,9 @@
 
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <pagedesc.hxx>
 
@@ -117,6 +119,18 @@ DECLARE_WW8EXPORT_TEST(testTdf104334, "tdf104334.doc")
     // mapped to SwChapterField, and the field result was "This is a Heading 1"
     // instead of just "1".
     CPPUNIT_ASSERT_EQUAL(OUString("1"), getRun(getParagraph(2), 3)->getString());
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf108072, "tdf108072.doc")
+{
+    // The property IsSplitAllowed was imported from an obsolete property, sprmTFCantSplit90
+    // instead of sprmTFCantSplit. sprmTFCantSplit90 is set to true for merged rows, so
+    // for merged rows incorrect settings were imported, which prevented them from breaking over pages.
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTableRows->getByIndex(0), "IsSplitAllowed"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

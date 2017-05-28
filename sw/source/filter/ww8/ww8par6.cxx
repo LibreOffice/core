@@ -6179,12 +6179,12 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x9602, nullptr},                                 //"sprmTDxaGapHalf"
                                                      //tap.dxaGapHalf,
                                                      //tap.rgdxaCenter; dxa; word;
-        {0x3403, nullptr},                                 //"sprmTFCantSplit"
-                                                     //tap.fCantSplit;1 or 0;byte;
+        {0x3403, nullptr},                                 //"sprmTFCantSplit90"
+                                                     //tap.fCantSplit90;1 or 0;byte;
         {0x3404, nullptr},                                 //"sprmTTableHeader"
                                                      //tap.fTableHeader;1 or 0;byte;
-        {0x3466, nullptr},                                 //"sprmTFCantSplit90"
-                                                     //tap.fCantSplit90;1 or 0;byte;
+        {0x3466, nullptr},                                 //"sprmTFCantSplit"
+                                                     //tap.fCantSplit;1 or 0;byte;
         {0xD605, nullptr},                                 //"sprmTTableBorders80"
                                                      //tap.rgbrcTable;complex;
                                                      //24 bytes;
