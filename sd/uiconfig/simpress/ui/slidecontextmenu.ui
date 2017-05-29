@@ -67,7 +67,7 @@
       <object class="GtkCheckMenuItem" id="pen">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Mouse pointer as ~Pen</property>
+        <property name="label" translatable="yes">Mouse Pointer as ~Pen</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -85,7 +85,7 @@
               <object class="GtkRadioMenuItem" id="4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Very thin</property>
+                <property name="label" translatable="yes">_Very Thin</property>
                 <property name="use_underline">True</property>
               </object>
             </child>
@@ -129,7 +129,7 @@
       <object class="GtkMenuItem" id="color">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Change pen Color...</property>
+        <property name="label" translatable="yes">_Change Pen Color...</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -137,7 +137,7 @@
       <object class="GtkMenuItem" id="erase">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">_Erase all ink on Slide</property>
+        <property name="label" translatable="yes">_Erase All Ink on Slide</property>
         <property name="use_underline">True</property>
       </object>
     </child>
