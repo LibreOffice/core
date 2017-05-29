@@ -26,7 +26,6 @@ $(eval $(call gb_Module_add_targets,setup_native,\
 	Library_instooofiltmsi \
 	Library_qslnkmsi \
 	Library_reg4allmsdoc \
-	Library_regactivex \
 	Library_sdqsmsi \
 	Library_sellangmsi \
 	Library_shlxtmsi \

@@ -31,7 +31,6 @@ $(eval $(call gb_Module_add_targets,scp2,\
 		InstallScript_sdkoo \
 	) \
 	$(if $(filter WNT,$(OS)),\
-		InstallModule_activex \
 		InstallModule_quickstart \
 		InstallModule_windows \
 		InstallModule_winexplorerext \

@@ -648,22 +648,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 endif
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activexbinarytable, \
-	regactivex \
-))
-
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activex, \
-	so_activex \
-	spsupp \
-))
-
-ifneq ($(BUILD_X64),)
-$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,activexwin64, \
-	so_activex_x64 \
-	spsupp_x64 \
-))
-endif
-
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooobinarytable, \
 	$(if $(WINDOWS_SDK_HOME),\
 		instooofiltmsi \

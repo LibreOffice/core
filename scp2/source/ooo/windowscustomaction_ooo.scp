@@ -54,24 +54,6 @@ WindowsCustomAction gid_Customaction_Restoreregallmsdocdll
     Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "end");
 End
 
-WindowsCustomAction gid_Customaction_Regactivexdll1
-	Name = "Regactivexdll1";
-	Typ = "65";
-	Source = "regactivex.dll";
-	Target = "InstallActiveXControl";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "(\&FEATURETEMPLATE=3 Or (\!FEATURETEMPLATE=3 And \&FEATURETEMPLATE=-1)) And Not PATCH", "end");
-End
-
-WindowsCustomAction gid_Customaction_Regactivexdll2
-	Name = "Regactivexdll2";
-	Typ = "65";
-	Source = "regactivex.dll";
-	Target = "DeinstallActiveXControl";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "RemoveExistingProducts");
-End
-
 #ifdef HAVE_WINDOWS_SDK
 
 WindowsCustomAction gid_Customaction_sdqsmsidll

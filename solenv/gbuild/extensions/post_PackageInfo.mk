@@ -20,7 +20,6 @@ gb_PackageInfo_InstallModules := \
 	ooo \
 	writer \
 	ure \
-	activexbinarytable \
 	ooobinarytable \
 	winexplorerextbinarytable \
 
