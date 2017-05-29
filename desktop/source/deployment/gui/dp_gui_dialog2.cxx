@@ -764,7 +764,7 @@ void ExtMgrDialog::enableRemoveButton( bool bEnable )
 {
     m_pRemoveBtn->Enable( bEnable && !officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get());
 
-    if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionInstallation::get())
+    if (officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get())
     {
         m_pRemoveBtn->SetQuickHelpText(getResId(RID_STR_WARNING_REMOVE_EXTENSION_DISABLED));
     }
