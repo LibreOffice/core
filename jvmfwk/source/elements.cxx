@@ -260,7 +260,7 @@ void NodeJava::load()
             {
                 CXmlCharPtr sUser(xmlNodeListGetString(
                     docUser, cur->children, 1));
-                m_userClassPath = boost::optional<OUString>(sUser);
+                m_userClassPath = boost::optional<OUString>(OUString(sUser));
             }
         }
         else if (xmlStrcmp(cur->name, reinterpret_cast<xmlChar const *>("javaInfo")) == 0)
