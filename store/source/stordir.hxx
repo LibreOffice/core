@@ -35,11 +35,6 @@ namespace store
 
 struct OStoreDirectoryPageData;
 
-/*========================================================================
- *
- * OStoreDirectory_Impl interface.
- *
- *======================================================================*/
 class OStoreDirectory_Impl : public store::OStoreObject
 {
 public:
@@ -112,12 +107,6 @@ SAL_CALL query (OStoreObject *pHandle, SAL_UNUSED_PARAMETER OStoreDirectory_Impl
     }
     return nullptr;
 }
-
-/*========================================================================
- *
- * The End.
- *
- *======================================================================*/
 
 } // namespace store
 

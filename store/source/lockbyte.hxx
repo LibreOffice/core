@@ -36,11 +36,6 @@
 namespace store
 {
 
-/*========================================================================
- *
- * ILockBytes interface.
- *
- *======================================================================*/
 class ILockBytes : public virtual salhelper::SimpleReferenceObject
 {
 public:
@@ -144,29 +139,15 @@ private:
     virtual storeError flush_Impl() = 0;
 };
 
-/*========================================================================
- *
- * ILockBytes factories.
- *
- *======================================================================*/
-
-storeError
-FileLockBytes_createInstance (
+storeError FileLockBytes_createInstance (
   rtl::Reference< store::ILockBytes > & rxLockBytes,
   rtl_uString *   pFilename,
   storeAccessMode eAccessMode
 );
 
-storeError
-MemoryLockBytes_createInstance (
+storeError MemoryLockBytes_createInstance (
   rtl::Reference< store::ILockBytes > & rxLockBytes
 );
-
-/*========================================================================
- *
- * The End.
- *
- *======================================================================*/
 
 } // namespace store
 
