@@ -6,8 +6,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 
-
 // Bridge functions to LibreOfficeKit
-int BridgeLOkit_Init();
+int BridgeLOkit_Init(const char *path);
 int BridgeLOkit_ClientCommand(const char *input);
-

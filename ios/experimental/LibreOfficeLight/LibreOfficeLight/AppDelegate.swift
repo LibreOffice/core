@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     {
         // start LibreOfficeKit
-        BridgeLOkit_Init()
+        BridgeLOkit_Init(Bundle.main.bundlePath)
         
         // Get version info
         let appInfo = Bundle.main.infoDictionary! as Dictionary<String,AnyObject>
