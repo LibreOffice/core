@@ -5394,9 +5394,9 @@ void lcl_OutlineLevel(sax_fastparser::FSHelperPtr const & pSerializer, sal_uInt1
 
 }
 
-void DocxAttributeOutput::OutlineNumbering(sal_uInt8 const nLvl)
+void DocxAttributeOutput::OutlineNumbering(sal_uInt8 const /*nLvl*/)
 {
-    lcl_OutlineLevel(m_pSerializer, nLvl);
+    // Handled by ParaOutlineLevel() instead.
 }
 
 void DocxAttributeOutput::ParaOutlineLevel(const SfxUInt16Item& rItem)
