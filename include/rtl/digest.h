@@ -29,11 +29,6 @@
 extern "C" {
 #endif
 
-/*========================================================================
- *
- * rtlDigest.
- *
- *======================================================================*/
 /** Digest Handle opaque type.
  */
 typedef void* rtlDigest;
@@ -161,11 +156,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_get (
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
 
-/*========================================================================
- *
- * rtl_digest_MD2 interface.
- *
- *======================================================================*/
 #define RTL_DIGEST_LENGTH_MD2 16
 
 /** Create a MD2 digest handle.
@@ -186,7 +176,6 @@ SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroyMD2 (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
 
-
 /** Update a MD2 digest with given data.
     @see rtl_digest_update()
  */
@@ -195,7 +184,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateMD2 (
     const void *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
 
-
 /** Finalize a MD2 digest and retrieve the digest value.
     @see rtl_digest_get()
  */
@@ -203,7 +191,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getMD2 (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
-
 
 /** Evaluate a MD2 digest value from given data.
 
@@ -225,11 +212,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD2 (
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
 
-/*========================================================================
- *
- * rtl_digest_MD5 interface.
- *
- *======================================================================*/
 #define RTL_DIGEST_LENGTH_MD5 16
 
 /** Create a MD5 digest handle.
@@ -242,14 +224,12 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD2 (
  */
 SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createMD5 (void) SAL_THROW_EXTERN_C();
 
-
 /** Destroy a MD5 digest handle.
     @see rtl_digest_destroy()
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroyMD5 (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
-
 
 /** Update a MD5 digest with given data.
     @see rtl_digest_update()
@@ -259,7 +239,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateMD5 (
     const void *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
 
-
 /** Finalize a MD5 digest and retrieve the digest value.
     @see rtl_digest_get()
  */
@@ -268,20 +247,18 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getMD5 (
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
 
-
 /** Retrieve the raw (not finalized) MD5 digest value.
 
     This function is a non-standard replacement for
     rtl_digest_getMD5() and must be used with caution.
 
     @post Digest initialized to accept another update sequence.
-    @see      rtl_digest_get()
+    @see rtl_digest_get()
  */
 SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_rawMD5 (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
-
 
 /** Evaluate a MD5 digest value from given data.
 
@@ -303,11 +280,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD5 (
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
 
-/*========================================================================
- *
- * rtl_digest_SHA interface.
- *
- *======================================================================*/
 #define RTL_DIGEST_LENGTH_SHA 20
 
 /** Create a SHA digest handle.
@@ -319,7 +291,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_MD5 (
     @see rtl_digest_create()
  */
 SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createSHA (void) SAL_THROW_EXTERN_C();
-
 
 /** Destroy a SHA digest handle.
     @see rtl_digest_destroy()
@@ -337,7 +308,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateSHA (
     const void *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
 
-
 /** Finalize a SHA digest and retrieve the digest value.
     @see rtl_digest_get()
  */
@@ -345,7 +315,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getSHA (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
-
 
 /** Evaluate a SHA digest value from given data.
 
@@ -384,14 +353,12 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA (
  */
 SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createSHA1 (void) SAL_THROW_EXTERN_C();
 
-
 /** Destroy a SHA1 digest handle.
     @see rtl_digest_destroy()
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroySHA1 (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
-
 
 /** Update a SHA1 digest with given data.
     @see rtl_digest_update()
@@ -401,7 +368,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateSHA1 (
     const void *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
 
-
 /** Finalize a SHA1 digest and retrieve the digest value.
     @see rtl_digest_get()
  */
@@ -409,7 +375,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getSHA1 (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
-
 
 /** Evaluate a SHA1 digest value from given data.
 
@@ -431,11 +396,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA1 (
     sal_uInt8  *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
 
-/*========================================================================
- *
- * rtl_digest_HMAC_MD5 interface.
- *
- *======================================================================*/
 #define RTL_DIGEST_LENGTH_HMAC_MD5 RTL_DIGEST_LENGTH_MD5
 
 /** Create a HMAC_MD5 digest handle.
@@ -449,14 +409,12 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_SHA1 (
  */
 SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createHMAC_MD5 (void) SAL_THROW_EXTERN_C();
 
-
 /** Destroy a HMAC_MD5 digest handle.
     @see rtl_digest_destroy()
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroyHMAC_MD5 (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
-
 
 /** Initialize a HMAC_MD5 digest.
     @see rtl_digest_init()
@@ -472,7 +430,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_initHMAC_MD5 (
     const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen
 ) SAL_THROW_EXTERN_C();
 
-
 /** Update a HMAC_MD5 digest with given data.
     @see rtl_digest_update()
  */
@@ -481,7 +438,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateHMAC_MD5 (
     const void *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
 
-
 /** Finalize a HMAC_MD5 digest and retrieve the digest value.
     @see rtl_digest_get()
  */
@@ -489,7 +445,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getHMAC_MD5 (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
-
 
 /** Evaluate a HMAC_MD5 digest value from given data.
 
@@ -515,11 +470,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_HMAC_MD5 (
     sal_uInt8       *pBuffer,  sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
 
-/*========================================================================
- *
- * rtl_digest_HMAC_SHA1 interface.
- *
- *======================================================================*/
 #define RTL_DIGEST_LENGTH_HMAC_SHA1 RTL_DIGEST_LENGTH_SHA1
 
 /** Create a HMAC_SHA1 digest handle.
@@ -534,14 +484,12 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_HMAC_MD5 (
  */
 SAL_DLLPUBLIC rtlDigest SAL_CALL rtl_digest_createHMAC_SHA1 (void) SAL_THROW_EXTERN_C();
 
-
 /** Destroy a HMAC_SHA1 digest handle.
     @see rtl_digest_destroy()
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_digest_destroyHMAC_SHA1 (
     rtlDigest Digest
 ) SAL_THROW_EXTERN_C();
-
 
 /** Initialize a HMAC_SHA1 digest.
     @see rtl_digest_init()
@@ -557,7 +505,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_initHMAC_SHA1 (
     const sal_uInt8 *pKeyData, sal_uInt32 nKeyLen
 ) SAL_THROW_EXTERN_C();
 
-
 /** Update a HMAC_SHA1 digest with given data.
     @see rtl_digest_update()
  */
@@ -566,7 +513,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_updateHMAC_SHA1 (
     const void *pData, sal_uInt32 nDatLen
 ) SAL_THROW_EXTERN_C();
 
-
 /** Finalize a HMAC_SHA1 digest and retrieve the digest value.
     @see rtl_digest_get()
  */
@@ -574,7 +520,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_getHMAC_SHA1 (
     rtlDigest Digest,
     sal_uInt8 *pBuffer, sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
-
 
 /** Evaluate a HMAC_SHA1 digest value from given data.
 
@@ -600,11 +545,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1 (
     sal_uInt8       *pBuffer,  sal_uInt32 nBufLen
 ) SAL_THROW_EXTERN_C();
 
-/*========================================================================
- *
- * rtl_digest_PBKDF2 interface.
- *
- *======================================================================*/
 /** Password-Based Key Derivation Function.
 
     The PBKDF2 key derivation function is specified in
@@ -627,12 +567,6 @@ SAL_DLLPUBLIC rtlDigestError SAL_CALL rtl_digest_PBKDF2 (
     const sal_uInt8 *pSaltData, sal_uInt32 nSaltLen,
     sal_uInt32       nCount
 ) SAL_THROW_EXTERN_C();
-
-/*========================================================================
- *
- * The End.
- *
- *======================================================================*/
 
 #ifdef __cplusplus
 }

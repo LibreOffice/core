@@ -36,12 +36,6 @@ namespace store
 
 struct Entry;
 
-/*========================================================================
- *
- * PageCache interface.
- *
- *======================================================================*/
-
 class PageCache :
     public store::OStoreObject
 {
@@ -72,7 +66,6 @@ class PageCache :
     void rescale_Impl (std::size_t new_size);
 
 public:
-    // Construction
     explicit PageCache (sal_uInt16 nPageSize);
 
     PageCache(const PageCache&) = delete;
@@ -102,27 +95,13 @@ public:
         sal_uInt32 nOffset);
 
 protected:
-    // Destruction
     virtual ~PageCache() override;
 };
 
-/*========================================================================
- *
- * PageCache factory.
- *
- *======================================================================*/
-
-storeError
-PageCache_createInstance (
+storeError PageCache_createInstance (
     rtl::Reference< store::PageCache > & rxCache,
     sal_uInt16                           nPageSize
 );
-
-/*========================================================================
- *
- * The End.
- *
- *======================================================================*/
 
 } // namespace store
 

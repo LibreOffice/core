@@ -35,11 +35,6 @@ namespace store
 
 class OStorePageBIOS;
 
-/*========================================================================
- *
- * OStoreBTreeEntry.
- *
- *======================================================================*/
 struct OStoreBTreeEntry
 {
     typedef OStorePageKey  K;
@@ -95,11 +90,6 @@ struct OStoreBTreeEntry
     }
 };
 
-/*========================================================================
- *
- * OStoreBTreeNodeData.
- *
- *======================================================================*/
 #define STORE_MAGIC_BTREENODE sal_uInt32(0x58190322)
 
 struct OStoreBTreeNodeData : public store::PageData
@@ -218,11 +208,6 @@ struct OStoreBTreeNodeData : public store::PageData
     void truncate (sal_uInt16 n);
 };
 
-/*========================================================================
- *
- * OStoreBTreeNodeObject.
- *
- *======================================================================*/
 class OStoreBTreeNodeObject : public store::OStorePageObject
 {
     typedef OStorePageObject      base;
@@ -260,11 +245,6 @@ public:
         OStorePageBIOS &   rBIOS);
 };
 
-/*========================================================================
- *
- * OStoreBTreeRootObject.
- *
- *======================================================================*/
 class OStoreBTreeRootObject : public store::OStoreBTreeNodeObject
 {
     typedef OStoreBTreeNodeObject base;
@@ -315,12 +295,6 @@ private:
         PageHolderObject< page > & rxPageL,
         OStorePageBIOS &           rBIOS);
 };
-
-/*========================================================================
- *
- * The End.
- *
- *======================================================================*/
 
 } // namespace store
 

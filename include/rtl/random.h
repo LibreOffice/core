@@ -29,11 +29,6 @@
 extern "C" {
 #endif
 
-/*========================================================================
- *
- * rtlRandom interface.
- *
- *======================================================================*/
 /** Random Pool opaque type.
  */
 typedef void* rtlRandomPool;
@@ -94,12 +89,6 @@ SAL_DLLPUBLIC rtlRandomError SAL_CALL rtl_random_getBytes (
     void          *Buffer,
     sal_Size       Bytes
 ) SAL_THROW_EXTERN_C();
-
-/*========================================================================
- *
- * The End.
- *
- *======================================================================*/
 
 #ifdef __cplusplus
 }

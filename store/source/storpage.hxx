@@ -35,11 +35,6 @@ namespace store
 struct OStoreDirectoryPageData;
 class  OStoreDirectoryPageObject;
 
-/*========================================================================
- *
- * OStorePageManager interface.
- *
- *======================================================================*/
 class OStorePageManager : public store::OStorePageBIOS
 {
 public:
@@ -160,12 +155,6 @@ SAL_CALL query (OStoreObject *pHandle, SAL_UNUSED_PARAMETER OStorePageManager*)
     }
     return nullptr;
 }
-
-/*========================================================================
- *
- * The End.
- *
- *======================================================================*/
 
 } // namespace store
 

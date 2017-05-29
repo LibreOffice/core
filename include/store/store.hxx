@@ -29,11 +29,6 @@
 namespace store
 {
 
-/*========================================================================
- *
- * OStoreStream interface.
- *
- *======================================================================*/
 class OStoreStream
 {
 public:
@@ -125,11 +120,6 @@ private:
     storeStreamHandle m_hImpl;
 };
 
-/*========================================================================
- *
- * OStoreDirectory interface.
- *
- *======================================================================*/
 class OStoreDirectory
 {
 public:
@@ -238,11 +228,6 @@ private:
     storeDirectoryHandle m_hImpl;
 };
 
-/*========================================================================
- *
- * OStoreFile interface.
- *
- *======================================================================*/
 class OStoreFile
 {
 public:
@@ -365,15 +350,8 @@ private:
     storeFileHandle m_hImpl;
 };
 
-/*========================================================================
- *
- * The End.
- *
- *======================================================================*/
-
 } // namespace store
 
 #endif /* ! INCLUDED_STORE_STORE_HXX */
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

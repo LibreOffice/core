@@ -34,11 +34,6 @@
 namespace store
 {
 
-/*========================================================================
- *
- * OStoreDataPageData.
- *
- *======================================================================*/
 constexpr sal_uInt32 STORE_MAGIC_DATAPAGE(0x94190310);
 
 struct OStoreDataPageData : public store::PageData
@@ -95,11 +90,6 @@ struct OStoreDataPageData : public store::PageData
     }
 };
 
-/*========================================================================
- *
- * OStoreDataPageObject.
- *
- *======================================================================*/
 class OStoreDataPageObject : public store::OStorePageObject
 {
     typedef OStorePageObject     base;
@@ -118,11 +108,6 @@ public:
     virtual storeError verify (sal_uInt32 nAddr) const override;
 };
 
-/*========================================================================
- *
- * OStoreIndirectionPageData.
- *
- *======================================================================*/
 constexpr sal_uInt32 STORE_MAGIC_INDIRECTPAGE(0x89191107);
 
 struct OStoreIndirectionPageData : public store::PageData
@@ -205,11 +190,6 @@ struct OStoreIndirectionPageData : public store::PageData
     }
 };
 
-/*========================================================================
- *
- * OStoreIndirectionPageObject.
- *
- *======================================================================*/
 class OStoreIndirectionPageObject : public store::OStorePageObject
 {
     typedef OStorePageObject          base;
@@ -289,11 +269,6 @@ public:
         OStorePageBIOS        &rBIOS);
 };
 
-/*========================================================================
- *
- * OStorePageNameBlock.
- *
- *======================================================================*/
 struct OStorePageNameBlock
 {
     typedef OStorePageGuard G;
@@ -342,11 +317,6 @@ struct OStorePageNameBlock
     }
 };
 
-/*========================================================================
- *
- * OStoreDirectoryDataBlock.
- *
- *======================================================================*/
 #define STORE_LIMIT_DATAPAGE_DIRECT 16
 #define STORE_LIMIT_DATAPAGE_SINGLE  8
 #define STORE_LIMIT_DATAPAGE_DOUBLE  1
@@ -514,11 +484,6 @@ struct OStoreDirectoryDataBlock
     }
 };
 
-/*========================================================================
- *
- * OStoreDirectoryPageData.
- *
- *======================================================================*/
 #define STORE_MAGIC_DIRECTORYPAGE sal_uInt32(0x62190120)
 
 struct OStoreDirectoryPageData : public store::PageData
@@ -627,11 +592,6 @@ struct OStoreDirectoryPageData : public store::PageData
     }
 };
 
-/*========================================================================
- *
- * OStoreDirectoryPageObject.
- *
- *======================================================================*/
 class OStoreDirectoryPageObject : public store::OStorePageObject
 {
     typedef OStorePageObject          base;
@@ -791,12 +751,6 @@ private:
         sal_uInt16             nRemain,
         OStorePageBIOS        &rBIOS);
 };
-
-/*========================================================================
- *
- * The End.
- *
- *======================================================================*/
 
 } // namespace store
 

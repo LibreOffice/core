@@ -35,11 +35,6 @@ namespace store
 struct OStoreDataPageData;
 struct OStoreDirectoryPageData;
 
-/*========================================================================
- *
- * OStoreLockBytes interface.
- *
- *======================================================================*/
 class OStoreLockBytes : public store::OStoreObject
 {
 public:
@@ -137,12 +132,6 @@ SAL_CALL query (OStoreObject *pHandle, SAL_UNUSED_PARAMETER OStoreLockBytes*)
     }
     return nullptr;
 }
-
-/*========================================================================
- *
- * The End.
- *
- *======================================================================*/
 
 } // namespace store
 
