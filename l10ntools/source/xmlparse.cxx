@@ -933,7 +933,7 @@ XMLFile *SimpleXMLParser::Execute( const OString &rFileName, XMLFile* pXMLFileIn
         if ( !pXMLFile->GetName().isEmpty())
             m_aErrorInformation.m_sMessage += pXMLFile->GetName();
         else
-            m_aErrorInformation.m_sMessage += OString( "XML-File (");
+            m_aErrorInformation.m_sMessage += "XML-File (";
 
         m_aErrorInformation.m_sMessage +=
             OString::number(sal::static_int_cast< sal_Int64 >(m_aErrorInformation.m_nLine)) + "," +
