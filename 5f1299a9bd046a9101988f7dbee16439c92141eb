@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_39941de1",
+        "filename": "editeng/source/editeng/eeobj.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-05-29T14:33:53Z",
+      "side": 1,
+      "message": "this refactoring is unrelated to the ODF-export changes so ideally it should be a separate commit",
+      "revId": "5f1299a9bd046a9101988f7dbee16439c92141eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_5991e9ef",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3487,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-05-29T14:33:53Z",
+      "side": 1,
+      "message": "does this actually work?",
+      "revId": "5f1299a9bd046a9101988f7dbee16439c92141eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_f9db75eb",
+        "filename": "editeng/source/xml/xmltxtexp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-05-29T14:33:53Z",
+      "side": 1,
+      "message": "please just remove this line, dont leave it commented",
+      "revId": "5f1299a9bd046a9101988f7dbee16439c92141eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_198761b6",
+        "filename": "include/xmloff/xmlexp.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-05-29T14:33:53Z",
+      "side": 1,
+      "message": "adding yet another overload for this does not strike me as a good idea - better to just add the parameter to the exising overload and then adapt any other exisiting callers to pass in the value that was previously hard-coded in line 511.",
+      "revId": "5f1299a9bd046a9101988f7dbee16439c92141eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
