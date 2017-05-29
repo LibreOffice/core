@@ -42,13 +42,13 @@ public:
     static sal_Int32    getTokenFromUnicode( const OUString& rUnicodeName );
 
     /** Returns the UTF8 name of the passed token identifier as byte sequence. */
-    css::uno::Sequence< sal_Int8 >
+    css::uno::Sequence< sal_Int8 > const &
                         getUtf8TokenName( sal_Int32 nToken ) const
     {
         SAL_WARN_IF(nToken < 0 || nToken >= XML_TOKEN_COUNT, "oox", "Wrong nToken parameter");
         if (0 <= nToken && nToken < XML_TOKEN_COUNT)
             return maTokenNames[ nToken ];
-        return css::uno::Sequence< sal_Int8 >();
+        return EMPTY_BYTE_SEQ;
     }
 
     /** Returns the token identifier for the passed UTF8 token name. */
@@ -75,6 +75,7 @@ public:
 
 private:
     static sal_Int32 getTokenPerfectHash( const char *pToken, sal_Int32 nLength );
+    static const css::uno::Sequence< sal_Int8 > EMPTY_BYTE_SEQ;
 
     typedef ::std::vector< css::uno::Sequence< sal_Int8 > > TokenNameVector;
 

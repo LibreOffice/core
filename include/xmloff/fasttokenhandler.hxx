@@ -27,12 +27,12 @@ public:
             ~TokenMap();
 
     /** Returns the UTF-8 name of the passed token identifier as byte sequence. */
-    css::uno::Sequence< sal_Int8 > getUtf8TokenName( sal_Int32 nToken ) const
+    css::uno::Sequence< sal_Int8 > const & getUtf8TokenName( sal_Int32 nToken ) const
     {
         SAL_WARN_IF(nToken < 0 || nToken >= XML_TOKEN_COUNT, "xmloff", "Wrong nToken parameter");
         if( 0 <= nToken && nToken < XML_TOKEN_COUNT )
             return maTokenNames[ nToken ];
-        return css::uno::Sequence< sal_Int8 >();
+        return EMPTY_BYTE_SEQ;
     }
 
     /** Returns the token identifier for the passed UTF-8 token name. */
@@ -52,6 +52,8 @@ private:
     static sal_Int32 getTokenPerfectHash( const char *pToken, sal_Int32 nLength );
 
     std::vector< css::uno::Sequence< sal_Int8 > > maTokenNames;
+
+    static const css::uno::Sequence< sal_Int8 > EMPTY_BYTE_SEQ;
 };
 
 struct StaticTokenMap : public rtl::Static< TokenMap, StaticTokenMap > {};

@@ -32,6 +32,8 @@ namespace token {
 
 using namespace css;
 
+const css::uno::Sequence< sal_Int8 > TokenMap::EMPTY_BYTE_SEQ;
+
 TokenMap::TokenMap() :
     maTokenNames( static_cast< size_t >( XML_TOKEN_COUNT ) )
 {
