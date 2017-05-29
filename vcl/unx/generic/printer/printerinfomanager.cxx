@@ -840,7 +840,7 @@ FILE* PrinterInfoManager::startSpool( const OUString& rPrintername, bool bQuickC
     const OUString& rCommand       = (bQuickCommand && !rPrinterInfo.m_aQuickCommand.isEmpty() ) ?
                                           rPrinterInfo.m_aQuickCommand : rPrinterInfo.m_aCommand;
     OString aShellCommand  = OUStringToOString (rCommand, RTL_TEXTENCODING_ISO_8859_1);
-    aShellCommand += OString( " 2>/dev/null" );
+    aShellCommand += " 2>/dev/null";
 
     return popen (aShellCommand.getStr(), "w");
 }

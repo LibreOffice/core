@@ -1044,10 +1044,10 @@ OString AstExpression::toString()
     switch (m_combOperator)
     {
         case ExprComb::UPlus:
-            exprStr += OString("+");
+            exprStr += "+";
             break;
         case ExprComb::UMinus:
-            exprStr += OString("-");
+            exprStr += "-";
             break;
         default:
             break;
@@ -1057,34 +1057,34 @@ OString AstExpression::toString()
     switch (m_combOperator)
     {
         case ExprComb::Add:
-            exprStr += OString(" + ");
+            exprStr += " + ";
             break;
         case ExprComb::Minus:
-            exprStr += OString(" - ");
+            exprStr += " - ";
             break;
         case ExprComb::Mul:
-            exprStr += OString(" * ");
+            exprStr += " * ";
             break;
         case ExprComb::Div:
-            exprStr += OString(" / ");
+            exprStr += " / ";
             break;
         case ExprComb::Mod:
-            exprStr += OString(" % ");
+            exprStr += " % ";
             break;
         case ExprComb::Or:
-            exprStr += OString(" | ");
+            exprStr += " | ";
             break;
         case ExprComb::Xor:
-            exprStr += OString(" ^ ");
+            exprStr += " ^ ";
             break;
         case ExprComb::And:
-            exprStr += OString(" & ");
+            exprStr += " & ";
             break;
         case ExprComb::Left:
-            exprStr += OString(" << ");
+            exprStr += " << ";
             break;
         case ExprComb::Right:
-            exprStr += OString(" >> ");
+            exprStr += " >> ";
             break;
         default:
             break;

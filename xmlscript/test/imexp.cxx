@@ -190,7 +190,7 @@ void MyApp::Main()
         uno::Exception exc;
         if (rExc.WrappedException >>= exc)
         {
-            aStr += OString( " >>> " );
+            aStr += " >>> ";
             aStr += OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US );
         }
         OSL_FAIL( aStr.getStr() );

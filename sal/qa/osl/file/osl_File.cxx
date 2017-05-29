@@ -4938,7 +4938,7 @@ namespace osl_Directory
 
 #if !defined(_WIN32) && !defined(ANDROID) && !defined(AIX)
             // FIXME would be nice to create unique dir even on Windows
-            tmp_x += OString("XXXXXX");
+            tmp_x += "XXXXXX";
             char *out = mkdtemp(const_cast<char*>(tmp_x.getStr()));
 
             CPPUNIT_ASSERT_MESSAGE
