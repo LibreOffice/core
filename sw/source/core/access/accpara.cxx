@@ -370,7 +370,7 @@ void SwAccessibleParagraph::GetStates(
     const SwTextNode* pTextNd = GetTextNode();
     if( pCaret != nullptr && pTextNd != nullptr &&
         pTextNd->GetIndex() == pCaret->GetPoint()->nNode.GetIndex() &&
-        nOldCaretPos != -1)
+        m_nOldCaretPos != -1)
     {
         vcl::Window *pWin = GetWindow();
         if( pWin && pWin->HasFocus() )
@@ -420,13 +420,13 @@ void SwAccessibleParagraph::InvalidateContent_( bool bVisibleDataFired )
 
     bool bNewIsHeading = IsHeading();
     //Get the real heading level, Heading1 ~ Heading10
-    nHeadingLevel = GetRealHeadingLevel();
+    m_nHeadingLevel = GetRealHeadingLevel();
     bool bOldIsHeading;
     {
         osl::MutexGuard aGuard( m_Mutex );
-        bOldIsHeading = bIsHeading;
-        if( bIsHeading != bNewIsHeading )
-            bIsHeading = bNewIsHeading;
+        bOldIsHeading = m_bIsHeading;
+        if( m_bIsHeading != bNewIsHeading )
+            m_bIsHeading = bNewIsHeading;
     }
 
     if( bNewIsHeading != bOldIsHeading )
@@ -444,9 +444,9 @@ void SwAccessibleParagraph::InvalidateContent_( bool bVisibleDataFired )
         OUString sOldDesc;
         {
             osl::MutexGuard aGuard( m_Mutex );
-            sOldDesc = sDesc;
-            if( sDesc != sNewDesc )
-                sDesc = sNewDesc;
+            sOldDesc = m_sDesc;
+            if( m_sDesc != sNewDesc )
+                m_sDesc = sNewDesc;
         }
 
         if( sNewDesc != sOldDesc )
@@ -469,8 +469,8 @@ void SwAccessibleParagraph::InvalidateCursorPos_()
     sal_Int32 nOld;
     {
         osl::MutexGuard aGuard( m_Mutex );
-        nOld = nOldCaretPos;
-        nOldCaretPos = nNew;
+        nOld = m_nOldCaretPos;
+        m_nOldCaretPos = nNew;
     }
     if( -1 != nNew )
     {
@@ -519,7 +519,7 @@ void SwAccessibleParagraph::InvalidateFocus_()
         sal_Int32 nPos;
         {
             osl::MutexGuard aGuard( m_Mutex );
-            nPos = nOldCaretPos;
+            nPos = m_nOldCaretPos;
         }
         OSL_ENSURE( nPos != -1, "focus object should be selected" );
 
@@ -533,32 +533,32 @@ SwAccessibleParagraph::SwAccessibleParagraph(
         const SwTextFrame& rTextFrame )
     : SwClient( const_cast<SwTextNode*>(rTextFrame.GetTextNode()) ) // #i108125#
     , SwAccessibleContext( pInitMap, AccessibleRole::PARAGRAPH, &rTextFrame )
-    , sDesc()
-    , pPortionData( nullptr )
-    , pHyperTextData( nullptr )
-    , nOldCaretPos( -1 )
-    , bIsHeading( false )
+    , m_sDesc()
+    , m_pPortionData( nullptr )
+    , m_pHyperTextData( nullptr )
+    , m_nOldCaretPos( -1 )
+    , m_bIsHeading( false )
     //Get the real heading level, Heading1 ~ Heading10
-    , nHeadingLevel (-1)
-    , aSelectionHelper( *this )
+    , m_nHeadingLevel (-1)
+    , m_aSelectionHelper( *this )
     , mpParaChangeTrackInfo( new SwParaChangeTrackingInfo( rTextFrame ) ) // #i108125#
     , m_bLastHasSelection(false)  //To add TEXT_SELECTION_CHANGED event
 {
-    bIsHeading = IsHeading();
+    m_bIsHeading = IsHeading();
     //Get the real heading level, Heading1 ~ Heading10
-    nHeadingLevel = GetRealHeadingLevel();
+    m_nHeadingLevel = GetRealHeadingLevel();
     SetName( OUString() ); // set an empty accessibility name for paragraphs
 
     // If this object has the focus, then it is remembered by the map itself.
-    nOldCaretPos = GetCaretPos();
+    m_nOldCaretPos = GetCaretPos();
 }
 
 SwAccessibleParagraph::~SwAccessibleParagraph()
 {
     SolarMutexGuard aGuard;
 
-    delete pPortionData;
-    delete pHyperTextData;
+    delete m_pPortionData;
+    delete m_pHyperTextData;
     delete mpParaChangeTrackInfo; // #i108125#
     if(GetRegisteredIn())
         GetRegisteredIn()->Remove(this);
@@ -567,7 +567,7 @@ SwAccessibleParagraph::~SwAccessibleParagraph()
 bool SwAccessibleParagraph::HasCursor()
 {
     osl::MutexGuard aGuard( m_Mutex );
-    return nOldCaretPos != -1;
+    return m_nOldCaretPos != -1;
 }
 
 void SwAccessibleParagraph::UpdatePortionData()
@@ -578,21 +578,21 @@ void SwAccessibleParagraph::UpdatePortionData()
     const SwTextFrame* pFrame = static_cast<const SwTextFrame*>( GetFrame() );
 
     // build new portion data
-    delete pPortionData;
-    pPortionData = new SwAccessiblePortionData(
+    delete m_pPortionData;
+    m_pPortionData = new SwAccessiblePortionData(
         pFrame->GetTextNode(), GetMap()->GetShell()->GetViewOptions() );
-    pFrame->VisitPortions( *pPortionData );
+    pFrame->VisitPortions( *m_pPortionData );
 
-    OSL_ENSURE( pPortionData != nullptr, "UpdatePortionData() failed" );
+    OSL_ENSURE( m_pPortionData != nullptr, "UpdatePortionData() failed" );
 }
 
 void SwAccessibleParagraph::ClearPortionData()
 {
-    delete pPortionData;
-    pPortionData = nullptr;
+    delete m_pPortionData;
+    m_pPortionData = nullptr;
 
-    delete pHyperTextData;
-    pHyperTextData = nullptr;
+    delete m_pHyperTextData;
+    m_pHyperTextData = nullptr;
 }
 
 void SwAccessibleParagraph::ExecuteAtViewShell( sal_uInt16 nSlot )
@@ -897,10 +897,10 @@ OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription()
     ThrowIfDisposed();
 
     osl::MutexGuard aGuard2( m_Mutex );
-    if( sDesc.isEmpty() )
-        sDesc = GetDescription();
+    if( m_sDesc.isEmpty() )
+        m_sDesc = GetDescription();
 
-    return sDesc;
+    return m_sDesc;
 }
 
 lang::Locale SAL_CALL SwAccessibleParagraph::getLocale()
@@ -1241,8 +1241,8 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
     sal_Int32 nRet = GetCaretPos();
     {
         osl::MutexGuard aOldCaretPosGuard( m_Mutex );
-        OSL_ENSURE( nRet == nOldCaretPos, "caret pos out of sync" );
-        nOldCaretPos = nRet;
+        OSL_ENSURE( nRet == m_nOldCaretPos, "caret pos out of sync" );
+        m_nOldCaretPos = nRet;
     }
     if( -1 != nRet )
     {
@@ -2915,7 +2915,7 @@ void SwAccessibleParagraph::selectAccessibleChild(
 {
     ThrowIfDisposed();
 
-    aSelectionHelper.selectAccessibleChild(nChildIndex);
+    m_aSelectionHelper.selectAccessibleChild(nChildIndex);
 }
 
 sal_Bool SwAccessibleParagraph::isAccessibleChildSelected(
@@ -2923,7 +2923,7 @@ sal_Bool SwAccessibleParagraph::isAccessibleChildSelected(
 {
     ThrowIfDisposed();
 
-    return aSelectionHelper.isAccessibleChildSelected(nChildIndex);
+    return m_aSelectionHelper.isAccessibleChildSelected(nChildIndex);
 }
 
 void SwAccessibleParagraph::clearAccessibleSelection(  )
@@ -2935,14 +2935,14 @@ void SwAccessibleParagraph::selectAllAccessibleChildren(  )
 {
     ThrowIfDisposed();
 
-    aSelectionHelper.selectAllAccessibleChildren();
+    m_aSelectionHelper.selectAllAccessibleChildren();
 }
 
 sal_Int32 SwAccessibleParagraph::getSelectedAccessibleChildCount(  )
 {
     ThrowIfDisposed();
 
-    return aSelectionHelper.getSelectedAccessibleChildCount();
+    return m_aSelectionHelper.getSelectedAccessibleChildCount();
 }
 
 uno::Reference<XAccessible> SwAccessibleParagraph::getSelectedAccessibleChild(
@@ -2950,7 +2950,7 @@ uno::Reference<XAccessible> SwAccessibleParagraph::getSelectedAccessibleChild(
 {
     ThrowIfDisposed();
 
-    return aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
+    return m_aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
 // index has to be treated as global child index.
@@ -2959,7 +2959,7 @@ void SwAccessibleParagraph::deselectAccessibleChild(
 {
     ThrowIfDisposed();
 
-    aSelectionHelper.deselectAccessibleChild( nChildIndex );
+    m_aSelectionHelper.deselectAccessibleChild( nChildIndex );
 }
 
 // XAccessibleHypertext
@@ -3073,11 +3073,11 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
             {   // it's a hyperlink
                 if( pHt )
                 {
-                    if( !pHyperTextData )
-                        pHyperTextData = new SwAccessibleHyperTextData;
+                    if( !m_pHyperTextData )
+                        m_pHyperTextData = new SwAccessibleHyperTextData;
                     SwAccessibleHyperTextData::iterator aIter =
-                        pHyperTextData ->find( pHt );
-                    if( aIter != pHyperTextData->end() )
+                        m_pHyperTextData ->find( pHt );
+                    if( aIter != m_pHyperTextData->end() )
                     {
                         xRet = (*aIter).second;
                     }
@@ -3091,14 +3091,14 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
                             xRet = new SwAccessibleHyperlink( aHIter.getCurrHintPos(),
                                 this, nTmpHStt, nTmpHEnd );
                         }
-                        if( aIter != pHyperTextData->end() )
+                        if( aIter != m_pHyperTextData->end() )
                         {
                             (*aIter).second = xRet;
                         }
                         else
                         {
                             SwAccessibleHyperTextData::value_type aEntry( pHt, xRet );
-                            pHyperTextData->insert( aEntry );
+                            m_pHyperTextData->insert( aEntry );
                         }
                     }
                 }
@@ -3700,7 +3700,7 @@ sal_Int16 SAL_CALL SwAccessibleParagraph::getAccessibleRole()
     SolarMutexGuard g;
 
     //Get the real heading level, Heading1 ~ Heading10
-    if (nHeadingLevel > 0)
+    if (m_nHeadingLevel > 0)
     {
         return AccessibleRole::HEADING;
     }
@@ -3739,8 +3739,8 @@ uno::Any SAL_CALL SwAccessibleParagraph::getExtendedAttributes()
 
     uno::Any Ret;
     OUString strHeading("heading-level:");
-    if( nHeadingLevel >= 0 )
-        strHeading += OUString::number(nHeadingLevel);
+    if( m_nHeadingLevel >= 0 )
+        strHeading += OUString::number(m_nHeadingLevel);
     strHeading += ";";
 
     strHeading += strHeading.copy(8); // tdf#84102: expose the same attribute with the name "level"

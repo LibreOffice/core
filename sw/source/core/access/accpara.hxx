@@ -67,25 +67,25 @@ class SwAccessibleParagraph :
 {
     friend class SwAccessibleHyperlink;
 
-    OUString sDesc;  // protected by base classes mutex
+    OUString m_sDesc;  // protected by base classes mutex
 
     // data for this paragraph's text portions; this contains the
     // mapping from the core 'model string' to the accessible text
     // string.
     // pPortionData may be NULL; it should only be accessed through the
     // Get/Clear/Has/UpdatePortionData() methods
-    SwAccessiblePortionData* pPortionData;
-    SwAccessibleHyperTextData *pHyperTextData;
+    SwAccessiblePortionData* m_pPortionData;
+    SwAccessibleHyperTextData *m_pHyperTextData;
 
-    sal_Int32 nOldCaretPos; // The 'old' caret pos. It's only valid as long
+    sal_Int32 m_nOldCaretPos; // The 'old' caret pos. It's only valid as long
                             // as the cursor is inside this object (protected by
                             // mutex)
 
-    bool bIsHeading;    // protected by base classes mutex
-    sal_Int32 nHeadingLevel;
+    bool m_bIsHeading;    // protected by base classes mutex
+    sal_Int32 m_nHeadingLevel;
 
     // implementation for XAccessibleSelection
-    SwAccessibleSelectionHelper aSelectionHelper;
+    SwAccessibleSelectionHelper m_aSelectionHelper;
 
     SwParaChangeTrackingInfo* mpParaChangeTrackInfo; // #i108125#
 
@@ -190,9 +190,9 @@ protected:
     /// @throws css::uno::RuntimeException
     SwAccessiblePortionData& GetPortionData()
     {
-        if( pPortionData == nullptr )
+        if( m_pPortionData == nullptr )
             UpdatePortionData();
-        return *pPortionData;
+        return *m_pPortionData;
     }
 
     //helpers for word boundaries
