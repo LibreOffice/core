@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_143f28b5",
+        "filename": "registry/tools/fileurl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-29T15:43:33Z",
+      "side": 1,
+      "message": "I\u0027d at least expect some comment explaining why failure of these functions would constitute a programming error here.",
+      "revId": "3a6eb7d7e5aaa455d892d63f95cced03d3e32a95",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
