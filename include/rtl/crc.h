@@ -29,11 +29,6 @@
 extern "C" {
 #endif
 
-/*========================================================================
- *
- * rtl_crc32 interface.
- *
- *======================================================================*/
 /** Evaluate CRC32 over given data.
 
     This function evaluates the CRC polynomial 0xEDB88320.
@@ -47,12 +42,6 @@ SAL_DLLPUBLIC sal_uInt32 SAL_CALL rtl_crc32 (
     sal_uInt32  Crc,
     const void *Data, sal_uInt32 DatLen
 ) SAL_THROW_EXTERN_C();
-
-/*========================================================================
- *
- * The End.
- *
- *======================================================================*/
 
 #ifdef __cplusplus
 }
