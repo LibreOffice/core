@@ -257,15 +257,13 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int
             &sId );
 
     rStrm.GetCurrentStream()->singleElement( XML_drawing,
-            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ).getStr(),
-            FSEND );
+            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ) );
 
     rStrm.PushStream( pDrawing );
     pDrawing->startElement( FSNS( XML_xdr, XML_wsDr ),
-            FSNS( XML_xmlns, XML_xdr ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(dmlSpreadDr))).getStr(),
-            FSNS( XML_xmlns, XML_a ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(dml))).getStr(),
-            FSNS( XML_xmlns, XML_r ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
-            FSEND );
+            FSNS( XML_xmlns, XML_xdr ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(dmlSpreadDr))),
+            FSNS( XML_xmlns, XML_a ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(dml))),
+            FSNS( XML_xmlns, XML_r ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))) );
 
     for (it = aList.begin(), itEnd = aList.end(); it != itEnd; ++it)
         (*it)->SaveXml(rStrm);
@@ -291,16 +289,14 @@ void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nV
             &sId );
 
     rStrm.GetCurrentStream()->singleElement( XML_legacyDrawing,
-            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ).getStr(),
-            FSEND );
+            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ) );
 
     rStrm.PushStream( pVmlDrawing );
     pVmlDrawing->startElement( XML_xml,
-            FSNS( XML_xmlns, XML_v ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vml))).getStr(),
-            FSNS( XML_xmlns, XML_o ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vmlOffice))).getStr(),
-            FSNS( XML_xmlns, XML_x ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vmlExcel))).getStr(),
-            FSNS( XML_xmlns, XML_w10 ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vmlWord))).getStr(),
-            FSEND );
+            FSNS( XML_xmlns, XML_v ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vml))),
+            FSNS( XML_xmlns, XML_o ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vmlOffice))),
+            FSNS( XML_xmlns, XML_x ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vmlExcel))),
+            FSNS( XML_xmlns, XML_w10 ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vmlWord))) );
 
     std::vector<XclObj*>::iterator pIter;
     for ( pIter = rList.begin(); pIter != rList.end(); ++pIter )
@@ -657,12 +653,9 @@ void VmlCommentExporter::EndShape( sal_Int32 nShapeElement )
                   maTo.Left(), maTo.Top(), maTo.Right(), maTo.Bottom() );
 
     pVmlDrawing->startElement( FSNS( XML_x, XML_ClientData ),
-            XML_ObjectType, "Note",
-            FSEND );
-    pVmlDrawing->singleElement( FSNS( XML_x, XML_MoveWithCells ),
-            FSEND );
-    pVmlDrawing->singleElement( FSNS( XML_x, XML_SizeWithCells ),
-            FSEND );
+            XML_ObjectType, "Note" );
+    pVmlDrawing->singleElement( FSNS( XML_x, XML_MoveWithCells ) );
+    pVmlDrawing->singleElement( FSNS( XML_x, XML_SizeWithCells ) );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Anchor ), pAnchor );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_AutoFill ), "False" );
     XclXmlUtils::WriteElement( pVmlDrawing, FSNS( XML_x, XML_Row ), maScPos.Row() );
@@ -1021,8 +1014,7 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
             aRange.aEnd.Col()-1, aRange.aEnd.Row()-1,
             nTab );
 
-    pDrawing->startElement( FSNS( XML_xdr, XML_from ),
-            FSEND );
+    pDrawing->startElement( FSNS( XML_xdr, XML_from ) );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_col ), (sal_Int32) aRange.aStart.Col() );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_colOff ),
             oox::drawingml::convertHmmToEmu( aLocation.Left() - aRangeRect.Left() ) );
@@ -1031,8 +1023,7 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
             oox::drawingml::convertHmmToEmu( aLocation.Top() - aRangeRect.Top() ) );
     pDrawing->endElement( FSNS( XML_xdr, XML_from ) );
 
-    pDrawing->startElement( FSNS( XML_xdr, XML_to ),
-            FSEND );
+    pDrawing->startElement( FSNS( XML_xdr, XML_to ) );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_col ), (sal_Int32) aRange.aEnd.Col() );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_colOff ),
             oox::drawingml::convertHmmToEmu( aLocation.Right() - aRangeRect.Right() ) );
@@ -1183,8 +1174,7 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
     aDML.SetURLTranslator(pURLTransformer);
 
     pDrawing->startElement( FSNS( XML_xdr, XML_twoCellAnchor ), // OOXTODO: oneCellAnchor, absoluteAnchor
-            XML_editAs, GetEditAs( *this ),
-            FSEND );
+            XML_editAs, GetEditAs( *this ) );
     Reference< XPropertySet > xPropSet( mxShape, UNO_QUERY );
     if (xPropSet.is())
     {
@@ -1192,10 +1182,10 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
         aDML.WriteShape( mxShape );
     }
 
-    pDrawing->singleElement( FSNS( XML_xdr, XML_clientData),
+    pDrawing->singleElement( FSNS( XML_xdr, XML_clientData)
             // OOXTODO: XML_fLocksWithSheet
             // OOXTODO: XML_fPrintsWithSheet
-            FSEND );
+            );
     pDrawing->endElement( FSNS( XML_xdr, XML_twoCellAnchor ) );
 }
 
@@ -1271,11 +1261,10 @@ void ExcBundlesheet8::SaveXml( XclExpXmlStream& rStrm )
             &sId );
 
     rStrm.GetCurrentStream()->singleElement( XML_sheet,
-            XML_name,               XclXmlUtils::ToOString( sUnicodeName ).getStr(),
-            XML_sheetId,            OString::number( ( nTab+1 ) ).getStr(),
+            XML_name,               XclXmlUtils::ToOString( sUnicodeName ),
+            XML_sheetId,            OString::number( ( nTab+1 ) ),
             XML_state,              nGrbit == 0x0000 ? "visible" : "hidden",
-            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ).getStr(),
-            FSEND );
+            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ) );
 }
 
 // --- class XclObproj -----------------------------------------------
@@ -1335,10 +1324,10 @@ void ExcEScenarioCell::SaveXml( XclExpXmlStream& rStrm ) const
     rStrm.GetCurrentStream()->singleElement( XML_inputCells,
             // OOXTODO: XML_deleted,
             // OOXTODO: XML_numFmtId,
-            XML_r,      XclXmlUtils::ToOString( ScAddress( nCol, nRow, 0 ) ).getStr(),
+            XML_r,      XclXmlUtils::ToOString( ScAddress( nCol, nRow, 0 ) ),
             // OOXTODO: XML_undone,
-            XML_val,    XclXmlUtils::ToOString( sText ).getStr(),
-            FSEND );
+            XML_val,    XclXmlUtils::ToOString( sText )
+            );
 }
 
 ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
@@ -1454,13 +1443,12 @@ void ExcEScenario::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     rWorkbook->startElement( XML_scenario,
-            XML_name,       XclXmlUtils::ToOString( sName ).getStr(),
+            XML_name,       XclXmlUtils::ToOString( sName ),
             XML_locked,     XclXmlUtils::ToPsz( bProtected ),
             // OOXTODO: XML_hidden,
-            XML_count,      OString::number(  aCells.size() ).getStr(),
+            XML_count,      OString::number(  aCells.size() ),
             XML_user,       XESTRING_TO_PSZ( sUserName ),
-            XML_comment,    XESTRING_TO_PSZ( sComment ),
-            FSEND );
+            XML_comment,    XESTRING_TO_PSZ( sComment ) );
 
     std::vector<ExcEScenarioCell>::iterator pIter;
     for( pIter = aCells.begin(); pIter != aCells.end(); ++pIter )
@@ -1517,10 +1505,10 @@ void ExcEScenarioManager::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
     rWorkbook->startElement( XML_scenarios,
-            XML_current,    OString::number( nActive ).getStr(),
-            XML_show,       OString::number( nActive ).getStr(),
+            XML_current,    OString::number( nActive ),
+            XML_show,       OString::number( nActive )
             // OOXTODO: XML_sqref,
-            FSEND );
+            );
 
     for( ExcEScenario& rScenario : aScenes )
         rScenario.SaveXml( rStrm );

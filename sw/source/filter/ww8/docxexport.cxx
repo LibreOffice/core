@@ -228,8 +228,7 @@ bool DocxExport::DisallowInheritingOutlineNumbering( const SwFormat& rFormat )
                 ::sax_fastparser::FSHelperPtr pSerializer = m_pAttrOutput->GetSerializer( );
                 // Level 9 disables the outline
                 pSerializer->singleElementNS( XML_w, XML_outlineLvl,
-                        FSNS( XML_w, XML_val ), "9" ,
-                        FSEND );
+                        FSNS( XML_w, XML_val ), "9" );
 
                 bRet = true;
             }
@@ -299,25 +298,22 @@ void DocxExport::DoComboBox(const OUString& rName,
                              const OUString& rSelected,
                              uno::Sequence<OUString>& rListItems)
 {
-    m_pDocumentFS->startElementNS( XML_w, XML_ffData, FSEND );
+    m_pDocumentFS->startElementNS( XML_w, XML_ffData );
 
     m_pDocumentFS->singleElementNS( XML_w, XML_name,
-            FSNS( XML_w, XML_val ), OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr(),
-            FSEND );
+            FSNS( XML_w, XML_val ), OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ) );
 
-    m_pDocumentFS->singleElementNS( XML_w, XML_enabled, FSEND );
+    m_pDocumentFS->singleElementNS( XML_w, XML_enabled );
 
     if ( !rHelp.isEmpty() )
         m_pDocumentFS->singleElementNS( XML_w, XML_helpText,
-            FSNS( XML_w, XML_val ), OUStringToOString( rHelp, RTL_TEXTENCODING_UTF8 ).getStr(),
-            FSEND );
+            FSNS( XML_w, XML_val ), OUStringToOString( rHelp, RTL_TEXTENCODING_UTF8 ) );
 
     if ( !rToolTip.isEmpty() )
         m_pDocumentFS->singleElementNS( XML_w, XML_statusText,
-            FSNS( XML_w, XML_val ), OUStringToOString( rToolTip, RTL_TEXTENCODING_UTF8 ).getStr(),
-            FSEND );
+            FSNS( XML_w, XML_val ), OUStringToOString( rToolTip, RTL_TEXTENCODING_UTF8 ) );
 
-    m_pDocumentFS->startElementNS( XML_w, XML_ddList, FSEND );
+    m_pDocumentFS->startElementNS( XML_w, XML_ddList );
 
     // Output the 0-based index of the selected value
     sal_uInt32 nListItems = rListItems.getLength();
@@ -331,16 +327,14 @@ void DocxExport::DoComboBox(const OUString& rName,
     }
 
     m_pDocumentFS->singleElementNS( XML_w, XML_result,
-            FSNS( XML_w, XML_val ), OString::number( nId ).getStr( ),
-            FSEND );
+            FSNS( XML_w, XML_val ), OString::number( nId ) );
 
     // Loop over the entries
 
     for (sal_uInt32 i = 0; i < nListItems; i++)
     {
         m_pDocumentFS->singleElementNS( XML_w, XML_listEntry,
-                FSNS( XML_w, XML_val ), OUStringToOString( rListItems[i], RTL_TEXTENCODING_UTF8 ).getStr(),
-               FSEND );
+                FSNS( XML_w, XML_val ), OUStringToOString( rListItems[i], RTL_TEXTENCODING_UTF8 ) );
     }
 
     m_pDocumentFS->endElementNS( XML_w, XML_ddList );
@@ -678,11 +672,10 @@ void DocxExport::WriteNumbering()
     m_pDrawingML->SetFS( pNumberingFS );
 
     pNumberingFS->startElementNS( XML_w, XML_numbering,
-            FSNS( XML_xmlns, XML_w ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(doc)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSNS( XML_xmlns, XML_o ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(vmlOffice)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSNS( XML_xmlns, XML_r ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSNS( XML_xmlns, XML_v ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(vml)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSEND );
+            FSNS( XML_xmlns, XML_w ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(doc)), RTL_TEXTENCODING_UTF8),
+            FSNS( XML_xmlns, XML_o ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(vmlOffice)), RTL_TEXTENCODING_UTF8),
+            FSNS( XML_xmlns, XML_r ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8),
+            FSNS( XML_xmlns, XML_v ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(vml)), RTL_TEXTENCODING_UTF8) );
 
     BulletDefinitions();
 
@@ -771,8 +764,7 @@ void DocxExport::WriteHeaderFooter( const SwFormat& rFormat, bool bHeader, const
     // and write the reference
     m_pDocumentFS->singleElementNS( XML_w, nReference,
             FSNS( XML_w, XML_type ), pType,
-            FSNS( XML_r, XML_id ), aRelId.toUtf8().getStr(),
-            FSEND );
+            FSNS( XML_r, XML_id ), aRelId.toUtf8() );
 }
 
 void DocxExport::WriteFonts()
@@ -786,9 +778,8 @@ void DocxExport::WriteFonts()
             "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml" );
 
     pFS->startElementNS( XML_w, XML_fonts,
-            FSNS( XML_xmlns, XML_w ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(doc)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSNS( XML_xmlns, XML_r ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSEND );
+            FSNS( XML_xmlns, XML_w ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(doc)), RTL_TEXTENCODING_UTF8),
+            FSNS( XML_xmlns, XML_r ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8) );
 
     // switch the serializer to redirect the output to word/styles.xml
     m_pAttrOutput->SetSerializer( pFS );
@@ -832,48 +823,47 @@ void DocxExport::WriteSettings()
             "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml" );
 
     pFS->startElementNS( XML_w, XML_settings,
-            FSNS( XML_xmlns, XML_w ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(doc)), RTL_TEXTENCODING_UTF8).getStr(),
-            FSEND );
+            FSNS( XML_xmlns, XML_w ), OUStringToOString(m_pFilter->getNamespaceURL(OOX_NS(doc)), RTL_TEXTENCODING_UTF8) );
 
     // Zoom
     if (pViewShell)
     {
         OString aZoom(OString::number(pViewShell->GetViewOptions()->GetZoom()));
-        pFS->singleElementNS(XML_w, XML_zoom, FSNS(XML_w, XML_percent), aZoom.getStr(), FSEND);
+        pFS->singleElementNS(XML_w, XML_zoom, FSNS(XML_w, XML_percent), aZoom.getStr());
     }
 
     // Display Background Shape
     if (boost::optional<SvxBrushItem> oBrush = getBackground())
     {
         // Turn on the 'displayBackgroundShape'
-        pFS->singleElementNS( XML_w, XML_displayBackgroundShape, FSEND );
+        pFS->singleElementNS( XML_w, XML_displayBackgroundShape );
     }
 
     // Track Changes
     if ( m_aSettings.trackRevisions )
-        pFS->singleElementNS( XML_w, XML_trackRevisions, FSEND );
+        pFS->singleElementNS( XML_w, XML_trackRevisions );
 
     // Mirror Margins
     if(isMirroredMargin())
-        pFS->singleElementNS( XML_w, XML_mirrorMargins, FSEND );
+        pFS->singleElementNS( XML_w, XML_mirrorMargins );
 
     // Embed Fonts
     if( m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_FONTS ))
-        pFS->singleElementNS( XML_w, XML_embedTrueTypeFonts, FSEND );
+        pFS->singleElementNS( XML_w, XML_embedTrueTypeFonts );
 
     // Embed System Fonts
     if( m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::EMBED_SYSTEM_FONTS ))
-        pFS->singleElementNS( XML_w, XML_embedSystemFonts, FSEND );
+        pFS->singleElementNS( XML_w, XML_embedSystemFonts );
 
     // Default Tab Stop
     if( m_aSettings.defaultTabStop != 0 )
         pFS->singleElementNS( XML_w, XML_defaultTabStop, FSNS( XML_w, XML_val ),
-            OString::number( m_aSettings.defaultTabStop).getStr(), FSEND );
+            OString::number( m_aSettings.defaultTabStop).getStr() );
 
     // Protect form
     if( m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::PROTECT_FORM ))
     {
-        pFS->singleElementNS( XML_w, XML_documentProtection, FSNS(XML_w, XML_edit), "forms", FSNS(XML_w, XML_enforcement), "1",  FSEND );
+        pFS->singleElementNS( XML_w, XML_documentProtection, FSNS(XML_w, XML_edit), "forms", FSNS(XML_w, XML_enforcement), "1" );
     }
 
     // Automatic hyphenation: it's a global setting in Word, it's a paragraph setting in Writer.
@@ -883,13 +873,12 @@ void DocxExport::WriteSettings()
     if (pColl && SfxItemState::SET == pColl->GetItemState(RES_PARATR_HYPHENZONE, false, &pItem))
     {
         pFS->singleElementNS(XML_w, XML_autoHyphenation,
-                             FSNS(XML_w, XML_val), OString::boolean(static_cast<const SvxHyphenZoneItem*>(pItem)->IsHyphen()),
-                             FSEND);
+                             FSNS(XML_w, XML_val), OString::boolean(static_cast<const SvxHyphenZoneItem*>(pItem)->IsHyphen()));
     }
 
     // Even and Odd Headers
     if( m_aSettings.evenAndOddHeaders )
-        pFS->singleElementNS( XML_w, XML_evenAndOddHeaders, FSEND );
+        pFS->singleElementNS( XML_w, XML_evenAndOddHeaders );
 
     // Has Footnotes
     if( m_pAttrOutput->HasFootnotes())
@@ -925,14 +914,13 @@ void DocxExport::WriteSettings()
                         themeFontLangProps[j].Value >>= aValues[2];
                 }
                 pFS->singleElementNS( XML_w, XML_themeFontLang,
-                                      FSNS( XML_w, XML_val ), OUStringToOString( aValues[0], RTL_TEXTENCODING_UTF8 ).getStr(),
-                                      FSNS( XML_w, XML_eastAsia ), OUStringToOString( aValues[1], RTL_TEXTENCODING_UTF8 ).getStr(),
-                                      FSNS( XML_w, XML_bidi ), OUStringToOString( aValues[2], RTL_TEXTENCODING_UTF8 ).getStr(),
-                                      FSEND );
+                                      FSNS( XML_w, XML_val ), OUStringToOString( aValues[0], RTL_TEXTENCODING_UTF8 ),
+                                      FSNS( XML_w, XML_eastAsia ), OUStringToOString( aValues[1], RTL_TEXTENCODING_UTF8 ),
+                                      FSNS( XML_w, XML_bidi ), OUStringToOString( aValues[2], RTL_TEXTENCODING_UTF8 ) );
             }
             else if ( propList[i].Name == "CompatSettings" )
             {
-                pFS->startElementNS( XML_w, XML_compat, FSEND );
+                pFS->startElementNS( XML_w, XML_compat );
 
                 uno::Sequence< beans::PropertyValue > aCompatSettingsSequence;
                 propList[i].Value >>= aCompatSettingsSequence;
@@ -954,10 +942,9 @@ void DocxExport::WriteSettings()
                             aCompatSetting[k].Value >>= aValue;
                     }
                     pFS->singleElementNS( XML_w, XML_compatSetting,
-                        FSNS( XML_w, XML_name ), OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr(),
-                        FSNS( XML_w, XML_uri ),  OUStringToOString(aUri, RTL_TEXTENCODING_UTF8).getStr(),
-                        FSNS( XML_w, XML_val ),  OUStringToOString(aValue, RTL_TEXTENCODING_UTF8).getStr(),
-                        FSEND);
+                        FSNS( XML_w, XML_name ), OUStringToOString(aName, RTL_TEXTENCODING_UTF8),
+                        FSNS( XML_w, XML_uri ),  OUStringToOString(aUri, RTL_TEXTENCODING_UTF8),
+                        FSNS( XML_w, XML_val ),  OUStringToOString(aValue, RTL_TEXTENCODING_UTF8));
                 }
 
                 pFS->endElementNS( XML_w, XML_compat );
@@ -970,8 +957,7 @@ void DocxExport::WriteSettings()
     {
         pFS->singleElementNS( XML_w, XML_documentProtection,
                               FSNS( XML_w, XML_enforcement ), "true",
-                              FSNS( XML_w, XML_edit ), "forms",
-                              FSEND );
+                              FSNS( XML_w, XML_edit ), "forms" );
     }
 
     pFS->endElementNS( XML_w, XML_settings );
@@ -1344,11 +1330,11 @@ void DocxExport::WriteMainText()
         Color backgroundColor = oBrush->GetColor();
         OString aBackgroundColorStr = msfilter::util::ConvertColor(backgroundColor);
 
-        m_pDocumentFS->singleElementNS( XML_w, XML_background, FSNS( XML_w, XML_color ), aBackgroundColorStr, FSEND );
+        m_pDocumentFS->singleElementNS( XML_w, XML_background, FSNS( XML_w, XML_color ), aBackgroundColorStr );
     }
 
     // body
-    m_pDocumentFS->startElementNS( XML_w, XML_body, FSEND );
+    m_pDocumentFS->startElementNS( XML_w, XML_body );
 
     m_pCurPam->GetPoint()->nNode = m_pDoc->GetNodes().GetEndOfContent().StartOfSectionNode()->GetIndex();
 
