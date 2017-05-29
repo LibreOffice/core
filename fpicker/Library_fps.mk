@@ -70,6 +70,5 @@ $(eval $(call gb_Library_add_exception_objects,fps,\
 	fpicker/source/win32/misc/resourceprovider \
 	fpicker/source/win32/misc/WinImplHelper \
 ))
-#	fpicker/source/win32/filepicker/PreviewCtrl \
 
 # vim: set noet sw=4 ts=4:
