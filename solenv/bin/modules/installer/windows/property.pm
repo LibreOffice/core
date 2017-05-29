@@ -419,14 +419,8 @@ sub update_property_table
     my $productname = get_productname_for_property_table($language, $allvariables);
     my $productversion = get_productversion_for_property_table();
     my $quickstarterlinkname = get_quickstarterlinkname_for_property_table($language, $allvariables);
-    my $windowsminversiontext = "Windows Vista";
-    my $windowsminversionnumber = "600";
-
-    if ( $allvariables->{'WINDOWSSDKVERSION'} eq '70' )
-    {
-       $windowsminversiontext = "Windows XP";
-       $windowsminversionnumber = "501";
-    }
+    my $windowsminversiontext = "Windows 7";
+    my $windowsminversionnumber = "601";
 
     # Updating the values
 
