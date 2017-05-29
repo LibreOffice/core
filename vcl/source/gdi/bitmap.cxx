@@ -275,6 +275,21 @@ BitmapChecksum Bitmap::GetChecksum() const
     if( mxImpBmp )
     {
         nRet = mxImpBmp->ImplGetChecksum();
+
+        if (!nRet)
+        {
+            // nRet == 0 => probably, we were not able to acquire
+            // the buffer in SalBitmap::updateChecksum;
+            // so, we need to update the imp bitmap for this bitmap instance
+            // as we do in BitmapInfoAccess::ImplCreate
+            std::shared_ptr<ImpBitmap> xNewImpBmp(new ImpBitmap);
+            if (xNewImpBmp->ImplCreate(*mxImpBmp, GetBitCount()))
+            {
+                Bitmap* pThis = const_cast<Bitmap*>(this);
+                pThis->mxImpBmp = xNewImpBmp;
+                nRet = mxImpBmp->ImplGetChecksum();
+            }
+        }
     }
 
     return nRet;
