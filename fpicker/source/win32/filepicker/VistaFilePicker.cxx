@@ -26,7 +26,6 @@
 // Without IFileDialogCustomize we can't do much
 #ifdef __IFileDialogCustomize_INTERFACE_DEFINED__
 
-#include "WinFileOpenImpl.hxx"
 #include "../misc/WinImplHelper.hxx"
 #include "shared.hxx"
 

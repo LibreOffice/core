@@ -19,7 +19,6 @@
 
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/container/XSet.hpp>
-#include "FilePicker.hxx"
 #include "FPServiceInfo.hxx"
 
 #ifdef _MSC_VER
@@ -45,22 +44,11 @@ static Reference< XInterface > SAL_CALL createInstance(
 {
     Reference< XInterface > xDlg;
 
-#ifdef __IFileDialogCustomize_INTERFACE_DEFINED__
-    bool                    bVistaOrNewer = IsWindowsVistaOrNewer();
+    if (!IsWindowsVistaOrNewer())
+        std::abort(); // not supported
 
-    if (bVistaOrNewer)
-    {
-        xDlg.set(
-            static_cast< XFilePicker2* >(
-                new ::fpicker::win32::vista::VistaFilePicker( rServiceManager ) ) );
-    }
-    else
-#endif
-    {
-        xDlg.set(
-            static_cast< XFilePicker2* >(
-                new CFilePicker( rServiceManager ) ) );
-    }
+    xDlg.set(static_cast<XFilePicker2*>(
+            new ::fpicker::win32::vista::VistaFilePicker(rServiceManager)));
 
     return xDlg;
 }

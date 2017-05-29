@@ -58,29 +58,12 @@ $(eval $(call gb_Library_add_libs,fps,\
 endif
 
 $(eval $(call gb_Library_add_exception_objects,fps,\
-	fpicker/source/win32/filepicker/asynceventnotifier \
 	fpicker/source/win32/filepicker/asyncrequests \
-	fpicker/source/win32/filepicker/controlaccess \
-	fpicker/source/win32/filepicker/controlcommand \
-	fpicker/source/win32/filepicker/customcontrolcontainer \
-	fpicker/source/win32/filepicker/customcontrol \
-	fpicker/source/win32/filepicker/customcontrolfactory \
-	fpicker/source/win32/filepicker/dialogcustomcontrols \
-	fpicker/source/win32/filepicker/dibpreview \
-	fpicker/source/win32/filepicker/FileOpenDlg \
-	fpicker/source/win32/filepicker/FilePicker \
-	fpicker/source/win32/filepicker/filepickereventnotification \
-	fpicker/source/win32/filepicker/filepickerstate \
 	fpicker/source/win32/filepicker/FilterContainer \
 	fpicker/source/win32/filepicker/FPentry \
-	fpicker/source/win32/filepicker/getfilenamewrapper \
-	fpicker/source/win32/filepicker/helppopupwindow \
-	fpicker/source/win32/filepicker/previewadapter \
-	fpicker/source/win32/filepicker/previewbase \
 	fpicker/source/win32/filepicker/VistaFilePicker \
 	fpicker/source/win32/filepicker/VistaFilePickerEventHandler \
 	fpicker/source/win32/filepicker/VistaFilePickerImpl \
-	fpicker/source/win32/filepicker/WinFileOpenImpl \
 	fpicker/source/win32/folderpicker/FolderPicker \
 	fpicker/source/win32/folderpicker/MtaFop \
 	fpicker/source/win32/folderpicker/WinFOPImpl \
