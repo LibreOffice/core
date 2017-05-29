@@ -752,7 +752,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     sal_Int32 length = aGrabBag.getLength();
                     aGrabBag.realloc( length+1);
                     aGrabBag[length].Name = "mso-orig-shape-type";
-                    const uno::Sequence< sal_Int8 > aNameSeq =
+                    uno::Sequence< sal_Int8 > const & aNameSeq =
                         mpCustomShapePropertiesPtr->getShapePresetTypeName();
                     OUString sShapePresetTypeName(reinterpret_cast< const char* >(
                         aNameSeq.getConstArray()), aNameSeq.getLength(), RTL_TEXTENCODING_UTF8);
