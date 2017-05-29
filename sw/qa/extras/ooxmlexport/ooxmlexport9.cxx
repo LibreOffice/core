@@ -588,6 +588,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107837, "tdf107837.odt")
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTextSections->getByIndex(0), "DontBalanceTextColumns"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf107684, "tdf107684.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/styles.xml"))
+        // This was 1, <w:outlineLvl> was duplicated for Heading1.
+        assertXPath(pXmlDoc, "//w:style[@w:styleId='Heading1']/w:pPr/w:outlineLvl", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
