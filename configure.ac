@@ -5288,11 +5288,7 @@ find_msvc_x64_dlls()
             msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$vcbuildnumber/x64/Microsoft.VC${VCVER}.CRT"
         fi
     fi
-    if test "$VCVER" = 150; then
-       msvcdlls="msvcp140.dll vcruntime140.dll"
-    else
-       msvcdlls="msvcp${VCVER}.dll vcruntime${VCVER}.dll"
-    fi
+    msvcdlls="msvcp140.dll vcruntime140.dll"
     for dll in $msvcdlls; do
         if ! test -f "$msvcdllpath/$dll"; then
             AC_MSG_ERROR([can not find $dll in $msvcdllpath])
