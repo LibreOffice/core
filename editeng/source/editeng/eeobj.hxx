@@ -20,14 +20,12 @@
 #ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EEOBJ_HXX
 #define INCLUDED_EDITENG_SOURCE_EDITENG_EEOBJ_HXX
 
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
 #include <tools/stream.hxx>
 
-class EditDataObject :  public css::datatransfer::XTransferable,
-                        public ::cppu::OWeakObject
-
+class EditDataObject :  public ::cppu::WeakImplHelper<css::datatransfer::XTransferable>
 {
 private:
     SvMemoryStream  maBinData;
@@ -44,12 +42,6 @@ public:
     SvMemoryStream& GetRTFStream() { return maRTFData; }
     OUString&       GetString() { return maText; }
     OUString&       GetURL()    { return maOfficeBookmark; }
-
-
-    // css::uno::XInterface
-    css::uno::Any                               SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
     // css::datatransfer::XTransferable
     css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
