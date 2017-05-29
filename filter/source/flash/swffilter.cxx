@@ -185,8 +185,8 @@ FlashExportFilter::FlashExportFilter(const Reference< XComponentContext > &rxCon
 
 OUString exportBackground(FlashExporter &aFlashExporter, const Reference< XDrawPage >& xDrawPage, const OUString& sPath, sal_uInt32 nPage, const char* suffix)
 {
-    OUString filename = STR("slide") + VAL(nPage+1) + STR(suffix) + STR(".swf");
-    OUString fullpath = sPath + STR("/") + filename;
+    OUString filename = "slide" + OUString::number(nPage+1) + OUString::createFromAscii(suffix) + ".swf";
+    OUString fullpath = sPath + "/" + filename;
 
     // AS: If suffix is "o" then the last parameter is true (for exporting objects).
     Reference<XOutputStream> xOutputStreamWrap(*(new OslOutputStreamWrapper(fullpath)), UNO_QUERY);
@@ -198,9 +198,9 @@ OUString exportBackground(FlashExporter &aFlashExporter, const Reference< XDrawP
     {
         osl_removeFile(fullpath.pData);
         if ( 0xffff == nCached )
-            return STR("NULL");
+            return OUString("NULL");
         else
-            return STR("slide") + VAL(nCached+1) + STR(suffix) + STR(".swf");
+            return "slide" + OUString::number(nCached+1) + OUString::createFromAscii(suffix) + ".swf";
     }
 
     return filename;
@@ -352,12 +352,12 @@ bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
 
     OUString fullpath, swfdirpath, backgroundfilename, objectsfilename;
 
-    swfdirpath = sPath + STR("/") + sPresentationName + STR(".sxi-swf-files");
+    swfdirpath = sPath + "/" + sPresentationName + ".sxi-swf-files";
 
     oslFileError err;
     err = osl_createDirectory( swfdirpath.pData );
 
-    fullpath = swfdirpath + STR("/backgroundconfig.txt");
+    fullpath = swfdirpath + "/backgroundconfig.txt";
 
     oslFileHandle aBackgroundConfig( nullptr );
 
@@ -410,7 +410,7 @@ bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
 
         if (bExportAll || findPropertyValue<bool>(aFilterData, "ExportSlideContents", true))
         {
-            fullpath = swfdirpath + STR("/slide") + VAL(nPage+1) + STR("p.swf");
+            fullpath = swfdirpath + "/slide"+ OUString::number(nPage+1) + "p.swf";
 
             Reference<XOutputStream> xOutputStreamWrap(*(new OslOutputStreamWrapper(fullpath)), UNO_QUERY);
             bool ret = aFlashExporter.exportSlides( xDrawPage, xOutputStreamWrap );
@@ -425,7 +425,7 @@ bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue >& a
         //  slide used.
         if (bExportAll)
         {
-            OUString temp = backgroundfilename + STR("|") + objectsfilename;
+            OUString temp = backgroundfilename + "|" + objectsfilename;
             OString ASCIItemp(temp.getStr(), temp.getLength(), RTL_TEXTENCODING_ASCII_US);
 
             sal_uInt64 bytesWritten;

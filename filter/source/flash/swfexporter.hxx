@@ -33,16 +33,6 @@ typedef ::std::map<BitmapChecksum, sal_uInt16> ChecksumCache;
 
 class GDIMetaFile;
 
-inline OUString STR(const sal_Char * in)
-{
-    return OUString::createFromAscii(in);
-}
-
-inline OUString VAL(sal_Int32 in)
-{
-    return OUString::number(in);
-}
-
 namespace swf {
 
 class Writer;
