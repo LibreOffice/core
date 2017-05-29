@@ -31,8 +31,12 @@ static LibreOfficeKitDocument* document;
 // Bridge functions to LibreOfficeKit
 extern "C" int BridgeLOkit_Init(const char *path)
 {
+    char bufUserPath[200];
+    strcpy(bufUserPath, path);
+    strcpy(bufUserPath + strlen(path), "/user");
+    
     // Initialize LibreOfficeKit
-    kit = lok_init(path);
+    kit = lok_init_2(path, bufUserPath);
 
     udata_setCommonData(NULL, NULL);
     ucnv_open("iso-8859-3", NULL);
