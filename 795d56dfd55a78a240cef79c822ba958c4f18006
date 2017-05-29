@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_7474ec9b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-29T16:02:04Z",
+      "side": 1,
+      "message": "no need for \"[API-CHANGE]\" here (extending a constants group, even if published, is a compatible change)",
+      "revId": "795d56dfd55a78a240cef79c822ba958c4f18006",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_94795896",
+        "filename": "dtrans/source/win32/clipb/WinClipbImpl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-29T16:02:04Z",
+      "side": 1,
+      "message": "The comment and the redundant combination of Persistant and Persistent is unnecessary, no?",
+      "revId": "795d56dfd55a78a240cef79c822ba958c4f18006",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b46e54c7",
+        "filename": "include/filter/msfilter/escherex.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1093,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-29T16:02:04Z",
+      "side": 1,
+      "message": "This change is unrelated to what\u0027s described in the commit message, right?",
+      "revId": "795d56dfd55a78a240cef79c822ba958c4f18006",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_d473e0af",
+        "filename": "offapi/com/sun/star/datatransfer/clipboard/RenderingCapabilities.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-29T16:02:04Z",
+      "side": 1,
+      "message": "I think these two doxygen comments need to be folded into one.  (And I think @deprecated can be followed by prose detailing what to use as a replacement.)",
+      "revId": "795d56dfd55a78a240cef79c822ba958c4f18006",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_f468dcbc",
+        "filename": "offapi/com/sun/star/datatransfer/clipboard/RenderingCapabilities.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-29T16:02:04Z",
+      "side": 1,
+      "message": "Please add a doxygen comment for the new constant, and add\n\n  @since LibreOffice 5.5",
+      "revId": "795d56dfd55a78a240cef79c822ba958c4f18006",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_146648ed",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 4315,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-29T16:02:04Z",
+      "side": 1,
+      "message": "no need to change this file manually (it will be regenerated once LO 5.5 is out)",
+      "revId": "795d56dfd55a78a240cef79c822ba958c4f18006",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_346344de",
+        "filename": "sd/source/filter/eppt/eppt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1322,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-29T16:02:04Z",
+      "side": 1,
+      "message": "This change is unrelated to what\u0027s described in the commit message, right?",
+      "revId": "795d56dfd55a78a240cef79c822ba958c4f18006",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
