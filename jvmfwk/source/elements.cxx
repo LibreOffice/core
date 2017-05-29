@@ -56,16 +56,14 @@ OString getElement(OString const & docPath,
     if (doc == nullptr)
         throw FrameworkException(
             JFW_E_ERROR,
-            OString("[Java framework] Error in function getElement "
-                         "(elements.cxx)"));
+            "[Java framework] Error in function getElement (elements.cxx)");
 
     jfw::CXPathContextPtr context(xmlXPathNewContext(doc));
     if (xmlXPathRegisterNs(context, reinterpret_cast<xmlChar const *>("jf"),
         reinterpret_cast<xmlChar const *>(NS_JAVA_FRAMEWORK)) == -1)
         throw FrameworkException(
             JFW_E_ERROR,
-            OString("[Java framework] Error in function getElement "
-                         "(elements.cxx)"));
+            "[Java framework] Error in function getElement (elements.cxx)");
 
     CXPathObjectPtr pathObj;
     pathObj = xmlXPathEvalExpression(pathExpression, context);
@@ -75,8 +73,7 @@ OString getElement(OString const & docPath,
         if (bThrowIfEmpty)
             throw FrameworkException(
                 JFW_E_ERROR,
-                OString("[Java framework] Error in function getElement "
-                             "(elements.cxx)"));
+                "[Java framework] Error in function getElement (elements.cxx)");
     }
     else
     {

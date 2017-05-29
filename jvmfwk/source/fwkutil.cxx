@@ -182,14 +182,13 @@ OUString getDirFromFile(const OUString& usFilePath)
 
 OUString getLibraryLocation()
 {
-    OString sExcMsg("[Java framework] Error in function getLibraryLocation "
-                         "(fwkutil.cxx).");
     OUString libraryFileUrl;
 
     if (!osl::Module::getUrlFromAddress(
             reinterpret_cast< oslGenericFunction >(getLibraryLocation),
             libraryFileUrl))
-        throw FrameworkException(JFW_E_ERROR, sExcMsg);
+        throw FrameworkException(JFW_E_ERROR,
+                    "[Java framework] Error in function getLibraryLocation (fwkutil.cxx).");
 
     return getDirFromFile(libraryFileUrl);
 }
