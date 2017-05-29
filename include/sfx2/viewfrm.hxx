@@ -176,6 +176,7 @@ public:
                                     const OUString& sMessage,
                                     InfoBarType aInfoBarType);
     void              RemoveInfoBar(const OUString& sId);
+    bool              HasInfoBarWithID(const OUString& sId);
 
     SAL_DLLPRIVATE void GetDocNumber_Impl();
     SAL_DLLPRIVATE void SetViewShell_Impl( SfxViewShell *pVSh );

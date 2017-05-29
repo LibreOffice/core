@@ -95,6 +95,7 @@ class SfxInfoBarContainerWindow : public vcl::Window
                                         InfoBarType ibType,
                                         WinBits nMessageStyle = WB_LEFT|WB_VCENTER);
         VclPtr<SfxInfoBarWindow> getInfoBar(const OUString& sId);
+        bool hasInfoBarWithID(const OUString& sId);
         void removeInfoBar(VclPtr<SfxInfoBarWindow> const & pInfoBar);
 
         virtual void Resize() override;

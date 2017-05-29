@@ -359,6 +359,11 @@ VclPtr<SfxInfoBarWindow> SfxInfoBarContainerWindow::getInfoBar(const OUString& s
     return nullptr;
 }
 
+bool SfxInfoBarContainerWindow::hasInfoBarWithID( const OUString &sId )
+{
+    return ( getInfoBar( sId ) != nullptr );
+}
+
 void SfxInfoBarContainerWindow::removeInfoBar(VclPtr<SfxInfoBarWindow> const & pInfoBar)
 {
     // Remove

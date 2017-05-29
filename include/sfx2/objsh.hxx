@@ -37,6 +37,7 @@
 #include <com/sun/star/document/CmisVersion.hpp>
 
 #include <vcl/vclptr.hxx>
+#include <vcl/button.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/bitmap.hxx>
 #include <sot/formats.hxx>
@@ -365,6 +366,7 @@ public:
     void                        SignDocumentContent();
     SignatureState              GetScriptingSignatureState();
     void                        SignScriptingContent();
+    DECL_LINK(SignDocumentHandler, Button*, void);
 
     virtual VclPtr<SfxDocumentInfoDialog> CreateDocumentInfoDialog( const SfxItemSet& );
 
