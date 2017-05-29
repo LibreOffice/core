@@ -47,7 +47,9 @@ $(call gb_ExternalProject_get_state_target,harfbuzz,build) :
 					$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUG_CFLAGS) \
 						$(gb_DEBUG_CXXFLAGS), \
 					$(gb_COMPILEROPTFLAGS)) \
-				$(CXXFLAGS) $(if $(filter LINUX,$(OS)),-fvisibility=hidden)' \
+				$(CXXFLAGS) \
+				$(ICU_UCHAR_TYPE) \
+				$(if $(filter LINUX,$(OS)),-fvisibility=hidden)' \
 		&& (cd $(EXTERNAL_WORKDIR)/src && $(MAKE) lib) \
 	)
 
