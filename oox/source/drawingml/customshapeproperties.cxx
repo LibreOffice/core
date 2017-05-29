@@ -52,7 +52,7 @@ CustomShapeProperties::~CustomShapeProperties()
 {
 }
 
-uno::Sequence< sal_Int8 > CustomShapeProperties::getShapePresetTypeName() const
+uno::Sequence< sal_Int8 > const & CustomShapeProperties::getShapePresetTypeName() const
 {
     return StaticTokenMap::get().getUtf8TokenName( mnShapePresetType );
 }
