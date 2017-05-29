@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_592d69a6",
+        "filename": "i18nutil/source/utility/paper.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-05-29T15:12:02Z",
+      "side": 1,
+      "message": "this is inverted and the copy asserted on startup for me, fortunately easy to track down and fixed with 922e935c8812b1c1f94347bdbd7cdf277a75644e",
+      "revId": "ef513fd4b049b214a03fbe6e62a5ea43680a7a9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
