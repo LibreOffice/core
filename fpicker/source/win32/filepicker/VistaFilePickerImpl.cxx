@@ -19,9 +19,6 @@
 
 #include "VistaFilePickerImpl.hxx"
 
-// Without IFileDialogCustomize we can't do much
-#ifdef __IFileDialogCustomize_INTERFACE_DEFINED__
-
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -1224,7 +1221,5 @@ bool VistaFilePickerImpl::onFileTypeChanged( UINT /*nTypeIndex*/ )
 } // namespace vista
 } // namespace win32
 } // namespace fpicker
-
-#endif // __IFileDialogCustomize_INTERFACE_DEFINED__
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

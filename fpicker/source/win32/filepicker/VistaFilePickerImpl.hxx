@@ -34,9 +34,6 @@
 #pragma warning(pop)
 #endif
 
-// Without IFileDialogCustomize we can't do this
-#ifdef __IFileDialogCustomize_INTERFACE_DEFINED__
-
 #include "asyncrequests.hxx"
 #include "comptr.hxx"
 #include "vistatypes.h"
@@ -327,8 +324,6 @@ class VistaFilePickerImpl : private ::cppu::BaseMutex
 } // namespace vista
 } // namespace win32
 } // namespace fpicker
-
-#endif // __IFileDialogCustomize_INTERFACE_DEFINED__
 
 #endif // INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_VISTAFILEPICKERIMPL_HXX
 

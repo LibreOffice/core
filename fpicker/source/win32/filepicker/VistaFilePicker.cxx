@@ -23,9 +23,6 @@
 
 #include "VistaFilePicker.hxx"
 
-// Without IFileDialogCustomize we can't do much
-#ifdef __IFileDialogCustomize_INTERFACE_DEFINED__
-
 #include "../misc/WinImplHelper.hxx"
 #include "shared.hxx"
 
@@ -530,7 +527,5 @@ css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSupportedServiceName
 } // namespace vista
 } // namespace win32
 } // namespace fpicker
-
-#endif // __IFileDialogCustomize_INTERFACE_DEFINED__
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
