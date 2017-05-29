@@ -1,0 +1,12 @@
+--- build/icu.old/source/common/uposixdefs.h
++++ build/icu/source/common/uposixdefs.h
+@@ -52,7 +52,7 @@
+  *
+  * z/OS needs this definition for timeval and to get usleep.
+  */
+-#if !defined(_XOPEN_SOURCE_EXTENDED)
++#if !defined(_XOPEN_SOURCE_EXTENDED) && (defined(__IBMC__) || defined(__IBMCPP__))
+ #   define _XOPEN_SOURCE_EXTENDED 1
+ #endif
+ 
+

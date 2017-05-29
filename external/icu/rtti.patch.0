@@ -1,0 +1,11 @@
+--- source/config/mh-linux
++++ source/config/mh-linux
+@@ -35,7 +35,7 @@
+ #SH# LD_SONAME=
+ 
+ ## Shared library options
+-LD_SOOPTIONS= -Wl,-Bsymbolic
++LD_SOOPTIONS= -Wl,-Bsymbolic-functions
+ 
+ ## Shared object suffix
+ SO = so
