@@ -5911,7 +5911,7 @@ if test "$GCC" = "yes"; then
 else
     # MSVC has sprouted C++11 thread-safe statics in 2015
     # http://blogs.msdn.com/b/vcblog/archive/2015/06/19/c-11-14-17-features-in-vs-2015-rtm.aspx
-    if test "$COM" = "MSC" -a "$VCVER" -ge "140"; then
+    if test "$COM" = "MSC"; then
         AC_DEFINE(HAVE_THREADSAFE_STATICS)
         AC_MSG_RESULT([yes])
     else
