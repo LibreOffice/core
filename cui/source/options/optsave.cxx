@@ -42,6 +42,7 @@
 #include <unotools/optionsdlg.hxx>
 
 #include <vcl/msgbox.hxx>
+#include <sfx2/fcontnr.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
@@ -528,7 +529,7 @@ IMPL_LINK( SvxSaveTabPage, AutoClickHdl_Impl, Button*, pBox, void )
     }
 }
 
-static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties)
+static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties, const OUString& rExtension)
 {
     OUString sName;
     const PropertyValue* pPropVal = rProperties.getConstArray();
@@ -540,7 +541,16 @@ static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties)
         {
             OUString sUIName;
             if ( ( pPropVal->Value >>= sUIName ) && sUIName.getLength() )
-                return sUIName;
+            {
+                if (!rExtension.isEmpty())
+                {
+                    return sUIName + " (" + rExtension + ")";
+                }
+                else
+                {
+                    return sUIName;
+                }
+            }
         }
         else if (rName == "Name")
         {
@@ -574,9 +584,17 @@ IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, ListBox&, rBox, void )
                 for(int nFilter = 0; nFilter < pImpl->aFilterArr[nData].getLength(); nFilter++)
                 {
                     Any aProps = pImpl->xFact->getByName(pFilters[nFilter]);
+                    // get the extension of the filter
+                    OUString extension;
+                    SfxFilterMatcher matcher;
+                    std::shared_ptr<const SfxFilter> pFilter = matcher.GetFilter4FilterName(pFilters[nFilter]);
+                    if (pFilter)
+                    {
+                        extension = pFilter->GetWildcard().getGlob().getToken(0, ';');
+                    }
                     Sequence<PropertyValue> aProperties;
                     aProps >>= aProperties;
-                    pUIFilters[nFilter] = lcl_ExtracUIName(aProperties);
+                    pUIFilters[nFilter] = lcl_ExtracUIName(aProperties, extension);
                 }
             }
             const OUString* pUIFilters = pImpl->aUIFilterArr[nData].getConstArray();
