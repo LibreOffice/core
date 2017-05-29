@@ -66,43 +66,6 @@ public class CalcRTL
      */
 
     /*
-     * In this method a spreadsheet document is opened<br>
-     * afterwards all properties of the Spreadsheet are checked.<br>
-     * <p>
-     * These are
-     * <ul>
-     *<li> IsVisible
-     *<li> PageStyle
-     *<li> TableLayout
-     *</ul>
-     */
-    @Test public void checkSpreadsheetProperties() {
-        assertTrue("Couldn't open document", openSpreadsheetDocument());
-
-        XPropertySet set =  UnoRuntime.queryInterface(
-                                   XPropertySet.class, getSpreadsheet());
-
-        // Make sure there are at least 2 sheets, otherwise hiding a sheet won't work
-        xSheetDoc.getSheets().insertNewByName("Some Sheet", (short)0);
-
-        assertTrue("Problems when setting property 'IsVisible'",
-               changeProperty(set, "IsVisible", Boolean.FALSE));
-        assertTrue("Problems when setting property 'IsVisible'",
-               changeProperty(set, "IsVisible", Boolean.TRUE));
-        assertTrue("Problems when setting property 'PageStyle'",
-               changeProperty(set, "PageStyle", "Report"));
-        assertTrue("Problems when setting property 'PageStyle'",
-               changeProperty(set, "PageStyle", "Default"));
-        assertTrue("Problems when setting property 'TableLayout'",
-               changeProperty(set, "TableLayout",
-                              Short.valueOf(com.sun.star.text.WritingMode2.RL_TB)));
-        assertTrue("Problems when setting property 'TableLayout'",
-               changeProperty(set, "TableLayout",
-                              Short.valueOf(com.sun.star.text.WritingMode2.LR_TB)));
-        assertTrue("Couldn't close document", closeSpreadsheetDocument());
-    }
-
-    /*
      * In this method a spreadsheet document is opened and a shape inserted<br>
      * afterwards all calc specific properties of the Shape are checked.<br>
      * <p>
