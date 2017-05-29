@@ -23,8 +23,6 @@ Function verify_testIsArray() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
     Dim date1, date2
     Dim MyArray(1 To 5) As Integer, YourArray    ' Declare array variables.
     testName = "Test IsArray function"

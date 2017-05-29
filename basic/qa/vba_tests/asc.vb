@@ -24,9 +24,6 @@ Function verify_testASC() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
-    Dim date1, date2 As Date   'variables for test
     Dim nr1, nr2 As Double
 
     testName = "Test ASC function"

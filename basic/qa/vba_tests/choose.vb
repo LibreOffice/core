@@ -23,7 +23,6 @@ Function verify_testChoose() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
     Dim var1, var2
     testName = "Test Choose function"
 

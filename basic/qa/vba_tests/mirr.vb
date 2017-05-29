@@ -23,8 +23,6 @@ Function verify_testMIRR() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
     Dim date1, date2, LoanAPR, InvAPR, Fmt, RetRate, Msg
     testName = "Test MIRR function"
     On Error GoTo errorHandler

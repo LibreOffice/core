@@ -24,8 +24,6 @@ Function verify_testCBool() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
     Dim res2, res1 As Boolean
     Dim a1, a2 As Integer
     testName = "Test CBool function"

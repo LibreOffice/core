@@ -23,8 +23,6 @@ Function verify_testDatePart() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
     Dim date1   'variables for test
     Dim date2
     testName = "Test DatePart function"

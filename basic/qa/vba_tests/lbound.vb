@@ -23,8 +23,6 @@ Function verify_testLBound() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
     Dim date1, date2
     Dim MyArray(1 To 10, 5 To 15, 10 To 20)     ' Declare array variables.
     testName = "Test LBound function"

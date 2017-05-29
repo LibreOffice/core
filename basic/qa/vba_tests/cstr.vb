@@ -23,7 +23,6 @@ Function verify_testCStr() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
     Dim str2, str3
     Dim str1 As String   'variables for test
     testName = "Test CStr function"

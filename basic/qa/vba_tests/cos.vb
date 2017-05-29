@@ -23,8 +23,6 @@ Function verify_testCOS() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
     Dim nr1, nr2 As Double   'variables for test
     testName = "Test COS function"
 
