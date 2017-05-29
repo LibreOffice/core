@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		39022C181EDC142F00100066 /* lokit.mm in Sources */ = {isa = PBXBuildFile; fileRef = 39022C171EDC142F00100066 /* lokit.mm */; };
+		39022C1B1EDC2A0E00100066 /* program in Resources */ = {isa = PBXBuildFile; fileRef = 39022C1A1EDC2A0E00100066 /* program */; };
+		39022C1D1EDC2A2C00100066 /* services in Resources */ = {isa = PBXBuildFile; fileRef = 39022C1C1EDC2A2C00100066 /* services */; };
+		39022C1F1EDC2AB000100066 /* share in Resources */ = {isa = PBXBuildFile; fileRef = 39022C1E1EDC2AB000100066 /* share */; };
+		39022C211EDC2D0800100066 /* icudt59l.dat in Resources */ = {isa = PBXBuildFile; fileRef = 39022C201EDC2D0800100066 /* icudt59l.dat */; };
+		39022C241EDC303200100066 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 39022C221EDC303200100066 /* InfoPlist.strings */; };
 		392ED9B31E5E4B03005C8435 /* ViewPrintManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */; };
 		396F92F71E7AE62400A28C82 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 396F92F61E7AE62400A28C82 /* Settings.bundle */; };
 		397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 397868D81E59A3EA007F9248 /* LaunchScreen.xib */; };
@@ -49,6 +54,11 @@
 /* Begin PBXFileReference section */
 		39022C171EDC142F00100066 /* lokit.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = lokit.mm; sourceTree = "<group>"; };
 		39022C191EDC14D300100066 /* lokit-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "lokit-Bridging-Header.h"; sourceTree = "<group>"; };
+		39022C1A1EDC2A0E00100066 /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = ../../ioswork/ios/resources/program; sourceTree = "<group>"; };
+		39022C1C1EDC2A2C00100066 /* services */ = {isa = PBXFileReference; lastKnownFileType = folder; name = services; path = ../../ioswork/ios/resources/services; sourceTree = "<group>"; };
+		39022C1E1EDC2AB000100066 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../../ioswork/ios/resources/share; sourceTree = "<group>"; };
+		39022C201EDC2D0800100066 /* icudt59l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt59l.dat; path = ../../ioswork/UnpackedTarball/icu/source/data/in/icudt59l.dat; sourceTree = "<group>"; };
+		39022C231EDC303200100066 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewPrintManager.swift; path = LibreOfficeLight/ViewPrintManager.swift; sourceTree = SOURCE_ROOT; };
 		396F92F61E7AE62400A28C82 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LibreOfficeLight.entitlements; sourceTree = "<group>"; };
@@ -57,7 +67,6 @@
 		397E08FD1E597BD8001374E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = LibreOfficeLight/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
 		397E09021E597BD8001374E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		397E09071E597BD8001374E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = LibreOfficeLight/Assets.xcassets; sourceTree = SOURCE_ROOT; };
-		397E090C1E597BD8001374E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = LibreOfficeLight/Info.plist; sourceTree = SOURCE_ROOT; };
 		397E09111E597BD8001374E0 /* LibreOfficeLightTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LibreOfficeLightTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		397E09151E597BD8001374E0 /* LibreOfficeLightTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LibreOfficeLightTests.swift; path = LibreOfficeLightTests/LibreOfficeLightTests.swift; sourceTree = SOURCE_ROOT; };
 		397E09171E597BD8001374E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = LibreOfficeLightTests/Info.plist; sourceTree = SOURCE_ROOT; };
@@ -68,14 +77,14 @@
 		3992D85B1E5B764A00BEA987 /* SideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SideMenu.swift; path = LibreOfficeLight/SideMenu.swift; sourceTree = SOURCE_ROOT; };
 		3992D85C1E5B764A00BEA987 /* FileManagerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileManagerController.swift; path = LibreOfficeLight/FileManagerController.swift; sourceTree = SOURCE_ROOT; };
 		399648461E5B87DC00E73E83 /* ViewProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewProperties.swift; path = LibreOfficeLight/ViewProperties.swift; sourceTree = SOURCE_ROOT; };
-		39B084E21E5F0A9600682A59 /* lo.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = lo.xcconfig; path = "../../../../ios-work/workdir/ios/generated/lo.xcconfig"; sourceTree = SOURCE_ROOT; };
-		39B084E51E5F0BB400682A59 /* fundamentalrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fundamentalrc; path = "../../../../ios-work/workdir/ios/resources/fundamentalrc"; sourceTree = SOURCE_ROOT; };
-		39B084E61E5F0BB400682A59 /* offapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = offapi.rdb; path = "../../../../ios-work/workdir/ios/resources/offapi.rdb"; sourceTree = SOURCE_ROOT; };
-		39B084E71E5F0BB400682A59 /* oovbaapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = oovbaapi.rdb; path = "../../../../ios-work/workdir/ios/resources/oovbaapi.rdb"; sourceTree = SOURCE_ROOT; };
-		39B085211E5F0BB400682A59 /* rc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = rc; path = "../../../../ios-work/workdir/ios/resources/rc"; sourceTree = SOURCE_ROOT; };
-		39B085241E5F0BB400682A59 /* services.rdb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = services.rdb; path = "../../../../ios-work/workdir/ios/resources/services.rdb"; sourceTree = SOURCE_ROOT; };
-		39B08B9B1E5F0BB600682A59 /* udkapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = udkapi.rdb; path = "../../../../ios-work/workdir/ios/resources/udkapi.rdb"; sourceTree = SOURCE_ROOT; };
-		39B08B9C1E5F0BB600682A59 /* unorc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = unorc; path = "../../../../ios-work/workdir/ios/resources/unorc"; sourceTree = SOURCE_ROOT; };
+		39B084E21E5F0A9600682A59 /* lo.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = lo.xcconfig; path = ../../ioswork/ios/generated/lo.xcconfig; sourceTree = SOURCE_ROOT; };
+		39B084E51E5F0BB400682A59 /* fundamentalrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fundamentalrc; path = ../../ioswork/ios/resources/fundamentalrc; sourceTree = SOURCE_ROOT; };
+		39B084E61E5F0BB400682A59 /* offapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = offapi.rdb; path = ../../ioswork/ios/resources/offapi.rdb; sourceTree = SOURCE_ROOT; };
+		39B084E71E5F0BB400682A59 /* oovbaapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = oovbaapi.rdb; path = ../../ioswork/ios/resources/oovbaapi.rdb; sourceTree = SOURCE_ROOT; };
+		39B085211E5F0BB400682A59 /* rc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = rc; path = ../../ioswork/ios/resources/rc; sourceTree = SOURCE_ROOT; };
+		39B085241E5F0BB400682A59 /* services.rdb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = services.rdb; path = ../../ioswork/ios/resources/services.rdb; sourceTree = SOURCE_ROOT; };
+		39B08B9B1E5F0BB600682A59 /* udkapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = udkapi.rdb; path = ../../ioswork/ios/resources/udkapi.rdb; sourceTree = SOURCE_ROOT; };
+		39B08B9C1E5F0BB600682A59 /* unorc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = unorc; path = ../../ioswork/ios/resources/unorc; sourceTree = SOURCE_ROOT; };
 		39B092501E5F3DEA00682A59 /* LibreOfficeLight-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "LibreOfficeLight-Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -107,11 +116,11 @@
 		3911D89F1E5993600050D6BC /* Support files */ = {
 			isa = PBXGroup;
 			children = (
+				39022C221EDC303200100066 /* InfoPlist.strings */,
 				39B092501E5F3DEA00682A59 /* LibreOfficeLight-Prefix.pch */,
 				397275391E77D9F1006ACDCC /* LibreOfficeLight.entitlements */,
 				39B084E21E5F0A9600682A59 /* lo.xcconfig */,
 				397E09071E597BD8001374E0 /* Assets.xcassets */,
-				397E090C1E597BD8001374E0 /* Info.plist */,
 				396F92F61E7AE62400A28C82 /* Settings.bundle */,
 			);
 			name = "Support files";
@@ -186,6 +195,10 @@
 		39B084E41E5F0B5200682A59 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				39022C201EDC2D0800100066 /* icudt59l.dat */,
+				39022C1E1EDC2AB000100066 /* share */,
+				39022C1C1EDC2A2C00100066 /* services */,
+				39022C1A1EDC2A0E00100066 /* program */,
 				39B084E51E5F0BB400682A59 /* fundamentalrc */,
 				39B084E61E5F0BB400682A59 /* offapi.rdb */,
 				39B084E71E5F0BB400682A59 /* oovbaapi.rdb */,
@@ -314,8 +327,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				397E09081E597BD8001374E0 /* Assets.xcassets in Resources */,
+				39022C241EDC303200100066 /* InfoPlist.strings in Resources */,
 				39B08BD71E5F0BB600682A59 /* rc in Resources */,
 				39B08B9E1E5F0BB600682A59 /* offapi.rdb in Resources */,
+				39022C211EDC2D0800100066 /* icudt59l.dat in Resources */,
+				39022C1B1EDC2A0E00100066 /* program in Resources */,
+				39022C1D1EDC2A2C00100066 /* services in Resources */,
 				397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */,
 				396F92F71E7AE62400A28C82 /* Settings.bundle in Resources */,
 				39B08B9F1E5F0BB600682A59 /* oovbaapi.rdb in Resources */,
@@ -323,6 +340,7 @@
 				39B091CD1E5F0BB800682A59 /* udkapi.rdb in Resources */,
 				39B08BD91E5F0BB600682A59 /* services.rdb in Resources */,
 				39B091CE1E5F0BB800682A59 /* unorc in Resources */,
+				39022C1F1EDC2AB000100066 /* share in Resources */,
 				397E09031E597BD8001374E0 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,6 +408,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		39022C221EDC303200100066 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				39022C231EDC303200100066 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		397868D81E59A3EA007F9248 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
