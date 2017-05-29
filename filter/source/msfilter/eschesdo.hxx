@@ -54,8 +54,7 @@ public:
     ImplEESdrObject( ImplEESdrWriter& rEx, const css::uno::Reference< css::drawing::XShape >& rShape );
     ~ImplEESdrObject();
 
-    bool ImplGetPropertyValue( const sal_Unicode* pString );
-    bool ImplGetPropertyValue( const OUString& rString ) { return ImplGetPropertyValue(rString.getStr()); }
+    bool ImplGetPropertyValue( const OUString& rString );
 
     sal_Int32 ImplGetInt32PropertyValue( const sal_Unicode* pStr )
     { return ImplGetPropertyValue( pStr ) ? *o3tl::doAccess<sal_Int32>(mAny) : 0; }

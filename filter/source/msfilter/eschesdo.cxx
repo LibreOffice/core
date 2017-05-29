@@ -224,7 +224,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         }
         rObj.SetAngle( rObj.ImplGetInt32PropertyValue( OUString( "RotateAngle" ) ));
 
-        if( ( rObj.ImplGetPropertyValue( OUString( "IsFontwork" ) ) &&
+        if( ( rObj.ImplGetPropertyValue( "IsFontwork" ) &&
             ::cppu::any2bool( rObj.GetUsrAny() ) ) ||
             rObj.GetType() == "drawing.Measure" )
         {
@@ -328,7 +328,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         {
             CircleKind  eCircleKind = CircleKind_FULL;
             PolyStyle   ePolyKind = PolyStyle();
-            if ( rObj.ImplGetPropertyValue( OUString( "CircleKind" ) ) )
+            if ( rObj.ImplGetPropertyValue( "CircleKind" ) )
             {
                 eCircleKind = *o3tl::doAccess<CircleKind>(rObj.GetUsrAny());
                 switch ( eCircleKind )
@@ -363,10 +363,10 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             else
             {
                 sal_Int32 nStartAngle, nEndAngle;
-                if ( !rObj.ImplGetPropertyValue( OUString( "CircleStartAngle" ) ) )
+                if ( !rObj.ImplGetPropertyValue( "CircleStartAngle" ) )
                     break;
                 nStartAngle = *o3tl::doAccess<sal_Int32>(rObj.GetUsrAny());
-                if( !rObj.ImplGetPropertyValue( OUString( "CircleEndAngle" ) ) )
+                if( !rObj.ImplGetPropertyValue( "CircleEndAngle" ) )
                     break;
                 nEndAngle = *o3tl::doAccess<sal_Int32>(rObj.GetUsrAny());
 
@@ -614,7 +614,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                  'D' == rObj.GetType()[9] )   // drawing.3D
         {
             // SceneObject, CubeObject, SphereObject, LatheObject, ExtrudeObject, PolygonObject
-            if ( !rObj.ImplGetPropertyValue( OUString( "Bitmap" ) ) )
+            if ( !rObj.ImplGetPropertyValue( "Bitmap" ) )
                 break;
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -646,7 +646,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         aPropOpt.CreateShadowProperties( rObj.mXPropSet );
 
         if( SDRLAYER_NOTFOUND != mpEscherEx->GetHellLayerId() &&
-            rObj.ImplGetPropertyValue( OUString( "LayerID" ) ) &&
+            rObj.ImplGetPropertyValue( "LayerID" ) &&
             *o3tl::doAccess<sal_uInt16>(rObj.GetUsrAny()) == sal_uInt8(mpEscherEx->GetHellLayerId()) )
         {
             aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x200020 );
@@ -1161,17 +1161,17 @@ void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
             SetRect(rEx.ImplMapPoint(aOldP), rEx.ImplMapSize(aOldS));
         }
 
-        if( ImplGetPropertyValue( OUString("IsPresentationObject")) )
+        if( ImplGetPropertyValue( "IsPresentationObject" ) )
             mbPresObj = ::cppu::any2bool( mAny );
 
-        if( mbPresObj && ImplGetPropertyValue( OUString("IsEmptyPresentationObject") ) )
+        if( mbPresObj && ImplGetPropertyValue( "IsEmptyPresentationObject" ) )
             mbEmptyPresObj = ::cppu::any2bool( mAny );
 
         mbValid = true;
     }
 }
 
-bool ImplEESdrObject::ImplGetPropertyValue( const sal_Unicode* rString )
+bool ImplEESdrObject::ImplGetPropertyValue( const OUString& rString )
 {
     bool bRetValue = false;
     if( mbValid )
