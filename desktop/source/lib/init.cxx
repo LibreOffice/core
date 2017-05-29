@@ -1517,6 +1517,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:CharBackgroundExt"),
         OUString(".uno:CharFontName"),
         OUString(".uno:Color"),
+        OUString(".uno:ControlCodes"),
         OUString(".uno:DecrementIndent"),
         OUString(".uno:DefaultBullet"),
         OUString(".uno:DefaultNumbering"),

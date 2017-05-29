@@ -994,6 +994,7 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
     if (aEvent.FeatureURL.Path == "Bold" ||
         aEvent.FeatureURL.Path == "CenterPara" ||
         aEvent.FeatureURL.Path == "CharBackgroundExt" ||
+        aEvent.FeatureURL.Path == "ControlCodes" ||
         aEvent.FeatureURL.Path == "DefaultBullet" ||
         aEvent.FeatureURL.Path == "DefaultNumbering" ||
         aEvent.FeatureURL.Path == "Italic" ||
