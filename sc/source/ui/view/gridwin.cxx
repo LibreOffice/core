@@ -1189,16 +1189,13 @@ void ScGridWindow::FilterSelect( sal_uLong nSel )
 
 void ScGridWindow::ExecDataSelect( SCCOL nCol, SCROW nRow, const OUString& rStr )
 {
-    if ( !rStr.isEmpty() )
-    {
-        SCTAB nTab = pViewData->GetTabNo();
-        ScViewFunc* pView = pViewData->GetView();
-        pView->EnterData( nCol, nRow, nTab, rStr );
+    SCTAB nTab = pViewData->GetTabNo();
+    ScViewFunc* pView = pViewData->GetView();
+    pView->EnterData( nCol, nRow, nTab, rStr );
 
-        // #i52307# CellContentChanged is not in EnterData so it isn't called twice
-        // if the cursor is moved afterwards.
-        pView->CellContentChanged();
-    }
+    // #i52307# CellContentChanged is not in EnterData so it isn't called twice
+    // if the cursor is moved afterwards.
+    pView->CellContentChanged();
 }
 
 void ScGridWindow::MoveMouseStatus( ScGridWindow& rDestWin )
