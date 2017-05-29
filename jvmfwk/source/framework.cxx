@@ -140,8 +140,7 @@ javaFrameworkError jfw_findAllJREs(std::vector<std::unique_ptr<JavaInfo>> *pparI
     }
     catch (const jfw::FrameworkException& e)
     {
-        fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_FAIL(e.message.getStr());
+        SAL_WARN( "jfw", e.message);
         return e.errorCode;
     }
 }
@@ -304,8 +303,7 @@ javaFrameworkError jfw_startVM(
     catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
-        fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_FAIL(e.message.getStr());
+        SAL_WARN( "jfw", e.message);
     }
 
     return errcode;
@@ -540,8 +538,7 @@ javaFrameworkError jfw_findAndSelectJRE(std::unique_ptr<JavaInfo> *pInfo)
     catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
-        fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_FAIL(e.message.getStr());
+        SAL_WARN( "jfw", e.message );
     }
 
     return errcode;
@@ -580,11 +577,10 @@ javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo)
                 != JFW_E_NONE)
                 throw jfw::FrameworkException(
                     JFW_E_CONFIGURATION,
-                    OString(
-                        "[Java framework] The JRE specified by the bootstrap "
-                        "variable UNO_JAVA_JFW_JREHOME  or  UNO_JAVA_JFW_ENV_JREHOME "
-                        " could not be recognized. Check the values and make sure that you "
-                        "use a plug-in library that can recognize that JRE."));
+                    "[Java framework] The JRE specified by the bootstrap "
+                    "variable UNO_JAVA_JFW_JREHOME  or  UNO_JAVA_JFW_ENV_JREHOME "
+                    " could not be recognized. Check the values and make sure that you "
+                    "use a plug-in library that can recognize that JRE.");
 
             return JFW_E_NONE;
         }
@@ -609,8 +605,7 @@ javaFrameworkError jfw_getSelectedJRE(std::unique_ptr<JavaInfo> *ppInfo)
     catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
-        fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_FAIL(e.message.getStr());
+        SAL_WARN( "jfw", e.message );
     }
     return errcode;
 }
@@ -675,8 +670,7 @@ javaFrameworkError jfw_getJavaInfoByPath(OUString const & pPath, std::unique_ptr
     catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
-        fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_FAIL(e.message.getStr());
+        SAL_WARN( "jfw", e.message );
     }
 
     return errcode;
@@ -709,8 +703,7 @@ javaFrameworkError jfw_setSelectedJRE(JavaInfo const *pInfo)
     catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
-        fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_FAIL(e.message.getStr());
+        SAL_WARN( "jfw", e.message );
     }
     return errcode;
 }
@@ -742,8 +735,7 @@ javaFrameworkError jfw_setEnabled(bool bEnabled)
     catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
-        fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_FAIL(e.message.getStr());
+        SAL_WARN( "jfw", e.message );
     }
     return errcode;
 }
@@ -763,8 +755,7 @@ javaFrameworkError jfw_getEnabled(bool *pbEnabled)
     catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
-        fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_FAIL(e.message.getStr());
+        SAL_WARN( "jfw", e.message );
     }
     return errcode;
 }
@@ -785,8 +776,7 @@ javaFrameworkError jfw_setVMParameters(std::vector<OUString> const & arOptions)
     catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
-        fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_FAIL(e.message.getStr());
+        SAL_WARN( "jfw", e.message );
     }
 
     return errcode;
@@ -807,8 +797,7 @@ javaFrameworkError jfw_getVMParameters(std::vector<OUString> * parOptions)
     catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
-        fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_FAIL(e.message.getStr());
+        SAL_WARN( "jfw", e.message );
     }
     return errcode;
 }
@@ -828,8 +817,7 @@ javaFrameworkError jfw_setUserClassPath(OUString const & pCp)
     catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
-        fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_FAIL(e.message.getStr());
+        SAL_WARN( "jfw", e.message );
     }
     return errcode;
 }
@@ -849,8 +837,7 @@ javaFrameworkError jfw_getUserClassPath(OUString * ppCP)
     catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
-        fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_FAIL(e.message.getStr());
+        SAL_WARN( "jfw", e.message );
     }
     return errcode;
 }
@@ -871,8 +858,7 @@ javaFrameworkError jfw_addJRELocation(OUString const & sLocation)
     catch (const jfw::FrameworkException& e)
     {
         errcode = e.errorCode;
-        fprintf(stderr, "%s\n", e.message.getStr());
-        OSL_FAIL(e.message.getStr());
+        SAL_WARN( "jfw", e.message );
     }
 
     return errcode;
