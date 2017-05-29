@@ -271,9 +271,10 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
                 if (ePaper == PAPER_USER)
                 {
-                    bHalve = !aPaper.startsWith("half");
-                    if (bHalve)
+                    if (aPaper.startsWith("half"))
+                    {
                         aPaper = aPaper.copy(4);
+                    }
                     ePaper = PaperInfo::fromPSName(aPaper);
                 }
 
