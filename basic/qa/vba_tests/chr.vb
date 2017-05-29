@@ -23,8 +23,6 @@ Function verify_testCHR() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
     Dim str1, str2 As String
     testName = "Test CHR function"
     On Error GoTo errorHandler

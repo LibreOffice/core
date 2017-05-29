@@ -23,8 +23,6 @@ Function verify_testIsDate() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
     Dim date1, date2
     testName = "Test IsDate function"
     On Error GoTo errorHandler

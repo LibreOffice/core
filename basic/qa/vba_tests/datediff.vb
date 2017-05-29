@@ -23,8 +23,6 @@ Function verify_testDateDiff() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
     Dim date1
     Dim date2
     testName = "Test DateDiff function"

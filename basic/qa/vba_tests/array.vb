@@ -28,9 +28,6 @@ Function verify_testARRAY() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
-    Dim date1, date2 As Date   'variables for test
     Dim a, b, C As Variant
     a = Array(10, 20, 30)
     testName = "Test ARRAY function"

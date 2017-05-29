@@ -23,8 +23,6 @@ Function verify_testInStr() As String
     result = "Test Results" & Chr$(10) & "============" & Chr$(10)
 
     Dim testName As String
-    Dim TestDateTime As Date
-    Dim TestStr As String
     Dim date1, date2, SearchString, SearchChar
     testName = "Test InStr function"
     On Error GoTo errorHandler
