@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <xmloff/xmlmultiimagehelper.hxx>
 #include <rtl/ustring.hxx>
+#include "xmlmultiimagehelper.hxx"
 
 using namespace ::com::sun::star;
 

@@ -38,7 +38,7 @@
 #include "xexptran.hxx"
 #include <vector>
 #include <xmloff/shapeimport.hxx>
-#include <xmloff/xmlmultiimagehelper.hxx>
+#include "xmlmultiimagehelper.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 template<typename EnumT> struct SvXMLEnumMapEntry;
