@@ -5288,17 +5288,10 @@ find_msvc_x64_dlls()
             msvcdllpath="$VC_PRODUCT_DIR/redist/MSVC/$vcbuildnumber/x64/Microsoft.VC${VCVER}.CRT"
         fi
     fi
-    # http://blogs.msdn.com/b/vcblog/archive/2014/06/03/visual-studio-14-ctp.aspx
-    # Refactored C Runtime (CRT): This CTP contains the first preview of the substantially refactored CRT.
-    # msvcr140.dll no longer exists. It is replaced by a trio of DLLs: vcruntime140.dll, appcrt140.dll,
-    # and desktopcrt140.dll.
-
     if test "$VCVER" = 150; then
        msvcdlls="msvcp140.dll vcruntime140.dll"
-    elif test "$VCVER" = 140; then
-       msvcdlls="msvcp${VCVER}.dll vcruntime${VCVER}.dll"
     else
-       msvcdlls="msvcp${VCVER}.dll msvcr${VCVER}.dll"
+       msvcdlls="msvcp${VCVER}.dll vcruntime${VCVER}.dll"
     fi
     for dll in $msvcdlls; do
         if ! test -f "$msvcdllpath/$dll"; then
