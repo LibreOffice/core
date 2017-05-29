@@ -4312,8 +4312,7 @@ module com {
      };
      published constants RenderingCapabilities {
       const byte Delayed = 1;
-      /** @deprecated */ const byte Persistant = 2;
-      const byte Persistent = 2;
+      const byte Persistant = 2;
      };
      published interface XFlushableClipboard {
       interface ::com::sun::star::uno::XInterface;

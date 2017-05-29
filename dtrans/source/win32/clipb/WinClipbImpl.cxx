@@ -138,9 +138,7 @@ OUString SAL_CALL CWinClipbImpl::getName(  )
 
 sal_Int8 SAL_CALL CWinClipbImpl::getRenderingCapabilities(  )
 {
-    // Errant spelling "Persistant" deprecated in version 5.4
-    // see offapi/com/sun/star/datatransfer/clipboard/RenderingCapabilities.idl
-    return ( Delayed | Persistant | Persistent );
+    return ( Delayed | Persistant );
 }
 
 void SAL_CALL CWinClipbImpl::flushClipboard( )

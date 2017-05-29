@@ -1319,7 +1319,7 @@ void PPTWriter::ImplWriteOLE( )
     }
 }
 
-// write PersistentTable and UserEditAtom
+// write PersistantTable and UserEditAtom
 
 bool PPTWriter::ImplWriteAtomEnding()
 {
