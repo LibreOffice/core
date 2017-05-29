@@ -1772,6 +1772,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             pFrame->GetCursorOfst( pShellCursor->GetPoint(), rPt, &aTmpState );
         }
         --mnStartAction;
+        UISizeNotify(); // tdf#96256 update view size
 
         if( !pShellCursor->HasMark() )
             m_aCursorHeight = aTmpState.m_aRealHeight;
