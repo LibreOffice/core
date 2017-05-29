@@ -39,11 +39,8 @@
 #include <string.h>
 #include <utility>
 
-/*========================================================================
- *
- * store common internals.
- *
- *======================================================================*/
+/** @file store common internals.
+*/
 
 namespace store
 {
@@ -76,11 +73,6 @@ inline sal_uInt32 htonl (sal_uInt32 h) { return h; }
 inline sal_uInt32 ntohl (sal_uInt32 n) { return n; }
 #endif /* OSL_BIGENDIAN */
 
-/*========================================================================
- *
- * OStorePageGuard.
- *
- *======================================================================*/
 struct OStorePageGuard
 {
     /** Representation.
@@ -122,11 +114,6 @@ struct OStorePageGuard
     }
 };
 
-/*========================================================================
- *
- * OStorePageDescriptor.
- *
- *======================================================================*/
 #define STORE_PAGE_NULL ((sal_uInt32)(~0))
 
 struct OStorePageDescriptor
@@ -176,15 +163,8 @@ struct OStorePageDescriptor
         return ((m_nAddr == rhs.m_nAddr) &&
                 (m_nSize == rhs.m_nSize)    );
     }
-
-
 };
 
-/*========================================================================
- *
- * OStorePageKey.
- *
- *======================================================================*/
 struct OStorePageKey
 {
     /** Representation.
@@ -227,11 +207,6 @@ struct OStorePageKey
     }
 };
 
-/*========================================================================
- *
- * OStorePageLink.
- *
- *======================================================================*/
 struct OStorePageLink
 {
     /** Representation.
@@ -281,11 +256,6 @@ struct OStorePageLink
 
 };
 
-/*========================================================================
- *
- * PageData.
- *
- *======================================================================*/
 struct PageData
 {
     typedef OStorePageGuard      G;
@@ -443,11 +413,6 @@ struct PageData
 
 };
 
-/*========================================================================
- *
- * PageHolderObject.
- *
- *======================================================================*/
 template< class T >
 class PageHolderObject
 {
@@ -520,6 +485,7 @@ public:
         OSL_PRECOND(pImpl != nullptr, "store::PageHolder<T>::operator*(): Null pointer");
         return pImpl;
     }
+
     T const * operator->() const
     {
         T const * pImpl = dynamic_page_cast<T>(m_xPage.get());
@@ -533,6 +499,7 @@ public:
         OSL_PRECOND(pImpl != nullptr, "store::PageHolder<T>::operator*(): Null pointer");
         return (*pImpl);
     }
+
     T const & operator*() const
     {
         T const * pImpl = dynamic_page_cast<T>(m_xPage.get());
@@ -553,6 +520,7 @@ public:
 
         return store_E_None;
     }
+
     static storeError verify (std::shared_ptr<PageData> const & rxPage, sal_uInt32 nAddr)
     {
         PageData const * pHead = rxPage.get();
@@ -570,7 +538,6 @@ public:
         return pImpl->verify();
     }
 };
-
 
 class OStorePageBIOS;
 
@@ -662,12 +629,6 @@ inline sal_uInt32 OStorePageObject::location() const
 {
     return m_xPage->location();
 }
-
-/*========================================================================
- *
- * The End.
- *
- *======================================================================*/
 
 } // namespace store
 

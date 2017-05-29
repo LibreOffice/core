@@ -33,7 +33,6 @@ extern "C" {
  */
 typedef void* storeHandle;
 
-
 /** Acquire a Handle.
     @param  Handle [in] the Handle.
     @return store_E_None upon success
@@ -41,7 +40,6 @@ typedef void* storeHandle;
 STORE_DLLPUBLIC storeError SAL_CALL store_acquireHandle (
     storeHandle Handle
 ) SAL_THROW_EXTERN_C();
-
 
 /** Release a Handle.
     @param  Handle [in] the Handle.
@@ -52,12 +50,9 @@ STORE_DLLPUBLIC storeError SAL_CALL store_releaseHandle (
     storeHandle Handle
 ) SAL_THROW_EXTERN_C();
 
-
-
 /** File Handle opaque type.
  */
 typedef void* storeFileHandle;
-
 
 /** Open a temporary file in memory.
     @param  nPageSize [in] the creation page size,
@@ -69,7 +64,6 @@ STORE_DLLPUBLIC storeError SAL_CALL store_createMemoryFile (
     sal_uInt16       nPageSize,
     storeFileHandle *phFile
 ) SAL_THROW_EXTERN_C();
-
 
 /** Open a file.
     @param  pFilename [in] the filename as URL or system path.
@@ -90,7 +84,6 @@ STORE_DLLPUBLIC storeError SAL_CALL store_openFile (
     storeFileHandle *phFile
 ) SAL_THROW_EXTERN_C();
 
-
 /** Close a file.
     @param  hFile [in] the File Handle.
     @return store_E_None upon     success,
@@ -100,7 +93,6 @@ STORE_DLLPUBLIC storeError SAL_CALL store_closeFile (
     storeFileHandle hFile
 ) SAL_THROW_EXTERN_C();
 
-
 /** Flush a file.
     @param  hFile [in] the File Handle.
     @return store_E_None upon success
@@ -109,11 +101,9 @@ STORE_DLLPUBLIC storeError SAL_CALL store_flushFile (
     storeFileHandle hFile
 ) SAL_THROW_EXTERN_C();
 
-
 /** Directory Handle opaque type.
  */
 typedef void* storeDirectoryHandle;
-
 
 /** Open a directory.
     @see store_openFile()
@@ -133,7 +123,6 @@ STORE_DLLPUBLIC storeError SAL_CALL store_openDirectory (
     storeDirectoryHandle *phDirectory
 ) SAL_THROW_EXTERN_C();
 
-
 /** Find first directory entry.
     @param  hDirectory [in] the Directory Handle.
     @param  pFindData [out] the Find Data structure.
@@ -144,7 +133,6 @@ STORE_DLLPUBLIC storeError SAL_CALL store_findFirst (
     storeDirectoryHandle  hDirectory,
     storeFindData        *pFindData
 ) SAL_THROW_EXTERN_C();
-
 
 /** Find next directory entry.
     @param  hDirectory [in] the Directory Handle.
@@ -157,12 +145,9 @@ STORE_DLLPUBLIC storeError SAL_CALL store_findNext (
     storeFindData        *pFindData
 ) SAL_THROW_EXTERN_C();
 
-
-
 /** Stream Handle opaque type.
  */
 typedef void* storeStreamHandle;
-
 
 /** Open a stream.
     @see store_openFile()
@@ -182,7 +167,6 @@ STORE_DLLPUBLIC storeError SAL_CALL store_openStream (
     storeStreamHandle *phStrm
 ) SAL_THROW_EXTERN_C();
 
-
 /** Read from a stream.
     @param  hStrm [in] the Stream Handle.
     @param  nOffset [in] the offset of the first byte to read.
@@ -198,7 +182,6 @@ STORE_DLLPUBLIC storeError SAL_CALL store_readStream (
     sal_uInt32         nBytes,
     sal_uInt32        *pnDone
 ) SAL_THROW_EXTERN_C();
-
 
 /** Write to a stream.
     @param  hStrm [in] the Stream Handle.
@@ -216,8 +199,6 @@ STORE_DLLPUBLIC storeError SAL_CALL store_writeStream (
     sal_uInt32        *pnDone
 ) SAL_THROW_EXTERN_C();
 
-
-
 /** Remove a file entry.
     @param  hFile [in] the File Handle
     @param  pPath [in] the entry path
@@ -229,12 +210,6 @@ STORE_DLLPUBLIC storeError SAL_CALL store_remove (
     rtl_uString    *pPath,
     rtl_uString    *pName
 ) SAL_THROW_EXTERN_C();
-
-/*========================================================================
- *
- * The End.
- *
- *======================================================================*/
 
 #ifdef __cplusplus
 }

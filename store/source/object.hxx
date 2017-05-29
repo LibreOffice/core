@@ -27,11 +27,6 @@
 namespace store
 {
 
-/*========================================================================
- *
- * OStoreObject interface.
- *
- *======================================================================*/
 class OStoreObject : public virtual salhelper::SimpleReferenceObject
 {
 public:
@@ -61,12 +56,6 @@ private:
 template<class store_handle_type>
 store_handle_type * SAL_CALL query (
     OStoreObject * pHandle, store_handle_type *);
-
-/*========================================================================
- *
- * The End.
- *
- *======================================================================*/
 
 } // namespace store
 
