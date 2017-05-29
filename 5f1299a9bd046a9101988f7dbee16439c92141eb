@@ -36,6 +36,29 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_d4aa00d4",
+        "filename": "editeng/source/xml/xmltxtexp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-29T16:11:08Z",
+      "side": 1,
+      "message": "Just a nitpick: for readability blanks are helpful, so\n\n SvXMLExportFlags::OASIS | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::CONTENT\n\nAlso, overly long lines should be avoided (e.g. \u003e120 characters), so best move those arguments to the next line (indented one level further).",
+      "range": {
+        "startLine": 311,
+        "startChar": 118,
+        "endLine": 311,
+        "endChar": 196
+      },
+      "revId": "5f1299a9bd046a9101988f7dbee16439c92141eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_f9db75eb",
         "filename": "editeng/source/xml/xmltxtexp.cxx",
         "patchSetId": 3
