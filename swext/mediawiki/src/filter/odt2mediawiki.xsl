@@ -1017,6 +1017,8 @@
 			<text>[[</text>
 			<call-template name="mk-image-name">
 				<with-param name="image" select="$image"/>
+				<with-param name="frame" select="."/>
+				<with-param name="extension" select="'.png'"/>
 			</call-template>
 			<text>|thumb</text>
 		</variable>
@@ -1038,6 +1040,7 @@
 			<text>[[</text>
 			<call-template name="mk-image-name">
 				<with-param name="image" select="."/>
+				<with-param name="frame" select="parent::node()"/>
 			</call-template>
 		</variable>
 
@@ -1155,7 +1158,9 @@
 
 	<template name="mk-image-name">
 		<param name="image"/>
-		
+		<param name="frame"/>
+		<param name="extension"/>
+
  		<variable name="base-name">
  			<call-template name="mk-base-name">
  				<with-param name="href" select="$image/@xlink:href"/>
@@ -1166,6 +1171,8 @@
 			<value-of select="'Image:'"/>
 		</if>
 		<value-of select="$base-name"/>
+		<value-of select="$frame/@draw:name"/>
+		<value-of select="'.png'"/>
 	</template>	
  	
  	<template name="mk-base-name">
