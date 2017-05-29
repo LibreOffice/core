@@ -72,6 +72,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/filter/pdfdocument.hxx>
+#include <comphelper/hash.hxx>
 
 #include "fontsubset.hxx"
 #include "outdev.h"
@@ -5405,15 +5406,6 @@ char *PDFSigningPKCS7PasswordCallback(PK11SlotInfo * /*slot*/, PRBool /*retry*/,
     return PL_strdup(static_cast<char *>(arg));
 }
 
-class HashContextScope {
-    HASHContext *mpPtr;
-public:
-    explicit HashContextScope(HASHContext *pPtr) : mpPtr(pPtr) {}
-    ~HashContextScope() { clear(); }
-    void clear() { if (mpPtr) { HASH_Destroy(mpPtr); } mpPtr = nullptr; }
-    HASHContext *get() { return mpPtr; }
-};
-
 // ASN.1 used in the (much simpler) time stamp request. From RFC3161
 // and other sources.
 
@@ -6427,29 +6419,24 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         return false;
     }
 
-    HashContextScope hc(HASH_Create(HASH_AlgSHA256));
-    if (!hc.get())
+    std::vector<unsigned char> aHashResult;
     {
-        SAL_WARN("vcl.pdfwriter", "HASH_Create failed");
-        return false;
+        comphelper::Hash aHash(comphelper::HashType::SHA256);
+
+        aHash.update(static_cast<const unsigned char*>(rContext.m_pByteRange1), rContext.m_nByteRange1);
+
+        aHash.update(static_cast<const unsigned char*>(rContext.m_pByteRange2), rContext.m_nByteRange2);
+
+        aHashResult = aHash.finalize();
     }
-
-    HASH_Begin(hc.get());
-
-    HASH_Update(hc.get(), static_cast<const unsigned char*>(rContext.m_pByteRange1), rContext.m_nByteRange1);
-
-    HASH_Update(hc.get(), static_cast<const unsigned char*>(rContext.m_pByteRange2), rContext.m_nByteRange2);
-
     SECItem digest;
-    unsigned char hash[SHA256_LENGTH];
-    digest.data = hash;
-    HASH_End(hc.get(), digest.data, &digest.len, SHA256_LENGTH);
-    hc.clear();
+    digest.data = aHashResult.data();
+    digest.len = aHashResult.size();
 
 #ifdef DBG_UTIL
     {
         FILE *out = fopen("PDFWRITER.hash.data", "wb");
-        fwrite(hash, SHA256_LENGTH, 1, out);
+        fwrite(aHashResult.data(), SHA256_LENGTH, 1, out);
         fclose(out);
     }
 #endif
@@ -6514,26 +6501,16 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         }
 #endif
 
-        HashContextScope ts_hc(HASH_Create(HASH_AlgSHA256));
-        if (!ts_hc.get())
-        {
-            SAL_WARN("vcl.pdfwriter", "HASH_Create failed");
-            return false;
-        }
-
-        HASH_Begin(ts_hc.get());
-        HASH_Update(ts_hc.get(), ts_cms_signer->encDigest.data, ts_cms_signer->encDigest.len);
+        std::vector<unsigned char> aTsHashResult = comphelper::Hash::calculateHash(ts_cms_signer->encDigest.data, ts_cms_signer->encDigest.len, comphelper::HashType::SHA256);
         SECItem ts_digest;
-        unsigned char ts_hash[SHA256_LENGTH];
         ts_digest.type = siBuffer;
-        ts_digest.data = ts_hash;
-        HASH_End(ts_hc.get(), ts_digest.data, &ts_digest.len, SHA256_LENGTH);
-        ts_hc.clear();
+        ts_digest.data = aTsHashResult.data();
+        ts_digest.len = aTsHashResult.size();
 
 #ifdef DBG_UTIL
         {
             FILE *out = fopen("PDFWRITER.ts_hash.data", "wb");
-            fwrite(ts_hash, SHA256_LENGTH, 1, out);
+            fwrite(aTsHashResult.data(), SHA256_LENGTH, 1, out);
             fclose(out);
         }
 #endif
@@ -6762,18 +6739,11 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     SECOID_SetAlgorithmID(nullptr, &aCertID.hashAlgorithm, SEC_OID_SHA256, nullptr);
     // Write ESSCertIDv2.certHash.
     SECItem aCertHashItem;
-    unsigned char aCertHash[SHA256_LENGTH];
-    HashContextScope aCertHashContext(HASH_Create(HASH_AlgSHA256));
-    if (!aCertHashContext.get())
-    {
-        SAL_WARN("vcl.pdfwriter", "HASH_Create() failed");
-        return false;
-    }
-    HASH_Begin(aCertHashContext.get());
-    HASH_Update(aCertHashContext.get(), reinterpret_cast<const unsigned char *>(rContext.m_pDerEncoded), rContext.m_nDerEncoded);
+    auto pDerEncoded = reinterpret_cast<const unsigned char *>(rContext.m_pDerEncoded);
+    std::vector<unsigned char> aCertHashResult = comphelper::Hash::calculateHash(pDerEncoded, rContext.m_nDerEncoded, comphelper::HashType::SHA256);
     aCertHashItem.type = siBuffer;
-    aCertHashItem.data = aCertHash;
-    HASH_End(aCertHashContext.get(), aCertHashItem.data, &aCertHashItem.len, SHA256_LENGTH);
+    aCertHashItem.data = aCertHashResult.data();
+    aCertHashItem.len = aCertHashResult.size();
     aCertID.certHash = aCertHashItem;
     // Write ESSCertIDv2.issuerSerial.
     IssuerSerial aSerial;
