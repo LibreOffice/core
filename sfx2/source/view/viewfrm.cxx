@@ -1138,42 +1138,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 rBind.Invalidate( SID_RELOAD );
                 rBind.Invalidate( SID_EDITDOC );
 
-                SignatureState nSignatureState = GetObjectShell()->GetDocumentSignatureState();
-                InfoBarType aInfoBarType(InfoBarType::Info);
-                OUString sMessage;
-
-                switch (nSignatureState)
-                {
-                case SignatureState::BROKEN:
-                    sMessage = SfxResId(STR_SIGNATURE_BROKEN);
-                    aInfoBarType = InfoBarType::Danger;
-                    break;
-                case SignatureState::NOTVALIDATED:
-                    sMessage = SfxResId(STR_SIGNATURE_NOTVALIDATED);
-                    aInfoBarType = InfoBarType::Warning;
-                    break;
-                case SignatureState::PARTIAL_OK:
-                    sMessage = SfxResId(STR_SIGNATURE_PARTIAL_OK);
-                    aInfoBarType = InfoBarType::Warning;
-                    break;
-                case SignatureState::OK:
-                    sMessage = SfxResId(STR_SIGNATURE_OK);
-                    aInfoBarType = InfoBarType::Info;
-                    break;
-                default:
-                    break;
-                }
-
-                if (!sMessage.isEmpty())
-                {
-                    auto pInfoBar = AppendInfoBar("signature", sMessage, aInfoBarType);
-                    VclPtrInstance<PushButton> xBtn(&GetWindow());
-                    xBtn->SetText(SfxResId(STR_SIGNATURE_SHOW));
-                    xBtn->SetSizePixel(xBtn->GetOptimalSize());
-                    xBtn->SetClickHdl(LINK(this, SfxViewFrame, SignDocumentHandler));
-                    pInfoBar->addButton(xBtn);
-                }
-
                 const SfxViewShell *pVSh;
                 const SfxShell *pFSh;
                 if ( m_xObjSh->IsOriginallyReadOnlyMedium() &&
@@ -3052,6 +3016,20 @@ void SfxViewFrame::RemoveInfoBar( const OUString& sId )
         pInfoBarContainer->removeInfoBar(pInfoBar);
         ShowChildWindow(nId);
     }
+}
+
+bool SfxViewFrame::HasInfoBarWithID( const OUString& sId )
+{
+    const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
+
+    SfxChildWindow* pChild = GetChildWindow(nId);
+    if (pChild)
+    {
+        SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
+        return pInfoBarContainer->hasInfoBarWithID(sId);
+    }
+
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
