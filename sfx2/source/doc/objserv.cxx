@@ -64,6 +64,7 @@
 #include <unotools/saveopt.hxx>
 #include <svtools/asynclink.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <tools/link.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/signaturestate.hxx>
@@ -90,6 +91,7 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/checkin.hxx>
+#include <sfx2/infobar.hxx>
 
 #include "app.hrc"
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
@@ -1033,6 +1035,60 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             }
             case SID_SIGNATURE:
             {
+                SfxViewFrame *pFrame = SfxViewFrame::Current();
+                if ( pFrame )
+                {
+                    SignatureState eState = GetDocumentSignatureState();
+                    InfoBarType aInfoBarType(InfoBarType::Info);
+                    OUString sMessage("");
+
+                    switch (eState)
+                    {
+                    case SignatureState::BROKEN:
+                        sMessage = SfxResId(STR_SIGNATURE_BROKEN);
+                        aInfoBarType = InfoBarType::Danger;
+                        break;
+                    case SignatureState::NOTVALIDATED:
+                        sMessage = SfxResId(STR_SIGNATURE_NOTVALIDATED);
+                        aInfoBarType = InfoBarType::Warning;
+                        break;
+                    case SignatureState::PARTIAL_OK:
+                        sMessage = SfxResId(STR_SIGNATURE_PARTIAL_OK);
+                        aInfoBarType = InfoBarType::Warning;
+                        break;
+                    case SignatureState::OK:
+                        sMessage = SfxResId(STR_SIGNATURE_OK);
+                        aInfoBarType = InfoBarType::Info;
+                        break;
+                    default:
+                        break;
+                    }
+
+                    // new info bar
+                    if ( !pFrame->HasInfoBarWithID("signature") )
+                    {
+
+                        if (!sMessage.isEmpty())
+                        {
+                            auto pInfoBar = pFrame->AppendInfoBar("signature", sMessage, aInfoBarType);
+                            if (pInfoBar == nullptr)
+                                return;
+                            VclPtrInstance<PushButton> xBtn(&(pFrame->GetWindow()));
+                            xBtn->SetText(SfxResId(STR_SIGNATURE_SHOW));
+                            xBtn->SetSizePixel(xBtn->GetOptimalSize());
+                            xBtn->SetClickHdl(LINK(this, SfxObjectShell, SignDocumentHandler));
+                            pInfoBar->addButton(xBtn);
+                        }
+                    }
+                    else // signature info bar exists already
+                    {
+                        if (eState == SignatureState::NOSIGNATURES )
+                             pFrame->RemoveInfoBar("signature");
+                        //FIXME: Update existing info bar
+                    }
+
+                }
+
                 rSet.Put( SfxUInt16Item( SID_SIGNATURE, static_cast<sal_uInt16>(GetDocumentSignatureState()) ) );
                 break;
             }
@@ -1049,6 +1105,10 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
     }
 }
 
+IMPL_LINK_NOARG(SfxObjectShell, SignDocumentHandler, Button*, void)
+{
+    GetDispatcher()->Execute(SID_SIGNATURE);
+}
 
 void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
 {
