@@ -68,7 +68,7 @@ void XclExpTablesImpl8::SaveXml( XclExpXmlStream& rStrm )
 {
 
     sax_fastparser::FSHelperPtr& pWorksheetStrm = rStrm.GetCurrentStream();
-    pWorksheetStrm->startElement( XML_tableParts, FSEND);
+    pWorksheetStrm->startElement( XML_tableParts);
     for (auto const& it : maTables)
     {
         OUString aRelId;
@@ -81,8 +81,7 @@ void XclExpTablesImpl8::SaveXml( XclExpXmlStream& rStrm )
                 &aRelId);
 
         pWorksheetStrm->singleElement( XML_tablePart,
-                FSNS(XML_r, XML_id), XclXmlUtils::ToOString(aRelId).getStr(),
-                FSEND);
+                FSNS(XML_r, XML_id), XclXmlUtils::ToOString(aRelId));
 
         rStrm.PushStream( pTableStrm);
         SaveTableXml( rStrm, it);
@@ -181,14 +180,14 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
     rData.GetArea( aRange);
     sax_fastparser::FSHelperPtr& pTableStrm = rStrm.GetCurrentStream();
     pTableStrm->startElement( XML_table,
-        XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
-        XML_id, OString::number( rEntry.mnTableId).getStr(),
-        XML_name, XclXmlUtils::ToOString( rData.GetName()).getStr(),
-        XML_displayName, XclXmlUtils::ToOString( rData.GetName()).getStr(),
+        XML_xmlns, XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))),
+        XML_id, OString::number( rEntry.mnTableId),
+        XML_name, XclXmlUtils::ToOString( rData.GetName()),
+        XML_displayName, XclXmlUtils::ToOString( rData.GetName()),
         XML_ref, XclXmlUtils::ToOString(aRange),
         XML_headerRowCount, BS(rData.HasHeader()),
         XML_totalsRowCount, BS(rData.HasTotals()),
-        XML_totalsRowShown, BS(rData.HasTotals()),  // we don't support that but if there are totals they are shown
+        XML_totalsRowShown, BS(rData.HasTotals())  // we don't support that but if there are totals they are shown
         // OOXTODO: XML_comment, ...,
         // OOXTODO: XML_connectionId, ...,
         // OOXTODO: XML_dataCellStyle, ...,
@@ -204,7 +203,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
         // OOXTODO: XML_totalsRowBorderDxfId, ...,
         // OOXTODO: XML_totalsRowCellStyle, ...,
         // OOXTODO: XML_totalsRowDxfId, ...,
-        FSEND);
+        );
 
     if (rData.HasAutoFilter())
     {
@@ -224,8 +223,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
     if (!rColNames.empty())
     {
         pTableStrm->startElement( XML_tableColumns,
-                XML_count, OString::number( aRange.aEnd.Col() - aRange.aStart.Col() + 1).getStr(),
-                FSEND);
+                XML_count, OString::number( aRange.aEnd.Col() - aRange.aStart.Col() + 1));
 
         for (size_t i=0, n=rColNames.size(); i < n; ++i)
         {
@@ -237,7 +235,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
 
             pTableStrm->singleElement( XML_tableColumn,
                     XML_id, OString::number(i+1).getStr(),
-                    XML_name, OUStringToOString( rColNames[i], RTL_TEXTENCODING_UTF8).getStr(),
+                    XML_name, OUStringToOString( rColNames[i], RTL_TEXTENCODING_UTF8)
                     // OOXTODO: XML_dataCellStyle, ...,
                     // OOXTODO: XML_dataDxfId, ...,
                     // OOXTODO: XML_headerRowCellStyle, ...,
@@ -248,7 +246,7 @@ void XclExpTables::SaveTableXml( XclExpXmlStream& rStrm, const Entry& rEntry )
                     // OOXTODO: XML_totalsRowFunction, ...,
                     // OOXTODO: XML_totalsRowLabel, ...,
                     // OOXTODO: XML_uniqueName, ...,
-                    FSEND);
+                    );
         }
 
         pTableStrm->endElement( XML_tableColumns);

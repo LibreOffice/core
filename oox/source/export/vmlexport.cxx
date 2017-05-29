@@ -392,8 +392,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                     }
                     if ( pWrapType )
                         m_pSerializer->singleElementNS( XML_w10, XML_wrap,
-                                XML_type, pWrapType,
-                                FSEND );
+                                XML_type, pWrapType );
                 }
                 bAlreadyWritten[ ESCHER_Prop_WrapText ] = true;
                 break;
@@ -796,8 +795,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         aStream.Seek(0);
 
                         m_pSerializer->singleElementNS( XML_v, XML_path,
-                                XML_textpathok, "t",
-                                FSEND );
+                                XML_textpathok, "t" );
 
                         sax_fastparser::FastAttributeList* pAttrList = FastSerializerHelper::createAttrList();
                         pAttrList->add(XML_on, "t");
@@ -1163,7 +1161,7 @@ sal_Int32 VMLExport::StartShape()
         if( pParaObj )
         {
             // this is reached only in case some text is attached to the shape
-            m_pSerializer->startElementNS(XML_v, XML_textbox, FSEND);
+            m_pSerializer->startElementNS(XML_v, XML_textbox);
             m_pTextExport->WriteOutliner(*pParaObj);
             m_pSerializer->endElementNS(XML_v, XML_textbox);
             if( bOwnParaObj )

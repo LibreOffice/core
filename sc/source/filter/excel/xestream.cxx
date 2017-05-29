@@ -836,7 +836,7 @@ const char* XclXmlUtils::ToPsz10( bool b )
 
 sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int32 nValue )
 {
-    pStream->startElement( nElement, FSEND );
+    pStream->startElement( nElement );
     pStream->write( nValue );
     pStream->endElement( nElement );
 
@@ -845,7 +845,7 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperP
 
 sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int64 nValue )
 {
-    pStream->startElement( nElement, FSEND );
+    pStream->startElement( nElement );
     pStream->write( nValue );
     pStream->endElement( nElement );
 
@@ -854,7 +854,7 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperP
 
 sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, const char* sValue )
 {
-    pStream->startElement( nElement, FSEND );
+    pStream->startElement( nElement );
     pStream->write( sValue );
     pStream->endElement( nElement );
 
@@ -866,8 +866,7 @@ static void lcl_WriteValue( sax_fastparser::FSHelperPtr& rStream, sal_Int32 nEle
     if( !pValue )
         return;
     rStream->singleElement( nElement,
-            XML_val, pValue,
-            FSEND );
+            XML_val, pValue );
 }
 
 static const char* lcl_GetUnderlineStyle( FontLineStyle eUnderline, bool& bHaveUnderline )
@@ -916,10 +915,10 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
         pStream->singleElement( XML_color,
                 // OOXTODO: XML_auto,       bool
                 // OOXTODO: XML_indexed,    uint
-                XML_rgb,    XclXmlUtils::ToOString( rFontData.maColor ).getStr(),
+                XML_rgb,    XclXmlUtils::ToOString( rFontData.maColor )
                 // OOXTODO: XML_theme,      index into <clrScheme/>
                 // OOXTODO: XML_tint,       double
-                FSEND );
+                 );
     lcl_WriteValue( pStream, nFontId,        XclXmlUtils::ToOString( rFontData.maName ).getStr() );
     lcl_WriteValue( pStream, XML_family,     OString::number(  rFontData.mnFamily ).getStr() );
     lcl_WriteValue( pStream, XML_charset,    rFontData.mnCharSet != 0 ? OString::number(  rFontData.mnCharSet ).getStr() : nullptr );

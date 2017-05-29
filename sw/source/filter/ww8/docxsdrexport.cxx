@@ -280,7 +280,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
 {
     m_pImpl->m_bDrawingOpen = true;
     m_pImpl->m_bParagraphHasDrawing = true;
-    m_pImpl->m_pSerializer->startElementNS(XML_w, XML_drawing, FSEND);
+    m_pImpl->m_pSerializer->startElementNS(XML_w, XML_drawing);
 
     const SvxLRSpaceItem aLRSpaceItem = pFrameFormat->GetLRSpace(false);
     const SvxULSpaceItem aULSpaceItem = pFrameFormat->GetULSpace(false);
@@ -386,7 +386,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         }
         sax_fastparser::XFastAttributeListRef xAttrList(attrList);
         m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_anchor, xAttrList);
-        m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND);   // required, unused
+        m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_simplePos, XML_x, "0", XML_y, "0");   // required, unused
         const char* relativeFromH;
         const char* relativeFromV;
         const char* alignH = nullptr;
@@ -475,7 +475,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         default:
             break;
         }
-        m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_positionH, XML_relativeFrom, relativeFromH, FSEND);
+        m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_positionH, XML_relativeFrom, relativeFromH);
         /**
         * Sizes of integral types
         * climits header defines constants with the limits of integral types for the specific system and compiler implementation used.
@@ -485,13 +485,13 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         const sal_Int64 MIN_INTEGER_VALUE = SAL_MIN_INT32;
         if (alignH != nullptr)
         {
-            m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_align, FSEND);
+            m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_align);
             m_pImpl->m_pSerializer->write(alignH);
             m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_align);
         }
         else
         {
-            m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_posOffset, FSEND);
+            m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_posOffset);
             sal_Int64 nPosXEMU = TwipsToEMU(aPos.X);
 
             /* Absolute Position Offset Value is of type Int. Hence it should not be greater than
@@ -517,7 +517,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_posOffset);
         }
         m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_positionH);
-        m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_positionV, XML_relativeFrom, relativeFromV, FSEND);
+        m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_positionV, XML_relativeFrom, relativeFromV);
 
         sal_Int64 nPosYEMU = TwipsToEMU(aPos.Y);
 
@@ -535,13 +535,13 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
 
         if (alignV != nullptr)
         {
-            m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_align, FSEND);
+            m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_align);
             m_pImpl->m_pSerializer->write(alignV);
             m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_align);
         }
         else
         {
-            m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_posOffset, FSEND);
+            m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_posOffset);
             if (nPosYEMU > MAX_INTEGER_VALUE)
             {
                 nPosYEMU = MAX_INTEGER_VALUE;
@@ -630,16 +630,14 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
 
     m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_extent,
                                             XML_cx, aWidth,
-                                            XML_cy, aHeight,
-                                            FSEND);
+                                            XML_cy, aHeight);
 
     // effectExtent, extent including the effect (shadow only for now)
     m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_effectExtent,
                                             XML_l, OString::number(nLeftExt),
                                             XML_t, OString::number(nTopExt),
                                             XML_r, OString::number(nRightExt),
-                                            XML_b, OString::number(nBottomExt),
-                                            FSEND);
+                                            XML_b, OString::number(nBottomExt));
 
     // See if we know the exact wrap type from grab-bag.
     sal_Int32 nWrapToken = 0;
@@ -660,14 +658,13 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                 SAL_WARN("sw.ww8", "DocxSdrExport::startDMLAnchorInline: unexpected EG_WrapType value");
 
             m_pImpl->m_pSerializer->startElementNS(XML_wp, nWrapToken,
-                                                   XML_wrapText, "bothSides", FSEND);
+                                                   XML_wrapText, "bothSides");
 
             it = aGrabBag.find("CT_WrapPath");
             if (it != aGrabBag.end())
             {
                 m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_wrapPolygon,
-                                                       XML_edited, "0",
-                                                       FSEND);
+                                                       XML_edited, "0");
                 drawing::PointSequenceSequence aSeqSeq = it->second.get< drawing::PointSequenceSequence >();
                 std::vector<awt::Point> aPoints(comphelper::sequenceToContainer<std::vector<awt::Point> >(aSeqSeq[0]));
                 for (auto i = aPoints.begin(); i != aPoints.end(); ++i)
@@ -675,8 +672,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
                     awt::Point& rPoint = *i;
                     m_pImpl->m_pSerializer->singleElementNS(XML_wp, (i == aPoints.begin() ? XML_start : XML_lineTo),
                                                             XML_x, OString::number(rPoint.X),
-                                                            XML_y, OString::number(rPoint.Y),
-                                                            FSEND);
+                                                            XML_y, OString::number(rPoint.Y));
                 }
                 m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_wrapPolygon);
             }
@@ -695,17 +691,15 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
             {
                 nWrapToken = XML_wrapTight;
                 m_pImpl->m_pSerializer->startElementNS(XML_wp, nWrapToken,
-                                                       XML_wrapText, "bothSides", FSEND);
+                                                       XML_wrapText, "bothSides");
 
                 m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_wrapPolygon,
-                                                       XML_edited, "0",
-                                                       FSEND);
+                                                       XML_edited, "0");
                 tools::Polygon aPoly = sw::util::CorrectWordWrapPolygonForExport(*pPolyPoly, pNd);
                 for (sal_uInt16 i = 0; i < aPoly.GetSize(); ++i)
                     m_pImpl->m_pSerializer->singleElementNS(XML_wp, (i == 0 ? XML_start : XML_lineTo),
                                                             XML_x, OString::number(aPoly[i].X()),
-                                                            XML_y, OString::number(aPoly[i].Y()),
-                                                            FSEND);
+                                                            XML_y, OString::number(aPoly[i].Y()));
                 m_pImpl->m_pSerializer->endElementNS(XML_wp, XML_wrapPolygon);
 
                 m_pImpl->m_pSerializer->endElementNS(XML_wp, nWrapToken);
@@ -719,19 +713,19 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         switch (pFrameFormat->GetSurround().GetValue())
         {
         case css::text::WrapTextMode_NONE:
-            m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_wrapTopAndBottom, FSEND);
+            m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_wrapTopAndBottom);
             break;
         case css::text::WrapTextMode_THROUGH:
-            m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_wrapNone, FSEND);
+            m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_wrapNone);
             break;
         case css::text::WrapTextMode_PARALLEL:
             m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_wrapSquare,
-                                                    XML_wrapText, "bothSides", FSEND);
+                                                    XML_wrapText, "bothSides");
             break;
         case css::text::WrapTextMode_DYNAMIC:
         default:
             m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_wrapSquare,
-                                                    XML_wrapText, "largest", FSEND);
+                                                    XML_wrapText, "largest");
             break;
         }
     }
@@ -769,7 +763,7 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
         }
     }
 
-    m_pImpl->m_pSerializer->startElementNS(XML_w, XML_pict, FSEND);
+    m_pImpl->m_pSerializer->startElementNS(XML_w, XML_pict);
     m_pImpl->m_pDrawingML->SetFS(m_pImpl->m_pSerializer);
     // See WinwordAnchoring::SetAnchoring(), these are not part of the SdrObject, have to be passed around manually.
 
@@ -835,17 +829,14 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
     else if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
         pNamespace = "http://schemas.openxmlformats.org/drawingml/2006/picture";
     pFS->startElementNS(XML_a, XML_graphic,
-                        FSNS(XML_xmlns, XML_a), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(),
-                        FSEND);
+                        FSNS(XML_xmlns, XML_a), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8));
     pFS->startElementNS(XML_a, XML_graphicData,
-                        XML_uri, pNamespace,
-                        FSEND);
+                        XML_uri, pNamespace);
 
     bool bLockedCanvas = lcl_isLockedCanvas(xShape);
     if (bLockedCanvas)
         pFS->startElementNS(XML_lc, XML_lockedCanvas,
-                            FSNS(XML_xmlns, XML_lc), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(dmlLockedCanvas)), RTL_TEXTENCODING_UTF8).getStr(),
-                            FSEND);
+                            FSNS(XML_xmlns, XML_lc), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(dmlLockedCanvas)), RTL_TEXTENCODING_UTF8));
 
     m_pImpl->m_rExport.OutputDML(xShape);
 
@@ -859,9 +850,8 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
     {
         // At the moment drawinglayer objects are always relative from page.
         pFS->startElementNS(XML_wp14, XML_sizeRelH,
-                            XML_relativeFrom, (pSdrObject->GetRelativeWidthRelation() == text::RelOrientation::FRAME ? "margin" : "page"),
-                            FSEND);
-        pFS->startElementNS(XML_wp14, XML_pctWidth, FSEND);
+                            XML_relativeFrom, (pSdrObject->GetRelativeWidthRelation() == text::RelOrientation::FRAME ? "margin" : "page"));
+        pFS->startElementNS(XML_wp14, XML_pctWidth);
         pFS->writeEscaped(OUString::number(*pSdrObject->GetRelativeWidth() * 100 * oox::drawingml::PER_PERCENT));
         pFS->endElementNS(XML_wp14, XML_pctWidth);
         pFS->endElementNS(XML_wp14, XML_sizeRelH);
@@ -869,9 +859,8 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrameFo
     if (pSdrObject->GetRelativeHeight())
     {
         pFS->startElementNS(XML_wp14, XML_sizeRelV,
-                            XML_relativeFrom, (pSdrObject->GetRelativeHeightRelation() == text::RelOrientation::FRAME ? "margin" : "page"),
-                            FSEND);
-        pFS->startElementNS(XML_wp14, XML_pctHeight, FSEND);
+                            XML_relativeFrom, (pSdrObject->GetRelativeHeightRelation() == text::RelOrientation::FRAME ? "margin" : "page"));
+        pFS->startElementNS(XML_wp14, XML_pctHeight);
         pFS->writeEscaped(OUString::number(*pSdrObject->GetRelativeHeight() * 100 * oox::drawingml::PER_PERCENT));
         pFS->endElementNS(XML_wp14, XML_pctHeight);
         pFS->endElementNS(XML_wp14, XML_sizeRelV);
@@ -913,8 +902,7 @@ void DocxSdrExport::Impl::textFrameShadow(const SwFrameFormat& rFrameFormat)
     m_pSerializer->singleElementNS(XML_v, XML_shadow,
                                    XML_on, "t",
                                    XML_color, "#" + aShadowColor,
-                                   XML_offset, aOffset,
-                                   FSEND);
+                                   XML_offset, aOffset);
 }
 
 bool DocxSdrExport::Impl::isSupportedDMLShape(const uno::Reference<drawing::XShape>& xShape)
@@ -948,16 +936,15 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrame
     // A common service created in util to check for VML shapes which are allowed to have textbox in content
     if ((msfilter::util::HasTextBoxContent(eShapeType)) && Impl::isSupportedDMLShape(xShape) && !bDMLAndVMLDrawingOpen)
     {
-        m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
+        m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_AlternateContent);
 
         auto pObjGroup = dynamic_cast<const SdrObjGroup*>(sdrObj);
         m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_Choice,
-                                               XML_Requires, (pObjGroup ? "wpg" : "wps"),
-                                               FSEND);
+                                               XML_Requires, (pObjGroup ? "wpg" : "wps"));
         writeDMLDrawing(sdrObj, &rFrameFormat, nAnchorId);
         m_pImpl->m_pSerializer->endElementNS(XML_mc, XML_Choice);
 
-        m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
+        m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_Fallback);
         writeVMLDrawing(sdrObj, rFrameFormat, rNdTopLeft);
         m_pImpl->m_pSerializer->endElementNS(XML_mc, XML_Fallback);
 
@@ -1014,17 +1001,17 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrameFormat& rFrameFormat)
         }
         OString aShadowDir(OString::number(nShadowDir));
 
-        m_pImpl->m_pSerializer->startElementNS(XML_a, XML_effectLst, FSEND);
+        m_pImpl->m_pSerializer->startElementNS(XML_a, XML_effectLst);
         m_pImpl->m_pSerializer->startElementNS(XML_a, XML_outerShdw,
                                                XML_dist, aShadowDist.getStr(),
-                                               XML_dir, aShadowDir.getStr(), FSEND);
+                                               XML_dir, aShadowDir.getStr());
         if (aShadowAlpha.isEmpty())
             m_pImpl->m_pSerializer->singleElementNS(XML_a, XML_srgbClr,
-                                                    XML_val, aShadowColor.getStr(), FSEND);
+                                                    XML_val, aShadowColor.getStr());
         else
         {
-            m_pImpl->m_pSerializer->startElementNS(XML_a, XML_srgbClr, XML_val, aShadowColor.getStr(), FSEND);
-            m_pImpl->m_pSerializer->singleElementNS(XML_a, XML_alpha, XML_val, aShadowAlpha.getStr(), FSEND);
+            m_pImpl->m_pSerializer->startElementNS(XML_a, XML_srgbClr, XML_val, aShadowColor.getStr());
+            m_pImpl->m_pSerializer->singleElementNS(XML_a, XML_alpha, XML_val, aShadowAlpha.getStr());
             m_pImpl->m_pSerializer->endElementNS(XML_a, XML_srgbClr);
         }
         m_pImpl->m_pSerializer->endElementNS(XML_a, XML_outerShdw);
@@ -1162,16 +1149,13 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
     sal_Int32 diagramCount;
     diagramCount = nAnchorId;
 
-    pFS->singleElementNS(XML_wp, XML_cNvGraphicFramePr,
-                         FSEND);
+    pFS->singleElementNS(XML_wp, XML_cNvGraphicFramePr);
 
     pFS->startElementNS(XML_a, XML_graphic,
-                        FSNS(XML_xmlns, XML_a), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(),
-                        FSEND);
+                        FSNS(XML_xmlns, XML_a), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8));
 
     pFS->startElementNS(XML_a, XML_graphicData,
-                        XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/diagram",
-                        FSEND);
+                        XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/diagram");
 
     // add data relation
     OUString dataFileName = "diagrams/data" + OUString::number(diagramCount) + ".xml";
@@ -1226,13 +1210,12 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrameFormat
     }
 
     pFS->singleElementNS(XML_dgm, XML_relIds,
-                         FSNS(XML_xmlns, XML_dgm), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(dmlDiagram)), RTL_TEXTENCODING_UTF8).getStr(),
-                         FSNS(XML_xmlns, XML_r), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8).getStr(),
-                         FSNS(XML_r, XML_dm), dataRelId.getStr(),
-                         FSNS(XML_r, XML_lo), layoutRelId.getStr(),
-                         FSNS(XML_r, XML_qs), styleRelId.getStr(),
-                         FSNS(XML_r, XML_cs), colorRelId.getStr(),
-                         FSEND);
+                         FSNS(XML_xmlns, XML_dgm), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(dmlDiagram)), RTL_TEXTENCODING_UTF8),
+                         FSNS(XML_xmlns, XML_r), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(officeRel)), RTL_TEXTENCODING_UTF8),
+                         FSNS(XML_r, XML_dm), dataRelId,
+                         FSNS(XML_r, XML_lo), layoutRelId,
+                         FSNS(XML_r, XML_qs), styleRelId,
+                         FSNS(XML_r, XML_cs), colorRelId);
 
     pFS->endElementNS(XML_a, XML_graphicData);
     pFS->endElementNS(XML_a, XML_graphic);
@@ -1341,18 +1324,16 @@ void DocxSdrExport::writeBoxItemLine(const SvxBoxItem& rBox)
     double fConverted(editeng::ConvertBorderWidthToWord(pBorderLine->GetBorderLineStyle(), pBorderLine->GetWidth()));
     OString sWidth(OString::number(TwipsToEMU(fConverted)));
     pFS->startElementNS(XML_a, XML_ln,
-                        XML_w, sWidth.getStr(),
-                        FSEND);
+                        XML_w, sWidth);
 
-    pFS->startElementNS(XML_a, XML_solidFill, FSEND);
+    pFS->startElementNS(XML_a, XML_solidFill);
     OString sColor(msfilter::util::ConvertColor(pBorderLine->GetColor()));
     pFS->singleElementNS(XML_a, XML_srgbClr,
-                         XML_val, sColor,
-                         FSEND);
+                         XML_val, sColor);
     pFS->endElementNS(XML_a, XML_solidFill);
 
     if (SvxBorderLineStyle::DASHED == pBorderLine->GetBorderLineStyle()) // Line Style is Dash type
-        pFS->singleElementNS(XML_a, XML_prstDash, XML_val, "dash", FSEND);
+        pFS->singleElementNS(XML_a, XML_prstDash, XML_val, "dash");
 
     pFS->endElementNS(XML_a, XML_ln);
 }
@@ -1404,15 +1385,12 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
         pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
 
         pFS->startElementNS(XML_a, XML_graphic,
-                            FSNS(XML_xmlns, XML_a), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(),
-                            FSEND);
+                            FSNS(XML_xmlns, XML_a), OUStringToOString(m_pImpl->m_rExport.GetFilter().getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8));
         pFS->startElementNS(XML_a, XML_graphicData,
-                            XML_uri, "http://schemas.microsoft.com/office/word/2010/wordprocessingShape",
-                            FSEND);
-        pFS->startElementNS(XML_wps, XML_wsp, FSEND);
+                            XML_uri, "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
+        pFS->startElementNS(XML_wps, XML_wsp);
         pFS->singleElementNS(XML_wps, XML_cNvSpPr,
-                             XML_txBox, "1",
-                             FSEND);
+                             XML_txBox, "1");
 
         uno::Any aRotation ;
         m_pImpl->m_nDMLandVMLTextFrameRotation = 0;
@@ -1433,27 +1411,24 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
         aRotation >>= m_pImpl->m_nDMLandVMLTextFrameRotation ;
         OString sRotation(OString::number((OOX_DRAWINGML_EXPORT_ROTATE_CLOCKWISIFY(m_pImpl->m_nDMLandVMLTextFrameRotation))));
         // Shape properties
-        pFS->startElementNS(XML_wps, XML_spPr, FSEND);
+        pFS->startElementNS(XML_wps, XML_spPr);
         if (m_pImpl->m_nDMLandVMLTextFrameRotation)
         {
             pFS->startElementNS(XML_a, XML_xfrm,
-                                XML_rot, sRotation.getStr(),
-                                FSEND);
+                                XML_rot, sRotation);
         }
         else
         {
-            pFS->startElementNS(XML_a, XML_xfrm, FSEND);
+            pFS->startElementNS(XML_a, XML_xfrm);
         }
         pFS->singleElementNS(XML_a, XML_off,
                              XML_x, "0",
-                             XML_y, "0",
-                             FSEND);
+                             XML_y, "0");
         OString aWidth(OString::number(TwipsToEMU(aSize.Width())));
         OString aHeight(OString::number(TwipsToEMU(aSize.Height())));
         pFS->singleElementNS(XML_a, XML_ext,
-                             XML_cx, aWidth.getStr(),
-                             XML_cy, aHeight.getStr(),
-                             FSEND);
+                             XML_cx, aWidth,
+                             XML_cy, aHeight);
         pFS->endElementNS(XML_a, XML_xfrm);
         OUString shapeType = "rect";
         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
@@ -1475,8 +1450,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
             shapeType = "rect";
 
         pFS->singleElementNS(XML_a, XML_prstGeom,
-                             XML_prst, OUStringToOString(shapeType, RTL_TEXTENCODING_UTF8).getStr(),
-                             FSEND);
+                             XML_prst, OUStringToOString(shapeType, RTL_TEXTENCODING_UTF8));
         m_pImpl->m_bDMLTextFrameSyntax = true;
         m_pImpl->m_rExport.OutputFormat(pParentFrame->GetFrameFormat(), false, false, true);
         m_pImpl->m_bDMLTextFrameSyntax = false;
@@ -1550,8 +1524,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
             //not the first in the chain, so write the tag as linkedTxbx
             pFS->singleElementNS(XML_wps, XML_linkedTxbx,
                                  XML_id,  I32S(linkedTextboxesIter->second.nId),
-                                 XML_seq, I32S(linkedTextboxesIter->second.nSeq),
-                                 FSEND);
+                                 XML_seq, I32S(linkedTextboxesIter->second.nSeq));
             /* no text content should be added to this tag,
                since the textbox is linked, the entire content
                is written in txbx block
@@ -1564,8 +1537,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
                to this block*/
             //since the text box is linked, it needs an id.
             pFS->startElementNS(XML_wps, XML_txbx,
-                                XML_id,  I32S(linkedTextboxesIter->second.nId),
-                                FSEND);
+                                XML_id,  I32S(linkedTextboxesIter->second.nId));
             isTxbxLinked = true ;
         }
     }
@@ -1573,9 +1545,9 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
     if (!skipTxBxContent)
     {
         if (!isTxbxLinked)
-            pFS->startElementNS(XML_wps, XML_txbx, FSEND);//text box is not linked, therefore no id.
+            pFS->startElementNS(XML_wps, XML_txbx);//text box is not linked, therefore no id.
 
-        pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
+        pFS->startElementNS(XML_w, XML_txbxContent);
 
         m_pImpl->m_bFrameBtLr = m_pImpl->checkFrameBtlr(m_pImpl->m_rExport.m_pDoc->GetNodes()[nStt], /*bDML=*/true);
         m_pImpl->m_bFlyFrameGraphic = true;
@@ -1598,7 +1570,7 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
         pFS->startElementNS(XML_wps, XML_bodyPr, xBodyPrAttrList);
         // AutoSize of the Text Frame.
         const SwFormatFrameSize& rSize = rFrameFormat.GetFrameSize();
-        pFS->singleElementNS(XML_a, (rSize.GetHeightSizeType() == ATT_VAR_SIZE ? XML_spAutoFit : XML_noAutofit), FSEND);
+        pFS->singleElementNS(XML_a, (rSize.GetHeightSizeType() == ATT_VAR_SIZE ? XML_spAutoFit : XML_noAutofit));
         pFS->endElementNS(XML_wps, XML_bodyPr);
 
         pFS->endElementNS(XML_wps, XML_wsp);
@@ -1610,9 +1582,8 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
         if (nWidthPercent && nWidthPercent != SwFormatFrameSize::SYNCED)
         {
             pFS->startElementNS(XML_wp14, XML_sizeRelH,
-                                XML_relativeFrom, (rSize.GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME ? "page" : "margin"),
-                                FSEND);
-            pFS->startElementNS(XML_wp14, XML_pctWidth, FSEND);
+                                XML_relativeFrom, (rSize.GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME ? "page" : "margin"));
+            pFS->startElementNS(XML_wp14, XML_pctWidth);
             pFS->writeEscaped(OUString::number(nWidthPercent * oox::drawingml::PER_PERCENT));
             pFS->endElementNS(XML_wp14, XML_pctWidth);
             pFS->endElementNS(XML_wp14, XML_sizeRelH);
@@ -1621,9 +1592,8 @@ void DocxSdrExport::writeDMLTextFrame(ww8::Frame* pParentFrame, int nAnchorId, b
         if (nHeightPercent && nHeightPercent != SwFormatFrameSize::SYNCED)
         {
             pFS->startElementNS(XML_wp14, XML_sizeRelV,
-                                XML_relativeFrom, (rSize.GetHeightPercentRelation() == text::RelOrientation::PAGE_FRAME ? "page" : "margin"),
-                                FSEND);
-            pFS->startElementNS(XML_wp14, XML_pctHeight, FSEND);
+                                XML_relativeFrom, (rSize.GetHeightPercentRelation() == text::RelOrientation::PAGE_FRAME ? "page" : "margin"));
+            pFS->startElementNS(XML_wp14, XML_pctHeight);
             pFS->writeEscaped(OUString::number(nHeightPercent * oox::drawingml::PER_PERCENT));
             pFS->endElementNS(XML_wp14, XML_pctHeight);
             pFS->endElementNS(XML_wp14, XML_sizeRelV);
@@ -1684,7 +1654,7 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame* pParentFrame, bool bTextBoxOnl
 
     if (!bTextBoxOnly)
     {
-        pFS->startElementNS(XML_w, XML_pict, FSEND);
+        pFS->startElementNS(XML_w, XML_pict);
         pFS->startElementNS(XML_v, XML_rect, xFlyAttrList);
         m_pImpl->textFrameShadow(rFrameFormat);
         if (m_pImpl->m_pFlyFillAttrList.is())
@@ -1701,7 +1671,7 @@ void DocxSdrExport::writeVMLTextFrame(ww8::Frame* pParentFrame, bool bTextBoxOnl
         }
         pFS->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
     }
-    pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
+    pFS->startElementNS(XML_w, XML_txbxContent);
     m_pImpl->m_bFlyFrameGraphic = true;
     m_pImpl->m_rExport.WriteText();
     if (m_pImpl->m_bParagraphSdtOpen)

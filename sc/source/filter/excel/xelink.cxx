@@ -1048,10 +1048,9 @@ void XclExpExtName::SaveXml(XclExpXmlStream& rStrm)
     sax_fastparser::FSHelperPtr pExternalLink = rStrm.GetCurrentStream();
 
     pExternalLink->startElement(XML_definedName,
-            XML_name, XclXmlUtils::ToOString(maName).getStr(),
+            XML_name, XclXmlUtils::ToOString(maName),
             XML_refersTo, nullptr,
-            XML_sheetId, nullptr,
-            FSEND);
+            XML_sheetId, nullptr);
 
     pExternalLink->endElement(XML_definedName);
 }
@@ -1211,8 +1210,7 @@ void XclExpCrn::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr pFS = rStrm.GetCurrentStream();
 
     pFS->startElement( XML_row,
-            XML_r,  OString::number( mnScRow + 1 ).getStr(),
-            FSEND);
+            XML_r,  OString::number( mnScRow + 1 ));
 
     ScAddress aAdr( mnScCol, mnScRow, 0);   // Tab number doesn't matter
     for( CachedValues::iterator aIt = maValues.begin(), aEnd = maValues.end(); aIt != aEnd; ++aIt, aAdr.IncCol() )
@@ -1224,18 +1222,16 @@ void XclExpCrn::SaveXml( XclExpXmlStream& rStrm )
             {
                 // t='n' is omitted
                 pFS->startElement( XML_cell,
-                        XML_r,      XclXmlUtils::ToOString( aAdr),
-                        FSEND);
-                pFS->startElement( XML_v, FSEND );
+                        XML_r,      XclXmlUtils::ToOString( aAdr));
+                pFS->startElement( XML_v );
                 pFS->write( fVal );
             }
             else
             {
                 pFS->startElement( XML_cell,
                         XML_r,      XclXmlUtils::ToOString( aAdr),
-                        XML_t,      "e",
-                        FSEND);
-                pFS->startElement( XML_v, FSEND );
+                        XML_t,      "e");
+                pFS->startElement( XML_v );
                 pFS->write( "#VALUE!" );    // OOXTODO: support other error values
             }
         }
@@ -1243,18 +1239,16 @@ void XclExpCrn::SaveXml( XclExpXmlStream& rStrm )
         {
             pFS->startElement( XML_cell,
                     XML_r,      XclXmlUtils::ToOString( aAdr),
-                    XML_t,      "str",
-                    FSEND);
-            pFS->startElement( XML_v, FSEND );
+                    XML_t,      "str");
+            pFS->startElement( XML_v );
             pFS->write( aIt->get< OUString >() );
         }
         else if( aIt->has< bool >() )
         {
             pFS->startElement( XML_cell,
                     XML_r,      XclXmlUtils::ToOString( aAdr),
-                    XML_t,      "b",
-                    FSEND);
-            pFS->startElement( XML_v, FSEND );
+                    XML_t,      "b");
+            pFS->startElement( XML_v );
             pFS->write( aIt->get< bool >() ? "1" : "0" );
         }
         // OOXTODO: error type cell t='e'
@@ -1411,8 +1405,7 @@ void XclExpXct::SaveXml( XclExpXmlStream& rStrm )
 
     bool bValid = BuildCrnList( aCrnRecs);
     pFS->startElement( XML_sheetData,
-            XML_sheetId, OString::number( mnSBTab).getStr(),
-            FSEND);
+            XML_sheetId, OString::number( mnSBTab));
     if (bValid)
     {
         // row elements
@@ -1678,22 +1671,19 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
             true );
 
     pExternalLink->startElement( XML_externalLink,
-            XML_xmlns,              XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
-            FSEND);
+            XML_xmlns,              XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))));
 
     pExternalLink->startElement( XML_externalBook,
-            FSNS(XML_xmlns, XML_r), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
-            FSNS(XML_r, XML_id),    XclXmlUtils::ToOString( sId ).getStr(),
-            FSEND);
+            FSNS(XML_xmlns, XML_r), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))),
+            FSNS(XML_r, XML_id),    XclXmlUtils::ToOString( sId ));
 
     if (!maXctList.IsEmpty())
     {
-        pExternalLink->startElement( XML_sheetNames, FSEND);
+        pExternalLink->startElement( XML_sheetNames);
         for (size_t nPos = 0, nSize = maXctList.GetSize(); nPos < nSize; ++nPos)
         {
             pExternalLink->singleElement( XML_sheetName,
-                    XML_val,    XclXmlUtils::ToOString( maXctList.GetRecord( nPos )->GetTabName()).getStr(),
-                    FSEND);
+                    XML_val,    XclXmlUtils::ToOString( maXctList.GetRecord( nPos )->GetTabName()));
         }
         pExternalLink->endElement( XML_sheetNames);
 
@@ -1701,7 +1691,7 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
 
     if (mxExtNameBfr)
     {
-        pExternalLink->startElement(XML_definedNames, FSEND);
+        pExternalLink->startElement(XML_definedNames);
         // externalName elements
         WriteExtNameBufferXml( rStrm );
         pExternalLink->endElement(XML_definedNames);
@@ -1709,7 +1699,7 @@ void XclExpSupbook::SaveXml( XclExpXmlStream& rStrm )
 
     if (!maXctList.IsEmpty())
     {
-        pExternalLink->startElement( XML_sheetDataSet, FSEND);
+        pExternalLink->startElement( XML_sheetDataSet);
 
         // sheetData elements
         maXctList.SaveXml( rStrm );
@@ -2106,8 +2096,7 @@ void XclExpSupbookBuffer::SaveXml( XclExpXmlStream& rStrm )
 
         // externalReference entry in workbook externalReferences
         rStrm.GetCurrentStream()->singleElement( XML_externalReference,
-                FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ).getStr(),
-                FSEND );
+                FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( sId ) );
 
         // Each externalBook in a separate stream.
         rStrm.PushStream( pExternalLink );
@@ -2495,7 +2484,7 @@ void XclExpLinkManagerImpl8::SaveXml( XclExpXmlStream& rStrm )
     if (maSBBuffer.HasExternalReferences())
     {
         sax_fastparser::FSHelperPtr pWorkbook = rStrm.GetCurrentStream();
-        pWorkbook->startElement( XML_externalReferences, FSEND);
+        pWorkbook->startElement( XML_externalReferences);
 
         // externalLink, externalBook, sheetNames, sheetDataSet, externalName
         maSBBuffer.SaveXml( rStrm );
