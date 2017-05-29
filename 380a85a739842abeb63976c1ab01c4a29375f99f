@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_993191a5",
+        "filename": "sw/source/filter/ww8/docxexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 962,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-05-29T08:26:43Z",
+      "side": 1,
+      "message": "You added this inside the if ( propList[i].Name \u003d\u003d \"CompatSettings\" ) branch, which means that in case the original document is an ODF one, the XML element won\u0027t be written, which is wrong. See https://bugs.documentfoundation.org/show_bug.cgi?id\u003d106029#c12 for a reproducer.",
+      "revId": "380a85a739842abeb63976c1ab01c4a29375f99f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
