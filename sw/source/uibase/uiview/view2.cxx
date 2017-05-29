@@ -1039,18 +1039,13 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case FN_NAVIGATION_POPUP:
         {
-            SfxViewFrame* pVFrame = GetViewFrame();
-            SfxChildWindow* pCh = pVFrame->GetChildWindow( SID_NAVIGATOR );
-            if (!pCh)
-            {
-                pVFrame->ToggleChildWindow( SID_NAVIGATOR );
-                pCh = pVFrame->GetChildWindow( SID_NAVIGATOR );
-            }
-            if (pCh)
-            {
-                static_cast<SwNavigationPI*>( pCh->GetContextWindow(SW_MOD()))->CreateNavigationTool(
-                                GetVisArea(), true, &pVFrame->GetWindow());
-            }
+            // First make sure that the sidebar is visible
+            GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
+
+            ::sfx2::sidebar::Sidebar::ShowPanel(
+                "SwNavigatorPanel",
+                GetViewFrame()->GetFrame().GetFrameInterface());
+
         }
         break;
         case SID_JUMPTOMARK:
