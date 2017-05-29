@@ -374,6 +374,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf108682, "tdf108682.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(459), aLineSpacing.Height);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf107684, "tdf107684.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/styles.xml"))
+        // This was 1, <w:outlineLvl> was duplicated for Heading1.
+        assertXPath(pXmlDoc, "//w:style[@w:styleId='Heading1']/w:pPr/w:outlineLvl", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
