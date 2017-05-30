@@ -16,6 +16,24 @@
       "revId": "020e1bff16a7bb5f401a2547d211807acd7db0fb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_68608c36",
+        "filename": "svx/source/gengal/gengal.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-30T15:44:04Z",
+      "side": 1,
+      "message": "fixed with \u003chttps://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d182622c757cceda83522f10922596ed4fa452b46\u003e \"Fix quoting\"",
+      "parentUuid": "5a3905b3_04329ff1",
+      "revId": "020e1bff16a7bb5f401a2547d211807acd7db0fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
