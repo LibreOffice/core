@@ -1726,6 +1726,27 @@ void SwTiledRenderingTest::testRedoRepairResult()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
+namespace {
+
+void checkUndoRepairStates(SwXTextDocument* pXTextDocument, SwView* pView1, SwView* pView2)
+{
+    SfxItemSet aItemSet1(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), SID_UNDO, SID_UNDO);
+    SfxItemSet aItemSet2(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), SID_UNDO, SID_UNDO);
+    // first view, undo enabled
+    pView1->GetState(aItemSet1);
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet1.GetItemState(SID_UNDO));
+    const SfxUInt32Item *pUnsetItem = dynamic_cast<const SfxUInt32Item*>(aItemSet1.GetItem(SID_UNDO));
+    CPPUNIT_ASSERT(!pUnsetItem);
+    // second view, undo conflict
+    pView2->GetState(aItemSet2);
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet2.GetItemState(SID_UNDO));
+    const SfxUInt32Item *pSetItem = dynamic_cast<const SfxUInt32Item*>(aItemSet2.GetItem(SID_UNDO));
+    CPPUNIT_ASSERT(pSetItem);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SwUndoId::CONFLICT), pSetItem->GetValue());
+};
+
+}
+
 void SwTiledRenderingTest::testDisableUndoRepair()
 {
     comphelper::LibreOfficeKit::setActive();
@@ -1751,29 +1772,12 @@ void SwTiledRenderingTest::testDisableUndoRepair()
         CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, aItemSet2.GetItemState(SID_UNDO));
     }
 
-    auto fnCheckStates = [pXTextDocument, pView1, pView2]()
-    {
-        SfxItemSet aItemSet1(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), SID_UNDO, SID_UNDO);
-        SfxItemSet aItemSet2(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), SID_UNDO, SID_UNDO);
-        // first view, undo enabled
-        pView1->GetState(aItemSet1);
-        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet1.GetItemState(SID_UNDO));
-        const SfxUInt32Item *pUnsetItem = dynamic_cast<const SfxUInt32Item*>(aItemSet1.GetItem(SID_UNDO));
-        CPPUNIT_ASSERT(!pUnsetItem);
-        // second view, undo conflict
-        pView2->GetState(aItemSet2);
-        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet2.GetItemState(SID_UNDO));
-        const SfxUInt32Item *pSetItem = dynamic_cast<const SfxUInt32Item*>(aItemSet2.GetItem(SID_UNDO));
-        CPPUNIT_ASSERT(pSetItem);
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SwUndoId::CONFLICT), pSetItem->GetValue());
-    };
-
     // Insert a character in the first view.
     SfxLokHelper::setView(nView1);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'k', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'k', 0);
     Scheduler::ProcessEventsToIdle();
-    fnCheckStates();
+    checkUndoRepairStates(pXTextDocument, pView1, pView2);
 
     // Insert a character in the second view.
     SfxLokHelper::setView(nView2);
@@ -1801,7 +1805,7 @@ void SwTiledRenderingTest::testDisableUndoRepair()
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'l', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'l', 0);
     Scheduler::ProcessEventsToIdle();
-    fnCheckStates();
+    checkUndoRepairStates(pXTextDocument, pView1, pView2);
 
     mxComponent->dispose();
     mxComponent.clear();
