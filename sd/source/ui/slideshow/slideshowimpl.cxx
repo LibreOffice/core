@@ -1829,9 +1829,9 @@ bool SlideshowImpl::keyInput(const KeyEvent& rKEvt)
     }
     catch( Exception& )
     {
-        bRet = false;
         SAL_WARN( "sd", "sd::SlideshowImpl::keyInput(), exception caught: "
                     << comphelper::anyToString( cppu::getCaughtException() ) );
+        bRet = false;
     }
 
     return bRet;
