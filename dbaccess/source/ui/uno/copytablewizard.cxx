@@ -1493,10 +1493,11 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
     catch( const SQLException& ) { throw; }
     catch( const Exception& )
     {
+        Any aError(::cppu::getCaughtException());
         throw WrappedTargetException(
             ModuleRes( STR_CTW_ERROR_DURING_INITIALIZATION ),
             *this,
-            ::cppu::getCaughtException()
+            aError
         );
     }
 }

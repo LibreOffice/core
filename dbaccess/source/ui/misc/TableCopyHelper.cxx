@@ -126,7 +126,8 @@ void OTableCopyHelper::insertTable( const OUString& i_rSourceDataSource, const R
     }
     catch( const SQLException& )
     {
-        m_pController->showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
+        Any aError(::cppu::getCaughtException());
+        m_pController->showError( SQLExceptionInfo(aError) );
     }
     catch( const Exception& )
     {
@@ -209,7 +210,8 @@ void OTableCopyHelper::pasteTable( SotClipboardFormatId _nFormatId
         }
         catch(const SQLException&)
         {
-            m_pController->showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
+            Any aError(::cppu::getCaughtException());
+            m_pController->showError( SQLExceptionInfo(aError) );
         }
         catch( const Exception& )
         {

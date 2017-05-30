@@ -348,14 +348,15 @@ namespace svx
         }
         catch ( const SQLException& )
         {
-            m_xFormOperations->getController()->removeSQLErrorListener( const_cast< FormControllerHelper* >(this) );
             aError = ::cppu::getCaughtException();
+            m_xFormOperations->getController()->removeSQLErrorListener( const_cast< FormControllerHelper* >(this) );
         }
         catch( const Exception& )
         {
+            Any aError2(::cppu::getCaughtException());
             m_xFormOperations->getController()->removeSQLErrorListener( const_cast< FormControllerHelper* >(this) );
             SQLException aFallbackError;
-            aFallbackError.Message = ::comphelper::anyToString( ::cppu::getCaughtException() );
+            aFallbackError.Message = ::comphelper::anyToString(aError2);
             aError <<= aFallbackError;
         }
 

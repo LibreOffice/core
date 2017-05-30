@@ -731,7 +731,8 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
     }
     catch( const SQLException&)
     {
-        ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), aWizard.get(), m_xContext );
+        Any aError(::cppu::getCaughtException());
+        ::dbaui::showError( ::dbtools::SQLExceptionInfo(aError), aWizard.get(), m_xContext );
         bError = true;
     }
     catch( const Exception& )

@@ -1101,7 +1101,8 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     }
                     catch( const Exception& )
                     {
-                        lcl_handleException_nothrow( m_xModel, ::cppu::getCaughtException() );
+                        Any aError(::cppu::getCaughtException());
+                        lcl_handleException_nothrow( m_xModel, aError );
                     }
                 }
                 break;
@@ -1137,7 +1138,8 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     }
                     catch( const Exception& )
                     {
-                        lcl_handleException_nothrow( m_xModel, ::cppu::getCaughtException() );
+                        Any aError(::cppu::getCaughtException());
+                        lcl_handleException_nothrow( m_xModel, aError );
                     }
 
                     /*updateTitle();*/
@@ -2130,7 +2132,8 @@ void OApplicationController::renameEntry()
                         }
                         catch(const SQLException& )
                         {
-                            showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
+                            Any aError(::cppu::getCaughtException());
+                            showError( SQLExceptionInfo(aError) );
 
                         }
                         catch(const ElementExistException& e)
@@ -2215,7 +2218,8 @@ void OApplicationController::showPreviewFor(const ElementType _eType,const OUStr
     }
     catch( const SQLException& )
     {
-        showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
+        Any aError(::cppu::getCaughtException());
+        showError( SQLExceptionInfo(aError) );
     }
     catch(const Exception& )
     {

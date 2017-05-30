@@ -714,7 +714,8 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup, boo
     }
     catch(const SQLException& )
     {
-        showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
+        Any aError(::cppu::getCaughtException());
+        showError( SQLExceptionInfo(aError) );
     }
     catch( const Exception& )
     {
@@ -1060,12 +1061,12 @@ void OTableController::alterColumns()
                 }
                 catch(const SQLException&)
                 {
+                    SQLExceptionInfo aError( ::cppu::getCaughtException() );
                     if(xDrop.is() && xAppend.is())
                     {
                         OUString aMessage( ModuleRes( STR_TABLEDESIGN_ALTER_ERROR ) );
                         aMessage = aMessage.replaceFirst( "$column$", pField->GetName() );
 
-                        SQLExceptionInfo aError( ::cppu::getCaughtException() );
                         ScopedVclPtrInstance< OSQLWarningBox > aMsg( getView(), aMessage, WB_YES_NO | WB_DEF_YES , &aError );
                         bNotOk = aMsg->Execute() == RET_YES;
                     }
@@ -1208,13 +1209,14 @@ void OTableController::alterColumns()
                 }
                 catch (const SQLException&)
                 {
+                    Any aError( ::cppu::getCaughtException() );
                     OUString sError( ModuleRes( STR_TABLEDESIGN_COULD_NOT_DROP_COL ) );
                     sError = sError.replaceFirst( "$column$", *pIter );
 
                     SQLException aNewException;
                     aNewException.Message = sError;
                     aNewException.SQLState = "S1000";
-                    aNewException.NextException = ::cppu::getCaughtException();
+                    aNewException.NextException = aError;
 
                     throw aNewException;
                 }

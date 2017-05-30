@@ -292,7 +292,8 @@ TTableWindowData::value_type OJoinTableView::createTableWindowData(const OUStrin
     }
     catch ( const SQLException& )
     {
-        ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ),
+        Any aError(::cppu::getCaughtException());
+        ::dbaui::showError( ::dbtools::SQLExceptionInfo(aError),
             pParent, pParent->getController().getORB() );
     }
     catch( const WrappedTargetException& e )

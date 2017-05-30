@@ -150,7 +150,8 @@ namespace dbaui
         }
         catch( const SQLException& )
         {
-            _out_rErrorToDisplay = ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() );
+            auto aError = ::cppu::getCaughtException();
+            _out_rErrorToDisplay = ::dbtools::SQLExceptionInfo(aError);
         }
         return false;
     }

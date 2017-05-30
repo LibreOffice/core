@@ -1838,8 +1838,9 @@ Reference< XComponent > ODocumentDefinition::impl_openUI_nolck_throw( bool _bFor
     catch( const RuntimeException& ) { throw; }
     catch( const Exception& )
     {
+        Any aError(::cppu::getCaughtException());
         throw WrappedTargetException(
-            OUString(), *this, ::cppu::getCaughtException() );
+            OUString(), *this, aError );
     }
 
     return xComponent;
@@ -1886,8 +1887,10 @@ void SAL_CALL ODocumentDefinition::store(  )
     catch( const RuntimeException& ) { throw; }
     catch( const Exception& )
     {
+        Any aError(::cppu::getCaughtException());
+
         throw WrappedTargetException(
-            OUString(), *this, ::cppu::getCaughtException() );
+            OUString(), *this, aError );
     }
 }
 
@@ -1903,8 +1906,9 @@ sal_Bool SAL_CALL ODocumentDefinition::close(  )
     catch( const RuntimeException& ) { throw; }
     catch( const Exception& )
     {
+        Any aError(::cppu::getCaughtException());
         throw WrappedTargetException(
-            OUString(), *this, ::cppu::getCaughtException() );
+            OUString(), *this, aError );
     }
     return bSuccess;
 }

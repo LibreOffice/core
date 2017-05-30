@@ -1516,9 +1516,9 @@ bool OQueryController::doSaveAsDoc(bool _bSaveAs)
     }
     catch(const SQLException&)
     {
+        aInfo = SQLExceptionInfo( ::cppu::getCaughtException() );
         if ( !bNew )
             m_sName = sOriginalName;
-        aInfo = SQLExceptionInfo( ::cppu::getCaughtException() );
     }
     catch(const Exception&)
     {
