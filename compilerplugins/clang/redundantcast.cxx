@@ -79,6 +79,15 @@ public:
         }
     }
 
+    bool TraverseInitListExpr(
+        InitListExpr * expr, DataRecursionQueue * queue = nullptr)
+    {
+        return WalkUpFromInitListExpr(expr)
+            && TraverseSynOrSemInitListExpr(
+                expr->isSemanticForm() ? expr : expr->getSemanticForm(),
+                queue);
+    }
+
     bool VisitImplicitCastExpr(ImplicitCastExpr const * expr);
 
     bool VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr);
