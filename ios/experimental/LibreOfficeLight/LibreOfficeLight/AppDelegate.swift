@@ -19,6 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 
     // MARK: - AppDelegate functions
 
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool
+    {
+        // called when started from another Application.
+        return true
+    }
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
@@ -30,6 +35,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         let defaults = UserDefaults.standard
         defaults.set(applicationVersion, forKey: "application_version")
         defaults.synchronize()
+
+        // start LibreOfficeKit
+        BridgeLOkit_Init(Bundle.main.bundlePath)
 
         // Override point for customization after application launch.
         return true
@@ -72,8 +80,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 
     func applicationDidBecomeActive(_ application: UIApplication)
     {
-        // start LibreOfficeKit
-        BridgeLOkit_Init(Bundle.main.bundlePath)
     }
 
 
