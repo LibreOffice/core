@@ -759,7 +759,7 @@ void Test::testMarkedCellIteration()
         {
             std::ostringstream os;
             os << ScAddress(rCheck.mnCol, rCheck.mnRow, 0).GetColRowString() << " was expected, but not found.";
-            CPPUNIT_FAIL(os.str().data());
+            CPPUNIT_FAIL(os.str());
         }
 
         CPPUNIT_ASSERT_EQUAL(rCheck.mnRow, nRow);

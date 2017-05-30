@@ -194,7 +194,7 @@ bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInp
 
     if ((kind != libwps::WPS_SPREADSHEET && kind != libwps::WPS_DATABASE) || (confidence == libwps::WPS_CONFIDENCE_NONE))
         return false;
-    std::string fileEncoding("");
+    std::string fileEncoding;
     if (needEncoding)
     {
         OUString title, encoding;

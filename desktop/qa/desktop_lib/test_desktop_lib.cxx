@@ -986,7 +986,7 @@ namespace {
         for (const auto& aItemPair: aRoot)
         {
             // This is an array, so no key
-            CPPUNIT_ASSERT_EQUAL(std::string(aItemPair.first.data()), std::string(""));
+            CPPUNIT_ASSERT_EQUAL(std::string(aItemPair.first), std::string(""));
 
             boost::property_tree::ptree aItemValue = aItemPair.second;
             boost::optional<boost::property_tree::ptree&> aText = aItemValue.get_child_optional("text");
