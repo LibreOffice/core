@@ -25,8 +25,6 @@ $(eval $(call gb_Library_use_sdk_api,fps))
 $(eval $(call gb_Library_add_defs,fps,\
 	-D_UNICODE \
 	-DUNICODE \
-	-U_WIN32_WINNT \
-	-D_WIN32_WINNT=0x0600 \
 ))
 
 $(eval $(call gb_Library_use_libraries,fps,\

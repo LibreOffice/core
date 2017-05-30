@@ -22,15 +22,8 @@
 
 #pragma once
 
-// Change these values to use different versions
-#undef WINVER
-#undef _WIN32_WINNT
-#undef _WIN32_IE
 #undef _WTL_NO_CSTRING
 
-#define WINVER          0x0600
-#define _WIN32_WINNT    0x0600
-#define _WIN32_IE       0x0700
 #define _WTL_NO_CSTRING
 
 #if defined _MSC_VER
