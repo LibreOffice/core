@@ -1147,6 +1147,17 @@ DECLARE_RTFEXPORT_TEST(testTdf107620, "tdf107620.docx")
     CPPUNIT_ASSERT(!bAddParaTableSpacing);
 }
 
+DECLARE_RTFEXPORT_TEST(testWatermark, "watermark.rtf")
+{
+    uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("WatermarkRTF"), xShape->getString());
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+
+    // Check transparency
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(50), getProperty<sal_Int16>(xShape, "FillTransparence"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
