@@ -219,8 +219,8 @@ OUString convertName2SQLName(const OUString& rName,const OUString& _rSpecials)
 
     OUStringBuffer aNewName(rName);
     sal_Int32 nLength = rName.getLength();
-    for (sal_Int32 i=0; i < nLength; ++pStr,++i )
-        if(!isCharOk(*pStr,_rSpecials))
+    for (sal_Int32 i=0; i < nLength; ++i)
+        if(!isCharOk(aNewName[i],_rSpecials))
             aNewName[i] = '_';
 
     return aNewName.makeStringAndClear();
