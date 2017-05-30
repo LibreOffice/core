@@ -57,8 +57,6 @@ using namespace ::rtl;
 #define IS_BIG_ENDIAN 0
 #endif
 
-using namespace ::com::sun::star::uno;
-
 namespace
 {
 

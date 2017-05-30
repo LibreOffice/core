@@ -2199,7 +2199,6 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
     {
         try
         {
-            using namespace ::com::sun::star;
             uno::Reference< frame::XModuleManager2 > xModuleManager(
                 frame::ModuleManager::create(::comphelper::getProcessComponentContext()));
             sModule = xModuleManager->identify(pViewFrame->GetFrame().GetFrameInterface());

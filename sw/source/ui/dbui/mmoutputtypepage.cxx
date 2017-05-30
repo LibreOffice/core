@@ -133,7 +133,6 @@ const SwMailDescriptor* SwSendMailDialog_Impl::GetNextDescriptor()
     return nullptr;
 }
 
-using namespace ::com::sun::star;
 class SwMailDispatcherListener_Impl : public IMailDispatcherListener
 {
     VclPtr<SwSendMailDialog> m_pSendMailDialog;

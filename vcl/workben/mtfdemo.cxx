@@ -29,8 +29,6 @@
 
 #include <cstdlib>
 
-using namespace com::sun::star;
-
 using namespace css;
 
 class DemoMtfWin : public WorkWindow

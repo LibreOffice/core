@@ -1828,7 +1828,6 @@ ScCompiler::~ScCompiler()
 void ScCompiler::CheckTabQuotes( OUString& rString,
                                  const FormulaGrammar::AddressConvention eConv )
 {
-    using namespace ::com::sun::star::i18n;
     sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER | KParseTokens::ASC_UNDERSCORE;
     sal_Int32 nContFlags = nStartFlags;
     ParseResult aRes = ScGlobal::pCharClass->parsePredefinedToken(

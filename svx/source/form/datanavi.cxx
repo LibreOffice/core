@@ -188,8 +188,6 @@ namespace svxform
         if(!xDataTypes.is())
             return;
 
-        using namespace ::com::sun::star::uno;
-
         ItemNode *pItemNode = static_cast<ItemNode*>(pSelected->GetUserData());
 
         if ( !pItemNode )

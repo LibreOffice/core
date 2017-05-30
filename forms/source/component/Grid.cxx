@@ -41,7 +41,6 @@ using namespace ::com::sun::star::uno;
 namespace frm
 {
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;

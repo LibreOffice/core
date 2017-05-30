@@ -1127,7 +1127,6 @@ sal_Int64 SAL_CALL FmXGridPeer::getSomething( const Sequence< sal_Int8 >& _rIden
 
 void FmXGridPeer::disposing(const EventObject& e)
 {
-using namespace ::com::sun::star::util;
     bool bKnownSender = false;
 
     Reference< XIndexContainer >  xCols( e.Source, UNO_QUERY );
