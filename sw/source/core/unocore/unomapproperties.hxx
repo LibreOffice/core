@@ -400,6 +400,7 @@
                     { OUString(UNO_NAME_PARA_BOTTOM_MARGIN_RELATIVE), RES_UL_SPACE,         cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, MID_LO_REL_MARGIN},\
                     TABSTOPS_MAP_ENTRY\
                     { OUString(UNO_NAME_CHAR_WORD_MODE), RES_CHRATR_WORDLINEMODE,cppu::UnoType<bool>::get()  ,    PROPERTY_NONE,     0},\
+                    { OUString(UNO_NAME_CHAR_SHADING_VALUE), RES_CHRATR_BACKGROUND, cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_SHADING_VALUE }, \
                     { OUString(UNO_NAME_CHAR_LEFT_BORDER), RES_CHRATR_BOX, cppu::UnoType<css::table::BorderLine>::get(), PROPERTY_NONE, LEFT_BORDER |CONVERT_TWIPS },\
                     { OUString(UNO_NAME_CHAR_RIGHT_BORDER), RES_CHRATR_BOX, cppu::UnoType<css::table::BorderLine>::get(), PROPERTY_NONE, RIGHT_BORDER |CONVERT_TWIPS },\
                     { OUString(UNO_NAME_CHAR_TOP_BORDER), RES_CHRATR_BOX, cppu::UnoType<css::table::BorderLine>::get(), PROPERTY_NONE, TOP_BORDER |CONVERT_TWIPS },\
