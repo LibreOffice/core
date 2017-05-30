@@ -294,7 +294,7 @@ constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16
 #define LANGUAGE_LU_CHINA                   LanguageType(0x0490)
 #define LANGUAGE_LUXEMBOURGISH_LUXEMBOURG   LanguageType(0x046E)  /* obsoletes LANGUAGE_USER_LUXEMBOURGISH 0x0630 */
 #define LANGUAGE_MACEDONIAN                 LanguageType(0x042F)
-#define LANGUAGE_MALAGASY_PLATEAU           LanguageType(0x048D)  /* obsoletes LANGUAGE_USER_MALAGASY_PLATEAU 0x064F */
+#define LANGUAGE_MALAGASY_PLATEAU           LanguageType(0x048D)  /* obsoletes LANGUAGE_OBSOLETE_USER_MALAGASY_PLATEAU */
 #define LANGUAGE_MALAYALAM                  LanguageType(0x044C)  /* in India */
 #define LANGUAGE_MALAY_BRUNEI_DARUSSALAM    LanguageType(0x083E)
 #define LANGUAGE_MALAY_MALAYSIA             LanguageType(0x043E)
@@ -620,7 +620,6 @@ constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16
 #define LANGUAGE_USER_BUSHI                 LanguageType(0x064D)
 #define LANGUAGE_USER_TAHITIAN              LanguageType(0x064E)
 #define LANGUAGE_OBSOLETE_USER_MALAGASY_PLATEAU LanguageType(0x064F)
-#define LANGUAGE_USER_MALAGASY_PLATEAU      LANGUAGE_MALAGASY_PLATEAU
 #define LANGUAGE_USER_PAPIAMENTU_ARUBA      LanguageType(0x8079)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_PAPIAMENTU)) */
 #define LANGUAGE_USER_SARDINIAN_CAMPIDANESE LanguageType(0x0650)
 #define LANGUAGE_USER_SARDINIAN_GALLURESE   LanguageType(0x0651)
