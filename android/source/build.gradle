@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.android.tools.build:gradle:2.3.2'
     }
 }
 
@@ -24,14 +24,14 @@ dependencies {
     ])
     compile files("${liboInstdir}/${liboShareJavaFolder}/unoil.jar")
     compile files("${liboWorkdir}/UnpackedTarball/owncloud_android_lib/bin/owncloud-android-library.jar")
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.3"
     compileOptions {
         // silence some java-language features hints
         sourceCompatibility 6
