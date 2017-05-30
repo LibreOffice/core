@@ -12,6 +12,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
@@ -520,11 +521,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99227, "tdf99227.docx")
     assertXPath(pXmlDoc, "//w:footnote/w:p/w:r/w:drawing", 1);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf82173_footnoteStyle, "tdf82173_footnoteStyle.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf82173_footnoteStyle, "tdf82173_footnoteStyle.docx")
 {
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("CharacterStyles")->getByName("Footnote Characters"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(58),       getProperty< sal_Int32 >(xPageStyle, "CharEscapementHeight") );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0x00FF00), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf82173_endnoteStyle, "tdf82173_endnoteStyle.docx")
+{
+    uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xEndnotes(xEndnotesSupplier->getEndnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XFootnote> xEndnote;
+    xEndnotes->getByIndex(0) >>= xEndnote;
+    // character properties were previously not assigned to the footnote/endnote in-text anchor.
+    CPPUNIT_ASSERT_EQUAL( 24.0f, getProperty< float >(xEndnote->getAnchor(), "CharHeight") );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFF0000), getProperty< sal_Int32 >(xEndnote->getAnchor(), "CharColor") );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104162, "tdf104162.docx")
