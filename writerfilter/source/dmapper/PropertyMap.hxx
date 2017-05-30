@@ -122,7 +122,6 @@ private:
 
     // marks context as footnote context - ::text( ) events contain either the footnote character or can be ignored
     // depending on sprmCSymbol
-    OUString                                    m_sFootnoteFontName;
     css::uno::Reference< css::text::XFootnote > m_xFootnote;
     std::map< PropertyIds, PropValue >          m_vMap;
     std::vector< RedlineParamsPtr >             m_aRedlines;
@@ -155,8 +154,6 @@ public:
     const css::uno::Reference< css::text::XFootnote >& GetFootnote() const { return m_xFootnote; }
 
     void SetFootnote( const css::uno::Reference< css::text::XFootnote >& xF ) { m_xFootnote = xF; }
-
-    const OUString& GetFootnoteFontName() const { return m_sFootnoteFontName; }
 
     virtual void insertTableProperties( const PropertyMap* );
 
