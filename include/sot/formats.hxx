@@ -173,8 +173,9 @@ enum class SotClipboardFormatId : sal_uLong
     MATHML                 = 143,
     JPEG                   = 144,
     RICHTEXT               = 145,
+    EDITENGINE_ODF_TEXT_FLAT = 146,
     // the point at which we start allocating "runtime" format IDs
-    USER_END  = RICHTEXT
+    USER_END  = EDITENGINE_ODF_TEXT_FLAT
 };
 
 /** Make it easier to iterate over format IDs */
