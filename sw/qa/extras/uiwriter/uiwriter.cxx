@@ -247,6 +247,7 @@ public:
     void testTdf105417();
     void testTdf105625();
     void testTdf106736();
+    void testTdf58604();
     void testMsWordCompTrailingBlanks();
     void testCreateDocxAnnotation();
 
@@ -385,6 +386,7 @@ public:
     CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST(testTdf105625);
     CPPUNIT_TEST(testTdf106736);
+    CPPUNIT_TEST(testTdf58604);
     CPPUNIT_TEST(testMsWordCompTrailingBlanks);
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST_SUITE_END();
@@ -4900,6 +4902,16 @@ void SwUiWriterTest::testCreateDocxAnnotation()
 #endif
         ;
     CPPUNIT_ASSERT_EQUAL(aResultText, xField->getPropertyValue("Content").get<OUString>());
+}
+
+void SwUiWriterTest::testTdf58604()
+{
+#ifdef WNT
+    // Allow linebreak character follows hanging punctuation immediately instead of
+    // breaking at the start of the next line.
+    load(DATA_DIRECTORY, "tdf58604.odt");
+    CPPUNIT_ASSERT_EQUAL( OUString("POR_BRK"), parseDump( "(/root/page/body/txt/LineBreak[1]/preceding::Text)[last()]", "nType" ) );
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
