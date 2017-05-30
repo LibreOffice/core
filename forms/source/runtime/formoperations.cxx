@@ -784,7 +784,8 @@ namespace frm
         catch( const SQLException& ) { throw; }
         catch( const Exception& )
         {
-            throw WrappedTargetException( OUString(), *this, ::cppu::getCaughtException() );
+            Any aError(::cppu::getCaughtException());
+            throw WrappedTargetException( OUString(), *this, aError );
         }
 
         impl_invalidateAllSupportedFeatures_nothrow( aGuard );
@@ -838,7 +839,8 @@ namespace frm
             catch( const SQLException& ) { throw; }
             catch( const Exception& )
             {
-                throw WrappedTargetException( OUString(), *this, ::cppu::getCaughtException() );
+                Any aError(::cppu::getCaughtException());
+                throw WrappedTargetException( OUString(), *this, aError );
             }
         }
         break;
@@ -946,7 +948,8 @@ namespace frm
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
         {
-            throw WrappedTargetException( OUString(), *this, ::cppu::getCaughtException() );
+            Any aError(::cppu::getCaughtException());
+            throw WrappedTargetException( OUString(), *this, aError );
         }
         return bIs;
     }
@@ -962,7 +965,8 @@ namespace frm
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
         {
-            throw WrappedTargetException( OUString(), *this, ::cppu::getCaughtException() );
+            Any aError(::cppu::getCaughtException());
+            throw WrappedTargetException( OUString(), *this, aError );
         }
         return bIs;
     }
@@ -1576,7 +1580,8 @@ namespace frm
         catch( const SQLException& ) { throw; }
         catch( const Exception& )
         {
-            throw WrappedTargetException( OUString(), *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );
+            Any aError(::cppu::getCaughtException());
+            throw WrappedTargetException( OUString(), *const_cast< FormOperations* >( this ), aError );
         }
     }
 
@@ -1645,7 +1650,8 @@ namespace frm
         catch( const SQLException& ) { throw; }
         catch( const Exception& )
         {
-            throw WrappedTargetException( OUString(), *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );
+            Any aError(::cppu::getCaughtException());
+            throw WrappedTargetException( OUString(), *const_cast< FormOperations* >( this ), aError );
         }
     }
 
@@ -1689,7 +1695,8 @@ namespace frm
         catch( const SQLException& ) { throw; }
         catch( const Exception& )
         {
-            throw WrappedTargetException( OUString(), *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );
+            Any aError(::cppu::getCaughtException());
+            throw WrappedTargetException( OUString(), *const_cast< FormOperations* >( this ), aError );
         }
     }
 
@@ -1704,12 +1711,12 @@ namespace frm
 #if HAVE_FEATURE_DBCONNECTIVITY
         catch( const SQLException& e )
         {
+            SQLExceptionInfo aInfo( ::cppu::getCaughtException() );
             (void)e;
             if ( !_nErrorResourceId )
                 // no information to prepend
                 throw;
 
-            SQLExceptionInfo aInfo( ::cppu::getCaughtException() );
             OUString sAdditionalError( FRM_RES_STRING( _nErrorResourceId ) );
             aInfo.prepend( sAdditionalError );
             aInfo.doThrow();
@@ -1718,8 +1725,9 @@ namespace frm
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
         {
+            Any aError(::cppu::getCaughtException());
             OUString sAdditionalError( FRM_RES_STRING( _nErrorResourceId ) );
-            throw WrappedTargetException( sAdditionalError, *const_cast< FormOperations* >( this ), ::cppu::getCaughtException() );
+            throw WrappedTargetException( sAdditionalError, *const_cast< FormOperations* >( this ), aError );
         }
     }
 

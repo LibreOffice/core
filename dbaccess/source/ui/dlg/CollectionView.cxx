@@ -204,7 +204,8 @@ IMPL_LINK_NOARG(OCollectionView, NewFolder_Click, Button*, void)
     }
     catch( const SQLException& )
     {
-        showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), this, m_xContext );
+        Any aError(::cppu::getCaughtException());
+        showError( ::dbtools::SQLExceptionInfo(aError), this, m_xContext );
     }
     catch( const Exception& )
     {

@@ -1131,10 +1131,11 @@ Reference< XStorageBasedLibraryContainer > ODatabaseModelImpl::getLibraryContain
     }
     catch( const Exception& )
     {
+        Any aError(::cppu::getCaughtException());
         throw WrappedTargetRuntimeException(
             OUString(),
             xDocument,
-            ::cppu::getCaughtException()
+            aError
         );
     }
     return rxContainer;
