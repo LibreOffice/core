@@ -56,14 +56,14 @@
 #include <memory>
 #include <iterator>
 
+using namespace comphelper;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star;
+
 namespace dbaxml
 {
-    using namespace comphelper;
-    using namespace ::com::sun::star::sdb;
-    using namespace ::com::sun::star::sdbcx;
-    using namespace ::com::sun::star::util;
-    using namespace ::com::sun::star;
-
     class ODBExportHelper
     {
     public:
@@ -102,11 +102,6 @@ extern "C" void SAL_CALL createRegistryInfo_OFullExport( )
 
 namespace dbaxml
 {
-    using namespace comphelper;
-    using namespace ::com::sun::star::sdb;
-    using namespace ::com::sun::star::sdbcx;
-    using namespace ::com::sun::star::util;
-
     Reference< XInterface > SAL_CALL ODBExportHelper::Create(const Reference< XMultiServiceFactory >& _rxORB)
     {
         return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB), getImplementationName_Static(), SvXMLExportFlags::SETTINGS | SvXMLExportFlags::PRETTY ));

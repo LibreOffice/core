@@ -45,8 +45,6 @@ using namespace ::com::sun::star::uno;
 namespace bib
 {
 
-    using namespace ::com::sun::star::uno;
-
     void HandleTaskPaneList( vcl::Window* pWindow, bool bAddToList )
     {
         vcl::Window*             pParent = pWindow->GetParent();

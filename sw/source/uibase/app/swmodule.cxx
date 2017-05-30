@@ -138,9 +138,6 @@ bool     g_bNoInterrupt     = false;
 #include "swdllimpl.hxx"
 
 using namespace com::sun::star;
-
-
-using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 SwModule::SwModule( SfxObjectFactory* pWebFact,

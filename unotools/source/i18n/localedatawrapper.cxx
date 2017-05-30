@@ -1452,7 +1452,6 @@ OUString LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCa
         bool bTwoDigitYear ) const
 {
     ::utl::ReadWriteGuard aGuard( aMutex, ReadWriteGuardMode::BlockCritical );
-    using namespace css::i18n;
     sal_Unicode     aBuf[20];
     sal_Unicode*    pBuf;
     OUString aStr;

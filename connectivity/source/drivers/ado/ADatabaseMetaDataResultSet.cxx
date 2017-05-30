@@ -42,7 +42,6 @@ using namespace connectivity::ado;
 using namespace cppu;
 using namespace ::comphelper;
 
-using namespace ::com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
