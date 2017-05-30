@@ -1280,6 +1280,13 @@ DECLARE_OOXMLIMPORT_TEST(testTdf100072, "tdf100072.docx")
     CPPUNIT_ASSERT_MESSAGE("Shape line width does not match", abs(nFirstEnd - nSecondEnd) < 10);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf76446, "tdf76446.docx")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    sal_Int64 nRot = getProperty<sal_Int64>(xShape, "RotateAngle");
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(3128), nRot);
+}
+
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 

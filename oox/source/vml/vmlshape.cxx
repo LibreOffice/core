@@ -372,7 +372,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                     }
 
                     if(!(maTypeModel.maRotation).isEmpty())
-                        aGrabBag.push_back(comphelper::makePropertyValue("mso-rotation-angle", sal_Int32(NormAngle360((maTypeModel.maRotation.toInt32()) * -100))));
+                        aGrabBag.push_back(comphelper::makePropertyValue("mso-rotation-angle", ConversionHelper::decodeRotation(maTypeModel.maRotation)));
                     propertySet->setPropertyValue("FrameInteropGrabBag", uno::makeAny(comphelper::containerToSequence(aGrabBag)));
                     sal_Int32 backColorTransparency = 0;
                     propertySet->getPropertyValue("BackColorTransparency")
@@ -620,20 +620,13 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, 
     lcl_setSurround( rPropSet, rTypeModel, rGraphicHelper );
 }
 
-void lcl_SetRotation(PropertySet& rPropSet, const sal_Int32 nRotation)
-{
-    // See DffPropertyReader::Fix16ToAngle(): in VML, positive rotation angles are clockwise, we have them as counter-clockwise.
-    // Additionally, VML type is 0..360, our is 0..36000.
-    rPropSet.setAnyProperty(PROP_RotateAngle, makeAny(sal_Int32(NormAngle360(nRotation * -100))));
-}
-
 Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
     awt::Rectangle aShapeRect(rShapeRect);
     boost::optional<sal_Int32> oRotation;
     bool bFlipX = false, bFlipY = false;
     if (!maTypeModel.maRotation.isEmpty())
-        oRotation.reset(maTypeModel.maRotation.toInt32());
+        oRotation.reset(ConversionHelper::decodeRotation(maTypeModel.maRotation));
     if (!maTypeModel.maFlip.isEmpty())
     {
         if (maTypeModel.maFlip == "x")
@@ -786,7 +779,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     {
         if (oRotation)
         {
-            lcl_SetRotation(aPropertySet, *oRotation);
+            aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(*oRotation));
             uno::Reference<lang::XServiceInfo> xServiceInfo(rxShapes, uno::UNO_QUERY);
             if (!xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
             {
@@ -844,7 +837,7 @@ Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >
         }
         // fdo#70457: preserve rotation information
         if ( !maTypeModel.maRotation.isEmpty() )
-            lcl_SetRotation( aPropSet, maTypeModel.maRotation.toInt32() );
+            aPropSet.setAnyProperty(PROP_RotateAngle, makeAny(ConversionHelper::decodeRotation(maTypeModel.maRotation)));
 
         const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
         lcl_SetAnchorType(aPropSet, maTypeModel, rGraphicHelper);
@@ -1288,7 +1281,7 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
     lcl_SetAnchorType(aPropertySet, maTypeModel, rGraphicHelper);
     if (!maTypeModel.maRotation.isEmpty())
-        lcl_SetRotation(aPropertySet, maTypeModel.maRotation.toInt32());
+        aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(ConversionHelper::decodeRotation(maTypeModel.maRotation)));
     return xGroupShape;
 }
 
