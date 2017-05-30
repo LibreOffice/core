@@ -215,7 +215,7 @@ namespace
                 // don't create an Undo-Action for the new connection : the connection is
                 // covered by the Undo-Action for the tabwin, as the "Undo the insert" will
                 // automatically remove all connections adjacent to the win.
-                // (Because of this automatism we would have an ownerhsip ambiguity for
+                // (Because of this automatism we would have an ownership ambiguity for
                 // the connection data if we would insert the conn-Undo-Action)
         }
     }

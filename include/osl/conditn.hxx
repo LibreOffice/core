@@ -56,7 +56,7 @@ namespace osl
     public:
         enum Result
         {
-            result_ok      = osl_cond_result_ok,        /*!< Succesful completion.                         */
+            result_ok      = osl_cond_result_ok,        /*!< Successful completion.                         */
             result_error   = osl_cond_result_error,     /*!< Error occurred. @see osl_getLastSocketError() */
             result_timeout = osl_cond_result_timeout    /*!< Blocking operation timed out.                 */
         };
