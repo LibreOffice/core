@@ -75,6 +75,18 @@ namespace ConversionHelper
                             const OUString& rValue,
                             double fDefValue );
 
+    /** Converts the passed VML rotation value to degrees.
+        See DffPropertyReader::Fix16ToAngle(): in VML, positive rotation
+        angles are clockwise, we have them as counter-clockwise.
+        Additionally, VML type is 0..360, our is 0..36000.
+
+        @param rValue  The VML rotation value. This is a floating-point value
+            with optional 'fd' suffix. If the suffix is missing, the floating
+            point value will be returned unmodified. If the 'fd' suffix is
+            present, the value will be divided by 65536.
+    */
+    OOX_DLLPUBLIC sal_Int32    decodeRotation( const OUString& rValue );
+
     /** Converts the passed VML measure string to EMU (English Metric Units).
 
         @param rGraphicHelper  The graphic helper needed to perform pixel

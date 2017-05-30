@@ -34,6 +34,7 @@
 #include "oox/helper/graphichelper.hxx"
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <svx/svdtrans.hxx>
 
 namespace oox {
 namespace vml {
@@ -107,6 +108,30 @@ double ConversionHelper::decodePercent( const OUString& rValue, double fDefValue
 
     OSL_FAIL( "ConversionHelper::decodePercent - unknown measure unit" );
     return fDefValue;
+}
+
+sal_Int32 ConversionHelper::decodeRotation( const OUString& rValue )
+{
+    if( rValue.isEmpty() )
+        return 0;
+
+    double fValue = 0.0;
+    double fRotation = 0.0;
+    sal_Int32 nEndPos = 0;
+    if( !lclExtractDouble(fValue, nEndPos, rValue) )
+        return 0;
+
+    if( nEndPos == rValue.getLength() )
+        fRotation = fValue;
+    else if( (nEndPos + 2 == rValue.getLength()) && (rValue[nEndPos] == 'f') && (rValue[nEndPos+1] == 'd') )
+        fRotation = fValue / 65536.0;
+    else
+    {
+        OSL_FAIL("ConversionHelper::decodeRotation - unknown measure unit");
+        return 0;
+    }
+
+    return NormAngle360(fRotation * -100);
 }
 
 sal_Int64 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHelper,
