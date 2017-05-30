@@ -110,7 +110,7 @@ interface FormatForSelection
     SID_NUMBER_CURRENCY     [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]
     SID_NUMBER_PERCENT      [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]
     SID_NUMBER_TIME         [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]
-    SID_NUMBER_STANDARD     [ ExecMethod = ExecuteNumFormat;]
+    SID_NUMBER_STANDARD     [ ExecMethod = ExecuteNumFormat; StateMethod = GetNumFormatState; ]
     SID_NUMBER_INCDEC       [ ExecMethod = ExecuteNumFormat;]
     SID_NUMBER_DECDEC       [ ExecMethod = ExecuteNumFormat;]
 
