@@ -32,6 +32,7 @@
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <string.h>
 #include <rtl/uri.hxx>
+#include <rtl/strbuf.hxx>
 
 #include "ftpurl.hxx"
 #include "ftpcontentprovider.hxx"
@@ -142,27 +143,25 @@ FTPURL::~FTPURL()
 
 void FTPURL::parse(const OUString& url)
 {
-    OUString aPassword,aAccount;
-    OString aIdent(url.getStr(),
-                        url.getLength(),
-                        RTL_TEXTENCODING_UTF8);
+    OUString aPassword, urlRest;
 
-    OString lower = aIdent.toAsciiLowerCase();
-    if(lower.getLength() < 6 ||
-       strncmp("ftp://",lower.getStr(),6))
+    if(url.getLength() < 6 || !url.startsWithIgnoreAsciiCase("ftp://"))
         throw malformed_exception();
+    urlRest = url.copy(6);
 
-    std::unique_ptr<char[]> buffer(new char[1+aIdent.getLength()]);
-    const char* p2 = aIdent.getStr();
-    p2 += 6;
-
-    char ch;
-    char *p1 = buffer.get();      // determine "username:password@host:port"
-    while((ch = *p2++) != '/' && ch)
-        *p1++ = ch;
-    *p1 = 0;
-
-    OUString aExpr(buffer.get(), strlen(buffer.get()), RTL_TEXTENCODING_UTF8);
+    // determine "username:password@host:port"
+    OUString aExpr;
+    sal_Int32 nIdx = urlRest.indexOf('/');
+    if (nIdx == -1)
+    {
+        aExpr = urlRest;
+        urlRest = "";
+    }
+    else
+    {
+        aExpr = urlRest.copy(0, nIdx);
+        urlRest = urlRest.copy(nIdx + 1);
+    }
 
     sal_Int32 l = aExpr.indexOf('@');
     m_aHost = aExpr.copy(1+l);
@@ -177,7 +176,7 @@ void FTPURL::parse(const OUString& url)
                 m_bShowPassword = true;
         }
         if(l > 0)
-            // Overwritte only if the username is not empty.
+            // Overwritten only if the username is not empty.
             m_aUsername = aExpr.copy(0,l);
         else if(!aExpr.isEmpty())
             m_aUsername = aExpr;
@@ -195,34 +194,36 @@ void FTPURL::parse(const OUString& url)
         m_aHost = m_aHost.copy(0,l);
     }
 
-    while(ch) {  // now determine the pathsegments ...
-        p1 = buffer.get();
-        while((ch = *p2++) != '/' && ch)
-            *p1++ = ch;
-        *p1 = 0;
-
-        if(buffer[0]) {
-            if( strcmp(buffer.get(),"..") == 0 && !m_aPathSegmentVec.empty() && m_aPathSegmentVec.back() != ".." )
-                m_aPathSegmentVec.pop_back();
-            else if(strcmp(buffer.get(),".") == 0)
-                ; // Ignore
-            else
-                // This is a legal name.
-                m_aPathSegmentVec.push_back(
-                    OUString(buffer.get(),
-                                  strlen(buffer.get()),
-                                  RTL_TEXTENCODING_UTF8));
+    // now determine the pathsegments ...
+    while(!urlRest.isEmpty())
+    {
+        nIdx = urlRest.indexOf('/');
+        OUString segment;
+        if(nIdx == -1)
+        {
+            segment = urlRest;
+            urlRest = "";
         }
+        else
+        {
+            segment = urlRest.copy(0, nIdx);
+            urlRest = urlRest.copy(nIdx + 1);
+        }
+        if( segment == ".." && !m_aPathSegmentVec.empty() && m_aPathSegmentVec.back() != ".." )
+            m_aPathSegmentVec.pop_back();
+        else if( segment == "." )
+            ; // Ignore
+        else
+            // This is a legal name.
+            m_aPathSegmentVec.push_back( segment );
     }
-
-    buffer.reset();
 
     if(m_bShowPassword)
         m_pFCP->setHost(m_aHost,
                         m_aPort,
                         m_aUsername,
                         aPassword,
-                        aAccount);
+                        ""/*aAccount*/);
 
     // now check for something like ";type=i" at end of url
     if(m_aPathSegmentVec.size() &&
