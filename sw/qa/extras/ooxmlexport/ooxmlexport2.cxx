@@ -734,10 +734,15 @@ DECLARE_OOXMLEXPORT_TEST(testWatermarkFont, "watermark-font.docx")
 
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     OUString aFont;
+    float nFontSize;
 
     // Check font family
     CPPUNIT_ASSERT(xPropertySet->getPropertyValue("CharFontName") >>= aFont);
     CPPUNIT_ASSERT_EQUAL(OUString("DejaVu Serif"), aFont);
+
+    // Check font size
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue("CharHeight") >>= nFontSize);
+    CPPUNIT_ASSERT_EQUAL((float)72, nFontSize);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo43093, "fdo43093.docx")

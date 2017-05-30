@@ -822,6 +822,13 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                             OUString aTextPathFont = SvxMSDffManager::MSDFFReadZString(aStream, aFont.nPropSize, true);
                             aStyle += "font-family:\"" + aTextPathFont + "\"";
                         }
+                        sal_uInt32 nSize;
+                        if (rProps.GetOpt(ESCHER_Prop_gtextSize, nSize))
+                        {
+                            float nSizeF = (sal_Int32)nSize / 65536;
+                            OUString aSize = OUString::number(nSizeF);
+                            aStyle += ";font-size:" + aSize + "pt";
+                        }
                         if (!aStyle.isEmpty())
                             pAttrList->add(XML_style, OUStringToOString(aStyle, RTL_TEXTENCODING_UTF8));
                         m_pSerializer->singleElementNS(XML_v, XML_textpath, XFastAttributeListRef(pAttrList));

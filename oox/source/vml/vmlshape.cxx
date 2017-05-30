@@ -517,7 +517,7 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
         }
     }
     else if (xSInfo->supportsService("com.sun.star.drawing.CustomShape"))
-        maTypeModel.maTextpathModel.pushToPropMap(aPropMap, rxShape);
+        maTypeModel.maTextpathModel.pushToPropMap(aPropMap, rxShape, rGraphicHelper);
 
     PropertySet( rxShape ).setProperties( aPropMap );
 }
