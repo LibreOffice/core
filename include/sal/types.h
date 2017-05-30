@@ -687,9 +687,9 @@ inline char16_t const * SAL_U(wchar_t const * p)
 /// @endcond
 #endif
 
-
-/** Indicate where function/methods that return a pointer always
-    return a non-nullptr value.
+/// @cond INTERNAL
+/** Annotate pointer-returning functions to indicate that such a pointer
+    is never nullptr.
 
     Note that MSVC supports this feature via it's SAL _Ret_notnull_
     annotation, but since it's in a completely different place on
@@ -697,11 +697,14 @@ inline char16_t const * SAL_U(wchar_t const * p)
 
     @since LibreOffice 5.5
 */
+#if defined LIBO_INTERNAL_ONLY
 #if (defined __GNUC__ && __GNUC__ > 4) || defined __clang__
 #define SAL_RETURNS_NONNULL  __attribute__((returns_nonnull))
 #else
 #define SAL_RETURNS_NONNULL
 #endif
+#endif
+/// @endcond
 
 #endif // INCLUDED_SAL_TYPES_H
 
