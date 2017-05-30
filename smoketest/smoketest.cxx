@@ -27,7 +27,6 @@
 #include "com/sun/star/frame/Desktop.hpp"
 #include "com/sun/star/frame/DispatchResultEvent.hpp"
 #include "com/sun/star/frame/DispatchResultState.hpp"
-#include "com/sun/star/frame/XComponentLoader.hpp"
 #include "com/sun/star/frame/XController.hpp"
 #include "com/sun/star/frame/XDispatchProvider.hpp"
 #include "com/sun/star/frame/XDispatchResultListener.hpp"

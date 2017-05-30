@@ -46,7 +46,6 @@
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/table/XTableChartsSupplier.hpp>

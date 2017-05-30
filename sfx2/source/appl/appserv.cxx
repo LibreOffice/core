@@ -28,8 +28,6 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
@@ -47,8 +45,6 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
-
-#include <com/sun/star/frame/XComponentLoader.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>

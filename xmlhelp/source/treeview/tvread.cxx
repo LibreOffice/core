@@ -27,7 +27,6 @@
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -170,7 +169,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::configuration;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
-using namespace com::sun::star::frame;
 using namespace com::sun::star::container;
 using namespace com::sun::star::deployment;
 

@@ -25,7 +25,6 @@
 
 #include <com/sun/star/awt/XTopWindowListener.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 
 #include <gtk/gtk.h>

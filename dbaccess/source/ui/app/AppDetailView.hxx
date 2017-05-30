@@ -19,7 +19,6 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_APP_APPDETAILVIEW_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_APP_APPDETAILVIEW_HXX
 
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/ucb/XContent.hpp>

@@ -21,12 +21,11 @@
 #include "optimizerdialog.hxx"
 #include "pppoptimizer.hxx"
 #include "fileopendialog.hxx"
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <sal/macros.h>
 #include <osl/time.h>
 #include <tools/urlobj.hxx>

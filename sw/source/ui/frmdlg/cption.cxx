@@ -31,7 +31,6 @@
 #include <doc.hxx>
 #include <modcfg.hxx>
 #include <swmodule.hxx>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextTableCursor.hpp>

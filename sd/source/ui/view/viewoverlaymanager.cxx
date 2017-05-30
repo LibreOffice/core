@@ -19,7 +19,6 @@
 
 #include "sddll.hxx"
 
-#include <com/sun/star/frame/XFrame.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/app.hxx>
@@ -56,7 +55,6 @@
 #include "smarttag.hxx"
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::frame;
 
 namespace sd {
 

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_ADDFIELD_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_ADDFIELD_HXX
 
-#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <svtools/transfer.hxx>

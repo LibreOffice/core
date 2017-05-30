@@ -19,8 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_MULTIPLEITEMCONVERTER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_MULTIPLEITEMCONVERTER_HXX
 
-#include <com/sun/star/frame/XModel.hpp>
-
 #include "ItemConverter.hxx"
 
 #include <vector>

@@ -11,7 +11,6 @@
 #define INCLUDED_SFX2_INC_BLUTHSNDAPI_HXX
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <sfx2/dllapi.h>

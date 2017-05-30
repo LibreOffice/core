@@ -25,7 +25,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XToolPanel.hpp>

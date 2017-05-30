@@ -60,8 +60,6 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XSeekable.hpp>

@@ -29,7 +29,6 @@
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <osl/diagnose.h>
 #include "basegfx/numeric/ftools.hxx"
@@ -48,7 +47,6 @@ namespace cssc = ::com::sun::star::chart;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 

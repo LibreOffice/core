@@ -32,7 +32,6 @@
 #include "com/sun/star/document/XStorageBasedDocument.hpp"
 #include "com/sun/star/frame/UnknownModuleException.hpp"
 #include "com/sun/star/frame/theGlobalEventBroadcaster.hpp"
-#include "com/sun/star/frame/XStorable.hpp"
 #include "com/sun/star/frame/ModuleManager.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/lang/NotInitializedException.hpp"

@@ -33,7 +33,6 @@
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include "fupage.hxx"
 #include <svx/papersizelistbox.hxx>
 #include <svx/xflclit.hxx>

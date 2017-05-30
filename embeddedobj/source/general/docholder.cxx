@@ -35,8 +35,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/frame/XDispatchHelper.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XControllerBorder.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>

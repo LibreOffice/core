@@ -26,7 +26,6 @@
 #include <com/sun/star/frame/XStatusbarController.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 

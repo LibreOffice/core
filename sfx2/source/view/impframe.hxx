@@ -24,7 +24,6 @@
 #include <sfx2/viewfrm.hxx>
 
 class SfxViewFrame;
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>

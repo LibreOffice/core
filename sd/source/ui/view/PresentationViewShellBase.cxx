@@ -27,7 +27,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

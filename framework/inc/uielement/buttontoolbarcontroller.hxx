@@ -23,12 +23,9 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/frame/ControlCommand.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

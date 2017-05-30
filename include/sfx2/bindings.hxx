@@ -31,8 +31,8 @@
 #include <tools/link.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XDispatchRecorder.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 
 //  some other includes
 

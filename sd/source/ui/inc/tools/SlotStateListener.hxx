@@ -22,7 +22,6 @@
 
 #include "MutexOwner.hxx"
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

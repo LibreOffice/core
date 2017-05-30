@@ -21,7 +21,6 @@
 
 #include <dbaccess/dataview.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <vcl/split.hxx>
 #include "IClipBoardTest.hxx"
 

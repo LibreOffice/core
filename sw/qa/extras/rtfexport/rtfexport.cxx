@@ -14,7 +14,6 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>

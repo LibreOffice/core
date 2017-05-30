@@ -19,7 +19,6 @@
 
 #include "embeddoc.hxx"
 #include <osl/diagnose.h>
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 

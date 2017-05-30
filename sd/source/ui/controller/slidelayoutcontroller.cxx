@@ -19,7 +19,6 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/DrawViewMode.hpp>

@@ -83,7 +83,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::view;
-using namespace ::com::sun::star::frame;
 
 using ::com::sun::star::util::URL;
 

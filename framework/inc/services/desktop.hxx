@@ -32,15 +32,10 @@
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XTask.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XFrames.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/FrameAction.hpp>
 #include <com/sun/star/frame/XTasksSupplier.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/Locale.hpp>

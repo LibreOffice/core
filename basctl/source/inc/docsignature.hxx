@@ -19,7 +19,6 @@
 #ifndef INCLUDED_BASCTL_SOURCE_INC_DOCSIGNATURE_HXX
 #define INCLUDED_BASCTL_SOURCE_INC_DOCSIGNATURE_HXX
 
-#include <com/sun/star/frame/XModel.hpp>
 #include <sfx2/signaturestate.hxx>
 #include <memory>
 

@@ -31,7 +31,6 @@
 #include <comphelper/types.hxx>
 #include "dbustrings.hrc"
 #include <connectivity/dbtools.hxx>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XChild.hpp>

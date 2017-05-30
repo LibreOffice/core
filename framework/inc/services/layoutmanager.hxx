@@ -32,7 +32,6 @@
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
-#include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
@@ -41,8 +40,6 @@
 #include <com/sun/star/awt/XTopWindow2.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/awt/XDockableWindowListener.hpp>
-#include <com/sun/star/frame/XMenuBarMergingAcceptor.hpp>
-#include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/propshlp.hxx>

@@ -28,7 +28,6 @@
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 
 #include <unordered_map>

@@ -30,7 +30,6 @@
 #include <general.h>
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <cppuhelper/weakref.hxx>

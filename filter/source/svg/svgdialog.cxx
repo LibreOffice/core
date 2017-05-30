@@ -26,7 +26,6 @@
 #include <cppuhelper/queryinterface.hxx>
 
 #include <com/sun/star/view/XRenderable.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #define SVG_DIALOG_SERVICE_NAME         "com.sun.star.comp.Draw.SVGFilterDialog"
@@ -37,7 +36,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::document;
 

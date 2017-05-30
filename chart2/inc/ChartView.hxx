@@ -27,7 +27,6 @@
 #include <svl/lstner.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

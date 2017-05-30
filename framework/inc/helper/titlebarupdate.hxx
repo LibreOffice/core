@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/frame/XTitleChangeListener.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>

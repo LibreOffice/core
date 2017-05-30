@@ -23,7 +23,6 @@
 #include <sal/config.h>
 #include <xmloff/dllapi.h>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 
 #define XML_PROGRESSRANGE   "ProgressRange"
 #define XML_PROGRESSMAX     "ProgressMax"

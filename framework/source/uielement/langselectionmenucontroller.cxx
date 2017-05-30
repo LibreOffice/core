@@ -34,7 +34,6 @@
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/document/XDocumentLanguages.hpp>
-#include <com/sun/star/frame/XPopupMenuController.hpp>
 
 #include <i18nlangtag/mslangid.hxx>
 #include <svl/languageoptions.hxx>

@@ -16,7 +16,6 @@
 #include <com/sun/star/frame/Desktop.hpp>
 
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 
 #include <sfx2/app.hxx>

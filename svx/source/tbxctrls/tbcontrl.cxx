@@ -60,7 +60,6 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/status/ItemStatus.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <svx/dialogs.hrc>
 #include <svx/svxitems.hrc>

@@ -35,7 +35,6 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/IllegalArgumentIOException.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
-#include <com/sun/star/frame/UntitledNumbersConst.hpp>
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>

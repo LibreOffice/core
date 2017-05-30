@@ -19,7 +19,6 @@
 
 #include <osl/file.hxx>
 #include <osl/module.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -42,7 +41,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::document;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
-using namespace com::sun::star::frame;
 using namespace com::sun::star::ui::dialogs;
 
 #include "pres.hxx"

@@ -52,12 +52,9 @@
 #include <com/sun/star/form/XGridControlListener.hpp>
 #include <com/sun/star/form/XLoadListener.hpp>
 #include <com/sun/star/form/XResetListener.hpp>
-#include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>

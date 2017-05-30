@@ -16,8 +16,6 @@
 
 #include <o3tl/typed_flags_set.hxx>
 
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 
 namespace sfx2

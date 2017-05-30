@@ -25,7 +25,6 @@
 #include "resource/sharedresources.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <tools/urlobj.hxx>
 #include "calc/CPreparedStatement.hxx"

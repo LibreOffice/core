@@ -23,7 +23,6 @@
 #include <cppuhelper/component.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>

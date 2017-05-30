@@ -27,7 +27,6 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>

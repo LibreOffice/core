@@ -23,7 +23,6 @@
 #include "ViewShell.hxx"
 #include "ShellFactory.hxx"
 #include <rtl/ustring.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
 
 #include <sal/types.h>
 #include <memory>

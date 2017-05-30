@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_FRAMEWORK_FACTORIES_FULLSCREENPANE_HXX
 
 #include "FrameWindowPane.hxx"
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/vclevent.hxx>
 #include <vcl/window.hxx>

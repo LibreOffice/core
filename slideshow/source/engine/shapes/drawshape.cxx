@@ -39,7 +39,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <tools/stream.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 

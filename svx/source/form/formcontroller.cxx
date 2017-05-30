@@ -47,7 +47,6 @@
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/form/control/FilterControl.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/sdb/ParametersRequest.hpp>

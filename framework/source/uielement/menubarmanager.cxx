@@ -33,7 +33,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/util/XStringWidth.hpp>

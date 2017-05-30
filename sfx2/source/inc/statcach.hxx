@@ -19,14 +19,10 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_STATCACH_HXX
 #define INCLUDED_SFX2_SOURCE_INC_STATCACH_HXX
 
-#include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
-#include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/implbase.hxx>
 

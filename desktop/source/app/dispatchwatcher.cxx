@@ -39,12 +39,10 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>

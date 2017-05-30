@@ -40,7 +40,6 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::frame;
 
 SvxFmAbsRecWin::SvxFmAbsRecWin( vcl::Window* _pParent, SfxToolBoxControl* _pController )
     :NumericField( _pParent, WB_BORDER )

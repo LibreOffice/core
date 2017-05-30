@@ -54,7 +54,6 @@
 #include <sys/resource.h>
 #endif
 
-#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <map>

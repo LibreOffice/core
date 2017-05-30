@@ -24,7 +24,6 @@
 
 #include <cassert>
 
-#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <basic/basrdll.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -81,7 +80,6 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::script;
 
 using ::basic::BasicManagerRepository;

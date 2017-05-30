@@ -24,7 +24,6 @@
 #include <general.h>
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>

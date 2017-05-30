@@ -68,7 +68,6 @@ using ::com::sun::star::beans::XPropertySetInfo;
 
 using namespace ::osl;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::io;

@@ -23,10 +23,7 @@
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/frame/TaskCreator.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XFrames.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>

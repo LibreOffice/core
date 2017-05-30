@@ -37,9 +37,7 @@
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XTitleChangeListener.hpp>
-#include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>

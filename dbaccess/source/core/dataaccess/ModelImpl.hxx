@@ -37,7 +37,6 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactionListener.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -56,7 +55,6 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#include <com/sun/star/frame/DoubleInitializationException.hpp>
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>

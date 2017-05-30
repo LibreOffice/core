@@ -21,7 +21,6 @@
 #define INCLUDED_FORMS_SOURCE_XFORMS_SUBMISSION_SUBMISSION_PUT_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 
 #include "submission.hxx"
 

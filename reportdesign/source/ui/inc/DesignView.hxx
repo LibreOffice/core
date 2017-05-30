@@ -20,7 +20,6 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_DESIGNVIEW_HXX
 
 #include <dbaccess/dataview.hxx>
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/report/XSection.hpp>
 #include <com/sun/star/report/XReportComponent.hpp>
 #include <vcl/split.hxx>

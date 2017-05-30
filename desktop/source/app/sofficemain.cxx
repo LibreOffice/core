@@ -36,9 +36,6 @@
 #include <vcl/svmain.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/XStorable2.hpp>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <unotools/mediadescriptor.hxx>

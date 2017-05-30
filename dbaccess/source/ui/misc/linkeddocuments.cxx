@@ -25,10 +25,8 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/util/URL.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument.hpp>

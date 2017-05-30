@@ -12,7 +12,6 @@
 #include "services.h"
 #include "dispatch/dispatchdisabler.hxx"
 
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 
 using namespace css;

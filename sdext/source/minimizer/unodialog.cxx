@@ -25,7 +25,6 @@
 #include <com/sun/star/awt/XMessageBoxFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XControlAccess.hpp>

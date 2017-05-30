@@ -12,7 +12,6 @@
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -22,7 +21,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/presentation/SlideShow.hpp>
 
 using namespace sd;
 using namespace ::osl;

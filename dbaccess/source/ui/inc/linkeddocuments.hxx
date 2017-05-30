@@ -27,8 +27,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <comphelper/namedvaluecollection.hxx>

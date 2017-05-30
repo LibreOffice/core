@@ -22,8 +22,6 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/text/XText.hpp>

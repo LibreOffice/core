@@ -38,7 +38,6 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>

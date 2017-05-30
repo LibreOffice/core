@@ -25,7 +25,6 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <xmloff/xmlexppr.hxx>

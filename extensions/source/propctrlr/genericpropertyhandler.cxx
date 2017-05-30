@@ -33,7 +33,6 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>

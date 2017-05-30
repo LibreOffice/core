@@ -33,6 +33,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/FrameActionEvent.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XBorderResizeListener.hpp>

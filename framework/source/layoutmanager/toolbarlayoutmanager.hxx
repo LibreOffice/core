@@ -34,11 +34,8 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
-#include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>

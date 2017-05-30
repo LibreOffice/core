@@ -25,9 +25,6 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/DispatchResultEvent.hpp>
-#include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteException.hpp>

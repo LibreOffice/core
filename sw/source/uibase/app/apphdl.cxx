@@ -88,6 +88,7 @@
 #include <editeng/unolingu.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/TextConnectionSettings.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>

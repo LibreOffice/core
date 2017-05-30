@@ -68,7 +68,6 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdb::application;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ucb;
 
 OTableCopyHelper::OTableCopyHelper(OGenericUnoController* _pControler)

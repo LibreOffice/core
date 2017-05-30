@@ -28,8 +28,6 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/help.hxx>
 
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <cppuhelper/compbase.hxx>
 
 using namespace css;

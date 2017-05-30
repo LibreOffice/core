@@ -23,7 +23,7 @@
 #include "AppElementType.hxx"
 
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 
 #include <comphelper/sharedmutex.hxx>
 #include <cppuhelper/implbase.hxx>

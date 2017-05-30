@@ -24,7 +24,6 @@
 
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <drawingml/textcharacterproperties.hxx>
 
 namespace oox { namespace drawingml {

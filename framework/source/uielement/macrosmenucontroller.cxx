@@ -27,7 +27,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
@@ -43,7 +42,6 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace com::sun::star::style;
 using namespace com::sun::star::container;
-using namespace ::com::sun::star::frame;
 
 namespace framework
 {

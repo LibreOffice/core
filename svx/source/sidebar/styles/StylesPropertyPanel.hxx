@@ -9,7 +9,6 @@
 #include <editeng/fhgtitem.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
-#include <com/sun/star/frame/XToolbarController.hpp>
 
 #include <svx/sidebar/PanelLayout.hxx>
 

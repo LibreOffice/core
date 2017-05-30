@@ -24,12 +24,6 @@
 
 #include <string>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XFrameActionListener.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/FrameActionEvent.hpp>
-#include <com/sun/star/frame/FrameAction.hpp>
 #include <framework/dispatchhelper.hxx>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

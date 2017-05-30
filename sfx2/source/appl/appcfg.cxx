@@ -18,7 +18,6 @@
  */
 
 #include <memory>
-#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -76,7 +75,6 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
 

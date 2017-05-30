@@ -16,7 +16,6 @@
 
 using namespace sd;
 using namespace ::com::sun::star::presentation;
-using namespace ::com::sun::star::frame;
 
 Listener::Listener( const ::rtl::Reference<Communicator>& rCommunicator,
                     sd::Transmitter *aTransmitter  ):

@@ -35,16 +35,10 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
-#include <com/sun/star/frame/status/ItemState.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>

@@ -13,15 +13,12 @@
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
-#include <com/sun/star/frame/XDesktop.hpp>
-
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>

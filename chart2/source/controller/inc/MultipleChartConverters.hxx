@@ -21,6 +21,7 @@
 
 #include "MultipleItemConverter.hxx"
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 class SdrModel;

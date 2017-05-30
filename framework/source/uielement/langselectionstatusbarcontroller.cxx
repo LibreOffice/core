@@ -37,12 +37,8 @@
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/frame/XModule.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include <tools/gen.hxx>

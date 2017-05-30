@@ -63,7 +63,6 @@ namespace dbaui
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::i18n;
     using namespace ::com::sun::star::container;
-    using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::util;
     using namespace ::dbtools;
     using namespace ::comphelper;

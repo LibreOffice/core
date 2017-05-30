@@ -32,7 +32,6 @@
 
 #include "unomodel.hxx"
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
