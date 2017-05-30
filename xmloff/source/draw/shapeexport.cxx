@@ -389,11 +389,16 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             // Shapes with a Writer TextBox always have a parent style.
             // If there would be none, then just assign the first available.
             uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(GetExport().GetModel(), uno::UNO_QUERY);
-            uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
-            uno::Reference<container::XNameAccess> xFrameStyles = xStyleFamilies->getByName("FrameStyles").get< uno::Reference<container::XNameAccess> >();
-            uno::Sequence<OUString> aFrameStyles = xFrameStyles->getElementNames();
-            if (aFrameStyles.hasElements())
-                aParentName = aFrameStyles[0];
+            if (xStyleFamiliesSupplier.is()) // tdf#108231
+            {
+                uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+                uno::Reference<container::XNameAccess> xFrameStyles = xStyleFamilies->getByName("FrameStyles").get< uno::Reference<container::XNameAccess> >();
+                uno::Sequence<OUString> aFrameStyles = xFrameStyles->getElementNames();
+                if (aFrameStyles.hasElements())
+                {
+                    aParentName = aFrameStyles[0];
+                }
+            }
         }
 
         // filter propset
