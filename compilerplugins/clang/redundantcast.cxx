@@ -480,17 +480,20 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
         return true;
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/svl/qa/"))
         return true;
-    // the array-of-struct initialiser here makes clang unhappy if I remove all of the "SchemeInfo" names
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/tools/source/fsys/urlobj.cxx"))
+
+    // Restrict this to "real" casts (compared to uses of braced-init-list, like
+    //
+    //   Foo{bar, baz}
+    //
+    // or
+    //
+    //   std::initializer_list<Foo>{bar, baz}
+    //
+    // ), at least for now:
+    auto const sub = compat::getSubExprAsWritten(expr);
+    if (isa<InitListExpr>(sub) || isa<CXXStdInitializerListExpr>(sub)) {
         return true;
-    // 2 structs with compiled-generated constructors where I cannot remove the cast even though the cast is a NoOp
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/tools/source/inet/inetmime.cxx"))
-        return true;
-    // some explicit use of std::initializer_list
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/svx/source/sidebar/area/AreaPropertyPanel.cxx"))
-        return true;
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/svx/source/tbxctrls/fillctrl.cxx"))
-        return true;
+    }
 
     // See the commit message of d0e7d020fa405ab94f19916ec96fbd4611da0031
     // "socket.c -> socket.cxx" for the reason to have
@@ -498,7 +501,6 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     //   bool(FD_ISSET(...))
     //
     // in sal/osl/unx/socket.cxx:
-    auto const sub = compat::getSubExprAsWritten(expr);
     //TODO: Better check that sub is exactly an expansion of FD_ISSET:
     if (sub->getLocEnd().isMacroID()) {
         for (auto loc = sub->getLocStart();
