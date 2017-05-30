@@ -84,7 +84,8 @@ namespace dbaui
         }
         catch(const SQLException& )
         {
-            showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
+            Any aError(::cppu::getCaughtException());
+            showError( SQLExceptionInfo(aError) );
         }
         catch( const Exception& )
         {

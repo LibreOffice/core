@@ -936,11 +936,11 @@ uno::Sequence< OUString > SAL_CALL FSStorage::getElementNames()
     }
     catch( const ucb::InteractiveIOException& r )
     {
+        uno::Any aCaught( ::cppu::getCaughtException() );
         if ( r.Code == ucb::IOErrorCode_NOT_EXISTING )
             OSL_FAIL( "The folder does not exist!" );
         else
         {
-            uno::Any aCaught( ::cppu::getCaughtException() );
             throw lang::WrappedTargetRuntimeException( "Can not open storage!",
                                             static_cast< OWeakObject* >( this ),
                                             aCaught );

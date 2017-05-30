@@ -636,10 +636,11 @@ namespace dbmm
         }
         catch( const Exception& )
         {
+            Any aError(::cppu::getCaughtException());
             m_rLogger.logFailure( MigrationError(
                 ERR_BIND_SCRIPT_STORAGE_FAILED,
                 ::comphelper::DocumentInfo::getDocumentTitle( _rxDocument ),
-                ::cppu::getCaughtException()
+                aError
             ) );
         }
     }
@@ -699,10 +700,11 @@ namespace dbmm
         }
         catch( const Exception& )
         {
+            Any aError(::cppu::getCaughtException());
             _rLogger.logFailure( MigrationError(
                 ERR_REMOVE_SCRIPTS_STORAGE_FAILED,
                 ::comphelper::DocumentInfo::getDocumentTitle( _rxDocument ),
-                ::cppu::getCaughtException()
+                aError
             ) ) ;
             return false;
         }
@@ -1015,9 +1017,10 @@ namespace dbmm
         }
         catch( const Exception& )
         {
+            Any aError(::cppu::getCaughtException());
             m_rLogger.logFailure( MigrationError(
                 ERR_COLLECTING_DOCUMENTS_FAILED,
-                ::cppu::getCaughtException()
+                aError
             ) );
             return false;
         }
@@ -1200,10 +1203,11 @@ namespace dbmm
         }
         catch( const Exception& )
         {
+            Any aError(::cppu::getCaughtException());
             m_rLogger.logFailure( MigrationError(
                 ERR_EXAMINING_SCRIPTS_FOLDER_FAILED,
                 lcl_getSubDocumentDescription( _rDocument ),
-                ::cppu::getCaughtException()
+                aError
             ) );
             return false;
         }
@@ -1612,9 +1616,10 @@ namespace dbmm
         }
         catch( const Exception& )
         {
+            Any aError(::cppu::getCaughtException());
             m_rLogger.logRecoverable( MigrationError(
                 ERR_INVALID_SCRIPT_DESCRIPTOR_FORMAT,
-                ::cppu::getCaughtException()
+                aError
             ) );
         }
 
@@ -1659,10 +1664,11 @@ namespace dbmm
         }
         catch( const Exception& )
         {
+            Any aError(::cppu::getCaughtException());
             m_rLogger.logRecoverable( MigrationError(
                 ERR_ADJUSTING_DOCUMENT_EVENTS_FAILED,
                 lcl_getSubDocumentDescription( _rDocument ),
-                ::cppu::getCaughtException()
+                aError
             ) );
         }
     }
@@ -1718,12 +1724,13 @@ namespace dbmm
         }
         catch( const Exception& )
         {
+            Any aError(::cppu::getCaughtException());
             m_rLogger.logRecoverable( MigrationError(
                 ERR_ADJUSTING_DIALOG_EVENTS_FAILED,
                 _rDocName,
                 _rDialogLibName,
                 _rDialogName,
-                ::cppu::getCaughtException()
+                aError
             ) );
             return false;
         }
@@ -1775,10 +1782,11 @@ namespace dbmm
         }
         catch( const Exception& )
         {
+            Any aError(::cppu::getCaughtException());
             m_rLogger.logRecoverable( MigrationError(
                 ERR_ADJUSTING_FORMCOMP_EVENTS_FAILED,
                 lcl_getSubDocumentDescription( _rDocument ),
-                ::cppu::getCaughtException()
+                aError
             ) );
         }
     }

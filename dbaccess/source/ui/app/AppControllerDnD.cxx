@@ -264,7 +264,8 @@ void OApplicationController::deleteObjects( ElementType _eType, const std::vecto
                 }
                 catch(const SQLException&)
                 {
-                    showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
+                    Any aError(::cppu::getCaughtException());
+                    showError( SQLExceptionInfo(aError) );
                 }
                 catch(const WrappedTargetException& e)
                 {
@@ -569,7 +570,8 @@ TransferableHelper* OApplicationController::copyObject()
     }
     catch(const SQLException&)
     {
-        showError( SQLExceptionInfo( ::cppu::getCaughtException() ) );
+        Any aError(::cppu::getCaughtException());
+        showError( SQLExceptionInfo(aError) );
     }
     catch( const Exception& )
     {
@@ -755,7 +757,11 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
             return insertHierachyElement(_eType,_sParentFolder,Reference<XNameAccess>(xContent,UNO_QUERY).is(),xContent,_bMove);
         }
     }
-    catch(const SQLException&) { showError( SQLExceptionInfo( ::cppu::getCaughtException() ) ); }
+    catch(const SQLException&)
+    {
+        Any aError(::cppu::getCaughtException());
+        showError( SQLExceptionInfo(aError) );
+    }
     catch(const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();

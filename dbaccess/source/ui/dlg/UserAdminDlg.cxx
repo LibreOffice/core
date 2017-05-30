@@ -107,7 +107,8 @@ namespace dbaui
         }
         catch(const SQLException&)
         {
-            ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), GetParent(), getORB() );
+            Any aError(::cppu::getCaughtException());
+            ::dbaui::showError( ::dbtools::SQLExceptionInfo(aError), GetParent(), getORB() );
             return RET_CANCEL;
         }
         catch(const Exception&)

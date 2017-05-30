@@ -202,7 +202,8 @@ IMPL_LINK_NOARG( ORelationDialog, OKClickHdl, Button*, void )
     }
     catch( const SQLException& )
     {
-        ::dbaui::showError( SQLExceptionInfo( ::cppu::getCaughtException() ),
+        Any aError(::cppu::getCaughtException());
+        ::dbaui::showError( SQLExceptionInfo(aError),
                             this,
                             static_cast<OJoinTableView*>(GetParent())->getDesignView()->getController().getORB());
     }

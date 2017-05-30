@@ -328,6 +328,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
     }
     catch ( const InteractiveIOException& e )
     {
+        Any aError1(::cppu::getCaughtException());
         if  (   ( e.Code == IOErrorCode_NO_FILE )
             ||  ( e.Code == IOErrorCode_NOT_EXISTING )
             ||  ( e.Code == IOErrorCode_NOT_EXISTING_PATH )
@@ -342,11 +343,12 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
 
             throw WrappedTargetException( _sURL, *this, makeAny( aError ) );
         }
-        throw WrappedTargetException( _sURL, *this, ::cppu::getCaughtException() );
+        throw WrappedTargetException( _sURL, *this, aError1 );
     }
     catch( const Exception& )
     {
-        throw WrappedTargetException( _sURL, *this, ::cppu::getCaughtException() );
+        Any aError(::cppu::getCaughtException());
+        throw WrappedTargetException( _sURL, *this, aError );
     }
 
     OSL_ENSURE( m_aDatabaseObjects.find( _sURL ) == m_aDatabaseObjects.end(),
