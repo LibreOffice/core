@@ -483,6 +483,30 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/svx/source/tbxctrls/fillctrl.cxx"))
         return true;
 
+    // See the commit message of d0e7d020fa405ab94f19916ec96fbd4611da0031
+    // "socket.c -> socket.cxx" for the reason to have
+    //
+    //   bool(FD_ISSET(...))
+    //
+    // in sal/osl/unx/socket.cxx:
+    auto const sub = compat::getSubExprAsWritten(expr);
+    //TODO: Better check that sub is exactly an expansion of FD_ISSET:
+    if (sub->getLocEnd().isMacroID()) {
+        for (auto loc = sub->getLocStart();
+             loc.isMacroID()
+                 && (compiler.getSourceManager()
+                     .isAtStartOfImmediateMacroExpansion(loc));
+             loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc))
+        {
+            if (Lexer::getImmediateMacroName(
+                    loc, compiler.getSourceManager(), compiler.getLangOpts())
+                == "FD_ISSET")
+            {
+                return true;
+            }
+        }
+    }
+
     auto const t1 = expr->getTypeAsWritten();
     auto const t2 = compat::getSubExprAsWritten(expr)->getType();
     if (t1 != t2)

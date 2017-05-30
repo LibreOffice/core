@@ -2399,7 +2399,7 @@ sal_Bool SAL_CALL osl_isInSocketSet(oslSocketSet Set, oslSocket pSocket)
         return false;
     }
 
-    return FD_ISSET(pSocket->m_Socket, &Set->m_Set);
+    return bool(FD_ISSET(pSocket->m_Socket, &Set->m_Set));
 }
 
 sal_Int32 SAL_CALL osl_demultiplexSocketEvents(oslSocketSet IncomingSet,
