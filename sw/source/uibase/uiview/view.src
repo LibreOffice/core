@@ -68,10 +68,6 @@ String STR_NB_REPLACED
 {
     Text [ en-US ] = "Search key replaced XX times." ;
 };
-String RID_TOOLS_TOOLBOX
-{
-    Text [ en-US ] = "Main Toolbar" ;
-};
 String STR_SRCVIEW_ROW
 {
     Text [ en-US ] = "Row " ;
@@ -83,10 +79,6 @@ String STR_SRCVIEW_COL
 String STR_SAVEAS_SRC
 {
     Text [ en-US ] = "~Export source..." ;
-};
-String RID_PVIEW_TOOLBOX
-{
-    Text [ en-US ] = "Print Preview" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

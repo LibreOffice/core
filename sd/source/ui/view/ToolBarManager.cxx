@@ -34,6 +34,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>
 #include <svx/dialogs.hrc>
@@ -1006,7 +1007,7 @@ void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
                 ToolBarManager::ToolBarGroup::Permanent,
                 ToolBarManager::msViewerToolBar);
             mpToolBarManager->AddToolBarShell(
-                ToolBarManager::ToolBarGroup::Permanent, RID_DRAW_TEXT_TOOLBOX);
+                ToolBarManager::ToolBarGroup::Permanent, ToolbarId::Draw_Text_Toolbox_Sd);
             break;
 
         case ViewShell::ST_SLIDE_SORTER:
@@ -1076,16 +1077,16 @@ void ToolBarRules::SelectionHasChanged (
     {
         case SdrViewContext::Graphic:
             if( !bTextEdit )
-                mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function, RID_DRAW_GRAF_TOOLBOX);
+                mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function, ToolbarId::Draw_Graf_Toolbox);
             break;
 
         case SdrViewContext::Media:
             if( !bTextEdit )
-                mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function, RID_DRAW_MEDIA_TOOLBOX);
+                mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function, ToolbarId::Draw_Media_Toolbox);
             break;
 
         case SdrViewContext::Table:
-            mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function, RID_DRAW_TABLE_TOOLBOX);
+            mpToolBarManager->SetToolBarShell(ToolBarManager::ToolBarGroup::Function, ToolbarId::Draw_Table_Toolbox);
             bTextEdit = true;
             break;
 
@@ -1111,20 +1112,20 @@ void ToolBarRules::SelectionHasChanged (
     }
 
     if( bTextEdit )
-        mpToolBarManager->AddToolBarShell(ToolBarManager::ToolBarGroup::Function, RID_DRAW_TEXT_TOOLBOX);
+        mpToolBarManager->AddToolBarShell(ToolBarManager::ToolBarGroup::Function, ToolbarId::Draw_Text_Toolbox_Sd);
 
     SdrView* pView = &const_cast<SdrView&>(rView);
     // Check if the extrusion tool bar and the fontwork tool bar have to
     // be activated.
     if (svx::checkForSelectedCustomShapes(pView, true /* bOnlyExtruded */ ))
-        mpToolBarManager->AddToolBarShell(ToolBarManager::ToolBarGroup::Function, RID_SVX_EXTRUSION_BAR);
+        mpToolBarManager->AddToolBarShell(ToolBarManager::ToolBarGroup::Function, ToolbarId::Svx_Extrusion_Bar);
     sal_uInt32 nCheckStatus = 0;
     if (svx::checkForSelectedFontWork(pView, nCheckStatus))
-        mpToolBarManager->AddToolBarShell(ToolBarManager::ToolBarGroup::Function, RID_SVX_FONTWORK_BAR);
+        mpToolBarManager->AddToolBarShell(ToolBarManager::ToolBarGroup::Function, ToolbarId::Svx_Fontwork_Bar);
 
     // Switch on additional context-sensitive tool bars.
     if (rView.GetContext() == SdrViewContext::PointEdit)
-        mpToolBarManager->AddToolBarShell(ToolBarManager::ToolBarGroup::Function, RID_BEZIER_TOOLBOX);
+        mpToolBarManager->AddToolBarShell(ToolBarManager::ToolBarGroup::Function, ToolbarId::Bezier_Toolbox_Sd);
 }
 
 void ToolBarRules::SubShellAdded (
@@ -1135,24 +1136,27 @@ void ToolBarRules::SubShellAdded (
     // actual tool bar here.
     switch (nShellId)
     {
-        case RID_DRAW_GRAF_TOOLBOX:
+        case ToolbarId::Draw_Graf_Toolbox:
             mpToolBarManager->AddToolBar(eGroup, ToolBarManager::msGraphicObjectBar);
             break;
 
-        case RID_DRAW_MEDIA_TOOLBOX:
+        case ToolbarId::Draw_Media_Toolbox:
             mpToolBarManager->AddToolBar(eGroup, ToolBarManager::msMediaObjectBar);
             break;
 
-        case RID_DRAW_TEXT_TOOLBOX:
+        case ToolbarId::Draw_Text_Toolbox_Sd:
             mpToolBarManager->AddToolBar(eGroup, ToolBarManager::msTextObjectBar);
             break;
 
-        case RID_BEZIER_TOOLBOX:
+        case ToolbarId::Bezier_Toolbox_Sd:
             mpToolBarManager->AddToolBar(eGroup, ToolBarManager::msBezierObjectBar);
             break;
 
-        case RID_DRAW_TABLE_TOOLBOX:
+        case ToolbarId::Draw_Table_Toolbox:
             mpToolBarManager->AddToolBar(eGroup, ToolBarManager::msTableObjectBar);
+            break;
+
+        default:
             break;
     }
 }
@@ -1165,24 +1169,27 @@ void ToolBarRules::SubShellRemoved (
     // actual tool bar here.
     switch (nShellId)
     {
-        case RID_DRAW_GRAF_TOOLBOX:
+        case ToolbarId::Draw_Graf_Toolbox:
             mpToolBarManager->RemoveToolBar(eGroup, ToolBarManager::msGraphicObjectBar);
             break;
 
-        case RID_DRAW_MEDIA_TOOLBOX:
+        case ToolbarId::Draw_Media_Toolbox:
             mpToolBarManager->RemoveToolBar(eGroup, ToolBarManager::msMediaObjectBar);
             break;
 
-        case RID_DRAW_TEXT_TOOLBOX:
+        case ToolbarId::Draw_Text_Toolbox_Sd:
             mpToolBarManager->RemoveToolBar(eGroup, ToolBarManager::msTextObjectBar);
             break;
 
-        case RID_BEZIER_TOOLBOX:
+        case ToolbarId::Bezier_Toolbox_Sd:
             mpToolBarManager->RemoveToolBar(eGroup, ToolBarManager::msBezierObjectBar);
             break;
 
-        case RID_DRAW_TABLE_TOOLBOX:
+        case ToolbarId::Draw_Table_Toolbox:
             mpToolBarManager->RemoveToolBar(eGroup, ToolBarManager::msTableObjectBar);
+            break;
+
+        default:
             break;
     }
 }
@@ -1399,7 +1406,7 @@ void ToolBarShellList::UpdateShells (
             std::insert_iterator<GroupedShellList>(aList,aList.begin()));
         for (GroupedShellList::iterator iShell=aList.begin(); iShell!=aList.end(); ++iShell)
         {
-            SAL_INFO("sd.view", OSL_THIS_FUNC << ": deactivating tool bar shell " << iShell->mnId);
+            SAL_INFO("sd.view", OSL_THIS_FUNC << ": deactivating tool bar shell " << (sal_uInt32)iShell->mnId);
             rpManager->DeactivateSubShell(*rpMainViewShell, iShell->mnId);
         }
 
@@ -1411,7 +1418,7 @@ void ToolBarShellList::UpdateShells (
             std::insert_iterator<GroupedShellList>(aList,aList.begin()));
         for (GroupedShellList::iterator iShell=aList.begin(); iShell!=aList.end(); ++iShell)
         {
-            SAL_INFO("sd.view", OSL_THIS_FUNC << ": activating tool bar shell " << iShell->mnId);
+            SAL_INFO("sd.view", OSL_THIS_FUNC << ": activating tool bar shell " << (sal_uInt32)iShell->mnId);
             rpManager->ActivateSubShell(*rpMainViewShell, iShell->mnId);
         }
 

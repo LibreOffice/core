@@ -95,12 +95,12 @@ struct SfxToDo_Impl
 
 struct SfxObjectBars_Impl
 {
-    sal_uInt32         nResId;  // Resource - and ConfigId of the Toolbox
+    ToolbarId          eId;      // ConfigId of the Toolbox
     sal_uInt16         nPos;
     SfxVisibilityFlags nFlags;   // special visibility flags
     SfxInterface*      pIFace;
 
-    SfxObjectBars_Impl() : nResId(0), nPos(0), nFlags(SfxVisibilityFlags::Invisible), pIFace(nullptr) {}
+    SfxObjectBars_Impl() : eId(ToolbarId::None), nPos(0), nFlags(SfxVisibilityFlags::Invisible), pIFace(nullptr) {}
 };
 
 struct SfxDispatcher_Impl
@@ -431,7 +431,7 @@ void SfxDispatcher::Construct_Impl()
     xImp->bInvalidateOnUnlock = false;
 
     for (SfxObjectBars_Impl & rObjBar : xImp->aObjBars)
-        rObjBar.nResId = 0;
+        rObjBar.eId = ToolbarId::None;
 
     Link<SfxRequest*,void> aGenLink( LINK(this, SfxDispatcher, PostMsgHandler) );
 
@@ -1325,7 +1325,7 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
         xImp->pParent->Update_Impl_( bUIActive, bIsMDIApp, bIsIPOwner, pTaskWin );
 
     for (SfxObjectBars_Impl & rObjBar : xImp->aObjBars)
-        rObjBar.nResId = 0;
+        rObjBar.eId = ToolbarId::None;
     xImp->aChildWins.clear();
 
     // bQuiet: own shells aren't considered for UI and SlotServer
@@ -1376,16 +1376,16 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
             SfxObjectBars_Impl& rBar = xImp->aObjBars[nPos];
             rBar.nPos = nPos;
             rBar.nFlags = nFlags;
-            rBar.nResId = pIFace->GetObjectBarId(nNo);
+            rBar.eId = pIFace->GetObjectBarId(nNo);
             rBar.pIFace = pIFace;
 
             if ( bUIActive || bIsActive )
             {
-                pWorkWin->SetObjectBar_Impl(nPos, nFlags, rBar.nResId, rBar.pIFace);
+                pWorkWin->SetObjectBar_Impl(nPos, nFlags, rBar.eId, rBar.pIFace);
             }
 
             if ( !bVisible )
-                rBar.nResId = 0;
+                rBar.eId = ToolbarId::None;
         }
 
         for ( nNo=0; pIFace && nNo<pIFace->GetChildWindowCount(); nNo++ )
@@ -1439,12 +1439,12 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
     for ( sal_uInt16 nPos=0; nPos<SFX_OBJECTBAR_MAX; nPos++ )
     {
         SfxObjectBars_Impl& rFixed = xImp->aFixedObjBars[nPos];
-        if ( rFixed.nResId )
+        if (rFixed.eId != ToolbarId::None)
         {
             SfxObjectBars_Impl& rBar = xImp->aObjBars[nPos];
             rBar = rFixed;
             pWorkWin->SetObjectBar_Impl(rFixed.nPos, rFixed.nFlags,
-                rFixed.nResId, rFixed.pIFace);
+                rFixed.eId, rFixed.pIFace);
         }
     }
 
@@ -1600,7 +1600,7 @@ void SfxDispatcher::FlushImpl()
         GetBindings()->DLEAVEREGISTRATIONS();
 
     for (SfxObjectBars_Impl & rFixedObjBar : xImp->aFixedObjBars)
-        rFixedObjBar.nResId = 0;
+        rFixedObjBar.eId = ToolbarId::None;
 
     SAL_INFO("sfx.control", "SfxDispatcher(" << this << ")::Flush() done");
 }
@@ -1999,9 +1999,9 @@ void SfxDispatcher::Lock( bool bLock )
     }
 }
 
-sal_uInt32 SfxDispatcher::GetObjectBarId( sal_uInt16 nPos ) const
+ToolbarId SfxDispatcher::GetObjectBarId( sal_uInt16 nPos ) const
 {
-    return xImp->aObjBars[nPos].nResId;
+    return xImp->aObjBars[nPos].eId;
 }
 
 void SfxDispatcher::HideUI( bool bHide )

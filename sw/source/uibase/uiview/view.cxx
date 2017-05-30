@@ -260,9 +260,9 @@ void SwView::SelectShell()
         {
             rDispatcher.Flush();        // Really erase all cached shells
             //Remember to the old selection which toolbar was visible
-            sal_uInt16 nId = static_cast< sal_uInt16 >( rDispatcher.GetObjectBarId( SFX_OBJECTBAR_OBJECT ));
-            if ( nId )
-                pBarCfg->SetTopToolbar( m_nSelectionType, nId );
+            ToolbarId eId = rDispatcher.GetObjectBarId(SFX_OBJECTBAR_OBJECT);
+            if (eId != ToolbarId::None)
+                pBarCfg->SetTopToolbar(m_nSelectionType, eId);
 
             for ( sal_uInt16 i = 0; true; ++i )
             {

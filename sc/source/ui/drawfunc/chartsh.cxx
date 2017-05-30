@@ -51,7 +51,7 @@ void ScChartShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT,
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::Server,
-                                            RID_DRAW_OBJECTBAR);
+                                            ToolbarId::Draw_Objectbar);
 
     GetStaticInterface()->RegisterPopupMenu("chart");
 }

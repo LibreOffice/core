@@ -22,8 +22,6 @@
 
 #include <svx/svxids.hrc>
 
-#define RID_BASICIDE_OBJECTBAR          ( RID_BASICIDE_START +  0 )
-
 #define RID_STR_SEARCHALLMODULES        ( RID_BASICIDE_START +  1 )
 #define RID_STR_SEARCHFROMSTART         ( RID_BASICIDE_START +  2 )
 #define RID_STR_NOMODULE                ( RID_BASICIDE_START +  3 )

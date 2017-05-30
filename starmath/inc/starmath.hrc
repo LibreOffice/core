@@ -82,8 +82,6 @@
 #define RID_PRINTUIOPT_FITTOPAGE    (RID_APP_START + 18)
 #define RID_PRINTUIOPT_SCALING      (RID_APP_START + 19)
 
-#define RID_MATH_TOOLBOX            (RID_APP_START + 50)
-
 #define RID_FONTREGULAR             (RID_APP_START + 804)
 #define RID_FONTITALIC              (RID_APP_START + 805)
 #define RID_FONTBOLD                (RID_APP_START + 806)

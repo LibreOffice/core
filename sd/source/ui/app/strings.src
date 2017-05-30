@@ -20,46 +20,6 @@
 #include "glob.hrc"
 #include "helpids.h"
 
-String STR_DRAW_TOOLBOX
-{
-    Text [ en-US ] = "Drawings Toolbar" ;
-};
-String STR_SLIDE_TOOLBOX
-{
-    Text [ en-US ] = "Slide Bar" ;
-};
-String STR_OUTLINE_TOOLBOX
-{
-    Text [ en-US ] = "Outline Bar" ;
-};
-String STR_DRAW_OBJ_TOOLBOX
-{
-    Text [ en-US ] = "Draw Object Bar" ;
-};
-String STR_GRAPHIC_OBJ_TOOLBOX
-{
-    Text [ en-US ] = "Draw Object Bar/Image" ;
-};
-String STR_DRAW_OPTIONS_TOOLBOX
-{
-    Text [ en-US ] = "Options Bar" ;
-};
-String STR_DRAW_COMMONTASK_TOOLBOX
-{
-    Text [ en-US ] = "Presentation" ;
-};
-String STR_SLIDE_OBJ_TOOLBOX
-{
-    Text [ en-US ] = "Slide Object Bar" ;
-};
-String STR_GLUEPOINTS_TOOLBOX
-{
-    Text [ en-US ] = "Glue Point Object Bar" ;
-};
-String STR_DRAW_TEXT_TOOLBOX
-{
-    Text [ en-US ] = "Text Object Bar" ;
-};
 String STR_NULL
 {
     Text [ en-US ] = "None" ;
@@ -869,11 +829,6 @@ String STR_PRES_SOFTEND
 String STR_PRES_PAUSE
 {
     Text [ en-US ] = "Pause..." ;
-};
-
-String STR_DRAW_GRAF_TOOLBOX
-{
-    Text [ en-US ] = "Image Object Bar" ;
 };
 
 String STR_UNDO_APPLY_3D_FAVOURITE

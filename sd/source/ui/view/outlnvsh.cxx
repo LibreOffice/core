@@ -112,9 +112,9 @@ void OutlineViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu("outline");
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS, SfxVisibilityFlags::Standard | SfxVisibilityFlags::FullScreen | SfxVisibilityFlags::Server,
-                                            RID_OUTLINE_TOOLBOX);
+                                            ToolbarId::Outline_Toolbox);
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_APPLICATION, SfxVisibilityFlags::Standard | SfxVisibilityFlags::Client | SfxVisibilityFlags::Viewer | SfxVisibilityFlags::ReadonlyDoc,
-                                            RID_DRAW_VIEWER_TOOLBOX);
+                                            ToolbarId::Draw_Viewer_Toolbox);
 
     GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxHlinkDlgWrapper::GetChildWindowId());

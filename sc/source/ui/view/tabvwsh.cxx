@@ -55,7 +55,7 @@ void ScTabViewShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS,
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::FullScreen | SfxVisibilityFlags::Server,
-                                            RID_OBJECTBAR_TOOLS);
+                                            ToolbarId::Objectbar_Tools);
 
     GetStaticInterface()->RegisterChildWindow(FID_INPUTLINE_STATUS);
     GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());

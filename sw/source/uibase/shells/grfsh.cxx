@@ -113,7 +113,7 @@ void SwGrfShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu("graphic");
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, RID_GRAFIK_TOOLBOX);
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Grafik_Toolbox);
 }
 
 void SwGrfShell::Execute(SfxRequest &rReq)

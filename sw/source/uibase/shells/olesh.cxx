@@ -42,7 +42,7 @@ void SwOleShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu("oleobject");
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, RID_OLE_TOOLBOX);
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Ole_Toolbox);
 }
 
 SwOleShell::SwOleShell(SwView &_rView) :

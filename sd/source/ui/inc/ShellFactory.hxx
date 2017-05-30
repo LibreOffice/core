@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_SHELLFACTORY_HXX
 
 #include <sal/types.h>
+#include <sfx2/toolbarids.hxx>
 
 namespace vcl { class Window; }
 
@@ -28,9 +29,7 @@ namespace sd {
 
 class FrameView;
 
-typedef sal_Int32 ShellId;
-// This shell id is a reserved value and does not specify any valid shell.
-static const sal_Int32 snInvalidShellId = -1;
+typedef ToolbarId ShellId;
 
 template<class ShellType>
 class ShellFactory

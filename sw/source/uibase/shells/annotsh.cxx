@@ -139,7 +139,7 @@ SFX_IMPL_INTERFACE(SwAnnotationShell, SfxShell)
 
 void SwAnnotationShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, RID_TEXT_TOOLBOX);
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Text_Toolbox_Sw);
 
     GetStaticInterface()->RegisterPopupMenu("annotation");
 }

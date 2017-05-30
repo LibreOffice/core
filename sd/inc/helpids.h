@@ -23,12 +23,6 @@
 #define HID_SDGRAPHICVIEWSHELL                                  "SD_HID_SDGRAPHICVIEWSHELL"
 #define HID_SDOUTLINEVIEWSHELL                                  "SD_HID_SDOUTLINEVIEWSHELL"
 
-// tool boxes
-#define HID_SD_DRAW_TOOLBOX                                     "SD_HID_SD_DRAW_TOOLBOX"
-#define HID_SD_DRAW_OBJ_TOOLBOX                                 "SD_HID_SD_DRAW_OBJ_TOOLBOX"
-#define HID_SD_DRAW_OPTIONS_TOOLBOX                             "SD_HID_SD_DRAW_OPTIONS_TOOLBOX"
-#define HID_SD_TEXT_TOOLBOX                                     "SD_HID_SD_TEXT_TOOLBOX"
-
 #define HID_SD_NAVIGATOR_MENU1                                  "SD_HID_SD_NAVIGATOR_MENU1"
 #define HID_SD_NAVIGATOR_MENU2                                  "SD_HID_SD_NAVIGATOR_MENU2"
 #define HID_SD_NAVIGATOR_MENU3                                  "SD_HID_SD_NAVIGATOR_MENU3"

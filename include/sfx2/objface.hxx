@@ -25,6 +25,7 @@
 #include <sal/types.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/msg.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <tools/resid.hxx>
 
 struct SfxInterface_Impl;
@@ -65,12 +66,12 @@ public:
 
     const SfxInterface*     GetGenoType() const { return pGenoType; }
 
-    void                    RegisterObjectBar(sal_uInt16, SfxVisibilityFlags nFlags, sal_uInt32 nResId);
-    void                    RegisterObjectBar(sal_uInt16, SfxVisibilityFlags nFlags, sal_uInt32 nResId, SfxShellFeature nFeature);
+    void                    RegisterObjectBar(sal_uInt16, SfxVisibilityFlags nFlags, ToolbarId eId);
+    void                    RegisterObjectBar(sal_uInt16, SfxVisibilityFlags nFlags, ToolbarId eId, SfxShellFeature nFeature);
     void                    RegisterChildWindow(sal_uInt16, bool bContext = false);
     void                    RegisterChildWindow(sal_uInt16, bool bContext, SfxShellFeature nFeature);
     void                    RegisterStatusBar(sal_uInt32 nResId);
-    sal_uInt32              GetObjectBarId(sal_uInt16 nNo) const;
+    ToolbarId               GetObjectBarId(sal_uInt16 nNo) const;
     sal_uInt16              GetObjectBarPos( sal_uInt16 nNo ) const;
     SfxVisibilityFlags      GetObjectBarFlags( sal_uInt16 nNo ) const;
     SfxShellFeature         GetObjectBarFeature(sal_uInt16 nNo) const;

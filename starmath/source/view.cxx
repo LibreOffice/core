@@ -869,7 +869,7 @@ void SmViewShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS,
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::FullScreen | SfxVisibilityFlags::Server,
-                                            RID_MATH_TOOLBOX);
+                                            ToolbarId::Math_Toolbox);
     //Dummy-Objectbar, to avoid quiver while activating
 
     GetStaticInterface()->RegisterChildWindow(SmCmdBoxWrapper::GetChildWindowId());

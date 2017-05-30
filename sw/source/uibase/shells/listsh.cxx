@@ -55,7 +55,7 @@ SFX_IMPL_INTERFACE(SwListShell, SwBaseShell)
 
 void SwListShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, RID_NUM_TOOLBOX);
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Num_Toolbox);
 }
 
 

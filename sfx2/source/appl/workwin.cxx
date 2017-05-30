@@ -20,8 +20,6 @@
 #include <config_features.h>
 #include <comphelper/processfactory.hxx>
 
-#include "workwin.hrc"
-
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
@@ -36,6 +34,7 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
 #include <tools/rcid.h>
@@ -55,6 +54,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <type_traits>
 #include <unordered_map>
 
 using namespace ::com::sun::star;
@@ -62,78 +62,72 @@ using namespace ::com::sun::star::uno;
 
 struct ResIdToResName
 {
-    sal_uInt16      nId;
+    ToolbarId   eId;
     const char* pName;
 };
 
 static const ResIdToResName pToolBarResToName[] =
 {
-    { RID_FULLSCREENTOOLBOX,       "fullscreenbar"        },
-    { RID_ENVTOOLBOX,              "standardbar",         },
-    { RID_SVXTBX_FORM_NAVIGATION,  "formsnavigationbar"   },
-    { RID_SVXTBX_FORM_FILTER,      "formsfilterbar"       },
-    { RID_SVXTBX_TEXT_CONTROL_ATTRIBUTES, "formtextobjectbar"    },
-    { RID_SVXTBX_CONTROLS,         "formcontrols"         },
-    { RID_SVXTBX_MORECONTROLS,     "moreformcontrols"     },
-    { RID_SVXTBX_FORMDESIGN,       "formdesign"           },
-    { RID_MATH_TOOLBOX,            "toolbar"              },      //math
-    { RID_TEXT_TOOLBOX_SC,         "textobjectbar"        },      //calc
-    { RID_DRAW_OBJECTBAR,          "drawobjectbar"        },
-    { RID_GRAPHIC_OBJECTBAR,       "graphicobjectbar"     },
-    { RID_OBJECTBAR_FORMAT,        "formatobjectbar"      },
-    { RID_OBJECTBAR_PREVIEW,       "previewbar"           },
-    { RID_OBJECTBAR_TOOLS,         "toolbar"              },      //calc
-    { RID_BEZIER_TOOLBOX_SD,       "bezierobjectbar"      },      //draw/impress
-    { RID_GLUEPOINTS_TOOLBOX,      "gluepointsobjectbar"  },
-    { RID_DRAW_GRAF_TOOLBOX,       "graphicobjectbar"     },
-    { RID_DRAW_OBJ_TOOLBOX,        "drawingobjectbar"     },      //impress
-    { RID_DRAW_TEXT_TOOLBOX_SD,    "textobjectbar"        },      //impress
-    { RID_DRAW_TOOLBOX_SD,         "toolbar"              },      //impress
-    { RID_DRAW_OPTIONS_TOOLBOX,    "optionsbar"           },
-    { RID_DRAW_COMMONTASK_TOOLBOX, "commontaskbar"        },
-    { RID_GRAPHIC_OBJ_TOOLBOX,     "drawingobjectbar"     },      //draw
-    { RID_OUTLINE_TOOLBOX,         "outlinetoolbar"       },      //impress
-    { RID_SLIDE_TOOLBOX,           "slideviewtoolbar"     },
-    { RID_SLIDE_OBJ_TOOLBOX,       "slideviewobjectbar"   },
-    { RID_BEZIER_TOOLBOX_SW,       "bezierobjectbar"      },
-    { RID_DRAW_TOOLBOX_SW,         "drawingobjectbar"     },
-    { RID_DRAW_TEXT_TOOLBOX_SW,    "drawtextobjectbar"    },
-    { RID_FRAME_TOOLBOX,           "frameobjectbar"       },
-    { RID_GRAFIK_TOOLBOX,          "graphicobjectbar"     },
-    { RID_NUM_TOOLBOX,             "numobjectbar"         },
-    { RID_OLE_TOOLBOX,             "oleobjectbar"         },
-    { RID_TABLE_TOOLBOX,           "tableobjectbar"       },
-    { RID_TEXT_TOOLBOX_SW,         "textobjectbar"        },
-    { RID_PVIEW_TOOLBOX,           "previewobjectbar"     },      //writer
-    { RID_WEBTOOLS_TOOLBOX,        "toolbar"              },      //web
-    { RID_WEBTEXT_TOOLBOX,         "textobjectbar"        },
-    { RID_TOOLS_TOOLBOX,           "toolbar"              },      //writer
-    { RID_WEBFRAME_TOOLBOX,        "frameobjectbar"       },      //web
-    { RID_WEBGRAPHIC_TOOLBOX,      "graphicobjectbar"     },
-    { RID_WEBOLE_TOOLBOX,          "oleobjectbar"         },
-    { RID_BASICIDE_OBJECTBAR,      "macrobar"             },
-    { RID_SVX_FONTWORK_BAR,        "fontworkobjectbar"    },      //global
-    { RID_SVX_EXTRUSION_BAR,       "extrusionobjectbar"   },
-    { RID_FORMLAYER_TOOLBOX,       "formsobjectbar"       },
-    { RID_MODULE_TOOLBOX,          "viewerbar"            },      //writer (plugin)
-    { RID_OBJECTBAR_APP,           "viewerbar"            },      //calc   (plugin)
-    { RID_DRAW_VIEWER_TOOLBOX,     "viewerbar"            },      //impress(plugin)
-    { RID_DRAW_MEDIA_TOOLBOX,      "mediaobjectbar"       },      //draw/impress
-    { RID_MEDIA_OBJECTBAR,         "mediaobjectbar"       },      //calc
-    { RID_MEDIA_TOOLBOX,           "mediaobjectbar"       },      //writer
-    { 0,                           ""                     }
+    { ToolbarId::FullScreenToolbox,       "fullscreenbar"        },
+    { ToolbarId::EnvToolbox,              "standardbar",         },
+    { ToolbarId::SvxTbx_Form_Navigation,  "formsnavigationbar"   },
+    { ToolbarId::SvxTbx_Form_Filter,      "formsfilterbar"       },
+    { ToolbarId::SvxTbx_Text_Control_Attributes, "formtextobjectbar"    },
+    { ToolbarId::SvxTbx_Controls,         "formcontrols"         },
+    { ToolbarId::SvxTbx_MoreControls,     "moreformcontrols"     },
+    { ToolbarId::SvxTbx_FormDesign,       "formdesign"           },
+    { ToolbarId::Math_Toolbox,            "toolbar"              },      //math
+    { ToolbarId::Text_Toolbox_Sc,         "textobjectbar"        },      //calc
+    { ToolbarId::Draw_Objectbar,          "drawobjectbar"        },
+    { ToolbarId::Graphic_Objectbar,       "graphicobjectbar"     },
+    { ToolbarId::Objectbar_Format,        "formatobjectbar"      },
+    { ToolbarId::Objectbar_Preview,       "previewbar"           },
+    { ToolbarId::Objectbar_Tools,         "toolbar"              },      //calc
+    { ToolbarId::Bezier_Toolbox_Sd,       "bezierobjectbar"      },      //draw/impress
+    { ToolbarId::Gluepoints_Toolbox,      "gluepointsobjectbar"  },
+    { ToolbarId::Draw_Graf_Toolbox,       "graphicobjectbar"     },
+    { ToolbarId::Draw_Obj_Toolbox,        "drawingobjectbar"     },      //impress
+    { ToolbarId::Draw_Text_Toolbox_Sd,    "textobjectbar"        },      //impress
+    { ToolbarId::Draw_Toolbox_Sd,         "toolbar"              },      //impress
+    { ToolbarId::Draw_Options_Toolbox,    "optionsbar"           },
+    { ToolbarId::Draw_CommonTask_Toolbox, "commontaskbar"        },
+    { ToolbarId::Graphic_Obj_Toolbox,     "drawingobjectbar"     },      //draw
+    { ToolbarId::Outline_Toolbox,         "outlinetoolbar"       },      //impress
+    { ToolbarId::Slide_Toolbox,           "slideviewtoolbar"     },
+    { ToolbarId::Slide_Obj_Toolbox,       "slideviewobjectbar"   },
+    { ToolbarId::Bezier_Toolbox_Sw,       "bezierobjectbar"      },
+    { ToolbarId::Draw_Toolbox_Sw,         "drawingobjectbar"     },
+    { ToolbarId::Draw_Text_Toolbox_Sw,    "drawtextobjectbar"    },
+    { ToolbarId::Frame_Toolbox,           "frameobjectbar"       },
+    { ToolbarId::Grafik_Toolbox,          "graphicobjectbar"     },
+    { ToolbarId::Num_Toolbox,             "numobjectbar"         },
+    { ToolbarId::Ole_Toolbox,             "oleobjectbar"         },
+    { ToolbarId::Table_Toolbox,           "tableobjectbar"       },
+    { ToolbarId::Text_Toolbox_Sw,         "textobjectbar"        },
+    { ToolbarId::PView_Toolbox,           "previewobjectbar"     },      //writer
+    { ToolbarId::Webtools_Toolbox,        "toolbar"              },      //web
+    { ToolbarId::Webtext_Toolbox,         "textobjectbar"        },
+    { ToolbarId::Tools_Toolbox,           "toolbar"              },      //writer
+    { ToolbarId::Webframe_Toolbox,        "frameobjectbar"       },      //web
+    { ToolbarId::Webgraphic_Toolbox,      "graphicobjectbar"     },
+    { ToolbarId::Webole_Toolbox,          "oleobjectbar"         },
+    { ToolbarId::Basicide_Objectbar,      "macrobar"             },
+    { ToolbarId::Svx_Fontwork_Bar,        "fontworkobjectbar"    },      //global
+    { ToolbarId::Svx_Extrusion_Bar,       "extrusionobjectbar"   },
+    { ToolbarId::FormLayer_Toolbox,       "formsobjectbar"       },
+    { ToolbarId::Module_Toolbox,          "viewerbar"            },      //writer (plugin)
+    { ToolbarId::Objectbar_App,           "viewerbar"            },      //calc   (plugin)
+    { ToolbarId::Draw_Viewer_Toolbox,     "viewerbar"            },      //impress(plugin)
+    { ToolbarId::Draw_Media_Toolbox,      "mediaobjectbar"       },      //draw/impress
+    { ToolbarId::Media_Objectbar,         "mediaobjectbar"       },      //calc
+    { ToolbarId::Media_Toolbox,           "mediaobjectbar"       },      //writer
+    { ToolbarId::None,                           ""                     }
 };
-
-//SV_IMPL_OBJARR( SfxObjectBarArr_Impl, SfxObjectBar_Impl );
-
 
 // Sort the Children according their alignment
 // The order corresponds to the enum SfxChildAlignment (->CHILDWIN.HXX).
 
-
 // Help to make changes to the alignment compatible!
-
-
 LayoutManagerListener::LayoutManagerListener(
     SfxWorkWindow* pWrkWin ) :
     m_bHasFrame( false ),
@@ -297,27 +291,35 @@ void SAL_CALL LayoutManagerListener::layoutEvent(
 
 namespace
 {
+    struct ToolbarIdHash
+    {
+        size_t operator()(ToolbarId t) const
+        {
+            typedef std::underlying_type<ToolbarId>::type underlying_type;
+            return std::hash<underlying_type>()(static_cast<underlying_type>(t));
+        }
+    };
+
     class FilledToolBarResIdToResourceURLMap
     {
     private:
-        typedef std::unordered_map< sal_Int32, OUString > ToolBarResIdToResourceURLMap;
+        typedef std::unordered_map<ToolbarId, OUString, ToolbarIdHash> ToolBarResIdToResourceURLMap;
         ToolBarResIdToResourceURLMap m_aResIdToResourceURLMap;
     public:
         FilledToolBarResIdToResourceURLMap()
         {
             sal_Int32 nIndex( 0 );
-            while ( pToolBarResToName[nIndex].nId != 0 )
+            while (pToolBarResToName[nIndex].eId != ToolbarId::None)
             {
                 OUString aResourceURL( OUString::createFromAscii( pToolBarResToName[nIndex].pName ));
-                m_aResIdToResourceURLMap.insert( ToolBarResIdToResourceURLMap::value_type(
-                                                    sal_Int32( pToolBarResToName[nIndex].nId ), aResourceURL ));
+                m_aResIdToResourceURLMap.insert(ToolBarResIdToResourceURLMap::value_type(pToolBarResToName[nIndex].eId, aResourceURL));
                 ++nIndex;
             }
         }
 
-        OUString findURL(sal_uInt16 nResId) const
+        OUString findURL(ToolbarId eId) const
         {
-            ToolBarResIdToResourceURLMap::const_iterator aIter = m_aResIdToResourceURLMap.find( nResId );
+            ToolBarResIdToResourceURLMap::const_iterator aIter = m_aResIdToResourceURLMap.find(eId);
             if ( aIter != m_aResIdToResourceURLMap.end() )
                 return aIter->second;
             return OUString();
@@ -331,9 +333,9 @@ namespace
     };
 }
 
-static OUString GetResourceURLFromResId( sal_uInt16 nResId )
+static OUString GetResourceURLFromToolbarId(ToolbarId eId)
 {
-    return theFilledToolBarResIdToResourceURLMap::get().findURL(nResId);
+    return theFilledToolBarResIdToResourceURLMap::get().findURL(eId);
 }
 
 bool IsAppWorkWinToolbox_Impl( sal_uInt16 nPos )
@@ -639,9 +641,9 @@ void SfxWorkWindow::DeleteControllers_Impl()
         for (SfxObjectBar_Impl & i : aObjBarList)
         {
             // Not every position must be occupied
-            sal_uInt16 nId = i.nId;
-            if ( nId )
-                i.nId = 0;
+            ToolbarId eId = i.eId;
+            if (eId != ToolbarId::None)
+                i.eId = ToolbarId::None;
         }
     }
 
@@ -987,26 +989,26 @@ void SfxWorkWindow::ResetObjectBars_Impl()
         n->nId = 0;
 }
 
-void SfxWorkWindow::SetObjectBar_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, sal_uInt32 nResId,
+void SfxWorkWindow::SetObjectBar_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, ToolbarId eId,
             SfxInterface* pIFace)
 {
     DBG_ASSERT( nPos < SFX_OBJECTBAR_MAX, "object bar position overflow" );
 
     if ( pParent && IsAppWorkWinToolbox_Impl( nPos ) )
     {
-        pParent->SetObjectBar_Impl(nPos, nFlags, nResId, pIFace);
+        pParent->SetObjectBar_Impl(nPos, nFlags, eId, pIFace);
         return;
     }
 
     SfxObjectBar_Impl aObjBar;
     aObjBar.pIFace = pIFace;
-    aObjBar.nId = sal::static_int_cast<sal_uInt16>(nResId);
+    aObjBar.eId = eId;
     aObjBar.nPos = nPos;
     aObjBar.nMode = nFlags;
 
     for (SfxObjectBar_Impl & rBar : aObjBarList)
     {
-        if ( rBar.nId == aObjBar.nId )
+        if ( rBar.eId == aObjBar.eId )
         {
             rBar = aObjBar;
             return;
@@ -1186,7 +1188,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
     xLayoutManager->lock();
     for ( auto const & n: aObjBarList )
     {
-        sal_uInt16      nId      = n.nId;
+        ToolbarId eId = n.eId;
         bool    bDestroy = n.bDestroy;
 
         // Determine the valid mode for the ToolBox
@@ -1200,14 +1202,14 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
         if ( bDestroy )
         {
             OUString aTbxId( m_aTbxTypeName );
-            aTbxId += GetResourceURLFromResId( nId );
+            aTbxId += GetResourceURLFromToolbarId(eId);
             xLayoutManager->destroyElement( aTbxId );
         }
-        else if ( nId != 0 && ( ( bModesMatching && !bIsFullScreen ) ||
+        else if ( eId != ToolbarId::None && ( ( bModesMatching && !bIsFullScreen ) ||
                                 ( bIsFullScreen && bFullScreenTbx ) ) )
         {
             OUString aTbxId( m_aTbxTypeName );
-            aTbxId += GetResourceURLFromResId( nId );
+            aTbxId += GetResourceURLFromToolbarId(eId);
             if ( !IsDockingAllowed() && !xLayoutManager->isElementFloating( aTbxId ))
                 xLayoutManager->destroyElement( aTbxId );
             else
@@ -1217,11 +1219,11 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
                     xLayoutManager->lockWindow( aTbxId );
             }
         }
-        else if ( nId != 0 )
+        else if ( eId != ToolbarId::None )
         {
             // Delete the Toolbox at this Position if possible
             OUString aTbxId( m_aTbxTypeName );
-            aTbxId += GetResourceURLFromResId( nId );
+            aTbxId += GetResourceURLFromToolbarId(eId);
             xLayoutManager->destroyElement( aTbxId );
         }
     }

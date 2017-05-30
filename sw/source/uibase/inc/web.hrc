@@ -22,12 +22,7 @@
 
 #include "rcid.hrc"
 
-#define RID_WEBTOOLS_TOOLBOX                    (RC_WEB_BEGIN + 2)
-#define RID_WEBTEXT_TOOLBOX                     (RC_WEB_BEGIN + 3)
 #define STR_HUMAN_SWWEBDOC_NAME                 (RC_WEB_BEGIN + 4)
-#define RID_WEBFRAME_TOOLBOX                    (RC_WEB_BEGIN + 8)
-#define RID_WEBGRAPHIC_TOOLBOX                  (RC_WEB_BEGIN + 10)
-#define RID_WEBOLE_TOOLBOX                      (RC_WEB_BEGIN + 11)
 #define STR_WRITER_WEBDOC_FULLTYPE              (RC_WEB_BEGIN + 12)
 
 #define WEB_ACT_END                                     STR_WRITER_WEBDOC_FULLTYPE

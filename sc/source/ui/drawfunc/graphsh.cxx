@@ -48,7 +48,7 @@ void ScGraphicShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT,
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::Server,
-                                            RID_GRAPHIC_OBJECTBAR);
+                                            ToolbarId::Graphic_Objectbar);
 
     GetStaticInterface()->RegisterPopupMenu("graphic");
 }

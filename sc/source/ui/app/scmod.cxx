@@ -128,7 +128,7 @@ void ScModule::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_APPLICATION,
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::Client | SfxVisibilityFlags::Viewer,
-                                            RID_OBJECTBAR_APP);
+                                            ToolbarId::Objectbar_App);
 
     GetStaticInterface()->RegisterStatusBar(SCCFG_STATUSBAR);
 }

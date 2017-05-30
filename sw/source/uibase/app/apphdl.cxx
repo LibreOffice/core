@@ -122,7 +122,7 @@ void SwModule::InitInterface_Impl()
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_APPLICATION,
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::Client | SfxVisibilityFlags::Viewer,
-                                            RID_MODULE_TOOLBOX);
+                                            ToolbarId::Module_Toolbox);
 }
 
 // other states
