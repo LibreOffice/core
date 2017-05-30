@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_6b4de671",
+        "filename": "onlineupdate/source/service/maintenanceservice.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-05-30T19:17:19Z",
+      "side": 1,
+      "message": "Nitpick: could you remove extra space?",
+      "range": {
+        "startLine": 241,
+        "startChar": 64,
+        "endLine": 241,
+        "endChar": 65
+      },
+      "revId": "28cf5a3dc76a07223a03463b02dd63a3c9e8e331",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_4b32eaf2",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_groupedbar_compact.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 7069,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-05-30T19:17:19Z",
+      "side": 1,
+      "message": "there\u0027s already an id \"ReviewSection\" so this one should stay \"ReviewSectio\"",
+      "range": {
+        "startLine": 7069,
+        "startChar": 72,
+        "endLine": 7069,
+        "endChar": 73
+      },
+      "revId": "28cf5a3dc76a07223a03463b02dd63a3c9e8e331",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
