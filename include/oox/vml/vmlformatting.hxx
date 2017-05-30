@@ -64,6 +64,9 @@ namespace ConversionHelper
 
     /** Converts the passed VML percentage measure string to a normalized
         floating-point value.
+        See DffPropertyReader::Fix16ToAngle(): in VML, positive rotation
+        angles are clockwise, we have them as counter-clockwise.
+        Additionally, VML type is 0..360, our is 0..36000.
 
         @param rValue  The VML percentage value. This is a floating-point value
             with optional following '%' or 'f' sign. If the sign is missing, the
@@ -74,6 +77,15 @@ namespace ConversionHelper
     OOX_DLLPUBLIC double       decodePercent(
                             const OUString& rValue,
                             double fDefValue );
+
+    /** Converts the passed VML rotation value to degrees.
+
+        @param rValue  The VML rotation value. This is a floating-point value
+            with optional 'fd' suffix. If the suffix is missing, the floating
+            point value will be returned unmodified. If the 'fd' suffix is
+            present, the value will be divided by 65536.
+    */
+    OOX_DLLPUBLIC sal_Int32    decodeRotation( const OUString& rValue );
 
     /** Converts the passed VML measure string to EMU (English Metric Units).
 
