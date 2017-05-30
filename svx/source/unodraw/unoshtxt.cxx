@@ -101,6 +101,7 @@ private:
     bool                            mbForwarderIsEditMode;      // have to reflect that, since ENDEDIT can happen more often
     bool                            mbShapeIsEditMode;          // only true, if SdrHintKind::BeginEdit was received
     bool                            mbNotificationsDisabled;    // prevent EditEngine/Outliner notifications (e.g. when setting up forwarder)
+    bool                            mbNotifyEditOutlinerSet;
 
     SvxUnoTextRangeBaseList         maTextRanges;
 
@@ -173,7 +174,8 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText
     mbOldUndoMode   ( false ),
     mbForwarderIsEditMode ( false ),
     mbShapeIsEditMode     ( false ),
-    mbNotificationsDisabled ( false )
+    mbNotificationsDisabled ( false ),
+    mbNotifyEditOutlinerSet ( false )
 {
     DBG_ASSERT( mpObject, "invalid pObject!" );
 
@@ -209,7 +211,8 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText
     mbOldUndoMode   ( false ),
     mbForwarderIsEditMode ( false ),
     mbShapeIsEditMode     ( true ),
-    mbNotificationsDisabled ( false )
+    mbNotificationsDisabled ( false ),
+    mbNotifyEditOutlinerSet ( false )
 {
     if( !mpText )
     {
@@ -390,7 +393,10 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 
                     // register as listener - need to broadcast state change messages
                     if( mpView && mpView->GetTextEditOutliner() )
+                    {
                         mpView->GetTextEditOutliner()->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
+                        mbNotifyEditOutlinerSet = true;
+                    }
 
                     // Only now we're really in edit mode
                     mbShapeIsEditMode = true;
@@ -409,7 +415,10 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 
                     // remove as listener - outliner might outlive ourselves
                     if( mpView && mpView->GetTextEditOutliner() )
+                    {
                         mpView->GetTextEditOutliner()->SetNotifyHdl( Link<EENotify&,void>() );
+                        mbNotifyEditOutlinerSet = false;
+                    }
 
                     // destroy view forwarder, OutlinerView no longer
                     // valid (no need for UpdateData(), it's been
@@ -483,6 +492,12 @@ void SvxTextEditSourceImpl::dispose()
 
     if( mpView )
     {
+        // remove as listener - outliner might outlive ourselves
+        if (mbNotifyEditOutlinerSet && mpView && mpView->GetTextEditOutliner())
+        {
+            mpView->GetTextEditOutliner()->SetNotifyHdl(Link<EENotify&,void>());
+            mbNotifyEditOutlinerSet = false;
+        }
         EndListening( *mpView );
         mpView = nullptr;
     }
@@ -730,6 +745,7 @@ SvxDrawOutlinerViewForwarder* SvxTextEditSourceImpl::CreateViewForwarder()
     {
         // register as listener - need to broadcast state change messages
         mpView->GetTextEditOutliner()->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
+        mbNotifyEditOutlinerSet = true;
 
         SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
         if( pTextObj )
