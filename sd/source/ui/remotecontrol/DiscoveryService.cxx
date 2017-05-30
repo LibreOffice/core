@@ -123,7 +123,7 @@ void DiscoveryService::setupSockets()
     struct ip_mreq multicastRequest;
 
 // the Win32 SDK 8.1 deprecates inet_addr()
-#if defined(_WIN32_WINNT) &&  _WIN32_WINNT >= _WIN32_WINNT_VISTA
+#if defined(_WIN32)
     IN_ADDR addr;
     INT ret = InetPtonW(AF_INET, L"239.0.0.1", & addr);
     if (1 == ret)

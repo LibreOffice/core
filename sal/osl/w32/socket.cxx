@@ -424,26 +424,12 @@ oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
 
     if (strDottedAddr && strDottedAddr->length)
     {
-// the Win32 SDK 8.1 deprecates inet_addr()
-#if _WIN32_WINNT >= _WIN32_WINNT_VISTA
         IN_ADDR addr;
         INT ret = InetPtonW(AF_INET, SAL_W(strDottedAddr->buffer), & addr);
         if (1 == ret)
         {
             nAddr = addr.S_un.S_addr;
         }
-#else
-        /* Dotted host address for limited broadcast */
-        rtl_String *pDottedAddr = NULL;
-
-        rtl_uString2String (
-            &pDottedAddr, strDottedAddr->buffer, strDottedAddr->length,
-            RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
-
-        nAddr = inet_addr (pDottedAddr->buffer);
-
-        rtl_string_release (pDottedAddr);
-#endif
     }
 
     if (nAddr != OSL_INADDR_NONE)
@@ -487,21 +473,9 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
 {
     sal_uInt32 Addr;
 
-// the Win32 SDK 8.1 deprecates inet_addr()
-#if _WIN32_WINNT >= _WIN32_WINNT_VISTA
     IN_ADDR addr;
     INT ret = InetPtonW(AF_INET, SAL_W(strDottedAddr->buffer), & addr);
     Addr = ret == 1 ? addr.S_un.S_addr : OSL_INADDR_NONE;
-#else
-    rtl_String  *pDottedAddr=NULL;
-
-    rtl_uString2String(
-        &pDottedAddr, strDottedAddr->buffer, strDottedAddr->length,
-        RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
-
-    Addr= inet_addr (pDottedAddr->buffer);
-    rtl_string_release (pDottedAddr);
-#endif
 
     oslSocketAddr pAddr = nullptr;
     if(Addr != OSL_INADDR_NONE)
@@ -554,68 +528,6 @@ struct oslHostAddrImpl {
     oslSocketAddr   pSockAddr;
 } ;
 
-#if _WIN32_WINNT < _WIN32_WINNT_VISTA
-static oslHostAddr __osl_hostentToHostAddr (const struct hostent *he)
-{
-    oslHostAddr pAddr= NULL;
-    oslSocketAddr pSocketAddr = 0;
-
-    rtl_uString     *cn= NULL;
-
-    if ((he == NULL) || (he->h_name == NULL) || (he->h_addr_list[0] == NULL))
-        return ((oslHostAddr)NULL);
-
-    rtl_string2UString(
-        &cn, he->h_name, strlen(he->h_name),
-        RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
-    OSL_ASSERT(cn != 0);
-
-    pSocketAddr = osl_createSocketAddr_();
-
-    if (pSocketAddr == NULL)
-    {
-        rtl_uString_release(cn);
-        return ((oslHostAddr)NULL);
-    }
-
-    pSocketAddr->m_sockaddr.sa_family = he->h_addrtype;
-    if (pSocketAddr->m_sockaddr.sa_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
-    {
-        struct sockaddr_in *sin= (struct sockaddr_in *)&(pSocketAddr->m_sockaddr);
-        memcpy (
-            &(sin->sin_addr.s_addr),
-            he->h_addr_list[0],
-            he->h_length);
-    }
-    else
-    {
-        /* unknown address family */
-        /* future extensions for new families might be implemented here */
-
-        SAL_WARN("sal.osl", "_osl_hostentToHostAddr(): unknown address family.");
-        OSL_ASSERT(sal_False);
-
-        osl_destroySocketAddr_( pSocketAddr );
-        rtl_uString_release(cn);
-        return ((oslHostAddr)NULL);
-    }
-
-    pAddr= (oslHostAddr )rtl_allocateMemory (sizeof (struct oslHostAddrImpl));
-
-    if (pAddr == NULL)
-    {
-        osl_destroySocketAddr_( pSocketAddr );
-        rtl_uString_release(cn);
-        return ((oslHostAddr)NULL);
-    }
-
-    pAddr->pHostName= cn;
-    pAddr->pSockAddr= pSocketAddr;
-
-    return pAddr;
-}
-#endif
-
 /*****************************************************************************/
 /* osl_createHostAddr */
 /*****************************************************************************/
@@ -659,19 +571,6 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname)
     if ((strHostname == nullptr) || (strHostname->length == 0))
         return nullptr;
 
-#if _WIN32_WINNT < _WIN32_WINNT_VISTA
-    struct hostent *he;
-    rtl_String     *Hostname= NULL;
-
-    rtl_uString2String(
-        &Hostname, strHostname->buffer, strHostname->length,
-        RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
-
-    he= gethostbyname (Hostname->buffer);
-
-    rtl_string_release (Hostname);
-    return __osl_hostentToHostAddr (he);
-#else
     PADDRINFOW pAddrInfo = nullptr;
     int ret = GetAddrInfoW(
                 SAL_W(strHostname->buffer), nullptr, nullptr, & pAddrInfo);
@@ -699,7 +598,6 @@ oslHostAddr SAL_CALL osl_createHostAddrByName(rtl_uString *strHostname)
         SAL_INFO("sal.osl", "GetAddrInfoW failed: " << WSAGetLastError());
     }
     return nullptr;
-#endif // _WIN32_WINNT
 }
 
 /*****************************************************************************/
@@ -717,13 +615,6 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr(const oslSocketAddr pAddr)
         if (sin->sin_addr.s_addr == htonl(INADDR_ANY))
             return nullptr;
 
-#if _WIN32_WINNT < _WIN32_WINNT_VISTA
-        struct hostent *he;
-        he= gethostbyaddr ((const sal_Char *)&(sin->sin_addr),
-                           sizeof (sin->sin_addr),
-                           sin->sin_family);
-        return __osl_hostentToHostAddr (he);
-#else
         WCHAR buf[NI_MAXHOST];
         int ret = GetNameInfoW(
                     & pAddr->m_sockaddr, sizeof(struct sockaddr),
@@ -744,7 +635,6 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr(const oslSocketAddr pAddr)
         {
             SAL_INFO("sal.osl", "GetNameInfoW failed: " << WSAGetLastError());
         }
-#endif // _WIN32_WINNT
     }
 
     return nullptr;
@@ -988,12 +878,6 @@ oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr (
         return osl_Socket_Error;
 
     *strDottedInetAddr = nullptr;
-#if _WIN32_WINNT < _WIN32_WINNT_VISTA
-    sal_Char * pDotted = inet_ntoa (pSystemInetAddr->sin_addr);
-    rtl_string2UString(
-        strDottedInetAddr, pDotted, strlen (pDotted),
-        RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
-#else
     WCHAR buf[16]; // 16 for IPV4, 46 for IPV6
     PCWSTR ret = InetNtopW(
             AF_INET, & pSystemInetAddr->sin_addr,
@@ -1004,7 +888,6 @@ oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr (
         return osl_Socket_Error;
     }
     rtl_uString_newFromStr(strDottedInetAddr, SAL_U(ret));
-#endif // _WIN32_WINNT
     OSL_ASSERT(*strDottedInetAddr != nullptr);
 
     return osl_Socket_Ok;
