@@ -109,6 +109,26 @@ double ConversionHelper::decodePercent( const OUString& rValue, double fDefValue
     return fDefValue;
 }
 
+double ConversionHelper::decodeRotation( const OUString& rValue )
+{
+    if( rValue.isEmpty() )
+        return 0.0;
+
+    double fValue = 0.0;
+    sal_Int32 nEndPos = 0;
+    if( !lclExtractDouble(fValue, nEndPos, rValue) )
+        return 0.0;
+
+    if( nEndPos == rValue.getLength() )
+        return fValue;
+
+    if( (nEndPos + 2 == rValue.getLength()) && (rValue[nEndPos] == 'f') && (rValue[nEndPos+1] == 'd') )
+        return fValue / 65536.0;
+
+    OSL_FAIL( "ConversionHelper::decodeRotation - unknown measure unit" );
+    return 0.0;
+}
+
 sal_Int64 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHelper,
         const OUString& rValue, sal_Int32 nRefValue, bool bPixelX, bool bDefaultAsPixel )
 {
