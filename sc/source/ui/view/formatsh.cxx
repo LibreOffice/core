@@ -1127,7 +1127,9 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             rReq.Done();
             break;
         case SID_NUMBER_STANDARD:
-            pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
+            if (!(nType & css::util::NumberFormat::NUMBER))
+                pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
+            rBindings.Invalidate( nSlot );
             rReq.Done();
             break;
         case SID_NUMBER_INCDEC:
@@ -2635,6 +2637,13 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                     const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
                     sal_uInt32 nNumberFormat = static_cast<const SfxUInt32Item&>(rAttrSet.Get(ATTR_VALUE_FORMAT)).GetValue();
                     rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::NUMBER) && nNumberFormat == 4 ) );
+                }
+                break;
+            case SID_NUMBER_STANDARD:
+                {
+                    const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
+                    sal_uInt32 nNumberFormat = static_cast<const SfxUInt32Item&>(rAttrSet.Get(ATTR_VALUE_FORMAT)).GetValue();
+                    rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::NUMBER) && nNumberFormat == 0 ) );
                 }
                 break;
         }
