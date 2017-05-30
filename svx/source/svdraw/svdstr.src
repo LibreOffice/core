@@ -65,7 +65,6 @@ String STR_ObjNamePluralLINE
 {
     Text [ en-US ] = "Lines" ;
 };
-
 String STR_ObjNameSingulRECT
 {
     Text [ en-US ] = "Rectangle" ;
@@ -74,7 +73,26 @@ String STR_ObjNamePluralRECT
 {
     Text [ en-US ] = "Rectangles" ;
 };
-
+String STR_ObjNamePluralQUAD
+{
+    Text [ en-US ] = "Squares" ;
+};
+String STR_ObjNamePluralPARAL
+{
+    Text [ en-US ] = "Parallelograms" ;
+};
+String STR_ObjNamePluralRECTRND
+{
+    Text [ en-US ] = "Rounded Rectangles" ;
+};
+String STR_ObjNamePluralQUADRND
+{
+    Text [ en-US ] = "Rounded Squares" ;
+};
+String STR_ObjNamePluralPARALRND
+{
+    Text [ en-US ] = "Rounded parallelograms" ;
+};
 String STR_ObjNameSingulCIRC
 {
     Text [ en-US ] = "Circle" ;
