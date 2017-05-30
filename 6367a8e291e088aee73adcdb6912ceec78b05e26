@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_a86ef4c6",
+        "filename": "svtools/source/misc/langtab.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-30T09:39:05Z",
+      "side": 1,
+      "message": "Just a side note: changing the define name here flags the string as changed for translators, which is why I kept those old LANGUAGE_USER_... I\u0027m not attached to that though, it was just a convenience for them.",
+      "revId": "6367a8e291e088aee73adcdb6912ceec78b05e26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_083f08b5",
+        "filename": "include/i18nlangtag/lang.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-05-30T09:39:05Z",
+      "side": 0,
+      "message": "I\u0027d rather keep the comment, changed to\n\n /* obsoletes LANGUAGE_OBSOLETE_USER_MALAGASY_PLATEAU */",
+      "revId": "5c5223bfaee5f00784cf291843d50df0dae1c967",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
