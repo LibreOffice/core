@@ -109,15 +109,6 @@ diff -ru openssl.orig/util/pl/VC-32.pl openssl/util/pl/VC-32.pl
  if ($FLAVOR =~ /WIN64/)
      {
      # Note that we currently don't have /WX on Win64! There is a lot of
-@@ -48,7 +48,7 @@
-     my $f = $shlib || $fips ?' /MD':' /MT';
-     $opt_cflags=$f.' /Ox';
-     $dbg_cflags=$f.'d /Od -DDEBUG -D_DEBUG';
--    $lflags="/nologo /subsystem:console /opt:ref";
-+    $lflags="/nologo /subsystem:console,5.02 /opt:ref";
- 
-     *::perlasm_compile_target = sub {
- 	my ($target,$source,$bname)=@_;
 @@ -114,7 +114,7 @@
      }
  
@@ -146,10 +137,9 @@ diff -ru openssl.orig/util/pl/VC-32.pl openssl/util/pl/VC-32.pl
      $ff = "/fixed";
 -    $opt_cflags=$f.' /Ox /O2 /Ob2';
 -    $dbg_cflags=$f.'d /Od -DDEBUG -D_DEBUG';
--    $lflags="/nologo /subsystem:console /opt:ref";
-+    $lflags="/nologo /subsystem:console,5.01 /opt:ref";
 +    $opt_cflags=$f.' -Ox -O2 -Ob2';
 +    $dbg_cflags=$f.'d -Od -DDEBUG -D_DEBUG';
+     $lflags="/nologo /subsystem:console /opt:ref";
      }
 -$lib_cflag='/Zl' if (!$shlib);	# remove /DEFAULTLIBs from static lib
 +$lib_cflag='-Zl' if (!$shlib);	# remove /DEFAULTLIBs from static lib
