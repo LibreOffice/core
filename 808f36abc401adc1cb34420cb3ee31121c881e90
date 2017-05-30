@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_941798a2",
+        "filename": "dtrans/source/win32/clipb/WinClipbImpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-05-30T07:03:40Z",
+      "side": 1,
+      "message": "I thought it could be useful for backward compatibility.\nBut great if we can remove it",
+      "parentUuid": "5a3905b3_94307858",
+      "revId": "808f36abc401adc1cb34420cb3ee31121c881e90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_344a64c6",
         "filename": "offapi/com/sun/star/datatransfer/clipboard/RenderingCapabilities.idl",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-05-30T06:59:05Z",
       "side": 1,
       "message": "Not sure the comma after @deprecated is useful for the doxygen-generated documentation?",
+      "revId": "808f36abc401adc1cb34420cb3ee31121c881e90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b40c9495",
+        "filename": "offapi/com/sun/star/datatransfer/clipboard/RenderingCapabilities.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-05-30T07:03:40Z",
+      "side": 1,
+      "message": "No pb, I\u0027ll remove it",
+      "parentUuid": "5a3905b3_344a64c6",
       "revId": "808f36abc401adc1cb34420cb3ee31121c881e90",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
