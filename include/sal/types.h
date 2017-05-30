@@ -697,12 +697,10 @@ inline char16_t const * SAL_U(wchar_t const * p)
 
     @since LibreOffice 5.5
 */
-#if defined LIBO_INTERNAL_ONLY
-#if (defined __GNUC__ && __GNUC__ > 4) || defined __clang__
+#if defined LIBO_INTERNAL_ONLY && ((defined __GNUC__ && __GNUC__ > 4) || defined __clang__)
 #define SAL_RETURNS_NONNULL  __attribute__((returns_nonnull))
 #else
 #define SAL_RETURNS_NONNULL
-#endif
 #endif
 /// @endcond
 
