@@ -16,6 +16,24 @@
       "revId": "6c80b3730ebe5a95aa685e5f02c285edeb21d4a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c888a0ea",
+        "filename": "ure/source/uno",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-30T15:40:36Z",
+      "side": 1,
+      "message": "fixed with \u003chttps://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d0a88690292e7e24b1e3250429364664ef4aa0345\u003e \"Fix quoting\"",
+      "parentUuid": "5a3905b3_c437b7e1",
+      "revId": "6c80b3730ebe5a95aa685e5f02c285edeb21d4a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
