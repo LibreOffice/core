@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_88ee9820",
+        "filename": "sw/source/uibase/docvw/edtdd.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-05-30T10:22:06Z",
+      "side": 1,
+      "message": "Nitpick: it\u0027s tdf#XxYyXz, not #iXxYyZz#, which makes people believe it is AOO bugzilla issue, which it isn\u0027t",
+      "revId": "a9d7f964c53923c849bd2ce982f12476ead98bb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
