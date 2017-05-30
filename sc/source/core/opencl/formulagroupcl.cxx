@@ -3773,8 +3773,8 @@ void DynamicKernel::CreateKernel()
     ::opencl::KernelEnv kEnv;
     ::opencl::setKernelEnv(&kEnv);
     const char* src = mFullProgramSrc.c_str();
-    static std::string lastOneKernelHash = "";
-    static std::string lastSecondKernelHash = "";
+    static std::string lastOneKernelHash;
+    static std::string lastSecondKernelHash;
     static cl_program lastOneProgram = nullptr;
     static cl_program lastSecondProgram = nullptr;
     std::string KernelHash = mKernelSignature + GetMD5();

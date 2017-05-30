@@ -844,12 +844,12 @@ void Test::testFormulaHashAndTag()
         if (aHashTests[i].bEqual)
         {
             os << " Error: these hashes should be equal." << endl;
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(os.str().c_str(), nHashVal1, nHashVal2);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(os.str(), nHashVal1, nHashVal2);
         }
         else
         {
             os << " Error: these hashes should differ." << endl;
-            CPPUNIT_ASSERT_MESSAGE(os.str().c_str(), nHashVal1 != nHashVal2);
+            CPPUNIT_ASSERT_MESSAGE(os.str(), nHashVal1 != nHashVal2);
         }
 
         aPos1.IncRow();
@@ -896,7 +896,7 @@ void Test::testFormulaHashAndTag()
             {
                 std::ostringstream os;
                 os << "Unexpected vectorization state: expr: '" << aVectorTests[i].pFormula << "', using software interpreter: " << bForceSwInterpreter;
-                CPPUNIT_ASSERT_MESSAGE(os.str().c_str(), false);
+                CPPUNIT_ASSERT_MESSAGE(os.str(), false);
             }
             aPos1.IncRow();
         }
@@ -949,7 +949,7 @@ void Test::testFormulaTokenEquality()
                 std::ostringstream os;
                 os << "These two formulas should be evaluated equal: '"
                     << aTests[i].mpFormula1 << "' vs '" << aTests[i].mpFormula2 << "'" << endl;
-                CPPUNIT_FAIL(os.str().c_str());
+                CPPUNIT_FAIL(os.str());
             }
         }
         else
@@ -959,7 +959,7 @@ void Test::testFormulaTokenEquality()
                 std::ostringstream os;
                 os << "These two formulas should be evaluated non-equal: '"
                     << aTests[i].mpFormula1 << "' vs '" << aTests[i].mpFormula2 << "'" << endl;
-                CPPUNIT_FAIL(os.str().c_str());
+                CPPUNIT_FAIL(os.str());
             }
         }
     }

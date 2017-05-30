@@ -932,7 +932,7 @@ void Test::testPivotTableCache()
             {
                 std::ostringstream os;
                 os << "Row " << i << " should be visible but it isn't.";
-                CPPUNIT_ASSERT_MESSAGE(os.str().c_str(), false);
+                CPPUNIT_ASSERT_MESSAGE(os.str(), false);
             }
         }
     }
