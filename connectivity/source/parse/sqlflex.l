@@ -717,15 +717,10 @@ void OSQLScanner::SQLyyerror(char const *fmt)
         m_sErrorMessage += ": ";
 
         ::rtl::OUString aError;
-        static sal_Int32 BUFFERSIZE = 256;
-        static sal_Char* Buffer = nullptr;
-        if(!Buffer)
-            Buffer = new sal_Char[BUFFERSIZE];
+        OUStringBuffer Buffer(256);
 
-        sal_Char *s = Buffer;
-        sal_Int32 nPos = 1;
         int ch = SQLyytext ? (SQLyytext[0] == 0 ? ' ' : SQLyytext[0]): ' ';
-        *s++ = ch;
+        Buffer.append((sal_Unicode)ch);
         while (!checkeof(ch = yyinput()))
         {
             if (ch == ' ')
@@ -735,31 +730,18 @@ void OSQLScanner::SQLyyerror(char const *fmt)
                     if (!checkeof(ch))
                         unput(ch);
                 }
-                *s = '\0';
-                aError = ::rtl::OUString(Buffer,nPos,RTL_TEXTENCODING_UTF8);
+                aError = Buffer.makeStringAndClear();
                 break;
             }
             else
             {
-                *s++ = ch;
-                if (++nPos == BUFFERSIZE)
-                {
-                    ::rtl::OString aBuf(Buffer);
-                    delete[] Buffer;
-                    BUFFERSIZE *=2;
-                    Buffer = new sal_Char[BUFFERSIZE];
-                    for(sal_Int32 i=0;i<aBuf.getLength();++i,++Buffer)
-                        *Buffer = aBuf.getStr()[i];
-                    s = &Buffer[nPos];
-    			}
-			}
-		}
-		m_sErrorMessage += aError;
-		delete[] Buffer;
-		Buffer = nullptr;
-	}
-	IN_SQLyyerror = false;
-	YY_FLUSH_BUFFER;
+                Buffer.append((sal_Unicode)ch);
+            }
+        }
+        m_sErrorMessage += aError;
+    }
+    IN_SQLyyerror = false;
+    YY_FLUSH_BUFFER;
 }
 
 //------------------------------------------------------------------------------
