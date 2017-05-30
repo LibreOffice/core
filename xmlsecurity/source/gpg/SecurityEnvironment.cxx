@@ -94,8 +94,36 @@ Sequence< Reference < XCertificate > > SecurityEnvironmentGpg::getPersonalCertif
     return xCertificateSequence;
 }
 
-Reference< XCertificate > SecurityEnvironmentGpg::getCertificate( const OUString& /*issuerName*/, const Sequence< sal_Int8 >& /*serialNumber*/ )
+Reference< XCertificate > SecurityEnvironmentGpg::getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& /*serialNumber*/ )
 {
+    GpgME::initializeLibrary();
+    GpgME::Error err = GpgME::checkEngine(GpgME::OpenPGP);
+    if (err)
+        throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+
+    GpgME::Context* ctx = GpgME::Context::createForProtocol(GpgME::OpenPGP);
+    if (ctx == nullptr)
+        throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+
+    CertificateImpl* xCert=nullptr;
+    std::list< CertificateImpl* > certsList;
+
+    ctx->setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
+    OString ostr = OUStringToOString( issuerName , RTL_TEXTENCODING_UTF8 );
+    err = ctx->startKeyListing(ostr.getStr(), true);
+    while (!err) {
+        GpgME::Key k = ctx->nextKey(err);
+        if (err)
+            break;
+        if (!k.isInvalid()) {
+            xCert = new CertificateImpl();
+            xCert->setCertificate(k);
+            ctx->endKeyListing();
+            return xCert;
+        }
+    }
+    ctx->endKeyListing();
+
     return nullptr;
 }
 
