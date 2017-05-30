@@ -37,6 +37,7 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/ctrlitem.hxx>
+#include <sfx2/toolbarids.hxx>
 #include <sfx2/viewfrm.hxx>
 
 class SfxSplitWindow;
@@ -46,14 +47,14 @@ class SfxWorkWindow;
 // This struct makes all relevant Information available of Toolboxes
 struct SfxObjectBar_Impl
 {
-    sal_uInt16         nId;   // Resource - and ConfigId of Toolbox
+    ToolbarId          eId;   // ConfigId of Toolbox
     SfxVisibilityFlags nMode; // special visibility flags
     sal_uInt16         nPos;
     bool               bDestroy;
     SfxInterface*      pIFace;
 
     SfxObjectBar_Impl() :
-        nId(0),
+        eId(ToolbarId::None),
         nMode(SfxVisibilityFlags::Invisible),
         nPos(0),
         bDestroy(false),
@@ -273,7 +274,7 @@ public:
     void                    UpdateObjectBars_Impl();
     void                    UpdateObjectBars_Impl2();
     void                    ResetObjectBars_Impl();
-    void                    SetObjectBar_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, sal_uInt32 nResId,
+    void                    SetObjectBar_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, ToolbarId eId,
                                     SfxInterface *pIFace);
     bool                    KnowsObjectBar_Impl( sal_uInt16 nPos ) const;
     bool                    IsVisible_Impl();

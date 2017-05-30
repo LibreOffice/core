@@ -155,10 +155,6 @@ String RID_STR_COLUMN
      // Abbreviation for 'column'
     Text [ en-US ] = "Col" ;
 };
-String RID_BASICIDE_OBJECTBAR
-{
-    Text [ en-US ] = "Macro Bar" ;
-};
 String RID_STR_CANNOTCLOSE
 {
     Text [ en-US ] = "The window cannot be closed while BASIC is running." ;

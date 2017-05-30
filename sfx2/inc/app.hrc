@@ -24,9 +24,6 @@
 #define STR_NO_WEBBROWSER_FOUND                 (RID_SFX_APP_START+7)
 #define STR_NO_ABS_URI_REF                      (RID_SFX_APP_START+8)
 
-#define RID_FULLSCREENTOOLBOX                   (RID_SFX_APP_START+42)
-#define RID_ENVTOOLBOX                          (RID_SFX_APP_START+44)
-
 #define STR_QUITAPP                             (RID_SFX_APP_START+59)
 
 #define RID_STR_HLPFILENOTEXIST                 (RID_SFX_APP_START+68)

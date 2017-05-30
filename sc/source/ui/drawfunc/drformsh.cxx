@@ -46,7 +46,7 @@ void ScDrawFormShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT,
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::Server,
-                                            RID_OBJECTBAR_FORMAT);
+                                            ToolbarId::Objectbar_Format);
 
     GetStaticInterface()->RegisterPopupMenu("form");
 }

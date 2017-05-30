@@ -22,6 +22,7 @@
 #include <memory>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
+#include <sfx2/toolbarids.hxx>
 #include <sal/types.h>
 
 #include <sfx2/bindings.hxx>
@@ -161,7 +162,7 @@ public:
                                        sal_uInt16 nCount = 0, const sal_uInt16 *pSIDs = nullptr );
 
     void                HideUI( bool bHide = true );
-    sal_uInt32          GetObjectBarId( sal_uInt16 nPos ) const;
+    ToolbarId           GetObjectBarId( sal_uInt16 nPos ) const;
 
     SfxItemState        QueryState( sal_uInt16 nSID, const SfxPoolItem* &rpState );
     SfxItemState        QueryState( sal_uInt16 nSID, css::uno::Any& rAny );

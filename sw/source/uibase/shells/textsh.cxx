@@ -118,7 +118,7 @@ void SwTextShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu("text");
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, RID_TEXT_TOOLBOX);
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Text_Toolbox_Sw);
 
     GetStaticInterface()->RegisterChildWindow(FN_EDIT_FORMULA);
     GetStaticInterface()->RegisterChildWindow(FN_INSERT_FIELD);

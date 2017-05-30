@@ -111,7 +111,7 @@ void SwFrameShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu("frame");
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, RID_FRAME_TOOLBOX);
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Frame_Toolbox);
 }
 
 void SwFrameShell::Execute(SfxRequest &rReq)

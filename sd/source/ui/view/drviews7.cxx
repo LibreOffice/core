@@ -943,7 +943,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     // EditText active
-    if (GetViewShellBase().GetViewShellManager()->GetShell(RID_DRAW_TEXT_TOOLBOX) != nullptr)
+    if (GetViewShellBase().GetViewShellManager()->GetShell(ToolbarId::Draw_Text_Toolbox_Sd) != nullptr)
     {
         sal_uInt16 nCurrentSId = SID_ATTR_CHAR;
 

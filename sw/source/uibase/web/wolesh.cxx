@@ -40,7 +40,7 @@ void SwWebOleShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu("oleobject");
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, RID_WEBOLE_TOOLBOX);
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Webole_Toolbox);
 }
 
 SwWebOleShell::SwWebOleShell(SwView &_rView) :

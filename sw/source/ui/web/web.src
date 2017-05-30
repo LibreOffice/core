@@ -32,16 +32,5 @@ String STR_WRITER_WEBDOC_FULLTYPE
 {
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION HTML Document";
 };
-String RID_WEBTOOLS_TOOLBOX
-{
-    Text [ en-US ] = "Main Toolbar/Web" ;
-};
-
-// Text bar
-
-String RID_WEBTEXT_TOOLBOX
-{
-    Text [ en-US ] = "Text Object Bar/Web" ;
-};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

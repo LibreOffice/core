@@ -58,7 +58,7 @@ SFX_IMPL_INTERFACE(ExtrusionBar, SfxShell)
 
 void ExtrusionBar::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, RID_SVX_EXTRUSION_BAR);
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Svx_Extrusion_Bar);
 }
 
 

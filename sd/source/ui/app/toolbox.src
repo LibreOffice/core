@@ -21,11 +21,6 @@
 #include "cfgids.hxx"
 #include <svx/svxids.hrc>
 
-String RID_DRAW_VIEWER_TOOLBOX
-{
-    Text [ en-US ] = "Function Bar (viewing mode)" ;
-};
-
 String RID_DRAW_MEDIA_TOOLBOX
 {
     Text [ en-US ] = "Media Playback" ;

@@ -96,7 +96,7 @@ SFX_IMPL_INTERFACE(SwTableShell, SwBaseShell)
 void SwTableShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu("table");
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, RID_TABLE_TOOLBOX);
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Table_Toolbox);
 }
 
 

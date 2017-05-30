@@ -118,7 +118,7 @@ void SwSrcView::InitInterface_Impl()
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS,
                                             SfxVisibilityFlags::Standard|SfxVisibilityFlags::Server,
-                                            RID_WEBTOOLS_TOOLBOX);
+                                            ToolbarId::Webtools_Toolbox);
 
     GetStaticInterface()->RegisterChildWindow(SvxSearchDialogWrapper::GetChildWindowId());
 }

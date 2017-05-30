@@ -81,12 +81,12 @@ static sal_Int32 lcl_getArrayIndex(SelectionType nSelType)
     return nRet;
 }
 
-void SwToolbarConfigItem::SetTopToolbar( SelectionType nSelType, sal_Int32 nBarId )
+void SwToolbarConfigItem::SetTopToolbar(SelectionType nSelType, ToolbarId eBarId)
 {
     sal_Int32 nProp = lcl_getArrayIndex(nSelType);
     if(nProp >= 0)
     {
-        aTbxIdArray[nProp] = nBarId;
+        aTbxIdArray[nProp] = (sal_Int32)eBarId;
         SetModified();
     }
 }

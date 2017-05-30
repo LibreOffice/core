@@ -80,7 +80,7 @@ void SwWebView::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS, SfxVisibilityFlags::Standard|SfxVisibilityFlags::Server,
-                                            RID_WEBTOOLS_TOOLBOX);
+                                            ToolbarId::Webtools_Toolbox);
 }
 
 
@@ -127,9 +127,9 @@ void SwWebView::SelectShell()
             rDispatcher.Flush();        // really delete all cached shells
 
             //Additional to the old selection remember which toolbar was visible.
-            sal_Int32 nId = rDispatcher.GetObjectBarId( SFX_OBJECTBAR_OBJECT );
-            if ( nId )
-                pBarCfg->SetTopToolbar( _nSelectionType, nId );
+            ToolbarId eId = rDispatcher.GetObjectBarId(SFX_OBJECTBAR_OBJECT);
+            if (eId != ToolbarId::None)
+                pBarCfg->SetTopToolbar( _nSelectionType, eId );
 
             SfxShell *pSfxShell;
             sal_uInt16 i;

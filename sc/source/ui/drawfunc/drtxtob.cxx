@@ -88,7 +88,7 @@ void ScDrawTextObjectBar::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT,
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::Server,
-                                            RID_TEXT_TOOLBOX);
+                                            ToolbarId::Text_Toolbox_Sc);
 
     GetStaticInterface()->RegisterPopupMenu("drawtext");
 

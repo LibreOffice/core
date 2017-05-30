@@ -90,7 +90,7 @@ void ScPreviewShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT,
                                             SfxVisibilityFlags::Standard|SfxVisibilityFlags::Server|SfxVisibilityFlags::ReadonlyDoc,
-                                            RID_OBJECTBAR_PREVIEW);
+                                            ToolbarId::Objectbar_Preview);
 
     GetStaticInterface()->RegisterPopupMenu("preview");
 }

@@ -42,7 +42,7 @@ void SwWebFrameShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu("frame");
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, RID_WEBFRAME_TOOLBOX);
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Webframe_Toolbox);
 }
 
 

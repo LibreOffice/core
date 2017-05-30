@@ -107,7 +107,7 @@ void SwView::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(FN_SYNC_LABELS, false, SfxShellFeature::SwChildWindowLabel);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS, SfxVisibilityFlags::Standard|SfxVisibilityFlags::Server,
-                                            RID_TOOLS_TOOLBOX);
+                                            ToolbarId::Tools_Toolbox);
 #endif
 }
 
