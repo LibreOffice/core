@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_ebce3682",
+        "filename": "connectivity/source/drivers/firebird/Table.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-05-30T23:54:05Z",
+      "side": 1,
+      "message": "I suggest to not make the change there, but change the function getAlterTableColumn to do the quote itself. Also quote the table name there.",
+      "range": {
+        "startLine": 142,
+        "startChar": 22,
+        "endLine": 142,
+        "endChar": 86
+      },
+      "revId": "50198fb5271fe6aa70184dd687d656621cadf153",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_2bc91e79",
+        "filename": "connectivity/source/drivers/firebird/Table.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-05-30T23:54:05Z",
+      "side": 1,
+      "message": "Sorry, there was a typo in my email.\nThe \"wrong\" name is not in the \"s\" or \"n\" at the beginning, but in the two \"b\" near the end. So I meant:\n\nIn the same function, there is a typo in variable name nNullabble, should be nNullable.",
+      "revId": "50198fb5271fe6aa70184dd687d656621cadf153",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_4bc66a68",
+        "filename": "connectivity/source/drivers/firebird/Table.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-05-30T23:54:05Z",
+      "side": 1,
+      "message": "Here (and a few other places), since the column name is included in a string (enclosed in single quotes), and not in an identifier (enclosed in double quotes), it needs to be escaped with a single quote (\u0027), not a double quote (\", which is what sQuoteString is IMO).\n\nTo test that this one works, use a column name with a single quote in it.",
+      "revId": "50198fb5271fe6aa70184dd687d656621cadf153",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
