@@ -127,6 +127,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     const bool bScaleChanged = xColumn->getPropertyValue("Scale") != rDescriptor->getPropertyValue("Scale");
     const bool bIsNullableChanged = xColumn->getPropertyValue("IsNullable") != rDescriptor->getPropertyValue("IsNullable");
     const bool bIsAutoIncrementChanged = xColumn->getPropertyValue("IsAutoIncrement") != rDescriptor->getPropertyValue("IsAutoIncrement");
+
     // TODO: remainder -- these are all "optional" so have to detect presence and change.
 
     bool bDefaultChanged = xColumn->getPropertyValue("DefaultValue")
@@ -146,22 +147,22 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
 
     if (bIsNullableChanged)
     {
-        sal_Int32 nNullabble = 0;
-        rDescriptor->getPropertyValue("IsNullable") >>= nNullabble;
+        sal_Int32 nNullable = 0;
+        rDescriptor->getPropertyValue("IsNullable") >>= nNullable;
 
-        if (nNullabble != ColumnValue::NULLABLE_UNKNOWN)
+        if (nNullable != ColumnValue::NULLABLE_UNKNOWN)
         {
 
             OUString sSql;
             // Dirty hack: can't change null directly in sql, we have to fiddle
             // the system tables manually.
-            if (nNullabble == ColumnValue::NULLABLE)
+            if (nNullable == ColumnValue::NULLABLE)
             {
                 sSql = "UPDATE RDB$RELATION_FIELDS SET RDB$NULL_FLAG = NULL "
                        "WHERE RDB$FIELD_NAME = '" + rColName + "' "
                        "AND RDB$RELATION_NAME = '" + getName() + "'";
             }
-            else if (nNullabble == ColumnValue::NO_NULLS)
+            else if (nNullable == ColumnValue::NO_NULLS)
             {
                 // And if we are making NOT NULL then we have to make sure we have
                 // no nulls left in the column.
@@ -208,10 +209,10 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     // TODO: quote identifiers as needed.
     if (bNameChanged)
     {
-        OUString sNewTableName;
-        rDescriptor->getPropertyValue("Name") >>= sNewTableName;
+        OUString sNewColName;
+        rDescriptor->getPropertyValue("Name") >>= sNewColName;
         OUString sSql(getAlterTableColumn(rColName)
-                                            + " TO \"" + sNewTableName + "\"");
+                                            + " TO \"" + sNewColName + "\"");
 
         getConnection()->createStatement()->execute(sSql);
     }
