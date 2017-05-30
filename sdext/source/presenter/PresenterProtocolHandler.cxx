@@ -27,7 +27,6 @@
 #include "PresenterPaneFactory.hxx"
 #include "PresenterViewFactory.hxx"
 #include "PresenterWindowManager.hxx"
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/drawing/SlideSorter.hpp>
 #include <com/sun/star/drawing/framework/Configuration.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>

@@ -47,7 +47,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>

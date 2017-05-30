@@ -26,7 +26,6 @@
 #include <vcl/dialog.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/URL.hpp>

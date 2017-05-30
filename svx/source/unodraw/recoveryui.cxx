@@ -22,7 +22,6 @@
 #include <docrecovery.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>

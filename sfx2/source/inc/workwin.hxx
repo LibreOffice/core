@@ -21,7 +21,6 @@
 
 #include <vector>
 #include <deque>
-#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>

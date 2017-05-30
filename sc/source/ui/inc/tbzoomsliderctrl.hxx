@@ -23,7 +23,6 @@
 #include <svl/poolitem.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <svx/zoomslideritem.hxx>
 
 class ScZoomSliderControl : public SfxToolBoxControl

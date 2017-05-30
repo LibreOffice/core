@@ -26,7 +26,6 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include "chartviewdllapi.hxx"

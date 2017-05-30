@@ -26,7 +26,6 @@
 #include <config_gio.h>
 
 #include <com/sun/star/awt/Toolkit.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>

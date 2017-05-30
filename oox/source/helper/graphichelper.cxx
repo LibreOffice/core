@@ -26,7 +26,6 @@
 #include <com/sun/star/awt/XUnitConversion.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/graphic/GraphicObject.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>

@@ -141,7 +141,6 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::form::runtime;
-using namespace ::com::sun::star::frame;
 using namespace ::svxform;
 
 FmDesignModeChangedHint::FmDesignModeChangedHint( bool bDesMode )

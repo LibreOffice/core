@@ -28,7 +28,6 @@
 #include <vcl/timer.hxx>
 #include <sfx2/app.hxx>
 #include <o3tl/enumarray.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 
 #include "bitset.hxx"
 #include <memory>

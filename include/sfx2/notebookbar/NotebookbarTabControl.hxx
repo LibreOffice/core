@@ -12,7 +12,6 @@
 
 #include <vcl/toolbox.hxx>
 #include <sfx2/dllapi.h>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <vcl/tabctrl.hxx>
 
 class ChangedUIEventListener;

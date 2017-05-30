@@ -22,7 +22,6 @@
 #include <tools/rcid.h>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/viewoptions.hxx>
-#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/XCloseable.hpp>

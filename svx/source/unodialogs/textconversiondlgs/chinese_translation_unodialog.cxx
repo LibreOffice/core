@@ -27,8 +27,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 namespace textconversiondlgs

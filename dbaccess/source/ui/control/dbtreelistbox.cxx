@@ -26,7 +26,6 @@
 #include <com/sun/star/datatransfer/dnd/XDragGestureListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
@@ -50,7 +49,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::view;
 

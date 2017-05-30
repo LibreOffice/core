@@ -45,7 +45,6 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <o3tl/make_unique.hxx>
 
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/ContextChangeEventObject.hpp>

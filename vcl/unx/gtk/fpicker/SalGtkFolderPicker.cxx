@@ -26,7 +26,6 @@
 #include <config_gio.h>
 
 #include <com/sun/star/awt/Toolkit.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>

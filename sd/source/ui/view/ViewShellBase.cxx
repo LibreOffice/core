@@ -55,10 +55,7 @@
 #include "sdattr.hxx"
 #include "optsitem.hxx"
 
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>

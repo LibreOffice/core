@@ -20,7 +20,6 @@
 #include <config_features.h>
 
 #include <com/sun/star/frame/theAutoRecovery.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>

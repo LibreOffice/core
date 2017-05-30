@@ -30,10 +30,8 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
-#include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -59,7 +57,6 @@ using namespace com::sun::star::document;
 using namespace com::sun::star::style;
 using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::task;
 
 bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )

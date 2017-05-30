@@ -34,7 +34,6 @@
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/frame/XControlNotificationListener.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 

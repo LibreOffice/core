@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_UNOIDL_UNODOCUMENTSETTINGS_HXX
 #define INCLUDED_SD_SOURCE_UI_UNOIDL_UNODOCUMENTSETTINGS_HXX
 
-#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
 
 class SdXImpressDocument;
 

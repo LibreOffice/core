@@ -27,7 +27,6 @@
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
-#include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/linguistic2/DictionaryType.hpp>

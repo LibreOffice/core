@@ -29,6 +29,7 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
 

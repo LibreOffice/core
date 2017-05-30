@@ -51,7 +51,6 @@
 #include <vcl/floatwin.hxx>
 #include <xmloff/autolayout.hxx>
 
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>

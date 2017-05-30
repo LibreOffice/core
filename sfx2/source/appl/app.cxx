@@ -36,13 +36,8 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/tempfile.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/frame/XFrameActionListener.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/FrameActionEvent.hpp>
-#include <com/sun/star/frame/FrameAction.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>

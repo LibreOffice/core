@@ -25,7 +25,6 @@
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

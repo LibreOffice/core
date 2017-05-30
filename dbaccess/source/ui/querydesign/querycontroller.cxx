@@ -43,7 +43,6 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/frame/XLoadEventListener.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -61,7 +60,6 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/VetoException.hpp>
-#include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 
 #include <comphelper/propertysequence.hxx>

@@ -29,7 +29,6 @@
 
 using namespace css;
 using namespace css::lang;
-using namespace css::frame;
 
 namespace sc_apitest {
 

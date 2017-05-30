@@ -34,12 +34,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XFrameActionListener.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/FrameActionEvent.hpp>
-#include <com/sun/star/frame/FrameAction.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 #include <com/sun/star/frame/status/ItemState.hpp>

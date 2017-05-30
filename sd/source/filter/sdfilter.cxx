@@ -38,7 +38,6 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::frame;
 
 
 SdFilter::SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell )

@@ -11,7 +11,6 @@
 #define INCLUDED_SFX2_NOTEBOOKBAR_SFXNOTEBOOKBAR_HXX
 
 #include <sfx2/dllapi.h>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <vcl/notebookbar.hxx>
 
 class SfxBindings;

@@ -38,7 +38,6 @@ namespace xmloff
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::drawing;
-    using namespace ::com::sun::star::frame;
 
     //= OFormLayerXMLExport
 

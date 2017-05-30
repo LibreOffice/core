@@ -23,7 +23,6 @@
 #include <helper/uiconfigelementwrapperbase.hxx>
 #include <uielement/statusbarmanager.hxx>
 
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

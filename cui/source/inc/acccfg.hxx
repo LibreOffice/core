@@ -22,10 +22,8 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

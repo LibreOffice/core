@@ -21,7 +21,6 @@
 #include <osl/mutex.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -81,7 +80,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
 

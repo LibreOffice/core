@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>

@@ -10,14 +10,11 @@
 #include <comphelper/processfactory.hxx>
 #include <test/unoapi_test.hxx>
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;

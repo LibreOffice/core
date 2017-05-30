@@ -20,7 +20,6 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -36,7 +35,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;

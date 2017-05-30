@@ -35,7 +35,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

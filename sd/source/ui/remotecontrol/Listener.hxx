@@ -10,7 +10,6 @@
 #define INCLUDED_SD_SOURCE_UI_REMOTECONTROL_LISTENER_HXX
 
 #include <sal/config.h>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 

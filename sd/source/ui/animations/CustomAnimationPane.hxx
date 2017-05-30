@@ -21,7 +21,6 @@
 #define INCLUDED_SD_SOURCE_UI_ANIMATIONS_CUSTOMANIMATIONPANE_HXX
 
 #include <com/sun/star/drawing/XDrawView.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/field.hxx>

@@ -28,7 +28,6 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/XUIControllerFactory.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>

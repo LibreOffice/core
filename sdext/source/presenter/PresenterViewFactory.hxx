@@ -27,7 +27,6 @@
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ref.hxx>
 #include <memory>

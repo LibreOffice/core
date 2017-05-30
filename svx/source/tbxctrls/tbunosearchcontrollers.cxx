@@ -35,7 +35,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>

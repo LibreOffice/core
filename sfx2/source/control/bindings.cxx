@@ -31,16 +31,9 @@
 #include <svl/visitem.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
-#include <com/sun/star/frame/DispatchDescriptor.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <comphelper/processfactory.hxx>
 #include "itemdel.hxx"
 
@@ -62,8 +55,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/msgpool.hxx>
-
-#include <com/sun/star/frame/XModuleManager.hpp>
 
 #include <cstddef>
 #include <memory>

@@ -20,14 +20,10 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/DispatchResultState.hpp>
-#include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>

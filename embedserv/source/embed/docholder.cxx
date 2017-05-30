@@ -49,10 +49,7 @@
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>

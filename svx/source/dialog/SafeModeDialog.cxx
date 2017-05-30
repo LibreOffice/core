@@ -23,8 +23,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>

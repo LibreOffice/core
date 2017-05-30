@@ -22,13 +22,9 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 
 #include <com/sun/star/embed/VerbAttributes.hpp>
 #include <com/sun/star/embed/VerbDescriptor.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <svtools/popupmenucontrollerbase.hxx>

@@ -60,7 +60,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

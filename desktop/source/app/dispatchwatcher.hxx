@@ -21,7 +21,6 @@
 #define INCLUDED_DESKTOP_SOURCE_APP_DISPATCHWATCHER_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 
 #include "officeipcthread.hxx"

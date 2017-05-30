@@ -18,7 +18,6 @@
  */
 #include "toolboxcontroller.hxx"
 #include <com/sun/star/ui/ImageType.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/menu.hxx>

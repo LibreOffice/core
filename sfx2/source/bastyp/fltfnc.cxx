@@ -47,23 +47,6 @@
 #include <svl/rectitem.hxx>
 
 #include <sot/storage.hxx>
-#include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
-#include <com/sun/star/frame/DispatchDescriptor.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XFrameActionListener.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/FrameActionEvent.hpp>
-#include <com/sun/star/frame/FrameAction.hpp>
-#include <com/sun/star/frame/XFrameLoader.hpp>
-#include <com/sun/star/frame/XLoadEventListener.hpp>
-#include <com/sun/star/frame/XFilterDetect.hpp>
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <comphelper/processfactory.hxx>
 

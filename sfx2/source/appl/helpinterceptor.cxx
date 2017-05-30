@@ -25,7 +25,6 @@
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <vcl/window.hxx>
 #include <limits.h>

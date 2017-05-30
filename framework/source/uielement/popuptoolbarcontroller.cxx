@@ -42,7 +42,6 @@
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>

@@ -35,7 +35,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <rtl/ref.hxx>
 
 

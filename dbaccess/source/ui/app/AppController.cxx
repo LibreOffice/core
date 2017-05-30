@@ -31,7 +31,6 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/ErrorMessageDialog.hpp>

@@ -23,7 +23,6 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/animations/XAnimateColor.hpp>
 #include <com/sun/star/animations/XAnimateMotion.hpp>
 #include <com/sun/star/animations/XAnimateTransform.hpp>
@@ -49,7 +48,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::animations;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::presentation;
 
 namespace oox { namespace ppt {

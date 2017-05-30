@@ -22,7 +22,6 @@
 
 #include <helper/uiconfigelementwrapperbase.hxx>
 
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/XUIFunctionListener.hpp>

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_OBJSHIMP_HXX
 #define INCLUDED_SFX2_SOURCE_INC_OBJSHIMP_HXX
 
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>

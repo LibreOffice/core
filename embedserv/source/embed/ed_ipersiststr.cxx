@@ -32,7 +32,6 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 

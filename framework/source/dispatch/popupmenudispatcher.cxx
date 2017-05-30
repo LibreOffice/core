@@ -24,7 +24,6 @@
 #include <services.h>
 #include <properties.h>
 
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XLayoutManager2.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/WindowDescriptor.hpp>

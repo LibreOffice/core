@@ -37,7 +37,6 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/Frame.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>

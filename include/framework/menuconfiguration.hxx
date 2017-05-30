@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

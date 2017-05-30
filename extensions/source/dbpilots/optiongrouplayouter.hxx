@@ -24,7 +24,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include "dbptypes.hxx"
 
 

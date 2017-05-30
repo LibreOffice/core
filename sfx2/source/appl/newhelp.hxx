@@ -20,8 +20,6 @@
 #define INCLUDED_SFX2_SOURCE_APPL_NEWHELP_HXX
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/frame/XDispatchResultListener.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
 
 #include <vcl/window.hxx>

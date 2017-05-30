@@ -46,7 +46,6 @@
 #include <time.h>
 
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::task;
 
 struct SfxProgress_Impl

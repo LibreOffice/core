@@ -49,8 +49,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
-#include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>

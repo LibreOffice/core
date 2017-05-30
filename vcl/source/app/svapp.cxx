@@ -67,7 +67,6 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/XToolkit.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

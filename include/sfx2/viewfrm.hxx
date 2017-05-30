@@ -31,9 +31,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/poolitem.hxx>
 #include <vcl/button.hxx>
-#include <com/sun/star/frame/status/Verb.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XController2.hpp>
 
 #include <tools/svborder.hxx>
 

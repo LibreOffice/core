@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_EDITTOOLBARCONTROLLER_HXX
 
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 #include <uielement/complextoolbarcontroller.hxx>

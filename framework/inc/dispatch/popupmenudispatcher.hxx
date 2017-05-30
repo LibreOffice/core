@@ -31,10 +31,6 @@
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/XFrameLoader.hpp>
-#include <com/sun/star/frame/XLoadEventListener.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

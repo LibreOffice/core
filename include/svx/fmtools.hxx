@@ -37,13 +37,7 @@
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

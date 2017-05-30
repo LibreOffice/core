@@ -25,7 +25,6 @@
 #include <officecfg/Office/UI/Notebookbar.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <unotools/confignode.hxx>
 #include <comphelper/types.hxx>
 

@@ -13,7 +13,6 @@
 #include "cppunit/extensions/HelperMacros.h"
 
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 
 #include <com/sun/star/util/XSearchable.hpp>

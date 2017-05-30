@@ -25,12 +25,7 @@
 #include "uielement/spinfieldtoolbarcontroller.hxx"
 
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/status/ItemStatus.hpp>
-#include <com/sun/star/frame/status/ItemState.hpp>
-#include <com/sun/star/frame/status/Visibility.hpp>
-#include <com/sun/star/frame/XControlNotificationListener.hpp>
 
 #include <svtools/toolboxcontroller.hxx>
 #include <osl/mutex.hxx>
@@ -43,7 +38,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::frame::status;
 using namespace ::com::sun::star::util;
 
 namespace framework

@@ -69,7 +69,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XFrames.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>

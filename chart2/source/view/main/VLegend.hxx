@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 
 #include "ChartModel.hxx"
 

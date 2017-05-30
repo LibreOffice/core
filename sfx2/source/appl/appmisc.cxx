@@ -31,15 +31,12 @@
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <tools/rcid.h>
 #include <osl/mutex.hxx>
 #include <unotools/configmgr.hxx>
-#include <com/sun/star/frame/XDesktop.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <comphelper/processfactory.hxx>

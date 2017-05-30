@@ -136,6 +136,7 @@
 #include <svx/strarray.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/frame/XSubToolbarController.hpp>
 #include <svx/colorwindow.hxx>
 #include <svx/PaletteManager.hxx>
 #include <memory>

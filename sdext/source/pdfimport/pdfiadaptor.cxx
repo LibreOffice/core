@@ -37,7 +37,6 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 

@@ -34,8 +34,6 @@
 #include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/Frame.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrames.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>

@@ -31,9 +31,6 @@
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 

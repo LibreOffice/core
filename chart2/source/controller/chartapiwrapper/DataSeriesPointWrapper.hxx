@@ -25,7 +25,6 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

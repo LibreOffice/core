@@ -30,7 +30,6 @@
 #include <com/sun/star/view/DocumentZoomType.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyle.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/awt/PosSize.hpp>

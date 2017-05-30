@@ -20,6 +20,7 @@
 #include "vbahelper/vbaeventshelperbase.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>

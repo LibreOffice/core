@@ -27,6 +27,7 @@
 #include "chartview/DrawModelWrapper.hxx"
 #include "macros.hxx"
 
+#include <com/sun/star/frame/CommandGroup.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 
 #include <osl/mutex.hxx>

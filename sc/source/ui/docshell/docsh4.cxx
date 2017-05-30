@@ -23,7 +23,6 @@
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 
 using namespace ::com::sun::star;
 

@@ -30,7 +30,6 @@
 
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
-#include <com/sun/star/frame/status/ItemStatus.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>

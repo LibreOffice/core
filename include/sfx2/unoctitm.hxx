@@ -22,14 +22,8 @@
 #include <memory>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
-#include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

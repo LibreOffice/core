@@ -32,7 +32,6 @@
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/task/XJobListener.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
-#include <com/sun/star/frame/DispatchResultEvent.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <osl/conditn.hxx>
