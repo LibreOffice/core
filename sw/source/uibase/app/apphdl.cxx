@@ -224,6 +224,9 @@ void SwModule::StateOther(SfxItemSet &rSet)
                 // #i51949# hide e-Mail option if e-Mail is not supported
                 // #i63267# printing might be disabled
                 if (!xConfigItem ||
+                    !xConfigItem->GetResultSet().is() ||
+                    xConfigItem->GetCurrentDBData().sDataSource.isEmpty() ||
+                    xConfigItem->GetCurrentDBData().sCommand.isEmpty() ||
                     (nWhich == FN_MAILMERGE_PRINT_DOCUMENTS && Application::GetSettings().GetMiscSettings().GetDisablePrinting()) ||
                     (nWhich == FN_MAILMERGE_EMAIL_DOCUMENTS && !xConfigItem->IsMailAvailable()))
                 {
