@@ -62,7 +62,7 @@ done
 
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
 if [ -x "$sd_prog/javaldx" ] ; then
-    my_path=$("$sd_prog/javaldx" "$BOOTSTRAPVARS" \
+    my_path=$("$sd_prog/javaldx" $BOOTSTRAPVARS \
         "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc")
     if [ -n "$my_path" ] ; then
         sd_platform=$(uname -s)
