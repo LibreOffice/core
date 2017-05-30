@@ -40,7 +40,6 @@ void SAL_CALL rtl_stringbuffer_newFromStr_WithLength( rtl_String ** newStr,
     rtl_string_new_WithLength( newStr, count + 16 );
     (*newStr)->length = count;
     memcpy( (*newStr)->buffer, value, count );
-    return;
 }
 
 /*************************************************************************

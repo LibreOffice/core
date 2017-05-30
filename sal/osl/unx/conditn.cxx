@@ -93,8 +93,6 @@ void SAL_CALL osl_destroyCondition(oslCondition Condition)
 
         free(Condition);
     }
-
-    return;
 }
 
 sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)

@@ -1306,8 +1306,6 @@ void SfxDispatcher::Update_Impl( bool bForce )
         const SfxPoolItem *pItem;
         SfxViewShell::Current()->GetDispatcher()->QueryState(SID_NOTEBOOKBAR, pItem);
     }
-
-    return;
 }
 
 void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwner, SfxWorkWindow *pTaskWin )

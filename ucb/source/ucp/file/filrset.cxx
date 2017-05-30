@@ -422,7 +422,6 @@ void SAL_CALL
 XResultSet_impl::refreshRow()
 {
     // get the row from the filesystem
-    return;
 }
 
 

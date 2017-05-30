@@ -1895,7 +1895,6 @@ void ScColumn::SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, cons
     EditEngine& rEngine = pDocument->GetEditEngine();
     rEngine.SetText(rEditText);
     SetEditText(rBlockPos, nRow, rEngine.CreateTextObject());
-    return;
 }
 
 void ScColumn::SetEditText( SCROW nRow, const EditTextObject& rEditText, const SfxItemPool* pEditPool )
@@ -1912,7 +1911,6 @@ void ScColumn::SetEditText( SCROW nRow, const EditTextObject& rEditText, const S
     EditEngine& rEngine = pDocument->GetEditEngine();
     rEngine.SetText(rEditText);
     SetEditText(nRow, rEngine.CreateTextObject());
-    return;
 }
 
 void ScColumn::SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::FormulaGrammar::Grammar eGram )

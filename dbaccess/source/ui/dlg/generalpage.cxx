@@ -420,8 +420,6 @@ namespace dbaui
         onTypeSelected( sURLPrefix );
         // tell the listener we were modified
         callModifiedHdl();
-        // outta here
-        return;
     }
 
     IMPL_LINK( OGeneralPage, OnDatasourceTypeSelected, ListBox&, _rBox, void )

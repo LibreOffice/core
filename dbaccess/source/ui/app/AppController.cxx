@@ -2542,8 +2542,6 @@ void OApplicationController::OnFirstControllerConnected()
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-
-    return;
 }
 
 void SAL_CALL OApplicationController::attachFrame( const Reference< XFrame > & i_rxFrame )

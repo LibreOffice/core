@@ -611,7 +611,6 @@ void SdrEscherImport::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd,
     Scale( b );
     rObj.aChildAnchor = tools::Rectangle( l, t, r, b );
     rObj.bChildAnchor = true;
-    return;
 };
 
 void SdrEscherImport::RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic& rGraphic )

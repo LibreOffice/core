@@ -72,7 +72,6 @@ namespace toolkit
 
         EventObject aEvent( *pOwningWindow );
         aStyleChangeListeners.notifyEach( &XStyleChangeListener::styleSettingsChanged, aEvent );
-        return;
     }
 
 

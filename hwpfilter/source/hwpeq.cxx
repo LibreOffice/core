@@ -450,7 +450,6 @@ void make_keyword( char *keyword, const char *token)
             ptr++;
         }
     }
-    return;
 }
 
 // token reading function

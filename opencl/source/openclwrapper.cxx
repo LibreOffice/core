@@ -348,8 +348,6 @@ void releaseOpenCLEnv( GPUEnv *gpuInfo )
     }
     bIsInited = false;
     gpuInfo->mnIsUserCreated = 0;
-
-    return;
 }
 
 namespace {

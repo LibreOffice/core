@@ -169,8 +169,6 @@ void SmFontPickListBox::Insert(const vcl::Font &rFont)
 
     while (GetEntryCount() > nMaxItems)
         RemoveEntry(GetEntryCount() - 1);
-
-    return;
 }
 
 

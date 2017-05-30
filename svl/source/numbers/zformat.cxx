@@ -1992,7 +1992,6 @@ void SvNumberformat::ImpGetOutputInputLine(double fNumber, OUString& OutString)
     {
         OutString += "%";
     }
-    return;
 }
 
 short SvNumberformat::ImpCheckCondition(double& fNumber,

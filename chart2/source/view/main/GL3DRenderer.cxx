@@ -1081,7 +1081,6 @@ void OpenGL3DRenderer::RenderPolygon3DObject()
         }
     }
     glDepthMask(GL_TRUE);
-    return;
 }
 
 void OpenGL3DRenderer::Set3DSenceInfo(sal_uInt32 nColor, bool twoSidesLighting)

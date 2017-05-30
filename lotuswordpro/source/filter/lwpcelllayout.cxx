@@ -289,8 +289,6 @@ void LwpCellLayout::ApplyFmtStyle(XFCellStyle *pCellStyle)
             pCellStyle->SetDataStyle(m_NumfmtName);
         }
     }
-
-    return;
 }
 /**
  * @short   get style name according to cell position, only table default cells use this function
@@ -855,7 +853,6 @@ LwpHiddenCellLayout::~LwpHiddenCellLayout()
  */
 void LwpHiddenCellLayout::SetCellMap()
 {
-    return;
 }
 /**
  * @short   Read hidden cell layout

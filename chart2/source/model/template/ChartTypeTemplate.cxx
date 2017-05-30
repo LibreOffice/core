@@ -507,7 +507,6 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
         }
     }
 
-    return;
 }
 
 // ____ XServiceName ____
@@ -676,8 +675,7 @@ void ChartTypeTemplate::adaptScales(
 
 void ChartTypeTemplate::adaptDiagram( const Reference< XDiagram > & /* xDiagram */ )
 {
-    return;
-}
+    }
 
 void ChartTypeTemplate::createAxes(
     const Sequence< Reference< XCoordinateSystem > > & rCoordSys )

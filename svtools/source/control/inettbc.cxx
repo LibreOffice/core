@@ -787,8 +787,6 @@ void SvtMatchContext_Impl::doExecute()
         else
             break;
     }
-
-    return;
 }
 
 void SvtURLBox::TryAutoComplete()

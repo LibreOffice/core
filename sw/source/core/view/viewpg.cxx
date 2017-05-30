@@ -65,8 +65,6 @@ void SwViewShell::AdjustOptionsForPagePreview(SwPrintData const& rPrintOptions)
     }
 
     PrepareForPrint( rPrintOptions );
-
-    return;
 }
 
 /// print brochure

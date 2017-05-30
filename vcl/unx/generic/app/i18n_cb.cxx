@@ -397,8 +397,6 @@ GetPreeditSpotLocation(XIC ic, XPointer client_data)
     preedit_attr = XVaCreateNestedList(0, XNSpotLocation, &point, nullptr);
     XSetICValues(ic, XNPreeditAttributes, preedit_attr, nullptr);
     XFree(preedit_attr);
-
-    return;
 }
 
 // iv. preedit caret callback
@@ -463,13 +461,11 @@ IsControlCode(sal_Unicode nChar)
 void
 StatusStartCallback (XIC, XPointer, XPointer)
 {
-    return;
 }
 
 void
 StatusDoneCallback (XIC, XPointer, XPointer)
 {
-    return;
 }
 
 void
@@ -513,7 +509,6 @@ StatusDrawCallback (XIC, XPointer, XIMStatusDrawCallbackStruct *call_data)
             call_data->type == XIMBitmapType ? "XIMBitmapType" : OString::number(call_data->type).getStr() );
     }
 #endif
-    return;
 }
 
 // vii. destroy callbacks: internally disable all IC/IM calls

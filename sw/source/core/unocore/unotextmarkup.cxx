@@ -473,8 +473,6 @@ void SAL_CALL SwXTextMarkup::commitMultiTextMarkup(
 
     if( bRepaint )
         finishGrammarCheck(*m_pImpl->m_pTextNode);
-
-    return;
 }
 
 void SwXTextMarkup::Impl::Modify( const SfxPoolItem* /*pOld*/, const SfxPoolItem* /*pNew*/ )

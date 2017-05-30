@@ -592,7 +592,6 @@ void SAL_CALL ChartModel::removeEventListener( const uno::Reference< lang::XEven
         return; //behave passive if already disposed or closed
 
     m_aLifeTimeManager.m_aListenerContainer.removeInterface( cppu::UnoType<lang::XEventListener>::get(), xListener );
-    return;
 }
 
 // util::XCloseBroadcaster (base of XCloseable)
@@ -607,7 +606,6 @@ void SAL_CALL ChartModel::removeCloseListener( const uno::Reference< util::XClos
         return; //behave passive if already disposed or closed
 
     m_aLifeTimeManager.m_aListenerContainer.removeInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
-    return;
 }
 
 // util::XCloseable

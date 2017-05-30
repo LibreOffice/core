@@ -1022,8 +1022,6 @@ void Desktop::HandleBootstrapErrors(
             aDiagnosticMessage.makeStringAndClear() );
         FatalError(aMessage);
     }
-
-    return;
 }
 
 

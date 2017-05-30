@@ -783,7 +783,6 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
     (void)nRstHeight;
 #endif
     mbInFootnoteConnect = false;
-    return;
 }
 
 /**

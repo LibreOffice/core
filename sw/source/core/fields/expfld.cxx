@@ -516,7 +516,7 @@ OUString SwSetExpFieldType::GetName() const
 
 void SwSetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* )
 {
-    return;     // do not expand further
+    // do not expand further
 }
 
 void SwSetExpFieldType::SetSeqFormat(sal_uLong nFormat)

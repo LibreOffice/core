@@ -45,7 +45,6 @@ void SAL_CALL rtl_uStringbuffer_newFromStr_WithLength( rtl_uString ** newStr,
     (*newStr)->length = count;
     memcpy( (*newStr)->buffer, value, count * sizeof(sal_Unicode));
     RTL_LOG_STRING_NEW( *newStr );
-    return;
 }
 
 rtl_uString * SAL_CALL rtl_uStringBuffer_refReturn( rtl_uString * pThis )

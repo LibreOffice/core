@@ -413,9 +413,6 @@ void TimerManager::checkForTimeout()
     {
         m_Lock.release();
     }
-
-
-    return;
 }
 
 void TimerManager::run()
