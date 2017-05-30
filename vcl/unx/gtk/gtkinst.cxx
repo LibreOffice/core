@@ -167,12 +167,6 @@ GtkInstance::GtkInstance( SalYieldMutex* pMutex )
 //UI in a LTR locale
 void GtkInstance::AfterAppInit()
 {
-    OUString aLocaleString(Application::GetSettings().GetUILanguageTag().getGlibcLocaleString(".UTF-8"));
-    if (!aLocaleString.isEmpty())
-    {
-        OUString envVar("LANGUAGE");
-        osl_setEnvironment(envVar.pData, aLocaleString.pData);
-    }
     EnsureInit();
 }
 
