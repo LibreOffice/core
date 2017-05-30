@@ -75,6 +75,15 @@ namespace ConversionHelper
                             const OUString& rValue,
                             double fDefValue );
 
+    /** TODO: Converts the passed VML rotation value to degrees.
+
+        @param rValue  The VML rotation value. This is a floating-point value
+            with optional 'fd' suffix. If the suffix is missing, the floating
+            point value will be returned unmodified. If the 'fd' suffix is
+            present, the value will be divided by 65536.
+    */
+    OOX_DLLPUBLIC double       decodeRotation( const OUString& rValue );
+
     /** Converts the passed VML measure string to EMU (English Metric Units).
 
         @param rGraphicHelper  The graphic helper needed to perform pixel
