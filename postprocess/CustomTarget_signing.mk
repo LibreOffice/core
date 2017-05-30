@@ -42,6 +42,7 @@ ifneq ($(ENABLE_DBGUTIL),TRUE)
 			$(INSTDIR)/URE/bin/*.exe \
 			$(INSTDIR)/program/*.dll \
 			$(INSTDIR)/program/*.exe \
+			$(INSTDIR)/program/soffice.bin \
 			$(INSTDIR)/program/shlxthdl/*.dll \
 			$(INSTDIR)/sdk/cli/*.dll \
 			$(INSTDIR)/sdk/bin/*.exe \
