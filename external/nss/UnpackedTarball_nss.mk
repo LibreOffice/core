@@ -30,8 +30,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 		external/nss/nss.cygwin64.in32bit.patch) \
 	$(if $(filter WNT,$(OS)), \
 		external/nss/nss.vs2015.pdb.patch) \
-    $(if $(findstring 120_70,$(VCVER)_$(WINDOWS_SDK_VERSION)), \
-        external/nss/nss-winXP-sdk.patch.1) \
 	$(if $(filter WNT,$(OS)), \
     	external/nss/nss.utf8bom.patch.1) \
 ))
