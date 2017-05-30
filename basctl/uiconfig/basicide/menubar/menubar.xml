@@ -68,8 +68,23 @@
             <menu:menuitem menu:id=".uno:FullScreen"/>
         </menu:menupopup>
     </menu:menu>
+    <menu:menu menu:id=".uno:RunMenu">
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:RunBasic"/>
+            <menu:menuitem menu:id=".uno:BasicStop"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:CompileBasic"/>
+            <menu:menuitem menu:id=".uno:BasicStepOver"/>
+            <menu:menuitem menu:id=".uno:BasicStepInto"/>
+            <menu:menuitem menu:id=".uno:BasicStepOut"/>
+        </menu:menupopup>
+    </menu:menu>
     <menu:menu menu:id=".uno:ToolsMenu">
         <menu:menupopup>
+            <menu:menuitem menu:id=".uno:ToggleBreakPoint"/>
+            <menu:menuitem menu:id=".uno:ManageBreakPoints"/>
+            <menu:menuitem menu:id=".uno:AddWatch"/>
+            <menu:menuseparator/>
             <menu:menu menu:id=".uno:MacrosMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:MacroRecorder"/>
