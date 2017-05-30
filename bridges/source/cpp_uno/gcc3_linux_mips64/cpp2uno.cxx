@@ -52,8 +52,6 @@ using namespace ::rtl;
 #include <unistd.h>
 #endif
 
-using namespace ::com::sun::star::uno;
-
 namespace CPPU_CURRENT_NAMESPACE
 {
   bool is_complex_struct(const typelib_TypeDescription * type)

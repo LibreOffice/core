@@ -2098,8 +2098,6 @@ void SvNumberFormatter::ImpAdjustFormatCodeDefault(
         css::i18n::NumberFormatCode * pFormatArr,
         sal_Int32 nCnt )
 {
-    using namespace ::com::sun::star;
-
     if ( !nCnt )
         return;
     if (LocaleDataWrapper::areChecksEnabled())
@@ -2221,8 +2219,6 @@ const SvNumberformat* SvNumberFormatter::GetEntry( sal_uInt32 nKey ) const
 
 void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditionalFormats )
 {
-    using namespace ::com::sun::star;
-
     bool bOldConvertMode = pFormatScanner->GetConvertMode();
     if (bOldConvertMode)
     {
@@ -2663,8 +2659,6 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
             css::uno::Reference< css::i18n::XNumberFormatCode > const & rNumberFormatCode,
             bool bAfterChangingSystemCL )
 {
-    using namespace ::com::sun::star;
-
     SvNumberformat* pStdFormat = GetFormatEntry( CLOffset + ZF_STANDARD );
     if ( !pStdFormat )
     {

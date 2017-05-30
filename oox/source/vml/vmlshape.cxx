@@ -78,7 +78,6 @@ using namespace ::com::sun::star::text;
 namespace oox {
 namespace vml {
 
-using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::graphic;
 using namespace ::com::sun::star::uno;

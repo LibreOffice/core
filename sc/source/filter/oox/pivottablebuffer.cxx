@@ -516,7 +516,6 @@ void PivotTableField::convertPageField( const PTPageFieldModel& rPageField )
     if( xDPField.is() )
     {
         PropertySet aPropSet( xDPField );
-        using namespace ::com::sun::star::sheet;
 
         // find cache item used as 'selected page'
         sal_Int32 nCacheItem = -1;
@@ -564,7 +563,6 @@ void PivotTableField::convertDataField( const PTDataFieldModel& rDataField )
     if( xDPField.is() )
     {
         PropertySet aPropSet( xDPField );
-        using namespace ::com::sun::star::sheet;
 
         // field orientation
         aPropSet.setProperty( PROP_Orientation, DataPilotFieldOrientation_DATA );
@@ -644,7 +642,6 @@ Reference< XDataPilotField > PivotTableField::convertRowColPageField( sal_Int32 
         ScDPObject* pDPObj = mrPivotTable.getDPObject();
 
         PropertySet aPropSet( xDPField );
-        using namespace ::com::sun::star::sheet;
 
         // field orientation
         DataPilotFieldOrientation eFieldOrient = DataPilotFieldOrientation_HIDDEN;
@@ -876,7 +873,6 @@ void PivotTableFilter::finalizeImport()
         PropertySet aPropSet( mrPivotTable.getDataPilotField( maModel.mnField ) );
         if( aPropSet.is() )
         {
-            using namespace ::com::sun::star::sheet;
             DataPilotFieldAutoShowInfo aAutoShowInfo;
             aAutoShowInfo.IsEnabled = true;
             aAutoShowInfo.ShowItemsMode = maModel.mbTopFilter ? DataPilotFieldShowItemsMode::FROM_TOP : DataPilotFieldShowItemsMode::FROM_BOTTOM;

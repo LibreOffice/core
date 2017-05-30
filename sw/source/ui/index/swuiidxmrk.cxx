@@ -73,7 +73,6 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
 using namespace ::comphelper;
-using namespace ::com::sun::star;
 
 // dialog to insert a directory selection
 SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,

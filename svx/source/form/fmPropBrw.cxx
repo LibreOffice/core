@@ -69,10 +69,16 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::form::inspection;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::inspection;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::inspection;
-using namespace ::com::sun::star::form::inspection;
+using namespace ::svxform;
 using ::com::sun::star::awt::XWindow;
 
 //= FmPropBrwMgr
@@ -96,13 +102,6 @@ const long STD_WIN_SIZE_Y = 350;
 const long STD_MIN_SIZE_X = 250;
 const long STD_MIN_SIZE_Y = 250;
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::form;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::container;
-using namespace ::svxform;
 
 OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
 {

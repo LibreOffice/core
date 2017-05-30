@@ -1433,8 +1433,6 @@ void SwAnnotationShell::ExecTransliteration(SfxRequest &rReq)
     if (!pOLV)
         return;
 
-    using namespace ::com::sun::star::i18n;
-
     TransliterationFlags nMode = TransliterationFlags::NONE;
 
     switch( rReq.GetSlot() )
