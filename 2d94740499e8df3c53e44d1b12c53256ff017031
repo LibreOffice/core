@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_abb42ef2",
+        "filename": "sd/source/ui/slideshow/slideshowimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1833,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-05-30T23:26:12Z",
+      "side": 1,
+      "message": "Stephan, do you think that this use is safe for the \"must be in first statement\" thing?",
+      "range": {
+        "startLine": 1833,
+        "startChar": 48,
+        "endLine": 1833,
+        "endChar": 74
+      },
+      "revId": "2d94740499e8df3c53e44d1b12c53256ff017031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
