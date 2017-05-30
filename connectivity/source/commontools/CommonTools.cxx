@@ -211,21 +211,19 @@ OUString convertName2SQLName(const OUString& rName,const OUString& _rSpecials)
 {
     if(isValidSQLName(rName,_rSpecials))
         return rName;
-    OUString aNewName(rName);
+
     const sal_Unicode* pStr = rName.getStr();
+    // if not valid
+    if (*pStr >= 128 || rtl::isAsciiDigit(*pStr))
+        return OUString();
+
+    OUStringBuffer aNewName(rName);
     sal_Int32 nLength = rName.getLength();
-    bool bValid(*pStr < 128 && !rtl::isAsciiDigit(*pStr));
-    for (sal_Int32 i=0; bValid && i < nLength; ++pStr,++i )
+    for (sal_Int32 i=0; i < nLength; ++pStr,++i )
         if(!isCharOk(*pStr,_rSpecials))
-        {
-            aNewName = aNewName.replace(*pStr,'_');
-            pStr = aNewName.getStr() + i;
-        }
+            aNewName[i] = '_';
 
-    if ( !bValid )
-        aNewName.clear();
-
-    return aNewName;
+    return aNewName.makeStringAndClear();
 }
 
 OUString quoteName(const OUString& _rQuote, const OUString& _rName)
