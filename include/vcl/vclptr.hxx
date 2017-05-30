@@ -347,6 +347,22 @@ public:
     {
     }
 
+    /** Up-casting assignment operator.
+
+        Does not work for up-casts to ambiguous bases.
+
+        @param rRef another VclPtr
+    */
+    template<typename derived_type>
+    typename std::enable_if<
+        std::is_base_of<reference_type, derived_type>::value,
+        ScopedVclPtr &>::type
+    operator =(VclPtr<derived_type> const & rRef)
+    {
+        disposeAndReset(rRef.get());
+        return *this;
+    }
+
     /**
      * Override and disallow this, to prevent people accidentally calling it and actually
      * getting VclPtr::Create and getting a naked VclPtr<> instance
