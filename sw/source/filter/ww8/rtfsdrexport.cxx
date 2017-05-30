@@ -507,7 +507,7 @@ sal_Int32 RtfSdrExport::StartShape()
         lcl_AppendSP(m_rAttrOutput.RunText(), (*it).first.getStr(), (*it).second);
 
     lcl_AppendSP(m_rAttrOutput.RunText(), "wzDescription", msfilter::rtfutil::OutString(m_pSdrObject->GetDescription(), m_rExport.m_eCurrentEncoding));
-    lcl_AppendSP(m_rAttrOutput.RunText(), "wzName", msfilter::rtfutil::OutString(m_pSdrObject->GetTitle(), m_rExport.m_eCurrentEncoding));
+    lcl_AppendSP(m_rAttrOutput.RunText(), "wzName", msfilter::rtfutil::OutString(m_pSdrObject->GetName(), m_rExport.m_eCurrentEncoding));
 
     // now check if we have some text
     const SwFrameFormat* pShape = FindFrameFormat(m_pSdrObject);
@@ -554,8 +554,9 @@ sal_Int32 RtfSdrExport::StartShape()
 
         if (pParaObj)
         {
-            // this is reached only in case some text is attached to the shape
-            WriteOutliner(*pParaObj, TXT_HFTXTBOX);
+            const EditTextObject& rEditObj = pParaObj->GetTextObject();
+            lcl_AppendSP(m_rAttrOutput.RunText(), "gtextUNICODE",
+                         msfilter::rtfutil::OutString(rEditObj.GetText(0), m_rExport.m_eCurrentEncoding));
         }
     }
 
