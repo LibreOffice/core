@@ -337,7 +337,7 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
             shift;
         done
 
-        ${MAILER} "${TO:+-T}" "${TO:-}" "${ATTACH:+-a}" "${ATTACH:+"${ATTACH}"}"
+        ${MAILER} ${TO:+-T} ${TO:-} ${ATTACH:+-a} ${ATTACH:+"${ATTACH}"}
         ;;
 
     sylpheed | claws)
@@ -358,7 +358,7 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
             shift;
         done
 
-         ${MAILER} "${TO:+--compose}" "${TO:-}" "${ATTACH:+--attach}" "${ATTACH:-}"
+         ${MAILER} ${TO:+--compose} ${TO:-} ${ATTACH:+--attach} ${ATTACH:-}
         ;;
 
     Mail | Thunderbird | *.app )
@@ -375,7 +375,7 @@ case $(basename "$MAILER" | sed 's/-.*$//') in
             esac
             shift;
         done
-        /usr/bin/open -a "${MAILER}" "${ATTACH}"
+        /usr/bin/open -a "${MAILER}" ${ATTACH}
         ;;
 
     *)
