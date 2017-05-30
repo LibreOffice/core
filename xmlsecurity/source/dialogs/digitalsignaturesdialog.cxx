@@ -500,6 +500,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     m_pSignaturesLB->Clear();
 
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureManager.getSecurityEnvironment();
+    uno::Reference<xml::crypto::XSecurityEnvironment> xGpgSecEnv = maSignatureManager.getGpgSecurityEnvironment();
 
     uno::Reference< css::security::XCertificate > xCert;
 
@@ -535,6 +536,8 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             //Todo: This probably could be removed, see above.
             if (!xCert.is())
                 xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xmlsecurity::numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
+            if (!xCert.is())
+                xCert = xGpgSecEnv->getCertificate( rInfo.ouX509IssuerName, xmlsecurity::numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
 
             SAL_WARN_IF( !xCert.is(), "xmlsecurity.dialogs", "Certificate not found and can't be created!" );
 
@@ -550,7 +553,8 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             {
                 //check the validity of the cert
                 try {
-                    sal_Int32 certResult = xSecEnv->verifyCertificate(xCert,
+                    // TODO: check for both sec envs ...
+                    sal_Int32 certResult = xGpgSecEnv->verifyCertificate(xCert,
                         Sequence<css::uno::Reference<css::security::XCertificate> >());
 
                     bCertValid = certResult == css::security::CertificateValidity::VALID;
