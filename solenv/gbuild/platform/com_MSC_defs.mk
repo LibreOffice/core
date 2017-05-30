@@ -54,7 +54,6 @@ gb_COMPILERDEFS := \
 	-D_MT \
 	-D_DLL \
 	-DCPPU_ENV=$(gb_CPPU_ENV) \
-	$(if $(findstring 140_70,$(VCVER)_$(WINDOWS_SDK_VERSION)),-D_USING_V110_SDK71_) \
 
 ifeq ($(CPUNAME),INTEL)
 gb_COMPILERDEFS += \
