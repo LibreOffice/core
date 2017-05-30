@@ -675,7 +675,7 @@ void OHTMLImportExport::WriteHeader()
     IncIndent(1); TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_head );
 
     SfxFrameHTMLWriter::Out_DocInfo( (*m_pStream), OUString(),
-        xDocProps, sIndent );
+        xDocProps, sIndent, osl_getThreadTextEncoding() );
     OUT_LF();
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_head );
 }
