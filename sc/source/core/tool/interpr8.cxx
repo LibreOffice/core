@@ -650,8 +650,6 @@ void ScETSForecastCalculation::CalcAlphaBetaGamma()
         }
     }
     calcAccuracyIndicators();
-
-    return;
 }
 
 void ScETSForecastCalculation::CalcBetaGamma()
@@ -1381,8 +1379,6 @@ void ScInterpreter::ScForecast_Ets( ScETSType eETSType )
             }
             break;
     }
-
-    return;
 }
 
 void ScInterpreter::ScConcat_MS()

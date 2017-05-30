@@ -84,8 +84,6 @@ void SAL_CALL osl_destroyMutex(oslMutexImpl *pMutex)
 
         free(pMutex);
     }
-
-    return;
 }
 
 sal_Bool SAL_CALL osl_acquireMutex(oslMutexImpl *pMutex)

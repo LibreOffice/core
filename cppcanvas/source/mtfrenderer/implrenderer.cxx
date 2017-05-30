@@ -438,7 +438,6 @@ namespace cppcanvas
             }
 
             // EOF
-            return;
         }
 
         bool ImplRenderer::isActionContained( GDIMetaFile&   rMtf,

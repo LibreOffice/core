@@ -50,8 +50,6 @@ void PyUNO_callable_del (PyObject* self)
     me = reinterpret_cast<PyUNO_callable*>(self);
     delete me->members;
     PyObject_Del (self);
-
-    return;
 }
 
 PyObject* PyUNO_callable_call(

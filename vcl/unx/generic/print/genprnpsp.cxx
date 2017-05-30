@@ -537,7 +537,6 @@ void PspSalInfoPrinter::ReleaseGraphics( SalGraphics* pGraphics )
         delete pGraphics;
         m_pGraphics = nullptr;
     }
-    return;
 }
 
 bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )

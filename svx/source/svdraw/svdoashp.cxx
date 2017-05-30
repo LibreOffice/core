@@ -165,7 +165,6 @@ static void lcl_ShapeSegmentFromBinary( EnhancedCustomShapeSegment& rSegInfo, sa
             rSegInfo.Count   = nSDat;
             break;
     }
-    return;
 }
 
 static MSO_SPT ImpGetCustomShapeType( const SdrObjCustomShape& rCustoShape )
@@ -825,7 +824,6 @@ static void lcl_ShapePropertiesFromDFF( const SvxMSDffHandle* pData, css::beans:
             rPropValues[ n++ ].Value <<= aRangeYMaximum;
         }
     }
-    return;
 }
 
 sdr::properties::BaseProperties* SdrObjCustomShape::CreateObjectSpecificProperties()

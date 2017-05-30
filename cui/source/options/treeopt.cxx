@@ -1096,8 +1096,6 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         sHelpId = pFirstChild->GetHelpId();
     }
     pBox->SetHelpId(sHelpId);
-
-    return;
 }
 
 OfaPageResource::OfaPageResource() :

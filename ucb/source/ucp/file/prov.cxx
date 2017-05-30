@@ -430,7 +430,6 @@ FileProvider::addPropertyChangeListener(
     const OUString&,
     const Reference< XPropertyChangeListener >& )
 {
-    return;
 }
 
 
@@ -439,7 +438,6 @@ FileProvider::removePropertyChangeListener(
     const OUString&,
     const Reference< XPropertyChangeListener >& )
 {
-    return;
 }
 
 void SAL_CALL
@@ -447,7 +445,6 @@ FileProvider::addVetoableChangeListener(
     const OUString&,
     const Reference< XVetoableChangeListener >& )
 {
-    return;
 }
 
 
@@ -456,7 +453,6 @@ FileProvider::removeVetoableChangeListener(
     const OUString&,
     const Reference< XVetoableChangeListener >& )
 {
-    return;
 }
 
 

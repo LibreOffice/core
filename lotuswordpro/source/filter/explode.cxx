@@ -343,7 +343,6 @@ void Decompression::ToString(sal_uInt32 nBits, sal_Char *pChar, sal_uInt32 nLen)
         pChar[nLen - i]  = nBit ? '1':'0';
     }
     pChar[nLen] = '\0';
-    return;
 }
 
 /**

@@ -549,7 +549,6 @@ void PrintFontManager::analyzeSfntFamilyName( void* pTTFont, ::std::list< OUStri
             if( *it != aFamily )
                 rNames.push_back( *it );
     }
-    return;
 }
 
 bool PrintFontManager::analyzeSfntFile( PrintFont* pFont ) const

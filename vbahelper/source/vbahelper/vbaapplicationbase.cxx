@@ -236,7 +236,6 @@ VbaApplicationBase::setDisplayStatusBar(sal_Bool bDisplayStatusBar)
             }
         }
     }
-    return;
 }
 
 sal_Bool SAL_CALL VbaApplicationBase::getInteractive()

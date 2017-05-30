@@ -181,7 +181,6 @@ void maybeOutputTimestamp(std::ostringstream &s) {
             ; // nothing
         }
     }
-    return;
 }
 
 #endif

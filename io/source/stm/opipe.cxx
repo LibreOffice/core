@@ -227,7 +227,6 @@ void OPipeImpl::closeInput()
     m_conditionBytesAvail.set();
 
     setSuccessor( Reference< XConnectable > () );
-    return;
 }
 
 
@@ -278,7 +277,6 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
 void OPipeImpl::flush()
 {
     // nothing to do for a pipe
-    return;
 }
 
 void OPipeImpl::closeOutput()
@@ -288,7 +286,6 @@ void OPipeImpl::closeOutput()
     m_bOutputStreamClosed = true;
     m_conditionBytesAvail.set();
     setPredecessor( Reference < XConnectable > () );
-    return;
 }
 
 

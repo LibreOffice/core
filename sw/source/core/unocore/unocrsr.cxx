@@ -66,7 +66,7 @@ SwUnoCursor::DoSetBidiLevelLeftRight( bool &, bool, bool )
 
 void SwUnoCursor::DoSetBidiLevelUpDown()
 {
-    return; // not for uno cursor
+    // not for uno cursor
 }
 
 bool SwUnoCursor::IsSelOvr( SwCursorSelOverFlags eFlags )

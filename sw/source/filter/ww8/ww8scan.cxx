@@ -2775,7 +2775,6 @@ void WW8PLCFx::GetSprms( WW8PLCFxDesc* p )
     p->pMemPos = nullptr;
     p->nSprmsLen = 0;
     p->bRealLineEnd = false;
-    return;
 }
 
 long WW8PLCFx::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )

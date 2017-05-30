@@ -1225,7 +1225,6 @@ ScVbaApplication::Volatile( const uno::Any& aVolatile )
     }
 
 // this is bound to break when loading the document
-    return;
 }
 
 sal_Bool SAL_CALL

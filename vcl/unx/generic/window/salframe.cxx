@@ -2372,7 +2372,6 @@ void X11SalFrame::SetInputContext( SalInputContext* pContext )
     }
     else
         mpInputContext->Map( this );
-    return;
 }
 
 void X11SalFrame::EndExtTextInput( EndExtTextInputFlags )

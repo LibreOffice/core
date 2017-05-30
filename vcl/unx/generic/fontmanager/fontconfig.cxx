@@ -680,8 +680,6 @@ void PrintFontManager::addFontconfigDir( const OString& rDirName )
         if( !bCfgOk )
             fprintf( stderr, "FcConfigParseAndLoad( \"%s\") => %d\n", aConfFileName.getStr(), bCfgOk );
     }
-
-    return;
 }
 
 static void addtopattern(FcPattern *pPattern,

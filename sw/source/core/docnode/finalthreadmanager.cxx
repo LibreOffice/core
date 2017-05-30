@@ -390,8 +390,6 @@ void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject
     }
 
     mpPauseThreadStarting = new SwPauseThreadStarting();
-
-    return;
 }
 
 void SAL_CALL FinalThreadManager::cancelTermination( const css::lang::EventObject& )
@@ -402,8 +400,7 @@ void SAL_CALL FinalThreadManager::cancelTermination( const css::lang::EventObjec
         mpPauseThreadStarting = nullptr;
     }
 
-    return;
-}
+    }
 
 void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObject& )
 {

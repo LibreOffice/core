@@ -365,7 +365,7 @@ public:
         mpCol->InitBlockPosition(maPos);
     }
 
-    virtual void execute(SCROW, SCROW, bool) override { return; };
+    virtual void execute(SCROW, SCROW, bool) override {}
 
     virtual void executeSum(SCROW nRow1, SCROW nRow2, bool bVal, double& fMem ) override
     {

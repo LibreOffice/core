@@ -437,7 +437,6 @@ void SAL_CALL ODummyEmbeddedObject::storeOwn()
                     static_cast< ::cppu::OWeakObject* >(this) );
 
     // the object can not be activated or changed
-    return;
 }
 
 

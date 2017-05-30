@@ -932,8 +932,6 @@ void OutlinerView::ToggleBulletsNumbering(
         // switch off bullets/numbering for selected paragraphs
         SwitchOffBulletsNumbering( true );
     }
-
-    return;
 }
 
 
@@ -1099,8 +1097,6 @@ void OutlinerView::ApplyBulletsNumbering(
     pOwner->pEditEngine->SetUpdateMode( bUpdate );
 
     pOwner->UndoActionEnd();
-
-    return;
 }
 
 

@@ -641,7 +641,6 @@ IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl, Button*, void)
     }
     else
         EndDialog();
-    return;
 }
 
 

@@ -2044,8 +2044,6 @@ struct OfficeStylesWritingVisitor
         }
 
         SAL_INFO("filter.svg", "SvgDashArray2Odf " << *dash_distance << " " << *dots1 << " " << *dots1_length << " " << *dots2 << " " << *dots2_length );
-
-        return;
     }
 
     static void push() {}

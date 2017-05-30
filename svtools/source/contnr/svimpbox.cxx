@@ -2078,8 +2078,6 @@ void SvImpLBox::MouseButtonUp( const MouseEvent& rMEvt)
         aEditClickPos = rMEvt.GetPosPixel();
         aEditIdle.Start();
     }
-
-    return;
 }
 
 void SvImpLBox::MouseMove( const MouseEvent& rMEvt)
@@ -2087,7 +2085,6 @@ void SvImpLBox::MouseMove( const MouseEvent& rMEvt)
     SvTreeListEntry* pEntry = GetClickedEntry( rMEvt.GetPosPixel() );
     if ( !MouseMoveCheckCtrl( rMEvt, pEntry ) && ( aSelEng.GetSelectionMode() != SelectionMode::NONE ) )
         aSelEng.SelMouseMove( rMEvt );
-    return;
 }
 
 bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)

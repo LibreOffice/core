@@ -60,7 +60,6 @@ public:
 
 void SAL_CALL DummyHandler_Impl::handle( const uno::Reference< task::XInteractionRequest >& )
 {
-    return;
 }
 
 

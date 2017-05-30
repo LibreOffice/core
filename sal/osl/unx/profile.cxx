@@ -1323,8 +1323,6 @@ static void removeLine(osl_TProfileImpl* pProfile, sal_uInt32 LineNo)
 
         pProfile->m_NoLines--;
     }
-
-    return;
 }
 
 static void setEntry(osl_TProfileImpl* pProfile, osl_TProfileSection* pSection,
@@ -1335,8 +1333,6 @@ static void setEntry(osl_TProfileImpl* pProfile, osl_TProfileSection* pSection,
     pSection->m_Entries[NoEntry].m_Line   = Line;
     pSection->m_Entries[NoEntry].m_Offset = Entry - pProfile->m_Lines[Line];
     pSection->m_Entries[NoEntry].m_Len    = Len;
-
-    return;
 }
 
 static bool addEntry(osl_TProfileImpl* pProfile,
@@ -1398,7 +1394,6 @@ static void removeEntry(osl_TProfileSection *pSection, sal_uInt32 NoEntry)
         pSection->m_NoEntries--;
     }
 
-    return;
 }
 
 static bool addSection(osl_TProfileImpl* pProfile, int Line, const sal_Char* Section, sal_uInt32 Len)
@@ -1474,8 +1469,6 @@ static void removeSection(osl_TProfileImpl* pProfile, osl_TProfileSection *pSect
 
         pProfile->m_NoSections--;
     }
-
-    return;
 }
 
 static osl_TProfileSection* findEntry(osl_TProfileImpl* pProfile,
@@ -1763,8 +1756,6 @@ static void osl_ProfileGenerateExtension(const sal_Char* pszFileName, const sal_
         cursor += BufferMaxLen - 1;
     }
     *cursor = 0;
-
-    return;
 }
 
 static osl_TProfileImpl* acquireProfile(oslProfile Profile, bool bWriteable)

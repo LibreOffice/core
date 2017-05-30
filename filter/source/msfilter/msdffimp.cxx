@@ -6536,7 +6536,7 @@ bool SvxMSDffManager::ProcessClientData(SvStream& rStData, sal_uInt32 nDatLen,
 
 void SvxMSDffManager::ProcessClientAnchor2( SvStream& /* rSt */, DffRecordHeader& /* rHd */ , void* /* pData */, DffObjData& /* rObj */ )
 {
-    return;  // will be overridden by SJ in Draw
+    // will be overridden by SJ in Draw
 }
 
 bool SvxMSDffManager::GetOLEStorageName( sal_uInt32, OUString&, tools::SvRef<SotStorage>&, uno::Reference < embed::XStorage >& ) const

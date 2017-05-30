@@ -112,25 +112,21 @@ uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& /* Propert
 void SAL_CALL ColorPropertySet::addPropertyChangeListener( const OUString& /* aPropertyName */, const Reference< XPropertyChangeListener >& /* xListener */ )
 {
     OSL_FAIL( "Not Implemented" );
-    return;
 }
 
 void SAL_CALL ColorPropertySet::removePropertyChangeListener( const OUString& /* aPropertyName */, const Reference< XPropertyChangeListener >& /* aListener */ )
 {
     OSL_FAIL( "Not Implemented" );
-    return;
 }
 
 void SAL_CALL ColorPropertySet::addVetoableChangeListener( const OUString& /* PropertyName */, const Reference< XVetoableChangeListener >& /* aListener */ )
 {
     OSL_FAIL( "Not Implemented" );
-    return;
 }
 
 void SAL_CALL ColorPropertySet::removeVetoableChangeListener( const OUString& /* PropertyName */, const Reference< XVetoableChangeListener >& /* aListener */ )
 {
     OSL_FAIL( "Not Implemented" );
-    return;
 }
 
 // ____ XPropertyState ____

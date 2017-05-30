@@ -983,7 +983,6 @@ void AbstractScriptSelectorDialog_Impl::SetRunLabel()
 {
     if (pDlg)
         pDlg->SetRunLabel();
-    return;
 }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( vcl::Window* pParent,

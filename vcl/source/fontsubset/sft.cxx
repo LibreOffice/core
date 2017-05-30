@@ -1415,8 +1415,6 @@ static void GetKern(TrueTypeFont *ttf)
   badtable:
     ttf->kerntype = KT_NONE;
     ttf->kerntables = nullptr;
-
-    return;
 }
 
 /*- Public functions */
@@ -1734,7 +1732,6 @@ void CloseTTFont(TrueTypeFont *ttf)
     free(ttf->kerntables);
 
     free(ttf);
-    return;
 }
 
 int GetTTGlyphPoints(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray)

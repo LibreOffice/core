@@ -127,7 +127,6 @@ void SwAccessiblePortionData::Text(sal_Int32 nLength, sal_uInt16 nType, sal_Int3
 void SwAccessiblePortionData::SetAttrFieldType( sal_uInt16 nAttrFieldType )
 {
     m_aAttrFieldType.push_back(nAttrFieldType);
-    return;
 }
 
 void SwAccessiblePortionData::Special(

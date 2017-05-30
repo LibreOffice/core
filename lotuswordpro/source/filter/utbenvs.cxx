@@ -111,8 +111,6 @@ sal_uInt64  LtcUtBenValueStream::SeekPos(sal_uInt64 const nPos)
 {
     //pLtcBenContainer pContainer = cpValue->GetContainer();
     //pContainer->GetStream()->SetStreamSize(nSize);
-
-    return;
 }
 /**
 *   Flush data function, not supported now
@@ -124,7 +122,6 @@ void    LtcUtBenValueStream::FlushData()
     pLtcBenContainer pContainer = cpValue->GetContainer();
     pContainer->GetStream()->Flush();*/
     assert(false);
-    return;
 }
 /**
 *   Construction

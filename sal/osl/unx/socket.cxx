@@ -971,8 +971,6 @@ void SAL_CALL osl_getHostnameOfHostAddr (
     pHostname = osl_psz_getHostnameOfHostAddr(Addr);
 
     rtl_uString_newFromAscii (ustrHostname, pHostname);
-
-    return;
 }
 
 const sal_Char* SAL_CALL osl_psz_getHostnameOfHostAddr (const oslHostAddr pAddr)
@@ -2276,8 +2274,6 @@ void SAL_CALL osl_getLastSocketErrorDescription(oslSocket Socket, rtl_uString **
     osl_psz_getLastSocketErrorDescription(Socket,pszError,sizeof(pszError));
 
     rtl_uString_newFromAscii(ustrError,pszError);
-
-    return;
 }
 
 void SAL_CALL osl_psz_getLastSocketErrorDescription(oslSocket pSocket, sal_Char* pBuffer, sal_uInt32 BufferSize)
@@ -2292,7 +2288,6 @@ void SAL_CALL osl_psz_getLastSocketErrorDescription(oslSocket pSocket, sal_Char*
     }
 
     strncpy(pBuffer, strerror(pSocket->m_nLastError), BufferSize-1);
-    return;
 }
 
 oslSocketError SAL_CALL osl_getLastSocketError(oslSocket pSocket)

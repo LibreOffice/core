@@ -2784,8 +2784,6 @@ void DrawingML::WriteFill( const Reference< XPropertySet >& xPropSet )
     default:
         ;
     }
-
-    return;
 }
 
 void DrawingML::WriteStyleProperties( sal_Int32 nTokenId, const Sequence< PropertyValue >& aProperties )

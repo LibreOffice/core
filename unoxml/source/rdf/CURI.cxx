@@ -704,7 +704,6 @@ void SAL_CALL CURI::initFromConstant(const sal_Int16 i_Constant)
     }
     m_Namespace = OUString::createFromAscii(ns).intern();
     m_LocalName = OUString::createFromAscii(ln).intern();
-    return;
 }
 
 // css::lang::XInitialization:

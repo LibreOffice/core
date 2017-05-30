@@ -1427,7 +1427,6 @@ void ScDPSaveData::RemoveDuplicateNameCount(const OUString& rName)
     }
 
     --it->second;
-    return;
 }
 
 ScDPSaveDimension* ScDPSaveData::AppendNewDimension(const OUString& rName, bool bDataLayout)
