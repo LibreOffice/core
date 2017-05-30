@@ -127,6 +127,8 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
     const bool bScaleChanged = xColumn->getPropertyValue("Scale") != rDescriptor->getPropertyValue("Scale");
     const bool bIsNullableChanged = xColumn->getPropertyValue("IsNullable") != rDescriptor->getPropertyValue("IsNullable");
     const bool bIsAutoIncrementChanged = xColumn->getPropertyValue("IsAutoIncrement") != rDescriptor->getPropertyValue("IsAutoIncrement");
+
+    const OUString sQuoteString = getConnection()->getMetaData()->getIdentifierQuoteString();
     // TODO: remainder -- these are all "optional" so have to detect presence and change.
 
     bool bDefaultChanged = xColumn->getPropertyValue("DefaultValue")
@@ -137,7 +139,7 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
         // If bPrecisionChanged this will only succeed if we have increased the
         // precision, otherwise an exception is thrown -- however the base
         // gui then offers to delete and recreate the column.
-        OUString sSql(getAlterTableColumn(rColName) + "TYPE " +
+        OUString sSql(getAlterTableColumn(::dbtools::quoteName(sQuoteString,rColName)) + "TYPE " +
                 ::dbtools::createStandardTypePart(rDescriptor, getConnection()));
         getConnection()->createStatement()->execute(sSql);
         // TODO: could cause errors e.g. if incompatible types, deal with them here as appropriate.
@@ -146,33 +148,33 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
 
     if (bIsNullableChanged)
     {
-        sal_Int32 nNullabble = 0;
-        rDescriptor->getPropertyValue("IsNullable") >>= nNullabble;
+        sal_Int32 sNullabble = 0;
+        rDescriptor->getPropertyValue("IsNullable") >>= sNullabble;
 
-        if (nNullabble != ColumnValue::NULLABLE_UNKNOWN)
+        if (sNullabble != ColumnValue::NULLABLE_UNKNOWN)
         {
 
             OUString sSql;
             // Dirty hack: can't change null directly in sql, we have to fiddle
             // the system tables manually.
-            if (nNullabble == ColumnValue::NULLABLE)
+            if (sNullabble == ColumnValue::NULLABLE)
             {
                 sSql = "UPDATE RDB$RELATION_FIELDS SET RDB$NULL_FLAG = NULL "
-                       "WHERE RDB$FIELD_NAME = '" + rColName + "' "
-                       "AND RDB$RELATION_NAME = '" + getName() + "'";
+                       "WHERE RDB$FIELD_NAME = '" + ::dbtools::quoteName(sQuoteString,rColName) + "' "
+                       "AND RDB$RELATION_NAME = '" + ::dbtools::quoteName(sQuoteString,getName()) + "'";
             }
-            else if (nNullabble == ColumnValue::NO_NULLS)
+            else if (sNullabble == ColumnValue::NO_NULLS)
             {
                 // And if we are making NOT NULL then we have to make sure we have
                 // no nulls left in the column.
-                OUString sFillNulls("UPDATE \"" + getName() + "\" SET \""
-                                    + rColName + "\" = 0 "
-                                    "WHERE \"" + rColName + "\" IS NULL");
+                OUString sFillNulls("UPDATE \"" + ::dbtools::quoteName(sQuoteString,getName()) + "\" SET \""
+                                    + ::dbtools::quoteName(sQuoteString,rColName) + "\" = 0 "
+                                    "WHERE \"" + ::dbtools::quoteName(sQuoteString,rColName) + "\" IS NULL");
                 getConnection()->createStatement()->execute(sFillNulls);
 
                 sSql = "UPDATE RDB$RELATION_FIELDS SET RDB$NULL_FLAG = 1 "
-                       "WHERE RDB$FIELD_NAME = '" + rColName + "' "
-                       "AND RDB$RELATION_NAME = '" + getName() + "'";
+                       "WHERE RDB$FIELD_NAME = '" + ::dbtools::quoteName(sQuoteString,rColName) + "' "
+                       "AND RDB$RELATION_NAME = '" + ::dbtools::quoteName(sQuoteString,getName()) + "'";
             }
             getConnection()->createStatement()->execute(sSql);
         }
@@ -199,19 +201,18 @@ void SAL_CALL Table::alterColumnByName(const OUString& rColName,
 
         OUString sSql;
         if (sNewDefault.isEmpty())
-            sSql = getAlterTableColumn(rColName) + "DROP DEFAULT";
+            sSql = getAlterTableColumn(::dbtools::quoteName(sQuoteString,rColName)) + "DROP DEFAULT";
         else
-            sSql = getAlterTableColumn(rColName) + "SET DEFAULT " + sNewDefault;
+            sSql = getAlterTableColumn(::dbtools::quoteName(sQuoteString,rColName)) + "SET DEFAULT " + sNewDefault;
 
         getConnection()->createStatement()->execute(sSql);
     }
-    // TODO: quote identifiers as needed.
     if (bNameChanged)
     {
-        OUString sNewTableName;
-        rDescriptor->getPropertyValue("Name") >>= sNewTableName;
-        OUString sSql(getAlterTableColumn(rColName)
-                                            + " TO \"" + sNewTableName + "\"");
+        OUString sNewColName;
+        rDescriptor->getPropertyValue("Name") >>= sNewColName;
+        OUString sSql(getAlterTableColumn(::dbtools::quoteName(sQuoteString,rColName))
+                                            + " TO \"" + ::dbtools::quoteName(sQuoteString,sNewColName) + "\"");
 
         getConnection()->createStatement()->execute(sSql);
     }
