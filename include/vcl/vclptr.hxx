@@ -35,42 +35,9 @@
 #endif
 #endif
 
-/// @cond INTERNAL
-namespace vcl { namespace detail {
-
-// A mechanism to enable up-casts, used by the VclReference conversion constructor,
-// heavily borrowed from boost::is_base_and_derived
-// (which manages to avoid compilation problems with ambiguous bases and cites
-// comp.lang.c++.moderated mail <http://groups.google.com/groups?
-// selm=df893da6.0301280859.522081f7%40posting.google.com> "SuperSubclass
-// (is_base_and_derived) complete implementation!" by Rani Sharoni and cites
-// Aleksey Gurtovoy for the workaround for MSVC), to avoid including Boost
-// headers in URE headers (could ultimately be based on C++11 std::is_base_of):
-
-template< typename T1, typename T2 > struct UpCast {
-private:
-    template< bool, typename U1, typename > struct C
-    { typedef U1 t; };
-
-    template< typename U1, typename U2 > struct C< false, U1, U2 >
-    { typedef U2 t; };
-
-    struct S { char c[2]; };
-
-    template< typename U > static char f(T2 *, U);
-    static S f(T1 *, int);
-
-    struct H {
-        operator T1 * () const;
-        operator T2 * ();
-    };
-
-public:
-    static bool const value = sizeof (f(H(), 0)) == 1;
-    typedef typename C< value, void *, void >::t t;
-};
-
 #if !(defined _MSC_VER && _MSC_VER <= 1900 && !defined __clang__)
+
+namespace vcl { namespace detail {
 
 template<typename>
 constexpr bool isIncompleteOrDerivedFromVclReferenceBase(...) { return true; }
@@ -79,11 +46,9 @@ template<typename T> constexpr bool isIncompleteOrDerivedFromVclReferenceBase(
     int (*)[sizeof(T)])
 { return std::is_base_of<VclReferenceBase, T>::value; }
 
-#endif
-
 }; }; // namespace detail, namespace vcl
 
-/// @endcond
+#endif
 
 /**
  * A thin wrapper around rtl::Reference to implement the acquire and dispose semantics we want for references to vcl::Window subclasses.
@@ -134,7 +99,9 @@ public:
     template< class derived_type >
     VclPtr(
         const VclPtr< derived_type > & rRef,
-        typename ::vcl::detail::UpCast< reference_type, derived_type >::t = 0 )
+        typename std::enable_if<
+            std::is_base_of<reference_type, derived_type>::value, int>::type
+            = 0 )
         : m_rInnerRef( static_cast<reference_type*>(rRef) )
     {
     }
@@ -198,7 +165,7 @@ public:
     */
     template<typename derived_type>
     typename std::enable_if<
-        vcl::detail::UpCast<reference_type, derived_type>::value,
+        std::is_base_of<reference_type, derived_type>::value,
         VclPtr &>::type
     operator =(VclPtr<derived_type> const & rRef)
     {
@@ -373,7 +340,9 @@ public:
     template< class derived_type >
     ScopedVclPtr(
         const VclPtr< derived_type > & rRef,
-        typename ::vcl::detail::UpCast< reference_type, derived_type >::t = 0 )
+        typename std::enable_if<
+            std::is_base_of<reference_type, derived_type>::value, int>::type
+            = 0 )
         : VclPtr<reference_type>( rRef )
     {
     }
