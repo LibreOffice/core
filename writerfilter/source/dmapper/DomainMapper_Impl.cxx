@@ -1693,12 +1693,6 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         pTopContext->SetFootnote( xFootnote );
         FontTablePtr pFontTable = GetFontTable();
         uno::Sequence< beans::PropertyValue > aFontProperties;
-        if(!pTopContext->GetFootnoteFontName().isEmpty())
-        {
-            PropertyMapPtr aFontProps( new PropertyMap );
-            aFontProps->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( pTopContext->GetFootnoteFontName()  ));
-            aFontProperties = aFontProps->GetPropertyValues();
-        }
         appendTextContent( uno::Reference< text::XTextContent >( xFootnoteText, uno::UNO_QUERY_THROW ), aFontProperties );
         m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xFootnoteText, uno::UNO_QUERY_THROW ),
                     xFootnoteText->createTextCursorByRange(xFootnoteText->getStart())));
