@@ -23,6 +23,7 @@
 #include "RangeSelectionHelper.hxx"
 #include "TabPageNotifiable.hxx"
 #include "macros.hxx"
+#include "HelpIds.hrc"
 
 #include <rtl/math.hxx>
 #include <vcl/dialog.hxx>
@@ -197,6 +198,7 @@ void ErrorBarResources::SetChartDocumentForRangeChoosing(
     if( m_bHasInternalDataProvider )
     {
         m_pRbRange->SetText(m_pUIStringRbRange->GetText());
+        m_pRbRange->SetHelpId( HID_SCH_ERROR_BARS_FROM_DATA );
     }
 
     if( m_pRbRange->IsChecked())
