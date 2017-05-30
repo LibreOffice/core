@@ -2347,8 +2347,6 @@ void SAL_CALL VCLXWindow::disposing( const css::lang::EventObject& _rSource )
 // css::accessibility::XAccessible
 css::uno::Reference< css::accessibility::XAccessibleContext > VCLXWindow::getAccessibleContext(  )
 {
-    using namespace ::com::sun::star;
-
     SolarMutexGuard aGuard;
 
     // already disposed

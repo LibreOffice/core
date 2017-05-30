@@ -1943,8 +1943,6 @@ SalGtkFilePicker::~SalGtkFilePicker()
     gtk_widget_destroy( m_pVBox );
 }
 
-using namespace ::com::sun::star;
-
 uno::Reference< ui::dialogs::XFilePicker2 >
 GtkInstance::createFilePicker( const css::uno::Reference< css::uno::XComponentContext > &xMSF )
 {

@@ -1367,7 +1367,6 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                  b) adjust the writer style tabstops relative to the old
                     paragraph indent to be relative to the new paragraph indent
                 */
-                using namespace sw::util;
                 SwPaM aRegion(rTmpPos);
                 if (rEntry.MakeRegion(pDoc, aRegion, false))
                 {
@@ -1781,7 +1780,6 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
         // balance
         if (!m_pAktColl) // not importing into a style
         {
-            using namespace sw::util;
             SvxTabStopItem aOrig = pSty ?
             ItemGet<SvxTabStopItem>(*pSty, RES_PARATR_TABSTOP) :
             DefaultItemGet<SvxTabStopItem>(m_rDoc, RES_PARATR_TABSTOP);
@@ -1907,8 +1905,6 @@ void SwWW8ImplReader::ImportDop()
     // disable form design mode to be able to use imported controls directly
     // #i31239# always disable form design mode, not only in protected docs
     {
-        using namespace com::sun::star;
-
         uno::Reference<lang::XComponent> xModelComp(m_pDocShell->GetModel(),
            uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xDocProps(xModelComp,
@@ -1939,7 +1935,6 @@ void SwWW8ImplReader::ImportDop()
 
 void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
 {
-    using namespace com::sun::star;
     switch (rTypo.iLevelOfKinsoku)
     {
         case 2: // custom
@@ -4683,8 +4678,6 @@ void SwWW8ImplReader::ReadDocVars()
         m_pWwFib->m_lcbStwUser, m_bVer67 ? 2 : 0, m_eStructCharSet,
         aDocVarStrings, &aDocVarStringIds, &aDocValueStrings);
     if (!m_bVer67) {
-        using namespace ::com::sun::star;
-
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             m_pDocShell->GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> xDocProps(
@@ -5498,8 +5491,6 @@ namespace
     OUString QueryPasswordForMedium(SfxMedium& rMedium)
     {
         OUString aPassw;
-
-        using namespace com::sun::star;
 
         const SfxItemSet* pSet = rMedium.GetItemSet();
         const SfxPoolItem *pPasswordItem;

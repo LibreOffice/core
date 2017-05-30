@@ -99,7 +99,6 @@ using namespace ::css::style;
 using namespace ::css::text;
 using namespace ::css::uno;
 using namespace ::css::container;
-using namespace ::css::text;
 
 using ::css::io::XOutputStream;
 using ::sax_fastparser::FSHelperPtr;

@@ -68,8 +68,6 @@ using namespace com::sun::star::uno;
 #define COLFUZZY 20
 #define ROWFUZZY 10
 
-using namespace ::com::sun::star;
-
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
 #else

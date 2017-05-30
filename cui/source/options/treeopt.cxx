@@ -503,7 +503,6 @@ void OfaTreeOptionsDialog::InitWidgets()
 }
 
 // Ctor() with Frame -----------------------------------------------------
-using namespace ::com::sun::star;
 OfaTreeOptionsDialog::OfaTreeOptionsDialog(
     vcl::Window* pParent,
     const Reference< XFrame >& _xFrame,

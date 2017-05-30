@@ -25,7 +25,6 @@
 #include <com/sun/star/presentation/SlideShow.hpp>
 
 using namespace sd;
-using namespace ::com::sun::star;
 using namespace ::osl;
 using namespace std;
 using namespace ::com::sun::star;

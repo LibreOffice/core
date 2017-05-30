@@ -26,7 +26,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <vcl/layout.hxx>
 
-using namespace ::com::sun::star;
 
 namespace chart
 {

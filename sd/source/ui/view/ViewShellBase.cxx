@@ -92,11 +92,13 @@ using namespace sd;
 #include "sdslots.hxx"
 
 using ::sd::framework::FrameworkHelper;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::frame;
-using namespace com::sun::star::container;
-using namespace com::sun::star::lang;
+
+using namespace com::sun::star;
 using namespace com::sun::star::beans;
+using namespace com::sun::star::container;
+using namespace com::sun::star::drawing::framework;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::uno;
 
 namespace {
 
@@ -110,11 +112,6 @@ private:
 };
 
 } // end of anonymous namespace
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
-using ::sd::framework::FrameworkHelper;
 
 namespace sd {
 

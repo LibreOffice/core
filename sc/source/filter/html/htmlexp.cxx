@@ -319,7 +319,6 @@ void ScHTMLExport::WriteHeader()
     }
     else
     {
-        using namespace ::com::sun::star;
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             pDoc->GetDocumentShell()->GetModel(), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> xDocProps
