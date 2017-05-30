@@ -258,7 +258,8 @@ struct OOX_DLLPUBLIC TextpathModel
     TextpathModel();
 
     /** Writes the properties to the passed property map. */
-    void pushToPropMap(oox::drawingml::ShapePropertyMap& rPropMap, const css::uno::Reference<css::drawing::XShape>& xShape) const;
+    void pushToPropMap(oox::drawingml::ShapePropertyMap& rPropMap, const css::uno::Reference<css::drawing::XShape>& xShape,
+                       const GraphicHelper& rGraphicHelper) const;
 };
 
 } // namespace vml
