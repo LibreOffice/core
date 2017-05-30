@@ -48,7 +48,7 @@ void SwBezierShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu("draw");
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, RID_BEZIER_TOOLBOX);
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Bezier_Toolbox_Sw);
 }
 
 

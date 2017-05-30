@@ -1207,7 +1207,7 @@ namespace {
 
 ShellDescriptor::ShellDescriptor()
     : mpShell(nullptr),
-      mnId(0),
+      mnId(ToolbarId::None),
       mpFactory(),
       mbIsListenerAddedToWindow(false)
 {

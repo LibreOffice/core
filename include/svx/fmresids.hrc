@@ -21,14 +21,6 @@
 
 #include <svl/solar.hrc>
 
-// Toolbars ------------------------------------------------------------
-#define RID_SVXTBX_FORM_NAVIGATION                  (RID_FORMS_START +  1)
-#define RID_SVXTBX_FORM_FILTER                      (RID_FORMS_START +  2)
-#define RID_SVXTBX_TEXT_CONTROL_ATTRIBUTES          (RID_FORMS_START +  3)
-#define RID_SVXTBX_CONTROLS                         (RID_FORMS_START +  4)
-#define RID_SVXTBX_MORECONTROLS                     (RID_FORMS_START +  5)
-#define RID_SVXTBX_FORMDESIGN                       (RID_FORMS_START +  6)
-
 // String-Id's -----------------------------------------------------------
 #define RID_STR_INVALID_XMLNAME                     (RID_FORMS_START + 1)
 #define RID_STR_INVALID_XMLPREFIX                   (RID_FORMS_START + 2)

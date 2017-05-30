@@ -37,7 +37,6 @@
 
 #define STR_NO_MERGE_ENTRY          (RC_VIEW_BEGIN + 25)
 
-#define RID_PVIEW_TOOLBOX           (RC_VIEW_BEGIN + 31)
 #define STR_WEBOPTIONS              (RC_VIEW_BEGIN + 32)
 #define STR_TEXTOPTIONS             (RC_VIEW_BEGIN + 33)
 

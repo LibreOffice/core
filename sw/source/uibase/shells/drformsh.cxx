@@ -62,7 +62,7 @@ void SwDrawFormShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu("form");
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, RID_TEXT_TOOLBOX);
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Text_Toolbox_Sw);
 }
 
 

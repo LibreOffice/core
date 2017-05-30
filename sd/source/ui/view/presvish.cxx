@@ -61,13 +61,13 @@ SFX_IMPL_INTERFACE(PresentationViewShell, DrawViewShell)
 void PresentationViewShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS, SfxVisibilityFlags::Standard | SfxVisibilityFlags::FullScreen | SfxVisibilityFlags::Server,
-                                            RID_DRAW_TOOLBOX);
+                                            ToolbarId::Draw_Toolbox_Sd);
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_APPLICATION, SfxVisibilityFlags::Standard | SfxVisibilityFlags::Client | SfxVisibilityFlags::Viewer | SfxVisibilityFlags::ReadonlyDoc,
-                                            RID_DRAW_VIEWER_TOOLBOX);
+                                            ToolbarId::Draw_Viewer_Toolbox);
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OPTIONS, SfxVisibilityFlags::Standard | SfxVisibilityFlags::Server,
-                                            RID_DRAW_OPTIONS_TOOLBOX);
+                                            ToolbarId::Draw_Options_Toolbox);
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_COMMONTASK, SfxVisibilityFlags::Standard | SfxVisibilityFlags::Server,
-                                            RID_DRAW_COMMONTASK_TOOLBOX);
+                                            ToolbarId::Draw_CommonTask_Toolbox);
 }
 
 

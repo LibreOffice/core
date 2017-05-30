@@ -1639,33 +1639,33 @@ SfxShell* ViewShellObjectBarFactory::CreateShell( ::sd::ShellId nId )
         ::sd::View* pView = mrViewShell.GetView();
         switch (nId)
         {
-            case RID_BEZIER_TOOLBOX:
+            case ToolbarId::Bezier_Toolbox_Sd:
                 pShell = new ::sd::BezierObjectBar(&mrViewShell, pView);
                 break;
 
-            case RID_DRAW_TEXT_TOOLBOX:
+            case ToolbarId::Draw_Text_Toolbox_Sd:
                 pShell = new ::sd::TextObjectBar(
                     &mrViewShell, mrViewShell.GetDoc()->GetPool(), pView);
                 break;
 
-            case RID_DRAW_GRAF_TOOLBOX:
+            case ToolbarId::Draw_Graf_Toolbox:
                 pShell = new ::sd::GraphicObjectBar(&mrViewShell, pView);
                 break;
 
-            case RID_DRAW_MEDIA_TOOLBOX:
+            case ToolbarId::Draw_Media_Toolbox:
                 pShell = new ::sd::MediaObjectBar(&mrViewShell, pView);
                 break;
 
-            case RID_DRAW_TABLE_TOOLBOX:
+            case ToolbarId::Draw_Table_Toolbox:
                 pShell = ::sd::ui::table::CreateTableObjectBar( mrViewShell, pView );
                 break;
 
-            case RID_SVX_EXTRUSION_BAR:
+            case ToolbarId::Svx_Extrusion_Bar:
                 pShell = new svx::ExtrusionBar(
                     &mrViewShell.GetViewShellBase());
                 break;
 
-            case RID_SVX_FONTWORK_BAR:
+            case ToolbarId::Svx_Fontwork_Bar:
                 pShell = new svx::FontworkBar(
                     &mrViewShell.GetViewShellBase());
                 break;

@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_BARCFG_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_BARCFG_HXX
 
+#include <sfx2/toolbarids.hxx>
 #include <unotools/configitem.hxx>
 
 enum class SelectionType : sal_Int32;
@@ -37,7 +38,7 @@ public:
 
     virtual void Notify( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
-    void        SetTopToolbar( SelectionType nSelType, sal_Int32 nBarId );
+    void        SetTopToolbar(SelectionType nSelType, ToolbarId eBarId);
 };
 
 #endif

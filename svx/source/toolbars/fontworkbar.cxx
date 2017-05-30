@@ -179,7 +179,7 @@ SFX_IMPL_INTERFACE(FontworkBar, SfxShell)
 
 void FontworkBar::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, RID_SVX_FONTWORK_BAR);
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SfxVisibilityFlags::Invisible, ToolbarId::Svx_Fontwork_Bar);
 }
 
 

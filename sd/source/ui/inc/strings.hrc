@@ -99,26 +99,6 @@
 
 #define STR_IMPRESS_DOCUMENT_FULLTYPE_60  (RID_APP_START+170)
 
-/*
- *  Do not change ResourceID's for toolboxes, without assigning strings in
- *  strings.hrc to the same  ID (a toolbox and its
- *  configurations string should have identical ResourceID's!).
- */
-
-#define STR_DRAW_TOOLBOX            RID_DRAW_TOOLBOX
-#define STR_SLIDE_TOOLBOX           RID_SLIDE_TOOLBOX
-#define STR_DRAW_OBJ_TOOLBOX        RID_DRAW_OBJ_TOOLBOX
-#define STR_SLIDE_OBJ_TOOLBOX       RID_SLIDE_OBJ_TOOLBOX
-#define STR_DRAW_TEXT_TOOLBOX       RID_DRAW_TEXT_TOOLBOX
-#define STR_OUTLINE_TOOLBOX         RID_OUTLINE_TOOLBOX
-#define STR_GLUEPOINTS_TOOLBOX      RID_GLUEPOINTS_TOOLBOX
-#define STR_DRAW_OPTIONS_TOOLBOX    RID_DRAW_OPTIONS_TOOLBOX
-#define STR_DRAW_COMMONTASK_TOOLBOX RID_DRAW_COMMONTASK_TOOLBOX
-
-#define STR_GRAPHIC_OBJ_TOOLBOX     RID_GRAPHIC_OBJ_TOOLBOX
-
-#define STR_DRAW_GRAF_TOOLBOX       RID_DRAW_GRAF_TOOLBOX
-
 // IDs for presentation slides
 #define STR_AUTOLAYOUT_NONE                     (RID_APP_START+210)
 #define STR_AUTOLAYOUT_ONLY_TITLE               (RID_APP_START+211)

@@ -149,7 +149,7 @@ void FormShellManager::RegisterAtCenterPane()
     OSL_ASSERT(mpSubShellFactory.get()==nullptr);
     mpSubShellFactory.reset(new FormShellManagerFactory(*pShell, *this));
     mrBase.GetViewShellManager()->AddSubShellFactory(pShell,mpSubShellFactory);
-    mrBase.GetViewShellManager()->ActivateSubShell(*pShell, RID_FORMLAYER_TOOLBOX);
+    mrBase.GetViewShellManager()->ActivateSubShell(*pShell, ToolbarId::FormLayer_Toolbox);
 }
 
 void FormShellManager::UnregisterAtCenterPane()
@@ -172,7 +172,7 @@ void FormShellManager::UnregisterAtCenterPane()
     ViewShell* pShell = mrBase.GetMainViewShell().get();
     if (pShell != nullptr)
     {
-        mrBase.GetViewShellManager()->DeactivateSubShell(*pShell,  RID_FORMLAYER_TOOLBOX);
+        mrBase.GetViewShellManager()->DeactivateSubShell(*pShell,  ToolbarId::FormLayer_Toolbox);
         mrBase.GetViewShellManager()->RemoveSubShellFactory(pShell, mpSubShellFactory);
     }
 
@@ -293,7 +293,7 @@ FmFormShell* FormShellManagerFactory::CreateShell( ::sd::ShellId nId )
     FmFormShell* pShell = nullptr;
 
     ::sd::View* pView = mrViewShell.GetView();
-    if (nId == RID_FORMLAYER_TOOLBOX)
+    if (nId == ToolbarId::FormLayer_Toolbox)
     {
         pShell = new FmFormShell(&mrViewShell.GetViewShellBase(), pView);
         mrFormShellManager.SetFormShell(pShell);
