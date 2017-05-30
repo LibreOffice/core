@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 	external/libetonyek/win_build.patch.1 \
 	external/libetonyek/ubsan.patch \
 	external/libetonyek/rpath.patch \
+	external/libetonyek/silence-libxml.patch \
 	external/libetonyek/0001-fix-brain-fart.patch.1 \
 ))
 
