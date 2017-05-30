@@ -95,6 +95,7 @@
 
         <activity
             android:name=".SettingsActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:label="@string/app_name_settings">
         </activity>
 
@@ -109,6 +110,7 @@
 
         <!-- Document Provider Settings Activity -->
         <activity android:name=".storage.DocumentProviderSettingsActivity"
+                  android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
                   android:label="@string/storage_provider_settings">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

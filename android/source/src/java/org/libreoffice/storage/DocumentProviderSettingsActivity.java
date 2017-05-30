@@ -14,7 +14,6 @@ import java.util.Set;
 import org.libreoffice.R;
 import org.libreoffice.storage.external.BrowserSelectorActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -22,8 +21,9 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.support.v7.app.AppCompatActivity;
 
-public class DocumentProviderSettingsActivity extends Activity {
+public class DocumentProviderSettingsActivity extends AppCompatActivity {
 
     public static final String KEY_PREF_OWNCLOUD_SERVER = "pref_server_url";
     public static final String KEY_PREF_OWNCLOUD_USER_NAME = "pref_user_name";
