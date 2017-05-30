@@ -36,16 +36,8 @@ extern "C" int BridgeLOkit_Init(const char *path)
     strcpy(bufUserPath + strlen(path), "/user");
     
     // Initialize LibreOfficeKit
-    kit = lok_init_2(path, bufUserPath);
-
-    udata_setCommonData(NULL, NULL);
-    ucnv_open("iso-8859-3", NULL);
-
-    ucnv_getName(NULL,NULL);
-    ucnv_close(NULL);
-    osl_setCommandArgs(8, NULL);
-    kit->pClass->documentLoad(kit, NULL);
-    document->pClass->initializeForRendering(document, "");
+    if (!kit)
+      kit = lok_init_2(path, bufUserPath);
     return 0;
 }
 
