@@ -913,65 +913,47 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
     {
         if ( aSalShlData.mbW7 )
         {
-            typedef HRESULT ( WINAPI *SHCREATEITEMFROMPARSINGNAME )( PCWSTR, IBindCtx*, REFIID, void **ppv );
-            SHCREATEITEMFROMPARSINGNAME pSHCreateItemFromParsingName =
-                                        reinterpret_cast<SHCREATEITEMFROMPARSINGNAME>(GetProcAddress(
-                                        GetModuleHandleW (L"shell32.dll"), "SHCreateItemFromParsingName" ));
+            IShellItem* pShellItem = nullptr;
 
-            if( pSHCreateItemFromParsingName )
+            HRESULT hr = SHCreateItemFromParsingName(SAL_W(system_path.getStr()), nullptr, IID_PPV_ARGS(&pShellItem));
+
+            if ( SUCCEEDED(hr) && pShellItem )
             {
-                IShellItem* pShellItem = nullptr;
+                OUString sApplicationName;
 
-                HRESULT hr = pSHCreateItemFromParsingName ( SAL_W(system_path.getStr()), nullptr, IID_PPV_ARGS(&pShellItem) );
+                if ( rDocumentService == "com.sun.star.text.TextDocument" ||
+                     rDocumentService == "com.sun.star.text.GlobalDocument" ||
+                     rDocumentService == "com.sun.star.text.WebDocument" ||
+                     rDocumentService == "com.sun.star.xforms.XMLFormDocument" )
+                    sApplicationName = "Writer";
+                else if ( rDocumentService == "com.sun.star.sheet.SpreadsheetDocument" ||
+                     rDocumentService == "com.sun.star.chart2.ChartDocument" )
+                    sApplicationName = "Calc";
+                else if ( rDocumentService == "com.sun.star.presentation.PresentationDocument" )
+                    sApplicationName = "Impress";
+                else if ( rDocumentService == "com.sun.star.drawing.DrawingDocument" )
+                    sApplicationName = "Draw";
+                else if ( rDocumentService == "com.sun.star.formula.FormulaProperties" )
+                    sApplicationName = "Math";
+                else if ( rDocumentService == "com.sun.star.sdb.DatabaseDocument" ||
+                     rDocumentService == "com.sun.star.sdb.OfficeDatabaseDocument" ||
+                     rDocumentService == "com.sun.star.sdb.RelationDesign" ||
+                     rDocumentService == "com.sun.star.sdb.QueryDesign" ||
+                     rDocumentService == "com.sun.star.sdb.TableDesign" ||
+                     rDocumentService == "com.sun.star.sdb.DataSourceBrowser" )
+                    sApplicationName = "Base";
 
-                if ( SUCCEEDED(hr) && pShellItem )
+                if ( !sApplicationName.isEmpty() )
                 {
-                    OUString sApplicationName;
+                    OUString sApplicationID("TheDocumentFoundation.LibreOffice.");
+                    sApplicationID += sApplicationName;
 
-                    if ( rDocumentService == "com.sun.star.text.TextDocument" ||
-                         rDocumentService == "com.sun.star.text.GlobalDocument" ||
-                         rDocumentService == "com.sun.star.text.WebDocument" ||
-                         rDocumentService == "com.sun.star.xforms.XMLFormDocument" )
-                        sApplicationName = "Writer";
-                    else if ( rDocumentService == "com.sun.star.sheet.SpreadsheetDocument" ||
-                         rDocumentService == "com.sun.star.chart2.ChartDocument" )
-                        sApplicationName = "Calc";
-                    else if ( rDocumentService == "com.sun.star.presentation.PresentationDocument" )
-                        sApplicationName = "Impress";
-                    else if ( rDocumentService == "com.sun.star.drawing.DrawingDocument" )
-                        sApplicationName = "Draw";
-                    else if ( rDocumentService == "com.sun.star.formula.FormulaProperties" )
-                        sApplicationName = "Math";
-                    else if ( rDocumentService == "com.sun.star.sdb.DatabaseDocument" ||
-                         rDocumentService == "com.sun.star.sdb.OfficeDatabaseDocument" ||
-                         rDocumentService == "com.sun.star.sdb.RelationDesign" ||
-                         rDocumentService == "com.sun.star.sdb.QueryDesign" ||
-                         rDocumentService == "com.sun.star.sdb.TableDesign" ||
-                         rDocumentService == "com.sun.star.sdb.DataSourceBrowser" )
-                        sApplicationName = "Base";
+                    SHARDAPPIDINFO info;
+                    info.psi = pShellItem;
+                    info.pszAppID = SAL_W(sApplicationID.getStr());
 
-                    if ( !sApplicationName.isEmpty() )
-                    {
-                        OUString sApplicationID("TheDocumentFoundation.LibreOffice.");
-                        sApplicationID += sApplicationName;
-
-#if _WIN32_WINNT < _WIN32_WINNT_WIN7
-// just define Windows 7 only constant locally...
-#define SHARD_APPIDINFO  0x00000004
-#endif
-
-                        typedef struct {
-                            IShellItem *psi;
-                            PCWSTR     pszAppID;
-                        } DummyShardAppIDInfo;
-
-                        DummyShardAppIDInfo info;
-                        info.psi = pShellItem;
-                        info.pszAppID = SAL_W(sApplicationID.getStr());
-
-                        SHAddToRecentDocs ( SHARD_APPIDINFO, &info );
-                        return;
-                    }
+                    SHAddToRecentDocs ( SHARD_APPIDINFO, &info );
+                    return;
                 }
             }
         }

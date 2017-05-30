@@ -100,10 +100,7 @@
 
 #ifdef _WIN32
 // WinCrypt headers for PDF signing
-// Note: this uses Windows 7 APIs and requires the relevant data types;
-// the functions that don't exist in WinXP must be looked up at runtime!
-#undef _WIN32_WINNT
-#define _WIN32_WINNT _WIN32_WINNT_WIN7
+// Note: this uses Windows 7 APIs and requires the relevant data types
 #include <prewin.h>
 #include <wincrypt.h>
 #include <postwin.h>
@@ -6222,17 +6219,6 @@ NSSCMSMessage *CreateCMSMessage(PRTime* time,
 
 #ifdef _WIN32
 
-typedef BOOL (WINAPI *PointerTo_CryptRetrieveTimeStamp)(LPCWSTR wszUrl,
-                                                        DWORD dwRetrievalFlags,
-                                                        DWORD dwTimeout,
-                                                        LPCSTR pszHashId,
-                                                        const CRYPT_TIMESTAMP_PARA *pPara,
-                                                        const BYTE *pbData,
-                                                        DWORD cbData,
-                                                        PCRYPT_TIMESTAMP_CONTEXT *ppTsContext,
-                                                        PCCERT_CONTEXT *ppTsSigner,
-                                                        HCERTSTORE phStore);
-
 namespace
 {
 
@@ -6958,15 +6944,6 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
 
     if( !rContext.m_aSignTSA.isEmpty() )
     {
-        PointerTo_CryptRetrieveTimeStamp crts = reinterpret_cast<PointerTo_CryptRetrieveTimeStamp>(GetProcAddress(LoadLibrary("crypt32.dll"), "CryptRetrieveTimeStamp"));
-        if (!crts)
-        {
-            SAL_WARN("vcl.pdfwriter", "Could not find the CryptRetrieveTimeStamp function in crypt32.dll: " << WindowsErrorString(GetLastError()));
-            CryptMsgClose(hMsg);
-            CertFreeCertificateContext(pCertContext);
-            return false;
-        }
-
         HCRYPTMSG hDecodedMsg = CryptMsgOpenToDecode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
                                                      CMSG_DETACHED_FLAG,
                                                      CMSG_SIGNED,
@@ -7047,7 +7024,7 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
         aTsPara.cExtension = 0;
         aTsPara.rgExtension = nullptr;
 
-        if (!(*crts)(SAL_W(rContext.m_aSignTSA.getStr()),
+        if (!CryptRetrieveTimeStamp(SAL_W(rContext.m_aSignTSA.getStr()),
                      0,
                      10000,
                      szOID_NIST_sha256,
