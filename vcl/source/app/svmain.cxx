@@ -313,10 +313,26 @@ bool InitVCL()
         new DesktopEnvironmentContext( css::uno::getCurrentContext() ) );
 
     // Initialize application instance (should be done after initialization of VCL SAL part)
-    if( pSVData->mpApp )
+    if (pSVData->mpApp)
+    {
         // call init to initialize application class
         // soffice/sfx implementation creates the global service manager
         pSVData->mpApp->Init();
+    }
+
+    if (pSVData->maAppData.mpSettings)
+    {
+        //Now that uno has been bootstrapped we can ask the config what the UI language is so that we can
+        //force that in as $LANGUAGE. That way we can get gtk to render widgets RTL
+        //if we have a RTL UI in an otherwise LTR locale and get gettext using externals (e.g. python)
+        //to match their translations to our preferred UI language
+        OUString aLocaleString(pSVData->maAppData.mpSettings->GetUILanguageTag().getGlibcLocaleString(".UTF-8"));
+        if (!aLocaleString.isEmpty())
+        {
+            OUString envVar("LANGUAGE");
+            osl_setEnvironment(envVar.pData, aLocaleString.pData);
+        }
+    }
 
     pSVData->mpDefInst->AfterAppInit();
 
