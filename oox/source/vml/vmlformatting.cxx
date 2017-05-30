@@ -855,7 +855,7 @@ beans::PropertyValue lcl_createTextpathProps()
     return aRet;
 }
 
-void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Reference<drawing::XShape>& xShape) const
+void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Reference<drawing::XShape>& xShape, const GraphicHelper& rGraphicHelper) const
 {
     if (moString.has())
     {
@@ -900,6 +900,16 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
 
                     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
                     xPropertySet->setPropertyValue("CharFontName", uno::makeAny(aValue));
+                }
+                else if (aName == "font-size")
+                {
+                    oox::OptValue<OUString> aOptString(aValue);
+                    sal_Int64 nEmu = lclGetEmu( rGraphicHelper, aOptString, 1 );
+                    // 1 point = 1/72 inch = 12,700 EMU
+                    float nSize = nEmu / 12700;
+
+                    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+                    xPropertySet->setPropertyValue("CharHeight", uno::makeAny(nSize));
                 }
             }
         }
