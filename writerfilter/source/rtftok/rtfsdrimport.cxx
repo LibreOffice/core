@@ -26,6 +26,7 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
 #include <ooxml/resourceids.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
@@ -376,6 +377,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     boost::logic::tribool obFlipH(boost::logic::indeterminate);
     boost::logic::tribool obFlipV(boost::logic::indeterminate);
 
+    OUString aShapeText = "";
     bool bCustom(false);
     int const nType = initShape(xShape, xPropertySet, bCustom, rShape, bClose, shapeOrPict);
 
@@ -397,6 +399,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         }
         else if (rProperty.first == "wzDescription")
             xPropertySet->setPropertyValue("Description", uno::makeAny(rProperty.second));
+        else if (rProperty.first == "gtextUNICODE")
+            aShapeText = rProperty.second;
         else if (rProperty.first == "pib")
         {
             m_rImport.setDestinationText(rProperty.second);
@@ -852,6 +856,14 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     {
         uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
         xDefaulter->createCustomShapeDefaults(OUString::number(nType));
+    }
+
+    // Set shape text
+    if (bCustom && !aShapeText.isEmpty())
+    {
+        uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
+        if (xTextRange.is())
+            xTextRange->setString(aShapeText);
     }
 
     // Creating CustomShapeGeometry property
