@@ -5356,13 +5356,6 @@ the  Windows SDK are installed.])
     elif echo $WINDOWS_SDK_HOME | grep "8.0" >/dev/null 2>/dev/null; then
         WINDOWS_SDK_VERSION=80
         AC_MSG_RESULT([found Windows SDK 8.0 ($WINDOWS_SDK_HOME)])
-        dnl compatibility warning if not explicitly choosing the 80 SDK:
-        if test -z "$with_windows_sdk"; then
-            AC_MSG_WARN([If a build should run on Windows XP,])
-            AC_MSG_WARN([use --with-windows-sdk=7.1A])
-            add_warning "If a build should run on Windows XP,"
-            add_warning "use --with-windows-sdk=7.1A"
-        fi
     elif echo $WINDOWS_SDK_HOME | grep "8.1" >/dev/null 2>/dev/null; then
         WINDOWS_SDK_VERSION=81
         AC_MSG_RESULT([found Windows SDK 8.1 ($WINDOWS_SDK_HOME)])
