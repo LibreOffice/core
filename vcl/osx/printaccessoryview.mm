@@ -172,14 +172,14 @@ public:
     rtl::OUString getMoreString()
     {
         return maLocalizedStrings.Count() >= 4
-               ? OUString( maLocalizedStrings.GetString( 3 ) )
+               ? maLocalizedStrings.GetString( 3 )
                : OUString( "More" );
     }
 
     rtl::OUString getPrintSelectionString()
     {
         return maLocalizedStrings.Count() >= 5
-               ? OUString( maLocalizedStrings.GetString( 4 ) )
+               ? maLocalizedStrings.GetString( 4 )
                : OUString( "Print selection only" );
     }
 
