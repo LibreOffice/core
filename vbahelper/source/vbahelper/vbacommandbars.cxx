@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>

@@ -51,7 +51,6 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include "RptDef.hxx"
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

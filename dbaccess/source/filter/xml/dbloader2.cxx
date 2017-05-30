@@ -29,10 +29,9 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameLoader.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XLoadEventListener.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

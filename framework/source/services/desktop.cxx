@@ -50,7 +50,6 @@
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

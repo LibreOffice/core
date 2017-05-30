@@ -22,9 +22,6 @@
 #include "scopetools.hxx"
 #include "viewdata.hxx"
 
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XDesktop2.hpp>
-
 #include <comphelper/random.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>

@@ -57,7 +57,6 @@
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <com/sun/star/text/TemplateDisplayFormat.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/util/NumberFormat.hpp>

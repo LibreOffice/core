@@ -49,10 +49,8 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XFrames.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>

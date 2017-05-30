@@ -23,7 +23,6 @@
 #include <ooo/vba/msforms/XUserForm.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 
 #include <vbahelper/vbahelperinterface.hxx>
 #include "vbacontrol.hxx"

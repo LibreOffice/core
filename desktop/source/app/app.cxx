@@ -49,7 +49,6 @@
 #include <com/sun/star/frame/theAutoRecovery.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/SessionListener.hpp>
-#include <com/sun/star/frame/XSessionManagerListener.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
 #include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
@@ -59,12 +58,10 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/StartModule.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/configuration/MissingBootstrapFileException.hpp>
 #include <com/sun/star/configuration/InvalidBootstrapFileException.hpp>
@@ -77,7 +74,6 @@
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/ui/theWindowStateConfiguration.hpp>
-#include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
 
 #include <desktop/exithelper.h>

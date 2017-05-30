@@ -18,16 +18,11 @@
  */
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>

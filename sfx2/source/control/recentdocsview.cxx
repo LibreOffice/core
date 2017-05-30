@@ -28,8 +28,6 @@
 #include <vcl/pngread.hxx>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <templateview.hrc>
 #include "bitmaps.hlst"
 
@@ -38,7 +36,6 @@
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 
 namespace {

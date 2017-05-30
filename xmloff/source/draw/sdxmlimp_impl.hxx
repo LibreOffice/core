@@ -21,7 +21,6 @@
 #define INCLUDED_XMLOFF_SOURCE_DRAW_SDXMLIMP_IMPL_HXX
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <xmloff/xmltkmap.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>

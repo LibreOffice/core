@@ -27,7 +27,6 @@
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <com/sun/star/frame/XGlobalEventBroadcaster.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/uno/Reference.hxx>

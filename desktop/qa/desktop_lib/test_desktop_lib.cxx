@@ -10,7 +10,6 @@
 #include <memory>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/awt/XReschedule.hpp>

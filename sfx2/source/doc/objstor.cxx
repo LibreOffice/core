@@ -28,9 +28,7 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XExporter.hpp>

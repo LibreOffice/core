@@ -25,7 +25,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/image.hxx>
 #include "PreviewRenderer.hxx"
-#include <com/sun/star/frame/XModel.hpp>
 #include <vcl/timer.hxx>
 #include "tools/SdGlobalResourceContainer.hxx"
 

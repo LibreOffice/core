@@ -29,7 +29,6 @@
 #include <xmloff/xmlexppr.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>

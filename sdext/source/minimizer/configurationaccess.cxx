@@ -19,7 +19,6 @@
 
 
 #include "configurationaccess.hxx"
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>

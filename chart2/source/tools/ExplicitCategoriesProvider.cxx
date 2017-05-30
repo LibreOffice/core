@@ -31,7 +31,6 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 
 namespace chart
 {

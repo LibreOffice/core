@@ -22,7 +22,6 @@
 
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>

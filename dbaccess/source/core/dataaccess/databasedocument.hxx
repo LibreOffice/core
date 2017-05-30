@@ -27,6 +27,7 @@
 #include "documenteventnotifier.hxx"
 
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
+#include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>

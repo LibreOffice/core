@@ -30,12 +30,6 @@
 
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XFrames.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -77,7 +71,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::embed;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;

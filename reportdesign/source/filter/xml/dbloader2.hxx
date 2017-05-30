@@ -24,12 +24,8 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XFrameLoader.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#include <com/sun/star/frame/XLoadEventListener.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -37,7 +33,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/XSet.hpp>

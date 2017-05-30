@@ -27,10 +27,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/XPopupMenuController.hpp>
 
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <toolkit/awt/vclxmenu.hxx>

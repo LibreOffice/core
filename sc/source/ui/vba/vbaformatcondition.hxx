@@ -21,7 +21,6 @@
 #include <ooo/vba/excel/XFormatCondition.hpp>
 #include <ooo/vba/excel/XFormatConditions.hpp>
 #include <ooo/vba/excel/XStyle.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
 #include <com/sun/star/sheet/XSheetCondition.hpp>

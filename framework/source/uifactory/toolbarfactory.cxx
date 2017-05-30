@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/frame/ModuleManager.hpp>
-
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -27,7 +25,6 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace ::com::sun::star::ui;

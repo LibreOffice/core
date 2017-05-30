@@ -25,17 +25,13 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <toolkit/helper/vclunohelper.hxx>

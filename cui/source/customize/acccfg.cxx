@@ -47,8 +47,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>

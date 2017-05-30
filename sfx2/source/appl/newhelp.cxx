@@ -50,11 +50,9 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/WordType.hpp>

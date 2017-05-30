@@ -26,7 +26,6 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/comphelperdllapi.h>
 
 #include <rtl/ustring.hxx>

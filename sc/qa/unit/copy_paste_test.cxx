@@ -15,7 +15,6 @@
 #include "tabvwsh.hxx"
 
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 
 #include "helper/qahelper.hxx"

@@ -18,7 +18,6 @@
  */
 
 #include "tools/SlotStateListener.hxx"
-#include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>

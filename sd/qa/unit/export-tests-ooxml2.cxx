@@ -58,7 +58,6 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>

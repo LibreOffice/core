@@ -50,7 +50,6 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <com/sun/star/xforms/XFormsSupplier.hpp>

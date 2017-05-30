@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_VIEWSHELLBASE_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_VIEWSHELLBASE_HXX
 
-#include <com/sun/star/frame/XFrame.hpp>
-
 #include "ViewShell.hxx"
 
 #include "glob.hxx"

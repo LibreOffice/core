@@ -27,12 +27,8 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 

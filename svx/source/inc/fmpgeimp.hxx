@@ -25,7 +25,6 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XForms.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XMap.hpp>
 

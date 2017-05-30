@@ -25,9 +25,7 @@
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
-#include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>

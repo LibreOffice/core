@@ -27,7 +27,6 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>

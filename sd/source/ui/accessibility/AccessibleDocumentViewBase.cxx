@@ -23,7 +23,6 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

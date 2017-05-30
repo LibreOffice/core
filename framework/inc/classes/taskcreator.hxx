@@ -22,7 +22,7 @@
 
 #include <general.h>
 
-#include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>

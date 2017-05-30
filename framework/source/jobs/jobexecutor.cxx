@@ -35,7 +35,6 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/frame/XModuleManager2.hpp>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>

@@ -60,7 +60,6 @@
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/view/XPrintJobBroadcaster.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

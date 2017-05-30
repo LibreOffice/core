@@ -22,7 +22,7 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/documentinfo.hxx>

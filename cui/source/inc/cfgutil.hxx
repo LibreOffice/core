@@ -23,11 +23,11 @@
 #include <memory>
 #include <rtl/ustring.hxx>
 
+#include <com/sun/star/frame/DispatchInformation.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <vcl/timer.hxx>
 #include <svtools/svtabbx.hxx>

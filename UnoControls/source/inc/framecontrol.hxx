@@ -20,11 +20,7 @@
 #ifndef INCLUDED_UNOCONTROLS_SOURCE_INC_FRAMECONTROL_HXX
 #define INCLUDED_UNOCONTROLS_SOURCE_INC_FRAMECONTROL_HXX
 
-#include <com/sun/star/frame/XFrameActionListener.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
-#include <com/sun/star/frame/FrameActionEvent.hpp>
-#include <com/sun/star/frame/FrameAction.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XConnectionPointContainer.hpp>

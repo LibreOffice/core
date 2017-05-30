@@ -22,7 +22,6 @@
 #include <editeng/unolingu.hxx>
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>

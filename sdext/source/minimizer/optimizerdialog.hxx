@@ -33,13 +33,10 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/XItemEventBroadcaster.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/awt/PushButtonType.hpp>
 #include <cppuhelper/implbase.hxx>
 

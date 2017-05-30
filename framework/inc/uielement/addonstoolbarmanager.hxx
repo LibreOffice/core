@@ -23,11 +23,9 @@
 #include <uielement/toolbarmanager.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>

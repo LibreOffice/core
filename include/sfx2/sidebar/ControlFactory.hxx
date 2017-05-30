@@ -23,7 +23,7 @@
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/vclptr.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
+
 class ToolBox;
 
 namespace sfx2 { namespace sidebar {

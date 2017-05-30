@@ -28,7 +28,6 @@
 #include "apitools.hxx"
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/embed/XStateChangeListener.hpp>
 #include <com/sun/star/sdb/XSubDocument.hpp>

@@ -28,7 +28,6 @@
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>

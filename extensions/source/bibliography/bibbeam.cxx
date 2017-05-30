@@ -21,7 +21,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 #include "bibliography.hrc"

@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/frame/ModuleManager.hpp>
-
 #include <uifactory/menubarfactory.hxx>
 #include <uielement/statusbarwrapper.hxx>
 
@@ -28,7 +26,6 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
 using namespace ::com::sun::star::ui;

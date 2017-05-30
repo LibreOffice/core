@@ -22,7 +22,6 @@
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/contextid.hxx>
 #include <xmloff/controlpropertyhdl.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <memory>

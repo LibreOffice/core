@@ -32,7 +32,6 @@
 #include <com/sun/star/form/XApproveActionBroadcaster.hpp>
 #include <com/sun/star/form/submission/XSubmissionSupplier.hpp>
 #include <com/sun/star/form/submission/XSubmission.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <cppuhelper/implbase3.hxx>

@@ -22,9 +22,7 @@
 #include <framework/addonsoptions.hxx>
 
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XControlNotificationListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <osl/mutex.hxx>

@@ -19,7 +19,6 @@
 #include <vcl/idle.hxx>
 #include <LibreOfficeKit/LibreOfficeKit.h>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <desktop/dllapi.h>

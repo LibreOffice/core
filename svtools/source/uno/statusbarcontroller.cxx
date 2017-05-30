@@ -23,7 +23,6 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <osl/mutex.hxx>

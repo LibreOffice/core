@@ -37,8 +37,6 @@
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
-#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XReportEngine.hpp>
@@ -94,7 +92,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/storagehelper.hxx>

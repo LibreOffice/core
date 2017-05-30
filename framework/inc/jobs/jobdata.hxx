@@ -28,7 +28,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/frame/DispatchResultEvent.hpp>
 
 #include <rtl/ustring.hxx>
 

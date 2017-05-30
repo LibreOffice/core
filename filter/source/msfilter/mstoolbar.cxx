@@ -17,7 +17,6 @@
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <fstream>
 #include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>

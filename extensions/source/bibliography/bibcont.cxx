@@ -23,8 +23,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include "bibconfig.hxx"
 
@@ -60,7 +58,6 @@ BibSplitWindow::BibSplitWindow( vcl::Window* pParent, WinBits nStyle ) : SplitWi
 using namespace osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::frame;
 
 //split window size is a percent value
 #define WIN_MIN_HEIGHT 10

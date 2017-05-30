@@ -81,9 +81,7 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/GeneralFunction2.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>

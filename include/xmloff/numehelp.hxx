@@ -24,7 +24,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <set>

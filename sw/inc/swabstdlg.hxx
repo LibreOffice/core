@@ -28,7 +28,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/awt/XControl.hpp>

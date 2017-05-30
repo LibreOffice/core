@@ -34,7 +34,6 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 

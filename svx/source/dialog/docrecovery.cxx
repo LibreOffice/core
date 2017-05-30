@@ -46,7 +46,6 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/theAutoRecovery.hpp>
-#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>

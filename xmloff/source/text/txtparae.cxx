@@ -126,7 +126,6 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::frame;
 using namespace ::xmloff;
 using namespace ::xmloff::token;
 

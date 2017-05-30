@@ -42,7 +42,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>

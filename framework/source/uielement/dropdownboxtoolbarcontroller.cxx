@@ -20,12 +20,7 @@
 #include "uielement/dropdownboxtoolbarcontroller.hxx"
 
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/status/ItemStatus.hpp>
-#include <com/sun/star/frame/status/ItemState.hpp>
-#include <com/sun/star/frame/status/Visibility.hpp>
-#include <com/sun/star/frame/XControlNotificationListener.hpp>
 
 #include <svtools/toolboxcontroller.hxx>
 #include <osl/mutex.hxx>
@@ -39,7 +34,6 @@ using namespace css::uno;
 using namespace css::beans;
 using namespace css::lang;
 using namespace css::frame;
-using namespace css::frame::status;
 using namespace css::util;
 
 namespace framework

@@ -23,7 +23,6 @@
 #include <unotools/configitem.hxx>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <unordered_map>

@@ -20,7 +20,6 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/io/TempFile.hpp>

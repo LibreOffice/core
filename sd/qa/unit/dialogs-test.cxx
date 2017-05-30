@@ -50,8 +50,6 @@
 #include "prltempl.hrc"
 
 #include <comphelper/servicehelper.hxx>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XDesktop2.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotest/macros_test.hxx>
 

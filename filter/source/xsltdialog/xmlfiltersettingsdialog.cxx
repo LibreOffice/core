@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 
@@ -53,7 +52,6 @@ using namespace osl;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
-using namespace com::sun::star::frame;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;

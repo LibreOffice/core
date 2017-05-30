@@ -24,7 +24,6 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

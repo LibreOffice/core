@@ -21,7 +21,6 @@
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>

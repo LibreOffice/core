@@ -28,9 +28,7 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
@@ -45,7 +43,6 @@
 #define MNI_RENAME             5
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::frame;
 
 bool ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION filter, const OUString &rExt)
 {

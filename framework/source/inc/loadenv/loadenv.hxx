@@ -25,9 +25,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/XFrameLoader.hpp>
-#include <com/sun/star/frame/XLoadEventListener.hpp>
-#include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

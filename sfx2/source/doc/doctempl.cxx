@@ -42,7 +42,6 @@
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/io/IOException.hpp>

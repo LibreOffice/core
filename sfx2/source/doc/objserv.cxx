@@ -37,10 +37,6 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#include <com/sun/star/frame/DocumentTemplates.hpp>
-#include <com/sun/star/frame/XController2.hpp>
-#include <com/sun/star/frame/XDocumentTemplates.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>

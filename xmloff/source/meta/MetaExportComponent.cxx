@@ -19,7 +19,6 @@
 
 #include "MetaExportComponent.hxx"
 #include "facreg.hxx"
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Sequence.hxx>

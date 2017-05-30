@@ -23,8 +23,6 @@
 
 #include <cppuhelper/interfacecontainer.hxx>
 
-#include <com/sun/star/frame/XModel.hpp>
-
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;

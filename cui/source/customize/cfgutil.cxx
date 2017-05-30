@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
+#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <com/sun/star/script/browse/theBrowseNodeFactory.hpp>

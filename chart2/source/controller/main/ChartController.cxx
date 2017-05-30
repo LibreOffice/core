@@ -55,7 +55,6 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/embed/XEmbeddedClient.hpp>

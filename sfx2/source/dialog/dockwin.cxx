@@ -38,7 +38,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/msgpool.hxx>
 
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/awt/XWindow.hpp>

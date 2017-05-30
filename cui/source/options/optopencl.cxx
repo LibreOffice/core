@@ -32,7 +32,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 #include <cuires.hrc>

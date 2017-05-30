@@ -71,8 +71,6 @@
 #include <vcl/svapp.hxx>
 #include <xmloff/attrlist.hxx>
 #include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XText.hpp>
 
@@ -84,7 +82,6 @@
 
 using namespace ::cppu;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::registry;

@@ -19,7 +19,6 @@
 
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -52,7 +51,6 @@ using namespace osl;
 using namespace comphelper;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::frame;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace com::sun::star::container;

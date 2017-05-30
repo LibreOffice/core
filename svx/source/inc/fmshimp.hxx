@@ -22,7 +22,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
-#include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/container/ContainerEvent.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/awt/XControl.hpp>

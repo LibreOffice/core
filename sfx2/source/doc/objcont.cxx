@@ -23,7 +23,6 @@
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/fileurl.hxx>
 #include <vcl/msgbox.hxx>
