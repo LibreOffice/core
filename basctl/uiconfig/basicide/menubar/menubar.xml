@@ -27,11 +27,16 @@
             <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Save"/>
-            <menu:menuitem menu:id=".uno:SaveAs"/>
             <menu:menuitem menu:id=".uno:SaveAll"/>
             <menu:menuitem menu:id=".uno:CheckOut"/>
             <menu:menuitem menu:id=".uno:CancelCheckOut"/>
             <menu:menuitem menu:id=".uno:CheckIn"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:SaveBasicAs"/>
+            <menu:menuitem menu:id=".uno:ExportDialog"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:LoadBasic"/>
+            <menu:menuitem menu:id=".uno:ImportDialog"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Signature"/>
             <menu:menuseparator/>
@@ -63,25 +68,71 @@
             <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
             <menu:menuitem menu:id=".uno:ShowLines"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ShowPropBrowser"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ObjectCatalog"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FullScreen"/>
         </menu:menupopup>
     </menu:menu>
+    <menu:menu menu:id=".uno:RunMenu">
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:RunBasic"/>
+            <menu:menuitem menu:id=".uno:BasicStop"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:BasicStepOver"/>
+            <menu:menuitem menu:id=".uno:BasicStepInto"/>
+            <menu:menuitem menu:id=".uno:BasicStepOut"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:CompileBasic"/>
+        </menu:menupopup>
+    </menu:menu>
+    <menu:menu menu:id=".uno:DialogMenu">
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
+            <menu:menuitem menu:id=".uno:TestMode"/>
+            <menu:menuitem menu:id=".uno:ManageLanguage"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:SelectMode"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:InsertPushbutton"/>
+            <menu:menuitem menu:id=".uno:Checkbox"/>
+            <menu:menuitem menu:id=".uno:Radiobutton"/>
+            <menu:menuitem menu:id=".uno:InsertFixedText"/>
+            <menu:menuitem menu:id=".uno:InsertEdit"/>
+            <menu:menuitem menu:id=".uno:InsertListbox"/>
+            <menu:menuitem menu:id=".uno:Combobox"/>
+            <menu:menuitem menu:id=".uno:VScrollbar"/>
+            <menu:menuitem menu:id=".uno:HScrollbar"/>
+            <menu:menuitem menu:id=".uno:SpinButton"/>
+            <menu:menuitem menu:id=".uno:ProgressBar"/>
+            <menu:menuitem menu:id=".uno:HFixedLine"/>
+            <menu:menuitem menu:id=".uno:VFixedLine"/>
+            <menu:menuitem menu:id=".uno:AddDateField"/>
+            <menu:menuitem menu:id=".uno:InsertTimeField"/>
+            <menu:menuitem menu:id=".uno:InsertNumericField"/>
+            <menu:menuitem menu:id=".uno:InsertCurrencyField"/>
+            <menu:menuitem menu:id=".uno:InsertFormattedField"/>
+            <menu:menuitem menu:id=".uno:InsertPatternField"/>
+            <menu:menuitem menu:id=".uno:InsertFileControl"/>
+            <menu:menuitem menu:id=".uno:InsertTreeControl"/>
+            <menu:menuitem menu:id=".uno:InsertImageControl"/>
+            <menu:menuitem menu:id=".uno:Groupbox"/>
+        </menu:menupopup>
+    </menu:menu>
     <menu:menu menu:id=".uno:ToolsMenu">
         <menu:menupopup>
-            <menu:menu menu:id=".uno:MacrosMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:MacroRecorder"/>
-                    <menu:menuitem menu:id=".uno:RunMacro"/>
-                    <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
-                    <menu:menuseparator/>
-                    <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
-                </menu:menupopup>
-            </menu:menu>
+            <menu:menuitem menu:id=".uno:ToggleBreakPoint"/>
+            <menu:menuitem menu:id=".uno:ManageBreakPoints"/>
+            <menu:menuitem menu:id=".uno:AddWatch"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:MatchGroup"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:MacroRecorder"/>
+            <menu:menuitem menu:id=".uno:ScriptOrganizer"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
             <menu:menuseparator/>
-
             <menu:menuitem menu:id=".uno:ConfigureDialog"/>
             <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
         </menu:menupopup>

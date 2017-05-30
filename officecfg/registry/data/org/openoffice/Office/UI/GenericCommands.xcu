@@ -3286,7 +3286,7 @@
       </node>
       <node oor:name=".uno:SelectMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Select</value>
+          <value xml:lang="en-US">Select Element</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -4948,7 +4948,7 @@
       </node>
       <node oor:name=".uno:LoadBasic" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert BASIC Source</value>
+          <value xml:lang="en-US">Import Basic</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -4956,7 +4956,7 @@
       </node>
       <node oor:name=".uno:SaveBasicAs" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Save BASIC</value>
+          <value xml:lang="en-US">Export Basic</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -4988,7 +4988,7 @@
       </node>
       <node oor:name=".uno:RunBasic" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Run BASIC</value>
+          <value xml:lang="en-US">Run</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -5012,7 +5012,7 @@
       </node>
       <node oor:name=".uno:BasicStop" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Stop Macro</value>
+          <value xml:lang="en-US">Stop</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

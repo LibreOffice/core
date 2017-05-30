@@ -95,6 +95,17 @@
         </prop>
       </node>
     </node>
-    <node oor:name="Popups"/>
+    <node oor:name="Popups">
+      <node oor:name=".uno:RunMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Run</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:DialogMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Dialog</value>
+        </prop>
+      </node>
+    </node>
   </node>
 </oor:component-data>
