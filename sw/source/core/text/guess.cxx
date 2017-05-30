@@ -533,7 +533,12 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
         nBreakWidth = 0;
 
     if( pHanging )
+    {
         nBreakPos = nCutPos;
+        // Keep following SwBreakPortion in the same line.
+        if ( CH_BREAK == rInf.GetChar( nBreakPos + pHanging->GetLen() ) )
+            return true;
+    }
 
     return false;
 }

@@ -250,6 +250,7 @@ public:
     void testTdf105417();
     void testTdf105625();
     void testTdf106736();
+    void testTdf58604();
     void testMsWordCompTrailingBlanks();
     void testCreateDocxAnnotation();
     void testTdf107976();
@@ -390,6 +391,7 @@ public:
     CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST(testTdf105625);
     CPPUNIT_TEST(testTdf106736);
+    CPPUNIT_TEST(testTdf58604);
     CPPUNIT_TEST(testMsWordCompTrailingBlanks);
     CPPUNIT_TEST(testCreateDocxAnnotation);
     CPPUNIT_TEST(testTdf107976);
@@ -4940,6 +4942,16 @@ void SwUiWriterTest::testTdf107976()
     // This failed: the first shell had a pointer to the deleted shell.
     CPPUNIT_ASSERT(!pTransferable->GetShell());
     CPPUNIT_ASSERT(!pTransferable2->GetShell());
+}
+
+void SwUiWriterTest::testTdf58604()
+{
+#ifdef WNT
+    // Allow linebreak character follows hanging punctuation immediately instead of
+    // breaking at the start of the next line.
+    load(DATA_DIRECTORY, "tdf58604.odt");
+    CPPUNIT_ASSERT_EQUAL( OUString("POR_BRK"), parseDump( "(/root/page/body/txt/LineBreak[1]/preceding::Text)[last()]", "nType" ) );
+#endif
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
