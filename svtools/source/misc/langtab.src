@@ -301,7 +301,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Maore" ; LANGUAGE_USER_MAORE ; > ;
         < "Bushi" ; LANGUAGE_USER_BUSHI ; > ;
         < "Tahitian" ; LANGUAGE_USER_TAHITIAN ; > ;
-        < "Malagasy, Plateau" ; LANGUAGE_USER_MALAGASY_PLATEAU ; > ;
+        < "Malagasy, Plateau" ; LANGUAGE_MALAGASY_PLATEAU ; > ;
         < "Papiamentu (Netherlands Antilles)" ; LANGUAGE_PAPIAMENTU ; > ;
         < "Papiamento (Aruba)" ; LANGUAGE_USER_PAPIAMENTU_ARUBA ; > ;
         < "Sardinian, Campidanese" ; LANGUAGE_USER_SARDINIAN_CAMPIDANESE ; > ;
