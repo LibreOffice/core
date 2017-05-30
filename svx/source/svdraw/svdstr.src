@@ -73,25 +73,61 @@ String STR_ObjNamePluralRECT
 {
     Text [ en-US ] = "Rectangles" ;
 };
+String STR_ObjNameSingulQUAD
+{
+    Text [ en-US ] = "Square" ;
+};
 String STR_ObjNamePluralQUAD
 {
     Text [ en-US ] = "Squares" ;
+};
+String STR_ObjNameSingulPARAL
+{
+    Text [ en-US ] = "Parallelogram" ;
 };
 String STR_ObjNamePluralPARAL
 {
     Text [ en-US ] = "Parallelograms" ;
 };
+String STR_ObjNameSingulRAUTE
+{
+    Text [ en-US ] = "Rhombus" ;
+};
+String STR_ObjNamePluralRAUTE
+{
+    Text [ en-US ] = "Rhombuses" ;
+};
+String STR_ObjNameSingulRECTRND
+{
+    Text [ en-US ] = "Rounded rectangle" ;
+};
 String STR_ObjNamePluralRECTRND
 {
     Text [ en-US ] = "Rounded Rectangles" ;
+};
+String STR_ObjNameSingulQUADRND
+{
+    Text [ en-US ] = "rounded square" ;
 };
 String STR_ObjNamePluralQUADRND
 {
     Text [ en-US ] = "Rounded Squares" ;
 };
+String STR_ObjNameSingulPARALRND
+{
+    Text [ en-US ] = "Rounded Parallelogram" ;
+};
 String STR_ObjNamePluralPARALRND
 {
     Text [ en-US ] = "Rounded parallelograms" ;
+};
+String STR_ObjNameSingulRAUTERND
+{
+    Text [ en-US ] = "rounded rhombus" ;
+};
+String STR_ObjNamePluralRAUTERND
+{
+    Text [ en-US ] = "Rounded rhombuses" ;
 };
 String STR_ObjNameSingulCIRC
 {
