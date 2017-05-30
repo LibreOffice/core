@@ -2827,6 +2827,15 @@ DECLARE_RTFIMPORT_TEST(testTdf107116, "tdf107116.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(convertTwipToMm100(120)), getProperty<sal_Int32>(getParagraph(2), "TopBorderDistance"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf106950, "tdf106950.rtf")
+{
+    uno::Reference<text::XTextRange> xPara(getParagraph(1));
+    // This was ParagraphAdjust_LEFT, trying to set CharShadingValue on a
+    // paragraph style thrown an exception, and remaining properties were not
+    // set.
+    CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xPara, "ParaAdjust")));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
