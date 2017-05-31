@@ -1362,9 +1362,6 @@ sub set_global_code_variables
         $installer::globals::productcode = "\{" . ${$guidref}[0] . "\}";
     }
 
-    # HACK: Fixed ProductCode
-    $installer::globals::productcode = "{795CAACE-4CCA-479F-8BF7-176B6E12C681}";
-
     # UpgradeCode can take english as default, if not defined in specified language
 
     $searchstring = "UPGRADECODE";  # searching in the codes.txt file
