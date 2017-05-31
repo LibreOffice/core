@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a3905b3_abe7cee2",
+        "filename": "forms/source/runtime/formoperations.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1707,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-31T06:45:55Z",
+      "side": 1,
+      "message": "this won\u0027t work, as getCaughtException internally re-throws and handles the currently handled exception, so the below re-throw will go to std::terminate",
+      "revId": "2d94740499e8df3c53e44d1b12c53256ff017031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_abb42ef2",
         "filename": "sd/source/ui/slideshow/slideshowimpl.cxx",
         "patchSetId": 1
@@ -13,6 +30,30 @@
       "writtenOn": "2017-05-30T23:26:12Z",
       "side": 1,
       "message": "Stephan, do you think that this use is safe for the \"must be in first statement\" thing?",
+      "range": {
+        "startLine": 1833,
+        "startChar": 48,
+        "endLine": 1833,
+        "endChar": 74
+      },
+      "revId": "2d94740499e8df3c53e44d1b12c53256ff017031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_2bdcbe11",
+        "filename": "sd/source/ui/slideshow/slideshowimpl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1833,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-31T06:45:55Z",
+      "side": 1,
+      "message": "better take it out  (there is no \"must be *in* the first statement\" rule; it\u0027s \"only *as* first statement in a catch block!\" (emphasis mine)---apparently modulo any variable initialization/assignment necessary to capture the return value)",
+      "parentUuid": "5a3905b3_abb42ef2",
       "range": {
         "startLine": 1833,
         "startChar": 48,
