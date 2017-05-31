@@ -35,6 +35,7 @@
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 
 #include "ProviderCache.hxx"
+#include <memory>
 
 namespace func_provider
 {
@@ -120,7 +121,7 @@ private:
     bool m_bInitialised;
     bool m_bIsPkgMSP;
     css::uno::Reference< css::script::provider::XScriptProvider > m_xMSPPkg;
-    ProviderCache* m_pPCache;
+    std::unique_ptr<ProviderCache> m_pPCache;
     osl::Mutex m_mutex;
     OUString m_sCtxString;
 };

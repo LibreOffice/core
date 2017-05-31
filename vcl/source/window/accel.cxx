@@ -162,9 +162,7 @@ void Accelerator::ImplDeleteData()
 {
     // delete accelerator-entries using the id-table
     for (ImplAccelEntry* pEntry : mpData->maIdList) {
-        if ( pEntry->mpAutoAccel ) {
-            delete pEntry->mpAutoAccel;
-        }
+        delete pEntry->mpAutoAccel;
         delete pEntry;
     }
     mpData->maIdList.clear();

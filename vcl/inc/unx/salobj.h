@@ -23,6 +23,7 @@
 #include <salobj.hxx>
 #include <vcl/sysdata.hxx>
 #include <vclpluginapi.h>
+#include <memory>
 
 class SalClipRegion
 {
@@ -36,7 +37,7 @@ public:
     void        UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
 
     XRectangle *EndSetClipRegion()  {
-        return ClipRectangleList;   }
+        return ClipRectangleList.get(); }
     void        ResetClipRegion()   {
         numClipRectangles = 0;      }
     int         GetRectangleCount() {
@@ -44,7 +45,8 @@ public:
 
 private:
 
-    XRectangle* ClipRectangleList;
+    std::unique_ptr<XRectangle[]>
+                ClipRectangleList;
     int         numClipRectangles;
     int         maxClipRectangles;
 };

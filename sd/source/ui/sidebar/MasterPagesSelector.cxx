@@ -591,8 +591,7 @@ void MasterPagesSelector::ClearPageSet()
     for (size_t nIndex=1; nIndex<=PreviewValueSet::GetItemCount(); nIndex++)
     {
         UserData* pData = GetUserData(nIndex);
-        if (pData != nullptr)
-            delete pData;
+        delete pData;
     }
     PreviewValueSet::Clear();
 }

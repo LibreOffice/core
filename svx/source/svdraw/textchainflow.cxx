@@ -46,10 +46,8 @@ TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
 
 TextChainFlow::~TextChainFlow()
 {
-    if (mpOverflChText)
-        delete mpOverflChText;
-    if (mpUnderflChText)
-        delete mpUnderflChText;
+    delete mpOverflChText;
+    delete mpUnderflChText;
 }
 
 void TextChainFlow::impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *)

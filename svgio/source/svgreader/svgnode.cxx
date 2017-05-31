@@ -296,20 +296,9 @@ namespace svgio
                 maChildren.pop_back();
             }
 
-            if(mpId)
-            {
-                delete mpId;
-            }
-
-            if(mpClass)
-            {
-                delete mpClass;
-            }
-
-            if(mpLocalCssStyle)
-            {
-                delete mpLocalCssStyle;
-            }
+            delete mpId;
+            delete mpClass;
+            delete mpLocalCssStyle;
         }
 
         void SvgNode::readLocalCssStyle(const OUString& aContent)

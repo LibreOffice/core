@@ -76,10 +76,7 @@ void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
         SvxIMapDlgChildWindow::UpdateIMapDlg( aGraphic, pIMap, pTargetList, pObj );
 
         // We can delete the target list
-        if ( pTargetList )
-        {
-            delete pTargetList;
-        }
+        delete pTargetList;
     }
 }
 

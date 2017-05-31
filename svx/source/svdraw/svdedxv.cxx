@@ -991,10 +991,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
             pGivenOutlinerView = nullptr;
         }
     }
-    if( pTextEditOutliner!=nullptr )
-    {
-        delete pTextEditOutliner;
-    }
+    delete pTextEditOutliner;
 
     pTextEditOutliner=nullptr;
     pTextEditOutlinerView=nullptr;

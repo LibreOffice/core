@@ -168,7 +168,7 @@ private:
     css::uno::Reference
         < css::container::XIndexAccess > m_xMenuSettings;
 
-    SvxConfigEntry* pRootEntry;
+    std::unique_ptr<SvxConfigEntry>      pRootEntry;
 
 
     static MenuSaveInData* pDefaultData;    ///< static holder of the default menu data

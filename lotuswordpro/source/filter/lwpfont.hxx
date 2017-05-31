@@ -72,6 +72,7 @@
 #include "lwpobj.hxx"
 #include "xfilter/xffont.hxx"
 #include "xfilter/xftextstyle.hxx"
+#include <memory>
 
 class LwpFontTableEntry
 {
@@ -253,7 +254,7 @@ public:
     void Override(sal_uInt16 index, rtl::Reference<XFFont> const & pFont);
 private:
     sal_uInt16 m_nCount;
-    LwpFontAttrEntry* m_pFontAttrs;
+    std::unique_ptr<LwpFontAttrEntry[]> m_pFontAttrs;
 };
 
 class LwpFontManager
