@@ -672,8 +672,7 @@ DecompressStatus CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_u
     {
         if ( pLastLine == nullptr || nLastLineSize != ( ( nTargetBits + 7 ) >> 3 ) )
         {
-            if ( pLastLine == nullptr )
-                delete[] pLastLine;
+            delete[] pLastLine;
             nLastLineSize = ( nTargetBits + 7 ) >> 3;
             pLastLine = new sal_uInt8[ nLastLineSize ];
             memset(pLastLine, 0, nLastLineSize);

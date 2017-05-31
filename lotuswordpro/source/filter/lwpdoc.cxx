@@ -81,14 +81,8 @@ LwpDocument::LwpDocument(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
 
 LwpDocument::~LwpDocument()
 {
-    if(m_pLnOpts)
-    {
-        delete m_pLnOpts;
-    }
-    if(m_pOwnedFoundry)
-    {
-        delete m_pOwnedFoundry;
-    }
+    delete m_pLnOpts;
+    delete m_pOwnedFoundry;
 }
 /**
  * @descr   Read VO_Document from object stream
