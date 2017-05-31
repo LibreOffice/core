@@ -137,6 +137,11 @@ String STR_SIGNATURE_BROKEN
     Text[ en-US ] = "This document has an invalid signature.";
 };
 
+String STR_SIGNATURE_INVALID
+{
+    Text[ en-US ] = "The signature was valid, but the document has been modified";
+};
+
 String STR_SIGNATURE_NOTVALIDATED
 {
     Text[ en-US ] = "The signature is OK, but the certificate could not be validated.";
