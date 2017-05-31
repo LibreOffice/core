@@ -1683,8 +1683,7 @@ SfxShell* ViewShellObjectBarFactory::CreateShell( ::sd::ShellId nId )
 
 void ViewShellObjectBarFactory::ReleaseShell (SfxShell* pShell)
 {
-    if (pShell != nullptr)
-        delete pShell;
+    delete pShell;
 }
 
 } // end of anonymous namespace

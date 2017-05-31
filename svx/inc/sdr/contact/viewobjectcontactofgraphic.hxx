@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_INC_SDR_CONTACT_VIEWOBJECTCONTACTOFGRAPHIC_HXX
 
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
+#include <memory>
 
 class SdrGrafObj;
 
@@ -40,7 +41,7 @@ namespace sdr
 
             // Member which takes care for the asynch loading events which may be necessary
             // for asynch graphics loading.
-            sdr::event::AsynchGraphicLoadingEvent*      mpAsynchLoadEvent;
+            std::unique_ptr<sdr::event::AsynchGraphicLoadingEvent>  mpAsynchLoadEvent;
 
             // async graphics loading helpers. Only to be used internally or from the
             // event helper class (in .cxx file)

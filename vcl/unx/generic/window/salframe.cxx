@@ -4136,8 +4136,7 @@ void X11SalFrame::ResetClipRegion()
 
 void X11SalFrame::BeginSetClipRegion( sal_uLong nRects )
 {
-    if( m_pClipRectangles )
-        delete [] m_pClipRectangles;
+    delete [] m_pClipRectangles;
     if( nRects )
         m_pClipRectangles = new XRectangle[nRects];
     else

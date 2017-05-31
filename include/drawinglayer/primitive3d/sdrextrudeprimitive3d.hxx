@@ -24,6 +24,7 @@
 
 #include <drawinglayer/primitive3d/sdrprimitive3d.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <memory>
 
 
 namespace drawinglayer
@@ -55,7 +56,7 @@ namespace drawinglayer
             double                                      mfBackScale;
 
             /// decomposition data when ReducedLineGeometry is used, see get3DDecomposition
-            geometry::ViewInformation3D*                mpLastRLGViewInformation;
+            std::unique_ptr<geometry::ViewInformation3D> mpLastRLGViewInformation;
 
             bool                                        mbSmoothNormals : 1; // Plane self
             bool                                        mbSmoothLids : 1; // Front/back

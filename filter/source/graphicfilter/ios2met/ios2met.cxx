@@ -487,7 +487,7 @@ OS2METReader::~OS2METReader()
     while (pBitmapList!=nullptr) {
         OSBitmap * p=pBitmapList;
         pBitmapList=p->pSucc;
-        if (p->pBMP!=nullptr) delete p->pBMP;
+        delete p->pBMP;
         delete p;
     }
 
@@ -500,7 +500,7 @@ OS2METReader::~OS2METReader()
     while (pPaletteStack!=nullptr) {
         OSPalette * p=pPaletteStack;
         pPaletteStack=p->pSucc;
-        if (p->p0RGB!=nullptr) delete[] p->p0RGB;
+        delete[] p->p0RGB;
         delete p;
     }
 }
@@ -2504,7 +2504,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             OSPalette * pP=pPaletteStack;
             if (pP!=nullptr) {
                 pPaletteStack=pP->pSucc;
-                if (pP->p0RGB!=nullptr) delete[] pP->p0RGB;
+                delete[] pP->p0RGB;
                 delete pP;
             }
             break;

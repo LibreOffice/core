@@ -63,6 +63,7 @@
 
 #include "lwpatomholder.hxx"
 #include "lwpobj.hxx"
+#include <memory>
 
 /**
  * @brief   Double Linked Virtual List
@@ -119,12 +120,12 @@ public:
     virtual ~LwpDLNFPVList() override;
 protected:
     bool m_bHasProperties;
-    LwpPropList* m_pPropList;
+    std::unique_ptr<LwpPropList> m_pPropList;
 protected:
     void Read() override;
     void ReadPropertyList(LwpObjectStream* pObjStrm);
 public:
-    LwpPropList* GetPropList() { return m_pPropList; }
+    LwpPropList* GetPropList() { return m_pPropList.get(); }
 };
 
 /**

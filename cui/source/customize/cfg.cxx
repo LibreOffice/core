@@ -935,10 +935,6 @@ MenuSaveInData::MenuSaveInData(
 
 MenuSaveInData::~MenuSaveInData()
 {
-    if ( pRootEntry != nullptr )
-    {
-        delete pRootEntry;
-    }
 }
 
 SvxEntries*
@@ -946,16 +942,16 @@ MenuSaveInData::GetEntries()
 {
     if ( pRootEntry == nullptr )
     {
-        pRootEntry = new SvxConfigEntry( "MainMenus", OUString(), true);
+        pRootEntry.reset( new SvxConfigEntry( "MainMenus", OUString(), true) );
 
         if ( m_xMenuSettings.is() )
         {
-            LoadSubMenus( m_xMenuSettings, OUString(), pRootEntry, false );
+            LoadSubMenus( m_xMenuSettings, OUString(), pRootEntry.get(), false );
         }
         else if ( GetDefaultData() != nullptr )
         {
             // If the doc has no config settings use module config settings
-            LoadSubMenus( GetDefaultData()->m_xMenuSettings, OUString(), pRootEntry, false );
+            LoadSubMenus( GetDefaultData()->m_xMenuSettings, OUString(), pRootEntry.get(), false );
         }
     }
 
@@ -1226,8 +1222,7 @@ MenuSaveInData::Reset()
 
     PersistChanges( GetConfigManager() );
 
-    delete pRootEntry;
-    pRootEntry = nullptr;
+    pRootEntry.reset();
 
     try
     {

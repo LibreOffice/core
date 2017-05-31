@@ -919,8 +919,7 @@ void OpenGLWatchdogThread::stop()
         gxWatchdog.clear();
     }
 
-    if (gpWatchdogExit)
-        delete gpWatchdogExit;
+    delete gpWatchdogExit;
     gpWatchdogExit = nullptr;
 }
 

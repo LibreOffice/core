@@ -87,15 +87,11 @@
 LwpSuperTableLayout::LwpSuperTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpPlacableLayout(objHdr, pStrm)
 {
-    m_pFrame = new LwpFrame(this);
+    m_pFrame.reset(new LwpFrame(this) );
 }
 
 LwpSuperTableLayout::~LwpSuperTableLayout()
 {
-    if(m_pFrame)
-    {
-        delete m_pFrame;
-    }
 }
 /**
  * @short    Read super table layout record

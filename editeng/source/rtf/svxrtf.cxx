@@ -1138,8 +1138,7 @@ SvxRTFItemStackType::SvxRTFItemStackType(
 
 SvxRTFItemStackType::~SvxRTFItemStackType()
 {
-    if (m_pChildList)
-        delete m_pChildList;
+    delete m_pChildList;
     if( pSttNd != pEndNd )
         delete pEndNd;
     delete pSttNd;

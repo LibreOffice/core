@@ -618,10 +618,7 @@ namespace drawinglayer
 
         ZBufferProcessor3D::~ZBufferProcessor3D()
         {
-            if(mpZBufferRasterConverter3D)
-            {
-                delete mpZBufferRasterConverter3D;
-            }
+            delete mpZBufferRasterConverter3D;
 
             if(mpRasterPrimitive3Ds)
             {

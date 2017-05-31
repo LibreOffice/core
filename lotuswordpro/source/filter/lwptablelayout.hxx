@@ -61,9 +61,11 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABLELAYOUT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABLELAYOUT_HXX
 
+#include "lwplayout.hxx"
+
 #include <vector>
 #include <map>
-#include "lwplayout.hxx"
+#include <memory>
 
 class XFTableStyle;
 class XFTable;
@@ -181,7 +183,7 @@ protected:
     LwpTableLayout* GetTableLayout();
     bool IsSizeRightToContent();
     bool IsJustifiable();
-    LwpFrame* m_pFrame;
+    std::unique_ptr<LwpFrame> m_pFrame;
 };
 
 /**

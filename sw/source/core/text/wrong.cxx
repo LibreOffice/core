@@ -83,8 +83,7 @@ void SwWrongList::ClearList()
 {
     for (SwWrongArea & i : maList)
     {
-        if (i.mpSubList)
-            delete i.mpSubList;
+        delete i.mpSubList;
         i.mpSubList = nullptr;
     }
     maList.clear();
@@ -573,8 +572,7 @@ void SwWrongList::Remove(sal_uInt16 nIdx, sal_uInt16 nLen )
     std::vector<SwWrongArea>::iterator iLoop = i1;
     while ( iLoop != i2 )
     {
-        if ( (*iLoop).mpSubList )
-            delete (*iLoop).mpSubList;
+        delete (*iLoop).mpSubList;
         ++iLoop;
     }
 
