@@ -12,6 +12,13 @@ void f2(char const *) {}
 
 enum Enum1 { X };
 
+struct S {
+    void f1() { (void)*this; };
+    void f2() const { (void)*this; };
+    void f3() { (void)*this; }
+    void f3() const { (void)*this; };
+};
+
 int main() {
     char * p1;
     char const * p2;
@@ -32,6 +39,12 @@ int main() {
 
     Enum1 e = (Enum1)Enum1::X; // expected-error {{redundant cstyle cast from 'Enum1' to 'Enum1' [loplugin:redundantcast]}}
     (void)e;
+
+    S const s;
+    const_cast<S &>(s).f1();
+    const_cast<S &>(s).f2(); // expected-error {{redundant const_cast from 'const S' to 'S', result is implicitly cast to 'const S' [loplugin:redundantcast]}}
+    const_cast<S &>(s).f3();
+    s.f3();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
