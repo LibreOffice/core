@@ -51,7 +51,6 @@ $(eval $(call gb_Library_use_packages,xsec_xmlsec,\
 $(eval $(call gb_Library_use_externals,xsec_xmlsec,\
 	boost_headers \
 	libxml2 \
-	nss3 \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
@@ -75,7 +74,6 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 	-DXMLSEC_CRYPTO_MSCRYPTO \
 ))
-
 
 $(eval $(call gb_Library_add_libs,xsec_xmlsec,\
 	$(call gb_UnpackedTarball_get_dir,xmlsec)/win32/binaries/libxmlsec-mscrypto.lib \
@@ -132,6 +130,11 @@ $(eval $(call gb_Library_add_exception_objects,xsec_xmlsec,\
 ))
 
 endif
+
+# nss3 after static libs to appease --as-needed linkers
+$(eval $(call gb_Library_use_externals,xsec_xmlsec,\
+	nss3 \
+))
 
 ifeq ($(OS),SOLARIS)
 $(eval $(call gb_Library_add_libs,xsec_xmlsec,\
