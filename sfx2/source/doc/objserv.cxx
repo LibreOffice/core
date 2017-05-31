@@ -1048,6 +1048,11 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         sMessage = SfxResId(STR_SIGNATURE_BROKEN);
                         aInfoBarType = InfoBarType::Danger;
                         break;
+                    case SignatureState::INVALID:
+                        sMessage = SfxResId(STR_SIGNATURE_INVALID);
+                        // Warning only, I've tried Danger and it looked too scary
+                        aInfoBarType = InfoBarType::Warning;
+                        break;
                     case SignatureState::NOTVALIDATED:
                         sMessage = SfxResId(STR_SIGNATURE_NOTVALIDATED);
                         aInfoBarType = InfoBarType::Warning;
@@ -1060,31 +1065,24 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                         sMessage = SfxResId(STR_SIGNATURE_OK);
                         aInfoBarType = InfoBarType::Info;
                         break;
+                    //FIXME SignatureState::Unknown, own message?
                     default:
                         break;
                     }
 
-                    // new info bar
-                    if ( !pFrame->HasInfoBarWithID("signature") )
-                    {
+                    if ( pFrame->HasInfoBarWithID("signature") )
+                        pFrame->RemoveInfoBar("signature");
 
-                        if (!sMessage.isEmpty())
-                        {
-                            auto pInfoBar = pFrame->AppendInfoBar("signature", sMessage, aInfoBarType);
-                            if (pInfoBar == nullptr)
-                                return;
-                            VclPtrInstance<PushButton> xBtn(&(pFrame->GetWindow()));
-                            xBtn->SetText(SfxResId(STR_SIGNATURE_SHOW));
-                            xBtn->SetSizePixel(xBtn->GetOptimalSize());
-                            xBtn->SetClickHdl(LINK(this, SfxObjectShell, SignDocumentHandler));
-                            pInfoBar->addButton(xBtn);
-                        }
-                    }
-                    else // signature info bar exists already
+                    if ( eState != SignatureState::NOSIGNATURES )
                     {
-                        if (eState == SignatureState::NOSIGNATURES )
-                             pFrame->RemoveInfoBar("signature");
-                        //FIXME: Update existing info bar
+                        auto pInfoBar = pFrame->AppendInfoBar("signature", sMessage, aInfoBarType);
+                        if (pInfoBar == nullptr)
+                            return;
+                        VclPtrInstance<PushButton> xBtn(&(pFrame->GetWindow()));
+                        xBtn->SetText(SfxResId(STR_SIGNATURE_SHOW));
+                        xBtn->SetSizePixel(xBtn->GetOptimalSize());
+                        xBtn->SetClickHdl(LINK(this, SfxObjectShell, SignDocumentHandler));
+                        pInfoBar->addButton(xBtn);
                     }
 
                 }
