@@ -182,11 +182,7 @@ void SdrPageView::RemovePaintWindowFromPageView(SdrPaintWindow& rPaintWindow)
     if(pCandidate)
     {
         pCandidate = RemovePageWindow(*pCandidate);
-
-        if(pCandidate)
-        {
-            delete pCandidate;
-        }
+        delete pCandidate;
     }
 }
 

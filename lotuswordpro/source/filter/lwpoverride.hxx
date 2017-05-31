@@ -63,6 +63,7 @@
 
 #include "lwpobjid.hxx"
 #include "lwptools.hxx"
+#include <memory>
 
 class LwpObjectStream;
 
@@ -493,7 +494,7 @@ private:
     LwpAmikakeOverride& operator=(LwpAmikakeOverride const& rOther) = delete;
 
 private:
-    LwpBackgroundStuff* m_pBackgroundStuff;
+    std::unique_ptr<LwpBackgroundStuff> m_pBackgroundStuff;
     sal_uInt16      m_nType;
 
 };

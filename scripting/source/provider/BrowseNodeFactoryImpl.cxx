@@ -44,6 +44,8 @@
 
 #include <vector>
 #include <algorithm>
+#include <memory>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
@@ -165,7 +167,7 @@ class LocationBrowseNode :
     public ::cppu::WeakImplHelper< browse::XBrowseNode >
 {
 private:
-    BrowseNodeAggregatorHash* m_hBNA;
+    std::unique_ptr<BrowseNodeAggregatorHash> m_hBNA;
     vString m_vStr;
     OUString m_sNodeName;
     Reference< browse::XBrowseNode > m_origNode;
@@ -179,17 +181,8 @@ public:
         m_origNode.set( node );
     }
 
-    virtual ~LocationBrowseNode() override
-    {
-        if (m_hBNA)
-        {
-            delete m_hBNA;
-        }
-    }
-
 
     // XBrowseNode
-
 
     virtual OUString SAL_CALL getName() override
     {
@@ -231,7 +224,7 @@ private:
 
     void loadChildNodes()
     {
-        m_hBNA = new BrowseNodeAggregatorHash;
+        m_hBNA.reset( new BrowseNodeAggregatorHash );
 
         Sequence< Reference< browse::XBrowseNode > > langNodes =
             m_origNode->getChildNodes();

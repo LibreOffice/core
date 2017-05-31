@@ -88,14 +88,8 @@ LwpCharacterBorderOverride::LwpCharacterBorderOverride(LwpCharacterBorderOverrid
 
 LwpCharacterBorderOverride::~LwpCharacterBorderOverride()
 {
-    if (m_pBorderStuff)
-    {
-        delete m_pBorderStuff;
-    }
-    if (m_pMargins)
-    {
-        delete m_pMargins;
-    }
+    delete m_pBorderStuff;
+    delete m_pMargins;
 }
 
 LwpCharacterBorderOverride* LwpCharacterBorderOverride::clone() const

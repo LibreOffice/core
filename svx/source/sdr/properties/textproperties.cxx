@@ -337,10 +337,7 @@ namespace sdr
                                 }
                             }
 
-                            if(pTempSet)
-                            {
-                                delete pTempSet;
-                            }
+                            delete pTempSet;
                         }
 
                         OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, nParaCount);

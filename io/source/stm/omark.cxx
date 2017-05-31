@@ -410,7 +410,6 @@ class OMarkableInputStream :
 {
 public:
     OMarkableInputStream(  );
-    virtual ~OMarkableInputStream() override;
 
 
 public: // XInputStream
@@ -452,7 +451,7 @@ private:
     Reference< XInputStream > m_input;
     bool m_bValidStream;
 
-    MemRingBuffer *m_pBuffer;
+    std::unique_ptr<MemRingBuffer> m_pBuffer;
     map<sal_Int32,sal_Int32,less< sal_Int32 > > m_mapMarks;
     sal_Int32 m_nCurrentPos;
     sal_Int32 m_nCurrentMark;
@@ -465,14 +464,7 @@ OMarkableInputStream::OMarkableInputStream()
     , m_nCurrentPos(0)
     , m_nCurrentMark(0)
 {
-    m_pBuffer = new MemRingBuffer;
-}
-
-OMarkableInputStream::~OMarkableInputStream()
-{
-    if( m_pBuffer ) {
-        delete m_pBuffer;
-    }
+    m_pBuffer.reset( new MemRingBuffer );
 }
 
 
@@ -615,8 +607,7 @@ void OMarkableInputStream::closeInput()
         setPredecessor( Reference< XConnectable > () );
         setSuccessor( Reference< XConnectable >() );
 
-        delete m_pBuffer;
-        m_pBuffer = nullptr;
+        m_pBuffer.reset();
         m_nCurrentPos = 0;
         m_nCurrentMark = 0;
     }

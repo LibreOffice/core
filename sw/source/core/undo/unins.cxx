@@ -200,7 +200,7 @@ SwUndoInsert::~SwUndoInsert()
             rUNds.GetEndOfExtras().GetIndex() - m_pUndoNodeIndex->GetIndex());
         m_pUndoNodeIndex.reset();
     }
-    else if( pText )     // the inserted text
+    else     // the inserted text
         delete pText;
     delete pRedlData;
     delete pUndoText;

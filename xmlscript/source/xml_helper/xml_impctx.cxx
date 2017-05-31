@@ -85,8 +85,8 @@ class MGuard
 {
     Mutex * m_pMutex;
 public:
-    explicit MGuard( Mutex * pMutex )
-        : m_pMutex( pMutex )
+    explicit MGuard( std::unique_ptr<Mutex> const & pMutex )
+        : m_pMutex( pMutex.get() )
         { if (m_pMutex) m_pMutex->acquire(); }
     ~MGuard() throw ()
         { if (m_pMutex) m_pMutex->release(); }
@@ -118,7 +118,7 @@ class DocumentHandlerImpl :
     std::vector< ElementEntry * > m_elements;
     sal_Int32 m_nSkipElements;
 
-    Mutex * m_pMutex;
+    std::unique_ptr<Mutex> m_pMutex;
 
     inline Reference< xml::input::XElement > getCurrentElement() const;
 
@@ -136,7 +136,6 @@ public:
     DocumentHandlerImpl(
         Reference< xml::input::XRoot > const & xRoot,
         bool bSingleThreadedUse );
-    virtual ~DocumentHandlerImpl() throw () override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -187,18 +186,7 @@ DocumentHandlerImpl::DocumentHandlerImpl(
     m_elements.reserve( 10 );
 
     if (! bSingleThreadedUse)
-        m_pMutex = new Mutex();
-}
-
-DocumentHandlerImpl::~DocumentHandlerImpl() throw ()
-{
-    if (m_pMutex != nullptr)
-    {
-        delete m_pMutex;
-#if OSL_DEBUG_LEVEL == 0
-        m_pMutex = nullptr;
-#endif
-    }
+        m_pMutex.reset(new Mutex);
 }
 
 inline Reference< xml::input::XElement >

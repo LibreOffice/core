@@ -3172,7 +3172,7 @@ MetaCommentAction::MetaCommentAction( const MetaCommentAction& rAct ) :
     maComment   ( rAct.maComment ),
     mnValue     ( rAct.mnValue )
 {
-    ImplInitDynamicData( rAct.mpData, rAct.mnDataSize );
+    ImplInitDynamicData( rAct.mpData.get(), rAct.mnDataSize );
 }
 
 MetaCommentAction::MetaCommentAction( const OString& rComment, sal_Int32 nValue, const sal_uInt8* pData, sal_uInt32 nDataSize ) :
@@ -3185,8 +3185,6 @@ MetaCommentAction::MetaCommentAction( const OString& rComment, sal_Int32 nValue,
 
 MetaCommentAction::~MetaCommentAction()
 {
-    if ( mpData )
-        delete[] mpData;
 }
 
 void MetaCommentAction::ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 nDataSize )
@@ -3194,8 +3192,8 @@ void MetaCommentAction::ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 
     if ( nDataSize && pData )
     {
         mnDataSize = nDataSize;
-        mpData = new sal_uInt8[ mnDataSize ];
-        memcpy( mpData, pData, mnDataSize );
+        mpData.reset( new sal_uInt8[ mnDataSize ] );
+        memcpy( mpData.get(), pData, mnDataSize );
     }
     else
     {
@@ -3229,7 +3227,7 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
             bool bPathStroke = (maComment == "XPATHSTROKE_SEQ_BEGIN");
             if ( bPathStroke || maComment == "XPATHFILL_SEQ_BEGIN" )
             {
-                SvMemoryStream  aMemStm( static_cast<void*>(mpData), mnDataSize, StreamMode::READ );
+                SvMemoryStream  aMemStm( static_cast<void*>(mpData.get()), mnDataSize, StreamMode::READ );
                 SvMemoryStream  aDest;
                 if ( bPathStroke )
                 {
@@ -3265,7 +3263,7 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
 
                     WriteSvtGraphicFill( aDest, aFill );
                 }
-                delete[] mpData;
+                mpData.reset();
                 ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
             }
         }
@@ -3285,7 +3283,7 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
             bool bPathStroke = (maComment == "XPATHSTROKE_SEQ_BEGIN");
             if ( bPathStroke || maComment == "XPATHFILL_SEQ_BEGIN" )
             {
-                SvMemoryStream  aMemStm( static_cast<void*>(mpData), mnDataSize, StreamMode::READ );
+                SvMemoryStream  aMemStm( static_cast<void*>(mpData.get()), mnDataSize, StreamMode::READ );
                 SvMemoryStream  aDest;
                 if ( bPathStroke )
                 {
@@ -3304,10 +3302,10 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
                     aFill.setPath( aPath );
                     WriteSvtGraphicFill( aDest, aFill );
                 }
-                delete[] mpData;
+                mpData.reset();
                 ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
             } else if( maComment == "EMF_PLUS_HEADER_INFO" ){
-                SvMemoryStream  aMemStm( static_cast<void*>(mpData), mnDataSize, StreamMode::READ );
+                SvMemoryStream  aMemStm( static_cast<void*>(mpData.get()), mnDataSize, StreamMode::READ );
                 SvMemoryStream  aDest;
 
                 sal_Int32 nLeft(0), nRight(0), nTop(0), nBottom(0);
@@ -3345,7 +3343,7 @@ void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteInt32( mnValue ).WriteUInt32( mnDataSize );
 
     if ( mnDataSize )
-        rOStm.WriteBytes( mpData, mnDataSize );
+        rOStm.WriteBytes( mpData.get(), mnDataSize );
 }
 
 void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
@@ -3363,15 +3361,13 @@ void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 
     SAL_INFO("vcl.gdi", "MetaCommentAction::Read " << maComment);
 
-    delete[] mpData;
+    mpData.reset();
 
     if( mnDataSize )
     {
-        mpData = new sal_uInt8[ mnDataSize ];
-        rIStm.ReadBytes(mpData, mnDataSize);
+        mpData.reset(new sal_uInt8[ mnDataSize ]);
+        rIStm.ReadBytes(mpData.get(), mnDataSize);
     }
-    else
-        mpData = nullptr;
 }
 
 MetaLayoutModeAction::MetaLayoutModeAction() :
