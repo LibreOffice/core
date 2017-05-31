@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_9e997271",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3549,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-05-31T18:18:44Z",
+      "side": 1,
+      "message": "the indentantion looks a bit wonky here - please configure your editor to always use 4 spaces",
+      "revId": "652bd12033b677bf5892cfa391864baf42a8097f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_be9e2e54",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3570,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-05-31T18:18:44Z",
+      "side": 1,
+      "message": "it would be interesting to see if anything goes wrong - please add a SAL_WARN to print the \"Message\" of the exception",
+      "revId": "652bd12033b677bf5892cfa391864baf42a8097f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
