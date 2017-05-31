@@ -1141,8 +1141,8 @@ void ScCheckListMenuWindow::setAllMemberState(bool bSet)
     {
         if (!(*itr))
         {
-            sal_uInt16 nCount = maChecks->GetEntryCount();
-            for( sal_uInt16 i = 0; i < nCount; ++i)
+            sal_uInt32 nCount = maChecks->GetEntryCount();
+            for( sal_uInt32 i = 0; i < nCount; ++i)
             {
                 SvTreeListEntry* pEntry = maChecks->GetEntry(i);
                 if (!pEntry)
@@ -1620,7 +1620,7 @@ ScCheckListBox::ScCheckListBox( vcl::Window* pParent )
 
 SvTreeListEntry* ScCheckListBox::FindEntry( SvTreeListEntry* pParent, const OUString& sNode )
 {
-    sal_uInt16 nRootPos = 0;
+    sal_uInt32 nRootPos = 0;
     SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
     while ( pEntry )
     {
@@ -1637,6 +1637,41 @@ void ScCheckListBox::Init()
     mpCheckButton = new SvLBoxButtonData( this );
     EnableCheckButton( mpCheckButton );
     SetNodeDefaultImages();
+}
+
+void ScCheckListBox::GetRecursiveChecked(SvTreeListEntry* pEntry, std::unordered_set<OUString, OUStringHash>& vOut, SvTreeListEntry* pParent)
+{
+    if (GetCheckButtonState(pEntry) == SvButtonState::Checked)
+    {
+        // we have to hash both parent and child together
+        OUString aName = GetEntryText(pEntry);
+        if (pParent) aName += GetEntryText(pParent);
+        vOut.insert(aName);
+    }
+
+    if (pEntry->HasChildren())
+    {
+        const SvTreeListEntries& rChildren = pEntry->GetChildEntries();
+        for (auto& rChild : rChildren)
+        {
+            GetRecursiveChecked(rChild.get(), vOut, pEntry);
+        }
+    }
+
+}
+
+std::unordered_set<OUString, OUStringHash> ScCheckListBox::GetAllChecked()
+{
+    std::unordered_set<OUString, OUStringHash> vResults(0);
+    sal_uInt32 nRootPos = 0;
+    SvTreeListEntry* pEntry = GetEntry(nRootPos);
+    while (pEntry)
+    {
+        GetRecursiveChecked(pEntry, vResults, nullptr);
+        pEntry = GetEntry(++nRootPos);
+    }
+
+    return vResults;
 }
 
 bool ScCheckListBox::IsChecked( const OUString& sName, SvTreeListEntry* pParent )
@@ -1907,6 +1942,7 @@ bool ScCheckListMenuWindow::isAllSelected() const
 void ScCheckListMenuWindow::getResult(ResultType& rResult)
 {
     ResultType aResult;
+    std::unordered_set<OUString, OUStringHash> vCheckeds = maChecks->GetAllChecked();
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
     {
@@ -1915,7 +1951,10 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
             OUString aLabel = maMembers[i].maName;
             if (aLabel.isEmpty())
                 aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
-            bool bState =  maChecks->IsChecked( aLabel,  maMembers[i].mpParent );
+
+            bool bState = vCheckeds.find(maMembers[i].mpParent ?
+                    aLabel.copy(0).concat(maChecks->GetEntryText(maMembers[i].mpParent)) :
+                    aLabel) != vCheckeds.end();
             ResultEntry aResultEntry;
             aResultEntry.bValid = bState;
             if ( maMembers[i].mbDate )
