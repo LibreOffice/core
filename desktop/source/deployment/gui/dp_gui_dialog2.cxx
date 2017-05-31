@@ -263,7 +263,10 @@ MENU_COMMAND ExtBoxWithBtns_Impl::ShowPopupMenu( const Point & rPos, const long 
             else if ( GetEntryData( nPos )->m_eState != NOT_AVAILABLE )
                 aPopup->InsertItem( CMD_ENABLE, DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
         }
-        aPopup->InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
+        if (!officecfg::Office::ExtensionManager::ExtensionSecurity::DisableExtensionRemoval::get())
+        {
+            aPopup->InsertItem( CMD_REMOVE, DialogHelper::getResourceString( RID_CTX_ITEM_REMOVE ) );
+        }
     }
 
     if ( !GetEntryData( nPos )->m_sLicenseText.isEmpty() )
