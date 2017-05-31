@@ -239,6 +239,7 @@ class ScCheckListBox : public SvTreeListBox
     void CheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bCheck );
     void CheckEntry( SvTreeListEntry* pEntry, bool bCheck );
     SvTreeListEntry* ShowCheckEntry( const OUString& sName, ScCheckListMember& rMember, bool bShow = true, bool bCheck = true );
+    std::vector<OUString> GetAllChecked();
     bool IsChecked( const OUString& sName, SvTreeListEntry* pParent );
     SvTreeListEntry* FindEntry( SvTreeListEntry* pParent, const OUString& sNode );
     sal_uInt16 GetCheckedEntryCount() const;
