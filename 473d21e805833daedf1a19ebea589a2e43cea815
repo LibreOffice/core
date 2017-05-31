@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_1e04a2be",
+        "filename": "basctl/uiconfig/basicide/menubar/menubar.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2017-05-31T13:43:39Z",
+      "side": 1,
+      "message": "Those should also go to the run menu.",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 52
+      },
+      "revId": "473d21e805833daedf1a19ebea589a2e43cea815",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
