@@ -316,8 +316,10 @@ public:
      */
     void disposeAndReset(reference_type *pBody)
     {
-        VclPtr<reference_type>::disposeAndClear();
-        VclPtr<reference_type>::set(pBody);
+        if (pBody != this->get()) {
+            VclPtr<reference_type>::disposeAndClear();
+            VclPtr<reference_type>::set(pBody);
+        }
     }
 
     /**
