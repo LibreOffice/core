@@ -801,7 +801,7 @@ EditSelection EditEngine::InsertText(
     uno::Reference<datatransfer::XTransferable > const & rxDataObj,
     const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial)
 {
-    return pImpEditEngine->InsertText(rxDataObj, rBaseURL, rPaM, bUseSpecial);
+    return pImpEditEngine->PasteText(rxDataObj, rBaseURL, rPaM, bUseSpecial);
 }
 
 EditPaM EditEngine::EndOfWord(const EditPaM& rPaM)
