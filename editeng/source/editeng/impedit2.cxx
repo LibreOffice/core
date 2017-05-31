@@ -3522,25 +3522,54 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
     datatransfer::DataFlavor aFlavor;
     bool bDone = false;
 
+    char* ODF_XML_Env = getenv ("ODF_TEXT_FLAT_XML_ENV");
+
     if ( bUseSpecial )
     {
         // BIN
         SotExchange::GetFormatDataFlavor( SotClipboardFormatId::EDITENGINE, aFlavor );
         if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
         {
-            try
+            if ( ODF_XML_Env == nullptr )
             {
-                uno::Any aData = rxDataObj->getTransferData( aFlavor );
-                uno::Sequence< sal_Int8 > aSeq;
-                aData >>= aSeq;
+                try
                 {
-                    SvMemoryStream aBinStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
-                    aNewSelection = Read( aBinStream, rBaseURL, EE_FORMAT_BIN, rPaM );
+                    uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                    uno::Sequence< sal_Int8 > aSeq;
+                    aData >>= aSeq;
+                    {
+                        SvMemoryStream aBinStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
+                        aNewSelection = Read( aBinStream, rBaseURL, EE_FORMAT_BIN, rPaM );
+                    }
+                    bDone = true;
                 }
-                bDone = true;
+                catch( const css::uno::Exception& )
+                {
+                }
             }
-            catch( const css::uno::Exception& )
+        }
+
+        if ( !bDone )
+        {
+            // XML
+            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT, aFlavor );
+            if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
             {
+                try
+                {
+                    uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                    uno::Sequence< sal_Int8 > aSeq;
+                    aData >>= aSeq;
+                    {
+                        SvMemoryStream aODFStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
+                        aNewSelection = Read( aODFStream, rBaseURL, EE_FORMAT_XML, rPaM );
+                    }
+                    bDone = true;
+                }
+                catch( const css::uno::Exception& e)
+                {
+                    SAL_WARN( "editeng", "Unable to paste EDITENGINE_ODF_TEXT_FLAT " << e.Message );
+                }
             }
         }
 
@@ -3574,11 +3603,6 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                 {
                 }
             }
-        }
-        if ( !bDone )
-        {
-            // XML ?
-            // Currently, there is nothing like "The" XML format, StarOffice doesn't offer plain XML in Clipboard...
         }
     }
     if ( !bDone )
