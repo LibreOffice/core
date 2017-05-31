@@ -3577,8 +3577,25 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
         }
         if ( !bDone )
         {
-            // XML ?
-            // Currently, there is nothing like "The" XML format, StarOffice doesn't offer plain XML in Clipboard...
+            // XML
+            SotExchange::GetFormatDataFlavor( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT, aFlavor );
+            if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
+            {
+                try
+                {
+                    uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                    uno::Sequence< sal_Int8 > aSeq;
+                    aData >>= aSeq;
+                    {
+                        SvMemoryStream aODFStream( aSeq.getArray(), aSeq.getLength(), StreamMode::READ );
+                        aNewSelection = Read( aODFStream, rBaseURL, EE_FORMAT_XML, rPaM );
+                    }
+                    bDone = true;
+                }
+                catch( const css::uno::Exception& )
+                {
+                }
+            }
         }
     }
     if ( !bDone )
