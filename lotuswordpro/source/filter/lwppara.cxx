@@ -134,10 +134,7 @@ LwpPara::~LwpPara()
         delete m_pBullOver;
         m_pBullOver = nullptr;
     }
-    if(m_pIndentOverride)
-    {
-        delete m_pIndentOverride;
-    }
+    delete m_pIndentOverride;
 
     LwpParaProperty* pNextProp;
     while(m_pProps)

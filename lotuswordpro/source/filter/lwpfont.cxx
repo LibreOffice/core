@@ -415,7 +415,7 @@ OUString LwpFontNameManager::GetNameByIndex(sal_uInt16 index)
 void LwpFontAttrManager::Read(LwpObjectStream *pStrm)
 {
     m_nCount = pStrm->QuickReaduInt16();
-    m_pFontAttrs = new LwpFontAttrEntry[m_nCount];
+    m_pFontAttrs.reset( new LwpFontAttrEntry[m_nCount] );
 
     for(sal_uInt16 i=0; i<m_nCount; i++)
     {
@@ -435,8 +435,6 @@ void    LwpFontAttrManager::Override(sal_uInt16 index, rtl::Reference<XFFont> co
 
 LwpFontAttrManager::~LwpFontAttrManager()
 {
-    if(m_pFontAttrs)
-        delete []m_pFontAttrs;
 }
 
 void LwpFontManager::Read(LwpObjectStream *pStrm)

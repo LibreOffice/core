@@ -684,8 +684,7 @@ void ViewIteratorImpl::Reverse()
     IteratorImplBase::Reverse ();
 
     // Create reversed object list iterator.
-    if (mpObjectIterator != nullptr)
-        delete mpObjectIterator;
+    delete mpObjectIterator;
     if (mpPage != nullptr)
         mpObjectIterator = new SdrObjListIter(*mpPage, SdrIterMode::DeepNoGroups, ! mbDirectionIsForward);
     else

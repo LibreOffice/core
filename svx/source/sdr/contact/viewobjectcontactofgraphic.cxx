@@ -112,7 +112,7 @@ namespace sdr
                             // Trigger asynchronious SwapIn.
                             sdr::event::TimerEventHandler& rEventHandler = rObjectContact.GetEventHandler();
 
-                            mpAsynchLoadEvent = new sdr::event::AsynchGraphicLoadingEvent(rEventHandler, *this);
+                            mpAsynchLoadEvent.reset( new sdr::event::AsynchGraphicLoadingEvent(rEventHandler, *this) );
                         }
                     }
                     else
@@ -142,7 +142,7 @@ namespace sdr
                 {
                     // just delete it, this will remove it from the EventHandler and
                     // will trigger forgetAsynchGraphicLoadingEvent from the destructor
-                    delete mpAsynchLoadEvent;
+                    mpAsynchLoadEvent.reset();
 
                     // Invalidate paint areas.
                     // [1] If a calc document with graphics is loaded then OnLoad will
@@ -222,7 +222,7 @@ namespace sdr
 
             if(mpAsynchLoadEvent)
             {
-                OSL_ENSURE(!pEvent || mpAsynchLoadEvent == pEvent,
+                OSL_ENSURE(!pEvent || mpAsynchLoadEvent.get() == pEvent,
                     "ViewObjectContactOfGraphic::forgetAsynchGraphicLoadingEvent: Forced to forget another event then I have scheduled (?)");
 
                 // forget event
@@ -302,13 +302,6 @@ namespace sdr
 
         ViewObjectContactOfGraphic::~ViewObjectContactOfGraphic()
         {
-            // evtl. delete the asynch loading event
-            if(mpAsynchLoadEvent)
-            {
-                // just delete it, this will remove it from the EventHandler and
-                // will trigger forgetAsynchGraphicLoadingEvent from the destructor
-                delete mpAsynchLoadEvent;
-            }
         }
     } // end of namespace contact
 } // end of namespace sdr

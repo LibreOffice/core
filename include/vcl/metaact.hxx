@@ -1433,7 +1433,8 @@ private:
     OString             maComment;
     sal_Int32           mnValue;
     sal_uInt32          mnDataSize;
-    sal_uInt8*          mpData;
+    std::unique_ptr<sal_uInt8[]>
+                        mpData;
 
     SAL_DLLPRIVATE void ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 nDataSize );
 
@@ -1456,7 +1457,7 @@ public:
     const OString&      GetComment() const { return maComment; }
     sal_Int32           GetValue() const { return mnValue; }
     sal_uInt32          GetDataSize() const { return mnDataSize; }
-    const sal_uInt8*    GetData() const { return mpData; }
+    const sal_uInt8*    GetData() const { return mpData.get(); }
 };
 
 class VCL_DLLPUBLIC MetaLayoutModeAction : public MetaAction
