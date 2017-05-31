@@ -87,14 +87,8 @@ namespace io_acceptor
 
     OAcceptor::~OAcceptor()
     {
-        if( m_pPipe )
-        {
-            delete m_pPipe;
-        }
-        if( m_pSocket )
-        {
-            delete m_pSocket;
-        }
+        delete m_pPipe;
+        delete m_pSocket;
     }
 
     struct BeingInAccept

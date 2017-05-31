@@ -179,10 +179,7 @@ XOutdevItemPool::~XOutdevItemPool()
     // release and delete static pool default items
     ReleaseDefaults(true);
 
-    if(mpLocalItemInfos)
-    {
-        delete[] mpLocalItemInfos;
-    }
+    delete[] mpLocalItemInfos;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

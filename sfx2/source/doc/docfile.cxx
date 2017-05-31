@@ -3470,8 +3470,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
 void SfxMedium::CreateTempFileNoCopy()
 {
     // this call always replaces the existing temporary file
-    if ( pImpl->pTempFile )
-        delete pImpl->pTempFile;
+    delete pImpl->pTempFile;
 
     pImpl->pTempFile = new ::utl::TempFile();
     pImpl->pTempFile->EnableKillingFile();

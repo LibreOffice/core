@@ -359,22 +359,10 @@ m_pParaSpacingBelow(new LwpSpacingCommonOverride)
 
 LwpSpacingOverride::~LwpSpacingOverride()
 {
-    if (m_pSpacing)
-    {
-        delete m_pSpacing;
-    }
-    if (m_pAboveLineSpacing)
-    {
-        delete m_pAboveLineSpacing;
-    }
-    if (m_pParaSpacingAbove)
-    {
-        delete m_pParaSpacingAbove;
-    }
-    if (m_pParaSpacingBelow)
-    {
-        delete m_pParaSpacingBelow;
-    }
+    delete m_pSpacing;
+    delete m_pAboveLineSpacing;
+    delete m_pParaSpacingAbove;
+    delete m_pParaSpacingBelow;
 }
 
 LwpSpacingOverride::LwpSpacingOverride(LwpSpacingOverride const& rOther)
@@ -454,19 +442,13 @@ m_pBackgroundStuff(new LwpBackgroundStuff), m_nType(AMIKAKE_NONE)
 
 LwpAmikakeOverride::~LwpAmikakeOverride()
 {
-    if (m_pBackgroundStuff)
-    {
-        delete m_pBackgroundStuff;
-    }
 }
 
 LwpAmikakeOverride::LwpAmikakeOverride(LwpAmikakeOverride const& rOther)
     : LwpOverride(rOther)
-    , m_pBackgroundStuff(nullptr)
+    , m_pBackgroundStuff(::clone(rOther.m_pBackgroundStuff.get()))
     , m_nType(rOther.m_nType)
 {
-    std::unique_ptr<LwpBackgroundStuff> pBackgroundStuff(::clone(rOther.m_pBackgroundStuff));
-    m_pBackgroundStuff = pBackgroundStuff.release();
 }
 
 LwpAmikakeOverride* LwpAmikakeOverride::clone() const

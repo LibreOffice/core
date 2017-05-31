@@ -3396,10 +3396,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
 
     //The TOC field representation contents should be inserted into TOC section, but not after TOC section.
     //So we need update the document position when loading TOC representation and after loading TOC;
-    if (m_pPosAfterTOC)
-    {
-        delete m_pPosAfterTOC;
-    }
+    delete m_pPosAfterTOC;
     m_pPosAfterTOC = new SwPaM(*m_pPaM, m_pPaM);
     (*m_pPaM).Move(fnMoveBackward);
     SwPaM aRegion(*m_pPaM, m_pPaM);
