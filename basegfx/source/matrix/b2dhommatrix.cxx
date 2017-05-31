@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/instance.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <hommatrixtemplate.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
@@ -32,11 +31,8 @@ namespace basegfx
     {
     };
 
-    namespace { struct IdentityMatrix : public rtl::Static< B2DHomMatrix::ImplType,
-                                                            IdentityMatrix > {}; }
-
-    B2DHomMatrix::B2DHomMatrix() :
-        mpImpl( IdentityMatrix::get() ) // use common identity matrix
+    B2DHomMatrix::B2DHomMatrix()
+        : mpImpl() // identity
     {
     }
 
@@ -55,7 +51,7 @@ namespace basegfx
     }
 
     B2DHomMatrix::B2DHomMatrix(double f_0x0, double f_0x1, double f_0x2, double f_1x0, double f_1x1, double f_1x2)
-    :   mpImpl( IdentityMatrix::get() ) // use common identity matrix, will be made unique with 1st set-call
+        :   mpImpl() // identity
     {
         mpImpl->set(0, 0, f_0x0);
         mpImpl->set(0, 1, f_0x1);
@@ -104,15 +100,12 @@ namespace basegfx
 
     bool B2DHomMatrix::isIdentity() const
     {
-        if(mpImpl.same_object(IdentityMatrix::get()))
-            return true;
-
         return mpImpl->isIdentity();
     }
 
     void B2DHomMatrix::identity()
     {
-        mpImpl = IdentityMatrix::get();
+        *mpImpl = Impl2DHomMatrix();
     }
 
     bool B2DHomMatrix::isInvertible() const
