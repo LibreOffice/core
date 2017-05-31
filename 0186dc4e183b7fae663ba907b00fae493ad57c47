@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_0bf6228f",
+        "filename": "offapi/com/sun/star/datatransfer/clipboard/RenderingCapabilities.idl",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-05-31T07:06:52Z",
+      "side": 1,
+      "message": "where\u0027s the\n\n  \"Persistent\" should be used instead of \"Persistant\"\n\npart of the @deprecated paragraph gone?",
+      "revId": "0186dc4e183b7fae663ba907b00fae493ad57c47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
