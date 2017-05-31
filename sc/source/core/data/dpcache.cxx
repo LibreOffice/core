@@ -134,7 +134,7 @@ void initFromCell(
 
     if (rCell.hasError())
     {
-        rData.SetErrorString(rCache.InternString(aDocStr));
+        rData.SetErrorStringInterned(rCache.InternString(aDocStr));
     }
     else if (rCell.hasNumeric())
     {
@@ -144,7 +144,7 @@ void initFromCell(
     }
     else if (!rCell.isEmpty())
     {
-        rData.SetString(rCache.InternString(aDocStr));
+        rData.SetStringInterned(rCache.InternString(aDocStr));
     }
     else
         rData.SetEmpty();
@@ -901,15 +901,15 @@ SCCOL ScDPCache::GetDimensionIndex(const OUString& sName) const
     return -1;
 }
 
-const OUString* ScDPCache::InternString(const OUString& rStr) const
+rtl_uString* ScDPCache::InternString( const OUString& rStr )
 {
     StringSetType::iterator it = maStringPool.find(rStr);
     if (it != maStringPool.end())
         // In the pool.
-        return &(*it);
+        return (*it).pData;
 
     std::pair<StringSetType::iterator, bool> r = maStringPool.insert(rStr);
-    return r.second ? &(*r.first) : nullptr;
+    return r.second ? (*r.first).pData : nullptr;
 }
 
 void ScDPCache::AddReference(ScDPObject* pObj) const

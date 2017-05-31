@@ -45,7 +45,7 @@ public:
 private:
 
     union {
-        const OUString* mpString;
+        rtl_uString* mpString;
         GroupValueAttr maGroupValue;
         double mfValue;
     };
@@ -68,12 +68,12 @@ public:
     Type GetType() const { return static_cast<Type>(meType); }
     void SetEmpty();
     void SetString(const OUString& rS);
-    void SetString(const OUString* pS);
+    void SetStringInterned( rtl_uString* pS );
     void SetValue(double fVal);
     void SetRangeStart(double fVal);
     void SetRangeFirst();
     void SetRangeLast();
-    void SetErrorString(const OUString* pS);
+    void SetErrorStringInterned( rtl_uString* pS );
     bool IsCaseInsEqual(const ScDPItemData& r) const;
 
     // exact equality
