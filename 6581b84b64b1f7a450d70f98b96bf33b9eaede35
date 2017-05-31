@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_3e1b1e74",
+        "filename": "sal/osl/w32/tempfile.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-05-31T10:53:17Z",
+      "side": 1,
+      "message": "as i said in my previous comment (which gerrit ate), i don\u0027t expect the DELETE_ON_CLOSE to work at all currently because there are likely lots of places that close and re-open temp files, there is a TempFile class somewhere that has the same problem.",
+      "revId": "6581b84b64b1f7a450d70f98b96bf33b9eaede35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
