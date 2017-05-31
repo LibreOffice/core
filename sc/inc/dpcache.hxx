@@ -117,7 +117,7 @@ private:
 
     FieldsType maFields;
     GroupFieldsType maGroupFields;
-    mutable StringSetType maStringPool;
+    StringSetType maStringPool;
 
     std::vector<OUString> maLabelNames; // Stores dimension names and the data layout dimension name at position 0.
     mdds::flat_segment_tree<SCROW, bool> maEmptyRows;
@@ -127,7 +127,7 @@ private:
     bool mbDisposing;
 
 public:
-    const OUString* InternString(const OUString& rStr) const;
+    rtl_uString* InternString( const OUString& rStr );
     void AddReference(ScDPObject* pObj) const;
     void RemoveReference(ScDPObject* pObj) const;
     const ScDPObjectSet& GetAllReferences() const;
