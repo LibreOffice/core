@@ -1662,7 +1662,9 @@ void DesktopLOKTest::testRedlineWriter()
 
     for (boost::property_tree::ptree::value_type& rRedline : aTree.get_child("redlines"))
         // This failed with boost::property_tree::ptree_bad_path, as there were no description field.
-        CPPUNIT_ASSERT_EQUAL(std::string("Insert “t”"), rRedline.second.get<std::string>("description"));
+        CPPUNIT_ASSERT_EQUAL(std::string("Insert \xE2\x80\x9Ct\xE2\x80\x9D"), rRedline.second.get<std::string>("description"));
+            // U+201C LEFT DOUBLE QUOTATION MARK, U+201D RIGHT DOUBLE QUOTATION
+            // MARK
 
     comphelper::LibreOfficeKit::setActive(false);
 }
