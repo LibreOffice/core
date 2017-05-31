@@ -320,7 +320,6 @@ void SAL_CALL SdXImpressDocument::release() throw ( )
             }
             catch (const uno::RuntimeException& exc)
             { // don't break throw ()
-                (void)exc;
                 SAL_WARN( "sd", exc.Message );
             }
         }

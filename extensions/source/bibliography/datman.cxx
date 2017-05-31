@@ -180,7 +180,6 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
             }
             catch (const Exception& e)
             {
-                (void)e;
                 SAL_WARN( "extensions.biblio", "::getColumns : catched an exception. " << e.Message);
             }
 

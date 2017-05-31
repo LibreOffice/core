@@ -784,7 +784,6 @@ IMPL_STATIC_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl, Button*, void)
     catch (const Exception& e)
     {
         SAL_WARN( "cui.options", e.Message);
-        (void)e;
     }
 }
 

@@ -582,7 +582,6 @@ OUString PackageManagerImpl::detectMediaType(
         catch (const lang::IllegalArgumentException & exc) {
             if (throw_exc)
                 throw;
-            (void) exc;
             SAL_WARN( "desktop", exc.Message );
         }
     }
@@ -1026,12 +1025,10 @@ PackageManagerImpl::getDeployedPackages_(
         }
         catch (const lang::IllegalArgumentException & exc) {
             // ignore
-            (void) exc; // avoid warnings
             SAL_WARN( "desktop", exc.Message );
         }
         catch (const deployment::DeploymentException& exc) {
             // ignore
-            (void) exc; // avoid warnings
             SAL_WARN( "desktop", exc.Message );
         }
     }

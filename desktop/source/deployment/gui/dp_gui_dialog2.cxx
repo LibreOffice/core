@@ -741,7 +741,6 @@ uno::Sequence< OUString > ExtMgrDialog::raiseAddPicker()
         }
         catch (const lang::IllegalArgumentException & exc) {
             SAL_WARN( "desktop", exc.Message );
-            (void) exc;
         }
     }
     xFilePicker->setCurrentFilter( sDefaultFilter );
@@ -1387,7 +1386,6 @@ bool UpdateRequiredDialog::isEnabled( const uno::Reference< deployment::XPackage
     }
     catch ( const uno::RuntimeException & ) { throw; }
     catch (const uno::Exception & exc) {
-        (void) exc;
         SAL_WARN( "desktop", exc.Message );
         bRegistered = false;
     }

@@ -54,7 +54,6 @@ void SimpleReferenceComponent::release()
         }
         catch (RuntimeException & exc ) // don't break throw ()
         {
-            (void)exc;
             SAL_WARN( "sd", exc.Message );
         }
     }

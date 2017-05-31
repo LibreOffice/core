@@ -986,7 +986,6 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream()
     }
     catch ( Exception &ex )
     {
-        (void)ex;
         SAL_WARN( "package", "Exception is thrown during stream wrapping!" << ex.Message);
         return uno::Reference < io::XInputStream > ();
     }

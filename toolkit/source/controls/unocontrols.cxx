@@ -2931,11 +2931,7 @@ void UnoListBoxControl::itemStateChanged( const awt::ItemEvent& rEvent )
         }
         catch( const Exception& e )
         {
-#if OSL_DEBUG_LEVEL == 0
-            (void) e; // suppress warning
-#else
             SAL_WARN( "toolkit", "UnoListBoxControl::itemStateChanged: caught an exception: " << e.Message);
-#endif
         }
     }
 }
@@ -3271,11 +3267,7 @@ void UnoComboBoxControl::itemStateChanged( const awt::ItemEvent& rEvent )
         }
         catch( const Exception& e )
         {
-#if OSL_DEBUG_LEVEL == 0
-            (void) e; // suppress warning
-#else
             SAL_WARN( "toolkit", "UnoComboBoxControl::itemStateChanged: caught an exception: " << e.Message);
-#endif
         }
     }
 }

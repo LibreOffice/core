@@ -32,7 +32,6 @@ ScopeGuard::~ScopeGuard()
         m_func();
     }
     catch (css::uno::Exception & exc) {
-        (void) exc; // avoid warning about unused variable
         SAL_WARN( "comphelper", "UNO exception occurred: " << exc.Message );
     }
     catch (...) {

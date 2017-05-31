@@ -1060,7 +1060,6 @@ void BackendImpl::PackageImpl::exportTo(
                                 ::cppu::getCaughtException() ) );
         }
         catch (const lang::IllegalArgumentException & exc) {
-            (void) exc;
             SAL_WARN( "desktop", exc.Message );
         }
 

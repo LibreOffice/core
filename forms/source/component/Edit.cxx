@@ -447,7 +447,6 @@ namespace
                 }
                 catch(const IllegalArgumentException& e)
                 {
-                    (void)e;
                     SAL_WARN( "forms.component", "could not transfer the property named '"
                                 << pSourceProps->Name
                                 << "'. " << e.Message );

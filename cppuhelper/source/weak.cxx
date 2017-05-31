@@ -243,7 +243,6 @@ void OWeakObject::disposeWeakConnectionPoint()
             p->dispose();
         }
         catch (RuntimeException const& exc) {
-            (void)exc;
             SAL_WARN( "cppuhelper", exc.Message );
         }
         p->release();

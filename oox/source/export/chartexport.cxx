@@ -192,7 +192,6 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
     }
     catch( const uno::Exception & ex )
     {
-        (void)ex; // avoid warning for pro build
         SAL_WARN( "oox", "Exception caught. " << ex.Message);
     }
 
@@ -298,7 +297,6 @@ bool lcl_isSeriesAttachedToFirstAxis(
     }
     catch( const uno::Exception & ex )
     {
-        (void)ex; // avoid warning for pro build
         SAL_WARN( "oox", "Exception caught. " << ex.Message);
     }
 
@@ -640,7 +638,6 @@ void ChartExport::InitRangeSegmentationProperties( const Reference< chart2::XCha
         }
         catch( const uno::Exception & ex )
         {
-            (void)ex; // avoid warning for pro build
             SAL_WARN( "oox", "Exception caught. " << ex.Message);
         }
 }

@@ -712,7 +712,6 @@ void SAL_CALL SdStyleSheet::release(  ) throw ()
         }
         catch (RuntimeException const& exc)
         { // don't break throw ()
-            (void)exc;
             SAL_WARN( "sd", exc.Message );
         }
         OSL_ASSERT( mrBHelper.bDisposed );

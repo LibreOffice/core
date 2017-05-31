@@ -77,7 +77,6 @@ void WeakComponentImplHelperBase::release()
                 dispose();
             }
             catch (RuntimeException const& exc) { // don't break throw ()
-                (void)exc;
                 SAL_WARN( "cppuhelper", exc.Message );
             }
             OSL_ASSERT( rBHelper.bDisposed );
@@ -202,7 +201,6 @@ void WeakAggComponentImplHelperBase::release()
                 dispose();
             }
             catch (RuntimeException const& exc) { // don't break throw ()
-                (void)exc;
                 SAL_WARN( "cppuhelper", exc.Message );
             }
             OSL_ASSERT( rBHelper.bDisposed );

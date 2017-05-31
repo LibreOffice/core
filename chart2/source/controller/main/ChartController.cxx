@@ -216,7 +216,6 @@ void ChartController::TheModel::tryTermination()
     }
     catch(const uno::Exception& ex)
     {
-        (void)ex; // no warning in non-debug builds
         SAL_WARN( "chart2", "Termination of model failed: " << ex.Message );
     }
 }

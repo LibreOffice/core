@@ -140,7 +140,6 @@ namespace
             }
             catch( const uno::Exception & ex )
             {
-                (void)ex; // no warning in non-debug builds
                 SAL_WARN( "chart2", "Property Exception caught. Message: " << ex.Message);
             }
         }
@@ -167,7 +166,6 @@ namespace
             }
             catch( const uno::Exception & ex )
             {
-                (void)ex; // no warning in non-debug builds
                 SAL_WARN( "chart2", "Property Exception caught. Message: " << ex.Message);
             }
         }
@@ -183,7 +181,6 @@ namespace
         }
         catch( const uno::Exception & ex )
         {
-            (void)ex; // no warning in non-debug builds
             SAL_WARN( "chart2", "Property Exception caught. Message: " << ex.Message);
         }
         return Color( nResult );
@@ -200,7 +197,6 @@ namespace
         }
         catch( const uno::Exception & ex )
         {
-            (void)(ex); // no warning in non-debug builds
             SAL_WARN( "chart2", "Property Exception caught. Message: " << ex.Message);
         }
     }

@@ -573,7 +573,6 @@ extern "C" { static void s_createComponentContext_v(va_list * pParam)
         }
         catch (Exception & exc)
         {
-            (void) exc; // avoid warning about unused variable
             SAL_WARN( "cppuhelper", exc.Message );
             xContext.clear();
         }

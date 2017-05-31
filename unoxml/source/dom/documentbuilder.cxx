@@ -201,7 +201,6 @@ namespace DOM
             memcpy(buffer, chunk.getConstArray(), nread);
             return nread;
         } catch (const css::uno::Exception& ex) {
-            (void) ex;
             SAL_WARN( "unoxml", ex.Message);
             return -1;
         }
@@ -221,7 +220,6 @@ namespace DOM
                 delete pctx;
             return 0;
         } catch (const css::uno::Exception& ex) {
-            (void) ex;
             SAL_WARN( "unoxml", ex.Message);
             return -1;
         }

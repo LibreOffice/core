@@ -187,12 +187,10 @@ bool ItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
                 }
                 catch( const beans::UnknownPropertyException &ex )
                 {
-                    (void)ex;
                     SAL_WARN( "chart2", ex.Message << " - unknown Property: " << aProperty.first);
                 }
                 catch( const uno::Exception &ex )
                 {
-                    (void)ex;
                     SAL_WARN( "chart2", ex.Message );
                 }
             }

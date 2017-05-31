@@ -92,7 +92,6 @@ void OComponentHelper::release() throw()
                 catch (css::uno::RuntimeException & exc)
                 {
                     // release should not throw exceptions
-                    (void) exc; // avoid warning about unused variable
                     SAL_WARN( "cppuhelper", exc.Message );
                 }
 

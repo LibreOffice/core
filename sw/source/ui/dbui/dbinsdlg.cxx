@@ -1175,7 +1175,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                 catch (const Exception& rExcept)
                 {
                     SAL_WARN("sw", rExcept.Message);
-                    (void)rExcept;
                 }
             }
 
