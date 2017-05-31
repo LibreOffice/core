@@ -672,10 +672,8 @@ ScAccessibleCellTextData::~ScAccessibleCellTextData()
 {
     if (pEditEngine)
         pEditEngine->SetNotifyHdl(Link<EENotify&,void>());
-    if (mpViewForwarder)
-        delete mpViewForwarder;
-    if (mpEditViewForwarder)
-        delete mpEditViewForwarder;
+    delete mpViewForwarder;
+    delete mpEditViewForwarder;
 }
 
 void ScAccessibleCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -897,12 +895,9 @@ ScAccessibleEditObjectTextData::~ScAccessibleEditObjectTextData()
     // If the object is cloned, do NOT set notify hdl.
     if (mpEditEngine && !mbIsCloned)
         mpEditEngine->SetNotifyHdl(Link<EENotify&,void>());
-    if (mpViewForwarder)
-        delete mpViewForwarder;
-    if (mpEditViewForwarder)
-        delete mpEditViewForwarder;
-    if (mpForwarder)
-        delete mpForwarder;
+    delete mpViewForwarder;
+    delete mpEditViewForwarder;
+    delete mpForwarder;
 }
 
 void ScAccessibleEditObjectTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -1159,8 +1154,7 @@ ScAccessiblePreviewCellTextData::~ScAccessiblePreviewCellTextData()
 {
     if (pEditEngine)
         pEditEngine->SetNotifyHdl(Link<EENotify&,void>());
-    if (mpViewForwarder)
-        delete mpViewForwarder;
+    delete mpViewForwarder;
 }
 
 void ScAccessiblePreviewCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -1232,8 +1226,7 @@ ScAccessiblePreviewHeaderCellTextData::~ScAccessiblePreviewHeaderCellTextData()
 {
     if (pEditEngine)
         pEditEngine->SetNotifyHdl(Link<EENotify&,void>());
-    if (mpViewForwarder)
-        delete mpViewForwarder;
+    delete mpViewForwarder;
 }
 
 void ScAccessiblePreviewHeaderCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )

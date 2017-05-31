@@ -538,7 +538,7 @@ ScDocumentLoader::~ScDocumentLoader()
 {
     if ( aRef.is() )
         aRef->DoClose();
-    else if ( pMedium )
+    else
         delete pMedium;
 }
 

@@ -142,7 +142,7 @@ void LwpDLNFPVList::ReadPropertyList(LwpObjectStream* pObjStrm)
         m_bHasProperties = pObjStrm->QuickReaduInt8() != 0;
         if (m_bHasProperties)
         {
-            m_pPropList = new LwpPropList;
+            m_pPropList.reset( new LwpPropList );
             m_pPropList->Read(pObjStrm);
         }
     }
@@ -152,10 +152,6 @@ void LwpDLNFPVList::ReadPropertyList(LwpObjectStream* pObjStrm)
  **/
 LwpDLNFPVList::~LwpDLNFPVList()
 {
-    if(m_pPropList)
-    {
-        delete m_pPropList;
-    }
 }
 
 /**

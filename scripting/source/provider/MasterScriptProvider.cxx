@@ -80,11 +80,6 @@ MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext >
 
 MasterScriptProvider::~MasterScriptProvider()
 {
-    if ( m_pPCache )
-    {
-        delete m_pPCache;
-    }
-    m_pPCache = nullptr;
 }
 
 
@@ -362,15 +357,15 @@ MasterScriptProvider::providerCache()
 
             if ( !m_bIsPkgMSP )
             {
-                m_pPCache = new ProviderCache( m_xContext, m_sAargs );
+                m_pPCache.reset( new ProviderCache( m_xContext, m_sAargs ) );
             }
             else
             {
-                m_pPCache = new ProviderCache( m_xContext, m_sAargs, blacklist );
+                m_pPCache.reset( new ProviderCache( m_xContext, m_sAargs, blacklist ) );
             }
         }
     }
-    return m_pPCache;
+    return m_pPCache.get();
 }
 
 

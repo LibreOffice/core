@@ -302,10 +302,6 @@ namespace drawinglayer
 
         SdrLathePrimitive3D::~SdrLathePrimitive3D()
         {
-            if(mpLastRLGViewInformation)
-            {
-                delete mpLastRLGViewInformation;
-            }
         }
 
         bool SdrLathePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
@@ -355,8 +351,7 @@ namespace drawinglayer
                     // new one and clear current decompositiopn
                     SdrLathePrimitive3D* pThat = const_cast< SdrLathePrimitive3D* >(this);
                     pThat->setBuffered3DDecomposition(Primitive3DContainer());
-                    delete pThat->mpLastRLGViewInformation;
-                    pThat->mpLastRLGViewInformation = new geometry::ViewInformation3D(rViewInformation);
+                    pThat->mpLastRLGViewInformation.reset( new geometry::ViewInformation3D(rViewInformation) );
                 }
             }
 
