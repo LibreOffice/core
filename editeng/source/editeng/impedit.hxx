@@ -548,7 +548,7 @@ private:
 
     EditTextObject*     CreateTextObject(EditSelection aSelection, SfxItemPool*, bool bAllowBigObjects = false, sal_Int32 nBigObjStart = 0);
     EditSelection       InsertTextObject( const EditTextObject&, EditPaM aPaM );
-    EditSelection       InsertText( css::uno::Reference< css::datatransfer::XTransferable > const & rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial );
+    EditSelection       PasteText( css::uno::Reference< css::datatransfer::XTransferable > const & rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial );
 
     void                CheckPageOverflow();
 
