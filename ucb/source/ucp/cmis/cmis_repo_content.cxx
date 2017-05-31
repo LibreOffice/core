@@ -212,7 +212,7 @@ namespace cmis
                     {
                         SAL_INFO( "ucb.ucp.cmis", "Error getting repositories: " << e.what() );
 
-                        if ( e.getType().compare( "permissionDenied" ) != 0 )
+                        if ( e.getType() != "permissionDenied" )
                         {
                             ucbhelper::cancelCommandExecution(
                                             ucb::IOErrorCode_INVALID_DEVICE,

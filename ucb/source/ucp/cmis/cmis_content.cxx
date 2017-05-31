@@ -430,7 +430,7 @@ namespace cmis
                     }
                     catch( const libcmis::Exception & e )
                     {
-                        if ( e.getType().compare( "permissionDenied" ) != 0 )
+                        if ( e.getType() != "permissionDenied" )
                             throw;
                     }
                 }
