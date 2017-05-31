@@ -80,12 +80,19 @@ public:
     }
 
     bool TraverseInitListExpr(
-        InitListExpr * expr, DataRecursionQueue * queue = nullptr)
+        InitListExpr * expr
+#if CLANG_VERSION >= 30800
+        , DataRecursionQueue * queue = nullptr
+#endif
+        )
     {
         return WalkUpFromInitListExpr(expr)
             && TraverseSynOrSemInitListExpr(
-                expr->isSemanticForm() ? expr : expr->getSemanticForm(),
-                queue);
+                expr->isSemanticForm() ? expr : expr->getSemanticForm()
+#if CLANG_VERSION >= 30800
+                , queue
+#endif
+                );
     }
 
     bool VisitImplicitCastExpr(ImplicitCastExpr const * expr);
