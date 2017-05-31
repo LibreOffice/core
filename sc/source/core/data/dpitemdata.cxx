@@ -83,7 +83,9 @@ ScDPItemData::ScDPItemData(const ScDPItemData& r) :
     {
         case String:
         case Error:
-            mpString = mbStringInterned ? r.mpString :  new OUString(*r.mpString);
+            mpString = r.mpString;
+            if (!mbStringInterned)
+                rtl_uString_acquire(mpString);
         break;
         case Value:
         case RangeStart:
@@ -104,14 +106,17 @@ void ScDPItemData::DisposeString()
     if (!mbStringInterned)
     {
         if (meType == String || meType == Error)
-            delete mpString;
+            rtl_uString_release(mpString);
     }
 
     mbStringInterned = false;
 }
 
 ScDPItemData::ScDPItemData(const OUString& rStr) :
-    mpString(new OUString(rStr)), meType(String), mbStringInterned(false) {}
+    mpString(rStr.pData), meType(String), mbStringInterned(false)
+{
+    rtl_uString_acquire(mpString);
+}
 
 ScDPItemData::ScDPItemData(sal_Int32 nGroupType, sal_Int32 nValue) :
     meType(GroupValue), mbStringInterned(false)
@@ -134,11 +139,12 @@ void ScDPItemData::SetEmpty()
 void ScDPItemData::SetString(const OUString& rS)
 {
     DisposeString();
-    mpString = new OUString(rS);
+    mpString = rS.pData;
+    rtl_uString_acquire(mpString);
     meType = String;
 }
 
-void ScDPItemData::SetString(const OUString* pS)
+void ScDPItemData::SetStringInterned( rtl_uString* pS )
 {
     DisposeString();
     mpString = pS;
@@ -174,9 +180,9 @@ void ScDPItemData::SetRangeLast()
     meType = RangeStart;
 }
 
-void ScDPItemData::SetErrorString(const OUString* pS)
+void ScDPItemData::SetErrorStringInterned( rtl_uString* pS )
 {
-    SetString(pS);
+    SetStringInterned(pS);
     meType = Error;
 }
 
@@ -234,13 +240,14 @@ ScDPItemData& ScDPItemData::operator= (const ScDPItemData& r)
 {
     DisposeString();
     meType = r.meType;
-    mbStringInterned = false;
     switch (r.meType)
     {
         case String:
         case Error:
-            mpString = r.mbStringInterned ? r.mpString : new OUString(*r.mpString);
             mbStringInterned = r.mbStringInterned;
+            mpString = r.mpString;
+            if (!mbStringInterned)
+                rtl_uString_acquire(mpString);
         break;
         case Value:
         case RangeStart:
@@ -286,7 +293,7 @@ void ScDPItemData::Dump(const char* msg) const
         break;
         case Error:
             printf("error: %s\n",
-                   OUStringToOString(*mpString, RTL_TEXTENCODING_UTF8).getStr());
+                   OUStringToOString(OUString(mpString), RTL_TEXTENCODING_UTF8).getStr());
         break;
         case GroupValue:
             printf("group value: group type = %d  value = %d\n",
@@ -294,7 +301,7 @@ void ScDPItemData::Dump(const char* msg) const
         break;
         case String:
             printf("string: %s\n",
-                   OUStringToOString(*mpString, RTL_TEXTENCODING_UTF8).getStr());
+                   OUStringToOString(OUString(mpString), RTL_TEXTENCODING_UTF8).getStr());
         break;
         case Value:
             printf("value: %g\n", mfValue);
@@ -325,7 +332,7 @@ OUString ScDPItemData::GetString() const
     {
         case String:
         case Error:
-            return *mpString;
+            return OUString(mpString);
         case Value:
         case RangeStart:
             return OUString::number(mfValue);
