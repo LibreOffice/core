@@ -144,13 +144,9 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     if( expr->getCastKind() == CK_NoOp ) {
         QualType t1 = expr->getSubExpr()->getType();
         QualType t2 = expr->getType();
-        if (t1->isPointerType() && t2->isPointerType()) {
-            t1 = t1->getAs<PointerType>()->getPointeeType();
-            t2 = t2->getAs<PointerType>()->getPointeeType();
-        } else if (t1->isLValueReferenceType() && t2->isLValueReferenceType()) {
-            t1 = t1->getAs<LValueReferenceType>()->getPointeeType();
-            t2 = t2->getAs<LValueReferenceType>()->getPointeeType();
-        } else {
+        if (!((t1->isPointerType() && t2->isPointerType())
+              || (t1->isLValueReferenceType() && t2->isLValueReferenceType())))
+        {
             return true;
         }
         if (isConstCast(
