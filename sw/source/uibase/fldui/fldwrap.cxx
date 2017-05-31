@@ -81,11 +81,10 @@ SwFieldDlgWrapper::SwFieldDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     assert(pFact && "SwAbstractDialogFactory fail!");
-    VclPtr<AbstractSwFieldDlg> pDlg = pFact->CreateSwFieldDlg(pB, this, _pParent);
-    assert(pDlg && "Dialog creation failed!");
-    pDlgInterface = pDlg;
-    SetWindow( pDlg->GetWindow() );
-    pDlg->Start();
+    pDlgInterface = pFact->CreateSwFieldDlg(pB, this, _pParent);
+    assert(pDlgInterface && "Dialog creation failed!");
+    SetWindow( pDlgInterface->GetWindow() );
+    pDlgInterface->Start();
 }
 
 // newly initialise dialog after Doc switch
@@ -124,14 +123,13 @@ SwFieldDataOnlyDlgWrapper::SwFieldDataOnlyDlgWrapper( vcl::Window* _pParent, sal
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    VclPtr<AbstractSwFieldDlg> pDlg = pFact->CreateSwFieldDlg(pB, this, _pParent);
-    OSL_ENSURE(pDlg, "Dialog creation failed!");
-    pDlgInterface = pDlg;
+    pDlgInterface = pFact->CreateSwFieldDlg(pB, this, _pParent);
+    OSL_ENSURE(pDlgInterface, "Dialog creation failed!");
 
-    SetWindow( pDlg->GetWindow() );
-    pDlg->ActivateDatabasePage();
-    pDlg->Start();
-    pDlg->Initialize( pInfo );
+    SetWindow( pDlgInterface->GetWindow() );
+    pDlgInterface->ActivateDatabasePage();
+    pDlgInterface->Start();
+    pDlgInterface->Initialize( pInfo );
 }
 
 // re-init after doc activation
