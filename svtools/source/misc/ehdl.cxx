@@ -53,15 +53,15 @@ static DialogMask aWndFunc(
 
     // determine necessary WinBits from the flags
     WinBits eBits=0;
-    if ( nFlags & (DialogMask::ButtonsCancel | DialogMask::ButtonsRetry) )
+    if ( (nFlags & (DialogMask::ButtonsCancel | DialogMask::ButtonsRetry)) == (DialogMask::ButtonsCancel | DialogMask::ButtonsRetry))
         eBits = WB_RETRY_CANCEL;
-    else if ( nFlags & DialogMask::ButtonsOkCancel )
+    else if ( (nFlags & DialogMask::ButtonsOkCancel) == DialogMask::ButtonsOkCancel )
         eBits = WB_OK_CANCEL;
-    else if ( nFlags & DialogMask::ButtonsOk )
+    else if ( (nFlags & DialogMask::ButtonsOk) == DialogMask::ButtonsOk )
         eBits = WB_OK;
-    else if ( nFlags & DialogMask::ButtonsYesNoCancel )
+    else if ( (nFlags & DialogMask::ButtonsYesNoCancel) == DialogMask::ButtonsYesNoCancel )
         eBits = WB_YES_NO_CANCEL;
-    else if ( nFlags & DialogMask::ButtonsYesNo )
+    else if ( (nFlags & DialogMask::ButtonsYesNo) == DialogMask::ButtonsYesNo )
         eBits = WB_YES_NO;
 
     switch(nFlags & DialogMask(0x0f00))
