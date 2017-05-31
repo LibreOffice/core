@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_eb02b63d",
+        "filename": "sc/source/ui/cctrl/checklistmenu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1927,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-05-31T09:16:33Z",
+      "side": 1,
+      "message": "std::unordered_set or o3tl::sorted_vector would allow you to use a more efficient find and avoid the inner loop",
+      "revId": "a56c72034404f3c953429e8befc913227c8b8338",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
