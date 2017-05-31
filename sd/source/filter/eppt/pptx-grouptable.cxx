@@ -45,8 +45,7 @@ void GroupTable::ImplResizeGroupTable( sal_uInt32 nEntrys )
         GroupEntry** pTemp = new GroupEntry*[ nEntrys ];
         for ( sal_uInt32 i = 0; i < mnCurrentGroupEntry; i++ )
             pTemp[ i ] = mpGroupEntry[ i ];
-        if ( mpGroupEntry )
-            delete[] mpGroupEntry;
+        delete[] mpGroupEntry;
         mpGroupEntry = pTemp;
     }
 }

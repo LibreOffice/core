@@ -1198,11 +1198,6 @@ ScDPDimensions::ScDPDimensions( ScDPSource* pSrc ) :
 ScDPDimensions::~ScDPDimensions()
 {
     //TODO: release pSource
-
-    if (ppDims)
-    {
-        delete[] ppDims;
-    }
 }
 
 void ScDPDimensions::CountChanged()
@@ -1220,8 +1215,7 @@ void ScDPDimensions::CountChanged()
         for (i=nCopy; i<nNewCount; i++)     // clear additional pointers
             ppNew[i] = nullptr;
 
-        delete[] ppDims;
-        ppDims = ppNew;
+        ppDims.reset( ppNew );
     }
     nDimCount = nNewCount;
 }
@@ -1288,7 +1282,7 @@ ScDPDimension* ScDPDimensions::getByIndex(long nIndex) const
     {
         if ( !ppDims )
         {
-            const_cast<ScDPDimensions*>(this)->ppDims = new rtl::Reference<ScDPDimension>[nDimCount];
+            const_cast<ScDPDimensions*>(this)->ppDims.reset(new rtl::Reference<ScDPDimension>[nDimCount] );
             for (long i=0; i<nDimCount; i++)
                 ppDims[i] = nullptr;
         }
@@ -1656,11 +1650,6 @@ ScDPHierarchies::ScDPHierarchies( ScDPSource* pSrc, long nD ) :
 ScDPHierarchies::~ScDPHierarchies()
 {
     //TODO: release pSource
-
-    if (ppHiers)
-    {
-        delete[] ppHiers;
-    }
 }
 
 // very simple XNameAccess implementation using getCount/getByIndex
@@ -1725,7 +1714,7 @@ ScDPHierarchy* ScDPHierarchies::getByIndex(long nIndex) const
     {
         if ( !ppHiers )
         {
-            const_cast<ScDPHierarchies*>(this)->ppHiers = new rtl::Reference<ScDPHierarchy>[nHierCount];
+            const_cast<ScDPHierarchies*>(this)->ppHiers.reset( new rtl::Reference<ScDPHierarchy>[nHierCount] );
             for (long i=0; i<nHierCount; i++)
                 ppHiers[i] = nullptr;
         }
@@ -1823,11 +1812,6 @@ ScDPLevels::ScDPLevels( ScDPSource* pSrc, long nD, long nH ) :
 ScDPLevels::~ScDPLevels()
 {
     //TODO: release pSource
-
-    if (ppLevs)
-    {
-        delete[] ppLevs;
-    }
 }
 
 // very simple XNameAccess implementation using getCount/getByIndex
@@ -1889,7 +1873,7 @@ ScDPLevel* ScDPLevels::getByIndex(long nIndex) const
     {
         if ( !ppLevs )
         {
-            const_cast<ScDPLevels*>(this)->ppLevs = new rtl::Reference<ScDPLevel>[nLevCount];
+            const_cast<ScDPLevels*>(this)->ppLevs.reset(new rtl::Reference<ScDPLevel>[nLevCount] );
             for (long i=0; i<nLevCount; i++)
                 ppLevs[i] = nullptr;
         }

@@ -199,12 +199,8 @@ void LwpGraphicObject::Read()
         m_WatermarkName = m_pObjStrm->QuickReadStringPtr();
     }
 
-    if (pServerContext != nullptr)
-        delete[] pServerContext;
-
-    if (pFilterContext != nullptr)
-        delete[] pFilterContext;
-
+    delete[] pServerContext;
+    delete[] pFilterContext;
 }
 
 void LwpGraphicObject::XFConvert (XFContentContainer* pCont)

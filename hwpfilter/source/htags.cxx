@@ -57,8 +57,7 @@ EmPicture::EmPicture(size_t tsize)
 #endif
 EmPicture::~EmPicture()
 {
-    if (data)
-        delete[]data;
+    delete[] data;
 };
 
 bool EmPicture::Read(HWPFile & hwpf)

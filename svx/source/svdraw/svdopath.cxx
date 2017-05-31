@@ -52,6 +52,7 @@
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/sdr/attribute/sdrformtextattribute.hxx>
+#include <memory>
 
 using namespace sdr;
 
@@ -501,12 +502,12 @@ class ImpPathForDragAndCreate
     SdrPathObj&                 mrSdrPathObject;
     XPolyPolygon                aPathPolygon;
     SdrObjKind                  meObjectKind;
-    ImpSdrPathDragData*         mpSdrPathDragData;
+    std::unique_ptr<ImpSdrPathDragData>
+                                mpSdrPathDragData;
     bool                        mbCreating;
 
 public:
     explicit ImpPathForDragAndCreate(SdrPathObj& rSdrPathObject);
-    ~ImpPathForDragAndCreate();
 
     // drag stuff
     bool beginPathDrag( SdrDragStat& rDrag )  const;
@@ -544,14 +545,6 @@ ImpPathForDragAndCreate::ImpPathForDragAndCreate(SdrPathObj& rSdrPathObject)
 {
 }
 
-ImpPathForDragAndCreate::~ImpPathForDragAndCreate()
-{
-    if(mpSdrPathDragData)
-    {
-        delete mpSdrPathDragData;
-    }
-}
-
 bool ImpPathForDragAndCreate::beginPathDrag( SdrDragStat& rDrag )  const
 {
     const SdrHdl* pHdl=rDrag.GetHdl();
@@ -585,13 +578,12 @@ bool ImpPathForDragAndCreate::beginPathDrag( SdrDragStat& rDrag )  const
             bMultiPointDrag = false;
     }
 
-    const_cast<ImpPathForDragAndCreate*>(this)->mpSdrPathDragData = new ImpSdrPathDragData(mrSdrPathObject,*pHdl,bMultiPointDrag,rDrag);
+    const_cast<ImpPathForDragAndCreate*>(this)->mpSdrPathDragData.reset( new ImpSdrPathDragData(mrSdrPathObject,*pHdl,bMultiPointDrag,rDrag) );
 
     if(!mpSdrPathDragData || !mpSdrPathDragData->bValid)
     {
         OSL_FAIL("ImpPathForDragAndCreate::BegDrag(): ImpSdrPathDragData is invalid.");
-        delete mpSdrPathDragData;
-        const_cast<ImpPathForDragAndCreate*>(this)->mpSdrPathDragData = nullptr;
+        const_cast<ImpPathForDragAndCreate*>(this)->mpSdrPathDragData.reset();
         return false;
     }
 
@@ -915,8 +907,7 @@ bool ImpPathForDragAndCreate::endPathDrag(SdrDragStat& rDrag)
         }
     }
 
-    delete mpSdrPathDragData;
-    mpSdrPathDragData = nullptr;
+    mpSdrPathDragData.reset();
 
     return true;
 }
@@ -992,7 +983,7 @@ OUString ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag
     else
     {
         // #i103058# standard for modification; model and handle needed
-        ImpSdrPathDragData* pDragData = mpSdrPathDragData;
+        ImpSdrPathDragData* pDragData = mpSdrPathDragData.get();
 
         if(!pDragData)
         {

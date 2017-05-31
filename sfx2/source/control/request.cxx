@@ -419,8 +419,7 @@ void SfxRequest::RemoveItem( sal_uInt16 nID )
 void SfxRequest::SetReturnValue(const SfxPoolItem &rItem)
 {
     DBG_ASSERT(!pImpl->pRetVal, "Set Return value multiple times?");
-    if(pImpl->pRetVal)
-        delete pImpl->pRetVal;
+    delete pImpl->pRetVal;
     pImpl->pRetVal = rItem.Clone();
 }
 

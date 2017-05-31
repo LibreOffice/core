@@ -187,17 +187,12 @@ SalClipRegion::SalClipRegion()
 
 SalClipRegion::~SalClipRegion()
 {
-    if ( ClipRectangleList )
-        delete [] ClipRectangleList;
 }
 
 void
 SalClipRegion::BeginSetClipRegion( sal_uLong nRects )
 {
-    if (ClipRectangleList)
-        delete [] ClipRectangleList;
-
-    ClipRectangleList = new XRectangle[nRects];
+    ClipRectangleList.reset( new XRectangle[nRects] );
     numClipRectangles = 0;
     maxClipRectangles = nRects;
 }
@@ -207,12 +202,12 @@ SalClipRegion::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
     if ( nWidth && nHeight && (numClipRectangles < maxClipRectangles) )
     {
-        XRectangle *aRect = ClipRectangleList + numClipRectangles;
+        XRectangle& aRect = ClipRectangleList[numClipRectangles];
 
-        aRect->x     = (short) nX;
-        aRect->y     = (short) nY;
-        aRect->width = (unsigned short) nWidth;
-        aRect->height= (unsigned short) nHeight;
+        aRect.x     = (short) nX;
+        aRect.y     = (short) nY;
+        aRect.width = (unsigned short) nWidth;
+        aRect.height= (unsigned short) nHeight;
 
         numClipRectangles++;
     }

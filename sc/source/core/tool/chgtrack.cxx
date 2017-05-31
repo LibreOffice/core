@@ -4389,7 +4389,7 @@ bool ScChangeTrack::Reject(
             pReject->SetState( SC_CAS_ACCEPTED );
             Append( pReject );
         }
-        else if ( pReject )
+        else
             delete pReject;
     }
     else

@@ -702,8 +702,7 @@ TypeWriter::TypeWriter(typereg_Version version,
 
 TypeWriter::~TypeWriter()
 {
-    if (m_superTypeNames)
-        delete[] m_superTypeNames;
+    delete[] m_superTypeNames;
 
     if (m_fieldCount)
         delete[] m_fields;
@@ -714,8 +713,7 @@ TypeWriter::~TypeWriter()
     if (m_referenceCount)
         delete[] m_references;
 
-    if (m_pUik)
-        delete m_pUik;
+    delete m_pUik;
 }
 
 void TypeWriter::setSuperType(sal_uInt16 index, OString const & name)

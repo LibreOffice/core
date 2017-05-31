@@ -771,9 +771,7 @@ FlatFndBox::~FlatFndBox()
 {
     FndBox_** ppTmp = const_cast<FndBox_**>(pArr);
     delete [] ppTmp;
-
-    if( ppItemSets )
-        delete [] ppItemSets;
+    delete [] ppItemSets;
 }
 
 /// All Lines of a Box need to have same number of Boxes
