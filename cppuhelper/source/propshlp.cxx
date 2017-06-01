@@ -467,7 +467,7 @@ void OPropertySetHelper::setDependentFastPropertyValue( sal_Int32 i_handle, cons
     catch (const RuntimeException& )            { throw;    /* allowed to leave */ }
     catch (const Exception& )
     {
-        // not allowed to leave this meathod
+        // not allowed to leave this method
         WrappedTargetException aWrapped;
         aWrapped.TargetException = ::cppu::getCaughtException();
         aWrapped.Context = static_cast< XPropertySet* >( this );
