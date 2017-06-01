@@ -6518,7 +6518,9 @@ void ScDocument::ForgetNoteCaptions( const ScRangeList& rRanges, bool bPreserveD
 
 CommentCaptionState ScDocument::GetAllNoteCaptionsState( const ScRangeList& rRanges )
 {
-    CommentCaptionState aOldState, aState = CommentCaptionState::ALLHIDDEN; //because of Werror=maybe-uninitialized
+    CommentCaptionState aTmpState = CommentCaptionState::ALLHIDDEN;
+    CommentCaptionState aState = CommentCaptionState::ALLHIDDEN;
+    bool bFirstControl = true;
     std::vector<sc::NoteEntry> aNotes;
 
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)
@@ -6528,18 +6530,19 @@ CommentCaptionState ScDocument::GetAllNoteCaptionsState( const ScRangeList& rRan
         for( SCTAB nTab = pRange->aStart.Tab(); nTab <= pRange->aEnd.Tab(); ++nTab )
         {
             aState = maTabs[nTab]->GetAllNoteCaptionsState( *pRange, aNotes );
+
             if (aState == CommentCaptionState::MIXED)
                 return aState;
 
-            if (nTab - 1 >= 0)  // it is possible that a range is ALLSHOWN, another range is ALLHIDDEN,
-            {                   // we have to detect that situation as mixed.
-                aOldState = maTabs[nTab-1]->GetAllNoteCaptionsState( *pRange, aNotes );
-
-                if (aState != aOldState)
-                {
-                    aState = CommentCaptionState::MIXED;
-                    return aState;
-                }
+            if (bFirstControl)                      // it is possible that a range is ALLSHOWN, another range is ALLHIDDEN,
+            {                                       // we have to detect that situation as mixed.
+                aTmpState = aState;
+                bFirstControl = false;
+            }
+            else if(aTmpState != aState)
+            {
+                aState = CommentCaptionState::MIXED;
+                return aState;
             }
         }
     }
