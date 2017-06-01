@@ -238,7 +238,7 @@ BackupOldLogs(LPCWSTR basePath, int numLogsToKeep)
  * if it has been 5 seconds after all work is done and the process is still not
  * terminated.  This thread is only started once a stopped state was sent to the
  * SCM. The stop pending hang can be reproduced intermittently even if you set
- * a stopped state dirctly and never set a stop pending state.  It is safe to
+ * a stopped state directly and never set a stop pending state. It is safe to
  * forcefully terminate the process ourselves since all work is done once we
  * start this thread.
 */
