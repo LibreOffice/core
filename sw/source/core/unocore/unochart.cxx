@@ -42,7 +42,7 @@
 #include <docsh.hxx>
 #include <ndole.hxx>
 #include <swtypes.hxx>
-#include <unocore.hrc>
+#include <strings.hrc>
 #include <docary.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>

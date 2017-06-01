@@ -24,7 +24,7 @@
 #include <vcl/status.hxx>
 
 #include <swtypes.hxx>
-#include <utlui.hrc>
+#include <strings.hrc>
 
 #include "wrtsh.hxx"
 #include "view.hxx"

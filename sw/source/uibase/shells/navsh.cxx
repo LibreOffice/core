@@ -22,7 +22,7 @@
 #include "helpid.h"
 #include "globals.hrc"
 #include "navsh.hxx"
-#include "shells.hrc"
+#include "strings.hrc"
 #define SwNavigationShell
 #include "swslots.hxx"
 #include <unomid.h>

@@ -25,7 +25,7 @@
 #include <chartview/ExplicitValueProvider.hxx>
 #include "DrawViewWrapper.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "ObjectIdentifier.hxx"
 
 #include <cppuhelper/supportsservice.hxx>

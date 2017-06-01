@@ -73,10 +73,10 @@ public:
     /**
      * Check the sanity of the data source range.
      *
-     * @return 0 if the source range is sane, otherwise an error message ID is
+     * @return nullptr if the source range is sane, otherwise an error message ID is
      *         returned.
      */
-    sal_uLong CheckSourceRange() const;
+    const char* CheckSourceRange() const;
 
 private:
     mutable ScRange maSourceRange;
