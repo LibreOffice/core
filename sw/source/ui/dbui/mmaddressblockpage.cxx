@@ -535,6 +535,16 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
         if(eType == ADDRESSBLOCK_EDIT)
             SetText(SwResId(ST_TITLE_EDIT));
         m_pDragED->SetText("\n\n\n\n\n");
+        /* Set custom HIDs for swriter/01/mm_newaddblo.xhp */
+        m_pAddressElementsLB->SetHelpId( HID_MM_ADDBLOCK_ELEMENTS );
+        m_pInsertFieldIB->SetHelpId( HID_MM_ADDBLOCK_INSERT );
+        m_pRemoveFieldIB->SetHelpId( HID_MM_ADDBLOCK_REMOVE );
+        m_pDragED->SetHelpId( HID_MM_ADDBLOCK_DRAG );
+        m_pPreviewWIN->SetHelpId( HID_MM_ADDBLOCK_PREVIEW );
+        m_pRightIB->SetHelpId( HID_MM_ADDBLOCK_MOVEBUTTONS );
+        m_pLeftIB->SetHelpId( HID_MM_ADDBLOCK_MOVEBUTTONS );
+        m_pDownIB->SetHelpId( HID_MM_ADDBLOCK_MOVEBUTTONS );
+        m_pUpIB->SetHelpId( HID_MM_ADDBLOCK_MOVEBUTTONS );
     }
 
     const ResStringArray& rHeaders = m_rConfigItem.GetDefaultAddressHeaders();
