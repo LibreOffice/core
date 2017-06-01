@@ -485,6 +485,7 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( FID_HIDE_NOTE );
     rBindings.Invalidate( FID_SHOW_ALL_NOTES );
     rBindings.Invalidate( FID_HIDE_ALL_NOTES );
+    rBindings.Invalidate( SID_TOGGLE_NOTES );
     rBindings.Invalidate( SID_DELETE_NOTE );
     rBindings.Invalidate( SID_ROWCOL_SELCOUNT );
 
