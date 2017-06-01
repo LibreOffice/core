@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_e17737d2",
+        "filename": "vcl/unx/generic/printer/ppdparser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-01T18:22:55Z",
+      "side": 1,
+      "message": "vcl.unx.print ?",
+      "revId": "e520722644ee51d09236fe9764834a4fc7bafe86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_017523ca",
+        "filename": "vcl/unx/generic/printer/ppdparser.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-01T18:22:55Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "e520722644ee51d09236fe9764834a4fc7bafe86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
