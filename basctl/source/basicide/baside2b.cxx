@@ -22,7 +22,7 @@
 #include <cassert>
 
 #include "helpid.hrc"
-#include <basidesh.hrc>
+#include <strings.hrc>
 #include "bitmaps.hlst"
 
 #include "baside2.hxx"
@@ -39,6 +39,7 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/urihelper.hxx>
+#include <svx/svxids.hrc>
 #include <vcl/xtextedt.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/settings.hxx>

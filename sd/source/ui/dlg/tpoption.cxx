@@ -239,12 +239,12 @@ SdTpOptionsMisc::SdTpOptionsMisc(vcl::Window* pParent, const SfxItemSet& rInAttr
     m_pScaleFrame->Hide();
 
     // fill ListBox with metrics
-    SvxStringArray aMetricArr( RID_SVXSTR_FIELDUNIT_TABLE );
+    SvxFieldUnitTable aMetricArr;
 
     for ( sal_uInt32 i = 0; i < aMetricArr.Count(); ++i )
     {
-        OUString sMetric = aMetricArr.GetStringByPos( i );
-        sal_IntPtr nFieldUnit = aMetricArr.GetValue( i );
+        OUString sMetric = aMetricArr.GetString(i);
+        sal_IntPtr nFieldUnit = aMetricArr.GetValue(i);
         sal_Int32 nPos = m_pLbMetric->InsertEntry( sMetric );
         m_pLbMetric->SetEntryData( nPos, reinterpret_cast<void*>(nFieldUnit) );
     }

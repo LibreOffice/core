@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="dba">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkDialog" id="RTFCopyTable">
     <property name="can_focus">False</property>
