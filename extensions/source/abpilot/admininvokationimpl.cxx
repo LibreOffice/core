@@ -25,7 +25,7 @@
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <vcl/stdtext.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include "abpresid.hrc"
+#include "strings.hrc"
 #include "componentmodule.hxx"
 #include <vcl/waitobj.hxx>
 

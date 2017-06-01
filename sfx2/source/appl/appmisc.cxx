@@ -63,9 +63,9 @@
 #include <sfx2/dispatch.hxx>
 #include "workwin.hxx"
 #include <sfx2/fcontnr.hxx>
-#include "sfxlocal.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/sfx.hrc>
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/templdlg.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/msgpool.hxx>

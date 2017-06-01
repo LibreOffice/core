@@ -23,7 +23,8 @@
 #include <vcl/settings.hxx>
 #include "JoinController.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 #include <sfx2/sfxsids.hrc>
 #include <vcl/fixed.hxx>
 #include "UITools.hxx"

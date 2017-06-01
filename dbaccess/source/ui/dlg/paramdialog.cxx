@@ -17,15 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "core_resource.hxx"
 #include "paramdialog.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
+#include "strings.hxx"
 #include "commontypes.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <comphelper/processfactory.hxx>
 #include <connectivity/dbtools.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/layout.hxx>
 #include <osl/diagnose.h>
@@ -197,7 +200,7 @@ namespace dbaui
                         DBG_UNHANDLED_EXCEPTION();
                     }
 
-                    OUString sMessage(ModuleRes(STR_COULD_NOT_CONVERT_PARAM));
+                    OUString sMessage(DBA_RES(STR_COULD_NOT_CONVERT_PARAM));
                     sMessage = sMessage.replaceAll( "$name$", sName );
                     ScopedVclPtrInstance<MessageDialog>(nullptr, sMessage)->Execute();
                     m_pParam->GrabFocus();

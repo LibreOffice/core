@@ -22,7 +22,7 @@
 #include <tools/fract.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/FilterConfigItem.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>

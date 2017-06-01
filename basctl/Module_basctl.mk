@@ -23,14 +23,11 @@ ifneq ($(filter SCRIPTING,$(BUILD_TYPE)),)
 
 $(eval $(call gb_Module_add_targets,basctl,\
 	Library_basctl \
-))
-
-$(eval $(call gb_Module_add_l10n_targets,basctl,\
-	AllLangResTarget_basctl \
-))
-
-$(eval $(call gb_Module_add_l10n_targets,basctl,\
 	UIConfig_basicide \
+))
+
+$(eval $(call gb_Module_add_l10n_targets,basctl,\
+	AllLangMoTarget_basctl \
 ))
 
 endif

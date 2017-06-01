@@ -54,7 +54,7 @@
 #include <viewsh.hxx>
 #include <viscrs.hxx>
 #include <rootfrm.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <unoport.hxx>
 #include <wrtsh.hxx>
 
@@ -974,9 +974,18 @@ void SwRedlineData::SetExtraData( const SwRedlineExtraData* pData )
         pExtraData = nullptr;
 }
 
+const char* STR_REDLINE_ARY[] =
+{
+    STR_REDLINE_INSERT,
+    STR_REDLINE_DELETE,
+    STR_REDLINE_FORMAT,
+    STR_REDLINE_TABLE,
+    STR_REDLINE_FMTCOLL
+};
+
 OUString SwRedlineData::GetDescr() const
 {
-    return SwResId(STR_REDLINE_INSERT + GetType());
+    return SwResId(STR_REDLINE_ARY[GetType()]);
 }
 
 sal_uInt32 SwRangeRedline::m_nLastId = 1;
