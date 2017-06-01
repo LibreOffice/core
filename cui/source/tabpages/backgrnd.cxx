@@ -981,7 +981,7 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
 bool SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
 {
     bool bResult = ( !aBgdGraphicPath.isEmpty() ) &&
-                   ( GRFILTER_OK == GraphicFilter::LoadGraphic( aBgdGraphicPath,
+                   ( ERRCODE_NONE == GraphicFilter::LoadGraphic( aBgdGraphicPath,
                                                  aBgdGraphicFilter,
                                                  aBgdGraphic ) );
     return bResult;

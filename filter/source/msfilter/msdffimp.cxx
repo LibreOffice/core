@@ -6328,7 +6328,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
 {
     sal_uLong nOldPos = rBLIPStream.Tell();
 
-    int nRes = GRFILTER_OPENERROR;  // initialize error variable
+    ErrCode nRes = ERRCODE_GRFILTER_OPENERROR;  // initialize error variable
 
     // check whether it's really a BLIP
     sal_uInt32 nLength;
@@ -6452,7 +6452,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
             if( ReadDIB(aNew, *pGrStream, false) )
             {
                 rData = Graphic( aNew );
-                nRes = GRFILTER_OK;
+                nRes = ERRCODE_NONE;
             }
         }
         else
@@ -6466,7 +6466,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
             //
             // For pict graphics we will furthermore scale the metafile, because font scaling leads to error if the
             // dxarray is empty (this has been solved in wmf/emf but not for pict)
-            if( bMtfBLIP && ( GRFILTER_OK == nRes ) && ( rData.GetType() == GraphicType::GdiMetafile ) && ( ( nInst & 0xFFFE ) == 0x542 ) )
+            if( bMtfBLIP && ( ERRCODE_NONE == nRes ) && ( rData.GetType() == GraphicType::GdiMetafile ) && ( ( nInst & 0xFFFE ) == 0x542 ) )
             {
                 if ( ( aMtfSize100.Width() >= 1000 ) && ( aMtfSize100.Height() >= 1000 ) )
                 {   // #75956#, scaling does not work properly, if the graphic is less than 1cm
@@ -6491,7 +6491,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
     }
     rBLIPStream.Seek( nOldPos );    // restore old FilePos of the strem
 
-    return ( GRFILTER_OK == nRes ); // return result
+    return ( ERRCODE_NONE == nRes ); // return result
 }
 
 /* also static */

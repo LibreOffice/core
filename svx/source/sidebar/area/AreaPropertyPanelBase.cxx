@@ -200,13 +200,13 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ClickImportBitmapHdl, Button*, void)
 {
     SvxOpenGraphicDialog aDlg( "Import" );
     aDlg.EnableLink(false);
-    if( aDlg.Execute() == GRFILTER_OK )
+    if( aDlg.Execute() == ERRCODE_NONE )
     {
         Graphic aGraphic;
         EnterWait();
         int nError = aDlg.GetGraphic( aGraphic );
         LeaveWait();
-        if( nError == GRFILTER_OK )
+        if( nError == ERRCODE_NONE )
         {
             const SvxBitmapListItem aItem( *static_cast<const SvxBitmapListItem*>(SfxObjectShell::Current()->GetItem(SID_BITMAP_LIST)));
             XBitmapListRef pList = aItem.GetBitmapList();

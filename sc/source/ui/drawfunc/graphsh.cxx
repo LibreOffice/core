@@ -305,11 +305,11 @@ void ScGraphicShell::ExecuteChangePicture( SAL_UNUSED_PARAMETER SfxRequest& /*rR
             SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
             SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC));
 
-            if( aDlg.Execute() == GRFILTER_OK )
+            if( aDlg.Execute() == ERRCODE_NONE )
             {
                 Graphic aGraphic;
                 int nError = aDlg.GetGraphic(aGraphic);
-                if( nError == GRFILTER_OK )
+                if( nError == ERRCODE_NONE )
                 {
                     SdrGrafObj* pNewObject = pGraphicObj->Clone();
                     pNewObject->SetGraphic( aGraphic );

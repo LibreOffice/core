@@ -219,7 +219,7 @@ namespace svgio
                             SvMemoryStream aStream(aPass.getArray(), aPass.getLength(), StreamMode::READ);
                             Graphic aGraphic;
 
-                            if(GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(
+                            if(ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(
                                 aGraphic,
                                 OUString(),
                                 aStream))
@@ -246,7 +246,7 @@ namespace svgio
                             SvFileStream aStream(aAbsUrl, StreamMode::STD_READ);
                             Graphic aGraphic;
 
-                            if(GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(
+                            if(ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(
                                    aGraphic,
                                    aAbsUrl,
                                    aStream))

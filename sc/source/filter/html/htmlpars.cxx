@@ -1377,7 +1377,7 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
     sal_uInt16 nFormat;
     Graphic* pGraphic = new Graphic;
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-    if ( GRFILTER_OK != GraphicFilter::LoadGraphic( pImage->aURL, pImage->aFilterName,
+    if ( ERRCODE_NONE != GraphicFilter::LoadGraphic( pImage->aURL, pImage->aFilterName,
             *pGraphic, &rFilter, &nFormat ) )
     {
         delete pGraphic;

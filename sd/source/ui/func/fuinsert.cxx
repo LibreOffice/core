@@ -121,7 +121,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
     Graphic aGraphic;
 
     bool bAsLink = false;
-    int nError = GRFILTER_OPENERROR;
+    ErrCode nError = ERRCODE_GRFILTER_OPENERROR;
 
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
@@ -143,7 +143,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
     {
         SvxOpenGraphicDialog    aDlg(SdResId(STR_INSERTGRAPHIC));
 
-        if( aDlg.Execute() != GRFILTER_OK )
+        if( aDlg.Execute() != ERRCODE_NONE )
             return; // cancel dialog
 
         nError = aDlg.GetGraphic(aGraphic);
@@ -152,7 +152,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
         aFilterName = aDlg.GetCurrentFilter();
     }
 
-    if( nError == GRFILTER_OK )
+    if( nError == ERRCODE_NONE )
     {
         if( mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr)
         {
@@ -213,7 +213,7 @@ void FuInsertGraphic::DoExecute( SfxRequest& rReq )
     }
     else
     {
-        SdGRFFilter::HandleGraphicFilterError( (sal_uInt16)nError, GraphicFilter::GetGraphicFilter().GetLastError().nStreamError );
+        SdGRFFilter::HandleGraphicFilterError( nError, GraphicFilter::GetGraphicFilter().GetLastError().nStreamError );
     }
 }
 

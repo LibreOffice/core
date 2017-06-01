@@ -55,19 +55,19 @@ using namespace ::com::sun::star::uno;
 using namespace ::cppu;
 
 
-sal_uInt16  SvxOpenGrfErr2ResId(    short   err     )
+sal_uInt16  SvxOpenGrfErr2ResId( ErrCode err )
 {
     switch( err )
     {
-        case GRFILTER_OPENERROR:
+        case ERRCODE_GRFILTER_OPENERROR:
             return RID_SVXSTR_GRFILTER_OPENERROR;
-        case GRFILTER_IOERROR:
+        case ERRCODE_GRFILTER_IOERROR:
             return RID_SVXSTR_GRFILTER_IOERROR;
-        case GRFILTER_VERSIONERROR:
+        case ERRCODE_GRFILTER_VERSIONERROR:
             return RID_SVXSTR_GRFILTER_VERSIONERROR;
-        case GRFILTER_FILTERERROR:
+        case ERRCODE_GRFILTER_FILTERERROR:
             return RID_SVXSTR_GRFILTER_FILTERERROR;
-        case GRFILTER_FORMATERROR:
+        case ERRCODE_GRFILTER_FORMATERROR:
         default:
             return RID_SVXSTR_GRFILTER_FORMATERROR;
     }
@@ -135,7 +135,7 @@ short SvxOpenGraphicDialog::Execute()
                 else
                     nImpRet = rFilter.CanImportGraphic( aObj, nFormatNum, &nRetFormat );
 
-                if ( GRFILTER_OK != nImpRet )
+                if ( ERRCODE_NONE != nImpRet )
                 {
                     if ( !pStream )
                         nImpRet = rFilter.CanImportGraphic( aObj, GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
@@ -146,11 +146,11 @@ short SvxOpenGraphicDialog::Execute()
             }
             else
             {
-                if( (nImpRet=rFilter.CanImportGraphic( aObj, nFormatNum, &nRetFormat )) != GRFILTER_OK )
+                if( (nImpRet=rFilter.CanImportGraphic( aObj, nFormatNum, &nRetFormat )) != ERRCODE_NONE )
                     nImpRet = rFilter.CanImportGraphic( aObj, GRFILTER_FORMAT_DONTKNOW, &nRetFormat );
             }
 
-            if ( GRFILTER_OK == nImpRet )
+            if ( ERRCODE_NONE == nImpRet )
                 nFound = nRetFormat;
 
             // could not load?
