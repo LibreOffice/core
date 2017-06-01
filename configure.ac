@@ -5873,9 +5873,9 @@ if test "$GCC" = "yes"; then
     dnl manual/abi.html#abi.versioning.history>; 4.3.0 is 20080306, 4.2.4 is
     dnl 20080519, 4.3.1 is 20080606) for Clang (for which GCC_VERSION is notoriously
     dnl "too old"):
-    if test "$_os" = Darwin; then
+    if test "$_os" = Darwin -o "$_os" = Android; then
         HAVE_THREADSAFE_STATICS=TRUE
-    elif test "$_os" != Android; then
+    else
         if test "$COM_IS_CLANG" = TRUE; then
             AC_LANG_PUSH([C++])
             AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
