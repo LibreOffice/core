@@ -1144,7 +1144,7 @@ void SwDocUpdateField::RemoveFieldType( const SwFieldType& rType )
                 SwHash* pPrev = aFieldTypeTable[ n ];
                 while( pPrev->pNext.get() != pFnd )
                     pPrev = pPrev->pNext.get();
-                pPrev->pNext.reset( pFnd->pNext.release() );
+                pPrev->pNext = std::move(pFnd->pNext);
             }
             delete pFnd;
         }
