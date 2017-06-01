@@ -27,7 +27,6 @@ $(eval $(call gb_Module_add_targets,svx,\
 
 $(eval $(call gb_Module_add_l10n_targets,svx,\
     AllLangResTarget_svx \
-    AllLangResTarget_ofa \
     AllLangResTarget_gal \
     UIConfig_svx \
 ))

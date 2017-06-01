@@ -152,7 +152,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
     OUString aMessage;
     {
         enum Source { SOURCE_DEFAULT, SOURCE_SVX, SOURCE_UUI };
-        static char const * const aManager[3] = { "ofa", "svx", "uui" };
+        static char const * const aManager[3] = { "svt", "svx", "uui" };
         static sal_uInt16 const aId[3]
             = { RID_ERRHDL,
                 RID_SVXERRCODE,

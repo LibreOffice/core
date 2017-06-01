@@ -49,8 +49,6 @@ STD_RES_FILE( gid_File_Res_Gal, gal )
 STD_RES_FILE( gid_File_Res_Deployment, deployment )
 STD_RES_FILE( gid_File_Res_DeploymentGui, deploymentgui )
 
-STD_RES_FILE( gid_File_Res_Ofa, ofa )
-
 STD_RES_FILE( gid_File_Res_Pcr, pcr)
 
 STD_RES_FILE( gid_File_Res_Pdffilter, pdffilter)

@@ -1082,7 +1082,6 @@ $(eval $(call gb_Helper_register_resources,\
 	frm \
 	fwe \
 	gal \
-	ofa \
 	$(call gb_Helper_optional,DBCONNECTIVITY,pcr) \
 	pdffilter \
 	pricing \
