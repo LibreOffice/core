@@ -23,7 +23,7 @@
 #include <basic/sbxdef.hxx>
 
 #ifndef __RSC
-typedef sal_uIntPtr SbError;
+typedef ErrCode SbError;
 #endif
 
 // Mapping to SbxError
