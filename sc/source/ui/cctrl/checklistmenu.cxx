@@ -1639,21 +1639,39 @@ void ScCheckListBox::Init()
     SetNodeDefaultImages();
 }
 
+void ScCheckListBox::GetRecursiveChecked(SvTreeListEntry* pEntry, std::unordered_set<OUString, OUStringHash>& vOut, SvTreeListEntry* pParent)
+{
+    if (GetCheckButtonState(pEntry) == SvButtonState::Checked)
+    {
+        // we have to hash both parent and child together
+        OUString aName = GetEntryText(pEntry);
+        if (pParent) aName += GetEntryText(pParent);
+        vOut.insert(aName);
+    }
+
+    if (pEntry->HasChildren())
+    {
+        const SvTreeListEntries& rChildren = pEntry->GetChildEntries();
+        for (auto& rChild : rChildren)
+        {
+            GetRecursiveChecked(rChild.get(), vOut, pEntry);
+        }
+    }
+
+}
+
 std::unordered_set<OUString, OUStringHash> ScCheckListBox::GetAllChecked()
 {
-    std::unordered_set<OUString, OUStringHash> results(0);
+    std::unordered_set<OUString, OUStringHash> vResults(0);
     sal_uInt32 nRootPos = 0;
     SvTreeListEntry* pEntry = GetEntry(nRootPos);
     while (pEntry)
     {
-        if (GetCheckButtonState(pEntry) == SvButtonState::Checked)
-        {
-            results.insert(GetEntryText(pEntry));
-        }
+        GetRecursiveChecked(pEntry, vResults, nullptr);
         pEntry = GetEntry(++nRootPos);
     }
 
-    return results;
+    return vResults;
 }
 
 bool ScCheckListBox::IsChecked( const OUString& sName, SvTreeListEntry* pParent )
@@ -1924,7 +1942,7 @@ bool ScCheckListMenuWindow::isAllSelected() const
 void ScCheckListMenuWindow::getResult(ResultType& rResult)
 {
     ResultType aResult;
-    std::unordered_set<OUString, OUStringHash> checkeds = maChecks->GetAllChecked();
+    std::unordered_set<OUString, OUStringHash> vCheckeds = maChecks->GetAllChecked();
     size_t n = maMembers.size();
     for (size_t i = 0; i < n; ++i)
     {
@@ -1933,7 +1951,10 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
             OUString aLabel = maMembers[i].maName;
             if (aLabel.isEmpty())
                 aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
-            bool bState = checkeds.find(aLabel) != checkeds.end();
+
+            bool bState = vCheckeds.find(maMembers[i].mpParent ?
+                    aLabel.copy(0).concat(maChecks->GetEntryText(maMembers[i].mpParent)) :
+                    aLabel) != vCheckeds.end();
             ResultEntry aResultEntry;
             aResultEntry.bValid = bState;
             if ( maMembers[i].mbDate )
