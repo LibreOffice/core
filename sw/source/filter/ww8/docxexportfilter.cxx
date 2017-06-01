@@ -29,6 +29,7 @@
 #include <IDocumentLayoutAccess.hxx>
 
 #include <cppuhelper/implementationentry.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
@@ -75,10 +76,14 @@ bool DocxExportFilter::exportDocument()
 
     SwPaM *pCurPam = new SwPaM( *aPam.End(), *aPam.Start() );
 
+    OUString aFilterName;
+    getMediaDescriptor()[utl::MediaDescriptor::PROP_FILTERNAME()] >>= aFilterName;
+    bool bDocm = aFilterName.endsWith("VBA");
+
     // export the document
     // (in a separate block so that it's destructed before the commit)
     {
-        DocxExport aExport( this, pDoc, pCurPam, &aPam );
+        DocxExport aExport( this, pDoc, pCurPam, &aPam, bDocm );
         aExport.ExportDocument( true ); // FIXME support exporting selection only
     }
 

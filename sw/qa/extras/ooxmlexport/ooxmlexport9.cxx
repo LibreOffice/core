@@ -37,10 +37,43 @@ protected:
     }
 };
 
+class DocmTest : public SwModelTestBase
+{
+public:
+    DocmTest()
+        : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "MS Word 2007 XML VBA")
+    {
+    }
+};
+
 DECLARE_OOXMLEXPORT_TEST(testTdf92045, "tdf92045.docx")
 {
     // This was true, <w:effect w:val="none"/> resulted in setting the blinking font effect.
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getRun(getParagraph(1), 1), "CharFlash"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testDocm, "hello.docm")
+{
+    // Make sure that we check the name of the export filter.
+    // This was application/vnd.ms-word.document.macroEnabled.main+xml when the
+    // name of the import filter was checked.
+    if (xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml"))
+        assertXPath(pXmlDoc,
+                    "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
+                    "ContentType",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml");
+}
+
+DECLARE_SW_ROUNDTRIP_TEST(testDocmSave, "hello.docm", nullptr, DocmTest)
+{
+    // This was
+    // application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml,
+    // we used the wrong content type for .docm files.
+    if (xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml"))
+        assertXPath(pXmlDoc,
+                    "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
+                    "ContentType",
+                    "application/vnd.ms-word.document.macroEnabled.main+xml");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf95031, "tdf95031.docx")
