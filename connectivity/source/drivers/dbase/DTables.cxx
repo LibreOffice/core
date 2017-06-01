@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include "dbase/DCatalog.hxx"
 #include <comphelper/types.hxx>
-#include "resource/dbase_res.hrc"
+#include "strings.hrc"
 #include <connectivity/dbexception.hxx>
 
 using namespace ::comphelper;

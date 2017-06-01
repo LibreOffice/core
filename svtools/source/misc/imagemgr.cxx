@@ -36,12 +36,13 @@
 #include <ucbhelper/content.hxx>
 #include <tools/rcid.h>
 #include <unotools/configmgr.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/lazydelete.hxx>
 #include "imagemgr.hrc"
 #include "bitmaps.hlst"
+#include "strings.hxx"
 
 // globals *******************************************************************
 
@@ -52,7 +53,7 @@ struct SvtExtensionResIdMapping_Impl
 {
     const char*   _pExt;
     bool    _bExt;
-    sal_uInt16  _nStrId;
+    const char* pStrId;
     sal_uInt16  _nImgId;
 };
 
@@ -413,50 +414,49 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, bool bDetectFol
     return nImage;
 }
 
-static sal_uInt16 GetDescriptionId_Impl( const OUString& rExtension, bool& rbShowExt )
+static const char* GetDescriptionId_Impl( const OUString& rExtension, bool& rbShowExt )
 {
-    sal_uInt16 nId = 0;
+    const char* pId = 0;
     sal_Int32  nIndex = GetIndexOfExtension_Impl( rExtension );
     if ( nIndex != NO_INDEX )
     {
-        nId = ExtensionMap_Impl[ nIndex ]._nStrId;
+        pId = ExtensionMap_Impl[ nIndex ].pStrId;
         rbShowExt = ExtensionMap_Impl[ nIndex ]._bExt;
     }
 
-    return nId;
+    return pId;
 }
 
 static OUString GetDescriptionByFactory_Impl( const OUString& rFactory )
 {
-    sal_uInt16 nResId = 0;
+    const char* pResId = nullptr;
     if ( rFactory.startsWithIgnoreAsciiCase( "swriter" ) )
-        nResId = STR_DESCRIPTION_FACTORY_WRITER;
+        pResId = STR_DESCRIPTION_FACTORY_WRITER;
     else if ( rFactory.startsWithIgnoreAsciiCase( "scalc" ) )
-        nResId = STR_DESCRIPTION_FACTORY_CALC;
+        pResId = STR_DESCRIPTION_FACTORY_CALC;
     else if ( rFactory.startsWithIgnoreAsciiCase( "simpress" ) )
-        nResId = STR_DESCRIPTION_FACTORY_IMPRESS;
+        pResId = STR_DESCRIPTION_FACTORY_IMPRESS;
     else if ( rFactory.startsWithIgnoreAsciiCase( "sdraw" ) )
-        nResId = STR_DESCRIPTION_FACTORY_DRAW;
+        pResId = STR_DESCRIPTION_FACTORY_DRAW;
     else if ( rFactory.startsWithIgnoreAsciiCase( "swriter/web" ) )
-        nResId = STR_DESCRIPTION_FACTORY_WRITERWEB;
+        pResId = STR_DESCRIPTION_FACTORY_WRITERWEB;
     else if ( rFactory.startsWithIgnoreAsciiCase( "swriter/globaldocument" ) )
-        nResId = STR_DESCRIPTION_FACTORY_GLOBALDOC;
+        pResId = STR_DESCRIPTION_FACTORY_GLOBALDOC;
     else if ( rFactory.startsWithIgnoreAsciiCase( "smath" ) )
-        nResId = STR_DESCRIPTION_FACTORY_MATH;
+        pResId = STR_DESCRIPTION_FACTORY_MATH;
     else if ( rFactory.startsWithIgnoreAsciiCase( "sdatabase" ) )
-        nResId = STR_DESCRIPTION_FACTORY_DATABASE;
+        pResId = STR_DESCRIPTION_FACTORY_DATABASE;
 
-    if ( nResId )
+    if (pResId)
     {
-        SolarMutexGuard aGuard;
-        return SvtResId(nResId);
+        return SvtResId(pResId);
     }
     return OUString();
 }
 
-static sal_uInt16 GetFolderDescriptionId_Impl( const OUString& rURL )
+static const char* GetFolderDescriptionId_Impl( const OUString& rURL )
 {
-    sal_uInt16 nRet = STR_DESCRIPTION_FOLDER;
+    const char* pRet = STR_DESCRIPTION_FOLDER;
     svtools::VolumeInfo aVolumeInfo;
     try
     {
@@ -464,13 +464,13 @@ static sal_uInt16 GetFolderDescriptionId_Impl( const OUString& rURL )
         if ( GetVolumeProperties_Impl( aCnt, aVolumeInfo ) )
         {
             if ( aVolumeInfo.m_bIsRemote )
-                nRet = STR_DESCRIPTION_REMOTE_VOLUME;
+                pRet = STR_DESCRIPTION_REMOTE_VOLUME;
             else if ( aVolumeInfo.m_bIsFloppy )
-                nRet = STR_DESCRIPTION_FLOPPY_VOLUME;
+                pRet = STR_DESCRIPTION_FLOPPY_VOLUME;
             else if ( aVolumeInfo.m_bIsCompactDisc )
-                nRet = STR_DESCRIPTION_CDROM_VOLUME;
+                pRet = STR_DESCRIPTION_CDROM_VOLUME;
             else if ( aVolumeInfo.m_bIsRemoveable || aVolumeInfo.m_bIsVolume )
-                nRet = STR_DESCRIPTION_LOCALE_VOLUME;
+                pRet = STR_DESCRIPTION_LOCALE_VOLUME;
         }
     }
     catch( const css::uno::RuntimeException& )
@@ -481,7 +481,7 @@ static sal_uInt16 GetFolderDescriptionId_Impl( const OUString& rURL )
     {
 
     }
-    return nRet;
+    return pRet;
 }
 
 static Image GetImageFromList_Impl( sal_uInt16 nImageId, bool bBig )
@@ -703,7 +703,7 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
 {
     OUString sExtension(rObject.getExtension());
     OUString sDescription, sURL( rObject.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
-    sal_uInt16 nResId = 0;
+    const char* pResId = nullptr;
     bool bShowExt = false, bOnlyFile = false;
     bool bFolder = bDetectFolder && CONTENT_HELPER::IsFolder( sURL );
     if ( !bFolder )
@@ -728,19 +728,19 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
             if ( bExt )
             {
                 sExtension = sExtension.toAsciiLowerCase();
-                nResId = GetDescriptionId_Impl( sExtension, bShowExt );
+                pResId = GetDescriptionId_Impl( sExtension, bShowExt );
             }
-            if ( !nResId )
+            if (!pResId)
             {
-                nResId = STR_DESCRIPTION_FILE;
+                pResId = STR_DESCRIPTION_FILE;
                 bOnlyFile = bExt;
             }
         }
     }
     else
-        nResId = GetFolderDescriptionId_Impl( sURL );
+        pResId = GetFolderDescriptionId_Impl( sURL );
 
-    if ( nResId > 0 )
+    if (pResId)
     {
         if ( bOnlyFile )
         {
@@ -749,8 +749,7 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
             sDescription = sExtension;
             sDescription += "-";
         }
-        SolarMutexGuard aGuard;
-        sDescription += SvtResId(nResId);
+        sDescription += SvtResId(pResId);
     }
 
     DBG_ASSERT( !sDescription.isEmpty(), "file without description" );
@@ -819,17 +818,17 @@ OUString SvFileInformationManager::GetFileDescription( const INetURLObject& rObj
 
 OUString SvFileInformationManager::GetFolderDescription( const svtools::VolumeInfo& rInfo )
 {
-    sal_uInt16 nResId = STR_DESCRIPTION_FOLDER;
+    const char* pResId = STR_DESCRIPTION_FOLDER;
     if ( rInfo.m_bIsRemote )
-        nResId = STR_DESCRIPTION_REMOTE_VOLUME;
+        pResId = STR_DESCRIPTION_REMOTE_VOLUME;
     else if ( rInfo.m_bIsFloppy )
-        nResId = STR_DESCRIPTION_FLOPPY_VOLUME;
+        pResId = STR_DESCRIPTION_FLOPPY_VOLUME;
     else if ( rInfo.m_bIsCompactDisc )
-        nResId = STR_DESCRIPTION_CDROM_VOLUME;
+        pResId = STR_DESCRIPTION_CDROM_VOLUME;
     else if ( rInfo.m_bIsRemoveable || rInfo.m_bIsVolume )
-        nResId = STR_DESCRIPTION_LOCALE_VOLUME;
+        pResId = STR_DESCRIPTION_LOCALE_VOLUME;
 
-    return SvtResId(nResId);
+    return SvtResId(pResId);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

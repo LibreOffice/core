@@ -33,7 +33,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/svdstr.hrc>
+#include <svx/strings.hrc>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>

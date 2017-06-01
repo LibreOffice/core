@@ -22,7 +22,7 @@
 #include "pcrservices.hxx"
 #include "propctrlr.hrc"
 #include "formbrowsertools.hxx"
-#include "formresid.hrc"
+#include "strings.hrc"
 #include "formstrings.hxx"
 #include "handlerhelper.hxx"
 #include "modulepcr.hxx"
@@ -137,8 +137,8 @@ namespace pcr
     namespace FormComponentType = css::form::FormComponentType;
 
     EventDescription::EventDescription( EventId _nId, const sal_Char* _pListenerNamespaceAscii, const sal_Char* _pListenerClassAsciiName,
-            const sal_Char* _pListenerMethodAsciiName, sal_uInt16 _nDisplayNameResId, const OString& _sHelpId, const OString& _sUniqueBrowseId )
-        :sDisplayName(PcrRes( _nDisplayNameResId ))
+            const sal_Char* _pListenerMethodAsciiName, const char* pDisplayNameResId, const OString& _sHelpId, const OString& _sUniqueBrowseId )
+        :sDisplayName(PcrRes( pDisplayNameResId ))
         ,sListenerMethodName( OUString::createFromAscii( _pListenerMethodAsciiName ) )
         ,sHelpId( _sHelpId )
         ,sUniqueBrowseId( _sUniqueBrowseId )

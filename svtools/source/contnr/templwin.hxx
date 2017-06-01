@@ -19,14 +19,12 @@
 #ifndef INCLUDED_SVTOOLS_SOURCE_CONTNR_TEMPLWIN_HXX
 #define INCLUDED_SVTOOLS_SOURCE_CONTNR_TEMPLWIN_HXX
 
-#include <tools/resary.hxx>
-
-class SvtDocInfoTable_Impl : public ResStringArray
+class SvtDocInfoTable_Impl
 {
 public:
     SvtDocInfoTable_Impl();
 
-    OUString GetString( long nId ) const;
+    OUString GetString(int nId) const;
 };
 
 #endif // INCLUDED_SVTOOLS_SOURCE_CONTNR_TEMPLWIN_HXX

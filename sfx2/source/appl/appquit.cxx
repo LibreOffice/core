@@ -103,7 +103,7 @@ void SfxApplication::Deinitialize()
     // free administration managers
     DELETEZ(pImpl->pAppDispat);
     SfxResMgr::DeleteResMgr();
-    SvtResMgr::DeleteResMgr();
+    SvtResLocale::DeleteResLocale();
 
     // from here no SvObjects have to exists
     DELETEZ(pImpl->pMatcher);
@@ -121,11 +121,6 @@ void SfxApplication::Deinitialize()
     //ReleaseArgs could be used instead!
     pImpl->pPool = nullptr;
     NoChaos::ReleaseItemPool();
-
-#if HAVE_FEATURE_SCRIPTING
-    DELETEZ(pImpl->pBasicResMgr);
-#endif
-    DELETEZ(pImpl->pSvtResMgr);
 
 #if HAVE_FEATURE_SCRIPTING
     delete pImpl->m_pSbxErrorHdl;

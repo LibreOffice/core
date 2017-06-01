@@ -27,7 +27,7 @@
 #include <svl/undo.hxx>
 #include <svl/lstner.hxx>
 
-#include <svids.hrc>
+#include <strings.hrc>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 

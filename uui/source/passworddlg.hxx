@@ -42,8 +42,8 @@ class PasswordDialog : public ModalDialog
     DECL_LINK(OKHdl_Impl, Button*, void);
 
 public:
-    PasswordDialog( vcl::Window* pParent, css::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr, const OUString& aDocURL,
-            bool bOpenToModify, bool bIsSimplePasswordRequest );
+    PasswordDialog(vcl::Window* pParent, css::task::PasswordRequestMode nDlgMode, const std::locale& rLocale, const OUString& aDocURL,
+                   bool bOpenToModify, bool bIsSimplePasswordRequest);
     virtual ~PasswordDialog() override;
     virtual void dispose() override;
 
@@ -52,7 +52,7 @@ public:
 
 private:
     css::task::PasswordRequestMode     nDialogMode;
-    ResMgr*                            pResourceMgr;
+    const std::locale&                 rResLocale;
 };
 
 #endif // INCLUDED_UUI_SOURCE_PASSWORDDLG_HXX

@@ -29,7 +29,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpoev.hxx>
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdglob.hxx"
 #include <svx/e3dsceneupdater.hxx>
 #include <rtl/strbuf.hxx>
