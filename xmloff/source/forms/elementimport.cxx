@@ -47,6 +47,7 @@
 #include <rtl/strbuf.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -81,14 +82,6 @@ namespace xmloff
             return _rLeft.Name < _rRight.Name;
         }
     };
-
-    template <class ELEMENT>
-    void pushBackSequenceElement(Sequence< ELEMENT >& _rContainer, const ELEMENT& _rElement)
-    {
-        sal_Int32 nLen = _rContainer.getLength();
-        _rContainer.realloc(nLen + 1);
-        _rContainer[nLen] = _rElement;
-    }
 
     //= OElementNameMap
     OElementNameMap::MapString2Element  OElementNameMap::s_sElementTranslations;
@@ -1583,12 +1576,12 @@ namespace xmloff
         // the string item list
         PropertyValue aItemList;
         aItemList.Name = PROPERTY_STRING_ITEM_LIST;
-        aItemList.Value <<= m_aListSource;
+        aItemList.Value <<= comphelper::containerToSequence(m_aListSource);
         implPushBackPropertyValue(aItemList);
 
         if (OControlElement::LISTBOX == m_eElementType)
         {
-            OSL_ENSURE((m_aListSource.getLength() + m_nEmptyListItems) == (m_aValueList.getLength() + m_nEmptyValueItems),
+            OSL_ENSURE((m_aListSource.size() + m_nEmptyListItems) == (m_aValueList.size() + m_nEmptyValueItems),
                 "OListAndComboImport::EndElement: inconsistence between labels and values!");
 
             if ( !m_bEncounteredLSAttrib )
@@ -1596,20 +1589,20 @@ namespace xmloff
                 // the value sequence
                 PropertyValue aValueList;
                 aValueList.Name = PROPERTY_LISTSOURCE;
-                aValueList.Value <<= m_aValueList;
+                aValueList.Value <<= comphelper::containerToSequence(m_aValueList);
                 implPushBackPropertyValue(aValueList);
             }
 
             // the select sequence
             PropertyValue aSelected;
             aSelected.Name = PROPERTY_SELECT_SEQ;
-            aSelected.Value <<= m_aSelectedSeq;
+            aSelected.Value <<= comphelper::containerToSequence(m_aSelectedSeq);
             implPushBackPropertyValue(aSelected);
 
             // the default select sequence
             PropertyValue aDefaultSelected;
             aDefaultSelected.Name = PROPERTY_DEFAULT_SELECT_SEQ;
-            aDefaultSelected.Value <<= m_aDefaultSelectedSeq;
+            aDefaultSelected.Value <<= comphelper::containerToSequence(m_aDefaultSelectedSeq);
             implPushBackPropertyValue(aDefaultSelected);
         }
 
@@ -1688,7 +1681,7 @@ namespace xmloff
     {
         OSL_ENSURE(!m_nEmptyListItems, "OListAndComboImport::implPushBackValue: label list is already done!");
         if (!m_nEmptyListItems)
-            pushBackSequenceElement(m_aListSource, _rLabel);
+            m_aListSource.push_back(_rLabel);
     }
 
     void OListAndComboImport::implPushBackValue(const OUString& _rValue)
@@ -1702,7 +1695,7 @@ namespace xmloff
                 // the first element of the sequence
                 // All other values in the file are invalid
 
-            pushBackSequenceElement( m_aValueList, _rValue );
+            m_aValueList.push_back( _rValue );
         }
     }
 
@@ -1718,20 +1711,20 @@ namespace xmloff
 
     void OListAndComboImport::implSelectCurrentItem()
     {
-        OSL_ENSURE((m_aListSource.getLength() + m_nEmptyListItems) == (m_aValueList.getLength() + m_nEmptyValueItems),
+        OSL_ENSURE((m_aListSource.size() + m_nEmptyListItems) == (m_aValueList.size() + m_nEmptyValueItems),
             "OListAndComboImport::implSelectCurrentItem: inconsistence between labels and values!");
 
-        sal_Int16 nItemNumber = (sal_Int16)(m_aListSource.getLength() - 1 + m_nEmptyListItems);
-        pushBackSequenceElement(m_aSelectedSeq, nItemNumber);
+        sal_Int16 nItemNumber = (sal_Int16)(m_aListSource.size() - 1 + m_nEmptyListItems);
+        m_aSelectedSeq.push_back(nItemNumber);
     }
 
     void OListAndComboImport::implDefaultSelectCurrentItem()
     {
-        OSL_ENSURE((m_aListSource.getLength() + m_nEmptyListItems) == (m_aValueList.getLength() + m_nEmptyValueItems),
+        OSL_ENSURE((m_aListSource.size() + m_nEmptyListItems) == (m_aValueList.size() + m_nEmptyValueItems),
             "OListAndComboImport::implDefaultSelectCurrentItem: inconsistence between labels and values!");
 
-        sal_Int16 nItemNumber = (sal_Int16)(m_aListSource.getLength() - 1 + m_nEmptyListItems);
-        pushBackSequenceElement(m_aDefaultSelectedSeq, nItemNumber);
+        sal_Int16 nItemNumber = (sal_Int16)(m_aListSource.size() - 1 + m_nEmptyListItems);
+        m_aDefaultSelectedSeq.push_back(nItemNumber);
     }
 
     //= OListOptionImport
