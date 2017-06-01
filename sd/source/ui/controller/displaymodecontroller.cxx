@@ -71,7 +71,7 @@ struct snewfoil_value_info
 {
     sal_uInt16 mnId;
     const char* msBmpResId;
-    sal_uInt16 mnStrResId;
+    const char* mpStrResId;
     const char* msUnoCommand;
 };
 
@@ -119,7 +119,7 @@ static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info* pIn
     Size aLayoutItemSize;
     for( ; pInfo->mnId; pInfo++ )
     {
-        OUString aText( SdResId( pInfo->mnStrResId ) );
+        OUString aText(SdResId(pInfo->mpStrResId));
         BitmapEx aBmp(OUString::createFromAscii(pInfo->msBmpResId));
 
         pValue->InsertItem(pInfo->mnId, Image(aBmp), aText);

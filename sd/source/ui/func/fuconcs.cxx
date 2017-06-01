@@ -63,7 +63,7 @@
 #include "stlpool.hxx"
 #include "drawdoc.hxx"
 #include "res_bmp.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 
 namespace sd {
 

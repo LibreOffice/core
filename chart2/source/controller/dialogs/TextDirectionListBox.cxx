@@ -19,7 +19,7 @@
 
 #include "TextDirectionListBox.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include <svl/languageoptions.hxx>
 #include <vcl/window.hxx>
 #include <vcl/builderfactory.hxx>

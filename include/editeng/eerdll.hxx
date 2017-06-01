@@ -30,13 +30,7 @@ namespace editeng
     class SharedVclResources;
 }
 
-class EDITENG_DLLPUBLIC EditResId: public ResId
-{
-public:
-    EditResId( sal_uInt16 nId );
-    static OUString GetString(sal_uInt16 nId)
-        { return EditResId(nId); }
-};
+OUString EDITENG_DLLPUBLIC EditResId(const char *pId);
 
 class EditDLL
 {
@@ -47,7 +41,7 @@ public:
     EditDLL();
     ~EditDLL();
 
-    static ResMgr* GetResMgr();
+    static std::locale& GetResLocale();
     GlobalEditData* GetGlobalData() const   { return pGlobalData.get(); }
     std::shared_ptr<editeng::SharedVclResources> GetSharedVclResources();
     static EditDLL& Get();

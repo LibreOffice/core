@@ -41,10 +41,10 @@
 #include "stlsheet.hxx"
 
 #include <svx/svdoutl.hxx>
-#include <svx/svdstr.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hrc"
 #include "View.hxx"
 #include "sdattr.hxx"

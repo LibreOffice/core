@@ -49,7 +49,7 @@
 
 #include <sfx2/docinf.hxx>
 
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hxx"
 #include "pptin.hxx"
 #include "Outliner.hxx"

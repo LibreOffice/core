@@ -23,7 +23,7 @@
 #include "helpers.hxx"
 #include <services.h>
 #include <services/layoutmanager.hxx>
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include <classes/fwkresid.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>

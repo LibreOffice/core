@@ -123,11 +123,6 @@ void SfxApplication::Deinitialize()
     NoChaos::ReleaseItemPool();
 
 #if HAVE_FEATURE_SCRIPTING
-    DELETEZ(pImpl->pBasicResMgr);
-#endif
-    DELETEZ(pImpl->pSvtResMgr);
-
-#if HAVE_FEATURE_SCRIPTING
     delete pImpl->m_pSbxErrorHdl;
 #endif
     delete pImpl->m_pSoErrorHdl;

@@ -22,7 +22,7 @@
 #include "app.hrc"
 #include "drawdoc.hxx"
 #include "framework/FrameworkHelper.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "glob.hxx"
 #include "helpids.h"
 #include "pres.hxx"
@@ -70,7 +70,7 @@ namespace sd { namespace sidebar {
 struct snewfoil_value_info
 {
     const char* msBmpResId;
-    sal_uInt16 mnStrResId;
+    const char* mpStrResId;
     WritingMode meWritingMode;
     AutoLayout maAutoLayout;
 };
@@ -539,7 +539,7 @@ void LayoutMenu::Fill()
     }
 
     Clear();
-    for (sal_uInt16 i=1; pInfo!=nullptr && pInfo->mnStrResId !=0; i++, pInfo++)
+    for (sal_uInt16 i=1; pInfo!=nullptr && pInfo->mpStrResId != nullptr; i++, pInfo++)
     {
         if ((WritingMode_TB_RL != pInfo->meWritingMode) || bVertical)
         {
@@ -548,7 +548,7 @@ void LayoutMenu::Fill()
             if (bRightToLeft && (WritingMode_TB_RL != pInfo->meWritingMode))
                 aBmp.Mirror (BmpMirrorFlags::Horizontal);
 
-            InsertItem(i, Image(aBmp), SdResId (pInfo->mnStrResId));
+            InsertItem(i, Image(aBmp), SdResId(pInfo->mpStrResId));
             SetItemData (i, new AutoLayout(pInfo->maAutoLayout));
         }
     }

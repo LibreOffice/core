@@ -85,7 +85,7 @@
 #include <vcl/svapp.hxx>
 #include "undo/undoobjects.hxx"
 #include <memory>
-#include "glob.hrc"
+#include "strings.hrc"
 
 #include <config_features.h>
 

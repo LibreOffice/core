@@ -96,6 +96,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,tl,\
 
 $(eval $(call gb_Library_use_externals,tl,\
 	boost_headers \
+	boost_locale \
 	zlib \
 ))
 

@@ -34,8 +34,7 @@
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 
-#include <svx/dialogs.hrc>
-#include "accessibility.hrc"
+#include <svx/strings.hrc>
 #include <svx/dlgctrl.hxx>
 
 #include <svx/dialmgr.hxx>
