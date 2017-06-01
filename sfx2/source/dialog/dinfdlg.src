@@ -20,7 +20,7 @@
 #include <sfx2/sfx.hrc>
 #include "helpid.hrc"
 #include "sfxlocal.hrc"
-#include "dinfdlg.hrc"
+#include "dinfdlg.hxx"
 #include "dialog.hrc"
 
 String STR_SFX_NEWOFFICEDOC

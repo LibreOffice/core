@@ -30,10 +30,11 @@
 #include <com/sun/star/task/XInteractionRequest.hpp>
 
 #include <osl/mutex.hxx>
+#include <tools/simplerm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "ids.hrc"
+#include "strings.hrc"
 #include "getcontinuations.hxx"
 #include "openlocked.hxx"
 #include "trylater.hxx"
@@ -72,9 +73,7 @@ handleLockedDocumentRequest_(
     try
     {
         SolarMutexGuard aGuard;
-        std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
-        if (!xManager.get())
-            return;
+        std::locale aResLocale = Translate::Create("uui", Application::GetSettings().GetUILanguageTag());
 
         OUString aMessage;
         std::vector< OUString > aArguments;
@@ -85,41 +84,40 @@ handleLockedDocumentRequest_(
         {
             aArguments.push_back( !aInfo.isEmpty()
                                   ? aInfo
-                                  : ResId( STR_UNKNOWNUSER,
-                                               *xManager.get() ).toString() );
-            aMessage = ResId(STR_OPENLOCKED_MSG, *xManager.get()).toString();
+                                  : Translate::get( STR_UNKNOWNUSER, aResLocale) );
+            aMessage = Translate::get(STR_OPENLOCKED_MSG, aResLocale);
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            ScopedVclPtrInstance< OpenLockedQueryBox > xDialog(pParent, xManager.get(), aMessage);
+            ScopedVclPtrInstance< OpenLockedQueryBox > xDialog(pParent, aResLocale, aMessage);
             nResult = xDialog->Execute();
         }
         else if ( nMode == UUI_DOC_SAVE_LOCK )
         {
             aArguments.push_back( !aInfo.isEmpty()
                                   ? aInfo
-                                  : ResId( STR_UNKNOWNUSER,
-                                               *xManager.get() ).toString() );
-            aMessage = ResId(STR_TRYLATER_MSG, *xManager.get()).toString();
+                                  : Translate::get( STR_UNKNOWNUSER,
+                                               aResLocale ) );
+            aMessage = Translate::get(STR_TRYLATER_MSG, aResLocale);
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
-            ScopedVclPtrInstance< TryLaterQueryBox > xDialog( pParent, xManager.get(), aMessage );
+            ScopedVclPtrInstance< TryLaterQueryBox > xDialog(pParent, aResLocale, aMessage);
             nResult = xDialog->Execute();
         }
         else if ( nMode == UUI_DOC_OWN_LOAD_LOCK ||
                   nMode == UUI_DOC_OWN_SAVE_LOCK )
         {
             aArguments.push_back( aInfo );
-            aMessage = ResId(nMode == UUI_DOC_OWN_SAVE_LOCK
+            aMessage = Translate::get(nMode == UUI_DOC_OWN_SAVE_LOCK
                                           ? STR_ALREADYOPEN_SAVE_MSG
                                           : STR_ALREADYOPEN_MSG,
-                                      *xManager.get() ).toString();
+                                      aResLocale );
             aMessage = UUIInteractionHelper::replaceMessageWithArguments(
                 aMessage, aArguments );
 
             ScopedVclPtrInstance< AlreadyOpenQueryBox > xDialog( pParent,
-                                         xManager.get(),
+                                         aResLocale,
                                          aMessage,
                                          nMode == UUI_DOC_OWN_SAVE_LOCK );
             nResult = xDialog->Execute();
@@ -154,11 +152,8 @@ handleChangedByOthersRequest_(
     try
     {
         SolarMutexGuard aGuard;
-        std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
-        if (!xManager.get())
-            return;
-
-        ScopedVclPtrInstance< FileChangedQueryBox > xDialog(pParent, xManager.get());
+        std::locale aResLocale = Translate::Create("uui", Application::GetSettings().GetUILanguageTag());
+        ScopedVclPtrInstance< FileChangedQueryBox > xDialog(pParent, aResLocale);
         sal_Int32 nResult = xDialog->Execute();
 
         if ( nResult == RET_YES )
@@ -188,11 +183,8 @@ handleLockFileIgnoreRequest_(
     try
     {
         SolarMutexGuard aGuard;
-        std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
-        if (!xManager.get())
-            return;
-
-        ScopedVclPtrInstance< LockFailedQueryBox > xDialog(pParent, xManager.get());
+        std::locale aResLocale = Translate::Create("uui", Application::GetSettings().GetUILanguageTag());
+        ScopedVclPtrInstance< LockFailedQueryBox > xDialog(pParent, aResLocale);
         sal_Int32 nResult = xDialog->Execute();
 
         if ( nResult == RET_OK )

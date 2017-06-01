@@ -33,7 +33,7 @@
 #include "datman.hxx"
 #include "bibconfig.hxx"
 #include "bibprop.hrc"
-#include "bib.hrc"
+#include "strings.hrc"
 #include "bibmod.hxx"
 #include "bibview.hxx"
 #include "bibtools.hxx"

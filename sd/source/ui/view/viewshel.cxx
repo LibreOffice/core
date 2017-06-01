@@ -88,7 +88,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/editeng.hxx>
 #include <svl/poolitem.hxx>
-#include <glob.hrc>
+#include <strings.hrc>
 #include "strings.hxx"
 #include "AccessibleDocumentViewBase.hxx"
 

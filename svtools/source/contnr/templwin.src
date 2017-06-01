@@ -18,7 +18,7 @@
  */
 
 #include "templwin.hrc"
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 #include <svtools/helpid.hrc>
 #include <svtools/svtools.hrc>
 

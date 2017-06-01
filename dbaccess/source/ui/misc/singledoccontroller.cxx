@@ -19,11 +19,12 @@
 
 #include <dbaccess/dbaundomanager.hxx>
 #include <dbaccess/dataview.hxx>
+#include "core_resource.hxx"
 #include "singledoccontroller.hxx"
 #include "browserids.hxx"
-#include "dbu_misc.hrc"
-#include "dbustrings.hrc"
-#include "moduledbu.hxx"
+#include "strings.hrc"
+#include "stringconstants.hxx"
+#include "core_resource.hxx"
 
 #include <svl/undo.hxx>
 
@@ -104,7 +105,7 @@ namespace dbaui
                 aReturn.bEnabled = isEditable() && GetUndoManager().GetUndoActionCount() != 0;
                 if ( aReturn.bEnabled )
                 {
-                    OUString sUndo(ModuleRes(STR_UNDO_COLON));
+                    OUString sUndo(DBA_RES(STR_UNDO_COLON));
                     sUndo += " ";
                     sUndo += GetUndoManager().GetUndoActionComment();
                     aReturn.sTitle = sUndo;
@@ -115,7 +116,7 @@ namespace dbaui
                 aReturn.bEnabled = isEditable() && GetUndoManager().GetRedoActionCount() != 0;
                 if ( aReturn.bEnabled )
                 {
-                    OUString sRedo(ModuleRes(STR_REDO_COLON));
+                    OUString sRedo(DBA_RES(STR_REDO_COLON));
                     sRedo += " ";
                     sRedo += GetUndoManager().GetRedoActionComment();
                     aReturn.sTitle = sRedo;

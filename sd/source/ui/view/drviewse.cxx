@@ -67,7 +67,7 @@
 #include "ViewShellHint.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include "app.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "drawdoc.hxx"
