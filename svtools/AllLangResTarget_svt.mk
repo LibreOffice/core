@@ -34,26 +34,8 @@ $(eval $(call gb_SrsTarget_set_include,svt/res,\
 ))
 
 $(eval $(call gb_SrsTarget_add_files,svt/res,\
-    svtools/source/contnr/fileview.src \
-    svtools/source/contnr/svcontnr.src \
-    svtools/source/contnr/templwin.src \
-    svtools/source/control/calendar.src \
-    svtools/source/control/ctrlbox.src \
-    svtools/source/control/ctrltool.src \
-    svtools/source/control/filectrl.src \
-    svtools/source/control/ruler.src \
-    svtools/source/dialogs/addresstemplate.src \
-	svtools/source/dialogs/filedlg2.src \
-    svtools/source/dialogs/formats.src \
     svtools/source/dialogs/so3res.src \
-    svtools/source/dialogs/wizardmachine.src \
-    $(if $(ENABLE_JAVA), \
-        svtools/source/java/javaerror.src) \
     svtools/source/misc/errtxt.src \
-    svtools/source/misc/imagemgr.src \
-    svtools/source/misc/langtab.src \
-    svtools/source/misc/svtools.src \
-    svtools/source/misc/undo.src \
 ))
 
 # vim: set noet sw=4 ts=4:

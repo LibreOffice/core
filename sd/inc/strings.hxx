@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SD_INC_STRINGS_HRC
-#define INCLUDED_SD_INC_STRINGS_HRC
+#ifndef INCLUDED_SD_INC_STRINGS_HXX
+#define INCLUDED_SD_INC_STRINGS_HXX
 
 /* do not translate */
 #define STR_LAYOUT_TITLE                "Titel"

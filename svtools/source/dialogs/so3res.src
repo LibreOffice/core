@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svtools/sores.hxx"
+#include "svtools/strings.hrc"
 #include <svtools/soerr.hxx>
 
 #define S_MAX   0x7fff
@@ -47,28 +47,6 @@ StringArray RID_SO_ERRCTX
     {
         < "$(ERR) activating object" ; ERRCTX_SO_DOVERB ; >;
     };
-};
-
-String STR_ERROR_OBJNOCREATE
-{
-    Text [ en-US ] = "Object % could not be inserted." ;
-};
-String STR_ERROR_OBJNOCREATE_FROM_FILE
-{
-    Text [ en-US ] = "Object from file % could not be inserted." ;
-};
-String STR_ERROR_OBJNOCREATE_PLUGIN
-{
-    Text [ en-US ] = "Plug-in from document % could not be inserted." ;
-};
-String STR_FURTHER_OBJECT
-{
-    Text [ en-US ] = "Further objects" ;
-};
-
-String STR_UNKNOWN_SOURCE
-{
-    Text [ en-US ] = "Unknown source" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,7 +31,8 @@
 #include <tools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/svdstr.hrc>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 
 #include <iostream>
 #include <memory>
@@ -307,8 +308,7 @@ OUString GraphicNamingHelper::NameGraphic(const OUString& rTemplate)
     if (aRet.isEmpty())
     {
         // Empty template: then auto-generate a unique name.
-        std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag()));
-        OUString aPrefix(ResId(STR_ObjNameSingulGRAF, *pResMgr));
+        OUString aPrefix(SvxResId(STR_ObjNameSingulGRAF));
         aRet += aPrefix + OUString::number(++m_nCounter);
     }
 

@@ -19,7 +19,7 @@
 
 #include <vector>
 
-#include "svtools/controldims.hrc"
+#include "svtools/controldims.hxx"
 
 #include "RemoteDialogClientBox.hxx"
 #include "RemoteServer.hxx"
@@ -31,7 +31,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 
-#include "glob.hrc"
+#include "strings.hrc"
 
 using namespace std;
 

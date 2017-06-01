@@ -29,6 +29,7 @@
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include "helpid.hrc"
 #include <svx/colorbox.hxx>
 #include "svx/xattr.hxx"
@@ -43,6 +44,7 @@
 #include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 
 #include <o3tl/make_unique.hxx>
 

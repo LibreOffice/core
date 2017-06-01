@@ -19,7 +19,9 @@
 
 #include "dlgsave.hxx"
 #include <vcl/msgbox.hxx>
-#include "dbu_dlg.hrc"
+#include "core_resource.hxx"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include "sqlmessage.hxx"
@@ -33,7 +35,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include "objectnamecheck.hxx"
 #include <tools/diagnose_ex.h>
 
@@ -83,8 +85,8 @@ OSaveAsDlgImpl::OSaveAsDlgImpl(OSaveAsDlg* pParent,
                                const OUString& rDefault,
                                const IObjectNameCheck& _rObjectNameCheck,
                                SADFlags _nFlags)
-    : m_aQryLabel(ModuleRes(STR_QRY_LABEL))
-    , m_sTblLabel(ModuleRes(STR_TBL_LABEL))
+    : m_aQryLabel(DBA_RES(STR_QRY_LABEL))
+    , m_sTblLabel(DBA_RES(STR_TBL_LABEL))
     , m_aName(rDefault)
     , m_rObjectNameCheck( _rObjectNameCheck )
     , m_nType(_rType)
@@ -117,8 +119,8 @@ OSaveAsDlgImpl::OSaveAsDlgImpl(OSaveAsDlg* pParent,
                                const OUString& rDefault,
                                const IObjectNameCheck& _rObjectNameCheck,
                                SADFlags _nFlags)
-    : m_aQryLabel(ModuleRes(STR_QRY_LABEL))
-    , m_sTblLabel(ModuleRes(STR_TBL_LABEL))
+    : m_aQryLabel(DBA_RES(STR_QRY_LABEL))
+    , m_sTblLabel(DBA_RES(STR_TBL_LABEL))
     , m_aName(rDefault)
     , m_rObjectNameCheck( _rObjectNameCheck )
     , m_nType(CommandType::COMMAND)
@@ -330,9 +332,9 @@ void OSaveAsDlg::implInit()
     }
 
     if ( SADFlags::TitlePasteAs == ( m_pImpl->m_nFlags & SADFlags::TitlePasteAs ) )
-        SetText( ModuleRes( STR_TITLE_PASTE_AS ) );
+        SetText( DBA_RES( STR_TITLE_PASTE_AS ) );
     else if ( SADFlags::TitleRename == ( m_pImpl->m_nFlags & SADFlags::TitleRename ) )
-        SetText( ModuleRes( STR_TITLE_RENAME ) );
+        SetText( DBA_RES( STR_TITLE_RENAME ) );
 
     m_pImpl->m_pPB_OK->SetClickHdl(LINK(this,OSaveAsDlg,ButtonClickHdl));
     m_pImpl->m_pTitle->SetModifyHdl(LINK(this,OSaveAsDlg,EditModifyHdl));

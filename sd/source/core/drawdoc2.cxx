@@ -53,7 +53,7 @@
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "pglink.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "glob.hxx"
 #include "stlpool.hxx"
 #include "sdiocmpt.hxx"

@@ -48,6 +48,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include "bitmaps.hlst"
 
 // Size check
@@ -387,18 +388,17 @@ SwZoomBox_Impl::SwZoomBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)
     SetHelpId(HID_PVIEW_ZOOM_LB);
     SetSizePixel(LogicToPixel(Size(30, 86), MapUnit::MapAppFont));
     EnableAutocomplete( false );
-    sal_uInt16 aZoomValues[] =
+    const char* aZoomValues[] =
     { RID_SVXSTR_ZOOM_25 , RID_SVXSTR_ZOOM_50 ,
       RID_SVXSTR_ZOOM_75 , RID_SVXSTR_ZOOM_100 ,
       RID_SVXSTR_ZOOM_150 , RID_SVXSTR_ZOOM_200 ,
       RID_SVXSTR_ZOOM_WHOLE_PAGE, RID_SVXSTR_ZOOM_PAGE_WIDTH ,
       RID_SVXSTR_ZOOM_OPTIMAL_VIEW };
-    for(sal_uInt16 aZoomValue : aZoomValues)
+    for(const char* pZoomValue : aZoomValues)
     {
-        OUString sEntry = SvxResId( aZoomValue );
+        OUString sEntry = SvxResId(pZoomValue);
         InsertEntry(sEntry);
     }
-
 }
 
 void    SwZoomBox_Impl::Select()

@@ -84,7 +84,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <svtools/asynclink.hxx>
 #include <svl/sharecontrolfile.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <framework/framelistanalyzer.hxx>
 #include <shellimpl.hxx>

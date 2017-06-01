@@ -30,9 +30,8 @@
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include "svtaccessiblefactory.hxx"
-#include <filectrl.hrc>
 #include <svtools/svtresid.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <limits>
 #include <utility>
 #include <vcl/idle.hxx>
