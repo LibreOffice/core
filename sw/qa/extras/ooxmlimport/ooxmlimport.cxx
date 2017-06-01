@@ -606,7 +606,7 @@ DECLARE_OOXMLIMPORT_TEST(testFdo43641, "fdo43641.docx")
     uno::Reference<container::XIndexAccess> xGroupShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xLine(xGroupShape->getByIndex(1), uno::UNO_QUERY);
     // This was 2200, not 2579 in mm100, i.e. the size of the line shape was incorrect.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(oox::drawingml::convertEmuToHmm(928440)), xLine->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(928440), xLine->getSize().Width);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testGroupshapeSdt, "groupshape-sdt.docx")
@@ -764,7 +764,7 @@ DECLARE_OOXMLIMPORT_TEST(textboxWpsOnly, "textbox-wps-only.docx")
 DECLARE_OOXMLIMPORT_TEST(testGroupshapeRelsize, "groupshape-relsize.docx")
 {
     // This was 43760, i.e. the height of the groupshape was larger than the page height, which is obviously incorrect.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(oox::drawingml::convertEmuToHmm(9142730)), getShape(1)->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(9142730), getShape(1)->getSize().Height);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testOleAnchor, "ole-anchor.docx")

@@ -95,7 +95,7 @@ DECLARE_WW8IMPORT_TEST( testTdf105570, "tdf105570.doc" )
     SwDoc*           pDoc         = pTextDoc->GetDocShell()->GetDoc();
     SwWrtShell*      pWrtShell    = pDoc->GetDocShell()->GetWrtShell();
     SwShellCursor*   pShellCursor = pWrtShell->getShellCursor( false );
-    SwNodeIndex      aIdx         = SwNodeIndex( pShellCursor->Start()->nNode );
+    SwNodeIndex      aIdx         = pShellCursor->Start()->nNode;
 
     // Find first table
     SwTableNode*     pTableNd     = aIdx.GetNode().FindTableNode();

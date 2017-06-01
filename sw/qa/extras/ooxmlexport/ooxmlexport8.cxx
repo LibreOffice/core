@@ -320,7 +320,7 @@ DECLARE_OOXMLEXPORT_TEST(testN764005, "n764005.docx")
     CPPUNIT_ASSERT(eValue != text::TextContentAnchorType_AS_CHARACTER);
     bool bValue = true;
     xPropertySet->getPropertyValue("Opaque") >>= bValue;
-    CPPUNIT_ASSERT_EQUAL(false, bool(bValue));
+    CPPUNIT_ASSERT_EQUAL(false, bValue);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN766481, "n766481.docx")
@@ -877,7 +877,7 @@ DECLARE_OOXMLEXPORT_TEST(testfdo78904, "fdo78904.docx")
     if (xIndexAccess->getCount())
     {
         uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(oox::drawingml::convertEmuToHmm(0)), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
+        CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(0), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
     }
 }
 
@@ -1213,7 +1213,7 @@ DECLARE_OOXMLEXPORT_TEST(testWpsOnly, "wps-only.docx")
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_PARAGRAPH, eValue);
 
     // Check position, it was 0. This is a shape, so use getPosition(), not a property.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(oox::drawingml::convertEmuToHmm(671830)), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(671830), xShape->getPosition().X);
 
     // Left margin was 0, instead of 114300 EMU's.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xShape, "LeftMargin"));
@@ -1232,7 +1232,7 @@ DECLARE_OOXMLEXPORT_TEST(testWpgOnly, "wpg-only.docx")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Check position, it was nearly 0. This is a shape, so use getPosition(), not a property.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(oox::drawingml::convertEmuToHmm(548005)), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(548005), xShape->getPosition().X);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testWpgNested, "wpg-nested.docx")

@@ -456,37 +456,6 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     if (ignoreLocation(expr)) {
         return true;
     }
-    // A bit of a rabbit hole here,  these expressions look like
-    //   CPPUNIT_ASSERT( bool(aVec.find(p1.get()) == aVec.end()) )
-    // If I remove the bool, then another plugin wants me to change it to CPPUNIT_ASSERT_EQUAL,
-    // but that fails because CppUnit can't do "std::ostream << iterator".
-    StringRef aFileName = compiler.getSourceManager().getFilename(compiler.getSourceManager().getSpellingLoc(expr->getLocStart()));
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/o3tl/qa/"))
-        return true;
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sfx2/qa/"))
-        return true;
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/postprocess/qa/"))
-        return true;
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sc/qa/"))
-        return true;
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/cppu/qa/"))
-        return true;
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/vcl/qa/"))
-        return true;
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/cppuhelper/qa/"))
-        return true;
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/comphelper/qa/"))
-        return true;
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/connectivity/qa/"))
-        return true;
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sal/qa/"))
-        return true;
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/salhelper/qa/"))
-        return true;
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sw/qa/"))
-        return true;
-    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/svl/qa/"))
-        return true;
 
     // Restrict this to "real" casts (compared to uses of braced-init-list, like
     //
@@ -500,6 +469,17 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     auto const sub = compat::getSubExprAsWritten(expr);
     if (isa<InitListExpr>(sub) || isa<CXXStdInitializerListExpr>(sub)) {
         return true;
+    }
+
+    // See "There might even be good reasons(?) not to warn inside explicit
+    // casts" block in compilerplugins/clang/test/cppunitassertequals.cxx:
+    auto const eloc = expr->getExprLoc();
+    if (compiler.getSourceManager().isMacroArgExpansion(eloc)) {
+        auto const name = Lexer::getImmediateMacroName(
+            eloc, compiler.getSourceManager(), compiler.getLangOpts());
+        if (name == "CPPUNIT_ASSERT" || name == "CPPUNIT_ASSERT_MESSAGE") {
+            return true;
+        }
     }
 
     // See the commit message of d0e7d020fa405ab94f19916ec96fbd4611da0031

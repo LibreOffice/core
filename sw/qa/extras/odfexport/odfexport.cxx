@@ -1301,9 +1301,9 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     xCell1Style->getPropertyValue("CharColor") >>= nInt64;
     CPPUNIT_ASSERT_EQUAL(sal_Int64(0xFF6600), nInt64);
     xCell1Style->getPropertyValue("CharContoured") >>= bBool;
-    CPPUNIT_ASSERT_EQUAL(bool(false), bBool);
+    CPPUNIT_ASSERT_EQUAL(false, bBool);
     xCell1Style->getPropertyValue("CharShadowed") >>= bBool;
-    CPPUNIT_ASSERT_EQUAL(bool(true), bBool);
+    CPPUNIT_ASSERT_EQUAL(true, bBool);
     xCell1Style->getPropertyValue("CharStrikeout") >>= nInt32;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nInt32);
     xCell1Style->getPropertyValue("CharUnderline") >>= nInt32;
@@ -1366,9 +1366,9 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     xCell1Style->getPropertyValue("CharColor") >>= nInt64;
     CPPUNIT_ASSERT_EQUAL(sal_Int64(0x9900FF), nInt64);
     xCell1Style->getPropertyValue("CharContoured") >>= bBool;
-    CPPUNIT_ASSERT_EQUAL(bool(true), bBool);
+    CPPUNIT_ASSERT_EQUAL(true, bBool);
     xCell1Style->getPropertyValue("CharShadowed") >>= bBool;
-    CPPUNIT_ASSERT_EQUAL(bool(false), bBool);
+    CPPUNIT_ASSERT_EQUAL(false, bBool);
     xCell1Style->getPropertyValue("CharStrikeout") >>= nInt32;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nInt32);
     xCell1Style->getPropertyValue("CharUnderline") >>= nInt32;
@@ -1427,9 +1427,9 @@ DECLARE_ODFEXPORT_TEST(testTableStyles2, "table_styles_2.odt")
     xCell1Style->getPropertyValue("CharColor") >>= nInt64;
     CPPUNIT_ASSERT_EQUAL(sal_Int64(0), nInt64);
     xCell1Style->getPropertyValue("CharContoured") >>= bBool;
-    CPPUNIT_ASSERT_EQUAL(bool(true), bBool);
+    CPPUNIT_ASSERT_EQUAL(true, bBool);
     xCell1Style->getPropertyValue("CharShadowed") >>= bBool;
-    CPPUNIT_ASSERT_EQUAL(bool(true), bBool);
+    CPPUNIT_ASSERT_EQUAL(true, bBool);
     xCell1Style->getPropertyValue("CharStrikeout") >>= nInt32;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nInt32);
     xCell1Style->getPropertyValue("CharUnderline") >>= nInt32;

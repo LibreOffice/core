@@ -3193,7 +3193,7 @@ void SwUiWriterTest::testTdf88899()
     alocale.Language = "en";
     alocale.Country = "US";
     sal_Int16 key = xNumFormat->getStandardFormat(util::NumberFormat::DATETIME, alocale);
-    xPropSet->setPropertyValue("NumberFormat", uno::makeAny(sal_Int16(key)));
+    xPropSet->setPropertyValue("NumberFormat", uno::makeAny(key));
     //Inserting Text Content
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xTextDocument->getText(), uno::UNO_QUERY);

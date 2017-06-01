@@ -48,9 +48,9 @@ void test(bool b1, bool b2, OUString const & s1, OUString const & s2, T t) {
     CPPUNIT_ASSERT(t.operator ==(t));
 
     // There might even be good reasons(?) not to warn inside explicit casts:
-    CPPUNIT_ASSERT(bool(b1 && b2)); // expected-error {{redundant functional cast from/to 'bool' [loplugin:redundantcast]}}
-    CPPUNIT_ASSERT(bool(b1 == b2)); // expected-error {{redundant functional cast from/to 'bool' [loplugin:redundantcast]}}
-    CPPUNIT_ASSERT(bool(s1 == s2)); // expected-error {{redundant functional cast from/to 'bool' [loplugin:redundantcast]}}
+    CPPUNIT_ASSERT(bool(b1 && b2));
+    CPPUNIT_ASSERT(bool(b1 == b2));
+    CPPUNIT_ASSERT(bool(s1 == s2));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

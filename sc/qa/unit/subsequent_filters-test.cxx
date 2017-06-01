@@ -3852,7 +3852,7 @@ void ScFiltersTest::testTdf100458()
     CPPUNIT_ASSERT_MESSAGE("Failed to open doc", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(rDoc.HasValueData(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(double(0.0), rDoc.GetValue(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(0,0,0));
     CPPUNIT_ASSERT(!rDoc.HasStringData(0, 0, 0));
     xDocSh->DoClose();
 }
