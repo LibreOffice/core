@@ -43,7 +43,7 @@
 #include <editeng/lrspitem.hxx>
 #include <svx/sdr/properties/properties.hxx>
 #include <sfx2/bindings.hxx>
-#include "glob.hrc"
+#include "strings.hrc"
 #include <editeng/shaditem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/sizeitem.hxx>

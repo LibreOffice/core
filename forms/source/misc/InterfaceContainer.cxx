@@ -18,7 +18,7 @@
  */
 
 
-#include "frm_resource.hrc"
+#include "strings.hrc"
 #include "frm_resource.hxx"
 #include "InterfaceContainer.hxx"
 #include "componenttools.hxx"

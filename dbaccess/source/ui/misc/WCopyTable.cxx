@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbu_misc.hrc"
-#include "dbustrings.hrc"
-#include "moduledbu.hxx"
+#include "strings.hrc"
+#include "strings.hxx"
+#include "stringconstants.hxx"
+#include "core_resource.hxx"
+#include "core_resource.hxx"
 #include "sqlmessage.hxx"
 #include "UITools.hxx"
 #include "WColumnSelect.hxx"
@@ -509,7 +511,7 @@ OCopyTableWizard::OCopyTableWizard( vcl::Window * pParent, const OUString& _rDef
     ,m_xFormatter( getNumberFormatter( _xConnection, _rxContext ) )
     ,m_xContext(_rxContext)
     ,m_xInteractionHandler(_xInteractionHandler)
-    ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
+    ,m_sTypeNames(DBA_RES(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_nPageCount(0)
     ,m_bDeleteSourceColumns(true)
     ,m_bInterConnectionCopy( _xSourceConnection != _xConnection )
@@ -601,7 +603,7 @@ OCopyTableWizard::OCopyTableWizard( vcl::Window* pParent, const OUString& _rDefa
     ,m_rSourceObject( DummyCopySource::Instance() )
     ,m_xFormatter(_xFormatter)
     ,m_xContext(_rxContext)
-    ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
+    ,m_sTypeNames(DBA_RES(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_nPageCount(0)
     ,m_bDeleteSourceColumns(false)
     ,m_bInterConnectionCopy( false )
@@ -651,9 +653,9 @@ void OCopyTableWizard::construct()
     m_pbNext->SetSizePixel( LogicToPixel( Size( 50, 14 ), MapUnit::MapAppFont ) );
     m_pbFinish->SetSizePixel( LogicToPixel( Size( 50, 14 ), MapUnit::MapAppFont ) );
 
-    m_pbPrev->SetText(ModuleRes(STR_WIZ_PB_PREV));
-    m_pbNext->SetText(ModuleRes(STR_WIZ_PB_NEXT));
-    m_pbFinish->SetText(ModuleRes(STR_WIZ_PB_OK));
+    m_pbPrev->SetText(DBA_RES(STR_WIZ_PB_PREV));
+    m_pbNext->SetText(DBA_RES(STR_WIZ_PB_NEXT));
+    m_pbFinish->SetText(DBA_RES(STR_WIZ_PB_OK));
 
     m_pbHelp->Show();
     m_pbCancel->Show();
@@ -878,7 +880,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl, Button*, void)
                         if ( aFind == m_vDestColumns.end() && m_xInteractionHandler.is() )
                         {
 
-                            OUString sMsg(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY));
+                            OUString sMsg(DBA_RES(STR_TABLEDESIGN_NO_PRIM_KEY));
                             SQLContext aError;
                             aError.Message = sMsg;
                             ::rtl::Reference< ::comphelper::OInteractionRequest > xRequest( new ::comphelper::OInteractionRequest( makeAny( aError ) ) );
@@ -1543,7 +1545,7 @@ OUString OCopyTableWizard::createUniqueName(const OUString& _sName)
 
 void OCopyTableWizard::showColumnTypeNotSupported(const OUString& _rColumnName)
 {
-    OUString sMessage( ModuleRes( STR_UNKNOWN_TYPE_FOUND ) );
+    OUString sMessage( DBA_RES( STR_UNKNOWN_TYPE_FOUND ) );
     sMessage = sMessage.replaceFirst("#1",_rColumnName);
     showError(sMessage);
 }

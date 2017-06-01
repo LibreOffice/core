@@ -40,7 +40,7 @@
 #include <vcl/cursor.hxx>
 
 #include "app.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "DrawDocShell.hxx"

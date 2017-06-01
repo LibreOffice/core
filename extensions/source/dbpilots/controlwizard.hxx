@@ -31,7 +31,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include "dbptypes.hxx"
-#include "dbpresid.hrc"
+#include "strings.hrc"
 #include "componentmodule.hxx"
 #include "wizardcontext.hxx"
 

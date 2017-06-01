@@ -41,7 +41,7 @@
 #include "anminfo.hxx"
 #include "imapinfo.hxx"
 #include "app.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
 

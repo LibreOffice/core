@@ -24,7 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include "browserids.hxx"
-#include "dbu_rel.hrc"
+#include "strings.hrc"
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -33,7 +33,7 @@
 #include "ConnectionLine.hxx"
 #include "ConnectionLineData.hxx"
 #include "RTableConnectionData.hxx"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <comphelper/extract.hxx>
 #include "UITools.hxx"
 

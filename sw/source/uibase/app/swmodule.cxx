@@ -169,10 +169,10 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     SetName( "StarWriter" );
     pSwResMgr = GetResMgr();
     SvxErrorHandler::ensure();
-    m_pErrorHandler = new SfxErrorHandler( RID_SW_ERRHDL,
+    m_pErrorHandler = new SfxErrorHandler( /* TODO RID_SW_ERRHDL */ nullptr,
                                      ERRCODE_AREA_SW,
-                                     ERRCODE_AREA_SW_END,
-                                     pSwResMgr );
+                                     ERRCODE_AREA_SW_END
+                                     /*TODO* ,pSwResMgr */);
 
     m_pModuleConfig = new SwModuleOptions;
 

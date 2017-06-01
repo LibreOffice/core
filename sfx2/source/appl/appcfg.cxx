@@ -70,7 +70,7 @@
 #include "appdata.hxx"
 #include "workwin.hxx"
 #include "helper.hxx"
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include <sfx2/sfxresid.hxx>
 #include "shutdownicon.hxx"
 
@@ -418,7 +418,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                     for ( sal_uInt16 nProp = SvtPathOptions::PATH_ADDIN;
                           nProp <= SvtPathOptions::PATH_WORK; nProp++ )
                     {
-                        aNames.InsertValue( nProp, SfxResId(CONFIG_PATH_START + nProp) );
+                        // aNames.InsertValue( nProp, SfxResId(CONFIG_PATH_START + nProp) ); TODO
                         OUString aValue;
                         switch ( nProp )
                         {

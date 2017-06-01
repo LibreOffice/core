@@ -48,7 +48,7 @@
 #include <svdibrow.hxx>
 #endif
 #include <svx/svddrgv.hxx>
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdglob.hxx"
 #include "svx/globl3d.hxx"
 #include <svx/textchain.hxx>

@@ -69,13 +69,12 @@
 #include <toolkit/awt/vclxwindow.hxx>
 
 #include <sfx2/sfxsids.hrc>
-#include <doc.hrc>
+#include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/dinfdlg.hxx>
 #include <sfx2/request.hxx>
 #include <sfxtypes.hxx>
 #include "alienwarn.hxx"
@@ -86,7 +85,7 @@
 #include <rtl/ref.hxx>
 #include <framework/interaction.hxx>
 #include <svtools/sfxecode.hxx>
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 
 #include <memory>
 

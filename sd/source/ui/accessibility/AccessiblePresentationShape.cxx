@@ -21,7 +21,7 @@
 
 #include "SdShapeTypes.hxx"
 
-#include "accessibility.hrc"
+#include "strings.hrc"
 #include "sdresid.hxx"
 #include <svx/DescriptionGenerator.hxx>
 #include <rtl/ustring.h>
