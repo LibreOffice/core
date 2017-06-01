@@ -61,7 +61,7 @@ extern "C"
     {
         (void)pPath;
     }
-#endif // TARGERT_OS_IPHONE
+#endif // TARGET_OS_IPHONE
 
     static void *lok_dlsym(void *Hnd, const char *pName)
     {
