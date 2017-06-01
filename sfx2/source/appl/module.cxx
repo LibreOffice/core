@@ -71,13 +71,9 @@ SfxModule_Impl::~SfxModule_Impl()
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxModule, SfxShell)
 
-ResMgr* SfxModule::GetResMgr()
-{
-    return pResMgr;
-}
-
-SfxModule::SfxModule( ResMgr* pMgrP, std::initializer_list<SfxObjectFactory*> pFactoryList )
-    : pResMgr( pMgrP ), pImpl(nullptr)
+SfxModule::SfxModule(const std::locale& rLocale, std::initializer_list<SfxObjectFactory*> pFactoryList)
+    : m_aResLocale(rLocale)
+    , pImpl(nullptr)
 {
     Construct_Impl();
     for (auto pFactory : pFactoryList)
@@ -100,13 +96,10 @@ void SfxModule::Construct_Impl()
     SetPool( &pApp->GetPool() );
 }
 
-
 SfxModule::~SfxModule()
 {
     delete pImpl;
-    delete pResMgr;
 }
-
 
 SfxSlotPool* SfxModule::GetSlotPool() const
 {

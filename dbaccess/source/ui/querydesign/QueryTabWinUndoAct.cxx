@@ -27,8 +27,8 @@
 #include "QueryTableView.hxx"
 
 using namespace dbaui;
-OQueryDesignFieldUndoAct::OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, sal_uInt16 nCommentID)
-    : OCommentUndoAction(nCommentID)
+OQueryDesignFieldUndoAct::OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, const char* pCommentID)
+    : OCommentUndoAction(pCommentID)
     , pOwner(pSelBrwBox)
     , m_nColumnPosition(BROWSER_INVALIDID)
 {
@@ -39,8 +39,8 @@ OQueryDesignFieldUndoAct::~OQueryDesignFieldUndoAct()
     pOwner = nullptr;
 }
 
-OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, sal_uInt16 nCommentID)
-    : OQueryDesignUndoAction(pOwner, nCommentID)
+OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, const char* pCommentID)
+    : OQueryDesignUndoAction(pOwner, pCommentID)
     , m_pTabWin(nullptr)
     , m_bOwnerOfObjects(false)
 {

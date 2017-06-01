@@ -18,7 +18,8 @@
  */
 
 #include "View.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 
 #include "connectivity/dbexception.hxx"
 #include "connectivity/dbtools.hxx"

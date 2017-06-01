@@ -32,7 +32,7 @@
 
 #include <svx/dialmgr.hxx>
 #include "svx/xoutbmp.hxx"
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <svx/contdlg.hxx>
 #include "contimp.hxx"
