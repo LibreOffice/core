@@ -506,7 +506,11 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
     short nParamCount = GetByte();
     const SCSIZE nMatRows = GetRefListArrayMaxSize( nParamCount);
     ScMatrixRef xResMat, xResCount;
-    double fRes = ( eFunc == ifPRODUCT ) ? 1.0 : 0.0;
+    auto ResInitVal = [eFunc]()
+    {
+        return (eFunc == ifPRODUCT) ? 1.0 : 0.0;
+    };
+    double fRes = ResInitVal();
     double fVal = 0.0;
     double fMem = 0.0;  // first numeric value != 0.0
     sal_uLong nCount = 0;
@@ -753,19 +757,27 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     {
                         // Current value and values from vector are operands
                         // for each vector position.
-                        for (SCSIZE i=0; i < nMatRows; ++i)
+                        if (nCount && xResCount)
                         {
-                            if (xResCount)
+                            for (SCSIZE i=0; i < nMatRows; ++i)
+                            {
                                 xResCount->PutDouble( xResCount->GetDouble(0,i) + nCount, 0,i);
-                            double fVecRes = xResMat->GetDouble(0,i);
-                            if (eFunc == ifPRODUCT)
-                                fVecRes *= fRes;
-                            else
-                                fVecRes += fRes;
-                            xResMat->PutDouble( fVecRes, 0,i);
+                            }
+                        }
+                        if (fRes != ResInitVal())
+                        {
+                            for (SCSIZE i=0; i < nMatRows; ++i)
+                            {
+                                double fVecRes = xResMat->GetDouble(0,i);
+                                if (eFunc == ifPRODUCT)
+                                    fVecRes *= fRes;
+                                else
+                                    fVecRes += fRes;
+                                xResMat->PutDouble( fVecRes, 0,i);
+                            }
                         }
                     }
-                    fRes = ((eFunc == ifPRODUCT) ? 1.0 : 0.0);
+                    fRes = ResInitVal();
                     nCount = 0;
                 }
             }
@@ -943,7 +955,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         fVecRes += fRes;
                     xResMat->PutDouble( fVecRes, 0,nRefArrayPos);
                     // Reset.
-                    fRes = ((eFunc == ifPRODUCT) ? 1.0 : 0.0);
+                    fRes = ResInitVal();
                     nCount = 0;
                     nRefArrayPos = std::numeric_limits<size_t>::max();
                 }
