@@ -18,7 +18,7 @@
  */
 
 #include <svtools/prnsetup.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <vcl/print.hxx>
 
@@ -127,9 +127,9 @@ static OUString ImplPrnDlgAddString(const OUString& rStr, const OUString& rAddSt
 }
 
 
-static OUString ImplPrnDlgAddResString(const OUString& rStr, sal_uInt16 nResId)
+static OUString ImplPrnDlgAddResString(const OUString& rStr, const char* pResId)
 {
-    return ImplPrnDlgAddString(rStr, SvtResId(nResId));
+    return ImplPrnDlgAddString(rStr, SvtResId(pResId));
 }
 
 

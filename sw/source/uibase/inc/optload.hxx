@@ -35,6 +35,14 @@ class SwFieldMgr;
 class SvTreeListEntry;
 class SwWrtShell;
 
+class SwFieldUnitTable
+{
+public:
+    OUString GetString(sal_uInt32 i) const;
+    sal_uInt32 Count() const;
+    FieldUnit GetValue(sal_uInt32 i) const;
+};
+
 class SwLoadOptPage : public SfxTabPage
 {
 private:

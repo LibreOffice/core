@@ -18,7 +18,7 @@
  */
 
 #include "dsselect.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
 #include <vcl/msgbox.hxx>
 #include <tools/rcid.h>
 
@@ -27,7 +27,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>

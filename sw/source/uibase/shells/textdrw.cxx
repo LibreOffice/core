@@ -32,7 +32,7 @@
 #include <swundo.hxx>
 #include <basesh.hxx>
 
-#include <poolfmt.hrc>
+#include <strings.hrc>
 
 #include <docsh.hxx>
 #include <sfx2/docfile.hxx>

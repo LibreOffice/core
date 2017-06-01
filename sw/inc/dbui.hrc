@@ -20,61 +20,7 @@
 #ifndef INCLUDED_SW_INC_DBUI_HRC
 #define INCLUDED_SW_INC_DBUI_HRC
 
-#include "rcid.hrc"
-
-// Strings ------------------------------------------------------------------
-
-#define SA_ADDRESS_HEADER       (RC_DBUI_BEGIN + 1)
-#define STR_NOTASSIGNED         (RC_DBUI_BEGIN + 2)
-#define STR_FILTER_ALL          (RC_DBUI_BEGIN + 3)
-#define STR_FILTER_SXB          (RC_DBUI_BEGIN + 4)
-#define STR_FILTER_SXC          (RC_DBUI_BEGIN + 5)
-#define STR_FILTER_DBF          (RC_DBUI_BEGIN + 6)
-#define STR_FILTER_XLS          (RC_DBUI_BEGIN + 7)
-#define STR_FILTER_TXT          (RC_DBUI_BEGIN + 8)
-#define STR_FILTER_CSV          (RC_DBUI_BEGIN + 9)
-#define STR_FILTER_ALL_DATA     (RC_DBUI_BEGIN + 10)
-#define STR_FILTER_MDB          (RC_DBUI_BEGIN + 11)
-#define STR_FILTER_ACCDB        (RC_DBUI_BEGIN + 12)
-#define ST_SALUTATION           (RC_DBUI_BEGIN + 13)
-#define ST_PUNCTUATION          (RC_DBUI_BEGIN + 14)
-#define ST_TEXT                 (RC_DBUI_BEGIN + 15)
-#define RA_SALUTATION           (RC_DBUI_BEGIN + 16)
-#define RA_PUNCTUATION          (RC_DBUI_BEGIN + 18)
-#define ST_TITLE_MALE           (RC_DBUI_BEGIN + 19)
-#define ST_TITLE_FEMALE         (RC_DBUI_BEGIN + 20)
-#define ST_SALUTATIONELEMENTS   (RC_DBUI_BEGIN + 21)
-#define ST_INSERTSALUTATIONFIELD (RC_DBUI_BEGIN + 22)
-#define ST_REMOVESALUTATIONFIELD (RC_DBUI_BEGIN + 23)
-#define ST_DRAGSALUTATION       (RC_DBUI_BEGIN + 24)
-#define ST_TITLE_EDIT           (RC_DBUI_BEGIN + 25)
-#define ST_CONFIGUREMAIL        (RC_DBUI_BEGIN + 32)
-#define ST_FILTERNAME           (RC_DBUI_BEGIN + 33)
-#define ST_TYPE                 (RC_DBUI_BEGIN + 34)
-#define ST_NAME                 (RC_DBUI_BEGIN + 35)
-#define ST_TABLE                (RC_DBUI_BEGIN + 36)
-#define ST_QUERY                (RC_DBUI_BEGIN + 37)
-#define ST_SALUTATIONPREVIEW    (RC_DBUI_BEGIN + 38)
-#define ST_SALUTATIONMATCHING   (RC_DBUI_BEGIN + 39)
-#define ST_SALUTATIONELEMENT    (RC_DBUI_BEGIN + 40)
-#define ST_ADDRESSELEMENT       (RC_DBUI_BEGIN + 41)
-#define ST_MATCHESTO            (RC_DBUI_BEGIN + 42)
-#define ST_PREVIEW              (RC_DBUI_BEGIN + 43)
-#define ST_CONTINUE             (RC_DBUI_BEGIN + 44)
-#define ST_TASK                 (RC_DBUI_BEGIN + 45)
-#define ST_STATUS               (RC_DBUI_BEGIN + 46)
-#define ST_SENDINGTO            (RC_DBUI_BEGIN + 48)
-#define ST_COMPLETED            (RC_DBUI_BEGIN + 49)
-#define ST_FAILED               (RC_DBUI_BEGIN + 50)
-#define ST_STARTING             (RC_DBUI_BEGIN + 52)
-#define ST_DOCUMENTTYPE         (RC_DBUI_BEGIN + 53)
-#define ST_ADDRESSBLOCK         (RC_DBUI_BEGIN + 54)
-#define ST_GREETINGSLINE        (RC_DBUI_BEGIN + 55)
-#define ST_LAYOUT               (RC_DBUI_BEGIN + 56)
-#define ST_FINISH               (RC_DBUI_BEGIN + 57)
-#define ST_ADDRESSLIST          (RC_DBUI_BEGIN + 58)
-#define ST_EXCLUDE              (RC_DBUI_BEGIN + 59)
-#define ST_MMWTITLE             (RC_DBUI_BEGIN + 63)
+#define N_(String) (u8##String)
 
 // Elements -----------------------------------------------------------------
 #define MM_PART_TITLE                   0
@@ -91,6 +37,24 @@
 #define MM_PART_PHONE_BUSINESS          11
 #define MM_PART_E_MAIL                  12
 #define MM_PART_GENDER                  13
+
+const std::pair<const char*, int> SA_ADDRESS_HEADER[] =
+{
+    { N_("Title") ,                 MM_PART_TITLE           },
+    { N_("First Name") ,            MM_PART_FIRSTNAME       },
+    { N_("Last Name") ,             MM_PART_LASTNAME        },
+    { N_("Company Name") ,          MM_PART_COMPANY         },
+    { N_("Address Line 1") ,        MM_PART_ADDRESS_1       },
+    { N_("Address Line 2") ,        MM_PART_ADDRESS_2       },
+    { N_("City") ,                  MM_PART_CITY            },
+    { N_("State") ,                 MM_PART_REGION          },
+    { N_("ZIP") ,                   MM_PART_ZIP             },
+    { N_("Country") ,               MM_PART_COUNTRY         },
+    { N_("Telephone private") ,     MM_PART_PHONE_PRIVATE   },
+    { N_("Telephone business") ,    MM_PART_PHONE_BUSINESS  },
+    { N_("E-mail Address") ,        MM_PART_E_MAIL          },
+    { N_("Gender"),                 MM_PART_GENDER          }
+};
 
 #endif
 
