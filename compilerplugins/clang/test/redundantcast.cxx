@@ -40,7 +40,7 @@ int main() {
     Enum1 e = (Enum1)Enum1::X; // expected-error {{redundant cstyle cast from 'Enum1' to 'Enum1' [loplugin:redundantcast]}}
     (void)e;
 
-    S const s;
+    S const s{};
     const_cast<S &>(s).f1();
     const_cast<S &>(s).f2(); // expected-error {{redundant const_cast from 'const S' to 'S', result is implicitly cast to 'const S' [loplugin:redundantcast]}}
     const_cast<S &>(s).f3();
