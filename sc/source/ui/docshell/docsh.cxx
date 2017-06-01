@@ -68,6 +68,7 @@
 
 #include "scabstdlg.hxx"
 #include <sot/formats.hxx>
+#include <svx/dialogs.hrc>
 
 #include "formulacell.hxx"
 #include "postit.hxx"

@@ -309,9 +309,9 @@ namespace dbaui
     /** returns the result of the user action when view the query dialog.
         @param  _pParent
             The parent of the dialog
-        @param  _nTitle
+        @param  pTitle
             A string resource id for the text which will be displayed as title.
-        @param  _nText
+        @param  pText
             A string resource id for the text which will be displayed above the buttons.
             When the string contains a #1. This will be replaced by the name.
         @param  _bAll
@@ -321,7 +321,7 @@ namespace dbaui
         @return
             RET_YES, RET_NO, RET_ALL
     */
-    sal_Int32 askForUserAction(vcl::Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _nText,bool _bAll,const OUString& _sName);
+    sal_Int32 askForUserAction(vcl::Window* _pParent, const char* pTitle, const char* pText, bool _bAll, const OUString& _sName);
 
     /** creates a new view from a query or table
         @param  _sName

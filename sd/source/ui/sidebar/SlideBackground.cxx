@@ -34,7 +34,7 @@
 #include "DrawViewShell.hxx"
 #include "DrawController.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/gallery.hxx>
 #include <svx/drawitem.hxx>

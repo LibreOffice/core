@@ -115,9 +115,6 @@ private:
     ::comphelper::OInterfaceContainerHelper2 maFocusListeners;
     ::comphelper::OInterfaceContainerHelper2 maPropertyListeners;
 
-    ResStringArray      maNames;
-    ResStringArray      maDescriptions;
-
     ::comphelper::AccessibleEventNotifier::TClientId    mnClientId;
 };
 

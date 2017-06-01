@@ -33,7 +33,7 @@
 #include <connectivity/PColumn.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include "resource/file_res.hrc"
+#include "strings.hrc"
 
 using namespace connectivity;
 using namespace comphelper;

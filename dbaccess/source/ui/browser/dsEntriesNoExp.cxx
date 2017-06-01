@@ -28,7 +28,7 @@
 #include <osl/diagnose.h>
 #include "dbtreeview.hxx"
 #include "dbtreelistbox.hxx"
-#include "dbu_brw.hrc"
+#include "strings.hrc"
 #include "dbtreemodel.hxx"
 #include "svtools/treelistentry.hxx"
 

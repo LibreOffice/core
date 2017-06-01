@@ -35,7 +35,7 @@
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/FValue.hxx>
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include <connectivity/sqlparse.hxx>
 #include <memory>
 #include <type_traits>

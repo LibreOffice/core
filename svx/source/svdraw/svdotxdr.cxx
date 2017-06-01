@@ -24,7 +24,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdorect.hxx>
 #include "svdglob.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include <svx/svdoashp.hxx>
 #include <tools/bigint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

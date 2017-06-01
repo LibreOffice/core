@@ -29,7 +29,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/stdtext.hxx>
 #include <com/sun/star/util/AliasProgrammaticPair.hpp>
-#include "abpresid.hrc"
+#include "strings.hrc"
 #include "componentmodule.hxx"
 #include <unotools/confignode.hxx>
 #include "sal/macros.h"

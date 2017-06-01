@@ -19,7 +19,7 @@
 
 #include <vector>
 
-#include "svtools/controldims.hrc"
+#include "svtools/controldims.hxx"
 
 #include "RemoteDialogClientBox.hxx"
 #include "RemoteServer.hxx"
