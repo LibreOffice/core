@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_5e31ca0a",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-06-01T07:48:54Z",
+      "side": 1,
+      "message": "Could you check in tdf99856_dataValidationTest.ods file to see if it contains \"18 Missis\" or \"18 missing\"?\nIndeed both must be synchronized so if you want to change it here, you must change it in tdf99856_dataValidationTest.ods",
+      "range": {
+        "startLine": 473,
+        "startChar": 35,
+        "endLine": 473,
+        "endChar": 45
+      },
+      "revId": "9c2f535dfc529e5a633a57ac29e8542613f88456",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
