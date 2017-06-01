@@ -1,0 +1,38 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_BASIC_INC_STRINGS_HRC
+#define INCLUDED_BASIC_INC_STRINGS_HRC
+
+#define N_(String) (u8##String)
+
+#define STR_BASICKEY_FORMAT_ON          N_("On")
+#define STR_BASICKEY_FORMAT_OFF         N_("Off")
+#define STR_BASICKEY_FORMAT_TRUE        N_("True")
+#define STR_BASICKEY_FORMAT_FALSE       N_("False")
+#define STR_BASICKEY_FORMAT_YES         N_("Yes")
+#define STR_BASICKEY_FORMAT_NO          N_("No")
+//format currency
+#define STR_BASICKEY_FORMAT_CURRENCY    N_("@0.00 $;@(0.00 $)")
+
+#define IDS_SBERR_TERMINATED            N_("The macro running has been interrupted")
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

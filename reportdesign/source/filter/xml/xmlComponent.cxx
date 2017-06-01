@@ -24,7 +24,7 @@
 #include <xmloff/nmspmap.hxx>
 #include "xmlEnums.hxx"
 #include "xmlHelper.hxx"
-#include "xmlstrings.hrc"
+#include "strings.hxx"
 #include "xmlStyleImport.hxx"
 #include <ucbhelper/content.hxx>
 #include <comphelper/namecontainer.hxx>

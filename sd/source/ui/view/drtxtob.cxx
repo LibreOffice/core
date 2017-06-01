@@ -52,7 +52,7 @@
 #include <sfx2/objface.hxx>
 
 #include "app.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "res_bmp.hrc"
 
 #include "drawdoc.hxx"

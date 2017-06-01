@@ -41,6 +41,7 @@
 #include <sfx2/app.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/strarray.hxx>
 #include <basic/basmgr.hxx>
 #include <editeng/langitem.hxx>
 #include <svl/macitem.hxx>
@@ -594,7 +595,7 @@ OUString SwFieldMgr::GetFormatStr(sal_uInt16 nTypeId, sal_uLong nFormatId) const
     {
         if(xNumberingInfo.is())
         {
-            ResStringArray aNames(ResId(RID_SVXSTRARY_NUMBERINGTYPE, DIALOG_MGR()));
+            SvxNumberingTypeTable aNames;
 
             Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
             const sal_Int16* pTypes = aTypes.getConstArray();

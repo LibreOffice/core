@@ -243,7 +243,7 @@ private:
     //add a custom control widget to the file dialog
     void addCustomControl(sal_Int16 controlId);
 
-    static QString getResString( sal_Int16 aRedId );
+    static QString getResString(const char* pRedId);
 
 private Q_SLOTS:
     void cleanupProxy();

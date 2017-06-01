@@ -27,7 +27,7 @@
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <svx/dialmgr.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/svdview.hxx>
 #include <svx/sdasitm.hxx>
 #include "svx/gallery.hxx"
@@ -417,7 +417,7 @@ void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const
 
 void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBindings )
 {
-    sal_uInt16 nStrResId = 0;
+    const char* pStrResId = nullptr;
 
     sal_uInt16 nSID = rReq.GetSlot();
     switch( nSID )
@@ -498,26 +498,26 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
         case SID_FONTWORK_SHAPE:
         case SID_FONTWORK_ALIGNMENT:
         {
-            if ( !nStrResId )
-                nStrResId = RID_SVXSTR_UNDO_APPLY_FONTWORK_ALIGNMENT;
+            if ( !pStrResId )
+                pStrResId = RID_SVXSTR_UNDO_APPLY_FONTWORK_ALIGNMENT;
             SAL_FALLTHROUGH;
         }
         case SID_FONTWORK_CHARACTER_SPACING:
         {
-            if ( !nStrResId )
-                nStrResId = RID_SVXSTR_UNDO_APPLY_FONTWORK_CHARACTER_SPACING;
+            if ( !pStrResId )
+                pStrResId = RID_SVXSTR_UNDO_APPLY_FONTWORK_CHARACTER_SPACING;
             SAL_FALLTHROUGH;
         }
         case SID_FONTWORK_KERN_CHARACTER_PAIRS:
         {
-            if ( !nStrResId )
-                nStrResId = RID_SVXSTR_UNDO_APPLY_FONTWORK_CHARACTER_SPACING;
+            if ( !pStrResId )
+                pStrResId = RID_SVXSTR_UNDO_APPLY_FONTWORK_CHARACTER_SPACING;
             SAL_FALLTHROUGH;
         }
         case SID_FONTWORK_SAME_LETTER_HEIGHTS:
         {
-            if ( !nStrResId )
-                nStrResId = RID_SVXSTR_UNDO_APPLY_FONTWORK_SAME_LETTER_HEIGHT;
+            if ( !pStrResId )
+                pStrResId = RID_SVXSTR_UNDO_APPLY_FONTWORK_SAME_LETTER_HEIGHT;
 
             const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
             const size_t nCount = rMarkList.GetMarkCount();
@@ -529,7 +529,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
                     const bool bUndo = pSdrView->IsUndoEnabled();
                     if( bUndo )
                     {
-                        OUString aStr( SvxResId( nStrResId ) );
+                        OUString aStr( SvxResId( pStrResId ) );
                         pSdrView->BegUndo( aStr );
                         pSdrView->AddUndo( pSdrView->GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pObj ) );
                     }

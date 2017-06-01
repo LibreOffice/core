@@ -31,8 +31,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/bmpmask.hxx>
-#include <svx/dialogs.hrc>
-#include <bmpmask.hrc>
+#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <memory>
 #include "helpid.hrc"
