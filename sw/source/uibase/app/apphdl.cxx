@@ -112,7 +112,7 @@ using namespace ::com::sun::star;
 #include "swslots.hxx"
 #include <cfgid.h>
 
-#include <shells.hrc>
+#include <strings.hrc>
 
 SFX_IMPL_INTERFACE(SwModule, SfxModule)
 

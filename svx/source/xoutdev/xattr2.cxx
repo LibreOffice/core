@@ -22,7 +22,8 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <i18nutil/unicode.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
+#include <svx/svxids.hrc>
 #include "svx/xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
@@ -116,37 +117,37 @@ bool XLineJointItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUnit /*e
 {
     rText.clear();
 
-    sal_uInt16 nId = 0;
+    const char* pId = nullptr;
 
     switch( GetValue() )
     {
         case css::drawing::LineJoint::LineJoint_MAKE_FIXED_SIZE:
         case css::drawing::LineJoint_NONE:
-            nId = RID_SVXSTR_LINEJOINT_NONE;
+            pId = RID_SVXSTR_NONE;
         break;
 
         case css::drawing::LineJoint_MIDDLE:
-            nId = RID_SVXSTR_LINEJOINT_MIDDLE;
+            pId = RID_SVXSTR_LINEJOINT_MIDDLE;
         break;
 
 
         case css::drawing::LineJoint_BEVEL:
-            nId = RID_SVXSTR_LINEJOINT_BEVEL;
+            pId = RID_SVXSTR_LINEJOINT_BEVEL;
         break;
 
 
         case css::drawing::LineJoint_MITER:
-            nId = RID_SVXSTR_LINEJOINT_MITER;
+            pId = RID_SVXSTR_LINEJOINT_MITER;
         break;
 
 
         case css::drawing::LineJoint_ROUND:
-            nId = RID_SVXSTR_LINEJOINT_ROUND;
+            pId = RID_SVXSTR_LINEJOINT_ROUND;
         break;
     }
 
-    if( nId )
-        rText = SvxResId( nId );
+    if (pId)
+        rText = SvxResId(pId);
 
     return true;
 }
@@ -320,25 +321,25 @@ bool XLineCapItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUnit /*eCo
 {
     rText.clear();
 
-    sal_uInt16 nId = 0;
+    const char* pId = nullptr;
 
     switch( GetValue() )
     {
         default: /*css::drawing::LineCap_BUTT*/
-            nId = RID_SVXSTR_LINECAP_BUTT;
+            pId = RID_SVXSTR_LINECAP_BUTT;
         break;
 
         case(css::drawing::LineCap_ROUND):
-            nId = RID_SVXSTR_LINECAP_ROUND;
+            pId = RID_SVXSTR_LINECAP_ROUND;
         break;
 
         case(css::drawing::LineCap_SQUARE):
-            nId = RID_SVXSTR_LINECAP_SQUARE;
+            pId = RID_SVXSTR_LINECAP_SQUARE;
         break;
     }
 
-    if( nId )
-        rText = SvxResId( nId );
+    if (pId)
+        rText = SvxResId(pId);
 
     return true;
 }

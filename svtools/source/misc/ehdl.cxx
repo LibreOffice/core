@@ -19,6 +19,7 @@
 
 #include <osl/mutex.hxx>
 #include <tools/rcid.h>
+#include <tools/simplerm.hxx>
 #include <tools/resary.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/msgbox.hxx>
@@ -26,10 +27,12 @@
 #include <vcl/settings.hxx>
 
 #include <svtools/ehdl.hxx>
+#include <svtools/soerr.hxx>
 #include <svtools/svtresid.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <svtools/sfxecode.hxx>
 #include <memory>
+#include "errtxt.hrc"
 #include "strings.hxx"
 
 static DialogMask aWndFunc(
@@ -139,25 +142,20 @@ static DialogMask aWndFunc(
     return nRet;
 }
 
-
-SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong lEndP, ResMgr *pMgrP) :
-
-    lStart(lStartP), lEnd(lEndP), nId(nIdP), pMgr(pMgrP), pFreeMgr( nullptr )
-
+SfxErrorHandler::SfxErrorHandler(const ErrMsgCode* pIdPs, sal_uLong lStartP, sal_uLong lEndP, const std::locale* pLocale)
+    : lStart(lStartP), lEnd(lEndP), pIds(pIdPs), pResLocale(pLocale)
 {
     ErrorRegistry::RegisterDisplay(&aWndFunc);
-    if( ! pMgr )
+    if (!pResLocale)
     {
-        pMgr = ResMgr::CreateResMgr("svt", Application::GetSettings().GetUILanguageTag() );
-        pFreeMgr.reset(pMgr);
+        xFreeLocale.reset(new std::locale(Translate::Create("svt", Application::GetSettings().GetUILanguageTag())));
+        pResLocale = xFreeLocale.get();
     }
 }
-
 
 SfxErrorHandler::~SfxErrorHandler()
 {
 }
-
 
 bool SfxErrorHandler::CreateString(const ErrorInfo *pErr, OUString &rStr) const
 
@@ -202,14 +200,13 @@ void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr)
     */
 
 {
-    std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr("svt", Application::GetSettings().GetUILanguageTag() ));
-    if( pResMgr )
+    std::locale loc(Translate::Create("svt", Application::GetSettings().GetUILanguageTag()));
+    for (const ErrMsgCode* pItem = getRID_ERRHDL(); pItem->second; ++pItem)
     {
-        ResStringArray aEr(ResId(RID_ERRHDL, *pResMgr));
-        sal_uInt32 nErrIdx = aEr.FindIndex((sal_uInt16)lClassId);
-        if (nErrIdx != RESARRAY_INDEX_NOTFOUND)
+        if (pItem->second == lClassId)
         {
-            rStr = aEr.GetString(nErrIdx);
+            rStr = Translate::get(pItem->first, loc);
+            break;
         }
     }
 }
@@ -224,20 +221,18 @@ bool SfxErrorHandler::GetErrorString(sal_uLong lErrId, OUString &rStr) const
     */
 
 {
-    SolarMutexGuard aGuard;
-
     bool bRet = false;
     rStr = RID_ERRHDL_CLASS;
 
-    ResStringArray aEr(ResId(nId, *pMgr));
-    sal_uInt32 nErrIdx = aEr.FindIndex((sal_uInt16)lErrId);
-    if (nErrIdx != RESARRAY_INDEX_NOTFOUND)
+    for (const ErrMsgCode* pItem = pIds; pItem->second; ++pItem)
     {
-        rStr = rStr.replaceAll("$(ERROR)", aEr.GetString(nErrIdx));
-        bRet = true;
+        if (pItem->second == lErrId)
+        {
+            rStr = rStr.replaceAll("$(ERROR)", Translate::get(pItem->first, *pResLocale));
+            bRet = true;
+            break;
+        }
     }
-    else
-        bRet = false;
 
     if( bRet )
     {
@@ -253,24 +248,23 @@ bool SfxErrorHandler::GetErrorString(sal_uLong lErrId, OUString &rStr) const
 }
 
 SfxErrorContext::SfxErrorContext(
-    sal_uInt16 nCtxIdP, vcl::Window *pWindow, sal_uInt16 nResIdP, ResMgr *pMgrP)
-:   ErrorContext(pWindow), nCtxId(nCtxIdP), nResId(nResIdP), pMgr(pMgrP)
+    sal_uInt16 nCtxIdP, vcl::Window *pWindow, const ErrMsgCode* pIdsP, const std::locale* pResLocaleP)
+:   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP), pResLocale(pResLocaleP)
 {
-    if( nResId==USHRT_MAX )
-        nResId=RID_ERRCTX;
+    if (!pIds)
+        pIds = getRID_ERRCTX();
 }
 
 
 SfxErrorContext::SfxErrorContext(
     sal_uInt16 nCtxIdP, const OUString &aArg1P, vcl::Window *pWindow,
-    sal_uInt16 nResIdP, ResMgr *pMgrP)
-:   ErrorContext(pWindow), nCtxId(nCtxIdP), nResId(nResIdP), pMgr(pMgrP),
+    const ErrMsgCode* pIdsP, const std::locale* pResLocaleP)
+:   ErrorContext(pWindow), nCtxId(nCtxIdP), pIds(pIdsP), pResLocale(pResLocaleP),
     aArg1(aArg1P)
 {
-    if( nResId==USHRT_MAX )
-        nResId=RID_ERRCTX;
+    if (!pIds)
+        pIds = getRID_ERRCTX();
 }
-
 
 bool SfxErrorContext::GetString(sal_uInt32 nErrId, OUString &rStr)
 
@@ -281,43 +275,67 @@ bool SfxErrorContext::GetString(sal_uInt32 nErrId, OUString &rStr)
 
 {
     bool bRet = false;
-    ResMgr* pFreeMgr = nullptr;
-    if( ! pMgr )
+    std::locale* pFreeLocale = nullptr;
+    if (!pResLocale)
     {
-        pFreeMgr = pMgr = ResMgr::CreateResMgr("svt", Application::GetSettings().GetUILanguageTag() );
+        pFreeLocale = new std::locale(Translate::Create("svt", Application::GetSettings().GetUILanguageTag()));
+        pResLocale = pFreeLocale;
     }
-    if( pMgr )
+    if (pResLocale)
     {
-        SolarMutexGuard aGuard;
+        for (const ErrMsgCode* pItem = pIds; pItem->second; ++pItem)
+        {
+            if (pItem->second == nCtxId)
+            {
+                rStr = Translate::get(pItem->first, *pResLocale);
+                rStr = rStr.replaceAll("$(ARG1)", aArg1);
+                bRet = true;
+                break;
+            }
+        }
 
-        ResStringArray aTestEr(ResId(nResId, *pMgr));
-        sal_uInt32 nErrIdx = aTestEr.FindIndex(nCtxId);
-        if (nErrIdx != RESARRAY_INDEX_NOTFOUND)
-        {
-            rStr = aTestEr.GetString(nErrIdx);
-            rStr = rStr.replaceAll("$(ARG1)", aArg1);
-            bRet = true;
-        }
-        else
-        {
-            SAL_WARN( "svtools.misc", "ErrorContext cannot find the resource" );
-            bRet = false;
-        }
+        SAL_WARN_IF(!bRet, "svtools.misc", "ErrorContext cannot find the resource");
 
         if ( bRet )
         {
             sal_uInt16 nId = ( nErrId & ERRCODE_WARNING_MASK ) ? ERRCTX_WARNING : ERRCTX_ERROR;
-            ResStringArray aEr(ResId(RID_ERRCTX, *pMgr));
-            rStr = rStr.replaceAll("$(ERR)", aEr.GetString(nId));
+            for (const ErrMsgCode* pItem = getRID_ERRCTX(); pItem->second; ++pItem)
+            {
+                if (pItem->second == nId)
+                {
+                    rStr = rStr.replaceAll("$(ERR)", Translate::get(pItem->first, *pResLocale));
+                    break;
+                }
+            }
         }
     }
 
-    if( pFreeMgr )
+    if (pFreeLocale)
     {
-        delete pFreeMgr;
-        pMgr = nullptr;
+        delete pFreeLocale;
+        pResLocale = nullptr;
     }
     return bRet;
+}
+
+const ErrMsgCode* getRID_ERRHDL()
+{
+    return RID_ERRHDL;
+}
+
+const ErrMsgCode* getRID_ERRCTX()
+{
+    return RID_ERRCTX;
+}
+
+const ErrMsgCode* getRID_SO_ERROR_HANDLER()
+{
+    return RID_SO_ERROR_HANDLER;
+}
+
+const ErrMsgCode* getRID_SO_ERRCTX()
+{
+    return RID_SO_ERRCTX;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

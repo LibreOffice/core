@@ -27,11 +27,10 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include "RptPage.hxx"
-#include "corestrings.hrc"
+#include "strings.hxx"
 #include <dbaccess/dbsubcomponentcontroller.hxx>
-#include "ModuleHelper.hxx"
 
-#include <RptResId.hrc>
+#include <strings.hrc>
 #include "strings.hxx"
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>

@@ -29,7 +29,7 @@
 #include <com/sun/star/report/ForceNewPage.hpp>
 #include "xmlCondPrtExpr.hxx"
 #include "xmlStyleImport.hxx"
-#include "xmlstrings.hrc"
+#include "strings.hxx"
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
