@@ -342,6 +342,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu
 	writer8 \
 	writer_MS_Word_2007_XML \
 	writer_MS_Word_2007_XML_Template \
+	writer_MS_Word_2007_XML_VBA \
 	writer_OOXML \
 	writer_OOXML_Template \
 	writer_layout_dump_xml \
@@ -388,6 +389,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters
 	writer8_template \
 	MS_Word_2007_XML \
 	MS_Word_2007_XML_Template \
+	MS_Word_2007_XML_VBA \
 	OOXML_Text \
 	OOXML_Text_Template \
 	writer_layout_dump \
