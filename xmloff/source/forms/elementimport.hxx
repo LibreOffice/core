@@ -22,8 +22,6 @@
 
 #include <sal/config.h>
 
-#include <map>
-
 #include "propertyimport.hxx"
 #include "controlelement.hxx"
 #include "valueproperties.hxx"
@@ -36,6 +34,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <osl/diagnose.h>
+
+#include <map>
+#include <vector>
 
 class XMLTextStyleContext;
 namespace xmloff
@@ -460,23 +461,23 @@ namespace xmloff
         friend class OComboItemImport;
 
     protected:
-        css::uno::Sequence< OUString >
+        std::vector<OUString >
                         m_aListSource;
-        css::uno::Sequence< OUString >
+        std::vector< OUString >
                         m_aValueList;
 
-        css::uno::Sequence< sal_Int16 >
+        std::vector< sal_Int16 >
                         m_aSelectedSeq;
-        css::uno::Sequence< sal_Int16 >
+        std::vector< sal_Int16 >
                         m_aDefaultSelectedSeq;
 
-        OUString m_sCellListSource;      /// the cell range which acts as list source for the control
+        OUString        m_sCellListSource;      /// the cell range which acts as list source for the control
 
         sal_Int32       m_nEmptyListItems;      /// number of empty list items encountered during reading
         sal_Int32       m_nEmptyValueItems;     /// number of empty value items encountered during reading
 
-        bool        m_bEncounteredLSAttrib;
-        bool        m_bLinkWithIndexes;     /** <TRUE/> if and only if we should use a cell value binding
+        bool            m_bEncounteredLSAttrib;
+        bool            m_bLinkWithIndexes;     /** <TRUE/> if and only if we should use a cell value binding
                                                     which exchanges the selection index (instead of the selection text
                                                 */
 
