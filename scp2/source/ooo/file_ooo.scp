@@ -251,22 +251,6 @@ File gid_Starregistry_Services_Rdb
     Styles = (PACKED);
 End
 
-File gid_File_Images
-    TXT_FILE_BODY;
-    Dir = FILELIST_DIR;
-    Name = "postprocess_images.filelist";
-    Styles = (FILELIST, PACKED);
-End
-
-#ifdef WITH_HELP
-File gid_File_HelpImages
-    TXT_FILE_BODY;
-    Dir = FILELIST_DIR;
-    Name = "postprocess_helpimages.filelist";
-    Styles = (FILELIST, PACKED);
-End
-#endif
-
 File gid_File_Share_Registry_Lingucomponent_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);

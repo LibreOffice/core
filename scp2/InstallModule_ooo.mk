@@ -13,6 +13,7 @@ $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/ooo,\
 	brand \
 	libreofficekit \
 	ooo \
+	ooo_images \
 	ooobinarytable \
 	pdfimport \
 	reportbuilder \

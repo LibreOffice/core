@@ -805,8 +805,6 @@ $(eval $(call gb_Helper_register_packages, \
 	instsetoo_native_setup \
 	$(if $(ENABLE_OOENV),instsetoo_native_ooenv) \
 	odk_headers_generated \
-	postprocess_images \
-	$(call gb_Helper_optional,HELP,helpcontent2_helpimages) \
 	postprocess_registry \
 	readlicense_oo_readmes \
 	setup_native_misc \
@@ -954,6 +952,11 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	)) \
 	sfx2_classification \
     $(if $(filter OPENCL,$(BUILD_TYPE)),sc_opencl_runtimetest) \
+))
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo_images,\
+	postprocess_images \
+	$(call gb_Helper_optional,HELP,helpcontent2_helpimages) \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ogltrans,\
