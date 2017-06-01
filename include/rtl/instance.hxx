@@ -25,9 +25,7 @@
 #include <cstddef>
 
 #include <osl/doublecheckedlocking.h>
-#if ! HAVE_THREADSAFE_STATICS
 #include <osl/getglobalmutex.hxx>
-#endif
 
 namespace {
 
@@ -383,7 +381,7 @@ namespace rtl {
               using the outer class
               (the one that derives from this base class)
 */
-#if HAVE_THREADSAFE_STATICS
+#if defined LIBO_INTERNAL_ONLY
 template<typename T, typename Unique>
 class Static {
 public:
@@ -443,7 +441,7 @@ private:
               using the outer class
               (the one that derives from this base class)
 */
-#if HAVE_THREADSAFE_STATICS
+#if defined LIBO_INTERNAL_ONLY
 template<typename T, typename Data, typename Unique>
 class StaticWithArg {
 public:
@@ -525,7 +523,7 @@ private:
     @tparam InitAggregate
               initializer functor class
 */
-#if HAVE_THREADSAFE_STATICS
+#if defined LIBO_INTERNAL_ONLY
 template<typename T, typename InitAggregate>
 class StaticAggregate {
 public:
@@ -590,7 +588,7 @@ public:
               Initializer functor's return type.
               Default is T (common practice).
 */
-#if HAVE_THREADSAFE_STATICS
+#if defined LIBO_INTERNAL_ONLY
 template<typename T, typename InitData,
          typename Unique = InitData, typename Data = T>
 class StaticWithInit {

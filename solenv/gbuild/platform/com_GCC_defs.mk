@@ -73,10 +73,6 @@ gb_CXXFLAGS_COMMON := \
 
 gb_CXXFLAGS_Wundef = -Wno-undef
 
-ifneq ($(HAVE_THREADSAFE_STATICS),TRUE)
-gb_CXXFLAGS_COMMON += -fno-threadsafe-statics
-endif
-
 ifeq ($(strip $(gb_GCOV)),YES)
 gb_CFLAGS_COMMON += -fprofile-arcs -ftest-coverage
 gb_CXXFLAGS_COMMON += -fprofile-arcs -ftest-coverage
