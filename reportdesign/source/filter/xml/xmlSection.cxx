@@ -29,7 +29,7 @@
 #include "xmlStyleImport.hxx"
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/report/ReportPrintOption.hpp>
-#include "xmlstrings.hrc"
+#include "strings.hxx"
 #include "xmlTable.hxx"
 
 

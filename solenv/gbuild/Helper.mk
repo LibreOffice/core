@@ -263,6 +263,11 @@ gb_AllLangResTarget_REGISTERED += $(1)
 
 endef
 
+define gb_Helper_register_mos
+gb_AllLangMoTarget_REGISTERED += $(1)
+
+endef
+
 # TODO: this should be extended to handle auto-installation.
 define gb_Helper_register_uiconfigs
 gb_UIConfig_REGISTERED += $(1)

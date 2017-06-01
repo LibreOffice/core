@@ -143,7 +143,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     bool bSuccess = false;
     bool bApi = false;                      //! pass as argument
     bool bTruncated = false;                // for warning
-    sal_uInt16 nErrStringId = 0;
+    const char* pErrStringId = nullptr;
     OUString aErrorMessage;
 
     SCCOL nCol = rParam.nCol1;
@@ -403,7 +403,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         aTester.TestBlock( &rDoc, nTab, rParam.nCol1,rParam.nRow1,nEndCol,nEndRow );
         if ( !aTester.IsEditable() )
         {
-            nErrStringId = aTester.GetMessageId();
+            pErrStringId = aTester.GetMessageId();
             bSuccess = false;
         }
         else if ( (pChangeTrack = rDoc.GetChangeTrack()) != nullptr )
@@ -419,7 +419,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                         nEndCol+nFormulaCols, nEndRow, nTab );
         if (!rDoc.CanFitBlock( aOld, aNew ))
         {
-            nErrStringId = STR_MSSG_DOSUBTOTALS_2;      // can't insert cells
+            pErrStringId = STR_MSSG_DOSUBTOTALS_2;      // can't insert cells
             bSuccess = false;
         }
     }
@@ -613,9 +613,9 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
         if (aErrorMessage.isEmpty())
         {
-            if (!nErrStringId)
-                nErrStringId = STR_MSSG_IMPORTDATA_0;
-            aErrorMessage = ScGlobal::GetRscString( nErrStringId );
+            if (!pErrStringId)
+                pErrStringId = STR_MSSG_IMPORTDATA_0;
+            aErrorMessage = ScGlobal::GetRscString(pErrStringId);
         }
         ScopedVclPtrInstance< InfoBox > aInfoBox( ScDocShell::GetActiveDialogParent(), aErrorMessage );
         aInfoBox->Execute();

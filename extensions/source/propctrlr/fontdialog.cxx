@@ -19,7 +19,7 @@
 
 #include <sfx2/sfxsids.hrc>
 #include "fontdialog.hxx"
-#include "formresid.hrc"
+#include "strings.hrc"
 #include "modulepcr.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
