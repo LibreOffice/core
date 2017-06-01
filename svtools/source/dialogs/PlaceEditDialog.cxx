@@ -13,7 +13,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svtools/svtresid.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <vcl/msgbox.hxx>
 
 using namespace com::sun::star::uno;

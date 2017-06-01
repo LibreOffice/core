@@ -18,7 +18,7 @@
  */
 
 #include <svtools/svtresid.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <svtools/collatorres.hxx>
 
 //  implementation of the collator-algorithm-name translation

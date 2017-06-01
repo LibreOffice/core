@@ -36,7 +36,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfx.hrc>
-#include "bastyp.hrc"
+#include "sfx2/strings.hrc"
 #include "strings.hxx"
 
 #include <comphelper/processfactory.hxx>

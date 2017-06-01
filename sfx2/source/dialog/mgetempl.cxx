@@ -38,7 +38,7 @@
 #include <sfx2/templdlg.hxx>
 #include "templdgi.hxx"
 #include <sfx2/sfx.hrc>
-#include "dialog.hrc"
+#include "sfx2/strings.hrc"
 
 #include <svl/style.hrc>
 #include <svl/stritem.hxx>

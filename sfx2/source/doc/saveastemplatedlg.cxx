@@ -26,7 +26,7 @@
 #include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 
-#include "doc.hrc"
+#include "sfx2/strings.hrc"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;

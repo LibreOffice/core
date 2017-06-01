@@ -34,6 +34,7 @@
 #include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <comphelper/processfactory.hxx>
+#include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
 #include "scres.hrc"
 #include "scmod.hxx"

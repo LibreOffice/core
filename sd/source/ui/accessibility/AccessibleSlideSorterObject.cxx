@@ -41,7 +41,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include "glob.hrc"
+#include "strings.hrc"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

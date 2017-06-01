@@ -50,7 +50,7 @@
 #include "svx/framelink.hxx"
 #include "svx/sdr/table/tabledesign.hxx"
 #include "svx/svdundo.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdglob.hxx"
 #include "editeng/writingmodeitem.hxx"
 #include "editeng/frmdiritem.hxx"

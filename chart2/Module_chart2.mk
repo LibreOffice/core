@@ -12,6 +12,7 @@ $(eval $(call gb_Module_Module,chart2))
 $(eval $(call gb_Module_add_targets,chart2,\
     Library_chartcontroller \
     Library_chartcore \
+	UIConfig_chart2 \
 ))
 ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Module_add_targets,chart2,\
@@ -21,8 +22,7 @@ $(eval $(call gb_Module_add_targets,chart2,\
 endif
 
 $(eval $(call gb_Module_add_l10n_targets,chart2,\
-    AllLangResTarget_chartcontroller \
-	UIConfig_chart2 \
+	AllLangMoTarget_chart \
 ))
 
 $(eval $(call gb_Module_add_check_targets,chart2,\

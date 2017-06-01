@@ -290,11 +290,11 @@ namespace frm
 
             @param f
                 a functionoid with no arguments to do the work
-            @param _nErrorResourceId
+            @param pErrorResourceId
                 the id of the resources string to use as error message
         */
         template < typename FunctObj >
-        void        impl_doActionInSQLContext_throw( FunctObj f, sal_uInt16 _nErrorResourceId ) const;
+        void        impl_doActionInSQLContext_throw( FunctObj f, const char* pErrorResourceId ) const;
 
         // functionoid to call appendOrderByColumn
         class impl_appendOrderByColumn_throw

@@ -33,8 +33,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/titledockwin.hxx>
-#include "sfxlocal.hrc"
-#include "Sidebar.hrc"
+#include "sfx2/strings.hrc"
 #include <framework/ContextChangeEventMultiplexerTunnel.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fixed.hxx>

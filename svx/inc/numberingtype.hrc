@@ -1,0 +1,61 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SVX_INC_NUMBERINGTYPE_HRC
+#define INCLUDED_SVX_INC_NUMBERINGTYPE_HRC
+
+#include <utility>
+
+#define N_(String) (u8##String)
+
+const std::pair<const char*, int> RID_SVXSTRARY_NUMBERINGTYPE[] =
+{
+    { "None" ,                                  5/*SVX_NUM_NUMBER_NONE         */ },
+    { "Bullet" ,                                6/*SVX_NUM_CHAR_SPECIAL        */ },
+    { "Graphics" ,                              8/*SVX_NUM_BITMAP              */ },
+    { "Linked graphics" ,                     136/*SVX_NUM_BITMAP|0x80         */ },
+    { "1, 2, 3, ..." ,                          4/*SVX_NUM_ARABIC              */ },
+    { "A, B, C, ..." ,                          0/*SVX_NUM_CHARS_UPPER_LETTER  */ },
+    { "a, b, c, ..." ,                          1/*SVX_NUM_CHARS_LOWER_LETTER  */ },
+    { "I, II, III, ..." ,                       2/*SVX_NUM_ROMAN_UPPER         */ },
+    { "i, ii, iii, ..." ,                       3/*SVX_NUM_ROMAN_LOWER         */ },
+    { "A, .., AA, .., AAA, ..." ,               9/*SVX_NUM_CHARS_UPPER_LETTER_N*/ },
+    { "a, .., aa, .., aaa, ..." ,               10/*SVX_NUM_CHARS_LOWER_LETTER_N*/ },
+    { "Native Numbering" ,                      12 /*NATIVE_NUMBERING                   */ },
+    { "А, Б, .., Аа, Аб, ... (Bulgarian)" ,     38 /*CHARS_CYRILLIC_UPPER_LETTER_BG     */ },
+    { "а, б, .., аа, аб, ... (Bulgarian)" ,     39 /*CHARS_CYRILLIC_LOWER_LETTER_BG     */ },
+    { "А, Б, .., Аа, Бб, ... (Bulgarian)" ,     40 /*CHARS_CYRILLIC_UPPER_LETTER_N_BG   */ },
+    { "а, б, .., аа, бб, ... (Bulgarian)" ,     41 /*CHARS_CYRILLIC_LOWER_LETTER_N_BG   */ },
+    { "А, Б, .., Аа, Аб, ... (Russian)" ,       42 /*CHARS_CYRILLIC_UPPER_LETTER_RU     */ },
+    { "а, б, .., аа, аб, ... (Russian)" ,       43 /*CHARS_CYRILLIC_LOWER_LETTER_RU     */ },
+    { "А, Б, .., Аа, Бб, ... (Russian)" ,       44 /*CHARS_CYRILLIC_UPPER_LETTER_N_RU   */ },
+    { "а, б, .., аа, бб, ... (Russian)" ,       45 /*CHARS_CYRILLIC_LOWER_LETTER_N_RU   */ },
+    { "А, Б, .., Аа, Аб, ... (Serbian)" ,       48 /*CHARS_CYRILLIC_UPPER_LETTER_SR     */ },
+    { "а, б, .., аа, аб, ... (Serbian)" ,       49 /*CHARS_CYRILLIC_LOWER_LETTER_SR     */ },
+    { "А, Б, .., Аа, Бб, ... (Serbian)" ,       50 /*CHARS_CYRILLIC_UPPER_LETTER_N_SR   */ },
+    { "а, б, .., аа, бб, ... (Serbian)" ,       51 /*CHARS_CYRILLIC_LOWER_LETTER_N_SR   */ },
+    { "Α, Β, Γ, ... (Greek Upper Letter)",      52 /*CHARS_GREEK_UPPER_LETTER           */ },
+    { "α, β, γ, ... (Greek Lower Letter)",      53 /*CHARS_GREEK_LOWER_LETTER           */ },
+    { "א...י, יא...כ, ..." ,                    56 /*NUMBER_HEBREW                      */ },
+    { "א...ת, אא...תת, ..." ,                   33 /*CHARS_HEBREW                       */ }
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

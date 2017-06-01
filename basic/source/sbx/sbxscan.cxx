@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include <vcl/errcode.hxx>
-#include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 
@@ -38,11 +38,10 @@
 #include "sbxbase.hxx"
 #include <basic/sbxfac.hxx>
 #include <basic/sbxform.hxx>
-#include <svtools/svtools.hrc>
 
-#include "basrid.hxx"
 #include "date.hxx"
 #include "runtime.hxx"
+#include "strings.hrc"
 
 #include <rtl/strbuf.hxx>
 #include <rtl/character.hxx>
@@ -584,21 +583,16 @@ bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
 namespace
 {
 
-ResMgr& implGetResMgr()
+const std::locale& implGetResLocale()
 {
-    static ResMgr* const pResMgr( ResMgr::CreateResMgr(
-                               "sb", Application::GetSettings().GetUILanguageTag() ));
-
-    return *pResMgr;
+    static std::locale loc(Translate::Create("sb", Application::GetSettings().GetUILanguageTag()));
+    return loc;
 }
 
-class SbxValueFormatResId : public ResId
+OUString SbxValueFormatResId(const char *pId)
 {
-public:
-    explicit SbxValueFormatResId( sal_uInt32 nId )
-        : ResId( nId, implGetResMgr() )
-    {}
-};
+    return Translate::get(pId, implGetResLocale());
+}
 
 enum class VbaFormatType
 {

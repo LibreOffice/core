@@ -17,24 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ids.hrc"
+#include "ids.hxx"
+#include "strings.hrc"
 #include "lockcorrupt.hxx"
-
+#include <tools/simplerm.hxx>
 #include <vcl/button.hxx>
 
-LockCorruptQueryBox::LockCorruptQueryBox( vcl::Window* pParent, ResMgr* pResMgr ) :
-    MessBox(pParent, 0,
-            ResId(STR_LOCKCORRUPT_TITLE, *pResMgr).toString(),
-            OUString() )
+LockCorruptQueryBox::LockCorruptQueryBox(vcl::Window* pParent, const std::locale& rResLocale)
+    : MessBox(pParent, 0, Translate::get(STR_LOCKCORRUPT_TITLE, rResLocale), OUString())
 {
     SetImage( ErrorBox::GetStandardImage() );
 
-    AddButton(ResId(STR_LOCKCORRUPT_OPENREADONLY_BTN, *pResMgr).toString(), RET_OK,
+    AddButton(Translate::get(STR_LOCKCORRUPT_OPENREADONLY_BTN, rResLocale), RET_OK,
         ButtonDialogFlags::Default | ButtonDialogFlags::OK | ButtonDialogFlags::Focus);
 
     AddButton( StandardButtonType::Cancel, RET_CANCEL, ButtonDialogFlags::Cancel );
 
-    SetMessText(ResId(STR_LOCKCORRUPT_MSG, *pResMgr ).toString());
+    SetMessText(Translate::get(STR_LOCKCORRUPT_MSG, rResLocale));
 }
 
 LockCorruptQueryBox::~LockCorruptQueryBox()

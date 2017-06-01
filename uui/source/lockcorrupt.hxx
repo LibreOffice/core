@@ -24,7 +24,7 @@
 class LockCorruptQueryBox : public MessBox
 {
 public:
-    LockCorruptQueryBox( vcl::Window* pParent, ResMgr* pResMgr );
+    LockCorruptQueryBox(vcl::Window* pParent, const std::locale& rResLocale);
     virtual ~LockCorruptQueryBox() override;
 };
 

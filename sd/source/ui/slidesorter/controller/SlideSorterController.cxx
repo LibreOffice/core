@@ -58,7 +58,7 @@
 #include "sdresid.hxx"
 #include "strings.hrc"
 #include "app.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "sdmod.hxx"
 #include "sdxfer.hxx"
 #include "ViewShellHint.hxx"

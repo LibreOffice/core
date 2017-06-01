@@ -17,83 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "dbmm_module.hxx"
-#include "dbmm_global.hrc"
-#include "macromigrationdialog.hxx"
 #include "macromigrationwizard.hxx"
-
-#include <com/sun/star/ucb/AlreadyInitializedException.hpp>
-#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
-
-#include <svtools/genericunodialog.hxx>
 
 namespace dbmm
 {
-
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::beans::XPropertySetInfo;
-    using ::com::sun::star::beans::Property;
-    using ::com::sun::star::ucb::AlreadyInitializedException;
-    using ::com::sun::star::sdb::XOfficeDatabaseDocument;
-    using ::com::sun::star::lang::IllegalArgumentException;
-    using ::com::sun::star::frame::XStorable;
-
-    // MacroMigrationDialogService
-    class MacroMigrationDialogService;
-    typedef ::svt::OGenericUnoDialog                                                MacroMigrationDialogService_Base;
-    typedef ::comphelper::OPropertyArrayUsageHelper< MacroMigrationDialogService >  MacroMigrationDialogService_PBase;
-
-    class MacroMigrationDialogService
-                :public MacroMigrationDialogService_Base
-                ,public MacroMigrationDialogService_PBase
-                ,public MacroMigrationModuleClient
-    {
-    public:
-        explicit MacroMigrationDialogService( const Reference< XComponentContext >& _rxContext );
-
-        // XTypeProvider
-        virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-
-        // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-        // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
-
-        // XPropertySet
-        virtual Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo() override;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-
-        // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
-
-        // helper for factories
-        static Reference< XInterface > SAL_CALL Create( const Reference< XComponentContext >& _rxContext );
-        /// @throws RuntimeException
-        static OUString SAL_CALL getImplementationName_static();
-        /// @throws RuntimeException
-        static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
-
-    protected:
-        virtual ~MacroMigrationDialogService() override;
-
-    protected:
-        virtual VclPtr<Dialog> createDialog( vcl::Window* _pParent ) override;
-
-    private:
-        Reference< XOfficeDatabaseDocument >    m_xDocument;
-    };
-
     // MacroMigrationDialogService
     MacroMigrationDialogService::MacroMigrationDialogService( const Reference< XComponentContext >& _rxContext )
         :MacroMigrationDialogService_Base( _rxContext )
@@ -157,7 +84,7 @@ namespace dbmm
 
         if ( _rArguments.getLength() != 1 )
             throw IllegalArgumentException(
-                MacroMigrationResId(STR_INVALID_NUMBER_ARGS),
+                DBA_RES(STR_INVALID_NUMBER_ARGS),
                 *this,
                 1
             );
@@ -165,7 +92,7 @@ namespace dbmm
         m_xDocument.set( _rArguments[0], UNO_QUERY );
         if ( !m_xDocument.is() )
             throw IllegalArgumentException(
-                MacroMigrationResId(STR_NO_DATABASE),
+                DBA_RES(STR_NO_DATABASE),
                 *this,
                 1
             );
@@ -173,7 +100,7 @@ namespace dbmm
         Reference< XStorable > xDocStor( m_xDocument, UNO_QUERY_THROW );
         if ( xDocStor->isReadonly() )
             throw IllegalArgumentException(
-                MacroMigrationResId(STR_NOT_READONLY),
+                DBA_RES(STR_NOT_READONLY),
                 *this,
                 1
             );
@@ -197,12 +124,6 @@ namespace dbmm
         describeProperties( aProps );
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
-
-    void createRegistryInfo_MacroMigrationDialogService()
-    {
-        static OAutoRegistration< MacroMigrationDialogService > aAutoRegistration;
-    }
-
 } // namespace dbmm
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
