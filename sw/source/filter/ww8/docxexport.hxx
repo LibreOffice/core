@@ -100,6 +100,9 @@ class DocxExport : public MSWordExportBase
     /// Exporter of drawings.
     DocxSdrExport* m_pSdrExport;
 
+    /// If the result will be a .docm file or not.
+    bool m_bDocm;
+
     DocxSettingsData m_aSettings;
 
 public:
@@ -254,7 +257,7 @@ public:
 
     /// Pass the pDocument, pCurrentPam and pOriginalPam to the base class.
     DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument,
-            SwPaM *pCurrentPam, SwPaM *pOriginalPam );
+            SwPaM *pCurrentPam, SwPaM *pOriginalPam, bool bDocm );
 
     /// Destructor.
     virtual ~DocxExport() override;
