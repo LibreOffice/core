@@ -153,7 +153,7 @@ namespace basegfx
             The second 2D Vector
 
             @return
-            The Angle value of the two involved 2D Vectors in -pi/2 < return < pi/2
+            The Angle value of the two involved 2D Vectors ranging from -pi to +pi
         */
         double angle( const B2DVector& rVec ) const;
 
