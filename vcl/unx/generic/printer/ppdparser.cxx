@@ -548,6 +548,10 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
                 << rFile << "\" !");
         return nullptr;
     }
+    else
+        SAL_INFO("vcl.unx.print", "Parsing printer info from \""
+                 << rFile << "\" !");
+
 
     PPDCache &rPPDCache = thePPDCache::get();
     for( ::std::list< PPDParser* >::const_iterator it = rPPDCache.aAllParsers.begin(); it != rPPDCache.aAllParsers.end(); ++it )
@@ -865,6 +869,9 @@ void PPDParser::parse( ::std::list< OString >& rLines )
     {
         OString aCurrentLine( *line );
         ++line;
+
+        SAL_INFO("vcl.unx.print", "Parse line '" << aCurrentLine << "'");
+
         if (aCurrentLine.getLength() < 2 || aCurrentLine[0] != '*')
             continue;
         if( aCurrentLine[1] == '%' )
@@ -1124,6 +1131,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         OString aLine(*line);
         if (aLine.startsWith("*Default"))
         {
+            SAL_INFO("vcl.unx.print", "Found a default: '" << aLine << "'");
             OUString aKey(OStringToOUString(aLine.copy(8), RTL_TEXTENCODING_MS_1252));
             sal_Int32 nPos = aKey.indexOf( ':' );
             if( nPos != -1 )
@@ -1148,6 +1156,7 @@ void PPDParser::parse( ::std::list< OString >& rLines )
                     // so invent that key here and have a default value
                     PPDKey* pKey = new PPDKey( aKey );
                     pKey->insertValue( aOption, eInvocation /*or what ?*/ );
+                    pKey->m_pDefaultValue = pKey->getValue( aOption );
                     insertKey( aKey, pKey );
                 }
             }

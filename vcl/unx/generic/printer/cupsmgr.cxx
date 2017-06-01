@@ -473,7 +473,8 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                         SAL_INFO("vcl.unx.print", "ppdOpenFile failed, falling back to generic driver");
 
                     // remove temporary PPD file
-                    unlink( aPPDFile.getStr() );
+                    if (!getenv("SAL_CUPS_PPD_RETAIN_TMP"))
+                        unlink( aPPDFile.getStr() );
                 }
                 else
                     SAL_INFO("vcl.unx.print", "cupsGetPPD failed, falling back to generic driver");
@@ -490,6 +491,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
     {
         // get the default PPD
         pNewParser = PPDParser::getParser( "SGENPRT" );
+        SAL_WARN("vcl.unx.print", "Parsing default SGENPRT PPD" );
 
         PrinterInfo& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
 
