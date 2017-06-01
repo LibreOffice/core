@@ -1,0 +1,17 @@
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+    <node oor:name="writer_MS_Word_2007_VBA" oor:op="replace" >
+    <prop oor:name="DetectService"><value>com.sun.star.comp.oox.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>docm</value></prop>
+        <prop oor:name="MediaType"><value>application/msword</value></prop>
+        <prop oor:name="Preferred"><value>true</value></prop>
+        <prop oor:name="PreferredFilter"><value>MS Word 2007 XML VBA</value></prop>
+        <prop oor:name="UIName"><value xml:lang="en-US">Microsoft Word 2007-2013 XML VBA</value></prop>
+        <prop oor:name="ClipboardFormat"><value>MSWordDoc</value></prop>
+    </node>

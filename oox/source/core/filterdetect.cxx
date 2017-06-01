@@ -162,9 +162,11 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 
 OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& rContentType )
 {
-    if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" ||
-        rContentType == "application/vnd.ms-word.document.macroEnabled.main+xml" )
+    if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" )
         return OUString( "writer_MS_Word_2007" );
+
+    if( rContentType == "application/vnd.ms-word.document.macroEnabled.main+xml" )
+        return OUString( "writer_MS_Word_2007_VBA" );
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml" ||
         rContentType == "application/vnd.ms-word.template.macroEnabledTemplate.main+xml" )
