@@ -1,0 +1,225 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_01f7e3d3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-01T11:36:51Z",
+      "side": 1,
+      "message": "... when reading it fails and skip \"Locked document dialog\" in that case",
+      "revId": "80fac6359dbc96e46a06533bb96ec2b3372db390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_2104dfbe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-01T11:36:51Z",
+      "side": 1,
+      "message": "when creating lock file is not possible",
+      "revId": "80fac6359dbc96e46a06533bb96ec2b3372db390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_4101ebad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-01T11:36:51Z",
+      "side": 1,
+      "message": "Two dialogs: \"lock file create error\" and \"empty lockfile is present\"",
+      "revId": "80fac6359dbc96e46a06533bb96ec2b3372db390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_612c274b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-01T11:36:51Z",
+      "side": 1,
+      "message": "Set the document to read-only when creating lockfile is not possible. If lockfile is corrupt or empty, inform the user. They can interrupt loading the document or open it read-only, which also erases the corrupt lock file after closing the document",
+      "revId": "80fac6359dbc96e46a06533bb96ec2b3372db390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a1260f66",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-01T11:36:51Z",
+      "side": 1,
+      "message": "... for create lockfile error",
+      "revId": "80fac6359dbc96e46a06533bb96ec2b3372db390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c12b1b2f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-01T11:36:51Z",
+      "side": 1,
+      "message": "(lock file is corrupt)",
+      "revId": "80fac6359dbc96e46a06533bb96ec2b3372db390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_813113a5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-01T11:36:51Z",
+      "side": 1,
+      "message": "I guess this ain\u0027t the case anymore ;)",
+      "revId": "80fac6359dbc96e46a06533bb96ec2b3372db390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_21e85f10",
+        "filename": "include/svl/documentlockfile.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-01T11:36:51Z",
+      "side": 1,
+      "message": "\"if current user is the owner\"",
+      "revId": "80fac6359dbc96e46a06533bb96ec2b3372db390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_41e56b35",
+        "filename": "include/svl/documentlockfile.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-01T11:36:51Z",
+      "side": 1,
+      "message": "s/without test/unconditionally/",
+      "revId": "80fac6359dbc96e46a06533bb96ec2b3372db390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_41bc8b05",
+        "filename": "offapi/com/sun/star/document/LockFileCorruptRequest.idl",
+        "patchSetId": 11
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-01T11:36:51Z",
+      "side": 1,
+      "message": "\"Is used for interaction handle to query user\u0027s decision when the lock file is corrupt\"\n\n(LockFileIgnoreRequest.idl isn\u0027t written any better, to be honest)",
+      "revId": "80fac6359dbc96e46a06533bb96ec2b3372db390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_813cb394",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-01T11:36:51Z",
+      "side": 1,
+      "message": "\"when system locking is enabled\"",
+      "revId": "80fac6359dbc96e46a06533bb96ec2b3372db390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a10fefdf",
+        "filename": "sfx2/source/doc/docfile.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-01T11:36:51Z",
+      "side": 1,
+      "message": "bReadOnly",
+      "revId": "80fac6359dbc96e46a06533bb96ec2b3372db390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_01db637d",
+        "filename": "uui/source/lockfailed.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-01T11:36:51Z",
+      "side": 1,
+      "message": "Pls remove the commented-out code, unless it is relevant to the current code in some way",
+      "revId": "80fac6359dbc96e46a06533bb96ec2b3372db390",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
