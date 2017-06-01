@@ -22,6 +22,30 @@
       "revId": "473d21e805833daedf1a19ebea589a2e43cea815",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_1ec90279",
+        "filename": "basctl/uiconfig/basicide/menubar/menubar.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-06-01T05:44:49Z",
+      "side": 1,
+      "message": "In MSVS, these are with Run in Debug menu. KDEvelop, too, has its breakpoint and run controls grouped together under Run.\n\nDo other IDEs follow this? Is this a convention? I feel it more natural that breakpoints and watches are tools.",
+      "parentUuid": "5a3905b3_1e04a2be",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 52
+      },
+      "revId": "473d21e805833daedf1a19ebea589a2e43cea815",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
