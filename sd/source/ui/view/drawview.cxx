@@ -41,7 +41,7 @@
 #include "stlsheet.hxx"
 
 #include <svx/svdoutl.hxx>
-#include <svx/svdstr.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
 #include "glob.hrc"

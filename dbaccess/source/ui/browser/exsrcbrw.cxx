@@ -26,7 +26,8 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include "formadapter.hxx"
 #include <comphelper/processfactory.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 #include "dbu_reghelper.hxx"
 #include <o3tl/any.hxx>
 #include <tools/diagnose_ex.h>

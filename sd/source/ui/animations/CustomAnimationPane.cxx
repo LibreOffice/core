@@ -78,7 +78,7 @@
 #include "app.hrc"
 
 #include <svx/svdetc.hxx>
-#include <svx/svdstr.hrc>
+#include <svx/strings.hrc>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>

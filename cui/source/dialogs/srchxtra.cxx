@@ -26,6 +26,7 @@
 #include <cuires.hrc>
 #include <svx/svxitems.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/strarray.hxx>
 #include <editeng/flstitem.hxx>
 #include "chardlg.hxx"
 #include "paragrph.hxx"
@@ -137,7 +138,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(vcl::Window* pParent,
     SfxObjectShell* pSh = SfxObjectShell::Current();
     DBG_ASSERT( pSh, "No DocShell" );
 
-    ResStringArray aAttrNames(ResId(RID_ATTR_NAMES, DIALOG_MGR()));
+    SvxAttrNameTable aAttrNames;
     SfxItemPool& rPool = pSh->GetPool();
     SfxItemSet aSet( rPool, pWhRanges );
     SfxWhichIter aIter( aSet );

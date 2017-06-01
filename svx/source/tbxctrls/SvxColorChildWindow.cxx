@@ -20,7 +20,7 @@
 #include <svx/SvxColorChildWindow.hxx>
 #include <sfx2/dockwin.hxx>
 #include <svx/svxids.hrc>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/colrctrl.hxx>
 #include <svx/dialmgr.hxx>
 
