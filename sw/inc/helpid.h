@@ -176,6 +176,12 @@
 #define HID_NID_NEXT                                            "SW_HID_NID_NEXT"
 #define HID_MM_NEXT_PAGE                                        "SW_HID_MM_NEXT_PAGE"
 #define HID_MM_PREV_PAGE                                        "SW_HID_MM_PREV_PAGE"
+#define HID_MM_ADDBLOCK_ELEMENTS                                "SW_HID_MM_ADDBLOCK_ELEMENTS"
+#define HID_MM_ADDBLOCK_INSERT                                  "SW_HID_MM_ADDBLOCK_INSERT"
+#define HID_MM_ADDBLOCK_REMOVE                                  "SW_HID_MM_ADDBLOCK_REMOVE"
+#define HID_MM_ADDBLOCK_DRAG                                    "SW_HID_MM_ADDBLOCK_DRAG"
+#define HID_MM_ADDBLOCK_PREVIEW                                 "SW_HID_MM_ADDBLOCK_PREVIEW"
+#define HID_MM_ADDBLOCK_MOVEBUTTONS                             "SW_HID_MM_ADDBLOCK_MOVEBUTTONS"
 
 #define HID_TBX_FORMULA_CALC                                    "SW_HID_TBX_FORMULA_CALC"
 #define HID_TBX_FORMULA_CANCEL                                  "SW_HID_TBX_FORMULA_CANCEL"
