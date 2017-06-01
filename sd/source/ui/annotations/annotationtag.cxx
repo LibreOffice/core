@@ -36,7 +36,7 @@
 
 #include "View.hxx"
 #include "sdresid.hxx"
-#include "annotations.hrc"
+#include "strings.hrc"
 #include "annotationmanagerimpl.hxx"
 #include "annotationwindow.hxx"
 #include "annotationtag.hxx"

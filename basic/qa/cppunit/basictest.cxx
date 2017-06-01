@@ -20,7 +20,6 @@
 
 void MacroSnippet::InitSnippet()
 {
-    CPPUNIT_ASSERT_MESSAGE( "No resource manager", maDll.GetBasResMgr() != nullptr );
     mpBasic = new StarBASIC();
     StarBASIC::SetGlobalErrorHdl( LINK( this, MacroSnippet, BasicErrorHdl ) );
 }

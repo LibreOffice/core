@@ -26,7 +26,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svl/style.hxx>
 #include <editeng/memberids.hrc>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include "svx/xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/xdef.hxx>

@@ -19,7 +19,7 @@
 #include "ReportComponentHandler.hxx"
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include "uistrings.hrc"
+#include "strings.hxx"
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

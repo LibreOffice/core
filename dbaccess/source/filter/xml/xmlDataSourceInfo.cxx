@@ -24,7 +24,8 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmlEnums.hxx"
-#include "xmlstrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vector>
 

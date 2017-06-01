@@ -21,7 +21,8 @@
 #include "uiservices.hxx"
 #include "unosqlmessage.hxx"
 #include "dbu_reghelper.hxx"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
+#include "strings.hxx"
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
