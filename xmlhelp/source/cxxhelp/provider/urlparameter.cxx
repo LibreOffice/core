@@ -327,16 +327,14 @@ public:
 
     void addToBuffer( const char* buffer,int len );
 
-    sal_Int8 const * getData() const { return reinterpret_cast<sal_Int8 const *>(buffer.get()); }
-
-    sal_Int32 getLen() const { return sal_Int32( len ); }
+    OStringBuffer const & getData() const { return buffer; }
 
 private:
 
     osl::Mutex m_aMutex;
 
-    int len,pos;
-    std::unique_ptr<char[]> buffer;
+    int pos;
+    OStringBuffer buffer;
 };
 
 
@@ -356,7 +354,7 @@ void URLParameter::open( const Command& aCommand,
     InputStreamTransformer* p = new InputStreamTransformer( this,m_pDatabases,isRoot() );
     try
     {
-        xDataSink->writeBytes( Sequence< sal_Int8 >( p->getData(),p->getLen() ) );
+        xDataSink->writeBytes( Sequence< sal_Int8 >( reinterpret_cast<const sal_Int8*>(p->getData().getStr()), p->getData().getLength() ) );
     }
     catch( const Exception& )
     {
@@ -716,25 +714,21 @@ fileClose(void * context) {
 InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
                                                 Databases*    pDatabases,
                                                 bool isRoot )
-    : len( 0 ),
-      pos( 0 ),
-      buffer( new char[1] ) // Initializing with one element to avoid gcc compiler warning
+    : pos( 0 )
 {
     if( isRoot )
     {
-        buffer.reset();
+        buffer.setLength(0);
         pDatabases->cascadingStylesheet( urlParam->get_language(),
-                                         buffer,
-                                         &len );
+                                         buffer );
     }
     else if( urlParam->isActive() )
     {
-        buffer.reset();
+        buffer.setLength(0);
         pDatabases->setActiveText( urlParam->get_module(),
                                    urlParam->get_language(),
                                    urlParam->get_id(),
-                                   buffer,
-                                   &len );
+                                   buffer );
     }
     else
     {
@@ -918,7 +912,7 @@ sal_Int32 SAL_CALL InputStreamTransformer::readBytes( Sequence< sal_Int8 >& aDat
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    int curr,available_ = len-pos;
+    int curr,available_ = buffer.getLength() - pos;
     if( nBytesToRead <= available_ )
         curr = nBytesToRead;
     else
@@ -950,7 +944,7 @@ void SAL_CALL InputStreamTransformer::skipBytes( sal_Int32 nBytesToSkip )
 sal_Int32 SAL_CALL InputStreamTransformer::available()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    return len-pos > 0 ? len - pos : 0 ;
+    return buffer.getLength() - pos > 0 ? buffer.getLength() - pos : 0 ;
 }
 
 
@@ -967,8 +961,8 @@ void SAL_CALL InputStreamTransformer::seek( sal_Int64 location )
     else
         pos = sal::static_int_cast<sal_Int32>( location );
 
-    if( pos > len )
-        pos = len;
+    if( pos > buffer.getLength() )
+        pos = buffer.getLength();
 }
 
 
@@ -983,7 +977,7 @@ sal_Int64 SAL_CALL InputStreamTransformer::getLength()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    return len;
+    return buffer.getLength();
 }
 
 
@@ -991,11 +985,7 @@ void InputStreamTransformer::addToBuffer( const char* buffer_,int len_ )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    std::unique_ptr<char[]> tmp(buffer.release());
-    buffer.reset( new char[ len+len_ ] );
-    memcpy( static_cast<void*>(buffer.get()),static_cast<void*>(tmp.get()),sal_uInt32( len ) );
-    memcpy( static_cast<void*>(buffer.get()+len),static_cast<void const *>(buffer_),sal_uInt32( len_ ) );
-    len += len_;
+    buffer.append( buffer_, len_ );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -173,8 +173,7 @@ namespace chelp {
          */
 
         void cascadingStylesheet( const OUString& Language,
-                                  std::unique_ptr<char[]>& buffer,
-                                  int* byteCount );
+                                  OStringBuffer& buffer );
 
         /**
          *  Changes the stylesheet for further reads.
@@ -189,8 +188,7 @@ namespace chelp {
         void setActiveText( const OUString& Module,
                             const OUString& Language,
                             const OUString& Id,
-                            std::unique_ptr<char[]>& buffer,
-                            int* byteCount );
+                            OStringBuffer& buffer );
 
         /**
          *  Has the purpose of forcing the jarfile to stay open
