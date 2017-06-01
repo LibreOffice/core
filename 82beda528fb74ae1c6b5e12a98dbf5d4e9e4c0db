@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_3c496660",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1130,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-01T20:59:18Z",
+      "side": 1,
+      "message": "What *exactly* is this supposed to check? Only if it\u0027s a format other than number, in which case it is correct, or also whether it is the General format, in which case it is not sufficient?",
+      "revId": "82beda528fb74ae1c6b5e12a98dbf5d4e9e4c0db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_5c74729b",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2639,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-01T20:59:18Z",
+      "side": 1,
+      "message": "This was already present earlier, but using hard coded nNumberFormat \u003d\u003d 4 is wrong, this works only for the default locale with which the number formatter was initially created, not other locales.",
+      "range": {
+        "startLine": 2639,
+        "startChar": 95,
+        "endLine": 2639,
+        "endChar": 114
+      },
+      "revId": "82beda528fb74ae1c6b5e12a98dbf5d4e9e4c0db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_7c792e93",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2646,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-01T20:59:18Z",
+      "side": 1,
+      "message": "Ditto, nNumberFormat \u003d\u003d 0 is wrong.",
+      "range": {
+        "startLine": 2646,
+        "startChar": 95,
+        "endLine": 2646,
+        "endChar": 114
+      },
+      "revId": "82beda528fb74ae1c6b5e12a98dbf5d4e9e4c0db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
