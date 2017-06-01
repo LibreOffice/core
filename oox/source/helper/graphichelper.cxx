@@ -271,14 +271,11 @@ std::vector< uno::Reference<graphic::XGraphic> > GraphicHelper::importGraphics(c
 
     for (const auto& rStream : rStreams)
     {
-        if (rStream.is())
+        uno::Sequence<beans::PropertyValue > aArgs = comphelper::InitPropertySequence(
         {
-            uno::Sequence<beans::PropertyValue > aArgs = comphelper::InitPropertySequence(
-            {
-                {"InputStream", uno::makeAny(rStream)}
-            });
-            aArgsVec.push_back(aArgs);
-        }
+            {"InputStream", uno::makeAny(rStream)}
+        });
+        aArgsVec.push_back(aArgs);
     }
 
     std::vector< uno::Reference<graphic::XGraphic> > aRet;
