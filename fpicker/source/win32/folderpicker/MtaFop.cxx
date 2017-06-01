@@ -280,7 +280,7 @@ bool CMtaFolderPicker::browseForFolder( )
                     // dispatching all messages but we expect to
                     // receive only paint or timer messages that's
                     // why we don't need to call TranslateMessage or
-                    // TranslateAccelerator, because keybord or
+                    // TranslateAccelerator, because keyboard or
                     // mouse messages are for the FolderPicker which
                     // is in the foreground and should not arrive here
                     MSG msg;

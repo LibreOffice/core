@@ -189,7 +189,7 @@ void MenuBarManager::Destroy()
     if ( !rBHelper.bDisposed )
     {
         // stop asynchronous settings timer and
-        // release defered item container reference
+        // release deferred item container reference
         m_aAsyncSettingsTimer.Stop();
         m_xDeferedItemContainer.clear();
         RemoveListener();

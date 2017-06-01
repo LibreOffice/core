@@ -366,7 +366,7 @@ Model::XPropertySet_t Model::cloneBindingAsGhost( const XPropertySet_t &xBinding
     // Create a new binding instance first...
     Binding *pBinding = new Binding();
 
-    // ...and bump up the "defered notification counter"
+    // ...and bump up the "deferred notification counter"
     // to prevent this binding from contributing to the
     // MIPs table...
     pBinding->deferNotifications(true);

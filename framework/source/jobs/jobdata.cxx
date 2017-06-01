@@ -264,7 +264,7 @@ void JobData::setJobConfig( const std::vector< css::beans::NamedValue >& lArgume
 }
 
 /**
-    @short      set a new excution result
+    @short      set a new execution result
     @descr      Every executed job can have returned a result.
                 We set it here, so our user can use it may be later.
                 But the outside code can use it too, to analyze it and
