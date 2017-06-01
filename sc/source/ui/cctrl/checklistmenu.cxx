@@ -1639,21 +1639,39 @@ void ScCheckListBox::Init()
     SetNodeDefaultImages();
 }
 
+void ScCheckListBox::GetRecursiveChecked(SvTreeListEntry* pEntry, std::unordered_set<OUString, OUStringHash>& pOut, SvTreeListEntry* pParent)
+{
+    if (GetCheckButtonState(pEntry) == SvButtonState::Checked)
+    {
+        // we have to hash both parent en child together
+        OUString pName = GetEntryText(pEntry);
+        if (pParent) pName += GetEntryText(pParent);
+        pOut.insert(pName);
+    }
+
+    if (pEntry->HasChildren())
+    {
+        const SvTreeListEntries& pChildren = pEntry->GetChildEntries();
+        for (auto& pChild : pChildren)
+        {
+            GetRecursiveChecked(pChild.get(), pOut, pEntry);
+        }
+    }
+
+}
+
 std::unordered_set<OUString, OUStringHash> ScCheckListBox::GetAllChecked()
 {
-    std::unordered_set<OUString, OUStringHash> results(0);
+    std::unordered_set<OUString, OUStringHash> pResults(0);
     sal_uInt32 nRootPos = 0;
     SvTreeListEntry* pEntry = GetEntry(nRootPos);
     while (pEntry)
     {
-        if (GetCheckButtonState(pEntry) == SvButtonState::Checked)
-        {
-            results.insert(GetEntryText(pEntry));
-        }
+        GetRecursiveChecked(pEntry, pResults, nullptr);
         pEntry = GetEntry(++nRootPos);
     }
 
-    return results;
+    return pResults;
 }
 
 bool ScCheckListBox::IsChecked( const OUString& sName, SvTreeListEntry* pParent )
@@ -1933,7 +1951,10 @@ void ScCheckListMenuWindow::getResult(ResultType& rResult)
             OUString aLabel = maMembers[i].maName;
             if (aLabel.isEmpty())
                 aLabel = ScGlobal::GetRscString(STR_EMPTYDATA);
-            bool bState = checkeds.find(aLabel) != checkeds.end();
+
+            bool bState = checkeds.find(maMembers[i].mpParent ?
+                    aLabel.copy(0).concat(maChecks->GetEntryText(maMembers[i].mpParent)) :
+                    aLabel) != checkeds.end();
             ResultEntry aResultEntry;
             aResultEntry.bValid = bState;
             if ( maMembers[i].mbDate )
