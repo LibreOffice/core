@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a3905b3_41756bf7",
+        "filename": "offapi/com/sun/star/document/LockFileCorruptRequest.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-01T16:15:00Z",
+      "side": 1,
+      "message": "... and related to that, maybe you want to drop \u0027published\u0027 flag here. \n\nOnce published, for example adding an argument to exception is no longer possible without creating a new exception/new interface, LockFileCorruptRequest2\n\nSo unless 100% sure that the interface is stable the way it is, do not publish",
+      "revId": "a1388af1e320c602ddc276be2fb5969357595cb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_411e4bbb",
         "filename": "offapi/type_reference/offapi.idl",
         "patchSetId": 12
