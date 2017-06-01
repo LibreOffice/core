@@ -22,7 +22,7 @@
 
 #include <svtools/wizardmachine.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "abpresid.hrc"
+#include "strings.hrc"
 #include "componentmodule.hxx"
 #include <vcl/fixed.hxx>
 

@@ -25,7 +25,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include "resource/sharedresources.hxx"
-#include "resource/ado_res.hrc"
+#include "strings.hrc"
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
 #include <com/sun/star/bridge/oleautomation/Currency.hpp>
 #include <com/sun/star/bridge/oleautomation/SCode.hpp>

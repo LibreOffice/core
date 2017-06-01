@@ -22,11 +22,11 @@ $(eval $(call gb_Module_Module,editeng))
 $(eval $(call gb_Module_add_targets,editeng,\
 	CustomTarget_generated \
 	Library_editeng \
+	UIConfig_editeng \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,editeng,\
-	AllLangResTarget_editeng \
-	UIConfig_editeng \
+	AllLangMoTarget_editeng \
 ))
 
 $(eval $(call gb_Module_add_check_targets,editeng,\

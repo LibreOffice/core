@@ -34,7 +34,7 @@
 #include "sdresid.hxx"
 
 #include "res_bmp.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hrc"
 
 #include "DrawDocShell.hxx"

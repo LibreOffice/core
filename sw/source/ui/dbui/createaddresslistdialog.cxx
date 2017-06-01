@@ -29,7 +29,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/builderfactory.hxx>
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfilt.hxx>

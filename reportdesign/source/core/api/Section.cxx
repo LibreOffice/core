@@ -25,9 +25,9 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include "corestrings.hrc"
+#include "strings.hxx"
 #include "core_resource.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include "Tools.hxx"
 #include "RptModel.hxx"
 #include "RptPage.hxx"

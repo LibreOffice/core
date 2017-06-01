@@ -21,19 +21,15 @@
 #define INCLUDED_SVTOOLS_SVTRESID_HXX
 
 #include <svtools/svtdllapi.h>
-#include <tools/resid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 
-struct SVT_DLLPUBLIC SvtResMgr
+struct SVT_DLLPUBLIC SvtResLocale
 {
-    static ResMgr* GetResMgr();
-    static void DeleteResMgr();
+    static std::locale* GetResLocale();
+    static void DeleteResLocale();
 };
 
-inline OUString SvtResId(sal_uInt16 nId)
-{
-    return ResId(nId, *SvtResMgr::GetResMgr());
-}
+SVT_DLLPUBLIC OUString SvtResId(const char* pId);
 
 #endif // INCLUDED_SVTOOLS_SVTRESID_HXX
 

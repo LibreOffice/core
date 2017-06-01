@@ -18,7 +18,7 @@
  */
 
 #include "EmptyPanel.hxx"
-#include "svx/dialogs.hrc"
+#include "svx/strings.hrc"
 #include "svx/dialmgr.hxx"
 
 namespace svx { namespace sidebar {

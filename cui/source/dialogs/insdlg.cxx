@@ -35,7 +35,8 @@
 #include "insdlg.hxx"
 #include <dialmgr.hxx>
 #include <svtools/imagemgr.hxx>
-#include <svtools/sores.hxx>
+#include <svtools/strings.hrc>
+#include <svtools/svtresid.hxx>
 
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
@@ -54,6 +55,7 @@
 #include <comphelper/seqstream.hxx>
 
 #include "cuires.hrc"
+#include "strings.hrc"
 
 #include <osl/file.hxx>
 
@@ -66,19 +68,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui::dialogs;
-
-
-static OUString impl_getSvtResString( sal_uInt32 nId )
-{
-    OUString aRet;
-    ResMgr* pMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() );
-    if( pMgr )
-    {
-        aRet = ResId( nId, *pMgr );
-        delete pMgr;
-    }
-    return aRet;
-}
 
 bool InsertObjectDialog_Impl::IsCreateNew() const
 {
@@ -278,7 +267,7 @@ short SvInsertOleDlg::Execute()
                     {
                         // object couldn't be created from file
                         // global Resource from svtools (former so3 resource)
-                        OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
+                        OUString aErr(SvtResId(STR_ERROR_OBJNOCREATE_FROM_FILE));
                         aErr = aErr.replaceFirst( "%", aFileName );
                         ScopedVclPtrInstance<MessageDialog>(this, aErr)->Execute();
                     }
@@ -286,7 +275,7 @@ short SvInsertOleDlg::Execute()
                     {
                         // object couldn't be created
                         // global Resource from svtools (former so3 resource)
-                        OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE ) );
+                        OUString aErr(SvtResId(STR_ERROR_OBJNOCREATE));
                         aErr = aErr.replaceFirst( "%", aServerName );
                         ScopedVclPtrInstance<MessageDialog>(this, aErr)->Execute();
                     }
@@ -327,7 +316,7 @@ short SvInsertOleDlg::Execute()
             {
                 // object couldn't be created from file
                 // global Resource from svtools (former so3 resource)
-                OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
+                OUString aErr(SvtResId(STR_ERROR_OBJNOCREATE_FROM_FILE));
                 aErr = aErr.replaceFirst( "%", aFileName );
                 ScopedVclPtrInstance<MessageDialog>(this, aErr)->Execute();
             }

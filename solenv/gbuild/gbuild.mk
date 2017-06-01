@@ -266,6 +266,7 @@ $(eval $(call gb_Deliver_init))
 include $(foreach class, \
 	ComponentTarget \
 	Postprocess \
+	AllLangMoTarget \
 	AllLangResTarget \
 	WinResTarget \
 	LinkTarget \

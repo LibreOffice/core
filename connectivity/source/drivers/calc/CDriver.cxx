@@ -22,8 +22,8 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/dbexception.hxx>
 #include "resource/sharedresources.hxx"
-#include "resource/calc_res.hrc"
 #include <comphelper/processfactory.hxx>
+#include "strings.hrc"
 
 using namespace connectivity::calc;
 using namespace connectivity::file;
