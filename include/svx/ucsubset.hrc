@@ -21,7 +21,6 @@
 
 // strings for unicode range descriptions (used e.g. by Charmap dialog)
 // (see the Unicode spec and TrueType::OS2.ulUnicodeRange description)
-#define RID_SUBSETMAP                   1243
 #define RID_SUBSET_START                (RID_SVX_START + 901)
 
 #define RID_SUBSETSTR_BASIC_LATIN               (RID_SUBSET_START + 0)

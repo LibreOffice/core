@@ -28,7 +28,7 @@
 #include <osl/mutex.hxx>
 #include <sfx2/app.hxx>
 #include <sal/macros.h>
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include "shutdownicon.hxx"
 
 #include <com/sun/star/util/XStringWidth.hpp>

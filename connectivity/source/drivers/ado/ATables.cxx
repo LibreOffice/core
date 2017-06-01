@@ -31,7 +31,7 @@
 #include <comphelper/types.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <connectivity/dbexception.hxx>
-#include "resource/ado_res.hrc"
+#include "strings.hrc"
 
 using namespace ::cppu;
 using namespace connectivity;

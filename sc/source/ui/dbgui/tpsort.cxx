@@ -36,7 +36,8 @@
 #include "userlist.hxx"
 #include "rangeutl.hxx"
 #include "scresid.hxx"
-#include "scres.hrc"
+#include "sc.hrc"
+#include "strings.hrc"
 #include "globstr.hrc"
 
 #include "sortkeydlg.hxx"

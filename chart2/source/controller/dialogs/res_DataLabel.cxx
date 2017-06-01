@@ -32,7 +32,7 @@
 #include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc>
 #include <svl/zforlist.hxx>
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 
 namespace chart
 {

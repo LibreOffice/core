@@ -22,14 +22,14 @@
 #include "reffact.hxx"
 #include "docfunc.hxx"
 #include "TableFillingAndNavigationTools.hxx"
-
 #include "DescriptiveStatisticsDialog.hxx"
+#include "strings.hrc"
 
 namespace
 {
 
 struct StatisticCalculation {
-    sal_Int16   aCalculationNameId;
+    const char* aCalculationNameId;
     const char* aFormula;
 };
 
@@ -71,7 +71,7 @@ bool ScDescriptiveStatisticsDialog::Close()
     return DoClose( ScDescriptiveStatisticsDialogWrapper::GetChildWindowId() );
 }
 
-sal_Int16 ScDescriptiveStatisticsDialog::GetUndoNameId()
+const char* ScDescriptiveStatisticsDialog::GetUndoNameId()
 {
     return STR_DESCRIPTIVE_STATISTICS_UNDO_NAME;
 }

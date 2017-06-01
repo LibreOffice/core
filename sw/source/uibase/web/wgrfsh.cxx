@@ -29,9 +29,9 @@
 #include "swmodule.hxx"
 #include "uitool.hxx"
 #include "docsh.hxx"
-#include "shells.hrc"
+#include "strings.hrc"
 #include "globals.hrc"
-#include "web.hrc"
+#include "strings.hrc"
 #include "wgrfsh.hxx"
 
 #include <sfx2/request.hxx>
