@@ -148,7 +148,7 @@ SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong l
     ErrorRegistry::RegisterDisplay(&aWndFunc);
     if( ! pMgr )
     {
-        pMgr = ResMgr::CreateResMgr("ofa", Application::GetSettings().GetUILanguageTag() );
+        pMgr = ResMgr::CreateResMgr("svt", Application::GetSettings().GetUILanguageTag() );
         pFreeMgr.reset(pMgr);
     }
 }
@@ -202,7 +202,7 @@ void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr)
     */
 
 {
-    std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr("ofa", Application::GetSettings().GetUILanguageTag() ));
+    std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr("svt", Application::GetSettings().GetUILanguageTag() ));
     if( pResMgr )
     {
         ResStringArray aEr(ResId(RID_ERRHDL, *pResMgr));
@@ -284,7 +284,7 @@ bool SfxErrorContext::GetString(sal_uInt32 nErrId, OUString &rStr)
     ResMgr* pFreeMgr = nullptr;
     if( ! pMgr )
     {
-        pFreeMgr = pMgr = ResMgr::CreateResMgr("ofa", Application::GetSettings().GetUILanguageTag() );
+        pFreeMgr = pMgr = ResMgr::CreateResMgr("svt", Application::GetSettings().GetUILanguageTag() );
     }
     if( pMgr )
     {
