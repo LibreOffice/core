@@ -952,8 +952,7 @@ void Databases::changeCSS(const OUString& newStyleSheet)
 }
 
 void Databases::cascadingStylesheet( const OUString& Language,
-                                     std::unique_ptr<char[]>& buffer,
-                                     int* byteCount )
+                                     OStringBuffer& buffer )
 {
     if( ! m_pCustomCSSDoc )
     {
@@ -1056,18 +1055,13 @@ void Databases::cascadingStylesheet( const OUString& Language,
         }
     }
 
-    *byteCount = m_nCustomCSSDocLength;
-    buffer.reset( new char[ 1 + *byteCount ] );
-    buffer[*byteCount] = 0;
-    memcpy( buffer.get(), m_pCustomCSSDoc, m_nCustomCSSDocLength );
-
+    buffer.append( m_pCustomCSSDoc, m_nCustomCSSDocLength );
 }
 
 void Databases::setActiveText( const OUString& Module,
                                const OUString& Language,
                                const OUString& Id,
-                               std::unique_ptr<char[]>& buffer,
-                               int* byteCount )
+                               OStringBuffer& buffer )
 {
     DataBaseIterator aDbIt( m_xContext, *this, Module, Language, true );
 
@@ -1110,15 +1104,10 @@ void Databases::setActiveText( const OUString& Module,
                 break;
             }
 
-        *byteCount = nSize;
-        buffer.reset( new char[ 1 + nSize ] );
-        buffer[nSize] = 0;
-        memcpy( buffer.get(), pData, nSize );
+        buffer.append( pData, nSize );
     }
     else
     {
-        *byteCount = 0;
-        buffer.reset( new char[1] ); // Initialize with 1 to avoid compiler warnings
         if( !bFoundAsEmpty )
             m_aEmptyActiveTextSet.insert( id );
     }
