@@ -11,8 +11,8 @@
 
 # TODO: should this include workdir headers?
 if [ "$1" = "--with-outpath" ]; then
-    dirs="$(ls -d ./*/* | sed -e '/\(\/\(cscope\.\|tags\|ID\)\)\|^\.\/\(clone\|workdir\|instdir\)\//d')"
+    dirs="$(ls -d ./*/* | sed -e '/\(\/\(cscope\.\|tags\|ID\)\)\|^\.\/\(workdir\|instdir\)\//d')"
 else
-    dirs="$(ls -d ./*/* | sed -e '/\(\/\(cscope\.\|tags\|ID\)\)\|^\.\/\(clone\|workdir\|instdir\)\//d')"
+    dirs="$(ls -d ./*/* | sed -e '/\(\/\(cscope\.\|tags\|ID\)\)\|^\.\/\(workdir\|instdir\)\//d')"
 fi
 mkid --lang-map="$(dirname "$0")"/id-lang.map --include='C C++ asm perl java make' --statistics $dirs
