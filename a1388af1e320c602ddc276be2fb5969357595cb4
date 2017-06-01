@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_411e4bbb",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 4665,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-01T15:53:54Z",
+      "side": 1,
+      "message": "One last comment though: this file is not supposed to be updated manually. A batch update is done twice a year, after a new version of LibO is released\n\n\u003d\u003e please drop this change",
+      "revId": "a1388af1e320c602ddc276be2fb5969357595cb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
