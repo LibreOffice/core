@@ -42,7 +42,7 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "Outliner.hxx"
 #include "Window.hxx"
 #include "sdmod.hxx"

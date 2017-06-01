@@ -32,6 +32,7 @@
 #include "impex.hxx"
 #include "scuiasciiopt.hxx"
 #include "asciiopt.hrc"
+#include "strings.hrc"
 #include "strings.hxx"
 #include "csvtablebox.hxx"
 #include <comphelper/string.hxx>

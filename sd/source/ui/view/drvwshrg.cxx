@@ -37,7 +37,7 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "SpellDialogChildWindow.hxx"
 #include "sdresid.hxx"
 #include "DrawDocShell.hxx"

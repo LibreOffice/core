@@ -29,7 +29,7 @@
 #include <svx/dialogs.hrc>
 
 #include "app.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "ViewShell.hxx"
 #include "View.hxx"
 #include "Window.hxx"

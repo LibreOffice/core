@@ -48,7 +48,7 @@
 #include "lnktrans.hxx"
 #include "formulacell.hxx"
 #include "dociter.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "scresid.hxx"
 #include "globstr.hrc"
 #include "bitmaps.hlst"

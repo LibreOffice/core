@@ -21,9 +21,11 @@
 #include "sqlmessage.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include "core_resource.hxx"
 #include "dbaccess_helpid.hrc"
-#include "dbu_resource.hrc"
-#include "dbu_dlg.hrc"
+#include "dbu_pageids.hxx"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
 #include <sfx2/sfxsids.hrc>
 #include "QueryTableView.hxx"
 #include "QueryDesignView.hxx"
@@ -463,9 +465,9 @@ OUString OAddTableDlg::getDialogTitleForContext( IAddTableDialogContext& _rConte
     OUString sTitle;
 
     if ( _rContext.allowQueries() )
-        sTitle = ModuleRes( STR_ADD_TABLE_OR_QUERY );
+        sTitle = DBA_RES( STR_ADD_TABLE_OR_QUERY );
     else
-        sTitle = ModuleRes( STR_ADD_TABLES );
+        sTitle = DBA_RES( STR_ADD_TABLES );
 
     return sTitle;
 }

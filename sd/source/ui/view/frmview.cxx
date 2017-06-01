@@ -37,7 +37,7 @@
 #include "sdmod.hxx"
 #include "sdresid.hxx"
 #include "pres.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "sdiocmpt.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include <comphelper/processfactory.hxx>

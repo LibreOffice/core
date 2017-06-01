@@ -71,9 +71,17 @@ SfxModule_Impl::~SfxModule_Impl()
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxModule, SfxShell)
 
-ResMgr* SfxModule::GetResMgr()
+SfxModule::SfxModule(const std::locale& rLocale, std::initializer_list<SfxObjectFactory*> pFactoryList)
+    : pResMgr(nullptr)
+    , m_aResLocale(rLocale)
+    , pImpl(nullptr)
 {
-    return pResMgr;
+    Construct_Impl();
+    for (auto pFactory : pFactoryList)
+    {
+        if (pFactory)
+            pFactory->SetModule_Impl( this );
+    }
 }
 
 SfxModule::SfxModule( ResMgr* pMgrP, std::initializer_list<SfxObjectFactory*> pFactoryList )

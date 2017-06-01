@@ -19,7 +19,6 @@
 
 #include <tools/stream.hxx>
 
-
 #include <svx/pageitem.hxx>
 #include <editeng/itemtype.hxx>
 #include <svx/unomid.hxx>
@@ -27,11 +26,11 @@
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <svl/itemset.hxx>
+#include <svx/strings.hrc>
 #include <svx/svxitems.hrc>
 #include <svx/dialmgr.hxx>
 
 using namespace ::com::sun::star;
-
 
 SfxPoolItem* SvxPageItem::CreateDefault() { return new   SvxPageItem(0);}
 
@@ -82,6 +81,15 @@ inline OUString GetUsageText( const SvxPageUsage eU )
     }
 }
 
+static const char* RID_SVXITEMS_PAGE_NUMS[] =
+{
+    RID_SVXITEMS_PAGE_NUM_CHR_UPPER,
+    RID_SVXITEMS_PAGE_NUM_CHR_LOWER,
+    RID_SVXITEMS_PAGE_NUM_ROM_UPPER,
+    RID_SVXITEMS_PAGE_NUM_ROM_LOWER,
+    RID_SVXITEMS_PAGE_NUM_ARABIC,
+    RID_SVXITEMS_PAGE_NUM_NONE
+};
 
 bool SvxPageItem::GetPresentation
 (
@@ -102,8 +110,8 @@ bool SvxPageItem::GetPresentation
             {
                 rText = aDescName + cpDelimTmp;
             }
-            DBG_ASSERT( eNumType <= css::style::NumberingType::NUMBER_NONE, "enum overflow" );
-            rText += SvxResId(RID_SVXITEMS_PAGE_NUM_BEGIN + eNumType) + cpDelimTmp;
+            assert(eNumType <= css::style::NumberingType::NUMBER_NONE && "enum overflow");
+            rText += SvxResId(RID_SVXITEMS_PAGE_NUMS[eNumType]) + cpDelimTmp;
             if ( bLandscape )
                 rText += SvxResId(RID_SVXITEMS_PAGE_LAND_TRUE);
             else
@@ -122,8 +130,8 @@ bool SvxPageItem::GetPresentation
             {
                 rText += aDescName + cpDelimTmp;
             }
-            DBG_ASSERT( eNumType <= css::style::NumberingType::NUMBER_NONE, "enum overflow" );
-            rText += SvxResId(RID_SVXITEMS_PAGE_NUM_BEGIN + eNumType) + cpDelimTmp;
+            assert(eNumType <= css::style::NumberingType::NUMBER_NONE && "enum overflow");
+            rText += SvxResId(RID_SVXITEMS_PAGE_NUMS[eNumType]) + cpDelimTmp;
             if ( bLandscape )
                 rText += SvxResId(RID_SVXITEMS_PAGE_LAND_TRUE);
             else

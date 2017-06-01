@@ -47,7 +47,8 @@
 #include "patattr.hxx"
 #include "docpool.hxx"
 #include "uiitems.hxx"
-#include "scres.hrc"
+#include "sc.hrc"
+#include "strings.hrc"
 #include "undocell.hxx"
 #include "undoblk.hxx"
 #include "undotab.hxx"
@@ -1593,9 +1594,9 @@ void ScViewFunc::DeleteMulti( bool bRows )
 
     //  test if allowed
 
-    sal_uInt16 nErrorId = 0;
+    const char* pErrorId = nullptr;
     bool bNeedRefresh = false;
-    for (size_t i = 0, n = aSpans.size(); i < n && !nErrorId; ++i)
+    for (size_t i = 0, n = aSpans.size(); i < n && !pErrorId; ++i)
     {
         SCCOLROW nStart = aSpans[i].mnStart;
         SCCOLROW nEnd = aSpans[i].mnEnd;
@@ -1623,7 +1624,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
             // test to the end of the sheet
             ScEditableTester aTester( &rDoc, nTab, nStartCol, nStartRow, MAXCOL, MAXROW );
             if (!aTester.IsEditable())
-                nErrorId = aTester.GetMessageId();
+                pErrorId = aTester.GetMessageId();
         }
 
         // merged cells
@@ -1639,7 +1640,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
             // Disallow deleting parts of a merged cell.
             // Deleting the start is allowed (merge is removed), so the end doesn't have to be checked.
 
-            nErrorId = STR_MSSG_DELETECELLS_0;
+            pErrorId = STR_MSSG_DELETECELLS_0;
         }
         if ( nMergeEndX != nEndCol || nMergeEndY != nEndRow )
         {
@@ -1649,9 +1650,9 @@ void ScViewFunc::DeleteMulti( bool bRows )
         }
     }
 
-    if ( nErrorId )
+    if (pErrorId)
     {
-        ErrorMessage( nErrorId );
+        ErrorMessage(pErrorId);
         return;
     }
 

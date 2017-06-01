@@ -38,7 +38,7 @@
 
 #include "sdresid.hxx"
 
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hxx"
 #include "bulmaper.hxx"
 #include "DrawDocShell.hxx"

@@ -50,6 +50,7 @@
 #include <svtools/colorcfg.hxx>
 
 #include <svl/whiter.hxx>
+#include <svx/dialogs.hrc>
 #include <svx/selctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/zoomctrl.hxx>
@@ -86,8 +87,10 @@
 #include "docsh.hxx"
 #include "drwlayer.hxx"
 #include "uiitems.hxx"
+#include "sc.hrc"
+#include "scerrors.hrc"
 #include "globstr.hrc"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "cfgids.hxx"
 #include "inputhdl.hxx"
@@ -175,10 +178,10 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     // Create ErrorHandler - was in Init()
     // Between OfficeApplication::Init and ScGlobal::Init
     SvxErrorHandler::ensure();
-    pErrorHdl    = new SfxErrorHandler( RID_ERRHDLSC,
-                                        ERRCODE_AREA_SC,
-                                        ERRCODE_AREA_APP2-1,
-                                        GetResMgr() );
+    pErrorHdl    = new SfxErrorHandler(RID_ERRHDLSC,
+                                       ERRCODE_AREA_SC,
+                                       ERRCODE_AREA_APP2-1,
+                                       &GetResLocale());
 
     aSpellIdle.SetPriority(TaskPriority::LOWER);
     aSpellIdle.SetInvokeHandler( LINK( this, ScModule, SpellTimerHdl ) );
@@ -2278,6 +2281,7 @@ bool ScModule::HasThesaurusLanguage( LanguageType nLang )
 
 SfxStyleFamilies* ScModule::CreateStyleFamilies()
 {
+#if 0 //TODO
     SfxStyleFamilies *pStyleFamilies = new SfxStyleFamilies;
 
     pStyleFamilies->emplace_back(SfxStyleFamilyItem(SfxStyleFamily::Para,
@@ -2291,6 +2295,9 @@ SfxStyleFamilies* ScModule::CreateStyleFamilies()
                                                     ResId(RID_PAGESTYLEFAMILY, *SC_MOD()->GetResMgr())));
 
     return pStyleFamilies;
+#else
+    return nullptr;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

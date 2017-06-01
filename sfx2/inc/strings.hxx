@@ -24,6 +24,14 @@
 #define STR_TEMPLATE_NAME9_DEF  "Sunset"
 #define STR_TEMPLATE_NAME10_DEF "Vintage"
 
+#define SFX_ST_EDIT             "..."
+
+#define CMIS_TYPE_STRING        "String"
+#define CMIS_TYPE_INTEGER       "Integer"
+#define CMIS_TYPE_DECIMAL       "Decimal"
+#define CMIS_TYPE_DATETIME      "Datetime"
+#define CMIS_TYPE_BOOL          "Bool"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

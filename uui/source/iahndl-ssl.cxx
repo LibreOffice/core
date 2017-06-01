@@ -32,9 +32,11 @@
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svl/zforlist.hxx>
+#include <tools/simplerm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
+#include "ids.hxx"
 #include "ids.hrc"
 #include "getcontinuations.hxx"
 #include "sslwarndlg.hxx"
@@ -154,17 +156,14 @@ executeUnknownAuthDialog(
         std::vector< OUString > aArguments;
         aArguments.push_back( getContentPart( rXCert->getSubjectName()) );
 
-        std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
-        if (xManager.get())
+        std::locale aResLocale(Translate::Create("uui", Application::GetSettings().GetUILanguageTag()));
+        ErrorResource aErrorResource(RID_UUI_ERRHDL, aResLocale);
+
+        if (aErrorResource.getString(ERRCODE_UUI_UNKNOWNAUTH_UNTRUSTED, aMessage))
         {
-            ResId aResId(RID_UUI_ERRHDL, *xManager.get());
-            if (ErrorResource(aResId).getString(
-                    ERRCODE_UUI_UNKNOWNAUTH_UNTRUSTED, aMessage))
-            {
-                aMessage = UUIInteractionHelper::replaceMessageWithArguments(
-                    aMessage, aArguments );
-                xDialog->setDescriptionText( aMessage );
-            }
+            aMessage = UUIInteractionHelper::replaceMessageWithArguments(
+                aMessage, aArguments );
+            xDialog->setDescriptionText( aMessage );
         }
 
         return static_cast<bool>(xDialog->Execute());
@@ -215,26 +214,23 @@ executeSSLWarnDialog(
                 break;
         }
 
-        std::unique_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
+        std::locale aResLocale(Translate::Create("uui", Application::GetSettings().GetUILanguageTag()));
+        ErrorResource aErrorResource(RID_UUI_ERRHDL, aResLocale);
 
-        if (xManager.get())
+        if (aErrorResource.getString(
+                ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + DESCRIPTION_1,
+                aMessage_1))
         {
-            ResId aResId(RID_UUI_ERRHDL, *xManager.get());
-            if (ErrorResource(aResId).getString(
-                    ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + DESCRIPTION_1,
-                    aMessage_1))
-            {
-                aMessage_1 = UUIInteractionHelper::replaceMessageWithArguments(
-                    aMessage_1, aArguments_1 );
-                xDialog->setDescription1Text( aMessage_1 );
-            }
+            aMessage_1 = UUIInteractionHelper::replaceMessageWithArguments(
+                aMessage_1, aArguments_1 );
+            xDialog->setDescription1Text( aMessage_1 );
+        }
 
-            OUString aTitle;
-            if (ErrorResource(aResId).getString(
-                ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + TITLE, aTitle))
-            {
-                xDialog->SetText(aTitle);
-            }
+        OUString aTitle;
+        if (aErrorResource.getString(
+            ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + TITLE, aTitle))
+        {
+            xDialog->SetText(aTitle);
         }
 
         return static_cast<bool>(xDialog->Execute());
