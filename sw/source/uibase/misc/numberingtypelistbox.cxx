@@ -90,7 +90,7 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
             pTypes = aTypes.getConstArray();
         }
     }
-    ResStringArray aNames(ResId(RID_SVXSTRARY_NUMBERINGTYPE, *pSwResMgr));
+    ResStringArray aNames(ResId(RID_SVXSTRARY_NUMBERINGTYPE, DIALOG_MGR()));
     for(size_t i = 0; i < aNames.Count(); i++)
     {
         sal_IntPtr nValue = aNames.GetValue(i);
