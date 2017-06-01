@@ -19,7 +19,7 @@
 
 #include "ComponentDefinition.hxx"
 #include "apitools.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>

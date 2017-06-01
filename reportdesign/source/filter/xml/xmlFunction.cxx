@@ -23,7 +23,7 @@
 #include <xmloff/nmspmap.hxx>
 #include "xmlHelper.hxx"
 #include "xmlEnums.hxx"
-#include "xmlstrings.hrc"
+#include "strings.hxx"
 
 namespace rptxml
 {

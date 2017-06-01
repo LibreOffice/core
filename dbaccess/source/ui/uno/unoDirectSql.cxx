@@ -27,7 +27,7 @@
 #include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include "directsql.hxx"
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include "datasourceconnector.hxx"
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>

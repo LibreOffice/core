@@ -17,12 +17,13 @@ $(eval $(call gb_Module_add_targets,sd,\
     Package_opengl \
     Package_web \
     Package_xml \
+    UIConfig_sdraw \
+    UIConfig_simpress \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,sd,\
+    AllLangMoTarget_sd \
     AllLangResTarget_sd \
-    UIConfig_sdraw \
-    UIConfig_simpress \
 ))
 
 ifeq ($(filter DRAGONFLY FREEBSD,$(OS)),)

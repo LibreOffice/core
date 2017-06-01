@@ -134,7 +134,7 @@ namespace connectivity
             return dataType;
         }
 
-        void impl_throwError(sal_uInt16 _nErrorId);
+        void impl_throwError(const char* pErrorId);
     }
 }
 

@@ -20,7 +20,7 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 
 #include "SlideTransitionPane.hxx"
-#include "CustomAnimation.hrc"
+#include "strings.hrc"
 #include "createslidetransitionpanel.hxx"
 
 #include "TransitionPreset.hxx"
@@ -34,7 +34,7 @@
 #include "DrawController.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 #include <svx/gallery.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/msgbox.hxx>

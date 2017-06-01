@@ -23,13 +23,9 @@
 #include <rtl/textenc.h>
 #include <svx/svxdllapi.h>
 
-class SvxTextEncodingTable;
-
 class SVX_DLLPUBLIC SvxTextEncodingBox : public ListBox
 {
 private:
-    const SvxTextEncodingTable*     m_pEncTable;
-
     SVX_DLLPRIVATE sal_Int32                EncodingToPos_Impl( rtl_TextEncoding nEnc ) const;
 
 public:

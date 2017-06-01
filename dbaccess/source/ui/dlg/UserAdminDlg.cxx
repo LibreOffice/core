@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "core_resource.hxx"
 #include "adminpages.hxx"
 #include "DbAdminImpl.hxx"
-#include "dbu_dlg.hrc"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
 #include "DriverSettings.hxx"
 #include "dsitems.hxx"
 #include "propertysetitem.hxx"
@@ -101,8 +103,8 @@ namespace dbaui
             ::dbtools::DatabaseMetaData aMetaData( createConnection().first );
             if ( !aMetaData.supportsUserAdministration( getORB() ) )
             {
-                OUString sError(ModuleRes(STR_USERADMIN_NOT_AVAILABLE));
-                throw SQLException(sError,nullptr, "S1000" ,0,Any());
+                OUString sError(DBA_RES(STR_USERADMIN_NOT_AVAILABLE));
+                throw SQLException(sError, nullptr, "S1000", 0, Any());
             }
         }
         catch(const SQLException&)
