@@ -78,6 +78,12 @@ public:
     bool                    IsAvailable( RESOURCE_TYPE _resourceType, sal_uInt32 _resourceId );
 };
 
+namespace Translate
+{
+    TOOLS_DLLPUBLIC std::locale Create(const sal_Char* pPrefixName, const LanguageTag& rLocale = LanguageTag(LANGUAGE_SYSTEM));
+    TOOLS_DLLPUBLIC OUString get(const char* pId, const std::locale &loc);
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

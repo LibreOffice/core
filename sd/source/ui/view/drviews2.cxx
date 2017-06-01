@@ -112,7 +112,7 @@
 #include <svl/whiter.hxx>
 
 #include "app.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hrc"
 
 #include "framework/FrameworkHelper.hxx"
@@ -1340,13 +1340,13 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( !bDone )
             {
 #ifndef UNX
-                const sal_uInt16 nId = STR_TWAIN_NO_SOURCE;
+                const char* pId = STR_TWAIN_NO_SOURCE;
 #else
-                const sal_uInt16 nId = STR_TWAIN_NO_SOURCE_UNX;
+                const char* pId = STR_TWAIN_NO_SOURCE_UNX;
 #endif
 
                 ::sd::Window* pWindow = GetActiveWindow();
-                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(nId))->Execute();
+                ScopedVclPtrInstance<InfoBox>(pWindow, SdResId(pId))->Execute();
             }
             else
             {

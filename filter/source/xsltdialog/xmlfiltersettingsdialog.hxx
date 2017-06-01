@@ -55,12 +55,12 @@ public:
     virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 };
 
-class EnsureResMgr
+class EnsureResLocale
 {
-    std::unique_ptr<ResMgr> m_xResMgr;
+    std::unique_ptr<std::locale> m_xResLocale;
 public:
-    EnsureResMgr();
-    ~EnsureResMgr();
+    EnsureResLocale();
+    ~EnsureResLocale();
 };
 
 class HeaderBar;
@@ -68,7 +68,7 @@ class HeaderBar;
 class XMLFilterListBox : public SvTabListBox
 {
 private:
-    EnsureResMgr       m_aEnsureResMgr;
+    EnsureResLocale    m_aEnsureResLocale;
     VclPtr<HeaderBar>  m_pHeaderBar;
 
     DECL_LINK( TabBoxScrollHdl_Impl, SvTreeListBox*, void );
@@ -127,7 +127,7 @@ private:
     OUString createUniqueInterfaceName( const OUString& rInterfaceName );
 
 private:
-    EnsureResMgr                                          maEnsureResMgr;
+    EnsureResLocale                                       maEnsureResLocale;
     css::uno::Reference< css::uno::XComponentContext >    mxContext;
     css::uno::Reference< css::container::XNameContainer > mxFilterContainer;
     css::uno::Reference< css::container::XNameContainer > mxTypeDetection;

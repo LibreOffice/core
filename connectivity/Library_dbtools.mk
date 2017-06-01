@@ -41,6 +41,7 @@ $(eval $(call gb_Library_use_libraries,dbtools,\
 	comphelper \
 	i18nlangtag \
 	svt \
+	vcl \
 ))
 
 ifeq ($(filter-out NETBSD MACOSX,$(OS)),)

@@ -21,7 +21,7 @@
 #include <svtools/treelistentry.hxx>
 #include <svx/checklbx.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <vcl/builderfactory.hxx>
 
 SvxCheckListBox::SvxCheckListBox( vcl::Window* pParent, WinBits nWinStyle ) :

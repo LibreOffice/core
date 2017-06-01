@@ -22,22 +22,14 @@
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/resary.hxx>
-
 
 //  class SvxTextEncodingTable
-
-
-class SVX_DLLPUBLIC SvxTextEncodingTable : public ResStringArray
+class SVX_DLLPUBLIC SvxTextEncodingTable
 {
 public:
-    SvxTextEncodingTable();
-    ~SvxTextEncodingTable();
-
-    const OUString GetTextString( const rtl_TextEncoding nEnc ) const;
-    rtl_TextEncoding    GetTextEncoding( const OUString& rStr ) const;
+    static const OUString GetTextString(const rtl_TextEncoding nEnc);
+    static rtl_TextEncoding GetTextEncoding(const OUString& rStr);
 };
-
 
 #endif
 

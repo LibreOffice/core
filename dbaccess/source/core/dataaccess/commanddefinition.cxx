@@ -19,7 +19,7 @@
 
 #include "commanddefinition.hxx"
 #include "apitools.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

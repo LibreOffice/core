@@ -21,7 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_ADVANCEDSETTINGSDLG_HXX
 
 #include "IItemSetHelper.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 
 #include <sfx2/tabdlg.hxx>
 
@@ -38,7 +38,7 @@ namespace dbaui
                                     ,public IItemSetHelper
                                     ,public IDatabaseSettingsDialog
     {
-        OModuleClient                                       m_aModuleClient;
+        dbaccess::OModuleClient m_aModuleClient;
         std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
 
     protected:

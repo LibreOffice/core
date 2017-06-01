@@ -45,7 +45,7 @@
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 #include "strings.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "res_bmp.hrc"
 
 #include "sdmod.hxx"
