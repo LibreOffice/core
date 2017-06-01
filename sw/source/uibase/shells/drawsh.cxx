@@ -126,12 +126,12 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
     {
         SvxOpenGraphicDialog aDlg(SwResId(STR_INSERT_GRAPHIC));
 
-        if(GRFILTER_OK == aDlg.Execute())
+        if(ERRCODE_NONE == aDlg.Execute())
         {
             Graphic aGraphic;
             int nError(aDlg.GetGraphic(aGraphic));
 
-            if(GRFILTER_OK == nError)
+            if(ERRCODE_NONE == nError)
             {
                 const bool bAsLink(aDlg.IsAsLink());
                 SdrObject* pResult = &rObject;

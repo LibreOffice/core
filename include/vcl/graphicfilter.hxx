@@ -25,6 +25,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/field.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/errcode.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <com/sun/star/uno/Sequence.h>
@@ -35,14 +36,13 @@ class SvStream;
 struct WMF_EXTERNALHEADER;
 struct ConvertData;
 
-#define GRFILTER_OK                 0
-#define GRFILTER_OPENERROR          1
-#define GRFILTER_IOERROR            2
-#define GRFILTER_FORMATERROR        3
-#define GRFILTER_VERSIONERROR       4
-#define GRFILTER_FILTERERROR        5
-#define GRFILTER_ABORT              6
-#define GRFILTER_TOOBIG             7
+#define ERRCODE_GRFILTER_OPENERROR    (ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 1)
+#define ERRCODE_GRFILTER_IOERROR      (ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 2)
+#define ERRCODE_GRFILTER_FORMATERROR  (ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 3)
+#define ERRCODE_GRFILTER_VERSIONERROR (ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 4)
+#define ERRCODE_GRFILTER_FILTERERROR  (ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 5)
+#define ERRCODE_GRFILTER_ABORT        (ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 6)
+#define ERRCODE_GRFILTER_TOOBIG       (ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 7)
 
 #define GRFILTER_OUTHINT_GREY       1
 
@@ -258,18 +258,18 @@ public:
     OUString        GetExportWildcard( sal_uInt16 nFormat );
     bool            IsExportPixelFormat( sal_uInt16 nFormat );
 
-    sal_uInt16          ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
+    ErrCode             ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
                                        sal_uInt16 nFormat,
                                        const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
-    sal_uInt16          ExportGraphic( const Graphic& rGraphic, const OUString& rPath,
+    ErrCode             ExportGraphic( const Graphic& rGraphic, const OUString& rPath,
                                        SvStream& rOStm, sal_uInt16 nFormat,
                                        const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
 
-    sal_uInt16          CanImportGraphic( const INetURLObject& rPath,
+    ErrCode             CanImportGraphic( const INetURLObject& rPath,
                                       sal_uInt16 nFormat,
                                       sal_uInt16 * pDeterminedFormat);
 
-    sal_uInt16          ImportGraphic( Graphic& rGraphic, const INetURLObject& rPath,
+    ErrCode             ImportGraphic( Graphic& rGraphic, const INetURLObject& rPath,
                                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
                                    sal_uInt16 * pDeterminedFormat = nullptr, GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE );
 
@@ -288,7 +288,7 @@ public:
     /// The resulting graphic is added to rGraphics on success, nullptr is added on failure.
     void ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGraphics, const std::vector< std::shared_ptr<SvStream> >& rStreams);
 
-    sal_uInt16          ImportGraphic( Graphic& rGraphic, const OUString& rPath,
+    ErrCode             ImportGraphic( Graphic& rGraphic, const OUString& rPath,
                                    SvStream& rStream,
                                    sal_uInt16 nFormat,
                                    sal_uInt16 * pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
@@ -314,7 +314,7 @@ protected:
 private:
     void            ImplInit();
     sal_uLong       ImplSetError( sal_uLong nError, const SvStream* pStm = nullptr );
-    sal_uInt16      ImpTestOrFindFormat( const OUString& rPath, SvStream& rStream, sal_uInt16& rFormat );
+    ErrCode         ImpTestOrFindFormat( const OUString& rPath, SvStream& rStream, sal_uInt16& rFormat );
 
                     DECL_LINK( FilterCallback, ConvertData&, bool );
 

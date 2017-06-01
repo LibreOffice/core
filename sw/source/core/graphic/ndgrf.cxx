@@ -769,9 +769,9 @@ void SwGrfNode::ReleaseLink()
             // data we have (but without knowing the original format)
             GraphicFilter& rFlt = GraphicFilter::GetGraphicFilter();
             Graphic aNew;
-            int nRes = GraphicFilter::LoadGraphic( aFileName, OUString(), aNew, &rFlt);
+            ErrCode nRes = GraphicFilter::LoadGraphic( aFileName, OUString(), aNew, &rFlt);
 
-            if(GRFILTER_OK == nRes)
+            if(ERRCODE_NONE == nRes)
             {
                 maGrfObj.SetGraphic(aNew);
             }

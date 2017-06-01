@@ -117,7 +117,7 @@ Graphic XOutBitmap::MirrorGraphic( const Graphic& rGraphic, const BmpMirrorFlags
     return aRetGraphic;
 }
 
-sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
+ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                                  const OUString& rFilterName, const XOutFlags nFlags,
                                  const Size* pMtfSize_100TH_MM )
 {
@@ -127,7 +127,8 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
         Graphic         aGraphic;
         OUString        aExt;
         GraphicFilter&  rFilter = GraphicFilter::GetGraphicFilter();
-        sal_uInt16          nErr = GRFILTER_FILTERERROR, nFilter = GRFILTER_FORMAT_NOTFOUND;
+        ErrCode         nErr = ERRCODE_GRFILTER_FILTERERROR;
+        sal_uInt16      nFilter = GRFILTER_FORMAT_NOTFOUND;
         bool            bTransparent = rGraphic.IsTransparent(), bAnimated = rGraphic.IsAnimated();
 
         DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "XOutBitmap::WriteGraphic(...): invalid URL" );
@@ -169,7 +170,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
 
                 if(!aMedium.GetError())
                 {
-                    nErr = GRFILTER_OK;
+                    nErr = ERRCODE_NONE;
                 }
             }
         }
@@ -188,11 +189,11 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                 pOutStream->WriteBytes(aPdfData.getConstArray(), aPdfData.getLength());
                 aMedium.Commit();
                 if (!aMedium.GetError())
-                    nErr = GRFILTER_OK;
+                    nErr = ERRCODE_NONE;
             }
         }
 
-        if( GRFILTER_OK != nErr )
+        if( ERRCODE_NONE != nErr )
         {
             if( ( nFlags & XOutFlags::UseNativeIfPossible ) &&
                 !( nFlags & XOutFlags::MirrorHorz ) &&
@@ -231,13 +232,13 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                         aMedium.Commit();
 
                         if( !aMedium.GetError() )
-                            nErr = GRFILTER_OK;
+                            nErr = ERRCODE_NONE;
                     }
                 }
             }
         }
 
-        if( GRFILTER_OK != nErr )
+        if( ERRCODE_NONE != nErr )
         {
             OUString  aFilter( rFilterName );
             bool    bWriteTransGrf = ( aFilter.equalsIgnoreAsciiCase( "transgrf" ) ) ||
@@ -344,7 +345,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
     }
     else
     {
-        return GRFILTER_OK;
+        return ERRCODE_NONE;
     }
 }
 
@@ -406,7 +407,7 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
     return true;
 }
 
-sal_uInt16 XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
+ErrCode XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                   GraphicFilter& rFilter, const sal_uInt16 nFormat,
                                   const css::uno::Sequence< css::beans::PropertyValue >* pFilterData )
 {
@@ -414,7 +415,7 @@ sal_uInt16 XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObje
 
     SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::WRITE | StreamMode::SHARE_DENYNONE | StreamMode::TRUNC );
     SvStream*   pOStm = aMedium.GetOutStream();
-    sal_uInt16      nRet = GRFILTER_IOERROR;
+    ErrCode     nRet = ERRCODE_GRFILTER_IOERROR;
 
     if( pOStm )
     {
@@ -425,8 +426,8 @@ sal_uInt16 XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObje
         pGrfFilter = nullptr;
         aMedium.Commit();
 
-        if( aMedium.GetError() && ( GRFILTER_OK == nRet  ) )
-            nRet = GRFILTER_IOERROR;
+        if( aMedium.GetError() && ( ERRCODE_NONE == nRet  ) )
+            nRet = ERRCODE_GRFILTER_IOERROR;
     }
 
     return nRet;

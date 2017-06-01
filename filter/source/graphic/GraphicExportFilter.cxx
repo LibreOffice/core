@@ -121,7 +121,7 @@ sal_Bool SAL_CALL GraphicExportFilter::filter( const Sequence<PropertyValue>& rD
 
     const sal_uInt16 nResult = rFilter.ExportGraphic( aGraphic.GetBitmapEx(aParameters), OUString(), aMemStream, nFilterFormat, &aFilterData );
 
-    if ( nResult == GRFILTER_OK )
+    if ( nResult == ERRCODE_NONE )
     {
         SvOutputStream aOutputStream( mxOutputStream );
         aMemStream.Seek(0);

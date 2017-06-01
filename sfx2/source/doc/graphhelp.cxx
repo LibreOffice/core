@@ -197,7 +197,7 @@ bool GraphicHelper::getThumbnailFormatFromGDI_Impl(GDIMetaFile* pMetaFile, const
 
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
 
-    if (rFilter.compressAsPNG(aResultBitmap, *pStream.get()) != GRFILTER_OK)
+    if (rFilter.compressAsPNG(aResultBitmap, *pStream.get()) != ERRCODE_NONE)
         return false;
 
     pStream->Flush();

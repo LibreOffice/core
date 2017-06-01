@@ -212,20 +212,20 @@ OUString SwView::GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUStr
     return aStr;
 }
 
-int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
+ErrCode SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
                                 bool bLink, GraphicFilter *pFilter )
 {
     SwWait aWait( *GetDocShell(), true );
 
     Graphic aGraphic;
-    int aResult = GRFILTER_OK;
+    ErrCode aResult = ERRCODE_NONE;
     if( !pFilter )
     {
         pFilter = &GraphicFilter::GetGraphicFilter();
     }
     aResult = GraphicFilter::LoadGraphic( rPath, rFilter, aGraphic, pFilter );
 
-    if( GRFILTER_OK == aResult )
+    if( ERRCODE_NONE == aResult )
     {
         GraphicNativeMetadata aMetadata;
         if ( aMetadata.read(aGraphic) )
@@ -449,10 +449,10 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
         rSh.StartUndo(SwUndoId::INSERT, &aRewriter);
 
-        int nError = InsertGraphic( aFileName, aFilterName, bAsLink, &GraphicFilter::GetGraphicFilter() );
+        ErrCode nError = InsertGraphic( aFileName, aFilterName, bAsLink, &GraphicFilter::GetGraphicFilter() );
 
         // format not equal to current filter (with autodetection)
-        if( nError == GRFILTER_FORMATERROR )
+        if( nError == ERRCODE_GRFILTER_FORMATERROR )
             nError = InsertGraphic( aFileName, OUString(), bAsLink, &GraphicFilter::GetGraphicFilter() );
 
         // #i123922# no new FrameFormat for replace mode, only when new object was created,
@@ -470,22 +470,22 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         sal_uInt32 nResId(0);
         switch( nError )
         {
-            case GRFILTER_OPENERROR:
+            case ERRCODE_GRFILTER_OPENERROR:
                 nResId = STR_GRFILTER_OPENERROR;
                 break;
-            case GRFILTER_IOERROR:
+            case ERRCODE_GRFILTER_IOERROR:
                 nResId = STR_GRFILTER_IOERROR;
                 break;
-            case GRFILTER_FORMATERROR:
+            case ERRCODE_GRFILTER_FORMATERROR:
                 nResId = STR_GRFILTER_FORMATERROR;
                 break;
-            case GRFILTER_VERSIONERROR:
+            case ERRCODE_GRFILTER_VERSIONERROR:
                 nResId = STR_GRFILTER_VERSIONERROR;
                 break;
-            case GRFILTER_FILTERERROR:
+            case ERRCODE_GRFILTER_FILTERERROR:
                 nResId = STR_GRFILTER_FILTERERROR;
                 break;
-            case GRFILTER_TOOBIG:
+            case ERRCODE_GRFILTER_TOOBIG:
                 nResId = STR_GRFILTER_TOOBIG;
                 break;
         }

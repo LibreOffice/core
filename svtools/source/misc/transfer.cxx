@@ -1563,7 +1563,7 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& r
             // it's a JPEG, import to BitmapEx
             GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
             Graphic aGraphic;
-            if (rFilter.ImportGraphic(aGraphic, "", *xStm) == GRFILTER_OK)
+            if (rFilter.ImportGraphic(aGraphic, "", *xStm) == ERRCODE_NONE)
                 rBmpEx = aGraphic.GetBitmapEx();
         }
 

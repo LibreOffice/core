@@ -58,12 +58,12 @@ public:
 
     static Graphic      MirrorGraphic( const Graphic& rGraphic, const BmpMirrorFlags nMirrorFlags );
     static Animation    MirrorAnimation( const Animation& rAnimation, bool bHMirr, bool bVMirr );
-    static sal_uInt16   WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
+    static ErrCode      WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                                       const OUString& rFilterName, const XOutFlags nFlags,
                                       const Size* pMtfSize_100TH_MM = nullptr );
     static bool         GraphicToBase64(const Graphic& rGraphic, OUString& rOUString);
 
-    static sal_uInt16   ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
+    static ErrCode      ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                        GraphicFilter& rFilter, const sal_uInt16 nFormat,
                                        const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
 

@@ -3814,7 +3814,7 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
         // tdf#94088 if we have a stream, try to load it directly as graphic
         if (xStream && !xStream->GetError())
         {
-            if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, maStrLink, *xStream,
+            if (ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, maStrLink, *xStream,
                 GRFILTER_FORMAT_DONTKNOW, nullptr, GraphicFilterImportFlags::DontSetLogsizeForJpeg))
             {
                 bGraphicLoaded = true;
@@ -3832,7 +3832,7 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
                 std::unique_ptr<SvMemoryStream> const xMemStream(aGraphicURL.getData());
                 if (xMemStream)
                 {
-                    if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, "", *xMemStream))
+                    if (ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, "", *xMemStream))
                     {
                         bGraphicLoaded = true;
 

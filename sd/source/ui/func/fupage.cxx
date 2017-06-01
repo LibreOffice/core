@@ -310,11 +310,11 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
     {
         SvxOpenGraphicDialog aDlg(SdResId(STR_SET_BACKGROUND_PICTURE));
 
-        if( aDlg.Execute() == GRFILTER_OK )
+        if( aDlg.Execute() == ERRCODE_NONE )
         {
             Graphic     aGraphic;
             int nError = aDlg.GetGraphic(aGraphic);
-            if( nError == GRFILTER_OK )
+            if( nError == ERRCODE_NONE )
             {
                 pTempSet.reset( new SfxItemSet( mpDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0) );
 

@@ -800,7 +800,7 @@ void paintGraphicUsingPrimitivesHelper(vcl::RenderContext & rOutputDevice,
             Graphic aTempGraphic;
             INetURLObject aURL(rGrfObj.GetLink());
 
-            if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aTempGraphic, aURL))
+            if (ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(aTempGraphic, aURL))
             {
                 if(aTempGraphic.IsLink() && GfxLinkType::NativeJpg == aTempGraphic.GetLink().GetType())
                 {

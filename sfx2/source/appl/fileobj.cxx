@@ -296,7 +296,7 @@ bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
                             ? rGF.GetImportFormatNumber( sFilter )
                             : GRFILTER_FORMAT_DONTKNOW;
 
-    int nRes;
+    ErrCode nRes;
 
     // To avoid that a native link is created
     if( !rGrf.IsLink() &&
@@ -304,7 +304,7 @@ bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
         rGrf.SetLink( GfxLink() );
 
     if( !pStream )
-        nRes = xMed.is() ? GRFILTER_OPENERROR
+        nRes = xMed.is() ? ERRCODE_GRFILTER_OPENERROR
                          : rGF.ImportGraphic( rGrf, INetURLObject(sFileNm),
                             nFilter );
     else
@@ -326,7 +326,7 @@ bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
             SAL_WARN( "sfx.appl", "Graphic error [" << nRes << "] - [" << sFileNm << "]" );
     }
 
-    return GRFILTER_OK == nRes;
+    return ERRCODE_NONE == nRes;
 }
 
 /** detect the filter of the given file

@@ -94,7 +94,7 @@ bool OGLPlayer::create( const OUString& rURL )
                 // Load images as bitmaps
                 GraphicFilter aFilter;
                 Graphic aGraphic;
-                if( aFilter.ImportGraphic(aGraphic, INetURLObject(sFilesURL)) != GRFILTER_OK )
+                if( aFilter.ImportGraphic(aGraphic, INetURLObject(sFilesURL)) != ERRCODE_NONE )
                 {
                     rFile.buffer = nullptr;
                     rFile.imagewidth = 0;
