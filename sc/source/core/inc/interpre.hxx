@@ -575,7 +575,7 @@ size_t GetRefListArrayMaxSize( short nParamCount );
 /** Switch to array reference list if current TOS is one and create/init or
     update matrix and return true. Else return false. */
 bool SwitchToArrayRefList( ScMatrixRef& xResMat, SCSIZE nMatRows, double fCurrent,
-        const std::function<void( SCSIZE i, double fCurrent )>& MatOpFunc );
+        const std::function<void( SCSIZE i, double fCurrent )>& MatOpFunc, bool bDoMatOp );
 void IterateParameters( ScIterFunc, bool bTextAsZero = false );
 void ScSumSQ();
 void ScSum();

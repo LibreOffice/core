@@ -3457,7 +3457,7 @@ void ScInterpreter::ScUnichar()
 }
 
 bool ScInterpreter::SwitchToArrayRefList( ScMatrixRef& xResMat, SCSIZE nMatRows, double fCurrent,
-        const std::function<void( SCSIZE i, double fCurrent )>& MatOpFunc )
+        const std::function<void( SCSIZE i, double fCurrent )>& MatOpFunc, bool bDoMatOp )
 {
     const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(pStack[sp-1]);
     if (!p || !p->IsArrayResult())
@@ -3470,7 +3470,7 @@ bool ScInterpreter::SwitchToArrayRefList( ScMatrixRef& xResMat, SCSIZE nMatRows,
         xResMat = GetNewMat( 1, nMatRows, true);
         xResMat->FillDouble( fCurrent, 0,0, 0,nMatRows-1);
     }
-    else
+    else if (bDoMatOp)
     {
         // Current value and values from vector are operands
         // for each vector position.
@@ -3533,8 +3533,13 @@ void ScInterpreter::ScMin( bool bTextAsZero )
             break;
             case svRefList :
             {
-                if (SwitchToArrayRefList( xResMat, nMatRows, nMin, MatOpFunc))
+                // bDoMatOp only for non-array value when switching to
+                // ArrayRefList.
+                if (SwitchToArrayRefList( xResMat, nMatRows, nMin, MatOpFunc,
+                            nRefArrayPos == std::numeric_limits<size_t>::max()))
+                {
                     nRefArrayPos = nRefInList;
+                }
             }
             SAL_FALLTHROUGH;
             case svDoubleRef :
@@ -3683,8 +3688,13 @@ void ScInterpreter::ScMax( bool bTextAsZero )
             break;
             case svRefList :
             {
-                if (SwitchToArrayRefList( xResMat, nMatRows, nMax, MatOpFunc))
+                // bDoMatOp only for non-array value when switching to
+                // ArrayRefList.
+                if (SwitchToArrayRefList( xResMat, nMatRows, nMax, MatOpFunc,
+                            nRefArrayPos == std::numeric_limits<size_t>::max()))
+                {
                     nRefArrayPos = nRefInList;
+                }
             }
             SAL_FALLTHROUGH;
             case svDoubleRef :
