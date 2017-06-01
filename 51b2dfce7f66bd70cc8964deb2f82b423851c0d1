@@ -16,6 +16,24 @@
       "revId": "51b2dfce7f66bd70cc8964deb2f82b423851c0d1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_9e6df206",
+        "filename": "dbaccess/source/core/dataaccess/documentdefinition.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1891,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-06-01T07:08:19Z",
+      "side": 1,
+      "message": "Indeed no reason.\nJust a copy paste and I forgot to remove extra line.\nI\u0027ll remove it when get back to home after my day time job",
+      "parentUuid": "5a3905b3_fead1632",
+      "revId": "51b2dfce7f66bd70cc8964deb2f82b423851c0d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
