@@ -27,7 +27,7 @@
 #include "app.hrc"
 #include "res_bmp.hrc"
 #include "strings.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "prltempl.hrc"
 #include "strings.hxx"
 

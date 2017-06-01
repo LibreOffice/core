@@ -18,7 +18,7 @@
  */
 
 #include "querycontainer.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "query.hxx"
 #include "objectnameapproval.hxx"
 #include "veto.hxx"

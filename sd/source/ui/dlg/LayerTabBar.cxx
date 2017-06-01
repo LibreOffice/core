@@ -27,7 +27,7 @@
 #include "sdmod.hxx"
 #include "helpids.h"
 #include "app.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "DrawViewShell.hxx"

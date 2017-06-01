@@ -40,7 +40,7 @@
 #include <com/sun/star/uno/Sequence.h>
 
 #include "app.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"
 

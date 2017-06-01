@@ -10,7 +10,7 @@
 #include <app.hrc>
 #include <docvw.hrc>
 #include <globals.hrc>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 
 #include <cmdid.h>
 #include <DashedLine.hxx>

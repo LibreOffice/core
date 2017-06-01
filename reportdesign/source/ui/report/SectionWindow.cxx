@@ -24,9 +24,10 @@
 #include "RptDef.hxx"
 #include "ReportSection.hxx"
 #include "DesignView.hxx"
-#include "uistrings.hrc"
+#include "strings.hxx"
+#include "core_resource.hxx"
 #include "helpids.hrc"
-#include "RptResId.hrc"
+#include "strings.hrc"
 #include "StartMarker.hxx"
 #include "EndMarker.hxx"
 #include "ViewsWindow.hxx"
@@ -149,7 +150,7 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
             }
             else
             {
-                OUString sTitle = ModuleRes(RID_STR_DETAIL);
+                OUString sTitle = RptResId(RID_STR_DETAIL);
                 m_aStartMarker->setTitle(sTitle);
                 m_aStartMarker->Invalidate(InvalidateFlags::Children);
             }
@@ -165,20 +166,20 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
     }
 }
 
-bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReportDefinition>& _xReport,sal_uInt16 _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OReportHelper> _pGetSection, const ::std::mem_fun_t<bool,OReportHelper>& _pIsSectionOn)
+bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReportDefinition>& _xReport,const char* pResId,::std::mem_fun_t<uno::Reference<report::XSection> , OReportHelper> _pGetSection, const ::std::mem_fun_t<bool,OReportHelper>& _pIsSectionOn)
 {
     OReportHelper aReportHelper(_xReport);
     const bool bRet = _pIsSectionOn(&aReportHelper) && _pGetSection(&aReportHelper) == m_aReportSection->getSection();
     if ( bRet )
     {
-        OUString sTitle = ModuleRes(_nResId);
+        OUString sTitle = RptResId(pResId);
         m_aStartMarker->setTitle(sTitle);
         m_aStartMarker->Invalidate(InvalidateFlags::Children);
     }
     return bRet;
 }
 
-bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>& _xGroup,sal_uInt16 _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> _pGetSection, const ::std::mem_fun_t<bool,OGroupHelper>& _pIsSectionOn)
+bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>& _xGroup,const char* pResId,::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> _pGetSection, const ::std::mem_fun_t<bool,OGroupHelper>& _pIsSectionOn)
 {
     OGroupHelper aGroupHelper(_xGroup);
     const bool bRet = _pIsSectionOn(&aGroupHelper) && _pGetSection(&aGroupHelper) == m_aReportSection->getSection() ;
@@ -191,8 +192,7 @@ bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>&
             sExpression = sLabel;
         }
 
-        ModuleRes aRes(_nResId);
-        OUString sTitle(aRes);
+        OUString sTitle(RptResId(pResId));
         sTitle = sTitle.replaceFirst("#", sExpression);
         m_aStartMarker->setTitle( sTitle );
         m_aStartMarker->Invalidate(InvalidateFlags::Children);
@@ -317,7 +317,7 @@ void OSectionWindow::zoom(const Fraction& _aZoom)
 
 IMPL_LINK_NOARG( OSectionWindow, StartSplitHdl, Splitter*, void)
 {
-    const OUString sUndoAction( ModuleRes( RID_STR_UNDO_CHANGE_SIZE ) );
+    const OUString sUndoAction( RptResId( RID_STR_UNDO_CHANGE_SIZE ) );
     getViewsWindow()->getView()->getReportView()->getController().getUndoManager().EnterListAction( sUndoAction, OUString(), 0, ViewShellId(-1) );
 }
 

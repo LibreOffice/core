@@ -24,6 +24,7 @@
 #include "hintids.hxx"
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <sfx2/htmlmode.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/xtable.hxx>

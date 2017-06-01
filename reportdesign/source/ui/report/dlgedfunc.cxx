@@ -48,7 +48,7 @@
 #include "ScrollHelper.hxx"
 #include "UITools.hxx"
 
-#include <uistrings.hrc>
+#include <strings.hxx>
 #include "UndoEnv.hxx"
 #include <RptModel.hxx>
 #include <tools/diagnose_ex.h>

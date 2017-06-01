@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.0 on Wed Jan  8 18:42:59 2014 -->
-<interface>
+<interface domain="sc">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkBox" id="OptCompatibilityPage">
     <property name="visible">True</property>

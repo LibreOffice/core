@@ -29,7 +29,7 @@
 #include <osl/module.hxx>
 #include <tools/resmgr.hxx>
 #include <sfx2/app.hxx>
-#include "app.hrc"
+#include "sfx2/strings.hrc"
 #include "shutdownicon.hxx"
 
 #include <config_gio.h>

@@ -66,7 +66,7 @@
 #include "FrameView.hxx"
 #include "ToolBarManager.hxx"
 #include "DrawDocShell.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "pres.hxx"
 #include "optsitem.hxx"
 
