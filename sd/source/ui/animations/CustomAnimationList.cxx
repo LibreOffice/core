@@ -28,7 +28,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include "CustomAnimationList.hxx"
-#include "CustomAnimation.hrc"
+#include "strings.hrc"
 #include "CustomAnimationPreset.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -42,7 +42,7 @@
 #include "svtools/viewdataentry.hxx"
 
 #include "res_bmp.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 
 #include <algorithm>

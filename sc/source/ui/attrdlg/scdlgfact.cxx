@@ -72,6 +72,7 @@
 #include "condformatmgr.hxx"
 #include "xmlsourcedlg.hxx"
 #include "editutil.hxx"
+#include <svx/dialogs.hrc>
 
 IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl);

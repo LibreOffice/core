@@ -23,7 +23,7 @@
 #include "QueryTableView.hxx"
 #include "QueryAddTabConnUndoAction.hxx"
 #include "QueryTabWinShowUndoAct.hxx"
-#include "dbu_qry.hrc"
+#include "strings.hrc"
 
 using namespace dbaui;
 
@@ -36,8 +36,8 @@ OQueryTabConnUndoAction::~OQueryTabConnUndoAction()
     }
 }
 
-OQueryTabConnUndoAction::OQueryTabConnUndoAction(OQueryTableView* pOwner, sal_uInt16 nCommentID)
-    :OQueryDesignUndoAction(pOwner, nCommentID)
+OQueryTabConnUndoAction::OQueryTabConnUndoAction(OQueryTableView* pOwner, const char* pCommentID)
+    :OQueryDesignUndoAction(pOwner, pCommentID)
     ,m_pConnection(nullptr)
     ,m_bOwnerOfConn(false)
 {

@@ -19,8 +19,8 @@
 #include "ImageControl.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include "corestrings.hrc"
-#include "core_resource.hrc"
+#include "strings.hxx"
+#include "strings.hrc"
 #include "core_resource.hxx"
 #include "Tools.hxx"
 #include <tools/color.hxx>
@@ -119,7 +119,7 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 ,m_nScaleMode(awt::ImageScaleMode::NONE)
 ,m_bPreserveIRI(true)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_IMAGECONTROL);
+    m_aProps.aComponent.m_sName  = RptResId(RID_STR_IMAGECONTROL);
 }
 
 OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _xContext
@@ -131,7 +131,7 @@ OImageControl::OImageControl(uno::Reference< uno::XComponentContext > const & _x
 ,m_nScaleMode(awt::ImageScaleMode::NONE)
 ,m_bPreserveIRI(true)
 {
-    m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_IMAGECONTROL);
+    m_aProps.aComponent.m_sName  = RptResId(RID_STR_IMAGECONTROL);
     m_aProps.aComponent.m_xFactory = _xFactory;
     osl_atomic_increment( &m_refCount );
     {

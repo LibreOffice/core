@@ -25,7 +25,7 @@
 #include <certificateviewer.hxx>
 #include <macrosecurity.hxx>
 #include <biginteger.hxx>
-#include <global.hrc>
+#include <strings.hrc>
 #include <pdfsignaturehelper.hxx>
 #include <sax/tools/converter.hxx>
 

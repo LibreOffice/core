@@ -20,6 +20,10 @@
 #define INCLUDED_SVTOOLS_SOERR_HXX
 
 #include <vcl/errcode.hxx>
+#ifndef __RSC
+#include <svtools/ehdl.hxx>
+#include <svtools/svtdllapi.h>
+#endif
 
 // error codes
 #define RID_SO_ERROR_HANDLER    32000
@@ -39,6 +43,10 @@
 
 #define ERRCTX_SO_DOVERB        1
 
+#ifndef __RSC
+SVT_DLLPUBLIC const ErrMsgCode* getRID_SO_ERROR_HANDLER();
+SVT_DLLPUBLIC const ErrMsgCode* getRID_SO_ERRCTX();
+#endif
 
 #endif
 

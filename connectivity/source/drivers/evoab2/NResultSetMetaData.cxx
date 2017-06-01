@@ -21,7 +21,7 @@
 #include "NDatabaseMetaData.hxx"
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include "resource/evoab2_res.hrc"
+#include "strings.hrc"
 
 using namespace connectivity::evoab;
 using namespace com::sun::star::uno;
