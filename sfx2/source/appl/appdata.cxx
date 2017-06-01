@@ -91,10 +91,6 @@ SfxAppData_Impl::SfxAppData_Impl()
     , pFactArr(nullptr)
     , pTopFrames( new SfxFrameArr_Impl )
     , pMatcher( nullptr )
-#if HAVE_FEATURE_SCRIPTING
-    , pBasicResMgr( nullptr )
-#endif
-    , pSvtResMgr( nullptr )
     , m_pToolsErrorHdl(nullptr)
     , m_pSoErrorHdl(nullptr)
 #if HAVE_FEATURE_SCRIPTING

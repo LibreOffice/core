@@ -25,7 +25,7 @@
 #include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/viewoptions.hxx>
-#include <svtools/controldims.hrc>
+#include <svtools/controldims.hxx>
 #include <vcl/idle.hxx>
 
 #include <sfx2/basedlgs.hxx>

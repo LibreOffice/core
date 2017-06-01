@@ -31,7 +31,7 @@
 #include <editeng/eeitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svdview.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include "svx/globl3d.hxx"
 #include <svx/obj3d.hxx>

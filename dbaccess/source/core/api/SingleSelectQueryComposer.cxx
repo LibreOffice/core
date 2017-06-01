@@ -19,9 +19,9 @@
 
 #include <string.h>
 #include "composertools.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include "core_resource.hxx"
-#include "dbastrings.hrc"
+#include "stringconstants.hxx"
 #include "HelperCollections.hxx"
 #include "SingleSelectQueryComposer.hxx"
 #include "sqlbison.hxx"

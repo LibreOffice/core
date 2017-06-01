@@ -27,7 +27,7 @@
 #include "fmobj.hxx"
 #include "formcontrolfactory.hxx"
 #include "svx/svditer.hxx"
-#include "svx/fmresids.hrc"
+#include "svx/strings.hrc"
 #include "treevisitor.hxx"
 
 #include <com/sun/star/sdb/CommandType.hpp>

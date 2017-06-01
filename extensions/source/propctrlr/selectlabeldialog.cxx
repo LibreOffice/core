@@ -18,7 +18,7 @@
  */
 
 #include "selectlabeldialog.hxx"
-#include "formresid.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 #include "formbrowsertools.hxx"
 #include "formstrings.hxx"

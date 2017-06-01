@@ -21,7 +21,7 @@
 #include <svx/svdpagv.hxx>
 
 #include <svx/svxids.hrc>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 
 #include "app.hrc"
@@ -499,14 +499,14 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
 /**
  * set line starts and ends for the object to be created
  */
-::basegfx::B2DPolyPolygon getPolygon( sal_uInt16 nResId, SdrModel* pDoc )
+::basegfx::B2DPolyPolygon getPolygon(const char* pResId, SdrModel* pDoc)
 {
     ::basegfx::B2DPolyPolygon aRetval;
     XLineEndListRef pLineEndList = pDoc->GetLineEndList();
 
     if( pLineEndList.is() )
     {
-        OUString aArrowName( SvxResId(nResId) );
+        OUString aArrowName(SvxResId(pResId));
         long nCount = pLineEndList->Count();
         long nIndex;
         for( nIndex = 0L; nIndex < nCount; nIndex++ )

@@ -20,16 +20,12 @@
 #ifndef INCLUDED_BASCTL_SOURCE_INC_IDERID_HXX
 #define INCLUDED_BASCTL_SOURCE_INC_IDERID_HXX
 
-#include <tools/resid.hxx>
+#include <rtl/ustring.hxx>
 
 namespace basctl
 {
 
-class IDEResId: public ResId
-{
-public:
-    IDEResId( sal_uInt16 nId );
-};
+OUString IDEResId(const char *pId);
 
 } // namespace basctl
 

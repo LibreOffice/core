@@ -50,6 +50,7 @@
 #include <svtools/colorcfg.hxx>
 
 #include <svl/whiter.hxx>
+#include <svx/dialogs.hrc>
 #include <svx/selctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/zoomctrl.hxx>
@@ -175,10 +176,10 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     // Create ErrorHandler - was in Init()
     // Between OfficeApplication::Init and ScGlobal::Init
     SvxErrorHandler::ensure();
-    pErrorHdl    = new SfxErrorHandler( RID_ERRHDLSC,
+    pErrorHdl    = new SfxErrorHandler( /* TODO RID_ERRHDLSC */ nullptr,
                                         ERRCODE_AREA_SC,
                                         ERRCODE_AREA_APP2-1,
-                                        GetResMgr() );
+                                        /* TODO GetResMgr() */ nullptr);
 
     aSpellIdle.SetPriority(TaskPriority::LOWER);
     aSpellIdle.SetInvokeHandler( LINK( this, ScModule, SpellTimerHdl ) );
