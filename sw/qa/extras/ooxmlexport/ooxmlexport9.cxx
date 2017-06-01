@@ -39,6 +39,15 @@ protected:
     }
 };
 
+class DocmTest : public SwModelTestBase
+{
+public:
+    DocmTest()
+        : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "MS Word 2007 XML VBA")
+    {
+    }
+};
+
 DECLARE_OOXMLEXPORT_TEST(testFdo55381, "fdo55381.docx")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -47,6 +56,30 @@ DECLARE_OOXMLEXPORT_TEST(testFdo55381, "fdo55381.docx")
     xCursor->jumpToLastPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(4), xCursor->getPage());
     //TODO: frames not located on the correct pages
+}
+
+DECLARE_OOXMLEXPORT_TEST(testDocm, "hello.docm")
+{
+    // Make sure that we check the name of the export filter.
+    // This was application/vnd.ms-word.document.macroEnabled.main+xml when the
+    // name of the import filter was checked.
+    if (xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml"))
+        assertXPath(pXmlDoc,
+                    "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
+                    "ContentType",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml");
+}
+
+DECLARE_SW_ROUNDTRIP_TEST(testDocmSave, "hello.docm", nullptr, DocmTest)
+{
+    // This was
+    // application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml,
+    // we used the wrong content type for .docm files.
+    if (xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml"))
+        assertXPath(pXmlDoc,
+                    "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
+                    "ContentType",
+                    "application/vnd.ms-word.document.macroEnabled.main+xml");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf92045, "tdf92045.docx")

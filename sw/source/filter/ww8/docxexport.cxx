@@ -1447,7 +1447,7 @@ void DocxExport::SetFS( ::sax_fastparser::FSHelperPtr const & pFS )
     mpFS = pFS;
 }
 
-DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam )
+DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam, bool bDocm )
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam ),
       m_pFilter( pFilter ),
       m_pAttrOutput( nullptr ),
@@ -1457,7 +1457,8 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
       m_nOLEObjects( 0 ),
       m_nHeadersFootersInSection(0),
       m_pVMLExport( nullptr ),
-      m_pSdrExport( nullptr )
+      m_pSdrExport( nullptr ),
+      m_bDocm(bDocm)
 {
     // Write the document properies
     WriteProperties( );
@@ -1466,9 +1467,12 @@ DocxExport::DocxExport( DocxExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCur
     m_pFilter->addRelation( oox::getRelationship(Relationship::OFFICEDOCUMENT),
             "word/document.xml" );
 
+    // DOCM needs a different media type for the document.xml stream.
+    OUString aMediaType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml";
+    if (m_bDocm)
+        aMediaType = "application/vnd.ms-word.document.macroEnabled.main+xml";
     // the actual document
-    m_pDocumentFS = m_pFilter->openFragmentStreamWithSerializer( "word/document.xml",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" );
+    m_pDocumentFS = m_pFilter->openFragmentStreamWithSerializer( "word/document.xml", aMediaType );
 
     SetFS(m_pDocumentFS);
 
