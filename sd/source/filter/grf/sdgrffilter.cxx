@@ -92,7 +92,7 @@ class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper< css::task:
 
     explicit SdGRFFilter_ImplInteractionHdl( css::uno::Reference< css::task::XInteractionHandler > const & xInteraction ) :
         m_xInter( xInteraction ),
-        nFilterError( GRFILTER_OK )
+        nFilterError( ERRCODE_NONE )
         {}
 
     sal_uInt16 GetErrorCode() const { return nFilterError; };
@@ -122,25 +122,25 @@ SdGRFFilter::~SdGRFFilter()
 {
 }
 
-void SdGRFFilter::HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong nStreamError )
+void SdGRFFilter::HandleGraphicFilterError( ErrCode nFilterError, sal_uLong nStreamError )
 {
     sal_uInt16 nId;
 
     switch( nFilterError )
     {
-        case GRFILTER_OPENERROR:
+        case ERRCODE_GRFILTER_OPENERROR:
             nId = STR_IMPORT_GRFILTER_OPENERROR;
             break;
-        case GRFILTER_IOERROR:
+        case ERRCODE_GRFILTER_IOERROR:
             nId = STR_IMPORT_GRFILTER_IOERROR;
             break;
-        case GRFILTER_FORMATERROR:
+        case ERRCODE_GRFILTER_FORMATERROR:
             nId = STR_IMPORT_GRFILTER_FORMATERROR;
             break;
-        case GRFILTER_VERSIONERROR:
+        case ERRCODE_GRFILTER_VERSIONERROR:
             nId = STR_IMPORT_GRFILTER_VERSIONERROR;
             break;
-        case GRFILTER_TOOBIG:
+        case ERRCODE_GRFILTER_TOOBIG:
             nId = STR_IMPORT_GRFILTER_TOOBIG;
             break;
         case 0 :
@@ -148,7 +148,7 @@ void SdGRFFilter::HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong n
             break;
 
         default:
-        case GRFILTER_FILTERERROR:
+        case ERRCODE_GRFILTER_FILTERERROR:
             nId = STR_IMPORT_GRFILTER_FILTERERROR;
             break;
     }

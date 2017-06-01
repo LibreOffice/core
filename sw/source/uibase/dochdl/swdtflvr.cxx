@@ -1950,7 +1950,7 @@ bool SwTransferable::PasteTargetURL( TransferableDataHelper& rData,
             //!!! check at FileSystem - only then it make sense to test graphics !!!
             Graphic aGraphic;
             GraphicFilter &rFlt = GraphicFilter::GetGraphicFilter();
-            bRet = GRFILTER_OK == GraphicFilter::LoadGraphic( sURL, aEmptyOUStr, aGraphic, &rFlt );
+            bRet = ERRCODE_NONE == GraphicFilter::LoadGraphic( sURL, aEmptyOUStr, aGraphic, &rFlt );
 
             if( bRet )
             {
@@ -2313,7 +2313,7 @@ bool SwTransferable::PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     {
         //!!! check at FileSystem - only then it makes sense to test the graphics !!!
         GraphicFilter &rFlt = GraphicFilter::GetGraphicFilter();
-        bRet = GRFILTER_OK == GraphicFilter::LoadGraphic( aBkmk.GetURL(), aEmptyOUStr,
+        bRet = ERRCODE_NONE == GraphicFilter::LoadGraphic( aBkmk.GetURL(), aEmptyOUStr,
                                             aGraphic, &rFlt );
 
         if( !bRet && SwPasteSdr::SetAttr == nAction &&

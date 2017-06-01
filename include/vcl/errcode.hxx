@@ -81,6 +81,7 @@ inline sal_uInt32 ERRCODE_TOERROR( ErrCode x )
 #define ERRCODE_AREA_SFX                 CAST_TO_UINT32(2UL   << ERRCODE_AREA_SHIFT)
 #define ERRCODE_AREA_INET                CAST_TO_UINT32(3UL   << ERRCODE_AREA_SHIFT)
 #define ERRCODE_AREA_IO                   ERRCODE_AREA_TOOLS
+#define ERRCODE_AREA_VCL                 CAST_TO_UINT32(4UL   << ERRCODE_AREA_SHIFT)
 
 #define ERRCODE_AREA_LIB1                CAST_TO_UINT32(8UL   << ERRCODE_AREA_SHIFT)
 #define ERRCODE_AREA_SVX                 ERRCODE_AREA_LIB1

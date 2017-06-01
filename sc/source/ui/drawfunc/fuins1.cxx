@@ -241,8 +241,8 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
             bAsLink = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
         Graphic aGraphic;
-        int nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter() );
-        if ( nError == GRFILTER_OK )
+        ErrCode nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, &GraphicFilter::GetGraphicFilter() );
+        if ( nError == ERRCODE_NONE )
         {
             lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, true, pViewSh, pWindow, pView );
         }
@@ -251,11 +251,11 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
     {
         SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC));
 
-        if( aDlg.Execute() == GRFILTER_OK )
+        if( aDlg.Execute() == ERRCODE_NONE )
         {
             Graphic aGraphic;
             int nError = aDlg.GetGraphic(aGraphic);
-            if( nError == GRFILTER_OK )
+            if( nError == ERRCODE_NONE )
             {
                 OUString aFileName = aDlg.GetPath();
                 OUString aFilterName = aDlg.GetCurrentFilter();

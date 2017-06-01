@@ -615,7 +615,7 @@ public:
     void StateFormatPaintbrush(SfxItemSet &);
 
     //public fuer D&D
-    int     InsertGraphic( const OUString &rPath, const OUString &rFilter,
+    ErrCode     InsertGraphic( const OUString &rPath, const OUString &rFilter,
                             bool bLink, GraphicFilter *pFlt );
 
     void ExecuteScan( SfxRequest& rReq );

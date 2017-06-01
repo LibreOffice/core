@@ -1013,15 +1013,15 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     // create the output stuff
     Graphic aGraphic;
 
-    sal_uInt16 nStatus = GetGraphic( aSettings, aGraphic, bVectorType ) ? GRFILTER_OK : GRFILTER_FILTERERROR;
+    ErrCode nStatus = GetGraphic( aSettings, aGraphic, bVectorType ) ? ERRCODE_NONE : ERRCODE_GRFILTER_FILTERERROR;
 
-    if( nStatus == GRFILTER_OK )
+    if( nStatus == ERRCODE_NONE )
     {
         // export graphic only if it has a size
         const Size aGraphSize( aGraphic.GetPrefSize() );
         if ( ( aGraphSize.Width() == 0 ) || ( aGraphSize.Height() == 0 ) )
         {
-            nStatus = GRFILTER_FILTERERROR;
+            nStatus = ERRCODE_GRFILTER_FILTERERROR;
         }
         else
         {
@@ -1054,7 +1054,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         }
     }
 
-    if ( aSettings.mxInteractionHandler.is() && ( nStatus != GRFILTER_OK ) )
+    if ( aSettings.mxInteractionHandler.is() && ( nStatus != ERRCODE_NONE ) )
     {
         Any aInteraction;
         Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations(1);
@@ -1066,7 +1066,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         aInteraction <<= aErrorCode;
         aSettings.mxInteractionHandler->handle( framework::InteractionRequest::CreateRequest( aInteraction, lContinuations ) );
     }
-    return nStatus == GRFILTER_OK;
+    return nStatus == ERRCODE_NONE;
 }
 
 void SAL_CALL GraphicExporter::cancel()
