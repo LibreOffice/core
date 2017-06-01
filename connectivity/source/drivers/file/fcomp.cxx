@@ -29,12 +29,12 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
-#include "resource/file_res.hrc"
 #include "file/FStringFunctions.hxx"
 #include "file/FDateFunctions.hxx"
 #include "file/FNumericFunctions.hxx"
 #include "file/FConnection.hxx"
 #include "sqlbison.hxx"
+#include "strings.hrc"
 
 using namespace connectivity;
 using namespace connectivity::file;

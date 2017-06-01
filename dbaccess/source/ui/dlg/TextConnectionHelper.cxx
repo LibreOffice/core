@@ -19,11 +19,14 @@
 
 #include <config_features.h>
 
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
+#include "core_resource.hxx"
 #include "TextConnectionHelper.hxx"
 #include "sqlmessage.hxx"
-#include "dbu_dlg.hrc"
-#include "dbu_resource.hrc"
+#include "dbu_dlg.hxx"
+#include "strings.hrc"
+#include "strings.hxx"
+#include "dbu_pageids.hxx"
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
@@ -57,9 +60,9 @@ namespace dbaui
 
     OTextConnectionHelper::OTextConnectionHelper( vcl::Window* pParent, const short _nAvailableSections )
         :TabPage(pParent, "TextPage", "dbaccess/ui/textpage.ui")
-        ,m_aFieldSeparatorList      (ModuleRes(STR_AUTOFIELDSEPARATORLIST))
-        ,m_aTextSeparatorList       (ModuleRes(STR_AUTOTEXTSEPARATORLIST))
-        ,m_aTextNone                (ModuleRes(STR_AUTOTEXT_FIELD_SEP_NONE))
+        ,m_aFieldSeparatorList      (DBA_RES(STR_AUTOFIELDSEPARATORLIST))
+        ,m_aTextSeparatorList       (STR_AUTOTEXTSEPARATORLIST)
+        ,m_aTextNone                (DBA_RES(STR_AUTOTEXT_FIELD_SEP_NONE))
         ,m_nAvailableSections( _nAvailableSections )
     {
         get(m_pExtensionHeader, "extensionheader");
@@ -248,61 +251,61 @@ namespace dbaui
         OUString aDelText(m_pFieldSeparator->GetText());
         if(aDelText.isEmpty())
         {   // No FieldSeparator
-            aErrorText = ModuleRes(STR_AUTODELIMITER_MISSING);
+            aErrorText = DBA_RES(STR_AUTODELIMITER_MISSING);
             aErrorText = aErrorText.replaceFirst("#1",m_pFieldSeparatorLabel->GetText());
             pErrorWin = m_pFieldSeparator;
         }
         else if (m_pDecimalSeparator->GetText().isEmpty())
         {   // No DecimalSeparator
-            aErrorText = ModuleRes(STR_AUTODELIMITER_MISSING);
+            aErrorText = DBA_RES(STR_AUTODELIMITER_MISSING);
             aErrorText = aErrorText.replaceFirst("#1",m_pDecimalSeparatorLabel->GetText());
             pErrorWin = m_pDecimalSeparator;
         }
         else if (m_pTextSeparator->GetText() == m_pFieldSeparator->GetText())
         {   // Field and TextSeparator must not be the same
-            aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
+            aErrorText = DBA_RES(STR_AUTODELIMITER_MUST_DIFFER);
             aErrorText = aErrorText.replaceFirst("#1",m_pTextSeparatorLabel->GetText());
             aErrorText = aErrorText.replaceFirst("#2",m_pFieldSeparatorLabel->GetText());
             pErrorWin = m_pTextSeparator;
         }
         else if (m_pDecimalSeparator->GetText() == m_pThousandsSeparator->GetText())
         {   // Thousands and DecimalSeparator must not be the same
-            aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
+            aErrorText = DBA_RES(STR_AUTODELIMITER_MUST_DIFFER);
             aErrorText = aErrorText.replaceFirst("#1",m_pDecimalSeparatorLabel->GetText());
             aErrorText = aErrorText.replaceFirst("#2",m_pThousandsSeparatorLabel->GetText());
             pErrorWin = m_pDecimalSeparator;
         }
         else if (m_pFieldSeparator->GetText() == m_pThousandsSeparator->GetText())
         {   // Thousands and FieldSeparator must not be the same
-            aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
+            aErrorText = DBA_RES(STR_AUTODELIMITER_MUST_DIFFER);
             aErrorText = aErrorText.replaceFirst("#1",m_pFieldSeparatorLabel->GetText());
             aErrorText = aErrorText.replaceFirst("#2",m_pThousandsSeparatorLabel->GetText());
             pErrorWin = m_pFieldSeparator;
         }
         else if (m_pFieldSeparator->GetText() == m_pDecimalSeparator->GetText())
         {   // Tenner and FieldSeparator must not be the same
-            aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
+            aErrorText = DBA_RES(STR_AUTODELIMITER_MUST_DIFFER);
             aErrorText = aErrorText.replaceFirst("#1",m_pFieldSeparatorLabel->GetText());
             aErrorText = aErrorText.replaceFirst("#2",m_pDecimalSeparatorLabel->GetText());
             pErrorWin = m_pFieldSeparator;
         }
         else if (m_pTextSeparator->GetText() == m_pThousandsSeparator->GetText())
         {   // Thousands and TextSeparator must not be the same
-            aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
+            aErrorText = DBA_RES(STR_AUTODELIMITER_MUST_DIFFER);
             aErrorText = aErrorText.replaceFirst("#1",m_pTextSeparatorLabel->GetText());
             aErrorText = aErrorText.replaceFirst("#2",m_pThousandsSeparatorLabel->GetText());
             pErrorWin = m_pTextSeparator;
         }
         else if (m_pTextSeparator->GetText() == m_pDecimalSeparator->GetText())
         {   // Tenner and TextSeparator must not be the same
-            aErrorText = ModuleRes(STR_AUTODELIMITER_MUST_DIFFER);
+            aErrorText = DBA_RES(STR_AUTODELIMITER_MUST_DIFFER);
             aErrorText = aErrorText.replaceFirst("#1",m_pTextSeparatorLabel->GetText());
             aErrorText = aErrorText.replaceFirst("#2",m_pDecimalSeparatorLabel->GetText());
             pErrorWin = m_pTextSeparator;
         }
         else if ((sExtension.indexOf('*') != -1) || (sExtension.indexOf('?') != -1))
         {
-            aErrorText = ModuleRes(STR_AUTONO_WILDCARDS);
+            aErrorText = DBA_RES(STR_AUTONO_WILDCARDS);
             aErrorText = aErrorText.replaceFirst("#1",sExtension);
             pErrorWin = m_pOwnExtension;
         }

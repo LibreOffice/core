@@ -20,13 +20,12 @@
 #include "UndoEnv.hxx"
 #include "formatnormalizer.hxx"
 #include "conditionupdater.hxx"
-#include "corestrings.hrc"
+#include "strings.hxx"
 #include "rptui_slotid.hrc"
 #include "RptDef.hxx"
-#include "ModuleHelper.hxx"
 #include "RptObject.hxx"
 #include "RptPage.hxx"
-#include "RptResId.hrc"
+#include "strings.hrc"
 #include "RptModel.hxx"
 
 #include <com/sun/star/container/XChild.hpp>

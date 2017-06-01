@@ -59,11 +59,12 @@
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/task/InteractionHandler.hpp"
 #include "com/sun/star/task/InteractionRequestStringResolver.hpp"
-#include <com/sun/star/resource/MissingResourceException.hpp>
-#include <com/sun/star/resource/XResourceBundleLoader.hpp>
 
-#include "updatehdl.hrc"
+#include "strings.hrc"
+#include <tools/simplerm.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 #define COMMAND_CLOSE       "close"
 
@@ -591,24 +592,10 @@ void UpdateHandler::updateState( UpdateState eState )
     meLastState = eState;
 }
 
-
-OUString UpdateHandler::loadString( const uno::Reference< resource::XResourceBundle >& rBundle,
-                                         sal_Int32 nResourceId )
+OUString UpdateHandler::loadString(const std::locale& rLocale,
+                                   const char* pResourceId)
 {
-    OUString sString;
-    OUString sKey = "string:" + OUString::number( nResourceId );
-
-    try
-    {
-        OSL_VERIFY( rBundle->getByName( sKey ) >>= sString );
-    }
-    catch( const uno::Exception& )
-    {
-        OSL_FAIL( "UpdateHandler::loadString: caught an exception!" );
-        sString = "Missing " + sKey;
-    }
-
-    return sString;
+    return Translate::get(pResourceId, rLocale);
 }
 
 OUString UpdateHandler::substVariables( const OUString &rSource ) const
@@ -620,7 +607,6 @@ OUString UpdateHandler::substVariables( const OUString &rSource ) const
         .replaceAll( "%PERCENT", OUString::number( mnPercent ) );
 }
 
-
 void UpdateHandler::loadStrings()
 {
     if ( mbStringsLoaded )
@@ -628,76 +614,65 @@ void UpdateHandler::loadStrings()
     else
         mbStringsLoaded = true;
 
-    uno::Reference< resource::XResourceBundleLoader > xLoader;
-    try
-    {
-        uno::Any aValue( mxContext->getValueByName(
-                "/singletons/com.sun.star.resource.OfficeResourceLoader" ) );
-        OSL_VERIFY( aValue >>= xLoader );
-    }
-    catch( const uno::Exception& )
-    {
-        OSL_FAIL( "UpdateHandler::loadStrings: could not create the resource loader!" );
-    }
+    std::locale loc = Translate::Create("pcr", Application::GetSettings().GetUILanguageTag());
 
-    if ( !xLoader.is() ) return;
+    msChecking      = loadString( loc, RID_UPDATE_STR_CHECKING );
+    msCheckingError = loadString( loc, RID_UPDATE_STR_CHECKING_ERR );
+    msNoUpdFound    = loadString( loc, RID_UPDATE_STR_NO_UPD_FOUND );
 
-    uno::Reference< resource::XResourceBundle > xBundle;
-
-    try
-    {
-        xBundle = xLoader->loadBundle_Default( "upd" );
-    }
-    catch( const resource::MissingResourceException& )
-    {
-        OSL_FAIL( "UpdateHandler::loadStrings: missing the resource bundle!" );
-    }
-
-    if ( !xBundle.is() ) return;
-
-    msChecking      = loadString( xBundle, RID_UPDATE_STR_CHECKING );
-    msCheckingError = loadString( xBundle, RID_UPDATE_STR_CHECKING_ERR );
-    msNoUpdFound    = loadString( xBundle, RID_UPDATE_STR_NO_UPD_FOUND );
-
-    msUpdFound      = loadString( xBundle, RID_UPDATE_STR_UPD_FOUND );
+    msUpdFound      = loadString( loc, RID_UPDATE_STR_UPD_FOUND );
     setFullVersion( msUpdFound );
 
-    msDlgTitle      = loadString( xBundle, RID_UPDATE_STR_DLG_TITLE );
-    msDownloadPause = loadString( xBundle, RID_UPDATE_STR_DOWNLOAD_PAUSE );
-    msDownloadError = loadString( xBundle, RID_UPDATE_STR_DOWNLOAD_ERR );
-    msDownloadWarning = loadString( xBundle, RID_UPDATE_STR_DOWNLOAD_WARN );
-    msDownloadDescr =  loadString( xBundle, RID_UPDATE_STR_DOWNLOAD_DESCR );
-    msDownloadNotAvail = loadString( xBundle, RID_UPDATE_STR_DOWNLOAD_UNAVAIL );
-    msDownloading   = loadString( xBundle, RID_UPDATE_STR_DOWNLOADING );
-    msReady2Install = loadString( xBundle, RID_UPDATE_STR_READY_INSTALL );
-    msCancelTitle   = loadString( xBundle, RID_UPDATE_STR_CANCEL_TITLE );
-    msCancelMessage = loadString( xBundle, RID_UPDATE_STR_CANCEL_DOWNLOAD );
-    msInstallMessage = loadString( xBundle, RID_UPDATE_STR_BEGIN_INSTALL );
-    msInstallNow    = loadString( xBundle, RID_UPDATE_STR_INSTALL_NOW );
-    msInstallLater  = loadString( xBundle, RID_UPDATE_STR_INSTALL_LATER );
-    msInstallError  = loadString( xBundle, RID_UPDATE_STR_INSTALL_ERROR );
-    msOverwriteWarning = loadString( xBundle, RID_UPDATE_STR_OVERWRITE_WARNING );
-    msPercent       = loadString( xBundle, RID_UPDATE_STR_PERCENT );
-    msReloadWarning = loadString( xBundle, RID_UPDATE_STR_RELOAD_WARNING );
-    msReloadReload  = loadString( xBundle, RID_UPDATE_STR_RELOAD_RELOAD );
-    msReloadContinue = loadString( xBundle, RID_UPDATE_STR_RELOAD_CONTINUE );
+    msDlgTitle      = loadString( loc, RID_UPDATE_STR_DLG_TITLE );
+    msDownloadPause = loadString( loc, RID_UPDATE_STR_DOWNLOAD_PAUSE );
+    msDownloadError = loadString( loc, RID_UPDATE_STR_DOWNLOAD_ERR );
+    msDownloadWarning = loadString( loc, RID_UPDATE_STR_DOWNLOAD_WARN );
+    msDownloadDescr =  loadString( loc, RID_UPDATE_STR_DOWNLOAD_DESCR );
+    msDownloadNotAvail = loadString( loc, RID_UPDATE_STR_DOWNLOAD_UNAVAIL );
+    msDownloading   = loadString( loc, RID_UPDATE_STR_DOWNLOADING );
+    msReady2Install = loadString( loc, RID_UPDATE_STR_READY_INSTALL );
+    msCancelTitle   = loadString( loc, RID_UPDATE_STR_CANCEL_TITLE );
+    msCancelMessage = loadString( loc, RID_UPDATE_STR_CANCEL_DOWNLOAD );
+    msInstallMessage = loadString( loc, RID_UPDATE_STR_BEGIN_INSTALL );
+    msInstallNow    = loadString( loc, RID_UPDATE_STR_INSTALL_NOW );
+    msInstallLater  = loadString( loc, RID_UPDATE_STR_INSTALL_LATER );
+    msInstallError  = loadString( loc, RID_UPDATE_STR_INSTALL_ERROR );
+    msOverwriteWarning = loadString( loc, RID_UPDATE_STR_OVERWRITE_WARNING );
+    msPercent       = loadString( loc, RID_UPDATE_STR_PERCENT );
+    msReloadWarning = loadString( loc, RID_UPDATE_STR_RELOAD_WARNING );
+    msReloadReload  = loadString( loc, RID_UPDATE_STR_RELOAD_RELOAD );
+    msReloadContinue = loadString( loc, RID_UPDATE_STR_RELOAD_CONTINUE );
 
-    msStatusFL      = loadString( xBundle, RID_UPDATE_FT_STATUS );
-    msDescription   = loadString( xBundle, RID_UPDATE_FT_DESCRIPTION );
+    msStatusFL      = loadString( loc, RID_UPDATE_FT_STATUS );
+    msDescription   = loadString( loc, RID_UPDATE_FT_DESCRIPTION );
 
-    msClose         = loadString( xBundle, RID_UPDATE_BTN_CLOSE );
-    msDownload      = loadString( xBundle, RID_UPDATE_BTN_DOWNLOAD );
-    msInstall       = loadString( xBundle, RID_UPDATE_BTN_INSTALL );
-    msPauseBtn      = loadString( xBundle, RID_UPDATE_BTN_PAUSE );
-    msResumeBtn     = loadString( xBundle, RID_UPDATE_BTN_RESUME );
-    msCancelBtn     = loadString( xBundle, RID_UPDATE_BTN_CANCEL );
+    msClose         = loadString( loc, RID_UPDATE_BTN_CLOSE );
+    msDownload      = loadString( loc, RID_UPDATE_BTN_DOWNLOAD );
+    msInstall       = loadString( loc, RID_UPDATE_BTN_INSTALL );
+    msPauseBtn      = loadString( loc, RID_UPDATE_BTN_PAUSE );
+    msResumeBtn     = loadString( loc, RID_UPDATE_BTN_RESUME );
+    msCancelBtn     = loadString( loc, RID_UPDATE_BTN_CANCEL );
+
+    std::pair<const char*, const char*> RID_UPDATE_BUBBLE[] =
+    {
+        { RID_UPDATE_BUBBLE_UPDATE_AVAIL, RID_UPDATE_BUBBLE_T_UPDATE_AVAIL },
+        { RID_UPDATE_BUBBLE_UPDATE_NO_DOWN, RID_UPDATE_BUBBLE_T_UPDATE_NO_DOWN },
+        { RID_UPDATE_BUBBLE_AUTO_START, RID_UPDATE_BUBBLE_T_AUTO_START },
+        { RID_UPDATE_BUBBLE_DOWNLOADING, RID_UPDATE_BUBBLE_T_DOWNLOADING },
+        { RID_UPDATE_BUBBLE_DOWNLOAD_PAUSED, RID_UPDATE_BUBBLE_T_DOWNLOAD_PAUSED },
+        { RID_UPDATE_BUBBLE_ERROR_DOWNLOADING, RID_UPDATE_BUBBLE_T_ERROR_DOWNLOADING },
+        { RID_UPDATE_BUBBLE_DOWNLOAD_AVAIL, RID_UPDATE_BUBBLE_T_DOWNLOAD_AVAIL },
+        { RID_UPDATE_BUBBLE_EXT_UPD_AVAIL, RID_UPDATE_BUBBLE_T_EXT_UPD_AVAIL }
+    };
+
+    static_assert(SAL_N_ELEMENTS(RID_UPDATE_BUBBLE) == UPDATESTATES_COUNT - UPDATESTATE_UPDATE_AVAIL, "mismatch");
 
     // all update states before UPDATESTATE_UPDATE_AVAIL don't have a bubble
     // so we can ignore them
-    for ( int i=0; i < (int)(UPDATESTATES_COUNT - UPDATESTATE_UPDATE_AVAIL); i++ )
+    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UPDATE_BUBBLE); ++i)
     {
-        msBubbleTexts[ i ] = loadString( xBundle, RID_UPDATE_BUBBLE_TEXT_START + i );
-        msBubbleTitles[ i ] = loadString( xBundle, RID_UPDATE_BUBBLE_T_TEXT_START + i );
+        msBubbleTexts[i] = loadString(loc, RID_UPDATE_BUBBLE[i].first);
+        msBubbleTitles[i] = loadString(loc, RID_UPDATE_BUBBLE[i].second);
     }
 
     for ( int i=0; i < BUTTON_COUNT; i++ )

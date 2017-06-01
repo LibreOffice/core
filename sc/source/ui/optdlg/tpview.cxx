@@ -329,7 +329,6 @@ ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
                                         const SfxItemSet&   rArgSet ) :
     SfxTabPage( pParent, "ScGeneralPage",
                 "modules/scalc/ui/scgeneralpage.ui", &rArgSet),
-    aUnitArr(ResId(SCSTR_UNIT, *SC_MOD()->GetResMgr())),
     pDoc(nullptr)
 {
     get( m_pUnitLB, "unitlb");
@@ -356,6 +355,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
 
     m_pAlignCB->SetClickHdl(LINK(this, ScTpLayoutOptions, AlignHdl));
 
+    /* TODO
     for ( sal_uInt32 i = 0; i < aUnitArr.Count(); ++i )
     {
         OUString sMetric = aUnitArr.GetStringByPos( i );
@@ -380,7 +380,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   vcl::Window* pParent,
             }
         }
     }
-
+    */
 }
 
 ScTpLayoutOptions::~ScTpLayoutOptions()

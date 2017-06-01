@@ -20,7 +20,7 @@
 
 #include <bastypes.hxx>
 #include <bastype2.hxx>
-#include <basidesh.hrc>
+#include <strings.hrc>
 #include <bitmaps.hlst>
 #include <iderid.hxx>
 #include <o3tl/make_unique.hxx>
