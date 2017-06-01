@@ -75,41 +75,119 @@ public:
     ~FastSerializerHelper();
 
     /// Start an element. After the first argument there can be a number of (attribute, value) pairs.
-    void startElement(sal_Int32 elementTokenId, FSEND_t)
-        { startElementInternal( elementTokenId, FSEND_internal ); }
-    /// overload
+    template<typename... Args>
+    void startElement(sal_Int32 elementTokenId, sal_Int32 attribute, const char* value, Args... args)
+    {
+        if (value)
+            pushAttributeValue(attribute, value);
+        startElement(elementTokenId, args...);
+    }
     void startElement(sal_Int32 elementTokenId, sal_Int32 attribute, const char* value, FSEND_t)
-        { startElementInternal( elementTokenId, attribute, value, FSEND_internal ); }
-    /// overload
+    {
+        if (value)
+            pushAttributeValue(attribute, value);
+        startElement(elementTokenId, FSEND);
+    }
+    template<typename... Args>
+    void startElement(sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, Args... args)
+    {
+        pushAttributeValue(attribute, value);
+        startElement(elementTokenId, args...);
+    }
     void startElement(sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, FSEND_t)
-        { startElementInternal( elementTokenId, attribute, value.getStr(), FSEND_internal ); }
-    /// Create a single element. After the first argument there can be a number of (attribute, value) pairs.
-    void singleElement(sal_Int32 elementTokenId, FSEND_t)
-        { singleElementInternal( elementTokenId, FSEND_internal ); }
-    /// overload
-    void singleElement(sal_Int32 elementTokenId, sal_Int32 attribute, const char* value, FSEND_t)
-        { singleElementInternal( elementTokenId, attribute, value, FSEND_internal ); }
-    /// overload
-    void singleElement(sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, FSEND_t)
-        { singleElementInternal( elementTokenId, attribute, value.getStr(), FSEND_internal ); }
+    {
+        pushAttributeValue(attribute, value);
+        startElement(elementTokenId, FSEND);
+    }
+    void startElement(sal_Int32 elementTokenId, FSEND_t);
+
     /// Start an element. After the first two arguments there can be a number of (attribute, value) pairs.
-    void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, FSEND_t)
-        { startElementInternal( FSNS( namespaceTokenId, elementTokenId), FSEND_internal ); }
-    /// overload
+    template<typename... Args>
+    void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const char* value, Args... args)
+    {
+        if (value)
+            pushAttributeValue(attribute, value);
+        startElementNS(namespaceTokenId, elementTokenId, args...);
+    }
     void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const char* value, FSEND_t)
-        { startElementInternal( FSNS( namespaceTokenId, elementTokenId), attribute, value, FSEND_internal ); }
-    /// overload
+    {
+        if (value)
+            pushAttributeValue(attribute, value);
+        startElementNS(namespaceTokenId, elementTokenId, FSEND);
+    }
+    template<typename... Args>
+    void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, Args... args)
+    {
+        pushAttributeValue(attribute, value);
+        startElementNS(namespaceTokenId, elementTokenId, args...);
+    }
     void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, FSEND_t)
-        { startElementInternal( FSNS( namespaceTokenId, elementTokenId), attribute, value.getStr(), FSEND_internal ); }
+    {
+        pushAttributeValue(attribute, value);
+        startElementNS(namespaceTokenId, elementTokenId, FSEND);
+    }
+    void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, FSEND_t)
+    {
+        startElement(FSNS(namespaceTokenId, elementTokenId), FSEND);
+    }
+
+    /// Create a single element. After the first argument there can be a number of (attribute, value) pairs.
+    template<typename... Args>
+    void singleElement(sal_Int32 elementTokenId, sal_Int32 attribute, const char* value, Args... args)
+    {
+        if (value)
+            pushAttributeValue(attribute, value);
+        singleElement(elementTokenId, args...);
+    }
+    void singleElement(sal_Int32 elementTokenId, sal_Int32 attribute, const char* value, FSEND_t)
+    {
+        if (value)
+            pushAttributeValue(attribute, value);
+        singleElement(elementTokenId, FSEND);
+    }
+    template<typename... Args>
+    void singleElement(sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, Args... args)
+    {
+        pushAttributeValue(attribute, value);
+        singleElement(elementTokenId, args...);
+    }
+    void singleElement(sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, FSEND_t)
+    {
+        pushAttributeValue(attribute, value);
+        singleElement(elementTokenId, FSEND);
+    }
+    void singleElement(sal_Int32 elementTokenId, FSEND_t);
+
     /// Create a single element. After the first two arguments there can be a number of (attribute, value) pairs.
-    void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, FSEND_t)
-        { singleElementInternal( FSNS( namespaceTokenId, elementTokenId), FSEND_internal ); }
-    /// overload
+    template<typename... Args>
+    void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const char* value, Args... args)
+    {
+        if (value)
+            pushAttributeValue(attribute, value);
+        singleElementNS(namespaceTokenId, elementTokenId, args...);
+    }
     void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const char* value, FSEND_t)
-        { singleElementInternal( FSNS( namespaceTokenId, elementTokenId), attribute, value, FSEND_internal ); }
-    /// overload
+    {
+        if (value)
+            pushAttributeValue(attribute, value);
+        singleElementNS(namespaceTokenId, elementTokenId, FSEND);
+    }
+    template<typename... Args>
+    void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, Args... args)
+    {
+        pushAttributeValue(attribute, value);
+        singleElementNS(namespaceTokenId, elementTokenId, args...);
+    }
     void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, sal_Int32 attribute, const OString& value, FSEND_t)
-        { singleElementInternal( FSNS( namespaceTokenId, elementTokenId), attribute, value.getStr(), FSEND_internal ); }
+    {
+        pushAttributeValue(attribute, value);
+        singleElementNS(namespaceTokenId, elementTokenId, FSEND);
+    }
+    void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, FSEND_t)
+    {
+        singleElement(FSNS(namespaceTokenId, elementTokenId), FSEND);
+    }
+
     void endElement(sal_Int32 elementTokenId);
     void endElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId)
         { endElement( FSNS( namespaceTokenId, elementTokenId ) ); }
@@ -143,45 +221,9 @@ public:
     void mergeTopMarks(sal_Int32 nTag,
             MergeMarks eMergeType = MergeMarks::APPEND );
 
-    /*
-      Now create all the overloads in a typesafe way (i.e. without varargs) by creating a number of overloads
-      up to a certain reasonable limit (feel free to raise it). This would be a lot easier with C++11 vararg templates.
-    */
-    // now overloads for 2 and more pairs
-    #define SAX_ARGS_FUNC_DECL( argsdecl, argsuse ) \
-        void startElement(sal_Int32 elementTokenId, argsdecl, FSEND_t) \
-            { startElementInternal( elementTokenId, argsuse, FSEND_internal ); } \
-        void singleElement(sal_Int32 elementTokenId, argsdecl, FSEND_t) \
-            { singleElementInternal( elementTokenId, argsuse, FSEND_internal ); } \
-        void startElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, argsdecl, FSEND_t) \
-            { startElementInternal( FSNS( namespaceTokenId, elementTokenId), argsuse, FSEND_internal ); } \
-        void singleElementNS(sal_Int32 namespaceTokenId, sal_Int32 elementTokenId, argsdecl, FSEND_t) \
-            { singleElementInternal( FSNS( namespaceTokenId, elementTokenId), argsuse, FSEND_internal ); }
-    #define SAX_ARGS_FUNC_NUM( decl1, decl2, use1, use2, convert, num ) \
-        SAX_ARGS_FUNC_DECL( SAX_ARGS_ARG##num( decl1, decl2, ), SAX_ARGS_ARG##num( use1, use2, convert ))
-    #define SAX_ARGS_FUNC_SUBST( type, convert, num ) \
-        SAX_ARGS_FUNC_NUM( sal_Int32 attribute, type value, attribute, value, convert, num )
-    #define SAX_ARGS_FUNC( arg, convert ) SAX_ARGS_FUNC_SUBST( arg, convert, 2 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 3 ) SAX_ARGS_FUNC_SUBST( arg, convert, 4 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 5 ) SAX_ARGS_FUNC_SUBST( arg, convert, 6 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 7 ) SAX_ARGS_FUNC_SUBST( arg, convert, 8 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 9 ) SAX_ARGS_FUNC_SUBST( arg, convert, 10 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 11 ) SAX_ARGS_FUNC_SUBST( arg, convert, 12 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 13 ) SAX_ARGS_FUNC_SUBST( arg, convert, 14 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 15 ) SAX_ARGS_FUNC_SUBST( arg, convert, 16 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 17 ) SAX_ARGS_FUNC_SUBST( arg, convert, 18 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 19 ) SAX_ARGS_FUNC_SUBST( arg, convert, 20 ) \
-        SAX_ARGS_FUNC_SUBST( arg, convert, 21 ) SAX_ARGS_FUNC_SUBST( arg, convert, 22 )
-    SAX_ARGS_FUNC( const char*, )
-    SAX_ARGS_FUNC( const OString&, .getStr() )
-    #undef SAX_ARGS_FUNC_DECL
-    #undef SAX_ARGS_FUNC_NUM
-    #undef SAX_ARGS_FUNC_SUBST
-    #undef SAX_ARGS_FUNC
-
 private:
-    void startElementInternal(sal_Int32 elementTokenId, ...);
-    void singleElementInternal(sal_Int32 elementTokenId, ...);
+    void pushAttributeValue( sal_Int32 attribute, const char* value );
+    void pushAttributeValue( sal_Int32 attribute, const OString& value );
 
     FastSaxSerializer* mpSerializer;
 };
