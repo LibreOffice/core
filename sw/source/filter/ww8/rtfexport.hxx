@@ -50,110 +50,110 @@ class RtfExport : public MSWordExportBase
 
 public:
     /// Access to the attribute output class.
-    virtual AttributeOutputBase& AttrOutput() const override;
+    AttributeOutputBase& AttrOutput() const override;
 
     /// Access to the sections/headers/footres.
-    virtual MSWordSections& Sections() const override;
+    MSWordSections& Sections() const override;
 
     /// Access to the Rtf Sdr exporter.
     RtfSdrExport& SdrExporter() const;
 
-    virtual bool SupportsOneColumnBreak() const override
+    bool SupportsOneColumnBreak() const override
     {
         return false;
     }
 
-    virtual bool FieldsQuoted() const override
+    bool FieldsQuoted() const override
     {
         return true;
     }
 
-    virtual bool AddSectionBreaksForTOX() const override
+    bool AddSectionBreaksForTOX() const override
     {
         return false;
     }
 
-    virtual bool PreferPageBreakBefore() const override
+    bool PreferPageBreakBefore() const override
     {
         return true;
     }
 
     /// Guess the script (asian/western).
-    virtual bool CollapseScriptsforWordOk(sal_uInt16 nScript, sal_uInt16 nWhich) override;
+    bool CollapseScriptsforWordOk(sal_uInt16 nScript, sal_uInt16 nWhich) override;
 
-    virtual void AppendBookmarks(const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen) override;
+    void AppendBookmarks(const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen) override;
 
-    virtual void AppendBookmark(const OUString& rName) override;
+    void AppendBookmark(const OUString& rName) override;
 
-    virtual void AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen) override;
+    void AppendAnnotationMarks(const SwTextNode& rNode, sal_Int32 nAktPos, sal_Int32 nLen) override;
 
     //For i120928,add an interface to export graphic of bullet
-    virtual void ExportGrfBullet(const SwTextNode& rNd) override;
+    void ExportGrfBullet(const SwTextNode& rNd) override;
 
-    virtual void WriteCR(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t()*/) override
+    void WriteCR(ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner = ww8::WW8TableNodeInfoInner::Pointer_t()*/) override
     {
         /* no-op for rtf, most probably should not even be in MSWordExportBase */
     }
-    virtual void WriteChar(sal_Unicode) override;
+    void WriteChar(sal_Unicode) override;
 
     /// Write the numbering table.
-    virtual void WriteNumbering() override;
+    void WriteNumbering() override;
 
     /// Write the revision table.
     void WriteRevTab();
 
     /// Output the actual headers and footers.
-    virtual void WriteHeadersFooters(sal_uInt8 nHeadFootFlags,
-                                     const SwFrameFormat& rFormat, const SwFrameFormat& rLeftFormat, const SwFrameFormat& rFirstPageFormat, sal_uInt8 nBreakCode) override;
+    void WriteHeadersFooters(sal_uInt8 nHeadFootFlags,
+                             const SwFrameFormat& rFormat, const SwFrameFormat& rLeftFormat, const SwFrameFormat& rFirstPageFormat, sal_uInt8 nBreakCode) override;
 
     /// Write the field
-    virtual void OutputField(const SwField* pField, ww::eField eFieldType,
-                             const OUString& rFieldCmd, FieldFlags nMode = FieldFlags::All) override;
+    void OutputField(const SwField* pField, ww::eField eFieldType,
+                     const OUString& rFieldCmd, FieldFlags nMode = FieldFlags::All) override;
 
     /// Write the data of the form field
-    virtual void WriteFormData(const ::sw::mark::IFieldmark& rFieldmark) override;
-    virtual void WriteHyperlinkData(const ::sw::mark::IFieldmark& rFieldmark) override;
+    void WriteFormData(const ::sw::mark::IFieldmark& rFieldmark) override;
+    void WriteHyperlinkData(const ::sw::mark::IFieldmark& rFieldmark) override;
 
-    virtual void DoComboBox(const OUString& rName,
-                            const OUString& rHelp,
-                            const OUString& ToolTip,
-                            const OUString& rSelected,
-                            css::uno::Sequence<OUString>& rListItems) override;
+    void DoComboBox(const OUString& rName,
+                    const OUString& rHelp,
+                    const OUString& ToolTip,
+                    const OUString& rSelected,
+                    css::uno::Sequence<OUString>& rListItems) override;
 
-    virtual void DoFormText(const SwInputField* pField) override;
+    void DoFormText(const SwInputField* pField) override;
 
-    virtual sal_uLong ReplaceCr(sal_uInt8 nChar) override;
+    sal_uLong ReplaceCr(sal_uInt8 nChar) override;
 
 protected:
     /// Format-dependent part of the actual export.
-    virtual void ExportDocument_Impl() override;
+    void ExportDocument_Impl() override;
 
-    virtual void SectionBreaksAndFrames(const SwTextNode& /*rNode*/) override {}
+    void SectionBreaksAndFrames(const SwTextNode& /*rNode*/) override {}
 
     /// Get ready for a new section.
-    virtual void PrepareNewPageDesc(const SfxItemSet* pSet,
-                                    const SwNode& rNd,
-                                    const SwFormatPageDesc* pNewPgDescFormat,
-                                    const SwPageDesc* pNewPgDesc) override;
+    void PrepareNewPageDesc(const SfxItemSet* pSet,
+                            const SwNode& rNd,
+                            const SwFormatPageDesc* pNewPgDescFormat,
+                            const SwPageDesc* pNewPgDesc) override;
 
     /// Return value indicates if an inherited outline numbering is suppressed.
-    virtual bool DisallowInheritingOutlineNumbering(const SwFormat& rFormat) override;
+    bool DisallowInheritingOutlineNumbering(const SwFormat& rFormat) override;
 
     /// Output SwTextNode is depending on outline export mode
-    virtual void OutputTextNode(const SwTextNode&) override;
+    void OutputTextNode(const SwTextNode&) override;
 
     /// Output SwEndNode
-    virtual void OutputEndNode(const SwEndNode&) override;
+    void OutputEndNode(const SwEndNode&) override;
 
     /// Output SwGrfNode
-    virtual void OutputGrfNode(const SwGrfNode&) override;
+    void OutputGrfNode(const SwGrfNode&) override;
 
     /// Output SwOLENode
-    virtual void OutputOLENode(const SwOLENode&) override;
+    void OutputOLENode(const SwOLENode&) override;
 
-    virtual void OutputLinkedOLE(const OUString&) override;
+    void OutputLinkedOLE(const OUString&) override;
 
-    virtual void AppendSection(const SwPageDesc* pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum) override;
+    void AppendSection(const SwPageDesc* pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum) override;
 
 public:
     /// Pass the pDocument, pCurrentPam and pOriginalPam to the base class.
@@ -161,8 +161,12 @@ public:
               SwPaM* pCurrentPam, SwPaM* pOriginalPam, Writer* pWriter,
               bool bOutOutlineOnly = false);
 
+    RtfExport(const RtfExport&) = delete;
+
+    RtfExport& operator=(const RtfExport&) = delete;
+
     /// Destructor.
-    virtual ~RtfExport() override;
+    ~RtfExport() override;
 
     rtl_TextEncoding m_eDefaultEncoding;
     rtl_TextEncoding m_eCurrentEncoding;
@@ -195,10 +199,6 @@ public:
     OString* GetStyle(sal_uInt16 nId);
 
 private:
-    RtfExport(const RtfExport&) = delete;
-
-    RtfExport& operator=(const RtfExport&) = delete;
-
     void WriteFonts();
     void WriteStyles();
     void WriteFootnoteSettings();

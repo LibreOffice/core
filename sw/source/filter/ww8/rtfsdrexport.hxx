@@ -58,7 +58,7 @@ class RtfSdrExport : public EscherEx
 
 public:
     explicit RtfSdrExport(RtfExport& rExport);
-    virtual             ~RtfSdrExport() override;
+    ~RtfSdrExport() override;
 
     /// Export the sdr object as Sdr.
     ///
@@ -83,17 +83,17 @@ protected:
     using EscherEx::EndShape;
     void        EndShape(sal_Int32 nShapeElement);
 
-    virtual void        Commit(EscherPropertyContainer& rProps, const tools::Rectangle& rRect) override;
+    void Commit(EscherPropertyContainer& rProps, const tools::Rectangle& rRect) override;
 
 private:
 
-    virtual void OpenContainer(sal_uInt16 nEscherContainer, int nRecInstance = 0) override;
-    virtual void CloseContainer() override;
+    void OpenContainer(sal_uInt16 nEscherContainer, int nRecInstance = 0) override;
+    void CloseContainer() override;
 
-    virtual sal_uInt32 EnterGroup(const OUString& rShapeName, const tools::Rectangle* pBoundRect) override;
-    virtual void LeaveGroup() override;
+    sal_uInt32 EnterGroup(const OUString& rShapeName, const tools::Rectangle* pBoundRect) override;
+    void LeaveGroup() override;
 
-    virtual void AddShape(sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0) override;
+    void AddShape(sal_uInt32 nShapeType, sal_uInt32 nShapeFlags, sal_uInt32 nShapeId = 0) override;
 
 private:
     /// Add starting and ending point of a line to the m_pShapeAttrList.
