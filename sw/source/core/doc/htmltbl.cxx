@@ -145,7 +145,7 @@ SwHTMLTableLayoutConstraints *SwHTMLTableLayoutConstraints::InsertNext(
 
     if( pPrev )
     {
-        pNxt->pNext.reset( pPrev->pNext.release() );
+        pNxt->pNext = std::move(pPrev->pNext);
         pPrev->pNext.reset( pNxt );
         pConstr = this;
     }
