@@ -10,8 +10,8 @@
 
 #include "docsh.hxx"
 #include "reffact.hxx"
-
 #include "CovarianceDialog.hxx"
+#include "strings.hrc"
 
 ScCovarianceDialog::ScCovarianceDialog(
                         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
@@ -21,7 +21,7 @@ ScCovarianceDialog::ScCovarianceDialog(
             "CovarianceDialog", "modules/scalc/ui/covariancedialog.ui" )
 {}
 
-sal_Int16 ScCovarianceDialog::GetUndoNameId()
+const char* ScCovarianceDialog::GetUndoNameId()
 {
     return STR_COVARIANCE_UNDO_NAME;
 }

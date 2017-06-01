@@ -2011,7 +2011,7 @@ template<typename T > inline void lcl_Format( T& r, SCTAB nTab, SCROW nRow, SCCO
     {
         if ( nTab >= pDoc->GetTableCount() )
         {
-            lcl_string_append(r, ScGlobal::GetRscString( STR_NOREF_STR ));
+            lcl_string_append(r, ScCompiler::GetNativeSymbol(ocErrRef));
             return;
         }
         if( nFlags & ScRefFlags::TAB_3D )
@@ -2202,7 +2202,7 @@ OUString ScRange::Format( ScRefFlags nFlags, const ScDocument* pDoc,
 {
     if( !( nFlags & ScRefFlags::VALID ) )
     {
-        return ScGlobal::GetRscString( STR_NOREF_STR );
+        return ScCompiler::GetNativeSymbol(ocErrRef);
     }
 
     OUStringBuffer r;
@@ -2454,7 +2454,7 @@ OUString ScRefAddress::GetRefString( ScDocument* pDoc, SCTAB nActTab,
     if ( !pDoc )
         return EMPTY_OUSTRING;
     if ( Tab()+1 > pDoc->GetTableCount() )
-        return ScGlobal::GetRscString( STR_NOREF_STR );
+        return ScCompiler::GetNativeSymbol(ocErrRef);
 
     ScRefFlags nFlags = ScRefFlags::VALID;
     if ( nActTab != Tab() )

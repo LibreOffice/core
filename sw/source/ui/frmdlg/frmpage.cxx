@@ -62,6 +62,7 @@
 #include <sal/macros.h>
 
 #include <frmui.hrc>
+#include <strings.hrc>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
@@ -956,9 +957,9 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
         else
         {
             if ( m_bNew )
-                SetText( SwResId(STR_OLE_INSERT));
+                SetText(SwResId(STR_FRMUI_OLE_INSERT));
             else
-                SetText( SwResId(STR_OLE_EDIT));
+                SetText(SwResId(STR_FRMUI_OLE_EDIT));
         }
     }
     else

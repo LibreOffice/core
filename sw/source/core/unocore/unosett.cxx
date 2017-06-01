@@ -22,7 +22,7 @@
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <hintids.hxx>
-#include "poolfmt.hrc"
+#include "strings.hrc"
 #include "poolfmt.hxx"
 #include <fmtcol.hxx>
 #include <unomap.hxx>
