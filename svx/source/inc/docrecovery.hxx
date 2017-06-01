@@ -463,7 +463,7 @@ class RecovDocList : public SvSimpleTable
 
 
         /** @short TODO */
-        RecovDocList(SvSimpleTableContainer& rParent, ResMgr& rResMgr);
+        RecovDocList(SvSimpleTableContainer& rParent);
 
         /** @short TODO */
         virtual void InitEntry(SvTreeListEntry* pEntry,

@@ -1,0 +1,99 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_SVX_INC_PAGE_HRC
+#define INCLUDED_SVX_INC_PAGE_HRC
+
+#include "page.h"
+#include <utility>
+
+#define N_(String) (u8##String)
+
+const std::pair<const char*, int> RID_SVXSTRARY_PAPERSIZE_STD[] =
+{
+    { N_("A6") , PAPERSIZE_A6 },
+    { N_("A5") , PAPERSIZE_A5 },
+    { N_("A4") , PAPERSIZE_A4 },
+    { N_("A3") , PAPERSIZE_A3 },
+    { N_("B6 (ISO)") , PAPERSIZE_B6_ISO },
+    { N_("B5 (ISO)") , PAPERSIZE_B5_ISO },
+    { N_("B4 (ISO)") , PAPERSIZE_B4_ISO },
+    { N_("Letter") , PAPERSIZE_LETTER },
+    { N_("Legal") , PAPERSIZE_LEGAL },
+    { N_("Long Bond") , PAPERSIZE_LEGAL2 },
+    { N_("Tabloid") , PAPERSIZE_TABLOID },
+    { N_("B6 (JIS)") , PAPERSIZE_B6_JIS },
+    { N_("B5 (JIS)") , PAPERSIZE_B5_JIS },
+    { N_("B4 (JIS)") , PAPERSIZE_B4_JIS },
+    { N_("16 Kai") , PAPERSIZE_KAI16},
+    { N_("32 Kai") , PAPERSIZE_KAI32},
+    { N_("Big 32 Kai") , PAPERSIZE_KAI32BIG},
+    { N_("User") , PAPERSIZE_USER },
+    { N_("DL Envelope") , PAPERSIZE_DL },
+    { N_("C6 Envelope") , PAPERSIZE_C6 },
+    { N_("C6/5 Envelope") , PAPERSIZE_C65 },
+    { N_("C5 Envelope") , PAPERSIZE_C5 },
+    { N_("C4 Envelope") , PAPERSIZE_C4 },
+    { N_("#6¾ Envelope") , PAPERSIZE_COM675},
+    { N_("#7¾ (Monarch) Envelope") , PAPERSIZE_MONARCH},
+    { N_("#9 Envelope") , PAPERSIZE_COM9},
+    { N_("#10 Envelope") , PAPERSIZE_COM10},
+    { N_("#11 Envelope") , PAPERSIZE_COM11},
+    { N_("#12 Envelope") , PAPERSIZE_COM12},
+    { N_("Japanese Postcard") , PAPERSIZE_POSTCARD_JP}
+};
+
+const std::pair<const char*, int> RID_SVXSTRARY_PAPERSIZE_DRAW[] =
+{
+    { N_("A6") , PAPERSIZE_A6 },
+    { N_("A5") , PAPERSIZE_A5 },
+    { N_("A4") , PAPERSIZE_A4 },
+    { N_("A3") , PAPERSIZE_A3 },
+    { N_("A2") , PAPERSIZE_A2 },
+    { N_("A1") , PAPERSIZE_A1 },
+    { N_("A0") , PAPERSIZE_A0 },
+    { N_("B6 (ISO)") , PAPERSIZE_B6_ISO },
+    { N_("B5 (ISO)") , PAPERSIZE_B5_ISO },
+    { N_("B4 (ISO)") , PAPERSIZE_B4_ISO },
+    { N_("Letter") , PAPERSIZE_LETTER },
+    { N_("Legal") , PAPERSIZE_LEGAL },
+    { N_("Long Bond") , PAPERSIZE_LEGAL2 },
+    { N_("Tabloid") , PAPERSIZE_TABLOID },
+    { N_("B6 (JIS)") , PAPERSIZE_B6_JIS },
+    { N_("B5 (JIS)") , PAPERSIZE_B5_JIS },
+    { N_("B4 (JIS)") , PAPERSIZE_B4_JIS },
+    { N_("16 Kai") , PAPERSIZE_KAI16},
+    { N_("32 Kai") , PAPERSIZE_KAI32},
+    { N_("Big 32 Kai") , PAPERSIZE_KAI32BIG},
+    { N_("User") , PAPERSIZE_USER },
+    { N_("DL Envelope") , PAPERSIZE_DL },
+    { N_("C6 Envelope") , PAPERSIZE_C6 },
+    { N_("C6/5 Envelope") , PAPERSIZE_C65 },
+    { N_("C5 Envelope") , PAPERSIZE_C5 },
+    { N_("C4 Envelope") , PAPERSIZE_C4 },
+    { N_("Dia Slide") , PAPERSIZE_DIA },
+    { N_("Screen 4:3") , PAPERSIZE_SCREEN_4_3 },
+    { N_("Screen 16:9") , PAPERSIZE_SCREEN_16_9 },
+    { N_("Screen 16:10") , PAPERSIZE_SCREEN_16_10 },
+    { N_("Japanese Postcard") , PAPERSIZE_POSTCARD_JP}
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,83 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef INCLUDED_REPORTDESIGN_INC_FNP_HRC
+#define INCLUDED_REPORTDESIGN_INC_FNP_HRC
+
+#define N_(String) (u8##String)
+
+const char* RID_STR_FORCENEWPAGE_CONST[] =
+{
+    N_("None"),
+    N_("Before Section"),
+    N_("After Section"),
+    N_("Before & After Section"),
+    nullptr
+};
+
+const char* RID_STR_GROUPKEEPTOGETHER_CONST[] =
+{
+    N_("Per Page"),
+    N_("Per Column"),
+    nullptr
+};
+
+const char* RID_STR_REPORTPRINTOPTION_CONST[] =
+{
+    N_("All Pages"),
+    N_("Not With Report Header"),
+    N_("Not With Report Footer"),
+    N_("Not With Report Header/Footer"),
+    nullptr
+};
+
+const char* RID_STR_TYPE_CONST[] =
+{
+    N_("Field or Formula"),
+    N_("Function"),
+    N_("Counter"),
+    N_("User defined Function"),
+    nullptr
+};
+
+const char* RID_STR_BOOL[] =
+{
+    N_("No"),
+    N_("Yes"),
+    nullptr
+};
+
+const char* RID_STR_KEEPTOGETHER_CONST[] =
+{
+    N_("No"),
+    N_("Whole Group"),
+    N_("With First Detail"),
+    nullptr
+};
+
+const char* RID_STR_VERTICAL_ALIGN_CONST[] =
+{
+    N_("Top"),
+    N_("Middle"),
+    N_("Bottom"),
+    nullptr
+};
+
+const char* RID_STR_PARAADJUST_CONST[] =
+{
+    N_("Left"),
+    N_("Right"),
+    N_("Block"),
+    N_("Center"),
+    nullptr
+};
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

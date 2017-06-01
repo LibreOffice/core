@@ -21,7 +21,7 @@
 #include "property.hrc"
 #include "property.hxx"
 #include "frm_resource.hxx"
-#include "frm_resource.hrc"
+#include "strings.hrc"
 #include "propertybaghelper.hxx"
 #include <comphelper/sequence.hxx>
 #include <comphelper/numbers.hxx>

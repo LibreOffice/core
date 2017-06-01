@@ -24,7 +24,7 @@
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "app.hrc"
 #include "strings.hrc"
 #include "helpids.h"

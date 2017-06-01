@@ -32,6 +32,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/colorbox.hxx>
+#include <svx/strarray.hxx>
 #include <svx/gallery.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/brushitem.hxx>
@@ -70,6 +71,7 @@
 #include "sfx2/opengrf.hxx"
 
 #include <cuires.hrc>
+#include <strings.hrc>
 #include <sfx2/request.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
@@ -1178,11 +1180,11 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
 
     // Fill ListBox with predefined / translated numbering types.
-    ResStringArray aNames(ResId(RID_SVXSTRARY_NUMBERINGTYPE, DIALOG_MGR()));
+    SvxNumberingTypeTable aNames;
     sal_uInt32 nCount = aNames.Count();
     for (sal_uInt32 i = 0; i < nCount; ++i)
     {
-        sal_Int32 nPos = m_pFmtLB->InsertEntry( aNames.GetString(i));
+        sal_Int32 nPos = m_pFmtLB->InsertEntry(aNames.GetString(i));
         m_pFmtLB->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_uIntPtr>(aNames.GetValue(i))));
     }
 

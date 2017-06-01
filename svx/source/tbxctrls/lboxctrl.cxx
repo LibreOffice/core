@@ -40,7 +40,7 @@
 #include <tools/urlobj.hxx>
 
 #include <svx/svxids.hrc>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -142,15 +142,12 @@ void SvxUndoRedoControl::Impl_SetInfo( sal_Int32 nCount )
 {
     DBG_ASSERT( pPopupWin, "NULL pointer, PopupWindow missing" );
 
-//    ListBox &rListBox = pPopupWin->GetListBox();
-
-    sal_uInt16 nId;
+    const char* pId;
     if (nCount == 1)
-        nId = SID_UNDO == GetSlotId() ? RID_SVXSTR_NUM_UNDO_ACTION : RID_SVXSTR_NUM_REDO_ACTION;
+        pId = SID_UNDO == GetSlotId() ? RID_SVXSTR_NUM_UNDO_ACTION : RID_SVXSTR_NUM_REDO_ACTION;
     else
-        nId = SID_UNDO == GetSlotId() ? RID_SVXSTR_NUM_UNDO_ACTIONS : RID_SVXSTR_NUM_REDO_ACTIONS;
-
-    aActionStr = SvxResId(nId);
+        pId = SID_UNDO == GetSlotId() ? RID_SVXSTR_NUM_UNDO_ACTIONS : RID_SVXSTR_NUM_REDO_ACTIONS;
+    aActionStr = SvxResId(pId);
 
     OUString aText = aActionStr.replaceAll("$(ARG1)", OUString::number(nCount));
     pPopupWin->SetText(aText);
