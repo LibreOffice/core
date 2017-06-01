@@ -46,6 +46,30 @@
       "revId": "473d21e805833daedf1a19ebea589a2e43cea815",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_1e1bc21c",
+        "filename": "basctl/uiconfig/basicide/menubar/menubar.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1001086
+      },
+      "writtenOn": "2017-06-01T06:00:51Z",
+      "side": 1,
+      "message": "No, they should not. Because these are not Run macros, but a tool for debugging. This is a tool that helps to investigate the algorithm. It will be easier to understand if you look at the menu calc -\u003e tools -\u003e Detective -\u003e ... They are similar.\nOf course, we can think about them in different ways. For example, they are placed in a separate menu of qtCreator, and in Kdevelop they are in the same menu run. As a person who uses BASIC IDE to develop macros, it would be more convenient for me to have them spaced apart.",
+      "parentUuid": "5a3905b3_1e04a2be",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 52
+      },
+      "revId": "473d21e805833daedf1a19ebea589a2e43cea815",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
