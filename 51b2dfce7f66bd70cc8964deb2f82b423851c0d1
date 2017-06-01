@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_fead1632",
+        "filename": "dbaccess/source/core/dataaccess/documentdefinition.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1891,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-01T07:02:42Z",
+      "side": 1,
+      "message": "any reason for an empty line here?",
+      "revId": "51b2dfce7f66bd70cc8964deb2f82b423851c0d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
