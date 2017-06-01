@@ -2311,7 +2311,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
         // find used row range
         if( rRow->IsEnabled() )
         {
-            sal_uInt16 nXclRow = rRow->GetXclRow();
+            sal_uInt32 nXclRow = rRow->GetXclRow();
             nFirstUsedXclRow = ::std::min< sal_uInt32 >( nFirstUsedXclRow, nXclRow );
             nFirstFreeXclRow = ::std::max< sal_uInt32 >( nFirstFreeXclRow, nXclRow + 1 );
         }
