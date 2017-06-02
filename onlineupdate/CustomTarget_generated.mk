@@ -12,13 +12,15 @@ $(eval $(call gb_CustomTarget_CustomTarget,onlineupdate/generated))
 onlineupdate_INC := $(call gb_CustomTarget_get_workdir,onlineupdate/generated)/onlineupdate
 
 $(onlineupdate_INC)/primaryCert.h : \
-		$(SRCDIR)/onlineupdate/source/update/updater/gen_cert_header.py
+		$(SRCDIR)/onlineupdate/source/update/updater/gen_cert_header.py \
+		$(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,,1)
 	mkdir -p $(dir $@)
 	$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/onlineupdate/source/update/updater/gen_cert_header.py "primaryCertData" $(UPDATE_CONFIG) > $(onlineupdate_INC)/primaryCert.h #"$(UPDATE_CONFIG)"
 
 $(onlineupdate_INC)/secondaryCert.h : \
-		$(SRCDIR)/onlineupdate/source/update/updater/gen_cert_header.py
+		$(SRCDIR)/onlineupdate/source/update/updater/gen_cert_header.py \
+		$(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,,1)
 	mkdir -p $(dir $@)
 	$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/onlineupdate/source/update/updater/gen_cert_header.py "secondaryCertData" $(UPDATE_CONFIG) > $(onlineupdate_INC)/secondaryCert.h #"$(UPDATE_CONFIG)"
