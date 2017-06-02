@@ -295,7 +295,7 @@ namespace drawinglayer
 
         bool SvgGradientHelper::operator==(const SvgGradientHelper& rSvgGradientHelper) const
         {
-            const SvgGradientHelper& rCompare = static_cast< const SvgGradientHelper& >(rSvgGradientHelper);
+            const SvgGradientHelper& rCompare = rSvgGradientHelper;
 
             return (getGradientTransform() == rCompare.getGradientTransform()
                 && getPolyPolygon() == rCompare.getPolyPolygon()
