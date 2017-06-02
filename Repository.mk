@@ -797,7 +797,6 @@ $(eval $(call gb_Helper_register_packages, \
 	$(if $(filter MSC,$(COM)),msvc_dlls) \
 	instsetoo_native_setup \
 	$(if $(ENABLE_OOENV),instsetoo_native_ooenv) \
-	odk_headers_generated \
 	postprocess_registry \
 	readlicense_oo_readmes \
 	setup_native_misc \
@@ -842,6 +841,7 @@ $(eval $(call gb_Helper_register_packages_for_install,sdk,\
 	$(if $(DOXYGEN),odk_doxygen) \
 	odk_examples \
 	odk_headers \
+	odk_headers_generated \
 	odk_html \
 	odk_settings \
 	odk_settings_generated \
