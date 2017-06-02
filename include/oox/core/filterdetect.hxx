@@ -61,7 +61,7 @@ namespace core {
 class FilterDetectDocHandler : public ::cppu::WeakImplHelper< css::xml::sax::XFastDocumentHandler >
 {
 public:
-    explicit            FilterDetectDocHandler( const css::uno::Reference< css::uno::XComponentContext >& rxContext, OUString& rFilter );
+    explicit            FilterDetectDocHandler( const css::uno::Reference< css::uno::XComponentContext >& rxContext, OUString& rFilter, const OUString& rFileName );
     virtual             ~FilterDetectDocHandler() override;
 
     // XFastDocumentHandler
@@ -81,7 +81,7 @@ public:
 private:
     void                parseRelationship( const AttributeList& rAttribs );
 
-    static OUString     getFilterNameFromContentType( const OUString& rContentType );
+    static OUString     getFilterNameFromContentType( const OUString& rContentType, const OUString& rFileName );
     void                parseContentTypesDefault( const AttributeList& rAttribs );
     void                parseContentTypesOverride( const AttributeList& rAttribs );
 
@@ -89,6 +89,7 @@ private:
     typedef ::std::vector< sal_Int32 > ContextVector;
 
     OUString&           mrFilterName;
+    OUString            maFileName;
     ContextVector       maContextStack;
     OUString            maTargetPath;
     css::uno::Reference< css::uno::XComponentContext > mxContext;
