@@ -1450,7 +1450,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
 
         SwDoc* pDoc = pFormat->GetDoc();
         if ( ((eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID)) ||
-            (FN_PARAM_COUNTOUR_PP        == pEntry->nWID) ||
+            (FN_PARAM_CONTOUR_PP         == pEntry->nWID) ||
             (FN_UNO_IS_AUTOMATIC_CONTOUR == pEntry->nWID) ||
             (FN_UNO_IS_PIXEL_CONTOUR     == pEntry->nWID) )
         {
@@ -1459,7 +1459,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             {
                 SwNodeIndex aIdx(*pIdx, 1);
                 SwNoTextNode* pNoText = aIdx.GetNode().GetNoTextNode();
-                if(pEntry->nWID == FN_PARAM_COUNTOUR_PP)
+                if(pEntry->nWID == FN_PARAM_CONTOUR_PP)
                 {
                     drawing::PointSequenceSequence aParam;
                     if(!aValue.hasValue())
@@ -2017,7 +2017,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     {
         if( ((eType == FLYCNTTYPE_GRF) || (eType == FLYCNTTYPE_OLE)) &&
                 (isGRFATR(pEntry->nWID) ||
-                        pEntry->nWID == FN_PARAM_COUNTOUR_PP ||
+                        pEntry->nWID == FN_PARAM_CONTOUR_PP ||
                         pEntry->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR ||
                         pEntry->nWID == FN_UNO_IS_PIXEL_CONTOUR ))
         {
@@ -2026,7 +2026,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             {
                 SwNodeIndex aIdx(*pIdx, 1);
                 SwNoTextNode* pNoText = aIdx.GetNode().GetNoTextNode();
-                if(pEntry->nWID == FN_PARAM_COUNTOUR_PP)
+                if(pEntry->nWID == FN_PARAM_CONTOUR_PP)
                 {
                     tools::PolyPolygon aContour;
                     if( pNoText->GetContourAPI( aContour ) )
@@ -2869,7 +2869,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             if(pProps->GetProperty(RES_SURROUND, MID_SURROUND_CONTOUROUTSIDE, pContourOutside))
                 setPropertyValue(UNO_NAME_CONTOUR_OUTSIDE, *pContourOutside);
             const ::uno::Any* pContourPoly;
-            if(pProps->GetProperty(FN_PARAM_COUNTOUR_PP, 0, pContourPoly))
+            if(pProps->GetProperty(FN_PARAM_CONTOUR_PP, 0, pContourPoly))
                 setPropertyValue(UNO_NAME_CONTOUR_POLY_POLYGON, *pContourPoly);
             const ::uno::Any* pPixelContour;
             if(pProps->GetProperty(FN_UNO_IS_PIXEL_CONTOUR, 0, pPixelContour))

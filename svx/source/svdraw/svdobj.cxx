@@ -1135,7 +1135,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
             const sal_uInt32 nSize(rResult.size());
 
             // when count is one, it is implied that the object has only its normal
-            // contour anyways and TakeCountour() is to return an empty PolyPolygon
+            // contour anyways and TakeContour() is to return an empty PolyPolygon
             // (see old implementation for historical reasons)
             if(nSize > 1)
             {

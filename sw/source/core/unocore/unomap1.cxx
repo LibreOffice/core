@@ -818,7 +818,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetGraphicPropertyMap(
         { OUString(UNO_NAME_GRAPHIC_FILTER), FN_UNO_GRAPHIC_FILTER,      cppu::UnoType<OUString>::get(), 0, 0 },
         { OUString(UNO_NAME_GRAPHIC), FN_UNO_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0 },
         { OUString(UNO_NAME_ACTUAL_SIZE), FN_UNO_ACTUAL_SIZE,    cppu::UnoType<css::awt::Size>::get(),  PropertyAttribute::READONLY, CONVERT_TWIPS},
-        { OUString(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, cppu::UnoType<css::drawing::PointSequenceSequence>::get(), PropertyAttribute::MAYBEVOID, 0 },
+        { OUString(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_CONTOUR_PP, cppu::UnoType<css::drawing::PointSequenceSequence>::get(), PropertyAttribute::MAYBEVOID, 0 },
         { OUString(UNO_NAME_IS_PIXEL_CONTOUR), FN_UNO_IS_PIXEL_CONTOUR, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
         { OUString(UNO_NAME_IS_AUTOMATIC_CONTOUR), FN_UNO_IS_AUTOMATIC_CONTOUR , cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
         { OUString(UNO_NAME_GRAPHIC_ROTATION), RES_GRFATR_ROTATION,      cppu::UnoType<sal_Int16>::get(),  0,   0},
@@ -854,7 +854,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetEmbeddedPropertyMap
         COMMON_FRAME_PROPERTIES
         { OUString(UNO_NAME_SURROUND_CONTOUR), RES_SURROUND, cppu::UnoType<bool>::get(), PROPERTY_NONE, MID_SURROUND_CONTOUR },
         { OUString(UNO_NAME_CONTOUR_OUTSIDE), RES_SURROUND, cppu::UnoType<bool>::get(), PROPERTY_NONE, MID_SURROUND_CONTOUROUTSIDE},
-        { OUString(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, cppu::UnoType<css::drawing::PointSequenceSequence>::get(), PropertyAttribute::MAYBEVOID, 0 },
+        { OUString(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_CONTOUR_PP, cppu::UnoType<css::drawing::PointSequenceSequence>::get(), PropertyAttribute::MAYBEVOID, 0 },
         { OUString(UNO_NAME_IS_PIXEL_CONTOUR), FN_UNO_IS_PIXEL_CONTOUR, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
         { OUString(UNO_NAME_IS_AUTOMATIC_CONTOUR), FN_UNO_IS_AUTOMATIC_CONTOUR , cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
         { OUString(UNO_NAME_CLSID),                FN_UNO_CLSID, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
