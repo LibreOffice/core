@@ -14,7 +14,7 @@ void f2(char const *) {}
 
 enum Enum1 { X };
 
-int main() {
+void testConstCast() {
     char * p1;
     char const * p2;
     p1 = nullptr;
@@ -32,15 +32,14 @@ int main() {
     f2(const_cast<char const *>(p2)); // expected-error {{redundant const_cast from 'const char *' to 'const char *' [loplugin:redundantcast]}}
     f2(const_cast<char const * const>(p2)); // expected-error {{redundant const_cast from 'const char *' to 'const char *const' [loplugin:redundantcast]}}
 
-    Enum1 e = (Enum1)Enum1::X; // expected-error {{redundant cstyle cast from 'Enum1' to 'Enum1' [loplugin:redundantcast]}}
-    (void)e;
-
     S const s{};
     const_cast<S &>(s).f1();
     const_cast<S &>(s).f2(); // expected-error {{redundant const_cast from 'const S' to 'S', result is implicitly cast to 'const S' [loplugin:redundantcast]}}
     const_cast<S &>(s).f3();
     s.f3();
+}
 
+void testStaticCast() {
     // non-class lvalue, non-const:
     int ni{};
     (void) static_cast<int>(ni); // expected-error {{static_cast from 'int' lvalue to 'int' prvalue is redundant or should be written as an explicit construction of a temporary [loplugin:redundantcast]}}
@@ -172,6 +171,17 @@ int main() {
     /* => */ (void) CS(csr());
     (void) static_cast<S const &>(csr()); // expected-error {{static_cast from 'const S' prvalue to 'const S &' lvalue is redundant [loplugin:redundantcast]}}
     (void) static_cast<S const &&>(csr());
+}
+
+void testCStyleCast() {
+    Enum1 e = (Enum1)Enum1::X; // expected-error {{redundant cstyle cast from 'Enum1' to 'Enum1' [loplugin:redundantcast]}}
+    (void)e;
+}
+
+int main() {
+    testConstCast();
+    testStaticCast();
+    testCStyleCast();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
