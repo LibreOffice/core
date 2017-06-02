@@ -120,6 +120,14 @@ File id \
     Styles = (FILELIST, USE_INTERNAL_RIGHTS, PACKED); \
 End
 
+#define PACKAGE_FILELIST_COMPONENTCONDITION(id,name,cond) \
+File id \
+    Dir = FILELIST_DIR; \
+    Name = name; \
+    Styles = (FILELIST, USE_INTERNAL_RIGHTS, PACKED); \
+    ComponentCondition = cond; \
+End
+
 #ifdef WNT
 #define PACKAGE_FILELIST_FONT(id,name) \
 File id \
