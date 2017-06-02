@@ -244,6 +244,9 @@ private:
     /// Write word/embeddings/Worksheet[n].xlsx
     void WriteEmbeddings();
 
+    /// Writes word/vbaProject.bin.
+    void WriteVBA();
+
     /// return true if Page Layout is set as Mirrored
     bool isMirroredMargin();
 
