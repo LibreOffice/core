@@ -52,12 +52,22 @@ private:
 
     void check(ExplicitCastExpr const * expr) {
         if (ignoreLocation(expr)
-            || isInUnoIncludeFile(expr->getExprLoc())
+            || isInUnoIncludeFile(expr->getExprLoc()))
                 //TODO: '#ifdef LIBO_INTERNAL_ONLY' within UNO include files
-            || !(loplugin::TypeCheck(expr->getTypeAsWritten())
-                 .Typedef("sal_Unicode").GlobalNamespace()))
         {
             return;
+        }
+        for (auto t = expr->getTypeAsWritten();;) {
+            auto const tt = t->getAs<TypedefType>();
+            if (tt == nullptr) {
+                return;
+            }
+            if (loplugin::TypeCheck(t).Typedef("sal_Unicode")
+                .GlobalNamespace())
+            {
+                break;
+            }
+            t = tt->desugar();
         }
         auto const e1 = expr->getSubExprAsWritten();
         auto const loc = e1->getLocStart();

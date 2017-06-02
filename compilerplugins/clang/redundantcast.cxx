@@ -66,6 +66,26 @@ bool isArithmeticOp(Expr const * expr) {
     return isa<UnaryOperator>(expr) || isa<AbstractConditionalOperator>(expr);
 }
 
+bool canConstCastFromTo(Expr const * from, Expr const * to) {
+    auto const k1 = from->getValueKind();
+    auto const k2 = to->getValueKind();
+    return (k2 == VK_LValue && k1 == VK_LValue)
+        || (k2 == VK_XValue
+            && (k1 != VK_RValue || from->getType()->isRecordType()));
+}
+
+char const * printExprValueKind(ExprValueKind k) {
+    switch (k) {
+    case VK_RValue:
+        return "prvalue";
+    case VK_LValue:
+        return "lvalue";
+    case VK_XValue:
+        return "xvalue";
+    };
+    llvm_unreachable("unknown ExprValueKind");
+}
+
 class RedundantCast:
     public RecursiveASTVisitor<RedundantCast>, public loplugin::RewritePlugin
 {
@@ -333,9 +353,46 @@ bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
-    auto t1 = compat::getSubExprAsWritten(expr)->getType();
-    auto t2 = expr->getTypeAsWritten();
-    if (t1.getCanonicalType() != t2.getCanonicalType()) {
+    auto const sub = compat::getSubExprAsWritten(expr);
+    auto const t1 = sub->getType();
+    auto const t2 = expr->getTypeAsWritten();
+    auto const nonClassObjectType = t2->isObjectType()
+        && !(t2->isRecordType() || t2->isArrayType());
+    if (nonClassObjectType && t2.hasLocalQualifiers()) {
+        report(
+            DiagnosticsEngine::Warning,
+            ("in static_cast from %0 %1 to %2 %3, remove redundant top-level"
+             " %select{const qualifier|volatile qualifer|const volatile"
+             " qualifiers}4"),
+            expr->getExprLoc())
+            << t1 << printExprValueKind(sub->getValueKind())
+            << t2 << printExprValueKind(expr->getValueKind())
+            << ((t2.isLocalConstQualified() ? 1 : 0)
+                + (t2.isLocalVolatileQualified() ? 2 : 0) - 1)
+            << expr->getSourceRange();
+        return true;
+    }
+    auto const t3 = expr->getType();
+    auto const c1 = t1.getCanonicalType();
+    auto const c3 = t3.getCanonicalType();
+    if (nonClassObjectType || !canConstCastFromTo(sub, expr)
+        ? c1.getTypePtr() != c3.getTypePtr() : c1 != c3)
+    {
+        bool ObjCLifetimeConversion;
+        if (nonClassObjectType
+            || (c1.getTypePtr() != c3.getTypePtr()
+                && !compiler.getSema().IsQualificationConversion(
+                    c1, c3, false, ObjCLifetimeConversion)))
+        {
+            return true;
+        }
+        report(
+            DiagnosticsEngine::Warning,
+            "static_cast from %0 %1 to %2 %3 should be written as const_cast",
+            expr->getExprLoc())
+            << t1 << printExprValueKind(sub->getValueKind())
+            << t2 << printExprValueKind(expr->getValueKind())
+            << expr->getSourceRange();
         return true;
     }
     if (!isOkToRemoveArithmeticCast(t1, t2, expr->getSubExpr())) {
@@ -372,10 +429,21 @@ bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
             }
         }
     }
+    auto const k1 = sub->getValueKind();
+    auto const k3 = expr->getValueKind();
+    if ((k3 == VK_XValue && k1 != VK_XValue)
+        || (k3 == VK_LValue && k1 == VK_XValue))
+    {
+        return true;
+    }
     report(
         DiagnosticsEngine::Warning,
-        "redundant static_cast from %0 to %1", expr->getExprLoc())
-        << t1 << t2 << expr->getSourceRange();
+        ("static_cast from %0 %1 to %2 %3 is redundant%select{| or should be"
+         " written as an explicit construction of a temporary}4"),
+        expr->getExprLoc())
+        << t1 << printExprValueKind(k1) << t2 << printExprValueKind(k3)
+        << (k3 == VK_RValue && (k1 != VK_RValue || t1->isRecordType()))
+        << expr->getSourceRange();
     return true;
 }
 

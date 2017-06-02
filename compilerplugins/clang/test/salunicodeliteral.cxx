@@ -25,7 +25,8 @@ void f(sal_Unicode) {}
 void test() {
     f(sal_Unicode('x')); // expected-error {{in LIBO_INTERNAL_ONLY code, replace literal cast to 'sal_Unicode' (aka 'char16_t') with a u'...' char16_t character literal [loplugin:salunicodeliteral]}}
     f(static_cast<sal_Unicode>('x')); // expected-error {{in LIBO_INTERNAL_ONLY code, replace literal cast to 'sal_Unicode' (aka 'char16_t') with a u'...' char16_t character literal [loplugin:salunicodeliteral]}}
-    f(static_cast<sal_Unicode const>('x')); // expected-error {{in LIBO_INTERNAL_ONLY code, replace literal cast to 'const sal_Unicode' (aka 'const char16_t') with a u'...' char16_t character literal [loplugin:salunicodeliteral]}}
+    using T = sal_Unicode const;
+    f(static_cast<T>('x')); // expected-error {{in LIBO_INTERNAL_ONLY code, replace literal cast to 'T' (aka 'const char16_t') with a u'...' char16_t character literal [loplugin:salunicodeliteral]}}
     f((sal_Unicode) 'x'); // expected-error {{in LIBO_INTERNAL_ONLY code, replace literal cast to 'sal_Unicode' (aka 'char16_t') with a u'...' char16_t character literal [loplugin:salunicodeliteral]}}
     f(sal_Unicode(('x'))); // expected-error {{in LIBO_INTERNAL_ONLY code, replace literal cast to 'sal_Unicode' (aka 'char16_t') with a u'...' char16_t character literal [loplugin:salunicodeliteral]}}
     f(sal_Unicode(120)); // expected-error {{in LIBO_INTERNAL_ONLY code, replace literal cast to 'sal_Unicode' (aka 'char16_t') with a u'...' char16_t character literal [loplugin:salunicodeliteral]}}
