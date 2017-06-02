@@ -116,7 +116,7 @@ bool AddTableDialogContext::allowQueries() const
 
 bool AddTableDialogContext::allowAddition() const
 {
-    return const_cast< OJoinController& >( m_rController ).getJoinView()->getTableView()->IsAddAllowed();
+    return m_rController.getJoinView()->getTableView()->IsAddAllowed();
 }
 
 void AddTableDialogContext::addTableWindow( const OUString& _rQualifiedTableName, const OUString& _rAliasName )

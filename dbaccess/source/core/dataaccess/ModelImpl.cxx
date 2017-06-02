@@ -1297,8 +1297,8 @@ ODatabaseModelImpl::EmbeddedMacros ODatabaseModelImpl::determineEmbeddedMacros()
         {
             m_aEmbeddedMacros.reset( eDocumentWideMacros );
         }
-        else if (   lcl_hasObjectsWithMacros_nothrow( const_cast< ODatabaseModelImpl& >( *this ), E_FORM )
-                ||  lcl_hasObjectsWithMacros_nothrow( const_cast< ODatabaseModelImpl& >( *this ), E_REPORT )
+        else if (   lcl_hasObjectsWithMacros_nothrow( *this, E_FORM )
+                ||  lcl_hasObjectsWithMacros_nothrow( *this, E_REPORT )
                 )
         {
             m_aEmbeddedMacros.reset( eSubDocumentMacros );
