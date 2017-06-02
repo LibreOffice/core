@@ -77,6 +77,7 @@
 #include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/font.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 using namespace sax_fastparser;
 using namespace ::comphelper;
@@ -463,6 +464,8 @@ void DocxExport::ExportDocument_Impl()
     WriteActiveX();
 
     WriteEmbeddings();
+
+    WriteVBA();
 
     m_aLinkedTextboxesHelper.clear();   //final cleanup
     delete m_pStyles;
@@ -1249,6 +1252,78 @@ void DocxExport::WriteActiveX()
 
         }
      }
+}
+
+void DocxExport::WriteVBA()
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+    if (!xPropertySet.is())
+        return;
+
+    uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+    if (!xPropertySetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
+        return;
+
+    uno::Sequence<beans::PropertyValue> aGrabBag;
+    xPropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBag;
+    uno::Sequence<beans::PropertyValue> aVBA;
+    for (const auto& rProperty : aGrabBag)
+    {
+        if (rProperty.Name == "OOXVBA")
+            rProperty.Value >>= aVBA;
+    }
+    if (!aVBA.hasElements())
+        return;
+
+    uno::Reference<io::XOutputStream> xProjectStream;
+    for (const auto& rProperty : aVBA)
+    {
+        if (rProperty.Name == "ProjectStream")
+        {
+            // First check for the project stream, this sets xProjectStream.
+            uno::Reference<io::XStream> xInputStream;
+            rProperty.Value >>= xInputStream;
+            if (!xInputStream.is())
+                return;
+            std::unique_ptr<SvStream> pIn(utl::UcbStreamHelper::CreateStream(xInputStream));
+
+            xProjectStream = GetFilter().openFragmentStream("word/vbaProject.bin", "application/vnd.ms-office.vbaProject");
+            uno::Reference<io::XStream> xOutputStream(xProjectStream, uno::UNO_QUERY);
+            if (!xOutputStream.is())
+                return;
+            std::unique_ptr<SvStream> pOut(utl::UcbStreamHelper::CreateStream(xOutputStream));
+
+            // Write the stream.
+            pOut->WriteStream(*pIn);
+
+            // Write the relationship.
+            m_pFilter->addRelation(m_pDocumentFS->getOutputStream(), "http://schemas.microsoft.com/office/2006/relationships/vbaProject", "vbaProject.bin");
+        }
+        else if (rProperty.Name == "DataStream")
+        {
+            // Then the data stream, which wants to work with an already set
+            // xProjectStream.
+            uno::Reference<io::XStream> xInputStream;
+            rProperty.Value >>= xInputStream;
+            if (!xInputStream.is())
+                return;
+            std::unique_ptr<SvStream> pIn(utl::UcbStreamHelper::CreateStream(xInputStream));
+
+            uno::Reference<io::XStream> xOutputStream(GetFilter().openFragmentStream("word/vbaData.xml", "application/vnd.ms-word.vbaData+xml"), uno::UNO_QUERY);
+            if (!xOutputStream.is())
+                return;
+            std::unique_ptr<SvStream> pOut(utl::UcbStreamHelper::CreateStream(xOutputStream));
+
+            // Write the stream.
+            pOut->WriteStream(*pIn);
+
+            // Write the relationship.
+            if (!xProjectStream.is())
+                return;
+
+            m_pFilter->addRelation(xProjectStream, "http://schemas.microsoft.com/office/2006/relationships/wordVbaData", "vbaData.xml");
+        }
+    }
 }
 
 void DocxExport::WriteEmbeddings()
