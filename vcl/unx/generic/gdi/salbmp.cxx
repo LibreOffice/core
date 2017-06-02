@@ -135,105 +135,100 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 
     BitmapBuffer* pDIB = nullptr;
 
-    if( rSize.Width() && rSize.Height() )
+    if( !rSize.Width() || !rSize.Height() )
+        return nullptr;
+
+    try
     {
-        try
-        {
-            pDIB = new BitmapBuffer;
-        }
-        catch (const std::bad_alloc&)
-        {
-            pDIB = nullptr;
-        }
-
-        if( pDIB )
-        {
-            const sal_uInt16 nColors = ( nBitCount <= 8 ) ? ( 1 << nBitCount ) : 0;
-
-            pDIB->mnFormat = ScanlineFormat::NONE;
-
-            switch( nBitCount )
-            {
-                case 1: pDIB->mnFormat |= ScanlineFormat::N1BitMsbPal; break;
-                case 4: pDIB->mnFormat |= ScanlineFormat::N4BitMsnPal; break;
-                case 8: pDIB->mnFormat |= ScanlineFormat::N8BitPal; break;
-#ifdef OSL_BIGENDIAN
-                case 16:
-                {
-                    pDIB->mnFormat|= ScanlineFormat::N16BitTcMsbMask;
-                    ColorMaskElement aRedMask(0xf800);
-                    aRedMask.CalcMaskShift();
-                    ColorMaskElement aGreenMask(0x07e0);
-                    aGreenMask.CalcMaskShift();
-                    ColorMaskElement aBlueMask(0x001f);
-                    aBlueMask.CalcMaskShift();
-                    pDIB->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
-                    break;
-                }
-#else
-                case 16:
-                {
-                    pDIB->mnFormat|= ScanlineFormat::N16BitTcLsbMask;
-                    ColorMaskElement aRedMask(0xf800);
-                    aRedMask.CalcMaskShift();
-                    ColorMaskElement aGreenMask(0x07e0);
-                    aGreenMask.CalcMaskShift();
-                    ColorMaskElement aBlueMask(0x001f);
-                    aBlueMask.CalcMaskShift();
-                    pDIB->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
-                    break;
-                }
-#endif
-                default:
-                    nBitCount = 24;
-                    SAL_FALLTHROUGH;
-                case 24:
-                    pDIB->mnFormat |= ScanlineFormat::N24BitTcBgr;
-                break;
-            }
-
-            pDIB->mnWidth = rSize.Width();
-            pDIB->mnHeight = rSize.Height();
-            long nScanlineBase;
-            bool bFail = o3tl::checked_multiply<long>(pDIB->mnWidth, nBitCount, nScanlineBase);
-            if (bFail)
-            {
-                SAL_WARN("vcl.gdi", "checked multiply failed");
-                delete pDIB;
-                return nullptr;
-            }
-            pDIB->mnScanlineSize = AlignedWidth4Bytes(nScanlineBase);
-            if (pDIB->mnScanlineSize < nScanlineBase/8)
-            {
-                SAL_WARN("vcl.gdi", "scanline calculation wraparound");
-                delete pDIB;
-                return nullptr;
-            }
-            pDIB->mnBitCount = nBitCount;
-
-            if( nColors )
-            {
-                pDIB->maPalette = rPal;
-                pDIB->maPalette.SetEntryCount( nColors );
-            }
-
-            try
-            {
-                pDIB->mpBits = new sal_uInt8[ pDIB->mnScanlineSize * pDIB->mnHeight ];
-#if defined HAVE_VALGRIND_HEADERS
-                if (RUNNING_ON_VALGRIND)
-                    blankExtraSpace(pDIB);
-#endif
-            }
-            catch (const std::bad_alloc&)
-            {
-                delete pDIB;
-                pDIB = nullptr;
-            }
-        }
+        pDIB = new BitmapBuffer;
     }
-    else
+    catch (const std::bad_alloc&)
+    {
+        return nullptr;
+    }
+
+    const sal_uInt16 nColors = ( nBitCount <= 8 ) ? ( 1 << nBitCount ) : 0;
+
+    pDIB->mnFormat = ScanlineFormat::NONE;
+
+    switch( nBitCount )
+    {
+        case 1: pDIB->mnFormat |= ScanlineFormat::N1BitMsbPal; break;
+        case 4: pDIB->mnFormat |= ScanlineFormat::N4BitMsnPal; break;
+        case 8: pDIB->mnFormat |= ScanlineFormat::N8BitPal; break;
+#ifdef OSL_BIGENDIAN
+        case 16:
+        {
+            pDIB->mnFormat|= ScanlineFormat::N16BitTcMsbMask;
+            ColorMaskElement aRedMask(0xf800);
+            aRedMask.CalcMaskShift();
+            ColorMaskElement aGreenMask(0x07e0);
+            aGreenMask.CalcMaskShift();
+            ColorMaskElement aBlueMask(0x001f);
+            aBlueMask.CalcMaskShift();
+            pDIB->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
+            break;
+        }
+#else
+        case 16:
+        {
+            pDIB->mnFormat|= ScanlineFormat::N16BitTcLsbMask;
+            ColorMaskElement aRedMask(0xf800);
+            aRedMask.CalcMaskShift();
+            ColorMaskElement aGreenMask(0x07e0);
+            aGreenMask.CalcMaskShift();
+            ColorMaskElement aBlueMask(0x001f);
+            aBlueMask.CalcMaskShift();
+            pDIB->maColorMask = ColorMask(aRedMask, aGreenMask, aBlueMask);
+            break;
+        }
+#endif
+        default:
+            nBitCount = 24;
+            SAL_FALLTHROUGH;
+        case 24:
+            pDIB->mnFormat |= ScanlineFormat::N24BitTcBgr;
+        break;
+    }
+
+    pDIB->mnWidth = rSize.Width();
+    pDIB->mnHeight = rSize.Height();
+    long nScanlineBase;
+    bool bFail = o3tl::checked_multiply<long>(pDIB->mnWidth, nBitCount, nScanlineBase);
+    if (bFail)
+    {
+        SAL_WARN("vcl.gdi", "checked multiply failed");
+        delete pDIB;
+        return nullptr;
+    }
+    pDIB->mnScanlineSize = AlignedWidth4Bytes(nScanlineBase);
+    if (pDIB->mnScanlineSize < nScanlineBase/8)
+    {
+        SAL_WARN("vcl.gdi", "scanline calculation wraparound");
+        delete pDIB;
+        return nullptr;
+    }
+    pDIB->mnBitCount = nBitCount;
+
+    if( nColors )
+    {
+        pDIB->maPalette = rPal;
+        pDIB->maPalette.SetEntryCount( nColors );
+    }
+
+    try
+    {
+        pDIB->mpBits = new sal_uInt8[ pDIB->mnScanlineSize * pDIB->mnHeight ];
+#if defined HAVE_VALGRIND_HEADERS
+        if (RUNNING_ON_VALGRIND)
+            blankExtraSpace(pDIB);
+#endif
+    }
+    catch (const std::bad_alloc&)
+    {
+        delete pDIB;
         pDIB = nullptr;
+    }
 
     return pDIB;
 }

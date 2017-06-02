@@ -64,11 +64,8 @@ BitmapBuffer* ImplCreateDIB(
     }
     catch (const std::bad_alloc&)
     {
-        pDIB = nullptr;
-    }
-
-    if(!pDIB)
         return nullptr;
+    }
 
     const sal_uInt16 nColors = ( nBitCount <= 8 ) ? ( 1 << nBitCount ) : 0;
 
