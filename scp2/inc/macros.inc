@@ -120,6 +120,17 @@ File id \
     Styles = (FILELIST, USE_INTERNAL_RIGHTS, PACKED); \
 End
 
+#ifdef WNT
+#define PACKAGE_FILELIST_FONT(id,name) \
+File id \
+    Dir = FILELIST_DIR; \
+    Name = name; \
+    Styles = (FILELIST, USE_INTERNAL_RIGHTS, PACKED, FONT); \
+End
+#else
+#define PACKAGE_FILELIST_FONT PACKAGE_FILELIST
+#endif // WNT
+
 #define SDK_PACKAGE_FILELIST(id,name) \
 File id \
     Dir = FILELIST_SDK_DIR; \
@@ -198,26 +209,6 @@ End
         Dir     = gid_Dir_Resource; \
         Styles  = (PACKED); \
     End
-
-#ifdef UNX
-#define STD_FONT_FILELIST(id,name) \
-    File id \
-        TXT_FILE_BODY; \
-        Dir       = FILELIST_DIR; \
-        Styles    = (FILELIST, PACKED, FONT_WARN_IF_EXISTS); \
-        Name      = name; \
-    End
-#endif
-
-#ifdef WNT
-#define STD_FONT_FILELIST(id,name) \
-    File id \
-        TXT_FILE_BODY; \
-        Dir       = FILELIST_DIR; \
-        Styles   = (FILELIST,PACKED,FONT,DONT_DELETE,FONT_WARN_IF_EXISTS); \
-        Name      = name; \
-    End
-#endif
 
 #define LIBO_JAR_FILE(id,name) \
     File id \

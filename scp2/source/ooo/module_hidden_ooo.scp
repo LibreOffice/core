@@ -18,6 +18,7 @@
 
 #include "macros.inc"
 #include "AutoInstall/ooo"
+#include "AutoInstall/ooo_fonts"
 #include "AutoInstall/ooo_images"
 #include "AutoInstall/ooobinarytable"
 
@@ -98,20 +99,7 @@ Module gid_Module_Root_Fonts_OOo_Hidden
 	Sortkey = "2100";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Fnt_Opensymb,
-	gid_File_Fnt_Caladea,
-	gid_File_Fnt_Carlito,
-	gid_File_Fnt_DejaVu,
-	gid_File_Fnt_Gentium,
-	gid_File_Fnt_LibSansNarrow,
-	gid_File_Fnt_Liberation,
-	gid_File_Fnt_LinuxLibertineG,
-	gid_File_Fnt_PtSerif,
-	gid_File_Fnt_OpenSans,
-	gid_File_Fnt_SourceSans,
-	gid_File_Fnt_SourceCode,
-    gid_File_Fnt_EmojiOne_Color,
-	gid_File_FcLocal_Conf);
+	Files = (auto_ooo_fonts_ALL);
 End
 #endif
 

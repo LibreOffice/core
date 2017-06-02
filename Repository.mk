@@ -799,10 +799,8 @@ $(eval $(call gb_Helper_register_packages, \
 	cli_basetypes_copy \
 	desktop_install \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),desktop_scripts_install) \
-	extras_fonts \
 	extras_wordbook \
 	$(if $(filter MSC,$(COM)),msvc_dlls) \
-	more_fonts_conf \
 	instsetoo_native_setup \
 	$(if $(ENABLE_OOENV),instsetoo_native_ooenv) \
 	odk_headers_generated \
@@ -953,6 +951,25 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	)) \
 	sfx2_classification \
     $(if $(filter OPENCL,$(BUILD_TYPE)),sc_opencl_runtimetest) \
+))
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo_fonts,\
+	extras_fonts \
+	$(call gb_Helper_optional,MORE_FONTS,\
+		fonts_caladea \
+		fonts_carlito \
+		fonts_dejavu \
+		fonts_emojione_color \
+		fonts_gentium \
+		fonts_liberation \
+		fonts_liberation_narrow \
+		fonts_libertineg \
+		fonts_opensans \
+		fonts_ptserif \
+		fonts_sourcecode \
+		fonts_sourcesans \
+		$(if $(filter-out WNT,$(OS)),more_fonts_conf) \
+	) \
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo_images,\
