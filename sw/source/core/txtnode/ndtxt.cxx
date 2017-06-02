@@ -1552,8 +1552,8 @@ void lcl_CopyHint(
             {
                 pFormat = pOtherDoc->CopyCharFormat( *pFormat );
             }
-            const_cast<SwFormatCharFormat&>( static_cast<const SwFormatCharFormat&>(
-                pNewHt->GetCharFormat() ) ).SetCharFormat( pFormat );
+            const_cast<SwFormatCharFormat&>(
+                pNewHt->GetCharFormat() ).SetCharFormat( pFormat );
         }
         break;
     case RES_TXTATR_INETFMT :

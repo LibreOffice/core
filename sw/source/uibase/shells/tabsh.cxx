@@ -394,7 +394,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         // The item must only be recorded while manual alignment, so that the
         // alignment is not overwritten by the distances while recording.
         if(eOrient != text::HoriOrientation::NONE)
-            const_cast<SfxItemSet&>(static_cast<const SfxItemSet&>(rSet)).ClearItem( SID_ATTR_LRSPACE );
+            const_cast<SfxItemSet&>(rSet).ClearItem( SID_ATTR_LRSPACE );
 
         if(pRep->HasColsChanged())
         {

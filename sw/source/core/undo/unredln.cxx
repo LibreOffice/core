@@ -469,7 +469,7 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
         if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineFlags() ))
         {
             SwRangeRedline* pTmp = new SwRangeRedline(*pRedlData, rPam);
-            static_cast<SwRedlineTable&>(rDoc.getIDocumentRedlineAccess().GetRedlineTable()).Insert( pTmp );
+            rDoc.getIDocumentRedlineAccess().GetRedlineTable().Insert( pTmp );
             pTmp->InvalidateRange();
         }
         else if( !( RedlineFlags::Ignore & GetRedlineFlags() ) &&
@@ -495,7 +495,7 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
         SwPaM& rPam(AddUndoRedoPaM(rContext));
 
         SwRangeRedline* pTmp = new SwRangeRedline(*pRedlData, rPam);
-        static_cast<SwRedlineTable&>(rDoc.getIDocumentRedlineAccess().GetRedlineTable()).Insert( pTmp );
+        rDoc.getIDocumentRedlineAccess().GetRedlineTable().Insert( pTmp );
         pTmp->InvalidateRange();
 
         SetPaM(rPam, true);

@@ -115,7 +115,7 @@ SwTwips SwTextFrameInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
 
     SwTwips nStt, nNext;
     SwRect aRect;
-    if( static_cast<SwTextCursor&>(aLine).GetCharRect( &aRect, nChar ) )
+    if( aLine.GetCharRect( &aRect, nChar ) )
     {
         if ( aRectFnSet.IsVert() )
             pFrame->SwitchHorizontalToVertical( aRect );
@@ -128,7 +128,7 @@ SwTwips SwTextFrameInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
     if( !bCenter )
         return nStt - aRectFnSet.GetLeft(pFrame->Frame());
 
-    if( static_cast<SwTextCursor&>(aLine).GetCharRect( &aRect, nChar+1 ) )
+    if( aLine.GetCharRect( &aRect, nChar+1 ) )
     {
         if ( aRectFnSet.IsVert() )
             pFrame->SwitchHorizontalToVertical( aRect );

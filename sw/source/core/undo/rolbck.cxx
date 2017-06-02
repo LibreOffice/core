@@ -522,12 +522,12 @@ void SwHistoryChangeFormatColl::SetInDoc( SwDoc* pDoc, bool )
     {
         if ( SwNodeType::Text == m_nNodeType )
         {
-            if (pDoc->GetTextFormatColls()->IsAlive(static_cast<SwTextFormatColl * const>(m_pColl)))
+            if (pDoc->GetTextFormatColls()->IsAlive(static_cast<SwTextFormatColl *>(m_pColl)))
             {
                 pContentNd->ChgFormatColl( m_pColl );
             }
         }
-        else if (pDoc->GetGrfFormatColls()->IsAlive(static_cast<SwGrfFormatColl * const>(m_pColl)))
+        else if (pDoc->GetGrfFormatColls()->IsAlive(static_cast<SwGrfFormatColl *>(m_pColl)))
         {
             pContentNd->ChgFormatColl( m_pColl );
         }

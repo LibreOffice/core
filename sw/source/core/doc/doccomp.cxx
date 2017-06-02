@@ -1082,7 +1082,7 @@ const SwNode& SwCompareLine::GetEndNode() const
 
 bool SwCompareLine::Compare( const SwCompareLine& rLine ) const
 {
-    return CompareNode( rNode, static_cast<const SwCompareLine&>(rLine).rNode );
+    return CompareNode( rNode, rLine.rNode );
 }
 
 namespace

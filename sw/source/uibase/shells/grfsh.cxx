@@ -702,8 +702,8 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_FLIP_HORIZONTAL:
             if( !bParentCntProt )
             {
-                MirrorGraph nState = static_cast< const MirrorGraph >(static_cast<const SwMirrorGrf &>( aCoreSet.Get(
-                                        RES_GRFATR_MIRRORGRF )).GetValue());
+                MirrorGraph nState = static_cast<const SwMirrorGrf &>( aCoreSet.Get(
+                                        RES_GRFATR_MIRRORGRF )).GetValue();
 
                 rSet.Put(SfxBoolItem( nWhich, nState == MirrorGraph::Vertical ||
                                               nState == MirrorGraph::Both));

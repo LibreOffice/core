@@ -798,7 +798,7 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
         return nullptr;
 
     SwTextFootnote  *pFootnote = static_cast<SwTextFootnote*>(pHint);
-    const SwFormatFootnote& rFootnote = static_cast<const SwFormatFootnote&>(pFootnote->GetFootnote());
+    const SwFormatFootnote& rFootnote = pFootnote->GetFootnote();
     SwDoc *pDoc = m_pFrame->GetNode()->GetDoc();
 
     if( rInf.IsTest() )

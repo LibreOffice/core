@@ -4919,10 +4919,10 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             CharHighlight( static_cast< const SvxBrushItem& >( rHt ) );
             break;
         case RES_CHRATR_BIDIRTL:
-            CharBidiRTL( static_cast< const SfxPoolItem& >( rHt ) );
+            CharBidiRTL( rHt );
             break;
         case RES_CHRATR_IDCTHINT:
-            CharIdctHint( static_cast< const SfxPoolItem& >( rHt ) );
+            CharIdctHint( rHt );
             break;
         case RES_TXTATR_INETFMT:
             TextINetFormat( static_cast< const SwFormatINetFormat& >( rHt ) );

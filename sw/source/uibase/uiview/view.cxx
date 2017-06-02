@@ -792,7 +792,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     }
     else
     {
-        SwDoc& rDoc = *static_cast<SwDocShell&>(rDocSh).GetDoc();
+        SwDoc& rDoc = *rDocSh.GetDoc();
 
         if( !bOldShellWasSrcView && bWebDShell && !m_bOldShellWasPagePreview )
             aUsrPref.setBrowseMode( true );

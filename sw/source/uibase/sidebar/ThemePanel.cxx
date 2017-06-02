@@ -204,7 +204,7 @@ void changeFont(SwFormat* pFormat, SwDocStyleSheet* pStyle, FontSet& rFontSet)
         return;
     }
 
-    SvxFontItem aFontItem(static_cast<const SvxFontItem&>(pFormat->GetFont(false)));
+    SvxFontItem aFontItem(pFormat->GetFont(false));
 
     FontPitch ePitch = aFontItem.GetPitch();
 
