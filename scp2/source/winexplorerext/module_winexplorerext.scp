@@ -20,10 +20,8 @@
 
 #include "AutoInstall/winexplorerextbinarytable"
 #include "AutoInstall/winexplorerext"
-#include "AutoInstall/winexplorerextnt6"
 #ifdef BUILD_X64
 #include "AutoInstall/winexplorerextwin64"
-#include "AutoInstall/winexplorerextwin64nt6"
 #endif
 
 Module gid_Module_Optional_Winexplorerext
@@ -34,7 +32,6 @@ Module gid_Module_Optional_Winexplorerext
     Dirs = (gid_Dir_Shlxthdl);
     Files = (auto_winexplorerextbinarytable_ALL,
              auto_winexplorerext_ALL,
-             auto_winexplorerextnt6_ALL,
              gid_File_Tmp_Userinstall_Winexplorerext_Inf);
 End
 
@@ -48,7 +45,6 @@ Module gid_Module_Optional_Winexplorerext_x64
     Styles = (HIDDEN_ROOT);
     Dirs = (gid_Dir_Shlxthdl);
     Files = (auto_winexplorerextwin64_ALL,
-             auto_winexplorerextwin64nt6_ALL,
              gid_File_Lib_Msvcp100,
              gid_File_Lib_Msvcr100,
              gid_File_Lib_Msvcp110,
