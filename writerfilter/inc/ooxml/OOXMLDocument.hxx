@@ -229,6 +229,7 @@ public:
     virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getActiveXDomList( ) = 0;
     virtual css::uno::Sequence<css::uno::Reference<css::io::XInputStream> > getActiveXBinList() = 0;
     virtual css::uno::Sequence<css::beans::PropertyValue > getEmbeddingsList() = 0;
+    virtual css::uno::Sequence<css::beans::PropertyValue > getVBA() = 0;
 };
 
 
