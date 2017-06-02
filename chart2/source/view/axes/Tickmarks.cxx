@@ -172,11 +172,17 @@ TickFactory2D::~TickFactory2D()
 
 bool TickFactory2D::isHorizontalAxis() const
 {
-    return ( m_aAxisStartScreenPosition2D.getY() == m_aAxisEndScreenPosition2D.getY() );
+    // check trivial case and for skew axes compare angle with horizontal vector
+    return ( m_aAxisStartScreenPosition2D.getY() == m_aAxisEndScreenPosition2D.getY() ) ||
+            ( m_aAxisStartScreenPosition2D.getX() != m_aAxisEndScreenPosition2D.getX() &&
+            ( std::abs(B2DVector(m_aAxisEndScreenPosition2D-m_aAxisStartScreenPosition2D).angle(B2DVector(1.0, 0.0))) < F_PI4 ));
 }
 bool TickFactory2D::isVerticalAxis() const
 {
-    return ( m_aAxisStartScreenPosition2D.getX() == m_aAxisEndScreenPosition2D.getX() );
+    // check trivial case and for skew axes compare angle with vertical vector
+    return ( m_aAxisStartScreenPosition2D.getX() == m_aAxisEndScreenPosition2D.getX() ) ||
+            ( m_aAxisStartScreenPosition2D.getY() != m_aAxisEndScreenPosition2D.getY() &&
+            ( std::abs(B2DVector(m_aAxisEndScreenPosition2D-m_aAxisStartScreenPosition2D).angle(B2DVector(0.0, -1.0))) < F_PI4 ));
 }
 
 //static
