@@ -127,8 +127,8 @@ DWORD getSizeOfFile( char* FileName )
 
     if (hFile != INVALID_HANDLE_VALUE)
     {
-        DWORD dwSize = GetFileSize( HANDLE(hFile), nullptr );
-        CloseHandle( HANDLE(hFile) );
+        DWORD dwSize = GetFileSize( hFile, nullptr );
+        CloseHandle( hFile );
         return dwSize;
     }
 
