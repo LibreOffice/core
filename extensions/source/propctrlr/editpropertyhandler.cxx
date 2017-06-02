@@ -232,13 +232,13 @@ namespace pcr
         std::vector< OUString > aSuperseded;
         if ( implHaveBothScrollBarProperties() )
         {
-            aSuperseded.push_back( static_cast<const OUString&>(PROPERTY_HSCROLL) );
-            aSuperseded.push_back( static_cast<const OUString&>(PROPERTY_VSCROLL) );
+            aSuperseded.push_back( PROPERTY_HSCROLL );
+            aSuperseded.push_back( PROPERTY_VSCROLL );
         }
         if ( implHaveTextTypeProperty() )
         {
-            aSuperseded.push_back(  static_cast<const OUString&>(PROPERTY_RICHTEXT) );
-            aSuperseded.push_back(  static_cast<const OUString&>(PROPERTY_MULTILINE) );
+            aSuperseded.push_back(  PROPERTY_RICHTEXT );
+            aSuperseded.push_back(  PROPERTY_MULTILINE );
         }
         if ( aSuperseded.empty() )
             return Sequence< OUString >();
@@ -251,8 +251,8 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         std::vector< OUString > aInterestingActuatingProps;
         if ( implHaveTextTypeProperty() )
-            aInterestingActuatingProps.push_back(  static_cast<const OUString&>(PROPERTY_TEXTTYPE) );
-        aInterestingActuatingProps.push_back( static_cast<const OUString&>(PROPERTY_MULTILINE) );
+            aInterestingActuatingProps.push_back(  PROPERTY_TEXTTYPE );
+        aInterestingActuatingProps.push_back( PROPERTY_MULTILINE );
         return Sequence< OUString >( &(*aInterestingActuatingProps.begin()), aInterestingActuatingProps.size() );
     }
 
