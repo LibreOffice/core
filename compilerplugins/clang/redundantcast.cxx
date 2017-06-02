@@ -37,9 +37,12 @@ bool isVoidPointer(QualType type) {
 }
 
 bool isRedundantConstCast(CXXConstCastExpr const * expr) {
-    return expr->getTypeAsWritten().getCanonicalType().getTypePtr()
-        == (expr->getSubExprAsWritten()->getType().getCanonicalType()
-            .getTypePtr());
+    auto const sub = compat::getSubExprAsWritten(expr);
+    return
+        (expr->getType().getCanonicalType()
+         == sub->getType().getCanonicalType())
+        && (expr->getValueKind() != VK_XValue
+            || sub->getValueKind() == VK_XValue);
 }
 
 bool isArithmeticOp(Expr const * expr) {
@@ -511,11 +514,14 @@ bool RedundantCast::VisitCXXConstCastExpr(CXXConstCastExpr const * expr) {
         return true;
     }
     if (isRedundantConstCast(expr)) {
+        auto const sub = compat::getSubExprAsWritten(expr);
         report(
-            DiagnosticsEngine::Warning, "redundant const_cast from %0 to %1",
-            expr->getExprLoc())
-            << expr->getSubExprAsWritten()->getType()
-            << expr->getTypeAsWritten() << expr->getSourceRange();
+            DiagnosticsEngine::Warning,
+            "redundant const_cast from %0 %1 to %2 %3", expr->getExprLoc())
+            << sub->getType() << printExprValueKind(sub->getValueKind())
+            << expr->getTypeAsWritten()
+            << printExprValueKind(expr->getValueKind())
+            << expr->getSourceRange();
     }
     return true;
 }

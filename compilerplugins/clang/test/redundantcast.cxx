@@ -19,24 +19,124 @@ void testConstCast() {
     char const * p2;
     p1 = nullptr;
     p2 = "";
-    f1(const_cast<char *>(p1)); // expected-error {{redundant const_cast from 'char *' to 'char *' [loplugin:redundantcast]}}
-    f1(const_cast<char * const>(p1)); // expected-error {{redundant const_cast from 'char *' to 'char *const' [loplugin:redundantcast]}}
+    f1(const_cast<char *>(p1)); // expected-error {{redundant const_cast from 'char *' lvalue to 'char *' prvalue [loplugin:redundantcast]}}
+    f1(const_cast<char * const>(p1)); // expected-error {{redundant const_cast from 'char *' lvalue to 'char *const' prvalue [loplugin:redundantcast]}}
     f1(const_cast<char *>(p2));
     f1(const_cast<char * const>(p2));
-    f2(const_cast<char *>(p1)); // expected-error {{redundant const_cast from 'char *' to 'char *' [loplugin:redundantcast]}}
-    f2(const_cast<char * const>(p1)); //  expected-error {{redundant const_cast from 'char *' to 'char *const' [loplugin:redundantcast]}}
+    f2(const_cast<char *>(p1)); // expected-error {{redundant const_cast from 'char *' lvalue to 'char *' prvalue [loplugin:redundantcast]}}
+    f2(const_cast<char * const>(p1)); //  expected-error {{redundant const_cast from 'char *' lvalue to 'char *const' prvalue [loplugin:redundantcast]}}
     f2(const_cast<char const *>(p1));
     f2(const_cast<char const * const>(p1));
     f2(const_cast<char *>(p2)); // expected-error {{redundant const_cast from 'const char *' to 'char *', result is implicitly cast to 'const char *' [loplugin:redundantcast]}}
     f2(const_cast<char * const>(p2)); // expected-error {{redundant const_cast from 'const char *' to 'char *', result is implicitly cast to 'const char *' [loplugin:redundantcast]}}
-    f2(const_cast<char const *>(p2)); // expected-error {{redundant const_cast from 'const char *' to 'const char *' [loplugin:redundantcast]}}
-    f2(const_cast<char const * const>(p2)); // expected-error {{redundant const_cast from 'const char *' to 'const char *const' [loplugin:redundantcast]}}
+    f2(const_cast<char const *>(p2)); // expected-error {{redundant const_cast from 'const char *' lvalue to 'const char *' prvalue [loplugin:redundantcast]}}
+    f2(const_cast<char const * const>(p2)); // expected-error {{redundant const_cast from 'const char *' lvalue to 'const char *const' prvalue [loplugin:redundantcast]}}
 
     S const s{};
     const_cast<S &>(s).f1();
     const_cast<S &>(s).f2(); // expected-error {{redundant const_cast from 'const S' to 'S', result is implicitly cast to 'const S' [loplugin:redundantcast]}}
     const_cast<S &>(s).f3();
     s.f3();
+
+    // non-class lvalue, non-const:
+    int ni{};
+//  (void) const_cast<int>(ni);
+    (void) const_cast<int &>(ni); // expected-error {{redundant const_cast from 'int' lvalue to 'int &' lvalue [loplugin:redundantcast]}}
+    (void) const_cast<int &&>(ni);
+//  (void) const_cast<int const>(ni);
+    (void) const_cast<int const &>(ni);
+    (void) const_cast<int const &&>(ni);
+
+    // non-class lvalue, const:
+    int const ci{};
+//  (void) const_cast<int>(ci);
+    (void) const_cast<int &>(ci);
+    (void) const_cast<int &&>(ci);
+//  (void) const_cast<int const>(ci);
+    (void) const_cast<int const &>(ci); // expected-error {{redundant const_cast from 'const int' lvalue to 'const int &' lvalue [loplugin:redundantcast]}}
+    (void) const_cast<int const &&>(ci);
+
+    // non-class xvalue, non-const:
+//  (void) const_cast<int>(nix());
+//  (void) const_cast<int &>(nix());
+    (void) const_cast<int &&>(nix()); // expected-error {{redundant const_cast from 'int' xvalue to 'int &&' xvalue [loplugin:redundantcast]}}
+//  (void) const_cast<int const>(nix());
+//  (void) const_cast<int const &>(nix());
+    (void) const_cast<int const &&>(nix());
+
+    // non-class xvalue, const:
+//  (void) const_cast<int>(cix());
+//  (void) const_cast<int &>(cix());
+    (void) const_cast<int &&>(cix());
+//  (void) const_cast<int const>(cix());
+//  (void) const_cast<int const &>(cix());
+    (void) const_cast<int const &&>(cix()); // expected-error {{redundant const_cast from 'const int' xvalue to 'const int &&' xvalue [loplugin:redundantcast]}}
+
+    // non-class prvalue, non-const:
+//  (void) const_cast<int>(nir());
+//  (void) const_cast<int &>(nir());
+//  (void) const_cast<int &&>(nir());
+//  (void) const_cast<int const>(nir());
+//  (void) const_cast<int const &>(nir());
+//  (void) const_cast<int const &&>(nir());
+
+    // non-class prvalue, const:
+//  (void) const_cast<int>(cir());
+//  (void) const_cast<int &>(cir());
+//  (void) const_cast<int &&>(cir());
+//  (void) const_cast<int const>(cir());
+//  (void) const_cast<int const &>(cir());
+//  (void) const_cast<int const &&>(cir());
+
+    // class lvalue, non-const:
+    S ns{};
+//    (void) const_cast<S>(ns);
+    (void) const_cast<S &>(ns); // expected-error {{redundant const_cast from 'S' lvalue to 'S &' lvalue [loplugin:redundantcast]}}
+    (void) const_cast<S &&>(ns);
+//  (void) const_cast<S const>(ns);
+    (void) const_cast<S const &>(ns);
+    (void) const_cast<S const &&>(ns);
+
+    // class lvalue, const:
+    S const cs{};
+//  (void) const_cast<S>(cs);
+    (void) const_cast<S &>(cs);
+    (void) const_cast<S &&>(cs);
+//  (void) const_cast<S const>(cs);
+    (void) const_cast<S const &>(cs); // expected-error {{redundant const_cast from 'const S' lvalue to 'const S &' lvalue [loplugin:redundantcast]}}
+    (void) const_cast<S const &&>(cs);
+
+    // class xvalue, non-const:
+//  (void) const_cast<S>(nsx());
+//  (void) const_cast<S &>(nsx());
+    (void) const_cast<S &&>(nsx()); // expected-error {{redundant const_cast from 'S' xvalue to 'S &&' xvalue [loplugin:redundantcast]}}
+//  (void) const_cast<S const>(nsx());
+//  (void) const_cast<S const &>(nsx());
+    (void) const_cast<S const &&>(nsx());
+
+    // class xvalue, const:
+//  (void) const_cast<S>(csx());
+//  (void) const_cast<S &>(csx());
+    (void) const_cast<S &&>(csx());
+//  (void) const_cast<S const>(csx());
+//  (void) const_cast<S const &>(csx());
+    (void) const_cast<S const &&>(csx()); // expected-error {{redundant const_cast from 'const S' xvalue to 'const S &&' xvalue [loplugin:redundantcast]}}
+
+    // class prvalue, non-const:
+//  (void) const_cast<S>(nsr());
+//  (void) const_cast<S &>(nsr());
+    (void) const_cast<S &&>(nsr());
+//  (void) const_cast<S const>(nsr());
+//  (void) const_cast<S const &>(nsr());
+    (void) const_cast<S const &&>(nsr());
+
+    // class prvalue, const:
+//  (void) const_cast<S>(csr());
+//  (void) const_cast<S &>(csr());
+    (void) const_cast<S &&>(csr());
+//  (void) const_cast<S const>(csr());
+//  (void) const_cast<S const &>(csr());
+    (void) const_cast<S const &&>(csr());
 }
 
 void testStaticCast() {
