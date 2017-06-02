@@ -91,10 +91,10 @@ for (gid, jarfile) in autojars:
         raise Exception("invalid scp2jartemplate \"" + scp2jartemplate + "\"")
     print(scp2jartemplate + "(" + gid + "," + jarfile + scp2componentcondition + ")")
 
-scp2pkgtemplates = set([ "PACKAGE_FILELIST", "PACKAGE_FILELIST_FONT", "SDK_PACKAGE_FILELIST" ])
+scp2pkgtemplates = set([ "PACKAGE_FILELIST", "PACKAGE_FILELIST_COMPONENTCONDITION","PACKAGE_FILELIST_FONT", "SDK_PACKAGE_FILELIST" ])
 for (gid, pkgfilelist) in autopkgs:
     if not(scp2pkgtemplate in scp2pkgtemplates):
         raise Exception("invalid scp2pkgtemplate \"" + scp2pkgtemplate + "\"")
-    print(scp2pkgtemplate + "(" + gid + "," + pkgfilelist + ")")
+    print(scp2pkgtemplate + "(" + gid + "," + pkgfilelist + scp2componentcondition + ")")
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
