@@ -539,9 +539,12 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     //
     //   std::initializer_list<Foo>{bar, baz}
     //
-    // ), at least for now:
+    // ), and only to cases where the sub-expression already is a prvalue (and
+    // thus the cast is unlikely meant to create a temporary):
     auto const sub = compat::getSubExprAsWritten(expr);
-    if (isa<InitListExpr>(sub) || isa<CXXStdInitializerListExpr>(sub)) {
+    if (sub->getValueKind() != VK_RValue || isa<InitListExpr>(sub)
+        || isa<CXXStdInitializerListExpr>(sub))
+    {
         return true;
     }
 
@@ -580,7 +583,7 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     }
 
     auto const t1 = expr->getTypeAsWritten();
-    auto const t2 = compat::getSubExprAsWritten(expr)->getType();
+    auto const t2 = sub->getType();
     if (t1 != t2)
         return true;
     if (!isOkToRemoveArithmeticCast(t1, t2, expr->getSubExpr()))
