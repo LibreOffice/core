@@ -79,7 +79,7 @@ void XMLShapeStyleContext::SetAttribute( sal_uInt16 nPrefixKey, const OUString& 
         {
             if( !GetName().isEmpty() && !GetDisplayName().isEmpty() && GetName() != GetDisplayName() )
             {
-                const_cast< SvXMLImport&>( GetImport() ).
+                GetImport().
                     AddStyleDisplayName( GetFamily(), GetName(), GetDisplayName() );
             }
         }
