@@ -34,6 +34,24 @@
       "revId": "43f959efe4c7f728205949c36fc52e41aa3a9502",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_bc9e3654",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 6549,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-02T10:13:41Z",
+      "side": 1,
+      "message": "if (aTmpState !\u003d aState)\n then return\nwhich means that when you hit the line\n aTmpState \u003d aState\nyou know that aTmpState is already \u003d\u003d aState,\nwhich means that line is useless",
+      "parentUuid": "5a3905b3_1c1bca1c",
+      "revId": "43f959efe4c7f728205949c36fc52e41aa3a9502",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
