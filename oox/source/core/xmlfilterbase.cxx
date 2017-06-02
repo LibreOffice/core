@@ -88,12 +88,6 @@ using ::sax_fastparser::FastSerializerHelper;
 
 namespace {
 
-bool lclHasSuffix( const OUString& rFragmentPath, const OUString& rSuffix )
-{
-    sal_Int32 nSuffixPos = rFragmentPath.getLength() - rSuffix.getLength();
-    return (nSuffixPos >= 0) && rFragmentPath.match( rSuffix, nSuffixPos );
-}
-
 struct NamespaceIds: public rtl::StaticWithInit<
     Sequence< beans::Pair< OUString, sal_Int32 > >,
     NamespaceIds>
@@ -315,7 +309,7 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
         return false;
 
     // try to import binary streams (fragment extension must be '.bin')
-    if( lclHasSuffix( aFragmentPath, mxImpl->maBinSuffix ) )
+    if (aFragmentPath.endsWith(mxImpl->maBinSuffix))
     {
         try
         {
@@ -387,8 +381,7 @@ Reference<XDocument> XmlFilterBase::importFragment( const OUString& aFragmentPat
         return xRet;
 
     // binary streams (fragment extension is '.bin') currently not supported
-    sal_Int32 nBinSuffixPos = aFragmentPath.getLength() - mxImpl->maBinSuffix.getLength();
-    if( (nBinSuffixPos >= 0) && aFragmentPath.match( mxImpl->maBinSuffix, nBinSuffixPos ) )
+    if (aFragmentPath.endsWith(mxImpl->maBinSuffix))
         return xRet;
 
     // try to import XML stream
