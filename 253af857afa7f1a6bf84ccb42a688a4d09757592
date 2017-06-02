@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_9720759d",
+        "filename": "editeng/source/xml/xmltxtimp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-02T15:50:57Z",
+      "side": 1,
+      "message": "that looks promising, although it\u0027s not complete:\n\nwe want to create this context only if the right top-level element is read i.e. office:document - see the CreateChildContext function above how to check the namespace prefix and element name, there are XML_* constants for all the element names.\n\nif this is some other element we want to call the base class CreateContext to get some do-nothing context.",
+      "revId": "253af857afa7f1a6bf84ccb42a688a4d09757592",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
