@@ -24,6 +24,9 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
+
 class Test : public SwModelTestBase
 {
 public:
@@ -80,6 +83,14 @@ DECLARE_SW_ROUNDTRIP_TEST(testDocmSave, "hello.docm", nullptr, DocmTest)
                     "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
                     "ContentType",
                     "application/vnd.ms-word.document.macroEnabled.main+xml");
+}
+
+DECLARE_SW_ROUNDTRIP_TEST(testBadDocm, "bad.docm", nullptr, DocmTest)
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    // This was 'MS Word 2007 XML', broken docm files were not recognized.
+    CPPUNIT_ASSERT_EQUAL(OUString("MS Word 2007 XML VBA"), pTextDoc->GetDocShell()->GetMedium()->GetFilter()->GetName());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf92045, "tdf92045.docx")
