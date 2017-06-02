@@ -30,8 +30,8 @@ $(if $(2),#endif)
 endef
 
 $(odk_allheaders_DIR)/allheaders.hxx : \
-			  $(call gb_PackageSet_target,odk_headers) \
-			  $(call gb_PackageSet_target,odk_headers_generated) \
+			  $(call gb_Package_get_target,odk_headers) \
+			  $(call gb_Package_get_target,odk_headers_generated) \
             | $(odk_allheaders_DIR)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 ifeq ($(HAVE_GNUMAKE_FILE_FUNC),)
