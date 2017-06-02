@@ -249,12 +249,12 @@ inline Reference< security::XAccessControlContext > getDynamicRestriction(
             if ( typeName == "com.sun.star.security.XAccessControlContext" )
             {
                 return Reference< security::XAccessControlContext >(
-                    *static_cast< security::XAccessControlContext ** const >( acc.pData ) );
+                    *static_cast< security::XAccessControlContext ** >( acc.pData ) );
             }
             else // try to query
             {
                 return Reference< security::XAccessControlContext >::query(
-                    *static_cast< XInterface ** const >( acc.pData ) );
+                    *static_cast< XInterface ** >( acc.pData ) );
             }
         }
     }
