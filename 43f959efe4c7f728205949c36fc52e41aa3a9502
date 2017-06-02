@@ -16,6 +16,24 @@
       "revId": "43f959efe4c7f728205949c36fc52e41aa3a9502",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_1c1bca1c",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 6549,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-06-02T08:16:01Z",
+      "side": 1,
+      "message": "if you say for statement is under the return, return is in a condition. If state is not mixed i need to reassigne tmp for the last state souldn\u0027t i?",
+      "parentUuid": "5a3905b3_816833f7",
+      "revId": "43f959efe4c7f728205949c36fc52e41aa3a9502",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
