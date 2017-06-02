@@ -87,6 +87,18 @@ DECLARE_SW_ROUNDTRIP_TEST(testBadDocm, "bad.docm", nullptr, DocmTest)
     CPPUNIT_ASSERT_EQUAL(OUString("MS Word 2007 XML VBA"), pTextDoc->GetDocShell()->GetMedium()->GetFilter()->GetName());
 }
 
+DECLARE_SW_ROUNDTRIP_TEST(testTdf108269, "tdf108269.docm", nullptr, DocmTest)
+{
+    if (!mbExported)
+        return;
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
+    // This failed: VBA streams were not roundtripped via the doc-level
+    // grab-bag.
+    CPPUNIT_ASSERT(xNameAccess->hasByName("word/vbaProject.bin"));
+    CPPUNIT_ASSERT(xNameAccess->hasByName("word/vbaData.xml"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf95031, "tdf95031.docx")
 {
     // This was 494, in-numbering paragraph's automating spacing was handled as visible spacing, while it should not.

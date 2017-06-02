@@ -24,6 +24,7 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -75,6 +76,7 @@
 #include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/font.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 using namespace sax_fastparser;
 using namespace ::comphelper;
@@ -461,6 +463,8 @@ void DocxExport::ExportDocument_Impl()
     WriteActiveX();
 
     WriteEmbeddings();
+
+    WriteVBA();
 
     m_aLinkedTextboxesHelper.clear();   //final cleanup
     delete m_pStyles;
@@ -1239,6 +1243,65 @@ void DocxExport::WriteActiveX()
 
         }
      }
+}
+
+void DocxExport::WriteVBA()
+{
+    uno::Reference<document::XStorageBasedDocument> xStorageBasedDocument(m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+    if (!xStorageBasedDocument.is())
+        return;
+
+    uno::Reference<embed::XStorage> xDocumentStorage(xStorageBasedDocument->getDocumentStorage(), uno::UNO_QUERY);
+    OUString aMacrosName("_MS_VBA_Macros");
+    if (!xDocumentStorage.is() || !xDocumentStorage->hasByName(aMacrosName))
+        return;
+
+    const sal_Int32 nOpenMode = embed::ElementModes::READ;
+    uno::Reference<io::XStream> xMacrosStream(xDocumentStorage->openStreamElement(aMacrosName, nOpenMode), uno::UNO_QUERY);
+    uno::Reference<io::XOutputStream> xProjectStream;
+    if (xMacrosStream.is())
+    {
+        // First handle the the project stream, this sets xProjectStream.
+        std::unique_ptr<SvStream> pIn(utl::UcbStreamHelper::CreateStream(xMacrosStream));
+
+        xProjectStream = GetFilter().openFragmentStream("word/vbaProject.bin", "application/vnd.ms-office.vbaProject");
+        uno::Reference<io::XStream> xOutputStream(xProjectStream, uno::UNO_QUERY);
+        if (!xOutputStream.is())
+            return;
+        std::unique_ptr<SvStream> pOut(utl::UcbStreamHelper::CreateStream(xOutputStream));
+
+        // Write the stream.
+        pOut->WriteStream(*pIn);
+
+        // Write the relationship.
+        m_pFilter->addRelation(m_pDocumentFS->getOutputStream(), "http://schemas.microsoft.com/office/2006/relationships/vbaProject", "vbaProject.bin");
+    }
+
+    OUString aDataName("_MS_VBA_Macros_XML");
+    if (!xDocumentStorage.is() || !xDocumentStorage->hasByName(aDataName))
+        return;
+
+    uno::Reference<io::XStream> xDataStream(xDocumentStorage->openStreamElement(aDataName, nOpenMode), uno::UNO_QUERY);
+    if (xDataStream.is())
+    {
+        // Then the data stream, which wants to work with an already set
+        // xProjectStream.
+        std::unique_ptr<SvStream> pIn(utl::UcbStreamHelper::CreateStream(xDataStream));
+
+        uno::Reference<io::XStream> xOutputStream(GetFilter().openFragmentStream("word/vbaData.xml", "application/vnd.ms-word.vbaData+xml"), uno::UNO_QUERY);
+        if (!xOutputStream.is())
+            return;
+        std::unique_ptr<SvStream> pOut(utl::UcbStreamHelper::CreateStream(xOutputStream));
+
+        // Write the stream.
+        pOut->WriteStream(*pIn);
+
+        // Write the relationship.
+        if (!xProjectStream.is())
+            return;
+
+        m_pFilter->addRelation(xProjectStream, "http://schemas.microsoft.com/office/2006/relationships/wordVbaData", "vbaData.xml");
+    }
 }
 
 void DocxExport::WriteEmbeddings()
