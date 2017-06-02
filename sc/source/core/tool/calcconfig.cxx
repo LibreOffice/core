@@ -15,6 +15,7 @@
 #include <formula/opcode.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/objsh.hxx>
+#include <unotools/configmgr.hxx>
 
 #include "calcconfig.hxx"
 #include "compiler.hxx"
@@ -34,12 +35,16 @@ static rtl::Reference<ConfigurationListener> const & getMiscListener()
 
 bool ScCalcConfig::isOpenCLEnabled()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return false;
     static comphelper::ConfigurationListenerProperty<bool> gOpenCLEnabled(getMiscListener(), "UseOpenCL");
     return gOpenCLEnabled.get();
 }
 
 bool ScCalcConfig::isSwInterpreterEnabled()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return false;
     static comphelper::ConfigurationListenerProperty<bool> gSwInterpreterEnabled(getMiscListener(), "UseSwInterpreter");
     return gSwInterpreterEnabled.get();
 }
