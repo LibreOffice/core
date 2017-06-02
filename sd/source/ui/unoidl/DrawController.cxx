@@ -62,10 +62,7 @@ namespace sd {
 DrawController::DrawController (ViewShellBase& rBase) throw()
     : DrawControllerInterfaceBase(&rBase),
       BroadcastHelperOwner(SfxBaseController::m_aMutex),
-      OPropertySetHelper( static_cast<OBroadcastHelperVar<
-          OMultiTypeInterfaceContainerHelper,
-          OMultiTypeInterfaceContainerHelper::keyType>& >(
-              BroadcastHelperOwner::maBroadcastHelper)),
+      OPropertySetHelper(BroadcastHelperOwner::maBroadcastHelper),
       m_aSelectionTypeIdentifier(
         cppu::UnoType<view::XSelectionChangeListener>::get()),
       mpBase(&rBase),
