@@ -18,16 +18,17 @@ scp2componentcondition = sys.argv[2]
 scp2libtemplate = sys.argv[3]
 scp2exetemplate = sys.argv[4]
 scp2jartemplate = sys.argv[5]
+scp2pkgtemplate = sys.argv[6]
 # use 'with open(file) as f:' to avoid 'ResourceWarning: unclosed file'
-with open(sys.argv[6]) as f:
-    sdklibs = f.readline().split()
 with open(sys.argv[7]) as f:
-    libs = f.readline().split()
+    sdklibs = f.readline().split()
 with open(sys.argv[8]) as f:
-    exes = f.readline().split()
+    libs = f.readline().split()
 with open(sys.argv[9]) as f:
-    jars = f.readline().split()
+    exes = f.readline().split()
 with open(sys.argv[10]) as f:
+    jars = f.readline().split()
+with open(sys.argv[11]) as f:
     pkgs = f.readline().split()
 
 if len(scp2componentcondition) > 0:
@@ -72,16 +73,28 @@ print(", \\\n".join(["    " + gid for gid in allgids]))
 for (gid, link, target) in autosdklibs:
     print("SDK_LIBRARY_LINK(" + gid + "," + link + "," + target + ")")
 
+scp2libtemplates = { "URE_PRIVATE_LIB", "LIBO_LIB_FILE", "LIBO_LIB_FILE_BINARYTABLE", "LIBO_LIB_FILE_COMPONENTCONDITION", "SHLXTHDL_LIB_FILE", "SHLXTHDL_LIB_FILE_COMPONENTCONDITION" }
 for (gid, libfile) in autolibs:
+    if not(scp2libtemplate in scp2libtemplates):
+        raise Exception("invalid scp2libtemplate \"" + scp2libtemplate + "\"")
     print(scp2libtemplate + "(" + gid + "," + libfile + scp2componentcondition + ")")
 
+scp2exetemplates = { "URE_EXECUTABLE", "LIBO_EXECUTABLE", "LIBO_EXECUTABLE_COMPONENTCONDITION", "SDK_EXECUTABLE" }
 for (gid, exefile) in autoexes:
+    if not(scp2exetemplate in scp2exetemplates):
+        raise Exception("invalid scp2exetemplate \"" + scp2exetemplate + "\"")
     print(scp2exetemplate + "(" + gid + "," + exefile + scp2componentcondition + ")")
 
+scp2jartemplates = { "URE_JAR_FILE", "LIBO_JAR_FILE" }
 for (gid, jarfile) in autojars:
+    if not(scp2jartemplate in scp2jartemplates):
+        raise Exception("invalid scp2jartemplate \"" + scp2jartemplate + "\"")
     print(scp2jartemplate + "(" + gid + "," + jarfile + scp2componentcondition + ")")
 
+scp2pkgtemplates = { "PACKAGE_FILELIST" }
 for (gid, pkgfilelist) in autopkgs:
-    print("PACKAGE_FILELIST(" + gid + "," + pkgfilelist + ")")
+    if not(scp2pkgtemplate in scp2pkgtemplates):
+        raise Exception("invalid scp2pkgtemplate \"" + scp2pkgtemplate + "\"")
+    print(scp2pkgtemplate + "(" + gid + "," + pkgfilelist + ")")
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
