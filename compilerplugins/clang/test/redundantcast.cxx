@@ -44,12 +44,12 @@ int main() {
     // non-class lvalue, non-const:
     int ni{};
     (void) static_cast<int>(ni); // expected-error {{static_cast from 'int' lvalue to 'int' prvalue is redundant or should be written as an explicit construction of a temporary [loplugin:redundantcast]}}
-    /* => */ (void) int(ni); //TODO: expected-error {{redundant functional cast from/to 'int' [loplugin:redundantcast]}}
+    /* => */ (void) int(ni); //TODO: expected-error {{redundant functional cast from 'int' to 'int' [loplugin:redundantcast]}}
     (void) static_cast<int &>(ni); // expected-error {{static_cast from 'int' lvalue to 'int &' lvalue is redundant [loplugin:redundantcast]}}
     (void) static_cast<int &&>(ni);
     (void) static_cast<int const>(ni); // expected-error {{in static_cast from 'int' lvalue to 'const int' prvalue, remove redundant top-level const qualifier [loplugin:redundantcast]}}
     /* => */ (void) static_cast<int>(ni); // expected-error {{static_cast from 'int' lvalue to 'int' prvalue is redundant or should be written as an explicit construction of a temporary [loplugin:redundantcast]}}
-    /* => */ (void) int(ni); //TODO: expected-error {{redundant functional cast from/to 'int' [loplugin:redundantcast]}}
+    /* => */ (void) int(ni); //TODO: expected-error {{redundant functional cast from 'int' to 'int' [loplugin:redundantcast]}}
     (void) static_cast<int const &>(ni); // expected-error {{static_cast from 'int' lvalue to 'const int &' lvalue should be written as const_cast [loplugin:redundantcast]}}
     /* => */ (void) const_cast<int const &>(ni);
     (void) static_cast<int const &&>(ni); // expected-error {{static_cast from 'int' lvalue to 'const int &&' xvalue should be written as const_cast [loplugin:redundantcast]}}
@@ -69,7 +69,7 @@ int main() {
 
     // non-class xvalue, non-const:
     (void) static_cast<int>(nix()); // expected-error {{static_cast from 'int' xvalue to 'int' prvalue is redundant or should be written as an explicit construction of a temporary [loplugin:redundantcast]}}
-    /* => */ (void) int(nix()); //TODO: expected-error {{redundant functional cast from/to 'int' [loplugin:redundantcast]}}
+    /* => */ (void) int(nix()); //TODO: expected-error {{redundant functional cast from 'int' to 'int' [loplugin:redundantcast]}}
 //  (void) static_cast<int &>(nix());
     (void) static_cast<int &&>(nix()); // expected-error {{static_cast from 'int' xvalue to 'int &&' xvalue is redundant [loplugin:redundantcast]}}
     (void) static_cast<int const>(nix()); // expected-error {{in static_cast from 'int' xvalue to 'const int' prvalue, remove redundant top-level const qualifier [loplugin:redundantcast]}}
@@ -110,7 +110,7 @@ int main() {
     // class lvalue, non-const:
     S ns{};
     (void) static_cast<S>(ns); // expected-error {{static_cast from 'S' lvalue to 'S' prvalue is redundant or should be written as an explicit construction of a temporary [loplugin:redundantcast]}}
-    /* => */ (void) S(ns); //TODO: expected-error {{redundant functional cast from/to 'S' [loplugin:redundantcast]}}
+    /* => */ (void) S(ns); //TODO: expected-error {{redundant functional cast from 'S' to 'S' [loplugin:redundantcast]}}
     (void) static_cast<S &>(ns); // expected-error {{static_cast from 'S' lvalue to 'S &' lvalue is redundant [loplugin:redundantcast]}}
     (void) static_cast<S &&>(ns);
     (void) static_cast<S const>(ns); // expected-error {{static_cast from 'S' lvalue to 'const S' prvalue is redundant or should be written as an explicit construction of a temporary [loplugin:redundantcast]}}
@@ -133,7 +133,7 @@ int main() {
 
     // class xvalue, non-const:
     (void) static_cast<S>(nsx()); // expected-error {{static_cast from 'S' xvalue to 'S' prvalue is redundant or should be written as an explicit construction of a temporary [loplugin:redundantcast]}}
-    /* => */ (void) S(nsx()); //TODO: expected-error {{redundant functional cast from/to 'S' [loplugin:redundantcast]}}
+    /* => */ (void) S(nsx()); //TODO: expected-error {{redundant functional cast from 'S' to 'S' [loplugin:redundantcast]}}
 //  (void) static_cast<S &>(nsx());
     (void) static_cast<S &&>(nsx()); // expected-error {{static_cast from 'S' xvalue to 'S &&' xvalue is redundant [loplugin:redundantcast]}}
     (void) static_cast<S const>(nsx()); // expected-error {{static_cast from 'S' xvalue to 'const S' prvalue is redundant or should be written as an explicit construction of a temporary [loplugin:redundantcast]}}
@@ -154,7 +154,7 @@ int main() {
 
     // class prvalue, non-const:
     (void) static_cast<S>(nsr()); // expected-error {{static_cast from 'S' prvalue to 'S' prvalue is redundant or should be written as an explicit construction of a temporary [loplugin:redundantcast]}}
-    /* => */ (void) S(nsr()); //TODO: expected-error {{redundant functional cast from/to 'S' [loplugin:redundantcast]}}
+    /* => */ (void) S(nsr()); //TODO: expected-error {{redundant functional cast from 'S' to 'S' [loplugin:redundantcast]}}
 //  (void) static_cast<S &>(nsr());
     (void) static_cast<S &&>(nsr());
     (void) static_cast<S const>(nsr()); // expected-error {{static_cast from 'S' prvalue to 'const S' prvalue is redundant or should be written as an explicit construction of a temporary [loplugin:redundantcast]}}
