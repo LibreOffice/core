@@ -16,6 +16,24 @@
       "revId": "10e626198c42c7a3691ae6b75320e0162884b1b0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b75d71eb",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2017-06-02T21:53:46Z",
+      "side": 1,
+      "message": "Gulsah put it in the incorrect location in her patch[1], when i asked her to place it in this location in my comment in gerrit[2]. The menu has functions that only affect the current sheet, which the command is placed inside of.\n\n[1] https://cgit.freedesktop.org/libreoffice/core/diff/sc/uiconfig/scalc/menubar/menubar.xml?id\u003d198f5a16fd4c5bf691a3450bbf16e88c000f9baa\n[2] https://gerrit.libreoffice.org/#/c/36697/",
+      "parentUuid": "5a3905b3_5cee328c",
+      "revId": "10e626198c42c7a3691ae6b75320e0162884b1b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
