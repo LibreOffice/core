@@ -15,6 +15,7 @@ $(dir $(call gb_AutoInstall_get_target,%)).dir :
 $(call gb_AutoInstall_get_target,%) : $(GBUILDDIR)/AutoInstall.mk \
 		$(SRCDIR)/Repository.mk $(SRCDIR)/RepositoryExternal.mk \
 		$(BUILDDIR)/config_host.mk \
+		$(GBUILDDIR)/gen-autoinstall.py \
 		$(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_Output_announce,$*,$(true),AIN,3)
 	SDKLIBFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,\

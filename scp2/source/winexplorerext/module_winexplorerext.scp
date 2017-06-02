@@ -44,10 +44,6 @@ Module gid_Module_Optional_Winexplorerext_x64
     Default = YES;
     Styles = (HIDDEN_ROOT);
     Dirs = (gid_Dir_Shlxthdl);
-    Files = (auto_winexplorerextwin64_ALL,
-             gid_File_Lib_Msvcp100,
-             gid_File_Lib_Msvcr100,
-             gid_File_Lib_Msvcp110,
-             gid_File_Lib_Msvcr110);
+    Files = (auto_winexplorerextwin64_ALL);
 End
 #endif
