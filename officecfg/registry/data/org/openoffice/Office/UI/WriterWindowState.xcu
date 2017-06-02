@@ -932,7 +932,7 @@
           <value>false</value>
         </prop>
         <prop oor:name="ContextSensitive" oor:type="xs:boolean">
-          <value>true</value>
+          <value>false</value>
         </prop>
       </node>
     </node>
