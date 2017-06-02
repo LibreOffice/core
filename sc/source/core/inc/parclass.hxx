@@ -24,6 +24,18 @@
 #include <formula/paramclass.hxx>
 #include <sys/types.h>
 
+/** Activate parameter classification documentation.
+
+    Building with DEBUG_SC_PARCLASSDOC 1 enables generation of parameter
+    classification documentation when instanciating the first Calc document if
+    the environment variable OOO_CALC_GENPARCLASSDOC is set and SAL_LOG
+    contains +INFO.sc.core
+
+    Generated output contains CALC_GENPARCLASSDOC that can be easily grep'ed for.
+
+    Activation adds overhead to Calc initialization time to gather information
+    that otherwise is not needed for anything else.
+ */
 #define DEBUG_SC_PARCLASSDOC 0
 
 namespace formula
