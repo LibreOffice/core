@@ -41,7 +41,7 @@ ConstantValue translateConstantValue(
 {
     switch (value.m_type) {
     case RT_TYPE_BOOL:
-        return ConstantValue(static_cast< bool >(value.m_value.aBool));
+        return ConstantValue(value.m_value.aBool);
     case RT_TYPE_BYTE:
         return ConstantValue(value.m_value.aByte);
     case RT_TYPE_INT16:
