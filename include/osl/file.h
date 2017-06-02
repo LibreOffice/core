@@ -766,9 +766,8 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_getFileSize(
 
 /** Map a shared file into memory.
 
-    Don't know what the "shared" is supposed to mean there? Also,
-    obviously this API can be used to map *part* of a file into
-    memory, and different parts can be mapped separately even.
+    Files can be mapped into memory to allow multiple processes to use
+    this memory-mapped file to share data.
 
     On Android, if the Handle refers to a file that is actually inside
     the app package (.apk zip archive), no new mapping is created,
@@ -789,8 +788,6 @@ SAL_DLLPUBLIC oslFileError SAL_CALL osl_mapFile (
 #ifndef ANDROID
 
 /** Unmap a shared file from memory.
-
-    Ditto here, why do we need to mention "shared"?
 
     This function just won't work on Android in general where for
     (uncompressed) files inside the .apk, per SDK conventions in the
