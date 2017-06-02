@@ -66,7 +66,7 @@ using namespace cppu;
 extern "C" { static void SAL_CALL thisModule() {} }
 #endif
 
-typedef bool (*WFilterCall)(const OUString &rUrl, const OUString &rFlt);
+typedef bool (*WFilterCall)(const OUString &rUrl);
 typedef bool (*FFilterCall)(SvStream &rStream);
 
 /* This constant specifies the number of inputs to process before restarting.
@@ -379,8 +379,7 @@ try_again:
                 SvFileStream aFileStream(out, StreamMode::READ);
                 ret = (int) (*pfnImport)(aFileStream);
             }
-            else if ( (strcmp(argv[2], "xls") == 0) ||
-                      (strcmp(argv[2], "wb2") == 0) )
+            else if (strcmp(argv[2], "xls") == 0)
             {
                 static WFilterCall pfnImport(nullptr);
                 if (!pfnImport)
@@ -388,10 +387,24 @@ try_again:
                     osl::Module aLibrary;
                     aLibrary.loadRelative(&thisModule, "libscfiltlo.so", SAL_LOADMODULE_LAZY);
                     pfnImport = reinterpret_cast<WFilterCall>(
-                        aLibrary.getFunctionSymbol("TestImportSpreadsheet"));
+                        aLibrary.getFunctionSymbol("TestImportXLS"));
                     aLibrary.release();
                 }
-                ret = (int) (*pfnImport)(out, OUString(argv[2], strlen(argv[2]), RTL_TEXTENCODING_UTF8));
+                ret = (int) (*pfnImport)(out);
+            }
+            else if (strcmp(argv[2], "ww2") == 0)
+            {
+                static FFilterCall pfnImport(nullptr);
+                if (!pfnImport)
+                {
+                    osl::Module aLibrary;
+                    aLibrary.loadRelative(&thisModule, "libscfiltlo.so", SAL_LOADMODULE_LAZY);
+                    pfnImport = reinterpret_cast<FFilterCall>(
+                        aLibrary.getFunctionSymbol("TestImportQPW"));
+                    aLibrary.release();
+                }
+                SvFileStream aFileStream(out, StreamMode::READ);
+                ret = (int) (*pfnImport)(aFileStream);
             }
             else if (strcmp(argv[2], "hwp") == 0)
             {

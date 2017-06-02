@@ -1372,7 +1372,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         }
         else if (aFltName == pFilterQPro6)
         {
-            FltError eError = ScFormatFilter::Get().ScImportQuattroPro( rMedium, &aDocument);
+            FltError eError = ScFormatFilter::Get().ScImportQuattroPro(rMedium.GetInStream(), &aDocument);
             if (eError != eERR_OK)
             {
                 if (!GetError())

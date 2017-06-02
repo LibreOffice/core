@@ -123,20 +123,20 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
     return eRet;
 }
 
-FltError ScFormatFilterPluginImpl::ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc )
+FltError ScFormatFilterPluginImpl::ScImportQuattroPro(SvStream *pStream, ScDocument *pDoc)
 {
-    ScQProReader aReader( rMedium );
+    ScQProReader aReader(pStream);
     FltError eRet = aReader.import( pDoc );
     return eRet;
 }
 
-ScQProReader::ScQProReader( SfxMedium &rMedium )
+ScQProReader::ScQProReader(SvStream* pStream)
     : mnId(0)
     , mnLength(0)
     , mnOffset(0)
+    , mpStream(pStream)
     , mbEndOfFile(false)
 {
-    mpStream = rMedium.GetInStream();
     if( mpStream )
     {
         mpStream->SetBufferSize( 65535 );

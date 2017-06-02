@@ -40,7 +40,7 @@ class ScQProReader
     bool mbEndOfFile;
 
 public:
-    ScQProReader( SfxMedium &rMedium );
+    ScQProReader(SvStream* pStream);
     ~ScQProReader();
 
     bool recordsLeft();

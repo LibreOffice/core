@@ -219,18 +219,21 @@ FltError ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocumen
     return eRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportSpreadsheet(const OUString &rURL, const OUString &rFlt)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportQPW(SvStream &rStream)
+{
+    ScDLL::Init();
+    ScDocument aDocument;
+    aDocument.MakeTable(0);
+    return ScFormatFilter::Get().ScImportQuattroPro(&rStream, &aDocument) == eERR_OK;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportXLS(const OUString &rURL)
 {
     ScDLL::Init();
     SfxMedium aMedium(rURL, StreamMode::READ);
     ScDocument aDocument;
     aDocument.MakeTable(0);
-    FltError eError(eERR_OK);
-    if (rFlt == "xls")
-        eError = ScFormatFilter::Get().ScImportExcel(aMedium, &aDocument, EIF_AUTO);
-    else if (rFlt == "wb2")
-        eError = ScFormatFilter::Get().ScImportQuattroPro(aMedium, &aDocument);
-    return eError == eERR_OK;
+    return ScFormatFilter::Get().ScImportExcel(aMedium, &aDocument, EIF_AUTO) == eERR_OK;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

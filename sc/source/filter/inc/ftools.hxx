@@ -264,7 +264,7 @@ public:
     virtual ~ScFormatFilterPluginImpl();
     // various import filters
     virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc ) override;
-    virtual FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc ) override;
+    virtual FltError ScImportQuattroPro(SvStream* pStream, ScDocument *pDoc) override;
     virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) override;
         // eFormat == EIF_AUTO  -> matching filter is used automatically
         // eFormat == EIF_BIFF5 -> only Biff5 stream leads to success (even in an Excel97 doc)
