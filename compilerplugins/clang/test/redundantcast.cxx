@@ -253,7 +253,7 @@ void testStaticCast() {
 
     // class prvalue, non-const:
     (void) static_cast<S>(nsr()); // expected-error {{static_cast from 'S' prvalue to 'S' prvalue is redundant or should be written as an explicit construction of a temporary [loplugin:redundantcast]}}
-    /* => */ (void) S(nsr()); //TODO: expected-error {{redundant functional cast from 'S' to 'S' [loplugin:redundantcast]}}
+    /* => */ (void) S(nsr());
 //  (void) static_cast<S &>(nsr());
     (void) static_cast<S &&>(nsr());
     (void) static_cast<S const>(nsr()); // expected-error {{static_cast from 'S' prvalue to 'const S' prvalue is redundant or should be written as an explicit construction of a temporary [loplugin:redundantcast]}}
@@ -273,6 +273,11 @@ void testStaticCast() {
     (void) static_cast<S const &&>(csr());
 }
 
+void testFunctionalCast() {
+    (void) int(nir()); // expected-error {{redundant functional cast from 'int' to 'int' [loplugin:redundantcast]}}
+    (void) S(nsr());
+}
+
 void testCStyleCast() {
     Enum1 e = (Enum1)Enum1::X; // expected-error {{redundant cstyle cast from 'Enum1' to 'Enum1' [loplugin:redundantcast]}}
     (void)e;
@@ -281,6 +286,7 @@ void testCStyleCast() {
 int main() {
     testConstCast();
     testStaticCast();
+    testFunctionalCast();
     testCStyleCast();
 }
 

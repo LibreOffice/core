@@ -539,11 +539,12 @@ bool RedundantCast::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr const * exp
     //
     //   std::initializer_list<Foo>{bar, baz}
     //
-    // ), and only to cases where the sub-expression already is a prvalue (and
-    // thus the cast is unlikely meant to create a temporary):
+    // ), and only to cases where the sub-expression already is a prvalue of
+    // non-class type (and thus the cast is unlikely meant to create a
+    // temporary):
     auto const sub = compat::getSubExprAsWritten(expr);
-    if (sub->getValueKind() != VK_RValue || isa<InitListExpr>(sub)
-        || isa<CXXStdInitializerListExpr>(sub))
+    if (sub->getValueKind() != VK_RValue || expr->getType()->isRecordType()
+        || isa<InitListExpr>(sub) || isa<CXXStdInitializerListExpr>(sub))
     {
         return true;
     }
