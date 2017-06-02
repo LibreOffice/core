@@ -1237,8 +1237,8 @@ IMPL_LINK_NOARG(ScCheckListMenuWindow, EdModifyHdl, Edit&, void)
             if ( !bIsDate )
                 bPartialMatch = ( ScGlobal::pCharClass->lowercase( aLabelDisp ).indexOf( aSearchText ) != -1 );
             else if ( maMembers[i].meDatePartType == ScCheckListMember::DAY ) // Match with both numerical and text version of month
-                bPartialMatch = bPartialMatch || ( ScGlobal::pCharClass->lowercase( OUString( maMembers[i].maRealName + maMembers[i].maDateParts[1] ) )
-                                                   .indexOf( aSearchText ) != -1 );
+                bPartialMatch = bPartialMatch || (ScGlobal::pCharClass->lowercase( OUString(
+                                maMembers[i].maRealName + maMembers[i].maDateParts[1] )).indexOf( aSearchText ) != -1);
             else
                 continue;
         }
