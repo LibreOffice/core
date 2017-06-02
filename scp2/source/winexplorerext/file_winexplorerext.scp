@@ -85,4 +85,15 @@ End
 
 #endif
 
+#if defined(WITH_VC140_REDIST) || defined(WITH_VC150_REDIST)
+
+File gid_File_X64_Redist
+    Styles = (FILELIST, USE_INTERNAL_RIGHTS, PACKED);
+    Dir = FILELIST_DIR;
+    Name = "msvc_dlls.filelist";
+    ComponentCondition = "VersionNT64";
+End
+
+#endif
+
 #endif

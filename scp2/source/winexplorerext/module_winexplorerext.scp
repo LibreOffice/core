@@ -49,9 +49,6 @@ Module gid_Module_Optional_Winexplorerext_x64
     Dirs = (gid_Dir_Shlxthdl);
     Files = (auto_winexplorerextwin64_ALL,
              auto_winexplorerextwin64nt6_ALL,
-             gid_File_Lib_Msvcp100,
-             gid_File_Lib_Msvcr100,
-             gid_File_Lib_Msvcp110,
-             gid_File_Lib_Msvcr110);
+             gid_File_X64_Redist);
 End
 #endif
