@@ -23,17 +23,16 @@ Directory gid_Dir_Shlxthdl
     DosName = "shlxthdl";
 End
 
-/*
- * TODO(davido): Probably the redists need to be included for the supported compilers
- */
-
 #ifdef BUILD_X64
 
-#if defined(WITH_VC140_REDIST)
+#if defined(WITH_VC140_REDIST) || defined(WITH_VC150_REDIST)
 
-#endif
-
-#if defined(WITH_VC150_REDIST)
+File gid_File_X64_Redist
+    Styles = (FILELIST, USE_INTERNAL_RIGHTS, PACKED);
+    Dir = FILELIST_DIR;
+    Name = "msvc_dlls.filelist";
+    ComponentCondition = "VersionNT64";
+End
 
 #endif
 
