@@ -2708,7 +2708,7 @@ void Test::testGraphicsInGroup()
         pPage->InsertObject(pObj);
         const tools::Rectangle &rNewRect = pObj->GetLogicRect();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("must have equal position and size",
-                               static_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
 
         ScDrawLayer::SetPageAnchored(*pObj);
 
@@ -2716,15 +2716,15 @@ void Test::testGraphicsInGroup()
         m_pDoc->ShowRows(0, 100, 0, false);
         m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should not change when page anchored",
-                               static_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
         m_pDoc->ShowRows(0, 100, 0, true);
         m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should not change when page anchored",
-                               static_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
 
         ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("That shouldn't change size or positioning",
-                               static_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
 
         m_pDoc->ShowRows(0, 100, 0, false);
         m_pDoc->SetDrawPageSize(0);
@@ -2735,7 +2735,7 @@ void Test::testGraphicsInGroup()
         m_pDoc->ShowRows(0, 100, 0, true);
         m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should not change when page anchored",
-                               static_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
     }
 
     {
@@ -2745,11 +2745,11 @@ void Test::testGraphicsInGroup()
         pPage->InsertObject(pObj);
         const tools::Rectangle& rNewRect = pObj->GetLogicRect();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Position and size of the circle shouldn't change when inserted into the page.",
-                               static_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
 
         ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Size changed when cell anchored. Not good.",
-                               static_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
 
         // Insert 2 rows at the top.  This should push the circle object down.
         m_pDoc->InsertRow(0, 0, MAXCOL, 0, 0, 2);
@@ -2763,7 +2763,7 @@ void Test::testGraphicsInGroup()
         m_pDoc->DeleteRow(0, 0, MAXCOL, 0, 0, 2);
         m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to move back to its original position.",
-                               static_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
     }
 
     {
@@ -2778,18 +2778,18 @@ void Test::testGraphicsInGroup()
         pPage->InsertObject(pObj);
         const tools::Rectangle& rNewRect = pObj->GetLogicRect();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Size differ.",
-                               static_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
 
         ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Size changed when cell-anchored. Not good.",
-                               static_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
 
         // Insert 2 rows at the top and delete them immediately.
         m_pDoc->InsertRow(0, 0, MAXCOL, 0, 0, 2);
         m_pDoc->DeleteRow(0, 0, MAXCOL, 0, 0, 2);
         m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Size of a line object changed after row insertion and removal.",
-                               static_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
+                               const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
 
         sal_Int32 n = pObj->GetPointCount();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly 2 points in a line object.", static_cast<sal_Int32>(2), n);

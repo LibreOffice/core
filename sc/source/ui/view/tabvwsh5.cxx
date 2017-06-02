@@ -377,7 +377,7 @@ SvxNumberInfoItem* ScTabViewShell::MakeNumberInfoItem( ScDocument* pDoc, ScViewD
     }
 
     return new SvxNumberInfoItem(
-        pDoc->GetFormatTable(), static_cast<const sal_uInt16>(SID_ATTR_NUMBERFORMAT_INFO));
+        pDoc->GetFormatTable(), static_cast<sal_uInt16>(SID_ATTR_NUMBERFORMAT_INFO));
 }
 
 void ScTabViewShell::UpdateNumberFormatter(

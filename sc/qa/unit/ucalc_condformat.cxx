@@ -134,7 +134,7 @@ void Test::testCondFormatInsertCol()
 
     m_pDoc->InsertCol(0,0,MAXROW,0,4,2);
     const ScRangeList& rRange = pFormat->GetRange();
-    CPPUNIT_ASSERT_EQUAL(static_cast<const ScRangeList&>(ScRangeList(ScRange(0,0,0,5,3,0))), rRange);
+    CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(0,0,0,5,3,0)), rRange);
 
     m_pDoc->DeleteTab(0);
 }

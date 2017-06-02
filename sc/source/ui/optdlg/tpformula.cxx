@@ -253,9 +253,9 @@ bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)
 
     if ( mpLbFormulaSyntax->GetSavedValue() != aSyntaxPos
          || mpCbEnglishFuncName->GetSavedValue() != (bEnglishFuncName ? 1 : 0)
-         || static_cast<OUString>(mpEdSepFuncArg->GetSavedValue()) != aSep
-         || static_cast<OUString>(mpEdSepArrayCol->GetSavedValue()) != aSepArrayCol
-         || static_cast<OUString>(mpEdSepArrayRow->GetSavedValue()) != aSepArrayRow
+         || mpEdSepFuncArg->GetSavedValue() != aSep
+         || mpEdSepArrayCol->GetSavedValue() != aSepArrayCol
+         || mpEdSepArrayRow->GetSavedValue() != aSepArrayRow
          || mpLbOOXMLRecalcOptions->GetSavedValue() != nOOXMLRecalcMode
          || mpLbODFRecalcOptions->GetSavedValue() != nODFRecalcMode
          || maSavedConfig != maCurrentConfig

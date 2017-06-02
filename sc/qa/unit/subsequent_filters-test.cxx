@@ -1274,7 +1274,7 @@ void checkCellValidity( const ScAddress& rValBaseAddr, const ScRange& rRange, co
 {
     SCCOL nBCol( rValBaseAddr.Col() );
     SCROW nBRow( rValBaseAddr.Row() );
-    SCTAB nTab( static_cast<const sal_Int32>(rValBaseAddr.Tab()) );
+    SCTAB nTab( static_cast<sal_Int32>(rValBaseAddr.Tab()) );
     //get from the document the data validation entry we are checking against
     const SfxUInt32Item* pItem = static_cast<const SfxUInt32Item*>(rDoc.GetAttr(nBCol, nBRow, nTab, ATTR_VALIDDATA) );
     const ScValidationData* pValData = rDoc.GetValidationEntry( pItem->GetValue() );
@@ -1290,12 +1290,12 @@ void checkCellValidity( const ScAddress& rValBaseAddr, const ScRange& rRange, co
             //prevent string operations for occurring unnecessarily
             if(!(pValDataTest && pValData->GetKey() == pValDataTest->GetKey()))
             {
-                sal_Int32 nCol = static_cast<const sal_Int32>(i);
-                sal_Int32 nRow = static_cast<const sal_Int32>(j);
-                sal_Int32 nTab32 = static_cast<const sal_Int32>(nTab);
+                sal_Int32 nCol = static_cast<sal_Int32>(i);
+                sal_Int32 nRow = static_cast<sal_Int32>(j);
+                sal_Int32 nTab32 = static_cast<sal_Int32>(nTab);
                 OStringBuffer sMsg("\nData validation entry base-cell-address: (");
-                sMsg.append( static_cast<const sal_Int32>(nBCol) ).append(",");
-                sMsg.append( static_cast<const sal_Int32>(nBRow) ).append(",");
+                sMsg.append( static_cast<sal_Int32>(nBCol) ).append(",");
+                sMsg.append( static_cast<sal_Int32>(nBRow) ).append(",");
                 sMsg.append( nTab32 ).append(")\n");
                 sMsg.append("Cell: (").append(nCol).append(",").append(nRow).append(",").append(nTab32).append(")");
                 sal_uInt32 expectedKey(pValData->GetKey());
