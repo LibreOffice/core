@@ -13,6 +13,8 @@ fuzzer_externals = \
     orcus \
     orcus-parser \
     boost_filesystem \
+    boost_system \
+    boost_iostreams \
     curl \
     harfbuzz \
     graphite \
@@ -43,6 +45,7 @@ fuzzer_libraries = \
     swd \
     writerfilter \
     textfd \
+    sc \
     sdfilt \
     sd \
     sdd \
@@ -60,6 +63,8 @@ fuzzer_libraries = \
     drawinglayer \
     editeng \
     filterconfig \
+    for \
+    forui \
     fsstorage \
     fwe \
     fwi \
