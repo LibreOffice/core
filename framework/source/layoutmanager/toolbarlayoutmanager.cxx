@@ -1594,7 +1594,7 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
             aWindowState[1].Name  = WINDOWSTATE_PROPERTY_VISIBLE;
             aWindowState[1].Value <<= rElementData.m_bVisible;
             aWindowState[2].Name  = WINDOWSTATE_PROPERTY_DOCKINGAREA;
-            aWindowState[2].Value <<= static_cast< ui::DockingArea >( rElementData.m_aDockedData.m_nDockedArea );
+            aWindowState[2].Value <<= rElementData.m_aDockedData.m_nDockedArea;
 
             awt::Point aPos = rElementData.m_aDockedData.m_aPos;
             aWindowState[3].Name  = WINDOWSTATE_PROPERTY_DOCKPOS;

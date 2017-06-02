@@ -658,7 +658,7 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
             aWindowState[1].Value <<= rElementData.m_bVisible;
 
             aWindowState[2].Name  = WINDOWSTATE_PROPERTY_DOCKINGAREA;
-            aWindowState[2].Value <<= static_cast< DockingArea >( rElementData.m_aDockedData.m_nDockedArea );
+            aWindowState[2].Value <<= rElementData.m_aDockedData.m_nDockedArea;
 
             aWindowState[3].Name = WINDOWSTATE_PROPERTY_DOCKPOS;
             aWindowState[3].Value <<= rElementData.m_aDockedData.m_aPos;
