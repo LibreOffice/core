@@ -105,7 +105,7 @@ bool FcPreMatchSubstitution::FindFontSubstitute( FontSelectPattern &rFontSelData
     //just on the name, cache map all the input and all the output not just map
     //from original selection to output fontname
     FontSelectPattern& rPatternAttributes = rFontSelData;
-    CachedFontMapType &rCachedFontMap = const_cast<CachedFontMapType &>(maCachedFontMap);
+    CachedFontMapType &rCachedFontMap = maCachedFontMap;
     CachedFontMapType::iterator itr = std::find_if(rCachedFontMap.begin(), rCachedFontMap.end(), equal(rPatternAttributes));
     if (itr != rCachedFontMap.end())
     {
