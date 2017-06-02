@@ -637,15 +637,17 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
             if (!bHasPreview && nBytesRead >= nSecurityCount)
             {
                 sal_uInt8* pDest = ImplSearchEntry( pBuf.get(), reinterpret_cast<sal_uInt8 const *>("%%BeginPreview:"), nBytesRead - nSecurityCount, 15 );
-                if ( pDest  )
+                sal_uInt32 nRemainingBytes = pDest ? (nBytesRead - (pDest - pBuf.get())) : 0;
+                if (nRemainingBytes >= 15)
                 {
                     pDest += 15;
+                    nSecurityCount = nRemainingBytes - 15;
                     long nWidth = ImplGetNumber(pDest, nSecurityCount);
                     long nHeight = ImplGetNumber(pDest, nSecurityCount);
                     long nBitDepth = ImplGetNumber(pDest, nSecurityCount);
                     long nScanLines = ImplGetNumber(pDest, nSecurityCount);
-                    pDest = nSecurityCount ? ImplSearchEntry(pDest, reinterpret_cast<sal_uInt8 const *>("%"), 16, 1) : nullptr;       // go to the first Scanline
-                    if ( nSecurityCount && pDest && nWidth && nHeight && ( ( nBitDepth == 1 ) || ( nBitDepth == 8 ) ) && nScanLines )
+                    pDest = ImplSearchEntry(pDest, reinterpret_cast<sal_uInt8 const *>("%"), nSecurityCount, 1);       // go to the first Scanline
+                    if (pDest && nWidth && nHeight && ( ( nBitDepth == 1 ) || ( nBitDepth == 8 ) ) && nScanLines)
                     {
                         rStream.Seek( nBufStartPos + ( pDest - pBuf.get() ) );
 
