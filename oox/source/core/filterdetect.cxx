@@ -52,8 +52,9 @@ using utl::MediaDescriptor;
 using comphelper::IDocPasswordVerifier;
 using comphelper::DocPasswordVerifierResult;
 
-FilterDetectDocHandler::FilterDetectDocHandler( const  Reference< XComponentContext >& rxContext, OUString& rFilterName ) :
+FilterDetectDocHandler::FilterDetectDocHandler( const  Reference< XComponentContext >& rxContext, OUString& rFilterName, const OUString& rFileName ) :
     mrFilterName( rFilterName ),
+    maFileName(rFileName),
     mxContext( rxContext )
 {
     maContextStack.reserve( 2 );
@@ -160,12 +161,12 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
     }
 }
 
-OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& rContentType )
+OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& rContentType, const OUString& rFileName )
 {
-    if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" )
+    if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" && !rFileName.endsWith("docm") )
         return OUString( "writer_MS_Word_2007" );
 
-    if( rContentType == "application/vnd.ms-word.document.macroEnabled.main+xml" )
+    if( rContentType == "application/vnd.ms-word.document.macroEnabled.main+xml" || rFileName.endsWith("docm") )
         return OUString( "writer_MS_Word_2007_VBA" );
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml" ||
@@ -209,14 +210,14 @@ void FilterDetectDocHandler::parseContentTypesDefault( const AttributeList& rAtt
         OUString aExtension = rAttribs.getString( XML_Extension, OUString() );
         sal_Int32 nExtPos = maTargetPath.getLength() - aExtension.getLength();
         if( (nExtPos > 0) && (maTargetPath[ nExtPos - 1 ] == '.') && maTargetPath.match( aExtension, nExtPos ) )
-            mrFilterName = getFilterNameFromContentType( rAttribs.getString( XML_ContentType, OUString() ) );
+            mrFilterName = getFilterNameFromContentType( rAttribs.getString( XML_ContentType, OUString() ), maFileName );
     }
 }
 
 void FilterDetectDocHandler::parseContentTypesOverride( const AttributeList& rAttribs )
 {
     if( rAttribs.getString( XML_PartName, OUString() ).equals( maTargetPath ) )
-        mrFilterName = getFilterNameFromContentType( rAttribs.getString( XML_ContentType, OUString() ) );
+        mrFilterName = getFilterNameFromContentType( rAttribs.getString( XML_ContentType, OUString() ), maFileName );
 }
 
 /* Helper for XServiceInfo */
@@ -400,7 +401,11 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             aParser.registerNamespace( NMSP_packageRel );
             aParser.registerNamespace( NMSP_officeRel );
             aParser.registerNamespace( NMSP_packageContentTypes );
-            aParser.setDocumentHandler( new FilterDetectDocHandler( mxContext, aFilterName ) );
+
+            OUString aFileName;
+            aMediaDescriptor[utl::MediaDescriptor::PROP_URL()] >>= aFileName;
+
+            aParser.setDocumentHandler( new FilterDetectDocHandler( mxContext, aFilterName, aFileName ) );
 
             /*  Parse '_rels/.rels' to get the target path and '[Content_Types].xml'
                 to determine the content type of the part at the target path. */
