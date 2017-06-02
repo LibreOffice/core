@@ -280,7 +280,6 @@ End
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarWriterDocument.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";
@@ -401,7 +400,6 @@ End
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarWriterGlobalDocument.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";
@@ -488,7 +486,6 @@ End
 RegistryItem gid_Regitem_Soffice_Starwritertemplate_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarWriterTemplate.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";
@@ -593,7 +590,6 @@ End
 RegistryItem gid_Regitem_stw_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".stw";
     Value = "document";
@@ -656,7 +652,6 @@ End
 RegistryItem gid_Regitem_sxg_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".sxg";
     Value = "document";
@@ -735,7 +730,6 @@ End
 RegistryItem gid_Regitem_sxw_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".sxw";
     Value = "document";
@@ -851,7 +845,6 @@ End
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.WriterDocument.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";
@@ -884,7 +877,6 @@ End
 RegistryItem gid_Regitem_odt_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".odt";
     Value = "document";
@@ -1012,7 +1004,6 @@ End
 RegistryItem gid_Regitem_fodt_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".fodt";
     Value = "document";
@@ -1088,7 +1079,6 @@ End
 RegistryItem gid_Regitem_Openoffice_Writertemplate_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.WriterTemplate.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";
@@ -1115,7 +1105,6 @@ End
 RegistryItem gid_Regitem_ott_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".ott";
     Value = "document";
@@ -1240,7 +1229,6 @@ End
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.WriterGlobalDocument.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";
@@ -1267,7 +1255,6 @@ End
 RegistryItem gid_Regitem_odm_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".odm";
     Value = "document";
@@ -1392,7 +1379,6 @@ End
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.WriterWebTemplate.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Writer";
@@ -1461,7 +1447,6 @@ End
 RegistryItem gid_Regitem_oth_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".oth";
     Value = "document";

@@ -294,7 +294,6 @@ End
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_AppUserModelID) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        ComponentCondition = STRING(VersionNT >= 601); \
         Subkey = STRING(CONCAT2(LibreOffice.,name)); \
         Name = STRING(AppUserModelID); \
         Value = STRING(CONCAT2(TheDocumentFoundation.LibreOffice.,doc_type)); \
@@ -435,7 +434,6 @@ End
     RegistryItem CONCAT2(gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_,extension) \
         ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
         ModuleID = gid_Module_Optional_Winexplorerext; \
-        ComponentCondition = "VersionNT >= 600"; \
         Subkey = STRING(CONCAT2(SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.,extension)); \
         Value = "{AE424E85-F6DF-4910-A6A9-438797986431}"; \
     End \
@@ -443,7 +441,7 @@ End
     RegistryItem CONCAT3(gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_,extension,_x64) \
         ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
         ModuleID = gid_Module_Optional_Winexplorerext_x64; \
-        ComponentCondition = "VersionNT64 >= 600"; \
+        ComponentCondition = "VersionNT64"; \
         Subkey = STRING(CONCAT2(SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.,extension)); \
         Value = "{AE424E85-F6DF-4910-A6A9-438797986431}"; \
     End
@@ -454,7 +452,6 @@ End
     RegistryItem CONCAT2(gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_,extension) \
         ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
         ModuleID = gid_Module_Optional_Winexplorerext; \
-        ComponentCondition = "VersionNT >= 600"; \
         Subkey = STRING(CONCAT2(SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.,extension)); \
         Value = "{AE424E85-F6DF-4910-A6A9-438797986431}"; \
     End

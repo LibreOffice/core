@@ -405,7 +405,6 @@ End
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_PropHdl
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}";
     Value = "%PRODUCTNAME Property Handler";
 End
@@ -413,7 +412,6 @@ End
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_EnableShareDenyWrite
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}";
     Name = "EnableShareDenyNone";
     Value = "#1";
@@ -424,7 +422,7 @@ End
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_PropHdl_x64
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64 >= 600";
+    ComponentCondition = "VersionNT64";
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}";
     Value = "%PRODUCTNAME Property Handler";
 End
@@ -432,7 +430,6 @@ End
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_EnableShareDenyWrite_x64
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}";
     Name = "EnableShareDenyNone";
     Value = "#1";
@@ -443,7 +440,6 @@ End
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}\InprocServer32";
     Value = "[INSTALLLOCATION]program\shlxthdl\propertyhdl.dll";
 End
@@ -453,7 +449,7 @@ End
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32_x64
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64 >= 600";
+    ComponentCondition = "VersionNT64";
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}\InprocServer32";
     Value = "[INSTALLLOCATION]program\shlxthdl\propertyhdl_x64.dll";
 End
@@ -463,7 +459,6 @@ End
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32_TM
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}\InprocServer32";
     Name = "ThreadingModel";
     Value = "Apartment";
@@ -474,7 +469,7 @@ End
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32_TM_x64
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64 >= 600";
+    ComponentCondition = "VersionNT64";
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}\InprocServer32";
     Name = "ThreadingModel";
     Value = "Apartment";
@@ -485,7 +480,6 @@ End
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_Approved
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved";
     Name = "{AE424E85-F6DF-4910-A6A9-438797986431}";
     Value = "%PRODUCTNAME Property Handler";
@@ -496,7 +490,7 @@ End
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_Approved_x64
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Optional_Winexplorerext_x64;
-    ComponentCondition = "VersionNT64 >= 600";
+    ComponentCondition = "VersionNT64";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved";
     Name = "{AE424E85-F6DF-4910-A6A9-438797986431}";
     Value = "%PRODUCTNAME Property Handler";

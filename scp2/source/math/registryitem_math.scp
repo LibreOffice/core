@@ -279,7 +279,6 @@ End
 RegistryItem gid_Regitem_Soffice_Starmathdocument_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarMathDocument.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Math";
@@ -449,7 +448,6 @@ End
 RegistryItem gid_Regitem_sxm_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Math_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".sxm";
     Value = "document";
@@ -557,7 +555,6 @@ End
 RegistryItem gid_Regitem_Openoffice_Mathdocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.MathDocument.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Math";
@@ -584,7 +581,6 @@ End
 RegistryItem gid_Regitem_odf_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Math_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".odf";
     Value = "document";

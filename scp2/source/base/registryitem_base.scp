@@ -81,7 +81,6 @@ End
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Base_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.DatabaseDocument.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Base";
@@ -108,7 +107,6 @@ End
 RegistryItem gid_Regitem_odb_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Base_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".odb";
     Value = "document";

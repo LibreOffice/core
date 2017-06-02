@@ -280,7 +280,6 @@ End
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarDrawDocument.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Draw";
@@ -394,7 +393,6 @@ End
 RegistryItem gid_Regitem_Soffice_Stardrawtemplate_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarDrawTemplate.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Draw";
@@ -506,7 +504,6 @@ End
 RegistryItem gid_Regitem_std_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".std";
     Value = "document";
@@ -585,7 +582,6 @@ End
 RegistryItem gid_Regitem_sxd_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".sxd";
     Value = "document";
@@ -701,7 +697,6 @@ End
 RegistryItem gid_Regitem_Openoffice_Drawdocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.DrawDocument.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Draw";
@@ -728,7 +723,6 @@ End
 RegistryItem gid_Regitem_odg_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".odg";
     Value = "document";
@@ -839,7 +833,6 @@ End
 RegistryItem gid_Regitem_fodg_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".fodg";
     Value = "document";
@@ -907,7 +900,6 @@ End
 RegistryItem gid_Regitem_Openoffice_Drawtemplate_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.DrawTemplate.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Draw";
@@ -934,7 +926,6 @@ End
 RegistryItem gid_Regitem_otg_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Draw_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".otg";
     Value = "document";

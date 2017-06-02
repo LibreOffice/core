@@ -280,7 +280,6 @@ End
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarImpressDocument.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Impress";
@@ -408,7 +407,6 @@ End
 RegistryItem gid_Regitem_Soffice_Starimpresstemplate_6_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "soffice.StarImpressTemplate.6";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Impress";
@@ -520,7 +518,6 @@ End
 RegistryItem gid_Regitem_sti_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".sti";
     Value = "document";
@@ -599,7 +596,6 @@ End
 RegistryItem gid_Regitem_sxi_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".sxi";
     Value = "document";
@@ -716,7 +712,6 @@ End
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.ImpressDocument.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Impress";
@@ -743,7 +738,6 @@ End
 RegistryItem gid_Regitem_odp_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".odp";
     Value = "document";
@@ -868,7 +862,6 @@ End
 RegistryItem gid_Regitem_fodp_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".fodp";
     Value = "document";
@@ -936,7 +929,6 @@ End
 RegistryItem gid_Regitem_Openoffice_Impresstemplate_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    ComponentCondition = "VersionNT >= 601";
     Subkey = "LibreOffice.ImpressTemplate.1";
     Name = "AppUserModelID";
     Value = "TheDocumentFoundation.LibreOffice.Impress";
@@ -963,7 +955,6 @@ End
 RegistryItem gid_Regitem_otp_KindMap
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     ModuleID = gid_Module_Prg_Impress_Bin;
-    ComponentCondition = "VersionNT >= 600";
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\KindMap";
     Name = ".otp";
     Value = "document";
