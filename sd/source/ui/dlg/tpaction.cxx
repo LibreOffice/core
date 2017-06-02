@@ -662,30 +662,39 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl, Control&, void)
         {
             WaitObject aWait( GetParentDialog() );
 
+            bool bHideTreeDocument = true;
+
             // is it a draw file?
             // open with READ, otherwise the Storages might write into the file!
             uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage();
             DBG_ASSERT( xStorage.is(), "No storage!" );
 
             uno::Reference < container::XNameAccess > xAccess( xStorage, uno::UNO_QUERY );
-            if( xAccess.is() &&
-                ( xAccess->hasByName( pStarDrawXMLContent ) ||
-                xAccess->hasByName( pStarDrawOldXMLContent ) ) )
+            if (xAccess.is())
             {
-                SdDrawDocument* pBookmarkDoc = mpDoc->OpenBookmarkDoc( aFile );
-                if( pBookmarkDoc )
+                try
                 {
-                    aLastFile = aFile;
+                    if (xAccess->hasByName(pStarDrawXMLContent) ||
+                        xAccess->hasByName(pStarDrawOldXMLContent))
+                    {
+                        if (SdDrawDocument* pBookmarkDoc = mpDoc->OpenBookmarkDoc(aFile))
+                        {
+                            aLastFile = aFile;
 
-                    m_pLbTreeDocument->Clear();
-                    m_pLbTreeDocument->Fill( pBookmarkDoc, true, aFile );
-                    mpDoc->CloseBookmarkDoc();
-                    m_pLbTreeDocument->Show();
+                            m_pLbTreeDocument->Clear();
+                            m_pLbTreeDocument->Fill(pBookmarkDoc, true, aFile);
+                            mpDoc->CloseBookmarkDoc();
+                            m_pLbTreeDocument->Show();
+                            bHideTreeDocument = false;
+                        }
+                    }
                 }
-                else
-                    m_pLbTreeDocument->Hide();
+                catch (...)
+                {
+                }
             }
-            else
+
+            if (bHideTreeDocument)
                 m_pLbTreeDocument->Hide();
 
         }
