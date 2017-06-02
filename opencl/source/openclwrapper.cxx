@@ -768,13 +768,13 @@ void findDeviceInfoFromDeviceId(cl_device_id aDeviceId, size_t& rDeviceId, size_
     const std::vector<OpenCLPlatformInfo>& rPlatforms = fillOpenCLInfo();
     for(size_t i = 0; i < rPlatforms.size(); ++i)
     {
-        cl_platform_id platId = static_cast<cl_platform_id>(rPlatforms[i].platform);
+        cl_platform_id platId = rPlatforms[i].platform;
         if(platId != platformId)
             continue;
 
         for(size_t j = 0; j < rPlatforms[i].maDevices.size(); ++j)
         {
-            cl_device_id id = static_cast<cl_device_id>(rPlatforms[i].maDevices[j].device);
+            cl_device_id id = rPlatforms[i].maDevices[j].device;
             if(id == aDeviceId)
             {
                 rDeviceId = j;
