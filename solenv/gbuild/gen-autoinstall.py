@@ -91,7 +91,7 @@ for (gid, jarfile) in autojars:
         raise Exception("invalid scp2jartemplate \"" + scp2jartemplate + "\"")
     print(scp2jartemplate + "(" + gid + "," + jarfile + scp2componentcondition + ")")
 
-scp2pkgtemplates = { "PACKAGE_FILELIST" }
+scp2pkgtemplates = { "PACKAGE_FILELIST", "SDK_PACKAGE_FILELIST" }
 for (gid, pkgfilelist) in autopkgs:
     if not(scp2pkgtemplate in scp2pkgtemplates):
         raise Exception("invalid scp2pkgtemplate \"" + scp2pkgtemplate + "\"")

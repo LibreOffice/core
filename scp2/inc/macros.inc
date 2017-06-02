@@ -115,7 +115,14 @@
 
 #define PACKAGE_FILELIST(id,name) \
 File id \
-    Dir = PACKAGE_FILELIST_DIR; \
+    Dir = FILELIST_DIR; \
+    Name = name; \
+    Styles = (FILELIST, USE_INTERNAL_RIGHTS, PACKED); \
+End
+
+#define SDK_PACKAGE_FILELIST(id,name) \
+File id \
+    Dir = FILELIST_SDK_DIR; \
     Name = name; \
     Styles = (FILELIST, USE_INTERNAL_RIGHTS, PACKED); \
 End
@@ -500,10 +507,6 @@ End
 #else
 #define FILELIST_SDK_DIR PREDEFINED_PROGDIR
 #endif
-#endif
-
-#if !defined PACKAGE_FILELIST_DIR
-#define PACKAGE_FILELIST_DIR FILELIST_DIR
 #endif
 
 #define UI_FILELIST(name, file) \

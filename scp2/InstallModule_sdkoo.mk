@@ -11,10 +11,6 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/sdkoo))
 
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/sdkoo,sdk))
 
-$(eval $(call gb_InstallModule_add_defs,scp2/sdkoo,\
-	-DPACKAGE_FILELIST_DIR=FILELIST_SDK_DIR \
-))
-
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/sdkoo,\
     scp2/source/sdkoo/sdkoo \
 ))
