@@ -11,7 +11,7 @@ $(eval $(call gb_AutoInstall_AutoInstall))
 
 $(eval $(call gb_AutoInstall_add_module,activexbinarytable,LIBO_LIB_FILE_BINARYTABLE))
 $(eval $(call gb_AutoInstall_add_module,activex,LIBO_LIB_FILE))
-$(eval $(call gb_AutoInstall_add_module,activexwin64,LIBO_LIB_FILE_COMPONENTCONDITION,,,"VersionNT64"))
+$(eval $(call gb_AutoInstall_add_module,activexwin64,LIBO_LIB_FILE_COMPONENTCONDITION,,,,"VersionNT64"))
 $(eval $(call gb_AutoInstall_add_module,base,LIBO_LIB_FILE,LIBO_EXECUTABLE))
 $(eval $(call gb_AutoInstall_add_module,base_brand,,LIBO_EXECUTABLE,,PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,brand,,LIBO_EXECUTABLE,,PACKAGE_FILELIST))
@@ -50,7 +50,7 @@ $(eval $(call gb_AutoInstall_add_module,ure,URE_PRIVATE_LIB,URE_EXECUTABLE,URE_J
 $(eval $(call gb_AutoInstall_add_module,winexplorerextbinarytable,LIBO_LIB_FILE_BINARYTABLE))
 $(eval $(call gb_AutoInstall_add_module,winexplorerext,SHLXTHDL_LIB_FILE))
 ifeq ($(BUILD_X64),TRUE)
-$(eval $(call gb_AutoInstall_add_module,winexplorerextwin64,SHLXTHDL_LIB_FILE_COMPONENTCONDITION,,,"VersionNT64"))
+$(eval $(call gb_AutoInstall_add_module,winexplorerextwin64,SHLXTHDL_LIB_FILE_COMPONENTCONDITION,,,,"VersionNT64"))
 endif
 $(eval $(call gb_AutoInstall_add_module,writer,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,writer_brand,,LIBO_EXECUTABLE,,PACKAGE_FILELIST))
