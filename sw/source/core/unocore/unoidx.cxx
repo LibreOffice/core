@@ -1994,7 +1994,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     m_pDoc = pDoc;
     m_pTOXMark = & pTextAttr->GetTOXMark();
     const_cast<SwTOXMark*>(m_pTOXMark)->Add(this);
-    const_cast<SwTOXType &>(rTOXType).Add(& m_TypeDepend);
+    rTOXType.Add(& m_TypeDepend);
 }
 
 uno::Reference< text::XTextRange > SAL_CALL

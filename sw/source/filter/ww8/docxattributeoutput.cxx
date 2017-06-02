@@ -3286,7 +3286,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     SwFrameFormat *pTableFormat = pTable->GetFrameFormat( );
     const SwFormatFrameSize &rSize = pTableFormat->GetFrameSize();
     int nWidthPercent = rSize.GetWidthPercent();
-    uno::Reference<beans::XPropertySet> xPropertySet(SwXTextTables::GetObject(const_cast<SwTableFormat&>(*pTable->GetFrameFormat( ))),uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(SwXTextTables::GetObject(*pTable->GetFrameFormat( )),uno::UNO_QUERY);
     bool isWidthRelative = false;
     xPropertySet->getPropertyValue("IsWidthRelative") >>= isWidthRelative;
 

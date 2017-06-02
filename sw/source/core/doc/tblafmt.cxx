@@ -1278,7 +1278,7 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
     {
         aBox.SetLine( i <= 3 ? &aLn : nullptr, SvxBoxItemLine::TOP );
         aBox.SetLine( (3 == ( i & 3 )) ? &aLn : nullptr, SvxBoxItemLine::RIGHT );
-        const_cast<SwBoxAutoFormat&>(pNew->GetBoxFormat( i )).SetBox( aBox );
+        pNew->GetBoxFormat( i ).SetBox( aBox );
     }
 
     pNew->SetUserDefined(false);

@@ -1828,7 +1828,7 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
             ( !m_rThis.IsTabFrame() ||
                 ( m_rThis.GetUpper()->IsInTab() &&
                   m_rThis.GetUpper()->FindTabFrame()->IsFwdMoveAllowed() ) ) &&
-             nullptr != const_cast<SwFrame&>(m_rThis).GetNextCellLeaf() )
+             nullptr != m_rThis.GetNextCellLeaf() )
         {
             bNoFwd = false;
         }

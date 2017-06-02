@@ -867,11 +867,11 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             if(pRelH )
                 bRet &= ((SfxPoolItem&)aFrameSz).PutValue(*pRelH, MID_FRMSIZE_REL_HEIGHT);
             if (pRelHRelation)
-                bRet &= const_cast<SwFormatFrameSize&>(aFrameSz).PutValue(*pRelHRelation, MID_FRMSIZE_REL_HEIGHT_RELATION);
+                bRet &= aFrameSz.PutValue(*pRelHRelation, MID_FRMSIZE_REL_HEIGHT_RELATION);
             if(pRelW )
                 bRet &= ((SfxPoolItem&)aFrameSz).PutValue(*pRelW, MID_FRMSIZE_REL_WIDTH);
             if (pRelWRelation)
-                bRet &= const_cast<SwFormatFrameSize&>(aFrameSz).PutValue(*pRelWRelation, MID_FRMSIZE_REL_WIDTH_RELATION);
+                bRet &= aFrameSz.PutValue(*pRelWRelation, MID_FRMSIZE_REL_WIDTH_RELATION);
             if(pSyncWidth)
                 bRet &= ((SfxPoolItem&)aFrameSz).PutValue(*pSyncWidth, MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT);
             if(pSyncHeight)

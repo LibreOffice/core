@@ -674,7 +674,7 @@ namespace
 
         // iterate over relevant redlines and decide for each whether it should
         // be saved, or split + saved
-        SwRedlineTable& rRedlineTable = const_cast<SwRedlineTable&>( pDoc->getIDocumentRedlineAccess().GetRedlineTable() );
+        SwRedlineTable& rRedlineTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
         for( ; nCurrentRedline < rRedlineTable.size(); nCurrentRedline++ )
         {
             SwRangeRedline* pCurrent = rRedlineTable[ nCurrentRedline ];

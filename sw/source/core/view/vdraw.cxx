@@ -138,7 +138,7 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
         if (pPrintData)
         {
             // hide drawings but not form controls (form controls are handled elsewhere)
-            SdrView &rSdrView = const_cast< SdrView & >(GetPageView()->GetView());
+            SdrView &rSdrView = GetPageView()->GetView();
             rSdrView.setHideDraw( !pPrintData->IsPrintDraw() );
         }
         basegfx::B2IRectangle const pageFrame(

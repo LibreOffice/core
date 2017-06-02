@@ -4212,7 +4212,7 @@ void SwDoc::ClearLineNumAttrs( SwPosition & rPos )
             && pTextNode->GetText().isEmpty())
         {
             const SfxPoolItem* pFormatItem = nullptr;
-            SfxItemSet rSet( const_cast<SwAttrPool&>(pTextNode->GetDoc()->GetAttrPool()),
+            SfxItemSet rSet( pTextNode->GetDoc()->GetAttrPool(),
                         RES_PARATR_BEGIN, RES_PARATR_END - 1,
                         0);
             pTextNode->SwContentNode::GetAttr( rSet );

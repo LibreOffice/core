@@ -3831,7 +3831,7 @@ void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrameFormat* pFlyFram
 
 bool RtfAttributeOutput::FlyFrameOLEMath(const SwFlyFrameFormat* pFlyFrameFormat, SwOLENode& rOLENode, const Size& rSize)
 {
-    uno::Reference <embed::XEmbeddedObject> xObj(const_cast<SwOLENode&>(rOLENode).GetOLEObj().GetOleRef());
+    uno::Reference <embed::XEmbeddedObject> xObj(rOLENode.GetOLEObj().GetOleRef());
     sal_Int64 nAspect = rOLENode.GetAspect();
     svt::EmbeddedObjectRef aObjRef(xObj, nAspect);
     SvGlobalName aObjName(aObjRef->getClassID());

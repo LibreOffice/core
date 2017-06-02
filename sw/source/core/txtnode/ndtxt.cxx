@@ -1172,7 +1172,7 @@ void SwTextNode::Update(
                     if (!pCursor)
                         continue;
 
-                    SwIndex& rIndex = const_cast<SwIndex&>(pCursor->Start()->nContent);
+                    SwIndex& rIndex = pCursor->Start()->nContent;
                     if (&pCursor->Start()->nNode.GetNode() == this && rIndex.GetIndex() == rPos.GetIndex())
                     {
                         // The cursor position of this other shell is exactly our insert position.
