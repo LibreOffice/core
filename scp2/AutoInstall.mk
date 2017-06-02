@@ -32,7 +32,7 @@ $(eval $(call gb_AutoInstall_add_module,libreofficekit,LIBO_LIB_FILE,LIBO_EXECUT
 $(eval $(call gb_AutoInstall_add_module,math,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,math_brand,,LIBO_EXECUTABLE,,PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,ogltrans,LIBO_LIB_FILE,,,PACKAGE_FILELIST))
-$(eval $(call gb_AutoInstall_add_module,onlineupdate,LIBO_LIB_FILE_COMPONENTCONDITION,LIBO_EXECUTABLE_COMPONENTCONDITION,,PACKAGE_FILELIST,"ISCHECKFORPRODUCTUPDATES=1"))
+$(eval $(call gb_AutoInstall_add_module,onlineupdate,LIBO_LIB_FILE_COMPONENTCONDITION,LIBO_EXECUTABLE_COMPONENTCONDITION,,PACKAGE_FILELIST_COMPONENTCONDITION,"ISCHECKFORPRODUCTUPDATES=1"))
 $(eval $(call gb_AutoInstall_add_module,ooo,LIBO_LIB_FILE,LIBO_EXECUTABLE,LIBO_JAR_FILE,PACKAGE_FILELIST))
 $(eval $(call gb_AutoInstall_add_module,ooo_fonts,,,,PACKAGE_FILELIST_FONT))
 $(eval $(call gb_AutoInstall_add_module,ooo_images,,,,PACKAGE_FILELIST))
@@ -50,7 +50,7 @@ $(eval $(call gb_AutoInstall_add_module,ure,URE_PRIVATE_LIB,URE_EXECUTABLE,URE_J
 $(eval $(call gb_AutoInstall_add_module,winexplorerextbinarytable,LIBO_LIB_FILE_BINARYTABLE))
 $(eval $(call gb_AutoInstall_add_module,winexplorerext,SHLXTHDL_LIB_FILE))
 ifeq ($(BUILD_X64),TRUE)
-$(eval $(call gb_AutoInstall_add_module,winexplorerextwin64,SHLXTHDL_LIB_FILE_COMPONENTCONDITION,,,,"VersionNT64"))
+$(eval $(call gb_AutoInstall_add_module,winexplorerextwin64,SHLXTHDL_LIB_FILE_COMPONENTCONDITION,,,PACKAGE_FILELIST_COMPONENTCONDITION,"VersionNT64"))
 endif
 $(eval $(call gb_AutoInstall_add_module,writer,LIBO_LIB_FILE))
 $(eval $(call gb_AutoInstall_add_module,writer_brand,,LIBO_EXECUTABLE,,PACKAGE_FILELIST))
