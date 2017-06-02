@@ -1594,7 +1594,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 SfxModule* pScMod = SfxApplication::GetModule( SfxToolsModule::Calc );
                 setGroupName( "Calc", rCalcArray.GetString(0) );
                 nGroup = AddGroup( rCalcArray.GetString( 0 ), pScMod, pScMod, SID_SC_EDITOPTIONS );
-                const sal_uInt16 nCount = static_cast< const sal_uInt16 >( rCalcArray.Count() );
+                const sal_uInt16 nCount = static_cast< sal_uInt16 >( rCalcArray.Count() );
                 for ( sal_uInt16 i = 1; i < nCount; ++i )
                 {
                     nPageId = (sal_uInt16)rCalcArray.GetValue(i);
@@ -1618,7 +1618,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 ResStringArray& rImpressArray = aDlgResource.GetImpressArray();
                 setGroupName( "Impress", rImpressArray.GetString(0) );
                 nGroup = AddGroup( rImpressArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_EDITOPTIONS );
-                const sal_uInt16 nCount = static_cast< const sal_uInt16 >( rImpressArray.Count() );
+                const sal_uInt16 nCount = static_cast< sal_uInt16 >( rImpressArray.Count() );
                 for ( sal_uInt16 i = 1; i < nCount; ++i )
                 {
                     nPageId = (sal_uInt16)rImpressArray.GetValue(i);
@@ -1641,7 +1641,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 ResStringArray& rDrawArray = aDlgResource.GetDrawArray();
                 setGroupName( "Draw", rDrawArray.GetString(0) );
                 nGroup = AddGroup( rDrawArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_GRAPHIC_OPTIONS );
-                const sal_uInt16 nCount = static_cast< const sal_uInt16 >( rDrawArray.Count() );
+                const sal_uInt16 nCount = static_cast< sal_uInt16 >( rDrawArray.Count() );
                 for ( sal_uInt16 i = 1; i < nCount; ++i )
                 {
                     nPageId = (sal_uInt16)rDrawArray.GetValue(i);
