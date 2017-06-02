@@ -741,9 +741,9 @@ namespace dxcanvas
             // a back buffer, and no way of falling back to a
             // different canvas implementation.
             ZeroMemory( &mad3dpp, sizeof(mad3dpp) );
-            mad3dpp.BackBufferWidth = std::max(sal_Int32(maSize.getX()),
+            mad3dpp.BackBufferWidth = std::max(maSize.getX(),
                                                sal_Int32(d3ddm.Width));
-            mad3dpp.BackBufferHeight = std::max(sal_Int32(maSize.getY()),
+            mad3dpp.BackBufferHeight = std::max(maSize.getY(),
                                                 sal_Int32(d3ddm.Height));
             mad3dpp.BackBufferCount = 1;
             mad3dpp.Windowed = TRUE;
