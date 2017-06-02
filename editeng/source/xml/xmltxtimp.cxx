@@ -103,10 +103,37 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const uno::Reference< XText > & rText );
 
+    virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
+        const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList >& xAttrList )  override;
+
 private:
     const uno::Reference< XText > mxText;
 };
 
+SvXMLImportContext *SvxXMLXTextImportComponent::CreateContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    SvXMLImportContext* pContext = nullptr;
+    if(XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken( rLocalName, XML_BODY ) )
+    {
+        pContext = new SvxXMLTextImportContext( *this, nPrefix, rLocalName, xAttrList, mxText );
+    }
+
+    else if( XML_NAMESPACE_OFFICE == nPrefix && IsXMLToken( rLocalName, XML_AUTOMATIC_STYLES ) )
+    {
+        pContext = new SvXMLStylesContext( *this, nPrefix, rLocalName, xAttrList );
+        this->GetTextImport()->SetAutoStyles( static_cast<SvXMLStylesContext*>(pContext) );
+    }
+
+    else
+    {
+        pContext = this->GetTextImport()->CreateTextChildContext( *this, nPrefix, rLocalName, xAttrList );
+    }
+
+    if( nullptr == pContext )
+        pContext = new SvXMLImportContext( *this, nPrefix, rLocalName );
+
+    return pContext;
+}
 
 SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
