@@ -16,6 +16,24 @@
       "revId": "9112839ec907d00208906982acc2059e66bdb635",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_176d6598",
+        "filename": "sc/uiconfig/scalc/toolbar/formatobjectbar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2017-06-02T21:56:19Z",
+      "side": 1,
+      "message": "Git message has been amended.",
+      "parentUuid": "5a3905b3_fcffde31",
+      "revId": "9112839ec907d00208906982acc2059e66bdb635",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
