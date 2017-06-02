@@ -84,6 +84,30 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_bc88f6e8",
+        "filename": "sc/source/ui/view/formatsh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2639,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-02T11:32:31Z",
+      "side": 1,
+      "message": "The default locale (or office system locale) is the one that is set under Tools -\u003e Options -\u003e Language Settings -\u003e Languages, \"Locale setting\". With that the number formatter is created for a document and  if you open Format -\u003e Cells -\u003e Numbers you see it as Language Default.\n\nHere you don\u0027t need to check for it but you need to eliminate the dependency on a specific number. For that call\n\n NfIndexTableOffset nOffset \u003d SvNumberFormatter::GetIndexTableOffset(nNumberFormat);\n\nand then check nOffset \u003d\u003d NF_NUMBER_1000DEC2\n(where NF_NUMBER_1000DEC2 is the 4 that is used now).\n\nJust some more explanation: for each locale actually used in number formatting of a document the number formatter reserves SV_COUNTRY_LANGUAGE_OFFSET index keys of which the first SV_MAX_ANZ_STANDARD_FORMATE are reserved and used as in NfIndexTableOffset of include/svl/zforlist.hxx\n\nTo check if a format index designates the General/Standard format it\u0027s possible to use\n\n ((nNumberFormat % SV_COUNTRY_LANGUAGE_OFFSET) \u003d\u003d 0)",
+      "parentUuid": "5a3905b3_1cf2ead2",
+      "range": {
+        "startLine": 2639,
+        "startChar": 95,
+        "endLine": 2639,
+        "endChar": 114
+      },
+      "revId": "82beda528fb74ae1c6b5e12a98dbf5d4e9e4c0db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_7c792e93",
         "filename": "sc/source/ui/view/formatsh.cxx",
         "patchSetId": 2
