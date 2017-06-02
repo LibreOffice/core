@@ -791,7 +791,6 @@ endif
 $(eval $(call gb_Helper_register_packages, \
 	test_unittest \
 	cli_basetypes_copy \
-	desktop_install \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),desktop_scripts_install) \
 	extras_wordbook \
 	$(if $(filter MSC,$(COM)),msvc_dlls) \
