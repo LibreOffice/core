@@ -103,10 +103,17 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const uno::Reference< XText > & rText );
 
+    virtual SvxXMLTextImportContext *CreateContext( sal_uInt16 nPrefix,
+        const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList >& xAttrList )  override;
+
 private:
     const uno::Reference< XText > mxText;
 };
 
+SvxXMLTextImportContext *SvxXMLXTextImportComponent::CreateContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    return new SvxXMLTextImportContext( *this, nPrefix, rLocalName, xAttrList, this->mxText);
+}
 
 SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
