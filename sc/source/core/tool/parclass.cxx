@@ -539,13 +539,14 @@ void ScParameterClassification::GenerateDocumentation()
         if ( !xMap->getSymbol(eOp).isEmpty() )
         {
             OUStringBuffer aStr(xMap->getSymbol(eOp));
-            aStr.append('(');
             formula::FormulaByteToken aToken( eOp);
             sal_uInt8 nParams = GetMinimumParameters( eOp);
             // preset parameter count according to opcode value, with some
             // special handling
+            bool bAddParentheses = true;
             if ( eOp < SC_OPCODE_STOP_DIV )
             {
+                bAddParentheses = false;    // will be overridden below if parameters
                 switch ( eOp )
                 {
                     case ocIf:
@@ -563,7 +564,10 @@ void ScParameterClassification::GenerateDocumentation()
                 }
             }
             else if ( eOp < SC_OPCODE_STOP_ERRORS )
+            {
+                bAddParentheses = false;
                 aToken.SetByte(0);
+            }
             else if ( eOp < SC_OPCODE_STOP_BIN_OP )
             {
                 switch ( eOp )
@@ -592,6 +596,10 @@ void ScParameterClassification::GenerateDocumentation()
             aToken.SetByte( nParams);
             if ( nParams != aToken.GetParamCount() )
                 SAL_WARN("sc.core", "(parameter count differs, token ParamCount: " << (int)aToken.GetParamCount() << " classification: " << (int)nParams << ") ");
+            if (aToken.GetByte())
+                bAddParentheses = true;
+            if (bAddParentheses)
+                aStr.append('(');
             for ( sal_uInt16 j=0; j < nParams; ++j )
             {
                 if ( j > 0 )
@@ -625,7 +633,8 @@ void ScParameterClassification::GenerateDocumentation()
                 aStr.append(", ...");
             if ( nParams )
                 aStr.append(' ');
-            aStr.append(')');
+            if (bAddParentheses)
+                aStr.append(')');
             switch ( eOp )
             {
                 case ocRRI:
