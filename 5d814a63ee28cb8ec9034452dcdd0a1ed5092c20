@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_fcad1e32",
+        "filename": "sc/source/core/data/document.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 6544,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-02T13:16:46Z",
+      "side": 1,
+      "message": "thanks.\nAlso please combine this \"if\" with the preceding \"else\".\nHaving an\n   else\n   {\n   }\nblock that only contains an\n  if\nis untidy :-)",
+      "revId": "5d814a63ee28cb8ec9034452dcdd0a1ed5092c20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
