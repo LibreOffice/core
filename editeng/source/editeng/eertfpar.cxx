@@ -310,8 +310,8 @@ bool EditRTFParser::IsEndPara( EditNodeIdx* pNd, sal_Int32 nCnt ) const
 
 void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 {
-    ContentNode* pSttNode = const_cast<EditNodeIdx&>(static_cast<const EditNodeIdx&>(rSet.GetSttNode())).GetNode();
-    ContentNode* pEndNode = const_cast<EditNodeIdx&>(static_cast<const EditNodeIdx&>(rSet.GetEndNode())).GetNode();
+    ContentNode* pSttNode = const_cast<EditNodeIdx&>(rSet.GetSttNode()).GetNode();
+    ContentNode* pEndNode = const_cast<EditNodeIdx&>(rSet.GetEndNode()).GetNode();
 
     EditPaM aStartPaM( pSttNode, rSet.GetSttCnt() );
     EditPaM aEndPaM( pEndNode, rSet.GetEndCnt() );

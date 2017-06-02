@@ -75,7 +75,7 @@ public:
     bool IsInner() const { return bInner; }
     bool IsVertical() const { return bVertical; }
     const tools::Rectangle& GetBoundRect()
-        { return pBound ? static_cast< const tools::Rectangle& >(*pBound) : GetBoundRect_(); }
+        { return pBound ? const_cast< const tools::Rectangle& >(*pBound) : GetBoundRect_(); }
     void SetUpper( sal_uInt16 nNew ){ nUpper = nNew; }
     void SetLower( sal_uInt16 nNew ){ nLower = nNew; }
     void SetVertical( bool bNew );
