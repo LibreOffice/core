@@ -127,7 +127,7 @@ Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
     {
         case DrawController::PROPERTY_CURRENTPAGE:
         {
-            SdPage* pPage = const_cast<OutlineViewShell&>(mrOutlineViewShell).GetActualPage();
+            SdPage* pPage = mrOutlineViewShell.GetActualPage();
             if (pPage != nullptr)
                 aValue <<= pPage->getUnoPage();
         }
