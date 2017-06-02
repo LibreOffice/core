@@ -1613,7 +1613,7 @@ long findBitRun( const Scanline i_pLine, long i_nStartIndex, long i_nW, bool i_b
     long nIndex = i_nStartIndex;
     if( nIndex < i_nW )
     {
-        const sal_uInt8 * pByte = static_cast<sal_uInt8*>(i_pLine) + (nIndex/8);
+        const sal_uInt8 * pByte = i_pLine + (nIndex/8);
         sal_uInt8 nByte = *pByte;
 
         // run up to byte boundary
