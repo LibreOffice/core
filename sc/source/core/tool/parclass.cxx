@@ -59,40 +59,40 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocIfNA,            {{ Array, Reference                                     }, 0, Value }},
     { ocChoose,          {{ Array, Reference                                     }, 1, Value }},
     // Other specials.
-    { ocArrayClose,      {{ Bounds                                               }, 0, Value }},
-    { ocArrayColSep,     {{ Bounds                                               }, 0, Value }},
-    { ocArrayOpen,       {{ Bounds                                               }, 0, Value }},
-    { ocArrayRowSep,     {{ Bounds                                               }, 0, Value }},
-    { ocBad,             {{ Bounds                                               }, 0, Value }},
-    { ocClose,           {{ Bounds                                               }, 0, Value }},
-    { ocColRowName,      {{ Bounds                                               }, 0, Value }},
-    { ocColRowNameAuto,  {{ Bounds                                               }, 0, Value }},
-    { ocDBArea,          {{ Bounds                                               }, 0, Value }},
+    { ocArrayClose,      {{ Bounds                                               }, 0, Bounds }},
+    { ocArrayColSep,     {{ Bounds                                               }, 0, Bounds }},
+    { ocArrayOpen,       {{ Bounds                                               }, 0, Bounds }},
+    { ocArrayRowSep,     {{ Bounds                                               }, 0, Bounds }},
+    { ocBad,             {{ Bounds                                               }, 0, Bounds }},
+    { ocClose,           {{ Bounds                                               }, 0, Bounds }},
+    { ocColRowName,      {{ Bounds                                               }, 0, Value }},    // or Reference?
+    { ocColRowNameAuto,  {{ Bounds                                               }, 0, Value }},    // or Reference?
+    { ocDBArea,          {{ Bounds                                               }, 0, Value }},    // or Reference?
     { ocMatRef,          {{ Bounds                                               }, 0, Value }},
     { ocMissing,         {{ Bounds                                               }, 0, Value }},
-    { ocNoName,          {{ Bounds                                               }, 0, Value }},
-    { ocOpen,            {{ Bounds                                               }, 0, Value }},
-    { ocSep,             {{ Bounds                                               }, 0, Value }},
-    { ocSkip,            {{ Bounds                                               }, 0, Value }},
-    { ocSpaces,          {{ Bounds                                               }, 0, Value }},
-    { ocStop,            {{ Bounds                                               }, 0, Value }},
-    { ocStringXML,       {{ Bounds                                               }, 0, Value }},
-    { ocTableRef,        {{ Bounds                                               }, 0, Value }},
-    { ocTableRefClose,   {{ Bounds                                               }, 0, Value }},
-    { ocTableRefItemAll,     {{ Bounds                                           }, 0, Value }},
-    { ocTableRefItemData,    {{ Bounds                                           }, 0, Value }},
-    { ocTableRefItemHeaders, {{ Bounds                                           }, 0, Value }},
-    { ocTableRefItemThisRow, {{ Bounds                                           }, 0, Value }},
-    { ocTableRefItemTotals,  {{ Bounds                                           }, 0, Value }},
-    { ocTableRefOpen,    {{ Bounds                                               }, 0, Value }},
+    { ocNoName,          {{ Bounds                                               }, 0, Bounds }},
+    { ocOpen,            {{ Bounds                                               }, 0, Bounds }},
+    { ocSep,             {{ Bounds                                               }, 0, Bounds }},
+    { ocSkip,            {{ Bounds                                               }, 0, Bounds }},
+    { ocSpaces,          {{ Bounds                                               }, 0, Bounds }},
+    { ocStop,            {{ Bounds                                               }, 0, Bounds }},
+    { ocStringXML,       {{ Bounds                                               }, 0, Bounds }},
+    { ocTableRef,        {{ Bounds                                               }, 0, Value }},    // or Reference?
+    { ocTableRefClose,   {{ Bounds                                               }, 0, Bounds }},
+    { ocTableRefItemAll,     {{ Bounds                                           }, 0, Bounds }},
+    { ocTableRefItemData,    {{ Bounds                                           }, 0, Bounds }},
+    { ocTableRefItemHeaders, {{ Bounds                                           }, 0, Bounds }},
+    { ocTableRefItemThisRow, {{ Bounds                                           }, 0, Bounds }},
+    { ocTableRefItemTotals,  {{ Bounds                                           }, 0, Bounds }},
+    { ocTableRefOpen,    {{ Bounds                                               }, 0, Bounds }},
     // Error constants.
-    { ocErrDivZero,      {{ Bounds                                               }, 0, Value }},
-    { ocErrNA,           {{ Bounds                                               }, 0, Value }},
-    { ocErrName,         {{ Bounds                                               }, 0, Value }},
-    { ocErrNull,         {{ Bounds                                               }, 0, Value }},
-    { ocErrNum,          {{ Bounds                                               }, 0, Value }},
-    { ocErrRef,          {{ Bounds                                               }, 0, Value }},
-    { ocErrValue,        {{ Bounds                                               }, 0, Value }},
+    { ocErrDivZero,      {{ Bounds                                               }, 0, Bounds }},
+    { ocErrNA,           {{ Bounds                                               }, 0, Bounds }},
+    { ocErrName,         {{ Bounds                                               }, 0, Bounds }},
+    { ocErrNull,         {{ Bounds                                               }, 0, Bounds }},
+    { ocErrNum,          {{ Bounds                                               }, 0, Bounds }},
+    { ocErrRef,          {{ Bounds                                               }, 0, Bounds }},
+    { ocErrValue,        {{ Bounds                                               }, 0, Bounds }},
     // Functions with Value parameters only but not in resource.
     { ocBackSolver,      {{ Value, Value, Value                                  }, 0, Value }},
     { ocTableOp,         {{ Value, Value, Value, Value, Value                    }, 0, Value }},
@@ -653,6 +653,31 @@ void ScParameterClassification::GenerateDocumentation()
                     aStr.append("   // error function, not a real function");
                 break;
                 default:;
+            }
+            // Return type.
+            formula::ParamClass eType = GetParameterType( &aToken, SAL_MAX_UINT16);
+            switch ( eType )
+            {
+                case Value :
+                    aStr.append(" -> Value");
+                break;
+                case Reference :
+                    aStr.append(" -> Reference");
+                break;
+                case Array :
+                    aStr.append(" -> Array");
+                break;
+                case ForceArray :
+                    aStr.append(" -> ForceArray");
+                break;
+                case ReferenceOrForceArray :
+                    aStr.append(" -> ReferenceOrForceArray");
+                break;
+                case Bounds :
+                    ;   // nothing
+                break;
+                default:
+                    aStr.append(" (-> ???, classification error?)");
             }
             /* We could add yet another log domain for this, if we wanted.. but
              * as it more seldom than rarely used it's not actually necessary,
