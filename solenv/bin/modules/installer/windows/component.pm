@@ -249,9 +249,6 @@ sub get_registry_component_attributes
     # Setting msidbComponentAttributes64bit for 64 bit shell extension in 32 bit installer, too
     if ( $componentname =~ m/winexplorerext_x64/ ) { $attributes |= 256; }
 
-    # Setting msidbComponentAttributesPermanent
-    if ( exists($installer::globals::dontdeletecomponents{$componentname}) ) { $attributes |= 16; }
-
     return $attributes;
 }
 

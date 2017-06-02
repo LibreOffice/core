@@ -256,7 +256,6 @@ BEGIN
     %allcabinetassigns = ();
     %cabfilecounter = ();
     %lastsequence = ();
-    %dontdeletecomponents = ();
     %allcalculated_guids = ();
     %calculated_component_guids = ();
     %all_english_languagestrings = ();

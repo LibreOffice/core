@@ -363,11 +363,8 @@ sub create_registry_table
                 push(@{$allregistrycomponentsref}, $registry{'Component_'});
             }
 
-            # Collecting all components with DONT_DELETE style
             my $style = "";
             if ( $oneregistry->{'Styles'} ) { $style = $oneregistry->{'Styles'}; }
-            if ( $style =~ /\bDONT_DELETE\b/ ) { $installer::globals::dontdeletecomponents{$registry{'Component_'}} = 1; }
-
             # Collecting all registry components with ALWAYS_REQUIRED style
             if ( ! ( $style =~ /\bALWAYS_REQUIRED\b/ ))
             {
