@@ -509,7 +509,6 @@ void ScParameterClassification::GenerateDocumentation()
         OpCode eOp = OpCode(i);
         if ( !xMap->getSymbol(eOp).isEmpty() )
         {
-            SAL_INFO("sc.core", "GenerateDocumentation, env var name: " << aEnvVarName);
             OUStringBuffer aStr(xMap->getSymbol(eOp));
             aStr.append('(');
             formula::FormulaByteToken aToken( eOp);
