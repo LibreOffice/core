@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_bc039672",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-02T11:04:25Z",
+      "side": 1,
+      "message": "Can we please have a slightly more descriptive summary of what was fixed?",
+      "revId": "ade9a9867d25cf2c48131f5698566c37a564bb5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
