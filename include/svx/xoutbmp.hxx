@@ -69,7 +69,7 @@ public:
 
     static Bitmap       DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold );
 
-    static tools::Polygon GetCountour( const Bitmap& rBmp, const XOutFlags nContourFlags,
+    static tools::Polygon GetContour( const Bitmap& rBmp, const XOutFlags nContourFlags,
                                        const sal_uInt8 cEdgeDetectThreshold,
                                        const tools::Rectangle* pWorkRect );
 };

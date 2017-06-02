@@ -762,7 +762,7 @@
 #define FN_PARAM_TOX_TYPE               (FN_PARAM2+14) /* TOX type in tox dialog*/
 #define FN_PARAM_LINK_DISPLAY_NAME      (FN_PARAM2+15) /* LinkDisplayName property*/
 #define FN_PARAM_NUM_LEVEL              (FN_PARAM2+16) /* rtf filter*/
-#define FN_PARAM_COUNTOUR_PP            (FN_PARAM2+17) /* contour PolyPolygon*/
+#define FN_PARAM_CONTOUR_PP             (FN_PARAM2+17) /* contour PolyPolygon*/
 
 #define FN_ANCHOR_POSITION              (FN_PARAM2+18) /* AnchorPosition property */
 #define FN_DROP_TEXT                    (FN_PARAM2+18) /* text set in drop caps tab page - for recording */
