@@ -117,7 +117,7 @@ private:
                                     {
                                         if ( eOp <= SC_OPCODE_LAST_OPCODE_ID )
                                             return pData[eOp].aData.nParam[0]
-                                                == Unknown ? 1 :
+                                                == formula::ParamClass::Unknown ? 1 :
                                                 pData[eOp].nMinParams;
                                         return 0;
                                     }

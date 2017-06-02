@@ -617,7 +617,10 @@ void ScParameterClassification::GenerateDocumentation()
                 break;
                 default:;
             }
-            SAL_INFO( "sc.core", "" << aStr);
+            /* We could add yet another log domain for this, if we wanted.. but
+             * as it more seldom than rarely used it's not actually necessary,
+             * just grep output. */
+            SAL_INFO( "sc.core", "CALC_GENPARCLASSDOC: " << aStr.makeStringAndClear());
         }
     }
     fflush( stdout);
