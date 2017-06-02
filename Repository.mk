@@ -791,7 +791,6 @@ endif
 $(eval $(call gb_Helper_register_packages, \
 	test_unittest \
 	cli_basetypes_copy \
-	$(if $(filter DESKTOP,$(BUILD_TYPE)),desktop_scripts_install) \
 	extras_wordbook \
 	$(if $(filter MSC,$(COM)),msvc_dlls) \
 	instsetoo_native_setup \
@@ -994,6 +993,7 @@ $(eval $(call gb_Helper_register_packages_for_install,xsltfilter,\
 $(eval $(call gb_Helper_register_packages_for_install,brand,\
 	desktop_branding \
 	$(if $(CUSTOM_BRAND_DIR),desktop_branding_custom) \
+	$(if $(filter DESKTOP,$(BUILD_TYPE)),desktop_scripts_install) \
 	$(if $(and $(filter-out MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),\
 		$(if $(ENABLE_HEADLESS),, \
 			desktop_soffice_sh \
