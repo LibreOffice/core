@@ -149,7 +149,7 @@ namespace
 void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
 {
     // clone the Forms collection
-    const Reference< css::form::XForms > xForeignForms( const_cast< FmFormPageImpl& >( i_foreignImpl ).getForms( false ) );
+    const Reference< css::form::XForms > xForeignForms( i_foreignImpl.getForms( false ) );
 
     if ( !xForeignForms.is() )
         return;
