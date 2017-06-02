@@ -559,10 +559,10 @@ void ScParameterClassification::GenerateDocumentation()
             // NoPar, 1Par, ...) and override parameter count with
             // classification
             if ( nParams != aToken.GetByte() )
-                SAL_WARN("sc.core", "(parameter count differs, token Byte: " << aToken.GetByte() << " classification: " << nParams << ") ");
+                SAL_WARN("sc.core", "(parameter count differs, token Byte: " << (int)aToken.GetByte() << " classification: " << (int)nParams << ") ");
             aToken.SetByte( nParams);
             if ( nParams != aToken.GetParamCount() )
-                SAL_WARN("sc.core", "(parameter count differs, token ParamCount: " << aToken.GetParamCount() << " classification: " << nParams << ") ");
+                SAL_WARN("sc.core", "(parameter count differs, token ParamCount: " << (int)aToken.GetParamCount() << " classification: " << (int)nParams << ") ");
             for ( sal_uInt16 j=0; j < nParams; ++j )
             {
                 if ( j > 0 )
