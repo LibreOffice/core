@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_5cee328c",
+        "filename": "sc/uiconfig/scalc/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-02T12:43:02Z",
+      "side": 1,
+      "message": "Why does this unrelated also move ShowAnnotations and not just do what the git message says? Apart from that, IMHO it\u0027s odd to have Comments after GridMenu, a separator and combined in a section with ToggleSheetGrid, FreezeCells and SplitWindow.",
+      "revId": "10e626198c42c7a3691ae6b75320e0162884b1b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
