@@ -537,8 +537,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
         PropertiesEventListenerMap::const_iterator it = aListeners.begin();
         while ( !aListeners.empty() )
         {
-            XPropertiesChangeListener* pListener =
-                    static_cast< XPropertiesChangeListener * >( (*it).first );
+            XPropertiesChangeListener* pListener = (*it).first;
             PropertyEventSequence* pSeq = (*it).second;
 
             // Remove current element.

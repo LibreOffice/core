@@ -730,7 +730,7 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                         if ( xSupplier.is() )
                             aInitialValues.push_back( NamedValue( "FormatsSupplier", makeAny( xSupplier ) ) );
                         aInitialValues.push_back( NamedValue( "TreatAsNumber", makeAny( bFormattedIsNumeric ) ) );
-                        aCopyProperties.push_back( static_cast<const OUString&>(PROPERTY_FORMATKEY) );
+                        aCopyProperties.push_back( PROPERTY_FORMATKEY );
                         break;
                 }
 
@@ -763,8 +763,8 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                     aInitialValues.push_back( NamedValue( sDefaultProperty, aDefault ) );
 
                 // transfer properties from the definition to the UNO-model :
-                aCopyProperties.push_back( static_cast<const OUString&>(PROPERTY_HIDDEN) );
-                aCopyProperties.push_back( static_cast<const OUString&>(PROPERTY_WIDTH) );
+                aCopyProperties.push_back( PROPERTY_HIDDEN );
+                aCopyProperties.push_back( PROPERTY_WIDTH );
 
                 // help text to display for the column
                 Any aDescription;
@@ -3343,8 +3343,8 @@ bool SbaTableQueryBrowser::ensureConnection( SvTreeListEntry* _pDSEntry, void* p
 
 IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData&, _rSortData, sal_Int32 )
 {
-    const SvTreeListEntry* pLHS = static_cast<const SvTreeListEntry*>(_rSortData.pLeft);
-    const SvTreeListEntry* pRHS = static_cast<const SvTreeListEntry*>(_rSortData.pRight);
+    const SvTreeListEntry* pLHS = _rSortData.pLeft;
+    const SvTreeListEntry* pRHS = _rSortData.pRight;
     OSL_ENSURE(pLHS && pRHS, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid tree entries!");
     // we want the table entry and the end so we have to do a check
 
