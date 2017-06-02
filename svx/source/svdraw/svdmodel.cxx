@@ -1208,7 +1208,7 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     if(nDecimalMark > nNumDigits)
     {
         const sal_Int32 nDiff(nDecimalMark - nNumDigits);
-        const double fFactor(pow(10.0, static_cast<const int>(nDiff)));
+        const double fFactor(pow(10.0, static_cast<int>(nDiff)));
 
         fLocalValue /= fFactor;
         nDecimalMark = nNumDigits;
@@ -1216,7 +1216,7 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     else if(nDecimalMark < nNumDigits)
     {
         const sal_Int32 nDiff(nNumDigits - nDecimalMark);
-        const double fFactor(pow(10.0, static_cast<const int>(nDiff)));
+        const double fFactor(pow(10.0, static_cast<int>(nDiff)));
 
         fLocalValue *= fFactor;
         nDecimalMark = nNumDigits;

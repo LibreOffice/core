@@ -1471,7 +1471,7 @@ SdrOle2Obj& SdrOle2Obj::assignFrom(const SdrOle2Obj& rObj)
     if( &rObj != this )
     {
         // ImpAssign( rObj );
-        const SdrOle2Obj& rOle2Obj = static_cast< const SdrOle2Obj& >( rObj );
+        const SdrOle2Obj& rOle2Obj = rObj;
 
         if( pModel && mpImpl->mbConnected )
             Disconnect();
