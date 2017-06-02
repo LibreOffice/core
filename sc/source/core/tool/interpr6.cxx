@@ -253,7 +253,7 @@ public:
                 {
                     double fVal = 0.0;
                     FormulaError nErr = FormulaError::NONE;
-                    ScFormulaCell& rCell = const_cast<ScFormulaCell&>(*(*it));
+                    ScFormulaCell& rCell = *(*it);
                     if (!rCell.GetErrorOrValue(nErr, fVal))
                         // The cell has neither error nor value.  Perhaps string result.
                         continue;
@@ -303,7 +303,7 @@ public:
                 std::advance(itEnd, nDataSize);
                 for (; it != itEnd; ++it)
                 {
-                    ScFormulaCell& rCell = const_cast<ScFormulaCell&>(**it);
+                    ScFormulaCell& rCell = **it;
                     if (rCell.IsValueNoError())
                         ++mnCount;
                 }

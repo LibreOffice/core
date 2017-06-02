@@ -1124,7 +1124,7 @@ void ScColumn::CopyStaticToDocument(
                 {
                     SCROW nRow = nCurRow + i;
 
-                    ScFormulaCell& rFC = const_cast<ScFormulaCell&>(**itData);
+                    ScFormulaCell& rFC = **itData;
                     if (rFC.GetDirty() && pDocument->GetAutoCalc())
                         rFC.Interpret();
 
@@ -1643,7 +1643,7 @@ public:
                 std::advance(itEnd, nDataSize);
 
                 for (; it != itEnd; ++it, ++nRow)
-                    cloneFormulaCell(nRow, const_cast<ScFormulaCell&>(**it));
+                    cloneFormulaCell(nRow, **it);
             }
             break;
             default:

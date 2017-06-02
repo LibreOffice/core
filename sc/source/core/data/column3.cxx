@@ -973,7 +973,7 @@ public:
                 std::advance(itEnd, nDataSize);
                 for (SCROW nSrcRow = nSrcRow1; it != itEnd; ++it, ++nSrcRow)
                 {
-                    ScFormulaCell& rSrcCell = const_cast<ScFormulaCell&>(**it);
+                    ScFormulaCell& rSrcCell = **it;
                     bool bForceFormula = false;
                     if (bBoolean)
                     {

@@ -2297,7 +2297,7 @@ public:
                 size_t nPrevRow = 0, nThisRow = node.position + nOffset;
                 for (; it != itEnd; ++it, nPrevRow = nThisRow, ++nThisRow)
                 {
-                    ScFormulaCell& rCell = const_cast<ScFormulaCell&>(**it);
+                    ScFormulaCell& rCell = **it;
 
                     if (rCell.IsEmpty())
                     {
