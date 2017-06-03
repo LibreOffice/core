@@ -527,6 +527,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_footnoteStyle, "tdf82173_footnoteStyle.doc
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("CharacterStyles")->getByName("Footnote Characters"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(58),       getProperty< sal_Int32 >(xPageStyle, "CharEscapementHeight") );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0x00FF00), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
+
+    xPageStyle.set(getStyles("CharacterStyles")->getByName("Footnote anchor"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(58),       getProperty< sal_Int32 >(xPageStyle, "CharEscapementHeight") );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0x00FF00), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf82173_endnoteStyle, "tdf82173_endnoteStyle.docx")
@@ -538,6 +542,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_endnoteStyle, "tdf82173_endnoteStyle.docx"
     // character properties were previously not assigned to the footnote/endnote in-text anchor.
     CPPUNIT_ASSERT_EQUAL( 24.0f, getProperty< float >(xEndnote->getAnchor(), "CharHeight") );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFF0000), getProperty< sal_Int32 >(xEndnote->getAnchor(), "CharColor") );
+
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("CharacterStyles")->getByName("Endnote Characters"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(58),       getProperty< sal_Int32 >(xPageStyle, "CharEscapementHeight") );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFF00FF), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
+
+    xPageStyle.set(getStyles("CharacterStyles")->getByName("Endnote anchor"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(58),       getProperty< sal_Int32 >(xPageStyle, "CharEscapementHeight") );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFF00FF), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104162, "tdf104162.docx")
