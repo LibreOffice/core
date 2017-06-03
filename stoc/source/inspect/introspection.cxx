@@ -476,7 +476,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
             Reference<XIdlField2> xField2(xField, UNO_QUERY);
             if( xField2.is() )
             {
-                xField2->set( (Any&)obj, aValue );
+                xField2->set( const_cast<Any&>(obj), aValue );
                 // IllegalArgumentException
                 // NullPointerException
             } else
