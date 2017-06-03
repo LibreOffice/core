@@ -176,7 +176,7 @@ for PROJECT in $INPUT_PROJECTS;
 do
   # avoid processing of full project subdirs, only add source and inc
 
-  # project header files can be in $PROJECT/inc and/pr include/$PROJECT
+  # project header files can be in $PROJECT/inc and/or include/$PROJECT
   if [ -d "$PROJECT/inc" ]; then
       PROJECT_INCLUDE="$PROJECT/inc"
   else
