@@ -839,7 +839,7 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
             if (sFullPath.getLength() > 1)
                 sFullPath += ROOT;
 
-            if (((OStoreFile&)pKey->getStoreFile()).remove(sFullPath, keyName))
+            if (const_cast<OStoreFile&>(pKey->getStoreFile()).remove(sFullPath, keyName))
             {
                 return RegError::DELETE_VALUE_FAILED;
             }
