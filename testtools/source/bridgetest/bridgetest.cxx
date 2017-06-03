@@ -162,7 +162,7 @@ static bool equals( const TestData & rData1, const TestData & rData2 )
     sal_Int32 nLen;
 
     if ((rData1.Sequence == rData2.Sequence) &&
-        equals( (const TestElement &)rData1, (const TestElement &)rData2 ) &&
+        equals( static_cast<const TestElement &>(rData1), static_cast<const TestElement &>(rData2) ) &&
         (nLen = rData1.Sequence.getLength()) == rData2.Sequence.getLength())
     {
         // once again by hand sequence ==
@@ -355,8 +355,8 @@ static bool performTest(
         TestData aData; // test against this data
         Reference< XInterface > xI(new MyClass);
         assign(
-            (TestElement &) aData, true, '@', 17, 0x1234, 0xFEDC, 0x12345678,
-            0xFEDCBA98, SAL_CONST_INT64(0x123456789ABCDEF0),
+            static_cast<TestElement &>(aData), true, '@', 17, 0x1234, 0xFEDC,
+            0x12345678, 0xFEDCBA98, SAL_CONST_INT64(0x123456789ABCDEF0),
             SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
             TestEnum_LOLA, STRING_TEST_CONSTANT, xI,
             Any(&xI, cppu::UnoType<XInterface>::get()));
@@ -368,10 +368,10 @@ static bool performTest(
         // aSetData is a manually copy of aData for first setting:
         TestData aSetData;
         assign(
-            (TestElement &) aSetData, aData.Bool, aData.Char, aData.Byte,
-            aData.Short, aData.UShort, aData.Long, aData.ULong, aData.Hyper,
-            aData.UHyper, aData.Float, aData.Double, aData.Enum, aData.String,
-            xI, Any(&xI, cppu::UnoType<XInterface>::get()));
+            static_cast<TestElement &>(aSetData), aData.Bool, aData.Char,
+            aData.Byte, aData.Short, aData.UShort, aData.Long, aData.ULong,
+            aData.Hyper, aData.UHyper, aData.Float, aData.Double, aData.Enum,
+            aData.String, xI, Any(&xI, cppu::UnoType<XInterface>::get()));
         aSetData.Sequence.realloc(2);
         aSetData.Sequence[0] = *static_cast<TestElement const *>(&aSetData);
         // aSetData.Sequence[1] is empty

@@ -111,7 +111,7 @@ static void assign( TestData & rData,
                     const css::uno::Any& rAny,
                     const css::uno::Sequence< TestElement >& rSequence )
 {
-    assign( (TestElement &)rData,
+    assign( static_cast<TestElement &>(rData),
             bBool, cChar, nByte, nShort, nUShort, nLong, nULong, nHyper, nUHyper, fFloat, fDouble,
             eEnum, rStr, xTest, rAny );
     rData.Sequence = rSequence;
