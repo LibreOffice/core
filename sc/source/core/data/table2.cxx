@@ -1968,7 +1968,7 @@ bool ScTable::HasAttribSelection( const ScMarkData& rMark, HasAttrFlags nMask ) 
 
     for (sc::ColRowSpan & aSpan : aSpans)
     {
-        for (SCCOLROW j = aSpan.mnStart; j < aSpan.mnEnd; ++j)
+        for (SCCOLROW j = aSpan.mnStart; j <= aSpan.mnEnd; ++j)
         {
             if (aCol[j].HasAttribSelection(rMark, nMask))
               return true;
@@ -2250,7 +2250,7 @@ bool ScTable::HasSelectionMatrixFragment( const ScMarkData& rMark ) const
 
     for (sc::ColRowSpan & aSpan : aSpans)
     {
-        for ( SCCOLROW j=aSpan.mnStart; j<aSpan.mnEnd; j++ )
+        for ( SCCOLROW j=aSpan.mnStart; j<=aSpan.mnEnd; j++ )
         {
             if ( aCol[j].HasSelectionMatrixFragment(rMark) )
                 return true;
