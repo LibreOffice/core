@@ -166,7 +166,7 @@ OUString SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
     }
     else
     {
-        SotClipboardFormatId nClipId = ((SotStorage&)rStg).GetFormat();
+        SotClipboardFormatId nClipId = const_cast<SotStorage&>(rStg).GetFormat();
         if ( nClipId != SotClipboardFormatId::NONE )
         {
             std::shared_ptr<const SfxFilter> pFilter = SfxFilterMatcher().GetFilter4ClipBoardId( nClipId );

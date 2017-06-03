@@ -250,7 +250,7 @@ void SfxObjectShell::UpdateTime_Impl(
         if (nDays==0)
         {
             // If no day between now and last editing - calculate time directly.
-            nAddTime    =   (const tools::Time&)aNow - (const tools::Time&)pImpl->nTime ;
+            nAddTime    =   static_cast<const tools::Time&>(aNow) - static_cast<const tools::Time&>(pImpl->nTime);
         }
         else if (nDays<=31)
         {
@@ -261,7 +261,7 @@ void SfxObjectShell::UpdateTime_Impl(
             // nAddTime = (24h - nTime) + (nDays * 24h) + aNow
             --nDays;
              nAddTime    =  nDays*n24Time.GetTime() ;
-            nAddTime    +=  n24Time-(const tools::Time&)pImpl->nTime        ;
+            nAddTime    +=  n24Time-static_cast<const tools::Time&>(pImpl->nTime);
             nAddTime    +=  aNow                    ;
         }
 
