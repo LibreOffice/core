@@ -284,7 +284,7 @@ sal_Int64 SAL_CALL FileStreamWrapper_Impl::getLength(  )
 void FileStreamWrapper_Impl::checkConnected()
 {
     if ( m_aURL.isEmpty() )
-        throw NotConnectedException(OUString(), const_cast<XWeak*>(static_cast<const XWeak*>(this)));
+        throw NotConnectedException(OUString(), static_cast<XWeak*>(this));
     if ( !m_pSvStream )
     {
         m_pSvStream = ::utl::UcbStreamHelper::CreateStream( m_aURL, StreamMode::STD_READ );
@@ -301,7 +301,7 @@ void FileStreamWrapper_Impl::checkError()
 
     if (m_pSvStream->SvStream::GetError() != ERRCODE_NONE)
         // TODO: really evaluate the error
-        throw NotConnectedException(OUString(), const_cast<XWeak*>(static_cast<const XWeak*>(this)));
+        throw NotConnectedException(OUString(), static_cast<XWeak*>(this));
 }
 
 
