@@ -108,7 +108,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
 
         if( pStm )
         {
-            Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
+            Graphic         aGraphic( aGrfObject.GetGraphic() );
             const GfxLink   aGfxLink( aGraphic.GetLink() );
             bool        bRet = false;
 
@@ -513,7 +513,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
         SvxGraphicHelperStream_Impl aStream( ImplGetGraphicStream( rPictureStorageName, rPictureStreamName ) );
         if( aStream.xStream.is() )
         {
-            Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
+            Graphic         aGraphic( aGrfObject.GetGraphic() );
             const GfxLink   aGfxLink( aGraphic.GetLink() );
             const OUString  aMimeType( ImplGetGraphicMimeType( rPictureStreamName ) );
             uno::Reference < beans::XPropertySet > xProps( aStream.xStream, uno::UNO_QUERY );
@@ -663,7 +663,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
             if( aGrfObject.GetType() != GraphicType::NONE )
             {
                 OUString        aStreamName( aPictureStreamName );
-                Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
+                Graphic         aGraphic( aGrfObject.GetGraphic() );
                 const GfxLink   aGfxLink( aGraphic.GetLink() );
                 OUString        aExtension;
                 bool            bUseGfxLink( true );

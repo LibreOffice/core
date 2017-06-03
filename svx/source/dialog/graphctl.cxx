@@ -332,7 +332,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
                     if(pHdl)
                     {
-                        ((SdrHdlList&)rHdlList).ResetFocusHdl();
+                        const_cast<SdrHdlList&>(rHdlList).ResetFocusHdl();
                         bGrabFocusToFirstControl = false;
                     }
                 }
@@ -367,7 +367,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
                     const SdrHdlList& rHdlList = pView->GetHdlList();
                     bool bForward(!aCode.IsShift());
 
-                    ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
+                    const_cast<SdrHdlList&>(rHdlList).TravelFocusHdl(bForward);
 
                     bProc = true;
                 }
@@ -514,7 +514,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
                             // switch snapping off
                             if(!bWasNoSnap)
-                                ((SdrDragStat&)rDragStat).SetNoSnap();
+                                const_cast<SdrDragStat&>(rDragStat).SetNoSnap();
                             if(bWasSnapEnabled)
                                 pView->SetSnapEnabled(false);
 
@@ -523,7 +523,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
                             // restore snap
                             if(!bWasNoSnap)
-                                ((SdrDragStat&)rDragStat).SetNoSnap(bWasNoSnap);
+                                const_cast<SdrDragStat&>(rDragStat).SetNoSnap(bWasNoSnap);
                             if(bWasSnapEnabled)
                                 pView->SetSnapEnabled(bWasSnapEnabled);
                         }
@@ -585,7 +585,7 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
                         if(pNewOne)
                         {
-                            ((SdrHdlList&)rHdlList).SetFocusHdl(pNewOne);
+                            const_cast<SdrHdlList&>(rHdlList).SetFocusHdl(pNewOne);
                         }
                     }
 

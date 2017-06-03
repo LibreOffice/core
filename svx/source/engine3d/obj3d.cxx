@@ -696,22 +696,21 @@ E3dObject& E3dObject::operator=(const E3dObject& rObj)
         return *this;
     SdrObject::operator=(rObj);
 
-    const E3dObject& r3DObj = (const E3dObject&) rObj;
-    if (r3DObj.GetSubList())
+    if (rObj.GetSubList())
     {
-        maSubList.CopyObjects(*r3DObj.GetSubList());
+        maSubList.CopyObjects(*rObj.GetSubList());
     }
 
     // BoundVol can be copied since also the children are copied
-    maLocalBoundVol  = r3DObj.maLocalBoundVol;
-    maTransformation = r3DObj.maTransformation;
+    maLocalBoundVol  = rObj.maLocalBoundVol;
+    maTransformation = rObj.maTransformation;
 
     // Because the parent may have changed, definitely redefine the total
     // transformation next time
     SetTransformChanged();
 
     // Copy selection status
-    mbIsSelected = r3DObj.mbIsSelected;
+    mbIsSelected = rObj.mbIsSelected;
     return *this;
 }
 

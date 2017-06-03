@@ -495,7 +495,7 @@ const OUString& SdrMarkList::GetMarkDescription() const
 
 const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
 {
-    bool& rNameOk = (bool&)(bGlue ? mbGluePointNameOk : mbPointNameOk);
+    bool& rNameOk = const_cast<bool&>(bGlue ? mbGluePointNameOk : mbPointNameOk);
     OUString& rName = const_cast<OUString&>(bGlue ? maGluePointName : maPointName);
     const size_t nMarkCount(GetMarkCount());
     size_t nMarkPtAnz(0);

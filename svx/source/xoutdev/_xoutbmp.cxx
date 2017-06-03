@@ -201,7 +201,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                 ( rGraphic.GetType() != GraphicType::GdiMetafile ) && rGraphic.IsLink() )
             {
                 // try to write native link
-                const GfxLink aGfxLink( ( (Graphic&) rGraphic ).GetLink() );
+                const GfxLink aGfxLink( rGraphic.GetLink() );
 
                 switch( aGfxLink.GetType() )
                 {

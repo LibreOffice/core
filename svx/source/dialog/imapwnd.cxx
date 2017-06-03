@@ -808,7 +808,7 @@ void IMapWindow::StartPolyEdit()
 
     if(!pHdl)
     {
-        ((SdrHdlList&)rHdlList).TravelFocusHdl(true);
+        const_cast<SdrHdlList&>(rHdlList).TravelFocusHdl(true);
     }
 }
 

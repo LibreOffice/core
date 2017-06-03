@@ -389,11 +389,11 @@ bool GalleryTheme::InsertObject( const SgaObject& rObj, sal_uIntPtr nInsertPos )
 
             if (pOldObj)
             {
-                ((SgaObject&) rObj).SetTitle( pOldObj->GetTitle() );
+                const_cast<SgaObject&>(rObj).SetTitle( pOldObj->GetTitle() );
             }
         }
         else if (rObj.GetTitle() == "__<empty>__")
-            ((SgaObject&) rObj).SetTitle("");
+            const_cast<SgaObject&>(rObj).SetTitle("");
 
         ImplWriteSgaObject(rObj, nInsertPos, &aNewEntry);
         pFoundEntry->nOffset = aNewEntry.nOffset;
@@ -846,7 +846,7 @@ bool GalleryTheme::InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPo
     if( rGraphic.GetType() != GraphicType::NONE )
     {
         ConvertDataFormat nExportFormat = ConvertDataFormat::Unknown;
-        const GfxLink     aGfxLink( ( (Graphic&) rGraphic ).GetLink() );
+        const GfxLink     aGfxLink( rGraphic.GetLink() );
 
         if( aGfxLink.GetDataSize() )
         {

@@ -243,7 +243,7 @@ sal_uInt32 E3dScene::RemapOrdNum(sal_uInt32 nNewOrdNum) const
 
         if(nObjCount > 1)
         {
-            const_cast<E3dScene*>(this)->mp3DDepthRemapper = new Imp3DDepthRemapper((E3dScene&)(*this));
+            const_cast<E3dScene*>(this)->mp3DDepthRemapper = new Imp3DDepthRemapper(const_cast<E3dScene&>(*this));
         }
     }
 
@@ -281,7 +281,7 @@ void E3dScene::NbcSetSnapRect(const tools::Rectangle& rRect)
     SetRectsDirty();
     E3dObject::NbcSetSnapRect(rRect);
     aCamera.SetDeviceWindow(rRect);
-    aCameraSet.SetViewportRectangle((tools::Rectangle&)rRect);
+    aCameraSet.SetViewportRectangle(rRect);
 
     ImpCleanup3DDepthMapper();
 }
@@ -325,7 +325,7 @@ void E3dScene::SetCamera(const Camera3D& rNewCamera)
 
     // Set perspective
     GetCameraSet().SetPerspective(aCamera.GetProjection() == ProjectionType::Perspective);
-    GetCameraSet().SetViewportRectangle((tools::Rectangle&)aCamera.GetDeviceWindow());
+    GetCameraSet().SetViewportRectangle(aCamera.GetDeviceWindow());
 
     ImpCleanup3DDepthMapper();
 }
@@ -419,10 +419,9 @@ E3dScene& E3dScene::operator=(const E3dScene& rObj)
         return *this;
     E3dObject::operator=(rObj);
 
-    const E3dScene& r3DObj = (const E3dScene&) rObj;
-    aCamera          = r3DObj.aCamera;
+    aCamera          = rObj.aCamera;
 
-    aCameraSet = r3DObj.aCameraSet;
+    aCameraSet = rObj.aCameraSet;
     static_cast<sdr::properties::E3dSceneProperties&>(GetProperties()).SetSceneItemsFromCamera();
 
     InvalidateBoundVolume();

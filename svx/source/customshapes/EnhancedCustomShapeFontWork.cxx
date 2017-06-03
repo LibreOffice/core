@@ -139,7 +139,7 @@ double GetLength( const tools::Polygon& rPolygon )
     {
         sal_uInt16 nCount = rPolygon.GetSize();
         while( --nCount )
-            fLength += ((tools::Polygon&)rPolygon).CalcDistance( nCount, nCount - 1 );
+            fLength += const_cast<tools::Polygon&>(rPolygon).CalcDistance( nCount, nCount - 1 );
     }
     return fLength;
 }
@@ -536,7 +536,7 @@ void CalcDistances( const tools::Polygon& rPoly, std::vector< double >& rDistanc
     {
         for ( i = 0; i < nCount; i++ )
         {
-            double fDistance = i ? ((tools::Polygon&)rPoly).CalcDistance( i, i - 1 ) : 0.0;
+            double fDistance = i ? const_cast<tools::Polygon&>(rPoly).CalcDistance( i, i - 1 ) : 0.0;
             rDistances.push_back( fDistance );
         }
         std::partial_sum( rDistances.begin(), rDistances.end(), rDistances.begin() );

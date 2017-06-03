@@ -522,9 +522,9 @@ ViewContact& ViewContactOfSdrPage::GetViewContact(sal_uInt32 nIndex) const
 {
     switch(nIndex)
     {
-        case 0: return (ViewContact&)maViewContactOfPageBackground;
-        case 1: return (ViewContact&)maViewContactOfPageShadow;
-        case 2: return (ViewContact&)maViewContactOfPageFill;
+        case 0: return const_cast<ViewContactOfPageBackground&>(maViewContactOfPageBackground);
+        case 1: return const_cast<ViewContactOfPageShadow&>(maViewContactOfPageShadow);
+        case 2: return const_cast<ViewContactOfPageFill&>(maViewContactOfPageFill);
         case 3:
         {
             const SdrPage& rPage = GetSdrPage();
@@ -535,17 +535,17 @@ ViewContact& ViewContactOfSdrPage::GetViewContact(sal_uInt32 nIndex) const
             }
             else
             {
-                return (ViewContact&)maViewContactOfMasterPage;
+                return const_cast<ViewContactOfMasterPage&>(maViewContactOfMasterPage);
             }
         }
-        case 4: return (ViewContact&)maViewContactOfOuterPageBorder;
-        case 5: return (ViewContact&)maViewContactOfInnerPageBorder;
-        case 6: return (ViewContact&)maViewContactOfGridBack;
-        case 7: return (ViewContact&)maViewContactOfHelplinesBack;
-        case 8: return (ViewContact&)maViewContactOfPageHierarchy;
-        case 9: return (ViewContact&)maViewContactOfGridFront;
-        case 10: case 11: return (ViewContact&)maViewContactOfHelplinesFront;
-        default: assert(false);return (ViewContact&)maViewContactOfHelplinesFront;
+        case 4: return const_cast<ViewContactOfOuterPageBorder&>(maViewContactOfOuterPageBorder);
+        case 5: return const_cast<ViewContactOfInnerPageBorder&>(maViewContactOfInnerPageBorder);
+        case 6: return const_cast<ViewContactOfGrid&>(maViewContactOfGridBack);
+        case 7: return const_cast<ViewContactOfHelplines&>(maViewContactOfHelplinesBack);
+        case 8: return const_cast<ViewContactOfPageHierarchy&>(maViewContactOfPageHierarchy);
+        case 9: return const_cast<ViewContactOfGrid&>(maViewContactOfGridFront);
+        case 10: case 11: return const_cast<ViewContactOfHelplines&>(maViewContactOfHelplinesFront);
+        default: assert(false);return const_cast<ViewContactOfHelplines&>(maViewContactOfHelplinesFront);
     }
 }
 

@@ -58,7 +58,7 @@ namespace sdr
             mrPageWindow(rPageWindow)
         {
             // init PreviewRenderer flag
-            setPreviewRenderer(((SdrPaintView&)rPageWindow.GetPageView().GetView()).IsPreviewRenderer());
+            setPreviewRenderer(static_cast<SdrPaintView&>(rPageWindow.GetPageView().GetView()).IsPreviewRenderer());
 
             // init timer
             SetPriority(TaskPriority::HIGH);

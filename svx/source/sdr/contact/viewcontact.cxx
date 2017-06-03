@@ -166,7 +166,7 @@ ViewContact& ViewContact::GetViewContact(sal_uInt32 /*nIndex*/) const
 {
     // This is the default implementation; call would be an error
     OSL_FAIL("ViewContact::GetViewContact: This call needs to be overridden when GetObjectCount() can return results != 0 (!)");
-    return (ViewContact&)(*this);
+    return const_cast<ViewContact&>(*this);
 }
 
 ViewContact* ViewContact::GetParentContact() const

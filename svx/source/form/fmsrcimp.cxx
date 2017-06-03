@@ -53,7 +53,7 @@
 
 #define EQUAL_BOOKMARKS(a, b) a == b
 
-#define IFACECAST(c)          ((const Reference< XInterface >&)c)
+#define IFACECAST(c)          static_cast<const Reference< XInterface >&>(c)
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

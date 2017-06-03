@@ -2205,7 +2205,7 @@ OUString SdrPathObj::getSpecialDragComment(const SdrDragStat& rDrag) const
     else
     {
         ImpPathForDragAndCreate aDragAndCreate(*const_cast<SdrPathObj*>(this));
-        bool bDidWork(aDragAndCreate.beginPathDrag((SdrDragStat&)rDrag));
+        bool bDidWork(aDragAndCreate.beginPathDrag(const_cast<SdrDragStat&>(rDrag)));
 
         if(bDidWork)
         {
@@ -2220,7 +2220,7 @@ basegfx::B2DPolyPolygon SdrPathObj::getSpecialDragPoly(const SdrDragStat& rDrag)
 {
     basegfx::B2DPolyPolygon aRetval;
     ImpPathForDragAndCreate aDragAndCreate(*const_cast<SdrPathObj*>(this));
-    bool bDidWork(aDragAndCreate.beginPathDrag((SdrDragStat&)rDrag));
+    bool bDidWork(aDragAndCreate.beginPathDrag(const_cast<SdrDragStat&>(rDrag)));
 
     if(bDidWork)
     {

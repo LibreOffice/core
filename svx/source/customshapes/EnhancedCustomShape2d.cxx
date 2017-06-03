@@ -537,13 +537,13 @@ bool EnhancedCustomShape2d::ConvertSequenceToEnhancedCustomShape2dHandle(
 void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryItem& rGeometryItem )
 {
     // AdjustmentValues
-    const Any* pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( "AdjustmentValues" );
+    const Any* pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( "AdjustmentValues" );
     if ( pAny )
         *pAny >>= seqAdjustmentValues;
 
 
     // Coordsize
-    const Any* pViewBox = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( "ViewBox" );
+    const Any* pViewBox = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( "ViewBox" );
     css::awt::Rectangle aViewBox;
     if ( pViewBox && (*pViewBox >>= aViewBox ) )
     {
@@ -556,31 +556,31 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
 
 
     // Path/Coordinates
-    pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, "Coordinates" );
+    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sPath, "Coordinates" );
     if ( pAny )
         *pAny >>= seqCoordinates;
 
 
     // Path/GluePoints
-    pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, "GluePoints" );
+    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sPath, "GluePoints" );
     if ( pAny )
         *pAny >>= seqGluePoints;
 
 
     // Path/Segments
-    pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, "Segments" );
+    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sPath, "Segments" );
     if ( pAny )
         *pAny >>= seqSegments;
 
 
     // Path/SubViewSize
-    pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, "SubViewSize" );
+    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sPath, "SubViewSize" );
     if ( pAny )
         *pAny >>= seqSubViewSize;
 
 
     // Path/StretchX
-    pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, "StretchX" );
+    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sPath, "StretchX" );
     if ( pAny )
     {
         sal_Int32 nStretchX = 0;
@@ -590,7 +590,7 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
 
 
     // Path/StretchY
-    pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, "StretchY" );
+    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sPath, "StretchY" );
     if ( pAny )
     {
         sal_Int32 nStretchY = 0;
@@ -600,19 +600,19 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
 
 
     // Path/TextFrames
-    pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( sPath, "TextFrames" );
+    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( sPath, "TextFrames" );
     if ( pAny )
         *pAny >>= seqTextFrames;
 
 
     // Equations
-    pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( "Equations" );
+    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( "Equations" );
     if ( pAny )
         *pAny >>= seqEquations;
 
 
     // Handles
-    pAny = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( "Handles" );
+    pAny = const_cast<SdrCustomShapeGeometryItem&>(rGeometryItem).GetPropertyValueByName( "Handles" );
     if ( pAny )
         *pAny >>= seqHandles;
 }
@@ -1632,7 +1632,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmen
                             _aCenter.Y() = nCoordHeight/2 * fYScale;
                             fWidth = nCoordWidth/2;
                             fHeight = nCoordHeight/2;
-                            const Any* pViewBox = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( "ViewBox" );
+                            const Any* pViewBox = rGeometryItem.GetPropertyValueByName( "ViewBox" );
                             css::awt::Rectangle aViewBox;
                             if ( pViewBox && (*pViewBox >>= aViewBox ) )
                             {
