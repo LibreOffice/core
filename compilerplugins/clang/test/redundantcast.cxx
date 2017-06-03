@@ -12,6 +12,8 @@
 void f1(char *) {}
 void f2(char const *) {}
 
+struct D: S {};
+
 enum Enum1 { X };
 
 void testConstCast() {
@@ -31,6 +33,11 @@ void testConstCast() {
     f2(const_cast<char * const>(p2)); // expected-error {{redundant const_cast from 'const char *' to 'char *', result is implicitly cast to 'const char *' [loplugin:redundantcast]}}
     f2(const_cast<char const *>(p2)); // expected-error {{redundant const_cast from 'const char *' lvalue to 'const char *' prvalue [loplugin:redundantcast]}}
     f2(const_cast<char const * const>(p2)); // expected-error {{redundant const_cast from 'const char *' lvalue to 'const char *const' prvalue [loplugin:redundantcast]}}
+
+    void * vp = nullptr;
+    (void) const_cast<char *>(static_cast<char const *>(vp)); // expected-error {{redundant static_cast/const_cast combination from 'void *' via 'const char *' to 'char *' [loplugin:redundantcast]}}
+    (void) const_cast<char *>(static_cast<char const *>(nullptr)); // expected-error {{redundant static_cast/const_cast combination from 'nullptr_t' via 'const char *' to 'char *' [loplugin:redundantcast]}}
+    (void) const_cast<S &>(static_cast<S const &>(D{})); // expected-error {{redundant static_cast/const_cast combination from 'D' via 'const S &' to 'S &' [loplugin:redundantcast]}}
 
     S const s{};
     const_cast<S &>(s).f1();

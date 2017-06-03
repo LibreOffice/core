@@ -513,8 +513,8 @@ bool RedundantCast::VisitCXXConstCastExpr(CXXConstCastExpr const * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
+    auto const sub = compat::getSubExprAsWritten(expr);
     if (isRedundantConstCast(expr)) {
-        auto const sub = compat::getSubExprAsWritten(expr);
         report(
             DiagnosticsEngine::Warning,
             "redundant const_cast from %0 %1 to %2 %3", expr->getExprLoc())
@@ -522,6 +522,56 @@ bool RedundantCast::VisitCXXConstCastExpr(CXXConstCastExpr const * expr) {
             << expr->getTypeAsWritten()
             << printExprValueKind(expr->getValueKind())
             << expr->getSourceRange();
+        return true;
+    }
+    if (auto const dce = dyn_cast<CXXStaticCastExpr>(
+            sub->IgnoreParenImpCasts()))
+    {
+        auto const sub2 = compat::getSubExprAsWritten(dce);
+        auto t1 = sub2->getType().getCanonicalType();
+        auto isNullptr = t1->isNullPtrType();
+        auto t2 = dce->getType().getCanonicalType();
+        auto t3 = expr->getType().getCanonicalType();
+        auto redundant = false;
+        for (;;) {
+            if ((t2.isConstQualified()
+                 && (isNullptr || !t1.isConstQualified())
+                 && !t3.isConstQualified())
+                || (t2.isVolatileQualified()
+                    && (isNullptr || !t1.isVolatileQualified())
+                    && !t3.isVolatileQualified()))
+            {
+                redundant = true;
+                break;
+            }
+            if (!isNullptr) {
+                auto const p1 = t1->getAs<clang::PointerType>();
+                if (p1 == nullptr) {
+                    break;
+                }
+                t1 = p1->getPointeeType();
+                isNullptr = t1->isNullPtrType();
+            }
+            auto const p2 = t2->getAs<clang::PointerType>();
+            if (p2 == nullptr) {
+                break;
+            }
+            t2 = p2->getPointeeType();
+            auto const p3 = t3->getAs<clang::PointerType>();
+            if (p3 == nullptr) {
+                break;
+            }
+            t3 = p3->getPointeeType();
+        }
+        if (redundant) {
+            report(
+                DiagnosticsEngine::Warning,
+                ("redundant static_cast/const_cast combination from %0 via %1"
+                 " to %2"),
+                expr->getExprLoc())
+                << sub2->getType() << dce->getTypeAsWritten()
+                << expr->getTypeAsWritten() << expr->getSourceRange();
+        }
     }
     return true;
 }
