@@ -142,10 +142,9 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     }
     char const * perf = nullptr;
     if( expr->getCastKind() == CK_NoOp ) {
-        QualType t1 = expr->getSubExpr()->getType();
-        QualType t2 = expr->getType();
-        if (!((t1->isPointerType() && t2->isPointerType())
-              || (t1->isLValueReferenceType() && t2->isLValueReferenceType())))
+        if (!((expr->getSubExpr()->getType()->isPointerType()
+               && expr->getType()->isPointerType())
+              || expr->getTypeAsWritten()->isReferenceType()))
         {
             return true;
         }
@@ -182,7 +181,7 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
         DiagnosticsEngine::Warning, "C-style cast from %0%1 to %2%3%4 (%5)",
         expr->getSourceRange().getBegin())
       << incompFrom << expr->getSubExprAsWritten()->getType()
-      << incompTo << expr->getType() << performs
+      << incompTo << expr->getTypeAsWritten() << performs
       << expr->getCastKindName()
       << expr->getSourceRange();
     return true;
