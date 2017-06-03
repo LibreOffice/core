@@ -200,7 +200,7 @@ SQLParseNodeParameter::SQLParseNodeParameter( const Reference< XConnection >& _r
     ,xFormatter(_xFormatter)
     ,xField(_xField)
     ,sPredicateTableAlias(_sPredicateTableAlias)
-    ,m_rContext( _pContext ? (const IParseContext&)(*_pContext) : (const IParseContext&)OSQLParser::s_aDefaultContext )
+    ,m_rContext( _pContext ? *_pContext : OSQLParser::s_aDefaultContext )
     ,cDecSep(_cDecSep)
     ,bQuote(_bQuote)
     ,bInternational(_bIntl)
