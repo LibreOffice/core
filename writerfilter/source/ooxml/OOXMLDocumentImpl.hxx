@@ -53,6 +53,7 @@ class OOXMLDocumentImpl : public OOXMLDocument
     css::uno::Reference<css::io::XInputStream> mxActiveXBin;
     css::uno::Reference<css::io::XInputStream> mxEmbeddings;
     css::uno::Sequence < css::beans::PropertyValue > mxEmbeddingsList;
+    std::vector<css::beans::PropertyValue> aEmbeddings;
     /// List of VBA-related streams.
     css::uno::Sequence<css::beans::PropertyValue> maVBA;
     bool mbIsSubstream;
