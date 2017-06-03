@@ -961,7 +961,7 @@ bool FuDraw::cancel()
 
         if(pHdl)
         {
-            ((SdrHdlList&)rHdlList).ResetFocusHdl();
+            const_cast<SdrHdlList&>(rHdlList).ResetFocusHdl();
         }
         else
         {

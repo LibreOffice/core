@@ -1043,7 +1043,7 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
         const MapMode       aMap100( MapUnit::Map100thMM );
         Size                aGraphSize;
         Point               aRelPoint( rWinPoint );
-        ImageMap&           rImageMap = (ImageMap&) pIMapInfo->GetImageMap();
+        ImageMap&           rImageMap = const_cast<ImageMap&>(pIMapInfo->GetImageMap());
         const ::tools::Rectangle&    rRect = pObj->GetLogicRect();
         bool                bObjSupported = false;
 

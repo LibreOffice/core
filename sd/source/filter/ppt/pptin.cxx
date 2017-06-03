@@ -245,7 +245,7 @@ bool ImplSdPPTImport::Import()
     EEControlBits nControlWord = rOutl.GetEditEngine().GetControlWord();
     nControlWord |=  EEControlBits::ULSPACESUMMATION;
     nControlWord &= ~EEControlBits::ULSPACEFIRSTPARA;
-    ((EditEngine&)rOutl.GetEditEngine()).SetControlWord( nControlWord );
+    const_cast<EditEngine&>(rOutl.GetEditEngine()).SetControlWord( nControlWord );
 
     SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
     mnBackgroundLayerID = rAdmin.GetLayerID( SdResId( STR_LAYER_BCKGRND ) );
@@ -607,8 +607,8 @@ bool ImplSdPPTImport::Import()
                             PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_Type::TextInShape, 0 );
                             PPTPortionObj aPortion( *pPPTStyleSheet, TSS_Type::TextInShape, 0 );
                             aParagraph.AppendPortion( aPortion );
-                            aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
-                            aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
+                            aParagraph.ApplyTo( rItemSet, oStartNumbering, static_cast<SdrPowerPointImport&>(*this), TSS_Type::Unknown );
+                            aPortion.ApplyTo( rItemSet, static_cast<SdrPowerPointImport&>(*this), TSS_Type::Unknown );
                         }
                     }
 
@@ -620,8 +620,8 @@ bool ImplSdPPTImport::Import()
                         PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_Type::TextInShape, 0 );
                         PPTPortionObj aPortion( *pPPTStyleSheet, TSS_Type::TextInShape, 0 );
                         aParagraph.AppendPortion( aPortion );
-                        aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
-                        aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
+                        aParagraph.ApplyTo( rItemSet, oStartNumbering, static_cast<SdrPowerPointImport&>(*this), TSS_Type::Unknown );
+                        aPortion.ApplyTo( rItemSet, static_cast<SdrPowerPointImport&>(*this), TSS_Type::Unknown );
                     }
 
                     // create layoutstylesheets, set layoutname and stylesheet
@@ -665,8 +665,8 @@ bool ImplSdPPTImport::Import()
                             PPTParagraphObj aParagraph( *pPPTStyleSheet, nTitleInstance, 0 );
                             PPTPortionObj aPortion( *pPPTStyleSheet, nTitleInstance, 0 );
                             aParagraph.AppendPortion( aPortion );
-                            aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
-                            aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
+                            aParagraph.ApplyTo( rItemSet, oStartNumbering, static_cast<SdrPowerPointImport&>(*this), TSS_Type::Unknown );
+                            aPortion.ApplyTo( rItemSet, static_cast<SdrPowerPointImport&>(*this), TSS_Type::Unknown );
                         }
 
                         // outlinerstylesheet
@@ -686,8 +686,8 @@ bool ImplSdPPTImport::Import()
                                 SfxItemSet& rItemSet = pOutlineSheet->GetItemSet();
                                 PPTPortionObj aPortion( *pPPTStyleSheet, nOutlinerInstance, nLevel );
                                 pParagraphs[ nLevel ]->AppendPortion( aPortion );
-                                pParagraphs[ nLevel ]->ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
-                                aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
+                                pParagraphs[ nLevel ]->ApplyTo( rItemSet, oStartNumbering, static_cast<SdrPowerPointImport&>(*this), TSS_Type::Unknown );
+                                aPortion.ApplyTo( rItemSet, static_cast<SdrPowerPointImport&>(*this), TSS_Type::Unknown );
                             }
                             else
                                 pParagraphs[ nLevel ] = nullptr;
@@ -702,8 +702,8 @@ bool ImplSdPPTImport::Import()
                             PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_Type::Subtitle, 0 );
                             PPTPortionObj aPortion( *pPPTStyleSheet, TSS_Type::Subtitle, 0 );
                             aParagraph.AppendPortion( aPortion );
-                            aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
-                            aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
+                            aParagraph.ApplyTo( rItemSet, oStartNumbering, static_cast<SdrPowerPointImport&>(*this), TSS_Type::Unknown );
+                            aPortion.ApplyTo( rItemSet, static_cast<SdrPowerPointImport&>(*this), TSS_Type::Unknown );
                         }
                     }
                     else if ( ePgKind == PageKind::Notes )
@@ -715,8 +715,8 @@ bool ImplSdPPTImport::Import()
                             PPTParagraphObj aParagraph( *pPPTStyleSheet, TSS_Type::Notes, 0 );
                             PPTPortionObj aPortion( *pPPTStyleSheet, TSS_Type::Notes, 0 );
                             aParagraph.AppendPortion( aPortion );
-                            aParagraph.ApplyTo( rItemSet, oStartNumbering, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
-                            aPortion.ApplyTo( rItemSet, (SdrPowerPointImport&)*this, TSS_Type::Unknown );
+                            aParagraph.ApplyTo( rItemSet, oStartNumbering, static_cast<SdrPowerPointImport&>(*this), TSS_Type::Unknown );
+                            aPortion.ApplyTo( rItemSet, static_cast<SdrPowerPointImport&>(*this), TSS_Type::Unknown );
                         }
                     }
                 }
@@ -2439,7 +2439,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                 {
                                     if ( PPTPortionObj * pPor = pPara->First() )
                                     {
-                                        pPor->ApplyTo(aSet, (SdrPowerPointImport&)*this, pTextObj->GetDestinationInstance());
+                                        pPor->ApplyTo(aSet, const_cast<SdrPowerPointImport&>(static_cast<SdrPowerPointImport const &>(*this)), pTextObj->GetDestinationInstance());
                                     }
                                 }
                             }

@@ -1776,7 +1776,7 @@ void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any& 
             EscherExAtom aAnimReference( rStrm, DFF_msofbtAnimReference );
 
             sal_uInt32 nRefType = 1;    // TODO: nRefType == 2 -> Sound;
-            sal_uInt32 nRefId = ((EscherSolverContainer&)mrSolverContainer).GetShapeId( xShape );
+            sal_uInt32 nRefId = mrSolverContainer.GetShapeId( xShape );
 
             rStrm.WriteUInt32( nRefMode )
                  .WriteUInt32( nRefType )

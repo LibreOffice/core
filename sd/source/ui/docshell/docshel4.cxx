@@ -405,7 +405,7 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         EEControlBits nControlWord = rOutl.GetEditEngine().GetControlWord();
         nControlWord |=  EEControlBits::ULSPACESUMMATION;
         nControlWord &=~ EEControlBits::ULSPACEFIRSTPARA;
-        ((EditEngine&)rOutl.GetEditEngine()).SetControlWord( nControlWord );
+        const_cast<EditEngine&>(rOutl.GetEditEngine()).SetControlWord( nControlWord );
 
         mpDoc->SetSummationOfParagraphs();
     }

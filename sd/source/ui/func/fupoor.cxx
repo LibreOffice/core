@@ -288,7 +288,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 const SdrHdlList& rHdlList = mpView->GetHdlList();
                 bool bForward(!rKEvt.GetKeyCode().IsShift());
 
-                ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
+                const_cast<SdrHdlList&>(rHdlList).TravelFocusHdl(bForward);
 
                 // guarantee visibility of focused handle
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();
@@ -569,7 +569,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                         if(pNewOne)
                         {
-                            ((SdrHdlList&)rHdlList).SetFocusHdl(pNewOne);
+                            const_cast<SdrHdlList&>(rHdlList).SetFocusHdl(pNewOne);
                         }
                     }
 
@@ -752,7 +752,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                                 // switch snapping off
                                 if(!bWasNoSnap)
-                                    ((SdrDragStat&)rDragStat).SetNoSnap();
+                                    const_cast<SdrDragStat&>(rDragStat).SetNoSnap();
                                 if(bWasSnapEnabled)
                                     mpView->SetSnapEnabled(false);
 
@@ -761,7 +761,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                                 // restore snap
                                 if(!bWasNoSnap)
-                                    ((SdrDragStat&)rDragStat).SetNoSnap(bWasNoSnap);
+                                    const_cast<SdrDragStat&>(rDragStat).SetNoSnap(bWasNoSnap);
                                 if(bWasSnapEnabled)
                                     mpView->SetSnapEnabled(bWasSnapEnabled);
                             }
@@ -891,7 +891,7 @@ bool FuPoor::MouseMove(const MouseEvent& )
 void FuPoor::SelectionHasChanged()
 {
     const SdrHdlList& rHdlList = mpView->GetHdlList();
-    ((SdrHdlList&)rHdlList).ResetFocusHdl();
+    const_cast<SdrHdlList&>(rHdlList).ResetFocusHdl();
 }
 
 /**

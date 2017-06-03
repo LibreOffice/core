@@ -1068,7 +1068,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
     if ( !mbEmptyPresObj )
     {
         ParagraphObj* pPara;
-        TextObjBinary aTextObj( mXText, nTextInstance, maFontCollection, (PPTExBulletProvider&)*this );
+        TextObjBinary aTextObj( mXText, nTextInstance, maFontCollection, static_cast<PPTExBulletProvider&>(*this) );
 
         // leaving out EPP_TextCharsAtom w/o text - still write out
         // attribute info though
@@ -2249,7 +2249,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         bIsTitlePossible = false;
 
                         ImplGetText();
-                        TextObjBinary aTextObj( mXText, EPP_TEXTTYPE_Title, maFontCollection, (PPTExBulletProvider&)*this );
+                        TextObjBinary aTextObj( mXText, EPP_TEXTTYPE_Title, maFontCollection, static_cast<PPTExBulletProvider&>(*this) );
                         if ( ePageType == MASTER )
                         {
                             if ( mnTextSize )
@@ -2343,7 +2343,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                        )
                     {
                         ImplGetText();
-                        TextObjBinary aTextObj( mXText, EPP_TEXTTYPE_Body, maFontCollection, (PPTExBulletProvider&)*this );
+                        TextObjBinary aTextObj( mXText, EPP_TEXTTYPE_Body, maFontCollection, static_cast<PPTExBulletProvider&>(*this) );
                         if ( ePageType == MASTER )
                         {
                             nPrevTextStyle = EPP_TEXTSTYLE_TITLE;

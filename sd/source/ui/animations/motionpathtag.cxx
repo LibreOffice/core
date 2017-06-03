@@ -596,7 +596,7 @@ bool MotionPathTag::OnTabHandles( const KeyEvent& rKEvt )
         const SdrHdlList& rHdlList = mrView.GetHdlList();
         bool bForward(!rKEvt.GetKeyCode().IsShift());
 
-        ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
+        const_cast<SdrHdlList&>(rHdlList).TravelFocusHdl(bForward);
 
         // guarantee visibility of focused handle
         SdrHdl* pHdl = rHdlList.GetFocusHdl();
@@ -659,7 +659,7 @@ bool MotionPathTag::OnMarkHandle( const KeyEvent& rKEvt )
             }
 
             if(pNewOne)
-                ((SdrHdlList&)rHdlList).SetFocusHdl(pNewOne);
+                const_cast<SdrHdlList&>(rHdlList).SetFocusHdl(pNewOne);
         }
     }
 
@@ -730,7 +730,7 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
 
                 // switch snapping off
                 if(!bWasNoSnap)
-                    ((SdrDragStat&)mrView.GetDragStat()).SetNoSnap();
+                    const_cast<SdrDragStat&>(mrView.GetDragStat()).SetNoSnap();
                 if(bWasSnapEnabled)
                     mrView.SetSnapEnabled(false);
 
@@ -739,7 +739,7 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
 
                 // restore snap
                 if(!bWasNoSnap)
-                    ((SdrDragStat&)mrView.GetDragStat()).SetNoSnap(bWasNoSnap);
+                    const_cast<SdrDragStat&>(mrView.GetDragStat()).SetNoSnap(bWasNoSnap);
                 if(bWasSnapEnabled)
                     mrView.SetSnapEnabled(bWasSnapEnabled);
             }
