@@ -2666,7 +2666,7 @@ EditPaM ImpEditEngine::InsertTextUserInput( const EditSelection& rCurSel,
             InsertUndo( pNewUndo, bTryMerge );
         }
 
-        aEditDoc.InsertText( (const EditPaM&)aPaM, OUString(c) );
+        aEditDoc.InsertText( aPaM, OUString(c) );
         ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
         OSL_ENSURE( pPortion, "Blind Portion in InsertText" );
         pPortion->MarkInvalid( aPaM.GetIndex(), 1 );

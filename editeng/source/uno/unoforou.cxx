@@ -116,7 +116,7 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, EditEngineA
 
     //! Does it not exist on the Outliner?
     //! and why is the GetAttribs on the EditEngine not a const?
-    EditEngine& rEditEngine = (EditEngine&)rOutliner.GetEditEngine();
+    EditEngine& rEditEngine = const_cast<EditEngine&>(rOutliner.GetEditEngine());
 
     SfxItemSet aSet( ImplOutlinerForwarderGetAttribs( rSel, nOnlyHardAttrib, rEditEngine ) );
 
@@ -154,7 +154,7 @@ SfxItemSet SvxOutlinerForwarder::GetParaAttribs( sal_Int32 nPara ) const
     mpParaAttribsCache = new SfxItemSet( rOutliner.GetParaAttribs( nPara ) );
     mnParaAttribsCache = nPara;
 
-    EditEngine& rEditEngine = (EditEngine&)rOutliner.GetEditEngine();
+    EditEngine& rEditEngine = const_cast<EditEngine&>(rOutliner.GetEditEngine());
 
     SfxStyleSheet* pStyle = rEditEngine.GetStyleSheet( nPara );
     if( pStyle )
@@ -189,7 +189,7 @@ SfxItemPool* SvxOutlinerForwarder::GetPool() const
 
 void SvxOutlinerForwarder::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList ) const
 {
-    ((EditEngine&)rOutliner.GetEditEngine()).GetPortions( nPara, rList );
+    const_cast<EditEngine&>(rOutliner.GetEditEngine()).GetPortions( nPara, rList );
 }
 
 void SvxOutlinerForwarder::QuickInsertText( const OUString& rText, const ESelection& rSel )
@@ -242,7 +242,7 @@ bool SvxOutlinerForwarder::IsValid() const
 
 SfxItemState SvxOutlinerForwarder::GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const
 {
-    return GetSvxEditEngineItemState( (EditEngine&)rOutliner.GetEditEngine(), rSel, nWhich );
+    return GetSvxEditEngineItemState( const_cast<EditEngine&>(rOutliner.GetEditEngine()), rSel, nWhich );
 }
 
 SfxItemState SvxOutlinerForwarder::GetItemState( sal_Int32 nPara, sal_uInt16 nWhich ) const

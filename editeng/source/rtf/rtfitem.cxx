@@ -1869,7 +1869,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
             SvxTabStopItem aNewTab( nTabCount, sal_uInt16(nValue),
                                 SvxTabAdjust::Default, aPardMap.nTabStop );
             while( nTabCount )
-                ((SvxTabStop&)aNewTab[ --nTabCount ]).GetAdjustment() = SvxTabAdjust::Default;
+                const_cast<SvxTabStop&>(aNewTab[ --nTabCount ]).GetAdjustment() = SvxTabAdjust::Default;
 
             pAttrPool->SetPoolDefaultItem( aNewTab );
         }

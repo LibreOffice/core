@@ -1280,7 +1280,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                     }
                     else
                     {
-                        aCurSel = pImpEditEngine->InsertTextUserInput( (const EditSelection&)aCurSel, nCharCode, !pEditView->IsInsertMode() );
+                        aCurSel = pImpEditEngine->InsertTextUserInput( aCurSel, nCharCode, !pEditView->IsInsertMode() );
                     }
                     // AutoComplete ???
                     if ( pImpEditEngine->GetStatus().DoAutoComplete() && ( nCharCode != ' ' ) )
