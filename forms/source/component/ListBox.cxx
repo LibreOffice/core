@@ -154,7 +154,7 @@ namespace frm
     OListBoxModel::OListBoxModel(const Reference<XComponentContext>& _rxFactory)
         :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_LISTBOX, FRM_SUN_CONTROL_LISTBOX, true, true, true )
         // use the old control name for compatibility reasons
-        ,OEntryListHelper( (OControlModel&)*this )
+        ,OEntryListHelper( static_cast<OControlModel&>(*this) )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
         ,m_aListRowSet()
         ,m_nConvertedBoundValuesType(0)
@@ -173,7 +173,7 @@ namespace frm
 
     OListBoxModel::OListBoxModel( const OListBoxModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
         :OBoundControlModel( _pOriginal, _rxFactory )
-        ,OEntryListHelper( *_pOriginal, (OControlModel&)*this )
+        ,OEntryListHelper( *_pOriginal, static_cast<OControlModel&>(*this) )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
         ,m_aListRowSet()
         ,m_eListSourceType( _pOriginal->m_eListSourceType )
