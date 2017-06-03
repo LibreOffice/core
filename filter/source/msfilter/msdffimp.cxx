@@ -256,7 +256,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
 #endif
 {
     sal_uLong nFilePos = rIn.Tell();
-    ReadDffPropSet( rIn, (DffPropertyReader&)*this );
+    ReadDffPropSet( rIn, const_cast<DffPropertyReader&>(*this) );
 
     if ( IsProperty( DFF_Prop_hspMaster ) )
     {
@@ -266,7 +266,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
             bool bOk = ReadDffRecordHeader(rIn, aRecHd);
             if (bOk && SvxMSDffManager::SeekToRec(rIn, DFF_msofbtOPT, aRecHd.GetRecEndFilePos()))
             {
-                rIn |= (DffPropertyReader&)*this;
+                rIn |= const_cast<DffPropertyReader&>(*this);
             }
         }
     }
@@ -4479,7 +4479,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > seqAdjustmentValues;
 
                         // before clearing the GeometryItem we have to store the current Coordinates
-                        const uno::Any* pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sPath, sCoordinates );
+                        const uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sPath, sCoordinates );
                         tools::Rectangle aPolyBoundRect;
                         Point aStartPt( 0,0 );
                         if ( pAny && ( *pAny >>= seqCoordinates ) && ( seqCoordinates.getLength() >= 4 ) )
@@ -4514,7 +4514,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
                         sal_Int32 nEndAngle = 9000;
                         sal_Int32 nStartAngle = 0;
-                        pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sAdjustmentValues );
+                        pAny = aGeometryItem.GetPropertyValueByName( sAdjustmentValues );
                         if ( pAny && ( *pAny >>= seqAdjustmentValues ) && seqAdjustmentValues.getLength() > 1 )
                         {
                             if ( seqAdjustmentValues[ 0 ].State == css::beans::PropertyState_DIRECT_VALUE )
