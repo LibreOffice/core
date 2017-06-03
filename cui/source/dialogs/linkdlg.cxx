@@ -591,7 +591,7 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
 
     if( pLinkMgr )
     {
-        SvBaseLinks& rLnks = (SvBaseLinks&)pLinkMgr->GetLinks();
+        SvBaseLinks& rLnks = const_cast<SvBaseLinks&>(pLinkMgr->GetLinks());
         for( size_t n = 0; n < rLnks.size(); ++n )
         {
             tools::SvRef<SvBaseLink>& rLinkRef = rLnks[ n ];

@@ -448,7 +448,7 @@ void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
         FillStandardDlgFields (pHyperlinkItem);
 
         // set all other fields
-        FillDlgFields ( (OUString&)pHyperlinkItem->GetURL() );
+        FillDlgFields ( pHyperlinkItem->GetURL() );
 
         // Store initial URL
         maStrInitURL = pHyperlinkItem->GetURL();

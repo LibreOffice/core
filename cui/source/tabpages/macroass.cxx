@@ -198,7 +198,7 @@ void SfxMacroTabPage::ScriptChanged()
 bool SfxMacroTabPage::FillItemSet( SfxItemSet* rSet )
 {
     SvxMacroItem aItem( GetWhich( aPageRg[0] ) );
-    ((SvxMacroTableDtor&)aItem.GetMacroTable()) = aTbl;
+    const_cast<SvxMacroTableDtor&>(aItem.GetMacroTable()) = aTbl;
 
     const SfxPoolItem* pItem;
     if( SfxItemState::SET != GetItemSet().GetItemState( aItem.Which(), true, &pItem )

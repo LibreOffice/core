@@ -111,8 +111,8 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
 
     ObjectLB().SetUpdateMode( false );
 
-    DataFlavorExVector::iterator aIter( ((DataFlavorExVector&)*pFormats).begin() ),
-                                 aEnd( ((DataFlavorExVector&)*pFormats).end() );
+    DataFlavorExVector::iterator aIter( const_cast<DataFlavorExVector&>(*pFormats).begin() ),
+                                 aEnd( const_cast<DataFlavorExVector&>(*pFormats).end() );
     while( aIter != aEnd )
     {
         SotClipboardFormatId nFormat = (*aIter++).mnSotId;

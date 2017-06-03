@@ -337,7 +337,7 @@ void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
     IconChoicePage* pPage = GetTabPage (nPageId);
     if(pPage)
     {
-        SfxItemSet& aPageSet =  (SfxItemSet&)pPage->GetItemSet ();
+        SfxItemSet& aPageSet = const_cast<SfxItemSet&>(pPage->GetItemSet ());
         aPageSet.Put ( *pItem );
 
         pCurrentPage->Reset( aPageSet );
