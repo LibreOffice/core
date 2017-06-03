@@ -1157,6 +1157,20 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         {
                             uno::Reference< beans::XMultiPropertySet > xMultiPropertySet( xStyle, uno::UNO_QUERY_THROW);
                             xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
+
+                            // Duplicate MSWord's single footnote reference into Footnote Characters and Footnote anchor
+                            if( pEntry->sStyleName.equalsIgnoreAsciiCase("footnote reference")
+                                || pEntry->sStyleName.equalsIgnoreAsciiCase("endnote reference") )
+                            {
+                                uno::Reference< style::XStyle > xCopyStyle;
+                                if( pEntry->sStyleName.equalsIgnoreAsciiCase("footnote reference") )
+                                    xStyles->getByName( "Footnote anchor" ) >>= xCopyStyle;
+                                else
+                                    xStyles->getByName( "Endnote anchor" ) >>= xCopyStyle;
+
+                                xMultiPropertySet.set( xCopyStyle, uno::UNO_QUERY_THROW);
+                                xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
+                            }
                         }
                         catch( const lang::WrappedTargetException& rWrapped)
                         {
