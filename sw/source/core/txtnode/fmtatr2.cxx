@@ -209,7 +209,7 @@ SwFormatINetFormat::~SwFormatINetFormat()
 bool SwFormatINetFormat::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    bool bRet = SfxPoolItem::operator==( (SfxPoolItem&) rAttr )
+    bool bRet = SfxPoolItem::operator==( rAttr )
                 && msURL == static_cast<const SwFormatINetFormat&>(rAttr).msURL
                 && msHyperlinkName == static_cast<const SwFormatINetFormat&>(rAttr).msHyperlinkName
                 && msTargetFrame == static_cast<const SwFormatINetFormat&>(rAttr).msTargetFrame

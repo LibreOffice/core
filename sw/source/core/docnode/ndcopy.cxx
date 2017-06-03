@@ -235,7 +235,7 @@ static void lcl_CopyTableLine( const SwTableLine* pLine, CopyTable* pCT )
 SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 {
     // In which array are we? Nodes? UndoNodes?
-    SwNodes& rNds = (SwNodes&)GetNodes();
+    SwNodes& rNds = const_cast<SwNodes&>(GetNodes());
 
     {
         if( rIdx < pDoc->GetNodes().GetEndOfInserts().GetIndex() &&
@@ -262,7 +262,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     SwEndNode* pEndNd = new SwEndNode( rIdx, *pTableNd );
     SwNodeIndex aInsPos( *pEndNd );
 
-    SwTable& rTable = (SwTable&)pTableNd->GetTable();
+    SwTable& rTable = pTableNd->GetTable();
     rTable.RegisterToFormat( *pTableFormat );
 
     rTable.SetRowsToRepeat( GetTable().GetRowsToRepeat() );

@@ -1524,7 +1524,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         ((nLclSelectionType & (SelectionType::DrawObject|SelectionType::DbForm)) &&
                 rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() == 1))))
     {
-        SdrHdlList& rHdlList = (SdrHdlList&)rSh.GetDrawView()->GetHdlList();
+        SdrHdlList& rHdlList = const_cast<SdrHdlList&>(rSh.GetDrawView()->GetHdlList());
         SdrHdl* pAnchor = rHdlList.GetHdl(SdrHdlKind::Anchor);
         if ( ! pAnchor )
             pAnchor = rHdlList.GetHdl(SdrHdlKind::Anchor_TR);

@@ -415,7 +415,7 @@ void SwLayoutFrame::SetFrameFormat( SwFrameFormat *pNew )
 
 SwContentFrame::SwContentFrame( SwContentNode * const pContent, SwFrame* pSib ) :
     SwFrame( pContent, pSib ),
-    SwFlowFrame( (SwFrame&)*this )
+    SwFlowFrame( static_cast<SwFrame&>(*this) )
 {
 }
 

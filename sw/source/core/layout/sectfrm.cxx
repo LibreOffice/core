@@ -58,7 +58,7 @@ SwSectionFrame::SwSectionFrame( SwSection &rSect, SwFrame* pSib )
 
 SwSectionFrame::SwSectionFrame( SwSectionFrame &rSect, bool bMaster ) :
     SwLayoutFrame( rSect.GetFormat(), rSect.getRootFrame() ),
-    SwFlowFrame( (SwFrame&)*this ),
+    SwFlowFrame( static_cast<SwFrame&>(*this) ),
     m_pSection( rSect.GetSection() ),
     m_bFootnoteAtEnd( rSect.IsFootnoteAtEnd() ),
     m_bEndnAtEnd( rSect.IsEndnAtEnd() ),

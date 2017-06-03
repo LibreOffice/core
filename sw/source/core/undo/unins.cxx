@@ -429,7 +429,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
         {
             // StarView does not yet provide an option to copy a StarOBJ
             tools::SvRef<SotStorage> aRef = new SotStorage( OUString() );
-            SwOLEObj& rSwOLE = (SwOLEObj&)static_cast<SwOLENode*>(pCNd)->GetOLEObj();
+            SwOLEObj& rSwOLE = static_cast<SwOLENode*>(pCNd)->GetOLEObj();
 
             // temporary storage until object is inserted
             // TODO/MBA: seems that here a physical copy is done - not as in drawing layer! Testing!

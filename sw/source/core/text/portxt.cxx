@@ -184,11 +184,11 @@ static sal_Int32 lcl_AddSpace( const SwTextSizeInfo &rInf, const OUString* pStr,
         if ( CH_TXTATR_BREAKWORD == rInf.GetChar( nPos ) && pPor->InExpGrp() )
         {
             bool bOldOnWin = rInf.OnWin();
-            ((SwTextSizeInfo &)rInf).SetOnWin( false );
+            const_cast<SwTextSizeInfo &>(rInf).SetOnWin( false );
 
             OUString aStr;
             pPor->GetExpText( rInf, aStr );
-            ((SwTextSizeInfo &)rInf).SetOnWin( bOldOnWin );
+            const_cast<SwTextSizeInfo &>(rInf).SetOnWin( bOldOnWin );
 
             nNextScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( aStr, 0 );
         }
@@ -580,11 +580,11 @@ sal_Int32 SwTextPortion::GetSpaceCnt( const SwTextSizeInfo &rInf,
             // OnWin() likes to return a blank instead of an empty string from
             // time to time. We cannot use that here at all, however.
             bool bOldOnWin = rInf.OnWin();
-            ((SwTextSizeInfo &)rInf).SetOnWin( false );
+            const_cast<SwTextSizeInfo &>(rInf).SetOnWin( false );
 
             OUString aStr;
             GetExpText( rInf, aStr );
-            ((SwTextSizeInfo &)rInf).SetOnWin( bOldOnWin );
+            const_cast<SwTextSizeInfo &>(rInf).SetOnWin( bOldOnWin );
 
             nCnt = nCnt + lcl_AddSpace( rInf, &aStr, *this );
             nPos = aStr.getLength();
@@ -617,11 +617,11 @@ long SwTextPortion::CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) co
             // OnWin() likes to return a blank instead of an empty string from
             // time to time. We cannot use that here at all, however.
             bool bOldOnWin = rInf.OnWin();
-            ((SwTextSizeInfo &)rInf).SetOnWin( false );
+            const_cast<SwTextSizeInfo &>(rInf).SetOnWin( false );
 
             OUString aStr;
             GetExpText( rInf, aStr );
-            ((SwTextSizeInfo &)rInf).SetOnWin( bOldOnWin );
+            const_cast<SwTextSizeInfo &>(rInf).SetOnWin( bOldOnWin );
             if( nSpaceAdd > 0 )
                 nCnt = nCnt + lcl_AddSpace( rInf, &aStr, *this );
             else

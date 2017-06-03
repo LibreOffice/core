@@ -205,7 +205,7 @@ const SwTOXBase* SwEditShell::GetCurTOX() const
 
 bool SwEditShell::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
 {
-    return GetDoc()->DeleteTOX( (SwTOXBase&)rTOXBase, bDelNodes );
+    return GetDoc()->DeleteTOX( rTOXBase, bDelNodes );
 }
 
 // manage types of listings

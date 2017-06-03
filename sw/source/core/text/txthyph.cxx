@@ -293,7 +293,7 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess &rGuess )
 
         // length of pHyphPor is adjusted
         pHyphPor->SetLen( aAltText.getLength() + 1 );
-        (SwPosSize&)(*pHyphPor) = pHyphPor->GetTextSize( rInf );
+        static_cast<SwPosSize&>(*pHyphPor) = pHyphPor->GetTextSize( rInf );
         pHyphPor->SetLen( aAltSpell.nChangedLength + nTmpLen );
     }
     else
@@ -309,7 +309,7 @@ bool SwTextPortion::CreateHyphen( SwTextFormatInfo &rInf, SwTextGuess &rGuess )
         rInf.GetFont()->GetMagic( pTmpMagic, nFntIdx, rInf.GetFont()->GetActual() );
         if( !pLastMagicNo || pLastMagicNo != pTmpMagic ) {
             pLastMagicNo = pTmpMagic;
-            (SwPosSize&)(*pHyphPor) = pHyphPor->GetTextSize( rInf );
+            static_cast<SwPosSize&>(*pHyphPor) = pHyphPor->GetTextSize( rInf );
             aMiniCacheH = pHyphPor->Height();
             aMiniCacheW = pHyphPor->Width();
         } else {

@@ -2480,7 +2480,7 @@ void SwTextNode::NumRuleChgd()
     // in the list tree reflected in the layout.
     // Important note:
     {
-        SvxLRSpaceItem& rLR = (SvxLRSpaceItem&)GetSwAttrSet().GetLRSpace();
+        SvxLRSpaceItem& rLR = const_cast<SvxLRSpaceItem&>(GetSwAttrSet().GetLRSpace());
         NotifyClients( &rLR, &rLR );
     }
 
@@ -4880,7 +4880,7 @@ void SwTextNode::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 sal_uInt32 SwTextNode::GetRsid( sal_Int32 nStt, sal_Int32 nEnd ) const
 {
-    SfxItemSet aSet( (SfxItemPool&) (GetDoc()->GetAttrPool()), RES_CHRATR_RSID, RES_CHRATR_RSID );
+    SfxItemSet aSet( const_cast<SfxItemPool&>(static_cast<SfxItemPool const &>(GetDoc()->GetAttrPool())), RES_CHRATR_RSID, RES_CHRATR_RSID );
     if ( GetAttr(aSet, nStt, nEnd) )
     {
         const SvxRsidItem* pRsid = aSet.GetItem<SvxRsidItem>(RES_CHRATR_RSID);

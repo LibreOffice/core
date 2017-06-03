@@ -799,7 +799,7 @@ const SwFrameFormat* SwFEShell::SelFlyGrabCursor()
                 pCursor->GetPoint()->nNode = *pCNode;
                 pCursor->GetPoint()->nContent.Assign( pCNode, 0 );
 
-                SwRect& rChrRect = (SwRect&)GetCharRect();
+                SwRect& rChrRect = const_cast<SwRect&>(GetCharRect());
                 rChrRect = pFly->Prt();
                 rChrRect.Pos() += pFly->Frame().Pos();
                 GetCursorDocPos() = rChrRect.Pos();
@@ -2126,7 +2126,7 @@ bool SwFEShell::EndMark()
             SwDrawView* pDView = Imp()->GetDrawView();
             // frames are not selected this way, except when
             // it is only one frame
-            SdrMarkList &rMrkList = (SdrMarkList&)pDView->GetMarkedObjectList();
+            SdrMarkList &rMrkList = const_cast<SdrMarkList&>(pDView->GetMarkedObjectList());
             SwFlyFrame* pOldSelFly = ::GetFlyFromMarked( &rMrkList, this );
 
             if ( rMrkList.GetMarkCount() > 1 )
@@ -2487,7 +2487,7 @@ bool SwFEShell::GotoFly( const OUString& rName, FlyCntType eType, bool bSelFrame
                     pCursor->GetPoint()->nNode = *pCNode;
                     pCursor->GetPoint()->nContent.Assign( pCNode, 0 );
 
-                    SwRect& rChrRect = (SwRect&)GetCharRect();
+                    SwRect& rChrRect = const_cast<SwRect&>(GetCharRect());
                     rChrRect = pFrame->Prt();
                     rChrRect.Pos() += pFrame->Frame().Pos();
                     GetCursorDocPos() = rChrRect.Pos();

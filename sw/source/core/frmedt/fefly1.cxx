@@ -736,7 +736,7 @@ const SwFrameFormat *SwFEShell::NewFlyFrame( const SfxItemSet& rSet, bool bAnchV
                 if( bVOriChgd )
                     const_cast<SfxItemSet&>(rSet).Put( aOldV );
 
-                GetDoc()->SetFlyFrameAttr( *pRet, (SfxItemSet&)rSet );
+                GetDoc()->SetFlyFrameAttr( *pRet, const_cast<SfxItemSet&>(rSet) );
                 GetDoc()->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
             }
             delete pOldAnchor;

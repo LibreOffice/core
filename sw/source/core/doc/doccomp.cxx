@@ -1579,7 +1579,7 @@ void CompareData::CheckForChangesInLine( const CompareData& rData,
                                     sal_uLong& rStt, sal_uLong& rEnd,
                                     sal_uLong& rThisStt, sal_uLong& rThisEnd )
 {
-    LineArrayComparator aCmp( (CompareData&)*this, rData, rThisStt, rThisEnd,
+    LineArrayComparator aCmp( *this, rData, rThisStt, rThisEnd,
                               rStt, rEnd );
 
     int nMinLen = std::min( aCmp.GetLen1(), aCmp.GetLen2() );
@@ -1857,7 +1857,7 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
 
     GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
     bool bDocWasModified = getIDocumentState().IsModified();
-    SwDoc& rSrcDoc = (SwDoc&)rDoc;
+    SwDoc& rSrcDoc = const_cast<SwDoc&>(rDoc);
     bool bSrcModified = rSrcDoc.getIDocumentState().IsModified();
 
     RedlineFlags eSrcRedlMode = rSrcDoc.getIDocumentRedlineAccess().GetRedlineFlags();
@@ -2080,7 +2080,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
     GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 
-    SwDoc& rSrcDoc = (SwDoc&)rDoc;
+    SwDoc& rSrcDoc = const_cast<SwDoc&>(rDoc);
     bool bSrcModified = rSrcDoc.getIDocumentState().IsModified();
 
     RedlineFlags eSrcRedlMode = rSrcDoc.getIDocumentRedlineAccess().GetRedlineFlags();

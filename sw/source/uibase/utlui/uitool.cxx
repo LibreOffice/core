@@ -559,7 +559,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     }
 
     // Integrate footnotes
-    SwPageFootnoteInfo& rInfo = (SwPageFootnoteInfo&)rPageDesc.GetFootnoteInfo();
+    SwPageFootnoteInfo& rInfo = const_cast<SwPageFootnoteInfo&>(rPageDesc.GetFootnoteInfo());
     SwPageFootnoteInfoItem aFootnoteItem(rInfo);
     rSet.Put(aFootnoteItem);
 
@@ -627,7 +627,7 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
         {
             // Delete only, if PageDesc will be enabled!
             rSet.ClearItem( RES_BREAK );
-            SwPageDesc* pDesc = ((SwWrtShell&)rShell).FindPageDescByName(
+            SwPageDesc* pDesc = const_cast<SwWrtShell&>(rShell).FindPageDescByName(
                                                     rDescName, true );
             if( pDesc )
                 aPgDesc.RegisterToPageDesc( *pDesc );

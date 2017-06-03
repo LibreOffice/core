@@ -228,16 +228,16 @@ void sw::FlyContentPortion::Paint(const SwTextPaintInfo& rInf) const
             SwLayoutModeModifier aLayoutModeModifier(*rInf.GetOut());
             m_pFly->Paint(const_cast<vcl::RenderContext&>(*rInf.GetOut()), aRect);
         }
-        ((SwTextPaintInfo&)rInf).GetRefDev()->SetLayoutMode(rInf.GetOut()->GetLayoutMode());
+        const_cast<SwTextPaintInfo&>(rInf).GetRefDev()->SetLayoutMode(rInf.GetOut()->GetLayoutMode());
 
         // As the OutputDevice might be anything, the font must be re-selected.
         // Being in const method should not be a problem.
-        ((SwTextPaintInfo&)rInf).SelectFont();
+        const_cast<SwTextPaintInfo&>(rInf).SelectFont();
 
         assert(rInf.GetVsh());
         SAL_WARN_IF(rInf.GetVsh()->GetOut() != rInf.GetOut(), "sw.core", "SwFlyCntPortion::Paint: Outdev has changed");
         if(rInf.GetVsh())
-            ((SwTextPaintInfo&)rInf).SetOut(rInf.GetVsh()->GetOut());
+            const_cast<SwTextPaintInfo&>(rInf).SetOut(rInf.GetVsh()->GetOut());
     }
 }
 

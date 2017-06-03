@@ -95,7 +95,7 @@ static bool lcl_GetSelTable( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
         ::GetTableSel( rSh, aSelBoxes );
         FndPara aPara( aSelBoxes, &aFndBox );
         const SwTable& rTable = pTableNd->GetTable();
-        ForEach_FndLineCopyCol( (SwTableLines&)rTable.GetTabLines(), &aPara );
+        ForEach_FndLineCopyCol( const_cast<SwTableLines&>(rTable.GetTabLines()), &aPara );
     }
     rX = aFndBox.GetLines().size();
     if( !rX )

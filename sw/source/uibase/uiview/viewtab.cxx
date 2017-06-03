@@ -1599,14 +1599,14 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         const SwFormatHeader& rHeaderFormat = rMaster.GetHeader();
                         SwFrameFormat *pHeaderFormat = const_cast<SwFrameFormat*>(rHeaderFormat.GetHeaderFormat());
                         if( pHeaderFormat )// #i80890# if rDesc is not the one belonging to the current page is might crash
-                            pBox = & (const SvxBoxItem&)pHeaderFormat->GetBox();
+                            pBox = & pHeaderFormat->GetBox();
                     }
                     else if(nFrameType & FrameTypeFlags::FOOTER )
                     {
                         const SwFormatFooter& rFooterFormat = rMaster.GetFooter();
                         SwFrameFormat *pFooterFormat = const_cast<SwFrameFormat*>(rFooterFormat.GetFooterFormat());
                         if( pFooterFormat )// #i80890# if rDesc is not the one belonging to the current page is might crash
-                            pBox = & (const SvxBoxItem&)pFooterFormat->GetBox();
+                            pBox = & pFooterFormat->GetBox();
                     }
                     if(pBox)
                     {

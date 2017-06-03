@@ -269,7 +269,7 @@ SwXFootnote::setLabel(const OUString& aLabel)
     {
         const SwTextFootnote* pTextFootnote = pFormat->GetTextFootnote();
         OSL_ENSURE(pTextFootnote, "No TextNode?");
-        SwTextNode& rTextNode = (SwTextNode&)pTextFootnote->GetTextNode();
+        SwTextNode& rTextNode = const_cast<SwTextNode&>(pTextFootnote->GetTextNode());
 
         SwPaM aPam(rTextNode, pTextFootnote->GetStart());
         GetDoc()->SetCurFootnote(aPam, newLabel, pFormat->GetNumber(), pFormat->IsEndNote());

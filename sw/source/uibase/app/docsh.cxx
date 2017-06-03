@@ -338,7 +338,7 @@ bool SwDocShell::Save()
                 if (m_pDoc->ContainsMSVBasic())
                 {
                     if( SvtFilterOptions::Get().IsLoadWordBasicStorage() )
-                        nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) (*this) );
+                        nVBWarning = GetSaveWarningOfMSVBAStorage( static_cast<SfxObjectShell&>(*this) );
                     m_pDoc->SetContainsMSVBasic( false );
                 }
 
@@ -463,7 +463,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         if (m_pDoc->ContainsMSVBasic())
         {
             if( SvtFilterOptions::Get().IsLoadWordBasicStorage() )
-                nVBWarning = GetSaveWarningOfMSVBAStorage( (SfxObjectShell&) *this );
+                nVBWarning = GetSaveWarningOfMSVBAStorage( static_cast<SfxObjectShell&>(*this) );
             m_pDoc->SetContainsMSVBasic( false );
         }
 
@@ -565,7 +565,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
             OSL_ENSURE( !xStg->GetError(), "No storage available for storing VBA macros!" );
             if ( !xStg->GetError() )
             {
-                nVBWarning = SaveOrDelMSVBAStorage( (SfxObjectShell&) *this, *xStg, bSave, "Macros" );
+                nVBWarning = SaveOrDelMSVBAStorage( static_cast<SfxObjectShell&>(*this), *xStg, bSave, "Macros" );
                 xStg->Commit();
                 m_pDoc->SetContainsMSVBasic( true );
             }

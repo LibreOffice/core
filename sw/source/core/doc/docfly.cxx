@@ -882,8 +882,8 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     }
                     else
                     {
-                        SwContentNode &rCNd = (SwContentNode&)
-                            *static_cast<const SwContentFrame*>(pNewAnchorFrame)->GetNode();
+                        SwContentNode &rCNd = const_cast<SwContentNode&>(
+                            *static_cast<const SwContentFrame*>(pNewAnchorFrame)->GetNode());
                         if ( pNewAnchorFrame->Frame().Bottom() < aPt.Y() )
                             rCNd.MakeStartIndex( &aPos.nContent );
                         else

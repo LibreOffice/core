@@ -153,8 +153,8 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
         const SwFrameFormat &rFormat = pPageDesc->GetMaster();
         nPageWidth = rFormat.GetFrameSize().GetSize().Width();
 
-        const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rFormat.GetLRSpace();
-        const SvxBoxItem& rBox = (const SvxBoxItem&) rFormat.GetBox();
+        const SvxLRSpaceItem& rLRSpace = rFormat.GetLRSpace();
+        const SvxBoxItem& rBox = rFormat.GetBox();
         nPageWidth -= rLRSpace.GetLeft() + rLRSpace.GetRight() + rBox.GetSmallestDistance();
 
         pPageSet->Put(rFormat.GetCol());

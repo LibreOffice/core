@@ -167,7 +167,7 @@ lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFormatArr,
         pNewTableBoxFormat->SetFormatAttr( pBoxFrameFormat->GetAttrSet().Get( RES_FRM_SIZE ) );
 
         if( pAutoFormat )
-            pAutoFormat->UpdateToSet( nId, (SfxItemSet&)pNewTableBoxFormat->GetAttrSet(),
+            pAutoFormat->UpdateToSet( nId, const_cast<SfxItemSet&>(static_cast<SfxItemSet const &>(pNewTableBoxFormat->GetAttrSet())),
                                     SwTableAutoFormat::UPDATE_BOX,
                                     pDoc->GetNumberFormatter() );
         else
@@ -200,7 +200,7 @@ static SwTableBoxFormat *lcl_CreateAFormatBoxFormat( SwDoc &rDoc, std::vector<Sw
     if( !rBoxFormatArr[nId] )
     {
         SwTableBoxFormat* pBoxFormat = rDoc.MakeTableBoxFormat();
-        rAutoFormat.UpdateToSet( nId, (SfxItemSet&)pBoxFormat->GetAttrSet(),
+        rAutoFormat.UpdateToSet( nId, const_cast<SfxItemSet&>(static_cast<SfxItemSet const &>(pBoxFormat->GetAttrSet())),
                                 SwTableAutoFormat::UPDATE_BOX,
                                 rDoc.GetNumberFormatter( ) );
         if( USHRT_MAX != nCols )
@@ -671,8 +671,8 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
             || pEnd->nNode.GetIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
         {
             getIDocumentContentOperations().SplitNode( *pEnd, false );
-            --((SwNodeIndex&)pEnd->nNode);
-            ((SwIndex&)pEnd->nContent).Assign(
+            --const_cast<SwNodeIndex&>(pEnd->nNode);
+            const_cast<SwIndex&>(pEnd->nContent).Assign(
                                 pEnd->nNode.GetNode().GetContentNode(), 0 );
             // A Node and at the End?
             if( pStt->nNode.GetIndex() >= pEnd->nNode.GetIndex() )
@@ -868,7 +868,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
     aNode2Layout.RestoreUpperFrames( GetNodes(), nIdx, nIdx + 1 );
 
     {
-        SwPaM& rTmp = (SwPaM&)rRange; // Point always at the Start
+        SwPaM& rTmp = const_cast<SwPaM&>(rRange); // Point always at the Start
         rTmp.DeleteMark();
         rTmp.GetPoint()->nNode = *pTableNd;
         SwContentNode* pCNd = GetNodes().GoNext( &rTmp.GetPoint()->nNode );
@@ -1168,8 +1168,8 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
             || pEnd->nNode.GetIndex() >= GetNodes().GetEndOfContent().GetIndex()-1 )
         {
             getIDocumentContentOperations().SplitNode( *pEnd, false );
-            --((SwNodeIndex&)pEnd->nNode);
-            ((SwIndex&)pEnd->nContent).Assign(
+            --const_cast<SwNodeIndex&>(pEnd->nNode);
+            const_cast<SwIndex&>(pEnd->nContent).Assign(
                                 pEnd->nNode.GetNode().GetContentNode(), 0 );
             // A Node and at the End?
             if( pStt->nNode.GetIndex() >= pEnd->nNode.GetIndex() )
@@ -3662,7 +3662,7 @@ struct SetAFormatTabPara
     sal_uInt8 nAFormatLine, nAFormatBox;
 
     explicit SetAFormatTabPara( const SwTableAutoFormat& rNew )
-        : rTableFormat( (SwTableAutoFormat&)rNew ), pUndo( nullptr ),
+        : rTableFormat( const_cast<SwTableAutoFormat&>(rNew) ), pUndo( nullptr ),
         nEndBox( 0 ), nCurBox( 0 ), nAFormatLine( 0 ), nAFormatBox( 0 )
     {}
 };

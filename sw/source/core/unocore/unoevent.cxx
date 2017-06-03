@@ -157,7 +157,7 @@ void SwHyperlinkEventDescriptor::copyMacrosFromNameReplace(
 // use double cast in superclass constructor to avoid ambiguous cast
 SwFrameEventDescriptor::SwFrameEventDescriptor(
     SwXTextFrame& rFrameRef ) :
-        SvEventDescriptor((text::XTextFrame&)rFrameRef, aFrameEvents),
+        SvEventDescriptor(static_cast<text::XTextFrame&>(rFrameRef), aFrameEvents),
         sSwFrameEventDescriptor("SwFrameEventDescriptor"),
         rFrame(rFrameRef)
 {
@@ -165,15 +165,15 @@ SwFrameEventDescriptor::SwFrameEventDescriptor(
 
 SwFrameEventDescriptor::SwFrameEventDescriptor(
     SwXTextGraphicObject& rGraphicRef ) :
-        SvEventDescriptor((text::XTextContent&)rGraphicRef, aGraphicEvents),
-        rFrame((SwXFrame&)rGraphicRef)
+        SvEventDescriptor(static_cast<text::XTextContent&>(rGraphicRef), aGraphicEvents),
+        rFrame(static_cast<SwXFrame&>(rGraphicRef))
 {
 }
 
 SwFrameEventDescriptor::SwFrameEventDescriptor(
     SwXTextEmbeddedObject& rObjectRef ) :
-        SvEventDescriptor((text::XTextContent&)rObjectRef, aOLEEvents),
-        rFrame((SwXFrame&)rObjectRef)
+        SvEventDescriptor(static_cast<text::XTextContent&>(rObjectRef), aOLEEvents),
+        rFrame(static_cast<SwXFrame&>(rObjectRef))
 {
 }
 

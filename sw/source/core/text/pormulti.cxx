@@ -219,9 +219,9 @@ sal_Int32 SwBidiPortion::GetSpaceCnt( const SwTextSizeInfo &rInf ) const
                  static_cast<SwMultiPortion*>(pPor)->IsBidi() )
             nBlanks = nBlanks + static_cast<SwBidiPortion*>(pPor)->GetSpaceCnt( rInf );
 
-        ((SwTextSizeInfo &)rInf).SetIdx( rInf.GetIdx() + pPor->GetLen() );
+        const_cast<SwTextSizeInfo &>(rInf).SetIdx( rInf.GetIdx() + pPor->GetLen() );
     }
-    ((SwTextSizeInfo &)rInf).SetIdx( nTmpStart );
+    const_cast<SwTextSizeInfo &>(rInf).SetIdx( nTmpStart );
     return nBlanks;
 }
 

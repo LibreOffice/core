@@ -2058,7 +2058,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     FndBox_ aFndBox( nullptr, nullptr );
     {
         FndPara aPara( rSelBoxes, &aFndBox );
-        ForEach_FndLineCopyCol( (SwTableLines&)GetTabLines(), &aPara );
+        ForEach_FndLineCopyCol( const_cast<SwTableLines&>(GetTabLines()), &aPara );
     }
     if( aFndBox.GetLines().empty() )
         return false;

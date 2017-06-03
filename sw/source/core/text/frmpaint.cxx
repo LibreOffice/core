@@ -308,7 +308,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
         SwRect rOldRect( rRect );
 
         if ( IsVertical() )
-            SwitchVerticalToHorizontal( (SwRect&)rRect );
+            SwitchVerticalToHorizontal( const_cast<SwRect&>(rRect) );
 
         SwLayoutModeModifier aLayoutModeModifier( *pSh->GetOut() );
         aLayoutModeModifier.Modify( false );
@@ -340,7 +340,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
                     aExtra.IncLineNr();
                 if( !aLine.Next() )
                 {
-                    (SwRect&)rRect = rOldRect;
+                    const_cast<SwRect&>(rRect) = rOldRect;
                     return;
                 }
             }
@@ -401,7 +401,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
                 aExtra.PaintRedline( Frame().Top()+Prt().Top(), Prt().Height() );
         }
 
-        (SwRect&)rRect = rOldRect;
+        const_cast<SwRect&>(rRect) = rOldRect;
     }
 }
 
@@ -654,10 +654,10 @@ void SwTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
             SwSwapIfNotSwapped swap(const_cast<SwTextFrame *>(this));
 
             if ( IsVertical() )
-                SwitchVerticalToHorizontal( (SwRect&)rRect );
+                SwitchVerticalToHorizontal( const_cast<SwRect&>(rRect) );
 
             if ( IsRightToLeft() )
-                SwitchRTLtoLTR( (SwRect&)rRect );
+                SwitchRTLtoLTR( const_cast<SwRect&>(rRect) );
 
             SwTextPaintInfo aInf( const_cast<SwTextFrame*>(this), rRect );
             aInf.SetWrongList( const_cast<SwTextNode*>(GetTextNode())->GetWrong() );
@@ -705,7 +705,7 @@ void SwTextFrame::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
                 rRepaint.Clear();
         }
 
-        (SwRect&)rRect = aOldRect;
+        const_cast<SwRect&>(rRect) = aOldRect;
 
         OSL_ENSURE( ! IsSwapped(), "A frame is swapped after Paint" );
     }

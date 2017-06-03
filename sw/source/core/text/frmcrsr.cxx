@@ -556,12 +556,12 @@ bool SwTextFrame::GetCursorOfst_(SwPosition* pPos, const Point& rPoint,
 
     if ( IsVertical() )
     {
-        SwitchVerticalToHorizontal( (Point&)rPoint );
+        SwitchVerticalToHorizontal( const_cast<Point&>(rPoint) );
         const_cast<SwTextFrame*>(this)->SwapWidthAndHeight();
     }
 
     if ( IsRightToLeft() )
-        SwitchRTLtoLTR( (Point&)rPoint );
+        SwitchRTLtoLTR( const_cast<Point&>(rPoint) );
 
     SwFillData *pFillData = ( pCMS && pCMS->m_pFill ) ?
                         new SwFillData( pCMS, pPos, Frame(), rPoint ) : nullptr;
@@ -651,7 +651,7 @@ bool SwTextFrame::GetCursorOfst_(SwPosition* pPos, const Point& rPoint,
                 pFillData->SetOrient( text::HoriOrientation::LEFT );
     }
 
-    (Point&)rPoint = aOldPoint;
+    const_cast<Point&>(rPoint) = aOldPoint;
     delete pFillData;
 
     return true;

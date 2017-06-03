@@ -1897,7 +1897,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
 
             SwPaM aPam( pStt->nNode, aMvRg.aEnd );
 
-            SwPaM& rOrigPam = (SwPaM&)rPam;
+            SwPaM& rOrigPam = const_cast<SwPaM&>(rPam);
             rOrigPam.DeleteMark();
             rOrigPam.GetPoint()->nNode = aIdx.GetIndex() - 1;
 

@@ -1995,7 +1995,7 @@ void SAL_CALL SwXTextField::attach(
                 // delete former annotation
                 {
                     const SwTextField* pTextField = m_pImpl->m_pFormatField->GetTextField();
-                    SwTextNode& rTextNode = (SwTextNode&)*pTextField->GetpTextNode();
+                    SwTextNode& rTextNode = *pTextField->GetpTextNode();
                     SwPaM aPam( rTextNode, pTextField->GetStart() );
                     aPam.SetMark();
                     aPam.Move();

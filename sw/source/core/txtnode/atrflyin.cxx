@@ -124,7 +124,7 @@ void SwTextFlyCnt::CopyFlyFormat( SwDoc* pDoc )
     }
 
     SwFrameFormat* pNew = pDoc->getIDocumentLayoutAccess().CopyLayoutFormat( *pFormat, aAnchor, false, false );
-    ((SwFormatFlyCnt&)GetFlyCnt()).SetFlyFormat( pNew );
+    const_cast<SwFormatFlyCnt&>(GetFlyCnt()).SetFlyFormat( pNew );
 }
 
 /** SetAnchor() is called by SwTextNode::InsertHint() and sets the anchor
@@ -176,7 +176,7 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
         ::sw::UndoGuard const undoGuardFormat(
             pFormat->GetDoc()->GetIDocumentUndoRedo());
         pFormat->GetDoc()->getIDocumentLayoutAccess().DelLayoutFormat( pFormat );
-        ((SwFormatFlyCnt&)GetFlyCnt()).SetFlyFormat( pNew );
+        const_cast<SwFormatFlyCnt&>(GetFlyCnt()).SetFlyFormat( pNew );
     }
     else if( pNode->GetpSwpHints() &&
             pNode->GetpSwpHints()->IsInSplitNode() &&

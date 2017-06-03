@@ -938,7 +938,7 @@ SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo &rInf 
     const SwTextFootnote* pFootnote = pFootnoteFrame->GetAttr();
 
     // Aha! So we're in the Footnote Area!
-    SwFormatFootnote& rFootnote = (SwFormatFootnote&)pFootnote->GetFootnote();
+    SwFormatFootnote& rFootnote = const_cast<SwFormatFootnote&>(pFootnote->GetFootnote());
 
     SwDoc *pDoc = m_pFrame->GetNode()->GetDoc();
     OUString aFootnoteText( rFootnote.GetViewNumStr( *pDoc, true ));
@@ -1248,17 +1248,17 @@ SwFootnoteSave::SwFootnoteSave( const SwTextSizeInfo &rInf,
                       const SwTextFootnote* pTextFootnote,
                       const bool bApplyGivenScriptType,
                       const SwFontScript nGivenScriptType )
-    : pInf( &((SwTextSizeInfo&)rInf) )
+    : pInf( &const_cast<SwTextSizeInfo&>(rInf) )
     , pFnt( nullptr )
     , pOld( nullptr )
 {
     if( pTextFootnote && rInf.GetTextFrame() )
     {
-        pFnt = ((SwTextSizeInfo&)rInf).GetFont();
+        pFnt = const_cast<SwTextSizeInfo&>(rInf).GetFont();
           pOld = new SwFont( *pFnt );
         pOld->GetTox() = pFnt->GetTox();
         pFnt->GetTox() = 0;
-        SwFormatFootnote& rFootnote = (SwFormatFootnote&)pTextFootnote->GetFootnote();
+        SwFormatFootnote& rFootnote = const_cast<SwFormatFootnote&>(pTextFootnote->GetFootnote());
         const SwDoc *pDoc = rInf.GetTextFrame()->GetNode()->GetDoc();
 
         // #i98418#
@@ -1278,7 +1278,7 @@ SwFootnoteSave::SwFootnoteSave( const SwTextSizeInfo &rInf,
             pInfo = &pDoc->GetEndNoteInfo();
         else
             pInfo = &pDoc->GetFootnoteInfo();
-        const SwAttrSet& rSet = pInfo->GetAnchorCharFormat((SwDoc&)*pDoc)->GetAttrSet();
+        const SwAttrSet& rSet = pInfo->GetAnchorCharFormat(const_cast<SwDoc&>(*pDoc))->GetAttrSet();
         pFnt->SetDiffFnt( &rSet, rInf.GetTextFrame()->GetNode()->getIDocumentSettingAccess() );
 
         // we reduce footnote size, if we are inside a double line portion

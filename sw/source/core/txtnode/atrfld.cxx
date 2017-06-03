@@ -414,7 +414,7 @@ void SwTextField::CopyTextField( SwTextField *pDest ) const
     IDocumentFieldsAccess* pIDFA = &m_pTextNode->getIDocumentFieldsAccess();
     IDocumentFieldsAccess* pDestIDFA = &pDest->m_pTextNode->getIDocumentFieldsAccess();
 
-    SwFormatField& rDestFormatField = (SwFormatField&)pDest->GetFormatField();
+    SwFormatField& rDestFormatField = const_cast<SwFormatField&>(pDest->GetFormatField());
     const SwFieldIds nFieldWhich = rDestFormatField.GetField()->GetTyp()->Which();
 
     if( pIDFA != pDestIDFA )

@@ -178,10 +178,10 @@ void StartGrammarChecking( SwDoc &rDoc )
  */
 static void lcl_DelFormatIndices( SwFormat* pFormat )
 {
-    SwFormatContent &rFormatContent = (SwFormatContent&)pFormat->GetContent();
+    SwFormatContent &rFormatContent = const_cast<SwFormatContent&>(pFormat->GetContent());
     if ( rFormatContent.GetContentIdx() )
         rFormatContent.SetNewContentIdx( nullptr );
-    SwFormatAnchor &rFormatAnchor = (SwFormatAnchor&)pFormat->GetAnchor();
+    SwFormatAnchor &rFormatAnchor = const_cast<SwFormatAnchor&>(pFormat->GetAnchor());
     if ( rFormatAnchor.GetContentAnchor() )
         rFormatAnchor.SetAnchor( nullptr );
 }

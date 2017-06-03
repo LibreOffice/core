@@ -667,7 +667,7 @@ bool SwLayHelper::CheckInsertPage()
         }
         // If the page style is changing, we'll have a first page.
         bool bNextPageFirst = pDesc != mrpPage->GetPageDesc();
-        ::InsertNewPage( (SwPageDesc&)*pDesc, mrpPage->GetUpper(),
+        ::InsertNewPage( const_cast<SwPageDesc&>(*pDesc), mrpPage->GetUpper(),
                          bNextPageOdd, bNextPageFirst, bInsertEmpty, false, mrpPage->GetNext() );
         if ( bEnd )
         {

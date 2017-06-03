@@ -3410,7 +3410,7 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
                 {
                     SvxBrushItem aBrush( RES_BACKGROUND );
                     SwDoc::GetBoxAttr(*m_pImpl->m_pTableCursor, aBrush);
-                    ((SfxPoolItem&)aBrush).PutValue(aValue, pEntry->nMemberId);
+                    static_cast<SfxPoolItem&>(aBrush).PutValue(aValue, pEntry->nMemberId);
                     pDoc->SetBoxAttr(*m_pImpl->m_pTableCursor, aBrush);
 
                 }
@@ -3444,7 +3444,7 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
 
                     aSet.Put(aBoxInfo);
                     SvxBoxItem aBoxItem(static_cast<const SvxBoxItem&>(aSet.Get(RES_BOX)));
-                    ((SfxPoolItem&)aBoxItem).PutValue(aValue, pEntry->nMemberId);
+                    static_cast<SfxPoolItem&>(aBoxItem).PutValue(aValue, pEntry->nMemberId);
                     aSet.Put(aBoxItem);
                     pDoc->SetTabBorders(*m_pImpl->m_pTableCursor, aSet);
                 }
@@ -3452,7 +3452,7 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
                 case RES_BOXATR_FORMAT:
                 {
                     SfxUInt32Item aNumberFormat(RES_BOXATR_FORMAT);
-                    ((SfxPoolItem&)aNumberFormat).PutValue(aValue, 0);
+                    static_cast<SfxPoolItem&>(aNumberFormat).PutValue(aValue, 0);
                     pDoc->SetBoxAttr(rCursor, aNumberFormat);
                 }
                 break;

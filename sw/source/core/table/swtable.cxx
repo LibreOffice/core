@@ -1632,8 +1632,8 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwNodeIndex &rIdx,
     // insert into the table
     const SwTableNode* pTableNd = m_pStartNode->FindTableNode();
     OSL_ENSURE( pTableNd, "In which table is that box?" );
-    SwTableSortBoxes& rSrtArr = (SwTableSortBoxes&)pTableNd->GetTable().
-                                GetTabSortBoxes();
+    SwTableSortBoxes& rSrtArr = const_cast<SwTableSortBoxes&>(pTableNd->GetTable().
+                                GetTabSortBoxes());
     SwTableBox* p = this;   // error: &this
     rSrtArr.insert( p );        // insert
 }
@@ -1652,8 +1652,8 @@ SwTableBox::SwTableBox( SwTableBoxFormat* pFormat, const SwStartNode& rSttNd, Sw
     // insert into the table
     const SwTableNode* pTableNd = m_pStartNode->FindTableNode();
     OSL_ENSURE( pTableNd, "In which table is the box?" );
-    SwTableSortBoxes& rSrtArr = (SwTableSortBoxes&)pTableNd->GetTable().
-                                GetTabSortBoxes();
+    SwTableSortBoxes& rSrtArr = const_cast<SwTableSortBoxes&>(pTableNd->GetTable().
+                                GetTabSortBoxes());
     SwTableBox* p = this;   // error: &this
     rSrtArr.insert( p );        // insert
 }
@@ -1665,8 +1665,8 @@ void SwTableBox::RemoveFromTable()
         // remove from table
         const SwTableNode* pTableNd = m_pStartNode->FindTableNode();
         assert(pTableNd && "In which table is that box?");
-        SwTableSortBoxes& rSrtArr = (SwTableSortBoxes&)pTableNd->GetTable().
-                                    GetTabSortBoxes();
+        SwTableSortBoxes& rSrtArr = const_cast<SwTableSortBoxes&>(pTableNd->GetTable().
+                                    GetTabSortBoxes());
         SwTableBox *p = this;   // error: &this
         rSrtArr.erase( p );        // remove
         m_pStartNode = nullptr; // clear it so this is only run once

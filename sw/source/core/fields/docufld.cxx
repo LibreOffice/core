@@ -734,7 +734,7 @@ OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, SvxNumType nFormat) con
         case DS_CHAR: nVal = rDStat.nChar;  break;
         case DS_PAGE:
             if( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() )
-                ((SwDocStat &)rDStat).nPage = pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetPageNum();
+                const_cast<SwDocStat &>(rDStat).nPage = pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->GetPageNum();
             nVal = rDStat.nPage;
             if( SVX_NUM_PAGEDESC == nFormat )
                 nFormat = nNumberingType;

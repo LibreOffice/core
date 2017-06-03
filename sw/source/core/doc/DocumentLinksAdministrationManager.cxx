@@ -500,7 +500,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
         }
         else if( sCmp == "outline" )
         {
-            SwPosition aPos( SwNodeIndex( (SwNodes&)m_rDoc.GetNodes() ));
+            SwPosition aPos( SwNodeIndex( m_rDoc.GetNodes() ));
             if( m_rDoc.GotoOutline( aPos, sName ))
             {
                 SwNode* pNd = &aPos.nNode.GetNode();

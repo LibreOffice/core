@@ -328,7 +328,7 @@ void SwTextFootnote::SetStartNode( const SwNodeIndex *pNewNode, bool bDelNode )
 
 void SwTextFootnote::SetNumber( const sal_uInt16 nNewNum, const OUString &sNumStr )
 {
-    SwFormatFootnote& rFootnote = (SwFormatFootnote&)GetFootnote();
+    SwFormatFootnote& rFootnote = const_cast<SwFormatFootnote&>(GetFootnote());
 
     rFootnote.m_aNumber = sNumStr;
     if ( sNumStr.isEmpty() )

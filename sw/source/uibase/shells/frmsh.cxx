@@ -233,7 +233,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             break;
 
         case FN_FRAME_UNCHAIN:
-            rSh.Unchain( (SwFrameFormat&)*rSh.GetFlyFrameFormat() );
+            rSh.Unchain( *rSh.GetFlyFrameFormat() );
             GetView().GetViewFrame()->GetBindings().Invalidate(FN_FRAME_CHAIN);
             break;
         case FN_FORMAT_FOOTNOTE_DLG:

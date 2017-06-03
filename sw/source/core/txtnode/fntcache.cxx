@@ -150,9 +150,9 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
             delete m_pPrtFont;
 
         const vcl::Font aOldFnt( rPrt.GetFont() );
-        ((OutputDevice&)rPrt).SetFont( m_aFont );
+        const_cast<OutputDevice&>(rPrt).SetFont( m_aFont );
         const FontMetric aWinMet( rPrt.GetFontMetric() );
-        ((OutputDevice&)rPrt).SetFont( aOldFnt );
+        const_cast<OutputDevice&>(rPrt).SetFont( aOldFnt );
         long nWidth = ( aWinMet.GetFontSize().Width() * m_nPropWidth ) / 100;
 
         if( !nWidth )
@@ -289,10 +289,10 @@ sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& 
         {
             CreatePrtFont( rOut );
             const vcl::Font aOldFnt( rRefDev.GetFont() );
-            ((OutputDevice&)rRefDev).SetFont( *m_pPrtFont );
+            const_cast<OutputDevice&>(rRefDev).SetFont( *m_pPrtFont );
             const FontMetric aOutMet( rRefDev.GetFontMetric() );
             m_nPrtAscent = (sal_uInt16) aOutMet.GetAscent();
-            ( (OutputDevice&)rRefDev).SetFont( aOldFnt );
+            const_cast<OutputDevice&>(rRefDev).SetFont( aOldFnt );
         }
 
         nRet = m_nPrtAscent;
@@ -326,7 +326,7 @@ sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& 
         {
             CreatePrtFont( rOut );
             const vcl::Font aOldFnt( rRefDev.GetFont() );
-            ((OutputDevice&)rRefDev).SetFont( *m_pPrtFont );
+            const_cast<OutputDevice&>(rRefDev).SetFont( *m_pPrtFont );
             m_nPrtHeight = static_cast<sal_uInt16>(rRefDev.GetTextHeight());
 
 #if OSL_DEBUG_LEVEL > 0
@@ -339,7 +339,7 @@ sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& 
                     "GetTextHeight != Ascent + Descent" );
 #endif
 
-            ((OutputDevice&)rRefDev).SetFont( aOldFnt );
+            const_cast<OutputDevice&>(rRefDev).SetFont( aOldFnt );
         }
 
         nRet = m_nPrtHeight + GetFontLeading( pSh, rRefDev );
@@ -360,9 +360,9 @@ sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice&
             SolarMutexGuard aGuard;
 
             const vcl::Font aOldFnt( rOut.GetFont() );
-            ((OutputDevice&)rOut).SetFont( *m_pPrtFont );
+            const_cast<OutputDevice&>(rOut).SetFont( *m_pPrtFont );
             const FontMetric aMet( rOut.GetFontMetric() );
-            ((OutputDevice&)rOut).SetFont( aOldFnt );
+            const_cast<OutputDevice&>(rOut).SetFont( aOldFnt );
             m_bSymbol = RTL_TEXTENCODING_SYMBOL == aMet.GetCharSet();
             GuessLeading( *pSh, aMet );
             m_nExtLeading = static_cast<sal_uInt16>(aMet.GetExternalLeading());

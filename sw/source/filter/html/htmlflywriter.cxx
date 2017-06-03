@@ -1717,7 +1717,7 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
         return rWrt;
 
     ImageMap aIMap;
-    Graphic aGraphic( ((SwFrameFormat &)rFrameFormat).MakeGraphic( &aIMap ) );
+    Graphic aGraphic( const_cast<SwFrameFormat &>(rFrameFormat).MakeGraphic( &aIMap ) );
     Size aSz( 0, 0 );
     OUString GraphicURL;
     if(!rHTMLWrt.mbEmbedImages)

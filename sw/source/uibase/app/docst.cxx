@@ -1256,7 +1256,7 @@ SfxStyleFamily SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily 
         {
             pCurrWrtShell->StartAllAction();
             size_t nPgDsc = pCurrWrtShell->GetCurPageDesc();
-            SwPageDesc& rSrc = (SwPageDesc&)pCurrWrtShell->GetPageDesc( nPgDsc );
+            SwPageDesc& rSrc = const_cast<SwPageDesc&>(pCurrWrtShell->GetPageDesc( nPgDsc ));
             SwPageDesc& rDest = *const_cast<SwPageDesc*>(pStyle->GetPageDesc());
 
             sal_uInt16 nPoolId = rDest.GetPoolFormatId();

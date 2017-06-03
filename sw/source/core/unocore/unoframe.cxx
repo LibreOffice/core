@@ -194,10 +194,10 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     {
         const ::uno::Any* pAnchorPgNo;
         if(GetProperty(RES_ANCHOR, MID_ANCHOR_PAGENUM, pAnchorPgNo))
-            bRet &= ((SfxPoolItem&)aAnchor).PutValue(*pAnchorPgNo, MID_ANCHOR_PAGENUM);
+            bRet &= static_cast<SfxPoolItem&>(aAnchor).PutValue(*pAnchorPgNo, MID_ANCHOR_PAGENUM);
         const ::uno::Any* pAnchorType;
         if(GetProperty(RES_ANCHOR, MID_ANCHOR_ANCHORTYPE, pAnchorType))
-            bRet &= ((SfxPoolItem&)aAnchor).PutValue(*pAnchorType, MID_ANCHOR_ANCHORTYPE);
+            bRet &= static_cast<SfxPoolItem&>(aAnchor).PutValue(*pAnchorType, MID_ANCHOR_ANCHORTYPE);
     }
 
     rToSet.Put(aAnchor);
@@ -301,44 +301,44 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
 
         if(pCol)
         {
-            bRet &= ((SfxPoolItem&)aBrush).PutValue(*pCol,MID_BACK_COLOR    );
+            bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pCol,MID_BACK_COLOR    );
         }
 
         if(pColTrans)
         {
-            bRet &= ((SfxPoolItem&)aBrush).PutValue(*pColTrans, MID_BACK_COLOR_TRANSPARENCY);
+            bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pColTrans, MID_BACK_COLOR_TRANSPARENCY);
         }
 
         if(pRGBCol)
         {
-            bRet &= ((SfxPoolItem&)aBrush).PutValue(*pRGBCol, MID_BACK_COLOR_R_G_B);
+            bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pRGBCol, MID_BACK_COLOR_R_G_B);
         }
 
         if(pTrans)
         {
             // don't overwrite transparency with a non-transparence flag
             if(!pColTrans || Any2Bool( *pTrans ))
-                bRet &= ((SfxPoolItem&)aBrush).PutValue(*pTrans, MID_GRAPHIC_TRANSPARENT);
+                bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pTrans, MID_GRAPHIC_TRANSPARENT);
         }
 
         if(pGrURL)
         {
-            bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrURL, MID_GRAPHIC_URL);
+            bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pGrURL, MID_GRAPHIC_URL);
         }
 
         if(pGrFilter)
         {
-            bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrFilter, MID_GRAPHIC_FILTER);
+            bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pGrFilter, MID_GRAPHIC_FILTER);
         }
 
         if(pGrLoc)
         {
-            bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrLoc, MID_GRAPHIC_POSITION);
+            bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pGrLoc, MID_GRAPHIC_POSITION);
         }
 
         if(pGrTranparency)
         {
-            bRet &= ((SfxPoolItem&)aBrush).PutValue(*pGrTranparency, MID_GRAPHIC_TRANSPARENCY);
+            bRet &= static_cast<SfxPoolItem&>(aBrush).PutValue(*pGrTranparency, MID_GRAPHIC_TRANSPARENCY);
         }
 
         setSvxBrushItemAsFillAttributesToTargetSet(aBrush, rToSet);
@@ -640,11 +640,11 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             SvxProtectItem aProt ( static_cast < const ::SvxProtectItem & > ( rFromSet.Get ( RES_PROTECT ) ) );
             if(pCont)
-                bRet &= ((SfxPoolItem&)aProt).PutValue(*pCont, MID_PROTECT_CONTENT);
+                bRet &= static_cast<SfxPoolItem&>(aProt).PutValue(*pCont, MID_PROTECT_CONTENT);
             if(pPos )
-                bRet &= ((SfxPoolItem&)aProt).PutValue(*pPos, MID_PROTECT_POSITION);
+                bRet &= static_cast<SfxPoolItem&>(aProt).PutValue(*pPos, MID_PROTECT_POSITION);
             if(pName)
-                bRet &= ((SfxPoolItem&)aProt).PutValue(*pName, MID_PROTECT_SIZE);
+                bRet &= static_cast<SfxPoolItem&>(aProt).PutValue(*pName, MID_PROTECT_SIZE);
             rToSet.Put(aProt);
         }
     }
@@ -661,13 +661,13 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             SwFormatHoriOrient aOrient ( static_cast < const ::SwFormatHoriOrient & > ( rFromSet.Get ( RES_HORI_ORIENT ) ) );
             if(pHori )
-                bRet &= ((SfxPoolItem&)aOrient).PutValue(*pHori, MID_HORIORIENT_ORIENT);
+                bRet &= static_cast<SfxPoolItem&>(aOrient).PutValue(*pHori, MID_HORIORIENT_ORIENT);
             if(pHoriP)
-                bRet &= ((SfxPoolItem&)aOrient).PutValue(*pHoriP, MID_HORIORIENT_POSITION|CONVERT_TWIPS);
+                bRet &= static_cast<SfxPoolItem&>(aOrient).PutValue(*pHoriP, MID_HORIORIENT_POSITION|CONVERT_TWIPS);
             if(pHoriR)
-                bRet &= ((SfxPoolItem&)aOrient).PutValue(*pHoriR, MID_HORIORIENT_RELATION);
+                bRet &= static_cast<SfxPoolItem&>(aOrient).PutValue(*pHoriR, MID_HORIORIENT_RELATION);
             if(pPageT)
-                bRet &= ((SfxPoolItem&)aOrient).PutValue(*pPageT, MID_HORIORIENT_PAGETOGGLE);
+                bRet &= static_cast<SfxPoolItem&>(aOrient).PutValue(*pPageT, MID_HORIORIENT_PAGETOGGLE);
             rToSet.Put(aOrient);
         }
     }
@@ -683,11 +683,11 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             SwFormatVertOrient aOrient ( static_cast < const ::SwFormatVertOrient & > ( rFromSet.Get ( RES_VERT_ORIENT ) ) );
             if(pVert )
-                bRet &= ((SfxPoolItem&)aOrient).PutValue(*pVert, MID_VERTORIENT_ORIENT);
+                bRet &= static_cast<SfxPoolItem&>(aOrient).PutValue(*pVert, MID_VERTORIENT_ORIENT);
             if(pVertP)
-                bRet &= ((SfxPoolItem&)aOrient).PutValue(*pVertP, MID_VERTORIENT_POSITION|CONVERT_TWIPS);
+                bRet &= static_cast<SfxPoolItem&>(aOrient).PutValue(*pVertP, MID_VERTORIENT_POSITION|CONVERT_TWIPS);
             if(pVertR)
-                bRet &= ((SfxPoolItem&)aOrient).PutValue(*pVertR, MID_VERTORIENT_RELATION);
+                bRet &= static_cast<SfxPoolItem&>(aOrient).PutValue(*pVertR, MID_VERTORIENT_RELATION);
             rToSet.Put(aOrient);
         }
     }
@@ -704,13 +704,13 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         {
             SwFormatURL aURL ( static_cast < const ::SwFormatURL & > ( rFromSet.Get ( RES_URL ) ) );
             if(pURL)
-                bRet &= ((SfxPoolItem&)aURL).PutValue(*pURL, MID_URL_URL);
+                bRet &= static_cast<SfxPoolItem&>(aURL).PutValue(*pURL, MID_URL_URL);
             if(pTarget)
-                bRet &= ((SfxPoolItem&)aURL).PutValue(*pTarget, MID_URL_TARGET);
+                bRet &= static_cast<SfxPoolItem&>(aURL).PutValue(*pTarget, MID_URL_TARGET);
             if(pHyLNm)
-                bRet &= ((SfxPoolItem&)aURL).PutValue(*pHyLNm, MID_URL_HYPERLINKNAME  );
+                bRet &= static_cast<SfxPoolItem&>(aURL).PutValue(*pHyLNm, MID_URL_HYPERLINKNAME  );
             if(pHySMp)
-                bRet &= ((SfxPoolItem&)aURL).PutValue(*pHySMp, MID_URL_SERVERMAP);
+                bRet &= static_cast<SfxPoolItem&>(aURL).PutValue(*pHySMp, MID_URL_SERVERMAP);
             rToSet.Put(aURL);
         }
     }
@@ -722,9 +722,9 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     {
         SvxLRSpaceItem aLR ( static_cast < const ::SvxLRSpaceItem & > ( rFromSet.Get ( RES_LR_SPACE ) ) );
         if(pL)
-            bRet &= ((SfxPoolItem&)aLR).PutValue(*pL, MID_L_MARGIN|CONVERT_TWIPS);
+            bRet &= static_cast<SfxPoolItem&>(aLR).PutValue(*pL, MID_L_MARGIN|CONVERT_TWIPS);
         if(pR)
-            bRet &= ((SfxPoolItem&)aLR).PutValue(*pR, MID_R_MARGIN|CONVERT_TWIPS);
+            bRet &= static_cast<SfxPoolItem&>(aLR).PutValue(*pR, MID_R_MARGIN|CONVERT_TWIPS);
         rToSet.Put(aLR);
     }
     const ::uno::Any* pT = nullptr;
@@ -735,30 +735,30 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     {
         SvxULSpaceItem aTB ( static_cast < const ::SvxULSpaceItem &> ( rFromSet.Get ( RES_UL_SPACE ) ) );
         if(pT)
-            bRet &= ((SfxPoolItem&)aTB).PutValue(*pT, MID_UP_MARGIN|CONVERT_TWIPS);
+            bRet &= static_cast<SfxPoolItem&>(aTB).PutValue(*pT, MID_UP_MARGIN|CONVERT_TWIPS);
         if(pB)
-            bRet &= ((SfxPoolItem&)aTB).PutValue(*pB, MID_LO_MARGIN|CONVERT_TWIPS);
+            bRet &= static_cast<SfxPoolItem&>(aTB).PutValue(*pB, MID_LO_MARGIN|CONVERT_TWIPS);
         rToSet.Put(aTB);
     }
     const ::uno::Any* pOp;
     if(GetProperty(RES_OPAQUE, 0, pOp))
     {
         SvxOpaqueItem aOp ( static_cast < const ::SvxOpaqueItem& > ( rFromSet.Get ( RES_OPAQUE ) ) );
-        bRet &= ((SfxPoolItem&)aOp).PutValue(*pOp, 0);
+        bRet &= static_cast<SfxPoolItem&>(aOp).PutValue(*pOp, 0);
         rToSet.Put(aOp);
     }
     const ::uno::Any* pPrt;
     if(GetProperty(RES_PRINT, 0, pPrt))
     {
         SvxPrintItem aPrt ( static_cast < const ::SvxPrintItem & > ( rFromSet.Get ( RES_PRINT ) ) );
-        bRet &= ((SfxPoolItem&)aPrt).PutValue(*pPrt, 0);
+        bRet &= static_cast<SfxPoolItem&>(aPrt).PutValue(*pPrt, 0);
         rToSet.Put(aPrt);
     }
     const ::uno::Any* pSh;
     if(GetProperty(RES_SHADOW, CONVERT_TWIPS, pSh))
     {
         SvxShadowItem aSh ( static_cast < const ::SvxShadowItem& > ( rFromSet.Get ( RES_SHADOW ) ) );
-        bRet &= ((SfxPoolItem&)aSh).PutValue(*pSh, CONVERT_TWIPS);
+        bRet &= static_cast<SfxPoolItem&>(aSh).PutValue(*pSh, CONVERT_TWIPS);
         rToSet.Put(aSh);
     }
     const ::uno::Any* pShTr;
@@ -776,9 +776,9 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     {
         SwFormatSurround aSrnd ( static_cast < const ::SwFormatSurround & > ( rFromSet.Get ( RES_SURROUND ) ) );
         if(pSur)
-            bRet &= ((SfxPoolItem&)aSrnd).PutValue(*pSur, MID_SURROUND_SURROUNDTYPE );
+            bRet &= static_cast<SfxPoolItem&>(aSrnd).PutValue(*pSur, MID_SURROUND_SURROUNDTYPE );
         if(pSurAnch)
-            bRet &= ((SfxPoolItem&)aSrnd).PutValue(*pSurAnch, MID_SURROUND_ANCHORONLY);
+            bRet &= static_cast<SfxPoolItem&>(aSrnd).PutValue(*pSurAnch, MID_SURROUND_ANCHORONLY);
         rToSet.Put(aSrnd);
     }
     const ::uno::Any* pLeft        = nullptr;
@@ -809,27 +809,27 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     {
         SvxBoxItem aBox ( static_cast < const ::SvxBoxItem & > ( rFromSet.Get ( RES_BOX ) ) );
         if( pLeft )
-            bRet &= ((SfxPoolItem&)aBox).PutValue(*pLeft, CONVERT_TWIPS|LEFT_BORDER );
+            bRet &= static_cast<SfxPoolItem&>(aBox).PutValue(*pLeft, CONVERT_TWIPS|LEFT_BORDER );
         if( pRight )
-            bRet &= ((SfxPoolItem&)aBox).PutValue(*pRight, CONVERT_TWIPS|RIGHT_BORDER );
+            bRet &= static_cast<SfxPoolItem&>(aBox).PutValue(*pRight, CONVERT_TWIPS|RIGHT_BORDER );
         if( pTop )
-            bRet &= ((SfxPoolItem&)aBox).PutValue(*pTop, CONVERT_TWIPS|TOP_BORDER);
+            bRet &= static_cast<SfxPoolItem&>(aBox).PutValue(*pTop, CONVERT_TWIPS|TOP_BORDER);
         if( pBottom )
-            bRet &= ((SfxPoolItem&)aBox).PutValue(*pBottom, CONVERT_TWIPS|BOTTOM_BORDER);
+            bRet &= static_cast<SfxPoolItem&>(aBox).PutValue(*pBottom, CONVERT_TWIPS|BOTTOM_BORDER);
         if( pDistance )
-            bRet &= ((SfxPoolItem&)aBox).PutValue(*pDistance, CONVERT_TWIPS|BORDER_DISTANCE);
+            bRet &= static_cast<SfxPoolItem&>(aBox).PutValue(*pDistance, CONVERT_TWIPS|BORDER_DISTANCE);
         if( pLeftDistance )
-            bRet &= ((SfxPoolItem&)aBox).PutValue(*pLeftDistance, CONVERT_TWIPS|LEFT_BORDER_DISTANCE);
+            bRet &= static_cast<SfxPoolItem&>(aBox).PutValue(*pLeftDistance, CONVERT_TWIPS|LEFT_BORDER_DISTANCE);
         if( pRightDistance )
-            bRet &= ((SfxPoolItem&)aBox).PutValue(*pRightDistance, CONVERT_TWIPS|RIGHT_BORDER_DISTANCE);
+            bRet &= static_cast<SfxPoolItem&>(aBox).PutValue(*pRightDistance, CONVERT_TWIPS|RIGHT_BORDER_DISTANCE);
         if( pTopDistance )
-            bRet &= ((SfxPoolItem&)aBox).PutValue(*pTopDistance, CONVERT_TWIPS|TOP_BORDER_DISTANCE);
+            bRet &= static_cast<SfxPoolItem&>(aBox).PutValue(*pTopDistance, CONVERT_TWIPS|TOP_BORDER_DISTANCE);
         if( pBottomDistance )
-            bRet &= ((SfxPoolItem&)aBox).PutValue(*pBottomDistance, CONVERT_TWIPS|BOTTOM_BORDER_DISTANCE);
+            bRet &= static_cast<SfxPoolItem&>(aBox).PutValue(*pBottomDistance, CONVERT_TWIPS|BOTTOM_BORDER_DISTANCE);
         if( pLineStyle )
-            bRet &= ((SfxPoolItem&)aBox).PutValue(*pLineStyle, LINE_STYLE);
+            bRet &= static_cast<SfxPoolItem&>(aBox).PutValue(*pLineStyle, LINE_STYLE);
         if( pLineWidth )
-            bRet &= ((SfxPoolItem&)aBox).PutValue(*pLineWidth, LINE_WIDTH|CONVERT_TWIPS);
+            bRet &= static_cast<SfxPoolItem&>(aBox).PutValue(*pLineWidth, LINE_WIDTH|CONVERT_TWIPS);
         rToSet.Put(aBox);
     }
     {
@@ -861,27 +861,27 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             rSizeFound = true;
             SwFormatFrameSize aFrameSz ( static_cast < const ::SwFormatFrameSize& > ( rFromSet.Get ( RES_FRM_SIZE ) ) );
             if(pWidth)
-                bRet &= ((SfxPoolItem&)aFrameSz).PutValue(*pWidth, MID_FRMSIZE_WIDTH|CONVERT_TWIPS);
+                bRet &= static_cast<SfxPoolItem&>(aFrameSz).PutValue(*pWidth, MID_FRMSIZE_WIDTH|CONVERT_TWIPS);
             if(pHeight)
-                bRet &= ((SfxPoolItem&)aFrameSz).PutValue(*pHeight, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS);
+                bRet &= static_cast<SfxPoolItem&>(aFrameSz).PutValue(*pHeight, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS);
             if(pRelH )
-                bRet &= ((SfxPoolItem&)aFrameSz).PutValue(*pRelH, MID_FRMSIZE_REL_HEIGHT);
+                bRet &= static_cast<SfxPoolItem&>(aFrameSz).PutValue(*pRelH, MID_FRMSIZE_REL_HEIGHT);
             if (pRelHRelation)
                 bRet &= aFrameSz.PutValue(*pRelHRelation, MID_FRMSIZE_REL_HEIGHT_RELATION);
             if(pRelW )
-                bRet &= ((SfxPoolItem&)aFrameSz).PutValue(*pRelW, MID_FRMSIZE_REL_WIDTH);
+                bRet &= static_cast<SfxPoolItem&>(aFrameSz).PutValue(*pRelW, MID_FRMSIZE_REL_WIDTH);
             if (pRelWRelation)
                 bRet &= aFrameSz.PutValue(*pRelWRelation, MID_FRMSIZE_REL_WIDTH_RELATION);
             if(pSyncWidth)
-                bRet &= ((SfxPoolItem&)aFrameSz).PutValue(*pSyncWidth, MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT);
+                bRet &= static_cast<SfxPoolItem&>(aFrameSz).PutValue(*pSyncWidth, MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT);
             if(pSyncHeight)
-                bRet &= ((SfxPoolItem&)aFrameSz).PutValue(*pSyncHeight, MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH);
+                bRet &= static_cast<SfxPoolItem&>(aFrameSz).PutValue(*pSyncHeight, MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH);
             if(pSize)
-                bRet &= ((SfxPoolItem&)aFrameSz).PutValue(*pSize, MID_FRMSIZE_SIZE|CONVERT_TWIPS);
+                bRet &= static_cast<SfxPoolItem&>(aFrameSz).PutValue(*pSize, MID_FRMSIZE_SIZE|CONVERT_TWIPS);
             if(pSizeType)
-                bRet &= ((SfxPoolItem&)aFrameSz).PutValue(*pSizeType, MID_FRMSIZE_SIZE_TYPE);
+                bRet &= static_cast<SfxPoolItem&>(aFrameSz).PutValue(*pSizeType, MID_FRMSIZE_SIZE_TYPE);
             if(pWidthType)
-                bRet &= ((SfxPoolItem&)aFrameSz).PutValue(*pWidthType, MID_FRMSIZE_WIDTH_TYPE);
+                bRet &= static_cast<SfxPoolItem&>(aFrameSz).PutValue(*pWidthType, MID_FRMSIZE_WIDTH_TYPE);
             if(!aFrameSz.GetWidth())
                 aFrameSz.SetWidth(MINFLY);
             if(!aFrameSz.GetHeight())
@@ -897,7 +897,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
             aSize.Height = 2 * MM50;
             ::uno::Any aSizeVal;
             aSizeVal <<= aSize;
-            ((SfxPoolItem&)aFrameSz).PutValue(aSizeVal, MID_FRMSIZE_SIZE|CONVERT_TWIPS);
+            static_cast<SfxPoolItem&>(aFrameSz).PutValue(aSizeVal, MID_FRMSIZE_SIZE|CONVERT_TWIPS);
             rToSet.Put(aFrameSz);
         }
     }
@@ -944,7 +944,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
         if ( pTextVertAdjust )
         {
             SdrTextVertAdjustItem aTextVertAdjust(static_cast <const ::SdrTextVertAdjustItem & > ( rFromSet.Get ( RES_TEXT_VERT_ADJUST ) ));
-            bRet &= ((SfxPoolItem&)aTextVertAdjust).PutValue(*pTextVertAdjust, 0);
+            bRet &= static_cast<SfxPoolItem&>(aTextVertAdjust).PutValue(*pTextVertAdjust, 0);
             rToSet.Put(aTextVertAdjust);
         }
     }
@@ -970,7 +970,7 @@ static inline void lcl_FillCol ( SfxItemSet &rToSet, const ::SfxItemSet &rFromSe
     if ( pAny )
     {
         SwFormatCol aCol ( static_cast < const ::SwFormatCol & > ( rFromSet.Get ( RES_COL ) ) );
-        ((SfxPoolItem&)aCol).PutValue( *pAny, MID_COLUMNS);
+        static_cast<SfxPoolItem&>(aCol).PutValue( *pAny, MID_COLUMNS);
         rToSet.Put(aCol);
     }
 }
@@ -1035,11 +1035,11 @@ static inline void lcl_FillMirror ( SfxItemSet &rToSet, const ::SfxItemSet &rFro
     {
         SwMirrorGrf aMirror ( static_cast < const ::SwMirrorGrf& > ( rFromSet.Get ( RES_GRFATR_MIRRORGRF ) ) );
         if(pHEvenMirror)
-            rRet &= ((SfxPoolItem&)aMirror).PutValue(*pHEvenMirror, MID_MIRROR_HORZ_EVEN_PAGES);
+            rRet &= static_cast<SfxPoolItem&>(aMirror).PutValue(*pHEvenMirror, MID_MIRROR_HORZ_EVEN_PAGES);
         if(pHOddMirror)
-            rRet &= ((SfxPoolItem&)aMirror).PutValue(*pHOddMirror, MID_MIRROR_HORZ_ODD_PAGES);
+            rRet &= static_cast<SfxPoolItem&>(aMirror).PutValue(*pHOddMirror, MID_MIRROR_HORZ_ODD_PAGES);
         if(pVMirror)
-            rRet &= ((SfxPoolItem&)aMirror).PutValue(*pVMirror, MID_MIRROR_VERT);
+            rRet &= static_cast<SfxPoolItem&>(aMirror).PutValue(*pVMirror, MID_MIRROR_VERT);
         rToSet.Put(aMirror);
     }
 }
@@ -2799,7 +2799,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             {
                 pFormat->Add(this);
                 if(!m_sName.isEmpty())
-                    pDoc->SetFlyName((SwFlyFrameFormat&)*pFormat, m_sName);
+                    pDoc->SetFlyName(*pFormat, m_sName);
             }
             // wake up the SwXTextFrame
             static_cast<SwXTextFrame*>(this)->SetDoc( bIsDescriptor ? m_pDoc : GetFrameFormat()->GetDoc() );
@@ -2859,7 +2859,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     pGrfNd->SetChgTwipSize( !bSizeFound );
                 pFormat->Add(this);
                 if(!m_sName.isEmpty())
-                    pDoc->SetFlyName((SwFlyFrameFormat&)*pFormat, m_sName);
+                    pDoc->SetFlyName(*pFormat, m_sName);
 
             }
             const ::uno::Any* pSurroundContour;
@@ -2963,7 +2963,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
                     pFormat2->Add(this);
                     if(!m_sName.isEmpty())
-                        pDoc->SetFlyName((SwFlyFrameFormat&)*pFormat2, m_sName);
+                        pDoc->SetFlyName(*pFormat2, m_sName);
                 }
             }
             else if( pStreamName )
@@ -2977,7 +2977,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
                 pFrameFormat->Add(this);
                 if(!m_sName.isEmpty())
-                    pDoc->SetFlyName((SwFlyFrameFormat&)*pFrameFormat, m_sName);
+                    pDoc->SetFlyName(*pFrameFormat, m_sName);
             }
             else if (pEmbeddedObject)
             {
@@ -3004,7 +3004,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 pDoc->GetIDocumentUndoRedo().EndUndo(SwUndoId::INSERT, nullptr);
                 pFrameFormat->Add(this);
                 if(!m_sName.isEmpty())
-                    pDoc->SetFlyName((SwFlyFrameFormat&)*pFrameFormat, m_sName);
+                    pDoc->SetFlyName(*pFrameFormat, m_sName);
             }
         }
         if( pFormat && pDoc->getIDocumentDrawModelAccess().GetDrawModel() )

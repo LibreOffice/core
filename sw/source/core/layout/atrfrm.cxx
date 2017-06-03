@@ -127,7 +127,7 @@ static void lcl_DelHFFormat( SwClient *pToRemove, SwFrameFormat *pFormat )
     {
         // If there is a Cursor registered in one of the nodes, we need to call the
         // ParkCursor in an (arbitrary) shell.
-        SwFormatContent& rCnt = (SwFormatContent&)pFormat->GetContent();
+        SwFormatContent& rCnt = const_cast<SwFormatContent&>(pFormat->GetContent());
         if ( rCnt.GetContentIdx() )
         {
             SwNode *pNode = nullptr;

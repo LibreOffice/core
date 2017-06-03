@@ -1401,14 +1401,14 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
 
             if ( pTextFootnote )
             {
-                SwFormatFootnote& rFootnote = (SwFormatFootnote&)pTextFootnote->GetFootnote();
+                SwFormatFootnote& rFootnote = const_cast<SwFormatFootnote&>(pTextFootnote->GetFootnote());
                 const SwDoc *pDoc = rInf.GetTextFrame()->GetNode()->GetDoc();
                 const SwEndNoteInfo* pInfo;
                 if( rFootnote.IsEndNote() )
                     pInfo = &pDoc->GetEndNoteInfo();
                 else
                     pInfo = &pDoc->GetFootnoteInfo();
-                const SwAttrSet& rSet = pInfo->GetAnchorCharFormat((SwDoc&)*pDoc)->GetAttrSet();
+                const SwAttrSet& rSet = pInfo->GetAnchorCharFormat(const_cast<SwDoc&>(*pDoc))->GetAttrSet();
 
                 const SfxPoolItem* pItem;
                 sal_uInt16 nDir = 0;
@@ -1925,9 +1925,9 @@ SwTwips SwTextFormatter::CalcBottomLine() const
             nRet = nMin - nDist;
             if( bRepaint )
             {
-                ((SwRepaint&)GetInfo().GetParaPortion()
+                const_cast<SwRepaint&>(GetInfo().GetParaPortion()
                     ->GetRepaint()).Bottom( nRet-1 );
-                ((SwTextFormatInfo&)GetInfo()).SetPaintOfst( 0 );
+                const_cast<SwTextFormatInfo&>(GetInfo()).SetPaintOfst( 0 );
             }
         }
     }

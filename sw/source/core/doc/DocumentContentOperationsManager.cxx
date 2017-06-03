@@ -748,7 +748,7 @@ namespace
 
         RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
         pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( ( eOld & ~RedlineFlags::Ignore) | RedlineFlags::On );
-        SwRedlineTable& rRedlTable = (SwRedlineTable&)pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+        SwRedlineTable& rRedlTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
 
         do {
             SwRangeRedline* pTmp = rRedlTable[ nRedlPos ];
@@ -871,7 +871,7 @@ namespace
                     // delete it
                     if( bDelFootnote )
                     {
-                        SwTextNode& rTextNd = (SwTextNode&)pSrch->GetTextNode();
+                        SwTextNode& rTextNd = const_cast<SwTextNode&>(pSrch->GetTextNode());
                         SwIndex aIdx( &rTextNd, nFootnoteSttIdx );
                         rTextNd.EraseText( aIdx, 1 );
                     }
@@ -899,7 +899,7 @@ namespace
                     if( bDelFootnote )
                     {
                         // delete it
-                        SwTextNode& rTextNd = (SwTextNode&)pSrch->GetTextNode();
+                        SwTextNode& rTextNd = const_cast<SwTextNode&>(pSrch->GetTextNode());
                         SwIndex aIdx( &rTextNd, nFootnoteSttIdx );
                         rTextNd.EraseText( aIdx, 1 );
                     }

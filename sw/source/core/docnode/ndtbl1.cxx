@@ -227,7 +227,7 @@ static void lcl_CollectLines( std::vector<SwTableLine*> &rArr, const SwCursor& r
     FndBox_ aFndBox( nullptr, nullptr );
     {
         FndPara aTmpPara( aBoxes, &aFndBox );
-        ForEach_FndLineCopyCol( (SwTableLines&)rTable.GetTabLines(), &aTmpPara );
+        ForEach_FndLineCopyCol( const_cast<SwTableLines&>(rTable.GetTabLines()), &aTmpPara );
     }
 
     // Collect the Lines which only contain selected Boxes
@@ -329,7 +329,7 @@ void SwDoc::GetRowSplit( const SwCursor& rCursor, SwFormatRowSplit *& rpSz )
 
         if( !aRowArr.empty() )
         {
-            rpSz = &(SwFormatRowSplit&)aRowArr[0]->GetFrameFormat()->GetRowSplit();
+            rpSz = &const_cast<SwFormatRowSplit&>(aRowArr[0]->GetFrameFormat()->GetRowSplit());
 
             if (rpSz)
             {
@@ -401,7 +401,7 @@ void SwDoc::GetRowHeight( const SwCursor& rCursor, SwFormatFrameSize *& rpSz )
 
         if( !aRowArr.empty() )
         {
-            rpSz = &(SwFormatFrameSize&)aRowArr[0]->GetFrameFormat()->GetFrameSize();
+            rpSz = &const_cast<SwFormatFrameSize&>(aRowArr[0]->GetFrameFormat()->GetFrameSize());
 
             if (rpSz)
             {

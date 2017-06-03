@@ -1139,7 +1139,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTableNd )
         SwXMLTableInfo_Impl aTableInfo( &rTable, nPrefix );
         ExportTableLines( rTable.GetTabLines(), aTableInfo, rTable.GetRowsToRepeat() );
 
-        for( SwTableLine *pLine : ((SwTable &)rTable).GetTabLines() )
+        for( SwTableLine *pLine : const_cast<SwTable &>(rTable).GetTabLines() )
             lcl_xmltble_ClearName_Line( pLine );
     }
 }

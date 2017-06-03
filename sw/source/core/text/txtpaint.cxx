@@ -46,14 +46,14 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
     const bool bVertical = pFrame && pFrame->IsVertical();
 
     if ( pFrame && pFrame->IsRightToLeft() )
-        pFrame->SwitchLTRtoRTL( (SwRect&)rRect );
+        pFrame->SwitchLTRtoRTL( const_cast<SwRect&>(rRect) );
 
     if ( bVertical )
-        pFrame->SwitchHorizontalToVertical( (SwRect&)rRect );
+        pFrame->SwitchHorizontalToVertical( const_cast<SwRect&>(rRect) );
 
     if ( !pOut || (!rRect.HasArea() && !pOut->IsClipRegion()) )
     {
-        (SwRect&)rRect = aOldRect;
+        const_cast<SwRect&>(rRect) = aOldRect;
         return;
     }
 
@@ -82,7 +82,7 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
         {
             if ( aRect == pOut->GetClipRegion().GetBoundRect() )
             {
-                (SwRect&)rRect = aOldRect;
+                const_cast<SwRect&>(rRect) = aOldRect;
                 return;
             }
         }
@@ -105,7 +105,7 @@ void SwSaveClip::ChgClip_( const SwRect &rRect, const SwTextFrame* pFrame,
     }
     bChg = true;
 
-    (SwRect&)rRect = aOldRect;
+    const_cast<SwRect&>(rRect) = aOldRect;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

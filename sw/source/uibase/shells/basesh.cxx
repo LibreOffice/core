@@ -2534,7 +2534,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 if ( pDlg->Execute() == RET_OK )
                 {
-                    rSh.SetFlyFrameAttr((SfxItemSet &) *pDlg->GetOutputItemSet() );
+                    rSh.SetFlyFrameAttr(const_cast<SfxItemSet &>(*pDlg->GetOutputItemSet()) );
                     pOutSet = pDlg->GetOutputItemSet();
                 }
             }

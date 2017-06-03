@@ -1445,7 +1445,7 @@ TableMergeErr CheckMergeSel( const SwSelBoxes& rBoxes )
         FndBox_ aFndBox( nullptr, nullptr );
         FndPara aPara( rBoxes, &aFndBox );
         const SwTableNode* pTableNd = aPara.rBoxes[0]->GetSttNd()->FindTableNode();
-        ForEach_FndLineCopyCol( (SwTableLines&)pTableNd->GetTable().GetTabLines(), &aPara );
+        ForEach_FndLineCopyCol( const_cast<SwTableLines&>(pTableNd->GetTable().GetTabLines()), &aPara );
         if( !aFndBox.GetLines().empty() )
         {
             bool bMergeSelOk = true;

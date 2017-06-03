@@ -1234,7 +1234,7 @@ SwPageFrame *SwFrame::InsertPage( SwPageFrame *pPrevPage, bool bFootnote )
     // For ContentFrame take the one from format if provided,
     // otherwise from the Follow of the PrevPage
     if ( IsFlowFrame() && !SwFlowFrame::CastFlowFrame( this )->IsFollow() )
-    {   SwFormatPageDesc &rDesc = (SwFormatPageDesc&)GetAttrSet()->GetPageDesc();
+    {   SwFormatPageDesc &rDesc = const_cast<SwFormatPageDesc&>(GetAttrSet()->GetPageDesc());
         pDesc = rDesc.GetPageDesc();
         if ( rDesc.GetNumOffset() )
         {

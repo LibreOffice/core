@@ -1232,7 +1232,7 @@ SwTextFormatColl* SwDoc::CopyTextColl( const SwTextFormatColl& rColl )
 /// copy the graphic nodes
 SwGrfFormatColl* SwDoc::CopyGrfColl( const SwGrfFormatColl& rColl )
 {
-    SwGrfFormatColl* pNewColl = static_cast<SwGrfFormatColl*>(FindFormatByName( (SwFormatsBase&)*mpGrfFormatCollTable, rColl.GetName() ));
+    SwGrfFormatColl* pNewColl = static_cast<SwGrfFormatColl*>(FindFormatByName( static_cast<SwFormatsBase const &>(*mpGrfFormatCollTable), rColl.GetName() ));
     if( pNewColl )
         return pNewColl;
 
