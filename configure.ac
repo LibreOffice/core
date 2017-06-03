@@ -407,8 +407,8 @@ if test -n "$with_android_ndk"; then
     fi
 
     if test -z "$with_android_ndk_toolchain_version"; then
-        # Default to gcc 4.9
-        with_android_ndk_toolchain_version=4.9
+        # Default to clang
+        with_android_ndk_toolchain_version=clang3.8
     fi
 
     case "$with_android_ndk_toolchain_version" in
@@ -416,10 +416,10 @@ if test -n "$with_android_ndk"; then
         ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-$with_android_ndk_toolchain_version
         ANDROID_COMPILER_DIR=$ANDROID_BINUTILS_DIR
         ;;
-    clang3.3|clang3.4)
+    clang3.3|clang3.4|clang3.5|clang3.6|clang3.7|clang3.8)
         AC_MSG_WARN([Building with the Clang tool-chain is known to break in the bridges module, fix that please])
-        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-4.8
-        ANDROID_COMPILER_DIR=$ANDROID_NDK_HOME/toolchains/llvm-${with_android_ndk_toolchain_version#clang}
+        ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-4.9
+        ANDROID_COMPILER_DIR=$ANDROID_NDK_HOME/toolchains/llvm
         ANDROID_USING_CLANG=true
         ;;
     *)
@@ -471,7 +471,7 @@ if test -n "$with_android_ndk"; then
         # as is the case when using the ndk-bundle as installed with android studio
         ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR="${with_android_ndk_toolchain_version}/"
         if test -n "$ANDROID_USING_CLANG"; then
-            ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR=4.8/
+            ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR=4.9/
         fi
     fi
 

@@ -34,7 +34,6 @@
 #include "vtablefactory.hxx"
 
 #include "share.hxx"
-
 #include <dlfcn.h>
 
 #ifdef ANDROID
@@ -403,7 +402,8 @@ namespace
                     }
                     TYPELIB_DANGER_RELEASE( pTD );
                 }
-            } // else perform queryInterface()
+                SAL_FALLTHROUGH; // else perform queryInterface()
+            }
             default:
                 eRet = cpp2uno_call(
                     pCppI, aMemberDescr.get(),
