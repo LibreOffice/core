@@ -32,6 +32,9 @@ ifneq (,$(strip $(OOO_JUNIT_JAR)))
 
 .PHONY : $(call gb_JunitTest_get_target,%)
 $(call gb_JunitTest_get_target,%) :
+ifneq ($(gb_SUPPRESS_TESTS),)
+	@true
+else
 	$(call gb_Output_announce,$*,$(true),JUT,2)
 	$(call gb_Helper_abbreviate_dirs,\
         rm -rf $(call gb_JunitTest_get_userdir,$*) && \
@@ -53,6 +56,7 @@ $(call gb_JunitTest_get_target,%) :
 		&& echo \
 		&& false)))
 	$(CLEAN_CMD)
+endif
 
 define gb_JunitTest_JunitTest
 $(call gb_JunitTest_get_target,$(1)) : T_CP := $(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$(if $(HAMCREST_JAR),$$(gb_CLASSPATHSEP)$(HAMCREST_JAR))$$(gb_CLASSPATHSEP)$(INSTROOT)/$(LIBO_URE_LIB_FOLDER)
@@ -152,7 +156,9 @@ else # OOO_JUNIT_JAR
 
 .PHONY : $(call gb_JunitTest_get_target,$(1))
 $(call gb_JunitTest_get_target,%) :
+ifeq ($(gb_SUPPRESS_TESTS),)
 	$(call gb_Output_announce,$* (skipped - no Junit),$(true),JUT,2)
+endif
 	@true
 
 define gb_JunitTest_JunitTest

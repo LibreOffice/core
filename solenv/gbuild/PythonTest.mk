@@ -32,6 +32,9 @@ ifneq ($(DISABLE_PYTHON),TRUE)
 
 .PHONY : $(call gb_PythonTest_get_target,%)
 $(call gb_PythonTest_get_target,%) :| $(gb_PythonTest_DEPS)
+ifneq ($(gb_SUPPRESS_TESTS),)
+	@true
+else
 	$(call gb_Output_announce,$*,$(true),PYT,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(dir $(call gb_PythonTest_get_target,$*)) && \
@@ -61,6 +64,7 @@ $(call gb_PythonTest_get_target,%) :| $(gb_PythonTest_DEPS)
 					RET=$$?; \
 					$(call gb_CppunitTest_postprocess,$(gb_PythonTest_EXECUTABLE_GDB),$@.core,$$RET) >> $@.log 2>&1;) \
 				cat $@.log; $(gb_PythonTest_UNITTESTFAILED) Python $*))))
+endif
 
 # always use udkapi and URE services
 define gb_PythonTest_PythonTest
@@ -99,7 +103,9 @@ else # DISABLE_PYTHON
 
 .PHONY : $(call gb_PythonTest_get_target,$(1))
 $(call gb_PythonTest_get_target,%) :
+ifeq ($(gb_SUPPRESS_TESTS),)
 	$(call gb_Output_announce,$* (skipped - no PythonTest),$(true),PYT,2)
+endif
 	@true
 
 define gb_PythonTest_PythonTest

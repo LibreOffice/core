@@ -145,3 +145,5 @@ INTERACTIVE VARIABLES:
                        set the build environment.
        gb_DBGARGS      Append these arguments to GDBs "set args" command for
                        debugrun. Double quotes will be automatically escaped.
+       gb_SUPPRESS_TESTS Do not run tests (but still build them, when requested
+                       by the given targets).

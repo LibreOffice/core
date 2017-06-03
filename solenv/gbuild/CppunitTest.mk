@@ -106,6 +106,9 @@ $(call gb_CppunitTest_get_clean_target,%) :
 
 .PHONY : $(call gb_CppunitTest_get_target,%)
 $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_RUNTIMEDEPS)
+ifneq ($(gb_SUPPRESS_TESTS),)
+	@true
+else
 	$(call gb_Output_announce,$*,$(true),CUT,2)
 	$(call gb_Helper_abbreviate_dirs,\
 	        $(if $(gb_CppunitTest_vcl_hide_windows),export VCL_HIDE_WINDOWS=1 && ) \
@@ -140,6 +143,7 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_RUNTIMEDEPS)
 					RET=$$?; \
 					$(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core,$$RET) >> $@.log 2>&1;) \
 				cat $@.log; $(gb_CppunitTest_UNITTESTFAILED) Cppunit $*)))
+endif
 
 define gb_CppunitTest_CppunitTest
 $(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest_get_linktarget,$(1)))

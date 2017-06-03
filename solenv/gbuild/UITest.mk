@@ -37,6 +37,9 @@ ifneq ($(DISABLE_PYTHON),TRUE)
 
 .PHONY : $(call gb_UITest_get_target,%)
 $(call gb_UITest_get_target,%) :| $(gb_UITest_DEPS)
+ifneq ($(gb_SUPPRESS_TESTS),)
+	@true
+else
 	$(call gb_Output_announce,$*,$(true),UIT,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(dir $(call gb_UITest_get_target,$*)) && \
@@ -69,6 +72,7 @@ $(call gb_UITest_get_target,%) :| $(gb_UITest_DEPS)
 				    RET=$$?; \
 				    $(call gb_CppunitTest_postprocess,$(gb_UITest_EXECUTABLE_GDB),$@.core,$$RET) >> $@.log 2>&1;) \
 			    cat $@.log; $(gb_UITest_UNITTESTFAILED) UI $*))))
+endif
 
 # always use udkapi and URE services
 define gb_UITest_UITest
@@ -111,7 +115,9 @@ else # DISABLE_PYTHON
 
 .PHONY : $(call gb_UITest_get_target,$(1))
 $(call gb_UITest_get_target,%) :
+ifeq ($(gb_SUPPRESS_TESTS),)
 	$(call gb_Output_announce,$* (skipped - no UITest),$(true),PYT,2)
+endif
 	@true
 
 define gb_UITest_UITest
