@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_d7ce7d82",
+        "filename": "sd/Library_sdui.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-03T09:16:36Z",
+      "side": 1,
+      "message": "Maybe the weird linking error would go away if you included this source code file in sd library (i.e. Library_sd.mk, not Library_sdui.mk)\n\nThat\u0027s where the other animation-related source files are.",
+      "revId": "01dfac35188766e80c6630f1f08f97ace4743f24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
