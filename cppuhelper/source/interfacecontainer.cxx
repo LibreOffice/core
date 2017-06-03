@@ -45,7 +45,7 @@ static void sequenceRemoveElementAt( Sequence< Reference< XInterface > > & rSeq,
 
     Sequence< Reference< XInterface > > aDestSeq( rSeq.getLength() - 1 );
     // getArray on a const sequence is faster
-    const Reference< XInterface > * pSource = ((const Sequence< Reference< XInterface > > &)rSeq).getConstArray();
+    const Reference< XInterface > * pSource = rSeq.getConstArray();
     Reference< XInterface > * pDest = aDestSeq.getArray();
     sal_Int32 i = 0;
     for( ; i < index; i++ )
