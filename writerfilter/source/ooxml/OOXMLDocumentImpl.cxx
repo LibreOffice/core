@@ -720,7 +720,6 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
 {
     uno::Reference<embed::XRelationshipAccess> xRelationshipAccess;
     xRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*pStream.get())).accessDocumentStream(), uno::UNO_QUERY);
-    std::vector<css::beans::PropertyValue> aEmbeddings;
     if (xRelationshipAccess.is())
     {
         OUString sChartType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart");
@@ -795,7 +794,7 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
                     {
                         embeddingsTemp.Name = embeddingsTarget;
                         embeddingsTemp.Value <<= mxEmbeddings;
-                        aEmbeddings.push_back(embeddingsTemp);
+                        maEmbedding.push_back(embeddingsTemp);
                         mxEmbeddings.clear();
                     }
                 }
@@ -804,8 +803,8 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
             }
         }
     }
-    if (!aEmbeddings.empty())
-        mxEmbeddingsList = comphelper::containerToSequence(aEmbeddings);
+    if (!maEmbedding.empty())
+        mxEmbeddingsList = comphelper::containerToSequence(maEmbedding);
 }
 
 void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
