@@ -120,8 +120,7 @@ void XMLHatchStyleImport::importXML(
                 ::sax::Converter::convertColor(aHatch.Color, rStrValue);
                 break;
             case XML_TOK_HATCH_DISTANCE:
-                rUnitConverter.convertMeasureToCore(
-                        (sal_Int32&)aHatch.Distance, rStrValue );
+                rUnitConverter.convertMeasureToCore(aHatch.Distance, rStrValue);
                 break;
             case XML_TOK_HATCH_ROTATION:
                 {

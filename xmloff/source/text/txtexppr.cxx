@@ -248,7 +248,7 @@ void XMLTextExportPropertySetMapper::ContextFontFilter(
     //"Find" which restores the original logic.
     if (pFontFamilyNameState || pFontStyleNameState)
     {
-        OUString sName( ((SvXMLExport&)GetExport()).GetFontAutoStylePool()->Find(
+        OUString sName( const_cast<SvXMLExport&>(GetExport()).GetFontAutoStylePool()->Find(
                             sFamilyName, sStyleName, nFamily, nPitch, eEnc ) );
         if (!sName.isEmpty())
         {

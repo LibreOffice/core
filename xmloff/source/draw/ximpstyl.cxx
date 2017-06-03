@@ -1043,7 +1043,7 @@ rtl::Reference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropert
     {
         if(!xPresImpPropMapper.is())
         {
-            rtl::Reference< XMLShapeImportHelper > aImpHelper = ((SvXMLImport&)GetImport()).GetShapeImport();
+            rtl::Reference< XMLShapeImportHelper > aImpHelper = const_cast<SvXMLImport&>(GetImport()).GetShapeImport();
             const_cast<SdXMLStylesContext*>(this)->xPresImpPropMapper =
                 aImpHelper->GetPresPagePropsMapper();
         }

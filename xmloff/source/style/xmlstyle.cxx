@@ -615,7 +615,7 @@ rtl::Reference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProper
     case XML_STYLE_FAMILY_SD_POOL_ID:
         if(!mxShapeImpPropMapper.is())
         {
-            rtl::Reference< XMLShapeImportHelper > aImpHelper = ((SvXMLImport&)GetImport()).GetShapeImport();
+            rtl::Reference< XMLShapeImportHelper > aImpHelper = const_cast<SvXMLImport&>(GetImport()).GetShapeImport();
             const_cast<SvXMLStylesContext*>(this)->mxShapeImpPropMapper =
                 aImpHelper->GetPropertySetMapper();
         }
