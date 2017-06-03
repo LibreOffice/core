@@ -63,20 +63,28 @@ public:
     void Clear();
     void MarkAllCols( SCROW nStartRow, SCROW nEndRow );
     bool HasAnyMarks() const;
+
+    // For faster access from within ScMarkData, instead of creating
+    // ScMultiSelIter with ScFlatBoolRowSegments bottleneck.
+    const ScMarkArray& GetRowSelArray() const;
+    const ScMarkArray* GetMultiSelArray( SCCOL nCol ) const;
 };
 
 class ScMultiSelIter
 {
 
 private:
-    ScFlatBoolRowSegments aRowSegs;
+    std::unique_ptr<ScFlatBoolRowSegments>  pRowSegs;
+    ScMarkArrayIter                         aMarkArrayIter;
     SCROW nNextSegmentStart;
 public:
     ScMultiSelIter( const ScMultiSel& rMultiSel, SCCOL nCol );
     ~ScMultiSelIter();
 
     bool Next( SCROW& rTop, SCROW& rBottom );
-    const ScFlatBoolRowSegments& GetRowSegments() const { return aRowSegs; }
+    /** Only to be used by ScMultiSel::IsAllMarked() or otherwise sure that a
+        segment tree is actually used. */
+    bool GetRangeData( SCROW nRow, ScFlatBoolRowSegments::RangeData& rRowRange ) const;
 };
 
 #endif
