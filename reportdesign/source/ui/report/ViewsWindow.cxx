@@ -1604,7 +1604,7 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
 
                         // switch snapping off
                         if ( !bWasNoSnap )
-                            ((SdrDragStat&)rDragStat).SetNoSnap();
+                            const_cast<SdrDragStat&>(rDragStat).SetNoSnap();
                         if ( bWasSnapEnabled )
                             rView.SetSnapEnabled( false );
 
@@ -1644,7 +1644,7 @@ void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
 
                         // restore snap
                         if ( !bWasNoSnap )
-                            ((SdrDragStat&)rDragStat).SetNoSnap( bWasNoSnap );
+                            const_cast<SdrDragStat&>(rDragStat).SetNoSnap( bWasNoSnap );
                         if ( bWasSnapEnabled )
                             rView.SetSnapEnabled( bWasSnapEnabled );
                     }

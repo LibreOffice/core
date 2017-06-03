@@ -284,7 +284,7 @@ bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                     const SdrHdlList& rHdlList = m_rView.GetHdlList();
                     SdrHdl* pHdl = rHdlList.GetFocusHdl();
                     if ( pHdl )
-                        ((SdrHdlList&)rHdlList).ResetFocusHdl();
+                        const_cast<SdrHdlList&>(rHdlList).ResetFocusHdl();
                     else
                         m_pParent->getSectionWindow()->getViewsWindow()->unmarkAllObjects(nullptr);
 
@@ -318,7 +318,7 @@ bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
                 {
                     // selected handle
                     const SdrHdlList& rHdlList = m_rView.GetHdlList();
-                    ((SdrHdlList&)rHdlList).TravelFocusHdl( !rCode.IsShift() );
+                    const_cast<SdrHdlList&>(rHdlList).TravelFocusHdl( !rCode.IsShift() );
 
                     // guarantee visibility of focused handle
                     SdrHdl* pHdl = rHdlList.GetFocusHdl();
