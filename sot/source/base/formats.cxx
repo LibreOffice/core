@@ -1321,8 +1321,8 @@ SotDestinationEntry_Impl const aDestinationArray[] =
 
 bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector, SotClipboardFormatId nId )
 {
-    DataFlavorExVector::iterator    aIter( ( (DataFlavorExVector&) rDataFlavorExVector ).begin() );
-    DataFlavorExVector::iterator    aEnd( ( (DataFlavorExVector&) rDataFlavorExVector ).end() );
+    auto aIter( rDataFlavorExVector.begin() );
+    auto aEnd( rDataFlavorExVector.end() );
     bool bRet = false;
 
     while( aIter != aEnd )

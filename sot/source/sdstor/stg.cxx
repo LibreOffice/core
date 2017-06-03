@@ -831,11 +831,11 @@ void Storage::SetClass( const SvGlobalName & rClass,
     if( Validate( true ) )
     {
         // set the class name in the root entry
-        pEntry->m_aEntry.SetClassId( (const ClsId&) rClass.GetCLSID() );
+        pEntry->m_aEntry.SetClassId( rClass.GetCLSID() );
         pEntry->SetDirty();
         // then create the streams
         StgCompObjStream aCompObj( *this, true );
-        aCompObj.GetClsId() = (const ClsId&) rClass.GetCLSID();
+        aCompObj.GetClsId() = rClass.GetCLSID();
         aCompObj.GetCbFormat() = nOriginalClipFormat;
         aCompObj.GetUserName() = rUserTypeName;
         if( !aCompObj.Store() )

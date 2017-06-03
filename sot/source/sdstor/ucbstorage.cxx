@@ -2392,7 +2392,7 @@ void UCBStorage::SetClassId( const ClsId& rClsId )
 
 const ClsId& UCBStorage::GetClassId() const
 {
-    return ( const ClsId& ) pImp->m_aClassId.GetCLSID();
+    return pImp->m_aClassId.GetCLSID();
 }
 
 SvGlobalName UCBStorage::GetClassName()
