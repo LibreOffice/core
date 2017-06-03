@@ -522,7 +522,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99227, "tdf99227.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testTdf82173_footnoteStyle, "tdf82173_footnoteStyle.docx")
 {
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("CharacterStyles")->getByName("Footnote anchor"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("CharacterStyles")->getByName("Footnote Characters"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(58),       getProperty< sal_Int32 >(xPageStyle, "CharEscapementHeight") );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0x00FF00), getProperty< sal_Int32 >(xPageStyle, "CharColor") );
 }
