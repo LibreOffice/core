@@ -178,7 +178,7 @@ private:
 
 inline OStorePageBIOS::operator osl::Mutex& (void) const
 {
-    return (osl::Mutex&)m_aMutex;
+    return const_cast<osl::Mutex&>(m_aMutex);
 }
 inline bool OStorePageBIOS::isWriteable() const
 {
