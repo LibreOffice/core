@@ -75,7 +75,7 @@ Octree::Octree(const BitmapReadAccess& rReadAcc, sal_uLong nColors)
             {
                 for( long nX = 0; nX < nWidth; nX++ )
                 {
-                    pColor = &(BitmapColor&) pAcc->GetPaletteColor( pAcc->GetPixelIndex( nY, nX ) );
+                    pColor = &pAcc->GetPaletteColor( pAcc->GetPixelIndex( nY, nX ) );
                     nLevel = 0;
                     ImplAdd( &pTree );
 

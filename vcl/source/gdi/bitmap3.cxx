@@ -386,7 +386,7 @@ bool Bitmap::ImplMakeGreyscales( sal_uInt16 nGreys )
         bool bPalDiffers = !pReadAcc->HasPalette() || ( rPal.GetEntryCount() != pReadAcc->GetPaletteEntryCount() );
 
         if( !bPalDiffers )
-            bPalDiffers = ( (BitmapPalette&) rPal != pReadAcc->GetPalette() );
+            bPalDiffers = ( rPal != pReadAcc->GetPalette() );
 
         if( bPalDiffers )
         {

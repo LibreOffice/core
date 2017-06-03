@@ -127,7 +127,7 @@ SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpap
         WriteDIBBitmapEx(*rImplWallpaper.mpBitmap, rOStm);
 
     // version 3 (new color format)
-    ( (Color&) rImplWallpaper.maColor ).Write( rOStm );
+    rImplWallpaper.maColor.Write( rOStm );
 
     return rOStm;
 }

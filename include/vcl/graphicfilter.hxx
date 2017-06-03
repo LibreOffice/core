@@ -206,10 +206,10 @@ public:
     GraphicFileFormat  GetFileFormat() const { return nFormat; }
 
     /** @return graphic size in pixels or 0 size */
-    const Size&     GetSizePixel() const { return (Size&) aPixSize; }
+    const Size&     GetSizePixel() const { return aPixSize; }
 
     /** @return the logical graphic size in 1/100mm or 0 size */
-    const Size&     GetSize_100TH_MM() const { return (Size&) aLogSize; }
+    const Size&     GetSize_100TH_MM() const { return aLogSize; }
 
     /** @return bits/pixel or 0 **/
     sal_uInt16          GetBitsPerPixel() const { return nBitsPerPixel; }

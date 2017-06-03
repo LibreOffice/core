@@ -65,7 +65,7 @@ AlphaMask& AlphaMask::operator=( const Bitmap& rBitmap )
 
 const Bitmap& AlphaMask::ImplGetBitmap() const
 {
-    return( (const Bitmap&) *this );
+    return *this;
 }
 
 void AlphaMask::ImplSetBitmap( const Bitmap& rBitmap )

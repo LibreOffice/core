@@ -99,7 +99,7 @@ void WinMtfPathObj::AddPoint( const Point& rPoint )
 {
     if ( bClosed )
         Insert( tools::Polygon() );
-    tools::Polygon& rPoly = ((tools::PolyPolygon&)*this)[ Count() - 1 ];
+    tools::Polygon& rPoly = static_cast<tools::PolyPolygon&>(*this)[ Count() - 1 ];
     rPoly.Insert( rPoly.GetSize(), rPoint );
     bClosed = false;
 }
@@ -108,7 +108,7 @@ void WinMtfPathObj::AddPolyLine( const tools::Polygon& rPolyLine )
 {
     if ( bClosed )
         Insert( tools::Polygon() );
-    tools::Polygon& rPoly = ((tools::PolyPolygon&)*this)[ Count() - 1 ];
+    tools::Polygon& rPoly = static_cast<tools::PolyPolygon&>(*this)[ Count() - 1 ];
     rPoly.Insert( rPoly.GetSize(), rPolyLine );
     bClosed = false;
 }
@@ -131,7 +131,7 @@ void WinMtfPathObj::ClosePath()
 {
     if ( Count() )
     {
-        tools::Polygon& rPoly = ((tools::PolyPolygon&)*this)[ Count() - 1 ];
+        tools::Polygon& rPoly = static_cast<tools::PolyPolygon&>(*this)[ Count() - 1 ];
         if ( rPoly.GetSize() > 2 )
         {
             Point aFirst( rPoly[ 0 ] );

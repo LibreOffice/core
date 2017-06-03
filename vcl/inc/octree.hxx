@@ -59,7 +59,7 @@ private:
     sal_uLong                   nLevel;
     NODE*                       pTree;
     NODE*                       pReduce[ OCTREE_BITS + 1 ];
-    BitmapColor*                pColor;
+    BitmapColor const *         pColor;
     ImpNodeCache*               pNodeCache;
     const BitmapReadAccess*     pAcc;
     sal_uInt16                  nPalIndex;
@@ -83,7 +83,7 @@ inline const BitmapPalette& Octree::GetPalette()
 
 inline sal_uInt16 Octree::GetBestPaletteIndex( const BitmapColor& rColor )
 {
-    pColor = &(BitmapColor&) rColor;
+    pColor = &rColor;
     nPalIndex = 65535;
     nLevel = 0L;
     GetPalIndex( pTree );

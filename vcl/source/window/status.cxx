@@ -608,7 +608,7 @@ void StatusBar::ImplCalcProgressRect()
     if( IsNativeControlSupported( ControlType::Progress, ControlPart::Entire ) )
     {
         ImplControlValue aValue;
-        tools::Rectangle aControlRegion( tools::Rectangle( (const Point&)Point(), maPrgsFrameRect.GetSize() ) );
+        tools::Rectangle aControlRegion( tools::Rectangle( Point(), maPrgsFrameRect.GetSize() ) );
         tools::Rectangle aNativeControlRegion, aNativeContentRegion;
         if( (bNativeOK = GetNativeControlRegion( ControlType::Progress, ControlPart::Entire, aControlRegion,
                                                  ControlState::ENABLED, aValue,
@@ -1414,7 +1414,7 @@ Size StatusBar::CalcWindowSizePixel() const
     if( IsNativeControlSupported( ControlType::Progress, ControlPart::Entire ) )
     {
         ImplControlValue aValue;
-        tools::Rectangle aControlRegion( (const Point&)Point(), Size( nCalcWidth, nMinHeight ) );
+        tools::Rectangle aControlRegion( Point(), Size( nCalcWidth, nMinHeight ) );
         tools::Rectangle aNativeControlRegion, aNativeContentRegion;
         if( GetNativeControlRegion( ControlType::Progress, ControlPart::Entire,
                     aControlRegion, ControlState::ENABLED, aValue,
