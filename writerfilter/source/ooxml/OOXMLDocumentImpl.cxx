@@ -720,7 +720,6 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
 {
     uno::Reference<embed::XRelationshipAccess> xRelationshipAccess;
     xRelationshipAccess.set((dynamic_cast<OOXMLStreamImpl&>(*pStream.get())).accessDocumentStream(), uno::UNO_QUERY);
-    std::vector<css::beans::PropertyValue> aEmbeddings;
     if (xRelationshipAccess.is())
     {
         OUString sChartType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart");

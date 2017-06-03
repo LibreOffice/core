@@ -53,6 +53,9 @@ class OOXMLDocumentImpl : public OOXMLDocument
     css::uno::Reference<css::io::XInputStream> mxActiveXBin;
     css::uno::Reference<css::io::XInputStream> mxEmbeddings;
     css::uno::Sequence < css::beans::PropertyValue > mxEmbeddingsList;
+    /// List of VBA-related streams.
+    css::uno::Sequence<css::beans::PropertyValue> maVBA;
+    std::vector<css::beans::PropertyValue> aEmbeddings;
     bool mbIsSubstream;
     bool mbSkipImages;
     /// How many paragraphs equal to 1 percent?
