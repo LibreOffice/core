@@ -530,7 +530,7 @@ SbxDimArray& SbxDimArray::operator=( const SbxDimArray& rArray )
 {
     if( &rArray != this )
     {
-        SbxArray::operator=( (const SbxArray&) rArray );
+        SbxArray::operator=( static_cast<const SbxArray&>(rArray) );
         m_vDimensions = rArray.m_vDimensions;
         this->mbHasFixedSize = rArray.mbHasFixedSize;
     }
