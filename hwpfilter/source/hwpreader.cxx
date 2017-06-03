@@ -53,7 +53,7 @@
 // xmloff/xmlkyd.hxx
 #define sXML_CDATA "CDATA"
 
-#define STARTP  padd( "text:style-name", "CDATA", ascii(getPStyleName(((ParaShape &)para->GetParaShape()).index,buf))); \
+#define STARTP  padd( "text:style-name", "CDATA", ascii(getPStyleName((para->GetParaShape()).index,buf))); \
     rstartEl( "text:p",mxList.get() ); \
     mxList->clear(); \
     pstart = true
