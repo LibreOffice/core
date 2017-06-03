@@ -147,7 +147,7 @@ sal_Int32 SAL_CALL OTempFileService::readBytes( css::uno::Sequence< sal_Int8 >& 
 {
     ::osl::MutexGuard aGuard( maMutex );
     if ( mbInClosed )
-        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
     checkConnected();
     if (nBytesToRead < 0)
@@ -180,7 +180,7 @@ sal_Int32 SAL_CALL OTempFileService::readSomeBytes( css::uno::Sequence< sal_Int8
 {
     ::osl::MutexGuard aGuard( maMutex );
     if ( mbInClosed )
-        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
     checkConnected();
     checkError();
@@ -200,7 +200,7 @@ void SAL_CALL OTempFileService::skipBytes( sal_Int32 nBytesToSkip )
 {
     ::osl::MutexGuard aGuard( maMutex );
     if ( mbInClosed )
-        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
     checkConnected();
     checkError();
@@ -211,7 +211,7 @@ sal_Int32 SAL_CALL OTempFileService::available(  )
 {
     ::osl::MutexGuard aGuard( maMutex );
     if ( mbInClosed )
-        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
     checkConnected();
 
@@ -225,7 +225,7 @@ void SAL_CALL OTempFileService::closeInput(  )
 {
     ::osl::MutexGuard aGuard( maMutex );
     if ( mbInClosed )
-        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak  * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
     mbInClosed = true;
 
@@ -245,7 +245,7 @@ void SAL_CALL OTempFileService::writeBytes( const css::uno::Sequence< sal_Int8 >
 {
     ::osl::MutexGuard aGuard( maMutex );
     if ( mbOutClosed )
-        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
     checkConnected();
     sal_uInt32 nWritten = mpStream->WriteBytes(aData.getConstArray(), aData.getLength());
@@ -257,7 +257,7 @@ void SAL_CALL OTempFileService::flush(  )
 {
     ::osl::MutexGuard aGuard( maMutex );
     if ( mbOutClosed )
-        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
     checkConnected();
     mpStream->Flush();
@@ -267,7 +267,7 @@ void SAL_CALL OTempFileService::closeOutput(  )
 {
     ::osl::MutexGuard aGuard( maMutex );
     if ( mbOutClosed )
-        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 
     mbOutClosed = true;
 
@@ -319,7 +319,7 @@ void OTempFileService::checkConnected ()
     }
 
     if (!mpStream)
-        throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
+        throw css::io::NotConnectedException ( OUString(), static_cast < css::uno::XWeak * > (this ) );
 }
 
 // XSeekable
