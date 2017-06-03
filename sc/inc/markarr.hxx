@@ -71,6 +71,7 @@ public:
                 ~ScMarkArrayIter();
 
     bool        Next( SCROW& rTop, SCROW& rBottom );
+    void        reset( const ScMarkArray* pNewArray );
 };
 
 #endif

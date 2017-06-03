@@ -468,19 +468,86 @@ std::vector<sc::ColRowSpan> ScMarkData::GetMarkedRowSpans() const
 
 std::vector<sc::ColRowSpan> ScMarkData::GetMarkedColSpans() const
 {
-    typedef mdds::flat_segment_tree<SCCOLROW, bool> SpansType;
 
-    ScRangeList aRanges = GetMarkedRanges();
-    SpansType aSpans(0, MAXCOL+1, false);
-    SpansType::const_iterator itPos = aSpans.begin();
-
-    for (size_t i = 0, n = aRanges.size(); i < n; ++i)
+    if (bMultiMarked)
     {
-        const ScRange& r = *aRanges[i];
-        itPos = aSpans.insert(itPos, r.aStart.Col(), r.aEnd.Col()+1, true).first;
+        SCCOL nStartCol = aMultiRange.aStart.Col();
+        SCCOL nEndCol = aMultiRange.aEnd.Col();
+        if (bMarked)
+        {
+            // Use segment tree to merge marked with multi marked.
+            typedef mdds::flat_segment_tree<SCCOLROW, bool> SpansType;
+            SpansType aSpans(0, MAXCOL+1, false);
+            SpansType::const_iterator itPos = aSpans.begin();
+            do
+            {
+                if (aMultiSel.GetRowSelArray().HasMarks())
+                {
+                    itPos = aSpans.insert(itPos, nStartCol, nEndCol+1, true).first;
+                    break;  // do; all columns marked
+                }
+
+                /* XXX if it turns out that span insert is too slow for lots of
+                 * subsequent columns we could gather each span first and then
+                 * insert. */
+                for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol)
+                {
+                    const ScMarkArray* pMultiArray = aMultiSel.GetMultiSelArray( nCol );
+                    if (pMultiArray && pMultiArray->HasMarks())
+                        itPos = aSpans.insert(itPos, nCol, nCol+1, true).first;
+                }
+            }
+            while(false);
+
+            // Merge marked.
+            itPos = aSpans.insert(itPos, aMarkRange.aStart.Col(), aMarkRange.aEnd.Col()+1, true).first;
+
+            return sc::toSpanArray<SCCOLROW,sc::ColRowSpan>(aSpans);
+        }
+        else
+        {
+            // A plain vector is sufficient, avoid segment tree and conversion
+            // to vector overhead.
+            std::vector<sc::ColRowSpan> aVec;
+            if (aMultiSel.GetRowSelArray().HasMarks())
+            {
+                aVec.push_back( sc::ColRowSpan( nStartCol, nEndCol));
+                return aVec;    // all columns marked
+            }
+            sc::ColRowSpan aSpan( -1, -1);
+            for (SCCOL nCol = nStartCol; nCol <= nEndCol; ++nCol)
+            {
+                const ScMarkArray* pMultiArray = aMultiSel.GetMultiSelArray( nCol );
+                if (pMultiArray && pMultiArray->HasMarks())
+                {
+                    if (aSpan.mnStart == -1)
+                        aSpan.mnStart = nCol;
+                    aSpan.mnEnd = nCol;
+                }
+                else
+                {
+                    // Add span gathered so far, if any.
+                    if (aSpan.mnStart != -1)
+                    {
+                        aVec.push_back( aSpan);
+                        aSpan.mnStart = -1;
+                    }
+                }
+            }
+            // Add last span, if any.
+            if (aSpan.mnStart != -1)
+                aVec.push_back( aSpan);
+            return aVec;
+        }
     }
 
-    return sc::toSpanArray<SCCOLROW,sc::ColRowSpan>(aSpans);
+    // Only reached if not multi marked.
+    std::vector<sc::ColRowSpan> aVec;
+    if (bMarked)
+    {
+        aVec.push_back( sc::ColRowSpan( aMarkRange.aStart.Col(), aMarkRange.aEnd.Col()));
+    }
+    return aVec;
 }
 
 bool ScMarkData::IsAllMarked( const ScRange& rRange ) const
