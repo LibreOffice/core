@@ -3061,7 +3061,7 @@ void SwXTextTable::setName(const OUString& rName)
             if ( pNd->IsOLENode() &&
                 aOldName == static_cast<const SwOLENode*>(pNd)->GetChartTableName() )
             {
-                const_cast<SwOLENode*>(static_cast<const SwOLENode*>(pNd))->SetChartTableName( rName );
+                static_cast<SwOLENode*>(pNd)->SetChartTableName( rName );
 
                 static_cast<SwOLENode*>(pNd)->GetOLEObj();
 
@@ -4076,7 +4076,7 @@ SwXTableColumns::~SwXTableColumns()
 
 SwFrameFormat* SwXTableColumns::GetFrameFormat() const
 {
-    return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(m_pImpl->GetRegisteredIn()));
+    return static_cast<SwFrameFormat*>(m_pImpl->GetRegisteredIn());
 }
 
 sal_Int32 SwXTableColumns::getCount()

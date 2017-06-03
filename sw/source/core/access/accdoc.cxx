@@ -584,7 +584,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
             }
         }
         else
-            pCurrTextFrame = const_cast<SwTextFrame*>(static_cast<const SwTextFrame* >(pCurrFrame));
+            pCurrTextFrame = static_cast<SwTextFrame* >(pCurrFrame);
         //check whether the text frame where the Graph/OLE/Frame anchored is in the Header/Footer
         SwFrame* pFrame = pCurrTextFrame;
         while ( pFrame && !pFrame->IsHeaderFrame() && !pFrame->IsFooterFrame() )
