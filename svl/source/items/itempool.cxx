@@ -761,8 +761,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
         assert(!IsDefaultItem(&rItem) && "a non Pool Item is Default?!");
         if ( 0 == ReleaseRef(rItem) )
         {
-            SfxPoolItem *pItem = &(SfxPoolItem &)rItem;
-            delete pItem;
+            delete &rItem;
         }
         return;
     }
