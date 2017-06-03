@@ -210,7 +210,8 @@ DateTime operator +( const DateTime& rDateTime, double fTimeInDays )
 
 double operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 )
 {
-    long nDays = (const Date&) rDateTime1 - (const Date&) rDateTime2;
+    long nDays = static_cast<const Date&>(rDateTime1)
+        - static_cast<const Date&>(rDateTime2);
     sal_Int64 nTime = rDateTime1.GetNSFromTime() - rDateTime2.GetNSFromTime();
     if ( nTime )
     {
