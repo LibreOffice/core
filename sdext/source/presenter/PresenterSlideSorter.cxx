@@ -1095,7 +1095,7 @@ void PresenterSlideSorter::ThrowIfDisposed()
     {
         throw lang::DisposedException (
             "PresenterSlideSorter has been already disposed",
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
+            static_cast<uno::XWeak*>(this));
     }
 }
 

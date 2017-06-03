@@ -211,7 +211,7 @@ void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventOb
     {
         throw lang::DisposedException (
             "PresenterScreenListener object has already been disposed",
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
+            static_cast<uno::XWeak*>(this));
     }
 
     if ( Event.EventName == "OnStartPresentation" )

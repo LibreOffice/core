@@ -432,7 +432,7 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::dispatch(
     {
         throw lang::DisposedException (
             "PresenterProtocolHandler::Dispatch object has already been disposed",
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
+            static_cast<uno::XWeak*>(this));
     }
 
     if (rURL.Protocol == "vnd.org.libreoffice.presenterscreen:"

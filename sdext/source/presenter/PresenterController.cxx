@@ -725,7 +725,7 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
     {
         throw lang::DisposedException (
             "PresenterController object has already been disposed",
-            const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
+            static_cast<uno::XWeak*>(this));
     }
 
     sal_Int32 nType (0);
