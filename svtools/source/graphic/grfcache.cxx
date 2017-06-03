@@ -258,7 +258,7 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
         }
 
         if( rGraphic.IsLink() )
-            maGfxLink = ( (Graphic&) rGraphic ).GetLink();
+            maGfxLink = rGraphic.GetLink();
         else
             maGfxLink = GfxLink();
 
@@ -1001,7 +1001,7 @@ void GraphicCache::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
         if( pEntry->GetID().IsEmpty() )
         {
             ReleaseGraphicObject( rObj );
-            AddGraphicObject( rObj, (Graphic&) rObj.GetGraphic(), nullptr, nullptr );
+            AddGraphicObject( rObj, const_cast<Graphic&>(rObj.GetGraphic()), nullptr, nullptr );
         }
         else
             pEntry->GraphicObjectWasSwappedIn( rObj );

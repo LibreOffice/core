@@ -1737,7 +1737,7 @@ namespace svt { namespace table
     {
         ENSURE_OR_RETURN( ( i_column >= 0 ) && ( i_column < m_pModel->getColumnCount() ),
             "TableControl_Impl::getColumnMetrics: illegal column index!", ColumnMetrics() );
-        return (ColumnMetrics const &)m_aColumnWidths[ i_column ];
+        return m_aColumnWidths[ i_column ];
     }
 
 

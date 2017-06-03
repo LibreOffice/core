@@ -133,11 +133,11 @@ void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEv
         // accepted action as the execute action in the call to ::ExecuteDrop
         aAcceptEvent.mnAction = aExecuteEvt.mnAction;
         aAcceptEvent.maPosPixel = aExecuteEvt.maPosPixel;
-        (DropTargetEvent&)( aAcceptEvent.maDragEvent ) = (DropTargetEvent&) rDTDE;
-        ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).DropAction = rDTDE.DropAction;
-        ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).LocationX = rDTDE.LocationX;
-        ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).LocationY = rDTDE.LocationY;
-        ( (DropTargetDragEvent&)( aAcceptEvent.maDragEvent ) ).SourceActions = rDTDE.SourceActions;
+        static_cast<DropTargetEvent&>(const_cast<DropTargetDragEvent&>( aAcceptEvent.maDragEvent )) = rDTDE;
+        const_cast<DropTargetDragEvent&>( aAcceptEvent.maDragEvent ).DropAction = rDTDE.DropAction;
+        const_cast<DropTargetDragEvent&>( aAcceptEvent.maDragEvent ).LocationX = rDTDE.LocationX;
+        const_cast<DropTargetDragEvent&>( aAcceptEvent.maDragEvent ).LocationY = rDTDE.LocationY;
+        const_cast<DropTargetDragEvent&>( aAcceptEvent.maDragEvent ).SourceActions = rDTDE.SourceActions;
         aAcceptEvent.mbLeaving = false;
         aAcceptEvent.mbDefault = aExecuteEvt.mbDefault;
 
@@ -373,7 +373,7 @@ bool TransferDataContainer::GetData(
     // test first the list
     for( ; aIter != aEnd; ++aIter )
     {
-        TDataCntnrEntry_Impl& rEntry = (TDataCntnrEntry_Impl&)*aIter;
+        TDataCntnrEntry_Impl& rEntry = *aIter;
         if( nFmtId == rEntry.nId )
         {
             bFnd = SetAny( rEntry.aAny );

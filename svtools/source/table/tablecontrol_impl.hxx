@@ -34,7 +34,7 @@ class ScrollBarBox;
 
 namespace svt { namespace table
 {
-    struct MutableColumnMetrics : protected ColumnMetrics
+    struct MutableColumnMetrics : public ColumnMetrics
     {
         MutableColumnMetrics()
             :ColumnMetrics()
