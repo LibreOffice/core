@@ -1773,7 +1773,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
         {
             DeleteArea( nStart, nEnd, InsertDeleteFlags::CONTENTS );
             sc::CopyToDocContext aCxt(*pDocument);
-            ((ScColumn&)rSrcCol).
+            rSrcCol.
                 CopyToColumn(aCxt, nStart, nEnd, InsertDeleteFlags::CONTENTS, false, *this);
 
             //  UpdateUsed not needed, already done in TestCopyScenario (obsolete comment ?)

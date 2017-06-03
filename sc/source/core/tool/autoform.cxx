@@ -633,7 +633,7 @@ void ScAutoFormatData::FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, S
 
     if( bIncludeValueFormat )
     {
-        ScNumFormatAbbrev& rNumFormat = (ScNumFormatAbbrev&)rField.GetNumFormat();
+        ScNumFormatAbbrev& rNumFormat = const_cast<ScNumFormatAbbrev&>(rField.GetNumFormat());
         SfxUInt32Item aValueFormat( ATTR_VALUE_FORMAT, 0 );
         aValueFormat.SetValue( rNumFormat.GetFormatIndex( *rDoc.GetFormatTable() ) );
         rItemSet.Put( aValueFormat );

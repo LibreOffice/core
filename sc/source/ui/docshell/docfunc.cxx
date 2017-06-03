@@ -1437,7 +1437,7 @@ bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
 
     }
 
-    rDoc.ApplySelectionStyle( (ScStyleSheet&)*pStyleSheet, rMark );
+    rDoc.ApplySelectionStyle( *pStyleSheet, rMark );
 
     if (!AdjustRowHeight( aMultiRange ))
         rDocShell.PostPaint( aMultiRange, PaintPartFlags::Grid );

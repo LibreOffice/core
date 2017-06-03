@@ -2053,7 +2053,7 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
     if ( pIMapInfo )
     {
         Size        aGraphSize;
-        ImageMap&   rImageMap = (ImageMap&) pIMapInfo->GetImageMap();
+        ImageMap&   rImageMap = const_cast<ImageMap&>(pIMapInfo->GetImageMap());
         Graphic     aGraphic;
         bool        bObjSupported = false;
 

@@ -1971,7 +1971,7 @@ tools::Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
             nStartCol = nEndCol;
         if (nStartRow>nEndRow)
             nStartRow = nEndRow;
-        tools::Rectangle aNewArea = ((ScDocument&)aDocument)
+        tools::Rectangle aNewArea = aDocument
                                 .GetMMRect( nStartCol,nStartRow, nEndCol,nEndRow, nVisTab );
         //TODO/LATER: different methods for setting VisArea?!
         const_cast<ScDocShell*>(this)->SfxObjectShell::SetVisArea( aNewArea );

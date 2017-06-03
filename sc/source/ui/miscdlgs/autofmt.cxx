@@ -235,7 +235,7 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
         mknum:
             if (bNumFormat)
             {
-                ScNumFormatAbbrev& rNumFormat = (ScNumFormatAbbrev&) pCurData->GetNumFormat(sal_uInt16(nNum));
+                ScNumFormatAbbrev& rNumFormat = const_cast<ScNumFormatAbbrev&>(pCurData->GetNumFormat(sal_uInt16(nNum)));
                 nNum = rNumFormat.GetFormatIndex(*pNumFmt);
             }
             else

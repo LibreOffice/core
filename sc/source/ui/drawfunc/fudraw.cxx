@@ -294,7 +294,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     const SdrHdlList& rHdlList = pView->GetHdlList();
                     bool bForward(!rKEvt.GetKeyCode().IsShift());
 
-                    ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
+                    const_cast<SdrHdlList&>(rHdlList).TravelFocusHdl(bForward);
 
                     // guarantee visibility of focused handle
                     SdrHdl* pHdl = rHdlList.GetFocusHdl();
@@ -506,7 +506,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 
                                     // switch snapping off
                                     if(!bWasNoSnap)
-                                        ((SdrDragStat&)rDragStat).SetNoSnap();
+                                        const_cast<SdrDragStat&>(rDragStat).SetNoSnap();
                                     if(bWasSnapEnabled)
                                         pView->SetSnapEnabled(false);
 
@@ -515,7 +515,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 
                                     // restore snap
                                     if(!bWasNoSnap)
-                                        ((SdrDragStat&)rDragStat).SetNoSnap(bWasNoSnap);
+                                        const_cast<SdrDragStat&>(rDragStat).SetNoSnap(bWasNoSnap);
                                     if(bWasSnapEnabled)
                                         pView->SetSnapEnabled(bWasSnapEnabled);
                                 }
@@ -586,7 +586,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 
                             if(pNewOne)
                             {
-                                ((SdrHdlList&)rHdlList).SetFocusHdl(pNewOne);
+                                const_cast<SdrHdlList&>(rHdlList).SetFocusHdl(pNewOne);
                             }
                         }
 

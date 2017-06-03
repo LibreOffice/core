@@ -275,7 +275,7 @@ void ScTpSubTotalGroup::FillListBoxes()
             i++;
         }
         // subsequent initialization of the constant:
-        (sal_uInt16&)nFieldCount = i;
+        const_cast<sal_uInt16&>(nFieldCount) = i;
     }
 }
 

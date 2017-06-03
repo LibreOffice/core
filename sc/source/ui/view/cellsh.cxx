@@ -424,7 +424,7 @@ static bool lcl_TestFormat( SvxClipboardFormatItem& rFormats, const Transferable
         if ( nFormatId == SotClipboardFormatId::EMBED_SOURCE )
         {
             TransferableObjectDescriptor aDesc;
-            if ( ((TransferableDataHelper&)rDataHelper).GetTransferableObjectDescriptor(
+            if ( const_cast<TransferableDataHelper&>(rDataHelper).GetTransferableObjectDescriptor(
                                         SotClipboardFormatId::OBJECTDESCRIPTOR, aDesc ) )
                 aStrVal = aDesc.maTypeName;
         }
