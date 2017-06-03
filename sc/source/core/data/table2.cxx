@@ -2441,8 +2441,15 @@ void ScTable::UnlockTable()
 
 void ScTable::MergeSelectionPattern( ScMergePatternState& rState, const ScMarkData& rMark, bool bDeep ) const
 {
-    for (SCCOL i=0; i < aCol.size(); i++)
-        aCol[i].MergeSelectionPattern( rState, rMark, bDeep );
+    std::vector<sc::ColRowSpan> aSpans = rMark.GetMarkedColSpans();
+
+    for (const sc::ColRowSpan & rSpan : aSpans)
+    {
+        for (SCCOLROW i = rSpan.mnStart; i <= rSpan.mnEnd; ++i)
+        {
+            aCol[i].MergeSelectionPattern( rState, rMark, bDeep );
+        }
+    }
 }
 
 void ScTable::MergePatternArea( ScMergePatternState& rState, SCCOL nCol1, SCROW nRow1,

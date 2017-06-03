@@ -143,7 +143,7 @@ bool ScMultiSel::IsAllMarked( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const
             return true;
         ScMultiSelIter aMultiIter( *this, nCol );
         ScFlatBoolRowSegments::RangeData aRowRange;
-        bool bRet = aMultiIter.GetRowSegments().getRangeData( nStartRow, aRowRange );
+        bool bRet = aMultiIter.GetRangeData( nStartRow, aRowRange );
         return bRet && aRowRange.mbValue && aRowRange.mnRow2 >= nEndRow;
     }
 
@@ -296,31 +296,53 @@ bool ScMultiSel::HasAnyMarks() const
     return false;
 }
 
+const ScMarkArray& ScMultiSel::GetRowSelArray() const
+{
+    return aRowSel;
+}
+
+const ScMarkArray* ScMultiSel::GetMultiSelArray( SCCOL nCol ) const
+{
+    ScMultiSel::MapType::const_iterator aIter = aMultiSelContainer.find( nCol );
+    return (aIter != aMultiSelContainer.end()) ? &aIter->second : nullptr;
+}
+
 ScMultiSelIter::ScMultiSelIter( const ScMultiSel& rMultiSel, SCCOL nCol ) :
-    aRowSegs(),
+    aMarkArrayIter(nullptr),
     nNextSegmentStart(0)
 {
-    aRowSegs.setFalse( 0, MAXROW );
     bool bHasMarks1 = rMultiSel.aRowSel.HasMarks();
     ScMultiSel::MapType::const_iterator aIter = rMultiSel.aMultiSelContainer.find( nCol );
     bool bHasMarks2 = ( ( aIter != rMultiSel.aMultiSelContainer.end() ) && aIter->second.HasMarks() );
 
-    if ( bHasMarks1 )
+    if (bHasMarks1 && bHasMarks2)
     {
-        ScMarkArrayIter aMarkIter( &rMultiSel.aRowSel );
-        SCROW nTop, nBottom;
-        while ( aMarkIter.Next( nTop, nBottom ) )
-            aRowSegs.setTrue( nTop, nBottom );
-    }
+        pRowSegs.reset( new ScFlatBoolRowSegments);
+        pRowSegs->setFalse( 0, MAXROW );
+        if ( bHasMarks1 )
+        {
+            ScMarkArrayIter aMarkIter( &rMultiSel.aRowSel );
+            SCROW nTop, nBottom;
+            while ( aMarkIter.Next( nTop, nBottom ) )
+                pRowSegs->setTrue( nTop, nBottom );
+        }
 
-    if ( bHasMarks2 )
+        if ( bHasMarks2 )
+        {
+            ScMarkArrayIter aMarkIter( &aIter->second );
+            SCROW nTop, nBottom;
+            while ( aMarkIter.Next( nTop, nBottom ) )
+                pRowSegs->setTrue( nTop, nBottom );
+        }
+    }
+    else if (bHasMarks1)
     {
-        ScMarkArrayIter aMarkIter( &aIter->second );
-        SCROW nTop, nBottom;
-        while ( aMarkIter.Next( nTop, nBottom ) )
-            aRowSegs.setTrue( nTop, nBottom );
+        aMarkArrayIter.reset( &rMultiSel.aRowSel);
     }
-
+    else if (bHasMarks2)
+    {
+        aMarkArrayIter.reset( &aIter->second);
+    }
 }
 
 ScMultiSelIter::~ScMultiSelIter()
@@ -329,20 +351,32 @@ ScMultiSelIter::~ScMultiSelIter()
 
 bool ScMultiSelIter::Next( SCROW& rTop, SCROW& rBottom )
 {
-    ScFlatBoolRowSegments::RangeData aRowRange;
-    bool bRet = aRowSegs.getRangeData( nNextSegmentStart, aRowRange );
-    if ( bRet && !aRowRange.mbValue )
+    if (pRowSegs)
     {
-        nNextSegmentStart = aRowRange.mnRow2 + 1;
-        bRet = aRowSegs.getRangeData( nNextSegmentStart, aRowRange );
+        ScFlatBoolRowSegments::RangeData aRowRange;
+        bool bRet = pRowSegs->getRangeData( nNextSegmentStart, aRowRange );
+        if ( bRet && !aRowRange.mbValue )
+        {
+            nNextSegmentStart = aRowRange.mnRow2 + 1;
+            bRet = pRowSegs->getRangeData( nNextSegmentStart, aRowRange );
+        }
+        if ( bRet )
+        {
+            rTop = aRowRange.mnRow1;
+            rBottom = aRowRange.mnRow2;
+            nNextSegmentStart = rBottom + 1;
+        }
+        return bRet;
     }
-    if ( bRet )
-    {
-        rTop = aRowRange.mnRow1;
-        rBottom = aRowRange.mnRow2;
-        nNextSegmentStart = rBottom + 1;
-    }
-    return bRet;
+
+    return aMarkArrayIter.Next( rTop, rBottom);
 }
+
+bool ScMultiSelIter::GetRangeData( SCROW nRow, ScFlatBoolRowSegments::RangeData& rRowRange ) const
+{
+    assert(pRowSegs);
+    return pRowSegs->getRangeData( nRow, rRowRange);
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

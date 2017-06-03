@@ -372,8 +372,16 @@ ScMarkArrayIter::~ScMarkArrayIter()
 {
 }
 
+void ScMarkArrayIter::reset( const ScMarkArray* pNewArray )
+{
+    pArray = pNewArray;
+    nPos = 0;
+}
+
 bool ScMarkArrayIter::Next( SCROW& rTop, SCROW& rBottom )
 {
+    if (!pArray)
+        return false;
     if ( nPos >= pArray->nCount )
         return false;
     while (!pArray->pData[nPos].bMarked)
