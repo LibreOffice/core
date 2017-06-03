@@ -1523,7 +1523,7 @@ void SAL_CALL ODatabaseDocument::close(sal_Bool bDeliverOwnership)
 
         impl_closeControllerFrames_nolck_throw( bDeliverOwnership );
 
-        m_aCloseListener.notifyEach( &XCloseListener::notifyClosing, (const lang::EventObject&)aEvent );
+        m_aCloseListener.notifyEach( &XCloseListener::notifyClosing, const_cast<const lang::EventObject&>(aEvent) );
 
         dispose();
     }
