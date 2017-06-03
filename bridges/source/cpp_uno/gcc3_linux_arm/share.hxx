@@ -18,12 +18,20 @@
  */
 #ifndef INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_ARM_SHARE_HXX
 #define INCLUDED_BRIDGES_SOURCE_CPP_UNO_GCC3_LINUX_ARM_SHARE_HXX
-#include "uno/mapping.h"
+#include "sal/config.h"
 
 #include <typeinfo>
 #include <exception>
 #include <cstddef>
+
+#include <cxxabi.h>
+#ifndef _GLIBCXX_CDTOR_CALLABI // new in GCC 4.7 cxxabi.h
+#define _GLIBCXX_CDTOR_CALLABI
+#endif
 #include <unwind.h>
+
+#include "config_cxxabi.h"
+#include "uno/mapping.h"
 
 namespace CPPU_CURRENT_NAMESPACE
 {
@@ -31,6 +39,7 @@ namespace CPPU_CURRENT_NAMESPACE
     void dummy_can_throw_anything( char const * );
 
     // -- following decl from libstdc++-v3/libsupc++/unwind-cxx.h and unwind.h
+
 
     struct __cxa_exception
     {
@@ -62,21 +71,24 @@ namespace CPPU_CURRENT_NAMESPACE
         void *thrown_exception, std::type_info *tinfo,
         void (*dest) (void *) ) __attribute__((noreturn));
 
-    struct __cxa_eh_globals
-    {
-        __cxa_exception *caughtExceptions;
-        unsigned int uncaughtExceptions;
-#ifdef __ARM_EABI__
+struct __cxa_eh_globals {
+    __cxa_exception *caughtExceptions;
+    unsigned int uncaughtExceptions;
+    #ifdef __ARM_EABI__
     __cxa_exception *propagatingExceptions;
+    #endif
+};
+
+#if !HAVE_CXXABI_H_CXA_GET_GLOBALS
+namespace __cxxabiv1 {
+    extern "C" __cxa_eh_globals * __cxa_get_globals() throw();
+}
 #endif
-    };
-    extern "C" __cxa_eh_globals *__cxa_get_globals () throw();
 
-
-    void raiseException(
-        uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
-    void fillUnoException(
-        __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
+void raiseException(
+    uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
+void fillUnoException(
+    __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
 }
 
 extern "C" void privateSnippetExecutor();

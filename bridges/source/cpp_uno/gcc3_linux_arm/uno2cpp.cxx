@@ -168,6 +168,7 @@ void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * 
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
             pRegisterReturn[1] = r1;
+            SAL_FALLTHROUGH;
         case typelib_TypeClass_LONG:
         case typelib_TypeClass_UNSIGNED_LONG:
         case typelib_TypeClass_ENUM:
@@ -569,10 +570,16 @@ static void cpp_call(
     }
     catch (...)
     {
-//        __asm__ __volatile__ ("sub sp, sp, #2048\n");
+        // // fill uno exception
+        // CPPU_CURRENT_NAMESPACE::fillUnoException(
+        //     __cxxabiv1::__cxa_get_globals()->caughtExceptions,
+        //     *ppUnoExc, pThis->getBridge()->getCpp2Uno());
 
         // fill uno exception
-        fillUnoException( CPPU_CURRENT_NAMESPACE::__cxa_get_globals()->caughtExceptions, *ppUnoExc, pThis->getBridge()->getCpp2Uno() );
+        fillUnoException(
+          reinterpret_cast< CPPU_CURRENT_NAMESPACE::__cxa_eh_globals * >(
+                    __cxxabiv1::__cxa_get_globals())->caughtExceptions,
+                    *ppUnoExc, pThis->getBridge()->getCpp2Uno());
 
         // temporary params
         for ( ; nTempIndices--; )
@@ -701,7 +708,8 @@ void unoInterfaceProxyDispatch(
                 }
                 TYPELIB_DANGER_RELEASE( pTD );
             }
-        } // else perform queryInterface()
+            SAL_FALLTHROUGH; // else perform queryInterface()
+        }
         default:
             // dependent dispatch
             cpp_call(
