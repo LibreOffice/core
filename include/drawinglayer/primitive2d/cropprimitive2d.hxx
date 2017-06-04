@@ -42,7 +42,7 @@ namespace drawinglayer
 
             Thus a transformation has to be calculated which will be applied
             to the already exsisting content to get it to the uncropped state
-            ans then this is masked with the current state (mask polygon
+            and then this is masked with the current state (mask polygon
             created from unit polygon and maTransformation).
 
             At least in this primitive the units of the crop values are

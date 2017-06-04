@@ -213,7 +213,7 @@ private:
  *  @par Extensions
  *  Plans are to extend the file format in such a way that the high nibble
  *  of the record type has special duties. For instance it is planned
- *  to mark Record-Contents als 'consisting only of Records'. That way
+ *  to mark Record-Contents as 'consisting only of Records'. That way
  *  a file viewer could automatically parse these structures without
  *  risking encountering data that looks like records, but actually is
  *  flat data. Those further extensions are prepared to the extent

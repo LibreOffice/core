@@ -152,7 +152,7 @@ public:
 
     void                SetUpdateInterval( sal_uLong nInterval );
 
-    // wird im Ctor eingeschaltet
+    // is switched on in the Ctor
     void                ExpandSelectionOnMouseMove( bool bExpand = true )
                         {
                             if( bExpand )

@@ -407,7 +407,7 @@ public:
     virtual sal_Int8 AcceptDrop( const BrowserAcceptDropEvent& rEvt );
     virtual sal_Int8 ExecuteDrop( const BrowserExecuteDropEvent& rEvt );
 
-    // neue Handler
+    // new handlers
     virtual void    MouseButtonDown( const BrowserMouseEvent& rEvt );
     virtual void    MouseButtonUp( const BrowserMouseEvent& rEvt );
     void            StartScroll();
