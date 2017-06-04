@@ -148,7 +148,7 @@ inline ds_status initDSProfile(std::unique_ptr<ds_profile>& rProfile, OString co
     unsigned int next;
     unsigned int i;
 
-    rProfile = std::unique_ptr<ds_profile>(new ds_profile(rVersion));
+    rProfile.reset(new ds_profile(rVersion));
 
     clGetPlatformIDs(0, nullptr, &numPlatforms);
     if (numPlatforms != 0)

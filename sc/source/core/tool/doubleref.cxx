@@ -374,7 +374,7 @@ std::unique_ptr<ScDBQueryParamBase> ScDBInternalRange::createQueryParam(const Sc
     if (!pQueryRef->fillQueryEntries(pParam.get(), this))
         return nullptr;
 
-    return std::unique_ptr<ScDBQueryParamBase>(std::move(pParam));
+    return pParam;
 }
 
 bool ScDBInternalRange::isRangeEqual(const ScRange& rRange) const
@@ -460,7 +460,7 @@ std::unique_ptr<ScDBQueryParamBase> ScDBExternalRange::createQueryParam(const Sc
     if (!pQueryRef->fillQueryEntries(pParam.get(), this))
         return nullptr;
 
-    return std::unique_ptr<ScDBQueryParamBase>(std::move(pParam));
+    return pParam;
 }
 
 bool ScDBExternalRange::isRangeEqual(const ScRange& /*rRange*/) const
