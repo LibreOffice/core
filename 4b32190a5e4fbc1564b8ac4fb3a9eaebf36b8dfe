@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_12bad323",
+        "filename": "solenv/gbuild/gen-autoinstall.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-06-04T19:52:10Z",
+      "side": 1,
+      "message": "this fails on some tinderboxes\n  File \"/home/buildslave/source/libo-core/solenv/gbuild/gen-autoinstall.py\", line 76\n  scp2libtemplates \u003d { \"URE_PRIVATE_LIB\", \"LIBO_LIB_FILE\", \"LIBO_LIB_FILE_BINARYTABLE\", \"LIBO_LIB_FILE_COMPONENTCONDITION\", \"SHLXTHDL_LIB_FILE\", \"SHLXTHDL_LIB_FILE_COMPONENTCONDITION\" }\n                                          ^\n  SyntaxError: invalid syntax\n\ntrying to fix this in\nhttps://gerrit.libreoffice.org/#/c/38393/",
+      "range": {
+        "startLine": 94,
+        "startChar": 19,
+        "endLine": 94,
+        "endChar": 129
+      },
+      "revId": "4b32190a5e4fbc1564b8ac4fb3a9eaebf36b8dfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
