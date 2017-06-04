@@ -91,7 +91,7 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         throw IllegalArgument(tmp);
                     }
 
-                    m_options["-nD"] = OString("");
+                    m_options["-nD"] = OString();
                     break;
                 case 'T':
                     if (av[i][2] == '\0')
@@ -139,7 +139,7 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
                             throw IllegalArgument(tmp);
                         }
 
-                        m_options["-Gc"] = OString("");
+                        m_options["-Gc"] = OString();
                         break;
                     } else if (av[i][2] != '\0')
                     {
@@ -152,7 +152,7 @@ bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         throw IllegalArgument(tmp);
                     }
 
-                    m_options["-G"] = OString("");
+                    m_options["-G"] = OString();
                     break;
                 case 'X': // support for eXtra type rdbs
                 {
