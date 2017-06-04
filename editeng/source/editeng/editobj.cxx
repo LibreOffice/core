@@ -1429,9 +1429,8 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                     aNewFontItem.SetFamilyName( GetFontToSubsFontName( hConv ) );
 
                     // Replace the existing attribute with a new one.
-                    pC->maCharAttribs[nAttr] =
-                            std::unique_ptr<XEditAttribute>(CreateAttrib(aNewFontItem, rAttr.GetStart(), rAttr.GetEnd()));
                     pPool->Remove(*rAttr.GetItem());
+                    pC->maCharAttribs[nAttr].reset(CreateAttrib(aNewFontItem, rAttr.GetStart(), rAttr.GetEnd()));
 
                     XEditAttribute* pNewAttr = pC->maCharAttribs[nAttr].get();
                     for ( sal_Int32 nChar = pNewAttr->GetStart(); nChar < pNewAttr->GetEnd(); nChar++ )
