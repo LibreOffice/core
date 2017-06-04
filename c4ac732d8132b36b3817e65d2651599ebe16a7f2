@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_f26f0790",
+        "filename": "include/svx/svdoedge.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T22:04:53Z",
+      "side": 0,
+      "message": "Any reason why you didn\u0027t change these two ...Versatz() names as well to ...Offset()?",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 81
+      },
+      "revId": "c4ac732d8132b36b3817e65d2651599ebe16a7f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
