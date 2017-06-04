@@ -1134,7 +1134,7 @@ RemoveFile::Parse(NS_tchar *line)
     if (!validPath)
         return PARSE_ERROR;
 
-    mRelPath = std::unique_ptr<NS_tchar>(new NS_tchar[MAXPATHLEN]);
+    mRelPath.reset(new NS_tchar[MAXPATHLEN]);
     NS_tstrcpy(mRelPath.get(), validPath);
 
     mFile.reset(get_full_path(validPath));
@@ -1261,7 +1261,7 @@ RemoveDir::Parse(NS_tchar *line)
     NS_tchar* validPath = get_valid_path(&line, true);
     if (!validPath)
         return PARSE_ERROR;
-    mRelPath = std::unique_ptr<NS_tchar>(new NS_tchar[MAXPATHLEN]);
+    mRelPath.reset(new NS_tchar[MAXPATHLEN]);
     NS_tstrcpy(mRelPath.get(), validPath);
 
     mDir.reset(get_full_path(validPath));
@@ -1386,7 +1386,7 @@ AddFile::Parse(NS_tchar *line)
     if (!validPath)
         return PARSE_ERROR;
 
-    mRelPath = std::unique_ptr<NS_tchar>(new NS_tchar[MAXPATHLEN]);
+    mRelPath.reset(new NS_tchar[MAXPATHLEN]);
 
     NS_tstrcpy(mRelPath.get(), validPath);
 
@@ -1582,7 +1582,7 @@ PatchFile::Parse(NS_tchar *line)
     NS_tchar* validPath = get_valid_path(&line);
     if (!validPath)
         return PARSE_ERROR;
-    mFileRelPath = std::unique_ptr<NS_tchar>(new NS_tchar[MAXPATHLEN]);
+    mFileRelPath.reset(new NS_tchar[MAXPATHLEN]);
     NS_tstrcpy(mFileRelPath.get(), validPath);
 
     mFile.reset(get_full_path(validPath));
