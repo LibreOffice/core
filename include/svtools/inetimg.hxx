@@ -49,7 +49,7 @@ public:
     const OUString& GetTargetURL() const { return aTargetURL; }
     const OUString& GetTargetFrame() const { return aTargetFrame; }
 
-    // Im-/Export
+    // import/export
     void Write( SvStream& rOStm, SotClipboardFormatId nFormat ) const;
     bool Read( SvStream& rIStm, SotClipboardFormatId nFormat );
 };

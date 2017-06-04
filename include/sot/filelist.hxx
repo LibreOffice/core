@@ -31,15 +31,15 @@ class SOT_DLLPUBLIC FileList
 
 private:
 
-    // Liste loeschen;
+    // delete list
     void clear() { aStrList.clear(); }
 
 public:
 
-    // Im-/Export
+    // import/export
     SOT_DLLPUBLIC friend SvStream&  ReadFileList( SvStream& rIStm, FileList& rFileList );
 
-    // Liste fuellen/abfragen
+    // fill in / interrogate list
     void AppendFile( const OUString& rStr );
     OUString GetFile( size_t i ) const;
     size_t Count() const;

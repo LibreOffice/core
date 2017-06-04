@@ -169,8 +169,8 @@ public:
 
     void                SetPaintSelection( bool bPaint);
 
-    // aus dem protected Teil hierher verschoben
-    // For 'SvtXECTextCursor' (TL). Must ggf nochmal anders gel?st werden.
+    // Moved in here from the protected part.
+    // For 'SvtXECTextCursor' (TL). Possibly needs to be solved again differently.
     TextPaM             PageUp( const TextPaM& rPaM );
     TextPaM             PageDown( const TextPaM& rPaM );
     TextPaM             CursorUp( const TextPaM& rPaM );

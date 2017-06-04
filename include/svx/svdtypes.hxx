@@ -68,7 +68,7 @@ constexpr SdrLayerID SDRLAYER_NOTFOUND(0xff);
  */
 enum class SdrObjListKind {
     Unknown    = 0x00,
-    // reine Objektlisten:
+    // pure object lists:
     GroupObj   = 0x01,
     // Here is space for 12 more types of lists
     // Pages:

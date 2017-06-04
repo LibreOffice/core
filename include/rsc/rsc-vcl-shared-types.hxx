@@ -109,7 +109,7 @@ enum class SymbolType : sal_uInt16
 };
 
 
-// Border-Styles fuer SetBorder()
+// Border styles for SetBorder()
 enum class WindowBorderStyle : sal_Int16
 {
     NONE              = 0x0000,
@@ -127,7 +127,7 @@ namespace o3tl
 
 #define KEY_CODE_MASK       ((sal_uInt16)0x0FFF)
 
-// Modifier-Tasten
+// Modifier keys
 #define KEY_SHIFT           ((sal_uInt16)0x1000)
 #define KEY_MOD1            ((sal_uInt16)0x2000)
 #define KEY_MOD2            ((sal_uInt16)0x4000)

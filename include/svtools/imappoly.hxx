@@ -36,7 +36,7 @@ class SVT_DLLPUBLIC IMapPolygonObject : public IMapObject
 
 protected:
 
-    // Binaer-Im-/Export
+    // binary import/export
     virtual void        WriteIMapObject( SvStream& rOStm ) const override;
     virtual void        ReadIMapObject(  SvStream& rIStm ) override;
 
@@ -65,7 +65,7 @@ public:
     using IMapObject::IsEqual;
     bool                IsEqual( const IMapPolygonObject& rEqObj );
 
-    // Im-/Export
+    // import/export
     void                WriteCERN( SvStream& rOStm ) const;
     void                WriteNCSA( SvStream& rOStm ) const;
 };

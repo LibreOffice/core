@@ -113,7 +113,7 @@ namespace dbtools
         The function tries to obtain a connection for the row set with the following
         steps (in this order):
         <nl>
-            <li>If the rowset already has an ActiveConnection (means a non-<NULL/> value vor this property),
+            <li>If the rowset already has an ActiveConnection (means a non-<NULL/> value for this property),
                 this one is used.</li>
             <li>If row set is part of a database form document (see ->isEmbeddedInDatabase),
                 a connection for the respective database is used.</li>

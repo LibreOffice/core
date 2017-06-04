@@ -176,7 +176,7 @@ public:
     // to implement it yourself. Example for MouseButtonDown:
     //      SdrViewEvent aVEvt;
     //      SdrHitKind eHit=pSdrView->PickAnything(rMEvt,SdrMouseEventKind::BUTTONDOWN,aVEvt);
-    //      ... hier Applikationsspezifischer Eingriff ...
+    //      ... here application-specific intervention ...
     //      pSdrView->DoMouseEvent(aVEvt);
     //      SetPointer(GetPreferredPointer(...))
     //      CaptureMouse(...)

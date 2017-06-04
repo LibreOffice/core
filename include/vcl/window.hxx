@@ -123,7 +123,7 @@ namespace o3tl
 }
 
 
-// Type fuer GetWindow()
+// Type for GetWindow()
 enum class GetWindowType
 {
     Parent                   =  0,

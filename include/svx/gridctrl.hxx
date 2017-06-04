@@ -185,7 +185,7 @@ public:
 
         friend class NavigationBar::AbsolutePos;
 
-        //  zusaetzliche Controls
+        //  additional controls
         VclPtr<FixedText>    m_aRecordText;
         VclPtr<AbsolutePos>  m_aAbsolute;            // absolute positioning
         VclPtr<FixedText>    m_aRecordOf;
