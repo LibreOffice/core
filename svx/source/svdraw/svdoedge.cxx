@@ -92,7 +92,7 @@ bool SdrObjConnection::TakeGluePoint(SdrGluePoint& rGP) const
     return bRet;
 }
 
-Point& SdrEdgeInfoRec::ImpGetLineVersatzPoint(SdrEdgeLineCode eLineCode)
+Point& SdrEdgeInfoRec::ImpGetLineOffsetPoint(SdrEdgeLineCode eLineCode)
 {
     switch (eLineCode) {
         case SdrEdgeLineCode::Obj1Line2 : return aObj1Line2;
@@ -128,16 +128,16 @@ bool SdrEdgeInfoRec::ImpIsHorzLine(SdrEdgeLineCode eLineCode, const XPolygon& rX
     return bHorz;
 }
 
-void SdrEdgeInfoRec::ImpSetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon& rXP, long nVal)
+void SdrEdgeInfoRec::ImpSetLineOffset(SdrEdgeLineCode eLineCode, const XPolygon& rXP, long nVal)
 {
-    Point& rPt=ImpGetLineVersatzPoint(eLineCode);
+    Point& rPt=ImpGetLineOffsetPoint(eLineCode);
     if (ImpIsHorzLine(eLineCode,rXP)) rPt.Y()=nVal;
     else rPt.X()=nVal;
 }
 
-long SdrEdgeInfoRec::ImpGetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const
+long SdrEdgeInfoRec::ImpGetLineOffset(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const
 {
-    const Point& rPt = const_cast<SdrEdgeInfoRec*>(this)->ImpGetLineVersatzPoint(eLineCode);
+    const Point& rPt = const_cast<SdrEdgeInfoRec*>(this)->ImpGetLineOffsetPoint(eLineCode);
     if (ImpIsHorzLine(eLineCode,rXP))
         return rPt.Y();
     else
@@ -199,31 +199,31 @@ void SdrEdgeObj::ImpSetAttrToEdgeInfo()
 
         if(aEdgeInfo.nObj1Lines >= 2 && n < 3)
         {
-            aEdgeInfo.ImpSetLineVersatz(SdrEdgeLineCode::Obj1Line2, *pEdgeTrack, nVals[n]);
+            aEdgeInfo.ImpSetLineOffset(SdrEdgeLineCode::Obj1Line2, *pEdgeTrack, nVals[n]);
             n++;
         }
 
         if(aEdgeInfo.nObj1Lines >= 3 && n < 3)
         {
-            aEdgeInfo.ImpSetLineVersatz(SdrEdgeLineCode::Obj1Line3, *pEdgeTrack, nVals[n]);
+            aEdgeInfo.ImpSetLineOffset(SdrEdgeLineCode::Obj1Line3, *pEdgeTrack, nVals[n]);
             n++;
         }
 
         if(aEdgeInfo.nMiddleLine != 0xFFFF && n < 3)
         {
-            aEdgeInfo.ImpSetLineVersatz(SdrEdgeLineCode::MiddleLine, *pEdgeTrack, nVals[n]);
+            aEdgeInfo.ImpSetLineOffset(SdrEdgeLineCode::MiddleLine, *pEdgeTrack, nVals[n]);
             n++;
         }
 
         if(aEdgeInfo.nObj2Lines >= 3 && n < 3)
         {
-            aEdgeInfo.ImpSetLineVersatz(SdrEdgeLineCode::Obj2Line3, *pEdgeTrack, nVals[n]);
+            aEdgeInfo.ImpSetLineOffset(SdrEdgeLineCode::Obj2Line3, *pEdgeTrack, nVals[n]);
             n++;
         }
 
         if(aEdgeInfo.nObj2Lines >= 2 && n < 3)
         {
-            aEdgeInfo.ImpSetLineVersatz(SdrEdgeLineCode::Obj2Line2, *pEdgeTrack, nVals[n]);
+            aEdgeInfo.ImpSetLineOffset(SdrEdgeLineCode::Obj2Line2, *pEdgeTrack, nVals[n]);
             n++;
         }
     }
@@ -269,31 +269,31 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
     {
         if(aEdgeInfo.nObj1Lines >= 2 && n < 3)
         {
-            nVals[n] = aEdgeInfo.ImpGetLineVersatz(SdrEdgeLineCode::Obj1Line2, *pEdgeTrack);
+            nVals[n] = aEdgeInfo.ImpGetLineOffset(SdrEdgeLineCode::Obj1Line2, *pEdgeTrack);
             n++;
         }
 
         if(aEdgeInfo.nObj1Lines >= 3 && n < 3)
         {
-            nVals[n] = aEdgeInfo.ImpGetLineVersatz(SdrEdgeLineCode::Obj1Line3, *pEdgeTrack);
+            nVals[n] = aEdgeInfo.ImpGetLineOffset(SdrEdgeLineCode::Obj1Line3, *pEdgeTrack);
             n++;
         }
 
         if(aEdgeInfo.nMiddleLine != 0xFFFF && n < 3)
         {
-            nVals[n] = aEdgeInfo.ImpGetLineVersatz(SdrEdgeLineCode::MiddleLine, *pEdgeTrack);
+            nVals[n] = aEdgeInfo.ImpGetLineOffset(SdrEdgeLineCode::MiddleLine, *pEdgeTrack);
             n++;
         }
 
         if(aEdgeInfo.nObj2Lines >= 3 && n < 3)
         {
-            nVals[n] = aEdgeInfo.ImpGetLineVersatz(SdrEdgeLineCode::Obj2Line3, *pEdgeTrack);
+            nVals[n] = aEdgeInfo.ImpGetLineOffset(SdrEdgeLineCode::Obj2Line3, *pEdgeTrack);
             n++;
         }
 
         if(aEdgeInfo.nObj2Lines >= 2 && n < 3)
         {
-            nVals[n] = aEdgeInfo.ImpGetLineVersatz(SdrEdgeLineCode::Obj2Line2, *pEdgeTrack);
+            nVals[n] = aEdgeInfo.ImpGetLineOffset(SdrEdgeLineCode::Obj2Line2, *pEdgeTrack);
             n++;
         }
     }
@@ -1912,8 +1912,8 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
         const Point aDist(rDragStat.GetNow() - rDragStat.GetStart());
         sal_Int32 nDist(pEdgeHdl->IsHorzDrag() ? aDist.X() : aDist.Y());
 
-        nDist += aEdgeInfo.ImpGetLineVersatz(eLineCode, *pEdgeTrack);
-        aEdgeInfo.ImpSetLineVersatz(eLineCode, *pEdgeTrack, nDist);
+        nDist += aEdgeInfo.ImpGetLineOffset(eLineCode, *pEdgeTrack);
+        aEdgeInfo.ImpSetLineOffset(eLineCode, *pEdgeTrack, nDist);
     }
 
     // force recalculation of EdgeTrack

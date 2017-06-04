@@ -402,7 +402,7 @@ SdrGrafObj::~SdrGrafObj()
 {
     delete pGraphic;
     delete mpReplacementGraphic;
-    ImpLinkAbmeldung();
+    ImpDeregisterLink();
 }
 
 void SdrGrafObj::SetGraphicObject( const GraphicObject& rGrfObj )
@@ -610,7 +610,7 @@ void SdrGrafObj::ForceSwapIn() const
     }
 }
 
-void SdrGrafObj::ImpLinkAnmeldung()
+void SdrGrafObj::ImpRegisterLink()
 {
     sfx2::LinkManager* pLinkManager = pModel != nullptr ? pModel->GetLinkManager() : nullptr;
 
@@ -626,7 +626,7 @@ void SdrGrafObj::ImpLinkAnmeldung()
     }
 }
 
-void SdrGrafObj::ImpLinkAbmeldung()
+void SdrGrafObj::ImpDeregisterLink()
 {
     sfx2::LinkManager* pLinkManager = pModel != nullptr ? pModel->GetLinkManager() : nullptr;
 
@@ -640,18 +640,18 @@ void SdrGrafObj::ImpLinkAbmeldung()
 
 void SdrGrafObj::SetGraphicLink(const OUString& rFileName, const OUString& rReferer, const OUString& rFilterName)
 {
-    ImpLinkAbmeldung();
+    ImpDeregisterLink();
     aFileName = rFileName;
     aReferer = rReferer;
     aFilterName = rFilterName;
-    ImpLinkAnmeldung();
+    ImpRegisterLink();
     pGraphic->SetUserData();
     pGraphic->SetSwapState();
 }
 
 void SdrGrafObj::ReleaseGraphicLink()
 {
-    ImpLinkAbmeldung();
+    ImpDeregisterLink();
     aFileName.clear();
     aReferer.clear();
     aFilterName.clear();
@@ -954,7 +954,7 @@ void SdrGrafObj::SetPage( SdrPage* pNewPage )
             pGraphic->StopAnimation();
 
         if( pGraphicLink != nullptr )
-            ImpLinkAbmeldung();
+            ImpDeregisterLink();
     }
 
     if(!pModel && !GetStyleSheet() && pNewPage && pNewPage->GetModel())
@@ -980,7 +980,7 @@ void SdrGrafObj::SetPage( SdrPage* pNewPage )
     SdrRectObj::SetPage( pNewPage );
 
     if (!aFileName.isEmpty() && bInsert)
-        ImpLinkAnmeldung();
+        ImpRegisterLink();
 }
 
 void SdrGrafObj::SetModel( SdrModel* pNewModel )
@@ -995,14 +995,14 @@ void SdrGrafObj::SetModel( SdrModel* pNewModel )
         }
 
         if( pGraphicLink != nullptr )
-            ImpLinkAbmeldung();
+            ImpDeregisterLink();
     }
 
     // realize model
     SdrRectObj::SetModel(pNewModel);
 
     if (bChg && !aFileName.isEmpty())
-        ImpLinkAnmeldung();
+        ImpRegisterLink();
 }
 
 void SdrGrafObj::StartAnimation()

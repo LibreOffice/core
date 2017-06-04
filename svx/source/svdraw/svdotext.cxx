@@ -184,7 +184,7 @@ SdrTextObj::~SdrTextObj()
 
     delete mpText;
 
-    ImpLinkAbmeldung();
+    ImpDeregisterLink();
 }
 
 void SdrTextObj::FitFrameToTextSize()
@@ -475,13 +475,13 @@ void SdrTextObj::SetPage(SdrPage* pNewPage)
     bool bLinked=IsLinkedText();
 
     if (bLinked && bRemove) {
-        ImpLinkAbmeldung();
+        ImpDeregisterLink();
     }
 
     SdrAttrObj::SetPage(pNewPage);
 
     if (bLinked && bInsert) {
-        ImpLinkAnmeldung();
+        ImpRegisterLink();
     }
 }
 
@@ -493,7 +493,7 @@ void SdrTextObj::SetModel(SdrModel* pNewModel)
 
     if (bLinked && bChg)
     {
-        ImpLinkAbmeldung();
+        ImpDeregisterLink();
     }
 
     SdrAttrObj::SetModel(pNewModel);
@@ -514,7 +514,7 @@ void SdrTextObj::SetModel(SdrModel* pNewModel)
 
     if (bLinked && bChg)
     {
-        ImpLinkAnmeldung();
+        ImpRegisterLink();
     }
 }
 

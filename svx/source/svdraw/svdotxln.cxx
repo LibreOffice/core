@@ -132,12 +132,12 @@ void SdrTextObj::SetTextLink(const OUString& rFileName, const OUString& rFilterN
     pData->aFilterName=rFilterName;
     pData->eCharSet=eCharSet;
     AppendUserData(pData);
-    ImpLinkAnmeldung();
+    ImpRegisterLink();
 }
 
 void SdrTextObj::ReleaseTextLink()
 {
-    ImpLinkAbmeldung();
+    ImpDeregisterLink();
     sal_uInt16 nCount=GetUserDataCount();
     for (sal_uInt16 nNum=nCount; nNum>0;) {
         nNum--;
@@ -251,7 +251,7 @@ ImpSdrObjTextLinkUserData* SdrTextObj::GetLinkUserData() const
     return nullptr;
 }
 
-void SdrTextObj::ImpLinkAnmeldung()
+void SdrTextObj::ImpRegisterLink()
 {
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
     sfx2::LinkManager* pLinkManager=pModel!=nullptr ? pModel->GetLinkManager() : nullptr;
@@ -263,7 +263,7 @@ void SdrTextObj::ImpLinkAnmeldung()
     }
 }
 
-void SdrTextObj::ImpLinkAbmeldung()
+void SdrTextObj::ImpDeregisterLink()
 {
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
     sfx2::LinkManager* pLinkManager=pModel!=nullptr ? pModel->GetLinkManager() : nullptr;

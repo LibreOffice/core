@@ -28,12 +28,12 @@
 #include <memory>
 
 #define BR 0x8000
-bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, bool bImmerVerschieben )
+bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, bool bMoveAlways )
 {
     //printf( "Move from %s to %s\n", rFile2.GetStr(), rFile1.GetStr() );
     sal_uLong nC1 = 0;
     sal_uLong nC2 = 1;
-    if( !bImmerVerschieben )
+    if( !bMoveAlways )
     {
         SvFileStream aOutStm1( rFile1, StreamMode::STD_READ );
         SvFileStream aOutStm2( rFile2, StreamMode::STD_READ );
