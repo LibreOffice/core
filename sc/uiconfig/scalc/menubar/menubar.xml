@@ -92,6 +92,7 @@
                     <menu:menuitem menu:id=".uno:PasteOnlyFormula"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SelectAll"/>
             <menu:menu menu:id=".uno:EditSelectMenu">
                 <menu:menupopup>
