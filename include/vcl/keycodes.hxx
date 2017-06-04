@@ -26,7 +26,7 @@
 #include <com/sun/star/awt/KeyGroup.hpp>
 #include <o3tl/typed_flags_set.hxx>
 
-// Key-Gruppen
+// Key groups
 #define KEYGROUP_NUM    ((sal_uInt16)css::awt::KeyGroup::NUM)
 #define KEYGROUP_ALPHA  ((sal_uInt16)css::awt::KeyGroup::ALPHA)
 #define KEYGROUP_FKEYS  ((sal_uInt16)css::awt::KeyGroup::FKEYS)
@@ -34,7 +34,7 @@
 #define KEYGROUP_MISC   ((sal_uInt16)css::awt::KeyGroup::MISC)
 #define KEYGROUP_TYPE   ((sal_uInt16)css::awt::KeyGroup::TYPE)
 
-// Key-Codes
+// Key codes
 #define KEY_0           ((sal_uInt16)css::awt::Key::NUM0)
 #define KEY_1           ((sal_uInt16)css::awt::Key::NUM1)
 #define KEY_2           ((sal_uInt16)css::awt::Key::NUM2)

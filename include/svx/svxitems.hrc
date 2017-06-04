@@ -28,7 +28,7 @@
 #define RID_SVXITEMS_ORI_BOTTOMTOP          (RID_SVXITEMS_START + 412)
 #define RID_SVXITEMS_ORI_STACKED            (RID_SVXITEMS_START + 413)
 
-// Complete-Texte -----------------------------------------------------------
+// Complete-texts -----------------------------------------------------------
 
 #define RID_SVXITEMS_MARGIN_LEFT            (RID_SVXITEMS_START + 480)
 #define RID_SVXITEMS_MARGIN_TOP             (RID_SVXITEMS_START + 481)
@@ -55,12 +55,12 @@
 #define RID_SVXITEMS_BRUSH_CHAR             (RID_SVXITEMS_START + 527)
 #define RID_ATTR_NAMES                      (RID_SVXITEMS_START + 528)
 
-// Ueberlaufpruefung --------------------------------------------------------
+// Overflow check --------------------------------------------------------
 
 // Resource-Id's
 #define ACT_RID_SVXITEMS_END    RID_ATTR_NAMES
 #if ACT_RID_SVXITEMS_END > RID_SVXITEMS_END
-#error Resource-Ueberlauf in #line, #file
+#error Resource overflow in #line, #file
 #endif
 
 #endif

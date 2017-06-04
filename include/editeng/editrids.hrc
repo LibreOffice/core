@@ -372,7 +372,7 @@
 #define RID_DASH_DOT_DOT                    (RID_EDIT_START + 331)
 
 #if 331 > (RID_EDIT_END-RID_EDIT_START)
-#error Resource-Ueberlauf in #line, #file
+#error Resource overflow in #line, #file
 #endif
 
 #endif

@@ -63,9 +63,9 @@ protected:
 public:
     SvRTFParser( SvStream& rIn, sal_uInt8 nStackSize = 3 );
 
-    virtual SvParserState CallParser() override;   // Aufruf des Parsers
+    virtual SvParserState CallParser() override;   // calling the parser
 
-    // fuers asynchrone lesen aus dem SvStream
+    // for asynchronous read from the SvStream
     virtual void Continue( int nToken ) override;
 };
 

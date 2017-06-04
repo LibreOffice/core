@@ -102,7 +102,7 @@ bool SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
 {
     if ( !rAttr.GetRef() && dynamic_cast<const SvMetaSlot *>(&rAttr) )
     {
-        SAL_WARN( "idl", "Neuer Slot : " << rAttr.GetSlotId().getString() );
+        SAL_WARN( "idl", "new slot : " << rAttr.GetSlotId().getString() );
     }
 
     for( sal_uLong n = 0; n < aAttrList.size(); n++ )

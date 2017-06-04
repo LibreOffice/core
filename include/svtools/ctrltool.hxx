@@ -68,7 +68,7 @@ the printer. Because if two different device fonts (one for the printer and
 one for the screen) exist, the ones from the "pDevice" are preferred.
 
 The third parameter governs whether only scalable or all fonts shall be queried.
-With sal_True Bitmap-Schriften will also be queried.
+With sal_True bitmap fonts will also be queried.
 With sal_False vectorized and scalable fonts will be queried.
 
 --------------------------------------------------------------------------

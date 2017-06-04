@@ -90,7 +90,7 @@ public:
     virtual void                 ScaleMetrics( long nMult, long nDiv ) override;
     virtual bool                 HasMetrics() const override;
 
-    // Die "Layout-Schnittstelle":
+    // The "layout interface":
     inline void   SetLeft ( const long nL, const sal_uInt16 nProp = 100 );
     inline void   SetRight( const long nR, const sal_uInt16 nProp = 100 );
 

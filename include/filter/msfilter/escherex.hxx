@@ -515,7 +515,7 @@ class EscherBlibEntry
 protected:
 
     sal_uInt32      mnIdentifier[ 4 ];
-    sal_uInt32      mnPictureOffset;        // offset to the graphic im PictureStreams
+    sal_uInt32      mnPictureOffset;        // offset to the graphic in PictureStreams
     sal_uInt32      mnSize;                 // size of real graphic
 
     sal_uInt32      mnRefCount;             // !! reference count
@@ -1094,7 +1094,7 @@ public:
     void            ReplacePersistOffset( sal_uInt32 nKey, sal_uInt32 nOffset );
     sal_uInt32      GetPersistOffset( sal_uInt32 nKey );
     bool            SeekToPersistOffset( sal_uInt32 nKey );
-    void            InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue );   // nValue is being inserted into the Stream where it's appropriate (overwrite modus), without that the
+    void            InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue );   // nValue is being inserted into the Stream where it's appropriate (overwrite mode), without that the
                                                                                     // current StreamPosition changes
     void            SetEditAs( const OUString& rEditAs );
     const OUString& GetEditAs() { return mEditAs; }
