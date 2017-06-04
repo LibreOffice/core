@@ -107,8 +107,8 @@ private:
 
 private:
 
-    void                    ImpLinkAnmeldung();
-    void                    ImpLinkAbmeldung();
+    void                    ImpRegisterLink();
+    void                    ImpDeregisterLink();
     bool                    ImpUpdateGraphicLink( bool bAsynchron = true ) const;
     void                    ImpSetLinkedGraphic( const Graphic& rGraphic );
                             DECL_LINK( ImpSwapHdl, const GraphicObject*, SvStream* );
