@@ -27,7 +27,7 @@
 /** Activate parameter classification documentation.
 
     Building with DEBUG_SC_PARCLASSDOC 1 enables generation of parameter
-    classification documentation when instanciating the first Calc document if
+    classification documentation when instantiating the first Calc document if
     the environment variable OOO_CALC_GENPARCLASSDOC is set and SAL_LOG
     contains +INFO.sc.core
 

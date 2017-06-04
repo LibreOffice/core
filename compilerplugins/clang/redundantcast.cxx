@@ -365,7 +365,7 @@ bool RedundantCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const * expr) {
         report(
             DiagnosticsEngine::Warning,
             ("in static_cast from %0 %1 to %2 %3, remove redundant top-level"
-             " %select{const qualifier|volatile qualifer|const volatile"
+             " %select{const qualifier|volatile qualifier|const volatile"
              " qualifiers}4"),
             expr->getExprLoc())
             << t1 << printExprValueKind(sub->getValueKind())

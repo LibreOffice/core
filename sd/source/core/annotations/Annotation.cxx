@@ -437,7 +437,7 @@ std::string lcl_LOKGetCommentPayload(CommentNotificationType nType, Reference<XA
 
     return aStream.str();
 }
-} // unonymous ns
+} // anonymous ns
 
 void LOKCommentNotify(CommentNotificationType nType, const SfxViewShell* pViewShell, Reference<XAnnotation>& rxAnnotation)
 {

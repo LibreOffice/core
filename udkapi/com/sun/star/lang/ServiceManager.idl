@@ -113,7 +113,7 @@ published service ServiceManager
     /** Property access.
     */
     [optional] interface com::sun::star::beans::XPropertySet;
-    /** specifies the default component context to be used, if instanciating services
+    /** specifies the default component context to be used, if instantiating services
         via XMultiServiceFactory
     */
     [optional, property] com::sun::star::uno::XComponentContext DefaultContext;
