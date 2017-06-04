@@ -1439,7 +1439,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
             {
                 try
                 {
-                    pGraphicContent =  std::unique_ptr<sal_uInt8[]>(new sal_uInt8[nGraphicContentSize]);
+                    pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
                 }
                 catch (const std::bad_alloc&)
                 {
@@ -1606,7 +1606,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                             const std::vector<sal_uInt8>& rData = aIter->aData;
                             nGraphicContentSize = nChunkSize - 11;
                             SvMemoryStream aIStrm(const_cast<sal_uInt8*>(&rData[11]), nGraphicContentSize, StreamMode::READ);
-                            pGraphicContent = std::unique_ptr<sal_uInt8[]>(new sal_uInt8[nGraphicContentSize]);
+                            pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
                             sal_uInt64 aCurrentPosition = aIStrm.Tell();
                             aIStrm.ReadBytes(pGraphicContent.get(), nGraphicContentSize);
                             aIStrm.Seek(aCurrentPosition);
@@ -1690,7 +1690,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
 
                         // Make a uncompressed copy for GfxLink
                         nGraphicContentSize = nMemoryLength;
-                        pGraphicContent = std::unique_ptr<sal_uInt8[]>(new sal_uInt8[nGraphicContentSize]);
+                        pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
                         std::copy(aNewData.begin(), aNewData.end(), pGraphicContent.get());
 
                         if(!aMemStream.GetError() )
@@ -1911,7 +1911,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
             {
                 try
                 {
-                    pGraphicContent =  std::unique_ptr<sal_uInt8[]>(new sal_uInt8[nGraphicContentSize]);
+                    pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
                 }
                 catch (const std::bad_alloc&)
                 {

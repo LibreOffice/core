@@ -1040,7 +1040,7 @@ bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
         bLastEntry = (nListPos == (rList.size()-1));
         SvTreeListEntries::iterator it = rList.begin();
         std::advance(it, nListPos);
-        pEntryDeleter = std::unique_ptr<SvTreeListEntry>(std::move(*it));
+        pEntryDeleter = std::move(*it);
         rList.erase(it);
     }
     else
@@ -1049,7 +1049,7 @@ bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
             std::find_if(rList.begin(), rList.end(), FindByPointer(pEntry));
         if (it != rList.end())
         {
-            pEntryDeleter = std::unique_ptr<SvTreeListEntry>(std::move(*it));
+            pEntryDeleter = std::move(*it);
             rList.erase(it);
         }
     }
