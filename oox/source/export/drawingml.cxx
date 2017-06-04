@@ -2278,7 +2278,7 @@ void DrawingML::WritePresetShape( const char* pShape , std::vector< std::pair<sa
         mpFS->startElementNS( XML_a, XML_avLst, FSEND );
         for(auto iter = rAvList.begin() ; iter != rAvList.end() ; ++iter)
         {
-            OString sName = OString("adj") + ( ( iter->first > 0 ) ? OString::number(iter->first) : OString("") );
+            OString sName = OString("adj") + ( ( iter->first > 0 ) ? OString::number(iter->first) : OString() );
             OString sFmla = OString("val ") + OString::number( iter->second );
 
             mpFS->singleElementNS( XML_a, XML_gd,
