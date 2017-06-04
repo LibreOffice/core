@@ -978,7 +978,7 @@ OString lcl_ConvertTransparency(const Color& rColor)
         return OString::number(nTransparencyPercent * oox::drawingml::PER_PERCENT);
     }
     else
-        return OString("");
+        return OString();
 }
 
 void DocxSdrExport::writeDMLEffectLst(const SwFrameFormat& rFrameFormat)

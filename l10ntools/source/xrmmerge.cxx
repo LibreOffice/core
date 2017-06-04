@@ -167,7 +167,7 @@ void XRMResParser::Execute( int nToken, char * pToken )
                     sGID = sNewGID;
                 }
                 bText = true;
-                sCurrentText = "";
+                sCurrentText = OString();
                 sCurrentOpenTag = rToken;
                 Output( rToken );
             }
@@ -181,8 +181,8 @@ void XRMResParser::Execute( int nToken, char * pToken )
                 Output( sCurrentText );
                 EndOfText( sCurrentOpenTag, sCurrentCloseTag );
                 bText = false;
-                rToken = OString("");
-                sCurrentText  = OString("");
+                rToken = OString();
+                sCurrentText  = OString();
         }
         break;
 
@@ -200,7 +200,7 @@ void XRMResParser::Execute( int nToken, char * pToken )
                 if (bDisplayName) {
                     sGID = OString("dispname");
                     bText = true;
-                    sCurrentText = "";
+                    sCurrentText = OString();
                     sCurrentOpenTag = rToken;
                     Output( rToken );
                 }
@@ -216,8 +216,8 @@ void XRMResParser::Execute( int nToken, char * pToken )
                     Output( sCurrentText );
                     EndOfText( sCurrentOpenTag, sCurrentCloseTag );
                     bText = false;
-                    rToken = OString("");
-                    sCurrentText  = OString("");
+                    rToken = OString();
+                    sCurrentText  = OString();
                 }
         }
         break;
@@ -238,13 +238,13 @@ void XRMResParser::Execute( int nToken, char * pToken )
                     sResourceType = OString ( "description" );
                     sLangAttribute = OString ( "lang" );
                     sCurrentOpenTag = rToken;
-                    sCurrentText  = OString("");
+                    sCurrentText  = OString();
                     Output( rToken );
                     WorkOnDesc( sCurrentOpenTag, sCurrentText );
                     sCurrentCloseTag = rToken;
                     Output( sCurrentText );
-                    rToken = OString("");
-                    sCurrentText  = OString("");
+                    rToken = OString();
+                    sCurrentText  = OString();
                 }
             }
         break;

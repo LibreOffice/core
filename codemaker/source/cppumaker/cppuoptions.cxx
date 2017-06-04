@@ -98,7 +98,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         throw IllegalArgument(tmp);
                     }
 
-                    m_options["-nD"] = OString("");
+                    m_options["-nD"] = OString();
                     break;
                 case 'T':
                     if (av[i][2] == '\0')
@@ -152,7 +152,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         OString tmp("'-L' could not be combined with '-C' or '-CS' option");
                         throw IllegalArgument(tmp);
                     }
-                    m_options["-L"] = OString("");
+                    m_options["-L"] = OString();
                     break;
                 case 'C':
                     if (av[i][2] == 'S')
@@ -173,7 +173,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                             OString tmp("'-CS' could not be combined with '-L' or '-C' option");
                             throw IllegalArgument(tmp);
                         }
-                        m_options["-CS"] = OString("");
+                        m_options["-CS"] = OString();
                         break;
                     }
                     else if (av[i][2] != '\0')
@@ -192,7 +192,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         OString tmp("'-C' could not be combined with '-L' or '-CS' option");
                         throw IllegalArgument(tmp);
                     }
-                    m_options["-C"] = OString("");
+                    m_options["-C"] = OString();
                     break;
                 case 'G':
                     if (av[i][2] == 'c')
@@ -208,7 +208,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                             throw IllegalArgument(tmp);
                         }
 
-                        m_options["-Gc"] = OString("");
+                        m_options["-Gc"] = OString();
                         break;
                     }
                     else if (av[i][2] != '\0')
@@ -222,7 +222,7 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
                         throw IllegalArgument(tmp);
                     }
 
-                    m_options["-G"] = OString("");
+                    m_options["-G"] = OString();
                     break;
                 case 'X': // support for eXtra type rdbs
                 {
