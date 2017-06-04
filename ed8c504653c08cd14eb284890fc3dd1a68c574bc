@@ -1,0 +1,342 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_32e50f37",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T21:54:06Z",
+      "side": 1,
+      "message": "This is not a translation of the original meaning. It would be more something like \"And search the position of the ControlModel within\" (the index access). Not search inside the ControlModel.",
+      "revId": "ed8c504653c08cd14eb284890fc3dd1a68c574bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_52d0db53",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T21:54:06Z",
+      "side": 1,
+      "message": "Rather \"Skip\" instead of \"skipping\".",
+      "range": {
+        "startLine": 245,
+        "startChar": 7,
+        "endLine": 245,
+        "endChar": 15
+      },
+      "revId": "ed8c504653c08cd14eb284890fc3dd1a68c574bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_92ca43a0",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T21:54:06Z",
+      "side": 1,
+      "message": "\"there it\u0027s only interesting if there is a control for the node and to which form it belongs.\"\n\nAlso, keep the capital \"C\" for \"Check\". If a comment forms a whole sentence it should start with a capital letter and end with a punctuation mark.",
+      "revId": "ed8c504653c08cd14eb284890fc3dd1a68c574bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b2cf3faf",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T21:54:06Z",
+      "side": 1,
+      "message": "\"if there are controls\"",
+      "range": {
+        "startLine": 261,
+        "startChar": 13,
+        "endLine": 261,
+        "endChar": 34
+      },
+      "revId": "ed8c504653c08cd14eb284890fc3dd1a68c574bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_d2c4cb93",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T21:54:06Z",
+      "side": 1,
+      "message": "\"Then we act as if we open a new form and continue searching.\"",
+      "revId": "ed8c504653c08cd14eb284890fc3dd1a68c574bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_f2c1c781",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T21:54:06Z",
+      "side": 1,
+      "message": "\"Then we act as if we open a new form.\"",
+      "revId": "ed8c504653c08cd14eb284890fc3dd1a68c574bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_12bf33fc",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T21:54:06Z",
+      "side": 1,
+      "message": "\"from\" -\u003e \"form\"",
+      "range": {
+        "startLine": 310,
+        "startChar": 17,
+        "endLine": 310,
+        "endChar": 21
+      },
+      "revId": "ed8c504653c08cd14eb284890fc3dd1a68c574bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_32bc2f05",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T21:54:06Z",
+      "side": 1,
+      "message": "\"from\" -\u003e \"form\"",
+      "range": {
+        "startLine": 319,
+        "startChar": 17,
+        "endLine": 319,
+        "endChar": 21
+      },
+      "revId": "ed8c504653c08cd14eb284890fc3dd1a68c574bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_5237fbaf",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T21:54:06Z",
+      "side": 1,
+      "message": "\"from is stiill\" -\u003e \"form is still\"",
+      "range": {
+        "startLine": 322,
+        "startChar": 25,
+        "endLine": 322,
+        "endChar": 39
+      },
+      "revId": "ed8c504653c08cd14eb284890fc3dd1a68c574bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_723cf793",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T21:54:06Z",
+      "side": 1,
+      "message": "\"close the old\"",
+      "range": {
+        "startLine": 323,
+        "startChar": 25,
+        "endLine": 323,
+        "endChar": 34
+      },
+      "revId": "ed8c504653c08cd14eb284890fc3dd1a68c574bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_9241630e",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T21:54:06Z",
+      "side": 1,
+      "message": "\"allocated\" -\u003e \"assigned\"",
+      "range": {
+        "startLine": 326,
+        "startChar": 47,
+        "endLine": 326,
+        "endChar": 56
+      },
+      "revId": "ed8c504653c08cd14eb284890fc3dd1a68c574bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b2465f21",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T21:54:06Z",
+      "side": 1,
+      "message": "\"Without DrawModel there can\u0027t be controls. Then you also can\u0027t access\" ...",
+      "range": {
+        "startLine": 339,
+        "startChar": 25,
+        "endLine": 339,
+        "endChar": 53
+      },
+      "revId": "ed8c504653c08cd14eb284890fc3dd1a68c574bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_f248e72f",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 615,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T21:54:06Z",
+      "side": 1,
+      "message": "\"routine\" -\u003e \"routines\"",
+      "range": {
+        "startLine": 615,
+        "startChar": 23,
+        "endLine": 615,
+        "endChar": 30
+      },
+      "revId": "ed8c504653c08cd14eb284890fc3dd1a68c574bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_125653d2",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T21:54:06Z",
+      "side": 1,
+      "message": "No comma.",
+      "revId": "ed8c504653c08cd14eb284890fc3dd1a68c574bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_525e1bea",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T21:54:06Z",
+      "side": 1,
+      "message": "\"delete the corresponding flag\"",
+      "range": {
+        "startLine": 1030,
+        "startChar": 16,
+        "endLine": 1030,
+        "endChar": 46
+      },
+      "revId": "ed8c504653c08cd14eb284890fc3dd1a68c574bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_925883fc",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-04T21:54:06Z",
+      "side": 1,
+      "message": "No comma after \"Find out\"\n\n\"and if yes then return\"...",
+      "range": {
+        "startLine": 1280,
+        "startChar": 46,
+        "endLine": 1280,
+        "endChar": 65
+      },
+      "revId": "ed8c504653c08cd14eb284890fc3dd1a68c574bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
