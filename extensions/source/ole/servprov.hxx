@@ -239,7 +239,7 @@ protected:
 
     Implementation of the UNO service com.sun.star.bridge.OleApplicationRegistration.
     Register the calling application as OLE automation server for
-    standard OLE object. The objects will be registered while instanciating
+    standard OLE object. The objects will be registered while instantiating
     this implementation and deregistered, if this implementation is destroyed.
 
 *****************************************************************************/

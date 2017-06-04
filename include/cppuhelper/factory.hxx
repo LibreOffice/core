@@ -129,7 +129,7 @@ typedef css::uno::Reference< css::uno::XInterface >(
 
 /** Creates a single component factory supporting the XSingleComponentFactory interface.
 
-    @param fptr function pointer for instanciating the object
+    @param fptr function pointer for instantiating the object
     @param rImplementationName implementation name of service
     @param rServiceNames supported services
     @param pModCount a backwards-compatibility remainder of a removed library
@@ -144,7 +144,7 @@ SAL_CALL createSingleComponentFactory(
 
 /** Creates a single service factory which holds the instance created only once.
 
-    @param fptr function pointer for instanciating the object
+    @param fptr function pointer for instantiating the object
     @param rImplementationName implementation name of service
     @param rServiceNames supported services
     @param pModCount a backwards-compatibility remainder of a removed library
