@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_7204f714",
+        "filename": "svtools/source/contnr/treelist.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1061,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2017-06-04T12:50:23Z",
+      "side": 0,
+      "message": "Just wonder if it shouldn\u0027t be pEntryDeleter here.\nIndeed, first this var would be used (because we only set it, never use it) + it\u0027d correspond to the comment lines 1032-1034\nFinally, it seems we call Broadcast with pEntry which doesn\u0027t own its memory since std::move has been called.",
+      "range": {
+        "startLine": 1061,
+        "startChar": 66,
+        "endLine": 1061,
+        "endChar": 72
+      },
+      "revId": "6e2d88bde27e5bb1ba62897778374b89d7d3afb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
