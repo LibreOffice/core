@@ -92,7 +92,7 @@ bool SdrObjConnection::TakeGluePoint(SdrGluePoint& rGP) const
     return bRet;
 }
 
-Point& SdrEdgeInfoRec::ImpGetLineVersatzPoint(SdrEdgeLineCode eLineCode)
+Point& SdrEdgeInfoRec::ImpGetLineOffsetPoint(SdrEdgeLineCode eLineCode)
 {
     switch (eLineCode) {
         case SdrEdgeLineCode::Obj1Line2 : return aObj1Line2;
@@ -130,14 +130,14 @@ bool SdrEdgeInfoRec::ImpIsHorzLine(SdrEdgeLineCode eLineCode, const XPolygon& rX
 
 void SdrEdgeInfoRec::ImpSetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon& rXP, long nVal)
 {
-    Point& rPt=ImpGetLineVersatzPoint(eLineCode);
+    Point& rPt=ImpGetLineOffsetPoint(eLineCode);
     if (ImpIsHorzLine(eLineCode,rXP)) rPt.Y()=nVal;
     else rPt.X()=nVal;
 }
 
 long SdrEdgeInfoRec::ImpGetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const
 {
-    const Point& rPt = const_cast<SdrEdgeInfoRec*>(this)->ImpGetLineVersatzPoint(eLineCode);
+    const Point& rPt = const_cast<SdrEdgeInfoRec*>(this)->ImpGetLineOffsetPoint(eLineCode);
     if (ImpIsHorzLine(eLineCode,rXP))
         return rPt.Y();
     else
