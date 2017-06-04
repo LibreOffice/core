@@ -41,24 +41,6 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace win {
 
-static ::osl::Mutex& ImplGetOwnStaticMutex()
-{
-    static ::osl::Mutex* pMutex = nullptr;
-
-    if( pMutex == nullptr )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-
-        if( pMutex == nullptr )
-        {
-            static ::osl::Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-
-    return *pMutex;
-}
-
 LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
 {
     Window* pWindow = reinterpret_cast<Window*>(::GetWindowLongPtr( hWnd, 0 ));
@@ -159,21 +141,18 @@ LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM n
 
 WNDCLASS* lcl_getWndClass()
 {
-    static WNDCLASS* s_pWndClass = nullptr;
-    if ( !s_pWndClass )
-    {
-        s_pWndClass = new WNDCLASS;
+    WNDCLASS* s_pWndClass = new WNDCLASS;
 
-        memset( s_pWndClass, 0, sizeof( *s_pWndClass ) );
-        s_pWndClass->hInstance = GetModuleHandle( nullptr );
-        s_pWndClass->cbWndExtra = sizeof( DWORD );
-        s_pWndClass->lpfnWndProc = MediaPlayerWndProc;
-        s_pWndClass->lpszClassName = "com_sun_star_media_PlayerWnd";
-        s_pWndClass->hbrBackground = static_cast<HBRUSH>(::GetStockObject( BLACK_BRUSH ));
-        s_pWndClass->hCursor = ::LoadCursor( nullptr, IDC_ARROW );
+    memset( s_pWndClass, 0, sizeof( *s_pWndClass ) );
+    s_pWndClass->hInstance = GetModuleHandle( nullptr );
+    s_pWndClass->cbWndExtra = sizeof( DWORD );
+    s_pWndClass->lpfnWndProc = MediaPlayerWndProc;
+    s_pWndClass->lpszClassName = "com_sun_star_media_PlayerWnd";
+    s_pWndClass->hbrBackground = static_cast<HBRUSH>(::GetStockObject( BLACK_BRUSH ));
+    s_pWndClass->hCursor = ::LoadCursor( nullptr, IDC_ARROW );
 
-        ::RegisterClass( s_pWndClass );
-    }
+    ::RegisterClass( s_pWndClass );
+
     return s_pWndClass;
 }
 
@@ -186,9 +165,6 @@ Window::Window( const uno::Reference< lang::XMultiServiceFactory >& rxMgr, Playe
     mnParentWnd( nullptr ),
     mnPointerType( awt::SystemPointer::ARROW )
 {
-    ::osl::MutexGuard aGuard( ImplGetOwnStaticMutex() );
-
-    lcl_getWndClass();
 }
 
 Window::~Window()
@@ -285,7 +261,7 @@ void Window::ImplLayoutVideoWindow()
 bool Window::create( const uno::Sequence< uno::Any >& rArguments )
 {
     IVideoWindow* pVideoWindow = const_cast< IVideoWindow* >( mrPlayer.getVideoWindow() );
-    WNDCLASS* mpWndClass = lcl_getWndClass();
+    static WNDCLASS* mpWndClass = lcl_getWndClass();
 
     if( !mnFrameWnd && pVideoWindow && mpWndClass )
     {
