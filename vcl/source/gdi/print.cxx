@@ -1615,7 +1615,7 @@ sal_uLong Printer::ImplSalPrinterErrorCodeToVCL( sal_uLong nError )
     switch ( nError )
     {
         case 0:
-            nVCLError = PRINTER_OK;
+            nVCLError = ERRCODE_NONE;
             break;
         case SAL_PRINTER_ERROR_ABORT:
             nVCLError = PRINTER_ABORT;
