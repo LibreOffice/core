@@ -22,6 +22,30 @@
       "revId": "c4ac732d8132b36b3817e65d2651599ebe16a7f2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b2b01ff6",
+        "filename": "include/svx/svdoedge.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T09:32:53Z",
+      "side": 0,
+      "message": "I missed those, thanks for pointing them out! I\u0027ll follow up with an update.",
+      "parentUuid": "5a3905b3_f26f0790",
+      "range": {
+        "startLine": 109,
+        "startChar": 0,
+        "endLine": 110,
+        "endChar": 81
+      },
+      "revId": "c4ac732d8132b36b3817e65d2651599ebe16a7f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
