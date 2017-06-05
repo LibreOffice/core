@@ -66,6 +66,7 @@ public:
     void testTdf107013();
     void testTdf107018();
     void testTdf107089();
+    void testTdf99680();
 #endif
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
@@ -81,6 +82,7 @@ public:
     CPPUNIT_TEST(testTdf107013);
     CPPUNIT_TEST(testTdf107018);
     CPPUNIT_TEST(testTdf107089);
+    CPPUNIT_TEST(testTdf99680);
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
@@ -592,6 +594,39 @@ void PdfExportTest::testTdf107089()
     // This failed, 'Hello' was part only a mixed compressed/uncompressed stream, i.e. garbage.
     CPPUNIT_ASSERT(it != pEnd);
 }
+
+void PdfExportTest::testTdf99680()
+{
+    vcl::filter::PDFDocument aDocument;
+    load("tdf99680.odt", aDocument);
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    // The page 1 has a stream.
+    vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents");
+    CPPUNIT_ASSERT(pContents);
+    vcl::filter::PDFStreamElement* pStream = pContents->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+
+    // Uncompress it.
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    rObjectStream.Seek(0);
+    aZCodec.Decompress(rObjectStream, aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+    // Make sure there are no empty clipping regions.
+    OString aEmptyReqion("0 0 m h W* n");
+    auto pStart = static_cast<const char*>(aUncompressed.GetData());
+    const char* pEnd = pStart + aUncompressed.GetSize();
+    auto it = std::search(pStart, pEnd, aEmptyReqion.getStr(), aEmptyReqion.getStr() + aEmptyReqion.getLength());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Empty clipping region detected!", it, pEnd);
+}
+
 #endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
