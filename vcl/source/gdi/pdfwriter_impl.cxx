@@ -2642,7 +2642,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
                 {
                     OSL_FAIL( "PDFWriterImpl::emitStructure: invalid child structure element" );
 #if OSL_DEBUG_LEVEL > 1
-                    SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::emitStructure: invalid child structure elemnt with id " << *it);
+                    SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::emitStructure: invalid child structure element with id " << *it);
 #endif
                 }
             }
@@ -12761,7 +12761,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
                 {
                     OSL_FAIL( "PDFWriterImpl::addInternalStructureContainer: invalid child structure element" );
 #if OSL_DEBUG_LEVEL > 1
-                    SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::addInternalStructureContainer: invalid child structure elemnt with id " << *it );
+                    SAL_INFO("vcl.pdfwriter", "PDFWriterImpl::addInternalStructureContainer: invalid child structure element with id " << *it );
 #endif
                 }
             }

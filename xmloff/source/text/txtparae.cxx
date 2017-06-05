@@ -3453,7 +3453,7 @@ void XMLTextParagraphExport::exportCharacterData(const OUString& rText,
         }
 
         // If the current character has to be exported as a special
-        // element, the elemnt will be exported now.
+        // element, the element will be exported now.
         if( bExpCharAsElement )
         {
             switch( cChar )

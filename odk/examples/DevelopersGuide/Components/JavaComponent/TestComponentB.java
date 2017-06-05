@@ -39,7 +39,7 @@ import com.sun.star.test.XSomethingB;
 import com.sun.star.uno.Type;
 
 // TestComponentB implements all necessary interfaces self, this is only
-// for demonstration. More convenient is to use the impelmentation WeakBase or
+// for demonstration. More convenient is to use the implementation WeakBase or
 // ComponentBase, see implementation of TestComponentA.
 public class TestComponentB implements XTypeProvider, XServiceInfo, XSomethingB {
     static final String __serviceName= "com.sun.star.test.SomethingB";
