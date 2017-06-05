@@ -139,8 +139,8 @@ public:
     ~EasyFile();
 
     sal_uLong createStream( const OUString& rUrl, SvStream*& rpStr );
-    sal_uLong createFileName(  const OUString& rUrl, OUString& rFileName );
-    sal_uLong close();
+    void      createFileName(  const OUString& rUrl, OUString& rFileName );
+    void      close();
 };
 
 // Helper class for the embedding of text attributes into the html output
@@ -1174,7 +1174,7 @@ bool HtmlExport::WriteHtml( const OUString& rFileName, bool bAddExtension, const
         OString aStr(OUStringToOString(rHtmlData,
             RTL_TEXTENCODING_UTF8));
         pStr->WriteCharPtr( aStr.getStr() );
-        nErr = aFile.close();
+        aFile.close();
     }
 
     if( nErr != 0 )
@@ -2918,8 +2918,7 @@ bool HtmlExport::CopyScript( const OUString& rPath, const OUString& rSource, con
             OString aStr(OUStringToOString(aScript,
                 RTL_TEXTENCODING_UTF8));
             pStr->WriteCharPtr( aStr.getStr() );
-
-            nErr = aFile.close();
+            aFile.close();
         }
     }
 
@@ -3004,7 +3003,7 @@ bool HtmlExport::CreateImageNumberFile()
     if(nErr == 0)
     {
         pStr->WriteCharPtr( "1" );
-        nErr = aFile.close();
+        aFile.close();
     }
 
     if (mpProgress)
@@ -3130,33 +3129,27 @@ EasyFile::EasyFile()
 EasyFile::~EasyFile()
 {
     if( bOpen )
-        (void)close();
+        close();
 }
 
 sal_uLong EasyFile::createStream(  const OUString& rUrl, SvStream* &rpStr )
 {
-    sal_uLong nErr = 0;
-
     if(bOpen)
-        nErr = close();
+        close();
 
     OUString aFileName;
+    createFileName( rUrl, aFileName );
 
-    if( nErr == 0 )
-        nErr = createFileName( rUrl, aFileName );
-
-    if( nErr == 0 )
+    sal_uLong nErr = 0;
+    pOStm = ::utl::UcbStreamHelper::CreateStream( aFileName, StreamMode::WRITE | StreamMode::TRUNC );
+    if( pOStm )
     {
-        pOStm = ::utl::UcbStreamHelper::CreateStream( aFileName, StreamMode::WRITE | StreamMode::TRUNC );
-        if( pOStm )
-        {
-            bOpen = true;
-            nErr = pOStm->GetError();
-        }
-        else
-        {
-            nErr = ERRCODE_SFX_CANTCREATECONTENT;
-        }
+        bOpen = true;
+        nErr = pOStm->GetError();
+    }
+    else
+    {
+        nErr = ERRCODE_SFX_CANTCREATECONTENT;
     }
 
     if( nErr != 0 )
@@ -3171,40 +3164,28 @@ sal_uLong EasyFile::createStream(  const OUString& rUrl, SvStream* &rpStr )
     return nErr;
 }
 
-sal_uLong EasyFile::createFileName(  const OUString& rURL, OUString& rFileName )
+void EasyFile::createFileName(  const OUString& rURL, OUString& rFileName )
 {
-    sal_uLong nErr = 0;
-
     if( bOpen )
-        nErr = close();
+        close();
 
-    if( nErr == 0 )
+    INetURLObject aURL( rURL );
+
+    if( aURL.GetProtocol() == INetProtocol::NotValid )
     {
-        INetURLObject aURL( rURL );
-
-        if( aURL.GetProtocol() == INetProtocol::NotValid )
-        {
-            OUString aURLStr;
-            osl::FileBase::getFileURLFromSystemPath( rURL, aURLStr );
-            aURL = INetURLObject( aURLStr );
-        }
-        DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
-        rFileName = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+        OUString aURLStr;
+        osl::FileBase::getFileURLFromSystemPath( rURL, aURLStr );
+        aURL = INetURLObject( aURLStr );
     }
-
-    return nErr;
+    DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
+    rFileName = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 }
 
-sal_uLong EasyFile::close()
+void EasyFile::close()
 {
-    sal_uLong nErr = 0;
-
     delete pOStm;
     pOStm = nullptr;
-
     bOpen = false;
-
-    return nErr;
 }
 
 // This class helps reporting errors during file i/o
