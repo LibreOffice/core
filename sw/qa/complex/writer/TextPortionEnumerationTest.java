@@ -1258,43 +1258,6 @@ public class TextPortionEnumerationTest
         util.DesktopTools.closeDoc(m_xDoc);
     }
 
-    @Test public void testText() throws Exception
-    {
-        TreeNode root = new TreeNode();
-        TreeNode text = new TextNode("abc");
-        root.appendChild(text);
-        doTest(root);
-    }
-
-    @Test public void testTextField() throws Exception
-    {
-        mkName("ruby");
-        TreeNode root = new TreeNode();
-        TreeNode txtf = new TextFieldNode("abc");
-        root.appendChild(txtf);
-        doTest(root);
-    }
-
-    /*@Test*/ public void testControlChar() throws Exception
-    {
-//FIXME this is converted to a text portion: ControlCharacter is obsolete
-        TreeNode root = new TreeNode();
-        TreeNode cchr = new ControlCharacterNode(HARD_HYPHEN);
-        root.appendChild(cchr);
-        doTest(root);
-    }
-
-    /*@Test*/ public void testSoftPageBreak() throws Exception
-    {
-//FIXME: insert a soft page break: not done
-        TreeNode root = new TreeNode();
-        TreeNode spbk = new SoftPageBreakNode();
-        TreeNode text = new TextNode("abc");
-        root.appendChild(spbk);
-        root.appendChild(text);
-        doTest(root);
-    }
-
     @Test public void testFootnote() throws Exception
     {
         String name = mkName("ftn");
