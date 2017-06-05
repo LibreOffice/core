@@ -50,8 +50,8 @@ public:
     sal_uInt16 getLength() { return mnLength; }
     void readString( OUString &rString, sal_uInt16 nLength );
 
-    FltError import( ScDocument *pDoc );
-    FltError readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pStyle );
+    ErrCode import( ScDocument *pDoc );
+    ErrCode readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pStyle );
 };
 #endif
 

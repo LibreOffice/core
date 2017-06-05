@@ -71,7 +71,7 @@ ExportBiff5::~ExportBiff5()
 {
 }
 
-FltError ExportBiff5::Write()
+ErrCode ExportBiff5::Write()
 {
     SfxObjectShell* pDocShell = GetDocShell();
     OSL_ENSURE( pDocShell, "ExportBiff5::Write - no document shell" );
@@ -139,7 +139,7 @@ FltError ExportBiff5::Write()
     if( rAddrConv.IsTabTruncated() )
         return SCWARN_EXPORT_MAXTAB;
 
-    return eERR_OK;
+    return ERRCODE_NONE;
 }
 
 ExportBiff8::ExportBiff8( XclExpRootData& rExpData, SvStream& rStrm ) :

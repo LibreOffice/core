@@ -263,18 +263,18 @@ public:
     ScFormatFilterPluginImpl();
     virtual ~ScFormatFilterPluginImpl();
     // various import filters
-    virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc ) override;
-    virtual FltError ScImportQuattroPro(SvStream* pStream, ScDocument *pDoc) override;
-    virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) override;
+    virtual ErrCode ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc ) override;
+    virtual ErrCode ScImportQuattroPro(SvStream* pStream, ScDocument *pDoc) override;
+    virtual ErrCode ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) override;
         // eFormat == EIF_AUTO  -> matching filter is used automatically
         // eFormat == EIF_BIFF5 -> only Biff5 stream leads to success (even in an Excel97 doc)
         // eFormat == EIF_BIFF8 -> only Biff8 stream leads to success (only in Excel97 docs)
         // eFormat == EIF_BIFF_LE4 -> only non-storage files _could_ lead to success
-    virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) override;
-    virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
+    virtual ErrCode ScImportStarCalc10( SvStream&, ScDocument* ) override;
+    virtual ErrCode ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
                  const rtl_TextEncoding eSrc ) override;
-    virtual FltError ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) override;
-    virtual FltError ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange,
+    virtual ErrCode ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) override;
+    virtual ErrCode ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange,
                                    double nOutputFactor, bool bCalcWidthHeight,
                                    SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true ) override;
 
@@ -283,7 +283,7 @@ public:
     virtual OUString       GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName ) override;
 
     // various export filters
-    virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, rtl_TextEncoding eDest ) override;
+    virtual ErrCode ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, rtl_TextEncoding eDest ) override;
     virtual void ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const rtl_TextEncoding eDest ) override;
     virtual void ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest ) override;
     virtual void ScExportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest, bool bAll,

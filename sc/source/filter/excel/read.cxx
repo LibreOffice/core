@@ -63,7 +63,7 @@ namespace
     }
 }
 
-FltError ImportExcel::Read()
+ErrCode ImportExcel::Read()
 {
     XclImpPageSettings&     rPageSett       = GetPageSettings();
     XclImpTabViewSettings&  rTabViewSett    = GetTabViewSettings();
@@ -97,7 +97,7 @@ FltError ImportExcel::Read()
 
     Zustand             eAkt = Z_BiffNull, ePrev = Z_BiffNull;
 
-    FltError        eLastErr = eERR_OK;
+    ErrCode         eLastErr = ERRCODE_NONE;
     sal_uInt16      nOpcode;
     sal_uInt16      nBofLevel = 0;
 
@@ -768,7 +768,7 @@ FltError ImportExcel::Read()
         }
     }
 
-    if( eLastErr == eERR_OK )
+    if( eLastErr == ERRCODE_NONE )
     {
         pProgress.reset();
 
@@ -790,7 +790,7 @@ FltError ImportExcel::Read()
     return eLastErr;
 }
 
-FltError ImportExcel8::Read()
+ErrCode ImportExcel8::Read()
 {
 #ifdef EXC_INCL_DUMPER
     {
@@ -834,7 +834,7 @@ FltError ImportExcel8::Read()
 
     XclImpReadState eAkt = EXC_STATE_BEFORE_GLOBALS;
 
-    FltError eLastErr = eERR_OK;
+    ErrCode eLastErr = ERRCODE_NONE;
 
     std::unique_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
         aIn.GetSvStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
@@ -1245,7 +1245,7 @@ FltError ImportExcel8::Read()
         }
     }
 
-    if( eLastErr == eERR_OK )
+    if( eLastErr == ERRCODE_NONE )
     {
         // In some strange circumstances a the codename might be missing
         // # Create any missing Sheet CodeNames

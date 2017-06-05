@@ -99,9 +99,9 @@ ImportTyp::~ImportTyp()
 {
 }
 
-FltError ImportTyp::Read()
+ErrCode ImportTyp::Read()
 {
-    return eERR_INTERN;
+    return SCERR_IMPORT_INTERNAL;
 }
 
 ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):

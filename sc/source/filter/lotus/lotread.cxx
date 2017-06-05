@@ -28,7 +28,7 @@
 
 class ScFormulaCell;
 
-FltError ImportLotus::Read()
+ErrCode ImportLotus::Read()
 {
     enum STATE
     {
@@ -44,7 +44,7 @@ FltError ImportLotus::Read()
     sal_uInt16          nSubType;
     sal_uInt16          nRecLen;
     sal_uInt32          nNextRec = 0UL;
-    FltError        eRet = eERR_OK;
+    ErrCode        eRet = ERRCODE_NONE;
 //  ScFormulaCell   *pLastFormCell;
 
     STATE           eAkt = S_START;
@@ -110,7 +110,7 @@ FltError ImportLotus::Read()
                 break;
 
                 case 0x0002:                            // PASSWORD
-                eRet = eERR_FILEPASSWD;
+                eRet = SCERR_IMPORT_FILEPASSWD;
                 eAkt = S_END;
                 break;
 
@@ -171,7 +171,7 @@ FltError ImportLotus::Read()
                 }
                 else
                 {
-                    eRet = eERR_FORMAT;
+                    eRet = SCERR_IMPORT_FORMAT;
                     eAkt = S_END;
                 }
             }
@@ -224,7 +224,7 @@ FltError ImportLotus::Read()
     return eRet;
 }
 
-FltError ImportLotus::Read(SvStream& rIn)
+ErrCode ImportLotus::Read(SvStream& rIn)
 {
     pIn = &rIn;
 
@@ -232,7 +232,7 @@ FltError ImportLotus::Read(SvStream& rIn)
     sal_uInt16          nOp;
     sal_uInt16          nRecLen;
     sal_uInt32          nNextRec = 0UL;
-    FltError        eRet = eERR_OK;
+    ErrCode             eRet = ERRCODE_NONE;
 
     nTab = 0;
     nExtTab = -1;
@@ -258,7 +258,7 @@ FltError ImportLotus::Read(SvStream& rIn)
                 if( nRecLen != 26 || !BofFm3() )
                 {
                     bRead = false;
-                    eRet = eERR_FORMAT;
+                    eRet = SCERR_IMPORT_FORMAT;
                 }
                 break;
 

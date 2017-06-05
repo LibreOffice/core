@@ -34,9 +34,9 @@
 #include <tools/stream.hxx>
 #include <memory>
 
-FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pStyle )
+ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pStyle )
 {
-    FltError eRet = eERR_OK;
+    ErrCode eRet = ERRCODE_NONE;
     sal_uInt8  nCol, nDummy;
     sal_uInt16 nRow;
     sal_uInt16 nStyle;
@@ -44,7 +44,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
 
     SAL_INFO("sc", "Read sheet " << nTab);
 
-    while( eERR_OK == eRet && !bEndOfSheet && nextRecord() )
+    while( ERRCODE_NONE == eRet && !bEndOfSheet && nextRecord() )
     {
         switch( getId() )
         {
@@ -61,7 +61,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                     pDoc->SetTextCell(ScAddress(nCol,nRow,nTab), aLabel);
                 }
                 else
-                    eRet = eERR_FORMAT;
+                    eRet = SCERR_IMPORT_FORMAT;
                 }
                 break;
 
@@ -106,7 +106,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
 
                 QProToSc aConv(*mpStream, pDoc->GetSharedStringPool(), aAddr);
                 if (ConvErr::OK != aConv.Convert( pArray ))
-                    eRet = eERR_FORMAT;
+                    eRet = SCERR_IMPORT_FORMAT;
                 else
                 {
                     ScFormulaCell* pFormula = new ScFormulaCell(pDoc, aAddr, *pArray);
@@ -123,10 +123,10 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
     return eRet;
 }
 
-FltError ScFormatFilterPluginImpl::ScImportQuattroPro(SvStream *pStream, ScDocument *pDoc)
+ErrCode ScFormatFilterPluginImpl::ScImportQuattroPro(SvStream *pStream, ScDocument *pDoc)
 {
     ScQProReader aReader(pStream);
-    FltError eRet = aReader.import( pDoc );
+    ErrCode eRet = aReader.import( pDoc );
     return eRet;
 }
 
@@ -151,20 +151,20 @@ ScQProReader::~ScQProReader()
 }
 
 
-FltError ScQProReader::import( ScDocument *pDoc )
+ErrCode ScQProReader::import( ScDocument *pDoc )
 {
-    FltError eRet = eERR_OK;
+    ErrCode eRet = ERRCODE_NONE;
     sal_uInt16 nVersion;
     sal_uInt16 i = 1, j = 1;
     SCTAB nTab = 0;
     SetEof( false );
 
     if( !recordsLeft() )
-        return eERR_OPEN;
+        return SCERR_IMPORT_OPEN;
 
     std::unique_ptr<ScQProStyle> pStyleElement( new ScQProStyle );
 
-    while( nextRecord() && eRet == eERR_OK)
+    while( nextRecord() && eRet == ERRCODE_NONE)
     {
         switch( getId() )
         {
@@ -212,7 +212,7 @@ FltError ScQProReader::import( ScDocument *pDoc )
                 if (nLen >= 4)
                     readString( aLabel, nLen - 4 );
                 else
-                    eRet = eERR_FORMAT;
+                    eRet = SCERR_IMPORT_FORMAT;
                 pStyleElement->setFontType( j, aLabel );
                 j++;
                 }
