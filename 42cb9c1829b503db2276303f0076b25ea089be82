@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_5288db22",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T10:23:40Z",
+      "side": 1,
+      "message": "\"output\" (\"outputted\" doesn\u0027t exist)",
+      "range": {
+        "startLine": 231,
+        "startChar": 46,
+        "endLine": 231,
+        "endChar": 55
+      },
+      "revId": "42cb9c1829b503db2276303f0076b25ea089be82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_728dd730",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T10:23:40Z",
+      "side": 1,
+      "message": "no mention of \"new\" here :)",
+      "range": {
+        "startLine": 301,
+        "startChar": 48,
+        "endLine": 301,
+        "endChar": 51
+      },
+      "revId": "42cb9c1829b503db2276303f0076b25ea089be82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_928243ff",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T10:23:40Z",
+      "side": 1,
+      "message": "no mention of \"new\" here",
+      "range": {
+        "startLine": 319,
+        "startChar": 13,
+        "endLine": 319,
+        "endChar": 16
+      },
+      "revId": "42cb9c1829b503db2276303f0076b25ea089be82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b2873f0e",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T10:23:40Z",
+      "side": 1,
+      "message": "\"doesn\u0027t\"",
+      "range": {
+        "startLine": 918,
+        "startChar": 31,
+        "endLine": 918,
+        "endChar": 36
+      },
+      "revId": "42cb9c1829b503db2276303f0076b25ea089be82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_d2a3eb9c",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T10:23:40Z",
+      "side": 1,
+      "message": "- Maybe \"If\" better than \"When\" here?\n\n- Maybe \"character objects\"? (Because otherwise it refers to \"Draw\" as LO part, which is not mentioned here. My first intention was a correction to \"drawing objects\", but that would be \"Zeichnungsobjekte\", not \"Zeichenobjekte\". And the code further down talks of text (e.g. characters), not drawings.)",
+      "range": {
+        "startLine": 1029,
+        "startChar": 11,
+        "endLine": 1029,
+        "endChar": 28
+      },
+      "revId": "42cb9c1829b503db2276303f0076b25ea089be82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_7294f736",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T10:23:40Z",
+      "side": 1,
+      "message": "\"the corresponding\" :)",
+      "range": {
+        "startLine": 1030,
+        "startChar": 23,
+        "endLine": 1030,
+        "endChar": 40
+      },
+      "revId": "42cb9c1829b503db2276303f0076b25ea089be82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_f2a0e792",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1230,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T10:23:40Z",
+      "side": 1,
+      "message": "maybe \"may\"",
+      "range": {
+        "startLine": 1230,
+        "startChar": 51,
+        "endLine": 1230,
+        "endChar": 55
+      },
+      "revId": "42cb9c1829b503db2276303f0076b25ea089be82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
