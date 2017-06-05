@@ -530,7 +530,7 @@ void Printer::ImplPrintJob(const std::shared_ptr<PrinterController>& xController
 
 bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::PrinterController>& i_xController)
 {
-    mnError = PRINTER_OK;
+    mnError = ERRCODE_NONE;
 
     if ( IsDisplayPrinter() )
         return false;
