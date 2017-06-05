@@ -24,25 +24,20 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
+#include <comphelper/solarmutex.hxx>
 
 
 namespace comphelper
 {
-
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;
-
-    IMutex::~IMutex() {}
 
     /** implementation class for OAccessibleContextHelper. No own thread safety!
     */
     class OContextHelper_Impl
     {
     private:
-        IMutex*                             m_pExternalLock;    // the optional additional external lock
-
         WeakReference< XAccessible >        m_aCreator;         // the XAccessible which created our XAccessibleContext
 
         AccessibleEventNotifier::TClientId  m_nClientId;
@@ -51,9 +46,6 @@ namespace comphelper
         Reference< XAccessible >    getCreator( ) const                 { return m_aCreator; }
         inline  void                        setCreator( const Reference< XAccessible >& _rAcc );
 
-        IMutex*                     getExternalLock( )                  { return m_pExternalLock; }
-        void                        setExternalLock( IMutex* _pLock )   { m_pExternalLock = _pLock; }
-
         AccessibleEventNotifier::TClientId
                                             getClientId() const                 { return m_nClientId; }
         void                        setClientId( const AccessibleEventNotifier::TClientId _nId )
@@ -61,8 +53,7 @@ namespace comphelper
 
     public:
         OContextHelper_Impl()
-            :m_pExternalLock( nullptr )
-            ,m_nClientId( 0 )
+            :m_nClientId( 0 )
         {
         }
     };
@@ -73,26 +64,15 @@ namespace comphelper
         m_aCreator = _rAcc;
     }
 
-    OAccessibleContextHelper::OAccessibleContextHelper( IMutex* _pExternalLock )
+    OAccessibleContextHelper::OAccessibleContextHelper( )
         :OAccessibleContextHelper_Base( GetMutex() )
         ,m_pImpl(new OContextHelper_Impl)
     {
-        assert(_pExternalLock);
-        m_pImpl->setExternalLock( _pExternalLock );
     }
 
 
     OAccessibleContextHelper::~OAccessibleContextHelper( )
     {
-        /* forgets the reference to the external lock, if present.
-
-           <p>This means any further locking will not be guard the external lock anymore, never.</p>
-
-           <p>To be used in derived classes which do not supply the external lock themself, but instead get
-           them passed from own derivees (or clients).</p>
-        */
-        m_pImpl->setExternalLock( nullptr );
-
             // this ensures that the lock, which may be already destroyed as part of the derivee,
             // is not used anymore
 
@@ -100,17 +80,11 @@ namespace comphelper
     }
 
 
-    IMutex* OAccessibleContextHelper::getExternalLock( )
-    {
-        return m_pImpl->getExternalLock();
-    }
-
-
     void SAL_CALL OAccessibleContextHelper::disposing()
     {
         // rhbz#1001768: de facto this class is locked by SolarMutex;
         // do not lock m_Mutex because it may cause deadlock
-        OMutexGuard aGuard( getExternalLock() );
+        osl::Guard<SolarMutex> aGuard(SolarMutex::get());
 
         if ( m_pImpl->getClientId( ) )
         {
@@ -122,7 +96,7 @@ namespace comphelper
 
     void SAL_CALL OAccessibleContextHelper::addAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener )
     {
-        OMutexGuard aGuard( getExternalLock() );
+        osl::Guard<SolarMutex> aGuard(SolarMutex::get());
             // don't use the OContextEntryGuard - it will throw an exception if we're not alive
             // anymore, while the most recent specification for XComponent states that we should
             // silently ignore the call in such a situation
@@ -145,7 +119,7 @@ namespace comphelper
 
     void SAL_CALL OAccessibleContextHelper::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& _rxListener )
     {
-        OMutexGuard aGuard( getExternalLock() );
+        osl::Guard<SolarMutex> aGuard(SolarMutex::get());
             // don't use the OContextEntryGuard - it will throw an exception if we're not alive
             // anymore, while the most recent specification for XComponent states that we should
             // silently ignore the call in such a situation

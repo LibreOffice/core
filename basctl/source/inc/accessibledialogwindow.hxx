@@ -27,7 +27,6 @@
 #include <svl/lstner.hxx>
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
-#include <toolkit/helper/externallock.hxx>
 
 class VclSimpleEvent;
 class VclWindowEvent;
@@ -52,8 +51,7 @@ typedef ::cppu::ImplHelper3 <
     css::accessibility::XAccessibleSelection,
     css::lang::XServiceInfo > AccessibleDialogWindow_BASE;
 
-class AccessibleDialogWindow :  private BaseVCLExternalSolarLock,
-                                public comphelper::OAccessibleExtendedComponentHelper,
+class AccessibleDialogWindow :  public comphelper::OAccessibleExtendedComponentHelper,
                                 public AccessibleDialogWindow_BASE,
                                 public SfxListener
 {

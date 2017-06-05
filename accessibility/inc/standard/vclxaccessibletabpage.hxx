@@ -25,7 +25,6 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <vcl/vclptr.hxx>
-#include <toolkit/helper/externallock.hxx>
 
 
 class TabControl;
@@ -44,8 +43,7 @@ typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessible,
     css::lang::XServiceInfo > VCLXAccessibleTabPage_BASE;
 
-class VCLXAccessibleTabPage :   private BaseVCLExternalSolarLock,
-                                public AccessibleTextHelper_BASE,
+class VCLXAccessibleTabPage :   public AccessibleTextHelper_BASE,
                                 public VCLXAccessibleTabPage_BASE
 {
     friend class VCLXAccessibleTabControl;

@@ -59,8 +59,6 @@ using namespace ::comphelper;
 // Ctor() and Dtor()
 
 VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_Int32 _nPos ) :
-    AccessibleTextHelper_BASE( &m_aLock ),
-
     m_pToolBox      ( _pToolBox ),
     m_nIndexInParent( _nPos ),
     m_nRole         ( AccessibleRole::PUSH_BUTTON ),

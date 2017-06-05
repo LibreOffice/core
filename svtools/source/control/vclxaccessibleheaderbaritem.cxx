@@ -31,7 +31,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <toolkit/awt/vclxfont.hxx>
-#include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/convert.hxx>
 
 #include <vector>
@@ -47,8 +46,7 @@ using namespace ::comphelper;
 
 
 VCLXAccessibleHeaderBarItem::VCLXAccessibleHeaderBarItem( HeaderBar*    pHeadBar, sal_Int32 _nIndexInParent )
-    :OAccessibleExtendedComponentHelper( &m_aLock )
-    ,m_pHeadBar( pHeadBar )
+    :m_pHeadBar( pHeadBar )
     ,m_nIndexInParent(_nIndexInParent + 1)
 
 {
