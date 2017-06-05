@@ -892,7 +892,7 @@ namespace basegfx
                 && (aCutFlags & (CutFlagValue::START2|CutFlagValue::END2)))
             {
                 // same startpoint?
-                if(!bFinished && (aCutFlags & (CutFlagValue::START1|CutFlagValue::START2)) == (CutFlagValue::START1|CutFlagValue::START2))
+                if((aCutFlags & (CutFlagValue::START1|CutFlagValue::START2)) == (CutFlagValue::START1|CutFlagValue::START2))
                 {
                     if(rEdge1Start.equal(rEdge2Start))
                     {
@@ -946,7 +946,7 @@ namespace basegfx
 
             if(!bFinished && (aCutFlags & CutFlagValue::LINE))
             {
-                if(!bFinished && (aCutFlags & CutFlagValue::START1))
+                if((aCutFlags & CutFlagValue::START1))
                 {
                     // start1 on line 2 ?
                     if(isPointOnEdge(rEdge1Start, rEdge2Start, rEdge2Delta, &fCut2))

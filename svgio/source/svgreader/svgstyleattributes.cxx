@@ -1112,8 +1112,8 @@ namespace svgio
                 // create fill
                 basegfx::B2DPolyPolygon aPath(rPath);
                 const bool bNeedToCheckClipRule(SVGTokenPath == mrOwner.getType() || SVGTokenPolygon == mrOwner.getType());
-                const bool bClipPathIsNonzero(!bIsLine && bNeedToCheckClipRule && mbIsClipPathContent && FillRule_nonzero == maClipRule);
-                const bool bFillRuleIsNonzero(!bIsLine && bNeedToCheckClipRule && !mbIsClipPathContent && FillRule_nonzero == getFillRule());
+                const bool bClipPathIsNonzero(bNeedToCheckClipRule && mbIsClipPathContent && FillRule_nonzero == maClipRule);
+                const bool bFillRuleIsNonzero(bNeedToCheckClipRule && !mbIsClipPathContent && FillRule_nonzero == getFillRule());
 
                 if(bClipPathIsNonzero || bFillRuleIsNonzero)
                 {
