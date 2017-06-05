@@ -2764,10 +2764,9 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     pAttrPam->GetPoint()->nNode.GetIndex() ==
                         rEndIdx.GetIndex() )
                 {
-                    // wenn wir vor dem Einfuegen einer Tabelle stehen
-                    // und das Attribut im aktuellen Node beendet wird,
-                    // muessen wir es im Node davor beenden oder wegschmeissen,
-                    // wenn es erst in dem Node beginnt
+                    // If we're before inserting a table and the attribute ends
+                    // in the current node, then we must end it in the previous
+                    // node or discard it, if it starts in that node.
                     if( nWhich != RES_BREAK && nWhich != RES_PAGEDESC &&
                          !isTXTATR_NOEND(nWhich) )
                     {
@@ -2962,11 +2961,10 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
 
 void SwHTMLParser::NewAttr( HTMLAttr **ppAttr, const SfxPoolItem& rItem )
 {
-    // Font-Hoehen und -Farben- sowie Escapement-Attribute duerfen nicht
-    // zusammengefasst werden. Sie werden deshalb in einer Liste gespeichert,
-    // in der das zuletzt aufgespannte Attribut vorne steht und der Count
-    // immer 1 ist. Fuer alle anderen Attribute wird der Count einfach
-    // hochgezaehlt.
+    // Font height and font colour as well as escape attributes may not be
+    // combined. Therefore they're saved in a list and in it the last opened
+    // attribute is at the beginning and count is always one. For all other
+    // attributes count is just incremented.
     if( *ppAttr )
     {
         HTMLAttr *pAttr = new HTMLAttr( *m_pPam->GetPoint(), rItem,
@@ -2982,30 +2980,29 @@ bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, bool bChkEmpty )
 {
     bool bRet = true;
 
-    // Der Listenkopf ist im Attribut gespeichert
+    // The list header is saved in the attribute.
     HTMLAttr **ppHead = pAttr->ppHead;
 
-    OSL_ENSURE( ppHead, "keinen Attributs-Listenkopf gefunden!" );
+    OSL_ENSURE( ppHead, "No list header attribute found!" );
 
-    // die aktuelle Position als Ende-Position merken
+    // save the current position as end position
     const SwNodeIndex* pEndIdx = &m_pPam->GetPoint()->nNode;
     sal_Int32 nEndCnt = m_pPam->GetPoint()->nContent.GetIndex();
 
-    // WIrd das zueltzt gestartete oder ein frueher gestartetes Attribut
-    // beendet?
+    // Is the last started or an earlier started attribute being ended?
     HTMLAttr *pLast = nullptr;
     if( ppHead && pAttr != *ppHead )
     {
-        // Es wird nicht das zuletzt gestartete Attribut beendet
+        // The last started attribute isn't being ended
 
-        // Dann suche wir das unmittelbar danach gestartete Attribut, das
-        // ja ebenfalls noch nicht beendet wurde (sonst stuende es nicht
-        // mehr in der Liste
+        // Then we look for attribute which was started immediately afterwards,
+        // which has also not yet been ended (otherwise it would no longer be
+        // in the list).
         pLast = *ppHead;
         while( pLast && pLast->GetNext() != pAttr )
             pLast = pLast->GetNext();
 
-        OSL_ENSURE( pLast, "Attribut nicht in eigener Liste gefunden!" );
+        OSL_ENSURE( pLast, "Attribute not found in own list!" );
     }
 
     bool bMoveBack = false;
@@ -3013,18 +3010,18 @@ bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, bool bChkEmpty )
     if( !nEndCnt && RES_PARATR_BEGIN <= nWhich &&
         *pEndIdx != pAttr->GetSttPara() )
     {
-        // dann eine Contentnt Position zurueck!
+        // Then move back one position in the content!
         bMoveBack = m_pPam->Move( fnMoveBackward );
         nEndCnt = m_pPam->GetPoint()->nContent.GetIndex();
     }
 
-    // nun das Attrubut beenden
+    // now end the attribute
     HTMLAttr *pNext = pAttr->GetNext();
 
     bool bInsert;
     sal_uInt16 nScriptItem = 0;
     bool bScript = false;
-    // ein Bereich ??
+    // does it have a non-empty range?
     if( !bChkEmpty || (RES_PARATR_BEGIN <= nWhich && bMoveBack) ||
         RES_PAGEDESC == nWhich || RES_BREAK == nWhich ||
         *pEndIdx != pAttr->GetSttPara() ||
@@ -3086,10 +3083,9 @@ bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, bool bChkEmpty )
 
         if( !pNext )
         {
-            // keine offenen Attribute dieses Typs mehr da,
-            // dann koennen alle gesetzt werden, es sei denn
-            // sie haengen noch von einem anderen Attribut ab,
-            // dann werden sie dort angehaengt
+            // No open attributes of that type exists any longer, so all
+            // can be set. Except they depend on another attribute, then
+            // they're appended there.
             if (pAttr->bInsAtStart)
                 m_aSetAttrTab.push_front( pAttr );
             else
@@ -3097,26 +3093,25 @@ bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, bool bChkEmpty )
         }
         else
         {
-            // es gibt noch andere offene Attribute des Typs,
-            // daher muss das Setzen zurueckgestellt werden.
-            // das aktuelle Attribut wird deshalb hinten an die
-            // Previous-Liste des Nachfolgers angehaengt
+            // There are other open attributes of that type,
+            // therefore the setting must be postponed.
+            // Hence the current attribute is added at the end
+            // of the Prev-List of the successor.
             pNext->InsertPrev( pAttr );
         }
     }
     else
     {
-        // dann nicht einfuegen, sondern Loeschen. Durch das "tuerken" von
-        // Vorlagen durch harte Attributierung koennen sich auch mal andere
-        // leere Attribute in der Prev-Liste befinden, die dann trotzdem
-        // gesetzt werden muessen
+        // Then don't insert, but delete. Because of the "faking" of styles
+        // by hard attributing there can be also other empty attributes in the
+        // Prev-List, which must be set anyway.
         HTMLAttr *pPrev = pAttr->GetPrev();
         bRet = false;
         delete pAttr;
 
         if( pPrev )
         {
-            // Die Previous-Attribute muessen trotzdem gesetzt werden.
+            // The previous attributes must be set anyway.
             if( pNext )
                 pNext->InsertPrev( pPrev );
             else
@@ -3130,8 +3125,8 @@ bool SwHTMLParser::EndAttr( HTMLAttr* pAttr, bool bChkEmpty )
 
     }
 
-    // wenn das erste Attribut der Liste gesetzt wurde muss noch der
-    // Listenkopf korrigiert werden.
+    // If the first attribute of the list was set, then the list header
+    // must be corrected as well.
     if( pLast )
         pLast->pNext = pNext;
     else if( ppHead )
@@ -3152,36 +3147,35 @@ void SwHTMLParser::DeleteAttr( HTMLAttr* pAttr )
     if( !m_aParaAttrs.empty() )
         m_aParaAttrs.clear();
 
-    // Der Listenkopf ist im Attribut gespeichert
+    // The list header is saved in the attribute
     HTMLAttr **ppHead = pAttr->ppHead;
 
-    OSL_ENSURE( ppHead, "keinen Attributs-Listenkopf gefunden!" );
+    OSL_ENSURE( ppHead, "no list header attribute found!" );
 
-    // Wird das zueltzt gestartete oder ein frueher gestartetes Attribut
-    // entfernt?
+    // Is the last started or an earlier started attribute being removed?
     HTMLAttr *pLast = nullptr;
     if( ppHead && pAttr != *ppHead )
     {
-        // Es wird nicht das zuletzt gestartete Attribut beendet
+        // The last started attribute isn't being ended
 
-        // Dann suche wir das unmittelbar danach gestartete Attribut, das
-        // ja ebenfalls noch nicht beendet wurde (sonst stuende es nicht
-        // mehr in der Liste
+        // Then we look for attribute which was started immediately afterwards,
+        // which has also not yet been ended (otherwise it would no longer be
+        // in the list).
         pLast = *ppHead;
         while( pLast && pLast->GetNext() != pAttr )
             pLast = pLast->GetNext();
 
-        OSL_ENSURE( pLast, "Attribut nicht in eigener Liste gefunden!" );
+        OSL_ENSURE( pLast, "Attribute not found in own list!" );
     }
 
-    // nun das Attrubut entfernen
+    // now delete the attribute
     HTMLAttr *pNext = pAttr->GetNext();
     HTMLAttr *pPrev = pAttr->GetPrev();
     delete pAttr;
 
     if( pPrev )
     {
-        // Die Previous-Attribute muessen trotzdem gesetzt werden.
+        // The previous attributes must be set anyway.
         if( pNext )
             pNext->InsertPrev( pPrev );
         else
@@ -3193,8 +3187,8 @@ void SwHTMLParser::DeleteAttr( HTMLAttr* pAttr )
         }
     }
 
-    // wenn das erste Attribut der Liste entfernt wurde muss noch der
-    // Listenkopf korrigiert werden.
+    // If the first attribute of the list was deleted, then the list header
+    // must be corrected as well.
     if( pLast )
         pLast->pNext = pNext;
     else if( ppHead )
