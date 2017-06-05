@@ -23,10 +23,8 @@
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
-#include <toolkit/helper/externallock.hxx>
 
 class TabBar;
-class VCLExternalSolarLock;
 class VclSimpleEvent;
 class VclWindowEvent;
 
@@ -34,8 +32,7 @@ class VclWindowEvent;
 namespace accessibility
 {
 
-class AccessibleTabBarBase : private BaseVCLExternalSolarLock,
-                             public comphelper::OAccessibleExtendedComponentHelper
+class AccessibleTabBarBase : public comphelper::OAccessibleExtendedComponentHelper
 {
 public:
     explicit            AccessibleTabBarBase( TabBar* pTabBar );

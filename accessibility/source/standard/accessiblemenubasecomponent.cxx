@@ -43,8 +43,7 @@ using namespace ::comphelper;
 
 
 OAccessibleMenuBaseComponent::OAccessibleMenuBaseComponent( Menu* pMenu )
-    :OAccessibleExtendedComponentHelper( &m_aLock )
-    ,m_pMenu( pMenu )
+    :m_pMenu( pMenu )
     ,m_bEnabled( false )
     ,m_bFocused( false )
     ,m_bVisible( false )

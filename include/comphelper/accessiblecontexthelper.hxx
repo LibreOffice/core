@@ -26,50 +26,12 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/solarmutex.hxx>
 #include <memory>
 
 
 namespace comphelper
 {
-
-
-    //= IMutex
-
-
-    // This whole thingie here (own mutex classes and such) is a HACK. I hate the SolarMutex.
-    // See below for more explanations ....
-
-    /** abstract interface for implementing a mutex
-    */
-    class COMPHELPER_DLLPUBLIC IMutex
-    {
-    public:
-        virtual ~IMutex();
-        virtual void acquire() = 0;
-        virtual void release() = 0;
-    };
-
-
-    //= OMutexGuard
-
-
-    class OMutexGuard
-    {
-        IMutex* m_pMutex;
-    public:
-        OMutexGuard( IMutex* _pMutex )
-            :m_pMutex( _pMutex )
-        {
-            if ( m_pMutex )
-                m_pMutex->acquire();
-        }
-
-        ~OMutexGuard( )
-        {
-            if ( m_pMutex )
-                m_pMutex->release();
-        }
-    };
 
 
     //= OAccessibleContextHelper
@@ -92,33 +54,7 @@ namespace comphelper
     protected:
         virtual ~OAccessibleContextHelper( ) override;
 
-        /** ctor
-
-            <p>If you need additional object safety for your class, and want to ensure that your own
-            mutex is locked before the mutex this class provides is, than use this ctor.</p>
-
-            <p>Beware that this is a hack. Unfortunately, OpenOffice.org has two different mutex hierarchies,
-            which are not compatible. In addition, wide parts of the code (especially VCL) is not thread-safe,
-            but instead relies on a <em>single global mutex</em>. As a consequence, components using
-            directly or indirectly such code need to care for this global mutex. Yes, this is as ugly as
-            anything.</p>
-
-            <p>Note that the external lock is used as additional lock, not as the only one. The own mutex of the
-            instance is used for internal actions, and every action which potentially involves external code
-            (for instance every call to a virtual method overridden by derivees) is <em>additionally</em> and
-            <em>first</em> guarded by with the external lock.</p>
-
-            <p>Beware of the lifetime of the lock - you must ensure that the lock exists at least as long as
-            the context does. A good approach to implement the lock may be to derive you own context
-            not only from OAccessibleContextHelper, but also from IMutex.</p>
-
-            <p>One more note. This lock is definitely not used once the dtor is reached. Means whatever
-            the dtor implementation does, it does <em>not</em> guard the external lock. See this as a contract.
-            <br/>You should ensure the same thing for own derivees which do not supply the lock themself,
-            but get them from yet another derivee.</p>
-            @see forgetExternalLock
-        */
-        OAccessibleContextHelper( IMutex* _pExternalLock );
+        OAccessibleContextHelper( );
 
         /** late construction
         @param _rxAccessible
@@ -180,7 +116,6 @@ namespace comphelper
 
         // ensures that the object is alive
         inline  void            ensureAlive( const OAccessControl& ) const;
-        inline  IMutex*         getExternalLock( const OAccessControl& );
         inline  ::osl::Mutex&   GetMutex( const OAccessControl& );
 
     protected:
@@ -224,19 +159,12 @@ namespace comphelper
 
         // access to the base class' broadcast helper/mutex
         ::osl::Mutex&                   GetMutex()                  { return m_aMutex; }
-        IMutex*                         getExternalLock( );
     };
 
 
     inline  void OAccessibleContextHelper::ensureAlive( const OAccessControl& ) const
     {
         ensureAlive();
-    }
-
-
-    inline  IMutex* OAccessibleContextHelper::getExternalLock( const OAccessControl& )
-    {
-        return getExternalLock();
     }
 
 
@@ -287,7 +215,7 @@ namespace comphelper
     //= OExternalLockGuard
 
     class OExternalLockGuard
-            :public OMutexGuard
+            :public osl::Guard<SolarMutex>
             ,public OContextEntryGuard
     {
     public:
@@ -296,7 +224,7 @@ namespace comphelper
 
 
     inline OExternalLockGuard::OExternalLockGuard( OAccessibleContextHelper* _pContext )
-        :OMutexGuard( _pContext->getExternalLock( OAccessibleContextHelper::OAccessControl() ) )
+        :osl::Guard<SolarMutex>( SolarMutex::get() )
         ,OContextEntryGuard( _pContext )
     {
         // Only lock the external mutex,
