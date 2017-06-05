@@ -67,17 +67,14 @@ IconThemeInfo::IconThemeInfo(const OUString& urlToFile)
 /*static*/ Size
 IconThemeInfo::SizeByThemeName(const OUString& themeName)
 {
-    if (themeName == "tango") {
-        return Size( 24, 24 );
-    }
-    else if (themeName == "crystal") {
+    if (themeName == "crystal") {
         return Size( 22, 22 );
     }
     else if (themeName == "galaxy") {
-        return Size( 22, 22 );
+        return Size( 26, 26 );
     }
     else {
-        return Size( 26, 26 );
+        return Size( 24, 24 );
     }
 }
 
