@@ -656,7 +656,7 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel )
         }
         else
         {
-            maXfIdRangeLists[ XfIdNumFmtKey (rModel.mnXfId, -1 ) ].Append(ScRange(rModel.maCellAddr, rModel.maCellAddr));
+            rRangeList.Append(ScRange(rModel.maCellAddr));
             pLastRange = rRangeList.back();
         }
 
@@ -669,7 +669,7 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel )
                     break;
 
                 /* Try to merge this with the previous range */
-                if (pLastRange->aStart.Row() == (pMergeRange->aStart.Row() + 1) &&
+                if (pLastRange->aStart.Row() == (pMergeRange->aEnd.Row() + 1) &&
                     pLastRange->aStart.Col() == pMergeRange->aStart.Col() &&
                     pLastRange->aEnd.Col() == pMergeRange->aEnd.Col())
                 {
