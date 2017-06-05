@@ -26,50 +26,12 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/solarmutex.hxx>
 #include <memory>
 
 
 namespace comphelper
 {
-
-
-    //= IMutex
-
-
-    // This whole thingie here (own mutex classes and such) is a HACK. I hate the SolarMutex.
-    // See below for more explanations ....
-
-    /** abstract interface for implementing a mutex
-    */
-    class COMPHELPER_DLLPUBLIC IMutex
-    {
-    public:
-        virtual ~IMutex();
-        virtual void acquire() = 0;
-        virtual void release() = 0;
-    };
-
-
-    //= OMutexGuard
-
-
-    class OMutexGuard
-    {
-        IMutex* m_pMutex;
-    public:
-        OMutexGuard( IMutex* _pMutex )
-            :m_pMutex( _pMutex )
-        {
-            if ( m_pMutex )
-                m_pMutex->acquire();
-        }
-
-        ~OMutexGuard( )
-        {
-            if ( m_pMutex )
-                m_pMutex->release();
-        }
-    };
 
 
     //= OAccessibleContextHelper
@@ -118,7 +80,7 @@ namespace comphelper
             but get them from yet another derivee.</p>
             @see forgetExternalLock
         */
-        OAccessibleContextHelper( IMutex* _pExternalLock );
+        OAccessibleContextHelper( );
 
         /** late construction
         @param _rxAccessible
@@ -180,7 +142,6 @@ namespace comphelper
 
         // ensures that the object is alive
         inline  void            ensureAlive( const OAccessControl& ) const;
-        inline  IMutex*         getExternalLock( const OAccessControl& );
         inline  ::osl::Mutex&   GetMutex( const OAccessControl& );
 
     protected:
@@ -224,19 +185,12 @@ namespace comphelper
 
         // access to the base class' broadcast helper/mutex
         ::osl::Mutex&                   GetMutex()                  { return m_aMutex; }
-        IMutex*                         getExternalLock( );
     };
 
 
     inline  void OAccessibleContextHelper::ensureAlive( const OAccessControl& ) const
     {
         ensureAlive();
-    }
-
-
-    inline  IMutex* OAccessibleContextHelper::getExternalLock( const OAccessControl& )
-    {
-        return getExternalLock();
     }
 
 
@@ -287,7 +241,7 @@ namespace comphelper
     //= OExternalLockGuard
 
     class OExternalLockGuard
-            :public OMutexGuard
+            :public osl::Guard<SolarMutex>
             ,public OContextEntryGuard
     {
     public:
@@ -296,7 +250,7 @@ namespace comphelper
 
 
     inline OExternalLockGuard::OExternalLockGuard( OAccessibleContextHelper* _pContext )
-        :OMutexGuard( _pContext->getExternalLock( OAccessibleContextHelper::OAccessControl() ) )
+        :osl::Guard<SolarMutex>( SolarMutex::get() )
         ,OContextEntryGuard( _pContext )
     {
         // Only lock the external mutex,

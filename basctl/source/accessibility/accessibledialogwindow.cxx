@@ -99,8 +99,7 @@ bool AccessibleDialogWindow::ChildDescriptor::operator<( const ChildDescriptor& 
 
 
 AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWindow)
-    : OAccessibleExtendedComponentHelper( &m_aLock)
-    , m_pDialogWindow(pDialogWindow)
+    : m_pDialogWindow(pDialogWindow)
     , m_pDlgEditor(nullptr)
     , m_pDlgEdModel(nullptr)
 {

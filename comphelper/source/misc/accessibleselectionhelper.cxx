@@ -101,7 +101,7 @@ namespace comphelper
         implSelect( nSelectedChildIndex, false );
     }
 
-    OAccessibleSelectionHelper::OAccessibleSelectionHelper( IMutex* _pExternalLock ) : OAccessibleComponentHelper(_pExternalLock)
+    OAccessibleSelectionHelper::OAccessibleSelectionHelper()
     {
     }
 

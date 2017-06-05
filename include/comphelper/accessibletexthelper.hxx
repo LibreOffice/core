@@ -128,8 +128,7 @@ namespace comphelper
                                   public OAccessibleTextHelper_Base
     {
     protected:
-        // see the respective base class ctor for an extensive comment on this, please
-        OAccessibleTextHelper( IMutex* _pExternalLock );
+        OAccessibleTextHelper();
 
     public:
         // XInterface

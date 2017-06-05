@@ -41,7 +41,7 @@ namespace comphelper
     {
     protected:
         /// see the respective base class ctor for an extensive comment on this, please
-        OCommonAccessibleComponent( IMutex* _pExternalLock );
+        OCommonAccessibleComponent();
         virtual ~OCommonAccessibleComponent() override;
 
     protected:
@@ -87,8 +87,7 @@ namespace comphelper
             ,public OAccessibleComponentHelper_Base
     {
     protected:
-        /// see the respective base class ctor for an extensive comment on this, please
-        OAccessibleComponentHelper( IMutex* _pExternalLock );
+        OAccessibleComponentHelper();
 
     public:
         // XInterface
@@ -118,8 +117,7 @@ namespace comphelper
             ,public OAccessibleExtendedComponentHelper_Base
     {
     protected:
-        /// see the respective base class ctor for an extensive comment on this, please
-        OAccessibleExtendedComponentHelper( IMutex* _pExternalLock );
+        OAccessibleExtendedComponentHelper( );
 
     public:
         // XInterface

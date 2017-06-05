@@ -48,8 +48,7 @@ using namespace ::comphelper;
 
 
 VCLXAccessibleTabPage::VCLXAccessibleTabPage( TabControl* pTabControl, sal_uInt16 nPageId )
-    :AccessibleTextHelper_BASE( &m_aLock )
-    ,m_pTabControl( pTabControl )
+    :m_pTabControl( pTabControl )
     ,m_nPageId( nPageId )
 {
     m_bFocused  = IsFocused();

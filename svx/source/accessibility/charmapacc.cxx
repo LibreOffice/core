@@ -41,8 +41,7 @@ namespace svx
     using namespace ::com::sun::star::accessibility;
 
 
-SvxShowCharSetVirtualAcc::SvxShowCharSetVirtualAcc( SvxShowCharSet* pParent ) : OAccessibleComponentHelper(&m_aLock)
-,mpParent( pParent )
+SvxShowCharSetVirtualAcc::SvxShowCharSetVirtualAcc( SvxShowCharSet* pParent ) : mpParent( pParent )
 {
     osl_atomic_increment(&m_refCount);
     {
@@ -253,8 +252,7 @@ uno::Reference< css::accessibility::XAccessible > SvxShowCharSetItem::GetAccessi
 
 
 
-SvxShowCharSetAcc::SvxShowCharSetAcc( SvxShowCharSetVirtualAcc* _pParent ) : OAccessibleSelectionHelper(&m_aLock)
-  ,m_pParent( _pParent )
+SvxShowCharSetAcc::SvxShowCharSetAcc( SvxShowCharSetVirtualAcc* _pParent ) : m_pParent( _pParent )
 {
     osl_atomic_increment(&m_refCount);
     {
@@ -558,8 +556,7 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleColumn( sal_Int32 nChildIndex
 }
 
 
-SvxShowCharSetItemAcc::SvxShowCharSetItemAcc( SvxShowCharSetItem* pParent ) : OAccessibleComponentHelper(&m_aLock)
-,mpParent( pParent )
+SvxShowCharSetItemAcc::SvxShowCharSetItemAcc( SvxShowCharSetItem* pParent ) : mpParent( pParent )
 {
     OSL_ENSURE(pParent,"NO parent supplied!");
     osl_atomic_increment(&m_refCount);

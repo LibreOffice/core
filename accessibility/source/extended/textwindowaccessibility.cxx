@@ -703,7 +703,7 @@ Document::Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
 
 css::lang::Locale Document::retrieveLocale()
 {
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
+    SolarMutexGuard aGuard;
     return m_rEngine.GetLocale();
 }
 
@@ -760,7 +760,7 @@ css::awt::Rectangle
 Document::retrieveParagraphBounds(Paragraph const * pParagraph,
                                   bool bAbsolute)
 {
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
+    SolarMutexGuard aGuard;
     ::osl::MutexGuard aInternalGuard(GetMutex());
 
     // If a client holds on to a Paragraph that is no longer visible (as it
@@ -799,7 +799,7 @@ Document::retrieveParagraphBounds(Paragraph const * pParagraph,
 OUString
 Document::retrieveParagraphText(Paragraph const * pParagraph)
 {
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
+    SolarMutexGuard aGuard;
     ::osl::MutexGuard aInternalGuard(GetMutex());
     return m_rEngine.GetText(static_cast< ::sal_uLong >(pParagraph->getNumber()));
         // numeric overflow cannot happen here
@@ -809,7 +809,7 @@ void Document::retrieveParagraphSelection(Paragraph const * pParagraph,
                                           ::sal_Int32 * pBegin,
                                           ::sal_Int32 * pEnd)
 {
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
+    SolarMutexGuard aGuard;
     ::osl::MutexGuard aInternalGuard(GetMutex());
     ::TextSelection const & rSelection = m_rView.GetSelection();
     Paragraphs::size_type nNumber = pParagraph->getNumber();
@@ -839,7 +839,7 @@ void Document::retrieveParagraphSelection(Paragraph const * pParagraph,
 
 ::sal_Int32 Document::retrieveParagraphCaretPosition(Paragraph const * pParagraph)
 {
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
+    SolarMutexGuard aGuard;
     ::osl::MutexGuard aInternalGuard(GetMutex());
     ::TextSelection const & rSelection = m_rView.GetSelection();
     Paragraphs::size_type nNumber = pParagraph->getNumber();
@@ -852,7 +852,7 @@ css::awt::Rectangle
 Document::retrieveCharacterBounds(Paragraph const * pParagraph,
                                   ::sal_Int32 nIndex)
 {
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
+    SolarMutexGuard aGuard;
     ::osl::MutexGuard aInternalGuard(GetMutex());
     ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
     sal_Int32 nLength = m_rEngine.GetText(nNumber).getLength();
@@ -898,7 +898,7 @@ Document::retrieveCharacterBounds(Paragraph const * pParagraph,
 ::sal_Int32 Document::retrieveCharacterIndex(Paragraph const * pParagraph,
                                              css::awt::Point const & rPoint)
 {
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
+    SolarMutexGuard aGuard;
     ::osl::MutexGuard aInternalGuard(GetMutex());
     ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
         // XXX  numeric overflow
@@ -927,7 +927,7 @@ Document::retrieveCharacterAttributes(
     Paragraph const * pParagraph, ::sal_Int32 nIndex,
     const css::uno::Sequence< OUString >& aRequestedAttributes)
 {
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
+    SolarMutexGuard aGuard;
 
     vcl::Font aFont = m_rEngine.GetFont();
     const sal_Int32 AttributeCount = 9;
@@ -1075,7 +1075,7 @@ Document::retrieveDefaultAttributes(
     Paragraph const * pParagraph,
     const css::uno::Sequence< OUString >& RequestedAttributes)
 {
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard( getExternalLock() );
+    SolarMutexGuard aGuard;
     ::osl::MutexGuard aInternalGuard( GetMutex() );
 
     tPropValMap aDefAttrSeq;
@@ -1141,7 +1141,7 @@ Document::retrieveRunAttributes(
     Paragraph const * pParagraph, ::sal_Int32 Index,
     const css::uno::Sequence< OUString >& RequestedAttributes)
 {
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard( getExternalLock() );
+    SolarMutexGuard aGuard;
     ::osl::MutexGuard aInternalGuard( GetMutex() );
     ::sal_uLong nNumber = static_cast< ::sal_uLong >( pParagraph->getNumber() );
         // XXX  numeric overflow
@@ -1159,7 +1159,7 @@ Document::retrieveRunAttributes(
 void Document::changeParagraphText(Paragraph * pParagraph,
                                    OUString const & rText)
 {
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
+    SolarMutexGuard aGuard;
     {
         ::osl::MutexGuard aInternalGuard(GetMutex());
         ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
@@ -1174,7 +1174,7 @@ void Document::changeParagraphText(Paragraph * pParagraph,
                                    bool bCut, bool bPaste,
                                    OUString const & rText)
 {
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
+    SolarMutexGuard aGuard;
     {
         ::osl::MutexGuard aInternalGuard(GetMutex());
         ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
@@ -1194,7 +1194,7 @@ void Document::changeParagraphText(Paragraph * pParagraph,
 void Document::copyParagraphText(Paragraph const * pParagraph,
                                  ::sal_Int32 nBegin, ::sal_Int32 nEnd)
 {
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
+    SolarMutexGuard aGuard;
     {
         ::osl::MutexGuard aInternalGuard(GetMutex());
         ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
@@ -1217,7 +1217,7 @@ void Document::changeParagraphAttributes(
     Paragraph * pParagraph, ::sal_Int32 nBegin, ::sal_Int32 nEnd,
     css::uno::Sequence< css::beans::PropertyValue > const & rAttributeSet)
 {
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
+    SolarMutexGuard aGuard;
     {
         ::osl::MutexGuard aInternalGuard(GetMutex());
         ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
@@ -1249,7 +1249,7 @@ void Document::changeParagraphAttributes(
 void Document::changeParagraphSelection(Paragraph * pParagraph,
                                         ::sal_Int32 nBegin, ::sal_Int32 nEnd)
 {
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
+    SolarMutexGuard aGuard;
     {
         ::osl::MutexGuard aInternalGuard(GetMutex());
         ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
@@ -1275,7 +1275,7 @@ Document::retrieveParagraphLineBoundary( Paragraph const * pParagraph,
     aBoundary.startPos = nIndex;
     aBoundary.endPos = nIndex;
 
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard( getExternalLock() );
+    SolarMutexGuard aGuard;
     {
         ::osl::MutexGuard aInternalGuard( GetMutex() );
         ::sal_uLong nNumber = static_cast< ::sal_uLong >( pParagraph->getNumber() );
@@ -1313,7 +1313,7 @@ Document::retrieveParagraphBoundaryOfLine( Paragraph const * pParagraph,
     aBoundary.startPos = 0;
     aBoundary.endPos = 0;
 
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard( getExternalLock() );
+    SolarMutexGuard aGuard;
     {
         ::osl::MutexGuard aInternalGuard( GetMutex() );
         ::sal_uLong nNumber = static_cast< ::sal_uLong >( pParagraph->getNumber() );
@@ -1339,7 +1339,7 @@ Document::retrieveParagraphBoundaryOfLine( Paragraph const * pParagraph,
 
 sal_Int32 Document::retrieveParagraphLineWithCursor( Paragraph const * pParagraph )
 {
-    ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
+    SolarMutexGuard aGuard;
     ::osl::MutexGuard aInternalGuard(GetMutex());
     ::TextSelection const & rSelection = m_rView.GetSelection();
     Paragraphs::size_type nNumber = pParagraph->getNumber();

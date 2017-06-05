@@ -50,8 +50,7 @@ using namespace ::comphelper;
 
 
 AccessibleDialogControlShape::AccessibleDialogControlShape (DialogWindow* pDialogWindow, DlgEdObj* pDlgEdObj)
-    :OAccessibleExtendedComponentHelper( &m_aLock )
-    ,m_pDialogWindow( pDialogWindow )
+    :m_pDialogWindow( pDialogWindow )
     ,m_pDlgEdObj( pDlgEdObj )
 {
     if ( m_pDlgEdObj )

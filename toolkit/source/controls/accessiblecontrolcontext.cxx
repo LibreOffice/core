@@ -45,7 +45,6 @@ namespace toolkit
 
 
     OAccessibleControlContext::OAccessibleControlContext()
-        : OAccessibleControlContext_Base(&m_aLock)
     {
         // nothing to do here, we have a late ctor
     }

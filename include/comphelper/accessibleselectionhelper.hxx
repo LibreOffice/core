@@ -104,8 +104,7 @@ namespace comphelper
     {
     protected:
 
-        /// see the respective base class ctor for an extensive comment on this, please
-        OAccessibleSelectionHelper( IMutex* _pExternalLock );
+        OAccessibleSelectionHelper();
 
         // return ourself here by default
         virtual css::uno::Reference< css::accessibility::XAccessibleContext > implGetAccessibleContext() override;

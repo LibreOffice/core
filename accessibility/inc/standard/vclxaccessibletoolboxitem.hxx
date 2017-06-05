@@ -31,7 +31,6 @@
 #include <cppuhelper/implbase4.hxx>
 #include <comphelper/accessibletexthelper.hxx>
 #include <vcl/vclptr.hxx>
-#include <toolkit/helper/externallock.hxx>
 
 
 class ToolBox;
@@ -42,8 +41,7 @@ typedef ::cppu::ImplHelper4 < css::accessibility::XAccessible,
                               css::accessibility::XAccessibleValue,
                               css::lang::XServiceInfo > VCLXAccessibleToolBoxItem_BASE;
 
-class VCLXAccessibleToolBoxItem : private BaseVCLExternalSolarLock,
-                                  public AccessibleTextHelper_BASE,
+class VCLXAccessibleToolBoxItem : public AccessibleTextHelper_BASE,
                                   public VCLXAccessibleToolBoxItem_BASE
 {
 private:

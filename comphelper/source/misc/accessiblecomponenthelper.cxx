@@ -29,8 +29,7 @@ namespace comphelper
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;
 
-    OCommonAccessibleComponent::OCommonAccessibleComponent( IMutex* _pExternalLock )
-        :OAccessibleContextHelper( _pExternalLock )
+    OCommonAccessibleComponent::OCommonAccessibleComponent( )
     {
     }
 
@@ -93,8 +92,7 @@ namespace comphelper
         return implGetBounds();
     }
 
-    OAccessibleComponentHelper::OAccessibleComponentHelper( IMutex* _pExternalLock )
-        :OCommonAccessibleComponent( _pExternalLock )
+    OAccessibleComponentHelper::OAccessibleComponentHelper( )
     {
     }
 
@@ -133,8 +131,7 @@ namespace comphelper
         return OCommonAccessibleComponent::getBounds( );
     }
 
-    OAccessibleExtendedComponentHelper::OAccessibleExtendedComponentHelper( IMutex* _pExternalLock )
-        :OCommonAccessibleComponent( _pExternalLock )
+    OAccessibleExtendedComponentHelper::OAccessibleExtendedComponentHelper( )
     {
     }
 
