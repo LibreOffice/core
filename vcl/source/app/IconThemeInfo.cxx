@@ -25,6 +25,8 @@ static const OUStringLiteral TANGO_TESTING_ID("tango_testing");
 static const OUStringLiteral TANGO_TESTING_DISPLAY_NAME("Tango Testing");
 static const OUStringLiteral BREEZE_DARK_ID("breeze_dark");
 static const OUStringLiteral BREEZE_DARK_DISPLAY_NAME("Breeze Dark");
+static const OUStringLiteral SIFR_DARK_ID("sifr_dark");
+static const OUStringLiteral SIFR_DARK_DISPLAY_NAME("Sifr Dark");
 
 OUString
 filename_from_url(const OUString& url)
@@ -131,6 +133,9 @@ IconThemeInfo::ThemeIdToDisplayName(const OUString& themeId)
     }
     else if (themeId.equalsIgnoreAsciiCase(BREEZE_DARK_ID)) {
         return BREEZE_DARK_DISPLAY_NAME;
+    }
+    else if (themeId.equalsIgnoreAsciiCase(SIFR_DARK_ID)) {
+        return SIFR_DARK_DISPLAY_NAME;
     }
 
     // make the first letter uppercase
