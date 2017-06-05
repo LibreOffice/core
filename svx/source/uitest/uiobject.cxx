@@ -12,7 +12,7 @@
 
 #include <svx/charmap.hxx>
 
-SvxShowCharSetUIObject::SvxShowCharSetUIObject(VclPtr<SvxShowCharSet> xCharSet):
+SvxShowCharSetUIObject::SvxShowCharSetUIObject(const VclPtr<SvxShowCharSet>& xCharSet):
     WindowUIObject(xCharSet),
     mxCharSet(xCharSet)
 {

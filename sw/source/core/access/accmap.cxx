@@ -522,12 +522,12 @@ public:
     size_t size() const { return maEvents.size(); }
     std::list<SwAccessibleEvent_Impl>::iterator begin() { return maEvents.begin(); }
     std::list<SwAccessibleEvent_Impl>::iterator end() { return maEvents.end(); }
-    std::list<SwAccessibleEvent_Impl>::iterator insert( std::list<SwAccessibleEvent_Impl>::iterator aIter,
+    std::list<SwAccessibleEvent_Impl>::iterator insert( const std::list<SwAccessibleEvent_Impl>::iterator& aIter,
                                                         const SwAccessibleEvent_Impl& rEvent )
     {
         return maEvents.insert( aIter, rEvent );
     }
-    std::list<SwAccessibleEvent_Impl>::iterator erase( std::list<SwAccessibleEvent_Impl>::iterator aPos )
+    std::list<SwAccessibleEvent_Impl>::iterator erase( const std::list<SwAccessibleEvent_Impl>::iterator& aPos )
     {
         return maEvents.erase( aPos );
     }

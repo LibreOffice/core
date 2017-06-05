@@ -22,6 +22,7 @@
 #include <hintids.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <utility>
 #include <xmloff/xmluconv.hxx>
 #include "xmlexpit.hxx"
 #include <xmloff/nmspmap.hxx>
@@ -85,7 +86,7 @@ public:
 SwXMLTableItemMapper_Impl::SwXMLTableItemMapper_Impl(
         SvXMLItemMapEntriesRef rMapEntries,
         SwXMLExport& rExp ) :
-    SvXMLExportItemMapper( rMapEntries ),
+    SvXMLExportItemMapper( std::move(rMapEntries) ),
     aBrushItemExport( rExp ),
     nAbsWidth( USHRT_MAX )
 {

@@ -37,7 +37,7 @@ namespace oox { namespace ppt {
 class SlideFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
-    SlideFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, SlidePersistPtr pPersistPtr, const ShapeLocation eShapeLocation );
+    SlideFragmentHandler( ::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, const SlidePersistPtr& pPersistPtr, const ShapeLocation eShapeLocation );
     virtual ~SlideFragmentHandler() override;
 
     virtual void finalizeImport() override;

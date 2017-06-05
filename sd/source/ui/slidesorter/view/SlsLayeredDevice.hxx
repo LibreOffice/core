@@ -42,7 +42,7 @@ class LayeredDevice
 
 {
 public:
-    explicit LayeredDevice (VclPtr<sd::Window> pTargetWindow);
+    explicit LayeredDevice (const VclPtr<sd::Window>& pTargetWindow);
     ~LayeredDevice ();
 
     void Invalidate (

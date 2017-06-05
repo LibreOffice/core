@@ -8,13 +8,15 @@
  */
 
 
+#include <utility>
+
 #include "scitems.hxx"
 #include "condformatdlgitem.hxx"
 
 ScCondFormatDlgItem::ScCondFormatDlgItem(std::shared_ptr<ScConditionalFormatList> pCondFormats,
         sal_Int32 nItem, bool bManaged):
     SfxPoolItem(SCITEM_CONDFORMATDLGDATA),
-    mpCondFormats(pCondFormats),
+    mpCondFormats(std::move(pCondFormats)),
     mnItem(nItem),
     meDialogType(condformat::dialog::CONDITION),
     mbManaged(bManaged)

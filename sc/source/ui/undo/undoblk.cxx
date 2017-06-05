@@ -740,7 +740,7 @@ bool ScUndoDeleteMulti::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 ScUndoCut::ScUndoCut( ScDocShell* pNewDocShell,
-                ScRange aRange, ScAddress aOldEnd, const ScMarkData& rMark,
+                ScRange aRange, const ScAddress& aOldEnd, const ScMarkData& rMark,
                 ScDocument* pNewUndoDoc ) :
     ScBlockUndo( pNewDocShell, ScRange(aRange.aStart, aOldEnd), SC_UNDO_AUTOHEIGHT ),
     aMarkData( rMark ),
@@ -1112,7 +1112,7 @@ bool ScUndoPaste::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 ScUndoDragDrop::ScUndoDragDrop( ScDocShell* pNewDocShell,
-                    const ScRange& rRange, ScAddress aNewDestPos, bool bNewCut,
+                    const ScRange& rRange, const ScAddress& aNewDestPos, bool bNewCut,
                     ScDocument* pUndoDocument, bool bScenario ) :
     ScMoveUndo( pNewDocShell, pUndoDocument, nullptr, SC_UNDO_REFLAST ),
     mnPaintExtFlags( 0 ),

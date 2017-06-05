@@ -19,7 +19,7 @@ class ChartUIObject : public UIObject
 {
 public:
 
-    ChartUIObject(VclPtr<chart::ChartWindow> xChartWindow,
+    ChartUIObject(const VclPtr<chart::ChartWindow>& xChartWindow,
             const OUString& rCID);
 
     StringMap get_state() override;
@@ -48,7 +48,7 @@ class ChartWindowUIObject : public WindowUIObject
 
 public:
 
-    ChartWindowUIObject(VclPtr<chart::ChartWindow> xChartWindow);
+    ChartWindowUIObject(const VclPtr<chart::ChartWindow>& xChartWindow);
 
     virtual StringMap get_state() override;
 

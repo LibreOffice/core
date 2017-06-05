@@ -17,7 +17,7 @@ class SvSimpleTable;
 class TreeListUIObject : public WindowUIObject
 {
 public:
-    TreeListUIObject(VclPtr<SvTreeListBox> xTreeList);
+    TreeListUIObject(const VclPtr<SvTreeListBox>& xTreeList);
 
     virtual StringMap get_state() override;
 
@@ -43,7 +43,7 @@ class TreeListEntryUIObject : public UIObject
 {
 public:
 
-    TreeListEntryUIObject(VclPtr<SvTreeListBox> xTreeList, SvTreeListEntry* pEntry);
+    TreeListEntryUIObject(const VclPtr<SvTreeListBox>& xTreeList, SvTreeListEntry* pEntry);
 
     virtual StringMap get_state() override;
 
@@ -66,7 +66,7 @@ private:
 class SimpleTableUIObject : public TreeListUIObject
 {
 public:
-    SimpleTableUIObject(VclPtr<SvSimpleTable> xTable);
+    SimpleTableUIObject(const VclPtr<SvSimpleTable>& xTable);
 
     virtual StringMap get_state() override;
 

@@ -87,8 +87,8 @@ public:
     std::vector<TETextPortion*>::const_iterator end() const;
     bool empty() const;
     std::size_t size() const;
-    std::vector<TETextPortion*>::iterator erase( std::vector<TETextPortion*>::iterator aIter );
-    std::vector<TETextPortion*>::iterator insert( std::vector<TETextPortion*>::iterator aIter,
+    std::vector<TETextPortion*>::iterator erase( const std::vector<TETextPortion*>::iterator& aIter );
+    std::vector<TETextPortion*>::iterator insert( const std::vector<TETextPortion*>::iterator& aIter,
                                                   TETextPortion* pTP );
     void push_back( TETextPortion* pTP );
 

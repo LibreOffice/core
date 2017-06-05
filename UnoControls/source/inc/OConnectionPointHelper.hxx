@@ -42,7 +42,7 @@ public:
 
     OConnectionPointHelper( ::osl::Mutex&                       aMutex                      ,
                             OConnectionPointContainerHelper*    pContainerImplementation    ,
-                            css::uno::Type                       aType                       );
+                            css::uno::Type const &              aType                       );
 
     virtual ~OConnectionPointHelper() override;
 

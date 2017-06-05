@@ -124,7 +124,7 @@ void implImportLabels( const Reference< XMultiServiceFactory >& xConfigProvider,
     }
 }
 
-CustomAnimationPreset::CustomAnimationPreset( CustomAnimationEffectPtr pEffect )
+CustomAnimationPreset::CustomAnimationPreset( const CustomAnimationEffectPtr& pEffect )
 {
     maPresetId = pEffect->getPresetId();
     maProperty = pEffect->getProperty();

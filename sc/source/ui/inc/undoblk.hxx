@@ -134,7 +134,7 @@ class ScUndoCut: public ScBlockUndo
 public:
                     ScUndoCut( ScDocShell* pNewDocShell,
                                ScRange aRange,              // adjusted for merged cells
-                               ScAddress aOldEnd,           // end position without adjustment
+                               const ScAddress& aOldEnd,           // end position without adjustment
                                const ScMarkData& rMark,     // selected sheets
                                ScDocument* pNewUndoDoc );
     virtual         ~ScUndoCut() override;
@@ -214,7 +214,7 @@ class ScUndoDragDrop: public ScMoveUndo
 {
 public:
                     ScUndoDragDrop( ScDocShell* pNewDocShell,
-                                    const ScRange& rRange, ScAddress aNewDestPos, bool bNewCut,
+                                    const ScRange& rRange, const ScAddress& aNewDestPos, bool bNewCut,
                                     ScDocument* pUndoDocument,
                                     bool bScenario );
     virtual         ~ScUndoDragDrop() override;

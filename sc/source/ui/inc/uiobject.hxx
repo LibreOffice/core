@@ -21,7 +21,7 @@ class ScGridWinUIObject : public WindowUIObject
 
 public:
 
-    ScGridWinUIObject(VclPtr<ScGridWindow> xGridWin);
+    ScGridWinUIObject(const VclPtr<ScGridWindow>& xGridWin);
 
     virtual StringMap get_state() override;
 

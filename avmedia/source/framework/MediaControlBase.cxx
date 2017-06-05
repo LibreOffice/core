@@ -39,7 +39,7 @@ MediaControlBase::MediaControlBase()
 {
 }
 
-void MediaControlBase::UpdateTimeField( MediaItem aMediaItem, double fTime )
+void MediaControlBase::UpdateTimeField( MediaItem const & aMediaItem, double fTime )
 {
     if( !aMediaItem.getURL().isEmpty())
     {
@@ -57,7 +57,7 @@ void MediaControlBase::UpdateTimeField( MediaItem aMediaItem, double fTime )
     }
 }
 
-void MediaControlBase::UpdateVolumeSlider( MediaItem aMediaItem )
+void MediaControlBase::UpdateVolumeSlider( MediaItem const & aMediaItem )
 {
     if( aMediaItem.getURL().isEmpty() )
         mpVolumeSlider->Disable();
@@ -70,7 +70,7 @@ void MediaControlBase::UpdateVolumeSlider( MediaItem aMediaItem )
     }
 }
 
-void MediaControlBase::UpdateTimeSlider( MediaItem aMediaItem )
+void MediaControlBase::UpdateTimeSlider( MediaItem const & aMediaItem )
 {
     if( aMediaItem.getURL().isEmpty() )
         mpTimeSlider->Disable();
@@ -211,7 +211,7 @@ void MediaControlBase::UpdateToolBoxes(MediaItem aMediaItem)
     }
 }
 
-void MediaControlBase::SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem aItem, sal_uInt16 nId)
+void MediaControlBase::SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem const & aItem, sal_uInt16 nId)
 {
     switch( nId )
     {

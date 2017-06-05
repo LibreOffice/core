@@ -117,7 +117,7 @@ void XclExpRangeFmlaBase::WriteRangeAddress( XclExpStream& rStrm ) const
 
 // Array formulas =============================================================
 
-XclExpArray::XclExpArray( XclTokenArrayRef xTokArr, const ScRange& rScRange ) :
+XclExpArray::XclExpArray( const XclTokenArrayRef& xTokArr, const ScRange& rScRange ) :
     XclExpRangeFmlaBase( EXC_ID3_ARRAY, 14 + xTokArr->GetSize(), rScRange ),
     mxTokArr( xTokArr )
 {
@@ -179,7 +179,7 @@ XclExpArrayRef XclExpArrayBuffer::FindArray( const ScTokenArray& rScTokArr, cons
 
 // Shared formulas ============================================================
 
-XclExpShrfmla::XclExpShrfmla( XclTokenArrayRef xTokArr, const ScAddress& rScPos ) :
+XclExpShrfmla::XclExpShrfmla( const XclTokenArrayRef& xTokArr, const ScAddress& rScPos ) :
     XclExpRangeFmlaBase( EXC_ID_SHRFMLA, 10 + xTokArr->GetSize(), rScPos ),
     mxTokArr( xTokArr ),
     mnUsedCount( 1 )

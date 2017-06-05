@@ -262,7 +262,7 @@ OUString to_string(const Size& rSize)
 
 }
 
-WindowUIObject::WindowUIObject(VclPtr<vcl::Window> xWindow):
+WindowUIObject::WindowUIObject(const VclPtr<vcl::Window>& xWindow):
     mxWindow(xWindow)
 {
 }
@@ -525,7 +525,7 @@ std::unique_ptr<UIObject> WindowUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new WindowUIObject(pWindow));
 }
 
-ButtonUIObject::ButtonUIObject(VclPtr<Button> xButton):
+ButtonUIObject::ButtonUIObject(const VclPtr<Button>& xButton):
     WindowUIObject(xButton),
     mxButton(xButton)
 {
@@ -565,7 +565,7 @@ std::unique_ptr<UIObject> ButtonUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new ButtonUIObject(pButton));
 }
 
-DialogUIObject::DialogUIObject(VclPtr<Dialog> xDialog):
+DialogUIObject::DialogUIObject(const VclPtr<Dialog>& xDialog):
     WindowUIObject(xDialog),
     mxDialog(xDialog)
 {
@@ -595,7 +595,7 @@ std::unique_ptr<UIObject> DialogUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new DialogUIObject(pDialog));
 }
 
-EditUIObject::EditUIObject(VclPtr<Edit> xEdit):
+EditUIObject::EditUIObject(const VclPtr<Edit>& xEdit):
     WindowUIObject(xEdit),
     mxEdit(xEdit)
 {
@@ -668,7 +668,7 @@ std::unique_ptr<UIObject> EditUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new EditUIObject(pEdit));
 }
 
-CheckBoxUIObject::CheckBoxUIObject(VclPtr<CheckBox> xCheckbox):
+CheckBoxUIObject::CheckBoxUIObject(const VclPtr<CheckBox>& xCheckbox):
     WindowUIObject(xCheckbox),
     mxCheckBox(xCheckbox)
 {
@@ -708,7 +708,7 @@ std::unique_ptr<UIObject> CheckBoxUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new CheckBoxUIObject(pCheckBox));
 }
 
-RadioButtonUIObject::RadioButtonUIObject(VclPtr<RadioButton> xRadioButton):
+RadioButtonUIObject::RadioButtonUIObject(const VclPtr<RadioButton>& xRadioButton):
     WindowUIObject(xRadioButton),
     mxRadioButton(xRadioButton)
 {
@@ -746,7 +746,7 @@ std::unique_ptr<UIObject> RadioButtonUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new RadioButtonUIObject(pRadioButton));
 }
 
-TabPageUIObject::TabPageUIObject(VclPtr<TabPage> xTabPage):
+TabPageUIObject::TabPageUIObject(const VclPtr<TabPage>& xTabPage):
     WindowUIObject(xTabPage),
     mxTabPage(xTabPage)
 {
@@ -777,7 +777,7 @@ OUString TabPageUIObject::get_name() const
     return OUString("TabPageUIObject");
 }
 
-ListBoxUIObject::ListBoxUIObject(VclPtr<ListBox> xListBox):
+ListBoxUIObject::ListBoxUIObject(const VclPtr<ListBox>& xListBox):
     WindowUIObject(xListBox),
     mxListBox(xListBox)
 {
@@ -851,7 +851,7 @@ std::unique_ptr<UIObject> ListBoxUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new ListBoxUIObject(pListBox));
 }
 
-ComboBoxUIObject::ComboBoxUIObject(VclPtr<ComboBox> xComboBox):
+ComboBoxUIObject::ComboBoxUIObject(const VclPtr<ComboBox>& xComboBox):
     WindowUIObject(xComboBox),
     mxComboBox(xComboBox)
 {
@@ -909,7 +909,7 @@ std::unique_ptr<UIObject> ComboBoxUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new ComboBoxUIObject(pComboBox));
 }
 
-SpinUIObject::SpinUIObject(VclPtr<SpinButton> xSpinButton):
+SpinUIObject::SpinUIObject(const VclPtr<SpinButton>& xSpinButton):
     WindowUIObject(xSpinButton),
     mxSpinButton(xSpinButton)
 {
@@ -947,7 +947,7 @@ OUString SpinUIObject::get_name() const
     return OUString("SpinUIObject");
 }
 
-SpinFieldUIObject::SpinFieldUIObject(VclPtr<SpinField> xSpinField):
+SpinFieldUIObject::SpinFieldUIObject(const VclPtr<SpinField>& xSpinField):
     EditUIObject(xSpinField),
     mxSpinField(xSpinField)
 {
@@ -1000,7 +1000,7 @@ std::unique_ptr<UIObject> SpinFieldUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new SpinFieldUIObject(pSpinField));
 }
 
-TabControlUIObject::TabControlUIObject(VclPtr<TabControl> xTabControl):
+TabControlUIObject::TabControlUIObject(const VclPtr<TabControl>& xTabControl):
     WindowUIObject(xTabControl),
     mxTabControl(xTabControl)
 {

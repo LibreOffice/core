@@ -187,7 +187,7 @@ void SfxEditDocumentDialog::dispose()
 }
 
 /// Is this read-only object shell opened via .uno:SignPDF?
-static bool IsSignPDF(SfxObjectShellRef xObjSh)
+static bool IsSignPDF(const SfxObjectShellRef& xObjSh)
 {
     if (!xObjSh.is())
         return false;

@@ -35,7 +35,7 @@
 #define SC_NOTEMARK_SHORT   70
 
 ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window* pBottom, vcl::Window* pDiagonal,
-                            ScDocument* pD, ScAddress aPos, const OUString& rUser,
+                            ScDocument* pD, const ScAddress& aPos, const OUString& rUser,
                             const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard ) :
     pWindow( pWin ),
     pRightWin( pRight ),

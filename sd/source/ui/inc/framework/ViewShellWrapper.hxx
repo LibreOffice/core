@@ -64,7 +64,7 @@ public:
             to the ViewShell object.
     */
     ViewShellWrapper (
-        ::std::shared_ptr<ViewShell> pViewShell,
+        const ::std::shared_ptr<ViewShell>& pViewShell,
         const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId,
         const css::uno::Reference<css::awt::XWindow>& rxWindow);
     virtual ~ViewShellWrapper() override;

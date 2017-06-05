@@ -942,7 +942,7 @@ private:
     std::map<SvxBoxItemLine, css::table::BorderLine2> m_aTableStyleConf;
 
 public:
-    DocxAttributeOutput( DocxExport &rExport, ::sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML );
+    DocxAttributeOutput( DocxExport &rExport, const ::sax_fastparser::FSHelperPtr& pSerializer, oox::drawingml::DrawingML* pDrawingML );
 
     virtual ~DocxAttributeOutput() override;
 

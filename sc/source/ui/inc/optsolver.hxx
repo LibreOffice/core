@@ -94,7 +94,7 @@ class ScOptSolverDlg : public ScAnyRefDlg
 {
 public:
                     ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
-                                 ScDocShell* pDocSh, ScAddress aCursorPos );
+                                 ScDocShell* pDocSh, const ScAddress& aCursorPos );
                     virtual ~ScOptSolverDlg() override;
     virtual void    dispose() override;
 

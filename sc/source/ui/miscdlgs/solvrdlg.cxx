@@ -41,7 +41,7 @@ namespace
 
 ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                           ScDocument* pDocument,
-                          ScAddress aCursorPos )
+                          const ScAddress& aCursorPos )
 
     : ScAnyRefDlg(pB, pCW, pParent, "GoalSeekDialog", "modules/scalc/ui/goalseekdlg.ui")
     , theFormulaCell(aCursorPos)

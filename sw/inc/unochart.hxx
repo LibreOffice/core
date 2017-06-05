@@ -264,7 +264,7 @@ protected:
 public:
     SwChartDataSequence( SwChartDataProvider &rProvider,
                          SwFrameFormat   &rTableFormat,
-                         std::shared_ptr<SwUnoCursor> pTableCursor );
+                         const std::shared_ptr<SwUnoCursor>& pTableCursor );
     virtual ~SwChartDataSequence() override;
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();

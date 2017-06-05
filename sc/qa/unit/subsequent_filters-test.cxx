@@ -1225,7 +1225,7 @@ struct ValDataTestParams
 
     ValDataTestParams( ScValidationMode eMode, ScConditionMode eOp,
                        const OUString& aExpr1, const OUString& aExpr2, ScDocument& rDoc,
-                       ScAddress aPos, const OUString& aETitle, const OUString& aEMsg,
+                       const ScAddress& aPos, const OUString& aETitle, const OUString& aEMsg,
                        ScValidErrorStyle eEStyle, sal_uLong nIndex ):
                             eValMode(eMode), eCondOp(eOp), aStrVal1(aExpr1),
                             aStrVal2(aExpr2), rDocument(rDoc), aPosition(aPos),

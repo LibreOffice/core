@@ -81,6 +81,7 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <sot/exchange.hxx>
+#include <utility>
 #include <vcl/cvtgrf.hxx>
 #include <unotools/fontcvt.hxx>
 #include <vcl/graph.hxx>
@@ -360,7 +361,7 @@ bool URLTransformer::isExternalURL(const OUString& /*rURL*/) const
         mAny >>= variable;
 
 ShapeExport::ShapeExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, ShapeHashMap* pShapeMap, XmlFilterBase* pFB, DocumentType eDocumentType, DMLTextExport* pTextExport )
-    : DrawingML( pFS, pFB, eDocumentType, pTextExport )
+    : DrawingML( std::move(pFS), pFB, eDocumentType, pTextExport )
     , m_nEmbeddedObjects(0)
     , mnShapeIdMax( 1 )
     , mnPictureIdMax( 1 )

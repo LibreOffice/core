@@ -13,7 +13,7 @@
 #include <svtools/treelistbox.hxx>
 #include <svtools/simptabl.hxx>
 
-TreeListUIObject::TreeListUIObject(VclPtr<SvTreeListBox> xTreeList):
+TreeListUIObject::TreeListUIObject(const VclPtr<SvTreeListBox>& xTreeList):
     WindowUIObject(xTreeList),
     mxTreeList(xTreeList)
 {
@@ -21,7 +21,7 @@ TreeListUIObject::TreeListUIObject(VclPtr<SvTreeListBox> xTreeList):
 
 namespace {
 
-bool isCheckBoxList(VclPtr<SvTreeListBox> xTreeList)
+bool isCheckBoxList(const VclPtr<SvTreeListBox>& xTreeList)
 {
     return (xTreeList->GetTreeFlags() & SvTreeFlags::CHKBTN) == SvTreeFlags::CHKBTN;
 }
@@ -90,7 +90,7 @@ std::unique_ptr<UIObject> TreeListUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new TreeListUIObject(pTreeList));
 }
 
-TreeListEntryUIObject::TreeListEntryUIObject(VclPtr<SvTreeListBox> xTreeList, SvTreeListEntry* pEntry):
+TreeListEntryUIObject::TreeListEntryUIObject(const VclPtr<SvTreeListBox>& xTreeList, SvTreeListEntry* pEntry):
     mxTreeList(xTreeList),
     mpEntry(pEntry)
 {
@@ -161,7 +161,7 @@ OUString TreeListEntryUIObject::get_type() const
     return OUString("TreeListEntry");
 }
 
-SimpleTableUIObject::SimpleTableUIObject(VclPtr<SvSimpleTable> xTable):
+SimpleTableUIObject::SimpleTableUIObject(const VclPtr<SvSimpleTable>& xTable):
     TreeListUIObject(xTable),
     mxTable(xTable)
 {

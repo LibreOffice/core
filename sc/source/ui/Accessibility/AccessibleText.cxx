@@ -397,13 +397,13 @@ class ScPreviewCellViewForwarder : public ScPreviewViewForwarder
     ScAddress           maCellPos;
 public:
                         ScPreviewCellViewForwarder(ScPreviewShell* pViewShell,
-                            ScAddress aCellPos);
+                            const ScAddress& aCellPos);
 
     virtual tools::Rectangle   GetVisArea() const override;
 };
 
 ScPreviewCellViewForwarder::ScPreviewCellViewForwarder(ScPreviewShell* pViewShell,
-                                                       ScAddress aCellPos)
+                                                       const ScAddress& aCellPos)
     :
     ScPreviewViewForwarder(pViewShell),
     maCellPos(aCellPos)
@@ -433,14 +433,14 @@ class ScPreviewHeaderCellViewForwarder : public ScPreviewViewForwarder
     bool            mbColHeader;
 public:
                         ScPreviewHeaderCellViewForwarder(ScPreviewShell* pViewShell,
-                            ScAddress aCellPos,
+                            const ScAddress& aCellPos,
                             bool bColHeader);
 
     virtual tools::Rectangle   GetVisArea() const override;
 };
 
 ScPreviewHeaderCellViewForwarder::ScPreviewHeaderCellViewForwarder(ScPreviewShell* pViewShell,
-                                                                   ScAddress aCellPos,
+                                                                   const ScAddress& aCellPos,
                                                                    bool bColHeader)
     :
     ScPreviewViewForwarder(pViewShell),
@@ -472,14 +472,14 @@ class ScPreviewNoteViewForwarder : public ScPreviewViewForwarder
     bool            mbNoteMark;
 public:
                         ScPreviewNoteViewForwarder(ScPreviewShell* pViewShell,
-                            ScAddress aCellPos,
+                            const ScAddress& aCellPos,
                             bool bNoteMark);
 
     virtual tools::Rectangle   GetVisArea() const override;
 };
 
 ScPreviewNoteViewForwarder::ScPreviewNoteViewForwarder(ScPreviewShell* pViewShell,
-                                                                   ScAddress aCellPos,
+                                                                   const ScAddress& aCellPos,
                                                                    bool bNoteMark)
     :
     ScPreviewViewForwarder(pViewShell),

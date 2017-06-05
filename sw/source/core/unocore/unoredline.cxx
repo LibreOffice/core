@@ -48,7 +48,7 @@
 
 using namespace ::com::sun::star;
 
-SwXRedlineText::SwXRedlineText(SwDoc* _pDoc, SwNodeIndex aIndex) :
+SwXRedlineText::SwXRedlineText(SwDoc* _pDoc, const SwNodeIndex& aIndex) :
     SwXText(_pDoc, CursorType::Redline),
     aNodeIndex(aIndex)
 {

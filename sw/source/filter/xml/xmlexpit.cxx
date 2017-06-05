@@ -24,6 +24,7 @@
 #include <svl/itempool.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
+#include <utility>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -278,7 +279,7 @@ const SfxPoolItem* SvXMLExportItemMapper::GetItem( const SfxItemSet& rSet,
 
 SvXMLExportItemMapper::SvXMLExportItemMapper( SvXMLItemMapEntriesRef rMapEntries )
 {
-    mrMapEntries = rMapEntries;
+    mrMapEntries = std::move(rMapEntries);
 }
 
 SvXMLExportItemMapper::~SvXMLExportItemMapper()

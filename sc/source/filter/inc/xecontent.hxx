@@ -227,7 +227,7 @@ class ScConditionalFormat;
 class XclExpCondfmt : public XclExpRecord, protected XclExpRoot
 {
 public:
-    explicit            XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat, XclExtLstRef xExtLst, sal_Int32& rIndex );
+    explicit            XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat, const XclExtLstRef& xExtLst, sal_Int32& rIndex );
     virtual             ~XclExpCondfmt() override;
 
     /** Returns true, if this conditional format contains at least one cell range and CF record. */
@@ -300,7 +300,7 @@ class XclExpCondFormatBuffer : public XclExpRecordBase, protected XclExpRoot
 {
 public:
     /** Constructs CONDFMT and CF records containing the conditional formats of the current sheet. */
-    explicit            XclExpCondFormatBuffer( const XclExpRoot& rRoot, XclExtLstRef xExtLst );
+    explicit            XclExpCondFormatBuffer( const XclExpRoot& rRoot, const XclExtLstRef& xExtLst );
 
     /** Writes all contained CONDFMT records with their CF records. */
     virtual void        Save( XclExpStream& rStrm ) override;

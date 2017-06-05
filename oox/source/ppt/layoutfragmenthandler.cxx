@@ -29,6 +29,7 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <utility>
 
 using namespace ::com::sun::star;
 using namespace ::oox::core;
@@ -43,7 +44,7 @@ namespace oox { namespace ppt {
 
 LayoutFragmentHandler::LayoutFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, SlidePersistPtr pMasterPersistPtr )
     throw()
-: SlideFragmentHandler( rFilter, rFragmentPath, pMasterPersistPtr, Layout )
+: SlideFragmentHandler( rFilter, rFragmentPath, std::move(pMasterPersistPtr), Layout )
 {
 }
 

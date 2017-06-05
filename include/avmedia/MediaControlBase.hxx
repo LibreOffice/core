@@ -72,10 +72,10 @@ protected:
     static Image GetImage(sal_Int32 nImageId);
     virtual void InitializeWidgets();
     virtual void UpdateToolBoxes( MediaItem aMediaItem );
-    void UpdateVolumeSlider( MediaItem aMediaItem );
-    void UpdateTimeSlider( MediaItem aMediaItem );
-    void UpdateTimeField( MediaItem aMediaItem, double fTime );
-    void SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem aItem, sal_uInt16 nId);
+    void UpdateVolumeSlider( MediaItem const & aMediaItem );
+    void UpdateTimeSlider( MediaItem const & aMediaItem );
+    void UpdateTimeField( MediaItem const & aMediaItem, double fTime );
+    void SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem const & aItem, sal_uInt16 nId);
 };
 
 }

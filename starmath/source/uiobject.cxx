@@ -12,7 +12,7 @@
 
 #include "ElementsDockingWindow.hxx"
 
-ElementUIObject::ElementUIObject(VclPtr<SmElementsControl> xElementSelector,
+ElementUIObject::ElementUIObject(const VclPtr<SmElementsControl>& xElementSelector,
         const OUString& rID):
     mxElementsSelector(xElementSelector),
     maID(rID)
@@ -52,7 +52,7 @@ void ElementUIObject::execute(const OUString& rAction,
     }
 }
 
-ElementSelectorUIObject::ElementSelectorUIObject(VclPtr<SmElementsControl> xElementSelector):
+ElementSelectorUIObject::ElementSelectorUIObject(const VclPtr<SmElementsControl>& xElementSelector):
     WindowUIObject(xElementSelector),
     mxElementsSelector(xElementSelector)
 {

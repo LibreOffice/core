@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 // Global data ================================================================
 
 XclExpRootData::XclExpRootData( XclBiff eBiff, SfxMedium& rMedium,
-        tools::SvRef<SotStorage> xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc ) :
+        const tools::SvRef<SotStorage>& xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc ) :
     XclRootData( eBiff, rMedium, xRootStrg, rDoc, eTextEnc, true )
 {
     SvtSaveOptions aSaveOpt;

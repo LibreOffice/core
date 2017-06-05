@@ -36,7 +36,7 @@ TextBody::TextBody()
 {
 }
 
-TextBody::TextBody( TextBodyPtr pBody )
+TextBody::TextBody( const TextBodyPtr& pBody )
 {
     if( pBody.get() ) {
         maTextProperties = pBody->maTextProperties;

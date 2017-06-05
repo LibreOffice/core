@@ -20,6 +20,7 @@
 #include "xmlimpit.hxx"
 
 #include <sax/tools/converter.hxx>
+#include <utility>
 #include <xmloff/xmluconv.hxx>
 #include <svl/itempool.hxx>
 #include <svl/poolitem.hxx>
@@ -71,7 +72,7 @@ SvXMLImportItemMapper::~SvXMLImportItemMapper()
 void
 SvXMLImportItemMapper::setMapEntries( SvXMLItemMapEntriesRef rMapEntries )
 {
-    mrMapEntries = rMapEntries;
+    mrMapEntries = std::move(rMapEntries);
 }
 
 // fills the given itemset with the attributes in the given list

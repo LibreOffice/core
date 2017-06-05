@@ -42,7 +42,7 @@ class CustomAnimationPreset
     friend class CustomAnimationPresets;
 
 public:
-    CustomAnimationPreset( CustomAnimationEffectPtr pEffect );
+    CustomAnimationPreset( const CustomAnimationEffectPtr& pEffect );
 
     void add( const CustomAnimationEffectPtr& pEffect );
 

@@ -42,7 +42,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox { namespace drawingml {
 
 ConnectorShapeContext::ConnectorShapeContext( ContextHandler2Helper& rParent,
-        ShapePtr pMasterShapePtr, ShapePtr pGroupShapePtr )
+        const ShapePtr& pMasterShapePtr, const ShapePtr& pGroupShapePtr )
 : ShapeContext( rParent, pMasterShapePtr, pGroupShapePtr )
 {
 }

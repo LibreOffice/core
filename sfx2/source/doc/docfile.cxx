@@ -74,6 +74,7 @@
 #include <framework/interaction.hxx>
 #include <unotools/streamhelper.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <utility>
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
@@ -2906,7 +2907,7 @@ SfxMedium::SfxMedium(const OUString &rName, StreamMode nOpenMode, std::shared_pt
     pImpl(new SfxMedium_Impl)
 {
     pImpl->m_pSet = pInSet;
-    pImpl->m_pFilter = pFilter;
+    pImpl->m_pFilter = std::move(pFilter);
     pImpl->m_aLogicName = rName;
     pImpl->m_nStorOpenMode = nOpenMode;
     Init_Impl();
@@ -2920,7 +2921,7 @@ SfxMedium::SfxMedium(const OUString &rName, const OUString &rReferer, StreamMode
     if (s->GetItem(SID_REFERER) == nullptr) {
         s->Put(SfxStringItem(SID_REFERER, rReferer));
     }
-    pImpl->m_pFilter = pFilter;
+    pImpl->m_pFilter = std::move(pFilter);
     pImpl->m_aLogicName = rName;
     pImpl->m_nStorOpenMode = nOpenMode;
     Init_Impl();
