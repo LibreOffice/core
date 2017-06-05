@@ -1089,13 +1089,10 @@ void UnoFrameControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
         OutputDevice*pOutDev = Application::GetDefaultDevice();
         if ( pOutDev )
         {
-            if ( !bOwnCtrl && !sTitle.isEmpty() )
-            {
-                // Adjust Y based on height of Title
-                ::tools::Rectangle aRect;
-                aRect = pOutDev->GetTextRect( aRect, sTitle );
-                nY = nY + ( aRect.GetHeight() / 2 );
-            }
+            // Adjust Y based on height of Title
+            ::tools::Rectangle aRect;
+            aRect = pOutDev->GetTextRect( aRect, sTitle );
+            nY = nY + ( aRect.GetHeight() / 2 );
         }
         else
         {
@@ -1119,9 +1116,8 @@ void UnoFrameControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
             }
 
             sal_Int16 nH = aFM.Ascent + aFM.Descent;
-            if ( !bOwnCtrl && !sTitle.isEmpty() )
-                // offset y based on height of font ( not sure if my guess at the correct calculation is correct here )
-                nY = nY + ( nH / 8); // how do I test this
+            // offset y based on height of font ( not sure if my guess at the correct calculation is correct here )
+            nY = nY + ( nH / 8); // how do I test this
         }
         xW->setPosSize( nX, nY, nWidth, nHeight, PosSize::POSSIZE );
     }

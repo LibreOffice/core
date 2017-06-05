@@ -143,7 +143,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearc
         {
             SwNodeIndex aTmp( *rNode.EndOfSectionNode(), +1 );
             pNd = GoPreviousWithFrame( &aTmp );
-            if( !bSearch && pNd && rNode.GetIndex() > pNd->GetIndex() )
+            if( pNd && rNode.GetIndex() > pNd->GetIndex() )
                 pNd = nullptr; // Do not go over the limits
             bMaster = false;
         }

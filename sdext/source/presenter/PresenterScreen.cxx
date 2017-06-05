@@ -465,8 +465,7 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
         {
             // A display number value of 0 indicates the primary screen.
             // Find out which screen number that is.
-            if (nDisplayNumber <= 0)
-                nScreenNumber = Application::GetDisplayExternalScreen();
+            nScreenNumber = Application::GetDisplayExternalScreen();
         }
 
         // We still have to determine the number of screens to decide

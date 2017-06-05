@@ -405,9 +405,7 @@ IMPL_LINK( SwGlossaryDlg, NameModify, Edit&, rEdit, void )
         //ShortNameEdit
         if(!bNotFound)
         {
-            bool bEnable = !bNotFound;
-            bEnable &= !bIsDocReadOnly;
-            m_pInsertBtn->Enable(bEnable);
+            m_pInsertBtn->Enable(!bIsDocReadOnly);
         }
     }
 }
