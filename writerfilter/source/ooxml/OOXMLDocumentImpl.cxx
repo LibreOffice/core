@@ -435,6 +435,57 @@ void OOXMLDocumentImpl::resolveFooter(Stream & rStream,
      }
 }
 
+namespace {
+void lcl_addDefFontToStyleTable(OOXMLTable* pTable)
+{
+    // tdf#108350
+    // In OOXML (i.e. Word since 2007), the default document font is Calibri 11 pt.
+    // If a document doesn't contain font information, we should assume our
+    // metric-compatible equivalent Carlito to provide best layout match.
+
+    // Here we recreate the following XML:
+    // <w:styles>
+    //   <w:docDefaults>
+    //     <w:rPrDefault>
+    //       <w:rPr>
+    //         <w:rFonts w:ascii="Carlito" w:hAnsi="Carlito"/>
+    //         <w:sz w:val="22"/>
+    //       </w:rPr>
+    //     </w:rPrDefault>
+    //   </w:docDefaults>
+    // </w:styles>
+    OOXMLPropertySet::Pointer_t p_docDefaultsSet(new OOXMLPropertySet);
+    OOXMLPropertySet::Pointer_t p_rPrDefaultSet(new OOXMLPropertySet);
+    OOXMLPropertySet::Pointer_t p_rPrSet(new OOXMLPropertySet);
+    OOXMLPropertySet::Pointer_t p_rFonts(new OOXMLPropertySet);
+
+    OOXMLValue::Pointer_t pVal(new OOXMLStringValue("Carlito"));
+    OOXMLProperty::Pointer_t pProperty(new OOXMLProperty(NS_ooxml::LN_CT_Fonts_ascii, pVal, OOXMLProperty::ATTRIBUTE));
+    p_rFonts->add(pProperty);
+
+    pProperty.reset(new OOXMLProperty(NS_ooxml::LN_CT_Fonts_hAnsi, pVal, OOXMLProperty::ATTRIBUTE));
+    p_rFonts->add(pProperty);
+
+    pVal.reset(new OOXMLPropertySetValue(p_rFonts));
+    pProperty.reset(new OOXMLProperty(NS_ooxml::LN_EG_RPrBase_rFonts, pVal, OOXMLProperty::SPRM));
+    p_rPrSet->add(pProperty);
+
+    pProperty.reset(new OOXMLProperty(NS_ooxml::LN_EG_RPrBase_sz, OOXMLIntegerValue::Create(22), OOXMLProperty::SPRM));
+    p_rPrSet->add(pProperty);
+
+    pVal.reset(new OOXMLPropertySetValue(p_rPrSet));
+    pProperty.reset(new OOXMLProperty(NS_ooxml::LN_CT_RPrDefault_rPr, pVal, OOXMLProperty::SPRM));
+    p_rPrDefaultSet->add(pProperty);
+
+    pVal.reset(new OOXMLPropertySetValue(p_rPrDefaultSet));
+    pProperty.reset(new OOXMLProperty(NS_ooxml::LN_CT_DocDefaults_rPrDefault, pVal, OOXMLProperty::SPRM));
+    p_docDefaultsSet->add(pProperty);
+
+    pVal.reset(new OOXMLPropertySetValue(p_docDefaultsSet));
+    pTable->add(pVal);
+}
+}
+
 void OOXMLDocumentImpl::resolve(Stream & rStream)
 {
     if (utl::MediaDescriptor(maMediaDescriptor).getUnpackedValueOrDefault("ReadGlossaries", false))
@@ -497,6 +548,12 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         resolveActiveXStream(rStream);
 
         resolveFastSubStream(rStream, OOXMLStream::FONTTABLE);
+        {
+            // tdf#108350: Add default font information in case it's absent in styles stream
+            std::unique_ptr<OOXMLTable> pDefFontsTable(new OOXMLTable);
+            lcl_addDefFontToStyleTable(pDefFontsTable.get());
+            rStream.table(NS_ooxml::LN_STYLESHEET, writerfilter::Reference<Table>::Pointer_t(pDefFontsTable.release()));
+        }
         resolveFastSubStream(rStream, OOXMLStream::STYLES);
         resolveFastSubStream(rStream, OOXMLStream::NUMBERING);
 
