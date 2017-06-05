@@ -446,7 +446,7 @@ public:
     /** checks the document is currently in the initialization phase, or already initialized.
         Throws NotInitializedException if not so.
     */
-    void checkNotUninitilized() const
+    void checkNotUninitialized() const
     {
         if ( impl_isInitialized() || impl_isInitializing() )
             // fine
@@ -696,7 +696,7 @@ public:
         : ModelMethodGuard(_document)
         , m_document(_document)
     {
-        m_document.checkNotUninitilized();
+        m_document.checkNotUninitialized();
     }
 
     /** constructs the guard
