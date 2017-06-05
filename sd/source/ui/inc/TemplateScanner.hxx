@@ -191,7 +191,7 @@ private:
     /** From the list of top-level folders collected by GatherFolderList()
         the one with highest priority is processed.
         @return
-            Returns one of the states ERROR, DONE, or INITILIZE_ENTRY_SCAN.
+            Returns one of the states ERROR, DONE, or INITIALIZE_ENTRY_SCAN.
     */
     State ScanFolder();
 
