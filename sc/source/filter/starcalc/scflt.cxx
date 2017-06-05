@@ -2399,11 +2399,11 @@ void Sc10Import::LoadObjects()
     }
 }
 
-FltError ScFormatFilterPluginImpl::ScImportStarCalc10( SvStream& rStream, ScDocument* pDocument )
+ErrCode ScFormatFilterPluginImpl::ScImportStarCalc10( SvStream& rStream, ScDocument* pDocument )
 {
     rStream.Seek( 0UL );
     Sc10Import  aImport( rStream, pDocument );
-    return ( FltError ) aImport.Import();
+    return ( ErrCode ) aImport.Import();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

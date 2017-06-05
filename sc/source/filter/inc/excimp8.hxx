@@ -38,7 +38,7 @@ public:
                             ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm );
     virtual                 ~ImportExcel8() override;
 
-    virtual FltError        Read() override;
+    virtual ErrCode         Read() override;
 
     void                    Calccount();              // 0x0C
     void                    Precision();              // 0x0E

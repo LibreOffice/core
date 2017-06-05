@@ -538,8 +538,8 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
             SfxMedium aMed;
             aMed.GetItemSet()->Put( SfxUsrAnyItem( SID_INPUTSTREAM, uno::makeAny( xStm ) ) );
-            FltError eErr = ScFormatFilter::Get().ScImportExcel( aMed, pInsDoc, EIF_AUTO );
-            if ( eErr == eERR_OK )
+            ErrCode eErr = ScFormatFilter::Get().ScImportExcel( aMed, pInsDoc, EIF_AUTO );
+            if ( eErr == ERRCODE_NONE )
             {
                 ScRange aSource;
                 const ScExtDocOptions* pExtOpt = pInsDoc->GetExtDocOptions();

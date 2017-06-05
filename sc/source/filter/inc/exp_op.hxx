@@ -46,7 +46,7 @@ public:
                             pD = pDoc;
                         }
 
-    virtual FltError    Write() = 0;
+    virtual ErrCode     Write() = 0;
 };
 
 class ExportBiff5 : public ExportTyp, protected XclExpRoot
@@ -61,7 +61,7 @@ protected:
 public:
                         ExportBiff5( XclExpRootData& rExpData, SvStream& rStrm );
     virtual             ~ExportBiff5() override;
-    FltError            Write() override;
+    ErrCode             Write() override;
 };
 
 class ExportBiff8 : public ExportBiff5

@@ -36,7 +36,7 @@
 #include "fprogressbar.hxx"
 #include "lotfilter.hxx"
 
-static FltError
+static ErrCode
 generate_Opcodes(LotusContext &rContext, SvStream& aStream,
                   ScfStreamProgressBar& aPrgrsBar)
 {
@@ -54,9 +54,9 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
             pOps = LotusContext::pOpFkt123;
             nOps = FKT_LIMIT123;
         break;
-        case eWK3:      return eERR_NI;
-        case eWK_Error: return eERR_FORMAT;
-        default:        return eERR_UNKN_WK;
+        case eWK3:      return SCERR_IMPORT_NI;
+        case eWK_Error: return SCERR_IMPORT_FORMAT;
+        default:        return SCERR_IMPORT_UNKNOWN_WK;
      }
 
     // #i76299# seems that SvStream::IsEof() does not work correctly
@@ -72,7 +72,7 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
         if( nOpcode == LOTUS_EOF )
             rContext.bEOF = true;
         else if( nOpcode == LOTUS_FILEPASSWD )
-            return eERR_FILEPASSWD;
+            return SCERR_IMPORT_FILEPASSWD;
         else if( nOpcode < nOps )
             pOps[ nOpcode ] (rContext, aStream, nLength);
         else if (rContext.eTyp == eWK123 && nOpcode == LOTUS_PATTERN)
@@ -103,7 +103,7 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
 
     rContext.pDoc->CalcAfterLoad();
 
-    return eERR_OK;
+    return ERRCODE_NONE;
 }
 
 WKTYP ScanVersion(SvStream& aStream)
@@ -161,7 +161,7 @@ WKTYP ScanVersion(SvStream& aStream)
     return eWK_UNKNOWN;
 }
 
-FltError ScImportLotus123old(LotusContext& rContext, SvStream& aStream, ScDocument* pDocument, rtl_TextEncoding eSrc )
+ErrCode ScImportLotus123old(LotusContext& rContext, SvStream& aStream, ScDocument* pDocument, rtl_TextEncoding eSrc )
 {
     aStream.Seek( 0UL );
 
@@ -172,7 +172,7 @@ FltError ScImportLotus123old(LotusContext& rContext, SvStream& aStream, ScDocume
 
     // allocate memory
     if( !MemNew(rContext) )
-        return eERR_NOMEM;
+        return SCERR_IMPORT_OUTOFMEM;
 
     // initialize page format (only Tab 0!)
     // initialize page format; meaning: get defaults from SC TODO:

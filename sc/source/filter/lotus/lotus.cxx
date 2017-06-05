@@ -28,7 +28,7 @@
 #include "filtopt.hxx"
 #include "ftools.hxx"
 
-FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, rtl_TextEncoding eSrc )
+ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, rtl_TextEncoding eSrc )
 {
     ScFilterOptions aFilterOpt;
     bool bWithWK3 = aFilterOpt.GetWK3Flag();
@@ -36,9 +36,9 @@ FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocum
     SvStream*           pStream = rMedium.GetInStream();
 
     if( !pStream )
-        return eERR_OPEN;
+        return SCERR_IMPORT_OPEN;
 
-    FltError            eRet;
+    ErrCode            eRet;
 
     pStream->Seek( 0UL );
 
@@ -67,7 +67,7 @@ FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocum
         return eRet;
     }
 
-    if( eRet != eERR_OK )
+    if( eRet != ERRCODE_NONE )
         return eRet;
 
     if (aContext.pLotusRoot->eFirstType == Lotus123Typ::WK3)
@@ -79,7 +79,7 @@ FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocum
         pStream = aMedium.GetInStream();
         if ( pStream )
         {
-            if( aLotusImport.Read( *pStream ) != eERR_OK )
+            if( aLotusImport.Read( *pStream ) != ERRCODE_NONE )
                 eRet = SCWARN_IMPORT_WRONG_FM3;
         }
         else
