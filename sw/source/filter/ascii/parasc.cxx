@@ -313,7 +313,7 @@ sal_uLong SwASCIIParser::ReadChars()
 
             // Read a new block
             sal_uLong lGCount;
-            if( SVSTREAM_OK != rInput.GetError() || 0 == (lGCount =
+            if( ERRCODE_NONE != rInput.GetError() || 0 == (lGCount =
                         rInput.ReadBytes( pArr + nArrOffset,
                                      ASC_BUFFLEN - nArrOffset )))
                 break;      // break from the while loop

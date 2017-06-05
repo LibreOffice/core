@@ -79,7 +79,7 @@ void SbiImage::Clear()
 
 bool SbiGood( SvStream& r )
 {
-    return !r.IsEof() && r.GetError() == SVSTREAM_OK;
+    return !r.IsEof() && r.GetError() == ERRCODE_NONE;
 }
 
 // Open Record
@@ -142,7 +142,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
 
         r.ReadUInt16( nSign ).ReadUInt32( nLen ).ReadUInt16( nCount );
         nNext += nLen + 8;
-        if( r.GetError() == SVSTREAM_OK )
+        if( r.GetError() == ERRCODE_NONE )
         {
             switch( static_cast<FileOffset>( nSign ) )
             {

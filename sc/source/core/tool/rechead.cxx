@@ -37,7 +37,7 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
     if (nID != SCID_SIZES)
     {
         OSL_FAIL("SCID_SIZES not found");
-        if ( rStream.GetError() == SVSTREAM_OK )
+        if ( rStream.GetError() == ERRCODE_NONE )
             rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
 
         //  everything to 0, so  BytesLeft() aborts at least
@@ -62,7 +62,7 @@ ScMultipleReadHeader::~ScMultipleReadHeader()
     if ( pMemStream && pMemStream->Tell() != pMemStream->GetEndOfData() )
     {
         OSL_FAIL( "Sizes not fully read" );
-        if ( rStream.GetError() == SVSTREAM_OK )
+        if ( rStream.GetError() == ERRCODE_NONE )
             rStream.SetError( SCWARN_IMPORT_INFOLOST );
     }
     delete pMemStream;
@@ -77,7 +77,7 @@ void ScMultipleReadHeader::EndEntry()
     OSL_ENSURE( nPos <= nEntryEnd, "read too much" );
     if ( nPos != nEntryEnd )
     {
-        if ( rStream.GetError() == SVSTREAM_OK )
+        if ( rStream.GetError() == ERRCODE_NONE )
             rStream.SetError( SCWARN_IMPORT_INFOLOST );
         rStream.Seek( nEntryEnd );          // ignore the rest
     }

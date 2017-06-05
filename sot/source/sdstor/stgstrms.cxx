@@ -1142,7 +1142,7 @@ bool StgTmpStrm::Copy( StgTmpStrm& rSrc )
     sal_uInt64 n = rSrc.GetSize();
     const sal_uInt64 nCur = rSrc.Tell();
     SetSize( n );
-    if( GetError() == SVSTREAM_OK )
+    if( GetError() == ERRCODE_NONE )
     {
         std::unique_ptr<sal_uInt8[]> p(new sal_uInt8[ 4096 ]);
         rSrc.Seek( 0L );
@@ -1232,7 +1232,7 @@ void StgTmpStrm::SetSize(sal_uInt64 n)
                         break; // error
                 }
                 s->Flush();
-                if( s->GetError() != SVSTREAM_OK )
+                if( s->GetError() != ERRCODE_NONE )
                     i = 1;
             }
             Seek( nCur );
@@ -1278,7 +1278,7 @@ std::size_t StgTmpStrm::PutData( const void* pData, std::size_t n )
     if( nNew > THRESHOLD && !m_pStrm )
     {
         SetSize( nNew );
-        if( GetError() != SVSTREAM_OK )
+        if( GetError() != ERRCODE_NONE )
             return 0;
     }
     if( m_pStrm )
@@ -1300,7 +1300,7 @@ sal_uInt64 StgTmpStrm::SeekPos(sal_uInt64 n)
     if( n && n > THRESHOLD && !m_pStrm )
     {
         SetSize( n );
-        if( GetError() != SVSTREAM_OK )
+        if( GetError() != ERRCODE_NONE )
             return Tell();
         else
             return n;

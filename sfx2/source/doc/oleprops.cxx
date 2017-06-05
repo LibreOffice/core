@@ -688,7 +688,7 @@ void SfxOleDictionaryProperty::ImplLoad( SvStream& rStrm )
     sal_Int32 nNameCount = GetPropType();
     // read property ID/name pairs
     maPropNameMap.clear();
-    for( sal_Int32 nIdx = 0; (nIdx < nNameCount) && (rStrm.GetErrorCode() == SVSTREAM_OK) && !rStrm.IsEof(); ++nIdx )
+    for( sal_Int32 nIdx = 0; (nIdx < nNameCount) && (rStrm.GetErrorCode() == ERRCODE_NONE) && !rStrm.IsEof(); ++nIdx )
     {
         sal_Int32 nPropId(0);
         rStrm.ReadInt32( nPropId );
@@ -953,7 +953,7 @@ void SfxOleSection::ImplLoad( SvStream& rStrm )
     // read property ID/position pairs
     typedef ::std::map< sal_Int32, sal_uInt32 > SfxOlePropPosMap;
     SfxOlePropPosMap aPropPosMap;
-    for( sal_Int32 nPropIdx = 0; (nPropIdx < nPropCount) && (rStrm.GetErrorCode() == SVSTREAM_OK) && !rStrm.IsEof(); ++nPropIdx )
+    for( sal_Int32 nPropIdx = 0; (nPropIdx < nPropCount) && (rStrm.GetErrorCode() == ERRCODE_NONE) && !rStrm.IsEof(); ++nPropIdx )
     {
         sal_Int32 nPropId(0);
         sal_uInt32 nPropPos(0);
@@ -1034,7 +1034,7 @@ void SfxOleSection::ImplSave( SvStream& rStrm )
 bool SfxOleSection::SeekToPropertyPos( SvStream& rStrm, sal_uInt32 nPropPos ) const
 {
     rStrm.Seek( static_cast< std::size_t >( mnStartPos + nPropPos ) );
-    return rStrm.GetErrorCode() == SVSTREAM_OK;
+    return rStrm.GetErrorCode() == ERRCODE_NONE;
 }
 
 void SfxOleSection::LoadProperty( SvStream& rStrm, sal_Int32 nPropId )
@@ -1099,7 +1099,7 @@ ErrCode SfxOlePropertySet::LoadPropertySet( SotStorage* pStrg, const OUString& r
     if( pStrg )
     {
         tools::SvRef<SotStorageStream> xStrm = pStrg->OpenSotStream( rStrmName, StreamMode::STD_READ );
-        if( xStrm.is() && (xStrm->GetError() == SVSTREAM_OK) )
+        if( xStrm.is() && (xStrm->GetError() == ERRCODE_NONE) )
         {
             xStrm->SetBufferSize( STREAM_BUFFER_SIZE );
             Load( *xStrm );

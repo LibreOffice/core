@@ -1054,7 +1054,7 @@ bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
         pStream->ReadUInt32( nVal );
         sal_uInt8 cRecTyp = (sal_uInt8)nVal;
         if( !nVal || cRecTyp != cType ||
-            pStream->GetErrorCode() != SVSTREAM_OK || pStream->IsEof() )
+            pStream->GetErrorCode() != ERRCODE_NONE || pStream->IsEof() )
         {
             OSL_ENSURE( nVal, "OpenRec: Record-Header is 0" );
             OSL_ENSURE( cRecTyp == cType, "OpenRec: Wrong Record Type" );
@@ -1087,7 +1087,7 @@ bool SwLayCacheIoImpl::CloseRec()
             sal_uInt32 nVal = ( nSize << 8 ) | aRecords.back().type;
             pStream->WriteUInt32( nVal );
             pStream->Seek( nPos );
-            if( pStream->GetError() != SVSTREAM_OK )
+            if( pStream->GetError() != ERRCODE_NONE )
                  bRes = false;
         }
         else
@@ -1100,7 +1100,7 @@ bool SwLayCacheIoImpl::CloseRec()
                 if( n < nPos )
                      bRes = false;
             }
-            if( pStream->GetErrorCode() != SVSTREAM_OK )
+            if( pStream->GetErrorCode() != ERRCODE_NONE )
                 bRes = false;
         }
         aRecords.pop_back();
@@ -1133,7 +1133,7 @@ sal_uInt8 SwLayCacheIoImpl::Peek()
         sal_uInt32 nPos = pStream->Tell();
         pStream->ReadUChar( c );
         pStream->Seek( nPos );
-        if( pStream->GetErrorCode() != SVSTREAM_OK )
+        if( pStream->GetErrorCode() != ERRCODE_NONE )
         {
             c = 0;
             bError = true;

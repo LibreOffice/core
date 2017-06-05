@@ -105,7 +105,7 @@ bool StgCompObjStream::Load()
     memset( &m_aClsId, 0, sizeof( ClsId ) );
     m_nCbFormat = SotClipboardFormatId::NONE;
     m_aUserName.clear();
-    if( GetError() != SVSTREAM_OK )
+    if( GetError() != ERRCODE_NONE )
         return false;
     Seek( 8L );     // skip the first part
     sal_Int32 nMarker = 0;
@@ -137,12 +137,12 @@ bool StgCompObjStream::Load()
                 SetError( SVSTREAM_GENERALERROR );
         }
     }
-    return GetError() == SVSTREAM_OK;
+    return GetError() == ERRCODE_NONE;
 }
 
 bool StgCompObjStream::Store()
 {
-    if( GetError() != SVSTREAM_OK )
+    if( GetError() != ERRCODE_NONE )
         return false;
     Seek( 0L );
     OString aAsciiUserName(OUStringToOString(m_aUserName, RTL_TEXTENCODING_MS_1252));
@@ -157,7 +157,7 @@ bool StgCompObjStream::Store()
     WriteClipboardFormat( *this, m_nCbFormat );
     WriteInt32( 0 );             // terminator
     Commit();
-    return GetError() == SVSTREAM_OK;
+    return GetError() == ERRCODE_NONE;
 }
 
 /////////////////////////// class StgOleStream
@@ -169,7 +169,7 @@ StgOleStream::StgOleStream( BaseStorage& rStg )
 
 bool StgOleStream::Store()
 {
-    if( GetError() != SVSTREAM_OK )
+    if( GetError() != ERRCODE_NONE )
         return false;
 
     Seek( 0L );
@@ -179,7 +179,7 @@ bool StgOleStream::Store()
     WriteInt32( 0 );                  // reserved
     WriteInt32( 0 );                 // Moniker 1
     Commit();
-    return GetError() == SVSTREAM_OK;
+    return GetError() == ERRCODE_NONE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -3719,7 +3719,7 @@ void WW8Export::RestoreMacroCmds()
                 xSrcRoot->openStreamElement( SL::aMSMacroCmds, embed::ElementModes::READ );
         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xSrcStream );
 
-        if ( pStream && SVSTREAM_OK == pStream->GetError())
+        if ( pStream && ERRCODE_NONE == pStream->GetError())
         {
             pStream->Seek(STREAM_SEEK_TO_END);
             pFib->m_lcbCmds = pStream->Tell();

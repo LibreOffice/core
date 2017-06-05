@@ -322,7 +322,7 @@ bool StgDirEntry::SetSize( sal_Int32 nNewSize )
     {
         m_pTmpStrm->SetSize( nNewSize );
         m_pStgStrm->GetIo().SetError( m_pTmpStrm->GetError() );
-        return m_pTmpStrm->GetError() == SVSTREAM_OK;
+        return m_pTmpStrm->GetError() == ERRCODE_NONE;
     }
     else
     {
@@ -561,7 +561,7 @@ bool StgDirEntry::Strm2Tmp()
         {
             // It was already committed once
             m_pTmpStrm = new StgTmpStrm;
-            if( m_pTmpStrm->GetError() == SVSTREAM_OK && m_pTmpStrm->Copy( *m_pCurStrm ) )
+            if( m_pTmpStrm->GetError() == ERRCODE_NONE && m_pTmpStrm->Copy( *m_pCurStrm ) )
                 return true;
             n = 1;  // indicates error
         }
@@ -569,7 +569,7 @@ bool StgDirEntry::Strm2Tmp()
         {
             n = m_aEntry.GetSize();
             m_pTmpStrm = new StgTmpStrm( n );
-            if( m_pTmpStrm->GetError() == SVSTREAM_OK )
+            if( m_pTmpStrm->GetError() == ERRCODE_NONE )
             {
                 if( n )
                 {

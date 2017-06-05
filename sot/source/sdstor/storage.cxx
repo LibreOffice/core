@@ -229,11 +229,11 @@ bool SotStorageStream::Commit()
     if( pOwnStm )
     {
         pOwnStm->Flush();
-        if( pOwnStm->GetError() == SVSTREAM_OK )
+        if( pOwnStm->GetError() == ERRCODE_NONE )
             pOwnStm->Commit();
         SetError( pOwnStm->GetError() );
     }
-    return GetError() == SVSTREAM_OK;
+    return GetError() == ERRCODE_NONE;
 }
 
 bool SotStorageStream::SetProperty( const OUString& rName, const css::uno::Any& rValue )
@@ -274,7 +274,7 @@ bool SotStorageStream::SetProperty( const OUString& rName, const css::uno::Any& 
 #define INIT_SotStorage()                     \
     : m_pOwnStg( nullptr )                       \
     , m_pStorStm( nullptr )                      \
-    , m_nError( SVSTREAM_OK )                 \
+    , m_nError( ERRCODE_NONE )                 \
     , m_bIsRoot( false )                      \
     , m_bDelStm( false )                      \
     , m_nVersion( SOFFICE_FILEFORMAT_CURRENT )
@@ -580,7 +580,7 @@ bool SotStorage::CopyTo( SotStorage * pDestStg )
     else
         SetError( SVSTREAM_GENERALERROR );
 
-    return SVSTREAM_OK == GetError();
+    return ERRCODE_NONE == GetError();
 }
 
 bool SotStorage::Commit()
@@ -593,7 +593,7 @@ bool SotStorage::Commit()
     else
         SetError( SVSTREAM_GENERALERROR );
 
-    return SVSTREAM_OK == GetError();
+    return ERRCODE_NONE == GetError();
 }
 
 SotStorageStream * SotStorage::OpenSotStream( const OUString & rEleName,
@@ -681,7 +681,7 @@ bool SotStorage::Remove( const OUString & rEleName )
     else
         SetError( SVSTREAM_GENERALERROR );
 
-    return SVSTREAM_OK == GetError();
+    return ERRCODE_NONE == GetError();
 }
 
 bool SotStorage::CopyTo( const OUString & rEleName,
@@ -696,7 +696,7 @@ bool SotStorage::CopyTo( const OUString & rEleName,
     else
         SetError( SVSTREAM_GENERALERROR );
 
-    return SVSTREAM_OK == GetError();
+    return ERRCODE_NONE == GetError();
 }
 
 bool SotStorage::Validate()

@@ -370,12 +370,12 @@ SvStream::~SvStream()
 void SvStream::ClearError()
 {
     m_isEof = false;
-    m_nError = SVSTREAM_OK;
+    m_nError = ERRCODE_NONE;
 }
 
 void SvStream::SetError( sal_uInt32 nErrorCode )
 {
-    if (m_nError == SVSTREAM_OK)
+    if (m_nError == ERRCODE_NONE)
         m_nError = nErrorCode;
 }
 
@@ -691,13 +691,13 @@ bool SvStream::WriteUnicodeOrByteText( const OUString& rStr, rtl_TextEncoding eD
     if ( eDestCharSet == RTL_TEXTENCODING_UNICODE )
     {
         write_uInt16s_FromOUString(*this, rStr, rStr.getLength());
-        return m_nError == SVSTREAM_OK;
+        return m_nError == ERRCODE_NONE;
     }
     else
     {
         OString aStr(OUStringToOString(rStr, eDestCharSet));
         write_uInt8s_FromOString(*this, aStr, aStr.getLength());
-        return m_nError == SVSTREAM_OK;
+        return m_nError == ERRCODE_NONE;
     }
 }
 
@@ -710,7 +710,7 @@ bool SvStream::WriteLine(const OString& rStr)
 {
     WriteBytes(rStr.getStr(), rStr.getLength());
     endl(*this);
-    return m_nError == SVSTREAM_OK;
+    return m_nError == ERRCODE_NONE;
 }
 
 bool SvStream::WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCharSet )
@@ -722,7 +722,7 @@ bool SvStream::WriteUniOrByteChar( sal_Unicode ch, rtl_TextEncoding eDestCharSet
         OString aStr(&ch, 1, eDestCharSet);
         WriteBytes(aStr.getStr(), aStr.getLength());
     }
-    return m_nError == SVSTREAM_OK;
+    return m_nError == ERRCODE_NONE;
 }
 
 void SvStream::StartWritingUnicodeText()

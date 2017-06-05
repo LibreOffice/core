@@ -37,7 +37,7 @@ bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, bool bImme
     {
         SvFileStream aOutStm1( rFile1, StreamMode::STD_READ );
         SvFileStream aOutStm2( rFile2, StreamMode::STD_READ );
-        if( aOutStm1.GetError() == SVSTREAM_OK )
+        if( aOutStm1.GetError() == ERRCODE_NONE )
         {
             std::unique_ptr<sal_uInt8[]> pBuf1(new sal_uInt8[ BR ]);
             std::unique_ptr<sal_uInt8[]> pBuf2(new sal_uInt8[ BR ]);
@@ -144,7 +144,7 @@ int main ( int argc, char ** argv)
             aTmpDepFile = tempFileHelper(aCommand.m_DepFile);
             SvFileStream aOutStm( aTmpDepFile, StreamMode::READWRITE | StreamMode::TRUNC );
             pDataBase->WriteDepFile(aOutStm, aCommand.aTargetFile);
-            if( aOutStm.GetError() != SVSTREAM_OK )
+            if( aOutStm.GetError() != ERRCODE_NONE )
             {
                 nExit = -1;
                 fprintf( stderr, "cannot write dependency file: %s\n",

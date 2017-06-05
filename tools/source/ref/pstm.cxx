@@ -441,7 +441,7 @@ void SvPersistStream::ReadObj
         OSL_FAIL( "false version" );
     }
 
-    if( !(nHdr & P_ID_0) && GetError() == SVSTREAM_OK )
+    if( !(nHdr & P_ID_0) && GetError() == ERRCODE_NONE )
     {
         if( P_OBJ & nHdr )
         { // read object, nId only set for P_DBGUTIL

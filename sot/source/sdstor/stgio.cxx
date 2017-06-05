@@ -132,9 +132,9 @@ bool StgIo::CommitAll()
                 const ErrCode n = m_pStrm->GetError();
                 SetError( n );
 #ifdef DBG_UTIL
-                if( n==SVSTREAM_OK ) ValidateFATs();
+                if( n==ERRCODE_NONE ) ValidateFATs();
 #endif
-                return n == SVSTREAM_OK;
+                return n == ERRCODE_NONE;
             }
         }
     }

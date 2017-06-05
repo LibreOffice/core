@@ -222,10 +222,7 @@ inline sal_uInt32 ERRCODE_TOERROR( ErrCode x )
 #define ERRCODE_IO_NOTSTORABLEINBINARYFORMAT      CAST_TO_UINT32(39UL |ERRCODE_CLASS_FORMAT|\
                                          ERRCODE_AREA_IO)
 
-// FsysErrorCodes
-
 // StreamErrorCodes
-#define SVSTREAM_OK                     ERRCODE_NONE
 
 #define SVSTREAM_GENERALERROR           ERRCODE_IO_GENERAL
 #define SVSTREAM_FILE_NOT_FOUND         ERRCODE_IO_NOTEXISTS

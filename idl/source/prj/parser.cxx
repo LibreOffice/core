@@ -141,7 +141,7 @@ void SvIdlParser::ReadInclude( SvMetaModule& rModule )
     osl::FileBase::getSystemPathFromFileURL( aFullName, aFullName );
     rBase.AddDepFile( aFullName );
     SvTokenStream aTokStm( aFullName );
-    if( SVSTREAM_OK != aTokStm.GetStream().GetError() )
+    if( ERRCODE_NONE != aTokStm.GetStream().GetError() )
     {
         OStringBuffer aStr("cannot open file: ");
         aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));

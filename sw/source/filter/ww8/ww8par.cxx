@@ -4871,7 +4871,7 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
         tools::SvRef<SotStorageStream> xTableStream =
                 rRoot->OpenSotStream(aWwFib.m_fWhichTableStm ? SL::a1Table : SL::a0Table, StreamMode::STD_READ);
 
-        if (xTableStream.is() && SVSTREAM_OK == xTableStream->GetError())
+        if (xTableStream.is() && ERRCODE_NONE == xTableStream->GetError())
         {
             xTableStream->SetEndian(SvStreamEndian::LITTLE);
             WW8Customizations aGblCustomisations( xTableStream.get(), aWwFib );
@@ -5421,7 +5421,7 @@ sal_uLong SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableS
 
             rDataStream = m_pStg->OpenSotStream(SL::aData, StreamMode::STD_READ);
 
-            if (rDataStream.is() && SVSTREAM_OK == rDataStream->GetError())
+            if (rDataStream.is() && ERRCODE_NONE == rDataStream->GetError())
             {
                 m_pDataStream = rDataStream.get();
                 m_pDataStream->SetEndian(SvStreamEndian::LITTLE);
@@ -6240,7 +6240,7 @@ sal_uLong WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_u
 
     if( rRef.is() )
     {
-        if( SVSTREAM_OK == rRef->GetError() )
+        if( ERRCODE_NONE == rRef->GetError() )
         {
             sal_uInt16 nOld = rRef->GetBufferSize();
             rRef->SetBufferSize( rBuffSize );

@@ -202,7 +202,7 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
             nColumn += c == '\t' ? nTabSize : 1;
         }
     }
-    while( 0 == c && !IsEof() && ( SVSTREAM_OK == pInStream->GetError() ) );
+    while( 0 == c && !IsEof() && ( ERRCODE_NONE == pInStream->GetError() ) );
 
     sal_uLong nLastLine     = nLine;
     sal_uLong nLastColumn   = nColumn;
@@ -239,8 +239,8 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
                 }
                 c = GetFastNextChar();
             }
-            while( '/' != c && !IsEof() && ( SVSTREAM_OK == pInStream->GetError() ) );
-            if( IsEof() || ( SVSTREAM_OK != pInStream->GetError() ) )
+            while( '/' != c && !IsEof() && ( ERRCODE_NONE == pInStream->GetError() ) );
+            if( IsEof() || ( ERRCODE_NONE != pInStream->GetError() ) )
                 return false;
             c = GetNextChar();
             rToken.nType = SVTOKENTYPE::Comment;
@@ -275,7 +275,7 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
             else
                 aStr.append(c);
         }
-        if( IsEof() || ( SVSTREAM_OK != pInStream->GetError() ) )
+        if( IsEof() || ( ERRCODE_NONE != pInStream->GetError() ) )
             return false;
         rToken.nType   = SVTOKENTYPE::String;
         rToken.aString = aStr.makeStringAndClear();
@@ -330,7 +330,7 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
     }
     rToken.SetLine( nLastLine );
     rToken.SetColumn( nLastColumn );
-    return pInStream->GetError() == SVSTREAM_OK;
+    return pInStream->GetError() == ERRCODE_NONE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -86,7 +86,7 @@ static sal_Int32 lcl_GetPageCount( sal_uLong nFileSize, short nPageSize )
 }
 
 StgCache::StgCache()
-   : m_nError( SVSTREAM_OK )
+   : m_nError( ERRCODE_NONE )
    , m_nPages( 0 )
    , m_nRef( 0 )
    , m_nReplaceIdx( 0 )
@@ -401,13 +401,13 @@ void StgCache::SetError( ErrCode n )
 
 void StgCache::ResetError()
 {
-    m_nError = SVSTREAM_OK;
+    m_nError = ERRCODE_NONE;
     m_pStrm->ResetError();
 }
 
 void StgCache::MoveError( StorageBase& r )
 {
-    if( m_nError != SVSTREAM_OK )
+    if( m_nError != ERRCODE_NONE )
     {
         r.SetError( m_nError );
         ResetError();

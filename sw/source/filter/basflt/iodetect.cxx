@@ -112,7 +112,7 @@ bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
     if (rFilter.GetUserData() == FILTER_WW8 || rFilter.GetUserData() == sWW6)
         nStgFormatId = SotClipboardFormatId::NONE;
 
-    bool bRet = SVSTREAM_OK == rStg.GetError() &&
+    bool bRet = ERRCODE_NONE == rStg.GetError() &&
         ( nStgFormatId == SotClipboardFormatId::NONE || rFilter.GetFormat() == nStgFormatId ) &&
         ( rStg.IsContained( SwIoSystem::GetSubStorageName( rFilter )) );
     if( bRet )
@@ -203,7 +203,7 @@ std::shared_ptr<const SfxFilter> SwIoSystem::GetFileFilter(const OUString& rFile
             {
             }
 
-            if( xStg.is() && ( xStg->GetError() == SVSTREAM_OK ) )
+            if( xStg.is() && ( xStg->GetError() == ERRCODE_NONE ) )
             {
                 while ( pFilter )
                 {

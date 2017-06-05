@@ -247,7 +247,7 @@ bool SbxBase::Store( SvStream& rStrm )
         rStrm.Seek( nOldPos );
         rStrm.WriteUInt32( nNewPos - nOldPos );
         rStrm.Seek( nNewPos );
-        if( rStrm.GetError() != SVSTREAM_OK )
+        if( rStrm.GetError() != ERRCODE_NONE )
             bRes = false;
         if( bRes )
             bRes = true;

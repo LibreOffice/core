@@ -458,7 +458,7 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
                 rStrm.WriteUInt16( 0 );
             else
                 rStrm.WriteChar( 0 );
-            return rStrm.GetError() == SVSTREAM_OK;
+            return rStrm.GetError() == ERRCODE_NONE;
         }
     }
     if( nFmt == SotClipboardFormatId::HTML )
@@ -1691,14 +1691,14 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                     lcl_WriteSimpleString( rStrm, OUString(cSep) );
             }
             WriteUnicodeOrByteEndl( rStrm );
-            if( rStrm.GetError() != SVSTREAM_OK )
+            if( rStrm.GetError() != ERRCODE_NONE )
                 break;
             if( nSizeLimit && rStrm.Tell() > nSizeLimit )
                 break;
         }
     }
 
-    return rStrm.GetError() == SVSTREAM_OK;
+    return rStrm.GetError() == ERRCODE_NONE;
 }
 
 bool ScImportExport::Sylk2Doc( SvStream& rStrm )
@@ -2094,7 +2094,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
     }
     lcl_WriteSimpleString( rStrm, OUString( 'E' ) );
     WriteUnicodeOrByteEndl( rStrm );
-    return rStrm.GetError() == SVSTREAM_OK;
+    return rStrm.GetError() == ERRCODE_NONE;
 }
 
 bool ScImportExport::Doc2HTML( SvStream& rStrm, const OUString& rBaseURL )
@@ -2102,14 +2102,14 @@ bool ScImportExport::Doc2HTML( SvStream& rStrm, const OUString& rBaseURL )
     // rtl_TextEncoding is ignored in ScExportHTML, read from Load/Save HTML options
     ScFormatFilter::Get().ScExportHTML( rStrm, rBaseURL, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW, bAll,
         aStreamPath, aNonConvertibleChars, maFilterOptions );
-    return rStrm.GetError() == SVSTREAM_OK;
+    return rStrm.GetError() == ERRCODE_NONE;
 }
 
 bool ScImportExport::Doc2RTF( SvStream& rStrm )
 {
     //  rtl_TextEncoding is ignored in ScExportRTF
     ScFormatFilter::Get().ScExportRTF( rStrm, pDoc, aRange, RTL_TEXTENCODING_DONTKNOW );
-    return rStrm.GetError() == SVSTREAM_OK;
+    return rStrm.GetError() == ERRCODE_NONE;
 }
 
 bool ScImportExport::Doc2Dif( SvStream& rStrm )
