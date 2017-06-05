@@ -26,6 +26,7 @@ $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	check_table \
 	get_expression \
 	set_expression \
+	text_portion_enumeration_test \
 	var_fields \
 ))
 
