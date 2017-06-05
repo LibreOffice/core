@@ -876,7 +876,7 @@ UUIInteractionHelper::getInteractionHandlerList(
                     "com.sun.star.configuration.ConfigurationAccess" , aArguments ) );
 
         if ( !xInterface.is() )
-            throw uno::RuntimeException("unable to instanciate config access");
+            throw uno::RuntimeException("unable to instantiate config access");
 
         uno::Reference< container::XNameAccess > xNameAccess(
             xInterface, uno::UNO_QUERY_THROW );

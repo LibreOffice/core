@@ -134,7 +134,7 @@ public class CustomShowDemo
             Object          xObj;
             XIndexContainer xContainer;
 
-            /* instanciate an IndexContainer that will take
+            /* instantiate an IndexContainer that will take
                a list of draw pages for the first custom show */
             xObj = xFactory.createInstance();
             xContainer = UnoRuntime.queryInterface( XIndexContainer.class, xObj );
@@ -142,7 +142,7 @@ public class CustomShowDemo
                 xContainer.insertByIndex( xContainer.getCount(), xDrawPages.getByIndex( i ) );
             xNameContainer.insertByName( "ShortVersion", xContainer );
 
-            /* instanciate an IndexContainer that will take
+            /* instantiate an IndexContainer that will take
                a list of draw page for the second custom show */
             xObj = xFactory.createInstance();
             xContainer = UnoRuntime.queryInterface( XIndexContainer.class, xObj );

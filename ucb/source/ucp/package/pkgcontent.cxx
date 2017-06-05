@@ -1832,7 +1832,7 @@ void Content::transfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            "Cannot instanciate source object!",
+            "Cannot instantiate source object!",
             this );
         // Unreachable
     }

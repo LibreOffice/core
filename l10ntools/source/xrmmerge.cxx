@@ -79,7 +79,7 @@ extern bool GetOutputFile( int argc, char* argv[])
 
 int InitXrmExport( const char* pFilename)
 {
-    // instanciate Export
+    // instantiate Export
     OString sFilename( pFilename );
 
     if ( bMergeMode )

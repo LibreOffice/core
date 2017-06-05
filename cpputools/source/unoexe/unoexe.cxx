@@ -427,7 +427,7 @@ SAL_IMPLEMENT_MAIN()
 
         xContext = defaultBootstrap_InitialComponentContext();
 
-        // accept, instanciate, etc.
+        // accept, instantiate, etc.
 
         if (!aUnoUrl.isEmpty()) // accepting connections
         {

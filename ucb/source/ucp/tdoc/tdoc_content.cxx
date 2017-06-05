@@ -2109,7 +2109,7 @@ void Content::transfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            "Cannot instanciate target object!",
+            "Cannot instantiate target object!",
             this );
         // Unreachable
     }
@@ -2151,7 +2151,7 @@ void Content::transfer(
                 ucb::IOErrorCode_CANT_READ,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
-                "Cannot instanciate target object!",
+                "Cannot instantiate target object!",
                 this );
             // Unreachable
         }

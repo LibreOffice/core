@@ -68,7 +68,7 @@ constants VBAScriptEventId
     const long SCRIPT_STOPPED = 1;
 
     /** This event is fired when a VBA script in the current document tries to
-        instanciate a userform.
+        instantiate a userform.
 
         <p>The member VBAScriptEvent::ModuleName of the event
         object will contain the name of the userform module.</p>

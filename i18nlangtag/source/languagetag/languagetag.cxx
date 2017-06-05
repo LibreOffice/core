@@ -1331,7 +1331,7 @@ void LanguageTagImpl::convertLocaleToBcp47()
     {
         // Do not call LanguageTag::convertToBcp47(Locale) that for an empty
         // locale via LanguageTag::convertToBcp47(LanguageType) and
-        // LanguageTag::convertToLocale(LanguageType) would instanciate another
+        // LanguageTag::convertToLocale(LanguageType) would instantiate another
         // LanguageTag.
         maLocale = MsLangId::Conversion::convertLanguageToLocale( LANGUAGE_SYSTEM, true);
     }

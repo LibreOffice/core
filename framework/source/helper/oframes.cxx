@@ -43,7 +43,7 @@ OFrames::OFrames( const   css::uno::Reference< XFrame >&              xOwner    
         ,   m_bRecursiveSearchProtection( false                     )
 {
     // An instance of this class can only work with valid initialization.
-    // We share the mutex with our owner class, need a valid factory to instanciate new services and
+    // We share the mutex with our owner class, need a valid factory to instantiate new services and
     // use the access to our owner for some operations.
     SAL_WARN_IF( !xOwner.is() || !pFrameContainer, "fwk", "OFrames::OFrames(): Invalid parameter detected!" );
 }

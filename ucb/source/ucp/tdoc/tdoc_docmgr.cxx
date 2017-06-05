@@ -632,7 +632,7 @@ bool OfficeDocumentsManager::isBasicIDE(
             }
 
             OSL_ENSURE( m_xModuleMgr .is(),
-                        "Could not instanciate ModuleManager service!" );
+                        "Could not instantiate ModuleManager service!" );
         }
     }
 

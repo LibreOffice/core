@@ -41,7 +41,7 @@ namespace ucbhelper {
  */
 struct ContentProviderData
 {
-    /** The UNO service name to use to instanciate the content provider.
+    /** The UNO service name to use to instantiate the content provider.
 
         If it is the empty string, a null provider will be used (see the
         documentation of the Provider argument to
@@ -49,11 +49,11 @@ struct ContentProviderData
      */
     OUString ServiceName;
 
-    /** The URL template to use to instanciate the content provider.
+    /** The URL template to use to instantiate the content provider.
      */
     OUString URLTemplate;
 
-    /** The arguments to use to instanciate the content provider.
+    /** The arguments to use to instantiate the content provider.
      */
     OUString Arguments;
 };

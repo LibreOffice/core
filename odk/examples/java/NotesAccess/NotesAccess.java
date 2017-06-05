@@ -141,7 +141,7 @@ public class NotesAccess implements Runnable {
 
             /* A desktop environment contains tasks with one or more
                frames in which components can be loaded. Desktop is the
-               environment for components which can instanciate within
+               environment for components which can instantiate within
                frames. */
             XComponentLoader xLoader = UnoRuntime.queryInterface(XComponentLoader.class,
                 xMCF.createInstanceWithContext(

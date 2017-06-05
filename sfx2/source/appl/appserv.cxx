@@ -194,7 +194,7 @@ namespace
     void lcl_tryLoadBibliography()
     {
         // lp#527938, debian#602953, fdo#33266, i#105408
-        // make sure we actually can instanciate services from base first
+        // make sure we actually can instantiate services from base first
         if(!lcl_isBaseAvailable())
         {
             try

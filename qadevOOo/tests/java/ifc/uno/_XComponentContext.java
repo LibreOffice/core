@@ -41,7 +41,7 @@ public class _XComponentContext extends MultiMethodTest {
             try {
                 if (names[i].equals("com.sun.star.i18n.ConversionDictionary_ko")) continue;
                 if (names[i].equals("com.sun.star.i18n.TextConversion_ko")) continue;
-                log.println("try to instanciate found servicename " +
+                log.println("try to instantiate found servicename " +
                             names[i]);
                 directly.createInstanceWithContext(names[i], oObj);
                 log.println("worked .... ok");

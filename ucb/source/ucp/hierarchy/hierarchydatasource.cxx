@@ -465,14 +465,14 @@ HierarchyDataSource::createInstanceWithArguments(
     catch ( uno::Exception const & )
     {
         OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
-                    "Cannot instanciate configuration access!" );
+                    "Cannot instantiate configuration access!" );
         throw;
     }
 
     if ( !xConfigAccess.is() )
     {
         OSL_FAIL( "HierarchyDataSource::createInstanceWithArguments - "
-                    "Cannot instanciate configuration access!" );
+                    "Cannot instantiate configuration access!" );
         return xConfigAccess;
     }
 
