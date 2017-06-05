@@ -48,7 +48,7 @@ static std::size_t GetSvError( DWORD nWntError )
 {
     static struct { DWORD wnt; std::size_t sv; } errArr[] =
     {
-        { ERROR_SUCCESS,                SVSTREAM_OK },
+        { ERROR_SUCCESS,                ERRCODE_NONE },
         { ERROR_ACCESS_DENIED,          SVSTREAM_ACCESS_DENIED },
         { ERROR_ACCOUNT_DISABLED,       SVSTREAM_ACCESS_DENIED },
         { ERROR_ACCOUNT_EXPIRED,        SVSTREAM_ACCESS_DENIED },

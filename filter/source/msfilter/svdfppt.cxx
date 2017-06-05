@@ -1299,7 +1299,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
 SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const OUString& rBaseURL ) :
     SdrEscherImport     ( rParam, rBaseURL ),
-    bOk                 ( rStCtrl.GetErrorCode() == SVSTREAM_OK ),
+    bOk                 ( rStCtrl.GetErrorCode() == ERRCODE_NONE ),
     pPersistPtr         ( nullptr ),
     nPersistPtrAnz      ( 0 ),
     pDefaultSheet       ( nullptr ),
@@ -2024,7 +2024,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                 // is this a visual basic storage ?
                                 tools::SvRef<SotStorage> xSubStorage = xSource->OpenSotStorage( "VBA",
                                     StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL );
-                                if( xSubStorage.is() && ( SVSTREAM_OK == xSubStorage->GetError() ) )
+                                if( xSubStorage.is() && ( ERRCODE_NONE == xSubStorage->GetError() ) )
                                 {
                                     tools::SvRef<SotStorage> xMacros = xDest->OpenSotStorage( "MACROS" );
                                     if ( xMacros.is() )
@@ -2046,13 +2046,13 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                             if ( xDoc.is() )
                                             {
                                                 tools::SvRef<SotStorage> xVBA = SotStorage::OpenOLEStorage( xDoc, SvxImportMSVBasic::GetMSBasicStorageName() );
-                                                if ( xVBA.is() && ( xVBA->GetError() == SVSTREAM_OK ) )
+                                                if ( xVBA.is() && ( xVBA->GetError() == ERRCODE_NONE ) )
                                                 {
                                                     tools::SvRef<SotStorage> xSubVBA = xVBA->OpenSotStorage( "_MS_VBA_Overhead" );
-                                                    if ( xSubVBA.is() && ( xSubVBA->GetError() == SVSTREAM_OK ) )
+                                                    if ( xSubVBA.is() && ( xSubVBA->GetError() == ERRCODE_NONE ) )
                                                     {
                                                         tools::SvRef<SotStorageStream> xOriginal = xSubVBA->OpenSotStream( "_MS_VBA_Overhead2" );
-                                                        if ( xOriginal.is() && ( xOriginal->GetError() == SVSTREAM_OK ) )
+                                                        if ( xOriginal.is() && ( xOriginal->GetError() == ERRCODE_NONE ) )
                                                         {
                                                             if ( nPersistPtr && ( nPersistPtr < nPersistPtrAnz ) )
                                                             {

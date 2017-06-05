@@ -727,7 +727,7 @@ bool SbxDimArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
     short nDimension;
     rStrm.ReadInt16( nDimension );
-    for( short i = 0; i < nDimension && rStrm.GetError() == SVSTREAM_OK; i++ )
+    for( short i = 0; i < nDimension && rStrm.GetError() == ERRCODE_NONE; i++ )
     {
         sal_Int16 lb(0), ub(0);
         rStrm.ReadInt16( lb ).ReadInt16( ub );

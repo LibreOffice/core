@@ -146,7 +146,7 @@ bool SvIdlDataBase::ReadIdFile( const OString& rOFileName )
     aIdFileList.push_back( rFileName );
     this->AddDepFile( aFullName );
     SvTokenStream aTokStm( aFullName );
-    if( aTokStm.GetStream().GetError() == SVSTREAM_OK )
+    if( aTokStm.GetStream().GetError() == ERRCODE_NONE )
     {
         SvToken& rTok = aTokStm.GetToken_Next();
 
@@ -447,7 +447,7 @@ SvIdlWorkingBase::SvIdlWorkingBase(const SvCommand& rCmd) : SvIdlDataBase(rCmd)
 
 bool SvIdlWorkingBase::WriteSfx( SvStream & rOutStm )
 {
-    if( rOutStm.GetError() != SVSTREAM_OK )
+    if( rOutStm.GetError() != ERRCODE_NONE )
         return false;
 
     // reset all tmp variables for writing

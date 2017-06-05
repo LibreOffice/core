@@ -144,7 +144,7 @@ void SbiStream::MapError()
     {
         switch( pStrm->GetError() )
         {
-        case SVSTREAM_OK:
+        case ERRCODE_NONE:
             nError = 0;
             break;
         case SVSTREAM_FILE_NOT_FOUND:

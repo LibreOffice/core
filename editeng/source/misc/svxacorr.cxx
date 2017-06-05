@@ -1989,7 +1989,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
         {
             tools::SvRef<SotStorageStream> xStrm = rStg->OpenSotStream( sStrmName,
                 ( StreamMode::READ | StreamMode::SHARE_DENYWRITE | StreamMode::NOCREATE ) );
-            if( SVSTREAM_OK != xStrm->GetError())
+            if( ERRCODE_NONE != xStrm->GetError())
             {
                 xStrm.clear();
                 rStg.clear();
@@ -2084,13 +2084,13 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                 xExp->exportDoc( XML_BLOCK_LIST );
 
                 xStrm->Commit();
-                if( xStrm->GetError() == SVSTREAM_OK )
+                if( xStrm->GetError() == ERRCODE_NONE )
                 {
                     xStrm.clear();
                     if (!bConvert)
                     {
                         rStg->Commit();
-                        if( SVSTREAM_OK != rStg->GetError() )
+                        if( ERRCODE_NONE != rStg->GetError() )
                         {
                             rStg->Remove( sStrmName );
                             rStg->Commit();
@@ -2312,7 +2312,7 @@ void SvxAutoCorrectLanguageLists::RemoveStream_Imp( const OUString& rName )
     if( sShareAutoCorrFile != sUserAutoCorrFile )
     {
         tools::SvRef<SotStorage> xStg = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
-        if( xStg.is() && SVSTREAM_OK == xStg->GetError() &&
+        if( xStg.is() && ERRCODE_NONE == xStg->GetError() &&
             xStg->IsStream( rName ) )
         {
             xStg->Remove( rName );
@@ -2449,12 +2449,12 @@ bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SotStorage& rStg )
             xExp->exportDoc( XML_BLOCK_LIST );
 
             refList->Commit();
-            bRet = SVSTREAM_OK == refList->GetError();
+            bRet = ERRCODE_NONE == refList->GetError();
             if( bRet )
             {
                 refList.clear();
                 rStg.Commit();
-                if( SVSTREAM_OK != rStg.GetError() )
+                if( ERRCODE_NONE != rStg.GetError() )
                 {
                     bRemove = true;
                     bRet = false;
@@ -2482,7 +2482,7 @@ bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWo
     MakeUserStorage_Impl();
     tools::SvRef<SotStorage> xStorage = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
 
-    bool bRet = xStorage.is() && SVSTREAM_OK == xStorage->GetError();
+    bool bRet = xStorage.is() && ERRCODE_NONE == xStorage->GetError();
 
     if( bRet )
     {
@@ -2554,7 +2554,7 @@ bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort, const OUStrin
     MakeUserStorage_Impl();
     tools::SvRef<SotStorage> xStg = new SotStorage( sUserAutoCorrFile, StreamMode::READWRITE );
 
-    bool bRet = xStg.is() && SVSTREAM_OK == xStg->GetError();
+    bool bRet = xStg.is() && ERRCODE_NONE == xStg->GetError();
 
     // Update the word list
     if( bRet )

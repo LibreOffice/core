@@ -392,7 +392,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const OUString& rShort,
     sal_uLong nRes = 0;
     if( nErr == SVSTREAM_DISK_FULL )
         nRes = ERR_W4W_WRITE_FULL;
-    else if( nErr != SVSTREAM_OK )
+    else if( nErr != ERRCODE_NONE )
         nRes = ERR_SWG_WRITE_ERROR;
     */
     if( !nRes ) // So that we can access the Doc via GetText & nCur

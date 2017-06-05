@@ -58,7 +58,7 @@ public:
     void            ResetError() const;
     void            SetError( ErrCode ) const;
     ErrCode         GetError() const;
-    bool            Good() const          { return m_nError == SVSTREAM_OK; }
+    bool            Good() const          { return m_nError == ERRCODE_NONE; }
     StreamMode      GetMode() const  { return m_nMode;  }
     void            SetAutoCommit( bool bSet )
                     { m_bAutoCommit = bSet; }

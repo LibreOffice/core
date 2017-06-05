@@ -374,7 +374,7 @@ void ImportExcel8::ReadBasic()
         {
             // see if we have the XCB stream
             tools::SvRef<SotStorageStream> xXCB = xRootStrg->OpenSotStream( "XCB", StreamMode::STD_READ );
-            if ( xXCB.is()|| SVSTREAM_OK == xXCB->GetError() )
+            if ( xXCB.is()|| ERRCODE_NONE == xXCB->GetError() )
             {
                 ScCTBWrapper wrapper;
                 if ( wrapper.Read( *xXCB ) )

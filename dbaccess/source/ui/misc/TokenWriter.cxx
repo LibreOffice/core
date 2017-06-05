@@ -509,7 +509,7 @@ bool ORTFImportExport::Write()
 
     m_pStream->WriteChar( '}' ).WriteCharPtr( SAL_NEWLINE_STRING );
     m_pStream->WriteUChar( 0 );
-    return ((*m_pStream).GetError() == SVSTREAM_OK);
+    return ((*m_pStream).GetError() == ERRCODE_NONE);
 }
 
 void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_Int32& k,sal_Int32& kk)
@@ -640,7 +640,7 @@ bool OHTMLImportExport::Write()
         OUT_LF();
         TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_html );
 
-        return ((*m_pStream).GetError() == SVSTREAM_OK);
+        return ((*m_pStream).GetError() == ERRCODE_NONE);
     }
     return false;
 }

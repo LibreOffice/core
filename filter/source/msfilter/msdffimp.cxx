@@ -6593,7 +6593,7 @@ bool SvxMSDffManager::MakeContentStream( SotStorage * pStor, const GDIMetaFile &
     aEle.Write( *xStm );
 
     xStm->SetBufferSize( 0 );
-    return xStm->GetError() == SVSTREAM_OK;
+    return xStm->GetError() == ERRCODE_NONE;
 }
 
 struct ClsIDs {
@@ -7165,7 +7165,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
         {
             sal_uInt32 nLen(0), nDummy(0);
             pDataStrm->ReadUInt32( nLen ).ReadUInt32( nDummy );
-            if( SVSTREAM_OK != pDataStrm->GetError() ||
+            if( ERRCODE_NONE != pDataStrm->GetError() ||
                 // Id in BugDoc - exist there other Ids?
                 // The ConvertToOle2 - does not check for consistent
                 0x30008 != nDummy )

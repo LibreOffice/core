@@ -244,7 +244,7 @@ public:
 
 SfxMedium_Impl::SfxMedium_Impl() :
     m_nStorOpenMode(SFX_STREAM_READWRITE),
-    m_eError(SVSTREAM_OK),
+    m_eError(ERRCODE_NONE),
     bUpdatePickList(true),
     bIsTemp( false ),
     bDownloadDone( true ),
@@ -291,7 +291,7 @@ SfxMedium_Impl::~SfxMedium_Impl()
 
 void SfxMedium::ResetError()
 {
-    pImpl->m_eError = SVSTREAM_OK;
+    pImpl->m_eError = ERRCODE_NONE;
     if( pImpl->m_pInStream )
         pImpl->m_pInStream->ResetError();
     if( pImpl->m_pOutStream )
@@ -649,13 +649,13 @@ bool SfxMedium::Commit()
     else if( pImpl->m_pInStream  )
         pImpl->m_pInStream->Flush();
 
-    if ( GetError() == SVSTREAM_OK )
+    if ( GetError() == ERRCODE_NONE )
     {
         // does something only in case there is a temporary file ( means aName points to different location than aLogicName )
         Transfer_Impl();
     }
 
-    bool bResult = ( GetError() == SVSTREAM_OK );
+    bool bResult = ( GetError() == ERRCODE_NONE );
 
     if ( bResult && DocNeedsFileDateCheck() )
         GetInitFileDate( true );
@@ -1353,7 +1353,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
         // impossibility to create the storage is no error
     }
 
-    if( ( pImpl->nLastStorageError = GetError() ) != SVSTREAM_OK )
+    if( ( pImpl->nLastStorageError = GetError() ) != ERRCODE_NONE )
     {
         pImpl->xStorage = nullptr;
         if ( pImpl->m_pInStream )
@@ -1399,7 +1399,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempIfNo )
                 // There the version is stored as packed Stream
                 uno::Reference < io::XStream > xStr = xSub->openStreamElement( rTag.Identifier, embed::ElementModes::READ );
                 SvStream* pStream = utl::UcbStreamHelper::CreateStream( xStr );
-                if ( pStream && pStream->GetError() == SVSTREAM_OK )
+                if ( pStream && pStream->GetError() == ERRCODE_NONE )
                 {
                     // Unpack Stream  in TempDir
                     ::utl::TempFile aTempFile;

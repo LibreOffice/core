@@ -181,7 +181,7 @@ static sal_uInt32 GetSvError( int nErrno )
 {
     static struct { int nErr; sal_uInt32 sv; } errArr[] =
     {
-        { 0,            SVSTREAM_OK },
+        { 0,            ERRCODE_NONE },
         { EACCES,       SVSTREAM_ACCESS_DENIED },
         { EBADF,        SVSTREAM_INVALID_HANDLE },
 #if defined(NETBSD) || \
@@ -233,7 +233,7 @@ static sal_uInt32 GetSvError( oslFileError nErrno )
 {
     static struct { oslFileError nErr; sal_uInt32 sv; } errArr[] =
     {
-        { osl_File_E_None,        SVSTREAM_OK },
+        { osl_File_E_None,        ERRCODE_NONE },
         { osl_File_E_ACCES,       SVSTREAM_ACCESS_DENIED },
         { osl_File_E_BADF,        SVSTREAM_INVALID_HANDLE },
         { osl_File_E_DEADLK,      SVSTREAM_LOCKING_VIOLATION },

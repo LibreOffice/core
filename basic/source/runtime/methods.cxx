@@ -4760,7 +4760,7 @@ RTLFUNC(DumpAllObjects)
                             StreamMode::WRITE | StreamMode::TRUNC );
         p->Dump( aStrm, rPar.Get( 2 )->GetBool() );
         aStrm.Close();
-        if( aStrm.GetError() != SVSTREAM_OK )
+        if( aStrm.GetError() != ERRCODE_NONE )
         {
             StarBASIC::Error( ERRCODE_BASIC_IO_ERROR );
         }

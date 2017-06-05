@@ -1451,13 +1451,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL SaveVBA( SfxObjectShell& rDocS
     aMSVBas.SaveOrDelMSVBAStorage( true, "_MS_VBA_Overhead" );
 
     tools::SvRef<SotStorage> xOverhead = xDest->OpenSotStorage( "_MS_VBA_Overhead" );
-    if ( xOverhead.is() && ( xOverhead->GetError() == SVSTREAM_OK ) )
+    if ( xOverhead.is() && ( xOverhead->GetError() == ERRCODE_NONE ) )
     {
         tools::SvRef<SotStorage> xOverhead2 = xOverhead->OpenSotStorage( "_MS_VBA_Overhead" );
-        if ( xOverhead2.is() && ( xOverhead2->GetError() == SVSTREAM_OK ) )
+        if ( xOverhead2.is() && ( xOverhead2->GetError() == ERRCODE_NONE ) )
         {
             tools::SvRef<SotStorageStream> xTemp = xOverhead2->OpenSotStream( "_MS_VBA_Overhead2" );
-            if ( xTemp.is() && ( xTemp->GetError() == SVSTREAM_OK ) )
+            if ( xTemp.is() && ( xTemp->GetError() == ERRCODE_NONE ) )
             {
                 sal_uInt32 nLen = xTemp->GetSize();
                 if ( nLen )

@@ -2105,7 +2105,7 @@ bool SfxObjectShell::ConvertFrom
             *xStream >> ...;
 
             // Do not call 'rMedium.CloseInStream()'! Keep File locked!
-            return SVSTREAM_OK == rMedium.GetError();
+            return ERRCODE_NONE == rMedium.GetError();
         }
 
         return false;
@@ -2430,7 +2430,7 @@ bool SfxObjectShell::ConvertTo
             *xStream << ...;
 
             rMedium.CloseOutStream(); // opens the InStream automatically
-            return SVSTREAM_OK == rMedium.GetError();
+            return ERRCODE_NONE == rMedium.GetError();
         }
         return false ;
     }

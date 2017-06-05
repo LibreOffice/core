@@ -108,7 +108,7 @@ public:
     ErrCode             GetError() const { return ERRCODE_TOERROR(m_nError); }
     void                SetError( ErrCode nErrorCode )
                         {
-                            if( m_nError == SVSTREAM_OK )
+                            if( m_nError == ERRCODE_NONE )
                                 m_nError = nErrorCode;
                         }
 

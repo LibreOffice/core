@@ -148,7 +148,7 @@ SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
     rStream.WriteUInt16( aSvxMacroTable.size() );
 
     SvxMacroTable::const_iterator it = aSvxMacroTable.begin();
-    while( it != aSvxMacroTable.end() && rStream.GetError() == SVSTREAM_OK )
+    while( it != aSvxMacroTable.end() && rStream.GetError() == ERRCODE_NONE )
     {
         const SvxMacro& rMac = it->second;
         rStream.WriteUInt16( it->first );

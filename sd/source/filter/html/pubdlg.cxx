@@ -1543,7 +1543,7 @@ void SdPublishingDlg::Load()
     pStream->ReadUInt16( nDesigns );
 
     for( sal_uInt16 nIndex = 0;
-         pStream->GetError() == SVSTREAM_OK && nIndex < nDesigns;
+         pStream->GetError() == ERRCODE_NONE && nIndex < nDesigns;
          nIndex++ )
     {
         SdPublishingDesign aDesign;
@@ -1576,7 +1576,7 @@ bool SdPublishingDlg::Save()
         pStream->WriteUInt16( nDesigns );
 
         for( sal_uInt16 nIndex = 0;
-             pStream->GetError() == SVSTREAM_OK && nIndex < nDesigns;
+             pStream->GetError() == ERRCODE_NONE && nIndex < nDesigns;
              nIndex++ )
             WriteSdPublishingDesign( *pStream, m_aDesignList[nIndex] );
     }

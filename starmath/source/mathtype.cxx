@@ -558,7 +558,7 @@ bool MathType::Parse(SotStorage *pStor)
     tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream(
         "Equation Native",
         StreamMode::STD_READ);
-    if ( (!xSrc.is()) || (SVSTREAM_OK != xSrc->GetError()))
+    if ( (!xSrc.is()) || (ERRCODE_NONE != xSrc->GetError()))
         return false;
     pS = xSrc.get();
     pS->SetEndian( SvStreamEndian::LITTLE );
@@ -1922,7 +1922,7 @@ bool MathType::ConvertFromStarMath( SfxMedium& rMedium )
         xStor2.clear();
 
         tools::SvRef<SotStorageStream> xSrc = pStor->OpenSotStream("Equation Native");
-        if ( (!xSrc.is()) || (SVSTREAM_OK != xSrc->GetError()))
+        if ( (!xSrc.is()) || (ERRCODE_NONE != xSrc->GetError()))
             return false;
 
         pS = xSrc.get();

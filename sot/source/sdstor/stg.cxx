@@ -51,7 +51,7 @@ StorageBase::StorageBase()
     : m_bAutoCommit( false )
 {
     m_nMode  = StreamMode::READ;
-    m_nError = SVSTREAM_OK;
+    m_nError = ERRCODE_NONE;
 }
 
 StorageBase::~StorageBase()
@@ -64,7 +64,7 @@ StorageBase::~StorageBase()
 ErrCode StorageBase::GetError() const
 {
     const ErrCode n = m_nError;
-    m_nError = SVSTREAM_OK;
+    m_nError = ERRCODE_NONE;
     return n;
 }
 
@@ -76,7 +76,7 @@ void StorageBase::SetError( ErrCode n ) const
 
 void StorageBase::ResetError() const
 {
-    m_nError = SVSTREAM_OK;
+    m_nError = ERRCODE_NONE;
 }
 
 OLEStorageBase::OLEStorageBase( StgIo* p, StgDirEntry* pe, StreamMode& nMode )
@@ -371,7 +371,7 @@ Storage::Storage( SvStream& r, bool bDirect )
     m_nMode = StreamMode::READ;
     if( r.IsWritable() )
         m_nMode = StreamMode::READ | StreamMode::WRITE;
-    if( r.GetError() == SVSTREAM_OK )
+    if( r.GetError() == ERRCODE_NONE )
     {
         pIo->SetStrm( &r, false );
         sal_uLong nSize = r.Seek( STREAM_SEEK_TO_END );
@@ -398,7 +398,7 @@ Storage::Storage( UCBStorageStream& rStrm, bool bDirect )
 {
     m_nMode = StreamMode::READ;
 
-    if ( rStrm.GetError() != SVSTREAM_OK )
+    if ( rStrm.GetError() != ERRCODE_NONE )
     {
         SetError( rStrm.GetError() );
         pEntry = nullptr;
