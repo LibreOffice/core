@@ -54,8 +54,8 @@ PPTShapeGroupContext::PPTShapeGroupContext(
         ContextHandler2Helper& rParent,
         const oox::ppt::SlidePersistPtr& rSlidePersistPtr,
         const ShapeLocation eShapeLocation,
-        oox::drawingml::ShapePtr pMasterShapePtr,
-        oox::drawingml::ShapePtr pGroupShapePtr )
+        const oox::drawingml::ShapePtr& pMasterShapePtr,
+        const oox::drawingml::ShapePtr& pGroupShapePtr )
 : ShapeGroupContext( rParent, pMasterShapePtr, pGroupShapePtr )
 , mpSlidePersistPtr( rSlidePersistPtr )
 , meShapeLocation( eShapeLocation )

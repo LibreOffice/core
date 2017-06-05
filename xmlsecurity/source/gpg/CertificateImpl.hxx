@@ -79,7 +79,7 @@ public:
     virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() override;
 
     // Helper methods
-    void setCertificate(GpgME::Key key);
+    void setCertificate(const GpgME::Key& key);
     const GpgME::Key* getCertificate() const;
 } ;
 

@@ -40,7 +40,7 @@ class ScSolverDlg : public ScAnyRefDlg
 public:
                     ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
                                  ScDocument* pDocument,
-                                 ScAddress aCursorPos );
+                                 const ScAddress& aCursorPos );
                     virtual ~ScSolverDlg() override;
     virtual void    dispose() override;
 

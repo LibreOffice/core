@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 
 namespace oox { namespace drawingml { namespace table {
 
-TableContext::TableContext( ContextHandler2Helper& rParent, ShapePtr pShapePtr )
+TableContext::TableContext( ContextHandler2Helper& rParent, const ShapePtr& pShapePtr )
 : ShapeContext( rParent, ShapePtr(), pShapePtr )
 , mrTableProperties( *pShapePtr->getTableProperties().get() )
 {

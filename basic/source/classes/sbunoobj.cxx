@@ -4219,7 +4219,7 @@ class ModuleInvocationProxy : public WeakImplHelper< XInvocation, XComponent >
     ::comphelper::OInterfaceContainerHelper2 m_aListeners;
 
 public:
-    ModuleInvocationProxy( const OUString& aPrefix, SbxObjectRef xScopeObj );
+    ModuleInvocationProxy( OUString const & aPrefix, SbxObjectRef const & xScopeObj );
 
     // XInvocation
     virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() override;
@@ -4239,7 +4239,7 @@ public:
     virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& aListener ) override;
 };
 
-ModuleInvocationProxy::ModuleInvocationProxy( const OUString& aPrefix, SbxObjectRef xScopeObj )
+ModuleInvocationProxy::ModuleInvocationProxy( OUString const & aPrefix, SbxObjectRef const & xScopeObj )
     : m_aMutex()
     , m_aPrefix( aPrefix + "_" )
     , m_xScopeObj( xScopeObj )

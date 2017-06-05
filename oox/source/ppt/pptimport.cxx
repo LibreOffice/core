@@ -87,7 +87,7 @@ PowerPointImport::~PowerPointImport()
 }
 
 /// Visits the relations from pRelations which are of type rType.
-static void visitRelations(PowerPointImport& rImport, core::RelationsRef pRelations, const OUString& rType, std::vector<OUString>& rImageFragments)
+static void visitRelations(PowerPointImport& rImport, const core::RelationsRef& pRelations, const OUString& rType, std::vector<OUString>& rImageFragments)
 {
     if (core::RelationsRef pRelationsOfType = pRelations->getRelationsFromTypeFromOfficeDoc(rType))
     {

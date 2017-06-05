@@ -188,7 +188,7 @@ private:
 
 public:
 
-    SvxScriptErrorDialog( css::uno::Any aException );
+    SvxScriptErrorDialog( css::uno::Any const & aException );
 
     virtual ~SvxScriptErrorDialog() override;
 

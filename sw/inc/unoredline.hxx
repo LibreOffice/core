@@ -37,7 +37,7 @@ class SwXRedlineText :
     virtual const SwStartNode *GetStartNode() const override;
 
 public:
-    SwXRedlineText(SwDoc* pDoc, SwNodeIndex aNodeIndex);
+    SwXRedlineText(SwDoc* pDoc, const SwNodeIndex& aNodeIndex);
 
     virtual     css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual void SAL_CALL acquire(  ) throw() override {OWeakObject::acquire();}

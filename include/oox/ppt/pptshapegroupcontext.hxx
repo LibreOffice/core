@@ -47,8 +47,8 @@ public:
         ::oox::core::ContextHandler2Helper& rParent,
         const oox::ppt::SlidePersistPtr& rSlidePersistPtr,
         const oox::ppt::ShapeLocation eShapeLocation,
-        oox::drawingml::ShapePtr pMasterShapePtr,
-        oox::drawingml::ShapePtr pGroupShapePtr );
+        const oox::drawingml::ShapePtr& pMasterShapePtr,
+        const oox::drawingml::ShapePtr& pGroupShapePtr );
 
     virtual ::oox::core::ContextHandlerRef
         onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;

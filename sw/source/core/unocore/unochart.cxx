@@ -1856,7 +1856,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSource::getSupportedServiceNames( 
 SwChartDataSequence::SwChartDataSequence(
         SwChartDataProvider &rProvider,
         SwFrameFormat   &rTableFormat,
-        std::shared_ptr<SwUnoCursor> pTableCursor ) :
+        const std::shared_ptr<SwUnoCursor>& pTableCursor ) :
     SwClient( &rTableFormat ),
     m_aEvtListeners( GetChartMutex() ),
     m_aModifyListeners( GetChartMutex() ),

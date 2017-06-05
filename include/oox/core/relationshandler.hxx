@@ -44,7 +44,7 @@ class RelationsFragment : public FragmentHandler
 public:
     explicit            RelationsFragment(
                             XmlFilterBase& rFilter,
-                            RelationsRef xRelations );
+                            const RelationsRef& xRelations );
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
                         createFastChildContext(

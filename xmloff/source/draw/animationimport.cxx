@@ -627,7 +627,7 @@ AnimationNodeContext::AnimationNodeContext(
         const Reference< XAnimationNode >& xParentNode,
         SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-        std::shared_ptr<AnimationsImportHelperImpl> pHelper )
+        const std::shared_ptr<AnimationsImportHelperImpl>& pHelper )
 :   SvXMLImportContext(rImport, nPrfx, rLocalName),
     mpHelper( pHelper ),
     mbRootContext( !pHelper )

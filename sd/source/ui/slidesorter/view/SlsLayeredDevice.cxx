@@ -155,7 +155,7 @@ private:
 
 //===== LayeredDevice =========================================================
 
-LayeredDevice::LayeredDevice (VclPtr<sd::Window> pTargetWindow)
+LayeredDevice::LayeredDevice (const VclPtr<sd::Window>& pTargetWindow)
     : mpTargetWindow(pTargetWindow),
       mpLayers(new LayerContainer()),
       mpBackBuffer(VclPtr<VirtualDevice>::Create(*mpTargetWindow)),

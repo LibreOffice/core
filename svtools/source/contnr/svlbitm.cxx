@@ -401,7 +401,7 @@ struct SvLBoxContextBmp_Impl
 
 // ***************************************************************
 
-SvLBoxContextBmp::SvLBoxContextBmp(Image aBmp1, Image aBmp2,
+SvLBoxContextBmp::SvLBoxContextBmp(const Image& aBmp1, const Image& aBmp2,
     bool bExpanded)
     :m_pImpl( new SvLBoxContextBmp_Impl )
 {

@@ -93,12 +93,12 @@ std::size_t TETextPortionList::size() const
     return maPortions.size();
 }
 
-std::vector<TETextPortion*>::iterator TETextPortionList::erase( std::vector<TETextPortion*>::iterator aIter )
+std::vector<TETextPortion*>::iterator TETextPortionList::erase( const std::vector<TETextPortion*>::iterator& aIter )
 {
     return maPortions.erase( aIter );
 }
 
-std::vector<TETextPortion*>::iterator TETextPortionList::insert( std::vector<TETextPortion*>::iterator aIter,
+std::vector<TETextPortion*>::iterator TETextPortionList::insert( const std::vector<TETextPortion*>::iterator& aIter,
                                                                  TETextPortion* pTP )
 {
     return maPortions.insert( aIter, pTP );

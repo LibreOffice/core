@@ -43,7 +43,7 @@ ScRange get_range_from_string(const OUString& rStr)
 
 }
 
-ScGridWinUIObject::ScGridWinUIObject(VclPtr<ScGridWindow> xGridWin):
+ScGridWinUIObject::ScGridWinUIObject(const VclPtr<ScGridWindow>& xGridWin):
     WindowUIObject(xGridWin),
     mxGridWindow(xGridWin)
 {

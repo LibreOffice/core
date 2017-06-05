@@ -1197,7 +1197,7 @@ OString generateGUIDString()
 
 }
 
-XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat, XclExtLstRef xExtLst, sal_Int32& rIndex ) :
+XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat, const XclExtLstRef& xExtLst, sal_Int32& rIndex ) :
     XclExpRecord( EXC_ID_CONDFMT ),
     XclExpRoot( rRoot )
 {
@@ -1478,7 +1478,7 @@ void XclExpIconSet::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_cfRule );
 }
 
-XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot, XclExtLstRef xExtLst ) :
+XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot, const XclExtLstRef& xExtLst ) :
     XclExpRoot( rRoot )
 {
     if( const ScConditionalFormatList* pCondFmtList = GetDoc().GetCondFormList(GetCurrScTab()) )

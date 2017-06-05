@@ -108,7 +108,7 @@ class ScTokenArray;
 class XclExpArray : public XclExpRangeFmlaBase
 {
 public:
-    explicit            XclExpArray( XclTokenArrayRef xTokArr, const ScRange& rScRange );
+    explicit            XclExpArray( const XclTokenArrayRef& xTokArr, const ScRange& rScRange );
 
     /** Creates and returns the token array for a corresponding FORMULA cell record. */
     virtual XclTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const override;
@@ -153,7 +153,7 @@ class XclExpShrfmla : public XclExpRangeFmlaBase
 {
 public:
     /** Creates a SHRFMLA record that consists of the passed cell address only. */
-    explicit            XclExpShrfmla( XclTokenArrayRef xTokArr, const ScAddress& rScPos );
+    explicit            XclExpShrfmla( const XclTokenArrayRef& xTokArr, const ScAddress& rScPos );
 
     /** Extends the cell range to include the passed cell address. */
     void                ExtendRange( const ScAddress& rScPos );

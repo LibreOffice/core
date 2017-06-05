@@ -24,6 +24,7 @@
 #include <com/sun/star/text/PositionLayoutDir.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 
+#include <utility>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 
 #include <list>
@@ -721,7 +722,7 @@ private:
 };
 
 ShapeSortContext::ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, std::shared_ptr<ShapeSortContext> pParentContext )
-:   mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( pParentContext )
+:   mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( std::move(pParentContext) )
 {
 }
 

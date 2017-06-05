@@ -12,7 +12,7 @@
 
 #include <sfx2/tabdlg.hxx>
 
-SfxTabDialogUIObject::SfxTabDialogUIObject(VclPtr<SfxTabDialog> xTabDialog):
+SfxTabDialogUIObject::SfxTabDialogUIObject(const VclPtr<SfxTabDialog>& xTabDialog):
     WindowUIObject(xTabDialog),
     mxTabDialog(xTabDialog)
 {

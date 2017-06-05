@@ -50,7 +50,7 @@ OUString lclGetRelationsPath( const OUString& rFragmentPath )
 
 } // namespace
 
-RelationsFragment::RelationsFragment( XmlFilterBase& rFilter, RelationsRef xRelations ) :
+RelationsFragment::RelationsFragment( XmlFilterBase& rFilter, const RelationsRef& xRelations ) :
     FragmentHandler( rFilter, lclGetRelationsPath( xRelations->getFragmentPath() ), xRelations ),
     mxRelations( xRelations )
 {

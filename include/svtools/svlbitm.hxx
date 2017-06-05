@@ -229,8 +229,8 @@ class SVT_DLLPUBLIC SvLBoxContextBmp : public SvLBoxItem
 {
     std::unique_ptr<SvLBoxContextBmp_Impl>  m_pImpl;
 public:
-    SvLBoxContextBmp(Image aBmp1,
-                     Image aBmp2,
+    SvLBoxContextBmp(const Image& aBmp1,
+                     const Image& aBmp2,
                      bool bExpanded);
     SvLBoxContextBmp();
     virtual ~SvLBoxContextBmp() override;

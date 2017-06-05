@@ -52,7 +52,7 @@ using ::com::sun::star::awt::XWindow;
 namespace sd { namespace framework {
 
 ViewShellWrapper::ViewShellWrapper (
-    std::shared_ptr<ViewShell> pViewShell,
+    const std::shared_ptr<ViewShell>& pViewShell,
     const Reference<XResourceId>& rxViewId,
     const Reference<awt::XWindow>& rxWindow)
     : ViewShellWrapperInterfaceBase(MutexOwner::maMutex),

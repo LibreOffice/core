@@ -47,7 +47,7 @@ public:
         sal_uInt16 nPrfx,
         const OUString& rLocalName,
         const css::uno::Reference< css::xml::sax::XAttributeList>& xAttrList,
-        std::shared_ptr<AnimationsImportHelperImpl> pImpl = nullptr );
+        const std::shared_ptr<AnimationsImportHelperImpl>& pImpl = nullptr );
 
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 

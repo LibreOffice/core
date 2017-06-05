@@ -260,7 +260,7 @@ void ScHeaderFooterTextData::UpdateData(EditEngine& rEditEngine)
 }
 
 ScHeaderFooterTextObj::ScHeaderFooterTextObj(
-    uno::WeakReference<sheet::XHeaderFooterContent> xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj) :
+    const uno::WeakReference<sheet::XHeaderFooterContent>& xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj) :
     aTextData(xContent, nP, pTextObj)
 {
     //  ScHeaderFooterTextData acquires rContent

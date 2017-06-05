@@ -40,7 +40,7 @@ class TextBody
 {
 public:
     TextBody();
-    TextBody( TextBodyPtr pBody );
+    TextBody( const TextBodyPtr& pBody );
     ~TextBody();
 
     const TextParagraphVector&          getParagraphs() const { return maParagraphs; }

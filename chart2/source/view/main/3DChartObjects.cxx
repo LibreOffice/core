@@ -127,7 +127,7 @@ void Text::setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, co
 }
 
 ScreenText::ScreenText(OpenGL3DRenderer* pRenderer, TextCache& rTextCache,
-        const OUString& rStr, glm::vec4 rColor, sal_uInt32 nId, bool bIs3dText):
+        const OUString& rStr, const glm::vec4& rColor, sal_uInt32 nId, bool bIs3dText):
     Renderable3DObject(pRenderer, nId),
     maText(rTextCache.getText(rStr,bIs3dText)),
     maColor(rColor)

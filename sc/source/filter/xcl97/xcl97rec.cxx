@@ -598,7 +598,7 @@ class VmlCommentExporter : public VMLExport
     tools::Rectangle           maTo;
 
 public:
-                        VmlCommentExporter ( sax_fastparser::FSHelperPtr p, ScAddress aScPos, SdrCaptionObj* pCaption, bool bVisible, tools::Rectangle &aFrom, tools::Rectangle &aTo );
+                        VmlCommentExporter ( const sax_fastparser::FSHelperPtr& p, const ScAddress& aScPos, SdrCaptionObj* pCaption, bool bVisible, tools::Rectangle &aFrom, tools::Rectangle &aTo );
 protected:
     virtual void        Commit( EscherPropertyContainer& rProps, const tools::Rectangle& rRect ) override;
     using VMLExport::StartShape;
@@ -607,7 +607,7 @@ protected:
     virtual void        EndShape( sal_Int32 nShapeElement ) override;
 };
 
-VmlCommentExporter::VmlCommentExporter( sax_fastparser::FSHelperPtr p, ScAddress aScPos, SdrCaptionObj* pCaption,
+VmlCommentExporter::VmlCommentExporter( const sax_fastparser::FSHelperPtr& p, const ScAddress& aScPos, SdrCaptionObj* pCaption,
                                         bool bVisible, tools::Rectangle &aFrom, tools::Rectangle &aTo )
     : VMLExport( p )
     , maScPos( aScPos )

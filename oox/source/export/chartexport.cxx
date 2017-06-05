@@ -89,6 +89,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/sequence.hxx>
+#include <utility>
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include "ColorPropertySet.hxx"
 
@@ -430,7 +431,7 @@ sal_Int32 lcl_generateRandomValue()
 }
 
 ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< frame::XModel >& xModel, XmlFilterBase* pFB, DocumentType eDocumentType )
-    : DrawingML( pFS, pFB, eDocumentType )
+    : DrawingML( std::move(pFS), pFB, eDocumentType )
     , mnXmlNamespace( nXmlNamespace )
     , mnSeriesCount(0)
     , mxChartModel( xModel )

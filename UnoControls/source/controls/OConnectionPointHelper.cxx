@@ -38,7 +38,7 @@ namespace unocontrols{
 OConnectionPointHelper::OConnectionPointHelper(
     Mutex&                              aMutex                      ,
     OConnectionPointContainerHelper*    pContainerImplementation    ,
-    Type                                aType
+    Type const &                        aType
 )   : m_aSharedMutex                ( aMutex                    )
     , m_oContainerWeakReference     ( pContainerImplementation  )
     , m_pContainerImplementation    ( pContainerImplementation  )

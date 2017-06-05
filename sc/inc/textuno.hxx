@@ -152,7 +152,7 @@ private:
 
 public:
     ScHeaderFooterTextObj(
-        css::uno::WeakReference<css::sheet::XHeaderFooterContent> xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj);
+        const css::uno::WeakReference<css::sheet::XHeaderFooterContent>& xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj);
     virtual ~ScHeaderFooterTextObj() override;
 
     const EditTextObject* GetTextObject() const;

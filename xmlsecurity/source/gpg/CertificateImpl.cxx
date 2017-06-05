@@ -187,7 +187,7 @@ const Sequence< sal_Int8>& CertificateImpl::getUnoTunnelId() {
     return CertificateImplUnoTunnelId::get().getSeq();
 }
 
-void CertificateImpl::setCertificate(GpgME::Key key)
+void CertificateImpl::setCertificate(const GpgME::Key& key)
 {
     m_pKey = key;
 }

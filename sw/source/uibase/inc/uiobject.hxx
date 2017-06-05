@@ -19,7 +19,7 @@ class SwEditWinUIObject : public WindowUIObject
 {
 public:
 
-    SwEditWinUIObject(VclPtr<SwEditWin> xEditWin);
+    SwEditWinUIObject(const VclPtr<SwEditWin>& xEditWin);
 
     virtual StringMap get_state() override;
 

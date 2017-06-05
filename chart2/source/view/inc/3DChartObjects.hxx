@@ -105,7 +105,7 @@ class ScreenText : public Renderable3DObject
 {
 public:
     ScreenText(OpenGL3DRenderer* pRenderer, TextCache& rTextCache,
-        const OUString& rStr, glm::vec4 rColor, sal_uInt32 nId, bool bIs3dText = false);
+        const OUString& rStr, const glm::vec4& rColor, sal_uInt32 nId, bool bIs3dText = false);
 
     virtual void render() override;
     void setPosition(const glm::vec2& rTopLeft, const glm::vec2& rBottomRight,

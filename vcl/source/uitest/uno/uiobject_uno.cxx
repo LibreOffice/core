@@ -9,6 +9,7 @@
 
 #include <memory>
 #include "uiobject_uno.hxx"
+#include <utility>
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
 
@@ -61,7 +62,7 @@ class ExecuteWrapper
 public:
 
     ExecuteWrapper(std::function<void()> func, Link<Timer*, void> handler):
-        mFunc(func),
+        mFunc(std::move(func)),
         mHandler(handler),
         mbSignal(false)
     {

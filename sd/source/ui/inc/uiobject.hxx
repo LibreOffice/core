@@ -24,7 +24,7 @@ class ImpressWindowUIObject : public WindowUIObject
 {
 public:
 
-    ImpressWindowUIObject(VclPtr<sd::Window> xWindow);
+    ImpressWindowUIObject(const VclPtr<sd::Window>& xWindow);
 
     virtual StringMap get_state() override;
 

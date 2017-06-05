@@ -168,7 +168,7 @@ const Size& MediaControl::getMinSizePixel() const
     return maMinSize;
 }
 
-void MediaControl::UpdateURLField(MediaItem tempItem)
+void MediaControl::UpdateURLField(MediaItem const & tempItem)
 {
     const OUString aURL( AvmResId(AVMEDIA_MEDIA_PATH) + ":  " + tempItem.getURL() ) ;
     mpMediaPath->SetText(aURL);

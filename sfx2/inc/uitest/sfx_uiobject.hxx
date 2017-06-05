@@ -20,7 +20,7 @@ private:
 
 public:
 
-    SfxTabDialogUIObject(VclPtr<SfxTabDialog> xTabDialog);
+    SfxTabDialogUIObject(const VclPtr<SfxTabDialog>& xTabDialog);
 
     virtual ~SfxTabDialogUIObject() override;
 

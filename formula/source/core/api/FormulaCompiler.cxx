@@ -145,7 +145,7 @@ class OpCodeList
 {
 public:
 
-    OpCodeList( sal_uInt16, FormulaCompiler::NonConstOpCodeMapPtr,
+    OpCodeList( sal_uInt16, const FormulaCompiler::NonConstOpCodeMapPtr&,
             FormulaCompiler::SeparatorType = FormulaCompiler::SeparatorType::SEMICOLON_BASE );
 
 private:
@@ -157,7 +157,7 @@ private:
     ResStringArray maStringList;
 };
 
-OpCodeList::OpCodeList( sal_uInt16 nRID, FormulaCompiler::NonConstOpCodeMapPtr xMap,
+OpCodeList::OpCodeList( sal_uInt16 nRID, const FormulaCompiler::NonConstOpCodeMapPtr& xMap,
         FormulaCompiler::SeparatorType eSepType )
     : meSepType(eSepType)
     , maStringList(ResId(nRID, *ResourceManager::getResManager()))

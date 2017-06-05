@@ -20,7 +20,7 @@
 #include <algorithm>
 #include <iterator>
 
-ChartUIObject::ChartUIObject(VclPtr<chart::ChartWindow> xChartWindow,
+ChartUIObject::ChartUIObject(const VclPtr<chart::ChartWindow>& xChartWindow,
         const OUString& rCID):
     maCID(rCID),
     mxChartWindow(xChartWindow)
@@ -92,7 +92,7 @@ OUString ChartUIObject::get_type() const
     return OUString("ChartUIObject for type: ");
 }
 
-ChartWindowUIObject::ChartWindowUIObject(VclPtr<chart::ChartWindow> xChartWindow):
+ChartWindowUIObject::ChartWindowUIObject(const VclPtr<chart::ChartWindow>& xChartWindow):
     WindowUIObject(xChartWindow),
     mxChartWindow(xChartWindow)
 {

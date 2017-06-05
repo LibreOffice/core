@@ -2439,7 +2439,7 @@ void SwEscherEx::FinishEscher()
 namespace
 {
     template<typename OrientType>
-    void lcl_SetRelationOrient(OrientType& rOrient, const sw::WW8AnchorConv eConv, std::function<void()> fDefault)
+    void lcl_SetRelationOrient(OrientType& rOrient, const sw::WW8AnchorConv eConv, const std::function<void()>& fDefault)
     {
         switch(eConv)
         {

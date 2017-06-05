@@ -13,7 +13,7 @@
 #include "view.hxx"
 #include "wrtsh.hxx"
 
-SwEditWinUIObject::SwEditWinUIObject(VclPtr<SwEditWin> xEditWin):
+SwEditWinUIObject::SwEditWinUIObject(const VclPtr<SwEditWin>& xEditWin):
     WindowUIObject(xEditWin),
     mxEditWin(xEditWin)
 {

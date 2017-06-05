@@ -61,7 +61,7 @@ public:
     ScAddress mMinimumAddress;
     ScAddress mMaximumAddress;
 
-    AddressWalker(ScAddress aInitialAddress);
+    AddressWalker(const ScAddress& aInitialAddress);
 
     ScAddress current(SCCOL aRelativeCol = 0, SCROW aRelativeRow = 0, SCTAB aRelativeTab = 0);
 
@@ -81,7 +81,7 @@ public:
     ScDocument*                         mpDocument;
     formula::FormulaGrammar::Grammar    meGrammar;
 
-    AddressWalkerWriter(ScAddress aInitialAddress, ScDocShell* pDocShell, ScDocument* pDocument,
+    AddressWalkerWriter(const ScAddress& aInitialAddress, ScDocShell* pDocShell, ScDocument* pDocument,
             formula::FormulaGrammar::Grammar eGrammar );
 
     void writeFormula(const OUString& aFormula);
@@ -117,7 +117,7 @@ protected:
     sal_Int32 mIndex;
 
 public:
-    DataRangeIterator(ScRange aInputRange);
+    DataRangeIterator(const ScRange& aInputRange);
     virtual ~DataRangeIterator();
 
     virtual bool hasNext() = 0;

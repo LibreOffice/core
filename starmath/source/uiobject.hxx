@@ -24,7 +24,7 @@ private:
 
 public:
 
-    ElementUIObject(VclPtr<SmElementsControl> xElementSelector,
+    ElementUIObject(const VclPtr<SmElementsControl>& xElementSelector,
             const OUString& rID);
 
     virtual StringMap get_state() override;
@@ -43,7 +43,7 @@ private:
 
 public:
 
-    explicit ElementSelectorUIObject(VclPtr<SmElementsControl> xElementSelector);
+    explicit ElementSelectorUIObject(const VclPtr<SmElementsControl>& xElementSelector);
 
     virtual StringMap get_state() override;
 

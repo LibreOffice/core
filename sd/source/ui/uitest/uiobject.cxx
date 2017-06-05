@@ -19,7 +19,7 @@
 class ImpressSdrObject : public SdrUIObject
 {
 public:
-    ImpressSdrObject(VclPtr<sd::Window> xImpressWin, const OUString& rName);
+    ImpressSdrObject(const VclPtr<sd::Window>& xImpressWin, const OUString& rName);
 
     SdrObject* get_object() override;
 
@@ -31,7 +31,7 @@ private:
 
 namespace {
 
-sd::DrawViewShell* getViewShell(VclPtr<sd::Window> xWindow)
+sd::DrawViewShell* getViewShell(const VclPtr<sd::Window>& xWindow)
 {
     sd::DrawViewShell* pViewShell = dynamic_cast<sd::DrawViewShell*>(xWindow->GetViewShell());
     assert(pViewShell);
@@ -47,7 +47,7 @@ OUString getObjectName(SdrObject* pObject)
         return pObject->GetName();
 }
 
-SdrObject* getObject(VclPtr<sd::Window> xWindow, const OUString& rName)
+SdrObject* getObject(const VclPtr<sd::Window>& xWindow, const OUString& rName)
 {
     SdrPage* pPage = getViewShell(xWindow)->getCurrentPage();
 
@@ -68,7 +68,7 @@ SdrObject* getObject(VclPtr<sd::Window> xWindow, const OUString& rName)
 
 }
 
-ImpressSdrObject::ImpressSdrObject(VclPtr<sd::Window> xImpressWin, const OUString& rName):
+ImpressSdrObject::ImpressSdrObject(const VclPtr<sd::Window>& xImpressWin, const OUString& rName):
     mxWindow(xImpressWin),
     maName(rName)
 {
@@ -79,7 +79,7 @@ SdrObject* ImpressSdrObject::get_object()
     return getObject(mxWindow, maName);
 }
 
-ImpressWindowUIObject::ImpressWindowUIObject(VclPtr<sd::Window> xWindow):
+ImpressWindowUIObject::ImpressWindowUIObject(const VclPtr<sd::Window>& xWindow):
     WindowUIObject(xWindow),
     mxWindow(xWindow)
 {

@@ -177,7 +177,7 @@ ScOptSolverSave::ScOptSolverSave( const OUString& rObjective, bool bMax, bool bM
 //  class ScOptSolverDlg
 
 ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent,
-                          ScDocShell* pDocSh, ScAddress aCursorPos )
+                          ScDocShell* pDocSh, const ScAddress& aCursorPos )
 
     : ScAnyRefDlg(pB, pCW, pParent, "SolverDialog", "modules/scalc/ui/solverdlg.ui")
     , maInputError(ScGlobal::GetRscString(STR_INVALIDINPUT))

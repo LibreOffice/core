@@ -1405,7 +1405,7 @@ OUString GetErrorMessage( const css::uno::Any& aException )
 
 }
 
-SvxScriptErrorDialog::SvxScriptErrorDialog( css::uno::Any aException )
+SvxScriptErrorDialog::SvxScriptErrorDialog( css::uno::Any const & aException )
     : m_sMessage()
 {
     SolarMutexGuard aGuard;

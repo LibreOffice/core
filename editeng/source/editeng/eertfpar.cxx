@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
+#include <utility>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
@@ -68,7 +69,7 @@ RtfImportInfo::~RtfImportInfo()
 EditRTFParser::EditRTFParser(
     SvStream& rIn, EditSelection aSel, SfxItemPool& rAttrPool, EditEngine* pEditEngine) :
     SvxRTFParser(rAttrPool, rIn, nullptr),
-    aCurSel(aSel),
+    aCurSel(std::move(aSel)),
     mpEditEngine(pEditEngine),
     aRTFMapMode(MapUnit::MapTwip),
     nDefFont(0),

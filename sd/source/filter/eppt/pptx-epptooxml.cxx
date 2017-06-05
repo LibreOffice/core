@@ -68,6 +68,7 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <utility>
 
 // presentation namespaces
 #define PNMSS         FSNS(XML_xmlns, XML_a),   OUStringToOString(this->getNamespaceURL(OOX_NS(dml)), RTL_TEXTENCODING_UTF8).getStr(), \
@@ -211,7 +212,7 @@ int PowerPointExport::GetPPTXLayoutId( int nOffset )
 
 PowerPointShapeExport::PowerPointShapeExport( FSHelperPtr pFS, ShapeHashMap* pShapeMap,
                                               PowerPointExport* pFB )
-    : ShapeExport( XML_p, pFS, pShapeMap, pFB )
+    : ShapeExport( XML_p, std::move(pFS), pShapeMap, pFB )
     , mrExport( *pFB )
     , mePageType(UNDEFINED)
     , mbMaster(false)
