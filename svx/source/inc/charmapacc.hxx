@@ -25,6 +25,7 @@
 #include <comphelper/accessibleselectionhelper.hxx>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
+#include <toolkit/helper/externallock.hxx>
 
 #include <vector>
 class SvxShowCharSet;
@@ -38,7 +39,8 @@ namespace svx
     /** The class SvxShowCharSetVirtualAcc is used as a virtual class which contains the table and the scrollbar.
         In the vcl control, the table and the scrollbar exists in one class. This is not feasible for the accessibility api.
     */
-    class SvxShowCharSetVirtualAcc : public ::comphelper::OAccessibleComponentHelper,
+    class SvxShowCharSetVirtualAcc : private BaseVCLExternalSolarLock,
+                                     public ::comphelper::OAccessibleComponentHelper,
                                      public OAccessibleHelper_Base_2
     {
         VclPtr<SvxShowCharSet>             mpParent; // the vcl control
@@ -120,7 +122,8 @@ namespace svx
     /** The table implementation of the vcl control.
     */
 
-    class SvxShowCharSetAcc : public ::comphelper::OAccessibleSelectionHelper,
+    class SvxShowCharSetAcc : private BaseVCLExternalSolarLock,
+                              public ::comphelper::OAccessibleSelectionHelper,
                               public OAccessibleHelper_Base
     {
         ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > m_aChildren;
@@ -209,7 +212,8 @@ namespace svx
 
     /** The child implementation of the table.
     */
-    class SvxShowCharSetItemAcc : public ::comphelper::OAccessibleComponentHelper,
+    class SvxShowCharSetItemAcc : private BaseVCLExternalSolarLock,
+                                  public ::comphelper::OAccessibleComponentHelper,
                                   public OAccessibleHelper_Base_3
     {
     private:

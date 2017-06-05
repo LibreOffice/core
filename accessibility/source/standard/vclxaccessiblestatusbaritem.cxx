@@ -18,7 +18,6 @@
  */
 
 #include <standard/vclxaccessiblestatusbaritem.hxx>
-#include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <helper/characterattributeshelper.hxx>
 

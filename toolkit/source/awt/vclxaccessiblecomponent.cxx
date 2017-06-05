@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
-#include <toolkit/helper/externallock.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/awt/vclxfont.hxx>
@@ -44,7 +43,7 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXWindow )
-    : OAccessibleExtendedComponentHelper( new VCLExternalSolarLock )
+    : OAccessibleExtendedComponentHelper( &m_aLock )
     , OAccessibleImplementationAccess( )
 {
     m_xVCLXWindow = pVCLXWindow;
@@ -80,14 +79,6 @@ VCLXAccessibleComponent::~VCLXAccessibleComponent()
 {
     ensureDisposed();
     DisconnectEvents();
-
-    delete getExternalLock();
-    // This is not completely safe. If we assume that the base class dtor calls some method which
-    // uses this lock, the we crash. However, as the base class' dtor does not have a chance to call _out_
-    // virtual methods, this is no problem as long as the base class is safe, i.e. does not use the external
-    // lock from within it's dtor. At the moment, we _know_ the base class is safe in this respect, so
-    // let's assume it keeps this way.
-    // @see OAccessibleContextHelper::OAccessibleContextHelper( IMutex* )
 }
 
 IMPLEMENT_FORWARD_XINTERFACE3( VCLXAccessibleComponent, OAccessibleExtendedComponentHelper, OAccessibleImplementationAccess, VCLXAccessibleComponent_BASE )
