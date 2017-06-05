@@ -29,7 +29,6 @@ namespace accessibility
 
 
 AccessibleTabBarBase::AccessibleTabBarBase( TabBar* pTabBar ) :
-    OAccessibleExtendedComponentHelper( &m_aLock ),
     m_pTabBar( nullptr )
 {
     SetTabBarPointer( pTabBar );
