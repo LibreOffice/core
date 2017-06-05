@@ -42,12 +42,12 @@
 #include "ftools.hxx"
 #include "tokenarray.hxx"
 
-FltError ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const OUString& rBaseURL, ScDocument *pDoc,
+ErrCode ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const OUString& rBaseURL, ScDocument *pDoc,
         ScRange& rRange, double nOutputFactor, bool bCalcWidthHeight, SvNumberFormatter* pFormatter,
         bool bConvertDate )
 {
     ScHTMLImport aImp( pDoc, rBaseURL, rRange, bCalcWidthHeight );
-    FltError nErr = (FltError) aImp.Read( rStream, rBaseURL );
+    ErrCode nErr = (ErrCode) aImp.Read( rStream, rBaseURL );
     ScRange aR = aImp.GetRange();
     rRange.aEnd = aR.aEnd;
     aImp.WriteToDocument( true, nOutputFactor, pFormatter, bConvertDate );

@@ -2216,20 +2216,20 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
       OSL_FAIL("Missing file filters");
     }
     virtual ~ScFormatFilterMissing() {}
-    virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding ) override { return eERR_INTERN; }
-    virtual FltError ScImportQuattroPro(SvStream*, ScDocument *) override { return eERR_INTERN; }
-    virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) override { return eERR_INTERN; }
-    virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) override { return eERR_INTERN; }
-    virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress&,
-                 const rtl_TextEncoding ) override { return eERR_INTERN; }
-    virtual FltError ScImportRTF( SvStream&, const OUString&, ScDocument*, ScRange& ) override { return eERR_INTERN; }
-    virtual FltError ScImportHTML( SvStream&, const OUString&, ScDocument*, ScRange&, double, bool, SvNumberFormatter*, bool ) override { return eERR_INTERN; }
+    virtual ErrCode ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding ) override { return SCERR_IMPORT_INTERNAL; }
+    virtual ErrCode ScImportQuattroPro( SvStream*, ScDocument* ) override { return SCERR_IMPORT_INTERNAL; }
+    virtual ErrCode ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) override { return SCERR_IMPORT_INTERNAL; }
+    virtual ErrCode ScImportStarCalc10( SvStream&, ScDocument* ) override { return SCERR_IMPORT_INTERNAL; }
+    virtual ErrCode ScImportDif( SvStream&, ScDocument*, const ScAddress&,
+                 const rtl_TextEncoding ) override { return SCERR_IMPORT_INTERNAL; }
+    virtual ErrCode ScImportRTF( SvStream&, const OUString&, ScDocument*, ScRange& ) override { return SCERR_IMPORT_INTERNAL; }
+    virtual ErrCode ScImportHTML( SvStream&, const OUString&, ScDocument*, ScRange&, double, bool, SvNumberFormatter*, bool ) override { return SCERR_IMPORT_INTERNAL; }
 
     virtual ScEEAbsImport *CreateRTFImport( ScDocument*, const ScRange& ) override { return nullptr; }
     virtual ScEEAbsImport *CreateHTMLImport( ScDocument*, const OUString&, const ScRange& ) override { return nullptr; }
     virtual OUString       GetHTMLRangeNameList( ScDocument*, const OUString& ) override { return OUString(); }
 
-    virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel, rtl_TextEncoding ) override { return eERR_INTERN; }
+    virtual ErrCode ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel, rtl_TextEncoding ) override { return SCERR_IMPORT_INTERNAL; }
     virtual void ScExportDif( SvStream&, ScDocument*, const ScAddress&, const rtl_TextEncoding ) override {}
     virtual void ScExportDif( SvStream&, ScDocument*, const ScRange&, const rtl_TextEncoding ) override {}
     virtual void ScExportHTML( SvStream&, const OUString&, ScDocument*, const ScRange&, const rtl_TextEncoding, bool,

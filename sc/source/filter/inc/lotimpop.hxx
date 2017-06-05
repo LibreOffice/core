@@ -79,8 +79,8 @@ public:
 
     virtual             ~ImportLotus() override;
 
-    FltError            Read() override;
-    FltError            Read( SvStream& );                  // special for *.fm3-Dateien
+    ErrCode             Read() override;
+    ErrCode             Read( SvStream& );                  // special for *.fm3-Dateien
 };
 
 inline void ImportLotus::Read( ScAddress& rAddr )

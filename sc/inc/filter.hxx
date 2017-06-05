@@ -23,6 +23,7 @@
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
+#include <vcl/errcode.hxx>
 
 #include "scdllapi.h"
 
@@ -34,23 +35,6 @@ class ScDocument;
 class ScRange;
 class SvNumberFormatter;
 class ScOrcusFilters;
-
-// return values im-/export filter  (sal_uLong)
-
-typedef sal_uLong FltError;
-
-#define eERR_OK         ERRCODE_NONE                // no error
-#define eERR_OPEN       SCERR_IMPORT_OPEN
-#define eERR_NOMEM      SCERR_IMPORT_OUTOFMEM       // out of memory
-#define eERR_UNKN_WK    SCERR_IMPORT_UNKNOWN_WK     // unknown WK? format (Lotus 1-2-3)
-#define eERR_FORMAT     SCERR_IMPORT_FORMAT         // format error during reading (no formula error!)
-#define eERR_NI         SCERR_IMPORT_NI             // filter not implemented
-#define eERR_UNKN_BIFF  SCERR_IMPORT_UNKNOWN_BIFF   // unknown BIFF format (Excel)
-#define eERR_FILEPASSWD SCERR_IMPORT_FILEPASSWD     // file password protected
-#define eERR_INTERN     SCERR_IMPORT_INTERNAL       // internal error
-#define eERR_RNGOVRFLW  SCWARN_IMPORT_RANGE_OVERFLOW// overflow of cell coordinates
-                                                    // table restricted to valid area (?)
-// more error codes: s. scerrors.hxx
 
 // for import
 enum EXCIMPFORMAT { EIF_AUTO, EIF_BIFF5, EIF_BIFF8, EIF_BIFF_LE4 };
@@ -74,18 +58,18 @@ class ScEEAbsImport {
 class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
   public:
     // various import filters
-    virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc ) = 0;
-    virtual FltError ScImportQuattroPro(SvStream* pStream, ScDocument *pDoc) = 0;
-    virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) = 0;
+    virtual ErrCode ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc ) = 0;
+    virtual ErrCode ScImportQuattroPro(SvStream* pStream, ScDocument *pDoc) = 0;
+    virtual ErrCode ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) = 0;
         // eFormat == EIF_AUTO  -> matching filter is used automatically
         // eFormat == EIF_BIFF5 -> only Biff5 stream is read successfully (in an Excel97 doc, too)
         // eFormat == EIF_BIFF8 -> only Biff8 stream is read successfully (only in Excel97 docs)
         // eFormat == EIF_BIFF_LE4 -> only non storage files _might_ be read successfully
-    virtual FltError ScImportStarCalc10( SvStream&, ScDocument* ) = 0;
-    virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
+    virtual ErrCode ScImportStarCalc10( SvStream&, ScDocument* ) = 0;
+    virtual ErrCode ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
                  const rtl_TextEncoding eSrc ) = 0;
-    virtual FltError ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) = 0;
-    virtual FltError ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor,
+    virtual ErrCode ScImportRTF( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange ) = 0;
+    virtual ErrCode ScImportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor,
                                    bool bCalcWidthHeight, SvNumberFormatter* pFormatter = nullptr, bool bConvertDate = true ) = 0;
 
     // various import helpers
@@ -94,7 +78,7 @@ class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
     virtual OUString       GetHTMLRangeNameList( ScDocument* pDoc, const OUString& rOrigName ) = 0;
 
     // various export filters
-    virtual FltError ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, rtl_TextEncoding eDest ) = 0;
+    virtual ErrCode ScExportExcel5( SfxMedium&, ScDocument*, ExportFormatExcel eFormat, rtl_TextEncoding eDest ) = 0;
     virtual void ScExportDif( SvStream&, ScDocument*, const ScAddress& rOutPos, const rtl_TextEncoding eDest ) = 0;
     virtual void ScExportDif( SvStream&, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest ) = 0;
     virtual void ScExportHTML( SvStream&, const OUString& rBaseURL, ScDocument*, const ScRange& rRange, const rtl_TextEncoding eDest, bool bAll,
@@ -119,7 +103,7 @@ class ScFormatFilter {
 
 struct LotusContext;
 
-FltError ScImportLotus123old(LotusContext& rContext, SvStream&, ScDocument*, rtl_TextEncoding eSrc);
+ErrCode ScImportLotus123old(LotusContext& rContext, SvStream&, ScDocument*, rtl_TextEncoding eSrc);
 
 #endif
 

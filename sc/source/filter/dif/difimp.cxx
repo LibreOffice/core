@@ -47,7 +47,7 @@ const sal_Unicode pKeyNA[]      = { 'N', 'A', 0 };
 const sal_Unicode pKeyV[]       = { 'V', 0 };
 const sal_Unicode pKey1_0[]     = { '1', ',', '0', 0 };
 
-FltError ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
+ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
                         const rtl_TextEncoding eVon )
 {
     DifParser   aDifParser( rIn, *pDoc, eVon );
@@ -211,17 +211,17 @@ FltError ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, 
         aAttrCache.Apply( *pDoc, nBaseTab );
     }
     else
-        return eERR_FORMAT;
+        return SCERR_IMPORT_FORMAT;
 
     if( bSyntErrWarn )
 
         // FIXME: Add proper Warnung!
-        return eERR_RNGOVRFLW;
+        return SCWARN_IMPORT_RANGE_OVERFLOW;
 
     else if( bOverflowWarn )
-        return eERR_RNGOVRFLW;
+        return SCWARN_IMPORT_RANGE_OVERFLOW;
     else
-        return eERR_OK;
+        return ERRCODE_NONE;
 }
 
 DifParser::DifParser( SvStream& rNewIn, ScDocument& rDoc, rtl_TextEncoding e )

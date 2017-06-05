@@ -299,7 +299,7 @@ sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncodi
     return ERRCODE_IO_GENERAL;
 #else
 
-    sal_uLong nErr = eERR_OK;
+    sal_uLong nErr = ERRCODE_NONE;
 
     // Try to get the Text Encoding from the driver
     if( eCharSet == RTL_TEXTENCODING_IBM_850 )
@@ -768,7 +768,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
     INetURLObject aDeleteObj( rFullFileName, INetProtocol::File );
     KillFile( aDeleteObj );
 
-    sal_uLong nErr = eERR_OK;
+    sal_uLong nErr = ERRCODE_NONE;
 
     SCCOL nFirstCol, nLastCol;
     SCROW  nFirstRow, nLastRow;
@@ -952,7 +952,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
                     case sdbc::DataType::VARCHAR:
                         aString = aDocument.GetString(nDocCol, nDocRow, nTab);
                         xRowUpdate->updateString( nCol+1, aString );
-                        if ( nErr == eERR_OK && pColLengths[nCol] < aString.getLength() )
+                        if ( nErr == ERRCODE_NONE && pColLengths[nCol] < aString.getLength() )
                             nErr = SCWARN_EXPORT_DATALOST;
                         break;
 
@@ -966,7 +966,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
                             if ( bIsNull )
                             {
                                 xRowUpdate->updateNull( nCol+1 );
-                                if ( nErr == eERR_OK &&
+                                if ( nErr == ERRCODE_NONE &&
                                         aDocument.HasStringData( nDocCol, nDocRow, nTab ) )
                                     nErr = SCWARN_EXPORT_DATALOST;
                             }
@@ -982,7 +982,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
                     case sdbc::DataType::DECIMAL:
                     case sdbc::DataType::BIT:
                         aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
-                        if ( fVal == 0.0 && nErr == eERR_OK &&
+                        if ( fVal == 0.0 && nErr == ERRCODE_NONE &&
                                             aDocument.HasStringData( nDocCol, nDocRow, nTab ) )
                             nErr = SCWARN_EXPORT_DATALOST;
                         if ( pColTypes[nCol] == sdbc::DataType::BIT )
@@ -993,7 +993,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
 
                     default:
                         OSL_FAIL( "ScDocShell::DBaseExport: unknown FieldType" );
-                        if ( nErr == eERR_OK )
+                        if ( nErr == ERRCODE_NONE )
                             nErr = SCWARN_EXPORT_DATALOST;
                         aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
                         xRowUpdate->updateDouble( nCol+1, fVal );

@@ -45,24 +45,24 @@
 
 #include <memory>
 
-FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPFORMAT eFormat )
+ErrCode ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPFORMAT eFormat )
 {
     // check the passed Calc document
     OSL_ENSURE( pDocument, "::ScImportExcel - no document" );
-    if( !pDocument ) return eERR_INTERN;        // should not happen
+    if( !pDocument ) return SCERR_IMPORT_INTERNAL;        // should not happen
 
     /*  Import all BIFF versions regardless on eFormat, needed for import of
         external cells (file type detection returns Excel4.0). */
     if( (eFormat != EIF_AUTO) && (eFormat != EIF_BIFF_LE4) && (eFormat != EIF_BIFF5) && (eFormat != EIF_BIFF8) )
     {
         OSL_FAIL( "::ScImportExcel - wrong file format specification" );
-        return eERR_FORMAT;
+        return SCERR_IMPORT_FORMAT;
     }
 
     // check the input stream from medium
     SvStream* pMedStrm = rMedium.GetInStream();
     OSL_ENSURE( pMedStrm, "::ScImportExcel - medium without input stream" );
-    if( !pMedStrm ) return eERR_OPEN;           // should not happen
+    if( !pMedStrm ) return SCERR_IMPORT_OPEN;           // should not happen
 
     SvStream* pBookStrm = nullptr;            // The "Book"/"Workbook" stream containing main data.
     XclBiff eBiff = EXC_BIFF_UNKNOWN;   // The BIFF version of the main stream.
@@ -116,7 +116,7 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
     }
 
     // try to import the file
-    FltError eRet = eERR_UNKN_BIFF;
+    ErrCode eRet = SCERR_IMPORT_UNKNOWN_BIFF;
     if( pBookStrm )
     {
         pBookStrm->SetBufferSize( 0x8000 );     // still needed?
@@ -137,18 +137,18 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
             default:    DBG_ERROR_BIFF();
         }
 
-        eRet = xFilter.get() ? xFilter->Read() : eERR_INTERN;
+        eRet = xFilter.get() ? xFilter->Read() : SCERR_IMPORT_INTERNAL;
     }
 
     return eRet;
 }
 
-static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
+static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         SvStream* pMedStrm, bool bBiff8, rtl_TextEncoding eNach )
 {
     // try to open an OLE storage
     tools::SvRef<SotStorage> xRootStrg = new SotStorage( pMedStrm, false );
-    if( xRootStrg->GetError() ) return eERR_OPEN;
+    if( xRootStrg->GetError() ) return SCERR_IMPORT_OPEN;
 
     // create BIFF dependent strings
     OUString aStrmName, aClipName, aClassName;
@@ -167,11 +167,11 @@ static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
 
     // open the "Book"/"Workbook" stream
     tools::SvRef<SotStorageStream> xStrgStrm = ScfTools::OpenStorageStreamWrite( xRootStrg, aStrmName );
-    if( !xStrgStrm.is() || xStrgStrm->GetError() ) return eERR_OPEN;
+    if( !xStrgStrm.is() || xStrgStrm->GetError() ) return SCERR_IMPORT_OPEN;
 
     xStrgStrm->SetBufferSize( 0x8000 );     // still needed?
 
-    FltError eRet = eERR_UNKN_BIFF;
+    ErrCode eRet = SCERR_IMPORT_UNKNOWN_BIFF;
     XclExpRootData aExpData( bBiff8 ? EXC_BIFF8 : EXC_BIFF5, rMedium, xRootStrg, *pDocument, eNach );
     if ( bBiff8 )
     {
@@ -184,7 +184,7 @@ static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         eRet = aFilter.Write();
     }
 
-    if( eRet == eERR_RNGOVRFLW )
+    if( eRet == SCWARN_IMPORT_RANGE_OVERFLOW )
         eRet = SCWARN_EXPORT_MAXROW;
 
     SvGlobalName aGlobName(MSO_EXCEL5_CLASSID);
@@ -197,22 +197,22 @@ static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
     return eRet;
 }
 
-FltError ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocument *pDocument,
+ErrCode ScFormatFilterPluginImpl::ScExportExcel5( SfxMedium& rMedium, ScDocument *pDocument,
     ExportFormatExcel eFormat, rtl_TextEncoding eNach )
 {
     if( eFormat != ExpBiff5 && eFormat != ExpBiff8 )
-        return eERR_NI;
+        return SCERR_IMPORT_NI;
 
     // check the passed Calc document
     OSL_ENSURE( pDocument, "::ScExportExcel5 - no document" );
-    if( !pDocument ) return eERR_INTERN;        // should not happen
+    if( !pDocument ) return SCERR_IMPORT_INTERNAL;        // should not happen
 
     // check the output stream from medium
     SvStream* pMedStrm = rMedium.GetOutStream();
     OSL_ENSURE( pMedStrm, "::ScExportExcel5 - medium without output stream" );
-    if( !pMedStrm ) return eERR_OPEN;           // should not happen
+    if( !pMedStrm ) return SCERR_IMPORT_OPEN;           // should not happen
 
-    FltError eRet = eERR_UNKN_BIFF;
+    ErrCode eRet = SCERR_IMPORT_UNKNOWN_BIFF;
     if( eFormat == ExpBiff5 || eFormat == ExpBiff8 )
         eRet = lcl_ExportExcelBiff( rMedium, pDocument, pMedStrm, eFormat == ExpBiff8, eNach );
 
@@ -224,7 +224,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportQPW(SvStream &rStream)
     ScDLL::Init();
     ScDocument aDocument;
     aDocument.MakeTable(0);
-    return ScFormatFilter::Get().ScImportQuattroPro(&rStream, &aDocument) == eERR_OK;
+    return ScFormatFilter::Get().ScImportQuattroPro(&rStream, &aDocument) == ERRCODE_NONE;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportXLS(const OUString &rURL)
@@ -233,7 +233,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportXLS(const OUString &rURL
     SfxMedium aMedium(rURL, StreamMode::READ);
     ScDocument aDocument;
     aDocument.MakeTable(0);
-    return ScFormatFilter::Get().ScImportExcel(aMedium, &aDocument, EIF_AUTO) == eERR_OK;
+    return ScFormatFilter::Get().ScImportExcel(aMedium, &aDocument, EIF_AUTO) == ERRCODE_NONE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

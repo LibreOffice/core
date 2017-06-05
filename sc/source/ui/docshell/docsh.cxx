@@ -1093,8 +1093,8 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             SvStream* pStream = rMedium.GetInStream();
             if (pStream)
             {
-                FltError eError = ScFormatFilter::Get().ScImportStarCalc10( *pStream, &aDocument );
-                if (eError != eERR_OK)
+                ErrCode eError = ScFormatFilter::Get().ScImportStarCalc10( *pStream, &aDocument );
+                if (eError != ERRCODE_NONE)
                 {
                     if (!GetError())
                         SetError(eError);
@@ -1121,9 +1121,9 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_437 );
             }
 
-            FltError eError = ScFormatFilter::Get().ScImportLotus123( rMedium, &aDocument,
+            ErrCode eError = ScFormatFilter::Get().ScImportLotus123( rMedium, &aDocument,
                                                 ScGlobal::GetCharsetValue(sItStr));
-            if (eError != eERR_OK)
+            if (eError != ERRCODE_NONE)
             {
                 if (!GetError())
                     SetError(eError);
@@ -1152,7 +1152,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             MakeDrawLayer(); //! In the filter
             CalcOutputFactor(); // prepare update of row height
-            FltError eError = ScFormatFilter::Get().ScImportExcel( rMedium, &aDocument, eFormat );
+            ErrCode eError = ScFormatFilter::Get().ScImportExcel( rMedium, &aDocument, eFormat );
             aDocument.UpdateFontCharSet();
             if ( aDocument.IsChartListenerCollectionNeedsUpdate() )
                 aDocument.UpdateChartListenerCollection(); //! For all imports?
@@ -1166,7 +1166,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     SetError(eError);
                 bRet = true;
             }
-            else if (eError != eERR_OK)
+            else if (eError != ERRCODE_NONE)
             {
                 if (!GetError())
                     SetError(eError);
@@ -1206,7 +1206,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 aOptions.SetTextSep( '"' );
             }
 
-            FltError eError = eERR_OK;
+            ErrCode eError = ERRCODE_NONE;
             bool bOverflowRow, bOverflowCol, bOverflowCell;
             bOverflowRow = bOverflowCol = bOverflowCell = false;
 
@@ -1221,7 +1221,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     pInStream->SetStreamCharSet( aOptions.GetCharSet() );
                     pInStream->Seek( 0 );
                     bRet = aImpEx.ImportStream( *pInStream, rMedium.GetBaseURL(), SotClipboardFormatId::STRING );
-                    eError = bRet ? eERR_OK : SCERR_IMPORT_CONNECT;
+                    eError = bRet ? ERRCODE_NONE : SCERR_IMPORT_CONNECT;
                     aDocument.StartAllListeners();
                     sc::SetFormulaDirtyContext aCxt;
                     aDocument.SetAllFormulasDirty(aCxt);
@@ -1248,7 +1248,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
             }
 
-            if (eError != eERR_OK)
+            if (eError != ERRCODE_NONE)
             {
                 if (!GetError())
                     SetError(eError);
@@ -1256,7 +1256,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             else if (!GetError() && (bOverflowRow || bOverflowCol || bOverflowCell))
             {
                 // precedence: row, column, cell
-                FltError nWarn = (bOverflowRow ? SCWARN_IMPORT_ROW_OVERFLOW :
+                ErrCode nWarn = (bOverflowRow ? SCWARN_IMPORT_ROW_OVERFLOW :
                         (bOverflowCol ? SCWARN_IMPORT_COLUMN_OVERFLOW :
                          SCWARN_IMPORT_CELL_OVERFLOW));
                 SetError(nWarn);
@@ -1288,7 +1288,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     ScGlobal::GetCharsetValue(sItStr), aColWidthParam, *aRecalcRanges.mpRanges );
             aRecalcRowRangesArray.push_back(aRecalcRanges);
 
-            if (eError != eERR_OK)
+            if (eError != ERRCODE_NONE)
             {
                 if (!GetError())
                     SetError(eError);
@@ -1306,7 +1306,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             SvStream* pStream = rMedium.GetInStream();
             if (pStream)
             {
-                FltError eError;
+                ErrCode eError;
                 OUString sItStr;
                 SfxItemSet*  pSet = rMedium.GetItemSet();
                 const SfxPoolItem* pItem;
@@ -1326,7 +1326,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
                 eError = ScFormatFilter::Get().ScImportDif( *pStream, &aDocument, ScAddress(0,0,0),
                                     ScGlobal::GetCharsetValue(sItStr));
-                if (eError != eERR_OK)
+                if (eError != ERRCODE_NONE)
                 {
                     if (!GetError())
                         SetError(eError);
@@ -1343,7 +1343,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         }
         else if (aFltName == pFilterSylk)
         {
-            FltError eError = SCERR_IMPORT_UNKNOWN;
+            ErrCode eError = SCERR_IMPORT_UNKNOWN;
             if( !rMedium.IsStorage() )
             {
                 ScImportExport aImpEx( &aDocument );
@@ -1353,7 +1353,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 {
                     pInStream->Seek( 0 );
                     bRet = aImpEx.ImportStream( *pInStream, rMedium.GetBaseURL(), SotClipboardFormatId::SYLK );
-                    eError = bRet ? eERR_OK : SCERR_IMPORT_UNKNOWN;
+                    eError = bRet ? ERRCODE_NONE : SCERR_IMPORT_UNKNOWN;
                     aDocument.StartAllListeners();
                     sc::SetFormulaDirtyContext aCxt;
                     aDocument.SetAllFormulasDirty(aCxt);
@@ -1364,7 +1364,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
             }
 
-            if ( eError != eERR_OK && !GetError() )
+            if ( eError != ERRCODE_NONE && !GetError() )
                 SetError(eError);
             bSetColWidths = true;
             bSetSimpleTextColWidths = true;
@@ -1372,8 +1372,8 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         }
         else if (aFltName == pFilterQPro6)
         {
-            FltError eError = ScFormatFilter::Get().ScImportQuattroPro(rMedium.GetInStream(), &aDocument);
-            if (eError != eERR_OK)
+            ErrCode eError = ScFormatFilter::Get().ScImportQuattroPro(rMedium.GetInStream(), &aDocument);
+            if (eError != ERRCODE_NONE)
             {
                 if (!GetError())
                     SetError(eError);
@@ -1390,7 +1390,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         }
         else if (aFltName == pFilterRtf)
         {
-            FltError eError = SCERR_IMPORT_UNKNOWN;
+            ErrCode eError = SCERR_IMPORT_UNKNOWN;
             if( !rMedium.IsStorage() )
             {
                 SvStream* pInStream = rMedium.GetInStream();
@@ -1399,7 +1399,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     pInStream->Seek( 0 );
                     ScRange aRange;
                     eError = ScFormatFilter::Get().ScImportRTF( *pInStream, rMedium.GetBaseURL(), &aDocument, aRange );
-                    if (eError != eERR_OK)
+                    if (eError != ERRCODE_NONE)
                     {
                         if (!GetError())
                             SetError(eError);
@@ -1421,12 +1421,12 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
             }
 
-            if ( eError != eERR_OK && !GetError() )
+            if ( eError != ERRCODE_NONE && !GetError() )
                 SetError(eError);
         }
         else if (aFltName == pFilterHtml || aFltName == pFilterHtmlWebQ)
         {
-            FltError eError = SCERR_IMPORT_UNKNOWN;
+            ErrCode eError = SCERR_IMPORT_UNKNOWN;
             bool bWebQuery = aFltName == pFilterHtmlWebQ;
             if( !rMedium.IsStorage() )
             {
@@ -1451,7 +1451,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     SvNumberFormatter aNumFormatter( comphelper::getProcessComponentContext(), eLang);
                     eError = ScFormatFilter::Get().ScImportHTML( *pInStream, rMedium.GetBaseURL(), &aDocument, aRange,
                                             GetOutputFactor(), !bWebQuery, &aNumFormatter, bDateConvert );
-                    if (eError != eERR_OK)
+                    if (eError != ERRCODE_NONE)
                     {
                         if (!GetError())
                             SetError(eError);
@@ -1472,7 +1472,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
             }
 
-            if ( eError != eERR_OK && !GetError() )
+            if ( eError != ERRCODE_NONE && !GetError() )
                 SetError(eError);
         }
         else
@@ -2282,13 +2282,13 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             ExportFormatExcel eFormat = ExpBiff5;
             if( aFltName == pFilterExcel97 || aFltName == pFilterEx97Temp )
                 eFormat = ExpBiff8;
-            FltError eError = ScFormatFilter::Get().ScExportExcel5( rMed, &aDocument, eFormat, RTL_TEXTENCODING_MS_1252 );
+            ErrCode eError = ScFormatFilter::Get().ScExportExcel5( rMed, &aDocument, eFormat, RTL_TEXTENCODING_MS_1252 );
 
             if( eError && !GetError() )
                 SetError(eError);
 
             // don't return false for warnings
-            bRet = ((eError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK) || (eError == eERR_OK);
+            bRet = ((eError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK) || (eError == ERRCODE_NONE);
         }
         else
         {
@@ -2356,15 +2356,15 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         sal_uLong eError = DBaseExport(
             rMed.GetPhysicalName(), ScGlobal::GetCharsetValue(sCharSet), bHasMemo);
 
-        if ( eError != eERR_OK && (eError & ERRCODE_WARNING_MASK) )
+        if ( eError != ERRCODE_NONE && (eError & ERRCODE_WARNING_MASK) )
         {
-            eError = eERR_OK;
+            eError = ERRCODE_NONE;
         }
 
         INetURLObject aTmpFile( rMed.GetPhysicalName(), INetProtocol::File );
         if ( bHasMemo )
             aTmpFile.setExtension("dbt");
-        if ( eError != eERR_OK )
+        if ( eError != ERRCODE_NONE )
         {
             if (!GetError())
                 SetError(eError);
