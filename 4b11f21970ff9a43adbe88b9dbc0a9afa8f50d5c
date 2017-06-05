@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_52953be2",
+        "filename": "include/comphelper/accessiblecontexthelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-05T14:37:30Z",
+      "side": 1,
+      "message": "can remove chunks of the text above, since it no longer applies",
+      "revId": "4b11f21970ff9a43adbe88b9dbc0a9afa8f50d5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_729a3716",
+        "filename": "include/comphelper/accessiblecontexthelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-05T14:37:30Z",
+      "side": 1,
+      "message": "I\u0027m assuming the next stage will be removing OContextEntryGuard and OExternalLockGuard",
+      "revId": "4b11f21970ff9a43adbe88b9dbc0a9afa8f50d5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
