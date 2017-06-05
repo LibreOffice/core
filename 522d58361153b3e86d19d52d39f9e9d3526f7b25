@@ -1,0 +1,418 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_f2c70743",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2767,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "maybe better \"If\" instead of \"When\"?",
+      "range": {
+        "startLine": 2767,
+        "startChar": 23,
+        "endLine": 2767,
+        "endChar": 27
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_12c5733b",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2768,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "maybe better \"ends\" instead of \"is closed\"?",
+      "range": {
+        "startLine": 2768,
+        "startChar": 23,
+        "endLine": 2768,
+        "endChar": 29
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_52dd3b13",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2769,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "\"it\" instead of \"it\u0027s\"",
+      "range": {
+        "startLine": 2769,
+        "startChar": 44,
+        "endLine": 2769,
+        "endChar": 48
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_32c26f34",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2769,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "maybe \"discard\"?",
+      "range": {
+        "startLine": 2769,
+        "startChar": 31,
+        "endLine": 2769,
+        "endChar": 36
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_72e237d7",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2964,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "maybe \"may not\" (which is stronger; \"shouldn\u0027t\" is a soft requirement which may be ignored)",
+      "range": {
+        "startLine": 2964,
+        "startChar": 64,
+        "endLine": 2964,
+        "endChar": 73
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_92e7a3e3",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2966,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "maybe \"and the count is always 1\"? (sounds a Yedi talk otherwise :) )",
+      "range": {
+        "startLine": 2966,
+        "startChar": 37,
+        "endLine": 2966,
+        "endChar": 60
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_d2d12bfd",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2992,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "maybe \"Is the ... being ended\" instead of \"Will the ... be ended\"? (The talk is of current situation here, not some hypothetical future one. Otherwise it would be \"Wird das ... beendet werden\" or contain some reference to the future. :) )",
+      "range": {
+        "startLine": 2992,
+        "startChar": 7,
+        "endLine": 2992,
+        "endChar": 11
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_f2ce2759",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2996,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "maybe \"is not being ended\"? (similar to the comment above - it\u0027s about now, not future)",
+      "range": {
+        "startLine": 2996,
+        "startChar": 38,
+        "endLine": 2996,
+        "endChar": 52
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_12dc9311",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2999,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "Maybe: \"Then we look for the attribute which was started immediately afterwards, which has also not yet been ended (otherwise it would no longer be in the list).\"\n\nReasons:\n- the part before the comma is hard to understand\n- tenses and grammar errors\n- missing negation inside the brackets",
+      "range": {
+        "startLine": 2998,
+        "startChar": 11,
+        "endLine": 2999,
+        "endChar": 65
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_32d98f22",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3085,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "maybe \"... type exist any longer, so ...\"",
+      "range": {
+        "startLine": 3085,
+        "startChar": 42,
+        "endLine": 3085,
+        "endChar": 52
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_52045b7d",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3086,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "maybe \"Except if they ...\" (missing \"if\")",
+      "range": {
+        "startLine": 3086,
+        "startChar": 15,
+        "endLine": 3086,
+        "endChar": 26
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_92fec369",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3086,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "maybe \"... attribute, then ...\"\n\nReasons:\n- \"attribute\" in singular\n- \"and\" superfluous",
+      "range": {
+        "startLine": 3086,
+        "startChar": 45,
+        "endLine": 3086,
+        "endChar": 65
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b203bf72",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3087,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "\"appended\"",
+      "range": {
+        "startLine": 3087,
+        "startChar": 23,
+        "endLine": 3087,
+        "endChar": 29
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_f2f54783",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3104,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "\"delete\" (same tense as \"insert\")",
+      "range": {
+        "startLine": 3104,
+        "startChar": 34,
+        "endLine": 3104,
+        "endChar": 42
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_9235e347",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3127,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "\"When\" -\u003e \"If\"",
+      "range": {
+        "startLine": 3127,
+        "startChar": 7,
+        "endLine": 3127,
+        "endChar": 11
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b23adf34",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3128,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "-\u003e \"then the list header needs to be corrected as well\".",
+      "range": {
+        "startLine": 3127,
+        "startChar": 53,
+        "endLine": 3128,
+        "endChar": 33
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_f23c6731",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3154,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "maybe \"Is the ... being removed\"? (note also that this talks of removing, not ending)",
+      "range": {
+        "startLine": 3154,
+        "startChar": 7,
+        "endLine": 3154,
+        "endChar": 11
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_124ad3c5",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3161,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-05T11:36:58Z",
+      "side": 1,
+      "message": "see comments to lines 2996-2999 above (these lines are a copy of those)",
+      "range": {
+        "startLine": 3158,
+        "startChar": 0,
+        "endLine": 3161,
+        "endChar": 65
+      },
+      "revId": "522d58361153b3e86d19d52d39f9e9d3526f7b25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
