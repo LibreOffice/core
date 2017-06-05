@@ -885,9 +885,9 @@ OUString Storage::GetUserName()
 bool Storage::ValidateFAT()
 {
     Link<StgLinkArg&,void> aLink = StgIo::GetErrorLink();
-    ErrCode nErr = pIo->ValidateFATs();
+    FatError nErr = pIo->ValidateFATs();
     StgIo::SetErrorLink( aLink );
-    return nErr == ERRCODE_NONE;
+    return nErr == FatError::Ok;
 }
 
 void Storage::SetDirty()

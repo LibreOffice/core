@@ -156,7 +156,7 @@ public:
 
     sal_Int32 GetPageSize() { return nPageSize; }
 
-    sal_uLong Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect );
+    FatError Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect );
     bool HasUnrefChains();
 };
 
@@ -194,7 +194,7 @@ bool EasyFat::HasUnrefChains()
     return false;
 }
 
-sal_uLong EasyFat::Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect )
+FatError EasyFat::Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect )
 {
     if( nCount > 0 )
     {
@@ -206,41 +206,41 @@ sal_uLong EasyFat::Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect )
     while( nCount != 0 )
     {
         if( nCurPage < 0 || nCurPage >= nPages )
-            return FAT_OUTOFBOUNDS;
+            return FatError::OutOfBounds;
         pFree[ nCurPage ] = false;
         nCurPage = pFat[ nCurPage ];
         //Stream zu lang
         if( nCurPage != nExpect && nCount == 1 )
-            return FAT_WRONGLENGTH;
+            return FatError::WrongLength;
         //Stream zu kurz
         if( nCurPage == nExpect && nCount != 1 && nCount != -1 )
-            return FAT_WRONGLENGTH;
+            return FatError::WrongLength;
         // letzter Block bei Stream ohne Laenge
         if( nCurPage == nExpect && nCount == -1 )
             nCount = 1;
         if( nCount != -1 )
             nCount--;
     }
-    return FAT_OK;
+    return FatError::Ok;
 }
 
 class Validator
 {
-    sal_uLong nError;
+    FatError nError;
 
     EasyFat aSmallFat;
     EasyFat aFat;
 
     StgIo &rIo;
 
-    sal_uLong ValidateMasterFATs();
-    sal_uLong ValidateDirectoryEntries();
-    sal_uLong FindUnrefedChains();
-    sal_uLong MarkAll( StgDirEntry *pEntry );
+    FatError ValidateMasterFATs();
+    FatError ValidateDirectoryEntries();
+    FatError FindUnrefedChains();
+    FatError MarkAll( StgDirEntry *pEntry );
 
 public:
     explicit Validator( StgIo &rIo );
-    bool IsError() { return nError != 0; }
+    bool IsError() { return nError != FatError::Ok; }
 };
 
 Validator::Validator( StgIo &rIoP )
@@ -248,48 +248,48 @@ Validator::Validator( StgIo &rIoP )
       aFat( rIoP, rIoP.m_pFAT, 1 << rIoP.m_aHdr.GetPageSize() ),
       rIo( rIoP )
 {
-    sal_uLong nErr = nError = FAT_OK;
+    FatError nErr = nError = FatError::Ok;
 
-    if( ( nErr = ValidateMasterFATs() ) != FAT_OK )
+    if( ( nErr = ValidateMasterFATs() ) != FatError::Ok )
         nError = nErr;
-    else if(    ( nErr = ValidateDirectoryEntries() ) != FAT_OK )
+    else if(    ( nErr = ValidateDirectoryEntries() ) != FatError::Ok )
         nError = nErr;
-    else if(    ( nErr = FindUnrefedChains()) != FAT_OK )
+    else if(    ( nErr = FindUnrefedChains()) != FatError::Ok )
         nError = nErr;
 }
 
-sal_uLong Validator::ValidateMasterFATs()
+FatError Validator::ValidateMasterFATs()
 {
     sal_Int32 nCount = rIo.m_aHdr.GetFATSize();
-    sal_uLong nErr;
+    FatError nErr;
     if ( !rIo.m_pFAT )
-        return FAT_INMEMORYERROR;
+        return FatError::InMemoryError;
 
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
-        if( ( nErr = aFat.Mark(rIo.m_pFAT->GetPage( short(i), false ), aFat.GetPageSize(), -3 )) != FAT_OK )
+        if( ( nErr = aFat.Mark(rIo.m_pFAT->GetPage( short(i), false ), aFat.GetPageSize(), -3 )) != FatError::Ok )
             return nErr;
     }
     if( rIo.m_aHdr.GetMasters() )
-        if( ( nErr = aFat.Mark(rIo.m_aHdr.GetFATChain( ), aFat.GetPageSize(), -4 )) != FAT_OK )
+        if( ( nErr = aFat.Mark(rIo.m_aHdr.GetFATChain( ), aFat.GetPageSize(), -4 )) != FatError::Ok )
             return nErr;
 
-    return FAT_OK;
+    return FatError::Ok;
 }
 
-sal_uLong Validator::MarkAll( StgDirEntry *pEntry )
+FatError Validator::MarkAll( StgDirEntry *pEntry )
 {
     if ( !pEntry )
-        return FAT_INMEMORYERROR;
+        return FatError::InMemoryError;
 
     StgIterator aIter( *pEntry );
-    sal_uLong nErr = FAT_OK;
+    FatError nErr = FatError::Ok;
     for( StgDirEntry* p = aIter.First(); p ; p = aIter.Next() )
     {
         if( p->m_aEntry.GetType() == STG_STORAGE )
         {
             nErr = MarkAll( p );
-            if( nErr != FAT_OK )
+            if( nErr != FatError::Ok )
                 return nErr;
         }
         else
@@ -299,32 +299,32 @@ sal_uLong Validator::MarkAll( StgDirEntry *pEntry )
                 nErr = aSmallFat.Mark( p->m_aEntry.GetStartPage(),nSize, -2 );
             else
                 nErr = aFat.Mark( p->m_aEntry.GetStartPage(),nSize, -2 );
-            if( nErr != FAT_OK )
+            if( nErr != FatError::Ok )
                 return nErr;
         }
     }
-    return FAT_OK;
+    return FatError::Ok;
 }
 
-sal_uLong Validator::ValidateDirectoryEntries()
+FatError Validator::ValidateDirectoryEntries()
 {
     if ( !rIo.m_pTOC )
-        return FAT_INMEMORYERROR;
+        return FatError::InMemoryError;
 
     // Normale DirEntries
-    sal_uLong nErr = MarkAll( rIo.m_pTOC->GetRoot() );
-    if( nErr != FAT_OK )
+    FatError nErr = MarkAll( rIo.m_pTOC->GetRoot() );
+    if( nErr != FatError::Ok )
         return nErr;
     // Small Data
     nErr = aFat.Mark( rIo.m_pTOC->GetRoot()->m_aEntry.GetStartPage(),
                  rIo.m_pTOC->GetRoot()->m_aEntry.GetSize(), -2 );
-    if( nErr != FAT_OK )
+    if( nErr != FatError::Ok )
         return nErr;
     // Small Data FAT
     nErr = aFat.Mark(
         rIo.m_aHdr.GetDataFATStart(),
         rIo.m_aHdr.GetDataFATSize() * aFat.GetPageSize(), -2 );
-    if( nErr != FAT_OK )
+    if( nErr != FatError::Ok )
         return nErr;
     // TOC
     nErr = aFat.Mark(
@@ -332,13 +332,13 @@ sal_uLong Validator::ValidateDirectoryEntries()
     return nErr;
 }
 
-sal_uLong Validator::FindUnrefedChains()
+FatError Validator::FindUnrefedChains()
 {
     if( aSmallFat.HasUnrefChains() ||
         aFat.HasUnrefChains() )
-        return FAT_UNREFCHAIN;
+        return FatError::UnrefChain;
     else
-        return FAT_OK;
+        return FatError::Ok;
 }
 
 namespace { struct ErrorLink : public rtl::Static<Link<StgLinkArg&,void>, ErrorLink > {}; }
@@ -353,7 +353,7 @@ const Link<StgLinkArg&,void>& StgIo::GetErrorLink()
     return ErrorLink::get();
 }
 
-sal_uLong StgIo::ValidateFATs()
+FatError StgIo::ValidateFATs()
 {
     if( m_bFile )
     {
@@ -363,7 +363,7 @@ sal_uLong StgIo::ValidateFATs()
 
         SvFileStream *pFileStrm = static_cast<SvFileStream *>( GetStrm() );
         if ( !pFileStrm )
-            return FAT_INMEMORYERROR;
+            return FatError::InMemoryError;
 
         StgIo aIo;
         if( aIo.Open( pFileStrm->GetFileName(),
@@ -375,11 +375,11 @@ sal_uLong StgIo::ValidateFATs()
             delete pV;
         }
 
-        sal_uLong nErr;
+        FatError nErr;
         if( bRet1 != bRet2 )
-            nErr = bRet1 ? FAT_ONFILEERROR : FAT_INMEMORYERROR;
-        else nErr = bRet1 ? FAT_OK : FAT_BOTHERROR;
-        if( nErr != FAT_OK && !m_bCopied )
+            nErr = bRet1 ? FatError::OnFileError : FatError::InMemoryError;
+        else nErr = bRet1 ? FatError::Ok : FatError::BothError;
+        if( nErr != FatError::Ok && !m_bCopied )
         {
             StgLinkArg aArg;
             aArg.aFile = pFileStrm->GetFileName();
@@ -387,11 +387,11 @@ sal_uLong StgIo::ValidateFATs()
             ErrorLink::get().Call( aArg );
             m_bCopied = true;
         }
-//      DBG_ASSERT( nErr == FAT_OK ,"Storage kaputt");
+//      DBG_ASSERT( nErr == FatError::Ok ,"Storage kaputt");
         return nErr;
     }
 //  OSL_FAIL("Validiere nicht (kein FileStorage)");
-    return FAT_OK;
+    return FatError::Ok;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
