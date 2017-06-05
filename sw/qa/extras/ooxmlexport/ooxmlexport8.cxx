@@ -348,7 +348,7 @@ DECLARE_OOXMLEXPORT_TEST(testN766487, "n766487.docx")
      * oPara = oParas.nextElement
      * oRuns = oPara.createEnumeration
      * oRun = oRuns.nextElement
-     * xray oRun.CharHeight ' 12, was larger
+     * xray oRun.CharHeight ' 11, was larger
      * oPara = oParas.nextElement
      * xray oPara.ParaFirstLineIndent ' -635, was 0
      */
@@ -361,7 +361,7 @@ DECLARE_OOXMLEXPORT_TEST(testN766487, "n766487.docx")
     uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
     float fValue = 0;
     xPropertySet->getPropertyValue("CharHeight") >>= fValue;
-    CPPUNIT_ASSERT_EQUAL(12.f, fValue);
+    CPPUNIT_ASSERT_EQUAL(11.f, fValue);
 
     xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     sal_Int32 nValue = 0;

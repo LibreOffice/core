@@ -1379,6 +1379,17 @@ DECLARE_OOXMLIMPORT_TEST(testTdf100072, "tdf100072.docx")
     CPPUNIT_ASSERT_MESSAGE("Shape line width does not match", abs(nFirstEnd - nSecondEnd) < 10);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf108350, "tdf108350.docx")
+{
+    // For OOXML without explicit font information, font needs to be Carlito 11 pt,
+    // our bundled metrically compatible substitute for Calibri.
+    uno::Reference<text::XTextRange> xPara(getParagraph(1));
+    uno::Reference<beans::XPropertySet> xRun(getRun(xPara, 1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Carlito"), getProperty<OUString>(xRun, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(double(11), getProperty<double>(xRun, "CharHeight"));
+}
+
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
