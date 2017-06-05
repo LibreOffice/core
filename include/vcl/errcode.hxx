@@ -252,7 +252,6 @@ inline sal_uInt32 ERRCODE_TOERROR( ErrCode x )
 // For the EditEngine:
 #define SVSTREAM_ERRBASE_USER           ERRCODE_AREA_LIB1
 
-#define PRINTER_OK                      ERRCODE_NONE
 #define PRINTER_ABORT                   ERRCODE_IO_ABORT
 #define PRINTER_GENERALERROR            ERRCODE_IO_GENERAL
 
