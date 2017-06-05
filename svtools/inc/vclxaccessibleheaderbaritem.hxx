@@ -25,6 +25,9 @@
 #include <cppuhelper/implbase2.hxx>
 
 #include <tools/link.hxx>
+
+#include <toolkit/helper/externallock.hxx>
+
 #include <vcl/vclptr.hxx>
 
 #include <vector>
@@ -46,7 +49,8 @@ typedef ::cppu::ImplHelper2<
     css::accessibility::XAccessible,
     css::lang::XServiceInfo > VCLXAccessibleHeaderBarItem_BASE;
 
-class VCLXAccessibleHeaderBarItem :    public comphelper::OAccessibleExtendedComponentHelper,
+class VCLXAccessibleHeaderBarItem : private BaseVCLExternalSolarLock,
+                        public comphelper::OAccessibleExtendedComponentHelper,
                         public VCLXAccessibleHeaderBarItem_BASE
 {
 private:

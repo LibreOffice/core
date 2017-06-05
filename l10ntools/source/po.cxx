@@ -229,7 +229,7 @@ PoEntry::PoEntry(
 
     OString sMsgCtxt =
         rGroupId + "\n" +
-        (rLocalId.isEmpty() ? OString( "" ) : rLocalId + "\n") +
+        (rLocalId.isEmpty() ? OString() : rLocalId + "\n") +
         rResType;
     switch(eType){
     case TTEXT:
@@ -243,7 +243,7 @@ PoEntry::PoEntry(
     m_pGenPo->setMsgCtxt(sMsgCtxt);
     m_pGenPo->setMsgId(rText);
     m_pGenPo->setExtractCom(
-        ( !rHelpText.isEmpty() ?  rHelpText + "\n" : OString( "" )) +
+        ( !rHelpText.isEmpty() ?  rHelpText + "\n" : OString()) +
         genKeyId( m_pGenPo->getReference() + rGroupId + rLocalId + rResType + rText ) );
     m_bIsInitialized = true;
 }

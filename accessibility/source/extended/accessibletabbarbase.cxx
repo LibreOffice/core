@@ -21,7 +21,6 @@
 #ifndef ACCESSIBILITY_EXT_ACCESSIBLETABBARPAGELIST
 #include "extended/accessibletabbarpagelist.hxx"
 #endif
-#include <toolkit/helper/externallock.hxx>
 #include <svtools/tabbar.hxx>
 
 

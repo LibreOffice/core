@@ -18,7 +18,6 @@
  */
 
 #include <standard/vclxaccessibletabpage.hxx>
-#include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <helper/characterattributeshelper.hxx>
 

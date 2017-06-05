@@ -25,6 +25,7 @@
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <vcl/vclptr.hxx>
+#include <toolkit/helper/externallock.hxx>
 
 namespace vcl { class Window; }
 
@@ -46,7 +47,8 @@ typedef ::cppu::ImplHelper3<
         css::lang::XServiceInfo,
         css::beans::XPropertyChangeListener > AccessibleDialogControlShape_BASE;
 
-class AccessibleDialogControlShape :    public comphelper::OAccessibleExtendedComponentHelper,
+class AccessibleDialogControlShape :    private BaseVCLExternalSolarLock,
+                                        public comphelper::OAccessibleExtendedComponentHelper,
                                         public AccessibleDialogControlShape_BASE
 {
     friend class AccessibleDialogWindow;

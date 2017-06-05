@@ -23,7 +23,6 @@
 #include <helper/accresmgr.hxx>
 #include <helper/accessiblestrings.hrc>
 #include <toolkit/awt/vclxwindows.hxx>
-#include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/convert.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

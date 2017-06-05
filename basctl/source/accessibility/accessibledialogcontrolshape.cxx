@@ -30,7 +30,6 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <toolkit/awt/vclxfont.hxx>
-#include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
@@ -51,7 +50,7 @@ using namespace ::comphelper;
 
 
 AccessibleDialogControlShape::AccessibleDialogControlShape (DialogWindow* pDialogWindow, DlgEdObj* pDlgEdObj)
-    :OAccessibleExtendedComponentHelper( new VCLExternalSolarLock )
+    :OAccessibleExtendedComponentHelper( &m_aLock )
     ,m_pDialogWindow( pDialogWindow )
     ,m_pDlgEdObj( pDlgEdObj )
 {
@@ -71,8 +70,6 @@ AccessibleDialogControlShape::~AccessibleDialogControlShape()
 {
     if ( m_xControlModel.is() )
         m_xControlModel->removePropertyChangeListener( OUString(), static_cast< beans::XPropertyChangeListener* >( this ) );
-
-    delete getExternalLock();
 }
 
 
