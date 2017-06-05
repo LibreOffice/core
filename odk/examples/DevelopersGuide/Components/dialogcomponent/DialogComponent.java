@@ -62,7 +62,7 @@ import com.sun.star.awt.Rectangle;
 import com.sun.star.test.XTestDialogHandler;
 
 // DialogComponent implements all necessary interfaces self, this is only
-// for demonstration. More convenient is to use the impelmentation WeakBase or
+// for demonstration. More convenient is to use the implementation WeakBase or
 // ComponentBase, see implementation of TestComponentA.
 public class DialogComponent {
 

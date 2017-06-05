@@ -2638,7 +2638,7 @@ void DrawingML::WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon )
 
     const tools::Rectangle aRect( rPolyPolygon.GetBoundRect() );
 
-    // Put all polygons of rPolyPolygon in the same path elemnt
+    // Put all polygons of rPolyPolygon in the same path element
     // to subtract the overlapped areas.
     mpFS->startElementNS( XML_a, XML_path,
             XML_w, I64S( aRect.GetWidth() ),
