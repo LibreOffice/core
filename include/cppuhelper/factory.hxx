@@ -159,7 +159,7 @@ createOneInstanceComponentFactory(
     css::uno::Sequence< ::rtl::OUString > const & rServiceNames,
     rtl_ModuleCount * pModCount = NULL );
 
-/** Deprecated.  The type of the instanciate function used as argument of the create*Factory functions.
+/** Deprecated.  The type of the instantiate function used as argument of the create*Factory functions.
 
     @see createSingleFactory
     @see createOneInstanceFactory

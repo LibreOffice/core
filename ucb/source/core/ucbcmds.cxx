@@ -1662,7 +1662,7 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            "Can't instanciate target object!",
+            "Can't instantiate target object!",
             this );
         // Unreachable
     }
@@ -1845,7 +1845,7 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            "Can't instanciate source object!",
+            "Can't instantiate source object!",
             this );
         // Unreachable
     }
@@ -1988,7 +1988,7 @@ uno::Any UniversalContentBroker::checkIn( const ucb::CheckinArgument& rArg,
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >( &aProps, 1 ),
             xEnv,
-            "Can't instanciate target object!",
+            "Can't instantiate target object!",
             this );
         // Unreachable
     }

@@ -212,7 +212,7 @@ HwpImportFilter::HwpImportFilter(const Reference< XMultiServiceFactory >& rFact)
     }
     catch( Exception & )
     {
-        printf(" fail to instanciate %s\n", WRITER_IMPORTER_NAME );
+        printf(" fail to instantiate %s\n", WRITER_IMPORTER_NAME );
         exit( 1 );
     }
 }

@@ -229,7 +229,7 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
     {
         SAL_WARN( "oox", "Drawing::createAndInsertXShape - error during shape object creation: " << e.Message );
     }
-    OSL_ENSURE( xShape.is(), "Drawing::createAndInsertXShape - cannot instanciate shape object" );
+    OSL_ENSURE( xShape.is(), "Drawing::createAndInsertXShape - cannot instantiate shape object" );
     return xShape;
 }
 

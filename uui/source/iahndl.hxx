@@ -64,7 +64,7 @@ namespace vcl { class Window; }
 
 struct InteractionHandlerData
 {
-    /** The UNO service name to use to instanciate the content provider.
+    /** The UNO service name to use to instantiate the content provider.
      */
     OUString ServiceName;
 };

@@ -59,7 +59,7 @@ class FWI_DLLPUBLIC ConfigAccess final
 
         /**
             reference to the uno service manager
-            It's necessary to instanciate own needed services.
+            It's necessary to instantiate own needed services.
          */
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
 

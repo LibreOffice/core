@@ -49,7 +49,7 @@ ________________________________________________________________________________
     }
 
 //  public
-//  define method to instanciate new services
+//  define method to instantiate new services
 
 #define COMPONENTGETFACTORY( LIB, IFFACTORIES )                                                                                         \
     extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL LIB##_component_getFactory( const sal_Char* pImplementationName,                      \

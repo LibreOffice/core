@@ -172,7 +172,7 @@ public class _XTopWindow extends MultiMethodTest {
 
             oObj.setMenuBar(menu) ;
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Can't instanciate MenuBar service") ;
+            log.println("Can't instantiate MenuBar service") ;
             result = false ;
         }
 

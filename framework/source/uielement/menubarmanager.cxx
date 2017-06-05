@@ -1018,7 +1018,7 @@ bool MenuBarManager::CreatePopupMenuController( MenuItemHandler* pMenuItemHandle
 {
     OUString aItemCommand( pMenuItemHandler->aMenuItemURL );
 
-    // Try instanciate a popup menu controller. It is stored in the menu item handler.
+    // Try instantiate a popup menu controller. It is stored in the menu item handler.
     if ( !m_xPopupMenuControllerFactory.is() )
         return false;
 

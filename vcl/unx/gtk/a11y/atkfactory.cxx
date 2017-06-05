@@ -104,7 +104,7 @@ wrapper_factory_create_accessible( GObject *obj )
 #if GTK_CHECK_VERSION(3,0,0)
     GtkWidget* pEventBox = gtk_widget_get_parent(GTK_WIDGET(obj));
 
-    // gail_container_real_remove_gtk tries to re-instanciate an accessible
+    // gail_container_real_remove_gtk tries to re-instantiate an accessible
     // for a widget that is about to vanish ..
     if (!pEventBox)
         return atk_noop_object_wrapper_new();
@@ -119,7 +119,7 @@ wrapper_factory_create_accessible( GObject *obj )
 #else
     GtkWidget* pTopLevel = gtk_widget_get_parent(GTK_WIDGET(obj));
 
-    // gail_container_real_remove_gtk tries to re-instanciate an accessible
+    // gail_container_real_remove_gtk tries to re-instantiate an accessible
     // for a widget that is about to vanish ..
     if (!pTopLevel)
         return atk_noop_object_wrapper_new();

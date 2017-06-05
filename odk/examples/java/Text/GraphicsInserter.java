@@ -67,7 +67,7 @@ public class GraphicsInserter {
 
             /* A desktop environment contains tasks with one or more
                frames in which components can be loaded. Desktop is the
-               environment for components which can instanciate within
+               environment for components which can instantiate within
                frames. */
             com.sun.star.frame.XDesktop xDesktop = UnoRuntime.queryInterface(com.sun.star.frame.XDesktop.class,
                 xMCF.createInstanceWithContext("com.sun.star.frame.Desktop",
