@@ -47,7 +47,7 @@ using namespace ::comphelper;
 
 
 VCLXAccessibleHeaderBarItem::VCLXAccessibleHeaderBarItem( HeaderBar*    pHeadBar, sal_Int32 _nIndexInParent )
-    :OAccessibleExtendedComponentHelper( new VCLExternalSolarLock )
+    :OAccessibleExtendedComponentHelper( &m_aLock )
     ,m_pHeadBar( pHeadBar )
     ,m_nIndexInParent(_nIndexInParent + 1)
 
@@ -56,7 +56,6 @@ VCLXAccessibleHeaderBarItem::VCLXAccessibleHeaderBarItem( HeaderBar*    pHeadBar
 
 VCLXAccessibleHeaderBarItem::~VCLXAccessibleHeaderBarItem()
 {
-    delete getExternalLock();
 }
 
 void VCLXAccessibleHeaderBarItem::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )

@@ -30,6 +30,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/accimplaccess.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
+#include <toolkit/helper/externallock.hxx>
+
 
 #include <tools/link.hxx>
 #include <vcl/vclptr.hxx>
@@ -51,7 +53,8 @@ typedef ::cppu::ImplHelper1<
     css::lang::XServiceInfo > VCLXAccessibleComponent_BASE;
 
 class TOOLKIT_DLLPUBLIC VCLXAccessibleComponent
-        :public comphelper::OAccessibleExtendedComponentHelper
+        :private BaseVCLExternalSolarLock
+        ,public comphelper::OAccessibleExtendedComponentHelper
         ,public ::comphelper::OAccessibleImplementationAccess
         ,public VCLXAccessibleComponent_BASE
 {

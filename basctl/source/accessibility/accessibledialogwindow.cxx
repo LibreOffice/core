@@ -34,7 +34,6 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <toolkit/awt/vclxfont.hxx>
-#include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -100,7 +99,7 @@ bool AccessibleDialogWindow::ChildDescriptor::operator<( const ChildDescriptor& 
 
 
 AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWindow)
-    : OAccessibleExtendedComponentHelper( new VCLExternalSolarLock )
+    : OAccessibleExtendedComponentHelper( &m_aLock)
     , m_pDialogWindow(pDialogWindow)
     , m_pDlgEditor(nullptr)
     , m_pDlgEdModel(nullptr)
@@ -140,8 +139,6 @@ AccessibleDialogWindow::~AccessibleDialogWindow()
 
     if ( m_pDlgEdModel )
         EndListening( *m_pDlgEdModel );
-
-    delete getExternalLock();
 }
 
 

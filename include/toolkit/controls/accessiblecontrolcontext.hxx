@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <vcl/vclptr.hxx>
+#include <toolkit/helper/externallock.hxx>
 
 namespace vcl { class Window; }
 
@@ -48,7 +49,8 @@ namespace toolkit
         is being disposed.</p>
     */
     class OAccessibleControlContext
-            :public ::comphelper::OAccessibleImplementationAccess
+            :private BaseVCLExternalSolarLock
+            ,public ::comphelper::OAccessibleImplementationAccess
             ,public OAccessibleControlContext_Base
             ,public OAccessibleControlContext_IBase
     {
