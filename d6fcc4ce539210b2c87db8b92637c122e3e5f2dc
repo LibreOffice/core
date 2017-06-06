@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_ed79e630",
+        "filename": "cui/source/factory/init.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001193
+      },
+      "writtenOn": "2017-06-06T10:20:23Z",
+      "side": 1,
+      "message": "This functionality cannot be used now... in the new design. It\u0027s better to remove it(recommended). We cannot use GetCharacters as the text field is removed. One can simply insert characters by selecting it from the dialog.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 50
+      },
+      "revId": "d6fcc4ce539210b2c87db8b92637c122e3e5f2dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
