@@ -79,7 +79,8 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
                                 const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable )
 {
     TransferableDataHelper aDataHelper( rxTransferable );
-    if ( aDataHelper.HasFormat( SotClipboardFormatId::EDITENGINE ) )
+    if ( aDataHelper.HasFormat( SotClipboardFormatId::EDITENGINE ) ||
+            aDataHelper.HasFormat( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT ) )
     {
         HideAllCursors();
 
