@@ -27,7 +27,6 @@ $(eval $(call gb_Executable_set_include,qpwfuzzer,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,qpwfuzzer,\
-	forui \
 	scfilt \
 	$(fuzzer_libraries) \
 ))
