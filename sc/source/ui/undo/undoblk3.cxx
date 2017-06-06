@@ -414,7 +414,7 @@ void ScUndoSelectionAttr::DoChange( const bool bUndo )
         aMarkData.MarkToSimple();
 
         if (pLineOuter)
-            rDoc.ApplySelectionFrame( aMarkData, pLineOuter, pLineInner );
+            rDoc.ApplySelectionFrame(aMarkData, *pLineOuter, pLineInner);
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();

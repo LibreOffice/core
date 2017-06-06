@@ -1593,9 +1593,9 @@ public:
     void            GetSelectionFrame( const ScMarkData& rMark,
                                        SvxBoxItem&      rLineOuter,
                                        SvxBoxInfoItem&  rLineInner );
-    void            ApplySelectionFrame( const ScMarkData& rMark,
-                                         const SvxBoxItem* pLineOuter,
-                                         const SvxBoxInfoItem* pLineInner );
+    void            ApplySelectionFrame(const ScMarkData& rMark,
+                                        const SvxBoxItem& rLineOuter,
+                                        const SvxBoxInfoItem* pLineInner);
     void            ApplyFrameAreaTab( const ScRange& rRange,
                                        const SvxBoxItem* pLineOuter,
                                        const SvxBoxInfoItem* pLineInner );
