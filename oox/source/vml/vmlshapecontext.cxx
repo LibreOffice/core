@@ -312,9 +312,11 @@ ShapeTypeContext::ShapeTypeContext( ContextHandler2Helper& rParent, ShapeType& r
     mrTypeModel.maFillModel.moColor = rAttribs.getString( XML_fillcolor );
 
     // For roundrect we may have a arcsize attribute to read
-    mrTypeModel.maArcsize = rAttribs.getString( XML_arcsize,OUString( ) );
+    mrTypeModel.maArcsize = rAttribs.getString( XML_arcsize, OUString() );
     // editas
-    mrTypeModel.maEditAs = rAttribs.getString(XML_editas, OUString());
+    mrTypeModel.maEditAs = rAttribs.getString( XML_editas, OUString() );
+
+    mrTypeModel.maAdjustments = rAttribs.getString( XML_adj, OUString() );
 }
 
 ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
