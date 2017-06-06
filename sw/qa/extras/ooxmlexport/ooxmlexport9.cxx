@@ -21,6 +21,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/view/XViewSettingsSupplier.hpp>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -278,6 +279,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106001_2, "tdf106001-2.odt")
     if (!pXmlDoc)
         return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:rPr/w:w","val","600");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf99074, "tdf99074.docx")
+{
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XViewSettingsSupplier> const xController(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> const xViewSettings(
+        xController->getViewSettings());
+    // This was false, Web Layout was ignored on import.
+    CPPUNIT_ASSERT(getProperty<bool>(xViewSettings, "ShowOnlineLayout"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107104, "tdf107104.docx")
