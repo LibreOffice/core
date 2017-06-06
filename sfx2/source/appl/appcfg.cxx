@@ -410,15 +410,12 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                     }
                     break;
                 case SID_ATTR_PATHNAME :
-                case SID_ATTR_PATHGROUP :
                 {
-                    SfxAllEnumItem aNames(rPool.GetWhich(SID_ATTR_PATHGROUP));
                     SfxAllEnumItem aValues(rPool.GetWhich(SID_ATTR_PATHNAME));
                     SvtPathOptions aPathCfg;
                     for ( sal_uInt16 nProp = SvtPathOptions::PATH_ADDIN;
                           nProp <= SvtPathOptions::PATH_WORK; nProp++ )
                     {
-                        aNames.InsertValue( nProp, SfxResId(CONFIG_PATH_START + nProp) );
                         OUString aValue;
                         switch ( nProp )
                         {
@@ -448,7 +445,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                         aValues.InsertValue( nProp, aValue );
                     }
 
-                    if ( rSet.Put(aNames) || rSet.Put(aValues) )
+                    if (rSet.Put(aValues))
                         bRet = true;
                 }
                 break;

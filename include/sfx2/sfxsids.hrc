@@ -470,7 +470,6 @@
 #define SID_ATTR_APPLYCHARUNIT          (SID_OPTIONS_START + 88)
 
 // PathTabPage
-#define SID_ATTR_PATHGROUP              (SID_OPTIONS_START + 10)
 #define SID_ATTR_PATHNAME               (SID_OPTIONS_START + 11)
 
 // LinguTabPage
