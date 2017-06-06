@@ -31,6 +31,7 @@
 #include "docary.hxx"
 #include <IDocumentStylePoolAccess.hxx>
 #include "unostyle.hxx"
+#include "unoprnms.hxx"
 #include "fmtpdsc.hxx"
 #include "pagedesc.hxx"
 #include <xmloff/xmlnmspe.hxx>
@@ -44,6 +45,7 @@
 #include <xmloff/XMLTextMasterStylesContext.hxx>
 #include <xmloff/XMLTextShapeStyleContext.hxx>
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include "xmlimp.hxx"
 #include "xmltbli.hxx"
 #include "cellatr.hxx"
@@ -51,10 +53,13 @@
 #include <xmloff/attrlist.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <ccoll.hxx>
 
 #include <memory>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
 class SwXMLConditionParser_Impl
@@ -205,6 +210,10 @@ public:
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
 
     bool IsValid() const { return Master_CollCondition::NONE != nCondition; }
+
+    Master_CollCondition getCondition() const { return nCondition; }
+    sal_uInt32 getSubCondition() const { return nSubCondition; }
+    OUString const &getApplyStyle() const { return sApplyStyle; }
 };
 
 SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
@@ -250,10 +259,12 @@ typedef std::vector<rtl::Reference<SwXMLConditionContext_Impl>> SwXMLConditions_
 class SwXMLTextStyleContext_Impl : public XMLTextStyleContext
 {
     std::unique_ptr<SwXMLConditions_Impl> pConditions;
+    uno::Reference < style::XStyle > xNewStyle;
 
 protected:
 
     virtual uno::Reference < style::XStyle > Create() override;
+    virtual void Finish( bool bOverwrite ) override;
 
 public:
 
@@ -273,7 +284,6 @@ public:
 
 uno::Reference < style::XStyle > SwXMLTextStyleContext_Impl::Create()
 {
-    uno::Reference < style::XStyle > xNewStyle;
 
     if( pConditions && XML_STYLE_FAMILY_TEXT_PARAGRAPH == GetFamily() )
     {
@@ -293,6 +303,46 @@ uno::Reference < style::XStyle > SwXMLTextStyleContext_Impl::Create()
     }
 
     return xNewStyle;
+}
+
+void
+SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
+{
+
+    if( pConditions && XML_STYLE_FAMILY_TEXT_PARAGRAPH == GetFamily() && xNewStyle.is() )
+    {
+        CommandStruct const *aCommands = SwCondCollItem::GetCmds();
+
+        Reference< XPropertySet > xPropSet( xNewStyle, UNO_QUERY );
+
+        uno::Sequence< beans::NamedValue > aSeq( pConditions->size() );
+
+        std::vector<rtl::Reference<SwXMLConditionContext_Impl>>::size_type i;
+        unsigned j;
+
+        for( i = 0; i < pConditions->size(); ++i )
+        {
+            if( (*pConditions)[i]->IsValid() )
+            {
+                Master_CollCondition nCond = (*pConditions)[i]->getCondition();
+                sal_uInt32 nSubCond = (*pConditions)[i]->getSubCondition();
+
+                for( j = 0; j < COND_COMMAND_COUNT; ++j )
+                {
+                    if( aCommands[j].nCnd == nCond &&
+                        aCommands[j].nSubCond == nSubCond )
+                    {
+                            aSeq[i].Name = GetCommandContextByIndex( j );
+                            aSeq[i].Value <<= GetImport().GetStyleDisplayName( GetFamily(), (*pConditions)[i]->getApplyStyle() );
+                            break;
+                    }
+                }
+            }
+        }
+
+        xPropSet->setPropertyValue( UNO_NAME_PARA_STYLE_CONDITIONS, uno::makeAny( aSeq )  );
+    }
+    XMLTextStyleContext::Finish( bOverwrite );
 }
 
 SwXMLTextStyleContext_Impl::SwXMLTextStyleContext_Impl( SwXMLImport& rImport,
