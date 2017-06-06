@@ -1,48 +1,6 @@
 {
   "images" : [
     {
-      "idiom" : "iphone",
-      "size" : "20x20",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "iphone",
-      "size" : "20x20",
-      "scale" : "3x"
-    },
-    {
-      "size" : "29x29",
-      "idiom" : "iphone",
-      "filename" : "LibreOffice-Small.png",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "iphone",
-      "size" : "29x29",
-      "scale" : "3x"
-    },
-    {
-      "idiom" : "iphone",
-      "size" : "40x40",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "iphone",
-      "size" : "40x40",
-      "scale" : "3x"
-    },
-    {
-      "size" : "60x60",
-      "idiom" : "iphone",
-      "filename" : "LibreOffice-60x60@2x.png",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "iphone",
-      "size" : "60x60",
-      "scale" : "3x"
-    },
-    {
       "idiom" : "ipad",
       "size" : "20x20",
       "scale" : "1x"
@@ -53,13 +11,15 @@
       "scale" : "2x"
     },
     {
-      "idiom" : "ipad",
       "size" : "29x29",
+      "idiom" : "ipad",
+      "filename" : "LibreOffice-29x29@1x.png",
       "scale" : "1x"
     },
     {
       "idiom" : "ipad",
       "size" : "29x29",
+      "filename" : "LibreOffice-29x29@2x.png",
       "scale" : "2x"
     },
     {
@@ -70,25 +30,27 @@
     {
       "idiom" : "ipad",
       "size" : "40x40",
+      "filename" : "LibreOffice-40x40@2x.png",
       "scale" : "2x"
-    },
-    {
-      "idiom" : "ipad",
-      "size" : "76x76",
-      "scale" : "1x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
+      "filename" : "LibreOffice-76x76@1x.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "ipad",
+      "size" : "76x76",
       "filename" : "LibreOffice-76x76@2x.png",
       "scale" : "2x"
     },
     {
-      "size" : "83.5x83.5",
       "idiom" : "ipad",
+      "size" : "83.5x83.5",
       "filename" : "LibreOffice-83.5x83.5@2x.png",
       "scale" : "2x"
-    }
+    },
   ],
   "info" : {
     "version" : 1,

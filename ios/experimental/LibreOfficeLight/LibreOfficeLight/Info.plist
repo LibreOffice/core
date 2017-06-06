@@ -7,6 +7,8 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeIconFiles</key>
+			<array/>
 			<key>CFBundleTypeName</key>
 			<string>DOCX Microsoft Word</string>
 			<key>CFBundleTypeRole</key>
@@ -15,10 +17,12 @@
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>com.jani.Editors.docx</string>
+				<string>org.openxmlformats.wordprocessingml.document</string>
 			</array>
 		</dict>
 		<dict>
+			<key>CFBundleTypeIconFiles</key>
+			<array/>
 			<key>CFBundleTypeName</key>
 			<string>DOC Microsoft Word</string>
 			<key>CFBundleTypeRole</key>
@@ -27,7 +31,7 @@
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>com.jani.Editors.doc</string>
+				<string>com.microsoft.word.doc</string>
 			</array>
 		</dict>
 		<dict>
@@ -179,10 +183,14 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIRequiresFullScreen</key>
+	<false/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -225,40 +233,6 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 				<string>xls</string>
 				<key>public.mime-type</key>
 				<string>iapplication/vnd.ms-excel</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.data</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>DOCX Microsoft Word</string>
-			<key>UTTypeIdentifier</key>
-			<string>com.jani.Editors.docx</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<string>docx</string>
-				<key>public.mime-type</key>
-				<string>application/vnd.openxmlformats-officedocument.wordprocessingml.document</string>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.data</string>
-			</array>
-			<key>UTTypeDescription</key>
-			<string>DOC Microsoft Word</string>
-			<key>UTTypeIdentifier</key>
-			<string>com.jani.Editors.doc</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<string>doc</string>
-				<key>public.mime-type</key>
-				<string>application/msword</string>
 			</dict>
 		</dict>
 		<dict>
@@ -362,6 +336,29 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 				<key>public.mime-type</key>
 				<string>application/vnd.oasis.opendocument.presentation</string>
 			</dict>
+		</dict>
+	</array>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>DOCX Microsoft Word</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.openxmlformats.wordprocessingml.document</string>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>DOC Microsoft Word</string>
+			<key>UTTypeIdentifier</key>
+			<string>com.microsoft.word.doc</string>
 		</dict>
 	</array>
 </dict>

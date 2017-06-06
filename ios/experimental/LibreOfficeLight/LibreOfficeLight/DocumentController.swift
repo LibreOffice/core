@@ -9,8 +9,16 @@ import UIKit
 
 
 
-class DocumentController: UIViewController, DocumentActionsControlDelegate
+class DocumentController: UIViewController, DocumentActionsControlDelegate, UIDocumentMenuDelegate
 {
+    func documentMenu(_: UIDocumentMenuViewController, didPickDocumentPicker: UIDocumentPickerViewController)
+    {
+    }
+
+    func documentMenuWasCancelled(_: UIDocumentMenuViewController)
+    {
+    }
+
     // Show sidemenu (part of documentcontroller)
     @IBAction func doMenu(_ sender: UIBarButtonItem)
     {
@@ -77,9 +85,23 @@ class DocumentController: UIViewController, DocumentActionsControlDelegate
 
     func actionOpen()
     {
+        let importMenu = UIDocumentMenuViewController(documentTypes: [], in: .import)
+//        let importMenu = UIDocumentMenuViewController(documentTypes: ["com.jani.Editors.docx",
+//                                                                      "com.jani.Editors.doc",
+//                                                                      "com.jani.Editors.xlsx",
+//                                                                      "com.jani.Editors.xls",
+//                                                                      "com.jani.Editors.pptx",
+//                                                                      "com.jani.Editors.ppt",
+//                                                                      "com.jani.Editors.pdf",
+//                                                                      "com.jani.Editors.odt",
+//                                                                      "com.jani.Editors.ods",
+//                                                                      "com.jani.Editors.odp"], in: .import)
+        importMenu.delegate = self
+        self.present(importMenu, animated: true, completion: nil)
+
         // JIX Close active documents if any
         // Present FileManager
-        performSegue(withIdentifier: "showFileManager", sender: self)
+//        performSegue(withIdentifier: "showFileManager", sender: self)
 
         // start DocumentBrowser with new document
     }
@@ -138,6 +160,10 @@ class DocumentController: UIViewController, DocumentActionsControlDelegate
     {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+
+//        let path = Bundle.main.path(forResource: "Info", ofType: "plist")
+//        let dict = NSDictionary(contentsOfFile: path!)
+//        let tableData = dict!.object(forKey: "CFBundleDocumentTypes")
     }
 
 
@@ -237,9 +263,9 @@ class DocumentActions: UITableViewController
     // Last stop before displaying popover
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-        let vc = segue.destination as! setNameAction
-        vc.delegateDoc = self.delegate
-        vc.protocolActionToPerform = (segue.identifier == "showNew") ? 2 : 3
+//        let vc = segue.destination as! setNameAction
+//        vc.delegateDoc = self.delegate
+//        vc.protocolActionToPerform = (segue.identifier == "showNew") ? 2 : 3
     }
 }
 
