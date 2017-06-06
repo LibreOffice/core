@@ -2013,7 +2013,8 @@ void SwXStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rPropertyNa
 {
     if(!m_pDoc)
         throw uno::RuntimeException();
-    const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(m_rEntry.m_nPropMapType);
+    sal_Int8 nPropSetId = m_bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : m_rEntry.m_nPropMapType;
+    const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
     if(rPropertyNames.getLength() != rValues.getLength())
         throw lang::IllegalArgumentException();
