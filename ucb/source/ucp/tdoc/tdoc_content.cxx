@@ -25,7 +25,6 @@
  *************************************************************************/
 
 #include "osl/diagnose.h"
-#include "osl/doublecheckedlocking.h"
 #include "rtl/ustrbuf.hxx"
 #include "com/sun/star/beans/IllegalTypeException.hpp"
 #include "com/sun/star/beans/PropertyAttribute.hpp"
@@ -216,21 +215,9 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 // virtual
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 {
-    cppu::OTypeCollection * pCollection = nullptr;
-
     if ( m_aProps.isContentCreator() )
     {
-        static cppu::OTypeCollection* pFolderTypes = nullptr;
-
-        pCollection = pFolderTypes;
-        if ( !pCollection )
-        {
-            osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-
-            pCollection = pFolderTypes;
-            if ( !pCollection )
-            {
-                static cppu::OTypeCollection aCollection(
+        static cppu::OTypeCollection s_aFolderTypes(
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
@@ -241,29 +228,13 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
                     CPPU_TYPE_REF( beans::XPropertyContainer ),
                     CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                     CPPU_TYPE_REF( container::XChild ),
-                    CPPU_TYPE_REF( ucb::XContentCreator ) ); // !!
-                pCollection = &aCollection;
-                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-                pFolderTypes = pCollection;
-            }
-        }
-        else {
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        }
+                    CPPU_TYPE_REF( ucb::XContentCreator ) );
+
+        return s_aFolderTypes.getTypes();
     }
     else
     {
-        static cppu::OTypeCollection* pDocumentTypes = nullptr;
-
-        pCollection = pDocumentTypes;
-        if ( !pCollection )
-        {
-            osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-
-            pCollection = pDocumentTypes;
-            if ( !pCollection )
-            {
-                static cppu::OTypeCollection aCollection(
+        static cppu::OTypeCollection s_aDocumentTypes(
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
@@ -274,17 +245,9 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
                     CPPU_TYPE_REF( beans::XPropertyContainer ),
                     CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                     CPPU_TYPE_REF( container::XChild ) );
-                pCollection = &aCollection;
-                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-                pDocumentTypes = pCollection;
-            }
-        }
-        else {
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        }
-    }
 
-    return (*pCollection).getTypes();
+        return s_aDocumentTypes.getTypes();
+    }
 }
 
 

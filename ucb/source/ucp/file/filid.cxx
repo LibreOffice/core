@@ -86,18 +86,11 @@ FileContentIdentifier::getImplementationId()
 uno::Sequence< uno::Type > SAL_CALL
 FileContentIdentifier::getTypes()
 {
-    static cppu::OTypeCollection* pCollection = nullptr;
-    if ( !pCollection ) {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
+    static cppu::OTypeCollection s_aCollection(
                 cppu::UnoType<lang::XTypeProvider>::get(),
                 cppu::UnoType<XContentIdentifier>::get() );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
+
+    return s_aCollection.getTypes();
 }
 
 

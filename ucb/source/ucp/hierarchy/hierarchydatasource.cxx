@@ -29,7 +29,6 @@
 #include "hierarchydatasource.hxx"
 #include <osl/diagnose.h>
 
-#include "osl/doublecheckedlocking.h"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -607,49 +606,21 @@ XTYPEPROVIDER_COMMON_IMPL( HierarchyDataAccess );
 // virtual
 uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
 {
-    cppu::OTypeCollection * pCollection = nullptr;
-
     if ( m_bReadOnly )
     {
-        static cppu::OTypeCollection* pReadOnlyTypes = nullptr;
-
-        pCollection = pReadOnlyTypes;
-        if ( !pCollection )
-        {
-            osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-
-            pCollection = pReadOnlyTypes;
-            if ( !pCollection )
-            {
-                static cppu::OTypeCollection aCollection(
+        static cppu::OTypeCollection s_aReadOnlyTypes(
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
                     CPPU_TYPE_REF( container::XHierarchicalNameAccess ),
                     CPPU_TYPE_REF( container::XNameAccess ),
                     CPPU_TYPE_REF( util::XChangesNotifier ) );
-                pCollection = &aCollection;
-                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-                pReadOnlyTypes = pCollection;
-            }
-        }
-        else {
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        }
+
+        return s_aReadOnlyTypes.getTypes();
     }
     else
     {
-        static cppu::OTypeCollection* pReadWriteTypes = nullptr;
-
-        pCollection = pReadWriteTypes;
-        if ( !pCollection )
-        {
-            osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-
-            pCollection = pReadWriteTypes;
-            if ( !pCollection )
-            {
-                static cppu::OTypeCollection aCollection(
+        static cppu::OTypeCollection s_aReadWriteTypes(
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                     CPPU_TYPE_REF( lang::XServiceInfo ),
                     CPPU_TYPE_REF( lang::XComponent ),
@@ -658,17 +629,9 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyDataAccess::getTypes()
                     CPPU_TYPE_REF( container::XNameContainer ),
                     CPPU_TYPE_REF( util::XChangesBatch ),
                     CPPU_TYPE_REF( util::XChangesNotifier ) );
-                pCollection = &aCollection;
-                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-                pReadWriteTypes = pCollection;
-            }
-        }
-        else {
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        }
-    }
 
-    return (*pCollection).getTypes();
+        return s_aReadWriteTypes.getTypes();
+    }
 }
 
 

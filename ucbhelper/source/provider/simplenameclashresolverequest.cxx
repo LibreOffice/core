@@ -105,19 +105,11 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionSupplyName::getImplementationId()
 
 uno::Sequence< uno::Type > SAL_CALL InteractionSupplyName::getTypes()
 {
-    static cppu::OTypeCollection* pCollection = nullptr;
-      if ( !pCollection )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
+    static cppu::OTypeCollection s_aCollection(
                 cppu::UnoType<lang::XTypeProvider>::get(),
                 cppu::UnoType<ucb::XInteractionSupplyName>::get() );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
+
+    return s_aCollection.getTypes();
 }
 
 void SAL_CALL InteractionSupplyName::select()
