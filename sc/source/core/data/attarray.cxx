@@ -1244,15 +1244,15 @@ bool ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
     }
 }
 
-void ScAttrArray::ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
-                            SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight )
+void ScAttrArray::ApplyBlockFrame(const SvxBoxItem& rLineOuter, const SvxBoxInfoItem* pLineInner,
+                                  SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight)
 {
     if (nStartRow == nEndRow)
-        ApplyFrame( pLineOuter, pLineInner, nStartRow, nEndRow, bLeft, nDistRight, true, 0 );
+        ApplyFrame(&rLineOuter, pLineInner, nStartRow, nEndRow, bLeft, nDistRight, true, 0);
     else if ( pData )
     {
-        ApplyFrame( pLineOuter, pLineInner, nStartRow, nStartRow, bLeft, nDistRight,
-                        true, nEndRow-nStartRow );
+        ApplyFrame(&rLineOuter, pLineInner, nStartRow, nStartRow, bLeft, nDistRight,
+                   true, nEndRow-nStartRow);
 
         if ( nEndRow > nStartRow+1 )     // inner part available?
         {
@@ -1265,8 +1265,8 @@ void ScAttrArray::ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInf
             for (SCSIZE i=nStartIndex; i<=nEndIndex;)
             {
                 nTmpEnd = std::min( (SCROW)(nEndRow-1), pData[i].nRow );
-                bool bChanged = ApplyFrame( pLineOuter, pLineInner, nTmpStart, nTmpEnd,
-                                            bLeft, nDistRight, false, nEndRow-nTmpEnd );
+                bool bChanged = ApplyFrame(&rLineOuter, pLineInner, nTmpStart, nTmpEnd,
+                                           bLeft, nDistRight, false, nEndRow - nTmpEnd);
                 nTmpStart = nTmpEnd+1;
                 if (bChanged)
                 {
@@ -1278,11 +1278,11 @@ void ScAttrArray::ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInf
             }
         }
 
-        ApplyFrame( pLineOuter, pLineInner, nEndRow, nEndRow, bLeft, nDistRight, false, 0 );
+        ApplyFrame(&rLineOuter, pLineInner, nEndRow, nEndRow, bLeft, nDistRight, false, 0);
     }
     else
     {
-        ApplyFrame( pLineOuter, pLineInner, nStartRow, nEndRow, bLeft, nDistRight, true, 0 );
+        ApplyFrame(&rLineOuter, pLineInner, nStartRow, nEndRow, bLeft, nDistRight, true, 0);
     }
 }
 

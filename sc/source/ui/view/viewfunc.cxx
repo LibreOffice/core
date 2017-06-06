@@ -1062,7 +1062,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
     sal_uInt16 nExt = SC_PF_TESTMERGE;
     pDocSh->UpdatePaintExt( nExt, aMarkRangeWithEnvelope ); // content before the change
 
-    pDoc->ApplySelectionFrame(aFuncMark, &rNewOuter, pNewInner);
+    pDoc->ApplySelectionFrame(aFuncMark, rNewOuter, pNewInner);
 
     pDocSh->UpdatePaintExt( nExt, aMarkRangeWithEnvelope ); // content after the change
 

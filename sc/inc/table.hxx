@@ -653,7 +653,7 @@ public:
                                             ScLineFlags& rFlags,
                                             SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow ) const;
-    void                    ApplyBlockFrame( const SvxBoxItem* pLineOuter,
+    void                    ApplyBlockFrame(const SvxBoxItem& rLineOuter,
                                             const SvxBoxInfoItem* pLineInner,
                                             SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow );

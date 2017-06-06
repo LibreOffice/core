@@ -5658,7 +5658,7 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
             for ( size_t j=0; j < nRangeCount; j++ )
             {
                 ScRange aRange = *aRangeList[ j ];
-                maTabs[*itr]->ApplyBlockFrame( &rLineOuter, pLineInner,
+                maTabs[*itr]->ApplyBlockFrame( rLineOuter, pLineInner,
                     aRange.aStart.Col(), aRange.aStart.Row(),
                     aRange.aEnd.Col(),   aRange.aEnd.Row() );
             }
@@ -5713,7 +5713,7 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
                 for ( size_t j=0; j < nEnvelopeRangeCount; j++ )
                 {
                     const ScRange* pRange = rRangeListTopEnvelope[ j ];
-                    maTabs[*itr1]->ApplyBlockFrame( &aTop, &aTopInfo,
+                    maTabs[*itr1]->ApplyBlockFrame( aTop, &aTopInfo,
                                                     pRange->aStart.Col(), pRange->aStart.Row(),
                                                     pRange->aEnd.Col(),   pRange->aEnd.Row() );
                 }
@@ -5721,7 +5721,7 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
                 for ( size_t j=0; j < nEnvelopeRangeCount; j++ )
                 {
                     const ScRange* pRange = rRangeListBottomEnvelope[ j ];
-                    maTabs[*itr1]->ApplyBlockFrame( &aBottom, &aBottomInfo,
+                    maTabs[*itr1]->ApplyBlockFrame( aBottom, &aBottomInfo,
                                                     pRange->aStart.Col(), pRange->aStart.Row(),
                                                     pRange->aEnd.Col(),   pRange->aEnd.Row() );
                 }
@@ -5729,7 +5729,7 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
                 for ( size_t j=0; j < nEnvelopeRangeCount; j++ )
                 {
                     const ScRange* pRange = rRangeListLeftEnvelope[ j ];
-                    maTabs[*itr1]->ApplyBlockFrame( &aLeft, &aLeftInfo,
+                    maTabs[*itr1]->ApplyBlockFrame( aLeft, &aLeftInfo,
                                                     pRange->aStart.Col(), pRange->aStart.Row(),
                                                     pRange->aEnd.Col(),   pRange->aEnd.Row() );
                 }
@@ -5737,7 +5737,7 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
                 for ( size_t j=0; j < nEnvelopeRangeCount; j++ )
                 {
                     const ScRange* pRange = rRangeListRightEnvelope[ j ];
-                    maTabs[*itr1]->ApplyBlockFrame( &aRight, &aRightInfo,
+                    maTabs[*itr1]->ApplyBlockFrame( aRight, &aRightInfo,
                                                     pRange->aStart.Col(), pRange->aStart.Row(),
                                                     pRange->aEnd.Col(),   pRange->aEnd.Row() );
                 }
@@ -5754,7 +5754,7 @@ void ScDocument::ApplyFrameAreaTab(const ScRange& rRange,
     SCTAB nEndTab = rRange.aStart.Tab();
     for (SCTAB nTab=nStartTab; nTab<=nEndTab && nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
         if (maTabs[nTab])
-            maTabs[nTab]->ApplyBlockFrame(&rLineOuter, &rLineInner,
+            maTabs[nTab]->ApplyBlockFrame(rLineOuter, &rLineInner,
                                           rRange.aStart.Col(), rRange.aStart.Row(),
                                           rRange.aEnd.Col(),   rRange.aEnd.Row());
 }

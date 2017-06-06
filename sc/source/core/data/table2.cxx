@@ -2472,16 +2472,16 @@ void ScTable::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInne
     }
 }
 
-void ScTable::ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
-                    SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
+void ScTable::ApplyBlockFrame(const SvxBoxItem& rLineOuter, const SvxBoxInfoItem* pLineInner,
+                              SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow)
 {
     if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
     {
         PutInOrder(nStartCol, nEndCol);
         PutInOrder(nStartRow, nEndRow);
         for (SCCOL i=nStartCol; i<=nEndCol; i++)
-            aCol[i].ApplyBlockFrame( pLineOuter, pLineInner,
-                                    nStartRow, nEndRow, (i==nStartCol), nEndCol-i );
+            aCol[i].ApplyBlockFrame(rLineOuter, pLineInner,
+                                    nStartRow, nEndRow, (i==nStartCol), nEndCol-i);
     }
 }
 
