@@ -272,18 +272,6 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>OpenDocument Database</string>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>LSHandlerRank</key>
-			<string>Owner</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>org.oasis-open.opendocument.database</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeName</key>
 			<string>LibreOfficeDev Extension</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -375,7 +363,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.4.5</string>
+	<string>0.4.6</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -442,10 +430,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenOffice.org 1.0 Text</string>
-			<key>UTTypeIconFile</key>
-			<string>text.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.text</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>text.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -466,10 +454,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenDocument Text</string>
-			<key>UTTypeIconFile</key>
-			<string>oasis-text.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.oasis-open.opendocument.text</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>oasis-text.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -490,10 +478,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenDocument Text (Flat XML)</string>
-			<key>UTTypeIconFile</key>
-			<string>oasis-text.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>vnd.oasis.opendocument.text-flat-xml</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>oasis-text.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -514,10 +502,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenOffice.org 1.0 Spreadsheet</string>
-			<key>UTTypeIconFile</key>
-			<string>spreadsheet.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.spreadsheet</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>spreadsheet.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -538,10 +526,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenDocument Spreadsheet</string>
-			<key>UTTypeIconFile</key>
-			<string>oasis-spreadsheet.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.oasis-open.opendocument.spreadsheet</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>oasis-spreadsheet.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -562,10 +550,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenDocument Spreadsheet (Flat XML)</string>
-			<key>UTTypeIconFile</key>
-			<string>oasis-spreadsheet.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>vnd.oasis.opendocument.spreadsheet-flat-xml</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>oasis-spreadsheet.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -586,10 +574,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenOffice.org 1.0 Presentation</string>
-			<key>UTTypeIconFile</key>
-			<string>presentation.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.presentation</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>presentation.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -610,10 +598,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenDocument Presentation</string>
-			<key>UTTypeIconFile</key>
-			<string>oasis-presentation.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.oasis-open.opendocument.presentation</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>oasis-presentation.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -634,10 +622,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenDocument Presentation</string>
-			<key>UTTypeIconFile</key>
-			<string>oasis-presentation.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>vnd.oasis.opendocument.presentation-flat-xml</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>oasis-presentation.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -658,10 +646,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenOffice.org 1.0 Drawing</string>
-			<key>UTTypeIconFile</key>
-			<string>drawing.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.graphics</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>drawing.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -682,10 +670,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenDocument Drawing</string>
-			<key>UTTypeIconFile</key>
-			<string>oasis-drawing.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.oasis-open.opendocument.graphics</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>oasis-drawing.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -706,10 +694,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenDocument Drawing (Flat XML)</string>
-			<key>UTTypeIconFile</key>
-			<string>oasis-drawing.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>vnd.oasis.opendocument.graphics-flat-xml</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>oasis-drawing.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -752,10 +740,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenOffice.org 1.0 Master</string>
-			<key>UTTypeIconFile</key>
-			<string>master-document.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.text-master</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>master-document.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -776,10 +764,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenDocument Master</string>
-			<key>UTTypeIconFile</key>
-			<string>oasis-master-document.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.oasis-open.opendocument.text-master</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>oasis-master-document.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -800,10 +788,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenOffice.org 1.0 Formula</string>
-			<key>UTTypeIconFile</key>
-			<string>formula.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.formula</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>formula.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -824,10 +812,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenDocument Formula</string>
-			<key>UTTypeIconFile</key>
-			<string>oasis-formula.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.oasis-open.opendocument.formula</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>oasis-formula.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -848,10 +836,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenOffice.org 1.0 Text Template</string>
-			<key>UTTypeIconFile</key>
-			<string>text-template.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.text-template</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>text-template.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -872,10 +860,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenDocument Text Template</string>
-			<key>UTTypeIconFile</key>
-			<string>oasis-text-template.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.oasis-open.opendocument.text-template</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>oasis-text-template.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -896,10 +884,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenDocument Text Master Template</string>
-			<key>UTTypeIconFile</key>
-			<string>oasis-master-document-template.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.oasis-open.opendocument.text-master-template</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>oasis-master-document-template.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -920,10 +908,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenOffice.org 1.0 Spreadsheet Template</string>
-			<key>UTTypeIconFile</key>
-			<string>spreadsheet-template.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.spreadsheet-template</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>spreadsheet-template.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -944,10 +932,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenDocument Spreadsheet Template</string>
-			<key>UTTypeIconFile</key>
-			<string>oasis-spreadsheet-template.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.oasis-open.opendocument.spreadsheet-template</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>oasis-spreadsheet-template.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -968,10 +956,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenOffice.org 1.0 Presentation Template</string>
-			<key>UTTypeIconFile</key>
-			<string>presentation-template.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.presentation-template</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>presentation-template.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -992,10 +980,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenDocument Presentation Template</string>
-			<key>UTTypeIconFile</key>
-			<string>oasis-presentation-template.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.oasis-open.opendocument.presentation-template</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>oasis-presentation-template.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -1016,10 +1004,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenOffice.org 1.0 Drawing Template</string>
-			<key>UTTypeIconFile</key>
-			<string>drawing-template.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.graphics-template</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>drawing-template.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -1040,10 +1028,10 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>OpenDocument Drawing Template</string>
-			<key>UTTypeIconFile</key>
-			<string>oasis-drawing-template.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.oasis-open.opendocument.graphics-template</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>oasis-drawing-template.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -1063,35 +1051,11 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 				<string>public.content</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>OpenDocument Database</string>
-			<key>UTTypeIconFile</key>
-			<string>oasis-database.icns</string>
-			<key>UTTypeIdentifier</key>
-			<string>org.oasis-open.opendocument.database</string>
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>odb</string>
-				</array>
-				<key>public.mime-type</key>
-				<array>
-					<string>application/vnd.oasis.opendocument.database</string>
-				</array>
-			</dict>
-		</dict>
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>public.data</string>
-				<string>public.content</string>
-			</array>
-			<key>UTTypeDescription</key>
 			<string>LibreOfficeDev Extension</string>
-			<key>UTTypeIconFile</key>
-			<string>extension.icns</string>
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.extension</string>
+			<key>UTTypeSize64IconFile</key>
+			<string>extension.icns</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
