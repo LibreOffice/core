@@ -186,12 +186,12 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
            break;
         }
     }
-    const CompoundStmt *pCompoundStatement = dyn_cast<CompoundStmt>(pCXXDestructorDecl->getBody());
+    const CompoundStmt *pCompoundStatement = dyn_cast_or_null<CompoundStmt>(pCXXDestructorDecl->getBody());
     // having an empty body and no dispose() method is fine
-    if (!bFoundVclPtrField && !bFoundDispose && pCompoundStatement && pCompoundStatement->size() == 0) {
+    if (!bFoundVclPtrField && !bFoundDispose && (!pCompoundStatement || pCompoundStatement->size() == 0)) {
         return true;
     }
-    if (bFoundVclPtrField && pCompoundStatement && pCompoundStatement->size() == 0) {
+    if (bFoundVclPtrField && (!pCompoundStatement || pCompoundStatement->size() == 0)) {
         report(
             DiagnosticsEngine::Warning,
             BASE_REF_COUNTED_CLASS " subclass with VclPtr field must call disposeOnce() from its destructor",
