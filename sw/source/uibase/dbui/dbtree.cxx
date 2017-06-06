@@ -25,6 +25,7 @@
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -182,6 +183,13 @@ void SwDBTreeList::InitTreeList()
     GetModel()->SetCompareHdl(LINK(this, SwDBTreeList, DBCompare));
 
     Sequence< OUString > aDBNames = pImpl->GetContext()->getElementNames();
+    auto const sort = comphelper::string::NaturalStringSorter(
+        comphelper::getProcessComponentContext(),
+        Application::GetSettings().GetUILanguageTag().getLocale());
+    std::sort(
+        aDBNames.begin(), aDBNames.end(),
+        [&sort](OUString const & x, OUString const & y)
+        { return sort.compare(x, y) < 0; });
     const OUString* pDBNames = aDBNames.getConstArray();
     long nCount = aDBNames.getLength();
 
