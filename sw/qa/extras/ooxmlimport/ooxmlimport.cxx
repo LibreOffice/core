@@ -1393,11 +1393,10 @@ DECLARE_OOXMLIMPORT_TEST(testTdf100072, "tdf100072.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testTdf108350, "tdf108350.docx")
 {
-    // For OOXML without explicit font information, font needs to be Carlito 11 pt,
-    // our bundled metrically compatible substitute for Calibri.
+    // For OOXML without explicit font information, font needs to be Calibri 11 pt
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
     uno::Reference<beans::XPropertySet> xRun(getRun(xPara, 1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Carlito"), getProperty<OUString>(xRun, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Calibri"), getProperty<OUString>(xRun, "CharFontName"));
     CPPUNIT_ASSERT_EQUAL(double(11), getProperty<double>(xRun, "CharHeight"));
 }
 
