@@ -962,13 +962,6 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     if( nBorderOpt==USHRT_MAX )
         nPWidth = 0;
 
-    // HACK: one pixel wide lines should be hairlines when we'll use double bordering
-    if( pOptions->nCellSpacing!=0 && nBorderOpt==1 )
-    {
-        nPWidth = 1;
-        nPHeight = 1;
-    }
-
     if ( pOptions->nCellSpacing != 0 )
     {
         m_aTopBorderLine.SetBorderLineStyle(SvxBorderLineStyle::DOUBLE);
@@ -1395,7 +1388,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                 nInnerFrameWidth -= GetBorderWidth( rBorderLine );
                 bSet = true;
             }
-            if( nCol+nColSpan == m_nCols && m_bRightBorder )
+            if( m_bRightBorder )
             {
                 aBoxItem.SetLine( &m_aRightBorderLine, SvxBoxItemLine::RIGHT );
                 nInnerFrameWidth -= GetBorderWidth( m_aRightBorderLine );
