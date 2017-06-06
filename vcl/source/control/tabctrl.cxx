@@ -50,7 +50,7 @@ struct ImplTabItem
     OUString            maHelpText;
     OString             maHelpId;
     OString             maTabName;
-    tools::Rectangle           maRect;
+    tools::Rectangle    maRect;
     sal_uInt16          mnLine;
     bool                mbFullVisible;
     bool                mbEnabled;
@@ -73,6 +73,7 @@ struct ImplTabCtrlData
 
 // for the Tab positions
 #define TAB_PAGERECT        0xFFFF
+#define HAMBURGER_DIM       50
 
 void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
@@ -2202,14 +2203,39 @@ FactoryFunction TabControl::GetUITestFactory() const
 
 sal_uInt16 NotebookbarTabControlBase::m_nHeaderHeight = 0;
 
+IMPL_LINK_NOARG(NotebookbarTabControlBase, OpenMenu, Button*, void)
+{
+    m_aIconClickHdl.Call(static_cast<NotebookBar*>(GetParent()->GetParent()));
+}
+
 NotebookbarTabControlBase::NotebookbarTabControlBase(vcl::Window* pParent)
     : TabControl(pParent, WB_STDTABCONTROL)
     , bLastContextWasSupported(true)
     , eLastContext(vcl::EnumContext::Context::Any)
 {
+    //const long nRightOff = HAMBURGER_DIM; // right offset for hamburger menu so it is on screen
+
     BitmapEx aBitmap(SV_RESID_BITMAP_NOTEBOOKBAR);
     InsertPage(1, "");
     SetPageImage(1, Image(aBitmap));
+
+    //tools::Rectangle aRect = ImplGetTabRect(TAB_PAGERECT);
+    //tools::Rectangle aRect = pParent->GetRefPoint();
+    //tools::Rectangle aRect = pParent->GetDesktopRectPixel();
+    //tools::Rectangle aRect(Point(0, 0), this->GetSizePixel());
+
+    m_pOpenMenu = VclPtr<PushButton>::Create(this);
+    //m_pOpenMenu->SetPosSizePixel(Point(aRect.Right(), aRect.Top()), Size(30, 30));
+    //m_pOpenMenu->SetPosSizePixel(Point(400, 0), Size(50, 50));
+    //m_pOpenMenu->SetPosSizePixel(Point(aRect.Right() - nRightOff, aRect.Top()), Size(HAMBURGER_DIM, HAMBURGER_DIM)); // aRect.Right() - nRightOff = -30 and not visible
+    //Point aPos(0, NotebookbarTabControlBase::GetHeaderHeight());
+    //m_pOpenMenu->SetPosSizePixel(aPos /*Point(nRightOff - nRightOff, aRect.Top())*/, Size(HAMBURGER_DIM, HAMBURGER_DIM));
+    //long aSize = ImplGetItemSize( &(*it), nMaxWidth ).getWidth();
+    //long aSize = ImplGetItemSize( mpTabCtrlData->maItemList.front(), nMaxWidth ).getWidth();
+    m_pOpenMenu->SetSizePixel(Size(HAMBURGER_DIM, HAMBURGER_DIM));
+    //Size aSize = ImplGetItemSize(,);
+    m_pOpenMenu->SetClickHdl(LINK(this, NotebookbarTabControlBase, OpenMenu));
+    /*m_pOpenMenu->Show();*/
 }
 
 NotebookbarTabControlBase::~NotebookbarTabControlBase()
@@ -2259,6 +2285,7 @@ void NotebookbarTabControlBase::SetContext( vcl::EnumContext::Context eContext )
 void NotebookbarTabControlBase::dispose()
 {
     m_pShortcuts.disposeAndClear();
+    m_pOpenMenu.disposeAndClear();
     TabControl::dispose();
 }
 
@@ -2344,6 +2371,7 @@ sal_uInt16 NotebookbarTabControlBase::GetHeaderHeight()
     return m_nHeaderHeight;
 }
 
+// Add notebookbar tabs
 bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 {
     if ( nWidth <= 0 )
@@ -2362,15 +2390,20 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 
     //collect widths
     std::vector<sal_Int32> aWidths;
-    aWidths.push_back(ImplGetItemSize( &(*(mpTabCtrlData->maItemList.begin())), nMaxWidth ).Width() + nShortcutsWidth);
-    for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin() + 1;
-         it != mpTabCtrlData->maItemList.end(); ++it )
+    //aWidths.push_back(ImplGetItemSize( &(*(mpTabCtrlData->maItemList.begin())), nMaxWidth ).Width() + nShortcutsWidth);
+    ImplTabItem tmp = mpTabCtrlData->maItemList[0];
+    mpTabCtrlData->maItemList.erase(mpTabCtrlData->maItemList.begin());
+    mpTabCtrlData->maItemList.push_back(tmp);
+    aWidths.push_back(nShortcutsWidth);
+    for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
+         it != mpTabCtrlData->maItemList.end() - 1; ++it )
     {
         long aSize = ImplGetItemSize( &(*it), nMaxWidth ).getWidth();
         if( !it->maText.isEmpty() && aSize < 100)
             aSize = 100;
         aWidths.push_back(aSize);
     }
+    aWidths.push_back(ImplGetItemSize(&mpTabCtrlData->maItemList.back(), nMaxWidth).getWidth());
 
     //aBreakIndexes will contain the indexes of the last tab on each row
     std::deque<size_t> aBreakIndexes(MinimumRaggednessWrap::GetEndOfLineIndexes(aWidths, nMaxWidth - nOffsetX - 2));
@@ -2423,6 +2456,11 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 
         if( !it->maText.isEmpty() && aSize.getHeight() < 28 )
             aSize.Height() = 28;
+
+        if (nIndex == 0)
+        {
+//            nX = nWidth - aSize.getWidth();
+        }
 
         tools::Rectangle aNewRect( Point( nX, nY ), aSize );
         if ( mbSmallInvalidate && (it->maRect != aNewRect) )
@@ -2549,6 +2587,8 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
             }
         }
     }
+
+    m_pOpenMenu->SetPosPixel(Point(nWidth - HAMBURGER_DIM, 0)); // position hamburger menu
 
     return true;
 }
