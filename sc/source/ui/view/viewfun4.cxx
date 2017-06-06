@@ -79,7 +79,10 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
                                 const css::uno::Reference< css::datatransfer::XTransferable >& rxTransferable )
 {
     TransferableDataHelper aDataHelper( rxTransferable );
-    if ( aDataHelper.HasFormat( SotClipboardFormatId::EDITENGINE ) )
+
+    char* ODF_XML_Env = getenv ("ODF_TEXT_FLAT_XML_ENV");
+
+    if ( aDataHelper.HasFormat( SotClipboardFormatId::EDITENGINE ) && ODF_XML_Env == NULL )
     {
         HideAllCursors();
 
@@ -153,6 +156,82 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
 
         ShowAllCursors();
     }
+
+    else if ( aDataHelper.HasFormat( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT ) )
+    {
+        HideAllCursors();
+
+        ScDocShell* pDocSh = GetViewData().GetDocShell();
+        ScDocument& rDoc = pDocSh->GetDocument();
+        SCTAB nTab = GetViewData().GetTabNo();
+        const bool bRecord (rDoc.IsUndoEnabled());
+
+        const ScPatternAttr* pPattern = rDoc.GetPattern( nStartCol, nStartRow, nTab );
+        std::unique_ptr<ScTabEditEngine> pEngine(new ScTabEditEngine( *pPattern, rDoc.GetEnginePool() ));
+        pEngine->EnableUndo( false );
+
+        vcl::Window* pActWin = GetActiveWin();
+        if (pActWin)
+        {
+            pEngine->SetPaperSize(Size(100000,100000));
+            ScopedVclPtrInstance< vcl::Window > aWin( pActWin );
+            EditView aEditView( pEngine.get(), aWin.get() );
+            aEditView.SetOutputArea(tools::Rectangle(0,0,100000,100000));
+
+            // same method now for clipboard or drag&drop
+            // mba: clipboard always must contain absolute URLs (could be from alien source)
+            aEditView.InsertText( rxTransferable, OUString(), true );
+        }
+
+        sal_Int32 nParCnt = pEngine->GetParagraphCount();
+        if (nParCnt)
+        {
+            SCROW nEndRow = nStartRow + static_cast<SCROW>(nParCnt) - 1;
+            if (nEndRow > MAXROW)
+                nEndRow = MAXROW;
+
+            ScDocument* pUndoDoc = nullptr;
+            if (bRecord)
+            {
+                pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
+                pUndoDoc->InitUndo( &rDoc, nTab, nTab );
+                rDoc.CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, InsertDeleteFlags::ALL, false, *pUndoDoc );
+            }
+
+            SCROW nRow = nStartRow;
+
+            // Temporarily turn off undo generation for this lot
+            bool bUndoEnabled = rDoc.IsUndoEnabled();
+            rDoc.EnableUndo( false );
+            for( sal_Int32 n = 0; n < nParCnt; n++ )
+            {
+                std::unique_ptr<EditTextObject> pObject(pEngine->CreateTextObject(n));
+                EnterData(nStartCol, nRow, nTab, *pObject, true);
+                if( ++nRow > MAXROW )
+                    break;
+            }
+            rDoc.EnableUndo(bUndoEnabled);
+
+            if (bRecord)
+            {
+                ScDocument* pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
+                pRedoDoc->InitUndo( &rDoc, nTab, nTab );
+                rDoc.CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, InsertDeleteFlags::ALL|InsertDeleteFlags::NOCAPTIONS, false, *pRedoDoc );
+
+                ScRange aMarkRange(nStartCol, nStartRow, nTab, nStartCol, nEndRow, nTab);
+                ScMarkData aDestMark;
+                aDestMark.SetMarkArea( aMarkRange );
+                pDocSh->GetUndoManager()->AddUndoAction(
+                    new ScUndoPaste( pDocSh, aMarkRange, aDestMark,
+                                     pUndoDoc, pRedoDoc, InsertDeleteFlags::ALL, nullptr));
+            }
+        }
+
+        pEngine.reset();
+
+        ShowAllCursors();
+    }
+
     else
     {
         HideAllCursors();
