@@ -789,25 +789,44 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             }
         }
 
+        // custom shape geometry attributes
+        std::vector<css::beans::PropertyValue> aPropVec;
+
         // When flip has 'x' or 'y', the associated ShapeRect will be changed but direction change doesn't occur.
         // It might occur internally in SdrObject of "sw" module, not here.
         // The associated properties "PROP_MirroredX" and "PROP_MirroredY" have to be set here so that direction change will occur internally.
         if (bFlipX || bFlipY)
         {
             assert(!(bFlipX && bFlipY));
-            css::uno::Sequence< css::beans::PropertyValue > aPropSequence (1);
+            css::beans::PropertyValue aProp;
             if (bFlipX)
-            {
-                aPropSequence [0].Name = "MirroredX";
-                aPropSequence [0].Value <<= bFlipX;
-            }
+                aProp.Name = "MirroredX";
             else
-            {
-                aPropSequence [0].Name = "MirroredY";
-                aPropSequence [0].Value <<= bFlipY;
-            }
-            aPropertySet.setAnyProperty(PROP_CustomShapeGeometry, makeAny( aPropSequence ) );
+                aProp.Name = "MirroredY";
+            aProp.Value <<= true;
+            aPropVec.push_back(aProp);
         }
+
+        if (!maTypeModel.maAdjustments.isEmpty())
+        {
+            std::vector<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues;
+            sal_Int32 nIndex = 0;
+            do
+            {
+                OUString aToken = maTypeModel.maAdjustments.getToken(0, ',', nIndex);
+                drawing::EnhancedCustomShapeAdjustmentValue aAdjustmentValue;
+                aAdjustmentValue.Value <<= aToken.toInt32();
+                aAdjustmentValues.push_back(aAdjustmentValue);
+            } while (nIndex >= 0);
+
+            css::beans::PropertyValue aProp;
+            aProp.Name = "AdjustmentValues";
+            aProp.Value <<= comphelper::containerToSequence(aAdjustmentValues);
+            aPropVec.push_back(aProp);
+        }
+
+        if (!aPropVec.empty())
+            aPropertySet.setAnyProperty(PROP_CustomShapeGeometry, makeAny(comphelper::containerToSequence(aPropVec)));
     }
 
     lcl_SetAnchorType(aPropertySet, maTypeModel, rGraphicHelper );
