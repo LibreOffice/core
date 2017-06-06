@@ -50,7 +50,7 @@ struct ImplTabItem
     OUString            maHelpText;
     OString             maHelpId;
     OString             maTabName;
-    tools::Rectangle           maRect;
+    tools::Rectangle    maRect;
     sal_uInt16          mnLine;
     bool                mbFullVisible;
     bool                mbEnabled;
@@ -73,6 +73,7 @@ struct ImplTabCtrlData
 
 // for the Tab positions
 #define TAB_PAGERECT        0xFFFF
+#define HAMBURGER_DIM       28
 
 void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
@@ -1180,7 +1181,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rect
         ImplTabItem* pLastTab = nullptr;
         size_t idx;
 
-        // Event though there is a tab overlap with GTK+, the first tab is not
+        // Even though there is a tab overlap with GTK+, the first tab is not
         // overlapped on the left side. Other toolkits ignore this option.
         if (bDrawTabsRTL)
         {
@@ -2202,6 +2203,11 @@ FactoryFunction TabControl::GetUITestFactory() const
 
 sal_uInt16 NotebookbarTabControlBase::m_nHeaderHeight = 0;
 
+IMPL_LINK_NOARG(NotebookbarTabControlBase, OpenMenu, Button*, void)
+{
+    m_aIconClickHdl.Call(static_cast<NotebookBar*>(GetParent()->GetParent()));
+}
+
 NotebookbarTabControlBase::NotebookbarTabControlBase(vcl::Window* pParent)
     : TabControl(pParent, WB_STDTABCONTROL)
     , bLastContextWasSupported(true)
@@ -2210,6 +2216,11 @@ NotebookbarTabControlBase::NotebookbarTabControlBase(vcl::Window* pParent)
     BitmapEx aBitmap(SV_RESID_BITMAP_NOTEBOOKBAR);
     InsertPage(1, "");
     SetPageImage(1, Image(aBitmap));
+
+    m_pOpenMenu = VclPtr<PushButton>::Create(this);
+    m_pOpenMenu->SetSizePixel(Size(HAMBURGER_DIM, HAMBURGER_DIM));
+    m_pOpenMenu->SetClickHdl(LINK(this, NotebookbarTabControlBase, OpenMenu));
+    m_pOpenMenu->Show();
 }
 
 NotebookbarTabControlBase::~NotebookbarTabControlBase()
@@ -2259,6 +2270,7 @@ void NotebookbarTabControlBase::SetContext( vcl::EnumContext::Context eContext )
 void NotebookbarTabControlBase::dispose()
 {
     m_pShortcuts.disposeAndClear();
+    m_pOpenMenu.disposeAndClear();
     TabControl::dispose();
 }
 
@@ -2344,6 +2356,7 @@ sal_uInt16 NotebookbarTabControlBase::GetHeaderHeight()
     return m_nHeaderHeight;
 }
 
+// Place notebookbar tabs
 bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 {
     if ( nWidth <= 0 )
@@ -2394,7 +2407,7 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
     sal_uInt16 nPos = 0;
     sal_uInt16 nHiddenWidth = 0;
 
-    for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
+    for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin() + 1;
          it != mpTabCtrlData->maItemList.end(); ++it, ++nIndex )
     {
         Size aSize = ImplGetItemSize( &(*it), nMaxWidth );
@@ -2475,7 +2488,7 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 
         sal_uInt16 i = 0;
         sal_uInt16 n = 0;
-        for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
+        for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin() + 1;
              it != mpTabCtrlData->maItemList.end(); ++it )
         {
             if ( i == nLinePosAry[n] )
@@ -2536,12 +2549,12 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
         if(ImplGetSVData()->maNWFData.mbCenteredTabs)
         {
             int nRightSpace = nMaxWidth;//space left on the right by the tabs
-            for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
+            for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin() + 1;
                  it != mpTabCtrlData->maItemList.end(); ++it )
             {
                 nRightSpace -= it->maRect.Right()-it->maRect.Left();
             }
-            for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
+            for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin() + 1;
                  it != mpTabCtrlData->maItemList.end(); ++it )
             {
                 it->maRect.Left() += nRightSpace / 2;
@@ -2549,6 +2562,8 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
             }
         }
     }
+
+    m_pOpenMenu->SetPosPixel(Point(nWidth - HAMBURGER_DIM, 0)); // position hamburger menu
 
     return true;
 }
