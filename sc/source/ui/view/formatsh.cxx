@@ -1127,9 +1127,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             rReq.Done();
             break;
         case SID_NUMBER_STANDARD:
-            if (!(nType & css::util::NumberFormat::NUMBER))
-                pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
-            rBindings.Invalidate( nSlot );
+            pTabViewShell->SetNumberFormat( css::util::NumberFormat::NUMBER );
             rReq.Done();
             break;
         case SID_NUMBER_INCDEC:
@@ -2485,9 +2483,14 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     ScDocument* pDoc                = pViewData->GetDocument();
     short nType                     = GetCurrentNumberFormatType();
+    const SfxItemSet& rAttrSet      = pTabViewShell->GetSelectionPattern()->GetItemSet();
+    sal_uInt32 nNumberFormat        = static_cast<const SfxUInt32Item&>(rAttrSet.Get(ATTR_VALUE_FORMAT)).GetValue();
+    SvNumberFormatter* pFormatter   = pDoc->GetFormatTable();
+    NfIndexTableOffset nOffset      = pFormatter->GetIndexTableOffset(nNumberFormat);
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
+
     while ( nWhich )
     {
         switch ( nWhich )
@@ -2495,12 +2498,8 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
             case SID_NUMBER_FORMAT:
                 // symphony version with format interpretation
                 {
-                    const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
-
                     if(SfxItemState::DONTCARE != rAttrSet.GetItemState(ATTR_VALUE_FORMAT))
                     {
-                        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-                        sal_uInt32 nNumberFormat = static_cast<const SfxUInt32Item&>(rAttrSet.Get(ATTR_VALUE_FORMAT)).GetValue();
                         bool bThousand(false);
                         bool bNegRed(false);
                         sal_uInt16 nPrecision(0);
@@ -2543,11 +2542,8 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
             case SID_NUMBER_TYPE_FORMAT:
                 {
                     sal_Int16 aFormatCode = -1;
-                    const SfxItemSet& rAttrSet  = pTabViewShell->GetSelectionPattern()->GetItemSet();
                     if ( rAttrSet.GetItemState( ATTR_VALUE_FORMAT ) >= SfxItemState::DEFAULT ) //Modify for more robust
                     {
-                        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-                        sal_uInt32 nNumberFormat = pTabViewShell->GetSelectionPattern()->GetNumberFormat( pFormatter );
                         const SvNumberformat* pFormatEntry = pFormatter->GetEntry( nNumberFormat );
                         bool bStandard = false;
 
@@ -2633,18 +2629,10 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                 rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::TIME)) );
                 break;
             case SID_NUMBER_TWODEC:
-                {
-                    const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
-                    sal_uInt32 nNumberFormat = static_cast<const SfxUInt32Item&>(rAttrSet.Get(ATTR_VALUE_FORMAT)).GetValue();
-                    rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::NUMBER) && nNumberFormat == 4 ) );
-                }
+                    rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::NUMBER) && nOffset == NF_NUMBER_1000DEC2 ) );
                 break;
             case SID_NUMBER_STANDARD:
-                {
-                    const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
-                    sal_uInt32 nNumberFormat = static_cast<const SfxUInt32Item&>(rAttrSet.Get(ATTR_VALUE_FORMAT)).GetValue();
-                    rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::NUMBER) && nNumberFormat == 0 ) );
-                }
+                    rSet.Put( SfxBoolItem(nWhich, (nType & css::util::NumberFormat::NUMBER) && (nNumberFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0) );
                 break;
         }
         nWhich = aIter.NextWhich();
