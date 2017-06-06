@@ -88,7 +88,7 @@ typedef std::vector<Line> LinesType;
 class CSVFetchThread : public salhelper::Thread
 {
     std::unique_ptr<SvStream> mpStream;
-    ScDocument* mpDocument;
+    ScDocument& mrDocument;
     OUString maURL;
     size_t mnColCount;
 
@@ -106,7 +106,7 @@ class CSVFetchThread : public salhelper::Thread
     virtual void execute() override;
 
 public:
-    CSVFetchThread(ScDocument** pDoc, const OUString&, size_t);
+    CSVFetchThread(ScDocument& rDoc, const OUString&, size_t);
     virtual ~CSVFetchThread() override;
 
     void RequestTerminate();
@@ -128,7 +128,7 @@ public:
 
     virtual void StartImport() = 0;
     virtual void Refresh() = 0;
-    virtual void WriteToDoc(ScDocument*) = 0;
+    virtual void WriteToDoc(ScDocument&) = 0;
 
     virtual ScRange GetRange() const = 0;
     virtual const OUString& GetURL() const = 0;
@@ -153,7 +153,7 @@ public:
 
     virtual void StartImport() override;
     virtual void Refresh() override;
-    virtual void WriteToDoc(ScDocument*) override;
+    virtual void WriteToDoc(ScDocument&) override;
     Line GetLine();
 
     ScRange GetRange() const override
