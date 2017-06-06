@@ -957,7 +957,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
         bool bDefNewInner = IsStaticDefaultItem(&rNewInner);
 
         ApplyPatternLines( aNewAttrs,
-                           bDefNewOuter ? &rOldOuter : &rNewOuter,
+                           bDefNewOuter ? rOldOuter : rNewOuter,
                            bDefNewInner ? &rOldInner : &rNewInner );
     }
 
@@ -996,7 +996,7 @@ void ScViewFunc::ApplyAttr( const SfxPoolItem& rAttrItem )
 
 //  patterns and borders
 
-void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem* pNewOuter,
+void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem& rNewOuter,
                                     const SvxBoxInfoItem* pNewInner )
 {
     ScDocument* pDoc = GetViewData().GetDocument();
@@ -1006,9 +1006,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
     if (!pDoc->IsUndoEnabled())
         bRecord = false;
 
-    bool bRemoveAdjCellBorder = false;
-    if( pNewOuter )
-        bRemoveAdjCellBorder = pNewOuter->IsRemoveAdjacentCellBorder();
+    bool bRemoveAdjCellBorder = rNewOuter.IsRemoveAdjacentCellBorder();
     ScRange aMarkRange, aMarkRangeWithEnvelope;
     aFuncMark.MarkToSimple();
     bool bMulti = aFuncMark.IsMultiMarked();
@@ -1058,13 +1056,13 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
             pDocSh, aFuncMark,
             aMarkRange.aStart.Col(), aMarkRange.aStart.Row(), aMarkRange.aStart.Tab(),
             aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(), aMarkRange.aEnd.Tab(),
-            pUndoDoc, bCopyOnlyMarked, &rAttr, pNewOuter, pNewInner, &aMarkRangeWithEnvelope ) );
+            pUndoDoc, bCopyOnlyMarked, &rAttr, &rNewOuter, pNewInner, &aMarkRangeWithEnvelope ) );
     }
 
     sal_uInt16 nExt = SC_PF_TESTMERGE;
     pDocSh->UpdatePaintExt( nExt, aMarkRangeWithEnvelope ); // content before the change
 
-    pDoc->ApplySelectionFrame( aFuncMark, pNewOuter, pNewInner );
+    pDoc->ApplySelectionFrame(aFuncMark, &rNewOuter, pNewInner);
 
     pDocSh->UpdatePaintExt( nExt, aMarkRangeWithEnvelope ); // content after the change
 

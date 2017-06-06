@@ -470,7 +470,7 @@ void ScUndoSelectionAttr::Repeat(SfxRepeatTarget& rTarget)
     {
         ScTabViewShell& rViewShell = *static_cast<ScTabViewTarget&>(rTarget).GetViewShell();
         if (pLineOuter)
-            rViewShell.ApplyPatternLines( *pApplyPattern, pLineOuter, pLineInner );
+            rViewShell.ApplyPatternLines(*pApplyPattern, *pLineOuter, pLineInner);
         else
             rViewShell.ApplySelectionPattern( *pApplyPattern );
     }
