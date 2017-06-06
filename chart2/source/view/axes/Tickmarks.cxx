@@ -172,13 +172,28 @@ TickFactory2D::~TickFactory2D()
 
 bool TickFactory2D::isHorizontalAxis() const
 {
-    return ( m_aAxisStartScreenPosition2D.getY() == m_aAxisEndScreenPosition2D.getY() );
+    // check trivial cases:
+    if ( m_aAxisStartScreenPosition2D.getY() == m_aAxisEndScreenPosition2D.getY() )
+        return true;
+    if ( m_aAxisStartScreenPosition2D.getX() == m_aAxisEndScreenPosition2D.getX() )
+        return false;
+
+    // for skew axes compare angle with horizontal vector
+    double fInclination = std::abs(B2DVector(m_aAxisEndScreenPosition2D-m_aAxisStartScreenPosition2D).angle(B2DVector(1.0, 0.0)));
+    return fInclination < F_PI4 || fInclination > (F_PI-F_PI4);
 }
 bool TickFactory2D::isVerticalAxis() const
 {
-    return ( m_aAxisStartScreenPosition2D.getX() == m_aAxisEndScreenPosition2D.getX() );
-}
+    // check trivial cases:
+    if ( m_aAxisStartScreenPosition2D.getX() == m_aAxisEndScreenPosition2D.getX() )
+        return true;
+    if ( m_aAxisStartScreenPosition2D.getY() == m_aAxisEndScreenPosition2D.getY() )
+        return false;
 
+    // for skew axes compare angle with vertical vector
+    double fInclination = std::abs(B2DVector(m_aAxisEndScreenPosition2D-m_aAxisStartScreenPosition2D).angle(B2DVector(0.0, -1.0)));
+    return fInclination < F_PI4 || fInclination > (F_PI-F_PI4);
+}
 //static
 sal_Int32 TickFactory2D::getTickScreenDistance( TickIter& rIter )
 {
