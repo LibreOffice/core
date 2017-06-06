@@ -53,7 +53,7 @@ class SwFootnoteBossFrame: public SwLayoutFrame
     friend class SwPageFrame; // for setting of MaxFootnoteHeight
 
     // max. height of the footnote container on this page
-    SwTwips nMaxFootnoteHeight;
+    SwTwips m_nMaxFootnoteHeight;
 
     SwFootnoteContFrame *MakeFootnoteCont();
     SwFootnoteFrame     *FindFirstFootnote();
@@ -66,12 +66,12 @@ protected:
 public:
     SwFootnoteBossFrame( SwFrameFormat* pFormat, SwFrame* pSib )
         : SwLayoutFrame( pFormat, pSib )
-        , nMaxFootnoteHeight(0)
+        , m_nMaxFootnoteHeight(0)
         {}
 
                  SwLayoutFrame *FindBodyCont();
     inline const SwLayoutFrame *FindBodyCont() const;
-    void SetMaxFootnoteHeight( const SwTwips nNewMax ) { nMaxFootnoteHeight = nNewMax; }
+    void SetMaxFootnoteHeight( const SwTwips nNewMax ) { m_nMaxFootnoteHeight = nNewMax; }
 
     // footnote interface
     void AppendFootnote( SwContentFrame *, SwTextFootnote * );
@@ -90,7 +90,7 @@ public:
     // Set DeadLine (in document coordinates) so that the text formatter can
     // temporarily limit footnote height.
     void    SetFootnoteDeadLine( const SwTwips nDeadLine );
-    SwTwips GetMaxFootnoteHeight() const { return nMaxFootnoteHeight; }
+    SwTwips GetMaxFootnoteHeight() const { return m_nMaxFootnoteHeight; }
 
     // returns value for remaining space until the body reaches minimal height
     SwTwips GetVarSpace() const;
