@@ -301,7 +301,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                                               pCommentAuthorsPersistPtr,
                                               Slide ) );
 
-                importSlide( xCommentAuthorsFragmentHandler, pCommentAuthorsPersistPtr );
+                getFilter().importFragment( xCommentAuthorsFragmentHandler );
                 maAuthorList.setValues( pCommentAuthorsPersistPtr->getCommentAuthors() );
             }
             if( !aCommentFragmentPath.isEmpty() )
@@ -323,7 +323,7 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, bool bFirstPage
                         pCommentsPersistPtr,
                         Slide ) );
                 pCommentsPersistPtr->getCommentsList().cmLst.clear();
-                importSlide( xCommentsFragmentHandler, pCommentsPersistPtr );
+                getFilter().importFragment( xCommentsFragmentHandler );
 
                 if (!pCommentsPersistPtr->getCommentsList().cmLst.empty())
                 {
