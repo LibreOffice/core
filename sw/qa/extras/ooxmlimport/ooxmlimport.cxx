@@ -46,7 +46,6 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <vcl/bitmapaccess.hxx>
@@ -1135,17 +1134,6 @@ DECLARE_OOXMLIMPORT_TEST(testTdf98882, "tdf98882.docx")
     sal_Int32 nContentHeight = parseDump("//notxt/infos/bounds", "height").toInt32();
     // The content height was 600, not 360, so the frame and the content height did not match.
     CPPUNIT_ASSERT_EQUAL(nFlyHeight, nContentHeight);
-}
-
-DECLARE_OOXMLIMPORT_TEST(testTdf99074, "tdf99074.docx")
-{
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<view::XViewSettingsSupplier> const xController(
-        xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> const xViewSettings(
-        xController->getViewSettings());
-    // This was false, Web Layout was ignored on import.
-    CPPUNIT_ASSERT(getProperty<bool>(xViewSettings, "ShowOnlineLayout"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf100830, "tdf100830.docx")
