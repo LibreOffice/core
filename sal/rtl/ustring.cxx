@@ -33,7 +33,6 @@
 #include <osl/interlck.h>
 #include <rtl/alloc.h>
 #include <osl/mutex.h>
-#include <osl/doublecheckedlocking.h>
 #include <rtl/tencinfo.h>
 
 #include <string.h>
@@ -903,24 +902,7 @@ enum StrLifecycle {
 static oslMutex
 getInternMutex()
 {
-    static oslMutex pPoolGuard = nullptr;
-    if( !pPoolGuard )
-    {
-        oslMutex pGlobalGuard;
-        pGlobalGuard = *osl_getGlobalMutex();
-        osl_acquireMutex( pGlobalGuard );
-        if( !pPoolGuard )
-        {
-            oslMutex p = osl_createMutex();
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            pPoolGuard = p;
-        }
-        osl_releaseMutex( pGlobalGuard );
-    }
-    else
-    {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-    }
+    static oslMutex pPoolGuard = osl_createMutex();
 
     return pPoolGuard;
 }
