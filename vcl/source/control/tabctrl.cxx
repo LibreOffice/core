@@ -50,7 +50,7 @@ struct ImplTabItem
     OUString            maHelpText;
     OString             maHelpId;
     OString             maTabName;
-    tools::Rectangle           maRect;
+    tools::Rectangle    maRect;
     sal_uInt16          mnLine;
     bool                mbFullVisible;
     bool                mbEnabled;
@@ -73,6 +73,7 @@ struct ImplTabCtrlData
 
 // for the Tab positions
 #define TAB_PAGERECT        0xFFFF
+#define HAMBURGER_DIM       28
 
 void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
@@ -1180,7 +1181,7 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const tools::Rect
         ImplTabItem* pLastTab = nullptr;
         size_t idx;
 
-        // Event though there is a tab overlap with GTK+, the first tab is not
+        // Even though there is a tab overlap with GTK+, the first tab is not
         // overlapped on the left side. Other toolkits ignore this option.
         if (bDrawTabsRTL)
         {
@@ -2202,14 +2203,24 @@ FactoryFunction TabControl::GetUITestFactory() const
 
 sal_uInt16 NotebookbarTabControlBase::m_nHeaderHeight = 0;
 
+IMPL_LINK_NOARG(NotebookbarTabControlBase, OpenMenu, Button*, void)
+{
+    m_aIconClickHdl.Call(static_cast<NotebookBar*>(GetParent()->GetParent()));
+}
+
 NotebookbarTabControlBase::NotebookbarTabControlBase(vcl::Window* pParent)
     : TabControl(pParent, WB_STDTABCONTROL)
     , bLastContextWasSupported(true)
     , eLastContext(vcl::EnumContext::Context::Any)
 {
     BitmapEx aBitmap(SV_RESID_BITMAP_NOTEBOOKBAR);
-    InsertPage(1, "");
-    SetPageImage(1, Image(aBitmap));
+    InsertPage(0, "");
+
+    m_pOpenMenu = VclPtr<PushButton>::Create(this);
+    m_pOpenMenu->SetSizePixel(Size(HAMBURGER_DIM, HAMBURGER_DIM));
+    m_pOpenMenu->SetClickHdl(LINK(this, NotebookbarTabControlBase, OpenMenu));
+    m_pOpenMenu->SetModeImage(Image(aBitmap));
+    m_pOpenMenu->Show();
 }
 
 NotebookbarTabControlBase::~NotebookbarTabControlBase()
@@ -2259,6 +2270,7 @@ void NotebookbarTabControlBase::SetContext( vcl::EnumContext::Context eContext )
 void NotebookbarTabControlBase::dispose()
 {
     m_pShortcuts.disposeAndClear();
+    m_pOpenMenu.disposeAndClear();
     TabControl::dispose();
 }
 
@@ -2286,22 +2298,14 @@ sal_uInt16 NotebookbarTabControlBase::GetPageId( const Point& rPos ) const
 
 void NotebookbarTabControlBase::SelectTabPage( sal_uInt16 nPageId )
 {
-    if ( nPageId == 1 )
-        m_aIconClickHdl.Call( static_cast<NotebookBar*>(GetParent()->GetParent()) );
-    else
-    {
-        TabControl::SelectTabPage( nPageId );
-        Resize();
-    }
+    TabControl::SelectTabPage( nPageId );
+    Resize();
 }
 
 void NotebookbarTabControlBase::SetCurPageId( sal_uInt16 nPageId )
 {
-    if ( nPageId != 1 )
-    {
-        TabControl::SetCurPageId( nPageId );
-        Resize();
-    }
+    TabControl::SetCurPageId( nPageId );
+    Resize();
     if ( nPageId == GetPageCount() )
         ImplActivateTabPage( true );
 }
@@ -2352,7 +2356,7 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
         return false;
 
     long nMaxWidth = nWidth;
-    long nShortcutsWidth = m_pShortcuts != nullptr ? m_pShortcuts->GetSizePixel().getWidth() : 0;
+    long nShortcutsWidth = m_pShortcuts != nullptr ? m_pShortcuts->GetSizePixel().getWidth() + 1 : 0;
 
     const long nOffsetX = 2 + GetItemsOffset().X();
     const long nOffsetY = 2 + GetItemsOffset().Y();
@@ -2418,9 +2422,11 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
             nLinePosAry[nLines] = nPos;
         }
 
+        // If the tab header width is less than 100, enlarge it to 100
         if( !it->maText.isEmpty() && aSize.getWidth() < 100)
             aSize.Width() = 100;
 
+        // If the tab header height is less than 28, enlarge it to 28
         if( !it->maText.isEmpty() && aSize.getHeight() < 28 )
             aSize.Height() = 28;
 
@@ -2549,6 +2555,8 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
             }
         }
     }
+
+    m_pOpenMenu->SetPosPixel(Point(nWidth - HAMBURGER_DIM, 0)); // position hamburger menu
 
     return true;
 }
