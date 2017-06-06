@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_c5ffa2ff",
+        "filename": "include/vcl/tabctrl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-06-06T13:25:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3905b3_6d6896f6",
+      "revId": "62d5503b61f7a7772021040d799da0274a62ba11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_edad6632",
         "filename": "vcl/source/control/tabctrl.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-06-06T13:08:50Z",
       "side": 1,
       "message": "This is declaration, should be moved to the header file",
+      "revId": "62d5503b61f7a7772021040d799da0274a62ba11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_ed09e632",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2220,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-06-06T13:25:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3905b3_edad6632",
       "revId": "62d5503b61f7a7772021040d799da0274a62ba11",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_cd0c2a45",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2221,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-06-06T13:25:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3905b3_8d44e274",
+      "revId": "62d5503b61f7a7772021040d799da0274a62ba11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_2d7f6eab",
         "filename": "vcl/source/control/tabctrl.cxx",
         "patchSetId": 1
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_0d07121d",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2222,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-06-06T13:25:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3905b3_2d7f6eab",
+      "revId": "62d5503b61f7a7772021040d799da0274a62ba11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_ad499e8d",
         "filename": "vcl/source/control/tabctrl.cxx",
         "patchSetId": 1
@@ -81,6 +153,24 @@
       "writtenOn": "2017-06-06T13:08:50Z",
       "side": 1,
       "message": "here you should destroy your button - like m_pShortcuts",
+      "revId": "62d5503b61f7a7772021040d799da0274a62ba11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_2d04ce15",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2272,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-06-06T13:25:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3905b3_ad499e8d",
       "revId": "62d5503b61f7a7772021040d799da0274a62ba11",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
