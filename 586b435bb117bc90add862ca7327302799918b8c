@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_851bda1a",
+        "filename": "cui/source/dialogs/screenshotannotationdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2017-06-06T18:09:56Z",
+      "side": 1,
+      "message": "The attribute must have escaped quotes: id\u003d\\\"%1\\\". \n\nSee quotes missing in 5.3 release.",
+      "revId": "586b435bb117bc90add862ca7327302799918b8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a51616ef",
+        "filename": "cui/source/dialogs/screenshotannotationdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2017-06-06T18:09:56Z",
+      "side": 1,
+      "message": "The attribute must have escaped quotes: id\u003d\\\"%1\\\" and src\u003d\\\" (...) \\\" \n\nSee quotes missing in 5.3 release.",
+      "revId": "586b435bb117bc90add862ca7327302799918b8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c5d32237",
+        "filename": "cui/source/dialogs/screenshotannotationdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2017-06-06T18:09:56Z",
+      "side": 1,
+      "message": "The attribute must have escaped quotes: id\u003d\\\"%1\\\". \n\nparragraph has quotes correclty escaped.",
+      "revId": "586b435bb117bc90add862ca7327302799918b8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e5d65e26",
+        "filename": "cui/source/dialogs/screenshotannotationdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2017-06-06T18:09:56Z",
+      "side": 1,
+      "message": "The attributes must have escaped quotes.",
+      "revId": "586b435bb117bc90add862ca7327302799918b8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
