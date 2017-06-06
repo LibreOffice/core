@@ -36,6 +36,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libstaroffice, \
 endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,libstaroffice, \
+	external/libstaroffice/0001-ofz-1029-use-correct-loop-index.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
