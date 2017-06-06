@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_454c9242",
+        "filename": "sc/source/ui/app/transobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-06T16:33:51Z",
+      "side": 1,
+      "message": "i guess this should be inside the \"if\" like EDITENGINE is?",
+      "revId": "3f25333f64a2bc18c4360ecfdd9551e2ebd9bbd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_856d9a9a",
+        "filename": "sc/source/ui/app/transobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-06T16:33:51Z",
+      "side": 1,
+      "message": "apparently this case is for some non-single-cell case as it does not check ablock.aStart \u003d\u003d aBlock.aEnd\n\nso i think we shouldn\u0027t change it\n\nbut i wonder why this case is used for RTF? maybe it can import a RTF table as cells?",
+      "revId": "3f25333f64a2bc18c4360ecfdd9551e2ebd9bbd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_6547ce1d",
+        "filename": "sc/source/ui/app/transobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-06T16:33:51Z",
+      "side": 1,
+      "message": "this else branch is impossible to reach, no?",
+      "revId": "3f25333f64a2bc18c4360ecfdd9551e2ebd9bbd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
