@@ -285,11 +285,10 @@ OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, v
 }
 
 OpenGLTexture::OpenGLTexture( const OpenGLTexture& rTexture )
+    : maRect(rTexture.maRect)
+    , mpImpl(rTexture.mpImpl)
+    , mnSlotNumber(rTexture.mnSlotNumber)
 {
-    maRect = rTexture.maRect;
-    mpImpl = rTexture.mpImpl;
-    mnSlotNumber = rTexture.mnSlotNumber;
-
     if (mpImpl)
         mpImpl->IncreaseRefCount(mnSlotNumber);
 }
