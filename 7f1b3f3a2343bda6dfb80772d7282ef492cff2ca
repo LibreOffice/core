@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_0d6d5298",
+        "filename": "include/sal/types.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-06T08:03:16Z",
+      "side": 1,
+      "message": "defined(LIBO_INTERNAL_ONLY)  should already imply  __cplusplus \u003e\u003d 201103L",
+      "revId": "7f1b3f3a2343bda6dfb80772d7282ef492cff2ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
