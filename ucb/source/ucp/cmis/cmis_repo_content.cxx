@@ -384,7 +384,7 @@ namespace cmis
 
     uno::Sequence< uno::Type > SAL_CALL RepoContent::getTypes()
     {
-        static cppu::OTypeCollection aFolderCollection
+        static cppu::OTypeCollection s_aFolderCollection
             (CPPU_TYPE_REF( lang::XTypeProvider ),
              CPPU_TYPE_REF( lang::XServiceInfo ),
              CPPU_TYPE_REF( lang::XComponent ),
@@ -395,7 +395,7 @@ namespace cmis
              CPPU_TYPE_REF( beans::XPropertyContainer ),
              CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
              CPPU_TYPE_REF( container::XChild ) );
-        return aFolderCollection.getTypes();
+        return s_aFolderCollection.getTypes();
     }
 
     list< uno::Reference< ucb::XContent > > RepoContent::getChildren( )

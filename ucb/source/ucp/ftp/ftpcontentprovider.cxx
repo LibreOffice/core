@@ -82,21 +82,13 @@ css::uno::Sequence< sal_Int8 > SAL_CALL FTPContentProvider::getImplementationId(
 
 css::uno::Sequence< css::uno::Type > SAL_CALL FTPContentProvider::getTypes()
 {
-    static cppu::OTypeCollection* pCollection = nullptr;
-    if ( !pCollection )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
+    static cppu::OTypeCollection s_aCollection(
                     cppu::UnoType<XTypeProvider>::get(),
                     cppu::UnoType<XServiceInfo>::get(),
                     cppu::UnoType<XContentProvider>::get()
                 );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
+
+    return s_aCollection.getTypes();
 }
 
 

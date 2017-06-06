@@ -23,7 +23,6 @@
 #include <sal/macros.h>
 #include <osl/time.h>
 
-#include <osl/doublecheckedlocking.h>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -1176,7 +1175,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 {
     if ( isFolder( uno::Reference< ucb::XCommandEnvironment >() ) )
     {
-        static cppu::OTypeCollection aFolderCollection
+        static cppu::OTypeCollection s_aFolderCollection
             (CPPU_TYPE_REF( lang::XTypeProvider ),
              CPPU_TYPE_REF( lang::XServiceInfo ),
              CPPU_TYPE_REF( lang::XComponent ),
@@ -1188,11 +1187,11 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
              CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
              CPPU_TYPE_REF( container::XChild ),
              CPPU_TYPE_REF( ucb::XContentCreator ) );
-        return aFolderCollection.getTypes();
+        return s_aFolderCollection.getTypes();
     }
     else
     {
-        static cppu::OTypeCollection aFileCollection
+        static cppu::OTypeCollection s_aFileCollection
             (CPPU_TYPE_REF( lang::XTypeProvider ),
              CPPU_TYPE_REF( lang::XServiceInfo ),
              CPPU_TYPE_REF( lang::XComponent ),
@@ -1204,7 +1203,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
              CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
              CPPU_TYPE_REF( container::XChild ) );
 
-        return aFileCollection.getTypes();
+        return s_aFileCollection.getTypes();
     }
 }
 

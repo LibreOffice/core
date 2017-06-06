@@ -27,7 +27,6 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <osl/mutex.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -128,19 +127,11 @@ ContentIdentifier::getImplementationId()
 Sequence< css::uno::Type > SAL_CALL
 ContentIdentifier::getTypes()
 {
-    static cppu::OTypeCollection* pCollection = nullptr;
-      if ( !pCollection )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
+    static cppu::OTypeCollection s_aCollection(
                     cppu::UnoType<XTypeProvider>::get(),
                     cppu::UnoType<XContentIdentifier>::get() );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
+
+    return s_aCollection.getTypes();
 }
 
 

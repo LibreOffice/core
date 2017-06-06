@@ -79,18 +79,11 @@ FTPContentIdentifier::getImplementationId()
 Sequence<Type> SAL_CALL
 FTPContentIdentifier::getTypes()
 {
-    static cppu::OTypeCollection* pCollection = nullptr;
-    if ( !pCollection ) {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
+    static cppu::OTypeCollection s_aCollection(
                 cppu::UnoType<XTypeProvider>::get(),
                 cppu::UnoType<XContentIdentifier>::get());
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
+
+    return s_aCollection.getTypes();
 }
 
 

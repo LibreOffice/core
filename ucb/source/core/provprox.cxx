@@ -158,13 +158,13 @@ Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()
     }
     else
     {
-        static cppu::OTypeCollection collection(
+        static cppu::OTypeCollection s_aCollection(
             CPPU_TYPE_REF( XTypeProvider ),
             CPPU_TYPE_REF( XServiceInfo ),
             CPPU_TYPE_REF( XContentProvider ),
             CPPU_TYPE_REF( XParameterizedContentProvider ),
             CPPU_TYPE_REF( XContentProviderSupplier ) );
-        return collection.getTypes();
+        return s_aCollection.getTypes();
     }
 }
 

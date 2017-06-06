@@ -25,7 +25,6 @@
  *************************************************************************/
 #include <ucbhelper/interactionrequest.hxx>
 
-#include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -146,19 +145,11 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionRequest::getImplementationId()
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionRequest::getTypes()
 {
-    static cppu::OTypeCollection* pCollection = nullptr;
-      if ( !pCollection )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
+    static cppu::OTypeCollection s_aCollection(
                 cppu::UnoType<lang::XTypeProvider>::get(),
                 cppu::UnoType<task::XInteractionRequest>::get() );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
+
+    return s_aCollection.getTypes();
 }
 
 
@@ -251,19 +242,11 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionAbort::getImplementationId()
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionAbort::getTypes()
 {
-    static cppu::OTypeCollection* pCollection = nullptr;
-      if ( !pCollection )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
+    static cppu::OTypeCollection s_aCollection(
                 cppu::UnoType<lang::XTypeProvider>::get(),
                 cppu::UnoType<task::XInteractionAbort>::get() );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
+
+    return s_aCollection.getTypes();
 }
 
 
@@ -326,19 +309,11 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionRetry::getImplementationId()
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionRetry::getTypes()
 {
-    static cppu::OTypeCollection* pCollection = nullptr;
-      if ( !pCollection )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
+    static cppu::OTypeCollection s_aCollection(
                 cppu::UnoType<lang::XTypeProvider>::get(),
                 cppu::UnoType<task::XInteractionRetry>::get() );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
+
+    return s_aCollection.getTypes();
 }
 
 
@@ -401,19 +376,11 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionApprove::getImplementationId()
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionApprove::getTypes()
 {
-    static cppu::OTypeCollection* pCollection = nullptr;
-      if ( !pCollection )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
+    static cppu::OTypeCollection s_aCollection(
                 cppu::UnoType<lang::XTypeProvider>::get(),
                 cppu::UnoType<task::XInteractionApprove>::get() );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
+
+    return s_aCollection.getTypes();
 }
 
 
@@ -476,19 +443,11 @@ uno::Sequence< sal_Int8 > SAL_CALL InteractionDisapprove::getImplementationId()
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionDisapprove::getTypes()
 {
-    static cppu::OTypeCollection* pCollection = nullptr;
-      if ( !pCollection )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
+    static cppu::OTypeCollection s_aCollection(
                 cppu::UnoType<lang::XTypeProvider>::get(),
                 cppu::UnoType<task::XInteractionDisapprove>::get() );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
+
+    return s_aCollection.getTypes();
 }
 
 
@@ -553,19 +512,11 @@ InteractionSupplyAuthentication::getImplementationId()
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionSupplyAuthentication::getTypes()
 {
-    static cppu::OTypeCollection* pCollection = nullptr;
-      if ( !pCollection )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
+    static cppu::OTypeCollection s_aCollection(
                 cppu::UnoType<lang::XTypeProvider>::get(),
                 cppu::UnoType<ucb::XInteractionSupplyAuthentication2>::get() );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
+
+    return s_aCollection.getTypes();
 }
 
 
@@ -771,19 +722,11 @@ InteractionReplaceExistingData::getImplementationId()
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionReplaceExistingData::getTypes()
 {
-    static cppu::OTypeCollection* pCollection = nullptr;
-      if ( !pCollection )
-      {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
+    static cppu::OTypeCollection s_aCollection(
                 cppu::UnoType<lang::XTypeProvider>::get(),
                 cppu::UnoType<ucb::XInteractionReplaceExistingData>::get() );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
+
+    return s_aCollection.getTypes();
 }
 
 

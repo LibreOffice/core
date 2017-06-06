@@ -1946,7 +1946,7 @@ namespace cmis
         {
             if ( isFolder( uno::Reference< ucb::XCommandEnvironment >() ) )
             {
-                static cppu::OTypeCollection aFolderCollection
+                static cppu::OTypeCollection s_aFolderCollection
                     (CPPU_TYPE_REF( lang::XTypeProvider ),
                      CPPU_TYPE_REF( lang::XServiceInfo ),
                      CPPU_TYPE_REF( lang::XComponent ),
@@ -1958,7 +1958,7 @@ namespace cmis
                      CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                      CPPU_TYPE_REF( container::XChild ),
                      CPPU_TYPE_REF( ucb::XContentCreator ) );
-                return aFolderCollection.getTypes();
+                return s_aFolderCollection.getTypes();
             }
         }
         catch (const uno::RuntimeException&)
@@ -1973,7 +1973,7 @@ namespace cmis
                 uno::Reference<uno::XInterface>(), a);
         }
 
-        static cppu::OTypeCollection aFileCollection
+        static cppu::OTypeCollection s_aFileCollection
             (CPPU_TYPE_REF( lang::XTypeProvider ),
              CPPU_TYPE_REF( lang::XServiceInfo ),
              CPPU_TYPE_REF( lang::XComponent ),
@@ -1985,7 +1985,7 @@ namespace cmis
              CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
              CPPU_TYPE_REF( container::XChild ) );
 
-        return aFileCollection.getTypes();
+        return s_aFileCollection.getTypes();
     }
 
     uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(

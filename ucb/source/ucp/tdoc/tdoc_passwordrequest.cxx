@@ -118,19 +118,11 @@ InteractionSupplyPassword::getImplementationId()
 // virtual
 uno::Sequence< uno::Type > SAL_CALL InteractionSupplyPassword::getTypes()
 {
-    static cppu::OTypeCollection * pCollection = nullptr;
-    if ( !pCollection )
-    {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-        if ( !pCollection )
-        {
-            static cppu::OTypeCollection collection(
+    static cppu::OTypeCollection s_aCollection(
                 cppu::UnoType<lang::XTypeProvider>::get(),
                 cppu::UnoType<task::XInteractionPassword>::get() );
-            pCollection = &collection;
-        }
-    }
-    return (*pCollection).getTypes();
+
+    return s_aCollection.getTypes();
 }
 
 
