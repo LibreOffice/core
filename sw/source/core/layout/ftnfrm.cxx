@@ -2389,26 +2389,26 @@ void SwFootnoteBossFrame::SetFootnoteDeadLine( const SwTwips nDeadLine )
     pBody->Calc(getRootFrame()->GetCurrShell()->GetOut());
 
     SwFrame *pCont = FindFootnoteCont();
-    const SwTwips nMax = nMaxFootnoteHeight;// current should exceed MaxHeight
+    const SwTwips nMax = m_nMaxFootnoteHeight;// current should exceed MaxHeight
     SwRectFnSet aRectFnSet(this);
     if ( pCont )
     {
         pCont->Calc(getRootFrame()->GetCurrShell()->GetOut());
-        nMaxFootnoteHeight = -aRectFnSet.BottomDist( pCont->Frame(), nDeadLine );
+        m_nMaxFootnoteHeight = -aRectFnSet.BottomDist( pCont->Frame(), nDeadLine );
     }
     else
-        nMaxFootnoteHeight = -aRectFnSet.BottomDist( pBody->Frame(), nDeadLine );
+        m_nMaxFootnoteHeight = -aRectFnSet.BottomDist( pBody->Frame(), nDeadLine );
 
     const SwViewShell *pSh = getRootFrame() ? getRootFrame()->GetCurrShell() : nullptr;
     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
-        nMaxFootnoteHeight += pBody->Grow( LONG_MAX, true );
+        m_nMaxFootnoteHeight += pBody->Grow( LONG_MAX, true );
     if ( IsInSct() )
-        nMaxFootnoteHeight += FindSctFrame()->Grow( LONG_MAX, true );
+        m_nMaxFootnoteHeight += FindSctFrame()->Grow( LONG_MAX, true );
 
-    if ( nMaxFootnoteHeight < 0 )
-        nMaxFootnoteHeight = 0;
-    if ( nMax != LONG_MAX && nMaxFootnoteHeight > nMax )
-        nMaxFootnoteHeight = nMax;
+    if ( m_nMaxFootnoteHeight < 0 )
+        m_nMaxFootnoteHeight = 0;
+    if ( nMax != LONG_MAX && m_nMaxFootnoteHeight > nMax )
+        m_nMaxFootnoteHeight = nMax;
 }
 
 SwTwips SwFootnoteBossFrame::GetVarSpace() const
@@ -2772,7 +2772,7 @@ SwSaveFootnoteHeight::~SwSaveFootnoteHeight()
 {
     // If somebody tweaked the deadline meanwhile, we let it happen
     if ( nNewHeight == pBoss->GetMaxFootnoteHeight() )
-        pBoss->nMaxFootnoteHeight = nOldHeight;
+        pBoss->m_nMaxFootnoteHeight = nOldHeight;
 }
 
 #ifdef DBG_UTIL
