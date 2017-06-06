@@ -36,7 +36,6 @@
 #include <memory>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
-#include <osl/doublecheckedlocking.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <officecfg/Inet.hxx>
@@ -369,21 +368,9 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     {
     }
 
-    cppu::OTypeCollection * pCollection = nullptr;
-
     if ( bFolder )
     {
-        static cppu::OTypeCollection* pFolderTypes = nullptr;
-
-        pCollection = pFolderTypes;
-        if ( !pCollection )
-        {
-            osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-
-            pCollection = pFolderTypes;
-            if ( !pCollection )
-            {
-                static cppu::OTypeCollection aCollection(
+        static cppu::OTypeCollection aFolderTypes(
                     CPPU_TYPE_REF( lang::XTypeProvider ),
                         CPPU_TYPE_REF( lang::XServiceInfo ),
                         CPPU_TYPE_REF( lang::XComponent ),
@@ -394,50 +381,26 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
                         CPPU_TYPE_REF( beans::XPropertyContainer ),
                         CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                         CPPU_TYPE_REF( container::XChild ),
-                        CPPU_TYPE_REF( ucb::XContentCreator ) ); // !!
-                pCollection = &aCollection;
-                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-                pFolderTypes = pCollection;
-            }
-        }
-        else {
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        }
+                        CPPU_TYPE_REF( ucb::XContentCreator ) );
+
+        return  aFolderTypes.getTypes();
     }
     else
     {
-        static cppu::OTypeCollection* pDocumentTypes = nullptr;
+        static cppu::OTypeCollection aDocumentTypes(
+                CPPU_TYPE_REF( lang::XTypeProvider ),
+                CPPU_TYPE_REF( lang::XServiceInfo ),
+                CPPU_TYPE_REF( lang::XComponent ),
+                CPPU_TYPE_REF( ucb::XContent ),
+                CPPU_TYPE_REF( ucb::XCommandProcessor ),
+                CPPU_TYPE_REF( beans::XPropertiesChangeNotifier ),
+                CPPU_TYPE_REF( ucb::XCommandInfoChangeNotifier ),
+                CPPU_TYPE_REF( beans::XPropertyContainer ),
+                CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
+                CPPU_TYPE_REF( container::XChild ) );
 
-        pCollection = pDocumentTypes;
-        if ( !pCollection )
-        {
-            osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-
-            pCollection = pDocumentTypes;
-            if ( !pCollection )
-            {
-                static cppu::OTypeCollection aCollection(
-                        CPPU_TYPE_REF( lang::XTypeProvider ),
-                        CPPU_TYPE_REF( lang::XServiceInfo ),
-                        CPPU_TYPE_REF( lang::XComponent ),
-                        CPPU_TYPE_REF( ucb::XContent ),
-                        CPPU_TYPE_REF( ucb::XCommandProcessor ),
-                        CPPU_TYPE_REF( beans::XPropertiesChangeNotifier ),
-                        CPPU_TYPE_REF( ucb::XCommandInfoChangeNotifier ),
-                        CPPU_TYPE_REF( beans::XPropertyContainer ),
-                        CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
-                        CPPU_TYPE_REF( container::XChild ) );
-                pCollection = &aCollection;
-                OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-                pDocumentTypes = pCollection;
-            }
-        }
-        else {
-            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        }
+        return aDocumentTypes.getTypes();
     }
-
-    return (*pCollection).getTypes();
 }
 
 
