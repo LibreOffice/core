@@ -162,9 +162,9 @@ public:
     void            ApplyAttr( const SfxPoolItem& rAttrItem );
     void            ApplySelectionPattern( const ScPatternAttr& rAttr,
                                             bool bCursorOnly = false);
-    void            ApplyPatternLines( const ScPatternAttr& rAttr,
-                                        const SvxBoxItem* pNewOuter,
-                                        const SvxBoxInfoItem* pNewInner );
+    void            ApplyPatternLines(const ScPatternAttr& rAttr,
+                                      const SvxBoxItem& rNewOuter,
+                                      const SvxBoxInfoItem* pNewInner);
 
     void            ApplyUserItemSet( const SfxItemSet& rItemSet );
 
