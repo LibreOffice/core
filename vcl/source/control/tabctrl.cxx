@@ -2202,6 +2202,11 @@ FactoryFunction TabControl::GetUITestFactory() const
 
 sal_uInt16 NotebookbarTabControlBase::m_nHeaderHeight = 0;
 
+IMPL_LINK_NOARG(NotebookbarTabControlBase, OpenMenu, Button*, void)
+{
+    m_aIconClickHdl.Call( static_cast<NotebookBar*>(GetParent()->GetParent()) );
+}
+
 NotebookbarTabControlBase::NotebookbarTabControlBase(vcl::Window* pParent)
     : TabControl(pParent, WB_STDTABCONTROL)
     , bLastContextWasSupported(true)
@@ -2210,6 +2215,9 @@ NotebookbarTabControlBase::NotebookbarTabControlBase(vcl::Window* pParent)
     BitmapEx aBitmap(SV_RESID_BITMAP_NOTEBOOKBAR);
     InsertPage(1, "");
     SetPageImage(1, Image(aBitmap));
+
+    m_pOpenMenu = VclPtr<PushButton>::Create(this);
+    m_pOpenMenu->SetClickHdl(LINK(this, NotebookbarTabControlBase, OpenMenu));
 }
 
 NotebookbarTabControlBase::~NotebookbarTabControlBase()
@@ -2259,6 +2267,7 @@ void NotebookbarTabControlBase::SetContext( vcl::EnumContext::Context eContext )
 void NotebookbarTabControlBase::dispose()
 {
     m_pShortcuts.disposeAndClear();
+    m_pOpenMenu.disposeAndClear();
     TabControl::dispose();
 }
 
