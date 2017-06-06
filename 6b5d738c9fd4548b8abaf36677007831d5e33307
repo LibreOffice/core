@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_25b866e5",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-06-06T18:31:07Z",
+      "side": 1,
+      "message": "the second \"the\" is one too many :)",
+      "range": {
+        "startLine": 1030,
+        "startChar": 41,
+        "endLine": 1030,
+        "endChar": 44
+      },
+      "revId": "6b5d738c9fd4548b8abaf36677007831d5e33307",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
