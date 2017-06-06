@@ -284,13 +284,20 @@ OpenGLTexture::OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, v
 
 }
 
-OpenGLTexture::OpenGLTexture( const OpenGLTexture& rTexture )
+OpenGLTexture::OpenGLTexture(const OpenGLTexture& rTexture)
     : maRect(rTexture.maRect)
     , mpImpl(rTexture.mpImpl)
     , mnSlotNumber(rTexture.mnSlotNumber)
 {
     if (mpImpl)
         mpImpl->IncreaseRefCount(mnSlotNumber);
+}
+
+OpenGLTexture::OpenGLTexture(OpenGLTexture&& rTexture)
+    : maRect(rTexture.maRect)
+    , mpImpl(std::move(rTexture.mpImpl))
+    , mnSlotNumber(rTexture.mnSlotNumber)
+{
 }
 
 OpenGLTexture::OpenGLTexture( const OpenGLTexture& rTexture,
@@ -561,18 +568,28 @@ OpenGLTexture::operator bool() const
     return IsValid();
 }
 
-OpenGLTexture& OpenGLTexture::operator=( const OpenGLTexture& rTexture )
+OpenGLTexture& OpenGLTexture::operator=(const OpenGLTexture& rTexture)
 {
     if (rTexture.mpImpl)
-    {
         rTexture.mpImpl->IncreaseRefCount(rTexture.mnSlotNumber);
-    }
 
     if (mpImpl)
         mpImpl->DecreaseRefCount(mnSlotNumber);
 
     maRect = rTexture.maRect;
     mpImpl = rTexture.mpImpl;
+    mnSlotNumber = rTexture.mnSlotNumber;
+
+    return *this;
+}
+
+OpenGLTexture& OpenGLTexture::operator=(OpenGLTexture&& rTexture)
+{
+    if (mpImpl)
+        mpImpl->DecreaseRefCount(mnSlotNumber);
+
+    maRect = rTexture.maRect;
+    mpImpl = std::move(rTexture.mpImpl);
     mnSlotNumber = rTexture.mnSlotNumber;
 
     return *this;

@@ -91,6 +91,7 @@ public:
                     OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, void const * pData );
                     OpenGLTexture( int nX, int nY, int nWidth, int nHeight );
                     OpenGLTexture( const OpenGLTexture& rTexture );
+                    OpenGLTexture( OpenGLTexture&& rTexture );
                     OpenGLTexture( const OpenGLTexture& rTexture, int nX, int nY, int nWidth, int nHeight );
                     ~OpenGLTexture();
 
@@ -117,6 +118,7 @@ public:
 
                     operator bool() const;
     OpenGLTexture&  operator=( const OpenGLTexture& rTexture );
+    OpenGLTexture&  operator=( OpenGLTexture&& rTexture );
     bool            operator==( const OpenGLTexture& rTexture ) const;
     bool            operator!=( const OpenGLTexture& rTexture ) const;
 
