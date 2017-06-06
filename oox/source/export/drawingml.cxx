@@ -2351,16 +2351,17 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool b
             EscherPropertyContainer::LookForPolarHandles( eShapeType, nAdjustmentsWhichNeedsToBeConverted );
 
         sal_Int32 nValue, nLength = aAdjustmentSeq.getLength();
-        //aAdjustments will give info about the number of adj values for a particular geometry. For example for hexagon aAdjustments.size() will be 2 and for circular arrow it will be 5 as per lcl_getAdjNames.
-        if(aAdjustments.size() == static_cast<sal_uInt32>(nLength))// In case there is a mismatch do not write the XML_gd tag.
+        // aAdjustments will give info about the number of adj values for a particular geometry. For example for hexagon aAdjustments.size() will be 2 and for circular arrow it will be 5 as per lcl_getAdjNames.
+        // sometimes there are more values than needed, so we ignore excessive ones
+        if( aAdjustments.size() <= static_cast<sal_uInt32>(nLength) ) // In case there is a mismatch do not write the XML_gd tag.
         {
-            for( sal_Int32 i=0; i < nLength; i++ )
+            for( sal_Int32 i=0; i < (sal_Int32)aAdjustments.size(); i++ )
             {
                 if( EscherPropertyContainer::GetAdjustmentValue( aAdjustmentSeq[ i ], i, nAdjustmentsWhichNeedsToBeConverted, nValue ) )
                 {
                     // If the document model doesn't have an adjustment name (e.g. shape was created from VML), then take it from the predefined list.
                     OString aAdjName;
-                    if (static_cast<sal_uInt32>(i) < aAdjustments.size() && aAdjustmentSeq[i].Name.isEmpty())
+                    if( aAdjustmentSeq[i].Name.isEmpty() )
                         aAdjName = aAdjustments[i];
 
                     mpFS->singleElementNS( XML_a, XML_gd,
