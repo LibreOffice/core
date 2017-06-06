@@ -124,8 +124,8 @@ public:
 
     void    MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner, ScLineFlags& rFlags,
                             SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight ) const;
-    void    ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInfoItem* pLineInner,
-                            SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight );
+    void    ApplyBlockFrame(const SvxBoxItem& rLineOuter, const SvxBoxInfoItem* pLineInner,
+                            SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight);
 
     void    SetPattern( SCROW nRow, const ScPatternAttr* pPattern, bool bPutToPool = false );
     void    SetPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern,
