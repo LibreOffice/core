@@ -874,7 +874,7 @@
 				</otherwise>
 			</choose>
  		</when>
- 		<when test="boolean(./following::*[1]/self::text:h) or boolean(./following::*[1]/self::table:table) or boolean(./following::*[1]/self::text:bibliography)">
+		<when test="not(boolean(ancestor::text:note)) and (boolean(./following::*[1]/self::text:h) or boolean(./following::*[1]/self::table:table) or boolean(./following::*[1]/self::text:bibliography))">
  			<!-- Newline before following heading or table. -->
  			<value-of select="$NL"/>
  			<value-of select="$NL"/>
