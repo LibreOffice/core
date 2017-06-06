@@ -16,6 +16,24 @@
       "revId": "0c81a0f1e27e81b70ca013d7cfabd1faa7fa4e22",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_854cba71",
+        "filename": "basic/source/sbx/sbxvalue.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-06-06T14:08:50Z",
+      "side": 1,
+      "message": "Yes, this is OK. The Put is called later near the end of the function, for any type, including string. The Put here seems like a leftover from some early-days refactoring (but it already was at the time of initial OOo code release).",
+      "parentUuid": "5a3905b3_a530d6e9",
+      "revId": "0c81a0f1e27e81b70ca013d7cfabd1faa7fa4e22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
