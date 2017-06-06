@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_05ffea67",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-06T21:23:13Z",
+      "side": 1,
+      "message": "Now you can remove this line as the button will be eventually hidden (if applicable) by the code you\u0027ve just wrote",
+      "revId": "4f162f89380cee5e4abfcde58c8fd6f741776c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c5040280",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-06T21:23:13Z",
+      "side": 1,
+      "message": "Move this up into \u0027if (pMainViewShell)\u0027 branch above, as you can see pMainViewShell can be null and in that case this code would crash\nYou can also integrate it w/ the code therein. For example it make senses to populateMasterSlideDropdown and preselect some entry only if EditMode::Page (not MasterPage)",
+      "revId": "4f162f89380cee5e4abfcde58c8fd6f741776c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_45f9f27f",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-06T21:23:13Z",
+      "side": 1,
+      "message": "Well, now the type of application is queried every time an event comes ... that is, for some events, every 10 seconds ;-)\n\nAnyway ... maybe you can initialize maApplication in HandleContextChange ... or maybe you can drop it altogether, maContext.meApplication has the necessary information, so why have it duplicate?",
+      "revId": "4f162f89380cee5e4abfcde58c8fd6f741776c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
