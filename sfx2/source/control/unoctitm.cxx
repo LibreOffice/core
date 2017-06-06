@@ -746,7 +746,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                             {
                                 if (const SfxBoolItem* pBoolItem = dynamic_cast<const SfxBoolItem*>(pItem))
                                     bSuccess = pBoolItem->GetValue();
-                                else if ( dynamic_cast< const SfxVoidItem *>( pItem ) ==  nullptr )
+                                else if ( !pItem->IsVoidItem() )
                                     bSuccess = true;  // all other types are true
                             }
                             // else bSuccess = false look to line 664 it is false
@@ -808,7 +808,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                 aEvent.State = css::frame::DispatchResultState::FAILURE;
 
             aEvent.Source = static_cast<css::frame::XDispatch*>(pDispatch);
-            if ( bSuccess && pItem && dynamic_cast< const SfxVoidItem *>( pItem ) ==  nullptr )
+            if ( bSuccess && pItem && !pItem->IsVoidItem() )
             {
                 sal_uInt16 nSubId( 0 );
                 if ( eMapUnit == MapUnit::MapTwip )
@@ -924,7 +924,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     if (bNotify)
     {
         css::uno::Any aState;
-        if ( ( eState >= SfxItemState::DEFAULT ) && pState && !IsInvalidItem( pState ) && dynamic_cast< const SfxVoidItem *>( pState ) ==  nullptr )
+        if ( ( eState >= SfxItemState::DEFAULT ) && pState && !IsInvalidItem( pState ) && !pState->IsVoidItem() )
         {
             // Retrieve metric from pool to have correct sub ID when calling QueryValue
             sal_uInt16     nSubId( 0 );
