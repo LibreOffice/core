@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_cdca6a4f",
+        "filename": "editeng/source/xml/xmltxtimp.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-06T10:41:18Z",
+      "side": 1,
+      "message": "i hope we don\u0027t need this else branch? none of the elements it checks for should occur on the top-level...",
+      "revId": "523c00912251bcdfed351a1a7b1545bcc5f6c186",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
