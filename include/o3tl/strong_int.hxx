@@ -36,37 +36,33 @@ template<typename T1, typename T2> constexpr
 typename std::enable_if<
     std::is_signed<T1>::value && std::is_signed<T2>::value, bool>::type
 isInRange(T2 value) {
-    const bool ret = value >= std::numeric_limits<T1>::min()
-                  && value <= std::numeric_limits<T1>::max();
-    return ret;
+    return value >= std::numeric_limits<T1>::min()
+        && value <= std::numeric_limits<T1>::max();
 }
 
 template<typename T1, typename T2> constexpr
 typename std::enable_if<
     std::is_signed<T1>::value && std::is_unsigned<T2>::value, bool>::type
 isInRange(T2 value) {
-    const bool ret = value
+    return value
         <= static_cast<typename std::make_unsigned<T1>::type>(
             std::numeric_limits<T1>::max());
-    return ret;
 }
 
 template<typename T1, typename T2> constexpr
 typename std::enable_if<
     std::is_unsigned<T1>::value && std::is_signed<T2>::value, bool>::type
 isInRange(T2 value) {
-    const bool ret = value >= 0
+    return value >= 0
         && (static_cast<typename std::make_unsigned<T2>::type>(value)
             <= std::numeric_limits<T1>::max());
-    return ret;
 }
 
 template<typename T1, typename T2> constexpr
 typename std::enable_if<
     std::is_unsigned<T1>::value && std::is_unsigned<T2>::value, bool>::type
 isInRange(T2 value) {
-    const bool ret = value <= std::numeric_limits<T1>::max();
-    return ret;
+    return value <= std::numeric_limits<T1>::max();
 }
 
 }
@@ -93,7 +89,7 @@ public:
         typename std::enable_if<std::is_integral<T>::value, int>::type = 0):
         m_value(value)
     {
-#if HAVE_CXX14_CONSTEXPR
+#if !defined __COVERITY__ && HAVE_CXX14_CONSTEXPR
         // catch attempts to pass in out-of-range values early
         assert(detail::isInRange<UNDERLYING_TYPE>(value)
                && "out of range");
