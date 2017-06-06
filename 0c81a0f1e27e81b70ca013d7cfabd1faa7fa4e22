@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_a530d6e9",
+        "filename": "basic/source/sbx/sbxvalue.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-06T14:00:27Z",
+      "side": 1,
+      "message": "I don\u0027t know much about SbxValue; is it OK to drop the call to Put here?",
+      "revId": "0c81a0f1e27e81b70ca013d7cfabd1faa7fa4e22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
