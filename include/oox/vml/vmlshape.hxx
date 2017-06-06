@@ -89,6 +89,7 @@ struct OOX_DLLPUBLIC ShapeTypeModel
     OUString     maWrapStyle;            ///< Wrapping mode for text.
     OUString     maArcsize;              ///< round rectangles arc size
     OUString     maEditAs;               ///< Edit As type (e.g. "canvas" etc)
+    OUString     maAdjustments;          ///< Shape adjustment values
 
     StrokeModel         maStrokeModel;          ///< Border line formatting.
     FillModel           maFillModel;            ///< Shape fill formatting.
