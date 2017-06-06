@@ -338,7 +338,7 @@ class Parser:
             "svgio" : 1,
             "svl" : 1,
             "svtools" : 1,
-            "svx" : 0, #
+            "svx" : 1,
             "sw" : 0, #
             "test" : 1,
             "testtools" : 1,
