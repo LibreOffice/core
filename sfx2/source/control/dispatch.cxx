@@ -1882,7 +1882,7 @@ bool SfxDispatcher::FillState_(const SfxSlotServer& rSvr, SfxItemSet& rState,
                   pItem;
                   pItem = aIter.NextItem() )
             {
-                if ( !IsInvalidItem(pItem) && dynamic_cast< const SfxVoidItem *>( pItem ) ==  nullptr )
+                if ( !IsInvalidItem(pItem) && !pItem->IsVoidItem() )
                 {
                     sal_uInt16 nSlotId = rState.GetPool()->GetSlotId(pItem->Which());
                     SAL_INFO_IF(
@@ -2084,7 +2084,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, css::uno::Any& rAny )
         else
         {
             css::uno::Any aState;
-            if ( dynamic_cast< const SfxVoidItem *>( pItem ) ==  nullptr )
+            if ( !pItem->IsVoidItem() )
             {
                 sal_uInt16 nSubId( 0 );
                 SfxItemPool& rPool = pShell->GetPool();

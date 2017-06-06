@@ -920,7 +920,7 @@ void SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItemS
             if (eState!=SfxItemState::DISABLED) {
                 const SfxPoolItem& rItem=pSet->Get(nWhich);
                 sal_uInt16 nIndent=0;
-                if (dynamic_cast<const SfxVoidItem *>(&rItem) == nullptr && dynamic_cast<const SfxSetItem *>(&rItem) == nullptr
+                if (!rItem.IsVoidItem() && dynamic_cast<const SfxSetItem *>(&rItem) == nullptr
                         && (!IsItemIneffective(nWhich,pSet,nIndent) || bDontHideIneffectiveItems)) {
                     OUString aCommentStr;
 
