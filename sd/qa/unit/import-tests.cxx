@@ -44,6 +44,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
+#include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -158,6 +159,7 @@ public:
     void testTdf105150();
     void testTdf105150PPT();
     void testTdf100926();
+    void testTdf89064();
 
     bool checkPattern(sd::DrawDocShellRef& rDocRef, int nShapeNumber, std::vector<sal_uInt8>& rExpected);
     void testPatternImport();
@@ -225,6 +227,7 @@ public:
     CPPUNIT_TEST(testTdf105150PPT);
     CPPUNIT_TEST(testTdf100926);
     CPPUNIT_TEST(testPatternImport);
+    CPPUNIT_TEST(testTdf89064);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2179,6 +2182,16 @@ void SdImportTest::testTdf100926()
     xCell.set(xTable->getCellByPosition(2, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("RotateAngle") >>= nRotation;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nRotation);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf89064()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("sd/qa/unit/data/pptx/tdf89064.pptx"), PPTX);
+    uno::Reference< presentation::XPresentationPage > xPage (getPage(0, xDocShRef), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XDrawPage > xNotesPage (xPage->getNotesPage(), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xNotesPage->getCount() == 1);
 
     xDocShRef->DoClose();
 }
