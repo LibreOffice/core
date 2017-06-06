@@ -23,6 +23,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/button.hxx>
 #include <vcl/EnumContext.hxx>
 #include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 
@@ -221,6 +222,8 @@ private:
     Link<NotebookBar*,void> m_aIconClickHdl;
     static sal_uInt16 m_nHeaderHeight;
     VclPtr<ToolBox> m_pShortcuts;
+    VclPtr<PushButton> m_pOpenMenu;
+    DECL_LINK(OpenMenu, Button*, void);
 };
 
 #endif // INCLUDED_VCL_TABCTRL_HXX
