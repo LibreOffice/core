@@ -105,24 +105,12 @@ Reference< drawing::XShape > createSingleLabel(
 
 bool lcl_doesShapeOverlapWithTickmark( const Reference< drawing::XShape >& xShape
                        , double fRotationAngleDegree
-                       , const basegfx::B2DVector& rTickScreenPosition
-                       , bool bIsHorizontalAxis, bool bIsVerticalAxis )
+                       , const basegfx::B2DVector& rTickScreenPosition )
 {
     if(!xShape.is())
         return false;
 
     ::basegfx::B2IRectangle aShapeRect = BaseGFXHelper::makeRectangle(xShape->getPosition(),AbstractShapeFactory::getSizeAfterRotation( xShape, fRotationAngleDegree ));
-
-    if( bIsVerticalAxis )
-    {
-        return ( (rTickScreenPosition.getY() >= aShapeRect.getMinY())
-            && (rTickScreenPosition.getY() <= aShapeRect.getMaxY()) );
-    }
-    if( bIsHorizontalAxis )
-    {
-        return ( (rTickScreenPosition.getX() >= aShapeRect.getMinX())
-            && (rTickScreenPosition.getX() <= aShapeRect.getMaxX()) );
-    }
 
     basegfx::B2IVector aPosition(
         static_cast<sal_Int32>( rTickScreenPosition.getX() )
@@ -745,8 +733,7 @@ bool VCartesianAxis::createTextShapes(
 
             if( lcl_doesShapeOverlapWithTickmark( pLastVisibleNeighbourTickInfo->xTextShape
                        , rAxisLabelProperties.fRotationAngleDegree
-                       , pTickInfo->aTickScreenPosition
-                       , bIsHorizontalAxis, bIsVerticalAxis ) )
+                       , pTickInfo->aTickScreenPosition ) )
             {
                 // This tick overlaps with its neighbor.  Try to stagger (if
                 // auto staggering is allowed) to avoid overlapping.
@@ -760,8 +747,7 @@ bool VCartesianAxis::createTextShapes(
                     if( !pLastVisibleNeighbourTickInfo ||
                         !lcl_doesShapeOverlapWithTickmark( pLastVisibleNeighbourTickInfo->xTextShape
                                 , rAxisLabelProperties.fRotationAngleDegree
-                                , pTickInfo->aTickScreenPosition
-                            , bIsHorizontalAxis, bIsVerticalAxis ) )
+                                , pTickInfo->aTickScreenPosition ) )
                         bOverlapsAfterAutoStagger = false;
                 }
 
@@ -842,8 +828,7 @@ bool VCartesianAxis::createTextShapes(
                         if( !pLastVisibleNeighbourTickInfo ||
                             !lcl_doesShapeOverlapWithTickmark( pLastVisibleNeighbourTickInfo->xTextShape
                                 , rAxisLabelProperties.fRotationAngleDegree
-                                , pTickInfo->aTickScreenPosition
-                                , bIsHorizontalAxis, bIsVerticalAxis ) )
+                                , pTickInfo->aTickScreenPosition ) )
                             bOverlapsAfterAutoStagger = false;
                     }
                 }
@@ -934,8 +919,7 @@ bool VCartesianAxis::createTextShapesSimple(
 
             if( lcl_doesShapeOverlapWithTickmark( pLastVisibleNeighbourTickInfo->xTextShape
                        , rAxisLabelProperties.fRotationAngleDegree
-                       , pTickInfo->aTickScreenPosition
-                       , bIsHorizontalAxis, bIsVerticalAxis ) )
+                       , pTickInfo->aTickScreenPosition ) )
             {
                 // This tick overlaps with its neighbor. Increment the visible
                 // tick intervals (if that's allowed) and start over.
