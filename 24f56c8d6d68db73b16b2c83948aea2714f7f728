@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_8d5a2282",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3024,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-06T12:09:47Z",
+      "side": 1,
+      "message": "here Bereich means range (it has only one \"dimension\" so area sounds wrong to me)",
+      "revId": "24f56c8d6d68db73b16b2c83948aea2714f7f728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_6d65f643",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3105,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-06T12:09:47Z",
+      "side": 1,
+      "message": "Vorlagen is better translated as \"styles\" in this context",
+      "revId": "24f56c8d6d68db73b16b2c83948aea2714f7f728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_4d603a36",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3129,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-06T12:09:47Z",
+      "side": 1,
+      "message": "must *be* corrected",
+      "revId": "24f56c8d6d68db73b16b2c83948aea2714f7f728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
