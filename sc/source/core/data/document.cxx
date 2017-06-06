@@ -5746,17 +5746,17 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
     }
 }
 
-void ScDocument::ApplyFrameAreaTab( const ScRange& rRange,
-                                    const SvxBoxItem* pLineOuter,
-                                    const SvxBoxInfoItem* pLineInner )
+void ScDocument::ApplyFrameAreaTab(const ScRange& rRange,
+                                   const SvxBoxItem& rLineOuter,
+                                   const SvxBoxInfoItem& rLineInner)
 {
     SCTAB nStartTab = rRange.aStart.Tab();
     SCTAB nEndTab = rRange.aStart.Tab();
     for (SCTAB nTab=nStartTab; nTab<=nEndTab && nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
         if (maTabs[nTab])
-            maTabs[nTab]->ApplyBlockFrame( pLineOuter, pLineInner,
-                                         rRange.aStart.Col(), rRange.aStart.Row(),
-                                         rRange.aEnd.Col(),   rRange.aEnd.Row() );
+            maTabs[nTab]->ApplyBlockFrame(&rLineOuter, &rLineInner,
+                                          rRange.aStart.Col(), rRange.aStart.Row(),
+                                          rRange.aEnd.Col(),   rRange.aEnd.Row());
 }
 
 void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark, ScEditDataArray* pDataArray )
