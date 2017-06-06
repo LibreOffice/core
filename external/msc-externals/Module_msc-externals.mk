@@ -9,8 +9,12 @@
 
 $(eval $(call gb_Module_Module,msc-externals))
 
+ifneq ($(BUILD_X64),)
+
 $(eval $(call gb_Module_add_targets,msc-externals,\
 	Package_msvc_dlls \
 ))
+
+endif
 
 # vim: set noet sw=4 ts=4:
