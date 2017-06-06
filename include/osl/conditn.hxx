@@ -20,9 +20,10 @@
 #ifndef INCLUDED_OSL_CONDITN_HXX
 #define INCLUDED_OSL_CONDITN_HXX
 
+#include <sal/config.h>
+
 #include <cstddef>
 
-#include <sal/config.h>
 #include <osl/time.h>
 #include <osl/conditn.h>
 
