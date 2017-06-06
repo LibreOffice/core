@@ -50,7 +50,7 @@ struct ImplTabItem
     OUString            maHelpText;
     OString             maHelpId;
     OString             maTabName;
-    tools::Rectangle           maRect;
+    tools::Rectangle    maRect;
     sal_uInt16          mnLine;
     bool                mbFullVisible;
     bool                mbEnabled;
@@ -73,6 +73,7 @@ struct ImplTabCtrlData
 
 // for the Tab positions
 #define TAB_PAGERECT        0xFFFF
+#define HAMBURGER_DIM       28
 
 void TabControl::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
@@ -2202,6 +2203,43 @@ FactoryFunction TabControl::GetUITestFactory() const
 
 sal_uInt16 NotebookbarTabControlBase::m_nHeaderHeight = 0;
 
+IMPL_LINK_NOARG(NotebookbarTabControlBase, OpenMenu, Button*, void)
+{
+    m_aIconClickHdl.Call(static_cast<NotebookBar*>(GetParent()->GetParent()));
+}
+
+/*
+IMPL_LINK(NotebookbarTabControlBase, OpenMenu, Button*, pNotebookbar, void)
+{
+    Sequence<Any> aArgs
+    {
+        makeAny(comphelper::makePropertyValue("Value", OUString("notebookbar"))),
+        makeAny(comphelper::makePropertyValue("Frame", m_xFrame))
+    };
+
+    Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+    Reference<XPopupMenuController> xPopupController(
+        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+        "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext), UNO_QUERY);
+
+    Reference<css::awt::XPopupMenu> xPopupMenu(xContext->getServiceManager()->createInstanceWithContext(
+        "com.sun.star.awt.PopupMenu", xContext), UNO_QUERY);
+
+    if (!xPopupController.is() || !xPopupMenu.is())
+        return;
+
+    xPopupController->setPopupMenu(xPopupMenu);
+    VCLXMenu* pAwtMenu = VCLXMenu::GetImplementation(xPopupMenu);
+    PopupMenu* pVCLMenu = static_cast<PopupMenu*>(pAwtMenu->GetMenu());
+    Point aPos(0, NotebookbarTabControlBase::GetHeaderHeight());
+    pVCLMenu->Execute(pNotebookbar, tools::Rectangle(aPos, aPos),PopupMenuFlags::ExecuteDown|PopupMenuFlags::NoMouseUpClose);
+
+    Reference<css::lang::XComponent> xComponent(xPopupController, UNO_QUERY);
+    if (xComponent.is())
+        xComponent->dispose();
+}
+*/
+
 NotebookbarTabControlBase::NotebookbarTabControlBase(vcl::Window* pParent)
     : TabControl(pParent, WB_STDTABCONTROL)
     , bLastContextWasSupported(true)
@@ -2210,6 +2248,11 @@ NotebookbarTabControlBase::NotebookbarTabControlBase(vcl::Window* pParent)
     BitmapEx aBitmap(SV_RESID_BITMAP_NOTEBOOKBAR);
     InsertPage(1, "");
     SetPageImage(1, Image(aBitmap));
+
+    m_pOpenMenu = VclPtr<PushButton>::Create(this);
+    m_pOpenMenu->SetSizePixel(Size(HAMBURGER_DIM, HAMBURGER_DIM));
+    m_pOpenMenu->SetClickHdl(LINK(this, NotebookbarTabControlBase, OpenMenu));
+    m_pOpenMenu->Show();
 }
 
 NotebookbarTabControlBase::~NotebookbarTabControlBase()
@@ -2259,6 +2302,7 @@ void NotebookbarTabControlBase::SetContext( vcl::EnumContext::Context eContext )
 void NotebookbarTabControlBase::dispose()
 {
     m_pShortcuts.disposeAndClear();
+    m_pOpenMenu.disposeAndClear();
     TabControl::dispose();
 }
 
@@ -2344,6 +2388,7 @@ sal_uInt16 NotebookbarTabControlBase::GetHeaderHeight()
     return m_nHeaderHeight;
 }
 
+// Place notebookbar tabs
 bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 {
     if ( nWidth <= 0 )
@@ -2549,6 +2594,8 @@ bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
             }
         }
     }
+
+    m_pOpenMenu->SetPosPixel(Point(nWidth - HAMBURGER_DIM, 0)); // position hamburger menu
 
     return true;
 }
