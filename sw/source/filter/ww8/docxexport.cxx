@@ -825,6 +825,12 @@ void DocxExport::WriteSettings()
             FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
             FSEND );
 
+    // View
+    if (pViewShell && pViewShell->GetViewOptions()->getBrowseMode())
+    {
+        pFS->singleElementNS(XML_w, XML_view, FSNS(XML_w, XML_val), "web", FSEND);
+    }
+
     // Zoom
     if (pViewShell)
     {
