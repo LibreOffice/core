@@ -25,6 +25,7 @@
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -1285,6 +1286,17 @@ DECLARE_OOXMLIMPORT_TEST(testTdf76446, "tdf76446.docx")
     uno::Reference<drawing::XShape> xShape = getShape(1);
     sal_Int64 nRot = getProperty<sal_Int64>(xShape, "RotateAngle");
     CPPUNIT_ASSERT_EQUAL(sal_Int64(3128), nRot);
+}
+
+DECLARE_OOXMLIMPORT_TEST(testVmlAdjustments, "vml-adjustments.docx")
+{
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
+    uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentValues =
+        aGeometry["AdjustmentValues"].get<uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue>>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aAdjustmentValues.getLength());
+    drawing::EnhancedCustomShapeAdjustmentValue aAdjustmentValue = *aAdjustmentValues.begin();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(17639), aAdjustmentValue.Value.get<sal_Int32>());
 }
 
 
