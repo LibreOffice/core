@@ -172,10 +172,19 @@ void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 
 OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& rContentType, const OUString& rFileName )
 {
-    if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" && !rFileName.endsWith("docm") )
+    bool bDocm = false;
+    OUString aDocmExtension = ".docm";
+    if (rFileName.getLength() >= aDocmExtension.getLength())
+    {
+        OUString aExtension = rFileName.copy(rFileName.getLength() - aDocmExtension.getLength());
+        // The file name ends with .docm, ignoring case.
+        bDocm = aExtension.equalsIgnoreAsciiCase(aDocmExtension);
+    }
+
+    if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml" && !bDocm )
         return OUString( "writer_MS_Word_2007" );
 
-    if( rContentType == "application/vnd.ms-word.document.macroEnabled.main+xml" || rFileName.endsWith("docm") )
+    if( rContentType == "application/vnd.ms-word.document.macroEnabled.main+xml" || bDocm )
         return OUString( "writer_MS_Word_2007_VBA" );
 
     if( rContentType == "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml" ||
