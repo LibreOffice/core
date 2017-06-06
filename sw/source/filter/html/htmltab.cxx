@@ -965,14 +965,6 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     if( nBorderOpt==USHRT_MAX )
         nPWidth = 0;
 
-    // HACK: ein Pixel-breite Linien sollen zur Haarlinie werden, wenn
-    // wir mit doppelter Umrandung arbeiten
-    if( pOptions->nCellSpacing!=0 && nBorderOpt==1 )
-    {
-        nPWidth = 1;
-        nPHeight = 1;
-    }
-
     if ( pOptions->nCellSpacing != 0 )
     {
         aTopBorderLine.SetBorderLineStyle(table::BorderLineStyle::DOUBLE);
@@ -1455,7 +1447,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                 nInnerFrmWidth -= GetBorderWidth( rBorderLine );
                 bSet = true;
             }
-            if( nCol+nColSpan == nCols && bRightBorder )
+            if( bRightBorder )
             {
                 aBoxItem.SetLine( &aRightBorderLine, SvxBoxItemLine::RIGHT );
                 nInnerFrmWidth -= GetBorderWidth( aRightBorderLine );
