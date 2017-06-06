@@ -33,6 +33,29 @@
       "revId": "4b11f21970ff9a43adbe88b9dbc0a9afa8f50d5c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_85dcba13",
+        "filename": "include/comphelper/accessiblecontexthelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2017-06-06T20:37:49Z",
+      "side": 1,
+      "message": "In fact I\u0027m not sure how to deal with this, lock the local mutex and SolarMutex or just lock the SolarMutex ?",
+      "range": {
+        "startLine": 260,
+        "startChar": 0,
+        "endLine": 260,
+        "endChar": 16
+      },
+      "revId": "4b11f21970ff9a43adbe88b9dbc0a9afa8f50d5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
