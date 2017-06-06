@@ -1596,9 +1596,9 @@ public:
     void            ApplySelectionFrame(const ScMarkData& rMark,
                                         const SvxBoxItem& rLineOuter,
                                         const SvxBoxInfoItem* pLineInner);
-    void            ApplyFrameAreaTab( const ScRange& rRange,
-                                       const SvxBoxItem* pLineOuter,
-                                       const SvxBoxInfoItem* pLineInner );
+    void            ApplyFrameAreaTab(const ScRange& rRange,
+                                      const SvxBoxItem& rLineOuter,
+                                      const SvxBoxInfoItem& rLineInner);
 
     void            ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
     void            ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );

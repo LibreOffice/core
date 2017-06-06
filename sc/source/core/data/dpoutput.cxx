@@ -275,7 +275,7 @@ void ScDPOutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL 
 
     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE,false);
 
-    mpDoc->ApplyFrameAreaTab( ScRange(  nStartCol, nStartRow, mnTab, nEndCol, nEndRow , mnTab ), &aBox, &aBoxInfo );
+    mpDoc->ApplyFrameAreaTab(ScRange(nStartCol, nStartRow, mnTab, nEndCol, nEndRow , mnTab), aBox, aBoxInfo);
 
 }
 
@@ -324,7 +324,7 @@ void lcl_SetFrame( ScDocument* pDoc, SCTAB nTab,
     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::VERT,false);
     aBoxInfo.SetValid(SvxBoxInfoItemValidFlags::DISTANCE,false);
 
-    pDoc->ApplyFrameAreaTab( ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab ), &aBox, &aBoxInfo );
+    pDoc->ApplyFrameAreaTab(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab), aBox, aBoxInfo);
 }
 
 void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
