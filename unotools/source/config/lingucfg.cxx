@@ -524,7 +524,7 @@ bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any 
         {
             if (nNew != (sal_uInt16)*plVal)
             {
-                *plVal = LanguageType(nNew);
+                *plVal = LanguageType(static_cast<sal_uInt16>(nNew));
                 bMod = true;
             }
             bSucc = true;
