@@ -253,6 +253,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/style/postuhdl \
     xmloff/source/style/prhdlfac \
     xmloff/source/style/prstylei \
+	xmloff/source/style/prstylecond \
     xmloff/source/style/shadwhdl \
     xmloff/source/style/shdwdhdl \
     xmloff/source/style/styleexp \
