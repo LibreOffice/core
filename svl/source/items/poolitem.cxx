@@ -136,6 +136,10 @@ SfxPoolItem* SfxPoolItem::CloneSetWhich( sal_uInt16 nNewWhich ) const
     return pItem;
 }
 
+bool SfxPoolItem::IsVoidItem() const
+{
+    return false;
+}
 
 SfxPoolItem* SfxVoidItem::CreateDefault()
 {
@@ -184,6 +188,11 @@ void SfxVoidItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 SfxPoolItem* SfxVoidItem::Clone(SfxItemPool *) const
 {
     return new SfxVoidItem(*this);
+}
+
+bool SfxVoidItem::IsVoidItem() const
+{
+    return true;
 }
 
 void SfxPoolItem::ScaleMetrics( long /*lMult*/, long /*lDiv*/ )

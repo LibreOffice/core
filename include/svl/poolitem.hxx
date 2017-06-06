@@ -177,6 +177,13 @@ public:
     SfxItemKind       GetKind() const { return m_nKind; }
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
+    /** Only SfxVoidItem shall and must return true for this.
+
+        This avoids costly calls to dynamic_cast<const SfxVoidItem*>()
+        specifically in SfxItemSet::GetItemState()
+     */
+    virtual bool             IsVoidItem() const;
+
 private:
     SfxPoolItem&             operator=( const SfxPoolItem& ) = delete;
 };
@@ -253,6 +260,9 @@ public:
 
     // create a copy of itself
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+
+    /** Always returns true as this is an SfxVoidItem. */
+    virtual bool            IsVoidItem() const override;
 };
 
 class SVL_DLLPUBLIC SfxSetItem: public SfxPoolItem
