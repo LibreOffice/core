@@ -909,15 +909,15 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
         // font language has changed.  Redo the online spelling.
         ResetAutoSpell();
 
-    const SvxBoxItem*     pOldOuter = static_cast<const SvxBoxItem*>     (&pOldSet->Get( ATTR_BORDER ));
-    const SvxBoxItem*     pNewOuter = static_cast<const SvxBoxItem*>     (&pDialogSet->Get( ATTR_BORDER ));
-    const SvxBoxInfoItem* pOldInner = static_cast<const SvxBoxInfoItem*> (&pOldSet->Get( ATTR_BORDER_INNER ));
-    const SvxBoxInfoItem* pNewInner = static_cast<const SvxBoxInfoItem*> (&pDialogSet->Get( ATTR_BORDER_INNER ));
+    const SvxBoxItem&     rOldOuter = static_cast<const SvxBoxItem&>     (pOldSet->Get(ATTR_BORDER));
+    const SvxBoxItem&     rNewOuter = static_cast<const SvxBoxItem&>     (pDialogSet->Get(ATTR_BORDER));
+    const SvxBoxInfoItem& rOldInner = static_cast<const SvxBoxInfoItem&> (pOldSet->Get(ATTR_BORDER_INNER));
+    const SvxBoxInfoItem& rNewInner = static_cast<const SvxBoxInfoItem&> (pDialogSet->Get(ATTR_BORDER_INNER));
     SfxItemSet&           rNewSet   = aNewAttrs.GetItemSet();
     SfxItemPool*          pNewPool  = rNewSet.GetPool();
 
-    pNewPool->Put( *pNewOuter );        // don't delete yet
-    pNewPool->Put( *pNewInner );
+    pNewPool->Put(rNewOuter);        // don't delete yet
+    pNewPool->Put(rNewInner);
     rNewSet.ClearItem( ATTR_BORDER );
     rNewSet.ClearItem( ATTR_BORDER_INNER );
 
@@ -931,27 +931,21 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     bool bFrame =    (pDialogSet->GetItemState( ATTR_BORDER ) != SfxItemState::DEFAULT)
                   || (pDialogSet->GetItemState( ATTR_BORDER_INNER ) != SfxItemState::DEFAULT);
 
-    if ( pNewOuter==pOldOuter && pNewInner==pOldInner )
+    if (&rNewOuter == &rOldOuter && &rNewInner == &rOldInner)
         bFrame = false;
 
     //  this should be intercepted by the pool: ?!??!??
 
-    if ( bFrame && pNewOuter && pNewInner )
-        if ( *pNewOuter == *pOldOuter && *pNewInner == *pOldInner )
-            bFrame = false;
-
-    if ( pNewInner )
-    {
-        bFrame =   bFrame
-                && (   pNewInner->IsValid(SvxBoxInfoItemValidFlags::LEFT)
-                    || pNewInner->IsValid(SvxBoxInfoItemValidFlags::RIGHT)
-                    || pNewInner->IsValid(SvxBoxInfoItemValidFlags::TOP)
-                    || pNewInner->IsValid(SvxBoxInfoItemValidFlags::BOTTOM)
-                    || pNewInner->IsValid(SvxBoxInfoItemValidFlags::HORI)
-                    || pNewInner->IsValid(SvxBoxInfoItemValidFlags::VERT) );
-    }
-    else
+    if (bFrame && rNewOuter == rOldOuter && rNewInner == rOldInner)
         bFrame = false;
+
+    bFrame =   bFrame
+            && (   rNewInner.IsValid(SvxBoxInfoItemValidFlags::LEFT)
+                || rNewInner.IsValid(SvxBoxInfoItemValidFlags::RIGHT)
+                || rNewInner.IsValid(SvxBoxInfoItemValidFlags::TOP)
+                || rNewInner.IsValid(SvxBoxInfoItemValidFlags::BOTTOM)
+                || rNewInner.IsValid(SvxBoxInfoItemValidFlags::HORI)
+                || rNewInner.IsValid(SvxBoxInfoItemValidFlags::VERT) );
 
     if (!bFrame)
         ApplySelectionPattern( aNewAttrs );            // standard only
@@ -959,16 +953,16 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     {
         // if new items are default-items, overwrite the old items:
 
-        bool bDefNewOuter = IsStaticDefaultItem(pNewOuter);
-        bool bDefNewInner = IsStaticDefaultItem(pNewInner);
+        bool bDefNewOuter = IsStaticDefaultItem(&rNewOuter);
+        bool bDefNewInner = IsStaticDefaultItem(&rNewInner);
 
         ApplyPatternLines( aNewAttrs,
-                           bDefNewOuter ? pOldOuter : pNewOuter,
-                           bDefNewInner ? pOldInner : pNewInner );
+                           bDefNewOuter ? &rOldOuter : &rNewOuter,
+                           bDefNewInner ? &rOldInner : &rNewInner );
     }
 
-    pNewPool->Remove( *pNewOuter );         // release
-    pNewPool->Remove( *pNewInner );
+    pNewPool->Remove(rNewOuter);         // release
+    pNewPool->Remove(rNewInner);
 
     //  adjust height
     AdjustBlockHeight();
