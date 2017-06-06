@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_c5c7a210",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-06T21:52:39Z",
+      "side": 1,
+      "message": "Is this necessary, given that few lines below you\u0027re doing SetFieldUnit?",
+      "revId": "f10056fb0919e1a22ade11ac3d82a716d4dccff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_854f5abc",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-06T21:52:39Z",
+      "side": 1,
+      "message": "If possible, do this (SetDecimalDigits, SetSpinSize) in .ui file. You\u0027ll have to attach GtkAdjustment to the spin box and define its parameters ... ask if you don\u0027t know how\n\nYou can do it in C++ code, and it\u0027ll work, but it clutters the code totally unnecessarily",
+      "revId": "f10056fb0919e1a22ade11ac3d82a716d4dccff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a5e1b69c",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-06T21:52:39Z",
+      "side": 1,
+      "message": "Please don\u0027t leave commented-out code behind, unless it is relevant to the existing code in any way",
+      "revId": "f10056fb0919e1a22ade11ac3d82a716d4dccff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c5eec28a",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 805,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-06T21:52:39Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "f10056fb0919e1a22ade11ac3d82a716d4dccff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_25ece68e",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 818,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-06T21:52:39Z",
+      "side": 1,
+      "message": "Perhaps we can cache the value of field unit (initialize e.g. in constructor), in contrast to querying it with lcl_GetFieldUnit all the time ... which is, given how often this func is called, a lot of time?",
+      "revId": "f10056fb0919e1a22ade11ac3d82a716d4dccff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_05e9aa80",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-06T21:52:39Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "f10056fb0919e1a22ade11ac3d82a716d4dccff0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
