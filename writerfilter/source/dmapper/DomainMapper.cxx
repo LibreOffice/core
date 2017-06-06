@@ -136,14 +136,14 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
 
     if (eDocumentType == SourceDocumentType::OOXML) {
         // tdf#108350
-        // In OOXML (i.e. Word since 2007), the default document font is Calibri 11 pt.
-        // If a document doesn't contain font information, we should assume our
-        // metric-compatible equivalent Carlito to provide best layout match.
+        // In Word since version 2007, the default document font is Calibri 11 pt.
+        // If a DOCX document doesn't contain font information, we should assume
+        // the intended font to provide best layout match.
         try
         {
             uno::Reference< beans::XPropertySet > xDefProps(GetTextFactory()->createInstance("com.sun.star.text.Defaults"),
                 uno::UNO_QUERY_THROW);
-            xDefProps->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME), css::uno::Any(OUString("Carlito")));
+            xDefProps->setPropertyValue(getPropertyName(PROP_CHAR_FONT_NAME), css::uno::Any(OUString("Calibri")));
             xDefProps->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT), css::uno::Any(double(11)));
         }
         catch (const uno::Exception& rException)
