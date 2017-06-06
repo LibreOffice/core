@@ -130,6 +130,7 @@ MarkedInlineButNotDefined::~MarkedInlineButNotDefined() {}
 // avoid loplugin:unreffun:
 int main() {
     (void) NonVirtualDerived1();
+    (void) DefaultDerived1();
     (void) CompleteBase();
 }
 
