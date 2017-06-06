@@ -221,6 +221,8 @@ private:
     Link<NotebookBar*,void> m_aIconClickHdl;
     static sal_uInt16 m_nHeaderHeight;
     VclPtr<ToolBox> m_pShortcuts;
+    VclPtr<PushButton> m_pOpenMenu;
+    DECL_LINK(OpenMenu, NotebookBar*, void);
 };
 
 #endif // INCLUDED_VCL_TABCTRL_HXX
