@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_c5dde215",
+        "filename": "sc/source/ui/view/viewfun4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-06T20:16:29Z",
+      "side": 1,
+      "message": "where is the difference between this branch and the previous one? i can\u0027t see any.\n\nwe want to copy/paste editengine document content, not c++ code!",
+      "revId": "1e4c69c95f7b1a47f41bf93143fff87aa9dad2c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
