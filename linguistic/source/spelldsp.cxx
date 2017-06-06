@@ -756,7 +756,7 @@ sal_Bool SAL_CALL SpellCheckerDispatcher::hasLanguage(
     sal_Int16 nLanguage )
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return hasLocale( LanguageTag::convertToLocale( LanguageType(nLanguage)) );
+    return hasLocale( LanguageTag::convertToLocale(LanguageType(static_cast<sal_uInt16>(nLanguage))));
 }
 
 
@@ -766,7 +766,7 @@ sal_Bool SAL_CALL SpellCheckerDispatcher::isValid(
     const uno::Sequence< beans::PropertyValue >& rProperties )
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return isValid( rWord, LanguageTag::convertToLocale( LanguageType(nLanguage) ), rProperties);
+    return isValid( rWord, LanguageTag::convertToLocale(LanguageType(static_cast<sal_uInt16>(nLanguage))), rProperties);
 }
 
 
@@ -776,7 +776,7 @@ uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL SpellCheckerDispatche
     const uno::Sequence< beans::PropertyValue >& rProperties )
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    return spell( rWord, LanguageTag::convertToLocale( LanguageType(nLanguage) ), rProperties);
+    return spell(rWord, LanguageTag::convertToLocale(LanguageType(static_cast<sal_uInt16>(nLanguage))), rProperties);
 }
 
 

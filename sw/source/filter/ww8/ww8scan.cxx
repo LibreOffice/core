@@ -5531,8 +5531,8 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     sal_Int16 cpnBtePap_Ver67=0;
 
     // read FIB
-    sal_Int16 nTmpLid = 0;
-    rSt.ReadInt16( nTmpLid );
+    sal_uInt16 nTmpLid = 0;
+    rSt.ReadUInt16(nTmpLid);
     m_lid = LanguageType(nTmpLid);
     rSt.ReadInt16( m_pnNext );
     rSt.ReadUChar( aBits1 );
@@ -5579,8 +5579,8 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         && (bVer67 || WW8ReadINT16(  rSt, pnLvcFirst_W6                 ))  // 8
         && (bVer67 || WW8ReadINT16(  rSt, cpnBteLvc_W6                  ))  // 9
         */
-        sal_Int16 nTmpFE = 0;
-        rSt.ReadInt16( nTmpFE );
+        sal_uInt16 nTmpFE = 0;
+        rSt.ReadUInt16(nTmpFE);
         m_lidFE = LanguageType(nTmpFE);
         rSt.ReadUInt16( m_clw );
     }
