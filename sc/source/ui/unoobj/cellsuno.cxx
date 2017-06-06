@@ -1075,7 +1075,7 @@ void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& r
         aMark.SetMarkArea( aRange );
         aMark.SelectTable( nTab, true );
 
-        rDoc.ApplySelectionFrame( aMark, &rOuter, &rInner );
+        rDoc.ApplySelectionFrame(aMark, rOuter, &rInner);
         // don't need RowHeight if there is only a border
     }
 

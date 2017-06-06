@@ -5643,7 +5643,7 @@ bool ScDocument::IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 }
 
 void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
-                                      const SvxBoxItem* pLineOuter,
+                                      const SvxBoxItem& rLineOuter,
                                       const SvxBoxInfoItem* pLineInner )
 {
     ScRangeList aRangeList;
@@ -5658,15 +5658,15 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
             for ( size_t j=0; j < nRangeCount; j++ )
             {
                 ScRange aRange = *aRangeList[ j ];
-                maTabs[*itr]->ApplyBlockFrame( pLineOuter, pLineInner,
+                maTabs[*itr]->ApplyBlockFrame( &rLineOuter, pLineInner,
                     aRange.aStart.Col(), aRange.aStart.Row(),
                     aRange.aEnd.Col(),   aRange.aEnd.Row() );
             }
         }
     }
-    if( pLineOuter && pLineOuter->IsRemoveAdjacentCellBorder() )
+    if (rLineOuter.IsRemoveAdjacentCellBorder())
     {
-        SvxBoxItem aTmp0( *pLineOuter );
+        SvxBoxItem aTmp0(rLineOuter);
         aTmp0.SetLine( nullptr, SvxBoxItemLine::TOP );
         aTmp0.SetLine( nullptr, SvxBoxItemLine::BOTTOM );
         aTmp0.SetLine( nullptr, SvxBoxItemLine::LEFT );
@@ -5687,16 +5687,16 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
         SvxBoxInfoItem aTopInfo( aTmp1 );
         SvxBoxInfoItem aBottomInfo( aTmp1 );
 
-        if( pLineInner->IsValid( SvxBoxInfoItemValidFlags::TOP ) && !pLineOuter->GetTop() )
+        if (pLineInner->IsValid( SvxBoxInfoItemValidFlags::TOP ) && !rLineOuter.GetTop())
             aTopInfo.SetValid( SvxBoxInfoItemValidFlags::BOTTOM );
 
-        if( pLineInner->IsValid( SvxBoxInfoItemValidFlags::BOTTOM ) && !pLineOuter->GetBottom() )
+        if (pLineInner->IsValid( SvxBoxInfoItemValidFlags::BOTTOM ) && !rLineOuter.GetBottom())
             aBottomInfo.SetValid( SvxBoxInfoItemValidFlags::TOP );
 
-        if( pLineInner->IsValid( SvxBoxInfoItemValidFlags::LEFT ) && !pLineOuter->GetLeft() )
+        if (pLineInner->IsValid( SvxBoxInfoItemValidFlags::LEFT ) && !rLineOuter.GetLeft())
             aLeftInfo.SetValid( SvxBoxInfoItemValidFlags::RIGHT );
 
-        if( pLineInner->IsValid( SvxBoxInfoItemValidFlags::RIGHT ) &&  !pLineOuter->GetRight() )
+        if (pLineInner->IsValid( SvxBoxInfoItemValidFlags::RIGHT ) && !rLineOuter.GetRight())
             aRightInfo.SetValid( SvxBoxInfoItemValidFlags::LEFT );
 
         const ScRangeList& rRangeListTopEnvelope = rMark.GetTopEnvelope();

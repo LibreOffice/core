@@ -2364,7 +2364,7 @@ void ScUndoBorder::Redo()
         aMark.SetMarkArea( aRange );
         aMark.SelectTable( nTab, true );
 
-        rDoc.ApplySelectionFrame(aMark, xOuter.get(), xInner.get());
+        rDoc.ApplySelectionFrame(aMark, *xOuter, xInner.get());
     }
     for (size_t i = 0; i < nCount; ++i)
         pDocShell->PostPaint( *(*xRanges)[i], PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
