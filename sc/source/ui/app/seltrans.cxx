@@ -193,7 +193,10 @@ void ScSelectionTransferObj::AddSupportedFormats()
             AddFormat( SotClipboardFormatId::RTF );
             AddFormat( SotClipboardFormatId::RICHTEXT );
             if ( eMode == SC_SELTRANS_CELL )
+            {
                 AddFormat( SotClipboardFormatId::EDITENGINE );
+                AddFormat( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT );
+            }
             break;
 
         // different graphic formats as in ScDrawTransferObj::AddSupportedFormats:
