@@ -1757,6 +1757,173 @@ bool FormulaTokenIterator::IsEndOfPath() const
     return GetNonEndOfPathToken( maStack.back().nPC + 1) == nullptr;
 }
 
+FormulaToken* FormulaTokenArrayPlainIterator::GetNextReference()
+{
+    while( mnIndex < mrFTA.nLen )
+    {
+        FormulaToken* t = mrFTA.pCode[ mnIndex++ ];
+        switch( t->GetType() )
+        {
+            case svSingleRef:
+            case svDoubleRef:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+                return t;
+            default:
+            {
+                // added to avoid warnings
+            }
+        }
+    }
+    return nullptr;
+}
+
+FormulaToken* FormulaTokenArrayPlainIterator::GetNextColRowName()
+{
+    while( mnIndex < mrFTA.nLen )
+    {
+        FormulaToken* t = mrFTA.pCode[ mnIndex++ ];
+        if ( t->GetOpCode() == ocColRowName )
+            return t;
+    }
+    return nullptr;
+}
+
+FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceRPN()
+{
+    while( mnIndex < mrFTA.nRPN )
+    {
+        FormulaToken* t = mrFTA.pRPN[ mnIndex++ ];
+        switch( t->GetType() )
+        {
+            case svSingleRef:
+            case svDoubleRef:
+            case svExternalSingleRef:
+            case svExternalDoubleRef:
+                return t;
+            default:
+            {
+                // added to avoid warnings
+            }
+        }
+    }
+    return nullptr;
+}
+
+FormulaToken* FormulaTokenArrayPlainIterator::GetNextReferenceOrName()
+{
+    if( mrFTA.pCode )
+    {
+        while ( mnIndex < mrFTA.nLen )
+        {
+            FormulaToken* t = mrFTA.pCode[ mnIndex++ ];
+            switch( t->GetType() )
+            {
+                case svSingleRef:
+                case svDoubleRef:
+                case svIndex:
+                case svExternalSingleRef:
+                case svExternalDoubleRef:
+                case svExternalName:
+                    return t;
+                default:
+                {
+                    // added to avoid warnings
+                }
+             }
+         }
+     }
+    return nullptr;
+}
+
+FormulaToken* FormulaTokenArrayPlainIterator::Next()
+{
+    if( mrFTA.pCode && mnIndex < mrFTA.nLen )
+        return mrFTA.pCode[ mnIndex++ ];
+    else
+        return nullptr;
+}
+
+FormulaToken* FormulaTokenArrayPlainIterator::NextNoSpaces()
+{
+    if( mrFTA.pCode )
+    {
+        while( (mnIndex < mrFTA.nLen) && (mrFTA.pCode[ mnIndex ]->GetOpCode() == ocSpaces) )
+            ++mnIndex;
+        if( mnIndex < mrFTA.nLen )
+            return mrFTA.pCode[ mnIndex++ ];
+    }
+    return nullptr;
+}
+
+FormulaToken* FormulaTokenArrayPlainIterator::NextRPN()
+{
+    if( mrFTA.pRPN && mnIndex < mrFTA.nRPN )
+        return mrFTA.pRPN[ mnIndex++ ];
+    else
+        return nullptr;
+}
+
+FormulaToken* FormulaTokenArrayPlainIterator::PrevRPN()
+{
+    if( mrFTA.pRPN && mnIndex )
+        return mrFTA.pRPN[ --mnIndex ];
+    else
+        return nullptr;
+}
+
+FormulaToken* FormulaTokenArrayPlainIterator::PeekNext()
+{
+    if( mrFTA.pCode && mnIndex < mrFTA.nLen )
+        return mrFTA.pCode[ mnIndex ];
+    else
+        return nullptr;
+}
+
+FormulaToken* FormulaTokenArrayPlainIterator::PeekNextNoSpaces() const
+{
+    if( mrFTA.pCode && mnIndex < mrFTA.nLen )
+    {
+        sal_uInt16 j = mnIndex;
+        while ( j < mrFTA.nLen && mrFTA.pCode[j]->GetOpCode() == ocSpaces )
+            j++;
+        if ( j < mrFTA.nLen )
+            return mrFTA.pCode[ j ];
+        else
+            return nullptr;
+    }
+    else
+        return nullptr;
+}
+
+FormulaToken* FormulaTokenArrayPlainIterator::PeekPrevNoSpaces() const
+{
+    if( mrFTA.pCode && mnIndex > 1 )
+    {
+        sal_uInt16 j = mnIndex - 2;
+        while ( mrFTA.pCode[j]->GetOpCode() == ocSpaces && j > 0 )
+            j--;
+        if ( j > 0 || mrFTA.pCode[j]->GetOpCode() != ocSpaces )
+            return mrFTA.pCode[ j ];
+        else
+            return nullptr;
+    }
+    else
+        return nullptr;
+}
+
+void FormulaTokenArrayPlainIterator::AfterRemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount )
+{
+    const sal_uInt16 nStop = std::min( static_cast<sal_uInt16>(nOffset + nCount), mrFTA.nLen);
+
+    if (mnIndex >= nOffset)
+    {
+        if (mnIndex < nStop)
+            mnIndex = nOffset + 1;
+        else
+            mnIndex -= nStop - nOffset;
+    }
+}
 
 // real implementations of virtual functions
 

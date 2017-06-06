@@ -115,6 +115,7 @@ class FORMULA_DLLPUBLIC FormulaTokenArray
 {
     friend class FormulaCompiler;
     friend class FormulaTokenIterator;
+    friend class FormulaTokenArrayPlainIterator;
     friend class FormulaMissingContext;
 
 protected:
@@ -404,6 +405,74 @@ public:
 private:
     const FormulaToken* GetNonEndOfPathToken( short nIdx ) const;
 };
+
+class FORMULA_DLLPUBLIC FormulaTokenArrayPlainIterator
+{
+    friend class FormulaCompiler;
+
+private:
+    const FormulaTokenArray& mrFTA;
+    sal_uInt16 mnIndex;                 // Current step index
+
+public:
+    FormulaTokenArrayPlainIterator( const FormulaTokenArray& rFTA ) :
+        mrFTA( rFTA ),
+        mnIndex( 0 )
+    {
+    }
+
+    void Reset()
+    {
+        mnIndex = 0;
+    }
+
+    sal_uInt16 GetIndex() const
+    {
+        return mnIndex;
+    }
+
+    FormulaToken* First()
+    {
+        mnIndex = 0;
+        return Next();
+    }
+
+    void Jump(sal_uInt16 nIndex)
+    {
+        mnIndex = nIndex;
+    }
+
+    FormulaToken* Next();
+    FormulaToken* NextNoSpaces();
+    FormulaToken* GetNextName();
+    FormulaToken* GetNextReference();
+    FormulaToken* GetNextReferenceRPN();
+    FormulaToken* GetNextReferenceOrName();
+    FormulaToken* GetNextColRowName();
+    FormulaToken* PeekNext();
+    FormulaToken* PeekPrevNoSpaces() const;    /// Only after Reset/First/Next/Last/Prev!
+    FormulaToken* PeekNextNoSpaces() const;    /// Only after Reset/First/Next/Last/Prev!
+
+    FormulaToken* FirstRPN()
+    {
+        mnIndex = 0;
+        return NextRPN();
+    }
+
+    FormulaToken* NextRPN();
+
+    FormulaToken* LastRPN()
+    {
+        mnIndex = mrFTA.nRPN;
+        return PrevRPN();
+    }
+
+    FormulaToken* PrevRPN();
+
+    void AfterRemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount );
+};
+
+
 } // formula
 
 #endif // INCLUDED_FORMULA_TOKENARRAY_HXX
