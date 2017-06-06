@@ -121,7 +121,16 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked )
                 SCSIZE nNeeded = nCount + 2;
                 if ( nLimit < nNeeded )
                 {
-                    nLimit += SC_MARKARRAY_DELTA;
+                    // Assume that if it grew already beyond a certain
+                    // threshold it will continue to grow and avoid the
+                    // bottleneck of lots of reallocations in small steps.
+                    // Don't use a simple "double amount" strategy though as
+                    // that again may allocate much more than actually needed.
+                    // The "one and a half" is just a shot into the blue sky.
+                    if (nLimit > 4 * SC_MARKARRAY_DELTA)
+                        nLimit += nLimit / 2;
+                    else
+                        nLimit += SC_MARKARRAY_DELTA;
                     if ( nLimit < nNeeded )
                         nLimit = nNeeded;
                     ScMarkEntry* pNewData = new ScMarkEntry[nLimit];
