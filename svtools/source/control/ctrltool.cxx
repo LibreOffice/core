@@ -35,7 +35,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <comphelper/lok.hxx>
 
-// Standard Fontgroessen fuer scalierbare Fonts
+// Standard fontsizes for scalable Fonts
 const sal_IntPtr FontList::aStdSizeAry[] =
 {
      60,
@@ -463,6 +463,36 @@ OUString FontList::GetStyleName(const FontMetric& rInfo) const
             aStyleName = maBlack;
         else if (aCompareStyleName == "blackitalic")
             aStyleName = maBlackItalic;
+        /* tdf#107700 support some less common style names with localization */
+        else if (aCompareStyleName == "book")
+            aStyleName = SvtResId(STR_SVT_STYLE_BOOK);
+        else if (aCompareStyleName == "boldoblique")
+            aStyleName = SvtResId(STR_SVT_STYLE_BOLD_OBLIQUE);
+        else if (aCompareStyleName == "condensed")
+            aStyleName = SvtResId(STR_SVT_STYLE_CONDENSED);
+        else if (aCompareStyleName == "condensedbold")
+            aStyleName = SvtResId(STR_SVT_STYLE_CONDENSED_BOLD);
+        else if (aCompareStyleName == "condensedbolditalic")
+            aStyleName = SvtResId(STR_SVT_STYLE_CONDENSED_BOLD_ITALIC);
+        else if (aCompareStyleName == "condensedboldoblique")
+            aStyleName = SvtResId(STR_SVT_STYLE_CONDENSED_BOLD_OBLIQUE);
+        else if (aCompareStyleName == "condenseditalic")
+            aStyleName = SvtResId(STR_SVT_STYLE_CONDENSED_ITALIC);
+        else if (aCompareStyleName == "condensedoblique")
+            aStyleName = SvtResId(STR_SVT_STYLE_CONDENSED_OBLIQUE);
+        else if (aCompareStyleName == "extralight")
+            aStyleName = SvtResId(STR_SVT_STYLE_EXTRALIGHT);
+        else if (aCompareStyleName == "extralightitalic")
+            aStyleName = SvtResId(STR_SVT_STYLE_EXTRALIGHT_ITALIC);
+        /* Medium is synonym with Normal */
+        else if (aCompareStyleName == "mediumitalic")
+            aStyleName = maNormalItalic;
+        else if (aCompareStyleName == "oblique")
+            aStyleName = SvtResId(STR_SVT_STYLE_OBLIQUE);
+        else if (aCompareStyleName == "semibold")
+            aStyleName = SvtResId(STR_SVT_STYLE_SEMIBOLD);
+        else if (aCompareStyleName == "semibolditalic")
+            aStyleName = SvtResId(STR_SVT_STYLE_SEMIBOLD_ITALIC);
 
         // fix up StyleName, because the PS Printer driver from
         // W2000 returns wrong StyleNames (e.g. Bold instead of Bold Italic
