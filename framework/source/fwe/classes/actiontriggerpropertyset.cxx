@@ -115,33 +115,16 @@ Sequence< OUString > SAL_CALL ActionTriggerPropertySet::getSupportedServiceNames
 // XTypeProvider
 Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes()
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static ::cppu::OTypeCollection* pTypeCollection = nullptr;
-
-    if ( pTypeCollection == nullptr )
-    {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
-
-        // Control these pointer again ... it can be, that another instance will be faster then these!
-        if ( pTypeCollection == nullptr )
-        {
-            // Create a static typecollection ...
-            static ::cppu::OTypeCollection aTypeCollection(
+    // Create a static typecollection ...
+    static ::cppu::OTypeCollection ourTypeCollection(
                         cppu::UnoType<XPropertySet>::get(),
                         cppu::UnoType<XFastPropertySet>::get(),
                         cppu::UnoType<XMultiPropertySet>::get(),
                         cppu::UnoType<XServiceInfo>::get(),
                         cppu::UnoType<XTypeProvider>::get());
 
-            // ... and set his address to static pointer!
-            pTypeCollection = &aTypeCollection;
-        }
-    }
 
-    return pTypeCollection->getTypes();
+    return ourTypeCollection.getTypes();
 }
 
 Sequence< sal_Int8 > SAL_CALL ActionTriggerPropertySet::getImplementationId()
@@ -251,49 +234,21 @@ void SAL_CALL ActionTriggerPropertySet::getFastPropertyValue(
 
 ::cppu::IPropertyArrayHelper& SAL_CALL ActionTriggerPropertySet::getInfoHelper()
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfoHelper is NULL - for the second call pInfoHelper is different from NULL!
-    static OPropertyArrayHelper* pInfoHelper = nullptr;
+    // Define static member to give structure of properties to baseclass "OPropertySetHelper".
+    // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.
+    // "true" say: Table is sorted by name.
+    static OPropertyArrayHelper ourInfoHelper( impl_getStaticPropertyDescriptor(), true );
 
-    if( pInfoHelper == nullptr )
-    {
-        SolarMutexGuard aGuard;
-        // Control this pointer again, another instance can be faster then these!
-        if( pInfoHelper == nullptr )
-        {
-            // Define static member to give structure of properties to baseclass "OPropertySetHelper".
-            // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.
-            // "sal_True" say: Table is sorted by name.
-            static OPropertyArrayHelper aInfoHelper( impl_getStaticPropertyDescriptor(), true );
-            pInfoHelper = &aInfoHelper;
-        }
-    }
-
-    return (*pInfoHelper);
+    return ourInfoHelper;
 }
 
 Reference< XPropertySetInfo > SAL_CALL ActionTriggerPropertySet::getPropertySetInfo()
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
-    static Reference< XPropertySetInfo >* pInfo = nullptr;
+    // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
+    // (Use method "getInfoHelper()".)
+    static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
 
-    if( pInfo == nullptr )
-    {
-        SolarMutexGuard aGuard;
-        // Control this pointer again, another instance can be faster then these!
-        if( pInfo == nullptr )
-        {
-            // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
-            // (Use method "getInfoHelper()".)
-            static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
-            pInfo = &xInfo;
-        }
-    }
-
-    return (*pInfo);
+    return xInfo;
 }
 
 const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescriptor()

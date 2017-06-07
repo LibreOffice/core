@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <osl/mutex.hxx>
 
 namespace framework{
 
@@ -73,31 +72,13 @@ ________________________________________________________________________________
 //  private
 //  complete implementation of XTypeProvider with max. 12 interfaces!
 
-#define PRIVATE_DEFINE_XTYPEPROVIDER( CLASS, TYPES )                                                                                            \
-    PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                                   \
+#define PRIVATE_DEFINE_XTYPEPROVIDER( CLASS, TYPES )                 \
+    PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )        \
     css::uno::Sequence< css::uno::Type > SAL_CALL CLASS::getTypes()  \
-    {                                                                                                                                           \
-        /* Optimize this method !                                       */                                                                      \
-        /* We initialize a static variable only one time.               */                                                                      \
-        /* And we don't must use a mutex at every call!                 */                                                                      \
-        /* For the first call; pTypeCollection is NULL -                */                                                                      \
-        /* for the second call pTypeCollection is different from NULL!  */                                                                      \
-        static ::cppu::OTypeCollection* pTypeCollection = nullptr;                                                                                \
-        if ( pTypeCollection == nullptr )                                                                                                          \
-        {                                                                                                                                       \
-            /* Ready for multithreading; get global mutex for first call of this method only! see before   */                                   \
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );                                                                         \
-            /* Control these pointer again ... it can be, that another instance will be faster then these! */                                   \
-            if ( pTypeCollection == nullptr )                                                                                                      \
-            {                                                                                                                                   \
-                /* Create a static typecollection ...           */                                                                              \
-                /* Attention: "TYPES" will expand to "(...)"!   */                                                                              \
-                static ::cppu::OTypeCollection aTypeCollection TYPES;                                                                          \
-                /* ... and set his address to static pointer! */                                                                                \
-                pTypeCollection = &aTypeCollection;                                                                                            \
-            }                                                                                                                                   \
-        }                                                                                                                                       \
-        return pTypeCollection->getTypes();                                                                                                     \
+    {                                                                \
+        /* Attention: "TYPES" will expand to "(...)"!   */           \
+        static cppu::OTypeCollection ourTypeCollection TYPES;        \
+        return ourTypeCollection.getTypes();                         \
     }
 
 //  public

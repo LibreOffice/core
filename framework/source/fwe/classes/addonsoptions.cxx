@@ -1594,24 +1594,10 @@ Image AddonsOptions::GetImageFromURL( const OUString& aURL, bool bBig ) const
 
 Mutex& AddonsOptions::GetOwnStaticMutex()
 {
-    // Initialize static mutex only for one time!
-    static Mutex* pMutex = nullptr;
-    // If these method first called (Mutex not already exist!) ...
-    if( pMutex == nullptr )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of our class will be faster than these!
-        if( pMutex == nullptr )
-        {
-            // Create the new mutex and set it for return on static variable.
-            static Mutex aMutex;
-            pMutex = &aMutex;
-        }
-    }
-    // Return new created or already existing mutex object.
-    return *pMutex;
+    // Create static mutex variable.
+    static Mutex ourMutex;
+
+    return ourMutex;
 }
 
 IMPL_LINK_NOARG(AddonsOptions_Impl, NotifyEvent, void*, void)

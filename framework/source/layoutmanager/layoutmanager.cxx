@@ -3109,20 +3109,9 @@ namespace
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL LayoutManager::getPropertySetInfo()
 {
-    static uno::Reference< beans::XPropertySetInfo >* pInfo = nullptr;
+    static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
 
-    if( pInfo == nullptr )
-    {
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
-
-        if( pInfo == nullptr )
-        {
-            static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
-            pInfo = &xInfo;
-        }
-    }
-
-    return (*pInfo);
+    return xInfo;
 }
 
 } // namespace framework
