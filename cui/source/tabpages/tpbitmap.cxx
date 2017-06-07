@@ -84,7 +84,6 @@ SvxBitmapTabPage::SvxBitmapTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     m_aXBitmapItem( OUString(), Graphic() ),
     m_fObjectWidth(0.0),
     m_fObjectHeight(0.0),
-    m_pPos(nullptr),
 
     m_aXFillAttr          ( rInAttrs.GetPool() ),
     m_rXFSet              ( m_aXFillAttr.GetItemSet() ),
@@ -179,14 +178,16 @@ void SvxBitmapTabPage::Construct()
 }
 
 
-void SvxBitmapTabPage::ActivatePage( const SfxItemSet& )
+void SvxBitmapTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    if( *m_pPos != LISTBOX_ENTRY_NOTFOUND )
+    XFillBitmapItem aItem( static_cast<const XFillBitmapItem&>(rSet.Get(XATTR_FILLBITMAP)) );
+
+    sal_Int32 nPos = SearchBitmapList( aItem.GetName() );
+    if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        sal_uInt16 nId = m_pBitmapLB->GetItemId( static_cast<size_t>( *m_pPos ) );
-        m_pBitmapLB->SelectItem(nId);
+        sal_uInt16 nId = m_pBitmapLB->GetItemId( static_cast<size_t>( nPos ) );
+        m_pBitmapLB->SelectItem( nId );
     }
-    *m_pPos = LISTBOX_ENTRY_NOTFOUND;
 }
 
 
