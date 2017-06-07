@@ -83,9 +83,9 @@ static bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 
 {
     if (pFormula)
     {
-        pFormula->Reset();
+        FormulaTokenArrayPlainIterator aIter( *pFormula );
         FormulaToken* t;
-        for( t = pFormula->Next(); t; t = pFormula->Next() )
+        for( t = aIter.Next(); t; t = aIter.Next() )
         {
             switch( t->GetType() )
             {
@@ -1418,9 +1418,9 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
         ScTokenArray* pFormula = nPass ? pFormula2 : pFormula1;
         if (pFormula)
         {
-            pFormula->Reset();
+            formula::FormulaTokenArrayPlainIterator aIter(*pFormula);
             formula::FormulaToken* t;
-            while ( ( t = pFormula->GetNextReference() ) != nullptr )
+            while ( ( t = aIter.GetNextReference() ) != nullptr )
             {
                 ScSingleRefData& rRef1 = *t->GetSingleRef();
                 ScAddress aAbs = rRef1.toAbs(aSrcPos);
