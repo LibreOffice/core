@@ -477,10 +477,10 @@ bool ScDocument::MarkUsedExternalReferences( ScTokenArray& rArr, const ScAddress
         return false;
 
     ScExternalRefManager* pRefMgr = nullptr;
-    rArr.Reset();
+    formula::FormulaTokenArrayPlainIterator aIter( rArr );
     formula::FormulaToken* t = nullptr;
     bool bAllMarked = false;
-    while (!bAllMarked && (t = rArr.GetNextReferenceOrName()) != nullptr)
+    while (!bAllMarked && (t = aIter.GetNextReferenceOrName()) != nullptr)
     {
         if (t->IsExternalRef())
         {
@@ -498,7 +498,8 @@ bool ScDocument::MarkUsedExternalReferences( ScTokenArray& rArr, const ScAddress
                 continue;
 
             ScTokenArray* pArray = pRangeData->GetCode();
-            for (t = pArray->First(); t; t = pArray->Next())
+            formula::FormulaTokenArrayPlainIterator aArrayIter(*pArray);
+            for (t = aArrayIter.First(); t; t = aArrayIter.Next())
             {
                 if (!t->IsExternalRef())
                     continue;
