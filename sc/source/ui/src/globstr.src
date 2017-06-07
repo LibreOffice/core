@@ -1347,7 +1347,7 @@ String STR_CHANGED_MOVE+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Range moved from #1 to #2" ;
 };
-String STR_END_REDLINING
+String STR_END_REDLINING+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "This action will exit the change recording mode.\nAny information about changes will be lost.\n\nExit change recording mode?\n\n" ;
 };
@@ -1434,7 +1434,7 @@ String STR_ERR_LONG_NESTED_ARRAY+RID_GLOBSTR_OFFSET
 {
 Text [ en-US ] = "Nested arrays are not supported." ;
 };
-String STR_UNDO_TEXTTOCOLUMNS
+String STR_UNDO_TEXTTOCOLUMNS+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Text to Columns";
 };
