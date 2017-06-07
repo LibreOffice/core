@@ -38,3 +38,14 @@
  }
  
  
+--- src/inc/Code.h
++++ src/inc/Code.h
+@@ -162,7 +162,7 @@
+ {
+     if (_code && !_own)
+     {
+-        _code += dist / sizeof(instr);
++        _code += dist / int(sizeof(instr));
+         _data += dist;
+     }
+ }
