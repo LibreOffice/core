@@ -34,6 +34,24 @@
       "revId": "7d07c13e3e200e5ca164dcd3e72ea924f545bbcb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_083c5fe1",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2207,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-06-07T13:08:37Z",
+      "side": 1,
+      "message": "I mean NotebookBar* like:\nstatic_cast\u003cNotebookBar*\u003e(GetParent()-\u003eGetParent())",
+      "parentUuid": "5a3905b3_c831770d",
+      "revId": "7d07c13e3e200e5ca164dcd3e72ea924f545bbcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
