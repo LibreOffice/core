@@ -8877,7 +8877,7 @@ void PDFWriterImpl::drawText( const Point& rPos, const OUString& rText, sal_Int3
     if( pLayout )
     {
         drawLayout( *pLayout, rText, bTextLines );
-        pLayout->Release();
+        delete pLayout;
     }
 }
 
@@ -8893,7 +8893,7 @@ void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, con
     if( pLayout )
     {
         drawLayout( *pLayout, rText, true );
-        pLayout->Release();
+        delete pLayout;
     }
 }
 
@@ -8909,7 +8909,7 @@ void PDFWriterImpl::drawStretchText( const Point& rPos, sal_uLong nWidth, const 
     if( pLayout )
     {
         drawLayout( *pLayout, rText, true );
-        pLayout->Release();
+        delete pLayout;
     }
 }
 

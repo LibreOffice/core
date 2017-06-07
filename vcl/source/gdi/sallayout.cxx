@@ -545,7 +545,6 @@ SalLayout::SalLayout()
     mnLayoutFlags( SalLayoutFlags::NONE ),
     mnUnitsPerPixel( 1 ),
     mnOrientation( 0 ),
-    mnRefCount( 1 ),
     maDrawOffset( 0, 0 )
 {}
 
@@ -558,15 +557,6 @@ void SalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     mnEndCharPos  = rArgs.mnEndCharPos;
     mnLayoutFlags = rArgs.mnFlags;
     mnOrientation = rArgs.mnOrientation;
-}
-
-void SalLayout::Release() const
-{
-    // TODO: protect when multiple threads can access this
-    if( --mnRefCount > 0 )
-        return;
-    // const_cast because some compilers violate ANSI C++ spec
-    delete this;
 }
 
 Point SalLayout::GetDrawPosition( const Point& rRelative ) const
@@ -1056,7 +1046,7 @@ void MultiSalLayout::SetIncomplete(bool bIncomplete)
 MultiSalLayout::~MultiSalLayout()
 {
     for( int i = 0; i < mnLevel; ++i )
-        mpLayouts[ i ]->Release();
+        delete mpLayouts[ i ];
 }
 
 void MultiSalLayout::AddFallback( SalLayout& rFallback,
@@ -1199,7 +1189,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         if( (n > 0) && !nValid[ nLevel ] )
         {
             // an empty fallback layout can be released
-            mpLayouts[n]->Release();
+            delete mpLayouts[n];
         }
         else
         {
