@@ -16,6 +16,24 @@
       "revId": "7d07c13e3e200e5ca164dcd3e72ea924f545bbcb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c831770d",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2207,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-06-07T13:07:38Z",
+      "side": 1,
+      "message": "Oh, I changed this for trying if it works and seems I also pushed it this way :)\nI tried using Notebookbar* here but it also failed to build. I am changing this and trying again.",
+      "parentUuid": "5a3905b3_88592f5d",
+      "revId": "7d07c13e3e200e5ca164dcd3e72ea924f545bbcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
