@@ -21,8 +21,12 @@
 #include <memory>
 #include "rtfattributeoutput.hxx"
 #include <svtools/rtfkeywd.hxx>
+#include <svtools/unitconv.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/editids.hrc>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/unoapi.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -555,8 +559,26 @@ sal_Int32 RtfSdrExport::StartShape()
         if (pParaObj)
         {
             const EditTextObject& rEditObj = pParaObj->GetTextObject();
+            const SfxItemSet& rItemSet = rEditObj.GetParaAttribs(0);
+
             lcl_AppendSP(m_rAttrOutput.RunText(), "gtextUNICODE",
                          msfilter::rtfutil::OutString(rEditObj.GetText(0), m_rExport.m_eCurrentEncoding));
+
+            const SvxFontItem* pFontFamily = static_cast<const SvxFontItem*>(rItemSet.GetItem(SID_ATTR_CHAR_FONT));
+            if (pFontFamily)
+            {
+                lcl_AppendSP(m_rAttrOutput.RunText(), "gtextFont",
+                         msfilter::rtfutil::OutString(pFontFamily->GetFamilyName(), m_rExport.m_eCurrentEncoding));
+            }
+
+            const SvxFontHeightItem* pFontHeight = static_cast<const SvxFontHeightItem*>(rItemSet.GetItem(SID_ATTR_CHAR_FONTHEIGHT));
+            if (pFontHeight)
+            {
+                long nFontHeight = TransformMetric(pFontHeight->GetHeight(), FUNIT_TWIP, FUNIT_POINT);
+                // RTF size is multiplied by 2^16
+                lcl_AppendSP(m_rAttrOutput.RunText(), "gtextSize",
+                         msfilter::rtfutil::OutString(OUString::number(nFontHeight * 65536), m_rExport.m_eCurrentEncoding));
+            }
         }
     }
 

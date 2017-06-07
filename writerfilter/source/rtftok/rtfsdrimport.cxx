@@ -378,6 +378,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     boost::logic::tribool obFlipV(boost::logic::indeterminate);
 
     OUString aShapeText = "";
+    OUString aFontFamily = "";
+    float nFontSize = 1.0;
+
     bool bCustom(false);
     int const nType = initShape(xShape, xPropertySet, bCustom, rShape, bClose, shapeOrPict);
 
@@ -401,6 +404,13 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             xPropertySet->setPropertyValue("Description", uno::makeAny(rProperty.second));
         else if (rProperty.first == "gtextUNICODE")
             aShapeText = rProperty.second;
+        else if (rProperty.first == "gtextFont")
+            aFontFamily = rProperty.second;
+        else if (rProperty.first == "gtextSize")
+        {
+            // RTF size is multiplied by 2^16
+            nFontSize = (float) rProperty.second.toUInt32() / 65536;
+        }
         else if (rProperty.first == "pib")
         {
             m_rImport.setDestinationText(rProperty.second);
@@ -864,6 +874,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
         if (xTextRange.is())
             xTextRange->setString(aShapeText);
+
+        xPropertySet->setPropertyValue("CharFontName", uno::makeAny(aFontFamily));
+        xPropertySet->setPropertyValue("CharHeight", uno::makeAny(nFontSize));
     }
 
     // Creating CustomShapeGeometry property
