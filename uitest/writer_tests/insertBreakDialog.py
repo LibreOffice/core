@@ -55,7 +55,7 @@ class WriterInsertBreakDialog(UITestCase):
 
         self.ui_test.create_doc_in_start_center("writer")
 
-        for i in range(11):
+        for i in range(9):
             xDialog = self.launch_dialog_and_select_option("pagerb")
 
             xStyleList = xDialog.getChild("stylelb")
