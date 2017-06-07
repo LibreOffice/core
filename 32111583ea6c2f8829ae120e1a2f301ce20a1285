@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_4855874e",
+        "filename": "include/vcl/tabctrl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-07T12:19:12Z",
+      "side": 1,
+      "message": "This link will be used for PushButton:\nchange Notebookbar* to Button*\n\n(http://opengrok.libreoffice.org/xref/core/include/vcl/button.hxx#75)\n\nvoid Button::SetClickHdl(const Link\u003cButton *,void\u003e \u0026)\u0027: cannot convert argument 1 from \u0027Link\u003cNotebookBar *,void\u003e\u0027 to \u0027const Link\u003cButton *,void\u003e \u0026",
+      "revId": "32111583ea6c2f8829ae120e1a2f301ce20a1285",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_6850835f",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2205,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-07T12:19:12Z",
+      "side": 1,
+      "message": "error: unused parameter ‘pNotebookbar’\n\nWe don\u0027t need arg:\nIMPL_LINK_NOARG(NotebookbarTabControlBase, OpenMenu, Button*, void)",
+      "revId": "32111583ea6c2f8829ae120e1a2f301ce20a1285",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
