@@ -885,6 +885,16 @@ DECLARE_RTFIMPORT_TEST(testFdo61193, "hello.rtf")
     paste("fdo61193.rtf", xEnd);
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf108123, "hello.rtf")
+{
+    // This crashed, the shape push/pop and table manager stack went out of
+    // sync -> we tried to de-reference an empty stack.
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xEnd = xText->getEnd();
+    paste("tdf108123.rtf", xEnd);
+}
+
 DECLARE_RTFIMPORT_TEST(testShptxtPard, "shptxt-pard.rtf")
 {
     // The problem was that \pard inside \shptxt caused loss of shape text
