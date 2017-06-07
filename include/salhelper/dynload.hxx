@@ -89,7 +89,7 @@ protected:
 };
 
 
-/** The ODynmaicLoader provides a special load on call mechanism for dynamic libraries
+/** The ODynamicLoader provides a special load on call mechanism for dynamic libraries
     which support a C-API.
 
     The libraries must provide a struct with function pointers for all supported C functions.
