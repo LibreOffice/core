@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_28483b87",
+        "filename": "include/vcl/tabctrl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-06-07T12:53:06Z",
+      "side": 1,
+      "message": "I changed them but might be missing something. I\u0027m pushing my changes now for you to see.",
+      "parentUuid": "5a3905b3_c8bc176f",
+      "revId": "32111583ea6c2f8829ae120e1a2f301ce20a1285",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_6850835f",
         "filename": "vcl/source/control/tabctrl.cxx",
         "patchSetId": 2
