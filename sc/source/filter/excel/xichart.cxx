@@ -120,6 +120,7 @@ using ::com::sun::star::chart2::data::XLabeledDataSequence;
 using ::com::sun::star::chart2::data::LabeledDataSequence;
 
 using ::formula::FormulaToken;
+using ::formula::FormulaTokenArrayPlainIterator;
 using ::std::unique_ptr;
 
 namespace cssc = ::com::sun::star::chart;
@@ -780,8 +781,8 @@ sal_uInt16 XclImpChSourceLink::GetCellCount() const
     sal_uInt32 nCellCount = 0;
     if( mxTokenArray )
     {
-        mxTokenArray->Reset();
-        for( const FormulaToken* pToken = mxTokenArray->First(); pToken; pToken = mxTokenArray->Next() )
+        FormulaTokenArrayPlainIterator aIter(*mxTokenArray);
+        for( const FormulaToken* pToken = aIter.First(); pToken; pToken = aIter.Next() )
         {
             switch( pToken->GetType() )
             {
@@ -895,8 +896,8 @@ void XclImpChSourceLink::FillSourceLink( ::std::vector< ScTokenRef >& rTokens ) 
         // no links to fill.
         return;
 
-    mxTokenArray->Reset();
-    for (FormulaToken* p = mxTokenArray->First(); p; p = mxTokenArray->Next())
+    FormulaTokenArrayPlainIterator aIter(*mxTokenArray);
+    for (FormulaToken* p = aIter.First(); p; p = aIter.Next())
     {
         ScTokenRef pToken(p->Clone());
         if (ScRefTokenHelper::isRef(pToken))
