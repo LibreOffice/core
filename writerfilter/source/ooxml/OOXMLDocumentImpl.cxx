@@ -872,7 +872,6 @@ void OOXMLDocumentImpl::preserveVBA()
 
     maVBA = comphelper::InitPropertySequence(
     {
-        {"ProjectStream", uno::makeAny(xStream)},
         {"DataStream", uno::makeAny(xDataStream)}
     });
 }
