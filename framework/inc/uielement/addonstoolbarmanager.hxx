@@ -22,7 +22,6 @@
 
 #include <uielement/toolbarmanager.hxx>
 #include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>

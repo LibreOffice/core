@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_INTERACTION_QUIETINTERACTION_HXX
 
 #include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 #include <general.h>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>

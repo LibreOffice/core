@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_HELPER_UICONFIGELEMENTWRAPPERBASE_HXX
 
 #include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XUIElementSettings.hpp>

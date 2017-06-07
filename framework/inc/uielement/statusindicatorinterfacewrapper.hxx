@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSINDICATORINTERFACEWRAPPER_HXX
 
 #include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
