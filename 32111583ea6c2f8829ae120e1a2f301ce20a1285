@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_c8bc176f",
+        "filename": "include/vcl/tabctrl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-07T12:46:57Z",
+      "side": 1,
+      "message": "Are you sure you changed both declaration ad implementation type to Button*?",
+      "parentUuid": "5a3905b3_a8e18b9c",
+      "revId": "32111583ea6c2f8829ae120e1a2f301ce20a1285",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_6850835f",
         "filename": "vcl/source/control/tabctrl.cxx",
         "patchSetId": 2
