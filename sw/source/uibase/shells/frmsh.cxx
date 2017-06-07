@@ -350,13 +350,15 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             bool bApplyNewSize = false;
 
             Size aNewSize = aMgr.GetSize();
-            if ( SfxItemState::SET == pArgs->GetItemState( SID_ATTR_TRANSFORM_WIDTH, false, &pItem ) )
+            if (pArgs &&
+                SfxItemState::SET == pArgs->GetItemState(SID_ATTR_TRANSFORM_WIDTH, false, &pItem))
             {
                 aNewSize.setWidth( static_cast< const SfxUInt32Item* >(pItem)->GetValue() );
                 bApplyNewSize = true;
             }
 
-            if ( SfxItemState::SET == pArgs->GetItemState( SID_ATTR_TRANSFORM_HEIGHT, false, &pItem ) )
+            if (pArgs &&
+                SfxItemState::SET == pArgs->GetItemState(SID_ATTR_TRANSFORM_HEIGHT, false, &pItem))
             {
                 aNewSize.setHeight( static_cast< const SfxUInt32Item* >(pItem)->GetValue() );
                 bApplyNewSize = true;
