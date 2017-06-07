@@ -145,9 +145,8 @@ void FTPURL::parse(const OUString& url)
 {
     OUString aPassword, urlRest;
 
-    if(url.getLength() < 6 || !url.startsWithIgnoreAsciiCase("ftp://"))
+    if(url.getLength() < 6 || !url.startsWithIgnoreAsciiCase("ftp://", &urlRest))
         throw malformed_exception();
-    urlRest = url.copy(6);
 
     // determine "username:password@host:port"
     OUString aExpr;
