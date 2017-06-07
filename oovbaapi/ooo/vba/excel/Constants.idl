@@ -168,6 +168,18 @@ module ooo { module vba { module excel {
         const long xlWorksheet4 = 1;
         const long xlWorksheetCell = 3;
         const long xlWorksheetShort = 5;
+        const long xlThemeColorAccent1 = 5;
+        const long xlThemeColorAccent2 = 6;
+        const long xlThemeColorAccent3 = 7;
+        const long xlThemeColorAccent4 = 8;
+        const long xlThemeColorAccent5 = 9;
+        const long xlThemeColorAccent6 = 10;
+        const long xlThemeColorDark1 = 1;
+        const long xlThemeColorDark2 = 3;
+        const long xlThemeColorFollowedHyperlink = 12;
+        const long xlThemeColorHyperlink = 11;
+        const long xlThemeColorLight1 = 2;
+        const long xlThemeColorLight2 = 4;
     };
 }; }; };
 

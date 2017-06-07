@@ -38,6 +38,7 @@ interface XInterior
     [attribute]  any  Pattern;
     [attribute]  any  PatternColor;
     [attribute]  any  PatternColorIndex;
+    [attribute]  any  ThemeColor;
 };
 
 
