@@ -1916,7 +1916,8 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
     if (!pArray.get())
         return;
 
-    for (FormulaToken* p = pArray->First(); p; p = pArray->Next())
+    FormulaTokenArrayPlainIterator aIter(*pArray);
+    for (FormulaToken* p = aIter.First(); p; p = aIter.Next())
     {
         if (p->GetType() == svMatrix)
             aMatrixList.push_back(p);
