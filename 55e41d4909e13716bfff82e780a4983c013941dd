@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_8be689b2",
+        "filename": "sd/source/ui/func/fuinsert.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-07T19:24:15Z",
+      "side": 1,
+      "message": "i wonder what dialog this is - can you find out how to get here?",
+      "revId": "55e41d4909e13716bfff82e780a4983c013941dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_6bd79dbf",
+        "filename": "sd/source/ui/view/sdview3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1395,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-07T19:24:15Z",
+      "side": 1,
+      "message": "i guess this should check the environment variable too so it defaults to the old format",
+      "revId": "55e41d4909e13716bfff82e780a4983c013941dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
