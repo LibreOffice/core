@@ -437,7 +437,6 @@ void SvxAreaTabPage::CreatePage( sal_Int32 nId, SfxTabPage* pTab )
     else if(nId == BITMAP)
     {
         static_cast<SvxBitmapTabPage*>(pTab)->SetBitmapList( m_pBitmapList );
-        static_cast<SvxBitmapTabPage*>(pTab)->SetPos( &m_nPos );
         static_cast<SvxBitmapTabPage*>(pTab)->SetBmpChgd( m_pnBitmapListState );
         static_cast<SvxBitmapTabPage*>(pTab)->Construct();
         static_cast<SvxBitmapTabPage*>(pTab)->ActivatePage( m_rXFSet );
