@@ -1334,7 +1334,7 @@ SalLayout* OutputDevice::getFallbackFont(
     if (!pFallback->LayoutText(rLayoutArgs))
     {
         // there is no need for a font that couldn't resolve anything
-        pFallback->Release();
+        delete pFallback;
         return nullptr;
     }
 
@@ -1457,7 +1457,7 @@ sal_Int32 OutputDevice::ValidateKashidas ( const OUString& rTxt,
             ++nDropped;
         }
     }
-    pSalLayout->Release();
+    delete pSalLayout;
     return nDropped;
 }
 
