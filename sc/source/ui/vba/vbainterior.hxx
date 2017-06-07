@@ -72,6 +72,8 @@ public:
     virtual void SAL_CALL setPatternColorIndex( const css::uno::Any& _patterncolorindex ) override;
     css::uno::Any SAL_CALL getThemeColor() override;
     void SAL_CALL setThemeColor(const css::uno::Any& rAny) override;
+    css::uno::Any SAL_CALL getTintAndShade() override;
+    void SAL_CALL setTintAndShade(const css::uno::Any& rAny) override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
