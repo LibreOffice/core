@@ -1924,13 +1924,16 @@ uno::Reference<drawing::XShape> DomainMapper_Impl::PopPendingShape()
 
 void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape > & xShape )
 {
+    // Append these early, so the context and the table manager stack will be
+    // in sync, even if the text append stack is empty.
+    appendTableManager();
+    appendTableHandler();
+    getTableManager().startLevel();
+
     if (m_aTextAppendStack.empty())
         return;
     uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
 
-    appendTableManager( );
-    appendTableHandler( );
-    getTableManager().startLevel();
     try
     {
         uno::Reference< lang::XServiceInfo > xSInfo( xShape, uno::UNO_QUERY_THROW );
