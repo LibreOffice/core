@@ -33,6 +33,24 @@
       "revId": "7ae2a6e4e95c3632529a0bff3696f3b88da4cf7f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_a8ffcba8",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-06-07T07:43:07Z",
+      "side": 1,
+      "message": "Well, the (2) case is guarded here, instead of needless complications (imo) there. Unless we explicitly care in callers about nullptr returned from rtl_uString_*, we will never get here with nullptr (crash earlier), so this \"defencive programming\" would not hide anything? And making this here, we would make it easier for possible other similar changes in other OUString functions later, without code duplications and overhead there.",
+      "parentUuid": "5a3905b3_4873c780",
+      "revId": "7ae2a6e4e95c3632529a0bff3696f3b88da4cf7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
