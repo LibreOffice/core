@@ -168,7 +168,8 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
     for (SCROW i = 0; i < xGroup->mnLength; ++i, aTmpPos.IncRow())
     {
         ScTokenArray aCode2;
-        for (const formula::FormulaToken* p = rCode.First(); p; p = rCode.Next())
+        formula::FormulaTokenArrayPlainIterator aIter(rCode);
+        for (const formula::FormulaToken* p = aIter.First(); p; p = aIter.Next())
         {
             CachedTokensType::iterator it = aCachedTokens.find(p);
             if (it != aCachedTokens.end())
