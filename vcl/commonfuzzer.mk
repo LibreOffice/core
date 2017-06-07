@@ -45,7 +45,6 @@ fuzzer_libraries = \
     swd \
     writerfilter \
     textfd \
-    sc \
     sdfilt \
     sd \
     sdd \
@@ -63,8 +62,6 @@ fuzzer_libraries = \
     drawinglayer \
     editeng \
     filterconfig \
-    for \
-    forui \
     fsstorage \
     fwe \
     fwi \
