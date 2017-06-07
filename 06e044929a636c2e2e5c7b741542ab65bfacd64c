@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_28af5b95",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-07T08:39:35Z",
+      "side": 1,
+      "message": "ach, damn, there\u0027s a\n\n  rtl_uString_release(newData);\n\nmissing, right?",
+      "revId": "06e044929a636c2e2e5c7b741542ab65bfacd64c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
