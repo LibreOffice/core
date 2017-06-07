@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_68d7a3bf",
+        "filename": "sc/source/ui/app/transobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-07T12:29:03Z",
+      "side": 1,
+      "message": "Yes, RTF tables can be imported.",
+      "parentUuid": "5a3905b3_856d9a9a",
+      "revId": "3f25333f64a2bc18c4360ecfdd9551e2ebd9bbd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_6547ce1d",
         "filename": "sc/source/ui/app/transobj.cxx",
         "patchSetId": 1
