@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_a8e18b9c",
+        "filename": "include/vcl/tabctrl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-06-07T12:32:07Z",
+      "side": 1,
+      "message": "Changing Notebookbar* to Button* still gives an error. What should be the type here? The message talks about the conversion from:\n    Link\u003cNotebookBar *,void\u003e\nto:\n    const Link\u003cButton *,void\u003e \u0026\nHow should we treat this?",
+      "parentUuid": "5a3905b3_4855874e",
+      "revId": "32111583ea6c2f8829ae120e1a2f301ce20a1285",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_6850835f",
         "filename": "vcl/source/control/tabctrl.cxx",
         "patchSetId": 2
@@ -65,6 +83,24 @@
       "writtenOn": "2017-06-07T12:23:14Z",
       "side": 1,
       "message": "Done",
+      "parentUuid": "5a3905b3_6850835f",
+      "revId": "32111583ea6c2f8829ae120e1a2f301ce20a1285",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_c8eed78a",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2205,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-06-07T12:32:07Z",
+      "side": 1,
+      "message": "I made a build and this seems to fix the problem. Thanks!",
       "parentUuid": "5a3905b3_6850835f",
       "revId": "32111583ea6c2f8829ae120e1a2f301ce20a1285",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
