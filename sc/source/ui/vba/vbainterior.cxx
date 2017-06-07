@@ -406,6 +406,17 @@ void SAL_CALL ScVbaInterior::setTintAndShade(const uno::Any& /*rAny*/)
     // Just a stub for now.
 }
 
+uno::Any SAL_CALL ScVbaInterior::getPatternTintAndShade()
+{
+    // Just a stub for now.
+    return uno::makeAny(static_cast<double>(0));
+}
+
+void SAL_CALL ScVbaInterior::setPatternTintAndShade(const uno::Any& /*rAny*/)
+{
+    // Just a stub for now.
+}
+
 OUString
 ScVbaInterior::getServiceImplName()
 {
