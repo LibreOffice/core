@@ -4453,7 +4453,8 @@ StackVar ScInterpreter::Interpret()
         {
             if ( !nErrorFunctionCount )
             {   // count of errorcode functions in formula
-                for ( FormulaToken* t = rArr.FirstRPN(); t; t = rArr.NextRPN() )
+                FormulaTokenArrayPlainIterator aIter(rArr);
+                for ( FormulaToken* t = aIter.FirstRPN(); t; t = aIter.NextRPN() )
                 {
                     if ( IsErrFunc(t->GetOpCode()) )
                         ++nErrorFunctionCount;
