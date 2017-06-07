@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_DISPATCHINFORMATIONPROVIDER_HXX
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_DISPATCHINFORMATIONPROVIDER_HXX
 
-#include <macros/xinterface.hxx>
 #include <general.h>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSBARMANAGER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_STATUSBARMANAGER_HXX
 
-#include <macros/xinterface.hxx>
 #include <stdtypes.h>
 
 #include <com/sun/star/frame/XFrame.hpp>
