@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_0810df00",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-07T07:35:35Z",
+      "side": 1,
+      "message": "(see (1))\n\n(2)  so to not make \"this\" be left in an invalid state, we need to do something here:\n\n* use a local var?  but short of another pair of calls to rtl_uString_acquire/release, we\u0027d need to ensure that rtl_uString_newConcat(\u0026a,b,c) does /not/ release the original a if it sets it to null on return (but could that lead to leaks with other callers of rtl_uString_newConcat or rtl_string_newConcat?); urgh\n\n* or, before throwing, call\n\n  rtl_uString_new(\u0026pData);\n\nto at least leave \"this\" in a valid state (though operator+\u003d then wouldn\u0027t fulfil the strong exception guarantee of leaving this\u0027 state unaltered)",
+      "revId": "7ae2a6e4e95c3632529a0bff3696f3b88da4cf7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_4873c780",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-07T07:35:35Z",
+      "side": 1,
+      "message": "(1)  why keep this?  there should never be cases where release is called with a nullptr (modulo the intended-to-crash-fast OOM situations), so this boils down to \"defensive programming\" that only helps hide programming errors\n\n(see (2))",
+      "revId": "7ae2a6e4e95c3632529a0bff3696f3b88da4cf7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
