@@ -56,7 +56,7 @@ class OImageControlModel
     OUString                                          m_sDocumentURL;
 
 protected:
-    // UNO Anbindung
+    // UNO binding
     virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
 
     ImageProducer* GetImageProducer() { return m_xImageProducer.get(); }
@@ -69,7 +69,7 @@ public:
 
     virtual sal_Bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
 
-    // UNO Anbindung
+    // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OImageControlModel, OBoundControlModel)
     virtual css::uno::Any SAL_CALL queryAggregation(const css::uno::Type& _rType) override;
 
