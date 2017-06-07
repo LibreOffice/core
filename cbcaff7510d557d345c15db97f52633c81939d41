@@ -16,6 +16,24 @@
       "revId": "cbcaff7510d557d345c15db97f52633c81939d41",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_884a0fc4",
+        "filename": "ucb/source/core/provprox.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-06-07T11:33:31Z",
+      "side": 1,
+      "message": "oh well, at least it\u0027s uniform across the module now.\ndoing more changes in framework now. should I omit prefix for new variables, or just \u0027a\u0027 prefix?\nthere are also some static uno::Reference\u003c\u003e, keep \u0027x\u0027 prefix?\ndon\u0027t know what you consider as fake hungarian notation.",
+      "parentUuid": "5a3905b3_a8726b47",
+      "revId": "cbcaff7510d557d345c15db97f52633c81939d41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
