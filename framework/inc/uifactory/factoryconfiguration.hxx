@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIFACTORY_FACTORYCONFIGURATION_HXX
 #define INCLUDED_FRAMEWORK_INC_UIFACTORY_FACTORYCONFIGURATION_HXX
 
-#include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -28,6 +27,7 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>

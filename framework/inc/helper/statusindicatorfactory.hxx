@@ -26,7 +26,6 @@
 
 // include files of own module
 #include <helper/wakeupthread.hxx>
-#include <macros/xserviceinfo.hxx>
 #include <general.h>
 
 // include uno interfaces
