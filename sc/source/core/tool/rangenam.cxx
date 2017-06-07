@@ -163,8 +163,8 @@ void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
     pCode->SetFromRangeName(true);
     if( pCode->GetCodeError() == FormulaError::NONE )
     {
-        pCode->Reset();
-        FormulaToken* p = pCode->GetNextReference();
+        FormulaTokenArrayPlainIterator aIter(*pCode);
+        FormulaToken* p = aIter.GetNextReference();
         if( p )
         {
             // first token is a reference
@@ -222,8 +222,8 @@ void ScRangeData::GuessPosition()
     SCTAB nMinTab = 0;
 
     formula::FormulaToken* t;
-    pCode->Reset();
-    while ( ( t = pCode->GetNextReference() ) != nullptr )
+    formula::FormulaTokenArrayPlainIterator aIter(*pCode);
+    while ( ( t = aIter.GetNextReference() ) != nullptr )
     {
         ScSingleRefData& rRef1 = *t->GetSingleRef();
         if ( rRef1.IsColRel() && rRef1.Col() < nMinCol )
@@ -283,9 +283,9 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
     bool bChanged = false;
 
     formula::FormulaToken* t;
-    pCode->Reset();
+    formula::FormulaTokenArrayPlainIterator aIter(*pCode);
 
-    while ( ( t = pCode->GetNextReference() ) != nullptr )
+    while ( ( t = aIter.GetNextReference() ) != nullptr )
     {
         if( t->GetType() != svIndex )
         {
@@ -315,9 +315,9 @@ void ScRangeData::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
     bool bChanged = false;
 
     formula::FormulaToken* t;
-    pCode->Reset();
+    formula::FormulaTokenArrayPlainIterator aIter(*pCode);
 
-    while ( ( t = pCode->GetNextReference() ) != nullptr )
+    while ( ( t = aIter.GetNextReference() ) != nullptr )
     {
         if( t->GetType() != svIndex )
         {
@@ -544,8 +544,8 @@ void ScRangeData::ValidateTabRefs()
     SCTAB nMinTab = aPos.Tab();
     SCTAB nMaxTab = nMinTab;
     formula::FormulaToken* t;
-    pCode->Reset();
-    while ( ( t = pCode->GetNextReference() ) != nullptr )
+    formula::FormulaTokenArrayPlainIterator aIter(*pCode);
+    while ( ( t = aIter.GetNextReference() ) != nullptr )
     {
         ScSingleRefData& rRef1 = *t->GetSingleRef();
         ScAddress aAbs = rRef1.toAbs(aPos);
@@ -580,8 +580,8 @@ void ScRangeData::ValidateTabRefs()
         ScAddress aOldPos = aPos;
         aPos.SetTab( aPos.Tab() - nMove );
 
-        pCode->Reset();
-        while ( ( t = pCode->GetNextReference() ) != nullptr )
+        aIter.Reset();
+        while ( ( t = aIter.GetNextReference() ) != nullptr )
         {
             switch (t->GetType())
             {
@@ -628,8 +628,7 @@ void ScRangeData::InitCode()
 {
     if( pCode->GetCodeError() == FormulaError::NONE )
     {
-        pCode->Reset();
-        FormulaToken* p = pCode->GetNextReference();
+        FormulaToken* p = FormulaTokenArrayPlainIterator(*pCode).GetNextReference();
         if( p )   // exact one reference at first
         {
             if( p->GetType() == svSingleRef )
