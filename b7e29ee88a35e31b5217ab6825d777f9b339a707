@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_eb08eddb",
+        "filename": "sc/source/ui/view/viewfun4.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-07T15:16:21Z",
+      "side": 1,
+      "message": "i dont think we need an empty line here",
+      "revId": "b7e29ee88a35e31b5217ab6825d777f9b339a707",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
