@@ -1163,9 +1163,12 @@ SCCOL ScTable::FindNextVisibleCol( SCCOL nCol, bool bRight ) const
 
 SCCOL ScTable::FindNextVisibleColWithContent( SCCOL nCol, bool bRight, SCROW nRow ) const
 {
+    const SCCOL nLastCol = aCol.size() - 1;
     if(bRight)
     {
-        if(nCol == MAXCOL)
+        // If nCol is the last allocated column index, there wont be any content to its right.
+        // To maintain the original return behaviour, return MAXCOL.
+        if(nCol >= nLastCol)
             return MAXCOL;
 
         do
@@ -1176,19 +1179,27 @@ SCCOL ScTable::FindNextVisibleColWithContent( SCCOL nCol, bool bRight, SCROW nRo
             if(bHidden)
             {
                 nCol = nEndCol +1;
-                if(nEndCol >= MAXCOL)
+                // Can end search early as there is no data after nLastCol.
+                // For nCol == nLastCol, it may still have data so don't want to return MAXCOL.
+                if(nCol > nLastCol)
                     return MAXCOL;
             }
 
             if(aCol[nCol].HasVisibleDataAt(nRow))
                 return nCol;
         }
-        while(nCol < MAXCOL);
+        while(nCol < nLastCol); // Stop search as soon as the last allocated column is searched.
 
         return MAXCOL;
     }
     else
     {
+        // If nCol is in the unallocated range [nLastCol+1, MAXCOL], then move it directly to nLastCol
+        // as there is no data in the unallocated range. This also makes the search faster and avoids
+        // the need for more range checks in the loop below.
+        if ( nCol > nLastCol )
+            nCol = nLastCol;
+
         if(nCol == 0)
             return 0;
 
@@ -1215,10 +1226,12 @@ SCCOL ScTable::FindNextVisibleColWithContent( SCCOL nCol, bool bRight, SCROW nRo
 
 void ScTable::FindAreaPos( SCCOL& rCol, SCROW& rRow, ScMoveDirection eDirection ) const
 {
+    const SCCOL nLastCol = aCol.size() - 1;
+
     if (eDirection == SC_MOVE_LEFT || eDirection == SC_MOVE_RIGHT)
     {
         SCCOL nNewCol = rCol;
-        bool bThere = aCol[nNewCol].HasVisibleDataAt(rRow);
+        bool bThere = ( nNewCol > nLastCol ) ? false : aCol[nNewCol].HasVisibleDataAt(rRow);
         bool bRight = (eDirection == SC_MOVE_RIGHT);
         if (bThere)
         {
@@ -1229,14 +1242,14 @@ void ScTable::FindAreaPos( SCCOL& rCol, SCROW& rRow, ScMoveDirection eDirection 
 
             SCCOL nNextCol = FindNextVisibleCol( nNewCol, bRight );
 
-            if(aCol[nNextCol].HasVisibleDataAt(rRow))
+            if( nNextCol <= nLastCol && aCol[nNextCol].HasVisibleDataAt(rRow) )
             {
                 bool bFound = false;
                 nNewCol = nNextCol;
                 do
                 {
                     nNextCol = FindNextVisibleCol( nNewCol, bRight );
-                    if(aCol[nNextCol].HasVisibleDataAt(rRow))
+                    if( nNextCol <= nLastCol && aCol[nNextCol].HasVisibleDataAt(rRow) )
                         nNewCol = nNextCol;
                     else
                         bFound = true;
@@ -1261,7 +1274,15 @@ void ScTable::FindAreaPos( SCCOL& rCol, SCROW& rRow, ScMoveDirection eDirection 
     }
     else
     {
-        aCol[rCol].FindDataAreaPos(rRow,eDirection == SC_MOVE_DOWN);
+        if ( rCol <= nLastCol )
+            aCol[rCol].FindDataAreaPos(rRow,eDirection == SC_MOVE_DOWN);
+        else
+        {
+            // The cell (rCol, rRow) is equivalent to an empty cell (although not allocated).
+            // Set rRow to 0 or MAXROW depending on eDirection to maintain the behaviour of
+            // ScColumn::FindDataAreaPos() when the given column is empty.
+            rRow = ( eDirection == SC_MOVE_DOWN ) ? MAXROW : 0;
+        }
     }
 }
 
