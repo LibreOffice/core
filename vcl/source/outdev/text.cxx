@@ -878,7 +878,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
-        pSalLayout->Release();
+        delete pSalLayout;
     }
 
     if( mpAlphaVDev )
@@ -943,7 +943,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
-        pSalLayout->Release();
+        delete pSalLayout;
     }
 
     if( mpAlphaVDev )
@@ -987,6 +987,7 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
     DeviceCoordinate nWidth = pSalLayout->FillDXArray( pDXPixelArray.get() );
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
     pSalLayout->Release();
+    delete pSalLayout;
 
     // convert virtual char widths to virtual absolute positions
     if( pDXPixelArray )
@@ -1031,7 +1032,7 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
 
     long nWidth = pSalLayout->FillDXArray( pDXAry );
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
-    pSalLayout->Release();
+    delete pSalLayout;
 
     // convert virtual char widths to virtual absolute positions
     if( pDXAry )
@@ -1075,7 +1076,7 @@ bool OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
     pSalLayout->GetCaretPositions( 2*nLen, pCaretXArray );
     long nWidth = pSalLayout->GetTextWidth();
-    pSalLayout->Release();
+    delete pSalLayout;
 
     // fixup unknown caret positions
     int i;
@@ -1135,7 +1136,7 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_uLong nWidth,
     if( pSalLayout )
     {
         ImplDrawText( *pSalLayout );
-        pSalLayout->Release();
+        delete pSalLayout;
     }
 
     if( mpAlphaVDev )
@@ -1313,7 +1314,7 @@ SalLayout* OutputDevice::ImplLayout(const OUString& rOrigStr,
     // layout text
     if( pSalLayout && !pSalLayout->LayoutText( aLayoutArgs ) )
     {
-        pSalLayout->Release();
+        delete pSalLayout;
         pSalLayout = nullptr;
     }
 
@@ -1358,7 +1359,7 @@ std::shared_ptr<vcl::TextLayoutCache> OutputDevice::CreateTextLayoutCache(
         return nullptr;
     std::shared_ptr<vcl::TextLayoutCache> const ret(
             pSalLayout->CreateTextLayoutCache(copyBecausePrepareModifiesIt));
-    pSalLayout->Release();
+    delete pSalLayout;
     return ret;
 }
 
@@ -1399,7 +1400,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
         }
         nRetVal = pSalLayout->GetTextBreak( nTextPixelWidth, nExtraPixelWidth, nSubPixelFactor );
 
-        pSalLayout->Release();
+        delete pSalLayout;
     }
 
     return nRetVal;
@@ -1445,7 +1446,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
         {
             // calculate subpixel width of hyphenation character
             long nHyphenPixelWidth = pHyphenLayout->GetTextWidth() * nSubPixelFactor;
-            pHyphenLayout->Release();
+            delete pHyphenLayout;
 
             // calculate hyphenated break position
             nTextPixelWidth -= nHyphenPixelWidth;
@@ -1458,7 +1459,7 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
                 rHyphenPos = nRetVal;
         }
 
-        pSalLayout->Release();
+        delete pSalLayout;
     }
 
     return nRetVal;
@@ -2326,7 +2327,7 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
     // Get font data
     aSysLayoutData.orientation = pLayout->GetOrientation();
 
-    pLayout->Release();
+    delete pLayout;
 
     return aSysLayoutData;
 }
@@ -2352,7 +2353,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
         {
             nXOffset = pSalLayout->GetTextWidth();
             nXOffset /= pSalLayout->GetUnitsPerPixel();
-            pSalLayout->Release();
+            delete pSalLayout;
             // TODO: fix offset calculation for Bidi case
             if( nBase < nIndex)
                 nXOffset = -nXOffset;
@@ -2390,7 +2391,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
                 rRect += Point( maMapRes.mnMapOfsX, maMapRes.mnMapOfsY );
         }
 
-        pSalLayout->Release();
+        delete pSalLayout;
     }
 
     return bRet;
@@ -2438,7 +2439,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
         if( pSalLayout )
         {
             nXOffset = pSalLayout->GetTextWidth();
-            pSalLayout->Release();
+            delete pSalLayout;
             // TODO: fix offset calculation for Bidi case
             if( nBase > nIndex)
                 nXOffset = -nXOffset;
@@ -2476,7 +2477,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
             }
         }
 
-        pSalLayout->Release();
+        delete pSalLayout;
     }
 
     if( bOldMap )
