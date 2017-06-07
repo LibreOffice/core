@@ -377,7 +377,7 @@ public:
     // destruct itself, hence a seperate method.
     void start() { xSrc->getImageProducer()->startProduction(); }
 
-    // UNO connection
+    // UNO binding
 
     // XImageConsumer
     virtual void SAL_CALL init( sal_Int32 Width, sal_Int32 Height) override;
