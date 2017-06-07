@@ -1229,11 +1229,12 @@ void lcl_AddCode( ScTokenArray& rArr, const ScFormulaCell* pCell )
     ScTokenArray* pCode = const_cast<ScFormulaCell*>(pCell)->GetCode();
     if (pCode)
     {
-        const formula::FormulaToken* pToken = pCode->First();
+        FormulaTokenArrayPlainIterator aIter(*pCode);
+        const formula::FormulaToken* pToken = aIter.First();
         while (pToken)
         {
             rArr.AddToken( *pToken );
-            pToken = pCode->Next();
+            pToken = aIter.Next();
         }
     }
 
