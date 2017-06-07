@@ -25,7 +25,6 @@
 */
 #include <vector>
 
-#include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 #include <properties.h>
 #include <uiconfiguration/globalsettings.hxx>

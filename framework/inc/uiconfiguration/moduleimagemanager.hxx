@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UICONFIGURATION_MODULEIMAGEMANAGER_HXX
 #define INCLUDED_FRAMEWORK_INC_UICONFIGURATION_MODULEIMAGEMANAGER_HXX
 
-#include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 #include <uiconfiguration/imagetype.hxx>
 
@@ -33,6 +32,7 @@
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
 #include <cppuhelper/implbase.hxx>
