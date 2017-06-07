@@ -604,7 +604,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     if( pLayout )
     {
         nStrikeoutWidth = pLayout->GetTextWidth() / (nTestStrLen * pLayout->GetUnitsPerPixel());
-        pLayout->Release();
+        delete pLayout;
     }
     if( nStrikeoutWidth <= 0 ) // sanity check
         return;
@@ -664,7 +664,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
 
     pLayout->DrawText( *mpGraphics );
 
-    pLayout->Release();
+    delete pLayout;
     Pop();
 
     SetTextColor( aOldColor );

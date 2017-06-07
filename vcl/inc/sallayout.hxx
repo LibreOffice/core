@@ -151,6 +151,7 @@ std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs);
 class VCL_PLUGIN_PUBLIC SalLayout
 {
 public:
+    virtual         ~SalLayout();
     // used by upper layers
     Point&          DrawBase()                              { return maDrawBase; }
     const Point&    DrawBase() const                        { return maDrawBase; }
@@ -179,9 +180,6 @@ public:
     virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, tools::Rectangle& ) const;
 
-    // reference counting
-    void            Release() const;
-
     // used by glyph+font+script fallback
     virtual void    MoveGlyph( int nStart, long nNewXPos ) = 0;
     virtual void    DropGlyph( int nStart ) = 0;
@@ -193,7 +191,6 @@ public:
 protected:
     // used by layout engines
                     SalLayout();
-    virtual         ~SalLayout();
 
     static int      CalcAsianKerning( sal_UCS4, bool bLeft, bool bVertical );
 
@@ -209,7 +206,6 @@ protected:
     int             mnUnitsPerPixel;
     int             mnOrientation;
 
-    mutable int     mnRefCount;
     mutable Point   maDrawOffset;
     Point           maDrawBase;
 };
