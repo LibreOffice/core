@@ -20,7 +20,7 @@ $(eval $(call gb_StaticLibrary_add_defs,hunspell,\
 	-DOPENOFFICEORG \
 ))
 
-$(eval $(call gb_StaticLibrary_add_generated_cxxobjects,hunspell,\
+$(eval $(call gb_StaticLibrary_add_generated_exception_objects,hunspell,\
 	UnpackedTarball/hunspell/src/hunspell/affentry \
 	UnpackedTarball/hunspell/src/hunspell/affixmgr \
 	UnpackedTarball/hunspell/src/hunspell/csutil \

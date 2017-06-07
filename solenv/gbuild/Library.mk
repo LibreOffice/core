@@ -182,7 +182,6 @@ $(eval $(foreach method,\
 	add_exception_objects \
 	add_x64_generated_exception_objects \
 	add_generated_cobjects \
-	add_generated_cxxobjects \
 	add_generated_exception_objects \
 	use_library_objects \
 	add_grammar \

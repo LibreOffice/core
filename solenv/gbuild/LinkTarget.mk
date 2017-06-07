@@ -1346,11 +1346,6 @@ $(foreach obj,$(2),$(call gb_LinkTarget_add_generated_c_object,$(1),$(obj),$(3),
 $(foreach obj,$(2),$(eval $(call gb_GenCObject_get_target,$(obj)) : CXXOBJECT_X64 := YES))
 endef
 
-# call gb_LinkTarget_add_generated_cxxobjects,linktarget,sourcefiles,cxxflags,linktargetmakefilename
-define gb_LinkTarget_add_generated_cxxobjects
-$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(obj),$(3)))
-endef
-
 # call gb_LinkTarget_add_generated_exception_object,linktarget,sourcefile,linktargetmakefilename,cxxflags
 define gb_LinkTarget_add_generated_exception_object
 $(call gb_LinkTarget_add_generated_cxx_object,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS) $(call gb_LinkTarget__get_cxxflags,$(3)) $(4))

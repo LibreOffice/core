@@ -82,7 +82,6 @@ $(eval $(foreach method,\
 	add_x64_generated_exception_objects \
 	add_generated_cobjects \
 	add_x64_generated_cobjects \
-	add_generated_cxxobjects \
 	add_generated_exception_objects \
 	add_cflags \
 	add_cxxflags \

@@ -37,7 +37,7 @@ $(eval $(call gb_Executable_add_exception_objects,tdefilepicker,\
 	vcl/unx/kde/fpicker/kdemodalityfilter \
 ))
 
-$(eval $(call gb_Executable_add_generated_cxxobjects,tdefilepicker,\
+$(eval $(call gb_Executable_add_generated_exception_objects,tdefilepicker,\
 	CustomTarget/vcl/unx/kde/fpicker/kdefilepicker.moc \
 ))
 

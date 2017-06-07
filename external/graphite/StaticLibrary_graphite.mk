@@ -33,7 +33,7 @@ endif
 
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,graphite,cpp))
 
-$(eval $(call gb_StaticLibrary_add_generated_cxxobjects,graphite,\
+$(eval $(call gb_StaticLibrary_add_generated_exception_objects,graphite,\
 	UnpackedTarball/graphite/src/$(if $(filter GCC,$(COM)),direct,call)_machine \
 	UnpackedTarball/graphite/src/gr_char_info \
 	UnpackedTarball/graphite/src/gr_face \
