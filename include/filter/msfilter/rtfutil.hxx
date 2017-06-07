@@ -17,6 +17,9 @@
 #include <sal/types.h>
 #include <tools/solar.h>
 
+// RTF values are often multiplied by 2^16
+#define RTF_MULTIPLIER 65536
+
 namespace msfilter {
 namespace rtfutil {
 

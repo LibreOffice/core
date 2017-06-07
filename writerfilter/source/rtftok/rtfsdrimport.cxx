@@ -30,8 +30,11 @@
 #include <ooxml/resourceids.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
+#include <filter/msfilter/rtfutil.hxx>
 #include <svx/svdtrans.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <rtfreferenceproperties.hxx>
 #include <oox/vml/vmlformatting.hxx>
 #include <oox/helper/modelobjecthelper.hxx>
@@ -242,7 +245,7 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape, 
     {
         // See DffPropertyReader::Fix16ToAngle(): in RTF, positive rotation angles are clockwise, we have them as counter-clockwise.
         // Additionally, RTF type is 0..360*2^16, our is 0..360*100.
-        sal_Int32 nRotation = aValue.toInt32()*100/65536;
+        sal_Int32 nRotation = aValue.toInt32()*100/RTF_MULTIPLIER;
         uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY);
         if (!xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
             xPropertySet->setPropertyValue("RotateAngle", uno::makeAny(sal_Int32(NormAngle360(static_cast<long>(nRotation) * -1))));
@@ -378,6 +381,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     boost::logic::tribool obFlipV(boost::logic::indeterminate);
 
     OUString aShapeText = "";
+    OUString aFontFamily = "";
+    float nFontSize = 1.0;
+
     bool bCustom(false);
     int const nType = initShape(xShape, xPropertySet, bCustom, rShape, bClose, shapeOrPict);
 
@@ -401,6 +407,13 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             xPropertySet->setPropertyValue("Description", uno::makeAny(rProperty.second));
         else if (rProperty.first == "gtextUNICODE")
             aShapeText = rProperty.second;
+        else if (rProperty.first == "gtextFont")
+            aFontFamily = rProperty.second;
+        else if (rProperty.first == "gtextSize")
+        {
+            // RTF size is multiplied by 2^16
+            nFontSize = (float) rProperty.second.toUInt32() / RTF_MULTIPLIER;
+        }
         else if (rProperty.first == "pib")
         {
             m_rImport.setDestinationText(rProperty.second);
@@ -433,7 +446,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             resolveFLine(xPropertySet, rProperty.second.toInt32());
         else if (rProperty.first == "fillOpacity" && xPropertySet.is())
         {
-            int opacity = 100 - (rProperty.second.toInt32())*100/65536;
+            int opacity = 100 - (rProperty.second.toInt32())*100/RTF_MULTIPLIER;
             xPropertySet->setPropertyValue("FillTransparence", uno::Any(sal_uInt32(opacity)));
         }
         else if (rProperty.first == "lineWidth")
@@ -864,6 +877,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         uno::Reference<text::XTextRange> xTextRange(xShape, uno::UNO_QUERY);
         if (xTextRange.is())
             xTextRange->setString(aShapeText);
+
+        xPropertySet->setPropertyValue("CharFontName", uno::makeAny(aFontFamily));
+        xPropertySet->setPropertyValue("CharHeight", uno::makeAny(nFontSize));
     }
 
     // Creating CustomShapeGeometry property
@@ -884,6 +900,27 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     }
     if (!aGeometry.empty() && xPropertySet.is() && !m_bTextFrame)
         xPropertySet->setPropertyValue("CustomShapeGeometry", uno::Any(comphelper::containerToSequence(aGeometry)));
+
+    if (!aShapeText.isEmpty())
+    {
+        auto aGeomPropSeq = xPropertySet->getPropertyValue("CustomShapeGeometry").get< uno::Sequence<beans::PropertyValue> >();
+        auto aGeomPropVec = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aGeomPropSeq);
+        uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+        {
+            {"TextPath", uno::makeAny(true)},
+        }));
+        auto it = std::find_if(aGeomPropVec.begin(), aGeomPropVec.end(), [](const beans::PropertyValue& rValue)
+        {
+            return rValue.Name == "TextPath";
+        });
+        if (it == aGeomPropVec.end())
+            aGeomPropVec.push_back(comphelper::makePropertyValue("TextPath", aPropertyValues));
+        else
+            it->Value <<= aPropertyValues;
+
+        xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(comphelper::containerToSequence(aGeomPropVec)));
+    }
+
     if (!boost::logic::indeterminate(obRelFlipV) && xPropertySet.is())
     {
         if (nType == ESCHER_ShpInst_Line)
