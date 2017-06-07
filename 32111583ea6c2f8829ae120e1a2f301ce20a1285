@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_e8cab319",
+        "filename": "include/vcl/tabctrl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-06-07T12:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3905b3_4855874e",
+      "revId": "32111583ea6c2f8829ae120e1a2f301ce20a1285",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_6850835f",
         "filename": "vcl/source/control/tabctrl.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2017-06-07T12:19:12Z",
       "side": 1,
       "message": "error: unused parameter ‘pNotebookbar’\n\nWe don\u0027t need arg:\nIMPL_LINK_NOARG(NotebookbarTabControlBase, OpenMenu, Button*, void)",
+      "revId": "32111583ea6c2f8829ae120e1a2f301ce20a1285",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_08d29fd2",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2205,
+      "author": {
+        "id": 1001305
+      },
+      "writtenOn": "2017-06-07T12:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3905b3_6850835f",
       "revId": "32111583ea6c2f8829ae120e1a2f301ce20a1285",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
