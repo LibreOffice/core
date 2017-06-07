@@ -69,6 +69,24 @@
       "revId": "7ae2a6e4e95c3632529a0bff3696f3b88da4cf7f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_e8d63326",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-07T07:52:06Z",
+      "side": 1,
+      "message": "I think trying to establish \"this-\u003epData \u003d\u003d nullptr\" as a valid state is going down a rat\u0027s hole (having to adapt all places that read pData) for no benefit (see how making operator+\u003d fulfil the strong guarantee, which is desirable, makes the demand for a \"this-\u003epData \u003d\u003d nullptr\" state not arise)",
+      "parentUuid": "5a3905b3_a8ffcba8",
+      "revId": "7ae2a6e4e95c3632529a0bff3696f3b88da4cf7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
