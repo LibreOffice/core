@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_TABWIN_TABWINFACTORY_HXX
 
 #include <stdtypes.h>
-#include <macros/xinterface.hxx>
 #include <macros/xserviceinfo.hxx>
 #include <services.h>
 

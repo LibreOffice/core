@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_UIELEMENT_CONSTITEMCONTAINER_HXX
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_CONSTITEMCONTAINER_HXX
 
-#include <macros/xinterface.hxx>
-
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

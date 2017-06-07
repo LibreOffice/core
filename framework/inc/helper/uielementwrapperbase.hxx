@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_HELPER_UIELEMENTWRAPPERBASE_HXX
 #define INCLUDED_FRAMEWORK_INC_HELPER_UIELEMENTWRAPPERBASE_HXX
 
-#include <macros/xinterface.hxx>
-
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

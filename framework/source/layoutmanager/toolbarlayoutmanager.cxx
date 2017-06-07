@@ -35,6 +35,7 @@
 #include <com/sun/star/ui/XUIElementSettings.hpp>
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
 
+#include <cppuhelper/queryinterface.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_JOBS_HELPONSTARTUP_HXX
 #define INCLUDED_FRAMEWORK_INC_JOBS_HELPONSTARTUP_HXX
 
-#include <macros/xinterface.hxx>
 #include <macros/xserviceinfo.hxx>
 
 #include <cppuhelper/implbase.hxx>

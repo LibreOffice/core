@@ -21,9 +21,7 @@
 #define INCLUDED_FRAMEWORK_INC_HELPER_STATUSINDICATOR_HXX
 
 // include files of own module
-
 #include <helper/statusindicatorfactory.hxx>
-#include <macros/xinterface.hxx>
 
 // include UNO interfaces
 #include <com/sun/star/task/XStatusIndicator.hpp>
