@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_0b21b99f",
+        "filename": "sw/source/filter/html/htmlforw.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-07T13:41:25Z",
+      "side": 1,
+      "message": "Well, outputted does exist (in dictionaries), it\u0027s just odd and output is preferred. Here we could use \"displayed\" as well.",
+      "parentUuid": "5a3905b3_5288db22",
+      "range": {
+        "startLine": 231,
+        "startChar": 46,
+        "endLine": 231,
+        "endChar": 55
+      },
+      "revId": "42cb9c1829b503db2276303f0076b25ea089be82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_728dd730",
         "filename": "sw/source/filter/html/htmlforw.cxx",
         "patchSetId": 3
