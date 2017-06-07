@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_88592f5d",
+        "filename": "vcl/source/control/tabctrl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2207,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-06-07T12:59:29Z",
+      "side": 1,
+      "message": "This one shouldn\u0027t be changed.\n\nSee m_aIconClickHdl declaration in the header file :)",
+      "revId": "7d07c13e3e200e5ca164dcd3e72ea924f545bbcb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
