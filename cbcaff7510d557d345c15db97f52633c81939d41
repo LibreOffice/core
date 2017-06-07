@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_a8726b47",
+        "filename": "ucb/source/core/provprox.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-07T08:59:06Z",
+      "side": 1,
+      "message": "isn\u0027t such renaming of local variables rather pointless? it\u0027s quite obvious that this is a local static variable, so the \"s_\" prefix doesn\u0027t have much value (and the cargo-cult fake-Hungarian \"a\" prefix has no value at all, anyway)",
+      "revId": "cbcaff7510d557d345c15db97f52633c81939d41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
