@@ -56,6 +56,30 @@
       "revId": "4b11f21970ff9a43adbe88b9dbc0a9afa8f50d5c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_88568fd0",
+        "filename": "include/comphelper/accessiblecontexthelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-07T07:10:17Z",
+      "side": 1,
+      "message": "ah, no, you\u0027re right, this can\u0027t be removed, didn\u0027t see the other locking thing.",
+      "parentUuid": "5a3905b3_85dcba13",
+      "range": {
+        "startLine": 260,
+        "startChar": 0,
+        "endLine": 260,
+        "endChar": 16
+      },
+      "revId": "4b11f21970ff9a43adbe88b9dbc0a9afa8f50d5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
