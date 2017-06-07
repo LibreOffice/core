@@ -23,7 +23,6 @@
 #include <jobs/jobresult.hxx>
 #include <jobs/jobdata.hxx>
 #include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 #include <stdtypes.h>
 #include <general.h>
 

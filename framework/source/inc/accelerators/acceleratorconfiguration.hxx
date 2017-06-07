@@ -23,7 +23,6 @@
 #include <accelerators/presethandler.hxx>
 #include <accelerators/acceleratorcache.hxx>
 #include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 #include <general.h>
 #include <stdtypes.h>
 

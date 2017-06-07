@@ -25,7 +25,6 @@
 #include <uielement/statusbarmerger.hxx>
 #include <uielement/statusbaritem.hxx>
 #include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 #include <stdtypes.h>
 #include "services.h"
 #include "general.h"

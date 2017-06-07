@@ -24,7 +24,6 @@
 
 #include <helper/statusindicatorfactory.hxx>
 #include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 
 // include UNO interfaces
 #include <com/sun/star/task/XStatusIndicator.hpp>

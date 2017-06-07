@@ -21,6 +21,8 @@
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_MENUBARWRAPPER_HXX
 
 #include <helper/uiconfigelementwrapperbase.hxx>
+#include <macros/xinterface.hxx>
+#include <macros/xtypeprovider.hxx>
 #include <uielement/menubarmanager.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>

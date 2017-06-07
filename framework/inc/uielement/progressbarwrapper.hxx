@@ -22,7 +22,6 @@
 
 #include <helper/uielementwrapperbase.hxx>
 #include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/awt/XWindow.hpp>

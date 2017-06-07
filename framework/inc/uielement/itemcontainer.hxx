@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_ITEMCONTAINER_HXX
 
 #include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 #include <helper/shareablemutex.hxx>
 
 #include <com/sun/star/container/XIndexContainer.hpp>

@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_JOBS_SHELLJOB_HXX
 
 #include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
 
 #include <cppuhelper/implbase.hxx>

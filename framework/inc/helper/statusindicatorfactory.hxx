@@ -27,7 +27,6 @@
 // include files of own module
 #include <helper/wakeupthread.hxx>
 #include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
 #include <general.h>
 

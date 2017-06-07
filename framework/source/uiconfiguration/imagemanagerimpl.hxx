@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_SOURCE_UICONFIGURATION_IMAGEMANAGERIMPL_HXX
 
 #include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 #include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 #include <uiconfiguration/imagetype.hxx>

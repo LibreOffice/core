@@ -20,8 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_SERVICES_LAYOUTMANAGER_HXX
 #define INCLUDED_FRAMEWORK_INC_SERVICES_LAYOUTMANAGER_HXX
 
-#include <macros/xinterface.hxx>
-#include <macros/xtypeprovider.hxx>
 #include <properties.h>
 #include <stdtypes.h>
 #include <uielement/menubarmanager.hxx>
@@ -52,6 +50,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertycontainer.hxx>
+#include <comphelper/uno3.hxx>
 #include <tools/wintypes.hxx>
 #include <svtools/miscopt.hxx>
 #include <vcl/toolbox.hxx>
@@ -82,8 +81,8 @@ namespace framework
             virtual ~LayoutManager() override;
 
             /** declaration of XInterface, XTypeProvider, XServiceInfo */
-            FWK_DECLARE_XINTERFACE
-            FWK_DECLARE_XTYPEPROVIDER
+            DECLARE_XINTERFACE()
+            DECLARE_XTYPEPROVIDER()
             virtual OUString SAL_CALL getImplementationName() override
             {
                 return OUString("com.sun.star.comp.framework.LayoutManager");
