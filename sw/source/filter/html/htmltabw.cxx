@@ -99,7 +99,7 @@ SwHTMLWrtTable::SwHTMLWrtTable( const SwTableLines& rLines, long nWidth,
 SwHTMLWrtTable::SwHTMLWrtTable( const SwHTMLTableLayout *pLayoutInfo )
     : SwWriteTable(nullptr, pLayoutInfo)
 {
-    // Einige Twip-Werte an Pixel-Grenzen anpassen
+    // Adjust some Twip values to pixel limits
     if( m_bCollectBorderWidth )
         PixelizeBorders();
 }
@@ -128,7 +128,7 @@ bool SwHTMLWrtTable::HasTabBackground( const SwTableBox& rBox,
                         bool bTop, bool bBottom, bool bLeft, bool bRight )
 {
     OSL_ENSURE( bTop || bBottom || bLeft || bRight,
-            "HasTabBackground: darf nicht aufgerufen werden" );
+            "HasTabBackground: cannot be called" );
 
     bool bRet = false;
     if( rBox.GetSttNd() )
@@ -162,7 +162,7 @@ bool SwHTMLWrtTable::HasTabBackground( const SwTableLine& rLine,
                         bool bTop, bool bBottom, bool bLeft, bool bRight )
 {
     OSL_ENSURE( bTop || bBottom || bLeft || bRight,
-            "HasTabBackground: darf nicht aufgerufen werden" );
+            "HasTabBackground: cannot be called" );
 
     SvxBrushItem aBrushItem = rLine.GetFrameFormat()->makeBackgroundBrushItem();
     /// The table line has a background, if its background color is not "no fill"/
@@ -236,8 +236,8 @@ bool SwHTMLWrtTable::ShouldExpandSub( const SwTableBox *pBox,
     bool bExpand = !pBox->GetSttNd() && nDepth>0;
     if( bExpand && bExpandedBefore )
     {
-        // MIB 30.6.97: Wenn schon eine Box expandiert wurde, wird eine
-        // weitere nur expandiert, wenn sie Umrandungen besitzt.
+        // MIB 30.6.97: If a box was already expanded, another one is only
+        // expanded when it has a border.
         bool bBorders = false;
         lcl_TableBox_HasTabBorders( pBox, &bBorders );
         if( !bBorders )
@@ -248,7 +248,7 @@ bool SwHTMLWrtTable::ShouldExpandSub( const SwTableBox *pBox,
     return bExpand;
 }
 
-// Eine Box als einzelne Zelle schreiben
+// Write a box as single cell
 void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
                                    const SwWriteTableCell *pCell,
                                    bool bOutVAlign ) const
@@ -271,15 +271,15 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     {
         sal_uLong nNdPos = pSttNd->GetIndex()+1;
 
-        // Art der Zelle (TD/TH) bestimmen
+        // determine the type of cell (TD/TH)
         SwNode* pNd;
         while( !( pNd = rWrt.pDoc->GetNodes()[nNdPos])->IsEndNode() )
         {
             if( pNd->IsTextNode() )
             {
-                // nur Absaetzte betrachten, an denen man was erkennt
-                // Das ist der Fall, wenn die Vorlage eine der Tabellen-Vorlagen
-                // ist oder von einer der beiden abgelitten ist.
+                // The only paragraphs relevant for the distinction are those
+                // where the style is one of the two table related styles
+                // or inherits from one of these.
                 const SwFormat *pFormat = &static_cast<SwTextNode*>(pNd)->GetAnyFormatColl();
                 sal_uInt16 nPoolId = pFormat->GetPoolFormatId();
                 while( !pFormat->IsDefault() &&
@@ -300,12 +300,12 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         }
     }
 
-    rWrt.OutNewLine();  // <TH>/<TD> in neue Zeile
+    rWrt.OutNewLine();  // <TH>/<TD> in new line
     OStringBuffer sOut;
     sOut.append('<');
     sOut.append(bHead ? OOO_STRING_SVTOOLS_HTML_tableheader : OOO_STRING_SVTOOLS_HTML_tabledata);
 
-    // ROW- und COLSPAN ausgeben
+    // output ROW- and COLSPAN
     if( nRowSpan>1 )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_rowspan).
@@ -348,7 +348,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
                         : 0;
     Size aPixelSz( nWidth, nHeight );
 
-    // WIDTH ausgeben (Grrr: nur fuer Netscape)
+    // output WIDTH (Argh: only for Netscape)
     if( (aPixelSz.Width() || aPixelSz.Height()) && Application::GetDefaultDevice() )
     {
         Size aOldSz( aPixelSz );
@@ -360,7 +360,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
             aPixelSz.Height() = 1;
     }
 
-    // WIDTH ausgeben: Aus Layout oder berechnet
+    // output WIDTH: from layout or calculated
     if( bOutWidth )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
@@ -387,9 +387,9 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     const SfxItemSet& rItemSet = pBox->GetFrameFormat()->GetAttrSet();
     const SfxPoolItem *pItem;
 
-    // ALIGN wird jetzt nur noch an den Absaetzen ausgegeben
+    // ALIGN is only outputted at the paragraphs from now on
 
-    // VALIGN ausgeben
+    // output VALIGN
     if( bOutVAlign )
     {
         sal_Int16 eVertOri = pCell->GetVertOri();
@@ -417,7 +417,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
 
     if( pBrushItem )
     {
-        // Hintergrund ausgeben
+        // output background
         rWrt.OutBackground( pBrushItem, false );
 
         if( rWrt.m_bCfgOutStyles )
@@ -452,7 +452,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     rWrt.m_bLFPossible = true;
 
-    rWrt.IncIndentLevel();  // den Inhalt von <TD>...</TD> einruecken
+    rWrt.IncIndentLevel();  // indent the content of <TD>...</TD>
 
     if( pSttNd )
     {
@@ -485,7 +485,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
         aTableWrt.Write( rWrt );
     }
 
-    rWrt.DecIndentLevel();  // den Inhalt von <TD>...</TD> einruecken
+    rWrt.DecIndentLevel();  // indent the content of <TD>...</TD>
 
     if( rWrt.m_bLFPossible )
         rWrt.OutNewLine();
@@ -495,14 +495,13 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     rWrt.m_bLFPossible = true;
 }
 
-// Eine Line als Zeilen ausgeben
+// output a line as lines
 void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
                                     const SwWriteTableCells& rCells,
                                     const SvxBrushItem *pBrushItem ) const
 {
-    // Wenn die Zeile mehr als eine Zelle nethaelt und alle Zellen
-    // die gleiche Ausrichtung besitzen, das VALIGN an der Zeile statt der
-    // Zelle ausgeben
+    // If the line contains more the one cell and all cells have the some
+    // alignment, then output the VALIGN at the line instead of the cell.
     sal_Int16 eRowVertOri = text::VertOrientation::NONE;
     if( rCells.size() > 1 )
     {
@@ -521,7 +520,7 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
         }
     }
 
-    rWrt.OutNewLine();  // <TR> in neuer Zeile
+    rWrt.OutNewLine();  // <TR> in new line
     rWrt.Strm().WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_tablerow );
     if( pBrushItem )
     {
@@ -544,16 +543,16 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
 
     rWrt.Strm().WriteChar( '>' );
 
-    rWrt.IncIndentLevel(); // Inhalt von <TR>...</TR> einruecken
+    rWrt.IncIndentLevel(); // indent content of <TR>...</TR>
 
     for (const auto &rpCell : rCells)
     {
         OutTableCell(rWrt, rpCell.get(), text::VertOrientation::NONE == eRowVertOri);
     }
 
-    rWrt.DecIndentLevel(); // Inhalt von <TR>...</TR> einruecken
+    rWrt.DecIndentLevel(); // indent content of <TR>...</TR>
 
-    rWrt.OutNewLine();  // </TR> in neuer Zeile
+    rWrt.OutNewLine();  // </TR> in new line
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_tablerow, false );
 }
 
@@ -562,7 +561,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
                             const OUString *pCaption, bool bTopCaption,
                             sal_uInt16 nHSpace, sal_uInt16 nVSpace ) const
 {
-    // Wert fur RULES bestimmen
+    // determine value of RULES
     bool bRowsHaveBorder = false;
     bool bRowsHaveBorderOnly = true;
     SwWriteTableRow *pRow = m_aRows[0];
@@ -600,11 +599,11 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         pCol = pNextCol;
     }
 
-    // vorhergende Aufzaehlung etc. beenden
+    // close previous numbering, etc
     rWrt.ChangeParaToken( HtmlTokenId::NONE );
 
     if( rWrt.m_bLFPossible )
-        rWrt.OutNewLine();  // <TABLE> in neue Zeile
+        rWrt.OutNewLine();  // <TABLE> in new line
     OStringBuffer sOut;
     sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_table);
 
@@ -617,7 +616,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         rWrt.OutDirection( rWrt.m_nDirection );
     }
 
-    // ALIGN= ausgeben
+    // output ALIGN=
     if( text::HoriOrientation::RIGHT == eAlign )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).
@@ -634,7 +633,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             append("=\"").append(OOO_STRING_SVTOOLS_HTML_AL_left).append("\"");
     }
 
-    // WIDTH ausgeben: Stammt aus Layout oder ist berechnet
+    // output WIDTH: from layout or calculated
     if( m_nTabWidth )
     {
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_width).
@@ -652,7 +651,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         }
         else
         {
-            OSL_ENSURE( Application::GetDefaultDevice(), "kein Application-Window!?" );
+            OSL_ENSURE( Application::GetDefaultDevice(), "no Application-Window!?" );
             sOut.append("100%");
         }
         sOut.append("\"");
@@ -681,17 +680,17 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         }
     }
 
-    // CELLPADDING ausgeben: Stammt aus Layout oder ist berechnet
+    // output CELLPADDING: from layout or calculated
     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellpadding).
         append("=\"").append(static_cast<sal_Int32>(SwHTMLWriter::ToPixel(m_nCellPadding,false))).append("\"");
 
-    // CELLSPACING ausgeben: Stammt aus Layout oder ist berechnet
+    // output CELLSPACING: from layout or calculated
     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_cellspacing).
         append("=\"").append(static_cast<sal_Int32>(SwHTMLWriter::ToPixel(m_nCellSpacing,false))).append("\"");
 
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
-    // Hintergrund ausgeben
+    // output background
     if( pFrameFormat )
     {
         rWrt.OutBackground( pFrameFormat->GetAttrSet(), false );
@@ -703,12 +702,12 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     sOut.append('>');
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
-    rWrt.IncIndentLevel(); // Inhalte von Table einruecken
+    rWrt.IncIndentLevel(); // indent content of table
 
-    // Ueberschrift ausgeben
+    // output caption
     if( pCaption && !pCaption->isEmpty() )
     {
-        rWrt.OutNewLine(); // <CAPTION> in neue Zeile
+        rWrt.OutNewLine(); // <CAPTION> in new line
         OStringBuffer sOutStr(OOO_STRING_SVTOOLS_HTML_caption);
         sOutStr.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_align).append("=\"")
                .append(bTopCaption ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom)
@@ -720,22 +719,22 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
     const SwWriteTableCols::size_type nCols = m_aCols.size();
 
-    // <COLGRP>/<COL> ausgeben: Bei Export ueber Layout nur wenn beim
-    // Import welche da waren, sonst immer.
+    // output <COLGRP>/<COL>: If exporting via layout only when during import
+    // some were there, otherwise always.
     bool bColGroups = (bColsHaveBorder && !bColsHaveBorderOnly);
     if( m_bColTags )
     {
         if( bColGroups )
         {
-            rWrt.OutNewLine(); // <COLGRP> in neue Zeile
+            rWrt.OutNewLine(); // <COLGRP> in new line
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_colgroup );
 
-            rWrt.IncIndentLevel(); // Inhalt von <COLGRP> einruecken
+            rWrt.IncIndentLevel(); // indent content of <COLGRP>
         }
 
         for( SwWriteTableCols::size_type nCol=0; nCol<nCols; ++nCol )
         {
-            rWrt.OutNewLine(); // <COL> in neue Zeile
+            rWrt.OutNewLine(); // </COL> in new line
 
             const SwWriteTableCol *pColumn = m_aCols[nCol];
 
@@ -766,48 +765,48 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
             if( bColGroups && pColumn->bRightBorder && nCol<nCols-1 )
             {
-                rWrt.DecIndentLevel(); // Inhalt von <COLGRP> einruecken
-                rWrt.OutNewLine(); // </COLGRP> in neue Zeile
+                rWrt.DecIndentLevel(); // indent content of <COLGRP>
+                rWrt.OutNewLine(); // </COLGRP> in new line
                 HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_colgroup,
                                             false );
-                rWrt.OutNewLine(); // <COLGRP> in neue Zeile
+                rWrt.OutNewLine(); // <COLGRP> in new line
                 HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_colgroup );
-                rWrt.IncIndentLevel(); // Inhalt von <COLGRP> einruecken
+                rWrt.IncIndentLevel(); // indent content of <COLGRP>
             }
         }
         if( bColGroups )
         {
-            rWrt.DecIndentLevel(); // Inhalt von <COLGRP> einruecken
+            rWrt.DecIndentLevel(); // indent content of <COLGRP>
 
-            rWrt.OutNewLine(); // </COLGRP> in neue Zeile
+            rWrt.OutNewLine(); // </COLGRP> in new line
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_colgroup,
                                         false );
         }
     }
 
-    // die Lines als Tabellenzeilen rausschreiben
+    // output the lines as table lines
 
-    // <TBODY> ausgeben?
+    // Output <TBODY>?
     bool bTSections = (bRowsHaveBorder && !bRowsHaveBorderOnly);
     bool bTBody = bTSections;
 
-    // Wenn Sections ausgegeben werden muessen darf ein THEAD um die erste
-    // Zeile nur ausgegeben werden, wenn unter der Zeile eine Linie ist
+    // If sections must be outputted, then a THEAD around the first line only
+    // can be outputted if there is a line below the cell.
     if( bTHead &&
         (bTSections || bColGroups) &&
         m_nHeadEndRow<m_aRows.size()-1 && !m_aRows[m_nHeadEndRow]->bBottomBorder )
         bTHead = false;
 
-    // <TBODY> aus ausgeben, wenn <THEAD> ausgegeben wird.
+    // Output <TBODY> only if <THEAD> is outputted.
     bTSections |= bTHead;
 
     if( bTSections )
     {
-        rWrt.OutNewLine(); // <THEAD>/<TDATA> in neue Zeile
+        rWrt.OutNewLine(); // <THEAD>/<TDATA> in new line
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(),
                             bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody );
 
-        rWrt.IncIndentLevel(); // Inhalt von <THEAD>/<TDATA> einr.
+        rWrt.IncIndentLevel(); // indent content of <THEAD>/<TDATA>
     }
 
     for( SwWriteTableRows::size_type nRow = 0; nRow < m_aRows.size(); ++nRow )
@@ -830,33 +829,33 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
               (bTBody && pRow2->bBottomBorder) ) &&
             nRow < m_aRows.size()-1 )
         {
-            rWrt.DecIndentLevel(); // Inhalt von <THEAD>/<TDATA> einr.
-            rWrt.OutNewLine(); // </THEAD>/</TDATA> in neue Zeile
+            rWrt.DecIndentLevel(); // indent content of <THEAD>/<TDATA>
+            rWrt.OutNewLine(); // </THEAD>/</TDATA> in new line
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(),
                             bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody, false );
-            rWrt.OutNewLine(); // <THEAD>/<TDATA> in neue Zeile
+            rWrt.OutNewLine(); // <THEAD>/<TDATA> in new line
 
             if( bTHead && nRow==m_nHeadEndRow )
                 bTHead = false;
 
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(),
                             bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody );
-            rWrt.IncIndentLevel(); // Inhalt von <THEAD>/<TDATA> einr.
+            rWrt.IncIndentLevel(); // indent content of <THEAD>/<TDATA>
         }
     }
 
     if( bTSections )
     {
-        rWrt.DecIndentLevel(); // Inhalt von <THEAD>/<TDATA> einr.
+        rWrt.DecIndentLevel(); // indent content of <THEAD>/<TDATA>
 
-        rWrt.OutNewLine(); // </THEAD>/</TDATA> in neue Zeile
+        rWrt.OutNewLine(); // </THEAD>/</TDATA> in new line
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(),
                             bTHead ? OOO_STRING_SVTOOLS_HTML_thead : OOO_STRING_SVTOOLS_HTML_tbody, false );
     }
 
-    rWrt.DecIndentLevel(); // Inhalt von <TABLE> einr.
+    rWrt.DecIndentLevel(); // indent content of <TABLE>
 
-    rWrt.OutNewLine(); // </TABLE> in neue Zeile
+    rWrt.OutNewLine(); // </TABLE> in new line
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_table, false );
 
     rWrt.m_nDirection = nOldDirection;
@@ -872,9 +871,8 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     rHTMLWrt.m_bOutTable = true;
 
-    // die horizontale Ausrichtung des Rahmens hat (falls vorhanden)
-    // Prioritaet. NONE bedeutet, dass keine horizontale
-    // Ausrichtung geschrieben wird.
+    // The horizontal alignment of the frame (if exists) has priority.
+    // NONE means that no horizontal alignment was outputted.
     sal_Int16 eFlyHoriOri = text::HoriOrientation::NONE;
     css::text::WrapTextMode eSurround = css::text::WrapTextMode_NONE;
     sal_uInt8 nFlyPrcWidth = 0;
@@ -899,7 +897,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
         nFlyVSpace = (rULSpace.GetUpper() + rULSpace.GetLower()) / 2;
     }
 
-    // ggf. eine FORM oeffnen
+    // maybe open a FORM
     bool bPreserveForm = false;
     if( !rHTMLWrt.m_bPreserveForm )
     {
@@ -917,15 +915,14 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
 
     sal_Int16 eTabHoriOri = pFormat->GetHoriOrient().GetHoriOrient();
 
-    // text::HoriOrientation::NONE und text::HoriOrientation::FULL Tabellen benoetigen relative Breiten
+    // text::HoriOrientation::NONE and text::HoriOrientation::FULL tables need relative widths
     sal_uInt16 nNewDefListLvl = 0;
     bool bRelWidths = false;
     bool bCheckDefList = false;
     switch( eTabHoriOri )
     {
     case text::HoriOrientation::FULL:
-        // Tabellen mit automatischer Ausrichtung werden zu Tabellen
-        // mit 100%-Breite
+        // Tables with automatic alignment become tables with 100% width.
         bRelWidths = true;
         nWidth = 100;
         eTabHoriOri = text::HoriOrientation::LEFT;
@@ -935,11 +932,10 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
             const SvxLRSpaceItem& aLRItem = pFormat->GetLRSpace();
             if( aLRItem.GetRight() )
             {
-                // Die Tabellenbreite wird anhand des linken und rechten
-                // Abstandes bestimmt. Deshalb versuchen wir die
-                // tatsaechliche Breite der Tabelle zu bestimmen. Wenn
-                // das nicht geht, machen wir eine 100% breite Tabelle
-                // draus.
+                // The table width is defined on the basis of the left and
+                // right margin. Therefore we try to define the actual
+                // width of the table. If that's not possible we transform
+                // it to a table with width 100%.
                 nWidth = pFormat->FindLayoutRect(true).Width();
                 if( !nWidth )
                 {
@@ -950,15 +946,14 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
             }
             else if( nPrcWidth  )
             {
-                // Ohne rechten Rand bleibt die %-Breite erhalten
+                // Without a right border the %-width is maintained.
                 nWidth = nPrcWidth;
                 bRelWidths = true;
             }
             else
             {
-                // Ohne rechten Rand bleibt auch eine absolute Breite erhalten
-                // Wir versuchen aber trotzdem ueber das Layout die
-                // tatsachliche Breite zu ermitteln.
+                // Without a right margin also an absolute width is maintained.
+                // We still try to define the actual width via the layout.
                 long nRealWidth = pFormat->FindLayoutRect(true).Width();
                 if( nRealWidth )
                     nWidth = nRealWidth;
@@ -971,8 +966,8 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
         bCheckDefList = true;
         SAL_FALLTHROUGH;
     default:
-        // In allen anderen Faellen kann eine absolute oder relative
-        // Breite direkt uebernommen werden.
+        // In all other case it's possible to use directly an absolute
+        // or relative width.
         if( nPrcWidth )
         {
             bRelWidths = true;
@@ -985,7 +980,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     {
         OSL_ENSURE( !rHTMLWrt.GetNumInfo().GetNumRule() ||
                 rHTMLWrt.GetNextNumInfo(),
-                "NumInfo fuer naechsten Absatz fehlt!" );
+                "NumInfo for next paragraph is missing!" );
         const SvxLRSpaceItem& aLRItem = pFormat->GetLRSpace();
         if( aLRItem.GetLeft() > 0 && rHTMLWrt.m_nDefListMargin > 0 &&
             ( !rHTMLWrt.GetNumInfo().GetNumRule() ||
@@ -994,11 +989,10 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
                  rHTMLWrt.GetNumInfo().GetNumRule() !=
                     rHTMLWrt.GetNextNumInfo()->GetNumRule()) ) ) )
         {
-            // Wenn der Absatz vor der Tabelle nicht numeriert ist oder
-            // der Absatz nach der Tabelle mit einer anderen oder
-            // (gar keiner) Regel numeriert ist, koennen wir
-            // die Einrueckung ueber eine DL regeln. Sonst behalten wir
-            // die Einrueckung der Numerierung bei.
+            // If the paragraph before the table is not numbered or the
+            // paragraph after the table starts with a new numbering or with
+            // a different rule, we can maintain the indentation with a DL.
+            // Otherwise we keep the indentation of the numbering.
             nNewDefListLvl = static_cast< sal_uInt16 >(
                 (aLRItem.GetLeft() + (rHTMLWrt.m_nDefListMargin/2)) /
                 rHTMLWrt.m_nDefListMargin );
@@ -1015,16 +1009,15 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_dd );
     }
 
-    // eFlyHoriOri und eTabHoriOri besitzen nun nur noch die Werte
-    // LEFT/CENTER und RIGHT!
+    // eFlyHoriOri and eTabHoriOri now only contain the values of
+    // LEFT/CENTER and RIGHT!
     if( eFlyHoriOri!=text::HoriOrientation::NONE )
     {
         eTabHoriOri = eFlyHoriOri;
-        // MIB 4.7.97: Wenn die Tabelle eine relative Breite besitzt,
-        // dann richtet sich ihre Breite nach der des Rahmens, also
-        // exportieren wir dessen Breite. Bei fixer Breite ist die Breite
-        // der Tabelle massgeblich. Wer Tabellen mit relativer Breite <100%
-        // in Rahmen steckt, ist selber schuld wenn nix Gutes bei rauskommt.
+        // MIB 4.7.97: If the table has a relative width, then the width is
+        // adjusted to the width of the frame, therefore we export its width.
+        // If fixed width, the table width is relevant. Whoever puts tables with
+        // relative width <100% into frames is to blame when the result looks bad.
         if( bRelWidths )
         {
             nWidth = nFlyPrcWidth ? nFlyPrcWidth : nFlyWidth;
@@ -1036,14 +1029,14 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     switch( eTabHoriOri )
     {
     case text::HoriOrientation::LEFT:
-        // Wenn eine linksbuendigeTabelle keinen rechtsseiigen Durchlauf
-        // hat, brauchen wir auch kein ALIGN=LEFT in der Tabelle.
+        // If a left-aligned table has no right sided flow, then we don't need
+        // a ALIGN=LEFT in the table.
         if( eSurround==css::text::WrapTextMode_NONE || eSurround==css::text::WrapTextMode_LEFT )
             eTabHoriOri = text::HoriOrientation::NONE;
         break;
     case text::HoriOrientation::RIGHT:
-        // Aehnliches gilt fuer rechtsbuendigeTabelle, hier nehmen wir
-        // stattdessen ein <DIV ALIGN=RIGHT>.
+        // Something like that also applies to right-aligned tables,
+        // here we use a <DIV ALIGN=RIGHT> instead.
         if( eSurround==css::text::WrapTextMode_NONE || eSurround==css::text::WrapTextMode_RIGHT )
         {
             eDivHoriOri = text::HoriOrientation::RIGHT;
@@ -1051,8 +1044,8 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
         }
         break;
     case text::HoriOrientation::CENTER:
-        // ALIGN=CENTER versteht so gut wie keiner, deshalb verzichten wir
-        // daruf und nehmen ein <CENTER>.
+        // Almost nobody understands ALIGN=CENTER, therefore we abstain
+        // from it and use a <CENTER>.
         eDivHoriOri = text::HoriOrientation::CENTER;
         eTabHoriOri = text::HoriOrientation::NONE;
         break;
@@ -1068,7 +1061,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     if( text::HoriOrientation::NONE!=eDivHoriOri )
     {
         if( rHTMLWrt.m_bLFPossible )
-            rHTMLWrt.OutNewLine();  // <CENTER> in neuer Zeile
+            rHTMLWrt.OutNewLine();  // <CENTER> in new line
         if( text::HoriOrientation::CENTER==eDivHoriOri )
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_center );
         else
@@ -1078,11 +1071,11 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
                 .append(OOO_STRING_SVTOOLS_HTML_AL_right).append("\"");
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), sOut.getStr() );
         }
-        rHTMLWrt.IncIndentLevel();  // Inhalt von <CENTER> einruecken
+        rHTMLWrt.IncIndentLevel();  // indent content of <CENTER>
         rHTMLWrt.m_bLFPossible = true;
     }
 
-    // Wenn die Tabelle in keinem Rahmen ist kann man immer ein LF ausgeben.
+    // If the table isn't in a frame, then you always can output a LF.
     if( text::HoriOrientation::NONE==eTabHoriOri )
         rHTMLWrt.m_bLFPossible = true;
 
@@ -1112,21 +1105,21 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
                          nFlyHSpace, nFlyVSpace );
     }
 
-    // Wenn die Tabelle in keinem Rahmen war kann man immer ein LF ausgeben.
+    // If the table wasn't in a frame, then you always can output a LF.
     if( text::HoriOrientation::NONE==eTabHoriOri )
         rHTMLWrt.m_bLFPossible = true;
 
     if( text::HoriOrientation::NONE!=eDivHoriOri )
     {
-        rHTMLWrt.DecIndentLevel();  // Inhalt von <CENTER> einruecken
-        rHTMLWrt.OutNewLine();      // </CENTER> in neue Teile
+        rHTMLWrt.DecIndentLevel();  // indent content of <CENTER>
+        rHTMLWrt.OutNewLine();      // </CENTER> in new line
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(),
                                text::HoriOrientation::CENTER==eDivHoriOri ? OOO_STRING_SVTOOLS_HTML_center
                                                         : OOO_STRING_SVTOOLS_HTML_division, false );
         rHTMLWrt.m_bLFPossible = true;
     }
 
-    // Pam hinter die Tabelle verschieben
+    // move Pam behind the table
     rHTMLWrt.pCurPam->GetPoint()->nNode = *rNode.EndOfSectionNode();
 
     if( bPreserveForm )
@@ -1142,11 +1135,10 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
         rHTMLWrt.GetNextNumInfo()->GetNumRule() ==
             rHTMLWrt.GetNumInfo().GetNumRule() )
     {
-        // Wenn der Absatz hinter der Tabelle mit der gleichen Regel
-        // numeriert ist wie der Absatz vor der Tabelle, dann steht in
-        // der NumInfo des naechsten Absatzes noch die Ebene des Absatzes
-        // vor der Tabelle. Es muss deshalb die NumInfo noch einmal geholt
-        // werden um ggf. die Num-Liste noch zu beenden.
+        // If the paragraph after the table is numbered with the same rule as the
+        // one before, then the NumInfo of the next paragraph holds the level of
+        // paragraph before the table. Therefore NumInfo must be fetched again
+        // to maybe close the Num list.
         rHTMLWrt.ClearNextNumInfo();
         rHTMLWrt.FillNextNumInfo();
         OutHTML_NumBulListEnd( rHTMLWrt, *rHTMLWrt.GetNextNumInfo() );
