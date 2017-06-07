@@ -138,6 +138,7 @@ public:
     mutable uno::Reference< sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
     uno::Sequence< sheet::FormulaToken >                    m_aTokenList;
     ::std::unique_ptr<FormulaTokenArray>                    m_pTokenArray;
+    ::std::unique_ptr<FormulaTokenArrayPlainIterator>       m_pTokenArrayIterator;
     mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aSpecialOpCodes;
     mutable const sheet::FormulaOpCodeMapEntry*             m_pSpecialOpCodesEnd;
     mutable uno::Sequence< sheet::FormulaToken >            m_aSeparatorsOpCodes;
@@ -676,7 +677,7 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,Formu
                     }
                 }
 
-                MakeTree(_pTree,pEntry,m_pTokenArray->PrevRPN(),nParas);
+                MakeTree(_pTree,pEntry,m_pTokenArrayIterator->PrevRPN(),nParas);
 
                 if (bCalcSubformula)
                 {
@@ -702,8 +703,8 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,Formu
                 }
 
                 --Count;
-                m_pTokenArray->NextRPN();
-                MakeTree(_pTree,pParent,m_pTokenArray->PrevRPN(),Count);
+                m_pTokenArrayIterator->NextRPN();
+                MakeTree(_pTree,pParent,m_pTokenArrayIterator->PrevRPN(),Count);
             }
             else
             {
@@ -732,7 +733,7 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,Formu
                     _pTree->InsertEntry(aResult,pParent,STRUCT_END,0,_pToken);
                 }
                 --Count;
-                MakeTree(_pTree,pParent,m_pTokenArray->PrevRPN(),Count);
+                MakeTree(_pTree,pParent,m_pTokenArrayIterator->PrevRPN(),Count);
             }
         }
         catch(const uno::Exception&)
@@ -745,7 +746,7 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,Formu
 void FormulaDlg_Impl::fillTree(StructPage* _pTree)
 {
     InitFormulaOpCodeMapper();
-    FormulaToken* pToken = m_pTokenArray->LastRPN();
+    FormulaToken* pToken = m_pTokenArrayIterator->LastRPN();
 
     if( pToken != nullptr)
     {
@@ -768,6 +769,7 @@ void FormulaDlg_Impl::UpdateTokenArray( const OUString& rStrExp)
     }
     InitFormulaOpCodeMapper();
     m_pTokenArray = m_pHelper->convertToTokenArray(m_aTokenList);
+    m_pTokenArrayIterator.reset(new FormulaTokenArrayPlainIterator(*m_pTokenArray));
     const sal_Int32 nLen = static_cast<sal_Int32>(m_pTokenArray->GetLen());
     FormulaToken** pTokens = m_pTokenArray->GetArray();
     if ( pTokens && nLen == m_aTokenList.getLength() )
