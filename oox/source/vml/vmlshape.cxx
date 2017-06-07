@@ -296,7 +296,7 @@ OUString ShapeBase::getShapeName() const
     {
         sal_Int32 nShapeIdx = mrDrawing.getLocalShapeIndex( getShapeId() );
         if( nShapeIdx > 0 )
-            return OUStringBuffer( aBaseName ).append( ' ' ).append( nShapeIdx ).makeStringAndClear();
+            return aBaseName + OUStringLiteral1(' ') + OUString::number( nShapeIdx );
     }
 
     return OUString();

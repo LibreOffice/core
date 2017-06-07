@@ -2373,7 +2373,7 @@ void XmlStreamObject::implDumpText( TextInputStream& rTextStrm )
         {
             while( (nPos < aElem.getLength()) && (aElem[ nPos ] >= 32) ) ++nPos;
             if( nPos < aElem.getLength() )
-                aElem = OUStringBuffer( aElem.copy( 0, nPos ) ).append( ' ' ).append( aElem.copy( nPos ).trim() ).makeStringAndClear();
+                aElem = aElem.copy( 0, nPos ) + OUStringLiteral1(' ') + aElem.copy( nPos ).trim();
             ++nPos;
         }
 

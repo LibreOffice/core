@@ -1664,11 +1664,9 @@ void SwTOXBaseSection::UpdatePageNum_( SwTextNode* pNd,
     // collect starts end ends of main entry character style
     std::unique_ptr< std::vector<sal_uInt16> > xCharStyleIdx(pMainEntryNums ? new std::vector<sal_uInt16> : nullptr);
 
-    OUString sSrchStr = OUStringBuffer().append(C_NUM_REPL).
-        append(S_PAGE_DELI).append(C_NUM_REPL).makeStringAndClear();
+    OUString sSrchStr = OUStringLiteral1(C_NUM_REPL) + S_PAGE_DELI + OUStringLiteral1(C_NUM_REPL);
     sal_Int32 nStartPos = pNd->GetText().indexOf(sSrchStr);
-    sSrchStr = OUStringBuffer().append(C_NUM_REPL).
-        append(C_END_PAGE_NUM).makeStringAndClear();
+    sSrchStr = OUStringLiteral1(C_NUM_REPL) + OUStringLiteral1(C_END_PAGE_NUM);
     sal_Int32 nEndPos = pNd->GetText().indexOf(sSrchStr);
 
     if (-1 == nEndPos || rNums.empty())

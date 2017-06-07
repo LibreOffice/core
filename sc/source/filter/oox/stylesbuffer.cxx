@@ -2591,7 +2591,7 @@ void CellStyleBuffer::finalizeImport()
         OUString aUnusedName;
         do
         {
-            aUnusedName = OUStringBuffer( aStyleName ).append( ' ' ).append( ++nIndex ).makeStringAndClear();
+            aUnusedName = aStyleName + OUStringLiteral1(' ') + OUString::number( ++nIndex );
         }
         while( aCellStyles.find( aUnusedName ) != aCellStyles.end() );
         aCellStyles[ aUnusedName ] = *aIt;
@@ -2877,7 +2877,7 @@ OUString StylesBuffer::createDxfStyle( sal_Int32 nDxfId ) const
 
     if (Dxf* pDxf = maDxfs.get(nDxfId).get())
     {
-        rStyleName = OUStringBuffer("ConditionalStyle_").append(nDxfId + 1).makeStringAndClear();
+        rStyleName = "ConditionalStyle_" + OUString::number(nDxfId + 1);
 
         // Create a cell style. This may overwrite an existing style if
         // one with the same name exists.

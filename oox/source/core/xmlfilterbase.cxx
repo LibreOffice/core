@@ -458,7 +458,7 @@ namespace {
 
 OUString lclAddRelation( const Reference< XRelationshipAccess >& rRelations, sal_Int32 nId, const OUString& rType, const OUString& rTarget, bool bExternal )
 {
-    OUString sId = OUStringBuffer().append( "rId" ).append( nId ).makeStringAndClear();
+    OUString sId = "rId" + OUString::number( nId );
 
     Sequence< StringPair > aEntry( bExternal ? 3 : 2 );
     aEntry[0].First = "Type";

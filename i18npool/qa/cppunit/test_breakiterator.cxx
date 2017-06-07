@@ -101,7 +101,7 @@ void TestBreakIterator::testLineBreaking()
     {
         const sal_Unicode HEBREW1[] = { 0x05DE, 0x05D9, 0x05DC, 0x05D9, 0x5DD };
         OUString aWord(HEBREW1, SAL_N_ELEMENTS(HEBREW1));
-        OUString aTest(OUStringBuffer(aWord).append(' ').append(aWord).makeStringAndClear());
+        OUString aTest(aWord + " " + aWord);
 
         aLocale.Language = "he";
         aLocale.Country = "IL";

@@ -327,7 +327,7 @@ static PathStatus getDerivedPath(
     {
         OSL_PRECOND(!_aBaseURL.endsWith(OUStringLiteral1(cURLSeparator)), "Unexpected: base URL ends in slash");
 
-        sDerivedURL = OUStringBuffer(_aBaseURL).append(cURLSeparator).append(_sRelativeURL).makeStringAndClear();
+        sDerivedURL = _aBaseURL + OUStringLiteral1(cURLSeparator) + _sRelativeURL;
 
         // a derived (nested) URL can only exist or have a lesser status, if the parent exists
         if (aStatus == Bootstrap::PATH_EXISTS)

@@ -297,8 +297,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             aResName = OutputFile( *aInputList[ 0 ], "res" );
         if( ! bSetSrs )
         {
-            aSrsName = OStringBuffer("-fp=").append(OutputFile(*aInputList[0], "srs")).
-                makeStringAndClear();
+            aSrsName = OString("-fp=") + OutputFile(*aInputList[0], "srs");
         }
     };
 

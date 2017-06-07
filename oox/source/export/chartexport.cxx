@@ -786,7 +786,7 @@ void ChartExport::exportExternalData( const Reference< css::chart::XChartDocumen
             if( nSepPos > 0)
             {
                 relationPath = relationPath.copy( nSepPos,  ::std::max< sal_Int32 >( externalDataPath.getLength(), 0 ) -  nSepPos );
-                relationPath = OUStringBuffer( ".." ).append( relationPath ).makeStringAndClear();
+                relationPath = ".." + relationPath;
             }
         }
         FSHelperPtr pFS = GetFS();

@@ -93,7 +93,7 @@ OUString lclGetBaseName( sal_Unicode cBuiltinId )
 
 OUString lclGetPrefixedName( sal_Unicode cBuiltinId )
 {
-    return OUStringBuffer( spcOoxPrefix ).append( lclGetBaseName( cBuiltinId ) ).makeStringAndClear();
+    return spcOoxPrefix + lclGetBaseName( cBuiltinId );
 }
 
 /** returns the built-in name identifier from a prefixed built-in name, e.g. '_xlnm.Print_Area'. */

@@ -873,7 +873,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
 
 OString VMLExport::ShapeIdString( sal_uInt32 nId )
 {
-    return OStringBuffer( 20 ).append( "shape_" ).append( sal_Int64( nId ) ).makeStringAndClear();
+    return "shape_" + OString::number( nId );
 }
 
 void VMLExport::AddFlipXY( )

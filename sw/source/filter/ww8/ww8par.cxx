@@ -4069,7 +4069,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
 
             if(m_pAktItemSet && !pFormat)
             {
-                OUString sPrefix(OUStringBuffer("WW8Dropcap").append(m_nDropCap++).makeStringAndClear());
+                OUString sPrefix = "WW8Dropcap" + OUString::number(m_nDropCap++);
                 pNewSwCharFormat = m_rDoc.MakeCharFormat(sPrefix, m_rDoc.GetDfltCharFormat());
                  m_pAktItemSet->ClearItem(RES_CHRATR_ESCAPEMENT);
                 pNewSwCharFormat->SetFormatAttr( *m_pAktItemSet );
