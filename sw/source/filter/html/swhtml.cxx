@@ -3235,8 +3235,7 @@ void SwHTMLParser::SplitAttrTab( HTMLAttrTable& rNewAttrTab,
     const SwNodeIndex& nSttIdx = m_pPam->GetPoint()->nNode;
     SwNodeIndex nEndIdx( nSttIdx );
 
-    // alle noch offenen Attribute beenden und hinter der Tabelle
-    // neu aufspannen
+    // close all still open attributes and re-open them after the table
     HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(&m_aAttrTab);
     HTMLAttr** pSaveAttributes = reinterpret_cast<HTMLAttr**>(&rNewAttrTab);
     bool bSetAttr = true;
@@ -3254,8 +3253,7 @@ void SwHTMLParser::SplitAttrTab( HTMLAttrTable& rNewAttrTab,
         }
         SwContentNode* pCNd = SwNodes::GoPrevious(&nEndIdx);
 
-        // keine Attribute setzen, wenn der PaM aus dem Content-Bereich
-        // herausgeschoben wurde.
+        // Don't set attributes, when the PaM was moved outside of the content area.
         bSetAttr = pCNd && nTmpIdx < nEndIdx.GetIndex();
 
         nEndCnt = (bSetAttr ? pCNd->Len() : 0);
@@ -3274,11 +3272,10 @@ void SwHTMLParser::SplitAttrTab( HTMLAttrTable& rNewAttrTab,
                   (pAttr->GetSttPara() == nEndIdx &&
                    pAttr->GetSttCnt() != nEndCnt) ) )
             {
-                // das Attribut muss vor der Liste gesetzt werden. Da wir
-                // das Original noch brauchen, weil Zeiger auf das Attribut
-                // noch in den Kontexten existieren, muessen wir es clonen.
-                // Die Next-Liste geht dabei verloren, aber die
-                // Previous-Liste bleibt erhalten
+                // The attribute must be set before the list. We need the
+                // original and therefore we clone it, because pointer to the
+                // attribute exist in the other contexts. The Next-List is lost
+                // in doing so, but the Previous-List is preserved.
                 HTMLAttr *pSetAttr = pAttr->Clone( nEndIdx, nEndCnt );
 
                 if( pNext )
@@ -3293,9 +3290,8 @@ void SwHTMLParser::SplitAttrTab( HTMLAttrTable& rNewAttrTab,
             }
             else if( pPrev )
             {
-                // Wenn das Attribut nicht gesetzt vor der Tabelle
-                // gesetzt werden muss, muessen der Previous-Attribute
-                // trotzdem gesetzt werden.
+                // If the attribute doesn't need to be set before the table, then
+                // the previous attributes must still be set.
                 if( pNext )
                     pNext->InsertPrev( pPrev );
                 else
@@ -3307,8 +3303,7 @@ void SwHTMLParser::SplitAttrTab( HTMLAttrTable& rNewAttrTab,
                 }
             }
 
-            // den Start des Attributs neu setzen und die Verkettungen
-            // aufbrechen
+            // set the start of the attribute anew and break link
             pAttr->Reset(nSttIdx, nSttCnt, pSaveAttributes);
 
             if (*pSaveAttributes)
@@ -3342,7 +3337,7 @@ void SwHTMLParser::RestoreAttrTab( HTMLAttrTable& rNewAttrTab )
 
     for (auto nCnt = sizeof(HTMLAttrTable) / sizeof(HTMLAttr*); nCnt--; ++pHTMLAttributes, ++pSaveAttributes)
     {
-        OSL_ENSURE(!*pHTMLAttributes, "Die Attribut-Tabelle ist nicht leer!");
+        OSL_ENSURE(!*pHTMLAttributes, "The attribute table is not empty!");
 
         *pHTMLAttributes = *pSaveAttributes;
 
@@ -3350,7 +3345,7 @@ void SwHTMLParser::RestoreAttrTab( HTMLAttrTable& rNewAttrTab )
         while (pAttr)
         {
             OSL_ENSURE( !pAttr->GetPrev() || !pAttr->GetPrev()->ppHead,
-                    "Previous-Attribut hat noch einen Header" );
+                    "Previous attribute has still a header" );
             pAttr->SetHead(pHTMLAttributes);
             pAttr = pAttr->GetNext();
         }
@@ -3410,10 +3405,10 @@ void SwHTMLParser::NewStdAttr( HtmlTokenId nToken )
         }
     }
 
-    // einen neuen Kontext anlegen
+    // create a new context
     HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
 
-    // Styles parsen
+    // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
@@ -3428,7 +3423,7 @@ void SwHTMLParser::NewStdAttr( HtmlTokenId nToken )
         }
     }
 
-    // den Kontext merken
+    // save the context
     PushContext( pCntxt );
 }
 
@@ -3464,10 +3459,10 @@ void SwHTMLParser::NewStdAttr( HtmlTokenId nToken,
         }
     }
 
-    // einen neuen Kontext anlegen
+    // create a new context
     HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
 
-    // Styles parsen
+    // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
@@ -3499,17 +3494,17 @@ void SwHTMLParser::NewStdAttr( HtmlTokenId nToken,
         }
     }
 
-    // den Kontext merken
+    // save the context
     PushContext( pCntxt );
 }
 
 void SwHTMLParser::EndTag( HtmlTokenId nToken )
 {
-    // den Kontext holen
+    // fetch context
     HTMLAttrContext *pCntxt = PopContext( getOnToken(nToken) );
     if( pCntxt )
     {
-        // und ggf. die Attribute beenden
+        // and maybe end the attributes
         EndContext( pCntxt );
         delete pCntxt;
     }
@@ -3554,10 +3549,10 @@ void SwHTMLParser::NewBasefontAttr()
     if( nSize > 7 )
         nSize = 7;
 
-    // einen neuen Kontext anlegen
+    // create a new context
     HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::BASEFONT_ON );
 
-    // Styles parsen
+    // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
@@ -3589,10 +3584,10 @@ void SwHTMLParser::NewBasefontAttr()
         InsertAttr( &m_aAttrTab.pFontHeightCTL, aFontHeightCTL, pCntxt );
     }
 
-    // den Kontext merken
+    // save the context
     PushContext( pCntxt );
 
-    // die Font-Size merken
+    // save the font size
     m_aBaseFontStack.push_back( nSize );
 }
 
@@ -3600,7 +3595,7 @@ void SwHTMLParser::EndBasefontAttr()
 {
     EndTag( HtmlTokenId::BASEFONT_ON );
 
-    // Stack-Unterlauf in Tabellen vermeiden
+    // avoid stack underflow in table
     if( m_aBaseFontStack.size() > m_nBaseFontStMin )
         m_aBaseFontStack.erase( m_aBaseFontStack.begin() + m_aBaseFontStack.size() - 1 );
 }
@@ -3758,10 +3753,10 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
         }
     }
 
-    // einen neuen Kontext anlegen
+    // create a new context
     HTMLAttrContext *pCntxt = new HTMLAttrContext(nToken );
 
-    // Styles parsen
+    // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
@@ -3870,7 +3865,7 @@ void SwHTMLParser::NewPara()
         }
     }
 
-    // einen neuen Kontext anlegen
+    // create a new context
     HTMLAttrContext *pCntxt =
         !aClass.isEmpty() ? new HTMLAttrContext( HtmlTokenId::PARABREAK_ON,
                                              RES_POOLCOLL_TEXT, aClass )
@@ -4296,7 +4291,7 @@ void SwHTMLParser::NewDefList()
 
     pCntxt->SetMargins( nLeft, nRight, nIndent );
 
-    // Styles parsen
+    // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
@@ -4754,7 +4749,7 @@ void SwHTMLParser::NewCharFormat( HtmlTokenId nToken )
         }
     }
 
-    // einen neuen Kontext anlegen
+    // create a new context
     HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken );
 
     // die Vorlage setzen und im Kontext merken
@@ -5123,7 +5118,7 @@ void SwHTMLParser::InsertLineBreak()
         } // kein Text-Node
     } // kein CLEAR
 
-    // Styles parsen
+    // parse styles
     SvxFormatBreakItem aBreakItem( SvxBreak::NONE, RES_BREAK );
     bool bBreakItem = false;
     if( HasStyleOptions( aStyle, aId, aClass ) )
