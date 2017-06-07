@@ -2126,7 +2126,8 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
             // store external cell contents in CRN records
             if( mxData->mpScBasePos )
             {
-                for( FormulaToken* pScToken = xArray->First(); pScToken; pScToken = xArray->Next() )
+                FormulaTokenArrayPlainIterator aIter(*xArray);
+                for( FormulaToken* pScToken = aIter.First(); pScToken; pScToken = aIter.Next() )
                 {
                     if( pScToken->IsExternalRef() )
                     {
