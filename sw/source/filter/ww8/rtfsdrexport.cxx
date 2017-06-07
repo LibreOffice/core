@@ -20,14 +20,19 @@
 #include "rtfsdrexport.hxx"
 #include "rtfattributeoutput.hxx"
 #include <svtools/rtfkeywd.hxx>
+#include <svtools/unitconv.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/editids.hrc>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/unoapi.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <textboxhelper.hxx>
 #include <dcontact.hxx>
 #include <algorithm>
+#include <filter/msfilter/rtfutil.hxx>
 
 using namespace css;
 
@@ -554,9 +559,39 @@ sal_Int32 RtfSdrExport::StartShape()
 
         if (pParaObj)
         {
-            const EditTextObject& rEditObj = pParaObj->GetTextObject();
-            lcl_AppendSP(m_rAttrOutput.RunText(), "gtextUNICODE",
-                         msfilter::rtfutil::OutString(rEditObj.GetText(0), m_rExport.m_eCurrentEncoding));
+            // this is reached only in case some text is attached to the shape
+            // Watermark or TextBox?
+            if (pTextObj->TakeObjNameSingul().match("Text Frame"))
+                WriteOutliner(*pParaObj, TXT_HFTXTBOX);
+            else
+            {
+                const EditTextObject& rEditObj = pParaObj->GetTextObject();
+                const SfxItemSet& rItemSet = rEditObj.GetParaAttribs(0);
+
+                lcl_AppendSP(m_rAttrOutput.RunText(), "gtextUNICODE",
+                             msfilter::rtfutil::OutString(rEditObj.GetText(0), m_rExport.m_eCurrentEncoding));
+
+                const SvxFontItem* pFontFamily = static_cast<const SvxFontItem*>(rItemSet.GetItem(SID_ATTR_CHAR_FONT));
+                if (pFontFamily)
+                {
+                    lcl_AppendSP(m_rAttrOutput.RunText(), "gtextFont",
+                                 msfilter::rtfutil::OutString(pFontFamily->GetFamilyName(), m_rExport.m_eCurrentEncoding));
+                }
+
+                const SvxFontHeightItem* pFontHeight = static_cast<const SvxFontHeightItem*>(rItemSet.GetItem(SID_ATTR_CHAR_FONTHEIGHT));
+                if (pFontHeight)
+                {
+                    long nFontHeight = TransformMetric(pFontHeight->GetHeight(), FUNIT_TWIP, FUNIT_POINT);
+                    lcl_AppendSP(m_rAttrOutput.RunText(), "gtextSize",
+                                 msfilter::rtfutil::OutString(OUString::number(nFontHeight * RTF_MULTIPLIER), m_rExport.m_eCurrentEncoding));
+                }
+
+                // RTF angle: 0-360 * 2^16  clockwise
+                // LO  angle: 0-360 * 100   counter-clockwise
+                sal_Int32 nRotation = -1 * pTextObj->GetGeoStat().nRotationAngle * RTF_MULTIPLIER / 100;
+                lcl_AppendSP(m_rAttrOutput.RunText(), "rotation",
+                             msfilter::rtfutil::OutString(OUString::number(nRotation), m_rExport.m_eCurrentEncoding));
+            }
         }
     }
 
