@@ -119,7 +119,7 @@ OUString VbaControlNamesSet::generateDummyName()
     OUString aCtrlName;
     do
     {
-        aCtrlName = OUStringBuffer( maDummyBaseName ).append( ++mnIndex ).makeStringAndClear();
+        aCtrlName = maDummyBaseName + OUString::number( ++mnIndex );
     }
     while( maCtrlNames.count( aCtrlName ) > 0 );
     maCtrlNames.insert( aCtrlName );

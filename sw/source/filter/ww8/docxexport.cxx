@@ -708,26 +708,26 @@ void DocxExport::WriteHeaderFooter( const SwFormat& rFormat, bool bHeader, const
     ::sax_fastparser::FSHelperPtr pFS;
     if ( bHeader )
     {
-        OUString aName( OUStringBuffer().append("header").append( ++m_nHeaders ).append(".xml").makeStringAndClear() );
+        OUString aName( "header" + OUString::number( ++m_nHeaders ) + ".xml" );
 
         aRelId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
                 oox::getRelationship(Relationship::HEADER),
                 aName );
 
-        pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().append("word/").append( aName ).makeStringAndClear(),
+        pFS = m_pFilter->openFragmentStreamWithSerializer( "word/" + aName,
                     "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml" );
 
         pFS->startElementNS( XML_w, XML_hdr, MainXmlNamespaces());
     }
     else
     {
-        OUString aName( OUStringBuffer().append("footer").append( ++m_nFooters ).append(".xml").makeStringAndClear() );
+        OUString aName( "footer" + OUString::number( ++m_nFooters ) + ".xml" );
 
         aRelId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
                 oox::getRelationship(Relationship::FOOTER),
                 aName );
 
-        pFS = m_pFilter->openFragmentStreamWithSerializer( OUStringBuffer().append("word/").append( aName ).makeStringAndClear(),
+        pFS = m_pFilter->openFragmentStreamWithSerializer( "word/" + aName,
                     "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml" );
 
         pFS->startElementNS( XML_w, XML_ftr, MainXmlNamespaces());

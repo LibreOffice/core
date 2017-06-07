@@ -431,7 +431,7 @@ void FieldParamExporter::Export()
         {
             sal_Int32 nValue = 0;
             aValue >>= nValue;
-            ExportParameter(rParameter, OUStringBuffer().append(nValue).makeStringAndClear());
+            ExportParameter(rParameter, OUString::number(nValue));
         }
     }
 }

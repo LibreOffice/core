@@ -105,7 +105,7 @@ void ExcelVbaProject::prepareImport()
             OUString aCodeName;
             do
             {
-                aCodeName = OUStringBuffer( aIt->maPrefix ).append( nCounter++ ).makeStringAndClear();
+                aCodeName = aIt->maPrefix + OUString::number( nCounter++ );
             }
             while( aUsedCodeNames.count( aCodeName ) > 0 );
             aUsedCodeNames.insert( aCodeName );
