@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_48dca7e4",
+        "filename": "sc/source/ui/app/transobj.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-06-07T12:33:35Z",
+      "side": 1,
+      "message": "Just a nitpick: please avoid overly long lines with more than 120 characters to keep the code readable. No need to change this again for this change, I\u0027ll do in a follow-up commit.",
+      "revId": "1884cb293889d7986dd00fb84cf9f26180f2e76d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
