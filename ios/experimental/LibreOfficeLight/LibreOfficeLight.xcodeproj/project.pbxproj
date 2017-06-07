@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -300,7 +300,7 @@
 				};
 			};
 			buildConfigurationList = 397E08F51E597BD8001374E0 /* Build configuration list for PBXProject "LibreOfficeLight" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -596,6 +596,16 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LibreOfficeLight/LibreOfficeLight-Prefix.pch";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				"HEADER_SEARCH_PATHS[arch=*]" = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(LO_BUILDDIR)/config_host",
+					"$(LO_SRCDIR)/include",
+					"$(LO_WORKDIR)/UnoApiHeadersTarget/udkapi/comprehensive",
+					"$(LO_WORKDIR)/UnoApiHeadersTarget/offapi/comprehensive",
+					"$(LO_WORKDIR)/UnpackedTarball/icu/source/common",
+					"$(LO_WORKDIR)/ios/generated",
+				);
 				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
