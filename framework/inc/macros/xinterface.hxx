@@ -20,12 +20,9 @@
 #ifndef INCLUDED_FRAMEWORK_INC_MACROS_XINTERFACE_HXX
 #define INCLUDED_FRAMEWORK_INC_MACROS_XINTERFACE_HXX
 
-#include <com/sun/star/uno/RuntimeException.hpp>
-
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <rtl/ustring.hxx>
 
 namespace framework{
 
@@ -85,27 +82,13 @@ ________________________________________________________________________________
 //  private
 //  help macros to replace INTERFACES in queryInterface() [see before]
 
-/*
-#ifdef ENABLE_SERVICEDEBUG
-    #define PRIVATE_DEFINE_INTERFACE_1( INTERFACE1 )     \
-        static_cast< XSPECIALDEBUGINTERFACE##* >( this ), \
-        INTERFACE1
-#else
-*/
-    #define PRIVATE_DEFINE_INTERFACE_1( INTERFACE1 )                                                                                                                                                    \
-        INTERFACE1
-//#endif // #ifdef ENABLE_SERVICEDEBUG
-
-#define PRIVATE_DEFINE_INTERFACE_6( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6 )                                                                                            \
-    PRIVATE_DEFINE_INTERFACE_1( INTERFACE1 ),                                                                                                                                                           \
+#define PRIVATE_DEFINE_INTERFACE_11( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7, INTERFACE8, INTERFACE9, INTERFACE10, INTERFACE11 )                             \
+    INTERFACE1, \
     INTERFACE2, \
     INTERFACE3, \
     INTERFACE4, \
     INTERFACE5, \
-    INTERFACE6
-
-#define PRIVATE_DEFINE_INTERFACE_11( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7, INTERFACE8, INTERFACE9, INTERFACE10, INTERFACE11 )                             \
-    PRIVATE_DEFINE_INTERFACE_6( INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6 ),                                                                                               \
+    INTERFACE6, \
     INTERFACE7, \
     INTERFACE8, \
     INTERFACE9, \
@@ -135,19 +118,6 @@ ________________________________________________________________________________
 //  public
 //  implementation of XInterface
 
-//  implementation of XInterface with 6 additional interfaces for queryInterface()
-#define DEFINE_XINTERFACE_6( CLASS, BASECLASS, INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6 ) \
-    PRIVATE_DEFINE_XINTERFACE   (   CLASS,                                                                          \
-                                    BASECLASS,                                                                      \
-                                    ( aType, PRIVATE_DEFINE_INTERFACE_6 (   INTERFACE1  ,                           \
-                                                                            INTERFACE2  ,                           \
-                                                                            INTERFACE3  ,                           \
-                                                                            INTERFACE4  ,                           \
-                                                                            INTERFACE5  ,                           \
-                                                                            INTERFACE6                              \
-                                                                        )                                           \
-                                    )                                                                               \
-                                )
 
 //  implementation of XInterface with 11 additional interfaces for queryInterface()
 #define DEFINE_XINTERFACE_11( CLASS, BASECLASS, INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7, INTERFACE8, INTERFACE9, INTERFACE10, INTERFACE11 )  \
