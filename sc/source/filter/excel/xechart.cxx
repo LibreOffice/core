@@ -113,6 +113,7 @@ using ::com::sun::star::chart2::data::XDataSource;
 using ::com::sun::star::chart2::data::XLabeledDataSequence;
 
 using ::formula::FormulaToken;
+using ::formula::FormulaTokenArrayPlainIterator;
 
 namespace cssc = ::com::sun::star::chart;
 namespace cssc2 = ::com::sun::star::chart2;
@@ -904,8 +905,8 @@ sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > c
 
     ScTokenArray aArray;
     sal_uInt32 nValueCount = 0;
-    pArray->Reset();
-    for( const FormulaToken* pToken = pArray->First(); pToken; pToken = pArray->Next() )
+    FormulaTokenArrayPlainIterator aIter(*pArray);
+    for( const FormulaToken* pToken = aIter.First(); pToken; pToken = aIter.Next() )
     {
         switch( pToken->GetType() )
         {
