@@ -202,9 +202,9 @@ bool hasRefsToSrcDoc(ScRangeData& rData, sal_uInt16 nFileId)
     if (!pArray)
         return false;
 
-    pArray->Reset();
-    formula::FormulaToken* p = pArray->GetNextReference();
-    for (; p; p = pArray->GetNextReference())
+    formula::FormulaTokenArrayPlainIterator aIter(*pArray);
+    formula::FormulaToken* p = aIter.GetNextReference();
+    for (; p; p = aIter.GetNextReference())
     {
         if (!p->IsExternalRef())
             continue;
@@ -2323,7 +2323,8 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
     ScExternalRefCache::TokenArrayRef pNew(new ScTokenArray);
 
     ScTokenArray aCode(*pRangeData->GetCode());
-    for (const FormulaToken* pToken = aCode.First(); pToken; pToken = aCode.Next())
+    FormulaTokenArrayPlainIterator aIter(aCode);
+    for (const FormulaToken* pToken = aIter.First(); pToken; pToken = aIter.Next())
     {
         bool bTokenAdded = false;
         switch (pToken->GetType())
