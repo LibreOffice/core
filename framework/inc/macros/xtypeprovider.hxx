@@ -21,13 +21,11 @@
 #define INCLUDED_FRAMEWORK_INC_MACROS_XTYPEPROVIDER_HXX
 
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/ustring.hxx>
 
 namespace framework{
 
@@ -59,22 +57,16 @@ ________________________________________________________________________________
 //  private
 //  help macros to replace TYPES in getTypes() [see before]
 
-#define PRIVATE_DEFINE_TYPE_6( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6 )                                                                       \
+#define PRIVATE_DEFINE_TYPE_11( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11 )                                 \
     cppu::UnoType<TYPE1>::get(), \
     cppu::UnoType<TYPE2>::get(), \
     cppu::UnoType<TYPE3>::get(), \
     cppu::UnoType<TYPE4>::get(), \
     cppu::UnoType<TYPE5>::get(), \
-    cppu::UnoType<TYPE6>::get()
-
-#define PRIVATE_DEFINE_TYPE_9( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9 )                                                  \
-    PRIVATE_DEFINE_TYPE_6( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6 ),                                                                          \
+    cppu::UnoType<TYPE6>::get(), \
     cppu::UnoType<TYPE7>::get(), \
     cppu::UnoType<TYPE8>::get(), \
-    cppu::UnoType<TYPE9>::get()
-
-#define PRIVATE_DEFINE_TYPE_11( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11 )                                 \
-    PRIVATE_DEFINE_TYPE_9( TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9 ),                                                     \
+    cppu::UnoType<TYPE9>::get(), \
     cppu::UnoType<TYPE10>::get(), \
     cppu::UnoType<TYPE11>::get()
 
@@ -121,18 +113,6 @@ ________________________________________________________________________________
 //  implementation of XTypeProvider without additional interface for getTypes()
 //  XTypeProvider is used as the only one interface automatically.
 
-
-//  implementation of XTypeProvider with 6 additional interfaces for getTypes()
-#define DEFINE_XTYPEPROVIDER_6( CLASS, TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6 )                                   \
-    PRIVATE_DEFINE_XTYPEPROVIDER    (   CLASS,                                                                      \
-                                        (PRIVATE_DEFINE_TYPE_6  (   TYPE1   ,                                       \
-                                                                    TYPE2   ,                                       \
-                                                                    TYPE3   ,                                       \
-                                                                    TYPE4   ,                                       \
-                                                                    TYPE5   ,                                       \
-                                                                    TYPE6                                           \
-                                                                ))                                                  \
-                                    )
 
 //  implementation of XTypeProvider with 11 additional interfaces for getTypes()
 #define DEFINE_XTYPEPROVIDER_11( CLASS, TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11 ) \
