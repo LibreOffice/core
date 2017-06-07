@@ -384,6 +384,17 @@ ScVbaInterior::setPatternColorIndex( const uno::Any& _patterncolorindex )
         throw uno::RuntimeException("Invalid Pattern Color" );
 }
 
+uno::Any SAL_CALL ScVbaInterior::getThemeColor()
+{
+    // Just a stub for now.
+    return uno::makeAny(static_cast<sal_Int32>(0));
+}
+
+void SAL_CALL ScVbaInterior::setThemeColor(const uno::Any& /*rAny*/)
+{
+    // Just a stub for now.
+}
+
 OUString
 ScVbaInterior::getServiceImplName()
 {
