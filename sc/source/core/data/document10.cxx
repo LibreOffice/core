@@ -564,7 +564,8 @@ bool ScDocument::FindRangeNamesReferencingSheet( sc::UpdatedRangeNames& rIndexes
     bool bRef = !bSameDoc;  // include every name used when copying to other doc
     if (nRecursion < 126)   // whatever.. 42*3
     {
-        for (const formula::FormulaToken* p = pCode->First(); p; p = pCode->Next())
+        formula::FormulaTokenArrayPlainIterator aIter(*pCode);
+        for (const formula::FormulaToken* p = aIter.First(); p; p = aIter.Next())
         {
             if (p->GetOpCode() == ocName)
             {
@@ -603,7 +604,8 @@ MightReferenceSheet mightRangeNameReferenceSheet( ScRangeData* pData, SCTAB nRef
     if (!pCode)
         return MightReferenceSheet::NONE;
 
-    for (const formula::FormulaToken* p = pCode->First(); p; p = pCode->Next())
+    formula::FormulaTokenArrayPlainIterator aIter(*pCode);
+    for (const formula::FormulaToken* p = aIter.First(); p; p = aIter.Next())
     {
         if (p->GetOpCode() == ocName)
             return MightReferenceSheet::NAME;
@@ -850,7 +852,8 @@ bool ScDocument::CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRange
                 ScTokenArray* pCode = iRD->GetCode();
                 if (pCode)
                 {
-                    for (formula::FormulaToken* p = pCode->First(); p; p = pCode->Next())
+                    formula::FormulaTokenArrayPlainIterator aIter(*pCode);
+                    for (formula::FormulaToken* p = aIter.First(); p; p = aIter.Next())
                     {
                         if (p->GetOpCode() == ocName)
                         {
