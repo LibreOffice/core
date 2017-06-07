@@ -291,8 +291,10 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             }
 
             bOK = SetObject( &aEngine,
-                            (nFormat == SotClipboardFormatId::RTF) ? SCTRANS_TYPE_EDIT_RTF : ( (nFormat == SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT) ? SCTRANS_TYPE_EDIT_ODF_TEXT_FLAT : SCTRANS_TYPE_EDIT_BIN),
-                            rFlavor );
+                    ((nFormat == SotClipboardFormatId::RTF) ? SCTRANS_TYPE_EDIT_RTF :
+                     ((nFormat == SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT) ?
+                      SCTRANS_TYPE_EDIT_ODF_TEXT_FLAT : SCTRANS_TYPE_EDIT_BIN)),
+                    rFlavor );
         }
         else if ( ScImportExport::IsFormatSupported( nFormat ) || nFormat == SotClipboardFormatId::RTF
             || nFormat == SotClipboardFormatId::RICHTEXT )
