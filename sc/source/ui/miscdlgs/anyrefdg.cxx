@@ -205,8 +205,8 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
                 pTabViewShell->DoneRefMode();
                 pTabViewShell->ClearHighlightRanges();
 
-                pScTokA->Reset();
-                const formula::FormulaToken* pToken = pScTokA->GetNextReference();
+                formula::FormulaTokenArrayPlainIterator aIter(*pScTokA);
+                const formula::FormulaToken* pToken = aIter.GetNextReference();
 
                 sal_uInt16 nIndex=0;
 
@@ -232,7 +232,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
                         pTabViewShell->AddHighlightRange(aRange, aColName);
                     }
 
-                    pToken = pScTokA->GetNextReference();
+                    pToken = aIter.GetNextReference();
                 }
             }
         }
