@@ -32,6 +32,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.h>
@@ -49,6 +50,7 @@
 namespace oox {
 namespace ole {
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::embed;
@@ -180,6 +182,18 @@ void VbaProject::importVbaProject( StorageBase& rVbaPrjStrg, const GraphicHelper
         if( isExportVba() )
             copyStorage( rVbaPrjStrg );
     }
+}
+
+void VbaProject::importVbaData(const uno::Reference<io::XInputStream>& xInputStream)
+{
+    uno::Reference<document::XStorageBasedDocument> xStorageBasedDoc(mxDocModel, uno::UNO_QUERY);
+    uno::Reference<embed::XStorage> xDocStorage(xStorageBasedDoc->getDocumentStorage(), uno::UNO_QUERY);
+    {
+        const sal_Int32 nOpenMode = ElementModes::SEEKABLE | ElementModes::WRITE | ElementModes::TRUNCATE;
+        uno::Reference<io::XOutputStream> xDocStream(xDocStorage->openStreamElement("_MS_VBA_Macros_XML", nOpenMode), uno::UNO_QUERY);
+        comphelper::OStorageHelper::CopyInputToOutput(xInputStream, xDocStream);
+    }
+    uno::Reference<embed::XTransactedObject>(xDocStorage, uno::UNO_QUERY)->commit();
 }
 
 void VbaProject::registerMacroAttacher( const VbaMacroAttacherRef& rxAttacher )

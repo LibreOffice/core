@@ -37,6 +37,7 @@ namespace com { namespace sun { namespace star {
     namespace script { namespace vba { class XVBAMacroResolver; } }
     namespace uno { class XComponentContext; }
     namespace uno { class XInterface; }
+    namespace io { class XInputStream; }
 } } }
 
 namespace oox {
@@ -129,6 +130,9 @@ public:
 
     bool                importVbaProject(
                             StorageBase& rVbaPrjStrg );
+
+    /// Imports VBA data for a VBA project, e.g. word/vbaData.xml.
+    void                importVbaData(const css::uno::Reference<css::io::XInputStream>& xInputStream);
 
     /** Reads vba module related information from the project streams */
     void                readVbaModules( StorageBase& rVbaPrjStrg );

@@ -236,9 +236,6 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDesc
         // Adding the saved embedding document to document's grab bag
         aGrabBagProperties["OOXEmbeddings"] <<= pDocument->getEmbeddingsList();
 
-        if (pDocument->getVBA().hasElements())
-            aGrabBagProperties["OOXVBA"] <<= pDocument->getVBA();
-
         putPropertiesToDocumentGrabBag(aGrabBagProperties);
 
         writerfilter::ooxml::OOXMLStream::Pointer_t  pVBAProjectStream(writerfilter::ooxml::OOXMLDocumentFactory::createStream(pDocStream, writerfilter::ooxml::OOXMLStream::VBAPROJECT));
@@ -257,6 +254,14 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDesc
 
             oox::GraphicHelper gHelper(m_xContext, xFrame, xVbaPrjStrg);
             aVbaProject.importVbaProject(*xVbaPrjStrg, gHelper);
+
+            writerfilter::ooxml::OOXMLStream::Pointer_t pVBADataStream(writerfilter::ooxml::OOXMLDocumentFactory::createStream(pDocStream, writerfilter::ooxml::OOXMLStream::VBADATA));
+            if (pVBADataStream)
+            {
+                uno::Reference<io::XInputStream> xDataStream = pVBADataStream->getDocumentStream();
+                if (xDataStream.is())
+                    aVbaProject.importVbaData(xDataStream);
+            }
         }
 
         pStream.reset();

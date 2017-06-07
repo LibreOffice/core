@@ -80,9 +80,6 @@ public:
 
     // Giving access to mxDocumentStream. It is needed by resolving custom xml to get list of customxml's used in document.
     const css::uno::Reference<css::io::XStream>& accessDocumentStream() { return mxDocumentStream;}
-
-    const css::uno::Reference<css::embed::XStorage>& getStorage() { return mxStorage; }
-    const OUString& getPath() { return msPath; }
 };
 }}
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLSTREAMIMPL_HXX

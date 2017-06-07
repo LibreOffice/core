@@ -172,6 +172,7 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
     static const char sHeaderTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/header";
     static const char sOleObjectTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/oleObject";
     static const char sVBAProjectType[] = "http://schemas.microsoft.com/office/2006/relationships/vbaProject";
+    static const char sVBADataType[] = "http://schemas.microsoft.com/office/2006/relationships/wordVbaData";
 
     OUString sStreamType;
     OUString sStreamTypeStrict;
@@ -181,6 +182,10 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
         case VBAPROJECT:
             sStreamType = sVBAProjectType;
             sStreamTypeStrict = sVBAProjectType;
+            break;
+        case VBADATA:
+            sStreamType = sVBADataType;
+            sStreamTypeStrict = sVBADataType;
             break;
         case DOCUMENT:
             sStreamType = sDocumentType;
@@ -416,8 +421,22 @@ OOXMLDocumentFactory::createStream
 (const OOXMLStream::Pointer_t& pStream,  OOXMLStream::StreamType_t nStreamType)
 {
     OOXMLStream::Pointer_t pRet;
-    if (OOXMLStreamImpl* pImpl = dynamic_cast<OOXMLStreamImpl *>(pStream.get()))
-        pRet.reset(new OOXMLStreamImpl(*pImpl, nStreamType));
+
+    if (nStreamType != OOXMLStream::VBADATA)
+    {
+        if (OOXMLStreamImpl* pImpl = dynamic_cast<OOXMLStreamImpl *>(pStream.get()))
+            pRet.reset(new OOXMLStreamImpl(*pImpl, nStreamType));
+    }
+    else
+    {
+        // VBADATA is not a relation of the document, but of the VBAPROJECT stream.
+        if (OOXMLStreamImpl* pImpl = dynamic_cast<OOXMLStreamImpl *>(pStream.get()))
+        {
+            std::unique_ptr<OOXMLStreamImpl> pProject(new OOXMLStreamImpl(*pImpl, OOXMLStream::VBAPROJECT));
+            pRet.reset(new OOXMLStreamImpl(*pProject, OOXMLStream::VBADATA));
+        }
+    }
+
     return pRet;
 }
 
