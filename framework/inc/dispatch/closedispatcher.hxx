@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_DISPATCH_CLOSEDISPATCHER_HXX
 #define INCLUDED_FRAMEWORK_INC_DISPATCH_CLOSEDISPATCHER_HXX
 
-#include <macros/xinterface.hxx>
 #include <stdtypes.h>
 #include <general.h>
 

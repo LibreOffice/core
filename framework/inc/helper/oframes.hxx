@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_HELPER_OFRAMES_HXX
 
 #include <classes/framecontainer.hxx>
-#include <macros/xinterface.hxx>
 #include <general.h>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

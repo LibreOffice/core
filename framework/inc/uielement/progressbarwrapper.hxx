@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_PROGRESSBARWRAPPER_HXX
 
 #include <helper/uielementwrapperbase.hxx>
-#include <macros/xinterface.hxx>
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/awt/XWindow.hpp>

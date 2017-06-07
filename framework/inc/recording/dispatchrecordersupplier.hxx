@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FRAMEWORK_INC_RECORDING_DISPATCHRECORDERSUPPLIER_HXX
 #define INCLUDED_FRAMEWORK_INC_RECORDING_DISPATCHRECORDERSUPPLIER_HXX
 
-#include <macros/xinterface.hxx>
 #include <macros/xserviceinfo.hxx>
 #include <general.h>
 #include <stdtypes.h>

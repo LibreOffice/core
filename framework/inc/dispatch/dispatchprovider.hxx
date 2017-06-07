@@ -22,7 +22,6 @@
 
 #include <classes/protocolhandlercache.hxx>
 
-#include <macros/xinterface.hxx>
 #include <stdtypes.h>
 
 #include <com/sun/star/lang/XTypeProvider.hpp>

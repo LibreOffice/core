@@ -21,7 +21,6 @@
 #define INCLUDED_FRAMEWORK_INC_UIELEMENT_ADDONSTOOLBARMANAGER_HXX
 
 #include <uielement/toolbarmanager.hxx>
-#include <macros/xinterface.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>

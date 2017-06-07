@@ -25,7 +25,6 @@
 */
 #include <vector>
 
-#include <macros/xinterface.hxx>
 #include <macros/xserviceinfo.hxx>
 #include <general.h>
 #include <rtl/ustring.hxx>
