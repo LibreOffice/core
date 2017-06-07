@@ -50,7 +50,7 @@ public:
     /// decrease the reference count and delete the last instance.
     sal_uInt32 SAL_CALL release();
 
-    /// returns a poiner to the initialized API function structure.
+    /// returns a pointer to the initialized API function structure.
     void* SAL_CALL getApi() const;
 
 protected:
@@ -89,7 +89,7 @@ protected:
 };
 
 
-/** The ODynmaicLoader provides a special load on call mechanism for dynamic libraries
+/** The ODynamicLoader provides a special load on call mechanism for dynamic libraries
     which support a C-API.
 
     The libraries must provide a struct with function pointers for all supported C functions.
