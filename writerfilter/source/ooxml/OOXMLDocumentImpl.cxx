@@ -39,7 +39,6 @@
 #include <svx/dialogs.hrc>
 #include <comphelper/sequence.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <comphelper/propertysequence.hxx>
 
 #include <iostream>
 #include "sfx2/objsh.hxx"
@@ -497,9 +496,6 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
 
         resolveActiveXStream(rStream);
 
-        if (!mbIsSubstream)
-            preserveVBA();
-
         resolveFastSubStream(rStream, OOXMLStream::FONTTABLE);
         resolveFastSubStream(rStream, OOXMLStream::STYLES);
         resolveFastSubStream(rStream, OOXMLStream::NUMBERING);
@@ -812,71 +808,6 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
         mxEmbeddingsList = comphelper::containerToSequence(aEmbeddings);
 }
 
-namespace
-{
-/// Returns the target string for rType in xRelationshipAccess.
-OUString getTypeTarget(const uno::Reference<embed::XRelationshipAccess>& xRelationshipAccess, const OUString& rType)
-{
-    uno::Sequence< uno::Sequence<beans::StringPair> > aRelations = xRelationshipAccess->getAllRelationships();
-    for (const auto& rRelation : aRelations)
-    {
-        OUString aType;
-        OUString aTarget;
-        for (const auto& rPair : rRelation)
-        {
-            if (rPair.First == "Type")
-                aType = rPair.Second;
-            else if (rPair.First == "Target")
-                aTarget = rPair.Second;
-        }
-
-        if (aType == rType)
-            return aTarget;
-    }
-
-    return OUString();
-}
-}
-
-void OOXMLDocumentImpl::preserveVBA()
-{
-    auto pOOXMLStream = dynamic_cast<OOXMLStreamImpl*>(mpStream.get());
-    if (!pOOXMLStream)
-        return;
-
-    uno::Reference<embed::XRelationshipAccess> xRelationshipAccess(pOOXMLStream->accessDocumentStream(), uno::UNO_QUERY);
-    if (!xRelationshipAccess.is())
-        return;
-
-    OUString aVBAStreamName = getTypeTarget(xRelationshipAccess, "http://schemas.microsoft.com/office/2006/relationships/vbaProject");
-    if (aVBAStreamName.isEmpty())
-        return;
-
-    uno::Reference<embed::XHierarchicalStorageAccess> xStorage(pOOXMLStream->getStorage(), uno::UNO_QUERY);
-    if (!xStorage.is())
-        return;
-
-    OUString aPath = pOOXMLStream->getPath();
-    uno::Reference<io::XStream> xStream(xStorage->openStreamElementByHierarchicalName(aPath + aVBAStreamName, embed::ElementModes::SEEKABLEREAD), uno::UNO_QUERY);
-    if (!xStream.is())
-        return;
-
-    xRelationshipAccess.set(xStream, uno::UNO_QUERY);
-    uno::Reference<io::XStream> xDataStream;
-    if (xRelationshipAccess.is())
-    {
-        // Check if there is a vbaData.xml for the vbaProject.bin.
-        OUString aVBAData = getTypeTarget(xRelationshipAccess, "http://schemas.microsoft.com/office/2006/relationships/wordVbaData");
-        if (!aVBAData.isEmpty())
-            xDataStream.set(xStorage->openStreamElementByHierarchicalName(aPath + aVBAData, embed::ElementModes::SEEKABLEREAD), uno::UNO_QUERY);
-    }
-
-    maVBA = comphelper::InitPropertySequence(
-    {
-        {"DataStream", uno::makeAny(xDataStream)}
-    });
-}
-
 void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
 {
     // Resolving all ActiveX[n].xml files from ActiveX folder.
@@ -1014,11 +945,6 @@ uno::Sequence<uno::Reference<io::XInputStream> > OOXMLDocumentImpl::getActiveXBi
 uno::Sequence<beans::PropertyValue > OOXMLDocumentImpl::getEmbeddingsList( )
 {
     return mxEmbeddingsList;
-}
-
-uno::Sequence<beans::PropertyValue> OOXMLDocumentImpl::getVBA()
-{
-    return maVBA;
 }
 
 OOXMLDocument *

@@ -75,7 +75,7 @@ class OOXMLStream
 {
 public:
     enum StreamType_t { UNKNOWN, DOCUMENT, STYLES, WEBSETTINGS, FONTTABLE, NUMBERING,
-        FOOTNOTES, ENDNOTES, COMMENTS, THEME, CUSTOMXML, CUSTOMXMLPROPS, ACTIVEX, ACTIVEXBIN, GLOSSARY, CHARTS, EMBEDDINGS, SETTINGS, VBAPROJECT, FOOTER, HEADER };
+        FOOTNOTES, ENDNOTES, COMMENTS, THEME, CUSTOMXML, CUSTOMXMLPROPS, ACTIVEX, ACTIVEXBIN, GLOSSARY, CHARTS, EMBEDDINGS, SETTINGS, VBAPROJECT, FOOTER, HEADER, VBADATA };
     typedef std::shared_ptr<OOXMLStream> Pointer_t;
 
     virtual ~OOXMLStream() {}
@@ -229,7 +229,6 @@ public:
     virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getActiveXDomList( ) = 0;
     virtual css::uno::Sequence<css::uno::Reference<css::io::XInputStream> > getActiveXBinList() = 0;
     virtual css::uno::Sequence<css::beans::PropertyValue > getEmbeddingsList() = 0;
-    virtual css::uno::Sequence<css::beans::PropertyValue > getVBA() = 0;
 };
 
 

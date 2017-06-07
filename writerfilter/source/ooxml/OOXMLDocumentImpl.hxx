@@ -53,8 +53,6 @@ class OOXMLDocumentImpl : public OOXMLDocument
     css::uno::Reference<css::io::XInputStream> mxActiveXBin;
     css::uno::Reference<css::io::XInputStream> mxEmbeddings;
     css::uno::Sequence < css::beans::PropertyValue > mxEmbeddingsList;
-    /// List of VBA-related streams.
-    css::uno::Sequence<css::beans::PropertyValue> maVBA;
     bool mbIsSubstream;
     bool mbSkipImages;
     /// How many paragraphs equal to 1 percent?
@@ -93,7 +91,6 @@ protected:
     void resolveActiveXStream(Stream & rStream);
     void resolveGlossaryStream(Stream & rStream);
     void resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStream);
-    void preserveVBA();
 public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t const & pStream, const css::uno::Reference<css::task::XStatusIndicator>& xStatusIndicator, bool bSkipImages, const css::uno::Sequence<css::beans::PropertyValue>& rDescriptor);
     virtual ~OOXMLDocumentImpl() override;
@@ -139,7 +136,6 @@ public:
     virtual css::uno::Reference<css::xml::dom::XDocument> getGlossaryDocDom() override;
     virtual css::uno::Sequence<css::uno::Sequence< css::uno::Any> >  getGlossaryDomList() override;
     virtual css::uno::Sequence<css::beans::PropertyValue >  getEmbeddingsList() override;
-    virtual css::uno::Sequence<css::beans::PropertyValue> getVBA() override;
 
     void incrementProgress();
     bool IsSkipImages() { return mbSkipImages; };

@@ -1287,51 +1287,30 @@ void DocxExport::WriteVBA()
         m_pFilter->addRelation(m_pDocumentFS->getOutputStream(), "http://schemas.microsoft.com/office/2006/relationships/vbaProject", "vbaProject.bin");
     }
 
-    uno::Reference<beans::XPropertySet> xPropertySet(m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
-    if (!xPropertySet.is())
+    OUString aDataName("_MS_VBA_Macros_XML");
+    if (!xDocumentStorage.is() || !xDocumentStorage->hasByName(aDataName))
         return;
 
-    uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
-    if (!xPropertySetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
-        return;
-
-    uno::Sequence<beans::PropertyValue> aGrabBag;
-    xPropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBag;
-    uno::Sequence<beans::PropertyValue> aVBA;
-    for (const auto& rProperty : aGrabBag)
+    uno::Reference<io::XStream> xDataStream(xDocumentStorage->openStreamElement(aDataName, nOpenMode), uno::UNO_QUERY);
+    if (xDataStream.is())
     {
-        if (rProperty.Name == "OOXVBA")
-            rProperty.Value >>= aVBA;
-    }
-    if (!aVBA.hasElements())
-        return;
+        // Then the data stream, which wants to work with an already set
+        // xProjectStream.
+        std::unique_ptr<SvStream> pIn(utl::UcbStreamHelper::CreateStream(xDataStream));
 
-    for (const auto& rProperty : aVBA)
-    {
-        if (rProperty.Name == "DataStream")
-        {
-            // Then the data stream, which wants to work with an already set
-            // xProjectStream.
-            uno::Reference<io::XStream> xInputStream;
-            rProperty.Value >>= xInputStream;
-            if (!xInputStream.is())
-                return;
-            std::unique_ptr<SvStream> pIn(utl::UcbStreamHelper::CreateStream(xInputStream));
+        uno::Reference<io::XStream> xOutputStream(GetFilter().openFragmentStream("word/vbaData.xml", "application/vnd.ms-word.vbaData+xml"), uno::UNO_QUERY);
+        if (!xOutputStream.is())
+            return;
+        std::unique_ptr<SvStream> pOut(utl::UcbStreamHelper::CreateStream(xOutputStream));
 
-            uno::Reference<io::XStream> xOutputStream(GetFilter().openFragmentStream("word/vbaData.xml", "application/vnd.ms-word.vbaData+xml"), uno::UNO_QUERY);
-            if (!xOutputStream.is())
-                return;
-            std::unique_ptr<SvStream> pOut(utl::UcbStreamHelper::CreateStream(xOutputStream));
+        // Write the stream.
+        pOut->WriteStream(*pIn);
 
-            // Write the stream.
-            pOut->WriteStream(*pIn);
+        // Write the relationship.
+        if (!xProjectStream.is())
+            return;
 
-            // Write the relationship.
-            if (!xProjectStream.is())
-                return;
-
-            m_pFilter->addRelation(xProjectStream, "http://schemas.microsoft.com/office/2006/relationships/wordVbaData", "vbaData.xml");
-        }
+        m_pFilter->addRelation(xProjectStream, "http://schemas.microsoft.com/office/2006/relationships/wordVbaData", "vbaData.xml");
     }
 }
 
