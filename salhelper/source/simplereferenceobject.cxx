@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "salhelper/simplereferenceobject.hxx"
-#include "osl/diagnose.h"
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <cassert>
 #include <new>
@@ -30,12 +29,12 @@ SimpleReferenceObject::~SimpleReferenceObject()
     assert(m_nCount == 0);
 }
 
-void * SimpleReferenceObject::operator new(std::size_t nSize)
+void *SimpleReferenceObject::operator new(std::size_t nSize)
 {
     return ::operator new(nSize);
 }
 
-void * SimpleReferenceObject::operator new(std::size_t nSize,
+void *SimpleReferenceObject::operator new(std::size_t nSize,
                                            std::nothrow_t const &)
 {
 #if defined(_WIN32)
