@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SALHELPER_REFOBJ_HXX
 #define INCLUDED_SALHELPER_REFOBJ_HXX
 
+#include <cassert>
+
 #include <sal/types.h>
 #include <rtl/alloc.h>
 #include <osl/diagnose.h>
@@ -85,7 +87,7 @@ protected:
      */
     virtual ~ReferenceObject()
     {
-        OSL_ASSERT(m_nReferenceCount == 0);
+        assert(m_nReferenceCount == 0);
     }
 };
 
