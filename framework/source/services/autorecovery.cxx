@@ -4024,35 +4024,17 @@ const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescripto
 
 ::cppu::IPropertyArrayHelper& SAL_CALL AutoRecovery::getInfoHelper()
 {
-    static ::cppu::OPropertyArrayHelper* pInfoHelper = nullptr;
-    if(!pInfoHelper)
-    {
-        SolarMutexGuard g;
-        if(!pInfoHelper)
-        {
-            static ::cppu::OPropertyArrayHelper aInfoHelper(impl_getStaticPropertyDescriptor(), true);
-            pInfoHelper = &aInfoHelper;
-        }
-    }
+    static ::cppu::OPropertyArrayHelper ourInfoHelper(impl_getStaticPropertyDescriptor(), true);
 
-    return (*pInfoHelper);
+    return ourInfoHelper;
 }
 
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL AutoRecovery::getPropertySetInfo()
 {
-    static css::uno::Reference< css::beans::XPropertySetInfo >* pInfo = nullptr;
-    if(!pInfo)
-    {
-        SolarMutexGuard g;
-        if(!pInfo)
-        {
-            static css::uno::Reference< css::beans::XPropertySetInfo > xInfo(
+    static css::uno::Reference< css::beans::XPropertySetInfo > xInfo(
                     ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper()));
-            pInfo = &xInfo;
-        }
-    }
 
-    return (*pInfo);
+    return xInfo;
 }
 
 void AutoRecovery::implts_verifyCacheAgainstDesktopDocumentList()

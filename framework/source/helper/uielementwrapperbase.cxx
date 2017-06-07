@@ -168,52 +168,21 @@ void SAL_CALL UIElementWrapperBase::getFastPropertyValue( css::uno::Any& aValue 
 
 ::cppu::IPropertyArrayHelper& SAL_CALL UIElementWrapperBase::getInfoHelper()
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfoHelper is NULL - for the second call pInfoHelper is different from NULL!
-    static ::cppu::OPropertyArrayHelper* pInfoHelper = nullptr;
+    // Define static member to give structure of properties to baseclass "OPropertySetHelper".
+    // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.
+    // "true" say: Table is sorted by name.
+    static ::cppu::OPropertyArrayHelper ourInfoHelper( impl_getStaticPropertyDescriptor(), true );
 
-    if( pInfoHelper == nullptr )
-    {
-        // Ready for multithreading
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
-
-        // Control this pointer again, another instance can be faster then these!
-        if( pInfoHelper == nullptr )
-        {
-            // Define static member to give structure of properties to baseclass "OPropertySetHelper".
-            // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.
-            // "sal_True" say: Table is sorted by name.
-            static ::cppu::OPropertyArrayHelper aInfoHelper( impl_getStaticPropertyDescriptor(), true );
-            pInfoHelper = &aInfoHelper;
-        }
-    }
-
-    return(*pInfoHelper);
+    return ourInfoHelper;
 }
 
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL UIElementWrapperBase::getPropertySetInfo()
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
-    static css::uno::Reference< css::beans::XPropertySetInfo >* pInfo = nullptr;
+    // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
+    // (Use method "getInfoHelper()".)
+    static css::uno::Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
 
-    if( pInfo == nullptr )
-    {
-        // Ready for multithreading
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
-        // Control this pointer again, another instance can be faster then these!
-        if( pInfo == nullptr )
-        {
-            // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
-            // (Use method "getInfoHelper()".)
-            static css::uno::Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
-            pInfo = &xInfo;
-        }
-    }
-
-    return (*pInfo);
+    return xInfo;
 }
 
 const css::uno::Sequence< css::beans::Property > UIElementWrapperBase::impl_getStaticPropertyDescriptor()

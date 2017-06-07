@@ -213,26 +213,11 @@ Any SAL_CALL ConstItemContainer::getByIndex( sal_Int32 Index )
 // XPropertySet
 Reference< XPropertySetInfo > SAL_CALL ConstItemContainer::getPropertySetInfo()
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
-    static Reference< XPropertySetInfo >* pInfo = nullptr;
+    // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
+    // (Use method "getInfoHelper()".)
+    static Reference< XPropertySetInfo > xInfo(new comphelper::PropertySetInfo(getInfoHelper().getProperties()));
 
-    if( pInfo == nullptr )
-    {
-        // Ready for multithreading
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
-        // Control this pointer again, another instance can be faster then these!
-        if( pInfo == nullptr )
-        {
-            // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
-            // (Use method "getInfoHelper()".)
-            static Reference< XPropertySetInfo > xInfo = new ::comphelper::PropertySetInfo(getInfoHelper().getProperties());
-            pInfo = &xInfo;
-        }
-    }
-
-    return (*pInfo);
+    return xInfo;
 }
 
 void SAL_CALL ConstItemContainer::setPropertyValue( const OUString&, const Any& )
@@ -281,28 +266,12 @@ Any SAL_CALL ConstItemContainer::getFastPropertyValue( sal_Int32 nHandle )
 
 ::cppu::IPropertyArrayHelper& SAL_CALL ConstItemContainer::getInfoHelper()
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfoHelper is NULL - for the second call pInfoHelper is different from NULL!
-    static ::cppu::OPropertyArrayHelper* pInfoHelper = nullptr;
+    // Define static member to give structure of properties to baseclass "OPropertySetHelper".
+    // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.
+    // "true" say: Table is sorted by name.
+    static ::cppu::OPropertyArrayHelper ourInfoHelper( impl_getStaticPropertyDescriptor(), true );
 
-    if( pInfoHelper == nullptr )
-    {
-        // Ready for multithreading
-        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
-
-        // Control this pointer again, another instance can be faster then these!
-        if( pInfoHelper == nullptr )
-        {
-            // Define static member to give structure of properties to baseclass "OPropertySetHelper".
-            // "impl_getStaticPropertyDescriptor" is a non exported and static function, who will define a static propertytable.
-            // "sal_True" say: Table is sorted by name.
-            static ::cppu::OPropertyArrayHelper aInfoHelper( impl_getStaticPropertyDescriptor(), true );
-            pInfoHelper = &aInfoHelper;
-        }
-    }
-
-    return(*pInfoHelper);
+    return ourInfoHelper;
 }
 
 const css::uno::Sequence< css::beans::Property > ConstItemContainer::impl_getStaticPropertyDescriptor()
