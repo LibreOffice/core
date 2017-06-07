@@ -115,8 +115,8 @@ ENABLE_DEBUGINFO_FOR := all
 endif
 endif
 
-# note: ENABLE_CRASHDUMP turns on gb_SYMBOL
-ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)$(ENABLE_CRASHDUMP)),)
+# note: ENABLE_BREAKPAD turns on gb_SYMBOL
+ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)$(ENABLE_BREAKPAD)),)
 gb_SYMBOL := $(true)
 else
 gb_SYMBOL := $(false)
