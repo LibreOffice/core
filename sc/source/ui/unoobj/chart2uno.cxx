@@ -2104,9 +2104,10 @@ sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByFormulaTokensPossibl
     if (!n)
         return false;
 
-    const formula::FormulaToken* pFirst = aCode.First();
+    formula::FormulaTokenArrayPlainIterator aIter(aCode);
+    const formula::FormulaToken* pFirst = aIter.First();
     const formula::FormulaToken* pLast = aCode.GetArray()[n-1];
-    for (const formula::FormulaToken* p = aCode.First(); p; p = aCode.Next())
+    for (const formula::FormulaToken* p = aIter.First(); p; p = aIter.Next())
     {
         switch (p->GetType())
         {
@@ -2162,9 +2163,10 @@ ScChart2DataProvider::createDataSequenceByFormulaTokens(
         return xResult;
 
     vector<ScTokenRef> aRefTokens;
-    const formula::FormulaToken* pFirst = aCode.First();
+    formula::FormulaTokenArrayPlainIterator aIter(aCode);
+    const formula::FormulaToken* pFirst = aIter.First();
     const formula::FormulaToken* pLast = aCode.GetArray()[n-1];
-    for (const formula::FormulaToken* p = aCode.First(); p; p = aCode.Next())
+    for (const formula::FormulaToken* p = aIter.First(); p; p = aIter.Next())
     {
         switch (p->GetType())
         {
@@ -2625,7 +2627,8 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
 
     ScExternalRefCache::TableTypeRef pTable = pRefMgr->getCacheTable(nFileId, aTabName, false);
     sal_Int32 nDataCount = 0;
-    for (FormulaToken* p = pArray->First(); p; p = pArray->Next())
+    FormulaTokenArrayPlainIterator aIter(*pArray);
+    for (FormulaToken* p = aIter.First(); p; p = aIter.Next())
     {
         // Cached external range is always represented as a single
         // matrix token, although that might change in the future when
