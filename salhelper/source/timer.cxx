@@ -106,12 +106,8 @@ void Timer::start()
 
         TimerManager *pManager = TimerManager::getTimerManager();
 
-        OSL_ASSERT(pManager);
-
-        if (pManager != nullptr)
-        {
+        if (pManager)
             pManager->registerTimer(this);
-        }
     }
 }
 
@@ -119,25 +115,18 @@ void Timer::stop()
 {
     TimerManager *pManager = TimerManager::getTimerManager();
 
-    OSL_ASSERT(pManager);
-
-    if (pManager != nullptr)
-    {
+    if (pManager)
         pManager->unregisterTimer(this);
-    }
 }
 
 sal_Bool Timer::isTicking() const
 {
     TimerManager *pManager = TimerManager::getTimerManager();
 
-    OSL_ASSERT(pManager);
-
     if (pManager)
         return pManager->lookupTimer(this);
     else
         return false;
-
 }
 
 sal_Bool Timer::isExpired() const
@@ -242,12 +231,10 @@ TimerManager::TimerManager()
 {
     osl::MutexGuard Guard(theTimerManagerMutex::get());
 
-    OSL_ASSERT(m_pManager == nullptr);
+    assert(m_pManager == nullptr);
 
     m_pManager = this;
-
     m_pHead= nullptr;
-
     m_notEmpty.reset();
 
     // start thread
@@ -258,7 +245,7 @@ TimerManager::~TimerManager()
 {
     osl::MutexGuard Guard(theTimerManagerMutex::get());
 
-    if ( m_pManager == this )
+    if (m_pManager == this)
         m_pManager = nullptr;
 }
 
@@ -279,12 +266,8 @@ TimerManager* TimerManager::getTimerManager()
 
 void TimerManager::registerTimer(Timer* pTimer)
 {
-    OSL_ASSERT(pTimer);
-
-    if ( pTimer == nullptr )
-    {
+    if (!pTimer)
         return;
-    }
 
     osl::MutexGuard Guard(m_Lock);
 
@@ -318,12 +301,8 @@ void TimerManager::registerTimer(Timer* pTimer)
 
 void TimerManager::unregisterTimer(Timer* pTimer)
 {
-    OSL_ASSERT(pTimer);
-
-    if ( pTimer == nullptr )
-    {
+    if (!pTimer)
         return;
-    }
 
     // lock access
     osl::MutexGuard Guard(m_Lock);
@@ -344,12 +323,8 @@ void TimerManager::unregisterTimer(Timer* pTimer)
 
 bool TimerManager::lookupTimer(const Timer* pTimer)
 {
-    OSL_ASSERT(pTimer);
-
-    if ( pTimer == nullptr )
-    {
+    if (!pTimer)
         return false;
-    }
 
     // lock access
     osl::MutexGuard Guard(m_Lock);
@@ -358,9 +333,7 @@ bool TimerManager::lookupTimer(const Timer* pTimer)
     for (Timer* pIter = m_pHead; pIter != nullptr; pIter= pIter->m_pNext)
     {
         if (pIter == pTimer)
-        {
             return true;
-        }
     }
 
     return false;
@@ -368,10 +341,9 @@ bool TimerManager::lookupTimer(const Timer* pTimer)
 
 void TimerManager::checkForTimeout()
 {
-
     m_Lock.acquire();
 
-    if ( m_pHead == nullptr )
+    if (!m_pHead)
     {
         m_Lock.release();
         return;
@@ -391,7 +363,7 @@ void TimerManager::checkForTimeout()
         pTimer->onShot();
 
         // restart timer if specified
-        if ( ! pTimer->m_aRepeatDelta.isEmpty() )
+        if (!pTimer->m_aRepeatDelta.isEmpty())
         {
             TTimeValue Now;
 
