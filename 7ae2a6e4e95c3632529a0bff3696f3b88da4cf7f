@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a3905b3_681c0314",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-07T07:47:13Z",
+      "side": 1,
+      "message": "...so something like\n\n  rtl_uString newData \u003d NULL;\n  rtl_uString_newConcat( \u0026newData, pData, str.pData );\n  if (newData \u003d\u003d NULL) {\n       throw std::bad_alloc();\n  }\n  rtl_uString_assign(\u0026pData, newData);\n  return *this;\n\nis probably the best solution overall, fulfilling the strong exception guarantee",
+      "parentUuid": "5a3905b3_0810df00",
+      "revId": "7ae2a6e4e95c3632529a0bff3696f3b88da4cf7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a3905b3_4873c780",
         "filename": "sal/rtl/strtmpl.cxx",
         "patchSetId": 9
