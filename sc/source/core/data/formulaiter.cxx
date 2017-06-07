@@ -25,11 +25,11 @@
 
 using namespace formula;
 
-ScDetectiveRefIter::ScDetectiveRefIter( ScFormulaCell* pCell )
+ScDetectiveRefIter::ScDetectiveRefIter( ScFormulaCell* pCell ) :
+    pCode(pCell->GetCode()),
+    maIter(*pCode),
+    aPos(pCell->aPos)
 {
-    pCode = pCell->GetCode();
-    pCode->Reset();
-    aPos = pCell->aPos;
 }
 
 static bool lcl_ScDetectiveRefIter_SkipRef( formula::FormulaToken* p, const ScAddress& rPos )
@@ -65,10 +65,10 @@ bool ScDetectiveRefIter::GetNextRef( ScRange& rRange )
 
 formula::FormulaToken* ScDetectiveRefIter::GetNextRefToken()
 {
-    formula::FormulaToken* p = pCode->GetNextReferenceRPN();
+    formula::FormulaToken* p = maIter.GetNextReferenceRPN();
     while (p && lcl_ScDetectiveRefIter_SkipRef(p, aPos))
     {
-        p = pCode->GetNextReferenceRPN();
+        p = maIter.GetNextReferenceRPN();
     }
     return p;
 }
