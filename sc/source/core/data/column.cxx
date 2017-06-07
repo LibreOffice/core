@@ -2684,11 +2684,12 @@ public:
         if (pCode && pCode->IsFormulaVectorDisabled())
         {
             pCode->ResetVectorState();
-            FormulaToken* pFT = pCode->First();
+            FormulaTokenArrayPlainIterator aIter(*pCode);
+            FormulaToken* pFT = aIter.First();
             while (pFT)
             {
                 pCode->CheckToken(*pFT);
-                pFT = pCode->Next();
+                pFT = aIter.Next();
             }
         }
     }
