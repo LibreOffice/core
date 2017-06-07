@@ -574,6 +574,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                 {
                     const bool  bSBAFormat = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::SVX_FORMFIELDEXCH );
                     const bool  bEditEngine = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::EDITENGINE );
+                    const bool  bEditEngineODF = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT );
                     const bool  bString = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::STRING );
                     const bool  bRTF = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::RTF );
                     const bool  bFile = rTargetHelper.IsDropFormatSupported( SotClipboardFormatId::SIMPLE_FILE );
@@ -588,7 +589,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                     if( bBookmark && bFile && ( nDropAction & DND_ACTION_MOVE ) && mpViewSh && SlideShow::IsRunning(mpViewSh->GetViewShellBase()) )
                         bBookmark = false;
 
-                    if( bDrawing || bGraphic || bMtf || bBitmap || bBookmark || bFile || bFileList || bXFillExchange || bSBAFormat || bEditEngine || bString || bRTF )
+                    if( bDrawing || bGraphic || bMtf || bBitmap || bBookmark || bFile || bFileList || bXFillExchange || bSBAFormat || bEditEngine || bEditEngineODF || bString || bRTF )
                         nRet = nDropAction;
 
                     // For entries from the navigator, change action copy.

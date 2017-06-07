@@ -160,6 +160,7 @@ using namespace ::com::sun::star::linguistic2;
                 case SotClipboardFormatId::RTF:
                 case SotClipboardFormatId::RICHTEXT:
                 case SotClipboardFormatId::EDITENGINE:
+                case SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT:
                     pResult->AddClipbrdFormat(nTestFormat);
                     break;
                 default: break;
