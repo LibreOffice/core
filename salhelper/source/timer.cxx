@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <salhelper/timer.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <osl/diagnose.h>
-#include <salhelper/simplereferenceobject.hxx>
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
@@ -29,12 +29,8 @@ using namespace salhelper;
 
 class salhelper::TimerManager : public osl::Thread
 {
-
 public:
-
-
     TimerManager();
-
 
     virtual ~TimerManager() override;
 
@@ -50,55 +46,49 @@ public:
     /// retrieves the "Singleton" TimerManager Instance
     static TimerManager* SAL_CALL getTimerManager();
 
-
 protected:
-
     /// worker-function of thread
     virtual void SAL_CALL run() override;
 
-    // Checking and triggering of a timer event
+    /// Checking and triggering of a timer event
     void SAL_CALL checkForTimeout();
 
-    // cleanup Method
+    /// cleanup Method
     virtual void SAL_CALL onTerminated() override;
 
-    // sorted-queue data
+    /// sorted-queue data
     salhelper::Timer*       m_pHead;
-    // List Protection
+    /// List Protection
     osl::Mutex                  m_Lock;
-    // Signal the insertion of a timer
+    /// Signal the insertion of a timer
     osl::Condition              m_notEmpty;
 
-    // "Singleton Pattern"
+    /// "Singleton Pattern"
     static salhelper::TimerManager* m_pManager;
 
 };
 
-
-// Timer class
-
-
 Timer::Timer()
-    : m_aTimeOut( 0 ),
-      m_aExpired( 0 ),
-      m_aRepeatDelta( 0 ),
-      m_pNext( nullptr )
+    : m_aTimeOut(0),
+      m_aExpired(0),
+      m_aRepeatDelta(0),
+      m_pNext(nullptr)
 {
 }
 
-Timer::Timer( const TTimeValue& rTime )
-    : m_aTimeOut( rTime ),
-      m_aExpired( 0 ),
-      m_aRepeatDelta( 0 ),
-      m_pNext( nullptr )
+Timer::Timer(const TTimeValue& rTime)
+    : m_aTimeOut(rTime),
+      m_aExpired(0),
+      m_aRepeatDelta(0),
+      m_pNext(nullptr)
 {
 }
 
-Timer::Timer( const TTimeValue& rTime, const TTimeValue& Repeat )
-    : m_aTimeOut( rTime ),
-      m_aExpired( 0 ),
-      m_aRepeatDelta( Repeat ),
-      m_pNext( nullptr )
+Timer::Timer(const TTimeValue& rTime, const TTimeValue& Repeat)
+    : m_aTimeOut(rTime),
+      m_aExpired(0),
+      m_aRepeatDelta(Repeat),
+      m_pNext(nullptr)
 {
 }
 
@@ -109,16 +99,16 @@ Timer::~Timer()
 
 void Timer::start()
 {
-    if (! isTicking())
+    if (!isTicking())
     {
-        if (! m_aTimeOut.isEmpty())
+        if (!m_aTimeOut.isEmpty())
             setRemainingTime(m_aTimeOut);
 
         TimerManager *pManager = TimerManager::getTimerManager();
 
         OSL_ASSERT(pManager);
 
-        if ( pManager != nullptr )
+        if (pManager != nullptr)
         {
             pManager->registerTimer(this);
         }
@@ -131,7 +121,7 @@ void Timer::stop()
 
     OSL_ASSERT(pManager);
 
-    if ( pManager != nullptr )
+    if (pManager != nullptr)
     {
         pManager->unregisterTimer(this);
     }
@@ -163,7 +153,7 @@ sal_Bool Timer::expiresBefore(const Timer* pTimer) const
 {
     OSL_ASSERT(pTimer);
 
-    if ( pTimer != nullptr )
+    if (pTimer != nullptr)
     {
         return m_aExpired < pTimer->m_aExpired;
     }
@@ -175,8 +165,8 @@ sal_Bool Timer::expiresBefore(const Timer* pTimer) const
 
 void Timer::setAbsoluteTime(const TTimeValue& Time)
 {
-    m_aTimeOut     = 0;
-    m_aExpired     = Time;
+    m_aTimeOut = 0;
+    m_aExpired = Time;
     m_aRepeatDelta = 0;
 
     m_aExpired.normalize();
@@ -230,9 +220,6 @@ TTimeValue Timer::getRemainingTime() const
     return TTimeValue(secs, nsecs);
 }
 
-
-// Timer manager
-
 namespace
 {
     // Synchronize access to TimerManager
@@ -240,6 +227,16 @@ namespace
 }
 
 TimerManager* salhelper::TimerManager::m_pManager = nullptr;
+
+/** The timer manager cleanup has been removed (no thread is killed anymore),
+    so the thread leaks.
+
+    This will result in a GPF in case the salhelper-library gets unloaded before
+    process termination.
+
+    @TODO : rewrite this file, so that the timerManager thread gets destroyed,
+            when there are no timers anymore !
+**/
 
 TimerManager::TimerManager()
 {
@@ -267,7 +264,7 @@ TimerManager::~TimerManager()
 
 void TimerManager::onTerminated()
 {
-    delete this; // mfe: AAARRRGGGHHH!!!
+    delete this; // FIXME
 }
 
 TimerManager* TimerManager::getTimerManager()
@@ -423,9 +420,8 @@ void TimerManager::run()
 
     while (schedule())
     {
-        TTimeValue      delay;
-        TTimeValue*     pDelay=nullptr;
-
+        TTimeValue delay;
+        TTimeValue* pDelay=nullptr;
 
         m_Lock.acquire();
 
@@ -451,17 +447,5 @@ void TimerManager::run()
     }
 
 }
-
-
-// Timer manager cleanup
-
-
-// jbu:
-// The timer manager cleanup has been removed (no thread is killed anymore).
-// So the thread leaks.
-// This will result in a GPF in case the salhelper-library gets unloaded before
-// process termination.
-// -> TODO : rewrite this file, so that the timerManager thread gets destroyed,
-//           when there are no timers anymore !
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
