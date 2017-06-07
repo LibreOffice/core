@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_2e0da337",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-07T23:01:35Z",
+      "side": 1,
+      "message": "Duplicate include",
+      "revId": "e6700a8bb752c8267b7357da8a9566cbd0954243",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_6e0fab2e",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-07T23:01:35Z",
+      "side": 1,
+      "message": "meFieldUnit (for example), \u0027fUnit\u0027 makes it look as if this was a floating point number",
+      "revId": "e6700a8bb752c8267b7357da8a9566cbd0954243",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_8e1e9761",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-06-07T23:01:35Z",
+      "side": 1,
+      "message": "This will crash if SfxViewFrame::Current is null",
+      "revId": "e6700a8bb752c8267b7357da8a9566cbd0954243",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
