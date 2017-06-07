@@ -1209,9 +1209,19 @@ DECLARE_RTFEXPORT_TEST(testWatermark, "watermark.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("WatermarkRTF"), xShape->getString());
 
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+    OUString aFont;
+    float nFontSize;
 
     // Check transparency
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), getProperty<sal_Int16>(xShape, "FillTransparence"));
+
+    // Check font family
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue("CharFontName") >>= aFont);
+    CPPUNIT_ASSERT_EQUAL(OUString("DejaVu Serif"), aFont);
+
+    // Check font size
+    CPPUNIT_ASSERT(xPropertySet->getPropertyValue("CharHeight") >>= nFontSize);
+    CPPUNIT_ASSERT_EQUAL((float)66, nFontSize);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
