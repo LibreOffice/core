@@ -24,6 +24,7 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -1256,6 +1257,36 @@ void DocxExport::WriteActiveX()
 
 void DocxExport::WriteVBA()
 {
+    uno::Reference<document::XStorageBasedDocument> xStorageBasedDocument(m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+    if (!xStorageBasedDocument.is())
+        return;
+
+    uno::Reference<embed::XStorage> xDocumentStorage(xStorageBasedDocument->getDocumentStorage(), uno::UNO_QUERY);
+    OUString aMacrosName("_MS_VBA_Macros");
+    if (!xDocumentStorage.is() || !xDocumentStorage->hasByName(aMacrosName))
+        return;
+
+    const sal_Int32 nOpenMode = embed::ElementModes::READ;
+    uno::Reference<io::XStream> xMacrosStream(xDocumentStorage->openStreamElement(aMacrosName, nOpenMode), uno::UNO_QUERY);
+    uno::Reference<io::XOutputStream> xProjectStream;
+    if (xMacrosStream.is())
+    {
+        // First handle the the project stream, this sets xProjectStream.
+        std::unique_ptr<SvStream> pIn(utl::UcbStreamHelper::CreateStream(xMacrosStream));
+
+        xProjectStream = GetFilter().openFragmentStream("word/vbaProject.bin", "application/vnd.ms-office.vbaProject");
+        uno::Reference<io::XStream> xOutputStream(xProjectStream, uno::UNO_QUERY);
+        if (!xOutputStream.is())
+            return;
+        std::unique_ptr<SvStream> pOut(utl::UcbStreamHelper::CreateStream(xOutputStream));
+
+        // Write the stream.
+        pOut->WriteStream(*pIn);
+
+        // Write the relationship.
+        m_pFilter->addRelation(m_pDocumentFS->getOutputStream(), "http://schemas.microsoft.com/office/2006/relationships/vbaProject", "vbaProject.bin");
+    }
+
     uno::Reference<beans::XPropertySet> xPropertySet(m_pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
     if (!xPropertySet.is())
         return;
@@ -1275,31 +1306,9 @@ void DocxExport::WriteVBA()
     if (!aVBA.hasElements())
         return;
 
-    uno::Reference<io::XOutputStream> xProjectStream;
     for (const auto& rProperty : aVBA)
     {
-        if (rProperty.Name == "ProjectStream")
-        {
-            // First check for the project stream, this sets xProjectStream.
-            uno::Reference<io::XStream> xInputStream;
-            rProperty.Value >>= xInputStream;
-            if (!xInputStream.is())
-                return;
-            std::unique_ptr<SvStream> pIn(utl::UcbStreamHelper::CreateStream(xInputStream));
-
-            xProjectStream = GetFilter().openFragmentStream("word/vbaProject.bin", "application/vnd.ms-office.vbaProject");
-            uno::Reference<io::XStream> xOutputStream(xProjectStream, uno::UNO_QUERY);
-            if (!xOutputStream.is())
-                return;
-            std::unique_ptr<SvStream> pOut(utl::UcbStreamHelper::CreateStream(xOutputStream));
-
-            // Write the stream.
-            pOut->WriteStream(*pIn);
-
-            // Write the relationship.
-            m_pFilter->addRelation(m_pDocumentFS->getOutputStream(), "http://schemas.microsoft.com/office/2006/relationships/vbaProject", "vbaProject.bin");
-        }
-        else if (rProperty.Name == "DataStream")
+        if (rProperty.Name == "DataStream")
         {
             // Then the data stream, which wants to work with an already set
             // xProjectStream.
