@@ -23,6 +23,7 @@
  <toolbar:toolbaritem xlink:href=".uno:StyleApply"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleUpdateByExample"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleNewByExample"/>
+ <toolbar:toolbaritem xlink:href=".uno:EditStyle" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CharFontName"/>
  <toolbar:toolbarseparator/>
