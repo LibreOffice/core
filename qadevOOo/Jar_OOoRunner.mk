@@ -600,7 +600,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/sheet/_XCellRangeMovement \
     qadevOOo/tests/java/ifc/sheet/_XCellRangeReferrer \
     qadevOOo/tests/java/ifc/sheet/_XCellRangesQuery \
-    qadevOOo/tests/java/ifc/sheet/_XCellSeries \
     qadevOOo/tests/java/ifc/sheet/_XConsolidatable \
     qadevOOo/tests/java/ifc/sheet/_XConsolidationDescriptor \
     qadevOOo/tests/java/ifc/sheet/_XDatabaseRange \
