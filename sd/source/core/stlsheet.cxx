@@ -228,16 +228,13 @@ SfxItemSet& SdStyleSheet::GetItemSet()
                                         SDRATTR_SHADOW_FIRST,           SDRATTR_SHADOW_LAST,
                                         SDRATTR_TEXT_MINFRAMEHEIGHT,    SDRATTR_TEXT_CONTOURFRAME,
 
-                                        SDRATTR_TEXT_WORDWRAP,          SDRATTR_TEXT_WORDWRAP,
+                                        SDRATTR_XMLATTRIBUTES,          SDRATTR_TEXT_WORDWRAP,
 
-                                        SDRATTR_EDGE_FIRST,             SDRATTR_EDGE_LAST,
-                                        SDRATTR_MEASURE_FIRST,          SDRATTR_MEASURE_LAST,
-
-                                        EE_PARA_START,                  EE_CHAR_END,
-
-                                        SDRATTR_XMLATTRIBUTES,          SDRATTR_TEXT_USEFIXEDCELLHEIGHT,
+                                        SDRATTR_EDGE_FIRST,             SDRATTR_MEASURE_LAST,
 
                                         SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
+
+                                        EE_PARA_START,                  EE_CHAR_END,
                                         0, 0 };
 
             pSet = new SfxItemSet(GetPool().GetPool(), nWhichPairTable);
@@ -257,12 +254,12 @@ SfxItemSet& SdStyleSheet::GetItemSet()
                                         SDRATTR_SHADOW_FIRST,           SDRATTR_SHADOW_LAST,
                                         SDRATTR_TEXT_MINFRAMEHEIGHT,    SDRATTR_TEXT_CONTOURFRAME,
 
+                                        SDRATTR_XMLATTRIBUTES,          SDRATTR_XMLATTRIBUTES,
                                         SDRATTR_TEXT_WORDWRAP,          SDRATTR_TEXT_WORDWRAP,
 
-                                        EE_PARA_START,                  EE_CHAR_END,
-
                                         SDRATTR_TABLE_FIRST,            SDRATTR_TABLE_LAST,
-                                        SDRATTR_XMLATTRIBUTES,          SDRATTR_XMLATTRIBUTES,
+
+                                        EE_PARA_START,                  EE_CHAR_END,
 
                                         0, 0 };
 
