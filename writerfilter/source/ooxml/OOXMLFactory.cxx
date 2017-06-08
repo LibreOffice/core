@@ -98,15 +98,24 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                 pFactory->attributeAction(pHandler, nToken, xValue);
             }
             break;
-        case RT_UniversalMeasure:
+        case RT_TwipsMeasure:
             {
                 const char *pValue = "";
                 pAttribs->getAsChar(nToken, pValue);
-                OOXMLValue::Pointer_t xValue(new OOXMLUniversalMeasureValue(pValue));
+                OOXMLValue::Pointer_t xValue(new OOXMLTwipsMeasureValue(pValue));
                 pHandler->newProperty(nId, xValue);
                 pFactory->attributeAction(pHandler, nToken, xValue);
             }
             break;
+        case RT_HpsMeasure:
+            {
+                const char *pValue = "";
+                pAttribs->getAsChar(nToken, pValue);
+                OOXMLValue::Pointer_t xValue(new OOXMLHpsMeasureValue(pValue));
+                pHandler->newProperty(nId, xValue);
+                pFactory->attributeAction(pHandler, nToken, xValue);
+            }
+        break;
         case RT_List:
             {
                 sal_uInt32 nValue;

@@ -37,7 +37,7 @@ def createFastChildContextFromFactory(model):
 
             switch (nResource)
             {""")
-    resources = ["List", "Integer", "Hex", "String", "UniversalMeasure", "Boolean"]
+    resources = ["List", "Integer", "Hex", "String", "TwipsMeasure", "HpsMeasure", "Boolean"]
     for resource in [r.getAttribute("resource") for r in model.getElementsByTagName("resource")]:
         if resource not in resources:
             resources.append(resource)
