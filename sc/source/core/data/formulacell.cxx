@@ -848,7 +848,8 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
         {
             bool bGlobalNamesToLocal = ((nCloneFlags & ScCloneFlags::NamesToLocal) != ScCloneFlags::Default);
             formula::FormulaToken* pToken = nullptr;
-            while((pToken = pCode->GetNextName())!= nullptr)
+            formula::FormulaTokenArrayPlainIterator aIter(*pCode);
+            while((pToken = aIter.GetNextName())!= nullptr)
             {
                 OpCode eOpCode = pToken->GetOpCode();
                 if (eOpCode == ocName)
@@ -876,9 +877,9 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
 
     if( !bCompile )
     {   // Name references with references and ColRowNames
-        pCode->Reset();
+        formula::FormulaTokenArrayPlainIterator aIter(*pCode);
         formula::FormulaToken* t;
-        while ( ( t = pCode->GetNextReferenceOrName() ) != nullptr && !bCompile )
+        while ( ( t = aIter.GetNextReferenceOrName() ) != nullptr && !bCompile )
         {
             if ( t->IsExternalRef() )
             {
@@ -977,8 +978,8 @@ void ScFormulaCell::GetFormula( OUStringBuffer& rBuffer,
     else if( cMatrixFlag == ScMatrixMode::Reference )
     {
         // Reference to another cell that contains a matrix formula.
-        pCode->Reset();
-        formula::FormulaToken* p = pCode->GetNextReferenceRPN();
+        formula::FormulaTokenArrayPlainIterator aIter(*pCode);
+        formula::FormulaToken* p = aIter.GetNextReferenceRPN();
         if( p )
         {
             /* FIXME: original GetFormula() code obtained
@@ -1042,8 +1043,8 @@ OUString ScFormulaCell::GetFormula( sc::CompileFormulaContext& rCxt ) const
     else if( cMatrixFlag == ScMatrixMode::Reference )
     {
         // Reference to another cell that contains a matrix formula.
-        pCode->Reset();
-        formula::FormulaToken* p = pCode->GetNextReferenceRPN();
+        formula::FormulaTokenArrayPlainIterator aIter(*pCode);
+        formula::FormulaToken* p = aIter.GetNextReferenceRPN();
         if( p )
         {
             /* FIXME: original GetFormula() code obtained
@@ -2644,8 +2645,8 @@ bool ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
             return true;
         case ScMatrixMode::Reference :
         {
-            pCode->Reset();
-            formula::FormulaToken* t = pCode->GetNextReferenceRPN();
+            formula::FormulaTokenArrayPlainIterator aIter(*pCode);
+            formula::FormulaToken* t = aIter.GetNextReferenceRPN();
             if( t )
             {
                 ScSingleRefData& rRef = *t->GetSingleRef();
@@ -2831,9 +2832,9 @@ sc::FormulaResultValue ScFormulaCell::GetResult() const
 
 bool ScFormulaCell::HasOneReference( ScRange& r ) const
 {
-    pCode->Reset();
-    formula::FormulaToken* p = pCode->GetNextReferenceRPN();
-    if( p && !pCode->GetNextReferenceRPN() )        // only one!
+    formula::FormulaTokenArrayPlainIterator aIter(*pCode);
+    formula::FormulaToken* p = aIter.GetNextReferenceRPN();
+    if( p && !aIter.GetNextReferenceRPN() )        // only one!
     {
         SingleDoubleRefProvider aProv( *p );
         r.aStart = aProv.Ref1.toAbs(aPos);
@@ -2861,23 +2862,23 @@ ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
     if (HasOneReference( rRange))
         return true;
 
-    pCode->Reset();
     // Get first reference, if any
-    formula::FormulaToken* const pFirstReference(pCode->GetNextReferenceRPN());
+    formula::FormulaTokenArrayPlainIterator aIter(*pCode);
+    formula::FormulaToken* const pFirstReference(aIter.GetNextReferenceRPN());
     if (pFirstReference)
     {
         // Collect all consecutive references, starting by the one
         // already found
         std::deque<formula::FormulaToken*> aReferences;
         aReferences.push_back(pFirstReference);
-        FormulaToken* pToken(pCode->NextRPN());
+        FormulaToken* pToken(aIter.NextRPN());
         FormulaToken* pFunction(nullptr);
         while (pToken)
         {
             if (lcl_isReference(*pToken))
             {
                 aReferences.push_back(pToken);
-                pToken = pCode->NextRPN();
+                pToken = aIter.NextRPN();
             }
             else
             {
@@ -2888,7 +2889,7 @@ ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
                 break;
             }
         }
-        if (pFunction && !pCode->GetNextReferenceRPN()
+        if (pFunction && !aIter.GetNextReferenceRPN()
                 && (pFunction->GetParamCount() == aReferences.size()))
         {
             return lcl_refListFormsOneRange(aPos, aReferences, rRange);
@@ -2900,9 +2901,9 @@ ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
 ScFormulaCell::RelNameRef ScFormulaCell::HasRelNameReference() const
 {
     RelNameRef eRelNameRef = RelNameRef::NONE;
-    pCode->Reset();
+    formula::FormulaTokenArrayPlainIterator aIter(*pCode);
     formula::FormulaToken* t;
-    while ( ( t = pCode->GetNextReferenceRPN() ) != nullptr )
+    while ( ( t = aIter.GetNextReferenceRPN() ) != nullptr )
     {
         switch (t->GetType())
         {
@@ -2967,11 +2968,11 @@ bool checkCompileColRowName(
             if (rCxt.mnColDelta <= 0 && rCxt.mnRowDelta <= 0)
                 return false;
 
+            formula::FormulaTokenArrayPlainIterator aIter(rCode);
             formula::FormulaToken* t;
             ScRangePairList* pColList = rDoc.GetColNameRanges();
             ScRangePairList* pRowList = rDoc.GetRowNameRanges();
-            rCode.Reset();
-            while ((t = rCode.GetNextColRowName()) != nullptr)
+            while ((t = aIter.GetNextColRowName()) != nullptr)
             {
                 ScSingleRefData& rRef = *t->GetSingleRef();
                 if (rCxt.mnRowDelta > 0 && rRef.IsColRel())
@@ -3014,9 +3015,9 @@ bool checkCompileColRowName(
             if (bMoved)
                 return true;
 
-            rCode.Reset();
-            const formula::FormulaToken* t = rCode.GetNextColRowName();
-            for (; t; t = rCode.GetNextColRowName())
+            formula::FormulaTokenArrayPlainIterator aIter(rCode);
+            const formula::FormulaToken* t = aIter.GetNextColRowName();
+            for (; t; t = aIter.GetNextColRowName())
             {
                 const ScSingleRefData& rRef = *t->GetSingleRef();
                 ScAddress aAbs = rRef.toAbs(aPos);
@@ -3079,8 +3080,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
     bool bHasColRowNames = false;
     if (!bHasRefs)
     {
-        pCode->Reset();
-        bHasColRowNames = (pCode->GetNextColRowName() != nullptr);
+        bHasColRowNames = (formula::FormulaTokenArrayPlainIterator(*pCode).GetNextColRowName() != nullptr);
         bHasRefs = bHasRefs || bHasColRowNames;
     }
     bool bOnRefMove = pCode->IsRecalcModeOnRefMove();
@@ -3206,8 +3206,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
     bool bHasColRowNames = false;
     if (!bHasRefs)
     {
-        pCode->Reset();
-        bHasColRowNames = (pCode->GetNextColRowName() != nullptr);
+        bHasColRowNames = (formula::FormulaTokenArrayPlainIterator(*pCode).GetNextColRowName() != nullptr);
         bHasRefs = bHasRefs || bHasColRowNames;
     }
     bool bOnRefMove = pCode->IsRecalcModeOnRefMove();
@@ -3333,8 +3332,7 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
 
     // Check presence of any references or column row names.
     bool bHasRefs = pCode->HasReferences();
-    pCode->Reset();
-    bool bHasColRowNames = (pCode->GetNextColRowName() != nullptr);
+    bool bHasColRowNames = (formula::FormulaTokenArrayPlainIterator(*pCode).GetNextColRowName() != nullptr);
     bHasRefs = bHasRefs || bHasColRowNames;
     bool bOnRefMove = pCode->IsRecalcModeOnRefMove();
 
@@ -3500,8 +3498,8 @@ void ScFormulaCell::UpdateInsertTabAbs(SCTAB nTable)
     if (!bAdjustCode)
         return;
 
-    pCode->Reset();
-    formula::FormulaToken* p = pCode->GetNextReferenceRPN();
+    formula::FormulaTokenArrayPlainIterator aIter(*pCode);
+    formula::FormulaToken* p = aIter.GetNextReferenceRPN();
     while (p)
     {
         ScSingleRefData& rRef1 = *p->GetSingleRef();
@@ -3513,7 +3511,7 @@ void ScFormulaCell::UpdateInsertTabAbs(SCTAB nTable)
             if (!rRef2.IsTabRel() && nTable <= rRef2.Tab())
                 rRef2.IncTab(1);
         }
-        p = pCode->GetNextReferenceRPN();
+        p = aIter.GetNextReferenceRPN();
     }
 }
 
@@ -3527,8 +3525,8 @@ bool ScFormulaCell::TestTabRefAbs(SCTAB nTable)
         return false;
 
     bool bRet = false;
-    pCode->Reset();
-    formula::FormulaToken* p = pCode->GetNextReferenceRPN();
+    formula::FormulaTokenArrayPlainIterator aIter(*pCode);
+    formula::FormulaToken* p = aIter.GetNextReferenceRPN();
     while (p)
     {
         ScSingleRefData& rRef1 = *p->GetSingleRef();
@@ -3550,7 +3548,7 @@ bool ScFormulaCell::TestTabRefAbs(SCTAB nTable)
                     rRef2.SetAbsTab(aPos.Tab());
             }
         }
-        p = pCode->GetNextReferenceRPN();
+        p = aIter.GetNextReferenceRPN();
     }
     return bRet;
 }
@@ -3568,9 +3566,9 @@ void ScFormulaCell::UpdateCompile( bool bForceIfNameInUse )
 void ScFormulaCell::TransposeReference()
 {
     bool bFound = false;
-    pCode->Reset();
+    formula::FormulaTokenArrayPlainIterator aIter(*pCode);
     formula::FormulaToken* t;
-    while ( ( t = pCode->GetNextReference() ) != nullptr )
+    while ( ( t = aIter.GetNextReference() ) != nullptr )
     {
         ScSingleRefData& rRef1 = *t->GetSingleRef();
         if ( rRef1.IsColRel() && rRef1.IsRowRel() )
@@ -3626,10 +3624,10 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
 
     ScTokenArray* pOld = pUndoDoc ? pCode->Clone() : nullptr;
     bool bRefChanged = false;
-    formula::FormulaToken* t;
 
-    pCode->Reset();
-    while( (t = pCode->GetNextReferenceOrName()) != nullptr )
+    formula::FormulaTokenArrayPlainIterator aIter(*pCode);
+    formula::FormulaToken* t;
+    while( (t = aIter.GetNextReferenceOrName()) != nullptr )
     {
         if( t->GetOpCode() == ocName )
         {
@@ -3680,10 +3678,11 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
     EndListeningTo( pDocument );
 
     bool bRefChanged = false;
+
+    formula::FormulaTokenArrayPlainIterator aIter(*pCode);
     formula::FormulaToken* t;
 
-    pCode->Reset();
-    while( (t = pCode->GetNextReferenceOrName()) != nullptr )
+    while( (t = aIter.GetNextReferenceOrName()) != nullptr )
     {
         if( t->GetOpCode() == ocName )
         {
@@ -3722,7 +3721,8 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
 static void lcl_FindRangeNamesInUse(sc::UpdatedRangeNames& rIndexes, ScTokenArray* pCode, const ScDocument* pDoc,
         int nRecursion)
 {
-    for (FormulaToken* p = pCode->First(); p; p = pCode->Next())
+    FormulaTokenArrayPlainIterator aIter(*pCode);
+    for (FormulaToken* p = aIter.First(); p; p = aIter.Next())
     {
         if (p->GetOpCode() == ocName)
         {
@@ -3764,7 +3764,8 @@ void ScFormulaCell::SetRunning( bool bVal )
 
 void ScFormulaCell::CompileDBFormula( sc::CompileFormulaContext& rCxt )
 {
-    for( FormulaToken* p = pCode->First(); p; p = pCode->Next() )
+    FormulaTokenArrayPlainIterator aIter(*pCode);
+    for( FormulaToken* p = aIter.First(); p; p = aIter.Next() )
     {
         OpCode eOp = p->GetOpCode();
         if ( eOp == ocDBArea || eOp == ocTableRef )
@@ -3779,8 +3780,8 @@ void ScFormulaCell::CompileDBFormula( sc::CompileFormulaContext& rCxt )
 
 void ScFormulaCell::CompileColRowNameFormula( sc::CompileFormulaContext& rCxt )
 {
-    pCode->Reset();
-    for ( FormulaToken* p = pCode->First(); p; p = pCode->Next() )
+    FormulaTokenArrayPlainIterator aIter(*pCode);
+    for ( FormulaToken* p = aIter.First(); p; p = aIter.Next() )
     {
         if ( p->GetOpCode() == ocColRowName )
         {
@@ -4241,8 +4242,8 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
         // external references are allowed.
 
         ScTokenArray aCode;
-        pCode->Reset();
-        for (const formula::FormulaToken* p = pCode->First(); p; p = pCode->Next())
+        FormulaTokenArrayPlainIterator aIter(*pCode);
+        for (const formula::FormulaToken* p = aIter.First(); p; p = aIter.Next())
         {
             switch (p->GetType())
             {
@@ -4355,9 +4356,9 @@ void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
         return;
     }
 
-    pArr->Reset();
+    formula::FormulaTokenArrayPlainIterator aIter(*pArr);
     formula::FormulaToken* t;
-    while ( ( t = pArr->GetNextReferenceRPN() ) != nullptr )
+    while ( ( t = aIter.GetNextReferenceRPN() ) != nullptr )
     {
         switch (t->GetType())
         {
@@ -4398,9 +4399,9 @@ void ScFormulaCell::StartListeningTo( sc::StartListeningContext& rCxt )
         return;
     }
 
-    pArr->Reset();
+    formula::FormulaTokenArrayPlainIterator aIter(*pArr);
     formula::FormulaToken* t;
-    while ( ( t = pArr->GetNextReferenceRPN() ) != nullptr )
+    while ( ( t = aIter.GetNextReferenceRPN() ) != nullptr )
     {
         switch (t->GetType())
         {
@@ -4475,9 +4476,9 @@ void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
         pArr = GetCode();
         aCellPos = aPos;
     }
-    pArr->Reset();
+    formula::FormulaTokenArrayPlainIterator aIter(*pArr);
     formula::FormulaToken* t;
-    while ( ( t = pArr->GetNextReferenceRPN() ) != nullptr )
+    while ( ( t = aIter.GetNextReferenceRPN() ) != nullptr )
     {
         switch (t->GetType())
         {
@@ -4522,9 +4523,9 @@ void ScFormulaCell::EndListeningTo( sc::EndListeningContext& rCxt )
         return;
     }
 
-    pArr->Reset();
+    formula::FormulaTokenArrayPlainIterator aIter(*pArr);
     formula::FormulaToken* t;
-    while ( ( t = pArr->GetNextReferenceRPN() ) != nullptr )
+    while ( ( t = aIter.GetNextReferenceRPN() ) != nullptr )
     {
         switch (t->GetType())
         {
