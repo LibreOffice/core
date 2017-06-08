@@ -32,6 +32,8 @@
 #include <svdata.hxx>
 #include <window.h>
 
+#include "sallayout.hxx"
+
 #define STATUSBAR_OFFSET_X      STATUSBAR_OFFSET
 #define STATUSBAR_OFFSET_Y      2
 #define STATUSBAR_OFFSET_TEXTY  3
@@ -59,20 +61,21 @@ StatusBar::ImplData::ImplData()
 
 struct ImplStatusItem
 {
-    sal_uInt16              mnId;
-    StatusBarItemBits   mnBits;
-    long                mnWidth;
-    long                mnOffset;
-    long                mnExtraWidth;
-    long                mnX;
-    OUString            maText;
-    OUString            maHelpText;
-    OUString            maQuickHelpText;
-    OString             maHelpId;
-    void*               mpUserData;
-    bool            mbVisible;
-    OUString            maAccessibleName;
-    OUString            maCommand;
+    sal_uInt16                          mnId;
+    StatusBarItemBits                   mnBits;
+    long                                mnWidth;
+    long                                mnOffset;
+    long                                mnExtraWidth;
+    long                                mnX;
+    OUString                            maText;
+    OUString                            maHelpText;
+    OUString                            maQuickHelpText;
+    OString                             maHelpId;
+    void*                               mpUserData;
+    bool                                mbVisible;
+    OUString                            maAccessibleName;
+    OUString                            maCommand;
+    std::unique_ptr<SalLayout>          mxLayoutCache;
 };
 
 inline long ImplCalcProgressWidth( sal_uInt16 nMax, long nSize )
@@ -369,19 +372,37 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
         rRenderContext.SetClipRegion(aRegion);
     }
 
-    // print text
-    Size aTextSize(rRenderContext.GetTextWidth(pItem->maText), rRenderContext.GetTextHeight());
+    SalLayout* pLayoutCache = pItem->mxLayoutCache.get();
+    Size aTextSize(rRenderContext.GetTextWidth(pItem->maText,0,-1,nullptr,&pLayoutCache), rRenderContext.GetTextHeight());
+
+    // update cache if necessary
+    if(pLayoutCache != pItem->mxLayoutCache.get() )
+        pItem->mxLayoutCache.reset(pLayoutCache);
+
     Point aTextPos = ImplGetItemTextPos(aTextRectSize, aTextSize, pItem->mnBits);
+
     if (bOffScreen)
     {
-        mpImplData->mpVirDev->DrawText(aTextPos, pItem->maText);
+        mpImplData->mpVirDev->DrawText(
+                    aTextPos,
+                    pItem->maText,
+                    0, -1, nullptr, nullptr,
+                    &pLayoutCache );
     }
     else
     {
         aTextPos.X() += aTextRect.Left();
         aTextPos.Y() += aTextRect.Top();
-        rRenderContext.DrawText(aTextPos, pItem->maText);
+        rRenderContext.DrawText(
+                    aTextPos,
+                    pItem->maText,
+                    0, -1, nullptr, nullptr,
+                    &pLayoutCache );
     }
+
+    // update cache if necessary
+    if(pLayoutCache != pItem->mxLayoutCache.get() )
+        pItem->mxLayoutCache.reset(pLayoutCache);
 
     // call DrawItem if necessary
     if (pItem->mnBits & StatusBarItemBits::UserDraw)
@@ -830,6 +851,13 @@ void StatusBar::StateChanged( StateChangedType nType )
         ImplInitSettings();
         Invalidate();
     }
+
+    //invalidate layout cache
+    for (ImplStatusItem* pItem : mpItemList)
+    {
+        pItem->mxLayoutCache.reset();
+    }
+
 }
 
 void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
@@ -852,6 +880,8 @@ void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
             long nWidth = GetTextWidth( pItem->maText ) + nFudge;
             if( nWidth > pItem->mnWidth + STATUSBAR_OFFSET )
                 pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
+
+            pItem->mxLayoutCache.reset();
         }
         Size aSize = GetSizePixel();
         // do not disturb current width, since
@@ -1133,11 +1163,21 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
 
         if ( pItem->maText != rText )
         {
+            // invalidate cache
+            pItem->mxLayoutCache.reset();
+
             pItem->maText = rText;
 
             // adjust item width - see also DataChanged()
             long nFudge = GetTextHeight()/4;
-            long nWidth = GetTextWidth( pItem->maText ) + nFudge;
+
+            SalLayout* pLayoutCache = nullptr;
+
+            long nWidth = GetTextWidth( pItem->maText,0,-1,nullptr,&pLayoutCache ) + nFudge;
+
+            // update cache
+            pItem->mxLayoutCache.reset(pLayoutCache);
+
             if( (nWidth > pItem->mnWidth + STATUSBAR_OFFSET) ||
                 ((nWidth < pItem->mnWidth) && (mnDX - STATUSBAR_OFFSET) < mnItemsWidth  ))
             {
@@ -1196,6 +1236,8 @@ void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
     {
         ImplStatusItem* pItem = mpItemList[ nPos ];
+        // invalidate cache
+        pItem->mxLayoutCache.reset();
         pItem->mpUserData = pNewData;
 
         // call Draw-Item if it's a User-Item
