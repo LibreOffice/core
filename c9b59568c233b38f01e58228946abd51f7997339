@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_39724fae",
+        "filename": "vcl/source/window/status.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-08T19:27:25Z",
+      "side": 1,
+      "message": "no need to check before calling reset()",
+      "revId": "c9b59568c233b38f01e58228946abd51f7997339",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_5969dbbd",
+        "filename": "vcl/source/window/status.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-08T19:27:25Z",
+      "side": 1,
+      "message": "no need to do this, has a default constructor",
+      "revId": "c9b59568c233b38f01e58228946abd51f7997339",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
