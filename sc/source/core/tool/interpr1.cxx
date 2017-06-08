@@ -5638,7 +5638,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
     sal_uInt8 nQueryCount = nParamCount / 2;
 
     sc::ParamIfsResult aRes;
-    std::vector<sal_uInt8> aResArray;
+    std::vector<sal_uInt32> aResArray;
     double fVal = 0.0;
     SCCOL nDimensionCols = 0;
     SCROW nDimensionRows = 0;
@@ -5854,7 +5854,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                     return;
                 }
 
-                std::vector<sal_uInt8>::iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
+                std::vector<sal_uInt32>::iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
                 std::vector<double>::const_iterator itThisRes = aResValues.begin();
                 for (; itRes != itResEnd; ++itRes, ++itThisRes)
                     *itRes += *itThisRes;
@@ -5973,7 +5973,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                     return;
                 }
 
-                std::vector<sal_uInt8>::const_iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
+                std::vector<sal_uInt32>::const_iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
                 std::vector<double>::const_iterator itMain = aMainValues.begin();
                 for (; itRes != itResEnd; ++itRes, ++itMain)
                 {
@@ -6000,7 +6000,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             }
             else
             {
-                std::vector<sal_uInt8>::const_iterator itRes = aResArray.begin();
+                std::vector<sal_uInt32>::const_iterator itRes = aResArray.begin();
                 for (SCCOL nCol = 0; nCol < nDimensionCols; ++nCol)
                 {
                     for (SCROW nRow = 0; nRow < nDimensionRows; ++nRow, ++itRes)
@@ -6034,7 +6034,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
     }
     else
     {
-        std::vector<sal_uInt8>::const_iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
+        std::vector<sal_uInt32>::const_iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
         for (; itRes != itResEnd; ++itRes)
             if (*itRes == nQueryCount)
                 ++aRes.mfCount;
