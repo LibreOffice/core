@@ -18,13 +18,21 @@ namespace apitest {
 class OOO_DLLPUBLIC_TEST XCellSeries
 {
 public:
+    XCellSeries(sal_Int32 aStartX, sal_Int32 aStartY) : maStartX(aStartX), maStartY(aStartY){}
     virtual css::uno::Reference< css::uno::XInterface > init() = 0;
     virtual ~XCellSeries(){}
 
     void testFillAuto();
     void testFillSeries();
+
+private:
+    sal_Int32 maStartX;
+    sal_Int32 maStartY;
 };
 
 }
 
 #endif // INCLUDED_TEST_SHEET_XCELLSERIES_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

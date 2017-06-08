@@ -8,42 +8,29 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
-#include <test/util/xreplaceable.hxx>
-#include <test/util/xsearchable.hxx>
-#include <test/sheet/xprintareas.hxx>
 #include <test/sheet/xcellseries.hxx>
 
+#include <com/sun/star/table/XCellCursor.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
 using namespace css;
 using namespace css::uno;
 
-namespace sc_apitest
-{
+namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 9
+#define NUMBER_OF_TESTS 2
 
-class ScTableSheetObj : public CalcUnoApiTest, public apitest::XSearchable, public apitest::XReplaceable, public apitest::XPrintAreas, public apitest::XCellSeries
+class ScCellCursorObj : public CalcUnoApiTest, apitest::XCellSeries
 {
 public:
-    ScTableSheetObj();
+    ScCellCursorObj();
 
     virtual void setUp() override;
     virtual void tearDown() override;
-
     virtual uno::Reference< uno::XInterface > init() override;
 
-    CPPUNIT_TEST_SUITE(ScTableSheetObj);
-    CPPUNIT_TEST(testFindAll);
-    CPPUNIT_TEST(testFindNext);
-    CPPUNIT_TEST(testFindFirst);
-    CPPUNIT_TEST(testReplaceAll);
-    CPPUNIT_TEST(testCreateReplaceDescriptor);
-    // XPrintAreas
-    CPPUNIT_TEST(testSetAndGetPrintTitleColumns);
-    CPPUNIT_TEST(testSetAndGetPrintTitleRows);
-    // XCellSeries
+    CPPUNIT_TEST_SUITE(ScCellCursorObj);
     CPPUNIT_TEST(testFillAuto);
     CPPUNIT_TEST(testFillSeries);
     CPPUNIT_TEST_SUITE_END();
@@ -53,21 +40,19 @@ private:
     static uno::Reference< lang::XComponent > mxComponent;
 };
 
-sal_Int32 ScTableSheetObj::nTest = 0;
-uno::Reference< lang::XComponent > ScTableSheetObj::mxComponent;
+sal_Int32 ScCellCursorObj::nTest = 0;
+uno::Reference< lang::XComponent > ScCellCursorObj::mxComponent;
 
-ScTableSheetObj::ScTableSheetObj():
+ScCellCursorObj::ScCellCursorObj():
     CalcUnoApiTest("/sc/qa/extras/testdocuments"),
-    apitest::XSearchable("test", 4),
-    apitest::XReplaceable("searchReplaceString", "replaceReplaceString"),
-    apitest::XCellSeries(1, 0)
+    apitest::XCellSeries(0, 0)
 {
 }
 
-uno::Reference< uno::XInterface > ScTableSheetObj::init()
+uno::Reference< uno::XInterface > ScCellCursorObj::init()
 {
     OUString aFileURL;
-    createFileURL("ScTableSheetObj.ods", aFileURL);
+    createFileURL("ScCellCursorObj.ods", aFileURL);
     if(!mxComponent.is())
         mxComponent = loadFromDesktop(aFileURL, "com.sun.star.sheet.SpreadsheetDocument");
     CPPUNIT_ASSERT(mxComponent.is());
@@ -75,18 +60,19 @@ uno::Reference< uno::XInterface > ScTableSheetObj::init()
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference< table::XCellCursor > xCellCursor( xSheet->createCursor(), UNO_QUERY_THROW);
 
-    return xSheet;
+    return xCellCursor;
 }
 
-void ScTableSheetObj::setUp()
+void ScCellCursorObj::setUp()
 {
     nTest++;
     CPPUNIT_ASSERT(nTest <= NUMBER_OF_TESTS);
     CalcUnoApiTest::setUp();
 }
 
-void ScTableSheetObj::tearDown()
+void ScCellCursorObj::tearDown()
 {
     if (nTest == NUMBER_OF_TESTS)
     {
@@ -97,7 +83,7 @@ void ScTableSheetObj::tearDown()
     CalcUnoApiTest::tearDown();
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScTableSheetObj);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScCellCursorObj);
 
 }
 
