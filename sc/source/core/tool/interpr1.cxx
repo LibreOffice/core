@@ -5638,7 +5638,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
     sal_uInt8 nQueryCount = nParamCount / 2;
 
     sc::ParamIfsResult aRes;
-    std::vector<sal_uInt32> aResArray;
+    std::vector<sal_uInt32> vConditions;
     double fVal = 0.0;
     SCCOL nDimensionCols = 0;
     SCROW nDimensionRows = 0;
@@ -5805,8 +5805,8 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             }
 
             // initialize temporary result matrix
-            if (aResArray.empty())
-                aResArray.resize( nDimensionCols * nDimensionRows, 0);
+            if (vConditions.empty())
+                vConditions.resize( nDimensionCols * nDimensionRows, 0);
 
             ScQueryParam rParam;
             rParam.nRow1       = nRow1;
@@ -5848,13 +5848,13 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                 // result matrix is filled with boolean values.
                 std::vector<double> aResValues;
                 pResultMatrix->GetDoubleArray(aResValues);
-                if (aResArray.size() != aResValues.size())
+                if (vConditions.size() != aResValues.size())
                 {
                     PushError( FormulaError::IllegalParameter);
                     return;
                 }
 
-                std::vector<sal_uInt32>::iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
+                std::vector<sal_uInt32>::iterator itRes = vConditions.begin(), itResEnd = vConditions.end();
                 std::vector<double>::const_iterator itThisRes = aResValues.begin();
                 for (; itRes != itResEnd; ++itRes, ++itThisRes)
                     *itRes += *itThisRes;
@@ -5870,7 +5870,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                     {
                         size_t nC = aCellIter.GetCol() + nColDiff;
                         size_t nR = aCellIter.GetRow() + nRowDiff;
-                        ++aResArray[nC * nDimensionRows + nR];
+                        ++vConditions[nC * nDimensionRows + nR];
                     } while ( aCellIter.GetNext() );
                 }
             }
@@ -5967,13 +5967,13 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             {
                 std::vector<double> aMainValues;
                 pMainMatrix->GetDoubleArray(aMainValues, false); // Map empty values to NaN's.
-                if (aResArray.size() != aMainValues.size())
+                if (vConditions.size() != aMainValues.size())
                 {
                     PushError( FormulaError::IllegalArgument);
                     return;
                 }
 
-                std::vector<sal_uInt32>::const_iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
+                std::vector<sal_uInt32>::const_iterator itRes = vConditions.begin(), itResEnd = vConditions.end();
                 std::vector<double>::const_iterator itMain = aMainValues.begin();
                 for (; itRes != itResEnd; ++itRes, ++itMain)
                 {
@@ -6000,7 +6000,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             }
             else
             {
-                std::vector<sal_uInt32>::const_iterator itRes = aResArray.begin();
+                std::vector<sal_uInt32>::const_iterator itRes = vConditions.begin();
                 for (SCCOL nCol = 0; nCol < nDimensionCols; ++nCol)
                 {
                     for (SCROW nRow = 0; nRow < nDimensionRows; ++nRow, ++itRes)
@@ -6034,7 +6034,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
     }
     else
     {
-        std::vector<sal_uInt32>::const_iterator itRes = aResArray.begin(), itResEnd = aResArray.end();
+        std::vector<sal_uInt32>::const_iterator itRes = vConditions.begin(), itResEnd = vConditions.end();
         for (; itRes != itResEnd; ++itRes)
             if (*itRes == nQueryCount)
                 ++aRes.mfCount;
