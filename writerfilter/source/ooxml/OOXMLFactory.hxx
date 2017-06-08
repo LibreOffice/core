@@ -53,7 +53,8 @@ enum ResourceType_t {
     RT_PropertyTable,
     RT_Math,
     RT_Any,
-    RT_UniversalMeasure
+    RT_TwipsMeasure,
+    RT_HpsMeasure
 };
 
 struct AttributeInfo
