@@ -138,13 +138,13 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                     // (== Standard page template)
 
                     SfxItemPool& rItemPool = GetPool().GetPool();
-                    pSet = new SfxItemSet( rItemPool,
-                                           ATTR_BACKGROUND, ATTR_BACKGROUND,
-                                           ATTR_BORDER, ATTR_SHADOW,
-                                           ATTR_LRSPACE, ATTR_PAGE_SCALETO,
-                                           ATTR_WRITINGDIR, ATTR_WRITINGDIR,
-                                           ATTR_USERDEF, ATTR_USERDEF,
-                                           0 );
+                    pSet = SfxItemSet::create<
+                        ATTR_USERDEF, ATTR_USERDEF,
+                        ATTR_WRITINGDIR, ATTR_WRITINGDIR,
+                        ATTR_BACKGROUND, ATTR_BACKGROUND,
+                        ATTR_BORDER, ATTR_SHADOW,
+                        ATTR_LRSPACE, ATTR_PAGE_SCALETO>(rItemPool)
+                        .release();//TODO
 
                     //  If being loaded also the set is then filled in from the file,
                     //  so the defaults do not need to be set.
