@@ -96,7 +96,7 @@ class GIFReader : public GraphicReader
     bool                ReadExtension();
     bool                ReadLocalHeader();
     sal_uLong           ReadNextBlock();
-    void                FillImages( sal_uInt8* pBytes, sal_uLong nCount );
+    void                FillImages( const sal_uInt8* pBytes, sal_uLong nCount );
     void                CreateNewBitmaps();
     bool                ProcessGIF();
 
@@ -517,7 +517,7 @@ sal_uLong GIFReader::ReadNextBlock()
     return nRet;
 }
 
-void GIFReader::FillImages( sal_uInt8* pBytes, sal_uLong nCount )
+void GIFReader::FillImages( const sal_uInt8* pBytes, sal_uLong nCount )
 {
     for( sal_uLong i = 0UL; i < nCount; i++ )
     {

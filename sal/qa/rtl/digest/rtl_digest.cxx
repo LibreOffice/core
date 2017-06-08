@@ -71,7 +71,7 @@ const OString constSampleStringSums[] =
 };
 
 // Create hex-value string from the digest value to keep the string size minimal
-OString createHex(sal_uInt8* pKeyBuffer, sal_uInt32 nKeyLen)
+OString createHex(const sal_uInt8* pKeyBuffer, sal_uInt32 nKeyLen)
 {
     OStringBuffer aBuffer(nKeyLen * 2 + 1);
     for (sal_uInt32 i = 0; i < nKeyLen; ++i)

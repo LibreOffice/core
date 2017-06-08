@@ -260,7 +260,7 @@ bool SwWrtShell::GoStart( bool bKeepArea, bool *pMoveTable,
            SwCursorShell::SttEndDoc(true);
 }
 
-bool SwWrtShell::GoEnd(bool bKeepArea, bool *pMoveTable)
+bool SwWrtShell::GoEnd(bool bKeepArea, const bool *pMoveTable)
 {
     if ( pMoveTable && *pMoveTable )
         return MoveTable( GotoCurrTable, fnTableEnd );

@@ -113,7 +113,7 @@ SwPaM & SwUndRng::AddUndoRedoPaM(
 }
 
 void SwUndo::RemoveIdxFromSection( SwDoc& rDoc, sal_uLong nSttIdx,
-                                    sal_uLong* pEndIdx )
+                                    const sal_uLong* pEndIdx )
 {
     SwNodeIndex aIdx( rDoc.GetNodes(), nSttIdx );
     SwNodeIndex aEndIdx( rDoc.GetNodes(), pEndIdx ? *pEndIdx
@@ -361,7 +361,7 @@ void SwUndoSaveContent::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
 
 void SwUndoSaveContent::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
                             SwPosition& rInsPos,
-                            sal_uLong* pEndNdIdx, sal_Int32* pEndCntIdx )
+                            const sal_uLong* pEndNdIdx, const sal_Int32* pEndCntIdx )
 {
     // here comes the recovery
     SwNodes & rNds = rDoc.GetUndoManager().GetUndoNodes();

@@ -621,7 +621,7 @@ public:
     virtual const PptSlideLayoutAtom*   GetSlideLayoutAtom() const override;
     SdrObject*              CreateTable(
                                 SdrObject* pGroupObject,
-                                sal_uInt32* pTableArry,
+                                const sal_uInt32* pTableArry,
                                 SvxMSDffSolverContainer*
                             );
     virtual bool ReadFormControl( tools::SvRef<SotStorage>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rFormComp ) const = 0;

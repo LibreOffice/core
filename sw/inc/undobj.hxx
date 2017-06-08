@@ -59,7 +59,7 @@ protected:
     bool bCacheComment;
     mutable std::unique_ptr<OUString> pComment;
 
-    static void RemoveIdxFromSection( SwDoc&, sal_uLong nSttIdx, sal_uLong* pEndIdx = nullptr );
+    static void RemoveIdxFromSection( SwDoc&, sal_uLong nSttIdx, const sal_uLong* pEndIdx = nullptr );
     static void RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext );
     static void RemoveIdxRel( sal_uLong, const SwPosition& );
 
@@ -163,7 +163,7 @@ protected:
                         sal_uLong* pEndNdIdx = nullptr, sal_Int32 * pEndCntIdx = nullptr );
     static void MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
                           SwPosition& rInsPos,
-                          sal_uLong* pEndNdIdx = nullptr, sal_Int32 * pEndCntIdx = nullptr );
+                          const sal_uLong* pEndNdIdx = nullptr, const sal_Int32 * pEndCntIdx = nullptr );
 
     // These two methods move the SPoint back/forth from PaM. With it
     // a range can be spanned for Undo/Redo. (In this case the SPoint

@@ -1608,7 +1608,7 @@ struct ScOUStringCollate
     }
 };
 
-void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, long nDimIndex, bool bAscending, sal_uInt16* pUserListId)
+void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, long nDimIndex, bool bAscending, const sal_uInt16* pUserListId)
 {
     if (!pDPObj)
         return;

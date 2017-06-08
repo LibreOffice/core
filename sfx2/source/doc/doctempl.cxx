@@ -178,7 +178,7 @@ public:
 
     void                AddEntry( const OUString& rTitle,
                                   const OUString& rTargetURL,
-                                  size_t *pPos );
+                                  const size_t *pPos );
     void                DeleteEntry( size_t nIndex );
 
     int                 Compare( RegionData_Impl* pCompareWith ) const;
@@ -1341,7 +1341,7 @@ size_t RegionData_Impl::GetEntryPos( const OUString& rTitle, bool& rFound ) cons
 
 void RegionData_Impl::AddEntry( const OUString& rTitle,
                                 const OUString& rTargetURL,
-                                size_t *pPos )
+                                const size_t *pPos )
 {
     INetURLObject aLinkObj( GetHierarchyURL() );
     aLinkObj.insertName( rTitle, false,

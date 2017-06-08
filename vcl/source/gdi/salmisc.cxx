@@ -65,7 +65,7 @@ static long ImplIndexFromColor( const BitmapColor& rCol )
 
 static void ImplPALToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
                           FncGetPixel pFncGetPixel, FncSetPixel pFncSetPixel,
-                          Scanline* pSrcScanMap, Scanline* pDstScanMap, long* pMapX, long* pMapY )
+                          Scanline* pSrcScanMap, Scanline* pDstScanMap, long* pMapX, const long* pMapY )
 {
     const long          nHeight1 = rDstBuffer.mnHeight - 1;
     const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;
@@ -98,7 +98,7 @@ static void ImplPALToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuff
 
 static void ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
                          FncGetPixel pFncGetPixel, FncSetPixel pFncSetPixel,
-                         Scanline* pSrcScanMap, Scanline* pDstScanMap, long* pMapX, long* pMapY )
+                         Scanline* pSrcScanMap, Scanline* pDstScanMap, long* pMapX, const long* pMapY )
 {
     const long          nHeight1 = rDstBuffer.mnHeight - 1;
     const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;
@@ -177,7 +177,7 @@ static void ImplPALToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
 
 static void ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
                         FncGetPixel pFncGetPixel, FncSetPixel pFncSetPixel,
-                        Scanline* pSrcScanMap, Scanline* pDstScanMap, long* pMapX, long* pMapY )
+                        Scanline* pSrcScanMap, Scanline* pDstScanMap, long* pMapX, const long* pMapY )
 {
     const long          nHeight1 = rDstBuffer.mnHeight - 1;
     const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;
@@ -221,7 +221,7 @@ static void ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer
 
 static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer,
                          FncGetPixel pFncGetPixel, FncSetPixel pFncSetPixel,
-                         Scanline* pSrcScanMap, Scanline* pDstScanMap, long* pMapX, long* pMapY )
+                         Scanline* pSrcScanMap, Scanline* pDstScanMap, long* pMapX, const long* pMapY )
 {
     const long          nHeight1 = rDstBuffer.mnHeight- 1;
     const ColorMask&    rSrcMask = rSrcBuffer.maColorMask;

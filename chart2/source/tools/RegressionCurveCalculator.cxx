@@ -85,7 +85,7 @@ void RegressionCurveCalculator::setRegressionProperties(
 OUString RegressionCurveCalculator::getFormattedString(
     const Reference< util::XNumberFormatter >& xNumFormatter,
     sal_Int32 nNumberFormatKey,
-    double fNumber, sal_Int32* pStringLength /* = nullptr */ )
+    double fNumber, const sal_Int32* pStringLength /* = nullptr */ )
 {
     if ( pStringLength && *pStringLength <= 0 )
         return OUString("###");
@@ -194,7 +194,7 @@ OUString SAL_CALL RegressionCurveCalculator::getFormattedRepresentation(
 }
 
 void RegressionCurveCalculator::addStringToEquation(
-        OUStringBuffer& aStrEquation, sal_Int32& nLineLength, OUStringBuffer& aAddString, sal_Int32* pMaxWidth)
+        OUStringBuffer& aStrEquation, sal_Int32& nLineLength, OUStringBuffer& aAddString, const sal_Int32* pMaxWidth)
 {
     if ( pMaxWidth && ( nLineLength + aAddString.getLength() > *pMaxWidth ) )
     {  // wrap line

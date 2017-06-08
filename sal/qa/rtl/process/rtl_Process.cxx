@@ -144,7 +144,7 @@ public:
 /************************************************************************
  * For diagnostics( from sal/test/testuuid.cxx )
  ************************************************************************/
-void printUuid( sal_uInt8 *pNode )
+void printUuid( const sal_uInt8 *pNode )
 {
     printf("# UUID is: ");
     for( sal_Int32 i1 = 0 ; i1 < 4 ; i1++ )
@@ -168,7 +168,7 @@ void printUuid( sal_uInt8 *pNode )
 /**************************************************************************
  *  output UUID to a string
  **************************************************************************/
-void printUuidtoBuffer( sal_uInt8 *pNode, sal_Char * pBuffer )
+void printUuidtoBuffer( const sal_uInt8 *pNode, sal_Char * pBuffer )
 {
     sal_Int8 nPtr = 0;
     for( sal_Int32 i1 = 0 ; i1 < 16 ; i1++ )

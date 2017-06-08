@@ -24,8 +24,8 @@ CertificateExtension_CertExtn::CertificateExtension_CertExtn()
 {
 }
 
-void CertificateExtension_CertExtn::setCertExtn(unsigned char* value, unsigned int vlen,
-                                                unsigned char* id, unsigned int idlen, bool critical)
+void CertificateExtension_CertExtn::setCertExtn(const unsigned char* value, unsigned int vlen,
+                                                const unsigned char* id, unsigned int idlen, bool critical)
 {
     unsigned int i ;
     if( value != nullptr && vlen != 0 ) {

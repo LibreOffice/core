@@ -29,7 +29,7 @@
 sal::detail::textenc::BadInputConversionAction
 sal::detail::textenc::handleBadInputTextToUnicodeConversion(
     bool bUndefined, bool bMultiByte, char cByte, sal_uInt32 nFlags,
-    sal_Unicode ** pDestBufPtr, sal_Unicode * pDestBufEnd, sal_uInt32 * pInfo)
+    sal_Unicode ** pDestBufPtr, const sal_Unicode * pDestBufEnd, sal_uInt32 * pInfo)
 {
     *pInfo |= bUndefined
         ? (bMultiByte
@@ -80,7 +80,7 @@ sal::detail::textenc::handleBadInputTextToUnicodeConversion(
 sal::detail::textenc::BadInputConversionAction
 sal::detail::textenc::handleBadInputUnicodeToTextConversion(
     bool bUndefined, sal_uInt32 nUtf32, sal_uInt32 nFlags, char ** pDestBufPtr,
-    char * pDestBufEnd, sal_uInt32 * pInfo, char const * pPrefix,
+    const char * pDestBufEnd, sal_uInt32 * pInfo, char const * pPrefix,
     sal_Size nPrefixLen, bool * pPrefixWritten)
 {
     // TODO! RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE

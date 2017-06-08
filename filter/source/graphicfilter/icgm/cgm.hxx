@@ -93,8 +93,8 @@ class CGM
         static sal_uInt8    ImplGetByte( sal_uInt32 nSource, sal_uInt32 nPrecision );
         sal_Int32           ImplGetI( sal_uInt32 nPrecision );
         sal_uInt32          ImplGetUI( sal_uInt32 nPrecision );
-        static void         ImplGetSwitch4( sal_uInt8* pSource, sal_uInt8* pDest );
-        static void         ImplGetSwitch8( sal_uInt8* pSource, sal_uInt8* pDest );
+        static void         ImplGetSwitch4( const sal_uInt8* pSource, sal_uInt8* pDest );
+        static void         ImplGetSwitch8( const sal_uInt8* pSource, sal_uInt8* pDest );
         double              ImplGetFloat( RealPrecision, sal_uInt32 nRealSize );
         sal_uInt32          ImplGetBitmapColor( bool bDirectColor = false );
         void                ImplSetMapMode();

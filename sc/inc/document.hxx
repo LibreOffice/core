@@ -2025,11 +2025,11 @@ private:
     sal_uInt16          RowDifferences( SCROW nThisRow, SCTAB nThisTab,
                                         ScDocument& rOtherDoc,
                                         SCROW nOtherRow, SCTAB nOtherTab,
-                                        SCCOL nMaxCol, SCCOLROW* pOtherCols );
+                                        SCCOL nMaxCol, const SCCOLROW* pOtherCols );
     sal_uInt16          ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
                                         ScDocument& rOtherDoc,
                                         SCCOL nOtherCol, SCTAB nOtherTab,
-                                        SCROW nMaxRow, SCCOLROW* pOtherRows );
+                                        SCROW nMaxRow, const SCCOLROW* pOtherRows );
     void                FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW nOtherEndRow,
                                         bool bColumns,
                                         ScDocument& rOtherDoc, SCTAB nThisTab, SCTAB nOtherTab,

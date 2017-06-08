@@ -356,7 +356,7 @@ protected:
         , const VDataSeries& rVDataSeries
         , sal_Int32 nIndex
         , bool bVertical
-        , double* pfScaledLogicX
+        , const double* pfScaledLogicX
         );
 
     void createErrorBar_X( const css::drawing::Position3D& rUnscaledLogicPosition

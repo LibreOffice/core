@@ -86,7 +86,7 @@ struct StringTraits
     }
 
     static void createBuffer(rtl_String ** pBuffer,
-                                    sal_Int32 * pCapacity)
+                                    const sal_Int32 * pCapacity)
     {
         rtl_string_new_WithLength(pBuffer, *pCapacity);
     }
@@ -123,7 +123,7 @@ struct UStringTraits
     }
 
     static void createBuffer(rtl_uString ** pBuffer,
-                                    sal_Int32 * pCapacity)
+                                    const sal_Int32 * pCapacity)
     {
         rtl_uString_new_WithLength(pBuffer, *pCapacity);
     }

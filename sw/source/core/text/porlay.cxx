@@ -1930,7 +1930,7 @@ void SwScriptInfo::ClearNoKashidaLine(sal_Int32 nStt, sal_Int32 nLen)
 }
 
 // mark the given character indices as invalid kashida positions
-bool SwScriptInfo::MarkKashidasInvalid(sal_Int32 nCnt, sal_Int32* pKashidaPositions)
+bool SwScriptInfo::MarkKashidasInvalid(sal_Int32 nCnt, const sal_Int32* pKashidaPositions)
 {
     SAL_WARN_IF( !pKashidaPositions || nCnt == 0, "sw.core", "Where are kashidas?" );
 
