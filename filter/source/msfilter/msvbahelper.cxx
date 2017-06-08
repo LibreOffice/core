@@ -671,7 +671,7 @@ KeyCodeEntry const aMSKeyCodesData[] = {
     { "F6", KEY_F6 },
     { "F7", KEY_F7 },
     { "F8", KEY_F8 },
-    { "F9", KEY_F1 },
+    { "F9", KEY_F9 },
     { "F10", KEY_F10 },
     { "F11", KEY_F11 },
     { "F12", KEY_F12 },
