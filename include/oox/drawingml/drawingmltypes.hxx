@@ -152,6 +152,7 @@ IndexRange GetIndexRange( const css::uno::Reference< css::xml::sax::XFastAttribu
 
 
 const sal_Int32 EMU_PER_HMM = 360;      /// 360 EMUs per 1/100 mm.
+const sal_Int32 EMU_PER_PT = 12700;
 
 /** Converts the passed 32-bit integer value from 1/100 mm to EMUs. */
 inline sal_Int64 convertHmmToEmu( sal_Int32 nValue )
@@ -166,6 +167,11 @@ inline sal_Int32 convertEmuToHmm( sal_Int64 nValue )
     return getLimitedValue< sal_Int32, sal_Int64 >( (nValue + nCorrection) / EMU_PER_HMM, SAL_MIN_INT32, SAL_MAX_INT32 );
 }
 
+/** Converts the passed 64-bit integer value from EMUs to Points. */
+inline float convertEmuToPoints( sal_Int64 nValue )
+{
+    return (float) nValue / EMU_PER_PT;
+}
 
 /** A structure for a point with 64-bit integer components. */
 struct EmuPoint
