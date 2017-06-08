@@ -130,7 +130,7 @@ class ManualCalcTests(UITestCase):
             enter_text_to_cell(xGridWin, cell, text)
 
         self.ui_test.execute_blocking_action(enter_text, "ok", args=("A1", "abc"))
-        self.ui_test.execute_blocking_action(enter_text, "ok", args=("B6", "2.18"))
+        #self.ui_test.execute_blocking_action(enter_text, "ok", args=("B6", "2.18"))
 
         enter_text_to_cell(xGridWin, "C2", "24")
 
