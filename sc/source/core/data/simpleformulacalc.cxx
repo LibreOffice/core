@@ -133,8 +133,7 @@ svl::SharedString ScSimpleFormulaCalculator::GetString()
 
 bool ScSimpleFormulaCalculator::HasColRowName()
 {
-    mpCode->Reset();
-    return mpCode->GetNextColRowName() != nullptr;
+    return formula::FormulaTokenArrayPlainIterator(*mpCode).GetNextColRowName() != nullptr;
 }
 
 ScTokenArray* ScSimpleFormulaCalculator::GetCode()
