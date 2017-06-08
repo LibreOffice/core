@@ -719,7 +719,7 @@ darwin*) # Mac OS X or iOS
     test_freetype=no
     test_fontconfig=no
     test_dbus=no
-    if test "$host_cpu" = "arm"; then
+    if test "$host_cpu" = "armv7" -o "$host_cpu" = "arm64"; then
         _os=iOS
         test_gtk=no
         test_cups=no
@@ -1373,7 +1373,7 @@ AC_ARG_ENABLE(ccache,
 AC_ARG_ENABLE(64-bit,
     AS_HELP_STRING([--enable-64-bit],
         [Build a 64-bit LibreOffice on platforms where the normal build is 32-bit.
-         At the moment meaningful only for iOS and Windows.]), ,)
+         At the moment meaningful only for Windows.]), ,)
 
 libo_FUZZ_ARG_ENABLE(online-update,
     AS_HELP_STRING([--enable-online-update],
@@ -1443,11 +1443,6 @@ AC_ARG_WITH(product-name,
 AC_ARG_WITH(package-version,
     AS_HELP_STRING([--with-package-version='3.1.4.5'],
         [Define the package version. Default is AC_PACKAGE_VERSION. Use only if you distribute an own build for macOS.]),
-,)
-
-AC_ARG_ENABLE(ios-simulator,
-    AS_HELP_STRING([--enable-ios-simulator],
-        [Build for the iOS Simulator, not iOS device.]),
 ,)
 
 libo_FUZZ_ARG_ENABLE(readonly-installset,
@@ -2956,19 +2951,24 @@ dnl Check iOS SDK and compiler
 dnl ===================================================================
 
 if test $_os = iOS; then
-
-    if test "$enable_64_bit" = "" -o "$enable_64_bit" = "no"; then
-        :
-    else
+    if test "$host_cpu" = "arm64"; then
         BITNESS_OVERRIDE=64
     fi
 
     AC_MSG_CHECKING([what iOS SDK to use])
 
-    if test "$enable_ios_simulator" = yes; then
+    if test "$build_cpu" = "i386"; then
         platform=iPhoneSimulator
+        XCODE_ARCHS=i386
+        versionmin=-mios-simulator-version-min=9.3
+    elif test "$build_cpu" = "x86_64"; then
+        platform=iPhoneSimulator
+        XCODE_ARCHS=x86_64
+        versionmin=-mios-simulator-version-min=9.3
     else
         platform=iPhoneOS
+        XCODE_ARCHS=$host_cpu
+        versionmin=-miphoneos-version-min=9.3
     fi
 
     xcode_developer=`xcode-select -print-path`
@@ -2990,24 +2990,6 @@ if test $_os = iOS; then
     AC_MSG_RESULT($sysroot)
 
     XCODEBUILD_SDK=`echo $platform | tr A-Z a-z`$ios_sdk
-
-    if test "$enable_ios_simulator" = yes; then
-        if test "$BITNESS_OVERRIDE" = 64; then
-            XCODE_ARCHS=x86_64
-            versionmin=-mios-simulator-version-min=9.3
-        else
-            XCODE_ARCHS=i386
-            versionmin=-mios-simulator-version-min=9.3
-        fi
-    else
-        platform=iPhoneOS
-        if test "$BITNESS_OVERRIDE" = 64; then
-            XCODE_ARCHS=arm64
-        else
-            XCODE_ARCHS=armv7
-        fi
-        versionmin=-miphoneos-version-min=9.3
-    fi
 
     # LTO is not really recommended for iOS builds,
     # the link time will be astronomical
@@ -8792,7 +8774,7 @@ if test $_os != iOS -a $_os != Android -a "$enable_fuzzers" != "yes"; then
     AC_DEFINE(HAVE_FEATURE_NSS)
     ENABLE_NSS="TRUE"
     AC_DEFINE(ENABLE_NSS)
-else
+elif test $_os != iOS ; then
     with_tls=openssl
 fi
 AC_SUBST(ENABLE_NSS)
@@ -8818,6 +8800,9 @@ if test -n "$with_tls"; then
     nss)
         AC_DEFINE(USE_TLS_NSS)
         TLS=NSS
+        ;;
+    no)
+        AC_MSG_WARN([Skipping TLS/SSL])
         ;;
     *)
         AC_MSG_ERROR([unsupported implementation $with_tls. Supported are:
