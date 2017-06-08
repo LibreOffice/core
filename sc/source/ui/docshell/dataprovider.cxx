@@ -61,8 +61,7 @@ ExternalDataMapper::ExternalDataMapper(ScDocShell* pDocShell, const OUString& rU
     maRange (ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab)),
     mpDocShell(pDocShell),
     mpDataProvider (new CSVDataProvider(mpDocShell, rURL, maRange)),
-    mpDBCollection (pDocShell->GetDocument().GetDBCollection()),
-    maURL(rURL)
+    mpDBCollection (pDocShell->GetDocument().GetDBCollection())
 {
     bSuccess = true;
     ScDBCollection::NamedDBs& rNamedDBS = mpDBCollection->getNamedDBs();

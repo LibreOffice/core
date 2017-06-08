@@ -46,8 +46,6 @@ class SC_DLLPUBLIC ExternalDataMapper
     ScDocument maDocument;
     ScDBCollection* mpDBCollection;
 
-    OUString maURL;
-
 public:
     ExternalDataMapper(ScDocShell* pDocShell, const OUString& rUrl, const OUString& rName,
         SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCOL2, SCROW nRow2, bool& bSuccess);
