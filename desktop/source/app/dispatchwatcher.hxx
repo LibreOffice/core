@@ -53,16 +53,17 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
             REQUEST_CONVERSION,
             REQUEST_INFILTER,
             REQUEST_BATCHPRINT,
-            REQUEST_CAT
+            REQUEST_CAT,
+            REQUEST_SCRIPT_CAT
         };
 
         struct DispatchRequest
         {
-            RequestType     aRequestType;
-            OUString   aURL;
+            RequestType aRequestType;
+            OUString    aURL;
             boost::optional< OUString > aCwdUrl;
-            OUString   aPrinterName;  // also conversion params
-            OUString   aPreselectedFactory;
+            OUString    aPrinterName;  // also conversion params
+            OUString    aPreselectedFactory;
         };
 
         DispatchWatcher();
@@ -77,6 +78,9 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
 
         // execute new dispatch request
         bool executeDispatchRequests( const std::vector<DispatchRequest>& aDispatches, bool bNoTerminate );
+
+        /// dump scripts in a document to the console.
+        static void scriptCat(const css::uno::Reference< css::frame::XModel >& xDocument );
 
     private:
         osl::Mutex m_mutex;
