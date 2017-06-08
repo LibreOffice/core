@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_39808f46",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3874,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-08T20:08:22Z",
+      "side": 1,
+      "message": "this is inverted, better \"as long as none of...\"",
+      "revId": "12b35ffc7f8f21bfd0994ec67b17ab0bb0720634",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_799217a1",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3896,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-08T20:08:22Z",
+      "side": 1,
+      "message": "which is neutral not female",
+      "revId": "12b35ffc7f8f21bfd0994ec67b17ab0bb0720634",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_59971b90",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3899,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-08T20:08:22Z",
+      "side": 1,
+      "message": "no it\u0027s a progress bar",
+      "revId": "12b35ffc7f8f21bfd0994ec67b17ab0bb0720634",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_9991839c",
+        "filename": "sw/source/filter/html/swhtml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3926,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-08T20:08:22Z",
+      "side": 1,
+      "message": "closed",
+      "revId": "12b35ffc7f8f21bfd0994ec67b17ab0bb0720634",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
