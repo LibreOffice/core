@@ -70,8 +70,12 @@ using ZipUtils::Inflater;
 
 /** This class is used to read entries from a zip file
  */
-ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XComponentContext > & rxContext, bool bInitialise )
-: aGrabber(xInput)
+ZipFile::ZipFile( const rtl::Reference<SotMutexHolder>& aMutexHolder,
+                  uno::Reference < XInputStream > &xInput,
+                  const uno::Reference < XComponentContext > & rxContext,
+                  bool bInitialise )
+: m_aMutexHolder( aMutexHolder )
+, aGrabber( xInput )
 , aInflater( true )
 , xStream(xInput)
 , m_xContext ( rxContext )
@@ -88,8 +92,12 @@ ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference 
     }
 }
 
-ZipFile::ZipFile( uno::Reference < XInputStream > &xInput, const uno::Reference < XComponentContext > & rxContext, bool bInitialise, bool bForceRecovery)
-: aGrabber(xInput)
+ZipFile::ZipFile( const rtl::Reference<SotMutexHolder>& aMutexHolder,
+                  uno::Reference < XInputStream > &xInput,
+                  const uno::Reference < XComponentContext > & rxContext,
+                  bool bInitialise, bool bForceRecovery)
+: m_aMutexHolder( aMutexHolder )
+, aGrabber( xInput )
 , aInflater( true )
 , xStream(xInput)
 , m_xContext ( rxContext )
@@ -122,7 +130,7 @@ void ZipFile::setUseBufferedStream( bool b )
 
 void ZipFile::setInputStream ( const uno::Reference < XInputStream >& xNewStream )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     xStream = xNewStream;
     aGrabber.setInputStream ( xStream );
@@ -381,7 +389,8 @@ bool ZipFile::StaticFillData (  ::rtl::Reference< BaseEncryptionData > & rData,
     return bOk;
 }
 
-uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::Reference< uno::XComponentContext >& rxContext,
+uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const rtl::Reference<SotMutexHolder>& aMutexHolder,
+                                                                const uno::Reference< uno::XComponentContext >& rxContext,
                                                                 const uno::Reference< XInputStream >& xStream,
                                                                 const ::rtl::Reference< EncryptionData > &rData )
 {
@@ -417,7 +426,7 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::R
             throw packages::WrongPasswordException(THROW_WHERE );
     }
 
-    return new XUnbufferedStream( rxContext, xStream, rData );
+    return new XUnbufferedStream( rxContext, aMutexHolder, xStream, rData );
 }
 
 #if 0
@@ -490,7 +499,7 @@ bool ZipFile::StaticHasValidPassword( const uno::Reference< uno::XComponentConte
 
 bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ::rtl::Reference< EncryptionData >& rData )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     bool bRet = false;
     if ( rData.is() && rData->m_aKey.getLength() )
@@ -608,7 +617,7 @@ uno::Reference< XInputStream > ZipFile::createStreamForZipEntry(
             bool bIsEncrypted,
             const OUString& aMediaType )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     uno::Reference<io::XInputStream> xSrcStream = new XUnbufferedStream(
         m_xContext, aMutexHolder, rEntry, xStream, rData, nStreamMode, bIsEncrypted, aMediaType, bRecoveryMode);
@@ -630,7 +639,7 @@ uno::Reference< XInputStream > ZipFile::getInputStream( ZipEntry& rEntry,
         bool bIsEncrypted,
         const rtl::Reference<SotMutexHolder>& aMutexHolder )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
@@ -657,7 +666,7 @@ uno::Reference< XInputStream > ZipFile::getDataStream( ZipEntry& rEntry,
         bool bIsEncrypted,
         const rtl::Reference<SotMutexHolder>& aMutexHolder )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
@@ -693,7 +702,7 @@ uno::Reference< XInputStream > ZipFile::getRawData( ZipEntry& rEntry,
         bool bIsEncrypted,
         const rtl::Reference<SotMutexHolder>& aMutexHolder )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     if ( rEntry.nOffset <= 0 )
         readLOC( rEntry );
@@ -707,7 +716,7 @@ uno::Reference< XInputStream > ZipFile::getWrappedRawStream(
         const OUString& aMediaType,
         const rtl::Reference<SotMutexHolder>& aMutexHolder )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     if ( !rData.is() )
         throw packages::NoEncryptionException(THROW_WHERE );
@@ -720,7 +729,7 @@ uno::Reference< XInputStream > ZipFile::getWrappedRawStream(
 
 bool ZipFile::readLOC( ZipEntry &rEntry )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     sal_Int64 nPos = -rEntry.nOffset;
 
@@ -948,7 +957,7 @@ sal_Int32 ZipFile::readCEN()
 
 void ZipFile::recover()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     sal_Int64 nLength;
     Sequence < sal_Int8 > aBuffer;
@@ -1123,7 +1132,7 @@ void ZipFile::recover()
 
 bool ZipFile::checkSizeAndCRC( const ZipEntry& aEntry )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     sal_Int32 nCRC = 0;
     sal_Int64 nSize = 0;
@@ -1137,7 +1146,7 @@ bool ZipFile::checkSizeAndCRC( const ZipEntry& aEntry )
 
 sal_Int32 ZipFile::getCRC( sal_Int64 nOffset, sal_Int64 nSize )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     Sequence < sal_Int8 > aBuffer;
     CRC32 aCRC;
@@ -1157,7 +1166,7 @@ sal_Int32 ZipFile::getCRC( sal_Int64 nOffset, sal_Int64 nSize )
 
 void ZipFile::getSizeAndCRC( sal_Int64 nOffset, sal_Int64 nCompressedSize, sal_Int64 *nSize, sal_Int32 *nCRC )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
     Sequence < sal_Int8 > aBuffer;
     CRC32 aCRC;

@@ -1047,7 +1047,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
         return xResult;
     }
     else if ( m_nStreamMode == PACKAGE_STREAM_RAW )
-        return ZipFile::StaticGetDataFromRawStream( m_xContext, GetOwnSeekStream(), GetEncryptionData() );
+        return ZipFile::StaticGetDataFromRawStream( m_rZipPackage.GetSharedMutexRef(), m_xContext, GetOwnSeekStream(), GetEncryptionData() );
     else if ( GetOwnSeekStream().is() )
     {
         return new WrapStreamForShare( GetOwnSeekStream(), m_rZipPackage.GetSharedMutexRef() );
