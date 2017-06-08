@@ -148,9 +148,6 @@ sc.AccessibleEditableTextPara_HeaderFooter
 ### i88242 ###
 sc.ScModelObj::com::sun::star::view::XPrintable
 
-### i88311 ###
-sc.ScTableSheetObj::com::sun::star::sheet::XCellSeries
-
 ### i88330 ###
 sc.ScAccessibleDocument
 
