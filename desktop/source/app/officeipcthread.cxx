@@ -1051,6 +1051,7 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
         pRequest->aConversionOut = aCmdLineArgs->GetConversionOut();
         pRequest->aInFilter = aCmdLineArgs->GetInFilter();
         pRequest->bTextCat = aCmdLineArgs->IsTextCat();
+        pRequest->bScriptCat = aCmdLineArgs->IsScriptCat();
         bDocRequestSent |= !pRequest->aConversionList.empty();
 
         if ( !rCurrentCmdLineArgs.IsInvisible() )
@@ -1289,20 +1290,29 @@ static void AddConversionsToDispatchList(
     const OUString& rPrinterName,
     const OUString& rFactory,
     const OUString& rParamOut,
-    const bool isTextCat )
+    const bool isTextCat,
+    const bool isScriptCat )
 {
     DispatchWatcher::RequestType nType;
     OUString aParam( rParam );
 
     if( !rParam.isEmpty() )
     {
-        nType = ( isTextCat ) ? DispatchWatcher::REQUEST_CAT : DispatchWatcher::REQUEST_CONVERSION;
+        if ( isTextCat )
+            nType = DispatchWatcher::REQUEST_CAT;
+        else
+            nType = DispatchWatcher::REQUEST_CONVERSION;
         aParam = rParam;
     }
     else
     {
-        nType = DispatchWatcher::REQUEST_BATCHPRINT;
-        aParam = rPrinterName;
+        if ( isScriptCat )
+            nType = DispatchWatcher::REQUEST_SCRIPT_CAT;
+        else
+        {
+            nType = DispatchWatcher::REQUEST_BATCHPRINT;
+            aParam = rPrinterName;
+        }
     }
 
     OUString aOutDir( rParamOut.trim() );
@@ -1355,7 +1365,7 @@ bool RequestHandler::ExecuteCmdLineRequests(
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aPrintToList, DispatchWatcher::REQUEST_PRINTTO, aRequest.aPrinterName, aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceOpenList, DispatchWatcher::REQUEST_FORCEOPEN, "", aRequest.aModule );
     AddToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aForceNewList, DispatchWatcher::REQUEST_FORCENEW, "", aRequest.aModule );
-    AddConversionsToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aConversionList, aRequest.aConversionParams, aRequest.aPrinterName, aRequest.aModule, aRequest.aConversionOut, aRequest.bTextCat );
+    AddConversionsToDispatchList( aDispatchList, aRequest.aCwdUrl, aRequest.aConversionList, aRequest.aConversionParams, aRequest.aPrinterName, aRequest.aModule, aRequest.aConversionOut, aRequest.bTextCat, aRequest.bScriptCat );
     bool bShutdown( false );
 
     if ( pGlobal.is() )

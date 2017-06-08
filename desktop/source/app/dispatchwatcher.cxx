@@ -51,6 +51,10 @@
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/script/ModuleInfo.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
+#include <com/sun/star/script/XLibraryContainer2.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
 
 #include <tools/urlobj.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -70,6 +74,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::document;
 
 namespace document = ::com::sun::star::document;
 
@@ -211,7 +216,8 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
              aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
              aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
              aDispatchRequest.aRequestType == REQUEST_CONVERSION ||
-             aDispatchRequest.aRequestType == REQUEST_CAT)
+             aDispatchRequest.aRequestType == REQUEST_CAT ||
+             aDispatchRequest.aRequestType == REQUEST_SCRIPT_CAT)
             nCount++;
 
         Sequence < PropertyValue > aArgs( nCount );
@@ -224,7 +230,8 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
              aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
              aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
              aDispatchRequest.aRequestType == REQUEST_CONVERSION ||
-             aDispatchRequest.aRequestType == REQUEST_CAT)
+             aDispatchRequest.aRequestType == REQUEST_CAT ||
+             aDispatchRequest.aRequestType == REQUEST_SCRIPT_CAT)
         {
             aArgs[1].Name = "ReadOnly";
             aArgs[2].Name = "OpenNewView";
@@ -261,7 +268,8 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
              aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
              aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
              aDispatchRequest.aRequestType == REQUEST_CONVERSION ||
-             aDispatchRequest.aRequestType == REQUEST_CAT)
+             aDispatchRequest.aRequestType == REQUEST_CAT ||
+             aDispatchRequest.aRequestType == REQUEST_SCRIPT_CAT )
         {
             // documents opened for printing are opened readonly because they must be opened as a new document and this
             // document could be open already
@@ -448,11 +456,16 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                       aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
                       aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
                       aDispatchRequest.aRequestType == REQUEST_CONVERSION ||
-                      aDispatchRequest.aRequestType == REQUEST_CAT )
+                      aDispatchRequest.aRequestType == REQUEST_CAT ||
+                      aDispatchRequest.aRequestType == REQUEST_SCRIPT_CAT )
             {
                 if ( xDoc.is() )
                 {
-                    if ( aDispatchRequest.aRequestType == REQUEST_CONVERSION || aDispatchRequest.aRequestType == REQUEST_CAT ) {
+                    // Do we need to save the document in a different format?
+                    if ( aDispatchRequest.aRequestType == REQUEST_CONVERSION ||
+                         aDispatchRequest.aRequestType == REQUEST_CAT )
+                    {
+// FIXME: factor out into a method ...
                         Reference< XStorable > xStorable( xDoc, UNO_QUERY );
                         if ( xStorable.is() ) {
                             OUString aParam = aDispatchRequest.aPrinterName;
@@ -479,9 +492,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                             INetURLObject aOutFilename( aObj );
                             aOutFilename.SetExtension( aFilterExt );
                             FileBase::getFileURLFromSystemPath( aFilterOut, aFilterOut );
-                            OUString aOutFile = aFilterOut+
-                                                     "/" +
-                                                     aOutFilename.getName();
+                            OUString aOutFile = aFilterOut + "/" + aOutFilename.getName();
 
                             OUString fileForCat;
                             if( aDispatchRequest.aRequestType == REQUEST_CAT )
@@ -582,7 +593,16 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                 }
                             }
                         }
-                    } else if ( aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ) {
+                    }
+                    else if ( aDispatchRequest.aRequestType == REQUEST_SCRIPT_CAT )
+                    {
+                        Reference< XModel > xModel( xDoc, UNO_QUERY );
+                        if( xModel.is() )
+                            scriptCat( xModel );
+                    }
+                    else if ( aDispatchRequest.aRequestType == REQUEST_BATCHPRINT )
+                    {
+// FIXME: factor out into a method ...
                         OUString aParam = aDispatchRequest.aPrinterName;
                         sal_Int32 nPathIndex =  aParam.lastIndexOf( ';' );
 
@@ -626,7 +646,9 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                         aPrinterArgs[1].Name = "Wait";
                         aPrinterArgs[1].Value <<= true;
                         xDoc->print( aPrinterArgs );
-                    } else {
+                    }
+                    else
+                    {
                         if ( aDispatchRequest.aRequestType == REQUEST_PRINTTO )
                         {
                             // create the printer
@@ -741,6 +763,60 @@ void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& )
         {
             // We don't have any task open so we have to shutdown ourself!!
             xDesktop->terminate();
+        }
+    }
+}
+
+void DispatchWatcher::scriptCat(const Reference< XModel >& xDoc )
+{
+    Reference< XEmbeddedScripts > xScriptAccess( xDoc, UNO_QUERY );
+    if (!xScriptAccess)
+    {
+        std::cout << "No script access\n";
+        return;
+    }
+
+    // ignore xScriptAccess->getDialogLibraries() for now
+    Reference< css::script::XLibraryContainer2 > xLibraries(
+        xScriptAccess->getBasicLibraries() );
+
+    if ( !xLibraries.is() )
+    {
+        std::cout << "No script libraries\n";
+        return;
+    }
+
+    Sequence< OUString > aLibNames = xLibraries->getElementNames();
+    std::cout << "Libraries: " << aLibNames.getLength() << "\n";
+    for ( sal_Int32 i = 0 ; i < aLibNames.getLength() ; ++i )
+    {
+        std::cout << "Library: '" << aLibNames[i] << "' children: ";
+        Reference< XNameContainer > xContainer(
+            xLibraries->getByName( aLibNames[i] ), UNO_QUERY );
+        if( !xContainer.is() )
+            std::cout << "0\n";
+        else
+        {
+            Sequence< OUString > aObjectNames = xContainer->getElementNames();
+
+            std::cout << aObjectNames.getLength() << "\n\n";
+            for ( sal_Int32 j = 0 ; j < aObjectNames.getLength() ; ++j )
+            {
+                rtl::OUString &rObjectName = aObjectNames[j];
+
+                rtl::OUString aCodeString;
+                Any aCode = xContainer->getByName( rObjectName );
+
+                if (! (aCode >>= aCodeString ) )
+                    std::cout << "[" << rObjectName << "] - error fetching code\n";
+                else
+                    std::cout << "[" << rObjectName << "]\n"
+                              << aCodeString.trim()
+                              << "\n[/" << rObjectName << "]\n";
+                if (j < aObjectNames.getLength() - 1)
+                    std::cout << "\n----------------------------------------------------------\n";
+                std::cout << "\n";
+            }
         }
     }
 }
