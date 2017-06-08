@@ -3595,7 +3595,7 @@ void SwHTMLParser::EndBasefontAttr()
 {
     EndTag( HtmlTokenId::BASEFONT_ON );
 
-    // avoid stack underflow in table
+    // avoid stack underflow in tables
     if( m_aBaseFontStack.size() > m_nBaseFontStMin )
         m_aBaseFontStack.erase( m_aBaseFontStack.begin() + m_aBaseFontStack.size() - 1 );
 }
@@ -3613,8 +3613,8 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
 
     OUString aFace, aId, aStyle, aClass, aLang, aDir;
     Color aColor;
-    sal_uLong nFontHeight = 0;  // tatsaechlich einzustellende Font-Hoehe
-    sal_uInt16 nSize = 0;       // Fontgroesse in Netscape-Notation (1-7)
+    sal_uLong nFontHeight = 0;  // actual font height to set
+    sal_uInt16 nSize = 0;       // font height in Netscape notation (1-7)
     bool bColor = false;
 
     const HTMLOptions& rHTMLOptions = GetOptions();
@@ -3674,16 +3674,16 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
 
     if( HtmlTokenId::FONT_ON != nToken )
     {
-        // HTML_BIGPRINT_ON oder HTML_SMALLPRINT_ON
+        // HTML_BIGPRINT_ON or HTML_SMALLPRINT_ON
 
-        // in Ueberschriften bestimmt die aktuelle Ueberschrift
-        // die Font-Hoehe und nicht BASEFONT
+        // In headings the current heading sets the font height
+        // and not BASEFONT.
         sal_uInt16 nPoolId = GetCurrFormatColl()->GetPoolFormatId();
         if( (nPoolId>=RES_POOLCOLL_HEADLINE1 &&
              nPoolId<=RES_POOLCOLL_HEADLINE6) )
         {
-            // wenn die Schriftgroesse in der Ueberschrift noch
-            // nicht veraendert ist, die aus der Vorlage nehmen
+            // If the font height in the heading wasn't changed yet,
+            // then take the one from the style.
             if( m_nFontStHeadStart==m_aFontStack.size() )
                 nFontSize = static_cast< sal_uInt16 >(6 - (nPoolId - RES_POOLCOLL_HEADLINE1));
         }
@@ -3695,8 +3695,8 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
         else
             nSize = ( nFontSize>1 ? nFontSize-1 : 1 );
 
-        // in Ueberschriften wird die neue Fonthoehe wenn moeglich aus
-        // den Vorlagen geholt.
+        // If possible in headlines we fetch the new font height
+        // from the style.
         if( nPoolId && nSize>=1 && nSize <=6 )
             nFontHeight =
                 m_pCSS1Parser->GetTextCollFromPool(
@@ -3708,8 +3708,8 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
     OSL_ENSURE( !nSize == !nFontHeight, "HTML-Font-Size != Font-Height" );
 
     OUString aFontName, aStyleName;
-    FontFamily eFamily = FAMILY_DONTKNOW;   // Family und Pitch,
-    FontPitch ePitch = PITCH_DONTKNOW;      // falls nicht gefunden
+    FontFamily eFamily = FAMILY_DONTKNOW;   // family and pitch,
+    FontPitch ePitch = PITCH_DONTKNOW;      // if not found
     rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
 
     if( !aFace.isEmpty() && !m_pCSS1Parser->IsIgnoreFontFamily() )
@@ -3812,7 +3812,7 @@ void SwHTMLParser::NewFontAttr( HtmlTokenId nToken )
         }
     }
 
-    // den Kontext merken
+    // save the context
     PushContext( pCntxt );
 
     m_aFontStack.push_back( nSize );
@@ -3822,7 +3822,7 @@ void SwHTMLParser::EndFontAttr( HtmlTokenId nToken )
 {
     EndTag( nToken );
 
-    // Stack-Unterlauf in Tabellen vermeiden
+    // avoid stack underflow in tables
     if( m_aFontStack.size() > m_nFontStMin )
         m_aFontStack.erase( m_aFontStack.begin() + m_aFontStack.size() - 1 );
 }
@@ -3871,8 +3871,8 @@ void SwHTMLParser::NewPara()
                                              RES_POOLCOLL_TEXT, aClass )
                      : new HTMLAttrContext( HtmlTokenId::PARABREAK_ON );
 
-    // Styles parsen (Class nicht beruecksichtigen. Das geht nur, solange
-    // keine der CSS1-Properties der Klasse hart formatiert werden muss!!!)
+    // parse styles (Don't consider class. This is only possible as long as none of
+    // the CSS1 properties of the class must be formatted hard!!!)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
@@ -3881,7 +3881,7 @@ void SwHTMLParser::NewPara()
         if( ParseStyleOptions( aStyle, aId, aEmptyOUStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             OSL_ENSURE( aClass.isEmpty() || !m_pCSS1Parser->GetClass( aClass ),
-                    "Class wird nicht beruecksichtigt" );
+                    "Class is not considered" );
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt );
         }
@@ -3890,16 +3890,16 @@ void SwHTMLParser::NewPara()
     if( SvxAdjust::End != m_eParaAdjust )
         InsertAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(m_eParaAdjust, RES_PARATR_ADJUST), pCntxt );
 
-    // und auf den Stack packen
+    // and push on stack
     PushContext( pCntxt );
 
-    // die aktuelle Vorlage oder deren Attribute setzen
+    // set the current style or its attributes
     SetTextCollAttrs( !aClass.isEmpty() ? pCntxt : nullptr );
 
-    // Laufbalkenanzeige
+    // progress bar
     ShowStatline();
 
-    OSL_ENSURE( m_nOpenParaToken == HtmlTokenId::NONE, "Jetzt geht ein offenes Absatz-Element verloren" );
+    OSL_ENSURE( m_nOpenParaToken == HtmlTokenId::NONE, "Now a open paragraph element will be lost." );
     m_nOpenParaToken = HtmlTokenId::PARABREAK_ON;
 }
 
@@ -3909,11 +3909,11 @@ void SwHTMLParser::EndPara( bool bReal )
     {
 #if OSL_DEBUG_LEVEL > 0
         const SwNumRule *pNumRule = m_pPam->GetNode().GetTextNode()->GetNumRule();
-        OSL_ENSURE( pNumRule, "Wo ist die Numrule geblieben" );
+        OSL_ENSURE( pNumRule, "Where is the NumRule" );
 #endif
     }
 
-    // leere Absaetze werden von Netscape uebersprungen, von uns jetzt auch
+    // Netscape skips empty paragraphs, we do the same.
     if( bReal )
     {
         if( m_pPam->GetPoint()->nContent.GetIndex() )
@@ -3922,28 +3922,28 @@ void SwHTMLParser::EndPara( bool bReal )
             AddParSpace();
     }
 
-    // wenn ein DD oder DT offen war, handelt es sich um eine
-    // implizite Def-Liste, die jetzt beendet werden muss
+    // If a DD or DT was open, its an implied definition list,
+    // which must be closed now.
     if( (m_nOpenParaToken == HtmlTokenId::DT_ON || m_nOpenParaToken == HtmlTokenId::DD_ON) &&
         m_nDefListDeep)
     {
         m_nDefListDeep--;
     }
 
-    // den Kontext vom Stack holen. Er kann auch von einer implizit
-    // geoeffneten Definitionsliste kommen
+    // Pop the context of the stack. It can also be from an
+    // implied opened definition list.
     HTMLAttrContext *pCntxt =
         PopContext( m_nOpenParaToken != HtmlTokenId::NONE ? getOnToken(m_nOpenParaToken) : HtmlTokenId::PARABREAK_ON );
 
-    // Attribute beenden
+    // close attribute
     if( pCntxt )
     {
         EndContext( pCntxt );
-        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();  // because of JavaScript set paragraph attribute as fast as possible
         delete pCntxt;
     }
 
-    // und die bisherige Vorlage neu setzen
+    // reset the existing style
     if( bReal )
         SetTextCollAttrs();
 
@@ -3984,13 +3984,13 @@ void SwHTMLParser::NewHeading( HtmlTokenId nToken )
         }
     }
 
-    // einen neuen Absatz aufmachen
+    // open a new paragraph
     if( m_pPam->GetPoint()->nContent.GetIndex() )
         AppendTextNode( AM_SPACE );
     else
         AddParSpace();
 
-    // die passende Vorlage suchen
+    // search for the matching style
     sal_uInt16 nTextColl;
     switch( nToken )
     {
@@ -4003,10 +4003,10 @@ void SwHTMLParser::NewHeading( HtmlTokenId nToken )
     default:                    nTextColl = RES_POOLCOLL_STANDARD;   break;
     }
 
-    // den Kontext anlegen
+    // create the context
     HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken, nTextColl, aClass );
 
-    // Styles parsen (zu Class siehe auch NewPara)
+    // parse styles (regarding class see also NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
@@ -4015,7 +4015,7 @@ void SwHTMLParser::NewHeading( HtmlTokenId nToken )
         if( ParseStyleOptions( aStyle, aId, aEmptyOUStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             OSL_ENSURE( aClass.isEmpty() || !m_pCSS1Parser->GetClass( aClass ),
-                    "Class wird nicht beruecksichtigt" );
+                    "Class is not considered" );
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt );
         }
@@ -4024,27 +4024,27 @@ void SwHTMLParser::NewHeading( HtmlTokenId nToken )
     if( SvxAdjust::End != m_eParaAdjust )
         InsertAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(m_eParaAdjust, RES_PARATR_ADJUST), pCntxt );
 
-    // udn auf den Stack packen
+    // and push on stack
     PushContext( pCntxt );
 
-    // und die Vorlage oder deren Attribute setzen
+    // set the current style or its attributes
     SetTextCollAttrs( pCntxt );
 
     m_nFontStHeadStart = m_aFontStack.size();
 
-    // Laufbalkenanzeige
+    // progress bar
     ShowStatline();
 }
 
 void SwHTMLParser::EndHeading()
 {
-    // einen neuen Absatz aufmachen
+    // open a new paragraph
     if( m_pPam->GetPoint()->nContent.GetIndex() )
         AppendTextNode( AM_SPACE );
     else
         AddParSpace();
 
-    // Kontext zu dem Token suchen und vom Stack holen
+    // search context matching the token and fetch it from stack
     HTMLAttrContext *pCntxt = nullptr;
     auto nPos = m_aContexts.size();
     while( !pCntxt && nPos>m_nContextStMin )
@@ -4064,15 +4064,15 @@ void SwHTMLParser::EndHeading()
         }
     }
 
-    // und noch Attribute beenden
+    // and now close attributes
     if( pCntxt )
     {
         EndContext( pCntxt );
-        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();  // because of JavaScript set paragraph attribute as fast as possible
         delete pCntxt;
     }
 
-    // die bisherige Vorlage neu setzen
+    // reset existing style
     SetTextCollAttrs();
 
     m_nFontStHeadStart = m_nFontStMin;
@@ -4107,7 +4107,7 @@ void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
         }
     }
 
-    // einen neuen Absatz aufmachen
+    // open a new paragraph
     SwHTMLAppendMode eMode = AM_NORMAL;
     switch( nToken )
     {
@@ -4142,7 +4142,7 @@ void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
     // ... und in einem Kontext merken
     HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken, nColl, aClass );
 
-    // Styles parsen (zu Class siehe auch NewPara)
+    // parse styles (regarding class see also NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
@@ -4151,7 +4151,7 @@ void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
         if( ParseStyleOptions( aStyle, aId, aEmptyOUStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             OSL_ENSURE( aClass.isEmpty() || !m_pCSS1Parser->GetClass( aClass ),
-                    "Class wird nicht beruecksichtigt" );
+                    "Class is not considered" );
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt );
         }
@@ -4756,7 +4756,7 @@ void SwHTMLParser::NewCharFormat( HtmlTokenId nToken )
     SwCharFormat* pCFormat = m_pCSS1Parser->GetChrFormat( nToken, aClass );
     OSL_ENSURE( pCFormat, "keine Zeichenvorlage zu Token gefunden" );
 
-    // Styles parsen (zu Class siehe auch NewPara)
+    // parse styles (regarding class see also NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
     {
         SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
@@ -4765,7 +4765,7 @@ void SwHTMLParser::NewCharFormat( HtmlTokenId nToken )
         if( ParseStyleOptions( aStyle, aId, aEmptyOUStr, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
             OSL_ENSURE( aClass.isEmpty() || !m_pCSS1Parser->GetClass( aClass ),
-                    "Class wird nicht beruecksichtigt" );
+                    "Class is not considered" );
             DoPositioning( aItemSet, aPropInfo, pCntxt );
             InsertAttrs( aItemSet, aPropInfo, pCntxt, true );
         }
@@ -4777,7 +4777,7 @@ void SwHTMLParser::NewCharFormat( HtmlTokenId nToken )
     if( pCFormat )
         InsertAttr( &m_aAttrTab.pCharFormats, SwFormatCharFormat( pCFormat ), pCntxt );
 
-    // den Kontext merken
+    // save the context
     PushContext( pCntxt );
 }
 
