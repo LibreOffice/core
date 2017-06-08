@@ -13,6 +13,7 @@
 #include <test/util/xreplaceable.hxx>
 #include <test/util/xsearchable.hxx>
 #include <test/sheet/xcellrangedata.hxx>
+#include <test/sheet/xcellseries.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -26,10 +27,11 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-#define NUMBER_OF_TESTS 15
+#define NUMBER_OF_TESTS 17
 
 class ScCellRangeObj : public CalcUnoApiTest, public apitest::XCellRangesQuery, public apitest::CellProperties,
-                        public apitest::XSearchable, public apitest::XReplaceable, public apitest::XCellRangeData
+                        public apitest::XSearchable, public apitest::XReplaceable, public apitest::XCellRangeData,
+                        public apitest::XCellSeries
 {
 public:
     ScCellRangeObj();
@@ -58,6 +60,8 @@ public:
     CPPUNIT_TEST(testGetDataArray);
     CPPUNIT_TEST(testSetDataArray);
     CPPUNIT_TEST(testSortOOB);
+    CPPUNIT_TEST(testFillAuto);
+    CPPUNIT_TEST(testFillSeries);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -71,7 +75,8 @@ uno::Reference< lang::XComponent > ScCellRangeObj::mxComponent;
 ScCellRangeObj::ScCellRangeObj():
         CalcUnoApiTest("/sc/qa/extras/testdocuments"),
         apitest::XSearchable("15", 1),
-        apitest::XReplaceable("15", "35")
+        apitest::XReplaceable("15", "35"),
+        apitest::XCellSeries(2, 1)
 {
 }
 
@@ -89,7 +94,7 @@ uno::Reference< uno::XInterface > ScCellRangeObj::init()
 
     CPPUNIT_ASSERT_MESSAGE("Could not create interface of type XSpreadsheet", xSheet.is());
 
-    uno::Reference<table::XCellRange> xReturn(xSheet->getCellRangeByPosition(0,0,3,4), UNO_QUERY_THROW);
+    uno::Reference<table::XCellRange> xReturn(xSheet->getCellRangeByPosition(0,0,4,4), UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT_MESSAGE("Could not create object of type XCellRangesQuery", xReturn.is());
     return xReturn;
