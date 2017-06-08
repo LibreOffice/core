@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_4e5f4f41",
+        "filename": "registry/source/regimpl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1181,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-06-08T13:42:04Z",
+      "side": 1,
+      "message": "the relevant limit to check is SAL_MAX_UINT16 (if you want to check aginst the largest valid UNO \u0027UNSIGNED SHORT\u0027 value, even if the corresponding C++ type sal_uInt16 could hyptothetically support larger values with some ABIs) or std::numeric_limits\u003csal_uInt16\u003e::max()",
+      "revId": "578c9265951cf3f9f2cb463a9102d73518cca389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
