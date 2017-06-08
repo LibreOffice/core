@@ -339,6 +339,12 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 eCurrentEvent = CommandLineEvent::Conversion;
                 setHeadless();
             }
+            else if ( oArg == "script-cat" )
+            {
+                m_scriptcat = true;
+                eCurrentEvent = CommandLineEvent::Conversion;
+                setHeadless();
+            }
             else if ( oArg == "quickstart" )
             {
 #if defined(ENABLE_QUICKSTART_APPLET)
@@ -706,6 +712,7 @@ void CommandLineArgs::InitParamValues()
     m_bEmpty = true;
     m_bDocumentArgs  = false;
     m_textcat = false;
+    m_scriptcat = false;
     m_safemode = false;
 }
 

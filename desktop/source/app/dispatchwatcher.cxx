@@ -50,6 +50,10 @@
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/script/ModuleInfo.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
+#include <com/sun/star/script/XLibraryContainer2.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
 
 #include <tools/urlobj.hxx>
 #include <unotools/mediadescriptor.hxx>
@@ -69,6 +73,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::document;
 
 namespace document = ::com::sun::star::document;
 
@@ -129,32 +134,31 @@ std::shared_ptr<const SfxFilter> impl_lookupExportFilterForUrl( const rtl::OUStr
 std::shared_ptr<const SfxFilter> impl_getExportFilterFromUrl(
         const rtl::OUString& rUrl, const rtl::OUString& rFactory)
 {
-try
-{
-    const Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-    const Reference< document::XTypeDetection > xTypeDetector(
+    try
+    {
+        const Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+        const Reference< document::XTypeDetection > xTypeDetector(
             xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.TypeDetection", xContext ),
             UNO_QUERY_THROW );
-    const rtl::OUString aTypeName( xTypeDetector->queryTypeByURL( rUrl ) );
+        const rtl::OUString aTypeName( xTypeDetector->queryTypeByURL( rUrl ) );
 
-    std::shared_ptr<const SfxFilter> pFilter( SfxFilterMatcher( rFactory ).GetFilter4EA( aTypeName, SfxFilterFlags::EXPORT ) );
-    if ( !pFilter )
-        pFilter = impl_lookupExportFilterForUrl( rUrl, rFactory );
-    if ( !pFilter )
-    {
-        OUString aTempName;
-        FileBase::getSystemPathFromFileURL( rUrl, aTempName );
-        OString aSource = OUStringToOString ( aTempName, osl_getThreadTextEncoding() );
-        std::cerr << "Error: no export filter for " << aSource << " found, aborting." << std::endl;
+        std::shared_ptr<const SfxFilter> pFilter( SfxFilterMatcher( rFactory ).GetFilter4EA( aTypeName, SfxFilterFlags::EXPORT ) );
+        if ( !pFilter )
+            pFilter = impl_lookupExportFilterForUrl( rUrl, rFactory );
+        if ( !pFilter )
+        {
+            OUString aTempName;
+            FileBase::getSystemPathFromFileURL( rUrl, aTempName );
+            OString aSource = OUStringToOString ( aTempName, osl_getThreadTextEncoding() );
+            std::cerr << "Error: no export filter for " << aSource << " found, aborting." << std::endl;
+        }
 
+        return pFilter;
     }
-
-    return pFilter;
-}
-catch ( const Exception& )
-{
-    return nullptr;
-}
+    catch ( const Exception& )
+    {
+        return nullptr;
+    }
 }
 
 OUString impl_GuessFilter( const OUString& rUrlOut, const OUString& rDocService )
@@ -167,7 +171,107 @@ OUString impl_GuessFilter( const OUString& rUrlOut, const OUString& rDocService 
     return aOutFilter;
 }
 
+/// dump scripts in a document to the console.
+void scriptCat(const Reference< XModel >& xDoc )
+{
+    Reference< XEmbeddedScripts > xScriptAccess( xDoc, UNO_QUERY );
+    if (!xScriptAccess.is())
+    {
+        std::cout << "No script access\n";
+        return;
+    }
+
+    // ignore xScriptAccess->getDialogLibraries() for now
+    Reference< css::script::XLibraryContainer2 > xLibraries(
+        xScriptAccess->getBasicLibraries() );
+
+    if ( !xLibraries.is() )
+    {
+        std::cout << "No script libraries\n";
+        return;
+    }
+
+    Sequence< OUString > aLibNames = xLibraries->getElementNames();
+    std::cout << "Libraries: " << aLibNames.getLength() << "\n";
+    for ( sal_Int32 i = 0 ; i < aLibNames.getLength() ; ++i )
+    {
+        std::cout << "Library: '" << aLibNames[i] << "' children: ";
+        Reference< XNameContainer > xContainer(
+            xLibraries->getByName( aLibNames[i] ), UNO_QUERY );
+        if( !xContainer.is() )
+            std::cout << "0\n";
+        else
+        {
+            Sequence< OUString > aObjectNames = xContainer->getElementNames();
+
+            std::cout << aObjectNames.getLength() << "\n\n";
+            for ( sal_Int32 j = 0 ; j < aObjectNames.getLength() ; ++j )
+            {
+                rtl::OUString &rObjectName = aObjectNames[j];
+
+                rtl::OUString aCodeString;
+                Any aCode = xContainer->getByName( rObjectName );
+
+                if (! (aCode >>= aCodeString ) )
+                    std::cout << "[" << rObjectName << "] - error fetching code\n";
+                else
+                    std::cout << "[" << rObjectName << "]\n"
+                              << aCodeString.trim()
+                              << "\n[/" << rObjectName << "]\n";
+                if (j < aObjectNames.getLength() - 1)
+                    std::cout << "\n----------------------------------------------------------\n";
+                std::cout << "\n";
+            }
+        }
+    }
 }
+
+// Perform batch print
+void batchPrint( const OUString &rPrinterName, const Reference< XPrintable > &xDoc,
+                 const INetURLObject &aObj, const OUString &aName )
+{
+    OUString aFilterOut;
+    OUString aPrinterName;
+    sal_Int32 nPathIndex =  rPrinterName.lastIndexOf( ';' );
+    if( nPathIndex != -1 )
+        aFilterOut=rPrinterName.copy( nPathIndex+1 );
+    if( nPathIndex != 0 )
+        aPrinterName=rPrinterName.copy( 0, nPathIndex );
+
+    INetURLObject aOutFilename( aObj );
+    aOutFilename.SetExtension( "ps" );
+    FileBase::getFileURLFromSystemPath( aFilterOut, aFilterOut );
+    OUString aOutFile = aFilterOut + "/" + aOutFilename.getName();
+
+    OUString aTempName;
+    FileBase::getSystemPathFromFileURL( aName, aTempName );
+    OString aSource8 = OUStringToOString ( aTempName, osl_getThreadTextEncoding() );
+    FileBase::getSystemPathFromFileURL( aOutFile, aTempName );
+    OString aTargetURL8 = OUStringToOString(aTempName, osl_getThreadTextEncoding() );
+
+    std::cout << "print " << aSource8 << " -> " << aTargetURL8;
+    std::cout << " using " << (aPrinterName.isEmpty() ? "<default_printer>" : OUStringToOString( aPrinterName, osl_getThreadTextEncoding() ));
+    std::cout << std::endl;
+
+    // create the custom printer, if given
+    Sequence < PropertyValue > aPrinterArgs( 1 );
+    if( !aPrinterName.isEmpty() )
+    {
+        aPrinterArgs[0].Name = "Name";
+        aPrinterArgs[0].Value <<= aPrinterName;
+        xDoc->setPrinter( aPrinterArgs );
+    }
+
+    // print ( also without user interaction )
+    aPrinterArgs.realloc(2);
+    aPrinterArgs[0].Name = "FileName";
+    aPrinterArgs[0].Value <<= aOutFile;
+    aPrinterArgs[1].Name = "Wait";
+    aPrinterArgs[1].Value <<= true;
+    xDoc->print( aPrinterArgs );
+}
+
+} // anonymous namespace
 
 DispatchWatcher::DispatchWatcher()
     : m_nRequestCount(0)
@@ -210,7 +314,8 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
              aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
              aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
              aDispatchRequest.aRequestType == REQUEST_CONVERSION ||
-             aDispatchRequest.aRequestType == REQUEST_CAT)
+             aDispatchRequest.aRequestType == REQUEST_CAT ||
+             aDispatchRequest.aRequestType == REQUEST_SCRIPT_CAT)
             nCount++;
 
         Sequence < PropertyValue > aArgs( nCount );
@@ -223,7 +328,8 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
              aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
              aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
              aDispatchRequest.aRequestType == REQUEST_CONVERSION ||
-             aDispatchRequest.aRequestType == REQUEST_CAT)
+             aDispatchRequest.aRequestType == REQUEST_CAT ||
+             aDispatchRequest.aRequestType == REQUEST_SCRIPT_CAT)
         {
             aArgs[1].Name = "ReadOnly";
             aArgs[2].Name = "OpenNewView";
@@ -260,7 +366,8 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
              aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
              aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
              aDispatchRequest.aRequestType == REQUEST_CONVERSION ||
-             aDispatchRequest.aRequestType == REQUEST_CAT)
+             aDispatchRequest.aRequestType == REQUEST_CAT ||
+             aDispatchRequest.aRequestType == REQUEST_SCRIPT_CAT )
         {
             // documents opened for printing are opened readonly because they must be opened as a new document and this
             // document could be open already
@@ -447,11 +554,16 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                       aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
                       aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
                       aDispatchRequest.aRequestType == REQUEST_CONVERSION ||
-                      aDispatchRequest.aRequestType == REQUEST_CAT )
+                      aDispatchRequest.aRequestType == REQUEST_CAT ||
+                      aDispatchRequest.aRequestType == REQUEST_SCRIPT_CAT )
             {
                 if ( xDoc.is() )
                 {
-                    if ( aDispatchRequest.aRequestType == REQUEST_CONVERSION || aDispatchRequest.aRequestType == REQUEST_CAT ) {
+                    // Do we need to save the document in a different format?
+                    if ( aDispatchRequest.aRequestType == REQUEST_CONVERSION ||
+                         aDispatchRequest.aRequestType == REQUEST_CAT )
+                    {
+// FIXME: factor out into a method ...
                         Reference< XStorable > xStorable( xDoc, UNO_QUERY );
                         if ( xStorable.is() ) {
                             OUString aParam = aDispatchRequest.aPrinterName;
@@ -478,9 +590,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                             INetURLObject aOutFilename( aObj );
                             aOutFilename.SetExtension( aFilterExt );
                             FileBase::getFileURLFromSystemPath( aFilterOut, aFilterOut );
-                            OUString aOutFile = aFilterOut+
-                                                     "/" +
-                                                     aOutFilename.getName();
+                            OUString aOutFile = aFilterOut + "/" + aOutFilename.getName();
 
                             OUString fileForCat;
                             if( aDispatchRequest.aRequestType == REQUEST_CAT )
@@ -581,51 +691,19 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                 }
                             }
                         }
-                    } else if ( aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ) {
-                        OUString aParam = aDispatchRequest.aPrinterName;
-                        sal_Int32 nPathIndex =  aParam.lastIndexOf( ';' );
-
-                        OUString aFilterOut;
-                        OUString aPrinterName;
-                        if( nPathIndex != -1 )
-                            aFilterOut=aParam.copy( nPathIndex+1 );
-                        if( nPathIndex != 0 )
-                            aPrinterName=aParam.copy( 0, nPathIndex );
-
-                        INetURLObject aOutFilename( aObj );
-                        aOutFilename.SetExtension( "ps" );
-                        FileBase::getFileURLFromSystemPath( aFilterOut, aFilterOut );
-                        OUString aOutFile = aFilterOut+
-                            "/" +
-                            aOutFilename.getName();
-
-                        OUString aTempName;
-                        FileBase::getSystemPathFromFileURL( aName, aTempName );
-                        OString aSource8 = OUStringToOString ( aTempName, osl_getThreadTextEncoding() );
-                        FileBase::getSystemPathFromFileURL( aOutFile, aTempName );
-                        OString aTargetURL8 = OUStringToOString(aTempName, osl_getThreadTextEncoding() );
-
-                        std::cout << "print " << aSource8 << " -> " << aTargetURL8;
-                        std::cout << " using " << (aPrinterName.isEmpty() ? "<default_printer>" : OUStringToOString( aPrinterName, osl_getThreadTextEncoding() ));
-                        std::cout << std::endl;
-
-                        // create the custom printer, if given
-                        Sequence < PropertyValue > aPrinterArgs( 1 );
-                        if( !aPrinterName.isEmpty() )
-                        {
-                            aPrinterArgs[0].Name = "Name";
-                            aPrinterArgs[0].Value <<= aPrinterName;
-                            xDoc->setPrinter( aPrinterArgs );
-                        }
-
-                        // print ( also without user interaction )
-                        aPrinterArgs.realloc(2);
-                        aPrinterArgs[0].Name = "FileName";
-                        aPrinterArgs[0].Value <<= aOutFile;
-                        aPrinterArgs[1].Name = "Wait";
-                        aPrinterArgs[1].Value <<= true;
-                        xDoc->print( aPrinterArgs );
-                    } else {
+                    }
+                    else if ( aDispatchRequest.aRequestType == REQUEST_SCRIPT_CAT )
+                    {
+                        Reference< XModel > xModel( xDoc, UNO_QUERY );
+                        if( xModel.is() )
+                            scriptCat( xModel );
+                    }
+                    else if ( aDispatchRequest.aRequestType == REQUEST_BATCHPRINT )
+                    {
+                        batchPrint( aDispatchRequest.aPrinterName, xDoc, aObj, aName );
+                    }
+                    else
+                    {
                         if ( aDispatchRequest.aRequestType == REQUEST_PRINTTO )
                         {
                             // create the printer
@@ -745,7 +823,6 @@ void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) th
     }
 }
 
-}
-
+} // namespace desktop
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

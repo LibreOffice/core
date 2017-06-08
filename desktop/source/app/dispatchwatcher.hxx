@@ -53,16 +53,17 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
             REQUEST_CONVERSION,
             REQUEST_INFILTER,
             REQUEST_BATCHPRINT,
-            REQUEST_CAT
+            REQUEST_CAT,
+            REQUEST_SCRIPT_CAT
         };
 
         struct DispatchRequest
         {
-            RequestType     aRequestType;
-            OUString   aURL;
+            RequestType aRequestType;
+            OUString    aURL;
             boost::optional< OUString > aCwdUrl;
-            OUString   aPrinterName;  // also conversion params
-            OUString   aPreselectedFactory;
+            OUString    aPrinterName;  // also conversion params
+            OUString    aPreselectedFactory;
         };
 
         DispatchWatcher();
@@ -82,8 +83,7 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
     private:
         osl::Mutex m_mutex;
 
-        std::unordered_map<OUString, sal_Int32, OUStringHash>
-            m_aRequestContainer;
+        std::unordered_map<OUString, sal_Int32, OUStringHash> m_aRequestContainer;
 
         sal_Int16                   m_nRequestCount;
 };
