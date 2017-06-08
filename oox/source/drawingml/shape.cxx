@@ -46,6 +46,9 @@
 #include <oox/token/properties.hxx>
 
 #include <comphelper/classids.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/mapunit.hxx>
@@ -95,10 +98,6 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::style;
 
 namespace oox { namespace drawingml {
-
-#define PUT_PROP( aProperties, nPos, sPropName, aPropValue ) \
-    aProperties[nPos].Name = sPropName; \
-    aProperties[nPos].Value <<= aPropValue;
 
 Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
 : mpLinePropertiesPtr( new LineProperties )
@@ -662,14 +661,16 @@ Reference< XShape > const & Shape::createAndInsert(
                 nLinePhClr = pLineRef->maPhClr.getColor( rGraphicHelper );
 
                 // Store style-related properties to InteropGrabBag to be able to export them back
-                Sequence< PropertyValue > aProperties( 7 );
-                PUT_PROP( aProperties, 0, "SchemeClr",      pLineRef->maPhClr.getSchemeName() );
-                PUT_PROP( aProperties, 1, "Idx",            pLineRef->mnThemedIdx );
-                PUT_PROP( aProperties, 2, "Color",          nLinePhClr );
-                PUT_PROP( aProperties, 3, "LineStyle",      aLineProperties.getLineStyle() );
-                PUT_PROP( aProperties, 4, "LineJoint",      aLineProperties.getLineJoint() );
-                PUT_PROP( aProperties, 5, "LineWidth",      aLineProperties.getLineWidth() );
-                PUT_PROP( aProperties, 6, "Transformations", pLineRef->maPhClr.getTransformations() );
+                uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
+                {
+                    {"SchemeClr", uno::makeAny(pLineRef->maPhClr.getSchemeName())},
+                    {"Idx", uno::makeAny(pLineRef->mnThemedIdx)},
+                    {"Color", uno::makeAny(nLinePhClr)},
+                    {"LineStyle", uno::makeAny(aLineProperties.getLineStyle())},
+                    {"LineJoint", uno::makeAny(aLineProperties.getLineJoint())},
+                    {"LineWidth", uno::makeAny(aLineProperties.getLineWidth())},
+                    {"Transformations", uno::makeAny(pLineRef->maPhClr.getTransformations())}
+                });
                 putPropertyToGrabBag( "StyleLnRef", Any( aProperties ) );
             }
             if( const ShapeStyleRef* pFillRef = getShapeStyleRef( XML_fillRef ) )
@@ -679,11 +680,13 @@ Reference< XShape > const & Shape::createAndInsert(
                 OUString sColorScheme = pFillRef->maPhClr.getSchemeName();
                 if( !sColorScheme.isEmpty() )
                 {
-                    Sequence< PropertyValue > aProperties(4);
-                    PUT_PROP( aProperties, 0, "SchemeClr",      sColorScheme );
-                    PUT_PROP( aProperties, 1, "Idx",            pFillRef->mnThemedIdx );
-                    PUT_PROP( aProperties, 2, "Color",          nFillPhClr );
-                    PUT_PROP( aProperties, 3, "Transformations", pFillRef->maPhClr.getTransformations() );
+                    uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
+                    {
+                        {"SchemeClr", uno::makeAny(sColorScheme)},
+                        {"Idx", uno::makeAny(pFillRef->mnThemedIdx)},
+                        {"Color", uno::makeAny(nFillPhClr)},
+                        {"Transformations", uno::makeAny(pFillRef->maPhClr.getTransformations())}
+                    });
 
                     putPropertyToGrabBag( "StyleFillRef", Any( aProperties ) );
                 }
@@ -694,10 +697,12 @@ Reference< XShape > const & Shape::createAndInsert(
                 // nEffectPhClr = pEffectRef->maPhClr.getColor( rGraphicHelper );
 
                 // Store style-related properties to InteropGrabBag to be able to export them back
-                Sequence< PropertyValue > aProperties( 3 );
-                PUT_PROP( aProperties, 0, "SchemeClr",      pEffectRef->maPhClr.getSchemeName() );
-                PUT_PROP( aProperties, 1, "Idx",            pEffectRef->mnThemedIdx );
-                PUT_PROP( aProperties, 2, "Transformations", pEffectRef->maPhClr.getTransformations() );
+                uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
+                {
+                    {"SchemeClr", uno::makeAny(pEffectRef->maPhClr.getSchemeName())},
+                    {"Idx", uno::makeAny(pEffectRef->mnThemedIdx)},
+                    {"Transformations", uno::makeAny(pEffectRef->maPhClr.getTransformations())}
+                });
                 putPropertyToGrabBag( "StyleEffectRef", Any( aProperties ) );
             }
         }
@@ -925,113 +930,97 @@ Reference< XShape > const & Shape::createAndInsert(
             }
 
             // Store original fill and line colors of the shape and the theme color name to InteropGrabBag
-            Sequence< PropertyValue > aProperties( 6 );  //allocate the maximum possible number of slots
-            sal_Int32 nSize = 2;
-            aProperties[0].Name = "OriginalSolidFillClr";
-            aProperties[0].Value = aShapeProps.getProperty(PROP_FillColor);
-            aProperties[1].Name = "OriginalLnSolidFillClr";
-            aProperties[1].Value = aShapeProps.getProperty(PROP_LineColor);
+            std::vector<beans::PropertyValue> aProperties;
+            aProperties.push_back(comphelper::makePropertyValue("OriginalSolidFillClr", aShapeProps.getProperty(PROP_FillColor)));
+            aProperties.push_back(comphelper::makePropertyValue("OriginalLnSolidFillClr", aShapeProps.getProperty(PROP_LineColor)));
             OUString sColorFillScheme = aFillProperties.maFillColor.getSchemeName();
             if( !aFillProperties.maFillColor.isPlaceHolder() && !sColorFillScheme.isEmpty() )
             {
-                PUT_PROP( aProperties, nSize, "SpPrSolidFillSchemeClr", sColorFillScheme );
-                nSize++;
-                PUT_PROP( aProperties, nSize, "SpPrSolidFillSchemeClrTransformations",
-                          aFillProperties.maFillColor.getTransformations() );
-                nSize++;
+                aProperties.push_back(comphelper::makePropertyValue("SpPrSolidFillSchemeClr", sColorFillScheme));
+                aProperties.push_back(comphelper::makePropertyValue("SpPrSolidFillSchemeClrTransformations", aFillProperties.maFillColor.getTransformations()));
             }
             OUString sLnColorFillScheme = aLineProperties.maLineFill.maFillColor.getSchemeName();
             if( !aLineProperties.maLineFill.maFillColor.isPlaceHolder() && !sLnColorFillScheme.isEmpty() )
             {
-                PUT_PROP( aProperties, nSize, "SpPrLnSolidFillSchemeClr", sLnColorFillScheme );
-                nSize++;
-                PUT_PROP( aProperties, nSize, "SpPrLnSolidFillSchemeClrTransformations",
-                          aLineProperties.maLineFill.maFillColor.getTransformations() );
-                nSize++;
+                aProperties.push_back(comphelper::makePropertyValue("SpPrLnSolidFillSchemeClr", sLnColorFillScheme));
+                aProperties.push_back(comphelper::makePropertyValue("SpPrLnSolidFillSchemeClrTransformations", aLineProperties.maLineFill.maFillColor.getTransformations()));
             }
-            aProperties.realloc( nSize ); //shrink the Sequence if we didn't use all the slots
-            putPropertiesToGrabBag( aProperties );
+            putPropertiesToGrabBag(comphelper::containerToSequence(aProperties));
 
             // Store original gradient fill of the shape to InteropGrabBag
             // LibreOffice doesn't support all the kinds of gradient so we save its complete definition
             if( aShapeProps.hasProperty( PROP_FillGradient ) )
             {
-                Sequence< PropertyValue > aGradientStops( aFillProperties.maGradientProps.maGradientStops.size() );
+                std::vector<beans::PropertyValue> aGradientStops;
                 ::std::map< double, Color >::iterator aIt = aFillProperties.maGradientProps.maGradientStops.begin();
                 for( size_t i = 0; i < aFillProperties.maGradientProps.maGradientStops.size(); ++i )
                 { // for each stop in the gradient definition:
 
                     // save position
-                    Sequence< PropertyValue > aGradientStop( 3 );
-                    PUT_PROP( aGradientStop, 0, "Pos", aIt->first );
+                    std::vector<beans::PropertyValue> aGradientStop;
+                    aGradientStop.push_back(comphelper::makePropertyValue("Pos", aIt->first));
 
                     OUString sStopColorScheme = aIt->second.getSchemeName();
                     if( sStopColorScheme.isEmpty() )
                     {
                         // save RGB color
-                        PUT_PROP( aGradientStop, 1, "RgbClr", aIt->second.getColor( rGraphicHelper, nFillPhClr ) );
+                        aGradientStop.push_back(comphelper::makePropertyValue("RgbClr", aIt->second.getColor(rGraphicHelper, nFillPhClr)));
                         // in the case of a RGB color, transformations are already applied to
                         // the color with the exception of alpha transformations. We only need
                         // to keep the transparency value to calculate the alpha value later.
                         if( aIt->second.hasTransparency() )
-                        {
-                            PUT_PROP( aGradientStop, 2, "Transparency", aIt->second.getTransparency() );
-                        }
+                            aGradientStop.push_back(comphelper::makePropertyValue("Transparency", aIt->second.getTransparency()));
                     }
                     else
                     {
                         // save color with scheme name
-                        PUT_PROP( aGradientStop, 1, "SchemeClr", sStopColorScheme );
+                        aGradientStop.push_back(comphelper::makePropertyValue("SchemeClr", sStopColorScheme));
                         // save all color transformations
-                        PUT_PROP( aGradientStop, 2, "Transformations", aIt->second.getTransformations() );
+                        aGradientStop.push_back(comphelper::makePropertyValue("Transformations", aIt->second.getTransformations()));
                     }
 
-                    PUT_PROP( aGradientStops, i, OUString::number( i ), aGradientStop );
+                    aGradientStops.push_back(comphelper::makePropertyValue(OUString::number(i), comphelper::containerToSequence(aGradientStop)));
                     ++aIt;
                 }
                 // If getFillProperties.moFillType is unused that means gradient is defined by a theme
                 // which is already saved into StyleFillRef property, so no need to save the explicit values too
                 if( getFillProperties().moFillType.has() )
-                    putPropertyToGrabBag( "GradFillDefinition", Any( aGradientStops ) );
+                    putPropertyToGrabBag( "GradFillDefinition", uno::Any(comphelper::containerToSequence(aGradientStops)));
                 putPropertyToGrabBag( "OriginalGradFill", aShapeProps.getProperty(PROP_FillGradient) );
             }
 
             // store unsupported effect attributes in the grab bag
             if (!aEffectProperties.m_Effects.empty())
             {
-                Sequence<PropertyValue> aEffects(aEffectProperties.m_Effects.size());
+                std::vector<beans::PropertyValue> aEffects;
                 sal_uInt32 i = 0;
                 for (auto const& it : aEffectProperties.m_Effects)
                 {
                     PropertyValue aEffect = it->getEffect();
                     if( !aEffect.Name.isEmpty() )
                     {
-                        Sequence< PropertyValue > aEffectsGrabBag( 3 );
-                        aEffectsGrabBag[0].Name = "Attribs";
-                        aEffectsGrabBag[0].Value = aEffect.Value;
+                        std::vector<beans::PropertyValue> aEffectsGrabBag;
+                        aEffectsGrabBag.push_back(comphelper::makePropertyValue("Attribs", aEffect.Value));
 
                         Color& aColor( it->moColor );
                         OUString sColorScheme = aColor.getSchemeName();
                         if( sColorScheme.isEmpty() )
                         {
                             // RGB color and transparency value
-                            PUT_PROP( aEffectsGrabBag, 1, "RgbClr",
-                                      aColor.getColor( rGraphicHelper, nFillPhClr ) );
-                            PUT_PROP( aEffectsGrabBag, 2, "RgbClrTransparency",
-                                      aColor.getTransparency() );
+                            aEffectsGrabBag.push_back(comphelper::makePropertyValue("RgbClr", aColor.getColor(rGraphicHelper, nFillPhClr)));
+                            aEffectsGrabBag.push_back(comphelper::makePropertyValue("RgbClrTransparency", aColor.getTransparency()));
                         }
                         else
                         {
                             // scheme color with name and transformations
-                            PUT_PROP( aEffectsGrabBag, 1, "SchemeClr", sColorScheme );
-                            PUT_PROP( aEffectsGrabBag, 2, "SchemeClrTransformations",
-                                      aColor.getTransformations() );
+                            aEffectsGrabBag.push_back(comphelper::makePropertyValue("SchemeClr", sColorScheme));
+                            aEffectsGrabBag.push_back(comphelper::makePropertyValue("SchemeClrTransformations", aColor.getTransformations()));
                         }
-                        PUT_PROP( aEffects, i, aEffect.Name, aEffectsGrabBag );
+                        aEffects.push_back(comphelper::makePropertyValue(aEffect.Name, comphelper::containerToSequence(aEffectsGrabBag)));
                         ++i;
                     }
                 }
-                putPropertyToGrabBag( "EffectProperties", Any( aEffects ) );
+                putPropertyToGrabBag("EffectProperties", uno::Any(comphelper::containerToSequence(aEffects)));
             }
 
             // add 3D effects if any
@@ -1040,10 +1029,12 @@ Reference< XShape > const & Shape::createAndInsert(
             Sequence< PropertyValue > aShape3DEffects = get3DProperties().getShape3DAttributes( rGraphicHelper, nFillPhClr );
             if( aCamera3DEffects.getLength() > 0 || aLightRig3DEffects.getLength() > 0 || aShape3DEffects.getLength() > 0 )
             {
-                Sequence< PropertyValue > a3DEffectsGrabBag( 3 );
-                PUT_PROP( a3DEffectsGrabBag, 0, "Camera", aCamera3DEffects );
-                PUT_PROP( a3DEffectsGrabBag, 1, "LightRig", aLightRig3DEffects );
-                PUT_PROP( a3DEffectsGrabBag, 2, "Shape3D", aShape3DEffects );
+                uno::Sequence<beans::PropertyValue> a3DEffectsGrabBag = comphelper::InitPropertySequence(
+                {
+                    {"Camera", uno::makeAny(aCamera3DEffects)},
+                    {"LightRig", uno::makeAny(aLightRig3DEffects)},
+                    {"Shape3D", uno::makeAny(aShape3DEffects)}
+                });
                 putPropertyToGrabBag( "3DEffectProperties", Any( a3DEffectsGrabBag ) );
             }
 
