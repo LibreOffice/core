@@ -1429,7 +1429,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                 bOverflow = true;
                 nVal = -128;
             }
-            else if( nVal > 127 )
+            else if( nVal > 255 ) // 128..255 map to -128..-1
             {
                 bOverflow = true;
                 nVal = 127;
