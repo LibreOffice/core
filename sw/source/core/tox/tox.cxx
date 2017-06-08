@@ -311,8 +311,6 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
                 nPoolId = STR_POOLCOLL_TOX_CNTNT6;
             else if( TOX_USER == m_eType && 6 == i )
                 nPoolId = STR_POOLCOLL_TOX_USER6;
-            else if( TOX_AUTHORITIES == m_eType )
-                nPoolId = STR_POOLCOLL_TOX_AUTHORITIES1;
             SetTemplate( i, SwResId( nPoolId ) );
         }
 }
