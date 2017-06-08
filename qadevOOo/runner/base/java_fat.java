@@ -186,15 +186,13 @@ public class java_fat implements TestBase {
                         res = executeInterfaceTest(aSubEntry, tEnv, m_aParams);
                     } catch (IllegalArgumentException iae) {
                         System.out.println("Couldn't load class "
-                                + aSubEntry.entryName);
-                        System.out
-                                .println("**** " + iae.getMessage() + " ****");
+                                + aSubEntry.entryName + ":");
+                        iae.printStackTrace(System.out);
                         Summarizer.summarizeDown(aSubEntry, iae.getMessage());
                     } catch (java.lang.NoClassDefFoundError iae) {
                         System.out.println("Couldn't load class "
-                                + aSubEntry.entryName);
-                        System.out
-                                .println("**** " + iae.getMessage() + " ****");
+                                + aSubEntry.entryName + ":");
+                        iae.printStackTrace(System.out);
                         Summarizer.summarizeDown(aSubEntry, iae.getMessage());
                     } catch (java.lang.RuntimeException e) {
                         closeExistingOffice();
