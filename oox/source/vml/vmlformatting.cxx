@@ -904,9 +904,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
                 else if (aName == "font-size")
                 {
                     oox::OptValue<OUString> aOptString(aValue);
-                    sal_Int64 nEmu = lclGetEmu( rGraphicHelper, aOptString, 1 );
-                    // 1 point = 1/72 inch = 12,700 EMU
-                    float nSize = nEmu / 12700;
+                    float nSize = drawingml::convertEmuToPoints(lclGetEmu(rGraphicHelper, aOptString, 1));
 
                     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
                     xPropertySet->setPropertyValue("CharHeight", uno::makeAny(nSize));
