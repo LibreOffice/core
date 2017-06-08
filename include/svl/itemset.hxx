@@ -22,6 +22,10 @@
 #include <svl/svldllapi.h>
 
 #include <cstdarg>
+#include <memory>
+#include <type_traits>
+
+#include <o3tl/make_unique.hxx>
 #include <svl/poolitem.hxx>
 
 class SfxItemPool;
@@ -29,6 +33,19 @@ class SfxPoolItem;
 class SvStream;
 
 typedef SfxPoolItem const** SfxItemArray;
+
+namespace svl { namespace detail {
+
+template<sal_uInt16 WID1, sal_uInt16 WID2> constexpr bool validRanges()
+{ return WID1 != 0 && WID1 <= WID2; }
+
+template<sal_uInt16 WID1, sal_uInt16 WID2, sal_uInt16 WID3, sal_uInt16... WIDs>
+constexpr bool validRanges() {
+    return WID1 != 0 && WID1 <= WID2 && WID2 < WID3 && WID3 - WID2 > 1
+        && validRanges<WID3, WIDs...>();
+}
+
+} }
 
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 {
@@ -68,6 +85,13 @@ public:
                                 SfxItemSet( SfxItemPool&, int nWh1, int nWh2, int nNull, ... );
                                 SfxItemSet( SfxItemPool&, const sal_uInt16* nWhichPairTable );
     virtual                     ~SfxItemSet();
+
+    template<sal_uInt16... WIDs> static
+    typename std::enable_if<
+        svl::detail::validRanges<WIDs...>(), std::unique_ptr<SfxItemSet>>::type
+    create(SfxItemPool & pool)
+    { return o3tl::make_unique<SfxItemSet>(pool, WIDs...); }
+
 
     virtual SfxItemSet *        Clone(bool bItems = true, SfxItemPool *pToPool = nullptr) const;
 
