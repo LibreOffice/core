@@ -51,7 +51,8 @@ enum class ResourceType {
     PropertyTable,
     Math,
     Any,
-    UniversalMeasure
+    TwipsMeasure,
+    HpsMeasure
 };
 
 struct AttributeInfo

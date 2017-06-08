@@ -229,21 +229,37 @@ public:
     virtual OOXMLValue * clone() const override;
 };
 
-/// Handles OOXML's ST_UniversalMeasure value.
 class OOXMLUniversalMeasureValue : public OOXMLValue
 {
-protected:
+private:
     sal_uInt32 mnValue;
 public:
-    explicit OOXMLUniversalMeasureValue(const char * pValue);
+    OOXMLUniversalMeasureValue(const char * pValue, sal_uInt32 npPt);
     virtual ~OOXMLUniversalMeasureValue() override;
 
     virtual int getInt() const override;
 #ifdef DEBUG_WRITERFILTER
     virtual std::string toString() const override;
 #endif
-    virtual OOXMLValue* clone() const override;
 };
+
+/// npPt is quotient defining how much units are in 1 pt
+template <sal_uInt32 npPt> class OOXMLNthPtMeasureValue : public OOXMLUniversalMeasureValue
+{
+public:
+    explicit OOXMLNthPtMeasureValue(const char * pValue)
+        : OOXMLUniversalMeasureValue(pValue, npPt) {}
+    virtual OOXMLValue* clone() const override
+    {
+        return new OOXMLNthPtMeasureValue<npPt>(*this);
+    }
+};
+
+/// Handles OOXML's ST_TwipsMeasure value.
+typedef OOXMLNthPtMeasureValue<20> OOXMLTwipsMeasureValue;
+
+/// Handles OOXML's ST_HpsMeasure value.
+typedef OOXMLNthPtMeasureValue<2> OOXMLHpsMeasureValue;
 
 class OOXMLShapeValue : public OOXMLValue
 {
