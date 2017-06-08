@@ -389,7 +389,7 @@ class PCodeVisitor
 public:
     virtual ~PCodeVisitor();
 
-    virtual void start( sal_uInt8* pStart ) = 0;
+    virtual void start( const sal_uInt8* pStart ) = 0;
     virtual void processOpCode0( SbiOpcode eOp ) = 0;
     virtual void processOpCode1( SbiOpcode eOp, T nOp1 ) = 0;
     virtual void processOpCode2( SbiOpcode eOp, T nOp1, T nOp2 ) = 0;
@@ -405,8 +405,8 @@ class PCodeBufferWalker
 {
 private:
     T  m_nBytes;
-    sal_uInt8* m_pCode;
-    static T readParam( sal_uInt8*& pCode )
+    const sal_uInt8* m_pCode;
+    static T readParam( sal_uInt8 const *& pCode )
     {
         short nBytes = sizeof( T );
         T nOp1=0;
@@ -415,15 +415,15 @@ private:
         return nOp1;
     }
 public:
-    PCodeBufferWalker( sal_uInt8* pCode, T nBytes ): m_nBytes( nBytes ), m_pCode( pCode )
+    PCodeBufferWalker( const sal_uInt8* pCode, T nBytes ): m_nBytes( nBytes ), m_pCode( pCode )
     {
     }
     void visitBuffer( PCodeVisitor< T >& visitor )
     {
-        sal_uInt8* pCode = m_pCode;
+        const sal_uInt8* pCode = m_pCode;
         if ( !pCode )
             return;
-        sal_uInt8* pEnd = pCode + m_nBytes;
+        const sal_uInt8* pEnd = pCode + m_nBytes;
         visitor.start( m_pCode );
         T nOp1 = 0, nOp2 = 0;
         for( ; pCode < pEnd; )
@@ -465,7 +465,7 @@ class OffSetAccumulator : public PCodeVisitor< T >
 public:
 
     OffSetAccumulator() : m_nNumOp0(0), m_nNumSingleParams(0), m_nNumDoubleParams(0){}
-    virtual void start( sal_uInt8* /*pStart*/ ) override {}
+    virtual void start( const sal_uInt8* /*pStart*/ ) override {}
     virtual void processOpCode0( SbiOpcode /*eOp*/ ) override { ++m_nNumOp0; }
     virtual void processOpCode1( SbiOpcode /*eOp*/, T /*nOp1*/ ) override {  ++m_nNumSingleParams; }
     virtual void processOpCode2( SbiOpcode /*eOp*/, T /*nOp1*/, T /*nOp2*/ ) override { ++m_nNumDoubleParams; }
@@ -491,11 +491,11 @@ public:
 template < class T, class S >
 class BufferTransformer : public PCodeVisitor< T >
 {
-    sal_uInt8* m_pStart;
+    const sal_uInt8* m_pStart;
     SbiBuffer m_ConvertedBuf;
 public:
     BufferTransformer():m_pStart(nullptr), m_ConvertedBuf( nullptr, 1024 ) {}
-    virtual void start( sal_uInt8* pStart ) override { m_pStart = pStart; }
+    virtual void start( const sal_uInt8* pStart ) override { m_pStart = pStart; }
     virtual void processOpCode0( SbiOpcode eOp ) override
     {
         m_ConvertedBuf += (sal_uInt8)eOp;
@@ -544,7 +544,7 @@ public:
     {
         return m_ConvertedBuf;
     }
-    static S convertBufferOffSet( sal_uInt8* pStart, T nOp1 )
+    static S convertBufferOffSet( const sal_uInt8* pStart, T nOp1 )
     {
         PCodeBufferWalker< T > aBuff( pStart, nOp1);
         OffSetAccumulator< T, S > aVisitor;

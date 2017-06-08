@@ -666,9 +666,9 @@ public:
                                 Bitmap& aNewBitmap,
                                 BitmapReadAccess* pReadAcc,
                                 int aNumberOfContributions,
-                                double* pWeights,
+                                const double* pWeights,
                                 int* pPixels,
-                                int* pCount );
+                                const int* pCount );
 
     SAL_DLLPRIVATE bool     ImplMakeMono( sal_uInt8 cThreshold );
     SAL_DLLPRIVATE bool     ImplMakeGreyscales( sal_uInt16 nGreyscales );
@@ -703,7 +703,7 @@ public:
     SAL_DLLPRIVATE static void ImplBlurContributions(
                                 const int aSize,
                                 const int aNumberOfContributions,
-                                double* pBlurVector,
+                                const double* pBlurVector,
                                 double*& pWeights,
                                 int*& pPixels,
                                 int*& pCount );

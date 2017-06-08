@@ -615,7 +615,7 @@ sal_Int16 T602ImportFilter::readnum(unsigned char *ch, bool show)
     return (sal_Int16) atoi(reinterpret_cast<char const *>(buff));
 }
 
-unsigned char T602ImportFilter::Setformat602(char *cmd)
+unsigned char T602ImportFilter::Setformat602(const char *cmd)
 {
     unsigned char ch;
     sal_Int16 i;

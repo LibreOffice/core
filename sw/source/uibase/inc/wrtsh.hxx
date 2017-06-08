@@ -591,7 +591,7 @@ private:
 
     SAL_DLLPRIVATE bool  GoStart(bool KeepArea, bool *,
             bool bSelect = false, bool bDontMoveRegion = false);
-    SAL_DLLPRIVATE bool  GoEnd(bool KeepArea = false, bool * = nullptr);
+    SAL_DLLPRIVATE bool  GoEnd(bool KeepArea = false, const bool * = nullptr);
 
     enum BookMarkMove
     {

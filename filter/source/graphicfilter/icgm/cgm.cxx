@@ -171,7 +171,7 @@ sal_uInt32 CGM::ImplGetUI( sal_uInt32 nPrecision )
     }
 }
 
-void CGM::ImplGetSwitch4( sal_uInt8* pSource, sal_uInt8* pDest )
+void CGM::ImplGetSwitch4( const sal_uInt8* pSource, sal_uInt8* pDest )
 {
     for ( int i = 0; i < 4; i++ )
     {
@@ -179,7 +179,7 @@ void CGM::ImplGetSwitch4( sal_uInt8* pSource, sal_uInt8* pDest )
     }
 }
 
-void CGM::ImplGetSwitch8( sal_uInt8* pSource, sal_uInt8* pDest )
+void CGM::ImplGetSwitch8( const sal_uInt8* pSource, sal_uInt8* pDest )
 {
     for ( int i = 0; i < 8; i++ )
     {

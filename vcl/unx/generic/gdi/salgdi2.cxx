@@ -107,7 +107,7 @@ bool X11SalGraphics::RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* 
 
 extern "C"
 {
-    static Bool GraphicsExposePredicate( Display*, XEvent* pEvent, XPointer pFrameWindow )
+    static Bool GraphicsExposePredicate( Display*, XEvent* pEvent, const XPointer pFrameWindow )
     {
         Bool bRet = False;
         if( (pEvent->type == GraphicsExpose || pEvent->type == NoExpose) &&

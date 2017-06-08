@@ -30,7 +30,7 @@ namespace rtl_alloc
 
     // small memory check routine, which return false, if there is a problem
 
-    bool checkMemory(char* _pMemory, sal_uInt32 _nSize, char _n)
+    bool checkMemory(const char* _pMemory, sal_uInt32 _nSize, char _n)
     {
         bool bOk = true;
 

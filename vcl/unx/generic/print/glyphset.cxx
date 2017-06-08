@@ -212,7 +212,7 @@ struct EncEntry
 
 static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, FILE* pTmpFile,
     const char* pGlyphSetName, int nGlyphCount,
-    /*const*/ sal_uInt16* pRequestedGlyphs, /*const*/ unsigned char* pEncoding,
+    /*const*/ const sal_uInt16* pRequestedGlyphs, /*const*/ const unsigned char* pEncoding,
     bool bAllowType42, bool /*bAllowCID*/ )
 {
     // match the font-subset to the printer capabilities

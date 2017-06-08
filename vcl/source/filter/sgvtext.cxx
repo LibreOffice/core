@@ -261,7 +261,7 @@ UCHAR GetNextChar(UCHAR* TBuf, sal_uInt16 Index)
     return TBuf[Index];
 }
 
-UCHAR ProcessOne(UCHAR* TBuf, sal_uInt16& Index,
+UCHAR ProcessOne(const UCHAR* TBuf, sal_uInt16& Index,
                  ObjTextType& Atr0, ObjTextType& AktAtr,
                  bool ScanEsc)
 {

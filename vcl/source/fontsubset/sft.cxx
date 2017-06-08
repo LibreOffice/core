@@ -2344,7 +2344,7 @@ bool GetSfntTable( TrueTypeFont* ttf, int nSubtableIndex,
     return bOk;
 }
 
-TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *glyphArray, int nGlyphs, bool vertical)
+TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical)
 {
     const sal_uInt8* pTable;
     sal_uInt32 n;

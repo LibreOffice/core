@@ -141,7 +141,7 @@ private:
     sal_uInt16 ConvertHeadingRow(rtl::Reference<XFTable> const & pXFTable,sal_uInt16 nStartHeadRow,sal_uInt16 nEndHeadRow);
     static bool FindSplitColMark(XFTable* pXFTable,sal_uInt8* pCellMark,sal_uInt8& nMaxColSpan);
     void SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable> const & pXFTable,
-                sal_uInt8 nFirstColSpann,sal_uInt8* pCellMark);
+                sal_uInt8 nFirstColSpann, const sal_uInt8* pCellMark);
 
     std::map<sal_uInt16,LwpRowLayout*> m_RowsMap;
     void SplitConflictCells();

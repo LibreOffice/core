@@ -7543,7 +7543,7 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
     }
 }
 
-SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, sal_uInt32* pTableArry, SvxMSDffSolverContainer* pSolverContainer )
+SdrObject* SdrPowerPointImport::CreateTable( SdrObject* pGroup, const sal_uInt32* pTableArry, SvxMSDffSolverContainer* pSolverContainer )
 {
     SdrObject* pRet = pGroup;
 

@@ -286,7 +286,7 @@ void SaveRedlEndPosForRestore::Restore_()
 }
 
 /// Convert list of ranges of whichIds to a corresponding list of whichIds
-static std::vector<sal_uInt16> * lcl_RangesToVector(sal_uInt16 * pRanges)
+static std::vector<sal_uInt16> * lcl_RangesToVector(const sal_uInt16 * pRanges)
 {
     std::vector<sal_uInt16> * pResult = new std::vector<sal_uInt16>;
 
