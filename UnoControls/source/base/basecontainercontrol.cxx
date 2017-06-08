@@ -73,30 +73,12 @@ Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType )
 
 Sequence< Type > SAL_CALL BaseContainerControl::getTypes()
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static OTypeCollection* pTypeCollection = nullptr;
+    static OTypeCollection ourTypeCollection(
+                cppu::UnoType<XControlModel>::get(),
+                cppu::UnoType<XControlContainer>::get(),
+                BaseControl::getTypes() );
 
-    if ( pTypeCollection == nullptr )
-    {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-
-        // Control these pointer again ... it can be, that another instance will be faster then these!
-        if ( pTypeCollection == nullptr )
-        {
-            // Create a static typecollection ...
-            static OTypeCollection aTypeCollection  (   cppu::UnoType<XControlModel>::get(),
-                                                          cppu::UnoType<XControlContainer>::get(),
-                                                        BaseControl::getTypes()
-                                                    );
-            // ... and set his address to static pointer!
-            pTypeCollection = &aTypeCollection;
-        }
-    }
-
-    return pTypeCollection->getTypes();
+    return ourTypeCollection.getTypes();
 }
 
 //  XAggregation
