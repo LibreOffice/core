@@ -102,8 +102,8 @@ bool ScGroupTokenConverter::convert( ScTokenArray& rCode, sc::FormulaLogger::Gro
     }
 #endif
 
-    rCode.Reset();
-    for (const formula::FormulaToken* p = rCode.First(); p; p = rCode.Next())
+    formula::FormulaTokenArrayPlainIterator aIter(rCode);
+    for (const formula::FormulaToken* p = aIter.First(); p; p = aIter.Next())
     {
         // A reference can be either absolute or relative.  If it's absolute,
         // convert it to a static value token.  If relative, convert it to a
