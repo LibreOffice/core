@@ -44,6 +44,13 @@ using namespace ::com::sun::star::util;
 
 namespace unocontrols{
 
+enum ProperyHandle  // values represent index in PropertyArray
+{                   // for FrameControl
+    Componenturl    = 0,
+    Frame           = 1,
+    Loaderarguments = 2
+};
+
 //  construct/destruct
 
 FrameControl::FrameControl( const Reference< XComponentContext >& rxContext)
@@ -245,7 +252,7 @@ void SAL_CALL FrameControl::unadvise(   const   Type&                       aTyp
 
 const Sequence< OUString > FrameControl::impl_getStaticSupportedServiceNames()
 {
-    Sequence<OUString> seqServiceNames { SERVICENAME_FRAMECONTROL };
+    Sequence<OUString> seqServiceNames { "com.sun.star.frame.FrameControl" };
     return seqServiceNames;
 }
 
@@ -253,7 +260,7 @@ const Sequence< OUString > FrameControl::impl_getStaticSupportedServiceNames()
 
 const OUString FrameControl::impl_getStaticImplementationName()
 {
-    return OUString(IMPLEMENTATIONNAME_FRAMECONTROL);
+    return OUString("stardiv.UnoControls.FrameControl");
 }
 
 //  OPropertySetHelper
@@ -266,12 +273,12 @@ sal_Bool FrameControl::convertFastPropertyValue(        Any&        rConvertedVa
     bool bReturn = false;
     switch (nHandle)
     {
-        case PROPERTYHANDLE_COMPONENTURL        :       rConvertedValue   = rValue;
+        case ProperyHandle::Componenturl        :       rConvertedValue   = rValue;
                                                         rOldValue       <<= m_sComponentURL;
                                                         bReturn           = true;
                                                         break;
 
-        case PROPERTYHANDLE_LOADERARGUMENTS     :       rConvertedValue   = rValue;
+        case ProperyHandle::Loaderarguments     :       rConvertedValue   = rValue;
                                                         rOldValue       <<= m_seqLoaderArguments;
                                                         bReturn           = true;
                                                         break;
@@ -294,14 +301,14 @@ void FrameControl::setFastPropertyValue_NoBroadcast(            sal_Int32   nHan
     MutexGuard  aGuard (m_aMutex);
     switch (nHandle)
     {
-        case PROPERTYHANDLE_COMPONENTURL        :       rValue >>= m_sComponentURL;
+        case ProperyHandle::Componenturl        :       rValue >>= m_sComponentURL;
                                                         if (getPeer().is())
                                                         {
                                                             impl_createFrame ( getPeer(), m_sComponentURL, m_seqLoaderArguments );
                                                         }
                                                         break;
 
-        case PROPERTYHANDLE_LOADERARGUMENTS     :       rValue >>= m_seqLoaderArguments;
+        case ProperyHandle::Loaderarguments     :       rValue >>= m_seqLoaderArguments;
                                                         break;
 
         default :                                       OSL_ENSURE ( nHandle == -1, "This is an invalid property handle." );
@@ -317,13 +324,13 @@ void FrameControl::getFastPropertyValue(    Any&        rRet    ,
 
     switch (nHandle)
     {
-        case PROPERTYHANDLE_COMPONENTURL    :       rRet <<= m_sComponentURL;
+        case ProperyHandle::Componenturl    :       rRet <<= m_sComponentURL;
                                                     break;
 
-        case PROPERTYHANDLE_LOADERARGUMENTS :       rRet <<= m_seqLoaderArguments;
+        case ProperyHandle::Loaderarguments :       rRet <<= m_seqLoaderArguments;
                                                     break;
 
-        case PROPERTYHANDLE_FRAME           :       rRet <<= m_xFrame;
+        case ProperyHandle::Frame           :       rRet <<= m_xFrame;
                                                        break;
 
         default :                                   OSL_ENSURE ( nHandle == -1, "This is an invalid property handle." );
@@ -335,7 +342,17 @@ void FrameControl::getFastPropertyValue(    Any&        rRet    ,
 IPropertyArrayHelper& FrameControl::getInfoHelper()
 {
     // Create a table that map names to index values.
-    static OPropertyArrayHelper ourPropertyInfo( impl_getStaticPropertyDescriptor(), true );
+    // attention: properies need to be sorted by name!
+    static OPropertyArrayHelper ourPropertyInfo(
+                {
+                    Property( "ComponentURL", ProperyHandle::Componenturl, cppu::UnoType<OUString>::get(),
+                            PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED ),
+                    Property( "Frame", ProperyHandle::Frame, cppu::UnoType<XFrame>::get(),
+                            PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT ),
+                    Property( "LoaderArguments", ProperyHandle::Loaderarguments, cppu::UnoType<Sequence<PropertyValue>>::get(),
+                            PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED )
+                },
+                true );
 
     return ourPropertyInfo;
 }
@@ -407,7 +424,7 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
     }
 
     // notify the listeners
-    sal_Int32   nFrameId = PROPERTYHANDLE_FRAME;
+    sal_Int32   nFrameId = ProperyHandle::Frame;
     Any aNewFrame ( &xNewFrame, cppu::UnoType<XFrame>::get());
     Any aOldFrame ( &xOldFrame, cppu::UnoType<XFrame>::get());
 
@@ -434,7 +451,7 @@ void FrameControl::impl_deleteFrame()
     }
 
     // notify the listeners
-    sal_Int32 nFrameId = PROPERTYHANDLE_FRAME;
+    sal_Int32 nFrameId = ProperyHandle::Frame;
     Any aNewFrame( &xNullFrame, cppu::UnoType<XFrame2>::get());
     Any aOldFrame( &xOldFrame, cppu::UnoType<XFrame2>::get());
     fire( &nFrameId, &aNewFrame, &aOldFrame, 1, false );
@@ -444,22 +461,6 @@ void FrameControl::impl_deleteFrame()
         xOldFrame->dispose();
 }
 
-//  private method
-
-const Sequence< Property >& FrameControl::impl_getStaticPropertyDescriptor()
-{
-    // All Properties of this implementation. The array must be sorted!
-    static const Property pPropertys[PROPERTY_COUNT] =
-    {
-        Property( PROPERTYNAME_COMPONENTURL, PROPERTYHANDLE_COMPONENTURL, cppu::UnoType<OUString>::get(), PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED ),
-        Property( PROPERTYNAME_FRAME, PROPERTYHANDLE_FRAME, cppu::UnoType<XFrame>::get(), PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT   ),
-        Property( PROPERTYNAME_LOADERARGUMENTS, PROPERTYHANDLE_LOADERARGUMENTS, cppu::UnoType<Sequence<PropertyValue>>::get(), PropertyAttribute::BOUND | PropertyAttribute::CONSTRAINED )
-    };
-
-    static const Sequence< Property > seqPropertys( pPropertys, PROPERTY_COUNT );
-
-    return seqPropertys;
-}
 
 }   // namespace unocontrols
 
