@@ -1503,6 +1503,11 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newConcat )( IMPL_RTL_STRINGDATA** ppThis,
         *ppThis = pRight;
         IMPL_RTL_ACQUIRE( pRight );
     }
+    else if (pLeft->length
+             > std::numeric_limits<sal_Int32>::max() - pRight->length)
+    {
+        *ppThis = nullptr;
+    }
     else
     {
         IMPL_RTL_STRINGDATA* pTempStr = IMPL_RTL_STRINGNAME( ImplAlloc )( pLeft->length + pRight->length );
