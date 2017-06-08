@@ -160,6 +160,8 @@ namespace desktop
         "                       --pt switch interferes with --printer-name.\n"
         "   --cat               Dump text content of the following files to console\n"
         "                       (implies --headless). Cannot be used with --convert-to.\n"
+        "   --script-cat        Dump text content of any scripts embedded in the files to console\n"
+        "                       (implies --headless). Cannot be used with --convert-to.\n"
         "   -env:<VAR>[=<VALUE>] Set a bootstrap variable. For example: to set\n"
         "                       a non-default user profile path:\n"
         "                       -env:UserInstallation=file:///tmp/test\n\n"
