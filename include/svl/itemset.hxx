@@ -42,7 +42,6 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 
 friend class SfxItemPoolCache;
 friend class SfxAllItemSet;
-friend const char *DbgCheckItemSet( const void* );
 
 private:
     SVL_DLLPRIVATE void                     InitRanges_Impl(const sal_uInt16 *nWhichPairTable);

@@ -204,8 +204,6 @@ include/sfx2/msg.hxx:120
     const class std::type_info * SfxType0::Type() const
 include/svl/itempool.hxx:209
     void SfxItemPool::dumpAsXml(struct _xmlTextWriter *) const
-include/svl/itemset.hxx:45
-    const char * DbgCheckItemSet(const void *)
 include/svl/macitem.hxx:96
     class __gnu_debug::_Safe_iterator<struct std::_Rb_tree_const_iterator<struct std::pair<const unsigned short, class SvxMacro> >, class std::__debug::map<unsigned short, class SvxMacro, struct std::less<unsigned short>, class std::allocator<struct std::pair<const unsigned short, class SvxMacro> > > > SvxMacroTableDtor::begin() const
 include/svl/macitem.hxx:98
