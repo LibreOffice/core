@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_eebd5bd8",
+        "filename": "oox/source/vml/vmlformatting.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 909,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-08T07:22:17Z",
+      "side": 1,
+      "message": "Nitpick: nEmu is int, you divite it by a large number (the result is still int) and then you store it to a float. You probably want to cast nEmu to a float first.\n\nAlso, factoring out this conversion to a separate function may make sense; there is convertEmuToHmm() in include/oox/drawingml/drawingmltypes.hxx already, you could add a convertEmuToPoint() there.",
+      "revId": "7d5d881e825d16ef243222d87d89daed30236e16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
