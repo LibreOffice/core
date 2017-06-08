@@ -133,11 +133,11 @@ public:
     /**
      * When adding all numerical matrix elements for a scalar result such as
      * summation, the interpreter wants to separate the first non-zero value
-     * with the rest of the summed values.
-     *
-     * TODO: Find out if we still need to do this.  If not, we can re-write
-     * ScInterpreter::IterateParameters() to make it simpler and remove this
-     * struct.
+     * with the rest of the summed values. This is necessary for better
+     * numerical stability, unless we sort all by absolute values before
+     * summing (not really an option) or use another algorithm, e.g. Kahan's
+     * summation algorithm,
+     * https://en.wikipedia.org/wiki/Kahan_summation_algorithm
      */
     struct IterateResult
     {
