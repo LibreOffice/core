@@ -245,6 +245,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, AddressBlockHdl_Impl, Button*, pBox, void
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     rConfigItem.SetAddressBlock(m_pAddressCB->IsChecked());
     m_pWizard->UpdateRoadmap();
+    GetWizard()->enableButtons(WizardButtonFlags::NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
 }
 
 IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressBlockSelectHdl_Impl, LinkParamNone*, void)
