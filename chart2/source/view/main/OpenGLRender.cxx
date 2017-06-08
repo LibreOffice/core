@@ -8,6 +8,7 @@
  */
 
 #include <epoxy/gl.h>
+#include <cmath>
 #include <vector>
 #include "OpenGLRender.hxx"
 #include <vcl/graph.hxx>
@@ -387,8 +388,8 @@ int OpenGLRender::Create2DCircle(int detail)
     m_Bubble2DCircle.push_back(0);
     for(angle = 2.0f * GL_PI; angle > -(2.0f * GL_PI / detail); angle -= (2.0f * GL_PI / detail))
     {
-        m_Bubble2DCircle.push_back(sin(angle));
-        m_Bubble2DCircle.push_back(cos(angle));
+        m_Bubble2DCircle.push_back(std::sin(angle));
+        m_Bubble2DCircle.push_back(std::cos(angle));
     }
     return 0;
 }

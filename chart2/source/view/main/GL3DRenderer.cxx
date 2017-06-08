@@ -11,6 +11,7 @@
 
 #include "GL3DRenderer.hxx"
 
+#include <cmath>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/font.hxx>
 #include <vcl/virdev.hxx>
@@ -606,8 +607,8 @@ int OpenGL3DRenderer::GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, s
         {
             fNextAngleY = 360.0f;
         }
-        float fSineY = sin(fCurAngleY/180.0f*PI), fCosY = cos(fCurAngleY/180.0f*PI);
-        float fNextSineY = sin(fNextAngleY/180.0f*PI), fNextCosY = cos(fNextAngleY/180.0f*PI);
+        float fSineY = std::sin(fCurAngleY/180.0f*PI), fCosY = std::cos(fCurAngleY/180.0f*PI);
+        float fNextSineY = std::sin(fNextAngleY/180.0f*PI), fNextCosY = std::cos(fNextAngleY/180.0f*PI);
         glm::vec3 vDirY(fCosY, 0.0f, -fSineY), vNextDirY(fNextCosY, 0.0f, -fNextSineY);
         float fCurAngleZ = 0.0f;
         int iStepsZ = 1;
@@ -633,8 +634,8 @@ int OpenGL3DRenderer::GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, s
             int yIndex = 0;
             float fNextAngleZ = fCurAngleZ+fAddAngleZ;
 
-            float fSineZ = sin(fCurAngleZ/180.0f*PI), fCosZ = cos(fCurAngleZ/180.0f*PI);
-            float fNextSineZ = sin(fNextAngleZ/180.0f*PI), fNextCosZ = cos(fNextAngleZ/180.0f*PI);
+            float fSineZ = std::sin(fCurAngleZ/180.0f*PI), fCosZ = std::cos(fCurAngleZ/180.0f*PI);
+            float fNextSineZ = std::sin(fNextAngleZ/180.0f*PI), fNextCosZ = std::cos(fNextAngleZ/180.0f*PI);
 
             if ((fCurAngleZ < 90.0f) && (fNextAngleZ >= 90.0f))
             {
