@@ -247,7 +247,7 @@ Preedit_UpdateAttributes ( preedit_text_t* ptext, XIMFeedback* feedback,
 // EXTTEXTINPUT_ATTR values
 // returns an allocate list of attributes, which must be freed by caller
 ExtTextInputAttr*
-Preedit_FeedbackToSAL ( XIMFeedback* pfeedback, int nlength, std::vector<ExtTextInputAttr>& rSalAttr )
+Preedit_FeedbackToSAL ( const XIMFeedback* pfeedback, int nlength, std::vector<ExtTextInputAttr>& rSalAttr )
 {
     ExtTextInputAttr *psalattr;
     ExtTextInputAttr  nval;

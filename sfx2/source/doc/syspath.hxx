@@ -26,7 +26,7 @@
 class SFX2_DLLPUBLIC SystemPath
 {
 public:
-    static bool GetUserTemplateLocation(sal_Unicode*, int nSize);
+    static bool GetUserTemplateLocation(const sal_Unicode*, int nSize);
 };
 
 #endif

@@ -20,9 +20,9 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_CSPLINE_H
 #define INCLUDED_HWPFILTER_SOURCE_CSPLINE_H
 
-void NaturalSpline (int N, double* x, double* a, double*& b, double*& c,
+void NaturalSpline (int N, const double* x, const double* a, double*& b, double*& c,
     double*& d);
-void PeriodicSpline (int N, double* x, double* a, double*& b, double*& c,
+void PeriodicSpline (int N, const double* x, const double* a, double*& b, double*& c,
     double*& d);
 
 #endif // INCLUDED_HWPFILTER_SOURCE_CSPLINE_H

@@ -85,7 +85,7 @@ public:
     void            UngroupDataPilot();
     void DataPilotInput( const ScAddress& rPos, const OUString& rString );
 
-    void            DataPilotSort(ScDPObject* pDPObject, long nDimIndex, bool bAscending, sal_uInt16* pUserListId = nullptr);
+    void            DataPilotSort(ScDPObject* pDPObject, long nDimIndex, bool bAscending, const sal_uInt16* pUserListId = nullptr);
     bool            DataPilotMove( const ScRange& rSource, const ScAddress& rDest );
 
     bool HasSelectionForDrillDown( css::sheet::DataPilotFieldOrientation& rOrientation );

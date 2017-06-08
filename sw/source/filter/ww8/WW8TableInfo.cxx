@@ -1089,7 +1089,7 @@ CellInfoMultiSet::const_iterator WW8TableCellGrid::getCellsEnd(long nTop)
 
 void WW8TableCellGrid::insert(const SwRect & rRect,
                               WW8TableNodeInfo * pNodeInfo,
-                              unsigned long * pFormatFrameWidth)
+                              const unsigned long * pFormatFrameWidth)
 {
     CellInfo aCellInfo(rRect, pNodeInfo);
 

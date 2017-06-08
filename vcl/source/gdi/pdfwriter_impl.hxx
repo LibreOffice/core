@@ -880,7 +880,8 @@ i12626
     /* writes a font descriptor and returns its object id (or 0) */
     sal_Int32 emitFontDescriptor( const PhysicalFontFace*, FontSubsetInfo&, sal_Int32 nSubsetID, sal_Int32 nStream );
     /* writes a ToUnicode cmap, returns the corresponding stream object */
-    sal_Int32 createToUnicodeCMap( sal_uInt8* pEncoding, sal_Ucs* pCodeUnits, sal_Int32* pCodeUnitsPerGlyph, sal_Int32* pEncToUnicodeIndex, int nGlyphs );
+    sal_Int32 createToUnicodeCMap( sal_uInt8* pEncoding, const sal_Ucs* pCodeUnits, const sal_Int32* pCodeUnitsPerGlyph,
+                                   const sal_Int32* pEncToUnicodeIndex, int nGlyphs );
 
     /* get resource dict object number */
     sal_Int32 getResourceDictObj()

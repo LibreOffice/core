@@ -25,7 +25,7 @@ BitmapColor BitmapReadAccess::GetPixelForN1BitMsbPal(ConstScanline pScanline, lo
     return BitmapColor( pScanline[ nX >> 3 ] & ( 1 << ( 7 - ( nX & 7 ) ) ) ? 1 : 0 );
 }
 
-void BitmapReadAccess::SetPixelForN1BitMsbPal(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask&)
+void BitmapReadAccess::SetPixelForN1BitMsbPal(const Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask&)
 {
     sal_uInt8& rByte = pScanline[ nX >> 3 ];
 
@@ -38,7 +38,7 @@ BitmapColor BitmapReadAccess::GetPixelForN1BitLsbPal(ConstScanline pScanline, lo
     return BitmapColor( pScanline[ nX >> 3 ] & ( 1 << ( nX & 7 ) ) ? 1 : 0 );
 }
 
-void BitmapReadAccess::SetPixelForN1BitLsbPal(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask&)
+void BitmapReadAccess::SetPixelForN1BitLsbPal(const Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask&)
 {
     sal_uInt8& rByte = pScanline[ nX >> 3 ];
 
@@ -51,7 +51,7 @@ BitmapColor BitmapReadAccess::GetPixelForN4BitMsnPal(ConstScanline pScanline, lo
     return BitmapColor( ( pScanline[ nX >> 1 ] >> ( nX & 1 ? 0 : 4 ) ) & 0x0f );
 }
 
-void BitmapReadAccess::SetPixelForN4BitMsnPal(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask&)
+void BitmapReadAccess::SetPixelForN4BitMsnPal(const Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask&)
 {
     sal_uInt8& rByte = pScanline[ nX >> 1 ];
 
@@ -64,7 +64,7 @@ BitmapColor BitmapReadAccess::GetPixelForN4BitLsnPal(ConstScanline pScanline, lo
     return BitmapColor( ( pScanline[ nX >> 1 ] >> ( nX & 1 ? 4 : 0 ) ) & 0x0f );
 }
 
-void BitmapReadAccess::SetPixelForN4BitLsnPal(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask&)
+void BitmapReadAccess::SetPixelForN4BitLsnPal(const Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask&)
 {
     sal_uInt8& rByte = pScanline[ nX >> 1 ];
 

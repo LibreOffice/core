@@ -956,7 +956,7 @@ class Matrix3
 {
     double f[6];
 
-    void set( double *pn ) { for( int i = 0 ; i < 6; i++ ) f[i] = pn[i]; }
+    void set( const double *pn ) { for( int i = 0 ; i < 6; i++ ) f[i] = pn[i]; }
 public:
     Matrix3();
 
@@ -3053,9 +3053,9 @@ static void appendSubsetName( int nSubsetID, const OUString& rPSName, OStringBuf
 }
 
 sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
-                                              sal_Ucs* pCodeUnits,
-                                              sal_Int32* pCodeUnitsPerGlyph,
-                                              sal_Int32* pEncToUnicodeIndex,
+                                              const sal_Ucs* pCodeUnits,
+                                              const sal_Int32* pCodeUnitsPerGlyph,
+                                              const sal_Int32* pEncToUnicodeIndex,
                                               int nGlyphs )
 {
     int nMapped = 0;
@@ -6120,7 +6120,7 @@ my_NSS_CMSSignerInfo_AddAuthAttr(NSSCMSSignerInfo *signerinfo, NSSCMSAttribute *
     return my_NSS_CMSAttributeArray_AddAttr(signerinfo->cmsg->poolp, &(signerinfo->authAttr), attr);
 }
 
-NSSCMSMessage *CreateCMSMessage(PRTime* time,
+NSSCMSMessage *CreateCMSMessage(const PRTime* time,
                                 NSSCMSSignedData **cms_sd,
                                 NSSCMSSignerInfo **cms_signer,
                                 CERTCertificate *cert,

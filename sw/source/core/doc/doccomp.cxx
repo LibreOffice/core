@@ -213,7 +213,7 @@ public:
         sal_uLong nCount;
 
     public:
-        MovedData( CompareData& rData, sal_Char* pDiscard );
+        MovedData( CompareData& rData, const sal_Char* pDiscard );
         ~MovedData();
 
         sal_uLong GetIndex( sal_uLong n ) const { return pIndex[ n ]; }
@@ -240,7 +240,7 @@ private:
 
     static void CountDifference( const CompareData& rData, sal_uLong* pCounts );
     static void SetDiscard( const CompareData& rData,
-                            sal_Char* pDiscard, sal_uLong* pCounts );
+                            sal_Char* pDiscard, const sal_uLong* pCounts );
     static void CheckDiscard( sal_uLong nLen, sal_Char* pDiscard );
     static void ShiftBoundaries( CompareData& rData1, CompareData& rData2 );
 
@@ -636,7 +636,7 @@ void Compare::CountDifference( const CompareData& rData, sal_uLong* pCounts )
 }
 
 void Compare::SetDiscard( const CompareData& rData,
-                            sal_Char* pDiscard, sal_uLong* pCounts )
+                            sal_Char* pDiscard, const sal_uLong* pCounts )
 {
     const sal_uLong nLen = rData.GetLineCount();
 
@@ -771,7 +771,7 @@ void Compare::CheckDiscard( sal_uLong nLen, sal_Char* pDiscard )
     }
 }
 
-Compare::MovedData::MovedData( CompareData& rData, sal_Char* pDiscard )
+Compare::MovedData::MovedData( CompareData& rData, const sal_Char* pDiscard )
     : pIndex( nullptr ), pLineNum( nullptr ), nCount( 0 )
 {
     sal_uLong nLen = rData.GetLineCount();

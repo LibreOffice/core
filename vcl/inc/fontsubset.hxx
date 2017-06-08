@@ -85,7 +85,7 @@ private:
 
     bool    CreateFontSubsetFromCff( sal_Int32* pOutGlyphWidths );
     bool    CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths );
-    static bool CreateFontSubsetFromType1( sal_Int32* pOutGlyphWidths );
+    static bool CreateFontSubsetFromType1( const sal_Int32* pOutGlyphWidths );
 };
 
 #endif // INCLUDED_VCL_INC_FONTSUBSET_HXX

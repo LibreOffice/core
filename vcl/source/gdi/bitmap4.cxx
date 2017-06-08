@@ -1064,7 +1064,7 @@ double* MakeBlurKernel(const double radius, int& rows) {
 }
 
 void Bitmap::ImplBlurContributions( const int aSize, const int aNumberOfContributions,
-                                    double* pBlurVector, double*& pWeights, int*& pPixels, int*& pCount )
+                                    const double* pBlurVector, double*& pWeights, int*& pPixels, int*& pCount )
 {
     pWeights = new double[ aSize*aNumberOfContributions ];
     pPixels = new int[ aSize*aNumberOfContributions ];

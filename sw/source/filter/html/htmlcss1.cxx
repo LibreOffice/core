@@ -96,7 +96,7 @@ void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
         pDoc->ChgPageDesc( pos, rNewPageDesc );
 }
 
-SwCSS1Parser::SwCSS1Parser( SwDoc *pD, sal_uInt32 aFHeights[7], const OUString& rBaseURL, bool bNewDoc ) :
+SwCSS1Parser::SwCSS1Parser( SwDoc *pD, const sal_uInt32 aFHeights[7], const OUString& rBaseURL, bool bNewDoc ) :
     SvxCSS1Parser( pD->GetAttrPool(), rBaseURL,
                    reinterpret_cast<sal_uInt16*>(&aItemIds), sizeof(aItemIds) / sizeof(sal_uInt16) ),
     pDoc( pD ),

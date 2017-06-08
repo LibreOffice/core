@@ -72,7 +72,7 @@ protected:
     using CSS1Parser::ParseStyleSheet;
 
 public:
-    SwCSS1Parser( SwDoc *pDoc, sal_uInt32 aFHeight[7], const OUString& rBaseURL, bool bNewDoc );
+    SwCSS1Parser( SwDoc *pDoc, sal_uInt32 const aFHeight[7], const OUString& rBaseURL, bool bNewDoc );
     virtual ~SwCSS1Parser() override;
 
     virtual bool ParseStyleSheet( const OUString& rIn ) override;

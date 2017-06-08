@@ -863,7 +863,7 @@ void VSeriesPlotter::createErrorBar(
     , const VDataSeries& rVDataSeries
     , sal_Int32 nIndex
     , bool bYError /* = true */
-    , double* pfScaledLogicX
+    , const double* pfScaledLogicX
     )
 {
     if( !ChartTypeHelper::isSupportingStatisticProperties( m_xChartTypeModel, m_nDimension ) )

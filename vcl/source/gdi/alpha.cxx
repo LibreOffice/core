@@ -42,7 +42,7 @@ AlphaMask::AlphaMask( AlphaMask&& rAlphaMask ) :
 {
 }
 
-AlphaMask::AlphaMask( const Size& rSizePixel, sal_uInt8* pEraseTransparency ) :
+AlphaMask::AlphaMask( const Size& rSizePixel, const sal_uInt8* pEraseTransparency ) :
     Bitmap( rSizePixel, 8, &Bitmap::GetGreyPalette( 256 ) )
 {
     if( pEraseTransparency )

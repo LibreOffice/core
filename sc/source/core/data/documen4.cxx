@@ -927,7 +927,7 @@ void ScDocument::SetDetOpList(ScDetOpList* pNew)
 
 sal_uInt16 ScDocument::RowDifferences( SCROW nThisRow, SCTAB nThisTab,
                                     ScDocument& rOtherDoc, SCROW nOtherRow, SCTAB nOtherTab,
-                                    SCCOL nMaxCol, SCCOLROW* pOtherCols )
+                                    SCCOL nMaxCol, const SCCOLROW* pOtherCols )
 {
     sal_uLong nDif = 0;
     sal_uLong nUsed = 0;
@@ -965,7 +965,7 @@ sal_uInt16 ScDocument::RowDifferences( SCROW nThisRow, SCTAB nThisTab,
 
 sal_uInt16 ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
                                     ScDocument& rOtherDoc, SCCOL nOtherCol, SCTAB nOtherTab,
-                                    SCROW nMaxRow, SCCOLROW* pOtherRows )
+                                    SCROW nMaxRow, const SCCOLROW* pOtherRows )
 {
 
     //TODO: optimize e.g. with iterator?

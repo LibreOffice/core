@@ -30,7 +30,7 @@ struct CertificateExtension_CertExtn
     css::uno::Sequence< sal_Int8 > m_xExtnValue;
 
     CertificateExtension_CertExtn();
-    void setCertExtn(unsigned char* value, unsigned int vlen, unsigned char* id, unsigned int idlen, bool critical);
+    void setCertExtn(unsigned char const * value, unsigned int vlen, unsigned char const * id, unsigned int idlen, bool critical);
 };
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_CERTIFICATEEXTENSION_CERTEXTN_HXX
