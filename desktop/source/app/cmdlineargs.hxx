@@ -93,6 +93,7 @@ class CommandLineArgs
         bool                HasModuleParam() const;
         bool                WantsToLoadDocument() const { return m_bDocumentArgs;}
         bool                IsTextCat() const { return m_textcat;}
+        bool                IsScriptCat() const { return m_scriptcat;}
         bool                IsSafeMode() const { return m_safemode; }
 
         const OUString&     GetUnknown() const { return m_unknown;}
@@ -157,6 +158,7 @@ class CommandLineArgs
         bool m_version;
         bool m_splashpipe;
         bool m_textcat;
+        bool m_scriptcat;
         bool m_safemode;
 
         OUString m_unknown;

@@ -133,6 +133,9 @@ namespace desktop
         "--cat files\n"\
         "      Dump text content of the files to console\n"\
         "      Eg. --cat *.odt\n"\
+        "--script-cat\n"\
+        "      Dump text content of any scripts embedded in the files to console\n"
+        "      Eg. --script-cat *.xls\n"
         "--pidfile=file\n"\
         "      Store soffice.bin pid to file.\n"\
         "-env:<VAR>[=<VALUE>]\n"\
