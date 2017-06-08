@@ -2006,22 +2006,22 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
             {
                 formula::FormulaToken* t;
                 ScTokenArray* pArr = maOldCell.mpFormula->GetCode();
-                pArr->Reset();
-                while ( ( t = pArr->GetNextReference() ) != nullptr )
+                formula::FormulaTokenArrayPlainIterator aIter(*pArr);
+                while ( ( t = aIter.GetNextReference() ) != nullptr )
                     lcl_InvalidateReference( *t, rPos );
-                pArr->Reset();
-                while ( ( t = pArr->GetNextReferenceRPN() ) != nullptr )
+                aIter.Reset();
+                while ( ( t = aIter.GetNextReferenceRPN() ) != nullptr )
                     lcl_InvalidateReference( *t, rPos );
             }
             if ( bNewFormula )
             {
                 formula::FormulaToken* t;
                 ScTokenArray* pArr = maNewCell.mpFormula->GetCode();
-                pArr->Reset();
-                while ( ( t = pArr->GetNextReference() ) != nullptr )
+                formula::FormulaTokenArrayPlainIterator aIter(*pArr);
+                while ( ( t = aIter.GetNextReference() ) != nullptr )
                     lcl_InvalidateReference( *t, rPos );
-                pArr->Reset();
-                while ( ( t = pArr->GetNextReferenceRPN() ) != nullptr )
+                aIter.Reset();
+                while ( ( t = aIter.GetNextReferenceRPN() ) != nullptr )
                     lcl_InvalidateReference( *t, rPos );
             }
         }
