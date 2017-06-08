@@ -971,7 +971,8 @@ public:
 
     void                        DrawText( const Point& rStartPt, const OUString& rStr,
                                           sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                          MetricVector* pVector = nullptr, OUString* pDisplayText = nullptr );
+                                          MetricVector* pVector = nullptr, OUString* pDisplayText = nullptr,
+                                          SalLayout** pLayoutCache = nullptr );
 
     void                        DrawText( const tools::Rectangle& rRect,
                                           const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::NONE,
@@ -1132,7 +1133,8 @@ public:
         See also GetTextBoundRect() for more explanation + code examples.
     */
     long                        GetTextWidth( const OUString& rStr, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                  vcl::TextLayoutCache const* = nullptr) const;
+                                  vcl::TextLayoutCache const* = nullptr,
+                                  SalLayout** pLayoutCache = nullptr) const;
 
     /** Height where any character of the current font fits; in logic coordinates.
 
@@ -1148,7 +1150,8 @@ public:
                                                SalLayoutFlags flags = SalLayoutFlags::NONE);
     long                        GetTextArray( const OUString& rStr, long* pDXAry,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                              vcl::TextLayoutCache const* = nullptr) const;
+                                              vcl::TextLayoutCache const* = nullptr,
+                                              SalLayout** pLayoutCache = nullptr) const;
 
     bool                        GetCaretPositions( const OUString&, long* pCaretXArray,
                                               sal_Int32 nIndex, sal_Int32 nLen ) const;
