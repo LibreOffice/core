@@ -5639,8 +5639,6 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
 
     sc::ParamIfsResult aRes;
     std::vector<sal_uInt8> aResArray;
-    size_t nRowSize = 0;
-    size_t nColSize = 0;
     double fVal = 0.0;
     SCCOL nDimensionCols = 0;
     SCROW nDimensionRows = 0;
@@ -5808,11 +5806,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
 
             // initialize temporary result matrix
             if (aResArray.empty())
-            {
-                nColSize = nCol2 - nCol1 + 1;
-                nRowSize = nRow2 - nRow1 + 1;
-                aResArray.resize(nColSize*nRowSize, 0);
-            }
+                aResArray.resize( nDimensionCols * nDimensionRows, 0);
 
             ScQueryParam rParam;
             rParam.nRow1       = nRow1;
@@ -5876,7 +5870,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                     {
                         size_t nC = aCellIter.GetCol() + nColDiff;
                         size_t nR = aCellIter.GetRow() + nRowDiff;
-                        ++aResArray[nC*nRowSize+nR];
+                        ++aResArray[nC * nDimensionRows + nR];
                     } while ( aCellIter.GetNext() );
                 }
             }
@@ -6007,14 +6001,14 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             else
             {
                 std::vector<sal_uInt8>::const_iterator itRes = aResArray.begin();
-                for (size_t nCol = 0; nCol < nColSize; ++nCol)
+                for (SCCOL nCol = 0; nCol < nDimensionCols; ++nCol)
                 {
-                    for (size_t nRow = 0; nRow < nRowSize; ++nRow, ++itRes)
+                    for (SCROW nRow = 0; nRow < nDimensionRows; ++nRow, ++itRes)
                     {
                         if (*itRes == nQueryCount)
                         {
-                            aAdr.SetCol( static_cast<SCCOL>(nCol) + nMainCol1);
-                            aAdr.SetRow( static_cast<SCROW>(nRow) + nMainRow1);
+                            aAdr.SetCol( nCol + nMainCol1);
+                            aAdr.SetRow( nRow + nMainRow1);
                             ScRefCellValue aCell(*pDok, aAdr);
                             if (aCell.hasNumeric())
                             {
