@@ -802,7 +802,8 @@ void OutputDevice::SetTextAlign( TextAlign eAlign )
 
 void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
                              sal_Int32 nIndex, sal_Int32 nLen,
-                             MetricVector* pVector, OUString* pDisplayText
+                             MetricVector* pVector, OUString* pDisplayText,
+                             SalLayout** pLayoutCache
                              )
 {
     assert(!is_double_buffered_window());
@@ -874,11 +875,47 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     if ( !IsDeviceOutputNecessary() || pVector )
         return;
 
-    SalLayout* pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt);
-    if( pSalLayout )
+    if(mpFontInstance && pLayoutCache)
+        // do not use cache with modified string
+        if( mpFontInstance->mpConversion )
+            *pLayoutCache = nullptr;
+
+    // without cache
+    if(!pLayoutCache)
     {
-        ImplDrawText( *pSalLayout );
-        delete pSalLayout;
+        SalLayout* pSalLayout = ImplLayout(rStr, nIndex, nLen, rStartPt);
+        if(pSalLayout)
+        {
+            ImplDrawText( *pSalLayout );
+            delete pSalLayout;
+        }
+
+    }
+    else
+    {
+        // with cache, but there is no cache yet
+        if(!*pLayoutCache)
+            *pLayoutCache = ImplLayout(rStr, nIndex, nLen, rStartPt);
+
+        if( *pLayoutCache )
+        {
+            // initialize font if needed
+            if( mbNewFont )
+                if( !ImplNewFont() )
+                    return;
+            if( mbInitFont )
+                InitFont();
+
+            OUString aStrModifiable = rStr;
+            ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStrModifiable, nIndex, nLen,
+                    0, nullptr);
+
+             // position, justify, etc. the layout
+             (*pLayoutCache)->AdjustLayout( aLayoutArgs );
+             (*pLayoutCache)->DrawBase() = ImplLogicToDevicePixel( rStartPt );
+
+            ImplDrawText( **pLayoutCache );
+        }
     }
 
     if( mpAlphaVDev )
@@ -886,10 +923,12 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
 }
 
 long OutputDevice::GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen,
-     vcl::TextLayoutCache const*const pLayoutCache) const
+     vcl::TextLayoutCache const*const pLayoutCache,
+     SalLayout** pSalLayoutCache) const
 {
 
-    long nWidth = GetTextArray( rStr, nullptr, nIndex, nLen, pLayoutCache );
+    long nWidth = GetTextArray( rStr, nullptr, nIndex,
+            nLen, pLayoutCache, pSalLayoutCache );
 
     return nWidth;
 }
@@ -952,7 +991,8 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
 
 long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
                                  sal_Int32 nIndex, sal_Int32 nLen,
-                                 vcl::TextLayoutCache const*const pLayoutCache) const
+                                 vcl::TextLayoutCache const*const pLayoutCache,
+                                 SalLayout** pSalLayoutCache) const
 {
     if( nIndex >= rStr.getLength() )
         return 0; // TODO: this looks like a buggy caller?
@@ -961,23 +1001,36 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
     {
         nLen = rStr.getLength() - nIndex;
     }
-    // do layout
-    SalLayout *const pSalLayout = ImplLayout(rStr, nIndex, nLen,
-            Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache);
-    if( !pSalLayout )
+
+    SalLayout* pSalLayout = pSalLayoutCache ? *pSalLayoutCache : nullptr;
+
+    if(!pSalLayout)
     {
-        // The caller expects this to init the elements of pDXAry.
-        // Adapting all the callers to check that GetTextArray succeeded seems
-        // too much work.
-        // Init here to 0 only in the (rare) error case, so that any missing
-        // element init in the happy case will still be found by tools,
-        // and hope that is sufficient.
-        if (pDXAry)
+        // do layout
+        pSalLayout = ImplLayout(rStr, nIndex, nLen,
+                Point(0,0), 0, nullptr, SalLayoutFlags::NONE, pLayoutCache);
+        if( !pSalLayout )
         {
-            memset(pDXAry, 0, nLen * sizeof(*pDXAry));
+            // The caller expects this to init the elements of pDXAry.
+            // Adapting all the callers to check that GetTextArray succeeded seems
+            // too much work.
+            // Init here to 0 only in the (rare) error case, so that any missing
+            // element init in the happy case will still be found by tools,
+            // and hope that is sufficient.
+            if (pDXAry)
+            {
+                memset(pDXAry, 0, nLen * sizeof(*pDXAry));
+            }
+            return 0;
         }
-        return 0;
+
+        // update cache if used
+        if(pSalLayoutCache)
+        {
+            *pSalLayoutCache = pSalLayout;
+        }
     }
+
 #if VCL_FLOAT_DEVICE_PIXEL
     std::unique_ptr<DeviceCoordinate[]> pDXPixelArray;
     if(pDXAry)
@@ -986,7 +1039,9 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
     }
     DeviceCoordinate nWidth = pSalLayout->FillDXArray( pDXPixelArray.get() );
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
-    delete pSalLayout;
+
+    if(!pSalLayoutCache)
+        delete pSalLayout;
 
     // convert virtual char widths to virtual absolute positions
     if( pDXPixelArray )
@@ -1031,7 +1086,9 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
 
     long nWidth = pSalLayout->FillDXArray( pDXAry );
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
-    delete pSalLayout;
+
+    if(!pSalLayoutCache)
+        delete pSalLayout;
 
     // convert virtual char widths to virtual absolute positions
     if( pDXAry )
