@@ -1696,6 +1696,20 @@ void FormulaTokenIterator::Reset()
     maStack.back().nPC = -1;
 }
 
+FormulaToken* FormulaTokenArrayPlainIterator::GetNextName()
+{
+    if( mrFTA.pCode )
+    {
+        while ( mnIndex < mrFTA.nLen )
+        {
+            FormulaToken* t = mrFTA.pCode[ mnIndex++ ];
+            if( t->GetType() == svIndex )
+                return t;
+        }
+    } // if( pCode )
+    return nullptr;
+}
+
 const FormulaToken* FormulaTokenIterator::Next()
 {
     const FormulaToken* t = GetNonEndOfPathToken( ++maStack.back().nPC );
