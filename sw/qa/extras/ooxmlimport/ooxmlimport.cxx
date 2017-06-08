@@ -1296,6 +1296,15 @@ DECLARE_OOXMLIMPORT_TEST(testTdf108350, "tdf108350.docx")
     CPPUNIT_ASSERT_EQUAL(double(11), getProperty<double>(xRun, "CharHeight"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf108408, "tdf108408.docx")
+{
+    // Font size must consider units specifications; previously ignored and only used
+    // integer part as half-pt size, i.e. 10 pt (20 half-pt) instead of 20 pt
+    uno::Reference<text::XTextRange> xPara(getParagraph(1));
+    uno::Reference<beans::XPropertySet> xRun(getRun(xPara, 1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(double(20), getProperty<double>(xRun, "CharHeight"));
+}
+
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 

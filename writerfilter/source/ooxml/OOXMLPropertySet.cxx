@@ -589,17 +589,45 @@ string OOXMLHexValue::toString() const
 #endif
 
 // OOXMLUniversalMeasureValue
-
-OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(const char * pValue)
+// ECMA-376 5th ed. Part 1 , 22.9.2.15
+OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(const char * pValue, sal_uInt32 npPt)
 {
-    mnValue = rtl_str_toInt32(pValue, 10); // will ignore the trailing 'pt'
+    double val = rtl_str_toDouble(pValue); // will ignore the trailing unit
 
     int nLen = strlen(pValue);
     if (nLen > 2 &&
         pValue[nLen-2] == 'p' &&
         pValue[nLen-1] == 't')
     {
-        mnValue = mnValue * 20;
+        mnValue = static_cast<sal_uInt32>(val * npPt);
+    }
+    else if (nLen > 2 &&
+        pValue[nLen - 2] == 'c' &&
+        pValue[nLen - 1] == 'm')
+    {
+        mnValue = static_cast<sal_uInt32>(val * npPt * 72 / 2.54);
+    }
+    else if (nLen > 2 &&
+        pValue[nLen - 2] == 'm' &&
+        pValue[nLen - 1] == 'm')
+    {
+        mnValue = static_cast<sal_uInt32>(val * npPt * 72 / 25.4);
+    }
+    else if (nLen > 2 &&
+        pValue[nLen - 2] == 'i' &&
+        pValue[nLen - 1] == 'n')
+    {
+        mnValue = static_cast<sal_uInt32>(val * npPt * 72);
+    }
+    else if (nLen > 2 &&
+        pValue[nLen - 2] == 'p' &&
+        ( pValue[nLen - 1] == 'c' || pValue[nLen - 1] == 'i' ))
+    {
+        mnValue = static_cast<sal_uInt32>(val * npPt * 12);
+    }
+    else
+    {
+        mnValue = static_cast<sal_uInt32>(val);
     }
 }
 
@@ -610,11 +638,6 @@ OOXMLUniversalMeasureValue::~OOXMLUniversalMeasureValue()
 int OOXMLUniversalMeasureValue::getInt() const
 {
     return mnValue;
-}
-
-OOXMLValue* OOXMLUniversalMeasureValue::clone() const
-{
-    return new OOXMLUniversalMeasureValue(*this);
 }
 
 #ifdef DEBUG_WRITERFILTER
