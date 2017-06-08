@@ -55,7 +55,7 @@ class ZipEnumeration;
 
 class ZipFile
 {
-    ::osl::Mutex    m_aMutex;
+    rtl::Reference<SotMutexHolder> m_aMutexHolder;
 
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
@@ -90,11 +90,13 @@ class ZipFile
 
 public:
 
-    ZipFile( css::uno::Reference < css::io::XInputStream > &xInput,
+    ZipFile( const rtl::Reference<SotMutexHolder>& aMutexHolder,
+             css::uno::Reference < css::io::XInputStream > &xInput,
              const css::uno::Reference < css::uno::XComponentContext > &rxContext,
              bool bInitialise );
 
-    ZipFile( css::uno::Reference < css::io::XInputStream > &xInput,
+    ZipFile( const rtl::Reference<SotMutexHolder>& aMutexHolder,
+             css::uno::Reference < css::io::XInputStream > &xInput,
              const css::uno::Reference < css::uno::XComponentContext > &rxContext,
              bool bInitialise,
              bool bForceRecover );
@@ -136,6 +138,7 @@ public:
                                      const css::uno::Reference < css::io::XInputStream >& rStream );
 
     static css::uno::Reference< css::io::XInputStream > StaticGetDataFromRawStream(
+            const rtl::Reference<SotMutexHolder>& aMutexHolder,
             const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             const css::uno::Reference< css::io::XInputStream >& xStream,
             const ::rtl::Reference < EncryptionData > &rData );

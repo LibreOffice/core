@@ -48,7 +48,7 @@ XUnbufferedStream::XUnbufferedStream(
                       bool bIsEncrypted,
                       const OUString& aMediaType,
                       bool bRecoveryMode )
-: maMutexHolder( aMutexHolder.is() ? aMutexHolder : rtl::Reference<SotMutexHolder>( new SotMutexHolder ) )
+: maMutexHolder( aMutexHolder )
 , mxZipStream ( xNewZipStream )
 , mxZipSeek ( xNewZipStream, UNO_QUERY )
 , maEntry ( rEntry )
@@ -108,9 +108,10 @@ XUnbufferedStream::XUnbufferedStream(
 // allows to read package raw stream
 XUnbufferedStream::XUnbufferedStream(
                     const uno::Reference< uno::XComponentContext >& /*xContext*/,
+                    const rtl::Reference<SotMutexHolder>& aMutexHolder,
                     const Reference < XInputStream >& xRawStream,
                     const ::rtl::Reference< EncryptionData >& rData )
-: maMutexHolder( new SotMutexHolder )
+: maMutexHolder( aMutexHolder )
 , mxZipStream ( xRawStream )
 , mxZipSeek ( xRawStream, UNO_QUERY )
 , mnBlockSize( 1 )
