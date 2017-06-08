@@ -55,4 +55,9 @@ String STR_ACCESS_FORMULA_TEXT
     Text [ en-US ] = "Formula Text" ;
 };
 
+String STR_TBL_FORMULA
+{
+    Text [ en-US ] = "Text Formula" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
