@@ -25,6 +25,9 @@ $(call gb_CustomTarget_get_target,idlc/parser_test) : \
             $(SRCDIR)/idlc/test/parser/struct.tests \
             $(SRCDIR)/idlc/test/parser/typedef.tests \
             | $(call gb_CustomTarget_get_workdir,idlc/parser_test)/.dir
+ifneq ($(gb_SUPPRESS_TESTS),)
+	@true
+else
 	$(call gb_Helper_abbreviate_dirs,( \
             $(PERL) $(SRCDIR)/solenv/bin/exectest.pl \
                 $(SRCDIR)/idlc/test/parser/attribute.tests \
@@ -77,5 +80,6 @@ $(call gb_CustomTarget_get_target,idlc/parser_test) : \
                 $(call gb_Executable_get_command,idlc) \
                 -O $(call gb_CustomTarget_get_workdir,idlc/parser_test) {}) \
             > $@.log 2>&1 || (cat $@.log && false))
+endif
 
 # vim: set noet sw=4 ts=4:

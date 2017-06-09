@@ -31,6 +31,9 @@ $(call gb_CustomTarget_get_target,registry/regcompare_test): \
         $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/ue.rdb \
         $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
         $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usb.rdb
+ifneq ($(gb_SUPPRESS_TESTS),)
+	@true
+else
 	$(call gb_Helper_abbreviate_dirs,( \
         $(call gb_Executable_get_command,unoidl-check) --ignore-unpublished \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/psa.rdb \
@@ -191,6 +194,7 @@ $(call gb_CustomTarget_get_target,registry/regcompare_test): \
             $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/usa.rdb \
             -- $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/other2.rdb) \
         > $@.log 2>&1 || (cat $@.log && false))
+endif
 
 $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/%.rdb: \
         $(call gb_CustomTarget_get_workdir,registry/regcompare_test)/%.urd \

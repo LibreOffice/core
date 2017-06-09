@@ -89,6 +89,9 @@ endif
 
 $(call gb_CustomTarget_get_target,odk/build-examples): \
         $(call gb_CustomTarget_get_workdir,odk/build-examples)/setsdkenv
+ifneq ($(gb_SUPPRESS_TESTS),)
+	@true
+else
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,1)
 	(saved_library_path=$${$(gb_Helper_LIBRARY_PATH_VAR)} && . $< \
         $(if $(filter MACOSX,$(OS)),, \
@@ -102,6 +105,7 @@ $(call gb_CustomTarget_get_target,odk/build-examples): \
         || (RET=$$? \
             && cat $(call gb_CustomTarget_get_workdir,odk/build-examples)/log \
             && exit $$RET)
+endif
 
 $(call gb_CustomTarget_get_workdir,odk/build-examples)/setsdkenv: \
         $(SRCDIR)/odk/config/setsdkenv_unix.sh.in \
