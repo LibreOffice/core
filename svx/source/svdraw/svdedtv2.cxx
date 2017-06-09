@@ -2000,8 +2000,8 @@ namespace
     {
         if (pGraf->HasGDIMetaFile())
             return pGraf->GetTransformedGraphic(SdrGrafObjTransformsAttrs::COLOR|SdrGrafObjTransformsAttrs::MIRROR).GetGDIMetaFile();
-        assert(pGraf->isEmbeddedSvg());
-        return pGraf->getMetafileFromEmbeddedSvg();
+        assert(pGraf->isEmbeddedVectorGraphicData());
+        return pGraf->getMetafileFromEmbeddedVectorGraphicData();
     }
 }
 
@@ -2039,7 +2039,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         sal_uIntPtr        nInsAnz=0;
         tools::Rectangle aLogicRect;
 
-        if (pGraf && (pGraf->HasGDIMetaFile() || pGraf->isEmbeddedSvg()))
+        if (pGraf && (pGraf->HasGDIMetaFile() || pGraf->isEmbeddedVectorGraphicData()))
         {
             GDIMetaFile aMetaFile(GetMetaFile(pGraf));
             if(aMetaFile.GetActionSize())

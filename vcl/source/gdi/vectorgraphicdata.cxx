@@ -18,10 +18,11 @@
  */
 
 #include <tools/stream.hxx>
-#include <vcl/svgdata.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/SvgTools.hpp>
+#include <com/sun/star/graphic/EmfTools.hpp>
 #include <com/sun/star/graphic/Primitive2DTools.hpp>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
@@ -105,7 +106,7 @@ size_t estimateSize(
     return nRet;
 }
 
-void SvgData::ensureReplacement()
+void VectorGraphicData::ensureReplacement()
 {
     ensureSequenceAndRange();
 
@@ -115,15 +116,15 @@ void SvgData::ensureReplacement()
     }
 }
 
-void SvgData::ensureSequenceAndRange()
+void VectorGraphicData::ensureSequenceAndRange()
 {
-    if(maSequence.empty() && maSvgDataArray.hasElements())
+    if(maSequence.empty() && maVectorGraphicDataArray.hasElements())
     {
         // import SVG to maSequence, also set maRange
         maRange.reset();
 
         // create stream
-        const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(maSvgDataArray));
+        const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(maVectorGraphicDataArray));
 
         if(myInputStream.is())
         {
@@ -131,9 +132,19 @@ void SvgData::ensureSequenceAndRange()
             try
             {
                 uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
-                const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
 
-                maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(myInputStream, maPath));
+                if (VectorGraphicDataType::Emf == getVectorGraphicDataType())
+                {
+                    const uno::Reference< graphic::XEmfParser > xEmfParser = graphic::EmfTools::create(xContext);
+
+                    maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xEmfParser->getDecomposition(myInputStream, maPath));
+                }
+                else
+                {
+                    const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
+
+                    maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(myInputStream, maPath));
+                }
             }
             catch(const uno::Exception&)
             {
@@ -169,35 +180,42 @@ void SvgData::ensureSequenceAndRange()
     }
 }
 
-auto SvgData::getSizeBytes() -> std::pair<State, size_t>
+auto VectorGraphicData::getSizeBytes() -> std::pair<State, size_t>
 {
-    if (maSequence.empty() && maSvgDataArray.hasElements())
+    if (maSequence.empty() && maVectorGraphicDataArray.hasElements())
     {
-        return std::make_pair(State::UNPARSED, maSvgDataArray.getLength());
+        return std::make_pair(State::UNPARSED, maVectorGraphicDataArray.getLength());
     }
     else
     {
-        return std::make_pair(State::PARSED, maSvgDataArray.getLength() + mNestedBitmapSize);
+        return std::make_pair(State::PARSED, maVectorGraphicDataArray.getLength() + mNestedBitmapSize);
     }
 }
 
-SvgData::SvgData(const SvgDataArray& rSvgDataArray, const OUString& rPath)
-:   maSvgDataArray(rSvgDataArray),
+VectorGraphicData::VectorGraphicData(
+    const VectorGraphicDataArray& rVectorGraphicDataArray,
+    const OUString& rPath,
+    VectorGraphicDataType eVectorDataType)
+:   maVectorGraphicDataArray(rVectorGraphicDataArray),
     maPath(rPath),
     maRange(),
     maSequence(),
-    maReplacement()
-,   mNestedBitmapSize(0)
+    maReplacement(),
+    mNestedBitmapSize(0),
+    meVectorGraphicDataType(eVectorDataType)
 {
 }
 
-SvgData::SvgData(const OUString& rPath):
-    maSvgDataArray(),
+VectorGraphicData::VectorGraphicData(
+    const OUString& rPath,
+    VectorGraphicDataType eVectorDataType)
+:   maVectorGraphicDataArray(),
     maPath(rPath),
     maRange(),
     maSequence(),
-    maReplacement()
-,   mNestedBitmapSize(0)
+    maReplacement(),
+    mNestedBitmapSize(0),
+    meVectorGraphicDataType(eVectorDataType)
 {
     SvFileStream rIStm(rPath, StreamMode::STD_READ);
     if(rIStm.GetError())
@@ -205,33 +223,33 @@ SvgData::SvgData(const OUString& rPath):
     const sal_uInt32 nStmLen(rIStm.remainingSize());
     if (nStmLen)
     {
-        maSvgDataArray.realloc(nStmLen);
-        rIStm.ReadBytes(maSvgDataArray.begin(), nStmLen);
+        maVectorGraphicDataArray.realloc(nStmLen);
+        rIStm.ReadBytes(maVectorGraphicDataArray.begin(), nStmLen);
 
         if (rIStm.GetError())
         {
-            maSvgDataArray = SvgDataArray();
+            maVectorGraphicDataArray = VectorGraphicDataArray();
         }
     }
 }
 
-const basegfx::B2DRange& SvgData::getRange() const
+const basegfx::B2DRange& VectorGraphicData::getRange() const
 {
-    const_cast< SvgData* >(this)->ensureSequenceAndRange();
+    const_cast< VectorGraphicData* >(this)->ensureSequenceAndRange();
 
     return maRange;
 }
 
-const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& SvgData::getPrimitive2DSequence() const
+const std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >& VectorGraphicData::getPrimitive2DSequence() const
 {
-    const_cast< SvgData* >(this)->ensureSequenceAndRange();
+    const_cast< VectorGraphicData* >(this)->ensureSequenceAndRange();
 
     return maSequence;
 }
 
-const BitmapEx& SvgData::getReplacement() const
+const BitmapEx& VectorGraphicData::getReplacement() const
 {
-    const_cast< SvgData* >(this)->ensureReplacement();
+    const_cast< VectorGraphicData* >(this)->ensureReplacement();
 
     return maReplacement;
 }

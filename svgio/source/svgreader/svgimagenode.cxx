@@ -166,13 +166,13 @@ namespace svgio
         {
             if(GraphicType::Bitmap == rGraphic.GetType())
             {
-                if(rGraphic.getSvgData().get())
+                if(rGraphic.getVectorGraphicData().get())
                 {
                     // embedded Svg
-                    rEmbedded = rGraphic.getSvgData()->getPrimitive2DSequence();
+                    rEmbedded = rGraphic.getVectorGraphicData()->getPrimitive2DSequence();
 
                     // fill aViewBox
-                    rViewBox = rGraphic.getSvgData()->getRange();
+                    rViewBox = rGraphic.getVectorGraphicData()->getRange();
                 }
                 else
                 {
