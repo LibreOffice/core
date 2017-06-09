@@ -191,7 +191,7 @@ bool SwpHints::Check(bool bPortionsMerged) const
 
         // --- check Ends ---
 
-        // 2b) gueltiger Pointer? vgl. DELETEFF
+        // 2b) valid pointer? see DELETEFF
         const SwTextAttr *pHtEnd = m_HintsByEnd[i];
         CHECK_ERR( 0xFF != *reinterpret_cast<unsigned char const *>(pHtEnd), "HintsCheck: end ptr was deleted" );
 
