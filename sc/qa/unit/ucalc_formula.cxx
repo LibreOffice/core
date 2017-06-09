@@ -7936,15 +7936,140 @@ void Test::testFuncSUMIFS()
     // Matrix formula in E8:E10 with AVERAGEIFS
     m_pDoc->InsertMatrixFormula(4, 7, 4, 9, aMark, "=AVERAGEIFS(B1:B7;A1:A7;A9:A11)");
 
-    // Result B1+B5, B2+B6, B3+B7 and counts and averages.
-    std::vector<std::vector<const char*>> aCheck = {
-        { "17", "2",  "8.5" },
-        { "34", "2", "17" },
-        { "68", "2", "34" }
-    };
+    {
+        // Result B1+B5, B2+B6, B3+B7 and counts and averages.
+        std::vector<std::vector<const char*>> aCheck = {
+            { "17", "2",  "8.5" },
+            { "34", "2", "17" },
+            { "68", "2", "34" }
+        };
+        bool bGood = checkOutput(m_pDoc, ScRange(2,7,0, 4,9,0), aCheck,
+                "SUMIFS, COUNTIFS and AVERAGEIFS in array context");
+        CPPUNIT_ASSERT_MESSAGE("SUMIFS, COUNTIFS or AVERAGEIFS in array context failed", bGood);
+    }
 
-    bool bGood = checkOutput(m_pDoc, ScRange(2,7,0, 4,9,0), aCheck, "COUNTIFS, SUMIFS and AVERAGEIFS in array context");
-    CPPUNIT_ASSERT_MESSAGE("COUNTIFS, SUMIFS or AVERAGEIFS in array context failed", bGood);
+    // Matrix formula in G8:G10 with SUMIFS and reference list arrays.
+    m_pDoc->InsertMatrixFormula(6, 7, 6, 9, aMark, "=SUMIFS(OFFSET(B1;ROW(1:3);0;2);OFFSET(B1;ROW(1:3);0;2);\">4\")");
+    // Matrix formula in H8:H10 with COUNTIFS and reference list arrays.
+    m_pDoc->InsertMatrixFormula(7, 7, 7, 9, aMark, "=COUNTIFS(OFFSET(B1;ROW(1:3);0;2);\">4\")");
+    // Matrix formula in I8:I10 with AVERAGEIFS and reference list arrays.
+    m_pDoc->InsertMatrixFormula(8, 7, 8, 9, aMark, "=AVERAGEIFS(OFFSET(B1;ROW(1:3);0;2);OFFSET(B1;ROW(1:3);0;2);\">4\")");
+
+    {
+        // Result sums, counts and averages.
+        std::vector<std::vector<const char*>> aCheck = {
+            {  "0", "0", "#DIV/0!" },
+            {  "8", "1",  "8" },
+            { "24", "2", "12" }
+        };
+        bool bGood = checkOutput(m_pDoc, ScRange(6,7,0, 8,9,0), aCheck,
+                "SUMIFS, COUNTIFS and AVERAGEIFS with reference list arrays");
+        CPPUNIT_ASSERT_MESSAGE("SUMIFS, COUNTIFS or AVERAGEIFS with reference list arrays failed", bGood);
+    }
+
+    // Matrix formula in K8:K10 with SUMIFS and reference list array condition
+    // and "normal" data range.
+    m_pDoc->InsertMatrixFormula(10, 7, 10, 9, aMark, "=SUMIFS(B1:B2;OFFSET(B1;ROW(1:3);0;2);\">4\")");
+    // Matrix formula in L8:L10 with AVERAGEIFS and reference list array
+    // condition and "normal" data range.
+    m_pDoc->InsertMatrixFormula(11, 7, 11, 9, aMark, "=AVERAGEIFS(B1:B2;OFFSET(B1;ROW(1:3);0;2);\">4\")");
+
+    {
+        // Result sums and averages.
+        std::vector<std::vector<const char*>> aCheck = {
+            { "0", "#DIV/0!" },
+            { "2", "2" },
+            { "3", "1.5" }
+        };
+        bool bGood = checkOutput(m_pDoc, ScRange(10,7,0, 11,9,0), aCheck,
+                "SUMIFS, COUNTIFS and AVERAGEIFS with reference list array and normal range");
+        CPPUNIT_ASSERT_MESSAGE("SUMIFS, COUNTIFS or AVERAGEIFS with reference list array and normal range failed", bGood);
+    }
+
+    // Matrix formula in G18:G20 with SUMIFS and reference list arrays and a
+    // "normal" criteria range.
+    m_pDoc->InsertMatrixFormula(6, 17, 6, 19, aMark, "=SUMIFS(OFFSET(B1;ROW(1:3);0;2);OFFSET(B1;ROW(1:3);0;2);\">4\";B1:B2;\">1\")");
+    // Matrix formula in H18:H20 with COUNTIFS and reference list arrays and a
+    // "normal" criteria range.
+    m_pDoc->InsertMatrixFormula(7, 17, 7, 19, aMark, "=COUNTIFS(OFFSET(B1;ROW(1:3);0;2);\">4\";B1:B2;\">1\")");
+    // Matrix formula in I18:I20 with AVERAGEIFS and reference list arrays and
+    // a "normal" criteria range.
+    m_pDoc->InsertMatrixFormula(8, 17, 8, 19, aMark, "=AVERAGEIFS(OFFSET(B1;ROW(1:3);0;2);OFFSET(B1;ROW(1:3);0;2);\">4\";B1:B2;\">1\")");
+
+    {
+        // Result sums, counts and averages.
+        std::vector<std::vector<const char*>> aCheck = {
+            {  "0", "0", "#DIV/0!" },
+            {  "8", "1",  "8" },
+            { "16", "1", "16" }
+        };
+        bool bGood = checkOutput(m_pDoc, ScRange(6,17,0, 8,19,0), aCheck,
+                "SUMIFS, COUNTIFS and AVERAGEIFS with reference list arrays and a normal criteria range");
+        CPPUNIT_ASSERT_MESSAGE("SUMIFS, COUNTIFS or AVERAGEIFS with reference list arrays and a normal criteria range failed", bGood);
+    }
+
+    // Matrix formula in K18:K20 with SUMIFS and reference list array condition
+    // and "normal" data range and a "normal" criteria range.
+    m_pDoc->InsertMatrixFormula(10, 17, 10, 19, aMark, "=SUMIFS(B1:B2;OFFSET(B1;ROW(1:3);0;2);\">4\";B1:B2;\">1\")");
+    // Matrix formula in L18:L20 with AVERAGEIFS and reference list array
+    // condition and "normal" data range and a "normal" criteria range.
+    m_pDoc->InsertMatrixFormula(11, 17, 11, 19, aMark, "=AVERAGEIFS(B1:B2;OFFSET(B1;ROW(1:3);0;2);\">4\";B1:B2;\">1\")");
+
+    {
+        // Result sums and averages.
+        std::vector<std::vector<const char*>> aCheck = {
+            { "0", "#DIV/0!" },
+            { "2", "2" },
+            { "2", "2" }
+        };
+        bool bGood = checkOutput(m_pDoc, ScRange(10,17,0, 11,19,0), aCheck,
+                "SUMIFS, COUNTIFS and AVERAGEIFS with reference list array and normal data and criteria range");
+        CPPUNIT_ASSERT_MESSAGE("SUMIFS, COUNTIFS or AVERAGEIFS with reference list array and normal data and criteria range failed", bGood);
+    }
+
+    // Same, but swapped normal and array criteria.
+
+    // Matrix formula in G28:G30 with SUMIFS and reference list arrays and a
+    // "normal" criteria range, swapped.
+    m_pDoc->InsertMatrixFormula(6, 27, 6, 29, aMark, "=SUMIFS(OFFSET(B1;ROW(1:3);0;2);B1:B2;\">1\";OFFSET(B1;ROW(1:3);0;2);\">4\")");
+    // Matrix formula in H28:H30 with COUNTIFS and reference list arrays and a
+    // "normal" criteria range, swapped.
+    m_pDoc->InsertMatrixFormula(7, 27, 7, 29, aMark, "=COUNTIFS(B1:B2;\">1\";OFFSET(B1;ROW(1:3);0;2);\">4\")");
+    // Matrix formula in I28:I30 with AVERAGEIFS and reference list arrays and
+    // a "normal" criteria range, swapped.
+    m_pDoc->InsertMatrixFormula(8, 27, 8, 29, aMark, "=AVERAGEIFS(OFFSET(B1;ROW(1:3);0;2);B1:B2;\">1\";OFFSET(B1;ROW(1:3);0;2);\">4\")");
+
+    {
+        // Result sums, counts and averages.
+        std::vector<std::vector<const char*>> aCheck = {
+            {  "0", "0", "#DIV/0!" },
+            {  "8", "1",  "8" },
+            { "16", "1", "16" }
+        };
+        bool bGood = checkOutput(m_pDoc, ScRange(6,27,0, 8,29,0), aCheck,
+                "SUMIFS, COUNTIFS and AVERAGEIFS with reference list arrays and a normal criteria range, swapped");
+        CPPUNIT_ASSERT_MESSAGE("SUMIFS, COUNTIFS or AVERAGEIFS with reference list arrays and a normal criteria range failed, swapped", bGood);
+    }
+
+    // Matrix formula in K28:K30 with SUMIFS and reference list array condition
+    // and "normal" data range and a "normal" criteria range, swapped.
+    m_pDoc->InsertMatrixFormula(10, 27, 10, 29, aMark, "=SUMIFS(B1:B2;B1:B2;\">1\";OFFSET(B1;ROW(1:3);0;2);\">4\")");
+    // Matrix formula in L28:L30 with AVERAGEIFS and reference list array
+    // condition and "normal" data range and a "normal" criteria range,
+    // swapped.
+    m_pDoc->InsertMatrixFormula(11, 27, 11, 29, aMark, "=AVERAGEIFS(B1:B2;B1:B2;\">1\";OFFSET(B1;ROW(1:3);0;2);\">4\")");
+
+    {
+        // Result sums and averages.
+        std::vector<std::vector<const char*>> aCheck = {
+            { "0", "#DIV/0!" },
+            { "2", "2" },
+            { "2", "2" }
+        };
+        bool bGood = checkOutput(m_pDoc, ScRange(10,27,0, 11,29,0), aCheck,
+                "SUMIFS, COUNTIFS and AVERAGEIFS with reference list array and normal data and criteria range, swapped");
+        CPPUNIT_ASSERT_MESSAGE("SUMIFS, COUNTIFS or AVERAGEIFS with reference list array and normal data and criteria range failed, swapped", bGood);
+    }
 
     m_pDoc->DeleteTab(0);
 }
