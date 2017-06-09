@@ -619,10 +619,10 @@ void PdfExportTest::testTdf99680()
     CPPUNIT_ASSERT(aZCodec.EndCompression());
 
     // Make sure there are no empty clipping regions.
-    OString aEmptyReqion("0 0 m h W* n");
+    OString aEmptyRegion("0 0 m h W* n");
     auto pStart = static_cast<const char*>(aUncompressed.GetData());
     const char* pEnd = pStart + aUncompressed.GetSize();
-    auto it = std::search(pStart, pEnd, aEmptyReqion.getStr(), aEmptyReqion.getStr() + aEmptyReqion.getLength());
+    auto it = std::search(pStart, pEnd, aEmptyRegion.getStr(), aEmptyRegion.getStr() + aEmptyRegion.getLength());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Empty clipping region detected!", it, pEnd);
 }
 
