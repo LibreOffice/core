@@ -1334,15 +1334,11 @@ OUString SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const OUString& rA
 }
 
 
-comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nServiceId ) throw()
+rtl::Reference<comphelper::PropertySetInfo> const & SvxPropertySetInfoPool::getOrCreate( sal_Int32 nServiceId ) throw()
 {
     SolarMutexGuard aGuard;
 
-    if( nServiceId > SVXUNO_SERVICEID_LASTID )
-    {
-        OSL_FAIL( "unknown service id!" );
-        return nullptr;
-    }
+    assert( nServiceId <= SVXUNO_SERVICEID_LASTID );
 
     if( !mxInfos[ nServiceId ].is() )
     {
@@ -1365,7 +1361,7 @@ comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nSer
         }
     }
 
-    return mxInfos[ nServiceId ].get();
+    return mxInfos[ nServiceId ];
 }
 
 rtl::Reference<comphelper::PropertySetInfo> SvxPropertySetInfoPool::mxInfos[SVXUNO_SERVICEID_LASTID+1] = { nullptr };

@@ -75,7 +75,7 @@ protected:
 
 protected:
 
-    static ::comphelper::PropertySetInfo* createPropertySetInfo();
+    static rtl::Reference<::comphelper::PropertySetInfo> createPropertySetInfo();
 
 private:
 

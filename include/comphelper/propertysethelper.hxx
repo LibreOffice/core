@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <comphelper/comphelperdllapi.h>
+#include <rtl/ref.hxx>
 #include <memory>
 
 namespace comphelper
@@ -63,8 +64,7 @@ protected:
     virtual css::uno::Any _getPropertyDefault( const comphelper::PropertyMapEntry* pEntry );
 
 public:
-    PropertySetHelper( comphelper::PropertySetInfo* pInfo ) throw();
-    PropertySetHelper( comphelper::PropertySetInfo* pInfo, __sal_NoAcquire ) throw();
+    PropertySetHelper( rtl::Reference<comphelper::PropertySetInfo> const & xInfo ) throw();
     virtual ~PropertySetHelper() throw();
 
     // XPropertySet

@@ -178,11 +178,8 @@ sal_Int8 SAL_CALL GalleryItem::getType()
 }
 
 
-::comphelper::PropertySetInfo* GalleryItem::createPropertySetInfo()
+rtl::Reference<::comphelper::PropertySetInfo> GalleryItem::createPropertySetInfo()
 {
-    SolarMutexGuard aGuard;
-    ::comphelper::PropertySetInfo*  pRet = new ::comphelper::PropertySetInfo();
-
     static ::comphelper::PropertyMapEntry const aEntries[] =
     {
         { OUString("GalleryItemType"), UNOGALLERY_GALLERYITEMTYPE, cppu::UnoType<sal_Int8>::get(),
@@ -206,10 +203,7 @@ sal_Int8 SAL_CALL GalleryItem::getType()
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
-    pRet->acquire();
-    pRet->add( aEntries );
-
-    return pRet;
+    return rtl::Reference<::comphelper::PropertySetInfo>( new ::comphelper::PropertySetInfo( aEntries ) );
 }
 
 void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const uno::Any* pValues )

@@ -226,7 +226,7 @@ enum SmModelPropertyHandles
     HANDLE_INTEROP_GRAB_BAG,
 };
 
-static PropertySetInfo * lcl_createModelPropertyInfo ()
+static rtl::Reference<PropertySetInfo> lcl_createModelPropertyInfo ()
 {
     static PropertyMapEntry aModelPropertyInfoMap[] =
     {
@@ -300,8 +300,7 @@ static PropertySetInfo * lcl_createModelPropertyInfo ()
         { OUString("InteropGrabBag")                   , HANDLE_INTEROP_GRAB_BAG                   ,  cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(),       PROPERTY_NONE,  0                     },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
-    PropertySetInfo *pInfo = new PropertySetInfo ( aModelPropertyInfoMap );
-    return pInfo;
+    return rtl::Reference<PropertySetInfo>( new PropertySetInfo ( aModelPropertyInfoMap ) );
 }
 
 SmModel::SmModel( SfxObjectShell *pObjSh )

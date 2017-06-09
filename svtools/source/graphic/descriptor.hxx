@@ -77,7 +77,7 @@ public:
 
 protected:
 
-    static ::comphelper::PropertySetInfo* createPropertySetInfo();
+    static rtl::Reference<::comphelper::PropertySetInfo> createPropertySetInfo();
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
