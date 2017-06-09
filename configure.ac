@@ -5626,12 +5626,32 @@ dnl ===================================================================
 
 if test "$_os" != "WINNT"; then
 
+if test "$_os" == "iOS"; then
+if test "$host_cpu" == "armv7"; then
+  ac_cv_sizeof_long=4
+  ac_cv_sizeof_short=2
+  ac_cv_sizeof_int=4
+  ac_cv_sizeof_long_long=8
+  ac_cv_sizeof_double=8
+  ac_cv_sizeof_voidp=4
+else
+  ac_cv_sizeof_long=8
+  ac_cv_sizeof_short=2
+  ac_cv_sizeof_int=4
+  ac_cv_sizeof_long_long=8
+  ac_cv_sizeof_double=8
+  ac_cv_sizeof_voidp=8
+fi
+AC_MSG_CHECKING([iOS setting sizes long, short, int, long long, double, voidp])
+
+else
     AC_CHECK_SIZEOF(long)
     AC_CHECK_SIZEOF(short)
     AC_CHECK_SIZEOF(int)
     AC_CHECK_SIZEOF(long long)
     AC_CHECK_SIZEOF(double)
     AC_CHECK_SIZEOF(void*)
+fi
 
     SAL_TYPES_SIZEOFSHORT=$ac_cv_sizeof_short
     SAL_TYPES_SIZEOFINT=$ac_cv_sizeof_int
@@ -12223,7 +12243,7 @@ AC_LANG_POP([C++])
 LIBS=$save_LIBS
 CXXFLAGS=$save_CXXFLAGS
 AC_MSG_RESULT([$broken])
-if test "$broken" = yes; then
+if test "$broken" = yes -a "$_os" != "iOS"; then
     AC_MSG_ERROR([working support for static initializer_list needed])
 fi
 
