@@ -108,7 +108,6 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     m_pnGradientListState(&maFixed_ChangeType),
     m_pnHatchingListState(&maFixed_ChangeType),
     m_nPageType(PageType::Area),
-    m_nPos(0),
     m_nDlgType(0),
     m_pbAreaTP(nullptr),
     m_aXFillAttr          ( rInAttrs.GetPool() ),
@@ -447,7 +446,6 @@ void SvxAreaTabPage::CreatePage( sal_Int32 nId, SfxTabPage* pTab )
     {
         static_cast<SvxPatternTabPage*>(pTab)->SetColorList( m_pColorList );
         static_cast<SvxPatternTabPage*>(pTab)->SetPatternList( m_pPatternList );
-        static_cast<SvxPatternTabPage*>(pTab)->SetPos( &m_nPos );
         static_cast<SvxPatternTabPage*>(pTab)->SetPtrnChgd( m_pnPatternListState );
         static_cast<SvxPatternTabPage*>(pTab)->SetColorChgd( m_pnColorListState );
         static_cast<SvxPatternTabPage*>(pTab)->Construct();
