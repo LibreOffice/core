@@ -3345,10 +3345,8 @@ void SfxBaseModel::getGrabBagItem(css::uno::Any& rVal) const
 {
     if (m_pData->m_xGrabBagItem.get())
         m_pData->m_xGrabBagItem->QueryValue(rVal);
-    else {
-        uno::Sequence<beans::PropertyValue> aValue(0);
-        rVal <<= aValue;
-    }
+    else
+        rVal <<= uno::Sequence<beans::PropertyValue>();
 }
 
 void SfxBaseModel::setGrabBagItem(const css::uno::Any& rVal)

@@ -79,6 +79,7 @@
 #include <tools/stream.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <sot/exchange.hxx>
 #include <utility>
@@ -275,11 +276,10 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
         xContext->getServiceManager()->createInstanceWithContext(
             "com.sun.star.comp.MemoryStream", xContext),
         uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> args(2);
-    args[0].Name = "OutputStream";
-    args[0].Value <<= xTempStream->getOutputStream();
-    args[1].Name = "FilterName";
-    args[1].Value <<= OUString::createFromAscii(pFilterName);
+    uno::Sequence<beans::PropertyValue> args( comphelper::InitPropertySequence({
+            { "OutputStream", Any(xTempStream->getOutputStream()) },
+            { "FilterName", Any(OUString::createFromAscii(pFilterName)) }
+        }));
     uno::Reference<frame::XStorable> xStorable(xObj->getComponent(), uno::UNO_QUERY);
     try
     {

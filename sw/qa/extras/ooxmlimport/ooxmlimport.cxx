@@ -101,11 +101,9 @@ public:
                 CPPUNIT_ASSERT_MESSAGE("no desktop", mxDesktop.is());
                 uno::Reference<frame::XComponentLoader> xLoader(mxDesktop, uno::UNO_QUERY);
                 CPPUNIT_ASSERT_MESSAGE("no loader", xLoader.is());
-                uno::Sequence<beans::PropertyValue> args(1);
-                args[0].Name = "DocumentService";
-                args[0].Handle = -1;
-                args[0].Value <<= OUString("com.sun.star.text.TextDocument");
-                args[0].State = beans::PropertyState_DIRECT_VALUE;
+                uno::Sequence<beans::PropertyValue> args( comphelper::InitPropertySequence({
+                        { "DocumentService", uno::Any(OUString("com.sun.star.text.TextDocument")) }
+                    }));
 
                 uno::Reference<lang::XComponent> xComponent = xLoader->loadComponentFromURL(aURL, "_default", 0, args);
                 OUString sMessage = "loading succeeded: " + aURL;
@@ -1243,11 +1241,10 @@ DECLARE_OOXMLIMPORT_TEST(testTdf100072, "tdf100072.docx")
 
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
-    uno::Sequence<beans::PropertyValue> aDescriptor =
-    {
-        beans::PropertyValue("OutputStream", sal_Int32(0), uno::makeAny(xOutputStream), beans::PropertyState_DIRECT_VALUE),
-        beans::PropertyValue("FilterName", sal_Int32(0), uno::makeAny(OUString("SVM")), beans::PropertyState_DIRECT_VALUE)
-    };
+    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
+            { "OutputStream", uno::Any(xOutputStream) },
+            { "FilterName", uno::Any(OUString("SVM")) }
+        }));
     xGraphicExporter->filter(aDescriptor);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 

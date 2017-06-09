@@ -38,6 +38,7 @@
 #include <unotools/tempfile.hxx>
 
 #include <comphelper/docpasswordrequest.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
 
 #include <editeng/brushitem.hxx>
@@ -1837,19 +1838,19 @@ void SwWW8ImplReader::ImportDop()
     // Import zoom factor
     if (m_pWDop->wScaleSaved)
     {
-        uno::Sequence<beans::PropertyValue> aViewProps(3);
-        aViewProps[0].Name = "ZoomFactor";
-        aViewProps[0].Value <<= sal_Int16(m_pWDop->wScaleSaved);
-        aViewProps[1].Name = "VisibleBottom";
-        aViewProps[1].Value <<= sal_Int32(0);
-        aViewProps[2].Name = "ZoomType";
         //Import zoom type
+        sal_Int16 nZoomType;
         switch (m_pWDop->zkSaved) {
-            case 1:  aViewProps[2].Value <<= sal_Int16(SvxZoomType::WHOLEPAGE); break;
-            case 2:  aViewProps[2].Value <<= sal_Int16(SvxZoomType::PAGEWIDTH); break;
-            case 3:  aViewProps[2].Value <<= sal_Int16(SvxZoomType::OPTIMAL);   break;
-            default: aViewProps[2].Value <<= sal_Int16(SvxZoomType::PERCENT);   break;
+            case 1:  nZoomType = sal_Int16(SvxZoomType::WHOLEPAGE); break;
+            case 2:  nZoomType = sal_Int16(SvxZoomType::PAGEWIDTH); break;
+            case 3:  nZoomType = sal_Int16(SvxZoomType::OPTIMAL);   break;
+            default: nZoomType = sal_Int16(SvxZoomType::PERCENT);   break;
         }
+        uno::Sequence<beans::PropertyValue> aViewProps( comphelper::InitPropertySequence({
+                { "ZoomFactor", uno::Any(sal_Int16(m_pWDop->wScaleSaved)) },
+                { "VisibleBottom", uno::Any(sal_Int32(0)) },
+                { "ZoomType", uno::Any(nZoomType) }
+            }));
 
         uno::Reference< uno::XComponentContext > xComponentContext(comphelper::getProcessComponentContext());
         uno::Reference<container::XIndexContainer> xBox = document::IndexedPropertyValues::create(xComponentContext);

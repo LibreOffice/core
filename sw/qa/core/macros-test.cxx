@@ -46,6 +46,7 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/intitem.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
 
 #include <basic/sbxdef.hxx>
@@ -410,9 +411,9 @@ void SwMacrosTest::testFdo68983()
 
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
-    Sequence<beans::PropertyValue> desc(1);
-    desc[0].Name = "FilterName";
-    desc[0].Value <<= OUString("writer8");
+    Sequence<beans::PropertyValue> desc( comphelper::InitPropertySequence({
+            { "FilterName", Any(OUString("writer8")) }
+        }));
     xDocStorable->storeAsURL(aTempFile.GetURL(), desc);
 
     Reference<util::XCloseable>(xComponent, UNO_QUERY_THROW)->close(false);
@@ -443,9 +444,9 @@ void SwMacrosTest::testFdo87530()
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
 
-    Sequence<beans::PropertyValue> desc(1);
-    desc[0].Name = "FilterName";
-    desc[0].Value <<= OUString("writer8");
+    Sequence<beans::PropertyValue> desc( comphelper::InitPropertySequence({
+            { "FilterName", Any(OUString("writer8")) }
+        }));
 
     {
         // insert initial password protected library

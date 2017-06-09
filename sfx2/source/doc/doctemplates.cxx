@@ -27,6 +27,7 @@
 #include <vcl/wrkwin.hxx>
 #include <unotools/pathoptions.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
@@ -614,11 +615,10 @@ bool SfxDocTplService_Impl::setTitleForURL( const OUString& rURL, const OUString
             uno::Reference< embed::XStorage > xStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
                     rURL, embed::ElementModes::READWRITE);
 
-            uno::Sequence<beans::PropertyValue> medium(2);
-            medium[0].Name = "DocumentBaseURL";
-            medium[0].Value <<= rURL;
-            medium[1].Name = "URL";
-            medium[1].Value <<= rURL;
+            uno::Sequence<beans::PropertyValue> medium( comphelper::InitPropertySequence({
+                    { "DocumentBaseURL", Any(rURL) },
+                    { "URL", Any(rURL) }
+                }));
 
             m_xDocProps->storeToStorage(xStorage, medium);
             return true;

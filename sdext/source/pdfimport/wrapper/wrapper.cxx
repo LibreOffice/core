@@ -35,6 +35,7 @@
 #include "rtl/strbuf.hxx"
 #include "rtl/byteseq.hxx"
 
+#include <comphelper/propertysequence.hxx>
 #include "cppuhelper/exc_hlp.hxx"
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
@@ -718,19 +719,11 @@ uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
         xFactory->createInstanceWithArgumentsAndContext( "com.sun.star.io.SequenceInputStream", aStreamCreationArgs, m_xContext ),
         uno::UNO_QUERY_THROW );
 
-    uno::Sequence<beans::PropertyValue> aSequence(3);
-    aSequence[0] = beans::PropertyValue( "URL",
-                                         0,
-                                         uno::makeAny(aFileName),
-                                         beans::PropertyState_DIRECT_VALUE );
-    aSequence[1] = beans::PropertyValue( "InputStream",
-                                         0,
-                                         uno::makeAny( xDataStream ),
-                                         beans::PropertyState_DIRECT_VALUE );
-    aSequence[2] = beans::PropertyValue( "InputSequence",
-                                         0,
-                                         uno::makeAny(aDataSequence),
-                                         beans::PropertyState_DIRECT_VALUE );
+    uno::Sequence<beans::PropertyValue> aSequence( comphelper::InitPropertySequence({
+            { "URL", uno::makeAny(aFileName) },
+            { "InputStream", uno::makeAny( xDataStream ) },
+            { "InputSequence", uno::makeAny(aDataSequence) }
+        }));
 
     return aSequence;
 }

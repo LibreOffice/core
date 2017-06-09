@@ -51,6 +51,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "styleuno.hxx"
@@ -529,20 +530,11 @@ void SAL_CALL ScStyleFamiliesObj::loadStylesFromURL( const OUString& aURL,
 uno::Sequence<beans::PropertyValue> SAL_CALL ScStyleFamiliesObj::getStyleLoaderOptions()
 {
     //  return defaults for options (?)
-
-    uno::Sequence<beans::PropertyValue> aSequence(3);
-    beans::PropertyValue* pArray = aSequence.getArray();
-
-    pArray[0].Name = SC_UNONAME_OVERWSTL;
-    pArray[0].Value <<= true;
-
-    pArray[1].Name = SC_UNONAME_LOADCELL;
-    pArray[1].Value <<= true;
-
-    pArray[2].Name = SC_UNONAME_LOADPAGE;
-    pArray[2].Value <<= true;
-
-    return aSequence;
+    return comphelper::InitPropertySequence({
+            { SC_UNONAME_OVERWSTL, uno::Any(true) },
+            { SC_UNONAME_LOADCELL, uno::Any(true) },
+            { SC_UNONAME_LOADPAGE, uno::Any(true) }
+        });
 }
 
 // style::XStyleLoader2

@@ -26,6 +26,7 @@
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotxdoc.hxx>
@@ -52,13 +53,9 @@ SwXFilterOptions::~SwXFilterOptions()
 
 uno::Sequence< beans::PropertyValue > SwXFilterOptions::getPropertyValues()
 {
-    uno::Sequence<beans::PropertyValue> aRet(1);
-    beans::PropertyValue* pArray = aRet.getArray();
-
-    pArray[0].Name = FILTER_OPTIONS_NAME;
-    pArray[0].Value <<= sFilterOptions;
-
-    return aRet;
+    return comphelper::InitPropertySequence({
+            { FILTER_OPTIONS_NAME, uno::Any(sFilterOptions) }
+        });
 }
 
 void   SwXFilterOptions::setPropertyValues( const uno::Sequence<beans::PropertyValue >& aProps )

@@ -209,13 +209,12 @@ void ScTiledRenderingTest::testRowColumnSelections()
 {
     comphelper::LibreOfficeKit::setActive();
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
-    uno::Sequence<beans::PropertyValue> aArgs(2);
 
     // Select the 5th row with no modifier
-    aArgs[0].Name = OUString::fromUtf8("Row");
-    aArgs[0].Value <<= static_cast<sal_Int32>(5 - 1);
-    aArgs[1].Name = OUString::fromUtf8("Modifier");
-    aArgs[1].Value <<= static_cast<sal_uInt16>(0);
+    uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+            { "Row", uno::Any(sal_Int32(5 - 1)) },
+            { "Modifier", uno::Any(sal_uInt16(0)) }
+        }));
     comphelper::dispatchCommand(".uno:SelectRow", aArgs);
 
     // Check if it is selected
@@ -384,13 +383,12 @@ void ScTiledRenderingTest::testEmptyColumnSelection()
 {
     comphelper::LibreOfficeKit::setActive();
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
-    uno::Sequence<beans::PropertyValue> aArgs(2);
 
     // Select empty column, 1000
-    aArgs[0].Name = OUString::fromUtf8("Col");
-    aArgs[0].Value <<= static_cast<sal_Int32>(1000 - 1);
-    aArgs[1].Name = OUString::fromUtf8("Modifier");
-    aArgs[1].Value <<= static_cast<sal_uInt16>(0);
+    uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+                { "Col", uno::Any(sal_Int32(1000 - 1)) },
+                { "Modifier", uno::Any(sal_uInt16(0)) }
+        }));
     comphelper::dispatchCommand(".uno:SelectColumn", aArgs);
 
     // Get plain selection
@@ -640,15 +638,14 @@ void ScTiledRenderingTest::testColRowResize()
 
     pViewShell->registerLibreOfficeKitViewCallback(&ScTiledRenderingTest::callback, this);
 
-    uno::Sequence<beans::PropertyValue> aArgs(2);
     ScDocument& rDoc = pDocSh->GetDocument();
     // Col 3, Tab 0
     int nOldWidth = rDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false);
 
-    aArgs[0].Name = OUString::fromUtf8("Column");
-    aArgs[0].Value <<= static_cast<sal_Int16>(3);
-    aArgs[1].Name = OUString::fromUtf8("Width");
-    aArgs[1].Value <<= static_cast<sal_uInt16>(nOldWidth + 100);
+    uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+            { "Column", uno::Any(sal_Int16(3)) },
+            { "Width", uno::Any(sal_uInt16(nOldWidth + 100)) }
+        }));
     comphelper::dispatchCommand(".uno:ColumnWidth", aArgs);
 
     int nNewWidth = rDoc.GetColWidth(static_cast<SCCOL>(2), static_cast<SCTAB>(0), false);
@@ -657,11 +654,11 @@ void ScTiledRenderingTest::testColRowResize()
     // Row 5, Tab 0
     int nOldHeight = rDoc.GetRowHeight(static_cast<SCROW>(4), static_cast<SCTAB>(0), false);
 
-    aArgs[0].Name = OUString::fromUtf8("Row");
-    aArgs[0].Value <<= static_cast<sal_Int16>(5);
-    aArgs[1].Name = OUString::fromUtf8("Height");
-    aArgs[1].Value <<= static_cast<sal_uInt16>(nOldHeight + 100);
-    comphelper::dispatchCommand(".uno:RowHeight", aArgs);
+    uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
+            { "Row", uno::Any(sal_Int16(5)) },
+            { "Height", uno::Any(sal_uInt16(nOldHeight + 100)) }
+        }));
+    comphelper::dispatchCommand(".uno:RowHeight", aArgs2);
 
     int nNewHeight = rDoc.GetRowHeight(static_cast<SCROW>(4), static_cast<SCTAB>(0), false);
     CPPUNIT_ASSERT(nNewHeight > nOldHeight);
@@ -902,21 +899,18 @@ void ScTiledRenderingTest::testHideColRow()
     comphelper::LibreOfficeKit::setActive();
     createDoc("small.ods");
     {
-        uno::Sequence<beans::PropertyValue> aArgs(2);
-
-        aArgs[0].Name = OUString::fromUtf8("Col");
-        aArgs[0].Value <<= static_cast<sal_Int32>(2 - 1);
-        aArgs[1].Name = OUString::fromUtf8("Modifier");
-        aArgs[1].Value <<= KEY_SHIFT;
-
+        uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+                { "Col", uno::Any(sal_Int32(2 - 1)) },
+                { "Modifier", uno::Any(KEY_SHIFT) }
+            }));
         comphelper::dispatchCommand(".uno:SelectColumn", aArgs);
 
-        aArgs[0].Name = OUString::fromUtf8("Col");
-        aArgs[0].Value <<= static_cast<sal_Int32>(3 - 1);
-        aArgs[1].Name = OUString::fromUtf8("Modifier");
-        aArgs[1].Value <<= static_cast<sal_uInt16>(0);
+        uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
+                { "Col", uno::Any(sal_Int32(3 - 1)) },
+                { "Modifier", uno::Any(sal_uInt16(0)) }
+            }));
 
-        comphelper::dispatchCommand(".uno:SelectColumn", aArgs);
+        comphelper::dispatchCommand(".uno:SelectColumn", aArgs2);
         Scheduler::ProcessEventsToIdle();
     }
 
@@ -933,21 +927,17 @@ void ScTiledRenderingTest::testHideColRow()
     CPPUNIT_ASSERT(nNewCurX > nOldCurX);
     CPPUNIT_ASSERT_EQUAL(nOldCurY, nNewCurY);
     {
-        uno::Sequence<beans::PropertyValue> aArgs(2);
-
-        aArgs[0].Name = OUString::fromUtf8("Row");
-        aArgs[0].Value <<= static_cast<sal_Int32>(6 - 1);
-        aArgs[1].Name = OUString::fromUtf8("Modifier");
-        aArgs[1].Value <<= KEY_SHIFT;
-
+        uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+                { "Row", uno::Any(sal_Int32(6 - 1)) },
+                { "Modifier", uno::Any(KEY_SHIFT) }
+            }));
         comphelper::dispatchCommand(".uno:SelectRow", aArgs);
 
-        aArgs[0].Name = OUString::fromUtf8("Row");
-        aArgs[0].Value <<= static_cast<sal_Int32>(7 - 1);
-        aArgs[1].Name = OUString::fromUtf8("Modifier");
-        aArgs[1].Value <<= static_cast<sal_uInt16>(0);
-
-        comphelper::dispatchCommand(".uno:SelectRow", aArgs);
+        uno::Sequence<beans::PropertyValue> aArgs2( comphelper::InitPropertySequence({
+                { "Row", uno::Any(sal_Int32(7 - 1)) },
+                { "Modifier", uno::Any(sal_uInt16(0)) }
+            }));
+        comphelper::dispatchCommand(".uno:SelectRow", aArgs2);
         Scheduler::ProcessEventsToIdle();
     }
 
@@ -1301,9 +1291,9 @@ void ScTiledRenderingTest::testInsertGraphicInvalidations()
 
     // insert an image in view and see if both views are invalidated
     aView.m_bInvalidateTiles = false;
-    uno::Sequence<beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = OUString::fromUtf8("FileName");
-    aArgs[0].Value <<= (m_directories.getURLFromSrc(DATA_DIRECTORY) + "smile.png");
+    uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+            { "FileName", uno::Any(m_directories.getURLFromSrc(DATA_DIRECTORY) + "smile.png") }
+        }));
     comphelper::dispatchCommand(".uno:InsertGraphic", aArgs);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);

@@ -41,6 +41,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <shellio.hxx>
@@ -135,14 +136,11 @@ void SwOneExampleFrame::CreateControl()
             sTempURL = m_sArgumentURL;
         aURL <<= sTempURL;
 
-        uno::Sequence<beans::PropertyValue> aSeq(3);
-        beans::PropertyValue* pValues = aSeq.getArray();
-        pValues[0].Name = "OpenFlags";
-        pValues[0].Value <<= OUString("-RB");
-        pValues[1].Name = "Referer";
-        pValues[1].Value <<= OUString("private:user");
-        pValues[2].Name = "ReadOnly";
-        pValues[2].Value <<= (sTempURL != cFactory);
+        uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
+                { "OpenFlags", uno::Any(OUString("-RB")) },
+                { "Referer", uno::Any(OUString("private:user")) },
+                { "ReadOnly", uno::Any(sTempURL != cFactory) }
+            }));
         uno::Any aArgs(aSeq);
 
         xPrSet->setPropertyValue( "LoaderArguments", aArgs );

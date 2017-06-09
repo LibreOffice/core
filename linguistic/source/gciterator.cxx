@@ -54,6 +54,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/extract.hxx>
 
 #include <deque>
@@ -490,16 +491,12 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
 static uno::Sequence<beans::PropertyValue>
 lcl_makeProperties(uno::Reference<text::XFlatParagraph> const& xFlatPara)
 {
-    uno::Sequence<beans::PropertyValue> ret(2);
     uno::Reference<beans::XPropertySet> const xProps(
             xFlatPara, uno::UNO_QUERY_THROW);
-    ret[0] = beans::PropertyValue("FieldPositions", -1,
-        xProps->getPropertyValue("FieldPositions"),
-        beans::PropertyState_DIRECT_VALUE);
-    ret[1] = beans::PropertyValue("FootnotePositions", -1,
-        xProps->getPropertyValue("FootnotePositions"),
-        beans::PropertyState_DIRECT_VALUE);
-    return ret;
+    return comphelper::InitPropertySequence({
+        { "FieldPositions", xProps->getPropertyValue("FieldPositions") },
+        { "FootnotePositions", xProps->getPropertyValue("FootnotePositions") }
+    });
 }
 
 void GrammarCheckingIterator::DequeueAndCheck()

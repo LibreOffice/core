@@ -912,11 +912,10 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
 
         uno::Reference< XExporter > xExport(xFilter, UNO_QUERY);
         xExport->setSourceDocument(xDoc);
-        uno::Sequence<beans::PropertyValue> aFilterData(2);
-        aFilterData[0].Name = "PageLayout";
-        aFilterData[0].Value <<= sal_Int32(0);
-        aFilterData[1].Name = "FirstPageOnLeft";
-        aFilterData[1].Value <<= sal_False;
+        uno::Sequence<beans::PropertyValue> aFilterData( comphelper::InitPropertySequence({
+            { "PageLayout", Any(sal_Int32(0)) },
+            { "FirstPageOnLeft", Any(false) }
+        }));
 
         const gchar *pStr = gtk_print_settings_get(pSettings, GTK_PRINT_SETTINGS_PRINT_PAGES);
         if (pStr && !strcmp(pStr, "ranges"))
@@ -1006,11 +1005,10 @@ void GtkPrintDialog::ExportAsPDF(const OUString &rFileURL, GtkPrintSettings *pSe
                 aFilterData[aFilterData.getLength()-1].Value <<= aSelection;
             }
         }
-        uno::Sequence<beans::PropertyValue> aArgs(2);
-        aArgs[0].Name = "FilterData";
-        aArgs[0].Value <<= aFilterData;
-        aArgs[1].Name = "OutputStream";
-        aArgs[1].Value <<= xOStm;
+        uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+            { "FilterData", Any(aFilterData) },
+            { "OutputStream", Any(xOStm) }
+        }));
         xFilter->filter(aArgs);
     }
 }

@@ -28,6 +28,7 @@
 #include <svtools/embedtransfer.hxx>
 #include <tools/mapunit.hxx>
 #include <vcl/outdev.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -112,11 +113,10 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                             SvStream* pStream = nullptr;
                             bool bDeleteStream = false;
                             uno::Sequence < beans::PropertyValue > aEmpty;
-                            uno::Sequence<beans::PropertyValue> aObjArgs(2);
-                            aObjArgs[0].Name = "SourceShellID";
-                            aObjArgs[0].Value <<= maParentShellID;
-                            aObjArgs[1].Name = "DestinationShellID";
-                            aObjArgs[1].Value <<= rDestDoc;
+                            uno::Sequence<beans::PropertyValue> aObjArgs( comphelper::InitPropertySequence({
+                                    { "SourceShellID", uno::Any(maParentShellID) },
+                                    { "DestinationShellID", uno::Any(rDestDoc) }
+                                }));
                             xPers->storeToEntry(xStg, aName, aEmpty, aObjArgs);
                             if ( xStg->isStreamElement( aName ) )
                             {

@@ -188,10 +188,8 @@ uno::Reference<sheet::XDataPilotTable> lclGetPivotTableByName(sal_Int32 nIndex, 
 uno::Sequence<uno::Reference<chart2::data::XLabeledDataSequence>>
     lclGetCategories(Reference<chart2::XChartDocument> const & xChartDoc)
 {
-    uno::Sequence<beans::PropertyValue> aArguments(1);
-    aArguments[0] = beans::PropertyValue("CellRangeRepresentation", -1,
-                                         uno::makeAny<OUString>("PT@categories"),
-                                         beans::PropertyState_DIRECT_VALUE);
+    uno::Sequence<beans::PropertyValue> aArguments( comphelper::InitPropertySequence(
+            {{"CellRangeRepresentation", uno::Any(OUString("PT@categories"))}} ));
 
     uno::Reference<chart2::data::XDataProvider> xDataProvider(xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW);
     return xDataProvider->createDataSource(aArguments)->getDataSequences();

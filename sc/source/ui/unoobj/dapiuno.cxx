@@ -57,6 +57,7 @@
 #include <com/sun/star/sheet/GeneralFunction2.hpp>
 
 #include <comphelper/extract.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 
@@ -958,22 +959,18 @@ Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue( const OUString& aPrope
                 const ScDPServiceDesc* pServiceDesc = pDPObject->GetDPServiceDesc();
                 if (pServiceDesc)
                 {
-                    uno::Sequence<beans::PropertyValue> aSeq( 4 );
-                    beans::PropertyValue* pArray = aSeq.getArray();
-                    pArray[0].Name = SC_UNO_DP_SOURCENAME;
-                    pArray[0].Value <<= pServiceDesc->aParSource;
-                    pArray[1].Name = SC_UNO_DP_OBJECTNAME;
-                    pArray[1].Value <<= pServiceDesc->aParName;
-                    pArray[2].Name = SC_UNO_DP_USERNAME;
-                    pArray[2].Value <<= pServiceDesc->aParUser;
-                    pArray[3].Name = SC_UNO_DP_PASSWORD;
-                    pArray[3].Value <<= pServiceDesc->aParPass;
+                    uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
+                            { SC_UNO_DP_SOURCENAME, Any(pServiceDesc->aParSource) },
+                            { SC_UNO_DP_OBJECTNAME, Any(pServiceDesc->aParName) },
+                            { SC_UNO_DP_USERNAME, Any(pServiceDesc->aParUser) },
+                            { SC_UNO_DP_PASSWORD, Any(pServiceDesc->aParPass) }
+                        }));
                     aRet <<= aSeq;
                 }
                 else
                 {
                     // empty sequence
-                    uno::Sequence<beans::PropertyValue> aEmpty(0);
+                    uno::Sequence<beans::PropertyValue> aEmpty;
                     aRet <<= aEmpty;
                 }
             }

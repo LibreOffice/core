@@ -39,6 +39,7 @@
 #include <optutil.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -119,13 +120,9 @@ Calc_FilterOptionsDialog_get_implementation(css::uno::XComponentContext*, css::u
 
 uno::Sequence<beans::PropertyValue> SAL_CALL ScFilterOptionsObj::getPropertyValues()
 {
-    uno::Sequence<beans::PropertyValue> aRet(1);
-    beans::PropertyValue* pArray = aRet.getArray();
-
-    pArray[0].Name = SC_UNONAME_FILTEROPTIONS;
-    pArray[0].Value <<= aFilterOptions;
-
-    return aRet;
+    return comphelper::InitPropertySequence({
+        { SC_UNONAME_FILTEROPTIONS, Any(aFilterOptions) }
+    });
 }
 
 void SAL_CALL ScFilterOptionsObj::setPropertyValues( const uno::Sequence<beans::PropertyValue>& aProps )

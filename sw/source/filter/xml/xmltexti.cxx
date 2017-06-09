@@ -19,6 +19,7 @@
 
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <com/sun/star/embed/EmbeddedObjectCreator.hpp>
 #include <com/sun/star/embed/OOoEmbeddedObjectFactory.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -273,9 +274,9 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                 OUString aName("DummyName");
                 uno::Sequence < sal_Int8 > aClass( aClassName.GetByteSequence() );
                 uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
-                uno::Sequence<beans::PropertyValue> aObjArgs(1);
-                aObjArgs[0].Name = "DefaultParentBaseURL";
-                aObjArgs[0].Value <<= GetXMLImport().GetBaseURL();
+                uno::Sequence<beans::PropertyValue> aObjArgs( comphelper::InitPropertySequence({
+                        { "DefaultParentBaseURL", Any(GetXMLImport().GetBaseURL()) }
+                    }));
                 uno::Reference < embed::XEmbeddedObject > xObj =
                     uno::Reference < embed::XEmbeddedObject >( xFactory->createInstanceInitNew(
                     aClass, OUString(), xStorage, aName, aObjArgs), uno::UNO_QUERY );

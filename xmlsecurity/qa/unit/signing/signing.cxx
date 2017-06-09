@@ -27,6 +27,7 @@
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <sax/tools/converter.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
@@ -491,11 +492,10 @@ void SigningTest::test96097Calc()
     // Save a copy
     utl::TempFile aTempFileSaveCopy;
     aTempFileSaveCopy.EnableKillingFile();
-    uno::Sequence<beans::PropertyValue> descSaveACopy(2);
-    descSaveACopy[0].Name = "SaveACopy";
-    descSaveACopy[0].Value <<= true;
-    descSaveACopy[1].Name = "FilterName";
-    descSaveACopy[1].Value <<= OUString("calc8");
+    uno::Sequence<beans::PropertyValue> descSaveACopy( comphelper::InitPropertySequence({
+        { "SaveACopy", uno::Any(true) },
+        { "FilterName", uno::Any(OUString("calc8")) }
+    }));
     xDocStorable->storeToURL(aTempFileSaveCopy.GetURL(), descSaveACopy);
 
     try
@@ -503,9 +503,9 @@ void SigningTest::test96097Calc()
         // Save As
         utl::TempFile aTempFileSaveAs;
         aTempFileSaveAs.EnableKillingFile();
-        uno::Sequence<beans::PropertyValue> descSaveAs(1);
-        descSaveAs[0].Name = "FilterName";
-        descSaveAs[0].Value <<= OUString("calc8");
+        uno::Sequence<beans::PropertyValue> descSaveAs( comphelper::InitPropertySequence({
+            { "FilterName", uno::Any(OUString("calc8")) }
+        }));
         xDocStorable->storeAsURL(aTempFileSaveAs.GetURL(), descSaveAs);
     }
     catch (...)
@@ -539,11 +539,10 @@ void SigningTest::test96097Doc()
     // Save a copy
     utl::TempFile aTempFileSaveCopy;
     aTempFileSaveCopy.EnableKillingFile();
-    uno::Sequence<beans::PropertyValue> descSaveACopy(2);
-    descSaveACopy[0].Name = "SaveACopy";
-    descSaveACopy[0].Value <<= true;
-    descSaveACopy[1].Name = "FilterName";
-    descSaveACopy[1].Value <<= OUString("writer8");
+    uno::Sequence<beans::PropertyValue> descSaveACopy( comphelper::InitPropertySequence({
+        { "SaveACopy", uno::Any(true) },
+        { "FilterName", uno::Any(OUString("writer8")) }
+    }));
     xDocStorable->storeToURL(aTempFileSaveCopy.GetURL(), descSaveACopy);
 
     try
@@ -551,9 +550,9 @@ void SigningTest::test96097Doc()
         // Save As
         utl::TempFile aTempFileSaveAs;
         aTempFileSaveAs.EnableKillingFile();
-        uno::Sequence<beans::PropertyValue> descSaveAs(1);
-        descSaveAs[0].Name = "FilterName";
-        descSaveAs[0].Value <<= OUString("writer8");
+        uno::Sequence<beans::PropertyValue> descSaveAs( comphelper::InitPropertySequence({
+            { "FilterName", uno::Any(OUString("writer8")) }
+        }));
         xDocStorable->storeAsURL(aTempFileSaveAs.GetURL(), descSaveAs);
     }
     catch (...)

@@ -1293,8 +1293,7 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale )
         return pv;
     }
 
-    Sequence< Sequence<beans::PropertyValue> > seq1(0);
-    return seq1;
+    return Sequence< Sequence<beans::PropertyValue> >();
 }
 
 // OutlineNumbering helper class

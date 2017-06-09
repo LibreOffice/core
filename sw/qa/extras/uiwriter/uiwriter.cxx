@@ -1374,11 +1374,10 @@ void SwUiWriterTest::testFdo87448()
 
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
-    uno::Sequence<beans::PropertyValue> aDescriptor =
-    {
-        beans::PropertyValue("OutputStream", sal_Int32(0), uno::makeAny(xOutputStream), beans::PropertyState_DIRECT_VALUE),
-        beans::PropertyValue("FilterName", sal_Int32(0), uno::makeAny(OUString("SVM")), beans::PropertyState_DIRECT_VALUE)
-    };
+    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
+            { "OutputStream", uno::makeAny(xOutputStream) },
+            { "FilterName", uno::makeAny(OUString("SVM")) }
+        }));
     xGraphicExporter->filter(aDescriptor);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
@@ -1626,10 +1625,9 @@ void SwUiWriterTest::testXFlatParagraph()
     uno::Reference<text::XFlatParagraph> xFlatPara4(xFPIterator->getParaBefore(xFlatPara3));
     CPPUNIT_ASSERT_EQUAL(xFlatPara2->getText(), xFlatPara4->getText());
     //changing the attributes of last para
-    uno::Sequence<beans::PropertyValue> aDescriptor =
-    {
-        beans::PropertyValue("CharWeight", sal_Int32(0), uno::makeAny(float(css::awt::FontWeight::BOLD)), beans::PropertyState_DIRECT_VALUE)
-    };
+    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
+         { "CharWeight", uno::Any(float(css::awt::FontWeight::BOLD)) }
+    }));
     xFlatPara3->changeAttributes(sal_Int32(0), sal_Int32(5), aDescriptor);
     //checking Language Portions
     uno::Sequence<::sal_Int32> aLangPortions(xFlatPara4->getLanguagePortions());
@@ -1680,16 +1678,14 @@ void SwUiWriterTest::testTdf81995()
 void SwUiWriterTest::testExportToPicture()
 {
     createDoc();
-    uno::Sequence<beans::PropertyValue> aFilterData =
-    {
-        beans::PropertyValue("PixelWidth", sal_Int32(0), uno::makeAny(sal_Int32(610)), beans::PropertyState_DIRECT_VALUE),
-        beans::PropertyValue("PixelHeight", sal_Int32(0), uno::makeAny(sal_Int32(610)), beans::PropertyState_DIRECT_VALUE)
-    };
-    uno::Sequence<beans::PropertyValue> aDescriptor =
-    {
-        beans::PropertyValue("FilterName", sal_Int32(0), uno::makeAny(OUString("writer_png_Export")), beans::PropertyState_DIRECT_VALUE),
-        beans::PropertyValue("FilterData", sal_Int32(0), uno::makeAny(aFilterData), beans::PropertyState_DIRECT_VALUE)
-    };
+    uno::Sequence<beans::PropertyValue> aFilterData( comphelper::InitPropertySequence({
+        { "PixelWidth", uno::Any(sal_Int32(610)) },
+        { "PixelHeight", uno::Any(sal_Int32(610)) }
+    }));
+    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer_png_Export")) },
+        { "FilterData", uno::Any(aFilterData) }
+    }));
     utl::TempFile aTempFile;
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
@@ -1821,10 +1817,9 @@ void SwUiWriterTest::testTextSearch()
     uno::Reference<util::XSearchDescriptor> xSearchDes(xSearch->createSearchDescriptor(), uno::UNO_QUERY);
     uno::Reference<util::XPropertyReplace> xProp(xSearchDes, uno::UNO_QUERY);
     //setting some properties
-    uno::Sequence<beans::PropertyValue> aDescriptor =
-    {
-        beans::PropertyValue("CharWeight", sal_Int32(0), uno::makeAny(float(css::awt::FontWeight::BOLD)), beans::PropertyState_DIRECT_VALUE)
-    };
+    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
+        { "CharWeight", uno::Any(float(css::awt::FontWeight::BOLD)) }
+    }));
     xProp->setSearchAttributes(aDescriptor);
     //receiving the defined properties and asserting them with expected values, covering UNO
     uno::Sequence<beans::PropertyValue> aPropVal2(xProp->getSearchAttributes());
@@ -4589,10 +4584,9 @@ void SwUiWriterTest::testLandscape()
 {
     // Set page orientation to landscape.
     SwDoc* pDoc = createDoc();
-    uno::Sequence<beans::PropertyValue> aPropertyValues =
-    {
-        comphelper::makePropertyValue("AttributePage.Landscape", true),
-    };
+    uno::Sequence<beans::PropertyValue> aPropertyValues( comphelper::InitPropertySequence({
+        { "AttributePage.Landscape", uno::Any(true) }
+    }));
     lcl_dispatchCommand(mxComponent, ".uno:AttributePage", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
 

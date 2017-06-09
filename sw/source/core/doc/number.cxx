@@ -1025,10 +1025,7 @@ void SwNumRule::GetGrabBagItem(uno::Any& rVal) const
     if (mpGrabBagItem.get())
         mpGrabBagItem->QueryValue(rVal);
     else
-    {
-        uno::Sequence<beans::PropertyValue> aValue(0);
-        rVal <<= aValue;
-    }
+        rVal <<= uno::Sequence<beans::PropertyValue>();
 }
 
 void SwNumRule::SetGrabBagItem(const uno::Any& rVal)

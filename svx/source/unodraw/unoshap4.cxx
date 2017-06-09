@@ -29,6 +29,7 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdpool.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -395,9 +396,9 @@ bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     if( SvxShape::getPropertyValue( UNO_NAME_OLE2_PERSISTNAME ) >>= aTmpStr )
         aPersistName = aTmpStr;
 
-    uno::Sequence<beans::PropertyValue> objArgs(1);
-    objArgs[0].Name = "DefaultParentBaseURL";
-    objArgs[0].Value <<= pPersist->getDocumentBaseURL();
+    uno::Sequence<beans::PropertyValue> objArgs( comphelper::InitPropertySequence({
+            { "DefaultParentBaseURL", Any(pPersist->getDocumentBaseURL()) }
+        }));
     //TODO/LATER: how to cope with creation failure?!
     uno::Reference<embed::XEmbeddedObject> xObj(
         pPersist->getEmbeddedObjectContainer().CreateEmbeddedObject(
