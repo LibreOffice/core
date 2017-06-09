@@ -420,6 +420,28 @@ inline  void SwRootFrame::SetVirtPageNum( const bool bOf) const
     const_cast<SwRootFrame*>(this)->mbIsVirtPageNum = bOf;
 }
 
+/// helper class to disable creation of an action by a callback event
+/// in particular, change event from a drawing object (SwDrawContact::Changed())
+class DisableCallbackAction
+{
+    private:
+        SwRootFrame & m_rRootFrame;
+        bool m_bOldCallbackActionState;
+
+    public:
+        explicit DisableCallbackAction(SwRootFrame & rRootFrame)
+            : m_rRootFrame(rRootFrame)
+            , m_bOldCallbackActionState(rRootFrame.IsCallbackActionEnabled())
+        {
+            m_rRootFrame.SetCallbackActionEnabled(false);
+        }
+
+        ~DisableCallbackAction()
+        {
+            m_rRootFrame.SetCallbackActionEnabled(m_bOldCallbackActionState);
+        }
+};
+
 #endif // INCLUDED_SW_SOURCE_CORE_INC_ROOTFRM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

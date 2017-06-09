@@ -3234,6 +3234,8 @@ SwFrame* GetFrameOfModify( const SwRootFrame* pLayout, SwModify const& rMod, SwF
 
                     if( bCalcFrame )
                     {
+                        // tdf#108118 prevent recursion
+                        DisableCallbackAction a(*pTmpFrame->getRootFrame());
                         // - format parent Writer
                         // fly frame, if it isn't been formatted yet.
                         // Note: The Writer fly frame could be the frame itself.
