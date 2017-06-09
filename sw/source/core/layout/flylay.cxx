@@ -800,7 +800,7 @@ void SwPageFrame::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
         static_cast<SwRootFrame*>(GetUpper())->InvalidateBrowseWidth();
     }
 
-    OSL_ENSURE( _rNewObj.GetAnchorFrame(), "anchored draw object without anchor" );
+    assert(_rNewObj.GetAnchorFrame());
     SwFlyFrame* pFlyFrame = const_cast<SwFlyFrame*>(_rNewObj.GetAnchorFrame()->FindFlyFrame());
     if ( pFlyFrame &&
          _rNewObj.GetDrawObj()->GetOrdNum() < pFlyFrame->GetVirtDrawObj()->GetOrdNum() )
