@@ -519,6 +519,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_endnoteStyle, "tdf82173_endnoteStyle.docx"
     CPPUNIT_ASSERT_EQUAL( 24.0f, getProperty< float >(xEndnote->getAnchor(), "CharHeight") );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFF0000), getProperty< sal_Int32 >(xEndnote->getAnchor(), "CharColor") );
 
+    uno::Reference<text::XText> xEndnoteText;
+    xEndnotes->getByIndex(0) >>= xEndnoteText;
+    // This was Footnote Symbol
+    CPPUNIT_ASSERT_EQUAL(OUString("Endnote"), getProperty<OUString>(getParagraphOfText(1, xEndnoteText), "ParaStyleName"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x993300), getProperty<sal_Int32>(getParagraphOfText(1, xEndnoteText), "CharColor"));
+
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("CharacterStyles")->getByName("Endnote Characters"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(58),       getProperty< sal_Int32 >(xPageStyle, "CharEscapementHeight") );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0xFF00FF), getProperty< sal_Int32 >(xPageStyle, "CharColor") );

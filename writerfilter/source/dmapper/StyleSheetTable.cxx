@@ -1385,6 +1385,7 @@ static const sal_Char* const aStyleNamePairs[] =
     "Line Number",               "Line numbering",
     "Page Number",               "Page Number",
     "Endnote Reference",         "Endnote Characters",
+    "endnote text",              "Endnote",
     "Endnote Text",              "Endnote Symbol",
     "Table of Authorities",      "",
     "Macro Text",                "",
