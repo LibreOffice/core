@@ -152,10 +152,9 @@ void PdfExportTest::testTdf106059()
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     // Explicitly enable the usage of the reference XObject markup.
-    uno::Sequence<beans::PropertyValue> aFilterData =
-    {
-        comphelper::makePropertyValue("UseReferenceXObject", true)
-    };
+    uno::Sequence<beans::PropertyValue> aFilterData( comphelper::InitPropertySequence({
+        {"UseReferenceXObject", uno::Any(true) }
+    }));
     aMediaDescriptor["FilterData"] <<= aFilterData;
     xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
 

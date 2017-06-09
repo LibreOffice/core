@@ -28,6 +28,7 @@
 #include <com/sun/star/util/MalformedNumberFormatException.hpp>
 #include <com/sun/star/util/NotNumericException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "numfmuno.hxx"
@@ -807,35 +808,21 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
         pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );
         lang::Locale aLocale( LanguageTag( pFormat->GetLanguage()).getLocale());
 
-        uno::Sequence<beans::PropertyValue> aSeq(13);
-        beans::PropertyValue* pArray = aSeq.getArray();
-
-        pArray[0].Name = PROPERTYNAME_FMTSTR;
-        pArray[0].Value <<= aFmtStr;
-        pArray[1].Name = PROPERTYNAME_LOCALE;
-        pArray[1].Value <<= aLocale;
-        pArray[2].Name = PROPERTYNAME_TYPE;
-        pArray[2].Value <<= (sal_Int16)( pFormat->GetType() );
-        pArray[3].Name = PROPERTYNAME_COMMENT;
-        pArray[3].Value <<= aComment;
-        pArray[4].Name = PROPERTYNAME_STDFORM;
-        pArray[4].Value <<= bStandard;
-        pArray[5].Name = PROPERTYNAME_USERDEF;
-        pArray[5].Value <<= bUserDef;
-        pArray[6].Name = PROPERTYNAME_DECIMALS;
-        pArray[6].Value <<= (sal_Int16)( nDecimals );
-        pArray[7].Name = PROPERTYNAME_LEADING;
-        pArray[7].Value <<= (sal_Int16)( nLeading );
-        pArray[8].Name = PROPERTYNAME_NEGRED;
-        pArray[8].Value <<= bRed;
-        pArray[9].Name = PROPERTYNAME_THOUS;
-        pArray[9].Value <<= bThousand;
-        pArray[10].Name = PROPERTYNAME_CURRSYM;
-        pArray[10].Value <<= aSymbol;
-        pArray[11].Name = PROPERTYNAME_CURREXT;
-        pArray[11].Value <<= aExt;
-        pArray[12].Name = PROPERTYNAME_CURRABB;
-        pArray[12].Value <<= aAbb;
+        uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
+                { PROPERTYNAME_FMTSTR, uno::Any(aFmtStr) },
+                { PROPERTYNAME_LOCALE, uno::Any(aLocale) },
+                { PROPERTYNAME_TYPE, uno::Any(sal_Int16( pFormat->GetType() )) },
+                { PROPERTYNAME_COMMENT, uno::Any(aComment) },
+                { PROPERTYNAME_STDFORM, uno::Any(bStandard) },
+                { PROPERTYNAME_USERDEF, uno::Any(bUserDef) },
+                { PROPERTYNAME_DECIMALS, uno::Any(sal_Int16( nDecimals )) },
+                { PROPERTYNAME_LEADING, uno::Any(sal_Int16( nLeading )) },
+                { PROPERTYNAME_NEGRED, uno::Any(bRed) },
+                { PROPERTYNAME_THOUS, uno::Any(bThousand) },
+                { PROPERTYNAME_CURRSYM, uno::Any(aSymbol) },
+                { PROPERTYNAME_CURREXT, uno::Any(aExt) },
+                { PROPERTYNAME_CURRABB, uno::Any(aAbb) }
+            }));
 
         return aSeq;
     }

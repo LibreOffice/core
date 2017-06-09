@@ -23,6 +23,7 @@
 #include <tools/urlobj.hxx>
 #include <svl/converter.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>
@@ -140,11 +141,10 @@ namespace
                 aCharSetStr = OUString::createFromAscii( pIanaName );
         }
 
-        uno::Sequence<beans::PropertyValue> aProps(2);
-        aProps[0].Name = SC_DBPROP_EXTENSION;
-        aProps[0].Value <<= aExtension;
-        aProps[1].Name = SC_DBPROP_CHARSET;
-        aProps[1].Value <<= aCharSetStr;
+        uno::Sequence<beans::PropertyValue> aProps( comphelper::InitPropertySequence({
+                { SC_DBPROP_EXTENSION, uno::Any(aExtension) },
+                { SC_DBPROP_CHARSET, uno::Any(aCharSetStr) }
+            }));
 
         _rConnection = _rDrvMgr->getConnectionWithInfo( aConnUrl, aProps );
         return 0L;

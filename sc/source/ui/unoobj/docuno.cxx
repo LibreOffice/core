@@ -34,6 +34,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <svl/numuno.hxx>
@@ -1644,10 +1645,9 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
             Size aTwips = aDefaultFunc.GetPageSize();
             awt::Size aPageSize( TwipsToHMM( aTwips.Width() ), TwipsToHMM( aTwips.Height() ) );
 
-            uno::Sequence<beans::PropertyValue> aSequence(1);
-            beans::PropertyValue* pArray = aSequence.getArray();
-            pArray[0].Name = SC_UNONAME_PAGESIZE;
-            pArray[0].Value <<= aPageSize;
+            uno::Sequence<beans::PropertyValue> aSequence( comphelper::InitPropertySequence({
+                { SC_UNONAME_PAGESIZE, uno::Any(aPageSize) }
+            }));
 
             if( ! pPrinterOptions )
                 pPrinterOptions = new ScPrintUIOptions;

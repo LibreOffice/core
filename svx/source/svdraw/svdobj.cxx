@@ -787,10 +787,8 @@ void SdrObject::GetGrabBagItem(css::uno::Any& rVal) const
 {
     if (pGrabBagItem != nullptr)
         pGrabBagItem->QueryValue(rVal);
-    else {
-        uno::Sequence<beans::PropertyValue> aValue(0);
-        rVal <<= aValue;
-    }
+    else
+        rVal <<= uno::Sequence<beans::PropertyValue>();
 }
 
 void SdrObject::SetGrabBagItem(const css::uno::Any& rVal)

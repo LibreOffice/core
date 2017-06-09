@@ -84,6 +84,7 @@
 #include <filter/msfilter/util.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 using namespace ::com::sun::star;
@@ -951,11 +952,9 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
             // will be ignored.
             aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BACK_COLOR_TRANSPARENCY), sal_Int32(100)));
 
-            beans::PropertyValue aRet;
-            uno::Sequence<beans::PropertyValue> aGrabBag(1);
-            aRet.Name = "ParaFrameProperties";
-            aRet.Value <<= rAppendContext.pLastParagraphProperties->IsFrameMode();
-            aGrabBag[0] = aRet;
+            uno::Sequence<beans::PropertyValue> aGrabBag( comphelper::InitPropertySequence({
+                    { "ParaFrameProperties", uno::Any(rAppendContext.pLastParagraphProperties->IsFrameMode()) }
+            }));
             aFrameProperties.push_back(comphelper::makePropertyValue("FrameInteropGrabBag", aGrabBag));
 
             lcl_MoveBorderPropertiesToFrame(aFrameProperties,
@@ -2066,11 +2065,9 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         xPropSetInfo = xShapePropertySet->getPropertySetInfo();
                         if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("InteropGrabBag"))
                         {
-                            uno::Sequence<beans::PropertyValue> aShapeGrabBag(1);
-                            beans::PropertyValue aRet;
-                            aRet.Name = "SdtEndBefore";
-                            aRet.Value <<= true;
-                            aShapeGrabBag[0] = aRet;
+                            uno::Sequence<beans::PropertyValue> aShapeGrabBag( comphelper::InitPropertySequence({
+                                { "SdtEndBefore", uno::Any(true) }
+                            }));
                             xShapePropertySet->setPropertyValue("InteropGrabBag",uno::makeAny(aShapeGrabBag));
                         }
                     }
@@ -4314,13 +4311,10 @@ void DomainMapper_Impl::CloseFieldCommand()
                                   uno::UNO_QUERY_THROW);
                         OUString sCmd(pContext->GetCommand());//sCmd is the entire instrText inclusing the index e.g. CITATION Kra06 \l 1033
                         if( !sCmd.isEmpty()){
-                            uno::Sequence<beans::PropertyValue> aValues(1);
-                            beans::PropertyValue propertyVal;
-                            propertyVal.Name = "Identifier";
-                            propertyVal.Value <<= sCmd;
-                            aValues[0] = propertyVal;
-                                    xTC->setPropertyValue("Fields",
-                                            uno::makeAny(aValues));
+                            uno::Sequence<beans::PropertyValue> aValues( comphelper::InitPropertySequence({
+                                { "Identifier", uno::Any(sCmd) }
+                            }));
+                            xTC->setPropertyValue("Fields", uno::makeAny(aValues));
                         }
                         uno::Reference< text::XTextContent > xToInsert( xTC, uno::UNO_QUERY );
 
@@ -4931,11 +4925,9 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference< Properties
         {
             if (bHasGrabBag)
             {
-                uno::Sequence<beans::PropertyValue> aFrameGrabBag(1);
-                beans::PropertyValue aRet;
-                aRet.Name = "SdtEndBefore";
-                aRet.Value <<= true;
-                aFrameGrabBag[0] = aRet;
+                uno::Sequence<beans::PropertyValue> aFrameGrabBag( comphelper::InitPropertySequence({
+                    { "SdtEndBefore", uno::Any(true) }
+                }));
                 xPropertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aFrameGrabBag));
             }
         }

@@ -13,6 +13,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -767,11 +768,9 @@ void Test::testSkipImages()
         if (bSkipImages)
         {
             // FilterOptions parameter
-            uno::Sequence<beans::PropertyValue> args(1);
-            args[0].Name = "FilterOptions";
-            args[0].Handle = -1;
-            args[0].Value <<= OUString::createFromAscii(aFilterNames[nFilter][1]);
-            args[0].State = beans::PropertyState_DIRECT_VALUE;
+            uno::Sequence<beans::PropertyValue> args( comphelper::InitPropertySequence({
+                    { "FilterOptions", uno::Any(OUString::createFromAscii(aFilterNames[nFilter][1])) }
+            }));
             mxComponent = loadFromDesktop(m_directories.getURLFromSrc(aFilterNames[nFilter][0]), "com.sun.star.text.TextDocument", args);
             sFailedMessage = sFailedMessage + " - " + aFilterNames[nFilter][1];
         } else

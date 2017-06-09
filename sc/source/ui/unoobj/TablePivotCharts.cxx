@@ -23,6 +23,7 @@
 #include <svx/charthelper.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/classids.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/globname.hxx>
@@ -145,10 +146,11 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
                 uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(m_pDocShell->GetModel(), uno::UNO_QUERY);
                 xReceiver->attachNumberFormatsSupplier(xNumberFormatsSupplier);
 
-                uno::Sequence<beans::PropertyValue> aArgs(3);
-                aArgs[0] = beans::PropertyValue("CellRangeRepresentation", -1, uno::makeAny(rDataPilotName), beans::PropertyState_DIRECT_VALUE);
-                aArgs[1] = beans::PropertyValue("HasCategories", -1, uno::makeAny(true), beans::PropertyState_DIRECT_VALUE);
-                aArgs[2] = beans::PropertyValue("DataRowSource", -1, uno::makeAny(chart::ChartDataRowSource_COLUMNS), beans::PropertyState_DIRECT_VALUE);
+                uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+                        { "CellRangeRepresentation", uno::makeAny(rDataPilotName) },
+                        { "HasCategories", uno::makeAny(true) },
+                        { "DataRowSource", uno::makeAny(chart::ChartDataRowSource_COLUMNS) }
+                    }));
                 xReceiver->setArguments(aArgs);
             }
 

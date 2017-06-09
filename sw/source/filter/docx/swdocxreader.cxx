@@ -27,6 +27,7 @@
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <docsh.hxx>
 #include <IDocumentStylePoolAccess.hxx>
@@ -83,11 +84,10 @@ bool SwDOCXReader::ReadGlossaries( SwTextBlocks& rBlocks, bool /* bSaveRelFiles 
 
         uno::Reference<io::XStream> xStream( new utl::OStreamWrapper( *pMedium->GetInStream() ) );
 
-        uno::Sequence<beans::PropertyValue> aDescriptor( 2 );
-        aDescriptor[0].Name = "InputStream";
-        aDescriptor[0].Value <<= xStream;
-        aDescriptor[1].Name = "ReadGlossaries";
-        aDescriptor[1].Value <<= true;
+        uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
+                { "InputStream", uno::Any(xStream) },
+                { "ReadGlossaries", uno::Any(true) }
+            }));
 
         if( xFilter->filter( aDescriptor ) )
             return MakeEntries( static_cast<SwDocShell*>( &xDocSh )->GetDoc(), rBlocks );

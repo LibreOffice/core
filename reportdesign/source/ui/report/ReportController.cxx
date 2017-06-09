@@ -34,6 +34,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <connectivity/dbtools.hxx>
@@ -3004,11 +3005,10 @@ void OReportController::insertGraphic()
         {
             bool bLink = true;
             xController->getValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bLink;
-            uno::Sequence<beans::PropertyValue> aArgs(2);
-            aArgs[0].Name = PROPERTY_IMAGEURL;
-            aArgs[0].Value <<= aDialog.GetPath();
-            aArgs[1].Name = PROPERTY_PRESERVEIRI;
-            aArgs[1].Value <<= bLink;
+            uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+                    { PROPERTY_IMAGEURL, Any(aDialog.GetPath()) },
+                    { PROPERTY_PRESERVEIRI, Any(bLink) }
+                }));
             createControl(aArgs,xSection,OUString(),OBJ_DLG_IMAGECONTROL);
         }
     }

@@ -24,6 +24,7 @@
 #include <sot/storage.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svtools/sfxecode.hxx>
@@ -747,10 +748,9 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
     if (pMedium)
         sFileName = pMedium->GetName();
     SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
-    uno::Sequence<beans::PropertyValue> aDescriptor(1);
-    beans::PropertyValue* pProps = aDescriptor.getArray();
-    pProps[0].Name = "FileName";
-    pProps[0].Value <<= sFileName;
+    uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
+            { "FileName", uno::Any(sFileName) }
+        }));
 
     /** property map for export info set */
     comphelper::PropertyMapEntry const aExportInfoMap[] =

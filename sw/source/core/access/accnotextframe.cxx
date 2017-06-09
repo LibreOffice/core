@@ -255,8 +255,7 @@ sal_Bool SAL_CALL SwAccessibleNoTextFrame::setCaretPosition( sal_Int32 ){return 
 sal_Unicode SAL_CALL SwAccessibleNoTextFrame::getCharacter( sal_Int32 ){return 0;}
 css::uno::Sequence< css::beans::PropertyValue > SAL_CALL SwAccessibleNoTextFrame::getCharacterAttributes( sal_Int32 , const css::uno::Sequence< OUString >& )
 {
-    uno::Sequence<beans::PropertyValue> aValues(0);
-    return aValues;
+    return uno::Sequence<beans::PropertyValue>();
 }
 css::awt::Rectangle SAL_CALL SwAccessibleNoTextFrame::getCharacterBounds( sal_Int32 )
 {

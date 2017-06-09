@@ -51,6 +51,7 @@
 #include <uistrings.hrc>
 #include "UndoEnv.hxx"
 #include <RptModel.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <tools/diagnose_ex.h>
 
 #define DEFAUL_MOVE_SIZE    100
@@ -169,9 +170,9 @@ bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
         if ( rMEvt.GetClicks() > 1 )
         {
             // show property browser
-            uno::Sequence<beans::PropertyValue> aArgs(1);
-            aArgs[0].Name = "ShowProperties";
-            aArgs[0].Value <<= true;
+            uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+                    { "ShowProperties", uno::Any(true) }
+                }));
             m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController().executeUnChecked(SID_SHOW_PROPERTYBROWSER,aArgs);
             m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_rView);
             // TODO character in shapes

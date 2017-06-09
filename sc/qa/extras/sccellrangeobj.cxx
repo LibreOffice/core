@@ -120,14 +120,13 @@ void ScCellRangeObj::testSortOOB()
     uno::Sequence<beans::PropertyValue> aEmptyDescriptor;
     xSortable->sort(aEmptyDescriptor);
 
-    uno::Sequence<beans::PropertyValue> aProps(1);
     uno::Sequence<util::SortField> aSort(1);
-
     aSort[0].Field = 0xffffff;
     aSort[0].SortAscending = true;
 
-    aProps[0].Name = "SortFields";
-    aProps[0].Value <<= aSort;
+    uno::Sequence<beans::PropertyValue> aProps( comphelper::InitPropertySequence({
+            { "SortFields", Any(aSort) }
+        }));
 
     xSortable->sort(aProps);
 }

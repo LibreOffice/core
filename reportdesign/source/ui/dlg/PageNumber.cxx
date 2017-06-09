@@ -29,6 +29,7 @@
 #include "UITools.hxx"
 #include "uistrings.hrc"
 #include "ReportController.hxx"
+#include <comphelper/propertysequence.hxx>
 #include <algorithm>
 
 namespace rptui
@@ -108,16 +109,11 @@ short OPageNumberDialog::Execute()
             if ( m_pAlignmentLst->GetSelectEntryPos() > 2 )
                 nPosX = nPos2X;
 
-            sal_Int32 nLength = 0;
-            uno::Sequence<beans::PropertyValue> aValues( 3 );
-            aValues[nLength].Name = PROPERTY_POSITION;
-            aValues[nLength++].Value <<= awt::Point(nPosX,0);
-
-            aValues[nLength].Name = PROPERTY_PAGEHEADERON;
-            aValues[nLength++].Value <<= m_pTopPage->IsChecked();
-
-            aValues[nLength].Name = PROPERTY_STATE;
-            aValues[nLength++].Value <<= m_pPageNofM->IsChecked();
+            uno::Sequence<beans::PropertyValue> aValues( comphelper::InitPropertySequence({
+                    { PROPERTY_POSITION, uno::Any(awt::Point(nPosX,0)) },
+                    { PROPERTY_PAGEHEADERON, uno::Any(m_pTopPage->IsChecked()) },
+                    { PROPERTY_STATE, uno::Any(m_pPageNofM->IsChecked()) }
+                }));
 
             m_pController->executeChecked(SID_INSERT_FLD_PGNUMBER,aValues);
         }

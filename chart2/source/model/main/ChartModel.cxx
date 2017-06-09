@@ -41,6 +41,7 @@
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <svl/numuno.hxx>
@@ -744,25 +745,12 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
                 xIni->initialize(aArgs);
             }
             //create data
-            uno::Sequence<beans::PropertyValue> aArgs(4);
-            aArgs[0] = beans::PropertyValue(
-                "CellRangeRepresentation", -1,
-                uno::Any( OUString("all") ), beans::PropertyState_DIRECT_VALUE );
-            aArgs[1] = beans::PropertyValue(
-                "HasCategories",
-                -1,
-                uno::Any( true ),
-                beans::PropertyState_DIRECT_VALUE );
-            aArgs[2] = beans::PropertyValue(
-                "FirstCellAsLabel",
-                -1,
-                uno::Any( true ),
-                beans::PropertyState_DIRECT_VALUE );
-            aArgs[3] = beans::PropertyValue(
-                "DataRowSource",
-                -1,
-                uno::Any( css::chart::ChartDataRowSource_COLUMNS ),
-                beans::PropertyState_DIRECT_VALUE );
+            uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
+                { "CellRangeRepresentation", uno::Any( OUString("all") ) },
+                { "HasCategories", uno::Any( true ) },
+                { "FirstCellAsLabel", uno::Any( true ) },
+                { "DataRowSource", uno::Any( css::chart::ChartDataRowSource_COLUMNS ) }
+                }));
             xDataSource = m_xInternalDataProvider->createDataSource( aArgs );
         }
     }

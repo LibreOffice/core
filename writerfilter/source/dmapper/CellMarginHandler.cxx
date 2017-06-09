@@ -20,6 +20,7 @@
 #include <PropertyMap.hxx>
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 
 namespace writerfilter {
@@ -76,17 +77,18 @@ void CellMarginHandler::createGrabBag(const OUString& aName)
     beans::PropertyValue aRet;
     aRet.Name = aName;
 
-    uno::Sequence<beans::PropertyValue> aSeq(2);
-    aSeq[0].Name = "w";
-    aSeq[0].Value <<= m_nWidth;
-    aSeq[1].Name = "type";
+    OUString sType;
     switch (m_nType)
     {
-        case NS_ooxml::LN_Value_ST_TblWidth_nil: aSeq[1].Value <<= OUString("nil"); break;
-        case NS_ooxml::LN_Value_ST_TblWidth_pct: aSeq[1].Value <<= OUString("pct"); break;
-        case NS_ooxml::LN_Value_ST_TblWidth_dxa: aSeq[1].Value <<= OUString("dxa"); break;
-        case NS_ooxml::LN_Value_ST_TblWidth_auto: aSeq[1].Value <<= OUString("auto"); break;
+        case NS_ooxml::LN_Value_ST_TblWidth_nil: sType = "nil"; break;
+        case NS_ooxml::LN_Value_ST_TblWidth_pct: sType = "pct"; break;
+        case NS_ooxml::LN_Value_ST_TblWidth_dxa: sType = "dxa"; break;
+        case NS_ooxml::LN_Value_ST_TblWidth_auto: sType = "auto"; break;
     }
+    uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
+        { "w", uno::Any(m_nWidth) },
+        { "type", uno::Any(sType) }
+    }));
 
     aRet.Value <<= aSeq;
     m_aInteropGrabBag.push_back(aRet);

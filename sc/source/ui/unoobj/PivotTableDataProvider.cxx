@@ -26,6 +26,7 @@
 
 #include <vcl/svapp.hxx>
 #include <sfx2/objsh.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
@@ -699,26 +700,15 @@ uno::Reference<chart2::data::XDataSource>
 uno::Sequence<beans::PropertyValue> SAL_CALL PivotTableDataProvider::detectArguments(
             const uno::Reference<chart2::data::XDataSource> & xDataSource)
 {
-    uno::Sequence<beans::PropertyValue> aArguments;
-
     if (!m_pDocument ||!xDataSource.is())
-        return aArguments;
+        return uno::Sequence<beans::PropertyValue>();
 
-    aArguments.realloc(4);
-
-    aArguments[0] = beans::PropertyValue("CellRangeRepresentation", -1, uno::Any(OUString("PivotChart")),
-                    beans::PropertyState_DIRECT_VALUE);
-
-    aArguments[1] = beans::PropertyValue("DataRowSource", -1, uno::Any(chart::ChartDataRowSource_COLUMNS),
-                    beans::PropertyState_DIRECT_VALUE);
-
-    aArguments[2] = beans::PropertyValue("FirstCellAsLabel", -1, uno::Any(false),
-                    beans::PropertyState_DIRECT_VALUE);
-
-    aArguments[3] = beans::PropertyValue("HasCategories", -1, uno::Any(true),
-                    beans::PropertyState_DIRECT_VALUE);
-
-    return aArguments;
+    return comphelper::InitPropertySequence({
+        { "CellRangeRepresentation", uno::Any(OUString("PivotChart")) },
+        { "DataRowSource", uno::Any(chart::ChartDataRowSource_COLUMNS) },
+        { "FirstCellAsLabel", uno::Any(false) },
+        { "HasCategories", uno::Any(true) }
+    });
 }
 
 sal_Bool SAL_CALL PivotTableDataProvider::createDataSequenceByRangeRepresentationPossible(const OUString& /*aRangeRepresentation*/)

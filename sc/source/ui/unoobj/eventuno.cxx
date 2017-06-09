@@ -22,6 +22,7 @@
 #include "docsh.hxx"
 #include "sheetevents.hxx"
 #include "unonames.hxx"
+#include <comphelper/propertysequence.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -132,13 +133,10 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
     uno::Any aRet;
     if (pScript)
     {
-        uno::Sequence<beans::PropertyValue> aPropSeq( 2 );
-        aPropSeq[0] = beans::PropertyValue(
-                        "EventType", -1,
-                        uno::makeAny( OUString("Script") ), beans::PropertyState_DIRECT_VALUE );
-        aPropSeq[1] = beans::PropertyValue(
-                        "Script", -1,
-                        uno::makeAny( *pScript ), beans::PropertyState_DIRECT_VALUE );
+        uno::Sequence<beans::PropertyValue> aPropSeq( comphelper::InitPropertySequence({
+                { "EventType", uno::Any( OUString("Script") ) },
+                { "Script", uno::Any( *pScript ) }
+            }));
         aRet <<= aPropSeq;
     }
     // empty Any if nothing was set

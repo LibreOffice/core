@@ -33,6 +33,7 @@
 #include <com/sun/star/sheet/XSheetCondition.hpp>
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include <comphelper/extract.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <sfx2/app.hxx>
 #include <o3tl/make_unique.hxx>
 
@@ -411,15 +412,11 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                             bool bScriptURL = SfxApplication::IsXScriptURL( aItr->sErrorTitle );
 
                             const OUString sScript("Script");
-                            uno::Sequence<beans::PropertyValue> aSeq(3);
-                            beans::PropertyValue* pArr(aSeq.getArray());
-                            pArr[0].Name = "EventType";
-                            pArr[0].Value <<= bScriptURL ? sScript : OUString("StarBasic");
-                            pArr[1].Name = "Library";
-                            pArr[1].Value <<= OUString();
-                            pArr[2].Name = bScriptURL ? sScript : OUString("MacroName");
-                            pArr[2].Value <<= aItr->sErrorTitle;
-
+                            uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
+                                    { "EventType", uno::Any(bScriptURL ? sScript : OUString("StarBasic")) },
+                                    { "Library", uno::Any(OUString()) },
+                                    { bScriptURL ? sScript : OUString("MacroName"), uno::Any(aItr->sErrorTitle) }
+                                }));
                             // 2) export the sequence
                             rExport.GetEventExport().ExportSingleEvent( aSeq, "OnError");
                         }

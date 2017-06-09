@@ -35,6 +35,7 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <svx/svdtrans.hxx>
+#include <comphelper/propertysequence.hxx>
 
 namespace oox {
 namespace vml {
@@ -864,15 +865,12 @@ TextpathModel::TextpathModel()
 
 beans::PropertyValue lcl_createTextpathProps()
 {
-    uno::Sequence<beans::PropertyValue> aTextpathPropSeq(4);
-    aTextpathPropSeq[0].Name = "TextPath";
-    aTextpathPropSeq[0].Value <<= true;
-    aTextpathPropSeq[1].Name = "TextPathMode";
-    aTextpathPropSeq[1].Value <<= drawing::EnhancedCustomShapeTextPathMode_SHAPE;
-    aTextpathPropSeq[2].Name = "ScaleX";
-    aTextpathPropSeq[2].Value <<= false;
-    aTextpathPropSeq[3].Name = "SameLetterHeights";
-    aTextpathPropSeq[3].Value <<= false;
+    uno::Sequence<beans::PropertyValue> aTextpathPropSeq( comphelper::InitPropertySequence({
+            { "TextPath", uno::Any(true) },
+            { "TextPathMode", uno::Any(drawing::EnhancedCustomShapeTextPathMode_SHAPE) },
+            { "ScaleX", uno::Any(false) },
+            { "SameLetterHeights", uno::Any(false) }
+        }));
 
     beans::PropertyValue aRet;
     aRet.Name = "TextPath";
