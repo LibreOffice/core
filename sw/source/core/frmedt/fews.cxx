@@ -116,9 +116,13 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
         case CurRectType::Page :    pFrame = pFrame->FindPageFrame();
                                     break;
 
-        case CurRectType::PageCalc:pFrame->Calc(Imp()->GetShell()->GetOut());
+        case CurRectType::PageCalc:
+                                {
+                                    DisableCallbackAction a(const_cast<SwRootFrame&>(*pFrame->getRootFrame()));
+                                    pFrame->Calc(Imp()->GetShell()->GetOut());
                                     pFrame = pFrame->FindPageFrame();
                                     pFrame->Calc(Imp()->GetShell()->GetOut());
+                                }
                                     break;
 
         case CurRectType::FlyEmbeddedPrt:

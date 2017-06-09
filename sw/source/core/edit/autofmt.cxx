@@ -250,6 +250,7 @@ SwTextFrame* SwAutoFormat::GetFrame( const SwTextNode& rTextNd ) const
     OSL_ENSURE( pFrame, "For Autoformat a Layout is needed" );
     if( m_aFlags.bAFormatByInput && !pFrame->IsValid() )
     {
+        DisableCallbackAction a(const_cast<SwRootFrame&>(*pFrame->getRootFrame()));
         SwRect aTmpFrame( pFrame->Frame() );
         SwRect aTmpPrt( pFrame->Prt() );
         pFrame->Calc(pFrame->getRootFrame()->GetCurrShell()->GetOut());

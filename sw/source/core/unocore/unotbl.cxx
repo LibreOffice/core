@@ -616,6 +616,7 @@ static bool lcl_FormatTable(SwFrameFormat* pTableFormat)
         // mba: no TYPEINFO for SwTabFrame
         if(!pFrame->IsTabFrame())
             continue;
+        DisableCallbackAction a(*pFrame->getRootFrame());
         SwTabFrame* pTabFrame = static_cast<SwTabFrame*>(pFrame);
         if(pTabFrame->IsValid())
             pTabFrame->InvalidatePos();

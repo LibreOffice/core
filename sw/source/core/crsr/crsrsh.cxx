@@ -1541,15 +1541,18 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 
             SwCursorMoveState aTmpState( MV_NONE );
             aTmpState.m_bRealHeight = true;
-            if( !pTableFrame->GetCharRect( m_aCharRect, *m_pTableCursor->GetPoint(), &aTmpState ) )
             {
-                Point aCentrPt( m_aCharRect.Center() );
-                aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
-                pTableFrame->GetCursorOfst( m_pTableCursor->GetPoint(), aCentrPt, &aTmpState );
-                bool const bResult =
-                    pTableFrame->GetCharRect( m_aCharRect, *m_pTableCursor->GetPoint() );
-                OSL_ENSURE( bResult, "GetCharRect failed." );
-                (void) bResult; // non-debug: unused
+                DisableCallbackAction a(*GetLayout());
+                if (!pTableFrame->GetCharRect( m_aCharRect, *m_pTableCursor->GetPoint(), &aTmpState))
+                {
+                    Point aCentrPt( m_aCharRect.Center() );
+                    aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
+                    pTableFrame->GetCursorOfst(m_pTableCursor->GetPoint(), aCentrPt, &aTmpState);
+                    bool const bResult =
+                        pTableFrame->GetCharRect(m_aCharRect, *m_pTableCursor->GetPoint());
+                    OSL_ENSURE( bResult, "GetCharRect failed." );
+                    (void) bResult; // non-debug: unused
+                }
             }
 
             m_pVisibleCursor->Hide(); // always hide visible Cursor
@@ -1804,6 +1807,7 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
 
         if( !(eFlags & SwCursorShell::UPDOWN ))   // delete old Pos. of Up/Down
         {
+            DisableCallbackAction a(*GetLayout());
             pFrame->Calc(GetOut());
             m_nUpDownX = pFrame->IsVertical() ?
                        m_aCharRect.Top() - pFrame->Frame().Top() :
