@@ -122,7 +122,6 @@ private:
     ChangeType          mnGradientListState;
     ChangeType          mnHatchingListState;
 
-    sal_Int16           mnPos;
     PageType            mnPageType;
     bool                mbAreaTP;
 
@@ -257,7 +256,6 @@ private:
     ChangeType*         m_pnHatchingListState;
 
     PageType            m_nPageType;
-    sal_Int32           m_nPos;
     sal_uInt16          m_nDlgType;
     bool*               m_pbAreaTP;
 
@@ -296,7 +294,6 @@ public:
     void    SetDrawModel( SdrModel* pModel ) { mpDrawModel = pModel; }
     void    SetPageType( PageType nInType ) { m_nPageType = nInType; }
     void    SetDlgType( sal_uInt16 nInType ) { m_nDlgType = nInType; }
-    void    SetPos( sal_uInt16 nInPos ) { m_nPos = nInPos; }
     void    SetAreaTP( bool* pIn ) { m_pbAreaTP = pIn; }
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
     void    CreatePage(sal_Int32 nId, SfxTabPage* pTab);
@@ -551,7 +548,6 @@ private:
 
     double                     m_fObjectWidth;
     double                     m_fObjectHeight;
-    sal_Int32*                 m_pPos;
 
     XFillAttrSetItem           m_aXFillAttr;
     SfxItemSet&                m_rXFSet;
@@ -594,7 +590,6 @@ public:
     virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
 
     void    SetBitmapList( const XBitmapListRef& pBmpLst) { m_pBitmapList = pBmpLst; }
-    void    SetPos( sal_Int32* pPos ) { m_pPos = pPos; }
     void    SetBmpChgd( ChangeType* pIn ) { m_pnBitmapListState = pIn; }
 };
 
@@ -623,7 +618,6 @@ private:
 
     ChangeType*         m_pnPatternListState;
     ChangeType*         m_pnColorListState;
-    sal_Int32*          m_pPos;
 
     XFillStyleItem      m_aXFStyleItem;
     XFillBitmapItem     m_aXPatternItem;
@@ -657,7 +651,6 @@ public:
 
     void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
     void    SetPatternList( XPatternListRef const & pPatternList) { m_pPatternList = pPatternList; }
-    void    SetPos( sal_Int32* pPos ) { m_pPos = pPos; }
     void    SetPtrnChgd( ChangeType* pIn ) { m_pnPatternListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
     void    ChangeColor_Impl();
