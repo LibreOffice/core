@@ -7904,7 +7904,7 @@ void Test::testFuncRowsHidden()
     m_pDoc->DeleteTab(0);
 }
 
-// Test SUMIFS in array context.
+// Test COUNTIFS, SUMIFS, AVERAGEIFS in array context.
 void Test::testFuncSUMIFS()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
@@ -7929,18 +7929,22 @@ void Test::testFuncSUMIFS()
 
     ScMarkData aMark;
     aMark.SelectOneTable(0);
-    // Matrix formula in C8:C10
+    // Matrix formula in C8:C10 with SUMIFS
     m_pDoc->InsertMatrixFormula(2, 7, 2, 9, aMark, "=SUMIFS(B1:B7;A1:A7;A9:A11)");
+    // Matrix formula in D8:D10 with COUNTIFS
+    m_pDoc->InsertMatrixFormula(3, 7, 3, 9, aMark, "=COUNTIFS(A1:A7;A9:A11)");
+    // Matrix formula in E8:E10 with AVERAGEIFS
+    m_pDoc->InsertMatrixFormula(4, 7, 4, 9, aMark, "=AVERAGEIFS(B1:B7;A1:A7;A9:A11)");
 
-    // Result B1+B5, B2+B6, B3+B7
+    // Result B1+B5, B2+B6, B3+B7 and counts and averages.
     std::vector<std::vector<const char*>> aCheck = {
-        { "17" },
-        { "34" },
-        { "68" }
+        { "17", "2",  "8.5" },
+        { "34", "2", "17" },
+        { "68", "2", "34" }
     };
 
-    bool bGood = checkOutput(m_pDoc, ScRange(2,7,0, 2,9,0), aCheck, "SUMIFS in array context");
-    CPPUNIT_ASSERT(bGood);
+    bool bGood = checkOutput(m_pDoc, ScRange(2,7,0, 4,9,0), aCheck, "COUNTIFS, SUMIFS and AVERAGEIFS in array context");
+    CPPUNIT_ASSERT_MESSAGE("COUNTIFS, SUMIFS or AVERAGEIFS in array context failed", bGood);
 
     m_pDoc->DeleteTab(0);
 }
