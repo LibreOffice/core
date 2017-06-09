@@ -266,6 +266,29 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
     }
 }
 
+sal_Int16 lcl_GetAngle(const drawing::HomogenMatrix3& rMatrix)
+{
+    basegfx::B2DHomMatrix aTransformation;
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate = 0;
+    double fShear = 0;
+
+    aTransformation.set(0, 0, rMatrix.Line1.Column1);
+    aTransformation.set(0, 1, rMatrix.Line1.Column2);
+    aTransformation.set(0, 2, rMatrix.Line1.Column3);
+    aTransformation.set(1, 0, rMatrix.Line2.Column1);
+    aTransformation.set(1, 1, rMatrix.Line2.Column2);
+    aTransformation.set(1, 2, rMatrix.Line2.Column3);
+    aTransformation.set(2, 0, rMatrix.Line3.Column1);
+    aTransformation.set(2, 1, rMatrix.Line3.Column2);
+    aTransformation.set(2, 2, rMatrix.Line3.Column3);
+
+    aTransformation.decompose(aScale, aTranslate, fRotate, fShear);
+    sal_Int16 nDeg = round(basegfx::rad2deg(fRotate));
+    return nDeg < 0 ? round(nDeg) * -1 : round(360.0 - nDeg);
+}
+
 SfxWatermarkItem SwEditShell::GetWatermark()
 {
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
@@ -311,13 +334,7 @@ SfxWatermarkItem SwEditShell::GetWatermark()
             if (xPropertySet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= nColor)
                 aItem.SetColor(nColor);
             if (xPropertySet->getPropertyValue("Transformation") >>= aMatrix)
-            {
-                double y = aMatrix.Line2.Column1;
-                double x = aMatrix.Line1.Column1;
-                double nRad = atan2(y, x) * -1;
-                double nDeg = nRad * 180.0 / F_PI;
-                aItem.SetAngle(nDeg);
-            }
+                aItem.SetAngle(lcl_GetAngle(aMatrix));
             if (xPropertySet->getPropertyValue(UNO_NAME_FILL_TRANSPARENCE) >>= nTransparency)
                 aItem.SetTransparency(nTransparency);
 
@@ -378,10 +395,7 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
             xPropertySet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= nColor;
             xPropertySet->getPropertyValue(UNO_NAME_FILL_TRANSPARENCE) >>= nTransparency;
             xPropertySet->getPropertyValue("Transformation") >>= aMatrix;
-            double y = aMatrix.Line2.Column1;
-            double x = aMatrix.Line1.Column1;
-            double nRad = atan2(y, x) * -1;
-            nAngle = nRad * 180.0 / F_PI;
+            nAngle = lcl_GetAngle(aMatrix);
 
             // If the header already contains a watermark, see if it its text is up to date.
             uno::Reference<text::XTextRange> xTextRange(xWatermark, uno::UNO_QUERY);
