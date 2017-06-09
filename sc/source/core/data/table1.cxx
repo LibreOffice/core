@@ -1380,6 +1380,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
         {
             std::unique_ptr<SCROW[]> pNextRows(new SCROW[MAXCOL+1]);
             SCCOL i;
+            const SCCOL nLastCol = aCol.size() - 1;
 
             if ( nMovX > 0 )                            //  forward
             {
@@ -1391,7 +1392,8 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
                     if ( bMarked )
                         nNextRow = rMark.GetNextMarked( nCol, nNextRow, false );
                     if ( bUnprotected )
-                        nNextRow = aCol[nCol].GetNextUnprotected( nNextRow, false );
+                        nNextRow = ( nCol <= nLastCol ) ? aCol[nCol].GetNextUnprotected( nNextRow, false ) :
+                            aDefaultColAttrArray.GetNextUnprotected( nNextRow, false );
                     pNextRows[nCol] = nNextRow;
 
                     SCROW nMinRow = MAXROW+1;
@@ -1424,7 +1426,8 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
                     if ( bMarked )
                         nNextRow = rMark.GetNextMarked( nCol, nNextRow, true );
                     if ( bUnprotected )
-                        nNextRow = aCol[nCol].GetNextUnprotected( nNextRow, true );
+                        nNextRow = ( nCol <= nLastCol ) ? aCol[nCol].GetNextUnprotected( nNextRow, true ) :
+                            aDefaultColAttrArray.GetNextUnprotected( nNextRow, true );
                     pNextRows[nCol] = nNextRow;
 
                     SCROW nMaxRow = -1;
@@ -1464,7 +1467,7 @@ bool ScTable::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMa
 {
     ++rRow;                 // next row
 
-    while ( rCol <= MAXCOL )
+    while ( rCol < aCol.size() )
     {
         ScMarkArray aArray( rMark.GetMarkArray( rCol ) );
         while ( rRow <= MAXROW )
@@ -1507,6 +1510,8 @@ bool ScTable::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMa
         ++rCol;                                 // test next column
     }
 
+    // Though searched only the allocated columns, it is equivalent to a search till MAXCOL.
+    rCol = MAXCOL + 1;
     return false;                               // Through all columns
 }
 
