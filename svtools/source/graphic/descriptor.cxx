@@ -55,7 +55,7 @@ namespace unographic {
 
 
 GraphicDescriptor::GraphicDescriptor() :
-    ::comphelper::PropertySetHelper( createPropertySetInfo(), SAL_NO_ACQUIRE ),
+    ::comphelper::PropertySetHelper( createPropertySetInfo() ),
     mpGraphic( nullptr ),
     meType( GraphicType::NONE ),
     mnBitsPerPixel ( 0 ),
@@ -232,11 +232,8 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
 }
 
 
-::comphelper::PropertySetInfo* GraphicDescriptor::createPropertySetInfo()
+rtl::Reference<::comphelper::PropertySetInfo> GraphicDescriptor::createPropertySetInfo()
 {
-    SolarMutexGuard aGuard;
-    ::comphelper::PropertySetInfo*  pRet = new ::comphelper::PropertySetInfo();
-
     static ::comphelper::PropertyMapEntry const aEntries[] =
     {
         { OUString( "GraphicType" ), static_cast< sal_Int32 >( UnoGraphicProperty::GraphicType ), cppu::UnoType< sal_Int8 >::get(), beans::PropertyAttribute::READONLY, 0 },
@@ -250,10 +247,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
-    pRet->acquire();
-    pRet->add( aEntries );
-
-    return pRet;
+    return rtl::Reference<::comphelper::PropertySetInfo>( new ::comphelper::PropertySetInfo(aEntries) );
 }
 
 

@@ -143,7 +143,7 @@ enum SdDocumentSettingsPropertyHandles
 
 #define MID_PRINTER 1
 
-    PropertySetInfo * createSettingsInfoImpl( bool bIsDraw )
+    rtl::Reference<PropertySetInfo> createSettingsInfoImpl( bool bIsDraw )
     {
         static PropertyMapEntry const aImpressSettingsInfoMap[] =
         {
@@ -204,10 +204,10 @@ enum SdDocumentSettingsPropertyHandles
             { OUString(), 0, css::uno::Type(), 0, 0 }
         };
 
-        PropertySetInfo* pInfo = new PropertySetInfo( aCommonSettingsInfoMap );
-        pInfo->add( bIsDraw ? aDrawSettingsInfoMap : aImpressSettingsInfoMap );
+        rtl::Reference<PropertySetInfo> xInfo = new PropertySetInfo( aCommonSettingsInfoMap );
+        xInfo->add( bIsDraw ? aDrawSettingsInfoMap : aImpressSettingsInfoMap );
 
-        return pInfo;
+        return xInfo;
     }
 }
 

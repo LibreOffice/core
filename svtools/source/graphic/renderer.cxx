@@ -53,7 +53,7 @@ class GraphicRendererVCL : public ::cppu::OWeakAggObject,
                            public ::comphelper::PropertySetHelper,
                            public css::graphic::XGraphicRenderer
 {
-    static ::comphelper::PropertySetInfo* createPropertySetInfo();
+    static rtl::Reference<::comphelper::PropertySetInfo> createPropertySetInfo();
 
 public:
 
@@ -179,11 +179,8 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicRendererVCL::getImplementationId()
 }
 
 
-::comphelper::PropertySetInfo* GraphicRendererVCL::createPropertySetInfo()
+rtl::Reference<::comphelper::PropertySetInfo> GraphicRendererVCL::createPropertySetInfo()
 {
-    SolarMutexGuard aGuard;
-    ::comphelper::PropertySetInfo*  pRet = new ::comphelper::PropertySetInfo();
-
     static ::comphelper::PropertyMapEntry const aEntries[] =
     {
         { OUString("Device"), UNOGRAPHIC_DEVICE, cppu::UnoType<uno::Any>::get(), 0, 0 },
@@ -192,10 +189,7 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicRendererVCL::getImplementationId()
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
 
-    pRet->acquire();
-    pRet->add( aEntries );
-
-    return pRet;
+    return rtl::Reference<::comphelper::PropertySetInfo>( new ::comphelper::PropertySetInfo(aEntries) );
 }
 
 

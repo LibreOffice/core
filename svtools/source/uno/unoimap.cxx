@@ -105,7 +105,7 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 private:
-    static PropertySetInfo* createPropertySetInfo( sal_uInt16 nType );
+    static rtl::Reference<PropertySetInfo> createPropertySetInfo( sal_uInt16 nType );
 
 
     sal_uInt16 mnType;
@@ -124,7 +124,7 @@ private:
 
 UNO3_GETIMPLEMENTATION_IMPL( SvUnoImageMapObject );
 
-PropertySetInfo * SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
+rtl::Reference<PropertySetInfo> SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
 {
     switch( nType )
     {
@@ -142,7 +142,7 @@ PropertySetInfo * SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
                 { OUString(), 0, css::uno::Type(), 0, 0 }
             };
 
-            return new PropertySetInfo( aPolygonObj_Impl );
+            return rtl::Reference<PropertySetInfo>(new PropertySetInfo( aPolygonObj_Impl ));
         }
     case IMAP_OBJ_CIRCLE:
         {
@@ -159,7 +159,7 @@ PropertySetInfo * SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
                 { OUString(), 0, css::uno::Type(), 0, 0 }
             };
 
-            return new PropertySetInfo( aCircleObj_Impl );
+            return rtl::Reference<PropertySetInfo>(new PropertySetInfo( aCircleObj_Impl ));
         }
     case IMAP_OBJ_RECTANGLE:
     default:
@@ -176,7 +176,7 @@ PropertySetInfo * SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
                 { OUString(), 0, css::uno::Type(), 0, 0 }
             };
 
-            return new PropertySetInfo( aRectangleObj_Impl );
+            return rtl::Reference<PropertySetInfo>(new PropertySetInfo( aRectangleObj_Impl ));
         }
     }
 }
