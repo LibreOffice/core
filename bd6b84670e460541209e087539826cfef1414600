@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_54144243",
+        "filename": "writerfilter/source/rtftok/rtfdispatchdestination.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-09T12:39:57Z",
+      "side": 1,
+      "message": "\u0027if (\u0027 here and inside the branch please keep using 4 spaces for indent (that\u0027s mostly consistent throughout the whole codebase), not 3.",
+      "revId": "bd6b84670e460541209e087539826cfef1414600",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
