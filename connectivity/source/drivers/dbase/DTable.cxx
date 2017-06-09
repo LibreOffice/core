@@ -254,8 +254,8 @@ void ODbaseTable::readHeader()
                         case 0x03: m_eEncoding = RTL_TEXTENCODING_MS_1252; break;       // Windows ANSI code page 1252
                         case 0x04: m_eEncoding = RTL_TEXTENCODING_APPLE_ROMAN; break;   // Standard Macintosh
                         case 0x64: m_eEncoding = RTL_TEXTENCODING_IBM_852; break;       // EE MS-DOS    code page 852
-                        case 0x65: m_eEncoding = RTL_TEXTENCODING_IBM_865; break;       // Nordic MS-DOS    code page 865
-                        case 0x66: m_eEncoding = RTL_TEXTENCODING_IBM_866; break;       // Russian MS-DOS   code page 866
+                        case 0x65: m_eEncoding = RTL_TEXTENCODING_IBM_866; break;       // Russian MS-DOS   code page 866
+                        case 0x66: m_eEncoding = RTL_TEXTENCODING_IBM_865; break;       // Nordic MS-DOS    code page 865
                         case 0x67: m_eEncoding = RTL_TEXTENCODING_IBM_861; break;       // Icelandic MS-DOS
                         //case 0x68: m_eEncoding = ; break;     // Kamenicky (Czech) MS-DOS
                         //case 0x69: m_eEncoding = ; break;     // Mazovia (Polish) MS-DOS
