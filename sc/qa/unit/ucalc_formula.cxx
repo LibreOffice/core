@@ -7919,7 +7919,7 @@ void Test::testFuncSUMIFS()
         { "a", "16" },
         { "b", "32" },
         { "c", "64" },
-        {},
+        { "" },             // {} doesn't work with some compilers
         { "a" },
         { "b" },
         { "c" },
