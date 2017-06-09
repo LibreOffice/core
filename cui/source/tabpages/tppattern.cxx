@@ -92,8 +92,7 @@ SvxPatternTabPage::SvxPatternTabPage(  vcl::Window* pParent, const SfxItemSet& r
 
     m_pnPatternListState  ( nullptr ),
     m_pnColorListState    ( nullptr ),
-    m_pPos                ( nullptr ),
-
+    m_bPtrnChanged        ( false ),
     m_aXFStyleItem        ( drawing::FillStyle_BITMAP ),
     m_aXPatternItem       ( OUString(), Graphic() ),
     m_aXFillAttr          ( rInAttrs.GetPool() ),
@@ -189,14 +188,12 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
         else
             aString += aURL.getBase();
 
-        *m_pPos = SearchPatternList( ( &static_cast<const XFillBitmapItem&>( rSet.Get(XATTR_FILLBITMAP)) )->GetName() );
-        if( *m_pPos != LISTBOX_ENTRY_NOTFOUND )
+        sal_Int32 nPos = SearchPatternList( ( &static_cast<const XFillBitmapItem&>( rSet.Get(XATTR_FILLBITMAP)) )->GetName() );
+        if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            sal_uInt16 nId = m_pPatternLB->GetItemId( static_cast<size_t>( *m_pPos ) );
+            sal_uInt16 nId = m_pPatternLB->GetItemId( static_cast<size_t>( nPos ) );
             m_pPatternLB->SelectItem( nId );
         }
-
-        *m_pPos = LISTBOX_ENTRY_NOTFOUND;
     }
 }
 

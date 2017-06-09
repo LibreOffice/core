@@ -447,7 +447,6 @@ void SvxAreaTabPage::CreatePage( sal_Int32 nId, SfxTabPage* pTab )
     {
         static_cast<SvxPatternTabPage*>(pTab)->SetColorList( m_pColorList );
         static_cast<SvxPatternTabPage*>(pTab)->SetPatternList( m_pPatternList );
-        static_cast<SvxPatternTabPage*>(pTab)->SetPos( &m_nPos );
         static_cast<SvxPatternTabPage*>(pTab)->SetPtrnChgd( m_pnPatternListState );
         static_cast<SvxPatternTabPage*>(pTab)->SetColorChgd( m_pnColorListState );
         static_cast<SvxPatternTabPage*>(pTab)->Construct();
