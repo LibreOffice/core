@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_99e6e3b2",
+        "filename": "sw/source/core/edit/edfcol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-09T10:00:25Z",
+      "side": 1,
+      "message": "Is this the good direction to go?\n\noffapi/com/sun/star/drawing/RotationDescriptor.idl suggests using Transformation instead of RotateAngle.",
+      "revId": "92335d5b39d186da44f032da5ad74c8a8b962092",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
