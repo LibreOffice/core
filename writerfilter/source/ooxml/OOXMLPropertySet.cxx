@@ -599,35 +599,35 @@ OOXMLUniversalMeasureValue::OOXMLUniversalMeasureValue(const char * pValue, sal_
         pValue[nLen-2] == 'p' &&
         pValue[nLen-1] == 't')
     {
-        mnValue = static_cast<sal_uInt32>(val * npPt);
+        mnValue = static_cast<int>(val * npPt);
     }
     else if (nLen > 2 &&
         pValue[nLen - 2] == 'c' &&
         pValue[nLen - 1] == 'm')
     {
-        mnValue = static_cast<sal_uInt32>(val * npPt * 72 / 2.54);
+        mnValue = static_cast<int>(val * npPt * 72 / 2.54);
     }
     else if (nLen > 2 &&
         pValue[nLen - 2] == 'm' &&
         pValue[nLen - 1] == 'm')
     {
-        mnValue = static_cast<sal_uInt32>(val * npPt * 72 / 25.4);
+        mnValue = static_cast<int>(val * npPt * 72 / 25.4);
     }
     else if (nLen > 2 &&
         pValue[nLen - 2] == 'i' &&
         pValue[nLen - 1] == 'n')
     {
-        mnValue = static_cast<sal_uInt32>(val * npPt * 72);
+        mnValue = static_cast<int>(val * npPt * 72);
     }
     else if (nLen > 2 &&
         pValue[nLen - 2] == 'p' &&
         ( pValue[nLen - 1] == 'c' || pValue[nLen - 1] == 'i' ))
     {
-        mnValue = static_cast<sal_uInt32>(val * npPt * 12);
+        mnValue = static_cast<int>(val * npPt * 12);
     }
     else
     {
-        mnValue = static_cast<sal_uInt32>(val);
+        mnValue = static_cast<int>(val);
     }
 }
 
