@@ -232,7 +232,7 @@ public:
 class OOXMLUniversalMeasureValue : public OOXMLValue
 {
 private:
-    sal_uInt32 mnValue;
+    int mnValue;
 public:
     OOXMLUniversalMeasureValue(const char * pValue, sal_uInt32 npPt);
     virtual ~OOXMLUniversalMeasureValue() override;
