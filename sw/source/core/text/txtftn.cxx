@@ -994,7 +994,7 @@ SwErgoSumPortion *SwTextFormatter::NewErgoSumPortion( SwTextFormatInfo &rInf ) c
         m_pFrame->ImplFindFootnoteFrame()->GetAttr()->GetFootnote().IsEndNote() )
         return nullptr;
 
-    // Aha, wir sind also im Fussnotenbereich
+    // we are in the footnote container
     const SwFootnoteInfo &rFootnoteInfo = m_pFrame->GetNode()->GetDoc()->GetFootnoteInfo();
     SwTextFrame *pQuoFrame = m_pFrame->FindQuoVadisFrame();
     if( !pQuoFrame )
