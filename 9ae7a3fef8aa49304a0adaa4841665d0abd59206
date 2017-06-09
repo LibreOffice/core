@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_b91c7fc2",
+        "filename": "sw/qa/python/text_portion_enumeration_test.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-09T08:48:01Z",
+      "side": 1,
+      "message": "TEMPLATE.SOURCECODE.HEADER suggests not using the Apache part in the license header when you created the work yourself (and not copied existing Apache-created code). In this case I think you can go with the 3-lines MPL-only header.",
+      "revId": "9ae7a3fef8aa49304a0adaa4841665d0abd59206",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
