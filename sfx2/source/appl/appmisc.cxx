@@ -142,11 +142,11 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
     OUString uri = "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER + aBaseName + ".svg";
     rtl::Bootstrap::expandMacros( uri );
     INetURLObject aObj( uri );
-    SvgData aSvgData(aObj.PathToFileName());
+    VectorGraphicData aVectorGraphicData(aObj.PathToFileName(), VectorGraphicDataType::Svg);
 
     // transform into [0,0,width,width*aspect] std dimensions
 
-    basegfx::B2DRange aRange(aSvgData.getRange());
+    basegfx::B2DRange aRange(aVectorGraphicData.getRange());
     const double fAspectRatio(
         aRange.getHeight() == 0.0 ? 1.0 : aRange.getWidth()/aRange.getHeight());
     basegfx::B2DHomMatrix aTransform(
@@ -160,7 +160,7 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
     const drawinglayer::primitive2d::Primitive2DReference xTransformRef(
         new drawinglayer::primitive2d::TransformPrimitive2D(
             aTransform,
-            aSvgData.getPrimitive2DSequence()));
+            aVectorGraphicData.getPrimitive2DSequence()));
 
     // UNO dance to render from drawinglayer
 

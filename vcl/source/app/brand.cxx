@@ -26,7 +26,7 @@
 #include <tools/stream.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/svgdata.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 
 namespace {
     bool loadPng( const OUString & rPath, BitmapEx &rBitmap)

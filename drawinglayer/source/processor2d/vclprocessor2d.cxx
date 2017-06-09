@@ -397,13 +397,13 @@ namespace drawinglayer
             {
                 // content is bitmap(ex)
                 //
-                // for SVG support, force decomposition when SVG is present. This will lead to use
-                // the primitive representation of the svg directly.
+                // for Vector Graphic Data (SVG, EMF+) support, force decomposition when present. This will lead to use
+                // the primitive representation of the vector data directly.
                 //
                 // when graphic is animated, force decomposition to use the correct graphic, else
                 // fill style will not be animated
                 if(GraphicType::Bitmap == rFillGraphicAttribute.getGraphic().GetType()
-                    && !rFillGraphicAttribute.getGraphic().getSvgData().get()
+                    && !rFillGraphicAttribute.getGraphic().getVectorGraphicData().get()
                     && !rFillGraphicAttribute.getGraphic().IsAnimated())
                 {
                     // decompose matrix to check for shear, rotate and mirroring

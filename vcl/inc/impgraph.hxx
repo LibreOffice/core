@@ -48,7 +48,7 @@ private:
     mutable sal_uLong            mnSizeBytes;
     bool                         mbSwapOut;
     bool                         mbDummyContext;
-    SvgDataPtr                   maSvgData;
+    VectorGraphicDataPtr         maVectorGraphicData;
     css::uno::Sequence<sal_Int8> maPdfData;
 
 private:
@@ -58,7 +58,7 @@ private:
                         ImpGraphic( ImpGraphic&& rImpGraphic );
                         ImpGraphic( const Bitmap& rBmp );
                         ImpGraphic( const BitmapEx& rBmpEx );
-                        ImpGraphic(const SvgDataPtr& rSvgDataPtr);
+                        ImpGraphic(const VectorGraphicDataPtr& rVectorGraphicDataPtr);
                         ImpGraphic( const Animation& rAnimation );
                         ImpGraphic( const GDIMetaFile& rMtf );
 public:
@@ -145,7 +145,7 @@ private:
     friend void         WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic);
     friend void         ReadImpGraphic(SvStream& rIStm, ImpGraphic& rImpGraphic);
 
-    const SvgDataPtr&   getSvgData() const { return maSvgData; }
+    const VectorGraphicDataPtr& getVectorGraphicData() const { return maVectorGraphicData; }
 };
 
 #endif // INCLUDED_VCL_INC_IMPGRAPH_HXX

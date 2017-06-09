@@ -147,11 +147,11 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
             aURL.setBase( aName );
         }
 
-        // #i121128# use shortcut to write SVG data in original form (if possible)
-        const SvgDataPtr& aSvgDataPtr(rGraphic.getSvgData());
+        // #i121128# use shortcut to write Vector Graphic Data data in original form (if possible)
+        const VectorGraphicDataPtr& aVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
 
-        if(aSvgDataPtr.get()
-            && aSvgDataPtr->getSvgDataArrayLength()
+        if(aVectorGraphicDataPtr.get()
+            && aVectorGraphicDataPtr->getVectorGraphicDataArrayLength()
             && rFilterName.equalsIgnoreAsciiCase("svg"))
         {
             if(!(nFlags & XOutFlags::DontAddExtension))
@@ -165,7 +165,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
 
             if(pOStm)
             {
-                pOStm->WriteBytes(aSvgDataPtr->getSvgDataArray().getConstArray(), aSvgDataPtr->getSvgDataArrayLength());
+                pOStm->WriteBytes(aVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(), aVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
                 aMedium.Commit();
 
                 if(!aMedium.GetError())

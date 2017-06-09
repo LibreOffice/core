@@ -332,11 +332,11 @@ void SwGrfNode::onGraphicChanged()
         OUString aName;
         OUString aTitle;
         OUString aDesc;
-        const SvgDataPtr& rSvgDataPtr = GetGrf().getSvgData();
+        const VectorGraphicDataPtr& rVectorGraphicDataPtr = GetGrf().getVectorGraphicData();
 
-        if(rSvgDataPtr.get())
+        if(rVectorGraphicDataPtr.get())
         {
-            const drawinglayer::primitive2d::Primitive2DContainer aSequence(rSvgDataPtr->getPrimitive2DSequence());
+            const drawinglayer::primitive2d::Primitive2DContainer aSequence(rVectorGraphicDataPtr->getPrimitive2DSequence());
 
             if(!aSequence.empty())
             {
@@ -394,11 +394,11 @@ const GraphicObject* SwGrfNode::GetReplacementGrfObj() const
 {
     if(!mpReplacementGraphic)
     {
-        const SvgDataPtr& rSvgDataPtr = GetGrfObj().GetGraphic().getSvgData();
+        const VectorGraphicDataPtr& rVectorGraphicDataPtr = GetGrfObj().GetGraphic().getVectorGraphicData();
 
-        if(rSvgDataPtr.get())
+        if(rVectorGraphicDataPtr.get())
         {
-            const_cast< SwGrfNode* >(this)->mpReplacementGraphic = new GraphicObject(rSvgDataPtr->getReplacement());
+            const_cast< SwGrfNode* >(this)->mpReplacementGraphic = new GraphicObject(rVectorGraphicDataPtr->getReplacement());
         }
         else if (GetGrfObj().GetGraphic().getPdfData().hasElements())
             // This returns the bitmap, without the pdf data.

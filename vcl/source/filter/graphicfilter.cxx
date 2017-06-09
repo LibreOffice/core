@@ -35,7 +35,7 @@
 #include <vcl/salctype.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
-#include <vcl/svgdata.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
@@ -1681,7 +1681,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
 
                     if (!rIStream.GetError() && nMemoryLength >= 0)
                     {
-                        SvgDataArray aNewData(nMemoryLength);
+                        VectorGraphicDataArray aNewData(nMemoryLength);
                         aMemStream.Seek(STREAM_SEEK_TO_BEGIN);
                         aMemStream.ReadBytes(aNewData.begin(), nMemoryLength);
 
@@ -1692,22 +1692,22 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
 
                         if(!aMemStream.GetError() )
                         {
-                            SvgDataPtr aSvgDataPtr(new SvgData(aNewData, rPath));
-                            rGraphic = Graphic(aSvgDataPtr);
+                            VectorGraphicDataPtr aVectorGraphicDataPtr(new VectorGraphicData(aNewData, rPath, VectorGraphicDataType::Svg));
+                            rGraphic = Graphic(aVectorGraphicDataPtr);
                             bOkay = true;
                         }
                     }
                 }
                 else
                 {
-                    SvgDataArray aNewData(nStreamLength);
+                    VectorGraphicDataArray aNewData(nStreamLength);
                     rIStream.Seek(nStreamPosition);
                     rIStream.ReadBytes(aNewData.begin(), nStreamLength);
 
                     if(!rIStream.GetError())
                     {
-                        SvgDataPtr aSvgDataPtr(new SvgData(aNewData, rPath));
-                        rGraphic = Graphic(aSvgDataPtr);
+                        VectorGraphicDataPtr aVectorGraphicDataPtr(new VectorGraphicData(aNewData, rPath, VectorGraphicDataType::Svg));
+                        rGraphic = Graphic(aVectorGraphicDataPtr);
                         bOkay = true;
                     }
                 }
@@ -1768,13 +1768,46 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_WMF ) ||
                 aFilterName.equalsIgnoreAsciiCase( IMP_EMF ) )
         {
-            GDIMetaFile aMtf;
-            if( !ConvertWMFToGDIMetaFile( rIStream, aMtf, nullptr, pExtHeader ) )
-                nStatus = ERRCODE_GRFILTER_FORMATERROR;
+            static bool bCheckEmf = false;
+            if (bCheckEmf)
+            {
+                if (rGraphic.IsDummyContext())
+                    rGraphic.SetDummyContext(false);
+
+                const sal_uInt32 nStreamPosition(rIStream.Tell());
+                const sal_uInt32 nStreamLength(rIStream.Seek(STREAM_SEEK_TO_END) - nStreamPosition);
+                VectorGraphicDataArray aNewData(nStreamLength);
+                bool bOkay(false);
+
+                rIStream.Seek(nStreamPosition);
+                rIStream.ReadBytes(aNewData.begin(), nStreamLength);
+
+                if (!rIStream.GetError())
+                {
+                    VectorGraphicDataPtr aVectorGraphicDataPtr(new VectorGraphicData(aNewData, rPath, VectorGraphicDataType::Emf));
+                    rGraphic = Graphic(aVectorGraphicDataPtr);
+                    bOkay = true;
+                }
+
+                if (bOkay)
+                {
+                    eLinkType = GfxLinkType::NativeSvg;
+                }
+                else
+                {
+                    nStatus = ERRCODE_GRFILTER_FILTERERROR;
+                }
+            }
             else
             {
-                rGraphic = aMtf;
-                eLinkType = GfxLinkType::NativeWmf;
+                GDIMetaFile aMtf;
+                if (!ConvertWMFToGDIMetaFile(rIStream, aMtf, nullptr, pExtHeader))
+                    nStatus = ERRCODE_GRFILTER_FORMATERROR;
+                else
+                {
+                    rGraphic = aMtf;
+                    eLinkType = GfxLinkType::NativeWmf;
+                }
             }
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_SVSGF )
@@ -2165,12 +2198,12 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
             {
                 bool bDone(false);
 
-                // do we have a native SVG RenderGraphic, whose data can be written directly?
-                const SvgDataPtr& aSvgDataPtr(rGraphic.getSvgData());
+                // do we have a native Vector Graphic Data RenderGraphic, whose data can be written directly?
+                const VectorGraphicDataPtr& aVectorGraphicDataPtr(rGraphic.getVectorGraphicData());
 
-                if (aSvgDataPtr.get() && aSvgDataPtr->getSvgDataArrayLength())
+                if (aVectorGraphicDataPtr.get() && aVectorGraphicDataPtr->getVectorGraphicDataArrayLength())
                 {
-                    rOStm.WriteBytes(aSvgDataPtr->getSvgDataArray().getConstArray(), aSvgDataPtr->getSvgDataArrayLength());
+                    rOStm.WriteBytes(aVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(), aVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
 
                     if( rOStm.GetError() )
                     {

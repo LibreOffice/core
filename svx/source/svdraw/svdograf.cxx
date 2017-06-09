@@ -285,12 +285,12 @@ void SdrGrafObj::onGraphicChanged()
     if (!pGraphic || pGraphic->IsSwappedOut()) // don't force swap-in for this
         return;
 
-    const SvgDataPtr& rSvgDataPtr = pGraphic->GetGraphic().getSvgData();
+    const VectorGraphicDataPtr& rVectorGraphicDataPtr = pGraphic->GetGraphic().getVectorGraphicData();
 
-    if (!rSvgDataPtr.get())
+    if (!rVectorGraphicDataPtr.get())
         return;
 
-    const drawinglayer::primitive2d::Primitive2DContainer aSequence(rSvgDataPtr->getPrimitive2DSequence());
+    const drawinglayer::primitive2d::Primitive2DContainer aSequence(rVectorGraphicDataPtr->getPrimitive2DSequence());
 
     if (aSequence.empty())
         return;
@@ -432,11 +432,11 @@ const GraphicObject* SdrGrafObj::GetReplacementGraphicObject() const
 {
     if(!mpReplacementGraphic && pGraphic)
     {
-        const SvgDataPtr& rSvgDataPtr = pGraphic->GetGraphic().getSvgData();
+        const VectorGraphicDataPtr& rVectorGraphicDataPtr = pGraphic->GetGraphic().getVectorGraphicData();
 
-        if(rSvgDataPtr.get())
+        if(rVectorGraphicDataPtr.get())
         {
-            const_cast< SdrGrafObj* >(this)->mpReplacementGraphic = new GraphicObject(rSvgDataPtr->getReplacement());
+            const_cast< SdrGrafObj* >(this)->mpReplacementGraphic = new GraphicObject(rVectorGraphicDataPtr->getReplacement());
         }
         else if (pGraphic->GetGraphic().getPdfData().hasElements())
             // Replacement graphic for bitmap + PDF is just the bitmap.
@@ -735,11 +735,11 @@ OUString SdrGrafObj::TakeObjNameSingul() const
     if (!pGraphic)
         return OUString();
 
-    const SvgDataPtr& rSvgDataPtr = pGraphic->GetGraphic().getSvgData();
+    const VectorGraphicDataPtr& rVectorGraphicDataPtr = pGraphic->GetGraphic().getVectorGraphicData();
 
     OUStringBuffer sName;
 
-    if(rSvgDataPtr.get())
+    if(rVectorGraphicDataPtr.get())
     {
         sName.append(ImpGetResStr(STR_ObjNameSingulGRAFSVG));
     }
@@ -788,11 +788,11 @@ OUString SdrGrafObj::TakeObjNamePlural() const
     if(!pGraphic)
         return OUString();
 
-    const SvgDataPtr& rSvgDataPtr = pGraphic->GetGraphic().getSvgData();
+    const VectorGraphicDataPtr& rVectorGraphicDataPtr = pGraphic->GetGraphic().getVectorGraphicData();
 
     OUStringBuffer sName;
 
-    if(rSvgDataPtr.get())
+    if(rVectorGraphicDataPtr.get())
     {
         sName.append(ImpGetResStr(STR_ObjNamePluralGRAFSVG));
     }
@@ -1023,16 +1023,16 @@ bool SdrGrafObj::HasGDIMetaFile() const
     return( pGraphic->GetType() == GraphicType::GdiMetafile );
 }
 
-bool SdrGrafObj::isEmbeddedSvg() const
+bool SdrGrafObj::isEmbeddedVectorGraphicData() const
 {
-    return GraphicType::Bitmap == GetGraphicType() && GetGraphic().getSvgData().get();
+    return GraphicType::Bitmap == GetGraphicType() && GetGraphic().getVectorGraphicData().get();
 }
 
-GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedSvg() const
+GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedVectorGraphicData() const
 {
     GDIMetaFile aRetval;
 
-    if(isEmbeddedSvg() && GetModel())
+    if(isEmbeddedVectorGraphicData() && GetModel())
     {
         ScopedVclPtrInstance< VirtualDevice > pOut;
         const tools::Rectangle aBoundRect(GetCurrentBoundRect());
@@ -1054,15 +1054,15 @@ GDIMetaFile SdrGrafObj::getMetafileFromEmbeddedSvg() const
 
 GDIMetaFile SdrGrafObj::GetMetaFile(GraphicType &rGraphicType) const
 {
-    if (isEmbeddedSvg())
+    if (isEmbeddedVectorGraphicData())
     {
-        // Embedded Svg
+        // Embedded Vector Graphic Data
         // There is currently no helper to create SdrObjects from primitives (even if I'm thinking
         // about writing one for some time). To get the roundtrip to SdrObjects it is necessary to
         // use the old converter path over the MetaFile mechanism. Create Metafile from Svg
         // primitives here pretty directly
         rGraphicType = GraphicType::GdiMetafile;
-        return getMetafileFromEmbeddedSvg();
+        return getMetafileFromEmbeddedVectorGraphicData();
     }
     else if (GraphicType::GdiMetafile == rGraphicType)
     {

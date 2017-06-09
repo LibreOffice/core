@@ -126,6 +126,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	svl \
 	svtools \
 	svgio \
+	emfio \
 	svx \
 	sw \
 	swext \
