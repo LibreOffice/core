@@ -314,9 +314,10 @@ SfxWatermarkItem SwEditShell::GetWatermark()
             {
                 double y = aMatrix.Line2.Column1;
                 double x = aMatrix.Line1.Column1;
-                double nRad = atan2(y, x) * -1;
+                double nRad = atan2(y, x) * -1.0;
                 double nDeg = nRad * 180.0 / F_PI;
-                aItem.SetAngle(nDeg);
+                sal_Int16 nAngle = nDeg > 0 ? round(nDeg) : round(360.0 - nDeg * -1.0);
+                aItem.SetAngle(nAngle);
             }
             if (xPropertySet->getPropertyValue(UNO_NAME_FILL_TRANSPARENCE) >>= nTransparency)
                 aItem.SetTransparency(nTransparency);
@@ -376,8 +377,9 @@ void SwEditShell::SetWatermark(const SfxWatermarkItem& rWatermark)
             xPropertySet->getPropertyValue("Transformation") >>= aMatrix;
             double y = aMatrix.Line2.Column1;
             double x = aMatrix.Line1.Column1;
-            double nRad = atan2(y, x) * -1;
-            nAngle = nRad * 180.0 / F_PI;
+            double nRad = atan2(y, x) * -1.0;
+            double nDeg = nRad * 180.0 / F_PI;
+            nAngle = nDeg > 0 ? ceil(nDeg) : round(360.0 - nDeg * -1.0);
 
             // If the header already contains a watermark, see if it its text is up to date.
             uno::Reference<text::XTextRange> xTextRange(xWatermark, uno::UNO_QUERY);
