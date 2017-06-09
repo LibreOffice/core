@@ -703,7 +703,7 @@ public class InterfaceContainer implements Cloneable
         synchronized (this)
         {
             aIt= iterator();
-            // Container freigeben, falls im disposing neue Eintraege kommen
+            // Release containers if new entries occur in disposing;
             // set the member to null, the iterator delete the values
             clear();
             elementData= null;
