@@ -114,7 +114,7 @@ namespace comphelper { class PropertySetInfo; }
 class SvxPropertySetInfoPool
 {
 public:
-    SVX_DLLPUBLIC static comphelper::PropertySetInfo* getOrCreate( sal_Int32 nServiceId ) throw();
+    SVX_DLLPUBLIC static rtl::Reference<comphelper::PropertySetInfo> const & getOrCreate( sal_Int32 nServiceId ) throw();
 
 private:
     static rtl::Reference<comphelper::PropertySetInfo> mxInfos[SVXUNO_SERVICEID_LASTID+1];

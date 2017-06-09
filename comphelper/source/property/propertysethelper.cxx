@@ -36,15 +36,15 @@ class PropertySetHelperImpl
 public:
     PropertyMapEntry const * find( const OUString& aName ) const throw();
 
-    PropertySetInfo* mpInfo;
+    rtl::Reference<PropertySetInfo> mxInfo;
 };
 }
 
 PropertyMapEntry const * PropertySetHelperImpl::find( const OUString& aName ) const throw()
 {
-    PropertyMap::const_iterator aIter = mpInfo->getPropertyMap().find( aName );
+    PropertyMap::const_iterator aIter = mxInfo->getPropertyMap().find( aName );
 
-    if( mpInfo->getPropertyMap().end() != aIter )
+    if( mxInfo->getPropertyMap().end() != aIter )
     {
         return (*aIter).second;
     }
@@ -55,28 +55,20 @@ PropertyMapEntry const * PropertySetHelperImpl::find( const OUString& aName ) co
 }
 
 
-PropertySetHelper::PropertySetHelper( comphelper::PropertySetInfo* pInfo ) throw()
+PropertySetHelper::PropertySetHelper( rtl::Reference<comphelper::PropertySetInfo> const & xInfo ) throw()
     : mpImpl(new PropertySetHelperImpl)
 {
-    mpImpl->mpInfo = pInfo;
-    pInfo->acquire();
-}
-
-PropertySetHelper::PropertySetHelper( comphelper::PropertySetInfo* pInfo, __sal_NoAcquire ) throw()
-    : mpImpl(new PropertySetHelperImpl)
-{
-    mpImpl->mpInfo = pInfo;
+    mpImpl->mxInfo = xInfo;
 }
 
 PropertySetHelper::~PropertySetHelper() throw()
 {
-    mpImpl->mpInfo->release();
 }
 
 // XPropertySet
 Reference< XPropertySetInfo > SAL_CALL PropertySetHelper::getPropertySetInfo(  )
 {
-    return mpImpl->mpInfo;
+    return mpImpl->mxInfo.get();
 }
 
 void SAL_CALL PropertySetHelper::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
