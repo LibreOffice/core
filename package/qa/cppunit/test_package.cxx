@@ -188,7 +188,7 @@ namespace
             sal_Int32 nSize = xStrm->available();
 
             uno::Sequence<sal_Int8> aBytes;
-            //Read chuncks of increasing size
+            //Read chunks of increasing size
             nReadSize += 1024;
 
             while (nSize > 0)

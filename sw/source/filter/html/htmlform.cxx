@@ -374,7 +374,7 @@ public:
                         bool bWidth, bool bHeight );
 
     // startProduction can not be called in the constructor because it can
-    // destruct itself, hence a seperate method.
+    // destruct itself, hence a separate method.
     void start() { xSrc->getImageProducer()->startProduction(); }
 
     // UNO binding
@@ -1530,7 +1530,7 @@ void SwHTMLParser::InsertInput()
     }
     else
     {
-        // evaluation of ALIGN for all contols is not a good idea as long as
+        // evaluation of ALIGN for all controls is not a good idea as long as
         // paragraph bound controls do not influence the height of the cells of a table
         eVertOri = text::VertOrientation::TOP;
         eHoriOri = text::HoriOrientation::NONE;
@@ -1640,7 +1640,7 @@ void SwHTMLParser::InsertInput()
             xPropSet->setPropertyValue("Label",
                                         aTmp );
             // RadioButton: The DefaultChecked property should only be set
-            // if the control has been created and activeTabOrder has been called
+            // if the control has been created and activateTabOrder has been called
             // because otherwise it would still belong to the previous group.
             if( HTMLInputType::Checkbox == eType )
             {
