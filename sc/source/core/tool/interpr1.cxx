@@ -5637,11 +5637,12 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
     sal_uInt8 nParamCount = GetByte();
     sal_uInt8 nQueryCount = nParamCount / 2;
 
-    sc::ParamIfsResult aRes;
     std::vector<sal_uInt32> vConditions;
     double fVal = 0.0;
     SCCOL nDimensionCols = 0;
     SCROW nDimensionRows = 0;
+    const SCSIZE nRefArrayRows = GetRefListArrayMaxSize( nParamCount);
+    std::vector<std::vector<sal_uInt32>> vRefArrayConditions;
 
     while (nParamCount > 1 && nGlobalError == FormulaError::NONE)
     {
@@ -5729,6 +5730,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
         // take range
         short nParam = nParamCount;
         size_t nRefInList = 0;
+        size_t nRefArrayPos = std::numeric_limits<size_t>::max();
         SCCOL nCol1 = 0;
         SCROW nRow1 = 0;
         SCTAB nTab1 = 0;
@@ -5742,6 +5744,38 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             {
                 case svRefList :
                     {
+                        const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(pStack[sp-1]);
+                        if (p && p->IsArrayResult())
+                        {
+                            if (nRefInList == 0)
+                            {
+                                if (vRefArrayConditions.empty())
+                                    vRefArrayConditions.resize( nRefArrayRows);
+                                if (!vConditions.empty())
+                                {
+                                    // Similar to other reference list array
+                                    // handling, add/op the current value to
+                                    // all array positions.
+                                    for (auto & rVec : vRefArrayConditions)
+                                    {
+                                        if (rVec.empty())
+                                            rVec = vConditions;
+                                        else
+                                        {
+                                            assert(rVec.size() == vConditions.size());  // see dimensions below
+                                            for (size_t i=0, n = rVec.size(); i < n; ++i)
+                                            {
+                                                rVec[i] += vConditions[i];
+                                            }
+                                        }
+                                    }
+                                    // Reset condition results.
+                                    std::for_each( vConditions.begin(), vConditions.end(),
+                                            [](sal_uInt32 & r){ r = 0.0; } );
+                                }
+                            }
+                            nRefArrayPos = nRefInList;
+                        }
                         ScRange aRange;
                         PopDoubleRef( aRange, nParam, nRefInList);
                         aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
@@ -5874,8 +5908,48 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                     } while ( aCellIter.GetNext() );
                 }
             }
+            if (nRefArrayPos != std::numeric_limits<size_t>::max())
+            {
+                // Apply condition result to reference list array result position.
+                std::vector<sal_uInt32>& rVec = vRefArrayConditions[nRefArrayPos];
+                if (rVec.empty())
+                    rVec = vConditions;
+                else
+                {
+                    assert(rVec.size() == vConditions.size());  // see dimensions above
+                    for (size_t i=0, n = rVec.size(); i < n; ++i)
+                    {
+                        rVec[i] += vConditions[i];
+                    }
+                }
+                // Reset conditions vector.
+                // When leaving an svRefList this has to be emptied not set to
+                // 0.0 because it's checked when entering an svRefList.
+                if (nRefInList == 0)
+                    std::vector<sal_uInt32>().swap( vConditions);
+                else
+                    std::for_each( vConditions.begin(), vConditions.end(), [](sal_uInt32 & r){ r = 0.0; } );
+            }
         }
         nParamCount -= 2;
+    }
+
+    if (!vRefArrayConditions.empty() && !vConditions.empty())
+    {
+        // Add/op the last current value to all array positions.
+        for (auto & rVec : vRefArrayConditions)
+        {
+            if (rVec.empty())
+                rVec = vConditions;
+            else
+            {
+                assert(rVec.size() == vConditions.size());  // see dimensions above
+                for (size_t i=0, n = rVec.size(); i < n; ++i)
+                {
+                    rVec[i] += vConditions[i];
+                }
+            }
+        }
     }
 
     if (nGlobalError != FormulaError::NONE)
@@ -5884,11 +5958,16 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
         return;   // bail out
     }
 
+    sc::ParamIfsResult aRes;
+    ScMatrixRef xResMat;
+
     // main range - only for AVERAGEIFS, SUMIFS, MINIFS and MAXIFS
     if (nParamCount == 1)
     {
         short nParam = nParamCount;
         size_t nRefInList = 0;
+        size_t nRefArrayPos = std::numeric_limits<size_t>::max();
+        bool bRefArrayMain = false;
         while (nParam-- == nParamCount)
         {
             bool bNull = true;
@@ -5903,6 +5982,24 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             {
                 case svRefList :
                     {
+                        const ScRefListToken* p = dynamic_cast<const ScRefListToken*>(pStack[sp-1]);
+                        if (p && p->IsArrayResult())
+                        {
+                            if (vRefArrayConditions.empty())
+                            {
+                                // Replicate conditions if there wasn't a
+                                // reference list array for criteria
+                                // evaluation.
+                                vRefArrayConditions.resize( nRefArrayRows);
+                                for (auto & rVec : vRefArrayConditions)
+                                {
+                                    rVec = vConditions;
+                                }
+                            }
+
+                            bRefArrayMain = true;
+                            nRefArrayPos = nRefInList;
+                        }
                         ScRange aRange;
                         PopDoubleRef( aRange, nParam, nRefInList);
                         aRange.GetVars( nMainCol1, nMainRow1, nMainTab1, nMainCol2, nMainRow2, nMainTab2);
@@ -5961,85 +6058,147 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             }
 
             // end-result calculation
-            ScAddress aAdr;
-            aAdr.SetTab( nMainTab1 );
+
+            // This gets weird.. if conditions were calculated using a
+            // reference list array but the main calculation range is not a
+            // reference list array, then the conditions of the array are
+            // applied to the main range each in turn to form the array result.
+
+            size_t nRefArrayMainPos = (bRefArrayMain ? nRefArrayPos :
+                    (vRefArrayConditions.empty() ? std::numeric_limits<size_t>::max() : 0));
+            const bool bAppliedArray = (!bRefArrayMain && nRefArrayMainPos == 0);
+
+            if (nRefArrayMainPos == 0)
+                xResMat = GetNewMat( 1, nRefArrayRows);
+
             if (pMainMatrix)
             {
                 std::vector<double> aMainValues;
                 pMainMatrix->GetDoubleArray(aMainValues, false); // Map empty values to NaN's.
-                if (vConditions.size() != aMainValues.size())
+
+                do
                 {
-                    PushError( FormulaError::IllegalArgument);
-                    return;
-                }
+                    if (nRefArrayMainPos < vRefArrayConditions.size())
+                        vConditions = vRefArrayConditions[nRefArrayMainPos];
 
-                std::vector<sal_uInt32>::const_iterator itRes = vConditions.begin(), itResEnd = vConditions.end();
-                std::vector<double>::const_iterator itMain = aMainValues.begin();
-                for (; itRes != itResEnd; ++itRes, ++itMain)
-                {
-                    if (*itRes != nQueryCount)
-                        continue;
-
-                    fVal = *itMain;
-                    if (GetDoubleErrorValue(fVal) == FormulaError::ElementNaN)
-                        continue;
-
-                    ++aRes.mfCount;
-                    if (bNull && fVal != 0.0)
+                    if (vConditions.size() != aMainValues.size())
                     {
-                        bNull = false;
-                        aRes.mfMem = fVal;
+                        PushError( FormulaError::IllegalArgument);
+                        return;
                     }
-                    else
-                        aRes.mfSum += fVal;
-                    if ( aRes.mfMin > fVal )
-                        aRes.mfMin = fVal;
-                    if ( aRes.mfMax < fVal )
-                        aRes.mfMax = fVal;
+
+                    std::vector<sal_uInt32>::const_iterator itRes = vConditions.begin(), itResEnd = vConditions.end();
+                    std::vector<double>::const_iterator itMain = aMainValues.begin();
+                    for (; itRes != itResEnd; ++itRes, ++itMain)
+                    {
+                        if (*itRes != nQueryCount)
+                            continue;
+
+                        fVal = *itMain;
+                        if (GetDoubleErrorValue(fVal) == FormulaError::ElementNaN)
+                            continue;
+
+                        ++aRes.mfCount;
+                        if (bNull && fVal != 0.0)
+                        {
+                            bNull = false;
+                            aRes.mfMem = fVal;
+                        }
+                        else
+                            aRes.mfSum += fVal;
+                        if ( aRes.mfMin > fVal )
+                            aRes.mfMin = fVal;
+                        if ( aRes.mfMax < fVal )
+                            aRes.mfMax = fVal;
+                    }
+                    if (nRefArrayMainPos != std::numeric_limits<size_t>::max())
+                    {
+                        xResMat->PutDouble( ResultFunc( aRes), 0, nRefArrayMainPos);
+                        aRes = sc::ParamIfsResult();
+                    }
                 }
+                while (bAppliedArray && ++nRefArrayMainPos < nRefArrayRows);
             }
             else
             {
-                std::vector<sal_uInt32>::const_iterator itRes = vConditions.begin();
-                for (SCCOL nCol = 0; nCol < nDimensionCols; ++nCol)
+                ScAddress aAdr;
+                aAdr.SetTab( nMainTab1 );
+                do
                 {
-                    for (SCROW nRow = 0; nRow < nDimensionRows; ++nRow, ++itRes)
+                    if (nRefArrayMainPos < vRefArrayConditions.size())
+                        vConditions = vRefArrayConditions[nRefArrayMainPos];
+
+                    std::vector<sal_uInt32>::const_iterator itRes = vConditions.begin();
+                    for (SCCOL nCol = 0; nCol < nDimensionCols; ++nCol)
                     {
-                        if (*itRes == nQueryCount)
+                        for (SCROW nRow = 0; nRow < nDimensionRows; ++nRow, ++itRes)
                         {
-                            aAdr.SetCol( nCol + nMainCol1);
-                            aAdr.SetRow( nRow + nMainRow1);
-                            ScRefCellValue aCell(*pDok, aAdr);
-                            if (aCell.hasNumeric())
+                            if (*itRes == nQueryCount)
                             {
-                                fVal = GetCellValue(aAdr, aCell);
-                                ++aRes.mfCount;
-                                if ( bNull && fVal != 0.0 )
+                                aAdr.SetCol( nCol + nMainCol1);
+                                aAdr.SetRow( nRow + nMainRow1);
+                                ScRefCellValue aCell(*pDok, aAdr);
+                                if (aCell.hasNumeric())
                                 {
-                                    bNull = false;
-                                    aRes.mfMem = fVal;
+                                    fVal = GetCellValue(aAdr, aCell);
+                                    ++aRes.mfCount;
+                                    if ( bNull && fVal != 0.0 )
+                                    {
+                                        bNull = false;
+                                        aRes.mfMem = fVal;
+                                    }
+                                    else
+                                        aRes.mfSum += fVal;
+                                    if ( aRes.mfMin > fVal )
+                                        aRes.mfMin = fVal;
+                                    if ( aRes.mfMax < fVal )
+                                        aRes.mfMax = fVal;
                                 }
-                                else
-                                    aRes.mfSum += fVal;
-                                if ( aRes.mfMin > fVal )
-                                    aRes.mfMin = fVal;
-                                if ( aRes.mfMax < fVal )
-                                    aRes.mfMax = fVal;
                             }
                         }
                     }
+                    if (nRefArrayMainPos != std::numeric_limits<size_t>::max())
+                    {
+                        xResMat->PutDouble( ResultFunc( aRes), 0, nRefArrayMainPos);
+                        aRes = sc::ParamIfsResult();
+                    }
                 }
+                while (bAppliedArray && ++nRefArrayMainPos < nRefArrayRows);
             }
         }
     }
     else
     {
-        std::vector<sal_uInt32>::const_iterator itRes = vConditions.begin(), itResEnd = vConditions.end();
-        for (; itRes != itResEnd; ++itRes)
-            if (*itRes == nQueryCount)
-                ++aRes.mfCount;
+        // COUNTIFS only.
+        if (vRefArrayConditions.empty())
+        {
+            for (auto const & rCond : vConditions)
+            {
+                if (rCond == nQueryCount)
+                    ++aRes.mfCount;
+            }
+        }
+        else
+        {
+            xResMat = GetNewMat( 1, nRefArrayRows);
+            for (size_t i=0, n = vRefArrayConditions.size(); i < n; ++i)
+            {
+                double fCount = 0.0;
+                for (auto const & rCond : vRefArrayConditions[i])
+                {
+                    if (rCond == nQueryCount)
+                        ++fCount;
+                }
+                if (fCount)
+                    xResMat->PutDouble( fCount, 0, i);
+            }
+        }
     }
-    PushDouble( ResultFunc( aRes));
+
+    if (xResMat)
+        PushMatrix( xResMat);
+    else
+        PushDouble( ResultFunc( aRes));
 }
 
 void ScInterpreter::ScSumIfs()
