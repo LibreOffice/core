@@ -95,8 +95,7 @@ import com.sun.star.util.Time;
 import com.sun.star.util.thePathSettings;
 
 
-// Anregung von DV:
-// Position und Weite als Parameter uebergeben
+// hand the position and width over as parameters
 
 public class UnoDialogSample implements XTextListener, XSpinListener, XActionListener, XFocusListener, XMouseListener, XItemListener, XAdjustmentListener, XKeyListener {
     protected XComponentContext m_xContext = null;

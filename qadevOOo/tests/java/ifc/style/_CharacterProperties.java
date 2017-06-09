@@ -309,7 +309,7 @@ public class _CharacterProperties extends MultiPropertyTest {
 
     /**
     * This property only takes values between 0..100
-    * so ist must be treated special
+    * so it must be treated specially
     */
     public void _CharEscapementHeight() {
         Byte aByte = Byte.valueOf((byte)75);

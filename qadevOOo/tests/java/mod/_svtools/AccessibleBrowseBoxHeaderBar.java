@@ -143,7 +143,7 @@ public class AccessibleBrowseBoxHeaderBar extends TestCase {
         the_url.Complete = ".component:DB/DataSourceBrowser";
         getting = aProv.queryDispatch(the_url, "_beamer", 12);
 
-        //am controller ein XSelectionSupplier->mit params rufen
+        // an XSelectionSupplier at the controller -> call with params
         PropertyValue[] noArgs = new PropertyValue[0];
         getting.dispatch(the_url, noArgs);
 
