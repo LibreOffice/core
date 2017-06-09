@@ -1843,6 +1843,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             if( !pTableCursor )
             {
                 // try to position the cursor at half of the char-rect's height
+                DisableCallbackAction a(*GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout());
                 pFrame = GetContentNode()->getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, GetPoint() );
                 SwCursorMoveState eTmpState( MV_UPDOWN );
                 eTmpState.m_bSetInReadOnly = bInReadOnly;
