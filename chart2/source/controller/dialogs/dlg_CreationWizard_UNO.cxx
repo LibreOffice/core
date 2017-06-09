@@ -97,7 +97,7 @@ uno::Any SAL_CALL CreationWizardUnoDlg::queryAggregation( uno::Type const & rTyp
     }
     else if (rType == cppu::UnoType<lang::XServiceInfo>::get())
     {
-        void * p = static_cast< lang::XTypeProvider * >( this );
+        void * p = static_cast< lang::XServiceInfo * >( this );
         return uno::Any( &p, rType );
     }
     else if (rType == cppu::UnoType<lang::XInitialization>::get())
