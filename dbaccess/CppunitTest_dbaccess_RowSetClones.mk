@@ -110,7 +110,6 @@ $(call gb_CppunitTest_get_target,dbaccess_RowSetClones) : $(WORKDIR)/CppunitTest
 $(WORKDIR)/CppunitTest/RowSetClones.odb : $(SRCDIR)/dbaccess/qa/extras/testdocuments/RowSetClones.odb
 	mkdir -p $(dir $@)
 	cp -P -f "$<" "$@"
-.PHONY: $(WORKDIR)/CppunitTest/RowSetClones.odb
 
 $(call gb_CppunitTest_get_target,dbaccess_RowSetClones): \
     $(call gb_AllLangResTarget_get_target,ofa)
