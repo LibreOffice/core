@@ -1449,28 +1449,6 @@ void SwPageFrame::GetContentPosition( const Point &rPt, SwPosition &rPos ) const
     }
 }
 
-// #123110# - helper class to disable creation of an action
-// by a callback event - e.g., change event from a drawing object
-class DisableCallbackAction
-{
-    private:
-        SwRootFrame& mrRootFrame;
-        bool mbOldCallbackActionState;
-
-    public:
-        explicit DisableCallbackAction( const SwRootFrame& _rRootFrame ) :
-            mrRootFrame( const_cast<SwRootFrame&>(_rRootFrame) ),
-            mbOldCallbackActionState( _rRootFrame.IsCallbackActionEnabled() )
-        {
-            mrRootFrame.SetCallbackActionEnabled( false );
-        }
-
-        ~DisableCallbackAction()
-        {
-            mrRootFrame.SetCallbackActionEnabled( mbOldCallbackActionState );
-        }
-};
-
 /** Search the nearest Content to the passed point.
  *
  * Only search inside the BodyText.
@@ -1483,7 +1461,7 @@ Point SwRootFrame::GetNextPrevContentPos( const Point& rPoint, bool bNext ) cons
     // #123110# - disable creation of an action by a callback
     // event during processing of this method. Needed because formatting is
     // triggered by this method.
-    DisableCallbackAction aDisableCallbackAction( *this );
+    DisableCallbackAction aDisableCallbackAction(const_cast<SwRootFrame&>(*this));
     //Search the first ContentFrame and his successor in the body area.
     //To be efficient (and not formatting too much) we'll start at the correct
     //page.
@@ -2018,6 +1996,8 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     {
         return;
     }
+
+    DisableCallbackAction a(*this); // the GetCharRect below may format
 
     //First obtain the ContentFrames for the start and the end - those are needed
     //anyway.
