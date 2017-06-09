@@ -40,7 +40,7 @@ module chart2
 
     // NOTES
 
-    // kombinierbarkeit - data series combiner (andere Komponente?)
+    // ability to be combined - data series combiner (another component?)
     // coordinatesystem-supplier
     // chart-type ? property string rendererServiceName
 
