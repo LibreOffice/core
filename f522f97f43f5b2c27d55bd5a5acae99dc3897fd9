@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_792137b4",
+        "filename": "writerfilter/source/rtftok/rtfdispatchdestination.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-09T12:01:04Z",
+      "side": 1,
+      "message": "Please follow the style of the surrounding code. This should be \"if (!m_hasRHeader)\\n{\". Same at several places below.",
+      "revId": "f522f97f43f5b2c27d55bd5a5acae99dc3897fd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_9930a303",
+        "filename": "writerfilter/source/rtftok/rtfdispatchdestination.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-09T12:01:04Z",
+      "side": 1,
+      "message": "Same here, surrounding code always does \"if (\".",
+      "revId": "f522f97f43f5b2c27d55bd5a5acae99dc3897fd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_b92b9f93",
+        "filename": "writerfilter/source/rtftok/rtfdocumentimpl.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-09T12:01:04Z",
+      "side": 1,
+      "message": "One empty line is enough?",
+      "revId": "f522f97f43f5b2c27d55bd5a5acae99dc3897fd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_d9186b87",
+        "filename": "writerfilter/source/rtftok/rtflistener.hxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-06-09T12:01:04Z",
+      "side": 1,
+      "message": "Is this used anywhere?",
+      "revId": "f522f97f43f5b2c27d55bd5a5acae99dc3897fd9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
