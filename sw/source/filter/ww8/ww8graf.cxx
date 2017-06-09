@@ -977,7 +977,7 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP 
     return pRet;
 }
 
-// InsertTxbxText() adds the Text and the Attributs for TextBoxes and CaptionBoxes
+// InsertTxbxText() adds the Text and the Attributes for TextBoxes and CaptionBoxes
 void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
     Size* pObjSiz, sal_uInt16 nTxBxS, sal_uInt16 nSequence, long nPosCp,
     SwFrameFormat* pOldFlyFormat, bool bMakeSdrGrafObj, bool& rbEraseTextObj,

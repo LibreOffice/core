@@ -69,7 +69,7 @@ XBufferedThreadedStream::~XBufferedThreadedStream()
 }
 
 /**
- * Reads from UnbufferedStream in a seperate thread and stores the buffer blocks
+ * Reads from UnbufferedStream in a separate thread and stores the buffer blocks
  * in maPendingBuffers queue for further use.
  */
 void XBufferedThreadedStream::produce()
