@@ -103,7 +103,6 @@ $(call gb_CppunitTest_get_target,dbaccess_empty_stdlib_save) : $(WORKDIR)/Cppuni
 $(WORKDIR)/CppunitTest/testEmptyStdlibSave.odb : $(SRCDIR)/dbaccess/qa/extras/testdocuments/testDialogSave.odb
 	mkdir -p $(dir $@)
 	cp -P -f "$<" "$@"
-.PHONY: $(WORKDIR)/CppunitTest/testEmptyStdlibSave.odb
 
 $(call gb_CppunitTest_get_target,dbaccess_empty_stdlib_save): \
     $(call gb_AllLangResTarget_get_target,ofa)
