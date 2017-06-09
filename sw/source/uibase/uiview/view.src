@@ -80,5 +80,9 @@ String STR_SAVEAS_SRC
 {
     Text [ en-US ] = "~Export source..." ;
 };
+String STR_SAVEACOPY_SRC
+{
+    Text [ en-US ] = "~Export copy of source..." ;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
