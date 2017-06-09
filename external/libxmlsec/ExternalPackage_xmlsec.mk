@@ -12,13 +12,8 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,xmlsec,xmlsec))
 $(eval $(call gb_ExternalPackage_use_external_project,xmlsec,xmlsec))
 
 ifeq ($(OS),WNT)
-ifeq ($(COM),GCC)
-$(eval $(call gb_ExternalPackage_add_file,xmlsec,$(LIBO_LIB_FOLDER)/libxmlsec1.dll,src/.libs/libxmlsec1.dll))
-$(eval $(call gb_ExternalPackage_add_file,xmlsec,$(LIBO_LIB_FOLDER)/libxmlsec1-nss.dll,src/nss/.libs/libxmlsec1-nss.dll))
-else
 $(eval $(call gb_ExternalPackage_add_file,xmlsec,$(LIBO_LIB_FOLDER)/libxmlsec-mscrypto.dll,win32/binaries/libxmlsec-mscrypto.dll))
 $(eval $(call gb_ExternalPackage_add_file,xmlsec,$(LIBO_LIB_FOLDER)/libxmlsec.dll,win32/binaries/libxmlsec.dll))
-endif
 endif
 
 # vim: set noet sw=4 ts=4:
