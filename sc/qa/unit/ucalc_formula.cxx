@@ -7904,6 +7904,47 @@ void Test::testFuncRowsHidden()
     m_pDoc->DeleteTab(0);
 }
 
+// Test SUMIFS in array context.
+void Test::testFuncSUMIFS()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, "Test");
+
+    // Data in A1:B7, query in A9:A11
+    std::vector<std::vector<const char*>> aData = {
+        { "a",  "1" },
+        { "b",  "2" },
+        { "c",  "4" },
+        { "d",  "8" },
+        { "a", "16" },
+        { "b", "32" },
+        { "c", "64" },
+        {},
+        { "a" },
+        { "b" },
+        { "c" },
+    };
+
+    insertRangeData(m_pDoc, ScAddress(0,0,0), aData);
+
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    // Matrix formula in C8:C10
+    m_pDoc->InsertMatrixFormula(2, 7, 2, 9, aMark, "=SUMIFS(B1:B7;A1:A7;A9:A11)");
+
+    // Result B1+B5, B2+B6, B3+B7
+    std::vector<std::vector<const char*>> aCheck = {
+        { "17" },
+        { "34" },
+        { "68" }
+    };
+
+    bool bGood = checkOutput(m_pDoc, ScRange(2,7,0, 2,9,0), aCheck, "SUMIFS in array context");
+    CPPUNIT_ASSERT(bGood);
+
+    m_pDoc->DeleteTab(0);
+}
+
 // Test SUBTOTAL with reference lists in array context.
 void Test::testFuncRefListArraySUBTOTAL()
 {
