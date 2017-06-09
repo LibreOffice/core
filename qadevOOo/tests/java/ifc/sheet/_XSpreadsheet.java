@@ -75,6 +75,6 @@ public class _XSpreadsheet extends MultiMethodTest {
         tRes.tested("createCursorByRange()", oCursor != null);
     }
 
-} // finisch class _XSpreadsheet
+} // finish class _XSpreadsheet
 
 

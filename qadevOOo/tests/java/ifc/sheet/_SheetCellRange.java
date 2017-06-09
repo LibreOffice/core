@@ -31,5 +31,5 @@ import lib.MultiPropertyTest;
 * @see com.sun.star.sheet.SheetCellRange
 */
 public class _SheetCellRange extends MultiPropertyTest {
-} // finisch class _SheetCellRange
+} // finish class _SheetCellRange
 
