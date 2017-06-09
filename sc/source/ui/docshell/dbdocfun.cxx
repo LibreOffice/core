@@ -742,7 +742,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             rDoc.CopyToDocument(aLocalParam.nCol1, aLocalParam.nRow1, nDestTab,
                                 aLocalParam.nCol2, aLocalParam.nRow2, nDestTab,
                                 InsertDeleteFlags::ALL, false, *pUndoDoc);
-            //  secure attributs in case they were copied along
+            //  secure attributes in case they were copied along
 
             if (pDestData)
             {
