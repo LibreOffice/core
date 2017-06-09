@@ -1764,14 +1764,15 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             aTmpState.m_pSpecialPos = &aSpecialPos;
         }
 
-        ++mnStartAction; // tdf#91602 prevent recursive Action!
-        if( !pFrame->GetCharRect( m_aCharRect, *pShellCursor->GetPoint(), &aTmpState ) )
         {
-            Point& rPt = pShellCursor->GetPtPos();
-            rPt = m_aCharRect.Center();
-            pFrame->GetCursorOfst( pShellCursor->GetPoint(), rPt, &aTmpState );
+            DisableCallbackAction a(*GetLayout()); // tdf#91602 prevent recursive Action
+            if (!pFrame->GetCharRect(m_aCharRect, *pShellCursor->GetPoint(), &aTmpState))
+            {
+                Point& rPt = pShellCursor->GetPtPos();
+                rPt = m_aCharRect.Center();
+                pFrame->GetCursorOfst( pShellCursor->GetPoint(), rPt, &aTmpState );
+            }
         }
-        --mnStartAction;
         UISizeNotify(); // tdf#96256 update view size
 
         if( !pShellCursor->HasMark() )
