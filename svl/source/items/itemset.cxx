@@ -675,7 +675,8 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
     {
         assert(pRange[0] <= pRange[1]);
         // ranges must be sorted and discrete
-        assert(!pRange[2] || (pRange[2] - pRange[1]) > 1);
+        assert(
+            !pRange[2] || (pRange[2] > pRange[1] && pRange[2] - pRange[1] > 1));
     }
 #endif
 
