@@ -31,7 +31,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <vcl/svgdata.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 
 
@@ -118,7 +118,7 @@ public:
                     Graphic( Graphic&& rGraphic );
                     Graphic( const Bitmap& rBmp );
                     Graphic( const BitmapEx& rBmpEx );
-                    Graphic( const SvgDataPtr& rSvgDataPtr );
+                    Graphic( const VectorGraphicDataPtr& rVectorGraphicDataPtr );
                     Graphic( const Animation& rAnimation );
                     Graphic( const GDIMetaFile& rMtf );
                     Graphic( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
@@ -219,7 +219,7 @@ public:
 
 public:
 
-    const SvgDataPtr& getSvgData() const;
+    const VectorGraphicDataPtr& getVectorGraphicData() const;
 
     void setPdfData(const css::uno::Sequence<sal_Int8>& rPdfData);
     const css::uno::Sequence<sal_Int8>& getPdfData() const;

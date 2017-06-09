@@ -712,9 +712,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         {
                             const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(mpDrawView->GetMarkedObjectByIndex(0));
 
-                            if(pSdrGrafObj && pSdrGrafObj->isEmbeddedSvg())
+                            if(pSdrGrafObj && pSdrGrafObj->isEmbeddedVectorGraphicData())
                             {
-                                aGraphic = Graphic(pSdrGrafObj->GetGraphic().getSvgData()->getReplacement());
+                                aGraphic = Graphic(pSdrGrafObj->GetGraphic().getVectorGraphicData()->getReplacement());
                                 bDone = true;
                             }
                         }
@@ -2343,9 +2343,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         {
                             nCount += pGraf->GetGraphic().GetGDIMetaFile().GetActionSize();
                         }
-                        else if(pGraf->isEmbeddedSvg())
+                        else if(pGraf->isEmbeddedVectorGraphicData())
                         {
-                            nCount += pGraf->getMetafileFromEmbeddedSvg().GetActionSize();
+                            nCount += pGraf->getMetafileFromEmbeddedVectorGraphicData().GetActionSize();
                         }
                     }
 

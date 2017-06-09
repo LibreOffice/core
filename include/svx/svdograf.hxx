@@ -185,8 +185,8 @@ public:
     virtual void            SetPage(SdrPage* pNewPage) override;
     virtual void            SetModel(SdrModel* pNewModel) override;
 
-    bool isEmbeddedSvg() const;
-    GDIMetaFile getMetafileFromEmbeddedSvg() const;
+    bool isEmbeddedVectorGraphicData() const;
+    GDIMetaFile getMetafileFromEmbeddedVectorGraphicData() const;
 
     virtual SdrObject*      DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 

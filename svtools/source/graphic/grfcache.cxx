@@ -70,15 +70,15 @@ GraphicID::GraphicID( const GraphicObject& rObj )
     {
         case GraphicType::Bitmap:
         {
-            if(rGraphic.getSvgData().get())
+            if(rGraphic.getVectorGraphicData().get())
             {
-                const SvgDataPtr& rSvgDataPtr = rGraphic.getSvgData();
-                const basegfx::B2DRange& rRange = rSvgDataPtr->getRange();
+                const VectorGraphicDataPtr& rVectorGraphicDataPtr = rGraphic.getVectorGraphicData();
+                const basegfx::B2DRange& rRange = rVectorGraphicDataPtr->getRange();
 
-                mnID1 |= rSvgDataPtr->getSvgDataArrayLength();
+                mnID1 |= rVectorGraphicDataPtr->getVectorGraphicDataArrayLength();
                 mnID2 = basegfx::fround(rRange.getWidth());
                 mnID3 = basegfx::fround(rRange.getHeight());
-                mnID4 = vcl_get_checksum(0, rSvgDataPtr->getSvgDataArray().getConstArray(), rSvgDataPtr->getSvgDataArrayLength());
+                mnID4 = vcl_get_checksum(0, rVectorGraphicDataPtr->getVectorGraphicDataArray().getConstArray(), rVectorGraphicDataPtr->getVectorGraphicDataArrayLength());
             }
             else if( rGraphic.IsAnimated() )
             {
@@ -145,15 +145,15 @@ private:
 
     std::vector< GraphicObject* >   maGraphicObjectList;
 
-    GraphicID           maID;
-    GfxLink             maGfxLink;
-    BitmapEx*           mpBmpEx;
-    GDIMetaFile*        mpMtf;
-    Animation*          mpAnimation;
-    bool                mbSwappedAll;
+    GraphicID               maID;
+    GfxLink                 maGfxLink;
+    BitmapEx*               mpBmpEx;
+    GDIMetaFile*            mpMtf;
+    Animation*              mpAnimation;
+    bool                    mbSwappedAll;
 
-    // SvgData support
-    SvgDataPtr          maSvgData;
+    // VectorGraphicData support
+    VectorGraphicDataPtr    maVectorGraphicData;
     uno::Sequence<sal_Int8> maPdfData;
 
     bool                ImplInit( const GraphicObject& rObj );
@@ -229,9 +229,9 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
         {
             case GraphicType::Bitmap:
             {
-                if(rGraphic.getSvgData().get())
+                if(rGraphic.getVectorGraphicData().get())
                 {
-                    maSvgData = rGraphic.getSvgData();
+                    maVectorGraphicData = rGraphic.getVectorGraphicData();
                 }
                 else if( rGraphic.IsAnimated() )
                 {
@@ -280,9 +280,9 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
     if( rSubstitute.IsLink() && ( GfxLinkType::NONE == maGfxLink.GetType() ) )
         maGfxLink = rSubstitute.GetLink();
 
-    if(maSvgData.get())
+    if(maVectorGraphicData.get())
     {
-        rSubstitute = maSvgData;
+        rSubstitute = maVectorGraphicData;
     }
     else if( mpBmpEx )
     {
@@ -381,8 +381,8 @@ void GraphicCacheEntry::GraphicObjectWasSwappedOut()
         delete mpAnimation;
         mpAnimation = nullptr;
 
-        // #119176# also reset SvgData
-        maSvgData.reset();
+        // #119176# also reset VectorGraphicData
+        maVectorGraphicData.reset();
         maPdfData = uno::Sequence<sal_Int8>();
     }
 }

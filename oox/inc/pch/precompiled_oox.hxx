@@ -85,7 +85,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/svgdata.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

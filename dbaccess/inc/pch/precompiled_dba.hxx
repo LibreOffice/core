@@ -129,7 +129,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/scopedbitmapaccess.hxx>
-#include <vcl/svgdata.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>

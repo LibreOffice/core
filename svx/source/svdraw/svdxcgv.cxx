@@ -47,7 +47,7 @@
 #include <vcl/virdev.hxx>
 #include <svl/style.hxx>
 #include <fmobj.hxx>
-#include <vcl/svgdata.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
@@ -462,9 +462,9 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
             {
                 const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(GetMarkedObjectByIndex(0));
 
-                if(pSdrGrafObj && pSdrGrafObj->isEmbeddedSvg())
+                if(pSdrGrafObj && pSdrGrafObj->isEmbeddedVectorGraphicData())
                 {
-                    aBmp = pSdrGrafObj->GetGraphic().getSvgData()->getReplacement();
+                    aBmp = pSdrGrafObj->GetGraphic().getVectorGraphicData()->getReplacement();
                 }
             }
         }
@@ -608,10 +608,10 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
 
         if(pSdrGrafObj)
         {
-            if(pSdrGrafObj->isEmbeddedSvg())
+            if(pSdrGrafObj->isEmbeddedVectorGraphicData())
             {
                 // get Metafile for Svg content
-                aRet = pSdrGrafObj->getMetafileFromEmbeddedSvg();
+                aRet = pSdrGrafObj->getMetafileFromEmbeddedVectorGraphicData();
             }
             else
             {

@@ -406,6 +406,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	storagefd \
 	$(call gb_Helper_optional,SCRIPTING,stringresource) \
 	svgio \
+	emfio \
 	svl \
 	svt \
 	svx \

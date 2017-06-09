@@ -94,7 +94,7 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/svgdata.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/vclptr.hxx>
 #include <attrib.hxx>
 #include <basegfx/color/bcolor.hxx>

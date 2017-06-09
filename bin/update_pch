@@ -102,6 +102,7 @@ DEFAULTS = \
     'sot.sot'                           : ( 5, EXCLUDE, EXCLUDE, INCLUDE), #   3.1
     'starmath.sm'                       : ( 5, EXCLUDE, EXCLUDE, INCLUDE), #  10.9
     'svgio.svgio'                       : ( 8, EXCLUDE, EXCLUDE, INCLUDE), #   4.3
+    'emfio.emfio'                       : ( 8, EXCLUDE, EXCLUDE, INCLUDE), #   4.3
     'svl.svl'                           : ( 6, EXCLUDE, EXCLUDE, EXCLUDE), #   7.6
     'svtools.svt'                       : ( 4, EXCLUDE, INCLUDE, EXCLUDE), #  17.6
     'svx.svx'                           : ( 3, EXCLUDE, EXCLUDE, INCLUDE), #  20.7

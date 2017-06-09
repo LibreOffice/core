@@ -211,8 +211,8 @@ Graphic::Graphic(const BitmapEx& rBmpEx)
 {
 }
 
-Graphic::Graphic(const SvgDataPtr& rSvgDataPtr)
-    : mxImpGraphic(new ImpGraphic(rSvgDataPtr))
+Graphic::Graphic(const VectorGraphicDataPtr& rVectorGraphicDataPtr)
+    : mxImpGraphic(new ImpGraphic(rVectorGraphicDataPtr))
 {
 }
 
@@ -581,9 +581,9 @@ void WriteGraphic( SvStream& rOStream, const Graphic& rGraphic )
     WriteImpGraphic(rOStream, *rGraphic.mxImpGraphic);
 }
 
-const SvgDataPtr& Graphic::getSvgData() const
+const VectorGraphicDataPtr& Graphic::getVectorGraphicData() const
 {
-    return mxImpGraphic->getSvgData();
+    return mxImpGraphic->getVectorGraphicData();
 }
 
 void Graphic::setPdfData(const uno::Sequence<sal_Int8>& rPdfData)

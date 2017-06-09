@@ -473,31 +473,31 @@ namespace drawinglayer
                             rGraphic,
                             rTransform);
                     }
-                    else if(rGraphic.getSvgData().get())
+                    else if(rGraphic.getVectorGraphicData().get())
                     {
-                        // embedded Svg fill, create embed transform
-                        const basegfx::B2DRange& rSvgRange(rGraphic.getSvgData()->getRange());
+                        // embedded Vector Graphic Data fill, create embed transform
+                        const basegfx::B2DRange& rSvgRange(rGraphic.getVectorGraphicData()->getRange());
 
                         if(basegfx::fTools::more(rSvgRange.getWidth(), 0.0) && basegfx::fTools::more(rSvgRange.getHeight(), 0.0))
                         {
                             // translate back to origin, scale to unit coordinates
-                            basegfx::B2DHomMatrix aEmbedSvg(
+                            basegfx::B2DHomMatrix aEmbedVectorGraphic(
                                 basegfx::tools::createTranslateB2DHomMatrix(
                                     -rSvgRange.getMinX(),
                                     -rSvgRange.getMinY()));
 
-                            aEmbedSvg.scale(
+                            aEmbedVectorGraphic.scale(
                                 1.0 / rSvgRange.getWidth(),
                                 1.0 / rSvgRange.getHeight());
 
                             // apply created object transformation
-                            aEmbedSvg = rTransform * aEmbedSvg;
+                            aEmbedVectorGraphic = rTransform * aEmbedVectorGraphic;
 
-                            // add Svg primitives embedded
+                            // add Vector Graphic Data primitives embedded
                             aRetval.resize(1);
                             aRetval[0] = new TransformPrimitive2D(
-                                aEmbedSvg,
-                                rGraphic.getSvgData()->getPrimitive2DSequence());
+                                aEmbedVectorGraphic,
+                                rGraphic.getVectorGraphicData()->getPrimitive2DSequence());
                         }
                     }
                     else

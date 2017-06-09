@@ -81,6 +81,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	svl/util/svl \
 	svtools/util/svt \
 	svgio/svgio \
+	emfio/emfio \
 	svx/util/svx \
 	svx/util/svxcore \
 	svx/util/textconversiondlgs \

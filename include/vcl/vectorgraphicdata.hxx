@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_SVGDATA_HXX
-#define INCLUDED_VCL_SVGDATA_HXX
+#ifndef INCLUDED_VCL_VECTORGRAPHICDATA_HXX
+#define INCLUDED_VCL_VECTORGRAPHICDATA_HXX
 
 #include <basegfx/range/b2drange.hxx>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
@@ -27,7 +27,7 @@
 #include <deque>
 
 
-typedef css::uno::Sequence<sal_Int8> SvgDataArray;
+typedef css::uno::Sequence<sal_Int8> VectorGraphicDataArray;
 
 
 // helper to convert any Primitive2DSequence to a good quality BitmapEx,
@@ -39,39 +39,53 @@ BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
     const sal_uInt32 nMaximumQuadraticPixels = 500000);
 
 
-class VCL_DLLPUBLIC SvgData
+enum class VectorGraphicDataType
+{
+    Svg = 0,
+    Emf = 1,
+    Wmf = 2
+};
+
+class VCL_DLLPUBLIC VectorGraphicData
 {
 private:
     // the file and length
-    SvgDataArray            maSvgDataArray;
+    VectorGraphicDataArray      maVectorGraphicDataArray;
 
     // The absolute Path if available
-    OUString           maPath;
+    OUString                    maPath;
 
     // on demand created content
-    basegfx::B2DRange       maRange;
+    basegfx::B2DRange           maRange;
     std::deque< css::uno::Reference< css::graphic::XPrimitive2D > >
-                            maSequence;
-    BitmapEx                maReplacement;
-    size_t mNestedBitmapSize;
+                                maSequence;
+    BitmapEx                    maReplacement;
+    size_t                      mNestedBitmapSize;
+    VectorGraphicDataType       meVectorGraphicDataType;
 
     // on demand creators
     void ensureReplacement();
     void ensureSequenceAndRange();
 
-    SvgData(const SvgData&) = delete;
-    SvgData& operator=(const SvgData&) = delete;
+    VectorGraphicData(const VectorGraphicData&) = delete;
+    VectorGraphicData& operator=(const VectorGraphicData&) = delete;
 
 public:
-    SvgData(const SvgDataArray& rSvgDataArray, const OUString& rPath);
-    SvgData(const OUString& rPath);
+    VectorGraphicData(
+        const VectorGraphicDataArray& rVectorGraphicDataArray,
+        const OUString& rPath,
+        VectorGraphicDataType eVectorDataType); // = VectorGraphicDataType::Svg);
+    VectorGraphicData(
+        const OUString& rPath,
+        VectorGraphicDataType eVectorDataType);
 
     /// data read
-    const SvgDataArray& getSvgDataArray() const { return maSvgDataArray; }
-    sal_uInt32 getSvgDataArrayLength() const { return maSvgDataArray.getLength(); }
+    const VectorGraphicDataArray& getVectorGraphicDataArray() const { return maVectorGraphicDataArray; }
+    sal_uInt32 getVectorGraphicDataArrayLength() const { return maVectorGraphicDataArray.getLength(); }
     enum class State { UNPARSED, PARSED };
     std::pair<State, size_t> getSizeBytes();
     const OUString& getPath() const { return maPath; }
+    const VectorGraphicDataType& getVectorGraphicDataType() const { return meVectorGraphicDataType; }
 
     /// data read and evtl. on demand creation
     const basegfx::B2DRange& getRange() const;
@@ -79,8 +93,8 @@ public:
     const BitmapEx& getReplacement() const;
 };
 
-typedef std::shared_ptr< SvgData > SvgDataPtr;
+typedef std::shared_ptr< VectorGraphicData > VectorGraphicDataPtr;
 
-#endif // INCLUDED_VCL_SVGDATA_HXX
+#endif // INCLUDED_VCL_VECTORGRAPHICDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
