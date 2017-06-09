@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_19d2f3d2",
+        "filename": "sw/source/core/text/txtftn.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-06-09T09:56:16Z",
+      "side": 1,
+      "message": "no, not the footer, the footnote container - those are different things",
+      "revId": "5e664692d4a23339d529acf24a308a6891ffdede",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
