@@ -1387,7 +1387,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                         {
                             case GraphicType::Bitmap :
                                 bFoundBitmap = true;
-                                if(pSdrGrafObj->isEmbeddedSvg())
+                                if(pSdrGrafObj->isEmbeddedVectorGraphicData())
                                 {
                                     bFoundMetafile = true;
                                 }

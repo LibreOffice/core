@@ -149,7 +149,7 @@
 #include <vcl/scopedbitmapaccess.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/svgdata.hxx>
+#include <vcl/vectorgraphicdata.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/vclenum.hxx>
