@@ -19,6 +19,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/util/XSortable.hpp>
 #include <com/sun/star/util/SortField.hpp>
+#include <comphelper/propertysequence.hxx>
 
 using namespace css;
 using namespace css::uno;
