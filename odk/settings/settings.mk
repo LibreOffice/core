@@ -275,6 +275,30 @@ ifeq "$(PROCTYPE)" "powerpc64"
 JAVA_PROC_TYPE=ppc64
 endif
 
+ifeq "$(PROCTYPE)" "powerpc64_le"
+JAVA_PROC_TYPE=ppc64le
+endif
+
+ifeq "$(PROCTYPE)" "arm_eabi"
+JAVA_PROC_TYPE=arm
+endif
+
+ifeq "$(PROCTYPE)" "arm_oabi"
+JAVA_PROC_TYPE=arm
+endif
+
+ifeq "$(PROCTYPE)" "mips_eb"
+JAVA_PROC_TYPE=mips
+endif
+
+ifeq "$(PROCTYPE)" "mips_el"
+JAVA_PROC_TYPE=mipsel
+endif
+
+ifeq "$(PROCTYPE)" "mips64_el"
+JAVA_PROC_TYPE=mips64el
+endif
+
 ifeq "$(PROCTYPE)" "sparc64"
 UNOPKG_PLATFORM=Linux_SPARC64
 JAVA_PROC_TYPE=sparcv9
