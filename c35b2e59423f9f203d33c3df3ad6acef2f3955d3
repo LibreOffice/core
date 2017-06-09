@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a3905b3_b9547f21",
+        "filename": "UnoControls/source/controls/framecontrol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-09T11:44:30Z",
+      "side": 1,
+      "message": "ProperyHandle -\u003e PropertyHandle",
+      "revId": "c35b2e59423f9f203d33c3df3ad6acef2f3955d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a3905b3_d9314b0d",
+        "filename": "UnoControls/source/controls/framecontrol.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-06-09T11:44:30Z",
+      "side": 1,
+      "message": "properies -\u003e properties",
+      "revId": "c35b2e59423f9f203d33c3df3ad6acef2f3955d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
