@@ -111,6 +111,12 @@ void Crypto::setupContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& i
 Decrypt::Decrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type)
     : Crypto()
 {
+#if USE_TLS_OPENSSL + USE_TLS_NSS == 0
+    (void)key;
+    (void)iv;
+    (void)type;
+#endif
+
 #if USE_TLS_OPENSSL
     EVP_CIPHER_CTX_init(&mContext);
 
@@ -132,7 +138,13 @@ sal_uInt32 Decrypt::update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8
 {
     int outputLength = 0;
 
+#if USE_TLS_OPENSSL + USE_TLS_NSS > 0
     sal_uInt32 actualInputLength = inputLength == 0 || inputLength > input.size() ? input.size() : inputLength;
+#else
+    (void)output;
+    (void)input;
+    (void)inputLength;
+#endif
 
 #if USE_TLS_OPENSSL
     (void)EVP_DecryptUpdate(&mContext, output.data(), &outputLength, input.data(), actualInputLength);
@@ -159,6 +171,12 @@ sal_uInt32 Decrypt::aes128ecb(std::vector<sal_uInt8>& output, std::vector<sal_uI
 Encrypt::Encrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type)
     : Crypto()
 {
+#if USE_TLS_OPENSSL + USE_TLS_NSS == 0
+    (void)key;
+    (void)iv;
+    (void)type;
+#endif
+
 #if USE_TLS_OPENSSL
     EVP_CIPHER_CTX_init(&mContext);
 
@@ -180,7 +198,13 @@ sal_uInt32 Encrypt::update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8
 {
     int outputLength = 0;
 
+#if USE_TLS_OPENSSL + USE_TLS_NSS > 0
     sal_uInt32 actualInputLength = inputLength == 0 || inputLength > input.size() ? input.size() : inputLength;
+#else
+    (void)output;
+    (void)input;
+    (void)inputLength;
+#endif
 
 #if USE_TLS_OPENSSL
     (void)EVP_EncryptUpdate(&mContext, output.data(), &outputLength, input.data(), actualInputLength);

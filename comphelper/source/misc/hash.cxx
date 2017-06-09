@@ -105,6 +105,9 @@ void Hash::update(const unsigned char* pInput, size_t length)
     HASH_Update(mpImpl->mpContext, pInput, length);
 #elif USE_TLS_OPENSSL
     EVP_DigestUpdate(mpImpl->mpContext, pInput, length);
+#else
+    (void)pInput;
+    (void)length;
 #endif
 }
 
@@ -116,6 +119,8 @@ std::vector<unsigned char> Hash::finalize()
     HASH_End(mpImpl->mpContext, hash.data(), &digestWrittenLength, getLength());
 #elif USE_TLS_OPENSSL
     EVP_DigestFinal_ex(mpImpl->mpContext, hash.data(), &digestWrittenLength);
+#else
+    (void)digestWrittenLength;
 #endif
 
     return hash;
