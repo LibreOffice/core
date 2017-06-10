@@ -6936,7 +6936,7 @@ void DocxAttributeOutput::TextFootnote_Impl( const SwFormatFootnote& rFootnote )
     // remember the footnote/endnote to
     // 1) write the footnoteReference/endnoteReference in EndRunProperties()
     // 2) be able to dump them all to footnotes.xml/endnotes.xml
-    if ( !rFootnote.IsEndNote() )
+    if ( !rFootnote.IsEndNote() && m_rExport.m_pDoc->GetFootnoteInfo().ePos != FTNPOS_CHAPTER )
         m_pFootnotesList->add( rFootnote );
     else
         m_pEndnotesList->add( rFootnote );
@@ -6946,15 +6946,17 @@ void DocxAttributeOutput::FootnoteEndnoteReference()
 {
     sal_Int32 nId;
     const SwFormatFootnote *pFootnote = m_pFootnotesList->getCurrent( nId );
+    sal_Int32 nToken = XML_footnoteReference;
 
     // both cannot be set at the same time - if they are, it's a bug
     if ( !pFootnote )
+    {
         pFootnote = m_pEndnotesList->getCurrent( nId );
+        nToken = XML_endnoteReference;
+    }
 
     if ( !pFootnote )
         return;
-
-    sal_Int32 nToken = pFootnote->IsEndNote()? XML_endnoteReference: XML_footnoteReference;
 
     // write it
     if ( pFootnote->GetNumStr().isEmpty() )
