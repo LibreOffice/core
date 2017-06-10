@@ -39,23 +39,7 @@ fuzzer_externals = \
     hunspell \
     zlib \
 
-fuzzer_libraries = \
-    msword \
-    sw \
-    swd \
-    writerfilter \
-    textfd \
-    analysis \
-    date \
-    pricing \
-    scfilt \
-    scd \
-    vbaevents \
-    sc \
-    sdfilt \
-    sd \
-    sdd \
-    icg \
+fuzzer_core_libraries = \
     basctl \
     avmedia \
     basegfx \
@@ -69,8 +53,6 @@ fuzzer_libraries = \
     drawinglayer \
     editeng \
     filterconfig \
-    for \
-    forui \
     fsstorage \
     fwe \
     fwi \
@@ -149,3 +131,27 @@ fuzzer_libraries = \
     gcc3_uno \
     salhelper \
     sal \
+
+fuzzer_calc_libraries = \
+    analysis \
+    date \
+    pricing \
+    scfilt \
+    scd \
+    vbaevents \
+    sc \
+    for \
+    forui \
+
+fuzzer_writer_libraries = \
+    msword \
+    sw \
+    swd \
+    writerfilter \
+    textfd \
+
+fuzzer_draw_libraries = \
+    sdfilt \
+    sd \
+    sdd \
+    icg \

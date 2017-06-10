@@ -27,13 +27,13 @@ $(eval $(call gb_Executable_set_include,xbmfuzzer,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,xbmfuzzer,\
-	$(fuzzer_libraries) \
+    $(fuzzer_core_libraries) \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,xbmfuzzer,\
     findsofficepath \
     ulingu \
-    fuzzer \
+    fuzzer_core \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,xbmfuzzer,\

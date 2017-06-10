@@ -27,14 +27,14 @@ $(eval $(call gb_Executable_set_include,qpwfuzzer,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,qpwfuzzer,\
-	scfilt \
-	$(fuzzer_libraries) \
+    $(fuzzer_calc_libraries) \
+    $(fuzzer_core_libraries) \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,qpwfuzzer,\
     findsofficepath \
     ulingu \
-    fuzzer \
+    fuzzer_calc \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,qpwfuzzer,\

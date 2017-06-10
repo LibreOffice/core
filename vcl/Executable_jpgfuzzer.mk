@@ -27,13 +27,13 @@ $(eval $(call gb_Executable_set_include,jpgfuzzer,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,jpgfuzzer,\
-	$(fuzzer_libraries) \
+    $(fuzzer_core_libraries) \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,jpgfuzzer,\
     findsofficepath \
     ulingu \
-    fuzzer \
+    fuzzer_core \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,jpgfuzzer,\
