@@ -976,7 +976,7 @@ void SwRedlineData::SetExtraData( const SwRedlineExtraData* pData )
 
 OUString SwRedlineData::GetDescr() const
 {
-    return SwResId(STR_REDLINE_INSERT + GetType());
+    return SwResId(STR_UNDO_REDLINE_INSERT + GetType());
 }
 
 sal_uInt32 SwRangeRedline::m_nLastId = 1;
