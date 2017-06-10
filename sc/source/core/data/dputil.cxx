@@ -369,8 +369,8 @@ sal_Int32 ScDPUtil::getDatePartValue(
 
 namespace {
 
-sal_uInt16 nFuncStrIds[] = {
-    0,                              // SUBTOTAL_FUNC_NONE
+const char* aFuncStrIds[] = {
+    nullptr,                        // SUBTOTAL_FUNC_NONE
     STR_FUN_TEXT_AVG,               // SUBTOTAL_FUNC_AVE
     STR_FUN_TEXT_COUNT,             // SUBTOTAL_FUNC_CNT
     STR_FUN_TEXT_COUNT,             // SUBTOTAL_FUNC_CNT2
@@ -391,11 +391,11 @@ sal_uInt16 nFuncStrIds[] = {
 OUString ScDPUtil::getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc eFunc)
 {
     OUStringBuffer aRet;
-    assert(eFunc < SAL_N_ELEMENTS(nFuncStrIds));
-    sal_uInt16 nId = nFuncStrIds[eFunc];
-    if (nId)
+    assert(eFunc < SAL_N_ELEMENTS(aFuncStrIds));
+    const char* pId = aFuncStrIds[eFunc];
+    if (pId)
     {
-        aRet.append(ScGlobal::GetRscString(nId));        // function name
+        aRet.append(ScGlobal::GetRscString(pId));        // function name
         aRet.append(" - ");
     }
     aRet.append(rName);                   // field name

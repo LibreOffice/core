@@ -45,7 +45,7 @@
 #include "AccessibleText.hxx"
 #include "editsrc.hxx"
 #include "scresid.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "scmod.hxx"
 #include <svtools/colorcfg.hxx>
 #include <vcl/svapp.hxx>

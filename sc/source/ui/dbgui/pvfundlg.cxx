@@ -34,7 +34,8 @@
 #include "scresid.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
-#include "scres.hrc"
+#include "pvfundlg.hrc"
+#include "strings.hrc"
 #include "scmod.hxx"
 #include "globstr.hrc"
 #include "dputil.hxx"
@@ -181,9 +182,8 @@ void ScDPFunctionListBox::FillFunctionNames()
 {
     OSL_ENSURE( !GetEntryCount(), "ScDPMultiFuncListBox::FillFunctionNames - do not add texts to resource" );
     Clear();
-    ResStringArray aArr(ResId(SCSTR_DPFUNCLISTBOX, *SC_MOD()->GetResMgr()));
-    for( sal_uInt16 nIndex = 0, nCount = sal::static_int_cast<sal_uInt16>(aArr.Count()); nIndex < nCount; ++nIndex )
-        InsertEntry( aArr.GetString( nIndex ) );
+    for (size_t nIndex = 0; nIndex < SAL_N_ELEMENTS(SCSTR_DPFUNCLISTBOX); ++nIndex)
+        InsertEntry(ScResId(SCSTR_DPFUNCLISTBOX[nIndex]));
     assert(GetEntryCount() == SAL_N_ELEMENTS(spnFunctions));
 }
 
