@@ -29,7 +29,7 @@
 #include <viewsh.hxx>
 #include <accmap.hxx>
 #include "accfootnote.hxx"
-#include "access.hrc"
+#include "strings.hrc"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -47,7 +47,7 @@ SwAccessibleFootnote::SwAccessibleFootnote(
         bIsEndnote ? AccessibleRole::END_NOTE : AccessibleRole::FOOTNOTE,
         pFootnoteFrame )
 {
-    sal_uInt16 nResId = bIsEndnote ? STR_ACCESS_ENDNOTE_NAME
+    const char* pResId = bIsEndnote ? STR_ACCESS_ENDNOTE_NAME
                                    : STR_ACCESS_FOOTNOTE_NAME;
 
     OUString sArg;
@@ -59,7 +59,7 @@ SwAccessibleFootnote::SwAccessibleFootnote(
         sArg = pTextFootnote->GetFootnote().GetViewNumStr( *pDoc );
     }
 
-    SetName( GetResource( nResId, &sArg ) );
+    SetName(GetResource(pResId, &sArg));
 }
 
 SwAccessibleFootnote::~SwAccessibleFootnote()
@@ -72,7 +72,7 @@ OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription()
 
     ThrowIfDisposed();
 
-    sal_uInt16 nResId = AccessibleRole::END_NOTE == GetRole()
+    const char* pResId = AccessibleRole::END_NOTE == GetRole()
         ? STR_ACCESS_ENDNOTE_DESC
         : STR_ACCESS_FOOTNOTE_DESC ;
 
@@ -85,7 +85,7 @@ OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription()
         sArg = pTextFootnote->GetFootnote().GetViewNumStr( *pDoc );
     }
 
-    return GetResource( nResId, &sArg );
+    return GetResource(pResId, &sArg);
 }
 
 OUString SAL_CALL SwAccessibleFootnote::getImplementationName()

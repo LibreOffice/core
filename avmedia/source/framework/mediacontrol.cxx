@@ -18,7 +18,7 @@
  */
 
 #include "mediacontrol.hxx"
-#include "mediacontrol.hrc"
+#include "strings.hrc"
 #include "mediamisc.hxx"
 #include <avmedia/mediawindow.hxx>
 #include <avmedia/mediaplayer.hxx>

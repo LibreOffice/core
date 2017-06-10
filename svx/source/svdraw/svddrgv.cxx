@@ -29,7 +29,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdoedge.hxx>
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdglob.hxx"
 #include "svddrgm1.hxx"
 #include <svx/obj3d.hxx>

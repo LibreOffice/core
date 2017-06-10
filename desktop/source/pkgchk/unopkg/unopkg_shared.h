@@ -31,14 +31,6 @@
 
 namespace unopkg {
 
-struct DeploymentResMgr :  public rtl::StaticWithInit< ResMgr *, DeploymentResMgr >
-{
-    ResMgr * operator () () {
-        return ResMgr::CreateResMgr(
-            "deployment", LanguageTag( utl::ConfigManager::getLocale() ) );
-    }
-};
-
 struct OptionInfo
 {
     char const * m_name;
