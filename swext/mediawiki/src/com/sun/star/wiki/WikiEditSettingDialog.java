@@ -281,7 +281,7 @@ public class WikiEditSettingDialog extends WikiDialog
                         {
                             // the used MainURL is not always directly accessible
                             // add the suffix as workaround, but only once
-                            sRedirectURL = sURL + "/index.php";
+                            sRedirectURL = sURL + "/w/index.php";
                             bAllowIndex = false;
                         }
                         else

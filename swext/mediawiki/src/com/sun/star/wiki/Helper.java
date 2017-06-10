@@ -760,7 +760,7 @@ public class Helper
         if ( sWikiUser != null && sWikiPass != null && xContext != null )
         {
             String sLoginPage = null;
-            URI aURI = new URI(aMainURL.toString() + "index.php?title=Special:Userlogin");
+            URI aURI = new URI(aMainURL.toString() + "/w/index.php?title=Special:Userlogin");
             HttpURLConnection connGet = PrepareMethod("GET", aURI, xContext);
             connGet.setInstanceFollowRedirects(true);
 
@@ -774,7 +774,7 @@ public class Helper
             {
                 String sLoginToken = GetLoginToken( sLoginPage );
 
-                URI aPostURI = new URI(aMainURL.toString() + "index.php?title=Special:Userlogin&action=submitlogin");
+                URI aPostURI = new URI(aMainURL.toString() + "/w/index.php?title=Special:Userlogin&action=submitlogin");
 
                 HttpURLConnection connPost = PrepareMethod("POST", aPostURI, xContext);
                 connPost.setInstanceFollowRedirects(true);

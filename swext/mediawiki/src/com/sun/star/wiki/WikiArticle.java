@@ -116,7 +116,7 @@ public class WikiArticle
 
         if (m_isLoggedIn)
         {
-            URI aURI = new URI(m_aMainURI.toString() + "index.php?title=" + m_sTitle + "&action=edit");
+            URI aURI = new URI(m_aMainURI.toString() + "/w/index.php?title=" + m_sTitle + "&action=edit");
             HttpURLConnection connGet = Helper.PrepareMethod("GET", aURI, m_xContext);
             connGet.connect();
 
@@ -156,7 +156,7 @@ public class WikiArticle
     {
         if (m_isLoggedIn)
         {
-            URI uri = new URI(m_aMainURI.toString() + "index.php?title=" + m_sTitle);
+            URI uri = new URI(m_aMainURI.toString() + "/w/index.php?title=" + m_sTitle);
             HttpURLConnection connGet = Helper.PrepareMethod("GET", uri, m_xContext);
             connGet.connect();
 
@@ -197,7 +197,7 @@ public class WikiArticle
             // get the edit time and token
             getArticleWiki();
 
-            URI uri = new URI(m_aMainURI.toString() + "index.php?title=" + m_sTitle + "&action=submit");
+            URI uri = new URI(m_aMainURI.toString() + "/w/index.php?title=" + m_sTitle + "&action=submit");
 
             HttpURLConnection connPost = Helper.PrepareMethod("POST", uri, m_xContext);
             connPost.setDoInput(true);
