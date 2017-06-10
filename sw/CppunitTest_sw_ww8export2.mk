@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_ww8export2, \
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     $(if $(filter WNT-TRUE,$(OS)-$(DISABLE_ATL)),,emboleobj) \
     sal \
     sfx \
