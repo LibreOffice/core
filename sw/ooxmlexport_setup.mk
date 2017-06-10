@@ -13,6 +13,7 @@ define sw_ooxmlexport_libraries
 	comphelper \
 	cppu \
 	cppuhelper \
+	editeng \
 	sal \
 	sfx \
 	sw \
