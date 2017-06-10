@@ -19,6 +19,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,jpeg-turbo,\
 	external/jpeg-turbo/jpeg-turbo.arm_build.patch.1 \
 	external/jpeg-turbo/ubsan.patch \
 	external/jpeg-turbo/jpeg-turbo.limits.patch.1 \
+	external/jpeg-turbo/jpeg-turbo.iOS.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
