@@ -173,9 +173,9 @@ void CSVFetchThread::execute()
     mpStream = FetchStreamFromURL(maURL, aBuffer);
     if (mpStream->good())
     {
-        LinesType* pLines = new LinesType(10);
+        LinesType aLines(10);
         SCROW nCurRow = 0;
-        for (Line & rLine : *pLines)
+        for (Line & rLine : aLines)
         {
             rLine.maCells.clear();
             mpStream->ReadLine(rLine.maLine);
