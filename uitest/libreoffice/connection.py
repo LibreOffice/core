@@ -8,6 +8,7 @@
 import subprocess
 import time
 import uuid
+import os
 
 try:
     import pyuno
@@ -76,7 +77,14 @@ class OfficeConnection:
             argv.insert(3, "--args")
             argv[4] = argv[4].replace("soffice", "soffice.bin")
 
-        self.pro = subprocess.Popen(argv)
+        env = None
+        environ = dict(os.environ)
+        if 'LIBO_LANG' in environ:
+            env = environ
+            env['LC_ALL'] = environ['LIBO_LANG']
+            print(env)
+
+        self.pro = subprocess.Popen(argv, env=env)
         return self.pro
 
     def connect(self, socket):
