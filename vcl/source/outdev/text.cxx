@@ -803,7 +803,7 @@ void OutputDevice::SetTextAlign( TextAlign eAlign )
 void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
                              sal_Int32 nIndex, sal_Int32 nLen,
                              MetricVector* pVector, OUString* pDisplayText,
-                             SalLayout** pLayoutCache
+                             SalLayout* pLayoutCache
                              )
 {
     assert(!is_double_buffered_window());
@@ -875,10 +875,10 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     if ( !IsDeviceOutputNecessary() || pVector )
         return;
 
-    if(mpFontInstance && pLayoutCache)
+    if(mpFontInstance)
         // do not use cache with modified string
-        if( mpFontInstance->mpConversion )
-            *pLayoutCache = nullptr;
+        if(mpFontInstance->mpConversion)
+            pLayoutCache = nullptr;
 
     // without cache
     if(!pLayoutCache)
@@ -893,29 +893,23 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     }
     else
     {
-        // with cache, but there is no cache yet
-        if(!*pLayoutCache)
-            *pLayoutCache = ImplLayout(rStr, nIndex, nLen, rStartPt);
+        // initialize font if needed
+        if( mbNewFont )
+            if( !ImplNewFont() )
+                return;
+        if( mbInitFont )
+            InitFont();
 
-        if( *pLayoutCache )
-        {
-            // initialize font if needed
-            if( mbNewFont )
-                if( !ImplNewFont() )
-                    return;
-            if( mbInitFont )
-                InitFont();
 
-            OUString aStrModifiable = rStr;
-            ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStrModifiable, nIndex, nLen,
-                    0, nullptr);
+        OUString aStrModifiable = rStr;
+        ImplLayoutArgs aLayoutArgs = ImplPrepareLayoutArgs( aStrModifiable, nIndex, nLen,
+                0, nullptr);
 
-             // position, justify, etc. the layout
-             (*pLayoutCache)->AdjustLayout( aLayoutArgs );
-             (*pLayoutCache)->DrawBase() = ImplLogicToDevicePixel( rStartPt );
+        // position, justify, etc. the layout
+        pLayoutCache->AdjustLayout( aLayoutArgs );
+        pLayoutCache->DrawBase() = ImplLogicToDevicePixel( rStartPt );
 
-            ImplDrawText( **pLayoutCache );
-        }
+        ImplDrawText( *pLayoutCache );
     }
 
     if( mpAlphaVDev )
@@ -924,7 +918,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
 
 long OutputDevice::GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen,
      vcl::TextLayoutCache const*const pLayoutCache,
-     SalLayout** pSalLayoutCache) const
+     SalLayout const*const pSalLayoutCache) const
 {
 
     long nWidth = GetTextArray( rStr, nullptr, nIndex,
@@ -992,7 +986,7 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
 long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
                                  sal_Int32 nIndex, sal_Int32 nLen,
                                  vcl::TextLayoutCache const*const pLayoutCache,
-                                 SalLayout** pSalLayoutCache) const
+                                 SalLayout const*const pSalLayoutCache) const
 {
     if( nIndex >= rStr.getLength() )
         return 0; // TODO: this looks like a buggy caller?
@@ -1002,9 +996,9 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
         nLen = rStr.getLength() - nIndex;
     }
 
-    SalLayout* pSalLayout = pSalLayoutCache ? *pSalLayoutCache : nullptr;
+    const SalLayout*  pSalLayout = pSalLayoutCache;
 
-    if(!pSalLayout)
+    if(!pSalLayoutCache)
     {
         // do layout
         pSalLayout = ImplLayout(rStr, nIndex, nLen,
@@ -1022,12 +1016,6 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
                 memset(pDXAry, 0, nLen * sizeof(*pDXAry));
             }
             return 0;
-        }
-
-        // update cache if used
-        if(pSalLayoutCache)
-        {
-            *pSalLayoutCache = pSalLayout;
         }
     }
 
