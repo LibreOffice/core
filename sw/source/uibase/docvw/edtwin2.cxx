@@ -75,6 +75,11 @@ static OUString lcl_GetRedlineHelp( const SwRangeRedline& rRedl, bool bBalloon )
     case nsRedlineType_t::REDLINE_FORMAT:   nResId = STR_REDLINE_FORMAT; break;
     case nsRedlineType_t::REDLINE_TABLE:        nResId = STR_REDLINE_TABLE; break;
     case nsRedlineType_t::REDLINE_FMTCOLL:  nResId = STR_REDLINE_FMTCOLL; break;
+    case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT: nResId = STR_REDLINE_PARAGRAPH_FORMAT; break;
+    case nsRedlineType_t::REDLINE_TABLE_ROW_INSERT: nResId = STR_REDLINE_TABLE_ROW_INSERT; break;
+    case nsRedlineType_t::REDLINE_TABLE_ROW_DELETE: nResId = STR_REDLINE_TABLE_ROW_DELETE; break;
+    case nsRedlineType_t::REDLINE_TABLE_CELL_INSERT: nResId = STR_REDLINE_TABLE_CELL_INSERT; break;
+    case nsRedlineType_t::REDLINE_TABLE_CELL_DELETE: nResId = STR_REDLINE_TABLE_CELL_DELETE; break;
     }
 
     OUStringBuffer sBuf;

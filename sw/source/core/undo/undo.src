@@ -482,6 +482,26 @@ String STR_UNDO_REDLINE_FMTCOLL
 {
     Text [ en-US ] = "Style changed";
 };
+String STR_UNDO_REDLINE_PARAGRAPH_FORMAT
+{
+    Text [ en-US ] = "Paragraph formatting changed";
+};
+String STR_UNDO_REDLINE_TABLE_ROW_INSERT
+{
+    Text [ en-US ] = "Insert Row";
+};
+String STR_UNDO_REDLINE_TABLE_ROW_DELETE
+{
+    Text [ en-US ] = "Delete Row";
+};
+String STR_UNDO_REDLINE_TABLE_CELL_INSERT
+{
+    Text [ en-US ] = "Insert Cell";
+};
+String STR_UNDO_REDLINE_TABLE_CELL_DELETE
+{
+    Text [ en-US ] = "Delete Cell";
+};
 String STR_N_REDLINES
 {
     Text [ en-US ] = "$1 changes";

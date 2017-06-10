@@ -41,6 +41,26 @@ String STR_REDLINE_FMTCOLL
 {
     Text [ en-US ] = "Applied Paragraph Styles";
 };
+String STR_REDLINE_PARAGRAPH_FORMAT
+{
+    Text [ en-US ] = "Paragraph formatting changed";
+};
+String STR_REDLINE_TABLE_ROW_INSERT
+{
+    Text [ en-US ] = "Row Inserted";
+};
+String STR_REDLINE_TABLE_ROW_DELETE
+{
+    Text [ en-US ] = "Row Deleted";
+};
+String STR_REDLINE_TABLE_CELL_INSERT
+{
+    Text [ en-US ] = "Cell Inserted";
+};
+String STR_REDLINE_TABLE_CELL_DELETE
+{
+    Text [ en-US ] = "Cell Deleted";
+};
 String STR_ENDNOTE
 {
     Text [ en-US ] = "Endnote: " ;
