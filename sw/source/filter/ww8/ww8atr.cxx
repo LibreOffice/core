@@ -3132,7 +3132,7 @@ void AttributeOutputBase::TextFootnote( const SwFormatFootnote& rFootnote )
 void WW8AttributeOutput::TextFootnote_Impl( const SwFormatFootnote& rFootnote )
 {
     WW8_WrPlcFootnoteEdn* pFootnoteEnd;
-    if ( rFootnote.IsEndNote() )
+    if ( rFootnote.IsEndNote() || GetExport().m_pDoc->GetFootnoteInfo().ePos == FTNPOS_CHAPTER )
         pFootnoteEnd = m_rWW8Export.pEdn;
     else
         pFootnoteEnd = m_rWW8Export.pFootnote;
