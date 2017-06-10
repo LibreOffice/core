@@ -3939,7 +3939,7 @@ void SwHTMLParser::EndPara( bool bReal )
     if( pCntxt )
     {
         EndContext( pCntxt );
-        SetAttr();  // because of JavaScript set paragraph attribute as fast as possible
+        SetAttr();  // because of JavaScript set paragraph attributes as fast as possible
         delete pCntxt;
     }
 
@@ -4064,11 +4064,11 @@ void SwHTMLParser::EndHeading()
         }
     }
 
-    // and now close attributes
+    // and now end attributes
     if( pCntxt )
     {
         EndContext( pCntxt );
-        SetAttr();  // because of JavaScript set paragraph attribute as fast as possible
+        SetAttr();  // because of JavaScript set paragraph attributes as fast as possible
         delete pCntxt;
     }
 
@@ -4113,9 +4113,9 @@ void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
     {
     case HtmlTokenId::LISTING_ON:
     case HtmlTokenId::XMP_ON:
-        // Diese beiden Tags werden jetzt auf die PRE-Vorlage gemappt.
-        // Fuer dem Fall, dass ein CLASS angegeben ist, loeschen wir
-        // es damit wir nicht die CLASS der PRE-Vorlage bekommen.
+        // These both tags will be mapped to the PRE style. For the case that a
+        // a CLASS exists we will delete it so that we don't get the CLASS of
+        // the PRE style.
         aClass = aEmptyOUStr;
         SAL_FALLTHROUGH;
     case HtmlTokenId::BLOCKQUOTE_ON:
@@ -4124,14 +4124,14 @@ void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
         eMode = AM_SPACE;
         break;
     case HtmlTokenId::ADDRESS_ON:
-        eMode = AM_NOSPACE; // ADDRESS kann auf einen <P> ohne </P> folgen
+        eMode = AM_NOSPACE; // ADDRESS can follow on a <P> without </P>
         break;
     case HtmlTokenId::DT_ON:
     case HtmlTokenId::DD_ON:
         eMode = AM_SOFTNOSPACE;
         break;
     default:
-        OSL_ENSURE( false, "unbekannte Vorlage" );
+        OSL_ENSURE( false, "unknown style" );
         break;
     }
     if( m_pPam->GetPoint()->nContent.GetIndex() )
@@ -4139,7 +4139,7 @@ void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
     else if( AM_SPACE==eMode )
         AddParSpace();
 
-    // ... und in einem Kontext merken
+    // ... and save in a context
     HTMLAttrContext *pCntxt = new HTMLAttrContext( nToken, nColl, aClass );
 
     // parse styles (regarding class see also NewPara)
@@ -4159,10 +4159,10 @@ void SwHTMLParser::NewTextFormatColl( HtmlTokenId nToken, sal_uInt16 nColl )
 
     PushContext( pCntxt );
 
-    // die neue Vorlage setzen
+    // set the new style
     SetTextCollAttrs( pCntxt );
 
-    // Laufbalkenanzeige aktualisieren
+    // update progress bar
     ShowStatline();
 }
 
@@ -4184,7 +4184,7 @@ void SwHTMLParser::EndTextFormatColl( HtmlTokenId nToken )
         eMode = AM_SOFTNOSPACE;
         break;
     default:
-        OSL_ENSURE( false, "unbekannte Vorlage" );
+        OSL_ENSURE( false, "unknown style" );
         break;
     }
     if( m_pPam->GetPoint()->nContent.GetIndex() )
@@ -4192,18 +4192,18 @@ void SwHTMLParser::EndTextFormatColl( HtmlTokenId nToken )
     else if( AM_SPACE==eMode )
         AddParSpace();
 
-    // den aktuellen Kontext vom Stack holen
+    // pop current context of stack
     HTMLAttrContext *pCntxt = PopContext( getOnToken(nToken) );
 
-    // und noch Attribute beenden
+    // and now end attributes
     if( pCntxt )
     {
         EndContext( pCntxt );
-        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();  // because of JavaScript set paragraph attributes as fast as possible
         delete pCntxt;
     }
 
-    // und die bisherige Vorlage setzen
+    // reset existing style
     SetTextCollAttrs();
 }
 
@@ -4236,14 +4236,14 @@ void SwHTMLParser::NewDefList()
         }
     }
 
-    // einen neuen Absatz aufmachen
+    // open a new paragraph
     bool bSpace = (GetNumInfo().GetDepth() + m_nDefListDeep) == 0;
     if( m_pPam->GetPoint()->nContent.GetIndex() )
         AppendTextNode( bSpace ? AM_SPACE : AM_SOFTNOSPACE );
     else if( bSpace )
         AddParSpace();
 
-    // ein Level mehr
+    // one level more
     m_nDefListDeep++;
 
     bool bInDD = false, bNotInDD = false;
@@ -4267,22 +4267,21 @@ void SwHTMLParser::NewDefList()
         }
     }
 
-    // ... und in einem Kontext merken
+    // ... and save in a context
     HTMLAttrContext *pCntxt = new HTMLAttrContext( HtmlTokenId::DEFLIST_ON );
 
-    // darin auch die Raender merken
+    // in it save also the margins
     sal_uInt16 nLeft=0, nRight=0;
     short nIndent=0;
     GetMarginsFromContext( nLeft, nRight, nIndent );
 
-    // Die Einrueckung, die sich schon aus einem DL-ergibt, entspricht der
-    // eines DT auf dem aktuellen Level, und die entspricht der eines
-    // DD auf dem Level davor. Fue einen Level >=2 muss also ein DD-Abstand
-    // hinzugefuegt werden
+    // The indentation, which already results from a DL, correlates with a DT
+    // on the current level and this correlates to a DD from the previous level.
+    // For a level >=2 we must add DD distance.
     if( !bInDD && m_nDefListDeep > 1 )
     {
 
-        // und den der DT-Vorlage des aktuellen Levels
+        // and the one of the DT-style of the current level
         SvxLRSpaceItem rLRSpace =
             m_pCSS1Parser->GetTextFormatColl( RES_POOLCOLL_HTML_DD, aEmptyOUStr )
                        ->GetLRSpace();
@@ -4306,7 +4305,7 @@ void SwHTMLParser::NewDefList()
 
     PushContext( pCntxt );
 
-    // die Attribute der neuen Vorlage setzen
+    // set the attributes of the new style
     if( m_nDefListDeep > 1 )
         SetTextCollAttrs( pCntxt );
 }
@@ -4319,28 +4318,28 @@ void SwHTMLParser::EndDefList()
     else if( bSpace )
         AddParSpace();
 
-    // ein Level weniger
+    // one level less
     if( m_nDefListDeep > 0 )
         m_nDefListDeep--;
 
-    // den aktuellen Kontext vom Stack holen
+    // pop current context of stack
     HTMLAttrContext *pCntxt = PopContext( HtmlTokenId::DEFLIST_ON );
 
-    // und noch Attribute beenden
+    // and now end attributes
     if( pCntxt )
     {
         EndContext( pCntxt );
-        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();  // because of JavaScript set paragraph attributes as fast as possible
         delete pCntxt;
     }
 
-    // und Vorlage setzen
+    // and set style
     SetTextCollAttrs();
 }
 
 void SwHTMLParser::NewDefListItem( HtmlTokenId nToken )
 {
-    // festellen, ob das DD/DT in einer DL vorkommt
+    // determine if the DD/DT exist in a DL
     bool bInDefList = false, bNotInDefList = false;
     auto nPos = m_aContexts.size();
     while( !bInDefList && !bNotInDefList && nPos>m_nContextStMin )
@@ -4361,12 +4360,12 @@ void SwHTMLParser::NewDefListItem( HtmlTokenId nToken )
         }
     }
 
-    // wenn nicht, implizit eine neue DL aufmachen
+    // if not, then implicitly open a new DL
     if( !bInDefList )
     {
         m_nDefListDeep++;
         OSL_ENSURE( m_nOpenParaToken == HtmlTokenId::NONE,
-                "Jetzt geht ein offenes Absatz-Element verloren" );
+                "Now an open paragraph element will be lost." );
         m_nOpenParaToken = nToken;
     }
 
@@ -4376,11 +4375,11 @@ void SwHTMLParser::NewDefListItem( HtmlTokenId nToken )
 
 void SwHTMLParser::EndDefListItem( HtmlTokenId nToken )
 {
-    // einen neuen Absatz aufmachen
+    // open a new paragraph
     if( nToken == HtmlTokenId::NONE && m_pPam->GetPoint()->nContent.GetIndex() )
         AppendTextNode( AM_SOFTNOSPACE );
 
-    // Kontext zu dem Token suchen und vom Stack holen
+    // search context matching the token and fetch it from stack
     nToken = getOnToken(nToken);
     HTMLAttrContext *pCntxt = nullptr;
     auto nPos = m_aContexts.size();
@@ -4398,23 +4397,23 @@ void SwHTMLParser::EndDefListItem( HtmlTokenId nToken )
             }
             break;
         case HtmlTokenId::DEFLIST_ON:
-            // keine DD/DT ausserhalb der aktuelen DefListe betrachten
+            // don't look at DD/DT outside the current DefList
         case HtmlTokenId::DIRLIST_ON:
         case HtmlTokenId::MENULIST_ON:
         case HtmlTokenId::ORDERLIST_ON:
         case HtmlTokenId::UNORDERLIST_ON:
-            // und auch nicht ausserhalb einer anderen Liste
+            // and also not outside another list
             nPos = m_nContextStMin;
             break;
         default: break;
         }
     }
 
-    // und noch Attribute beenden
+    // and now end attributes
     if( pCntxt )
     {
         EndContext( pCntxt );
-        SetAttr();  // Absatz-Atts wegen JavaScript moeglichst schnell setzen
+        SetAttr();  // because of JavaScript set paragraph attributes as fast as possible
         delete pCntxt;
     }
 }
@@ -5319,7 +5318,7 @@ void SwHTMLParser::InsertHorzRule()
     if( !aId.isEmpty() )
         InsertBookmark( aId );
 
-    // den aktuellen Kontext vom Stack holen
+    // pop current context of stack
     HTMLAttrContext *pPoppedContext = PopContext( HtmlTokenId::HORZRULE );
     OSL_ENSURE( pPoppedContext==pCntxt, "wo kommt denn da ein HR-Kontext her?" );
     delete pPoppedContext;
@@ -5441,10 +5440,10 @@ HTMLAttr::~HTMLAttr()
 
 HTMLAttr *HTMLAttr::Clone(const SwNodeIndex& rEndPara, sal_Int32 nEndCnt) const
 {
-    // das Attribut mit der alten Start-Position neu anlegen
+    // create the attribute anew with old start position
     HTMLAttr *pNew = new HTMLAttr( *this, rEndPara, nEndCnt, ppHead );
 
-    // die Previous-Liste muss uebernommen werden, die Next-Liste nicht!
+    // The Previous-List must be taken over, the Next-List not!
     pNew->pPrev = pPrev;
 
     return pNew;
@@ -5453,13 +5452,13 @@ HTMLAttr *HTMLAttr::Clone(const SwNodeIndex& rEndPara, sal_Int32 nEndCnt) const
 void HTMLAttr::Reset(const SwNodeIndex& rSttPara, sal_Int32 nSttCnt,
                        HTMLAttr **ppHd)
 {
-    // den Anfang (und das Ende) neu setzen
+    // reset the start (and the end)
     nSttPara = rSttPara;
     nSttContent = nSttCnt;
     nEndPara = rSttPara;
     nEndContent = nSttCnt;
 
-    // den Head korrigieren und die Verkettungen aufheben
+    // correct the head and nullify link
     pNext = nullptr;
     pPrev = nullptr;
     ppHead = ppHd;
@@ -5468,11 +5467,11 @@ void HTMLAttr::Reset(const SwNodeIndex& rSttPara, sal_Int32 nSttCnt,
 void HTMLAttr::InsertPrev( HTMLAttr *pPrv )
 {
     OSL_ENSURE( !pPrv->pNext || pPrv->pNext == this,
-            "HTMLAttr::InsertPrev: pNext falsch" );
+            "HTMLAttr::InsertPrev: pNext wrong" );
     pPrv->pNext = nullptr;
 
     OSL_ENSURE( nullptr == pPrv->ppHead || ppHead == pPrv->ppHead,
-            "HTMLAttr::InsertPrev: ppHead falsch" );
+            "HTMLAttr::InsertPrev: ppHead wrong" );
     pPrv->ppHead = nullptr;
 
     HTMLAttr *pAttr = this;
