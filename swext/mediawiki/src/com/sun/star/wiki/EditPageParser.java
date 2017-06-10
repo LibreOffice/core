@@ -103,13 +103,16 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
                 String sName = ( String ) a.getAttribute( HTML.Attribute.HREF );
                 if ( sName != null )
                 {
-                    int nIndexStart = sName.indexOf( "index.php" );
-                    // get the main URL from the first header-link with index.php
-                    // the link with "action=edit" inside is preferable
-                    if ( nIndexStart>= 0
-                      && ( m_sMainURL.length() == 0 || sName.contains("action=edit") ) )
+                    // get the main URL from the first header-link with load.php (which is used for stylesheet)
+                    int nPhpFileStart = sName.indexOf( "load.php" );
+                    if (nPhpFileStart < 0)
+                        // if not found, try header-link with opensearch_desc.php
+                        nPhpFileStart = sName.indexOf( "opensearch_desc.php" );
+
+                    if ( nPhpFileStart >= 0
+                      && m_sMainURL.length() == 0 )
                     {
-                        m_sMainURL = sName.substring( 0, nIndexStart );
+                        m_sMainURL = sName.substring( 0, nPhpFileStart );
                     }
                 }
             }
