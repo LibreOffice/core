@@ -104,8 +104,15 @@ endif
 
 ifneq ($(ENABLE_FUZZERS),)
 $(eval $(call gb_Module_add_targets,vcl,\
-    CustomTarget_nativecode \
-    StaticLibrary_fuzzer \
+    CustomTarget_nativecore \
+    CustomTarget_nativecalc \
+    CustomTarget_nativedraw \
+    CustomTarget_nativewriter \
+    StaticLibrary_fuzzerstubs \
+    StaticLibrary_fuzzer_core \
+    StaticLibrary_fuzzer_calc \
+    StaticLibrary_fuzzer_draw \
+    StaticLibrary_fuzzer_writer \
     Executable_wmffuzzer \
     Executable_jpgfuzzer \
     Executable_giffuzzer \
