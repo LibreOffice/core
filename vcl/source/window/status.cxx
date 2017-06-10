@@ -373,11 +373,17 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
     }
 
     SalLayout* pLayoutCache = pItem->mxLayoutCache.get();
-    Size aTextSize(rRenderContext.GetTextWidth(pItem->maText,0,-1,nullptr,&pLayoutCache), rRenderContext.GetTextHeight());
 
-    // update cache if necessary
-    if(pLayoutCache != pItem->mxLayoutCache.get() )
-        pItem->mxLayoutCache.reset(pLayoutCache);
+    if(!pLayoutCache)
+    {
+        pLayoutCache = rRenderContext.ImplLayout(pItem->maText, 0, -1);
+
+        // update cache
+        if(pLayoutCache)
+            pItem->mxLayoutCache.reset(pLayoutCache);
+    }
+
+    Size aTextSize(rRenderContext.GetTextWidth(pItem->maText,0,-1,nullptr,pLayoutCache), rRenderContext.GetTextHeight());
 
     Point aTextPos = ImplGetItemTextPos(aTextRectSize, aTextSize, pItem->mnBits);
 
@@ -387,7 +393,7 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
                     aTextPos,
                     pItem->maText,
                     0, -1, nullptr, nullptr,
-                    &pLayoutCache );
+                    pLayoutCache );
     }
     else
     {
@@ -397,12 +403,8 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
                     aTextPos,
                     pItem->maText,
                     0, -1, nullptr, nullptr,
-                    &pLayoutCache );
+                    pLayoutCache );
     }
-
-    // update cache if necessary
-    if(pLayoutCache != pItem->mxLayoutCache.get() )
-        pItem->mxLayoutCache.reset(pLayoutCache);
 
     // call DrawItem if necessary
     if (pItem->mnBits & StatusBarItemBits::UserDraw)
@@ -1163,20 +1165,16 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
 
         if ( pItem->maText != rText )
         {
-            // invalidate cache
-            pItem->mxLayoutCache.reset();
-
             pItem->maText = rText;
 
             // adjust item width - see also DataChanged()
             long nFudge = GetTextHeight()/4;
 
-            SalLayout* pLayoutCache = nullptr;
-
-            long nWidth = GetTextWidth( pItem->maText,0,-1,nullptr,&pLayoutCache ) + nFudge;
+            SalLayout* pSalLayout = ImplLayout(pItem->maText,0,-1);
+            long nWidth = GetTextWidth( pItem->maText,0,-1,nullptr,pSalLayout ) + nFudge;
 
             // update cache
-            pItem->mxLayoutCache.reset(pLayoutCache);
+            pItem->mxLayoutCache.reset(pSalLayout);
 
             if( (nWidth > pItem->mnWidth + STATUSBAR_OFFSET) ||
                 ((nWidth < pItem->mnWidth) && (mnDX - STATUSBAR_OFFSET) < mnItemsWidth  ))
