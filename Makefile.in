@@ -399,7 +399,7 @@ findunusedcode:
 	@$(SRCDIR)/bin/findunusedcode $(SRCDIR) $(MAKE)
 
 findunusedheaders:
-	$(SRCDIR)/bin/find-unusedheaders.pl
+	$(SRCDIR)/bin/find-unusedheaders.py
 
 symbols:
 	rm -fr $(WORKDIR)/symbols/
