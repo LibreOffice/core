@@ -116,7 +116,7 @@ namespace pcr
         DECL_LINK( OnButtonClicked, Button*, void );
         DECL_LINK( OnButtonFocus, Control&, void );
 
-        void    implHideBrowseButton( bool _bPrimary, bool _bReLayout );
+        void    implHideBrowseButton(bool _bPrimary);
         void    implUpdateEnabledDisabled();
 
         void    impl_layoutComponents();

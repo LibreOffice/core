@@ -69,8 +69,8 @@ namespace pcr
 
     OBrowserLine::~OBrowserLine()
     {
-        implHideBrowseButton( true, false );
-        implHideBrowseButton( false, false );
+        implHideBrowseButton(true);
+        implHideBrowseButton(false);
         m_aFtTitle.disposeAndClear();
     }
 
@@ -410,8 +410,7 @@ namespace pcr
         }
 
         rButton.SetModeImage( aImage );
-   }
-
+    }
 
     void OBrowserLine::ShowBrowseButton( const Image& _rImage, bool _bPrimary )
     {
@@ -420,14 +419,12 @@ namespace pcr
             rButton.SetModeImage( _rImage );
     }
 
-
     void OBrowserLine::ShowBrowseButton( bool _bPrimary )
     {
         impl_ensureButton( _bPrimary );
     }
 
-
-    void OBrowserLine::implHideBrowseButton( bool _bPrimary, bool _bReLayout )
+    void OBrowserLine::implHideBrowseButton(bool _bPrimary)
     {
         VclPtr<PushButton>& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
 
@@ -436,17 +433,13 @@ namespace pcr
             rpButton->Hide();
             rpButton.disposeAndClear();
         }
-
-        if ( _bReLayout )
-            impl_layoutComponents();
     }
 
-
-    void OBrowserLine::HideBrowseButton( bool _bPrimary )
+    void OBrowserLine::HideBrowseButton(bool _bPrimary)
     {
-        implHideBrowseButton( _bPrimary, true );
+        implHideBrowseButton(_bPrimary);
+        impl_layoutComponents();
     }
-
 
     void OBrowserLine::SetTitleWidth(sal_uInt16 nWidth)
     {
