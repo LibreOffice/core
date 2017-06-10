@@ -67,7 +67,12 @@ struct ScaFuncDataBase
     const sal_Char*             pIntName;           // internal name (get***)
     sal_uInt16                  nUINameID;          // resource ID to UI name
     sal_uInt16                  nDescrID;           // resource ID to description, parameter names and ~ description
-    sal_uInt16                  nCompListID;        // resource ID to list of valid names
+    // sCompName was originally meant to be able to load Excel documents that for
+    // some time were stored with localized function names.
+    // This is not relevant to this add-in, so we only supply the same
+    // (English) function names again.
+    // see also: GetExcelName() or GetCompNames() or getCompatibilityNames()
+    OUStringLiteral             sCompName;
     sal_uInt16                  nParamCount;        // number of named / described parameters
     ScaCategory                 eCat;               // function category
     bool                        bDouble;            // name already exist in Calc
@@ -87,8 +92,8 @@ private:
     bool                    bWithOpt;           // first parameter is internal
 
 public:
-                                ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rRscMgr );
-                                ~ScaFuncData();
+    ScaFuncData(const ScaFuncDataBase& rBaseData);
+    ~ScaFuncData();
 
     sal_uInt16           GetUINameID() const     { return nUINameID; }
     sal_uInt16           GetDescrID() const      { return nDescrID; }
@@ -105,7 +110,7 @@ public:
 
 typedef std::vector<ScaFuncData> ScaFuncDataList;
 
-void InitScaFuncDataList ( ScaFuncDataList& rMap, ResMgr& rResMgr );
+void InitScaFuncDataList(ScaFuncDataList& rMap);
 
 // Predicate for use with std::find_if
 struct FindScaFuncData

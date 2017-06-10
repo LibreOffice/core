@@ -52,20 +52,20 @@ ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
 
 #define STDPAR              false   // all parameters are described
 
-#define FUNCDATA( FuncName, ParamCount, Category, Double, IntPar )  \
-    { "get" #FuncName, PRICING_FUNCNAME_##FuncName, PRICING_FUNCDESC_##FuncName, PRICING_DEFFUNCNAME_##FuncName, ParamCount, Category, Double, IntPar }
+#define FUNCDATA( FuncName, CompName, ParamCount, Category, Double, IntPar )  \
+    { "get" #FuncName, PRICING_FUNCNAME_##FuncName, PRICING_FUNCDESC_##FuncName, CompName, ParamCount, Category, Double, IntPar }
 
 const ScaFuncDataBase pFuncDataArr[] =
 {
-   FUNCDATA( OptBarrier,       13, ScaCategory::Finance,    UNIQUE,  STDPAR),
-   FUNCDATA( OptTouch,         11, ScaCategory::Finance,    UNIQUE,  STDPAR),
-   FUNCDATA( OptProbHit,        6, ScaCategory::Finance,    UNIQUE,  STDPAR),
-   FUNCDATA( OptProbInMoney,    8, ScaCategory::Finance,    UNIQUE,  STDPAR)
+   FUNCDATA(OptBarrier,     "OPT_BARRIER",      13, ScaCategory::Finance, UNIQUE,  STDPAR),
+   FUNCDATA(OptTouch,       "OPT_TOUCH",        11, ScaCategory::Finance, UNIQUE,  STDPAR),
+   FUNCDATA(OptProbHit,     "OPT_PROB_HIT",      6, ScaCategory::Finance, UNIQUE,  STDPAR),
+   FUNCDATA(OptProbInMoney, "OPT_PROB_INMONEY",  8, ScaCategory::Finance, UNIQUE,  STDPAR)
 };
 
 #undef FUNCDATA
 
-ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rResMgr ) :
+ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData ) :
     aIntName( OUString::createFromAscii( rBaseData.pIntName ) ),
     nUINameID( rBaseData.nUINameID ),
     nDescrID( rBaseData.nDescrID ),
@@ -74,9 +74,7 @@ ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rResMgr ) :
     bDouble( rBaseData.bDouble ),
     bWithOpt( rBaseData.bWithOpt )
 {
-    ResStringArray aArr(ScaResId(rBaseData.nCompListID, rResMgr));
-    for (sal_uInt32 nIndex = 0; nIndex < aArr.Count(); ++nIndex)
-        aCompList.push_back(aArr.GetString(nIndex));
+    aCompList.push_back(rBaseData.sCompName);
 }
 
 ScaFuncData::~ScaFuncData()
@@ -90,10 +88,10 @@ sal_uInt16 ScaFuncData::GetStrIndex( sal_uInt16 nParam ) const
     return (nParam > nParamCount) ? (nParamCount * 2) : (nParam * 2);
 }
 
-void sca::pricing::InitScaFuncDataList( ScaFuncDataList& rList, ResMgr& rResMgr )
+void sca::pricing::InitScaFuncDataList(ScaFuncDataList& rList)
 {
-    for(const auto & nIndex : pFuncDataArr)
-        rList.push_back( ScaFuncData( nIndex, rResMgr ) ) ;
+    for (const auto & nIndex : pFuncDataArr)
+        rList.push_back(ScaFuncData(nIndex));
 }
 
 // entry points for service registration / instantiation
@@ -189,7 +187,7 @@ void ScaPricingAddIn::InitData()
     if(pResMgr)
     {
         pFuncDataList = new ScaFuncDataList;
-        InitScaFuncDataList( *pFuncDataList, *pResMgr );
+        InitScaFuncDataList(*pFuncDataList);
     }
     else
     {
