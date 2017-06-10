@@ -815,7 +815,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         sal_uInt32 nSize;
                         if (rProps.GetOpt(ESCHER_Prop_gtextSize, nSize))
                         {
-                            float nSizeF = (sal_Int32)nSize / 65536;
+                            float nSizeF = (sal_Int32)nSize / 65536.0;
                             OUString aSize = OUString::number(nSizeF);
                             aStyle += ";font-size:" + aSize + "pt";
                         }
