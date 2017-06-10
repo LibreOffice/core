@@ -420,7 +420,7 @@ SwHTMLImageWatcher::SwHTMLImageWatcher(
     xComp->addEventListener( xEvtLstnr );
 
     // Lastly we keep a reference to ourselves so we are not destroyed
-    // (should not be neccessary since we're still registered elsewhere)
+    // (should not be necessary since we're still registered elsewhere)
     xThis = static_cast<awt::XImageConsumer *>(this);
 
     // Register at ImageProducer to retrieve the size...
@@ -1654,7 +1654,7 @@ void SwHTMLParser::InsertInput()
                 aMacroTable.Insert( HTML_ET_ONCLICK_ITEM, *pMacro );
                 aMacroTable.Erase( HTML_ET_ONCLICK );
             }
-            // evaluating SIZE shouldn't be neccessary here?
+            // evaluating SIZE shouldn't be necessary here?
             bMinWidth = bMinHeight = true;
         }
         break;

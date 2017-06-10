@@ -207,7 +207,7 @@ Point XIMStatusWindow::updatePosition()
                                &aChild );
 
         // TODO:  Currently, place the status window to the (physical) left of
-        // the cursor iff in vertical mode (assuming that the columns in
+        // the cursor if in vertical mode (assuming that the columns in
         // vertical mode are always written from right to left, this causes the
         // status window to keep out of the text already written).  This
         // heuristic would break if there is ever a vertical mode in which the

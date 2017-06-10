@@ -58,7 +58,7 @@ public:
         E_NOENT        = osl_File_E_NOENT,          ///< no such file or directory
         E_SRCH         = osl_File_E_SRCH,           ///< no process matches the PID
         E_INTR         = osl_File_E_INTR,           ///< function call was interrupted
-        E_IO           = osl_File_E_IO,             ///< I/O error occured
+        E_IO           = osl_File_E_IO,             ///< I/O error occurred
         E_NXIO         = osl_File_E_NXIO,           ///< no such device or address
         E_2BIG         = osl_File_E_2BIG,           ///< argument list too long
         E_NOEXEC       = osl_File_E_NOEXEC,         ///< invalid executable file format
