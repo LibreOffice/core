@@ -462,23 +462,23 @@ String STR_UNDO_COLBRKS
 {
     Text[ en-US ] = "column break";
 };
-String STR_REDLINE_INSERT
+String STR_UNDO_REDLINE_INSERT
 {
     Text [ en-US ] = "Insert $1";
 };
-String STR_REDLINE_DELETE
+String STR_UNDO_REDLINE_DELETE
 {
     Text [ en-US ] = "Delete $1";
 };
-String STR_REDLINE_FORMAT
+String STR_UNDO_REDLINE_FORMAT
 {
     Text [ en-US ] = "Attributes changed";
 };
-String STR_REDLINE_TABLE
+String STR_UNDO_REDLINE_TABLE
 {
     Text [ en-US ] = "Table changed";
 };
-String STR_REDLINE_FMTCOLL
+String STR_UNDO_REDLINE_FMTCOLL
 {
     Text [ en-US ] = "Style changed";
 };
