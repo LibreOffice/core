@@ -150,41 +150,4 @@ String PRICING_FUNCNAME_OptProbInMoney
     Text [ en-US ] = "OPT_PROB_INMONEY";
 };
 
-// These were originally meant to be able to load Excel documents that for
-// some time were stored with localized function names.
-// This is not relevant to this add-in, so we only supply the same
-// (English) function names again.
-// see also: GetExcelName() or GetCompNames() or getCompatibilityNames()
-StringArray PRICING_DEFFUNCNAME_OptBarrier
-{
-    ItemList =
-    {
-        < "OPT_BARRIER"; >;
-    };
-};
-
-StringArray PRICING_DEFFUNCNAME_OptTouch
-{
-    ItemList =
-    {
-        < "OPT_TOUCH"; >;
-    };
-};
-
-StringArray PRICING_DEFFUNCNAME_OptProbHit
-{
-    ItemList =
-    {
-        < "OPT_PROB_HIT"; >;
-    };
-};
-
-StringArray PRICING_DEFFUNCNAME_OptProbInMoney
-{
-    ItemList =
-    {
-        < "OPT_PROB_INMONEY"; >;
-    };
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
