@@ -19,10 +19,10 @@
 
 #include "CondFormat.hxx"
 
-#include "uistrings.hrc"
-#include "RptResId.hrc"
+#include "strings.hxx"
+#include "strings.hrc"
 #include "rptui_slotid.hrc"
-#include "ModuleHelper.hxx"
+#include "core_resource.hxx"
 #include "helpids.hrc"
 #include "UITools.hxx"
 #include "ReportController.hxx"
@@ -434,7 +434,7 @@ namespace rptui
         short nRet = ModalDialog::Execute();
         if ( nRet == RET_OK )
         {
-            const OUString sUndoAction( ModuleRes( RID_STR_UNDO_CONDITIONAL_FORMATTING ) );
+            const OUString sUndoAction( RptResId( RID_STR_UNDO_CONDITIONAL_FORMATTING ) );
             const UndoContext aUndoContext( m_rController.getUndoManager(), sUndoAction );
             try
             {

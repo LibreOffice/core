@@ -35,7 +35,7 @@
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 
-#include "glob.hrc"
+#include "strings.hrc"
 #include "ViewShellBase.hxx"
 #include "ViewShellManager.hxx"
 #include "FrameView.hxx"

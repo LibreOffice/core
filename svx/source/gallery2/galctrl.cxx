@@ -24,6 +24,7 @@
 #include <avmedia/mediaplayer.hxx>
 #include "helpid.hrc"
 #include "galbrws2.hxx"
+#include "svx/dialmgr.hxx"
 #include "svx/galtheme.hxx"
 #include "svx/galmisc.hxx"
 #include "svx/galctrl.hxx"
@@ -31,7 +32,7 @@
 #include <editeng/svxfont.hxx>
 #include "galobj.hxx"
 #include <avmedia/mediawindow.hxx>
-#include "gallery.hrc"
+#include "svx/strings.hrc"
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
@@ -411,7 +412,7 @@ GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme
 
     SetMode( BrowserMode::AUTO_VSCROLL | BrowserMode::AUTOSIZE_LASTCOL | BrowserMode::AUTO_HSCROLL );
     SetDataRowHeight( 28 );
-    InsertDataColumn( GALLERY_BRWBOX_TITLE, GalResId(RID_SVXSTR_GALLERY_TITLE), 256  );
+    InsertDataColumn( GALLERY_BRWBOX_TITLE, SvxResId(RID_SVXSTR_GALLERY_TITLE), 256  );
 }
 
 void GalleryListView::InitSettings()
