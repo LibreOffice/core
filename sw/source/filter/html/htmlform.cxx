@@ -203,7 +203,7 @@ public:
         m_pDocShell( pDSh ),
         m_pHeaderAttrs( pDSh ? pDSh->GetHeaderAttributes() : nullptr )
     {
-        OSL_ENSURE( m_pDocShell, "Keine DocShell, keine Controls" );
+        OSL_ENSURE( m_pDocShell, "No DocShell, no Controls" );
     }
 
     const uno::Reference< XMultiServiceFactory >& GetServiceFactory();
@@ -272,7 +272,7 @@ const uno::Reference< XMultiServiceFactory >& SwHTMLForm_Impl::GetServiceFactory
             uno::Reference< XMultiServiceFactory >( m_pDocShell->GetBaseModel(),
                                                UNO_QUERY );
         OSL_ENSURE( m_xServiceFactory.is(),
-                "XServiceFactory nicht vom Model erhalten" );
+                "XServiceFactory not received from model" );
     }
     return m_xServiceFactory;
 }
@@ -284,9 +284,9 @@ void SwHTMLForm_Impl::GetDrawPage()
         uno::Reference< drawing::XDrawPageSupplier > xTextDoc( m_pDocShell->GetBaseModel(),
                                                          UNO_QUERY );
         OSL_ENSURE( xTextDoc.is(),
-                "drawing::XDrawPageSupplier nicht vom XModel erhalten" );
+                "drawing::XDrawPageSupplier not received from model" );
         m_xDrawPage = xTextDoc->getDrawPage();
-        OSL_ENSURE( m_xDrawPage.is(), "drawing::XDrawPage nicht erhalten" );
+        OSL_ENSURE( m_xDrawPage.is(), "drawing::XDrawPage not received" );
     }
 }
 
@@ -299,13 +299,13 @@ const uno::Reference< container::XIndexContainer >& SwHTMLForm_Impl::GetForms()
         {
             uno::Reference< XFormsSupplier > xFormsSupplier( m_xDrawPage, UNO_QUERY );
             OSL_ENSURE( xFormsSupplier.is(),
-                    "XFormsSupplier nicht vom drawing::XDrawPage erhalten" );
+                    "XFormsSupplier not received from drawing::XDrawPage" );
 
             uno::Reference< container::XNameContainer > xNameCont =
                 xFormsSupplier->getForms();
             m_xForms.set( xNameCont, UNO_QUERY );
 
-            OSL_ENSURE( m_xForms.is(), "XForms nicht erhalten" );
+            OSL_ENSURE( m_xForms.is(), "XForms not received" );
         }
     }
     return m_xForms;
@@ -320,7 +320,7 @@ const uno::Reference< drawing::XShapes > & SwHTMLForm_Impl::GetShapes()
         {
             m_xShapes.set( m_xDrawPage, UNO_QUERY );
             OSL_ENSURE( m_xShapes.is(),
-                    "XShapes nicht vom drawing::XDrawPage erhalten" );
+                    "XShapes not received from drawing::XDrawPage" );
         }
     }
     return m_xShapes;
@@ -334,7 +334,7 @@ const uno::Reference< script::XEventAttacherManager >&
         m_xControlEventManager =
             uno::Reference< script::XEventAttacherManager >( m_xFormComps, UNO_QUERY );
         OSL_ENSURE( m_xControlEventManager.is(),
-    "uno::Reference< XEventAttacherManager > nicht von xFormComps erhalten" );
+    "uno::Reference< XEventAttacherManager > not received from xFormComps" );
     }
 
     return m_xControlEventManager;
@@ -351,7 +351,7 @@ const uno::Reference< script::XEventAttacherManager >&
             m_xFormEventManager =
                 uno::Reference< script::XEventAttacherManager >( m_xForms, UNO_QUERY );
             OSL_ENSURE( m_xFormEventManager.is(),
-        "uno::Reference< XEventAttacherManager > nicht von xForms erhalten" );
+        "uno::Reference< XEventAttacherManager > not received from xForms" );
         }
     }
 
@@ -412,7 +412,7 @@ SwHTMLImageWatcher::SwHTMLImageWatcher(
     uno::Reference< awt::XControlModel > xControlModel(
             xControlShape->getControl() );
     xSrc.set( xControlModel, UNO_QUERY );
-    OSL_ENSURE( xSrc.is(), "Kein XImageProducerSupplier" );
+    OSL_ENSURE( xSrc.is(), "No XImageProducerSupplier" );
 
     // Register as Event-Listener on the shape to be able to release it on dispose.
     uno::Reference< XEventListener > xEvtLstnr = static_cast<XEventListener *>(this);
@@ -420,7 +420,7 @@ SwHTMLImageWatcher::SwHTMLImageWatcher(
     xComp->addEventListener( xEvtLstnr );
 
     // Lastly we keep a reference to ourselves so we are not destroyed
-    // (should not be neccessary since we're still registered elsewhere)
+    // (should not be necessary since we're still registered elsewhere)
     xThis = static_cast<awt::XImageConsumer *>(this);
 
     // Register at ImageProducer to retrieve the size...
@@ -662,7 +662,7 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
     SwFrameFormat *pFrameFormat = pSwShape ? pSwShape->GetFrameFormat() : nullptr ;
     OSL_ENSURE( pFrameFormat && RES_DRAWFRMFMT == pFrameFormat->Which(), "No DrawFrameFormat" );
 
-    // Schauen, ob es ein SdrObject dafuer gibt
+    // look if a SdrObject exists for it
     const SdrObject *pObj = pFrameFormat ? pFrameFormat->FindSdrObject() : nullptr;
     OSL_ENSURE( pObj, "SdrObject not found" );
     OSL_ENSURE( pObj && SdrInventor::FmForm == pObj->GetObjInventor(), "wrong Inventor" );
@@ -1758,7 +1758,7 @@ void SwHTMLParser::InsertInput()
             aNewSz = Application::GetDefaultDevice()
                         ->PixelToLogic( aNewSz, MapMode( MapUnit::Map100thMM ) );
             aSz.Width() = aNewSz.Width();
-            OSL_ENSURE( !aTextSz.Width(), "Text-Breite ist gegeben" );
+            OSL_ENSURE( !aTextSz.Width(), "text width is present" );
             bMinWidth = false;
         }
     }
@@ -1815,7 +1815,7 @@ void SwHTMLParser::InsertInput()
                                              bHidden );
     if( aTextSz.Width() || aTextSz.Height() || bMinWidth || bMinHeight )
     {
-        OSL_ENSURE( !(bSetGrfWidth || bSetGrfHeight), "Grafikgroesse anpassen???" );
+        OSL_ENSURE( !(bSetGrfWidth || bSetGrfHeight), "Adjust graphic size???" );
         SetControlSize( xShape, aTextSz, bMinWidth, bMinHeight );
     }
 
@@ -2397,7 +2397,7 @@ void SwHTMLParser::EndSelect()
 
     if( m_bFixSelectWidth )
     {
-        OSL_ENSURE( m_pFormImpl->GetShape().is(), "Kein Shape gemerkt" );
+        OSL_ENSURE( m_pFormImpl->GetShape().is(), "Shape not saved" );
         Size aTextSz( -1, 0 );
         SetControlSize( m_pFormImpl->GetShape(), aTextSz, false, false );
     }
@@ -2418,9 +2418,9 @@ void SwHTMLParser::EndSelect()
 
 void SwHTMLParser::InsertSelectOption()
 {
-    OSL_ENSURE( m_bSelect, "keine Select" );
+    OSL_ENSURE( m_bSelect, "no Select" );
     OSL_ENSURE( m_pFormImpl && m_pFormImpl->GetFCompPropSet().is(),
-            "kein Select-Control" );
+            "no Select-Control" );
 
     m_bLBEntrySelected = false;
     OUString aValue;
