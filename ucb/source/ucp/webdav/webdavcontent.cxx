@@ -353,8 +353,6 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     {
     }
 
-    cppu::OTypeCollection * pCollection = nullptr;
-
     if ( bFolder )
     {
         static cppu::OTypeCollection s_aFolderTypes(
