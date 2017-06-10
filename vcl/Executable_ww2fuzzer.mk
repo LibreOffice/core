@@ -27,13 +27,15 @@ $(eval $(call gb_Executable_set_include,ww2fuzzer,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,ww2fuzzer,\
-	$(fuzzer_libraries) \
+    $(fuzzer_writer_libraries) \
+    $(fuzzer_core_libraries) \
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,ww2fuzzer,\
     findsofficepath \
     ulingu \
-    fuzzer \
+    fuzzer_writer \
+    fuzzerstubs \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,ww2fuzzer,\

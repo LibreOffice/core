@@ -6,19 +6,19 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,fuzzer))
+$(eval $(call gb_StaticLibrary_StaticLibrary,fuzzerstubs))
 
-$(eval $(call gb_StaticLibrary_set_include,fuzzer,\
+$(eval $(call gb_StaticLibrary_set_include,fuzzerstubs,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
 ))
 
-$(eval $(call gb_StaticLibrary_use_api,fuzzer,\
+$(eval $(call gb_StaticLibrary_use_api,fuzzerstubs,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_StaticLibrary_add_exception_objects,fuzzer,\
+$(eval $(call gb_StaticLibrary_add_exception_objects,fuzzerstubs,\
     vcl/workben/localestub/localestub \
     vcl/workben/localestub/localedata_en_AU \
     vcl/workben/localestub/localedata_en_BW \
@@ -39,10 +39,6 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,fuzzer,\
     vcl/workben/localestub/localedata_en_US \
     vcl/workben/localestub/localedata_en_ZA \
     vcl/workben/localestub/localedata_en_ZW \
-))
-
-$(eval $(call gb_StaticLibrary_add_generated_exception_objects,fuzzer,\
-    CustomTarget/vcl/workben/native-code \
 ))
 
 # vim: set noet sw=4 ts=4:
