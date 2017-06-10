@@ -26,7 +26,7 @@ gb_UITest_GDBTRACE := --gdb
 gb_UITest__interactive := $(true)
 endif
 
-gb_UITest_COMMAND := $(gb_UITest_EXECUTABLE) $(SRCDIR)/uitest/test_main.py
+gb_UITest_COMMAND := LIBO_LANG=en_US.UTF-8 $(gb_UITest_EXECUTABLE) $(SRCDIR)/uitest/test_main.py
 
 .PHONY : $(call gb_UITest_get_clean_target,%)
 $(call gb_UITest_get_clean_target,%) :
