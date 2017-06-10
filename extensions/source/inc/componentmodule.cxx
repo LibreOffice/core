@@ -19,7 +19,9 @@
 
 #include <memory>
 #include "componentmodule.hxx"
-#include <tools/resmgr.hxx>
+#include <tools/simplerm.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include <svl/solar.hrc>
 #include <comphelper/sequence.hxx>
 #include <tools/debug.hxx>
@@ -43,79 +45,50 @@ namespace COMPMOD_NAMESPACE
     // implementation for <type>OModule</type>. not threadsafe, has to be guarded by its owner
     class OModuleImpl
     {
-        std::unique_ptr<ResMgr>  m_pResources;
+        std::locale              m_aResLocale;
         bool                     m_bInitialized;
-        OString                  m_sFilePrefix;
 
     public:
         /// ctor
         OModuleImpl();
-        ~OModuleImpl();
 
         /// get the manager for the resources of the module
-        ResMgr* getResManager();
-        void    setResourceFilePrefix(const OString& _rPrefix) { m_sFilePrefix = _rPrefix; }
+        const std::locale& getResLocale();
     };
 
 
     OModuleImpl::OModuleImpl()
-        :m_pResources(nullptr)
-        ,m_bInitialized(false)
+        : m_bInitialized(false)
     {
     }
 
-
-    OModuleImpl::~OModuleImpl()
-    {
-    }
-
-
-    ResMgr* OModuleImpl::getResManager()
+    const std::locale& OModuleImpl::getResLocale()
     {
         // note that this method is not threadsafe, which counts for the whole class !
-        if (!m_pResources && !m_bInitialized)
+        if (!m_bInitialized)
         {
-            DBG_ASSERT(!m_sFilePrefix.isEmpty(), "OModuleImpl::getResManager: no resource file prefix!");
             // create a manager with a fixed prefix
-            m_pResources.reset( ResMgr::CreateResMgr(m_sFilePrefix.getStr()) );
-            DBG_ASSERT(m_pResources,
-                    OStringBuffer("OModuleImpl::getResManager: could not create the resource manager (file name: ")
-                .append(m_sFilePrefix)
-                .append(")!").getStr());
-
+            m_aResLocale = Translate::Create("pcr", Application::GetSettings().GetUILanguageTag());
             m_bInitialized = true;
         }
-        return m_pResources.get();
+        return m_aResLocale;
     }
-
 
     ::osl::Mutex    OModule::s_aMutex;
     sal_Int32       OModule::s_nClients = 0;
     OModuleImpl*    OModule::s_pImpl = nullptr;
-    OString  OModule::s_sResPrefix;
 
-    ResMgr* OModule::getResManager()
+    const std::locale& OModule::getResLocale()
     {
         ENTER_MOD_METHOD();
-        return s_pImpl->getResManager();
+        return s_pImpl->getResLocale();
     }
-
-
-    void OModule::setResourceFilePrefix(const OString& _rPrefix)
-    {
-        ::osl::MutexGuard aGuard(s_aMutex);
-        s_sResPrefix = _rPrefix;
-        if (s_pImpl)
-            s_pImpl->setResourceFilePrefix(_rPrefix);
-    }
-
 
     void OModule::registerClient()
     {
         ::osl::MutexGuard aGuard(s_aMutex);
         ++s_nClients;
     }
-
 
     void OModule::revokeClient()
     {
@@ -127,15 +100,12 @@ namespace COMPMOD_NAMESPACE
         }
     }
 
-
     void OModule::ensureImpl()
     {
         if (s_pImpl)
             return;
         s_pImpl = new OModuleImpl();
-        s_pImpl->setResourceFilePrefix(s_sResPrefix);
     }
-
 
     //- registration helper
 
