@@ -96,25 +96,22 @@ namespace slideshow
             }
         }
 
-
         ViewMediaShape::~ViewMediaShape()
         {
             try
             {
                 endMedia();
             }
-            catch (uno::Exception &)
+            catch (const uno::Exception &e)
             {
-                SAL_WARN( "slideshow", comphelper::anyToString( cppu::getCaughtException() ) );
+                SAL_WARN("slideshow", "" << e.Message);
             }
         }
-
 
         const ViewLayerSharedPtr& ViewMediaShape::getViewLayer() const
         {
             return mpViewLayer;
         }
-
 
         void ViewMediaShape::startMedia()
         {
@@ -124,7 +121,6 @@ namespace slideshow
             if (mxPlayer.is())
                 mxPlayer->start();
         }
-
 
         void ViewMediaShape::endMedia()
         {
@@ -156,20 +152,17 @@ namespace slideshow
             }
         }
 
-
         void ViewMediaShape::pauseMedia()
         {
             if (mxPlayer.is())
                 mxPlayer->stop();
         }
 
-
         void ViewMediaShape::setMediaTime(double fTime)
         {
             if (mxPlayer.is())
                 mxPlayer->setMediaTime(fTime);
         }
-
 
         bool ViewMediaShape::render( const ::basegfx::B2DRectangle& rBounds ) const
         {
