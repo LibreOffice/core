@@ -23,8 +23,8 @@
 #include "dlgedobj.hxx"
 #include "iderid.hxx"
 #include "baside3.hxx"
+#include "strings.hrc"
 
-#include "dlgresid.hrc"
 #include "strings.hxx"
 #include <svx/svxids.hrc>
 
@@ -285,8 +285,8 @@ void PropBrw::implSetNewObjectSequence
     {
         xObjectInspector->inspect( _rObjectSeq );
 
-        OUString aText = OUString(IDEResId(RID_STR_BRWTITLE_PROPERTIES))
-                       + OUString(IDEResId(RID_STR_BRWTITLE_MULTISELECT));
+        OUString aText = IDEResId(RID_STR_BRWTITLE_PROPERTIES)
+                       + IDEResId(RID_STR_BRWTITLE_MULTISELECT);
         SetText( aText );
     }
 }

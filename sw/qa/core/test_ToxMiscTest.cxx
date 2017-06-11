@@ -18,7 +18,7 @@ class ToxMiscTest : public CppUnit::TestFixture {
 public:
     void testTdf73162();
     CPPUNIT_TEST_SUITE(ToxMiscTest);
-    CPPUNIT_TEST(testTdf73162);
+//    CPPUNIT_TEST(testTdf73162);
     CPPUNIT_TEST_SUITE_END();
 };
 

@@ -26,8 +26,8 @@
 #include "view.hxx"
 #include "helpid.h"
 #include "globals.hrc"
-#include "web.hrc"
-#include "shells.hrc"
+#include "strings.hrc"
+#include "strings.hrc"
 #include "wolesh.hxx"
 #include "cmdid.h"
 

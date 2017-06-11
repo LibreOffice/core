@@ -508,12 +508,10 @@ namespace dbp
         setDescriptionText(ModuleRes(RID_STR_COMBOWIZ_DBFIELD));
     }
 
-
     OUString& OComboDBFieldPage::getDBFieldSetting()
     {
         return static_cast<OListComboWizard*>(getDialog())->getSettings().sLinkedFormField;
     }
-
 
     void OComboDBFieldPage::ActivatePage()
     {
@@ -521,13 +519,11 @@ namespace dbp
         getDialog()->enableButtons(WizardButtonFlags::FINISH, true);
     }
 
-
     bool OComboDBFieldPage::canAdvance() const
     {
         // we're on the last page here, no travelNext allowed ...
         return false;
     }
-
 
 }   // namespace dbp
 

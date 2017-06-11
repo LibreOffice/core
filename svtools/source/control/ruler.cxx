@@ -26,7 +26,7 @@
 
 #include <svtools/ruler.hxx>
 #include <svtools/svtresid.hxx>
-#include <svtools/svtools.hrc>
+#include <svtools/strings.hrc>
 #include <svtools/colorcfg.hxx>
 
 #include <memory>

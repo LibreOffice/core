@@ -42,14 +42,13 @@
 #include "cellatr.hxx"
 #include "edtwin.hxx"
 #include "helpid.h"
-#include "access.hrc"
+#include "strings.hrc"
 #include "bitmaps.hlst"
 
 // Only for the UpdateRange: Delete the box in which the stacked cursor is positioned.
 #include "pam.hxx"
 
 #include "swundo.hxx"
-#include "ribbar.hrc"
 #include "dbui.hrc"
 
 #include <IDocumentContentOperations.hxx>

@@ -56,9 +56,9 @@ using ::com::sun::star::uno::Sequence;
 
 namespace {
 
-sal_uInt16 nFuncStrIds[] =     // matching enum ScSubTotalFunc
+const char* aFuncStrIds[] =     // matching enum ScSubTotalFunc
 {
-    0,                              // SUBTOTAL_FUNC_NONE
+    nullptr,                        // SUBTOTAL_FUNC_NONE
     STR_FUN_TEXT_AVG,               // SUBTOTAL_FUNC_AVE
     STR_FUN_TEXT_COUNT,             // SUBTOTAL_FUNC_CNT
     STR_FUN_TEXT_COUNT,             // SUBTOTAL_FUNC_CNT2
@@ -71,7 +71,7 @@ sal_uInt16 nFuncStrIds[] =     // matching enum ScSubTotalFunc
     STR_FUN_TEXT_VAR,               // SUBTOTAL_FUNC_VAR
     STR_FUN_TEXT_VAR,               // SUBTOTAL_FUNC_VARP
     STR_FUN_TEXT_MEDIAN,            // SUBTOTAL_FUNC_MED
-    0                               // SUBTOTAL_FUNC_SELECTION_COUNT - not used for pivot table
+    nullptr                         // SUBTOTAL_FUNC_SELECTION_COUNT - not used for pivot table
 };
 
 bool lcl_SearchMember( const std::vector <ScDPResultMember *>& list, SCROW nOrder, SCROW& rIndex)
@@ -837,9 +837,9 @@ OUString ScDPResultData::GetMeasureString(long nMeasure, bool bForce, ScSubTotal
     {
         //  for user-specified subtotal function with all measures,
         //  display only function name
-        assert(eForceFunc < SAL_N_ELEMENTS(nFuncStrIds));
+        assert(eForceFunc < SAL_N_ELEMENTS(aFuncStrIds));
         if ( eForceFunc != SUBTOTAL_FUNC_NONE )
-            return ScGlobal::GetRscString(nFuncStrIds[eForceFunc]);
+            return ScGlobal::GetRscString(aFuncStrIds[eForceFunc]);
 
         rbTotalResult = true;
         return ScGlobal::GetRscString(STR_TABLE_ERGEBNIS);
