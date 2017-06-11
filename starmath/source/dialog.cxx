@@ -44,6 +44,8 @@
 
 #include "dialog.hxx"
 #include "starmath.hrc"
+#include "strings.hrc"
+#include "helpids.h"
 #include "cfgitem.hxx"
 #include "smmod.hxx"
 #include "symbol.hxx"
@@ -92,12 +94,11 @@ public:
     const OUString& GetStyleName(sal_uInt16 nIdx) const;
 };
 
-SmFontStyles::SmFontStyles() :
-    aNormal (ResId(RID_FONTREGULAR, *SM_MOD()->GetResMgr())),
-    aBold   (ResId(RID_FONTBOLD,    *SM_MOD()->GetResMgr())),
-    aItalic (ResId(RID_FONTITALIC,  *SM_MOD()->GetResMgr()))
+SmFontStyles::SmFontStyles()
+    : aNormal(SmResId(RID_FONTREGULAR))
+    , aBold(SmResId(RID_FONTBOLD))
+    , aItalic(SmResId(RID_FONTITALIC))
 {
-
     aBoldItalic = aBold;
     aBoldItalic += ", ";
     aBoldItalic += aItalic;

@@ -46,7 +46,7 @@ static SwProgress *lcl_SwFindProgress( SwDocShell *pDocShell )
     return nullptr;
 }
 
-void StartProgress( sal_uInt16 nMessResId, long nStartValue, long nEndValue,
+void StartProgress( const char* pMessResId, long nStartValue, long nEndValue,
                     SwDocShell *pDocShell )
 {
     if( !SW_MOD()->IsEmbeddedLoadSave() )
@@ -64,7 +64,7 @@ void StartProgress( sal_uInt16 nMessResId, long nStartValue, long nEndValue,
         {
             pProgress = new SwProgress;
             pProgress->pProgress = new SfxProgress( pDocShell,
-                                                    SwResId(nMessResId),
+                                                    SwResId(pMessResId),
                                                     nEndValue - nStartValue );
             pProgress->nStartCount = 1;
             pProgress->pDocShell = pDocShell;
@@ -117,13 +117,13 @@ void EndProgress( SwDocShell *pDocShell )
     }
 }
 
-void SetProgressText( sal_uInt16 nId, SwDocShell *pDocShell )
+void SetProgressText(const char* pId, SwDocShell *pDocShell)
 {
     if( pProgressContainer && !SW_MOD()->IsEmbeddedLoadSave() )
     {
         SwProgress *pProgress = lcl_SwFindProgress( pDocShell );
         if ( pProgress )
-            pProgress->pProgress->SetStateText( 0, SwResId(nId) );
+            pProgress->pProgress->SetStateText(0, SwResId(pId));
     }
 }
 

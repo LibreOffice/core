@@ -30,7 +30,7 @@
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include "xmlstrings.hrc"
+#include "strings.hxx"
 
 #define PROPERTY_ID_WIDTH    1
 #define PROPERTY_ID_HEIGHT   2

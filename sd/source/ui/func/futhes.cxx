@@ -67,7 +67,7 @@ rtl::Reference<FuPoor> FuThesaurus::Create( ViewShell* pViewSh, ::sd::Window* pW
 void FuThesaurus::DoExecute( SfxRequest& )
 {
     SfxErrorContext aContext(ERRCTX_SVX_LINGU_THESAURUS, OUString(),
-                             mpWindow, RID_SVXERRCTX, &DIALOG_MGR() );
+                             mpWindow, getRID_SVXERRCTX(), &SvxResLocale());
 
     if (mpViewShell && dynamic_cast< DrawViewShell *>( mpViewShell ) !=  nullptr)
     {

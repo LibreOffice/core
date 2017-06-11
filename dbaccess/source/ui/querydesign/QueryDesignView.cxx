@@ -34,7 +34,8 @@
 #include <vcl/layout.hxx>
 #include "browserids.hxx"
 #include "SelectionBrowseBox.hxx"
-#include "dbu_qry.hrc"
+#include "strings.hrc"
+#include "strings.hxx"
 #include <unotools/configmgr.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/string.hxx>
@@ -50,7 +51,8 @@
 #include "ConnectionLine.hxx"
 #include "ConnectionLineData.hxx"
 #include "QTableConnectionData.hxx"
-#include "dbustrings.hrc"
+#include "core_resource.hxx"
+#include "stringconstants.hxx"
 #include "UITools.hxx"
 #include "querycontainerwindow.hxx"
 #include "sqlmessage.hxx"
@@ -265,7 +267,7 @@ namespace
         if ( !bErg )
         {
             eErrorCode = eColumnNotFound;
-            OUString sError(ModuleRes(STR_QRY_COLUMN_NOT_FOUND));
+            OUString sError(DBA_RES(STR_QRY_COLUMN_NOT_FOUND));
             sError = sError.replaceFirst("$name$",aColumnName);
             _pView->getController().appendError( sError );
 
@@ -273,7 +275,7 @@ namespace
             {
                 Reference<XDatabaseMetaData> xMeta = _pView->getController().getConnection()->getMetaData();
                 if ( xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers() )
-                    _pView->getController().appendError( OUString( ModuleRes( STR_QRY_CHECK_CASESENSITIVE ) ) );
+                    _pView->getController().appendError(DBA_RES(STR_QRY_CHECK_CASESENSITIVE));
             }
             catch(Exception&)
             {
@@ -565,7 +567,7 @@ namespace
                   SQL_ISRULE(pNode->getChild(2),column_ref) &&
                    pNode->getChild(1)->getNodeType() == SQLNodeType::Equal))
             {
-                OUString sError(ModuleRes(STR_QRY_JOIN_COLUMN_COMPARE));
+                OUString sError(DBA_RES(STR_QRY_JOIN_COLUMN_COMPARE));
                 _pView->getController().appendError( sError );
                 return eIllegalJoin;
             }
@@ -749,7 +751,7 @@ namespace
                         {
                             // only show the messagebox the first time
                             if (!bCritsOnAsterikWarning)
-                                ScopedVclPtrInstance<MessageDialog>(_pView, ModuleRes( STR_QRY_CRITERIA_ON_ASTERISK))->Execute();
+                                ScopedVclPtrInstance<MessageDialog>(_pView, DBA_RES(STR_QRY_CRITERIA_ON_ASTERISK))->Execute();
                             bCritsOnAsterikWarning = true;
                             continue;
                         }
@@ -903,7 +905,7 @@ namespace
                     {
                         // only show the  MessageBox the first time
                         if (!bCritsOnAsterikWarning)
-                            ScopedVclPtrInstance<MessageDialog>(_pView, ModuleRes( STR_QRY_ORDERBY_ON_ASTERISK))->Execute();
+                            ScopedVclPtrInstance<MessageDialog>(_pView, DBA_RES(STR_QRY_ORDERBY_ON_ASTERISK))->Execute();
                         bCritsOnAsterikWarning = true;
                         continue;
                     }
@@ -1396,7 +1398,7 @@ namespace
             else
             {
                 eErrorCode = eNoColumnInLike;
-                OUString sError(ModuleRes(STR_QRY_LIKE_LEFT_NO_COLUMN));
+                OUString sError(DBA_RES(STR_QRY_LIKE_LEFT_NO_COLUMN));
                 _pView->getController().appendError( sError );
             }
         }
@@ -2403,47 +2405,46 @@ namespace
 
     OUString getParseErrorMessage( SqlParseError _eErrorCode )
     {
-        sal_uInt16 nResId;
-        switch(_eErrorCode)
+        const char* pResId;
+        switch (_eErrorCode)
         {
             case eIllegalJoin:
-                nResId = STR_QRY_ILLEGAL_JOIN;
+                pResId = STR_QRY_ILLEGAL_JOIN;
                 break;
             case eStatementTooLong:
-                nResId = STR_QRY_TOO_LONG_STATEMENT;
+                pResId = STR_QRY_TOO_LONG_STATEMENT;
                 break;
             case eNoConnection:
-                nResId = STR_QRY_SYNTAX;
+                pResId = STR_QRY_SYNTAX;
                 break;
             case eNoSelectStatement:
-                nResId = STR_QRY_NOSELECT;
+                pResId = STR_QRY_NOSELECT;
                 break;
             case eNoColumnInLike:
-                nResId = STR_QRY_SYNTAX;
+                pResId = STR_QRY_SYNTAX;
                 break;
             case eColumnNotFound:
-                nResId = STR_QRY_SYNTAX;
+                pResId = STR_QRY_SYNTAX;
                 break;
             case eNativeMode:
-                nResId = STR_QRY_NATIVE;
+                pResId = STR_QRY_NATIVE;
                 break;
             case eTooManyTables:
-                nResId = STR_QRY_TOO_MANY_TABLES;
+                pResId = STR_QRY_TOO_MANY_TABLES;
                 break;
             case eTooManyColumns:
-                nResId = STR_QRY_TOO_MANY_COLUMNS;
+                pResId = STR_QRY_TOO_MANY_COLUMNS;
                 break;
             case eStatementTooComplex:
-                nResId = STR_QRY_TOOCOMPLEX;
+                pResId = STR_QRY_TOOCOMPLEX;
                 break;
             default:
-                nResId = STR_QRY_SYNTAX;
+                pResId = STR_QRY_SYNTAX;
                 break;
         }
         ;
-        return OUString( ModuleRes( nResId ) );
+        return DBA_RES(pResId);
     }
-
 }
 
 // end of anonymouse namespace

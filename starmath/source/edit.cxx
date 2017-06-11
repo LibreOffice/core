@@ -23,8 +23,9 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 
-
 #include "starmath.hrc"
+#include "strings.hrc"
+#include "helpids.h"
 
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
