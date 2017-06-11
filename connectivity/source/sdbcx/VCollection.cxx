@@ -30,7 +30,7 @@
 #include <comphelper/property.hxx>
 #include "TConnection.hxx"
 #include <rtl/ustrbuf.hxx>
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include "resource/sharedresources.hxx"
 
 using namespace connectivity::sdbcx;

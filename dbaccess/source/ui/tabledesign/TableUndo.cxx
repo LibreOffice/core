@@ -18,7 +18,7 @@
  */
 
 #include "TableUndo.hxx"
-#include "dbu_tbl.hrc"
+#include "strings.hrc"
 #include "TEditControl.hxx"
 #include "TableRow.hxx"
 #include "browserids.hxx"
@@ -31,8 +31,9 @@ using namespace ::svt;
 
 
 // class OTableDesignUndoAct
-OTableDesignUndoAct::OTableDesignUndoAct( OTableRowView* pOwner,sal_uInt16 nCommentID ) : OCommentUndoAction(nCommentID)
-    ,m_pTabDgnCtrl(  pOwner )
+OTableDesignUndoAct::OTableDesignUndoAct(OTableRowView* pOwner, const char* pCommentID)
+    : OCommentUndoAction(pCommentID)
+    , m_pTabDgnCtrl(pOwner)
 {
     m_pTabDgnCtrl->m_nCurUndoActId++;
 }
@@ -108,9 +109,9 @@ void OTableDesignCellUndoAct::Redo()
 }
 
 // class OTableEditorUndoAct
-OTableEditorUndoAct::OTableEditorUndoAct( OTableEditorCtrl* pOwner,sal_uInt16 _nCommentID ) :
-     OTableDesignUndoAct(  pOwner ,_nCommentID)
-    ,pTabEdCtrl(pOwner)
+OTableEditorUndoAct::OTableEditorUndoAct(OTableEditorCtrl* pOwner, const char* pCommentID)
+    : OTableDesignUndoAct(pOwner, pCommentID)
+    , pTabEdCtrl(pOwner)
 {
 }
 

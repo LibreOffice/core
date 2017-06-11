@@ -21,56 +21,6 @@
 
 #include "rcid.hrc"
 
-// Strings
-
-#define STR_COMCORE_READERROR               (RC_COMCORE_BEGIN + 0)
-#define STR_TABLE_DEFNAME                   (RC_COMCORE_BEGIN + 2)
-#define STR_GRAPHIC_DEFNAME                 (RC_COMCORE_BEGIN + 3)
-#define STR_OBJECT_DEFNAME                  (RC_COMCORE_BEGIN + 4)
-#define STR_FRAME_DEFNAME                   (RC_COMCORE_BEGIN + 5)
-#define STR_REGION_DEFNAME                  (RC_COMCORE_BEGIN + 6)
-#define STR_COMCORE_CANT_SHOW               (RC_COMCORE_BEGIN + 7)
-#define STR_NUMRULE_DEFNAME                 (RC_COMCORE_BEGIN + 10)
-#define STR_EMPTYPAGE                       (RC_COMCORE_BEGIN + 11)
-#define RID_SHELLRES_AUTOFMTSTRS            (RC_COMCORE_BEGIN + 12)
-#define STR_MULT_INTERACT_HYPH_WARN         (RC_COMCORE_BEGIN + 13)
-#define STR_HYPH_TITLE                      (RC_COMCORE_BEGIN + 16)
-#define STR_SHAPE_DEFNAME                   (RC_COMCORE_BEGIN + 17)
-
-#define STR_UNDO_REDLINE_INSERT             (RC_COMCORE_BEGIN + 19)
-#define STR_UNDO_REDLINE_DELETE             (RC_COMCORE_BEGIN + 20)
-#define STR_UNDO_REDLINE_FORMAT             (RC_COMCORE_BEGIN + 21)
-#define STR_UNDO_REDLINE_TABLE              (RC_COMCORE_BEGIN + 22)
-#define STR_UNDO_REDLINE_FMTCOLL            (RC_COMCORE_BEGIN + 23)
-#define STR_UNDO_REDLINE_PARAGRAPH_FORMAT   (RC_COMCORE_BEGIN + 24)
-#define STR_UNDO_REDLINE_TABLE_ROW_INSERT   (RC_COMCORE_BEGIN + 25)
-#define STR_UNDO_REDLINE_TABLE_ROW_DELETE   (RC_COMCORE_BEGIN + 26)
-#define STR_UNDO_REDLINE_TABLE_CELL_INSERT  (RC_COMCORE_BEGIN + 27)
-#define STR_UNDO_REDLINE_TABLE_CELL_DELETE  (RC_COMCORE_BEGIN + 28)
-#define STR_START_QUOTE                     (RC_COMCORE_BEGIN + 29)
-#define STR_END_QUOTE                       (RC_COMCORE_BEGIN + 30)
-#define STR_LDOTS                           (RC_COMCORE_BEGIN + 31)
-#define STR_YIELDS                          (RC_COMCORE_BEGIN + 32)
-#define STR_PARAGRAPHS                      (RC_COMCORE_BEGIN + 33)
-#define STR_MULTISEL                        (RC_COMCORE_BEGIN + 34)
-#define STR_N_REDLINES                      (RC_COMCORE_BEGIN + 35)
-#define STR_FIELD                           (RC_COMCORE_BEGIN + 36)
-
-#define STR_FRAME                           (RC_COMCORE_BEGIN + 37)
-#define STR_OLE                             (RC_COMCORE_BEGIN + 38)
-#define STR_MATH_FORMULA                    (RC_COMCORE_BEGIN + 39)
-#define STR_CHART                           (RC_COMCORE_BEGIN + 40)
-#define STR_NOTE                            (RC_COMCORE_BEGIN + 41)
-#define STR_REFERENCE                       (RC_COMCORE_BEGIN + 42)
-#define STR_SCRIPT                          (RC_COMCORE_BEGIN + 43)
-#define STR_AUTHORITY_ENTRY                 (RC_COMCORE_BEGIN + 44)
-#define STR_SPECIALCHAR                     (RC_COMCORE_BEGIN + 45)
-#define STR_FOOTNOTE                        (RC_COMCORE_BEGIN + 46)
-#define STR_GRAPHIC                         (RC_COMCORE_BEGIN + 47)
-#define STR_DRAWING_OBJECTS                 (RC_COMCORE_BEGIN + 48)
-#define STR_TABLE_NAME                      (RC_COMCORE_BEGIN + 49)
-#define STR_PARAGRAPH_UNDO                  (RC_COMCORE_BEGIN + 50)
-
 // defines for the Autoformat Redline Comments
 #define STR_AUTOFMTREDL_DEL_EMPTY_PARA          0
 #define STR_AUTOFMTREDL_USE_REPLACE             1

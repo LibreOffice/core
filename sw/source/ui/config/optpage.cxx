@@ -45,7 +45,7 @@
 #include <crstate.hxx>
 #include <viewopt.hxx>
 #include <globals.hrc>
-#include <config.hrc>
+#include <strings.hrc>
 #include <swwrtshitem.hxx>
 #include <unomid.h>
 
@@ -72,6 +72,8 @@
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
+
+#include "optload.hxx"
 
 using namespace ::com::sun::star;
 
@@ -128,10 +130,10 @@ SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
         m_pVRulerRightCBox->Hide();
     m_pVRulerCBox->SetClickHdl(LINK(this, SwContentOptPage, VertRulerHdl ));
 
-    SvxStringArray aMetricArr(ResId(STR_ARR_METRIC, *pSwResMgr));
+    SwFieldUnitTable aMetricArr;
     for ( size_t i = 0; i < aMetricArr.Count(); ++i )
     {
-        const OUString sMetric = aMetricArr.GetStringByPos( i );
+        const OUString sMetric = aMetricArr.GetString(i);
         FieldUnit eFUnit = (FieldUnit)aMetricArr.GetValue( i );
 
         switch ( eFUnit )

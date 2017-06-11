@@ -28,27 +28,27 @@ namespace
 
 OUString lclGetFunctionMaskName(const PivotFunc nFunctionMask)
 {
-    sal_uInt16 nStrId = 0;
+    const char* pStrId = nullptr;
     switch (nFunctionMask)
     {
-        case PivotFunc::Sum:        nStrId = STR_FUN_TEXT_SUM;      break;
-        case PivotFunc::Count:      nStrId = STR_FUN_TEXT_COUNT;    break;
-        case PivotFunc::Average:    nStrId = STR_FUN_TEXT_AVG;      break;
-        case PivotFunc::Median:     nStrId = STR_FUN_TEXT_MEDIAN;   break;
-        case PivotFunc::Max:        nStrId = STR_FUN_TEXT_MAX;      break;
-        case PivotFunc::Min:        nStrId = STR_FUN_TEXT_MIN;      break;
-        case PivotFunc::Product:    nStrId = STR_FUN_TEXT_PRODUCT;  break;
-        case PivotFunc::CountNum:   nStrId = STR_FUN_TEXT_COUNT;    break;
-        case PivotFunc::StdDev:     nStrId = STR_FUN_TEXT_STDDEV;   break;
-        case PivotFunc::StdDevP:    nStrId = STR_FUN_TEXT_STDDEV;   break;
-        case PivotFunc::StdVar:     nStrId = STR_FUN_TEXT_VAR;      break;
-        case PivotFunc::StdVarP:    nStrId = STR_FUN_TEXT_VAR;      break;
+        case PivotFunc::Sum:        pStrId = STR_FUN_TEXT_SUM;      break;
+        case PivotFunc::Count:      pStrId = STR_FUN_TEXT_COUNT;    break;
+        case PivotFunc::Average:    pStrId = STR_FUN_TEXT_AVG;      break;
+        case PivotFunc::Median:     pStrId = STR_FUN_TEXT_MEDIAN;   break;
+        case PivotFunc::Max:        pStrId = STR_FUN_TEXT_MAX;      break;
+        case PivotFunc::Min:        pStrId = STR_FUN_TEXT_MIN;      break;
+        case PivotFunc::Product:    pStrId = STR_FUN_TEXT_PRODUCT;  break;
+        case PivotFunc::CountNum:   pStrId = STR_FUN_TEXT_COUNT;    break;
+        case PivotFunc::StdDev:     pStrId = STR_FUN_TEXT_STDDEV;   break;
+        case PivotFunc::StdDevP:    pStrId = STR_FUN_TEXT_STDDEV;   break;
+        case PivotFunc::StdVar:     pStrId = STR_FUN_TEXT_VAR;      break;
+        case PivotFunc::StdVarP:    pStrId = STR_FUN_TEXT_VAR;      break;
         default:
             assert(false);
             break;
     }
-    if (nStrId != 0)
-        return ScGlobal::GetRscString(nStrId);
+    if (pStrId)
+        return ScGlobal::GetRscString(pStrId);
     else
         return OUString();
 }

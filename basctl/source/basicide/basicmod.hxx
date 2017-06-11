@@ -29,9 +29,10 @@ namespace basctl
 class Module : public SfxModule
 {
 public:
-    Module ( ResMgr *pMgr, SfxObjectFactory *pObjFact) :
-        SfxModule( pMgr, {pObjFact} )
-    { }
+    Module(const std::locale& rResLocale, SfxObjectFactory *pObjFact)
+        : SfxModule(rResLocale, {pObjFact})
+    {
+    }
 };
 
 } // namespace basctl

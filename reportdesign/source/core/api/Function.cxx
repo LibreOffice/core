@@ -18,7 +18,7 @@
  */
 #include "Function.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include "corestrings.hrc"
+#include "strings.hxx"
 #include <connectivity/dbtools.hxx>
 #include <comphelper/property.hxx>
 #include <cppuhelper/supportsservice.hxx>

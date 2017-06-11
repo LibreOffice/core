@@ -26,7 +26,7 @@
 #include <vcl/msgbox.hxx>
 #include "JoinTableView.hxx"
 #include "RelControliFace.hxx"
-#include "moduledbu.hxx"
+#include "core_resource.hxx"
 #include "RelationControl.hxx"
 
 namespace dbaui
@@ -35,7 +35,7 @@ namespace dbaui
     class ORelationDialog : public ModalDialog
                             ,public IRelationControlInterface
     {
-        OModuleClient                           m_aModuleClient;
+        dbaccess::OModuleClient m_aModuleClient;
         std::unique_ptr<OTableListBoxControl> m_xTableControl;
         OJoinTableView::OTableWindowMap*        m_pTableMap;
 

@@ -23,7 +23,7 @@
 #include <vcl/graph.hxx>
 #include <sfx2/sfxresid.hxx>
 
-#include <templateview.hrc>
+#include <sfx2/strings.hrc>
 #include "bitmaps.hlst"
 
 using namespace basegfx;
