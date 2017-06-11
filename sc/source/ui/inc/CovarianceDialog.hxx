@@ -25,7 +25,7 @@ public:
 protected:
     virtual const OUString getLabel() override;
     virtual const OUString getTemplate() override;
-    virtual sal_Int16 GetUndoNameId() override;
+    virtual const char* GetUndoNameId() override;
 };
 
 #endif

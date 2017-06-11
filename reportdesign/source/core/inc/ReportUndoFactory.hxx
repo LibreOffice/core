@@ -21,13 +21,11 @@
 
 #include <svx/svdundo.hxx>
 #include <memory>
-#include "ModuleHelper.hxx"
 
 namespace rptui
 {
     class OReportUndoFactory : public SdrUndoFactory
     {
-        OModuleClient       m_aModuleClient;
         ::std::unique_ptr<SdrUndoFactory> m_pUndoFactory;
 
         OReportUndoFactory(const OReportUndoFactory&) = delete;

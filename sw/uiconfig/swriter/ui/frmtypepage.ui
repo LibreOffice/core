@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="sw">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkAdjustment" id="adjustment1">
@@ -72,7 +72,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="autowidth">
-                            <property name="label" translatable="yes">AutoSize</property>
+                            <property name="label" translatable="yes" context="frmtypepage|autowidth">AutoSize</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -98,7 +98,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_Width (at least)</property>
+                                <property name="label" translatable="yes" context="frmtypepage|autowidthft">_Width (at least)</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">width:0.00cm</property>
                               </object>
@@ -114,7 +114,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_Width</property>
+                                <property name="label" translatable="yes" context="frmtypepage|widthft">_Width</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">width:0.00cm</property>
                               </object>
@@ -140,7 +140,7 @@
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="relwidth">
-                                <property name="label" translatable="yes">Relat_ive to</property>
+                                <property name="label" translatable="yes" context="frmtypepage|relwidth">Relat_ive to</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -207,7 +207,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="autoheight">
-                            <property name="label" translatable="yes">AutoSize</property>
+                            <property name="label" translatable="yes" context="frmtypepage|autoheight">AutoSize</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -233,7 +233,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">H_eight (at least)</property>
+                                <property name="label" translatable="yes" context="frmtypepage|autoheightft">H_eight (at least)</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">height:0.00cm</property>
                               </object>
@@ -249,7 +249,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">H_eight</property>
+                                <property name="label" translatable="yes" context="frmtypepage|heightft">H_eight</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">height:0.00cm</property>
                               </object>
@@ -275,7 +275,7 @@
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="relheight">
-                                <property name="label" translatable="yes">Re_lative to</property>
+                                <property name="label" translatable="yes" context="frmtypepage|relheight">Re_lative to</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -320,7 +320,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="ratio">
-                        <property name="label" translatable="yes">_Keep ratio</property>
+                        <property name="label" translatable="yes" context="frmtypepage|ratio">_Keep ratio</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -337,7 +337,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="origsize">
-                        <property name="label" translatable="yes">_Original Size</property>
+                        <property name="label" translatable="yes" context="frmtypepage|origsize">_Original Size</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="no_show_all">True</property>
@@ -359,7 +359,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Size</property>
+                <property name="label" translatable="yes" context="frmtypepage|label2">Size</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -421,7 +421,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="topage">
-                        <property name="label" translatable="yes">To _page</property>
+                        <property name="label" translatable="yes" context="frmtypepage|topage">To _page</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -440,7 +440,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="topara">
-                        <property name="label" translatable="yes">To paragrap_h</property>
+                        <property name="label" translatable="yes" context="frmtypepage|topara">To paragrap_h</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -458,7 +458,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="tochar">
-                        <property name="label" translatable="yes">To cha_racter</property>
+                        <property name="label" translatable="yes" context="frmtypepage|tochar">To cha_racter</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -476,7 +476,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="aschar">
-                        <property name="label" translatable="yes">_As character</property>
+                        <property name="label" translatable="yes" context="frmtypepage|aschar">_As character</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -494,7 +494,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="toframe">
-                        <property name="label" translatable="yes">To _frame</property>
+                        <property name="label" translatable="yes" context="frmtypepage|toframe">To _frame</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -518,7 +518,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Anchor</property>
+                <property name="label" translatable="yes" context="frmtypepage|label1">Anchor</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -563,7 +563,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Hori_zontal</property>
+                    <property name="label" translatable="yes" context="frmtypepage|horiposft">Hori_zontal</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">horipos</property>
                   </object>
@@ -579,7 +579,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">b_y</property>
+                    <property name="label" translatable="yes" context="frmtypepage|horibyft">b_y</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">byhori:0.00cm</property>
                   </object>
@@ -595,7 +595,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">by</property>
+                    <property name="label" translatable="yes" context="frmtypepage|vertbyft">by</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">byvert:0.00cm</property>
                   </object>
@@ -611,7 +611,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_to</property>
+                    <property name="label" translatable="yes" context="frmtypepage|horitoft">_to</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">horianchor</property>
                   </object>
@@ -671,7 +671,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Vertical</property>
+                    <property name="label" translatable="yes" context="frmtypepage|vertposft">_Vertical</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">vertpos</property>
                   </object>
@@ -717,7 +717,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">t_o</property>
+                    <property name="label" translatable="yes" context="frmtypepage|verttoft">t_o</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">vertanchor</property>
                   </object>
@@ -744,7 +744,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="mirror">
-                    <property name="label" translatable="yes">_Mirror on even pages</property>
+                    <property name="label" translatable="yes" context="frmtypepage|mirror">_Mirror on even pages</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -762,7 +762,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="followtextflow">
-                    <property name="label" translatable="yes">Follow text flow</property>
+                    <property name="label" translatable="yes" context="frmtypepage|followtextflow">Follow text flow</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -786,7 +786,7 @@
           <object class="GtkLabel" id="label11">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Position</property>
+            <property name="label" translatable="yes" context="frmtypepage|label11">Position</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

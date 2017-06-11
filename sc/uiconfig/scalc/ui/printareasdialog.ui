@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sc">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="PrintAreasDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Edit Print Ranges</property>
+    <property name="title" translatable="yes" context="printareasdialog|PrintAreasDialog">Edit Print Ranges</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -131,10 +131,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <items>
-                              <item translatable="yes">- none -</item>
-                              <item translatable="yes">- entire sheet -</item>
-                              <item translatable="yes">- user defined -</item>
-                              <item translatable="yes">- selection -</item>
+                              <item translatable="yes" context="printareasdialog|lbprintarea">- none -</item>
+                              <item translatable="yes" context="printareasdialog|lbprintarea">- entire sheet -</item>
+                              <item translatable="yes" context="printareasdialog|lbprintarea">- user defined -</item>
+                              <item translatable="yes" context="printareasdialog|lbprintarea">- selection -</item>
                             </items>
                           </object>
                           <packing>
@@ -150,7 +150,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Print Range</property>
+                    <property name="label" translatable="yes" context="printareasdialog|label1">Print Range</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -216,8 +216,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <items>
-                              <item translatable="yes">- none -</item>
-                              <item translatable="yes">- user defined -</item>
+                              <item translatable="yes" context="printareasdialog|lbrepeatrow">- none -</item>
+                              <item translatable="yes" context="printareasdialog|lbrepeatrow">- user defined -</item>
                             </items>
                           </object>
                           <packing>
@@ -233,7 +233,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Rows to Repeat</property>
+                    <property name="label" translatable="yes" context="printareasdialog|label2">Rows to Repeat</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -299,8 +299,8 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <items>
-                              <item translatable="yes">- none -</item>
-                              <item translatable="yes">- user defined -</item>
+                              <item translatable="yes" context="printareasdialog|lbrepeatcol">- none -</item>
+                              <item translatable="yes" context="printareasdialog|lbrepeatcol">- user defined -</item>
                             </items>
                           </object>
                           <packing>
@@ -316,7 +316,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Columns to Repeat</property>
+                    <property name="label" translatable="yes" context="printareasdialog|label3">Columns to Repeat</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

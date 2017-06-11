@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <classes/resource.hrc>
+#include <strings.hrc>
 #include "bitmaps.hlst"
 #include <classes/fwkresid.hxx>
 

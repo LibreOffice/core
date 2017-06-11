@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_KEYCOD_HXX
 
 #include <rtl/ustring.hxx>
-#include <tools/resid.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/keycodes.hxx>
 #include <vcl/vclenum.hxx>

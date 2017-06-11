@@ -38,7 +38,7 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/servicehelper.hxx>
 #include "services.hxx"
-#include "frm_resource.hrc"
+#include "strings.hrc"
 #include <tools/debug.hxx>
 
 

@@ -28,6 +28,7 @@
 
 #include <fldui.hrc>
 #include <globals.hrc>
+#include <strings.hrc>
 #include <SwNodeNum.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
@@ -739,6 +740,36 @@ bool SwFieldRefPage::MatchSubstring( const OUString& rListString, const OUString
     return aListString.indexOf(aSubstr) >= 0;
 }
 
+enum FMT_REF_IDX
+{
+    FMT_REF_PAGE_IDX                = 0,
+    FMT_REF_CHAPTER_IDX             = 1,
+    FMT_REF_TEXT_IDX                = 2,
+    FMT_REF_UPDOWN_IDX              = 3,
+    FMT_REF_PAGE_PGDSC_IDX          = 4,
+    FMT_REF_ONLYNUMBER_IDX          = 5,
+    FMT_REF_ONLYCAPTION_IDX         = 6,
+    FMT_REF_ONLYSEQNO_IDX           = 7,
+    FMT_REF_NUMBER_IDX              = 8,
+    FMT_REF_NUMBER_NO_CONTEXT_IDX   = 9,
+    FMT_REF_NUMBER_FULL_CONTEXT_IDX = 10
+};
+
+static const char* FMT_REF_ARY[] =
+{
+    FMT_REF_PAGE,
+    FMT_REF_CHAPTER,
+    FMT_REF_TEXT,
+    FMT_REF_UPDOWN,
+    FMT_REF_PAGE_PGDSC,
+    FMT_REF_ONLYNUMBER,
+    FMT_REF_ONLYCAPTION,
+    FMT_REF_ONLYSEQNO,
+    FMT_REF_NUMBER,
+    FMT_REF_NUMBER_NO_CONTEXT,
+    FMT_REF_NUMBER_FULL_CONTEXT
+};
+
 sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
 {
     OUString sOldSel;
@@ -765,7 +796,7 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
         case REFFLDFLAG_BOOKMARK:
         case REFFLDFLAG_FOOTNOTE:
         case REFFLDFLAG_ENDNOTE:
-            nSize = FMT_REF_PAGE_PGDSC - FMT_REF_BEGIN + 1;
+            nSize = FMT_REF_PAGE_PGDSC_IDX + 1;
             break;
 
         default:
@@ -773,7 +804,7 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
 
             if ( REFFLDFLAG & nTypeId )
             {
-                nSize = FMT_REF_ONLYSEQNO - FMT_REF_BEGIN + 1;
+                nSize = FMT_REF_ONLYSEQNO_IDX + 1;
             }
             else
             {
@@ -793,13 +824,13 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
     // #i83479#
     if ( bAddCrossRefFormats )
     {
-        sal_uInt16 nFormat = FMT_REF_NUMBER - FMT_REF_BEGIN;
+        sal_uInt16 nFormat = FMT_REF_NUMBER_IDX;
         sal_Int32 nPos = m_pFormatLB->InsertEntry(GetFieldMgr().GetFormatStr( nTypeId, nFormat ));
         m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(GetFieldMgr().GetFormatId( nTypeId, nFormat )));
-        nFormat = FMT_REF_NUMBER_NO_CONTEXT - FMT_REF_BEGIN;
+        nFormat = FMT_REF_NUMBER_NO_CONTEXT_IDX;
         nPos = m_pFormatLB->InsertEntry(GetFieldMgr().GetFormatStr( nTypeId, nFormat ));
         m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(GetFieldMgr().GetFormatId( nTypeId, nFormat )));
-        nFormat = FMT_REF_NUMBER_FULL_CONTEXT - FMT_REF_BEGIN;
+        nFormat = FMT_REF_NUMBER_FULL_CONTEXT_IDX;
         nPos = m_pFormatLB->InsertEntry(GetFieldMgr().GetFormatStr( nTypeId, nFormat ));
         m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(GetFieldMgr().GetFormatId( nTypeId, nFormat )));
         nSize += 3;
@@ -811,7 +842,7 @@ sal_Int32 SwFieldRefPage::FillFormatLB(sal_uInt16 nTypeId)
         if (!IsFieldEdit())
             m_pFormatLB->SelectEntry(sOldSel);
         else
-            m_pFormatLB->SelectEntry(SwResId(FMT_REF_BEGIN + GetCurField()->GetFormat()));
+            m_pFormatLB->SelectEntry(SwResId(FMT_REF_ARY[GetCurField()->GetFormat()]));
 
         if (!m_pFormatLB->GetSelectEntryCount())
         {

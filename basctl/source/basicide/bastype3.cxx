@@ -20,7 +20,7 @@
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
 #include <bastype2.hxx>
-#include <basidesh.hrc>
+#include <strings.hrc>
 #include "bitmaps.hlst"
 #include <bastypes.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>

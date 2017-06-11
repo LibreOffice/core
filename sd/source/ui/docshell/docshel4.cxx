@@ -57,7 +57,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include "app.hrc"
-#include "glob.hrc"
+#include "strings.hrc"
 #include "strings.hrc"
 #include "strmname.h"
 #include "FrameView.hxx"

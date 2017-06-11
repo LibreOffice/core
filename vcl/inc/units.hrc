@@ -1,0 +1,58 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_VCL_INC_UNITS_HRC
+#define INCLUDED_VCL_INC_UNITS_HRC
+
+#define NC_(Context, String) (Context "\004" u8##String)
+
+std::pair<const char*, FieldUnit> SV_FUNIT_STRINGS[] =
+{
+    // To translators: This is the first entry of a sequence of measurement unit names
+    { NC_("SV_FUNIT_STRINGS", "mm"), FUNIT_MM },
+    { NC_("SV_FUNIT_STRINGS", "cm"), FUNIT_CM },
+    { NC_("SV_FUNIT_STRINGS", "m"), FUNIT_M },
+    { NC_("SV_FUNIT_STRINGS", "km"), FUNIT_KM },
+    { NC_("SV_FUNIT_STRINGS", "twips"), FUNIT_TWIP },
+    { NC_("SV_FUNIT_STRINGS", "twip"), FUNIT_TWIP },
+    { NC_("SV_FUNIT_STRINGS", "pt"), FUNIT_POINT },
+    { NC_("SV_FUNIT_STRINGS", "pc"), FUNIT_PICA },
+    { NC_("SV_FUNIT_STRINGS", "\""), FUNIT_INCH },
+    { NC_("SV_FUNIT_STRINGS", "in"), FUNIT_INCH },
+    { NC_("SV_FUNIT_STRINGS", "inch"), FUNIT_INCH },
+    { NC_("SV_FUNIT_STRINGS", "'"), FUNIT_FOOT },
+    { NC_("SV_FUNIT_STRINGS", "ft"), FUNIT_FOOT },
+    { NC_("SV_FUNIT_STRINGS", "foot"), FUNIT_FOOT },
+    { NC_("SV_FUNIT_STRINGS", "feet"), FUNIT_FOOT },
+    { NC_("SV_FUNIT_STRINGS", "miles"), FUNIT_MILE },
+    { NC_("SV_FUNIT_STRINGS", "mile"), FUNIT_MILE },
+    { NC_("SV_FUNIT_STRINGS", "ch"), FUNIT_CHAR },
+    { NC_("SV_FUNIT_STRINGS", "line"), FUNIT_LINE },
+    { NC_("SV_FUNIT_STRINGS", "pixels"), FUNIT_PIXEL },
+    { NC_("SV_FUNIT_STRINGS", "pixel"), FUNIT_PIXEL },
+    /* To translators: degree */
+    { NC_("SV_FUNIT_STRINGS", "°"), FUNIT_DEGREE },
+    { NC_("SV_FUNIT_STRINGS", "sec"), FUNIT_SECOND },
+    // To translators: This is the last entry of the sequence of measurement unit names
+    { NC_("SV_FUNIT_STRINGS", "ms"), FUNIT_MILLISECOND }
+};
+
+#endif // INCLUDED_VCL_INC_UNITS_HRC
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

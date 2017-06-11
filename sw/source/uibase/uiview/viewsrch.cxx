@@ -61,9 +61,9 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 
-#include <view.hrc>
+#include <strings.hrc>
 #include <SwRewriter.hxx>
-#include <comcore.hrc>
+#include <strings.hrc>
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 

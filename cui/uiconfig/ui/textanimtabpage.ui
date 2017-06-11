@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustmentAMOUNT">
     <property name="upper">100</property>
@@ -46,23 +46,23 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">No Effect</col>
+        <col id="0" translatable="yes" context="textanimtabpage|liststoreEFFECT">No Effect</col>
         <col id="1">0</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Blink</col>
+        <col id="0" translatable="yes" context="textanimtabpage|liststoreEFFECT">Blink</col>
         <col id="1">1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Scroll Through</col>
+        <col id="0" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll Through</col>
         <col id="1">2</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Scroll Back and Forth</col>
+        <col id="0" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll Back and Forth</col>
         <col id="1">3</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Scroll In</col>
+        <col id="0" translatable="yes" context="textanimtabpage|liststoreEFFECT">Scroll In</col>
         <col id="1">4</col>
       </row>
     </data>
@@ -91,7 +91,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">E_ffect:</property>
+                <property name="label" translatable="yes" context="textanimtabpage|FT_EFFECTS">E_ffect:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">LB_EFFECT</property>
               </object>
@@ -132,7 +132,7 @@
               <object class="GtkLabel" id="FT_DIRECTION">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Direction:</property>
+                <property name="label" translatable="yes" context="textanimtabpage|FT_DIRECTION">Direction:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">grid1</property>
               </object>
@@ -152,13 +152,13 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">To top</property>
+                    <property name="tooltip_text" translatable="yes" context="textanimtabpage|BTN_UP|tooltip_text">To top</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
                     <property name="image">imageUP</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="BTN_UP-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Up</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_UP-atkobject">Up</property>
                       </object>
                     </child>
                   </object>
@@ -173,13 +173,13 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">To right</property>
+                    <property name="tooltip_text" translatable="yes" context="textanimtabpage|BTN_RIGHT|tooltip_text">To right</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
                     <property name="image">imageRIGHT</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="BTN_RIGHT-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Right</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_RIGHT-atkobject">Right</property>
                       </object>
                     </child>
                   </object>
@@ -194,13 +194,13 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">To left</property>
+                    <property name="tooltip_text" translatable="yes" context="textanimtabpage|BTN_LEFT|tooltip_text">To left</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
                     <property name="image">imageLEFT</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="BTN_LEFT-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Left</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_LEFT-atkobject">Left</property>
                       </object>
                     </child>
                   </object>
@@ -215,13 +215,13 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">To bottom</property>
+                    <property name="tooltip_text" translatable="yes" context="textanimtabpage|BTN_DOWN|tooltip_text">To bottom</property>
                     <property name="halign">center</property>
                     <property name="hexpand">True</property>
                     <property name="image">imageDOWN</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="BTN_DOWN-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Down</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="textanimtabpage|BTN_DOWN-atkobject">Down</property>
                       </object>
                     </child>
                   </object>
@@ -286,7 +286,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="TSB_START_INSIDE">
-                    <property name="label" translatable="yes">S_tart inside</property>
+                    <property name="label" translatable="yes" context="textanimtabpage|TSB_START_INSIDE">S_tart inside</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -303,7 +303,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="TSB_STOP_INSIDE">
-                    <property name="label" translatable="yes">Text _visible when exiting</property>
+                    <property name="label" translatable="yes" context="textanimtabpage|TSB_STOP_INSIDE">Text _visible when exiting</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -323,7 +323,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Animation cycles:</property>
+                    <property name="label" translatable="yes" context="textanimtabpage|FT_COUNT">Animation cycles:</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -341,7 +341,7 @@
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkCheckButton" id="TSB_ENDLESS">
-                        <property name="label" translatable="yes">_Continuous</property>
+                        <property name="label" translatable="yes" context="textanimtabpage|TSB_ENDLESS">_Continuous</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -387,7 +387,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Increment:</property>
+                    <property name="label" translatable="yes" context="textanimtabpage|FT_AMOUNT">Increment:</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -405,7 +405,7 @@
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkCheckButton" id="TSB_PIXEL">
-                        <property name="label" translatable="yes">_Pixels</property>
+                        <property name="label" translatable="yes" context="textanimtabpage|TSB_PIXEL">_Pixels</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -451,7 +451,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Delay:</property>
+                    <property name="label" translatable="yes" context="textanimtabpage|FT_DELAY">Delay:</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -469,7 +469,7 @@
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkCheckButton" id="TSB_AUTO">
-                        <property name="label" translatable="yes">_Automatic</property>
+                        <property name="label" translatable="yes" context="textanimtabpage|TSB_AUTO">_Automatic</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="receives_default">False</property>
@@ -519,7 +519,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Properties</property>
+            <property name="label" translatable="yes" context="textanimtabpage|label2">Properties</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

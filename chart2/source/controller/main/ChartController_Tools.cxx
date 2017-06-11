@@ -27,7 +27,7 @@
 #include "ControllerLockGuard.hxx"
 #include "macros.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "ObjectIdentifier.hxx"
 #include "ReferenceSizeProvider.hxx"
 #include "chartview/ExplicitValueProvider.hxx"
@@ -62,6 +62,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <editeng/outliner.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
@@ -724,20 +725,20 @@ bool ChartController::executeDispatch_Delete()
                     ObjectIdentifier::getObjectPropertySet( aCID, getModel() ));
                 if( xErrorBarProp.is())
                 {
-                    sal_Int16 nId;
+                    const char* pId;
 
                     if ( aObjectType == OBJECTTYPE_DATA_ERRORS_X )
-                        nId = STR_OBJECT_ERROR_BARS_X;
+                        pId = STR_OBJECT_ERROR_BARS_X;
                     else if ( aObjectType == OBJECTTYPE_DATA_ERRORS_Y )
-                        nId = STR_OBJECT_ERROR_BARS_Y;
+                        pId = STR_OBJECT_ERROR_BARS_Y;
                     else
-                        nId = STR_OBJECT_ERROR_BARS_Z;
+                        pId = STR_OBJECT_ERROR_BARS_Z;
 
                     uno::Reference< frame::XModel > xModel( getModel() );
                     UndoGuard aUndoGuard(
                         ActionDescriptionProvider::createDescription(
-                            ActionDescriptionProvider::ActionType::Delete, SchResId( nId )),
-                        m_xUndoManager );
+                            ActionDescriptionProvider::ActionType::Delete, SchResId(pId)),
+                        m_xUndoManager);
                     {
                         ControllerLockGuardUNO aCtlLockGuard( xModel );
                         xErrorBarProp->setPropertyValue(

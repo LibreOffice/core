@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="HangulHanjaAddDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">New Dictionary</property>
+    <property name="title" translatable="yes" context="hangulhanjaadddialog|HangulHanjaAddDialog">New Dictionary</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -94,7 +94,7 @@
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Name:</property>
+                        <property name="label" translatable="yes" context="hangulhanjaadddialog|label2">_Name:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">entry</property>
                       </object>
@@ -126,7 +126,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Dictionary</property>
+                <property name="label" translatable="yes" context="hangulhanjaadddialog|label1">Dictionary</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

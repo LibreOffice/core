@@ -11,7 +11,8 @@
 #include <tools/resmgr.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <rtl/strbuf.hxx>
 #include <rtfskipdestination.hxx>
 #include <rtl/character.hxx>
@@ -66,8 +67,7 @@ RTFError RTFTokenizer::resolveParse()
 
     if (m_xStatusIndicator.is())
     {
-        static ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag());
-        OUString sDocLoad(ResId(RID_SVXSTR_DOC_LOAD, *pResMgr));
+        OUString sDocLoad(SvxResId(RID_SVXSTR_DOC_LOAD));
 
         sal_uInt64 const nCurrentPos = Strm().Tell();
         sal_uInt64 const nEndPos = nCurrentPos + Strm().remainingSize();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="flt">
   <requires lib="gtk+" version="3.6"/>
   <object class="GtkBox" id="PdfSecurityPage">
     <property name="visible">True</property>
@@ -28,7 +28,7 @@
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkButton" id="setpassword">
-                    <property name="label" translatable="yes">Set _Passwords…</property>
+                    <property name="label" translatable="yes" context="pdfsecuritypage|setpassword">Set _Passwords…</property>
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
@@ -51,7 +51,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Open password set</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|label5">Open password set</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -63,7 +63,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">PDF document will be encrypted</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|label6">PDF document will be encrypted</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -86,7 +86,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">No open password set</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|label7">No open password set</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -98,7 +98,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">PDF document will not be encrypted</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|label8">PDF document will not be encrypted</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -121,7 +121,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">PDF document will not be encrypted due to PDF/A export.</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|label30">PDF document will not be encrypted due to PDF/A export.</property>
                         <property name="wrap">True</property>
                       </object>
                       <packing>
@@ -145,7 +145,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Permission password set</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|label9">Permission password set</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -157,7 +157,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">PDF document will be restricted</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|label11">PDF document will be restricted</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -180,7 +180,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">No permission password set</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|label12">No permission password set</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -192,7 +192,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">PDF document will be unrestricted</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|label13">PDF document will be unrestricted</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -215,7 +215,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <property name="label" translatable="yes">PDF document will not be restricted due to PDF/A export.</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|label14">PDF document will not be restricted due to PDF/A export.</property>
                         <property name="wrap">True</property>
                       </object>
                       <packing>
@@ -235,7 +235,7 @@
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Set Passwords</property>
+                    <property name="label" translatable="yes" context="pdfsecuritypage|setpasswordstitle">Set Passwords</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -251,7 +251,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">File Encryption and Permission</property>
+            <property name="label" translatable="yes" context="pdfsecuritypage|label2">File Encryption and Permission</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -289,7 +289,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="printnone">
-                        <property name="label" translatable="yes">_Not permitted</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|printnone">_Not permitted</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -305,7 +305,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="printlow">
-                        <property name="label" translatable="yes">_Low resolution (150 dpi)</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|printlow">_Low resolution (150 dpi)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -321,7 +321,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="printhigh">
-                        <property name="label" translatable="yes">_High resolution</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|printhigh">_High resolution</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -344,7 +344,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Printing</property>
+                <property name="label" translatable="yes" context="pdfsecuritypage|label1">Printing</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -376,7 +376,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkRadioButton" id="changenone">
-                        <property name="label" translatable="yes">No_t permitted</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|changenone">No_t permitted</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -392,7 +392,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="changeinsdel">
-                        <property name="label" translatable="yes">_Inserting, deleting, and rotating pages</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|changeinsdel">_Inserting, deleting, and rotating pages</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -408,7 +408,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="changeform">
-                        <property name="label" translatable="yes">_Filling in form fields</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|changeform">_Filling in form fields</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -424,7 +424,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="changecomment">
-                        <property name="label" translatable="yes">_Commenting, filling in form fields</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|changecomment">_Commenting, filling in form fields</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -440,7 +440,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="changeany">
-                        <property name="label" translatable="yes">_Any except extracting pages</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|changeany">_Any except extracting pages</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -463,7 +463,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Changes</property>
+                <property name="label" translatable="yes" context="pdfsecuritypage|label3">Changes</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -495,7 +495,7 @@
                     <property name="row_spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="enablecopy">
-                        <property name="label" translatable="yes">Ena_ble copying of content</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|enablecopy">Ena_ble copying of content</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -511,7 +511,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="enablea11y">
-                        <property name="label" translatable="yes">Enable text access for acce_ssibility tools</property>
+                        <property name="label" translatable="yes" context="pdfsecuritypage|enablea11y">Enable text access for acce_ssibility tools</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -533,7 +533,7 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Content</property>
+                <property name="label" translatable="yes" context="pdfsecuritypage|label4">Content</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

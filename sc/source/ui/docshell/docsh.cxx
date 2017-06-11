@@ -68,6 +68,7 @@
 
 #include "scabstdlg.hxx"
 #include <sot/formats.hxx>
+#include <svx/dialogs.hrc>
 
 #include "formulacell.hxx"
 #include "postit.hxx"
@@ -79,7 +80,7 @@
 #include "imoptdlg.hxx"
 #include "impex.hxx"
 #include "scresid.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "globstr.hrc"
 #include "scerrors.hxx"
 #include "brdcst.hxx"

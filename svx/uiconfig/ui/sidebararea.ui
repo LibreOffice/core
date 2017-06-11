@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.1 -->
-<interface>
+<interface domain="svx">
   <!-- interface-requires LibreOffice 1.0 -->
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -37,9 +37,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Fill:</property>
+                <property name="tooltip_text" translatable="yes" context="sidebararea|filllabel|tooltip_text">Fill:</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Fill:</property>
+                <property name="label" translatable="yes" context="sidebararea|filllabel">_Fill:</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -63,7 +63,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
-                        <property name="tooltip_text" translatable="yes">Select the color to apply.</property>
+                        <property name="tooltip_text" translatable="yes" context="sidebararea|color|tooltip_text">Select the color to apply.</property>
                         <property name="action_name">.uno:FillColor</property>
                         <property name="use_underline">True</property>
                       </object>
@@ -83,13 +83,13 @@
                   <object class="svxlo-SvxFillAttrBox" id="fillattr">
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Select the effect to apply.</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebararea|fillattr|tooltip_text">Select the effect to apply.</property>
                     <accessibility>
                       <relation type="labelled-by" target="filllabel"/>
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="fillattr-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Hatching/Bitmap</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebararea|fillattr-atkobject">Hatching/Bitmap</property>
                       </object>
                     </child>
                   </object>
@@ -103,7 +103,7 @@
                   <object class="svxcorelo-SvxColorListBox" id="fillgrad1">
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Fill gradient from.</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebararea|fillgrad1|tooltip_text">Fill gradient from.</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -124,7 +124,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Select the fill type to apply.</property>
+                <property name="tooltip_text" translatable="yes" context="sidebararea|fillstyle|tooltip_text">Select the fill type to apply.</property>
                 <property name="entry_text_column">0</property>
                 <property name="id_column">1</property>
                 <accessibility>
@@ -132,7 +132,7 @@
                 </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="fillstyle-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Fill Type</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebararea|fillstyle-atkobject">Fill Type</property>
                   </object>
                 </child>
               </object>
@@ -147,7 +147,7 @@
               <object class="svxcorelo-SvxColorListBox" id="fillgrad2">
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Fill gradient to.</property>
+                <property name="tooltip_text" translatable="yes" context="sidebararea|fillgrad2|tooltip_text">Fill gradient to.</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -164,18 +164,18 @@
                   <object class="GtkComboBoxText" id="gradientstyle">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="tooltip_text" translatable="yes">Select the gradient style.</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebararea|gradientstyle|tooltip_text">Select the gradient style.</property>
                     <items>
-                      <item translatable="yes">Linear</item>
-                      <item translatable="yes">Axial</item>
-                      <item translatable="yes">Radial</item>
-                      <item translatable="yes">Ellipsoid</item>
-                      <item translatable="yes">Quadratic</item>
-                      <item translatable="yes">Square</item>
+                      <item translatable="yes" context="sidebararea|gradientstyle">Linear</item>
+                      <item translatable="yes" context="sidebararea|gradientstyle">Axial</item>
+                      <item translatable="yes" context="sidebararea|gradientstyle">Radial</item>
+                      <item translatable="yes" context="sidebararea|gradientstyle">Ellipsoid</item>
+                      <item translatable="yes" context="sidebararea|gradientstyle">Quadratic</item>
+                      <item translatable="yes" context="sidebararea|gradientstyle">Square</item>
                     </items>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="gradientstyle-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Gradient Type</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="sidebararea|gradientstyle-atkobject">Gradient Type</property>
                       </object>
                     </child>
                   </object>
@@ -187,7 +187,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="bmpimport">
-                    <property name="label" translatable="yes">_Import</property>
+                    <property name="label" translatable="yes" context="sidebararea|bmpimport">_Import</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
@@ -209,11 +209,11 @@
             <child>
               <object class="GtkSpinButton" id="gradangle:0degrees">
                 <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes">Select the gradient angle.</property>
+                <property name="tooltip_text" translatable="yes" context="sidebararea|gradangle|tooltip_text">Select the gradient angle.</property>
                 <property name="adjustment">adjustment2</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="gradangle:0degrees-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Gradient angle</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebararea|gradangle-atkobject">Gradient angle</property>
                   </object>
                 </child>
               </object>
@@ -229,9 +229,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Transparency</property>
+                <property name="tooltip_text" translatable="yes" context="sidebararea|transparencylabel|tooltip_text">Transparency</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Transparency:</property>
+                <property name="label" translatable="yes" context="sidebararea|transparencylabel">_Transparency:</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -246,20 +246,20 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Select the type of transparency to apply.</property>
+                <property name="tooltip_text" translatable="yes" context="sidebararea|transtype|tooltip_text">Select the type of transparency to apply.</property>
                 <items>
-                  <item translatable="yes">None</item>
-                  <item translatable="yes">Solid</item>
-                  <item translatable="yes">Linear</item>
-                  <item translatable="yes">Axial</item>
-                  <item translatable="yes">Radial</item>
-                  <item translatable="yes">Ellipsoid</item>
-                  <item translatable="yes">Quadratic</item>
-                  <item translatable="yes">Square</item>
+                  <item translatable="yes" context="sidebararea|transtype">None</item>
+                  <item translatable="yes" context="sidebararea|transtype">Solid</item>
+                  <item translatable="yes" context="sidebararea|transtype">Linear</item>
+                  <item translatable="yes" context="sidebararea|transtype">Axial</item>
+                  <item translatable="yes" context="sidebararea|transtype">Radial</item>
+                  <item translatable="yes" context="sidebararea|transtype">Ellipsoid</item>
+                  <item translatable="yes" context="sidebararea|transtype">Quadratic</item>
+                  <item translatable="yes" context="sidebararea|transtype">Square</item>
                 </items>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="transtype-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Transparency Type</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebararea|transtype-atkobject">Transparency Type</property>
                   </object>
                 </child>
               </object>
@@ -280,7 +280,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Specify the variation of gradient transparency.</property>
+                    <property name="tooltip_text" translatable="yes" context="sidebararea|gradient|tooltip_text">Specify the variation of gradient transparency.</property>
                     <property name="hexpand">True</property>
                     <property name="action_name">.uno:sidebargradient</property>
                     <property name="use_underline">True</property>
@@ -317,7 +317,7 @@
               <object class="GtkScale" id="transparencyslider">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="tooltip_text" translatable="yes">Specify 0% for fully opaque through 100% for fully transparent.</property>
+                <property name="tooltip_text" translatable="yes" context="sidebararea|transparencyslider|tooltip_text">Specify 0% for fully opaque through 100% for fully transparent.</property>
                 <property name="hexpand">True</property>
                 <property name="round_digits">1</property>
                 <property name="draw_value">False</property>
@@ -334,7 +334,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Specify 0% for fully opaque through 100% for fully transparent.</property>
+                <property name="tooltip_text" translatable="yes" context="sidebararea|settransparency|tooltip_text">Specify 0% for fully opaque through 100% for fully transparent.</property>
                 <property name="max_length">100</property>
                 <property name="invisible_char">•</property>
                 <property name="secondary_icon_activatable">False</property>
@@ -343,7 +343,7 @@
                 <property name="numeric">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="settransparency:0%-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Transparency</property>
+                    <property name="AtkObject::accessible-name" translatable="yes" context="sidebararea|settransparency-atkobject">Transparency</property>
                   </object>
                 </child>
               </object>

@@ -51,8 +51,8 @@
 #include <SwStyleNameMapper.hxx>
 #include <shellres.hxx>
 #include <poolfmt.hxx>
-#include <poolfmt.hrc>
-#include <comcore.hrc>
+#include <strings.hrc>
+#include <strings.hrc>
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 #include <calbck.hxx>
@@ -756,24 +756,24 @@ void SwGetRefField::ConvertProgrammaticToUIName()
         if(!pDoc->getIDocumentFieldsAccess().GetFieldType(SwFieldIds::SetExp, rPar1, false))
         {
             sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, SwGetPoolIdFromName::TxtColl );
-            sal_uInt16 nResId = USHRT_MAX;
+            const char* pResId = nullptr;
             switch( nPoolId )
             {
                 case RES_POOLCOLL_LABEL_ABB:
-                    nResId = STR_POOLCOLL_LABEL_ABB;
+                    pResId = STR_POOLCOLL_LABEL_ABB;
                 break;
                 case RES_POOLCOLL_LABEL_TABLE:
-                    nResId = STR_POOLCOLL_LABEL_TABLE;
+                    pResId = STR_POOLCOLL_LABEL_TABLE;
                 break;
                 case RES_POOLCOLL_LABEL_FRAME:
-                    nResId = STR_POOLCOLL_LABEL_FRAME;
+                    pResId = STR_POOLCOLL_LABEL_FRAME;
                 break;
                 case RES_POOLCOLL_LABEL_DRAWING:
-                    nResId = STR_POOLCOLL_LABEL_DRAWING;
+                    pResId = STR_POOLCOLL_LABEL_DRAWING;
                 break;
             }
-            if( nResId != USHRT_MAX )
-                SetPar1(SwResId( nResId ));
+            if (pResId)
+                SetPar1(SwResId(pResId));
         }
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sd">
   <requires lib="gtk+" version="3.12"/>
   <requires lib="LibreOffice" version="1.0"/>
   <!-- interface-local-resource-path ../../../icon-themes/galaxy/cmd/ -->
@@ -46,7 +46,7 @@
       <object class="GtkMenuItem" id="layout01">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Blank</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|layout01">Blank</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -54,7 +54,7 @@
       <object class="GtkMenuItem" id="layout02">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Title Slide</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|layout02">Title Slide</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -62,7 +62,7 @@
       <object class="GtkMenuItem" id="layout03">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Title, Text</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|layout03">Title, Text</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -70,7 +70,7 @@
       <object class="GtkMenuItem" id="layout04">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Title, Content</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|layout04">Title, Content</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -78,7 +78,7 @@
       <object class="GtkMenuItem" id="layout05">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Centered Text</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|layout05">Centered Text</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -101,7 +101,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:HyperlinkDialog</property>
-        <property name="label" translatable="yes">Hyperlink</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|hyperlink">Hyperlink</property>
       </object>
     </child>
     <child>
@@ -115,7 +115,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertFootnote</property>
-        <property name="label" translatable="yes">Footnote</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|footnote">Footnote</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -124,7 +124,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertEndnote</property>
-        <property name="label" translatable="yes">Endnote</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|endnote">Endnote</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -139,7 +139,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertBookmark</property>
-        <property name="label" translatable="yes">Bookmark</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|bookmark">Bookmark</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -148,7 +148,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertReferenceField</property>
-        <property name="label" translatable="yes">Cross-Reference</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|crossreference">Cross-Reference</property>
       </object>
     </child>
   </object>
@@ -165,7 +165,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertRowsBefore</property>
-        <property name="label" translatable="yes">Master 1</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|master01">Master 1</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -174,7 +174,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertRowsAfter</property>
-        <property name="label" translatable="yes">Master 2</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|master02">Master 2</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -254,7 +254,7 @@
       <object class="GtkMenuItem" id="shapestyledefault">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Default</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|shapestyledefault">Default</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -262,7 +262,7 @@
       <object class="GtkMenuItem" id="shapestylenofill">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">No Fill</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|shapestylenofill">No Fill</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -270,7 +270,7 @@
       <object class="GtkMenuItem" id="shapestyleshadow">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">With Shadow</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|shapestyleshadow">With Shadow</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -284,7 +284,7 @@
       <object class="GtkMenuItem" id="shapestyletitle1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Title 1</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|shapestyletitle1">Title 1</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -292,7 +292,7 @@
       <object class="GtkMenuItem" id="shapestyletitle2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Title 2</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|shapestyletitle2">Title 2</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -486,7 +486,7 @@
                 <property name="height_request">15</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">File</property>
+                <property name="label" translatable="yes" context="notebookbar_groups|filegrouplabel">File</property>
                 <attributes>
                   <attribute name="font-desc" value="Noto Sans 9"/>
                   <attribute name="style" value="italic"/>
@@ -639,7 +639,7 @@
                 <property name="height_request">15</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Clipboard</property>
+                <property name="label" translatable="yes" context="notebookbar_groups|clipboardgrouplabel">Clipboard</property>
                 <attributes>
                   <attribute name="font-desc" value="Noto Sans 9"/>
                   <attribute name="style" value="italic"/>
@@ -685,7 +685,7 @@
                 <property name="spacing">3</property>
                 <child>
                   <object class="GtkButton" id="shapestyleb:stylemenu">
-                    <property name="label" translatable="yes">Style</property>
+                    <property name="label" translatable="yes" context="notebookbar_groups|shapestyleb">Style</property>
                     <property name="width_request">70</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -846,7 +846,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="growb">
-                            <property name="label" translatable="yes"> </property>
+                            <property name="label" translatable="yes" context="notebookbar_groups|growb"> </property>
                             <property name="width_request">35</property>
                             <property name="height_request">30</property>
                             <property name="visible">True</property>
@@ -868,7 +868,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="shrinkb">
-                            <property name="label" translatable="yes"> </property>
+                            <property name="label" translatable="yes" context="notebookbar_groups|shrinkb"> </property>
                             <property name="width_request">35</property>
                             <property name="height_request">30</property>
                             <property name="visible">True</property>
@@ -1198,7 +1198,7 @@
                 <property name="height_request">15</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Text</property>
+                <property name="label" translatable="yes" context="notebookbar_groups|formatgrouplabel">Text</property>
                 <attributes>
                   <attribute name="font-desc" value="Noto Sans 9"/>
                   <attribute name="style" value="italic"/>
@@ -1248,7 +1248,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkButton" id="startshowb">
-                        <property name="label" translatable="yes">Start</property>
+                        <property name="label" translatable="yes" context="notebookbar_groups|startshowb">Start</property>
                         <property name="width_request">70</property>
                         <property name="height_request">78</property>
                         <property name="visible">True</property>
@@ -1272,7 +1272,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="masterb:mastermenu">
-                            <property name="label" translatable="yes">Master</property>
+                            <property name="label" translatable="yes" context="notebookbar_groups|masterb">Master</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -1290,7 +1290,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="layoutb:layoutmenu">
-                            <property name="label" translatable="yes">Layout</property>
+                            <property name="label" translatable="yes" context="notebookbar_groups|layoutb">Layout</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -1320,7 +1320,7 @@
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="animationb:animenu">
-                            <property name="label" translatable="yes">Animation</property>
+                            <property name="label" translatable="yes" context="notebookbar_groups|animationb">Animation</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -1337,7 +1337,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="transitionb:transmenu">
-                            <property name="label" translatable="yes">Transition</property>
+                            <property name="label" translatable="yes" context="notebookbar_groups|transitionb">Transition</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
@@ -1383,7 +1383,7 @@
                     <property name="height_request">15</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Slide</property>
+                    <property name="label" translatable="yes" context="notebookbar_groups|slidegrouplabel">Slide</property>
                     <attributes>
                       <attribute name="font-desc" value="Noto Sans 9"/>
                       <attribute name="style" value="italic"/>
@@ -1457,7 +1457,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="is_important">True</property>
                                 <property name="action_name">.uno:BasicShapes</property>
-                                <property name="label" translatable="yes">Shapes</property>
+                                <property name="label" translatable="yes" context="notebookbar_groups|shapesb">Shapes</property>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
@@ -1473,7 +1473,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="linksb:linksmenu">
-                            <property name="label" translatable="yes">Links</property>
+                            <property name="label" translatable="yes" context="notebookbar_groups|linksb">Links</property>
                             <property name="height_request">26</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -1581,7 +1581,7 @@
                     <property name="height_request">15</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Insert</property>
+                    <property name="label" translatable="yes" context="notebookbar_groups|insertgrouplabel">Insert</property>
                     <attributes>
                       <attribute name="font-desc" value="Noto Sans 9"/>
                       <attribute name="style" value="italic"/>
@@ -1617,7 +1617,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkButton" id="imagestyleb">
-                        <property name="label" translatable="yes">Style</property>
+                        <property name="label" translatable="yes" context="notebookbar_groups|imagestyleb">Style</property>
                         <property name="height_request">78</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -1656,7 +1656,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="resetb">
-                            <property name="label" translatable="yes">Reset</property>
+                            <property name="label" translatable="yes" context="notebookbar_groups|resetb">Reset</property>
                             <property name="height_request">36</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -1700,7 +1700,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="wrapb:wrapmenu">
-                            <property name="label" translatable="yes">Wrap</property>
+                            <property name="label" translatable="yes" context="notebookbar_groups|wrapb">Wrap</property>
                             <property name="height_request">24</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -1715,7 +1715,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="lockb">
-                            <property name="label" translatable="yes">Lock</property>
+                            <property name="label" translatable="yes" context="notebookbar_groups|lockb">Lock</property>
                             <property name="height_request">24</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
@@ -1759,7 +1759,7 @@
                     <property name="height_request">15</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Image</property>
+                    <property name="label" translatable="yes" context="notebookbar_groups|imagegrouplabel">Image</property>
                     <attributes>
                       <attribute name="font-desc" value="Noto Sans 9"/>
                       <attribute name="style" value="italic"/>
@@ -1815,7 +1815,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:WrapOff</property>
-        <property name="label" translatable="yes">None</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|wrapoff">None</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -1824,7 +1824,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:WrapIdeal</property>
-        <property name="label" translatable="yes">Optimal</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|wrapideal">Optimal</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -1833,7 +1833,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:WrapOn</property>
-        <property name="label" translatable="yes">Parallel</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|wrapon">Parallel</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -1842,7 +1842,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:WrapLeft</property>
-        <property name="label" translatable="yes">Before</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|wrapleft">Before</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -1851,7 +1851,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:WrapRight</property>
-        <property name="label" translatable="yes">After</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|wrapright">After</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -1860,7 +1860,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:WrapThrough</property>
-        <property name="label" translatable="yes">Through</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|wrapthrough">Through</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -1875,7 +1875,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:WrapContour</property>
-        <property name="label" translatable="yes">Contour</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|wrapcontour">Contour</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -1884,7 +1884,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ContourDialog</property>
-        <property name="label" translatable="yes">Edit Contour</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|contourdialog">Edit Contour</property>
         <property name="use_underline">True</property>
       </object>
     </child>

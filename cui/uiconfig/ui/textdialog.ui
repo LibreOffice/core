@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="TextDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Text</property>
+    <property name="title" translatable="yes" context="textdialog|TextDialog">Text</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -97,7 +97,7 @@
               <object class="GtkLabel" id="RID_SVXPAGE_TEXTATTR">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Text</property>
+                <property name="label" translatable="yes" context="textdialog|RID_SVXPAGE_TEXTATTR">Text</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -110,7 +110,7 @@
               <object class="GtkLabel" id="RID_SVXPAGE_TEXTANIMATION">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Text Animation</property>
+                <property name="label" translatable="yes" context="textdialog|RID_SVXPAGE_TEXTANIMATION">Text Animation</property>
               </object>
               <packing>
                 <property name="position">1</property>

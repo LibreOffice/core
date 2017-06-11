@@ -32,8 +32,6 @@
 
 #include <unordered_map>
 
-class ResMgr;
-
 // hash map for the coefficients of a dependent cell (objective or constraint)
 // The size of each vector is the number of columns (variable cells) plus one, first entry is initial value.
 
@@ -66,8 +64,6 @@ class SolverComponent : public comphelper::OMutexAndBroadcastHelper,
                         public SolverComponent_Base
 {
 protected:
-    static ResMgr* pSolverResMgr;
-
     // settings
     css::uno::Reference< css::sheet::XSpreadsheetDocument > mxDoc;
     css::table::CellAddress                                 maObjective;
@@ -86,7 +82,7 @@ protected:
     css::uno::Sequence< double >                            maSolution;
     OUString                                                maStatus;
 
-    static OUString GetResourceString( sal_uInt32 nId );
+    static OUString GetResourceString(const char* pId);
     static css::uno::Reference<css::table::XCell> GetCell(
             const css::uno::Reference<css::sheet::XSpreadsheetDocument>& xDoc,
             const css::table::CellAddress& rPos );

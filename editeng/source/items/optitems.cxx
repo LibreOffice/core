@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/resid.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
@@ -120,9 +119,9 @@ bool SfxHyphenRegionItem::GetPresentation
 )   const
 {
     rText = rText +
-            EditResId::GetString(RID_SVXITEMS_HYPHEN_MINLEAD).replaceAll("%1", OUString::number(nMinLead)) +
+            EditResId(RID_SVXITEMS_HYPHEN_MINLEAD).replaceAll("%1", OUString::number(nMinLead)) +
             "," +
-            EditResId::GetString(RID_SVXITEMS_HYPHEN_MINTRAIL).replaceAll("%1", OUString::number(nMinTrail));
+            EditResId(RID_SVXITEMS_HYPHEN_MINTRAIL).replaceAll("%1", OUString::number(nMinTrail));
     return true;
 }
 

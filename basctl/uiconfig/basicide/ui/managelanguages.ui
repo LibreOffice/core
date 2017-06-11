@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="basctl">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="ManageLanguagesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Manage User Interface Languages [$1]</property>
+    <property name="title" translatable="yes" context="managelanguages|ManageLanguagesDialog">Manage User Interface Languages [$1]</property>
     <property name="resizable">False</property>
     <property name="type_hint">normal</property>
     <child internal-child="vbox">
@@ -66,7 +66,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Present languages:</property>
+                <property name="label" translatable="yes" context="managelanguages|label1">Present languages:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">treeview:border</property>
               </object>
@@ -80,7 +80,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">The default language is used if no localization for a user interface locale is present. Furthermore all strings from the default language are copied to resources of newly added languages.</property>
+                <property name="label" translatable="yes" context="managelanguages|label2">The default language is used if no localization for a user interface locale is present. Furthermore all strings from the default language are copied to resources of newly added languages.</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">68</property>
               </object>
@@ -105,7 +105,7 @@
                     <property name="layout_style">start</property>
                     <child>
                       <object class="GtkButton" id="add">
-                        <property name="label" translatable="yes">Add...</property>
+                        <property name="label" translatable="yes" context="managelanguages|add">Add...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -133,7 +133,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="default">
-                        <property name="label" translatable="yes">Default</property>
+                        <property name="label" translatable="yes" context="managelanguages|default">Default</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>

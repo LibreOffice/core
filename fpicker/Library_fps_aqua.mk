@@ -12,6 +12,11 @@ $(eval $(call gb_Library_Library,fps_aqua))
 
 $(eval $(call gb_Library_set_componentfile,fps_aqua,fpicker/source/aqua/fps_aqua))
 
+$(eval $(call gb_Library_set_include,fps_aqua,\
+    $$(INCLUDE) \
+    -I$(SRCDIR)/fpicker/inc \
+))
+
 $(eval $(call gb_Library_use_external,fps_aqua,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,fps_aqua))

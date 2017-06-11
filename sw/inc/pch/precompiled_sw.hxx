@@ -390,8 +390,6 @@
 #include <prtopt.hxx>
 #include <redline.hxx>
 #include <reffld.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
-#include <rsc/rscsfx.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
@@ -522,7 +520,6 @@
 #include <tools/link.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/ref.hxx>
-#include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>

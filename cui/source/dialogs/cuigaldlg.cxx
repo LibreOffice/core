@@ -47,9 +47,10 @@
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <sfx2/sfxuno.hxx>
 #include "dialmgr.hxx"
-#include "gallery.hrc"
+#include "strings.hrc"
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 
 using namespace ::ucbhelper;
 using namespace ::cppu;

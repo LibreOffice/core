@@ -17,31 +17,101 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/strarray.hxx>
+#include <tools/resary.hxx>
+#include <svx/svxitems.hrc>
+#include "fieldunit.hrc"
+#include "numberingtype.hrc"
 
-SvxStringArray::SvxStringArray( sal_uInt32 nResId ) :
-    ResStringArray(ResId(nResId, DIALOG_MGR()))
-
+SvxStringArray::SvxStringArray(const char **pResId, size_t nLength)
 {
+    for (size_t i = 0; i < nLength; ++i)
+        m_aTranslations.push_back(SvxResId(pResId[i]));
 }
 
-SvxStringArray::SvxStringArray( const ResId& rResId ) :
-    ResStringArray( rResId )
+const OUString SvxStringArray::GetString(sal_uInt32 nPos) const
 {
+    return m_aTranslations[nPos];
 }
 
-
-SvxStringArray::~SvxStringArray()
+sal_uInt32 SvxFieldUnitTable::Count()
 {
+    return SAL_N_ELEMENTS(RID_SVXSTR_FIELDUNIT_TABLE);
 }
 
-const OUString SvxStringArray::GetStringByPos( sal_uInt32 nPos ) const
+OUString SvxFieldUnitTable::GetString(sal_uInt32 nPos)
 {
-    if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
-        return ResStringArray::GetString( nPos );
+    if (RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count())
+        return SvxResId(RID_SVXSTR_FIELDUNIT_TABLE[nPos].first);
     return OUString();
 }
+
+FieldUnit SvxFieldUnitTable::GetValue(sal_uInt32 nPos)
+{
+    if (RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count())
+        return RID_SVXSTR_FIELDUNIT_TABLE[nPos].second;
+    return FUNIT_NONE;
+}
+
+OUString SvxAttrNameTable::GetString(sal_uInt32 nPos)
+{
+    if (RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count())
+        return SvxResId(RID_ATTR_NAMES[nPos].first);
+    return OUString();
+}
+
+sal_uInt32 SvxAttrNameTable::Count()
+{
+    return SAL_N_ELEMENTS(RID_ATTR_NAMES);
+}
+
+sal_uInt16 SvxAttrNameTable::GetValue(sal_uInt32 nPos)
+{
+    if (RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count())
+        return RID_ATTR_NAMES[nPos].second;
+    return 0;
+}
+
+sal_uInt32 SvxAttrNameTable::FindIndex(int nValue)
+{
+    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_ATTR_NAMES); ++i)
+    {
+        if (nValue == RID_ATTR_NAMES[i].second)
+            return i;
+    }
+    return RESARRAY_INDEX_NOTFOUND;
+}
+
+OUString SvxNumberingTypeTable::GetString(sal_uInt32 nPos)
+{
+    if (RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count())
+        return SvxResId(RID_SVXSTRARY_NUMBERINGTYPE[nPos].first);
+    return OUString();
+}
+
+sal_uInt32 SvxNumberingTypeTable::Count()
+{
+    return SAL_N_ELEMENTS(RID_SVXSTRARY_NUMBERINGTYPE);
+}
+
+int SvxNumberingTypeTable::GetValue(sal_uInt32 nPos)
+{
+    if (RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count())
+        return RID_SVXSTRARY_NUMBERINGTYPE[nPos].second;
+    return 0;
+}
+
+sal_uInt32 SvxNumberingTypeTable::FindIndex(int nValue)
+{
+    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_SVXSTRARY_NUMBERINGTYPE); ++i)
+    {
+        if (nValue == RID_SVXSTRARY_NUMBERINGTYPE[i].second)
+            return i;
+    }
+    return RESARRAY_INDEX_NOTFOUND;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

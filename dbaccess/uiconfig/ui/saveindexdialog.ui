@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="dba">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="SaveIndexDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Exit Index Design</property>
+    <property name="title" translatable="yes" context="saveindexdialog|SaveIndexDialog">Exit Index Design</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">question</property>
-    <property name="text" translatable="yes">Do you want to save the changes made to the current index?</property>
+    <property name="text" translatable="yes" context="saveindexdialog|SaveIndexDialog">Do you want to save the changes made to the current index?</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>

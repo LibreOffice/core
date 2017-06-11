@@ -14,7 +14,7 @@ $(eval $(call gb_Module_add_targets,avmedia,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,avmedia,\
-	AllLangResTarget_avmedia \
+    AllLangMoTarget_avmedia \
 ))
 
 ifeq ($(ENABLE_GSTREAMER_1_0),TRUE)

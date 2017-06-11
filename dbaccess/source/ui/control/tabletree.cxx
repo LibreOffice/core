@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "core_resource.hxx"
 #include "tabletree.hxx"
 #include "imageprovider.hxx"
-#include "moduledbu.hxx"
-#include "dbu_control.hrc"
+#include "strings.hrc"
 #include <vcl/layout.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/builderfactory.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
-#include "dbustrings.hrc"
+#include "stringconstants.hxx"
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
@@ -141,7 +141,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     try
     {
         Reference< XTablesSupplier > xTableSupp( _rxConnection, UNO_QUERY_THROW );
-        sCurrentActionError = ModuleRes(STR_NOTABLEINFO);
+        sCurrentActionError = DBA_RES(STR_NOTABLEINFO);
 
         Reference< XNameAccess > xTables,xViews;
 
@@ -251,12 +251,12 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
             OUString sRootEntryText;
             if ( std::none_of(_rTables.begin(),_rTables.end(),
                                 [] (const TNames::value_type& name) { return !name.second; }) )
-                sRootEntryText  = ModuleRes(STR_ALL_TABLES);
+                sRootEntryText  = DBA_RES(STR_ALL_TABLES);
             else if ( std::none_of(_rTables.begin(),_rTables.end(),
                                      [] (const TNames::value_type& name) { return name.second; }) )
-                sRootEntryText  = ModuleRes(STR_ALL_VIEWS);
+                sRootEntryText  = DBA_RES(STR_ALL_VIEWS);
             else
-                sRootEntryText  = ModuleRes(STR_ALL_TABLES_AND_VIEWS);
+                sRootEntryText  = DBA_RES(STR_ALL_TABLES_AND_VIEWS);
             InsertEntry( sRootEntryText, nullptr, false, TREELIST_APPEND, reinterpret_cast< void* >( DatabaseObjectContainer::TABLES ) );
         }
 

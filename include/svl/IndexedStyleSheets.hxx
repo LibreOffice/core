@@ -12,7 +12,7 @@
 
 #include <sal/types.h>
 
-#include <rsc/rscsfx.hxx>
+#include <svl/style.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
 

@@ -26,7 +26,7 @@
 #include "osx/salinst.h"
 #include "quartz/utils.h"
 
-#include "svids.hrc"
+#include "strings.hrc"
 
 AquaSalSystem::~AquaSalSystem()
 {

@@ -45,6 +45,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/app.hxx>
 #include <editeng/fontitem.hxx>
+#include "strings.hrc"
 #include "macroass.hxx"
 
 using namespace css;

@@ -20,7 +20,6 @@
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_REPORTCONTROLLER_HXX
 
 #include "DesignView.hxx"
-#include "ModuleHelper.hxx"
 #include "ReportControllerObserver.hxx"
 #include "RptDef.hxx"
 
@@ -83,7 +82,6 @@ namespace rptui
                                 ,public ::comphelper::OPropertyArrayUsageHelper < OReportController_BASE >
     {
     private:
-        OModuleClient           m_aModuleClient;
         ::comphelper::OInterfaceContainerHelper2
                                 m_aSelectionListeners;
         css::uno::Sequence< css::beans::PropertyValue>
@@ -201,20 +199,20 @@ namespace rptui
                          ,sal_Int32 _nGroupPos
                          ,bool _bShow);
 
-        void executeMethodWithUndo(sal_uInt16 _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun);
-        void alignControlsWithUndo(sal_uInt16 _nUndoStrId, ControlModification _nControlModification, bool _bAlignAtSection = false);
+        void executeMethodWithUndo(const char* pUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun);
+        void alignControlsWithUndo(const char* pUndoStrId, ControlModification _nControlModification, bool _bAlignAtSection = false);
 
         css::uno::Reference< css::frame::XFrame > getXFrame();
 
         /** shrink a section
-        @param _nUndoStrId the string id of the string which is shown in undo menu
+        @param pUndoStrId the string id of the string which is shown in undo menu
         @param _nShrinkId  ID of what you would like to shrink.
         */
         static void shrinkSectionBottom(const css::uno::Reference< css::report::XSection >& _xSection);
         static void shrinkSectionTop(const css::uno::Reference< css::report::XSection >& _xSection);
 
     public:
-        void shrinkSection(sal_uInt16 _nUndoStrId, const css::uno::Reference< css::report::XSection >& _xSection, sal_Int32 _nShrinkId);
+        void shrinkSection(const char* pUndoStrId, const css::uno::Reference< css::report::XSection >& _xSection, sal_Int32 _nShrinkId);
 
         /** opens the file open dialog to allow the user to select a image which will be
         * bound to a newly created image button.
@@ -299,7 +297,7 @@ namespace rptui
         /** set the property at all selected controls.
             @return <TRUE/> when the selection is not empty
         */
-        bool impl_setPropertyAtControls_throw(const sal_uInt16 _nUndoResId
+        bool impl_setPropertyAtControls_throw(const char* pUndoResId
             ,const OUString& _sProperty
             ,const css::uno::Any& _aValue
             ,const css::uno::Sequence< css::beans::PropertyValue >& _aArgs);

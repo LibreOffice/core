@@ -20,654 +20,504 @@
 #ifndef SC_GLOBSTR_HRC
 #define SC_GLOBSTR_HRC
 
+#define NC_(Context, String) (Context "\004" u8##String)
+
 /*
  * This file is reserved for string IDs of permanently loaded resident string
  * resources for faster access in core and filter code (and some UI like
  * Undo/Redo or strings displayed in the status bar), they reside in resource
  * RID_GLOBSTR and are meant to be accessed via ScGlobal::GetRscString(). All
  * other string IDs of strings used in message boxes and elsewhere go into
- * sc/inc/sc.hrc if they need to be global, or if restricted to UI dialogs into
- * a proper sc/source/ui/xxx/yyy.hrc and corresponding .src PLEASE!
- *
- * When inserting or removing defines the entire file can be renumbered using
- * sc/util/number-defines-consecutively.awk
- * Hint: when inserting a define use some arbitrary large enough number such as
- * 9999 and then renumber the file, which you HAVE TO then since otherwise the
- * number would be greater than the count of resident strings.
+ * sc/inc/strings.hrc
  */
 
-#define STR_UNDO_DELETECELLS        1
-#define STR_UNDO_CUT                2
-#define STR_UNDO_PASTE              3
-#define STR_UNDO_MOVE               4
-#define STR_UNDO_COPY               5
-#define STR_UNDO_DELETECONTENTS     6
-#define STR_UNDO_SELATTR            7
-#define STR_UNDO_SELATTRLINES       8
-#define STR_UNDO_COLWIDTH           9
-#define STR_UNDO_OPTCOLWIDTH        10
-#define STR_UNDO_ROWHEIGHT          11
-#define STR_UNDO_OPTROWHEIGHT       12
-#define STR_UNDO_AUTOFILL           13
-#define STR_UNDO_MERGE              14
-#define STR_UNDO_REMERGE            15
-#define STR_UNDO_AUTOFORMAT         16
-#define STR_UNDO_REPLACE            17
-#define STR_UNDO_CURSORATTR         18
-#define STR_UNDO_ENTERDATA          19
-#define STR_UNDO_INSCOLBREAK        20
-#define STR_UNDO_DELCOLBREAK        21
-#define STR_UNDO_INSROWBREAK        22
-#define STR_UNDO_DELROWBREAK        23
-#define STR_UNDO_DOOUTLINE          24
-#define STR_UNDO_REDOOUTLINE        25
-#define STR_UNDO_MAKEOUTLINE        26
-#define STR_UNDO_REMAKEOUTLINE      27
-#define STR_UNDO_OUTLINELEVEL       28
-#define STR_UNDO_DOOUTLINEBLK       29
-#define STR_UNDO_REDOOUTLINEBLK     30
-#define STR_UNDO_REMOVEALLOTLNS     31
-#define STR_UNDO_AUTOOUTLINE        32
-#define STR_UNDO_SUBTOTALS          33
-#define STR_UNDO_SORT               34
-#define STR_UNDO_QUERY              35
-#define STR_UNDO_DBDATA             36
-#define STR_UNDO_IMPORTDATA         37
-#define STR_UNDO_REPEATDB           38
-
-#define STR_MSSG_DOSUBTOTALS_0      39
-#define STR_MSSG_DOSUBTOTALS_1      40
-#define STR_MSSG_DOSUBTOTALS_2      41
-#define STR_MSSG_REPEATDB_0         42
-#define STR_MSSG_MAKEAUTOFILTER_0   43
-#define STR_MSSG_IMPORTDATA_0       44
-#define STR_MSSG_MAKEOUTLINE_0      45
-#define STR_MSSG_REMOVEOUTLINE_0    46
-#define STR_MSSG_PASTEFROMCLIP_0    47
-#define STR_MSSG_MOVEBLOCKTO_0      48
-#define STR_MSSG_INSERTCELLS_0      49
-#define STR_MSSG_DELETECELLS_0      50
-#define STR_MSSG_MERGECELLS_0       51
-#define STR_MSSG_SOLVE_0            52
-#define STR_MSSG_SOLVE_1            53
-#define STR_MSSG_SOLVE_2            54
-#define STR_MSSG_SOLVE_3            55
-#define STR_MSSG_SOLVE_4            56
-
-#define STR_TABLE_GESAMTERGEBNIS    57
-#define STR_TABLE_ERGEBNIS          58
-#define STR_UNDO_SPELLING           59
-#define STR_TABLE_UND               60
-#define STR_TABLE_ODER              61
-#define STR_UNDO_INSERTCELLS        62
-#define STR_TABLE_DEF               63
-#define STR_MOVE_TO_END             64
-#define STR_NO_REF_TABLE            65
-
-#define STR_PIVOT_TOTAL             66
-#define STR_PIVOT_DATA              67
-
-#define STR_COLUMN                  68
-#define STR_ROW                     69
-#define STR_LOAD_DOC                70
-#define STR_SAVE_DOC                71
-
-#define STR_AREA_ALREADY_INSERTED   72
-#define STR_INVALID_TABREF          73
-#define STR_INVALID_QUERYAREA       74
-
-#define STR_REIMPORT_EMPTY          75
-#define STR_NOMULTISELECT           76
-#define STR_FILL_SERIES_PROGRESS    77 // documen3.cxx
-
-#define STR_COND_AND                78
-
-#define STR_UNDO_PRINTRANGES        79
-
-#define STR_UNDO_DEC_INDENT         80
-#define STR_UNDO_INC_INDENT         81
-#define STR_UNDO_THESAURUS          82
-
-#define STR_FILL_TAB                83
-#define STR_NO_VALUE                84     /* moved to compiler.src, keep define! */
-#define STR_UPDATE_SCENARIO         85
-#define STR_ERR_NEWSCENARIO         86
-#define STR_SCENARIO                87
-#define STR_PIVOT_TABLE             88
-#define STR_NEWTABNAMENOTUNIQUE     89
-
-#define STR_FUN_TEXT_SUM            90
-#define STR_FUN_TEXT_COUNT          91
-#define STR_FUN_TEXT_AVG            92
-#define STR_FUN_TEXT_MEDIAN         93
-#define STR_FUN_TEXT_MAX            94
-#define STR_FUN_TEXT_MIN            95
-#define STR_FUN_TEXT_PRODUCT        96
-#define STR_FUN_TEXT_STDDEV         97
-#define STR_FUN_TEXT_VAR            98
-#define STR_DOC_STAT                99
-
-#define STR_DBNAME_IMPORT           100
-
-#define STR_NOCHARTATCURSOR         101
-#define STR_NOAREASELECTED          102
-#define STR_INVALIDTABNAME          103
-
-#define STR_PIVOT_NOTFOUND          104
-#define STR_ERROR_STR               105
-#define STR_NV_STR                  106     /* moved to compiler.src, keep define! */
-#define STR_EMPTYDATA               107
-#define STR_PIVOT_NODATA            108
-#define STR_PIVOT_MOVENOTALLOWED    109
-
-#define STR_PRINT_INVALID_AREA      110
-
-#define STR_PAGESTYLE               111
-#define STR_HEADER                  112
-#define STR_FOOTER                  113
-
-#define STR_TEXTATTRS               114
-
-#define STR_HFCMD_DELIMITER         115
-#define STR_HFCMD_PAGE              116
-#define STR_HFCMD_PAGES             117
-#define STR_HFCMD_DATE              118
-#define STR_HFCMD_TIME              119
-#define STR_HFCMD_FILE              120
-#define STR_HFCMD_TABLE             121
-
-#define STR_PROTECTIONERR           122
-
-#define STR_PAGEHEADER              123
-#define STR_PAGEFOOTER              124
-#define STR_PAGE                    125
-#define STR_LONG_ERR_ILL_ARG        126
-#define STR_LONG_ERR_ILL_PAR        127
-#define STR_LONG_ERR_ILL_FPO        128
-#define STR_LONG_ERR_ILL_CHAR       129
-// empty
-#define STR_LONG_ERR_PAIR           130
-#define STR_LONG_ERR_OP_EXP         131
-#define STR_LONG_ERR_VAR_EXP        132
-#define STR_LONG_ERR_CODE_OVF       133
-#define STR_LONG_ERR_STR_OVF        134
-#define STR_LONG_ERR_STACK_OVF      135
-#define STR_LONG_ERR_MATRIX_SIZE    136
-#define STR_LONG_ERR_SYNTAX         137
-#define STR_LONG_ERR_CIRC_REF       138
-#define STR_LONG_ERR_NO_NAME        139
-#define STR_LONG_ERR_NO_REF         140
-#define STR_LONG_ERR_NO_CONV        141
-#define STR_LONG_ERR_NO_VALUE       142
-#define STR_LONG_ERR_NV             143
-
-#define STR_GRIDCOLOR               144
-#define STR_CELL_FILTER             145
-
-#define STR_TARGETNOTFOUND          146
-
-#define STR_INVALID_EPS             147
-#define STR_UNDO_TABOP              148
-
-#define STR_INVALID_AFNAME          149
-
-#define STR_AREA                    150
-#define STR_YES                     151
-#define STR_NO                      152
-#define STR_PROTECTION              153
-#define STR_FORMULAS                154
-#define STR_HIDE                    155
-#define STR_PRINT                   156
-
-#define STR_INVALID_AFAREA          157
-
-#define STR_OPTIONAL                158
-#define STR_REQUIRED                159
-
-#define STR_NOTES                   160
-#define STR_QUERY_DELTAB            161
-
-#define STR_UNDO_DETREFRESH         162
-
-#define STR_UNDO_SHOWNOTE           163
-#define STR_UNDO_HIDENOTE           164
-#define STR_UNDO_DRAGDROP           165
-#define STR_UNDO_SHOWALLNOTES       166
-#define STR_UNDO_HIDEALLNOTES       167
-
-#define STR_IMPORT_LOTUS            168
-#define STR_IMPORT_DBF              169
-#define STR_EXPORT_ASCII            170
-
-#define STR_STYLENAME_STANDARD      171
-#define STR_STYLENAME_RESULT        172
-#define STR_STYLENAME_RESULT1       173
-#define STR_STYLENAME_HEADLINE      174
-#define STR_STYLENAME_HEADLINE1     175
-#define STR_STYLENAME_REPORT        176
-
-#define STR_PIVOT_ERROR             177
-#define STR_SPELLING_STOP_OK        178
-#define STR_THESAURUS_NO_STRING     179
-#define STR_SPELLING_BEGIN_TAB      180
-#define STR_SPELLING_NO_LANG        181                         // can be removed later
-
-// empty
-
-#define STR_UNDO_INSERT_TAB         182
-#define STR_UNDO_DELETE_TAB         183
-#define STR_UNDO_RENAME_TAB         184
-#define STR_UNDO_MOVE_TAB           185
-#define STR_UNDO_COPY_TAB           186
-#define STR_UNDO_APPEND_TAB         187
-
-#define STR_ABSREFLOST              188
-#define STR_NAMECONFLICT            189
-
-#define STR_ERR_AUTOFILTER          190
-
-#define STR_CREATENAME_REPLACE      191
-#define STR_CREATENAME_MARKERR      192
-
-#define STR_UNDO_LISTNAMES          193
-#define STR_UNDO_PIVOT_NEW          194
-#define STR_UNDO_PIVOT_MODIFY       195
-#define STR_UNDO_PIVOT_DELETE       196
-#define STR_UNDO_CONSOLIDATE        197
-#define STR_UNDO_USESCENARIO        198
-#define STR_UNDO_MAKESCENARIO       199
-
-#define STR_CONSOLIDATE_ERR1        200
-#define STR_SCENARIO_NOTFOUND       201
-
-#define STR_UNDO_APPLYCELLSTYLE     202
-
-#define STR_UNDO_DETADDPRED         203
-#define STR_UNDO_DETDELPRED         204
-#define STR_UNDO_DETADDSUCC         205
-#define STR_UNDO_DETDELSUCC         206
-#define STR_UNDO_DETADDERROR        207
-#define STR_UNDO_DETDELALL          208
-
-#define STR_QUERY_DELENTRY          209
-
-#define STR_VOBJ_OBJECT             210
-#define STR_VOBJ_CHART              211
-#define STR_VOBJ_DRAWINGS           212
-#define STR_VOBJ_MODE_SHOW          213
-#define STR_VOBJ_MODE_HIDE          214
-
-#define STR_SCATTR_PAGE_TOPDOWN     215
-#define STR_SCATTR_PAGE_LEFTRIGHT   216
-#define STR_SCATTR_PAGE_NOTES       217
-#define STR_SCATTR_PAGE_GRID        218
-#define STR_SCATTR_PAGE_HEADERS     219
-#define STR_SCATTR_PAGE_FORMULAS    220
-#define STR_SCATTR_PAGE_NULLVALS    221
-#define STR_SCATTR_PAGE_PRINTDIR    222
-#define STR_SCATTR_PAGE_FIRSTPAGENO 223
-#define STR_SCATTR_PAGE_SCALE       224
-#define STR_SCATTR_PAGE_SCALETOPAGES 225
-
-#define STR_NOREF_STR               226     /* moved to compiler.src, keep define! */
-
-#define STR_UNDO_CHARTDATA          227
-#define STR_UNDO_ORIGINALSIZE       228
-
-#define STR_LINKERROR               229
-#define STR_LINKERRORFILE           230
-#define STR_LINKERRORTAB            231
-#define STR_UNDO_UPDATELINK         232
-
-#define STR_IMPORT_REPLACE          233
-
-#define STR_UNDO_REMOVELINK         234
-
-#define STR_OVERVIEW                235
-#define STR_DOC_INFO                236
-#define STR_DOC_PRINTED             237
-#define STR_BY                      238
-#define STR_ON                      239
-
-#define STR_RELOAD_TABLES           240
-
-#define STR_UNDO_ENTERMATRIX        241
-
-#define STR_INSERT_FULL             242
-#define STR_TABINSERT_ERROR         243
-#define STR_PASTE_ERROR             244
-#define STR_PASTE_FULL              245
-
-#define STR_ERR_INVALID_AREA        246
-
-#define STR_IMPORT_DIF              247
-#define STR_EXPORT_DIF              248
-
-#define STR_ERR_NOREF               249
-#define STR_FUN_TEXT_COUNT2         250
-#define STR_NO_NAME_REF             251     /* moved to compiler.src, keep define! */
-
-#define STR_MATRIXFRAGMENTERR       252
-
-#define STR_UNDO_SHOWTAB            253
-#define STR_UNDO_HIDETAB            254
-#define STR_UNDO_INSERTAREALINK     255
-
-#define STR_REIMPORT_AFTER_LOAD     256
-
-#define STR_DETINVALID_OVERFLOW     257
-#define STR_GRAPHICNAME             258
-#define STR_INVALIDNAME             259
-
-#define STR_VALID_MACRONOTFOUND     260
-#define STR_VALID_DEFERROR          261
-
-#define STR_UNDO_DETINVALID         262
-
-#define STR_PROGRESS_CALCULATING    263
-#define STR_PROGRESS_SORTING        264
-#define STR_PROGRESS_HEIGHTING      265
-
-#define STR_QUICKHELP_DELETE        266
-
-#define STR_FUNCTIONLIST_MORE       267
-
-#define STR_PIVOT_STYLE_INNER       268
-#define STR_PIVOT_STYLE_RESULT      269
-#define STR_PIVOT_STYLE_CATEGORY    270
-#define STR_PIVOT_STYLE_TITLE       271
-#define STR_PIVOT_STYLE_FIELDNAME   272
-#define STR_PIVOT_STYLE_TOP         273
-
-#define STR_OPERATION_FILTER        274
-#define STR_OPERATION_SORT          275
-#define STR_OPERATION_SUBTOTAL      276
-#define STR_OPERATION_NONE          277
-
-#define STR_UNDO_PROTECT_TAB        278
-#define STR_UNDO_UNPROTECT_TAB      279
-#define STR_UNDO_PROTECT_DOC        280
-#define STR_UNDO_UNPROTECT_DOC      281
-
-#define STR_PROGRESS_IMPORT         282
-
-#define STR_SORT_ERR_MERGED         283
-
-#define STR_TIP_WIDTH               284
-#define STR_TIP_HEIGHT              285
-#define STR_TIP_HIDE                286
-
-#define STR_UNDO_REMOVEBREAKS       287
-#define STR_UNDO_PRINTSCALE         288
-#define STR_UNDO_DRAG_BREAK         289
-
-#define STR_QUICKHELP_REF           290
-
-#define STR_PIVOT_NOTEMPTY          291
-#define STR_PIVOT_REMOVE_PIVOTCHART 292
-
-#define STR_PROGRESS_COMPARING      293
-
-#define STR_CHANGED_BLANK           294
-#define STR_CHANGED_CELL            295
-#define STR_CHANGED_INSERT          296
-#define STR_CHANGED_DELETE          297
-#define STR_CHANGED_MOVE            298
-
-#define STR_QUERY_DELSCENARIO       299
-#define STR_UNDO_EDITSCENARIO       300
-
-#define STR_END_REDLINING           301
-
-#define STR_UNDO_EDITNOTE           302
-#define STR_TABREMOVE_ERROR         303
-#define STR_CLOSE_ERROR_LINK        304
-#define STR_UNDO_RANGENAMES         305
-
-#define STR_UNDO_RESIZEMATRIX       306
-#define STR_TIP_RESIZEMATRIX        307
-
-#define STR_READONLYERR             308
-
-#define STR_PASTE_BIGGER            309
-
-#define STR_EXPORT_DBF              310
-
-#define STR_UNDO_APPLYPAGESTYLE     311
-#define STR_UNDO_EDITCELLSTYLE      312
-#define STR_UNDO_EDITPAGESTYLE      313
-
-#define STR_DATAPILOT_SUBTOTAL      314
-
-#define STR_UNDO_TRANSLITERATE      315
-
-#define STR_NO_ADDIN                316
-#define STR_LONG_ERR_NO_ADDIN       317
-#define STR_NO_MACRO                318
-#define STR_LONG_ERR_NO_MACRO       319
-
-#define STR_SCATTR_PAGE_SCALETO         320
-#define STR_SCATTR_PAGE_SCALE_WIDTH     321
-#define STR_SCATTR_PAGE_SCALE_HEIGHT    322
-#define STR_SCATTR_PAGE_SCALE_PAGES     323
-#define STR_SCATTR_PAGE_SCALE_AUTO      324
-
-#define STR_UNDO_TAB_RTL                325
-#define STR_UNDO_HANGULHANJA            326
-#define STR_UNDO_CHINESE_TRANSLATION    327
-
-#define STR_NAME_INPUT_CELL         328
-#define STR_NAME_INPUT_RANGE        329
-#define STR_NAME_INPUT_DBRANGE      330
-#define STR_NAME_INPUT_ROW          331
-#define STR_NAME_INPUT_SHEET        332
-#define STR_NAME_INPUT_DEFINE       333
-#define STR_NAME_ERROR_SELECTION    334
-#define STR_NAME_ERROR_NAME         335
-
-#define STR_CHANGED_MOVE_REJECTION_WARNING      336
-#define STR_CHANGED_DELETE_REJECTION_WARNING    337
-
-#define STR_ERR_DATAPILOT_INPUT     338
-
-#define STR_DIV_ZERO                339     /* moved to compiler.src, keep define! */
-#define STR_LONG_ERR_DIV_ZERO       340
-#define STR_NUM_ERROR               341     /* moved to compiler.src, keep define! */
-#define STR_NULL_ERROR              342     /* moved to compiler.src, keep define! */
-
-#define STR_RECALC_MANUAL           343
-#define STR_RECALC_AUTO             344
-
-#define STR_ERR_LONG_NESTED_ARRAY   345
-#define STR_UNDO_TEXTTOCOLUMNS      346
-
-#define STR_DOC_UPDATED             347
-#define STR_DOC_WILLBESAVED         348
-#define STR_DOC_WILLNOTBESAVED      349
-#define STR_DOC_DISABLESHARED       350
-#define STR_DOC_NOLONGERSHARED      351
-#define STR_SHARED_DOC_WARNING      352
-#define STR_FILE_LOCKED_TRY_LATER   353
-#define STR_FILE_LOCKED_SAVE_LATER  354
-#define STR_UNKNOWN_USER            355
-
-#define STR_UNDO_INSERTNOTE         356
-#define STR_UNDO_DELETENOTE         357
-#define STR_STYLE_FAMILY_CELL       358
-#define STR_STYLE_FAMILY_PAGE       359
-
-#define STR_ERR_DATAPILOTSOURCE     360
-
-#define STR_UNDO_SET_TAB_BG_COLOR       361
-#define STR_UNDO_SET_MULTI_TAB_BG_COLOR 362
-#define STR_UNDO_INSERT_CURRENT_DATE    363
-#define STR_UNDO_INSERT_CURRENT_TIME    364
-
-#define STR_OPTIONS_WARN_SEPARATORS 365
-#define STR_SHAPE_AUTOSHAPE         366
-#define STR_SHAPE_RECTANGLE         367
-#define STR_SHAPE_LINE              368
-#define STR_SHAPE_OVAL              369
-
-#define STR_FORM_BUTTON             370
-#define STR_FORM_CHECKBOX           371
-#define STR_FORM_OPTIONBUTTON       372
-#define STR_FORM_LABEL              373
-#define STR_FORM_LISTBOX            374
-#define STR_FORM_GROUPBOX           375
-#define STR_FORM_DROPDOWN           376
-#define STR_FORM_SPINNER            377
-#define STR_FORM_SCROLLBAR          378
-
-#define STR_PGNUM                   379
-
-#define STR_MANAGE_NAMES            380
-
-#define STR_HEADER_NAME             381
-#define STR_HEADER_RANGE_OR_EXPR    382
-#define STR_HEADER_SCOPE            383
-#define STR_GLOBAL_SCOPE            384
-#define STR_ERR_NAME_EXISTS         385
-#define STR_ERR_NAME_INVALID        386
-#define STR_ERR_NAME_INVALID_CELL_REF   387
-
-#define STR_UNSAVED_EXT_REF         388
-#define STR_CLOSE_WITH_UNSAVED_REFS 389
-#define STR_PIVOT_GROUP             390
-#define STR_HEADER_RANGE            391
-#define STR_HEADER_COND             392
-
-#define STR_COND_CONDITION          393
-#define STR_COND_COLORSCALE         394
-#define STR_COND_DATABAR            395
-#define STR_COND_ICONSET            396
-#define STR_COND_FORMULA            397
-#define STR_COND_BETWEEN            398
-#define STR_COND_NOTBETWEEN         399
-#define STR_COND_UNIQUE             400
-#define STR_COND_DUPLICATE          401
-#define STR_COND_TOP10              402
-#define STR_COND_BOTTOM10           403
-#define STR_COND_TOP_PERCENT        404
-#define STR_COND_BOTTOM_PERCENT     405
-#define STR_COND_ABOVE_AVERAGE      406
-#define STR_COND_BELOW_AVERAGE      407
-#define STR_COND_ERROR              408
-#define STR_COND_NOERROR            409
-#define STR_COND_BEGINS_WITH        410
-#define STR_COND_ENDS_WITH          411
-#define STR_COND_CONTAINS           412
-#define STR_COND_NOT_CONTAINS       413
-#define STR_COND_DATE               414
-/* Values from STR_COND_TODAY to STR_COND_NEXTYEAR must be in sequence for
- * sc/source/ui/condformat/condformathelper.cxx getDateString() */
-#define STR_COND_TODAY              415
-#define STR_COND_YESTERDAY          416
-#define STR_COND_TOMORROW           417
-#define STR_COND_LAST7DAYS          418
-#define STR_COND_THISWEEK           419
-#define STR_COND_LASTWEEK           420
-#define STR_COND_NEXTWEEK           421
-#define STR_COND_THISMONTH          422
-#define STR_COND_LASTMONTH          423
-#define STR_COND_NEXTMONTH          424
-#define STR_COND_THISYEAR           425
-#define STR_COND_LASTYEAR           426
-#define STR_COND_NEXTYEAR           427
-
-#define STR_ERR_CONDFORMAT_PROTECTED   428
-#define STR_EDIT_EXISTING_COND_FORMATS 429
-
-#define STR_QUERY_FORMULA_RECALC_ONLOAD_ODS 430
-#define STR_QUERY_FORMULA_RECALC_ONLOAD_XLS 431
-#define STR_ALWAYS_PERFORM_SELECTED         432
-
-#define STR_NO_INSERT_DELETE_OVER_PIVOT_TABLE 433
-
-#define STR_CHG_INSERT_COLS         434
-#define STR_CHG_INSERT_ROWS         435
-#define STR_CHG_INSERT_TABS         436
-#define STR_CHG_DELETE_COLS         437
-#define STR_CHG_DELETE_ROWS         438
-#define STR_CHG_DELETE_TABS         439
-#define STR_CHG_MOVE                440
-#define STR_CHG_CONTENT             441
-#define STR_CHG_REJECT              442
-#define STR_CHG_ACCEPTED            443
-#define STR_CHG_REJECTED            444
-#define STR_CHG_NO_ENTRY            445
-#define STR_CHG_CONTENT_WITH_CHILD  446
-#define STR_CHG_CHILD_CONTENT       447
-#define STR_CHG_CHILD_ORGCONTENT    448
-#define STR_CHG_EMPTY               449
-
-#define STR_UNDO_HIDETABS           450
-#define STR_UNDO_SHOWTABS           451
-
-#define STR_DPFIELD_GROUP_BY_SECONDS     452
-#define STR_DPFIELD_GROUP_BY_MINUTES     453
-#define STR_DPFIELD_GROUP_BY_HOURS       454
-#define STR_DPFIELD_GROUP_BY_DAYS        455
-#define STR_DPFIELD_GROUP_BY_MONTHS      456
-#define STR_DPFIELD_GROUP_BY_QUARTERS    457
-#define STR_DPFIELD_GROUP_BY_YEARS       458
-
-#define STR_COND_ABOVE_EQUAL_AVERAGE 459
-#define STR_COND_BELOW_EQUAL_AVERAGE 460
-
-#define STR_MULTI_SELECT            461
-
-#define STR_INVALIDVAL              462
-#define STR_INVALIDVAR              463
-#define STR_INVALIDFORM             464
-#define STR_NOFORMULA               465
-
-#define STR_INVALIDINPUT            466
-#define STR_INVALIDCONDITION        467
-
-#define STR_FUN_TEXT_SELECTION_COUNT 468
-
-#define STR_QUERYREMOVE             469
-#define STR_COPYLIST                470
-#define STR_COPYFROM                471
-#define STR_COPYERR                 472
-
-#define STR_CTRLCLICKHYPERLINK      473
-#define STR_CLICKHYPERLINK          474
-
-#define STR_ROWCOL_SELCOUNT         475
-
-#define STR_PRINT_PREVIEW_NODATA        476
-#define STR_PRINT_PREVIEW_EMPTY_RANGE   477
-
-#define STR_UNDO_CONDFORMAT             478
-#define STR_UNDO_FORMULA_TO_VALUE       479
-
-#define STR_UNQUOTED_STRING             480
-#define STR_ENTER_VALUE                 481
-
-#define STR_TABLE_COUNT                 482
-
-#define STR_FUNCTIONS_FOUND             483
-
-#define STR_FILTER_SELCOUNT             484
-
-#define STR_GENERAL                     485
-#define STR_NUMBER                      486
-#define STR_PERCENT                     487
-#define STR_CURRENCY                    488
-#define STR_DATE                        489
-#define STR_TIME                        490
-#define STR_SCIENTIFIC                  491
-#define STR_FRACTION                    492
-#define STR_BOOLEAN_VALUE               493
-#define STR_TEXT                        494
-
-#define STR_QUERY_PIVOTTABLE_DELTAB     495
-
-#define STR_UNDO_CONDFORMAT_LIST        496
-
-#define SC_GLOBSTR_STR_COUNT            497     /**< the count of permanently resident strings */
+#define STR_UNDO_INSERTCELLS                    NC_("STR_UNDO_INSERTCELLS", "Insert")
+#define STR_UNDO_DELETECELLS                    NC_("STR_UNDO_DELETECELLS", "Delete")
+#define STR_UNDO_CUT                            NC_("STR_UNDO_CUT", "Cut")
+#define STR_UNDO_PASTE                          NC_("STR_UNDO_PASTE", "Insert")
+#define STR_UNDO_DRAGDROP                       NC_("STR_UNDO_DRAGDROP", "Drag and Drop")
+#define STR_UNDO_MOVE                           NC_("STR_UNDO_MOVE", "Move")
+#define STR_UNDO_COPY                           NC_("STR_UNDO_COPY", "Copy")
+#define STR_UNDO_DELETECONTENTS                 NC_("STR_UNDO_DELETECONTENTS", "Delete")
+#define STR_UNDO_SELATTR                        NC_("STR_UNDO_SELATTR", "Attributes")
+#define STR_UNDO_SELATTRLINES                   NC_("STR_UNDO_SELATTRLINES", "Attributes/Lines")
+#define STR_UNDO_COLWIDTH                       NC_("STR_UNDO_COLWIDTH", "Column Width")
+#define STR_UNDO_OPTCOLWIDTH                    NC_("STR_UNDO_OPTCOLWIDTH", "Optimal Column Width")
+#define STR_UNDO_ROWHEIGHT                      NC_("STR_UNDO_ROWHEIGHT", "Row height")
+#define STR_UNDO_OPTROWHEIGHT                   NC_("STR_UNDO_OPTROWHEIGHT", "Optimal Row Height")
+#define STR_UNDO_AUTOFILL                       NC_("STR_UNDO_AUTOFILL", "Fill")
+#define STR_UNDO_MERGE                          NC_("STR_UNDO_MERGE", "Merge")
+#define STR_UNDO_REMERGE                        NC_("STR_UNDO_REMERGE", "Split")
+#define STR_UNDO_AUTOFORMAT                     NC_("STR_UNDO_AUTOFORMAT", "AutoFormat")
+#define STR_UNDO_REPLACE                        NC_("STR_UNDO_REPLACE", "Replace")
+#define STR_UNDO_CURSORATTR                     NC_("STR_UNDO_CURSORATTR", "Attributes")
+#define STR_UNDO_ENTERDATA                      NC_("STR_UNDO_ENTERDATA", "Input")
+#define STR_UNDO_INSCOLBREAK                    NC_("STR_UNDO_INSCOLBREAK", "Insert Column Break")
+#define STR_UNDO_DELCOLBREAK                    NC_("STR_UNDO_DELCOLBREAK", "Delete column break")
+#define STR_UNDO_INSROWBREAK                    NC_("STR_UNDO_INSROWBREAK", "Insert Row Break")
+#define STR_UNDO_DELROWBREAK                    NC_("STR_UNDO_DELROWBREAK", "Delete row break")
+#define STR_UNDO_DOOUTLINE                      NC_("STR_UNDO_DOOUTLINE", "View Details")
+#define STR_UNDO_REDOOUTLINE                    NC_("STR_UNDO_REDOOUTLINE", "Hide details")
+#define STR_UNDO_MAKEOUTLINE                    NC_("STR_UNDO_MAKEOUTLINE", "Group")
+#define STR_UNDO_REMAKEOUTLINE                  NC_("STR_UNDO_REMAKEOUTLINE", "Ungroup")
+#define STR_UNDO_OUTLINELEVEL                   NC_("STR_UNDO_OUTLINELEVEL", "Select outline level")
+#define STR_UNDO_DOOUTLINEBLK                   NC_("STR_UNDO_DOOUTLINEBLK", "View Details")
+#define STR_UNDO_REDOOUTLINEBLK                 NC_("STR_UNDO_REDOOUTLINEBLK", "Hide details")
+#define STR_UNDO_REMOVEALLOTLNS                 NC_("STR_UNDO_REMOVEALLOTLNS", "Clear Outline")
+#define STR_UNDO_AUTOOUTLINE                    NC_("STR_UNDO_AUTOOUTLINE", "AutoOutline")
+#define STR_UNDO_SUBTOTALS                      NC_("STR_UNDO_SUBTOTALS", "Subtotals")
+#define STR_UNDO_SORT                           NC_("STR_UNDO_SORT", "Sort")
+#define STR_UNDO_QUERY                          NC_("STR_UNDO_QUERY", "Filter")
+#define STR_UNDO_DBDATA                         NC_("STR_UNDO_DBDATA", "Change Database Range")
+#define STR_UNDO_IMPORTDATA                     NC_("STR_UNDO_IMPORTDATA", "Importing")
+#define STR_UNDO_REPEATDB                       NC_("STR_UNDO_REPEATDB", "Refresh range")
+#define STR_UNDO_LISTNAMES                      NC_("STR_UNDO_LISTNAMES", "List names")
+#define STR_UNDO_PIVOT_NEW                      NC_("STR_UNDO_PIVOT_NEW", "Create pivot table")
+#define STR_UNDO_PIVOT_MODIFY                   NC_("STR_UNDO_PIVOT_MODIFY", "Edit pivot table")
+#define STR_UNDO_PIVOT_DELETE                   NC_("STR_UNDO_PIVOT_DELETE", "Delete pivot table")
+#define STR_UNDO_CONSOLIDATE                    NC_("STR_UNDO_CONSOLIDATE", "Consolidate")
+#define STR_UNDO_USESCENARIO                    NC_("STR_UNDO_USESCENARIO", "Use scenario")
+#define STR_UNDO_MAKESCENARIO                   NC_("STR_UNDO_MAKESCENARIO", "Create scenario")
+#define STR_UNDO_EDITSCENARIO                   NC_("STR_UNDO_EDITSCENARIO", "Edit scenario")
+#define STR_UNDO_APPLYCELLSTYLE                 NC_("STR_UNDO_APPLYCELLSTYLE", "Apply Cell Style")
+#define STR_UNDO_EDITCELLSTYLE                  NC_("STR_UNDO_EDITCELLSTYLE", "Edit Cell Style")
+#define STR_UNDO_APPLYPAGESTYLE                 NC_("STR_UNDO_APPLYPAGESTYLE", "Apply Page Style")
+#define STR_UNDO_EDITPAGESTYLE                  NC_("STR_UNDO_EDITPAGESTYLE", "Edit Page Style")
+#define STR_UNDO_DETADDPRED                     NC_("STR_UNDO_DETADDPRED", "Trace Precedents")
+#define STR_UNDO_DETDELPRED                     NC_("STR_UNDO_DETDELPRED", "Remove Precedent")
+#define STR_UNDO_DETADDSUCC                     NC_("STR_UNDO_DETADDSUCC", "Trace Dependents")
+#define STR_UNDO_DETDELSUCC                     NC_("STR_UNDO_DETDELSUCC", "Remove Dependent")
+#define STR_UNDO_DETADDERROR                    NC_("STR_UNDO_DETADDERROR", "Trace Error")
+#define STR_UNDO_DETDELALL                      NC_("STR_UNDO_DETDELALL", "Remove all Traces")
+#define STR_UNDO_DETINVALID                     NC_("STR_UNDO_DETINVALID", "Mark invalid data")
+#define STR_UNDO_DETREFRESH                     NC_("STR_UNDO_DETREFRESH", "Refresh Traces")
+#define STR_UNDO_CHARTDATA                      NC_("STR_UNDO_CHARTDATA", "Modify chart data range")
+#define STR_UNDO_ORIGINALSIZE                   NC_("STR_UNDO_ORIGINALSIZE", "Original Size")
+#define STR_UNDO_UPDATELINK                     NC_("STR_UNDO_UPDATELINK", "Update Link")
+#define STR_UNDO_REMOVELINK                     NC_("STR_UNDO_REMOVELINK", "Unlink")
+#define STR_UNDO_INSERTAREALINK                 NC_("STR_UNDO_INSERTAREALINK", "Insert Link")
+#define STR_UNDO_ENTERMATRIX                    NC_("STR_UNDO_ENTERMATRIX", "Insert Array Formula")
+#define STR_UNDO_INSERTNOTE                     NC_("STR_UNDO_INSERTNOTE", "Insert Comment")
+#define STR_UNDO_DELETENOTE                     NC_("STR_UNDO_DELETENOTE", "Delete Comment")
+#define STR_UNDO_SHOWNOTE                       NC_("STR_UNDO_SHOWNOTE", "Show Comment")
+#define STR_UNDO_HIDENOTE                       NC_("STR_UNDO_HIDENOTE", "Hide Comment")
+#define STR_UNDO_SHOWALLNOTES                   NC_("STR_UNDO_SHOWALLNOTES", "Show All Comments")
+#define STR_UNDO_HIDEALLNOTES                   NC_("STR_UNDO_HIDEALLNOTES", "Hide All Comments")
+#define STR_UNDO_EDITNOTE                       NC_("STR_UNDO_EDITNOTE", "Edit Comment")
+#define STR_UNDO_DEC_INDENT                     NC_("STR_UNDO_DEC_INDENT", "Decrease Indent")
+#define STR_UNDO_INC_INDENT                     NC_("STR_UNDO_INC_INDENT", "Increase Indent")
+#define STR_UNDO_PROTECT_TAB                    NC_("STR_UNDO_PROTECT_TAB", "Protect sheet")
+#define STR_UNDO_UNPROTECT_TAB                  NC_("STR_UNDO_UNPROTECT_TAB", "Unprotect sheet")
+#define STR_UNDO_PROTECT_DOC                    NC_("STR_UNDO_PROTECT_DOC", "Protect document")
+#define STR_UNDO_UNPROTECT_DOC                  NC_("STR_UNDO_UNPROTECT_DOC", "Unprotect document")
+#define STR_UNDO_PRINTRANGES                    NC_("STR_UNDO_PRINTRANGES", "Print range")
+#define STR_UNDO_REMOVEBREAKS                   NC_("STR_UNDO_REMOVEBREAKS", "Delete Page Breaks")
+#define STR_UNDO_PRINTSCALE                     NC_("STR_UNDO_PRINTSCALE", "Change Scale")
+#define STR_UNDO_DRAG_BREAK                     NC_("STR_UNDO_DRAG_BREAK", "Move Page Break")
+#define STR_UNDO_RANGENAMES                     NC_("STR_UNDO_RANGENAMES", "Edit range names")
+#define STR_UNDO_TRANSLITERATE                  NC_("STR_UNDO_TRANSLITERATE", "Change Case")
+#define STR_DBNAME_IMPORT                       NC_("STR_DBNAME_IMPORT", "Import")
+#define STR_MSSG_DOSUBTOTALS_0                  NC_("STR_MSSG_DOSUBTOTALS_0", "%PRODUCTNAME Calc")
+#define STR_MSSG_DOSUBTOTALS_1                  NC_("STR_MSSG_DOSUBTOTALS_1", "Delete data?")
+#define STR_MSSG_DOSUBTOTALS_2                  NC_("STR_MSSG_DOSUBTOTALS_2", "Unable to insert rows")
+#define STR_MSSG_REPEATDB_0                     NC_("STR_MSSG_REPEATDB_0", "No operations to execute")
+#define STR_MSSG_MAKEAUTOFILTER_0               NC_("STR_MSSG_MAKEAUTOFILTER_0", "The range does not contain column headers.\nDo you want the first line to be used as column header?")
+#define STR_MSSG_IMPORTDATA_0                   NC_("STR_MSSG_IMPORTDATA_0", "Error while importing data!")
+#define STR_PROGRESS_IMPORT                     NC_("STR_PROGRESS_IMPORT", "# records imported...")
+#define STR_MSSG_MAKEOUTLINE_0                  NC_("STR_MSSG_MAKEOUTLINE_0", "Grouping not possible")
+#define STR_MSSG_REMOVEOUTLINE_0                NC_("STR_MSSG_REMOVEOUTLINE_0", "Ungrouping not possible")
+#define STR_MSSG_PASTEFROMCLIP_0                NC_("STR_MSSG_PASTEFROMCLIP_0", "Insert into multiple selection not possible")
+#define STR_MSSG_MOVEBLOCKTO_0                  NC_("STR_MSSG_MOVEBLOCKTO_0", "Cell merge not possible if cells already merged!")
+#define STR_MSSG_INSERTCELLS_0                  NC_("STR_MSSG_INSERTCELLS_0", "Inserting into merged ranges not possible")
+#define STR_MSSG_DELETECELLS_0                  NC_("STR_MSSG_DELETECELLS_0", "Deleting in merged ranges not possible")
+#define STR_MSSG_MERGECELLS_0                   NC_("STR_MSSG_MERGECELLS_0", "Cell merge not possible if cells already merged")
+#define STR_SORT_ERR_MERGED                     NC_("STR_SORT_ERR_MERGED", "Ranges containing merged cells can only be sorted without formats.")
+#define STR_MSSG_SOLVE_0                        NC_("STR_MSSG_SOLVE_0", "Goal Seek succeeded. Result: ")
+#define STR_MSSG_SOLVE_1                        NC_("STR_MSSG_SOLVE_1", "\n\nInsert the result into the variable cell?")
+#define STR_MSSG_SOLVE_2                        NC_("STR_MSSG_SOLVE_2", "Goal Seek failed.\n\n")
+#define STR_MSSG_SOLVE_3                        NC_("STR_MSSG_SOLVE_3", "Insert the closest value (")
+#define STR_MSSG_SOLVE_4                        NC_("STR_MSSG_SOLVE_4", ") into the variable cell anyway?")
+#define STR_TABLE_GESAMTERGEBNIS                NC_("STR_TABLE_GESAMTERGEBNIS", "Grand Total")
+#define STR_TABLE_ERGEBNIS                      NC_("STR_TABLE_ERGEBNIS", "Result")
+#define STR_UNDO_SPELLING                       NC_("STR_UNDO_SPELLING", "Spellcheck")
+#define STR_TABLE_UND                           NC_("STR_TABLE_UND", "AND")
+#define STR_TABLE_ODER                          NC_("STR_TABLE_ODER", "OR")
+#define STR_TABLE_DEF                           NC_("STR_TABLE_DEF", "Sheet")
+#define STR_MOVE_TO_END                         NC_("STR_MOVE_TO_END", "- move to end position -")
+#define STR_NO_REF_TABLE                        NC_("STR_NO_REF_TABLE", "#REF!")
+#define STR_PIVOT_NODATA                        NC_("STR_PIVOT_NODATA", "The pivot table must contain at least one entry.")
+#define STR_PIVOT_MOVENOTALLOWED                NC_("STR_PIVOT_MOVENOTALLOWED", "The data range can not be deleted.")
+#define STR_PIVOT_ERROR                         NC_("STR_PIVOT_ERROR", "Error creating the pivot table.")
+#define STR_PIVOT_NOTEMPTY                      NC_("STR_PIVOT_NOTEMPTY", "The destination range is not empty. Overwrite existing contents?")
+#define STR_PIVOT_REMOVE_PIVOTCHART             NC_("STR_PIVOT_REMOVE_PIVOTCHART", "There is at least one pivot chart associated with this pivot table. Should remove all or abort?")
+#define STR_DATAPILOT_SUBTOTAL                  NC_("STR_DATAPILOT_SUBTOTAL", "The source range contains subtotals which may distort the results. Use it anyway?")
+#define STR_PIVOT_TOTAL                         NC_("STR_PIVOT_TOTAL", "Total")
+#define STR_PIVOT_DATA                          NC_("STR_PIVOT_DATA", "Data")
+#define STR_PIVOT_GROUP                         NC_("STR_PIVOT_GROUP", "Group")
+#define STR_ROWCOL_SELCOUNT                     NC_("STR_ROWCOL_SELCOUNT", "$1 rows, $2 columns selected")
+#define STR_FILTER_SELCOUNT                     NC_("STR_FILTER_SELCOUNT", "$1 of $2 records found")
+#define STR_COLUMN                              NC_("STR_COLUMN", "Column")
+#define STR_ROW                                 NC_("STR_ROW", "Row")
+#define STR_PAGE                                NC_("STR_PAGE", "Page")
+#define STR_PGNUM                               NC_("STR_PGNUM", "Page %1")
+#define STR_LOAD_DOC                            NC_("STR_LOAD_DOC", "Load document")
+#define STR_SAVE_DOC                            NC_("STR_SAVE_DOC", "Save document")
+#define STR_AREA_ALREADY_INSERTED               NC_("STR_AREA_ALREADY_INSERTED", "This range has already been inserted.")
+#define STR_INVALID_TABREF                      NC_("STR_INVALID_TABREF", "Invalid sheet reference.")
+#define STR_INVALID_QUERYAREA                   NC_("STR_INVALID_QUERYAREA", "This range does not contain a valid query.")
+#define STR_REIMPORT_EMPTY                      NC_("STR_REIMPORT_EMPTY", "This range does not contain imported data.")
+#define STR_NOMULTISELECT                       NC_("STR_NOMULTISELECT", "This function cannot be used with multiple selections.")
+#define STR_FILL_SERIES_PROGRESS                NC_("STR_FILL_SERIES_PROGRESS", "Fill Row...")
+#define STR_UNDO_THESAURUS                      NC_("STR_UNDO_THESAURUS", "Thesaurus")
+#define STR_FILL_TAB                            NC_("STR_FILL_TAB", "Fill Sheets")
+#define STR_UPDATE_SCENARIO                     NC_("STR_UPDATE_SCENARIO", "Add selected ranges to current scenario?")
+#define STR_ERR_NEWSCENARIO                     NC_("STR_ERR_NEWSCENARIO", "The scenario ranges must be selected in order to be able to create a new scenario.")
+#define STR_NOAREASELECTED                      NC_("STR_NOAREASELECTED", "A range has not been selected.")
+#define STR_NEWTABNAMENOTUNIQUE                 NC_("STR_NEWTABNAMENOTUNIQUE", "This name already exists.")
+#define STR_INVALIDTABNAME                      NC_("STR_INVALIDTABNAME", "Invalid sheet name.\nThe sheet name must not be a duplicate of an existing name \nand may not contain the characters [ ] * ? : / \\")
+#define STR_SCENARIO                            NC_("STR_SCENARIO", "Scenario")
+#define STR_PIVOT_TABLE                         NC_("STR_PIVOT_TABLE", "Pivot Table")
+ // Text strings for captions of subtotal functions.
+#define STR_FUN_TEXT_SUM                        NC_("STR_FUN_TEXT_SUM", "Sum")
+#define STR_FUN_TEXT_SELECTION_COUNT            NC_("STR_FUN_TEXT_SELECTION_COUNT", "Selection count")
+#define STR_FUN_TEXT_COUNT                      NC_("STR_FUN_TEXT_COUNT", "Count")
+#define STR_FUN_TEXT_COUNT2                     NC_("STR_FUN_TEXT_COUNT2", "CountA")
+#define STR_FUN_TEXT_AVG                        NC_("STR_FUN_TEXT_AVG", "Average")
+#define STR_FUN_TEXT_MEDIAN                     NC_("STR_FUN_TEXT_MEDIAN", "Median")
+#define STR_FUN_TEXT_MAX                        NC_("STR_FUN_TEXT_MAX", "Max")
+#define STR_FUN_TEXT_MIN                        NC_("STR_FUN_TEXT_MIN", "Min")
+#define STR_FUN_TEXT_PRODUCT                    NC_("STR_FUN_TEXT_PRODUCT", "Product")
+#define STR_FUN_TEXT_STDDEV                     NC_("STR_FUN_TEXT_STDDEV", "StDev")
+#define STR_FUN_TEXT_VAR                        NC_("STR_FUN_TEXT_VAR", "Var")
+#define STR_NOCHARTATCURSOR                     NC_("STR_NOCHARTATCURSOR", "No chart found at this position.")
+#define STR_PIVOT_NOTFOUND                      NC_("STR_PIVOT_NOTFOUND", "No pivot table found at this position.")
+#define STR_EMPTYDATA                           NC_("STR_EMPTYDATA", "(empty)")
+#define STR_PRINT_INVALID_AREA                  NC_("STR_PRINT_INVALID_AREA", "Invalid print range")
+#define STR_PAGESTYLE                           NC_("STR_PAGESTYLE", "Page Style")
+#define STR_HEADER                              NC_("STR_HEADER", "Header")
+#define STR_FOOTER                              NC_("STR_FOOTER", "Footer")
+#define STR_TEXTATTRS                           NC_("STR_TEXTATTRS", "Text Attributes")
+#define STR_HFCMD_DELIMITER                     NC_("STR_HFCMD_DELIMITER", "\\")
+#define STR_HFCMD_PAGE                          NC_("STR_HFCMD_PAGE", "PAGE")
+#define STR_HFCMD_PAGES                         NC_("STR_HFCMD_PAGES", "PAGES")
+#define STR_HFCMD_DATE                          NC_("STR_HFCMD_DATE", "DATE")
+#define STR_HFCMD_TIME                          NC_("STR_HFCMD_TIME", "TIME")
+#define STR_HFCMD_FILE                          NC_("STR_HFCMD_FILE", "FILE")
+#define STR_HFCMD_TABLE                         NC_("STR_HFCMD_TABLE", "SHEET")
+#define STR_PROTECTIONERR                       NC_("STR_PROTECTIONERR", "Protected cells can not be modified.")
+#define STR_READONLYERR                         NC_("STR_READONLYERR", "Document opened in read-only mode.")
+#define STR_MATRIXFRAGMENTERR                   NC_("STR_MATRIXFRAGMENTERR", "You cannot change only part of an array.")
+#define STR_PAGEHEADER                          NC_("STR_PAGEHEADER", "Header")
+#define STR_PAGEFOOTER                          NC_("STR_PAGEFOOTER", "Footer")
+
+/* BEGIN error constants and error strings. */
+#define STR_ERROR_STR                           NC_("STR_ERROR_STR", "Err:")
+/* BEGIN defined ERROR.TYPE() values. */
+/* ERROR.TYPE( #DIV/0! ) == 2 */
+#define STR_LONG_ERR_DIV_ZERO                   NC_("STR_LONG_ERR_DIV_ZERO", "Error: Division by zero")
+/* ERROR.TYPE( #VALUE! ) == 3 */
+#define STR_LONG_ERR_NO_VALUE                   NC_("STR_LONG_ERR_NO_VALUE", "Error: Wrong data type")
+/* ERROR.TYPE( #REF! ) == 4 */
+#define STR_LONG_ERR_NO_REF                     NC_("STR_LONG_ERR_NO_REF", "Error: Not a valid reference")
+/* ERROR.TYPE( #NAME! ) == 5 */
+#define STR_LONG_ERR_NO_NAME                    NC_("STR_LONG_ERR_NO_NAME", "Error: Invalid name")
+/* ERROR.TYPE( #NUM! ) == 6 */
+#define STR_LONG_ERR_ILL_FPO                    NC_("STR_LONG_ERR_ILL_FPO", "Error: Invalid numeric value")
+/* ERROR.TYPE( #N/A ) == 7 */
+#define STR_LONG_ERR_NV                         NC_("STR_LONG_ERR_NV", "Error: Value not available")
+/* END defined ERROR.TYPE() values. */
+#define STR_NO_ADDIN                            NC_("STR_NO_ADDIN", "#ADDIN?")
+#define STR_LONG_ERR_NO_ADDIN                   NC_("STR_LONG_ERR_NO_ADDIN", "Error: Add-in not found")
+#define STR_NO_MACRO                            NC_("STR_NO_MACRO", "#MACRO?")
+#define STR_LONG_ERR_NO_MACRO                   NC_("STR_LONG_ERR_NO_MACRO", "Error: Macro not found")
+#define STR_LONG_ERR_SYNTAX                     NC_("STR_LONG_ERR_SYNTAX", "Internal syntactical error")
+#define STR_LONG_ERR_ILL_ARG                    NC_("STR_LONG_ERR_ILL_ARG", "Error: Invalid argument")
+#define STR_LONG_ERR_ILL_PAR                    NC_("STR_LONG_ERR_ILL_PAR", "Error in parameter list")
+#define STR_LONG_ERR_ILL_CHAR                   NC_("STR_LONG_ERR_ILL_CHAR", "Error: Invalid character")
+#define STR_LONG_ERR_PAIR                       NC_("STR_LONG_ERR_PAIR", "Error: in bracketing")
+#define STR_LONG_ERR_OP_EXP                     NC_("STR_LONG_ERR_OP_EXP", "Error: Operator missing")
+#define STR_LONG_ERR_VAR_EXP                    NC_("STR_LONG_ERR_VAR_EXP", "Error: Variable missing")
+#define STR_LONG_ERR_CODE_OVF                   NC_("STR_LONG_ERR_CODE_OVF", "Error: Formula overflow")
+#define STR_LONG_ERR_STR_OVF                    NC_("STR_LONG_ERR_STR_OVF", "Error: String overflow")
+#define STR_LONG_ERR_STACK_OVF                  NC_("STR_LONG_ERR_STACK_OVF", "Error: Internal overflow")
+#define STR_LONG_ERR_MATRIX_SIZE                NC_("STR_LONG_ERR_MATRIX_SIZE", "Error: Array or matrix size")
+#define STR_LONG_ERR_CIRC_REF                   NC_("STR_LONG_ERR_CIRC_REF", "Error: Circular reference")
+#define STR_LONG_ERR_NO_CONV                    NC_("STR_LONG_ERR_NO_CONV", "Error: Calculation does not converge")
+/* END error constants and error strings. */
+
+#define STR_GRIDCOLOR                           NC_("STR_GRIDCOLOR", "Grid color")
+#define STR_CELL_FILTER                         NC_("STR_CELL_FILTER", "Filter")
+#define STR_TARGETNOTFOUND                      NC_("STR_TARGETNOTFOUND", "The target database range does not exist.")
+#define STR_INVALID_EPS                         NC_("STR_INVALID_EPS", "Invalid increment")
+#define STR_UNDO_TABOP                          NC_("STR_UNDO_TABOP", "Multiple operations")
+#define STR_INVALID_AFNAME                      NC_("STR_INVALID_AFNAME", "You have entered an invalid name.\nAutoFormat could not be created. \nTry again using a different name.")
+#define STR_AREA                                NC_("STR_AREA", "Range")
+#define STR_YES                                 NC_("STR_YES", "Yes")
+#define STR_NO                                  NC_("STR_NO", "No")
+#define STR_PROTECTION                          NC_("STR_PROTECTION", "Protection")
+#define STR_FORMULAS                            NC_("STR_FORMULAS", "Formulas")
+#define STR_HIDE                                NC_("STR_HIDE", "Hide")
+#define STR_PRINT                               NC_("STR_PRINT", "Print")
+#define STR_INVALID_AFAREA                      NC_("STR_INVALID_AFAREA", "To apply an AutoFormat,\na table range of at least\n3x3 cells must be selected.")
+#define STR_OPTIONAL                            NC_("STR_OPTIONAL", "(optional)")
+#define STR_REQUIRED                            NC_("STR_REQUIRED", "(required)")
+#define STR_NOTES                               NC_("STR_NOTES", "Comments")
+#define STR_QUERY_DELTAB                        NC_("STR_QUERY_DELTAB", "Are you sure you want to delete the selected sheet(s)?")
+#define STR_QUERY_DELSCENARIO                   NC_("STR_QUERY_DELSCENARIO", "Are you sure you want to delete the selected scenario?")
+#define STR_EXPORT_ASCII                        NC_("STR_EXPORT_ASCII", "Export Text File")
+#define STR_IMPORT_LOTUS                        NC_("STR_IMPORT_LOTUS", "Import Lotus files")
+#define STR_IMPORT_DBF                          NC_("STR_IMPORT_DBF", "Import DBase files")
+#define STR_EXPORT_DBF                          NC_("STR_EXPORT_DBF", "DBase export")
+#define STR_EXPORT_DIF                          NC_("STR_EXPORT_DIF", "Dif Export")
+#define STR_IMPORT_DIF                          NC_("STR_IMPORT_DIF", "Dif Import")
+#define STR_STYLENAME_STANDARD                  NC_("STR_STYLENAME_STANDARD", "Default")
+#define STR_STYLENAME_RESULT                    NC_("STR_STYLENAME_RESULT", "Result")
+#define STR_STYLENAME_RESULT1                   NC_("STR_STYLENAME_RESULT1", "Result2")
+#define STR_STYLENAME_HEADLINE                  NC_("STR_STYLENAME_HEADLINE", "Heading")
+#define STR_STYLENAME_HEADLINE1                 NC_("STR_STYLENAME_HEADLINE1", "Heading1")
+#define STR_STYLENAME_REPORT                    NC_("STR_STYLENAME_REPORT", "Report")
+#define STR_THESAURUS_NO_STRING                 NC_("STR_THESAURUS_NO_STRING", "Thesaurus can only be used in text cells!")
+#define STR_SPELLING_BEGIN_TAB                  NC_("STR_SPELLING_BEGIN_TAB", "Should the spellcheck be continued at the beginning of the current sheet?")
+#define STR_SPELLING_NO_LANG                    NC_("STR_SPELLING_NO_LANG", "is not available for the thesaurus.\nPlease check your installation and install \nthe desired language if necessary")
+#define STR_SPELLING_STOP_OK                    NC_("STR_SPELLING_STOP_OK", "The spellcheck of this sheet has been completed.")
+#define STR_UNDO_INSERT_TAB                     NC_("STR_UNDO_INSERT_TAB", "Insert Sheet")
+#define STR_UNDO_DELETE_TAB                     NC_("STR_UNDO_DELETE_TAB", "Delete Sheets")
+#define STR_UNDO_RENAME_TAB                     NC_("STR_UNDO_RENAME_TAB", "Rename Sheet")
+#define STR_UNDO_SET_TAB_BG_COLOR               NC_("STR_UNDO_SET_TAB_BG_COLOR", "Color Tab")
+#define STR_UNDO_SET_MULTI_TAB_BG_COLOR         NC_("STR_UNDO_SET_MULTI_TAB_BG_COLOR", "Color Tabs")
+#define STR_UNDO_MOVE_TAB                       NC_("STR_UNDO_MOVE_TAB", "Move Sheets")
+#define STR_UNDO_COPY_TAB                       NC_("STR_UNDO_COPY_TAB", "Copy Sheet")
+#define STR_UNDO_APPEND_TAB                     NC_("STR_UNDO_APPEND_TAB", "Append sheet")
+#define STR_UNDO_SHOWTAB                        NC_("STR_UNDO_SHOWTAB", "Show Sheet")
+#define STR_UNDO_SHOWTABS                       NC_("STR_UNDO_SHOWTABS", "Show Sheets")
+#define STR_UNDO_HIDETAB                        NC_("STR_UNDO_HIDETAB", "Hide sheet")
+#define STR_UNDO_HIDETABS                       NC_("STR_UNDO_HIDETABS", "Hide sheets")
+#define STR_UNDO_TAB_RTL                        NC_("STR_UNDO_TAB_RTL", "Flip sheet")
+#define STR_ABSREFLOST                          NC_("STR_ABSREFLOST", "The new table contains absolute references to other tables which may be incorrect!")
+#define STR_NAMECONFLICT                        NC_("STR_NAMECONFLICT", "Due to identical names, an existing range name in the destination document has been altered!")
+#define STR_ERR_AUTOFILTER                      NC_("STR_ERR_AUTOFILTER", "AutoFilter not possible")
+#define STR_CREATENAME_REPLACE                  NC_("STR_CREATENAME_REPLACE", "Replace existing definition of #?")
+#define STR_CREATENAME_MARKERR                  NC_("STR_CREATENAME_MARKERR", "Invalid selection for range names")
+#define STR_CONSOLIDATE_ERR1                    NC_("STR_CONSOLIDATE_ERR1", "References can not be inserted above the source data.")
+#define STR_SCENARIO_NOTFOUND                   NC_("STR_SCENARIO_NOTFOUND", "Scenario not found")
+#define STR_QUERY_DELENTRY                      NC_("STR_QUERY_DELENTRY", "Do you really want to delete the entry #?")
+#define STR_VOBJ_OBJECT                         NC_("STR_VOBJ_OBJECT", "Objects/Images")
+#define STR_VOBJ_CHART                          NC_("STR_VOBJ_CHART", "Charts")
+#define STR_VOBJ_DRAWINGS                       NC_("STR_VOBJ_DRAWINGS", "Drawing Objects")
+#define STR_VOBJ_MODE_SHOW                      NC_("STR_VOBJ_MODE_SHOW", "Show")
+#define STR_VOBJ_MODE_HIDE                      NC_("STR_VOBJ_MODE_HIDE", "Hide")
+#define STR_SCATTR_PAGE_TOPDOWN                 NC_("STR_SCATTR_PAGE_TOPDOWN", "Top to bottom")
+#define STR_SCATTR_PAGE_LEFTRIGHT               NC_("STR_SCATTR_PAGE_LEFTRIGHT", "Left-to-right")
+#define STR_SCATTR_PAGE_NOTES                   NC_("STR_SCATTR_PAGE_NOTES", "Comments")
+#define STR_SCATTR_PAGE_GRID                    NC_("STR_SCATTR_PAGE_GRID", "Grid")
+#define STR_SCATTR_PAGE_HEADERS                 NC_("STR_SCATTR_PAGE_HEADERS", "Row & Column Headers")
+#define STR_SCATTR_PAGE_FORMULAS                NC_("STR_SCATTR_PAGE_FORMULAS", "Formulas")
+#define STR_SCATTR_PAGE_NULLVALS                NC_("STR_SCATTR_PAGE_NULLVALS", "Zero Values")
+#define STR_SCATTR_PAGE_PRINTDIR                NC_("STR_SCATTR_PAGE_PRINTDIR", "Print direction")
+#define STR_SCATTR_PAGE_FIRSTPAGENO             NC_("STR_SCATTR_PAGE_FIRSTPAGENO", "First page number")
+#define STR_SCATTR_PAGE_SCALE                   NC_("STR_SCATTR_PAGE_SCALE", "Reduce/enlarge printout")
+#define STR_SCATTR_PAGE_SCALETOPAGES            NC_("STR_SCATTR_PAGE_SCALETOPAGES", "Fit print range(s) on number of pages")
+#define STR_SCATTR_PAGE_SCALETO                 NC_("STR_SCATTR_PAGE_SCALETO", "Fit print range(s) to width/height")
+#define STR_SCATTR_PAGE_SCALE_WIDTH             NC_("STR_SCATTR_PAGE_SCALE_WIDTH", "Width")
+#define STR_SCATTR_PAGE_SCALE_HEIGHT            NC_("STR_SCATTR_PAGE_SCALE_HEIGHT", "Height")
+#define STR_SCATTR_PAGE_SCALE_PAGES             NC_("STR_SCATTR_PAGE_SCALE_PAGES", "%1 page(s)")
+#define STR_SCATTR_PAGE_SCALE_AUTO              NC_("STR_SCATTR_PAGE_SCALE_AUTO", "automatic")
+#define STR_DOC_STAT                            NC_("STR_DOC_STAT", "Statistics")
+#define STR_LINKERROR                           NC_("STR_LINKERROR", "The link could not be updated.")
+#define STR_LINKERRORFILE                       NC_("STR_LINKERRORFILE", "File:")
+#define STR_LINKERRORTAB                        NC_("STR_LINKERRORTAB", "Sheet:")
+#define STR_OVERVIEW                            NC_("STR_OVERVIEW", "Overview")
+#define STR_DOC_INFO                            NC_("STR_DOC_INFO", "Doc.Information")
+#define STR_DOC_PRINTED                         NC_("STR_DOC_PRINTED", "Printed")
+#define STR_BY                                  NC_("STR_BY", "by")
+#define STR_ON                                  NC_("STR_ON", "on")
+#define STR_RELOAD_TABLES                       NC_("STR_RELOAD_TABLES", "This file contains links to other files.\nShould they be updated?")
+#define STR_REIMPORT_AFTER_LOAD                 NC_("STR_REIMPORT_AFTER_LOAD", "This file contains queries. The results of these queries were not saved.\nDo you want these queries to be repeated?")
+#define STR_INSERT_FULL                         NC_("STR_INSERT_FULL", "Filled cells cannot be shifted\nbeyond the sheet.")
+#define STR_TABINSERT_ERROR                     NC_("STR_TABINSERT_ERROR", "The table could not be inserted.")
+#define STR_TABREMOVE_ERROR                     NC_("STR_TABREMOVE_ERROR", "The sheets could not be deleted.")
+#define STR_PASTE_ERROR                         NC_("STR_PASTE_ERROR", "The contents of the clipboard could not be pasted.")
+#define STR_PASTE_FULL                          NC_("STR_PASTE_FULL", "There is not enough space on the sheet to insert here.")
+#define STR_PASTE_BIGGER                        NC_("STR_PASTE_BIGGER", "The content of the clipboard is bigger than the range selected.\nDo you want to insert it anyway?")
+#define STR_ERR_NOREF                           NC_("STR_ERR_NOREF", "No cell references are found in the selected cells.")
+#define STR_GRAPHICNAME                         NC_("STR_GRAPHICNAME", "Image")
+#define STR_INVALIDNAME                         NC_("STR_INVALIDNAME", "Invalid name.")
+#define STR_VALID_MACRONOTFOUND                 NC_("STR_VALID_MACRONOTFOUND", "Selected macro not found.")
+#define STR_VALID_DEFERROR                      NC_("STR_VALID_DEFERROR", "Invalid value.")
+#define STR_PROGRESS_CALCULATING                NC_("STR_PROGRESS_CALCULATING", "calculating")
+#define STR_PROGRESS_SORTING                    NC_("STR_PROGRESS_SORTING", "sorting")
+#define STR_PROGRESS_HEIGHTING                  NC_("STR_PROGRESS_HEIGHTING", "Adapt row height")
+#define STR_PROGRESS_COMPARING                  NC_("STR_PROGRESS_COMPARING", "Compare #")
+#define STR_DETINVALID_OVERFLOW                 NC_("STR_DETINVALID_OVERFLOW", "The maximum number of invalid cells has been exceeded.\nNot all invalid cells have been marked.")
+#define STR_QUICKHELP_DELETE                    NC_("STR_QUICKHELP_DELETE", "Delete contents")
+#define STR_QUICKHELP_REF                       NC_("STR_QUICKHELP_REF", "%1 R  x %2 C")
+#define STR_FUNCTIONLIST_MORE                   NC_("STR_FUNCTIONLIST_MORE", "More...")
+#define STR_ERR_INVALID_AREA                    NC_("STR_ERR_INVALID_AREA", "Invalid range")
+// Templates for data pilot tables.
+#define STR_PIVOT_STYLE_INNER                   NC_("STR_PIVOT_STYLE_INNER", "Pivot Table Value")
+#define STR_PIVOT_STYLE_RESULT                  NC_("STR_PIVOT_STYLE_RESULT", "Pivot Table Result")
+#define STR_PIVOT_STYLE_CATEGORY                NC_("STR_PIVOT_STYLE_CATEGORY", "Pivot Table Category")
+#define STR_PIVOT_STYLE_TITLE                   NC_("STR_PIVOT_STYLE_TITLE", "Pivot Table Title")
+#define STR_PIVOT_STYLE_FIELDNAME               NC_("STR_PIVOT_STYLE_FIELDNAME", "Pivot Table Field")
+#define STR_PIVOT_STYLE_TOP                     NC_("STR_PIVOT_STYLE_TOP", "Pivot Table Corner")
+#define STR_OPERATION_FILTER                    NC_("STR_OPERATION_FILTER", "Filter")
+#define STR_OPERATION_SORT                      NC_("STR_OPERATION_SORT", "Sort")
+#define STR_OPERATION_SUBTOTAL                  NC_("STR_OPERATION_SUBTOTAL", "Subtotals")
+#define STR_OPERATION_NONE                      NC_("STR_OPERATION_NONE", "None")
+#define STR_IMPORT_REPLACE                      NC_("STR_IMPORT_REPLACE", "Do you want to replace the contents of #?")
+#define STR_TIP_WIDTH                           NC_("STR_TIP_WIDTH", "Width:")
+#define STR_TIP_HEIGHT                          NC_("STR_TIP_HEIGHT", "Height:")
+#define STR_TIP_HIDE                            NC_("STR_TIP_HIDE", "Hide")
+#define STR_CHANGED_BLANK                       NC_("STR_CHANGED_BLANK", "<empty>")
+#define STR_CHANGED_CELL                        NC_("STR_CHANGED_CELL", "Cell #1 changed from '#2' to '#3'")
+#define STR_CHANGED_INSERT                      NC_("STR_CHANGED_INSERT", "#1 inserted")
+#define STR_CHANGED_DELETE                      NC_("STR_CHANGED_DELETE", "#1 deleted")
+#define STR_CHANGED_MOVE                        NC_("STR_CHANGED_MOVE", "Range moved from #1 to #2")
+#define STR_END_REDLINING                       NC_("STR_END_REDLINING", "This action will exit the change recording mode.\nAny information about changes will be lost.\n\nExit change recording mode?\n\n")
+#define STR_CLOSE_ERROR_LINK                    NC_("STR_CLOSE_ERROR_LINK", "The document can not be closed while a link is being updated.")
+#define STR_UNDO_RESIZEMATRIX                   NC_("STR_UNDO_RESIZEMATRIX", "Adapt array area")
+#define STR_TIP_RESIZEMATRIX                    NC_("STR_TIP_RESIZEMATRIX", "Array formula  %1 R x %2 C")
+#define STR_UNDO_HANGULHANJA                    NC_("STR_UNDO_HANGULHANJA", "Hangul/Hanja Conversion")
+#define STR_NAME_INPUT_CELL                     NC_("STR_NAME_INPUT_CELL", "Select Cell")
+#define STR_NAME_INPUT_RANGE                    NC_("STR_NAME_INPUT_RANGE", "Select Range")
+#define STR_NAME_INPUT_DBRANGE                  NC_("STR_NAME_INPUT_DBRANGE", "Select Database Range")
+#define STR_NAME_INPUT_ROW                      NC_("STR_NAME_INPUT_ROW", "Go To Row")
+#define STR_NAME_INPUT_SHEET                    NC_("STR_NAME_INPUT_SHEET", "Go To Sheet")
+#define STR_NAME_INPUT_DEFINE                   NC_("STR_NAME_INPUT_DEFINE", "Define Name for Range")
+#define STR_NAME_ERROR_SELECTION                NC_("STR_NAME_ERROR_SELECTION", "The selection needs to be rectangular in order to name it.")
+#define STR_NAME_ERROR_NAME                     NC_("STR_NAME_ERROR_NAME", "You must enter a valid reference or type a valid name for the selected range.")
+#define STR_CHANGED_MOVE_REJECTION_WARNING      NC_("STR_CHANGED_MOVE_REJECTION_WARNING", "WARNING: This action may have resulted in unintended changes to cell references in formulas.")
+#define STR_CHANGED_DELETE_REJECTION_WARNING    NC_("STR_CHANGED_DELETE_REJECTION_WARNING", "WARNING: This action may have resulted in references to the deleted area not being restored.")
+#define STR_UNDO_CHINESE_TRANSLATION            NC_("STR_UNDO_CHINESE_TRANSLATION", "Chinese conversion")
+#define STR_ERR_DATAPILOT_INPUT                 NC_("STR_ERR_DATAPILOT_INPUT", "You cannot change this part of the pivot table.")
+#define STR_RECALC_MANUAL                       NC_("STR_RECALC_MANUAL", "Manual")
+#define STR_RECALC_AUTO                         NC_("STR_RECALC_AUTO", "Automatic")
+#define STR_ERR_LONG_NESTED_ARRAY               NC_("STR_ERR_LONG_NESTED_ARRAY", "Nested arrays are not supported.")
+#define STR_UNDO_TEXTTOCOLUMNS                  NC_("STR_UNDO_TEXTTOCOLUMNS", "Text to Columns")
+#define STR_DOC_UPDATED                         NC_("STR_DOC_UPDATED", "Your spreadsheet has been updated with changes saved by other users.")
+#define STR_DOC_WILLBESAVED                     NC_("STR_DOC_WILLBESAVED", "The spreadsheet must be saved now to activate sharing mode.\n\nDo you want to continue?")
+#define STR_DOC_WILLNOTBESAVED                  NC_("STR_DOC_WILLNOTBESAVED", "Already resolved merge conflicts will be lost and your changes to the shared spreadsheet will not be saved.\n\nDo you want to continue?")
+#define STR_DOC_DISABLESHARED                   NC_("STR_DOC_DISABLESHARED", "Disabling shared mode of a spreadsheet hinders all other users of the shared spreadsheet to merge back their work.\n\nDo you want to continue?")
+#define STR_DOC_NOLONGERSHARED                  NC_("STR_DOC_NOLONGERSHARED", "This spreadsheet is no longer in shared mode.\n\nSave your spreadsheet to a separate file and merge your changes to the shared spreadsheet manually.")
+#define STR_SHARED_DOC_WARNING                  NC_("STR_SHARED_DOC_WARNING", "The spreadsheet is in shared mode. This allows multiple users to access and edit the spreadsheet at the same time.\n\nChanges to formatting attributes like fonts, colors, and number formats will not be saved and some functionalities like editing charts and drawing objects are not available in shared mode. Turn off shared mode to get exclusive access needed for those changes and functionalities.")
+#define STR_FILE_LOCKED_TRY_LATER               NC_("STR_FILE_LOCKED_TRY_LATER", "The shared spreadsheet file is locked due to a merge in progress by user: '%1'\n\nSharing mode of a locked file cannot be disabled. Try again later.")
+#define STR_FILE_LOCKED_SAVE_LATER              NC_("STR_FILE_LOCKED_SAVE_LATER", "The shared spreadsheet file is locked due to a merge in progress by user: '%1'\n\nTry again later to save your changes.")
+#define STR_UNKNOWN_USER                        NC_("STR_UNKNOWN_USER", "Unknown User")
+#define STR_SHAPE_AUTOSHAPE                     NC_("STR_SHAPE_AUTOSHAPE", "AutoShape")
+#define STR_SHAPE_RECTANGLE                     NC_("STR_SHAPE_RECTANGLE", "Rectangle")
+#define STR_SHAPE_LINE                          NC_("STR_SHAPE_LINE", "Line")
+#define STR_SHAPE_OVAL                          NC_("STR_SHAPE_OVAL", "Oval")
+#define STR_FORM_BUTTON                         NC_("STR_FORM_BUTTON", "Button")
+#define STR_FORM_CHECKBOX                       NC_("STR_FORM_CHECKBOX", "Check Box")
+#define STR_FORM_OPTIONBUTTON                   NC_("STR_FORM_OPTIONBUTTON", "Option Button")
+#define STR_FORM_LABEL                          NC_("STR_FORM_LABEL", "Label")
+#define STR_FORM_LISTBOX                        NC_("STR_FORM_LISTBOX", "List Box")
+#define STR_FORM_GROUPBOX                       NC_("STR_FORM_GROUPBOX", "Group Box")
+#define STR_FORM_DROPDOWN                       NC_("STR_FORM_DROPDOWN", "Drop Down")
+#define STR_FORM_SPINNER                        NC_("STR_FORM_SPINNER", "Spinner")
+#define STR_FORM_SCROLLBAR                      NC_("STR_FORM_SCROLLBAR", "Scroll Bar")
+#define STR_STYLE_FAMILY_CELL                   NC_("STR_STYLE_FAMILY_CELL", "Cell Styles")
+#define STR_STYLE_FAMILY_PAGE                   NC_("STR_STYLE_FAMILY_PAGE", "Page Styles")
+#define STR_ERR_DATAPILOTSOURCE                 NC_("STR_ERR_DATAPILOTSOURCE", "Pivot table source data is invalid.")
+#define STR_OPTIONS_WARN_SEPARATORS             NC_("STR_OPTIONS_WARN_SEPARATORS", "Because the current formula separator settings conflict with the locale, the formula separators have been reset to their default values.")
+#define STR_UNDO_INSERT_CURRENT_DATE            NC_("STR_UNDO_INSERT_CURRENT_DATE", "Insert Current Date")
+#define STR_UNDO_INSERT_CURRENT_TIME            NC_("STR_UNDO_INSERT_CURRENT_TIME", "Insert Current Time")
+#define STR_MANAGE_NAMES                        NC_("STR_MANAGE_NAMES", "Manage Names...")
+#define STR_HEADER_NAME                         NC_("STR_HEADER_NAME", "Name")
+#define STR_HEADER_RANGE_OR_EXPR                NC_("STR_HEADER_RANGE_OR_EXPR", "Range or formula expression")
+#define STR_HEADER_SCOPE                        NC_("STR_HEADER_SCOPE", "Scope")
+#define STR_MULTI_SELECT                        NC_("STR_MULTI_SELECT", "(multiple)")
+#define STR_GLOBAL_SCOPE                        NC_("STR_GLOBAL_SCOPE", "Document (Global)")
+#define STR_ERR_NAME_EXISTS                     NC_("STR_ERR_NAME_EXISTS", "Invalid name. Already in use for the selected scope.")
+#define STR_ERR_NAME_INVALID                    NC_("STR_ERR_NAME_INVALID", "Invalid name. Only use letters, numbers and underscore.")
+#define STR_UNSAVED_EXT_REF                     NC_("STR_UNSAVED_EXT_REF", "This Document contains external references to unsaved documents.\n\nDo you want to continue?")
+#define STR_CLOSE_WITH_UNSAVED_REFS             NC_("STR_CLOSE_WITH_UNSAVED_REFS", "This Document is referenced by another document and not yet saved. Closing it without saving will result in data loss.")
+#define STR_HEADER_RANGE                        NC_("STR_HEADER_RANGE", "Range")
+#define STR_HEADER_COND                         NC_("STR_HEADER_COND", "First Condition")
+#define STR_COND_CONDITION                      NC_("STR_COND_CONDITION", "Cell value is")
+#define STR_COND_COLORSCALE                     NC_("STR_COND_COLORSCALE", "ColorScale")
+#define STR_COND_DATABAR                        NC_("STR_COND_DATABAR", "DataBar")
+#define STR_COND_ICONSET                        NC_("STR_COND_ICONSET", "IconSet")
+#define STR_COND_BETWEEN                        NC_("STR_COND_BETWEEN", "between")
+#define STR_COND_NOTBETWEEN                     NC_("STR_COND_NOTBETWEEN", "not between")
+#define STR_COND_UNIQUE                         NC_("STR_COND_UNIQUE", "unique")
+#define STR_COND_DUPLICATE                      NC_("STR_COND_DUPLICATE", "duplicate")
+#define STR_COND_FORMULA                        NC_("STR_COND_FORMULA", "Formula is")
+#define STR_COND_TOP10                          NC_("STR_COND_TOP10", "Top Elements")
+#define STR_COND_BOTTOM10                       NC_("STR_COND_BOTTOM10", "Bottom Elements")
+#define STR_COND_TOP_PERCENT                    NC_("STR_COND_TOP_PERCENT", "Top Percent")
+#define STR_COND_DATE                           NC_("STR_COND_DATE", "Date is")
+#define STR_COND_BOTTOM_PERCENT                 NC_("STR_COND_BOTTOM_PERCENT", "Bottom Percent")
+#define STR_COND_ABOVE_AVERAGE                  NC_("STR_COND_ABOVE_AVERAGE", "Above Average")
+#define STR_COND_BELOW_AVERAGE                  NC_("STR_COND_BELOW_AVERAGE", "Below Average")
+#define STR_COND_ABOVE_EQUAL_AVERAGE            NC_("STR_COND_ABOVE_EQUAL_AVERAGE", "Above or equal Average")
+#define STR_COND_BELOW_EQUAL_AVERAGE            NC_("STR_COND_BELOW_EQUAL_AVERAGE", "Below or equal Average")
+#define STR_COND_ERROR                          NC_("STR_COND_ERROR", "an Error code")
+#define STR_COND_NOERROR                        NC_("STR_COND_NOERROR", "not an Error code")
+#define STR_COND_BEGINS_WITH                    NC_("STR_COND_BEGINS_WITH", "Begins with")
+#define STR_COND_ENDS_WITH                      NC_("STR_COND_ENDS_WITH", "Ends with")
+#define STR_COND_CONTAINS                       NC_("STR_COND_CONTAINS", "Contains")
+#define STR_COND_NOT_CONTAINS                   NC_("STR_COND_NOT_CONTAINS", "Not Contains")
+#define STR_COND_TODAY                          NC_("STR_COND_TODAY", "today")
+#define STR_COND_YESTERDAY                      NC_("STR_COND_YESTERDAY", "yesterday")
+#define STR_COND_TOMORROW                       NC_("STR_COND_TOMORROW", "tomorrow")
+#define STR_COND_LAST7DAYS                      NC_("STR_COND_LAST7DAYS", "in the last 7 days")
+#define STR_COND_THISWEEK                       NC_("STR_COND_THISWEEK", "this week")
+#define STR_COND_LASTWEEK                       NC_("STR_COND_LASTWEEK", "last week")
+#define STR_COND_NEXTWEEK                       NC_("STR_COND_NEXTWEEK", "next week")
+#define STR_COND_THISMONTH                      NC_("STR_COND_THISMONTH", "this month")
+#define STR_COND_LASTMONTH                      NC_("STR_COND_LASTMONTH", "last month")
+#define STR_COND_NEXTMONTH                      NC_("STR_COND_NEXTMONTH", "next month")
+#define STR_COND_THISYEAR                       NC_("STR_COND_THISYEAR", "this year")
+#define STR_COND_LASTYEAR                       NC_("STR_COND_LASTYEAR", "last year")
+#define STR_COND_NEXTYEAR                       NC_("STR_COND_NEXTYEAR", "next year")
+#define STR_COND_AND                            NC_("STR_COND_AND", "and")
+#define STR_ERR_CONDFORMAT_PROTECTED            NC_("STR_ERR_CONDFORMAT_PROTECTED", "Conditional Formats can not be created, deleted or changed in protected sheets!")
+#define STR_EDIT_EXISTING_COND_FORMATS          NC_("STR_EDIT_EXISTING_COND_FORMATS", "The selected cell already contains conditional formatting. You can either edit the existing conditional format or you define a new overlapping conditional format.\n\n Do you want to edit the existing conditional format?")
+#define STR_QUERY_FORMULA_RECALC_ONLOAD_ODS     NC_("STR_QUERY_FORMULA_RECALC_ONLOAD_ODS", "This document was last saved by an application other than %PRODUCTNAME.  Some formula cells may produce different results when recalculated.\n\nDo you want to recalculate all formula cells in this document now?")
+#define STR_QUERY_FORMULA_RECALC_ONLOAD_XLS     NC_("STR_QUERY_FORMULA_RECALC_ONLOAD_XLS", "This document was last saved by Excel.  Some formula cells may produce different results when recalculated.\n\nDo you want to recalculate all formula cells now?")
+#define STR_ALWAYS_PERFORM_SELECTED             NC_("STR_ALWAYS_PERFORM_SELECTED", "Always perform this without prompt in the future.")
+#define STR_NO_INSERT_DELETE_OVER_PIVOT_TABLE   NC_("STR_NO_INSERT_DELETE_OVER_PIVOT_TABLE", "You cannot insert or delete cells when the affected range intersects with pivot table.")
+#define STR_DPFIELD_GROUP_BY_SECONDS            NC_("STR_DPFIELD_GROUP_BY_SECONDS", "Seconds")
+#define STR_DPFIELD_GROUP_BY_MINUTES            NC_("STR_DPFIELD_GROUP_BY_MINUTES", "Minutes")
+#define STR_DPFIELD_GROUP_BY_HOURS              NC_("STR_DPFIELD_GROUP_BY_HOURS", "Hours")
+#define STR_DPFIELD_GROUP_BY_DAYS               NC_("STR_DPFIELD_GROUP_BY_DAYS", "Days")
+#define STR_DPFIELD_GROUP_BY_MONTHS             NC_("STR_DPFIELD_GROUP_BY_MONTHS", "Months")
+#define STR_DPFIELD_GROUP_BY_QUARTERS           NC_("STR_DPFIELD_GROUP_BY_QUARTERS", "Quarters")
+#define STR_DPFIELD_GROUP_BY_YEARS              NC_("STR_DPFIELD_GROUP_BY_YEARS", "Years")
+#define STR_INVALIDVAL                          NC_("STR_INVALIDVAL", "Invalid target value.")
+#define STR_INVALIDVAR                          NC_("STR_INVALIDVAR", "Undefined name for variable cell.")
+#define STR_INVALIDFORM                         NC_("STR_INVALIDFORM", "Undefined name as formula cell.")
+#define STR_NOFORMULA                           NC_("STR_NOFORMULA", "Formula cell must contain a formula.")
+#define STR_INVALIDINPUT                        NC_("STR_INVALIDINPUT", "Invalid input.")
+#define STR_INVALIDCONDITION                    NC_("STR_INVALIDCONDITION", "Invalid condition.")
+#define STR_QUERYREMOVE                         NC_("STR_QUERYREMOVE", "Should the entry\n#\nbe deleted?")
+#define STR_COPYLIST                            NC_("STR_COPYLIST", "Copy List")
+#define STR_COPYFROM                            NC_("STR_COPYFROM", "List from")
+#define STR_COPYERR                             NC_("STR_COPYERR", "Cells without text have been ignored.")
+#define STR_CTRLCLICKHYPERLINK                  NC_("STR_CTRLCLICKHYPERLINK", "%s-click to follow hyperlink:")
+#define STR_CLICKHYPERLINK                      NC_("STR_CLICKHYPERLINK", "click to open hyperlink:")
+#define STR_PRINT_PREVIEW_NODATA                NC_("STR_PRINT_PREVIEW_NODATA", "No Data")
+#define STR_PRINT_PREVIEW_EMPTY_RANGE           NC_("STR_PRINT_PREVIEW_EMPTY_RANGE", "Print Range Empty")
+#define STR_UNDO_CONDFORMAT                     NC_("STR_UNDO_CONDFORMAT", "Conditional Format")
+#define STR_UNDO_CONDFORMAT_LIST                NC_("STR_UNDO_CONDFORMAT_LIST", "Conditional Formats")
+#define STR_UNDO_FORMULA_TO_VALUE               NC_("STR_UNDO_FORMULA_TO_VALUE", "Convert Formula To Value")
+#define STR_UNQUOTED_STRING                     NC_("STR_UNQUOTED_STRING", "Strings without quotes are interpreted as column/row labels.")
+#define STR_ENTER_VALUE                         NC_("STR_ENTER_VALUE", "Enter a value!")
+#define STR_TABLE_COUNT                         NC_("STR_TABLE_COUNT", "Sheet %1 of %2")
+#define STR_FUNCTIONS_FOUND                     NC_("STR_FUNCTIONS_FOUND", "%1 and %2 more")
+#define STR_GENERAL                             NC_("STR_GENERAL", "General")
+#define STR_NUMBER                              NC_("STR_NUMBER", "Number")
+#define STR_PERCENT                             NC_("STR_PERCENT", "Percent")
+#define STR_CURRENCY                            NC_("STR_CURRENCY", "Currency")
+#define STR_DATE                                NC_("STR_DATE", "Date")
+#define STR_TIME                                NC_("STR_TIME", "Time")
+#define STR_SCIENTIFIC                          NC_("STR_SCIENTIFIC", "Scientific")
+#define STR_FRACTION                            NC_("STR_FRACTION", "Fraction")
+#define STR_BOOLEAN_VALUE                       NC_("STR_BOOLEAN_VALUE", "Boolean Value")
+#define STR_TEXT                                NC_("STR_TEXT", "Text")
+#define STR_QUERY_PIVOTTABLE_DELTAB             NC_("STR_QUERY_PIVOTTABLE_DELTAB", "The selected sheet(s) contain source data of related pivot tables that will be lost. Are you sure you want to delete the selected sheet(s)?")
+#define STR_ERR_NAME_INVALID_CELL_REF           NC_("STR_ERR_NAME_INVALID_CELL_REF", "Invalid name. Reference to a cell, or a range of cells not allowed.")
 
 #endif
 

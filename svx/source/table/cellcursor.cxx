@@ -25,7 +25,7 @@
 #include "tablelayouter.hxx"
 #include "cell.hxx"
 #include "svx/svdmodel.hxx"
-#include "svx/svdstr.hrc"
+#include "svx/strings.hrc"
 #include "svdglob.hxx"
 
 

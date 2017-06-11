@@ -87,7 +87,7 @@
 #include <svtools/imapobj.hxx>
 #include <tools/urlobj.hxx>
 #include <mdiexp.hxx>
-#include <statstr.hrc>
+#include <strings.hrc>
 #include <fmtline.hxx>
 #include <fmtfsize.hxx>
 #include <comphelper/extract.hxx>

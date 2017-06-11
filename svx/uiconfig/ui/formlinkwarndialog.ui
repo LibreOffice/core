@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="svx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="FormLinkWarnDialog">
     <property name="can_focus">False</property>
@@ -9,8 +9,8 @@
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">question</property>
-    <property name="text" translatable="yes">This instance is linked with the form.</property>
-    <property name="secondary_text" translatable="yes">The changes you make to this instance will be lost when the form is reloaded.
+    <property name="text" translatable="yes" context="formlinkwarndialog|FormLinkWarnDialog">This instance is linked with the form.</property>
+    <property name="secondary_text" translatable="yes" context="formlinkwarndialog|FormLinkWarnDialog">The changes you make to this instance will be lost when the form is reloaded.
 
 How do you want to proceed?</property>
     <child internal-child="vbox">
@@ -24,7 +24,7 @@ How do you want to proceed?</property>
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="ok">
-                <property name="label" translatable="yes">_Edit</property>
+                <property name="label" translatable="yes" context="formlinkwarndialog|ok">_Edit</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>

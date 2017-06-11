@@ -18,7 +18,7 @@
  */
 #include "ReportComponent.hxx"
 
-#include "corestrings.hrc"
+#include "strings.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>

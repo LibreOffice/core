@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="flt">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="XmlFilterTabPageTransformation">
@@ -22,7 +22,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">_DocType:</property>
+            <property name="label" translatable="yes" context="xmlfiltertabpagetransformation|label2">_DocType:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">doc</property>
           </object>
@@ -49,7 +49,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">_XSLT for export:</property>
+            <property name="label" translatable="yes" context="xmlfiltertabpagetransformation|label4">_XSLT for export:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">xsltexport</property>
           </object>
@@ -60,7 +60,7 @@
         </child>
         <child>
           <object class="GtkButton" id="browseexport">
-            <property name="label" translatable="yes">Brows_e...</property>
+            <property name="label" translatable="yes" context="xmlfiltertabpagetransformation|browseexport">Brows_e...</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -76,7 +76,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">XSLT _for import:</property>
+            <property name="label" translatable="yes" context="xmlfiltertabpagetransformation|label5">XSLT _for import:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">xsltimport</property>
           </object>
@@ -87,7 +87,7 @@
         </child>
         <child>
           <object class="GtkButton" id="browseimport">
-            <property name="label" translatable="yes">B_rowse...</property>
+            <property name="label" translatable="yes" context="xmlfiltertabpagetransformation|browseimport">B_rowse...</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -103,7 +103,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">1</property>
-            <property name="label" translatable="yes">Template for _import:</property>
+            <property name="label" translatable="yes" context="xmlfiltertabpagetransformation|label6">Template for _import:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">tempimport</property>
           </object>
@@ -114,7 +114,7 @@
         </child>
         <child>
           <object class="GtkButton" id="browsetemp">
-            <property name="label" translatable="yes">Browse...</property>
+            <property name="label" translatable="yes" context="xmlfiltertabpagetransformation|browsetemp">Browse...</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -172,7 +172,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="filtercb">
-        <property name="label" translatable="yes">The filter needs XSLT 2.0 processor</property>
+        <property name="label" translatable="yes" context="xmlfiltertabpagetransformation|filtercb">The filter needs XSLT 2.0 processor</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>

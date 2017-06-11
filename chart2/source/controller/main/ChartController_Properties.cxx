@@ -48,7 +48,7 @@
 #include "UndoGuard.hxx"
 #include "ObjectNameProvider.hxx"
 #include "ResId.hxx"
-#include "Strings.hrc"
+#include "strings.hrc"
 #include "ReferenceSizeProvider.hxx"
 #include "RegressionCurveHelper.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>

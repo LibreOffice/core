@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="rpt">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="CondFormat">
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Conditional Formatting</property>
+    <property name="title" translatable="yes" context="condformatdialog|CondFormat">Conditional Formatting</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">

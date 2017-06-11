@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="wpt">
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkDialog" id="WPFTEncodingDialog">
     <property name="can_focus">False</property>
@@ -60,7 +60,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">_Character set:</property>
+            <property name="label" translatable="yes" context="wpftencodingdialog|label">_Character set:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">comboboxtext</property>
           </object>

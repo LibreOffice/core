@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="chart">
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustmentDegree">
     <property name="lower">2</property>
@@ -49,7 +49,7 @@
                 <property name="row_homogeneous">True</property>
                 <child>
                   <object class="GtkRadioButton" id="linear">
-                    <property name="label" translatable="yes">_Linear</property>
+                    <property name="label" translatable="yes" context="tp_Trendline|linear">_Linear</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -68,7 +68,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="logarithmic">
-                    <property name="label" translatable="yes">L_ogarithmic</property>
+                    <property name="label" translatable="yes" context="tp_Trendline|logarithmic">L_ogarithmic</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -87,7 +87,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="exponential">
-                    <property name="label" translatable="yes">_Exponential</property>
+                    <property name="label" translatable="yes" context="tp_Trendline|exponential">_Exponential</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -106,7 +106,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="power">
-                    <property name="label" translatable="yes">Po_wer</property>
+                    <property name="label" translatable="yes" context="tp_Trendline|power">Po_wer</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -125,7 +125,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="polynomial">
-                    <property name="label" translatable="yes">_Polynomial</property>
+                    <property name="label" translatable="yes" context="tp_Trendline|polynomial">_Polynomial</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -144,7 +144,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="movingAverage">
-                    <property name="label" translatable="yes">_Moving Average</property>
+                    <property name="label" translatable="yes" context="tp_Trendline|movingAverage">_Moving Average</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -170,7 +170,7 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Degree</property>
+                        <property name="label" translatable="yes" context="tp_Trendline|label3">Degree</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -210,7 +210,7 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Period</property>
+                        <property name="label" translatable="yes" context="tp_Trendline|label4">Period</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -333,7 +333,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Regression Type</property>
+            <property name="label" translatable="yes" context="tp_Trendline|label1">Regression Type</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -370,7 +370,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Extrapolate Forward</property>
+                    <property name="label" translatable="yes" context="tp_Trendline|label7">Extrapolate Forward</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">extrapolateForward</property>
                   </object>
@@ -386,7 +386,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Extrapolate Backward</property>
+                    <property name="label" translatable="yes" context="tp_Trendline|label8">Extrapolate Backward</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">extrapolateBackward</property>
                   </object>
@@ -427,7 +427,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="setIntercept">
-                    <property name="label" translatable="yes">Force _Intercept</property>
+                    <property name="label" translatable="yes" context="tp_Trendline|setIntercept">Force _Intercept</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -444,7 +444,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="showEquation">
-                    <property name="label" translatable="yes">Show E_quation</property>
+                    <property name="label" translatable="yes" context="tp_Trendline|showEquation">Show E_quation</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -461,7 +461,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="showCorrelationCoefficient">
-                    <property name="label" translatable="yes">Show _Coefficient of Determination (R²)</property>
+                    <property name="label" translatable="yes" context="tp_Trendline|showCorrelationCoefficient">Show _Coefficient of Determination (R²)</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -481,7 +481,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Trendline _Name</property>
+                    <property name="label" translatable="yes" context="tp_Trendline|label5">Trendline _Name</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry_name</property>
                   </object>
@@ -526,7 +526,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_X Variable Name</property>
+                    <property name="label" translatable="yes" context="tp_Trendline|label6">_X Variable Name</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry_Xname</property>
                   </object>
@@ -555,7 +555,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Y Variable Name</property>
+                    <property name="label" translatable="yes" context="tp_Trendline|label9">_Y Variable Name</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry_Yname</property>
                   </object>
@@ -587,7 +587,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Options</property>
+            <property name="label" translatable="yes" context="tp_Trendline|label2">Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

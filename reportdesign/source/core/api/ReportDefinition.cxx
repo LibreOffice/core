@@ -37,9 +37,9 @@
 #include "Shape.hxx"
 #include "Tools.hxx"
 #include "UndoEnv.hxx"
-#include "core_resource.hrc"
+#include "strings.hrc"
 #include "core_resource.hxx"
-#include "corestrings.hrc"
+#include "strings.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
@@ -537,13 +537,13 @@ OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > co
 ,m_aProps(new OReportComponentProperties(_xContext))
 ,m_pImpl(new OReportDefinitionImpl(m_aMutex))
 {
-    m_aProps->m_sName  = RPT_RESSTRING(RID_STR_REPORT);
+    m_aProps->m_sName  = RptResId(RID_STR_REPORT);
     osl_atomic_increment(&m_refCount);
     {
         init();
         m_pImpl->m_xGroups = new OGroups(this,m_aProps->m_xContext);
         m_pImpl->m_xDetail = OSection::createOSection(this,m_aProps->m_xContext);
-        m_pImpl->m_xDetail->setName(RPT_RESSTRING(RID_STR_DETAIL));
+        m_pImpl->m_xDetail->setName(RptResId(RID_STR_DETAIL));
     }
     osl_atomic_decrement( &m_refCount );
 }
@@ -556,7 +556,7 @@ OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > co
 ,m_aProps(new OReportComponentProperties(_xContext))
 ,m_pImpl(new OReportDefinitionImpl(m_aMutex))
 {
-    m_aProps->m_sName  = RPT_RESSTRING(RID_STR_REPORT);
+    m_aProps->m_sName  = RptResId(RID_STR_REPORT);
     m_aProps->m_xFactory = _xFactory;
     osl_atomic_increment(&m_refCount);
     {
@@ -564,7 +564,7 @@ OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > co
         init();
         m_pImpl->m_xGroups = new OGroups(this,m_aProps->m_xContext);
         m_pImpl->m_xDetail = OSection::createOSection(this,m_aProps->m_xContext);
-        m_pImpl->m_xDetail->setName(RPT_RESSTRING(RID_STR_DETAIL));
+        m_pImpl->m_xDetail->setName(RptResId(RID_STR_DETAIL));
     }
     osl_atomic_decrement( &m_refCount );
 }
@@ -855,7 +855,7 @@ void SAL_CALL OReportDefinition::setReportHeaderOn( sal_Bool _reportheaderon )
 {
     if ( bool(_reportheaderon) != m_pImpl->m_xReportHeader.is() )
     {
-        setSection(PROPERTY_REPORTHEADERON,_reportheaderon,RPT_RESSTRING(RID_STR_REPORT_HEADER),m_pImpl->m_xReportHeader);
+        setSection(PROPERTY_REPORTHEADERON,_reportheaderon,RptResId(RID_STR_REPORT_HEADER),m_pImpl->m_xReportHeader);
     }
 }
 
@@ -869,7 +869,7 @@ void SAL_CALL OReportDefinition::setReportFooterOn( sal_Bool _reportfooteron )
 {
     if ( bool(_reportfooteron) != m_pImpl->m_xReportFooter.is() )
     {
-        setSection(PROPERTY_REPORTFOOTERON,_reportfooteron,RPT_RESSTRING(RID_STR_REPORT_FOOTER),m_pImpl->m_xReportFooter);
+        setSection(PROPERTY_REPORTFOOTERON,_reportfooteron,RptResId(RID_STR_REPORT_FOOTER),m_pImpl->m_xReportFooter);
     }
 }
 
@@ -883,7 +883,7 @@ void SAL_CALL OReportDefinition::setPageHeaderOn( sal_Bool _pageheaderon )
 {
     if ( bool(_pageheaderon) != m_pImpl->m_xPageHeader.is() )
     {
-        setSection(PROPERTY_PAGEHEADERON,_pageheaderon,RPT_RESSTRING(RID_STR_PAGE_HEADER),m_pImpl->m_xPageHeader);
+        setSection(PROPERTY_PAGEHEADERON,_pageheaderon,RptResId(RID_STR_PAGE_HEADER),m_pImpl->m_xPageHeader);
     }
 }
 
@@ -897,7 +897,7 @@ void SAL_CALL OReportDefinition::setPageFooterOn( sal_Bool _pagefooteron )
 {
     if ( bool(_pagefooteron) != m_pImpl->m_xPageFooter.is() )
     {
-        setSection(PROPERTY_PAGEFOOTERON,_pagefooteron,RPT_RESSTRING(RID_STR_PAGE_FOOTER),m_pImpl->m_xPageFooter);
+        setSection(PROPERTY_PAGEFOOTERON,_pagefooteron,RptResId(RID_STR_PAGE_FOOTER),m_pImpl->m_xPageFooter);
     }
 }
 
@@ -1281,7 +1281,7 @@ void SAL_CALL OReportDefinition::loadFromStorage( const uno::Reference< embed::X
 void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XStorage >& _xStorageToSaveTo, const uno::Sequence< beans::PropertyValue >& _aMediaDescriptor )
 {
     if ( !_xStorageToSaveTo.is() )
-        throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL),*this,1);
+        throw lang::IllegalArgumentException(RptResId(RID_STR_ARGUMENT_IS_NULL),*this,1);
 
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -1437,7 +1437,7 @@ void SAL_CALL OReportDefinition::switchToStorage(
         const uno::Reference< embed::XStorage >& xStorage)
 {
     if (!xStorage.is())
-        throw lang::IllegalArgumentException(RPT_RESSTRING(RID_STR_ARGUMENT_IS_NULL),*this,1);
+        throw lang::IllegalArgumentException(RptResId(RID_STR_ARGUMENT_IS_NULL),*this,1);
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);

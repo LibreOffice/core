@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="sfx">
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="CmisInfoPage">
     <property name="visible">True</property>
@@ -51,7 +51,7 @@
           <object class="GtkLabel" id="name">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Name</property>
+            <property name="label" translatable="yes" context="cmisinfopage|name">Name</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -63,7 +63,7 @@
           <object class="GtkLabel" id="type">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Type</property>
+            <property name="label" translatable="yes" context="cmisinfopage|type">Type</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -75,7 +75,7 @@
           <object class="GtkLabel" id="value">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Value</property>
+            <property name="label" translatable="yes" context="cmisinfopage|value">Value</property>
           </object>
           <packing>
             <property name="expand">False</property>

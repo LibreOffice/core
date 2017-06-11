@@ -29,6 +29,7 @@
 #include "hldocntp.hxx"
 #include "bitmaps.hlst"
 #include <svx/svxids.hrc>
+#include "strings.hrc"
 #include <vector>
 
 using ::com::sun::star::uno::Reference;

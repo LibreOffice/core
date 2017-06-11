@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="ColorConfigWindow">
@@ -11,7 +11,7 @@
     <property name="row_homogeneous">True</property>
     <child>
       <object class="GtkCheckButton" id="docboundaries">
-        <property name="label" translatable="yes">Text boundaries</property>
+        <property name="label" translatable="yes" context="colorconfigwin|docboundaries">Text boundaries</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -30,7 +30,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Document background</property>
+        <property name="label" translatable="yes" context="colorconfigwin|doccolor">Document background</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -86,7 +86,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">General</property>
+        <property name="label" translatable="yes" context="colorconfigwin|general">General</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
@@ -125,7 +125,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Application background</property>
+        <property name="label" translatable="yes" context="colorconfigwin|appback">Application background</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -134,7 +134,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="objboundaries">
-        <property name="label" translatable="yes">Object boundaries</property>
+        <property name="label" translatable="yes" context="colorconfigwin|objboundaries">Object boundaries</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -171,7 +171,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="tblboundaries">
-        <property name="label" translatable="yes">Table boundaries</property>
+        <property name="label" translatable="yes" context="colorconfigwin|tblboundaries">Table boundaries</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -212,7 +212,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Font color</property>
+        <property name="label" translatable="yes" context="colorconfigwin|font">Font color</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -243,7 +243,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="unvisitedlinks">
-        <property name="label" translatable="yes">Unvisited links</property>
+        <property name="label" translatable="yes" context="colorconfigwin|unvisitedlinks">Unvisited links</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -280,7 +280,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="visitedlinks">
-        <property name="label" translatable="yes">Visited links</property>
+        <property name="label" translatable="yes" context="colorconfigwin|visitedlinks">Visited links</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -321,7 +321,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">AutoSpellcheck</property>
+        <property name="label" translatable="yes" context="colorconfigwin|autospellcheck">AutoSpellcheck</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -334,7 +334,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Smart Tags</property>
+        <property name="label" translatable="yes" context="colorconfigwin|smarttags">Smart Tags</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -388,7 +388,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Text Document</property>
+        <property name="label" translatable="yes" context="colorconfigwin|writer">Text Document</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
@@ -415,7 +415,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Grid</property>
+        <property name="label" translatable="yes" context="colorconfigwin|writergrid">Grid</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -494,7 +494,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Script Indicator</property>
+        <property name="label" translatable="yes" context="colorconfigwin|script">Script Indicator</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -515,7 +515,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="field">
-        <property name="label" translatable="yes">Field shadings</property>
+        <property name="label" translatable="yes" context="colorconfigwin|field">Field shadings</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -530,7 +530,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="index">
-        <property name="label" translatable="yes">Index and table shadings</property>
+        <property name="label" translatable="yes" context="colorconfigwin|index">Index and table shadings</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -545,7 +545,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="section">
-        <property name="label" translatable="yes">Section boundaries</property>
+        <property name="label" translatable="yes" context="colorconfigwin|section">Section boundaries</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -596,7 +596,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Headers and Footer delimiter</property>
+        <property name="label" translatable="yes" context="colorconfigwin|hdft">Headers and Footer delimiter</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -631,7 +631,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Page and column breaks</property>
+        <property name="label" translatable="yes" context="colorconfigwin|pagebreak">Page and column breaks</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -666,7 +666,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Direct Cursor</property>
+        <property name="label" translatable="yes" context="colorconfigwin|direct">Direct Cursor</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -690,7 +690,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">HTML Document</property>
+        <property name="label" translatable="yes" context="colorconfigwin|html">HTML Document</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
@@ -717,7 +717,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">SGML syntax highlighting</property>
+        <property name="label" translatable="yes" context="colorconfigwin|sgml">SGML syntax highlighting</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -752,7 +752,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Comment highlighting</property>
+        <property name="label" translatable="yes" context="colorconfigwin|htmlcomment">Comment highlighting</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -787,7 +787,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Keyword highlighting</property>
+        <property name="label" translatable="yes" context="colorconfigwin|htmlkeyword">Keyword highlighting</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -822,7 +822,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Text</property>
+        <property name="label" translatable="yes" context="colorconfigwin|unknown">Text</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -846,7 +846,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Spreadsheet</property>
+        <property name="label" translatable="yes" context="colorconfigwin|calc">Spreadsheet</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
@@ -873,7 +873,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Grid lines</property>
+        <property name="label" translatable="yes" context="colorconfigwin|calcgrid">Grid lines</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -908,7 +908,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Page breaks</property>
+        <property name="label" translatable="yes" context="colorconfigwin|brk">Page breaks</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -943,7 +943,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Manual page breaks</property>
+        <property name="label" translatable="yes" context="colorconfigwin|brkmanual">Manual page breaks</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -978,7 +978,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Automatic page breaks</property>
+        <property name="label" translatable="yes" context="colorconfigwin|brkauto">Automatic page breaks</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1013,7 +1013,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Detective</property>
+        <property name="label" translatable="yes" context="colorconfigwin|det">Detective</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1048,7 +1048,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Detective error</property>
+        <property name="label" translatable="yes" context="colorconfigwin|deterror">Detective error</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1083,7 +1083,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">References</property>
+        <property name="label" translatable="yes" context="colorconfigwin|ref">References</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1118,7 +1118,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Notes background</property>
+        <property name="label" translatable="yes" context="colorconfigwin|notes">Notes background</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1142,7 +1142,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Drawing / Presentation</property>
+        <property name="label" translatable="yes" context="colorconfigwin|draw">Drawing / Presentation</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
@@ -1169,7 +1169,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Grid</property>
+        <property name="label" translatable="yes" context="colorconfigwin|drawgrid">Grid</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1193,7 +1193,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Basic Syntax Highlighting</property>
+        <property name="label" translatable="yes" context="colorconfigwin|basic">Basic Syntax Highlighting</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
@@ -1220,7 +1220,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Identifier</property>
+        <property name="label" translatable="yes" context="colorconfigwin|basicid">Identifier</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1255,7 +1255,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Comment</property>
+        <property name="label" translatable="yes" context="colorconfigwin|basiccomment">Comment</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1290,7 +1290,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Number</property>
+        <property name="label" translatable="yes" context="colorconfigwin|basicnumber">Number</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1325,7 +1325,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">String</property>
+        <property name="label" translatable="yes" context="colorconfigwin|basicstring">String</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1360,7 +1360,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Operator</property>
+        <property name="label" translatable="yes" context="colorconfigwin|basicop">Operator</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1395,7 +1395,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Reserved expression</property>
+        <property name="label" translatable="yes" context="colorconfigwin|basickeyword">Reserved expression</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1430,7 +1430,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Error</property>
+        <property name="label" translatable="yes" context="colorconfigwin|error">Error</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1454,7 +1454,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">SQL Syntax Highlighting</property>
+        <property name="label" translatable="yes" context="colorconfigwin|sql">SQL Syntax Highlighting</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
@@ -1481,7 +1481,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Identifier</property>
+        <property name="label" translatable="yes" context="colorconfigwin|sqlid">Identifier</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1516,7 +1516,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Number</property>
+        <property name="label" translatable="yes" context="colorconfigwin|sqlnumber">Number</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1551,7 +1551,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">String</property>
+        <property name="label" translatable="yes" context="colorconfigwin|sqlstring">String</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1586,7 +1586,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Operator</property>
+        <property name="label" translatable="yes" context="colorconfigwin|sqlop">Operator</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1621,7 +1621,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Keyword</property>
+        <property name="label" translatable="yes" context="colorconfigwin|sqlkeyword">Keyword</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1656,7 +1656,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Parameter</property>
+        <property name="label" translatable="yes" context="colorconfigwin|sqlparam">Parameter</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1691,7 +1691,7 @@
         <property name="can_focus">False</property>
         <property name="margin_left">6</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Comment</property>
+        <property name="label" translatable="yes" context="colorconfigwin|sqlcomment">Comment</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -1736,7 +1736,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="shadows">
-        <property name="label" translatable="yes">Shadows</property>
+        <property name="label" translatable="yes" context="colorconfigwin|shadows">Shadows</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>

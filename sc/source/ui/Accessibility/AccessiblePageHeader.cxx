@@ -28,7 +28,7 @@
 #include "scitems.hxx"
 #include "attrib.hxx"
 #include "scresid.hxx"
-#include "scres.hrc"
+#include "strings.hrc"
 #include "strings.hxx"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

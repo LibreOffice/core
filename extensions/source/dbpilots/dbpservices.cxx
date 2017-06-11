@@ -32,7 +32,6 @@ extern "C" void SAL_CALL dbp_initializeModule()
         createRegistryInfo_OGroupBoxWizard();
         createRegistryInfo_OListComboWizard();
         createRegistryInfo_OGridWizard();
-        compmodule::OModule::setResourceFilePrefix("dbp");
         s_bInit = true;
     }
 }

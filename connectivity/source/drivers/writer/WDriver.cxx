@@ -22,7 +22,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <connectivity/dbexception.hxx>
 #include "resource/sharedresources.hxx"
-#include "resource/common_res.hrc"
+#include "strings.hrc"
 #include <comphelper/processfactory.hxx>
 
 using namespace connectivity::file;

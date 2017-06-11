@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
-<interface>
+<interface domain="cui">
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustmentDistance">
@@ -42,7 +42,7 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="TSB_SHOW_SHADOW">
-                    <property name="label" translatable="yes">_Use shadow</property>
+                    <property name="label" translatable="yes" context="shadowtabpage|TSB_SHOW_SHADOW">_Use shadow</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">False</property>
@@ -120,7 +120,7 @@
                           <object class="GtkLabel" id="FT_DISTANCE">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Distance:</property>
+                            <property name="label" translatable="yes" context="shadowtabpage|FT_DISTANCE">_Distance:</property>
                             <property name="use_underline">True</property>
                           </object>
                         </child>
@@ -156,7 +156,7 @@
                           <object class="GtkLabel" id="FT_TRANSPARENT">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Transparency:</property>
+                            <property name="label" translatable="yes" context="shadowtabpage|FT_TRANSPARENT">_Transparency:</property>
                             <property name="use_underline">True</property>
                           </object>
                         </child>
@@ -177,7 +177,7 @@
                           <object class="GtkLabel" id="FT_SHADOW_COLOR">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Color:</property>
+                            <property name="label" translatable="yes" context="shadowtabpage|FT_SHADOW_COLOR">_Color:</property>
                             <property name="use_underline">True</property>
                           </object>
                         </child>
@@ -220,7 +220,7 @@
                     <property name="vexpand">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="CTL_COLOR_PREVIEW-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Example</property>
+                        <property name="AtkObject::accessible-name" translatable="yes" context="shadowtabpage|CTL_COLOR_PREVIEW-atkobject">Example</property>
                       </object>
                     </child>
                   </object>
@@ -245,7 +245,7 @@
       <object class="GtkLabel" id="label">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Properties</property>
+        <property name="label" translatable="yes" context="shadowtabpage|label">Properties</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
