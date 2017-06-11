@@ -20,7 +20,7 @@ $(eval $(call gb_Module_add_targets,sc,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,sc,\
-	AllLangResTarget_sc \
+	AllLangMoTarget_sc \
 	UIConfig_scalc \
 ))
 

@@ -1376,15 +1376,15 @@ ScUndoDataPilot::ScUndoDataPilot( ScDocShell* pNewDocShell,
 
 OUString ScUndoDataPilot::GetComment() const
 {
-    sal_uInt16 nIndex;
+    const char* pResId;
     if (xOldUndoDoc && xNewUndoDoc)
-        nIndex = STR_UNDO_PIVOT_MODIFY;
+        pResId = STR_UNDO_PIVOT_MODIFY;
     else if (xNewUndoDoc)
-        nIndex = STR_UNDO_PIVOT_NEW;
+        pResId = STR_UNDO_PIVOT_NEW;
     else
-        nIndex = STR_UNDO_PIVOT_DELETE;
+        pResId = STR_UNDO_PIVOT_DELETE;
 
-    return ScGlobal::GetRscString( nIndex );
+    return ScGlobal::GetRscString(pResId);
 }
 
 void ScUndoDataPilot::Undo()

@@ -67,8 +67,8 @@
 #include <sfx2/viewfrm.hxx>
 
 #include "app.hrc"
-#include "glob.hrc"
-#include "res_bmp.hrc"
+#include "strings.hrc"
+
 #include "PresentationViewShell.hxx"
 
 #include "Outliner.hxx"

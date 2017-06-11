@@ -40,7 +40,7 @@
 #include <pagedesc.hxx>
 #include <breakit.hxx>
 #include <swerror.h>
-#include <statstr.hrc>
+#include <strings.hrc>
 #include <mdiexp.hxx>
 #include <poolfmt.hxx>
 

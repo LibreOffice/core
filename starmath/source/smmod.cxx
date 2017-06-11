@@ -25,6 +25,7 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/viewsh.hxx>
 #include <svx/svxids.hrc>
+#include <tools/simplerm.hxx>
 #include <vcl/virdev.hxx>
 #include <unotools/syslocale.hxx>
 #include "smmod.hxx"
@@ -33,6 +34,8 @@
 #include "dialog.hxx"
 #include "edit.hxx"
 #include "view.hxx"
+#include "strings.hrc"
+#include "smmod.hrc"
 #include "starmath.hrc"
 #include "svx/modctrl.hxx"
 
@@ -40,16 +43,12 @@
 #define SmModule
 #include "smslots.hxx"
 
-OUString SmResId(sal_uInt16 nId)
+OUString SmResId(const char* pId)
 {
-    return ResId(nId, *SM_MOD()->GetResMgr());
+    return Translate::get(pId, SM_MOD()->GetResLocale());
 }
 
-SmLocalizedSymbolData::SmLocalizedSymbolData() :
-    aUiSymbolNamesAry       (ResId(RID_UI_SYMBOL_NAMES, *SM_MOD()->GetResMgr())),
-    aExportSymbolNamesAry   (ResId(RID_EXPORT_SYMBOL_NAMES, *SM_MOD()->GetResMgr())),
-    aUiSymbolSetNamesAry    (ResId(RID_UI_SYMBOLSET_NAMES, *SM_MOD()->GetResMgr())),
-    aExportSymbolSetNamesAry(ResId(RID_EXPORT_SYMBOLSET_NAMES, *SM_MOD()->GetResMgr()))
+SmLocalizedSymbolData::SmLocalizedSymbolData()
 {
 }
 
@@ -61,15 +60,11 @@ const OUString SmLocalizedSymbolData::GetUiSymbolName( const OUString &rExportNa
 {
     OUString aRes;
 
-    const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
-    const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
-    const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
-    sal_uInt32 nCount = rExportNames.Count();
-    for (sal_uInt32 i = 0;  i < nCount;  ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UI_SYMBOL_NAMES); ++i)
     {
-        if (rExportNames.GetString(i).equals(rExportName))
+        if (rExportName.equalsAscii(RID_UI_SYMBOL_NAMES[i]))
         {
-            aRes = rUiNames.GetString(i);
+            aRes = SmResId(RID_UI_SYMBOL_NAMES[i]);
             break;
         }
     }
@@ -81,15 +76,11 @@ const OUString SmLocalizedSymbolData::GetExportSymbolName( const OUString &rUiNa
 {
     OUString aRes;
 
-    const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
-    const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
-    const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
-    sal_uInt32 nCount = rUiNames.Count();
-    for (sal_uInt32 i = 0;  i < nCount;  ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UI_SYMBOL_NAMES); ++i)
     {
-        if (rUiNames.GetString(i).equals(rUiName))
+        if (rUiName == SmResId(RID_UI_SYMBOL_NAMES[i]))
         {
-            aRes = rExportNames.GetString(i);
+            aRes = OUString(RID_UI_SYMBOL_NAMES[i], strlen(RID_UI_SYMBOL_NAMES[i]), RTL_TEXTENCODING_UTF8);
             break;
         }
     }
@@ -101,15 +92,11 @@ const OUString SmLocalizedSymbolData::GetUiSymbolSetName( const OUString &rExpor
 {
     OUString aRes;
 
-    const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
-    const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
-    const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
-    sal_uInt32 nCount = rExportNames.Count();
-    for (sal_uInt32 i = 0;  i < nCount;  ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UI_SYMBOLSET_NAMES); ++i)
     {
-        if (rExportNames.GetString(i).equals(rExportName))
+        if (rExportName.equalsAscii(RID_UI_SYMBOLSET_NAMES[i]))
         {
-            aRes = rUiNames.GetString(i);
+            aRes = SmResId(RID_UI_SYMBOLSET_NAMES[i]);
             break;
         }
     }
@@ -121,15 +108,11 @@ const OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rU
 {
     OUString aRes;
 
-    const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
-    const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
-    const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
-    sal_uInt32 nCount = rUiNames.Count();
-    for (sal_uInt32 i = 0;  i < nCount;  ++i)
+    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UI_SYMBOLSET_NAMES); ++i)
     {
-        if (rUiNames.GetString(i).equals(rUiName))
+        if (rUiName == SmResId(RID_UI_SYMBOLSET_NAMES[i]))
         {
-            aRes = rExportNames.GetString(i);
+            aRes = OUString(RID_UI_SYMBOLSET_NAMES[i], strlen(RID_UI_SYMBOL_NAMES[i]), RTL_TEXTENCODING_UTF8);
             break;
         }
     }
@@ -144,8 +127,8 @@ void SmModule::InitInterface_Impl()
     GetStaticInterface()->RegisterStatusBar(RID_STATUSBAR);
 }
 
-SmModule::SmModule(SfxObjectFactory* pObjFact) :
-    SfxModule(ResMgr::CreateResMgr("sm"), {pObjFact})
+SmModule::SmModule(SfxObjectFactory* pObjFact)
+    : SfxModule(Translate::Create("sm", Application::GetSettings().GetUILanguageTag()), {pObjFact})
 {
     SetName("StarMath");
 

@@ -63,7 +63,7 @@
 #include <usrpref.hxx>
 #include <edtwin.hxx>
 #include <swwait.hxx>
-#include <shells.hrc>
+#include <strings.hrc>
 #include <svx/extedit.hxx>
 #include <svx/graphichelper.hxx>
 #include <doc.hxx>

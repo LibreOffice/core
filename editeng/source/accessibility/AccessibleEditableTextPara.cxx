@@ -66,7 +66,7 @@
 
 #include <svtools/colorcfg.hxx>
 using namespace std;
-#include "editeng.hrc"
+#include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
 #include <editeng/numitem.hxx>
 #include <memory>

@@ -23,7 +23,8 @@
 #include <unotools/pathoptions.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/drawitem.hxx>
-#include <svx/dialogs.hrc>
+#include <svx/strings.hrc>
+#include <svx/svxids.hrc>
 #include <svx/dialmgr.hxx>
 #include <vcl/toolbox.hxx>
 #include <svtools/colrdlg.hxx>

@@ -32,13 +32,10 @@ using namespace std;
 
 namespace XmlSec
 {
-    static ResMgr*          pResMgr = nullptr;
-
-    ResMgr* GetResMgr()
+    const std::locale& GetResLocale()
     {
-        if (!pResMgr)
-            pResMgr = ResMgr::CreateResMgr("xmlsec");
-        return pResMgr;
+        static const std::locale loc = Translate::Create("xsc", Application::GetSettings().GetUILanguageTag());
+        return loc;
     }
 
     const LocaleDataWrapper&    GetLocaleData()

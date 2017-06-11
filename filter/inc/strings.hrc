@@ -1,0 +1,83 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#ifndef INCLUDED_FILTER_INC_STRINGS_HRC
+#define INCLUDED_FILTER_INC_STRINGS_HRC
+
+#define N_(String) (u8##String)
+
+#define STR_COLUMN_HEADER_NAME                  N_("Name")
+#define STR_COLUMN_HEADER_TYPE                  N_("Type")
+#define STR_UNKNOWN_APPLICATION                 N_("Unknown")
+#define STR_IMPORT_ONLY                         N_("import filter")
+#define STR_IMPORT_EXPORT                       N_("import/export filter")
+#define STR_EXPORT_ONLY                         N_("export filter")
+#define STR_WARN_DELETE                         N_("Do you really want to delete the XML Filter '%s'? This action cannot be undone.")
+#define STR_ERROR_FILTER_NAME_EXISTS            N_("An XML filter with the name '%s' already exists. Please enter a different name.")
+#define STR_ERROR_TYPE_NAME_EXISTS              N_("The name for the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.")
+#define STR_ERROR_EXPORT_XSLT_NOT_FOUND         N_("The XSLT for export cannot be found. Please enter a valid path.")
+#define STR_ERROR_IMPORT_XSLT_NOT_FOUND         N_("The XSLT for import cannot be found. Please enter a valid path.")
+#define STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND     N_("The given import template cannot be found. Please enter a valid path.")
+#define STR_DEFAULT_FILTER_NAME                 N_("New Filter")
+#define STR_DEFAULT_UI_NAME                     N_("Untitled")
+#define STR_UNDEFINED_FILTER                    N_("undefined filter")
+#define STR_FILTER_HAS_BEEN_SAVED               N_("The XML filter '%s' has been saved as package '%s'. ")
+#define STR_FILTERS_HAVE_BEEN_SAVED             N_("%s XML filters have been saved in the package '%s'.")
+#define STR_FILTER_PACKAGE                      N_("XSLT filter package")
+#define STR_FILTER_INSTALLED                    N_("The XML filter '%s' has been installed successfully.")
+#define STR_FILTERS_INSTALLED                   N_("%s XML filters have been installed successfully.")
+#define STR_NO_FILTERS_FOUND                    N_("No XML filter could be installed because the package '%s' does not contain any XML filters.")
+#define STR_XML_FILTER_LISTBOX                  N_("XML Filter List")
+
+#define T602FILTER_STR_IMPORT_DIALOG_TITLE      N_("Settings for T602 import")
+#define T602FILTER_STR_ENCODING_LABEL           N_("Encoding")
+#define T602FILTER_STR_ENCODING_AUTO            N_("Automatic")
+#define T602FILTER_STR_ENCODING_CP852           N_("CP852 (Latin2)")
+#define T602FILTER_STR_ENCODING_CP895           N_("CP895 (KEYB2CS, Kamenicky)")
+#define T602FILTER_STR_ENCODING_KOI8CS2         N_("KOI8 CS2")
+#define T602FILTER_STR_CYRILLIC_MODE            N_("Mode for Russian language (Cyrillic)")
+#define T602FILTER_STR_REFORMAT_TEXT            N_("Reformat the text")
+#define T602FILTER_STR_DOT_COMMANDS             N_("Display dot commands")
+#define T602FILTER_STR_CANCEL_BUTTON            N_("Cancel")
+#define T602FILTER_STR_OK_BUTTON                N_("OK")
+
+#define KEY_VERSION_CHECK                       N_("Warning: Not all of the imported EPS graphics could be saved at level1\nas some are at a higher level!")
+
+#define PDF_PROGRESS_BAR                        N_("Export as PDF")
+
+//strings used in encryption UI
+//password dialog title
+#define STR_PDF_EXPORT_UDPWD                    N_("Set open password")
+//password dialog title
+#define STR_PDF_EXPORT_ODPWD                    N_("Set permission password")
+#define STR_WARN_PASSWORD_PDFA                  N_("PDF/A does not allow encryption. The exported PDF file will not be password protected.")
+#define STR_WARN_TRANSP_PDFA_SHORT              N_("PDF/A transparency")
+#define STR_WARN_TRANSP_PDFA                    N_("PDF/A forbids transparency. A transparent object was painted opaque instead.")
+#define STR_WARN_TRANSP_VERSION_SHORT           N_("PDF version conflict")
+#define STR_WARN_TRANSP_VERSION                 N_("Transparency is not supported in PDF versions earlier than PDF 1.4. A transparent object was painted opaque instead")
+#define STR_WARN_FORMACTION_PDFA_SHORT          N_("PDF/A form action")
+#define STR_WARN_FORMACTION_PDFA                N_("A form control contained an action not supported by the PDF/A standard. The action was skipped")
+#define STR_WARN_TRANSP_CONVERTED               N_("Some objects were converted to an image in order to remove transparencies, because the target PDF format does not support transparencies. Possibly better results can be achieved if you remove the transparent objects before exporting.")
+#define STR_WARN_TRANSP_CONVERTED_SHORT         N_("Transparencies removed")
+#define STR_ERR_SIGNATURE_FAILED                N_("Signature generation failed")
+#define STR_ERR_PDF_EXPORT_ABORTED              N_("PDF export aborted")
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

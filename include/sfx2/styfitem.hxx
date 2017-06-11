@@ -24,7 +24,6 @@
 #include <sfx2/dllapi.h>
 #include <vcl/bitmap.hxx>
 #include <vcl/image.hxx>
-#include <tools/resary.hxx>
 #include <rsc/rscsfx.hxx>
 #include <vector>
 
@@ -32,7 +31,13 @@ struct SFX2_DLLPUBLIC SfxFilterTupel
 {
     OUString aName;
     sal_uInt16 nFlags;
+    SfxFilterTupel(const OUString& rName, sal_uInt16 nArg)
+        : aName(rName)
+        , nFlags(nArg)
+    {
+    }
 };
+
 typedef std::vector<SfxFilterTupel> SfxStyleFilter;
 
 class SFX2_DLLPUBLIC SfxStyleFamilyItem
@@ -43,7 +48,7 @@ class SFX2_DLLPUBLIC SfxStyleFamilyItem
     SfxStyleFilter  aFilterList;
 
 public:
-    SfxStyleFamilyItem(SfxStyleFamily nFamily, const OUString &rName, const Image& rImage, const ResId &rStringArray);
+    SfxStyleFamilyItem(SfxStyleFamily nFamily, const OUString &rName, const Image& rImage, const std::pair<const char*, int>* pStringArray, const std::locale& rLocale);
 
     const OUString& GetText() const { return aText; }
     SfxStyleFamily  GetFamily() const { return nFamily; }

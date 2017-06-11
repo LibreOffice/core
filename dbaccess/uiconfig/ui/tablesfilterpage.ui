@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.16.0 on Tue Jan 21 15:00:47 2014 -->
-<interface>
+<interface domain="dba">
   <!-- interface-requires gtk+ 3.0 -->
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkFrame" id="TablesFilterPage">

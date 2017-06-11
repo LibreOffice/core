@@ -23,7 +23,7 @@
 #include <txttypes.hxx>
 
 // for portion replacement in Special()
-#include "access.hrc"
+#include "strings.hrc"
 #include <tools/resid.hxx>
 #include "viewopt.hxx"
 
